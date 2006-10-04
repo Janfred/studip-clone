@@ -159,7 +159,7 @@ function wiki_steplist($template_name,$opt) {
 	global $PHP_SELF, $SessSemName;
 	global $keyword, $show_wiki_comments, $step_templates;
 	$template=$step_templates[$template_name];
-	$opt = array_merge($opt,@$_REQUEST);
+	$opt = array_merge((array)$opt,(array)$_REQUEST);
 	$steplist = wiki_get_steppagelist($template);
 	$out[] = "<table border='1' cellspacing='0' cellpadding='3'></tr>";
 	foreach ($template['listheader'] as $h) {

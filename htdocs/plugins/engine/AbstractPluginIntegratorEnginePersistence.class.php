@@ -135,7 +135,7 @@ class AbstractPluginIntegratorEnginePersistence {
     	}
     	if ($attendroles){
 	    	// ok, filter should start with no where clause
-	    	$params = array_merge(array($userid),$params,array($userid),$params);
+	    	$params = array_merge(array($userid),(array)$params,array($userid),(array)$params);
 	    	
 	    	// $filter = "where p.pluginid in (select rp.pluginid from roles_plugins rp where rp.roleid in (SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?)) " . $filter;    	    		    	
 	    		    	

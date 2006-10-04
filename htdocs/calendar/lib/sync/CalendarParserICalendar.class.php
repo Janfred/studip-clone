@@ -202,7 +202,7 @@ class CalendarParserICalendar extends CalendarParser {
 							}
 							// some iCalendar exports (e.g. KOrganizer) use an EXDATE-entry for every
 							// exception, so we have to merge them
-							array_merge($properties[$tag], $dates);
+							array_merge((array)$properties[$tag], (array)$dates);
 							break;
 	
 						// Duration fields

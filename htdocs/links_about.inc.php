@@ -68,7 +68,7 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 		}
 	}
 	// now insert the bottomkats
-	$structure = array_merge($structure,$pluginsubmenu);
+	$structure = array_merge((array)$structure, (array)$pluginsubmenu);
 }
 //Bottomkats
 $structure["_alle"] = array('topKat' => "alle", 'name' => _("Pers&ouml;nliche Homepage"), 'link' => "about.php?username=$username", 'active' => FALSE);

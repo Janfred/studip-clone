@@ -333,10 +333,10 @@ function GetMyScore() {
 	if ($GLOBALS['PLUGINS_ENABLE'])	{
 		$sysengine = PluginEngine::getPluginPersistence("System");
 		$scoreplugins = array();
-		$scoreplugins = array_merge($scoreplugins,$sysengine->getAllActivatedPlugins());
+		$scoreplugins = array_merge((array)$scoreplugins, (array)$sysengine->getAllActivatedPlugins());
 		unset($sysengine);
 		$standardengine = PluginEngine::getPluginPersistence("Standard");
-		$scoreplugins = array_merge($scoreplugins,$standardengine->getAllActivatedPlugins());
+		$scoreplugins = array_merge((array)$scoreplugins, (array)$standardengine->getAllActivatedPlugins());
 		unset($standardengine);
 		$pluginscore = 0;
 		$pluginscount = 0;

@@ -362,7 +362,7 @@ class messaging {
 			}
 
 			// wir mergen die eben erstellten arrays und entfernen doppelte eintraege
-			$rec_id = array_merge($rec_id, $rec_id_tmp);
+			$rec_id = array_merge((array)$rec_id, (array)$rec_id_tmp);
 			$rec_id = array_unique($rec_id);
 
 		

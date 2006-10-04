@@ -478,7 +478,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			$max_spalte += 2;
 	}
 
-	$tab = array_merge($day_event_row, $tab);
+	$tab = array_merge((array)$day_event_row, (array)$tab);
 
 	if ($compact)
 		$tab = implode("", $tab);

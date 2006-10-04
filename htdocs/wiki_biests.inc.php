@@ -145,7 +145,7 @@ function wiki_biestlist($template_name,$opt) {
 	global $PHP_SELF, $SessSemName;
 	global $keyword, $show_wiki_comments, $biest_templates;
 	$template=$biest_templates[$template_name];
-	$opt = array_merge($opt,@$_REQUEST);
+	$opt = array_merge($opt,(array)$_REQUEST);
 	$biestlist = wiki_get_biestpagelist($template);
 	$out[] = "<table border='1' cellspacing='0' cellpadding='3'></tr>";
 	foreach ($template['listheader'] as $h) {

@@ -456,7 +456,7 @@ class AdminNewsController {
 	}
 
 	function search_range($search_str = false) {
-		$this->search_result = array_merge($this->search_result, search_range($search_str, true));
+		$this->search_result = array_merge((array)$this->search_result, (array)search_range($search_str, true));
 		if (is_array($this->search_result) && count($this->search_result)){
 			$query="SELECT range_id,COUNT(range_id) AS anzahl FROM news_range WHERE range_id IN ('".implode("','",array_keys($this->search_result))."') GROUP BY range_id";
 			$this->db->query($query);

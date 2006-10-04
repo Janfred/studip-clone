@@ -139,7 +139,7 @@ if ($_REQUEST['cmd'] == 'check' && is_array($_check_list) && is_array($_lit_data
 	foreach ($_check_list as $el){
 		$check = StudipLitSearch::CheckZ3950($_lit_data[$el]['accession_number'], $_check_plugin);
 		if (is_array($_lit_data[$el]['check_accession'])){
-			$_lit_data[$el]['check_accession'] = array_merge($_lit_data[$el]['check_accession'],$check);
+			$_lit_data[$el]['check_accession'] = array_merge((array)$_lit_data[$el]['check_accession'],(array)$check);
 		} else {
 			$_lit_data[$el]['check_accession'] = $check;
 		}

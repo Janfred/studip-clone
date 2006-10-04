@@ -233,7 +233,7 @@ class TreeAbstract {
 		$num_kids = $this->getNumKids($item_id);
 		if ($num_kids){
 			$kids = $this->getKids($item_id);
-			$kidskids = array_merge($kidskids,$kids);
+			$kidskids = array_merge((array)$kidskids, (array)$kids);
 			for ($i = 0; $i < $num_kids; ++$i){
 				$this->getKidsKids($kids[$i],true);
 			}

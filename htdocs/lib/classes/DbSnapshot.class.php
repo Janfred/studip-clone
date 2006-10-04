@@ -300,7 +300,7 @@ class DbSnapshot {
 				}
 			}
 		}
-		$this->result = array_merge(array(),$this->result);
+		$this->result = array_merge(array(),(array)$this->result);
 		$this->numRows = count($this->result);
 		$this->resetPos();
 		return $this->numRows;

@@ -388,9 +388,9 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		$update_dates_kill_resources = TRUE;
 		//check if change inside regular times
 		if (count($metadates_deleted) || count($metadates_new)) {
-			$check_metadates = array_merge($metadates_deleted,$metadates_new);
+			$check_metadates = array_merge((array)$metadates_deleted,(array)$metadates_new);
 		} else {
-			$check_metadates = array_merge($term_metadata['turnus_data'], $term_metadata['original_turnus_data']);
+			$check_metadates = array_merge((array)$term_metadata['turnus_data'], (array)$term_metadata['original_turnus_data']);
 		}
 		foreach ($check_metadates as $val) {
 			if ($val["resource_id"]){
@@ -459,7 +459,7 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		//If resource-management activ, update the assigned resources and do the overlap checks.... not so easy!
 		if (($RESOURCES_ENABLE) && ($update_resources)) {
 		 	$veranstAssign = new VeranstaltungResourcesAssign($term_metadata["sem_id"]);
-    		$updateResult = array_merge ($updateResult, $veranstAssign->updateAssign());
+    		$updateResult = array_merge ((array)$updateResult, (array)$veranstAssign->updateAssign());
 			//produce the messages from result
 			$errormsg.=getFormattedResult($updateResult, "booth");
 		}

@@ -359,7 +359,7 @@ class RoomRequest {
 						$resultdates = array();
 						foreach($metadates as $dates){
 							if (is_array($dates)){
-								$resultdates = array_merge($resultdates,array_keys($dates));
+								$resultdates = array_merge((array)$resultdates,array_keys($dates));
 							}
 						}
 						$query = sprintf ("SELECT count(assign_id) FROM resources_assign WHERE assign_user_id IN('%s') ", join("','", $resultdates));

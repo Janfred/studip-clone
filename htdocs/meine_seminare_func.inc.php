@@ -230,7 +230,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 				$must_have_perm = $my_obj[$obj_id]['obj_type'] == 'sem' ? 'tutor' : 'autor';
 				if ($GLOBALS['perm']->permissions[$my_obj[$obj_id]['status']] < $GLOBALS['perm']->permissions[$must_have_perm]){
 					$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $obj_id,'entity_type' => $my_obj[$obj_id]['obj_type']));
-					$unreadable_folders = array_merge($unreadable_folders, $folder_tree->getUnReadableFolders($user_id));
+					$unreadable_folders = array_merge((array)$unreadable_folders, (array)$folder_tree->getUnReadableFolders($user_id));
 				}
 			}
 		}

@@ -122,7 +122,7 @@ class StudipForm {
 					}
 				}
 			}
-			$this->form_values = array_merge($this->form_values, $new_form_values);
+			$this->form_values = array_merge((array)$this->form_values, (array)$new_form_values);
 		}
 	}
 
@@ -159,7 +159,7 @@ class StudipForm {
 			}
 		}
 		if (is_array($this->form_fields[$name]['attributes'])){
-			$attributes = array_merge($attributes, $this->form_fields[$name]['attributes']);
+			$attributes = array_merge((array)$attributes, (array)$this->form_fields[$name]['attributes']);
 		}
 
 		if ($this->form_fields[$name]['disabled']){
@@ -232,11 +232,11 @@ class StudipForm {
 
 	function getFormFieldDate($name, $attributes, $default){
 		$date_values = explode("-", $default); //YYYY-MM-DD
-		$ret = $this->getFormFieldText($name . "_day", array_merge(array('size'=>2,'maxlength'=>2), $attributes), $date_values[2]);
+		$ret = $this->getFormFieldText($name . "_day", array_merge(array('size'=>2,'maxlength'=>2), (array)$attributes), $date_values[2]);
 		$ret .= "\n" . $this->form_fields[$name]['separator'];
-		$ret .= $this->getFormFieldText($name . "_month", array_merge(array('size'=>2,'maxlength'=>2), $attributes), $date_values[1]);
+		$ret .= $this->getFormFieldText($name . "_month", array_merge(array('size'=>2,'maxlength'=>2), (array)$attributes), $date_values[1]);
 		$ret .= "\n" . $this->form_fields[$name]['separator'];
-		$ret .= $this->getFormFieldText($name . "_year", array_merge(array('size'=>4,'maxlength'=>4), $attributes), $date_values[0]);
+		$ret .= $this->getFormFieldText($name . "_year", array_merge(array('size'=>4,'maxlength'=>4), (array)$attributes), $date_values[0]);
 		return $ret;
 	}
 
@@ -283,7 +283,7 @@ class StudipForm {
 		$select_attributes = array('onChange' => "document.{$this->form_name}.{$this->form_name}_{$combo_text_name}.value="
 		."document.{$this->form_name}.{$this->form_name}_{$combo_select_name}.options[document.{$this->form_name}.{$this->form_name}_{$combo_select_name}.selectedIndex].text; ");
 		if (is_array($attributes)){
-			$select_attributes = array_merge($select_attributes, $attributes);
+			$select_attributes = array_merge((array)$select_attributes, (array)$attributes);
 		}
 		if (!$subtype){
 			$ret .= "\n" . $this->getFormFieldSelect($combo_select_name, $select_attributes, $default);

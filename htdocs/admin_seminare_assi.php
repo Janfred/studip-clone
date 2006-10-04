@@ -344,10 +344,10 @@ if ($form == 2)
 					$false_mark = true;
 				}
 			}
-			$st_search->selected = array_merge($st_search->selected,$selected);
+			$st_search->selected = array_merge((array)$st_search->selected,(array)$selected);
 			$st_search->sem_tree_ranges = array_merge_recursive($st_search->sem_tree_ranges, $sem_tree_ranges);
 			array_walk($st_search->sem_tree_ranges, create_function('&$value,$key', '$value = array_values(array_unique($value));'));
-			$st_search->sem_tree_ids = array_unique(array_merge($st_search->sem_tree_ids, $sem_tree_ids));
+			$st_search->sem_tree_ids = array_unique(array_merge((array)$st_search->sem_tree_ids, (array)$sem_tree_ids));
 			$sem_create_data["sem_bereich"] = $sem_tree_ids;
 	}
 
@@ -996,7 +996,7 @@ if (($form == 4) && ($jump_next_x)) {
 			if ((!$errormsg) && ($RESOURCES_ENABLE)) {
 				$tmp_chk_date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
 				$tmp_chk_end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
-				$checkResult = array_merge($checkResult, $resAssign->insertDateAssign(FALSE, $sem_create_data["term_resource_id"][$i], $tmp_chk_date, $tmp_chk_end_time, TRUE));
+				$checkResult = array_merge((array)$checkResult, (array)$resAssign->insertDateAssign(FALSE, $sem_create_data["term_resource_id"][$i], $tmp_chk_date, $tmp_chk_end_time, TRUE));
 			}
 		}
 	}
@@ -1005,7 +1005,7 @@ if (($form == 4) && ($jump_next_x)) {
 	else {
 		//check overlaps...
 		if ($RESOURCES_ENABLE) {
-			$checkResult = array_merge($checkResult, $resAssign->insertDateAssign(FALSE, $sem_create_data["sem_vor_resource_id"], $sem_create_data["sem_vor_termin"], $sem_create_data["sem_vor_end_termin"],TRUE));
+			$checkResult = array_merge((array)$checkResult, (array)$resAssign->insertDateAssign(FALSE, $sem_create_data["sem_vor_resource_id"], $sem_create_data["sem_vor_termin"], $sem_create_data["sem_vor_end_termin"],TRUE));
 		}
 	}
 
@@ -1476,7 +1476,7 @@ if (($form == 6) && ($jump_next_x))
 				//update/insert the assigned roomes
 				if ($RESOURCES_ENABLE && $db->affected_rows()) {
 					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
-					$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["sem_vor_resource_id"]));
+					$updateResult = array_merge((array)$updateResult, (array)$updateAssign->insertDateAssign($termin_id, $sem_create_data["sem_vor_resource_id"]));
 				}
 
 				//create a request
@@ -1507,7 +1507,7 @@ if (($form == 6) && ($jump_next_x))
 						//update/insert the assigned roomes
 						if ($RESOURCES_ENABLE && $db->affected_rows()) {
 							$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
-							$updateResult = array_merge($updateResult, $updateAssign->insertDateAssign($termin_id, $sem_create_data["term_resource_id"][$i]));
+							$updateResult = array_merge((array)$updateResult,(array)$updateAssign->insertDateAssign($termin_id, $sem_create_data["term_resource_id"][$i]));
 						}
 					}
 			}

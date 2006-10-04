@@ -118,7 +118,7 @@ class ResourceObjectPerms {
 			$my_administrable_objects = search_administrable_objects();	//the administrative ones....
 			$my_objects=search_my_objects();				//...and the other, where the user is autor.
 			$my_objects["all"] = TRUE;
-			$my_objects = array_merge($my_administrable_objects, $my_objects);
+			$my_objects = array_merge((array)$my_administrable_objects, (array)$my_objects);
 			//check if one of my administrable (system) objects owner of the resourcen object, so that I am too...
 			
 			if (is_array($my_objects) && count($my_objects)){

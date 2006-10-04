@@ -293,7 +293,7 @@ function getFolderId($parent_id, $in_recursion = false){
 		}
 		$kids = getFolderChildren($parent_id);
 		if ($kids[1]){
-			$kidskids = array_merge($kidskids,$kids[0]);
+			$kidskids = array_merge((array)$kidskids,(array)$kids[0]);
 			for ($i = 0; $i < $kids[1]; ++$i){
 				getFolderId($kids[0][$i],true);
 			}

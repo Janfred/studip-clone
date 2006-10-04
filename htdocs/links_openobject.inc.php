@@ -177,7 +177,7 @@ if ($PLUGINS_ENABLE){
 			}
 		}
 		// now insert the bottomkats
-		$structure = array_merge($structure,$pluginsubmenu);
+		$structure = array_merge((array)$structure,(array)$pluginsubmenu);
 	}
 }
 

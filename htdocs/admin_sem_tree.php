@@ -51,7 +51,7 @@ if ($search_obj->search_done){
 	} elseif ($search_obj->search_result->numRows > 0){
 		$_msg = "msg§" .sprintf(_("Es wurden %s Veranstaltungen gefunden, und in Ihre Merkliste eingef&uuml;gt"),$search_obj->search_result->numRows);
 		if (is_array($_marked_sem) && count($_marked_sem)){
-			$_marked_sem = array_merge($_marked_sem,$search_obj->search_result->getDistinctRows("seminar_id"));
+			$_marked_sem = array_merge((array)$_marked_sem, (array)$search_obj->search_result->getDistinctRows("seminar_id"));
 		} else {
 			$_marked_sem = $search_obj->search_result->getDistinctRows("seminar_id");
 		}

@@ -139,7 +139,7 @@ class CalendarSynchronizer {
 		// delete sentinel
 		array_shift($events);
 		// every event left over in $events is not in Stud.IP, so import the rest
-		$int = array_merge($int, $events);
+		$int = array_merge((array)$int, (array)$events);
 		
 		if (sizeof($int) > $this->max_events) {
 			$_calendar_error->throwError(ERROR_CRITICAL,

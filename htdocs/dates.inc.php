@@ -1210,9 +1210,9 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 						//only if we get a resource_id, we update assigns...
 						if ($val["resource_id"]){
 							if ($action == 'update' && $val['resource_id'] != $old_turnus[$old_turnus_key]['resource_id'] ) {
-								$resources_result = array_merge($resources_result, $insertAssign->changeDateAssign($saved_dates[md5($start_time.$end_time)], $val["resource_id"], FALSE, FALSE, FALSE, $check_locks));
+								$resources_result = array_merge((array)$resources_result, (array)$insertAssign->changeDateAssign($saved_dates[md5($start_time.$end_time)], $val["resource_id"], FALSE, FALSE, FALSE, $check_locks));
 							} elseif ($action == 'insert') {
-								$resources_result = array_merge($resources_result, $insertAssign->insertDateAssign($date_id, $val["resource_id"], FALSE, FALSE, FALSE, $check_locks));
+								$resources_result = array_merge((array)$resources_result, (array)$insertAssign->insertDateAssign($date_id, $val["resource_id"], FALSE, FALSE, FALSE, $check_locks));
 							}
 						} elseif ($action == 'update'){
 							$insertAssign->killDateAssign($saved_dates[md5($start_time.$end_time)]);

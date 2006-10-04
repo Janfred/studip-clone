@@ -124,7 +124,7 @@
     	    	}
     	    }
 
-    	    $event_array    = array_merge($event_new_array, $event_old_array);
+    	    $event_array    = array_merge((array)$event_new_array, (array)$event_old_array);
     	    $progress_limit = $progress_counter + EVENTS_PER_PAGE;
     	    if ($progress_limit > $num_events)
     	    	$progress_limit = $num_events;

@@ -189,7 +189,7 @@ class ZebraTable extends Table {
 		if (!$styles["class"]) {
 			$styles["class"]=$this->switcherClass[$this->classcnt];
 		}
-		$s = array_merge($styles, $this->getHover());
+		$s = array_merge((array)$styles, (array)$this->getHover());
 		return Table::openRow($s);
 	}
 

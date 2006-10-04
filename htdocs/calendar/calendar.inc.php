@@ -741,7 +741,7 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 			$post_vars['exc_year'])) {
 		$exception = array(mktime(12, 0, 0, $post_vars['exc_month'],
 				$post_vars['exc_day'], $post_vars['exc_year'], 0));
-		$atermin->setExceptions(array_merge($atermin->getExceptions(), $exception));
+		$atermin->setExceptions(array_merge((array)$atermin->getExceptions(), (array)$exception));
 		unset($post_vars['add_exc_x']);
 	}
 	// delete exceptions

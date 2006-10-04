@@ -94,7 +94,7 @@ class ExternModuleLecturedetails extends ExternModule {
 	function setup () {
 		// extend $data_fields if generic datafields are set
 		$config_datafields = $this->config->getValue("Main", "genericdatafields");
-		$this->data_fields = array_merge($this->data_fields, $config_datafields);
+		$this->data_fields = array_merge((array)$this->data_fields, (array)$config_datafields);
 		
 		// setup module properties
 		$this->elements["SemName"]->real_name = _("Name der Veranstaltung");

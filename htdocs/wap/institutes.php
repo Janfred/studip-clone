@@ -117,7 +117,7 @@
     	    	}
     	    }
 
-    	    $inst_array     = array_merge($inst_new_array, $inst_old_array);
+    	    $inst_array     = array_merge((array)$inst_new_array, (array)$inst_old_array);
     	    $progress_limit = $progress_counter + INSTS_PER_PAGE;
     	    if ($progress_limit > $num_insts)
     	    	$progress_limit = $num_insts;

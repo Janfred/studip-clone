@@ -1322,7 +1322,7 @@ if ($save_state_x) {
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["resource_id"] = $val;
 					foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$key]["termin_ids"] as $key2 => $val2) {
 						if (!$dates_with_request[$key2]) {
-							$result = array_merge($result, $semResAssign->changeDateAssign($key2, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
+							$result = array_merge((array)$result, (array)$semResAssign->changeDateAssign($key2, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
 							$result_termin_id[] = $key2;
 						} else
 							$skipped_termin_ids[$key2]=TRUE;
@@ -1354,7 +1354,7 @@ if ($save_state_x) {
 			} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE))) {
 				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val){
 					if (!$dates_with_request[$key]) {
-						$result = array_merge($result, $semResAssign->changeDateAssign($key, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
+						$result = array_merge((array)$result, (array)$semResAssign->changeDateAssign($key, $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$key]));
 						$result_termin_id[] = $key;
 					} else
 						$skipped_termin_ids[$key]=TRUE;

@@ -65,7 +65,7 @@ class VeranstaltungResourcesAssign {
 		$query = sprintf("SELECT termin_id, date_typ FROM termine WHERE range_id = '%s' ", $this->seminar_id);
 		$db->query($query);
 		while ($db->next_record()) {
-			$result = array_merge($result, $this->changeDateAssign($db->f("termin_id")));
+			$result = array_merge((array)$result, (array)$this->changeDateAssign($db->f("termin_id")));
 		}
 		//kill all assigned rooms (only roomes and only resources assigned directly to the Veranstaltung, not to a termin!) to create new ones
 		$this->deleteAssignedRooms();
@@ -73,7 +73,7 @@ class VeranstaltungResourcesAssign {
 		//if no schedule-date exits, we take the metadates (only in this case! else we take only the concrete dates from the termin table!)
 		if (!isSchedule($this->seminar_id,true,true)){
 			$seminar =& Seminar::GetInstance($this->seminar_id);
-			$result2 = array_merge($result, $this->changeMetaAssigns('', '', '', FALSE, FALSE, $check_locks));
+			$result2 = array_merge((array)$result, (array)$this->changeMetaAssigns('', '', '', FALSE, FALSE, $check_locks));
 			if (is_array($result2)){
 				$clear_turnus = false;
 				foreach($result2 as $key => $value){
@@ -91,7 +91,7 @@ class VeranstaltungResourcesAssign {
 					$this->clearTurnusData(array_unique($keys_to_clear)); //die, dreaded resource_id, die!!!
 				}
 			}
-			$result = array_merge($result, $result2);
+			$result = array_merge((array)$result, (array)$result2);
 		}
 		//Raumanfrage als bearbeitet markieren, wenn vorhanden
 		if(get_config('RESOURCES_ALLOW_ROOM_REQUESTS')){

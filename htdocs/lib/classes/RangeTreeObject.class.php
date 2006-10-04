@@ -120,7 +120,7 @@ class RangeTreeObject {
 	* @return	mixed	returns numeric array if param is false, else comma separated string
 	*/
 	function getAllObjectKids($as_value_list = false){
-		$all_object_kids = array_merge($this->getInstKids(),$this->getFakKids());
+		$all_object_kids = array_merge((array)$this->getInstKids(), (array)$this->getFakKids());
 		return ($as_value_list) ? $this->getValueList($all_object_kids) : $all_object_kids;
 	}
 	

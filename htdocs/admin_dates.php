@@ -330,7 +330,7 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 			$tmp_result=edit_dates($stunde[$i],$minute[$i],$monat[$i], $tag[$i], $jahr[$i], $end_stunde[$i], $end_minute[$i], $t_id, $art[$i], $titel[$i],$description[$i], $topic_id[$i],$raum[$i], $resource_id[$i], $admin_dates_data["range_id"], $save_changes_with_request);
 		 	$result.=$tmp_result["msg"];
 
-		 	$resources_result = array_merge ($resources_result, $tmp_result["resources_result"]);
+		 	$resources_result = array_merge ((array)$resources_result, (array)$tmp_result["resources_result"]);
 
 			$aktuell=time();
 
@@ -376,7 +376,7 @@ if ((($edit_x) || ($save_changes_with_request)) && (!$admin_dates_data["termin_i
 	//after every change, we have to do this check (and we create the msgs...)
 	if ($RESOURCES_ENABLE) {
 		$updateAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
-		$resources_result = array_merge ($resources_result, $updateAssign->updateAssign(false)); //do not check locks, we are only editing real dates
+		$resources_result = array_merge ((array)$resources_result, (array)$updateAssign->updateAssign(false)); //do not check locks, we are only editing real dates
 	}
 }  // end if ($edit_x)
 
@@ -409,7 +409,7 @@ if ((($kill_x) || ($delete_confirm)) && ($admin_dates_data["range_id"])) {
 	//after every change, we have to do this check (and we create the msgs...)
 	if ($RESOURCES_ENABLE) {
 		$updateAssign = new VeranstaltungResourcesAssign($admin_dates_data["range_id"]);
-		$resources_result = array_merge ($resources_result, $updateAssign->updateAssign(false));
+		$resources_result = array_merge ((array)$resources_result, (array)$updateAssign->updateAssign(false));
 		if ($updateAssign->turnus_cleared && $RESOURCES_ALLOW_ROOM_REQUESTS){
 			$request_id = getSeminarRoomRequest($admin_dates_data["range_id"]);
 			if ($request_id){		//reactivate room request if there is one

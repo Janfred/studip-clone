@@ -535,8 +535,8 @@ function update_generic_datafields (&$config, &$data_fields, &$field_names, $obj
 		// data fields added
 		if ($diff_generic_datafields = array_diff($generic_datafields["ids"],
 				$config_generic_datafields)) {
-			$config_generic_datafields = array_merge($config_generic_datafields,
-					$diff_generic_datafields);
+			$config_generic_datafields = array_merge((array)$config_generic_datafields,
+					(array)$diff_generic_datafields);
 			foreach ($diff_generic_datafields as $datafield) {
 				$visible[] = "0";
 				$order[] = sizeof($order);

@@ -62,7 +62,7 @@ class ExternElementSelectSubjectAreas extends ExternElement {
 		if ($this->config->range_id) {
 			$this->selector->institut_id = $this->config->range_id;
 			foreach ($this->selector->sem_tree_ranges as $range_path) {
-				$this->all_ranges = array_merge($this->all_ranges, $range_path);
+				$this->all_ranges = array_merge((array)$this->all_ranges, (array)$range_path);
 			}
 		}
 	}

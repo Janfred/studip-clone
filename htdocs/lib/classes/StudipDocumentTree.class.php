@@ -237,7 +237,7 @@ class StudipDocumentTree extends TreeAbstract {
 			foreach($this->getKids($item_id) as $one){
 				if($this->isReadable($one, $user_id) && $this->isExecutable($one, $user_id)) $kids[] = $one;
 			}
-			$kidskids = array_merge($kidskids,$kids);
+			$kidskids = array_merge((array)$kidskids, (array)$kids);
 			foreach($kids as $kid){
 				$this->getReadableKidsKids($kid,$user_id, true);
 			}
