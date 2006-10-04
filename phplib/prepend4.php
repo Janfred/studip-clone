@@ -8,6 +8,9 @@
  * $Id$
  *
  */ 
+
+if (!get_magic_quotes_gpc()) set_magic_quotes_runtime(1);
+
 (!isset($_REQUEST['GLOBALS'])) OR die('Setting the $GLOBALS array is not tolerated!');
 $PHP_SELF = $_SERVER['PHP_SELF'] = $_SERVER['SCRIPT_NAME'];
 $_PHPLIB = array();
