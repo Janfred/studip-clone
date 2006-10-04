@@ -195,7 +195,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			$title = fit_title($day_event->getTitle(), 1, 1, $title_length);
 			$title_str = sprintf("<a style=\"color: #FFFFFF; font-size:10px;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%s%s\" %s>"
 													, $day_event->getId(), $day_event->getStart()
-													, get_class($day_event) == 'seminarevent' ? '&evtype=sem' : ''
+													, strtolower(get_class($day_event)) == 'seminarevent' ? '&evtype=sem' : ''
 													, js_hover($day_obj->events[$map_day_events[$i]]));
 			$title_str .= $title . '</a>';
 			$day_event_row[0] .= "<tr><td height=\"20\" valign=\"top\" style=\"border-style:solid; border-width:1px; border-color:";
@@ -356,7 +356,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 					$tab[$zeile] .= "); border-style:solid; border-width:1px; border-color:";
 					$tab[$zeile] .= $category_style['color'] . ";\">";
 
-					if (get_class($term[$zeile][$j]) == 'seminarevent'
+					if (strtolower(get_class($term[$zeile][$j])) == 'seminarevent'
 							&& $term[$zeile][$j]->getTitle() == "Kein Titel") {
 						$title_out = $term[$zeile][$j]->getSemName();
 					}
@@ -369,7 +369,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$tab[$zeile] .= sprintf("<a style=\"color: #FFFFFF;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\" %s>"
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
-													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : ""
+													, strtolower(get_class($term[$zeile][$j])) == "seminarevent" ? "&evtype=sem" : ""
 													, js_hover($day_obj->events[$mapping[$zeile][$j]]));
 						$tab[$zeile] .= $title . "</a>";
 					}
@@ -382,7 +382,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 						$tab[$zeile] .= sprintf("<a style=\"color: #FFFFFF;\" href=\"$PHP_SELF?cmd=edit&termin_id=%s&atime=%d%s\" %s>"
 													, $term[$zeile][$j]->getId()
 													, ($day_obj->getStart() + $term[$zeile][$j]->getStart() % 86400)
-													, get_class($term[$zeile][$j]) == "seminarevent" ? "&evtype=sem" : ""
+													, strtolower(get_class($term[$zeile][$j])) == "seminarevent" ? "&evtype=sem" : ""
 													, js_hover($day_obj->events[$mapping[$zeile][$j]]));
 						$tab[$zeile] .= $title . "</a>";
 					}
@@ -775,7 +775,7 @@ function js_hover ($aterm) {
 		$jscript_text = '<b>' . _("Zusammenfassung:") . ' </b>'
 				. htmlReady($aterm->getTitle()) . '<hr>';
 
-		if (get_class($aterm) == 'seminarevent') {
+		if (strtolower(get_class($aterm)) == 'seminarevent') {
 			$jscript_text .= '<b>' . _("Veranstaltung:") . ' </b> '
 					. htmlReady($aterm->getSemName()) . '<br>';
 		}
@@ -791,7 +791,7 @@ function js_hover ($aterm) {
 			$jscript_text .= '<b>' . _("Ort:") . ' </b> '
 					. htmlReady($aterm->getProperty('LOCATION')) . '<br>';
 		}
-		if (get_class($aterm) != 'seminarevent') {
+		if (strtolower(get_class($aterm)) != 'seminarevent') {
 			$jscript_text .= '<b>' . _("Priorit&auml;t:") . ' </b>'
 					. htmlReady($aterm->toStringPriority()) . '<br>';
 			$jscript_text .= '<b>' . _("Zugriff:") . ' </b>'

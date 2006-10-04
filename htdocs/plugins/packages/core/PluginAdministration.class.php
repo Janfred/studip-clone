@@ -171,7 +171,7 @@ class PluginAdministration {
 				}
 				else {
 					 // check if certain methods exist in the plugin
-					 $methods = get_class_methods($plugin);
+					 $methods = array_map('strtolower', get_class_methods($plugin));
 					 if (array_search('show',$methods)){
 					 	// now register the plugin in the database					 	
 					 	$newpluginid = $persistence->registerPlugin($plugin,$pluginclassname,$pluginrelativepath);					 	
@@ -286,7 +286,7 @@ class PluginAdministration {
 		$persistence = PluginEngine::getPluginPersistence();
 		$plugin = $persistence->getPlugin($pluginid);		
 		$manifest = PluginEngine::getPluginManifest($this->environment->getBasepath() . $plugin->getPluginpath());
-		$file_id = get_class($plugin) . "_" . $manifest["version"] . ".zip";
+		$file_id = strtolower(get_class($plugin)) . "_" . $manifest["version"] . ".zip";
 		create_zip_from_directory($this->environment->getBasepath() . $plugin->getPluginpath(), $GLOBALS["TMP_PATH"] . "/" . $file_id);
 		return GetDownloadLink($file_id, $file_id, 4, 'force');
 	}

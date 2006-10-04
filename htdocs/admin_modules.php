@@ -289,7 +289,7 @@ if ($admin_modules_data["range_id"]) {
 				/*
 				$globalactivated = false;
 				foreach ($defactplugins as $actplugin) {
-					if (get_class($actplugin) == get_class($plugin)){
+					if (strtolower(get_class($actplugin)) == strtolower(get_class($plugin))){
 						$globalactivated = true;
 						break;
 					}

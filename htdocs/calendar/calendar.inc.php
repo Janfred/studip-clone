@@ -494,10 +494,10 @@ if ($cmd == 'showyear') {
 // ist $atime an das Skript uebergeben worden, dann erzeuge neuen Termin (s.o.)
 if ($cmd == 'edit') {
 
-	if (get_class($atermin) == 'seminarevent') {
+	if (strtolower(get_class($atermin)) == 'seminarevent') {
 		$edit_mode_out .= sprintf(_("Termin am %s"), ldate($atermin->getStart()));
 	}
-	elseif (get_class($atermin) == 'dbcalendarevent') {
+	elseif (strtolower(get_class($atermin)) == 'dbcalendarevent') {
 		$edit_mode_out .= sprintf(_("Termin am %s bearbeiten"), ldate($atime));
 	}
 	elseif ($atime) {
@@ -773,7 +773,7 @@ function get_event_properties (&$post_vars, &$atermin) {
 	$post_vars['content'] = htmlReady($atermin->properties['DESCRIPTION']);
 	$post_vars['loc'] = htmlReady($atermin->getLocation());
 	
-	if (get_class($atermin) != 'seminarevent') {
+	if (strtolower(get_class($atermin)) != 'seminarevent') {
 		
 		// exceptions
 		$post_vars['exceptions'] = $atermin->getExceptions();

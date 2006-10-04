@@ -52,11 +52,11 @@ if ($plugin == null){
 	}	
 }
 
-if (!array_search(strtolower($cmd),get_class_methods($plugin))){	
+if (!array_search(strtolower($cmd),array_map('strtolower', get_class_methods($plugin)))) {	
 	die(_("Das Plugin verfügt nicht über die gewünschte Operation"));
 }
 
-if (array_search("initialize",get_class_methods($plugin))){
+if (array_search('initialize',array_map('strtolower', get_class_methods($plugin)))){
 	// the plugin has an initialize-method
 	// call it
 	$plugin->initialize();

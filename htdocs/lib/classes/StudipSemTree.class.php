@@ -261,6 +261,6 @@ class StudipSemTree extends TreeAbstract {
 }
 //$test =& TreeAbstract::GetInstance("StudipSemTree");
 //echo "<pre>";
-//echo get_class($test) .  "\n";
+//echo strtolower(get_class($test)) .  "\n";
 //print_r($test->tree_data);
 ?>

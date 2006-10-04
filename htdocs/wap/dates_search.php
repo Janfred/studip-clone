@@ -108,7 +108,7 @@
 				$progress_counter ++;
 				$event_id     = $event->getId();
 				$event_title  = $event->getTitle();
-				if (get_class($event) == 'seminarevent')
+				if (strtolower(get_class($event)) == 'seminarevent')
 					$sem_event = 1;
 				else
 					$sem_event = 0;

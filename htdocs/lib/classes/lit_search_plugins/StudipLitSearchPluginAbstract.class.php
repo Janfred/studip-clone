@@ -40,7 +40,7 @@ class StudipLitSearchPluginAbstract {
 	
 	function StudipLitSearchPluginAbstract(){
 		global $sess;
-		$this->class_name = get_class($this);
+		$this->class_name = strtolower(get_class($this));
 		$this->sess_var_name = "_search_result_" . $this->class_name;
 		if (is_object($sess) && ! $sess->is_registered($this->sess_var_name)){
 			$sess->register($this->sess_var_name);

@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+// $Id$ 
 
 page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
 
@@ -236,21 +237,24 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		'<td width="90%" class="blank" valign="top">', "\n", '<table cellpadding=4>', "\n";
 
 		for ($i=0; $i < count($menue_auswahl); $i++) { // mainmenue
-			echo	'<tr><td class="blank"><a href="',$menue[$menue_auswahl[$i][0]][1], '"',
-				(($menue[$menue_auswahl[$i][0]][2])? ' target="'.$menue[$menue_auswahl[$i][0]][2].'"':''),
-				'><img src="'.$GLOBALS['ASSETS_URL'].'images/forumrot.gif" border=0>&nbsp;', $menue[$menue_auswahl[$i][0]][0], '</a>';
-
+			if ($menue[$menue_auswahl[$i][0]][1]) {
+				echo	'<tr><td class="blank"><a href="'.$menue[$menue_auswahl[$i][0]][1]. '"'.
+				(($menue[$menue_auswahl[$i][0]][2])? ' target="'.$menue[$menue_auswahl[$i][0]][2].'"':'').
+				'><img src="'.$GLOBALS['ASSETS_URL'].'images/forumrot.gif" border=0>&nbsp;'. $menue[$menue_auswahl[$i][0]][0]. '</a>';
+			
+			} else {
+				echo	'<tr><td class="blank"><img src="'.$GLOBALS['ASSETS_URL'].'images/forumrot.gif" border=0>&nbsp;'. $menue[$menue_auswahl[$i][0]][0];
+			}
 			for ($k = 0; $k < count($menue_auswahl[$i][1]); $k++) { // submenue
 				echo	(($k == 0)? '<br />&nbsp; &nbsp; ':'&nbsp;/&nbsp;');
-				echo	'<font size="-1"><a href="',$menue[$menue_auswahl[$i][1][$k]][1],'"',
-					(($menue[$menue_auswahl[$i][1][$k]][2])? ' target="'.$menue[$menue_auswahl[$i][1][$k]][2].'"':''),
-					'>', $menue[$menue_auswahl[$i][1][$k]][0],'</a>';
+				echo	'<font size="-1"><a href="',$menue[$menue_auswahl[$i][1][$k]][1].'"'.
+					(($menue[$menue_auswahl[$i][1][$k]][2])? ' target="'.$menue[$menue_auswahl[$i][1][$k]][2].'"':'').
+					'>'. $menue[$menue_auswahl[$i][1][$k]][0].'</a>';
 			}
 			echo	'</td></tr>', "\n";
 		}
-	echo	'</table>', "\n", '</td>', "\n",
-		'<td class="blank" align="right" valign="top" background="'.$GLOBALS['ASSETS_URL'].'images/indexbild.jpg"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="235"></td>', "\n",
-		'</tr>',"\n", '</table> <br>', "\n";
+	echo	'</table>'. "\n". '</td>'. "\n".
+		'<td class="blank" align="right" valign="top" background="' . $GLOBALS['ASSETS_URL'] . 'images/indexbild.jpg"><img src="' . $GLOBALS['ASSETS_URL'] . 'images/blank.gif" width="235"></td>'. "\n". '</tr>'."\n". '</table> <br />'. "\n";
 
 	// display news
 	if (show_news('studip', $perm->have_perm('root'), 0, $index_data['nopen'], "70%", $LastLogin, $index_data))
@@ -287,7 +291,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 				continue;
 			}
 			// set the gettext-domain
-			$domain = "gtdomain_" . get_class($activatedportalplugin);
+			$domain = "gtdomain_" . strtolower(get_class($activatedportalplugin));
 			bindtextdomain($domain,$plugindbenv->getBasepath() . $activatedportalplugin->getPluginpath() . "/locale");
 			textdomain($domain);
 			// hier nun die PortalPlugins anzeigen				
@@ -435,7 +439,6 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 </table>
 </body>
 </html>
-<!-- $Id$ -->
 <?php
   // Save data back to database.
   page_close();

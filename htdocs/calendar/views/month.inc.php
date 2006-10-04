@@ -214,7 +214,7 @@ function print_month_events ($month_obj, $max_events, $day_timestamp) {
 
 	$count = 0;
 	while (($aterm = $month_obj->nextEvent($day_timestamp)) && $count < $max_events) {
-		if (get_class($aterm) == "seminarevent") {
+		if (strtolower(get_class($aterm)) == "seminarevent") {
 			$html_title = fit_title($aterm->getSemName(), 1, 1, 15);
 			$jscript_title = JSReady($aterm->getSemName());
 			$ev_type = "&evtype=sem";

@@ -143,7 +143,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	
 	function doCheckAccession($accession_number){
 		if (!$this->z_accession_bib){
-			$this->addError("error", sprintf(_("Attribut für Zugriffsnummer fehlt! (%s)"), get_class($this)));
+			$this->addError("error", sprintf(_("Attribut für Zugriffsnummer fehlt! (%s)"), strtolower(get_class($this))));
 			return false;
 		}
 		if (!$accession_number){

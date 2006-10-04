@@ -497,11 +497,11 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 
 		while ($termin = $list->nextEvent()) {
 			$icon = '&nbsp;<img src="'.$GLOBALS['ASSETS_URL'].'images/termin-icon.gif" border="0" alt="Termin">';
-			$have_write_permission = ((get_class($termin) == 'seminarevent' && $termin->haveWritePermission())
-					|| (get_class($termin) != 'seminarevent'));
+			$have_write_permission = ((strtolower(get_class($termin)) == 'seminarevent' && $termin->haveWritePermission())
+					|| (strtolower(get_class($termin)) != 'seminarevent'));
 
 			$zusatz = "";
-			if(get_class($termin) == 'seminarevent')
+			if(strtolower(get_class($termin)) == 'seminarevent')
 				$zusatz .= "<a href=\"seminar_main.php?auswahl=" . $termin->getSeminarId()
 								. "\"><font size=\"-1\">".htmlReady(mila($termin->getSemName(), 22))
 								. "&nbsp;</font></a>";
@@ -524,7 +524,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 			else
 				$titel .= " - ".date("H:i", $termin->getEnd());
 
-			if (get_class($termin) == 'seminarevent')
+			if (strtolower(get_class($termin)) == 'seminarevent')
 				//Beschneiden des Titels
 				$titel .= ", " . htmlReady(mila($termin->getTitle(), $length - 10));
 			else
@@ -533,7 +533,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 
 			//Dokumente zaehlen
 			$num_docs = 0;
-			if ($show_docs && get_class($termin) == 'seminarevent') {
+			if ($show_docs && strtolower(get_class($termin)) == 'seminarevent') {
 				$num_docs = doc_count($termin->getId());
 
 				if ($num_docs) {
@@ -592,11 +592,11 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 					$content .= _("Keine Beschreibung vorhanden") . "<br /><br />";
 
 				$have_category = FALSE;
-				if (sizeof($PERS_TERMIN_KAT) > 1 && get_class($termin) != 'seminarevent') {
+				if (sizeof($PERS_TERMIN_KAT) > 1 && strtolower(get_class($termin)) != 'seminarevent') {
 					$content .= "<b>" . _("Kategorie:") . "</b> " . htmlReady($termin->toStringCategories());
 					$have_category = TRUE;
 				}
-				elseif (sizeof($TERMIN_TYP) > 1 && get_class($termin) == 'seminarevent') {
+				elseif (sizeof($TERMIN_TYP) > 1 && strtolower(get_class($termin)) == 'seminarevent') {
 					$content .= "<b>" . _("Art des Termins:") . "</b> " . htmlReady($termin->toStringCategories());
 					$have_category = TRUE;
 				}
@@ -604,14 +604,14 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 				if ($termin->getLocation()) {
 					if ($have_category)
 						$content .= "&nbsp; &nbsp; &nbsp; &nbsp; ";
-					if (get_class($termin) == 'seminartermin')
+					if (strtolower(get_class($termin)) == 'seminartermin')
 						$content .= "<b>" . _("Raum:") . " </b>";
 					else
 						$content .= "<b>" . _("Ort:") . " </b>";
 					$content .= htmlReady(mila($termin->getLocation(), 25));
 				}
 
-				if (get_class($termin) != 'seminarevent') {
+				if (strtolower(get_class($termin)) != 'seminarevent') {
 					$content .= '<br><b>' . _("Priorit&auml;t:") . ' </b>'
 							. htmlReady($termin->toStringPriority());
 					$content .= '&nbsp; &nbsp; &nbsp; &nbsp; ';

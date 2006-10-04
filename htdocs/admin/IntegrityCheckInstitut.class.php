@@ -43,7 +43,7 @@ class IntegrityCheckInstitut extends IntegrityCheckAbstract{
 	* @access	public
 	*/
 	function IntegrityCheckInstitut(){
-		$baseclass = get_parent_class($this);
+		$baseclass = strtolower(get_parent_class($this));
 		//parent::$baseclass(); //calling the baseclass constructor 
 		$this->$baseclass(); //calling the baseclass constructor PHP < 4.1.0
 		$this->master_table = "Institute";

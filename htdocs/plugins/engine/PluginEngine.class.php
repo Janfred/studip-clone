@@ -219,7 +219,7 @@ class PluginEngine{
 	 * @param string $value - the value, which should be saved into the session
 	 */
 	function saveToSession($plugin,$key,$value){
-		$_SESSION["PLUGIN_SESSION_SPACE"][get_class($plugin)][$key] =serialize($value);
+		$_SESSION["PLUGIN_SESSION_SPACE"][strtolower(get_class($plugin))][$key] =serialize($value);
 	}
 	
 	
@@ -228,7 +228,7 @@ class PluginEngine{
 	 *
 	 */
 	function getValueFromSession($plugin,$key){
-		return unserialize($_SESSION["PLUGIN_SESSION_SPACE"][get_class($plugin)][$key]);
+		return unserialize($_SESSION["PLUGIN_SESSION_SPACE"][strtolower(get_class($plugin))][$key]);
 	}
 	
 	/**

@@ -69,7 +69,7 @@ echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
 echo "<form name=\"Formular\" action=\"$PHP_SELF?cmd=edit\" method=\"post\">";
 echo "<table class=\"blank\" width=\"99%\" border=\"0\" cellspacing=\"0\" cellpadding=\"10\">\n";
 
-if (isset($atermin) && get_class($atermin) == "seminarevent") {
+if (isset($atermin) && strtolower(get_class($atermin)) == "seminarevent") {
 	// form is not editable
 	$disabled = " style=\"color:#000000; background-color:#FFFFFF;\" disabled=\"disabled\"";
 } else {
@@ -87,7 +87,7 @@ $css_switcher->switchClass();
 
 if (!$set_recur_x) {
 
-	if (isset($atermin) && get_class($atermin) == "seminarevent") {
+	if (isset($atermin) && strtolower(get_class($atermin)) == "seminarevent") {
 		echo "<tr>\n<td class=\"" . $css_switcher->getClass() . "\" width=\"100%\">\n";
 		echo "<font size=\"-1\">" . _("Veranstaltung") . ":&nbsp; ";
 		echo htmlReady($atermin->getSemName());
@@ -204,7 +204,7 @@ if (!$set_recur_x) {
 	echo _("Kategorie:") . "&nbsp;&nbsp;</font>";
 	echo "<select name=\"cat\" size=\"1\"$disabled>\n";
 
-	if (isset($atermin) && get_class($atermin) == "seminarevent") {
+	if (isset($atermin) && strtolower(get_class($atermin)) == "seminarevent") {
 		if (!isset($cat))
 			$cat = 1;
 		printf("<option value=\"%s\" selected>%s", $cat, htmlReady($TERMIN_TYP[$cat]["name"]));
@@ -238,7 +238,7 @@ if (!$set_recur_x) {
 	echo "<input type=\"text\" name=\"loc\" size=\"30\" maxlength=\"255\" value=\"$loc\"$disabled>";
 	echo "</td>\n</tr>\n";
 
-	if (get_class($atermin) != "seminarevent") {
+	if (strtolower(get_class($atermin)) != "seminarevent") {
 		$css_switcher->switchClass();
 		echo "<tr><td class=\"" . $css_switcher->getClass() . "\">\n";
 		$info = _("Private und vertrauliche Termine sind nur für Sie sichtbar. Öffentliche Termine werden auf ihrer internen Homepage auch anderen Nutzern bekanntgegeben.");
@@ -291,7 +291,7 @@ else{
 
 
 
-	if (!isset($atermin) || get_class($atermin) != "seminarevent") {
+	if (!isset($atermin) || strtolower(get_class($atermin)) != "seminarevent") {
 		echo "<tr><td align=\"center\" class=\"" .  $css_switcher->getClass();
 		echo "\" colspan=\"2\" nowrap=\"nowrap\">\n<font size=\"-1\">&nbsp;";
 
@@ -599,14 +599,14 @@ else{
 if ($termin_id) {
 	$info_box['export_link'] = "$PHP_SELF?cmd=export&expmod=exp_direct&termin_id=";
 	$info_box['export_link'] .= $atermin->getId();
-	if (get_class($atermin) == "seminarevent")
+	if (strtolower(get_class($atermin)) == "seminarevent")
 		$info_box['export_link'] .= '&evtype=sem';
 	$info_box['export'] = array('icon' => 'vcardexport.gif',
 			'text' => sprintf(_("Sie k&ouml;nnen diesen Termin einzeln %sexportieren%s."),
 			"<a href=\"{$info_box['export_link']}\">", "</a>"));
 }
 
-if (isset($atermin) && get_class($atermin) == "seminarevent") {
+if (isset($atermin) && strtolower(get_class($atermin)) == "seminarevent") {
 	$db = new DB_Seminar();
 	$query = "SELECT name FROM seminare WHERE Seminar_id='".$atermin->getSeminarId()."'";
 	$db->query($query);
@@ -659,7 +659,7 @@ else {
 		echo "<input type=\"hidden\" name=\"set_recur_x\" value=\"1\">\n";
 		echo "<input type=\"hidden\" name=\"wholeday\" value=\"{$_POST['wholeday']}\">\n";
 	}
-	if ($atime && get_class($atermin) == 'calendarevent') {
+	if ($atime && strtolower(get_class($atermin)) == 'calendarevent') {
 		if ($count_events < $CALENDAR_MAX_EVENTS)
 			echo "<input type=\"image\" " . makeButton("terminspeichern", "src"). " name=\"store\" border=\"0\">\n";
 	}

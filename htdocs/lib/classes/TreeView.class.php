@@ -112,7 +112,7 @@ class TreeView {
 	function TreeView($tree_class_name,$args = null){
 		global $sess;
 		$this->tree_class_name = $tree_class_name;
-		$this->class_name = get_class($this);
+		$this->class_name = strtolower(get_class($this));
 		$this->tree =& TreeAbstract::GetInstance($tree_class_name,$args);
 		$this->pic_open = ($this->use_aging) ? "forumgraurunt2.gif" : "forumrotrunt.gif";
 		$this->pic_close = ($this->use_aging) ? "forumgrau2.gif" : "forumgrau.gif";

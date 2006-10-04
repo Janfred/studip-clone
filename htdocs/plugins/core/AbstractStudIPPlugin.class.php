@@ -52,7 +52,7 @@ class AbstractStudIPPlugin {
 	}
 	
 	function getPluginclassname(){
-		return get_class($this);
+		return strtolower(get_class($this));
 	}	
 	
 	/**
@@ -249,7 +249,7 @@ class AbstractStudIPPlugin {
 	
 	function getPluginname(){
 		if ($this->pluginname == ""){
-			$this->pluginname = get_class($this);
+			$this->pluginname = strtolower(get_class($this));
 		}
 		return $this->pluginname;
 	}
