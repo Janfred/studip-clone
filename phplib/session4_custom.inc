@@ -171,7 +171,7 @@ class Session {
   */
   function Session() {
 	  if (!$this->classname){
-		  $this->classname = get_class($this);
+		  $this->classname = strtolower(get_class($this));
 	  }
 	  $this->name($this->name);
   } // end constructor
