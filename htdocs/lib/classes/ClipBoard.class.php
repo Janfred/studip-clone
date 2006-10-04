@@ -41,7 +41,6 @@ class ClipBoard {
 	var $form_obj = null;
 	var $object_types = null;
 	var $form_name = "clipboard_form";
-	var $elements_query;
 	var $msg;
 	//querys for different object_types
 	var $elements_query = array (
