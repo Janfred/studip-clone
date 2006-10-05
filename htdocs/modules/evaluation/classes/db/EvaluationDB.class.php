@@ -418,8 +418,7 @@ class EvaluationDB extends EvaluationObjectDB {
    * @return integer  The number of users
    */
    function getNumberOfVotes ($evalID) {
-      $db = method_exists ($this->db, 'save') ? $this->db :
-         DatabaseObject::getDBObject ();
+       $db = DatabaseObject::getDBObject ();
 
     $sql =
       "SELECT".
