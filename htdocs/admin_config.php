@@ -118,7 +118,7 @@ if ($_REQUEST["change_config"]) {
 	<tr>
 		<td class="blank" colspan=2>
 			<?
-			$out[] = '<form action="'.$PHP_SELF.'">';
+			$out[] = '<form method="post" action="'.$PHP_SELF.'">';
 			$out[] = '<table width="95%" border=0 cellpadding=0 cellspacing=0 align="center">';
 			$out[] = '<tr><td width="50%"style="border: dotted 1px black; background: url(\''.$GLOBALS['ASSETS_URL'].'images/steel1.jpg\')" valign="top">';
 			$out[] = '<font size="-1">&nbsp;'._("Gew&auml;hlter Konfigurations-Bereich:").'&nbsp;<br>';
@@ -171,7 +171,7 @@ if ($_REQUEST["change_config"]) {
 			<table width="99%" border=0 cellpadding=0 cellspacing=3>
 			<?
 			$config_values = $cfg->getAll();
-				$out[] = '<form action="'.$PHP_SELF.'">';
+				$out[] = '<form method="post" action="'.$PHP_SELF.'#anker">';
 				foreach ($config_values as $key => $val) {
 					$out[] = '<tr><td width="5%">&nbsp;</td>';
 					$out[] = '<td width="95%" style="border: solid 1px black; background: url(\''.$GLOBALS['ASSETS_URL'].'images/steel1.jpg\')" align="right">';
@@ -181,10 +181,11 @@ if ($_REQUEST["change_config"]) {
 					if ($_REQUEST["edit_config"] == $key) {
 						$out[].= '<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border=0>';
 					} else {
-						$out[].= '<a href="'.$PHP_SELF.'?edit_config='.$key.'">';
+						$out[].= '<a href="'.$PHP_SELF.'?edit_config='.$key.'#anker">';
 						$out[].= '&nbsp;<img src="'.$GLOBALS['ASSETS_URL'].'images/edit_transparent.gif" border=0>';
 					}
 					$out[] = '<td width="20%" class="steelgraulight" align="center"><font size="-1">';
+					if ($_REQUEST["edit_config"] == $key || isset($_REQUEST['change_config'][$key])) $out[] = '<a name="anker"> </a>';
 					if ($_REQUEST["edit_config"] == $key) {
 						if ($val["type"] == "boolean") {
 							$out[].= '<select style="font-size: 8pt" name="change_config['.$key.']">';
@@ -194,10 +195,10 @@ if ($_REQUEST["change_config"]) {
 						} elseif ($val["type"] == "integer") {
 							$out[].= '<input type="TEXT" style="font-size: 8pt" maxlength=20 size=20 name="change_config['.$key.']" value="'.$val["value"].'">';
 						} else {
-							$out[].= '<textarea style="font-size: 8pt" cols=20 cols=4 name="change_config['.$key.']">'.$val["value"].'</textarea>';
+							$out[].= '<textarea style="font-size: 8pt;width:100%;" wrap="virtual" rows="4" name="change_config['.$key.']">'.$val["value"].'</textarea>';
 						}
 						$out[].= '<br><font size="-1">'. _("Kommentar:") .'</font><br>';
-						$out[].= '<textarea style="font-size: 8pt" cols=20 cols=4 name="change_comment['.$key.']">'.$val["comment"].'</textarea>';
+						$out[].= '<textarea style="font-size: 8pt;width:100%;" wrap="virtual" rows="4" name="change_comment['.$key.']">'.$val["comment"].'</textarea>';
 					} elseif ($val["type"] == "boolean") {
 						if ($val["value"]) {
 							$out[].= '<img src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif">';
