@@ -52,6 +52,8 @@ class StudipAuthLdap extends StudipAuthAbstract {
 	var $protocol_version;
 	var $username_attribute;
 	var $bad_char_regex =  '/[^0-9_a-zA-Z]/';
+	var $decode_utf8_values = false;
+	var $send_utf8_credentials = false;
 	
 	var $conn = null;
 	var $user_data = null;
@@ -92,6 +94,9 @@ class StudipAuthLdap extends StudipAuthAbstract {
 
 	function getUserDn($username){
 		$user_dn = "";
+		if ($this->send_utf8_credentials){
+			$username = utf8_encode($username);
+		}
 		if ($this->anonymous_bind){
 			if (!($r = @ldap_bind($this->conn))){
 				$this->error_msg =_("Anonymer Bind fehlgeschlagen.") . $this->getLdapError();
@@ -120,6 +125,9 @@ class StudipAuthLdap extends StudipAuthAbstract {
 	}
 				
 	function doLdapBind($username, $password){
+		if ($this->send_utf8_credentials){
+			$password = utf8_encode($password);
+		}
 		if (!$this->doLdapConnect()){
 			return false;
 		}
@@ -171,14 +179,21 @@ class StudipAuthLdap extends StudipAuthAbstract {
 		if ($this->user_data[$map_params][0]){
 			$ret = $this->user_data[$map_params][0];
 		}
-		return $ret;
+		return ($this->decode_utf8_values ? utf8_decode($ret) : $ret);
 	}
 	
 	function doLdapMapVorname($map_params){
 		$ret = "";
 		$ldap_field = $this->user_data[$map_params[0]][$map_params[1]];
+		if ($this->decode_utf8_values) {
+			$ldap_field = utf8_decode($ldap_field);
+		}
 		if ($ldap_field){
-			$pos = strpos($ldap_field,$this->user_data['sn'][0]);
+			$sn = $this->user_data['sn'][0];
+			if ($this->decode_utf8_values) {
+				$sn = utf8_decode($sn);
+			}
+			$pos = strpos($ldap_field, $sn);
 			if ($pos !== false){
 				$ret = trim(substr($ldap_field,0,$pos));
 			}
@@ -187,6 +202,9 @@ class StudipAuthLdap extends StudipAuthAbstract {
 	}
 	
 	function isUsedUsername($username){
+		if ($this->send_utf8_credentials){
+			$username = utf8_encode($username);
+		}
 		if (!$this->anonymous_bind){
 			$this->error = _("Kann den Usernamen nicht überprüfen, anonymous_bind ist ausgeschaltet!");
 			return false;
