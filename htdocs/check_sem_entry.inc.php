@@ -45,6 +45,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 					if ($send_from_search)
 					echo " | <a href=\"sem_portal.php\">" . _("zur&uuml;ck zur Suche") . "</a>";
 					echo "<br /><br /></td></tr></table>";
+					closeObject();
+					page_close();
 					die;
 				}
 			} else { // wir haben einen Status, dann mal sehen...
