@@ -45,10 +45,6 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 	require_once ($ABSOLUTE_PATH_STUDIP."/" . $RELATIVE_PATH_ELEARNING_MODULES . "elearning/ObjectConnections.class.php");
 	ELearningUtils::bench("start");
 
-	$GLOBALS['ALWAYS_SELECT_DB'] = true;
-
-	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
-
 	ELearningUtils::bench("checkObject");
 
 	if ((! $rechte) AND ($view == "edit"))
@@ -132,6 +128,7 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 		$connected_modules = $object_connections->getConnections();
 		ELearningUtils::bench("connections");
 	}
+	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
 
 	?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
