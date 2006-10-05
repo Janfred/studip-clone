@@ -183,7 +183,7 @@ class StudipAuthAbstract {
 	function CheckAuthentication($username,$password,$jscript = false){
 
 		$db = new DB_Seminar();
-                $db->query(sprintf("SELECT * FROM auth_user_md5 WHERE username='%s'",$username));
+                $db->query(sprintf("SELECT * FROM auth_user_md5 WHERE username='%s'",mysql_escape_string($username)));
                 if ($db->next_record()) {
                         if ($db->f("locked")=="1") {
                                 $error .= _("Dieser Benutzer ist gesperrt! Wenden Sie sich bitte an die Administration.")."<BR>";
@@ -316,7 +316,7 @@ class StudipAuthAbstract {
 	* @return	string	the Stud.IP user id or false if an error occurs
 	*/
 	function getStudipUserid($username){
-		$this->dbv->params[] = $username;
+		$this->dbv->params[] = mysql_escape_string($username);
 		$db = $this->dbv->get_query("view:AUTH_USER_UNAME");
 		if ($db->next_record()){
 			$auth_plugin = is_null($db->f("auth_plugin")) ? "standard" : $db->f("auth_plugin");
