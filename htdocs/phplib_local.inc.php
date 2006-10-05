@@ -500,7 +500,7 @@ class Seminar_Auth extends Auth {
 			$password = $response;
 		}
 	
-		$check_auth = StudipAuthAbstract::CheckAuthentication($username,$password,$this->auth['jscript']);
+		$check_auth = StudipAuthAbstract::CheckAuthentication(stripslashes($username),stripslashes($password),$this->auth['jscript']);
 		
 		$GLOBALS['sess']->unregister('challenge');
 		
