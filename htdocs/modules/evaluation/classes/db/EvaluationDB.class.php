@@ -17,6 +17,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +--------------------------------------------------------------------------+
 
+
 # Include all required files ================================================ #
 require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
 require_once(EVAL_FILE_OBJECTDB);
@@ -124,7 +125,6 @@ class EvaluationDB extends EvaluationObjectDB {
     $evalObject->setAnonymous    ($this->db->f ("anonymous"));
     $evalObject->setVisible      ($this->db->f ("visible"));
     $evalObject->setShared       ($this->db->f ("shared"));
-    $evalObject->setProtected($this->db->f("protected"));
     /* --------------------------------------------------------- end: values */
 
 
@@ -193,11 +193,10 @@ class EvaluationDB extends EvaluationObjectDB {
    " chdate    = '".$evalObject->getChangedate ()."',".
    " anonymous = '".$evalObject->isAnonymous ()."',".
    " visible   = '".$evalObject->isVisible ()."',".
-   " shared    = '".$evalObject->isShared ()."',".
-   " protected = '".($evalObject->protected ? "1" : "0")."' ".
+   " shared    = '".$evalObject->isShared ()."'".
    "WHERE".
    " eval_id   = '".$evalObject->getObjectID ()."'";
-    } else {    	
+    } else {
       $sql =
    "INSERT INTO".
    " eval ".
@@ -213,15 +212,15 @@ class EvaluationDB extends EvaluationObjectDB {
    " chdate    = '".$evalObject->getChangedate ()."',".
    " anonymous = '".$evalObject->isAnonymous ()."',".
    " visible   = '".$evalObject->isVisible ()."',".
-   " shared    = '".$evalObject->isShared ()."'," .
-   " protected = '".($evalObject->protected ? "1" : "0") ."'";
-    }	
+   " shared    = '".$evalObject->isShared ()."'";
+    }
+
     $this->db->query ($sql);
     if ($this->db->Errno)
       return $this->throwError (1, _("Fehler beim Speichern. Fehlermeldung: ").
             $this->db->Error);
     /* ------------------------------------------------------- end: evalsave */
-    
+
     /* connect to ranges --------------------------------------------------- */
       $sql =
          "DELETE FROM".
@@ -444,7 +443,7 @@ class EvaluationDB extends EvaluationObjectDB {
    * @param  array    $answerIDs  The answerIDs to get the pseudonym users
    * @return integer  The number of users
    */
-  function getUserVoted ($evalID, $answerIDs = array (), $questionIDs = array ()) {
+   function getUserVoted ($evalID, $answerIDs = array (), $questionIDs = array ()) {
       if (!is_object ($this->db))
          $this->db = DatabaseObject::getDBObject ();
 
@@ -467,16 +466,16 @@ class EvaluationDB extends EvaluationObjectDB {
             " evalanswer_user ".
             "WHERE".
             " evalanswer_id IN ('".join("','", $answerIDs)."')";
-       } else { 
-               $sql = 
-               "SELECT DISTINCT". 
-               " user_id ". 
-               "FROM". 
-               " evalanswer INNER JOIN evalanswer_user USING(evalanswer_id) ". 
-               "WHERE". 
-               " parent_id IN ('".join("','", $questionIDs)."')"; 
-              } 
-
+       } else {
+	    $sql =
+            "SELECT DISTINCT".
+            " user_id ".
+            "FROM".
+            " evalanswer INNER JOIN evalanswer_user USING(evalanswer_id) ".
+            "WHERE".
+            " parent_id IN ('".join("','", $questionIDs)."')";
+	   }
+	   
       $this->db->query ($sql);
        if ($this->db->Errno)
          return $this->throwError (1, _("EvalDB::getUserVoted - Fehlermeldung: ").$this->db->Error);
@@ -499,7 +498,7 @@ class EvaluationDB extends EvaluationObjectDB {
    * @return array
    */
    function search_range($search_str) {
-   	  return search_range($search_str, true);      
+      return search_range($search_str, true);
    }
 # ===================================================== end: static functions #
 

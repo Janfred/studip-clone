@@ -55,26 +55,21 @@ class EvalShow {
 	  $td2->html( $br );
       }
 
-      /*
       $span = new HTM( "span" );
       $span->attr( "class", "eval_title" );
       $span->html( htmlReady($eval->getTitle()) );
-      
       $td2->cont( $span );
       $td2->cont( $br );
 
       $td2->cont( $br );
-      */
       if( $votedNow ) {
-		  $td2->cont( EvalCommon::createReportMessage( _("Vielen Dank für Ihre Teilnahme."), EVAL_PIC_SUCCESS, EVAL_CSS_SUCCESS ) );
-		  
-      } 
-      elseif( $votedEarlier ) {
-		  $td2->cont( EvalCommon::createReportMessage( _("Sie haben an dieser Evaluation bereits teilgenommen."), EVAL_PIC_INFO, EVAL_CSS_INFO ) );
+	  $td2->cont( EvalCommon::createReportMessage( _("Vielen Dank für Ihre Teilnahme."), EVAL_PIC_SUCCESS, EVAL_CSS_SUCCESS ) );
+      } elseif( $votedEarlier ) {
+	  $td2->cont( EvalCommon::createReportMessage( _("Sie haben an dieser Evaluation bereits teilgenommen."), EVAL_PIC_INFO, EVAL_CSS_INFO ) );
       } else {
-		  $td2->html( formatReady($eval->getText()) );
-		  $td2->cont( $br );
-	  }
+	  $td2->html( formatReady($eval->getText()) );
+	  $td2->cont( $br );
+      }
       $tr2->cont( $td2 );
 
       $td2 = new HTM( "td" );
@@ -112,7 +107,7 @@ class EvalShow {
       $infobox = array( array( "kategorie" => _("Information:"),
 			       "eintrag"   => $infos ) );
 
-      return print_infobox ($infobox, "", YES);
+      return print_infobox ($infobox, NULL, YES);
   }
 
 
@@ -303,61 +298,33 @@ class EvalShow {
          $button->attr( "border", "0" );
          $td->cont( $button );
       }
-      else {
-      	$evalID = $eval->getObjectId();
-      	// prüfen, ob zu dieser Evaluation noch ein verknüpfter Fragebogen besteht
-      	$studipdb = new DB_Seminar();
-      	$studipdb->query(sprintf("select * from eval_link where eval_id='%s'",$evalID));
-	    if ($studipdb->next_record()){
-	   	 // ergebnis vorhanden
-	   	 $linkedevalid = $studipdb->f("linked_eval_id");
-	    }
-	    
-	    if (isset($linkedevalid) && $linkedevalid != ""){
-	    	
-  			$button = new HTM( "a" );
-  			$preview = $_REQUEST["isPreview"];
-		    $button->attr( "href", sprintf("show_evaluation.php?evalID=%s&isPreview=%s",$linkedevalid,$isPreview));
-		    $img = new HTMpty( "img" );
-		    $img->stri( makeButton( "ok", "src" ).
-		       tooltip(_("Schließt dieses Fenster und ruft den nächsten Fragebogen auf.")) );
-		    $img->attr( "border", "0" );
-		    $button->cont( $img );
-		    $text = _("Mit dieser Evaluation sind weitere Fragen der Dozentin/ des Dozenten verknüpft. Diese werden nach dem Click auf den Button automatisch geöffnet wird. Bitte beantworten Sie auch diese zusätzlichen Fragen.");
-		    $td->cont($text);
-		    $td->cont($br);
-		    $td->cont($button );
-	    }
-	    else {
-	    	/* close button */
-		      if( $auth->auth["jscript"] ) {
-		         $button = new HTM( "a" );
-		         $button->attr( "href", "javascript:window.close()" );
-		         $img = new HTMpty( "img" );
-		         $img->stri( makeButton( "schliessen", "src" ).
-		            tooltip(_("Schließt dieses Fenster.")) );
-		         $img->attr( "border", "0" );
-		         $button->cont( $img );
-		      } else {
-		         $button = new HTM( "p" );
-		         $button->cont( _("Sie können dieses Fenster jetzt schließen.") );
-		      }
-		      $td->cont( $button );
-		
-		      /* reload button */
-		      if( $isPreview ) {
-		         $button = new HTM( "a" );
-		#         $button->attr( "href", "javascript:location.reload()" );
-		         $button->attr( "href", "show_evaluation.php?evalID=".$eval->getObjectID()."&isPreview=1" );
-		         $img = new HTMpty( "img" );
-		         $img->stri( makeButton( "aktualisieren", "src" ).
-		            tooltip(_("Vorschau aktualisieren.")) );
-		         $img->attr( "border", "0" );
-		         $button->cont( $img );
-			 $td->cont( $button );
-		      }
-	    }
-      	
+      
+      /* close button */
+      if( $auth->auth["jscript"] ) {
+         $button = new HTM( "a" );
+         $button->attr( "href", "javascript:window.close()" );
+         $img = new HTMpty( "img" );
+         $img->stri( makeButton( "schliessen", "src" ).
+            tooltip(_("Schließt dieses Fenster.")) );
+         $img->attr( "border", "0" );
+         $button->cont( $img );
+      } else {
+         $button = new HTM( "p" );
+         $button->cont( _("Sie können dieses Fenster jetzt schließen.") );
+      }
+      $td->cont( $button );
+
+      /* reload button */
+      if( $isPreview ) {
+         $button = new HTM( "a" );
+#         $button->attr( "href", "javascript:location.reload()" );
+         $button->attr( "href", "show_evaluation.php?evalID=".$eval->getObjectID()."&isPreview=1" );
+         $img = new HTMpty( "img" );
+         $img->stri( makeButton( "aktualisieren", "src" ).
+            tooltip(_("Vorschau aktualisieren.")) );
+         $img->attr( "border", "0" );
+         $button->cont( $img );
+	 $td->cont( $button );
       }
 
       $td->cont( $br );

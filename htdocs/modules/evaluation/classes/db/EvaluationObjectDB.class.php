@@ -324,7 +324,7 @@ class EvaluationObjectDB extends DatabaseObject {
    * @param   string  $state  Specific state
    * @return  array   All evaluations in this range and this state
    */
-  function getEvaluationIDs ($rangeID = "", $state = "", $protected=false) {
+  function getEvaluationIDs ($rangeID = "", $state = "") {
     $db = DatabaseObject::getDBObject ();
     global $user;
 
@@ -342,7 +342,9 @@ class EvaluationObjectDB extends DatabaseObject {
     if ( get_userid($rangeID) != NULL && $rangeID != NULL)
       $rangeID = get_userid($rangeID);
 
-    /* ------------------------------------------------------ end: checking */	
+    /* ------------------------------------------------------ end: checking */
+
+
     /* ask database ------------------------------------------------------- */
     if (!empty ($rangeID)) {
     $sql =
@@ -353,10 +355,7 @@ class EvaluationObjectDB extends DatabaseObject {
       "WHERE".
       " a.eval_id = b.eval_id".
       " AND ".
-      " a.range_id = '".$rangeID."'";      
-      if ($protected){
-      	$sql = $sql . " and b.protected=1";
-      }      
+      " a.range_id = '".$rangeID."'";
     } else {
       // Krampf!!! Jetzt klappt's....seufz
       $sql =
@@ -398,6 +397,7 @@ class EvaluationObjectDB extends DatabaseObject {
       "     )";
 
     $sql .= " ORDER BY chdate DESC";
+
     if ($db->Debug)
        $sql .= " #eval->getEvaluationIDs ()";
     $db->query ($sql);

@@ -52,7 +52,7 @@ class EvaluationTreeShowUser {
 
     /**
      * Reference to the tree structure
-     * 
+     *
      * @access	private
      * @var	object EvaluationTree $tree
      */
@@ -60,7 +60,7 @@ class EvaluationTreeShowUser {
 
     /**
      * contains the item with the current html anchor (currently unused)
-     * 
+     *
      * @access	public
      * @var	string	$anchor
      */
@@ -87,7 +87,6 @@ class EvaluationTreeShowUser {
 
     }
 
-	
 
     /**
      * prints out the tree beginning with a given item
@@ -96,29 +95,28 @@ class EvaluationTreeShowUser {
      * @param	string	ID of the start item, shouldnt be needed.
      */
     function showTree( $item_id = "root" ) {
-		$items = array();
-		$js = EvalCommon::createEvalShowJS( YES );
-		echo $js->createContent();
-		if( ! is_array($item_id) ) {
-		    $items[0] = $item_id;
-		    $this->start_item_id = $item_id;
-		} else {
-		    $items = $item_id;
-		}
-	
-		$num_items = count($items);
-		for( $j = 0; $j < $num_items; ++$j ) {
-		    
-		    $this->printLevelOutput( $items[$j] );
-		    $this->printItemOutput( $items[$j] );
-	
-		    if( $this->tree->hasKids( $items[$j] ) ) {
-			$this->showTree( $this->tree->tree_childs[$items[$j]] );
-		    }
-		}
-	   return;
+	$items = array();
+
+	if( ! is_array($item_id) ) {
+	    $items[0] = $item_id;
+	    $this->start_item_id = $item_id;
+	} else {
+	    $items = $item_id;
+	}
+
+	$num_items = count($items);
+	for( $j = 0; $j < $num_items; ++$j ) {
+
+	    $this->printLevelOutput( $items[$j] );
+	    $this->printItemOutput( $items[$j] );
+
+	    if( $this->tree->hasKids( $items[$j] ) ) {
+		$this->showTree( $this->tree->tree_childs[$items[$j]] );
+	    }
+	}
+	return;
     }
-	
+
 
     /**
      * prints out ... hmm ... the group's level indentation space, and a table start
@@ -133,9 +131,9 @@ class EvaluationTreeShowUser {
 	$level_output = "";
 #	echo "<td nowrap width=\"1\" valign=\"middle\">\n";
 #	echo ($this->anchor == $group_id ? "<a name=\"anchor\">" : "");
-#	echo "<img src=\"pictures/forumleer.gif\" border=\"0\" height=\"1\" width=\"1\" alt=\"\">";
+#	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" border=\"0\" height=\"1\" width=\"1\" alt=\"\">";
 #	echo ($this->anchor == $group_id ? "</a>\n" : "\n");
-		    
+
 	$parent_id = $group_id;
 	while( $this->tree->tree_data[$parent_id]['parent_id'] != $this->start_item_id ) {
 	    $parent_id = $this->tree->tree_data[$parent_id]['parent_id'];
@@ -146,14 +144,14 @@ class EvaluationTreeShowUser {
 		"<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"".INDENT_PIXELS."\" height=\"1\" border=\"0\" alt=\"\" />".
 		"</td>";
 	}
-	
+
 	echo "<!-- printLevelOutput ----------------- -->\n";
 	echo "<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n";
 	echo "<tr>\n";
 	echo $level_output;
 	return;
     }
-	
+
 
     /**
      * prints out one group
@@ -167,7 +165,7 @@ class EvaluationTreeShowUser {
 
 #	$group = new EvaluationGroup( $group_id, NULL, EVAL_LOAD_ALL_CHILDREN );
 	$group = &$this->tree->getGroupObject($group_id);
-	
+
 #	echo "<td>";
 #	echo ">";
 #	echo "</td>\n";
@@ -175,13 +173,12 @@ class EvaluationTreeShowUser {
 	echo "<td width=\"1\">\n";
 #	echo "<td nowrap width=\"1\" valign=\"middle\">\n";
 #	echo ($this->anchor == $group_id ? "<a name=\"anchor\">" : "");
-#	echo "<img src=\"pictures/forumleer.gif\" border=\"0\" height=\"1\" width=\"1\" alt=\"\">";
+#	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" border=\"0\" height=\"1\" width=\"1\" alt=\"\">";
 #	echo ($this->anchor == $group_id ? "</a>\n" : "\n");
 	echo "</td>\n";
 
 	/* show group headline, if it's not a question group */
-	
-	if( ($group->getChildType() != "EvaluationQuestion") && ($group->getChildType() != "EvaluationText") && ($group->getChildType() != "EvaluationLink") ) {
+	if( $group->getChildType() != "EvaluationQuestion" ) {
 
 	    /* add space after a top-level group */
 	    $parent = $group->getParentObject();
@@ -194,7 +191,8 @@ class EvaluationTreeShowUser {
 		$chapter_num = ($this->tree->tree_data[$parent_id]['priority'] + 1) .".". $chapter_num;
 		$parent_id = $this->tree->tree_data[$parent_id]['parent_id'];
 	    }
-	    echo "&nbsp;<b>".$chapter_num." ";
+	    echo "&nbsp;".$chapter_num." ";
+	    echo "<b>";
 	    echo $this->tree->tree_data[$group_id]['name'];
 	    echo "</b>";
 	    echo "</td>";
@@ -203,48 +201,6 @@ class EvaluationTreeShowUser {
 	    echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"2\" height=\"1\" border=\"0\" alt=\"\"></td>";
 	    echo "</td>\n";
 
-	} elseif ($group->getChildType() == "EvaluationText") {
-		/* add space after a top-level group */
-	    $parent = $group->getParentObject();
-	    if( $parent->x_instanceof() == "Evaluation" && $group->getPosition() != 0 )
-		echo "<td colspan=\"2\" width=\"100%\"><br /></td><tr>";
-
-	    echo "<td align=\"left\" width=\"100%\" valign=\"bottom\" class=\"steelkante\" style=\"padding:1px;\">\n";
-	    $parent_id = $group_id;
-	    while( $parent_id != "root" ) {
-		$chapter_num = ($this->tree->tree_data[$parent_id]['priority'] + 1) .".". $chapter_num;
-		$parent_id = $this->tree->tree_data[$parent_id]['parent_id'];
-	    }
-	    echo "&nbsp;<b>";
-	    echo $this->tree->tree_data[$group_id]['name'];
-	    echo "</b>";
-	    echo "</td>";
-
-	    echo "<td width=\"1\">\n";
-	    echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"2\" height=\"1\" border=\"0\" alt=\"\"></td>";
-	    echo "</td>\n";
-		
-	}  elseif ($group->getChildType() == "EvaluationLink") {
-		/* add space after a top-level group */
-	    $parent = $group->getParentObject();
-	    if( $parent->x_instanceof() == "Evaluation" && $group->getPosition() != 0 )
-		echo "<td colspan=\"2\" width=\"100%\"><br /></td><tr>";
-
-	    echo "<td align=\"left\" width=\"100%\" valign=\"bottom\" class=\"steelkante\" style=\"padding:1px;\">\n";
-	    $parent_id = $group_id;
-	    while( $parent_id != "root" ) {
-		$chapter_num = ($this->tree->tree_data[$parent_id]['priority'] + 1) .".". $chapter_num;
-		$parent_id = $this->tree->tree_data[$parent_id]['parent_id'];
-	    }
-	    echo "&nbsp;<i>";
-	    echo $this->tree->tree_data[$group_id]['name'];
-	    echo "</i>";
-	    echo "</td>";
-
-	    echo "<td width=\"1\">\n";
-	    echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"2\" height=\"1\" border=\"0\" alt=\"\"></td>";
-	    echo "</td>\n";
-		
 	} else {
 	    echo "<td width=\"100%\"></td>";
 	}
@@ -271,7 +227,7 @@ class EvaluationTreeShowUser {
         $parent_id = $group_id;
 	while( $this->tree->tree_data[$parent_id]['parent_id'] != $this->start_item_id ) {
 	    $parent_id = $this->tree->tree_data[$parent_id]['parent_id'];
-	    
+
 	    /* a little space to indent subgroups */
 	    $level_output = "<td width=\"".INDENT_PIXELS."\">".
 		"<img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" width=\"".INDENT_PIXELS."\" height=\"1\" border=\"0\" alt=\"\"></td>".
@@ -282,27 +238,18 @@ class EvaluationTreeShowUser {
 	echo "<!-- printItemDetails ----------------- -->\n";
 	echo "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
 	echo "<tr>\n".$level_output;
-	if ($group->getChildType() == "EvaluationLink"){
-		echo "<td class=\"printcontent\" width=\"100%\" >";
-		echo (sprintf(_("Bitte beantworten Sie auch die veranstaltungsspezifischen Fragen. Klicken Sie dazu <a href=\"show_evaluation.php?evalID=%s&isPreview=0\" target=\"_top\">hier</a>"),$group->getText()));
-		echo(sprintf("<a href=\"javascript:openEval('%s');\">oder hier</a>",$group->getText()));
-		echo "</td></tr>\n";			
-	}
-	else {
-		echo "<td class=\"printcontent\" width=\"100%\" ".
-		    ($group->getChildType() == "EvaluationQuestion"
-	#	     ? "style=\"border-left:1px solid #d0d0d0; border-right:1px solid #d0d0d0;\">"
-		     ? ">"
-		     : ">");
-		echo $this->getGroupContent($group);
-		echo "</td></tr>\n";
-	}
+	echo "<td class=\"printcontent\" width=\"100%\" ".
+	    ($group->getChildType() == "EvaluationQuestion"
+#	     ? "style=\"border-left:1px solid #d0d0d0; border-right:1px solid #d0d0d0;\">"
+	     ? ">"
+	     : ">");
+	echo $this->getGroupContent($group);
+	echo "</td></tr>\n";
 	echo "</table>\n";
-	
 	return;
     }
 
-	
+
     /**
      * returns html for the content of a group
      *
@@ -314,7 +261,7 @@ class EvaluationTreeShowUser {
 	$closeTable = NO;
 	$html = "";
 	$content = "";
-	
+
 	/* get title */
 	$content .= $group->getChildType() == "EvaluationQuestion" && $group->getTitle()
 	    ? "<b>".formatReady( $group->getTitle() )."</b><br />\n"
@@ -350,7 +297,7 @@ class EvaluationTreeShowUser {
 #	    ? "style=\"border:1px solid #d0d0d0;\""
 	    ? ""
 	    : "";
-	
+
 	$class = $group->getChildType() != "EvaluationQuestion"
 	    ? "eval_gray"
 	    : "steelgroup7";
@@ -368,7 +315,7 @@ class EvaluationTreeShowUser {
 
 	return $html;
     }
-	
+
 
     /**
      * returns html for a question and its answers
@@ -404,7 +351,7 @@ class EvaluationTreeShowUser {
 
 	    if( $numAnswers > 0 && $answerArray[ $numAnswers - 1 ]->isResidual() )
 		$hasResidual = YES;
-		
+
 	    $lastTextAnswer = $hasResidual ? ($numAnswers - 3) : ($numAnswers - 2);
 
 	    /* Headline, only shown for first question */
@@ -429,7 +376,7 @@ class EvaluationTreeShowUser {
 			    else
 				//$headCell = "<img src=\"".PATH_PICTURES."horizontal_line.gif\" alt=\"---\" border=\"0\" >";
 				$headCell = "&lt;- -&gt;";
-			    
+
 			    $noWrap = YES;
 			} else {
 			    /* answer has its own text ------ */
@@ -448,7 +395,7 @@ class EvaluationTreeShowUser {
 				"width=\"1\">&nbsp;</td>";
 			}
 
-			$html .= 
+			$html .=
 			    "  <td align=\"center\" class=\"steelgroup6\" ".
 			    "style=\"border-bottom: $answerBorder; ".
 			    "border-left: $answerBorder; border-top: $answerBorder; $extraStyle;\" ".
@@ -460,7 +407,7 @@ class EvaluationTreeShowUser {
 		$html .= " </tr>\n";
 	    }
 	    /* ------------------------------- Headline end */
-	    
+
 
 	    /* Question and Answer Widgets ---------------- */
 	    $class = $question->getPosition() % 2 ? "steel3" : "steelgraulight";
@@ -545,7 +492,7 @@ class EvaluationTreeShowUser {
 		    /* if not a user's answer */
 		    if( ! ($answer->isFreetext() && $answer->getText()) )  {
 			$html .= "<tr valign=\"middle\">\n";
-		    
+
 			/* show text input field ---------- */
 			if( $answer->isFreetext() ) {
 
@@ -558,10 +505,10 @@ class EvaluationTreeShowUser {
 				    " name=\"answers[".$question->getObjectID()."]".$number."\"".
 				    " value=\"".$answer->getObjectID()."\" />".
 				    "</td>\n";
-			
+
 			    /* one row input field */
 			    if( $answer->getRows() == 1)
-				$html .= 
+				$html .=
 				    "<td colspan=\"2\">".
 				    "<input type=\"text\"".
 				    " name=\"freetexts[".$question->getObjectID()."]\"".

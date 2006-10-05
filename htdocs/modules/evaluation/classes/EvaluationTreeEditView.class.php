@@ -23,7 +23,6 @@ require_once($ABSOLUTE_PATH_STUDIP ."modules/evaluation/evaluation.config.php");
 require_once(EVAL_LIB_COMMON);
 require_once(EVAL_FILE_EVALTREE);
 require_once(EVAL_FILE_EVAL);
-require_once("EvaluationText.class.php");
 # ====================================================== end: including files #
 
 /**
@@ -99,10 +98,6 @@ define ("ARRANGMENT_BLOCK", ARRANGMENT_BLOCK);
  * @access private
  */
 define ("QUESTION_BLOCK", QUESTION_BLOCK);
-
-define("TEXT_BLOCK", TEXT_BLOCK);
-
-define("LINK_BLOCK", LINK_BLOCK);
 
 # =============================================================== end: defines #
 
@@ -692,11 +687,10 @@ function getItemContent($itemID){
 		break;
 
 	 case ARRANGMENT_BLOCK:
-		
-			$content .= $this->createTitleInput(ARRANGMENT_BLOCK);
+
+		$content .= $this->createTitleInput(ARRANGMENT_BLOCK);
 			
 			$group = &$this->tree->getGroupObject($itemID);
-
 			if ($children = $group->getChildren()){
 				if ($this->getInstance( $children[0]->getObjectID()) == ARRANGMENT_BLOCK)
 					$show = ARRANGMENT_BLOCK;
@@ -704,12 +698,6 @@ function getItemContent($itemID){
 					$show = QUESTION_BLOCK;
 			} else 
 				$show = "both";
-		$content .=  $this->createButtonbar($show);
-		break;
-		
-	case TEXT_BLOCK:
-			
-		$content .= $this->createTitleInput(TEXT_BLOCK);
 		$content .=  $this->createButtonbar($show);
 		break;
 		
@@ -1253,6 +1241,7 @@ function parseCommand(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandCancel(){
+	
 
 	$itemID = $_REQUEST['startItemID'];
 
@@ -1271,6 +1260,7 @@ function execCommandCancel(){
 */
 function execCommandUpdateItem ( $no_delete = false ){
 	
+	
 	$mode = $this->getInstance($this->itemID);
 
 	$title = $_REQUEST['title'];
@@ -1286,12 +1276,7 @@ function execCommandUpdateItem ( $no_delete = false ){
 		
 		//global features
 		$this->tree->eval->setAnonymous($_REQUEST['anonymous']);
-		if (isset($_REQUEST["protected"])){			
-			$this->tree->eval->protected = true;
-		}
-		else  {
-			$this->tree->eval->protected = false;
-		}
+
 		$this->tree->eval->save();
 		
 		if ($this->tree->eval->isError)
@@ -1304,7 +1289,7 @@ function execCommandUpdateItem ( $no_delete = false ){
 	 case ARRANGMENT_BLOCK:
 
 		$group = &$this->tree->getGroupObject($this->itemID, true);
-		
+
 		$group->setTitle($title, QUOTED);
 		$group->setText($text, QUOTED);
 		$group->save();
@@ -1313,21 +1298,8 @@ function execCommandUpdateItem ( $no_delete = false ){
 				_("Fehler beim Einlesen (Block)"));
 		$this->msg[$this->itemID] = "msg§"
 			. _("Veränderungen wurden gespeichert.");
+		$group = null;
 		break;
-
-	case TEXT_BLOCK:
-
-		$group = &$this->tree->getGroupObject($this->itemID);
-		$group->setTitle($title, QUOTED);
-		$group->setText($text, QUOTED);
-		$group->save();
-		if ($group->isError)
-			return EvalCommon::showErrorReport ($this->tree->eval,
-				_("Fehler beim Einlesen (Block)"));
-		$this->msg[$this->itemID] = "msg§"
-			. _("Veränderungen wurden gespeichert.");
-		break;
-		
 	 case QUESTION_BLOCK:
 
 		$group = &$this->tree->getGroupObject($this->itemID, true );
@@ -1335,7 +1307,7 @@ function execCommandUpdateItem ( $no_delete = false ){
 		$group->setText($text, QUOTED);
 		$group->setMandatory($_REQUEST['mandatory']);
 		$group->save();
-
+		
 		// update the questions
 		$msg = $this->execCommandUpdateQuestions();
 		
@@ -1394,6 +1366,7 @@ function execCommandUpdateItem ( $no_delete = false ){
 * @return    boolean  false
  */
 function execCommandAssertDeleteItem(){
+	
 
 	$group = &$this->tree->getGroupObject($this->itemID);
 	if ($group->getChildType() == "EvaluationQuestion")
@@ -1474,7 +1447,7 @@ function execCommandDeleteItem(){
 			_("Fehler beim Löschen eines Block."));
 
 	if ($group->getChildType() == "EvaluationQuestion"){
-		if ($numberofchildren){		
+		if ($numberofchildren){
 			$this->msg[$parentID] = "msg§" . sprintf(_("Der Fragenblock <b>%s</b> und alle darin enthaltenen Fragen (insgesamt %s) wurden gel&ouml;scht. "),$title,$numberofchildren);
 		} else {
 			$this->msg[$parentID] = "msg§" . sprintf(_("Der Fragenblock <b>%s</b> wurden gel&ouml;scht. "), $title);	
@@ -1502,6 +1475,7 @@ function execCommandDeleteItem(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandAddGroup(){
+	
 
 	$group = &new EvaluationGroup();
 	$group->setTitle( NEW_ARRANGMENT_BLOCK_TITLE , QUOTED);
@@ -1535,44 +1509,13 @@ function execCommandAddGroup(){
 }
 
 /**
- * Creates a new Group and adds it to the tree 
- * 
- * @access   public
- * @return   boolean  true (reinits the tree)
- */
-function execCommandAddText(){
-
-	$group = &new EvaluationText();
-	$group->setTitle( "Neuer Textblock" , QUOTED);
-	$group->setText("");
-
-	$mode = $this->getInstance($this->itemID);
-
-	if ($mode == ROOT_BLOCK){
-		$this->tree->eval->addChild($group);
-		$this->tree->eval->save();
-		if ($this->tree->eval->isError)
-			return EvalCommon::showErrorReport ($this->tree->eval,
-				_("Fehler beim Anlegen eines neuen Textblocks."));
-		$this->msg[$this->itemID] = "msg§"
-			. _("Ein neuer Textblock wurde angelegt.");
-	}
-	
-	$this->execCommandUpdateItem();
-	
-	return true;
-}
-
-
-
-/**
  * adds a questions-group
  * 
  * @access   private
  * @return   boolean  true (reinits the tree)
  */
 function execCommandAddQGroup(){
-
+	
 
 	$group = &new EvaluationGroup();
 	$group->setTitle( NEW_QUESTION_BLOCK_BLOCK_TITLE , QUOTED);
@@ -1639,6 +1582,7 @@ function execCommandAddQGroup(){
  */
 function execCommandChangeTemplate(){
 	
+	
 	$this->execCommandUpdateItem();
 	
 	$group = &$this->tree->getGroupObject($this->itemID);
@@ -1676,6 +1620,7 @@ function execCommandUpdateQuestions ( $no_delete = false ){
 
 	$questions = $_REQUEST['questions'];
 	$deleteQuestions = $_REQUEST['DeleteQuestions'];
+
 	// remove any empty questions
 	$deletecount = 0;
 
@@ -1688,23 +1633,23 @@ function execCommandUpdateQuestions ( $no_delete = false ){
 		
 	for( $i=0; $i<count($questions); $i++ ) {
 
-	    if (!isset($deleteQuestions[$i])){ 
-                           $question = &new EvaluationQuestion($questions[$i]['questionID'], NULL, 
-																EVAL_LOAD_FIRST_CHILDREN);
-		
-		
+	    if (!isset($deleteQuestions[$i])){
+			$question = &new EvaluationQuestion($questions[$i]['questionID'], NULL,
+			EVAL_LOAD_FIRST_CHILDREN);
 			
-		 	   // remove any empty questions
-	    	   if( (empty( $questions[$i]['text'] )) && $delete_empty_questions ) {
-		    		$question->delete();
-		    		$deletecount++;
-		    		// upadate the questiontext to the db 
-	           } else { 
-	
-	                   $question->setText($questions[$i]['text'], QUOTED); 
-	                   $question->save(); 
-	           } 
-	   } 
+			// remove any empty questions
+			if( (empty( $questions[$i]['text'] )) && $delete_empty_questions ) {
+				
+				$question->delete();
+				$deletecount++;
+				
+				// upadate the questiontext to the db
+			} else { 
+				
+				$question->setText($questions[$i]['text'], QUOTED);
+				$question->save();
+			} 
+		}
 	}
 	$msg = NULL;
 	if ($deletecount == 1)
@@ -1954,6 +1899,7 @@ function execCommandMove(){
  * @return   boolean  true (reinits the tree)
  */
 function execCommandMoveGroup(){
+	
 	
 	$moveGroupeID = $_REQUEST['moveGroupeID'];
 	
@@ -2213,21 +2159,10 @@ function createButtonbar ( $show = ARRANGMENT_BLOCK ){
 	$infotext .= "\n"
 		. _("- einen neuen Gruppierungsblock innerhalb dieses Blockes erstellen, in welchem sie weitere Gruppierungs- oder Fragenblöcke anlegen können.");
    }
-   
-   // the new textblock-button
-   if ($show == ROOT_BLOCK){
-	$buttons .= $seperator
-		. $this->createButton(
-			"erstellen-group",
-			_("Einen neuen Textblock erstellen."),
-			"cmd[AddText]");
-	$infotext .= "\n"
-		. _("- einen neuen Textblock innerhalb dieses Blockes erstellen, in welchem sie Text eintragen können.");
-   }
 
 	// the new question-group-button
    if ($show == "both" || $show == QUESTION_BLOCK){
-    // echo("SHOW: $show <br>");
+   
 	$buttons .=  $seperator
 		. $this->createTemplateSelection()
 		. $this->createButton("erstellen-qgroup",
@@ -2348,6 +2283,7 @@ function createButtonbar ( $show = ARRANGMENT_BLOCK ){
 * @return	string the html
 */
 function createFormNew($show = ARRANGMENT_BLOCK){
+
 	$table = new HTML ("table");
 	$table->addAttr ("width","100%");
 	$table->addAttr ("class","blank");
@@ -2389,13 +2325,6 @@ function createFormNew($show = ARRANGMENT_BLOCK){
 			"erstellen",
 			_("Einen neuen Gruppierungsblock erstellen"),
 			"cmd[AddGroup]");
-	
-	$text_selection = _("Textblock")
-		. "&nbsp;"
-		. $this->createButton(
-			"erstellen",
-			_("Einen neuen Textblock erstellen"),
-			"cmd[AddText]");
 			
 	$qgroup_selection = _("Fragenblock mit")
 		. "&nbsp;"
@@ -2486,14 +2415,6 @@ function createTitleInput($mode = ROOT_BLOCK){
 			
 		case ARRANGMENT_BLOCK:
 			$title_label = _("Titel des Gruppierungsblocks");
-			$group 		 =  &$this->tree->getGroupObject($this->itemID);
-			$title 		 = htmlentities ($group->getTitle());
-			$text_label	 = _("Zusätzlicher Text");
-			$text 		 = htmlentities ($group->getText());
-			break;
-			
-		case TEXT_BLOCK:
-			$title_label = _("Titel des Textblocks");
 			$group 		 =  &$this->tree->getGroupObject($this->itemID);
 			$title 		 = htmlentities ($group->getTitle());
 			$text_label	 = _("Zusätzlicher Text");
@@ -2622,33 +2543,7 @@ function createGlobalFeatures (){
 	$td->addContent ($b);
 	$tr->addContent ($td);
 	$table->addContent ($tr);
-	/******
-		CELab-Änderungen	
-	*/
-	$perm = $GLOBALS["perm"];
-	if ($perm->have_perm("admin")){
-		$tr = new HTML("tr");
-		$td = new HTML("td");
-		$td->addAttr ("style","border-bottom:0px dotted black;");
-		$td->addContent(_("Veränderung der Evaluation nur durch Admin/Root-Admins: "));
-		$tr->addContent($td);
-		$td = new HTML("td");
-		$td->addAttr ("style","border-bottom:0px dotted black;");
-		$input = new HTMLempty ("input");
-		$input->addAttr("type","checkbox");
-		// $input->addString("checked");
-		if ($this->tree->eval->protected){
-			$input->addString("checked");
-		}
-		//$input->addAttr("value",$this->tree->eval->protected);
-		$input->addAttr("name","protected");
-		$td->addContent($input);
-		$tr->addContent($td);
-		$table->addContent($tr);
-	}
-	/*****
-		Ende CELab-Änderungen
-	*/
+	
 	$tr = new HTML ("tr");
 	
 	$td = new HTML ("td");
@@ -3323,8 +3218,8 @@ function createTemplateSelection ( $selected = NULL ){
 
 		$questiontext = $question->getText();
 
-		if( $question->getParentID() == 0) 
-			$questiontext .= " [R]";
+		if( $question->getParentID() == '0') 
+			$questiontext .= " " . EVAL_ROOT_TAG;
 
 		
 	   switch( $questiontyp ) {
@@ -3463,6 +3358,7 @@ function createTemplateSelection ( $selected = NULL ){
 * @return  string  the insctance of an object
 */
 function getInstance ( $itemID ){
+
 	if ($itemID == ROOT_BLOCK || $itemID == $this->evalID)
 		return ROOT_BLOCK;
 	else {
@@ -3470,14 +3366,11 @@ function getInstance ( $itemID ){
 																		'load_mode' => EVAL_LOAD_FIRST_CHILDREN));
 		$group = &$tree->getGroupObject($itemID);
 		$childtype = $group->getChildType();
+		
 		if ($childtype == "EvaluationQuestion")
 			return QUESTION_BLOCK;
-		else if ($childtype == "EvaluationText"){
-			return TEXT_BLOCK;
-		}
-		else {
+		else
 			return ARRANGMENT_BLOCK;
-		}
 	}
 }
 

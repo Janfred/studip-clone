@@ -445,7 +445,7 @@ class EvaluationObject extends StudipObject {
     */
    function duplicate_init () {
      $this->init ();
-     while ($childObject =& $this->getNextChild ()) {     	
+     while ($childObject =& $this->getNextChild ()) {
        $childObject->setParentID ($this->getObjectID ());
        $childObject->duplicate_init ();
      }
@@ -461,7 +461,7 @@ class EvaluationObject extends StudipObject {
      if (empty ($objectID)) {
        $this->setObjectID ($this->createNewID ());
      } else {
-       $this->setObjectID ($objectID);       
+       $this->setObjectID ($objectID);
        $this->load ();
        if ($this->db->isError ())
 	 return $this->throwErrorFromClass ($this->db);
@@ -518,7 +518,7 @@ class EvaluationObject extends StudipObject {
     */
    function toString () {
      echo "<table border=1 cellpadding=5><tr><td>";
-     echo "Typ: ".$this->x_instanceOf ()."<br>";
+     echo "Typ: ".$this->x_instanceof ()."<br>";
      echo "ObjectID: ".$this->getObjectID ()."<br>";
      echo "ParentID: ".$this->getParentID ()."<br>";
      echo "ParentObject: ".$this->getParentObject ()."<br>";

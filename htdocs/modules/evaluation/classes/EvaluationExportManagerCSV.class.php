@@ -134,9 +134,9 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
       fputs ($this->filehandle, EVALEXPORT_DELIMITER._("Benutzername").EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
       fputs ($this->filehandle, EVALEXPORT_DELIMITER._("Nachname").EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
       fputs ($this->filehandle, EVALEXPORT_DELIMITER._("Vorname").EVALEXPORT_DELIMITER.EVALEXPORT_SEPERATOR);
-	  
-      $db      = new EvaluationAnswerDB ();
-      
+
+	  $db      = new EvaluationAnswerDB ();
+
       /* for each question -------------------------------------------------- */
       foreach ($this->evalquestions as $evalquestion) {
          $type     = $evalquestion->getType ();
@@ -144,6 +144,7 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
 
          /* Questiontype: likert scale -------------------------------------- */
          if ($type == EVALQUESTION_TYPE_LIKERT) {
+			 $db->addChildren($evalquestion);
             $header = $evalquestion->getText ().":";
             while ($answer = &$evalquestion->getNextChild ()) {
                if ($answer->isResidual ()) {
@@ -166,9 +167,8 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
 
          /* Questiontype: pol scale ----------------------------------------- */
          } elseif ($type == EVALQUESTION_TYPE_POL) {
-            $db->addChildren($evalquestion); 
-            $header = $evalquestion->getText ().":"; 
-
+			$db->addChildren($evalquestion);
+			$header = $evalquestion->getText ().":";
             $answer = $evalquestion->getNextChild ();
             $header .= $answer->getText ();
             $header .= "(".$answer->getPosition ().")";
@@ -190,6 +190,7 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
          /* Questiontype: multiple chioice ---------------------------------- */
          } elseif ($type == EVALQUESTION_TYPE_MC) {
             if ($evalquestion->isMultiplechoice ()) {
+				$db->addChildren($evalquestion);
                while ($answer = &$evalquestion->getNextChild ()) {
                   $header = $evalquestion->getText ();
                   $header .= ":".$answer->getText ();
@@ -251,10 +252,10 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
                $entry       = "";
                $residual    = 0;
                foreach($db->getAllAnswers($evalquestion->getObjectID(), $userID) as $answer) {
-                   if ($answer['residual'])
+                  if ($answer['residual'])
                      $hasResidual = YES;
 
-                   if ($answer['has_voted']) {
+                  if ($answer['has_voted']) {
                      if ($answer['residual']) {
                         $residual = 1;
                      } else {
@@ -274,9 +275,9 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
             /* Questiontype: multiple chioice ------------------------------ */
             elseif ($type == EVALQUESTION_TYPE_MC) {
                if ($evalquestion->isMultiplechoice ()) {
-                  foreach($db->getAllAnswers($evalquestion->getObjectID(), $userID) as $answer) {
-                     if ($answer['has_voted'])
-                        $entry = 1;
+				   foreach($db->getAllAnswers($evalquestion->getObjectID(), $userID) as $answer) {
+                     if ($answer['has_voted']) 
+						$entry = 1;
                      else
                         $entry = 0;
                      $this->addCol ($entry);
@@ -284,7 +285,7 @@ class EvaluationExportManagerCSV extends EvaluationExportManager {
                } else {
                   $entry = "";
                   foreach($db->getAllAnswers($evalquestion->getObjectID(), $userID, true) as $answer) {
-                     if ($answer['has_voted']) $entry = preg_replace ("(\r\n|\n|\r)", " ", $answer['text']);
+					  if ($answer['has_voted']) $entry = preg_replace ("(\r\n|\n|\r)", " ", $answer['text']);
                   }
                   $this->addCol ($entry);
                }
