@@ -132,7 +132,7 @@ class AdministrationPluginIntegratorEnginePersistence extends AbstractPluginInte
      * Speichere ein Plugin
      */
     function savePlugin($plugin){
-    	Parent::savePlugin($plugin);
+    	parent::savePlugin($plugin);
     	if (is_object($plugin) && is_subclass_of($plugin,'AbstractStudIPAdministrationPlugin')){
     		// Plugin speichern
     		if ($plugin->isActivated()){
