@@ -33,6 +33,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+if (version_compare(PHP_VERSION,'5','>=') && extension_loaded('xsl')) require_once('xslt-php4-to-php5.php');
+
 if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 	$perm->check("tutor");
 
