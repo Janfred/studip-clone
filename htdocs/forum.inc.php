@@ -874,12 +874,12 @@ function forum_print_toolbar ($id="") {
 			$print .= "<td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"".$GLOBALS['ASSETS_URL']."images/griff2.jpg\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
 			$print .= "</td></tr></table>";
 		}
+		$print .= "</td></tr></table>\n";
 		if ($id) {  // Schreibmodus, also form einbauen
 			//$print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."?test=s#anker\">";
 			$print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">";
 		}
 
-		$print .= "</td></tr></table>\n";
 		return $print;
 }
 
