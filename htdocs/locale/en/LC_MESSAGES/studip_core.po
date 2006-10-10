@@ -13,8 +13,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_core\n"
-"POT-Creation-Date: 2006-08-28 12:29+0200\n"
-"PO-Revision-Date: 2006-08-28 12:24+GMT\n"
+"POT-Creation-Date: 2006-10-10 21:08+0200\n"
+"PO-Revision-Date: 2006-10-10 21:07+GMT\n"
 "Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
 "Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -56,7 +56,7 @@ msgstr ""
 msgid "Benutzer nicht gefunden"
 msgstr "User not found"
 
-#: about.php:209 forum.inc.php:1214 lib/classes/FoafDisplay.class.php:202
+#: about.php:209 forum.inc.php:1220 lib/classes/FoafDisplay.class.php:202
 msgid "kein persönliches Bild vorhanden"
 msgstr "no personal photo is included"
 
@@ -193,7 +193,7 @@ msgstr "Publications"
 msgid "Arbeitsschwerpunkte"
 msgstr "Research interests"
 
-#: about.php:440 index.php:279
+#: about.php:440 index.php:300
 msgid "Administration"
 msgstr "Administration"
 
@@ -926,15 +926,15 @@ msgstr "URL"
 
 #: admin_banner_ads.php:278 admin_dates.php:448 admin_news.php:192
 #: admin_seminare1.php:354 admin_statusgruppe.php:314 details.php:113
-#: folder.php:399 functions.php:74 functions.php:79 functions.php:131
+#: folder.php:400 functions.php:74 functions.php:79 functions.php:131
 #: functions.php:135 gruppe.php:79 links_admin.inc.php:956
-#: links_admin.inc.php:977 links_admin.inc.php:986 sem_notification.php:167
+#: links_admin.inc.php:977 links_admin.inc.php:986 sem_notification.php:169
 #: show_admission.php:171 show_log.php:83 show_log.php:102
 msgid "Veranstaltung"
 msgstr "Course"
 
 #: admin_banner_ads.php:279 admin_news.php:192 config.inc.php.dist:186
-#: contact.inc.php:223 edit_about.php:1497 folder.php:413 freie.php:199
+#: contact.inc.php:223 edit_about.php:1497 folder.php:414 freie.php:199
 #: functions.php:88 functions.php:175 sem_browse.inc.php:377
 #: show_bereich.php:76 show_log.php:84 show_log.php:108
 #: lib/classes/SemBrowse.class.php:30
@@ -1097,7 +1097,7 @@ msgstr "No user found."
 #: admin_config.php:154 admin_news.php:181 admin_room_requests.php:440
 #: admin_seminare1.php:602 admin_seminare1.php:667
 #: admin_seminare_assi.php:2127 admin_seminare_assi.php:2194
-#: admin_seminare_assi.php:2838 archiv.php:527 forum.inc.php:1726
+#: admin_seminare_assi.php:2838 archiv.php:527 forum.inc.php:1732
 #: institut_browse.php:105 pers_browse.inc.php:138
 #: lib/classes/AdminNewsController.class.php:319
 #: lib/classes/StudipLitSearch.class.php:83
@@ -1110,12 +1110,12 @@ msgstr "Start search"
 msgid "Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein."
 msgstr "To search, enter the first name, surname or username."
 
-#: admin_config.php:199 admin_sem_tree.php:153 new_user_md5.php:392
+#: admin_config.php:200 admin_sem_tree.php:153 new_user_md5.php:392
 #: sem_browse.inc.php:252 lib/classes/SemBrowse.class.php:263
 msgid "Kommentar:"
 msgstr "Commentary:"
 
-#: admin_config.php:213 datei.inc.php:1417 datei.inc.php:1586
+#: admin_config.php:214 datei.inc.php:1419 datei.inc.php:1588
 #: show_dates.inc.php:267 show_dates.inc.php:425 show_dates.inc.php:592
 msgid "Keine Beschreibung vorhanden"
 msgstr "No description available"
@@ -1510,13 +1510,13 @@ msgstr "Title:"
 #: admin_dates.php:642 admin_dates.php:835 admin_metadates.php:662
 #: admin_semester.inc.php:179 admin_semester.inc.php:678
 #: admin_seminare_assi.php:2477 admin_studiengang.php:185 archiv.inc.php:124
-#: archiv.php:294 archiv.php:466 datei.inc.php:666 datei.inc.php:1203
+#: archiv.php:294 archiv.php:466 datei.inc.php:666 datei.inc.php:1205
 #: mein_stundenplan.php:651
 msgid "Beschreibung:"
 msgstr "Description:"
 
 #: admin_dates.php:660 admin_dates.php:847 admin_metadates.php:666
-#: admin_metadates.php:685 admin_seminare_assi.php:2481 folder.php:431
+#: admin_metadates.php:685 admin_seminare_assi.php:2481 folder.php:432
 msgid "ausw&auml;hlen oder wie Eingabe"
 msgstr "select or as entered"
 
@@ -1600,8 +1600,8 @@ msgstr "Information:"
 #: admin_dates.php:985 admin_elearning_interface.php:199
 #: admin_lernmodule.php:108 admin_lernmodule.php:155 admin_lit_element.php:290
 #: admin_lit_list.php:196 browse_elearning.php:80 browse_lernmodule.php:69
-#: dates.php:104 details.php:214 elearning_interface.php:340
-#: elearning_interface.php:362 literatur.php:71 lit_search.php:301
+#: dates.php:104 details.php:214 elearning_interface.php:337
+#: elearning_interface.php:359 literatur.php:71 lit_search.php:301
 #: meine_seminare.php:800 migration2studip.php:209 migration2studip.php:295
 #: my_archiv.php:174 my_elearning.php:194 seminar_lernmodule.php:193
 #: seminar_lernmodule.php:237 seminar_lernmodule.php:306 sem_portal.php:257
@@ -1763,7 +1763,7 @@ msgstr "Settings"
 #: admin_elearning_interface.php:191 admin_lernmodule.php:100
 #: admin_lernmodule.php:146 admin_lit_element.php:277 admin_lit_list.php:167
 #: browse_elearning.php:76 browse_lernmodule.php:65 chat_online.php:243
-#: details.php:243 elearning_interface.php:332 elearning_interface.php:354
+#: details.php:243 elearning_interface.php:329 elearning_interface.php:351
 #: eval_config.php:103 evaluation_export.php:173 export.php:153
 #: institut_browse.php:92 literatur.php:66 lit_search.php:289
 #: meine_seminare.php:763 meine_seminare.php:793 migration2studip.php:206
@@ -1819,7 +1819,7 @@ msgstr ""
 "linked."
 
 #: admin_elearning_interface.php:248 browse_elearning.php:194
-#: elearning_interface.php:394 my_elearning.php:231
+#: elearning_interface.php:391 my_elearning.php:231
 msgid ""
 "Die Schnittstelle für die Integration von Lernmodulen ist nicht aktiviert. "
 "Damit Lernmodule verwendet werden können, muss die Verbindung zu einem LCM-"
@@ -1832,7 +1832,7 @@ msgstr ""
 "administrator."
 
 #: admin_elearning_interface.php:249 browse_elearning.php:195
-#: elearning_interface.php:395 my_elearning.php:232
+#: elearning_interface.php:392 my_elearning.php:232
 msgid "E-Learning-Schnittstelle nicht eingebunden"
 msgstr "No e-learning interface is available"
 
@@ -1882,7 +1882,7 @@ msgid "Hier ist Raum für allgemeine Diskussionen"
 msgstr "Here is space for general discussion"
 
 #: admin_institut.php:116 admin_seminare_assi.php:1463 folder.php:121
-#: folder.php:434 lib/classes/AdminModules.class.php:196
+#: folder.php:435 lib/classes/AdminModules.class.php:196
 msgid "Allgemeiner Dateiordner"
 msgstr "General folder"
 
@@ -2008,7 +2008,7 @@ msgstr "With the key symbol %s please select another institute."
 msgid "Neue Auswahl"
 msgstr "New selection"
 
-#: admin_institut.php:357 datei.inc.php:664 datei.inc.php:1200
+#: admin_institut.php:357 datei.inc.php:664 datei.inc.php:1202
 #: edit_about.php:1182 edit_about.php:1211 inst_admin.php:100
 msgid "Name:"
 msgstr "Name:"
@@ -2293,7 +2293,7 @@ msgid "Literatur suchen"
 msgstr "Search literature "
 
 #: admin_lit_element.php:301 admin_lit_list.php:207 admin_sem_tree.php:179
-#: lit_search.php:313 lib/classes/ClipBoard.class.php:198
+#: lit_search.php:313 lib/classes/ClipBoard.class.php:197
 msgid "Merkliste:"
 msgstr "Clipboard:"
 
@@ -2332,7 +2332,7 @@ msgstr "Open all entries"
 #: admin_literatur_overview.php:342 eval_summary.php:471
 #: links_openobject.inc.php:201 links_openobject.inc.php:222
 #: links_openobject.inc.php:247 links_openobject.inc.php:250
-#: links_seminare.inc.php:43 links_sms.inc.php:71 wiki.inc.php:975
+#: links_seminare.inc.php:43 links_sms.inc.php:71 wiki.inc.php:980
 #: help/kartei.inc.php:32 help/structure.inc.php:240
 msgid "Druckansicht"
 msgstr "Print view"
@@ -2387,7 +2387,7 @@ msgid "Teilnehmeranzahl (erwartet/angemeldet):"
 msgstr "Number of participants (expect/announced):"
 
 #: admin_literatur_overview.php:429 admin_seminare1.php:764
-#: admin_seminare1.php:767 forum.inc.php:119 functions.php:502
+#: admin_seminare1.php:767 forum.inc.php:125 functions.php:502
 #: functions.php:528 functions.php:558 functions.php:578
 #: lit_overview_print_view.php:117 new_user_md5.php:376 new_user_md5.php:573
 #: teilnehmer.php:966 user_visible.inc.php:104 write_topic.php:121
@@ -5029,11 +5029,11 @@ msgstr ""
 "You can use various Stud.IP formatting on this page. You can enter links in "
 "the normal fashion. These will later be automatically shown as hyperlinks."
 
-#: admin_seminare_assi.php:3764
+#: admin_seminare_assi.php:3770
 msgid "Hilfe zur Formatierung von Texten"
 msgstr "Help for text formatting"
 
-#: admin_seminare_assi.php:3765
+#: admin_seminare_assi.php:3771
 msgid ""
 "Um eine geordnete Literaturliste zu erstellen, benutzen Sie bitte die "
 "Literaturverwaltung."
@@ -5041,7 +5041,7 @@ msgstr ""
 "In order to create an ordered literature list, please use the literature "
 "administration."
 
-#: admin_seminare_assi.php:3769
+#: admin_seminare_assi.php:3775
 msgid ""
 "In dieses Feld können Sie beliebigen Text zur Anzeige auf der "
 "Informationsseite eingeben."
@@ -5105,7 +5105,7 @@ msgstr ""
 msgid "Einfügesymbol"
 msgstr "Insertion symbol"
 
-#: admin_sem_tree.php:112 folder.php:426
+#: admin_sem_tree.php:112 folder.php:427
 #: lib/classes/StudipSemTreeViewAdmin.class.php:504
 msgid "Verschieben / Kopieren abbrechen"
 msgstr "Cancel moving / copying"
@@ -5146,7 +5146,7 @@ msgstr "Enter in all open areas"
 msgid "Aus Merkliste l&ouml;schen"
 msgstr "Delete from clipboard"
 
-#: admin_sem_tree.php:222 lib/classes/ClipBoard.class.php:171
+#: admin_sem_tree.php:222 lib/classes/ClipBoard.class.php:170
 #: lib/classes/StudipLitClipBoard.class.php:145
 #: lib/classes/StudipSemTreeViewAdmin.class.php:649
 msgid "Gewählte Aktion starten"
@@ -5278,17 +5278,17 @@ msgstr "Free user search"
 msgid "Person suchen"
 msgstr "User search "
 
-#: admin_statusgruppe.php:545 contact_statusgruppen.php:350
+#: admin_statusgruppe.php:551 contact_statusgruppen.php:356
 msgid "Es sind noch keine Gruppen oder Funktionen angelegt worden."
 msgstr "No groups or functions have been created yet."
 
-#: admin_statusgruppe.php:546
+#: admin_statusgruppe.php:552
 msgid ""
 "Um für diesen Bereich Gruppen oder Funktionen anzulegen, nutzen Sie bitte "
 "die obere Zeile!"
 msgstr "To create groups or functions for this area, use the above line! "
 
-#: admin_statusgruppe.php:547
+#: admin_statusgruppe.php:553
 msgid ""
 "Mit dem Feld 'Gruppengröße' haben Sie die Möglichkeit, die Sollstärke für "
 "eine Gruppe festzulegen. Dieser Wert wird nur für die Anzeige benutzt - es "
@@ -5297,7 +5297,7 @@ msgstr ""
 "With the field `Group size` you may determine how large the group should be. "
 "This value will only be used as description - more people can be entered."
 
-#: admin_statusgruppe.php:548
+#: admin_statusgruppe.php:554
 msgid ""
 "Wenn Sie Gruppen angelegt haben, können Sie diesen Personen zuordnen. Jeder "
 "Gruppe können beliebig viele Personen zugeordnet werden. Jede Person kann "
@@ -5306,7 +5306,7 @@ msgstr ""
 "When you have set up groups, you can assign people to them. Every group can "
 "be assigned several users. Every user can be assigned to several groups."
 
-#: admin_statusgruppe.php:549 contact_statusgruppen.php:355
+#: admin_statusgruppe.php:555 contact_statusgruppen.php:361
 #, c-format
 msgid "Lesen Sie weitere Bedienungshinweise in der %sHilfe%s nach!"
 msgstr "Read about further operating instructions in %sHelp%s!"
@@ -6043,7 +6043,7 @@ msgstr "Please select a user from the list: "
 msgid "Diese Person hinzuf&uuml;gen"
 msgstr "Add this user "
 
-#: archiv.php:515 forum.inc.php:618
+#: archiv.php:515 forum.inc.php:624
 msgid "Neue Suche"
 msgstr "New search"
 
@@ -6184,12 +6184,12 @@ msgstr ""
 "Please enter a search string in order to search for content modules in "
 "system %s:"
 
-#: browse_elearning.php:140 elearning_interface.php:276
+#: browse_elearning.php:140 elearning_interface.php:273
 #, c-format
 msgid "Gefundene Lernmodule zum Suchbegriff \"%s\""
 msgstr "Learning modules found matching the search string \"%s\""
 
-#: browse_elearning.php:148 elearning_interface.php:270 header.php:350
+#: browse_elearning.php:148 elearning_interface.php:267 header.php:350
 msgid "Suche"
 msgstr "Search"
 
@@ -6211,7 +6211,7 @@ msgstr "Search for learning modules"
 msgid "Suchbereich:"
 msgstr "Search area:"
 
-#: browse_lernmodule.php:101 forum.inc.php:848 sem_browse.inc.php:195
+#: browse_lernmodule.php:101 forum.inc.php:854 sem_browse.inc.php:195
 #: wiki.inc.php:695 lib/classes/SemBrowse.class.php:44
 #: lib/classes/StudipLitCatElement.class.php:59
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginStudip.class.php:95
@@ -6763,7 +6763,7 @@ msgstr "Error!"
 msgid "Neue Rubrik"
 msgstr "New category"
 
-#: contact.inc.php:427 contact.php:113 forum.inc.php:1720 freie.php:200
+#: contact.inc.php:427 contact.php:113 forum.inc.php:1726 freie.php:200
 #: meine_seminare.php:407 meine_seminare.php:657 meine_seminare.php:971
 #: my_archiv.php:95 lib/classes/AdminNewsController.class.php:172
 #: lib/classes/AdminNewsController.class.php:236
@@ -6821,11 +6821,11 @@ msgstr "1 entry"
 msgid "%d Eintr&auml;ge"
 msgstr "%d entries "
 
-#: contact.php:134 forum.inc.php:1379
+#: contact.php:134 forum.inc.php:1385
 msgid "Alle aufklappen"
 msgstr "Open all"
 
-#: contact.php:136 forum.inc.php:1376
+#: contact.php:136 forum.inc.php:1382
 msgid "Alle zuklappen"
 msgstr "Close all"
 
@@ -6926,13 +6926,13 @@ msgstr "Free user search (will be added to address book) "
 msgid "freie Personensuche (wird in Adressbuch &uuml;bernommen)"
 msgstr "Free user search (will be added to address book)"
 
-#: contact_statusgruppen.php:351
+#: contact_statusgruppen.php:357
 msgid ""
 "Um f&uuml;r diesen Bereich Gruppen oder Funktionen anzulegen, nutzen Sie "
 "bitte die obere Zeile!"
 msgstr "To create groups or functions for this area, use the above line!"
 
-#: contact_statusgruppen.php:353
+#: contact_statusgruppen.php:359
 msgid ""
 "Wenn Sie Gruppen angelegt haben, k&ouml;nnen Sie diesen Personen zuordnen. "
 "Jeder Gruppe k&ouml;nnen beliebig viele Personen zugeordnet werden. Jede "
@@ -7220,7 +7220,7 @@ msgid ""
 "1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen."
 msgstr "1. Click on <b>'Browse...'</b> to select a file."
 
-#: datei.inc.php:659 datei.inc.php:1187
+#: datei.inc.php:659 datei.inc.php:1189
 msgid "Dateipfad:"
 msgstr "File path:"
 
@@ -7241,7 +7241,7 @@ msgstr ""
 "2. Click on <b>'send'</b> to upload the zip archive and to unpack it into "
 "this folder."
 
-#: datei.inc.php:672 datei.inc.php:1207
+#: datei.inc.php:672 datei.inc.php:1209
 msgid ""
 "2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die "
 "alte Version zu &uuml;berschreiben."
@@ -7249,11 +7249,11 @@ msgstr ""
 "2. Click on <b>'send'</b> to upload the file and to overwrite the old "
 "version with it."
 
-#: datei.inc.php:728 datei.inc.php:2003
+#: datei.inc.php:728 datei.inc.php:2005
 msgid "Sie haben keine Datei zum Hochladen ausgew&auml;hlt!"
 msgstr "You haven't selected any file to upload! "
 
-#: datei.inc.php:751 datei.inc.php:799
+#: datei.inc.php:751 datei.inc.php:804
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp %"
@@ -7262,7 +7262,7 @@ msgstr ""
 "The file could not be accepted: you are not allowed to upload thefile types %"
 "s!"
 
-#: datei.inc.php:753 datei.inc.php:801
+#: datei.inc.php:753 datei.inc.php:806
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen die "
@@ -7271,21 +7271,12 @@ msgstr ""
 "The file could not be accepted: you are not allowed to upload the file types "
 "%s!"
 
-#: datei.inc.php:756 datei.inc.php:779 datei.inc.php:804 datei.inc.php:827
-#: datei.inc.php:829
+#: datei.inc.php:760 datei.inc.php:785 datei.inc.php:813 datei.inc.php:839
 #, c-format
 msgid "%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."
 msgstr "%sHere%s you can get help for uploading word documents."
 
-#: datei.inc.php:758 datei.inc.php:781 datei.inc.php:806
-msgid ""
-"Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;"
-"ffneten Hilfefenster!"
-msgstr ""
-"Help on how to upload word documents will be displayed in the help window "
-"just opened!"
-
-#: datei.inc.php:774 datei.inc.php:822
+#: datei.inc.php:776 datei.inc.php:830
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den "
@@ -7294,7 +7285,7 @@ msgstr ""
 "The file could not be accepted: you are only allowed to upload the file type "
 "%s!"
 
-#: datei.inc.php:776 datei.inc.php:824
+#: datei.inc.php:778 datei.inc.php:832
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die "
@@ -7303,7 +7294,7 @@ msgstr ""
 "The file could not be accepted: you are only allowed to upload the file "
 "types %s!"
 
-#: datei.inc.php:836
+#: datei.inc.php:847
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Die maximale Gr&ouml;sse "
@@ -7312,15 +7303,15 @@ msgstr ""
 "The file could not be accepted: the maximum size for uploading (%s "
 "Megabytes) was exceeded! "
 
-#: datei.inc.php:864
+#: datei.inc.php:875
 msgid "Datei&uuml;bertragung gescheitert!"
 msgstr "File transmission aborted!"
 
-#: datei.inc.php:872
+#: datei.inc.php:883
 msgid "Die Datei wurde erfolgreich auf den Server &uuml;bertragen!"
 msgstr "The file has been successfully sent to the server!"
 
-#: datei.inc.php:1174
+#: datei.inc.php:1176
 msgid ""
 "&nbsp;FEHLER: unter der angegebenen Adresse wurde keine Datei gefunden."
 "<br>&nbsp;Bitte kontrollieren Sie die Pfadangabe!"
@@ -7328,17 +7319,17 @@ msgstr ""
 "&nbsp;Error: No file was found at the indicated address.<br>&nbsp; Please "
 "check the path!"
 
-#: datei.inc.php:1181
+#: datei.inc.php:1183
 msgid "Sie haben diesen Ordner zum Upload ausgewählt:"
 msgstr "You have chosen to upload a document into this folder:"
 
-#: datei.inc.php:1185
+#: datei.inc.php:1187
 msgid ""
 "1. Geben Sie hier den <b>vollständigen Pfad</b> zu der Datei an die sie "
 "verlinken wollen."
 msgstr "1. Here enter the complete path to the file you want to link. "
 
-#: datei.inc.php:1195
+#: datei.inc.php:1197
 msgid ""
 "2. Sie können hier angeben, ob es sich um eine urheberrechtlich geschützte "
 "Datei handelt."
@@ -7346,44 +7337,44 @@ msgstr ""
 "Here you can include an information whether or not the file is protectedby "
 "copyright."
 
-#: datei.inc.php:1196
+#: datei.inc.php:1198
 msgid "Geschützt:"
 msgstr "Protected:"
 
-#: datei.inc.php:1199
+#: datei.inc.php:1201
 msgid "3. Geben Sie eine kurze Beschreibung und einen Namen für die Datei ein."
 msgstr "3. Enter a short description and a name for the file."
 
-#: datei.inc.php:1205
+#: datei.inc.php:1207
 msgid "4. Klicken Sie auf <b>'absenden'</b>, um die Datei zu verlinken"
 msgstr "4. Click on <b>'send'</b> to upload the file."
 
-#: datei.inc.php:1305
+#: datei.inc.php:1307
 msgid "Dieser Ordner ist gesperrt."
 msgstr "This folder is locked."
 
-#: datei.inc.php:1307
+#: datei.inc.php:1309
 msgid ""
 "Dieser Ordner ist nicht zugänglich, da ein übergeordneter Ordner gesperrt "
 "ist."
 msgstr "This folder is not available because a superordinate folder is locked."
 
-#: datei.inc.php:1309 datei.inc.php:1384
+#: datei.inc.php:1311 datei.inc.php:1386
 msgid ""
 "Dieser Ordner ist ein Hausaufgabenordner. Es können nur Dateien eingestellt "
 "werden."
 msgstr "This folder is for homework. Files can be placed in, only."
 
-#: datei.inc.php:1333
+#: datei.inc.php:1335
 #, c-format
 msgid "(%s Dokumente)"
 msgstr "(%s documents)"
 
-#: datei.inc.php:1335
+#: datei.inc.php:1337
 msgid "(1 Dokument)"
 msgstr "(1 Document)"
 
-#: datei.inc.php:1378
+#: datei.inc.php:1380
 #, c-format
 msgid ""
 "Dieser Ordner ist nicht zugänglich, da der übergeordnete Ordner \"%s\" nicht "
@@ -7392,31 +7383,31 @@ msgstr ""
 "This folder is not available because the superordinate folder \"%s\" is not "
 "readable or not visible!"
 
-#: datei.inc.php:1385
+#: datei.inc.php:1387
 msgid "Sie selbst haben folgende Dateien in diesen Ordner eingestellt:"
 msgstr "You have placed in this folder the following files:"
 
-#: datei.inc.php:1398
+#: datei.inc.php:1400
 msgid "Lesen (Dateien k&ouml;nnen heruntergeladen werden)"
 msgstr "Read (files can be downloaded)"
 
-#: datei.inc.php:1400
+#: datei.inc.php:1402
 msgid "Schreiben (Dateien k&ouml;nnen heraufgeladen werden)"
 msgstr "Write (files can be uploaded)"
 
-#: datei.inc.php:1402
+#: datei.inc.php:1404
 msgid "Sichtbarkeit (Ordner wird angezeigt)"
 msgstr "Visibility (folder will be shown)"
 
-#: datei.inc.php:1408 datei.inc.php:1577
+#: datei.inc.php:1410 datei.inc.php:1579
 msgid "&Auml;nderungen speichern"
 msgstr "Save changes"
 
-#: datei.inc.php:1409 datei.inc.php:1578
+#: datei.inc.php:1411 datei.inc.php:1580
 msgid "Abbrechen"
 msgstr "Cancel "
 
-#: datei.inc.php:1420
+#: datei.inc.php:1422
 #, c-format
 msgid ""
 "Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen "
@@ -7430,43 +7421,43 @@ msgstr ""
 "case that you want to move / copy the folder to a different course, then, "
 "please, select the course of your choice at the top of this page. "
 
-#: datei.inc.php:1420
+#: datei.inc.php:1422
 msgid ""
 "Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner "
 "einzufügen."
 msgstr "Click this symbol in order to paste this folder into another folder."
 
-#: datei.inc.php:1526
+#: datei.inc.php:1528
 msgid "Download"
 msgstr "Download"
 
-#: datei.inc.php:1526
+#: datei.inc.php:1528
 msgid "Downloads"
 msgstr "Downloads"
 
-#: datei.inc.php:1549
+#: datei.inc.php:1551
 msgid "Diese Datei ist urheberrechtlich geschützt!"
 msgstr "This file is copyright protected!"
 
-#: datei.inc.php:1551
+#: datei.inc.php:1553
 msgid "Diese Datei wird von einem externen Server geladen!"
 msgstr "This file is loaded from an external server!"
 
-#: datei.inc.php:1575
+#: datei.inc.php:1577
 msgid "geschützter Inhalt"
 msgstr "Protected contents"
 
-#: datei.inc.php:1587
+#: datei.inc.php:1589
 #, c-format
 msgid "<b>Dateigr&ouml;&szlig;e:</b> %s kB"
 msgstr "<b>File size:</b> %s kB"
 
-#: datei.inc.php:1588
+#: datei.inc.php:1590
 #, c-format
 msgid "<b>Dateiname:</b> %s "
 msgstr "<b>File name:</b> %s"
 
-#: datei.inc.php:1592
+#: datei.inc.php:1594
 #, c-format
 msgid ""
 "Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie "
@@ -7480,12 +7471,12 @@ msgstr ""
 "case that you want to move / copy the file to a different course, then, "
 "please, select the course of your choice at the top of this page. "
 
-#: datei.inc.php:1592
+#: datei.inc.php:1594
 msgid ""
 "Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen"
 msgstr "Click this symbol to paste this file into another folder"
 
-#: datei.inc.php:1634
+#: datei.inc.php:1636
 msgid ""
 "Diese Datei ist urheberrechtlich geschützt.<br>Sie darf nur im Rahmen dieser "
 "Veranstaltung verwendet werden, jede weitere Verbreitung ist strafbar!"
@@ -7493,17 +7484,17 @@ msgstr ""
 "This file is copyright protected. It may be used only in the context of this "
 "course, further distribution is liable to persecution!"
 
-#: datei.inc.php:1854
+#: datei.inc.php:1856
 #, c-format
 msgid "Der Dateiordner <b>%s</b> und %s Dokument(e) wurden gel&ouml;scht"
 msgstr "The folder <b>%s</b> and %s files have been deleted"
 
-#: datei.inc.php:1856
+#: datei.inc.php:1858
 #, c-format
 msgid "Der Dateiordner <b>%s</b> wurde gel&ouml;scht"
 msgstr "The folder <b>%s</b> has been deleted"
 
-#: datei.inc.php:1861
+#: datei.inc.php:1863
 #, c-format
 msgid ""
 "Probleme beim L&ouml;schen des Ordners <b>%s</b>. %s Dokument(e) wurden "
@@ -7512,12 +7503,12 @@ msgstr ""
 "A problem occurred while deleting the folder <b>%s</b>.. %s files have been "
 "deleted"
 
-#: datei.inc.php:1863
+#: datei.inc.php:1865
 #, c-format
 msgid "Probleme beim L&ouml;schen des Ordners <b>%s</b>"
 msgstr "Problem while deleting the folder <b>%s</b>"
 
-#: datei.inc.php:2008
+#: datei.inc.php:2010
 msgid ""
 "Die Datei kann nicht entpackt werden: Sie d&uuml;rfen nur den Dateityp .ZIP "
 "hochladen!"
@@ -7525,16 +7516,16 @@ msgstr ""
 "The file could not be unpacked: you are allowed to upload files of the type ."
 "ZIP, only!"
 
-#: datei.inc.php:2014 datei.inc.php:2021
+#: datei.inc.php:2016 datei.inc.php:2023
 msgid "Die ZIP-Datei kann nicht ge&ouml;ffnet werden!"
 msgstr "The ZIP file could not been opened!"
 
-#: datei.inc.php:2028
+#: datei.inc.php:2030
 #, c-format
 msgid "Es wurden %d Dateien und %d Ordner erfolgreich entpackt."
 msgstr " %d files und %d folders have successfully been unpacked."
 
-#: datei.inc.php:2036
+#: datei.inc.php:2038
 msgid "Die Datei konnte nicht entpackt werden."
 msgstr "It was not possible to unpack the file."
 
@@ -8229,7 +8220,7 @@ msgstr ""
 "address, then you must use the password which has been sent to this address! "
 "<br><br>Your current username is: %s"
 
-#: edit_about.php:739 header.php:129 index.php:330 links_about.inc.php:112
+#: edit_about.php:739 header.php:129 index.php:351 links_about.inc.php:112
 msgid "Login"
 msgstr "Login"
 
@@ -8481,7 +8472,7 @@ msgstr ""
 "Datas of this institution will not be presented on your homepage nor in your "
 "address book."
 
-#: edit_about.php:1369 wiki.inc.php:904
+#: edit_about.php:1369 wiki.inc.php:909
 msgid "nach oben"
 msgstr "to the top"
 
@@ -8666,54 +8657,54 @@ msgstr ""
 "As administrator, you are not allowed to use this feature - you have "
 "responsibilities!"
 
-#: elearning_interface.php:108
+#: elearning_interface.php:104
 msgid "Die Zuordnung wurde entfernt."
 msgstr "Allocation has been deleted."
 
-#: elearning_interface.php:115 seminar_lernmodule.php:90
+#: elearning_interface.php:111 seminar_lernmodule.php:90
 msgid "Die Zuordnung wurde gespeichert."
 msgstr "The allocation has been saved."
 
-#: elearning_interface.php:124
+#: elearning_interface.php:120
 msgid "Jeder Suchbegriff muss mindestens 3 Zeichen lang sein!"
 msgstr "Your search criteria must contain at least 3 symbols!"
 
-#: elearning_interface.php:143 seminar_lernmodule.php:135
+#: elearning_interface.php:140 seminar_lernmodule.php:135
 msgid "Verbindung von Einrichtungen und Lernmodulen"
 msgstr "Connection of institutes and learning modules"
 
-#: elearning_interface.php:145 seminar_lernmodule.php:137
+#: elearning_interface.php:142 seminar_lernmodule.php:137
 msgid "Verbindung von Veranstaltungen und Lernmodulen"
 msgstr "Connection of courses and learning modules"
 
-#: elearning_interface.php:150
+#: elearning_interface.php:147
 #, c-format
 msgid "Lernmodule der Einrichtung \"%s\""
 msgstr "Learning modules of the institution \"%s\""
 
-#: elearning_interface.php:152
+#: elearning_interface.php:149
 #, c-format
 msgid "Lernmodule der Veranstaltung \"%s\""
 msgstr "Learning modules of the course \"%s\""
 
-#: elearning_interface.php:206
+#: elearning_interface.php:203
 msgid "Angebundene Lernmodule"
 msgstr "Linked learning modules"
 
-#: elearning_interface.php:231
+#: elearning_interface.php:228
 msgid "Momentan sind dieser Einrichtung keine Lernmodule zugeordnet."
 msgstr "No learning module.has been associated with this institution."
 
-#: elearning_interface.php:233
+#: elearning_interface.php:230
 msgid "Momentan sind dieser Veranstaltung keine Lernmodule zugeordnet."
 msgstr "No learning module.has been associated with this course."
 
-#: elearning_interface.php:251
+#: elearning_interface.php:248
 #, c-format
 msgid "Ihre Lernmodule in %s"
 msgstr "Your learning modules in %s"
 
-#: elearning_interface.php:271
+#: elearning_interface.php:268
 #, c-format
 msgid ""
 "Um im System %s nach Lernmodulen zu suchen, geben Sie einen Suchbegriff ein:"
@@ -8721,18 +8712,18 @@ msgstr ""
 "Please enter a search string in order to search for learning modules in "
 "system %s:"
 
-#: elearning_interface.php:288
+#: elearning_interface.php:285
 #, c-format
 msgid "Es gibt im System %s zu diesem Suchbegriff keine Lernmodule."
 msgstr ""
 "In the system %s there are no learning modules matching the search string."
 
-#: elearning_interface.php:297 elearning_interface.php:299
+#: elearning_interface.php:294 elearning_interface.php:296
 msgid ""
 "Um Lernmodule hinzuzuf&uuml;gen, w&auml;hlen Sie ein angebundenes System aus:"
 msgstr "In order to add a learning module, select a linked system:"
 
-#: elearning_interface.php:335
+#: elearning_interface.php:332
 msgid ""
 "Hier k&ouml;nnen Sie Lernmodule f&uuml;r die Veranstaltung einh&auml;ngen "
 "und aush&auml;ngen. Das Laden dieser Seite kann etwas l&auml;nger dauern, da "
@@ -8742,7 +8733,7 @@ msgstr ""
 "Loading of this page might take a while because datas have to be exchanged "
 "betwwen Stud.IP and the linked systems."
 
-#: elearning_interface.php:342
+#: elearning_interface.php:339
 msgid ""
 "W&auml;hlen Sie das System, aus dem Sie ein Modul einh&auml;ngen wollen. "
 "Anschlie&szlig;end k&ouml;nnen Sie nach Modulen suchen. Gefundene Module "
@@ -8753,7 +8744,7 @@ msgstr ""
 "step you can search for modules. Modules found can be added to the course by "
 "pressing the button \"add\". "
 
-#: elearning_interface.php:346 elearning_interface.php:368
+#: elearning_interface.php:343 elearning_interface.php:365
 #, c-format
 msgid ""
 "Um neue Lernmodule zu erstellen, wechseln Sie auf die Seite %s, auf der sie "
@@ -8762,18 +8753,18 @@ msgstr ""
 "In order to create learning modules move to page %s where you can administer "
 "your learning modules and external user accounts."
 
-#: elearning_interface.php:346 elearning_interface.php:368
+#: elearning_interface.php:343 elearning_interface.php:365
 #: links_about.inc.php:109 my_elearning.php:139
 msgid "Meine Lernmodule"
 msgstr "My learning modules"
 
-#: elearning_interface.php:357
+#: elearning_interface.php:354
 msgid ""
 "Hier sehen sie die Lernmodule, die an diese Veranstaltung angeh&auml;ngt "
 "wurden."
 msgstr "Here all the learning modules added to this course are viewed."
 
-#: elearning_interface.php:364
+#: elearning_interface.php:361
 msgid ""
 "Wenn Sie in einem Lernmodul auf 'Starten' klicken, &ouml;ffnet sich ein "
 "neues Fenster mit dem Lernmodul."
@@ -9055,70 +9046,70 @@ msgstr "New folder"
 msgid "Ablage für allgemeine Ordner und Dokumente der %s"
 msgstr "Clipboard for general file and documents of %s"
 
-#: folder.php:144
+#: folder.php:145
 #, c-format
 msgid ""
 "Der ausgewählte Ordner enthält %s Datei(en). Wollen Sie den Ordner wirklich "
 "löschen?"
 msgstr "The chosen folder contains %s files. Do you really want to the folder?"
 
-#: folder.php:161
+#: folder.php:162
 #, c-format
 msgid "Wollen sie die Verlinkung zu <b>%s</b> von %s wirklich löschen?"
 msgstr "Do you really want to delete to <b>%s</b> from %s?"
 
-#: folder.php:164
+#: folder.php:165
 #, c-format
 msgid "Wollen sie die Datei <b>%s</b> von %s wirklich löschen?"
 msgstr "Do you really want to delete the file <b>%s</b> from %s?"
 
-#: folder.php:172
+#: folder.php:173
 msgid "Die Datei wurde gel&ouml;scht"
 msgstr "The file has been deleted"
 
-#: folder.php:174
+#: folder.php:175
 msgid "Die Datei konnte nicht gel&ouml;scht werden"
 msgstr "The file could not be deleted"
 
-#: folder.php:180
+#: folder.php:181
 msgid "Die Verlinkung wurde gelöscht"
 msgstr "The link was deleted."
 
-#: folder.php:182
+#: folder.php:183
 msgid "Die Verlinkung konnte nicht gelöscht werden"
 msgstr "The link could not be deleted."
 
-#: folder.php:290 folder.php:324
+#: folder.php:291 folder.php:325
 msgid "Verschiebung konnte nicht durchgeführt werden."
 msgstr "Moving was not possible."
 
-#: folder.php:292 folder.php:326
+#: folder.php:293 folder.php:327
 #, c-format
 msgid "%s Ordner, %s Datei(en) wurden verschoben."
 msgstr "%s folders, %s files have been moved."
 
-#: folder.php:297 folder.php:331
+#: folder.php:298 folder.php:332
 msgid "Kopieren konnte nicht durchgeführt werden."
 msgstr "Copy was not possible"
 
-#: folder.php:299 folder.php:333
+#: folder.php:300 folder.php:334
 #, c-format
 msgid "%s Ordner, %s Datei(en) wurden kopiert."
 msgstr "%s folders, %s files have been copied."
 
-#: folder.php:362 links_openobject.inc.php:87 links_openobject.inc.php:110
+#: folder.php:363 links_openobject.inc.php:87 links_openobject.inc.php:110
 msgid "Dateien"
 msgstr "Documents"
 
-#: folder.php:394
+#: folder.php:395
 msgid "Verschiebemodus"
 msgstr "Moving modus"
 
-#: folder.php:394
+#: folder.php:395
 msgid "Kopiermodus"
 msgstr "Copy modus"
 
-#: folder.php:395
+#: folder.php:396
 msgid ""
 "Ausgewähltes Objekt in den Allgemeinen Dateiordner einer anderen "
 "Veranstaltung oder einer anderen Einrichtung verschieben / kopieren:"
@@ -9126,20 +9117,20 @@ msgstr ""
 "Move / copy the selected object to the general folder of a different course "
 "or a different institution."
 
-#: folder.php:401 folder.php:408
+#: folder.php:402 folder.php:409
 msgid "In diese Veranstaltung verschieben / kopieren"
 msgstr "Move / copy to this course."
 
-#: folder.php:415 folder.php:422
+#: folder.php:416 folder.php:423
 msgid "In diese Einrichtung verschieben / kopieren"
 msgstr "Move / copy to this institution"
 
-#: folder.php:438
+#: folder.php:439
 #, c-format
 msgid "Dateiordner zum Termin am %s [%s]"
 msgstr "Folder for appointments on %s [%s]"
 
-#: folder.php:473
+#: folder.php:474
 #, c-format
 msgid ""
 "Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Wenn Sie "
@@ -9172,43 +9163,43 @@ msgstr "Created:"
 msgid "Zuletzt editiert von"
 msgstr "Last edited by"
 
-#: forum.inc.php:105 links_admin.inc.php:329 show_news.php:257
-#: write_topic.php:133 lib/classes/guestbook.class.php:225
+#: forum.inc.php:111 links_admin.inc.php:329 show_news.php:263
+#: write_topic.php:138 lib/classes/guestbook.class.php:231
 #: lib/classes/smiley.class.php:385
 msgid "Smileys"
 msgstr "Smilies "
 
-#: forum.inc.php:105 show_news.php:257 write_topic.php:133
-#: lib/classes/guestbook.class.php:225
+#: forum.inc.php:111 show_news.php:263 write_topic.php:138
+#: lib/classes/guestbook.class.php:231
 msgid "Formatierungshilfen"
 msgstr "Help for text formatting"
 
-#: forum.inc.php:107
+#: forum.inc.php:113
 msgid "Ihr Beitrag"
 msgstr "Your posting"
 
-#: forum.inc.php:119 write_topic.php:121
+#: forum.inc.php:125 write_topic.php:121
 msgid "Ihr Name:"
 msgstr "Your name:"
 
-#: forum.inc.php:458
+#: forum.inc.php:464
 #, c-format
 msgid "komprimierter Thread mit %s Postings"
 msgstr "Compressed thread with %s postings"
 
-#: forum.inc.php:466
+#: forum.inc.php:472
 msgid "Hier klicken um alle Postings im Thema zu öffnen"
 msgstr "Click here to open all postings for this topic."
 
-#: forum.inc.php:480
+#: forum.inc.php:486
 msgid "Alle Postings im Thema öffnen"
 msgstr "Open all postings for this topic"
 
-#: forum.inc.php:487
+#: forum.inc.php:493
 msgid "Postings in dieses Thema verschieben"
 msgstr "Move postings in this topic"
 
-#: forum.inc.php:596
+#: forum.inc.php:602
 msgid ""
 "In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie können oben "
 "unter <b>neues Thema</b> einen Themenordner anlegen."
@@ -9216,7 +9207,7 @@ msgstr ""
 "No topic folders have yet been entered in this forum.<br>You can add a new "
 "topic folder above, under <b>New topic</b>."
 
-#: forum.inc.php:599
+#: forum.inc.php:605
 msgid ""
 "In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie "
 "eine/n TutorIn oder eine/n DozentIn dieser Veranstaltung, um Themenordner "
@@ -9225,7 +9216,7 @@ msgstr ""
 "No topic folders have yet been entered in this forum.<br>Contact a tutor or  "
 "lecturer responsible for this course in order to add a new topic folder."
 
-#: forum.inc.php:601
+#: forum.inc.php:607
 msgid ""
 "In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie "
 "den/die AdministratorIn der Einrichtung, um Themenordner anlegen zu lassen."
@@ -9233,161 +9224,161 @@ msgstr ""
 "No topic folders have yet been entered in this forum. <br>Contact the "
 "institute administrator in order to add a topic folder. "
 
-#: forum.inc.php:616
+#: forum.inc.php:622
 msgid "In dieser Ansicht gibt es derzeit keine Beiträge."
 msgstr "There are no postings in this view."
 
-#: forum.inc.php:618
+#: forum.inc.php:624
 msgid "Zu Ihrem Suchbegriff gibt es keine Treffer."
 msgstr "Your search did not reveal any matches."
 
-#: forum.inc.php:639 lib/classes/guestbook.class.php:154
+#: forum.inc.php:645 lib/classes/guestbook.class.php:154
 msgid "zurück"
 msgstr "back"
 
-#: forum.inc.php:660 lib/classes/guestbook.class.php:175
+#: forum.inc.php:666 lib/classes/guestbook.class.php:175
 msgid "weiter"
 msgstr "Continue"
 
-#: forum.inc.php:724
+#: forum.inc.php:730
 msgid "Ihnen fehlen die Rechte in dieser Veranstaltung zu Schreiben."
 msgstr "You do not have the permission for changing this course"
 
-#: forum.inc.php:734
+#: forum.inc.php:740
 msgid "Fehler beim Anlegen eines Postings."
 msgstr "Error while creating a posting."
 
-#: forum.inc.php:758
+#: forum.inc.php:764
 msgid "Aktualisieren des Postings fehlgeschlagen"
 msgstr "Posting update aborted"
 
-#: forum.inc.php:761
+#: forum.inc.php:767
 msgid "Ihnen fehlen die Rechte diesen Beitrag zu bearbeiten"
 msgstr "You do not have the permission to change this contribution"
 
-#: forum.inc.php:819
+#: forum.inc.php:825
 msgid "Indikator:"
 msgstr "Indicator:"
 
-#: forum.inc.php:845 lib/classes/smiley.class.php:637
+#: forum.inc.php:851 lib/classes/smiley.class.php:637
 msgid "Favoriten"
 msgstr "Favourites"
 
-#: forum.inc.php:846 forum.inc.php:1706
+#: forum.inc.php:852 forum.inc.php:1712
 #: lib/classes/AdminNewsController.class.php:173
 #: lib/classes/lit_search_plugins/StudipLitSearchPluginStudip.class.php:96
 msgid "Autor"
 msgstr "Author"
 
-#: forum.inc.php:847 forum.inc.php:1511
+#: forum.inc.php:853 forum.inc.php:1517
 msgid "Thema"
 msgstr "Topic"
 
-#: forum.inc.php:857
+#: forum.inc.php:863
 msgid "Sortierung durchführen"
 msgstr "Carry out sorting"
 
-#: forum.inc.php:859
+#: forum.inc.php:865
 msgid "Toolbar einfahren"
 msgstr "Roll in toolbar"
 
-#: forum.inc.php:868
+#: forum.inc.php:874
 msgid "Toolbar ausfahren"
 msgstr "Roll out tool bar"
 
-#: forum.inc.php:936
+#: forum.inc.php:942
 msgid "editiert von: "
 msgstr "Edited by:"
 
-#: forum.inc.php:950 links_about.inc.php:94 links_openobject.inc.php:83
+#: forum.inc.php:956 links_about.inc.php:94 links_openobject.inc.php:83
 #: links_openobject.inc.php:105 lib/classes/ModulesNotification.class.php:61
 msgid "Forum"
 msgstr "Forum"
 
-#: forum.inc.php:952
+#: forum.inc.php:958
 msgid "Look & Feel anpassen"
 msgstr "Customise Look & Feel"
 
-#: forum.inc.php:990
+#: forum.inc.php:996
 #, c-format
 msgid "Bewertung: %sZum Abstimmen bitte klicken."
 msgstr "Rating: %sKlick hier to rate."
 
-#: forum.inc.php:991
+#: forum.inc.php:997
 msgid "Bitte werten:"
 msgstr "Please rate:"
 
-#: forum.inc.php:992
+#: forum.inc.php:998
 msgid "Bewertung des Beitrags"
 msgstr "Rating of this posting"
 
-#: forum.inc.php:993
+#: forum.inc.php:999
 msgid "Schulnote"
 msgstr "school mark"
 
-#: forum.inc.php:1130
+#: forum.inc.php:1136
 msgid "aus den Favoriten entfernen"
 msgstr "Remove from favourites"
 
-#: forum.inc.php:1133
+#: forum.inc.php:1139
 msgid "zu den Favoriten hinzufügen"
 msgstr "Add to favourites"
 
-#: forum.inc.php:1142
+#: forum.inc.php:1148
 msgid "Hier klicken um in einem neuen Fenster zu antworten"
 msgstr "Click here to reply in a new window"
 
-#: forum.inc.php:1189
+#: forum.inc.php:1195
 msgid "Kein Zugriff auf dieses Element möglich."
 msgstr "No access to this element possible."
 
-#: forum.inc.php:1222
+#: forum.inc.php:1228
 msgid "Bewertung: "
 msgstr "Rating: "
 
-#: forum.inc.php:1227
+#: forum.inc.php:1233
 msgid "Noch nicht bewertet"
 msgstr "Not rated yet"
 
-#: forum.inc.php:1246
+#: forum.inc.php:1252
 #, c-format
 msgid "Sie haben diesen%sBeitrag bewertet."
 msgstr "You have already%srated this object."
 
-#: forum.inc.php:1520
+#: forum.inc.php:1526
 msgid "<b>Postings</b> / letzter Eintrag"
 msgstr "<b>Postings</b>/last posting"
 
-#: forum.inc.php:1549
+#: forum.inc.php:1555
 msgid "Neues Thema anlegen"
 msgstr "Add a new topic"
 
-#: forum.inc.php:1689
+#: forum.inc.php:1695
 msgid "Suchbegriff:"
 msgstr "Search keyword:"
 
-#: forum.inc.php:1697
+#: forum.inc.php:1703
 msgid "Suchen in den Feldern:"
 msgstr "Search in the fields:"
 
-#: forum.inc.php:1713
+#: forum.inc.php:1719
 msgid "Überschrift"
 msgstr "Headline "
 
-#: forum.inc.php:1780
+#: forum.inc.php:1786
 #, c-format
 msgid "Als Thema verschieben (zusammen mit %s Antworten):"
 msgstr "Moved as topic (together with %s replies):"
 
-#: forum.inc.php:1790
+#: forum.inc.php:1796
 msgid "in das Forum einer Veranstaltung:"
 msgstr "in the forum of a course:"
 
-#: forum.inc.php:1794 forum.inc.php:1816
+#: forum.inc.php:1800 forum.inc.php:1822
 msgid "dahin verschieben"
 msgstr "Move there"
 
-#: forum.inc.php:1812
+#: forum.inc.php:1818
 msgid "in das Forum einer Einrichtung:"
 msgstr "in the forum of an institution:"
 
@@ -9734,7 +9725,7 @@ msgstr ""
 
 #: functions.php:985 functions.php:1005 functions.php:1025 functions.php:1057
 #: gruppe.php:142 links_admin.inc.php:935 meine_seminare.php:495
-#: meine_seminare.php:1019 sem_notification.php:248
+#: meine_seminare.php:1019 sem_notification.php:250
 #: lib/classes/SemBrowse.class.php:354 lib/dbviews/sem_tree.view.php:47
 #: lib/dbviews/sem_tree.view.php:53 lib/dbviews/sem_tree.view.php:82
 msgid "(versteckt)"
@@ -9797,12 +9788,12 @@ msgstr "Type"
 msgid "Farbgruppen"
 msgstr "Groups by colour"
 
-#: gruppe.php:116 meine_seminare.php:431 sem_notification.php:219
+#: gruppe.php:116 meine_seminare.php:431 sem_notification.php:221
 msgid "Gruppierung schließen"
 msgstr "Close grouping"
 
 #: gruppe.php:119 meine_seminare.php:438 meine_seminare.php:457
-#: sem_notification.php:224
+#: sem_notification.php:226
 msgid "Gruppierung öffnen"
 msgstr "Open grouping"
 
@@ -9834,7 +9825,7 @@ msgstr "Imprint"
 msgid "Informationen über das System"
 msgstr "Information about the system"
 
-#: header.php:128 header.php:371 index.php:98 index.php:337
+#: header.php:128 header.php:371 index.php:105 index.php:364
 msgid "Hilfe"
 msgstr "Help"
 
@@ -10113,8 +10104,8 @@ msgid "(Evaluationen)"
 msgstr "(Evaluations)"
 
 #: impressum.php:137
-msgid "(Newsverwaltung, Chat, Einrichtungsverzeichnis, Vorlesungsverzeichnis)"
-msgstr "(News administration, chat, institute index, course index)"
+msgid "(Chat, Literaturverwaltung, Authentifizierung, Verzeichnisse)"
+msgstr ""
 
 #: impressum.php:138
 msgid "(Usability)"
@@ -10129,15 +10120,19 @@ msgid "(Security, Distribution)"
 msgstr "(Security, Distribution)"
 
 #: impressum.php:141
-msgid "(Forensystem, pers&ouml;nliche Seiten, Adressbuch, Design)"
+#, fuzzy
+msgid "(Forensystem, Adressbuch, Design)"
 msgstr "(Forum system, personal pages, address book, design)"
 
 #: impressum.php:142
-msgid "(Datenbankstruktur, Rechtesystem, Adminbereich, Internationalisierung)"
+#, fuzzy
+msgid ""
+"(Projektmanagement, Datenbankstruktur, Rechtesystem, Internationalisierung)"
 msgstr "(Data base structure, access system, admin area, internationalisation)"
 
 #: impressum.php:143
-msgid "(WikiWeb)"
+#, fuzzy
+msgid "(WikiWeb, Hilfe)"
 msgstr "(WikiWeb)"
 
 #: impressum.php:144
@@ -10369,106 +10364,106 @@ msgstr ""
 "The system is continually being developed and customised to the wishes of "
 "our users - %sTell us your opinion!%s"
 
-#: index.php:87 meine_seminare.php:387 mystudip.inc.php:174
+#: index.php:88 meine_seminare.php:387 mystudip.inc.php:174
 #: help/structure.inc.php:197
 msgid "Meine Veranstaltungen"
 msgstr "My courses"
 
-#: index.php:88
+#: index.php:89
 msgid "Veranstaltung hinzuf&uuml;gen"
 msgstr "Add course"
 
-#: index.php:89 mystudip.inc.php:177
+#: index.php:90 mystudip.inc.php:177
 msgid "Mein Planer"
 msgstr "My planner"
 
-#: index.php:90 links_about.inc.php:97 links_sms.inc.php:44
+#: index.php:91 links_about.inc.php:97 links_sms.inc.php:44
 msgid "Terminkalender"
 msgstr "Appointment calendar"
 
-#: index.php:91 links_sms.inc.php:47
+#: index.php:92 links_sms.inc.php:47
 msgid "Adressbuch"
 msgstr "Address book"
 
-#: index.php:92 links_about.inc.php:98 links_sms.inc.php:45
+#: index.php:93 links_about.inc.php:98 links_sms.inc.php:45
 #: links_sms.inc.php:70
 msgid "Stundenplan"
 msgstr "Time table"
 
-#: index.php:93 inst_admin.php:161 new_user_md5.php:437
+#: index.php:94 inst_admin.php:161 new_user_md5.php:437
 msgid "pers&ouml;nliche Homepage"
 msgstr "Personal homepage"
 
-#: index.php:94
+#: index.php:95
 msgid "individuelle Einstellungen"
 msgstr "Individual settings"
 
-#: index.php:95 links_openobject.inc.php:220 help/structure.inc.php:292
+#: index.php:96 links_openobject.inc.php:220 help/structure.inc.php:292
 #: help/structure.inc.php:487
 msgid "Suchen"
 msgstr "Search"
 
-#: index.php:96
+#: index.php:97
 msgid "Personensuche"
 msgstr "User search"
 
-#: index.php:97
+#: index.php:98
 msgid "Veranstaltungssuche"
 msgstr "Course search"
 
-#: index.php:99 help/structure.inc.php:98
+#: index.php:111 help/structure.inc.php:98
 msgid "Schnelleinstieg"
 msgstr "Quick introduction"
 
-#: index.php:101 index.php:105
+#: index.php:113 index.php:117
 msgid "Verwaltung von Veranstaltungen"
 msgstr "Course administration"
 
-#: index.php:102
+#: index.php:114
 msgid "neue Veranstaltung anlegen"
 msgstr "Set up new courses"
 
-#: index.php:104 meine_seminare.php:913
+#: index.php:116 meine_seminare.php:913
 msgid "Veranstaltungen an meinen Einrichtungen"
 msgstr "Courses at my institutes"
 
-#: index.php:106
+#: index.php:118
 msgid "Verwaltung von Einrichtungen"
 msgstr "Institute administration"
 
-#: index.php:107
+#: index.php:119
 msgid "globale Benutzerverwaltung"
 msgstr "Global user administration"
 
-#: index.php:109
+#: index.php:121
 msgid "Veranstaltungs&uuml;bersicht"
 msgstr "Course overview"
 
-#: index.php:110
+#: index.php:122
 msgid "Verwaltung globaler Einstellungen"
 msgstr "Global settings administration"
 
-#: index.php:130
+#: index.php:142
 msgid "Startseite f&uuml;r Root bei Stud.IP"
 msgstr "Start page for root at Stud.IP"
 
-#: index.php:149
+#: index.php:161
 msgid "Startseite f&uuml;r AdministratorInnen bei Stud.IP"
 msgstr "Start page for administrators at Stud.IP"
 
-#: index.php:164
+#: index.php:176
 msgid "Startseite f&uuml;r DozentInnen bei Stud.IP"
 msgstr "Start page for lecturers at Stud.IP"
 
-#: index.php:173 index.php:181
+#: index.php:185 index.php:193
 msgid "Ihre pers&ouml;nliche Startseite bei Stud.IP"
 msgstr "Your personal start page at Stud.IP"
 
-#: index.php:191
+#: index.php:203
 msgid "Bestätigungsgsmail beachten!"
 msgstr "Note confirmation email."
 
-#: index.php:197
+#: index.php:215
 #, c-format
 msgid ""
 "Sie haben noch nicht auf Ihre %s Bestätigungsmail %s geantwortet.<br>Bitte "
@@ -10479,55 +10474,55 @@ msgstr ""
 "in order to use Stud.IP functions such as subscribing to courses.<br>In case "
 "of problems please contact: %s"
 
-#: index.php:330
+#: index.php:351
 msgid "f&uuml;r registrierte NutzerInnen"
 msgstr "for registered users"
 
-#: index.php:332
+#: index.php:353
 msgid "Single Sign On"
 msgstr "Single Sign On"
 
-#: index.php:332
+#: index.php:353
 msgid "f&uuml;r NutzerInnen des Central Authentication Services"
 msgstr "For users of the Central Authentication Services"
 
-#: index.php:335
+#: index.php:356
 msgid "Registrieren"
 msgstr "Register"
 
-#: index.php:335
+#: index.php:356
 msgid "um NutzerIn zu werden"
 msgstr "to become a user"
 
-#: index.php:336
+#: index.php:357
 msgid "Freier Zugang"
 msgstr "Public access"
 
-#: index.php:336
+#: index.php:357
 msgid "ohne Registrierung"
 msgstr "without registration"
 
-#: index.php:337
+#: index.php:364
 msgid "zu Bedienung und Funktionsumfang"
 msgstr "to service and features"
 
-#: index.php:355
+#: index.php:382
 msgid "Zur Portalseite"
 msgstr "to the portal page"
 
-#: index.php:365
+#: index.php:392
 msgid "Aktive Veranstaltungen"
 msgstr "Active courses"
 
-#: index.php:369
+#: index.php:396
 msgid "Registrierte NutzerInnen"
 msgstr "Registered users"
 
-#: index.php:372
+#: index.php:399
 msgid "Davon online"
 msgstr "Users online"
 
-#: index.php:378
+#: index.php:405
 msgid "mehr"
 msgstr "more"
 
@@ -10953,8 +10948,8 @@ msgstr "Category changed!"
 msgid "Kategorien wurden neu geordnet"
 msgstr "Category has been reordered"
 
-#: links_about.inc.php:35 links_seminare.inc.php:48 sem_notification.php:175
-#: sem_notification.php:359
+#: links_about.inc.php:35 links_seminare.inc.php:48 sem_notification.php:177
+#: sem_notification.php:361
 msgid "Alle"
 msgstr "All"
 
@@ -11026,7 +11021,7 @@ msgstr "Messaging"
 msgid "RSS Feeds"
 msgstr "RSS feeds"
 
-#: links_about.inc.php:103 sem_notification.php:150
+#: links_about.inc.php:103 sem_notification.php:152
 msgid "Benachrichtigung"
 msgstr "Notification"
 
@@ -11763,7 +11758,7 @@ msgstr ""
 msgid "Die Zuordnung zur Einrichtung %s wurde aufgehoben."
 msgstr "The allocation to institute %s has been removed."
 
-#: meine_seminare.php:324 sem_notification.php:131
+#: meine_seminare.php:324 sem_notification.php:133
 #, c-format
 msgid ""
 "Sie haben zur Zeit keine Veranstaltungen abonniert, an denen Sie teilnehmen "
@@ -12745,7 +12740,7 @@ msgstr ""
 
 #: mystudip.inc.php:130
 msgid "sichtbar"
-msgstr "invisible"
+msgstr "visible"
 
 #: mystudip.inc.php:142
 msgid "Java-Script Hovereffekte"
@@ -13378,7 +13373,7 @@ msgstr "or select a name here:"
 msgid "Vorlagen"
 msgstr "Templates"
 
-#: scm.php:242 scm.php:246
+#: scm.php:248 scm.php:252
 msgid "Inhalt ge&auml;ndert"
 msgstr "Contents changed"
 
@@ -13608,7 +13603,7 @@ msgstr ""
 "to use the learning module, a connection to a ILIAS installation in the "
 "system settings must be set up. Please contact an administrator."
 
-#: sem_notification.php:46
+#: sem_notification.php:47
 msgid ""
 "Die Benachrichtigungsfunktion ist nicht eingebunden. Die "
 "Benachrichtigungsfunktion wurde in den Systemeinstellungen nicht "
@@ -13619,11 +13614,11 @@ msgstr ""
 "been activated in the system settings. Please contact the responsible "
 "administrator."
 
-#: sem_notification.php:47
+#: sem_notification.php:48
 msgid "Benachrichtigungsfunktion ist nicht eingebunden!"
 msgstr "Notification feature is not connected!"
 
-#: sem_notification.php:161
+#: sem_notification.php:163
 msgid ""
 "Stud.IP kann Sie bei Änderungen in den einzelnen Inhaltsbereichen Ihrer "
 "Veranstaltungen automatisch per Email informieren.<br>Geben Sie hier an, "
@@ -13633,11 +13628,11 @@ msgstr ""
 "your courses are changed. <br>Enter here on which changes you want to be "
 "informed."
 
-#: sem_notification.php:366
+#: sem_notification.php:368
 msgid "Benachrichtigung für alle aufgelisteten Veranstaltungen:"
 msgstr "Notification for all listed courses:"
 
-#: sem_notification.php:390 sem_portal.php:182
+#: sem_notification.php:392 sem_portal.php:182
 msgid "zurücksetzen"
 msgstr "reset"
 
@@ -14569,7 +14564,7 @@ msgstr "%s new Comments"
 msgid "Keine Beschreibung vorhanden."
 msgstr "No description available."
 
-#: show_news.php:230 wiki.inc.php:1020
+#: show_news.php:230 wiki.inc.php:1025
 msgid "Kommentare"
 msgstr "comments"
 
@@ -14577,24 +14572,24 @@ msgstr "comments"
 msgid "Geben Sie hier Ihren Kommentar ein!"
 msgstr "Enter your commentary here!"
 
-#: show_news.php:262
+#: show_news.php:268
 #, c-format
 msgid "Kommentare lesen (%s) / Kommentar schreiben"
 msgstr "Read commentary (%s) / write commentary"
 
-#: show_news.php:285
+#: show_news.php:291
 msgid "Persönliche Neuigkeiten"
 msgstr "Personal news"
 
-#: show_news.php:292
+#: show_news.php:298
 msgid "Neuigkeiten der Veranstaltung"
 msgstr "News of the course"
 
-#: show_news.php:299
+#: show_news.php:305
 msgid "Neuigkeiten der Einrichtung"
 msgstr "News of the Institute"
 
-#: show_news.php:304
+#: show_news.php:310
 msgid "Allgemeine Neuigkeiten"
 msgstr "General news"
 
@@ -15182,15 +15177,15 @@ msgstr "Save"
 msgid "Übersicht:"
 msgstr "Survey:"
 
-#: sms_send.php:952 wiki.inc.php:1002 wiki.inc.php:1055
+#: sms_send.php:959 wiki.inc.php:1007 wiki.inc.php:1060
 msgid "Ansicht:"
 msgstr "View:"
 
-#: sms_send.php:957
+#: sms_send.php:964
 msgid "Smilies & Textformatierung:"
 msgstr "Smilies & Textformatting:"
 
-#: sms_send.php:958
+#: sms_send.php:965
 #, c-format
 msgid ""
 "%s Liste mit allen Smilies %s Hilfe zu Smilies %s Hilfe zur Textformatierung "
@@ -16161,11 +16156,11 @@ msgstr ""
 msgid "Klicken Sie auf Abbrechen, um zurückzukehren."
 msgstr "Click on cancel to go back."
 
-#: wiki.inc.php:801 wiki.inc.php:842 wiki.inc.php:1000 wiki.inc.php:1054
+#: wiki.inc.php:806 wiki.inc.php:847 wiki.inc.php:1005 wiki.inc.php:1059
 msgid "Information"
 msgstr "Information"
 
-#: wiki.inc.php:801
+#: wiki.inc.php:806
 #, c-format
 msgid ""
 "Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;"
@@ -16178,12 +16173,12 @@ msgstr ""
 "words which begin with a capital letter and have a capital letter in the "
 "middle."
 
-#: wiki.inc.php:822 wiki.inc.php:900
+#: wiki.inc.php:827 wiki.inc.php:905
 #, c-format
 msgid "Version %s, letzte Änderung %s von %s."
 msgstr "Version %s, last change on %s by %s"
 
-#: wiki.inc.php:840
+#: wiki.inc.php:845
 msgid ""
 "Alle Wiki-Seiten werden als große HTML-Datei zusammengefügt und in einem "
 "neuen Fenster angezeigt. Von dort aus können Sie die Datei abspeichern."
@@ -16191,45 +16186,45 @@ msgstr ""
 "All Wiki pages will be joined together as a large HTML file and shown in a "
 "new window. You can then save the file from there."
 
-#: wiki.inc.php:842
+#: wiki.inc.php:847
 msgid ""
 "Die Wiki-Seiten werden als eine zusammenhängende HTML-Datei ohne Links "
 "exportiert."
 msgstr "The Wiki pages will be exported as a joined HTML file without links."
 
-#: wiki.inc.php:917
+#: wiki.inc.php:922
 msgid "exportiert vom Stud.IP Wiki-Modul"
 msgstr "exported from Stud.IP Wiki modul"
 
-#: wiki.inc.php:964 wiki.inc.php:1040 wiki.inc.php:1050
+#: wiki.inc.php:969 wiki.inc.php:1045 wiki.inc.php:1055
 msgid "Aktuelle Version"
 msgstr "Current version"
 
-#: wiki.inc.php:967 wiki.inc.php:1043
+#: wiki.inc.php:972 wiki.inc.php:1048
 msgid "Version"
 msgstr "Version"
 
-#: wiki.inc.php:971 wiki.inc.php:1047
+#: wiki.inc.php:976 wiki.inc.php:1052
 msgid "Keine alten Versionen."
 msgstr "No old versions."
 
-#: wiki.inc.php:974
+#: wiki.inc.php:979
 msgid "Standard"
 msgstr "Standard"
 
-#: wiki.inc.php:977
+#: wiki.inc.php:982
 msgid "Textänderungen anzeigen"
 msgstr "Show text changes"
 
-#: wiki.inc.php:978
+#: wiki.inc.php:983
 msgid "Text mit AutorInnenzuordnung anzeigen"
 msgstr "Show text with author allocation"
 
-#: wiki.inc.php:994
+#: wiki.inc.php:999
 msgid "Keine Verweise vorhanden."
 msgstr "No links available."
 
-#: wiki.inc.php:1000
+#: wiki.inc.php:1005
 #, c-format
 msgid ""
 "Sie betrachten eine alte Version, die nicht mehr geändert werden kann. "
@@ -16238,31 +16233,31 @@ msgstr ""
 "You are looking at an old version which can not be changed. For this purpose "
 "use the %sactual version%s·"
 
-#: wiki.inc.php:1005
+#: wiki.inc.php:1010
 msgid "Seiten, die auf diese Seite verweisen:"
 msgstr "Pages which link to this page."
 
-#: wiki.inc.php:1007 wiki.inc.php:1056
+#: wiki.inc.php:1012 wiki.inc.php:1061
 msgid "Alte Versionen dieser Seite:"
 msgstr "Old versions of this page:"
 
-#: wiki.inc.php:1009
+#: wiki.inc.php:1014
 msgid "einblenden"
 msgstr "show"
 
-#: wiki.inc.php:1010
+#: wiki.inc.php:1015
 msgid "als Icons einblenden"
 msgstr "show as icon"
 
-#: wiki.inc.php:1011
+#: wiki.inc.php:1016
 msgid "ausblenden"
 msgstr "hide"
 
-#: wiki.inc.php:1013
+#: wiki.inc.php:1018
 msgid "ausgeblendet"
 msgstr "hidden"
 
-#: wiki.inc.php:1054
+#: wiki.inc.php:1059
 msgid ""
 "Sie betrachten die Änderungsgeschichte eines Dokumentes. Falls einzelne "
 "Versionen gelöscht wurden, kann es zu falschen AutorInnenzuordnungen kommen."
@@ -16270,23 +16265,23 @@ msgstr ""
 "You are looking at the history of a document. If a version is deleted,then "
 "an association to an author could become wrong."
 
-#: wiki.inc.php:1100
+#: wiki.inc.php:1105
 msgid "Ältere Version, nicht bearbeitbar!"
 msgstr "Old version, cannot be changed!"
 
-#: wiki.inc.php:1173
+#: wiki.inc.php:1178
 msgid "Es gibt keine zu vergleichenden Versionen."
 msgstr "There are no comparative versions."
 
-#: wiki.inc.php:1191
+#: wiki.inc.php:1196
 msgid "Änderungen zu"
 msgstr "Changes of"
 
-#: wiki.inc.php:1289
+#: wiki.inc.php:1294
 msgid "Legende der AutorInnenfarben:"
 msgstr "Legend of Author colours."
 
-#: wiki.inc.php:1304
+#: wiki.inc.php:1309
 msgid "Änderung von"
 msgstr "Change of"
 
@@ -16328,11 +16323,11 @@ msgstr "Headline:"
 msgid "Ihr Beitrag:"
 msgstr "Your posting:"
 
-#: write_topic.php:149
+#: write_topic.php:154
 msgid "Ihr Beitrag wurde erfolgreich ins System &uuml;bernommen"
 msgstr "Your posting has been successfully added to the system"
 
-#: write_topic.php:149
+#: write_topic.php:154
 msgid ""
 "Sie k&ouml;nnen dieses Fenster jetzt schliessen.<br>Um Ihr neues Posting zu "
 "sehen, m&uuml;ssen Sie das Hauptfenster aktualisieren!"
@@ -16340,7 +16335,7 @@ msgstr ""
 "You can now close this window. <br>To be able to see your new posting, you "
 "must update your main window!"
 
-#: write_topic.php:153
+#: write_topic.php:158
 msgid "Schreiben nicht m&ouml;glich"
 msgstr "Writing not possible"
 
@@ -16826,25 +16821,25 @@ msgstr "You don't have any authorisation to edit this news item"
 msgid "News geändert"
 msgstr "News changed"
 
-#: lib/classes/ClipBoard.class.php:93
+#: lib/classes/ClipBoard.class.php:92
 msgid "Es wurde ein Verweis in ihre Merkliste aufgenommen."
 msgstr "A literature link has been added to your clipboard."
 
-#: lib/classes/ClipBoard.class.php:95
+#: lib/classes/ClipBoard.class.php:94
 #, c-format
 msgid "Es wurden %s Verweise in ihre Merkliste aufgenommen."
 msgstr "%s literature links have been added to your clipboard."
 
-#: lib/classes/ClipBoard.class.php:113
+#: lib/classes/ClipBoard.class.php:112
 msgid "Es wurde ein Verweis aus ihrer Merkliste entfernt."
 msgstr "A literature link has been deleted from your clipboard. "
 
-#: lib/classes/ClipBoard.class.php:115
+#: lib/classes/ClipBoard.class.php:114
 #, c-format
 msgid "Es wurden %s Verweis aus ihrer Merkliste entfernt."
 msgstr "%s literature links have been deleted from your clipboard."
 
-#: lib/classes/ClipBoard.class.php:170
+#: lib/classes/ClipBoard.class.php:169
 #: lib/classes/StudipLitClipBoard.class.php:144
 msgid "Aus Merkliste löschen"
 msgstr "Delete from clipboard"
@@ -16955,27 +16950,27 @@ msgstr "Entries "
 msgid "%s hat am %s geschrieben:"
 msgstr "%s wrote on %s :"
 
-#: lib/classes/guestbook.class.php:216
+#: lib/classes/guestbook.class.php:222
 msgid "Geben Sie hier Ihren Gästebuchbeitrag ein!"
 msgstr "Enter your guest book entry here!"
 
-#: lib/classes/guestbook.class.php:267
+#: lib/classes/guestbook.class.php:273
 msgid "Sie haben das Gästebuch deaktiviert. Es ist nun nicht mehr sichtbar."
 msgstr "You have deactivated the guest book. It is no longer visible."
 
-#: lib/classes/guestbook.class.php:270
+#: lib/classes/guestbook.class.php:276
 msgid "Sie haben das Gästebuch aktiviert: Besucher können nun schreiben!"
 msgstr "You have activated the guest book: Visitors can now write in it!"
 
-#: lib/classes/guestbook.class.php:278
+#: lib/classes/guestbook.class.php:284
 msgid "Sie haben alle Beiträge des Gästebuchs gelöscht!"
 msgstr "You have deleted all postings in the guest book!"
 
-#: lib/classes/guestbook.class.php:286
+#: lib/classes/guestbook.class.php:292
 msgid "Sie haben einen Beitrag im Gästebuch gelöscht!"
 msgstr "You have deleted one posting from the guest book!"
 
-#: lib/classes/guestbook.class.php:288
+#: lib/classes/guestbook.class.php:294
 msgid "Netter Versuch!"
 msgstr "Nice try!"
 
@@ -18924,63 +18919,63 @@ msgstr "This username is allready used by another user (authentication %s)!"
 msgid "Methode %s nicht implementiert!"
 msgstr "Method %s not implemented!"
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:74
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:76
 msgid "Keine Verbindung zum LDAP Server möglich."
 msgstr "No connection to the LDAP server is possible."
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:78
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:80
 msgid "Setzen der LDAP Protokolversion fehlgeschlagen."
 msgstr "Setting the LDAP protocol version failed."
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:83
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:85
 msgid "LDAP Protokolversion 3 wird für \"Start TLS\" benötigt."
 msgstr "LDAP protokol version 3 is necessary for \"Start TLS\"."
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:86
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:88
 msgid "\"Start TLS\" fehlgeschlagen."
 msgstr "\"Start TLS\" failed."
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:97
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:198
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:102
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:216
 msgid "Anonymer Bind fehlgeschlagen."
 msgstr "Anonymous bind not successful."
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:101
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:202
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:106
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:220
 msgid "Anonymes Durchsuchen des LDAP Baumes fehlgeschlagen."
 msgstr "Anonymous search of LDAP tree not successful."
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:105
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:110
 #, c-format
 msgid "%s wurde nicht unterhalb von %s gefunden."
 msgstr "%s was not found under %s."
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:130
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:138
 msgid "Kein Passwort eingegeben."
 msgstr "No password entered."
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:134
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:142
 #: lib/classes/auth_plugins/StudipAuthLdapReader.class.php:78
 #, c-format
 msgid "Anmeldung von %s fehlgeschlagen."
 msgstr "Login of %s was not successful."
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:138
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:146
 #: lib/classes/auth_plugins/StudipAuthLdapReader.class.php:82
 msgid "Abholen der User Attribute fehlgeschlagen."
 msgstr "Transfer of user attributes was not successful."
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:191
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:209
 msgid "Kann den Usernamen nicht überprüfen, anonymous_bind ist ausgeschaltet!"
 msgstr "Cannot check username, anonymous bind is not enabled!"
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:206
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:224
 #: lib/classes/auth_plugins/StudipAuthLdapReader.class.php:91
 #: lib/classes/auth_plugins/StudipAuthStandard.class.php:114
 msgid "Der Username wurde nicht gefunden."
 msgstr "The username was not found."
 
-#: lib/classes/auth_plugins/StudipAuthLdap.class.php:213
+#: lib/classes/auth_plugins/StudipAuthLdap.class.php:231
 msgid "<br>LDAP Fehler: "
 msgstr "<br>LDAP error: "
 
@@ -20359,6 +20354,17 @@ msgstr "What is ILIAS?"
 #: help/structure.inc.php:588
 msgid "Was ist ILIAS und was sind ILIAS Lernmodule"
 msgstr "What is ILIAS and what are ILIAS learning modules"
+
+#~ msgid ""
+#~ "Hilfe zum Upload von Word-Dokumenten bekommen Sie in dem soeben ge&ouml;"
+#~ "ffneten Hilfefenster!"
+#~ msgstr ""
+#~ "Help on how to upload word documents will be displayed in the help window "
+#~ "just opened!"
+
+#~ msgid ""
+#~ "(Newsverwaltung, Chat, Einrichtungsverzeichnis, Vorlesungsverzeichnis)"
+#~ msgstr "(News administration, chat, institute index, course index)"
 
 #~ msgid "Personennamen [PRS]"
 #~ msgstr "Person's name [PRS]"

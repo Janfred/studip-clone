@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_vote\n"
-"POT-Creation-Date: 2006-08-28 12:29+0200\n"
+"POT-Creation-Date: 2006-10-10 21:08+0200\n"
 "PO-Revision-Date: 2006-08-21 15:59+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -757,98 +757,47 @@ msgstr "No running votes or tests available."
 msgid "Keine gestoppten Votings oder Tests vorhanden."
 msgstr "No terminated votes or tests available."
 
-#: vote/vote_show.inc.php:48
+#: vote/vote_show.inc.php:49
 msgid "Vote-Datenbankfehler"
 msgstr "Vote data base error."
 
-#: vote/vote_show.inc.php:53
+#: vote/vote_show.inc.php:54
 msgid "Evaluation-Datenbankfehler"
 msgstr "Evaluation data base error"
 
-#: vote/vote_show.inc.php:68
+#: vote/vote_show.inc.php:71
 msgid "Datenbankfehler bei Voteaktivierung"
 msgstr "Data base error while activating votes."
 
-#: vote/vote_show.inc.php:83 vote/vote_show.inc.php:90
+#: vote/vote_show.inc.php:87 vote/vote_show.inc.php:95
 msgid "Datenbankfehler beim Auslesen der EvaluationsIDs."
 msgstr "Database error while reading EvaluationID."
 
-#: vote/vote_show.inc.php:135 vote/vote_show.inc.php:139
-msgid "Lehrveranstaltungsevaluationen zu meinen Veranstaltungen"
-msgstr "Course evaluations associated to my courses"
-
-#: vote/vote_show.inc.php:135 vote/vote_show.inc.php:139
-#: vote/vote_show.inc.php:302 vote/vote_show.inc.php:306
-msgid "Evaluationen..."
-msgstr "Evaluations..."
-
-#: vote/vote_show.inc.php:137 vote/vote_show.inc.php:304
-#, fuzzy
-msgid "Evaluationen bearbeiten"
-msgstr "Evaluations"
-
-#: vote/vote_show.inc.php:158 vote/vote_show.inc.php:322
-msgid "Fehler beim Einlesen der Evaluation"
-msgstr "Error while reading the evaluation"
-
-#: vote/vote_show.inc.php:231
-msgid ""
-"Die Evaluation ist geschützt und darf nur durch einen Administrator "
-"verändert werden."
-msgstr ""
-"This is a protected evaluation and can be modified by an administrator, only."
-
-#: vote/vote_show.inc.php:241
-msgid ""
-"Dieser Evaluation kann keine Verknüpfung mehr zu einem anderen Fragebogen "
-"hinzugefügt werden, da bereits Antworten vorliegen."
-msgstr ""
-"No links to any further questionnaire can be added to this evaluation "
-"because answers to this evaluation have already been given."
-
-#: vote/vote_show.inc.php:246 vote/vote_show.inc.php:412
-msgid "Evaluation mit anderer Evaluation verknüpfen"
-msgstr "Add to this evaluation a link to another evaluation"
-
-#: vote/vote_show.inc.php:302 vote/vote_show.inc.php:306
-msgid "Evaluationen"
-msgstr "Evaluations"
-
-#: vote/vote_show.inc.php:396
-msgid ""
-"Die Evaluation ist geschützt und darf nur durch den Administrator verändert "
-"werden."
-msgstr ""
-"This is a protected evaluation and can be modified by the administrator, "
-"only."
-
-#: vote/vote_show.inc.php:407
-msgid ""
-"Dieser Evaluation darf keine Verknüpfung mehr zu einem anderen Fragebogen "
-"hinzugefügt werden."
-msgstr "No links to any further questionnaire can be added to this evaluation."
-
-#: vote/vote_show.inc.php:465 vote/vote_show.inc.php:469
+#: vote/vote_show.inc.php:118 vote/vote_show.inc.php:127
 msgid "Umfragen"
 msgstr "Surveys"
 
-#: vote/vote_show.inc.php:465 vote/vote_show.inc.php:469
+#: vote/vote_show.inc.php:120 vote/vote_show.inc.php:129
 msgid "Umfragen und mehr..."
 msgstr "Surveys and more..."
 
-#: vote/vote_show.inc.php:467
+#: vote/vote_show.inc.php:125
 msgid "Umfragen bearbeiten"
 msgstr "Edit surveys."
 
-#: vote/vote_show.inc.php:482
+#: vote/vote_show.inc.php:152
+msgid "Fehler beim Einlesen der Evaluation"
+msgstr "Error while reading the evaluation"
+
+#: vote/vote_show.inc.php:256
 msgid "Fehler beim Einlesen des Votes"
 msgstr "Error while reading the votes"
 
-#: vote/vote_show.inc.php:512
+#: vote/vote_show.inc.php:287
 msgid "Die &Auml;nderungen wurden gespeichert"
 msgstr "The changes were saved."
 
-#: vote/vote_show.inc.php:529
+#: vote/vote_show.inc.php:308
 msgid "Fehler bei der Abstimmung"
 msgstr "Error while voting."
 
@@ -1530,3 +1479,46 @@ msgid ""
 msgstr ""
 "No current votes are available. In order to create new votes, please click "
 "on the double arrow."
+
+#~ msgid "Lehrveranstaltungsevaluationen zu meinen Veranstaltungen"
+#~ msgstr "Course evaluations associated to my courses"
+
+#~ msgid "Evaluationen..."
+#~ msgstr "Evaluations..."
+
+#, fuzzy
+#~ msgid "Evaluationen bearbeiten"
+#~ msgstr "Evaluations"
+
+#~ msgid ""
+#~ "Die Evaluation ist geschützt und darf nur durch einen Administrator "
+#~ "verändert werden."
+#~ msgstr ""
+#~ "This is a protected evaluation and can be modified by an administrator, "
+#~ "only."
+
+#~ msgid ""
+#~ "Dieser Evaluation kann keine Verknüpfung mehr zu einem anderen Fragebogen "
+#~ "hinzugefügt werden, da bereits Antworten vorliegen."
+#~ msgstr ""
+#~ "No links to any further questionnaire can be added to this evaluation "
+#~ "because answers to this evaluation have already been given."
+
+#~ msgid "Evaluation mit anderer Evaluation verknüpfen"
+#~ msgstr "Add to this evaluation a link to another evaluation"
+
+#~ msgid "Evaluationen"
+#~ msgstr "Evaluations"
+
+#~ msgid ""
+#~ "Die Evaluation ist geschützt und darf nur durch den Administrator "
+#~ "verändert werden."
+#~ msgstr ""
+#~ "This is a protected evaluation and can be modified by the administrator, "
+#~ "only."
+
+#~ msgid ""
+#~ "Dieser Evaluation darf keine Verknüpfung mehr zu einem anderen Fragebogen "
+#~ "hinzugefügt werden."
+#~ msgstr ""
+#~ "No links to any further questionnaire can be added to this evaluation."

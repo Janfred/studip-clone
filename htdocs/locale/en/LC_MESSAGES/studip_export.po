@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_export\n"
-"POT-Creation-Date: 2006-08-28 12:29+0200\n"
+"POT-Creation-Date: 2006-10-10 21:08+0200\n"
 "PO-Revision-Date: 2006-08-21 16:10+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -22,8 +22,8 @@ msgstr ""
 "There is no export module installed for this format.<br>Please select "
 "another export format."
 
-#: export/export_choose_xslt.inc.php:80 export/export_run_xslt.inc.php:68
-#: export/export_xml.inc.php:72
+#: export/export_choose_xslt.inc.php:80 export/export_run_xslt.inc.php:70
+#: export/export_xml.inc.php:70
 msgid "Unzulässiger Seitenaufruf!"
 msgstr "Illegal page loading!"
 
@@ -38,9 +38,9 @@ msgstr "An error has occurred"
 #: export/export_choose_xslt.inc.php:91 export/export_choose_xslt.inc.php:162
 #: export/export_choose_xslt.inc.php:232 export/export_choose_xslt.inc.php:289
 #: export/export_run_fop.inc.php:72 export/export_run_fop.inc.php:146
-#: export/export_run_xslt.inc.php:83 export/export_run_xslt.inc.php:180
-#: export/export_start.inc.php:159 export/export_xml.inc.php:81
-#: export/export_xml.inc.php:178
+#: export/export_run_xslt.inc.php:85 export/export_run_xslt.inc.php:182
+#: export/export_start.inc.php:159 export/export_xml.inc.php:79
+#: export/export_xml.inc.php:176
 msgid "Information:"
 msgstr "Information:"
 
@@ -69,8 +69,8 @@ msgid "Name der Datei (z.B. &raquo;Test&laquo;):"
 msgstr "File name (e.g &raquo;Test&laquo;)"
 
 #: export/export_choose_xslt.inc.php:156 export/export_choose_xslt.inc.php:224
-#: export/export_choose_xslt.inc.php:277 export/export_run_xslt.inc.php:145
-#: export/export_xml.inc.php:170
+#: export/export_choose_xslt.inc.php:277 export/export_run_xslt.inc.php:147
+#: export/export_xml.inc.php:168
 msgid "Zur&uuml;ck"
 msgstr "Back"
 
@@ -81,8 +81,8 @@ msgstr "This page prepares the data for export. %s Step 1/3 %s"
 
 #: export/export_choose_xslt.inc.php:171 export/export_choose_xslt.inc.php:241
 #: export/export_choose_xslt.inc.php:298 export/export_run_fop.inc.php:155
-#: export/export_run_xslt.inc.php:190 export/export_start.inc.php:168
-#: export/export_xml.inc.php:189
+#: export/export_run_xslt.inc.php:192 export/export_start.inc.php:168
+#: export/export_xml.inc.php:187
 msgid "Aktionen:"
 msgstr "Actions:"
 
@@ -135,12 +135,12 @@ msgid "Die ben&ouml;tigten Dateien liegen nun zum Download bereit."
 msgstr "The required files are ready to download."
 
 #: export/export_choose_xslt.inc.php:257 export/export_run_fop.inc.php:136
-#: export/export_run_xslt.inc.php:162 export/export_xml.inc.php:173
+#: export/export_run_xslt.inc.php:164 export/export_xml.inc.php:171
 msgid "XML-Daten"
 msgstr "XML data"
 
-#: export/export_choose_xslt.inc.php:258 export/export_run_xslt.inc.php:163
-#: export/export_xml.inc.php:174
+#: export/export_choose_xslt.inc.php:258 export/export_run_xslt.inc.php:165
+#: export/export_xml.inc.php:172
 msgid ""
 "In dieser Datei sind die Daten als XML-Tags gespeichert. Diese Tags können "
 "mit einem XSLT-Script verarbeitet werden."
@@ -148,7 +148,7 @@ msgstr ""
 "In this file the data saved as XML tags. These tags can be processed with a "
 "XSLT script."
 
-#: export/export_choose_xslt.inc.php:262 export/export_run_xslt.inc.php:167
+#: export/export_choose_xslt.inc.php:262 export/export_run_xslt.inc.php:169
 msgid "XSLT-Datei"
 msgstr "XSLT file"
 
@@ -197,11 +197,11 @@ msgstr "Export these data"
 msgid "Diese Daten exportieren"
 msgstr "Export these data"
 
-#: export/export_run_fop.inc.php:59 export/export_run_xslt.inc.php:59
+#: export/export_run_fop.inc.php:59 export/export_run_xslt.inc.php:61
 msgid "Fehlende Parameter!"
 msgstr "Defective parameter!"
 
-#: export/export_run_fop.inc.php:75 export/export_xml.inc.php:84
+#: export/export_run_fop.inc.php:75 export/export_xml.inc.php:82
 msgid ""
 "Die Parametern, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr "The parameters, with which this page has been loaded are defective."
@@ -218,7 +218,7 @@ msgstr ""
 msgid "Download der PDF-Datei"
 msgstr "Download the PDF files"
 
-#: export/export_run_fop.inc.php:109 export/export_run_xslt.inc.php:151
+#: export/export_run_fop.inc.php:109 export/export_run_xslt.inc.php:153
 msgid "Ausgabe-Datei: "
 msgstr "Export file:"
 
@@ -264,15 +264,15 @@ msgstr ""
 msgid "Um die Ausgabe-Datei herunterzuladen, klicken Sie %s hier %s."
 msgstr "To download the export file, click %s here %s."
 
-#: export/export_run_xslt.inc.php:77
+#: export/export_run_xslt.inc.php:79
 msgid "Download der Ausgabedatei"
 msgstr "Download the export file"
 
-#: export/export_run_xslt.inc.php:86
+#: export/export_run_xslt.inc.php:88
 msgid "Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft."
 msgstr "The parameters with which this page was loaded, are defective."
 
-#: export/export_run_xslt.inc.php:104
+#: export/export_run_xslt.inc.php:106
 #, c-format
 msgid ""
 "Die Daten wurden erfolgreich konvertiert. %s Sie k&ouml;nnen die "
@@ -281,11 +281,11 @@ msgstr ""
 "The files were successfully converted. %s You can now download the export "
 "file. %s"
 
-#: export/export_run_xslt.inc.php:105
+#: export/export_run_xslt.inc.php:107
 msgid "Die Daten sind nun im gew&auml;hlten Format verf&uuml;gbar."
 msgstr "The data are only available in the selected format."
 
-#: export/export_run_xslt.inc.php:112
+#: export/export_run_xslt.inc.php:114
 #, c-format
 msgid ""
 "Bei der Konvertierung ist ein Fehler aufgetreten. %sDer XSLT-Prozessor "
@@ -294,11 +294,11 @@ msgstr ""
 "An error has occurred while converting. %s The XSLT processor registered the "
 "error nr. %s: %s %s"
 
-#: export/export_run_xslt.inc.php:113
+#: export/export_run_xslt.inc.php:115
 msgid "Bei der Konvertierung ist ein Fehler aufgetreten."
 msgstr "An error occurred while converting."
 
-#: export/export_run_xslt.inc.php:168
+#: export/export_run_xslt.inc.php:170
 msgid ""
 "Dies ist das XSLT-Script zur Konvertierung der Daten. Klicken Sie auf den "
 "Dateinamen, um die Datei zu öffnen."
@@ -306,15 +306,15 @@ msgstr ""
 "This is the XSLT script for conversion of the data. Click on the file name "
 "in order to open the file."
 
-#: export/export_run_xslt.inc.php:174
+#: export/export_run_xslt.inc.php:176
 msgid "Ausgabe-Datei"
 msgstr "Export file"
 
-#: export/export_run_xslt.inc.php:175
+#: export/export_run_xslt.inc.php:177
 msgid "Dies ist die fertige Ausgabedatei."
 msgstr "This is the finished export file."
 
-#: export/export_run_xslt.inc.php:192
+#: export/export_run_xslt.inc.php:194
 #, c-format
 msgid "Um die Ausgabe-Datei herunterzuladen, klicken Sie %shier%s."
 msgstr "In order to download the export file, click %shere%s."
@@ -442,32 +442,32 @@ msgstr "All institutes"
 msgid "Datenexport"
 msgstr "Data export"
 
-#: export/export_xml.inc.php:139
+#: export/export_xml.inc.php:137
 msgid "Es wurden keine Daten gefunden!"
 msgstr "No data was found!"
 
-#: export/export_xml.inc.php:140
+#: export/export_xml.inc.php:138
 msgid ""
 "Es wurden keine Daten gefunden! Die &uuml;bergebene ID ist mit keinen "
 "Veranstaltungs- / Personendaten verbunden."
 msgstr ""
 "No data was found! The given ID is not connected to any course or user data."
 
-#: export/export_xml.inc.php:150
+#: export/export_xml.inc.php:148
 msgid "Die Daten wurden erfolgreich exportiert."
 msgstr "The data was successfully exported."
 
-#: export/export_xml.inc.php:152
+#: export/export_xml.inc.php:150
 #, c-format
 msgid "%s Objekt wurde verarbeitet."
 msgstr "%s object was processed."
 
-#: export/export_xml.inc.php:154
+#: export/export_xml.inc.php:152
 #, c-format
 msgid "%s Objekte wurden verarbeitet."
 msgstr "%s objects were processed."
 
-#: export/export_xml.inc.php:191
+#: export/export_xml.inc.php:189
 #, c-format
 msgid "Um die XML-Datei jetzt herunterzuladen klicken Sie %s hier %s."
 msgstr "To download the XML file click %shere%s."

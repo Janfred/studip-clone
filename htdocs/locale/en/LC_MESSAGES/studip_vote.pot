@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-08-28 12:29+0200\n"
+"POT-Creation-Date: 2006-10-10 21:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -732,92 +732,47 @@ msgstr ""
 msgid "Keine gestoppten Votings oder Tests vorhanden."
 msgstr ""
 
-#: vote/vote_show.inc.php:48
+#: vote/vote_show.inc.php:49
 msgid "Vote-Datenbankfehler"
 msgstr ""
 
-#: vote/vote_show.inc.php:53
+#: vote/vote_show.inc.php:54
 msgid "Evaluation-Datenbankfehler"
 msgstr ""
 
-#: vote/vote_show.inc.php:68
+#: vote/vote_show.inc.php:71
 msgid "Datenbankfehler bei Voteaktivierung"
 msgstr ""
 
-#: vote/vote_show.inc.php:83 vote/vote_show.inc.php:90
+#: vote/vote_show.inc.php:87 vote/vote_show.inc.php:95
 msgid "Datenbankfehler beim Auslesen der EvaluationsIDs."
 msgstr ""
 
-#: vote/vote_show.inc.php:135 vote/vote_show.inc.php:139
-msgid "Lehrveranstaltungsevaluationen zu meinen Veranstaltungen"
-msgstr ""
-
-#: vote/vote_show.inc.php:135 vote/vote_show.inc.php:139
-#: vote/vote_show.inc.php:302 vote/vote_show.inc.php:306
-msgid "Evaluationen..."
-msgstr ""
-
-#: vote/vote_show.inc.php:137 vote/vote_show.inc.php:304
-msgid "Evaluationen bearbeiten"
-msgstr ""
-
-#: vote/vote_show.inc.php:158 vote/vote_show.inc.php:322
-msgid "Fehler beim Einlesen der Evaluation"
-msgstr ""
-
-#: vote/vote_show.inc.php:231
-msgid ""
-"Die Evaluation ist geschützt und darf nur durch einen Administrator "
-"verändert werden."
-msgstr ""
-
-#: vote/vote_show.inc.php:241
-msgid ""
-"Dieser Evaluation kann keine Verknüpfung mehr zu einem anderen Fragebogen "
-"hinzugefügt werden, da bereits Antworten vorliegen."
-msgstr ""
-
-#: vote/vote_show.inc.php:246 vote/vote_show.inc.php:412
-msgid "Evaluation mit anderer Evaluation verknüpfen"
-msgstr ""
-
-#: vote/vote_show.inc.php:302 vote/vote_show.inc.php:306
-msgid "Evaluationen"
-msgstr ""
-
-#: vote/vote_show.inc.php:396
-msgid ""
-"Die Evaluation ist geschützt und darf nur durch den Administrator verändert "
-"werden."
-msgstr ""
-
-#: vote/vote_show.inc.php:407
-msgid ""
-"Dieser Evaluation darf keine Verknüpfung mehr zu einem anderen Fragebogen "
-"hinzugefügt werden."
-msgstr ""
-
-#: vote/vote_show.inc.php:465 vote/vote_show.inc.php:469
+#: vote/vote_show.inc.php:118 vote/vote_show.inc.php:127
 msgid "Umfragen"
 msgstr ""
 
-#: vote/vote_show.inc.php:465 vote/vote_show.inc.php:469
+#: vote/vote_show.inc.php:120 vote/vote_show.inc.php:129
 msgid "Umfragen und mehr..."
 msgstr ""
 
-#: vote/vote_show.inc.php:467
+#: vote/vote_show.inc.php:125
 msgid "Umfragen bearbeiten"
 msgstr ""
 
-#: vote/vote_show.inc.php:482
+#: vote/vote_show.inc.php:152
+msgid "Fehler beim Einlesen der Evaluation"
+msgstr ""
+
+#: vote/vote_show.inc.php:256
 msgid "Fehler beim Einlesen des Votes"
 msgstr ""
 
-#: vote/vote_show.inc.php:512
+#: vote/vote_show.inc.php:287
 msgid "Die &Auml;nderungen wurden gespeichert"
 msgstr ""
 
-#: vote/vote_show.inc.php:529
+#: vote/vote_show.inc.php:308
 msgid "Fehler bei der Abstimmung"
 msgstr ""
 

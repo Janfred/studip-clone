@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip_resources\n"
-"POT-Creation-Date: 2006-08-28 12:29+0200\n"
+"POT-Creation-Date: 2006-10-10 21:08+0200\n"
 "PO-Revision-Date: 2006-08-21 21:08+GMT\n"
 "Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
 "Language-Team:  <de@li.org>\n"
@@ -60,7 +60,7 @@ msgid "Veranstaltungen"
 msgstr "Courses"
 
 #: resources/resourcesFunc.inc.php:648
-#: resources/lib/ResourceObject.class.php:291
+#: resources/lib/ResourceObject.class.php:290
 msgid "Global"
 msgstr "Global"
 
@@ -93,18 +93,18 @@ msgid "Starten Sie hier Ihre Suche"
 msgstr "Start your search here"
 
 #: resources/lib/AssignObject.class.php:187
-#: resources/lib/ResourceObject.class.php:299
+#: resources/lib/ResourceObject.class.php:298
 msgid "NutzerIn"
 msgstr "User"
 
 #: resources/lib/AssignObject.class.php:197
-#: resources/lib/ResourceObject.class.php:275
-#: resources/lib/ResourceObject.class.php:308
+#: resources/lib/ResourceObject.class.php:274
+#: resources/lib/ResourceObject.class.php:307
 msgid "Einrichtung"
 msgstr "Institution"
 
 #: resources/lib/AssignObject.class.php:219
-#: resources/lib/ResourceObject.class.php:317
+#: resources/lib/ResourceObject.class.php:316
 msgid "Veranstaltung"
 msgstr "Course"
 
@@ -304,15 +304,15 @@ msgstr "from:"
 msgid "Raumanfrage bearbeitet"
 msgstr "Resolved room request"
 
-#: resources/lib/ResourceObject.class.php:285
+#: resources/lib/ResourceObject.class.php:284
 msgid "jederR"
 msgstr "everyone"
 
-#: resources/lib/ResourceObject.class.php:287
+#: resources/lib/ResourceObject.class.php:286
 msgid "jedeR (alle Nutzenden)"
 msgstr "everyone (all users)"
 
-#: resources/lib/ResourceObject.class.php:293
+#: resources/lib/ResourceObject.class.php:292
 msgid "Global (zentral verwaltet)"
 msgstr "global (centrally administrated)"
 
