@@ -317,7 +317,7 @@ function show_rss_news($range_id, $type){
 	foreach(StudipNews::GetNewsByRange($range_id, true) as  $news_id => $details) {
 		list ($body,$admin_msg) = explode("<admin_msg>",$details["body"]);
 		$items .= "<item>
-		<title><![CDATA[".utf8_encode(formatReady($details["topic"],1,1))."]]</title>
+		<title><![CDATA[".utf8_encode(formatReady($details["topic"],1,1))."]]></title>
 		<link>".utf8_encode($studip_url . "&#38;nopen=$news_id&#35;anker")."</link>";
 		$items .= "<description>"."<![CDATA[".utf8_encode(formatready($body,1,1))."]]>"."</description>
 		<dc:contributor>"."<![CDATA[".utf8_encode(htmlready($details['author']))."]]>"."</dc:contributor>
