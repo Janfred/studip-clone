@@ -330,14 +330,14 @@ function show_rss_news($range_id, $type){
 	echo "<?xml version=\"1.0\"?>
 	<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">
 	<channel>
-	<title><![CDATA[".utf8_encode(formatReady($title,1,1))."]]</title>
+	<title><![CDATA[".utf8_encode(formatReady($title,1,1))."]]></title>
 	<link>$studip_url</link>
 	<image>
 	<url>http://www.studip.de/images/studip_logo.gif</url>
-	<title><![CDATA[".utf8_encode(formatReady($title,1,1))."]]</title>
+	<title><![CDATA[".utf8_encode(formatReady($title,1,1))."]]></title>
 	<link>$studip_url</link>
 	</image>
-	<description><![CDATA[".utf8_encode(formatReady($RssChannelDesc,1,1))."]]</description>
+	<description><![CDATA[".utf8_encode(formatReady($RssChannelDesc,1,1))."]]></description>
 	<lastBuildDate>".date("r",$last_changed)."</lastBuildDate>
 	<generator>". utf8_encode('Stud.IP - ' . htmlspecialchars($GLOBALS['SOFTWARE_VERSION'])) . "</generator>";
 	echo chr(10).$items;
