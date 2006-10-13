@@ -317,7 +317,7 @@ function show_rss_news($range_id, $type){
 	foreach(StudipNews::GetNewsByRange($range_id, true) as  $news_id => $details) {
 		list ($body,$admin_msg) = explode("<admin_msg>",$details["body"]);
 		$items .= "<item>
-		<title>".utf8_encode(htmlspecialchars($details["topic"]))."</title>
+		<title><![CDATA[".utf8_encode(formatReady($details["topic"],1,1))."]]</title>
 		<link>".utf8_encode($studip_url . "&#38;nopen=$news_id&#35;anker")."</link>";
 		$items .= "<description>"."<![CDATA[".utf8_encode(formatready($body,1,1))."]]>"."</description>
 		<dc:contributor>"."<![CDATA[".utf8_encode(htmlready($details['author']))."]]>"."</dc:contributor>
@@ -330,14 +330,14 @@ function show_rss_news($range_id, $type){
 	echo "<?xml version=\"1.0\"?>
 	<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">
 	<channel>
-	<title>".utf8_encode($title)."</title>
+	<title><![CDATA[".utf8_encode(formatReady($title,1,1))."]]</title>
 	<link>$studip_url</link>
 	<image>
 	<url>http://www.studip.de/images/studip_logo.gif</url>
-	<title>".utf8_encode($title)."</title>
+	<title><![CDATA[".utf8_encode(formatReady($title,1,1))."]]</title>
 	<link>$studip_url</link>
 	</image>
-	<description>".utf8_encode($RssChannelDesc)."</description>
+	<description><![CDATA[".utf8_encode(formatReady($RssChannelDesc,1,1))."]]</description>
 	<lastBuildDate>".date("r",$last_changed)."</lastBuildDate>
 	<generator>". utf8_encode('Stud.IP - ' . htmlspecialchars($GLOBALS['SOFTWARE_VERSION'])) . "</generator>";
 	echo chr(10).$items;
