@@ -571,7 +571,7 @@ class AdminNewsController {
 			}
 			if ($perm->is_fak_admin()){
 				$query = "SELECT d.Seminar_id,d.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
-				LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d USING(Institut_id)
+				LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id) LEFT JOIN seminare d ON(d.institut_id=c.institut_id)
 				WHERE a.user_id='$this->user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id)";
 				$this->db->query($query);
 				while($this->db->next_record()){

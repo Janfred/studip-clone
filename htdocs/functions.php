@@ -1026,7 +1026,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				. ($show_sem ? $show_sem_sql1 : "")
 				. " FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
 				LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id)
-				LEFT JOIN seminare s USING(Institut_id) "
+				LEFT JOIN seminare s ON(s.institut_id = c.institut_id) "
 				. ($show_sem ? $show_sem_sql2 : "")
 				. "	WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND s.Name LIKE '%$search_str%'";
 			$db->query($query);
