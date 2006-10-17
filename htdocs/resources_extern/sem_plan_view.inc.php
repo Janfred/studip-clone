@@ -1,5 +1,5 @@
 <a href="<?=$PHP_SELF?>?semester_id=<?=$_semester_id?>&timespan=<?=$_timespan?>" style="font-size:90%">
-<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/pfeil.gif" border="0" align="absmiddle">
+<img src="pictures/pfeil.gif" border="0" align="absmiddle">
 zur&uuml;ck zur Startseite
 </a>
 <?php
@@ -8,6 +8,6 @@ show_sem_plan($_REQUEST['rid'], $_semester_id, $_timespan);
 ?>
 <br>
 <a href="<?=$PHP_SELF?>?semester_id=<?=$_semester_id?>&timespan=<?=$_timespan?>" style="font-size:90%">
-<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/pfeil.gif" border="0" align="absmiddle">
+<img src="pictures/pfeil.gif" border="0" align="absmiddle">
 zur&uuml;ck zur Startseite
 </a>
