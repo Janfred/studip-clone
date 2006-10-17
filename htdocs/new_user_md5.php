@@ -244,9 +244,9 @@ if (isset($_GET['details'])) {
 					<td class="steel1">&nbsp;
 					<?
 					if (StudipAuthAbstract::CheckField("auth_user_md5.username", $db->f('auth_plugin'))) {
-						echo $db->f("username");
+						echo htmlReady($db->f("username"));
 					} else {
-					?><input type="text" name="username" size=24 maxlength=63 value="<?php $db->p("username") ?>"><?
+					?><input type="text" name="username" size=24 maxlength=63 value="<?=htmlReady($db->f("username"))?>"><?
 					}
 					?>
 					</td>
@@ -272,9 +272,9 @@ if (isset($_GET['details'])) {
 					<td class="steel1">&nbsp;
 					<?
 					if (StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $db->f('auth_plugin'))) {
-						echo $db->f("Vorname");
+						echo htmlReady($db->f("Vorname"));
 					} else {
-						?><input type="text" name="Vorname" size=24 maxlength=63 value="<?php $db->p("Vorname") ?>"><?
+						?><input type="text" name="Vorname" size=24 maxlength=63 value="<?=htmlReady($db->f("Vorname"))?>"><?
 					}
 					?>
 					</td>
@@ -284,9 +284,9 @@ if (isset($_GET['details'])) {
 					<td class="steel1">&nbsp;
 					<?
 					if (StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $db->f('auth_plugin'))) {
-						echo $db->f("Nachname");
+						echo htmlReady($db->f("Nachname"));
 					} else {
-						?><input type="text" name="Nachname" size=24 maxlength=63 value="<?php $db->p("Nachname") ?>"><?
+						?><input type="text" name="Nachname" size=24 maxlength=63 value="<?=htmlReady($db->f("Nachname"))?>"><?
 					}
 					?>
 					</td>
@@ -296,7 +296,7 @@ if (isset($_GET['details'])) {
 				</td><td class="steel1" align="right">
 				<?
 				if (StudipAuthAbstract::CheckField("user_info.title_front", $db->f('auth_plugin'))) {
-						echo "&nbsp;</td><td class=\"steel1\">&nbsp;" . $db->f("title_front");
+						echo "&nbsp;</td><td class=\"steel1\">&nbsp;" . htmlReady($db->f("title_front"));
 				} else {
 				?>
 				<select name="title_front_chooser" onChange="document.edit.title_front.value=document.edit.title_front_chooser.options[document.edit.title_front_chooser.selectedIndex].text;">
@@ -305,11 +305,11 @@ if (isset($_GET['details'])) {
 					 echo "\n<option";
 					 if($TITLE_FRONT_TEMPLATE[$i] == $db->f("title_front"))
 					 	echo " selected ";
-					 echo ">$TITLE_FRONT_TEMPLATE[$i]</option>";
+					 echo ">".htmlReady($TITLE_FRONT_TEMPLATE[$i])."</option>";
 					}
 				?>
 				</select></td>
-				<td class="steel1">&nbsp;<input type="text" name="title_front" value="<?=$db->f("title_front")?>" size=24 maxlength=63>
+				<td class="steel1">&nbsp;<input type="text" name="title_front" value="<?=htmlReady($db->f("title_front"))?>" size=24 maxlength=63>
 				<?
 				}
 				?>
@@ -320,7 +320,7 @@ if (isset($_GET['details'])) {
 				</td><td class="steel1" align="right">
 				<?
 				if (StudipAuthAbstract::CheckField("user_info.title_rear", $db->f('auth_plugin'))) {
-						echo "&nbsp;</td><td class=\"steel1\">&nbsp;" . $db->f("title_rear");
+						echo "&nbsp;</td><td class=\"steel1\">&nbsp;" . htmlReady($db->f("title_rear"));
 				} else {
 				?>
 				<select name="title_rear_chooser" onChange="document.edit.title_rear.value=document.edit.title_rear_chooser.options[document.edit.title_rear_chooser.selectedIndex].text;">
@@ -329,11 +329,11 @@ if (isset($_GET['details'])) {
 					 echo "\n<option";
 					 if($TITLE_REAR_TEMPLATE[$i] == $db->f("title_rear"))
 					 	echo " selected ";
-					 echo ">$TITLE_REAR_TEMPLATE[$i]</option>";
+					 echo ">".htmlReady($TITLE_REAR_TEMPLATE[$i])."</option>";
 					}
 				?>
 				</select></td>
-				<td class="steel1">&nbsp;<input type="text" name="title_rear" value="<?=$db->f("title_rear")?>" size=24 maxlength=63>
+				<td class="steel1">&nbsp;<input type="text" name="title_rear" value="<?=htmlReady($db->f("title_rear"))?>" size=24 maxlength=63>
 				<?
 				}
 				?>
@@ -359,9 +359,9 @@ if (isset($_GET['details'])) {
 					<td class="steel1">&nbsp;
 					<?
 					if (StudipAuthAbstract::CheckField("auth_user_md5.Email", $db->f('auth_plugin'))) {
-						echo $db->f("Email");
+						echo htmlReady($db->f("Email"));
 					} else {
-					?><input type="text" name="Email" size=48 maxlength=63 value="<?php $db->p("Email") ?>">&nbsp;
+					?><input type="text" name="Email" size=48 maxlength=63 value="<?=htmlReady($db->f("Email"))?>">&nbsp;
 					<?
 					}
 					?>
@@ -390,11 +390,11 @@ if (isset($_GET['details'])) {
                                 	echo "  </td>\n";
                                 	echo "  <td class=\"steel1\">\n";
                                 	echo "    &nbsp;"._("Kommentar:")."&nbsp;\n";
-                                	echo "    <INPUT TYPE=\"text\" NAME=\"lock_comment\" VALUE=\"".$db->f("lock_comment")."\" SIZE=\"24\" MAXLENGTH=\"255\">\n";
+                                	echo "    <INPUT TYPE=\"text\" NAME=\"lock_comment\" VALUE=\"".htmlReady($db->f("lock_comment"))."\" SIZE=\"24\" MAXLENGTH=\"255\">\n";
                                 	echo "  </td>\n";
                                		echo "</tr>\n";
 					if ($db->f("locked")==1) 
-                                        	echo "<TR><TD CLASS=\"steel1\" COLSPAN=\"3\" ALIGN=\"center\"><FONT SIZE=\"-2\">"._("Gesperrt von:")." ".get_fullname($db->f("locked_by"))." (<A HREF=\"about.php?username=".get_username($db->f("locked_by"))."\">".get_username($db->f("locked_by"))."</A>)</FONT></TD></TR>\n";
+                                        	echo "<TR><TD CLASS=\"steel1\" COLSPAN=\"3\" ALIGN=\"center\"><FONT SIZE=\"-2\">"._("Gesperrt von:")." ".htmlReady(get_fullname($db->f("locked_by")))." (<A HREF=\"about.php?username=".get_username($db->f("locked_by"))."\">".get_username($db->f("locked_by"))."</A>)</FONT></TD></TR>\n";
 				}
 				?>
 
