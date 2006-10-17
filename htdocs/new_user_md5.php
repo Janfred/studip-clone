@@ -160,7 +160,7 @@ if (isset($_GET['details'])) {
 				</tr>
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("globaler Status:")?>&nbsp;</b></td>
-					<td>&nbsp;<? print $perm->perm_sel("perms", $db->f("perms")) ?></td>
+					<td>&nbsp;<? print $perm->perm_sel("perms", 'autor') ?></td>
 				</tr>
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("Sichtbarkeit")?>&nbsp;</b></td>
@@ -437,7 +437,14 @@ if (isset($_GET['details'])) {
 				printf("&nbsp;" . _("pers&ouml;nliche Homepage") . " <a href=\"about.php?username=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
 				printf("&nbsp;" . _("Nachricht an BenutzerIn") . " <a href=\"sms_send.php?rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
 			print "</td></tr>";
-
+			if ($perm->have_perm('root') && @file_exists('user_activities.php')){
+				echo "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
+				echo "&nbsp;" . _("Datei- und Aktivitätenübersicht") . "&nbsp;";
+				printf('<a href="user_activities.php?username=%s">
+						<img src="'.$GLOBALS['ASSETS_URL'].'images/icon-disc.gif" align="absmiddle" border="0">
+						</a>' , $db->f('username'));
+				echo "</td></tr>\n";
+			}
 			$temp_user_id = $db->f("user_id");
 			if ($perm->have_perm("root"))
 				$db2->query("SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_id ='$temp_user_id' AND inst_perms != 'user'");
@@ -533,6 +540,8 @@ if (isset($_GET['details'])) {
 				if (is_object($userkillplugin)){
 					echo "<tr valign=\"top\"><td colspan=\"7\"><a href=\"" . PluginEngine::getLink($userkillplugin,array('transfer_search' => 1))."\">"._("Suchergebnis in Löschformular übernehmen")."</a></td></tr>";
 				}
+			} else if ($perm->have_perm('root') && @file_exists('admin_user_kill.php')){
+				echo "<tr valign=\"top\"><td colspan=\"7\"><a href=\"admin_user_kill.php?transfer_search=1\">"._("Suchergebnis in Löschformular übernehmen")."</a></td></tr>";
 			}
 			
 			print "<tr valign=\"top\" align=\"middle\">";
