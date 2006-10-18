@@ -145,8 +145,8 @@ class ExternElementStudipLink extends ExternElement {
 			// This is especially for checkbox-values. If there is no checkbox
 			// checked, the variable is not declared and it is necessary to set the
 			// variable to 0.
-			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
-				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = 0;
+			if (!isset($_POST[$this->name . "_" . $attribute])) {
+				$_POST[$this->name . "_" . $attribute] = 0;
 				return FALSE;
 			}
 			return !($value == "1" || $value == "0");

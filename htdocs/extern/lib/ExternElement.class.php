@@ -46,18 +46,34 @@ class ExternElement {
 	var $description;
 	var $headlines = array();
 
+	
+	/**
+	*
+	*/
+	function &GetInstance (&$config, $element_name) {
+		$class_name = "ExternElement" . $element_name;
+		require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]
+				. $GLOBALS["RELATIVE_PATH_EXTERN"] . "/elements/$class_name.class.php");
+		$element = new $class_name();
+		$element->config =& $config;
+		
+		return $element;
+	}
+	
+	
 	/**
 	* Constructor
+	* Don't call direct, use GetInstance() instead.
 	*
 	* @param array config
 	* @param string element_name
 	*/
 	function ExternElement (&$config, $element_name) {
-		$class_name = "ExternElement" . $element_name;
+	/*	$class_name = "ExternElement" . $element_name;
 		require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]
 				. $GLOBALS["RELATIVE_PATH_EXTERN"] . "/elements/$class_name.class.php");
 		$this = new $class_name();
-		$this->config =& $config;
+		$this->config =& $config;*/
 	}
 
 	/**

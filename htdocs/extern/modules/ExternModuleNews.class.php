@@ -40,27 +40,25 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternModuleNews extends ExternModule {
 
-	var $field_names = array();
-	var $data_fields = array("date", "topic");
-	var $registered_elements = array(
-								"Body",
-								"TableHeader",
-								"TableHeadrow",
-								"TableRow",
-								"ContentNews",
-								"LinkInternSimple" => "LinkIntern",
-								"StudipLink");
-
 	/**
 	*
 	*/
-	function ExternModuleNews () {
+	function ExternModuleNews ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+		$this->registered_elements = array(
+								'Body',
+								'TableHeader',
+								'TableHeadrow',
+								'TableRow',
+								'ContentNews',
+								'LinkInternSimple' => 'LinkIntern',
+								'StudipLink');
+		$this->data_fields = array('date', 'topic');
 		$this->field_names = array
 		(
 				_("Datum/Autor"),
 				_("Nachricht")
 		);
-		
+		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
 	}
 	
 	function setup () {

@@ -49,16 +49,36 @@ class ExternModule {
 	var $type = NULL;
 	var $name;
 	var $config;
-	var $registered_elements;
-	var $elements;
-	var $field_names;
-	var $data_fields;
+	var $registered_elements = array();
+	var $elements = array();
+	var $field_names = array();
+	var $data_fields = array();
 	var $args = array();
+	
+	
 	/**
 	*
 	*/
-	function ExternModule ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+	function &GetInstance ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
 		$module_name = ucfirst($module_name);
+		
+		if ($module_name != '') {
+			$class_name = "ExternModule" . $module_name;
+			// Vorläufiger Bugfix (Modul-Skript wird schon in extern.inc.php eingebunden)
+		//	require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "extern/modules/$class_name.class.php");
+			$module =& new $class_name($range_id, $module_name, $config_id, $set_config, $global_id);
+			
+			return $module;
+		}
+		
+		return NULL;
+	}
+	
+	/**
+	* The constructor of a child class has to call this parent constructor!
+	*/
+	function ExternModule ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+		/*$module_name = ucfirst($module_name);
 		
 		if ($module_name != "") {
 			$class_name = "ExternModule" . $module_name;
@@ -66,7 +86,7 @@ class ExternModule {
 		//	require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "extern/modules/$class_name.class.php");
 			$this = new $class_name();
 		}
-		
+		*/
 		// the module is called via extern.php (not via the admin area) and there is
 		// no config_id so it's necessary to check the range_id
 		if (!$config_id && !$this->checkRangeId($range_id))
@@ -90,15 +110,15 @@ class ExternModule {
 		
 		// the "Main"-element is included in every module and needs information
 		// about the data this module handles with
-		$this->elements["Main"] =& new ExternElementMain($module_name, $this->data_fields,
-				$this->field_names, $this->config);
+		$this->elements["Main"] =& ExternElementMain::GetInstance($module_name,
+				$this->data_fields, $this->field_names, $this->config);
 		
 		// instantiate the registered elements
 		foreach ($this->registered_elements as $name => $registered_element) {
 			if (is_int($name) || !$name)
-				$this->elements[$registered_element] =& new ExternElement(&$this->config, $registered_element);
+				$this->elements[$registered_element] =& ExternElement::GetInstance(&$this->config, $registered_element);
 			else {
-				$this->elements[$name] =& new ExternElement(&$this->config, $registered_element);
+				$this->elements[$name] =& ExternElement::GetInstance(&$this->config, $registered_element);
 				$this->elements[$name]->name = $name;
 			}
 		}

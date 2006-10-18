@@ -39,18 +39,20 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainPersondetails extends ExternElementMain {
 
-	var $attributes = array("name", "genericdatafields", "order", "visible",
-			"aliases", "width", "showcontact", "showimage", "wholesite", "nameformat",
-			"dateformat", "language", "studiplink", "urlcss", "title", "copyright",
-			"author");
-	
 	/**
 	* Constructor
 	*
 	*/
-	function ExternElementMainPersondetails () {
+	function ExternElementMainPersondetails ($module_name, &$data_fields, &$field_names, &$config) {
+		$this->attributes = array(
+				'name', 'genericdatafields', 'order', 'visible',
+				'aliases', 'width', 'showcontact', 'showimage', 'wholesite', 'nameformat',
+				'dateformat', 'language', 'studiplink', 'urlcss', 'title', 'copyright',
+				'author'
+		);
 		$this->real_name = _("Grundeinstellungen");
 		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;ndern.");
+		parent::ExternElementMain($module_name, &$data_fields, &$field_names, &$config);
 	}
 	
 	/**
@@ -191,8 +193,8 @@ class ExternElementMainPersondetails extends ExternElementMain {
 	
 	function checkValue ($attribute, $value) {
 		if ($attribute == "showcontact") {
-			if (!isset($GLOBALS["HTTP_POST_VARS"]["Main_$attribute"])) {
-				$GLOBALS["HTTP_POST_VARS"]["Main_$attribute"] = 0;
+			if (!isset($_POST["Main_$attribute"])) {
+				$_POST["Main_$attribute"] = 0;
 				return FALSE;
 			}
 				
@@ -200,8 +202,8 @@ class ExternElementMainPersondetails extends ExternElementMain {
 		}
 		
 		if ($attribute == "showimage") {
-			if (!isset($GLOBALS["HTTP_POST_VARS"]["Main_$attribute"])) {
-				$GLOBALS["HTTP_POST_VARS"]["Main_$attribute"] = 0;
+			if (!isset($_POST["Main_$attribute"])) {
+				$_POST["Main_$attribute"] = 0;
 				return FALSE;
 			}
 			

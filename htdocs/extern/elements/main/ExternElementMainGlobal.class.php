@@ -42,17 +42,19 @@ require_once($ABSOLUTE_PATH_STUDIP."lib/classes/SemesterData.class.php");
 
 class ExternElementMainGlobal extends ExternElementMain {
 
-	var $attributes = array('name', 'semstart', 'semrange', 'semswitch',
-			'nameformat', 'language', 'wholesite', 'urlcss', 'copyright', 'author',
-			'defaultadr');
-	
 	/**
 	* Constructor
 	*
 	*/
-	function ExternElementMainGlobal () {
+	function ExternElementMainGlobal ($module_name, &$data_fields, &$field_names, &$config) {
+		$this->attributes = array(
+				'name', 'semstart', 'semrange', 'semswitch',
+				'nameformat', 'language', 'wholesite', 'urlcss', 'copyright', 'author',
+				'defaultadr'
+		);
 		$this->real_name = _("Grundeinstellungen");
 		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;ndern.");
+		parent::ExternElementMain($module_name, &$data_fields, &$field_names, &$config);
 	}
 	
 	/**
@@ -216,8 +218,8 @@ class ExternElementMainGlobal extends ExternElementMain {
 	
 	function checkValue ($attribute, $value) {
 		if ($attribute == 'defaultadr') {
-			if (!isset($GLOBALS['HTTP_POST_VARS']["Main_$attribute"])) {
-				$GLOBALS['HTTP_POST_VARS']["Main_$attribute"] = 0;
+			if (!isset($_POST["Main_$attribute"])) {
+				$_POST["Main_$attribute"] = 0;
 				return FALSE;
 			}
 				

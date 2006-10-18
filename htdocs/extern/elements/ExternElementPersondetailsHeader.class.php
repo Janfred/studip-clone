@@ -244,8 +244,8 @@ class ExternElementPersondetailsHeader extends ExternElement {
 	
 	function checkValue ($attribute, $value) {
 		if ($attribute == "hidename") {
-			if (!isset($GLOBALS["HTTP_POST_VARS"]["PersondetailsHeader_$attribute"])) {
-				$GLOBALS["HTTP_POST_VARS"]["PersondetailsHeader_$attribute"] = 0;
+			if (!isset($_POST["PersondetailsHeader_$attribute"])) {
+				$_POST["PersondetailsHeader_$attribute"] = 0;
 				return FALSE;
 			}
 				

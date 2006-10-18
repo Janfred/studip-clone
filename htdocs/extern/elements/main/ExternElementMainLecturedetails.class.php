@@ -39,18 +39,20 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainLecturedetails extends ExternElementMain {
 
-	var $attributes = array("name", "genericdatafields", "order", "visible", "aliases",
-			"aliaspredisc", "aliasfirstmeeting", "headlinerow", "rangepathlevel", "studipinfo" ,
-			"studiplink", "studiplinktarget", "wholesite", "nameformat", "urlcss", "title",
-			"language", "copyright", "author");
-	
 	/**
 	* Constructor
 	*
 	*/
-	function ExternElementMainLecturedetails () {
+	function ExternElementMainLecturedetails ($module_name, &$data_fields, &$field_names, &$config) {
+		$this->attributes = array(
+				'name', 'genericdatafields', 'order', 'visible', 'aliases',
+				'aliaspredisc', 'aliasfirstmeeting', 'headlinerow', 'rangepathlevel',
+				'studipinfo',	'studiplink', 'studiplinktarget', 'wholesite',
+				'nameformat', 'urlcss', 'title', 'language', 'copyright', 'author'
+		);
 		$this->real_name = _("Grundeinstellungen");
 		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;ndern.");
+		parent::ExternElementMain($module_name, &$data_fields, &$field_names, &$config);
 	}
 	
 	/**
@@ -217,8 +219,8 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 			// This is especially for checkbox-values. If there is no checkbox
 			// checked, the variable is not declared and it is necessary to set the
 			// variable to "".
-			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
-				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = "";
+			if (!isset($_POST[$this->name . "_" . $attribute])) {
+				$_POST[$this->name . "_" . $attribute] = "";
 				return FALSE;
 			}
 			return !($value == "1" || $value == "");

@@ -42,24 +42,23 @@ require_once($ABSOLUTE_PATH_STUDIP."language.inc.php");
 
 class ExternModuleLectures extends ExternModule {
 
-	var $field_names = array();
-	var $data_fields = array();
-	var $registered_elements = array(
-			"ReplaceTextSemType",
-			"SelectSubjectAreas",
-			"Body",
-			"TableHeader",
-			"InfoCountSem" => "TableGroup",
-			"Grouping" => "TableGroup",
-			"LecturesInnerTable",
-			"SemLink" => "LinkInternSimple",
-			"LecturerLink" => "LinkInternSimple");
-	var $args = array('group');
-
 	/**
 	*
 	*/
-	function ExternModuleLectures () {}
+	function ExternModuleLectures ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+		$this->registered_elements = array(
+			'ReplaceTextSemType',
+			'SelectSubjectAreas',
+			'Body',
+			'TableHeader',
+			'InfoCountSem' => 'TableGroup',
+			'Grouping' => 'TableGroup',
+			'LecturesInnerTable',
+			'SemLink' => 'LinkInternSimple',
+			'LecturerLink' => 'LinkInternSimple');
+		$this->args = array('group');
+		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+	}
 	
 	function setup () {
 		$this->elements["InfoCountSem"]->real_name = _("Anzahl Veranstaltungen/Gruppierung");

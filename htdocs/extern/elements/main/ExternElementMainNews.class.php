@@ -39,18 +39,20 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainNews extends ExternElementMain {
 
-	var $attributes = array("name", "order", "visible", "aliases", "width",
-			"width_pp", "sort", "studiplink", "wholesite", "nameformat", "dateformat", "language",
-			"urlcss", "title", "nodatatext", "copyright", "author", "showdateauthor", "notauthorlink");
-	var $edit_function = "editMainSettings";
-	
 	/**
 	* Constructor
 	*
 	*/
-	function ExternElementMainNews () {
+	function ExternElementMainNews ($module_name, &$data_fields, &$field_names, &$config) {
+		$this->attributes = array(
+				'name', 'order', 'visible', 'aliases', 'width',
+				'width_pp', 'sort', 'studiplink', 'wholesite', 'nameformat',
+				'dateformat', 'language',	'urlcss', 'title', 'nodatatext',
+				'copyright', 'author', 'showdateauthor', 'notauthorlink'
+		);
 		$this->real_name = _("Grundeinstellungen");
 		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;ndern.");
+		parent::ExternElementMain($module_name, &$data_fields, &$field_names, &$config);
 	}
 	
 	/**
@@ -194,8 +196,8 @@ class ExternElementMainNews extends ExternElementMain {
 	
 	function checkValue ($attribute, $value) {
 		if ($attribute == 'notauthorlink') {
-			if (!isset($GLOBALS["HTTP_POST_VARS"]["Main_$attribute"])) {
-				$GLOBALS["HTTP_POST_VARS"]["Main_$attribute"] = 0;
+			if (!isset($_POST["Main_$attribute"])) {
+				$_POST["Main_$attribute"] = 0;
 				return FALSE;
 			}
 				

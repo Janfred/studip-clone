@@ -41,14 +41,12 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."/lib/classes/StudipNews.class.php
 
 class ExternModuleNewsticker extends ExternModule {
 
-	var $field_names = array();
-	var $data_fields = array();
-	var $registered_elements = array();
-
 	/**
 	*
 	*/
-	function ExternModuleNewsticker () {}
+	function ExternModuleNewsticker ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+	}
 	
 	function setup () {}
 	

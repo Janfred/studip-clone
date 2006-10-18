@@ -42,26 +42,24 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."language.inc.php");
 
 class ExternModuleLecturestable extends ExternModule {
 
-	var $field_names = array();
-	var $data_fields = array("VeranstaltungsNummer", "Name", "Untertitel", "status", "Ort",
-			"art", "zeiten", "dozent");
-	var $registered_elements = array(
-			"ReplaceTextSemType",
-			"SelectSubjectAreas",
-			"Body",
-			"TableHeader",
-			"InfoCountSem" => "TableGroup",
-			"Grouping" => "TableGroup",
-			"TableHeadrow",
-			"TableRow",
-			"SemLink" => "LinkInternSimple",
-			"LecturerLink" => "LinkInternSimple");
-	var $args = array();
-
 	/**
 	*
 	*/
-	function ExternModuleLecturestable () {
+	function ExternModuleLecturestable ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+		$this->data_fields = array('VeranstaltungsNummer', 'Name', 'Untertitel', 'status', 'Ort',
+			'art', 'zeiten', 'dozent');
+		$this->registered_elements = array(
+			'ReplaceTextSemType',
+			'SelectSubjectAreas',
+			'Body',
+			'TableHeader',
+			'InfoCountSem' => 'TableGroup',
+			'Grouping' => 'TableGroup',
+			'TableHeadrow',
+			'TableRow',
+			'SemLink' => 'LinkInternSimple',
+			'LecturerLink' => 'LinkInternSimple');
+		$this->
 		$this->field_names = array(
 				_("Veranstaltungsnummer"),
 				_("Name"),
@@ -72,6 +70,7 @@ class ExternModuleLecturestable extends ExternModule {
 				_("Zeiten"),
 				_("DozentIn")
 		);
+		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
 	}
 	
 	function setup () {

@@ -44,19 +44,25 @@ require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php");
 
 class ExternModulePersondetails extends ExternModule {
 
-	var $field_names = array();
-	var $data_fields = array("contact" => array("raum", "Telefon", "Fax", "Email",
-			"Home", "sprechzeiten"), "content" => array("head", "lebenslauf", "schwerp", "lehre",
-			"news", "termine", "publi", "kategorien"));
-	var $registered_elements = array("Body", "TableHeader", "PersondetailsHeader", "Contact",
-			"PersondetailsLectures", "TableParagraph", "TableParagraphHeadline",
-			"TableParagraphSubHeadline", "TableParagraphText", "List", "LinkIntern", "StudipLink");
-	var $args = array("username", "seminar_id");
-
 	/**
 	*
 	*/
-	function ExternModulePersondetails () {
+	function ExternModulePersondetails ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+		$this->data_fields = array(
+				'contact' => array(
+					'raum', 'Telefon', 'Fax', 'Email',
+					'Home', 'sprechzeiten'),
+				'content' => array(
+					'head', 'lebenslauf', 'schwerp', 'lehre',
+					'news', 'termine', 'publi', 'kategorien')
+		);
+		$this->registered_elements = array(
+				'Body', 'TableHeader', 'PersondetailsHeader', 'Contact',
+				'PersondetailsLectures', 'TableParagraph', 'TableParagraphHeadline',
+				'TableParagraphSubHeadline', 'TableParagraphText', 'List',
+				'LinkIntern', 'StudipLink'
+		);
+		$this->args = array('username', 'seminar_id');
 		$this->field_names = array
 		(
 			"contact" => array
@@ -80,7 +86,7 @@ class ExternModulePersondetails extends ExternModule {
 				_("eigene Kategorien")
 			)
 		);
-		
+		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
 	}
 	
 	function setup () {

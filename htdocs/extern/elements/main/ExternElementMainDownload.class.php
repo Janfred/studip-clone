@@ -39,19 +39,21 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainDownload extends ExternElementMain {
 
-	var $attributes = array("name", "order", "visible", "aliases", "width", "sort",
-			"wholesite", "lengthdesc", "nameformat", "urlcss", "title", "nodatatext", "dateformat",
-			"language", "iconpic", "icontxt", "iconpdf", "iconppt", "iconxls",
-			"iconrtf", "iconzip", "icondefault", "copyright", "author");
-	var $edit_function = "editMainSettings";
-	
 	/**
 	* Constructor
 	*
 	*/
-	function ExternElementMainDownload () {
+	function ExternElementMainDownload ($module_name, &$data_fields, &$field_names, &$config) {
+		$this->attributes = array(
+				'name', 'order', 'visible', 'aliases', 'width', 'sort',
+				'wholesite', 'lengthdesc', 'nameformat', 'urlcss', 'title',
+				'nodatatext', 'dateformat', 'language', 'iconpic', 'icontxt',
+				'iconpdf', 'iconppt', 'iconxls', 'iconrtf', 'iconzip',
+				'icondefault', 'copyright', 'author'
+		);
 		$this->real_name = _("Grundeinstellungen");
 		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;ndern.");
+		parent::ExternElementMain($module_name, &$data_fields, &$field_names, &$config);
 	}
 	
 	/**

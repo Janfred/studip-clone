@@ -39,7 +39,7 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementLinkIntern extends ExternElement {
 
 	var $attributes = array("font_size", "font_face", "font_color", "font_class", "font_style",
-			"a_class", "a_style", "config", "srilink");
+			"a_class", "a_style", "config", "srilink", "externlink");
 	var $link_module_type;
 
 	/**
@@ -103,6 +103,10 @@ class ExternElementLinkIntern extends ExternElement {
 		$info = _("Wenn Sie die SRI-Schnittstelle benutzen, müssen Sie hier die vollständige URL (mit http://) der Seite angeben, in der das Modul, das durch den Link aufgerufen wird, eingebunden ist. Lassen Sie dieses Feld unbedingt leer, falls Sie die SRI-Schnittstelle nicht nutzen.");
 		$table .= $edit_form->editTextfieldGeneric("srilink", $title, $info, 50, 250);
 		
+		$title = _("Extern-Link:");
+		$info = _("Wenn Sie die SRI-Schnittstelle nicht benutzen, können Sie hier die vollständige URL (mit http://) der Seite angeben, in der das Modul, das durch den Link aufgerufen wird, eingebunden wird. Lassen Sie dieses Feld unbedingt leer, falls Sie die SRI-Schnittstelle nutzen.");
+		$table .= $edit_form->editTextfieldGeneric("externlink", $title, $info, 50, 250);
+		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
 				
@@ -123,6 +127,7 @@ class ExternElementLinkIntern extends ExternElement {
 		if (!$args["main_module"])
 			$args["main_module"] = "Main";
 		$sri_link = $this->config->getValue($this->name, "srilink");
+		$extern_link = $this->config->getValue($this->name, "externlink");
 		if ($this->config->config[$args["main_module"]]["incdata"]) {
 			$link = $sri_link;
 			if ($args["link_args"]) {
@@ -139,7 +144,19 @@ class ExternElementLinkIntern extends ExternElement {
 				else
 					$link .= "?";
 				$link .= "page_url=" . $sri_link;
-			} else {
+			}
+			elseif ($extern_link) {
+				if (strrpos($extern_link, '?'))
+					$link = "$extern_link&module={$args['module']}";
+				else
+					$link = "$extern_link?module={$args['module']}";
+				if ($config = $this->config->getValue($this->name, "config"))
+					$link .= "&config_id=" . $config;
+				$link .= "&range_id={$this->config->range_id}";
+				if ($args["link_args"])
+					$link .= "&" . $args["link_args"];
+			}
+			else {
 				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?module={$args['module']}";
 				if ($config = $this->config->getValue($this->name, "config"))
 					$link .= "&config_id=" . $config;

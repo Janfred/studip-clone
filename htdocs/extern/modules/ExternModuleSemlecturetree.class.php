@@ -40,16 +40,17 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternModuleSemLectureTree extends ExternModule {
 
-	var $field_names = array();
-	var $data_fields = array();
-	var $registered_elements = array("Body", "TreePath", "TreeLevelName", "TreeLevelContent", "TreeKids",
-			"TreeBackLink");
-	var $args = array("sem", "start_item_id");
-
 	/**
 	*
 	*/
-	function ExternModuleSemLectureTree () {}
+	function ExternModuleSemLectureTree ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+		$this->registered_elements = array(
+				'Body', 'TreePath', 'TreeLevelName', 'TreeLevelContent', 'TreeKids',
+				'TreeBackLink'
+		);
+		$this->args = array('sem', 'start_item_id');
+		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+	}
 	
 	function checkRangeId ($range_id) {
 		$range = get_object_type($range_id);

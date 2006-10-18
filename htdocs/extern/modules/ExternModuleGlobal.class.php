@@ -41,27 +41,26 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "/lib/classes/DataFields.class.p
 
 class ExternModuleGlobal extends ExternModule {
 
-	var $field_names = array();
-	var $data_fields = array();
-	var $registered_elements = array
-			(
-				"PageBodyGlobal" => "Body",
-				"MainTableHeaderGlobal" => "TableHeader",
-				"InnerTableHeaderGlobal" => "TableHeader",
-				"MainTableHeadrowGlobal" => "TableHeadrow",
-				"TableGrouprowGlobal" => "TableGroup",
-				"TableRowGlobal" => "TableRow",
-				"TableHeadrowTextGlobal" => "Link",
-				"Headline1TextGlobal" => "Link",
-				"Headline2TextGlobal" => "Link",
-				"TextGlobal" => "Link",
-				"LinksGlobal" => "Link"
-			);
-
 	/**
 	*
 	*/
-	function ExternModuleGlobal () {}
+	function ExternModuleGlobal ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+		$this->registered_elements = array
+			(
+				'PageBodyGlobal' => 'Body',
+				'MainTableHeaderGlobal' => 'TableHeader',
+				'InnerTableHeaderGlobal' => 'TableHeader',
+				'MainTableHeadrowGlobal' => 'TableHeadrow',
+				'TableGrouprowGlobal' => 'TableGroup',
+				'TableRowGlobal' => 'TableRow',
+				'TableHeadrowTextGlobal' => 'Link',
+				'Headline1TextGlobal' => 'Link',
+				'Headline2TextGlobal' => 'Link',
+				'TextGlobal' => 'Link',
+				'LinksGlobal' => 'Link'
+			);
+		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
+	}
 	
 	/**
 	*

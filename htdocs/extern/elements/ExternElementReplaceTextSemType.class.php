@@ -124,11 +124,11 @@ class ExternElementReplaceTextSemType extends ExternElement {
 		}
 		if ($attribute == 'visibility') {
 			$this->isset_visibilities = TRUE;
-			$count_semtypes = intval($GLOBALS['HTTP_POST_VARS']['count_semtypes']);
+			$count_semtypes = intval($_POST['count_semtypes']);
 			if ($count_semtypes < 100) {
 				for ($i = 0; $i < $count_semtypes; $i++) {
-					if ($GLOBALS['HTTP_POST_VARS'][$this->name . '_visibility'][$i] != '1') {
-						$GLOBALS['HTTP_POST_VARS'][$this->name . '_visibility'][$i] = '0';
+					if ($_POST[$this->name . '_visibility'][$i] != '1') {
+						$_POST[$this->name . '_visibility'][$i] = '0';
 					}
 				}
 			}

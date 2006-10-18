@@ -41,27 +41,34 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 class ExternElementMain extends ExternElement {
 
 	var $attributes = array();
-	var $edit_function = "";
-	var $data_fields;
-	var $field_names;
-
+	var $edit_function;
+	
+	
+	/**
+	*
+	*/
+	function &GetInstance ($module_name, &$data_fields,	&$field_names, &$config) {
+		if ($module_name != '') {
+			$main_class_name = 'ExternElementMain' . ucfirst($module_name);
+			require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_EXTERN']
+					. "/elements/main/$main_class_name.class.php");
+			$main_module =& new $main_class_name($module_name, &$data_fields,	&$field_names, &$config);
+			
+			return $main_module;
+		}
+		
+		return NULL;
+	}
+	
 	/**
 	* Constructor
 	*
 	*/
-	function ExternElementMain ($module_name, &$data_fields,
-			&$field_names, &$config) {
-			
+	function ExternElementMain ($module_name, &$data_fields, &$field_names, &$config) {	
 		$this->real_name = _("Grundeinstellungen");
 		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Elements ändern.");
-		
-		if ($module_name != "") {
-			$main_class_name = "ExternElementMain" . $module_name;
-			require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
-					. "/elements/main/$main_class_name.class.php");
-			$this = new $main_class_name();
-		}
-		$this->name = "Main";
+		$this->name = 'Main';
+		$this->edit_function = 'editMainSettings';
 		$this->config =& $config;
 		$this->data_fields =& $data_fields;
 		$this->field_names =& $field_names;

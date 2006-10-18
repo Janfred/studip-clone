@@ -39,17 +39,17 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainNewsticker extends ExternElementMain {
 
-	var $attributes = array("name", "rows", "length", "pause", "frequency",
-			"starttext", "endtext", "nodatatext", "automaticstart", "jsonly", "style");
-	var $edit_function = "editMainSettings";
-	
 	/**
 	* Constructor
 	*
 	*/
-	function ExternElementMainNewsticker () {
+	function ExternElementMainNewsticker ($module_name, &$data_fields, &$field_names, &$config) {
+		$this->attributes = array(
+				'name', 'rows', 'length', 'pause', 'frequency',
+				'starttext', 'endtext', 'nodatatext', 'automaticstart', 'jsonly', 'style');
 		$this->real_name = _("Grundeinstellungen");
 		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;ndern.");
+		parent::ExternElementMain($module_name, &$data_fields, &$field_names, &$config);
 	}
 	
 	/**
@@ -168,8 +168,8 @@ class ExternElementMainNewsticker extends ExternElementMain {
 				return !(preg_match("'^\d{1,3}$'", $value) && $value > 9 && $value < 201);
 			case "automaticstart" :
 			case "jsonly" :
-				if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
-					$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = 0;
+				if (!isset($_POST[$this->name . "_" . $attribute])) {
+					$_POST[$this->name . "_" . $attribute] = 0;
 					return FALSE;
 				}
 				return !($value == "1" || $value == "0");

@@ -41,15 +41,17 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "/lib/classes/DataFields.class.p
 
 class ExternModulePersons extends ExternModule {
 
-	var $field_names = array();
-	var $data_fields = array("Nachname", "Telefon", "raum", "Email", "sprechzeiten");
-	var $registered_elements = array("Body", "TableHeader", "TableHeadrow", "TableGroup",
-																	 "TableRow", "Link", "LinkIntern", "TableFooter");
-
 	/**
 	*
 	*/
-	function ExternModulePersons () {
+	function ExternModulePersons ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+		$this->data_fields = array(
+				'Nachname', 'Telefon', 'raum', 'Email', 'sprechzeiten'
+		);
+		$this->registered_elements = array(
+				'Body', 'TableHeader', 'TableHeadrow', 'TableGroup',
+				'TableRow', 'Link', 'LinkIntern', 'TableFooter'
+		);
 		$this->field_names = array
 		(
 				_("Name"),
@@ -58,6 +60,7 @@ class ExternModulePersons extends ExternModule {
 				_("Email"),
 				_("Sprechzeiten")
 		);
+		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
 	}
 	
 	function setup () {

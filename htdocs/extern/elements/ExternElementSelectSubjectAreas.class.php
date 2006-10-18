@@ -126,13 +126,13 @@ class ExternElementSelectSubjectAreas extends ExternElement {
 			// This is necessary for checkbox-values. If there is no checkbox
 			// checked, the variable is not declared and it is necessary to set the
 			// variable to "".
-			if (!isset($GLOBALS['HTTP_POST_VARS'][$this->name . '_' . $attribute])) {
-				$GLOBALS['HTTP_POST_VARS'][$this->name . '_' . $attribute] = '';
+			if (!isset($_POST[$this->name . '_' . $attribute])) {
+				$_POST[$this->name . '_' . $attribute] = '';
 				return FALSE;
 			}
 			return !($value == '1' || $value == '');
 		}
-		if ($attribute == 'subjectareasselected' && sizeof($GLOBALS['HTTP_POST_VARS'][$this->name . '_selectallsubjectareas'])) {
+		if ($attribute == 'subjectareasselected' && sizeof($_POST[$this->name . '_selectallsubjectareas'])) {
 			return ($value == '0');
 		}
 

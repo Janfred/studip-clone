@@ -53,7 +53,7 @@ class ExternModuleDownload extends ExternModule {
 	/**
 	*
 	*/
-	function ExternModuleDownload () {
+	function ExternModuleDownload ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
 		$this->field_names = array
 		(
 				_("Icon"),
@@ -63,7 +63,7 @@ class ExternModuleDownload extends ExternModule {
 				_("Gr&ouml;&szlig;e"),
 				_("Upload durch")
 		);
-
+		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
 	}
 
 	function setup () {

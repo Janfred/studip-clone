@@ -42,20 +42,21 @@ require_once($ABSOLUTE_PATH_STUDIP."lib/classes/SemesterData.class.php");
 
 class ExternElementMainLecturestable extends ExternElementMain {
 
-	var $attributes = array("name", "order", "visible", "aliases", "width", "widthpp",
-			"grouping", "semstart", "semrange", "semswitch", "allseminars", "rangepathlevel",
-			"addinfo", "time", "lecturer", "repeatheadrow", "semclasses", "textlectures",
-			"textgrouping", "textnogroups", "aliasesgrouping", "wholesite", "nameformat",
-			"language", "urlcss", "title", "copyright", "author");
-	var $edit_function = "editMainSettings";
-	
 	/**
 	* Constructor
 	*
 	*/
-	function ExternElementMainLecturestable () {
+	function ExternElementMainLecturestable ($module_name, &$data_fields, &$field_names, &$config) {
+		$this->attributes = array(
+				'name', 'order', 'visible', 'aliases', 'width', 'widthpp',
+				'grouping', 'semstart', 'semrange', 'semswitch', 'allseminars', 'rangepathlevel',
+				'addinfo', 'time', 'lecturer', 'repeatheadrow', 'semclasses', 'textlectures',
+				'textgrouping', 'textnogroups', 'aliasesgrouping', 'wholesite', 'nameformat',
+				'language', 'urlcss', 'title', 'copyright', 'author'
+		);
 		$this->real_name = _("Grundeinstellungen");
 		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;ndern.");
+		parent::ExternElementMain($module_name, &$data_fields, &$field_names, &$config);
 	}
 	
 	/**
@@ -302,8 +303,8 @@ class ExternElementMainLecturestable extends ExternElementMain {
 			// This is especially for checkbox-values. If there is no checkbox
 			// checked, the variable is not declared and it is necessary to set the
 			// variable to "".
-			if (!isset($GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute])) {
-				$GLOBALS["HTTP_POST_VARS"][$this->name . "_" . $attribute] = "";
+			if (!isset($_POST[$this->name . "_" . $attribute])) {
+				$_POST[$this->name . "_" . $attribute] = "";
 				return FALSE;
 			}
 			return !($value == "1" || $value == "");

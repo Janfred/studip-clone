@@ -48,21 +48,6 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "functions.php");
 
 class ExternModuleLecturedetails extends ExternModule {
 
-	var $field_names = array();
-	var $data_fields = array("subtitle", "lecturer", "art", "status", "description",
-			"location", "semester", "time", "number", "teilnehmer", "requirements",
-			"lernorga", "leistung", "range_path", "misc", "ects");
-	var $registered_elements = array(
-			"ReplaceTextSemType",
-			"Body",
-			"TableHeader",
-			"SemName" => "TableParagraphText",
-			"Headline" => "TableParagraphText",
-			"Content" => "TableParagraphText",
-			"LinkInternSimple" => "LinkIntern",
-			"StudipInfo",
-			"StudipLink");
-	var $args = array("seminar_id");
 	// private
 	var $db;
 	// private
@@ -71,7 +56,21 @@ class ExternModuleLecturedetails extends ExternModule {
 	/**
 	*
 	*/
-	function ExternModuleLecturedetails () {
+	function ExternModuleLecturedetails ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+		$this->data_fields = array('subtitle', 'lecturer', 'art', 'status', 'description',
+			'location', 'semester', 'time', 'number', 'teilnehmer', 'requirements',
+			'lernorga', 'leistung', 'range_path', 'misc', 'ects');
+		$this->registered_elements = array(
+			'ReplaceTextSemType',
+			'Body',
+			'TableHeader',
+			'SemName' => 'TableParagraphText',
+			'Headline' => 'TableParagraphText',
+			'Content' => 'TableParagraphText',
+			'LinkInternSimple' => 'LinkIntern',
+			'StudipInfo',
+			'StudipLink');
+		$this->args = array('seminar_id');
 		$this->field_names = array(
 				_("Untertitel"),
 				_("DozentIn"),
@@ -89,6 +88,7 @@ class ExternModuleLecturedetails extends ExternModule {
 				_("Bereichseinordnung"),
 				_("Sonstiges"),
 				_("ECTS-Kreditpunkte"));
+		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
 	}
 	
 	function setup () {

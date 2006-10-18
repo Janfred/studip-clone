@@ -39,19 +39,20 @@ require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."
 
 class ExternElementMainRangeLectureTree extends ExternElementMain {
 
-	var $attributes = array("name", "table_width", "table_align", "table_border", "table_bgcolor",
-				"table_bordercolor", "table_cellpadding", "table_cellspacing", "table_class",
-				"table_style", "wholesite", "urlcss", "title", "bodystyle",
-				"bodyclass");
-	var $edit_function = "editMainSettings";
-	
 	/**
 	* Constructor
 	*
 	*/
-	function ExternElementMainRangeLectureTree () {
+	function ExternElementMainRangeLectureTree ($module_name, &$data_fields, &$field_names, &$config) {
+		$this->attributes = array(
+				'name', 'table_width', 'table_align', 'table_border', 'table_bgcolor',
+				'table_bordercolor', 'table_cellpadding', 'table_cellspacing', 'table_class',
+				'table_style', 'wholesite', 'urlcss', 'title', 'bodystyle',
+				'bodyclass'
+		);
 		$this->real_name = _("Grundeinstellungen");
 		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;ndern.");
+		parent::ExternElementMain($module_name, &$data_fields, &$field_names, &$config);
 	}
 	
 	/**
