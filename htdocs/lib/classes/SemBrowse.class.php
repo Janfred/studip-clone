@@ -21,7 +21,7 @@ class SemBrowse {
 	var $target_id;
 
 	function SemBrowse($sem_browse_data_init = array()){
-		global $_REQUEST,$sem_browse_data,$sess;
+		global $sem_browse_data,$sess;
 
 		$this->group_by_fields = array(	array('name' => _("Semester"), 'group_field' => 'sem_number'),
 										array('name' => _("Bereich"), 'group_field' => 'bereich'),
@@ -209,7 +209,7 @@ class SemBrowse {
 	}
 
 	function print_qs(){
-		global $_REQUEST,$PHP_SELF;
+		global $PHP_SELF;
 		//Quicksort Formular... fuer die eiligen oder die DAUs....
 		echo "<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=0 width = \"99%\">\n";
 		echo $this->search_obj->getFormStart("$PHP_SELF?send=yes");
@@ -332,10 +332,10 @@ class SemBrowse {
 		ob_end_flush();
 	}
 
-	function print_result(){
+function print_result(){
 		ob_start();
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS;
-
+		
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
 			if ($this->sem_browse_data['group_by'] == 1){
 				if (!is_object($this->sem_tree)){
@@ -348,19 +348,24 @@ class SemBrowse {
 					$allowed_ranges[] = $this->sem_browse_data['start_item_id'];
 					$sem_tree_query = " AND sem_tree_id IN('" . join("','", $allowed_ranges) . "') ";
 				}
-				$the_tree->buildIndex();
+				$add_fields = "seminar_sem_tree.sem_tree_id AS bereich,";
+				$add_query = "LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id $sem_tree_query)";
+			} else if ($this->sem_browse_data['group_by'] == 4){
+				$add_fields = "Institute.Name AS Institut,Institute.Institut_id,";
+				$add_query = "LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
+							LEFT JOIN Institute ON (Institute.Institut_id = seminar_inst.institut_id)";
+			} else {
+				$add_fields = "";
+				$add_query = "";
 			}
-
-			$query = ("SELECT seminare.Seminar_id, seminare.status, IF(seminare.visible=0,CONCAT(seminare.Name, ' ". _("(versteckt)") ."'), seminare.Name) AS Name, seminare.metadata_dates
-				, Institute.Name AS Institut,Institute.Institut_id,
-				seminar_sem_tree.sem_tree_id AS bereich, " . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
-				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare
-				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent')
-				LEFT JOIN auth_user_md5 USING (user_id)
-				LEFT JOIN user_info USING (user_id)
-				LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id $sem_tree_query)
-				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id)
-				LEFT JOIN Institute ON (Institute.Institut_id = seminar_inst.institut_id)
+					
+			$query = ("SELECT seminare.Seminar_id, seminare.status, IF(visible=0,CONCAT(seminare.Name, ' ". _("(versteckt)") ."'), seminare.Name) AS Name, seminare.metadata_dates,
+					 $add_fields" . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
+				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
+				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
+				LEFT JOIN auth_user_md5 USING (user_id) 
+				LEFT JOIN user_info USING (user_id) 
+				$add_query
 				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "')");
 			$db = new DB_Seminar($query);
 			$snap = new DbSnapShot($db);
@@ -371,7 +376,6 @@ class SemBrowse {
 			}
 			$group_by_data = $snap->getGroupedResult($group_field, $data_fields);
 			$sem_data = $snap->getGroupedResult("Seminar_id");
-
 			if ($this->sem_browse_data['group_by'] == 0){
 				$group_by_duration = $snap->getGroupedResult("sem_number_end", array("sem_number","Seminar_id"));
 				foreach ($group_by_duration as $sem_number_end => $detail){
@@ -437,6 +441,7 @@ class SemBrowse {
 					case 1:
 					uksort($group_by_data, create_function('$a,$b',
 							'$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
+							$the_tree->buildIndex();
 							return (int)($the_tree->tree_data[$a]["index"] - $the_tree->tree_data[$b]["index"]);
 							'));
 					break;
