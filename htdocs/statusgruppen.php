@@ -166,7 +166,7 @@ function PrintAktualStatusgruppen () {
 
 function PrintNonMembers ($range_id)
 {
-	global $_fullname_sql, $rechte, $PHP_SELF;
+	global $_fullname_sql, $rechte, $user, $PHP_SELF;
 	$bereitszugeordnet = GetAllSelected($range_id);
 	$db=new DB_Seminar;
 	$query = "SELECT seminar_user.user_id, username, " . $_fullname_sql['full'] ." AS fullname, perms, seminar_user.visible FROM seminar_user  LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
@@ -184,7 +184,7 @@ function PrintNonMembers ($range_id)
 					$class="steelgraulight";
 				}
 				printf ("<tr>");
-				if ($rechte || $db->f("visible")=="yes") {
+				if ($rechte || $db->f("visible")=="yes" || $db->f("user_id")==$user->id) {
 					printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>&nbsp;%s</a>%s</font></td>",$class, $db->f("username"), htmlReady($db->f("fullname")), ($db->f("user_id")==$user->id && $db->f("visible")!="yes") ? " "._("(unsichtbar)") : '');
 					printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
 					printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db->f("username"));
