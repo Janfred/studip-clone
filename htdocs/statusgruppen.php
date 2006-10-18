@@ -190,7 +190,7 @@ function PrintNonMembers ($range_id)
 					printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db->f("username"));
 					printf ("&nbsp;</td>");
 				} else {
-					printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\" color=\"#666666\">". _("(unsichtbareR NutzerIn)"). "</font></td>";
+					printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\" color=\"#666666\">". _("(unsichtbareR NutzerIn)"). "</font></td>");
 					printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
 					printf ("&nbsp;</td>");
 				}
