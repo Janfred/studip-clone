@@ -48,8 +48,8 @@ $cssSw->switchClass();
 // Hilfsfunktionen
 
 function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers="", $Freesearch="", $workgroup_mode=FALSE)
-{ global $HTTP_POST_VARS;
-		while (list($key, $val) = each ($HTTP_POST_VARS)) {
+{
+		while (list($key, $val) = each ($_POST)) {
 			$statusgruppe_id = substr($key, 0, -2);
 		}
 		$db=new DB_Seminar;
