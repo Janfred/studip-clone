@@ -166,10 +166,10 @@ function PrintAktualStatusgruppen () {
 
 function PrintNonMembers ($range_id)
 {
-	global $_fullname_sql, $PHP_SELF;
+	global $_fullname_sql, $rechte, $PHP_SELF;
 	$bereitszugeordnet = GetAllSelected($range_id);
 	$db=new DB_Seminar;
-	$query = "SELECT seminar_user.user_id, username, " . $_fullname_sql['full'] ." AS fullname, perms FROM seminar_user  LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
+	$query = "SELECT seminar_user.user_id, username, " . $_fullname_sql['full'] ." AS fullname, perms, seminar_user.visible FROM seminar_user  LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
 	$db->query ($query);
 	if ($db->num_rows() >sizeof($bereitszugeordnet)-1) { // there are non-grouped members
 		echo "<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" border=\"0\"><tr>";
@@ -184,10 +184,16 @@ function PrintNonMembers ($range_id)
 					$class="steelgraulight";
 				}
 				printf ("<tr>");
-				printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>&nbsp;%s</a></font></td>",$class, $db->f("username"), htmlReady($db->f("fullname")));
-				printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
-				printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db->f("username"));
-				printf ("&nbsp;</td>");
+				if ($db->f("visible")=="yes") {
+					printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>&nbsp;%s</a></font></td>",$class, $db->f("username"), htmlReady($db->f("fullname")));
+					printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
+					printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db->f("username"));
+					printf ("&nbsp;</td>");
+				} else {
+					printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\" color=\"#666666\">". _("(unsichtbareR NutzerIn)"). "</font></td>";
+					printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
+					printf ("&nbsp;</td>");
+				}
 				echo "	</tr>";
 				$k++;
 			}

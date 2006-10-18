@@ -54,16 +54,16 @@ while ($db->next_record()) {
 
 /* ---------------------------------- */
 
-if ($cmd == "make_me_visible") {
-	if ($mode == "autor") {
+if ($cmd == "make_me_visible" && !$perm->have_studip_perm('tutor',$SessSemName[1])) {
+	if ($mode == "participant") {
 		$db->query("UPDATE seminar_user SET visible = 'yes' WHERE user_id = '".$auth->auth['uid']."' AND Seminar_id = '".$SessSemName[1]."'");
-	} else {
+	} elseif ($mode == "awaiting") {
 		$db->query("UPDATE admission_seminar_user SET visible = 'yes' WHERE user_id = '".$auth->auth['uid']."' AND seminar_id = '".$SessSemName[1]."'");
 	}
 }
 
-if ($cmd == "make_me_invisible") {
-	if ($mode == "autor") {
+if ($cmd == "make_me_invisible" && !$perm->have_studip_perm('tutor',$SessSemName[1])) {
+	if ($mode == "participant") {
 		$db->query("UPDATE seminar_user SET visible = 'no' WHERE user_id = '".$auth->auth['uid']."' AND Seminar_id = '".$SessSemName[1]."'");
 	} else {
 		$db->query("UPDATE admission_seminar_user SET visible = 'no' WHERE user_id = '".$auth->auth['uid']."' AND seminar_id = '".$SessSemName[1]."'");
@@ -200,7 +200,7 @@ if (Seminar_Session::check_ticket($studipticket)){
 			if ($db->next_record()) {
 				$userchange=$db->f("user_id");
 				$fullname = $db->f("fullname");
-				$db->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
+				$db->query("UPDATE seminar_user SET status='tutor', visible='yes' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
 				$msg = "msg§" . sprintf(_("Bef&ouml;rderung von %s durchgef&uuml;hrt"), htmlReady($fullname)) . "§";
 			}
 			else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
@@ -581,8 +581,8 @@ if ($perm->have_perm("dozent")) {
 				} else {
 					$iam_visible = false;
 				}
-				if ($db3->f("status") == "autor") {
-					$visible_mode = "autor";
+				if ($db3->f("status") == "user" || $db3->f("status")=="autor") {
+					$visible_mode = "participant";
 				} else {
 					$iam_visible = true;
 					$visible_mode = false;
@@ -864,7 +864,7 @@ while (list ($key, $val) = each ($gruppe)) {
 
 	echo "</tr>";
 	$c=1;
-	$i_see_everybody = $perm->have_studip_perm('dozent', $SessSemName[1]);
+	$i_see_everybody = $perm->have_studip_perm('tutor', $SessSemName[1]);
 
 	while ($db->next_record()) {
 		if (($db->Record['user_id'] == $user->id) && ($db->f('visible') != 'yes')) {
