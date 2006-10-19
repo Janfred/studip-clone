@@ -78,15 +78,7 @@ class ExternModule {
 	* The constructor of a child class has to call this parent constructor!
 	*/
 	function ExternModule ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
-		/*$module_name = ucfirst($module_name);
 		
-		if ($module_name != "") {
-			$class_name = "ExternModule" . $module_name;
-			// Vorläufiger Bugfix (Modul-Skript wird schon in extern.inc.php eingebunden)
-		//	require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "extern/modules/$class_name.class.php");
-			$this = new $class_name();
-		}
-		*/
 		// the module is called via extern.php (not via the admin area) and there is
 		// no config_id so it's necessary to check the range_id
 		if (!$config_id && !$this->checkRangeId($range_id))
@@ -208,7 +200,7 @@ class ExternModule {
 	/**
 	*
 	*/
-	function toString ($start, $end) {}
+	function toString ($args) {}
 	
 	/**
 	*
@@ -241,10 +233,9 @@ class ExternModule {
 	/**
 	*
 	*/
-	function printout ($start, $end) {
-		echo $this->toString($start, $end);
+	function printout ($args) {
+		echo $this->toString($args);
 	}
-
 	/**
 	*
 	*/
@@ -318,22 +309,30 @@ class ExternModule {
 	/**
 	*
 	*/
-	function getModuleLink ($module, $config, $sri_link) {
-		if ($this->config->config["Main"]["incdata"])
-			$link = $sri_link;
-		else {
-			if ($sri_link) {
-				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?page_url=$sri_link";
+	function getModuleLink ($module_name, $config_id, $sri_link) {
+		if ($this->config->global_id) {
+			$global_param = "global_id=" . $this->config->global_id;
+		} else {
+			$global_param = '';
+		}
+		if ($this->config->config["Main"]["incdata"]) {
+			if (strrpos($sri_link, '?')) {
+				$link = $sri_link . ($global_param != '' ? '&' : '') . $global_param;
+			} else {
+				$link = $sri_link . ($global_param != '' ? '?' : '') . $global_param;
 			}
-			else {
-				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?module=$module";
-				if ($config)
-					$link .= "&config_id=$config";
+		} else {
+			$global_param = $global_param != '' ? $global_param . '&' : '';
+			if ($sri_link) {
+				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?{$global_param}page_url=$sri_link";
+			} else {
+				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?{$global_param}module=$module_name";
+				if ($config_id) {
+					$link .= "&config_id=$config_id";
+				}
 				$link .= "&range_id={$this->config->range_id}";
 			}
 		}
-		if ($this->config->global_id)
-			$link .= "&global_id=" . $this->config->global_id;
 		
 		return $link;
 	}

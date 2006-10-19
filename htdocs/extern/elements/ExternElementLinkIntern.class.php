@@ -131,11 +131,13 @@ class ExternElementLinkIntern extends ExternElement {
 		if ($this->config->config[$args["main_module"]]["incdata"]) {
 			$link = $sri_link;
 			if ($args["link_args"]) {
-				if (preg_match("#.*\?.*#", $link))
+				if (strrpos($link, '?'))
 					$link .= "&" . $args["link_args"];
 				else
 					$link .= "?" . $args["link_args"];
 			}
+			if ($this->config->global_id)
+				$link .= "&global_id=" . $this->config->global_id;
 		} else {
 			if ($sri_link) {
 				$link = $GLOBALS['EXTERN_SERVER_NAME'] . 'extern.php';
@@ -143,9 +145,10 @@ class ExternElementLinkIntern extends ExternElement {
 					$link .= "?" . $args["link_args"] . "&";
 				else
 					$link .= "?";
+				if ($this->config->global_id)
+					$link .= "global_id=" . $this->config->global_id . '&';
 				$link .= "page_url=" . $sri_link;
-			}
-			elseif ($extern_link) {
+			} elseif ($extern_link) {
 				if (strrpos($extern_link, '?'))
 					$link = "$extern_link&module={$args['module']}";
 				else
@@ -155,18 +158,19 @@ class ExternElementLinkIntern extends ExternElement {
 				$link .= "&range_id={$this->config->range_id}";
 				if ($args["link_args"])
 					$link .= "&" . $args["link_args"];
-			}
-			else {
+				if ($this->config->global_id)
+					$link .= "&global_id=" . $this->config->global_id;
+			} else {
 				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?module={$args['module']}";
 				if ($config = $this->config->getValue($this->name, "config"))
 					$link .= "&config_id=" . $config;
 				$link .= "&range_id={$this->config->range_id}";
 				if ($args["link_args"])
 					$link .= "&" . $args["link_args"];
+				if ($this->config->global_id)
+					$link .= "&global_id=" . $this->config->global_id;
 			}
 		}
-		if ($this->config->global_id)
-			$link .= "&global_id=" . $this->config->global_id;
 		
 		// to set the color of the font in the style-attribute of the a-tag
 		if ($color = $this->config->getValue($this->name, "font_color")) {
