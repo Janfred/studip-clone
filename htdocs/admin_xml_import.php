@@ -4,9 +4,11 @@
 // 			INITIALISIERUNG, HEADER, GLOBALE VARIABLEN
 //			___________________________________________
 //
+
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User", "ses" => "ses"));
 $perm->check("admin");
 
+//test
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
