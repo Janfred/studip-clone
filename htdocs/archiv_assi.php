@@ -68,7 +68,7 @@ if ($SessSemName[1]) {
 // Kill current list and stuff
 
 if ($new_session)
-	$archiv_assi_data = '';
+	$archiv_assi_data = array();
 
 // A list was sent
 if (is_array($archiv_sem)) {
