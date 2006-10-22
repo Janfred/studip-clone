@@ -1,5 +1,5 @@
 Q: Wie kann ich eine Person einer Einrichtung zuordnen?
-blubb
+
 A: Zuerst eine entsprechende Stud.IP-Einrichtung auswählen. Dann über die Rubrik "Mitarbeiter" 
 die Person in die Einrichtung aufnehmen. Über "Gruppen/Funktionen" kann sie anschließend entsprechend 
 ihrem Status im Personalverzeichnis einsortiert werden.
