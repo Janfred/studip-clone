@@ -204,7 +204,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 					if ($auth->auth['perm'] == "root"){
 						$db->query("SELECT a.Institut_id, a.Name, 1 AS is_fak, COUNT(DISTINCT(catalog_id)) as anzahl FROM Institute a
 									LEFT JOIN Institute b ON (a.Institut_id = b.fakultaets_id AND b.fakultaets_id != b.Institut_id)
-									LEFT JOIN seminar_inst c USING(Institut_id)
+									LEFT JOIN seminar_inst c ON (c.Institut_id=f.Institut_id)
 									$_sem_sql
 									LEFT JOIN lit_list_content e USING(list_id)
 									WHERE a.Institut_id=a.fakultaets_id
@@ -213,7 +213,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 						$db->query("SELECT a.Institut_id,b.Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,COUNT(DISTINCT(catalog_id)) as anzahl
 									FROM user_inst a LEFT JOIN Institute b USING (Institut_id)
 									LEFT JOIN Institute f ON (f.fakultaets_id=b.institut_id OR f.Institut_id=b.Institut_id)
-									LEFT JOIN seminar_inst c USING(Institut_id)
+									LEFT JOIN seminar_inst c ON (c.Institut_id=f.Institut_id)
 									$_sem_sql
 									LEFT JOIN lit_list_content e USING(list_id)
 									WHERE a.user_id='$user->id' AND a.inst_perms='admin'
@@ -222,7 +222,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 						$db->query("SELECT b.Institut_id,b.Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,COUNT(DISTINCT(catalog_id)) as anzahl
 									FROM Institute b
 									LEFT JOIN Institute f ON (f.fakultaets_id=b.institut_id OR f.Institut_id=b.Institut_id)
-									LEFT JOIN seminar_inst c USING(Institut_id)
+									LEFT JOIN seminar_inst c ON (c.Institut_id=f.Institut_id)
 									$_sem_sql
 									LEFT JOIN lit_list_content e USING(list_id)
 									WHERE b.Institut_id IN('" . join("','", $_lit_admin_ids) . "')
