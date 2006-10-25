@@ -661,7 +661,7 @@ class Layout {
 		}
 		$this->defval($BORDER,    $this->picture_def['BORDER']);
 		$this->defval($ALIGN,     $this->picture_def['ALIGN']);
-		$this->defval(&$HVSPACE,   $this->picture_def['HVSPACE']);
+		$this->defval($HVSPACE,   $this->picture_def['HVSPACE']);
 		$this->defval($ALT,       $this->picture_def['ALT']);
 
 		$r.=($BORDER!='') ? sprintf($this->picture['BORDER'],$BORDER) : '';

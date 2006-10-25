@@ -52,7 +52,7 @@ class ExternElementMainLecturedetails extends ExternElementMain {
 		);
 		$this->real_name = _("Grundeinstellungen");
 		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;ndern.");
-		parent::ExternElementMain($module_name, &$data_fields, &$field_names, &$config);
+		parent::ExternElementMain($module_name, $data_fields, $field_names, $config);
 	}
 	
 	/**

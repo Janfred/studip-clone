@@ -158,7 +158,7 @@ class EvaluationQuestion extends EvaluationObject {
    * @throws  error
    */
   function addChild (&$child) {
-    parent::addChild (&$child);
+    parent::addChild ($child);
     if ($child->getValue () == 0)
         $child->setValue ($child->getPosition () + 1);
   }

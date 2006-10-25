@@ -204,7 +204,7 @@ if ($num_my_sem){
 	while ($db->next_record())
 		$my_sem[$db->f("Seminar_id")]=array("name"=>$db->f("Name"),"status"=>$db->f("status"),"Institut"=>$db->f("Institut"),"id"=>$db->f("id"),"Schreibzugriff"=>$db->f("Schreibzugriff"));
 
-  get_my_sem_values(&$my_sem);
+  get_my_sem_values($my_sem);
 	$c=1;
 
   foreach ($my_sem as $semid=>$values){
@@ -239,4 +239,3 @@ if ($num_my_sem){
   // Save data back to database.
   page_close()
 ?>
-<!-- $Id$ -->

@@ -254,8 +254,8 @@ class StudipForm {
 		}
 		if (is_array($this->form_fields[$name]['options'])){
 			$options = $this->form_fields[$name]['options'];
-		} else if ($this->form_fields[$name]['options_callback']){
-			$options = call_user_func($this->form_fields[$name]['options_callback'],&$this,$name);
+		} else if ($this->form_fields[$name]['options_callback']){ 
+			$options = call_user_func($this->form_fields[$name]['options_callback'],$this,$name);
 		}
 		for ($i = 0; $i < count($options); ++$i){
 			$options_name = (is_array($options[$i])) ? $options[$i]['name'] : $options[$i];

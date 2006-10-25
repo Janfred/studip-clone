@@ -41,7 +41,7 @@ class ExternEditHtml extends ExternEditGeneric {
 
 	function ExternEditHtml (&$config, $form_values = "", $faulty_values = "",
 			 $edit_element = "") {
-		parent::ExternEdit(&$config, $form_values, $faulty_values, $edit_element);
+		parent::ExternEdit($config, $form_values, $faulty_values, $edit_element);
 	}
 
 	/**

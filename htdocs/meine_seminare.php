@@ -992,7 +992,7 @@ elseif ($auth->auth["perm"]=="admin") {
 					$db->f("modules"),
 					$db->f("status")));
 		}
-		get_my_obj_values(&$my_sem, $GLOBALS['user']->id);
+		get_my_obj_values($my_sem, $GLOBALS['user']->id);
 		$cssSw->enableHover();
 		foreach ($my_sem as $semid=>$values){
 			$cssSw->switchClass();

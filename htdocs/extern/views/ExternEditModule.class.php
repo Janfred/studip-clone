@@ -41,7 +41,7 @@ class ExternEditModule extends ExternEditHtml {
 
 	function ExternEditModule (&$config, $form_values = "", $faulty_values = "",
 			 $edit_element = "") {
-		ExternEdit::ExternEdit(&$config, $form_values, $faulty_values, $edit_element);
+		ExternEdit::ExternEdit($config, $form_values, $faulty_values, $edit_element);
 	}
 
 	function editMainSettings ($field_names, $hide_fields = "", $hide = "") {

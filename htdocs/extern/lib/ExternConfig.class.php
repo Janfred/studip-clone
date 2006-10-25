@@ -237,7 +237,7 @@ class ExternConfig {
 	* @param		object	 $module		The module whose configuration will be restored
 	* @param		string[] $values		These values overwrites the values in current configuration
 	*/
-	function restore ($module, $element_name = '', $values = '') {
+	function restore (&$module, $element_name = '', $values = '') {
 		// store the own configuration if the function is called without parameters
 		if ($values != "" && $module) {
 			if ($element_name)

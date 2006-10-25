@@ -1755,7 +1755,7 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 							$first_event = $evtObj->getBegin();
 					}
 									
-					$multiOverlaps->checkOverlap($events, &$result, "assign_id");
+					$multiOverlaps->checkOverlap($events, $result, 'assign_id');
 					$lock_count = array();
 					foreach ($result as $key => $val) {
 						foreach ($val as $key2 => $val2) {
@@ -1809,7 +1809,7 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 							}
 						}
 					}
-					$multiOverlaps->checkOverlap($events, &$tmp_result, "assign_user_id");
+					$multiOverlaps->checkOverlap($events, $tmp_result, 'assign_user_id');
 
 				//count for every group	
 				foreach ($tmp_result as $key=>$val) {

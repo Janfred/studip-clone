@@ -319,8 +319,8 @@ class EvaluationObject extends StudipObject {
     */
    function addChild (&$child) {
      $child->setPosition ($this->numberChildren++);
-     $child->setParentObject (&$this);
-     array_push ($this->childObjects, &$child);
+     $child->setParentObject ($this);
+     array_push ($this->childObjects, $child);
    }
 
    /**
@@ -503,7 +503,7 @@ class EvaluationObject extends StudipObject {
       }
       
       if ($object->x_instanceof () == $instanceof) {
-         array_push ($specialchildobjects, &$object);
+         array_push ($specialchildobjects, $object);
       } else {
          while ($child = &$object->getNextChild ()) {
             $this->getSpecialChildobjects ($child, $instanceof, NO);

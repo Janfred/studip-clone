@@ -108,9 +108,9 @@ class ExternModule {
 		// instantiate the registered elements
 		foreach ($this->registered_elements as $name => $registered_element) {
 			if (is_int($name) || !$name)
-				$this->elements[$registered_element] =& ExternElement::GetInstance(&$this->config, $registered_element);
+				$this->elements[$registered_element] =& ExternElement::GetInstance($this->config, $registered_element);
 			else {
-				$this->elements[$name] =& ExternElement::GetInstance(&$this->config, $registered_element);
+				$this->elements[$name] =& ExternElement::GetInstance($this->config, $registered_element);
 				$this->elements[$name]->name = $name;
 			}
 		}
@@ -274,7 +274,7 @@ class ExternModule {
 	*
 	*/
 	function store ($element_name = '', $values = '') {
-		$this->config->restore(&$this, $element_name, $values);
+		$this->config->restore($this, $element_name, $values);
 		$this->config->store();
 	}
 	

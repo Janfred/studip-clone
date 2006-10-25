@@ -217,19 +217,19 @@ if( $pageMode != MODE_RESTRICTED ) {
     elseif( isset( $move_up ) ) {
 	for( $i=0; $i<count($answers); $i++ )
 	    if( isset( $move_up[$i] ) )
-		moveAnswerUp( &$answers, $i );
+		moveAnswerUp( $answers, $i );
     }
     elseif( isset( $move_down ) ) {
 	for( $i=0; $i<count($answers); $i++ )
 	    if( isset( $move_down[$i] ) )
-		moveAnswerDown( &$answers, $i );
+		moveAnswerDown( $answers, $i );
     }
     
     /**** Command: delete Answers ****/
     elseif( isset( $deleteAnswersButton_x ) ) {
 	for( $i=0; $i<count($answers); $i++ ) {
 	    if( $deleteAnswers[$i] == "on" ) {
-		deleteAnswer( $i, &$answers, &$deleteAnswers );
+		deleteAnswer( $i, $answers, $deleteAnswers );
 		$i--;
 	    }
 	}
@@ -261,7 +261,7 @@ if( isset( $saveButton_x ) ) {
 	// remove any empty answers
 	for( $i=0; $i<count($answers); $i++ ) {
 	    if( empty( $answers[$i]['text'] ) ) {
-		deleteAnswer( $i, &$answers, &$deleteAnswers );
+		deleteAnswer( $i, $answers, $deleteAnswers );
 		$i--;
 	    }
 	}
