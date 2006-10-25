@@ -18,6 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+// $Id$
+
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("tutor");
 
@@ -981,26 +983,27 @@ if (!sizeof($term_data["turnus_data"])) {
 		}
 
 		//the box
-		$infobox[0]["kategorie"] = _("Informationen:");
-		$infobox[1]["kategorie"] = _("Aktionen:");
+		$infobox[0]['kategorie'] = _("Informationen:");
+		$infobox[1]['kategorie'] = _("Aktionen:");
 
-		$infobox[0]["eintrag"][] = array ("icon" => "ausruf_small.gif",
-			"text"  => ($admin_dates_data["assi"]) ? _("Sie k&ouml;nnen nun den Ablaufplan und weitere Termine f&uuml;r die neu angelegte Veranstaltung eingeben.") : _("Hier k&ouml;nnen Sie den Ablaufplan und weitere Termine der Veranstaltung ver&auml;ndern."));
-		$infobox[0]["eintrag"][] = array ("icon" => "blank.gif",
-			"text"  => $times_inf);
-		$infobox[1]["eintrag"][] = array ("icon" => "link_intern.gif",
-			"text"  =>"<a href=\"admin_dates.php?insert_new=TRUE#anchor\">"._("Einen neuen Termin anlegen")."</a>");
-		$infobox[1]["eintrag"][] = array ("icon" => "link_intern.gif",
-			"text"  => sprintf(_("Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte den Men&uuml;punkt %s Zeiten %s"), "<a href=\"admin_metadates.php?seminar_id=".$admin_dates_data["range_id"]."\">", "</a>"));
+		$infobox[0]['eintrag'][] = array ('icon' => $GLOBALS['ASSETS_URL'].'images/ausruf_small.gif',
+			'text'  => ($admin_dates_data['assi']) ? _("Sie k&ouml;nnen nun den Ablaufplan und weitere Termine f&uuml;r die neu angelegte Veranstaltung eingeben.") : _("Hier k&ouml;nnen Sie den Ablaufplan und weitere Termine der Veranstaltung ver&auml;ndern."));
+		$infobox[0]['eintrag'][] = array ('icon' => $GLOBALS['ASSETS_URL'].'images/blank.gif',
+			'text'  => $times_inf);
+		$infobox[1]['eintrag'][] = array ('icon' => $GLOBALS['ASSETS_URL'].'images/link_intern.gif',
+			'text'  =>'<a href="admin_dates.php?insert_new=TRUE#anchor">'._("Einen neuen Termin anlegen").'</a>');
+		$infobox[1]['eintrag'][] = array ('icon' => $GLOBALS['ASSETS_URL'].'images/link_intern.gif',
+			'text'  => sprintf(_("Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte den Men&uuml;punkt %s Zeiten %s"), '<a href="admin_metadates.php?seminar_id='.$admin_dates_data['range_id'].'">', '</a>'));
 		?>
 		<td class="blank" width="1%" valign="top">
 		<?
-		if ($admin_dates_data["assi"]) {
-			print_infobox_absolute($infobox, "locale/$_language_path/LC_PICTURES/hands08.jpg");
+		if ($admin_dates_data['assi']) {
+			$info_picture = 'locale/' . $_language_path . '/LC_PICTURES/hands08.jpg';
 		}
 		else {
-			print_infobox($infobox, "schedules.jpg");
+			$info_picture = $GLOBALS['ASSETS_URL'] . 'images/schedules.jpg';
 		}
+		print_infobox_absolute($infobox, $info_picture);
 		?>
 			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="270" height="1"/>
 		</td>
