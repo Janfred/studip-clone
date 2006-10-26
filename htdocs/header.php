@@ -33,6 +33,16 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+# necessary if you want to include header.php in function/method scope
+global $ABSOLUTE_PATH_STUDIP, $HELP_KEYWORD, $INSTALLED_LANGUAGES,
+       $RELATIVE_PATH_CHAT, $SHOW_TERMS_ON_FIRST_LOGIN,
+       $UNI_NAME_CLEAN, $USER_VISIBILITY_CHECK;
+
+global $auth, $perm, $user;
+
+global $homepage_cache_own, $i_page, $i_query, $_language, $_language_path,
+       $LastLogin, $my_messaging_settings, $perm, $SessionStart;
+
 
 if ($SHOW_TERMS_ON_FIRST_LOGIN){
 	require_once ("$ABSOLUTE_PATH_STUDIP/terms.inc.php");
@@ -271,14 +281,14 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		}
 
 		if ($GLOBALS["PLUGINS_ENABLE"]){
-			$plugins = $pluginengine->getAllActivatedPlugins(); 
-			
-			foreach ($plugins as $plugin){				
+			$plugins = $pluginengine->getAllActivatedPlugins();
+
+			foreach ($plugins as $plugin){
 				// does the plugin have a navigation entry?
 				if ($plugin->hasNavigation()){
 					$navi = $plugin->getNavigation();
 					if ($navi->hasIcon()){
-						echo MakeToolbar($plugin->getPluginpath() . "/" . $navi->getIcon(),htmlReady(PluginEngine::getLink($plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");						
+						echo MakeToolbar($plugin->getPluginpath() . "/" . $navi->getIcon(),htmlReady(PluginEngine::getLink($plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");
 					}
 					else {
 						echo MakeToolbar($plugin->getPluginiconname(),htmlReady(PluginEngine::getLink($plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");
@@ -387,4 +397,3 @@ ob_end_flush();
 include "check_sem_entry.inc.php"; //hier wird der Zugang zum Seminar ueberprueft
 ?>
 <!-- $Id$ -->
-

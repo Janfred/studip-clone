@@ -25,6 +25,21 @@
 * @const PHPDOC_DUMMY
 */
 define('PHPDOC_DUMMY',true);
+
+# necessary if you want to include html_head.inc.php in function/method scope
+global  $AUTH_LIFETIME, $FAVICON, $HTML_HEAD_TITLE;
+
+global  $auth, $user;
+
+global  $_html_head_title,
+        $_include_additional_header,
+        $_include_extra_stylesheet,
+        $_include_stylesheet,
+        $messenger_started,
+        $my_messaging_settings,
+        $seminar_open_redirected;
+
+
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // html_head.inc.php

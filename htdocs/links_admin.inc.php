@@ -17,6 +17,66 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
+# necessary if you want to include links_admin.inc.php in function/method scope
+global  $ABSOLUTE_PATH_STUDIP,
+        $BANNER_ADS_ENABLE,
+        $ELEARNING_INTERFACE_ENABLE,
+        $EXPORT_ENABLE,
+        $EXTERN_ENABLE,
+        $ILIAS_CONNECT_ENABLE,
+        $LOG_ENABLE,
+        $PHP_SELF,
+        $RESOURCES_ALLOW_ROOM_REQUESTS,
+        $RESOURCES_ENABLE,
+        $SEM_BEGINN_NEXT,
+        $SEM_CLASS,
+        $SEM_TYPE,
+        $SMILEYADMIN_ENABLE,
+        $VOTE_ENABLE;
+
+global  $auth, $perm, $sess, $user;
+
+global  $admin_admission_data,
+        $adminarea_sortby,
+        $admin_dates_data,
+        $admin_inst_id,
+        $archiv_assi_data,
+        $archive_kill,
+        $back_jump,
+        $conditions,
+        $_fullname_sql,
+        $i_page,
+        $i_view,
+        $links_admin_data,
+        $list,
+        $msg,
+        $my_inst,
+        $new_inst,
+        $new_sem,
+        $news_range_id,
+        $news_range_name,
+        $quit,
+        $select_all,
+        $select_inactive,
+        $select_none,
+        $select_old,
+        $select_sem_id,
+        $sem_create_data,
+        $SessSemName,
+        $srch_doz,
+        $srch_exp,
+        $srch_fak,
+        $srch_inst,
+        $srch_result,
+        $srch_sem,
+        $srch_send,
+        $structure,
+        $term_metadata,
+        $view,
+        $view_mode;
+
+
 if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
@@ -231,11 +291,11 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link'=>"institut_main.php?auswahl=".$SessSemName[1], 'active'=>FALSE);
 	elseif (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
 		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link'=>"seminar_main.php?auswahl=".$SessSemName[1], 'active'=>FALSE);
-	
+
 	if ($perm->have_perm("root") && $GLOBALS["PLUGINS_ENABLE"]) {
-		$structure["plugins"]=array ('topKat'=>"", 'name'=>_("Administrations-Plugins"), 'link'=>"plugins.php?cmd=show&id=1", 'active'=>FALSE);		
-	}		
-		
+		$structure["plugins"]=array ('topKat'=>"", 'name'=>_("Administrations-Plugins"), 'link'=>"plugins.php?cmd=show&id=1", 'active'=>FALSE);
+	}
+
 	//Bottomkats
 	$structure["grunddaten_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Grunddaten"), 'link'=>"admin_seminare1.php?list=TRUE", 'active'=>FALSE);
 	$structure["zeiten"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zeiten"), 'link'=>"admin_metadates.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
@@ -343,7 +403,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			foreach ($plugins as $adminplugin) {
 				if ($adminplugin->hasNavigation()){
 					$nav = $adminplugin->getNavigation();
-					$structure["plugins_" . $adminplugin->getPluginid()]=array ('topKat'=>"plugins", 'name'=>$nav->getDisplayname(), 'link'=>"plugins.php?cmd=show&id=" . $adminplugin->getPluginid(), 'active'=>FALSE);			
+					$structure["plugins_" . $adminplugin->getPluginid()]=array ('topKat'=>"plugins", 'name'=>$nav->getDisplayname(), 'link'=>"plugins.php?cmd=show&id=" . $adminplugin->getPluginid(), 'active'=>FALSE);
 				}
 			}
 		}
@@ -925,7 +985,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			$cssSw->switchClass();
 			echo "<tr>";
 			echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=\"-1\">".htmlReady($db->f('startsem'));
-			if ($db->f('startsem') != $db->f('endsem')) echo '<br>( - '.htmlReady($db->f('endsem')).')'; 
+			if ($db->f('startsem') != $db->f('endsem')) echo '<br>( - '.htmlReady($db->f('endsem')).')';
 			echo "</font></td>";
 			echo "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\">".htmlReady($db->f("VeranstaltungsNummer"))."</font></td>";
 			echo "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\">".htmlReady(substr($db->f("Name"),0,100));
