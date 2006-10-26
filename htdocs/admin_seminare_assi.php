@@ -164,7 +164,7 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 		$sem_create_data['sem_vor_end_termin'] = -1;
 		$sem_create_data['sem_vor_termin'] = -1;
 	}
-	
+
 	for ($i=0;$i<$sem_create_data["turnus_count"];$i++) {
 		$sem_create_data["term_turnus_start_stunde"][$i] = $term_turnus[$i]["start_stunde"];
 		$sem_create_data["term_turnus_start_minute"][$i] = $term_turnus[$i]["start_minute"];
@@ -209,11 +209,11 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 	$sem_create_data["timestamp"] = time(); // wichtig, da sonst beim ersten Aufruf sofort sem_create_data resetted wird!
 	// eintragen der sem_tree_ids
 	$sem_create_data["sem_bereich"] = get_seminar_sem_tree_entries($cp_id);
-	
+
 	// Modulkonfiguration übernehmen
-	$sem_create_data['modules_list'] = $Modules->getLocalModules($cp_id,'sem'); 
+	$sem_create_data['modules_list'] = $Modules->getLocalModules($cp_id,'sem');
 	$sem_create_data['sem_modules'] = $db->f('modules');
-	
+
 	// Dozenten und Tutoren eintragen
 	$sem_create_data["sem_doz"] = get_seminar_dozent($cp_id);
 	if (!$sem_create_data["sem_tut"] = get_seminar_tutor($cp_id)) {
@@ -262,7 +262,7 @@ if (($sem_create_data["sem_entry"]) && (!$form))
 if ($start_level) { //create defaults
 	if (!array_key_exists('sem_class', $sem_create_data))
 		$sem_create_data['sem_class'] = $class;
-		
+
 	if (!array_key_exists('sem_modules', $sem_create_data)){
 		foreach ($SEM_TYPE as $key => $val) {
 			if ($val['class'] == $class) {
@@ -484,7 +484,7 @@ if ($form == 3)
 	if (!$vor_tag && !$vor_monat && !$vor_jahr){
 		$sem_create_data["sem_vor_termin"] = $sem_create_data["sem_vor_end_termin"] = -1;
 	} else {
-		if (!check_and_set_date($vor_tag, $vor_monat, $vor_jahr, $vor_stunde, $vor_minute, $sem_create_data, "sem_vor_termin") 
+		if (!check_and_set_date($vor_tag, $vor_monat, $vor_jahr, $vor_stunde, $vor_minute, $sem_create_data, "sem_vor_termin")
 		|| !check_and_set_date($vor_tag, $vor_monat, $vor_jahr, $vor_end_stunde, $vor_end_minute, $sem_create_data, "sem_vor_end_termin")){
 			$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r Start- und Endzeit der Vorbesprechung ein!")."§";
 		} elseif ($sem_create_data["sem_vor_termin"] >= $sem_create_data["sem_vor_end_termin"]) {
@@ -867,7 +867,7 @@ if (($form == 3) && ($jump_next_x))
 		for ($i=0; $i<$sem_create_data["turnus_count"]; $i++)
 			if ((($sem_create_data["term_turnus_start_stunde"][$i] !== '') || ($sem_create_data["term_turnus_end_stunde"][$i] !== '')))
 				{
-				if (($sem_create_data["term_turnus_start_stunde"][$i] !== '') xor ($sem_create_data["term_turnus_end_stunde"][$i]) !== '') 
+				if (($sem_create_data["term_turnus_start_stunde"][$i] !== '') xor ($sem_create_data["term_turnus_end_stunde"][$i]) !== '')
 						{
 						if (!$just_informed)
 							$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der regul&auml;ren Termine aus!")."§";
@@ -897,7 +897,7 @@ if (($form == 3) && ($jump_next_x))
 	else {
 		for ($i=0; $i<$sem_create_data["term_count"]; $i++)
 			if ((($sem_create_data["term_start_stunde"][$i] !== '') || ($sem_create_data["term_end_stunde"][$i] !== '')) && (($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_jahr"][$i]))) {
-				if (($sem_create_data["term_start_stunde"][$i] !== '') xor ($sem_create_data["term_end_stunde"][$i] !== '')) 
+				if (($sem_create_data["term_start_stunde"][$i] !== '') xor ($sem_create_data["term_end_stunde"][$i] !== ''))
 						{
 						if (!$just_informed)
 							$errormsg=$errormsg."error§"._("Bitte f&uuml;llen Sie beide Felder f&uuml;r Start- und Endzeit der jeweiligen Termine aus!")."§";
@@ -1308,7 +1308,7 @@ if (($form == 6) && ($jump_next_x))
 				openSem($sem_create_data["sem_id"]); //open Veranstaltung to administrate in the admin-area
 				$links_admin_data["referred_from"]="assi";
 				$links_admin_data["assi"]=FALSE; //protected Assi-mode off
-				
+
 				if (!array_key_exists('sem_modules', $sem_create_data)){
 					//write the default module-config
 					$Modules = new Modules;
@@ -1591,26 +1591,26 @@ $sem_create_data["level"]=$level;
 
 // Help-Keywords
 switch ($level) {
-	case '1': 
-		$HELP_KEYWORD="Basis.VeranstaltungsAssistentGrunddaten"; 
+	case '1':
+		$HELP_KEYWORD="Basis.VeranstaltungsAssistentGrunddaten";
 		break;
-	case '2': 
-		$HELP_KEYWORD="Basis.VeranstaltungsAssistentPersonendatenTypUndSicherheit"; 
+	case '2':
+		$HELP_KEYWORD="Basis.VeranstaltungsAssistentPersonendatenTypUndSicherheit";
 		break;
 	case '3':
 		$HELP_KEYWORD="Basis.VeranstaltungsAssistentTermindaten";
 		break;
 	case '4':
-		$HELP_LEYWORD="Basis.VeranstaltungsAssistentSonstiges";
+		$HELP_KEYWORD="Basis.VeranstaltungsAssistentSonstiges";
 		break;
 	case '5':
-		$HELP_LEYWORD="Basis.VeranstaltungsAssistentBereitZumAnlegen";
+		$HELP_KEYWORD="Basis.VeranstaltungsAssistentBereitZumAnlegen";
 		break;
 	case '6':
-		$HELP_LEYWORD="Basis.VeranstaltungsAssistentVeranstaltungAngelegt";
+		$HELP_KEYWORD="Basis.VeranstaltungsAssistentVeranstaltungAngelegt";
 		break;
 	case '7':
-		$HELP_LEYWORD="Basis.VeranstaltungsAssistentLiteratur-UndLinkliste";
+		$HELP_KEYWORD="Basis.VeranstaltungsAssistentLiteratur-UndLinkliste";
 		break;
 	default:
 		$HELP_KEYWORD="Basis.VeranstaltungsAssistent";
