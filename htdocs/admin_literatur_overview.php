@@ -204,7 +204,7 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 					if ($auth->auth['perm'] == "root"){
 						$db->query("SELECT a.Institut_id, a.Name, 1 AS is_fak, COUNT(DISTINCT(catalog_id)) as anzahl FROM Institute a
 									LEFT JOIN Institute b ON (a.Institut_id = b.fakultaets_id AND b.fakultaets_id != b.Institut_id)
-									LEFT JOIN seminar_inst c ON (c.Institut_id=f.Institut_id)
+									LEFT JOIN seminar_inst c ON (c.Institut_id=b.Institut_id)
 									$_sem_sql
 									LEFT JOIN lit_list_content e USING(list_id)
 									WHERE a.Institut_id=a.fakultaets_id
