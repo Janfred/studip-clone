@@ -31,8 +31,6 @@ include_once("$ABSOLUTE_PATH_STUDIP/lit_import.inc.php");
 
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
 
-//Literaturlisten-Import
-do_lit_import();
 
 $HELP_KEYWORD="Basis.LiteraturListen";
 
@@ -78,6 +76,9 @@ if (($_the_tree->range_type == "sem" && !$perm->have_studip_perm("tutor", $_rang
 		page_close();
 		die;
 }
+
+//Literaturlisten-Import
+do_lit_import();
 
 $_the_treeview->parseCommand();
 
