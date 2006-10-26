@@ -51,31 +51,35 @@ class StudipLitImportPluginAbstract {
 
 	// Zum Starten der Plugins immer nur diese Methode aufrufen mit folgendem Kommando:
 	// StudipLitImportPluginAbstract::use_lit_import_plugins($xmlfile, $xmlfile_size, $xmlfile_name, $plugin_name);
-	function use_lit_import_plugins($xmlfile, $xmlfile_size, $xmlfile_name, $plugin_name = "EndNote") {
-        	global $_msg, $ABSOLUTE_PATH_STUDIP, $LIT_IMPORT_PLUGINS;
-
-        	if ($plugin_name)
-        	foreach ($LIT_IMPORT_PLUGINS as $plugin) {
-                	if ($plugin["name"] == $plugin_name) {
-                        	require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/lit_import_plugins/StudipLitImportPlugin".$plugin["name"].".class.php");
-                        	$p = "StudipLitImportPlugin".$plugin["name"];
-                        	$object = new $p;
-				$object->xmlfile = $xmlfile;
-				$object->xmlfile_size = $xmlfile_size;
-				$object->xmlfile_name = $xmlfile_name;
-                        	$data = $object->upload_file();
-                        	$dom = $object->parse($data);
-                        	if ($dom) {
-                                	$fields_arr = $object->import($dom);
-					if ($fields_arr)
-						$object->importEntries($fields_arr);
-                        	}
-                        	$msg = &$_msg;
-                        	$msg .= $object->getError("irgendwas");
-                       		break;
-                	}
-        	}
-
+	function use_lit_import_plugins($xmlfile, $xmlfile_size, $xmlfile_name, $plugin_name = "EndNote", $range_id = false) {
+		global $_msg, $ABSOLUTE_PATH_STUDIP, $LIT_IMPORT_PLUGINS;
+		
+		if ($plugin_name){
+			foreach ($LIT_IMPORT_PLUGINS as $plugin) {
+				if ($plugin["name"] == $plugin_name) {
+					require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/lit_import_plugins/StudipLitImportPlugin".$plugin["name"].".class.php");
+					$p = "StudipLitImportPlugin".$plugin["name"];
+					$object = new $p;
+					$object->xmlfile = $xmlfile;
+					$object->xmlfile_size = $xmlfile_size;
+					$object->xmlfile_name = $xmlfile_name;
+					$data = $object->upload_file();
+					$dom = $object->parse($data);
+					if ($dom) {
+						$fields_arr = $object->import($dom);
+						if ($fields_arr){
+							if(!$range_id){
+								$range_id = $GLOBALS['user']->id;
+							}
+							$object->importEntries($fields_arr, $range_id);
+						}
+					}
+					$msg = &$_msg;
+					$msg .= $object->getError("irgendwas");
+					break;
+				}
+			}
+		}
 	}
 
 	// Kann bei Bedarf ueberschrieben werden
@@ -131,44 +135,42 @@ class StudipLitImportPluginAbstract {
 	}
 	
 	// Sollte nicht ueberschrieben werden
-	function importEntries($field_arr){
-		global $auth;
+	function importEntries($field_arr, $range_id){
 		if (is_array($field_arr)) {
 			$catalog_ids = array();
 			foreach ($field_arr as $fields) {
 				if ($fields["dc_title"]!="") {
 					$litCatElement = new StudipLitCatElement();
- 	                                $litCatElement->setValues($fields);
-        	                        if ($litCatElement->insertData() > 0 ) {
-                	                        $cat_element_id = $litCatElement->fields['catalog_id']['value'];
-                        	                array_push($catalog_ids, $cat_element_id);
-                                	}
-                        	}
+					$litCatElement->setValues($fields);
+					if ($litCatElement->insertData() > 0 ) {
+						$cat_element_id = $litCatElement->fields['catalog_id']['value'];
+						array_push($catalog_ids, $cat_element_id);
+					}
+				}
 			}
 			if (count($catalog_ids)>0) {
-  	        	        $lit_list = &TreeAbstract::GetInstance("StudipLitList", $auth->auth["uid"]);
-        	                $lit_list->init();
-				$lit_list_id = md5(uniqid("sdlfhaldfhuizhsdhg"));
-                        	$fields = array();
-                        	$fields["list_id"]  = $lit_list_id;
-                        	$fields["range_id"] = $auth->auth["uid"];
-                        	$fields["name"]     = _("Neue importierte Liste vom")." ".date("r");
-                        	$fields["user_id"]  = $auth->auth["uid"];
-                        	if ($lit_list->insertList($fields)) {
-                                	$num_elements = $lit_list->insertElementBulk($catalog_ids, $lit_list_id);
-                                	if ($num_elements > 0 ) {
+				$lit_list = &TreeAbstract::GetInstance("StudipLitList", $range_id);
+				$lit_list_id = md5(uniqid("sdlfhaldfhuizhsdhg",1));
+				$fields = array();
+				$fields["list_id"]  = $lit_list_id;
+				$fields["name"]     = _("Neue importierte Liste vom")." ".strftime("%x %X");
+				$fields["user_id"]  = $GLOBALS['user']->id;
+				if ($lit_list->insertList($fields)) {
+					$num_elements = $lit_list->insertElementBulk($catalog_ids, $lit_list_id);
+					if ($num_elements > 0 ) {
+						$lit_list->init();
 						$this->num_entries = $num_elements;
-                                        	$this->addError("msg",sprintf(_("Neue Liste mit %s neuen Element(en) erzeugt"),$num_elements));
+						$this->addError("msg",sprintf(_("Neue Liste mit %s neuen Element(en) erzeugt"),$num_elements));
 						return TRUE;
-                                	} else {
+					} else {
 						$this->addError("error",_("Konnte keine Elemente anlegen"));
 						return FALSE;
 					}
-                        	} else {
+				} else {
 					$this->addError("error",_("Konnte Liste nicht erzeugen"));
 					return FALSE;
 				}
-                	} else {
+			} else {
 				$this->addError("error",_("Keine Listeneintr&auml;ge gefunden"));
 				return FALSE;
 			}
