@@ -41,6 +41,10 @@ function get_group_names($group_field, $groups){
 					$groupcount++;
 					break;
 					
+					case 'dozent_id':
+					$ret[$key] = get_fullname($key, 'no_title_short');
+					break;
+					
 					default:
 					$ret[$key] = 'unknown';
 					break;
@@ -74,6 +78,13 @@ function sort_groups($group_field, &$groups){
 				return strnatcasecmp($SEM_TYPE[$a]["name"]." (". $SEM_CLASS[$SEM_TYPE[$a]["class"]]["name"].")",
 									$SEM_TYPE[$b]["name"]." (". $SEM_CLASS[$SEM_TYPE[$b]["class"]]["name"].")");'));
 		break;
+		
+		case 'dozent_id':
+		uksort($groups, create_function('$a,$b',
+				'return strnatcasecmp(str_replace(array("ä","ö","ü"), array("ae","oe","ue"), strtolower(get_fullname($a, "no_title_short"))),
+									str_replace(array("ä","ö","ü"), array("ae","oe","ue"), strtolower(get_fullname($b, "no_title_short"))));'));
+		break;
+		
 		default:
 	}
 	
@@ -170,10 +181,7 @@ function fill_groups(&$groups, $group_key, $group_entry){
 	if (is_null($group_key)){
 		$group_key = 'not_grouped';
 	}
-	$group_entry['name'] = strtolower($group_entry['name']);
-	$group_entry['name'] = str_replace("ä","ae",$group_entry['name']);
-	$group_entry['name'] = str_replace("ö","oe",$group_entry['name']);
-	$group_entry['name'] = str_replace("ü","ue",$group_entry['name']);
+	$group_entry['name'] = str_replace(array("ä","ö","ü"), array("ae","oe","ue"), strtolower($group_entry['name']));
 	if (!is_array($groups[$group_key]) || (is_array($groups[$group_key]) && !in_array($group_entry, $groups[$group_key]))){
 		$groups[$group_key][$group_entry['seminar_id']] = $group_entry;
 		return true;

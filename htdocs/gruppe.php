@@ -68,6 +68,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		<option value="sem_tree_id" <?=($_my_sem_group_field == 'sem_tree_id' ? 'selected' : '')?>><?=_("Studienbereich")?></option>
 		<option value="sem_status" <?=($_my_sem_group_field == 'sem_status' ? 'selected' : '')?>><?=_("Typ")?></option>
 		<option value="gruppe" <?=($_my_sem_group_field == 'gruppe' ? 'selected' : '')?>><?=_("Farbgruppen")?></option>
+		<option value="dozent_id" <?=($_my_sem_group_field == 'dozent_id' ? 'selected' : '')?>><?=_("Dozenten")?></option>
 	</select>
 	</td><td class="blank" align="center" colspan="8">
 	<INPUT type="IMAGE" <?=makeButton("absenden", "src") ?> border="0" value="absenden">
@@ -84,11 +85,25 @@ FOR ($i=0; $i<8; $i++)
 	ECHO "</tr>";
 	$group_field = $_my_sem_group_field;
 	$groups = array();
-	$db->query ("SELECT sem_tree_id,seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.gruppe, seminare.visible,
-	{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end
-	FROM seminar_user LEFT JOIN seminare  USING (Seminar_id)
-	LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)
-	WHERE seminar_user.user_id = '$user->id'");
+	$add_fields = '';
+	$add_query = '';
+	
+	if($group_field == 'sem_tree_id'){
+		$add_fields = ',sem_tree_id';
+		$add_query = "LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)";
+	}
+	
+	if($group_field == 'dozent_id'){
+		$add_fields = ', su1.user_id as dozent_id';
+		$add_query = "LEFT JOIN seminar_user as su1 ON (su1.seminar_id=seminare.Seminar_id AND su1.status='dozent')";
+	}
+	
+	
+	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.gruppe, seminare.visible,
+				{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end $add_fields
+				FROM seminar_user LEFT JOIN seminare  USING (Seminar_id)
+				$add_query
+				WHERE seminar_user.user_id = '$user->id'");
 	while ($db->next_record()){
 		$my_sem[$db->f("Seminar_id")] = array("obj_type" => "sem", "name" => $db->f("Name"), "visible" => $db->f("visible"), "gruppe" => $db->f("gruppe"),
 		"sem_status" => $db->f("sem_status"),"sem_number" => $db->f("sem_number"),"sem_number_end" => $db->f("sem_number_end") );

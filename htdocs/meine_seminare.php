@@ -310,13 +310,27 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	$groups = array();
 
 	$all_semester = SemesterData::GetSemesterArray();
-
-	$db->query ("SELECT sem_tree_id,seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe,
+	
+	$add_fields = '';
+	$add_query = '';
+	
+	if($group_field == 'sem_tree_id'){
+		$add_fields = ',sem_tree_id';
+		$add_query = "LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)";
+	}
+	
+	if($group_field == 'dozent_id'){
+		$add_fields = ', su1.user_id as dozent_id';
+		$add_query = "LEFT JOIN seminar_user as su1 ON (su1.seminar_id=seminare.Seminar_id AND su1.status='dozent')";
+	}
+	
+	
+	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe,
 				seminare.chdate, seminare.visible, admission_binding,modules,IFNULL(visitdate,0) as visitdate,
-				{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end
+				{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end $add_fields
 				FROM seminar_user LEFT JOIN seminare  USING (Seminar_id)
 				LEFT JOIN object_user_visits ouv ON (ouv.object_id=seminar_user.Seminar_id AND ouv.user_id='$user->id' AND ouv.type='sem')
-				LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)
+				$add_query
 				WHERE seminar_user.user_id = '$user->id'");
 	$num_my_sem = $db->num_rows();
 

@@ -122,11 +122,30 @@ if (isset($_REQUEST['close_my_sem']))
 
 if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("admin")) {
 	$db = new DB_Seminar();
-	$db->query("SELECT sem_tree_id,seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.gruppe, seminare.visible,
-	{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end
-	FROM seminar_user LEFT JOIN seminare  USING (Seminar_id)
-	LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)
-	WHERE seminar_user.user_id = '$user->id'");
+	
+	if (isset($_my_sem_group_field)) {
+		$group_field = $_my_sem_group_field;
+	} else {
+		$group_field = 'not_grouped';
+	}
+	
+	if($group_field == 'sem_tree_id'){
+		$add_fields = ',sem_tree_id';
+		$add_query = "LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)";
+	}
+	
+	if($group_field == 'dozent_id'){
+		$add_fields = ', su1.user_id as dozent_id';
+		$add_query = "LEFT JOIN seminar_user as su1 ON (su1.seminar_id=seminare.Seminar_id AND su1.status='dozent')";
+	}
+	
+	
+	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.gruppe, seminare.visible,
+				{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end $add_fields
+				FROM seminar_user LEFT JOIN seminare  USING (Seminar_id)
+				$add_query
+				WHERE seminar_user.user_id = '$user->id'");
+	
 	if (!$db->num_rows()) {
 		echo "<table class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 		echo "<tr><td class=\"blank\">&nbsp;</td></tr>";
@@ -179,12 +198,6 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		echo '';
 	}
 	echo "</th></tr>\n";
-
-	if ($GLOBALS['auth']->auth['jscript']) {
-		$group_field = $_my_sem_group_field;
-	} else {
-		$group_field = 'not_grouped';
-	}
 
 	$groups = array();
 	$my_sem = array();
