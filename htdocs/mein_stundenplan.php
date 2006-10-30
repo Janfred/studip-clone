@@ -181,7 +181,7 @@ if ($view=="inst") {
 	}
 }
 
-if (!isset($tmp_sem_nr)) {
+if (!$tmp_sem_nr) {
 	if (time() < $VORLES_ENDE) {
 		$tmp_sem_beginn = $SEM_BEGINN;
 		$tmp_sem_ende = $SEM_ENDE;
