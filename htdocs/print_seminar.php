@@ -43,7 +43,7 @@ echo "</table>\n";
 
 
 // Save data back to database.
-page_close()
+page_close();
 ?>
 </body>
 </html>
