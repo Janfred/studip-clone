@@ -85,7 +85,7 @@ class Ilias3ConnectedPermissions extends ConnectedPermissions
 	*/
 	function checkUserPermissions($course_id = "")
 	{
-		global $connected_cms, $SemUserStatus;
+		global $connected_cms, $SemUserStatus, $messages;
 	
 		if ($course_id == "")
 			return false;
@@ -97,17 +97,18 @@ class Ilias3ConnectedPermissions extends ConnectedPermissions
 		$active_role = "";
 		$proper_role = "";
 		$user_crs_role = $connected_cms[$this->cms_type]->crs_roles[$SemUserStatus];
-		foreach ($local_roles as $key => $role_data)
-			// check only if local role is il_crs_member, -tutor or -admin
-			if (! (strpos($role_data["title"], "_crs_") === false))
-			{
-				if ( in_array( $role_data["obj_id"], $connected_cms[$this->cms_type]->user->getRoles() ) )
-					$active_role = $role_data["obj_id"];
-				if ( strpos( $role_data["title"], $user_crs_role) > 0 )
-					$proper_role = $role_data["obj_id"];
-			}
-//			if ($GLOBALS["debug"] == true) 
-//				echo "P$proper_role A$active_role U" . $user_crs_role . " R" . implode($connected_cms[$this->cms_type]->user->getRoles(), ".")."<br>";
+		if (is_array($local_roles))
+			foreach ($local_roles as $key => $role_data)
+				// check only if local role is il_crs_member, -tutor or -admin
+				if (! (strpos($role_data["title"], "_crs_") === false))
+				{
+					if ( in_array( $role_data["obj_id"], $connected_cms[$this->cms_type]->user->getRoles() ) )
+						$active_role = $role_data["obj_id"];
+					if ( strpos( $role_data["title"], $user_crs_role) > 0 )
+						$proper_role = $role_data["obj_id"];
+				}
+	//			if ($GLOBALS["debug"] == true) 
+	//				echo "P$proper_role A$active_role U" . $user_crs_role . " R" . implode($connected_cms[$this->cms_type]->user->getRoles(), ".")."<br>";
 
 		// is user already course-member? otherwise add member with proper role
 		$is_member = $connected_cms[$this->cms_type]->soap_client->isMember( $connected_cms[$this->cms_type]->user->getId(), $course_id);
@@ -161,15 +162,17 @@ class Ilias3ConnectedPermissions extends ConnectedPermissions
 					echo "Role $proper_role added.";
 			}
 			$this->permissions_changed = true;
-/**/
+
 		}
 //		echo $connected_cms[$this->cms_type]->crs_roles[$SemUserStatus];
 
 //		if ($permissions_changed)
 //			unset($connected_cms[$this->cms_type]->content_module);
 		if (! $this->getContentModulePerms( $course_id ))
-//			if ($GLOBALS["debug"] == true) 
-				echo "PERMISSION-ERROR";
+		{
+//			if ($GLOBALS["debug"] == true) 		
+			$messages["info"] .= _("F&uuml;r den zugeordneten ILIAS-Kurs konnten keine Berechtigungen ermittelt werden.") . "<br>";
+		}
 //		if (! $this->isAllowed(OPERATION_READ))
 //			echo "NIX DA";
 		
@@ -212,7 +215,7 @@ class Ilias3ConnectedPermissions extends ConnectedPermissions
 		if (! is_array($this->tree_allowed_operations))
 			return false;
 
-		$no_permission == false;
+		$no_permission = false;
 		if ((! in_array($this->operations[OPERATION_READ], $this->tree_allowed_operations)) OR (! in_array($this->operations[OPERATION_VISIBLE], $this->tree_allowed_operations)))
 			$no_permission == true;
 			

@@ -166,6 +166,8 @@ class Ilias3Soap extends StudipSoapClient
 	*/
 	function clearCache()
 	{
+		global $sess;
+		
 		$this->soap_cache = "";
 		$GLOBALS["cache_data"][$this->cms_type] = "";
 		$sess->register("cache_data");

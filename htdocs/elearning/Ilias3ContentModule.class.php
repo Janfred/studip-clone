@@ -137,6 +137,18 @@ class Ilias3ContentModule extends ContentModule
 		$crs_id = ObjectConnections::getConnectionModuleId($seminar_id, "crs", $this->cms_type);
 //		echo "SET?".$this->cms_type;
 		$connected_cms[$this->cms_type]->soap_client->setCachingStatus(false);
+		$connected_cms[$this->cms_type]->soap_client->clearCache();
+
+		// Check, ob Kurs in ILIAS gelöscht wurde
+		if (($crs_id != false) AND ($connected_cms[$this->cms_type]->soap_client->getObjectByReference($crs_id) == false))
+		{
+			ObjectConnections::unsetConnection($seminar_id, $crs_id, "crs", $this->cms_type);
+//			echo "deleted: ".ObjectConnections::getConnectionModuleId($seminar_id, "crs", $this->cms_type);
+//			echo "Der zugeordnete ILIAS-Kurs (ID $crs_id) existiert nicht mehr. Ein neuer Kurs wird angelegt.";
+			$messages["info"] .= _("Der zugeordnete ILIAS-Kurs (ID $crs_id) existiert nicht mehr. Ein neuer Kurs wird angelegt.") . "<br>";
+			$crs_id = false;
+		}
+
 		if ($crs_id == false)
 		{
 
@@ -153,6 +165,10 @@ class Ilias3ContentModule extends ContentModule
 				return false;
 			 }
 			ObjectConnections::setConnection($seminar_id, $crs_id, "crs", $this->cms_type);
+
+			// Rollen zuordnen
+			$connected_cms[$this->cms_type]->permissions->CheckUserPermissions($crs_id);
+//			$messages["info"] .= "Neue Kurs-ID: $crs_id. <br>";
 		}
 		
 		if ($write_permission != "")
