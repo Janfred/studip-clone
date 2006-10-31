@@ -196,7 +196,7 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 	$sem_create_data["sem_art"] = $db->f("art");
 	$sem_create_data["sem_teiln"] = $db->f("teilnehmer");
 	$sem_create_data["sem_voraus"] = $db->f("vorrausetzungen");
-	$sem_create_data["sem_orga"] = $db->f("lernorga");;
+	$sem_create_data["sem_orga"] = $db->f("lernorga");
 	$sem_create_data["sem_leistnw"] = $db->f("leistungsnachweis");
 	$sem_create_data["sem_ects"] = $db->f("ects");
 	$sem_create_data["sem_admission_date"] = $db->f("admission_endtime");
