@@ -90,6 +90,9 @@ class StudipDocumentTree extends TreeAbstract {
 				$this->initSubfolders($db->f("folder_id"));
 			}
 		}
+		if (is_array($this->tree_childs['root'])){
+			$this->tree_childs['root'] = array_unique($this->tree_childs['root']);
+		}
 	}
 	
 	function initSubfolders($parent_id){
@@ -248,17 +251,18 @@ class StudipDocumentTree extends TreeAbstract {
 }
 //test
 /*
-$f =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => '834499e2b8a2cd71637890e5de31cba3'));
+$f =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => '55c88e42f2cbbda0fa55b6c1af6121fc'));
 echo "<pre>";
 print_r($f->tree_childs);
 print_r($f->tree_data);
-echo $f->getPermissionString('823b5c771f17d4103b1828251c29a7cb');
-echo var_dump($f->isWritable('823b5c771f17d4103b1828251c29a7cb'));
-echo "<br>";
+//echo $f->getPermissionString('823b5c771f17d4103b1828251c29a7cb');
+//echo var_dump($f->isWritable('823b5c771f17d4103b1828251c29a7cb'));
+//echo "<br>";
 //$f->unsetPermission('834499e2b8a2cd71637890e5de31cba3', 'x');
-echo $f->getPermissionString('823b5c771f17d4103b1828251c29a7cb');
-echo var_dump($f->isWritable('823b5c771f17d4103b1828251c29a7cb'));
-echo var_dump($f->getNextSuperFolder('823b5c771f17d4103b1828251c29a7cb'));
-echo var_Dump($f->getKids('823b5c771f17d4103b1828251c29a7cb'));
+//echo $f->getPermissionString('823b5c771f17d4103b1828251c29a7cb');
+//echo var_dump($f->isWritable('823b5c771f17d4103b1828251c29a7cb'));
+//echo var_dump($f->getNextSuperFolder('823b5c771f17d4103b1828251c29a7cb'));
+echo var_dump($f->getReadableFolders());
+//echo var_Dump($f->getKids('823b5c771f17d4103b1828251c29a7cb'));
 */
 ?>
