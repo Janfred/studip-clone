@@ -68,7 +68,7 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 	$structure["calendar_changeview"] = array ("topKat"=>"calendar", "name"=>_("Ansicht anpassen"), "link"=>"calendar.php?cmd=changeview&atime=$atime", "active"=>FALSE);
 }
 $structure["timetable_timetable"] = array ("topKat"=>"timetable", "name"=>_("Stundenplan"), "link"=>"mein_stundenplan.php", "active"=>FALSE);
-$structure["timetable_printview"] = array ("topKat"=>"timetable", "name"=>_("Druckansicht"), "link"=>"mein_stundenplan.php?print_view=TRUE", target=>"_new", "active"=>FALSE);
+$structure["timetable_printview"] = array ("topKat"=>"timetable", "name"=>_("Druckansicht"), "link"=>"mein_stundenplan.php?print_view=TRUE", 'target'=>"_new", "active"=>FALSE);
 $structure["timetable_changeview"] = array ("topKat"=>"timetable", "name"=>_("Ansicht anpassen"), "link"=>"mein_stundenplan.php?change_view=TRUE", "active"=>FALSE);
 
 $structure["contact_viewalpha"] = array ("topKat"=>"contact", "name"=>_("Alphabetisch"), "link"=>"contact.php?view=alpha", "active"=>FALSE);

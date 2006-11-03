@@ -78,77 +78,77 @@ if ($ELEARNING_INTERFACE_ENABLE) {
 
 //Topkats
 if ($SessSemName["class"]=="inst") {
-	$structure["institut_main"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"institut_main.php", active=>FALSE);
+	$structure["institut_main"]=array ('topKat' => '', 'name'=>_("&Uuml;bersicht"), 'link'=>"institut_main.php", 'active'=>FALSE);
 	if ($modules["forum"])
-		$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php", active=>FALSE);
+		$structure["forum"]=array ('topKat' => '', 'name' => _("Forum"), 'link' => "forum.php", 'active' => FALSE);
 	if ($modules["personal"])
-		$structure["personal"]=array (topKat=>"", name=>_("Personal"), link=>"institut_members.php", active=>FALSE);
+		$structure["personal"]=array ('topKat' => '', 'name' => _("Personal"), 'link' => "institut_members.php", 'active' => FALSE);
 	if ($modules["documents"])
-		$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
+		$structure["folder"]=array ('topKat' => '', 'name' => _("Dateien"), 'link' => "folder.php?cmd=tree", 'active' => FALSE);
 	if ($modules["scm"])
-		$structure["scm"]=array (topKat=>"", name=>scm_tab_name(), link=>"scm.php", active=>FALSE);
+		$structure["scm"]=array ('topKat' => '', 'name' => scm_tab_name(), 'link' => "scm.php", 'active' => FALSE);
 	if ($modules["literature"])
-		$structure["literatur"]=array (topKat=>"", name=>_("Literatur zur Einrichtung"), link=>"literatur.php", active=>FALSE);
+		$structure["literatur"]=array ('topKat' => '', 'name' => _("Literatur zur Einrichtung"), 'link' => "literatur.php", 'active' => FALSE);
 	if ($modules["wiki"]){
-	  	$structure["wiki"]=array (topKat=>"", name=>_("Wiki"), link=>"wiki.php", active=>FALSE);
+	  	$structure["wiki"]=array ('topKat' => '', 'name' => _("Wiki"), 'link' => "wiki.php", 'active' => FALSE);
 	}
 
 	//topkats for resources management, if module is activated
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		if (checkAvailableResources ($SessSemName[1]))
-			$structure["resources"]=array (topKat=>"", name=>_("Ressourcen"), link=>"resources.php?view=openobject_main&view_mode=oobj", active=>FALSE);
+			$structure["resources"]=array ('topKat' => '', 'name' => _("Ressourcen"), 'link' => "resources.php?view=openobject_main&view_mode=oobj", 'active' => FALSE);
 	}
 } else {
-	$structure["seminar_main"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"seminar_main.php", active=>FALSE);
+	$structure["seminar_main"]=array ('topKat' => '', 'name' => _("&Uuml;bersicht"), 'link' => "seminar_main.php", 'active' => FALSE);
 	if ($modules["forum"])
-		$structure["forum"]=array (topKat=>"", name=>_("Forum"), link=>"forum.php?view=reset", active=>FALSE);
+		$structure["forum"]=array ('topKat' => '', 'name' => _("Forum"), 'link' => "forum.php?view=reset", 'active' => FALSE);
 	if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) && ($modules["participants"])){
-		$structure["teilnehmer"]=array (topKat=>"", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
+		$structure["teilnehmer"]=array ('topKat' => '', 'name' => _("TeilnehmerInnen"), 'link' => "teilnehmer.php", 'active' => FALSE);
 	}
 	if ($modules["documents"])
-		$structure["folder"]=array (topKat=>"", name=>_("Dateien"), link=>"folder.php?cmd=tree", active=>FALSE);
+		$structure["folder"]=array ('topKat' => '', 'name' => _("Dateien"), 'link' => "folder.php?cmd=tree", 'active' => FALSE);
 	if ($modules["schedule"])
-		$structure["dates"]=array (topKat=>"", name=>_("Ablaufplan"), link=>"dates.php", active=>FALSE);
+		$structure["dates"]=array ('topKat' => '', 'name' => _("Ablaufplan"), 'link' => "dates.php", 'active' => FALSE);
 	if ($modules["scm"]) {
-		$structure["scm"]=array (topKat=>"", name=>scm_tab_name(), link=>"scm.php", active=>FALSE);
+		$structure["scm"]=array ('topKat' => '', 'name' => scm_tab_name(), 'link' => "scm.php", 'active' => FALSE);
 	}
 	if ($modules["literature"])
-		$structure["literatur"]=array (topKat=>"", name=>_("Literatur"), link=>"literatur.php", active=>FALSE);
+		$structure["literatur"]=array ('topKat' => '', 'name' => _("Literatur"), 'link' => "literatur.php", 'active' => FALSE);
 	if ($modules["wiki"]){
-	  	$structure["wiki"]=array (topKat=>"", name=>_("Wiki"), link=>"wiki.php", active=>FALSE);
+	  	$structure["wiki"]=array ('topKat' => '', 'name' => _("Wiki"), 'link' => "wiki.php", 'active' => FALSE);
 	}
 
 	//topkats for resources management, if module is activated
 	if ($RESOURCES_ENABLE) {
 		require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 		if (checkAvailableResources ($SessSemName[1]))
-			$structure["resources"]=array (topKat=>"", name=>_("Ressourcen"), link=>"resources.php?view=openobject_main&view_mode=oobj", active=>FALSE);
+			$structure["resources"]=array ('topKat' => '', 'name' => _("Ressourcen"), 'link' => "resources.php?view=openobject_main&view_mode=oobj", 'active' => FALSE);
 	}
 }
 
 //topkats for Ilias-learningmodules, if module is activated
 if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])) {
 	if (get_seminar_modules($SessSemName[1]) != false)
-		$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?seminar_id=".$SessSemName[1], active=>FALSE);
+		$structure["lernmodule"]=array ('topKat' => '', 'name' => _("Lernmodule"), 'link' => "seminar_lernmodule.php?seminar_id=".$SessSemName[1], 'active' => FALSE);
 	elseif  ($perm->have_studip_perm("tutor",$SessSemName[1]))
-		$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"seminar_lernmodule.php?view=edit&seminar_id=".$SessSemName[1], active=>FALSE);
+		$structure["lernmodule"]=array ('topKat' => '', 'name' => _("Lernmodule"), 'link' => "seminar_lernmodule.php?view=edit&seminar_id=".$SessSemName[1], 'active' => FALSE);
 /*		else $nolink = true;
 		if (($nolink != true) AND (get_connected_user_id($auth->auth["uid"]) == false))
-			$structure["lernmodule"]=array (topKat=>"", name=>_("Lernmodule"), link=>"migration2studip.php", active=>FALSE);/**/
+			$structure["lernmodule"]=array ('topKat' =>"", 'name' => _("Lernmodule"), 'link' => "migration2studip.php", 'active' => FALSE);/**/
 }
 
 //topkats for contentmodules, if elearning-interface is activated
 if (($ELEARNING_INTERFACE_ENABLE) && ($modules["elearning_interface"])) {
 	if (ObjectConnections::isConnected($SessSemName[1]))
-		$structure["elearning_interface"]=array (topKat=>"", name=>_("Lernmodule"), link=>"elearning_interface.php?view=show&seminar_id=".$SessSemName[1], active=>FALSE);
+		$structure["elearning_interface"]=array ('topKat' => '', 'name' => _("Lernmodule"), 'link' => "elearning_interface.php?view=show&seminar_id=".$SessSemName[1], 'active' => FALSE);
 	elseif  ($perm->have_studip_perm("tutor",$SessSemName[1]))
-		$structure["elearning_interface"]=array (topKat=>"", name=>_("Lernmodule"), link=>"elearning_interface.php?view=edit&seminar_id=".$SessSemName[1], active=>FALSE);
+		$structure["elearning_interface"]=array ('topKat' => '', 'name' => _("Lernmodule"), 'link' => "elearning_interface.php?view=edit&seminar_id=".$SessSemName[1], 'active' => FALSE);
 }
 
 //topkats for SupportDB, if module is activated
 if (($SUPPORT_ENABLE) && ($modules["support"])) {
-	$structure["support"]=array (topKat=>"", name=>_("SupportDB"), link=>"support.php", active=>FALSE);
+	$structure["support"]=array ('topKat' => '', 'name' => _("SupportDB"), 'link' => "support.php", 'active' => FALSE);
 }
 
 // last topkats, insert new topkats in front of this statement
@@ -162,14 +162,14 @@ if ($PLUGINS_ENABLE){
 		foreach ($plugins as $plugin){
 			if ($plugin->hasNavigation()){
 				$pluginnavi = $plugin->getNavigation();
-				$structure["plugin_" . $plugin->getPluginId()] = array(topKat=>"", name=>$pluginnavi->getDisplayname(),link=>PluginEngine::getLink($plugin),active=>false);
+				$structure["plugin_" . $plugin->getPluginId()] = array('topKat' => '', 'name' => $pluginnavi->getDisplayname(),'link' => PluginEngine::getLink($plugin),'active' => false);
 				
-				$pluginsubmenu["_plugin_" . $plugin->getPluginId()] = array(topKat=>"plugin_" . $plugin->getPluginId(), name=>$pluginnavi->getDisplayname(),link=>PluginEngine::getLink($plugin),active=>false);
+				$pluginsubmenu["_plugin_" . $plugin->getPluginId()] = array('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $pluginnavi->getDisplayname(), 'link' => PluginEngine::getLink($plugin), 'active' => false);
 				$submenu = $pluginnavi->getSubMenu();
 				// create bottomkats for activated plugins
 				foreach ($submenu as $submenuitem){
 					// create entries in a temporary structure and add it to structure later
-					$pluginsubmenu["plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array (topKat=>"plugin_" . $plugin->getPluginId(), name=>$submenuitem->getDisplayname(), link=>PluginEngine::getLink($plugin,$submenuitem->getLinkParams()), active=>false); 
+					$pluginsubmenu["plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $submenuitem->getDisplayname(), 'link' => PluginEngine::getLink($plugin,$submenuitem->getLinkParams()), 'active' => false); 
 				}
 			}
 			else {
@@ -183,107 +183,107 @@ if ($PLUGINS_ENABLE){
 
 //Bottomkats
 if ($SessSemName["class"]=="inst") {
-	$structure["_institut_main"]=array (topKat=>"institut_main", name=>_("Info"), link=>"institut_main.php", active=>FALSE);
+	$structure["_institut_main"]=array ('topKat' => "institut_main", 'name' => _("Info"), 'link' => "institut_main.php", 'active' => FALSE);
 	if ($modules["personal"])	
-		$structure["institut_members"]=array (topKat=>"personal", name=>_("MitarbeiterInnen"), link=>"institut_members.php", active=>FALSE);
-	$structure["institut_veranstaltungen"]=array (topKat=>"institut_main", name=>_("Veranstaltungen"), link=>"show_bereich.php?level=s&id=$SessSemName[1]", active=>FALSE);
-	$structure["timetable"]=array (topKat=>"institut_main", name=>_("Veranstaltungs-Timetable"), link=>"mein_stundenplan.php?inst_id=$SessSemName[1]", active=>FALSE);
-	// $structure["druckansicht_i"]=array (topKat=>"institut_main", name=>"Druckansicht", link=>"print_institut.php", target=>"_new", active=>FALSE);
+		$structure["institut_members"]=array ( 'topKat' => "personal", 'name' => _("MitarbeiterInnen"), 'link' => "institut_members.php", 'active' => FALSE);
+	$structure["institut_veranstaltungen"]=array ('topKat' => "institut_main", 'name' => _("Veranstaltungen"), 'link' => "show_bereich.php?level=s&id=$SessSemName[1]", 'active' => FALSE);
+	$structure["timetable"]=array ('topKat' => "institut_main", 'name' => _("Veranstaltungs-Timetable"), 'link' => "mein_stundenplan.php?inst_id=$SessSemName[1]", 'active' => FALSE);
+	// $structure["druckansicht_i"]=array ('topKat' => "institut_main", 'name' => "Druckansicht", 'link' => "print_institut.php", 'target' =>"_new", 'active' => FALSE);
 	if ($rechte)
 		if ($perm->have_perm("admin"))
-			$structure["administration_e"]=array (topKat=>"institut_main", name=>_("Administration der Einrichtung"), link=>"admin_institut.php?new_inst=TRUE", active=>FALSE);
+			$structure["administration_e"]=array ('topKat' => "institut_main", 'name' => _("Administration der Einrichtung"), 'link' => "admin_institut.php?new_inst=TRUE", 'active' => FALSE);
 		else
-			$structure["administration_e"]=array (topKat=>"institut_main", name=>_("Administration der Einrichtung"), link=>"admin_lit_list.php?new_inst=TRUE&view=literatur_inst", active=>FALSE);		
+			$structure["administration_e"]=array ('topKat' => "institut_main", 'name' => _("Administration der Einrichtung"), 'link' => "admin_lit_list.php?new_inst=TRUE&view=literatur_inst", 'active' => FALSE);		
 } else {
 //
-	$structure["_seminar_main"]=array (topKat=>"seminar_main", name=>_("Kurzinfo"), link=>"seminar_main.php", active=>FALSE);
-	$structure["details"]=array (topKat=>"seminar_main", name=>_("Details"), link=>"details.php", active=>FALSE);
-	$structure["druckansicht_s"]=array (topKat=>"seminar_main", name=>_("Druckansicht"), link=>"print_seminar.php", target=>"_new", active=>FALSE);
+	$structure["_seminar_main"]=array ('topKat' => "seminar_main", 'name' => _("Kurzinfo"), 'link' => "seminar_main.php", 'active' => FALSE);
+	$structure["details"]=array ('topKat' => "seminar_main", 'name' => _("Details"), 'link' => "details.php", 'active' => FALSE);
+	$structure["druckansicht_s"]=array ('topKat' => "seminar_main", 'name' => _("Druckansicht"), 'link' => "print_seminar.php", 'target' => "_new", 'active' => FALSE);
 	if ($rechte)
-		$structure["administration_v"]=array (topKat=>"seminar_main", name=>_("Administration dieser Veranstaltung"), link=>"admin_seminare1.php?new_sem=TRUE", active=>FALSE);
+		$structure["administration_v"]=array ('topKat' => "seminar_main", 'name' => _("Administration dieser Veranstaltung"), 'link' => "admin_seminare1.php?new_sem=TRUE", 'active' => FALSE);
 
 	$db->query("SELECT admission_binding FROM seminare WHERE seminar_id = '$SessSemName[1]'");
 	$db->next_record();
 	if (!$db->f("admission_binding") && !$perm->have_studip_perm("tutor",$SessSemName[1]) && $user->id != "nobody")
-		$structure["delete_abo"]=array (topKat=>"seminar_main", name=>_("Austragen aus der Veranstaltung"), link=>"meine_seminare.php?auswahl=$SessSemName[1]&cmd=suppose_to_kill", isolator=>TRUE);
+		$structure["delete_abo"]=array ('topKat' => "seminar_main", 'name' => _("Austragen aus der Veranstaltung"), 'link' => "meine_seminare.php?auswahl=$SessSemName[1]&cmd=suppose_to_kill", 'isolator' => TRUE);
 }
 //
 
 if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)  || $rechte) && ($modules["participants"])){
-	$structure["_teilnehmer"]=array (topKat=>"teilnehmer", name=>_("TeilnehmerInnen"), link=>"teilnehmer.php", active=>FALSE);
+	$structure["_teilnehmer"]=array ('topKat' => "teilnehmer", 'name' => _("TeilnehmerInnen"), 'link' => "teilnehmer.php", 'active' => FALSE);
 }
 if ($modules["forum"]) {
-	$structure["_forum"]=array (topKat=>"forum", name=>_("Themenansicht"), link=>"forum.php?view=".$forum["themeview"], active=>FALSE);
+	$structure["_forum"]=array ('topKat' => "forum", 'name' => _("Themenansicht"), 'link' => "forum.php?view=".$forum["themeview"], 'active' => FALSE);
 	if ($user->id != "nobody") {
-		$structure["neue"]=array (topKat=>"forum", name=>_("neue Beiträge"), link=>"forum.php?view=neue&sort=age", active=>FALSE);
-		$structure["flat"]=array (topKat=>"forum", name=>_("letzte Beiträge"), link=>"forum.php?view=flat&sort=age", active=>FALSE);
-		$structure["search"]=array (topKat=>"forum", name=>_("Suchen"), link=>"forum.php?view=search&reset=1", active=>FALSE);
+		$structure["neue"]=array ('topKat' => "forum", 'name' => _("neue Beiträge"), 'link' => "forum.php?view=neue&sort=age", 'active' => FALSE);
+		$structure["flat"]=array ('topKat' => "forum", 'name' => _("letzte Beiträge"), 'link' => "forum.php?view=flat&sort=age", 'active' => FALSE);
+		$structure["search"]=array ('topKat' => "forum", 'name' => _("Suchen"), 'link' => "forum.php?view=search&reset=1", 'active' => FALSE);
 	}
-	$structure["forum_export"]=array (topKat=>"forum", name=>_("Druckansicht"), link=>"forum_export.php", target=>"_new", active=>FALSE);
+	$structure["forum_export"]=array ('topKat' => "forum", 'name' => _("Druckansicht"), 'link' => "forum_export.php", 'target' => "_new", 'active' => FALSE);
 	if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"]))
-		$structure["neues_thema"]=array (topKat=>"forum", name=>_("neues Thema anlegen"), link=>"forum.php?view=".$forum["themeview"]."&neuesthema=TRUE#anker", active=>FALSE);
+		$structure["neues_thema"]=array ('topKat' => "forum", 'name' => _("neues Thema anlegen"), 'link' => "forum.php?view=".$forum["themeview"]."&neuesthema=TRUE#anker", 'active' => FALSE);
 }
 //
 if (($SessSemName["class"]=="sem") && ($modules["schedule"])){
-	$structure["_dates"]=array (topKat=>"dates", name=>_("alle Termine"), link=>"dates.php", active=>FALSE);
-	$structure["sitzung"]=array (topKat=>"dates", name=>_("Sitzungstermine"), link=>"dates.php?show_not=sem", active=>FALSE);
-	$structure["andere_t"]=array (topKat=>"dates", name=>_("andere Termine"), link=>"dates.php?show_not=other", active=>FALSE);
+	$structure["_dates"]=array ('topKat' => "dates", 'name' => _("alle Termine"), 'link' => "dates.php", 'active' => FALSE);
+	$structure["sitzung"]=array ('topKat' => "dates", 'name' => _("Sitzungstermine"), 'link' => "dates.php?show_not=sem", 'active' => FALSE);
+	$structure["andere_t"]=array ('topKat' => "dates", 'name' => _("andere Termine"), 'link' => "dates.php?show_not=other", 'active' => FALSE);
 	if ($rechte)
-		$structure["admin_dates"]=array (topKat=>"dates", name=>_("Ablaufplan bearbeiten"), link=>"admin_dates.php?new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+		$structure["admin_dates"]=array ('topKat' => "dates", 'name' => _("Ablaufplan bearbeiten"), 'link' => "admin_dates.php?new_sem=TRUE&range_id=".$SessSemName[1], 'active' => FALSE);
 }
 //
 if ($modules["documents"]) {
-	$structure["_folder"]=array (topKat=>"folder", name=>_("Ordneransicht"), link=>"folder.php?cmd=tree", active=>FALSE);
-	$structure["alle_dateien"]=array (topKat=>"folder", name=>_("Alle Dateien"), link=>"folder.php?cmd=all", active=>FALSE);
+	$structure["_folder"]=array ('topKat' => "folder", 'name' => _("Ordneransicht"), 'link' => "folder.php?cmd=tree", 'active' => FALSE);
+	$structure["alle_dateien"]=array ('topKat' => "folder", 'name' => _("Alle Dateien"), 'link' => "folder.php?cmd=all", 'active' => FALSE);
 }
 //
 if ($modules["scm"]) {
-	$structure["_scm"]=array (topKat=>"scm", name=>scm_tab_name(), link=>"scm.php", active=>FALSE);
+	$structure["_scm"]=array ('topKat' => "scm", name=>scm_tab_name(), 'link' => "scm.php", 'active' => FALSE);
 }
 //
 if ($modules["literature"]) {
 	if ($SessSemName["class"]=="sem"){
-		$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur"), link=>"literatur.php?view=literatur_sem", active=>FALSE);
-		$structure["_literatur_print"]=array (topKat=>"literatur", name=>_("Druckansicht"), link=>"lit_print_view.php?_range_id=" . $SessSemName[1], target=>"_blank", active=>FALSE);
+		$structure["_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur"), 'link' => "literatur.php?view=literatur_sem", 'active' => FALSE);
+		$structure["_literatur_print"]=array ('topKat' => "literatur", 'name' => _("Druckansicht"), 'link' => "lit_print_view.php?_range_id=" . $SessSemName[1], 'target' => "_blank", 'active' => FALSE);
 	}else{
-		$structure["_literatur"]=array (topKat=>"literatur", name=>_("Literatur"), link=>"literatur.php?view=literatur_inst", active=>FALSE);
-		$structure["_literatur_print"]=array (topKat=>"literatur", name=>_("Druckansicht"), link=>"lit_print_view.php?_range_id=" . $SessSemName[1], target=>"_blank", active=>FALSE);
+		$structure["_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur"), 'link' => "literatur.php?view=literatur_inst", 'active' => FALSE);
+		$structure["_literatur_print"]=array ('topKat' => "literatur", 'name' => _("Druckansicht"), 'link' => "lit_print_view.php?_range_id=" . $SessSemName[1], 'target' => "_blank", 'active' => FALSE);
 	}
 }
 
 if ($SessSemName["class"]=="sem" && $modules["participants"] && (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)  || $rechte))
-	$structure["statusgruppen"]=array (topKat=>"teilnehmer", name=>_("Funktionen / Gruppen"), link=>"statusgruppen.php?view=statusgruppe_sem", active=>FALSE);
+	$structure["statusgruppen"]=array ('topKat' => "teilnehmer", 'name' => _("Funktionen / Gruppen"), 'link' => "statusgruppen.php?view=statusgruppe_sem", 'active' => FALSE);
 
 
 if ($rechte)
 	if (($SessSemName["class"]=="sem") && ($modules["participants"]))
-		$structure["Statusgruppen verwalten"]=array (topKat=>"teilnehmer", name=>_("Funktionen / Gruppen verwalten"), link=>"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+		$structure["Statusgruppen verwalten"]=array ('topKat' => "teilnehmer", 'name' => _("Funktionen / Gruppen verwalten"), 'link' => "admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=".$SessSemName[1], 'active' => FALSE);
 	elseif (($perm->have_perm("admin")) && ($modules["personal"]))
-			$structure["Statusgruppen verwalten"]=array (topKat=>"personal", name=>_("Funktionen / Gruppen verwalten"), link=>"admin_statusgruppe.php?view=statusgruppe_inst&new_sem=TRUE&range_id=".$SessSemName[1], active=>FALSE);
+			$structure["Statusgruppen verwalten"]=array ('topKat' => "personal", 'name' => _("Funktionen / Gruppen verwalten"), 'link' => "admin_statusgruppe.php?view=statusgruppe_inst&new_sem=TRUE&range_id=".$SessSemName[1], 'active' => FALSE);
 
 
 if (($rechte) && ($modules["literature"]))
 	if ($SessSemName["class"]=="sem")
-		$structure["admin_literatur"]=array (topKat=>"literatur", name=>_("Literatur bearbeiten"), link=>"admin_lit_list.php?view=literatur_sem&new_sem=TRUE&_range_id=".$SessSemName[1], active=>FALSE);
+		$structure["admin_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur bearbeiten"), 'link' => "admin_lit_list.php?view=literatur_sem&new_sem=TRUE&_range_id=".$SessSemName[1], 'active' => FALSE);
 	else
-		$structure["admin_literatur"]=array (topKat=>"literatur", name=>_("Literatur bearbeiten"), link=>"admin_lit_list.php?view=literatur_inst&new_inst=TRUE&_range_id=".$SessSemName[1], active=>FALSE);
+		$structure["admin_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur bearbeiten"), 'link' => "admin_lit_list.php?view=literatur_inst&new_inst=TRUE&_range_id=".$SessSemName[1], 'active' => FALSE);
 
 if ($modules["wiki"]) {
-	$structure["_wiki"]=array (topKat=>"wiki", name=>_("WikiWikiWeb"), link=>"wiki.php", active=>FALSE);
-	$structure["wiki_listnew"]=array (topKat=>"wiki", name=>_("Neue Seiten"), link=>"wiki.php?view=listnew", active=>FALSE);
-	$structure["wiki_listall"]=array (topKat=>"wiki", name=>_("Alle Seiten"), link=>"wiki.php?view=listall", active=>FALSE); 
-	$structure["wiki_export"]=array (topKat=>"wiki", name=>_("Export"), link=>"wiki.php?view=export", active=>FALSE); 
+	$structure["_wiki"]=array ('topKat' => "wiki", 'name' => _("WikiWikiWeb"), 'link' => "wiki.php", 'active' => FALSE);
+	$structure["wiki_listnew"]=array ('topKat' => "wiki", 'name' => _("Neue Seiten"), 'link' => "wiki.php?view=listnew", 'active' => FALSE);
+	$structure["wiki_listall"]=array ('topKat' => "wiki", 'name' => _("Alle Seiten"), 'link' => "wiki.php?view=listall", 'active' => FALSE); 
+	$structure["wiki_export"]=array ('topKat' => "wiki", 'name' => _("Export"), 'link' => "wiki.php?view=export", 'active' => FALSE); 
 }
 		
 
 //bottomkats for resources-management, if modul is activated
 if ($RESOURCES_ENABLE) {
-	$structure["resources_overview"]=array (topKat=>"resources", name=>_("&Uuml;bersicht"), link=>"resources.php?view=openobject_main", active=>FALSE);
-	$structure["resources_details"]=array (topKat=>"resources", name=>_("Details"), link=>"resources.php?view=openobject_details", active=>FALSE);
-	$structure["resources_schedule"]=array (topKat=>"resources", name=>_("Belegung"), link=>"resources.php?view=openobject_schedule", active=>FALSE);
-	$structure["resources_assign"]=array (topKat=>"resources", name=>_("Belegungen bearbeiten"), link=>"resources.php?view=openobject_assign", active=>FALSE);
+	$structure["resources_overview"]=array ('topKat' => "resources", 'name' => _("&Uuml;bersicht"), 'link' => "resources.php?view=openobject_main", 'active' => FALSE);
+	$structure["resources_details"]=array ('topKat' => "resources", 'name' => _("Details"), 'link' => "resources.php?view=openobject_details", 'active' => FALSE);
+	$structure["resources_schedule"]=array ('topKat' => "resources", 'name' => _("Belegung"), 'link' => "resources.php?view=openobject_schedule", 'active' => FALSE);
+	$structure["resources_assign"]=array ('topKat' => "resources", 'name' => _("Belegungen bearbeiten"), 'link' => "resources.php?view=openobject_assign", 'active' => FALSE);
 	if ($rechte)
-		$structure["resources_admin"]=array (topKat=>"resources", name=>_("Ressourcen verwalten"), link=>"resources.php", active=>FALSE);
+		$structure["resources_admin"]=array ('topKat' => "resources", 'name' => _("Ressourcen verwalten"), 'link' => "resources.php", 'active' => FALSE);
 }
 
 //bottomkats for Ilias-connect, if modul is activated
@@ -291,12 +291,12 @@ if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])){
 	if (get_seminar_modules($SessSemName[1]) != false)
 	{
 		if ($SessSemName["class"]=="inst") 
-			$structure["lernmodule_show"]=array (topKat=>"lernmodule", name=>_("Lernmodule dieser Einrichtung"), link=>"seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
+			$structure["lernmodule_show"]=array ('topKat' => "lernmodule", 'name' => _("Lernmodule dieser Einrichtung"), 'link' => "seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 		else		
-			$structure["lernmodule_show"]=array (topKat=>"lernmodule", name=>_("Lernmodule dieser Veranstaltung"), link=>"seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
+			$structure["lernmodule_show"]=array ('topKat' => "lernmodule", 'name' => _("Lernmodule dieser Veranstaltung"), 'link' => "seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 	}
 	if  ($perm->have_studip_perm("tutor",$SessSemName[1]))
-		$structure["lernmodule_edit"]=array (topKat=>"lernmodule", name=>_("Lernmodule hinzuf&uuml;gen / entfernen"), link=>"seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
+		$structure["lernmodule_edit"]=array ('topKat' => "lernmodule", 'name' => _("Lernmodule hinzuf&uuml;gen / entfernen"), 'link' => "seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 }
 
 //bottomkats for Ilias-connect, if modul is activated
@@ -304,20 +304,20 @@ if (($ELEARNING_INTERFACE_ENABLE) && ($modules["elearning_interface"])){
 	if (ObjectConnections::isConnected($SessSemName[1]))
 	{
 		if ($SessSemName["class"]=="inst") 
-			$structure["elearning_interface_show"]=array (topKat=>"elearning_interface", name=>_("Lernmodule dieser Einrichtung"), link=>"elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
+			$structure["elearning_interface_show"]=array ('topKat' => "elearning_interface", 'name' => _("Lernmodule dieser Einrichtung"), 'link' => "elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 		else		
-			$structure["elearning_interface_show"]=array (topKat=>"elearning_interface", name=>_("Lernmodule dieser Veranstaltung"), link=>"elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], active=>FALSE);
+			$structure["elearning_interface_show"]=array ('topKat' => "elearning_interface", 'name' => _("Lernmodule dieser Veranstaltung"), 'link' => "elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 	}
 	if  ($perm->have_studip_perm("tutor",$SessSemName[1]))
-		$structure["elearning_interface_edit"]=array (topKat=>"elearning_interface", name=>_("Lernmodule hinzuf&uuml;gen / entfernen"), link=>"elearning_interface.php?view=edit&seminar_id=" . $SessSemName[1], active=>FALSE);
+		$structure["elearning_interface_edit"]=array ('topKat' => "elearning_interface", 'name' => _("Lernmodule hinzuf&uuml;gen / entfernen"), 'link' => "elearning_interface.php?view=edit&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 }
 
 //bottomkats for SupportDB, if modul is activated
 if (($SUPPORT_ENABLE) && ($modules["support"])){
-	$structure["support_overview"]=array (topKat=>"support", name=>_("&Uuml;bersicht"), link=>"support.php?view=overview", active=>FALSE);
-	$structure["support_requests"]=array (topKat=>"support", name=>_("Anfragen"), link=>"support.php?view=requests", active=>FALSE);
+	$structure["support_overview"]=array ('topKat' => "support", 'name' => _("&Uuml;bersicht"), 'link' => "support.php?view=overview", 'active' => FALSE);
+	$structure["support_requests"]=array ('topKat' => "support", 'name'=>_("Anfragen"), 'link' => "support.php?view=requests", 'active' => FALSE);
 	if ($rechte)
-		$structure["support_events"]=array (topKat=>"resources", name=>_("Supportleistungen bearbeiten"), link=>"support.php?view=edit_events", active=>FALSE);
+		$structure["support_events"]=array ('topKat' => "resources", 'name' => _("Supportleistungen bearbeiten"), 'link' => "support.php?view=edit_events", 'active' => FALSE);
 }
 
 //Infofenstereintraege erzeugen

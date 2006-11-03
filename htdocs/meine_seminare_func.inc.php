@@ -364,7 +364,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 										
 			foreach ($activated_plugins as $plugin){				
 				if ($plugin->isShownInOverview()) {
-					$my_obj[$poiid][activatedplugins][] = $plugin;
+					$my_obj[$poiid]['activatedplugins'][] = $plugin;
 				}
 			}
 		}

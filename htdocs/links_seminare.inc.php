@@ -18,66 +18,66 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once "$ABSOLUTE_PATH_STUDIP/reiter.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP. '/reiter.inc.php';
 
-$reiter=new reiter;
+$reiter = new reiter;
 
 //Create Reitersystem
 
 //Topkats
-if (!$perm->have_perm("root")){
-	$structure["meine_veranstaltungen"]=array (topKat=>"", name=>_("Meine&nbsp;Veranstaltungen"), link=>"meine_seminare.php", active=>FALSE);
+if (!$perm->have_perm('root')){
+	$structure['meine_veranstaltungen'] = array ('topKat' => '', 'name' => _("Meine&nbsp;Veranstaltungen"), 'link' => 'meine_seminare.php', 'active' => FALSE);
 }
-if (!$perm->have_perm("admin")){
-	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>_("Veranstaltungen&nbsp;suchen / hinzuf&uuml;gen"), link=>"sem_portal.php", active=>FALSE);
+if (!$perm->have_perm('admin')){
+	$structure['veranstaltungen_suche'] = array ('topKat' => '', 'name' => _("Veranstaltungen&nbsp;suchen / hinzuf&uuml;gen"), 'link' => 'sem_portal.php', 'active' => FALSE);
 } else {
-	$structure["veranstaltungen_suche"]=array (topKat=>"", name=>_("Veranstaltungen&nbsp;suchen"), link=>"sem_portal.php", active=>FALSE);
+	$structure['veranstaltungen_suche'] = array ('topKat' => '', 'name' => _("Veranstaltungen&nbsp;suchen"), 'link' => 'sem_portal.php', 'active' => FALSE);
 }
 
 //Bottomkats
-$structure["_meine_veranstaltungen"]=array (topKat=>"meine_veranstaltungen", name=>_("&Uuml;bersicht"), link=>"meine_seminare.php", active=>FALSE);
-if (!$perm->have_perm("admin")) {
-	$structure["meine_veranstaltungen_extendet"]=array (topKat=>"meine_veranstaltungen", name=>_("erweiterte&nbsp;&Uuml;bersicht"), link=>"meine_seminare.php?view=ext", active=>FALSE);
-	$structure["my_archiv"]=array (topKat=>"meine_veranstaltungen", name=>_("meine&nbsp;archivierten&nbsp;Veranstaltungen"), link=>"my_archiv.php", active=>FALSE);
+$structure["_meine_veranstaltungen"] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("&Uuml;bersicht"), 'link' => 'meine_seminare.php', 'active' => FALSE);
+if (!$perm->have_perm('admin')) {
+	$structure['meine_veranstaltungen_extendet'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("erweiterte&nbsp;&Uuml;bersicht"), 'link' => 'meine_seminare.php?view=ext', 'active' => FALSE);
+	$structure['my_archiv'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("meine&nbsp;archivierten&nbsp;Veranstaltungen"), 'link' => 'my_archiv.php', 'active' => FALSE);
 	if ($GLOBALS['EXPORT_ENABLE'])
-		$structure["record_of_study"]=array (topKat=>"meine_veranstaltungen", name=>_("Druckansicht"), link=>"recordofstudy.php", active=>FALSE);
+		$structure['record_of_study'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("Druckansicht"), 'link' => 'recordofstudy.php', 'active' => FALSE);
 }
-if ($perm->have_perm("admin"))
-	$structure["veranstaltungs_timetable"]=array (topKat=>"meine_veranstaltungen", name=>_("Veranstaltungs-Timetable"), link=>"mein_stundenplan.php", active=>FALSE);
+if ($perm->have_perm('admin'))
+	$structure['veranstaltungs_timetable'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("Veranstaltungs-Timetable"), 'link' => 'mein_stundenplan.php', 'active' => FALSE);
 //
-$structure["all"]=array (topKat=>"veranstaltungen_suche", name=>_("Alle"), link=>"sem_portal.php?view=all&reset_all=TRUE", active=>FALSE);
-foreach ($SEM_CLASS as $key=>$val)  {
-	$structure["class_".$key]=array (topKat=>"veranstaltungen_suche", name=>$val["name"], link=>"sem_portal.php?view=$key&reset_all=TRUE&cmd=qs", active=>FALSE);
+$structure['all'] = array ('topKat' => 'veranstaltungen_suche', 'name' => _("Alle"), 'link' => 'sem_portal.php?view=all&reset_all=TRUE', 'active' => FALSE);
+foreach ($SEM_CLASS as $key => $val)  {
+	$structure['class_'.$key] = array ('topKat' => 'veranstaltungen_suche', 'name' => $val['name'], 'link' => 'sem_portal.php?view='.$key.'&reset_all=TRUE&cmd=qs', 'active' => FALSE);
 }
 //
 
 //View festlegen
 switch ($i_page) {
-	case "meine_seminare.php" : 
-		if ($view=="ext") 
-			$reiter_view="meine_veranstaltungen_extendet"; 
+	case 'meine_seminare.php' : 
+		if (isset($view) && ($view == 'ext')) 
+			$reiter_view = 'meine_veranstaltungen_extendet'; 
 		else
-			$reiter_view="meine_veranstaltungen"; 
+			$reiter_view = 'meine_veranstaltungen'; 
 	break;
-	case "my_archiv.php":
-		$reiter_view="my_archiv"; 
+	case 'my_archiv.php':
+		$reiter_view = 'my_archiv'; 
 	break;	
-	case "sem_portal.php" : 
-		if ($view=="all")
-			$reiter_view="all";
+	case 'sem_portal.php' : 
+		if ($view == 'all')
+			$reiter_view = 'all';
 		else
-			$reiter_view="class_".$view;
+			$reiter_view = 'class_'.$view;
 	break;
-	case "mein_stundenplan.php" : 
-		$reiter_view="veranstaltungs_timetable";
+	case 'mein_stundenplan.php' : 
+		$reiter_view = 'veranstaltungs_timetable';
 	break;
-	case "recordofstudy.php" : 
-		$reiter_view="record_of_study";
+	case 'recordofstudy.php' : 
+		$reiter_view = 'record_of_study';
 	break;
 	default :
-		$reiter_view="meine_seminare";
+		$reiter_view = 'meine_seminare';
 	break;
 }
 
-$reiter->create($structure, $reiter_view, $alt, $js);
+$reiter->create($structure, $reiter_view, ((isset($alt))? $alt:false), ((isset($js))? $js:false));
 ?>
