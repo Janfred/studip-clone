@@ -318,7 +318,7 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 }
 
 //wurde Code fuer Starten der Verschiebung uebermittelt (=id+"_md_"), wird entsprechende Funktion aufgerufen (hier kein Rechtecheck noetig, da Dok_id aus Sess_Variable.
-if ($open_cmd == 'md' && (!$cancel_x)) {
+if ($open_cmd == 'md' && $folder_tree->isWritable($open_id) && !$cancel_x) {
 	if ($folder_system_data["mode"] == 'move'){
 		$done = move_item($folder_system_data["move"], $open_id);
 		if (!$done){
