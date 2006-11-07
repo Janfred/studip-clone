@@ -217,7 +217,7 @@ class Ilias3ConnectedPermissions extends ConnectedPermissions
 
 		$no_permission = false;
 		if ((! in_array($this->operations[OPERATION_READ], $this->tree_allowed_operations)) OR (! in_array($this->operations[OPERATION_VISIBLE], $this->tree_allowed_operations)))
-			$no_permission == true;
+			$no_permission = true;
 			
 		if ($no_permission == false)
 			$connected_cms[$this->cms_type]->content_module[$current_module]->allowed_operations = $this->tree_allowed_operations;

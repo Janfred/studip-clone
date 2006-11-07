@@ -279,7 +279,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		if (is_array($result))
 			foreach($result as $key => $object_data)
 				if (((! in_array($object_data["obj_id"], $obj_ids)) AND in_array(OPERATION_READ, $object_data["operations"]))
-					OR in_array(OPERATION_WRITE, $object_data["operations"]))
+					OR (is_array($object_data["operations"]) && in_array(OPERATION_WRITE, $object_data["operations"])) )
 				{
 					if (is_array($user_modules[$object_data["obj_id"]]["operations"]))
 						if (in_array(OPERATION_WRITE, $user_modules[$object_data["obj_id"]]["operations"]))
