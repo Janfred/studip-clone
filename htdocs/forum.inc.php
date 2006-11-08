@@ -487,7 +487,9 @@ function ForumIcon ($forumposting) {
 		else
 			$forumposting["icon"] =	"<img src=\"".$bild."\" $addon>";
 	}
-
+	if ($forumposting["type"]=="folder" && $forumposting["read_only"]){
+		$forumposting["icon"] .= "<img src=\"{$GLOBALS['ASSETS_URL']}images/closelock.gif\" border=\"0\" ".tooltip(_("Dieses Thema kann nur gelesen werden")).">";
+	}
 	if ($cmd=="move" && $rechte && $topic_id != $forumposting["id"] )  // ein Beitrag wird verschoben, gelbe Pfeile davor
 		$forumposting["icon"] =	 "<a href=\"".$PHP_SELF."?target=Thema&move_id=".$topic_id."&parent_id=".$forumposting["id"]."\">"
 					."<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Postings in dieses Thema verschieben")) . "></a>"
@@ -547,17 +549,33 @@ function forum_get_buttons ($forumposting) {
 	{ if (!(have_sem_write_perm())) { // nur mit Rechten...
 		if ($view=="search") $tmp = "&view=tree";
 		if ($view=="mixed") $tmp = "&open=".$forumposting["id"]."&view=flatfolder";
-		$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=0&sort=age".$tmp."#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
-		$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=0&sort=age".$tmp."#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
-		if ($forumposting["lonely"]==TRUE && ($rechte || $forumposting["perms"]=="write")) // ich darf bearbeiten
-			$edit .= "&nbsp;<a href=\"".$PHP_SELF."?edit_id=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\">"
-			. makeButton("bearbeiten", "img") . "</a>";
-		if ($rechte || ($forumposting["lonely"]==TRUE && $forumposting["perms"]=="write")) // ich darf löschen
-			$edit .= "&nbsp;<a href=\"".$PHP_SELF."?delete_id=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"]."\">"
-			. makeButton("loeschen", "img") . "</a>";
-		if ($rechte)  // ich darf verschieben
-			$edit .= "&nbsp;<a href=\"".$PHP_SELF."?cmd=move&topic_id=".$forumposting["id"]."&view=tree\">"
-			. makeButton("verschieben", "img") . "</a>";
+		if(!$forumposting['read_only'] || $rechte){
+			$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=0&sort=age".$tmp."#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
+			$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=0&sort=age".$tmp."#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
+			if ($forumposting["lonely"]==TRUE && ($rechte || $forumposting["perms"]=="write")) // ich darf bearbeiten
+				$edit .= "&nbsp;<a href=\"".$PHP_SELF."?edit_id=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\">"
+				. makeButton("bearbeiten", "img") . "</a>";
+			if ($rechte || ($forumposting["lonely"]==TRUE && $forumposting["perms"]=="write")) // ich darf löschen
+				$edit .= "&nbsp;<a href=\"".$PHP_SELF."?delete_id=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"]."\">"
+				. makeButton("loeschen", "img") . "</a>";
+			if ($rechte){  // ich darf verschieben
+				$edit .= "&nbsp;<a href=\"".$PHP_SELF."?cmd=move&topic_id=".$forumposting["id"]."&view=tree\">"
+				. makeButton("verschieben", "img") . "</a>";
+				if($forumposting["type"] == "folder"){
+					if($forumposting['read_only']){
+						$lockpic = "closelock.gif";
+						$ttip = _("Schreibberechtigung für diesen Ordner erteilen.");
+					} else {
+						$lockpic = "openlock.gif";
+						$ttip = _("Schreibberechtigung für diesen Ordner entziehen.");
+					}
+					$edit .= "&nbsp;&nbsp;<a ".tooltip($ttip, true)." href=\"".$PHP_SELF."?cmd=toggle_lock&topic_id=".$forumposting["id"]."&open=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"]."\">"
+					. "<img src=\"{$GLOBALS['ASSETS_URL']}images/$lockpic\" border=\"0\" align=\"absmiddle\"></a>";
+				}
+			}
+		} else {
+			$edit = '<br>';
+		}
 	} elseif ($user->id == "nobody") { 	// darf Nobody hier schreiben?
 		$db=new DB_Seminar;
 		$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id='$SessionSeminar' AND Schreibzugriff=0");
@@ -709,10 +727,14 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 	}
 
 	if ($root_id != "0")	{
-		$db->query ("SELECT seminar_id FROM px_topics WHERE topic_id = '$root_id'");
-		while ($db->next_record())
+		$db->query ("SELECT seminar_id, read_only FROM px_topics WHERE topic_id = '$root_id'");
+		if ($db->next_record()){
 			if ($db->f("seminar_id") != $tmpSessionSeminar)
 				$tmpSessionSeminar = $db->f("seminar_id");
+			if($db->f('read_only') && !$perm->have_studip_perm('tutor',$tmpSessionSeminar)){
+				return;
+			}
+		}
 	}
 
 	$topic_id = MakeUniqueID();
@@ -1024,7 +1046,7 @@ function print_rating($rate, $id, $username) {
 *
 **/
 function printposting ($forumposting) {
-	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $sidebar, $indexvars, $open, $openorig, $delete_id;
+	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $sidebar, $indexvars, $open, $openorig, $delete_id,$rechte;
 
   // Status des Postings holen
  	// auf- zugeklappt
@@ -1144,7 +1166,7 @@ function printposting ($forumposting) {
 
 	// Antwort-Pfeil
 
-		if (!(have_sem_write_perm()) && !$delete_id)
+		if (!(have_sem_write_perm()) && !$delete_id && (!$forumposting['read_only'] || $rechte))
 			$forumhead[] = "<a href=\"write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"]."\" target=\"_new\"><img src=\"".$GLOBALS['ASSETS_URL']."images/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>";
 
   		$zusatz = ForumParseZusatz($forumhead);
@@ -1261,7 +1283,7 @@ function printposting ($forumposting) {
 
 		if ($forumposting["intree"]==TRUE) // etwas Schmuckwerk für die Strichlogik
 			echo ForumStriche($forumposting);
-		printcontent ("100%",$formposting,$description,$edit,TRUE,$addon);
+		printcontent ("100%",$forumposting,$description,$edit,TRUE,$addon);
 		if ($forumposting["intree"]==TRUE)
 			echo "<td class=\"blank\">&nbsp;&nbsp;&nbsp;</td>";
 		echo "</tr></table>\n";
@@ -1347,7 +1369,7 @@ if ($db->num_rows() > 0) {  // Forum ist nicht leer
 
 // we proudly present: the longest SQl in Stud.IP :) regards to Suchi+Noack for inspirations
 
-$query = "SELECT x.topic_id, x.name , x.author , x.mkdate, x.chdate as age, y.name AS root_name"
+$query = "SELECT y.read_only, x.topic_id, x.name , x.author , x.mkdate, x.chdate as age, y.name AS root_name"
 	.", x.description, x.Seminar_id, y.topic_id AS root_id, username, x.user_id"
 	.", IFNULL(views,0) as viewcount, nachname, IFNULL(ROUND(AVG(rate),1),99) as rating"
 	.", IF(object_user.object_id!='',1,0) as fav"
@@ -1391,6 +1413,7 @@ echo "</td></tr></table>";
 /////////////////// Konstanten für das gerade auszugebene Posting und Posting ausgeben
 
 while($db->next_record()){
+	$forumposting["read_only"] = $db->f("read_only");
 	$forumposting["id"] = $db->f("topic_id");
 	$forumposting["name"] = $db->f("name");
 	$forumposting["description"] = $db->f("description");
@@ -1463,7 +1486,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 
 	$fields = array("topic_id", "parent_id", "root_id", "name"
 		, "description", "author", "author_host", "mkdate"
-		, "chdate", "user_id");
+		, "chdate", "read_only", "user_id");
 	$query = "select distinct ";
 	$comma = "";
 
@@ -1525,6 +1548,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		echo "</font><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" border=0 height=\"20\" align=\"middle\"></td>";
 		echo "<td class=\"steelgraudunkel\" width=\"33%\"align=\"right\"><font size=\"-1\">" . _("<b>Postings</b> / letzter Eintrag") . "&nbsp;&nbsp;".forum_get_index($forumposting)."&nbsp;&nbsp;</font></td></tr></table>\n";
 		while ($db->next_record()) {
+			$forumposting["read_only"] = $db->f("read_only");
 			$forumposting["id"] = $db->f("topic_id");
 			$forumposting["name"] = $db->f("name");
 			$forumposting["description"] = $db->f("description");
@@ -1583,22 +1607,23 @@ function DisplayKids ($forumposting, $level=0) {
 
 	$topic_id = $forumposting["id"];
 	$forumposting["intree"]="TRUE";
-	$query = "select topic_id, parent_id, name, author "
-		.", px_topics.mkdate, px_topics.chdate, description, root_id, username, px_topics.user_id"
+	$query = "select x.topic_id, x.parent_id, x.name, x.author, y.read_only "
+		.", x.mkdate, x.chdate, x.description, x.root_id, username, x.user_id"
 		.", IFNULL(views,0) as viewcount, IFNULL(ROUND(AVG(rate),1),99) as rating"
-		.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-px_topics.mkdate)/604800)+1)) as score "
+		.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-x.mkdate)/604800)+1)) as score "
 		.", IF(object_user.object_id!='',1,0) as fav"
-		." FROM px_topics LEFT JOIN auth_user_md5 USING(user_id)"
-		." LEFT JOIN object_views ON(object_views.object_id=topic_id) LEFT JOIN object_rate ON(object_rate.object_id=topic_id)"
-		." LEFT OUTER JOIN object_user ON(object_user.object_id=topic_id AND object_user.user_id='$user->id' AND flag='fav')"
+		." FROM px_topics x LEFT JOIN px_topics y ON (y.topic_id=x.root_id)"
+		." LEFT JOIN auth_user_md5 ON(auth_user_md5.user_id = x.user_id)"
+		." LEFT JOIN object_views ON(object_views.object_id=x.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=x.topic_id)"
+		." LEFT OUTER JOIN object_user ON(object_user.object_id=x.topic_id AND object_user.user_id='$user->id' AND flag='fav')"
 		." WHERE"
-		." parent_id = '$topic_id' AND (px_topics.chdate>=px_topics.mkdate OR px_topics.user_id='$user->id' OR px_topics.author='unbekannt')"
-		." GROUP BY topic_id ORDER by px_topics.mkdate";
+		." x.parent_id = '$topic_id' AND (x.chdate>=x.mkdate OR x.user_id='$user->id' OR x.author='unbekannt')"
+		." GROUP BY x.topic_id ORDER by x.mkdate";
 	$db=new DB_Seminar;
 	$db->query($query);
 	$forumposting["lines"][$level] = $db->num_rows();
 	while ($db->next_record()) {
-
+		$forumposting["read_only"] = $db->f("read_only");
 		$forumposting["id"] = $db->f("topic_id");
 		$forumposting["name"] = $db->f("name");
 		$forumposting["description"] = $db->f("description");
