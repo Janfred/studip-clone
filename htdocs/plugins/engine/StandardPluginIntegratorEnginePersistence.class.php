@@ -139,10 +139,10 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
 				AND (pad.state != 'off' OR pad.state IS NULL)";
     	
     	if ($GLOBALS["PLUGINS_CACHING"]){
-    		$result =& $this->connection->CacheExecute($GLOBALS['PLUGINS_CACHE_TIME'],$query,array($userid,$this->poiid,$userid,$this->poiid,$id,$this->poiid));    		
+    		$result =& $this->connection->CacheExecute($GLOBALS['PLUGINS_CACHE_TIME'],$query,array($userid,$this->poiid,$userid,$this->poiid,$this->poiid,$id));    		
     	}
     	else {    	
-    		$result =& $this->connection->execute($query,array($userid,$this->poiid,$userid,$this->poiid,$id,$this->poiid));
+    		$result =& $this->connection->execute($query,array($userid,$this->poiid,$userid,$this->poiid,$this->poiid,$id));
     	}
 		
     	/*
@@ -167,6 +167,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     			// Klasse instanziieren
     			$plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
     			if ($plugin !=null){
+					$plugin->setId($id);
 	            	$plugin->setPluginid($result->fields("pluginid"));
 	            	$plugin->setPluginname($result->fields("pluginname"));
 	            	$plugin->setUser($this->getUser());
