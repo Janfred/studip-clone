@@ -50,7 +50,15 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     function hasChanged($lastlogin){
     	return false;
     }
+    /**
+     * Nachricht für tooltip in der Übersicht
+     * @param lastlogin - letzter Loginzeitpunkt des Benutzers
+     */
     
+	function getOverviewMessage($has_changed = false){
+		return $this->getPluginname() . ($has_changed ? ' ' . _("geändert") : '');
+	}
+	
     /**
      * Wird dieses Plugin in der Übersicht angezeigt?
      */
@@ -75,7 +83,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     
     
     function getChangeindicatoriconname(){
-    	return $this->changeindicatoriconname;
+    	return $this->getPluginpath() . "/" . $this->changeindicatoriconname;
     }
     
     function setChangeindicatoriconname($newicon){
