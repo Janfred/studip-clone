@@ -117,11 +117,16 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
 
 		  	if ($plugin->hasChanged($my_obj_values["visitdate"])){
 		  		// something new
-		  		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" . $plugin->getPluginId() . "\"><img src='" . $plugin->getChangeindicatoriconname() . "' border=0 ".tooltip(sprintf(_("%s Plugins, %s neue"), $my_obj_values["termine"], $my_obj_values["neuetermine"]))."></a>";
+		  		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" 
+				. $plugin->getPluginId() . "\"><img src='" . $plugin->getChangeindicatoriconname() . "' border=0 "
+				. tooltip($plugin->getOverviewMessage(true)) ."></a>";
 		  	}
 		  	else {
 		  		// nothing changed, show empty icon
-				echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" . $plugin->getPluginId() . "\"><img src='" . $plugin->getPluginiconname() . "' border=0 ".tooltip(sprintf(_("%s Plugins, %s neue"), $my_obj_values["termine"], $my_obj_values["neuetermine"]))."></a>";
+				echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" 
+				. $plugin->getPluginId() . "\"><img src='" . $plugin->getPluginiconname() 
+				. "' border=0 "
+				. tooltip($plugin->getOverviewMessage())."></a>";
 		  	}
 		  }
   	  }
