@@ -20,19 +20,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/SemBrowse.class.php";
+require_once("visual.inc.php");
+require_once "lib/classes/SemBrowse.class.php";
 
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
-	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+	include ("links_openobject.inc.php");
 }
 
 	$sess->register ("show_bereich_data");
@@ -122,7 +122,7 @@ $infobox[] = 	array(	"kategorie" => _("Anzeige gruppieren:"),
 				);
 if (($EXPORT_ENABLE) AND ($show_bereich_data['level'] == "s") AND ($perm->have_perm("tutor")))
 {
-	include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
+	include_once($PATH_EXPORT . "/export_linking_func.inc.php");
 	$infobox[] = 	array(	"kategorie" => _("Daten ausgeben:"),
 							"eintrag" => array(array(	"icon" => "blank.gif",
 														"text" => export_link($SessSemName[1], "veranstaltung", $SessSemName[0])))

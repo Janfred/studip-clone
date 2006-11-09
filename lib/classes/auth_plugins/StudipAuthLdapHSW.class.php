@@ -22,7 +22,7 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/auth_plugins/StudipAuthLdap.class.php");
+require_once ("lib/classes/auth_plugins/StudipAuthLdap.class.php");
 
 /**
 * Stud.IP authentication against LDAP Server

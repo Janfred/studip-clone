@@ -10,7 +10,7 @@ $perm->check("admin");
 
 //bla
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 //session_start();
@@ -21,10 +21,10 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 	session_register("xml_import_titel");
 }/**/
 
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		//wir brauchen die Seminar-Typen
+require_once ("config.inc.php"); 		//wir brauchen die Seminar-Typen
 //require_once ("functions.php");	//noch mehr Stuff
 //require_once ("forum.inc");		//damit wir Themen anlegen koennen
-require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
+require_once ("msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
 //if (!$xml_import_person)
 //if ($sess->is_registered("xml_import_person")) echo "JOJO";
 /*{
@@ -35,10 +35,10 @@ require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Funktionen f&uuml;r Nachri
 }/**/
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 $i_page = "admin_institut.php";
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
+include ("links_admin.inc.php");  //Linkleiste fuer admins
 
 //$xml_import_person = "MMM";
 ?>
@@ -943,7 +943,7 @@ if ($assi_page == 4)
 					if ($p_data[$i]["comment"] == "") 
 						echo ' selected>' . $p_data[$i]["name"] . ' (' . $p_data[$i]["username"] . ') ';
 					else
-						echo '>' . $p_data[$i]["name"] . ' (' . $p_data[$i]["username"] . ') ' . $p_data[$i]["comment"] . '';
+						echo '>' . $p_data[$i]["name"] . ' (' . $p_data[$i]["username"] . ') ' . $p_data[$i]["comment"];
 				}
 			}
 			else

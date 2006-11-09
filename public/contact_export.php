@@ -34,9 +34,9 @@
 page_open (array ("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 	"perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check ("autor");
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
+include ("seminar_open.php");
+require_once ("statusgruppe.inc.php");
+require_once ("user_visible.inc.php");
 /* **END*of*initialise*Stud.IP-Session*********************************** */
 
 /* ************************************************************************** *
@@ -49,9 +49,9 @@ if (!( (isset($_POST["export_vcard_x"]))
 	|| (isset($_GET["contactid"]))
 	|| (isset($_GET["username"]))
 	|| (isset($_GET["groupid"])) )){
-	require_once($ABSOLUTE_PATH_STUDIP . "html_head.inc.php");
-	require_once($ABSOLUTE_PATH_STUDIP . "header.php");
-	require_once($ABSOLUTE_PATH_STUDIP . "links_sms.inc.php");
+	require_once("html_head.inc.php");
+	require_once("header.php");
+	require_once("links_sms.inc.php");
 }
 /* **END*of*initialize*post/get*variables*********************************** */
 

@@ -20,17 +20,17 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/wiki.inc.php"); // getAllWikiPages for dump
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
+require_once ("config.inc.php");
+require_once ("dates.inc.php");
+require_once ("datei.inc.php");
+require_once ("wiki.inc.php"); // getAllWikiPages for dump
+require_once ("visual.inc.php");
+require_once ("functions.php");
+require_once ("language.inc.php");
+require_once ("lib/classes/DataFields.class.php");
+require_once ("lib/classes/Modules.class.php");
+require_once("lib/classes/StudipLitList.class.php");
+require_once ("lib/classes/SemesterData.class.php");
 
 
 
@@ -577,7 +577,7 @@ function in_archiv ($sem_id) {
 	$fakultaet = addslashes($fakultaet);	
 
 	setTempLanguage();  // use $DEFAULT_LANGUAGE for archiv-dumps
-	include ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+	include ("config.inc.php");
 
 	//Dump holen
 
@@ -591,7 +591,7 @@ function in_archiv ($sem_id) {
 	$wikidump=addslashes(getAllWikiPages($sem_id, $name, FALSE));
 
 	restoreLanguage();
-	include ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+	include ("config.inc.php");
 
 	//OK, naechster Schritt: Kopieren der Personendaten aus seminar_user in archiv_user
 

@@ -38,8 +38,8 @@ if (version_compare(PHP_VERSION,'5','>=') && extension_loaded('xsl')) require_on
 if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 	$perm->check("tutor");
 
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['PATH_EXPORT'] . '/export_xslt_vars.inc.php');   // Liste der XSLT-Skripts
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
+require_once ($GLOBALS['PATH_EXPORT'] . '/export_xslt_vars.inc.php');   // Liste der XSLT-Skripts
+require_once('datei.inc.php');
 
 /**
 * Checks given parameters
@@ -100,7 +100,7 @@ else
 	$result_file = md5(uniqid(rand())) . "." . $format;
 	$result = "" . $TMP_PATH . "/export/" . $result_file;
 	$xml_process_file = "" . $TMP_PATH . "/export/" . $xml_file_id;
-	$xslt_process_file = "" . $ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
+	$xslt_process_file = "" . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
 	if (xslt_process($xh, "file://$xml_process_file" , "file://$xslt_process_file", "file://$result") AND ($o_mode != "passthrough"))
 	{
 		$export_msg .= sprintf(_("Die Daten wurden erfolgreich konvertiert. %s Sie k&ouml;nnen die Ausgabedatei jetzt herunterladen. %s"), "<br>", "<br>");
@@ -195,7 +195,7 @@ else
 										);
 		}
 
-		include_once ("$ABSOLUTE_PATH_STUDIP$PATH_EXPORT/oscar.php");
+		include_once ("$PATH_EXPORT/oscar.php");
 	}
 
 }

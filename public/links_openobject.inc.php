@@ -37,10 +37,10 @@
 
 if (isset($SessSemName) && $SessSemName[0] != "") {
 
-require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."reiter.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."functions.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Modules.class.php");
+require_once ("visual.inc.php");
+require_once ("reiter.inc.php");
+require_once ("functions.php");
+require_once ("lib/classes/Modules.class.php");
 
 $db=new DB_Seminar;
 $reiter=new reiter;
@@ -68,12 +68,12 @@ $modules = $Modules->getLocalModules($SessSemName[1]);
 //Reitersytem erzeugen
 
 if ($ILIAS_CONNECT_ENABLE) {
-	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_db_functions.inc.php");
-	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_user_functions.inc.php");
+	include_once ("$RELATIVE_PATH_LEARNINGMODULES/lernmodul_db_functions.inc.php");
+	include_once ("$RELATIVE_PATH_LEARNINGMODULES/lernmodul_user_functions.inc.php");
 }
 
 if ($ELEARNING_INTERFACE_ENABLE) {
-	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_ELEARNING_INTERFACE/ObjectConnections.class.php");
+	include_once ("$RELATIVE_PATH_ELEARNING_INTERFACE/ObjectConnections.class.php");
 }
 
 //Topkats

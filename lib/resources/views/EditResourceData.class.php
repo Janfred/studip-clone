@@ -40,7 +40,7 @@ require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObjectPerms.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 
-require_once ($ABSOLUTE_PATH_STUDIP."/cssClassSwitcher.inc.php");
+require_once ("cssClassSwitcher.inc.php");
 
 $cssSw = new cssClassSwitcher;
 

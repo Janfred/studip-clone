@@ -29,12 +29,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
+require_once ("language.inc.php");
+require_once ("functions.php");
+require_once ("user_visible.inc.php");
+require_once ("contact.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
+	include_once $RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
 }
 
 // 

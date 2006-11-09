@@ -25,19 +25,19 @@ if (!isset($SessSemName[0]) || $SessSemName[0] == "") {
    die;
 }
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 if (!isset($htmlversion))
 	$_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("html_head.inc.php"); // Output of html head
 
 echo "<body bgcolor=\"white\">";
 
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/archiv.inc.php");
+require_once("visual.inc.php");
+require_once("archiv.inc.php");
 
 if ($htmlversion)
 	echo "<a href=\"$PHP_SELF\">" . _("zur Druck-Ansicht") . "</a>";

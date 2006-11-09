@@ -1,7 +1,7 @@
 <?php
 # Include all required files ================================================ #
-require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/StudipObject.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."vote/VoteDB.class.php");
+require_once ("lib/classes/StudipObject.class.php");
+require_once ("vote/VoteDB.class.php");
 # ====================================================== end: including files #
 
 

@@ -32,20 +32,20 @@ if (!$BANNER_ADS_ENABLE) {
 	die;
 }
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Table.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/ZebraTable.class.php");
+require_once ("msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
+require_once ("visual.inc.php");
+require_once ("config.inc.php");
+require_once("lib/classes/Table.class.php");
+require_once("lib/classes/ZebraTable.class.php");
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
+include ("links_admin.inc.php");  //Linkleiste fuer admins
 
 // Get a database connection
 $db = new DB_Seminar;

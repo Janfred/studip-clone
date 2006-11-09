@@ -21,11 +21,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <!-- $Id$ -->
 */
 
-require_once($ABSOLUTE_PATH_STUDIP.'/config.inc.php');
-require_once($ABSOLUTE_PATH_STUDIP.'/msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
-require_once($ABSOLUTE_PATH_STUDIP.'/visual.inc.php');
-require_once($ABSOLUTE_PATH_STUDIP.'/lib/classes/Table.class.php');
-require_once($ABSOLUTE_PATH_STUDIP.'/lib/classes/ZebraTable.class.php');
+require_once('config.inc.php');
+require_once('msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
+require_once('visual.inc.php');
+require_once('lib/classes/Table.class.php');
+require_once('lib/classes/ZebraTable.class.php');
 
 
 class smiley {
@@ -192,7 +192,7 @@ class smiley {
 		$this->fill_smiley_array(0);
 		$smiley_tab = &$this->smiley_tab;
 
-		$path = realpath($GLOBALS['ABSOLUTE_PATH_STUDIP'].'/'.$GLOBALS['SMILE_PATH']);
+		$path = realpath($GLOBALS['SMILE_PATH']);
 		$folder = dir($path);
 
 		while ($entry = $folder->read()){
@@ -280,7 +280,7 @@ class smiley {
 		}
 
 		//na dann kopieren wir mal...
-		$uploaddir=$GLOBALS['ABSOLUTE_PATH_STUDIP'].$GLOBALS['SMILE_PATH'];
+		$uploaddir=$GLOBALS['SMILE_PATH'];
 		$newfile = $uploaddir . '/' . $img_name;
 
 		$smiley_id = 0;
@@ -521,7 +521,7 @@ class smiley {
 	function process_commands() {
 		if ($this->error) return false;
 		$count=0;
-		$path = $GLOBALS['ABSOLUTE_PATH_STUDIP'].$GLOBALS['SMILE_PATH'].'/';
+		$path = $GLOBALS['SMILE_PATH'].'/';
 		foreach($_POST as $key => $val) {
 			$matches=array();
 			preg_match('/(short|rename)_(.*)/', $key, $matches);
@@ -559,7 +559,7 @@ class smiley {
 		$this->db->query('SELECT * FROM smiley WHERE smiley_id = ' . $img);
 		if ($this->db->next_record()) {
 			$file = $this->db->f('smiley_name') . '.gif';
-			if (unlink($GLOBALS['ABSOLUTE_PATH_STUDIP'].$GLOBALS['SMILE_PATH'].'/'.$file)) {
+			if (unlink(''.$GLOBALS['SMILE_PATH'].'/'.$file)) {
 				$this->db->query('DELETE FROM smiley WHERE smiley_id = ' . $img);
 				$this->msg .= 'msg§' .sprintf( _("Smiley \"%s\" erfolgreich gelöscht."),$file) . '§';
 				return true;

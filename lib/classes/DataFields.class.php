@@ -33,9 +33,9 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $ABSOLUTE_PATH_STUDIP."functions.php";
-require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."lib/classes/StudipForm.class.php";
+require_once "functions.php";
+require_once "config.inc.php";
+require_once "lib/classes/StudipForm.class.php";
 
 class DataFields {
 	var $db;
@@ -168,7 +168,7 @@ class DataFields {
 	}
 
 	function &getLocalFieldsFormObject($form_name = 'datafield_form', $range_id = null, $object_class = null, $object_type = null, $user_id = null){
-		@include $GLOBALS['ABSOLUTE_PATH_STUDIP']."config_datafields.inc.php";
+		@include "config_datafields.inc.php";
 		if (!$range_id){
 			$range_id = $this->range_id;
 		}

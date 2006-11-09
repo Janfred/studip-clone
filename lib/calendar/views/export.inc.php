@@ -39,12 +39,12 @@ define("PHPDOC_DUMMY",true);
 // +---------------------------------------------------------------------------+
 
 
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarImportFile.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarParserICalendar.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarExportFile.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarWriterICalendar.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarSynchronizer.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarImportFile.class.php");
+require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarParserICalendar.class.php");
+require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarExportFile.class.php");
+require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarWriterICalendar.class.php");
+require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarSynchronizer.class.php");
+require_once("msg.inc.php");
 
 if ($experiod != 'period') {
 	unset($exstartmonth);
@@ -85,13 +85,13 @@ if ($experiod == 'period') {
 }
 
 if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == 'exp' && !empty($err))) {
-	require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
+	require("html_head.inc.php");
 
 	print_js_import();
 	echo "\n<body onUnLoad=\"upload_end()\">";
 
-	require("$ABSOLUTE_PATH_STUDIP/header.php");
-	require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
+	require("header.php");
+	require($RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
 }
 
 if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == 'exp' && !empty($err))) {

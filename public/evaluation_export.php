@@ -42,7 +42,7 @@ define("PHPDOC_DUMMY",true);
 if (($o_mode != "direct") AND ($o_mode != "passthrough")) {
   page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
   $perm->check("tutor");
-  include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+  include ("seminar_open.php"); // initialise Stud.IP-Session
 }
 
 //$i_page = "meine_seminare.php";
@@ -50,23 +50,23 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough")) {
 //$PATH_EXPORT = "export";
 // -- here you have to put initialisations for the current page
 
-require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/DataFields.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
+require_once ("visual.inc.php");
+require_once ("functions.php");
+require_once ("msg.inc.php");
+require_once("lib/classes/DataFields.class.php");
+require_once ("config.inc.php");
 
 # Include all required files ================================================ #
-require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
-require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/classes/EvaluationQuestion.class.php");
-require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/classes/db/EvaluationQuestionDB.class.php");
-require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/classes/EvaluationAnswer.class.php");
-require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/classes/db/EvaluationAnswerDB.class.php");
+require_once("modules/evaluation/evaluation.config.php");
+require_once("modules/evaluation/classes/EvaluationQuestion.class.php");
+require_once("modules/evaluation/classes/db/EvaluationQuestionDB.class.php");
+require_once("modules/evaluation/classes/EvaluationAnswer.class.php");
+require_once("modules/evaluation/classes/db/EvaluationAnswerDB.class.php");
 
-require_once ($ABSOLUTE_PATH_STUDIP."seminar_open.php");
-require_once ($ABSOLUTE_PATH_STUDIP."html_head.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."header.php");
-/*equire_once ($ABSOLUTE_PATH_STUDIP."links_admin.inc.php");*/
+require_once ("seminar_open.php");
+require_once ("html_head.inc.php");
+require_once ("header.php");
+/*equire_once ("links_admin.inc.php");*/
 require_once (EVAL_LIB_COMMON);
 require_once (EVAL_LIB_OVERVIEW);
 require_once (EVAL_FILE_EVAL);
@@ -132,7 +132,7 @@ if ($EXPORT_ENABLE)
 
 	if ((!isset($range_id) AND !isset($xml_file_id) AND !isset($o_mode) AND !isset($ex_type)) OR ($o_mode == "start"))
 	{
-		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_start.inc.php");
+		include("" . $PATH_EXPORT . "/export_start.inc.php");
 		$start_done = true;
 	}
 
@@ -142,14 +142,14 @@ if ($EXPORT_ENABLE)
 	//Exportmodul einbinden
 	if (/*($xml_file_id != "") AND */($page != 3) AND ($o_mode == "choose") AND ($export_error_num < 1))
 	{
-		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_choose_xslt.inc.php");
+		include("" . $PATH_EXPORT . "/export_choose_xslt.inc.php");
 		if ($export_error_num < 1)
 			$xslt_choose_done = true;
 	}
 	
 	if (($range_id != "") AND ($xml_file_id == "") AND ($o_mode != "start") AND (($o_mode != "choose") OR ($page == 3)))
 	{
-		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_xml.inc.php");
+		include("" . $PATH_EXPORT . "/export_xml.inc.php");
 		if ($export_error_num < 1)
 			$xml_output_done = true;
 	}
@@ -157,13 +157,13 @@ if ($EXPORT_ENABLE)
 	if ( ($choose != "") AND ($format != "") AND ($format != "xml") AND ($XSLT_ENABLE) AND ($export_error_num==0) AND
 		( ($o_mode == "processor") OR ($o_mode == "passthrough") OR ($page == 3) ) )
 	{
-		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_run_xslt.inc.php");
+		include("" . $PATH_EXPORT . "/export_run_xslt.inc.php");
 		if ($export_error_num < 1)
 			$xslt_process_done = true;
 	}
 	
 	if (($export_error_num < 1) AND ($xslt_process_done) AND ($format == "fo"))
-		include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_run_fop.inc.php");
+		include("" . $PATH_EXPORT . "/export_run_fop.inc.php");
 		
 	if (($export_error_num < 1) AND (!$start_done) AND ((!$xml_output_done) OR ($o_mode != "file")) AND (!$xslt_choose_done) AND (!$xslt_process_done))
 	{
@@ -180,13 +180,13 @@ if ($EXPORT_ENABLE)
 		);
 	}
 	
-	include($ABSOLUTE_PATH_STUDIP ."" . $PATH_EXPORT . "/export_view.inc.php");
+	include("" . $PATH_EXPORT . "/export_view.inc.php");
 }
 else 
 {
 	// Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
 	parse_window ("error§" . _("Das Exportmodul ist nicht eingebunden. Damit Daten im XML-Format exportiert werden k&ouml;nnen, muss das Exportmodul in den Systemeinstellungen freigeschaltet werden. Wenden Sie sich bitte an die Administratoren."), "§",
 				_("Exportmodul nicht eingebunden"));
 }

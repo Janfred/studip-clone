@@ -35,8 +35,8 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_EXTERN/lib/ExternModule.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "msg.inc.php");
+require_once("$RELATIVE_PATH_EXTERN/lib/ExternModule.class.php");
+require_once("msg.inc.php");
 
 echo "<table class=\"blank\" border=\"0\" width=\"100%\" ";
 echo "align=\"left\" cellspacing=\"0\" cellpadding=\"0\">\n";
@@ -50,7 +50,7 @@ if ($com == "new") {
 		if ($type["module"] == $mod) {
 			$configurations = get_all_configurations($range_id, $key);
 			if (sizeof($configurations[$type["module"]]) < $EXTERN_MAX_CONFIGURATIONS) {
-				require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/modules/ExternModule$mod.class.php");
+				require_once($RELATIVE_PATH_EXTERN."/modules/ExternModule$mod.class.php");
 				$module =& ExternModule::GetInstance($range_id, $mod, '', 'NEW');
 			}
 			else {
@@ -72,7 +72,7 @@ else {
 	foreach ($EXTERN_MODULE_TYPES as $type) {
 		if ($type["module"] == $mod) {
 			// Vorläufiger Bugfix
-			require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/modules/ExternModule$mod.class.php");
+			require_once($RELATIVE_PATH_EXTERN . "/modules/ExternModule$mod.class.php");
 			$module =& ExternModule::GetInstance($range_id, $mod, $config_id);
 		}
 	}

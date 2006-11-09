@@ -35,9 +35,9 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "/lib/classes/DataFields.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
+require_once("lib/classes/DataFields.class.php");
 
 class ExternModulePersons extends ExternModule {
 
@@ -91,7 +91,7 @@ class ExternModulePersons extends ExternModule {
 			$language = "de_DE";
 		init_i18n($language);
 		
-		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+		include($GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/persons.inc.php");
 		
 		if ($this->config->getValue("Main", "wholesite"))
@@ -102,7 +102,7 @@ class ExternModulePersons extends ExternModule {
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_header($this->config);
 		
-		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+		include($GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/persons_preview.inc.php");
 				
 		if ($this->config->getValue("Main", "wholesite"))

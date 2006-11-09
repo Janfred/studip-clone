@@ -35,15 +35,15 @@ if (!isset($EVAL_AUSWERTUNG_GRAPH_FORMAT)) $EVAL_AUSWERTUNG_GRAPH_FORMAT = 'jpg'
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");             // initialise Stud.IP-Session
+include ("seminar_open.php");             // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
+require_once("msg.inc.php");
+require_once("visual.inc.php");
+require_once("config.inc.php");
+require_once("functions.php");
+require_once("datei.inc.php");
+require_once("modules/evaluation/evaluation.config.php");
 require_once(EVAL_FILE_EVAL);
 require_once(EVAL_FILE_OBJECTDB);
 // Start of Output
@@ -69,15 +69,15 @@ if (!isset($ausgabeformat)) $ausgabeformat = 1;
 $HELP_KEYWORD="Basis.Evaluationen";
 
 if ($ausgabeformat==1) {
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");    //hier wird der "Kopf" nachgeladen
-	include ($ABSOLUTE_PATH_STUDIP . "links_about.inc.php");
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");    //hier wird der "Kopf" nachgeladen
+	include ("links_about.inc.php");
 }
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); // fuer CSS etc.
+require_once("visual.inc.php"); // fuer CSS etc.
 
 
 // Grafikbibliotheken
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/phplot.php");
+require_once("lib/classes/phplot.php");
 
 
 

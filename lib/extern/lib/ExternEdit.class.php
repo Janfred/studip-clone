@@ -35,9 +35,9 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "visual.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "cssClassSwitcher.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "language.inc.php");
+require_once("visual.inc.php");
+require_once("cssClassSwitcher.inc.php");
+require_once("language.inc.php");
 
 class ExternEdit {
 

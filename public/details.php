@@ -20,24 +20,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.InVeranstaltungDetails";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");	 // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");	 // Output of Stud.IP head
 
-require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); //Funktionen zum Anzeigen der Terminstruktur
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php"); // wir brauchen htmlReady
-require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTree.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
+require_once ("msg.inc.php");
+require_once ("dates.inc.php"); //Funktionen zum Anzeigen der Terminstruktur
+require_once ("config.inc.php");
+require_once ("visual.inc.php"); // wir brauchen htmlReady
+require_once ("admission.inc.php");
+require_once ("functions.php");
+require_once ("lib/classes/StudipSemTree.class.php");
+require_once ("lib/classes/DataFields.class.php");
 
 ?>
 <body>

@@ -21,8 +21,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/DbView.class.php");
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/DbSnapshot.class.php");
+require_once ("lib/classes/DbView.class.php");
+require_once ("lib/classes/DbSnapshot.class.php");
 
 			
 
@@ -141,7 +141,7 @@ class StudipAuthAbstract {
 		if (!is_array($plugin_instance)){
 			foreach($GLOBALS['STUDIP_AUTH_PLUGIN'] as $plugin){
 				$plugin = "StudipAuth" . $plugin;
-				include_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/auth_plugins/" . $plugin . ".class.php";
+				include_once "lib/classes/auth_plugins/" . $plugin . ".class.php";
 				$plugin_instance[strtoupper($plugin)] = new $plugin;
 			}
 		}

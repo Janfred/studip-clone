@@ -47,14 +47,14 @@ if (!$CHAT_ENABLE) {
 	//page_close();
 	die;
 }
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
+require_once $RELATIVE_PATH_CHAT."/ChatServer.class.php";
 //Studip includes
-require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."user_visible.inc.php";
+require_once "msg.inc.php";
+require_once "visual.inc.php";
+require_once "messaging.inc.php";
+require_once "user_visible.inc.php";
 
 
 //Hilfsfunktion, druckt script tags
@@ -415,7 +415,7 @@ $chat_log = array();
 <html>
 <head>
 	<title>ChatAusgabe</title>
-	<?php include $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
+	<?php include $RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
 </head>
 <body style="font-size:10pt;">
 <?

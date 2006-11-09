@@ -35,8 +35,8 @@
 
 $perm->check("dozent");
 
-require_once($ABSOLUTE_PATH_STUDIP."msg.inc.php");	//Ausgaben
-require_once($ABSOLUTE_PATH_STUDIP."lib/classes/StartupChecks.class.php");
+require_once("msg.inc.php");	//Ausgaben
+require_once("lib/classes/StartupChecks.class.php");
 
 $checks=new StartupChecks;
 $list = $checks->getCheckList();

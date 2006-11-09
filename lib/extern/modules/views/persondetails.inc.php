@@ -1,13 +1,13 @@
 <?
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "config.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "/lib/classes/SemesterData.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "visual.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "statusgruppe.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+require_once("config.inc.php");
+require_once("lib/classes/SemesterData.class.php");
+require_once("visual.inc.php");
+require_once("statusgruppe.inc.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]
 		. "/lib/extern_functions.inc.php");
 if ($GLOBALS["CALENDAR_ENABLE"]) {
-	require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_CALENDAR"]
+	require_once($GLOBALS["RELATIVE_PATH_CALENDAR"]
 			. "/lib/DbCalendarEventList.class.php");
 }
 global $_fullname_sql;
@@ -413,7 +413,7 @@ function head (&$this, $db, $a) {
 
 	// fit size of image
 	if ($pic_max_width && $pic_max_height) {
-		$pic_size = @getimagesize($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "user/"
+		$pic_size = @getimagesize("user/"
 				. $db->f("user_id") . ".jpg");
 	
 		if ($pic_size[0] > $pic_max_width || $pic_size[1] > $pic_max_height) {
@@ -470,7 +470,7 @@ function head (&$this, $db, $a) {
 		
 		if ($this->config->getValue("Main", "showimage")) {
 			echo "<td" . $this->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
-			if (file_exists("{$GLOBALS['ABSOLUTE_PATH_STUDIP']}/user/" . $db->f("user_id").".jpg")) {
+			if (file_exists("{''}/user/" . $db->f("user_id").".jpg")) {
 				echo "<img src=\"{$GLOBALS['ABSOLUTE_URI_STUDIP']}user/";
 				echo $db->f("user_id") . ".jpg\" alt=\"Foto " . htmlReady(trim($db->f("fullname"))) . "\"";
 				echo $this->config->getAttributes("PersondetailsHeader", "img") . "></td>";

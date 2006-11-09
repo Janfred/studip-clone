@@ -39,16 +39,16 @@ $perm->check("user");
 
 $HELP_KEYWORD="Basis.VeranstaltungenAbonnieren";
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once "$ABSOLUTE_PATH_STUDIP/functions.php";   //hier wird der "Kopf" nachgeladen
-require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php"; 		//wir brauchen die Seminar-Typen
-require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php"; 		//wir brauchen die Seminar-Typen
-require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/SemBrowse.class.php";
+require_once "functions.php";   //hier wird der "Kopf" nachgeladen
+require_once "config.inc.php"; 		//wir brauchen die Seminar-Typen
+require_once "visual.inc.php"; 		//wir brauchen die Seminar-Typen
+require_once "lib/classes/SemBrowse.class.php";
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 $db=new DB_Seminar;
 
@@ -134,7 +134,7 @@ if ($sem_portal["bereich"] != "all") {
 }
 
 
-include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");   	//hier wird die Navigation nachgeladen
+include ("links_seminare.inc.php");   	//hier wird die Navigation nachgeladen
 
 $init_data = array("level" => "f","cmd"=>"qs","show_class"=>$sem_portal['bereich'],"group_by"=>0,"default_sem"=>"all","sem_status"=>$_sem_status);
 if ($reset_all) $sem_browse_data = null;

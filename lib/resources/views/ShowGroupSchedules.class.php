@@ -31,10 +31,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES']."/views/ShowSemSchedules.class.php");
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES']."/views/SemGroupScheduleDayOfWeek.class.php");
+require_once ($GLOBALS['RELATIVE_PATH_RESOURCES']."/views/ShowSemSchedules.class.php");
+require_once ($GLOBALS['RELATIVE_PATH_RESOURCES']."/views/SemGroupScheduleDayOfWeek.class.php");
 
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/SemesterData.class.php");
+require_once ("lib/classes/SemesterData.class.php");
 
 
 

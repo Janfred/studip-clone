@@ -125,23 +125,23 @@ function studip_auth_user()
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("user");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
-include_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
-include_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
-include_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
+require_once ("config.inc.php");
+include_once ("visual.inc.php");
+include_once ("functions.php");
+include_once ("msg.inc.php");
 
 if ($ILIAS_CONNECT_ENABLE)
 {
 	$GLOBALS['ALWAYS_SELECT_DB'] = true;
-	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
-	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
-	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
-	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
+	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
+	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
+	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
+	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
 
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
 
 	if (isset($do_open))
 		$print_open_admin[$do_open] = true;
@@ -174,7 +174,7 @@ if ($ILIAS_CONNECT_ENABLE)
 	$out = true;
 
 	$username = $auth->auth["uname"];
-	include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php");
+	include ("links_about.inc.php");
 ?>
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 		<tr>
@@ -369,8 +369,8 @@ if ($ILIAS_CONNECT_ENABLE)
 else
 {
 	// Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
 	parse_window ("error§" . _("Das Verbindungsmodul f&uuml;r ILIAS-Lernmodule ist nicht eingebunden. Damit Lernmodule verwendet werden k&ouml;nnen, muss die Verbindung zu einer ILIAS-Installation in den Systemeinstellungen hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",
 				_("Lernmodule nicht eingebunden"));
 }

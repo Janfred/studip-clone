@@ -38,7 +38,7 @@ include 'sajax_chat_functions.php';
 <head>
 	<title>Chat(<?=$auth->auth["uname"]?>) -
 	<?=htmlReady($chatServer->chatDetail[$chatid]["name"])?></title>
-	<?php include $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
+	<?php include $RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
 	<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 <script type="text/javascript">
 	//

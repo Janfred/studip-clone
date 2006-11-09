@@ -38,9 +38,9 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
-require("$ABSOLUTE_PATH_STUDIP/header.php");
-require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
+require("html_head.inc.php");
+require("header.php");
+require($RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
 
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";

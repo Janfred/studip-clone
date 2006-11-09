@@ -37,7 +37,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 if (!preg_match('/^('.preg_quote($CANONICAL_RELATIVE_PATH_STUDIP,'/').')?([a-zA-Z0-9_-]+\.php)([a-zA-Z0-9_?&=-]*)$/', $send_from_search_page)) $send_from_search_page = '';
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 /*
  * This functions is used for printing a message, that the user can decide whether really to sign in to the seminar or not
@@ -125,9 +125,9 @@ function seminar_preliminary($seminar_id,$user_id=NULL) {
 }
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
+require_once ("dates.inc.php");
 ?>
 <script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 <script type="text/javascript" language="javascript">

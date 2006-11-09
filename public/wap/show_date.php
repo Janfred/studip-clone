@@ -52,11 +52,11 @@ include_once("Dummy.class.php");
 include_once("wap_adm.inc.php");
 include_once("wap_txt.inc.php");
 include_once("wap_buttons.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "calendar_functions.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]
+require_once("calendar_functions.inc.php");
+require_once(''
 		. $GLOBALS["RELATIVE_PATH_CALENDAR"]
 		. "/lib/DbCalendarEvent.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]
+require_once(''
 		. $GLOBALS["RELATIVE_PATH_CALENDAR"]
 		. "/lib/SeminarEvent.class.php");
 	

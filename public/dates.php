@@ -38,23 +38,23 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 $HELP_KEYWORD="Basis.InVeranstaltungAblauf";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
-require_once("$ABSOLUTE_PATH_STUDIP/show_dates.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("show_dates.inc.php");
+require_once("config.inc.php");
+require_once("visual.inc.php");
 
 checkObject();
 checkObjectModule("schedule");
 object_set_visit_module("schedule");
 
-include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+include ("links_openobject.inc.php");
 
 $sess->register("dates_data");
 

@@ -43,13 +43,13 @@ define("PHPDOC_DUMMY",true);
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("root");
 
-require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php"; 
-require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
+require_once "msg.inc.php"; 
+require_once "visual.inc.php";
 
-include $ABSOLUTE_PATH_STUDIP."seminar_open.php"; //hier werden die sessions initialisiert
-include $ABSOLUTE_PATH_STUDIP."html_head.inc.php";
-include $ABSOLUTE_PATH_STUDIP."header.php";   //hier wird der "Kopf" nachgeladen 
-include $ABSOLUTE_PATH_STUDIP."links_admin.inc.php";  //Linkleiste fuer admins
+include "seminar_open.php"; //hier werden die sessions initialisiert
+include "html_head.inc.php";
+include "header.php";   //hier wird der "Kopf" nachgeladen 
+include "links_admin.inc.php";  //Linkleiste fuer admins
 
 //global variables
 $_integrity_plugins = array("User","Seminar","Institut","Archiv","Studiengang");
@@ -64,7 +64,7 @@ $_csw = new cssClassSwitcher();
 //check, if a plugin is activated
 if($_REQUEST['plugin'] AND in_array($_REQUEST['plugin'],$_integrity_plugins)) {
 	
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ADMIN_MODULES."/IntegrityCheck".$_REQUEST['plugin'].".class.php";
+	include_once $RELATIVE_PATH_ADMIN_MODULES."/IntegrityCheck".$_REQUEST['plugin'].".class.php";
 	$plugin_name = "IntegrityCheck".$_REQUEST['plugin'];
 	$plugin_obj = new $plugin_name;
 	
@@ -162,7 +162,7 @@ if($_REQUEST['plugin'] AND in_array($_REQUEST['plugin'],$_integrity_plugins)) {
 //show all available plugins
 if(!$_REQUEST['plugin']) {
 	for($i=0; $i < count($_integrity_plugins); ++$i){
-		include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ADMIN_MODULES."/IntegrityCheck".$_integrity_plugins[$i].".class.php";
+		include_once $RELATIVE_PATH_ADMIN_MODULES."/IntegrityCheck".$_integrity_plugins[$i].".class.php";
 	}
 	?>
 	<table border="0" width="80%" cellpadding="2" cellspacing="0">

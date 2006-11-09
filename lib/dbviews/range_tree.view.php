@@ -21,8 +21,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 // $Id$
-require_once($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
+require_once("config.inc.php");
+require_once("lib/classes/SemesterData.class.php");
 
 foreach (SemesterData::GetSemesterArray() as $key => $value){
 	if ($value['beginn']) $sem_start_times[] = $value['beginn'];

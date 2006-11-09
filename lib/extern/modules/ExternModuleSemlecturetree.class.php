@@ -35,8 +35,8 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
 
 class ExternModuleSemLectureTree extends ExternModule {
 
@@ -66,7 +66,7 @@ class ExternModuleSemLectureTree extends ExternModule {
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_header($this->config);
 		
-		require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+		require_once($GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/ExternSemLectureTree.class.php");
 		
 		$tree =& new ExternSemLectureTree($this->config, $args["start_item_id"]);
@@ -81,7 +81,7 @@ class ExternModuleSemLectureTree extends ExternModule {
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_header($this->config);
 		
-		require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+		require_once($GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/ExternSemLectureTree.class.php");
 		
 		$tree =& new ExternSemLectureTree($this->config, $args["start_item_id"]);

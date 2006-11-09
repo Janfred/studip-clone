@@ -22,21 +22,21 @@ page_open(array("sess"=> "Seminar_Session", "auth" =>"Seminar_Auth", "perm" => "
 $auth->login_if($auth->auth["uid"] == "nobody");
 $perm->check("autor");
 
-require_once "$ABSOLUTE_PATH_STUDIP/messaging.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
-require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/AdminNewsController.class.php";
+require_once "messaging.inc.php";
+require_once "visual.inc.php";
+require_once "functions.php";
+require_once "lib/classes/AdminNewsController.class.php";
 
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.News";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 
 
@@ -64,9 +64,9 @@ $news = new AdminNewsController();
 
 
 if ($list || $view || (($news_range_id != $user->id) && ($news_range_id != 'studip')) ){
-		include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
+		include ("links_admin.inc.php");	//Linkleiste fuer admins
 } else {
-		include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php"); //Linkliste persönlicher Bereich
+		include ("links_about.inc.php"); //Linkliste persönlicher Bereich
 }
 
 

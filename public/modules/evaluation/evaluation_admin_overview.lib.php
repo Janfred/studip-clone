@@ -20,8 +20,8 @@
 // $Id$
 
 # Include all required files ================================================ #
-require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
-require_once($ABSOLUTE_PATH_STUDIP."datei.inc.php");
+require_once("modules/evaluation/evaluation.config.php");
+require_once("datei.inc.php");
 require_once (HTML);
 require_once (EVAL_LIB_COMMON);
 require_once (EVAL_LIB_SHOW);

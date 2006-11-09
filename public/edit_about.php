@@ -27,20 +27,20 @@ $auth->login_if(!$logout && ($auth->auth["uid"] == "nobody"));
 
 if ($usr_name)  $username=$usr_name; //wenn wir von den externen Seiten kommen, nehmen wir den Usernamen aus usr_name, falls dieser gesetzt ist, um die Anmeldeprozedur nicht zu verwirren....
 
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'config.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'my_rss_feed.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'kategorien.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'msg.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'messaging.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'visual.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'functions.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'statusgruppe.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'language.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/DataFields.class.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/UserConfig.class.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'log_events.inc.php');
+require_once('config.inc.php');
+require_once('my_rss_feed.inc.php');
+require_once('kategorien.inc.php');
+require_once('msg.inc.php');
+require_once('messaging.inc.php');
+require_once('visual.inc.php');
+require_once('functions.php');
+require_once('statusgruppe.inc.php');
+require_once('language.inc.php');
+require_once('lib/classes/DataFields.class.php');
+require_once('lib/classes/UserConfig.class.php');
+require_once('log_events.inc.php');
 
-include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'seminar_open.php'); // initialise Stud.IP-Session
+include ('seminar_open.php'); // initialise Stud.IP-Session
 
 if (!isset($ALLOW_CHANGE_NAME)) $ALLOW_CHANGE_NAME = TRUE; //wegen Abwärtskompatibilität, erst ab 1.1 bekannt
 
@@ -531,7 +531,7 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 						$url = $smtp->url;
 
 						// include language-specific subject and mailbody
-						include_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."locale/$_language_path/LC_MAILS/change_self_mail.inc.php");
+						include_once("locale/$_language_path/LC_MAILS/change_self_mail.inc.php");
 
 						$smtp->SendMessage(
 						$smtp->env_from, array($to),
@@ -727,8 +727,8 @@ if ($logout && $auth->auth["uid"] == "nobody")  // wir wurden gerade ausgeloggt.
 	{
 
 	// Start of Output
-	include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] .'html_head.inc.php'); // Output of html head
-	include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] .'header.php');   // Output of Stud.IP head
+	include ('html_head.inc.php'); // Output of html head
+	include ('header.php');   // Output of Stud.IP head
 
 	echo '<table cellspacing="0" cellpadding="0" border="0" width="100%">';
 	echo '<tr><td class="topic" colspan="2"><b>&nbsp;'. _("Daten ge&auml;ndert!") .'</b></td></tr>';
@@ -750,8 +750,8 @@ if (!$my_about->check)
  {
 	// -- here you have to put initialisations for the current page
 	// Start of Output
-	include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'html_head.inc.php'); // Output of html head
-	include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'header.php');   // Output of Stud.IP head
+	include ('html_head.inc.php'); // Output of html head
+	include ('header.php');   // Output of Stud.IP head
 	parse_window ('error§' . _("Zugriff verweigert.")."<br />\n<font size=-1 color=black>". sprintf(_("Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen.<br /> <br /> Eine andere Ursache kann der Versuch des Zugriffs auf Userdaten, die Sie nicht bearbeiten d&uuml;rfen, sein. Nutzen Sie den untenstehenden Link, um zurück auf die Startseite zu gelangen."), $AUTH_LIFETIME).'</font>', '§',
 	_("Zugriff auf Userdaten verweigert"),
 	sprintf(_("%s Hier%s geht es wieder zur Anmeldung beziehungsweise Startseite."),'<a href="index.php"><b>&nbsp;','</b></a>')."<br />\n&nbsp;");
@@ -877,7 +877,7 @@ if(check_ticket($studipticket)){
 }
 
 // Start of Output
-include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'html_head.inc.php'); // Output of html head
+include ('html_head.inc.php'); // Output of html head
 
 if ($auth->auth["jscript"]) { // nur wenn JS aktiv
 if ($view == 'Daten') {
@@ -1037,7 +1037,7 @@ switch($view) {
 		break;
 }
 
-include ($GLOBALS['ABSOLUTE_PATH_STUDIP']. 'header.php');   // Output of Stud.IP head
+include ('header.php');   // Output of Stud.IP head
 
 
 if (!$cmd)
@@ -1051,7 +1051,7 @@ if (!$cmd)
 	 else $max_col =  64 ; //default für 640x480
 
 // Reitersystem
-include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'links_about.inc.php');
+include ('links_about.inc.php');
 
 //Kopfzeile bei allen eigenen Modulen ausgeben
 $table_open = FALSE;

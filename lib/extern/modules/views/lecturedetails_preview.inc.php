@@ -1,7 +1,7 @@
 <?
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "visual.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "dates.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "functions.php");
+require_once("visual.inc.php");
+require_once("dates.inc.php");
+require_once("functions.php");
 
 global $SEM_CLASS, $SEM_TYPE;
 

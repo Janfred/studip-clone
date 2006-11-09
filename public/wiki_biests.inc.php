@@ -1,7 +1,7 @@
 <?
 // $Id$
 
-require_once $ABSOLUTE_PATH_STUDIP . 'forum.inc.php';
+require_once 'forum.inc.php';
 // wikiMarkups are used by the wikiDirective function
 // after all other conversions,
 // wikiMarkup patterns are replaced

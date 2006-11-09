@@ -19,17 +19,17 @@
 */
 // $Id$
 
-require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php"); // Funktionen zum Loeschen von Terminen
-require_once($ABSOLUTE_PATH_STUDIP . "datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
-require_once($ABSOLUTE_PATH_STUDIP . "archiv.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
-require_once($ABSOLUTE_PATH_STUDIP . "config_tools_semester.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "statusgruppe.inc.php"); //Enthaelt Funktionen fuer Statusgruppen
-require_once($ABSOLUTE_PATH_STUDIP . "log_events.inc.php"); // Logging
-require_once($ABSOLUTE_PATH_STUDIP . "lib/classes/DataFields.class.php"); //Enthaelt Funktionen fuer Statusgruppen
-require_once($ABSOLUTE_PATH_STUDIP . "lib/classes/StudipLitList.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "lib/classes/StudipNews.class.php");
+require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
+require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
+require_once("archiv.inc.php");
+require_once("functions.php");
+require_once("config_tools_semester.inc.php");
+require_once("visual.inc.php");
+require_once("statusgruppe.inc.php"); //Enthaelt Funktionen fuer Statusgruppen
+require_once("log_events.inc.php"); // Logging
+require_once("lib/classes/DataFields.class.php"); //Enthaelt Funktionen fuer Statusgruppen
+require_once("lib/classes/StudipLitList.class.php");
+require_once("lib/classes/StudipNews.class.php");
 
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
@@ -39,7 +39,7 @@ $check_perm = (get_config('ALLOW_DOZENT_ARCHIV') ? 'dozent' : 'admin');
 
 $perm->check($check_perm);
 
-include ($ABSOLUTE_PATH_STUDIP . 'seminar_open.php'); // initialise Stud.IP-Session
+include ('seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
@@ -55,9 +55,9 @@ $db4 = new DB_Seminar;
 $sess->register("archiv_assi_data");
 $cssSw = new cssClassSwitcher; 
 // Start of Output
-include ($ABSOLUTE_PATH_STUDIP.'html_head.inc.php'); // Output of html head
-include ($ABSOLUTE_PATH_STUDIP.'header.php'); // Output of Stud.IP head
-include ($ABSOLUTE_PATH_STUDIP.'links_admin.inc.php'); //Linkleiste fuer admins
+include ('html_head.inc.php'); // Output of html head
+include ('header.php'); // Output of Stud.IP head
+include ('links_admin.inc.php'); //Linkleiste fuer admins
 
 // single delete (a Veranstaltung is open)
 if ($SessSemName[1]) {

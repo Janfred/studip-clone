@@ -21,7 +21,7 @@
 
 
 /* Include all required files ---------------------------------------------- */
-#require_once ($ABSOLUTE_PATH_STUDIP."Vote.class.php");
+#require_once ("Vote.class.php");
 /* ------------------------------------------------------------------------- */
 
 

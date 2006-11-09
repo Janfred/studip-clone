@@ -1,9 +1,9 @@
 <?
 // Wrapper class for driver functions in calendar/lib/driver/
 
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
+require_once($RELATIVE_PATH_CALENDAR
 		. "/lib/CalendarEvent.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
+require_once($RELATIVE_PATH_CALENDAR
 		. "/lib/driver/$CALENDAR_DRIVER/event_driver.inc.php");
 
 class DbCalendarEvent extends CalendarEvent {

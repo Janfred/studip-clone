@@ -35,18 +35,18 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("autor");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 //$i_page = "meine_seminare.php";
 // -- here you have to put initialisations for the current page
 
-require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/functions.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/msg.inc.php");
+require_once ("config.inc.php");
+require_once ("visual.inc.php");
+require_once ("functions.php");
+require_once ("msg.inc.php");
 
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 checkObject();
 checkObjectModule("ilias_connect");
@@ -118,11 +118,11 @@ if ($ILIAS_CONNECT_ENABLE)
 		die();
 	}
 
-	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+	include ("links_openobject.inc.php");
 
-	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
-	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
-	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
+	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
+	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
+	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
 
 
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -157,7 +157,7 @@ if ($ILIAS_CONNECT_ENABLE)
 		<td width="90%" class="blank">
 <?
 echo $auswahl;
-include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
+include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php");
 
 		if ($seminar_id != $print_open["id"])
 		{

@@ -45,12 +45,12 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 $perm->check("admin");
 
 if ($EXTERN_ENABLE) {
-	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/admin_extern.inc.php");
+	include($RELATIVE_PATH_EXTERN . "/admin_extern.inc.php");
 } else {
 	// Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
+	require_once ("msg.inc.php");
 	parse_window ("error§" . _("Die Verwaltung externer Seiten ist nicht eingebunden. Bitte aktivieren Sie diese in den Systemeinstellungen, oder wenden Sie sich an den oder die SystemadministratorIn."), "§",
 				_("Modul \"externe Seiten\" nicht eingebunden"));
 }

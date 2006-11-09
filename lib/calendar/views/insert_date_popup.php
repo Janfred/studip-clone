@@ -29,8 +29,8 @@
 // +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-include ($ABSOLUTE_PATH_STUDIP . '/seminar_open.php'); // initialise Stud.IP-Session
-require_once ($ABSOLUTE_PATH_STUDIP. '/config.inc.php');
+include ('seminar_open.php'); // initialise Stud.IP-Session
+require_once ('config.inc.php');
 
 $element_switch = (isset($_REQUEST['element_switch']))? $_REQUEST['element_switch']:0; // Wert von 1 - 7 für Auswahl der Feldbezeichner
 $c = (isset($_REQUEST['c']))? $_REQUEST['c'] : 0;                   // Zähler wenn mehrere gleiche Eingabefelder im Zielformular
@@ -46,7 +46,7 @@ if (isset($GLOBALS['TIME_PRESETS']) && is_array($GLOBALS['TIME_PRESETS']) && cou
 	$zz = $GLOBALS['TIME_PRESETS'];
 	$preset_error = '';
 } else {
-	include_once($ABSOLUTE_PATH_STUDIP . '/msg.inc.php');
+	include_once('msg.inc.php');
 	$zz = array();
 	$preset_error = _("Ihr Systemverwalter hat leider keine Standardzeiten vorgegeben.");
 }
@@ -240,7 +240,7 @@ function insert_date (m, d, y) {
 <body>
 EOT;
 
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . '/calendar_visual.inc.php');
+require_once($RELATIVE_PATH_CALENDAR . '/calendar_visual.inc.php');
 
 $atime =  (isset($_REQUEST['atime']) && $_REQUEST['atime'])? $_REQUEST['atime']: time();
 

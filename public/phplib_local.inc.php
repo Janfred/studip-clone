@@ -44,10 +44,10 @@ foreach($_never_globalize_request_params as $one_param){
 }
 
 require_once("language.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Config.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/UserConfig.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipNews.class.php");
+require_once("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
+require_once("lib/classes/Config.class.php");
+require_once("lib/classes/UserConfig.class.php");
+require_once("lib/classes/StudipNews.class.php");
 
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";
@@ -385,10 +385,10 @@ class Seminar_Auth extends Auth {
 		}
 		if ($cfg->getValue('MAINTENANCE_MODE_ENABLE') && $actual_perms != 'root'){
 			$this->unauth();
-			include_once $ABSOLUTE_PATH_STUDIP . 'msg.inc.php';
-			include_once $ABSOLUTE_PATH_STUDIP . 'html_head.inc.php';
+			include_once 'msg.inc.php';
+			include_once 'html_head.inc.php';
 			parse_window('error§' . _("Das System befindet sich im Wartungsmodus. Zur Zeit ist kein Zugriff möglich."), '§', $GLOBALS['UNI_NAME'] . ' ' . _("Wartungsmodus"), '&nbsp;');
-			include_once $ABSOLUTE_PATH_STUDIP . 'html_end.inc.php';
+			include_once 'html_end.inc.php';
 			die;
 		}
 		return parent::is_authenticated();
@@ -477,7 +477,7 @@ class Seminar_Auth extends Auth {
         $sess->register("challenge");
     }
 
-		include("$ABSOLUTE_PATH_STUDIP/crcloginform.ihtml");
+		include("crcloginform.ihtml");
 	}
 
 	function auth_validatelogin() {
@@ -567,7 +567,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$challenge = md5(uniqid($this->magic));
 		$sess->register("challenge");
 
-		include("$ABSOLUTE_PATH_STUDIP/crcregister.ihtml");
+		include("crcregister.ihtml");
 	}
 
 	function auth_doregister() {
@@ -699,7 +699,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$url = $smtp->url . "email_validation.php?secret=" . $secret;
 
 		// include language-specific subject and mailbody
-		include_once("$ABSOLUTE_PATH_STUDIP"."locale/$_language_path/LC_MAILS/register_mail.inc.php");
+		include_once(""."locale/$_language_path/LC_MAILS/register_mail.inc.php");
 
 		$smtp->SendMessage(
 		$smtp->env_from, array($to),
@@ -729,7 +729,7 @@ class Seminar_Perm extends Perm {
 	function perm_invalid($does_have, $must_have) {
 		global $perm, $auth, $sess;
 		global $ABSOLUTE_PATH_STUDIP,$RELATIVE_PATH_CHAT;
-		include($ABSOLUTE_PATH_STUDIP . "perminvalid.ihtml");
+		include("perminvalid.ihtml");
 	}
 
 	function get_perm($user_id = false){

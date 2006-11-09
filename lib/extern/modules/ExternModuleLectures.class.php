@@ -35,10 +35,10 @@
 // +---------------------------------------------------------------------------+
 
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_EXTERN;
-require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/lib/ExternModule.class.php");
-require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/views/extern_html_templates.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/modules/views/ExternSemBrowse.class.php");
-require_once($ABSOLUTE_PATH_STUDIP."language.inc.php");
+require_once($RELATIVE_PATH_EXTERN."/lib/ExternModule.class.php");
+require_once($RELATIVE_PATH_EXTERN."/views/extern_html_templates.inc.php");
+require_once($RELATIVE_PATH_EXTERN."/modules/views/ExternSemBrowse.class.php");
+require_once("language.inc.php");
 
 class ExternModuleLectures extends ExternModule {
 
@@ -102,7 +102,7 @@ class ExternModuleLectures extends ExternModule {
 			$language = "de_DE";
 		init_i18n($language);
 		
-		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+		include($GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/lectures_preview.inc.php");
 		
 		if ($this->config->getValue("Main", "wholesite"))

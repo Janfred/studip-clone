@@ -21,9 +21,9 @@
 // +---------------------------------------------------------------------------+
 //$Id$
 require_once 'ResourcesExternTree.class.php';
-require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'functions.php';
-require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/views/ShowSemSchedules.class.php";
-require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/list_assign.inc.php";
+require_once 'functions.php';
+require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/views/ShowSemSchedules.class.php";
+require_once $GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/list_assign.inc.php";
 
 
 class MockObjectPerms {

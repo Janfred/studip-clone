@@ -21,24 +21,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");   //wir brauchen die Auto-Eintrag-Seminare
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
+require_once ("config.inc.php");   //wir brauchen die Auto-Eintrag-Seminare
+require_once ("visual.inc.php");
+require_once ("functions.php");
+require_once("statusgruppe.inc.php");
+require_once("user_visible.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
+	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 }
 
 $HELP_KEYWORD="Basis.SuchenPersonen";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 $sess->register("browse_data");
 

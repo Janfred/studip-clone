@@ -20,11 +20,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 if ($i_page == "calendar.php") {
-	require("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
-	require("$ABSOLUTE_PATH_STUDIP/header.php");
-	require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
+	require("html_head.inc.php");
+	require("header.php");
+	require($RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
 }
-require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
+require_once("visual.inc.php");
 
 // store user-settings
 if($cmd_cal == 'chng_cal_settings'){

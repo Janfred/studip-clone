@@ -33,9 +33,9 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/ResourceObject.class.php";
-require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/ResourcesUserRoomsList.class.php";
-require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/DbSnapshot.class.php";
+require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/ResourceObject.class.php";
+require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/ResourcesUserRoomsList.class.php";
+require_once "lib/classes/DbSnapshot.class.php";
 
 
 class RoomGroups {
@@ -65,7 +65,7 @@ class RoomGroups {
 	}
 	
 	function createConfigGroups(){
-		@include $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/config_room_groups.inc.php";
+		@include $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/config_room_groups.inc.php";
 		if (is_array($room_groups)){
 			$room_list = new ResourcesUserRoomsList($GLOBALS['user']->id, false, false, true);
 			if ($room_list->numberOfRooms()){

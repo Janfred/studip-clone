@@ -146,7 +146,7 @@ if (($supporter) && ($kill_con)) {
 
 //changes for a contract are coming in...
 if (($supporter) && ($sent_con_id)) {
-	require_once ("{$ABSOLUTE_PATH_STUDIP}calendar_functions.inc.php"); //needed for extended checkdate
+	require_once ("calendar_functions.inc.php"); //needed for extended checkdate
 	$changedCon = new ContractObject($sent_con_id);
 	$changedCon->restore();
 	
@@ -229,7 +229,7 @@ if (($supporter) && ($kill_req)) {
 
 //changes for a request are coming in...
 if (($supporter) && ($sent_req_id)) {
-	require_once ("{$ABSOLUTE_PATH_STUDIP}calendar_functions.inc.php"); //needed for extended checkdate
+	require_once ("calendar_functions.inc.php"); //needed for extended checkdate
 	$changedReq = new RequestObject($sent_req_id);
 	$changedReq->restore();
 
@@ -268,7 +268,7 @@ if (($supporter) && ($edit_evt)) {
 
 //changes for one ore more events coming in...
 if (($supporter) && ($evt_sent_x)) {
-	require_once ("{$ABSOLUTE_PATH_STUDIP}calendar_functions.inc.php"); //needed for extended checkdate
+	require_once ("calendar_functions.inc.php"); //needed for extended checkdate
 	
 	foreach ($evt_id as $key=>$id) {
 		$changedEvt = new EventObject($id);

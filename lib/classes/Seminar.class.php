@@ -33,10 +33,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($ABSOLUTE_PATH_STUDIP."functions.php");
-require_once ($ABSOLUTE_PATH_STUDIP."admission.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Modules.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/dates.inc.php");
+require_once ("functions.php");
+require_once ("admission.inc.php");
+require_once ("lib/classes/Modules.class.php");
+require_once ("dates.inc.php");
 
 
 class Seminar {

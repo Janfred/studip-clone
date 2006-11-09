@@ -30,10 +30,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $ABSOLUTE_PATH_STUDIP . '/lib/classes/StudipNews.class.php';
-require_once $ABSOLUTE_PATH_STUDIP . '/messaging.inc.php';
-require_once $ABSOLUTE_PATH_STUDIP . 'visual.inc.php';
-require_once $ABSOLUTE_PATH_STUDIP . 'functions.php';
+require_once 'lib/classes/StudipNews.class.php';
+require_once 'messaging.inc.php';
+require_once 'visual.inc.php';
+require_once 'functions.php';
 
 class AdminNewsController {
 	var $db;			  //Datenbankverbindung

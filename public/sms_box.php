@@ -34,19 +34,19 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check("user");
 
 // initialise session
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
+include ("seminar_open.php");
 
 // -- here you have to put initialisations for the current page
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/messagingSettings.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/reiter.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/sms_functions.inc.php");
+require_once ("functions.php");
+require_once ("msg.inc.php");
+require_once ("visual.inc.php");
+require_once ("messagingSettings.inc.php");
+require_once ("messaging.inc.php");
+require_once ("statusgruppe.inc.php");
+require_once ("reiter.inc.php");
+require_once ("sms_functions.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
+	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = true;
 	$admin_chats = $chatServer->getAdminChats($auth->auth['uid']);
@@ -69,8 +69,8 @@ if ($change_view) {
 }
 
 // Output of html head and Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
-include ("$ABSOLUTE_PATH_STUDIP/header.php");
+include ("html_head.inc.php");
+include ("header.php");
 
 //
 if ($neux) {
@@ -86,7 +86,7 @@ if ($sms_inout && !$neux) {
 }
 
 // include
-include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
+include ("links_sms.inc.php");
 
 // check the messaging settings, avoids severals errors
 check_messaging_default();

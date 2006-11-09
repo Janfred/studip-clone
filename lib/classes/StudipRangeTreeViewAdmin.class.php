@@ -20,10 +20,10 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipRangeTree.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/TreeView.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/RangeTreeObject.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
+require_once("lib/classes/StudipRangeTree.class.php");
+require_once("lib/classes/TreeView.class.php");
+require_once("lib/classes/RangeTreeObject.class.php");
+require_once("config.inc.php");
 
 /**
 * class to print out the admin view of the "range tree"

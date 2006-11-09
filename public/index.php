@@ -44,11 +44,11 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	}
 }
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-include_once("$ABSOLUTE_PATH_STUDIP/lib/classes/RSSFeed.class.php");
+include ("seminar_open.php"); // initialise Stud.IP-Session
+require_once ("config.inc.php");
+require_once ("functions.php");
+require_once ("visual.inc.php");
+include_once("lib/classes/RSSFeed.class.php");
 // -- hier muessen Seiten-Initialisierungen passieren --
 
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
@@ -57,7 +57,7 @@ closeObject();
 $sess->register('index_data');
 
 //Auf und Zuklappen News
-require_once ("$ABSOLUTE_PATH_STUDIP/show_news.php");
+require_once ("show_news.php");
 process_news_commands($index_data);
 
 // Auf- und Zuklappen Termine
@@ -79,8 +79,8 @@ $HELP_KEYWORD="Basis.Startseite"; // set keyword for new help
 
 // Start of Output
 
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");
 
 // only for authenticated users
 if ($auth->is_authenticated() && $user->id != 'nobody') {

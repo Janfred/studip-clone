@@ -23,13 +23,13 @@
 
 
 // Including all needed files
-require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/StudipObject.class.php");
+require_once ("lib/classes/StudipObject.class.php");
 
 # wozu diese Datei?
 
-require_once ($ABSOLUTE_PATH_STUDIP."phplib_local.inc.php");
+require_once ("phplib_local.inc.php");
 
-require_once ($ABSOLUTE_PATH_STUDIP . "functions.php"); // <- für getHeaderLine
+require_once ("functions.php"); // <- für getHeaderLine
 
 
 /**

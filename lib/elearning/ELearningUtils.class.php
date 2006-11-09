@@ -25,7 +25,7 @@ class ELearningUtils
 
 		if (! is_object($connected_cms[$cms]))
 		{
-			require_once ($ABSOLUTE_PATH_STUDIP."" . $RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
+			require_once ("" . $RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
 			$classname = $ELEARNING_INTERFACE_MODULES[$cms]["CLASS_PREFIX"] . "ConnectedCMS";
 			$connected_cms[$cms] = new $classname($cms);
 			$connected_cms[$cms]->initSubclasses();
@@ -282,7 +282,7 @@ class ELearningUtils
 	{
 		global $PHP_SELF, $connected_cms, $cms_select, $search_key, $view, $new_account_step, $current_module,
 			$start, $next, $go_back, $assign, $ext_username, $ext_password, $ext_password_2, $messages, $ref_id, $module_type, $assign,
-			$ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
+			'', $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
 
 		ELearningUtils::loadClass($new_account_cms);
 

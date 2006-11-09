@@ -1,7 +1,7 @@
 <?
 global $ABSOLUTE_PATH_STUDIP;
 //global $RELATIVE_PATH_CALENDAR;
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
+require_once("lib/classes/SemesterData.class.php");
 
 global $SEM_TYPE,$SEM_CLASS ;
 $semester = new SemesterData;

@@ -20,11 +20,11 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DbSnapshot.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/dbviews/sem_tree.view.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/TreeAbstract.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
+require_once("lib/classes/DbSnapshot.class.php");
+require_once("lib/dbviews/sem_tree.view.php");
+require_once("lib/classes/TreeAbstract.class.php");
+require_once("lib/classes/SemesterData.class.php");
+require_once("config.inc.php");
 
 /**
 * class to handle the seminar tree

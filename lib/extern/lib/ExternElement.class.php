@@ -33,8 +33,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."visual.inc.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
+require_once("visual.inc.php");
 
 class ExternElement {
 	
@@ -52,7 +52,7 @@ class ExternElement {
 	*/
 	function &GetInstance (&$config, $element_name) {
 		$class_name = "ExternElement" . $element_name;
-		require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]
+		require_once(''
 				. $GLOBALS["RELATIVE_PATH_EXTERN"] . "/elements/$class_name.class.php");
 		$element = new $class_name();
 		$element->config =& $config;
@@ -70,7 +70,7 @@ class ExternElement {
 	*/
 	function ExternElement (&$config, $element_name) {
 	/*	$class_name = "ExternElement" . $element_name;
-		require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]
+		require_once(''
 				. $GLOBALS["RELATIVE_PATH_EXTERN"] . "/elements/$class_name.class.php");
 		$this = new $class_name();
 		$this->config =& $config;*/

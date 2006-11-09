@@ -14,8 +14,8 @@
 
 
 # Include all required files ================================================ #
-require_once ($ABSOLUTE_PATH_STUDIP."config.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."cssClassSwitcher.inc.php");
+require_once ("config.inc.php");
+require_once ("cssClassSwitcher.inc.php");
 # ====================================================== end: including files #
 
 

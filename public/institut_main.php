@@ -22,25 +22,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php"; //Funktionen zur Anzeige der Terminstruktur
-require_once "$ABSOLUTE_PATH_STUDIP/datei.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
-require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php";
+require_once "dates.inc.php"; //Funktionen zur Anzeige der Terminstruktur
+require_once "datei.inc.php";
+require_once "config.inc.php";
+require_once "visual.inc.php";
+require_once "functions.php";
+require_once "lib/classes/DataFields.class.php";
 
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
+	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	if ($_REQUEST['kill_chat']){
 		chat_kill_chat($_REQUEST['kill_chat']);
 	}
 
 }
 if ($GLOBALS['VOTE_ENABLE']) {
-	include_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
+	include_once ("show_vote.php");
 }
 
 
@@ -93,8 +93,8 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && $SessSemName[1]){
 $HELP_KEYWORD="Basis.Einrichtungen";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 checkObject();
 

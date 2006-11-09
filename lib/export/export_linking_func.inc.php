@@ -30,7 +30,7 @@ function export_form($range_id, $ex_type = "", $filename = "", $format = "", $fi
 {
 	global $output_formats, $ABSOLUTE_PATH_STUDIP , $PATH_EXPORT, $xslt_filename;
 	$filename = $xslt_filename;
-	require_once ($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_xslt_vars.inc.php");
+	require_once ($PATH_EXPORT . "/export_xslt_vars.inc.php");
 	$export_string .= "<form action=\"" . "export.php\" method=\"post\">";
 	$export_string .= "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td class=\"steel1\"> &nbsp; &nbsp; &nbsp; ";
 

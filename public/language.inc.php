@@ -81,7 +81,7 @@ function init_i18n($_language) {
 		putenv("LC_ALL=$_language");
 		setlocale(LC_ALL, "");
 		if ($_language != "de_DE") { // German is the original language, so we need no I18N
-			bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
+			bindtextdomain($_language_domain, "locale");
 			textdomain($_language_domain);
 		}
 	}
@@ -186,7 +186,7 @@ function setTempLanguage ($uid = FALSE, $temp_language = "") {
 
 	putenv("LC_ALL=$temp_language");
 	setlocale(LC_ALL, "");
-	bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
+	bindtextdomain($_language_domain, "locale");
 	textdomain($_language_domain);
 }
 
@@ -204,7 +204,7 @@ function restoreLanguage() {
 
 	putenv("LC_ALL=$_language");
 	setlocale(LC_ALL, "");
-	bindtextdomain($_language_domain, "$ABSOLUTE_PATH_STUDIP/locale");
+	bindtextdomain($_language_domain, "locale");
 	textdomain($_language_domain);
 }
 

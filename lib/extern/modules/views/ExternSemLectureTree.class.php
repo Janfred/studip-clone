@@ -1,5 +1,5 @@
 <?
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipSemTreeViewSimple.class.php");
+require_once("lib/classes/StudipSemTreeViewSimple.class.php");
 
 class ExternSemLectureTree extends StudipSemTreeViewSimple {
 	

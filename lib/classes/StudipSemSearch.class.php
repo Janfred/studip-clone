@@ -20,11 +20,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipSemTree.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipRangeTree.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
+require_once("lib/classes/StudipSemTree.class.php");
+require_once("lib/classes/StudipRangeTree.class.php");
+require_once("lib/classes/SemesterData.class.php");
+require_once("visual.inc.php");
+require_once("functions.php");
 
 
 /**

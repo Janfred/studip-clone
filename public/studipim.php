@@ -27,12 +27,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 define("CLOSE_ON_LOGIN_SCREEN",true);
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-	require_once ($ABSOLUTE_PATH_STUDIP . "seminar_open.php");
-	require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
-	require_once ($ABSOLUTE_PATH_STUDIP . "config.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP . "messaging.inc.php");
-	require_once ($ABSOLUTE_PATH_STUDIP . "sms_functions.inc.php");
+	require_once ("seminar_open.php");
+	require_once ("visual.inc.php");
+	require_once ("functions.php");
+	require_once ("config.inc.php");
+	require_once ("messaging.inc.php");
+	require_once ("sms_functions.inc.php");
 
 
 if ($auth->auth["uid"] != "nobody"){
@@ -84,7 +84,7 @@ if ($auth->auth["uid"] != "nobody"){
 // Start of Output
 $_html_head_title = "Stud.IP IM (" . $auth->auth["uname"] . ")";
 $messenger_started = true; //html_head should NOT try to open us again!
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("html_head.inc.php"); // Output of html head
 ?>
 <script language="JavaScript">
 <!--

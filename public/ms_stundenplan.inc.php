@@ -36,10 +36,10 @@
 //Variable registrieren
 //$user->register("my_schedule_settings");
 
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+require_once ("config.inc.php");
+require_once ("config_tools_semester.inc.php");
+require_once ("functions.php");
+require_once ("language.inc.php");
 
 //Funktion zum ueberpruefen der Einstellungen
 function check_schedule_settings() {

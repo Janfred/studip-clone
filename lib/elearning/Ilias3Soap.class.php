@@ -1,5 +1,5 @@
 <?php
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_SOAP . "/StudipSoapClient.class.php");
+require_once($RELATIVE_PATH_SOAP . "/StudipSoapClient.class.php");
 require_once($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . "Ilias3ObjectXMLParser.class.php");
 
 /**

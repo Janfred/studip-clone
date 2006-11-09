@@ -21,9 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("root");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/HolidayData.class.php");
+include ("seminar_open.php"); // initialise Stud.IP-Session
+require_once("lib/classes/SemesterData.class.php");
+require_once("lib/classes/HolidayData.class.php");
 // -- here you have to put initialisations for the current page
 
 // Set this to something, just something different...
@@ -33,12 +33,12 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/HolidayData.class.php");
  if (isset($cancel_x)) unset ($i_view);
 
 // Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
+	include ("links_admin.inc.php");  //Linkleiste fuer admins
 
-	require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
-	require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+	require_once ("msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
+	require_once ("visual.inc.php");
 	
 	$cssSw=new cssClassSwitcher;
 ?>

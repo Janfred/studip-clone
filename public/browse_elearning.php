@@ -24,11 +24,11 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check("autor");
 
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
-include_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."messaging.inc.php");
+require_once ("config.inc.php");
+include_once ("visual.inc.php");
+require_once ("messaging.inc.php");
 
 if (isset($do_open))
 	$print_open_search[$do_open] = true;
@@ -40,10 +40,10 @@ if ($ELEARNING_INTERFACE_ENABLE)
 {
 	$GLOBALS['ALWAYS_SELECT_DB'] = true;
 
-	include_once ($ABSOLUTE_PATH_STUDIP. $RELATIVE_PATH_ELEARNING_INTERFACE ."/" . "ELearningUtils.class.php");
+	include_once ($RELATIVE_PATH_ELEARNING_INTERFACE ."/" . "ELearningUtils.class.php");
 
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
 
 	if ($elearning_open_close["type"] != "search")
 	{
@@ -61,7 +61,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	if ($search_key != "")
 	{
 		ELearningUtils::loadClass($cms_select);
-//		require_once ($ABSOLUTE_PATH_STUDIP."" . $RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
+//		require_once ("" . $RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
 //		$classname = $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS";
 //		$connected_cms[$cms_select] = new $classname($cms_select);
 //		$connected_cms[$cms_select]->initSubclasses();
@@ -189,8 +189,8 @@ if ($ELEARNING_INTERFACE_ENABLE)
 else
 {
 	// Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
 	parse_window ("error§" . _("Die Schnittstelle für die Integration von Lernmodulen ist nicht aktiviert. Damit Lernmodule verwendet werden können, muss die Verbindung zu einem LCM-System in der Konfigurationsdatei von Stud.IP hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",
 				_("E-Learning-Schnittstelle nicht eingebunden"));
 }

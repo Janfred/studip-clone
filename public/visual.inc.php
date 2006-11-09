@@ -2,10 +2,10 @@
 
 // $Id$
 
-require_once($ABSOLUTE_PATH_STUDIP.'config.inc.php');
-require_once($ABSOLUTE_PATH_STUDIP.'cssClassSwitcher.inc.php');
-include_once($ABSOLUTE_PATH_STUDIP.'lib/classes/idna_convert.class.php');
-include_once($ABSOLUTE_PATH_STUDIP.'lib/classes/UserConfig.class.php');
+require_once('config.inc.php');
+require_once('cssClassSwitcher.inc.php');
+include_once('lib/classes/idna_convert.class.php');
+include_once('lib/classes/UserConfig.class.php');
 
 /*****************************************************************************
 get_ampel_state is a helper function for get_ampel_write and get_ampel_read.
@@ -442,7 +442,7 @@ function latex($text, $extern = FALSE) {
 	global $LATEX_PATH,$DVIPS_PATH,$CONVERT_PATH,$IDENTIFY_PATH,$TMP_PATH, $LATEX_FORMATS;
 
 	if ($LATEXRENDER_ENABLE && isset($LATEX_FORMATS)) {
-		include_once($ABSOLUTE_PATH_STUDIP."/lib/classes/latexrender.class.php");
+		include_once("lib/classes/latexrender.class.php");
 		if ($extern) {
 			$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH, $GLOBALS['ABSOLUTE_URI_STUDIP'] . $TEXCACHE_PATH);
 		} else {

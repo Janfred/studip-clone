@@ -32,7 +32,7 @@
 
 
 //Checken ob es sich um vergangene Semester handelt + checken, welches das aktuelle Semester ist und Daten daraus verwenden
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
+require_once("lib/classes/SemesterData.class.php");
 $semester = new SemesterData;
 $all_semester = $semester->getAllSemesterData();
 for ($i=0; $i < sizeof($all_semester); $i++)

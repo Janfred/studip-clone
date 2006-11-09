@@ -38,12 +38,12 @@ if (!$MAIL_NOTIFICATION_ENABLE) {
 	if ($_REQUEST['view'] != 'notification') {
 		page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 		$auth->login_if($auth->auth["uid"] == "nobody");
-		include("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-		include("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+		include("html_head.inc.php"); // Output of html head
+		include("header.php");   // Output of Stud.IP head
 	} else {
 		echo '<br><br>';
 	}
-	require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+	require_once ("msg.inc.php");
 	$message = _("Die Benachrichtigungsfunktion ist nicht eingebunden. Die Benachrichtigungsfunktion wurde in den Systemeinstellungen nicht freigeschaltet. Wenden Sie sich bitte an die zust&auml;ndigen Administrierenden.");
 	parse_window ("error§$message", "§", _("Benachrichtigungsfunktion ist nicht eingebunden!"));
 	print("</body></html>");
@@ -53,21 +53,21 @@ if (!$MAIL_NOTIFICATION_ENABLE) {
 if ($_REQUEST['view'] != 'notification') {
 	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 	$auth->login_if($auth->auth["uid"] == "nobody");
-	include("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+	include("seminar_open.php"); // initialise Stud.IP-Session
 	// Start of Output
-	include("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include("html_head.inc.php"); // Output of html head
+	include("header.php");   // Output of Stud.IP head
 	$link_param = '';
 } else {
 	$link_param = '&view=notification';
 }
 
 // -- here you have to put initialisations for the current page
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/cssClassSwitcher.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/meine_seminare_func.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/ModulesNotification.class.php");
+require_once("functions.php");
+require_once("visual.inc.php");
+require_once("cssClassSwitcher.inc.php");
+require_once("meine_seminare_func.inc.php");
+require_once("lib/classes/ModulesNotification.class.php");
 
 
 function print_module_icons ($m_enabled) {

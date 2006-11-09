@@ -20,23 +20,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
   page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+	include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("visual.inc.php");
+require_once ("statusgruppe.inc.php");
+require_once ("functions.php");
 
 $HELP_KEYWORD="Basis.InVeranstaltungGruppen";
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 checkObject();
 checkObjectModule("participants");
 
-include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+include ("links_openobject.inc.php");
 
 $cssSw=new cssClassSwitcher;
 
@@ -262,7 +262,7 @@ if ($delete_id)
 
 			if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1])))
 			{
-				include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
+				include_once($PATH_EXPORT . "/export_linking_func.inc.php");
 				echo "<br><b>&nbsp;<font size=\"-1\">" . export_link($SessSemName[1], "person", $SessSemName[0], "rtf", "rtf-gruppen", "status") . "</font></b>";
 			}
 			?>

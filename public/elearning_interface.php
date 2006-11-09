@@ -23,15 +23,15 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("autor");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
+require_once ("config.inc.php");
+require_once ("visual.inc.php");
 
 $HELP_KEYWORD="Basis.Ilias";
 
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 {
@@ -41,8 +41,8 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 	checkObjectModule("elearning_interface");
 	object_set_visit_module("elearning_interface");
 
-	require_once ($ABSOLUTE_PATH_STUDIP."/" . $RELATIVE_PATH_ELEARNING_MODULES . "elearning/ELearningUtils.class.php");
-	require_once ($ABSOLUTE_PATH_STUDIP."/" . $RELATIVE_PATH_ELEARNING_MODULES . "elearning/ObjectConnections.class.php");
+	require_once ("" . $RELATIVE_PATH_ELEARNING_MODULES . "elearning/ELearningUtils.class.php");
+	require_once ("" . $RELATIVE_PATH_ELEARNING_MODULES . "elearning/ObjectConnections.class.php");
 	ELearningUtils::bench("start");
 
 	ELearningUtils::bench("checkObject");
@@ -128,7 +128,7 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 		$connected_modules = $object_connections->getConnections();
 		ELearningUtils::bench("connections");
 	}
-	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+	include ("links_openobject.inc.php");
 
 	?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>

@@ -30,7 +30,7 @@
 define('MAGPIE_CACHE_DIR', $TMP_PATH.'/magpie_cache');
 
 require_once('magpierss/rss_fetch.inc');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'visual.inc.php');
+require_once('visual.inc.php');
 
 class RSSFeed {
 

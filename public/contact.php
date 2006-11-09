@@ -31,21 +31,21 @@ $perm->check("user");
 		echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"".$GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
 	}
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("functions.php");
+require_once ("statusgruppe.inc.php");
+require_once ("user_visible.inc.php");
+require_once ("contact.inc.php");
+require_once ("visual.inc.php");
 
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
 
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
@@ -73,7 +73,7 @@ if ($contact["view"]=="alpha" && strlen($filter) > 3)
 if ($contact["view"]=="gruppen" && strlen($filter) < 4)
 	$filter="";
 
-include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
+include ("links_sms.inc.php");
 
 // Aktionen //////////////////////////////////////
 

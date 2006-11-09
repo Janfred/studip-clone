@@ -68,26 +68,26 @@ if (!$perm->have_studip_perm("admin",$_test_institut_id)){
 }
 
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once $ABSOLUTE_PATH_STUDIP . "/dates.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP . "/lib/classes/DbSnapshot.class.php";
-require_once $ABSOLUTE_PATH_STUDIP . "/forum.inc.php";
-require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	 //Enthaelt Funktionen zum Updaten der Wartelisten
-require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
-require_once("$ABSOLUTE_PATH_STUDIP/contact.inc.php");	 //Enthaelt Funktionen fuer Adressbuchverwaltung
+require_once "dates.inc.php";
+require_once "lib/classes/DbSnapshot.class.php";
+require_once "forum.inc.php";
+require_once("admission.inc.php");	 //Enthaelt Funktionen zum Updaten der Wartelisten
+require_once("statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
+require_once("contact.inc.php");	 //Enthaelt Funktionen fuer Adressbuchverwaltung
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
 }
 if ($ILIAS_CONNECT_ENABLE) {
-	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_db_functions.inc.php");
-	include_once ("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_LEARNINGMODULES/lernmodul_user_functions.inc.php");
+	include_once ("$RELATIVE_PATH_LEARNINGMODULES/lernmodul_db_functions.inc.php");
+	include_once ("$RELATIVE_PATH_LEARNINGMODULES/lernmodul_user_functions.inc.php");
 }
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 ?>
 <script type="text/javascript">
 function invert_selection(formname){

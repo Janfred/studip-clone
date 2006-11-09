@@ -22,8 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //****************************************************************************
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "config.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_CALENDAR"]
+require_once("config.inc.php");
+require_once($GLOBALS["RELATIVE_PATH_CALENDAR"]
 		. "/lib/Event.class.php");
 
 class CalendarEvent extends Event {

@@ -33,14 +33,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $ABSOLUTE_PATH_STUDIP.("functions.php");
-require_once $ABSOLUTE_PATH_STUDIP.("forum.inc.php");
-require_once $ABSOLUTE_PATH_STUDIP.("config.inc.php");
-require_once $ABSOLUTE_PATH_STUDIP.("datei.inc.php");
-require_once $ABSOLUTE_PATH_STUDIP.("dates.inc.php");
-require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/ModulesNotification.class.php");
-require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/StudipLitList.class.php");
-require_once $ABSOLUTE_PATH_STUDIP.("lib/classes/StudipDocumentTree.class.php");
+require_once ("functions.php");
+require_once ("forum.inc.php");
+require_once ("config.inc.php");
+require_once ("datei.inc.php");
+require_once ("dates.inc.php");
+require_once ("lib/classes/ModulesNotification.class.php");
+require_once ("lib/classes/StudipLitList.class.php");
+require_once ("lib/classes/StudipDocumentTree.class.php");
 
 class AdminModules extends ModulesNotification {
 	var $db;

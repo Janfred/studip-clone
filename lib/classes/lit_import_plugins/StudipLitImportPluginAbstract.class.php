@@ -20,8 +20,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitList.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitCatElement.class.php");
+require_once ("lib/classes/StudipLitList.class.php");
+require_once ("lib/classes/StudipLitCatElement.class.php");
 
 /**
 *
@@ -57,7 +57,7 @@ class StudipLitImportPluginAbstract {
 		if ($plugin_name){
 			foreach ($LIT_IMPORT_PLUGINS as $plugin) {
 				if ($plugin["name"] == $plugin_name) {
-					require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/lit_import_plugins/StudipLitImportPlugin".$plugin["name"].".class.php");
+					require_once ("lib/classes/lit_import_plugins/StudipLitImportPlugin".$plugin["name"].".class.php");
 					$p = "StudipLitImportPlugin".$plugin["name"];
 					$object = new $p;
 					$object->xmlfile = $xmlfile;

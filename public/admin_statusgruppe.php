@@ -23,19 +23,19 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 	$perm->check("tutor");
 
 $hash_secret = "dslkjjhetbjs";
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGruppen";
 
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
+include ("links_admin.inc.php");
 
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+require_once ("config.inc.php");
+require_once ("visual.inc.php");
+require_once ("functions.php");
+require_once ("admission.inc.php");
+require_once ("statusgruppe.inc.php");
 
 //get ID, if a object is open
 if ($SessSemName[1])

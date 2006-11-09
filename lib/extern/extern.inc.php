@@ -35,14 +35,14 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/lib/ExternModule.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
+require_once($RELATIVE_PATH_EXTERN . "/lib/ExternModule.class.php");
+require_once($RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
 
 $default = "";
 
 // there is a page_url, switch to the sri-interface
 if ($page_url) {
-	require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/sri.inc.php");
+	require($RELATIVE_PATH_EXTERN . "/sri.inc.php");
 	exit;
 }
 
@@ -104,7 +104,7 @@ foreach ($EXTERN_MODULE_TYPES as $type) {
 	if ($type["module"] == $module) {
 		// Vorläufiger Bugfix
 		$class_name = "ExternModule" . $module;
-		require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/modules/$class_name.class.php");
+		require_once($RELATIVE_PATH_EXTERN . "/modules/$class_name.class.php");
 		$module_obj =& ExternModule::GetInstance($range_id, $module, $config_id, $default, $global_id);
 	}
 }

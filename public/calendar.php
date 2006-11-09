@@ -50,7 +50,7 @@ if ($perm->have_perm("admin")) {
 }
 $perm->check("user");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
@@ -72,10 +72,10 @@ if ($CALENDAR_ENABLE)
 	//Kalenderfrontend einbinden
 	include($RELATIVE_PATH_CALENDAR."/calendar.inc.php");
 else {
-	require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
+	require_once ("msg.inc.php");
 	// Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
 	$message = _("Der Terminkalender ist nicht eingebunden. Der Terminkalender wurde in den Systemeinstellungen nicht freigeschaltet. Wenden Sie sich bitte an die zust&auml;ndigen Administrierenden.");
 	parse_window ("error§$message", "§", _("Terminkalender ist nicht eingebunden!"));
 	print("</body></html>");

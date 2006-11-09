@@ -1,5 +1,5 @@
 <?php
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "lib/classes/StudipDocumentTree.class.php");
+require_once("lib/classes/StudipDocumentTree.class.php");
 
 function get_group_names($group_field, $groups){
 	global $SEM_TYPE, $SEM_CLASS;

@@ -27,19 +27,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Set this to something, just something different...
 $hash_secret = "nirhtak";
 
-include ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'seminar_open.php'); 	//hier werden die sessions initialisiert
+include ('seminar_open.php'); 	//hier werden die sessions initialisiert
 
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'msg.inc.php'); 		//Funktionen fuer Nachrichtenmeldungen
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'config.inc.php'); 		//wir brauchen die Seminar-Typen
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'config_tools_semester.inc.php');  //Bereitstellung weiterer Daten
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'functions.php');		//noch mehr Stuff
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'forum.inc.php');		//damit wir Themen anlegen koennen
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'visual.inc.php');		//Aufbereitungsfunktionen
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'dates.inc.php');		//Terminfunktionen
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'log_events.inc.php');
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/StudipSemTreeSearch.class.php');
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/Modules.class.php');
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/DataFields.class.php');
+require_once ('msg.inc.php'); 		//Funktionen fuer Nachrichtenmeldungen
+require_once ('config.inc.php'); 		//wir brauchen die Seminar-Typen
+require_once ('config_tools_semester.inc.php');  //Bereitstellung weiterer Daten
+require_once ('functions.php');		//noch mehr Stuff
+require_once ('forum.inc.php');		//damit wir Themen anlegen koennen
+require_once ('visual.inc.php');		//Aufbereitungsfunktionen
+require_once ('dates.inc.php');		//Terminfunktionen
+require_once ('log_events.inc.php');
+require_once ('lib/classes/StudipSemTreeSearch.class.php');
+require_once ('lib/classes/Modules.class.php');
+require_once ('lib/classes/DataFields.class.php');
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
@@ -1619,12 +1619,12 @@ switch ($level) {
 
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  		//Linkleiste fuer admins
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
+include ("links_admin.inc.php");  		//Linkleiste fuer admins
 
 if (!$sem_create_data["sem_class"])
-	include ("$ABSOLUTE_PATH_STUDIP/startup_checks.inc.php");
+	include ("startup_checks.inc.php");
 
 ?>
 	<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>

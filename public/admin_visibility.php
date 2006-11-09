@@ -18,13 +18,13 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php"); // Funktionen zum Loeschen von Terminen
-require_once($ABSOLUTE_PATH_STUDIP . "datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
-require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
-require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "log_events.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/Table.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/ZebraTable.class.php");
+require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
+require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
+require_once("functions.php");
+require_once("visual.inc.php");
+require_once("log_events.inc.php");
+require_once("lib/classes/Table.class.php");
+require_once("lib/classes/ZebraTable.class.php");
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $auth->login_if($auth->auth["uid"] == "nobody");
@@ -33,15 +33,15 @@ $needed_perm = (get_config('ALLOW_DOZENT_VISIBILITY') ? 'dozent' : 'admin');
 
 $perm->check($needed_perm);
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php"); // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php"); // Output of Stud.IP head
 
 // most of the logic happens in links_admin
 // 
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php"); //Linkleiste fuer admins
+include ("links_admin.inc.php"); //Linkleiste fuer admins
 
 function visibility_change_message($old_vis, $new_vis) {
 	if ($old_vis) {

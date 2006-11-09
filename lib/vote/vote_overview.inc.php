@@ -29,13 +29,13 @@
 /* ************************************************************************* */
 
 ob_start(); // start output buffering
-include_once($ABSOLUTE_PATH_STUDIP . "vote/vote.config.php");
-include_once($ABSOLUTE_PATH_STUDIP . "vote/view/visual.inc.php");
-include_once($ABSOLUTE_PATH_STUDIP . "vote/Vote.class.php");
-include_once($ABSOLUTE_PATH_STUDIP.  "vote/TestVote.class.php");
-include_once($ABSOLUTE_PATH_STUDIP . "vote/VoteDB.class.php");
-include_once($ABSOLUTE_PATH_STUDIP . "lib/classes//StudipObject.class.php");
-include_once($ABSOLUTE_PATH_STUDIP . "vote/view/vote_overview.lib.php");
+include_once("vote/vote.config.php");
+include_once("vote/view/visual.inc.php");
+include_once("vote/Vote.class.php");
+include_once("vote/TestVote.class.php");
+include_once("vote/VoteDB.class.php");
+include_once("lib/classes//StudipObject.class.php");
+include_once("vote/view/vote_overview.lib.php");
 /* **END*of*including*needed*files****************************************** */
 
 

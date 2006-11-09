@@ -21,8 +21,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/auth_plugins/StudipAuthStandard.class.php");
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/dbviews/core.view.php");
+require_once ("lib/classes/auth_plugins/StudipAuthStandard.class.php");
+require_once ("lib/dbviews/core.view.php");
 
 /**
 * Stud.IP authentication, using an external Stud.IP database, e.g. an alternative installation

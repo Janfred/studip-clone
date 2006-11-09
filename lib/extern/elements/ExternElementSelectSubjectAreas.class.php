@@ -35,8 +35,8 @@
 // +---------------------------------------------------------------------------+
 
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_EXTERN;
-require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/lib/ExternElement.class.php");
-require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/StudipSemTreeSearch.class.php");
+require_once($RELATIVE_PATH_EXTERN."/lib/ExternElement.class.php");
+require_once("lib/classes/StudipSemTreeSearch.class.php");
 
 class ExternElementSelectSubjectAreas extends ExternElement {
 

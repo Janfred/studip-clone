@@ -35,8 +35,8 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/extern_config.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "/lib/classes/DataFields.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/extern_config.inc.php");
+require_once("lib/classes/DataFields.class.php");
 
 /**
 * Returns all statusgruppen for the given range.

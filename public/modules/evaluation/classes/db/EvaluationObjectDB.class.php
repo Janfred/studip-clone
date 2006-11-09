@@ -19,9 +19,9 @@
 
 
 # Include all required files ================================================ #
-require_once($ABSOLUTE_PATH_STUDIP."lib/classes/DatabaseObject.class.php");
-require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
-require_once($ABSOLUTE_PATH_STUDIP."functions.php");
+require_once("lib/classes/DatabaseObject.class.php");
+require_once("modules/evaluation/evaluation.config.php");
+require_once("functions.php");
 # ====================================================== end: including files #
 
 

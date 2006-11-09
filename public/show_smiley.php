@@ -21,9 +21,9 @@
 // $Id$
 page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
 
-include_once($ABSOLUTE_PATH_STUDIP.'/seminar_open.php');
-require_once($ABSOLUTE_PATH_STUDIP.'/config.inc.php');
-require_once($ABSOLUTE_PATH_STUDIP.'/lib/classes/smiley.class.php');
+include_once('seminar_open.php');
+require_once('config.inc.php');
+require_once('lib/classes/smiley.class.php');
 
 function my_comp($a, $b){
 	return strcasecmp($a[1], $b[1]);
@@ -33,7 +33,7 @@ $sm = new smiley(false);
 
 if ($sm->error) { // old code is used
 
-	$path = realpath($ABSOLUTE_PATH_STUDIP.'/'.$SMILE_PATH);
+	$path = realpath($SMILE_PATH);
 	$folder=dir($path);
 	$SMILE_SHORT_R=array_flip($SMILE_SHORT);
 	$i_smile = array();

@@ -23,11 +23,11 @@ $auth->login_if($auth->auth["uid"] == "nobody");
 $perm->check("user");
 // nobody hat hier nix zu suchen...
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/UserManagement.class.php");
+include ("seminar_open.php"); // initialise Stud.IP-Session
+require_once("msg.inc.php");
+require_once("config.inc.php"); 
+require_once ("functions.php");
+require_once("lib/classes/UserManagement.class.php");
 
 // -- here you have to put initialisations for the current page
 
@@ -37,8 +37,8 @@ $magic     = "dsdfjhgretha";  // Challenge seed.
 $HELP_KEYWORD="Basis.AnmeldungMail";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 
 ?>

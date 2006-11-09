@@ -23,20 +23,20 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 
 $hash_secret = "dslkjjhetbjs";
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
-require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
-#include ("$ABSOLUTE_PATH_STUDIP/calendar/calendar_links.inc.php");
-include("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
+require_once ("contact.inc.php");
+require_once ("config.inc.php");
+require_once ("visual.inc.php");
+require_once ("functions.php");
+require_once ("statusgruppe.inc.php");
+require_once ("user_visible.inc.php");
+#include ("calendar/calendar_links.inc.php");
+include("links_sms.inc.php");
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
 

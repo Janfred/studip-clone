@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
-include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'seminar_open.php'); // initialise Stud.IP-Session
+include('seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
@@ -31,14 +31,14 @@ elseif (($dump_id) || ($forum_dump_id) || ($wiki_dump_id))
 	$_include_stylesheet = 'style_dump.css';
 
 // Start of Output
-include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'html_head.inc.php'); // Output of html head
+include('html_head.inc.php'); // Output of html head
 
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'msg.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'config.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'visual.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'functions.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'log_events.inc.php');
+require_once('msg.inc.php');
+require_once('config.inc.php');
+require_once('visual.inc.php');
+require_once('functions.php');
+require_once('datei.inc.php');
+require_once('log_events.inc.php');
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -201,7 +201,7 @@ $HELP_KEYWORD="Basis.SuchenArchiv";
 
 // dann eben den Rest...
 
-include($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'header.php');   //hier wird der "Kopf" nachgeladen
+include('header.php');   //hier wird der "Kopf" nachgeladen
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0 border=0>
 	<tr>

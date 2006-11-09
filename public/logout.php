@@ -23,9 +23,9 @@ ob_start();
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
+require_once ("messaging.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
+	include_once $RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
 }
 if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir dies tun!
 
@@ -62,17 +62,17 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 
 } else {        //wir sind nobody, also wahrscheinlich gerade ausgeloggt
 
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+	include ("seminar_open.php"); // initialise Stud.IP-Session
 
 	// -- here you have to put initialisations for the current page
-	include("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-	require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+	include("config.inc.php");
+	require_once("msg.inc.php");
 
 	$HELP_KEYWORD="Basis.Logout";
 
 	// Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
 
 	?>
 	<table width="80%" align="center" border="0" cellpadding="0" cellspacing="0">

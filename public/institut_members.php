@@ -22,20 +22,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-include($ABSOLUTE_PATH_STUDIP."seminar_open.php"); //hier werden die sessions initialisiert
-require_once($ABSOLUTE_PATH_STUDIP."language.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP."config.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP."visual.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP."html_head.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP."statusgruppe.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP."functions.php");
+include("seminar_open.php"); //hier werden die sessions initialisiert
+require_once("language.inc.php");
+require_once("config.inc.php");
+require_once("visual.inc.php");
+require_once("html_head.inc.php");
+require_once("statusgruppe.inc.php");
+require_once("functions.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
+	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 }
 $css_switcher = new CssClassSwitcher();
 echo $css_switcher->GetHoverJSFunction();
 
-require($ABSOLUTE_PATH_STUDIP."header.php");   //hier wird der "Kopf" nachgeladen
+require("header.php");   //hier wird der "Kopf" nachgeladen
 
 $db_institut_members = new DB_Seminar();
 
@@ -82,7 +82,7 @@ else{
 checkObject();
 checkObjectModule("personal");
 
-require($ABSOLUTE_PATH_STUDIP."links_openobject.inc.php");
+require("links_openobject.inc.php");
 
 // group by function as preset
 switch ($institut_members_data["show"]) {
@@ -518,7 +518,7 @@ else {
 
 if (($EXPORT_ENABLE) AND ($db_institut_members->num_rows() > 0) AND ($perm->have_perm("tutor")))
 {
-	include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
+	include_once($PATH_EXPORT . "/export_linking_func.inc.php");
 	echo "<tr><td colspan=$colspan><br>" . export_form($auswahl, "person", $SessSemName[0]) . "</td></tr>";
 }
 echo "<tr><td class=\"blank\" colspan=\"$colspan\">&nbsp;</td></tr>\n";

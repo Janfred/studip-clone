@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("admin");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
@@ -31,19 +31,19 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 ## If is set 'cancel', we leave the adminstration form...
 if (isset($cancel)) unset ($i_view);
 
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipLitList.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitSearch.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipNews.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/log_events.inc.php");
+require_once("msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
+require_once("visual.inc.php");
+require_once("config.inc.php");
+require_once("forum.inc.php");
+require_once("datei.inc.php");
+require_once("statusgruppe.inc.php");
+require_once("functions.php");
+require_once("lib/classes/Modules.class.php");
+require_once("lib/classes/DataFields.class.php");
+require_once("lib/classes/StudipLitList.class.php");
+require_once ("lib/classes/StudipLitSearch.class.php");
+require_once ("lib/classes/StudipNews.class.php");
+require_once("log_events.inc.php");
 
 
 if ($RESOURCES_ENABLE) {
@@ -292,9 +292,9 @@ if ($i_view == "new")
 
 //Output starts here
 
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   //hier wird der "Kopf" nachgeladen
+include ("links_admin.inc.php");  //Linkleiste fuer admins
 
 //get ID from a open Institut
 if ($SessSemName[1])

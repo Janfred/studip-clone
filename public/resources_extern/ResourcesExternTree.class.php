@@ -22,7 +22,7 @@
 // +---------------------------------------------------------------------------+
 //$Id$
 
-require_once($ABSOLUTE_PATH_STUDIP. "/lib/classes/TreeAbstract.class.php");
+require_once("lib/classes/TreeAbstract.class.php");
 
 class ResourcesExternTree extends TreeAbstract {
 	

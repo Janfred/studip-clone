@@ -233,7 +233,7 @@ class Evaluation {
 /**
  * Common configuration
  */
-require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
+require_once("modules/evaluation/evaluation.config.php");
 # ====================================================== end: including files #
 
 

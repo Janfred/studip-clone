@@ -1,5 +1,5 @@
 <?
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP']."lib/classes/SemesterData.class.php");
+require_once("lib/classes/SemesterData.class.php");
 
 global $SEM_TYPE, $SEM_CLASS;
 

@@ -35,8 +35,8 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
 
 class ExternModuleNews extends ExternModule {
 
@@ -84,7 +84,7 @@ class ExternModuleNews extends ExternModule {
 			$language = "de_DE";
 		init_i18n($language);
 		
-		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+		include($GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/news.inc.php");
 		
 		if ($this->config->getValue("Main", "wholesite"))
@@ -99,7 +99,7 @@ class ExternModuleNews extends ExternModule {
 			$language = "de_DE";
 		init_i18n($language);
 		
-		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+		include($GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/news_preview.inc.php");
 		
 		if ($this->config->getValue("Main", "wholesite"))

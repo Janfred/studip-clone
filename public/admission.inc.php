@@ -34,10 +34,10 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
+require_once ("messaging.inc.php");
+require_once ("functions.php");
+require_once ("language.inc.php");
+require_once ("dates.inc.php");
 //set handling for script execution
 ignore_user_abort(TRUE);
 if( !ini_get('safe_mode')) set_time_limit(0);

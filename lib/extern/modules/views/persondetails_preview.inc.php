@@ -1,9 +1,9 @@
 <?
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "config.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "/lib/classes/SemesterData.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "visual.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+require_once("config.inc.php");
+require_once("lib/classes/SemesterData.class.php");
+require_once("visual.inc.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]
 		. "/lib/extern_functions.inc.php");
 global $_fullname_sql;
 
@@ -428,7 +428,7 @@ function head (&$this, $data, $a) {
 		
 		if ($this->config->getValue("Main", "showimage")) {
 			echo "<td" . $this->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
-			if (file_exists("{$GLOBALS['ABSOLUTE_PATH_STUDIP']}/user/nobody.jpg")) {
+			if (file_exists("{''}/user/nobody.jpg")) {
 				echo "<img src=\"{$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']}user/";
 				echo "nobody.jpg\" alt=\"Foto " . $data["fullname"] . "\"";
 				echo $this->config->getAttributes("PersondetailsHeader", "img") . ">";

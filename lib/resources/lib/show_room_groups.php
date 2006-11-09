@@ -1,6 +1,6 @@
 <?php
-require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/ResourceObject.class.php";
-require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/DbSnapshot.class.php";
+require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/ResourceObject.class.php";
+require_once "lib/classes/DbSnapshot.class.php";
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "user" => "Seminar_user" , "perm" => "Seminar_Perm"));
 $perm->check("root");
 echo "<pre>";

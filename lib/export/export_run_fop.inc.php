@@ -38,7 +38,7 @@ $FOP_ENABLE = true;
 if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 	$perm->check("tutor");
 
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
+require_once('datei.inc.php');
 
 
 /**

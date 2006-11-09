@@ -36,10 +36,10 @@
 
 
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemBrowse.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DataFields.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php");
+require_once("lib/classes/SemBrowse.class.php");
+require_once("lib/classes/DataFields.class.php");
+require_once("lib/classes/SemesterData.class.php");
+require_once("dates.inc.php");
 
 
 class ExternSemBrowseTable extends SemBrowse {

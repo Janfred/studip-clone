@@ -132,7 +132,7 @@ echo "Fehler in HTML.class.php: Es fehlt ein addHTMLContent-Element für ein Elem
     if (!is_array($_content)) {
 	$attributes = "";
 	foreach ($attribute as $name => $value) {
-	    $attributes .= (''.$name.'=&gt;"'.$value.'"; ');
+	    $attributes .= ($name.'=&gt;"'.$value.'"; ');
 	}
 	print "Fehler in HTML.class.php: Es fehlt ein Content-Element für ein Element des Typs \"&lt;".$this->getName ()."&gt;\" (Attribute: $attributes).";
 	return;	

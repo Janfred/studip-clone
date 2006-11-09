@@ -36,8 +36,8 @@
 
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
  
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarExport.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . 'datei.inc.php');
+require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarExport.class.php");
+require_once('datei.inc.php');
 
 class CalendarExportFile extends CalendarExport {
 	

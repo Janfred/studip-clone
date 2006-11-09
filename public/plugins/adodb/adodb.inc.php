@@ -2731,7 +2731,7 @@
 					while (!$this->EOF) {
 					// some bug in mssql PHP 4.02 -- doesn't handle references properly so we FORCE creating a new string
 						$v1 = trim(reset($this->fields));
-						$v2 = ''.next($this->fields); 
+						$v2 = next($this->fields); 
 						$results[$v1] = $v2;
 						adodb_movenext($this);
 					}
@@ -2747,7 +2747,7 @@
 					while (!$this->EOF) {
 					// some bug in mssql PHP 4.02 -- doesn't handle references properly so we FORCE creating a new string
 						$v1 = trim(reset($this->fields));
-						$v2 = ''.next($this->fields); 
+						$v2 = next($this->fields); 
 						$results[$v1] = $v2;
 						$this->MoveNext();
 					}

@@ -42,14 +42,14 @@ define("PHPDOC_DUMMY",true);
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("autor");
 
-require_once($ABSOLUTE_PATH_STUDIP."visual.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP."/lib/classes/StudipRangeTreeViewAdmin.class.php");
+require_once("visual.inc.php");
+require_once("lib/classes/StudipRangeTreeViewAdmin.class.php");
 
 
-include($ABSOLUTE_PATH_STUDIP."seminar_open.php"); //hier werden die sessions initialisiert
-include($ABSOLUTE_PATH_STUDIP."html_head.inc.php");
-include($ABSOLUTE_PATH_STUDIP."header.php");   //hier wird der "Kopf" nachgeladen 
-include($ABSOLUTE_PATH_STUDIP."links_admin.inc.php");  //Linkleiste fuer admins
+include("seminar_open.php"); //hier werden die sessions initialisiert
+include("html_head.inc.php");
+include("header.php");   //hier wird der "Kopf" nachgeladen 
+include("links_admin.inc.php");  //Linkleiste fuer admins
 
 ?>
 <table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">

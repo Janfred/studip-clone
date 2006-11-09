@@ -43,24 +43,24 @@ if (!$LOG_ENABLE) {
         die;
 }
 
-include ($ABSOLUTE_PATH_STUDIP."seminar_open.php"); // initialise Stud.IP-Session
-require_once($ABSOLUTE_PATH_STUDIP."msg.inc.php");	//messages
-require_once($ABSOLUTE_PATH_STUDIP."config.inc.php");	//Settings....
-require_once($ABSOLUTE_PATH_STUDIP."functions.php");	//whatever ;)
-require_once($ABSOLUTE_PATH_STUDIP."visual.inc.php");	//visuals
-require_once($ABSOLUTE_PATH_STUDIP."lib/classes/Config.class.php");	//Acces to config-values
-require_once($ABSOLUTE_PATH_STUDIP."lib/classes/UserConfig.class.php");	//Acces to userconfig-values
+include ("seminar_open.php"); // initialise Stud.IP-Session
+require_once("msg.inc.php");	//messages
+require_once("config.inc.php");	//Settings....
+require_once("functions.php");	//whatever ;)
+require_once("visual.inc.php");	//visuals
+require_once("lib/classes/Config.class.php");	//Acces to config-values
+require_once("lib/classes/UserConfig.class.php");	//Acces to userconfig-values
 
 $cssSw=new cssClassSwitcher;
 //$sess->register("admin_config_data");
 //$admin_config_data["range_id"] = '';
 
 // Start of Output
-include ($ABSOLUTE_PATH_STUDIP."html_head.inc.php"); // Output of html head
-include ($ABSOLUTE_PATH_STUDIP."header.php");   // Output of Stud.IP head
-include ($ABSOLUTE_PATH_STUDIP."links_admin.inc.php");	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
-include ($ABSOLUTE_PATH_STUDIP."lib/classes/Table.class.php");
-include ($ABSOLUTE_PATH_STUDIP."lib/classes/ZebraTable.class.php");
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
+include ("links_admin.inc.php");	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+include ("lib/classes/Table.class.php");
+include ("lib/classes/ZebraTable.class.php");
 
 class LogAction {
 	function LogAction($record) {

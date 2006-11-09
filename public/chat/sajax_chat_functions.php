@@ -43,12 +43,12 @@ if (!function_exists("ob_get_clean")) {
 if (!is_object($chatServer)){
 	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 	$perm->check("user");
-	require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'visual.inc.php';
-	require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'functions.php';
-	require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'messaging.inc.php';
-	require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
+	require_once 'visual.inc.php';
+	require_once 'functions.php';
+	require_once 'messaging.inc.php';
+	require_once $RELATIVE_PATH_CHAT."/ChatServer.class.php";
 
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+	include ("seminar_open.php"); // initialise Stud.IP-Session
 
 	//chat eingeschaltet?
 	if (!$CHAT_ENABLE) {

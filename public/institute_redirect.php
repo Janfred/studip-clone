@@ -20,9 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once("config.inc.php");
+require_once("msg.inc.php");
+require_once("functions.php");
 
 // wichtiger Teil aus seminar_open.php
 	
@@ -56,8 +56,8 @@ if (isset($auswahl) && $auswahl!="") {
 
 if ($SessSemName[1] =="") {
 	// Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
 	parse_window ("error§Die aufgerufene Einrichtung existiert nicht!<br /><font size=-1 color=black>Der Autor der aufrufenden Seite hat keine Einrichtung gew&auml;hlt oder die angegebene Einrichtung existiert nicht mehr.<br /></font>", "§",
 				"Keine Einrichtung gew&auml;hlt", 
 				"&nbsp;Bitte informieren Sie den zust&auml;ndigen Webmaster.");

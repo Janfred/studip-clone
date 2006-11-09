@@ -37,7 +37,7 @@ $auth->login_if($auth->auth['uid'] == 'nobody');
 
 $perm->check("autor");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.Ressourcen";// META:in resourcesControl.inc.php verlagern,wenn detaillierter vorhanden
 
 if ($RESOURCES_ENABLE) {
@@ -45,9 +45,9 @@ if ($RESOURCES_ENABLE) {
 	include ("$RELATIVE_PATH_RESOURCES/resourcesControl.inc.php");
 } else {
 	// Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
+	require_once ("msg.inc.php");
 	parse_window ("error§" . _("Die Ressurcenverwaltung ist nicht eingebunden. Bitte aktivieren Sie sie in den Systemeinstellungen oder wenden Sie sich an die Systemadministratoren."), "§",
 				_("Ressourcenverwaltung nicht eingebunden"));
 }

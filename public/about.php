@@ -23,39 +23,39 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 $perm->check("user");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/show_news.php");
-require_once("$ABSOLUTE_PATH_STUDIP/show_dates.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbView.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/dbviews/sem_tree.view.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DbSnapshot.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/guestbook.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/score.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.class.php");
+require_once("functions.php");
+require_once("config.inc.php");
+require_once("dates.inc.php");
+require_once("messaging.inc.php");
+require_once("msg.inc.php");
+require_once("statusgruppe.inc.php");
+require_once("show_news.php");
+require_once("show_dates.inc.php");
+require_once("lib/classes/DbView.class.php");
+require_once("lib/dbviews/sem_tree.view.php");
+require_once("lib/classes/DbSnapshot.class.php");
+require_once("lib/classes/DataFields.class.php");
+require_once("lib/classes/guestbook.class.php");
+require_once("object.inc.php");
+require_once("lib/classes/score.class.php");
+require_once("lib/classes/SemesterData.class.php");
+require_once("user_visible.inc.php");
+require_once("lib/classes/StudipLitList.class.php");
 
 
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
+	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	if ($_REQUEST['kill_chat']){
 		chat_kill_chat($_REQUEST['kill_chat']);
 	}
 
 }
 if ($GLOBALS['VOTE_ENABLE']) {
-	include_once ("$ABSOLUTE_PATH_STUDIP/show_vote.php");
+	include_once ("show_vote.php");
 }
 if (get_config('NEWS_RSS_EXPORT_ENABLE')){
 	$news_author_id = StudipNews::GetRssIdFromUserId(get_userid($_REQUEST['username']));
@@ -70,8 +70,8 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE')){
 $HELP_KEYWORD="Basis.Homepage";
 
 // Start  of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");
 
 if ($rssusername) $username = $rssusername;
 
@@ -184,7 +184,7 @@ $db->next_record();
 
 //daten anzeigen
 IF (($user_id==$user->id AND $perm->have_perm("autor")) OR $perm->have_perm("root") OR $admin_darf == TRUE) { // Es werden die Editreiter angezeigt, wenn ich &auml;ndern darf
-	include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php");
+	include ("links_about.inc.php");
 }
 
 ?>

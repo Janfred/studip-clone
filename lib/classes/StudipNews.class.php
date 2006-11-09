@@ -30,10 +30,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $ABSOLUTE_PATH_STUDIP . '/lib/classes/SimpleORMap.class.php';
-require_once $ABSOLUTE_PATH_STUDIP . '/lib/classes/StudipComments.class.php';
-require_once $ABSOLUTE_PATH_STUDIP . '/lib/classes/Config.class.php';
-require_once $ABSOLUTE_PATH_STUDIP . 'object.inc.php';
+require_once 'lib/classes/SimpleORMap.class.php';
+require_once 'lib/classes/StudipComments.class.php';
+require_once 'lib/classes/Config.class.php';
+require_once 'object.inc.php';
 
 define('STUDIPNEWS_DB_TABLE', 'news');
 

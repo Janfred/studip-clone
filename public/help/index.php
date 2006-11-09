@@ -39,9 +39,9 @@ else
 
 <?php
 //includes
-require_once ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("seminar_open.php");
+require_once ("config.inc.php");
+require_once ("visual.inc.php");
 
 // -- FIX ME
 // until now, we only have German help pages

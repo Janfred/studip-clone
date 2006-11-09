@@ -50,7 +50,7 @@ define ("EVAL_MAX_TEMPLATENAMELEN", 22);
 
 /* Path constants ---------------------------------------------------------- */
 define ("EVAL_PATH_RELATIV", "modules/evaluation/");
-define ("EVAL_PATH", $ABSOLUTE_PATH_STUDIP.EVAL_PATH_RELATIV);
+define ("EVAL_PATH", EVAL_PATH_RELATIV);
 define ("EVAL_PATH_CLASSES", EVAL_PATH."classes/");
 define ("EVAL_PATH_DBCLASSES", EVAL_PATH_CLASSES."db/");
 define ("PATH_PICTURES", $GLOBALS['ASSETS_URL'] . "images/");

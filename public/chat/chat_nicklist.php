@@ -50,13 +50,13 @@ if (!$CHAT_ENABLE) {
 	page_close();
 	die;
 }
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
+require_once $RELATIVE_PATH_CHAT."/ChatServer.class.php";
 
 //Studip includes
-require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
+require_once "msg.inc.php";
+require_once "visual.inc.php";
 
 
 $chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
@@ -67,7 +67,7 @@ $chatServer->caching = true;
 <html>
 <head>
 	<title>Chat Nicklist</title>
-	<?php include $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
+	<?php include $RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
 </head>
 <body>
 <?

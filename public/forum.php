@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-	include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+	include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
@@ -42,8 +42,8 @@ if ($forumsend && $forumsend!="bla") {
 }
 
 // Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
 
 	if ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu auch JS Check auf Name
 ?>
@@ -78,12 +78,12 @@ if ($auth->auth["jscript"]) { // JS an
 	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"".$GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
 }
 
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/object.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
+require_once ("functions.php");
+require_once ("visual.inc.php");
+require_once ("forum.inc.php");
+require_once ("object.inc.php");
+require_once ("msg.inc.php");
+require_once ("dates.inc.php");
 
 checkObject();
 checkObjectModule("forum");

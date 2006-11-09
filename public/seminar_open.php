@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Id$
 */
-require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'lib/classes/SemesterData.class.php';
+require_once 'lib/classes/SemesterData.class.php';
 
 // set default Values for messaging
 function check_messaging_default() {
@@ -142,7 +142,7 @@ function startpage_redirect($page_code) {
 }
 
 
-require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+require_once("language.inc.php");
 
 //get the name of the current page in $i_page
 

@@ -35,7 +35,7 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElement.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElement.class.php");
 
 class ExternElementPersondetailsHeader extends ExternElement {
 
@@ -158,7 +158,7 @@ class ExternElementPersondetailsHeader extends ExternElement {
 	
 		// fit size of image
 		if ($pic_max_width && $pic_max_height) {
-			$pic_size = @getimagesize($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "user/"
+			$pic_size = @getimagesize("user/"
 					. $db->f("user_id") . ".jpg");
 		
 			if ($pic_size[0] > $pic_max_width || $pic_size[1] > $pic_max_height) {

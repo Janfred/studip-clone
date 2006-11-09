@@ -1,6 +1,6 @@
 <?php
 
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/auth_plugins/StudipAuthAbstract.class.php");
+require_once ("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 
 /**
 * Stud.IP authentication against CAS Server

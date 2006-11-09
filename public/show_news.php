@@ -19,13 +19,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 //$Id$
 
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/language.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/object.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipNews.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipComments.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/Seminar.class.php");
+require_once ("functions.php");
+require_once ("visual.inc.php");
+require_once ("language.inc.php");
+require_once ("object.inc.php");
+require_once ("lib/classes/StudipNews.class.php");
+require_once ("lib/classes/StudipComments.class.php");
+require_once ("lib/classes/Seminar.class.php");
 
 function process_news_commands(&$cmd_data) {
 	global $nopen, $nclose, $comopen, $comnew, $comsubmit, $comdel, $comdelnews;

@@ -38,7 +38,7 @@
  * @package	vote
  */
 
-include ($ABSOLUTE_PATH_STUDIP."vote/vote_show.inc.php");
+include ("vote/vote_show.inc.php");
 
 
 

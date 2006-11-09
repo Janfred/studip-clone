@@ -1,6 +1,6 @@
 <?
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipRangeTree.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP . "/lib/classes/RangeTreeObject.class.php");
+require_once("lib/classes/StudipRangeTree.class.php");
+require_once ("lib/classes/RangeTreeObject.class.php");
 
 /**
 * class to print out the range tree

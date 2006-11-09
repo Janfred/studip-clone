@@ -19,7 +19,7 @@
 
 
 # Include all required files ================================================ #
-require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
+require_once("modules/evaluation/evaluation.config.php");
 require_once(EVAL_FILE_EVALDB);
 require_once(EVAL_FILE_ANSWERDB);
 require_once(EVAL_FILE_OBJECT);

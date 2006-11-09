@@ -1,5 +1,5 @@
 <?
-require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
+require_once("visual.inc.php");
 
 $error_message = "";
 

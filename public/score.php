@@ -1,21 +1,21 @@
 <?php
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.VerschiedenesScore"; // external help keyword
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/score.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/object.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
+require_once("functions.php");
+require_once("visual.inc.php");
+require_once("lib/classes/score.class.php");
+require_once("object.inc.php");
+require_once("user_visible.inc.php");
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>

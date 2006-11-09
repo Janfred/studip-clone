@@ -30,7 +30,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.class.php");
+require_once("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 
 	/**
 	* Gets the ID of a user
@@ -183,7 +183,7 @@ require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.
 
 		include_once("wap_buttons.inc.php");
 		include_once("wap_hlp.inc.php");
-		include_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+		include_once("language.inc.php");
 
 		$session_expired = FALSE;
 

@@ -79,15 +79,15 @@ global  $admin_admission_data,
 
 if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
-	require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
-	require_once "$ABSOLUTE_PATH_STUDIP/admin_semester.inc.php";
-	require_once "$ABSOLUTE_PATH_STUDIP/dates.inc.php";
-	require_once "$ABSOLUTE_PATH_STUDIP/msg.inc.php";
-	require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
-	require_once "$ABSOLUTE_PATH_STUDIP/reiter.inc.php";
-	require_once "$ABSOLUTE_PATH_STUDIP/functions.php";
-	require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php";
-	require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php";
+	require_once "config.inc.php";
+	require_once "admin_semester.inc.php";
+	require_once "dates.inc.php";
+	require_once "msg.inc.php";
+	require_once "visual.inc.php";
+	require_once "reiter.inc.php";
+	require_once "functions.php";
+	require_once "lib/classes/Modules.class.php";
+	require_once "lib/classes/SemesterData.class.php";
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;

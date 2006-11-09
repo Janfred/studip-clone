@@ -1,11 +1,11 @@
 <?php
 
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemSearch.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeViewSimple.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemRangeTreeViewSimple.class.php");
+require_once ("visual.inc.php");
+require_once ("functions.php");
+require_once ("dates.inc.php");
+require_once ("lib/classes/StudipSemSearch.class.php");
+require_once ("lib/classes/StudipSemTreeViewSimple.class.php");
+require_once ("lib/classes/StudipSemRangeTreeViewSimple.class.php");
 
 class SemBrowse {
 

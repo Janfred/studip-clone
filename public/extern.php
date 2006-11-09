@@ -45,6 +45,6 @@ if (!$EXTERN_ENABLE) {
 	exit;
 }
 
-include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/extern.inc.php");
+include($RELATIVE_PATH_EXTERN . "/extern.inc.php");
 
 ?>

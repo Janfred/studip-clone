@@ -21,22 +21,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("admin");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); 		// initialise Stud.IP-Session
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php"); 		// Funktionen fuer Nachrichtenmeldungen
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php"); 		// Wir brauchen den Namen der Uni
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/UserManagement.class.php");
+include ("seminar_open.php"); 		// initialise Stud.IP-Session
+require_once("msg.inc.php"); 		// Funktionen fuer Nachrichtenmeldungen
+require_once("config.inc.php"); 		// Wir brauchen den Namen der Uni
+require_once("visual.inc.php");
+require_once("user_visible.inc.php");
+require_once("lib/classes/UserManagement.class.php");
 
 $cssSw=new cssClassSwitcher;
 
 //-- hier muessen Seiten-Initialisierungen passieren --
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");	 //hier wird der "Kopf" nachgeladen
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");	 //hier wird der "Kopf" nachgeladen
 
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
+include ("links_admin.inc.php");	//Linkleiste fuer admins
 
 
 // Get a database connection

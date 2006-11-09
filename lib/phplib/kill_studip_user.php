@@ -42,9 +42,9 @@ function CliErrorHandler($errno, $errstr, $errfile, $errline) {
 set_error_handler('CliErrorHandler');
 
 require_once dirname(__FILE__) . "/prepend4.php"; //for use with old style phplib change this to prepend.php!!!
-require_once $ABSOLUTE_PATH_STUDIP . "/language.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP . "/functions.php";
-require_once $ABSOLUTE_PATH_STUDIP . "/lib/classes/UserManagement.class.php";
+require_once "language.inc.php";
+require_once "functions.php";
+require_once "lib/classes/UserManagement.class.php";
 
 class FakePerm {
 	function have_perm($foo){return true;}

@@ -39,7 +39,7 @@ require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomGroups.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/dates.inc.php");
+require_once ("dates.inc.php");
 
 //a temp session-variable...
 $sess->register("new_assign_object");
@@ -183,7 +183,7 @@ if ($nrecurse_list)
 	
 //Create ClipBoard-Class, if needed
 if (($view == "search") || ($view == "edit_request")) {
-	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/ClipBoard.class.php");
+	require_once ("lib/classes/ClipBoard.class.php");
 
 	$clipObj = & ClipBoard::GetInstance("search");
 	$clipFormObj =& $clipObj->getFormObject();
@@ -321,9 +321,9 @@ edit/add assigns
 
 //Objektbelegung erstellen/aendern
 if ($change_object_schedules) {
-	require_once ($ABSOLUTE_PATH_STUDIP."calendar_functions.inc.php"); //needed for extended checkdate
+	require_once ("calendar_functions.inc.php"); //needed for extended checkdate
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
-	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php");
+	require_once ("lib/classes/SemesterData.class.php");
 	
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
@@ -935,7 +935,7 @@ if ($edit_lock) {
 //edit locks
 if (($lock_sent_x)) {
 	if ($globalPerm == "admin") { //check for resources root or global root
-		require_once ($ABSOLUTE_PATH_STUDIP."calendar_functions.inc.php"); //needed for extended checkdate
+		require_once ("calendar_functions.inc.php"); //needed for extended checkdate
 		
 		foreach ($lock_id as $key=>$id) {
 			$illegal_begin = FALSE;
@@ -1259,7 +1259,7 @@ if (is_array($selected_resource_id)) {
 if ($save_state_x) {
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
-	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
+	require_once ("lib/classes/Seminar.class.php");
 	
 	$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
 	$semObj =& Seminar::GetInstance($reqObj->getSeminarId());
@@ -1650,8 +1650,8 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/CheckMultipleOverlaps.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
-	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
-	require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php");
+	require_once ("lib/classes/Seminar.class.php");
+	require_once ("lib/classes/SemesterData.class.php");
 	
 	if ((!is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"])) || ($marked_clip_ids) || ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"])) {
 		unset ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"]);
@@ -1845,9 +1845,9 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 //inform the owner of the requests
 if ($snd_closed_request_sms) {
 	require_once ($GLOBALS["RELATIVE_PATH_RESOURCES"]."/lib/RoomRequest.class.php");
-	require_once ($GLOBALS["ABSOLUTE_PATH_STUDIP"]."/lib/classes/Seminar.class.php");
-	require_once ($GLOBALS["ABSOLUTE_PATH_STUDIP"]."/messaging.inc.php");
-	require_once ($GLOBALS["ABSOLUTE_PATH_STUDIP"]."/language.inc.php");
+	require_once ("lib/classes/Seminar.class.php");
+	require_once ("messaging.inc.php");
+	require_once ("language.inc.php");
 	
 	
 	$messaging = new messaging;

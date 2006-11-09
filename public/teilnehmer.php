@@ -21,18 +21,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-include "$ABSOLUTE_PATH_STUDIP/seminar_open.php"; //hier werden die sessions initialisiert
+include "seminar_open.php"; //hier werden die sessions initialisiert
 
-require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
-require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
-require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");	//Funktionen des Nachrichtensystems
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");		//We need the config for some parameters of the class of the Veranstaltung
-require_once("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
+require_once ("msg.inc.php");
+require_once ("visual.inc.php");
+require_once ("functions.php");
+require_once ("admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
+require_once ("statusgruppe.inc.php");	//Funktionen der Statusgruppen
+require_once ("messaging.inc.php");	//Funktionen des Nachrichtensystems
+require_once ("config.inc.php");		//We need the config for some parameters of the class of the Veranstaltung
+require_once("user_visible.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
+	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 }
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
@@ -77,13 +77,13 @@ if ($rechte) {
 }
 
 // Start  of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   //hier wird der "Kopf" nachgeladen
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   //hier wird der "Kopf" nachgeladen
 
 checkObject();
 checkObjectModule("participants");
 
-include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+include ("links_openobject.inc.php");
 
 $messaging=new messaging;
 $cssSw=new cssClassSwitcher;
@@ -1327,7 +1327,7 @@ if ($rechte) {
 	echo "</table>\n</form>";
 
 	if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1]))) {
-		include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/export_linking_func.inc.php");
+		include_once($PATH_EXPORT . "/export_linking_func.inc.php");
 //			echo "<table width=\"99%\"><tr><td colspan=$colspan align=right class=\"steel1\"><br>" . export_button($SessSemName[1], "person", $SessSemName[0], "html", "html-teiln") . "</td></tr></table>";
 		echo "<br><b>&nbsp;<font size=\"-1\">" . export_link($SessSemName[1], "person", $SessSemName[0], "rtf", "rtf-teiln", "", _("TeilnehmerInnen exportieren")) . "</font></b>";
 		if ($awaiting) echo "<br><b>&nbsp;<font size=\"-1\">" . export_link($SessSemName[1], "person", $SessSemName[0], "rtf", "rtf-warteliste","awaiting",_("Anmeldeliste exportieren")) . "</font></b>";

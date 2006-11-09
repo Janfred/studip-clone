@@ -39,16 +39,16 @@ define("PHPDOC_DUMMY",true);
 // +---------------------------------------------------------------------------+
 
 
-require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
-require_once($ABSOLUTE_PATH_STUDIP . "calendar_functions.inc.php");
-require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/calendar_visual.inc.php");
-require($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/calendar_misc_func.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
+require_once("config.inc.php");
+require_once("visual.inc.php");
+require_once("functions.php");
+require_once("calendar_functions.inc.php");
+require($RELATIVE_PATH_CALENDAR . "/calendar_visual.inc.php");
+require($RELATIVE_PATH_CALENDAR . "/lib/calendar_misc_func.inc.php");
+require_once($RELATIVE_PATH_CALENDAR
 		. "/lib/driver/$CALENDAR_DRIVER/CalendarDriver.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/SeminarEvent.class.php");
+require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
+require_once($RELATIVE_PATH_CALENDAR . "/lib/SeminarEvent.class.php");
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
@@ -411,7 +411,7 @@ if ($cmd == 'showday') {
 		$et = 23;
 	}
 	
-	include_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarDay.class.php");
+	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarDay.class.php");
 	$aday =& new DbCalendarDay($atime);
 	$aday->bindSeminarEvents($bind_seminare);
 	$tab = createDayTable($aday, $st, $et, $calendar_user_control_data['step_day'],
@@ -445,7 +445,7 @@ if ($cmd == 'showweek') {
 		$et = 23;
 	}
 	
-	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/week.inc.php");
+	include($RELATIVE_PATH_CALENDAR . "/views/week.inc.php");
 
 }
 
@@ -453,7 +453,7 @@ if ($cmd == 'showweek') {
 
 if ($cmd == 'showmonth') {
 
-	include_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarMonth.class.php");
+	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarMonth.class.php");
 	
 	$amonth =& new DbCalendarMonth($atime);
 	$calendar_sess_forms_data['bind_seminare'] = '';
@@ -471,7 +471,7 @@ if ($cmd == 'showmonth') {
 		$height = '80';
 	}
 	
-	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/month.inc.php");
+	include($RELATIVE_PATH_CALENDAR . "/views/month.inc.php");
 	
 }
 
@@ -479,12 +479,12 @@ if ($cmd == 'showmonth') {
 
 if ($cmd == 'showyear') {
 
-	include_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/DbCalendarYear.class.php");
+	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarYear.class.php");
 	
 	$ayear =& new DbCalendarYear($atime);
 	$ayear->bindSeminarEvents($bind_seminare);
 	
-	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/year.inc.php");
+	include($RELATIVE_PATH_CALENDAR . "/views/year.inc.php");
 
 }
 
@@ -528,14 +528,14 @@ if ($cmd == 'edit') {
 	if ($atermin)
 		$repeat = $atermin->getRepeat();
 	
-	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/edit.inc.php");
+	include($RELATIVE_PATH_CALENDAR . "/views/edit.inc.php");
 }
 
 // Seminartermine einbinden **************************************************
 
 if ($cmd == 'bind') {
 	
-	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/views/bind.inc.php");
+	include($RELATIVE_PATH_CALENDAR . "/views/bind.inc.php");
 	
 }
 
@@ -550,7 +550,7 @@ if ($cmd == 'export') {
 
 if ($cmd == 'changeview') {
 
-	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/calendar_settings.inc.php");
+	include($RELATIVE_PATH_CALENDAR . "/calendar_settings.inc.php");
 	
 }
 	

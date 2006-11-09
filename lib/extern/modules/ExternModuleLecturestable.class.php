@@ -35,10 +35,10 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/modules/views/ExternSemBrowseTable.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]."language.inc.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/modules/views/ExternSemBrowseTable.class.php");
+require_once("language.inc.php");
 
 class ExternModuleLecturestable extends ExternModule {
 
@@ -119,7 +119,7 @@ class ExternModuleLecturestable extends ExternModule {
 			$language = "de_DE";
 		init_i18n($language);
 		
-		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+		include($GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/lecturestable_preview.inc.php");
 		
 		if ($this->config->getValue("Main", "wholesite"))	

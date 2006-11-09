@@ -33,10 +33,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($ABSOLUTE_PATH_STUDIP."/cssClassSwitcher.inc.php");
+require_once ("cssClassSwitcher.inc.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomGroups.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php");
+require_once ("lib/classes/Seminar.class.php");
 
 
 $cssSw = new cssClassSwitcher;
@@ -222,7 +222,7 @@ class ShowToolsRequests {
 
 	function showRequestList() {
 		global $resources_data, $_fullname_sql, $ABSOLUTE_PATH_STUDIP, $CANONICAL_RELATIVE_PATH_STUDIP;
-		require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/ZebraTable.class.php");
+		require_once("lib/classes/ZebraTable.class.php");
 
 		$license_to_kill = (get_config('RESOURCES_ALLOW_DELETE_REQUESTS') && getGlobalPerms($GLOBALS['user']->id) == 'admin');
 		if ($license_to_kill){

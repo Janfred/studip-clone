@@ -130,19 +130,19 @@ function print_seminar_content($semid,$my_sem_values) {
 
 } // Ende function print_seminar_content
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.SymboleFreieVeranstaltungen";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("config.inc.php");
+require_once("msg.inc.php");
+require_once("visual.inc.php");
 
 // we are definitely not in an lexture or institute
 closeObject();

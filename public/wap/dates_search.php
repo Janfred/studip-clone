@@ -56,7 +56,7 @@
 	include_once("wap_hlp.inc.php");
 	include_once("wap_txt.inc.php");
 	include_once("wap_buttons.inc.php");
-	require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"]
+	require_once(''
 	           . $GLOBALS["RELATIVE_PATH_CALENDAR"]
 	           . "/lib/DbCalendarEventList.class.php");
 

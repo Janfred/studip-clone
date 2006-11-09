@@ -23,23 +23,23 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("autor");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/visual.inc.php");
+require_once ("config.inc.php");
+require_once ("visual.inc.php");
 
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 
 if ($ELEARNING_INTERFACE_ENABLE)
 {
-	require_once ($ABSOLUTE_PATH_STUDIP."/" . $RELATIVE_PATH_ELEARNING_MODULES . "elearning/ELearningUtils.class.php");
+	require_once ("" . $RELATIVE_PATH_ELEARNING_MODULES . "elearning/ELearningUtils.class.php");
 	ELearningUtils::bench("start");
 
 	$GLOBALS['ALWAYS_SELECT_DB'] = true;
 
-	include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php");
+	include ("links_about.inc.php");
 
 	if ($elearning_open_close["type"] != "user")
 	{

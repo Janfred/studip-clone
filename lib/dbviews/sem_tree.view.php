@@ -22,8 +22,8 @@
 // +---------------------------------------------------------------------------+
 // $Id$
 
-require_once($ABSOLUTE_PATH_STUDIP . "/config.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/SemesterData.class.php");
+require_once("config.inc.php");
+require_once("lib/classes/SemesterData.class.php");
 //
 
 foreach (SemesterData::GetSemesterArray() as $key => $value){

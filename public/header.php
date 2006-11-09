@@ -45,7 +45,7 @@ global $homepage_cache_own, $i_page, $i_query, $_language, $_language_path,
 
 
 if ($SHOW_TERMS_ON_FIRST_LOGIN){
-	require_once ("$ABSOLUTE_PATH_STUDIP/terms.inc.php");
+	require_once ("terms.inc.php");
 	check_terms($user->id, $_language_path);
 }
 
@@ -63,12 +63,12 @@ ob_start();
 if (!$perm->have_perm("user"))
 	$my_messaging_settings["active_time"]=5;
 
-require_once ($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP . "functions.php");
-require_once ($ABSOLUTE_PATH_STUDIP . "sms_functions.inc.php");
+require_once ("visual.inc.php");
+require_once ("functions.php");
+require_once ("sms_functions.inc.php");
 
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
+	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = true;
 	$sms = new messaging();

@@ -43,8 +43,8 @@
 page_open (array ("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 		  "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check ("autor");
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
-require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
+include ("seminar_open.php");
+require_once("config.inc.php");
 {
 // needed session-variables
 $sess->register("seminars");
@@ -61,11 +61,11 @@ $sess->register("template");
 /* ************************************************************************* */
 // if you wanna create a pdf no html-header should be send to the browser
 if (!isset($_GET["create_pdf"])){
-	require_once($ABSOLUTE_PATH_STUDIP . "html_head.inc.php");
-	require_once($ABSOLUTE_PATH_STUDIP . "header.php");
-	require_once($ABSOLUTE_PATH_STUDIP . "links_seminare.inc.php");
-	include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT ."/recordofstudy.lib.php");
-	include_once($ABSOLUTE_PATH_STUDIP . $PATH_EXPORT ."/recordofstudyDB.php");
+	require_once("html_head.inc.php");
+	require_once("header.php");
+	require_once("links_seminare.inc.php");
+	include_once($PATH_EXPORT ."/recordofstudy.lib.php");
+	include_once($PATH_EXPORT ."/recordofstudyDB.php");
 }
 /* **END*of*initialize*post/get*variables*********************************** */
 

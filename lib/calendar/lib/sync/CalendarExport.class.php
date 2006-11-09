@@ -36,8 +36,8 @@
 
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR, $CALENDAR_DRIVER;
 
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/ErrorHandler.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/driver/$CALENDAR_DRIVER/CalendarDriver.class.php");
+require_once("$RELATIVE_PATH_CALENDAR/lib/ErrorHandler.class.php");
+require_once("$RELATIVE_PATH_CALENDAR/lib/driver/$CALENDAR_DRIVER/CalendarDriver.class.php");
  
 class CalendarExport {
 	
@@ -125,7 +125,7 @@ class CalendarExport {
 ///////////////////////////////////////////////////////////////////////////////////////
 /*
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/sync/CalendarWriterICalendar.class.php");
+require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarWriterICalendar.class.php");
 global $user;
 $export = new CalendarExport(new CalendarWriterICalendar());
 $export->exportFromDatabase($user->id);

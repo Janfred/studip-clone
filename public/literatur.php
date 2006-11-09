@@ -22,22 +22,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitList.class.php");
+require_once("lib/classes/StudipLitList.class.php");
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.Literatur";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 checkObject(); // do we have an open object?
 checkObjectModule("literature");
 object_set_visit_module("literature");
 
-include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+include ("links_openobject.inc.php");
 ?>
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">

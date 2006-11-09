@@ -36,9 +36,9 @@
 
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_EXTERN;
 
-require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/lib/ExternElementMain.class.php");
-require_once($ABSOLUTE_PATH_STUDIP."dates.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP."lib/classes/SemesterData.class.php");
+require_once($RELATIVE_PATH_EXTERN."/lib/ExternElementMain.class.php");
+require_once("dates.inc.php");
+require_once("lib/classes/SemesterData.class.php");
 
 class ExternElementMainGlobal extends ExternElementMain {
 

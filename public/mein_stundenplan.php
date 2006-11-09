@@ -37,20 +37,20 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 ob_start(); //Outputbuffering for max performance
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 if (isset($print_view))
 	$_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("html_head.inc.php"); // Output of html head
 
-require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php"; //Daten laden
-require_once "$ABSOLUTE_PATH_STUDIP/config_tools_semester.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/ms_stundenplan.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/visual.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php";
+require_once "config.inc.php"; //Daten laden
+require_once "config_tools_semester.inc.php";
+require_once "ms_stundenplan.inc.php";
+require_once "visual.inc.php";
+require_once "lib/classes/SemesterData.class.php";
 
 if ($RESOURCES_ENABLE)
  	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
@@ -66,13 +66,13 @@ if ($change_view) {
 }
 
 if (!$print_view) {
-	include "$ABSOLUTE_PATH_STUDIP/header.php";   //hier wird der "Kopf" nachgeladen
+	include "header.php";   //hier wird der "Kopf" nachgeladen
 	if ($inst_id) //Links if we show in the instiute-object-view
-		include "$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php";
+		include "links_openobject.inc.php";
 	elseif (!$perm->have_perm("admin")) //if not in the adminview, it's the user view!
-		include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
+		include ("links_sms.inc.php");
 	else
-		include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
+		include ("links_sms.inc.php");
 	}
 
 if ($change_view) {

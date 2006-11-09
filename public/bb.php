@@ -21,15 +21,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("root");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 // chdir ('/usr/local/httpd/htdocs/studip/');
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
+include ("links_admin.inc.php");  //Linkleiste fuer admins
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -40,12 +40,12 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");  //Linkleiste fuer admins
 	<tr><td class="blank" colspan=2><br><br><?=_("Unsch&ouml;n dass wir uns hier sehen... diese Seite ist das geheime Easteregg von Stud.IP. Wenn es jemand hierher geschafft hat, der nicht zum Team geh&ouml;rt, dann k&uuml;ndige ich.")?><br><br>
 	<i>Cornelis</i><br><br>
 	<?
-	$folder=opendir($ABSOLUTE_PATH_STUDIP."/user/");
+	$folder=opendir("user/");
 	$i=0;
 	while ($entry=readdir($folder))
 		{
 		$i++;
-		if (($entry!="..") && ($entry!=".") && ($entry!="")) $file[$i]=array("time"=>filemtime($ABSOLUTE_PATH_STUDIP."/user/".$entry), "file"=>$entry);
+		if (($entry!="..") && ($entry!=".") && ($entry!="")) $file[$i]=array("time"=>filemtime("user/".$entry), "file"=>$entry);
 		}
 	rsort ($file);
 	$i=5;

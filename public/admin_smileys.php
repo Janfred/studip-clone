@@ -29,14 +29,14 @@ if (!$SMILEYADMIN_ENABLE) {
 	die;
 }
 
-include ($ABSOLUTE_PATH_STUDIP.'/seminar_open.php'); // initialise Stud.IP-Session
+include ('seminar_open.php'); // initialise Stud.IP-Session
 
-require_once($ABSOLUTE_PATH_STUDIP.'/lib/classes/smiley.class.php');
+require_once('lib/classes/smiley.class.php');
 
 // Start of Output
-include ($ABSOLUTE_PATH_STUDIP.'/html_head.inc.php'); // Output of html head
-include ($ABSOLUTE_PATH_STUDIP.'/header.php');   // Output of Stud.IP head
-include ($ABSOLUTE_PATH_STUDIP.'/links_admin.inc.php');  //Linkleiste fuer admins
+include ('html_head.inc.php'); // Output of html head
+include ('header.php');   // Output of Stud.IP head
+include ('links_admin.inc.php');  //Linkleiste fuer admins
 
 
 $sm = new smiley(true);

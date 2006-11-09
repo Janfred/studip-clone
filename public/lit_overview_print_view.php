@@ -65,13 +65,13 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 my_session_open(md5('admin_literatur_overview.php'));
 $perm->check('admin');
 
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/StudipLitCatElement.class.php");
+require_once("lib/classes/StudipLitCatElement.class.php");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 $_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("html_head.inc.php"); // Output of html head
 
 $element = new StudipLitCatElement();
 $db = new DB_Seminar();

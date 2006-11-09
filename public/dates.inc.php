@@ -19,12 +19,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once $ABSOLUTE_PATH_STUDIP."datei.inc.php";  // benötigt zum Löschen von Dokumenten
-require_once $ABSOLUTE_PATH_STUDIP."config.inc.php";  //Daten 
-require_once $ABSOLUTE_PATH_STUDIP."functions.php";  //Daten 
-require_once $ABSOLUTE_PATH_STUDIP."/lib/classes/SemesterData.class.php";  //Daten 
-require_once $ABSOLUTE_PATH_STUDIP."/lib/classes/Seminar.class.php";  //Daten 
-require_once ($ABSOLUTE_PATH_STUDIP."calendar_functions.inc.php");
+require_once "datei.inc.php";  // benötigt zum Löschen von Dokumenten
+require_once "config.inc.php";  //Daten 
+require_once "functions.php";  //Daten 
+require_once "lib/classes/SemesterData.class.php";  //Daten 
+require_once "lib/classes/Seminar.class.php";  //Daten 
+require_once ("calendar_functions.inc.php");
 
 /**
 * This function creates the assigned room name for range_id
@@ -38,8 +38,8 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
 	global $RESOURCES_ENABLE, $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP;
 	
 	if ($RESOURCES_ENABLE) {
-	 	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
-	 	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+	 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
+	 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	 }
 	$not_booked_hint = get_config('RESOURCES_SHOW_ROOM_NOT_BOOKED_HINT');
 	$db = new DB_Seminar;

@@ -26,23 +26,23 @@ $perm->check("tutor");
 
 $hash_secret = "dslkjjhetbjs";
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php"); // Funktionen zum Loeschen von Terminen
-require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/admission.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");	//Funktionen der Statusgruppen
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeSearch.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/DataFields.class.php");
+include ("seminar_open.php"); // initialise Stud.IP-Session
+require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
+require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
+require_once("functions.php");
+require_once("visual.inc.php");
+require_once("admission.inc.php");
+require_once("statusgruppe.inc.php");	//Funktionen der Statusgruppen
+require_once("lib/classes/StudipSemTreeSearch.class.php");
+require_once("lib/classes/DataFields.class.php");
 
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGrunddaten";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
+include ("links_admin.inc.php");
 ?>
 
 <SCRIPT language="JavaScript">

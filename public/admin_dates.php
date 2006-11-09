@@ -23,13 +23,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("tutor");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/forum.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/calendar_functions.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Modules.class.php");
+include ("seminar_open.php"); // initialise Stud.IP-Session
+require_once("dates.inc.php");
+require_once("functions.php");
+require_once("forum.inc.php");
+require_once("visual.inc.php");
+require_once("calendar_functions.inc.php");
+require_once("lib/classes/Modules.class.php");
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -79,9 +79,9 @@ if ($RESOURCES_ENABLE) {
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenAblaufplan";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
+include ("links_admin.inc.php");
 
 checkObjectModule("schedule");
 

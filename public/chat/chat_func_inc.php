@@ -30,12 +30,12 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/ChatServer.class.php";
+require_once $RELATIVE_PATH_CHAT."/ChatServer.class.php";
 //Studip includes
-require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."functions.php";
-require_once $ABSOLUTE_PATH_STUDIP."contact.inc.php";
+require_once "visual.inc.php";
+require_once "messaging.inc.php";
+require_once "functions.php";
+require_once "contact.inc.php";
 
 function chat_kill_chat($chatid){
 	if ($GLOBALS['CHAT_ENABLE']){

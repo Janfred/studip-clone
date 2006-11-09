@@ -18,15 +18,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once("msg.inc.php");
 
 $my_auth = ($GLOBALS['ENABLE_SELF_REGISTRATION'] ? "Seminar_Register_Auth" : "Seminar_Default_Auth");
 
 page_open(array("sess" => "Seminar_Session", "auth" => $my_auth, "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 if (!$GLOBALS['ENABLE_SELF_REGISTRATION']){
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
 	parse_window ("error§" . _("In dieser Installation ist die M&ouml;glichkeit zur Registrierung ausgeschaltet."), "§",
 				_("Registrierung ausgeschaltet"), 
 				'<div style="margin:10px">'.$UNI_LOGIN_ADD.'</div>'
@@ -41,15 +41,15 @@ if ($auth->auth["uid"] == "nobody") {
 	die;
 }
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.AnmeldungRegistrierung";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 ?>
 <table width ="100%" border="0" cellspacing="0" cellpadding="0">

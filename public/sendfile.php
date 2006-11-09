@@ -40,11 +40,11 @@ if (!ini_get('allow_url_fopen')){
 ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-require_once ($ABSOLUTE_PATH_STUDIP . 'config.inc.php');
-require_once ($ABSOLUTE_PATH_STUDIP . 'datei.inc.php');
-require_once ($ABSOLUTE_PATH_STUDIP . 'visual.inc.php');
-require_once ($ABSOLUTE_PATH_STUDIP . 'functions.php');
-require_once ($ABSOLUTE_PATH_STUDIP . 'lib/classes/StudipLitList.class.php');
+require_once ('config.inc.php');
+require_once ('datei.inc.php');
+require_once ('visual.inc.php');
+require_once ('functions.php');
+require_once ('lib/classes/StudipLitList.class.php');
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -63,7 +63,7 @@ switch ($type) {
 	break;
 	//We want to download an XSL-Script
 	case 3:
-		$path_file=$ABSOLUTE_PATH_STUDIP . $PATH_EXPORT . "/".$file_id;
+		$path_file=$PATH_EXPORT . "/".$file_id;
 	break;
 	//we want to download from the studip-tmp folder (this mode performs perm checks)
 	case 4:
@@ -286,8 +286,8 @@ if ($no_access) {
 		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Downloadbereich"), '<a href="folder.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br />&nbsp;' ;
 
 	// Start of Output
-	include ($ABSOLUTE_PATH_STUDIP.'html_head.inc.php'); // Output of html head
-	include ($ABSOLUTE_PATH_STUDIP.'header.php');   // Output of Stud.IP head
+	include ('html_head.inc.php'); // Output of html head
+	include ('header.php');   // Output of Stud.IP head
 
 	parse_window('error§' . _("Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!"), '§', _("Download nicht m&ouml;glich"), $add_msg);
 	page_close();
@@ -300,8 +300,8 @@ if ($no_access) {
 if ($type == 6) {
 	$link_data = parse_link($path_file);
 	if (!($link_data['HTTP/1.0 200 OK'] || $link_data['HTTP/1.1 200 OK'])) {
-		include ($ABSOLUTE_PATH_STUDIP.'html_head.inc.php'); // Output of html head
-		include ($ABSOLUTE_PATH_STUDIP.'header.php');   // Output of Stud.IP head
+		include ('html_head.inc.php'); // Output of html head
+		include ('header.php');   // Output of Stud.IP head
 		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Downloadbereich"), '<a href="folder.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br />&nbsp;' ;
 		parse_window('error§' . _("Diese Datei wird von einem externen Server geladen und ist dort momentan nicht erreichbar!"), '§', _("Download nicht m&ouml;glich"), $add_msg);
 		page_close();

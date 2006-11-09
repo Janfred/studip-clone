@@ -14,8 +14,8 @@
 
 
 # Include all required files ================================================ #
-require_once ($ABSOLUTE_PATH_STUDIP."vote/view/visual.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."vote/vote.config.php");
+require_once ("vote/view/visual.inc.php");
+require_once ("vote/vote.config.php");
 # ====================================================== end: including files #
 
 

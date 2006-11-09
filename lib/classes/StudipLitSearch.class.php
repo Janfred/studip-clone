@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipForm.class.php");
+require_once("lib/classes/StudipForm.class.php");
 
 /**
 *
@@ -114,7 +114,7 @@ class StudipLitSearch {
 		}
 		if ( ($init_plugin_name = $this->outer_form->getFormFieldValue("search_plugin")) ){
 			$init_plugin_name = "StudipLitSearchPlugin" . $init_plugin_name;
-			include_once $GLOBALS['ABSOLUTE_PATH_STUDIP']. "lib/classes/lit_search_plugins/" . $init_plugin_name .".class.php";
+			include_once "lib/classes/lit_search_plugins/" . $init_plugin_name .".class.php";
 			$this->search_plugin =& new $init_plugin_name();
 		}
 		if ($plugin_name !== false){
@@ -200,7 +200,7 @@ class StudipLitSearch {
 			foreach ($_lit_search_plugins as $plugin){
 				if ( $plugin['name'] != 'Studip' && ($one_plugin_name === false || $plugin['name'] == $one_plugin_name) ){
 					$plugin_name = "StudipLitSearchPlugin" . $plugin['name'];
-					include_once("$ABSOLUTE_PATH_STUDIP/lib/classes/lit_search_plugins/{$plugin_name}.class.php");
+					include_once("lib/classes/lit_search_plugins/{$plugin_name}.class.php");
 					$plugin_list[$plugin['name']] =& new $plugin_name();
 				}
 			}

@@ -17,11 +17,11 @@
 if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 {
 // Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
 	if ($page == 1)
 		echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
-	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
+	include ("links_admin.inc.php");
 	if ($page == 1)
 		$cssSw->enableHover();
 

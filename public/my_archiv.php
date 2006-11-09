@@ -37,12 +37,12 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
-include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'seminar_open.php'); // initialise Stud.IP-Session
+include ('seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'visual.inc.php');		// htmlReady fuer die Veranstaltungsnamen
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'dates.inc.php');		// Semester-Namen fuer Admins
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'datei.inc.php');
+require_once ('visual.inc.php');		// htmlReady fuer die Veranstaltungsnamen
+require_once ('dates.inc.php');		// Semester-Namen fuer Admins
+require_once ('datei.inc.php');
 
 $cssSw = new cssClassSwitcher;							// Klasse für Zebra-Design
 $cssSw->enableHover();
@@ -53,13 +53,13 @@ closeObject();
 $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
 // Start of Output
-include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'html_head.inc.php'); // Output of html head
-include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'header.php');   // Output of Stud.IP head
+include ('html_head.inc.php'); // Output of html head
+include ('header.php');   // Output of Stud.IP head
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 
 if (!$perm->have_perm('root'))
-	include ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . 'links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
+	include ('links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
 
 if (!isset($sortby))
 	$sortby="name";

@@ -10,7 +10,7 @@
  * @package     vote
  * @modulegroup vote_modules
  */
-include_once($ABSOLUTE_PATH_STUDIP . "vote/view/vote_show.lib.php");
+include_once("vote/view/vote_show.lib.php");
 
 /**
  * displays the title bar
@@ -73,10 +73,10 @@ function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID =
 			$value2 = "setResultvisibility_aborted";
 		}
 		global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
-		$html .="<font size=\"-1\"><a href=\"".$ABSOLUTE_PATH_STUDIP . VOTE_FILE_ADMIN."?page=overview&voteaction=".$value1."&voteID=".$voteID."&showrangeID=".$showrangeID;
+		$html .="<font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&voteaction=".$value1."&voteID=".$voteID."&showrangeID=".$showrangeID;
 		if ($referer) $html .= "&referer=".$referer;
 		$html .="\" title=\"".$label["yes"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/ja2-button.gif\" width=\"93\" alt=\"".$label["yes"]."\" title=\"".$label["yes"]."\" border=\"0\" align=\"middle\"></a></font>\n";
-		$html .="<font size=\"-1\"><a href=\"".$ABSOLUTE_PATH_STUDIP.VOTE_FILE_ADMIN."?page=overview&voteaction=".$value2."&voteID=".$voteID."&showrangeID=".$showrangeID;
+		$html .="<font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&voteaction=".$value2."&voteID=".$voteID."&showrangeID=".$showrangeID;
 		if ($referer) $html .= "&referer=".$referer;
 		$html .="\" title=\"".$label["no"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/nein-button.gif\" width=\"93\" alt=\"".$label["no"]."\" title=\"".$label["no"]."\" border=\"0\" align=\"middle\"></a></font>\n";
 	}
@@ -599,7 +599,7 @@ function makeTableDataCellForm( $displayclass = "steel1",
 								$hidden4_name = NULL,
 								$hidden4_value= NULL){
 	global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
-	$link =	$ABSOLUTE_PATH_STUDIP.VOTE_FILE_ADMIN."?page=".$action;
+	$link =	VOTE_FILE_ADMIN."?page=".$action;
 	if (!empty($hidden1_name)) $link .="&".$hidden1_name."=".$hidden1_value;
 	if (!empty($hidden2_name)) $link .="&".$hidden2_name."=".$hidden2_value;
 	if (!empty($hidden3_name)) $link .="&".$hidden3_name."=".$hidden3_value;

@@ -34,8 +34,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElement.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/elements/ExternElementLinkIntern.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElement.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/elements/ExternElementLinkIntern.class.php");
 
 // this class is only for compatibility reasons (Stud.IP < 0.95)
 // this class is replaced by ExternElementLinkIntern and the

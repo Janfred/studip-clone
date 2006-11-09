@@ -36,9 +36,9 @@
 
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
 
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/driver/MySQL/MysqlDriver.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/CalendarEvent.class.php");
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/SeminarEvent.class.php");
+require_once("$RELATIVE_PATH_CALENDAR/lib/driver/MySQL/MysqlDriver.class.php");
+require_once("$RELATIVE_PATH_CALENDAR/lib/CalendarEvent.class.php");
+require_once("$RELATIVE_PATH_CALENDAR/lib/SeminarEvent.class.php");
 
 class CalendarDriver extends MysqlDriver {
 	

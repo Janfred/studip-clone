@@ -18,11 +18,11 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once $ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CHAT."/chat_config.php";
-require_once $ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CHAT."/ChatFileServer.class.php";
-require_once $ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
-require_once $ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CHAT."/ChatMysqlServer.class.php";
-require_once $ABSOLUTE_PATH_STUDIP . "/visual.inc.php";
+require_once $RELATIVE_PATH_CHAT."/chat_config.php";
+require_once $RELATIVE_PATH_CHAT."/ChatFileServer.class.php";
+require_once $RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
+require_once $RELATIVE_PATH_CHAT."/ChatMysqlServer.class.php";
+require_once "visual.inc.php";
 /**
 *  Chat Server Klasse
 * 

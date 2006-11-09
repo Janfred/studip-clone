@@ -24,19 +24,19 @@
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("autor");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitListViewAdmin.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipLitClipBoard.class.php");
-include_once("$ABSOLUTE_PATH_STUDIP/lit_import.inc.php");
+require_once ("visual.inc.php");
+require_once ("lib/classes/StudipLitListViewAdmin.class.php");
+require_once ("lib/classes/StudipLitClipBoard.class.php");
+include_once("lit_import.inc.php");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 
 $HELP_KEYWORD="Basis.LiteraturListen";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 $_attributes['lit_select'] = array('style' => 'font-size:8pt;width:100%');
 
@@ -59,10 +59,10 @@ if (!$_range_id){
 <body>
 <?
 if ($list  || $view || $view_mode || $_range_id != $auth->auth['uid']){
-	include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
+	include ("links_admin.inc.php");	//Linkleiste fuer admins
 	$_range_id = ($SessSemName[1]) ? $SessSemName[1] : $_range_id;
 } else {
-	include ("$ABSOLUTE_PATH_STUDIP/links_about.inc.php"); //Linkliste persönlicher Bereich
+	include ("links_about.inc.php"); //Linkliste persönlicher Bereich
 }
 $_lit_range = $_range_id;
 

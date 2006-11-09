@@ -45,14 +45,14 @@ if (!$CHAT_ENABLE) {
 	page_close();
 	die;
 }
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
+require_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 //Studip includes
-require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."messaging.inc.php";
-require_once $ABSOLUTE_PATH_STUDIP."functions.php";
-require_once $ABSOLUTE_PATH_STUDIP."visual.inc.php";
+require_once "msg.inc.php";
+require_once "messaging.inc.php";
+require_once "functions.php";
+require_once "visual.inc.php";
 
 //korrekte chatid ?
 if (!$chatid || !in_array(get_object_type($chatid), array('user','sem','inst','fak','global'))) {
@@ -105,7 +105,7 @@ if (!$chat_entry_check){
 	<html>
 	<head>
 	 <title>Stud.IP</title>
-	<?php include $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
+	<?php include $RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
 	<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 	<script type="text/javascript">
 	/**

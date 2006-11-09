@@ -20,9 +20,9 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/StudipSemTree.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/TreeView.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php");
+require_once("lib/classes/StudipSemTree.class.php");
+require_once("lib/classes/TreeView.class.php");
+require_once("config.inc.php");
 
 
 /**
@@ -222,7 +222,7 @@ class StudipSemTreeView extends TreeView {
 //test
 //page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 //include "html_head.inc.php";
-//include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+//include ("seminar_open.php"); // initialise Stud.IP-Session
 //$test = new StudipSemTreeView();
 //$test->showTree("c2942084b6140fc2635dfecdf65bf20d");
 //page_close();

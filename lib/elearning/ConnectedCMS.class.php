@@ -173,7 +173,7 @@ class ConnectedCMS
 				$msg["soap"]["error"] = sprintf(_("Die SOAP-Verbindungsdaten sind f&uuml;r dieses System nicht gesetzt. Erg&auml;nzen sie die Einstellungen f&uuml;r dieses Systems um den Eintrag \"soap_data\" in der Konfigurationsdatei \"local.inc\"."));
 			else
 			{
-				require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_SOAP."/StudipSoapClient.class.php");
+				require_once($RELATIVE_PATH_SOAP."/StudipSoapClient.class.php");
 				$this->soap_client = new StudipSoapClient($this->ABSOLUTE_PATH_SOAP);
 				$msg["soap"]["info"] = sprintf(_("Das SOAP-Modul ist aktiv."));
 			}
@@ -194,23 +194,23 @@ class ConnectedCMS
 		}
 
 		// check if needed classes exist
-		if (!file_exists($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedUser.class.php") AND ($this->auth_necessary))
+		if (!file_exists($RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedUser.class.php") AND ($this->auth_necessary))
 			$msg["class_user"]["error"] .= sprintf(_("Die Datei \"%s\" existiert nicht."), $RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedUser.class.php");
-		if (!file_exists($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedPermissions.class.php") AND ($this->auth_necessary))
+		if (!file_exists($RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedPermissions.class.php") AND ($this->auth_necessary))
 			$msg["class_perm"]["error"] .= sprintf(_("Die Datei \"%s\" existiert nicht."), $RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedPermissions.class.php");
-		if (!file_exists($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedLink.class.php"))
+		if (!file_exists($RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedLink.class.php"))
 			$msg["class_link"]["error"] .= sprintf(_("Die Datei \"%s\" existiert nicht."), $RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedLink.class.php");
-		if (!file_exists($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ContentModule.class.php"))
+		if (!file_exists($RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ContentModule.class.php"))
 			$msg["class_content"]["error"] .= sprintf(_("Die Datei \"%s\" existiert nicht."), $RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ContentModule.class.php");
-		if (!file_exists($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedCMS.class.php"))
+		if (!file_exists($RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedCMS.class.php"))
 			$msg["class_cms"]["error"] .= sprintf(_("Die Datei \"%s\" existiert nicht."), $RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedCMS.class.php");
-		if (file_exists($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedCMS.class.php") AND 
-			(file_exists($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedUser.class.php") OR (!$this->auth_necessary)) AND
-			(file_exists($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedPermissions.class.php") OR (!$this->auth_necessary)) AND
-			file_exists($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedLink.class.php") AND
-			file_exists($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ContentModule.class.php"))
+		if (file_exists($RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedCMS.class.php") AND 
+			(file_exists($RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedUser.class.php") OR (!$this->auth_necessary)) AND
+			(file_exists($RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedPermissions.class.php") OR (!$this->auth_necessary)) AND
+			file_exists($RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedLink.class.php") AND
+			file_exists($RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ContentModule.class.php"))
 		{	
-			require_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedCMS.class.php");
+			require_once ($RELATIVE_PATH_ELEARNING_INTERFACE."/" . $this->CLASS_PREFIX . "ConnectedCMS.class.php");
 			$msg["classes"]["info"] .= sprintf(_("Die Klassen der Schnittstelle zum System \"%s\" wurden geladen."), $this->name);
 		}
 		else

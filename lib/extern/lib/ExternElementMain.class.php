@@ -35,8 +35,8 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElement.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElement.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
 
 class ExternElementMain extends ExternElement {
 
@@ -50,7 +50,7 @@ class ExternElementMain extends ExternElement {
 	function &GetInstance ($module_name, &$data_fields,	&$field_names, &$config) {
 		if ($module_name != '') {
 			$main_class_name = 'ExternElementMain' . ucfirst($module_name);
-			require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_EXTERN']
+			require_once($GLOBALS['RELATIVE_PATH_EXTERN']
 					. "/elements/main/$main_class_name.class.php");
 			$main_module =& new $main_class_name($module_name, $data_fields,	$field_names, $config);
 			

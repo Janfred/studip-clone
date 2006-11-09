@@ -23,7 +23,7 @@
 
 
 # Include all required files ================================================ #
-require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/Object.class.php");
+require_once ("lib/classes/Object.class.php");
 # =========================================================================== #
 
 

@@ -25,15 +25,15 @@ if (!isset($SessSemName[0]) || $SessSemName[0] == "") {
 	die;
 }
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 $_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
+include ("html_head.inc.php"); // Output of html head
 
-require_once("$ABSOLUTE_PATH_STUDIP/archiv.inc.php");
+require_once("archiv.inc.php");
 
 print (dump_sem($SessSemName[1]));
 

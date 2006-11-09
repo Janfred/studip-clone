@@ -37,12 +37,12 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 $perm->check("root");
 
-include ($ABSOLUTE_PATH_STUDIP."seminar_open.php"); // initialise Stud.IP-Session
-require_once($ABSOLUTE_PATH_STUDIP."msg.inc.php");	//Ausgaben
-require_once($ABSOLUTE_PATH_STUDIP."config.inc.php");	//Settings....
-require_once($ABSOLUTE_PATH_STUDIP."functions.php");	//basale Funktionen
-require_once($ABSOLUTE_PATH_STUDIP."visual.inc.php");	//Darstellungsfunktionen
-require_once($ABSOLUTE_PATH_STUDIP."lib/classes/DataFields.class.php");	//class DataFields
+include ("seminar_open.php"); // initialise Stud.IP-Session
+require_once("msg.inc.php");	//Ausgaben
+require_once("config.inc.php");	//Settings....
+require_once("functions.php");	//basale Funktionen
+require_once("visual.inc.php");	//Darstellungsfunktionen
+require_once("lib/classes/DataFields.class.php");	//class DataFields
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -52,9 +52,9 @@ $DataFields=new DataFields;
 
 
 // Start of Output
-include ($ABSOLUTE_PATH_STUDIP."html_head.inc.php"); // Output of html head
-include ($ABSOLUTE_PATH_STUDIP."header.php");   // Output of Stud.IP head
-include ($ABSOLUTE_PATH_STUDIP."links_admin.inc.php");	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
+include ("links_admin.inc.php");	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
 
 if ($change_datafield) {

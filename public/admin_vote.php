@@ -38,9 +38,9 @@ $perm->check ("autor");
 
 $HELP_KEYWORD="Basis.Votings";
 
-include_once($ABSOLUTE_PATH_STUDIP . "seminar_open.php");
-include_once($ABSOLUTE_PATH_STUDIP . "html_head.inc.php");
-include_once($ABSOLUTE_PATH_STUDIP . "header.php");
+include_once("seminar_open.php");
+include_once("html_head.inc.php");
+include_once("header.php");
 $the_range = isset($showrangeID) ? $showrangeID : $rangeID;
 	
 if (!empty($the_range) && $the_range != $auth->auth['uname'] && $the_range != 'studip'){
@@ -48,14 +48,14 @@ if (!empty($the_range) && $the_range != $auth->auth['uname'] && $the_range != 's
 	if ($view_mode == "fak"){
 		$view_mode = "inst";
 	}
-	include ($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");
+	include ("links_admin.inc.php");
 } else {
-	include ($ABSOLUTE_PATH_STUDIP . "links_about.inc.php");
+	include ("links_about.inc.php");
 }
 if ($page == "edit")
-	include ($ABSOLUTE_PATH_STUDIP . "/vote/vote_edit.inc.php");
+	include ("vote/vote_edit.inc.php");
 else
-	include ($ABSOLUTE_PATH_STUDIP . "/vote/vote_overview.inc.php");
+	include ("vote/vote_overview.inc.php");
 
 page_close ();
 ?>

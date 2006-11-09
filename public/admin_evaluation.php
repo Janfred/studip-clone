@@ -41,16 +41,16 @@ $perm->check ("autor");
 
 $HELP_KEYWORD="Basis.Evaluationen";
 
-require_once ($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
+require_once ("modules/evaluation/evaluation.config.php");
 
-include_once($ABSOLUTE_PATH_STUDIP . "seminar_open.php");
-include_once($ABSOLUTE_PATH_STUDIP . "html_head.inc.php");
-include_once($ABSOLUTE_PATH_STUDIP . "header.php");
+include_once("seminar_open.php");
+include_once("html_head.inc.php");
+include_once("header.php");
 
 if ($list || $view)
-	include ($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");
+	include ("links_admin.inc.php");
 else
-	include ($ABSOLUTE_PATH_STUDIP . "links_about.inc.php");
+	include ("links_about.inc.php");
 
 if (($SessSemName[1]) && (($view == "vote_sem") || ($view == "vote_inst"))) 
 	$the_range = $SessSemName[1];

@@ -42,11 +42,11 @@ define( "QUESTION_HELPTEXT",
 /* -------------------------------------------------------- */
 
 
-include_once($ABSOLUTE_PATH_STUDIP . "vote/vote.config.php");
-include_once ($ABSOLUTE_PATH_STUDIP . "vote/Vote.class.php");
-include_once ($ABSOLUTE_PATH_STUDIP . "vote/TestVote.class.php");
-include_once ($ABSOLUTE_PATH_STUDIP . "vote/view/vote_edit.lib.php");
-include_once ($ABSOLUTE_PATH_STUDIP . "vote/view/visual.inc.php");
+include_once("vote/vote.config.php");
+include_once ("vote/Vote.class.php");
+include_once ("vote/TestVote.class.php");
+include_once ("vote/view/vote_edit.lib.php");
+include_once ("vote/view/visual.inc.php");
 
 global $auth, $perm;
 

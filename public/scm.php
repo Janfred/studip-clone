@@ -22,13 +22,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("seminar_open.php"); // initialise Stud.IP-Session
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once("functions.php");
+require_once("msg.inc.php");
+require_once("visual.inc.php");
 require_once("lib/classes/Table.class.php");
 
 checkObject(); // do we have an open object?
@@ -40,14 +40,14 @@ $msg=""; // Message to display
 
 switch ($i_view) {
 	case "edit":
-		include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+		include ("links_openobject.inc.php");
 		scm_edit_content($SessSemName[1]);
 		break;
 	case "change":
 		scm_change_content($scm_id, $SessSemName[1], $scm_name, $scm_preset, $content, $new_entry);
 		$msg="msg§"._("Die Änderungen wurden übernommen.");
 	default:
-		include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+		include ("links_openobject.inc.php");
 		scm_show_content($SessSemName[1], $msg);
 		break;
 }

@@ -38,10 +38,10 @@
 /*****************************************************************************
 Startups...
 /*****************************************************************************/
-require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."config.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."functions.php");
+require_once ("msg.inc.php");
+require_once ("visual.inc.php");
+require_once ("config.inc.php");
+require_once ("functions.php");
 require_once ($RELATIVE_PATH_SUPPORT."/views/Msg.class.php");
 require_once ($RELATIVE_PATH_SUPPORT."/views/Request.class.php");
 require_once ($RELATIVE_PATH_SUPPORT."/views/Overview.class.php");
@@ -55,8 +55,8 @@ $db=new DB_Seminar;
 /*****************************************************************************
 headers
 /*****************************************************************************/
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
-include ("$ABSOLUTE_PATH_STUDIP/header.php");
+include ("html_head.inc.php");
+include ("header.php");
 
 //We need a stud.ip object opened before
 checkObject();
@@ -70,7 +70,7 @@ evaluate values and handle commands
 include ("$RELATIVE_PATH_SUPPORT/lib/evaluate_values.php");
 
 //load content, text, pictures and stuff
-include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+include ("links_openobject.inc.php");
 include ("$RELATIVE_PATH_SUPPORT/views/page_intros.inc.php");
 
 ?>

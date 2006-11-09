@@ -36,11 +36,11 @@
 
 global $RELATIVE_PATH_CALENDAR, $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_EXTERN;
 
-require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/lib/ExternModule.class.php");
-require_once($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_EXTERN."/views/extern_html_templates.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "/lib/classes/DataFields.class.php");
-require_once($ABSOLUTE_PATH_STUDIP."language.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "dates.inc.php");
+require_once($RELATIVE_PATH_EXTERN."/lib/ExternModule.class.php");
+require_once($RELATIVE_PATH_EXTERN."/views/extern_html_templates.inc.php");
+require_once("lib/classes/DataFields.class.php");
+require_once("language.inc.php");
+require_once("dates.inc.php");
 
 class ExternModulePersondetails extends ExternModule {
 
@@ -117,7 +117,7 @@ class ExternModulePersondetails extends ExternModule {
 			$language = "de_DE";
 		init_i18n($language);
 		
-		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+		include($GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/persondetails.inc.php");
 		
 		if ($this->config->getValue("Main", "wholesite"))
@@ -132,7 +132,7 @@ class ExternModulePersondetails extends ExternModule {
 			$language = "de_DE";
 		init_i18n($language);
 		
-		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+		include($GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/persondetails_preview.inc.php");
 		
 		if ($this->config->getValue("Main", "wholesite"))

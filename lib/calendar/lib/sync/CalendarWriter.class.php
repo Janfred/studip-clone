@@ -40,7 +40,7 @@
  
 global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
 
-require_once("$ABSOLUTE_PATH_STUDIP$RELATIVE_PATH_CALENDAR/lib/ErrorHandler.class.php");
+require_once("$RELATIVE_PATH_CALENDAR/lib/ErrorHandler.class.php");
 
 class CalendarWriter {
 

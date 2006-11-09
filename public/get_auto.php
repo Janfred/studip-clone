@@ -2,8 +2,8 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("autor");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+include ("seminar_open.php"); // initialise Stud.IP-Session
+require_once ("visual.inc.php");
 
 if (!$_POST["pass"])
    {

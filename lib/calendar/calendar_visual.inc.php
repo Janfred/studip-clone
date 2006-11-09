@@ -31,8 +31,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once($ABSOLUTE_PATH_STUDIP . 'visual.inc.php');
-require_once($ABSOLUTE_PATH_STUDIP . 'calendar_functions.inc.php');
+require_once('visual.inc.php');
+require_once('calendar_functions.inc.php');
 
 // Tabellenansicht der Termine eines Tages erzeugen
 function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol = TRUE,
@@ -581,7 +581,7 @@ function jumpTo ($month, $day, $year, $colsp = 1) {
 
 function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 	global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR, $CANONICAL_RELATIVE_PATH_STUDIP;
-	require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR . "/lib/CalendarMonth.class.php");
+	require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarMonth.class.php");
 	global $imt, $atime;
 
 	if ($imt)

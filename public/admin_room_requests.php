@@ -40,20 +40,20 @@ $perm->check("tutor");
 if ((!$RESOURCES_ENABLE) || (!$RESOURCES_ALLOW_ROOM_REQUESTS)) //we need resources management and room request ability
 	die;
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
+include ("links_admin.inc.php");	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");	//Ausgaben
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");	//Settings....
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");	//basale Funktionen
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");	//Darstellungsfunktionen
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Seminar.class.php");	//Seminar-class
+require_once("msg.inc.php");	//Ausgaben
+require_once("config.inc.php");	//Settings....
+require_once("functions.php");	//basale Funktionen
+require_once("visual.inc.php");	//Darstellungsfunktionen
+require_once("lib/classes/Seminar.class.php");	//Seminar-class
 
 
 if ($RESOURCES_ENABLE) {

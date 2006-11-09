@@ -35,16 +35,16 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user"); 
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 if ($SUPPORT_ENABLE){
 	//Steuerung der SupportDB einbinden
 	include ("$RELATIVE_PATH_SUPPORT/support.inc.php");
 } else {
 	// Start of Output
-	include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-	require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
+	include ("html_head.inc.php"); // Output of html head
+	include ("header.php");   // Output of Stud.IP head
+	require_once ("msg.inc.php");
 	parse_window ("error§" . _("Das SupportDB-Modul ist nicht eingebunden. Bitte aktivieren Sie es in den Systemeinstellungen oder wenden Sie sich an eine Person mit administrativen Rechten im System."), "§",
 				_("SupportDB nicht eingebunden"));
 }

@@ -28,7 +28,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/lit_import_plugins/StudipLitImportPluginAbstract.class.php");
+require_once ("lib/classes/lit_import_plugins/StudipLitImportPluginAbstract.class.php");
 
 function do_lit_import() {
 	global $_msg, $cmd, $xmlfile, $xmlfile_size, $xmlfile_name, $username, $_range_id, $PHP_SELF, $plugin_name;

@@ -34,15 +34,15 @@ if (!isset($EVAL_AUSWERTUNG_GRAPH_FORMAT)) $EVAL_AUSWERTUNG_GRAPH_FORMAT = 'jpg'
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");             // initialise Stud.IP-Session
+include ("seminar_open.php");             // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once("$ABSOLUTE_PATH_STUDIP/datei.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
+require_once("msg.inc.php");
+require_once("visual.inc.php");
+require_once("config.inc.php");
+require_once("functions.php");
+require_once("datei.inc.php");
+require_once("modules/evaluation/evaluation.config.php");
 require_once(EVAL_FILE_EVAL);
 require_once(EVAL_FILE_OBJECTDB);
 

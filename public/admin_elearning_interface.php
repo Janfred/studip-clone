@@ -23,20 +23,20 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("root");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
-require_once ($ABSOLUTE_PATH_STUDIP."/config.inc.php");
+require_once ("config.inc.php");
 
-require_once ($ABSOLUTE_PATH_STUDIP."/elearning/ELearningUtils.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."/elearning/ConnectedCMS.class.php");
+require_once ("elearning/ELearningUtils.class.php");
+require_once ("elearning/ConnectedCMS.class.php");
 
 $HELP_KEYWORD="Basis.Ilias";
 
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");
+include ("links_admin.inc.php");
 
 if ($ELEARNING_INTERFACE_ENABLE)
 {
@@ -57,7 +57,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 
 		if ($error_count == 0)
 		{
-			require_once ($ABSOLUTE_PATH_STUDIP."" . $RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
+			require_once ("" . $RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
 			$classname = $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS";
 			$connected_cms[$cms_select] = new $classname($cms_select);
 			$connected_cms[$cms_select]->initSubclasses();

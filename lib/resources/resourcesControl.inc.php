@@ -39,12 +39,12 @@
 Requires & Registers
 /*****************************************************************************/
 
-require_once ($ABSOLUTE_PATH_STUDIP."reiter.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."msg.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."config.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."config_tools_semester.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."functions.php");
+require_once ("reiter.inc.php");
+require_once ("msg.inc.php");
+require_once ("visual.inc.php");
+require_once ("config.inc.php");
+require_once ("config_tools_semester.inc.php");
+require_once ("functions.php");
 require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 require_once ($RELATIVE_PATH_RESOURCES."/views/Msg.class.php");
 
@@ -89,13 +89,13 @@ if (isset($_REQUEST['print_view'])){
 	$_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 }
 
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
+include ("html_head.inc.php");
 if ($quick_view_mode != "no_nav" && !isset($_REQUEST['print_view']))
-	include ("$ABSOLUTE_PATH_STUDIP/header.php");
+	include ("header.php");
 
 //load correct nav
 if ($view_mode == "oobj")
-	include ("$ABSOLUTE_PATH_STUDIP/links_openobject.inc.php");
+	include ("links_openobject.inc.php");
 elseif (($view_mode == "no_nav") || ($view_mode == "search") || isset($_REQUEST['print_view']))
 	;
 else

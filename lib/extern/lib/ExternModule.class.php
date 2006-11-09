@@ -35,13 +35,13 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/extern_config.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/lib/ExternConfig.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/lib/ExternElement.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/lib/ExternElementMain.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/views/ExternEditModule.class.php");
-require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
+require_once($RELATIVE_PATH_EXTERN . "/extern_config.inc.php");
+require_once($RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
+require_once($RELATIVE_PATH_EXTERN . "/lib/ExternConfig.class.php");
+require_once($RELATIVE_PATH_EXTERN . "/lib/ExternElement.class.php");
+require_once($RELATIVE_PATH_EXTERN . "/lib/ExternElementMain.class.php");
+require_once($RELATIVE_PATH_EXTERN . "/views/ExternEditModule.class.php");
+require_once("functions.php");
 
 
 class ExternModule {
@@ -65,7 +65,7 @@ class ExternModule {
 		if ($module_name != '') {
 			$class_name = "ExternModule" . $module_name;
 			// Vorläufiger Bugfix (Modul-Skript wird schon in extern.inc.php eingebunden)
-		//	require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "extern/modules/$class_name.class.php");
+		//	require_once("extern/modules/$class_name.class.php");
 			$module =& new $class_name($range_id, $module_name, $config_id, $set_config, $global_id);
 			
 			return $module;
@@ -208,7 +208,7 @@ class ExternModule {
 	function toStringEdit ($open_elements = "", $post_vars = "",
 			$faulty_values = "", $anker = "") {
 		
-		require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "extern/views/ExternEditModule.class.php");
+		require_once("extern/views/ExternEditModule.class.php");
 		$edit_form =& new ExternEditModule($this->config, $post_vars, $faulty_values, $anker);
 		
 		$out = $edit_form->editHeader();

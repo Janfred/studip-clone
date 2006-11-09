@@ -27,16 +27,16 @@ if (!$perm->is_fak_admin()){
 	page_close();
 	die;
 }
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemTreeViewAdmin.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/StudipSemSearch.class.php");
+require_once ("visual.inc.php");
+require_once ("lib/classes/StudipSemTreeViewAdmin.class.php");
+require_once ("lib/classes/StudipSemSearch.class.php");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
+include ("links_admin.inc.php");	//Linkleiste fuer admins
 
 $view = new DbView();
 $the_tree = new StudipSemTreeViewAdmin($_REQUEST['start_item_id']);

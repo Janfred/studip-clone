@@ -30,7 +30,7 @@
 // +---------------------------------------------------------------------------+
 
 # Include all required files ================================================ #
-require_once ($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
+require_once ("modules/evaluation/evaluation.config.php");
 require_once (HTML);
 //require_once (HTMLempty);
 # ====================================================== end: including files #

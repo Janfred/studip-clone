@@ -20,19 +20,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/messagingSettings.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/contact.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
+require_once ("functions.php");
+require_once ("msg.inc.php");
+require_once ("visual.inc.php");
+require_once ("messagingSettings.inc.php");
+require_once ("messaging.inc.php");
+require_once ("contact.inc.php");
+require_once ("user_visible.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
+	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = true;
 }
@@ -42,9 +42,9 @@ $cssSw=new cssClassSwitcher;
 $HELP_KEYWORD="Basis.InteraktionWhosOnline";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/links_sms.inc.php");
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
+include ("links_sms.inc.php");
 
 ob_start();
 

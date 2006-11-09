@@ -16,12 +16,12 @@
 
 # Include all required files ================================================ #
 
-require_once ($ABSOLUTE_PATH_STUDIP."vote/view/visual.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."vote/view/vote_show.lib.php");
-require_once ($ABSOLUTE_PATH_STUDIP."vote/VoteDB.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."vote/Vote.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."vote/TestVote.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation.config.php");
+require_once ("vote/view/visual.inc.php");
+require_once ("vote/view/vote_show.lib.php");
+require_once ("vote/VoteDB.class.php");
+require_once ("vote/Vote.class.php");
+require_once ("vote/TestVote.class.php");
+require_once ("modules/evaluation/evaluation.config.php");
 require_once (EVAL_FILE_OBJECTDB);
 require_once (EVAL_FILE_EVAL);
 require_once (EVAL_LIB_SHOW);

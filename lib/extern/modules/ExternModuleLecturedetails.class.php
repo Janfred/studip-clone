@@ -35,16 +35,16 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/modules/views/ExternSemBrowse.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"].$GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/modules/views/ExternSemBrowse.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
 
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "/lib/classes/DataFields.class.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "language.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "visual.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "dates.inc.php");
-require_once($GLOBALS["ABSOLUTE_PATH_STUDIP"] . "functions.php");
+require_once("lib/classes/DataFields.class.php");
+require_once("language.inc.php");
+require_once("visual.inc.php");
+require_once("dates.inc.php");
+require_once("functions.php");
 
 class ExternModuleLecturedetails extends ExternModule {
 
@@ -137,7 +137,7 @@ class ExternModuleLecturedetails extends ExternModule {
 			$language = "de_DE";
 		init_i18n($language);
 		
-		include($GLOBALS["ABSOLUTE_PATH_STUDIP"] . $GLOBALS["RELATIVE_PATH_EXTERN"]
+		include($GLOBALS["RELATIVE_PATH_EXTERN"]
 				. "/modules/views/lecturedetails_preview.inc.php");
 				
 		if ($this->config->getValue("Main", "wholesite"))

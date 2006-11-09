@@ -29,6 +29,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-include ($ABSOLUTE_PATH_STUDIP."modules/evaluation/evaluation_show.inc.php");
+include ("modules/evaluation/evaluation_show.inc.php");
 
 ?>

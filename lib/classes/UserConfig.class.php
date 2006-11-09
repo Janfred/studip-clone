@@ -1,6 +1,6 @@
 <?php
 
-require_once($ABSOLUTE_PATH_STUDIP."lib/classes/Config.class.php");	//Acces to config-values
+require_once("lib/classes/Config.class.php");	//Acces to config-values
 
 
 /**

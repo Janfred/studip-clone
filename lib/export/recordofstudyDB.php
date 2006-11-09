@@ -17,9 +17,9 @@
  * @module      recordofstudy
 
  */
-require_once("$ABSOLUTE_PATH_STUDIP/dates.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/config.inc.php");
-require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
+require_once("dates.inc.php");
+require_once("config.inc.php");
+require_once("lib/classes/SemesterData.class.php");
 
 /**
  * collect the current seminars and concerning semesters from the archiv	

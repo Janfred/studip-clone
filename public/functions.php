@@ -34,14 +34,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/StudipSemTree.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/StudipRangeTree.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/Modules.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/SemesterData.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/HolidayData.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."object.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/user_visible.inc.php");
+require_once ("lib/classes/StudipSemTree.class.php");
+require_once ("lib/classes/StudipRangeTree.class.php");
+require_once ("lib/classes/Modules.class.php");
+require_once ("lib/classes/SemesterData.class.php");
+require_once ("lib/classes/HolidayData.class.php");
+require_once ("visual.inc.php");
+require_once ("object.inc.php");
+require_once ("user_visible.inc.php");
 
 /**
 * This function creates the header line for studip-objects

@@ -20,12 +20,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/idna_convert.class.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/StudipDocument.class.php');
-require_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/classes/StudipDocumentTree.class.php');
+require_once('lib/classes/idna_convert.class.php');
+require_once('lib/classes/StudipDocument.class.php');
+require_once('lib/classes/StudipDocumentTree.class.php');
 
 
-if ($GLOBALS['ZIP_USE_INTERNAL']) include_once($GLOBALS['ABSOLUTE_PATH_STUDIP'].'lib/pclzip/pclzip.lib.php');
+if ($GLOBALS['ZIP_USE_INTERNAL']) include_once('lib/pclzip/pclzip.lib.php');
 function readfile_chunked($filename,$retbytes=true) { 
    $chunksize = 1*(1024*1024); // how many bytes per chunk 
    $buffer = ''; 
@@ -1971,7 +1971,7 @@ function create_zip_from_directory($fullpath, $zip_file_name){
 		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
 		if (@chdir($fullpath)) {
 			exec ($GLOBALS['ZIP_PATH'] . ' -q -D ' . $GLOBALS['ZIP_OPTIONS'] . ' ' . $zippara . $zip_file_name . ' *',$output, $ret);
-			@chdir($GLOBALS['ABSOLUTE_PATH_STUDIP']);
+			@chdir('');
 		}
 		return $ret;
 	}

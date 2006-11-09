@@ -21,7 +21,7 @@
 //$Id$
 require_once "resources_extern_config.inc.php";
 require_once "resources_extern_functions.inc.php";
-require_once $GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/SemesterData.class.php";
+require_once "lib/classes/SemesterData.class.php";
 $sem = new SemesterData();
 $current_sem = $sem->getCurrentSemesterData();
 $_view = ($_REQUEST['view'] ? $_REQUEST['view'] : 'start');

@@ -35,22 +35,22 @@
 // +---------------------------------------------------------------------------+
 
 
-include($ABSOLUTE_PATH_STUDIP. "seminar_open.php"); // initialise Stud.IP-Session
-require_once($ABSOLUTE_PATH_STUDIP . "config.inc.php"); 		//wir brauchen die Seminar-Typen
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/extern_config.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
+include("seminar_open.php"); // initialise Stud.IP-Session
+require_once("config.inc.php"); 		//wir brauchen die Seminar-Typen
+require_once($RELATIVE_PATH_EXTERN . "/extern_config.inc.php");
+require_once($RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
 
 // -- here you have to put initialisations for the current page
 
 // Start of Output
-include($ABSOLUTE_PATH_STUDIP . "html_head.inc.php"); // Output of html head
-include($ABSOLUTE_PATH_STUDIP . "header.php");   // Output of Stud.IP head
+include("html_head.inc.php"); // Output of html head
+include("header.php");   // Output of Stud.IP head
 
-require_once($ABSOLUTE_PATH_STUDIP . "msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
-require_once($ABSOLUTE_PATH_STUDIP . "cssClassSwitcher.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "language.inc.php");
+require_once("msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
+require_once("cssClassSwitcher.inc.php");
+require_once("language.inc.php");
 
-include($ABSOLUTE_PATH_STUDIP . "links_admin.inc.php");  //Linkleiste fuer admins
+include("links_admin.inc.php");  //Linkleiste fuer admins
 
 //get ID from an open Institute
 if ($SessSemName[1])
@@ -95,7 +95,7 @@ if ($com == "delete_sec") {
 $css_switcher =& new cssClassSwitcher();
 
 if ($com == "info") {
-	include($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/views/extern_info_module.inc.php");
+	include($RELATIVE_PATH_EXTERN . "/views/extern_info_module.inc.php");
 	print_footer();
 	page_close();
 	exit;
@@ -120,7 +120,7 @@ if ($edit) {
 if ($com == "new" || $com == "edit" || $com == "open" ||
 		$com == "close" || $com == "store") {
 
-	require_once($ABSOLUTE_PATH_STUDIP . $RELATIVE_PATH_EXTERN . "/views/extern_edit_module.inc.php");
+	require_once($RELATIVE_PATH_EXTERN . "/views/extern_edit_module.inc.php");
 	print_footer();
 	page_close();
 	exit;

@@ -28,7 +28,7 @@
 $_lit_search_plugins[] = array('name' => 'DDB_Experimental', 'link' => '');
 */
 
-require_once ($GLOBALS['ABSOLUTE_PATH_STUDIP'] . "/lib/classes/lit_search_plugins/StudipLitSearchPluginZ3950Abstract.class.php");
+require_once ("lib/classes/lit_search_plugins/StudipLitSearchPluginZ3950Abstract.class.php");
 
 /**
 * Plugin for retrieval using Z39.50

@@ -21,8 +21,8 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($ABSOLUTE_PATH_STUDIP . "visual.inc.php");
-require_once($ABSOLUTE_PATH_STUDIP . "functions.php");
+require_once("visual.inc.php");
+require_once("functions.php");
 
 
 /**

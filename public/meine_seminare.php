@@ -140,27 +140,27 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
 } // Ende function print_seminar_content
 
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Session
+include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once ($ABSOLUTE_PATH_STUDIP."config.inc.php");			// Klarnamen fuer den Veranstaltungsstatus
-require_once ($ABSOLUTE_PATH_STUDIP."visual.inc.php");			// htmlReady fuer die Veranstaltungsnamen
-require_once ($ABSOLUTE_PATH_STUDIP."dates.inc.php");			// Semester-Namen fuer Admins
-require_once ($ABSOLUTE_PATH_STUDIP."admission.inc.php");		// Funktionen der Teilnehmerbegrenzung
-require_once ($ABSOLUTE_PATH_STUDIP."messaging.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/Modules.class.php");	// modul-config class
-require_once ($ABSOLUTE_PATH_STUDIP."lib/classes/ModulesNotification.class.php");
-require_once ($ABSOLUTE_PATH_STUDIP."statusgruppe.inc.php");		// Funktionen für Statusgruppen
-require_once ($ABSOLUTE_PATH_STUDIP."object.inc.php");
-require_once ($ABSOLUTE_PATH_STUDIP. "meine_seminare_func.inc.php");
+require_once ("config.inc.php");			// Klarnamen fuer den Veranstaltungsstatus
+require_once ("visual.inc.php");			// htmlReady fuer die Veranstaltungsnamen
+require_once ("dates.inc.php");			// Semester-Namen fuer Admins
+require_once ("admission.inc.php");		// Funktionen der Teilnehmerbegrenzung
+require_once ("messaging.inc.php");
+require_once ("lib/classes/Modules.class.php");	// modul-config class
+require_once ("lib/classes/ModulesNotification.class.php");
+require_once ("statusgruppe.inc.php");		// Funktionen für Statusgruppen
+require_once ("object.inc.php");
+require_once ("meine_seminare_func.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
-	include_once $ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_CHAT."/chat_func_inc.php";
+	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = true;
 	$sms = new messaging();
 }
 if ($GLOBALS['ILIAS_CONNECT_ENABLE']){
-	include_once ($ABSOLUTE_PATH_STUDIP.$RELATIVE_PATH_LEARNINGMODULES."/lernmodul_db_functions.inc.php");
+	include_once ($RELATIVE_PATH_LEARNINGMODULES."/lernmodul_db_functions.inc.php");
 }
 
 $cssSw = new cssClassSwitcher();									// Klasse für Zebra-Design
@@ -175,13 +175,13 @@ $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen g
 $HELP_KEYWORD="Basis.MeineVeranstaltungen";
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");   // Output of Stud.IP head
+include ("html_head.inc.php"); // Output of html head
+include ("header.php");   // Output of Stud.IP head
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 
 if (!$perm->have_perm("root"))
-	include ("$ABSOLUTE_PATH_STUDIP/links_seminare.inc.php");	   //hier wird die Navigation nachgeladen
+	include ("links_seminare.inc.php");	   //hier wird die Navigation nachgeladen
 
 //Ausgabe bei bindenden Veranstaltungen, loeschen nicht moeglich!
 if ($cmd == "no_kill") {
