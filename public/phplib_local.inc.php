@@ -3,8 +3,8 @@
 // This file is part of Stud.IP
 // phplib_local.inc.php
 // This file contains several phplib classes extended for use with Stud.IP
-// 
-// Copyright (c) 2003 André Noack <noack@data-quest.de> 
+//
+// Copyright (c) 2003 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -22,7 +22,10 @@
 // +---------------------------------------------------------------------------+
 //$Id$
 
-ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $ABSOLUTE_PATH_STUDIP);
+$include_path = get_include_path();
+$include_path .= PATH_SEPARATOR . dirname(__FILE__);
+$include_path .= PATH_SEPARATOR . dirname(__FILE__) . DIRECTORY_SEPARATOR . '..';
+set_include_path($include_path);
 
 //compatibility section
 if (!defined('PHPLIB_SESSIONDATA_TABLE')){
@@ -40,7 +43,7 @@ foreach($_never_globalize_request_params as $one_param){
 	}
 }
 
-require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+require_once("language.inc.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/Config.class.php");
 require_once("$ABSOLUTE_PATH_STUDIP/lib/classes/UserConfig.class.php");
@@ -50,8 +53,8 @@ if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME
 	$CHAT_SERVER_NAME = "ChatFileServer";
 
 if (!$GLOBALS['ABSOLUTE_URI_STUDIP']){
-	$GLOBALS['ABSOLUTE_URI_STUDIP'] = ( ($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://") 
-									. $_SERVER["SERVER_NAME"] . (($_SERVER["SERVER_PORT"] != 443 && $_SERVER["SERVER_PORT"] != 80) ? ":" . $_SERVER["SERVER_PORT"] : "") 
+	$GLOBALS['ABSOLUTE_URI_STUDIP'] = ( ($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://")
+									. $_SERVER["SERVER_NAME"] . (($_SERVER["SERVER_PORT"] != 443 && $_SERVER["SERVER_PORT"] != 80) ? ":" . $_SERVER["SERVER_PORT"] : "")
 									. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']; // link to system
 }
 if (!$GLOBALS['ASSETS_URL']){
@@ -117,7 +120,7 @@ class studip_smtp_class extends smtp_class {
 	var $abuse = "";
 	var $url = "";
 	var $additional_headers = array();
-	
+
 	function studip_smtp_class() {
 		$this->localhost = ($GLOBALS['MAIL_LOCALHOST'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_LOCALHOST']; // name of the mail sending machine (the web server)
 		$this->host_name = ($GLOBALS['MAIL_HOST_NAME'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_HOST_NAME']; // which mailserver should we use? (must allow mail-relaying from this->localhost)
@@ -145,7 +148,7 @@ class Seminar_CT_Sql extends CT_Sql {
 
 class Seminar_Session extends Session {
 	var $classname = "Seminar_Session";
-	
+
 	var $cookiename     = "Seminar_Session"; // defaults to classname
 	var $magic	  = "sdfghjdfdf";      // ID seed
 	var $mode	   = "cookie";	  // We propagate session IDs with cookies
@@ -154,8 +157,8 @@ class Seminar_Session extends Session {
 	var $that_class     = "Seminar_CT_Sql"; // name of data storage container
 	var $gc_probability = 2;
 	var $allowcache = "nocache";
-	
-	
+
+
 	function get_ticket(){
 		global $sess, $last_ticket;
 		static $studipticket;
@@ -165,10 +168,10 @@ class Seminar_Session extends Session {
 		if (!$studipticket){
 			$studipticket = $last_ticket = md5(uniqid('studipticket',1));
 		}
-		
+
 		return $studipticket;
 	}
-	
+
 	function check_ticket($studipticket){
 		global $sess, $last_ticket;
 		if (!$sess->is_registered('last_ticket')){
@@ -180,14 +183,14 @@ class Seminar_Session extends Session {
 		return $check;
 	}
 
-	
+
 	function Seminar_Session(){
 		$this->cookie_path = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'];
 		if (method_exists($this, 'Session')){
 			$this->Session();
 		}
 	}
-	
+
 	//erweiterter Garbage Collector
 	function gc(){
 		mt_srand((double)microtime()*1000000);
@@ -218,7 +221,7 @@ class Seminar_Session extends Session {
 				$db->query("UPDATE px_topics SET chdate=mkdate WHERE topic_id IN('" . join("','",$result['with_kids']) . "')");
 			}
 			unset($result);
-			
+
 			//messages aufräumen
 			$db->query("SELECT message_id, count( message_id ) AS gesamt, count(IF (deleted =0, NULL , 1) ) AS geloescht
 						FROM message_user GROUP BY message_id HAVING gesamt = geloescht");
@@ -233,9 +236,9 @@ class Seminar_Session extends Session {
 				$db->query("DELETE FROM message_user WHERE message_id IN('$ids')");
 				$db->query("DELETE FROM message WHERE message_id IN('$ids')");
 			}
-			
+
 			unset($result);
-			
+
 		}
 	//weiter mit gc() in der Super Klasse
 	parent::gc();
@@ -245,7 +248,7 @@ class Seminar_Session extends Session {
 class Seminar_User_CT_Sql extends CT_Sql {
 	var $database_class = "DB_Seminar";	  // Which database to connect...
 	var $database_table = PHPLIB_USERDATA_TABLE;
-	
+
 	function ac_get_changed($id, $name = null){
 		$this->db->query(sprintf("SELECT UNIX_TIMESTAMP(changed) FROM %s WHERE  sid='%s'  %s",
 		$this->database_table,
@@ -254,7 +257,7 @@ class Seminar_User_CT_Sql extends CT_Sql {
 		$this->db->next_record();
 		return $this->db->f(0);
 	}
-	
+
 	function ac_set_changed($id, $name = null, $timestamp){
 		$this->db->query(sprintf("UPDATE %s SET changed = '%s' WHERE  sid='%s'  %s",
 		$this->database_table,
@@ -263,7 +266,7 @@ class Seminar_User_CT_Sql extends CT_Sql {
 		$this->get_where_clause($name)));
 		return $this->db->affected_rows();
 	}
-	
+
 	function get_where_clause($name = null){
 		$ret = "";
 		if (PHPLIB_USERDATA_TABLE === PHPLIB_SESSIONDATA_TABLE){
@@ -279,7 +282,7 @@ class Seminar_User extends User {
 	var $that_class     = "Seminar_User_CT_Sql"; // data storage container
 	var $fake_user = false;
 	var $cfg = null; //UserConfig object
-	
+
 	function Seminar_User($uid = null){
 		$this->cfg =& new UserConfig();
 		if ($uid){
@@ -291,12 +294,12 @@ class Seminar_User extends User {
 			}
 		}
 	}
-	
+
 	function start($uid){
 		parent::start($uid);
 		$this->cfg->setUserId($uid);
 	}
-	
+
 	function freeze(){
 		if ($this->fake_user){
 			$this->fake_freeze();
@@ -305,7 +308,7 @@ class Seminar_User extends User {
 			return parent::freeze();
 		}
 	}
-	
+
 	function fake_freeze(){
 		$changed = $this->get_last_action();
 		if(!$this->that->ac_store($this->id, $this->name, $this->serialize())){
@@ -313,11 +316,11 @@ class Seminar_User extends User {
 		}
 		$this->set_last_action($changed);
 	}
-	
+
 	function get_last_action(){
 		return $this->that->ac_get_changed($this->id, $this->name);
 	}
-	
+
 	function set_last_action($timestamp = 0){
 		if ($timestamp <= 0){
 			$timestamp = time();
@@ -334,9 +337,9 @@ class Seminar_User extends User {
 
 class Seminar_Auth extends Auth {
 	var $classname      = "Seminar_Auth";
-	
+
 	var $lifetime       =  60;
-	
+
 	var $magic	  = "Fdfglkdfsg";  // Challenge seed
 	var $database_class = "DB_Seminar";
 	var $database_table = "auth_user_md5";
@@ -345,13 +348,13 @@ class Seminar_Auth extends Auth {
 	//constructor
 	function Seminar_Auth() {
 	}
-	
+
 	function start(){
 		//load the lifetime from the settings
 		$this->lifetime = $GLOBALS['AUTH_LIFETIME'];
 		return parent::start();
 	}
-	
+
 	function login_if($ok){
 		if ($ok){
 			parent::login_if($ok);
@@ -361,7 +364,7 @@ class Seminar_Auth extends Auth {
 		}
 		return true;
 	}
-	
+
 	function is_authenticated(){
 		global $ABSOLUTE_PATH_STUDIP;
 		$cfg =& Config::GetInstance();
@@ -390,12 +393,12 @@ class Seminar_Auth extends Auth {
 		}
 		return parent::is_authenticated();
 	}
-	
+
 	function auth_preauth() {
 		global $auto_user,$auto_response,$auto_id,$resolution,$TMP_PATH;
-		// is Single Sign On activated?		
+		// is Single Sign On activated?
 		if ($GLOBALS["sso"]){
-			// then do login 
+			// then do login
 			require_once("lib/classes/auth_plugins/StudipAuthCAS.class.php");
 			$authplugin = StudipAuthAbstract::GetInstance("CAS");
 			$authplugin->authenticateUser("","","");
@@ -403,7 +406,7 @@ class Seminar_Auth extends Auth {
 				$uid = $authplugin->getStudipUserid($authplugin->getUser());
 				$this->db->query(sprintf("select username,perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
 				$this->db->next_record();
-				
+
 				$this->auth["perm"]  = $this->db->f("perms");
 				$this->auth["uname"] = $this->db->f("username");
 				$this->auth["auth_plugin"]  = $this->db->f("auth_plugin");
@@ -411,7 +414,7 @@ class Seminar_Auth extends Auth {
 				return $uid;
 			}
 		}
-		// end of single sign on		
+		// end of single sign on
 		if (!$auto_user OR !$auto_response OR !$auto_id){
 			return false;
 		}
@@ -460,50 +463,50 @@ class Seminar_Auth extends Auth {
 			return false;
 		}
 	}
-	
+
 	function auth_loginform() {
 		global $sess;
 		global $challenge;
 		global $ABSOLUTE_PATH_STUDIP;
 		global $shortcut;
 		global $order;
-		
+
 	  $challenge = StudipAuthAbstract::CheckMD5();
     if ($challenge){
         $challenge = md5(uniqid($this->magic));
         $sess->register("challenge");
     }
-	
+
 		include("$ABSOLUTE_PATH_STUDIP/crcloginform.ihtml");
 	}
-	
+
 	function auth_validatelogin() {
 		global $username, $password, $challenge, $response, $resolution;
 		global $_language, $_language_path, $login_ticket;
-		
+
 		//prevent replay attack
 		if (!Seminar_Session::check_ticket($login_ticket)){
 			return false;
 		}
-		
-		// check for direct link  
+
+		// check for direct link
 		if (!isset($_language) || $_language == "") {
 			$_language = get_accepted_languages();
-		}		
-		
+		}
+
 		$_language_path = init_i18n($_language);
-		
-		
+
+
 		$this->auth["uname"] = $username;	// This provides access for "loginform.ihtml"
 		$this->auth["jscript"] = ($resolution != "");
 		if ($this->auth['jscript'] && $challenge){
 			$password = $response;
 		}
-	
+
 		$check_auth = StudipAuthAbstract::CheckAuthentication(stripslashes($username),stripslashes($password),$this->auth['jscript']);
-		
+
 		$GLOBALS['sess']->unregister('challenge');
-		
+
 		if ($check_auth['uid']){
 			$uid = $check_auth['uid'];
 			$this->db->query(sprintf("select username,perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
@@ -518,7 +521,7 @@ class Seminar_Auth extends Auth {
 			return false;
 		}
 	}
-	
+
 	function auth_set_user_settings($uid){
 		global $resolution, $_language;
 		$divided = explode("x",$resolution);
@@ -541,9 +544,9 @@ class Seminar_Auth extends Auth {
 
 class Seminar_Default_Auth extends Seminar_Auth {
 	var $classname = "Seminar_Default_Auth";
-	
+
 	var $nobody    = true;
-	
+
 	function Seminar_Default_Auth(){
 		Seminar_Auth::Seminar_Auth();
 	}
@@ -553,52 +556,52 @@ class Seminar_Default_Auth extends Seminar_Auth {
 class Seminar_Register_Auth extends Seminar_Auth {
 	var $classname = "Seminar_Register_Auth";
 	var $magic     = "dsdfjhgretha";  // Challenge seed
-	
+
 	var $mode      = "reg";
 	var $error_msg = ""; // Was läuft falsch bei der Registrierung ?
-	
+
 	function auth_registerform() {
 		global $sess;
 		global $challenge,$ABSOLUTE_PATH_STUDIP;
-		
+
 		$challenge = md5(uniqid($this->magic));
 		$sess->register("challenge");
-		
+
 		include("$ABSOLUTE_PATH_STUDIP/crcregister.ihtml");
 	}
-	
+
 	function auth_doregister() {
 		global $username, $password, $challenge, $response, $Vorname, $Nachname, $geschlecht, $Email,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$ABSOLUTE_PATH_STUDIP, $CANONICAL_RELATIVE_PATH_STUDIP, $UNI_NAME_CLEAN, $DEFAULT_LANGUAGE;
-		
+
 		global $_language, $_language_path;
-		
+
 		$this->error_msg = "";
-		
-		// check for direct link to register2.php 
+
+		// check for direct link to register2.php
 		if (!isset($_language) || $_language == "") {
 			$_language = get_accepted_languages();
-		}		
-		
+		}
+
 		$_language_path = init_i18n($_language);
-		
+
 		$this->auth["uname"]=$username;					// This provides access for "crcregister.ihtml"
-		
+
 		$validator=new email_validation_class;	// Klasse zum Ueberpruefen der Eingaben
 		$validator->timeout=10;									// Wie lange warten wir auf eine Antwort des Mailservers?
-		
-		
+
+
 		$username = trim($username);
 		$Vorname = trim($Vorname);
 		$Nachname = trim($Nachname);
 		$Email = trim($Email);
-		
+
 		if (!$validator->ValidateUsername($username))
 		{
 			$this->error_msg=$this->error_msg. _("Der gewählte Username ist zu kurz!") . "<br>";
 			return false;
 		}														// username syntaktisch falsch oder zu kurz
 		// auf doppelte Vergabe wird weiter unten getestet.
-		
+
 		if (!isset($response) || $response=="")	{	// wir haben kein verschluesseltes Passwort
 			if (!$validator->ValidatePassword($password))
 			{
@@ -606,7 +609,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 				return false;
 			}													// also können wir das unverschluesselte Passwort testen
 		}
-		
+
 		if (!$validator->ValidateName($Vorname))
 		{
 			$this->error_msg=$this->error_msg. _("Der Vorname fehlt oder ist unsinnig!") . "<br>";
@@ -622,11 +625,11 @@ class Seminar_Register_Auth extends Seminar_Auth {
 			$this->error_msg=$this->error_msg. _("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!") . "<br>";
 			return false;
 		}			   // E-Mail syntaktisch nicht korrekt oder fehlend
-		
+
 		$smtp=new studip_smtp_class;		     // Einstellungen fuer das Verschicken der Mails
 		$REMOTE_ADDR=$_SERVER["REMOTE_ADDR"];
 		$Zeit=date("H:i:s, d.m.Y",time());
-		
+
 		if (!$validator->ValidateEmailHost($Email)) {     // Mailserver nicht erreichbar, ablehnen
 			$this->error_msg=$this->error_msg. _("Der Mailserver ist nicht erreichbar, bitte überprüfen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken und empfangen können!") . "<br>";
 			return false;
@@ -644,7 +647,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 				;					     // Alles paletti, jetzt kommen die Checks gegen die Datenbank...
 			}
 		}
-		
+
 		$check_uname = StudipAuthAbstract::CheckUsername($username);
 
 		if ($check_uname['found']){
@@ -652,7 +655,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 			$this->error_msg = $this->error_msg. _("Der gewählte Username ist bereits vorhanden!") . "<br>";
 			return false;				   // username schon vorhanden
 		}
-		
+
 		$this->db->query(sprintf("select user_id ".
 		"from %s where Email = '%s'",
 		$this->database_table,
@@ -663,7 +666,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 			$this->error_msg=$this->error_msg. _("Die angegebene E-Mail-Adresse wird bereits von einem anderen User verwendet. Sie müssen eine andere E-Mail-Adresse angeben!") . "<br>";
 			return false;				   // Email schon vorhanden
 		}
-		
+
 		// alle Checks ok, Benutzer registrieren...
 		// True when JS is disabled
 		if ($response == "") {
@@ -680,16 +683,16 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$this->database_table, $uid, addslashes($username), $perm, $newpass,
 		addslashes($Vorname), addslashes($Nachname), addslashes($Email)));
 		$this->auth["perm"] = $perm;
-		
+
 		if($title_front == "")
 			$title_front = $title_front_chooser;
-		
+
 		if($title_rear == "")
 			$title_rear = $title_rear_chooser;
-		
+
 		// Anlegen eines korespondierenden Eintrags in der user_info
 		$this->db->query("INSERT INTO user_info SET user_id='$uid', mkdate='".time()."', geschlecht='$geschlecht', title_front='$title_front', title_rear='$title_rear'");
-		
+
 		// Abschicken der Bestaetigungsmail
 		$to=$Email;
 		$secret= md5("$uid:$this->magic");
@@ -702,7 +705,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$smtp->env_from, array($to),
 		array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
 		$mailbody);
-		
+
 		return $uid;
 	}
 }
@@ -711,7 +714,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 
 class Seminar_Perm extends Perm {
 	var $classname = "Seminar_Perm";
-	
+
 	var $permissions = array(
 	"user"       => 1,
 	"autor"      => 3,
@@ -722,13 +725,13 @@ class Seminar_Perm extends Perm {
 	);
 	var $studip_perms = array();
 	var $fak_admins = array();
-	
+
 	function perm_invalid($does_have, $must_have) {
 		global $perm, $auth, $sess;
 		global $ABSOLUTE_PATH_STUDIP,$RELATIVE_PATH_CHAT;
 		include($ABSOLUTE_PATH_STUDIP . "perminvalid.ihtml");
 	}
-	
+
 	function get_perm($user_id = false){
 		global $auth,$user;
 		if (!$user_id) $user_id = $user->id;
@@ -745,15 +748,15 @@ class Seminar_Perm extends Perm {
 			}
 		}
 	}
-	
+
 	function have_perm($perm, $user_id = false) {
-		
+
 		$pageperm = split(",", $perm);
 		$userperm = split(",", $this->get_perm($user_id));
-		
+
 		list($ok0, $pagebits) = $this->permsum($pageperm);
 		list($ok1, $userbits) = $this->permsum($userperm);
-		
+
 		$has_all = (($userbits & $pagebits) == $pagebits);
 		if (!($has_all && $ok0 && $ok1) ) {
 			return false;
@@ -761,7 +764,7 @@ class Seminar_Perm extends Perm {
 			return true;
 		}
 	}
-	
+
 	function get_studip_perm($range_id, $user_id = false) {
 		global $auth, $user;
 		if (!$user_id) $user_id = $user->id;
@@ -780,13 +783,13 @@ class Seminar_Perm extends Perm {
 		} elseif (isset($this->studip_perms[$range_id][$user_id])) {
 			return $this->studip_perms[$range_id][$user_id];
 		} elseif ($user_perm == "admin") {
-			$db->query("SELECT seminare.Seminar_id FROM user_inst 
+			$db->query("SELECT seminare.Seminar_id FROM user_inst
 						LEFT JOIN seminare USING (Institut_id)
 						WHERE inst_perms='admin' AND user_id='$user_id' AND seminare.Seminar_id='$range_id'");
 			if ($db->num_rows()) {
 				$status = "admin";
 			} else {
-				$db->query("SELECT Seminar_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id) 
+				$db->query("SELECT Seminar_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
 							LEFT JOIN Institute c ON (b.Institut_id=c.fakultaets_id) LEFT JOIN seminare d ON (d.Institut_id=c.Institut_id) WHERE a.user_id='$user_id' AND a.inst_perms='admin' AND d.Seminar_id='$range_id'");
 				if ($db->num_rows()) {
 					$status = "admin";
@@ -799,12 +802,12 @@ class Seminar_Perm extends Perm {
 				}
 			}
 		}
-		
+
 		if ($status) {
 			$this->studip_perms[$range_id][$user_id] = $status;
 			return $status;
 		}
-		
+
 		$db->query("SELECT status FROM seminar_user WHERE user_id='$user_id' AND Seminar_id='$range_id'");
 		if ($db->next_record()){
 			$status=$db->f("status");
@@ -817,24 +820,24 @@ class Seminar_Perm extends Perm {
 		$this->studip_perms[$range_id][$user_id] = $status;
 		return $status;
 	}
-	
+
 	function have_studip_perm($perm, $range_id, $user_id = false) {
-		
+
 		$pageperm = split(",", $perm);
 		$userperm = split(",", $this->get_studip_perm($range_id, $user_id));
-		
+
 		list ($ok0, $pagebits) = $this->permsum($pageperm);
 		list ($ok1, $userbits) = $this->permsum($userperm);
-		
+
 		$has_all = (($userbits & $pagebits) == $pagebits);
-		
+
 		if (!($has_all && $ok0 && $ok1) ) {
 			return false;
 		} else {
 			return true;
 		}
 	}
-	
+
 	function is_fak_admin($user_id = false){
 		global $user;
 		if (!$user_id) $user_id = $user->id;
@@ -848,7 +851,7 @@ class Seminar_Perm extends Perm {
 		if (isset($this->fak_admins[$user_id])){
 			return $this->fak_admins[$user_id];
 		} else {
-			$db = new DB_Seminar("SELECT a.Institut_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)  
+			$db = new DB_Seminar("SELECT a.Institut_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
 									WHERE a.user_id='$user_id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id)");
 			if ($db->next_record()){
 				$this->fak_admins[$user_id] = true;
