@@ -243,7 +243,7 @@ class MagpieRSS {
 			if ( isset($attrs['rel']) and $attrs['rel'] != 'alternate' ) 
             {
                 $link_el = 'link_' . $attrs['rel'];
-			}
+            }
             else {
                 $link_el = 'link';
             }
