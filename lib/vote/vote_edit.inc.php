@@ -42,11 +42,11 @@ define( "QUESTION_HELPTEXT",
 /* -------------------------------------------------------- */
 
 
-include_once("vote/vote.config.php");
-include_once ("vote/Vote.class.php");
-include_once ("vote/TestVote.class.php");
-include_once ("vote/view/vote_edit.lib.php");
-include_once ("vote/view/visual.inc.php");
+include_once("lib/vote/vote.config.php");
+include_once ("lib/vote/Vote.class.php");
+include_once ("lib/vote/TestVote.class.php");
+include_once ("lib/vote/view/vote_edit.lib.php");
+include_once ("lib/vote/view/visual.inc.php");
 
 global $auth, $perm;
 
@@ -75,10 +75,10 @@ if ( ! ( $perm->have_studip_perm( "tutor", $rangeID ) || $auth->auth["uname"] ==
 		  "<br /><font size=-1 color=black>".
 		  $reason.
 		  "</font>",
-		  "§", _("Zugriff auf Editierseite verweigert"), 
+		  "§", _("Zugriff auf Editierseite verweigert"),
 		  "<br />&nbsp;"
 		  );
-    
+
     page_close ();
     exit;
 }
@@ -163,7 +163,7 @@ if( !isset( $answers ) ) {
 	}
     }
 }
-	
+
 if( empty( $answers ) ) {
     if( !isset( $addAnswersButton_x ) && !isset( $saveButton_x ) && !isset( $deleteAnswersButton_x ) ) {
 	for( $i=0; $i<5; $i++ )
@@ -212,7 +212,7 @@ if( $pageMode != MODE_RESTRICTED ) {
 	for( $i=0; $i<$newAnswerFields; $i++ )
 	    array_push( $answers, makeNewAnswer() );
     }
-    
+
     /**** Command: move Answers ****/
     elseif( isset( $move_up ) ) {
 	for( $i=0; $i<count($answers); $i++ )
@@ -224,7 +224,7 @@ if( $pageMode != MODE_RESTRICTED ) {
 	    if( isset( $move_down[$i] ) )
 		moveAnswerDown( $answers, $i );
     }
-    
+
     /**** Command: delete Answers ****/
     elseif( isset( $deleteAnswersButton_x ) ) {
 	for( $i=0; $i<count($answers); $i++ ) {
@@ -246,18 +246,18 @@ if( isset( $saveButton_x ) ) {
     // but in the meantime the first user has voted...
     if( $pageMode == MODE_RESTRICTED && !empty( $_POST["question"]) )
 	$vote->throwError(666, _("Inzwischen hat jemand abgestimmt! Sie k&ouml;nnen daher die meisten &Auml;nderungen nicht mehr vornehmen."), __LINE__, __FILE__);
-    
+
     if( $title == NULL )
 	if( $question != NULL )
 	    $title = my_substr( $question, 0, 50 );
-    
+
     $vote->setTitle( $title );
     /* -------------------------------------------------------- */
 
     if( $pageMode != MODE_RESTRICTED ) {
 	/* -------------------------------------------------------- */
 	$vote->setQuestion ( $question );
-    
+
 	// remove any empty answers
 	for( $i=0; $i<count($answers); $i++ ) {
 	    if( empty( $answers[$i]['text'] ) ) {
@@ -332,7 +332,7 @@ if( isset( $saveButton_x ) ) {
     if( ! $vote->isError() ) {
 	if ($pageMode == MODE_RESTRICTED)
 	    $vote->addSlashesToText(); // prevent mysql from crashing...
-	
+
 	// save vote to database!
 	$vote->executeWrite();
 
@@ -365,7 +365,7 @@ elseif( isset( $cancelButton_x ) ) {
 
 
 // end output buffering, we are still on the edit page...
-ob_end_flush(); 
+ob_end_flush();
 
 /*******************************************************************/
 /************************ output calls *****************************/
@@ -486,13 +486,13 @@ function moveAnswerDown( &$answers, $pos ) {
  */
 
 function deleteAnswer( $pos, &$answers, &$deleteAnswers ) {
-     
+
     unset( $answers[$pos] );
     if( is_array( $deleteAnswers ) )
 	unset( $deleteAnswers[$pos] );
 
     for( $i=$pos; $i<count($answers); $i++ ) {
-	 
+
 	if( !isset( $answers[$i] ) ) {
 	    $answers[$i] = $answers[$i+1];
 	    unset( $answers[$i+1] );
@@ -504,7 +504,7 @@ function deleteAnswer( $pos, &$answers, &$deleteAnswers ) {
     }
     return;
 }
- 
+
 
 /**
  * deletes argument '&arg=value' from URL

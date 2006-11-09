@@ -1,9 +1,9 @@
 <?
 /**
 * ExternElement.class.php
-* 
+*
 * This is an abstract class that define an interface to every so called HTML-element
-* 
+*
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
@@ -37,7 +37,7 @@ require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
 require_once("visual.inc.php");
 
 class ExternElement {
-	
+
 	var $type;
 	var $config;
 	var $name;
@@ -46,7 +46,7 @@ class ExternElement {
 	var $description;
 	var $headlines = array();
 
-	
+
 	/**
 	*
 	*/
@@ -56,11 +56,11 @@ class ExternElement {
 				. $GLOBALS["RELATIVE_PATH_EXTERN"] . "/elements/$class_name.class.php");
 		$element = new $class_name();
 		$element->config =& $config;
-		
+
 		return $element;
 	}
-	
-	
+
+
 	/**
 	* Constructor
 	* Don't call direct, use GetInstance() instead.
@@ -82,44 +82,44 @@ class ExternElement {
 	function getType () {
 		return $this->type;
 	}
-	
+
 	/**
 	*
 	*/
 	function getName () {
 		return $this->name;
 	}
-	
+
 	/**
 	*
 	*/
 	function getRealname () {
 		return $this->real_name;
 	}
-	
+
 	/**
 	*
 	*/
 	function getDefaultConfig () {
 		$config = array();
-		
+
 		reset($this->attributes);
 		foreach ($this->attributes as $attribute)
 			$config[$attribute] = "";
-		
+
 		return $config;
 	}
-			
+
 	/**
 	*
 	*/
 	function isEditable () {
 		if (sizeof($this->attributes))
 			return TRUE;
-		
+
 		return FALSE;
 	}
-	
+
 	/**
 	*
 	*/
@@ -128,85 +128,85 @@ class ExternElement {
 	}
 
 	/**
-	* 
+	*
 	*/
 	function toString ($args = NULL) {
 		return "";
 	}
 
 	/**
-	* 
+	*
 	*/
 	function printout ($args = NULL) {
 		echo $this->toString($args);
 	}
 
 	/**
-	* 
+	*
 	*/
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
-		
+
 		if ($faulty_values == '')
-			$faulty_values = array();	
+			$faulty_values = array();
 		$out = "";
 		$tag_headline = "";
 		$table = "";
 		if ($edit_form == "")
 			$edit_form =& new ExternEditHtml($this->config, $post_vars, $faulty_values, $anker);
-		
+
 		$edit_form->setElementName($this->getName());
 		$element_headline = $this->getEditFormHeadline($edit_form);
-		
+
 		$out = $edit_form->getEditFormContent($this->attributes);
-		
+
 		$submit = $edit_form->editSubmit($this->config->getName(),
 				$this->config->getId(), $this->getName());
 		$out = $edit_form->editContent($out, $submit);
 		$out .= $edit_form->editBlank();
-		
+
 		return  $element_headline . $out;
 	}
-	
+
 	function getEditFormHeadline (&$edit_form) {
 		$headline = $edit_form->editElementHeadline($this->real_name,
 				$this->config->getName(), $this->config->getId(), TRUE);
-		
+
 		return $headline;
 	}
-	
+
 	/**
-	* 
+	*
 	*/
 	function printoutEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
-			
+
 		echo $this->toStringEdit($post_vars, $faulty_values, $edit_form, $anker);
 	}
-	
+
 	/**
-	* 
+	*
 	*/
 	function getAttributes ($short = TRUE) {
 		if ($short)
 			return $this->attributes;
-		
+
 		reset($this->attributes);
 		foreach($this->attributes as $attribute)
 			$attributes_long[] = $this->name . "_" . $attribute;
-		
+
 		return $attributes_long;
 	}
-	
+
 	/**
-	* 
+	*
 	*/
 	function getDescription () {
 		return $this->description;
 	}
-	
+
 	/**
-	* 
+	*
 	*/
 	function executeCommand ($command, $value = "") {
 
@@ -219,17 +219,17 @@ class ExternElement {
 					$_POST["{$this->name}_visible"] = $visible;
 				}
 				break;
-				
+
 			case "hide" :
 				$visible = $this->config->getValue($this->name, "visible");
-				
+
 				if ($value >= 0 || $value < sizeof($visible)) {
 					$visible[$value] = "0";
 					$this->config->setValue($this->name, "visible", $visible);
 					$_POST["{$this->name}_visible"] = $visible;
 				}
 				break;
-				
+
 			case "move_left" :
 				$order = $this->config->getValue($this->name, "order");
 				if ($value >= 0 || $value < sizeof($order)) {
@@ -248,7 +248,7 @@ class ExternElement {
 					$_POST["{$this->name}_order"] = $order;
 				}
 				break;
-				
+
 			case "move_right" :
 				$order = $this->config->getValue($this->name, "order");
 				if ($value >= 0 || $value < sizeof($order)) {
@@ -267,7 +267,7 @@ class ExternElement {
 					$_POST["{$this->name}_order"] = $order;
 				}
 				break;
-			
+
 			case "show_group" :
 				$visible = $this->config->getValue($this->name, "groupsvisible");
 				if (!is_array($visible))
@@ -278,7 +278,7 @@ class ExternElement {
 				}
 				else
 					break;
-				
+
 				if (in_array($value, $groups)) {
 					$visible[] = $value;
 					$visible = array_unique($visible);
@@ -286,7 +286,7 @@ class ExternElement {
 					$_POST["{$this->name}_groupsvisible"] = $visible;
 				}
 				break;
-			
+
 			case "hide_group" :
 				$visible = $this->config->getValue($this->name, "groupsvisible");
 				if ($groups = get_all_statusgruppen($this->config->range_id)) {
@@ -297,35 +297,35 @@ class ExternElement {
 					break;
 				// initialize groupsvisible if it isn't set in the config file
 				// all groups are visible (1)
-				if (!$visible) 
+				if (!$visible)
 					$visible = array_keys(get_all_statusgruppen($this->config->range_id));
 				$visible = array_diff($visible, array($value));
 				$this->config->setValue($this->name, "groupsvisible", $visible);
 				$_POST["{$this->name}_groupsvisible"] = $visible;
 				break;
-			
+
 			default :
 				return FALSE;
 		}
-		
+
 		return TRUE;
 	}
-	
+
 	/**
 	*
 	*/
 	function checkFormValues () {
 
 		$fault = array();
-		
+
 		$_POST['Main_copyright'] = htmlentities(decodeHTML(
 				$_POST['Main_copyright'], ENT_QUOTES), ENT_QUOTES);
 		$_POST['Main_author'] = htmlentities(decodeHTML(
 				$_POST['Main_author'], ENT_QUOTES), ENT_QUOTES);
-		
+
 		foreach ($this->attributes as $attribute) {
 			$form_name = $this->name . "_" . $attribute;
-			
+
 			// Check for an alternative input field. All names of alternative input
 			// fields begin with an underscore. The alternative input field overwrites
 			// the input field having the same name but without the leading underscore.
@@ -334,33 +334,33 @@ class ExternElement {
 						&& $_POST["_$form_name"] != "")
 					$_POST[$form_name] = $_POST["_$form_name"];
 			}
-			
+
 			if (is_array($_POST[$form_name]))
 				$value = $_POST[$form_name];
 			else
 				$value = array($_POST[$form_name]);
-						
+
 			$splitted_attribute = explode("_", $attribute);
 			if (sizeof($splitted_attribute) == 1)
 				$html_attribute = $splitted_attribute[0];
 			else
 				$html_attribute = $splitted_attribute[1] . $splitted_attribute[2];
-			
+
 			for ($i = 0; $i < sizeof($value); $i++) {
-			
+
 				// Don't accept strings longer than 200 characters!
 				if (strlen($value[$i]) > 200) {
 					$fault[$form_name][$i] = TRUE;
 					continue;
 				}
-				
+
 				if (preg_match("/(<|>|\"|\|)/i", $value[$i])) {
 					$fault[$form_name][$i] = TRUE;
 					continue;
 				}
-					
+
 				switch ($html_attribute) {
-			
+
 					case "height" :
 						$fault[$form_name][$i] = (!preg_match("/^\d{0,3}$/", $value[$i])
 								|| $value[$i]> 2000 || $value[$i]< 0);
@@ -439,24 +439,24 @@ class ExternElement {
 						break;
 					default :
 						$fault[$form_name][$i] = $this->checkValue($html_attribute, $value[$i]);
-						
+
 				}
-					
+
 			}
-			
+
 		}
-		
+
 		if (in_array(TRUE, $fault))
 			return $fault;
-		
+
 		return FALSE;
 	}
-	
+
 	function checkValue ($attribute, $value) {
-	
+
 		return FALSE;
 	}
-	
+
 }
 
 ?>

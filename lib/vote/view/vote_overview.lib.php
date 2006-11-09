@@ -10,7 +10,7 @@
  * @package     vote
  * @modulegroup vote_modules
  */
-include_once("vote/view/vote_show.lib.php");
+include_once("lib/vote/view/vote_show.lib.php");
 
 /**
  * displays the title bar

@@ -42,7 +42,7 @@ include_once("seminar_open.php");
 include_once("html_head.inc.php");
 include_once("header.php");
 $the_range = isset($showrangeID) ? $showrangeID : $rangeID;
-	
+
 if (!empty($the_range) && $the_range != $auth->auth['uname'] && $the_range != 'studip'){
 	$view_mode = get_object_type($the_range);
 	if ($view_mode == "fak"){
@@ -53,9 +53,9 @@ if (!empty($the_range) && $the_range != $auth->auth['uname'] && $the_range != 's
 	include ("links_about.inc.php");
 }
 if ($page == "edit")
-	include ("vote/vote_edit.inc.php");
+	include ("lib/vote/vote_edit.inc.php");
 else
-	include ("vote/vote_overview.inc.php");
+	include ("lib/vote/vote_overview.inc.php");
 
 page_close ();
 ?>

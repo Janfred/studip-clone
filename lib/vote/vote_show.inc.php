@@ -16,11 +16,11 @@
 
 # Include all required files ================================================ #
 
-require_once ("vote/view/visual.inc.php");
-require_once ("vote/view/vote_show.lib.php");
-require_once ("vote/VoteDB.class.php");
-require_once ("vote/Vote.class.php");
-require_once ("vote/TestVote.class.php");
+require_once ("lib/vote/view/visual.inc.php");
+require_once ("lib/vote/view/vote_show.lib.php");
+require_once ("lib/vote/VoteDB.class.php");
+require_once ("lib/vote/Vote.class.php");
+require_once ("lib/vote/TestVote.class.php");
 require_once ("modules/evaluation/evaluation.config.php");
 require_once (EVAL_FILE_OBJECTDB);
 require_once (EVAL_FILE_EVAL);
@@ -48,26 +48,26 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    if ($voteDB->isError ()) {
       echo createErrorReport ($voteDB, _("Vote-Datenbankfehler"));
       return;
-   }  
+   }
    $evalDB  = &new EvaluationDB ();
    if ($evalDB->isError ()) {
       echo createErrorReport ($evalDB, _("Evaluation-Datenbankfehler"));
       return;
-   }  
-   
+   }
+
    if ($perm->have_studip_perm ("tutor", $rangeID) ||
        get_username($userID) == $rangeID)
       $haveFullPerm = true;
    else
       $haveFullPerm = false;
-   
+
    $debug = "";
    /* ---------------------------------------------------------------------- */
 
    /* Start waiting votes -------------------------------------------------- */
    $voteDB->startWaitingVotes ();
    if ($voteDB->isError ()) {
-      echo createErrorReport ($voteDB, 
+      echo createErrorReport ($voteDB,
 			      _("Datenbankfehler bei Voteaktivierung"));
    }
    /* ---------------------------------------------------------------------- */
@@ -77,28 +77,28 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    $stoppedVotes = $voteDB->getStoppedVisibleVotes ($rangeID);
    $activeEvals  = array ();
    $stoppedEvals = array ();
-  
+
    if (!($rangeID2 = get_userid($rangeID)))
      $rangeID2 = $rangeID;
-   
+
    $activeEvals  = $evalDB->getEvaluationIDs ($rangeID2, EVAL_STATE_ACTIVE);
    if ($evalDB->isError ()) {
-      echo createErrorReport ($evalDB, 
+      echo createErrorReport ($evalDB,
             _("Datenbankfehler beim Auslesen der EvaluationsIDs."));
    }
-   
-   
+
+
    if ($haveFullPerm) {
      $stoppedEvals = $evalDB->getEvaluationIDs ($rangeID2, EVAL_STATE_STOPPED);
      if ($evalDB->isError ()) {
-         echo createErrorReport ($evalDB, 
+         echo createErrorReport ($evalDB,
          _("Datenbankfehler beim Auslesen der EvaluationsIDs."));
      }
    }
-   
-   if (empty ($activeVotes) && 
+
+   if (empty ($activeVotes) &&
        empty ($stoppedVotes) &&
-       empty ($activeEvals) && 
+       empty ($activeEvals) &&
        empty ($stoppedEvals) &&
        !($perm->have_studip_perm ("tutor", $rangeID) ||
 	 get_username($userID) == $rangeID)) {
@@ -116,8 +116,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    if ($perm->have_studip_perm ("tutor", $rangeID) OR
        get_username($userID) == $rangeID)
       echo createBoxHeader (_("Umfragen"), $width, "",
-			    VOTE_ICON_BIG, 
-			    _("Umfragen und mehr..."), 
+			    VOTE_ICON_BIG,
+			    _("Umfragen und mehr..."),
 			    VOTE_FILE_ADMIN."?page=overview&rangeID=".$rangeID.
 			    ($GLOBALS['SessSemName']["class"]=="sem"
 			     ? "&new_sem=TRUE&view=vote_sem"
@@ -125,7 +125,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 			    VOTE_ICON_ARROW, _("Umfragen bearbeiten"));
    else
       echo createBoxHeader (_("Umfragen"), $width, "",
-			    VOTE_ICON_BIG, 
+			    VOTE_ICON_BIG,
 			    _("Umfragen und mehr..."));
 
    /* create an anchor ---------------------------------------------------- */
@@ -143,7 +143,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 
    /* Javascript function for show-link */
    echo EvalCommon::createEvalShowJS( NO, NO );
-   
+
   /* Show all active evals ------------------------------------------------ */
    foreach ($activeEvals as $evalID) {
       $eval = &new Evaluation ($evalID, NULL, EVAL_LOAD_NO_CHILDREN);
@@ -151,7 +151,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       if ($eval->isError ()) {
          echo createErrorReport ($vote, _("Fehler beim Einlesen der Evaluation"));
       }
-      
+
       $haveFullPerm = $haveFullPerm || ($userID == $eval->getAuthorID());
 
       /* Get post and get-variables ---------------------------------------- */
@@ -166,22 +166,22 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 
       if ( $open ) {
 	 object_set_visit($evalID, "eval"); //set a visittime for this eval
-	 
+
          echo createBoxContentHeader ();
          echo createFormHeader ($eval);
-         
+
      /* User has already used the vote --------------------------------- */
          $hasVoted = $evalDB->hasVoted ($evalID, $userID);
          $numberOfVotes = $evalDB->getNumberOfVotes ($evalID);
          $evalNoPermissons = EvaluationObjectDB::getEvalUserRangesWithNoPermission($eval);
-         
+
          $table = new HTML ("table");
          $table->addAttr("style", "font-size:1.2em;");
          $table->addAttr("width", "100%");
          $table->addAttr("border", "0");
          $tr = new HTML ("tr");
          $td = new HTML ("td");
-         
+
          $maxTitleLength = ($isHomepage)
             ? VOTE_SHOW_MAXTITLELENGTH
             : VOTE_SHOW_MAXTITLELENGTH - 10;
@@ -189,28 +189,28 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
          if (strlen (formatReady($eval->getTitle ())) > $maxTitleLength){
             $b = new HTML ("b");
             $b->addHTMLContent(formatReady($eval->getTitle ()));
-            
+
             $td->addContent($b);
             $td->addContent( new HTMLempty ("br") );
             $td->addContent( new HTMLempty ("br") );
          }
-         
+
 	 $td->addAttr("style", "font-size:0.8em;");
          $td->addHTMLContent(formatReady($eval->getText ()));
          $td->addContent(new HTMLempty ("br"));
          $td->addContent(new HTMLempty ("br"));
-         
+
          if (! $hasVoted ) {
             $div = new HTML ("div");
             $div->addAttr ("align", "center");
             $div->addContent (EvalShow::createVoteButton ($eval));
             $td->addContent ($div);
          }
-         
+
          $tr->addContent ($td);
          $table->addContent ($tr);
          $table->addContent (EvalShow::createEvalMetaInfo ($eval, $hasVoted));
-         
+
          if ( $haveFullPerm ) {
             if (!($range = get_username($rangeID2)))
                $range = $rangeID2;
@@ -224,11 +224,11 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
             $td->addContent (EvalShow::createDeleteButton ($eval));
             $td->addContent (EvalShow::createExportButton ($eval));
             }
-            
+
             $tr->addContent ($td);
             $table->addContent ($tr);
          }
-         
+
          echo $table->createContent ();
          //echo createVoteForm ($eval, $userID);
      /* --------------------------------------------------------------- */
@@ -236,22 +236,22 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       echo createBoxContentFooter ();
       }
       /* ------------------------------------------------------------------- */
-      
+
       echo createBoxLineFooter ();
    }
    /* ---------------------------------------------------------------------- */
-  
+
 
    /* Show all active Votes ------------------------------------------------ */
    foreach ($activeVotes as $tmpVote) {
 
       $voteID = $tmpVote["voteID"];
-   
+
       if ($tmpVote["type"] == INSTANCEOF_TEST)
          $vote = new TestVote ($voteID);
       else
          $vote = new Vote ($voteID);
-      
+
       if ($vote->isError ()) {
 	 echo createErrorReport ($vote, _("Fehler beim Einlesen des Votes"));
       }
@@ -279,7 +279,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 
       if ( $open ) {
 	 object_set_visit($voteID, "vote"); //set a visittime for this vote
-     
+
 	 echo createBoxContentHeader ();
 	 echo createFormHeader ($vote);
 
@@ -287,18 +287,18 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 	    echo createReportMessage (_("Die &Auml;nderungen wurden gespeichert"),
 				      VOTE_ICON_SUCCESS, VOTE_COLOR_SUCCESS).
 		"<br>\n";
-					 
+
 	 /* User has already used the vote --------------------------------- */
 	 if ( $voteDB->isAssociated ($voteID, $userID) &&
 	      (! $changeAnswer) && (! $answerChanged) ) {
 	    echo createSuccessReport ($vote, NO);
 	 }
-	  
+
 	 /* User clicked 'preview' ---------------------------------------- */
 	 elseif ($previewResults) {
 	    echo createVoteResult($vote, $previewResults);
 	 }
-	  
+
 	 /* User has just voted ------------------------------------------- */
 	 elseif (($voted && $formID == $voteID && !$changeAnswer) ||
 		 ($voted && $formID == $voteID && $answerChanged)
@@ -339,7 +339,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       if (!isset($openStoppedVotes))
 	 $openStoppedVotes = NO;
 
-      echo createBoxLineHeader ();            
+      echo createBoxLineHeader ();
       echo createStoppedVotesHeadline ($stoppedVotes, $openStoppedVotes, $stoppedEvals);
 
       if( $openStoppedVotes ) {
@@ -382,7 +382,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 	       $vote = &new TestVote ($voteID);
 	    else
 	       $vote = &new Vote ($voteID);
-	       
+
 	    echo createBoxContentHeader ();
 	    echo createStoppedVoteHeader ($vote);
 #	       echo createBoxHeader (formatReady($vote->getTitle()), "90%", "",
@@ -397,7 +397,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       echo createBoxLineFooter ();
    }
    /* ---------------------------------------------------------------------- */
-   
+
    /* Show text if no vote is available ------------------------------------ */
      if (empty ($activeVotes) AND empty ($stoppedVotes) AND
        empty ($activeEvals) AND (empty ($stoppedEvals) && $haveFullPerm)
@@ -412,7 +412,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 	  count ($stoppedEvals)
 	  ) > 1)
        echo createOpeningOrClosingArrow ();
-     
+
    echo createBoxFooter ();
    $voteDB->finalize ();
 

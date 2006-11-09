@@ -1,7 +1,7 @@
 <?php
 # Include all required files ================================================ #
 require_once ("lib/classes/StudipObject.class.php");
-require_once ("vote/VoteDB.class.php");
+require_once ("lib/vote/VoteDB.class.php");
 # ====================================================== end: including files #
 
 
@@ -20,14 +20,14 @@ class Vote extends StudipObject {
 
 # Define all required variables ============================================= #
    /**
-    * The title of the vote. 
+    * The title of the vote.
     * @access   private
     * @var      string   $title
     */
    var $title;
 
    /**
-    * The question of the vote. 
+    * The question of the vote.
     * @access   private
     * @var      string   $question
     */
@@ -80,7 +80,7 @@ class Vote extends StudipObject {
     * @access   private
     * @var      boolean $multiplechoice
     */
-   var $multiplechoice;   
+   var $multiplechoice;
 
    /**
     * Defines whether the vote is to be linked with a user.
@@ -95,7 +95,7 @@ class Vote extends StudipObject {
     * @var      boolean $changeable
     */
    var $changeable;
-   
+
    /**
     * Defines whether the vote is visible or not
     * @access   private
@@ -116,7 +116,7 @@ class Vote extends StudipObject {
     * @var      integer    $namesvisibility
     */
    var $namesvisibility;
-   
+
    /**
     * Defines whether a user had already used this vote
     * @access   private
@@ -137,21 +137,21 @@ class Vote extends StudipObject {
     * @var      integer $objectID
     */
    var $objectID;
-   
+
    /**
     * The unique range ID of the vote
     * @access   private
     * @var      string $rangeID
     */
    var $rangeID;
-   
+
    /**
     * The unique userID of the author of the vote
     * @access   private
     * @var      string $authorID
     */
    var $authorID;
-   
+
    /**
     * Holds the VoteDB object
     * @access   public
@@ -170,7 +170,7 @@ class Vote extends StudipObject {
     * @throws   error
     */
    function Vote ($oldVoteID = "") {
- 
+
       /* For good OOP: Call constructor and set destruktor ----------------- */
       parent::StudipObject ();
       register_shutdown_function (array (&$this, 'finalize'));
@@ -219,7 +219,7 @@ class Vote extends StudipObject {
          if (! $this->voteDB->isExistant ($oldVoteID))
             return $this->throwError (1, _("Die angegebene ID existiert nicht."));
          $this->objectID = $oldVoteID;
-         $this->readVote ();	
+         $this->readVote ();
       }
 
       $this->voteDB->setVote ($this);
@@ -269,10 +269,10 @@ class Vote extends StudipObject {
    function setQuestion ($question) {
       if ($this->isInUse ())
 	 return $this->throwError (2, _("Es ist nicht erlaubt die Frage im Nachhinein zu ändern."));
-      
+
       if (empty ($question))
 	 return $this->throwError (1, _("Sie haben keine Fragestellung angegeben."));
-      
+
       $this->question = $question;
    }
 
@@ -293,7 +293,7 @@ class Vote extends StudipObject {
     */
    function setAnswers ($answerArray) {
       if ($this->isInUse ())
-	 return $this->throwError (1, 
+	 return $this->throwError (1,
 				   _("Es ist nicht erlaubt die Antworten im Nachhinein zu ändern!"));
 
       if (!is_array ($answerArray) || empty ($answerArray))
@@ -317,7 +317,7 @@ class Vote extends StudipObject {
     * @access  public
     * @return  array   The answers.
     */
-   function getAnswers () {      
+   function getAnswers () {
       if (!is_array ($this->answerArray))
 	 $this->answerArray = array ();
       return $this->answerArray;
@@ -331,16 +331,16 @@ class Vote extends StudipObject {
     */
    function setStartdate ($timestamp) {
       if ($this->isInUse ())
-	 return $this->throwError (1, 
+	 return $this->throwError (1,
 				   _("Es ist nicht erlaubt das Startdatum im Nachhinein zu ändern."));
       if ($timestamp != NULL & $timestamp <= 0)
 	 return $this->throwError (2, _("Das Startdatum ungültig."));
- 
+
       if (!empty ($this->stopdate) && $timespan > $this->stopdate)
-	 return $this->throwError (3, 
+	 return $this->throwError (3,
 				   _("Startdatum ist größer als Enddatum."));
-      
-      
+
+
       $this->startdate = $timestamp;
       if (!$this->isNew ())
 	 $this->state = VOTE_STATE_NEW;
@@ -363,12 +363,12 @@ class Vote extends StudipObject {
     */
    function setStopdate ($timestamp) {
       if ($timestamp != NULL && $timestamp <= 0)
-	 return $this->throwError (1, 
+	 return $this->throwError (1,
 				   _("Das Stoppdatum ist leider ungültig."));
       if ($timestamp != NULL && !empty ($this->timespan))
 	 return $this->throwError (2, _("Es ist nur eine Zeitspanne oder ein Enddatum erlaubt."));
       if ($timestamp != NULL && $timestamp < $this->startdate)
-	 return $this->throwError (3, 
+	 return $this->throwError (3,
 				   _("Das Enddatum ist vor dem Startdatum."));
 
       $this->stopdate = $timestamp;
@@ -390,10 +390,10 @@ class Vote extends StudipObject {
     */
    function getRealStopdate () {
       $stopdate = $this->getStopdate ();
-      
+
       if ($this->getTimespan () != NULL)
 	 $stopdate = $this->getStartdate () + $this->getTimespan ();
-      
+
       return $stopdate;
    }
 
@@ -447,7 +447,7 @@ class Vote extends StudipObject {
     */
    function setMultiplechoice ($multiplechoice) {
       if ($this->isInUse ())
-	 return $this->throwError (2, 
+	 return $this->throwError (2,
 				   _("Es ist nicht erlaubt 'Multiple Choice' im Nachhinein zu ändern."));
 
       $this->multiplechoice = ($multiplechoice == NO) ? NO : YES;
@@ -474,7 +474,7 @@ class Vote extends StudipObject {
 	  $mode != VOTE_RESULTS_ALWAYS &&
 	  $mode != VOTE_RESULTS_NEVER)
 	 return $this->throwError (1, _("Ungültige Ergebnissichtbarkeit. Siehe Konstanten VOTE_RESULTS_*."));
-      
+
       $this->resultvisibility = $mode;
    }
 
@@ -500,7 +500,7 @@ class Vote extends StudipObject {
       elseif ($namesvisibility == YES &&
 	      $this->isAnonymous ())
 	 return $this->throwError (2, _("Die Namen der Teilnehmer k&ouml;nnen nicht sichtbar gemacht werden, wenn die Auswertung anonym ist."));
-      
+
       $this->namesvisibility = $namesvisibility;
    }
 
@@ -525,11 +525,11 @@ class Vote extends StudipObject {
 
       $this->anonymous = ($anonymous == NO) ? NO : YES;
    }
-   
+
    /**
     * Checks whether the vote is to be linked with a user
     * @access  public
-    * @return  boolean YES if vote is not linked with a user 
+    * @return  boolean YES if vote is not linked with a user
     */
    function isAnonymous () {
       return ($this->anonymous == YES) ? YES : NO;
@@ -544,10 +544,10 @@ class Vote extends StudipObject {
    function setChangeable ($changeable) {
       if ($this->isAnonymous () && $changeable == YES)
 	 return $this->throwError (1, _("Antwortaenderung ist mit der Option 'anonym' leider nicht moeglich."));
-      
-      $this->changeable = ($changeable == NO) ? NO : YES;      
+
+      $this->changeable = ($changeable == NO) ? NO : YES;
    }
-   
+
    /**
     * Checks whether the it´s allowed to change the answer
     * @access  public
@@ -556,13 +556,13 @@ class Vote extends StudipObject {
    function isChangeable () {
       return ($this->changeable == YES) ? YES : NO;
    }
- 
+
    /**
     * Checks whether the vote is visible
     * @access  public
     * @return  boolean YES if vote is visible
     */
-   function isVisible () {      
+   function isVisible () {
       return ($this->visible == YES) ? YES : NO;
    }
 
@@ -574,7 +574,7 @@ class Vote extends StudipObject {
    function setVoteID ($objectID) {
       $this->objectID = $objectID;
    }
-   
+
    /**
     * Gets the unique ID from the vote
     * @access  public
@@ -601,7 +601,7 @@ class Vote extends StudipObject {
    function getRangeID () {
       return $this->rangeID;
    }
-  
+
    /**
     * Sets the unique author ID from the vote
     * @access  public
@@ -628,7 +628,7 @@ class Vote extends StudipObject {
    function isInUse () {
       return ($this->isInUse == NO) ? NO : YES;
    }
-   
+
    /**
     * Checks whether the vote is new
     * @access  public
@@ -655,8 +655,8 @@ class Vote extends StudipObject {
    function isStopped () {
       return ($this->state == VOTE_STOPPED_VISIBLE ||
 	      $this->state == VOTE_STOPPED_INVISIBLE) ? YES : NO;
-   }  
-   
+   }
+
    /**
     * Sorts the answerarray
     * @access public
@@ -664,7 +664,7 @@ class Vote extends StudipObject {
    function sortVoteAnswers () {
       usort ($this->answerArray, array ($this, "sortVoteAnswerarray"));
    }
-   
+
    /**
     * Gets the number of votes from the answer with the most votes
     * @access public
@@ -673,11 +673,11 @@ class Vote extends StudipObject {
    function getMaxAnswer () {
       $max = 0;
       foreach ($this->getAnswers () as $answer)
-	 if ($answer["counter"] > $max) 
+	 if ($answer["counter"] > $max)
 	    $max = $answer["counter"];
       return $max;
    }
-   
+
    /**
     * Gets the total number of votes
     * @access public
@@ -706,22 +706,22 @@ class Vote extends StudipObject {
     * @param   array   $answerArray An array with one or more answers
     * @throws  error
     */
-   function executeAssociate ($userID, $answerArray) {      
+   function executeAssociate ($userID, $answerArray) {
       $answerNumber = count ($this->answerArray);
 
       /* Check for illegal input ------------------------------------------- */
       if (count($answerArray) <= 0)
-	 return $this->throwError (2, 
+	 return $this->throwError (2,
 				   _("Sie haben keine Antwort ausgewählt."));
 
       if (!is_array ($answerArray))
 	 return $this->throwError (1, _("Ungültiger Aufruf: Wert ist kein Array."));
 
       if (!$this->isMultiplechoice () && count($answerArray) != 1)
-	 return $this->throwError (2, 
+	 return $this->throwError (2,
 				   _("Mehrfachantworten sind nicht erlaubt!"));
-      
-     
+
+
       foreach ($answerArray as $answer) {
 	 if ($answer < 0 || $answer > $answerNumber)
 	    $this->throwError (3, _("Keine gültige Antwort ausgewählt!"));
@@ -732,12 +732,12 @@ class Vote extends StudipObject {
 
 
       /* Write data -------------------------------------------------------- */
-      $this->voteDB->participate ($this->objectID, $userID, 
+      $this->voteDB->participate ($this->objectID, $userID,
 				  $answerArray, $this->isAnonymous ());
       if ($this->voteDB->isError ())
 	 $this->throwErrorFromClass ($this->voteDB);
       /* ------------------------------------------------------------------- */
-      
+
       /* Load new data ----------------------------------------------------- */
       $this->readVote ();
       /* ------------------------------------------------------------------- */
@@ -772,7 +772,7 @@ class Vote extends StudipObject {
     */
    function executeStop () {
       if ($this->getState () != VOTE_STATE_ACTIVE) {
-	 $this->throwError (1, 
+	 $this->throwError (1,
 			    _("Nur ein laufendes Objekt kann gestoppt werden"));
       }
       if ($this->isError ()) return;
@@ -817,7 +817,7 @@ class Vote extends StudipObject {
       $this->startdate = time ();
       if ($this->stopdate <= $this->startdate)
 	 $this->stopdate = NULL;
-      $this->voteDB->restartVote ($this->objectID, $this->startdate, 
+      $this->voteDB->restartVote ($this->objectID, $this->startdate,
 				  $this->stopdate, $this->isAnonymous ());
       if ($this->voteDB->isError ())
 	 $this->throwErrorFromClass ($this->voteDB);
@@ -856,7 +856,7 @@ class Vote extends StudipObject {
 	 $this->throwError (1, _("Es können nur gestoppte Objecte (un)sichtbar geschaltet werden!"));
 
       if ($this->isError ()) return;
-      
+
 
       $this->visible = ($visibility == NO) ? NO : YES;
       if ($this->isVisible ())
@@ -902,7 +902,7 @@ class Vote extends StudipObject {
 				);
       if ($this->voteDB->isError ())
 	 $this->throwErrorFromClass ($this->voteDB);
-   }  
+   }
 # ===================================================== end: public functions #
 
 
@@ -920,7 +920,7 @@ class Vote extends StudipObject {
     * @param   integer $second The second (optional)
     * @return  integer If an error occurs -> -1. Otherwise the UNIX-timestamp
     */
-   function date2timestamp ($day, $month, $year, 
+   function date2timestamp ($day, $month, $year,
 			    $hour = 0, $minute = 0, $second = 0) {
       if (!checkdate ((int)$month, (int)$day, (int)$year) ||
 	  $hour < 0 || $hour > 24 ||
@@ -942,7 +942,7 @@ class Vote extends StudipObject {
     */
    function readVote () {
       $result = $this->voteDB->getVote ($this->objectID);
-      
+
       if ($this->voteDB->isError ()) {
 	 $this->throwErrorFromClass ($this->voteDB);
 	 return;
@@ -1055,7 +1055,7 @@ class Vote extends StudipObject {
 			   _("Objekt besitzt kein gültiges Erstellungsdatum!"));
 
       if (empty ($this->changedate) || $this->changedate > time ())
-	 $this->throwError (8, 
+	 $this->throwError (8,
 			    _("Objekt besitzt kein gültiges Änderungsdatum!"));
 
       if ($this->resultvisibility != VOTE_RESULTS_AFTER_VOTE &&
@@ -1070,14 +1070,14 @@ class Vote extends StudipObject {
 	  $this->state != VOTE_STOPPED_INVISIBLE)
 	 $this->throwError (14, _("Objekt besitzt ungültigen Status!"));
       /* ------------------------------------------------------------------- */
-      
-      
+
+
       /* It´s not possible to have a stopdate and a timespan --------------- */
       if (!empty ($this->stopdate) && !empty ($this->timespan))
 	 $this->throwError (15,
 			    _("Objekt hat ein Enddatum UND eine Zeitspanne!"));
       /* ------------------------------------------------------------------- */
-      
+
 
       /* Running Vote without stardate? ------------------------------------ */
       if ($this->state == VOTE_ACTIVE && empty($this->startdate))
@@ -1096,10 +1096,10 @@ class Vote extends StudipObject {
 musste ich rausnehmen, da man sonst einem laufenden Vote kein Enddatum mehr
 geben konnte das in der Vergangenheit liegt
       if ($this->state == VOTE_ACTIVE && (
-					  (!empty ($this->stopdate) && 
+					  (!empty ($this->stopdate) &&
 					   $this->stopdate < time ()) ||
-					  (!empty ($this->timespan) && 
-					   $this->startdate + 
+					  (!empty ($this->timespan) &&
+					   $this->startdate +
 					   $this->timespan < time ())) )
 	 $this->throwError (18, _("Laufender Vote hätte bereits beendet werden müssen!"));
       */
@@ -1109,7 +1109,7 @@ geben konnte das in der Vergangenheit liegt
 
       /* ------------------------------------------------------------------- */
    }
-   
+
    /**
     * Sorts the answerarray
     * @param   array $a first answerarray

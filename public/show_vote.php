@@ -38,7 +38,7 @@
  * @package	vote
  */
 
-include ("vote/vote_show.inc.php");
+include ("lib/vote/vote_show.inc.php");
 
 
 

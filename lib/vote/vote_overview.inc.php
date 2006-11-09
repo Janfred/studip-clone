@@ -29,13 +29,13 @@
 /* ************************************************************************* */
 
 ob_start(); // start output buffering
-include_once("vote/vote.config.php");
-include_once("vote/view/visual.inc.php");
-include_once("vote/Vote.class.php");
-include_once("vote/TestVote.class.php");
-include_once("vote/VoteDB.class.php");
+include_once("lib/vote/vote.config.php");
+include_once("lib/vote/view/visual.inc.php");
+include_once("lib/vote/Vote.class.php");
+include_once("lib/vote/TestVote.class.php");
+include_once("lib/vote/VoteDB.class.php");
 include_once("lib/classes//StudipObject.class.php");
-include_once("vote/view/vote_overview.lib.php");
+include_once("lib/vote/view/vote_overview.lib.php");
 /* **END*of*including*needed*files****************************************** */
 
 
@@ -52,8 +52,8 @@ $showrangeID								= $_POST['rangeID'];
 	if(empty($showrangeID)) $showrangeID	= $_GET['rangeID'];
 	if(empty($showrangeID)) $showrangeID	= $_POST['showrangeID'];
 	//<workaround author='anoack'>
-	if(	empty($showrangeID) 
-		&& isset($SessSemName[1])) 
+	if(	empty($showrangeID)
+		&& isset($SessSemName[1]))
 							$showrangeID	= $SessSemName[1];
 	//</workaround>
 	if(empty($showrangeID)) $showrangeID	= NULL;
@@ -136,7 +136,7 @@ $typen = array("user"=>_("Benutzer"),"sem"=>_("Veranstaltung"),"inst"=>_("Einric
 if ($rangemode == "root"){
 	$range[] = array("studip",_("Systemweite Votings/Tests"));
 	$range[] = array(get_username($userID),_("pers&ouml;nliche Homepage"));
-	if (($showrangeID != "studip") && 
+	if (($showrangeID != "studip") &&
 	    ($showrangeID != get_username ($userID))
 		&& ($showrangeID != NULL))
 		$range[] = array($showrangeID,$voteDB->getRangename($showrangeID));
@@ -235,7 +235,7 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 		$vote = &new Vote($voteID);
 	else
 		$vote = &new TestVote($voteID);
-	
+
 	// If theres an error ... print it and return
 	if ($vote->isError()){
 		createErrorReport ($vote);
@@ -246,13 +246,13 @@ function callSafeguard($voteaction, $voteID = "", $showrangeID = NULL, $search =
 	//$vote->finalize ();
 
 	if($rangeID = $vote->getRangeID())
-	
+
 	if (!($perm->have_studip_perm("tutor",$vote->getRangeID())) &&
 		(get_username($userID) != $vote->getRangeID())){
 		$safeguard .= printSafeguard("ausruf", sprintf(_("Das Voting \"%s\" ist einem Bereich zugeordnet für den Sie keine Veränderungsrechte besitzen. Die Aktion wurde nicht ausgeführt."),$votename));
 		$voteaction = "nothing";
 	}
-	
+
 	switch ($voteaction){
 		case "change_visibility":
 			if ($vote->getResultvisibility() != VOTE_RESULTS_NEVER){
@@ -484,7 +484,7 @@ function createVoteArray($mode){
 		$voteID = $votearray["voteID"];
 
 		// create an object of the current vote
-		if 
+		if
 		 ($votearray["type"] == "vote")
 			$vote = &new Vote($voteID);
 		else
@@ -494,13 +494,13 @@ function createVoteArray($mode){
 		if ($vote->isError()){
 			echo createErrorReport ($vote);
 			//return;
-		} 
-		
+		}
+
 		// read out the required data
 		$changedate = $vote->getChangedate();
 		$title = htmlready (my_substr ($vote->getTitle(), 0, 35));
 		$rangeID = $vote->getRangeID();
-		
+
 		if (($rangemode == "root" ) || ($rangemode == "admin") || ($rangemode == "dozent")){
 			$authID = $vote->getAuthorID();
 			$rangetitle = $voteDB->getAuthorRealname($authID);
@@ -518,10 +518,10 @@ function createVoteArray($mode){
 			$isAssociated = YES;
 		else
 			$isAssociated = NO;
-		
+
 		$vote->finalize ();
-		
-		// read out the special data of the status 
+
+		// read out the special data of the status
 		switch ($mode){
 			case VOTE_STATE_NEW:
 					$special_data = $vote->getStartdate();
@@ -536,7 +536,7 @@ function createVoteArray($mode){
 			default:
 				break;
 		}
-		// if $special_data contents timestamp, it shold be transformed 
+		// if $special_data contents timestamp, it shold be transformed
 		if (($mode == VOTE_STATE_NEW) || ($mode == VOTE_STATE_ACTIVE)){
 			if ($special_data)
 				$special_data = date("d", $special_data)."."
@@ -556,7 +556,7 @@ function createVoteArray($mode){
 						"username" => $username,
 						"type" => $votemode);
 	}
-	
+
 	return $votes;
 }
 
@@ -564,16 +564,16 @@ function createVoteArray($mode){
  * creates an array with all used labes
  *
  * @access private
- * @returns array an array with all the labels 
+ * @returns array an array with all the labels
  */
 function createLabel(){
 	$label = array(
 		// labels for printSiteTitle
 		"sitetitle_title" => _("Voting-Verwaltung"),
-		
+
 		// labels for printSafeguard
 		"referer" => _("Zum vorherigen Bereich zur&uuml;ckkehren."),
-		
+
 		// labels for printSelections
 		"selections_text_vote" => _("Ein neues Voting"),
 		"selections_text_test" => _("Einen neuen Test"),
@@ -584,7 +584,7 @@ function createLabel(){
 		"selections_allranges" => _("allen Bereichen"),
 		"selections_selectrange_button" => "anzeigen",
 		"selections_selectrange_tooltip" => _("Bereich der angezeigten Votings und Tests ausw&auml;hlen."),
-			
+
 		// labels for printSearchResults
 		"searchresults_title" => _("Suchergebnisse"),
 		"searchresults_no_string" => _("Bitte geben sie ein l&auml;ngeres Suchmuster ein."),
@@ -594,24 +594,24 @@ function createLabel(){
 		// labels for printSafeguard
 		"yes" => _("Ja!"),
 		"no" => _("Nein!"),
-		
-		
+
+
 		// labels for printSearch
 		"search_text" => _("Nach weiteren Bereichen suchen: "),
 		"search_button" => "suchen",
 		"search_tooltip" => _("Hier können Sie nach weiteren Bereichen suchen."),
-		
+
 		// labels for printVoteTable
 		"table_title" => _("Votings und Tests aus dem Bereich"),
 		"table_title_new" => _("Noch nicht gestartete Votings/Tests:"),
 		"table_title_active" => _("Laufende Votings/Tests:"),
-		"table_title_stopped" => _("Gestoppte Votings/Tests:"),	
-		
+		"table_title_stopped" => _("Gestoppte Votings/Tests:"),
+
 		"arrow_openthis" => _("Diesen Eintrag aufklappen."),
 		"arrow_closethis" => _("Diesen Eintrag zuklappen."),
 		"arrow_open_all" => _("Alle Votings und Tests &ouml;ffnen!"),
 		"arrow_close_all" => _("Alle Votings und Tests schliessen!"),
-		
+
 
 		"title" => _("Titel"),
 		"range" => _("Bereich"),
@@ -637,7 +637,7 @@ function createLabel(){
 		"status_tooltip_stopped" => _("Diesen Eintrag jetzt fortsetzen."),
 
 		"restart_button" => "zuruecksetzen",
-		"restart_tooltip" => _("Alle abgegebenen Stimmen l&ouml;schen."),		
+		"restart_tooltip" => _("Alle abgegebenen Stimmen l&ouml;schen."),
 
 		"edit" => _("Bearbeiten"),
 		"edit_button" => "bearbeiten",
