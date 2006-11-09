@@ -5,16 +5,16 @@ if (CLOSE_ON_LOGIN_SCREEN === true) {
 	}
 
 // first of all init I18N because seminar_open is not called here...
-require_once("$ABSOLUTE_PATH_STUDIP/language.inc.php");
+require_once("language.inc.php");
 global $_language;
 $_language_path = init_i18n($_language);
 
 //wir befinden uns in einer Funktion ! Alles verfügbar machen,was später gebraucht wird !!!
-global $auth,$perm,$user,$ABSOLUTE_PATH_STUDIP,$RELATIVE_PATH_CHAT,$CHAT_ENABLE,$my_messaging_settings,$SessionStart,$LastLogin,$messenger_started;
-include $ABSOLUTE_PATH_STUDIP."html_head.inc.php";
-include $ABSOLUTE_PATH_STUDIP."header.php";   //hier wird der "Kopf" nachgeladen 
-require_once $ABSOLUTE_PATH_STUDIP."msg.inc.php";
-include $ABSOLUTE_PATH_STUDIP."config.inc.php";
+global $auth,$perm,$user,$RELATIVE_PATH_CHAT,$CHAT_ENABLE,$my_messaging_settings,$SessionStart,$LastLogin,$messenger_started;
+include "html_head.inc.php";
+include "header.php";   //hier wird der "Kopf" nachgeladen
+require_once "msg.inc.php";
+include "config.inc.php";
 
 ?>
 
