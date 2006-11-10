@@ -45,7 +45,7 @@ require_once("lib/classes/SemesterData.class.php");
 */
 function xml_header()
 {
-global $UNI_NAME_CLEAN, $SEM_ID, $SOFTWARE_VERSION, $ABSOLUTE_PATH_STUDIP, $ex_type, $ex_sem, $range_name, $range_id;
+global $UNI_NAME_CLEAN, $SEM_ID, $SOFTWARE_VERSION, $ex_type, $ex_sem, $range_name, $range_id;
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
 	$xml_tag_string = "<" . "?xml version=\"1.0\"?>\n";

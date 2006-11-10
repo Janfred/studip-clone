@@ -116,7 +116,7 @@ class smiley {
 
 	function search_smileys(){
 		if ($this->error) return false;
-		global $DB_STUDIP_DATABASE, $SMILE_SHORT, $ABSOLUTE_PATH_STUDIP, $SMILE_PATH;
+		global $DB_STUDIP_DATABASE, $SMILE_SHORT, $SMILE_PATH;
 
 		$this->fill_smiley_array(1);
 		$smiley_tab = &$this->smiley_tab;

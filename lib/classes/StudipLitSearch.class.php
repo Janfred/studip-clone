@@ -194,7 +194,7 @@ class StudipLitSearch {
 	}
 	
 	function CheckZ3950($accession_number, $one_plugin_name = false){
-		global $_lit_search_plugins, $ABSOLUTE_PATH_STUDIP;
+		global $_lit_search_plugins;
 		static $plugin_list;
 		if (!is_array($plugin_list)){
 			foreach ($_lit_search_plugins as $plugin){

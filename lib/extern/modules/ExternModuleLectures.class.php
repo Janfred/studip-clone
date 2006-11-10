@@ -34,7 +34,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_EXTERN;
+global $RELATIVE_PATH_EXTERN;
 require_once($RELATIVE_PATH_EXTERN."/lib/ExternModule.class.php");
 require_once($RELATIVE_PATH_EXTERN."/views/extern_html_templates.inc.php");
 require_once($RELATIVE_PATH_EXTERN."/modules/views/ExternSemBrowse.class.php");
@@ -78,7 +78,7 @@ class ExternModuleLectures extends ExternModule {
 	}
 	
 	function printout ($args) {
-		global $ABSOLUTE_PATH_STUDIP;
+		
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_header($this->config);
 		

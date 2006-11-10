@@ -131,7 +131,7 @@ class ConnectedCMS
 	*/
 	function getConnectionStatus($cms = "")
 	{
-		global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_ELEARNING_INTERFACE, $RELATIVE_PATH_SOAP, $SOAP_ENABLE;
+		global $RELATIVE_PATH_ELEARNING_INTERFACE, $RELATIVE_PATH_SOAP, $SOAP_ENABLE;
 		if ($this->cms_type == "")
 		{
 			$this->init($cms);

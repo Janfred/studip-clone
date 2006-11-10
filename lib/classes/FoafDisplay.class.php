@@ -126,7 +126,6 @@ class FoafDisplay {
 	* @param	string	open/close indication (passed by about.php)
 	*/
 	function show($open="close") {
-		global $ABSOLUTE_PATH_STUDIP;
 		if (!$open) {
 			$open="close";
 		}

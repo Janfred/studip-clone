@@ -114,7 +114,7 @@ class ExternModuleLecturedetails extends ExternModule {
 	}
 	
 	function printout ($args) {
-		global $ABSOLUTE_PATH_STUDIP;
+		
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_header($this->config);
 		
@@ -129,7 +129,7 @@ class ExternModuleLecturedetails extends ExternModule {
 	}
 	
 	function printoutPreview () {
-		global $ABSOLUTE_PATH_STUDIP;
+		
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_header($this->config);
 		

@@ -580,7 +580,7 @@ function jumpTo ($month, $day, $year, $colsp = 1) {
 }
 
 function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
-	global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR, $CANONICAL_RELATIVE_PATH_STUDIP;
+	global $RELATIVE_PATH_CALENDAR, $CANONICAL_RELATIVE_PATH_STUDIP;
 	require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarMonth.class.php");
 	global $imt, $atime;
 

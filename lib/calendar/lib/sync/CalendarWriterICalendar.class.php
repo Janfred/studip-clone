@@ -38,7 +38,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
+global $RELATIVE_PATH_CALENDAR;
 
 require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarWriter.class.php");
 

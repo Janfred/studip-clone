@@ -62,7 +62,7 @@ class ExternModuleRangeLectureTree extends ExternModule {
 	}
 	
 	function printout ($args) {
-		global $ABSOLUTE_PATH_STUDIP;
+		
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_header($this->config);
 		
@@ -77,7 +77,7 @@ class ExternModuleRangeLectureTree extends ExternModule {
 	}
 	
 	function printoutPreview ($args) {
-		global $ABSOLUTE_PATH_STUDIP;
+		
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_header($this->config);
 		

@@ -2,8 +2,8 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipLitImportPluginAbstract.class.php
-// 
-// 
+//
+//
 // Copyright (c) 2006 Jan Kulmann <jankul@zmml.uni-bremen.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -26,15 +26,15 @@ require_once ("lib/classes/StudipLitCatElement.class.php");
 /**
 *
 *
-* 
 *
-* @access	public	
-* @author 	Jan Kulmann <jankul@zmml.uni-bremen.de>	
+*
+* @access	public
+* @author 	Jan Kulmann <jankul@zmml.uni-bremen.de>
 * @version	$Id$
-* @package	
+* @package
 **/
 class StudipLitImportPluginAbstract {
-	
+
 	var $class_name;
 	var $error_msg = array();
         var $data; // Data
@@ -45,15 +45,15 @@ class StudipLitImportPluginAbstract {
 
 	function StudipLitImportPluginAbstract(){
 		$this->class_name = strtolower(get_class($this));
-		$this->data = FALSE; 
+		$this->data = FALSE;
 		$this->num_entries = 0;
 	}
 
 	// Zum Starten der Plugins immer nur diese Methode aufrufen mit folgendem Kommando:
 	// StudipLitImportPluginAbstract::use_lit_import_plugins($xmlfile, $xmlfile_size, $xmlfile_name, $plugin_name);
 	function use_lit_import_plugins($xmlfile, $xmlfile_size, $xmlfile_name, $plugin_name = "EndNote", $range_id = false) {
-		global $_msg, $ABSOLUTE_PATH_STUDIP, $LIT_IMPORT_PLUGINS;
-		
+		global $_msg, $LIT_IMPORT_PLUGINS;
+
 		if ($plugin_name){
 			foreach ($LIT_IMPORT_PLUGINS as $plugin) {
 				if ($plugin["name"] == $plugin_name) {
@@ -123,7 +123,7 @@ class StudipLitImportPluginAbstract {
                 }
 
 	}
-	
+
 	// Muss implementiert werden
 	function parse(){
 		return FALSE;
@@ -133,7 +133,7 @@ class StudipLitImportPluginAbstract {
 	function import(){
 		return FALSE;
 	}
-	
+
 	// Sollte nicht ueberschrieben werden
 	function importEntries($field_arr, $range_id){
 		if (is_array($field_arr)) {
@@ -177,11 +177,11 @@ class StudipLitImportPluginAbstract {
 		}
 		return FALSE;
 	}
-	
+
 	function getNumEntries(){
 		return $this->num_entries;
 	}
-	
+
 	function getError($format = "clear"){
 		if ($format == "clear"){
 			return $this->error_msg;
@@ -192,16 +192,16 @@ class StudipLitImportPluginAbstract {
 			return $ret;
 		}
 	}
-	
+
 	function getNumError(){
 		return count($this->error_msg);
 	}
-	
+
 	function addError($type, $msg){
 		$this->error_msg[] = array('type' => $type, 'msg' => $msg);
 		return true;
 	}
-	
+
 	function getPluginName(){
 		global $LIT_IMPORT_PLUGINS;
 		$ret = false;

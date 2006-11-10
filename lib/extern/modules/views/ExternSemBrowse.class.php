@@ -35,7 +35,7 @@
 // +---------------------------------------------------------------------------+
 
 
-global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR;
+global $RELATIVE_PATH_CALENDAR;
 require_once("lib/classes/SemBrowse.class.php");
 require_once("dates.inc.php");
 require_once("lib/classes/SemesterData.class.php");
