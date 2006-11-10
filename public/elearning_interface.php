@@ -41,8 +41,8 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 	checkObjectModule("elearning_interface");
 	object_set_visit_module("elearning_interface");
 
-	require_once ("" . $RELATIVE_PATH_ELEARNING_MODULES . "elearning/ELearningUtils.class.php");
-	require_once ("" . $RELATIVE_PATH_ELEARNING_MODULES . "elearning/ObjectConnections.class.php");
+	require_once ($RELATIVE_PATH_ELEARNING_MODULES . "elearning/ELearningUtils.class.php");
+	require_once ($RELATIVE_PATH_ELEARNING_MODULES . "elearning/ObjectConnections.class.php");
 	ELearningUtils::bench("start");
 
 	ELearningUtils::bench("checkObject");
@@ -175,7 +175,7 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 	}
 
 	echo $page_content;
-	
+
 	$module_count = 0;
 	if ($object_connections->isConnected())
 	{
@@ -193,13 +193,13 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 				$type_tmp[$key] = ($connected_modules[$key]['type'] == 'tst' ? 2 : 1);
 			}
 		}
-		
+
 		array_multisort($type_tmp, SORT_ASC, $title_tmp, SORT_ASC, $connected_modules);
-			
+
 		foreach ($connected_modules as $connection)
 		{
 			$current_module = $connection["id"]; //Arrrghhhh
-			
+
 			if ($module_count == 0) echo ELearningUtils::getModuleHeader(_("Angebundene Lernmodule"));
 				$module_count++;
 				if ($open_all != "")
@@ -208,20 +208,20 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 					$elearning_open_close[$connected_cms[$connection["cms"]]->content_module[$connection["id"]]->getReferenceString()] = false;
 				// USE_CASE 1: show connected contentmodules
 				if ($view == "show")
-				{	
+				{
 					$connected_cms[$connection["cms"]]->content_module[$connection["id"]]->view->setChangeDate($connection["chdate"]);
 					$connected_cms[$connection["cms"]]->content_module[$connection["id"]]->view->show();
 				}
 				// USE_CASE 2: edit contentmodule connections
 				elseif ($view == "edit")
 					$connected_cms[$connection["cms"]]->content_module[$connection["id"]]->view->showAdmin();
-		
+
 				ELearningUtils::bench("module");
 		}
 		echo "<br>\n";
 		echo "<br>\n";
 	}
-	
+
 	if (($module_count == 0) AND ($new_account_cms == ""))
 	{
 		if ($SessSemName["class"]=="inst")

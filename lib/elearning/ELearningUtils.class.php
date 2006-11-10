@@ -25,7 +25,7 @@ class ELearningUtils
 
 		if (! is_object($connected_cms[$cms]))
 		{
-			require_once ("" . $RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
+			require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
 			$classname = $ELEARNING_INTERFACE_MODULES[$cms]["CLASS_PREFIX"] . "ConnectedCMS";
 			$connected_cms[$cms] = new $classname($cms);
 			$connected_cms[$cms]->initSubclasses();

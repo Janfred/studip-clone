@@ -35,7 +35,7 @@
 ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-if (($o_mode != "direct") AND ($o_mode != "passthrough")) 
+if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 {
 	$perm->check("tutor");
 	include ("seminar_open.php"); // initialise Stud.IP-Session
@@ -112,7 +112,7 @@ if ($EXPORT_ENABLE)
 
 	if ((!isset($range_id) AND !isset($xml_file_id) AND !isset($o_mode) AND !isset($ex_type)) OR ($o_mode == "start"))
 	{
-		include("" . $PATH_EXPORT . "/export_start.inc.php");
+		include($PATH_EXPORT . "/export_start.inc.php");
 		$start_done = true;
 	}
 
@@ -122,14 +122,14 @@ if ($EXPORT_ENABLE)
 	//Exportmodul einbinden
 	if (/*($xml_file_id != "") AND */($page != 3) AND ($o_mode == "choose") AND ($export_error_num < 1))
 	{
-		include("" . $PATH_EXPORT . "/export_choose_xslt.inc.php");
+		include($PATH_EXPORT . "/export_choose_xslt.inc.php");
 		if ($export_error_num < 1)
 			$xslt_choose_done = true;
 	}
 
 	if (($range_id != "") AND ($xml_file_id == "") AND ($o_mode != "start") AND (($o_mode != "choose") OR ($page == 3)))
 	{
-		include("" . $PATH_EXPORT . "/export_xml.inc.php");
+		include($PATH_EXPORT . "/export_xml.inc.php");
 		if ($export_error_num < 1)
 			$xml_output_done = true;
 	}
@@ -137,13 +137,13 @@ if ($EXPORT_ENABLE)
 	if ( ($choose != "") AND ($format != "") AND ($format != "xml") AND ($XSLT_ENABLE) AND ($export_error_num==0) AND
 		( ($o_mode == "processor") OR ($o_mode == "passthrough") OR ($page == 3) ) )
 	{
-		include("" . $PATH_EXPORT . "/export_run_xslt.inc.php");
+		include($PATH_EXPORT . "/export_run_xslt.inc.php");
 		if ($export_error_num < 1)
 			$xslt_process_done = true;
 	}
 
 	if (($export_error_num < 1) AND ($xslt_process_done) AND ($format == "fo"))
-		include("" . $PATH_EXPORT . "/export_run_fop.inc.php");
+		include($PATH_EXPORT . "/export_run_fop.inc.php");
 
 	if (($export_error_num < 1) AND (!$start_done) AND ((!$xml_output_done) OR ($o_mode != "file")) AND (!$xslt_choose_done) AND (!$xslt_process_done))
 	{
@@ -160,7 +160,7 @@ if ($EXPORT_ENABLE)
 		);
 	}
 
-	include("" . $PATH_EXPORT . "/export_view.inc.php");
+	include($PATH_EXPORT . "/export_view.inc.php");
 }
 else
 {

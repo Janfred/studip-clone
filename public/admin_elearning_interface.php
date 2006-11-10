@@ -57,7 +57,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 
 		if ($error_count == 0)
 		{
-			require_once ("" . $RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
+			require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
 			$classname = $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS";
 			$connected_cms[$cms_select] = new $classname($cms_select);
 			$connected_cms[$cms_select]->initSubclasses();
@@ -68,8 +68,8 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	<tr>
 		<td class="topic" colspan="3">&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-lern.gif" align="texttop">&nbsp;
 		<b>
-	<? 
-			echo _("Administration der Lernmodul-Schnittstelle"); 
+	<?
+			echo _("Administration der Lernmodul-Schnittstelle");
 	?>
 		</b>
 		</td>

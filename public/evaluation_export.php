@@ -1,8 +1,8 @@
 <?
 /**
 * Export-mainfile. Calls the submodules.
-* 
-* 
+*
+*
 *
 * @author
 * @version		$Id$
@@ -22,7 +22,7 @@ define("PHPDOC_DUMMY",true);
 // This file is part of Stud.IP
 // export.php
 //
-// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +--------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -82,14 +82,14 @@ if ($EXPORT_ENABLE)
 	{
 		if ($o_mode == "choose")
 		{
-			if ($page == 4) 
+			if ($page == 4)
 			{
 				if ($skip_page_3)
 					$page = 1;
 				else
 					$page = 2;
 			}
-			elseif ($page>1) 
+			elseif ($page>1)
 				$page = $page-2;
 			else
 			{
@@ -103,9 +103,9 @@ if ($EXPORT_ENABLE)
 	{
 		?><script LANGUAGE="JavaScript">
 		<!-- Begin
-	
+
 		var exportproc=false;
-	
+
 		function export_end()
 		{
 			if (exportproc)
@@ -114,14 +114,14 @@ if ($EXPORT_ENABLE)
 			}
 			return;
 		}
-		
+
 		function export_start()
 		{
 			msg_window=window.open("","messagewindow","height=250,width=200,left=20,top=20,scrollbars=no,resizable=no,toolbar=no");
 			msg_window.document.write("<html><head><title><? echo _("Daten-Export");?></title></head>");
 			msg_window.document.write("<body bgcolor='#ffffff'><center><p><img src='pictures/alienupload.gif' width='165' height='125'></p>");
 			msg_window.document.write("<p><font face='arial, helvetica, sans-serif'><b>&nbsp;<? printf(_("Die Daten werden exportiert. %sBitte haben sie etwas Geduld!"),"<br>&nbsp;");?><br /></font></p></body></html>");
-			exportproc=true; 
+			exportproc=true;
 			return true;
 		}
 		// End -->
@@ -132,46 +132,46 @@ if ($EXPORT_ENABLE)
 
 	if ((!isset($range_id) AND !isset($xml_file_id) AND !isset($o_mode) AND !isset($ex_type)) OR ($o_mode == "start"))
 	{
-		include("" . $PATH_EXPORT . "/export_start.inc.php");
+		include($PATH_EXPORT . "/export_start.inc.php");
 		$start_done = true;
 	}
 
-	if (($page==2) AND $XSLT_ENABLE AND $skip_page_3) 
+	if (($page==2) AND $XSLT_ENABLE AND $skip_page_3)
 		$page=3;
-	
+
 	//Exportmodul einbinden
 	if (/*($xml_file_id != "") AND */($page != 3) AND ($o_mode == "choose") AND ($export_error_num < 1))
 	{
-		include("" . $PATH_EXPORT . "/export_choose_xslt.inc.php");
+		include($PATH_EXPORT . "/export_choose_xslt.inc.php");
 		if ($export_error_num < 1)
 			$xslt_choose_done = true;
 	}
-	
+
 	if (($range_id != "") AND ($xml_file_id == "") AND ($o_mode != "start") AND (($o_mode != "choose") OR ($page == 3)))
 	{
-		include("" . $PATH_EXPORT . "/export_xml.inc.php");
+		include($PATH_EXPORT . "/export_xml.inc.php");
 		if ($export_error_num < 1)
 			$xml_output_done = true;
 	}
-	
+
 	if ( ($choose != "") AND ($format != "") AND ($format != "xml") AND ($XSLT_ENABLE) AND ($export_error_num==0) AND
 		( ($o_mode == "processor") OR ($o_mode == "passthrough") OR ($page == 3) ) )
 	{
-		include("" . $PATH_EXPORT . "/export_run_xslt.inc.php");
+		include($PATH_EXPORT . "/export_run_xslt.inc.php");
 		if ($export_error_num < 1)
 			$xslt_process_done = true;
 	}
-	
+
 	if (($export_error_num < 1) AND ($xslt_process_done) AND ($format == "fo"))
-		include("" . $PATH_EXPORT . "/export_run_fop.inc.php");
-		
+		include($PATH_EXPORT . "/export_run_fop.inc.php");
+
 	if (($export_error_num < 1) AND (!$start_done) AND ((!$xml_output_done) OR ($o_mode != "file")) AND (!$xslt_choose_done) AND (!$xslt_process_done))
 	{
 		$export_pagename = "Exportmodul - Fehler!";
 		$export_error = _("Fehlerhafter Seitenaufruf");
-		$infobox = array(			
+		$infobox = array(
 		array ("kategorie"  => _("Information:"),
-			"eintrag" => array	(	
+			"eintrag" => array	(
 							array (	"icon" => "pictures/ausruf_small.gif",
 									"text"  => _("Die Parameter, mit denen diese Seite aufgerufen wurde, sind fehlerhaft.")
 								 )
@@ -179,10 +179,10 @@ if ($EXPORT_ENABLE)
 			)
 		);
 	}
-	
-	include("" . $PATH_EXPORT . "/export_view.inc.php");
+
+	include($PATH_EXPORT . "/export_view.inc.php");
 }
-else 
+else
 {
 	// Start of Output
 	include ("html_head.inc.php"); // Output of html head
@@ -200,17 +200,17 @@ $db  = new EvaluationDB ();
 if ($db->isError)
   return EvalCommon::showErrorReport ($db, _("Datenbankfehler"));
 $lib = new EvalOverview ($db, $perm, $user);
-/* ------------------------------------------------------------ end: objects 
-/* Set variables ----------------------------------------------------------- 
+/* ------------------------------------------------------------ end: objects
+/* Set variables -----------------------------------------------------------
 $rangeID = ($rangeID) ? $rangeID : $SessSemName[1];
 if (empty ($rangeID) || ($rangeID == get_username ($user->id)))
      $rangeID = $user->id;
 
 $debug = 1;
-/* ---------------------------------------------------------- end: variables 
+/* ---------------------------------------------------------- end: variables
 
 $evalArray = $db->getEvaluationIDs ($rangeID);
-echo "Es wurde(n) ".count($evalArray)." Evaluation(en) gefunden...</font><br>"; 
+echo "Es wurde(n) ".count($evalArray)." Evaluation(en) gefunden...</font><br>";
 
 $group1 = &new EvaluationGroup ();
 $group1->setTitle ("Ich bin Gruppe Nummer 1");

@@ -61,7 +61,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	if ($search_key != "")
 	{
 		ELearningUtils::loadClass($cms_select);
-//		require_once ("" . $RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
+//		require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/" . $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS.class.php");
 //		$classname = $ELEARNING_INTERFACE_MODULES[$cms_select]["CLASS_PREFIX"] . "ConnectedCMS";
 //		$connected_cms[$cms_select] = new $classname($cms_select);
 //		$connected_cms[$cms_select]->initSubclasses();

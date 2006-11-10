@@ -698,7 +698,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$url = $smtp->url . "email_validation.php?secret=" . $secret;
 
 		// include language-specific subject and mailbody
-		include_once(""."locale/$_language_path/LC_MAILS/register_mail.inc.php");
+		include_once("locale/$_language_path/LC_MAILS/register_mail.inc.php");
 
 		$smtp->SendMessage(
 		$smtp->env_from, array($to),
