@@ -109,7 +109,7 @@ function vis_chooser($vis) {
 }
 
 function first_decision($userid) {
-	global $PHP_SELF, $ABSOLUTE_PATH_STUDIP, $vis_cmd, $vis_state, $auth;
+	global $PHP_SELF, $vis_cmd, $vis_state, $auth;
 
 	if ($vis_cmd == "apply" && ($vis_state == "yes" || $vis_state == "no")) {
 		$db = new DB_Seminar("UPDATE auth_user_md5 SET visible = '$vis_state' WHERE user_id = '$userid'");

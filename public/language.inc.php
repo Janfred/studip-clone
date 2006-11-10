@@ -1,9 +1,9 @@
 <?
 /**
 * language functions
-* 
+*
 * helper functions for handling I18N system
-* 
+*
 *
 * @author		Stefan Suchi <suchi@data-quest.de>
 * @version		$Id$
@@ -35,13 +35,13 @@
 
 
 /**
-* This function tries to find the preferred language  
+* This function tries to find the preferred language
 *
 * This function tries to find the preferred language.
 * It returns the first accepted language from browser settings, which is installed.
-* 
-* @access	public        
-* @return		string	preferred user language, given in "en_GB"-style	
+*
+* @access	public
+* @return		string	preferred user language, given in "en_GB"-style
 *
 */
 function get_accepted_languages() {
@@ -63,18 +63,18 @@ function get_accepted_languages() {
 
 
 /**
-* This function starts output via i18n system in the given language  
+* This function starts output via i18n system in the given language
 *
 * This function starts output via i18n system in the given language.
 * It returns the path to the choosen language.
-* 
-* @access	public        
+*
+* @access	public
 * @param		string	the language to use for output, given in "en_GB"-style
-* @return		string	the path to the language file, given in "en"-style	
+* @return		string	the path to the language file, given in "en"-style
 *
 */
 function init_i18n($_language) {
-	global $_language_domain, $INSTALLED_LANGUAGES, $ABSOLUTE_PATH_STUDIP;
+	global $_language_domain, $INSTALLED_LANGUAGES;
 
 	if (isset($_language_domain) && isset($_language)) {
 		$_language_path = $INSTALLED_LANGUAGES[$_language]["path"];
@@ -96,7 +96,7 @@ function init_i18n($_language) {
 * Decides, which button (folder)
 * is used for international buttons.
 *
-* @access	public        
+* @access	public
 * @param	string	the (german) button name
 * @param	string	if mode = img, the functions return the full tag, if mode = src, it return only the src-part , if mode = input returns full input tag
 * @param	string	tooltip text, if tooltip should be included in tag
@@ -123,7 +123,7 @@ function makeButton($name, $mode = "img", $tooltip = false, $inputname = false) 
 *
 * Can be used for sending language specific mails to other users.
 *
-* @access	public        
+* @access	public
 * @param		string	the user_id of the recipient (function will try to get preferred language from database)
 * @return		string	the path to the language files, given in "en"-style
 */
@@ -154,13 +154,13 @@ function getUserLanguagePath($uid) {
 * Should be called before writing strings to other users into database.
 * Use restoreLanguage() to switch back.
 *
-* @access	public        
+* @access	public
 * @param		string	the user_id of the recipient (function will try to get preferred language from database)
 * @param		string	explicit temporary language (set $uid to FALSE to switch to this language)
 */
 function setTempLanguage ($uid = FALSE, $temp_language = "") {
-	global $_language_domain, $DEFAULT_LANGUAGE, $ABSOLUTE_PATH_STUDIP;
-	
+	global $_language_domain, $DEFAULT_LANGUAGE;
+
 	if ($uid) {
 		// try to get preferred language from user
 		$db=new DB_Seminar;
@@ -178,7 +178,7 @@ function setTempLanguage ($uid = FALSE, $temp_language = "") {
 			$temp_language = $DEFAULT_LANGUAGE;
 		}
 	}
-	
+
 	if ($temp_language == "") {
 		// we got no arguments, best we can do is to set system default
 		$temp_language = $DEFAULT_LANGUAGE;
@@ -197,10 +197,10 @@ function setTempLanguage ($uid = FALSE, $temp_language = "") {
 * This function switches i18n system back to the original language.
 * Should be called after writing strings to other users via setTempLanguage().
 *
-* @access	public        
+* @access	public
 */
 function restoreLanguage() {
-	global $_language_domain, $_language, $ABSOLUTE_PATH_STUDIP;
+	global $_language_domain, $_language;
 
 	putenv("LC_ALL=$_language");
 	setlocale(LC_ALL, "");

@@ -34,7 +34,7 @@
 // +---------------------------------------------------------------------------+
 
 # necessary if you want to include header.php in function/method scope
-global $ABSOLUTE_PATH_STUDIP, $HELP_KEYWORD, $INSTALLED_LANGUAGES,
+global $HELP_KEYWORD, $INSTALLED_LANGUAGES,
        $RELATIVE_PATH_CHAT, $SHOW_TERMS_ON_FIRST_LOGIN,
        $UNI_NAME_CLEAN, $USER_VISIBILITY_CHECK;
 

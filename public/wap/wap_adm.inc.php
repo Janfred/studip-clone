@@ -131,7 +131,7 @@ require_once("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 		include_once("wap_hlp.inc.php");
 
 		$db = new DB_Seminar;
-		
+
 		/*
 		$encoded_pass = md5($user_pass);
 
@@ -176,7 +176,6 @@ require_once("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 	{
 		define("SESSION_TIME_OUT", 1800);
 
-		global $ABSOLUTE_PATH_STUDIP;
 		global $_language;
 		global $_language_path;
 		global $session_expired;
@@ -196,7 +195,7 @@ require_once("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 		echo "    <meta http-equiv=\"Cache-Control\" content=\"no-store\" forua=\"true\"/>\n";
 		echo "</head>\n";
 		echo "<card newcontext=\"true\">\n\n";
-		
+
 		if (!$session_id)
 		{
 			$_language      = wap_hlp_get_language(FALSE);

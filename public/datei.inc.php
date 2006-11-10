@@ -26,31 +26,31 @@ require_once('lib/classes/StudipDocumentTree.class.php');
 
 
 if ($GLOBALS['ZIP_USE_INTERNAL']) include_once('lib/pclzip/pclzip.lib.php');
-function readfile_chunked($filename,$retbytes=true) { 
-   $chunksize = 1*(1024*1024); // how many bytes per chunk 
-   $buffer = ''; 
-   $cnt =0; 
-   // $handle = fopen($filename, 'rb'); 
-   $handle = fopen($filename, 'rb'); 
-   if ($handle === false) { 
-       return false; 
-   } 
-   while (!feof($handle)) { 
-       $buffer = fread($handle, $chunksize); 
-       echo $buffer; 
-       ob_flush(); 
-       flush(); 
-       if ($retbytes) { 
-           $cnt += strlen($buffer); 
-       } 
-   } 
-       $status = fclose($handle); 
-   if ($retbytes && $status) { 
-       return $cnt; // return num. bytes delivered like readfile() does. 
-   } 
-   return $status; 
+function readfile_chunked($filename,$retbytes=true) {
+   $chunksize = 1*(1024*1024); // how many bytes per chunk
+   $buffer = '';
+   $cnt =0;
+   // $handle = fopen($filename, 'rb');
+   $handle = fopen($filename, 'rb');
+   if ($handle === false) {
+       return false;
+   }
+   while (!feof($handle)) {
+       $buffer = fread($handle, $chunksize);
+       echo $buffer;
+       ob_flush();
+       flush();
+       if ($retbytes) {
+           $cnt += strlen($buffer);
+       }
+   }
+       $status = fclose($handle);
+   if ($retbytes && $status) {
+       return $cnt; // return num. bytes delivered like readfile() does.
+   }
+   return $status;
 
-} 
+}
 
 function parse_header($header){
 	if (!is_array($header)){
@@ -174,7 +174,7 @@ function parse_link($link, $level=0) {
 
 
 function createSelectedZip ($file_ids, $perm_check = TRUE) {
-	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH, $SessSemName, $ABSOLUTE_PATH_STUDIP;
+	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH, $SessSemName;
 	$zip_file_id = false;
 	if ( is_array($file_ids)){
 		if ($perm_check){
@@ -209,7 +209,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 }
 
 function createFolderZip ($folder_id) {
-	global $TMP_PATH, $ZIP_PATH, $ABSOLUTE_PATH_STUDIP;
+	global $TMP_PATH, $ZIP_PATH;
 	$zip_file_id = false;
 
 	$zip_file_id = md5(uniqid("jabba",1));
@@ -300,7 +300,7 @@ function getFolderId($parent_id, $in_recursion = false){
 		}
 		return (!$in_recursion) ? $kidskids : null;
 }
-	
+
 
 function doc_count ($parent_id) {
 	global $SessionSeminar, $user;
@@ -525,7 +525,7 @@ function copy_folder($folder_id, $new_range, $seed = false){
 
 function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "", $filesize="") {
 	global $SessionSeminar;
-	
+
 	$db=new DB_Seminar;
 	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
 
@@ -534,7 +534,7 @@ function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "
 		$the_file_name = basename($url_parts['path']);
 	}
 	if ($protected == "on") $protected=1;
-	
+
 	if ($type){
 		$db->query("UPDATE folder SET name='$name', description='$description' WHERE folder_id ='$item_id'");
 		if ($folder_tree->permissions_activated) {
@@ -890,18 +890,18 @@ function upload($the_file, $refresh = false) {
 //Erzeugen des Datenbankeintrags zur Datei
 function insert_entry_db($range_id, $sem_id=0, $refresh = FALSE) {
 	global $the_file_name, $the_file_size, $dokument_id, $description, $name, $user, $upload_seminar_id;
-	
+
 	$fn1 = strrchr($the_file_name,"/");  // Unix-Pfadtrenner
 	$fn2 = strrchr($the_file_name,"\\"); // Windows-Pfadtrenner
 	if ($fn1) $the_file_name = $fn1;
-	else if ($fn2) $the_file_name = $fn2; 
-	
+	else if ($fn2) $the_file_name = $fn2;
+
 	$range_id = trim($range_id); 		// laestige white spaces loswerden
 	$description = trim($description);  	// laestige white spaces loswerden
 	$name = trim($name);  			// laestige white spaces loswerden
-	
+
 	if (!$name) $name = $the_file_name;
-	
+
 	if ($the_file_size > 0) {
 		$doc =& new StudipDocument($dokument_id);
 		if (!$refresh){
@@ -1309,8 +1309,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			else if ( ($super_folder = $folder_tree->getNextSuperFolder($db->f("folder_id"))) ) $icon .= "<img ".tooltip(_("Dieser Ordner ist nicht zugänglich, da ein übergeordneter Ordner gesperrt ist."))." src=\"".$GLOBALS['ASSETS_URL']."images/lock.gif\">";
 			// Wenn es ein Hausaufgabenordner ist
 			if ($folder_tree->isExerciseFolder($db->f("folder_id"))) $icon .= "<img ".tooltip(_("Dieser Ordner ist ein Hausaufgabenordner. Es können nur Dateien eingestellt werden."))." src=\"".$GLOBALS['ASSETS_URL']."images/eigene2.gif\" WIDTH=\"18\" HEIGTH=\"18\">";
-			
-			
+
+
 			if ($move && !in_array($db->f('folder_id'), $dont_move_to) && $folder_tree->isWritable($db->f('folder_id'))){
 
 				$icon="&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_md_\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0></a>".$icon;
@@ -1338,8 +1338,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				else
 					$titel= $tmp_titel;
 				}
-			
-			
+
+
 			//Workaround for older data from previous versions (chdate is 0)
 			$chdate = (($db->f("chdate")) ? $db->f("chdate") : $db->f("mkdate"));
 
@@ -1351,12 +1351,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$neuer_ordner = TRUE;
 			else
 				$neuer_ordner = FALSE;
-				
+
 		//Ordner aufgeklappt
 		if (isset($open[$db->f("folder_id")]) || $all) {
 			$content='';
 
-			
+
 			//Objekttitelzeile ausgeben
 			if (!$all) printhead ("99%", 0, $link, "open", $neuer_ordner, $icon, $titel, $zusatz, $newest_document);
 
@@ -1374,28 +1374,28 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			else
 				$striche2.= "<td class=\"blank\" nowrap background=\"".$GLOBALS['ASSETS_URL']."images/steel1.jpg\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\"></td>";
 
-			
+
 			if ($super_folder){
 				$content .=  '<img  src="'.$GLOBALS['ASSETS_URL'].'images/lock.gif">&nbsp;'
 						. sprintf(_("Dieser Ordner ist nicht zugänglich, da der übergeordnete Ordner \"%s\" nicht lesbar oder nicht sichtbar ist!"), htmlReady($folder_tree->getValue($super_folder,'name')))
 						. '<hr>';
 			}
-			
+
 			if ($folder_tree->isExerciseFolder($db->f("folder_id"))){
 				$content .=  '<img  src="'.$GLOBALS['ASSETS_URL'].'images/eigene2.gif">&nbsp;'
 						. _("Dieser Ordner ist ein Hausaufgabenordner. Es können nur Dateien eingestellt werden.")
-						. (!$rechte ? _("Sie selbst haben folgende Dateien in diesen Ordner eingestellt:") 
+						. (!$rechte ? _("Sie selbst haben folgende Dateien in diesen Ordner eingestellt:")
 						. '<br><b>' . htmlReady(join('; ', get_user_documents_in_folder($db->f("folder_id"), $GLOBALS['user']->id))).'</b>' : '')
 						. '<hr>';
 			}
-			
+
 			//Contentbereich erstellen
 			if ($change == $db->f("folder_id")) { //Aenderungsmodus, zweiter Teil
 				$content .= chr(10) . '<table cellpadding="2" cellspacing="2" border="0">';
 				$content .= chr(10) . '<tr><td>';
 				$content.="\n<textarea name=\"change_description\" rows=3 cols=40>".htmlReady($db->f("description"))."</textarea>";
 				$content .= chr(10) . '</td><td><font size="-1">';
-				if ($folder_tree->permissions_activated){ 
+				if ($folder_tree->permissions_activated){
 					$content.= "\n<INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isReadable($db->f('folder_id')) ? "CHECKED" : "" ) . " NAME=\"perm_read\">&nbsp;";
 					$content.= "<b>r</b> - " . _("Lesen (Dateien k&ouml;nnen heruntergeladen werden)");
 					$content.= "\n<br><INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isWritable($db->f('folder_id')) ? "CHECKED" : "" ) . " NAME=\"perm_write\">&nbsp;";
@@ -1411,7 +1411,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				$content.="\n<input type=\"image\"" . makeButton("abbrechen", "src") . " align=\"absmiddle\" name=\"cancel\" value=\""._("Abbrechen")."\">";
 				$content.= "\n<input type=\"hidden\" name=\"open\" value=\"".$db->f("folder_id")."_sc_\" />";
 				$content.="\n<input type=\"hidden\" name=\"type\" value=1 />";
-				$content .= chr(10) . '</td></tr></table>';	
+				$content .= chr(10) . '</td></tr></table>';
 			}
 			elseif ($db->f("description"))
 				$content .= htmlReady($db->f("description"), TRUE, TRUE);
@@ -1458,7 +1458,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					}
 				}
 			}
-			
+
 			if (!$edit) $edit = '&nbsp;';
 
 			if (!$all) {?><td class="blank" width="*">&nbsp;</td></tr></table><table width="100%" cellpadding=0 cellspacing=0 border=0><tr><?}
@@ -1652,8 +1652,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 		//Ordner nicht aufgeklappt
 		else {
 
-			list($link,$titel) = str_replace('?close=','?open=',array($link, $titel)); 
-			
+			list($link,$titel) = str_replace('?close=','?open=',array($link, $titel));
+
 			//Objekttitelzeile ausgeben
 			if (!$all) printhead ("90%", 0, $link, "close", $neuer_ordner, $icon, $titel, $zusatz, $newest_document);
 			if (!$all) echo "<td class=\"blank\">&nbsp;</td></tr></td></table>";

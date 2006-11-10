@@ -9,32 +9,32 @@
 define("UNKNOWN_PLUGINTYPE","undefined");
 
 class PluginEngine{
-	
+
 	/**
 	* Returns the plugin persistence object for the required plugin type.
 	* @param $plugintype - Standard, Administration, System
-	* @return a persistence object 
+	* @return a persistence object
 	*/
 	function &getPluginPersistence($plugintype="Abstract"){
 		$classname = $plugintype . "PluginIntegratorEnginePersistence";
 		$persistence =& new $classname();
 		$conn =& PluginEngine::getPluginDatabaseConnection();
-		
+
 		$persistence->setConnection($conn);
 		$persistence->setEnvironment($GLOBALS["plugindbenv"]);
-		
+
 		// now set the user
 		$persistence->setUser(new StudIPUser());
 		return $persistence;
 	}
-	
+
 	/**
 	* @param the plugin for which a persistence object should be instantiated
 	*/
 	function &getPluginPersistenceByPlugin($plugin){
 		return PluginEngine::getPluginPersistence(PluginEngine::getTypeOfPlugin($plugin));
 	}
-	
+
 	/**
 	* Returns an active connection to the plugin database
 	* @return active connection to the database
@@ -43,14 +43,14 @@ class PluginEngine{
 	function &getPluginDatabaseConnection(){
 		$env = $GLOBALS["plugindbenv"]; // get the environment
 		$connection =& NewADOConnection($env->dbtype);
-	
+
 		// connect to the database
 		// TODO: persistent connection ok ?
-  		$connection->PConnect($env->dbhost,$env->dbuser,$env->dbpassword,$env->dbname); 
-    
+  		$connection->PConnect($env->dbhost,$env->dbuser,$env->dbpassword,$env->dbname);
+
     	return $connection;
 	}
-	
+
 	/**
 	* Generates a Link which can be shown in user interfaces
 	* @param $plugin - the plugin to which should be linked
@@ -75,21 +75,21 @@ class PluginEngine{
 		}
 		return $link;
 	}
-	
+
 	/**
 	* Generates a Link to the plugin administration which can be shown in user interfaces
 	* @param $params - an array with name value pairs
 	* @return a link to the administration plugin with the additional $params
 	*/
 	function getLinkToAdministrationPlugin($params=array()){
-		$link = "plugins.php?cmd=show&id=1"; 
+		$link = "plugins.php?cmd=show&id=1";
 		// add Params
 		foreach ($params as $paramkey=>$paramval){
 			$link .= "&" . urlencode($paramkey) . "=" . urlencode($paramval);
 		}
 		return $link;
 	}
-	
+
 	/**
 	* Returns the plugin type
 	* @return returns the type of the plugin if known by the engine
@@ -108,11 +108,11 @@ class PluginEngine{
 			return "Portal";
 		} else if (is_a($plugin, 'AbstractStudIPCorePlugin') || is_subclass_of($plugin, 'AbstractStudIPCorePlugin')){
 			return "Core";
-		} 		
+		}
 		return UNKNOWN_PLUGINTYPE;
   }
-  
-  
+
+
    /**
     * Creates an instance of the desired plugin class
     * @param pluginclassname - the desired class name
@@ -127,29 +127,29 @@ class PluginEngine{
 	    }
 	    else {
 			//anoack: unschöner workaround, aber auf die Schnelle kaum anders zu lösen, solange Plugins auch vorhandenen Stud.IP code nutzen wollen :)
-			global $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_RESOURCES, $RELATIVE_PATH_CALENDAR,$RELATIVE_PATH_LEARNINGMODULES,$RELATIVE_PATH_CHAT;
+			global $RELATIVE_PATH_RESOURCES, $RELATIVE_PATH_CALENDAR,$RELATIVE_PATH_LEARNINGMODULES,$RELATIVE_PATH_CHAT;
 			require_once($absolutepluginfile);
 		    $plugin =& new $pluginclassname();
-		    $plugin->setEnvironment($env);			    	    	    
+		    $plugin->setEnvironment($env);
 		    $plugin->setPluginpath($env->getRelativepackagepath() . "/" . $pluginpath);
 		    $plugin->setBasepluginpath($pluginpath);
 		    return $plugin;
 	    }
    }
-   
+
    /**
 	* Reads the manifest of the plugin in the given path
 	* @return array containing the manifest information
 	* @todo Klasse für die Rückgabe realisieren
 	*/
-	function getPluginManifest($pluginpath){		
-	   $pluginpath = trim($pluginpath);	   
+	function getPluginManifest($pluginpath){
+	   $pluginpath = trim($pluginpath);
 	   if (!(strrpos($pluginpath,"/") == strlen($pluginpath)-1)) $pluginpath .= "/";
-	   if (!file_exists($pluginpath . "plugin.manifest")){	
+	   if (!file_exists($pluginpath . "plugin.manifest")){
 	   	  return array();
-	   }	 
+	   }
 	   $manifest = fopen($pluginpath . "plugin.manifest","r");
-	   $plugininfos = array();		
+	   $plugininfos = array();
 		while (!feof($manifest)){
 			// Suche nach STRING1=STRING2
 			$result = fscanf($manifest,"%[^=]=%[^\n]");
@@ -182,7 +182,7 @@ class PluginEngine{
 		fclose($manifest);
 		return $plugininfos;
 	}
-	
+
 	/**
 	 * Searches for plugins in the plugins installation directory, if enabled in local.inc
 	 * @return list of installable names of plugin packages
@@ -209,8 +209,8 @@ class PluginEngine{
 			}
 			return $installableplugins;
 		}
-	}	
-	
+	}
+
 	/**
 	 * Saves a value to the global session
 	 *
@@ -221,8 +221,8 @@ class PluginEngine{
 	function saveToSession($plugin,$key,$value){
 		$_SESSION["PLUGIN_SESSION_SPACE"][strtolower(get_class($plugin))][$key] =serialize($value);
 	}
-	
-	
+
+
 	/**
 	 * Retrieves the value to key from the global plugin session
 	 *
@@ -230,7 +230,7 @@ class PluginEngine{
 	function getValueFromSession($plugin,$key){
 		return unserialize($_SESSION["PLUGIN_SESSION_SPACE"][strtolower(get_class($plugin))][$key]);
 	}
-	
+
 	/**
 	 * for internal use only
 	 *
@@ -238,9 +238,9 @@ class PluginEngine{
 	 * @return unknown
 	 */
 	function getEngineValueFromSession($key){
-		return unserialize($_SESSION["PLUGIN_SESSION_SPACE"]["PLUGINENGINE"][$key]);		
+		return unserialize($_SESSION["PLUGIN_SESSION_SPACE"]["PLUGINENGINE"][$key]);
 	}
-	
+
 	/**
 	 * for internal use only
 	 *

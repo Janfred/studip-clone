@@ -106,7 +106,7 @@ function user_answers ($evalanswer_id) {
 }
 
 function answers ($parent_id, $anz_nutzer, $question_type) {
-	global $ABSOLUTE_PATH_STUDIP, $graph_switch, $auth, $ausgabeformat, $fo_file, $has_template, $pattern, $replace;
+	global $graph_switch, $auth, $ausgabeformat, $fo_file, $has_template, $pattern, $replace;
 
 	 // Rueckgabearray, damit die Daten noch aufzutrennen sind...
         $ret_array = array("id"=>$parent_id,                         // Question-ID
@@ -149,7 +149,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
 		if ($has_residual && ($db_answers_sum->f("anz")-$has_residual)>0) $prozente_wo_residual = ROUND($answer_counter*100/($db_answers_sum->f("anz")-$has_residual));
 		$edit .= "                <fo:table-row>\n";
 		$edit .= "                  <fo:table-cell ><fo:block font-size=\"8pt\">".$antwort_nummer.". ".preg_replace($pattern,$replace,smile(htmlspecialchars(($db_answers->f("text")!="" ? $db_answers->f("text") : $db_answers->f("value"))),TRUE))."</fo:block></fo:table-cell>\n";
-	
+
 		if ($has_residual) $edit .= "                  <fo:table-cell ><fo:block font-size=\"8pt\">".$answer_counter." (".$prozente."%) ".($db_answers->f("residual")==0 ? "(".$prozente_wo_residual."%)*" : "" )."</fo:block></fo:table-cell>\n";
 		else $edit .= "                  <fo:table-cell ><fo:block font-size=\"8pt\">".$answer_counter." (".$prozente."%)</fo:block></fo:table-cell>\n";
 		$edit .= "                </fo:table-row>\n";
@@ -160,7 +160,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
 
 	}
 	if ($gesamte_antworten > 0 && $antwort_durchschnitt > 0) $antwort_durchschnitt = ROUND($antwort_durchschnitt / $gesamte_antworten, 3);
-	
+
 	$ret_array["antwort_durchschnitt"] = $antwort_durchschnitt;
         $ret_array["summe_antworten"] = $gesamte_antworten;
 
@@ -188,7 +188,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
 		$txt .= "                </fo:table-row>\n";
 
 	}
-	
+
 	if ($has_residual) {
 		$txt .= "                <fo:table-row>\n";
 		$txt .= "                  <fo:table-cell ><fo:block space-before.optimum=\"5pt\" font-size=\"8pt\">*"._("Werte ohne Enthaltungen").".</fo:block></fo:table-cell>\n";
@@ -206,7 +206,7 @@ function groups ($parent_id) {
 	global $cssSw, $ausgabeformat, $fo_file, $auth, $global_counter, $local_counter, $TMP_PATH, $EVAL_AUSWERTUNG_CONFIG_ENABLE, $pattern, $replace;
 	$db_groups = new DB_Seminar();
 	$db_groups->query(sprintf("SELECT * FROM evalgroup WHERE parent_id='%s' ORDER BY position",$parent_id));
-	
+
 
 	while ($db_groups->next_record()) {
 		// Heraussuchen, ob es sich um ein Freitext-Template handelt...
@@ -243,7 +243,7 @@ function groups ($parent_id) {
 				fputs($fo_file,"      ".$global_counter.".".$local_counter.". ".preg_replace($pattern,$replace,smile(htmlspecialchars($db_groups->f("title")),TRUE))."\n");
 			fputs($fo_file,"    </fo:block>\n");
 		}
-		
+
 		if ($db_groups->f("child_type")=="EvaluationQuestion") {
 
 			$db_questions = new DB_Seminar();
@@ -266,26 +266,26 @@ function groups ($parent_id) {
 					fputs($fo_file,"      ".$global_counter.".".$local_counter.".".$local_question_counter.". ".preg_replace($pattern,$replace,smile(htmlspecialchars($db_questions->f("text")),TRUE))."\n");
 				}
 				fputs($fo_file,"    </fo:block>\n");
-	 			fputs($fo_file,"    <!-- table start -->\n");	
-	 			fputs($fo_file,"    <fo:table table-layout=\"fixed\" border-width=\".1mm\" space-after.optimum=\"10pt\">\n");	
+	 			fputs($fo_file,"    <!-- table start -->\n");
+	 			fputs($fo_file,"    <fo:table table-layout=\"fixed\" border-width=\".1mm\" space-after.optimum=\"10pt\">\n");
 				if (!($freetype)) {
-	 				fputs($fo_file,"      <fo:table-column column-width=\"100mm\"/>\n");	
-	 				fputs($fo_file,"      <fo:table-column column-width=\"60mm\"/>\n");	
+	 				fputs($fo_file,"      <fo:table-column column-width=\"100mm\"/>\n");
+	 				fputs($fo_file,"      <fo:table-column column-width=\"60mm\"/>\n");
 	 			} else {
-	 				fputs($fo_file,"      <fo:table-column column-width=\"160mm\"/>\n");	
+	 				fputs($fo_file,"      <fo:table-column column-width=\"160mm\"/>\n");
 				}
-				fputs($fo_file,"      <fo:table-body>\n");	
-	 			fputs($fo_file,"        <fo:table-row >\n");	
+				fputs($fo_file,"      <fo:table-body>\n");
+	 			fputs($fo_file,"        <fo:table-row >\n");
 	 			fputs($fo_file,"          <fo:table-cell ><fo:block start-indent=\"3mm\" end-indent=\"3mm\" padding-left=\"3mm\" padding-right=\"3mm\" padding-top=\"4mm\" padding-bottom=\"4mm\">\n");
-	 			fputs($fo_file,"            <!-- table start -->\n");	
-	 			fputs($fo_file,"            <fo:table table-layout=\"fixed\">\n");	
+	 			fputs($fo_file,"            <!-- table start -->\n");
+	 			fputs($fo_file,"            <fo:table table-layout=\"fixed\">\n");
 				if (!($freetype)) {
-	 				fputs($fo_file,"              <fo:table-column column-width=\"60mm\"/>\n");	
-	 				fputs($fo_file,"              <fo:table-column column-width=\"40mm\"/>\n");	
+	 				fputs($fo_file,"              <fo:table-column column-width=\"60mm\"/>\n");
+	 				fputs($fo_file,"              <fo:table-column column-width=\"40mm\"/>\n");
 	 			} else {
 					fputs($fo_file,"              <fo:table-column column-width=\"160mm\"/>\n");
 				}
-				fputs($fo_file,"              <fo:table-body>\n");	
+				fputs($fo_file,"              <fo:table-body>\n");
 
 
 				} // ($group_type=="normal")
@@ -304,21 +304,21 @@ function groups ($parent_id) {
 
 				if ($group_type=="normal") {
 
-	 				fputs($fo_file,"              </fo:table-body>\n");	
-	 				fputs($fo_file,"            </fo:table>\n");	
-	 				fputs($fo_file,"            <!-- table end -->\n");	
-	 				fputs($fo_file,"          </fo:block></fo:table-cell>\n");	
+	 				fputs($fo_file,"              </fo:table-body>\n");
+	 				fputs($fo_file,"            </fo:table>\n");
+	 				fputs($fo_file,"            <!-- table end -->\n");
+	 				fputs($fo_file,"          </fo:block></fo:table-cell>\n");
 					if (!($freetype)) {
-	 					fputs($fo_file,"          <fo:table-cell ><fo:block start-indent=\"3mm\" end-indent=\"3mm\" padding-left=\"3mm\" padding-right=\"3mm\" padding-top=\"4mm\" padding-bottom=\"4mm\">\n");	
+	 					fputs($fo_file,"          <fo:table-cell ><fo:block start-indent=\"3mm\" end-indent=\"3mm\" padding-left=\"3mm\" padding-right=\"3mm\" padding-top=\"4mm\" padding-bottom=\"4mm\">\n");
 						if (do_template("show_graphics")) {
 	 						fputs($fo_file,"            <fo:external-graphic content-width=\"70pt\" content-height=\"60pt\" src=\"url(".$TMP_PATH."/export/evalsum".$db_questions->f("evalquestion_id").$auth->auth["uid"].".".$GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT'].")\"/>\n");
-						}	
-	 					fputs($fo_file,"          </fo:block></fo:table-cell>\n");	
+						}
+	 					fputs($fo_file,"          </fo:block></fo:table-cell>\n");
 	 				}
-					fputs($fo_file,"        </fo:table-row>\n");	
-	 				fputs($fo_file,"      </fo:table-body>\n");	
-	 				fputs($fo_file,"    </fo:table>\n");	
-	 				fputs($fo_file,"  <!-- table end -->\n");	
+					fputs($fo_file,"        </fo:table-row>\n");
+	 				fputs($fo_file,"      </fo:table-body>\n");
+	 				fputs($fo_file,"    </fo:table>\n");
+	 				fputs($fo_file,"  <!-- table end -->\n");
 
 				} // ($group_type=="normal")
 
@@ -356,7 +356,7 @@ function groups ($parent_id) {
 							fputs($fo_file, preg_replace($pattern,$replace,smile(htmlspecialchars($v2),TRUE)));
 							fputs($fo_file,"          </fo:block></fo:table-cell >");
 						}
-							
+
 						fputs($fo_file,"          <fo:table-cell ><fo:block text-align=\"center\" space-before.optimum=\"10pt\" font-size=\"7pt\" font-family=\"Symbol\">\n");
 						fputs($fo_file, "&#x2211;");
 						fputs($fo_file,"          </fo:block></fo:table-cell >");
@@ -372,7 +372,7 @@ function groups ($parent_id) {
 					}
 
 					fputs($fo_file,"        <fo:table-row >\n");
-	
+
 					fputs($fo_file,"          <fo:table-cell ><fo:block font-size=\"6pt\" start-indent=\"3mm\">\n");
 					fputs($fo_file, $questions["frage"]);
 					fputs($fo_file,"          </fo:block></fo:table-cell >");
@@ -401,7 +401,7 @@ function groups ($parent_id) {
 
 					fputs($fo_file,"        </fo:table-row>\n");
 
-				}			
+				}
 
 				fputs($fo_file,"        <fo:table-row >\n");
 				fputs($fo_file,"          <fo:table-cell ><fo:block start-indent=\"3mm\" space-after.optimum=\"10pt\" font-size=\"7pt\">\n");
@@ -425,9 +425,9 @@ function groups ($parent_id) {
 
 $db = new DB_Seminar();
 
-if ($staff_member) 
+if ($staff_member)
 	$db->query(sprintf("SELECT * FROM eval WHERE eval_id='%s'",$eval_id));
-else 
+else
 	$db->query(sprintf("SELECT * FROM eval WHERE eval_id='%s' AND author_id='%s'",$eval_id,$auth->auth["uid"]));
 
 if ($db->next_record()) {
@@ -488,12 +488,12 @@ if ($db->next_record()) {
   fputs($fo_file,"    </fo:block>\n");
 
   if (do_template("show_total_stats")) {
-  	fputs($fo_file,"    <fo:block text-align=\"start\" line-height=\"10pt\" font-size=\"8pt\">\n"); 
-  	fputs($fo_file,"      ".$db_number_of_votes->f("anz")." "._("Teilnehmer insgesamt").".\n"); 
-  	fputs($fo_file,"      "._("Die Teilnahme war")." ". ($db->f("anonymous")==0 ? _("nicht") : "") . " "._("anonym").".\n"); 
+  	fputs($fo_file,"    <fo:block text-align=\"start\" line-height=\"10pt\" font-size=\"8pt\">\n");
+  	fputs($fo_file,"      ".$db_number_of_votes->f("anz")." "._("Teilnehmer insgesamt").".\n");
+  	fputs($fo_file,"      "._("Die Teilnahme war")." ". ($db->f("anonymous")==0 ? _("nicht") : "") . " "._("anonym").".\n");
   	fputs($fo_file,"      "._("Eigentümer").": ".$db_owner->f("fullname").". "._("Erzeugt am").": ".date("d.m.Y H:i:s")."\n");
   	fputs($fo_file,"    </fo:block>\n");
-  } 
+  }
 
   // ----- ENDE HEADER -----
 
@@ -504,23 +504,23 @@ if ($db->next_record()) {
   fputs($fo_file,"    </fo:flow>\n");
   fputs($fo_file,"  </fo:page-sequence>\n");
   fputs($fo_file,"</fo:root>\n");
- 
+
   // ----- ENDE FOOTER -----
 
   fclose($fo_file);
 
   $pdffile = "$TMP_PATH/export/" . md5($db->f("eval_id").$auth->auth["uid"]);
-  
+
   $str = $FOP_SH_CALL." $TMP_PATH/export/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo $pdffile";
 
   if ($JAVA_ENV_CALL){
 		$str = ". $JAVA_ENV_CALL && " . $str;
   }
-  
+
   $err = exec($str);
-  
+
   if (file_exists($pdffile) && filesize($pdffile)) {
-	 header('Location: ' . getDownloadLink( basename($pdffile), "evaluation.pdf", 2)); 
+	 header('Location: ' . getDownloadLink( basename($pdffile), "evaluation.pdf", 2));
 
 /*	header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
 	header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");

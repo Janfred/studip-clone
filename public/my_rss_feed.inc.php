@@ -32,7 +32,7 @@ require_once "lib/classes/RSSFeed.class.php";
 
 function print_rss($username) {
 
-	global $view,$PHP_SELF,$auth, $ABSOLUTE_PATH_STUDIP;
+	global $view,$PHP_SELF,$auth;
 
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;

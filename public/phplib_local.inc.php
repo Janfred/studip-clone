@@ -366,7 +366,7 @@ class Seminar_Auth extends Auth {
 	}
 
 	function is_authenticated(){
-		global $ABSOLUTE_PATH_STUDIP;
+
 		$cfg =& Config::GetInstance();
 		//check if the user got kicked meanwhile, or if user is locked out
 		if ($this->auth['uid'] && !in_array($this->auth['uid'], array('form','nobody'))){
@@ -467,7 +467,6 @@ class Seminar_Auth extends Auth {
 	function auth_loginform() {
 		global $sess;
 		global $challenge;
-		global $ABSOLUTE_PATH_STUDIP;
 		global $shortcut;
 		global $order;
 
@@ -562,7 +561,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 
 	function auth_registerform() {
 		global $sess;
-		global $challenge,$ABSOLUTE_PATH_STUDIP;
+		global $challenge;
 
 		$challenge = md5(uniqid($this->magic));
 		$sess->register("challenge");
@@ -571,7 +570,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 	}
 
 	function auth_doregister() {
-		global $username, $password, $challenge, $response, $Vorname, $Nachname, $geschlecht, $Email,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser,$ABSOLUTE_PATH_STUDIP, $CANONICAL_RELATIVE_PATH_STUDIP, $UNI_NAME_CLEAN, $DEFAULT_LANGUAGE;
+		global $username, $password, $challenge, $response, $Vorname, $Nachname, $geschlecht, $Email,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser, $CANONICAL_RELATIVE_PATH_STUDIP, $UNI_NAME_CLEAN, $DEFAULT_LANGUAGE;
 
 		global $_language, $_language_path;
 
@@ -728,7 +727,7 @@ class Seminar_Perm extends Perm {
 
 	function perm_invalid($does_have, $must_have) {
 		global $perm, $auth, $sess;
-		global $ABSOLUTE_PATH_STUDIP,$RELATIVE_PATH_CHAT;
+		global $RELATIVE_PATH_CHAT;
 		include("perminvalid.ihtml");
 	}
 

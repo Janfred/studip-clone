@@ -211,7 +211,7 @@ function user_answers ($evalanswer_id) {
 }
 
 function answers ($parent_id, $anz_nutzer, $question_type) {
-	global $ABSOLUTE_PATH_STUDIP, $graph_switch, $auth, $ausgabeformat, $has_template;
+	global $graph_switch, $auth, $ausgabeformat, $has_template;
 
 	// Rueckgabearray, damit die Daten noch aufzutrennen sind...
 	$ret_array = array("id"=>$parent_id,                         // Question-ID

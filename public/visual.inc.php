@@ -438,15 +438,16 @@ function format_wiki_comment($comment, $metainfo, $show_comment) {
 
 
 function latex($text, $extern = FALSE) {
-	global $ABSOLUTE_PATH_STUDIP,$CANONICAL_RELATIVE_PATH_STUDIP,$TEXCACHE_PATH,$LATEXRENDER_ENABLE;
+	global $CANONICAL_RELATIVE_PATH_STUDIP,$TEXCACHE_PATH,$LATEXRENDER_ENABLE;
 	global $LATEX_PATH,$DVIPS_PATH,$CONVERT_PATH,$IDENTIFY_PATH,$TMP_PATH, $LATEX_FORMATS;
 
 	if ($LATEXRENDER_ENABLE && isset($LATEX_FORMATS)) {
 		include_once("lib/classes/latexrender.class.php");
+		$path_here = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 		if ($extern) {
-			$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH, $GLOBALS['ABSOLUTE_URI_STUDIP'] . $TEXCACHE_PATH);
+			$latex = new LatexRender($path_here.$TEXCACHE_PATH, $GLOBALS['ABSOLUTE_URI_STUDIP'].$TEXCACHE_PATH);
 		} else {
-			$latex = new LatexRender($ABSOLUTE_PATH_STUDIP.$TEXCACHE_PATH,$CANONICAL_RELATIVE_PATH_STUDIP.$TEXCACHE_PATH);
+			$latex = new LatexRender($path_here.$TEXCACHE_PATH, $CANONICAL_RELATIVE_PATH_STUDIP.$TEXCACHE_PATH);
 		}
 		$latex->_latex_path = $LATEX_PATH;
 		$latex->_dvips_path = $DVIPS_PATH;
@@ -975,7 +976,7 @@ function symbol ($text = "", $extern = FALSE) {
 
 	if(empty($text))
 		return $text;
-	
+
 	if ($extern)
 		$path = $GLOBALS['ABSOLUTE_URI_STUDIP'];
 	else
@@ -1175,7 +1176,7 @@ function print_infobox($content, $picture = '', $html = FALSE) {
   # prefix picture if necessary
   if ($picture)
     $picture = sprintf('%simages/%s', $GLOBALS['ASSETS_URL'], $picture);
-    
+
   # prefix icons
   foreach ($content as $i => $value) {
     if (!$value) continue;
@@ -1185,7 +1186,7 @@ function print_infobox($content, $picture = '', $html = FALSE) {
         sprintf('%simages/%s',
                 $GLOBALS['ASSETS_URL'],
                 $content[$i]['eintrag'][$j]['icon']);
-    }  
+    }
   }
 
   return print_infobox_absolute($content, $picture, $html);

@@ -19,8 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 # necessary if you want to include links_admin.inc.php in function/method scope
-global  $ABSOLUTE_PATH_STUDIP,
-        $BANNER_ADS_ENABLE,
+global  $BANNER_ADS_ENABLE,
         $ELEARNING_INTERFACE_ENABLE,
         $EXPORT_ENABLE,
         $EXTERN_ENABLE,

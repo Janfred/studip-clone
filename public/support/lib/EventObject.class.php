@@ -1,9 +1,9 @@
 <?
 /**
 * EventObject.class.php
-* 
+*
 * class for a event object for supportdb
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -44,21 +44,21 @@ class EventObject {
 	var $end;					//the end ts of the event
 	var $user_id;					//the id of the supporting user
 	var $used_points;				//the used poinjts for this event
-	
+
 	//Konstruktor
 	function EventObject($id='', $request_id='', $begin='', $end='', $user_id='', $used_points='') {
 		global $user;
-		
+
 		$this->user_id = $user->id;
 		$this->db=new DB_Seminar;
-		
+
 		if(func_num_args() == 1) {
 			$this->id = func_get_arg(0);
 			$this->restore();
 		} elseif(func_num_args() == 6) {
 			$this->id = func_get_arg(0);
 			$this->request_id = func_get_arg(1);
-			$this->begin = func_get_arg(2);			
+			$this->begin = func_get_arg(2);
 			$this->end = func_get_arg(3);
 			$this->user_id = func_get_arg(4);
 			$this->used_points = func_get_arg(5);
@@ -80,7 +80,7 @@ class EventObject {
 		} else
 			return $this->store(TRUE);
 	}
-	
+
 	function setRequestId($id){
 		$this->request_id= $id;
 	}
@@ -104,7 +104,7 @@ class EventObject {
 	function getId() {
 		return $this->id;
 	}
-	
+
 	function getBegin() {
 		return $this->begin;
 	}
@@ -116,7 +116,7 @@ class EventObject {
 	function getEnd() {
 		return $this->end;
 	}
-	
+
 	function getUserId() {
 		return $this->user_id;
 	}
@@ -131,7 +131,7 @@ class EventObject {
 		else
 			return FALSE;
 	}
-	
+
 	//private, works as ceil, but if the output is 0, it will be converted to 1
 	function myCeil ($number) {
 		$result = ceil ($number);
@@ -144,13 +144,13 @@ class EventObject {
 
 	//private
 	function calculatePoints() {
-		global $POINTS, $CALENDAR_ENABLE, $ABSOLUTE_PATH_STUDIP, $RELATIVE_PATH_CALENDAR,
+		global $POINTS, $CALENDAR_ENABLE, $RELATIVE_PATH_CALENDAR,
 			$BASE_DATE_FROM_REQUEST, $CHANGE_RATE;
-		
+
 		if ($CALENDAR_ENABLE)
 			include_once ("calendar_functions.inc.php");
-	
-		
+
+
 		if ($BASE_DATE_FROM_REQUEST) {
 			$tmpRequest = new RequestObject ($this->request_id);
 			$tmp_begin = $tmpRequest->getDate();
@@ -159,17 +159,17 @@ class EventObject {
 			$tmp_begin = $this->begin;
 			$tmp_end = $this->end;
 		}
-		
+
 		$i = 0;
-		
+
 		while ($tmp_end) {
 			if  ($CALENDAR_ENABLE)
 				if (holiday($tmp_begin) == 3)
 					$tmp_day = "holiday";
-					
+
 			if ($tmp_day !=  "holiday")
 				$tmp_day = date("w", $tmp_begin);
-			
+
 			foreach ($POINTS[$tmp_day] as $val) {
 				if ($CHANGE_RATE) {
 					$tmp_seperating_start = $tmp_begin;
@@ -178,8 +178,8 @@ class EventObject {
 					$tmp_seperating_start = mktime ($val["begin_hour"], $val["begin_min"], 0, date("m", $tmp_begin), date("j", $tmp_begin), date("Y", $tmp_begin));
 					$tmp_seperating_end = mktime ($val["end_hour"], $val["end_min"], 0, date("m", $tmp_begin), date("j", $tmp_begin), date("Y", $tmp_begin));
 				}
-				$i++;				
-				
+				$i++;
+
 				if (($tmp_seperating_start <= $tmp_begin) && ($tmp_seperating_end >= $tmp_begin))
 					if ($tmp_seperating_end >= $tmp_end){
 						$points = $points + ($this->myCeil($this->myCeil(($tmp_end - $tmp_begin) / 60) / $val["min"]) * $val["ratio"]);
@@ -190,10 +190,10 @@ class EventObject {
 					}
 			}
 		}
-		
+
 		return $points;
 	}
-	
+
 	function restore() {
 		$query = sprintf("SELECT * FROM support_event WHERE event_id='%s' ",$this->id);
 
@@ -217,12 +217,12 @@ class EventObject {
 		$chdate = time();
 		$mkdate = time();
 		if($create) {
-			$query = sprintf("INSERT INTO support_event SET event_id = '%s', request_id='%s', begin='%s', " 
+			$query = sprintf("INSERT INTO support_event SET event_id = '%s', request_id='%s', begin='%s', "
 				."end='%s', used_points='%s', user_id ='%s', mkdate='%s', chdate='%s' "
 						 , $this->id, $this->request_id, $this->begin, $this->end
 						 , $this->calculatePoints(), $this->user_id, $mkdate, $chdate);
 		} else
-			$query = sprintf("UPDATE support_event SET request_id='%s', begin='%s', " 
+			$query = sprintf("UPDATE support_event SET request_id='%s', begin='%s', "
 				."end='%s', used_points='%s', user_id ='%s' WHERE event_id = '%s'"
 						 , $this->request_id, $this->begin, $this->end
 						 , $this->calculatePoints(), $this->user_id, $this->id);
@@ -234,7 +234,7 @@ class EventObject {
 				return TRUE;
 			} else
 				return FALSE;
-		
+
 		return FALSE;
 	}
 
