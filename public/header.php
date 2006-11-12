@@ -77,7 +77,7 @@ if ($GLOBALS['CHAT_ENABLE']){
 	echo "\t\tfunction open_chat(chatid) {\n";
 	echo "\t\t\tif(!chatid){\n";
 	printf ("\t\t\t\talert('%s');\n", _("Sie sind bereits in diesem Chat angemeldet!"));
-	echo "\t\t\t} else {\n\t\t\tfenster=window.open(\"". $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . $GLOBALS['RELATIVE_PATH_CHAT'] ."/chat_login.php?chatid=\" + chatid,\"chat_\" + chatid + \"_".$auth->auth["uid"]."\",\"scrollbars=no,width=640,height=480,resizable=yes\");\n";
+	echo "\t\t\t} else {\n\t\t\tfenster=window.open(\"chat_dispatcher.php?target=chat_login.php&chatid=\" + chatid,\"chat_\" + chatid + \"_".$auth->auth["uid"]."\",\"scrollbars=no,width=640,height=480,resizable=yes\");\n";
 	echo "\t\t}\nreturn false;\n}\n";
 	echo "\t\t</script>\n";
 }
