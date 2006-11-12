@@ -3,7 +3,7 @@
  * Funktionen für das Rollemanagement
  * @author Dennis Reil, <Dennis.Reil@offis.de>
  */
-require_once("plugins/core/de_studip_Role.class.php");
+
 define("UNKNOWN_ROLE_ID",-1);
 
 class de_studip_RolePersistence {
