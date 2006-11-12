@@ -168,13 +168,11 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 		if ($auth->auth["jscript"]) {
 			$insert_date_start = "&nbsp;"
 				. "<img align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" border=\"0\" "
-				. "onClick=\"window.open('" . $CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
-				. "/views/insert_date_popup.php?element_switch=9', 'InsertDate', "
+				. "onClick=\"window.open('termin_eingabe_dispatch.php?element_switch=9', 'InsertDate', "
 				. "'dependent=yes, width=210, height=210, left=500, top=150')\">";
 			$insert_date_end = "&nbsp;"
 				. "<img align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" border=\"0\" "
-				. "onClick=\"window.open('" . $CANONICAL_RELATIVE_PATH_STUDIP . $RELATIVE_PATH_CALENDAR
-				. "/views/insert_date_popup.php?element_switch=10', 'InsertDate', "
+				. "onClick=\"window.open('termin_eingabe_dispatch.php?element_switch=10', 'InsertDate', "
 				. "'dependent=yes, width=210, height=210, left=500, top=150')\">";
 		}
 		else {
