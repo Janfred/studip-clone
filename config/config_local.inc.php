@@ -4,7 +4,7 @@
 you find here the basic system settings. You shouldn't have to touch much of them...
 please note the CONFIG.INC.PHP in the system folder for the indivual settings of your installation!*/
 
-$UNI_NAME_CLEAN = "Stud.IP 1.3";						//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
+$UNI_NAME_CLEAN = "Stud.IP 1.5-dev";							//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
 $AUTH_LIFETIME = 60;									//the length of a session in minutes, zero means unlimited lifetime
 
 
@@ -16,8 +16,8 @@ DB_Ilias is used to connect to an Ilias Database*/
 
 // default Stud.IP database (DB_Seminar)
 $DB_STUDIP_HOST = "localhost";
-$DB_STUDIP_USER = "<username>";
-$DB_STUDIP_PASSWORD = "<password>";
+$DB_STUDIP_USER = "";
+$DB_STUDIP_PASSWORD = "";
 $DB_STUDIP_DATABASE = "studip";
 
 //additional class for Ilias connection (DB_Ilias)
@@ -26,122 +26,30 @@ $DB_ILIAS_USER = "<username>";
 $DB_ILIAS_PASSWORD = "<password>";
 $DB_ILIAS_DATABASE = "ilias";
 
-
-/*system functions
-----------------------------------------------------------------
-activate or deactivate some basic system-functions here*/
-
-$LATEXRENDER_ENABLE = TRUE;								//enable to use the LaTexrenderer (Please note the further LaTeX template-settings below)
-$WIKI_ENABLE = TRUE;									//enable WikiWiki-Webs
-$SCM_ENABLE = TRUE;										//enable Simple-Content functionality
-$LOG_ENABLE = FALSE;										// enable event logging for some admin actions on courses, users and institutes
-$SMILEYADMIN_ENABLE = TRUE;								//enable Smiley-administration
-$SMILEY_COUNTER = FALSE;								//enable Smiley-counter
-
-
-/*Stud.IP modules
-----------------------------------------------------------------
-enable or disable the Stud.IP internal modules, set and basic settings*/
-
-$RESOURCES_ENABLE = TRUE;								//Stud.IP module: resource management
-
-$CALENDAR_ENABLE = TRUE;								//Stud.IP module: calendar
-$CALENDAR_DRIVER = "MySQL"; 							//calendar driver: database to use (MySQL in default installation)*/
-
-$CHAT_ENABLE = TRUE;									//Stud.IP module: chat
-$CHAT_SERVER_NAME = "ChatShmServer";
-
-$EXPORT_ENABLE = TRUE;									//Stud.IP module: export
-$XSLT_ENABLE = TRUE;
-$FOP_ENABLE = TRUE;
-$FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    	//path to fop
-$JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     		//used to set environment for JRE
-
-$ILIAS_CONNECT_ENABLE = FALSE;							//Stud.IP module: ilias 2 connect
-$ABSOLUTE_PATH_ILIAS = "http://<your.server.name/ilias/>";
-
-$EXTERN_ENABLE = TRUE;									//Stud.IP module: "external pages" and SRI-System
-$EXTERN_SERVER_NAME = "";								//define name, if you use special setup
-$EXTERN_CONFIG_FILE_PATH = "/var/lib/studip/extern_config/";				//path to store configs (wwwrun needs write-perm there)
-$EXTERN_SRI_ENABLE = TRUE;								//allow the usage of SRI-interface (Stud.IP Remote Include)
-$EXTERN_SRI_ENABLE_BY_ROOT = FALSE;						//only root allows the usage of SRI-interface for specific institutes
-$EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG = FALSE;			//free access to external pages (without the need of a configuration), independent of SRI settings above
-
-$SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the main distribution)
-
-$VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
-
-$ELEARNING_INTERFACE_ENABLE = TRUE;						//Stud.IP module: elearning interface
-$SOAP_ENABLE = TRUE;
-
-$ELEARNING_INTERFACE_MODULES = array(
-"ilias3" =>	array(
-	"name" => "ILIAS 3",
-	"ABSOLUTE_PATH_ELEARNINGMODULES" => "http://<your Ilias3 installation>/",
-	"ABSOLUTE_PATH_SOAP" => "http://<your Ilias3 installation>/webservice/soap/server.php?wsdl",
-	"CLASS_PREFIX" => "Ilias3",
-	"auth_necessary" => true,
-	"USER_PREFIX" => "studip_",
-	"target_file" => "studip_referrer.php",
-	"logo_file" => "pictures/ilias_logo.png",
-	"soap_data" => array(
-					"username" => "<username>",		//this credentials are used to communicate with your Ilias 3 installation over SOAP
-					"password" => "<password>",
-					"client" => "<ilias client id>"),
-	"types" => 	array(
-					"htlm" => array("name" => "HTML-Lerneinheit", "icon" => "pictures/icon-lern.gif"),
-					"sahs" => array("name" => "SCORM/AICC-Lerneinheit", "icon" => "pictures/icon-lern.gif"),
-					"lm" => array("name" => "ILIAS-Lerneinheit", "icon" => "pictures/icon-lern.gif"),
-					"tst" => array("name" => "ILIAS-Test", "icon" => "pictures/icon-lern.gif")
-					),
-	"global_roles" => array(4,5,14), // put here the ilias role-ids for User, Guest and Anonymous
-	"roles" =>	array(
-					"autor" => "4",
-					"tutor" => "4",
-					"dozent" => "4",
-					"admin" => "4",
-					"root" => "2"
-					),
-	"crs_roles" =>	array(
-					"autor" => "member",
-					"tutor" => "tutor",
-					"dozent" => "admin",
-					"admin" => "admin",
-					"root" => "admin"
-					)
-	)
-);
-
-$PLUGINS_ENABLE=TRUE;
-$PLUGINS_UPLOAD_ENABLE=TRUE; // Upload of Plugins is enabled
-			     // if disabled for security reasons, uploads have to go into $NEW_PLUGINS_PATH
-$NEW_PLUGINS_PATH=""; // The place from which new plugins should be loaded
-$PLUGINS_CACHING=true;  // enable caching
-$PLUGINS_CACHE_TIME=300; // Time in seconds, the cache is valid
-
+					
 /*paths
 ----------------------------------------------------------------
 configure Stud.IP folders*/
 
-$ABSOLUTE_PATH_STUDIP = "/srv/www/public/studip/";
+$ABSOLUTE_PATH_STUDIP = $STUDIP_BASE_PATH . "/public/";
 // where to store plugins
-$PLUGINS_PATH = $ABSOLUTE_PATH_STUDIP . "plugins/packages";
+$PLUGINS_PATH = $ABSOLUTE_PATH_STUDIP . "plugins_packages";
 //where ro store documents and the archive
-$UPLOAD_PATH = "/var/lib/studip/upload_doc";			//path to uploaded documents (wwwrun needs write-perm there)
-$ARCHIV_PATH = "/var/lib/studip/archiv";				//path to Stud.IP archive (wwwrun needs write-perm there)
-$ASSETS_URL="assets/";                                  //path to constant assets
+$UPLOAD_PATH = $STUDIP_BASE_PATH . "/data/upload_doc";						//path to uploaded documents (wwwrun needs write-perm there)
+$ARCHIV_PATH = $STUDIP_BASE_PATH . "/data/archiv";						//path to Stud.IP archive (wwwrun needs write-perm there)
+$EXTERN_CONFIG_FILE_PATH =  $STUDIP_BASE_PATH . "/data/extern_config/";				//path to store configs (wwwrun needs write-perm there)		
 
 //path to smileys and symbols
-$SMILE_PATH = "pictures/smile";							//smileys
-$SYMBOL_PATH = "pictures/symbol";						//symbols
+$SMILE_PATH = "pictures/smile";								//smileys
+$SYMBOL_PATH = "pictures/symbol";							//symbols
 
 //path to the temporary folder
-$TMP_PATH ="/tmp";										//the system temp path
+$TMP_PATH ="/tmp";									//the system temp path
 
 //paths to the command line tools, used in Stud.IP
 $ZIP_USE_INTERNAL = false;								//set to true, if command-line zip/unzip is not available
 $ZIP_PATH = "/usr/bin/zip";								//zip tool
-$ZIP_OPTIONS = "-K";									//command line options for zip, e.g. when using SuSE try "-K" to correct long filenames for windows
+$ZIP_OPTIONS = "";									//command line options for zip, e.g. when using SuSE try "-K" to correct long filenames for windows
 $UNZIP_PATH = "/usr/bin/unzip";
 
 //latexrender settings
@@ -155,19 +63,19 @@ $CONVERT_PATH = "/usr/bin/convert";
 $IDENTIFY_PATH = "/usr/bin/identify";
 
 //path to Stud.IP modules (this folders only have to exist, if the corresponcing module is active)
-$RELATIVE_PATH_RESOURCES = "lib/resources";					//Stud.IP module: resourge management
-$RELATIVE_PATH_CALENDAR = "lib/calendar";					//Stud.IP module: calendar
-$RELATIVE_PATH_CHAT = "chat"; 							//Stud.IP module: chat
-$RELATIVE_PATH_ADMIN_MODULES = "lib/admin";				 	//Stud.IP module: admin tools
-$RELATIVE_PATH_EXTERN = "lib/extern"; 						//Stud.IP module: SRI-System for including Stud.IP data in other websites
-$RELATIVE_PATH_LEARNINGMODULES = "lib/lernmodule";			//Stud.IP moule: Ilias 2 lerningmodules-connection
-$RELATIVE_PATH_ELEARNING_INTERFACE = "lib/elearning";		//Stud.IP module: Ilias 3 lerningmodules-connection
-$RELATIVE_PATH_SUPPORT = "support";						//Stud.IP module: SupportDB (not part of the main distribution)
+$RELATIVE_PATH_RESOURCES = "lib/resources";							//Stud.IP module: resourge management
+$RELATIVE_PATH_CALENDAR = "lib/calendar";							//Stud.IP module: calendar
+$RELATIVE_PATH_CHAT = "lib/chat"; 								//Stud.IP module: chat
+$RELATIVE_PATH_ADMIN_MODULES = "lib/admin";				 			//Stud.IP module: admin tools
+$RELATIVE_PATH_EXTERN = "lib/extern"; 							//Stud.IP module: SRI-System for including Stud.IP data in other websites
+$RELATIVE_PATH_LEARNINGMODULES = "lib/lernmodule";						//Stud.IP module: Ilias 2 lerningmodules-connection (deprecated)
+$RELATIVE_PATH_ELEARNING_INTERFACE = "lib/elearning";					//Stud.IP module: Ilias 3 lerningmodules-connection / general E-Learning-interface
 $RELATIVE_PATH_SOAP = "lib/soap";
 
 $PATH_EXPORT = "lib/export";								//Stud.IP module: export
 
-$FAVICON = "http://www.studip.de/favicon.ico";			//the place where the favicon is stored.
+$FAVICON = "http://www.studip.de/favicon.ico";						//the place where the favicon is stored. 
+
 
 /*URL
 ----------------------------------------------------------------
@@ -179,6 +87,100 @@ will be detected automatically.
 If you activate the MAIL_NOTIFICATION feature, you MUST set this variable!
 */
 $ABSOLUTE_URI_STUDIP = "";
+$ASSETS_URL = "";        	//path to constant assets, defaults to $ABSOLUTE_URI_STUDIP . "assets/"
+
+
+/*Stud.IP modules
+----------------------------------------------------------------
+enable or disable the Stud.IP internal modules, set and basic settings*/
+
+$RESOURCES_ENABLE = TRUE;								//Stud.IP module: resource management
+
+$CALENDAR_ENABLE = TRUE;								//Stud.IP module: calendar 
+$CALENDAR_DRIVER = "MySQL"; 								//calendar driver: database to use (MySQL in default installation)*/
+
+$CHAT_ENABLE = TRUE;									//Stud.IP module: chat
+$CHAT_SERVER_NAME = "ChatShmServer";
+
+$EXPORT_ENABLE = TRUE;									//Stud.IP module: export
+$XSLT_ENABLE = TRUE;
+$FOP_ENABLE = TRUE;
+$FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    					//path to fop
+$JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     					//used to set environment for JRE
+
+$ILIAS_CONNECT_ENABLE = FALSE;								//Stud.IP module: ilias 2 connect
+$ABSOLUTE_PATH_ILIAS = "http://<your.server.name/ilias/>";
+
+$EXTERN_ENABLE = TRUE;									//Stud.IP module: "external pages" and SRI-System
+$EXTERN_SERVER_NAME = "";								//define name, if you use special setup
+$EXTERN_SRI_ENABLE = TRUE;								//allow the usage of SRI-interface (Stud.IP Remote Include)
+$EXTERN_SRI_ENABLE_BY_ROOT = FALSE;							//only root allows the usage of SRI-interface for specific institutes
+$EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG = FALSE;						//free access to external pages (without the need of a configuration), independent of SRI settings above
+
+$SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the main distribution)
+
+$VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
+
+$ELEARNING_INTERFACE_ENABLE = TRUE;							//Stud.IP module: elearning interface
+$SOAP_ENABLE = TRUE;
+
+$ELEARNING_INTERFACE_MODULES = array(
+	"ilias3" =>	array(
+		"name" => "ILIAS 3",
+		"ABSOLUTE_PATH_ELEARNINGMODULES" => "http://<your Ilias3 installation>/",
+		"ABSOLUTE_PATH_SOAP" => "http://<your Ilias3 installation>/webservice/soap/server.php?wsdl",
+		"CLASS_PREFIX" => "Ilias3",
+		"auth_necessary" => true,
+		"USER_PREFIX" => "studip_",
+		"target_file" => "studip_referrer.php",
+		"logo_file" => "assets/images/ilias_logo.png",
+		"soap_data" => array(
+						"username" => "<username>",		//this credentials are used to communicate with your Ilias 3 installation over SOAP
+						"password" => "<password>",
+						"client" => "<ilias client id>"),
+		"types" => 	array(
+						"htlm" => array("name" => "HTML-Lerneinheit", "icon" => "assets/images/icon-lern.gif"),
+						"sahs" => array("name" => "SCORM/AICC-Lerneinheit", "icon" => "assets/images/icon-lern.gif"),
+						"lm" => array("name" => "ILIAS-Lerneinheit", "icon" => "assets/images/icon-lern.gif"),
+						"tst" => array("name" => "ILIAS-Test", "icon" => "assets/images/icon-lern.gif")
+						),
+		"global_roles" => array(4,5,14), // put here the ilias role-ids for User, Guest and Anonymous
+		"roles" =>	array(
+						"autor" => "4",
+						"tutor" => "4",
+						"dozent" => "4",
+						"admin" => "4",
+						"root" => "2"
+						),
+		"crs_roles" =>	array(
+						"autor" => "member",
+						"tutor" => "tutor",
+						"dozent" => "admin",
+						"admin" => "admin",
+						"root" => "admin"
+						)
+		)
+	);
+
+$PLUGINS_ENABLE = true;
+$PLUGINS_UPLOAD_ENABLE = TRUE; 					//Upload of Plugins is enabled
+			     								//if disabled for security reasons, uploads have to go into $NEW_PLUGINS_PATH
+$NEW_PLUGINS_PATH = ""; 							//The place from which new plugins should be loaded
+$PLUGINS_CACHING = TRUE;  						//enable caching 
+$PLUGINS_CACHE_TIME = 300; 						//Time in seconds, the cache is valid
+
+
+/*system functions
+----------------------------------------------------------------
+activate or deactivate some basic system-functions here*/
+
+$LATEXRENDER_ENABLE = TRUE;								//enable to use the LaTexrenderer (Please note the further LaTeX template-settings below)
+$WIKI_ENABLE = TRUE;									//enable WikiWiki-Webs
+$SCM_ENABLE = TRUE;									//enable Simple-Content functionality
+$LOG_ENABLE = FALSE;									//enable event logging for some admin actions on courses, users and institutes
+$SMILEYADMIN_ENABLE = TRUE;								//enable Smiley-administration
+$SMILEY_COUNTER = FALSE;								//enable Smiley-counter
+
 
 /*domain name and path translation
 ----------------------------------------------------------------
@@ -188,14 +190,14 @@ and add all used domain names. Below, some examples are given.
 */
 
 //server-root is stud.ip root dir, or virtual server for stud.ip
-//$STUDIP_DOMAINS[1] = "<your.server.name>";
+//$STUDIP_DOMAINS[1] = "<your.server.name>"; 
 //$STUDIP_DOMAINS[2] = "<your.server.ip>";
 //$STUDIP_DOMAINS[3] = "<your.virtual.server.name>";
 //
 // or
 //
 //stud.ip root is a normal directory
-//$STUDIP_DOMAINS[1] = "<your.server.name/studip>";
+//$STUDIP_DOMAINS[1] = "<your.server.name/studip>"; 
 //$STUDIP_DOMAINS[2] = "<your.server.ip/studip>";
 
 
@@ -205,37 +207,37 @@ leave blank if localhost is also the mailserver*/
 
 $MAIL_LOCALHOST = "";									//name of the mail sending machine (the web server) defaults to SERVER_NAME
 $MAIL_HOST_NAME = "";									//which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
-$MAIL_CHARSET = "";										//character set of mail body, defaults to ISO-8859-1
+$MAIL_CHARSET = "";									//character set of mail body, defaults to ISO-8859-1
 $MAIL_ENV_FROM = "";									//sender mail adress, defaults to wwwrun @ $MAIL_LOCAHOST
-$MAIL_FROM = "";										//name of sender, defaults to "Stud.IP"
-$MAIL_ABUSE = "";										//mail adress to reply to in case of abuse, defaults to abuse @  $MAIL_LOCAHOST
+$MAIL_FROM = "";									//name of sender, defaults to "Stud.IP"
+$MAIL_ABUSE = "";									//mail adress to reply to in case of abuse, defaults to abuse @  $MAIL_LOCAHOST
 
 $MAIL_VALIDATE_HOST = TRUE;								//check for valid mail host when user enters email adress
 $MAIL_VALIDATE_BOX = TRUE;								//check for valid mail account when user enters email adress; set to false if the webserver got no valid MX record
 
-$MESSAGING_FORWARD_AS_EMAIL = TRUE;						//enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
-$MESSAGING_FORWARD_DEFAULT = 1;							//the default setting: if 1, the user has to switch it on; if 2, every message will be forwarded; if 3 every message will be forwarded on request of the sender
+$MESSAGING_FORWARD_AS_EMAIL = TRUE;							//enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
+$MESSAGING_FORWARD_DEFAULT = 1;								//the default setting: if 1, the user has to switch it on; if 2, every message will be forwarded; if 3 every message will be forwarded on request of the sender
 
 
 /*advanced system settings
 ----------------------------------------------------------------
 this are some settings to activate some special features, special
-behaviour of some features and other advanced options. Change on your
+behaviour of some features and other advanced options. Change on your 
 own risk :) */
 
-$ALLOW_GROUPING_SEMINARS = TRUE;						//if true, administrators can group seminars - students
-														//will only be able to register for one of the grouped seminars
+$ALLOW_GROUPING_SEMINARS = TRUE;							//if true, administrators can group seminars - students
+											//will only be able to register for one of the grouped seminars
 
-$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 					//if true, students are allowed to set or change
-														//their studycourse (studiengang)
+$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 							//if true, students are allowed to set or change 
+											//their studycourse (studiengang)
 
-$SHOW_TERMS_ON_FIRST_LOGIN = FALSE;						//if true, the user has to accept the terms on his first login
-														//(this feature makes only sense, if you use disable $ENABLE_SELF_REGISTRATION).
-
-$BANNER_ADS_ENABLE = FALSE; 							//enable the Banner ads functions (config as root in "global settings")
-														//you'll need an additional folder in the pictures folder named banner. The Webserver
-														//needs write accees for this folder.
-
+$SHOW_TERMS_ON_FIRST_LOGIN = FALSE;							//if true, the user has to accept the terms on his first login
+											//(this feature makes only sense, if you use disable $ENABLE_SELF_REGISTRATION).
+							
+$BANNER_ADS_ENABLE = FALSE; 								//enable the Banner ads functions (config as root in "global settings")
+											//you'll need an additional folder in the pictures folder named banner. The Webserver
+											//needs write accees for this folder.
+							
 $CONVERT_IDNA_URL = TRUE;								//if true, urls with german "umlauts" are converted
 
 /*language settings
@@ -244,55 +246,60 @@ $CONVERT_IDNA_URL = TRUE;								//if true, urls with german "umlauts" are conve
 $INSTALLED_LANGUAGES["de_DE"] = array ("path"=>"de", "picture"=>"lang_de.gif", "name"=>"Deutsch");
 $INSTALLED_LANGUAGES["en_GB"] =	array ("path"=>"en", "picture"=>"lang_en.gif", "name"=>"English");
 
-$DEFAULT_LANGUAGE = "de_DE";  // which language should we use if we can gather no information from user?
+$DEFAULT_LANGUAGE = "de_DE";  // which language should we use if we can gather no information from user? 
 
 $_language_domain = "studip";  // the name of the language file. Should not be changed except in cases of individual translations or special terms.
 
 // Literature-Import Plugins
 $LIT_IMPORT_PLUGINS[] = array('name' => 'EndNote', 'visual_name' => 'EndNote ab Version 7 / Reference Manager 11', 'description' => 'Exportieren Sie Ihre Literaturliste aus EndNote / Reference Manager als XML-Datei.');
 $LIT_IMPORT_PLUGINS[] = array('name' => 'GenericXML', 'visual_name' => 'Einfaches XML nach fester Vorgabe',
-'description' => 'Die XML-Datei muss folgende Struktur besitzen:[code]
-<? xml version="1.0" encoding="UTF-8" ?>
-<xml>
-<eintrag>
-  <titel></titel>
-  <autor></autor>
-  <beschreibung></beschreibung>
-  <herausgeber></herausgeber>
-  <ort></ort>
-  <isbn></isbn>
-  <jahr></jahr>
-</eintrag>
-</xml>[/code]
-Jeder Abschnitt darf mehrfach vorkommen oder kann weggelassen werden, mindestens ein Titel pro Eintrag muss vorhanden sein.');
+	'description' => 'Die XML-Datei muss folgende Struktur besitzen:[code]
+	<?xml version="1.0" encoding="UTF-8"?>
+	<xml>
+	<eintrag>
+	  <titel></titel>
+	  <autor></autor>
+	  <beschreibung></beschreibung>
+	  <herausgeber></herausgeber>
+	  <ort></ort>
+	  <isbn></isbn>
+	  <jahr></jahr>
+	</eintrag>
+	</xml>[/code]
+	Jeder Abschnitt darf mehrfach vorkommen oder kann weggelassen werden, mindestens ein Titel pro Eintrag muss vorhanden sein.');
 $LIT_IMPORT_PLUGINS[] = array('name' => 'CSV', 'visual_name' => 'CSV mit Semikolon als Trennzeichen', 'description' => 'Exportieren Sie Ihre Literaturliste als mit Trennzeichen getrennter Datei (CSV). Wichtig hierbei ist die Verwendung des Semikolons als Trennzeichen.');
 $LIT_IMPORT_PLUGINS[] = array('name' => 'StudipLitList', 'visual_name' => 'Literaturliste im Stud.IP Format', 'description' => 'Benutzen Sie die Export-Funktion innerhalb von Stud.IP, um eine Literaturliste im Stud.IP Format zu exportieren.');
 
-
-/*literature search plugins
+/*literature search plugins 
 ----------------------------------------------------------------
-If you write your own plugin put it in studip-htdocs/lib/classes/lit_search_plugins
-and enable it here. The name of the plugin is the classname excluding "StudipLitSearchPlugin".
+If you write your own plugin put it in studip-htdocs/lib/classes/lit_search_plugins 
+and enable it here. The name of the plugin is the classname excluding "StudipLitSearchPlugin". 
 If the catalog your plugin is designed for offers the possibility to create a link to an entry, you
 could provide the link here. Place templates for the needed attributes in curly braces. (see examples below)*/
 
 //standard plugin, searches in Stud.IP Database (table lit_catalog), you should leave this one enabled !
-$_lit_search_plugins[] = array('name' => "Studip", 'link' => '');
+$_lit_search_plugins[] = array('name' => "Studip",'display_name' =>'Katalog der Stud.IP Datenbank', 'link' => '');
 
 //Plugins derived from Z3950Abstract, used for querying Z39.50 Servers
 //only activate these plugins, if your Version of PHP supports the YAZ extension!
 
 /* Gemeinsamer Verbundkatalog - GVK */
-//$_lit_search_plugins[] = array('name' => 'Gvk', 'link' => 'http://gso.gbv.de/DB=2.1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+//$_lit_search_plugins[] = array('name' => "Gvk",'display_name' =>'Gemeinsamer Verbundkatalog', 'link' => 'http://gso.gbv.de/DB=2.1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Niedersächsische Staats- und Universitätsbibliothek Göttingen, OPAC */
-//$_lit_search_plugins[] = array('name' => 'SUBGoeOpac', 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+//$_lit_search_plugins[] = array('name' => "SUBGoeOpac",'display_name' => "Opac der SUB Göttingen" , 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Göttinger Gesamtkatalog (Regionalkatalog Göttingen) */
 //$_lit_search_plugins[] = array('name' => 'Rkgoe', 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
-/* Bibliotheken der Wirtschafts- und Sozialwiss. Fakultäten" */
+/* Bibliotheken der Wirtschafts- und Sozialwiss. Fakultäten Goettingen" */
 //$_lit_search_plugins[] = array('name' => 'WisoFak', 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+
+/* Technische Informationsbibliothek / Universitätsbibliothek Hannover, OPAC */
+//$_lit_search_plugins[] = array('name' => 'TIBUBOpac', 'link' => 'http://opc4.tib.uni-hannover.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}', 'display_name' => "UB Katalog");
+
+/* Hannover Gesamtkatalog (Regionalkatalog Hannover) */
+//$_lit_search_plugins[] = array('name' => 'Rkhan', 'link' => 'http://gso.gbv.de/DB=2.92/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}', 'display_name' => "Gesamtkatalog Hannover");
 
 /* Bibliotheken der Fachhochschule Hildesheim/Holzminden/Göttingen */
 //$_lit_search_plugins[] = array('name' => 'FHHIOpac', 'link' => 'http://hidbs2.bib.uni-hildesheim.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
@@ -349,10 +356,10 @@ LdapReader		authentication using an LDAP server, this plugin binds to the server
 			Using this plugin allows to keep the md5 challenge-response mechanism during the login process, provided a md5
 			hash of the user password is available in LDAP
 
-If you write your own plugin put it in studip-htdocs/lib/classes/auth_plugins
-and enable it here. The name of the plugin is the classname excluding "StudipAuth".
+If you write your own plugin put it in studip-htdocs/lib/classes/auth_plugins 
+and enable it here. The name of the plugin is the classname excluding "StudipAuth". 
 
-You could also place your configuration here, name it $STUDIP_AUTH_CONFIG_<plugin name>,
+You could also place your configuration here, name it $STUDIP_AUTH_CONFIG_<plugin name>, 
 all uppercase each item of the configuration array will become a member of your plugin class.*/
 
 //$STUDIP_AUTH_PLUGIN[] = "LdapReader";
@@ -364,17 +371,15 @@ $STUDIP_AUTH_PLUGIN[] = "Standard";
 // create a config for your own user data mapping class
 $CASAbstractUserDataMapping_CONFIG = array();
 $STUDIP_AUTH_CONFIG_CAS = array("host" => "cas.studip.de",
-				"port" => 8443,
-				"uri"  => "cas",
-				"user_data_mapping_class" => "CASAbstractUserDataMapping",
-				"user_data_mapping" => // map_args are dependent on your own data mapping class
-						array(  "auth_user_md5.username" => array("callback" => "getUserData", "map_args" => "username"),
-                                "auth_user_md5.Vorname" => array("callback" => "getUserData", "map_args" => "givenname"),
-                                "auth_user_md5.Nachname" => array("callback" => "getUserData", "map_args" => "surname"),
-                                "auth_user_md5.Email" => array("callback" => "getUserData", "map_args" => "email"),
-                                "auth_user_md5.perms" => array("callback" => "getUserData", "map_args" => "status"))
-				);
-
+										"port" => 8443,
+										"uri"  => "cas",
+										"user_data_mapping_class" => "CASAbstractUserDataMapping",
+										"user_data_mapping" => // map_args are dependent on your own data mapping class
+												array(  "auth_user_md5.username" => array("callback" => "getUserData", "map_args" => "username"),
+						                                "auth_user_md5.Vorname" => array("callback" => "getUserData", "map_args" => "givenname"),
+						                                "auth_user_md5.Nachname" => array("callback" => "getUserData", "map_args" => "surname"),
+						                                "auth_user_md5.Email" => array("callback" => "getUserData", "map_args" => "email"),
+						                                "auth_user_md5.perms" => array("callback" => "getUserData", "map_args" => "status"))        
 $STUDIP_AUTH_CONFIG_LDAPREADER = array(		"host" => "localhost",
 										"base_dn" => "dc=studip,dc=de",
 										"protocol_version" => 3,
@@ -388,7 +393,7 @@ $STUDIP_AUTH_CONFIG_LDAPREADER = array(		"host" => "localhost",
 										"user_data_mapping" =>
 										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
 												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""));
-
+												
 $STUDIP_AUTH_CONFIG_LDAP = array(		"host" => "localhost",
 										"base_dn" => "dc=data-quest,dc=de",
 										"protocol_version" => 3,
@@ -429,8 +434,8 @@ $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array(	"db_host" => "localhost",
 //NOTE: you MUST enable Standard authentication-plugin for this settings to take effect!
 
 $ALLOW_CHANGE_USERNAME = TRUE;							//if true, users are allowed to change their username
-$ALLOW_CHANGE_EMAIL = TRUE;								//if true, users are allowed to change their email-address
-$ALLOW_CHANGE_NAME = TRUE;								//if true, users are allowed to change their name
+$ALLOW_CHANGE_EMAIL = TRUE;							//if true, users are allowed to change their email-address
+$ALLOW_CHANGE_NAME = TRUE;							//if true, users are allowed to change their name
 $ALLOW_CHANGE_TITLE = TRUE;							//if true, users are allowed to change their titles
 $ENABLE_SELF_REGISTRATION = TRUE;						//should it be possible for an user to register himself
 
@@ -451,23 +456,23 @@ $LATEX_FORMATS = array(
 /*
 	Format of entries:
 	------------------
-
-	Internal format name => array (
+	
+	Internal format name => array ( 
 		Format tag (e.g. "tex" --> [tex]...[/tex])
 		Format template (must contain structure of an entire valid LaTeX-document and must contain exactly one %s placeholder that will be replaced be the code entered between [tag]....[/tag].
 	)
-
+  	
   	Examples for additional formats:
   	--------------------------------
 
-	IPA Phonetic font (needs LaTeX package tipa installed):
+	IPA Phonetic font (needs LaTeX package tipa installed):  
 		"ipa" => array("tag" => "ipa", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{tipa}\n \pagestyle{empty}\n \begin{document}\n \\textipa{%s}\n \end{document}\n")
 
 	Arab font (needs LaTeX package arabtex installed):
   		"arab" => array("tag" => "arab", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{arabtex,atrans}\n \pagestyle{empty}\n \begin{document}\n \begin{arabtext}%s\end{arabtext}\n \end{document}\n")
 
 
-/*path generation
+/*path generation 
 -----------------------------------------------------------------
 (end of user defined settings)*/
 
@@ -476,7 +481,7 @@ $LATEX_FORMATS = array(
 if (substr($ABSOLUTE_PATH_STUDIP,-1) != "/"){
 	$ABSOLUTE_PATH_STUDIP .= "/";
 }
-$CANONICAL_RELATIVE_PATH_STUDIP = substr($ABSOLUTE_PATH_STUDIP,strlen($_SERVER["DOCUMENT_ROOT"]));
+$CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']);
 if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
 	$CANONICAL_RELATIVE_PATH_STUDIP .= "/";
 }
@@ -485,7 +490,7 @@ if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
 $UNI_NAME=htmlentities($UNI_NAME_CLEAN, ENT_QUOTES);
 
 
-require_once $ABSOLUTE_PATH_STUDIP . "/phplib_local.inc.php";
+require_once $ABSOLUTE_PATH_STUDIP . "phplib_local.inc.php";
 
 //$Id$
 ?>
