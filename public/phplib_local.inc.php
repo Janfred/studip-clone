@@ -22,10 +22,7 @@
 // +---------------------------------------------------------------------------+
 //$Id$
 
-$include_path = get_include_path();
-$include_path .= PATH_SEPARATOR . dirname(__FILE__);
-$include_path .= PATH_SEPARATOR . dirname(__FILE__) . DIRECTORY_SEPARATOR . '..';
-set_include_path($include_path);
+
 
 //compatibility section
 if (!defined('PHPLIB_SESSIONDATA_TABLE')){
