@@ -38,7 +38,7 @@ include 'sajax_chat_functions.php';
 <head>
 	<title>Chat(<?=$auth->auth["uname"]?>) -
 	<?=htmlReady($chatServer->chatDetail[$chatid]["name"])?></title>
-	<?php include $RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
+	<link rel="stylesheet" href="<?=$GLOBALS['ASSETS_URL']?>stylesheets/style.css" type="text/css">'
 	<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 <script type="text/javascript">
 	//
@@ -159,7 +159,7 @@ include 'sajax_chat_functions.php';
 			x_get_chat_color_chooser(chat_id, set_chat_color_chooser_cb);
 		}
 		if (messages_html.match(/<sendlog>/)){
-			download = window.open('chat_dummy.php?chatid=' + chat_id, 'chat_dummy', 'scrollbars=no,width=100,height=100,resizable=no');
+			download = window.open('chat_dispatcher.php?target=chat_dummy.php&chatid=' + chat_id, 'chat_dummy', 'scrollbars=no,width=100,height=100,resizable=no');
 			download.setTimeout('window.close()', 5000);
 		}
 		if (messages_html.match(/<close>/)){
@@ -178,7 +178,7 @@ include 'sajax_chat_functions.php';
 	
 	</script>
 </head>
-<body>
+<body style="background-color:#EEEEEE;background-image:url('<?= $GLOBALS['ASSETS_URL'] ?>images/steel1.jpg');">
 <div id="chat_msg" style="margin-left:2px;font-size:10pt;position:absolute;top:0px;left:0px;width:440px;height:418px;overflow:auto">
 <?
 echo "\n<b>" . sprintf(_("Hallo %s,<br> willkommen im Raum: %s"),htmlReady($chatServer->getNick($user->id,$chatid)),

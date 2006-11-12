@@ -58,7 +58,7 @@ $chatServer->caching = true;
 <html>
 <head>
 	<title>ChatStatus</title>
-	<?php include $RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
+	<link rel="stylesheet" href="<?=$GLOBALS['ASSETS_URL']?>stylesheets/style.css" type="text/css">
 <script type="text/javascript">
 /**
 * JavaScript
@@ -96,7 +96,7 @@ $chatServer->caching = true;
 </script>
 
 </head>
-<body>
+<body style="background-color:#EEEEEE;background-image:url('<?= $GLOBALS['ASSETS_URL'] ?>images/steel1.jpg');">
 <?
 //darf ich überhaupt hier sein ?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {

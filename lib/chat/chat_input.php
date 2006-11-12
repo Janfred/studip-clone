@@ -59,7 +59,7 @@ $chatServer->caching = true;
 <html>
 <head>
 	<title>ChatInput</title>
-	<?php include $RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
+	<link rel="stylesheet" href="<?=$GLOBALS['ASSETS_URL']?>stylesheets/style.css" type="text/css">
 <script type="text/javascript">
 	function strltrim() {
 		return this.replace(/^\s+/,'');
@@ -113,7 +113,7 @@ $chatServer->caching = true;
 </script>
 
 </head>
-<body>
+<body style="background-color:#EEEEEE;background-image:url('<?= $GLOBALS['ASSETS_URL'] ?>images/steel1.jpg');">
 <?
 //darf ich überhaupt hier sein ?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
@@ -140,7 +140,7 @@ if ($chatInput) {
 }
 
 ?>
-<form method="post" action="<?=$PHP_SELF?>" name="inputform" onSubmit="return doCheck();">
+<form method="post" action="chat_dispatcher.php?target=chat_input.php" name="inputform" onSubmit="return doCheck();">
 <input type="hidden" name="chatid" value="<?=$chatid?>">
 <div align="center">
 	<table width="98%" border="0" bgcolor="white" cellspacing="0" cellpadding="0" align="center">

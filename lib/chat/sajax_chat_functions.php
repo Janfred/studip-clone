@@ -541,7 +541,7 @@ function chatCommand($msg, $chatid){
 	$chatFunc($msgStr, $chatid);       //variabler Funktionsaufruf!
 	return ob_get_clean();
 }
-$GLOBALS['sajax_remote_uri'] = 'sajax_chat_functions.php';
+$GLOBALS['sajax_remote_uri'] = 'chat_dispatcher.php?target=sajax_chat_functions.php';
 $GLOBALS['sajax_request_type'] = 'POST';
 $GLOBALS['sajax_debug_mode'] = 0;
 sajax_init();

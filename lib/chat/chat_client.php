@@ -381,7 +381,7 @@ function outputLoop($chatid){
 //wurden wir zwischenzeitlich gekickt?
 		if (!$chatServer->isActiveUser($user->id,$chatid)){
 			echo _("Sie mussten den Chat verlassen...") ."<br>";
-			echo sprintf(_("%sHier%s k&ouml;nnen Sie versuchen wieder einzusteigen."),"<a href=\"javascript:parent.location.href='chat_login.php?chatid=$chatid';\">",'</a>').'<br>';
+			echo sprintf(_("%sHier%s k&ouml;nnen Sie versuchen wieder einzusteigen."),"<a href=\"javascript:parent.location.href='chat_dispatcher.php?target=chat_login.php&chatid=$chatid';\">",'</a>').'<br>';
 			printJs("window.scrollBy(0, 500);");
 			flush();
 			break;
@@ -391,7 +391,7 @@ function outputLoop($chatid){
 			($chatServer->getPerm($user->id,$chatid) && (time()-$chatServer->getAction($user->id,$chatid)) > CHAT_ADMIN_IDLE_TIMEOUT)){
 			echo sprintf(_("%sIDLE TIMEOUT%s - Sie wurden aus dem Chat entfernt!"),'<b>','</b>').'<br>';
 			$chatServer->removeUser($user->id,$chatid);
-			echo sprintf(_("%sHier%s k&ouml;nnen Sie versuchen wieder einzusteigen."),"<a href=\"javascript:parent.location.href='chat_login.php?chatid=$chatid';\">",'</a>'). '<br>';
+			echo sprintf(_("%sHier%s k&ouml;nnen Sie versuchen wieder einzusteigen."),"<a href=\"javascript:parent.location.href='chat_dispatcher.php?target=chat_dispatcher.php?target=chat_login.php&chatid=$chatid';\">",'</a>'). '<br>';
 			printJs("window.scrollBy(0, 500);");
 			flush();
 			break;
@@ -415,9 +415,9 @@ $chat_log = array();
 <html>
 <head>
 	<title>ChatAusgabe</title>
-	<?php include $RELATIVE_PATH_CHAT."/chat_style.inc.php";?>
+	<link rel="stylesheet" href="<?=$GLOBALS['ASSETS_URL']?>stylesheets/style.css" type="text/css">
 </head>
-<body style="font-size:10pt;">
+<body style="font-size:10pt;background-color:#EEEEEE;background-image:url('<?= $GLOBALS['ASSETS_URL'] ?>images/steel1.jpg');">
 <?
 if (!$chatServer->isActiveUser($user->id,$chatid)) {
 	?><table width="100%"><tr><?
