@@ -39,7 +39,7 @@ $perm->check ("autor");
 # ============================================================== end: PHP-LIB #
 
 # Include all required files ================================================ #
-require_once ("modules/evaluation/evaluation.config.php");
+require_once ("lib/evaluation/evaluation.config.php");
 require_once ("seminar_open.php");
 require_once ("html_head.inc.php");
 require_once ("visual.inc.php");

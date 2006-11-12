@@ -49,7 +49,7 @@ define ("EVAL_MAX_TEMPLATENAMELEN", 22);
 /* -------------------------------------------------- end: general constants */
 
 /* Path constants ---------------------------------------------------------- */
-define ("EVAL_PATH_RELATIV", "modules/evaluation/");
+define ("EVAL_PATH_RELATIV", "lib/evaluation/");
 define ("EVAL_PATH", EVAL_PATH_RELATIV);
 define ("EVAL_PATH_CLASSES", EVAL_PATH."classes/");
 define ("EVAL_PATH_DBCLASSES", EVAL_PATH_CLASSES."db/");

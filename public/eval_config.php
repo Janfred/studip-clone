@@ -38,7 +38,7 @@ require_once("msg.inc.php");
 require_once("visual.inc.php");
 require_once("config.inc.php");
 require_once("functions.php");
-require_once("modules/evaluation/evaluation.config.php");
+require_once("lib/evaluation/evaluation.config.php");
 require_once(EVAL_FILE_EVAL);
 require_once(EVAL_FILE_OBJECTDB);
 

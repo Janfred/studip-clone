@@ -57,11 +57,11 @@ require_once("lib/classes/DataFields.class.php");
 require_once ("config.inc.php");
 
 # Include all required files ================================================ #
-require_once("modules/evaluation/evaluation.config.php");
-require_once("modules/evaluation/classes/EvaluationQuestion.class.php");
-require_once("modules/evaluation/classes/db/EvaluationQuestionDB.class.php");
-require_once("modules/evaluation/classes/EvaluationAnswer.class.php");
-require_once("modules/evaluation/classes/db/EvaluationAnswerDB.class.php");
+require_once("lib/evaluation/evaluation.config.php");
+require_once("lib/evaluation/classes/EvaluationQuestion.class.php");
+require_once("lib/evaluation/classes/db/EvaluationQuestionDB.class.php");
+require_once("lib/evaluation/classes/EvaluationAnswer.class.php");
+require_once("lib/evaluation/classes/db/EvaluationAnswerDB.class.php");
 
 require_once ("seminar_open.php");
 require_once ("html_head.inc.php");

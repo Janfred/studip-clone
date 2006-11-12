@@ -41,7 +41,7 @@ $perm->check ("autor");
 
 $HELP_KEYWORD="Basis.Evaluationen";
 
-require_once ("modules/evaluation/evaluation.config.php");
+require_once ("lib/evaluation/evaluation.config.php");
 
 include_once("seminar_open.php");
 include_once("html_head.inc.php");

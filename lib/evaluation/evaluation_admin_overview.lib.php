@@ -20,7 +20,7 @@
 // $Id$
 
 # Include all required files ================================================ #
-require_once("modules/evaluation/evaluation.config.php");
+require_once("lib/evaluation/evaluation.config.php");
 require_once("datei.inc.php");
 require_once (HTML);
 require_once (EVAL_LIB_COMMON);

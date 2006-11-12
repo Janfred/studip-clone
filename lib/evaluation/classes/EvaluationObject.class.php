@@ -20,7 +20,7 @@
 
 # Include all required files ================================================ #
 require_once("lib/classes/StudipObject.class.php");
-require_once("modules/evaluation/evaluation.config.php");
+require_once("lib/evaluation/evaluation.config.php");
 # ====================================================== end: including files #
 
 
