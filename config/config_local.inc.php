@@ -19,7 +19,7 @@ $DB_STUDIP_HOST = "localhost";
 $DB_STUDIP_USER = "";
 $DB_STUDIP_PASSWORD = "";
 $DB_STUDIP_DATABASE = "studip";
-
+@include "dbpass.inc";
 //additional class for Ilias connection (DB_Ilias)
 $DB_ILIAS_HOST = "localhost";
 $DB_ILIAS_USER = "<username>";
