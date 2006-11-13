@@ -28,8 +28,8 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 
 require_once ("config.inc.php");
 
-require_once ("elearning/ELearningUtils.class.php");
-require_once ("elearning/ConnectedCMS.class.php");
+require_once ("lib/elearning/ELearningUtils.class.php");
+require_once ("lib/elearning/ConnectedCMS.class.php");
 
 $HELP_KEYWORD="Basis.Ilias";
 
