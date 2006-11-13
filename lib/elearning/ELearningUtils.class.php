@@ -282,7 +282,7 @@ class ELearningUtils
 	{
 		global $PHP_SELF, $connected_cms, $cms_select, $search_key, $view, $new_account_step, $current_module,
 			$start, $next, $go_back, $assign, $ext_username, $ext_password, $ext_password_2, $messages, $ref_id, $module_type, $assign,
-			'', $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
+			$RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
 
 		ELearningUtils::loadClass($new_account_cms);
 
