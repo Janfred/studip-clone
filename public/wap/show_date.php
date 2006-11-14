@@ -53,19 +53,17 @@ include_once("wap_adm.inc.php");
 include_once("wap_txt.inc.php");
 include_once("wap_buttons.inc.php");
 require_once("calendar_functions.inc.php");
-require_once(''
-		. $GLOBALS["RELATIVE_PATH_CALENDAR"]
+require_once($GLOBALS["RELATIVE_PATH_CALENDAR"]
 		. "/lib/DbCalendarEvent.class.php");
-require_once(''
-		. $GLOBALS["RELATIVE_PATH_CALENDAR"]
+require_once($GLOBALS["RELATIVE_PATH_CALENDAR"]
 		. "/lib/SeminarEvent.class.php");
-	
+
 $session_user_id = wap_adm_start_card($session_id);
 if ($session_user_id)
 {
 	$user     = new Dummy();
 	$user->id = $session_user_id;
-	
+
 	if ($sem_event)
 		$event = new SeminarEvent($date_id);
 	else

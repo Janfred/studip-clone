@@ -56,8 +56,7 @@
 	include_once("wap_hlp.inc.php");
 	include_once("wap_txt.inc.php");
 	include_once("wap_buttons.inc.php");
-	require_once(''
-	           . $GLOBALS["RELATIVE_PATH_CALENDAR"]
+	require_once($GLOBALS["RELATIVE_PATH_CALENDAR"]
 	           . "/lib/DbCalendarEventList.class.php");
 
 	$session_user_id = wap_adm_start_card($session_id);
