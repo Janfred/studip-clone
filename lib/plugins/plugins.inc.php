@@ -49,9 +49,9 @@ if ($PLUGINS_ENABLE){
 	}
 	else {
 		// set the default
-		$plugindbenv->setPackagebasepath("plugins/packages");
+		$plugindbenv->setPackagebasepath("plugins_packages");
 	}	
-	$plugindbenv->setRelativepackagepath("plugins/packages");
+	$plugindbenv->setRelativepackagepath("plugins_packages");
 	$plugindbenv->setTmppath($GLOBALS["TMP_PATH"]);
 	
 	$GLOBALS["ADODB_CACHE_DIR"] = $GLOBALS["TMP_PATH"];

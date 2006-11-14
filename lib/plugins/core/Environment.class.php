@@ -11,8 +11,8 @@ class Environment {
 	function Environment(){
 		$this->basepath = "";
 		$this->tmppath = "";
-		$this->packagebasepath = "plugins/packages";
-		$this->relativepackagepath = "plugin/packages";
+		$this->packagebasepath = "plugins_packages";
+		$this->relativepackagepath = "plugin_packages";
 	}
 	
 	function setBasepath($newbasepath){

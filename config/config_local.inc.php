@@ -162,7 +162,7 @@ $ELEARNING_INTERFACE_MODULES = array(
 		)
 	);
 
-$PLUGINS_ENABLE = false;
+$PLUGINS_ENABLE = TRUE;
 $PLUGINS_UPLOAD_ENABLE = TRUE; 					//Upload of Plugins is enabled
 			     								//if disabled for security reasons, uploads have to go into $NEW_PLUGINS_PATH
 $NEW_PLUGINS_PATH = ""; 							//The place from which new plugins should be loaded
