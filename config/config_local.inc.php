@@ -42,6 +42,7 @@ $EXTERN_CONFIG_FILE_PATH =  $STUDIP_BASE_PATH . "/data/extern_config/";				//pat
 //path to smileys and symbols
 $SMILE_PATH = "pictures/smile";								//smileys
 $SYMBOL_PATH = "pictures/symbol";							//symbols
+$USER_PIC_PATH = "pictures/user";
 
 //path to the temporary folder
 $TMP_PATH ="/tmp";									//the system temp path
@@ -116,8 +117,6 @@ $EXTERN_SERVER_NAME = "";								//define name, if you use special setup
 $EXTERN_SRI_ENABLE = TRUE;								//allow the usage of SRI-interface (Stud.IP Remote Include)
 $EXTERN_SRI_ENABLE_BY_ROOT = FALSE;							//only root allows the usage of SRI-interface for specific institutes
 $EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG = FALSE;						//free access to external pages (without the need of a configuration), independent of SRI settings above
-
-$SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the main distribution)
 
 $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 
@@ -485,6 +484,8 @@ $CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']);
 if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
 	$CANONICAL_RELATIVE_PATH_STUDIP .= "/";
 }
+
+$ABSOLUTE_PATH_USER_PIC = $ABSOLUTE_PATH_STUDIP . $USER_PIC_PATH;
 
 //create the html-version of $UNI_NAME clean
 $UNI_NAME=htmlentities($UNI_NAME_CLEAN, ENT_QUOTES);

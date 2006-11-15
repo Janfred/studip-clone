@@ -59,7 +59,6 @@ var $msg = ""; //enthält evtl Fehlermeldungen
 var $max_file_size = 100; //max Größe der Bilddatei in KB
 var $img_max_h = 250; // max picture height
 var $img_max_w = 200; // max picture width
-var $uploaddir = "./user"; //Uploadverzeichnis für Bilder
 var $logout_user = FALSE; //Hilfsvariable, zeigt an, ob der User ausgeloggt werden muß
 var $priv_msg = "";  //Änderungsnachricht bei Adminzugriff
 var $default_url = "http://www"; //default fuer private URL
@@ -179,7 +178,7 @@ function imaging($img,$img_size,$img_name) {
 		return;
 	}
 	//na dann kopieren wir mal...
-	$newfile = $this->uploaddir . "/".$this->auth_user["user_id"].".jpg";
+	$newfile =  $GLOBALS['ABSOLUTE_PATH_USER_PIC'] . "/" . $this->auth_user["user_id"].".jpg";
 	if(!@copy($img,$newfile)) {
 		$this->msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
 		return;
@@ -851,11 +850,11 @@ if(check_ticket($studipticket)){
 	if ($cmd) {
 		if ($view=="Bild" && $cmd=="bild_loeschen" && $_SERVER["REQUEST_METHOD"]=="POST") {
 			if ($user_id==$auth->auth["uid"] || $perm->have_perm("admin")) {
-        	        	if (file_exists("./user/".$user_id.".jpg")) {
-	                       		unlink("./user/".$user_id.".jpg");
+				if(file_exists($GLOBALS['ABSOLUTE_PATH_USER_PIC']."/".$user_id.".jpg")) {
+					unlink($GLOBALS['ABSOLUTE_PATH_USER_PIC']."/".$user_id.".jpg");
 					$my_about->msg.="msg§"._("Das Bild wurde gel&ouml;scht");
 				}
-                	}
+               }
         	}
 
 		if (($my_about->check != "user") && ($my_about->priv_msg != "")) {
@@ -1118,10 +1117,10 @@ if ($view == 'Bild') {
 	echo '<tr><td width="30%" class="'.$cssSw->getClass().'" align="center">';
 	echo '<font size="-1"><b>' . _("Aktuell angezeigtes Bild:") . '<br /><br /></b></font>';
 
-	if (!file_exists('./user/'.$my_about->auth_user["user_id"].'.jpg')) {
-		echo '<img src="./user/nobody.jpg" width="200" height="250" alt="' . _("Kein pers&ouml;nliches Bild vorhanden") . '" ><br />&nbsp; ';
+	if(!file_exists($GLOBALS['ABSOLUTE_PATH_USER_PIC']."/".$my_about->auth_user['user_id'].".jpg")) {
+		echo '<img src="'.$GLOBALS['USER_PIC_PATH'].'/nobody.jpg" width="200" height="250" alt="' . _("Kein pers&ouml;nliches Bild vorhanden") . '" ><br />&nbsp; ';
 	} else {
-		echo '<img border="1" src="./user/'.$my_about->auth_user['user_id'] . '.jpg" alt="'. $my_about->auth_user['Vorname'].' '.$my_about->auth_user['Nachname']."\"><br />\n&nbsp; ";
+		echo '<img border="1" src="'.$GLOBALS['USER_PIC_PATH'].'/'.$my_about->auth_user['user_id'] . '.jpg" alt="'. $my_about->auth_user['Vorname'].' '.$my_about->auth_user['Nachname']."\"><br />\n&nbsp; ";
 		if ($my_about->auth_user["user_id"]==$auth->auth["uid"] || $perm->have_perm("admin")) {
                         echo "\n<FORM NAME=\"bild_loeschen\" METHOD=\"POST\" ACTION=\"$PHP_SELF?studipticket=".get_ticket()."\">\n";
                         echo "  <INPUT TYPE=\"hidden\" NAME=\"user_id\" VALUE=\"".$my_about->auth_user["user_id"]."\">\n";

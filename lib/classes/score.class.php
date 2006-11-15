@@ -362,9 +362,9 @@ function GetMyScore() {
 	}
 	
 	$score = round($score/$age);
-	if(file_exists("./user/".$user_id.".jpg"))
+	if(file_exists($GLOBALS['ABSOLUTE_PATH_USER_PIC']."/".$user_id.".jpg")) {
 		$score *=10;
-
+	}
 /// Schreiben des neuen Wertes
 
 	$query = "UPDATE user_info "
