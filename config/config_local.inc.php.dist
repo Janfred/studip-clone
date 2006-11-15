@@ -41,7 +41,8 @@ $EXTERN_CONFIG_FILE_PATH =  $STUDIP_BASE_PATH . "/data/extern_config/";				//pat
 
 //path to smileys and symbols
 $SMILE_PATH = "pictures/smile";								//smileys
-$SYMBOL_PATH = "pictures/symbol";							//symbols
+$SYMBOL_PATH = "assets/images/symbol";						//symbols !Problem!
+$USER_PIC_PATH = "pictures/user";
 
 //path to the temporary folder
 $TMP_PATH ="/tmp";									//the system temp path
@@ -71,6 +72,7 @@ $RELATIVE_PATH_EXTERN = "lib/extern"; 							//Stud.IP module: SRI-System for in
 $RELATIVE_PATH_LEARNINGMODULES = "lib/lernmodule";						//Stud.IP module: Ilias 2 lerningmodules-connection (deprecated)
 $RELATIVE_PATH_ELEARNING_INTERFACE = "lib/elearning";					//Stud.IP module: Ilias 3 lerningmodules-connection / general E-Learning-interface
 $RELATIVE_PATH_SOAP = "lib/soap";
+$RELATIVE_PATH_SUPPORT = "lib/support";
 
 $PATH_EXPORT = "lib/export";								//Stud.IP module: export
 
@@ -485,6 +487,8 @@ $CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']);
 if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
 	$CANONICAL_RELATIVE_PATH_STUDIP .= "/";
 }
+
+$ABSOLUTE_PATH_USER_PIC = $ABSOLUTE_PATH_STUDIP . $USER_PIC_PATH;
 
 //create the html-version of $UNI_NAME clean
 $UNI_NAME=htmlentities($UNI_NAME_CLEAN, ENT_QUOTES);
