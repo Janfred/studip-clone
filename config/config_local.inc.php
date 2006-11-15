@@ -41,7 +41,7 @@ $EXTERN_CONFIG_FILE_PATH =  $STUDIP_BASE_PATH . "/data/extern_config/";				//pat
 
 //path to smileys and symbols
 $SMILE_PATH = "pictures/smile";								//smileys
-$SYMBOL_PATH = "pictures/symbol";							//symbols
+$SYMBOL_PATH = "assets/images/symbol";						//symbols !Problem!
 $USER_PIC_PATH = "pictures/user";
 
 //path to the temporary folder
@@ -72,6 +72,7 @@ $RELATIVE_PATH_EXTERN = "lib/extern"; 							//Stud.IP module: SRI-System for in
 $RELATIVE_PATH_LEARNINGMODULES = "lib/lernmodule";						//Stud.IP module: Ilias 2 lerningmodules-connection (deprecated)
 $RELATIVE_PATH_ELEARNING_INTERFACE = "lib/elearning";					//Stud.IP module: Ilias 3 lerningmodules-connection / general E-Learning-interface
 $RELATIVE_PATH_SOAP = "lib/soap";
+$RELATIVE_PATH_SUPPORT = "lib/support";
 
 $PATH_EXPORT = "lib/export";								//Stud.IP module: export
 
@@ -117,6 +118,8 @@ $EXTERN_SERVER_NAME = "";								//define name, if you use special setup
 $EXTERN_SRI_ENABLE = TRUE;								//allow the usage of SRI-interface (Stud.IP Remote Include)
 $EXTERN_SRI_ENABLE_BY_ROOT = FALSE;							//only root allows the usage of SRI-interface for specific institutes
 $EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG = FALSE;						//free access to external pages (without the need of a configuration), independent of SRI settings above
+
+$SUPPORT_ENABLE = FALSE;
 
 $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 
