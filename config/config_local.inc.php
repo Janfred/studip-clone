@@ -4,8 +4,8 @@
 you find here the basic system settings. You shouldn't have to touch much of them...
 please note the CONFIG.INC.PHP in the system folder for the indivual settings of your installation!*/
 
-$UNI_NAME_CLEAN = "Stud.IP 1.5-dev";							//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
-$AUTH_LIFETIME = 60;									//the length of a session in minutes, zero means unlimited lifetime
+$UNI_NAME_CLEAN = "Entwicklungsserver der Stud.IP Core Group";							//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
+$AUTH_LIFETIME = 120;									//the length of a session in minutes, zero means unlimited lifetime
 
 
 /*settings for database access
@@ -50,7 +50,7 @@ $TMP_PATH ="/tmp";									//the system temp path
 //paths to the command line tools, used in Stud.IP
 $ZIP_USE_INTERNAL = false;								//set to true, if command-line zip/unzip is not available
 $ZIP_PATH = "/usr/bin/zip";								//zip tool
-$ZIP_OPTIONS = "";									//command line options for zip, e.g. when using SuSE try "-K" to correct long filenames for windows
+$ZIP_OPTIONS = "-K";									//command line options for zip, e.g. when using SuSE try "-K" to correct long filenames for windows
 $UNZIP_PATH = "/usr/bin/unzip";
 
 //latexrender settings
@@ -88,7 +88,7 @@ In most cases you can leave this variable empty, as the correct value
 will be detected automatically.
 If you activate the MAIL_NOTIFICATION feature, you MUST set this variable!
 */
-$ABSOLUTE_URI_STUDIP = "";
+$ABSOLUTE_URI_STUDIP = "http://develop.studip.de/studip/";
 $ASSETS_URL = "";        	//path to constant assets, defaults to $ABSOLUTE_URI_STUDIP . "assets/"
 
 
@@ -107,14 +107,13 @@ $CHAT_SERVER_NAME = "ChatShmServer";
 $EXPORT_ENABLE = TRUE;									//Stud.IP module: export
 $XSLT_ENABLE = TRUE;
 $FOP_ENABLE = TRUE;
-$FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    					//path to fop
+$FOP_SH_CALL = "/usr/local/fop-0.20.5/fop.sh";    					//path to fop
 $JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     					//used to set environment for JRE
 
 $ILIAS_CONNECT_ENABLE = FALSE;								//Stud.IP module: ilias 2 connect
 $ABSOLUTE_PATH_ILIAS = "http://<your.server.name/ilias/>";
 
 $EXTERN_ENABLE = TRUE;									//Stud.IP module: "external pages" and SRI-System
-$EXTERN_SERVER_NAME = "";								//define name, if you use special setup
 $EXTERN_SRI_ENABLE = TRUE;								//allow the usage of SRI-interface (Stud.IP Remote Include)
 $EXTERN_SRI_ENABLE_BY_ROOT = FALSE;							//only root allows the usage of SRI-interface for specific institutes
 $EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG = FALSE;						//free access to external pages (without the need of a configuration), independent of SRI settings above
@@ -126,43 +125,114 @@ $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 $ELEARNING_INTERFACE_ENABLE = TRUE;							//Stud.IP module: elearning interface
 $SOAP_ENABLE = TRUE;
 
-$ELEARNING_INTERFACE_MODULES = array(
-	"ilias3" =>	array(
-		"name" => "ILIAS 3",
-		"ABSOLUTE_PATH_ELEARNINGMODULES" => "http://<your Ilias3 installation>/",
-		"ABSOLUTE_PATH_SOAP" => "http://<your Ilias3 installation>/webservice/soap/server.php?wsdl",
-		"CLASS_PREFIX" => "Ilias3",
-		"auth_necessary" => true,
-		"USER_PREFIX" => "studip_",
-		"target_file" => "studip_referrer.php",
-		"logo_file" => "assets/images/ilias_logo.png",
-		"soap_data" => array(
-						"username" => "<username>",		//this credentials are used to communicate with your Ilias 3 installation over SOAP
-						"password" => "<password>",
-						"client" => "<ilias client id>"),
-		"types" => 	array(
-						"htlm" => array("name" => "HTML-Lerneinheit", "icon" => "assets/images/icon-lern.gif"),
-						"sahs" => array("name" => "SCORM/AICC-Lerneinheit", "icon" => "assets/images/icon-lern.gif"),
-						"lm" => array("name" => "ILIAS-Lerneinheit", "icon" => "assets/images/icon-lern.gif"),
-						"tst" => array("name" => "ILIAS-Test", "icon" => "assets/images/icon-lern.gif")
-						),
-		"global_roles" => array(4,5,14), // put here the ilias role-ids for User, Guest and Anonymous
-		"roles" =>	array(
-						"autor" => "4",
-						"tutor" => "4",
-						"dozent" => "4",
-						"admin" => "4",
-						"root" => "2"
-						),
-		"crs_roles" =>	array(
-						"autor" => "member",
-						"tutor" => "tutor",
-						"dozent" => "admin",
-						"admin" => "admin",
-						"root" => "admin"
-						)
-		)
-	);
+$ELEARNING_INTERFACE_MODULES["ilias36x"] = array(
+	"name" => "ILIAS 3.6.X Testserver",
+	"ABSOLUTE_PATH_ELEARNINGMODULES" =>	"http://develop.studip.de/ilias_3_6_x/",
+	"ABSOLUTE_PATH_SOAP" =>	"http://develop.studip.de/ilias_3_6_x/webservice/soap/server.php?wsdl",
+	"CLASS_PREFIX" => "Ilias3",
+	"auth_necessary" => true,
+	"USER_PREFIX" => "studilias36x_",
+	"target_file" => "studip_referrer.php",
+	"logo_file" => "assets/images/ilias_logo.png",
+	"soap_data" => array(
+		"username" => "soap_admin",
+		"password" => "soapsucks",
+		"client" => "foobar36x"),
+	"types" => 	array(
+		"htlm" => array("name" => "HTML-Lerneinheit", "icon" => "assets/images/icon-lern.gif"),
+		"sahs" => array("name" => "SCORM/AICC-Lerneinheit", "icon" =>  "assets/images/icon-lern.gif"),
+		"lm" => array("name" => "ILIAS-Lerneinheit", "icon" =>  "assets/images/icon-lern.gif"),
+		"tst" => array("name" => "ILIAS-Test", "icon" =>  "assets/images/icon-lern.gif")
+	),
+	"global_roles" => array(4,5,14), // put here the ilias role-ids for User, Guest and Anonymous
+	"roles" =>	array(
+		"autor" => "4",
+		"tutor" => "4",
+		"dozent" => "4",
+		"admin" => "4",
+		"root" => "2"
+		),
+	"crs_roles" =>	array(
+		"autor" => "member",
+		"tutor" => "tutor",
+		"dozent" => "admin",
+		"admin" => "admin",
+		"root" => "admin"
+	)
+);
+
+$ELEARNING_INTERFACE_MODULES["ilias371"] = 
+array(
+	"name" => "ILIAS 3.7.1 Testserver",
+	"ABSOLUTE_PATH_ELEARNINGMODULES" => "http://develop.studip.de/ilias3/",
+	"ABSOLUTE_PATH_SOAP" => "http://develop.studip.de/ilias3/webservice/soap/server.php?wsdl",
+	"CLASS_PREFIX" => "Ilias3",
+	"auth_necessary" => true,
+	"USER_PREFIX" => "studip371_",
+	"target_file" => "studip_referrer.php",
+	"logo_file" =>  "assets/images/ilias_logo.png",
+	"soap_data" => array(
+		"username" => "soap_admin",
+		"password" => "hochgeheim",
+		"client" => "foobar2"),
+	"types" => array(
+		"htlm" => array("name" => "HTML-Lerneinheit", "icon" =>  "assets/images/icon-lern.gif"),
+		"sahs" => array("name" => "SCORM/AICC-Lerneinheit", "icon" =>  "assets/images/icon-lern.gif"),
+		"lm" => array("name" => "ILIAS-Lerneinheit", "icon" =>  "assets/images/icon-lern.gif"),
+		"tst" => array("name" => "ILIAS-Test", "icon" =>  "assets/images/icon-lern.gif")),
+	"global_roles" => array(4,5,14), // put here the ilias role-ids for User, Guest and Anonymous
+	"roles" => array(
+		"autor" => "4",
+		"tutor" => "4",
+		"dozent" => "4",
+		"admin" => "4",
+		"root" => "2"
+		),
+	"crs_roles" =>	array(
+		"autor" => "member",
+		"tutor" => "tutor",
+		"dozent" => "admin",
+		"admin" => "admin",
+		"root" => "admin")
+);
+
+$ELEARNING_INTERFACE_MODULES["ilias36x-2"] = 
+array(
+	"name" => "ILIAS 3.6.x Testserver (zweite Verknüpfung)",
+	"ABSOLUTE_PATH_ELEARNINGMODULES" =>
+	"http://develop.studip.de/ilias_3_6_x/",
+	"ABSOLUTE_PATH_SOAP" =>
+	"http://develop.studip.de/ilias_3_6_x/webservice/soap/server.php?wsdl",
+	"CLASS_PREFIX" => "Ilias3",
+	"auth_necessary" => true,
+	"USER_PREFIX" => "studip2_",
+	"target_file" => "studip_referrer.php",
+	"logo_file" => $ASSETS_URL."images/ilias_logo.png",
+	"soap_data" => array(
+		"username" => "soap_admin",
+		"password" => "soapsucks",
+		"client" => "foobar36x"),
+	"types" => array(
+		"htlm" => array("name" => "HTML-Lerneinheit", "icon" => $ASSETS_URL."images/icon-lern.gif"),
+		"sahs" => array("name" => "SCORM/AICC-Lerneinheit", "icon" => $ASSETS_URL."images/icon-lern.gif"),
+		"lm" => array("name" => "ILIAS-Lerneinheit", "icon" => $ASSETS_URL."images/icon-lern.gif"),
+		"tst" => array("name" => "ILIAS-Test", "icon" => $ASSETS_URL."images/icon-lern.gif")),
+	"global_roles" => array(4,5,14), // put here the ilias role-ids for User, Guest and Anonymous
+	"roles" => array(
+		"autor" => "4",
+		"tutor" => "4",
+		"dozent" => "4",
+		"admin" => "4",
+		"root" => "2"
+		),
+	"crs_roles" =>	array(
+		"autor" => "member",
+		"tutor" => "tutor",
+		"dozent" => "admin",
+		"admin" => "admin",
+		"root" => "admin")
+);
+					
 
 $PLUGINS_ENABLE = TRUE;
 $PLUGINS_UPLOAD_ENABLE = TRUE; 					//Upload of Plugins is enabled
@@ -179,9 +249,9 @@ activate or deactivate some basic system-functions here*/
 $LATEXRENDER_ENABLE = TRUE;								//enable to use the LaTexrenderer (Please note the further LaTeX template-settings below)
 $WIKI_ENABLE = TRUE;									//enable WikiWiki-Webs
 $SCM_ENABLE = TRUE;									//enable Simple-Content functionality
-$LOG_ENABLE = FALSE;									//enable event logging for some admin actions on courses, users and institutes
+$LOG_ENABLE = TRUE;									//enable event logging for some admin actions on courses, users and institutes
 $SMILEYADMIN_ENABLE = TRUE;								//enable Smiley-administration
-$SMILEY_COUNTER = FALSE;								//enable Smiley-counter
+$SMILEY_COUNTER = TRUE;								//enable Smiley-counter
 
 
 /*domain name and path translation
@@ -199,26 +269,28 @@ and add all used domain names. Below, some examples are given.
 // or
 //
 //stud.ip root is a normal directory
-//$STUDIP_DOMAINS[1] = "<your.server.name/studip>"; 
-//$STUDIP_DOMAINS[2] = "<your.server.ip/studip>";
+$STUDIP_DOMAINS[1] = "test.studip.de/studip";
+$STUDIP_DOMAINS[2] = "www.test.studip.de/studip";
+$STUDIP_DOMAINS[3] = "develop.studip.de/studip";
+$STUDIP_DOMAINS[4] = "134.76.82.67/studip";
 
 
 /*mail settings
 ----------------------------------------------------------------
 leave blank if localhost is also the mailserver*/
 
-$MAIL_LOCALHOST = "";									//name of the mail sending machine (the web server) defaults to SERVER_NAME
-$MAIL_HOST_NAME = "";									//which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
+$MAIL_LOCALHOST = "develop.studip.de";					//name of the mail sending machine (the web server) defaults to SERVER_NAME
+$MAIL_HOST_NAME = "127.0.0.1";									//which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
 $MAIL_CHARSET = "";									//character set of mail body, defaults to ISO-8859-1
-$MAIL_ENV_FROM = "";									//sender mail adress, defaults to wwwrun @ $MAIL_LOCAHOST
+$MAIL_ENV_FROM = "develop-noreply@studip.de";		//sender mail adress, defaults to wwwrun @ $MAIL_LOCAHOST
 $MAIL_FROM = "";									//name of sender, defaults to "Stud.IP"
-$MAIL_ABUSE = "";									//mail adress to reply to in case of abuse, defaults to abuse @  $MAIL_LOCAHOST
+$MAIL_ABUSE = "abuse@studip.de";									//mail adress to reply to in case of abuse, defaults to abuse @  $MAIL_LOCAHOST
 
 $MAIL_VALIDATE_HOST = TRUE;								//check for valid mail host when user enters email adress
 $MAIL_VALIDATE_BOX = TRUE;								//check for valid mail account when user enters email adress; set to false if the webserver got no valid MX record
 
 $MESSAGING_FORWARD_AS_EMAIL = TRUE;							//enable to forward every internal message to the user-mail (the user is able to deactivate this function in his personal settings)
-$MESSAGING_FORWARD_DEFAULT = 1;								//the default setting: if 1, the user has to switch it on; if 2, every message will be forwarded; if 3 every message will be forwarded on request of the sender
+$MESSAGING_FORWARD_DEFAULT = 3;								//the default setting: if 1, the user has to switch it on; if 2, every message will be forwarded; if 3 every message will be forwarded on request of the sender
 
 
 /*advanced system settings
@@ -286,13 +358,13 @@ $_lit_search_plugins[] = array('name' => "Studip",'display_name' =>'Katalog der 
 //only activate these plugins, if your Version of PHP supports the YAZ extension!
 
 /* Gemeinsamer Verbundkatalog - GVK */
-//$_lit_search_plugins[] = array('name' => "Gvk",'display_name' =>'Gemeinsamer Verbundkatalog', 'link' => 'http://gso.gbv.de/DB=2.1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+$_lit_search_plugins[] = array('name' => "Gvk",'display_name' =>'Gemeinsamer Verbundkatalog', 'link' => 'http://gso.gbv.de/DB=2.1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Niedersächsische Staats- und Universitätsbibliothek Göttingen, OPAC */
-//$_lit_search_plugins[] = array('name' => "SUBGoeOpac",'display_name' => "Opac der SUB Göttingen" , 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+$_lit_search_plugins[] = array('name' => "SUBGoeOpac",'display_name' => "Opac der SUB Göttingen" , 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=1/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Göttinger Gesamtkatalog (Regionalkatalog Göttingen) */
-//$_lit_search_plugins[] = array('name' => 'Rkgoe', 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
+$_lit_search_plugins[] = array('name' => 'Rkgoe', 'display_name' =>'Regionalkatalog Göttingen', 'link' => 'http://gso.gbv.de/DB=2.90/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Bibliotheken der Wirtschafts- und Sozialwiss. Fakultäten Goettingen" */
 //$_lit_search_plugins[] = array('name' => 'WisoFak', 'link' => 'http://goopc4.sub.uni-goettingen.de:8080/DB=2/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
@@ -445,7 +517,12 @@ $ENABLE_SELF_REGISTRATION = TRUE;						//should it be possible for an user to re
 /*IDs of courses, in which users were entered when they are promoted to 'autor'
 -----------------------------------------------------------------*/
 
-//$AUTO_INSERT_SEM[1]="<seminar_id>";
+$AUTO_INSERT_SEM[1]="28e888802838a57bc1fbac4e39f0b13a";
+$AUTO_INSERT_SEM[3]="3039f73267a276064c5aa26fcf8446d3";
+$AUTO_INSERT_SEM[4]="a70c45ca747f0ab2ea4acbb17398d370";
+$AUTO_INSERT_SEM[5]="c2b5ace2c9b866c6baecd3f70207f68a";
+$AUTO_INSERT_SEM[6]="1927f2b86d6b185aa6c6697810ad42f1";
+$AUTO_INSERT_SEM[7]="16eab3dfcfd488f713a262e95bb3da43";
 //further courses can be added with their IDs here
 
 
