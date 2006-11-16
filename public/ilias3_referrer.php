@@ -32,7 +32,7 @@ require_once ("config.inc.php");
 
 if ($ELEARNING_INTERFACE_ENABLE)
 {
-	require_once ($RELATIVE_PATH_ELEARNING_MODULES . "elearning/ELearningUtils.class.php");
+	require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ELearningUtils.class.php");
 	ELearningUtils::bench("start");
 
 	$GLOBALS['ALWAYS_SELECT_DB'] = true;
