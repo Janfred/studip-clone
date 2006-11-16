@@ -723,8 +723,13 @@ function createVoteResult ($vote, $preview = NO) {
       $html .= "<font size=-1><b>".$percent."%</b></font>\n";
       if( ! $revealNames ) {
 	  // the bars
+	  if ($percent < 50){
+		  $bar = VOTE_BAR_MIDDLE . (floor($percent / 5) * 5) . '.png';
+	  } else {
+		  $bar = VOTE_BAR_MIDDLE . '50.png';
+	  }
 	  $html .= "&nbsp;<img src=\"".VOTE_BAR_LEFT."\" width=1 height=10 align=middle>";
-	  $html .= "<img src=\"".VOTE_BAR_MIDDLE.$percent."\"";
+	  $html .= "<img src=\"".$bar."\"";
 	  $html .= " width=\"" . ($val/$max * 100 + 1) . "\" height=10 align=middle>";
 	  $html .= "<img src=\"".VOTE_BAR_RIGHT."\" width=1 height=10 align=middle>";
       }
@@ -847,8 +852,8 @@ function createVoteInfo (&$vote, $isAssociated = NO) {
 			  date ("d.m.Y", $stopdate),
 			  date ("H:i", $stopdate))
 	       : sprintf (_("Das Voting wurde beendet am <b>%s</b> um <b>%s</b> Uhr."),
-			  date ("d.m.Y", $vote->getChangedate()),
-			  date ("H:i", $vote->getChangedate()));
+			  date ("d.m.Y", $stopdate),
+			  date ("H:i", $stopdate));
        }
        else {
 	   if ($isAssociated) {
