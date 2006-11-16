@@ -1211,7 +1211,7 @@ function print_infobox_absolute($content, $picture = '', $html = FALSE) {
 
     <tr>
       <td class="angemeldet" width="100%">
-        <table background="<?=$GLOBALS['ASSETS_URL']?>"images/white.gif" align="center" width="99%" border="0" cellpadding="4" cellspacing="0">
+        <table background="<?=$GLOBALS['ASSETS_URL']?>images/white.gif" align="center" width="99%" border="0" cellpadding="4" cellspacing="0">
 
           <? for ($i = 0; $i < count($content); $i++) : ?>
             <? if ($content[$i]) : ?>
