@@ -549,12 +549,16 @@ $LATEX_FORMATS = array(
 
 	Arab font (needs LaTeX package arabtex installed):
   		"arab" => array("tag" => "arab", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{arabtex,atrans}\n \pagestyle{empty}\n \begin{document}\n \begin{arabtext}%s\end{arabtext}\n \end{document}\n")
-
-
-/*path generation 
------------------------------------------------------------------
-(end of user defined settings)*/
-
+*/
+// WIKI PLUGINS
+// - plugins are loaded from the wiki module
+// - plugins can define own wiki markup applied after general markup rules//
+// uncomment/change below to activate
+//
+$WIKI_PLUGINS=array(
+	"wiki_steps.inc.php",  // Stud.IP Enhancement Proposal System	
+	"wiki_biests.inc.php"  // Bug and Inconsistency Detection System
+	);
 
 //path generation
 if (substr($ABSOLUTE_PATH_STUDIP,-1) != "/"){
