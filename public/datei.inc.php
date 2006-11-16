@@ -26,7 +26,6 @@ require_once('lib/classes/StudipDocumentTree.class.php');
 
 
 if ($GLOBALS['ZIP_USE_INTERNAL']) include_once('vendor/pclzip/pclzip.lib.php');
-
 function readfile_chunked($filename,$retbytes=true) {
    $chunksize = 1*(1024*1024); // how many bytes per chunk
    $buffer = '';
@@ -1250,7 +1249,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 	if (($check_folder[1]) || ($all)) {
 	$db->query("SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, range_id, a.user_id, name, description, a.mkdate, a.chdate FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '$folder_id' ORDER BY a.name, a.chdate");
-	while (($db->next_record() && $folder_tree->isExecutable($db->f('folder_id'), $user->id)) || ($all && !$cnt) ) {
+	while ($db->next_record() || ($all && !$cnt) ) {
+		if ($folder_tree->isExecutable($db->f('folder_id'), $user->id) || ($all && !$cnt)){
 		$cnt++; //a very hard hack to fix the problem, that no documents in view "all documents" are shown, if the "general folder" was deleted. Not good. But works...
 		if (!$all) {?><table border=0 cellpadding=0 cellspacing=0 width="100%"><tr><td class="blank" valign="top" heigth=21 nowrap><img src='<?= $GLOBALS['ASSETS_URL'] ?>images/forumleer.gif'><img src='<?= $GLOBALS['ASSETS_URL'] ?>images/forumleer.gif'><?}
 
@@ -1665,6 +1665,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			display_folder_system ($db->f("folder_id"), $level+1, $open, $lines, $change, $move, $upload, $all, $refresh, $filelink);
 		}
 	}
+	}
 }
 
 
@@ -1972,7 +1973,7 @@ function create_zip_from_directory($fullpath, $zip_file_name){
 		$zippara = (ini_get('safe_mode')) ? ' -R ':' -r ';
 		if (@chdir($fullpath)) {
 			exec ($GLOBALS['ZIP_PATH'] . ' -q -D ' . $GLOBALS['ZIP_OPTIONS'] . ' ' . $zippara . $zip_file_name . ' *',$output, $ret);
-			@chdir('');
+			@chdir($GLOBALS['ABSOLUTE_PATH_STUDIP']);
 		}
 		return $ret;
 	}
