@@ -41,8 +41,8 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 	checkObjectModule("elearning_interface");
 	object_set_visit_module("elearning_interface");
 
-	require_once ($RELATIVE_PATH_ELEARNING_MODULES . "elearning/ELearningUtils.class.php");
-	require_once ($RELATIVE_PATH_ELEARNING_MODULES . "elearning/ObjectConnections.class.php");
+	require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ELearningUtils.class.php");
+	require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ObjectConnections.class.php");
 	ELearningUtils::bench("start");
 
 	ELearningUtils::bench("checkObject");
