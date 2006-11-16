@@ -25,7 +25,8 @@ require_once('lib/classes/StudipDocument.class.php');
 require_once('lib/classes/StudipDocumentTree.class.php');
 
 
-if ($GLOBALS['ZIP_USE_INTERNAL']) include_once('lib/pclzip/pclzip.lib.php');
+if ($GLOBALS['ZIP_USE_INTERNAL']) include_once('vendor/pclzip/pclzip.lib.php');
+
 function readfile_chunked($filename,$retbytes=true) {
    $chunksize = 1*(1024*1024); // how many bytes per chunk
    $buffer = '';
