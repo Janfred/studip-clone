@@ -45,7 +45,7 @@ $SYMBOL_PATH = "assets/images/symbol";						//symbols !Problem!
 $USER_PIC_PATH = "pictures/user";
 
 //path to the temporary folder
-$TMP_PATH ="/tmp";									//the system temp path
+$TMP_PATH ="/tmp/studip";									//the system temp path
 
 //paths to the command line tools, used in Stud.IP
 $ZIP_USE_INTERNAL = false;								//set to true, if command-line zip/unzip is not available
