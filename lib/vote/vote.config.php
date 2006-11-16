@@ -43,7 +43,7 @@ define ("VOTE_ICON_INFO",    VOTE_PATH_PICTURES."ausruf.gif");
 define ("VOTE_ICON_LIST",    VOTE_PATH_PICTURES."file.gif");
 
 define ("VOTE_BAR_LEFT",   VOTE_PATH_PICTURES."bar_l.gif");
-define ("VOTE_BAR_MIDDLE", "vote/view/vote_bar_image.php?percent=");
+define ("VOTE_BAR_MIDDLE",  VOTE_PATH_PICTURES."vote_bar_");
 define ("VOTE_BAR_RIGHT",  VOTE_PATH_PICTURES."bar_r.gif");
 
 define ("VOTE_ANSWER_CORRECT", VOTE_PATH_PICTURES."haken_transparent.gif");
