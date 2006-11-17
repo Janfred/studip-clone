@@ -110,33 +110,34 @@ function CheckScore ($user_id) {
 
 function doRefreshScoreContentCache(){
 	$db = new DB_Seminar("SELECT a.user_id,username FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0");
+	$s = 0;
 	while ($db->next_record()){
 		$this->score_content_cache[$db->f('user_id')]['username'] = $db->f('username');
+		++$s;
 	}
-	if (is_array( ($user_ids = array_keys($this->score_content_cache)) )){
-		$id_list = "('" . join("','", $user_ids) . "')";
-		$db->query("SELECT count(post_id) as guestcount,u.user_id FROM user_info u  LEFT JOIN guestbook ON(range_id=u.user_id)
-					WHERE u.user_id IN $id_list AND guestbook=1 GROUP BY u.user_id");
+	if ($s) {
+		$db->query("SELECT count(u.user_id) as guestcount,u.user_id FROM user_info u INNER JOIN guestbook ON(range_id=u.user_id)
+					WHERE score > 0 AND guestbook=1 GROUP BY u.user_id ORDER BY NULL");
 		while ($db->next_record()){
 			$this->score_content_cache[$db->f('user_id')]['guestcount'] = $db->f('guestcount');
 		}
-		$db->query("SELECT count(news_id) as newscount,range_id FROM news_range WHERE range_id IN $id_list GROUP BY range_id");
+		$db->query("SELECT count(u.user_id) as newscount,u.user_id FROM user_info u INNER JOIN news_range ON(range_id=u.user_id) WHERE score > 0 GROUP BY u.user_id ORDER BY NULL");
 		while ($db->next_record()){
-			$this->score_content_cache[$db->f('range_id')]['newscount'] = $db->f('newscount');
+			$this->score_content_cache[$db->f('user_id')]['newscount'] = $db->f('newscount');
 		}
-		$db->query("SELECT count(event_id) as eventcount,range_id FROM calendar_events WHERE range_id IN $id_list AND class = 'PUBLIC' GROUP BY range_id");
+		$db->query("SELECT count(u.user_id) as eventcount,u.user_id FROM user_info u INNER JOIN calendar_events ON(range_id=u.user_id AND class = 'PUBLIC') WHERE score > 0  GROUP BY u.user_id ORDER BY NULL");
 		while ($db->next_record()){
-			$this->score_content_cache[$db->f('range_id')]['eventcount'] = $db->f('eventcount');
+			$this->score_content_cache[$db->f('user_id')]['eventcount'] = $db->f('eventcount');
 		}
-		$db->query("SELECT count(list_element_id) AS litcount, range_id FROM lit_list LEFT JOIN lit_list_content USING ( list_id )
-					WHERE visibility = 1 AND range_id IN $id_list GROUP BY range_id");
+		$db->query("SELECT count(u.user_id) AS litcount, u.user_id FROM user_info u INNER JOIN lit_list ON(range_id=u.user_id) INNER JOIN lit_list_content USING ( list_id )
+					WHERE score > 0  AND visibility = 1 GROUP BY u.user_id ORDER BY NULL");
 		while ($db->next_record()){
-			$this->score_content_cache[$db->f('range_id')]['litcount'] = $db->f('litcount');
+			$this->score_content_cache[$db->f('user_id')]['litcount'] = $db->f('litcount');
 		}
 		if ($GLOBALS['VOTE_ENABLE']){
-			$db->query("SELECT count(vote_id) AS votecount,range_id FROM vote WHERE range_id IN $id_list GROUP BY range_id");
+			$db->query("SELECT count(u.user_id) AS votecount,u.user_id FROM user_info u INNER JOIN vote ON(range_id=u.user_id) WHERE  score > 0 GROUP BY u.user_id ORDER BY NULL");
 			while ($db->next_record()){
-				$this->score_content_cache[$db->f('range_id')]['votecount'] = $db->f('votecount');
+				$this->score_content_cache[$db->f('user_id')]['votecount'] = $db->f('votecount');
 			}
 		}
 	}
@@ -245,7 +246,7 @@ function gettitel($score, $gender=0) {
 *
 */
 function GetMyScore() {
-	global $user,$auth, $GLOBALS;
+	global $user,$auth;
 
 	$user_id=$user->id; //damit keiner schummelt...
 
