@@ -368,8 +368,7 @@ class VoteDB extends StudipObject {
 			  'changeable'    => $this->db->f("changeable"), 
 			  'co_visibility' => $this->db->f("co_visibility"), 
 			  'answerArray'   => array (),
-			  'isAssociated'  => $this->hasanyoneparticipated 
-			  ($voteID));
+			  'isAssociated'  => $this->hasanyoneparticipated($voteID,$this->db->f("anonymous")));
 
 	// convert userID to username
 	if ($name = get_username($votearray['range_id']))
@@ -467,14 +466,14 @@ class VoteDB extends StudipObject {
     * @access  public
     * @return  boolean True if user had already used his/her vote
     */
-   function hasanyoneparticipated ($voteID) {
-      $query = "SELECT * FROM vote WHERE vote_id='".$voteID."'";
+   function hasanyoneparticipated ($voteID, $anonymous = NO) {
+    /*  $query = "SELECT * FROM vote WHERE vote_id='".$voteID."'";
       $this->db->query ($query);
       $this->db->next_record();
-
+	  */
       /* If vote is anonymous ---------------------------------------------- */
-      if ($this->db->f("anonymous") == YES) {
-	 $sql="SELECT count(*) FROM vote_user WHERE vote_id = '".$voteID."'";
+      if ($anonymous == YES) {
+	 $sql="SELECT vote_id FROM vote_user WHERE vote_id = '".$voteID."' LIMIT 1";
 	 $this->db->query ($sql);
 	 $this->db->next_record();
 	 return ($this->db->f(0)) ? YES : NO;
@@ -483,11 +482,11 @@ class VoteDB extends StudipObject {
       else {
 	 $sql = 
 	    "SELECT".
-	    " count(*)".
+	    " b.vote_id ".
 	    " FROM ".
 	    "  voteanswers b INNER JOIN voteanswers_user a USING(answer_id)".
 	    "WHERE".
-	    " b.vote_id = '".$voteID."' ";
+	    " b.vote_id = '".$voteID."' LIMIT 1";
 	 $this->db->query ($sql);
 	 $this->db->next_record();
 	 return ($this->db->f(0)) ? YES : NO;
