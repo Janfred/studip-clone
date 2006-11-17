@@ -3,11 +3,11 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Erstellungszeit: 25. Juli 2006 um 10:17
--- Server Version: 4.0.18
--- PHP-Version: 4.4.2
+-- Erstellungszeit: 17. November 2006 um 12:27
+-- Server Version: 5.0.26
+-- PHP-Version: 4.4.4-0.dotdeb.1
 -- 
--- Datenbank: `studip14`
+-- Datenbank: `studip15`
 -- 
 
 -- --------------------------------------------------------
@@ -17,7 +17,7 @@
 -- 
 
 DROP TABLE IF EXISTS `Institute`;
-CREATE TABLE `Institute` (
+CREATE TABLE IF NOT EXISTS `Institute` (
   `Institut_id` varchar(32) NOT NULL default '',
   `Name` varchar(255) NOT NULL default '',
   `fakultaets_id` varchar(32) NOT NULL default '',
@@ -36,6 +36,7 @@ CREATE TABLE `Institute` (
   PRIMARY KEY  (`Institut_id`),
   KEY `fakultaets_id` (`fakultaets_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
 -- --------------------------------------------------------
 
 -- 
@@ -43,7 +44,7 @@ CREATE TABLE `Institute` (
 -- 
 
 DROP TABLE IF EXISTS `admission_seminar_studiengang`;
-CREATE TABLE `admission_seminar_studiengang` (
+CREATE TABLE IF NOT EXISTS `admission_seminar_studiengang` (
   `seminar_id` varchar(32) NOT NULL default '',
   `studiengang_id` varchar(32) NOT NULL default '',
   `quota` int(3) NOT NULL default '0',
@@ -57,7 +58,7 @@ CREATE TABLE `admission_seminar_studiengang` (
 -- 
 
 DROP TABLE IF EXISTS `admission_seminar_user`;
-CREATE TABLE `admission_seminar_user` (
+CREATE TABLE IF NOT EXISTS `admission_seminar_user` (
   `user_id` varchar(32) NOT NULL default '',
   `seminar_id` varchar(32) NOT NULL default '',
   `studiengang_id` varchar(32) NOT NULL default '',
@@ -76,7 +77,7 @@ CREATE TABLE `admission_seminar_user` (
 -- 
 
 DROP TABLE IF EXISTS `archiv`;
-CREATE TABLE `archiv` (
+CREATE TABLE IF NOT EXISTS `archiv` (
   `seminar_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
   `untertitel` varchar(255) NOT NULL default '',
@@ -105,7 +106,7 @@ CREATE TABLE `archiv` (
 -- 
 
 DROP TABLE IF EXISTS `archiv_user`;
-CREATE TABLE `archiv_user` (
+CREATE TABLE IF NOT EXISTS `archiv_user` (
   `seminar_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `status` enum('user','autor','tutor','dozent') NOT NULL default 'user',
@@ -120,7 +121,7 @@ CREATE TABLE `archiv_user` (
 -- 
 
 DROP TABLE IF EXISTS `auth_extern`;
-CREATE TABLE `auth_extern` (
+CREATE TABLE IF NOT EXISTS `auth_extern` (
   `studip_user_id` varchar(32) NOT NULL default '',
   `external_user_id` varchar(32) NOT NULL default '',
   `external_user_name` varchar(64) NOT NULL default '',
@@ -138,7 +139,7 @@ CREATE TABLE `auth_extern` (
 -- 
 
 DROP TABLE IF EXISTS `auth_user_md5`;
-CREATE TABLE `auth_user_md5` (
+CREATE TABLE IF NOT EXISTS `auth_user_md5` (
   `user_id` varchar(32) NOT NULL default '',
   `username` varchar(64) NOT NULL default '',
   `password` varchar(32) NOT NULL default '',
@@ -162,7 +163,7 @@ CREATE TABLE `auth_user_md5` (
 -- 
 
 DROP TABLE IF EXISTS `banner_ads`;
-CREATE TABLE `banner_ads` (
+CREATE TABLE IF NOT EXISTS `banner_ads` (
   `ad_id` varchar(32) NOT NULL default '',
   `banner_path` varchar(255) NOT NULL default '',
   `description` varchar(255) default NULL,
@@ -186,7 +187,7 @@ CREATE TABLE `banner_ads` (
 -- 
 
 DROP TABLE IF EXISTS `calendar_events`;
-CREATE TABLE `calendar_events` (
+CREATE TABLE IF NOT EXISTS `calendar_events` (
   `event_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   `autor_id` varchar(32) NOT NULL default '',
@@ -226,10 +227,10 @@ CREATE TABLE `calendar_events` (
 -- 
 
 DROP TABLE IF EXISTS `chat_data`;
-CREATE TABLE `chat_data` (
+CREATE TABLE IF NOT EXISTS `chat_data` (
   `id` int(11) NOT NULL default '0',
   `data` mediumblob NOT NULL,
-  `tstamp` timestamp(14) NOT NULL,
+  `tstamp` timestamp NOT NULL,
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
 
@@ -240,7 +241,7 @@ CREATE TABLE `chat_data` (
 -- 
 
 DROP TABLE IF EXISTS `comments`;
-CREATE TABLE `comments` (
+CREATE TABLE IF NOT EXISTS `comments` (
   `comment_id` varchar(32) NOT NULL default '',
   `object_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
@@ -258,7 +259,7 @@ CREATE TABLE `comments` (
 -- 
 
 DROP TABLE IF EXISTS `config`;
-CREATE TABLE `config` (
+CREATE TABLE IF NOT EXISTS `config` (
   `config_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
   `field` varchar(255) NOT NULL default '',
@@ -285,7 +286,7 @@ CREATE TABLE `config` (
 -- 
 
 DROP TABLE IF EXISTS `contact`;
-CREATE TABLE `contact` (
+CREATE TABLE IF NOT EXISTS `contact` (
   `contact_id` varchar(32) NOT NULL default '',
   `owner_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
@@ -301,7 +302,7 @@ CREATE TABLE `contact` (
 -- 
 
 DROP TABLE IF EXISTS `contact_userinfo`;
-CREATE TABLE `contact_userinfo` (
+CREATE TABLE IF NOT EXISTS `contact_userinfo` (
   `userinfo_id` varchar(32) NOT NULL default '',
   `contact_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
@@ -319,7 +320,7 @@ CREATE TABLE `contact_userinfo` (
 -- 
 
 DROP TABLE IF EXISTS `datafields`;
-CREATE TABLE `datafields` (
+CREATE TABLE IF NOT EXISTS `datafields` (
   `datafield_id` varchar(32) NOT NULL default '',
   `name` varchar(255) default NULL,
   `object_type` enum('sem','inst','user') default NULL,
@@ -340,7 +341,7 @@ CREATE TABLE `datafields` (
 -- 
 
 DROP TABLE IF EXISTS `datafields_entries`;
-CREATE TABLE `datafields_entries` (
+CREATE TABLE IF NOT EXISTS `datafields_entries` (
   `datafield_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   `content` text,
@@ -356,7 +357,7 @@ CREATE TABLE `datafields_entries` (
 -- 
 
 DROP TABLE IF EXISTS `dokumente`;
-CREATE TABLE `dokumente` (
+CREATE TABLE IF NOT EXISTS `dokumente` (
   `dokument_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
@@ -386,7 +387,7 @@ CREATE TABLE `dokumente` (
 -- 
 
 DROP TABLE IF EXISTS `eval`;
-CREATE TABLE `eval` (
+CREATE TABLE IF NOT EXISTS `eval` (
   `eval_id` varchar(32) NOT NULL default '',
   `author_id` varchar(32) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',
@@ -399,7 +400,6 @@ CREATE TABLE `eval` (
   `anonymous` tinyint(1) NOT NULL default '1',
   `visible` tinyint(1) NOT NULL default '1',
   `shared` tinyint(1) NOT NULL default '0',
-  `protected` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`eval_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
@@ -410,7 +410,7 @@ CREATE TABLE `eval` (
 -- 
 
 DROP TABLE IF EXISTS `eval_group_template`;
-CREATE TABLE `eval_group_template` (
+CREATE TABLE IF NOT EXISTS `eval_group_template` (
   `evalgroup_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `group_type` varchar(250) NOT NULL default 'normal',
@@ -420,24 +420,11 @@ CREATE TABLE `eval_group_template` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `eval_link`
--- 
-
-DROP TABLE IF EXISTS `eval_link`;
-CREATE TABLE `eval_link` (
-  `eval_id` varchar(32) NOT NULL default '',
-  `linked_eval_id` varchar(32) NOT NULL default '',
-  PRIMARY KEY  (`eval_id`,`linked_eval_id`)
-) TYPE=MyISAM;
-
--- --------------------------------------------------------
-
--- 
 -- Tabellenstruktur für Tabelle `eval_range`
 -- 
 
 DROP TABLE IF EXISTS `eval_range`;
-CREATE TABLE `eval_range` (
+CREATE TABLE IF NOT EXISTS `eval_range` (
   `eval_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`eval_id`,`range_id`)
@@ -450,7 +437,7 @@ CREATE TABLE `eval_range` (
 -- 
 
 DROP TABLE IF EXISTS `eval_templates`;
-CREATE TABLE `eval_templates` (
+CREATE TABLE IF NOT EXISTS `eval_templates` (
   `template_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) default NULL,
   `institution_id` varchar(32) default NULL,
@@ -475,7 +462,7 @@ CREATE TABLE `eval_templates` (
 -- 
 
 DROP TABLE IF EXISTS `eval_templates_eval`;
-CREATE TABLE `eval_templates_eval` (
+CREATE TABLE IF NOT EXISTS `eval_templates_eval` (
   `eval_id` varchar(32) NOT NULL default '',
   `template_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`eval_id`),
@@ -489,7 +476,7 @@ CREATE TABLE `eval_templates_eval` (
 -- 
 
 DROP TABLE IF EXISTS `eval_templates_user`;
-CREATE TABLE `eval_templates_user` (
+CREATE TABLE IF NOT EXISTS `eval_templates_user` (
   `eval_id` varchar(32) NOT NULL default '',
   `template_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
@@ -503,7 +490,7 @@ CREATE TABLE `eval_templates_user` (
 -- 
 
 DROP TABLE IF EXISTS `eval_user`;
-CREATE TABLE `eval_user` (
+CREATE TABLE IF NOT EXISTS `eval_user` (
   `eval_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`eval_id`,`user_id`)
@@ -516,7 +503,7 @@ CREATE TABLE `eval_user` (
 -- 
 
 DROP TABLE IF EXISTS `evalanswer`;
-CREATE TABLE `evalanswer` (
+CREATE TABLE IF NOT EXISTS `evalanswer` (
   `evalanswer_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
   `position` int(11) NOT NULL default '0',
@@ -536,7 +523,7 @@ CREATE TABLE `evalanswer` (
 -- 
 
 DROP TABLE IF EXISTS `evalanswer_user`;
-CREATE TABLE `evalanswer_user` (
+CREATE TABLE IF NOT EXISTS `evalanswer_user` (
   `evalanswer_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`evalanswer_id`,`user_id`)
@@ -549,13 +536,13 @@ CREATE TABLE `evalanswer_user` (
 -- 
 
 DROP TABLE IF EXISTS `evalgroup`;
-CREATE TABLE `evalgroup` (
+CREATE TABLE IF NOT EXISTS `evalgroup` (
   `evalgroup_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
   `title` varchar(255) NOT NULL default '',
   `text` text NOT NULL,
   `position` int(11) NOT NULL default '0',
-  `child_type` enum('EvaluationGroup','EvaluationQuestion','EvaluationText','EvaluationLink') NOT NULL default 'EvaluationGroup',
+  `child_type` enum('EvaluationGroup','EvaluationQuestion') NOT NULL default 'EvaluationGroup',
   `mandatory` tinyint(1) NOT NULL default '0',
   `template_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`evalgroup_id`),
@@ -569,7 +556,7 @@ CREATE TABLE `evalgroup` (
 -- 
 
 DROP TABLE IF EXISTS `evalquestion`;
-CREATE TABLE `evalquestion` (
+CREATE TABLE IF NOT EXISTS `evalquestion` (
   `evalquestion_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
   `type` enum('likertskala','multiplechoice','polskala') NOT NULL default 'multiplechoice',
@@ -587,7 +574,7 @@ CREATE TABLE `evalquestion` (
 -- 
 
 DROP TABLE IF EXISTS `extern_config`;
-CREATE TABLE `extern_config` (
+CREATE TABLE IF NOT EXISTS `extern_config` (
   `config_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   `config_type` int(4) NOT NULL default '0',
@@ -605,7 +592,7 @@ CREATE TABLE `extern_config` (
 -- 
 
 DROP TABLE IF EXISTS `folder`;
-CREATE TABLE `folder` (
+CREATE TABLE IF NOT EXISTS `folder` (
   `folder_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
@@ -627,7 +614,7 @@ CREATE TABLE `folder` (
 -- 
 
 DROP TABLE IF EXISTS `guestbook`;
-CREATE TABLE `guestbook` (
+CREATE TABLE IF NOT EXISTS `guestbook` (
   `post_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
@@ -645,7 +632,7 @@ CREATE TABLE `guestbook` (
 -- 
 
 DROP TABLE IF EXISTS `kategorien`;
-CREATE TABLE `kategorien` (
+CREATE TABLE IF NOT EXISTS `kategorien` (
   `kategorie_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
@@ -666,7 +653,7 @@ CREATE TABLE `kategorien` (
 -- 
 
 DROP TABLE IF EXISTS `lit_catalog`;
-CREATE TABLE `lit_catalog` (
+CREATE TABLE IF NOT EXISTS `lit_catalog` (
   `catalog_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `mkdate` int(11) NOT NULL default '0',
@@ -698,7 +685,7 @@ CREATE TABLE `lit_catalog` (
 -- 
 
 DROP TABLE IF EXISTS `lit_list`;
-CREATE TABLE `lit_list` (
+CREATE TABLE IF NOT EXISTS `lit_list` (
   `list_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
@@ -721,7 +708,7 @@ CREATE TABLE `lit_list` (
 -- 
 
 DROP TABLE IF EXISTS `lit_list_content`;
-CREATE TABLE `lit_list_content` (
+CREATE TABLE IF NOT EXISTS `lit_list_content` (
   `list_element_id` varchar(32) NOT NULL default '',
   `list_id` varchar(32) NOT NULL default '',
   `catalog_id` varchar(32) NOT NULL default '',
@@ -743,7 +730,7 @@ CREATE TABLE `lit_list_content` (
 -- 
 
 DROP TABLE IF EXISTS `log_actions`;
-CREATE TABLE `log_actions` (
+CREATE TABLE IF NOT EXISTS `log_actions` (
   `action_id` varchar(32) NOT NULL default '',
   `name` varchar(128) NOT NULL default '',
   `description` varchar(64) default NULL,
@@ -760,7 +747,7 @@ CREATE TABLE `log_actions` (
 -- 
 
 DROP TABLE IF EXISTS `log_events`;
-CREATE TABLE `log_events` (
+CREATE TABLE IF NOT EXISTS `log_events` (
   `event_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `action_id` varchar(32) NOT NULL default '',
@@ -779,7 +766,7 @@ CREATE TABLE `log_events` (
 -- 
 
 DROP TABLE IF EXISTS `message`;
-CREATE TABLE `message` (
+CREATE TABLE IF NOT EXISTS `message` (
   `message_id` varchar(32) NOT NULL default '',
   `chat_id` varchar(32) default NULL,
   `autor_id` varchar(32) NOT NULL default '',
@@ -799,7 +786,7 @@ CREATE TABLE `message` (
 -- 
 
 DROP TABLE IF EXISTS `message_user`;
-CREATE TABLE `message_user` (
+CREATE TABLE IF NOT EXISTS `message_user` (
   `user_id` char(32) NOT NULL default '',
   `message_id` char(32) NOT NULL default '',
   `readed` tinyint(1) NOT NULL default '0',
@@ -822,7 +809,7 @@ CREATE TABLE `message_user` (
 -- 
 
 DROP TABLE IF EXISTS `news`;
-CREATE TABLE `news` (
+CREATE TABLE IF NOT EXISTS `news` (
   `news_id` varchar(32) NOT NULL default '',
   `topic` varchar(255) NOT NULL default '',
   `body` text NOT NULL,
@@ -846,7 +833,7 @@ CREATE TABLE `news` (
 -- 
 
 DROP TABLE IF EXISTS `news_range`;
-CREATE TABLE `news_range` (
+CREATE TABLE IF NOT EXISTS `news_range` (
   `news_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`news_id`,`range_id`),
@@ -860,7 +847,7 @@ CREATE TABLE `news_range` (
 -- 
 
 DROP TABLE IF EXISTS `news_rss_range`;
-CREATE TABLE `news_rss_range` (
+CREATE TABLE IF NOT EXISTS `news_rss_range` (
   `range_id` char(32) NOT NULL default '',
   `rss_id` char(32) NOT NULL default '',
   `range_type` enum('user','sem','inst','global') NOT NULL default 'user',
@@ -875,7 +862,7 @@ CREATE TABLE `news_rss_range` (
 -- 
 
 DROP TABLE IF EXISTS `object_contentmodules`;
-CREATE TABLE `object_contentmodules` (
+CREATE TABLE IF NOT EXISTS `object_contentmodules` (
   `object_id` varchar(32) NOT NULL default '',
   `module_id` varchar(32) NOT NULL default '',
   `system_type` varchar(32) NOT NULL default '',
@@ -892,7 +879,7 @@ CREATE TABLE `object_contentmodules` (
 -- 
 
 DROP TABLE IF EXISTS `object_rate`;
-CREATE TABLE `object_rate` (
+CREATE TABLE IF NOT EXISTS `object_rate` (
   `object_id` varchar(32) NOT NULL default '',
   `rate` int(10) NOT NULL default '0',
   `mkdate` int(20) NOT NULL default '0',
@@ -907,7 +894,7 @@ CREATE TABLE `object_rate` (
 -- 
 
 DROP TABLE IF EXISTS `object_user`;
-CREATE TABLE `object_user` (
+CREATE TABLE IF NOT EXISTS `object_user` (
   `object_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `flag` varchar(32) NOT NULL default '',
@@ -922,7 +909,7 @@ CREATE TABLE `object_user` (
 -- 
 
 DROP TABLE IF EXISTS `object_user_visits`;
-CREATE TABLE `object_user_visits` (
+CREATE TABLE IF NOT EXISTS `object_user_visits` (
   `object_id` char(32) NOT NULL default '',
   `user_id` char(32) NOT NULL default '',
   `type` enum('vote','documents','forum','literature','schedule','scm','sem','wiki','news','eval','inst','ilias_connect','elearning_interface') NOT NULL default 'vote',
@@ -939,7 +926,7 @@ CREATE TABLE `object_user_visits` (
 -- 
 
 DROP TABLE IF EXISTS `object_views`;
-CREATE TABLE `object_views` (
+CREATE TABLE IF NOT EXISTS `object_views` (
   `object_id` varchar(32) NOT NULL default '',
   `views` int(20) NOT NULL default '0',
   `chdate` int(20) NOT NULL default '0',
@@ -954,7 +941,7 @@ CREATE TABLE `object_views` (
 -- 
 
 DROP TABLE IF EXISTS `plugins`;
-CREATE TABLE `plugins` (
+CREATE TABLE IF NOT EXISTS `plugins` (
   `pluginid` int(10) unsigned NOT NULL auto_increment,
   `pluginclassname` varchar(255) NOT NULL default '',
   `pluginpath` varchar(255) NOT NULL default '',
@@ -965,7 +952,7 @@ CREATE TABLE `plugins` (
   `navigationpos` int(10) unsigned NOT NULL default '4294967295',
   `dependentonid` int(10) unsigned default NULL,
   PRIMARY KEY  (`pluginid`)
-) TYPE=MyISAM AUTO_INCREMENT=4 ;
+) TYPE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -974,7 +961,7 @@ CREATE TABLE `plugins` (
 -- 
 
 DROP TABLE IF EXISTS `plugins_activated`;
-CREATE TABLE `plugins_activated` (
+CREATE TABLE IF NOT EXISTS `plugins_activated` (
   `pluginid` int(10) unsigned NOT NULL default '0',
   `poiid` varchar(255) NOT NULL default '',
   `state` enum('on','off') NOT NULL default 'on',
@@ -988,7 +975,7 @@ CREATE TABLE `plugins_activated` (
 -- 
 
 DROP TABLE IF EXISTS `plugins_default_activations`;
-CREATE TABLE `plugins_default_activations` (
+CREATE TABLE IF NOT EXISTS `plugins_default_activations` (
   `pluginid` int(10) unsigned NOT NULL default '0',
   `institutid` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`pluginid`,`institutid`)
@@ -1001,7 +988,7 @@ CREATE TABLE `plugins_default_activations` (
 -- 
 
 DROP TABLE IF EXISTS `px_topics`;
-CREATE TABLE `px_topics` (
+CREATE TABLE IF NOT EXISTS `px_topics` (
   `topic_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
   `root_id` varchar(32) NOT NULL default '',
@@ -1013,6 +1000,7 @@ CREATE TABLE `px_topics` (
   `author_host` varchar(255) default NULL,
   `Seminar_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
+  `read_only` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`topic_id`),
   KEY `root_id` (`root_id`),
   KEY `Seminar_id` (`Seminar_id`),
@@ -1029,7 +1017,7 @@ CREATE TABLE `px_topics` (
 -- 
 
 DROP TABLE IF EXISTS `range_tree`;
-CREATE TABLE `range_tree` (
+CREATE TABLE IF NOT EXISTS `range_tree` (
   `item_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
   `level` int(11) NOT NULL default '0',
@@ -1050,7 +1038,7 @@ CREATE TABLE `range_tree` (
 -- 
 
 DROP TABLE IF EXISTS `resources_assign`;
-CREATE TABLE `resources_assign` (
+CREATE TABLE IF NOT EXISTS `resources_assign` (
   `assign_id` varchar(32) NOT NULL default '',
   `resource_id` varchar(32) NOT NULL default '',
   `assign_user_id` varchar(32) default NULL,
@@ -1078,7 +1066,7 @@ CREATE TABLE `resources_assign` (
 -- 
 
 DROP TABLE IF EXISTS `resources_categories`;
-CREATE TABLE `resources_categories` (
+CREATE TABLE IF NOT EXISTS `resources_categories` (
   `category_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
   `description` text NOT NULL,
@@ -1096,7 +1084,7 @@ CREATE TABLE `resources_categories` (
 -- 
 
 DROP TABLE IF EXISTS `resources_categories_properties`;
-CREATE TABLE `resources_categories_properties` (
+CREATE TABLE IF NOT EXISTS `resources_categories_properties` (
   `category_id` varchar(32) NOT NULL default '',
   `property_id` varchar(32) NOT NULL default '',
   `requestable` tinyint(4) NOT NULL default '0',
@@ -1111,7 +1099,7 @@ CREATE TABLE `resources_categories_properties` (
 -- 
 
 DROP TABLE IF EXISTS `resources_locks`;
-CREATE TABLE `resources_locks` (
+CREATE TABLE IF NOT EXISTS `resources_locks` (
   `lock_id` varchar(32) NOT NULL default '',
   `lock_begin` int(20) unsigned default NULL,
   `lock_end` int(20) unsigned default NULL,
@@ -1126,7 +1114,7 @@ CREATE TABLE `resources_locks` (
 -- 
 
 DROP TABLE IF EXISTS `resources_objects`;
-CREATE TABLE `resources_objects` (
+CREATE TABLE IF NOT EXISTS `resources_objects` (
   `resource_id` varchar(32) NOT NULL default '',
   `root_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
@@ -1155,7 +1143,7 @@ CREATE TABLE `resources_objects` (
 -- 
 
 DROP TABLE IF EXISTS `resources_objects_properties`;
-CREATE TABLE `resources_objects_properties` (
+CREATE TABLE IF NOT EXISTS `resources_objects_properties` (
   `resource_id` varchar(32) NOT NULL default '',
   `property_id` varchar(32) NOT NULL default '',
   `state` text NOT NULL,
@@ -1170,7 +1158,7 @@ CREATE TABLE `resources_objects_properties` (
 -- 
 
 DROP TABLE IF EXISTS `resources_properties`;
-CREATE TABLE `resources_properties` (
+CREATE TABLE IF NOT EXISTS `resources_properties` (
   `property_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
   `description` text NOT NULL,
@@ -1187,7 +1175,7 @@ CREATE TABLE `resources_properties` (
 -- 
 
 DROP TABLE IF EXISTS `resources_requests`;
-CREATE TABLE `resources_requests` (
+CREATE TABLE IF NOT EXISTS `resources_requests` (
   `request_id` varchar(32) NOT NULL default '',
   `seminar_id` varchar(32) NOT NULL default '',
   `termin_id` varchar(32) NOT NULL default '',
@@ -1214,7 +1202,7 @@ CREATE TABLE `resources_requests` (
 -- 
 
 DROP TABLE IF EXISTS `resources_requests_properties`;
-CREATE TABLE `resources_requests_properties` (
+CREATE TABLE IF NOT EXISTS `resources_requests_properties` (
   `request_id` varchar(32) NOT NULL default '',
   `property_id` varchar(32) NOT NULL default '',
   `state` text,
@@ -1230,7 +1218,7 @@ CREATE TABLE `resources_requests_properties` (
 -- 
 
 DROP TABLE IF EXISTS `resources_temporary_events`;
-CREATE TABLE `resources_temporary_events` (
+CREATE TABLE IF NOT EXISTS `resources_temporary_events` (
   `event_id` varchar(32) NOT NULL default '',
   `resource_id` varchar(32) NOT NULL default '',
   `assign_id` varchar(32) NOT NULL default '',
@@ -1243,7 +1231,7 @@ CREATE TABLE `resources_temporary_events` (
   PRIMARY KEY  (`event_id`),
   KEY `resource_id` (`resource_id`),
   KEY `assign_object_id` (`assign_id`)
-) TYPE=HEAP;
+) TYPE=MEMORY;
 
 -- --------------------------------------------------------
 
@@ -1252,7 +1240,7 @@ CREATE TABLE `resources_temporary_events` (
 -- 
 
 DROP TABLE IF EXISTS `resources_user_resources`;
-CREATE TABLE `resources_user_resources` (
+CREATE TABLE IF NOT EXISTS `resources_user_resources` (
   `user_id` varchar(32) NOT NULL default '',
   `resource_id` varchar(32) NOT NULL default '',
   `perms` varchar(10) NOT NULL default '',
@@ -1266,12 +1254,12 @@ CREATE TABLE `resources_user_resources` (
 -- 
 
 DROP TABLE IF EXISTS `roles`;
-CREATE TABLE `roles` (
+CREATE TABLE IF NOT EXISTS `roles` (
   `roleid` int(10) unsigned NOT NULL auto_increment,
   `rolename` varchar(80) NOT NULL default '',
   `system` enum('y','n') NOT NULL default 'n',
   PRIMARY KEY  (`roleid`)
-) TYPE=MyISAM AUTO_INCREMENT=7 ;
+) TYPE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -1280,7 +1268,7 @@ CREATE TABLE `roles` (
 -- 
 
 DROP TABLE IF EXISTS `roles_plugins`;
-CREATE TABLE `roles_plugins` (
+CREATE TABLE IF NOT EXISTS `roles_plugins` (
   `roleid` int(10) unsigned NOT NULL default '0',
   `pluginid` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`roleid`,`pluginid`)
@@ -1293,7 +1281,7 @@ CREATE TABLE `roles_plugins` (
 -- 
 
 DROP TABLE IF EXISTS `roles_studipperms`;
-CREATE TABLE `roles_studipperms` (
+CREATE TABLE IF NOT EXISTS `roles_studipperms` (
   `roleid` int(10) unsigned NOT NULL default '0',
   `permname` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`roleid`,`permname`)
@@ -1306,7 +1294,7 @@ CREATE TABLE `roles_studipperms` (
 -- 
 
 DROP TABLE IF EXISTS `roles_user`;
-CREATE TABLE `roles_user` (
+CREATE TABLE IF NOT EXISTS `roles_user` (
   `roleid` int(10) unsigned NOT NULL default '0',
   `userid` char(32) NOT NULL default '',
   PRIMARY KEY  (`roleid`,`userid`)
@@ -1319,7 +1307,7 @@ CREATE TABLE `roles_user` (
 -- 
 
 DROP TABLE IF EXISTS `rss_feeds`;
-CREATE TABLE `rss_feeds` (
+CREATE TABLE IF NOT EXISTS `rss_feeds` (
   `feed_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
@@ -1340,7 +1328,7 @@ CREATE TABLE `rss_feeds` (
 -- 
 
 DROP TABLE IF EXISTS `scm`;
-CREATE TABLE `scm` (
+CREATE TABLE IF NOT EXISTS `scm` (
   `scm_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
@@ -1360,7 +1348,7 @@ CREATE TABLE `scm` (
 -- 
 
 DROP TABLE IF EXISTS `sem_tree`;
-CREATE TABLE `sem_tree` (
+CREATE TABLE IF NOT EXISTS `sem_tree` (
   `sem_tree_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
   `priority` tinyint(4) NOT NULL default '0',
@@ -1380,7 +1368,7 @@ CREATE TABLE `sem_tree` (
 -- 
 
 DROP TABLE IF EXISTS `semester_data`;
-CREATE TABLE `semester_data` (
+CREATE TABLE IF NOT EXISTS `semester_data` (
   `semester_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
   `description` text NOT NULL,
@@ -1399,7 +1387,7 @@ CREATE TABLE `semester_data` (
 -- 
 
 DROP TABLE IF EXISTS `semester_holiday`;
-CREATE TABLE `semester_holiday` (
+CREATE TABLE IF NOT EXISTS `semester_holiday` (
   `holiday_id` varchar(32) NOT NULL default '',
   `semester_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
@@ -1416,7 +1404,7 @@ CREATE TABLE `semester_holiday` (
 -- 
 
 DROP TABLE IF EXISTS `seminar_inst`;
-CREATE TABLE `seminar_inst` (
+CREATE TABLE IF NOT EXISTS `seminar_inst` (
   `seminar_id` varchar(32) NOT NULL default '',
   `institut_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`seminar_id`,`institut_id`),
@@ -1430,10 +1418,10 @@ CREATE TABLE `seminar_inst` (
 -- 
 
 DROP TABLE IF EXISTS `seminar_lernmodul`;
-CREATE TABLE `seminar_lernmodul` (
+CREATE TABLE IF NOT EXISTS `seminar_lernmodul` (
   `seminar_id` varchar(32) NOT NULL default '',
-  `co_inst` bigint(20) NOT NULL default '0',
-  `co_id` bigint(20) NOT NULL default '0',
+  `co_inst` int(11) unsigned NOT NULL default '0',
+  `co_id` int(11) unsigned NOT NULL default '0',
   `status` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`seminar_id`,`co_id`)
 ) TYPE=MyISAM;
@@ -1445,7 +1433,7 @@ CREATE TABLE `seminar_lernmodul` (
 -- 
 
 DROP TABLE IF EXISTS `seminar_sem_tree`;
-CREATE TABLE `seminar_sem_tree` (
+CREATE TABLE IF NOT EXISTS `seminar_sem_tree` (
   `seminar_id` varchar(32) NOT NULL default '',
   `sem_tree_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`seminar_id`,`sem_tree_id`),
@@ -1459,7 +1447,7 @@ CREATE TABLE `seminar_sem_tree` (
 -- 
 
 DROP TABLE IF EXISTS `seminar_user`;
-CREATE TABLE `seminar_user` (
+CREATE TABLE IF NOT EXISTS `seminar_user` (
   `Seminar_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `status` enum('user','autor','tutor','dozent') NOT NULL default 'user',
@@ -1481,9 +1469,9 @@ CREATE TABLE `seminar_user` (
 -- 
 
 DROP TABLE IF EXISTS `seminare`;
-CREATE TABLE `seminare` (
+CREATE TABLE IF NOT EXISTS `seminare` (
   `Seminar_id` varchar(32) NOT NULL default '0',
-  `VeranstaltungsNummer` varchar(32) default NULL,
+  `VeranstaltungsNummer` varchar(100) default NULL,
   `Institut_id` varchar(32) NOT NULL default '0',
   `Name` varchar(255) NOT NULL default '',
   `Untertitel` varchar(255) default NULL,
@@ -1531,10 +1519,10 @@ CREATE TABLE `seminare` (
 -- 
 
 DROP TABLE IF EXISTS `session_data`;
-CREATE TABLE `session_data` (
+CREATE TABLE IF NOT EXISTS `session_data` (
   `sid` varchar(32) NOT NULL default '',
   `val` mediumtext NOT NULL,
-  `changed` timestamp(14) NOT NULL,
+  `changed` timestamp NOT NULL,
   PRIMARY KEY  (`sid`),
   KEY `changed` (`changed`)
 ) TYPE=MyISAM;
@@ -1546,21 +1534,21 @@ CREATE TABLE `session_data` (
 -- 
 
 DROP TABLE IF EXISTS `smiley`;
-CREATE TABLE `smiley` (
-  `smiley_id` bigint(20) NOT NULL auto_increment,
+CREATE TABLE IF NOT EXISTS `smiley` (
+  `smiley_id` int(11) unsigned NOT NULL auto_increment,
   `smiley_name` varchar(50) NOT NULL default '',
   `smiley_width` int(11) NOT NULL default '0',
   `smiley_height` int(11) NOT NULL default '0',
   `short_name` varchar(50) NOT NULL default '',
-  `smiley_counter` bigint(20) NOT NULL default '0',
-  `short_counter` bigint(20) NOT NULL default '0',
-  `fav_counter` bigint(20) NOT NULL default '0',
+  `smiley_counter` int(11) unsigned NOT NULL default '0',
+  `short_counter` int(11) unsigned NOT NULL default '0',
+  `fav_counter` int(11) unsigned NOT NULL default '0',
   `mkdate` int(10) unsigned default NULL,
   `chdate` int(10) unsigned default NULL,
   PRIMARY KEY  (`smiley_id`),
   UNIQUE KEY `name` (`smiley_name`),
   KEY `short` (`short_name`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) TYPE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -1569,7 +1557,7 @@ CREATE TABLE `smiley` (
 -- 
 
 DROP TABLE IF EXISTS `statusgruppe_user`;
-CREATE TABLE `statusgruppe_user` (
+CREATE TABLE IF NOT EXISTS `statusgruppe_user` (
   `statusgruppe_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `position` int(11) NOT NULL default '0',
@@ -1584,7 +1572,7 @@ CREATE TABLE `statusgruppe_user` (
 -- 
 
 DROP TABLE IF EXISTS `statusgruppen`;
-CREATE TABLE `statusgruppen` (
+CREATE TABLE IF NOT EXISTS `statusgruppen` (
   `statusgruppe_id` varchar(32) NOT NULL default '',
   `name` varchar(255) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
@@ -1605,7 +1593,7 @@ CREATE TABLE `statusgruppen` (
 -- 
 
 DROP TABLE IF EXISTS `studiengaenge`;
-CREATE TABLE `studiengaenge` (
+CREATE TABLE IF NOT EXISTS `studiengaenge` (
   `studiengang_id` varchar(32) NOT NULL default '',
   `name` varchar(255) default NULL,
   `beschreibung` text,
@@ -1621,9 +1609,9 @@ CREATE TABLE `studiengaenge` (
 -- 
 
 DROP TABLE IF EXISTS `studip_ilias`;
-CREATE TABLE `studip_ilias` (
+CREATE TABLE IF NOT EXISTS `studip_ilias` (
   `studip_user_id` varchar(32) NOT NULL default '',
-  `ilias_user_id` bigint(20) NOT NULL default '0',
+  `ilias_user_id` int(11) unsigned NOT NULL default '0',
   `is_created` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`studip_user_id`,`ilias_user_id`),
   KEY `is_created` (`is_created`)
@@ -1636,7 +1624,7 @@ CREATE TABLE `studip_ilias` (
 -- 
 
 DROP TABLE IF EXISTS `support_contract`;
-CREATE TABLE `support_contract` (
+CREATE TABLE IF NOT EXISTS `support_contract` (
   `contract_id` varchar(32) NOT NULL default '',
   `institut_id` varchar(32) default NULL,
   `range_id` varchar(32) default NULL,
@@ -1656,7 +1644,7 @@ CREATE TABLE `support_contract` (
 -- 
 
 DROP TABLE IF EXISTS `support_event`;
-CREATE TABLE `support_event` (
+CREATE TABLE IF NOT EXISTS `support_event` (
   `event_id` varchar(32) NOT NULL default '',
   `request_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
@@ -1676,7 +1664,7 @@ CREATE TABLE `support_event` (
 -- 
 
 DROP TABLE IF EXISTS `support_request`;
-CREATE TABLE `support_request` (
+CREATE TABLE IF NOT EXISTS `support_request` (
   `request_id` varchar(32) NOT NULL default '',
   `contract_id` varchar(32) NOT NULL default '',
   `name` varchar(255) default NULL,
@@ -1697,7 +1685,7 @@ CREATE TABLE `support_request` (
 -- 
 
 DROP TABLE IF EXISTS `termine`;
-CREATE TABLE `termine` (
+CREATE TABLE IF NOT EXISTS `termine` (
   `termin_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   `autor_id` varchar(32) NOT NULL default '',
@@ -1722,7 +1710,7 @@ CREATE TABLE `termine` (
 -- 
 
 DROP TABLE IF EXISTS `user_config`;
-CREATE TABLE `user_config` (
+CREATE TABLE IF NOT EXISTS `user_config` (
   `userconfig_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) default NULL,
   `user_id` varchar(32) NOT NULL default '',
@@ -1742,10 +1730,10 @@ CREATE TABLE `user_config` (
 -- 
 
 DROP TABLE IF EXISTS `user_data`;
-CREATE TABLE `user_data` (
+CREATE TABLE IF NOT EXISTS `user_data` (
   `sid` varchar(32) NOT NULL default '',
   `val` mediumtext NOT NULL,
-  `changed` timestamp(14) NOT NULL,
+  `changed` timestamp NOT NULL,
   PRIMARY KEY  (`sid`),
   KEY `changed` (`changed`)
 ) TYPE=MyISAM;
@@ -1757,7 +1745,7 @@ CREATE TABLE `user_data` (
 -- 
 
 DROP TABLE IF EXISTS `user_info`;
-CREATE TABLE `user_info` (
+CREATE TABLE IF NOT EXISTS `user_info` (
   `user_id` varchar(32) NOT NULL default '',
   `hobby` varchar(255) NOT NULL default '',
   `lebenslauf` text,
@@ -1767,7 +1755,7 @@ CREATE TABLE `user_info` (
   `privatnr` varchar(32) NOT NULL default '',
   `privatcell` varchar(32) NOT NULL default '',
   `privadr` varchar(64) NOT NULL default '',
-  `score` bigint(20) NOT NULL default '0',
+  `score` int(11) unsigned NOT NULL default '0',
   `geschlecht` tinyint(4) NOT NULL default '0',
   `mkdate` int(20) NOT NULL default '0',
   `chdate` int(20) NOT NULL default '0',
@@ -1782,8 +1770,8 @@ CREATE TABLE `user_info` (
   `smiley_favorite_publish` tinyint(1) NOT NULL default '0',
   `motto` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`user_id`),
-  KEY `score` (`score`),
-  KEY `guestbook` (`guestbook`,`user_id`)
+  KEY `score` (`score`,`guestbook`),
+  KEY `guestbook` (`user_id`,`score`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
 -- --------------------------------------------------------
@@ -1793,7 +1781,7 @@ CREATE TABLE `user_info` (
 -- 
 
 DROP TABLE IF EXISTS `user_inst`;
-CREATE TABLE `user_inst` (
+CREATE TABLE IF NOT EXISTS `user_inst` (
   `user_id` varchar(32) NOT NULL default '0',
   `Institut_id` varchar(32) NOT NULL default '0',
   `inst_perms` enum('user','autor','tutor','dozent','admin') NOT NULL default 'user',
@@ -1816,7 +1804,7 @@ CREATE TABLE `user_inst` (
 -- 
 
 DROP TABLE IF EXISTS `user_studiengang`;
-CREATE TABLE `user_studiengang` (
+CREATE TABLE IF NOT EXISTS `user_studiengang` (
   `user_id` varchar(32) NOT NULL default '',
   `studiengang_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`user_id`,`studiengang_id`)
@@ -1829,7 +1817,7 @@ CREATE TABLE `user_studiengang` (
 -- 
 
 DROP TABLE IF EXISTS `vote`;
-CREATE TABLE `vote` (
+CREATE TABLE IF NOT EXISTS `vote` (
   `vote_id` varchar(32) NOT NULL default '',
   `author_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
@@ -1865,7 +1853,7 @@ CREATE TABLE `vote` (
 -- 
 
 DROP TABLE IF EXISTS `vote_user`;
-CREATE TABLE `vote_user` (
+CREATE TABLE IF NOT EXISTS `vote_user` (
   `vote_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `votedate` int(20) default NULL,
@@ -1880,7 +1868,7 @@ CREATE TABLE `vote_user` (
 -- 
 
 DROP TABLE IF EXISTS `voteanswers`;
-CREATE TABLE `voteanswers` (
+CREATE TABLE IF NOT EXISTS `voteanswers` (
   `answer_id` varchar(32) NOT NULL default '',
   `vote_id` varchar(32) NOT NULL default '',
   `answer` varchar(255) NOT NULL default '',
@@ -1899,7 +1887,7 @@ CREATE TABLE `voteanswers` (
 -- 
 
 DROP TABLE IF EXISTS `voteanswers_user`;
-CREATE TABLE `voteanswers_user` (
+CREATE TABLE IF NOT EXISTS `voteanswers_user` (
   `answer_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `votedate` int(20) default NULL,
@@ -1914,7 +1902,7 @@ CREATE TABLE `voteanswers_user` (
 -- 
 
 DROP TABLE IF EXISTS `wap_sessions`;
-CREATE TABLE `wap_sessions` (
+CREATE TABLE IF NOT EXISTS `wap_sessions` (
   `user_id` char(32) NOT NULL default '',
   `session_id` char(32) NOT NULL default '',
   `creation_time` datetime default NULL,
@@ -1928,7 +1916,7 @@ CREATE TABLE `wap_sessions` (
 -- 
 
 DROP TABLE IF EXISTS `wiki`;
-CREATE TABLE `wiki` (
+CREATE TABLE IF NOT EXISTS `wiki` (
   `range_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) default NULL,
   `keyword` varchar(128) binary NOT NULL default '',
@@ -1947,7 +1935,7 @@ CREATE TABLE `wiki` (
 -- 
 
 DROP TABLE IF EXISTS `wiki_links`;
-CREATE TABLE `wiki_links` (
+CREATE TABLE IF NOT EXISTS `wiki_links` (
   `range_id` char(32) NOT NULL default '',
   `from_keyword` char(128) binary NOT NULL default '',
   `to_keyword` char(128) binary NOT NULL default '',
@@ -1961,7 +1949,7 @@ CREATE TABLE `wiki_links` (
 -- 
 
 DROP TABLE IF EXISTS `wiki_locks`;
-CREATE TABLE `wiki_locks` (
+CREATE TABLE IF NOT EXISTS `wiki_locks` (
   `user_id` varchar(32) NOT NULL default '',
   `range_id` varchar(32) NOT NULL default '',
   `keyword` varchar(128) binary NOT NULL default '',
