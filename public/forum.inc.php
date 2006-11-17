@@ -1504,7 +1504,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	.", IFNULL(views,0) as viewcount, IFNULL(ROUND(AVG(rate),1),99) as rating "
 	.", ((6-(IFNULL(AVG(rate),3))-3)*5)+(IFNULL(views,0)/(((UNIX_TIMESTAMP()-t.mkdate)/604800)+1)) as score "
 	.", IF(object_user.object_id!='',1,0) as fav "
-	."FROM px_topics t LEFT JOIN px_topics s USING(root_id) "
+	."FROM px_topics t LEFT JOIN px_topics s ON(s.root_id=t.root_id AND s.chdate >= s.mkdate) "
 	."LEFT JOIN object_views ON(object_views.object_id=t.topic_id) LEFT JOIN object_rate ON(object_rate.object_id=t.topic_id) "
 	."LEFT OUTER JOIN object_user ON(object_user.object_id=t.root_id AND object_user.user_id='$user->id' AND flag='fav') "
 	."WHERE t.topic_id = t.root_id AND t.Seminar_id = '$SessionSeminar' AND (t.chdate>=t.mkdate OR t.user_id='$user->id' OR t.author='unbekannt') GROUP BY t.root_id  ORDER BY $order";
