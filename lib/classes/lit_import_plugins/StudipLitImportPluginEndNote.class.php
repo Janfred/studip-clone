@@ -21,6 +21,7 @@
 // +---------------------------------------------------------------------------+
 
 require_once ("lib/classes/lit_import_plugins/StudipLitImportPluginAbstract.class.php");
+if (version_compare(PHP_VERSION,'5','>=')) require_once('vendor/php4-to-php5/domxml-php4-to-php5.php');
 
 /**
 *
