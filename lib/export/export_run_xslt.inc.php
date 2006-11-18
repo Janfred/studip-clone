@@ -33,7 +33,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-if (version_compare(PHP_VERSION,'5','>=') && extension_loaded('xsl')) require_once('xslt-php4-to-php5.php');
+if (version_compare(PHP_VERSION,'5','>=') && extension_loaded('xsl')) require_once('vendor/php4-to-php5/xslt-php4-to-php5.php');
 
 if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 	$perm->check("tutor");
@@ -100,7 +100,7 @@ else
 	$result_file = md5(uniqid(rand())) . "." . $format;
 	$result = "" . $TMP_PATH . "/export/" . $result_file;
 	$xml_process_file = "" . $TMP_PATH . "/export/" . $xml_file_id;
-	$xslt_process_file = "" . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
+	$xslt_process_file = $GLOBALS['STUDIP_BASE_PATH'] . '/' . $PATH_EXPORT . "/" . $xslt_files[$choose]["file"];
 	if (xslt_process($xh, "file://$xml_process_file" , "file://$xslt_process_file", "file://$result") AND ($o_mode != "passthrough"))
 	{
 		$export_msg .= sprintf(_("Die Daten wurden erfolgreich konvertiert. %s Sie k&ouml;nnen die Ausgabedatei jetzt herunterladen. %s"), "<br>", "<br>");
