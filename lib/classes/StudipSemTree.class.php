@@ -107,9 +107,15 @@ class StudipSemTree extends TreeAbstract {
 	}
 	
 	function initEntries(){
-		$this->view->params[] = isset($this->sem_number) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . " IN(" . join(",",$this->sem_number) . "),b.seminar_id,NULL)"  : "b.seminar_id";
-		$this->view->params[] = $this->sem_status;
-		$this->view->params[] = $this->visible_only ? "visible=1" : "1";
+		//$this->view->params[0] = isset($this->sem_number) ? " IF(" . $GLOBALS['_views']['sem_number_sql'] . " IN(" . join(",",$this->sem_number) . "),b.seminar_id,NULL)"  : "b.seminar_id";
+		$this->view->params[0] = $this->sem_status;
+		$this->view->params[1] = $this->visible_only ? "visible=1" : "1";
+		$this->view->params[1] .= (isset($this->sem_number)) ? " AND (" . $GLOBALS['_views']['sem_number_sql'] 
+								. ") IN (" . join(",",$this->sem_number) .") OR ((" . $GLOBALS['_views']['sem_number_sql'] 
+								.") <= " . $this->sem_number[count($this->sem_number)-1] 
+								. "  AND ((" . $GLOBALS['_views']['sem_number_end_sql'] . ") > " . $this->sem_number[count($this->sem_number)-1] 
+								. " OR (" . $GLOBALS['_views']['sem_number_end_sql'] . ") = -1)) " : "";
+
 		$db = $this->view->get_query("view:SEM_TREE_GET_ENTRIES");
 		while ($db->next_record()){
 			$this->tree_data[$db->f("sem_tree_id")]['entries'] = $db->f('entries');

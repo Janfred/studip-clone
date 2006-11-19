@@ -41,7 +41,7 @@ class SemBrowse {
 			}
 		}
 		$this->search_obj = new StudipSemSearch("search_sem", false, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('root')));
-		$this->search_obj->search_fields['qs_choose']['content'] = array('title' => _("Titel"), 'lecturer' => _("DozentIn"), 'comment' => _("Kommentar"));
+		$this->search_obj->search_fields['qs_choose']['content'] = array('title' => _("Titel"), 'lecturer' => _("DozentIn"),'number' => _("Nummer"), 'comment' => _("Kommentar"));
 		$this->search_obj->search_fields['type']['class'] = $this->sem_browse_data['show_class'];
 
 		if (isset($_REQUEST[$this->search_obj->form_name . "_scope_choose"])){
@@ -67,9 +67,9 @@ class SemBrowse {
 			}
 		}
 
-		if ($this->sem_browse_data['cmd'] == "qs"){
+		/*if ($this->sem_browse_data['cmd'] == "qs"){
 			$this->sem_browse_data['default_sem'] = "all";
-		}
+		}*/
 
 		if($this->sem_browse_data["default_sem"] != 'all'){
 			$this->sem_number[0] = $this->sem_browse_data["default_sem"];
@@ -213,7 +213,7 @@ class SemBrowse {
 		//Quicksort Formular... fuer die eiligen oder die DAUs....
 		echo "<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=0 width = \"99%\">\n";
 		echo $this->search_obj->getFormStart("$PHP_SELF?send=yes");
-		echo "<tr><td height=\"40\" class=\"steel1\" align=\"center\" valign=\"middle\" ><font size=\"-1\">";
+		echo "<tr><td class=\"steel1\" align=\"center\" valign=\"middle\"><font size=\"-1\">";
 		echo _("Schnellsuche:") . "&nbsp;";
 		echo $this->search_obj->getSearchField("qs_choose",array('style' => 'vertical-align:middle;font-size:9pt;'));
 		if ($this->sem_browse_data['level'] == "vv"){
@@ -232,11 +232,13 @@ class SemBrowse {
 			echo "&nbsp;" . _("in:") . "&nbsp;" . $this->search_obj->getSearchField("range_choose",array('style' => 'vertical-align:middle;font-size:9pt;'),$this->range_tree->start_item_id);
 			echo "\n<input type=\"hidden\" name=\"level\" value=\"ev\">";
 		}
+		echo "&nbsp;" . _("Semester:") . "&nbsp;";
+		echo $this->search_obj->getSearchField("sem",array('style' => 'vertical-align:middle;font-size:9pt;'),$this->sem_browse_data['default_sem']);
+		echo "</font></td></tr><tr><td height=\"40\" class=\"steel1\" align=\"center\" valign=\"middle\"><font size=\"-1\">";
+		echo $this->search_obj->getSearchField("quick_search",array( 'style' => 'vertical-align:middle;font-size:9pt;','size' => 45));
 		echo "&nbsp;";
-
-		echo $this->search_obj->getSearchField("quick_search",array( 'style' => 'vertical-align:middle;font-size:9pt;','size' => 20));
 		echo $this->search_obj->getSearchButton(array('style' => 'vertical-align:middle'));
-		echo "</td></tr>";
+		echo "</font></td></tr>";
 		echo $this->search_obj->getFormEnd();
 		echo "</table>\n";
 	}
@@ -260,6 +262,10 @@ class SemBrowse {
 		echo "<td class=\"steel1\" align=\"left\" width=\"35%\">";
 		echo $this->search_obj->getSearchField("sem",array('style' => 'width:*;font-size:10pt;'),$this->sem_browse_data['default_sem']);
 		echo "</td></tr>";
+		echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">" . _("Nummer:") . " </td>";
+		echo "<td class=\"steel1\" align=\"left\" width=\"35%\">";
+		echo $this->search_obj->getSearchField("number");
+		echo "</td><td class=\"steel1\" align=\"right\" width=\"15%\">&nbsp;</td><td class=\"steel1\" align=\"left\" width=\"35%\">&nbsp; </td></tr>\n";
 		echo "<tr><td class=\"steel1\" align=\"right\" width=\"15%\">" . _("Kommentar:") . " </td>";
 		echo "<td class=\"steel1\" align=\"left\" width=\"35%\">";
 		echo $this->search_obj->getSearchField("comment");
@@ -359,7 +365,7 @@ function print_result(){
 				$add_query = "";
 			}
 					
-			$query = ("SELECT seminare.Seminar_id, seminare.status, IF(seminare.visible=0,CONCAT(seminare.Name, ' ". _("(versteckt)") ."'), seminare.Name) AS Name, seminare.metadata_dates,
+			$query = ("SELECT seminare.Seminar_id,VeranstaltungsNummer, seminare.status, IF(seminare.visible=0,CONCAT(seminare.Name, ' ". _("(versteckt)") ."'), seminare.Name) AS Name, seminare.metadata_dates,
 					 $add_fields" . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
 				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
 				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
@@ -488,6 +494,7 @@ function print_result(){
 				if (is_array($sem_ids['Seminar_id'])){
 					while(list($seminar_id,) = each($sem_ids['Seminar_id'])){
 						$sem_name = key($sem_data[$seminar_id]["Name"]);
+						$seminar_number = key($sem_data[$seminar_id]['VeranstaltungsNummer']);
 						$sem_number_start = key($sem_data[$seminar_id]["sem_number"]);
 						$sem_number_end = key($sem_data[$seminar_id]["sem_number_end"]);
 						if ($sem_number_start != $sem_number_end){
@@ -505,7 +512,9 @@ function print_result(){
 							$temp_turnus_string = htmlReady(substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71));
 							$temp_turnus_string .= "...&nbsp;<a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">(mehr) </a>";
 						}
-						echo "</font><font size=\"-2\">" . $temp_turnus_string . "</font></td>";
+						echo "</font>";
+						echo "<font style=\"margin-left:5px;\" size=\"-2\">" . htmlReady($seminar_number) . "</font><br>";
+						echo "<font style=\"margin-left:5px;\" size=\"-2\">" . $temp_turnus_string . "</font></td>";
 						echo "<td class=\"steel1\" align=\"right\"><font size=-1>(";
 						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
 						$doz_uname = array_keys($sem_data[$seminar_id]['username']);

@@ -38,8 +38,8 @@ $_views["SEM_TREE_GET_DATA_NO_ENTRIES"] = array("pk"=>"sem_tree_id","temp_table_
 							 FROM sem_tree a LEFT JOIN Institute c ON (a.studip_object_id = c.Institut_id)
 							ORDER BY priority");
 $_views["SEM_TREE_GET_ENTRIES"] = array("pk"=>"sem_tree_id","temp_table_type"=>"HEAP",
-							"query" => "SELECT st.sem_tree_id, count(§) AS entries 
-									FROM seminare b INNER JOIN seminar_sem_tree st ON(st.seminar_id = b.Seminar_id)
+							"query" => "SELECT st.sem_tree_id, count(b.Seminar_id) AS entries 
+								FROM seminare b INNER JOIN seminar_sem_tree st ON(st.seminar_id = b.Seminar_id)
 									WHERE b.status IN(&) AND §
 									GROUP BY st.sem_tree_id"); 
 $_views["SEM_TREE_GET_SEMIDS"] = array("pk"=>"seminar_id","temp_table_type"=>"HEAP",
