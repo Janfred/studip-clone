@@ -191,7 +191,7 @@ class LatexRender {
 	* @returns array containing the picture dimensions
 	*/
 	function getDimensions($filename) {
-		$output=exec($this->_identify_path.' -format"%wx%h" '.$filename);
+		$output=exec($this->_identify_path.' -format "%wx%h" '.$filename);
 		$dim=explode("x",$output);
 		$dim["x"] = $dim[0];
 		$dim["y"] = $dim[1];
