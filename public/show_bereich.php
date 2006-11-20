@@ -128,6 +128,14 @@ if (($EXPORT_ENABLE) AND ($show_bereich_data['level'] == "s") AND ($perm->have_p
 														"text" => export_link($SessSemName[1], "veranstaltung", $SessSemName[0])))
 					);
 }
+if (($EXPORT_ENABLE) AND ($show_bereich_data['level'] == "sbb") AND ($perm->have_perm("tutor")))
+{
+	include_once($PATH_EXPORT . "/export_linking_func.inc.php");
+	$infobox[] = 	array(	"kategorie" => _("Daten ausgeben:"),
+							"eintrag" => array(array(	"icon" => "blank.gif",
+														"text" => export_link($show_bereich_data["id"], "veranstaltung", $show_bereich_data["id"])))
+					);
+}
 print_infobox ($infobox,"browse.jpg");
 ?>
 </tr>

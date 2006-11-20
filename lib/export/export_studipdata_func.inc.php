@@ -146,6 +146,21 @@ function export_range($range_id)
 			export_inst($inst_ids);
 		}
 	}
+	
+	$db->query("SELECT sem_tree_id FROM sem_tree WHERE sem_tree_id = '$range_id' ");
+	if ($db->next_record()){
+		if (!$output_startet)  output_data(xml_header(), $o_mode);
+		$output_startet = true;
+		$the_tree =& TreeAbstract::GetInstance('StudipSemTree');
+		$sem_ids = $the_tree->getSemIds($range_id, true);
+		if(is_array($sem_ids)){
+			$db2->query("SELECT DISTINCT Institut_id FROM seminare WHERE Seminar_id IN('".join("','", $sem_ids)."')");
+			while($db2->next_record()){
+				export_inst($db2->f('Institut_id'), $sem_ids);
+			}
+		}
+	}
+	
 	if ($ex_person_details && is_array($persons)){
 		export_persons(array_keys($persons));
 	}
@@ -262,8 +277,10 @@ function export_sem($inst_id, $ex_sem_id = "all")
 	if (isset($all_semester[ $ex_sem]["beginn"] ) )
 		$addquery = " AND seminare.start_time <=".$all_semester[$ex_sem]["beginn"]." AND (".$all_semester[$ex_sem]["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
 
-	if ($ex_sem_id != "all")
-		$addquery .= " AND seminare.Seminar_id = '" . $ex_sem_id . "' ";
+	if ($ex_sem_id != "all"){
+		if (!is_array($ex_sem_id)) $ex_sem_id = array($ex_sem_id);
+		$addquery .= " AND seminare.Seminar_id IN('" . join("','", $ex_sem_id) . "') AND seminare.Institut_id='$inst_id' ";
+	}
 	
 	if (!$GLOBALS['perm']->have_perm('root')) $addquery .= " AND visible=1 ";
 	
