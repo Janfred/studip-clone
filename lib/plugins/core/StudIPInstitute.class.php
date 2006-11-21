@@ -1,6 +1,9 @@
 <?php
 
-define("UNKNOWN_ID",-1);
+/**
+ * id unknown
+ */
+define("UNKNOWN_ID", -1);
 
 /**
 * @author Dennis Reil, <Dennis.Reil@offis.de>

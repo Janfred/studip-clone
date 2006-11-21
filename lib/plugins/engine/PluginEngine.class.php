@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * plugin type unknown
+ */
 define("UNKNOWN_PLUGINTYPE", "undefined");
 
 /**

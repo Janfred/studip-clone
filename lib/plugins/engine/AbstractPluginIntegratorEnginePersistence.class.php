@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * plugin id unknown
+ */
 define("UNKNOWN_PLUGIN_ID",-1);
 
 /**

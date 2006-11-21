@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * poiid of administrators
+ */
 define("PLUGIN_ADMINISTRATION_POIID","admin");
 
 /**

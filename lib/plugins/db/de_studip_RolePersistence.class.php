@@ -1,5 +1,8 @@
 <?
 
+/**
+ * role id unknown
+ */
 define("UNKNOWN_ROLE_ID",-1);
 
 /**
