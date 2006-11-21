@@ -86,12 +86,11 @@ class StudipSemSearch {
 	var $visible_only = false;
 	
 	function StudipSemSearch($form_name = "search_sem", $auto_search = true, $visible_only = false){
-		global $_REQUEST;
 		$this->view = new DbView();
 		$this->form_name = $form_name;
 		$this->sem_dates = SemesterData::GetSemesterArray();
 		$this->visible_only = $visible_only;
-		if(isset($_REQUEST[$form_name . "_do_search_x"]) || isset($_REQUEST[$form_name . "_send"])){
+		if(isset($_REQUEST[$form_name . "_do_search_x"]) || isset($_REQUEST[$form_name . "_send"]) && !isset($_REQUEST[$form_name . "_sem_change_x"])){
 			$this->search_button_clicked = true;
 			if ($auto_search){
 				$this->doSearch();
@@ -109,7 +108,6 @@ class StudipSemSearch {
 	}
 	
 	function getSearchField($name,$attributes = false,$default = false){
-		global $_REQUEST;
 		if (!$attributes){
 			$attributes = $this->attributes_default;
 		}
@@ -246,7 +244,7 @@ class StudipSemSearch {
 		if (!$tooltip){
 			$tooltip = _("anderes Semester auswählen");
 		}
-		$ret = "\n<input type=\"image\" name=\"{$this->form_name}_sem_change\" " . makeButton("uebernehmen","src") . tooltip($tooltip);
+		$ret = "\n<input type=\"image\" name=\"{$this->form_name}_sem_change\" " . makeButton("auswaehlen","src") . tooltip($tooltip);
 		if ($attributes){
 			foreach($attributes as $key => $value){
 				$ret .= " $key=\"$value\"";
@@ -257,7 +255,6 @@ class StudipSemSearch {
 	}
 		
 	function doSearch(){
-		global $_REQUEST;
 		$clause = "";
 		$and_clause = "";
 		$this->search_result = new DbSnapshot();

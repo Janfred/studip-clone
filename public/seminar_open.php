@@ -110,7 +110,7 @@ function check_calendar_default(){
 }
 
 function check_semester_default(){
-	if ($GLOBALS['perm']->have_perm('dozent')){
+	if ($GLOBALS['perm']->have_perm('user')){
 		$GLOBALS['sess']->register("_default_sem");
 		$semester =& SemesterData::GetInstance();
 		$cfg =& Config::GetInstance();

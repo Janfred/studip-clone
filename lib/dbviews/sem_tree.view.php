@@ -41,7 +41,7 @@ $_views["SEM_TREE_GET_ENTRIES"] = array("pk"=>"sem_tree_id","temp_table_type"=>"
 							"query" => "SELECT st.sem_tree_id, count(b.Seminar_id) AS entries 
 								FROM seminare b INNER JOIN seminar_sem_tree st ON(st.seminar_id = b.Seminar_id)
 									WHERE b.status IN(&) AND §
-									GROUP BY st.sem_tree_id"); 
+									GROUP BY st.sem_tree_id ORDER BY NULL"); 
 $_views["SEM_TREE_GET_SEMIDS"] = array("pk"=>"seminar_id","temp_table_type"=>"HEAP",
 							"query" => "SELECT  b.seminar_id, " . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminar_sem_tree b INNER JOIN seminare c ON(b.seminar_id=c.Seminar_id AND c.status IN(&) AND §) WHERE sem_tree_id IN(&) §");
 $_views["SEM_TREE_GET_SEMDATA"] = array("query" => "SELECT a.seminar_id,IF(b.visible=0,CONCAT(Name, ' "._("(versteckt)")."'), Name) AS Name,username AS doz_uname, Nachname AS doz_name, " . $_views['sem_number_sql'] . " AS sem_number , " . $_views['sem_number_end_sql'] . " AS sem_number_end

@@ -91,6 +91,10 @@ class SemBrowse {
 				$this->sem_browse_data['show_entries'] = "level";
 				$this->sem_browse_data['sset'] = false;
 			}
+			if ($this->search_obj->sem_change_button_clicked){
+				$this->get_sem_range($this->sem_browse_data["start_item_id"], ($this->sem_browse_data['show_entries'] == 'sublevels'));
+				$this->show_result = true;
+			}
 		}
 
 		if ($this->sem_browse_data['level'] == "ev"){
@@ -104,6 +108,10 @@ class SemBrowse {
 				$this->show_result = true;
 				$this->sem_browse_data['show_entries'] = "level";
 				$this->sem_browse_data['sset'] = false;
+			}
+			if ($this->search_obj->sem_change_button_clicked){
+				$this->get_sem_range_tree($this->sem_browse_data["start_item_id"], ($this->sem_browse_data['show_entries'] == 'sublevels'));
+				$this->show_result = true;
 			}
 		}
 
@@ -211,7 +219,7 @@ class SemBrowse {
 	function print_qs(){
 		global $PHP_SELF;
 		//Quicksort Formular... fuer die eiligen oder die DAUs....
-		echo "<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=0 width = \"99%\">\n";
+		echo "<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 		echo $this->search_obj->getFormStart("$PHP_SELF?send=yes");
 		echo "<tr><td class=\"steel1\" align=\"center\" valign=\"middle\"><font size=\"-1\">";
 		echo _("Schnellsuche:") . "&nbsp;";
@@ -234,7 +242,9 @@ class SemBrowse {
 		}
 		echo "&nbsp;" . _("Semester:") . "&nbsp;";
 		echo $this->search_obj->getSearchField("sem",array('style' => 'vertical-align:middle;font-size:9pt;'),$this->sem_browse_data['default_sem']);
-		echo "</font></td></tr><tr><td height=\"40\" class=\"steel1\" align=\"center\" valign=\"middle\"><font size=\"-1\">";
+		echo "&nbsp;";
+		echo $this->search_obj->getSemChangeButton(array('style' => 'vertical-align:middle'));
+		echo "</font></td></tr><tr><td class=\"steel1\" align=\"center\" valign=\"middle\"><font size=\"-1\">";
 		echo $this->search_obj->getSearchField("quick_search",array( 'style' => 'vertical-align:middle;font-size:9pt;','size' => 45));
 		echo "&nbsp;";
 		echo $this->search_obj->getSearchButton(array('style' => 'vertical-align:middle'));

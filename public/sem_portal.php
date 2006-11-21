@@ -136,7 +136,13 @@ if ($sem_portal["bereich"] != "all") {
 
 include ("links_seminare.inc.php");   	//hier wird die Navigation nachgeladen
 
-$init_data = array("level" => "f","cmd"=>"qs","show_class"=>$sem_portal['bereich'],"group_by"=>0,"default_sem"=>"all","sem_status"=>$_sem_status);
+$init_data = array(	"level" => "f",
+					"cmd"=>"qs",
+					"show_class"=>$sem_portal['bereich'],
+					"group_by"=>0,
+					"default_sem"=> ( ($default_sem = SemesterData::GetSemesterIndexById($GLOBALS['_default_sem'])) !== false ? $default_sem : "all"),
+					"sem_status"=>$_sem_status);
+					
 if ($reset_all) $sem_browse_data = null;
 $sem_browse_obj = new SemBrowse($init_data);
 $sem_browse_data['show_class'] = $sem_portal["bereich"];

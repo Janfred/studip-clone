@@ -63,6 +63,17 @@ class SemesterData {
 		return $all_semester;
 	}
 	
+	function GetSemesterIndexById($semester_id){
+		$index = false;
+		foreach(SemesterData::GetSemesterArray() as $i => $sem){
+			if($sem['semester_id'] == $semester_id) {
+				$index = $i;
+				break;
+			}
+		}
+		return $index;
+	}
+	
 	function GetSemesterSelector($select_attributes = null, $default = 0, $option_value = 'semester_id', $include_all = true){
 		$semester = SemesterData::GetSemesterArray();
 		unset($semester[0]);
