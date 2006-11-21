@@ -1,6 +1,6 @@
 <?php
 
-// require_once('adodb/adodb.inc.php');
+// require_once('vendor/adodb/adodb.inc.php');
 
 class AbstractPluginPersistence {
 
@@ -9,9 +9,9 @@ class AbstractPluginPersistence {
     function AbstractPluginPersistence($type, $host, $user, $password, $database){
     	$this->connection = &ADONewConnection($type);
     	// Verbindung zur Datenbank herstellen.
-    	$this->connection->Connect($host,$user,$password,$database);  
+    	$this->connection->Connect($host,$user,$password,$database);
     }
-    
+
     function getConnection(){
     	return $this->connection;
     }

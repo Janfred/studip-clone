@@ -3,8 +3,8 @@
 
 if ($PLUGINS_ENABLE){
 	// AdoDB-Database Interface
-	require_once("adodb/adodb.inc.php");
-	
+	require_once("vendor/adodb/adodb.inc.php");
+
 	// the plugin interface classes
 	require_once("core/StudIPInstitute.class.php");
 	require_once("core/AbstractStudIPPluginVisualization.class.php");
@@ -35,7 +35,7 @@ if ($PLUGINS_ENABLE){
 	require_once("engine/PluginEngine.class.php");
 	require_once("core/de_studip_Role.class.php");
 	require_once("db/de_studip_RolePersistence.class.php");
-	
+
 	// create a plugin environment
 	$plugindbenv = new DBEnvironment();
 	$plugindbenv->setDbtype("mysql");
@@ -50,10 +50,10 @@ if ($PLUGINS_ENABLE){
 	else {
 		// set the default
 		$plugindbenv->setPackagebasepath("plugins_packages");
-	}	
+	}
 	$plugindbenv->setRelativepackagepath("plugins_packages");
 	$plugindbenv->setTmppath($GLOBALS["TMP_PATH"]);
-	
+
 	$GLOBALS["ADODB_CACHE_DIR"] = $GLOBALS["TMP_PATH"];
 }
 
