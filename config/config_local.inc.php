@@ -15,10 +15,10 @@ please note: Stud.IP uses the class DB_Seminar,
 DB_Ilias is used to connect to an Ilias Database*/
 
 // default Stud.IP database (DB_Seminar)
-$DB_STUDIP_HOST = "staffa.virtuos.uos.de";
-$DB_STUDIP_USER = "root";
-$DB_STUDIP_PASSWORD = ',1341"pw';
-$DB_STUDIP_DATABASE = "mlunzena_studip_14_goe";
+$DB_STUDIP_HOST = "localhost";
+$DB_STUDIP_USER = "";
+$DB_STUDIP_PASSWORD = "";
+$DB_STUDIP_DATABASE = "studip";
 @include "dbpass.inc";
 //additional class for Ilias connection (DB_Ilias)
 $DB_ILIAS_HOST = "localhost";
