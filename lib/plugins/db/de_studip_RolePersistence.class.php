@@ -1,19 +1,22 @@
 <?
-/**
- * Funktionen für das Rollemanagement
- * @author Dennis Reil, <Dennis.Reil@offis.de>
- */
 
 define("UNKNOWN_ROLE_ID",-1);
+
+/**
+ * Funktionen für das Rollenmanagement
+ * @author Dennis Reil <dennis.reil@offis.de>
+ * @package pluginengine
+ * @subpackage db
+ */
 
 class de_studip_RolePersistence {
 
 	function de_studip_RolePersistence(){
-		
+
 	}
 
 	function getAllRoles(){
-		$conn =& PluginEngine::getPluginDatabaseConnection();		
+		$conn =& PluginEngine::getPluginDatabaseConnection();
 
 		if ($GLOBALS["PLUGINS_CACHING"]){
 			$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],"select * from roles order by rolename");
@@ -34,33 +37,33 @@ class de_studip_RolePersistence {
 		}
 		return $roles;
 	}
-	
+
 	/**
 	 * Inserts the role into the database or does an update, if it's already there
 	 *
 	 * @param de_studip_Role $role
 	 * @return the role id
 	 */
-	function saveRole($role){		
+	function saveRole($role){
 		$conn =& PluginEngine::getPluginDatabaseConnection();
 		if ($role->getRoleid() == UNKNOWN_ROLE_ID){
-			// role is not in database			
+			// role is not in database
 			$result = $conn->execute("insert into roles (roleid,rolename) values (0,?)", array($role->getRolename()));
 			$result =& $conn->execute("select last_insert_id() as roleid from roles");
 			$roleid = $result->fields("roleid");
 			$conn->CacheFlush();
 		}
 		else {
-			// role is already in database			
+			// role is already in database
 			$result = $conn->execute("update roles set rolename=? where roleid=?",array($role->getRolename(),$role->getRoleid()));
 			$roleid = $role->getRoleid();
 			$conn->CacheFlush();
-		}		
+		}
 		return $roleid;
 	}
-	
+
 	/**
-	 * Delete role if not a permanent role. System roles cannot be deleted. 
+	 * Delete role if not a permanent role. System roles cannot be deleted.
 	 *
 	 * @param unknown_type $role
 	 */
@@ -72,7 +75,7 @@ class de_studip_RolePersistence {
 			$conn->execute("delete from roles_plugins where roleid=?",array($role->getRoleid()));
 			$conn->execute("delete from roles_studipperms where roleid=?",array($role->getRoleid()));
 		}
-		$conn->CacheFlush();				
+		$conn->CacheFlush();
 	}
 
 	/**
@@ -84,63 +87,63 @@ class de_studip_RolePersistence {
 	function assignRole($user,$role){
 		$conn =& PluginEngine::getPluginDatabaseConnection();
 		if ($role->getRoleid() <> UNKNOWN_ROLE_ID){
-			// role is not in database		
+			// role is not in database
 			// save it to the database first
 			$roleid = $this->saveRole($role);
 		}
 		else {
 			$roleid = $role->getRoleid();
-		}		
-		$conn =& PluginEngine::getPluginDatabaseConnection();		
-		$conn->execute("replace into roles_user (roleid,userid) values (?,?)",array($roleid,$user->getUserid()));		
+		}
+		$conn =& PluginEngine::getPluginDatabaseConnection();
+		$conn->execute("replace into roles_user (roleid,userid) values (?,?)",array($roleid,$user->getUserid()));
 		$conn->CacheFlush();
 	}
-	
+
 	function getAssignedRoles($userid,$implicit=false){
 		$conn =& PluginEngine::getPluginDatabaseConnection();
 		$roles = $this->getAllRoles();
 		if ($implicit){
 			$sqlstr = "SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?";
 			if ($GLOBALS["PLUGINS_CACHING"]){
-				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($userid,$userid));	
+				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($userid,$userid));
 			}
-			else {	
-				$result = $conn->execute($sqlstr,array($userid,$userid));		
+			else {
+				$result = $conn->execute($sqlstr,array($userid,$userid));
 			}
 		}
 		else {
 			$sqlstr = "SELECT r.roleid FROM roles_user r where r.userid=?";
 			if ($GLOBALS["PLUGINS_CACHING"]){
-				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($userid));		
+				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($userid));
 			}
 			else {
-				$result = $conn->execute($sqlstr,array($userid));		
+				$result = $conn->execute($sqlstr,array($userid));
 			}
 		}
 		$assignedroles=array();
 		if (!$result == null){
-			while (!$result->EOF){				
+			while (!$result->EOF){
 				$assignedroles[] = $roles[$result->fields("roleid")];
 				$result->moveNext();
 			}
-			$result->Close();		
+			$result->Close();
 
-		}		
-		return $assignedroles;		
+		}
+		return $assignedroles;
 	}
-	
+
 	/**
 	 * Deletes a role assignment from the database
 	 *
 	 * @param StudIPUser[] $users
 	 * @param de_studip_Role $role
 	 */
-	function deleteRoleAssignment($user,$role){		
+	function deleteRoleAssignment($user,$role){
 		$conn =& PluginEngine::getPluginDatabaseConnection();
 		$conn->execute("delete from roles_user where roleid=? and userid=?",array($role->getRoleid(),$user->getUserid()));
 		$conn->CacheFlush();
 	}
-	
+
 	/**
 	 * Get's all Role-Assignments for a certain user.
 	 * If no user is set, all role assignments are returned.
@@ -162,16 +165,16 @@ class de_studip_RolePersistence {
 		else {
 			$sqlstr = "select * from roles_user where userid=?";
 			if ($GLOBALS["PLUGINS_CACHING"]){
-				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($user->getUserid()));			
+				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($user->getUserid()));
 			}
 			else {
-				$result = $conn->execute($sqlstr,array($user->getUserid()));			
+				$result = $conn->execute($sqlstr,array($user->getUserid()));
 			}
 		}
-		
+
 		$roles_user = array();
 		if (!$result == null){
-			while (!$result->EOF){				
+			while (!$result->EOF){
 				$roles_user[$result->fields("roleid")] = $result->fields("userid");
 				$result->moveNext();
 			}
@@ -179,25 +182,25 @@ class de_studip_RolePersistence {
 		}
 		return $roles_user;
 	}
-	
+
 	function assignPluginRoles($pluginid,$roleids){
 		$conn =& PluginEngine::getPluginDatabaseConnection();
 		foreach ($roleids as $roleid){
-			$conn->Execute("replace into roles_plugins (roleid,pluginid) values (?,?)",array($roleid,$pluginid));							
+			$conn->Execute("replace into roles_plugins (roleid,pluginid) values (?,?)",array($roleid,$pluginid));
 		}
 		$conn->CacheFlush();
 	}
-	
+
 	function deleteAssignedPluginRoles($pluginid,$roleids){
 		$conn =& PluginEngine::getPluginDatabaseConnection();
 		foreach ($roleids as $roleid){
-			$conn->Execute("delete from roles_plugins where roleid=? and pluginid=?",array($roleid,$pluginid));							
+			$conn->Execute("delete from roles_plugins where roleid=? and pluginid=?",array($roleid,$pluginid));
 		}
 		$conn->CacheFlush();
 	}
-	
-	function getAssignedPluginRoles($pluginid=-1){		
-		$roles = $this->getAllRoles();		
+
+	function getAssignedPluginRoles($pluginid=-1){
+		$roles = $this->getAllRoles();
 		$conn =& PluginEngine::getPluginDatabaseConnection();
 		$sqlstr = "select * from roles_plugins where pluginid=?";
 		if ($GLOBALS["PLUGINS_CACHING"]){
@@ -207,11 +210,11 @@ class de_studip_RolePersistence {
 			$result = $conn->execute($sqlstr,array($pluginid));
 		}
 		$assignedroles = array();
-		if (!$result == null){			
-			while (!$result->EOF){						
+		if (!$result == null){
+			while (!$result->EOF){
 				$role = $roles[$result->fields("roleid")];
 				if (!empty($role)){
-					$assignedroles[] = $role;				
+					$assignedroles[] = $role;
 				}
 				$result->moveNext();
 			}
@@ -219,10 +222,10 @@ class de_studip_RolePersistence {
 		}
 		return $assignedroles;
 	}
-	
+
 	function getAllGroupRoleAssignments(){
-		$roles = $this->getAllRoles();		
-		$studipperms = $GLOBALS["perm"]->permissions;	
+		$roles = $this->getAllRoles();
+		$studipperms = $GLOBALS["perm"]->permissions;
 		$conn =& PluginEngine::getPluginDatabaseConnection();
 		$sqlstr = "select * from roles_studipperms";
 		if ($GLOBALS["PLUGINS_CACHING"]){
@@ -232,8 +235,8 @@ class de_studip_RolePersistence {
 			$result = $conn->execute($sqlstr);
 		}
 		$assignedrolesperms = array();
-		if (!$result == null){			
-			while (!$result->EOF){				
+		if (!$result == null){
+			while (!$result->EOF){
 				$assignedrolesperm["role"] = $roles[$result->fields("roleid")];
 				$assignedrolesperm[$result->fields("permname")] = $studipperms[$result->fields("permname")];
 				$assignedrolesperms[] = $assignedrolesperm;
@@ -244,4 +247,3 @@ class de_studip_RolePersistence {
 		return $assignedrolesperms;
 	}
 }
-?>

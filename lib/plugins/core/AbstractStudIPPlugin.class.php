@@ -1,14 +1,17 @@
 <?php
+
 /**
  * Abstract class for a plugin in Stud.IP.
- * Don't use this as a base class for creating your own plugin. Look at 
- * AbstractStudIPStandardPlugin, AbstractStudIPSystemPlugin or AbstractStudIPAdministrationPlugin 
+ * Don't use this as a base class for creating your own plugin. Look at
+ * AbstractStudIPStandardPlugin, AbstractStudIPSystemPlugin or AbstractStudIPAdministrationPlugin
  * for creating a plugin.
- * 
+ *
  * @author Dennis Reil, <Dennis.Reil@offis.de>
  * @version $Revision$
- * @see AbstractStudIPStandardPlugin, AbstractStudIPSystemPlugin, AbstractStudIPAdministrationPlugin 
+ * @see AbstractStudIPStandardPlugin, AbstractStudIPSystemPlugin, AbstractStudIPAdministrationPlugin
  * $Id$
+ * @package pluginengine
+ * @subpackage core
  */
 
 class AbstractStudIPPlugin {
@@ -16,13 +19,13 @@ class AbstractStudIPPlugin {
 	var $pluginid;
 	var $pluginpath;
 	var $basepluginpath; // the pluginpath without the plugins_directory
-	
-	
+
+
 	var $pluginadmininfo;
 	var $pluginiconname;
 	var $user;
 	var $helpinfo;
-	
+
 	var $navigation;
 	var $activated;
 	var $environment;
@@ -30,7 +33,7 @@ class AbstractStudIPPlugin {
 	var $navposition; // the position in the navigation menü
 	var $dependentonplugin; // this plugin depends on another plugin
 
-	
+
 	/**
 	  Constructor
 	*/
@@ -50,51 +53,51 @@ class AbstractStudIPPlugin {
 		$this->navposition = 99999; // a high value to put it at the end of the list
 		$this->dependentonplugin = false;
 	}
-	
+
 	function getPluginclassname(){
 		return strtolower(get_class($this));
-	}	
-	
+	}
+
 	/**
 	 * This function is called by the plugin engine directly before uninstallation.
 	 * Normally a plugin would drop all tables created and used by the plugin.
 	 *
 	 */
-	function prepareUninstallation(){		
+	function prepareUninstallation(){
 		$manifest = PluginEngine::getPluginManifest($this->environment->getBasepath() . "/" . $this->getPluginpath());
 		if (is_array($manifest)){
 			if (isset($manifest["uninstalldbscheme"])) {
-				$schemafile = $this->getPluginpath() . "/" . $manifest["uninstalldbscheme"];				
-				$conn = PluginEngine::getPluginDatabaseConnection();				
+				$schemafile = $this->getPluginpath() . "/" . $manifest["uninstalldbscheme"];
+				$conn = PluginEngine::getPluginDatabaseConnection();
 				$fp = fopen($schemafile,"r");
 				$sqlstatement = "";
 		 		while (!feof($fp)){
-		 			$line = trim(fgets($fp));			 			
+		 			$line = trim(fgets($fp));
 		 			if (strpos($line,"--") === 0){
 		 				// commentary skip entry
 		 				continue;
 		 			}
 		 			else {
-		 				// add it to the 
-		 				$sqlstatement .= $line; 	 				
+		 				// add it to the
+		 				$sqlstatement .= $line;
 		 				if (strpos($sqlstatement,";") === (strlen($sqlstatement)-1)){
 		 					// we reached the end of the statement
 		 					// execute it
-		 					$conn->execute($sqlstatement);					 					
+		 					$conn->execute($sqlstatement);
 		 					$sqlstatement="";
 		 				}
-		 			} 			
+		 			}
 		 		}
-		 		fclose($fp);		
+		 		fclose($fp);
 			}
 		}
 	}
-	
+
 	/**
-	* Shows a page describing the plugin's functionality, dependence on other plugins, ... 
+	* Shows a page describing the plugin's functionality, dependence on other plugins, ...
 	*/
-	function showDescriptionalPage(){	
-		
+	function showDescriptionalPage(){
+
 		if (is_object($this->user)){
 		   $permission = $this->user->getPermission();
 		   if (!$permission->hasAdminPermission()){
@@ -105,7 +108,7 @@ class AbstractStudIPPlugin {
 	   $version = $plugininfos["version"];
 	   $vendor = $plugininfos["origin"];
 	   $origname = $plugininfos["pluginname"];
-	   StudIPTemplateEngine::makeContentHeadline(_("Plugin-Details"),2);	   
+	   StudIPTemplateEngine::makeContentHeadline(_("Plugin-Details"),2);
 		?>
 				<tr>
 					<td>Name:</td>
@@ -130,13 +133,13 @@ class AbstractStudIPPlugin {
 				<tr>
 					<td colspan="2" align="center"><a href="<?= PluginEngine::getLinkToAdministrationPlugin()?>"><?= makeButton("zurueck","img",_("zurück zur Plugin-Verwaltung"))?></a></td>
 				</tr>
-		<?php		
+		<?php
 	}
-	
+
 	function showAdministrationPage(){
 		echo (_("Eine Administrationsseite ist für dieses Plugin nicht vorhanden"));
 	}
-	
+
 	/**
 	 * set the current user
 	 *
@@ -147,7 +150,7 @@ class AbstractStudIPPlugin {
 			$this->user = $newuser;
 		}
 	}
-	
+
 	/**
 	 * Returns the current user
 	 *
@@ -156,7 +159,7 @@ class AbstractStudIPPlugin {
 	function getUser(){
 		return $this->user;
 	}
-	
+
 	/**
 	 * Sets the state of the plugin.
 	 *
@@ -164,17 +167,17 @@ class AbstractStudIPPlugin {
 	 * @param boolean $requestedbyuser - true if the user requested to change the status
 	 */
 	function setActivated($value=false,$requestedbyuser=false){
-		$this->activated = $value;		
+		$this->activated = $value;
 	}
-	
+
 	function setEnabled($value=false){
 		$this->enabled = $value;
 	}
-	
+
 	function isEnabled(){
 		return $this->enabled;
 	}
-	
+
 	/**
 	 * Diese Methode überprüft, ob alle Voraussetzungen für den Einsatz dieses
 	 * Plugins erfüllt sind.
@@ -186,14 +189,14 @@ class AbstractStudIPPlugin {
 	function checkVersion($studipversion){
 		return false;
 	}
-	
+
 	/**
 	 * Liefert die Administrationsinformationen zu diesem Plugin zurück
 	 */
 	function getPluginAdminInfo(){
 		return $this->pluginadmininfo;
 	}
-	
+
 	/**
 	 * setzt neue Administrationsinformationen zu diesem Plugin
 	 * @param AdminInfo
@@ -206,86 +209,86 @@ class AbstractStudIPPlugin {
 			echo "Incompatible Paramter type";
 		}
 	}
-	
+
 	/**
 	 * Aktiviert das Plugin
-	 * @return  true - Erfolg 			
+	 * @return  true - Erfolg
 	 * 			false	 - kein Erfolg
 	 */
 	function activatePlugin(){
 		$this->activated = true;
 		return false;
 	}
-	
+
 	/**
 	 * Dektiviert das Plugin
-	 * @return  true - Erfolg 			
+	 * @return  true - Erfolg
 	 * 			false	 - kein Erfolg
 	 */
 	function deactivatePlugin(){
 		$this->activated = false;
 		return false;
 	}
-	
+
 	/**
 	 * Liefert den relativen Namen des Icons dieses Plugins zurück
 	 * @return den relativen Namen des Icons
 	 */
-	function getPluginiconname(){		
+	function getPluginiconname(){
 		return $this->getPluginpath() . "/" . $this->pluginiconname;
 	}
-	
+
 	/**
 	 * Liefert die Persistenzschnittstelle zu diesem Plugin zurück.
 	 * @return die Persisitenzschnittstelle vom Typ AbstractPluginPersistence
 	 */
-	
+
 	/**
 	 * Getter und Setter für die Attribute der Klasse
 	 */
 	function setPluginiconname($newicon){
 		$this->pluginiconname = $newicon;
 	}
-	
+
 	function getPluginname(){
 		if ($this->pluginname == ""){
 			$this->pluginname = strtolower(get_class($this));
 		}
 		return $this->pluginname;
 	}
-	
+
 	function setPluginname($newname){
 		$this->pluginname = $newname;
 	}
-	
+
 	function setPluginid($newid){
 		$this->pluginid = $newid;
 	}
-	
+
 	function getPluginid(){
 		return $this->pluginid;
 	}
-	
+
 	function getHelpinfo(){
 		return $this->helpinfo;
 	}
-	
+
 	function setHelpInfo($newhelpinfo){
 		if (is_a($newhelpinfo,'HelpInfo') || is_subclass_of($newhelpinfo,'HelpInfo')){
 			$this->helpinfo = $newhelpinfo;
 		}
 	}
-	
+
 	function getNavigation(){
 		return $this->navigation;
 	}
-	
+
 	function setNavigation($newnavigation){
 		if (is_a($newnavigation,'PluginNavigation') || is_subclass_of($newnavigation,'PluginNavigation')){
 		    $this->navigation = $newnavigation;
 		}
 	}
-	
+
 	function hasNavigation(){
 		if ($this->navigation != null){
 		   return true;
@@ -294,47 +297,47 @@ class AbstractStudIPPlugin {
 		   return false;
 		}
 	}
-	
+
 	function isActivated(){
 		return $this->activated;
 	}
-	
-	
+
+
 	function setEnvironment($newenv){
 		$this->environment = $newenv;
 		$this->setPluginPath($newenv->getRelativepackagepath());
 	}
-	
-	function getEnvironment(){		
+
+	function getEnvironment(){
 		return $this->environment;
 	}
-	
+
 	function setPluginpath($newpath){
 		$this->pluginpath = $newpath;
 	}
-	
+
 	function getPluginpath(){
 		return $this->pluginpath;
 	}
-	
+
 	function setBasepluginpath($newpath){
 		$this->basepluginpath = $newpath;
 	}
-	
+
 	function getBasepluginpath(){
 		return $this->basepluginpath;
 	}
-	
+
 	/**
 	* @param $subnavigationparam - set if a subnavigation item was clicked. The value is plugin dependant and specified by the plugins subnavigation link params.
 	*/
 	function show($subnavigationparam=null){
 	}
-	
+
 	function getNavigationPosition(){
 		return $this->navposition;
 	}
-		
+
 	function setNavigationPosition($newpos){
 		$this->navposition = $newpos;
 	}
@@ -343,7 +346,7 @@ class AbstractStudIPPlugin {
 	 * Which text should be shown in certain titles
 	 * @return string title
 	 */
-	function getDisplaytitle(){	
+	function getDisplaytitle(){
 		if ($this->hasNavigation()){
 			return $this->navigation->getDisplayname();
 		}
@@ -351,7 +354,7 @@ class AbstractStudIPPlugin {
 			return $this->getPluginname();
 		}
 	}
-	
+
 	/**
 	 * Sets, if the plugin is main oder dependent on other plugins
 	 * @param boolean $dependentplugin
@@ -361,7 +364,7 @@ class AbstractStudIPPlugin {
 			$this->dependentonplugin = $dependentplugin;
 		}
 	}
-	
+
 	/**
 	 * returns true, if this plugin depends on another plugin
 	 *
@@ -370,5 +373,5 @@ class AbstractStudIPPlugin {
 		return $this->dependentonplugin;
 	}
 }
- 
+
 ?>

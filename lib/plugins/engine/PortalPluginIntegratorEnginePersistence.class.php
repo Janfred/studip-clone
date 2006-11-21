@@ -1,17 +1,19 @@
 <?php
+
 /**
- * @author Dennis Reil <dennis.reil@offis.de>
- * @version $Revision$ 
+ * @author Dennis Reil, <dennis.reil@offis.de>
+ * @version $Revision$
  * $Id$
  * @package pluginengine
+ * @subpackage engine
  */
 
 class PortalPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEnginePersistence {
-    
+
     function PortalPluginIntegratorEnginePersistence(){
     	parent::AbstractPluginIntegratorEnginePersistence();
     }
-    
+
     /**
      * Liefert alle in der Datenbank bekannten Plugins zurück
      */
@@ -20,7 +22,7 @@ class PortalPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
     	$plugins = parent::executePluginQuery("where plugintype='Portal'");
     	return $plugins;
     }
-    
+
     /**
      * Returns all activated system plugins
      * @return all activated system plugins
@@ -29,8 +31,8 @@ class PortalPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
     	// return all activated system plugins
     	$plugins = parent::executePluginQuery("where plugintype='Portal' and enabled='yes'");
     	return $plugins;
-    }     
-    
+    }
+
     /**
      * Returns all deactivated system plugins
      * @return all deactivated plugins
@@ -40,8 +42,8 @@ class PortalPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
     	$plugins = parent::executePluginQuery("where plugintype='Portal' and enabled='no'");
     	return $plugins;
     }
-   
-    
+
+
     function getPlugin($id){
     	$result = &$this->connection->execute("Select p.* from plugins p where p.pluginid=? and p.plugintype='Portal'",array($id));
     	if (!$result){
@@ -57,11 +59,11 @@ class PortalPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
             	if ($plugin != null){
 	            	$plugin->setPluginid($result->fields("pluginid"));
 	            	$plugin->setPluginname($result->fields("pluginname"));
-	            	$plugin->setUser($this->getUser());	
+	            	$plugin->setUser($this->getUser());
             	}
-        	}    
+        	}
         	$result->Close();
-        	return $plugin; 
+        	return $plugin;
     	}
     }
 }

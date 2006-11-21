@@ -1,10 +1,16 @@
 <?php
+
+require_once("lib/classes/TreeAbstract.class.php");
+
 /**
  * Starting point for creating "normal" course or institute plugins.
  * @author Dennis Reil <dennis.reil@offis.de>
  * @version $Revision$
+ * $Id$
+ * @package pluginengine
+ * @subpackage core
  */
-require_once("lib/classes/TreeAbstract.class.php");
+
 class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
 
 	var $changeindicatoriconname; 	// relativer Name des Icons f¸r ƒnderungen an diesem Plugin
@@ -13,7 +19,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
 	*/
 	var $id; 						// Id, der dieses Plugin zugeordnet ist (bspw. Veranstaltung oder Institution)
 	var $overview; 					// wird dieses Plugin in der ‹bersicht (z.B. meine_seminare) angezeigt
-	
+
 	/**
 	 */
     function AbstractStudIPStandardPlugin() {
@@ -28,11 +34,11 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     	$admininfo = new AdminInfo();
     	$this->setPluginAdminInfo($admininfo);
     }
-    
+
     function setId($newid){
 	    $this->id=$newid;
     }
-    
+
     function getId(){
     	if ($this->id == UNKNOWN_ID){
     		$this->id = $GLOBALS['SessSemName'][1];
@@ -42,9 +48,9 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     	}
 	    return $this->id;
     }
-    
+
     /**
-     * Hat sich seit dem letzten Login etwas ge‰ndert? 
+     * Hat sich seit dem letzten Login etwas ge‰ndert?
      * @param lastlogin - letzter Loginzeitpunkt des Benutzers
      */
     function hasChanged($lastlogin){
@@ -54,18 +60,18 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
      * Nachricht f¸r tooltip in der ‹bersicht
      * @param lastlogin - letzter Loginzeitpunkt des Benutzers
      */
-    
+
 	function getOverviewMessage($has_changed = false){
 		return $this->getPluginname() . ($has_changed ? ' ' . _("ge‰ndert") : '');
 	}
-	
+
     /**
      * Wird dieses Plugin in der ‹bersicht angezeigt?
      */
     function isShownInOverview(){
     	return $this->overview;
     }
-    
+
     /**
      * Liefert die ƒnderungsmeldungen f¸r die ¸bergebenen ids zur¸ck
      * @param lastlogin - letzter Loginzeitpunkt des Benutzers
@@ -76,34 +82,34 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     function getChangeMessages($lastlogin, $ids){
     	return array();
     }
-    
+
     /**
      * Getter- und Setter f¸r die Attribute
      */
-    
-    
+
+
     function getChangeindicatoriconname(){
     	return $this->getPluginpath() . "/" . $this->changeindicatoriconname;
     }
-    
+
     function setChangeindicatoriconname($newicon){
     	// TODO: Icon testen
     	$this->changeindicatoriconname = $newicon;
     }
-    
+
     function setShownInOverview($value=true){
     	$this->overview = $value;
     }
-    
-    
+
+
     /**
     * Shows the standard configuration.
     */
-    function showConfigurationPage(){    
+    function showConfigurationPage(){
     	$user = $this->getUser();
     	$permission = $user->getPermission();
-    	
-    	if (!$permission->hasAdminPermission()){    		
+
+    	if (!$permission->hasAdminPermission()){
     		StudIPTemplateEngine::showErrorMessage(_("Sie besitzen keine Berechtigung, um dieses Plugin zu konfigurieren."));
 		}
 		else {
@@ -128,7 +134,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
 						}
 						else {
 							StudIPTemplateEngine::showSuccessMessage(_("F¸r das ausgew‰hlte Institut wurde das Plugin standardm‰ﬂig aktiviert!"));
-						}	
+						}
 					}
 					else {
 						StudIPTemplateEngine::showErrorMessage(_("Das Abspeichern der Default-Einstellungen ist fehlgeschlagen"));
@@ -139,21 +145,21 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
 				// load old config
 				$sel_institutes = $this->pluginengine->getDefaultActivations($this);
 			}
-			
+
 			?>
 			<tr>
 				<td>
 					<?
-					echo _("W‰hlen Sie die Einrichtungen, in deren Veranstaltungen das Plugin automatisch aktiviert sein soll.<p>"); 
+					echo _("W‰hlen Sie die Einrichtungen, in deren Veranstaltungen das Plugin automatisch aktiviert sein soll.<p>");
 					$institutes = StudIPCore::getInstitutes();
 					?>
 					<form action="<?= PluginEngine::getLink($this,array("selected" => true),"showConfigurationPage") ?>" method="POST">
 					<select name="sel_institutes[]" multiple size="20">
 					<?
-					
+
 					foreach ($institutes as $institute) {
 						// if id is in selected institutes, the mark it as selected
-					
+
 						if (array_search($institute->getId(),$sel_institutes) !== false){
 							$selected = "selected";
 						}
@@ -172,24 +178,24 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
 							echo(sprintf("<option value=\"%s\" %s>&nbsp;&nbsp;&nbsp;&nbsp; %s </option>",$child->getId(),$selected, $child->getName()));
 						}
 					}
-					
+
 					?>
 					</select><br>
 					<input type="checkbox" name="nodefault"><?= _("keine Voreinstellung w‰hlen") ?>
 					<p>
-					
+
 					<?= makeButton("uebernehmen","input",_("Einstellungen speichern")) ?>
 					<a href="<?= PluginEngine::getLinkToAdministrationPlugin() ?>"><?= makeButton("zurueck","img",_("Zur¸ck zur Plugin-Verwaltung")) ?></a>
 					</form>
 				</td>
 			</tr>
-			
+
 			<?php
-			
+
 			StudIPTemplateEngine::createInfoBoxTableCell();
-			$infobox = array	(	
+			$infobox = array	(
 						array  ("kategorie"  => _("Hinweise:"),
-								"eintrag" => array	(	
+								"eintrag" => array	(
 									array (	"icon" => "pictures/ausruf_small.gif",
 													"text"  => _("W‰hlen Sie die Institute, in deren Veranstaltungen das Plugin standardm‰ﬂig eingeschaltet werden soll.")
 									),
@@ -200,10 +206,10 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
 						)
 				);
 			print_infobox ($infobox);
-			StudIPTemplateEngine::endInfoBoxTableCell();			
+			StudIPTemplateEngine::endInfoBoxTableCell();
 		}
     }
-    
+
     /**
      * returns the score which the current user get's for activities in this plugin
      *

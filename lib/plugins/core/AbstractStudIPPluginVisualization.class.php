@@ -1,14 +1,18 @@
 <?php
+
 /**
  * abstract class for the visualization of plugins
- * @author Dennis Reil <Dennis.Reil@offis.de>
+ * @author Dennis Reil <dennis.reil@offis.de>
  * @version $Revision$
  * $Id$
+ * @package pluginengine
+ * @subpackage core
  */
+
 class AbstractStudIPPluginVisualization {
 	// reference to plugin
-	var $pluginref;	
-	
+	var $pluginref;
+
 	function AbstractStudIPPluginVisualization($plugin){
 		$this->pluginref = $plugin;
 	}

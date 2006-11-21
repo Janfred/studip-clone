@@ -1,14 +1,17 @@
 <?php
-/**
-* @author Dennis Reil <Dennis.Reil@offis.de>
-* @version $Revision$
-* @package pluginengine
-*/
 
 require_once("msg.inc.php");
 
+/**
+ * @author Dennis Reil, <dennis.reil@offis.de>
+ * @version $Revision$
+ * $Id$
+ * @package pluginengine
+ * @subpackage engine
+ */
+
 class StudIPTemplateEngine {
-	
+
 	function makeHeadline($title,$full_width=true,$img=""){
 		if (!$full_width) {
 			echo "\n<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
@@ -23,9 +26,9 @@ class StudIPTemplateEngine {
 			print("\n<tr><td class=\"topic\" width=\"99%%\">&nbsp;<b>&nbsp;&nbsp;");
 		}
 		printf($title);
-		printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;&nbsp;</td></tr>");		
+		printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;&nbsp;</td></tr>");
 	}
-	
+
 	function startContentTable($full_width=true){
 		if (!$full_width){
 			echo ("<tr><td colspan=\"2\"><table border=\"0\" width=\"70%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
@@ -47,17 +50,17 @@ class StudIPTemplateEngine {
 					<td>
 		<?php
 	}
-	
+
 	function createInfoBoxTableCell(){
-		?>			
+		?>
 					</td>
 				</tr>
 				</table>
 		  	 </td>
 			<td align="right" valign="top" width="270" class="blank">
-		<?php	
+		<?php
 	}
-	
+
 	function endInfoBoxTableCell(){
 		?>
 			</td>
@@ -72,7 +75,7 @@ class StudIPTemplateEngine {
 					<td>
 		<?php
 	}
-	
+
 	function endContentTable(){
 		?>
 					</td>
@@ -90,27 +93,27 @@ class StudIPTemplateEngine {
 		</tr>
 		<?php
 	}
-	
+
 	function makeContentHeadline($title,$colspan=2){
 		echo(sprintf("<table width=\"100%%\" cellpadding=0 cellspacing=0><tr><th align=\"left\">&nbsp;%s</th></tr></table>",$title));
 	}
-	
+
 	function showErrorMessage($text,$colspan=2){
 		my_error($text,"blank",$colspan);
 	}
-	
+
 	function showSuccessMessage($text,$colspan=2){
 		my_msg($text,"blank",$colspan);
 	}
-	
+
 	function showInfoMessage($text,$colspan=2){
 		my_info($text,"blank",$colspan);
 	}
-	
+
 	function showQuestionMessage($text,$colspan=2,$newrow=true){
 		$colspan = $colspan -1;
 		?>
-		
+
 		<tr>
 			<td valign="top"><img src="<?=$GLOBALS['ASSETS_URL']?>images/ausruf.gif"></td>
 			<td valign="top" colspan=<?= $colspan?>>
@@ -122,7 +125,7 @@ class StudIPTemplateEngine {
 		<tr>
 			<td colspan="<?=$colspan?>" height="5">&nbsp;</td>
 		</tr>
-		<?php		
+		<?php
 	}
 }
 ?>

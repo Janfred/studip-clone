@@ -1,6 +1,12 @@
 <?php
 
-// require_once('vendor/adodb/adodb.inc.php');
+/**
+ * @author Dennis Reil, <dennis.reil@offis.de>
+ * @version $Revision$
+ * $Id$
+ * @package pluginengine
+ * @subpackage core
+ */
 
 class AbstractPluginPersistence {
 

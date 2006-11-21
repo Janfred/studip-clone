@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Dennis Reil, <dennis.reil@offis.de>
+ * @version $Revision$
+ * $Id$
+ * @package pluginengine
+ */
 
 if ($PLUGINS_ENABLE){
 	// AdoDB-Database Interface

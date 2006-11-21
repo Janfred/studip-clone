@@ -1,14 +1,17 @@
 <?php
-/**
-* Factory Class for the plugin engine
-* @author Dennis Reil, <dennis.reil@offis.de>
-* @version $Revision$
-* @package pluginengine
-* $Id$
-*/
-define("UNKNOWN_PLUGINTYPE","undefined");
 
-class PluginEngine{
+define("UNKNOWN_PLUGINTYPE", "undefined");
+
+/**
+ * Factory Class for the plugin engine
+ * @author Dennis Reil, <dennis.reil@offis.de>
+ * @version $Revision$
+ * $Id$
+ * @package pluginengine
+ * @subpackage engine
+ */
+
+class PluginEngine {
 
 	/**
 	* Returns the plugin persistence object for the required plugin type.

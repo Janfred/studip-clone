@@ -1,17 +1,19 @@
 <?php
+
 /**
- * @author Dennis Reil <dennis.reil@offis.de>
- * @version $Revision$ 
+ * @author Dennis Reil, <dennis.reil@offis.de>
+ * @version $Revision$
  * $Id$
  * @package pluginengine
+ * @subpackage engine
  */
 
 class HomepagePluginIntegratorEnginePersistence extends AbstractPluginIntegratorEnginePersistence {
-    
+
     function HomepagePluginIntegratorEnginePersistence(){
     	parent::AbstractPluginIntegratorEnginePersistence();
     }
-    
+
     /**
      * Liefert alle in der Datenbank bekannten Plugins zurück
      */
@@ -20,7 +22,7 @@ class HomepagePluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     	$plugins = parent::executePluginQuery("where plugintype='Homepage'");
     	return $plugins;
     }
-    
+
     /**
      * Returns all activated system plugins
      * @return all activated system plugins
@@ -30,7 +32,7 @@ class HomepagePluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     	$plugins = parent::executePluginQuery("where plugintype='Homepage' and enabled='yes'");
     	return $plugins;
     }
-    
+
     /**
      * Returns all deactivated system plugins
      * @return all deactivated plugins
@@ -40,8 +42,8 @@ class HomepagePluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     	$plugins = parent::executePluginQuery("where plugintype='Homepage' and enabled='no'");
     	return $plugins;
     }
-   
-    
+
+
     function getPlugin($id){
     	$user = $this->getUser();
     	$userid = $user->getUserid();
@@ -59,11 +61,11 @@ class HomepagePluginIntegratorEnginePersistence extends AbstractPluginIntegrator
             	if ($plugin != null){
 	            	$plugin->setPluginid($result->fields("pluginid"));
 	            	$plugin->setPluginname($result->fields("pluginname"));
-	            	$plugin->setUser($this->getUser());	
+	            	$plugin->setUser($this->getUser());
             	}
-        	}    
+        	}
         	$result->Close();
-        	return $plugin; 
+        	return $plugin;
     	}
     }
 }

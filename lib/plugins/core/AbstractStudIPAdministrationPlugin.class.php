@@ -1,26 +1,28 @@
 <?php
+
 /**
  * Ausgangspunkt für Administrationsplugins, also Plugins, die speziell im
- * Adminstrator- / Root-Bereich angezeigt werden. 
+ * Adminstrator- / Root-Bereich angezeigt werden.
  * @author Dennis Reil <dennis.reil@offis.de>
+ * @package pluginengine
+ * @subpackage core
  */
-// require_once('AbstractStudIPPlugin.class.php');
 
 class AbstractStudIPAdministrationPlugin extends AbstractStudIPPlugin{
 
 	var $topnavigation;
-	
+
 	function AbstractStudIPAdministrationPlugin(){
 		// Konstruktor der Basisklasse aufrufen
     	AbstractStudIPPlugin::AbstractStudIPPlugin();
     	$this->topnavigation = null;
     	$this->pluginengine = PluginEngine::getPluginPersistence("Administration");
-	}	
-    
+	}
+
     /**
      * Verfügt dieses Plugin über einen Eintrag auf der Startseite des
      * Administrators
-     * @return  true 	- Hauptmenü vorhanden 						
+     * @return  true 	- Hauptmenü vorhanden
      * 			false	- kein Hauptmenü vorhanden
      */
     function hasTopNavigation(){
@@ -31,7 +33,7 @@ class AbstractStudIPAdministrationPlugin extends AbstractStudIPPlugin{
     		return false;
     	}
     }
-    
+
     /**
      * Liefert den Menüeintrag zurück
      * @return das Menü, oder null, wenn kein Menü vorhanden ist
@@ -39,7 +41,7 @@ class AbstractStudIPAdministrationPlugin extends AbstractStudIPPlugin{
     function getTopNavigation(){
     	return $this->topnavigation;
     }
-    
+
     /**
      * Setzt das Hauptmenü des Plugins
      */

@@ -1,13 +1,17 @@
 <?php
+
 /**
  * @author Dennis Reil, <dennis.reil@offis.de>
- * @version 1.0
- *
+ * @version $Revision$
+ * $Id$
+ * @package pluginengine
+ * @subpackage core
  */
-class AbstractStudIPCorePlugin extends AbstractStudIPPlugin {		
-	
+
+class AbstractStudIPCorePlugin extends AbstractStudIPPlugin {
+
 	function AbstractStudIPCorePlugin(){
-		parent::AbstractStudIPPlugin();		
-	}	
+		parent::AbstractStudIPPlugin();
+	}
 }
 ?>
