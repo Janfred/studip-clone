@@ -35,7 +35,7 @@
 
 
 require_once ("messaging.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("language.inc.php");
 require_once ("dates.inc.php");
 //set handling for script execution

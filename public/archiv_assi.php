@@ -22,7 +22,7 @@
 require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
 require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
 require_once("archiv.inc.php");
-require_once("functions.php");
+require_once 'lib/functions.php';
 require_once("config_tools_semester.inc.php");
 require_once("visual.inc.php");
 require_once("statusgruppe.inc.php"); //Enthaelt Funktionen fuer Statusgruppen

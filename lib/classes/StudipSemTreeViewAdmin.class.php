@@ -22,7 +22,7 @@
 // +---------------------------------------------------------------------------+
 require_once("lib/classes/StudipSemTree.class.php");
 require_once("lib/classes/TreeView.class.php");
-require_once("functions.php");
+require_once 'lib/functions.php';
 require_once("config.inc.php");
 
 

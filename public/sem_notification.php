@@ -63,7 +63,7 @@ if ($_REQUEST['view'] != 'notification') {
 }
 
 // -- here you have to put initialisations for the current page
-require_once("functions.php");
+require_once 'lib/functions.php';
 require_once("visual.inc.php");
 require_once("cssClassSwitcher.inc.php");
 require_once("meine_seminare_func.inc.php");

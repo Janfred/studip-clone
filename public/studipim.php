@@ -29,7 +29,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 	require_once ("seminar_open.php");
 	require_once ("visual.inc.php");
-	require_once ("functions.php");
+	require_once 'lib/functions.php';
 	require_once ("config.inc.php");
 	require_once ("messaging.inc.php");
 	require_once ("sms_functions.inc.php");

@@ -88,7 +88,7 @@ include ("links_admin.inc.php");	//hier wird das Reiter- und Suchsystem des Admi
 
 require_once("msg.inc.php");	//Ausgaben
 require_once("config.inc.php");	//Settings....
-require_once("functions.php");	//basale Funktionen
+require_once 'lib/functions.php';	//basale Funktionen
 require_once("visual.inc.php");	//Darstellungsfunktionen
 require_once("messaging.inc.php");	//Nachrichtenfunktionen
 require_once("admission.inc.php");	//load functions from admission system

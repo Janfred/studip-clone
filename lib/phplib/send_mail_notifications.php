@@ -32,7 +32,7 @@
 // +---------------------------------------------------------------------------+
 require_once "prepend4.php"; //for use with old style phplib change this to prepend.php!!!
 require_once "language.inc.php";
-require_once "functions.php";
+require_once 'lib/functions.php';
 require_once "lib/classes/ModulesNotification.class.php";
 
 

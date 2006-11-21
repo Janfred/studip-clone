@@ -23,7 +23,7 @@
 require_once("lib/classes/TreeAbstract.class.php");
 require_once("lib/classes/Modules.class.php");
 require_once("lib/dbviews/core.view.php");
-require_once("functions.php");
+require_once 'lib/functions.php';
 
 
 /**

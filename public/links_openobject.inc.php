@@ -39,7 +39,7 @@ if (isset($SessSemName) && $SessSemName[0] != "") {
 
 require_once ("visual.inc.php");
 require_once ("reiter.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("lib/classes/Modules.class.php");
 
 $db=new DB_Seminar;

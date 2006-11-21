@@ -23,7 +23,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once("functions.php");
+require_once 'lib/functions.php';
 require_once("visual.inc.php");
 require_once ("meine_seminare_func.inc.php");
 

@@ -33,7 +33,7 @@ require_once('kategorien.inc.php');
 require_once('msg.inc.php');
 require_once('messaging.inc.php');
 require_once('visual.inc.php');
-require_once('functions.php');
+require_once 'lib/functions.php';
 require_once('statusgruppe.inc.php');
 require_once('language.inc.php');
 require_once('lib/classes/DataFields.class.php');

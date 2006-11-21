@@ -32,7 +32,7 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 require_once("wiki.inc.php");
-require_once("functions.php");
+require_once 'lib/functions.php';
 require_once("visual.inc.php");
 
 // -- Load Wiki Plugins -------------------

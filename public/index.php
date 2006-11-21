@@ -46,7 +46,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
 require_once ("config.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("visual.inc.php");
 include_once("lib/classes/RSSFeed.class.php");
 // -- hier muessen Seiten-Initialisierungen passieren --

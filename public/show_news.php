@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 //$Id$
 
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("visual.inc.php");
 require_once ("language.inc.php");
 require_once ("object.inc.php");

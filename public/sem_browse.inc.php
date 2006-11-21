@@ -30,7 +30,7 @@ require_once "config.inc.php";
 require_once "config_tools_semester.inc.php";
 require_once "dates.inc.php";
 require_once "visual.inc.php";
-require_once "functions.php";
+require_once 'lib/functions.php';
 require_once ("lib/classes/StudipSemSearch.class.php");
 require_once ("lib/classes/StudipSemTreeViewSimple.class.php");
 require_once ("lib/classes/StudipSemRangeTreeViewSimple.class.php");

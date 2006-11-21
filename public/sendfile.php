@@ -43,7 +43,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 require_once ('config.inc.php');
 require_once ('datei.inc.php');
 require_once ('visual.inc.php');
-require_once ('functions.php');
+require_once 'lib/functions.php';
 require_once ('lib/classes/StudipLitList.class.php');
 
 $db=new DB_Seminar;

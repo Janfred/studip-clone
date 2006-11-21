@@ -32,7 +32,7 @@ include ('seminar_open.php'); 	//hier werden die sessions initialisiert
 require_once ('msg.inc.php'); 		//Funktionen fuer Nachrichtenmeldungen
 require_once ('config.inc.php'); 		//wir brauchen die Seminar-Typen
 require_once ('config_tools_semester.inc.php');  //Bereitstellung weiterer Daten
-require_once ('functions.php');		//noch mehr Stuff
+require_once 'lib/functions.php';		//noch mehr Stuff
 require_once ('forum.inc.php');		//damit wir Themen anlegen koennen
 require_once ('visual.inc.php');		//Aufbereitungsfunktionen
 require_once ('dates.inc.php');		//Terminfunktionen

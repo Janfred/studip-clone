@@ -23,7 +23,7 @@
 require_once("lib/dbviews/literatur.view.php");
 require_once("lib/classes/TreeAbstract.class.php");
 require_once("lib/classes/StudipLitCatElement.class.php");
-require_once("functions.php");
+require_once 'lib/functions.php';
 require_once("config.inc.php");
 
 

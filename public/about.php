@@ -27,7 +27,7 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 
-require_once("functions.php");
+require_once 'lib/functions.php';
 require_once("config.inc.php");
 require_once("dates.inc.php");
 require_once("messaging.inc.php");

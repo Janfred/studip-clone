@@ -24,7 +24,7 @@ require_once("lib/classes/StudipSemTree.class.php");
 require_once("lib/classes/StudipRangeTree.class.php");
 require_once("lib/classes/SemesterData.class.php");
 require_once("visual.inc.php");
-require_once("functions.php");
+require_once 'lib/functions.php';
 
 
 /**

@@ -41,7 +41,7 @@ require_once($RELATIVE_PATH_EXTERN . "/lib/ExternConfig.class.php");
 require_once($RELATIVE_PATH_EXTERN . "/lib/ExternElement.class.php");
 require_once($RELATIVE_PATH_EXTERN . "/lib/ExternElementMain.class.php");
 require_once($RELATIVE_PATH_EXTERN . "/views/ExternEditModule.class.php");
-require_once("functions.php");
+require_once 'lib/functions.php';
 
 
 class ExternModule {

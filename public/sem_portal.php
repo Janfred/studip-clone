@@ -42,7 +42,7 @@ $HELP_KEYWORD="Basis.VeranstaltungenAbonnieren";
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once "functions.php";   //hier wird der "Kopf" nachgeladen
+require_once 'lib/functions.php';   //hier wird der "Kopf" nachgeladen
 require_once "config.inc.php"; 		//wir brauchen die Seminar-Typen
 require_once "visual.inc.php"; 		//wir brauchen die Seminar-Typen
 require_once "lib/classes/SemBrowse.class.php";

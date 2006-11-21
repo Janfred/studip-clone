@@ -37,7 +37,7 @@ $perm->check("user");
 include ("seminar_open.php");
 
 // -- here you have to put initialisations for the current page
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("msg.inc.php");
 require_once ("visual.inc.php");
 require_once ("messagingSettings.inc.php");

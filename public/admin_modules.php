@@ -40,7 +40,7 @@ $perm->check("tutor");
 include ("seminar_open.php"); // initialise Stud.IP-Session
 require_once("msg.inc.php");	//Ausgaben
 require_once("config.inc.php");	//Settings....
-require_once("functions.php");	//basale Funktionen
+require_once 'lib/functions.php';	//basale Funktionen
 require_once("visual.inc.php");	//Darstellungsfunktionen
 require_once("messaging.inc.php");	//Nachrichtenfunktionen
 require_once("lib/classes/AdminModules.class.php");	//Nachrichtenfunktionen

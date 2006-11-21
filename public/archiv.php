@@ -36,7 +36,7 @@ include('html_head.inc.php'); // Output of html head
 require_once('msg.inc.php');
 require_once('config.inc.php');
 require_once('visual.inc.php');
-require_once('functions.php');
+require_once 'lib/functions.php';
 require_once('datei.inc.php');
 require_once('log_events.inc.php');
 

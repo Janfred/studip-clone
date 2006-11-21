@@ -44,7 +44,7 @@ require_once("lib/classes/DataFields.class.php");
 require_once("language.inc.php");
 require_once("visual.inc.php");
 require_once("dates.inc.php");
-require_once("functions.php");
+require_once 'lib/functions.php';
 
 class ExternModuleLecturedetails extends ExternModule {
 

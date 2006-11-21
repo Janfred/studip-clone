@@ -141,7 +141,7 @@ require_once ("dates.inc.php");
 
 <?php
 require_once "msg.inc.php";
-require_once "functions.php";
+require_once 'lib/functions.php';
 require_once "admission.inc.php";
 
 $db=new DB_Seminar;

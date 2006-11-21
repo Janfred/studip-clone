@@ -22,7 +22,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 
 require_once("config.inc.php");
 require_once("msg.inc.php");
-require_once("functions.php");
+require_once 'lib/functions.php';
 
 // wichtiger Teil aus seminar_open.php
 	

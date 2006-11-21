@@ -25,7 +25,7 @@ include "seminar_open.php"; //hier werden die sessions initialisiert
 
 require_once ("msg.inc.php");
 require_once ("visual.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
 require_once ("statusgruppe.inc.php");	//Funktionen der Statusgruppen
 require_once ("messaging.inc.php");	//Funktionen des Nachrichtensystems

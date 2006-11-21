@@ -22,7 +22,7 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 }/**/
 
 require_once ("config.inc.php"); 		//wir brauchen die Seminar-Typen
-//require_once ("functions.php");	//noch mehr Stuff
+//require_once 'lib/functions.php';	//noch mehr Stuff
 //require_once ("forum.inc");		//damit wir Themen anlegen koennen
 require_once ("msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
 //if (!$xml_import_person)

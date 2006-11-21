@@ -33,7 +33,7 @@ include ("links_admin.inc.php");
 
 require_once ("config.inc.php");
 require_once ("visual.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("admission.inc.php");
 require_once ("statusgruppe.inc.php");
 

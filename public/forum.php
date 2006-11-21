@@ -78,7 +78,7 @@ if ($auth->auth["jscript"]) { // JS an
 	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"".$GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
 }
 
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("visual.inc.php");
 require_once ("forum.inc.php");
 require_once ("object.inc.php");

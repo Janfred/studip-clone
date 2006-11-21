@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 require_once ("visual.inc.php");
 require_once ("statusgruppe.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 
 $HELP_KEYWORD="Basis.InVeranstaltungGruppen";
 // Start of Output

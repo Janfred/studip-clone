@@ -16,7 +16,7 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 
 require_once ("msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
 require_once ("visual.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("config.inc.php");
 require_once ("log_events.inc.php");
 require_once("lib/classes/Table.class.php");

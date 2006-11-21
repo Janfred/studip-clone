@@ -34,7 +34,7 @@ require_once $RELATIVE_PATH_CHAT."/ChatServer.class.php";
 //Studip includes
 require_once "visual.inc.php";
 require_once "messaging.inc.php";
-require_once "functions.php";
+require_once 'lib/functions.php';
 require_once "contact.inc.php";
 
 function chat_kill_chat($chatid){

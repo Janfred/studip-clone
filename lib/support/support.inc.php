@@ -41,7 +41,7 @@ Startups...
 require_once ("msg.inc.php");
 require_once ("visual.inc.php");
 require_once ("config.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ($RELATIVE_PATH_SUPPORT."/views/Msg.class.php");
 require_once ($RELATIVE_PATH_SUPPORT."/views/Request.class.php");
 require_once ($RELATIVE_PATH_SUPPORT."/views/Overview.class.php");

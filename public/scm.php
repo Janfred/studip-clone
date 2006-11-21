@@ -26,7 +26,7 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 include ("html_head.inc.php"); // Output of html head
 include ("header.php");   // Output of Stud.IP head
 
-require_once("functions.php");
+require_once 'lib/functions.php';
 require_once("msg.inc.php");
 require_once("visual.inc.php");
 require_once("lib/classes/Table.class.php");

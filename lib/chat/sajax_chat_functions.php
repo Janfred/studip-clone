@@ -44,7 +44,7 @@ if (!is_object($chatServer)){
 	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 	$perm->check("user");
 	require_once 'visual.inc.php';
-	require_once 'functions.php';
+	require_once 'lib/functions.php';
 	require_once 'messaging.inc.php';
 	require_once $RELATIVE_PATH_CHAT."/ChatServer.class.php";
 

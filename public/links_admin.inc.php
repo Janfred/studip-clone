@@ -84,7 +84,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	require_once "msg.inc.php";
 	require_once "visual.inc.php";
 	require_once "reiter.inc.php";
-	require_once "functions.php";
+	require_once 'lib/functions.php';
 	require_once "lib/classes/Modules.class.php";
 	require_once "lib/classes/SemesterData.class.php";
 

@@ -11,7 +11,7 @@ $HELP_KEYWORD="Basis.VerschiedenesScore"; // external help keyword
 include ("html_head.inc.php"); // Output of html head
 include ("header.php");   // Output of Stud.IP head
 
-require_once("functions.php");
+require_once 'lib/functions.php';
 require_once("visual.inc.php");
 require_once("lib/classes/score.class.php");
 require_once("object.inc.php");

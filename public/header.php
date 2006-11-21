@@ -64,7 +64,7 @@ if (!$perm->have_perm("user"))
 	$my_messaging_settings["active_time"]=5;
 
 require_once ("visual.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("sms_functions.inc.php");
 
 if ($GLOBALS['CHAT_ENABLE']){

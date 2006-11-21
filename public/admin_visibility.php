@@ -20,7 +20,7 @@
 
 require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
 require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
-require_once("functions.php");
+require_once 'lib/functions.php';
 require_once("visual.inc.php");
 require_once("log_events.inc.php");
 require_once("lib/classes/Table.class.php");

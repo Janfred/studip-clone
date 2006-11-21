@@ -27,7 +27,7 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 
 require_once ("config.inc.php");   //wir brauchen die Auto-Eintrag-Seminare
 require_once ("visual.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once("statusgruppe.inc.php");
 require_once("user_visible.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){

@@ -29,7 +29,7 @@ require_once ("lib/classes/StudipObject.class.php");
 
 require_once ("phplib_local.inc.php");
 
-require_once ("functions.php"); // <- für getHeaderLine
+require_once 'lib/functions.php'; // <- für getHeaderLine
 
 
 /**

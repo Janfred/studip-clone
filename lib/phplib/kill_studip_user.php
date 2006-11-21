@@ -43,7 +43,7 @@ set_error_handler('CliErrorHandler');
 
 require_once dirname(__FILE__) . "/prepend4.php"; //for use with old style phplib change this to prepend.php!!!
 require_once "language.inc.php";
-require_once "functions.php";
+require_once 'lib/functions.php';
 require_once "lib/classes/UserManagement.class.php";
 
 class FakePerm {

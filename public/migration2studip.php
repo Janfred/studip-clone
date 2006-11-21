@@ -129,7 +129,7 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 
 require_once ("config.inc.php");
 include_once ("visual.inc.php");
-include_once ("functions.php");
+include_once 'lib/functions.php';
 include_once ("msg.inc.php");
 
 if ($ILIAS_CONNECT_ENABLE)

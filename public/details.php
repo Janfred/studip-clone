@@ -35,7 +35,7 @@ require_once ("dates.inc.php"); //Funktionen zum Anzeigen der Terminstruktur
 require_once ("config.inc.php");
 require_once ("visual.inc.php"); // wir brauchen htmlReady
 require_once ("admission.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("lib/classes/StudipSemTree.class.php");
 require_once ("lib/classes/DataFields.class.php");
 

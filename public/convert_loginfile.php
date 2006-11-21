@@ -1,7 +1,7 @@
 <?php
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("root");
-include "functions.php";
+include 'lib/functions.php';
 include "statusgruppe.inc.php";
 set_time_limit(0); //bis zum bitteren Ende...
 class FakeUser{

@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 require_once ("language.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("user_visible.inc.php");
 require_once ("contact.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){

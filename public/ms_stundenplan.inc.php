@@ -38,7 +38,7 @@
 
 require_once ("config.inc.php");
 require_once ("config_tools_semester.inc.php");
-require_once ("functions.php");
+require_once 'lib/functions.php';
 require_once ("language.inc.php");
 
 //Funktion zum ueberpruefen der Einstellungen

@@ -33,7 +33,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once "functions.php";
+require_once 'lib/functions.php';
 require_once "language.inc.php";
 require_once "config.inc.php"; 		// We need the uni name for emails
 require_once "admission.inc.php";	// remove user from waiting lists

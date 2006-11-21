@@ -46,7 +46,7 @@ if (!$LOG_ENABLE) {
 include ("seminar_open.php"); // initialise Stud.IP-Session
 require_once("msg.inc.php");	//messages
 require_once("config.inc.php");	//Settings....
-require_once("functions.php");	//whatever ;)
+require_once 'lib/functions.php';	//whatever ;)
 require_once("visual.inc.php");	//visuals
 require_once("lib/classes/Config.class.php");	//Acces to config-values
 require_once("lib/classes/UserConfig.class.php");	//Acces to userconfig-values

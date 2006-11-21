@@ -29,7 +29,7 @@ $hash_secret = "dslkjjhetbjs";
 include ("seminar_open.php"); // initialise Stud.IP-Session
 require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
 require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
-require_once("functions.php");
+require_once 'lib/functions.php';
 require_once("visual.inc.php");
 require_once("admission.inc.php");
 require_once("statusgruppe.inc.php");	//Funktionen der Statusgruppen
