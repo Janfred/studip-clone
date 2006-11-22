@@ -41,7 +41,7 @@ class AbstractStudIPPlugin {
 		$this->pluginname = "";
 		$this->pluginid = "-1";
 		$this->pluginadmininfo = null;
-		$this->pluginiconname = $GLOBALS['ASSETS_URL'].'images/leer.gif';
+		$this->pluginiconname = NULL;
 		$this->helpinfo = null;
 		$this->navigation = null;
 		$this->activated = false;
@@ -235,7 +235,9 @@ class AbstractStudIPPlugin {
 	 * @return den relativen Namen des Icons
 	 */
 	function getPluginiconname(){
-		return $this->getPluginpath() . "/" . $this->pluginiconname;
+		return is_null($this->pluginiconname)
+		       ? $GLOBALS['ASSETS_URL'].'images/leer.gif'
+		       : $this->getPluginpath() . '/' . $this->pluginiconname;
 	}
 
 	/**
