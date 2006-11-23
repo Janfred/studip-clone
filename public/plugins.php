@@ -196,7 +196,7 @@ else if ($type == "Homepage"){
 	// let the plugin show its view	 
 	$plugin->$cmd($pluginparams);
 	StudIPTemplateEngine::endContentTable();
-} else if ($type == "Portal"){
+} else if ($type == "Portal" || $type == "Core"){
 	StudIPTemplateEngine::makeHeadline($plugin->getDisplaytitle(),true,$plugin->getPluginiconname());
 	StudIPTemplateEngine::startContentTable();
 	// let the plugin show its view	 
