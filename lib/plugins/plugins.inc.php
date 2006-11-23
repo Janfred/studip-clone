@@ -49,13 +49,14 @@ if ($PLUGINS_ENABLE){
 	$plugindbenv->setDbuser($GLOBALS["DB_STUDIP_USER"]);
 	$plugindbenv->setDbpassword($GLOBALS["DB_STUDIP_PASSWORD"]);
 	$plugindbenv->setDbname($GLOBALS["DB_STUDIP_DATABASE"]);
-	$plugindbenv->setBasepath('');
+	$plugindbenv->setBasepath($GLOBALS["STUDIP_BASE_PATH"] .'/public/');
 	if (isset($GLOBALS["PLUGINS_PATH"]) && !empty($GLOBALS["PLUGINS_PATH"])){
 		$plugindbenv->setPackagebasepath($GLOBALS["PLUGINS_PATH"]);
 	}
 	else {
 		// set the default
-		$plugindbenv->setPackagebasepath("plugins_packages");
+		$plugindbenv->setPackagebasepath($GLOBALS["STUDIP_BASE_PATH"].
+		                                 '/public/plugins_packages');
 	}
 	$plugindbenv->setRelativepackagepath("plugins_packages");
 	$plugindbenv->setTmppath($GLOBALS["TMP_PATH"]);
