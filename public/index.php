@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-// $Id$ 
+// $Id$
 
 page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
 
@@ -130,10 +130,26 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		}
 		foreach ($activatedplugins as $activatedplugin){
 			if ($activatedplugin->hasTopNavigation()){
+
 				$pluginnav = $activatedplugin->getTopNavigation();
 				$pluginid = $activatedplugin->getPluginid();
-				$menue["pluginnav_" . $pluginid] = array($pluginnav->getDisplayname(),PluginEngine::getLink($activatedplugin),false);
-				$pluginmenue[] = "pluginnav_" . $activatedplugin->getPluginid();
+
+				$menue["pluginnav_" . $pluginid] = array(
+				  $pluginnav->getDisplayname(),
+				  PluginEngine::getLink($activatedplugin),
+				  false);
+
+        $submenu = array();
+        foreach ($pluginnav->getSubMenu() as $subkey => $subitem) {
+          $menue["pluginnav_" . $pluginid . '_' . $subkey] = array(
+            $subitem->getDisplayname(),
+            PluginEngine::getLink($activatedplugin,
+                                  $subitem->getLinkParams()),
+            false);
+          $submenu[] = "pluginnav_" . $pluginid . '_' . $subkey;
+        }
+				$pluginmenue[] = array("pluginnav_" . $activatedplugin->getPluginid(),
+				                       $submenu);
 			}
 		}
 	}
@@ -153,7 +169,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 				$pluginmenue = array();
 			}
 			foreach($pluginmenue as $item){
-				$menue_auswahl[] = array($item, array());
+				$menue_auswahl[] = $item;
 			}
 		}
 
@@ -168,7 +184,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		//insert plugin menus
 		if ($GLOBALS["PLUGINS_ENABLE"]){
 			foreach($pluginmenue as $item){
-				$menue_auswahl[] = array($item, array());
+				$menue_auswahl[] = $item;
 			}
 		}
 
@@ -206,7 +222,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			<td width="90%" class="blank" valign="top">
 				<table cellpadding="2">
 					<tr><td class="blank" colspan="2">
-					<? 
+					<?
 						if (get_config("EXTERNAL_HELP")) {
 							$help_url=format_help_url("Basis.AnmeldungMail");
 						} else {
@@ -241,7 +257,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 				echo	'<tr><td class="blank"><a href="'.$menue[$menue_auswahl[$i][0]][1]. '"'.
 				(($menue[$menue_auswahl[$i][0]][2])? ' target="'.$menue[$menue_auswahl[$i][0]][2].'"':'').
 				'><img src="'.$GLOBALS['ASSETS_URL'].'images/forumrot.gif" border=0>&nbsp;'. $menue[$menue_auswahl[$i][0]][0]. '</a>';
-			
+
 			} else {
 				echo	'<tr><td class="blank"><img src="'.$GLOBALS['ASSETS_URL'].'images/forumrot.gif" border=0>&nbsp;'. $menue[$menue_auswahl[$i][0]][0];
 			}
@@ -277,14 +293,14 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	}
 
 	if ($GLOBALS["PLUGINS_ENABLE"]){
-		// PluginEngine aktiviert. 
+		// PluginEngine aktiviert.
 		// Prüfen, ob PortalPlugins vorhanden sind.
-		$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");	
+		$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");
 		$activatedportalplugins = $portalpluginpersistence->getAllActivatedPlugins();
 		if (!is_array($activatedportalplugins)){
 			$activatedportalplugins = array();
 		}
-		
+
 		foreach ($activatedportalplugins as $activatedportalplugin){
 			if (!$activatedportalplugin->hasAuthorizedView()){
 				// skip this plugin
@@ -294,14 +310,14 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			$domain = "gtdomain_" . strtolower(get_class($activatedportalplugin));
 			bindtextdomain($domain,$plugindbenv->getBasepath() . $activatedportalplugin->getPluginpath() . "/locale");
 			textdomain($domain);
-			// hier nun die PortalPlugins anzeigen				
+			// hier nun die PortalPlugins anzeigen
 			if ($activatedportalplugin->hasAdministration()){
-				echo "<table class=\"blank\" width=\"70%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedportalplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedportalplugin->getDisplaytitle() . 
-				 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;<a href=\"". PluginEngine::getLink($activatedportalplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" ></a>&nbsp;</tr>";				
+				echo "<table class=\"blank\" width=\"70%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedportalplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedportalplugin->getDisplaytitle() .
+				 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;<a href=\"". PluginEngine::getLink($activatedportalplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" ></a>&nbsp;</tr>";
 			}
 			else {
-				echo "<table class=\"blank\" width=\"70%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedportalplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedportalplugin->getDisplaytitle() . 
-				 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;&nbsp;</tr>";				
+				echo "<table class=\"blank\" width=\"70%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedportalplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedportalplugin->getDisplaytitle() .
+				 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;&nbsp;</tr>";
 			}
 			echo ("<tr><td class=\"steel1\" colspan=\"2\">&nbsp;</td></tr><tr><td class=\"steel1\" colspan=\"2\"><blockquote>");
 			$activatedportalplugin->showOverview();
@@ -310,7 +326,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			textdomain("studip");
 		}
 	}
-	
+
 	$db->query(sprintf("SELECT * FROM rss_feeds WHERE user_id='%s' AND hidden=0 ORDER BY priority",$auth->auth["uid"]));
 	while ($db->next_record()) {
 		if ($db->f("name")!="" && $db->f("url")!="") {
@@ -411,24 +427,24 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	<td colspan="3" align="center" height="30"></td>
 </tr>
 <?
-if ($GLOBALS["PLUGINS_ENABLE"]){	
-	$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");	
+if ($GLOBALS["PLUGINS_ENABLE"]){
+	$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");
 	$activatedportalplugins = $portalpluginpersistence->getAllActivatedPlugins();
 	// we already should have the activatedportalplugins here
 	if (!empty($activatedportalplugins)){
 		foreach ($activatedportalplugins as $activatedplugin){
-			
-			if ($activatedplugin->hasUnauthorizedView()){			
+
+			if ($activatedplugin->hasUnauthorizedView()){
 ?>
 				<tr>
 					<td colspan="3"class="topic">&nbsp;<b><?= $activatedplugin->getDisplaytitle() ?></b></td>
 				</tr>
 				<tr>
-					<td colspan="3" class="steel1"><blockquote><?= $activatedplugin->showOverview(false) ?><blockquote></td>				
+					<td colspan="3" class="steel1"><blockquote><?= $activatedplugin->showOverview(false) ?><blockquote></td>
 				</tr>
 
 				<td colspan="3" align="center" height="30"></td>
-				
+
 				</tr>
 <?
 			}
