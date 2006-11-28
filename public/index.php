@@ -312,11 +312,11 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			textdomain($domain);
 			// hier nun die PortalPlugins anzeigen
 			if ($activatedportalplugin->hasAdministration()){
-				echo "<table class=\"blank\" width=\"70%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedportalplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedportalplugin->getDisplaytitle() .
+				echo "<table class=\"blank\" width=\"70%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedportalplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedportalplugin->getDisplaytitle() .
 				 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;<a href=\"". PluginEngine::getLink($activatedportalplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" ></a>&nbsp;</tr>";
 			}
 			else {
-				echo "<table class=\"blank\" width=\"70%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedportalplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedportalplugin->getDisplaytitle() .
+				echo "<table class=\"blank\" width=\"70%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedportalplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedportalplugin->getDisplaytitle() .
 				 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;&nbsp;</tr>";
 			}
 			echo ("<tr><td class=\"steel1\" colspan=\"2\">&nbsp;</td></tr><tr><td class=\"steel1\" colspan=\"2\"><blockquote>");
