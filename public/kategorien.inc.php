@@ -115,7 +115,7 @@ function delete_freie($kategorie_id) {
 	$db=new DB_Seminar;
 	$db->query ("SELECT * FROM kategorien LEFT JOIN auth_user_md5 ON(range_id=user_id) WHERE username = '$username' and kategorie_id='$kategorie_id'");
 	if (!$db->next_record()) { //hier wollte jemand schummeln
-		parse_msg ("info§" . _("Netter Versuch, vielleicht beim n&auml;chsten Mal!"));
+		parse_msg ("info§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion."));
 		die;
 	} else {
 		$db->query("DELETE FROM kategorien WHERE kategorie_id='$kategorie_id'");

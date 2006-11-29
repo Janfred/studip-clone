@@ -110,7 +110,7 @@ function delete_rss($rss_id) {
 	$db=new DB_Seminar;
 	$db->query ("SELECT * FROM rss_feeds LEFT JOIN auth_user_md5 USING (user_id) WHERE username = '$username' and feed_id='$rss_id'");
 	if (!$db->next_record()) { //hier wollte jemand schummeln
-		parse_msg ("info§" . _("Netter Versuch, vielleicht beim n&auml;chsten Mal!"));
+		parse_msg ("info§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion."));
 		die;
 	} else {
 		$db->query("DELETE FROM rss_feeds WHERE feed_id='$rss_id'");

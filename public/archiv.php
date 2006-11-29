@@ -112,7 +112,7 @@ if (($delete_id) && ($delete_really)){
 			$msg .= sprintf("msg§" . _("Es wurden %s Zugriffsberechtigungen entfernt.") . "§", $db->affected_rows());
 		}
 	} else {
-		$msg="error§" . _("Netter Versuch");
+		$msg="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.");
 	}
 }
 
@@ -124,7 +124,7 @@ if ($delete_user) {
 			$msg="msg§" . _("Zugriffsberechtigung entfernt") . "§";
 		}
 	} else {
-		$msg="error§" . _("Netter Versuch");
+		$msg="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.");
 	}
 }
 
@@ -136,7 +136,7 @@ if ($do_add_user) {
 			$msg="msg§" . _("Zugriffsberechtigung erteilt") . "§";
 		}
 	} else {
-		$msg="error§" . _("Netter Versuch");
+		$msg="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.");
 	}
 	$add_user=FALSE;
 }
@@ -155,7 +155,7 @@ if (!empty($dump_id)) {
 			echo $db->f('dump');
 		}
 	} else {
-		echo _("Netter Versuch, vielleicht beim n&auml;chsten Mal");
+		echo _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.");
 	}
 }
 
@@ -172,7 +172,7 @@ elseif (!empty($forum_dump_id)) {
 			echo $db->f('forumdump');
 		}
 	} else {
-		echo _("Netter Versuch, vielleicht beim n&auml;chsten Mal");
+		echo _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.");
 	}
 }
 
@@ -191,7 +191,7 @@ elseif (!empty($wiki_dump_id)) {
 			echo "</td></tr></table>";
 		}
 	} else {
-		echo _("Netter Versuch, vielleicht beim n&auml;chsten Mal");
+		echo _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.");
 	}
 }
 

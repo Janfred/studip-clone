@@ -203,9 +203,9 @@ if (Seminar_Session::check_ticket($studipticket)){
 				$db->query("UPDATE seminar_user SET status='tutor', visible='yes' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
 				$msg = "msg§" . sprintf(_("Bef&ouml;rderung von %s durchgef&uuml;hrt"), htmlReady($fullname)) . "§";
 			}
-			else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+			else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 		}
-		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
 	
 	// jemand ist der anspruchsvollen Aufgabe eines Tutors nicht gerecht geworden...
@@ -224,7 +224,7 @@ if (Seminar_Session::check_ticket($studipticket)){
 				$msg = "msg§" . sprintf (_("Der/die TutorIn %s wurde entlassen und auf den Status 'Autor' zur&uuml;ckgestuft."), htmlReady($fullname)) . "§";
 			}
 		}
-		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
 	
 	// jemand ist zu bloede, sein Seminar selbst zu abbonieren...
@@ -239,9 +239,9 @@ if (Seminar_Session::check_ticket($studipticket)){
 				$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
 				$msg = "msg§" . sprintf(_("User %s wurde als Autor in die Veranstaltung aufgenommen."), htmlReady($fullname)) . "§";
 			}
-			else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+			else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 		}
-		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
 	
 	// jemand sollte erst mal das Maul halten...
@@ -258,7 +258,7 @@ if (Seminar_Session::check_ticket($studipticket)){
 			$msg.= "info§" . _("Um jemanden permanent am Schreiben zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Schreiben nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.") . "<br>\n"
 					. _("Dann k&ouml;nnen sich weitere BenutzerInnen nur noch mit Kenntnis des Veranstaltungs-Passworts als 'Autor' anmelden.") . "§";
 		}
-		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
 	
 	// und tschuess...
@@ -292,7 +292,7 @@ if (Seminar_Session::check_ticket($studipticket)){
 			$msg.= "info§" . _("Um jemanden permanent am Lesen zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Lesen nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.") . "<br>\n"
 					. _("Dann k&ouml;nnen sich weitere BenutzerInnen nur noch mit Kenntnis des Veranstaltungs-Passworts anmelden.") . "§";
 		}
-		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
 	
 	//aus der Anmelde- oder Warteliste entfernen
@@ -330,7 +330,7 @@ if (Seminar_Session::check_ticket($studipticket)){
 	
 			$msg = "msg§" . sprintf(_("LeserIn %s wurde aus der Anmelde bzw. Warteliste entfernt."), htmlReady($fullname)) . "§";
 		}
-		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
 	
 	//aus der Anmelde- oder Warteliste in die Veranstaltung hochstufen / aus der freien Suche als Tutoren oder Autoren eintragen
@@ -382,7 +382,7 @@ if (Seminar_Session::check_ticket($studipticket)){
 					$msg = "msg§" . sprintf(_("NutzerIn %s wurde mit dem Status <b>%s</b> endgültig akzeptiert und damit in die Veranstaltung aufgenommen."), htmlReady($fullname), $status) . "§";
 				}
 		}
-		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
 	
 	// import users from a csv-list
@@ -503,11 +503,11 @@ if (Seminar_Session::check_ticket($studipticket)){
 						$messaging->insert_message($message, get_username($u_id), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
 					}
 				}
-				else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+				else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 			}
-			else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+			else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 		}
-		else $msg ="error§" . _("Netter Versuch! vielleicht beim n&auml;chsten Mal!") . "§";
+		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
 }
 //Alle fuer das Losen anstehenden Veranstaltungen bearbeiten (wenn keine anstehen wird hier nahezu keine Performance verbraten!)
