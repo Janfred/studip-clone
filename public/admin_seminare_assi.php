@@ -3238,7 +3238,7 @@ if ($level == 5)
 										<?
 										printf ("<input type=\"HIDDEN\" name=\"sem_studg_ratio_old[]\" value=\"%s\" />", $val["ratio"]);
 										printf ("<input type=\"TEXT\" name=\"sem_studg_ratio[]\" size=5 maxlength=5 value=\"%s\" /><font size=-1> %%</font>", $val["ratio"]);
-										printf ("&nbsp; <a href=\"%s?sem_delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"), TRUE)." />", $PHP_SELF, $key);
+										printf ("&nbsp; <a href=\"%s?sem_delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"), TRUE)." /></a>", $PHP_SELF, $key);
 										?>
 										</td>
 										<td class="<? echo $cssSw->getClass() ?>" width="70%" colspan=2>&nbsp;
