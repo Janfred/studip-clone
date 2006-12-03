@@ -91,7 +91,7 @@ class Ilias3Soap extends StudipSoapClient
 	*/
 	function call($method, $params)
 	{
-		$index = $method . ":" . implode($params, "-");
+		$index = md5($method . ":" . implode($params, "-"));
 		// return false if no session_id is given
 		if (($method != "login") AND ($params["sid"] == ""))
 			return false;
