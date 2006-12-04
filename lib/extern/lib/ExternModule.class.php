@@ -208,7 +208,7 @@ class ExternModule {
 	function toStringEdit ($open_elements = "", $post_vars = "",
 			$faulty_values = "", $anker = "") {
 		
-		require_once("extern/views/ExternEditModule.class.php");
+		require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . "/views/ExternEditModule.class.php");
 		$edit_form =& new ExternEditModule($this->config, $post_vars, $faulty_values, $anker);
 		
 		$out = $edit_form->editHeader();
