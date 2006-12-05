@@ -437,7 +437,7 @@ if (isset($_GET['details'])) {
 				printf("&nbsp;" . _("pers&ouml;nliche Homepage") . " <a href=\"about.php?username=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
 				printf("&nbsp;" . _("Nachricht an BenutzerIn") . " <a href=\"sms_send.php?rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
 			print "</td></tr>";
-			if ($perm->have_perm('root') && @file_exists('user_activities.php')){
+			if ($perm->have_perm('root')){
 				echo "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
 				echo "&nbsp;" . _("Datei- und Aktivitätenübersicht") . "&nbsp;";
 				printf('<a href="user_activities.php?username=%s">
@@ -530,17 +530,7 @@ if (isset($_GET['details'])) {
 		} else { // wir haben ein Suchergebnis
 			print "<table border=0 bgcolor=\"#eeeeee\" align=\"center\" cellspacing=0 class=blank cellpadding=2 width=\"100%\">";
 
-			if ($GLOBALS["PLUGINS_ENABLE"]){
-				// plugins activated
-				$userkillplugin = null;
-				$pluginengine = PluginEngine::getPluginPersistence("Administration");
-				foreach ($pluginengine->getAllActivatedPlugins() as $activatedplugin){
-					if (strtolower($activatedplugin->getPluginclassname()) == 'userkillplugin') $userkillplugin =& $activatedplugin;
-				}
-				if (is_object($userkillplugin)){
-					echo "<tr valign=\"top\"><td colspan=\"7\"><a href=\"" . PluginEngine::getLink($userkillplugin,array('transfer_search' => 1))."\">"._("Suchergebnis in Löschformular übernehmen")."</a></td></tr>";
-				}
-			} else if ($perm->have_perm('root') && @file_exists('admin_user_kill.php')){
+			if ($perm->have_perm('root')){
 				echo "<tr valign=\"top\"><td colspan=\"7\"><a href=\"admin_user_kill.php?transfer_search=1\">"._("Suchergebnis in Löschformular übernehmen")."</a></td></tr>";
 			}
 			
