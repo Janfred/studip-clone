@@ -1366,7 +1366,7 @@ if (($form == 6) && ($jump_next_x))
 				$count_doz=0;
 				foreach ($sem_create_data["sem_doz"] as $key=>$val)
 					{
-					$group=select_group($temp_array, $sem_create_data["sem_start_time"]);
+					$group=select_group($sem_create_data["sem_start_time"]);
 
 					if ($key == $user_id)
 						$self_included=TRUE;
@@ -1381,7 +1381,7 @@ if (($form == 6) && ($jump_next_x))
 
 			if (!$perm->have_perm("admin") && !$self_included) // wenn nicht admin, aktuellen Dozenten eintragen
 				{
-				$group=select_group($user_id, $sem_create_data["sem_start_time"]);
+				$group=select_group($sem_create_data["sem_start_time"]);
 
 				$query = "insert into seminar_user SET Seminar_id = '".
 					$sem_create_data["sem_id"]."', user_id = '".
@@ -1396,7 +1396,7 @@ if (($form == 6) && ($jump_next_x))
 				$count_tut=0;
 				foreach ($sem_create_data["sem_tut"] as $key=>$val)
 					{
-					$group=select_group($temp_array, $sem_create_data["sem_start_time"]);
+					$group=select_group($sem_create_data["sem_start_time"]);
 
 					$query = "SELECT user_id FROM seminar_user WHERE Seminar_id = '".
 						$sem_create_data["sem_id"]."' AND user_id ='$key'";
