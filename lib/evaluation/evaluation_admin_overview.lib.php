@@ -220,17 +220,18 @@ class EvalOverview {
 
       $link = $GLOBALS["PHP_SELF"]."?rangeID=".$GLOBALS["rangeID"];
       if ($open == NO)
-     $link .= "&openID=".$evalID."#open";
+     $link .= '&openID='.$evalID.'#open';
 
-      $openLink = new HTML ("a");
-      $openLink->addAttr ("href", $link);
+     $titleLink = new HTML ('a');
+     $titleLink->addAttr ('href', $link);
+     $arrowLink = new HTML ('a');
+     $arrowLink->addAttr ('href', $link);
 
-      $titleLink = $arrowLink = $openLink;
-      $titleLink->addContent( $eval->getTitle () ? $eval->getTitle () : " " );
+     $titleLink->addContent( ($eval->getTitle()) ? $eval->getTitle () : ' ' );
 
-      switch ($state) {
+     switch ($state) {
 
-      case "public_template":
+     case "public_template":
      $arrowLink = "&nbsp;";
      $titleLink = $eval->getTitle () ? $eval->getTitle () : " ";
      $content[0] = $eval->getFullname () ? $eval->getFullname () : " ";
