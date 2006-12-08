@@ -882,7 +882,7 @@ if ($auth->auth["jscript"]) { // nur wenn JS aktiv
 if ($view == 'Daten') {
 	$validator=new email_validation_class;
 ?>
-<script type="text/javascript" language="javascript" src="md5.js"></script>
+<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 
 <script type="text/javascript" language="javascript">
 <!--
