@@ -9,8 +9,6 @@
 * @subpackage core
 */
 
-require_once("lib/classes/UserManagement.class.php");
-
 class StudIPUser {
 	var $userid;
 	var $username;
@@ -36,11 +34,20 @@ class StudIPUser {
     }
 
     function setUserid($newuserid){
-	    $this->userid=$newuserid;
-	    $usermgmt = new UserManagement($this->userid);
-	    $this->givenname = $usermgmt->user_data["auth_user_md5.Vorname"];
-	    $this->surname = $usermgmt->user_data["auth_user_md5.Nachname"];
-	    $this->username = $usermgmt->user_data["auth_user_md5.username"];
+	    $this->userid = $newuserid;
+		$dbconn =& PluginEngine::getPluginDatabaseConnection();
+		if ($GLOBALS['PLUGINS_CACHING']){
+    		$result =& $dbconn->CacheExecute($GLOBALS['PLUGINS_CACHE_TIME'],"SELECT * FROM auth_user_md5 WHERE user_id=?",array($newuserid));
+		}
+		else {
+			$result =& $dbconn->Execute("SELECT * FROM auth_user_md5 WHERE user_id=?",array($newuserid));
+		}
+		if (!$result->EOF){
+			$this->givenname = $result->fields("Vorname");
+			$this->surname = $result->fields("Nachname");
+			$this->username = $result->fields("username");
+		}
+    	$result->Close();
 	   	$this->permission = new Permission($this->userid);
     }
 
