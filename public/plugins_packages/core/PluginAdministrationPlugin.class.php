@@ -49,7 +49,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$this->pluginvis->showPluginAdministrationList($plugins,$msg,$installableplugins,$roleplugin);
 	}
 	
-	function installPlugin(){
+	function actionInstallPlugin(){
 		$forceupdate = $_POST["update"];
 		$pluginfilename = $_POST["pluginfilename"];		
 		$user = $this->getUser();
@@ -86,7 +86,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 	 * Shows the plugins view
 	 *
 	 */
-	function show(){
+	function actionShow(){
 		$user = $this->getUser();
 		$permission = $user->getPermission();
 		$pluginengine = PluginEngine::getPluginPersistence();

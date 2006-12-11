@@ -29,7 +29,7 @@ class de_studip_core_RoleManagementPlugin extends AbstractStudIPAdministrationPl
 		$this->usermgmt = $pluginpersist->getPlugin($pluginid);					
 	}
 	
-	function show(){		
+	function actionShow(){
 		// show the standard view
 		$rolevis = PluginEngine::getValueFromSession($this,"rolevis");
 		if (empty($rolevis)){
@@ -51,7 +51,7 @@ class de_studip_core_RoleManagementPlugin extends AbstractStudIPAdministrationPl
 		}
 	}
 	
-	function doPluginRoleAssignment(){		
+	function actionDoPluginRoleAssignment(){
 		$pluginid = $_REQUEST["pluginid"];	
 		$assignbtn = $_REQUEST["assignrolebtn_x"];
 		$delassignbtn = $_REQUEST["deleteroleassignmentbtn_x"];
@@ -87,7 +87,7 @@ class de_studip_core_RoleManagementPlugin extends AbstractStudIPAdministrationPl
 		$rolevis->showPluginRolesAssignmentForm($pluginforassignment,$roles,$this->rolemgmt->getAssignedPluginRoles($pluginid));	
 	}
 
-	function createRole(){
+	function actionCreateRole(){
 		$createrolebtn = $_POST["createrolebtn_x"];
 		$this->checkRootRights();
 		if (!empty($createrolebtn)){
@@ -111,7 +111,7 @@ class de_studip_core_RoleManagementPlugin extends AbstractStudIPAdministrationPl
 		$rolevis->showRoleForm($roles);
 	}
 	
-	function removeRole(){
+	function actionRemoveRole(){
 		$removerolebtn = $_POST["removerolebtn_x"];
 		$roles = PluginEngine::getValueFromSession($this,"roles");
 		$this->checkRootRights();
@@ -142,7 +142,7 @@ class de_studip_core_RoleManagementPlugin extends AbstractStudIPAdministrationPl
 		$rolevis->showRoleForm($roles);
 	}
 	
-	function doRoleAssignment(){		
+	function actionDoRoleAssignment(){		
 		$usersearchtxt = $_POST["usersearchtxt"];
 		$userselid = $_POST["usersel"];
 		$rolselids = $_POST["rolesel"];

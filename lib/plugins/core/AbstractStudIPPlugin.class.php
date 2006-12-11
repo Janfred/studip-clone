@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Abstract class for a plugin in Stud.IP.
  * Don't use this as a base class for creating your own plugin. Look at
@@ -374,6 +373,13 @@ class AbstractStudIPPlugin {
 	function isDependentOnOtherPlugin(){
 		return $this->dependentonplugin;
 	}
-}
 
+	function actionShow($param = null){
+		return $this->show($param);
+	}
+	
+	function actionShowDescriptionalPage(){
+		return $this->showDescriptionalPage();
+	}
+}
 ?>

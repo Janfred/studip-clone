@@ -22,7 +22,7 @@ include ("html_head.inc.php");
 include ("header.php");
 
 // read in the command and pluginid
-$cmd = $_GET["cmd"];
+$cmd = 'Action' . $_GET["cmd"];
 $pluginid = $_GET["id"];
 
 // create plugin persistence objects
