@@ -133,10 +133,10 @@ class StudIPCore{
     	while (!$result->EOF){
 
     		if ($current >= $result->fields("beginn") && $current <= $result->fields("ende")){
-    			$semester[] = array("id" => $result->fields("Semester_id"),"name" => $result->fields("name"), "currentsemester" => true);
+    			$semester[] = array("id" => $result->fields("semester_id"),"name" => $result->fields("name"), "currentsemester" => true);
     		}
     		else {
-    			$semester[] = array("id" => $result->fields("Semester_id"),"name" => $result->fields("name"),"currentsemester" => false);;
+    			$semester[] = array("id" => $result->fields("semester_id"),"name" => $result->fields("name"),"currentsemester" => false);;
     		}
     		$result->moveNext();
     	}
