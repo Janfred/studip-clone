@@ -26,20 +26,20 @@ class StudIPTemplateEngine {
 			print("\n<tr><td class=\"topic\" width=\"99%%\">&nbsp;<b>&nbsp;&nbsp;");
 		}
 		printf($title);
-		printf("</b></td>\n<td align = \"right\" class=\"topic\">&nbsp;&nbsp;</td></tr>");
+		printf("</b></td></tr>");
 	}
 
 	function startContentTable($full_width=true){
 		if (!$full_width){
-			echo ("<tr><td colspan=\"2\"><table border=\"0\" width=\"70%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
+			echo ("<tr><td><table border=\"0\" width=\"70%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
 		}
 		else {
-			echo ("<tr><td colspan=\"2\"><table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
+			echo ("<tr><td><table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
 		}
 		?>
 		<tr>
 			<td height="5" colspan="3"></td>
-	    </tr>
+		</tr>
 		<tr>
 			<td width="5">
 			<!-- Pixelrand 1%??-->
@@ -56,7 +56,7 @@ class StudIPTemplateEngine {
 					</td>
 				</tr>
 				</table>
-		  	 </td>
+			   </td>
 			<td align="right" valign="top" width="270" class="blank">
 		<?php
 	}
@@ -80,17 +80,18 @@ class StudIPTemplateEngine {
 		?>
 					</td>
 				</tr>
-		  	 	</table>
+				   </table>
 			</td>
 			<td width="5">
 			</td>
 		</tr>
 		<tr>
-			<td height="5" colspan="2"></td>
+			<td height="5" colspan="3"></td>
 		</tr>
 		</table>
 		</td>
 		</tr>
+		</table>
 		<?php
 	}
 
