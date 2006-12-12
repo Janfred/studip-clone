@@ -910,7 +910,7 @@ elseif ($auth->auth["perm"]=="admin") {
 		if ($sortby == "teilnehmer")
 		$sortby = "teilnehmer DESC";
 		$db->query("SELECT Institute.Name AS Institut, seminare.Seminar_id,seminare.Name,seminare.status,seminare.chdate,
-					seminare.start_time,seminare.admission_binding,seminare.visible,
+					seminare.start_time,seminare.admission_binding,seminare.visible, seminare.modules,
 					COUNT(seminar_user.user_id) AS teilnehmer,IFNULL(visitdate,0) as visitdate,
 					sd1.name AS startsem,IF(duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem
 					FROM Institute INNER JOIN seminare ON(seminare.Institut_id=Institute.Institut_id $sem_condition ) INNER JOIN seminar_user USING(Seminar_id)
@@ -1007,9 +1007,10 @@ elseif ($auth->auth["perm"]=="admin") {
 					'binding' => $db->f("admission_binding"),
 					'visible' => $db->f('visible'),
 					'modules' => $Modules->getLocalModules($db->f("Seminar_id"),
-					"sem",
-					$db->f("modules"),
-					$db->f("status")));
+								"sem",
+								$db->f("modules"),
+								$db->f("status"))
+					);
 		}
 		get_my_obj_values($my_sem, $GLOBALS['user']->id);
 		$cssSw->enableHover();
@@ -1044,7 +1045,7 @@ elseif ($auth->auth["perm"]=="admin") {
 			$db2->query ("SELECT Nachname, username FROM  seminar_user LEFT JOIN auth_user_md5  USING (user_id) WHERE Seminar_id='$semid' AND status='dozent' ORDER BY Nachname ASC");
 			$temp = "";
 			while ($db2->next_record()) {
-				$temp .= "<a href=\"about.php?username=" . $db2->f("username") . "\">" . $db2->f("Nachname") . "</a>, ";
+				$temp .= "<a href=\"about.php?username=" . $db2->f("username") . "\">" . htmlReady($db2->f("Nachname")) . "</a>, ";
 			}
 			$temp = substr($temp, 0, -2);
 			print ("<td class=\"$class\" align=\"center\"><font size=\"-1\">&nbsp;$temp</font></td>");
