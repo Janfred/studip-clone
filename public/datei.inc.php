@@ -510,7 +510,7 @@ function copy_folder($folder_id, $new_range, $seed = false){
 						$record[3] = mysql_escape_string($record[3]);
 						$record[4] = mysql_escape_string($record[4]);
 						$db->query("INSERT INTO folder (folder_id, range_id, user_id,
-									name, description, mkdate, chdate) VALUES (
+									name, description, mkdate, chdate, permission) VALUES (
 									'{$record[0]}','{$record[1]}','{$record[2]}',
 									'{$record[3]}','{$record[4]}',{$record[5]},
 									{$record[6]},{$record[7]})");
