@@ -1,10 +1,10 @@
 <?
 /**
 * VeranstaltungResourcesAssign.class.php
-* 
+*
 * updates the saved settings from dates and metadates from a Veranstaltung
 * and the linked resources (rooms)
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -36,8 +36,8 @@
 
 require_once "dates.inc.php";
 require_once "config.inc.php";
-require_once $RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php";
-require_once $RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php";
+require_once $GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/AssignObject.class.php";
+require_once $GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/RoomRequest.class.php";
 require_once "lib/classes/SemesterData.class.php";
 
 class VeranstaltungResourcesAssign {
@@ -46,18 +46,18 @@ class VeranstaltungResourcesAssign {
 	var $seminar_id;
 	var $assign_id;
 	var $dont_check;
-	
+
 	//Konstruktor
 	function VeranstaltungResourcesAssign ($seminar_id=FALSE) {
 		global $RELATIVE_PATH_RESOURCES;
 	 	//make shure to load all the classes from resources, if this class is extern used °change if the classes are storen in own scripts
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
-		
+
 		$this->seminar_id = $seminar_id;
 		$this->dont_check=FALSE;
 	}
-	
+
 	function updateAssign($check_locks = true) {
 		global $TERMIN_TYP;
 		$db = new DB_Seminar;
@@ -69,7 +69,7 @@ class VeranstaltungResourcesAssign {
 		}
 		//kill all assigned rooms (only roomes and only resources assigned directly to the Veranstaltung, not to a termin!) to create new ones
 		$this->deleteAssignedRooms();
-		
+
 		//if no schedule-date exits, we take the metadates (only in this case! else we take only the concrete dates from the termin table!)
 		if (!isSchedule($this->seminar_id,true,true)){
 			$seminar =& Seminar::GetInstance($this->seminar_id);
@@ -102,7 +102,7 @@ class VeranstaltungResourcesAssign {
 		}
 		return $result;
 	}
-	
+
 	//kills resource_id in metadata_dates
 	function clearTurnusData($keys_to_clear = null){
 		$seminar =& Seminar::GetInstance($this->seminar_id);
@@ -116,7 +116,7 @@ class VeranstaltungResourcesAssign {
 		$seminar->restore();
 		$this->turnus_cleared = true;
 	}
-	
+
 	//this method creates all assign-objects based on the seminar-metadata
 	function &getMetaAssignObjects ($term_data='', $veranstaltung_start_time='', $veranstaltung_duration_time='') {
 		$semester = new SemesterData;
@@ -141,14 +141,14 @@ class VeranstaltungResourcesAssign {
 				}
 		} else
 			$sem_begin = $term_data["start_termin"];
-			
+
 		//if there happens a mistake with the $sem_beginn, cancel.
 		if ($sem_begin <= 0) {
 			return FALSE;
 		}
 
 		$dow = date("w", $sem_begin);
-	
+
 		if ($dow <= 5)
 			$corr = ($dow -1) * -1;
 		elseif ($dow == 6)
@@ -157,45 +157,45 @@ class VeranstaltungResourcesAssign {
 			$corr = 1;
 		else
 			$corr = 0;
-		
+
 		if ($corr)
 			$sem_begin_uncorrected = $sem_begin;
-			
+
 		$sem_begin = mktime(0, 0, 0, date("n",$sem_begin), date("j",$sem_begin)+$corr,  date("Y",$sem_begin));
-	
-	
+
+
 		//determine the last day as sem_end
 		foreach ($all_semester as $val)
 			if  ((($veranstaltung_start_time + $veranstaltung_duration_time + 1) >= $val["beginn"]) AND (($veranstaltung_start_time + $veranstaltung_duration_time +1) <= $val["ende"])) {
 				$sem_end=$val["vorles_ende"];
 			}
-		
+
 		$interval = $term_data["turnus"] + 1;
-				
+
 		//create the assigns
 		$i=0;
 		if (is_array($term_data["turnus_data"])) {
 			foreach ($term_data["turnus_data"] as $val) {
 				$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($corr_week * 7), date("Y", $sem_begin));
 				$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
-			
+
 				//check if we have to correct the timestamps for a whole week (in special cases, sem_beginn is not a Monday but the assign is)
 				if (($sem_begin_uncorrected) && ($start_time < $sem_begin_uncorrected) && ($term_data["turnus"]))  {
 					$start_time = mktime (date("G", $start_time), date("i", $start_time), 0, date("n", $start_time), date("j", $start_time) +  7, date("Y", $start_time));
 					$end_time = mktime (date("G", $end_time), date("i", $end_time), 0, date("n", $end_time), date("j", $end_time) +  7, date("Y", $end_time));
 				}
-			
+
 				$day_of_week = date("w", $start_time);
 				if ($day_of_week == 0)
 					$day_of_week = 7;
-						
-				$AssignObjects[] =& AssignObject::Factory(FALSE, $val["resource_id"], $this->seminar_id, $user_free_name, 
+
+				$AssignObjects[] =& AssignObject::Factory(FALSE, $val["resource_id"], $this->seminar_id, $user_free_name,
 											$start_time, $end_time, $sem_end,
-											-1, $interval, 0, 0, 
+											-1, $interval, 0, 0,
 											0, $day_of_week);
 			}
 		}
-		
+
 		if (is_array($AssignObjects))
 			return $AssignObjects;
 		else
@@ -205,14 +205,14 @@ class VeranstaltungResourcesAssign {
 	function &getDateAssignObjects($presence_dates_only = FALSE) {
 		$query2 = sprintf("SELECT termin_id FROM termine WHERE range_id = '%s' %s ORDER BY date, content", $this->seminar_id, ($presence_dates_only) ? "AND date_typ IN ".getPresenceTypeClause() : "");
 		$this->db2->query($query2);
-		
+
 		while ($this->db2->next_record()) {
 			$assignObjects[$this->db2->f("termin_id")] =& $this->getDateAssignObject($this->db2->f("termin_id"));
 		}
-		
+
 		return $assignObjects;
 	}
-	
+
 	//this method creates an assign-object for a seminar-date
 	function &getDateAssignObject($termin_id, $resource_id='', $begin='', $end='') {
 		if (!$begin) {
@@ -233,7 +233,7 @@ class VeranstaltungResourcesAssign {
 			$AssignObject->setResourceId($resource_id);
 		if (!$AssignObject->getAssignUserId())
 			$AssignObject->setAssignUserId($termin_id);
-			
+
 		$AssignObject->setBegin($begin);
 		$AssignObject->setEnd($end);
 		$AssignObject->setRepeatEnd($end);
@@ -245,7 +245,7 @@ class VeranstaltungResourcesAssign {
 		$AssignObject->setRepeatDayOfWeek(0);
 		if (!$AssignObject->getId())
 			$AssignObject->createId();
-	
+
 		return $AssignObject;
 	}
 
@@ -253,7 +253,7 @@ class VeranstaltungResourcesAssign {
 	function changeMetaAssigns($term_data='', $veranstaltung_start_time='', $veranstaltung_duration_time='', $check_only = FALSE, $assignObjects = FALSE, $check_locks = TRUE) {
 		if (func_num_args() == 1)
 			$assignObjects = func_get_arg(0);
-		
+
 		//load the assign-objects, if not given
 		if (!$assignObjects) {
 			$assignObjects =& $this->getMetaAssignObjects($term_data, $veranstaltung_start_time, $veranstaltung_duration_time);
@@ -266,7 +266,7 @@ class VeranstaltungResourcesAssign {
 					//check if there are overlaps (resource isn't free!)
 					if (!$this->dont_check)
 						$overlaps = $obj->checkOverlap($check_locks);
-					
+
 					if ($overlaps)
 						$result[$obj->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$obj->getResourceId());
 					$i++;
@@ -275,12 +275,12 @@ class VeranstaltungResourcesAssign {
 						$obj->create();
 						$result[$obj->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$obj->getResourceId());
 					}
-					
+
 				}
 			}
 		return $result;
 	}
-	
+
 	function changeDateAssign($termin_id, $resource_id='', $begin='', $end='', $check_only=FALSE, $check_locks = TRUE) {
 		//load data from termin and assign object
 		$query = sprintf("SELECT date, content, end_time, assign_id, resources_assign.begin AS assign_begin, resources_assign.end AS assign_end, resources_assign.resource_id AS assign_resource_id FROM termine LEFT JOIN resources_assign ON (assign_user_id = termin_id) WHERE termin_id = '%s' ORDER BY date, content", $termin_id);
@@ -294,20 +294,20 @@ class VeranstaltungResourcesAssign {
 				if (!$end)
 					$end=$begin;
 			}
-			
+
 			if (!$resource_id)
 				$resource_id=$this->db->f("assign_resource_id");
-				
+
 			$assign_begin = $this->db->f("assign_begin");
 			$assign_end = $this->db->f("assign_end");
 			$assign_resource_id = $this->db->f("assign_resource_id");
 		} else
 			return FALSE;
-		
+
 		//check the saved assign-object-times against the planned times - if the same, no update is needed.
 		if (($assign_begin == $begin) && ($assign_end == $end) && (($assign_resource_id == $resource_id))) {
 			return TRUE;
-		}			
+		}
 		if ((!$assign_id) && (!$check_only)) {
 			$result = $this->insertDateAssign($termin_id, $resource_id);
 		} else {
@@ -328,7 +328,7 @@ class VeranstaltungResourcesAssign {
 			$changeAssign->setRepeatDayOfWeek(0);
 			if (!$changeAssign->getId())
 				$changeAssign->createId();
-			
+
 			//check if there are overlaps (resource isn't free!)
 			if (!$this->dont_check)
 				$overlaps = $changeAssign->checkOverlap($check_locks);
@@ -337,7 +337,7 @@ class VeranstaltungResourcesAssign {
 				$result[$changeAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id, "termin_id"=>$termin_id);
 				$this->killDateAssign($termin_id);
 			}
-			
+
 			if ((!$check_only) && (!$overlaps)) {
 				$changeAssign->store();
 				$result[$changeAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id, "termin_id"=>$termin_id);
@@ -352,7 +352,7 @@ class VeranstaltungResourcesAssign {
 		}
 		return $result;
 	}
-	
+
 	function insertDateAssign($termin_id, $resource_id, $begin='', $end='', $check_only=FALSE, $check_locks = TRUE) {
 		if ($resource_id) {
 			if (!$begin) {
@@ -366,18 +366,18 @@ class VeranstaltungResourcesAssign {
 				if (!$end)
 					$end=$begin;
 			}
-			
+
 			if ($begin) {
-				$createAssign =& AssignObject::Factory(FALSE, $resource_id, $termin_id, '', 
+				$createAssign =& AssignObject::Factory(FALSE, $resource_id, $termin_id, '',
 											$begin, $end, $end,
 											0, 0, 0, 0, 0, 0);
 				//check if there are overlaps (resource isn't free!)
 				if (!$this->dont_check)
 					$overlaps = $createAssign->checkOverlap($check_locks);
-					
+
 				if ($overlaps)
 					$result[$createAssign->getId()]=array("overlap_assigns"=>$overlaps, "resource_id"=>$resource_id, "termin_id"=>$termin_id);
-	
+
 				if ((!$check_only) && (!$overlaps)) {
 					$createAssign->create();
 					$result[$createAssign->getId()]=array("overlap_assigns"=>FALSE, "resource_id"=>$resource_id, "termin_id"=>$termin_id);
@@ -400,10 +400,10 @@ class VeranstaltungResourcesAssign {
 			while ($this->db->next_record()) {
 				$killRequest = new RoomRequest ($this->db->f("request_id"));
 				$killRequest->delete();
-			}			
+			}
 		}
 	}
-	
+
 	function deleteAssignedRooms() {
 		if ($this->seminar_id) {
 			$query = sprintf("SELECT assign_id FROM resources_assign LEFT JOIN resources_objects USING (resource_id) LEFT JOIN resources_categories USING (category_id) WHERE resources_assign.assign_user_id = '%s' AND resources_categories.is_room = 1 ", $this->seminar_id);
