@@ -18,14 +18,14 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once $RELATIVE_PATH_CHAT."/ChatServer.class.php";
-require_once $RELATIVE_PATH_CHAT."/FileHandler.class.php";
+require_once $GLOBALS['RELATIVE_PATH_CHAT']."/ChatServer.class.php";
+require_once $GLOBALS['RELATIVE_PATH_CHAT']."/FileHandler.class.php";
 
 /**
 *  Chat Server class (file based)
-* 
 *
-* @access	public	
+*
+* @access	public
 * @author	André Noack <andre.noack@gmx.net>
 * @version	$Id$
 * @package	Chat
@@ -36,6 +36,6 @@ class ChatFileServer extends ChatServer {
 		$this->that = new FileHandler($file_name = CHAT_FILE_NAME,$file_path = CHAT_FILE_PATH);
 		parent::ChatServer();
 	}
-	
+
 }
 ?>

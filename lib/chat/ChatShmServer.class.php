@@ -18,14 +18,14 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once $RELATIVE_PATH_CHAT."/ChatServer.class.php";
-require_once $RELATIVE_PATH_CHAT."/ShmHandler.class.php";
+require_once $GLOBALS['RELATIVE_PATH_CHAT']."/ChatServer.class.php";
+require_once $GLOBALS['RELATIVE_PATH_CHAT']."/ShmHandler.class.php";
 
 /**
 *  Chat Server class (shared memory)
-* 
 *
-* @access	public	
+*
+* @access	public
 * @author	André Noack <andre.noack@gmx.net>
 * @version	$Id$
 * @package	Chat
@@ -36,6 +36,6 @@ class ChatShmServer extends ChatServer{
 		$this->that = new ShmHandler($key=CHAT_SHM_KEY,$size=CHAT_SHM_SIZE*1024);
 		parent::ChatServer();
 	}
-	
+
 }
 ?>

@@ -18,14 +18,14 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once "ChatServer.class.php";
-require_once "MysqlHandler.class.php";
+require_once $GLOBALS['RELATIVE_PATH_CHAT']."/ChatServer.class.php";
+require_once $GLOBALS['RELATIVE_PATH_CHAT']."/MysqlHandler.class.php";
 
 /**
 *  Chat Server class (Mysql based)
-* 
 *
-* @access	public	
+*
+* @access	public
 * @author	André Noack <andre.noack@gmx.net>
 * @version	$Id$
 * @package	Chat
@@ -36,6 +36,6 @@ class ChatMysqlServer extends ChatServer {
 		$this->that =& new MysqlHandler($db_host = CHAT_DB_HOST, $db_user = CHAT_DB_USER, $db_pass = CHAT_DB_PASS, $db_name = CHAT_DB_NAME , $table_name = CHAT_DB_TABLE_NAME);
 		parent::ChatServer();
 	}
-	
+
 }
 ?>
