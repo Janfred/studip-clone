@@ -218,7 +218,7 @@ $SEM_CLASS[5]=array("name"=>_("Arbeitsgruppen"),
 					"participants"=>TRUE,
 					"literature"=>TRUE,
 					"chat"=>TRUE,
-					"description"=>sprintf(_("Hier finden Sie verschiedene Arbeitsgruppen an der %s"), $UNI_NAME),
+					"description"=>sprintf(_("Hier finden Sie verschiedene Arbeitsgruppen an der %s"), $GLOBALS['UNI_NAME']),
 					"create_description"=>_("Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen."));
 //weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
