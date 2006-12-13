@@ -18,16 +18,16 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once $RELATIVE_PATH_CHAT."/chat_config.php";
-require_once $RELATIVE_PATH_CHAT."/ChatFileServer.class.php";
-require_once $RELATIVE_PATH_CHAT."/ChatShmServer.class.php";
-require_once $RELATIVE_PATH_CHAT."/ChatMysqlServer.class.php";
+require_once $GLOBALS['RELATIVE_PATH_CHAT']."/chat_config.php";
+require_once $GLOBALS['RELATIVE_PATH_CHAT']."/ChatFileServer.class.php";
+require_once $GLOBALS['RELATIVE_PATH_CHAT']."/ChatShmServer.class.php";
+require_once $GLOBALS['RELATIVE_PATH_CHAT']."/ChatMysqlServer.class.php";
 require_once "visual.inc.php";
 /**
 *  Chat Server Klasse
-* 
 *
-* @access	public	
+*
+* @access	public
 * @author	André Noack <andre.noack@gmx.net>
 * @version	$Id$
 * @package	Chat
@@ -38,7 +38,7 @@ class ChatServer {
 	var $chatUser = array();
 	var $chatDetail = array();
 	var $caching = FALSE;
-	
+
 	function &GetInstance($class_name){
 		static $object_instance;
 		if (!is_object($object_instance[$class_name])){
@@ -46,22 +46,22 @@ class ChatServer {
 		}
 		return $object_instance[$class_name];
 	}
-	
+
 	function ChatServer(){
 		$this->restore();
 	}
-	
+
 	function restore(){
 		if ($this->caching) return;
 		$this->that->restore($this->chatDetail,CHAT_DETAIL_KEY);
 		if (!is_array($this->chatDetail))
 			$this->chatDetail=array();
 	}
-	
+
 	function store(){
 		$this->that->store($this->chatDetail,CHAT_DETAIL_KEY);
 	}
-	
+
 	function addChat($rangeid, $chatname = "Stud.IP Global Chat",$password = false){
 		if ($this->isActiveChat($rangeid)){
 			return false;
@@ -75,13 +75,13 @@ class ChatServer {
 		$this->store();
 		return true;
 	}
-	
+
 	function removeChat($rangeid){
 		unset($this->chatDetail[$rangeid]);
 		$this->store();
 		return true;
 	}
-	
+
 	function isActiveChat($rangeid){
 		$this->restore();
 		if (!$this->chatDetail[$rangeid]){
@@ -93,7 +93,7 @@ class ChatServer {
 		}
 		return $anzahl;
 	}
-	
+
 	function getActiveUsers($rangeid){
 		$chat_users = $this->getUsers($rangeid);
 		$a_time = time();
@@ -102,19 +102,19 @@ class ChatServer {
 			if ((!$detail["perm"] && ($a_time-$detail["action"]) > CHAT_IDLE_TIMEOUT) ||
 				($detail["perm"] && ($a_time-$detail["action"]) > CHAT_ADMIN_IDLE_TIMEOUT) ||
 				( ($a_time - $detail['heartbeat']) > 5)){
-				$this->removeUser($userid,$rangeid); 
+				$this->removeUser($userid,$rangeid);
 			}
-			else 
+			else
 				++$anzahl;
 		}
 		return $anzahl;
 	}
-	
+
 	function getUsers($rangeid){
 		$this->restore();
 		return (is_array($this->chatDetail[$rangeid]['users'])) ? $this->chatDetail[$rangeid]['users'] : array();
 	}
-	
+
 	function getIdFromNick($rangeid,$nick){
 		$this->restore();
 		$chat_users = $this->getUsers($rangeid);
@@ -140,34 +140,34 @@ class ChatServer {
 		$this->store();
 		return true;
 	}
-	
+
 	function getFullname($userid,$rangeid){
 		return $this->chatDetail[$rangeid]["users"][$userid]["fullname"];
 	}
-	
+
 	function getNick($userid,$rangeid){
 		return $this->chatDetail[$rangeid]["users"][$userid]["nick"];
 	}
-	
+
 	function getPerm($userid,$rangeid){
 		return $this->chatDetail[$rangeid]["users"][$userid]["perm"];
 	}
-	
+
 	function getAction($userid,$rangeid){
 		return $this->chatDetail[$rangeid]["users"][$userid]["action"];
 	}
-	
+
 	function getHeartbeat($userid,$rangeid){
 		return $this->chatDetail[$rangeid]["users"][$userid]["heartbeat"];
 	}
-	
+
 	function setHeartbeat($userid,$rangeid){
 		if (isset($this->chatDetail[$rangeid]["users"][$userid])){
 			$this->chatDetail[$rangeid]["users"][$userid]["heartbeat"] = time();
 			$this->store();
 		}
 	}
-	
+
 	function removeUser($userid,$rangeid){
 		if (!$this->isActiveUser($userid,$rangeid))
 			return false;
@@ -197,7 +197,7 @@ class ChatServer {
 		}
 		$this->store();
 	}
-	
+
 	function getMsg($rangeid,$msStamp = null){
 		$this->restore();
 		if (is_array($this->chatDetail[$rangeid]["messages"])){
@@ -218,7 +218,7 @@ class ChatServer {
 		}
 		return false;
 	}
-	
+
 	function removeCmdMsg($userid,$rangeid){
 		$this->restore();
 		$anzahl = count($this->chatDetail[$rangeid]["messages"]);
@@ -243,7 +243,7 @@ class ChatServer {
 		}
 		return true;
 	}
-	
+
 	function getAllChatUsers(){
 		$this->restore();
 		if (!$this->caching){
@@ -261,7 +261,7 @@ class ChatServer {
 		}
 		return count($this->chatUser);
 	}
-	
+
 	function getAdminChats($user_id){
 		$this->restore();
 		$ret = false;
@@ -274,12 +274,12 @@ class ChatServer {
 		}
 		return $ret;
 	}
-		
+
 	function getMsTime(){
-		list($usec, $sec) = explode(" ",microtime()); 
+		list($usec, $sec) = explode(" ",microtime());
 		return array((int)($usec*1000) ,(int)$sec);
 	}
-	
+
 	function msTimeToFloat($arg = null){
 		if (!$arg){
 			$arg = $this->getMsTime();
