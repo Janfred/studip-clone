@@ -28,33 +28,33 @@ function check_messaging_default() {
 	if (!$my_messaging_settings['show_only_buddys'])
 		$my_messaging_settings['show_only_buddys'] = FALSE;
 	if (!$my_messaging_settings['delete_messages_after_logout'])
-		$my_messaging_settings['delete_messages_after_logout'] = FALSE;	
+		$my_messaging_settings['delete_messages_after_logout'] = FALSE;
 	if (!$my_messaging_settings['start_messenger_at_startup'])
-		$my_messaging_settings['start_messenger_at_startup'] = FALSE;	
+		$my_messaging_settings['start_messenger_at_startup'] = FALSE;
 	if (!$my_messaging_settings['active_time'])
-		$my_messaging_settings['active_time'] = 5;	
+		$my_messaging_settings['active_time'] = 5;
 	if (!$my_messaging_settings['default_setted'])
-		$my_messaging_settings['default_setted'] = time();	
+		$my_messaging_settings['default_setted'] = time();
 	if (!$my_messaging_settings['last_login'])
-		$my_messaging_settings['last_login'] = FALSE;	
+		$my_messaging_settings['last_login'] = FALSE;
 	if (!$my_messaging_settings['timefilter'])
-		$my_messaging_settings['timefilter'] = "30d";	
+		$my_messaging_settings['timefilter'] = "30d";
 	if (!$my_messaging_settings['opennew'])
-		$my_messaging_settings['opennew'] = 1;	
+		$my_messaging_settings['opennew'] = 1;
 	if (!$my_messaging_settings['logout_markreaded'])
-		$my_messaging_settings['logout_markreaded'] = FALSE;	
+		$my_messaging_settings['logout_markreaded'] = FALSE;
 	if (!$my_messaging_settings['openall'])
-		$my_messaging_settings['openall'] = FALSE;	
+		$my_messaging_settings['openall'] = FALSE;
 	if (!$my_messaging_settings['addsignature'])
-		$my_messaging_settings['addsignature'] = FALSE;	
+		$my_messaging_settings['addsignature'] = FALSE;
 	if (!$my_messaging_settings['save_snd'])
-		$my_messaging_settings['save_snd'] = 1;	
+		$my_messaging_settings['save_snd'] = 1;
 	if (!$my_messaging_settings['sms_sig'])
-		$my_messaging_settings['sms_sig'] = FALSE;	
+		$my_messaging_settings['sms_sig'] = FALSE;
 	if (!$my_messaging_settings['send_view'])
-		$my_messaging_settings['send_view'] = FALSE;	
+		$my_messaging_settings['send_view'] = FALSE;
 	if (!$my_messaging_settings['last_box_visit'])
-		$my_messaging_settings['last_box_visit'] = 1;	
+		$my_messaging_settings['last_box_visit'] = 1;
 	if (!$my_messaging_settings['folder']['in'])
 		$my_messaging_settings['folder']['in'][0] = "dummy";
 	if (!$my_messaging_settings['folder']['out'])
@@ -64,14 +64,14 @@ function check_messaging_default() {
 	if (!$my_messaging_settings['show_sndpicture'])
 		$my_messaging_settings['show_sndpicture'] = FALSE;
 }
-	
-// set default Values for schedule (timetable)	
+
+// set default Values for schedule (timetable)
 function check_schedule_default() {
 	global $my_schedule_settings;
-		
+
 	if (!$my_schedule_settings) {
 		$my_schedule_settings=array(
-			"glb_start_time"=>8, 
+			"glb_start_time"=>8,
 			"glb_end_time"=>19,
 			"glb_days"=>array(
 				"mo"=>"TRUE",
@@ -84,13 +84,13 @@ function check_schedule_default() {
 			),
 			"default_setted"=>time()
 		);
-	}		
+	}
 }
 
-// set default Values for calendar	
+// set default Values for calendar
 function check_calendar_default(){
 	global $calendar_user_control_data;
-	
+
 	if(!$calendar_user_control_data){
 		$calendar_user_control_data = array(
 			"view"             => "showweek",
@@ -144,9 +144,18 @@ function startpage_redirect($page_code) {
 
 require_once("language.inc.php");
 
-//get the name of the current page in $i_page
+global $i_page, $i_query,
+       $SessionStart, $SessionSeminar, $SessSemName, $messenger_started,
+       $object_cache, $contact,
+       $_language, $DEFAULT_LANGUAGE,
+       $sess, $auth, $user, $perm,
+       $CurrentLogin, $LastLogin, $forum, $writemode,
+       $my_messaging_settings, $my_schedule_settings,
+       $my_personal_sems, $my_studip_settings, $homepage_cache_own,
+       $CALENDAR_ENABLE, $seminar_open_redirected, $_language_path;
 
-$i_page = basename($PHP_SELF);
+//get the name of the current page in $i_page
+$i_page = basename($GLOBALS['PHP_SELF']);
 
 // function to get the parameters of the current page in array $i_query
 
@@ -155,8 +164,8 @@ $i_query = explode('&',getenv("QUERY_STRING"));
 //INITS
 
 // session init starts here
-if ($SessionStart==0) { 
-	$SessionStart=time(); 
+if ($SessionStart==0) {
+	$SessionStart=time();
 	$SessionSeminar="";
 	$SessSemName="";
 	$sess->register("SessionStart");
@@ -166,7 +175,7 @@ if ($SessionStart==0) {
 	$sess->register("object_cache");
 	$sess->register("contact");
 	$object_cache[] = " ";
-	
+
 	// Language Settings
 	$sess->register("_language");
 	// try to get accepted languages from browser
@@ -175,7 +184,7 @@ if ($SessionStart==0) {
 	if (!$_language)
 		$_language = $DEFAULT_LANGUAGE; // else use system default
 }
-	
+
 // user init starts here
 if ($auth->is_authenticated() && $user->id != "nobody") {
 	if ($SessionStart > $CurrentLogin) {      // just logged in
@@ -191,18 +200,18 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 		$user->register("my_personal_sems");
 		$user->register("my_studip_settings");
 		$user->register("homepage_cache_own");
-		
-				
+
+
 		// call default functions
 		check_messaging_default();
 		check_schedule_default();
 		check_semester_default();
-		
+
 		if($CALENDAR_ENABLE){
 			$user->register("calendar_user_control_data");
 			check_calendar_default();
 		}
-	
+
 		//redirect user to another page if he want to
 		if (($my_studip_settings["startpage_redirect"]) && ($i_page == "index.php") && (!$perm->have_perm("root"))){
 			$seminar_open_redirected = TRUE;
