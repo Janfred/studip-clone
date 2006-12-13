@@ -3,8 +3,8 @@
 // This file is part of Stud.IP
 // range_tree.view.class.php
 // Database views used with "range_tree"
-// 
-// Copyright (c) 2002 André Noack <noack@data-quest.de> 
+//
+// Copyright (c) 2002 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -25,7 +25,8 @@ require_once("config.inc.php");
 require_once("lib/classes/SemesterData.class.php");
 
 foreach (SemesterData::GetSemesterArray() as $key => $value){
-	if ($value['beginn']) $sem_start_times[] = $value['beginn'];
+	if (isset($value['beginn']) && $value['beginn'])
+	  $sem_start_times[] = $value['beginn'];
 }
 $_views['sem_number_sql'] = "INTERVAL(start_time," . join(",",$sem_start_times) .")";
 $_views['sem_number_end_sql'] = "IF(duration_time=-1,-1,INTERVAL(start_time+duration_time," . join(",",$sem_start_times) ."))";
@@ -33,10 +34,10 @@ $_views['sem_number_end_sql'] = "IF(duration_time=-1,-1,INTERVAL(start_time+dura
 $_views["TREE_KIDS"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT item_id FROM range_tree WHERE parent_id=? ORDER BY priority");
 $_views["TREE_GET_DATA"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT a.*, b.Name AS studip_object_name, b.fakultaets_id FROM range_tree a 
+							"query"=>"SELECT a.*, b.Name AS studip_object_name, b.fakultaets_id FROM range_tree a
 									LEFT JOIN Institute b ON (a.studip_object_id = b.Institut_id) ORDER BY priority");
 $_views["TREE_GET_SEM_ENTRIES"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT item_id,count(d.Seminar_id) AS entries FROM range_tree a 
+							"query"=>"SELECT item_id,count(d.Seminar_id) AS entries FROM range_tree a
 									INNER JOIN seminar_inst c ON (a.studip_object_id = c.institut_id)
 									 INNER JOIN seminare d ON(c.seminar_id=d.Seminar_id  §) § GROUP BY a.item_id");
 
@@ -67,7 +68,7 @@ $_views["TREE_SEARCH_USER"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT rt.item_id FROM auth_user_md5 a LEFT JOIN user_inst b ON (a.user_id=b.user_id AND b.inst_perms!='user')
 LEFT JOIN range_tree rt ON (rt.studip_object_id=b.Institut_id ) WHERE NOT ISNULL(rt.item_id) AND CONCAT(a.username,' ',a.Vorname,' ',a.Nachname) LIKE ?");
 $_views["TREE_SEARCH_SEM"] = array("pk"=>"item_id","temp_table_type"=>"HEAP",
-							"query"=>"SELECT rt.item_id FROM seminare a LEFT JOIN seminar_inst b USING (Seminar_id)LEFT JOIN range_tree rt ON (rt.studip_object_id=b.institut_id) 
+							"query"=>"SELECT rt.item_id FROM seminare a LEFT JOIN seminar_inst b USING (Seminar_id)LEFT JOIN range_tree rt ON (rt.studip_object_id=b.institut_id)
 							WHERE NOT ISNULL(rt.item_id) AND a.Name LIKE ?");
 
 
