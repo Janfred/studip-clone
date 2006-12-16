@@ -174,10 +174,11 @@ class Ilias3ConnectedUser extends ConnectedUser
 		$user_data["email"] = $this->email;
 		$user_data["street"] = $this->street;
 		$user_data["phone_home"] = $this->phone_home;
-		$user_data["getTimeLimitUnlimited"] = 1;
+		$user_data["time_limit_unlimited"] = 1;
 		$user_data["active"] = 1;
 		$user_data["approve_date"] = date('Y-m-d H:i:s');
 		$user_data["accepted_agreement"] = true;
+		
 		if ($connected_cms[$this->cms_type]->user_style != "")
 			$user_data["user_style"] = $connected_cms[$this->cms_type]->user_style;
 		if ($connected_cms[$this->cms_type]->user_skin != "")
