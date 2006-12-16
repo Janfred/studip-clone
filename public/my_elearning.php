@@ -37,7 +37,6 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ELearningUtils.class.php");
 	ELearningUtils::bench("start");
 
-	$GLOBALS['ALWAYS_SELECT_DB'] = true;
 
 	include ("links_about.inc.php");
 
@@ -45,7 +44,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	{
 		$sess->unregister("elearning_open_close");
 		unset($elearning_open_close);
-	}/**/
+	}
 	$elearning_open_close["type"] = "user";
 	$elearning_open_close["id"] = $auth->auth["uid"];
 	if (isset($do_open))
