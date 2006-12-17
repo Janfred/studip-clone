@@ -65,7 +65,7 @@ class RoomGroups {
 	}
 	
 	function createConfigGroups(){
-		@include $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/config_room_groups.inc.php";
+		@include "config_room_groups.inc.php";
 		if (is_array($room_groups)){
 			$room_list = new ResourcesUserRoomsList($GLOBALS['user']->id, false, false, true);
 			if ($room_list->numberOfRooms()){
