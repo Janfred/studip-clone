@@ -30,30 +30,24 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once "prepend4.php"; //for use with old style phplib change this to prepend.php!!!
+require_once dirname(__FILE__) . '/studip_cli_env.inc.php';
 require_once "language.inc.php";
 require_once 'lib/functions.php';
 require_once "lib/classes/ModulesNotification.class.php";
 
 
-get_config('MAIL_NOTIFICATION_ENABLE') || die('Mail notifications are disabled in this Stud.IP installation.');
-($MAIL_LOCALHOST && $MAIL_HOST_NAME && $ABSOLUTE_URI_STUDIP) || die('To use mail notifications you MUST set correct values for $MAIL_LOCALHOST, $MAIL_HOST_NAME and $ABSOLUTE_URI_STUDIP in local.inc!');
+get_config('MAIL_NOTIFICATION_ENABLE') || trigger_error('Mail notifications are disabled in this Stud.IP installation.', E_USER_ERROR);
+($MAIL_LOCALHOST && $MAIL_HOST_NAME && $ABSOLUTE_URI_STUDIP) || trigger_error('To use mail notifications you MUST set correct values for $MAIL_LOCALHOST, $MAIL_HOST_NAME and $ABSOLUTE_URI_STUDIP in local.inc!', E_USER_ERROR);
 
 set_time_limit(60*60*2);
-
-class FakeUser {
-	var $id;
-}
 
 $db = new DB_Seminar();
 $notification = new ModulesNotification();
 $smtp =& $notification->smtp;
-$user = new FakeUser();
-$perm = new Seminar_Perm();
 
 $db->query("SELECT aum.user_id,aum.username,{$GLOBALS['_fullname_sql']['full']} as fullname,Email FROM seminar_user su INNER JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info ui USING(user_id) WHERE notification != 0 GROUP BY su.user_id");
 while($db->next_record()){
-	$user->id = $db->f("user_id");
+	$user->start($db->f("user_id"));
 	setTempLanguage($db->f("user_id"));	
 	$to = $db->f("Email");				
 	$title = "[" . $GLOBALS['UNI_NAME_CLEAN'] . "] " . _("Tägliche Benachrichtigung");
@@ -67,7 +61,7 @@ while($db->next_record()){
 										"Reply-To: $reply_to",
 										"Subject: " . $smtp->QuotedPrintableEncode($title,1)),
 								$mailmessage);
-		echo date('r') . " " . $db->f('username') . ": " . (int)$ok . "\n";
+		fwrite(STDOUT, date('r') . " " . $db->f('username') . ": " . (int)$ok . "\n");
 	}
 }
 ?>

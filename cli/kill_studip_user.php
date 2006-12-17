@@ -33,31 +33,11 @@
 define('SEND_MAIL_ON_DELETE', 1);
 define('KILL_ADMINS' , 0);
 
-function CliErrorHandler($errno, $errstr, $errfile, $errline) {
-	if ($errno & ~E_NOTICE && error_reporting()){
-		fwrite(STDERR,"$errstr \n$errfile line $errline\n");
-		exit(1);
-	}
-}
-set_error_handler('CliErrorHandler');
-
-require_once dirname(__FILE__) . "/prepend4.php"; //for use with old style phplib change this to prepend.php!!!
+require_once dirname(__FILE__) . '/studip_cli_env.inc.php';
 require_once "language.inc.php";
 require_once 'lib/functions.php';
 require_once "lib/classes/UserManagement.class.php";
 
-class FakePerm {
-	function have_perm($foo){return true;}
-}
-
-function parse_msg_to_clean_text($long_msg,$separator="§") {
-	$msg = explode ($separator,$long_msg);
-	$ret = array();
-	for ($i=0; $i < count($msg); $i=$i+2) {
-		if ($msg[$i+1]) $ret[] = trim(decodeHTML(preg_replace ("'<[\/\!]*?[^<>]*?>'si", "", $msg[$i+1])));
-	}
-	return join("\n", $ret);
-}
 if (!($MAIL_LOCALHOST && $MAIL_HOST_NAME && $ABSOLUTE_URI_STUDIP)){
 	trigger_error('To use this script you MUST set correct values for $MAIL_LOCALHOST, $MAIL_HOST_NAME and $ABSOLUTE_URI_STUDIP in local.inc!', E_USER_ERROR);
 }
@@ -94,8 +74,6 @@ if (!is_array($kill_user)) {
 	exit(0);
 }
 $umanager = new UserManagement();
-$perm = new FakePerm();
-$user = new Seminar_User('xxx');
 foreach($kill_user as $uname => $udetail){
 	if (!KILL_ADMINS && ($udetail['perms'] == 'admin' || $udetail['perms'] == 'root')){
 		fwrite(STDOUT, "user: $uname is '{$udetail['perms']}', NOT deleted". chr(10));
