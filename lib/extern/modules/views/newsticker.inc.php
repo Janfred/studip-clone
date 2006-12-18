@@ -61,5 +61,5 @@ if (!$js_only) {
 
 	if ($this->config->getValue("Main", "automaticstart"))
 		echo "<script type=\"text/javascript\">\n\tnewsticker();\n</script>\n";
-		
+}	
 ?>
