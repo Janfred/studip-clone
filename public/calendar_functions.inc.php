@@ -15,7 +15,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // calendar_functions.inc.php
-// 
+//
 // Copyright (C) 2001 Peter Thienel <pthienel@web.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@
 
 function wday ($tmstamp = "", $mode = "LONG", $day_german = "") {
 	global $_language;
-	
+
 	// translate german weekdays with strftime()
 	if (!$tmstamp) {
 		// timestamps of known weekdays
@@ -53,27 +53,27 @@ function wday ($tmstamp = "", $mode = "LONG", $day_german = "") {
 		);
 		$tmstamp = $tmstamps[$day_german];
 	}
-	
+
 	// If the setlocale is set to "de_DE" the short form of day names is a bit
 	// strange ;-), so it's better to use these:
 	if ($_language == "de_DE") {
 		$dayname_long = array("Sonntag", "Montag", "Dienstag", "Mittwoch",
 												"Donnerstag", "Freitag", "Samstag");
 		$dayname_short = array("So", "Mo", "Di", "Mi", "Do", "Fr", "Sa");
-												
+
 		$dow = date("w", $tmstamp);
-	
-	
+
+
 		if($mode == "SHORT")
 			return $dayname_short[$dow];
 		return $dayname_long[$dow];
 	}
-	
+
 	// For the rest of the world strftime() should be OK ;-)
 	if ($mode == "SHORT")
 		return htmlentities(strftime("%a", $tmstamp), ENT_QUOTES);
 	return htmlentities(strftime("%A", $tmstamp), ENT_QUOTES);
-	
+
 }
 
 
@@ -120,13 +120,13 @@ function holiday ($tmstamp, $mod = "") {
 		case  50: $name = "Pfingstmontag"; $col = 3; break;
 		case  60: $name = "Fronleichnam"; $col = 1; break;
 	}
-	
+
 	// die unveraenderlichen Feiertage
 	switch ($doy) {
 		case   1: $name = "Neujahr"; $col = 3; break;
 		case   6: $name = "Hl. Drei K&ouml;nige"; $col = 1; break;
 	}
-	
+
 	// Schaltjahre nicht vergessen
 	if (date("L", $tmstamp))
 		$doy--;
@@ -147,7 +147,7 @@ function holiday ($tmstamp, $mod = "") {
 		case 360: $name = "2. Weihnachtstag"; $col = 3; break;
 		case 365: $name = "Sylvester"; $col = 1; break;
 	}
-	
+
 	// Die Sonntagsfeiertage
 	if (date("w", $tmstamp) == 0) {
 		if ($doy > 127 && $doy < 135) {
@@ -183,10 +183,10 @@ function holiday ($tmstamp, $mod = "") {
 			$col = 2;
 		}
 	}
-	
+
 	if ($name)
 		return array("name" => _($name), "col" => $col);
-	
+
 	return FALSE;
 }
 
@@ -203,7 +203,7 @@ function check_date ($month, $day, $year, $hour = 0, $min = 0) {
 		return FALSE;
 	if ($hour > 23 || $hour < 0 || $min > 59 || $min < 0)
 		return FALSE;
-	
+
 	return mktime($hour, $min, 0, $month, $day, $year);
 }
 
@@ -216,8 +216,36 @@ function day_diff ($ts_1, $ts_2) {
 		$days_1--;
 	if (date("n", $ts_2) > 3 && date("L", $ts_2))
 		$days_2--;
-		
-	return $days - abs($days_1 - $days_2);
-}	
 
-?>
+	return $days - abs($days_1 - $days_2);
+}
+
+/**
+ * Useful function to return the name of the n-th day. Note that the first
+ * day's is 1 not 0. Thus "monday" is "1" and "sunday" is "7"!
+ *
+ *
+ * @param int     the index of the day
+ *
+ * @return string the name of the day
+ *
+ */
+function get_day_name($day) {
+
+  $days = array(_("Montag"),
+                _("Dienstag"),
+                _("Mittwoch"),
+                _("Donnerstag"),
+                _("Freitag"),
+                _("Samstag"),
+                _("Sonntag"));
+
+  if (!isset($days[$day - 1])) {
+    trigger_error(sprintf('Argument(%s) has to be between 1 and 7', $day),
+                  E_USER_ERROR);
+    exit;
+  }
+
+
+	return $days[$day - 1];
+}
