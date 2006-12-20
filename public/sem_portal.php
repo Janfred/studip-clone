@@ -33,7 +33,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-
+ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
@@ -126,7 +126,7 @@ if ($sem_portal["bereich"] != "all") {
 	}
 
 	$query = "SELECT count(*) AS count FROM seminare WHERE "
-		. (!$GLOBALS['perm']->have_perm('root') ? "seminare.visible=1 AND" : "" )
+		. (!$GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM')) ? "seminare.visible=1 AND" : "" )
 		. " seminare.status IN ('" . join("','", $_sem_status) . "')";
 	$db->query($query);
 	if ($db->next_record())
@@ -154,7 +154,15 @@ if (!$perm->have_perm("root")){
 	$sem_browse_obj->target_url="seminar_main.php";
 	$sem_browse_obj->target_id="auswahl";
 }
-
+if (isset($_REQUEST['send_excel'])){
+	$tmpfile = basename($sem_browse_obj->create_result_xls());
+	if($tmpfile){
+		header('Location: ' . getDownloadLink( $tmpfile, _("ErgebnisVeranstaltungssuche.xls"), 4));
+		page_close();
+		die;
+	}
+}
+ob_end_flush();
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
@@ -216,6 +224,10 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 							"eintrag" => array(array(	'icon' => "blank.gif",
 														"text" => $group_by_links))
 					);
+	$infobox[] = 	array(	"kategorie" => _("Aktionen:"),
+							"eintrag" => array(array(	'icon' => "blank.gif",
+														"text" => '<a href="'.$PHP_SELF.'?send_excel=1"><img src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" align="absbottom" border="0">&nbsp;'._("Download des Ergebnisses").'</a>'))
+					);
 } else {
 	//create TOP-lists
 	if (!$mehr) {
@@ -225,7 +237,7 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 	else
 		$count = 5 * $mehr;
 	$sql_where_query_seminare = " WHERE 1 ";
-	if (!$GLOBALS['perm']->have_perm('root')) $sql_where_query_seminare .= " AND seminare.visible=1  ";
+	if (!$GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM'))) $sql_where_query_seminare .= " AND seminare.visible=1  ";
 
 	if ($sem_portal['bereich'] !="all")
 		$sql_where_query_seminare .= " AND seminare.status IN ('" . join("','", $_sem_status) . "')";

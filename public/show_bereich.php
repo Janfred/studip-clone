@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
+ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
@@ -57,7 +57,7 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 	$sem_browse_obj->sem_browse_data['level'] = $show_bereich_data['level'];
 	switch ($show_bereich_data['level']) {
 		case "sbb":
-			$the_tree =& TreeAbstract::GetInstance("StudipSemTree", array('visible_only' => !$GLOBALS['perm']->have_perm('root')));
+			$the_tree =& TreeAbstract::GetInstance("StudipSemTree", array('visible_only' => !$GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM'))));
 			$bereich_typ = _("Studienbereich");
 			$head_text = "&nbsp; " . _("&Uuml;bersicht aller Veranstaltungen eines Studienbereichs");
 			$intro_text = sprintf(_("Alle Veranstaltungen, die dem Studienbereich: <br><b>%s</b><br> zugeordnet wurden."),
@@ -80,7 +80,7 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 			$intro_text = sprintf(_("Alle Veranstaltungen der Einrichtung <b>%s</b>"),$db->f("Name"));
 			$db->query("SELECT seminar_inst.seminar_id FROM seminar_inst
 			LEFT JOIN seminare ON (seminar_inst.seminar_id=seminare.Seminar_id)
-			WHERE seminar_inst.Institut_id='".$show_bereich_data["id"]."'" . (!$GLOBALS['perm']->have_perm('root') ? " AND seminare.visible='1'" : ""));
+			WHERE seminar_inst.Institut_id='".$show_bereich_data["id"]."'" . (!$GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM')) ? " AND seminare.visible='1'" : ""));
 
 			$sem_browse_obj->sem_browse_data['search_result'] = array();
 			while ($db->next_record()){
@@ -90,6 +90,15 @@ if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
 			break;
 	}
 
+if (isset($_REQUEST['send_excel'])){
+	$tmpfile = basename($sem_browse_obj->create_result_xls());
+	if($tmpfile){
+		header('Location: ' . getDownloadLink( $tmpfile, _("Veranstaltungsübersicht.xls"), 4));
+		page_close();
+		die;
+	}
+}
+ob_end_flush();
 ?>
 <body>
 <table width="100%" border=0 cellpadding=2 cellspacing=0>
@@ -125,7 +134,11 @@ if (($EXPORT_ENABLE) AND ($show_bereich_data['level'] == "s") AND ($perm->have_p
 	include_once($PATH_EXPORT . "/export_linking_func.inc.php");
 	$infobox[] = 	array(	"kategorie" => _("Daten ausgeben:"),
 							"eintrag" => array(array(	"icon" => "blank.gif",
-														"text" => export_link($SessSemName[1], "veranstaltung", $SessSemName[0])))
+														"text" => export_link($SessSemName[1], "veranstaltung", $SessSemName[0])),
+												array( 'icon' => 'blank.gif',
+														"text" => '<a href="'.$PHP_SELF.'?send_excel=1&group_by='.(int)$_REQUEST['group_by'].'"><img src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" align="absbottom" border="0">&nbsp;'._("Download als Excel Tabelle").'</a>')
+
+														)
 					);
 }
 if (($EXPORT_ENABLE) AND ($show_bereich_data['level'] == "sbb") AND ($perm->have_perm("tutor")))
@@ -133,7 +146,11 @@ if (($EXPORT_ENABLE) AND ($show_bereich_data['level'] == "sbb") AND ($perm->have
 	include_once($PATH_EXPORT . "/export_linking_func.inc.php");
 	$infobox[] = 	array(	"kategorie" => _("Daten ausgeben:"),
 							"eintrag" => array(array(	"icon" => "blank.gif",
-														"text" => export_link($show_bereich_data["id"], "veranstaltung", $show_bereich_data["id"])))
+														"text" => export_link($show_bereich_data["id"], "veranstaltung", $show_bereich_data["id"])),
+												array( 'icon' => 'blank.gif',
+														"text" => '<a href="'.$PHP_SELF.'?send_excel=1&group_by='.(int)$_REQUEST['group_by'].'"><img src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" align="absbottom" border="0">&nbsp;'._("Download als Excel Tabelle").'</a>')
+
+														)
 					);
 }
 print_infobox ($infobox,"browse.jpg");

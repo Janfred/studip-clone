@@ -40,7 +40,7 @@ class SemBrowse {
 			$this->sem_browse_data[$this->persistent_fields[$i]] = $_REQUEST[$this->persistent_fields[$i]];
 			}
 		}
-		$this->search_obj = new StudipSemSearch("search_sem", false, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('root')));
+		$this->search_obj = new StudipSemSearch("search_sem", false, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM'))));
 		$this->search_obj->search_fields['qs_choose']['content'] = array('title' => _("Titel"), 'lecturer' => _("DozentIn"),'number' => _("Nummer"), 'comment' => _("Kommentar"));
 		$this->search_obj->search_fields['type']['class'] = $this->sem_browse_data['show_class'];
 
@@ -83,7 +83,7 @@ class SemBrowse {
 			if (!$this->sem_browse_data['start_item_id']){
 				$this->sem_browse_data['start_item_id'] = "root";
 			}
-			$this->sem_tree = new StudipSemTreeViewSimple($this->sem_browse_data["start_item_id"], $this->sem_number, $sem_status, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('root')));
+			$this->sem_tree = new StudipSemTreeViewSimple($this->sem_browse_data["start_item_id"], $this->sem_number, $sem_status, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM'))));
 			$this->sem_browse_data['cmd'] = "qs";
 			if ($_REQUEST['cmd'] != "show_sem_range" && $level_change && !$this->search_obj->search_button_clicked ){
 				$this->get_sem_range($this->sem_browse_data["start_item_id"], false);
@@ -101,7 +101,7 @@ class SemBrowse {
 			if (!$this->sem_browse_data['start_item_id']){
 				$this->sem_browse_data['start_item_id'] = "root";
 			}
-			$this->range_tree = new StudipSemRangeTreeViewSimple($sem_browse_data["start_item_id"],$this->sem_number,$sem_status, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('root')));
+			$this->range_tree = new StudipSemRangeTreeViewSimple($sem_browse_data["start_item_id"],$this->sem_number,$sem_status, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM'))));
 			$this->sem_browse_data['cmd'] = "qs";
 			if ($_REQUEST['cmd'] != "show_sem_range_tree" && $level_change && !$this->search_obj->search_button_clicked ){
 				$this->get_sem_range_tree($this->sem_browse_data["start_item_id"], false);
@@ -176,7 +176,7 @@ class SemBrowse {
 
 	function get_sem_class(){
 		$db = new DB_Seminar("SELECT Seminar_id from seminare WHERE "
-							. (!(is_object($GLOBALS['perm'] && $GLOBALS['perm']->have_perm('root'))) ? "seminare.visible=1 AND" : "" )
+							. (!(is_object($GLOBALS['perm'] && $GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM')))) ? "seminare.visible=1 AND" : "" )
 							. " seminare.status IN ('" . join("','", $this->sem_browse_data['sem_status']) . "')");
 		$snap = new DbSnapshot($db);
 		$sem_ids = $snap->getRows("Seminar_id");
@@ -204,7 +204,7 @@ class SemBrowse {
 		$inst_ids[] = $range_object->item_data['studip_object_id'];
 		$db_view = new DbView();
 		$db_view->params[0] = $inst_ids;
-		$db_view->params[1] = (is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm('root')) ? '' : ' AND c.visible=1';
+		$db_view->params[1] = (is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM'))) ? '' : ' AND c.visible=1';
 		$db_view->params[1] .= (is_array($this->sem_browse_data['sem_status'])) ? " AND c.status IN('" . join("','",$this->sem_browse_data['sem_status']) ."')" : "";
 		$db_view->params[2] = (is_array($this->sem_number)) ? " HAVING sem_number IN (" . join(",",$this->sem_number) .") OR (sem_number <= " . $this->sem_number[count($this->sem_number)-1] . "  AND (sem_number_end > " . $this->sem_number[count($this->sem_number)-1] . " OR sem_number_end = -1)) " : "";
 		$db_snap = new DbSnapshot($db_view->get_query("view:SEM_INST_GET_SEM"));
@@ -353,126 +353,18 @@ function print_result(){
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS;
 		
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
-			if ($this->sem_browse_data['group_by'] == 1){
-				if (!is_object($this->sem_tree)){
-						$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
-					} else {
-						$the_tree =& $this->sem_tree->tree;
-					}
-				if ($this->sem_browse_data['level'] == "vv" || $this->sem_browse_data['level'] == "sbb"){
-					$allowed_ranges = $the_tree->getKidsKids($this->sem_browse_data['start_item_id']);
-					$allowed_ranges[] = $this->sem_browse_data['start_item_id'];
-					$sem_tree_query = " AND sem_tree_id IN('" . join("','", $allowed_ranges) . "') ";
-				}
-				$add_fields = "seminar_sem_tree.sem_tree_id AS bereich,";
-				$add_query = "LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id $sem_tree_query)";
-			} else if ($this->sem_browse_data['group_by'] == 4){
-				$add_fields = "Institute.Name AS Institut,Institute.Institut_id,";
-				$add_query = "LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
-							LEFT JOIN Institute ON (Institute.Institut_id = seminar_inst.institut_id)";
+			if (!is_object($this->sem_tree)){
+				$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
 			} else {
-				$add_fields = "";
-				$add_query = "";
+				$the_tree =& $this->sem_tree->tree;
 			}
-					
-			$query = ("SELECT seminare.Seminar_id,VeranstaltungsNummer, seminare.status, IF(seminare.visible=0,CONCAT(seminare.Name, ' ". _("(versteckt)") ."'), seminare.Name) AS Name, seminare.metadata_dates,
-					 $add_fields" . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
-				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
-				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
-				LEFT JOIN auth_user_md5 USING (user_id) 
-				LEFT JOIN user_info USING (user_id) 
-				$add_query
-				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "')");
-			$db = new DB_Seminar($query);
-			$snap = new DbSnapShot($db);
-			$group_field = $this->group_by_fields[$this->sem_browse_data['group_by']]['group_field'];
-			$data_fields[0] = "Seminar_id";
-			if ($this->group_by_fields[$this->sem_browse_data['group_by']]['unique_field']){
-				$data_fields[1] = $this->group_by_fields[$this->sem_browse_data['group_by']]['unique_field'];
-			}
-			$group_by_data = $snap->getGroupedResult($group_field, $data_fields);
-			$sem_data = $snap->getGroupedResult("Seminar_id");
-			if ($this->sem_browse_data['group_by'] == 0){
-				$group_by_duration = $snap->getGroupedResult("sem_number_end", array("sem_number","Seminar_id"));
-				foreach ($group_by_duration as $sem_number_end => $detail){
-					if ($sem_number_end != -1 && ($detail['sem_number'][$sem_number_end] && count($detail['sem_number']) == 1)){
-						continue;
-					} else {
-						foreach ($detail['Seminar_id'] as $seminar_id => $foo){
-							$start_sem = key($sem_data[$seminar_id]["sem_number"]);
-							if ($sem_number_end == -1){
-								$sem_number_end = count($this->search_obj->sem_dates)-1;
-							}
-							for ($i = $start_sem; $i <= $sem_number_end; ++$i){
-								if ($this->sem_number === false || (is_array($this->sem_number) && in_array($i,$this->sem_number))){
-									if ($group_by_data[$i] && !$tmp_group_by_data[$i]){
-										foreach($group_by_data[$i]['Seminar_id'] as $id => $bar){
-											$tmp_group_by_data[$i]['Seminar_id'][$id] = true;
-										}
-									}
-									$tmp_group_by_data[$i]['Seminar_id'][$seminar_id] = true;
-								}
-							}
-						}
-					}
-				}
-				if (is_array($tmp_group_by_data)){
-					if ($this->sem_number !== false){
-						unset($group_by_data);
-					}
-					foreach ($tmp_group_by_data as $start_sem => $detail){
-						$group_by_data[$start_sem] = $detail;
-					}
-				}
-			}
-
-			//release memory
-			unset($snap);
-			unset($tmp_group_by_data);
-
-			foreach ($group_by_data as $group_field => $sem_ids){
-				foreach ($sem_ids['Seminar_id'] as $seminar_id => $foo){
-					$name = strtolower(key($sem_data[$seminar_id]["Name"]));
-					$name = str_replace("ä","ae",$name);
-					$name = str_replace("ö","oe",$name);
-					$name = str_replace("ü","ue",$name);
-					$group_by_data[$group_field]['Seminar_id'][$seminar_id] = $name;
-				}
-				uasort($group_by_data[$group_field]['Seminar_id'], 'strnatcmp');
-			}
-
+			list($group_by_data, $sem_data) = $this->get_result();
 			echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 			echo "\n<tr><td class=\"steelgraulight\" colspan=\"2\"><div style=\"margin-top:10px;margin-bottom:10px;\"><font size=\"-1\"><b>&nbsp;"
 				. sprintf(_(" %s Veranstaltungen gefunden %s, Gruppierung: %s"),count($sem_data),
 				(($this->sem_browse_data['sset']) ? _("(Suchergebnis)") : ""),
 				$this->group_by_fields[$this->sem_browse_data['group_by']]['name'])
 				. "</b></font></div></td></tr>";
-
-
-			switch ($this->sem_browse_data["group_by"]){
-					case 0:
-					krsort($group_by_data, SORT_NUMERIC);
-					break;
-
-					case 1:
-					uksort($group_by_data, create_function('$a,$b',
-							'$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
-							$the_tree->buildIndex();
-							return (int)($the_tree->tree_data[$a]["index"] - $the_tree->tree_data[$b]["index"]);
-							'));
-					break;
-
-					case 3:
-					uksort($group_by_data, create_function('$a,$b',
-							'global $SEM_CLASS,$SEM_TYPE;
-							return strnatcasecmp($SEM_TYPE[$a]["name"]." (". $SEM_CLASS[$SEM_TYPE[$a]["class"]]["name"].")",
-												$SEM_TYPE[$b]["name"]." (". $SEM_CLASS[$SEM_TYPE[$b]["class"]]["name"].")");'));
-					break;
-					default:
-					uksort($group_by_data, 'strnatcasecmp');
-					break;
-
-			}
 
 			foreach ($group_by_data as $group_field => $sem_ids){
 				echo "\n<tr><td class=\"steelkante\" colspan=\"2\"><font size=-1><b>";
@@ -559,6 +451,252 @@ function print_result(){
 			$this->sem_browse_data["sset"] = 0;
 		}
 	ob_end_flush();
+	}
+	
+	function create_result_xls(){
+		require_once "vendor/write_excel/OLEwriter.php";
+		require_once "vendor/write_excel/BIFFwriter.php";
+		require_once "vendor/write_excel/Worksheet.php";
+		require_once "vendor/write_excel/Workbook.php";
+		
+		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS,$TMP_PATH;
+		
+		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
+			if (!is_object($this->sem_tree)){
+				$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
+			} else {
+				$the_tree =& $this->sem_tree->tree;
+			}
+			list($group_by_data, $sem_data) = $this->get_result();
+			$tmpfile = $TMP_PATH . '/' . md5(uniqid('write_excel',1));
+			// Creating a workbook
+			$workbook = new Workbook($tmpfile);
+			$head_format =& $workbook->addformat();
+			$head_format->set_size(12);
+			$head_format->set_bold();
+			$head_format->set_align("left");
+			$head_format->set_align("vcenter");
+			
+			$head_format_merged =& $workbook->addformat();
+			$head_format_merged->set_size(12);
+			$head_format_merged->set_bold();
+			$head_format_merged->set_align("left");
+			$head_format_merged->set_align("vcenter");
+			$head_format_merged->set_merge();
+			$head_format_merged->set_text_wrap();
+			
+			$caption_format =& $workbook->addformat();
+			$caption_format->set_size(10);
+			$caption_format->set_align("left");
+			$caption_format->set_align("vcenter");
+			$caption_format->set_bold();
+			$caption_format->set_text_wrap();
+			
+			$data_format =& $workbook->addformat();
+			$data_format->set_size(10);
+			$data_format->set_align("left");
+			$data_format->set_align("vcenter");
+	
+			// Creating the first worksheet
+			$worksheet1 =& $workbook->addworksheet(_("Veranstaltungen"));
+			$worksheet1->set_row(0, 20);
+			$worksheet1->write_string(0, 0, _("Stud.IP Veranstaltungen") . ' - ' . $GLOBALS['UNI_NAME_CLEAN'] ,$head_format_merged);
+			$worksheet1->set_row(1, 20);
+			$worksheet1->write_string(1, 0, sprintf(_(" %s Veranstaltungen gefunden %s, Gruppierung: %s"),count($sem_data),
+				(($this->sem_browse_data['sset']) ? _("(Suchergebnis)") : ""),
+				$this->group_by_fields[$this->sem_browse_data['group_by']]['name']), $head_format_merged);
+			
+			$worksheet1->write_blank(0,1,$head_format_merged);
+			$worksheet1->write_blank(0,2,$head_format_merged);
+			$worksheet1->write_blank(0,3,$head_format_merged);
+			$worksheet1->set_column(0, 0, 70);
+			$worksheet1->set_column(0, 1, 25);
+			$worksheet1->set_column(0, 2, 25);
+			$worksheet1->set_column(0, 3, 50);
+			
+			$row = 2;
+			
+			foreach ($group_by_data as $group_field => $sem_ids){
+				switch ($this->sem_browse_data["group_by"]){
+					case 0:
+					$headline = $this->search_obj->sem_dates[$group_field]['name'];
+					break;
+
+					case 1:
+					if ($the_tree->tree_data[$group_field]) {
+						$headline = $the_tree->getShortPath($group_field);
+					} else {
+						$headline =  _("keine Studienbereiche eingetragen");
+					}
+					break;
+
+					case 3:
+					$headline = $SEM_TYPE[$group_field]["name"]." (". $SEM_CLASS[$SEM_TYPE[$group_field]["class"]]["name"].")";
+					break;
+
+					default:
+					$headline = $group_field;
+					break;
+
+				}
+				++$row;
+				$worksheet1->write_string($row, 0 , $headline, $caption_format);
+				$worksheet1->write_blank($row,1, $caption_format);
+				$worksheet1->write_blank($row,2, $caption_format);
+				$worksheet1->write_blank($row,3, $caption_format);
+				++$row;
+				if (is_array($sem_ids['Seminar_id'])){
+					while(list($seminar_id,) = each($sem_ids['Seminar_id'])){
+						$sem_name = key($sem_data[$seminar_id]["Name"]);
+						$seminar_number = key($sem_data[$seminar_id]['VeranstaltungsNummer']);
+						$sem_number_start = key($sem_data[$seminar_id]["sem_number"]);
+						$sem_number_end = key($sem_data[$seminar_id]["sem_number_end"]);
+						if ($sem_number_start != $sem_number_end){
+							$sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . " - ";
+							$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->search_obj->sem_dates[$sem_number_end]['name']) . ")";
+						} elseif ($this->sem_browse_data["group_by"]) {
+							$sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . ")";
+						}
+						$worksheet1->write_string($row, 0, $sem_name, $data_format);
+						//create Turnus field
+						$temp_turnus_string = view_turnus($seminar_id, true, key($sem_data[$seminar_id]["metadata_dates"]),(!$this->sem_browse_data["group_by"]) ? $this->search_obj->sem_dates[$group_field]['beginn'] : false);
+						//Shorten, if string too long (add link for details.php)
+						if (strlen($temp_turnus_string) > 245) {
+							$temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 245, strlen($temp_turnus_string)), ",") + 246);
+							$temp_turnus_string .= "...(mehr)";
+						}
+						$worksheet1->write_string($row, 1, $seminar_number, $data_format);
+						$worksheet1->write_string($row, 2, $temp_turnus_string, $data_format);
+
+						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
+						if (is_array($doz_name)){
+							usort($doz_name, 'strnatcasecmp');
+							$worksheet1->write_string($row, 3, join(', ', $doz_name), $data_format);
+						}
+						++$row;
+					}
+				}
+			}
+			$workbook->close();
+		}
+		return $tmpfile;
+	}
+	
+	function get_result() {
+		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS;;
+		if ($this->sem_browse_data['group_by'] == 1){
+			if (!is_object($this->sem_tree)){
+				$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
+			} else {
+				$the_tree =& $this->sem_tree->tree;
+			}
+			if ($this->sem_browse_data['level'] == "vv" || $this->sem_browse_data['level'] == "sbb"){
+				$allowed_ranges = $the_tree->getKidsKids($this->sem_browse_data['start_item_id']);
+				$allowed_ranges[] = $this->sem_browse_data['start_item_id'];
+				$sem_tree_query = " AND sem_tree_id IN('" . join("','", $allowed_ranges) . "') ";
+			}
+			$add_fields = "seminar_sem_tree.sem_tree_id AS bereich,";
+			$add_query = "LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id $sem_tree_query)";
+		} else if ($this->sem_browse_data['group_by'] == 4){
+			$add_fields = "Institute.Name AS Institut,Institute.Institut_id,";
+			$add_query = "LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
+			LEFT JOIN Institute ON (Institute.Institut_id = seminar_inst.institut_id)";
+		} else {
+			$add_fields = "";
+			$add_query = "";
+		}
+		
+		$query = ("SELECT seminare.Seminar_id,VeranstaltungsNummer, seminare.status, IF(seminare.visible=0,CONCAT(seminare.Name, ' ". _("(versteckt)") ."'), seminare.Name) AS Name, seminare.metadata_dates,
+				$add_fields" . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
+				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
+				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
+				LEFT JOIN auth_user_md5 USING (user_id) 
+				LEFT JOIN user_info USING (user_id) 
+				$add_query
+				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "')");
+		$db = new DB_Seminar($query);
+		$snap = new DbSnapShot($db);
+		$group_field = $this->group_by_fields[$this->sem_browse_data['group_by']]['group_field'];
+		$data_fields[0] = "Seminar_id";
+		if ($this->group_by_fields[$this->sem_browse_data['group_by']]['unique_field']){
+			$data_fields[1] = $this->group_by_fields[$this->sem_browse_data['group_by']]['unique_field'];
+		}
+		$group_by_data = $snap->getGroupedResult($group_field, $data_fields);
+		$sem_data = $snap->getGroupedResult("Seminar_id");
+		if ($this->sem_browse_data['group_by'] == 0){
+			$group_by_duration = $snap->getGroupedResult("sem_number_end", array("sem_number","Seminar_id"));
+			foreach ($group_by_duration as $sem_number_end => $detail){
+				if ($sem_number_end != -1 && ($detail['sem_number'][$sem_number_end] && count($detail['sem_number']) == 1)){
+					continue;
+				} else {
+					foreach ($detail['Seminar_id'] as $seminar_id => $foo){
+						$start_sem = key($sem_data[$seminar_id]["sem_number"]);
+						if ($sem_number_end == -1){
+							$sem_number_end = count($this->search_obj->sem_dates)-1;
+						}
+						for ($i = $start_sem; $i <= $sem_number_end; ++$i){
+							if ($this->sem_number === false || (is_array($this->sem_number) && in_array($i,$this->sem_number))){
+								if ($group_by_data[$i] && !$tmp_group_by_data[$i]){
+									foreach($group_by_data[$i]['Seminar_id'] as $id => $bar){
+										$tmp_group_by_data[$i]['Seminar_id'][$id] = true;
+									}
+								}
+								$tmp_group_by_data[$i]['Seminar_id'][$seminar_id] = true;
+							}
+						}
+					}
+				}
+			}
+			if (is_array($tmp_group_by_data)){
+				if ($this->sem_number !== false){
+					unset($group_by_data);
+				}
+				foreach ($tmp_group_by_data as $start_sem => $detail){
+					$group_by_data[$start_sem] = $detail;
+				}
+			}
+		}
+		
+		//release memory
+		unset($snap);
+		unset($tmp_group_by_data);
+		
+		foreach ($group_by_data as $group_field => $sem_ids){
+			foreach ($sem_ids['Seminar_id'] as $seminar_id => $foo){
+				$name = strtolower(key($sem_data[$seminar_id]["Name"]));
+				$name = str_replace("ä","ae",$name);
+				$name = str_replace("ö","oe",$name);
+				$name = str_replace("ü","ue",$name);
+				$group_by_data[$group_field]['Seminar_id'][$seminar_id] = $name;
+			}
+			uasort($group_by_data[$group_field]['Seminar_id'], 'strnatcmp');
+		}
+		
+		switch ($this->sem_browse_data["group_by"]){
+			case 0:
+			krsort($group_by_data, SORT_NUMERIC);
+			break;
+			
+			case 1:
+			uksort($group_by_data, create_function('$a,$b',
+			'$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
+			$the_tree->buildIndex();
+			return (int)($the_tree->tree_data[$a]["index"] - $the_tree->tree_data[$b]["index"]);
+			'));
+			break;
+			
+			case 3:
+			uksort($group_by_data, create_function('$a,$b',
+			'global $SEM_CLASS,$SEM_TYPE;
+			return strnatcasecmp($SEM_TYPE[$a]["name"]." (". $SEM_CLASS[$SEM_TYPE[$a]["class"]]["name"].")",
+			$SEM_TYPE[$b]["name"]." (". $SEM_CLASS[$SEM_TYPE[$b]["class"]]["name"].")");'));
+			break;
+			default:
+			uksort($group_by_data, 'strnatcasecmp');
+			break;
+			
+		}
+		return array($group_by_data, $sem_data);
 	}
 }
 ?>
