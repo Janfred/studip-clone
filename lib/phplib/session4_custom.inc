@@ -201,6 +201,8 @@ class Session {
 		if (strlen($_COOKIE[$this->name]) != 32 || ereg('[^0-9a-f]+', $_COOKIE[$this->name])){
 			session_id(md5(uniqid($this->name,1)));
 		}
+	} else {
+		session_id(md5(uniqid($this->name,1)));	
 	}
 	
     $ok = session_start();

@@ -29,6 +29,7 @@ if (!$_POST["pass"])
     page_close();
     die;
     }
+
 ob_start();
 $link = "http" . ($_SERVER['HTTPS'] ? 's' : '') . "://" . $_SERVER["HTTP_HOST"].$CANONICAL_RELATIVE_PATH_STUDIP;
 ?>
@@ -84,7 +85,7 @@ if (auto_key)
 </body>
 </html>
 <?
-$data = ob_get_contents();
+$data = ob_get_clean();
 header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
 header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
@@ -93,4 +94,5 @@ header("Content-Type: application/octet-stream");
 header("Content-Disposition: attachment; filename=\"autologin_".$auth->auth["uname"].".html\"");
 header("Content-Length: " . strlen($data));
 echo $data;
+die();
 ?>
