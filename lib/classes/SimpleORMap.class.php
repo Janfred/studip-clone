@@ -174,7 +174,7 @@ class SimpleORMap {
 		$where_query = null;
 		foreach ($this->pk as $key){
 			if (isset($this->content[$key])){
-				$where_query[] = $key . "='{$this->content[$key]}'";
+				$where_query[] = $key . "='".mysql_escape_string($this->content[$key])."'";
 			}
 		}
 		if (!$where_query){
