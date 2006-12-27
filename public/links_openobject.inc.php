@@ -41,30 +41,19 @@ require_once ("visual.inc.php");
 require_once ("reiter.inc.php");
 require_once 'lib/functions.php';
 require_once ("lib/classes/Modules.class.php");
+require_once ("lib/classes/StudipScmEntry.class.php");
 
 $db=new DB_Seminar;
 $reiter=new reiter;
 $Modules=new Modules;
 
-/**
-* Get dynamic tab name for simple content module
-*
-**/
-function scm_tab_name() {
-	global $SessSemName;
-	static $tab_name="";
-	$db=new DB_Seminar;
-	if (!$tab_name) {
-		$db->query("SELECT tab_name FROM scm WHERE range_id='$SessSemName[1]'");
-		$db->next_record();
-		$tab_name=$db->f("tab_name");
-	}
-	return $tab_name;
-}
 
 //load list of used modules
 $modules = $Modules->getLocalModules($SessSemName[1]);
 
+if ($modules["scm"]){
+	$scms = array_values(StudipScmEntry::GetSCMEntriesForRange($SessSemName[1]));
+}
 //Reitersytem erzeugen
 
 if ($ILIAS_CONNECT_ENABLE) {
@@ -86,7 +75,7 @@ if ($SessSemName["class"]=="inst") {
 	if ($modules["documents"])
 		$structure["folder"]=array ('topKat' => '', 'name' => _("Dateien"), 'link' => "folder.php?cmd=tree", 'active' => FALSE);
 	if ($modules["scm"])
-		$structure["scm"]=array ('topKat' => '', 'name' => scm_tab_name(), 'link' => "scm.php", 'active' => FALSE);
+		$structure["scm"]=array ('topKat' => '', 'name' => ($scms[0]['tab_name'] ? $scms[0]['tab_name'] : _("Informationen")), 'link' => "scm.php", 'active' => FALSE);
 	if ($modules["literature"])
 		$structure["literatur"]=array ('topKat' => '', 'name' => _("Literatur zur Einrichtung"), 'link' => "literatur.php", 'active' => FALSE);
 	if ($modules["wiki"]){
@@ -111,7 +100,7 @@ if ($SessSemName["class"]=="inst") {
 	if ($modules["schedule"])
 		$structure["dates"]=array ('topKat' => '', 'name' => _("Ablaufplan"), 'link' => "dates.php", 'active' => FALSE);
 	if ($modules["scm"]) {
-		$structure["scm"]=array ('topKat' => '', 'name' => scm_tab_name(), 'link' => "scm.php", 'active' => FALSE);
+		$structure["scm"]=array ('topKat' => '', 'name' => ($scms[0]['tab_name'] ? $scms[0]['tab_name'] : _("Informationen")), 'link' => "scm.php", 'active' => FALSE);
 	}
 	if ($modules["literature"])
 		$structure["literatur"]=array ('topKat' => '', 'name' => _("Literatur"), 'link' => "literatur.php", 'active' => FALSE);
@@ -238,7 +227,12 @@ if ($modules["documents"]) {
 }
 //
 if ($modules["scm"]) {
-	$structure["_scm"]=array ('topKat' => "scm", name=>scm_tab_name(), 'link' => "scm.php", 'active' => FALSE);
+	foreach($scms as $scm){
+		$structure["_scm_" . $scm['scm_id']]=array ('topKat' => "scm", 'name' => $scm['tab_name'] , 'link' => "scm.php?show_scm=" . $scm['scm_id'], 'active' => FALSE);
+	}
+	if ($perm->have_studip_perm('tutor', $SessSemName[1])){
+		$structure["_scm_new_entry"]=array ('topKat' => "scm", 'name' => _("neuen Eintrag anlegen") , 'link' => "scm.php?show_scm=new_entry&i_view=edit", 'active' => FALSE);
+	}
 }
 //
 if ($modules["literature"]) {
@@ -470,7 +464,12 @@ if (!$found){
 			$reiter_view="timetable"; 
 		break;	
 		case "scm.php":
-			$reiter_view="scm";
+			if ($_show_scm){
+				$reiter_view = "_scm_" . $_show_scm;
+			} else {
+				$reiter_view = "scm";
+				$_show_scm = $scms[0]['scm_id'];
+			}
 		break;
 		case "literatur.php": 
 			$reiter_view="literatur";

@@ -25,7 +25,7 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 include ("seminar_open.php"); // initialise Stud.IP-Session
 include ("html_head.inc.php"); // Output of html head
 include ("header.php");   // Output of Stud.IP head
-
+require_once ("lib/classes/StudipScmEntry.class.php");
 require_once 'lib/functions.php';
 require_once("msg.inc.php");
 require_once("visual.inc.php");
@@ -35,20 +35,30 @@ checkObject(); // do we have an open object?
 checkObjectModule("scm");
 object_set_visit_module("scm");
 
-$msg=""; // Message to display
+$msg = ""; // Message to display
 
+$_show_scm = preg_replace('/[^a-z0-9_-]/', '',  $_REQUEST['show_scm']);
 
+if ($i_view == 'kill' && $perm->have_studip_perm('tutor', $SessSemName[1])){
+	$scm = new StudipScmEntry($_show_scm);
+	if (!$scm->is_new && $scm->getValue('range_id') == $SessSemName[1]){
+		$scm->delete();
+		$msg = "msg§" . _("Der Eintrag wurde gelöscht.");
+	}
+	unset($scm);
+	$_show_scm = null;
+}
 switch ($i_view) {
 	case "edit":
 		include ("links_openobject.inc.php");
-		scm_edit_content($SessSemName[1]);
+		scm_edit_content($SessSemName[1], $_show_scm);
 		break;
 	case "change":
-		scm_change_content($scm_id, $SessSemName[1], $scm_name, $scm_preset, $content, $new_entry);
-		$msg="msg§"._("Die Änderungen wurden übernommen.");
+		$_show_scm = scm_change_content($_show_scm, $SessSemName[1], $scm_name, $scm_preset, $content);
+		$msg = "msg§"._("Die Änderungen wurden übernommen.");
 	default:
 		include ("links_openobject.inc.php");
-		scm_show_content($SessSemName[1], $msg);
+		scm_show_content($SessSemName[1], $msg, $_show_scm);
 		break;
 }
 
@@ -102,25 +112,14 @@ function scm_change_header($table, $titel, $user_id, $chdate) {
 	echo $table->closeRow();
 }
 
-function scm_get_content($range_id) {
-	$result=array();
-	$db=new DB_Seminar;
-	$db->query("SELECT * FROM scm WHERE range_id='$range_id'");
-	if ($db->num_rows()) {
-		$db->next_record();
-		$result["content"]=$db->f("content");
-		$result["user_id"]=$db->f("user_id");
-		$result["chdate"]=$db->f("chdate");
-		$result["tab_name"]=$db->f("tab_name");
-	}
-	return $result;
-}
-
-function scm_show_content($range_id, $msg) {
+function scm_show_content($range_id, $msg, $scm_id) {
 	global $rechte, $PHP_SELF;
-	$result=scm_get_content($range_id);
+	
+	if ($scm_id == 'new_entry') $scm_id = null;
+	
+	$scm = new StudipScmEntry($scm_id);
 
-	$header_table=scm_seminar_header($range_id, $result["tab_name"]);
+	$header_table = scm_seminar_header($range_id, $scm->getValue("tab_name"));
 
 	$frame_table=new Table();
 	$frame_table->setTableWidth("100%");
@@ -136,18 +135,21 @@ function scm_show_content($range_id, $msg) {
 		parse_msg($msg);
 	}
 
-	if (($result["content"]) || ($rechte)) {
-		scm_change_header($content_table, $result["tab_name"], $result["user_id"], $result["chdate"]);
+	if (!$scm->is_new) {
+		scm_change_header($content_table, $scm->getValue("tab_name"), $scm->getValue("user_id"), $scm->getValue("chdate"));
 		echo $content_table->openRow();
 		echo $content_table->openCell();
 		$printcontent_table=new Table(array("width"=>"100%"));
 		echo $printcontent_table->open();
 		if ($rechte) {
-			$edit = "<a href=\"$PHP_SELF?i_view=edit\">".makeButton("bearbeiten")."</a>";
+			$edit = "<a href=\"$PHP_SELF?i_view=edit&show_scm=$scm_id\">".makeButton("bearbeiten")."</a>";
+			if(StudipScmEntry::GetNumSCMEntriesForRange($range_id) > 1){
+				$edit .= "&nbsp;<a href=\"$PHP_SELF?i_view=kill&show_scm=$scm_id\">".makeButton("loeschen")."</a>";
+			}
 		} else {
-			$edit = "";
+			$edit = "&nbsp;";
 		}
-		printcontent(0,0, formatReady($result["content"]), $edit);
+		printcontent(0,0, formatReady($scm->getValue("content")), $edit);
 		echo $printcontent_table->close();
 		echo $content_table->closeRow();
 	} else {
@@ -159,12 +161,21 @@ function scm_show_content($range_id, $msg) {
 	echo $header_table->close();
 }
 
-function scm_edit_content($range_id) {
+function scm_edit_content($range_id, $scm_id) {
 	global $perm, $PHP_SELF, $SCM_PRESET;
-	$result=scm_get_content($range_id);
-	$max_col=scm_max_cols();
+	
+	if ($scm_id == 'new_entry') $scm_id = null;
+	
+	$scm = new StudipScmEntry($scm_id);
+	
+	if ($scm->is_new){
+		$scm->setValue('user_id', $GLOBALS['user']->id);
+		$scm->setValue('chdate', time());
+	}
+	
+	$max_col = scm_max_cols();
 
-	$header_table=scm_seminar_header($range_id, $result["tab_name"]);
+	$header_table = scm_seminar_header($range_id, $scm->getValue("tab_name"));
 
 	print("<form action=\"$PHP_SELF\" method=\"POST\">");
 
@@ -182,23 +193,21 @@ function scm_edit_content($range_id) {
 	$content_table->setTableAlign("center");
 	$content_table->setCellClass("printcontent");
 	echo $content_table->open();
-	if ($msg) {
-		parse_msg($msg);
-	}
-	$titel="</b><input style=\"font-size:8 pt;\" type=\"TEXT\" name=\"scm_name\" value=\"".$result["tab_name"]."\" maxlength=\"20\" size=\"20\" />";
+	$titel="</b><input style=\"font-size:8 pt;\" type=\"TEXT\" name=\"scm_name\" value=\"".htmlReady($scm->getValue("tab_name"))."\" maxlength=\"20\" size=\"20\" />";
 	$titel.="</font size=\"-1\">&nbsp;"._("oder w&auml;hlen Sie hier einen Namen aus:")."&nbsp;\n";
 	$titel.="<select style=\"font-size:8 pt;\" name=\"scm_preset\">";
 	$titel.="<option value=\"0\">- "._("Vorlagen")." -</option>\n";
 	foreach ($SCM_PRESET as $key=>$val)
-		$titel.=sprintf("<option value=\"%s\">%s</option>\n", $key, $val["name"]);
+		$titel.=sprintf("<option value=\"%s\">%s</option>\n", $key, htmlReady($val["name"]));
 	$titel.="</select>";
 
-	scm_change_header($content_table, $titel, $result["user_id"], $result["chdate"]);
+	scm_change_header($content_table, $titel, $scm->getValue("user_id"), $scm->getValue("chdate"));
 
-	$content="<textarea name=\"content\" style=\"width: 90%\" cols=$max_col rows=10 wrap=virtual >".htmlReady($result["content"])."</textarea>\n";
-	if (!$result)
-		$content.="<input type=\"HIDDEN\" name=\"new_entry\" value=\"1\"><b>\n";
-	$content.= "<input type=\"HIDDEN\" name=\"scm_id\" value=\"$scm_id\">";
+	$content = "<textarea name=\"content\" style=\"width: 90%\" cols=$max_col rows=10 wrap=virtual >".htmlReady($scm->getValue("content"))."</textarea>\n";
+	if ($scm->is_new)
+		$content.="<input type=\"HIDDEN\" name=\"show_scm\" value=\"new_entry\"><b>\n";
+	else 
+		$content.= "<input type=\"HIDDEN\" name=\"show_scm\" value=\"$scm_id\">";
 	$content.= "<input type=\"HIDDEN\" name=\"i_view\" value=\"change\">";
 
 	$edit="<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"send_scm\" value=\"&auml;nderungen vornehmen\" border=0 " . makeButton("uebernehmen", "src") . ">";
@@ -228,30 +237,30 @@ function scm_edit_content($range_id) {
 	print("</form>");
 }
 
-function scm_change_content($scm_id, $range_id, $name, $preset, $content, $new_entry) {
+function scm_change_content($scm_id, $range_id, $name, $preset, $content) {
 	global $user, $perm, $SCM_PRESET;
-	$db = new DB_Seminar;
 	if (!$perm->have_studip_perm("tutor",$range_id)) {
 		echo "</tr></td></table>";
 		return;
 	}
-
+	if ($scm_id == 'new_entry') $scm_id = null;
+	
+	$scm = new StudipScmEntry($scm_id);
+	
 	if ($preset)
 		$tab_name = $SCM_PRESET[$preset]["name"];
 	else
-		$tab_name = $name;
-
-	if ($new_entry) {
-		$scm_id=md5(uniqid("simplecontent"));
-		$db->query("INSERT INTO scm SET scm_id = '$scm_id', range_id='$range_id', user_id='$user->id', tab_name='$tab_name', content='$content', mkdate='".time()."', chdate='".time()."'");
-		if ($db->affected_rows())
-			$result="msg§" . _("Inhalt ge&auml;ndert");
+		$tab_name = stripslashes($name);
+	
+	$scm->setValue('tab_name', $tab_name);
+	$scm->setValue('content', stripslashes($content));
+	$scm->setValue('user_id', $user->id);
+	$scm->setValue('range_id', $range_id);
+	
+	if ($scm->store()) {
+		return $scm->getId();
 	} else {
-		$db->query("UPDATE scm SET user_id='$user->id', tab_name='$tab_name', content='$content' WHERE range_id='$range_id'");
-		if ($db->affected_rows()) {
-			$result="msg§" . _("Inhalt ge&auml;ndert");
-		 	$db->query("UPDATE scm SET chdate='".time()."' WHERE range_id='$range_id'");
-		}
+		return false;
 	}
 }
 

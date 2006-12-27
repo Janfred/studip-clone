@@ -31,7 +31,7 @@ require_once ("lib/classes/DataFields.class.php");
 require_once ("lib/classes/Modules.class.php");
 require_once("lib/classes/StudipLitList.class.php");
 require_once ("lib/classes/SemesterData.class.php");
-
+require_once ("lib/classes/StudipScmEntry.class.php");
 
 
 // Liefert den dump des Seminars
@@ -278,21 +278,14 @@ function dump_sem($sem_id) {
 
 	//SCM
 	if ($Modules["scm"]) {
-		$db->query("SELECT * FROM scm WHERE range_id='$sem_id'");
-		if ($db->num_rows()) {
-		  	$db->next_record();
-		  	$content = $db->f("content");
-		  	$content = FixLinks(format(htmlReady($content))); // /newline fixen
-		  	$tab_name = $db->f("tab_name");
-		  	$tab_name = htmlReady($tab_name); // /newline fixen
-
-		  	if(!empty($content)) {
-		 		$dump.="<br>";
-		  		$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
+		foreach(StudipScmEntry::GetSCMEntriesForRange($sem_id) as $scm){
+			if(!empty($scm['content'])) {
+		 		$dump .= "<br>";
+		  		$dump .= "<table width=100% border=1 cellpadding=2 cellspacing=0>";
 				$dump .= " <tr><td align=left class=\"topic\">";
-				$dump .= "<H2 class=\"topic\">&nbsp;" . $tab_name . "</H2>";
-				$dump.= "</td></tr>\n";
-				$dump.="<tr><td align=\"left\" width=\"100%\"><br>". $content ."<br></td></tr>\n";
+				$dump .= "<H2 class=\"topic\">&nbsp;" . htmlReady($scm['tab_name']) . "</H2>";
+				$dump .= "</td></tr>\n";
+				$dump .= "<tr><td align=\"left\" width=\"100%\"><br>". formatReady($scm['content'],1,1) ."<br></td></tr>\n";
 				$dump .= "</table>\n";
 			}
 		}

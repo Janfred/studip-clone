@@ -54,10 +54,23 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
   //SCM
   if ($my_obj_values["scmcontent"]) {
 		echo "<a href=\"$link?auswahl=$semid&redirect_to=scm.php\">";
+		if($my_obj_values["scmcontent"] == 1){
+			if ($my_obj_values["neuscmcontent"]){
+				$ttip = $my_obj_values["scmtabname"]._(" (geändert)");
+			} else {
+				$ttip = $my_obj_values["scmtabname"];
+			}
+		} else {
+			if ($my_obj_values["neuscmcontent"]){
+				$ttip = sprintf(_("%s Einträge, %s neue"), $my_obj_values["scmcontent"] ,$my_obj_values["neuscmcontent"]);
+			} else {
+				$ttip = sprintf(_("%s Einträge"), $my_obj_values["scmcontent"]);
+			}
+		}
 		if ($my_obj_values["neuscmcontent"])
-			echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-cont2.gif\" border=0 ".tooltip($my_obj_values["scmtabname"]._(" (geändert)"))."></a>";
+			echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-cont2.gif\" border=0 ".tooltip($ttip)."></a>";
 		else
-			echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-cont.gif\" border=0 ".tooltip($my_obj_values["scmtabname"])."></a>";
+			echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-cont.gif\" border=0 ".tooltip($ttip)."></a>";
   }
   else
 		echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-leer.gif\" border=\"0\">";
