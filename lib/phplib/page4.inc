@@ -64,10 +64,10 @@ function page_open($feature) {
 function page_close() {
   global $sess, $user;
 
-  /*if (is_object($sess)) {
-    $sess->freeze();
+  if (is_object($sess)) {
+    @session_write_close();
   }
-  */
+  
   if (is_object($user)) {
       $user->freeze();
   }
