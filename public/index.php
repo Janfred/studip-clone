@@ -326,7 +326,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			textdomain("studip");
 		}
 	}
-
+	page_close(); // end session
 	$db->query(sprintf("SELECT * FROM rss_feeds WHERE user_id='%s' AND hidden=0 ORDER BY priority",$auth->auth["uid"]));
 	while ($db->next_record()) {
 		if ($db->f("name")!="" && $db->f("url")!="") {
@@ -455,7 +455,3 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 </table>
 </body>
 </html>
-<?php
-  // Save data back to database.
-  page_close();
-?>
