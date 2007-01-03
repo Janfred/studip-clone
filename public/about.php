@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Id$
 */
+if (isset($_REQUEST['username'])) $username = $_REQUEST['username'];
+
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 $perm->check("user");
@@ -128,7 +130,7 @@ if (!isset($username) || $username == "")
 
 
 //3 zeilen wegen username statt id zum aufruf... in $user_id steht jetzt die user_id (sic)
-$db->query("SELECT * FROM auth_user_md5  WHERE username ='$username'");
+
 $user_gesperrt = FALSE;
 if ($perm->have_perm("root"))
         $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username'");
@@ -143,9 +145,9 @@ if ($perm->have_perm("root") && $db->f("locked")==1)
 if (!$db->nf()) {
 	parse_window ("error§"._("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!")."<br />"._(" Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;scht wurde.")."§", "§", _("Benutzer nicht gefunden"));
 	die;
-} else
+} else {
 	$user_id=$db->f("user_id");
-
+}
 
 // count views of Page
 if ($auth->auth["uid"]!=$user_id) {
@@ -381,42 +383,26 @@ if ( ($lit_list = StudipLitList::GetFormattedListsByRange($user_id)) ) {
 	printf ("</tr><tr><td colspan=\"$cs\" class=\"steel1\">&nbsp;</td></tr><tr><td colspan=\"$cs\" class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td colspan=\"$cs\" class=\"steel1\">&nbsp;</td></tr></table><br>\n",$lit_list);
 	unset($cs);
 }
-
-// Hier wird der Lebenslauf ausgegeben:
-if ($db->f("lebenslauf")!="") {
-	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Lebenslauf") . " </b></td></tr>";
-	printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("lebenslauf")));
+// Hier werden Lebenslauf, Hobbies, Publikationen und Arbeitsschwerpunkte ausgegeben:
+$ausgabe_format = '<table class="blank" width="100%%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><b>&nbsp;%s </b>%s</td></tr><tr><td class="steel1">&nbsp;</td></tr><tr><td class="steel1"><blockquote>%s</blockquote></td></tr><tr><td class="steel1">&nbsp;</td></tr></table><br />'."\n";
+$ausgabe_felder = array('lebenslauf' => _("Lebenslauf"), 
+			'hobby' => _("Hobbies"),
+			'publi' => _("Publikationen"),
+			'schwerp' => _("Arbeitsschwerpunkte")
+			);
+			
+foreach ($ausgabe_felder as $key => $value) {
+	if ($db->f($key) != '') {
+		printf($ausgabe_format, $value, '', formatReady($db->f($key)));
+	}
 }
-
-// Ausgabe Hobbys
-
-if ($db->f("hobby")!="") {
-	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Hobbies") . " </b></td></tr>";
-	printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("hobby")));
-}
-
-//Ausgabe von Publikationen
-
-if ($db->f("publi")!="") {
-	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Publikationen") . " </b></td></tr>";
-	printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("publi")));
-}
-
-// Ausgabe von Arbeitsschwerpunkten
-
-if ($db->f("schwerp")!="") {
-	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Arbeitsschwerpunkte") . " </b></td></tr>";
-	printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($db->f("schwerp")));
-}
-
 //add the free administrable datafields (these field are system categories - the user is not allowed to change the catgeories)
 $localFields = $DataFields->getLocalFields($user_id, 'user', $auth->auth['perm']);
 
 foreach ($localFields as $val) {
 	if ($DataFields->checkPermission($perm, $val["view_perms"], $auth->auth["uid"], $user_id)) {
-		if ($val["content"]) {
-			echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . htmlReady($val["name"]) . " </b></td></tr>";
-			printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($val["content"]));
+		if ($val['content']) {
+			printf($ausgabe_format, htmlReady($val['name']),'', formatReady($val['content']) );
 		}
 	}
 }
@@ -434,18 +420,17 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 	foreach ($activatedhomepageplugins as $activatedhomepageplugin){
 		$activatedhomepageplugin->setRequestedUser($requser);
 		// hier nun die HomepagePlugins anzeigen
-		if ($activatedhomepageplugin->hasNavigation()){		
+//		if ($activatedhomepageplugin->hasNavigation()){ // wieso ist hier eine Navigation erforderlich? hab das mal geaendert :-)
+		if ($activatedhomepageplugin->getStatusShowOverviewPage()){
+			echo '<table class="blank" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><img src="'. $activatedhomepageplugin->getPluginiconname() .'" border="0" /><b>&nbsp;' . $activatedhomepageplugin->getDisplaytitle() .' </b></td><td align="right" width="1%" class="topic" nowrap="nowrap">&nbsp;';
+					 
 			if ($requser->isSameUser($activatedhomepageplugin->getUser())){
-				echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedhomepageplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedhomepageplugin->getDisplaytitle() . 
-					 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;<a href=\"". PluginEngine::getLink($activatedhomepageplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" ></a>&nbsp;</tr>";
+				echo '<a href="'. PluginEngine::getLink($activatedhomepageplugin,array(),'showAdministrationPage') .'"><img src="'. $GLOBALS['ASSETS_URL']. 'images/pfeillink.gif" border="0" alt="'._("Administration").'" title="' . _("Administration") .  '" ></a>';
 			}
-			else {
-				echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedhomepageplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedhomepageplugin->getDisplaytitle() . 
-					 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;&nbsp;</tr>";
-			}
-			echo ("<tr><td class=\"steel1\" colspan=\"2\">&nbsp;</td></tr><tr><td class=\"steel1\" colspan=\"2\"><blockquote>");
+			echo '&nbsp;</td></tr>'."\n";
+			echo '<tr><td class="steel1" colspan="2">&nbsp;</td></tr><tr><td class="steel1" colspan="2"><blockquote>';
 			$activatedhomepageplugin->showOverview();
-			echo ("</blockquote></td></tr><tr><td class=\"steel1\" colspan=\"2\">&nbsp;</td></tr></table><br>\n");	
+			echo '</blockquote></td></tr><tr><td class="steel1" colspan="2">&nbsp;</td></tr></table><br>'."\n";	
 		}
 	}
 }
@@ -454,12 +439,10 @@ $db2->query("SELECT * FROM kategorien WHERE range_id = '$user_id' ORDER BY prior
 while ($db2->next_record())  {
 	$head=$db2->f("name");
 	$body=$db2->f("content");
-	if ($db2->f("hidden")!='1') { // oeffentliche Rubrik
-		printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;%s </b></td></tr>", htmlReady($head));
-		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($body));
-	} elseif ($db->f("user_id")==$user->id) {  // nur ich darf sehen
-		printf ("<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;%s </b> (%s)</td></tr>", htmlReady($head), _("f&uuml;r andere unsichtbar"));
-		printf ("<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n",formatReady($body));
+	if ($db2->f("hidden") != '1') { // oeffentliche Rubrik
+		printf ($ausgabe_format, htmlReady($head), '', formatReady($body));
+	} elseif ($db->f("user_id") == $user->id) {  // nur ich darf sehen
+		printf ($ausgabe_format, htmlReady($head), ' ('._("f&uuml;r andere unsichtbar").')',formatReady($body));
 	}
 }
 // Anzeige der Seminare
@@ -474,7 +457,8 @@ if ($perm->get_perm($user_id) == 'dozent'){
 		$snap = new DbSnapshot($view->get_query("view:SEM_USER_GET_SEM"));
 		if ($snap->numRows){
 			$sem_name = $all_semester[$i]['name'];
-			$output .= "<br><font size=\"+1\"><b>$sem_name</b></font><br><br>";
+			if ($output) $output .= '<br />';
+			$output .= "<font size=\"+1\"><b>$sem_name</b></font><br><br>";
 			$snap->sortRows("Name");
 			while ($snap->nextRow()) {
 				$ver_name = $snap->getField("Name");
@@ -484,14 +468,12 @@ if ($perm->get_perm($user_id) == 'dozent'){
 					$ver_name .= " (" . $all_semester[$sem_number_start]['name'] . " - ";
 					$ver_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $all_semester[$sem_number_end]['name']) . ")";
 				}
-				$output .= "<b><a href=\"details.php?sem_id=" . $snap->getField("Seminar_id") . "\">" . htmlReady($ver_name) . "</a></b><br>";
+				$output .= '<b><a href="details.php?sem_id=' . $snap->getField('Seminar_id') . '">' . htmlReady($ver_name) . '</a></b><br />';
 			}
 		}
 	}
 	if ($output){
-		echo "<table class=\"blank\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Veranstaltungen") . "</b></td></tr><tr><td class=\"steel1\"><blockquote>";
-		echo $output;
-		echo "</blockquote></td></tr><tr><td class=\"steel1\">&nbsp;</td></tr></table><br>\n";
+		printf($ausgabe_format, _("Veranstaltungen"), '', $output);
 	}
 }
 
@@ -500,4 +482,3 @@ page_close();
 ?>
 </body>
 </html>
-

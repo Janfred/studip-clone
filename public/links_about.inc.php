@@ -28,6 +28,8 @@ $reiter=new reiter;
 if (!$username){
 	$username = $auth->auth['uname'];
 }
+$user_id = get_userid($username);
+
 
 //Create Reitersystem
 
@@ -46,15 +48,17 @@ if ($username == $auth->auth["uname"]) {
 if ($GLOBALS["PLUGINS_ENABLE"]){
 	// PluginEngine aktiviert. 
 	// Prüfen, ob HomepagePlugins vorhanden sind.
+	$requser = new StudIPUser();
+	$requser->setUserid($user_id);
 	$homepagepluginpersistence = PluginEngine::getPluginPersistence("Homepage");	
 	$activatedhomepageplugins = $homepagepluginpersistence->getAllActivatedPlugins();
 	if (!is_array($activatedhomepageplugins)){
 		$activatedhomepageplugins = array();
 	}
 	foreach ($activatedhomepageplugins as $activatedhomepageplugin){
-		$activatedhomepageplugin->setRequestedUser($activatedhomepageplugin->getUser());
+		$activatedhomepageplugin->setRequestedUser($requser);
 		// hier nun die HomepagePlugins anzeigen
-		if ($activatedhomepageplugin->hasNavigation()){			
+		if ($activatedhomepageplugin->hasNavigation()){	
 			$hppluginnav = $activatedhomepageplugin->getNavigation();
 			$structure["hpplugin_" . $activatedhomepageplugin->getPluginid()] = array('topKat' => '', 'name' => $hppluginnav->getDisplayname(), 'link' => PluginEngine::getLink($activatedhomepageplugin,array("requesteduser" => $username)), 'active' => FALSE);
 			$pluginsubmenu["_hpplugin_" . $activatedhomepageplugin->getPluginId()] = array('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$hppluginnav->getDisplayname(),'link'=>PluginEngine::getLink($activatedhomepageplugin,array("requesteduser" => $username)),'active'=>false);
@@ -122,7 +126,7 @@ if ($PLUGINS_ENABLE){
 		} 
 		if ($i_page == "plugins.php"){
 			foreach ($activatedhomepageplugins as $activatedhomepageplugin){
-				$activatedhomepageplugin->setRequestedUser($activatedhomepageplugin->getUser());
+				$activatedhomepageplugin->setRequestedUser($requser);
 				if ($activatedhomepageplugin->hasNavigation() && ($activatedhomepageplugin->getPluginId() == $pluginid)){
 					// Hauptmenü gefunden
 					$reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId();
@@ -179,9 +183,8 @@ switch ($i_page) {
 				$reiter_view="sonstiges"; 
 			break;
 			case "rss":
-                $reiter_view="rss";
-            break;
-
+				$reiter_view="rss";
+			break;
 			case "Login":
 				$reiter_view="login"; 
 			break;

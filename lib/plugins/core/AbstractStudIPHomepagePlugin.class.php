@@ -12,10 +12,12 @@
 class AbstractStudIPHomepagePlugin extends AbstractStudIPPlugin {
 
 	var $requesteduser; // StudIPUser for which user the homepage should be shown
+	var $status_showOverview; // Uebersichtsseite unterdruecken
 
 	function AbstractStudIPHomepagePlugin(){
 		parent::AbstractStudIPPlugin();
 		$this->requesteduser = null;
+		$this->status_showOverview = 1;
 	}
 
 	/**
@@ -25,6 +27,20 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPPlugin {
 	function showOverview(){
 		// has to be implemented
 	}
+	
+	/**
+	 * true:  overviewpage is enabled
+	 * false: overviewpage is disabled
+	 */
+	function getStatusShowOverviewPage(){
+		return $this->status_showOverview;
+	}
+	function setStatusShowOverviewPage($status){
+		$oldstatus = $this->status_showOverview;
+		$this->status_showOverview = $status;
+		return $oldstatus;
+	}
+
 
 	/**
 	 * Set the user for which the homepage is rendered

@@ -145,6 +145,7 @@ else if ($type == "System") {
 	StudIPTemplateEngine::endContentTable();
 }
 else if ($type == "Homepage"){
+	textdomain('studip');
 	// show the admin-Tabs
 	$hpusername = $_GET["requesteduser"];	
 	$admin_darf = FALSE;
@@ -168,10 +169,9 @@ else if ($type == "Homepage"){
 	}
 	
 	$requser = new StudIPUser();
-	// $requser->setUsername($hpusername);
 	$requser->setUserid($user_id);
 	$plugin->setRequestedUser($requser);
-	
+
 	//Bin ich ein Inst_admin, und ist der user in meinem Inst Tutor oder Dozent?
 	$db->query("SELECT b.inst_perms FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.user_id = '$user_id') AND (b.inst_perms = 'autor' OR b.inst_perms = 'tutor' OR b.inst_perms = 'dozent') AND (a.user_id = '$user->id') AND (a.inst_perms = 'admin')");
 	if ($db->num_rows())
@@ -189,7 +189,8 @@ else if ($type == "Homepage"){
 		// rights should be checked
 		$username = $hpusername;
 		include("links_about.inc.php");	
-	}	
+	}
+	textdomain($domain);
 	$pluginnav = $plugin->getNavigation();
 	StudIPTemplateEngine::makeHeadline($plugin->getDisplaytitle(),true,$plugin->getPluginiconname());
 	StudIPTemplateEngine::startContentTable();
