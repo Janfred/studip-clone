@@ -162,19 +162,19 @@ $i_page = basename($GLOBALS['PHP_SELF']);
 $i_query = explode('&',getenv("QUERY_STRING"));
 
 //INITS
-
 // session init starts here
-if ($SessionStart==0) {
-	$SessionStart=time();
-	$SessionSeminar="";
-	$SessSemName="";
+if ($SessionStart == 0) {
+	$SessionStart = time();
+	$SessionSeminar = '';
+	$SessSemName = '';
 	$sess->register("SessionStart");
 	$sess->register("SessionSeminar");
 	$sess->register("SessSemName");
 	$sess->register("messenger_started");
 	$sess->register("object_cache");
 	$sess->register("contact");
-	$object_cache[] = " ";
+//??	$object_cache[] = " "; // sollte das Array hier geloescht oder initialisiert werden? js
+	$object_cache = array();
 
 	// Language Settings
 	$sess->register("_language");

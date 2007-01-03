@@ -108,7 +108,7 @@ function getMsTime(){
 if ($forumsend) {
 	if ($forumsend=="bla"){
 		if ($presetview == "theme")
-			$presetview = $themetview;
+			$presetview = $themeview;
 		$forum["neuauf"] = $neuauf;
 		$forum["postingsperside"] = $postingsperside;
 		$forum["flatallopen"] = $flatallopen;
