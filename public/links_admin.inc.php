@@ -240,7 +240,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 			if ($db->nf() ==1) {
 				$db->next_record();
-				reset_all_data;
+				reset_all_data();
 				openInst($db->f("Institut_id"));
 			}
 		}
