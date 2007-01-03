@@ -378,6 +378,8 @@ function outputLoop($chatid){
 
 		if ($userQuit) break; //...done dirt cheap
 		
+		$chatServer->setHeartbeat($user->id, $chatid);
+
 //wurden wir zwischenzeitlich gekickt?
 		if (!$chatServer->isActiveUser($user->id,$chatid)){
 			echo _("Sie mussten den Chat verlassen...") ."<br>";
@@ -397,7 +399,6 @@ function outputLoop($chatid){
 			break;
 		}
 		
-		$chatServer->setHeartbeat($user->id, $chatid);
 
 		usleep(CHAT_SLEEP_TIME);
 	}

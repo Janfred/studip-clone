@@ -101,7 +101,7 @@ class ChatServer {
 		foreach ($chat_users as $userid => $detail){
 			if ((!$detail["perm"] && ($a_time-$detail["action"]) > CHAT_IDLE_TIMEOUT) ||
 				($detail["perm"] && ($a_time-$detail["action"]) > CHAT_ADMIN_IDLE_TIMEOUT) ||
-				( ($a_time - $detail['heartbeat']) > 5)){
+				( ($a_time - $detail['heartbeat']) > 15)){
 				$this->removeUser($userid,$rangeid);
 			}
 			else

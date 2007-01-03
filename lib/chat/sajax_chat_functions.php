@@ -266,6 +266,8 @@ function check_and_get_messages($chatid){
 		$lastMsgTime = $msg[2];
 	}
 	
+	$chatServer->setHeartbeat($user->id, $chatid);
+
 	//wurden wir zwischenzeitlich gekickt?
 	if (!$userQuit){
 		if (!$chatServer->isActiveUser($user->id,$chatid)){
@@ -278,8 +280,6 @@ function check_and_get_messages($chatid){
 			$output .=  sprintf(_("%sHier%s k&ouml;nnen Sie versuchen wieder einzusteigen."),"<a href=\"javascript:location.reload();\">",'</a>'). '<br>';
 		}
 	}
-
-	$chatServer->setHeartbeat($user->id, $chatid);
 
 	return $output;
 }
