@@ -32,10 +32,11 @@ require_once ("lib/classes/Modules.class.php");
 require_once("lib/classes/StudipLitList.class.php");
 require_once ("lib/classes/SemesterData.class.php");
 require_once ("lib/classes/StudipScmEntry.class.php");
-
+require_once ("lib/classes/StudipDocumentTree.class.php");
+require_once("user_visible.inc.php");
 
 // Liefert den dump des Seminars
-function dump_sem($sem_id) {
+function dump_sem($sem_id, $print_view = false) {
 	global $TERMIN_TYP, $SEM_TYPE, $SEM_CLASS,$_fullname_sql,$AUTO_INSERT_SEM;
 
 	$dump = "";
@@ -306,9 +307,21 @@ function dump_sem($sem_id) {
 
 	// Dateien anzeigen
 	if ($Modules["documents"]) {
+		//do not show hidden documents
+		$unreadable_folders = array();
+		if($print_view){
+			if($Modules['documents_folder_permissions']){
+				if (!$GLOBALS['perm']->have_studip_perm('tutor', $sem_id)){
+					$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $sem_id,'entity_type' => 'sem'));
+					$unreadable_folders = $folder_tree->getUnReadableFolders($GLOBALS['user']->id);
+				}
+			}
+		}
 		$i=0;
-
-		$db->query("SELECT dokument_id, dokumente.description, dokumente.name , filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname, dokumente.url  FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id WHERE seminar_id = '$sem_id'");
+		$db->query("SELECT dokument_id, dokumente.description, dokumente.name , 
+				filename, dokumente.mkdate, filesize, dokumente.user_id, username, Nachname, dokumente.url  
+				FROM dokumente LEFT JOIN auth_user_md5 ON auth_user_md5.user_id = dokumente.user_id 
+				WHERE seminar_id = '$sem_id'" . (count($unreadable_folders) ? " AND range_id NOT IN('".join("','", $unreadable_folders)."')" : ""));
 		while($db->next_record()){
 			if ($db->f("url")!="")
 				$linktxt = _("Hinweis: Diese Datei wurde nicht archiviert, da sie lediglich verlinkt wurde.");
@@ -340,10 +353,9 @@ function dump_sem($sem_id) {
 		}
 	}
 
-
 	// Teilnehmer
 	if ($Modules["participants"]) {
-		if (is_array($AUTO_INSERT_SEM) && !in_array($sem_id, $AUTO_INSERT_SEM)) {
+		if (!is_array($AUTO_INSERT_SEM) || (is_array($AUTO_INSERT_SEM) && !in_array($sem_id, $AUTO_INSERT_SEM))) {
 			$gruppe = array ("dozent" => _("DozentInnen"),
 				"tutor" => _("TutorInnen"),
 				"autor" => _("AutorInnen"),
@@ -354,7 +366,8 @@ function dump_sem($sem_id) {
 			// die eigentliche Teil-Tabelle
 
 				$sortby = "doll DESC";
-				$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status, count(topic_id) AS doll 
+				$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status, count(topic_id) AS doll,
+							" . get_ext_vis_query('seminar_user') . " as user_is_visible 
 							FROM seminar_user LEFT JOIN px_topics USING (user_id,Seminar_id)
 							LEFT JOIN auth_user_md5 ON (seminar_user.user_id=auth_user_md5.user_id)
 							LEFT JOIN user_info ON (auth_user_md5.user_id=user_info.user_id)
@@ -371,7 +384,7 @@ function dump_sem($sem_id) {
 
 					while ($db->next_record()) {
 						$dump.="<tr><td>";
-						$dump.= htmlReady($db->f("fullname"));
+						$dump.= ($db->f('user_is_visible') ? htmlReady($db->f("fullname")) : _("(unsichtbareR NutzerIn)"));
 						$dump.="</td><td align=center>";
 						$dump.= $db->f("doll");
 						$dump.="</td><td align=center>";
