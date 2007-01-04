@@ -956,7 +956,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		printf ("<font size=\"-1\"><a href = about.php?username=%s>", $db->f("username"));
 		echo htmlReady($db->f("fullname")) ."</a></font></td>";
 	} else {
-		echo '<font size="-1" color="#666666">(unsichtbareR NutzerIn)</font>';
+		echo '<font size="-1" color="#666666">'. _("(unsichtbareR NutzerIn)") . '</font>';
 	}
 
 	if ($key != "dozent" && $rechte) {
