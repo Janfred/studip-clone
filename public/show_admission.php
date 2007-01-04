@@ -82,7 +82,7 @@ $db3=new DB_Seminar;
 				}
 				?>
 				</select>&nbsp;
-				<input <?=makeButton("auswaehlen","src")?> <?=tooltip(_("Einrichtung auswÃ¤hlen"))?> type="image" border="0" style="vertical-align:middle;">
+				<input <?=makeButton("auswaehlen","src")?> <?=tooltip(_("Einrichtung auswählen"))?> type="image" border="0" style="vertical-align:middle;">
 				<br>&nbsp;
 			</div>
 		</td>
@@ -115,7 +115,7 @@ $db3=new DB_Seminar;
 					printf("<input type=\"hidden\" name=\"gruppe[]\" value=\"%s\">\n",$element);
 				}
 			}
-			printf("<a href=\"show_admission.php?institut_id=%s\"><img %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\"></a>\n",$institut_id,makeButton("nein","src"),tooltip(_("Ã„nderung NICHT durchfuehren")));
+			printf("<a href=\"show_admission.php?institut_id=%s\"><img %s %s type=\"image\" border=\"0\" style=\"vertical-align:middle;\"></a>\n",$institut_id,makeButton("nein","src"),tooltip(_("Änderung NICHT durchführen")));
 			print("</tr></td></table></form>");
 		} elseif ($ALLOW_GROUPING_SEMINARS) {
 			//execute order
