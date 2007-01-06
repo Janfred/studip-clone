@@ -894,12 +894,12 @@ function forum_print_toolbar ($id="") {
 		} else {
 			$print .= "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"blank\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"22\" width=\"1\"></td>";
 			$print .= "<td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"".$GLOBALS['ASSETS_URL']."images/griff2.jpg\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
-			$print .= "</td></tr></table>";
+			$print .= '</td></tr></table>';
 		}
 		$print .= "</td></tr></table>\n";
 		if ($id) {  // Schreibmodus, also form einbauen
 			//$print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."?test=s#anker\">";
-			$print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."#anker\">";
+			$print .= '<form name="forumwrite" method="post" action="'.$PHP_SELF.'#anker">';
 		}
 
 		return $print;
@@ -915,6 +915,7 @@ function forum_print_toolbar ($id="") {
 **/
 function forum_get_index ($forumposting) {
 	global $forum, $indexvars;
+	$i = 0;
  	if ($forum["sort"] == "viewcount" || $forum["sort"] == "rating" || $forum["sort"] == "score") {
   		$color = $indexvars[$forum["sort"]]["color"];
   		$name = $indexvars[$forum["sort"]]["name"];

@@ -98,7 +98,7 @@ function getMsTime(){
 	return (double)($microtime[1].substr($microtime[0],1));
 }
 
-// $stoppuhr=getMsTime();
+//$stoppuhr=getMsTime();
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -231,35 +231,22 @@ $openorig = $open;  // wird gebraucht für den open-Link wenn im Treeview $open ü
 //////////////////////////////////////////////////////////////////////////////////
 // Sind wir da wo wir hinwollen?
 //////////////////////////////////////////////////////////////////////////////////
-
+$sql_topic_id = false;
 if ($topic_id AND !$update) {
-	$db=new DB_Seminar;
-	$db->query("SELECT * FROM px_topics WHERE topic_id='$topic_id' AND Seminar_id ='$SessSemName[1]'");
-	if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
-		echo "<br><br>";
-		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu verwenden.") . "</font>", "§",
-				_("zuviele Browserfenster im Forenbereich!"),
-				"");
-		die;
-	}
+	$sql_topic_id = $topic_id;
 } elseif ($open AND !$update) {
-	$db=new DB_Seminar;
-	$db->query("SELECT * FROM px_topics WHERE topic_id='$open' AND Seminar_id ='$SessSemName[1]'");
-	if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
-		echo "<br><br>";
-		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu verwenden.") . "</font>", "§",
-				_("zuviele Browserfenster im Forenbereich!"),
-				"");
-		die;
-	}
+	$sql_topic_id = $open;
 } elseif ($answer_id) {
+	$sql_topic_id = $answer_id;
+}
+if ($sql_topic_id) {
 	$db=new DB_Seminar;
-	$db->query("SELECT * FROM px_topics WHERE topic_id='$answer_id' AND Seminar_id ='$SessSemName[1]'");
+	$db->query('SELECT * FROM px_topics WHERE topic_id=\''.$sql_topic_id. '\' AND Seminar_id =\''.$SessSemName[1].'\'');
 	if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
-		echo "<br><br>";
-		parse_window ("error§" . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Stud.IP Bereiche zu navigieren.") . "<br /><font size=-1 color=black>" . _("Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu verwenden.") . "</font>", "§",
+		echo '<br /><br />';
+		parse_window ('error§' . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . '<br /><font size="-1" color="black">' . _("Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu verwenden.") . '</font>', '§',
 				_("zuviele Browserfenster im Forenbereich!"),
-				"");
+				'');
 		die;
 	}
 }
@@ -324,14 +311,14 @@ if ($delete_id) {
 
 		// Darstellung des zu loeschenden Postings
 
-			echo "<table width=\"100%\" class=blank border=0 cellpadding=0 cellspacing=0 align=center><tr><td class=blank><br><br>";
-			echo "<table width=\"80%\" class=blank border=0 cellpadding=0 cellspacing=0 align=center><tr>";
+			echo '<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="0" align="center"><tr><td class="blank"><br /><br />';
+			echo '<table width="80%" class="blank" border="0" cellpadding="0" cellspacing="0" align="center"><tr>';
 
 
 
 			printposting($forumposting);
 
-			echo "<br></td></tr></table>\n<br></td></tr></table>";
+			echo "<br /></td></tr></table>\n<br /></td></tr></table>";
 			page_close();
 			die;
 		}
