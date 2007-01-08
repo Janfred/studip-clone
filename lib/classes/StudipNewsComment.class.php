@@ -39,7 +39,6 @@ class StudipNewsComments extends SimpleORMap {
 	function &GetNewsComments($news_id, $as_objects = false){
 		$ret = array();
 		$db =& new DB_Seminar();
-		$comment_object =& new StudipNewsComments();
 		$query = "SELECT " . STUDIPNEWSCOMMENTS_DB_TABLE . ".* FROM "
 					. STUDIPNEWSCOMMENTS_DB_TABLE . " WHERE object_id='$news_id' ORDER BY chdate DESC";
 		$db->query($query);
@@ -47,7 +46,7 @@ class StudipNewsComments extends SimpleORMap {
 			if (!$as_objects){
 				$ret[$db->f('comment_id')] = $db->Record;
 			} else {
-				$ret[$db->f('comment_id')] = $comment_object; //in PHP5 clone!!!
+				$ret[$db->f('comment_id')] =& new StudipNewsComments();
 				$ret[$db->f('comment_id')]->setData($db->Record, true);
 				$ret[$db->f('comment_id')]->is_new = false;
 			}

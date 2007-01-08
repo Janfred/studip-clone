@@ -80,9 +80,8 @@ class StudipNews extends SimpleORMap {
 	function &GetNewsObjects($news_result){
 		$objects = array();
 		if (is_array($news_result)){
-			$news =& new StudipNews();
 			foreach($news_result as $id => $result){
-				$objects[$id] = $news; //in PHP5 clone!!!
+				$objects[$id] =& new StudipNews();
 				$objects[$id]->setData($result, true);
 				$objects[$id]->is_new = false;
 			}
