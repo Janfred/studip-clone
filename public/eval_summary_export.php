@@ -311,7 +311,7 @@ function groups ($parent_id) {
 					if (!($freetype)) {
 	 					fputs($fo_file,"          <fo:table-cell ><fo:block start-indent=\"3mm\" end-indent=\"3mm\" padding-left=\"3mm\" padding-right=\"3mm\" padding-top=\"4mm\" padding-bottom=\"4mm\">\n");
 						if (do_template("show_graphics")) {
-	 						fputs($fo_file,"            <fo:external-graphic content-width=\"70pt\" content-height=\"60pt\" src=\"url(".$TMP_PATH."/export/evalsum".$db_questions->f("evalquestion_id").$auth->auth["uid"].".".$GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT'].")\"/>\n");
+	 						fputs($fo_file,"            <fo:external-graphic content-width=\"70pt\" content-height=\"60pt\" src=\"url(".$TMP_PATH."/evalsum".$db_questions->f("evalquestion_id").$auth->auth["uid"].".".$GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT'].")\"/>\n");
 						}
 	 					fputs($fo_file,"          </fo:block></fo:table-cell>\n");
 	 				}
@@ -449,10 +449,10 @@ if ($db->next_record()) {
   $db_number_of_votes->query(sprintf("SELECT COUNT(DISTINCT user_id) anz FROM eval_user WHERE eval_id='%s'", $eval_id));
   $db_number_of_votes->next_record();
 
-  if (file_exists($TMP_PATH."/export/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo")) unlink($TMP_PATH."/export/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo");
-  if (file_exists($TMP_PATH."/export/evalsum".$db->f("eval_id").$auth->auth["uid"].".pdf")) unlink($TMP_PATH."/export/evalsum".$db->f("eval_id").$auth->auth["uid"].".pdf");
+  if (file_exists($TMP_PATH."/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo")) unlink($TMP_PATH."/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo");
+  if (file_exists($TMP_PATH."/evalsum".$db->f("eval_id").$auth->auth["uid"].".pdf")) unlink($TMP_PATH."/evalsum".$db->f("eval_id").$auth->auth["uid"].".pdf");
 
-  $fo_file = fopen($TMP_PATH."/export/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo","w");
+  $fo_file = fopen($TMP_PATH."/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo","w");
 
   // ----- START HEADER -----
 
@@ -509,9 +509,9 @@ if ($db->next_record()) {
 
   fclose($fo_file);
 
-  $pdffile = "$TMP_PATH/export/" . md5($db->f("eval_id").$auth->auth["uid"]);
+  $pdffile = "$TMP_PATH/" . md5($db->f("eval_id").$auth->auth["uid"]);
 
-  $str = $FOP_SH_CALL." $TMP_PATH/export/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo $pdffile";
+  $str = $FOP_SH_CALL." $TMP_PATH/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo $pdffile";
 
   if ($JAVA_ENV_CALL){
 		$str = ". $JAVA_ENV_CALL && " . $str;
@@ -540,19 +540,19 @@ if ($db->next_record()) {
 	} else {
 		// Internet Explorer
   		header("Content-Type: application/pdf; name=\"evaluation.pdf\"");
-		// header("Content-Length: ".@filesize("$TMP_PATH/export/evalsum".$db->f("eval_id").$auth->auth["uid"].".pdf"));
+		// header("Content-Length: ".@filesize("$TMP_PATH/evalsum".$db->f("eval_id").$auth->auth["uid"].".pdf"));
 		header("Content-Length: ".@filesize("$pdffile"));
   		// header("Content-disposition: inline; filename=\"evaluation.pdf\"");
   		header("Content-disposition: attachment; filename=\"evaluation.pdf\"");
 	}
 
-  	// readfile($TMP_PATH."/export/evalsum".$db->f("eval_id").$auth->auth["uid"].".pdf");
+  	// readfile($TMP_PATH."/evalsum".$db->f("eval_id").$auth->auth["uid"].".pdf");
   	readfile($pdffile);
 
-  	// unlink($TMP_PATH."/export/evalsum".$db->f("eval_id").$auth->auth["uid"].".pdf");
+  	// unlink($TMP_PATH."/evalsum".$db->f("eval_id").$auth->auth["uid"].".pdf");
   	unlink($pdffile);
 */
- 	unlink($TMP_PATH."/export/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo");
+ 	unlink($TMP_PATH."/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo");
 
 } else {
 	echo "Fehler beim PDF-Export!<BR>".$err;
