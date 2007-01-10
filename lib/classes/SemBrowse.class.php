@@ -251,6 +251,7 @@ class SemBrowse {
 		echo "</font></td></tr>";
 		echo $this->search_obj->getFormEnd();
 		echo "</table>\n";
+		echo '<script type="text/javascript">document.'.$this->search_obj->form_name.'.'.$this->search_obj->form_name.'_quick_search.focus();</script>' . chr(10);
 	}
 
 	function print_xts(){

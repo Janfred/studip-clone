@@ -90,7 +90,7 @@ class StudipSemSearch {
 		$this->form_name = $form_name;
 		$this->sem_dates = SemesterData::GetSemesterArray();
 		$this->visible_only = $visible_only;
-		if(isset($_REQUEST[$form_name . "_do_search_x"]) || isset($_REQUEST[$form_name . "_send"]) && !isset($_REQUEST[$form_name . "_sem_change_x"])){
+		if(isset($_REQUEST[$form_name . "_do_search_x"]) || (isset($_REQUEST[$form_name . "_send"]) && !$_REQUEST[$form_name . "_sem_change_x"])){
 			$this->search_button_clicked = true;
 			if ($auto_search){
 				$this->doSearch();
@@ -111,7 +111,7 @@ class StudipSemSearch {
 		if (!$attributes){
 			$attributes = $this->attributes_default;
 		}
-		if (!$default && isset($_REQUEST[$this->form_name . "_do_search_x"])){
+		if (!$default && $this->search_button_clicked){
 			$default = stripslashes($_REQUEST[$this->form_name . "_" . $name]);
 		}
 		if($this->search_fields[$name]['type']){
