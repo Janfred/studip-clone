@@ -296,93 +296,111 @@ if (Seminar_Session::check_ticket($studipticket)){
 	}
 	
 	//aus der Anmelde- oder Warteliste entfernen
-	if ($cmd=="admission_raus") {
+	if ( ($cmd == "admission_raus" && $username)  || (isset($_REQUEST['do_admission_delete_x']) && is_array($_REQUEST['admission_delete']) ) ) {
 		//erst mal sehen, ob er hier wirklich Dozent ist...
 		if ($rechte) {
-			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
-			$db->next_record();
-			$userchange=$db->f("user_id");
-			$fullname = $db->f("fullname");
-			$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
-	
-			setTempLanguage($userchange);
-			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-				if (!$accepted) {
-					$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
-				} else {
-					 $message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
-				}
+			$msgs = array();
+			if ($cmd == "admission_raus"){
+				$adm_delete[] = $username;
 			} else {
-				if (!$accepted) {
-					$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
-				} else {
-					 $message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
-				}
+				$adm_delete = (is_array($_REQUEST['admission_delete']) ? array_keys($_REQUEST['admission_delete']) : array());
 			}
-			restoreLanguage();
-	
-			$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("nicht zugelassen in Veranstaltung"), TRUE);
-	
-			//Warteliste neu sortieren
-			renumber_admission($id);
-			if ($accepted)
-				update_admission($id);
-	
-			$msg = "msg§" . sprintf(_("LeserIn %s wurde aus der Anmelde bzw. Warteliste entfernt."), htmlReady($fullname)) . "§";
-		}
-		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
-	}
-	
-	//aus der Anmelde- oder Warteliste in die Veranstaltung hochstufen / aus der freien Suche als Tutoren oder Autoren eintragen
-	if ((($cmd=="admission_rein") || ($cmd=="add_user")) && ($username)){
-		//erst mal sehen, ob er hier wirklich Dozent ist...
-		if ($rechte) {
-	
-			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
-			$db->next_record();
-			$userchange=$db->f("user_id");
-			$fullname = $db->f("fullname");
-	
-			if ($cmd == "add_user" && !$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))){
-				$status = 'tutor';
-			} else {
-				$status = 'autor';
-			}
-			
-			$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted) ? TRUE : FALSE);
-			//Only if user was on the waiting list
-			if ($admission_user) {
+			foreach($adm_delete as $username){
+				$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
+				$db->next_record();
+				$userchange=$db->f("user_id");
+				$fullname = $db->f("fullname");
+				$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
 				setTempLanguage($userchange);
 				if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 					if (!$accepted) {
-						$message = sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+						$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
 					} else {
-						$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
+						$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
 					}
 				} else {
 					if (!$accepted) {
-						$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+						$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
 					} else {
-						$message = sprintf(_("Sie wurden von einem/r DozentIn oder AdministratorIn vom Status **vorläufig akzeptiert** zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
+						$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
 					}
 				}
 				restoreLanguage();
-				$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
+				
+				$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("nicht zugelassen in Veranstaltung"), TRUE);
+				
+				$msgs[] = $fullname;
 			}
-	
 			//Warteliste neu sortieren
 			renumber_admission($id);
-	
-			if ($cmd=="add_user")
-				$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung mit dem Status <b>%s</b> eingetragen."), htmlReady($fullname), $status) . "§";
-			else
-				if (!$accepted) {
-					$msg = "msg§" . sprintf(_("NutzerIn %s wurde aus der Anmelde bzw. Warteliste mit dem Status <b>%s</b> in die Veranstaltung eingetragen."), htmlReady($fullname), $status) . "§";
-				} else {
-					$msg = "msg§" . sprintf(_("NutzerIn %s wurde mit dem Status <b>%s</b> endgültig akzeptiert und damit in die Veranstaltung aufgenommen."), htmlReady($fullname), $status) . "§";
-				}
+			if ($accepted)
+			update_admission($id);
+			$msg = "msg§". sprintf(_("LeserIn %s wurde aus der Anmelde bzw. Warteliste entfernt."), htmlReady(join(', ', $msgs))) . '§';
+		} else {
+			$msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 		}
-		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
+	}
+
+	//aus der Anmelde- oder Warteliste in die Veranstaltung hochstufen / aus der freien Suche als Tutoren oder Autoren eintragen
+	if ((isset($_REQUEST['do_admission_insert_x']) && is_array($_REQUEST['admission_insert'])) || (($cmd == "admission_rein" || $cmd == "add_user") && $username)){
+		//erst mal sehen, ob er hier wirklich Dozent ist...
+		if ($rechte) {
+			$msgs = array();
+			if ($cmd == "admission_rein" || $cmd == "add_user"){
+				$user_add[] = $username;
+			} else {
+				$user_add = (is_array($_REQUEST['admission_insert']) ? array_keys($_REQUEST['admission_insert']) : array());
+			}
+			foreach($user_add as $username){
+				
+				$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
+				$db->next_record();
+				$userchange=$db->f("user_id");
+				$fullname = $db->f("fullname");
+				
+				if ($cmd == "add_user" && !$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))){
+					$status = 'tutor';
+				} else {
+					$status = 'autor';
+				}
+				
+				$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted) ? TRUE : FALSE);
+				//Only if user was on the waiting list
+				if ($admission_user) {
+					setTempLanguage($userchange);
+					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+						if (!$accepted) {
+							$message = sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+						} else {
+							$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
+						}
+					} else {
+						if (!$accepted) {
+							$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+						} else {
+							$message = sprintf(_("Sie wurden von einem/r DozentIn oder AdministratorIn vom Status **vorläufig akzeptiert** zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
+						}
+					}
+					restoreLanguage();
+					$messaging->insert_message($message, $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
+				}
+				$msgs[] = $fullname;
+			}
+			
+			//Warteliste neu sortieren
+			renumber_admission($id);
+			
+			if ($cmd=="add_user")
+			$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung mit dem Status <b>%s</b> eingetragen."), htmlReady($fullname[0]), $status) . "§";
+			else
+			if (!$accepted) {
+				$msg = "msg§" . sprintf(_("NutzerIn %s wurde aus der Anmelde bzw. Warteliste mit dem Status <b>%s</b> in die Veranstaltung eingetragen."), htmlReady(join(', ', $msgs)), $status) . "§";
+			} else {
+				$msg = "msg§" . sprintf(_("NutzerIn %s wurde mit dem Status <b>%s</b> endgültig akzeptiert und damit in die Veranstaltung aufgenommen."), htmlReady(join(', ', $msgs)), $status) . "§";
+			}
+		} else {
+			$msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
+		}
 	}
 	
 	// import users from a csv-list
@@ -1105,7 +1123,25 @@ if ($rechte) {
 	$db->query ("SELECT admission_seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname , username, studiengaenge.name, position, admission_seminar_user.studiengang_id, status FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (admission_seminar_user.studiengang_id=studiengaenge.studiengang_id)  WHERE admission_seminar_user.seminar_id = '$SessionSeminar' AND admission_seminar_user.status != 'accepted' ORDER BY position, name");
 	if ($db->num_rows()) { //Only if Users were found...
 		$awaiting = true;
+		?>
+		<script type="text/javascript">
+			function invert_selection(prefix){
+				my_elements = document.forms['waitlist'].elements;
+				for(i = 0; i < my_elements.length; ++i){
+					if(my_elements[i].type == 'checkbox' && my_elements[i].name.substr(0, prefix.length) == prefix){
+					if(my_elements[i].checked)
+						my_elements[i].checked = false;
+					else
+						my_elements[i].checked = true;
+					}
+				}
+			return false;
+			}
+				
+		</script>
+		<?
 		// die eigentliche Teil-Tabelle
+		echo '<form name="waitlist" action="'.$PHP_SELF.'?studipticket='.$studipticket.'" method="post">';
 		echo "<tr><td class=\"blank\" colspan=\"2\">";
 		echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
 		echo "<tr height=\"28\">";
@@ -1114,8 +1150,8 @@ if ($rechte) {
 			printf("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td>", _("Position"));
 		printf("<td class=\"steel\" width=\"10%%\" align=\"center\">&nbsp; </td>");
 		printf("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td>", _("Nachricht"));
-		printf("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td>", _("eintragen"));
-		printf("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td>", _("entfernen"));
+		printf("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=\"-1\"><a name=\"blubb\" onClick=\"return invert_selection('admission_insert');\" %s><b>%s</b></a></font></td>", tooltip(_("Klicken, um Auswahl umzukehren"),false), _("eintragen"));
+		printf("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=\"-1\"><a name=\"bla\" onClick=\"return invert_selection('admission_delete');\" %s><b>%s</b></a></font></td>", tooltip(_("Klicken, um Auswahl umzukehren"),false), _("entfernen"));
 		printf("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td></tr>\n", _("Kontingent"));
 
 
@@ -1142,11 +1178,18 @@ if ($rechte) {
 
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" %s border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username"), tooltip(_("Nachricht an User verschicken")));
 
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/down.gif\" width=\"21\" height=\"16\"></a></td>", $cssSw->getClass(), $db->f("username"));
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\"></a>
+					<input type=\"checkbox\" name=\"admission_insert[%s]\" value=\"1\"></td>", $cssSw->getClass(), $db->f("username"), $db->f("username"));
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/down.gif\" width=\"21\" height=\"16\"></a>
+					<input type=\"checkbox\" name=\"admission_delete[%s]\" value=\"1\"></td>", $cssSw->getClass(), $db->f("username"), $db->f("username"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td></tr>\n", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"));
 		}
-		print "</table>";
+		echo '<tr><td class="blank" colspan="4">&nbsp;</td>';
+		echo '<td class="blank" align="center">' . makeButton('eintragen','input',_("Ausgewählte Nutzer aus der Warteliste in die Veranstaltung eintragen"),'do_admission_insert') . '</td>';
+		echo '<td class="blank" align="center">' . makeButton('entfernen','input',_("Ausgewählte Nutzer aus der Warteliste entfernen"),'do_admission_delete') . '</td>';
+		echo '<td class="blank">&nbsp;</td></tr>';
+		echo '</table>';
+		echo '</td></tr></form>';
 	}
 }
 
