@@ -169,7 +169,7 @@ class StudipRangeTree extends TreeAbstract {
 			$this->view->params[0] = $this->getKidsKids($item_id);
 		}
 		$this->view->params[0][] = $item_id;
-		$this->view->params[1] = (isset($this->sem_number)) ? " HAVING sem_number IN (" . join(",",$this->sem_number) .") OR (sem_number <= " . $this->sem_number[count($this->sem_number)-1] . "  AND (sem_number_end > " . $this->sem_number[count($this->sem_number)-1] . " OR sem_number_end = -1)) " : " ";
+		$this->view->params[1] = (isset($this->sem_number)) ? " HAVING sem_number IN (" . join(",",$this->sem_number) .") OR (sem_number <= " . $this->sem_number[count($this->sem_number)-1] . "  AND (sem_number_end >= " . $this->sem_number[count($this->sem_number)-1] . " OR sem_number_end = -1)) " : " ";
 		$ret = false;
 		$rs = $this->view->get_query("view:RANGE_TREE_GET_SEMIDS");
 		while($rs->next_record()){
