@@ -93,7 +93,7 @@ class StudipRangeTree extends TreeAbstract {
 		$this->view->params[1] = (isset($this->sem_number)) ? " WHERE ((" . $GLOBALS['_views']['sem_number_sql'] 
 								. ") IN (" . join(",",$this->sem_number) .") OR ((" . $GLOBALS['_views']['sem_number_sql'] 
 								.") <= " . $this->sem_number[count($this->sem_number)-1] 
-								. "  AND ((" . $GLOBALS['_views']['sem_number_end_sql'] . ") > " . $this->sem_number[count($this->sem_number)-1] 
+								. "  AND ((" . $GLOBALS['_views']['sem_number_end_sql'] . ") >= " . $this->sem_number[count($this->sem_number)-1] 
 								. " OR (" . $GLOBALS['_views']['sem_number_end_sql'] . ") = -1))) " : "";
 
 		$db = $this->view->get_query("view:TREE_GET_SEM_ENTRIES");
