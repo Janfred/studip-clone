@@ -1609,7 +1609,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							if (($type != '6') && ($fext != 'zip') && ($fext != 'tgz') && ($fext != 'gz') && ($fext != 'bz2')) {
 								$edit.= '&nbsp;<a href="'. GetDownloadLink( $db3->f('dokument_id'), $db3->f('filename'), $type, 'zip') . '">' . makeButton('alsziparchiv', 'img') . '</a>';
 							}
-							if (($rechte) || ($db3->f("user_id")==$user->id)) {
+							if (($rechte) || ($db3->f("user_id") == $user->id && $folder_tree->isWritable($db3->f("range_id"), $user->id))) {
 								if ($type!=6)
 									$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \">" . makeButton("bearbeiten", "img") . "</a>";
 								if ($type==6)

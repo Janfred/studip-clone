@@ -90,11 +90,11 @@ if (strpos($open, "_") !== false){
 	list($open_id, $open_cmd) = explode('_', $open);
 }
 
-//Wenn nicht Rechte und Operation uebermittelt: Ist das mein Dokument?
+//Wenn nicht Rechte und Operation uebermittelt: Ist das mein Dokument und ist der Ordner beschreibbar?
 if ((!$rechte) && $open_cmd) {
-	$db->query("SELECT user_id FROM dokumente WHERE dokument_id = '".$open_id."'");
+	$db->query("SELECT user_id,range_id FROM dokumente WHERE dokument_id = '".$open_id."'");
 	$db->next_record();
-	if (($db->f("user_id") == $user->id) && ($db->f("user_id") != "nobody"))
+	if (($db->f("user_id") == $user->id) && ($db->f("user_id") != "nobody") && $folder_tree->isWritable($db->f('range_id'), $user->id))
 		$owner=TRUE;
 	else
 		$owner=FALSE;
@@ -194,17 +194,30 @@ if (($rechte) || ($owner)) {
 		}
 
 	//wurde Code fuer Verschieben-Vorwaehlen uebermittelt (=id+"_m_"), wird entsprechende Funktion aufgerufen
-	if ($open_cmd == 'm' && (!$cancel_c)) {
+	if ($open_cmd == 'm' && (!$cancel_x)) {
 		$folder_system_data["move"]=$open_id;
 		$folder_system_data["mode"]='move';
 		}
 
 	//wurde Code fuer Kopieren-Vorwaehlen uebermittelt (=id+"_co_"), wird entsprechende Funktion aufgerufen
-	if ($open_cmd == 'co' && (!$cancel_c)) {
+	if ($open_cmd == 'co' && (!$cancel_x)) {
 		$folder_system_data["move"]=$open_id;
 		$folder_system_data["mode"]='copy';
 		}
+		
+	//wurde Code fuer Aktualisieren-Hochladen uebermittelt (=id+"_rfu_"), wird entsprechende Variable gesetzt
+	if ($open_cmd == 'rfu' && (!$cancel_x)) {
+		$folder_system_data["upload"]=$open_id;
+		$folder_system_data["refresh"]=$open_id;
+		unset($folder_system_data["zipupload"]);
 	}
+
+	//wurde Code fuer Aktualisieren-Verlinken uebermittelt (=id+"_led_"), wird entsprechende Variable gesetzt
+	if ($open_cmd == 'led' && (!$cancel_x)) {
+		$folder_system_data["link"]=$open_id;
+		$folder_system_data["update_link"]=TRUE;
+	}
+}
 
 
 //Upload, Check auf Konsistenz mit Seminar-Schreibberechtigung
@@ -223,19 +236,6 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 	//wurde Code fuer Verlinken uebermittelt (=id+"_l_"), wird entsprechende Variable gesetzt
 	if ($open_cmd == 'l' && (!$cancel_x)) {
 		$folder_system_data["link"]=$open_id;
-	}
-
-	//wurde Code fuer Aktualisieren-Hochladen uebermittelt (=id+"_rfu_"), wird entsprechende Variable gesetzt
-	if ($open_cmd == 'rfu' && (!$cancel_x)) {
-		$folder_system_data["upload"]=$open_id;
-		$folder_system_data["refresh"]=$open_id;
-		unset($folder_system_data["zipupload"]);
-	}
-
-	//wurde Code fuer Aktualisieren-Verlinken uebermittelt (=id+"_led_"), wird entsprechende Variable gesetzt
-	if ($open_cmd == 'led' && (!$cancel_x)) {
-		$folder_system_data["link"]=$open_id;
-		$folder_system_data["update_link"]=TRUE;
 	}
 
 	//wurde eine Datei hochgeladen/aktualisiert?
