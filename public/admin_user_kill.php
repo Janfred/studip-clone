@@ -89,11 +89,11 @@ if (isset($_REQUEST['kill_accounts_x']) && check_ticket($_POST['ticket'])){
 }
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");	 //hier wird der "Kopf" nachgeladen 
+include ('html_head.inc.php'); // Output of html head
+include ('header.php');	 //hier wird der "Kopf" nachgeladen 
 //fake
 $i_page = 'new_user_md5.php';
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
+include ('links_admin.inc.php');	//Linkleiste fuer admins
 
 ?>
 <script type="text/javascript">
@@ -187,6 +187,6 @@ include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
 	</tr>
 </table>
 <?
-include ("$ABSOLUTE_PATH_STUDIP/html_end.inc.php"); // Output of html head
+include ('html_end.inc.php'); // Output of html head
 page_close();
 ?>

@@ -112,8 +112,7 @@ print_infobox ($infobox,"einrichtungen.jpg");
 ?>
 </td></tr>
 </table>
-</body>
 <?
-page_close()
+include ('html_end.inc.php');
+page_close();
 ?>
-

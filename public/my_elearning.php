@@ -231,7 +231,6 @@ else
 				_("E-Learning-Schnittstelle nicht eingebunden"));
 }
 
+include ('html_end.inc.php');
 page_close();
 ?>
-</body>
-</html>

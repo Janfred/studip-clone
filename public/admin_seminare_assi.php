@@ -3799,15 +3799,13 @@ if ($level == 8)
 				</table>
 		</tr>
 	</table>
-	<?
+	<?php
 	}
 //de-initialisations for room-requests
 if (is_object($sem_create_data["resRequest"])) {
 	$sem_create_data["resRequest"] = serialize ($sem_create_data["resRequest"]);
 }
-
+include ('html_end.inc.php');
 //save all the data back to database
 page_close();
 ?>
-</body>
-</html>

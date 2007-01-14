@@ -157,7 +157,6 @@ echo $contentTable->close();
 
 echo $containerTable->blankRow();
 echo $containerTable->close();
-echo "</body>";
-echo "</html>";
+include ('html_end.inc.php');
 page_close();
 ?>

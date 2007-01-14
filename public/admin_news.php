@@ -249,6 +249,7 @@ if (!$cmd OR $cmd=="show") {
 		echo "</blockquote></td></tr>";
 	}
 }
-echo"\n</table></html>";
+echo"\n</table>";
+include ('html_end.inc.php');
 page_close();
 ?>

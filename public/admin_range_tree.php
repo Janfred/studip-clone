@@ -63,7 +63,10 @@ $the_tree = new StudipRangeTreeViewAdmin();
 $the_tree->open_ranges['root'] = true;
 
 $the_tree->showTree();
+
+echo '</td></tr></table><br /></td></tr></table>';
+include ('html_end.inc.php');
 page_close();
+
+// <!--$Id$-->
 ?>
-</td></tr></table><br /></td></tr></table></body></html>
-<!--$Id$-->

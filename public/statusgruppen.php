@@ -338,11 +338,9 @@ if ($delete_id)
 	</tr>
 </table>
 <p>
-<?
+<?php
 
 // Ende Darstellungsteil
-
+include ('html_end.inc.php');
 page_close();
 ?>
-</body>
-</html>

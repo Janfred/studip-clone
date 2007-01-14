@@ -277,9 +277,9 @@ if (!$i_view) {
   print("</td></tr>\n");
 }
 
-echo"</table>";
+echo '</table>';
+include ('html_end.inc.php');
 page_close();
+
+//<!-- $Id$ -->
 ?>
-</body>
-</html>
-<!-- $Id$ -->

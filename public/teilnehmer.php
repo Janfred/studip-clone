@@ -1387,10 +1387,8 @@ if ($rechte) {
 } // end insert autor
 
 
-echo "</td></tr></table>";
-
+echo '</td></tr></table>';
+include ('html_end.inc.php');
 // Save data back to database.
-page_close()
+page_close();
 ?>
-</body>
-</html>

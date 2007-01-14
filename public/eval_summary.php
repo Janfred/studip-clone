@@ -501,10 +501,8 @@ if ($db->next_record()) {
   echo "&nbsp;"._("Evaluation NICHT vorhanden oder keine Rechte vorhanden!");
 }
 
-
+include ('html_end.inc.php');
   // Save data back to database.
   page_close();
 
 ?>
-</body>
-</html>

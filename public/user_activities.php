@@ -30,7 +30,7 @@ function show_posts_guestbook($user_id,$range_id) {
 	$output = "<table class=\"blank\" width=\"98%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">";
 	while ($db->next_record()) {  
 		$output .= "<tr><td class=\"steel2\"><b><font size=\"-1\"><a href=\"$PHP_SELF?username=".get_username($db->f("user_id"))."\">";
-		$output .= sprintf(_("%s hat am %s geschrieben:"), get_fullname($db->f("user_id"),'full',true)."</a>", date("d.m.Y - H:i", $db->f("mkdate")));
+		$output .= sprintf(_("%s hat am %s geschrieben:"), htmlReady(get_fullname($db->f("user_id")),'full',true)."</a>", date("d.m.Y - H:i", $db->f("mkdate")));
 		$output .= "</font></b></td></tr>"
 		. "<tr><td class=\"steelgraulight\"><font size=\"-1\">".quotes_decode(formatready($db->f("content")))."</font><p align=\"right\">";
 		$output .= "<a href=\"".$PHP_SELF."?deletepost=".$db->f("post_id")."&ticket=".get_ticket()."\">" . makeButton("loeschen", "img") . "</a>";
@@ -218,11 +218,11 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); 		// initialise Stud.IP-Sess
 
 
 // Start of Output
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php"); // Output of html head
-include ("$ABSOLUTE_PATH_STUDIP/header.php");	 //hier wird der "Kopf" nachgeladen 
+include ('html_head.inc.php'); // Output of html head
+include ('header.php');	 //hier wird der "Kopf" nachgeladen 
 //fake
 $i_page = 'new_user_md5.php';
-include ("$ABSOLUTE_PATH_STUDIP/links_admin.inc.php");	//Linkleiste fuer admins
+include ('links_admin.inc.php');	//Linkleiste fuer admins
 $pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 ?>
 <table border="0" bgcolor="#000000" align="center" cellspacing="0" cellpadding="0" width="100%">
@@ -422,7 +422,7 @@ $pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 				$content = '<div style="margin-bottom:10px;"><b>'
 						.'<a href="about.php?username='.get_username($db->f('range_id'))
 						. '&guestbook=open#guest"><img src="'.$pic_path.'/guestbook.gif" border="0" align="absmiddle" hspace="4" >'
-						. _("Gästebuch"). ': ' . get_fullname($db->f('range_id')).'</a></b></div>';
+						. _("Gästebuch"). ': ' . htmlReady(get_fullname($db->f('range_id'))).'</a></b></div>';
 				
 				$content .= show_posts_guestbook($user_id,$db->f('range_id'));
 				printcontent(0,0,$content, $edit);
@@ -438,6 +438,6 @@ $pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 	</tr>
 </table>
 <?
-include ("$ABSOLUTE_PATH_STUDIP/html_end.inc.php"); // Output of html head
+include ('html_end.inc.php'); // Output of html head
 page_close();
 ?>

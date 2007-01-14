@@ -24,7 +24,7 @@ $perm->check('root');
 
 if (!$SMILEYADMIN_ENABLE) {
 	print '<p>' . _("Smiley-Modul abgeschaltet."). '</p>';
-	print '</body></html>';
+	include ('html_end.inc.php');
 	page_close();
 	die;
 }
@@ -83,8 +83,7 @@ echo $content->close();
 echo $container->blankRow();
 echo $container->close();
 
+include ('html_end.inc.php');
 page_close();
-?>
-</body>
-</html>
 <!-- $Id$ -->
+?>

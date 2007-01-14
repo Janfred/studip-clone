@@ -84,10 +84,9 @@ include ("header.php");   // Output of Stud.IP head
 </td>
 <td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suche.jpg" border="0"></td>
 </tr>
-
-<?  // Save data back to database.
-  page_close()
- ?>
 </table>
-</body>
-</html>
+<?php
+  include ('html_end.inc.php');
+  // Save data back to database.
+  page_close();
+ ?>

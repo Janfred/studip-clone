@@ -581,8 +581,6 @@ if (isset($_GET['details'])) {
 
 
 }
-
+include ('html_end.inc.php');
 page_close();
 ?>
-</body>
-</html>

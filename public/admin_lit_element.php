@@ -315,7 +315,7 @@ echo $_the_clip_form->getHiddenField(md5("is_sended"),1) . $_the_form->getFormEn
 </td>
 </tr>
 </table>
-</body>
 <?
-page_close()
+include ('html_end.inc.php');
+page_close();
 ?>

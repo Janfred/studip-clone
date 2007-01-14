@@ -844,13 +844,15 @@ if (($uebernehmen_x) && (!$errormsg)) {
 		</td>
 	</tr>
 	</form>
-<?
+<?php
 	}
-	page_close();
-?>
-	</table>
+
+
+echo '	</table>
 </td>
 </tr>
-</table>
-	</body>
-</html>
+</table>';
+
+include ('html_end.inc.php');
+page_close();
+?>

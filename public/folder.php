@@ -512,8 +512,7 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 </table>
 <br>
 <?php
+include ('html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>
-</body>
-</html>

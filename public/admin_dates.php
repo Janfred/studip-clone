@@ -1015,9 +1015,8 @@ if (!sizeof($term_data["turnus_data"])) {
 	</tr>
 </table>
 </form>
-<?
+</td></tr></table>
+<?php
+include ('html_end.inc.php');
 page_close();
 ?>
-</td></tr></table>
-</body>
-</html>

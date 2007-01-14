@@ -916,16 +916,13 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			<td class="blank" colspan=3>&nbsp;
 			</td>
 		</tr>
-		<?
-page_close();
-?>
+		
 	</table>
 </td>
 </tr>
 </table>
-</body>
-</html>
 
-
-
-
+<?php
+include ('html_end.inc.php');
+page_close();
+?>

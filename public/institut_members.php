@@ -325,7 +325,7 @@ else {
 	printf(_("Der Einrichtung <b>%s</b> wurden noch keine MitarbeiterInnen zugeordnet!"), htmlReady($SessSemName[0]));
 	echo "\n<br /><br /></blockquote>\n";
 	echo "</td></tr></table\n";
-	echo "</body></html>";
+	include ('html_end.inc.php');
 	page_close();
 	die;
 }
@@ -523,7 +523,7 @@ if (($EXPORT_ENABLE) AND ($db_institut_members->num_rows() > 0) AND ($perm->have
 }
 echo "<tr><td class=\"blank\" colspan=\"$colspan\">&nbsp;</td></tr>\n";
 echo "</table></td></tr></table>\n";
-echo "</body></html>";
+include ('html_end.inc.php');
 
 function table_head ($structure, $css_switcher) {
 	echo "<colgroup>\n";

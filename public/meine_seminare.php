@@ -1117,13 +1117,12 @@ ELSEIF ($perm->have_perm("root")){
 			</td>
 		</tr>
 	</table>
-<?
+<?php
 }
-?>
-</table>
-</body>
-</html>
-<?
+
+echo '</table>';
+
+include ('html_end.inc.php');
   // Save data back to database.
 ob_end_flush(); //Outputbuffering beenden
 page_close();

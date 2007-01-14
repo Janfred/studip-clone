@@ -739,7 +739,8 @@ if ($logout && $auth->auth["uid"] == "nobody")  // wir wurden gerade ausgeloggt.
 	$my_about->my_info($temp_string);
 
 
-	echo '</table></body></html>';
+	echo '</table>';
+	include ('html_end.inc.php');
 	page_close();
 	die;
 	}
@@ -755,10 +756,7 @@ if (!$my_about->check)
 	_("Zugriff auf Userdaten verweigert"),
 	sprintf(_("%s Hier%s geht es wieder zur Anmeldung beziehungsweise Startseite."),'<a href="index.php"><b>&nbsp;','</b></a>')."<br />\n&nbsp;");
 
-	?>
-	</body>
-	</html>
-	<?
+	include ('html_end.inc.php');
 	page_close();
 	die;
 	}
@@ -1643,8 +1641,8 @@ if ($view == 'Login') {
 }
 
 	if ($table_open) echo "\n</table>\n";
-	echo "</body>\n";
-	echo "</html>";
+	
+	include ('html_end.inc.php');
 }
 
 page_close();

@@ -164,7 +164,6 @@ print_infobox ($infobox,"browse.jpg");
 
 <?
 $sem_browse_data = $save_me;
+include ('html_end.inc.php');
 page_close()
 ?>
-</body>
-</html>

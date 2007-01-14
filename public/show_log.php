@@ -5,7 +5,7 @@ $perm->check("root");
 
 if (!$LOG_ENABLE) {
         print '<p>' . _("Log-Modul abgeschaltet."). '</p>';
-        print '</body></html>';
+	include ('html_end.inc.php');
         page_close();
         die;
 }
@@ -404,10 +404,7 @@ echo $content->close();
 echo $container->blankRow();
 echo $container->close();
 end_form($from);
-
+include ('html_end.inc.php');
 page_close();
+//<!-- $Id$ -->
 ?>
-</body>
-</html>
-<!-- $Id$ -->
-

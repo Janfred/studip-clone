@@ -114,9 +114,8 @@ if ($problems_found) {
 </td>
 </tr>
 </table>
-</body>
-</html>
-<?
+<?php
+include ('html_end.inc.php');
 die;
 }
 ?>

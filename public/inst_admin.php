@@ -447,8 +447,7 @@ if ($inst_id != "" && $inst_id !="0") {
 ?>
 
 </table>
-<?
-	page_close()
+<?php
+include ('html_end.inc.php');
+page_close();
 ?>
-</body>
-</html>

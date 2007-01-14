@@ -196,9 +196,7 @@ else if (isset($change) && isset($semester_id)) {  // zeige Form mit vordefinier
     // show all terms 
 	echo semester_show_overview($PHP_SELF);
 }
-
+echo '</table>';
+include ('html_end.inc.php');
 page_close();
 ?>
-</table>
-</body>
-</html>

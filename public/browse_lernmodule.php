@@ -143,7 +143,6 @@ else
 	parse_window ("error§" . _("Das Verbindungsmodul f&uuml;r ILIAS-Lernmodule ist nicht eingebunden. Damit Lernmodule verwendet werden k&ouml;nnen, muss die Verbindung zu einer ILIAS-Installation in den Systemeinstellungen hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",
 				_("Lernmodule nicht eingebunden"));
 }
+include ('html_end.inc.php');
 page_close();
 ?>
-</body>
-</html>

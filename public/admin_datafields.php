@@ -785,9 +785,7 @@ if ($kill_datafield) {
 	</tr>
 	</form>
 </table>
-</body>
-</html>
 <?
+include ('html_end.inc.php');
 page_close();
 ?>
-

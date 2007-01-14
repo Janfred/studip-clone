@@ -45,9 +45,8 @@ if ($SessSemName[1]) {
 	<br />
 	</td></tr>
 	</table>
-<?
+<?php
 }
+include ('html_end.inc.php');
 page_close();
 ?>
-</body>
-</html>

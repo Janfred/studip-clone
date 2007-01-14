@@ -334,7 +334,8 @@ if ($i_view=="delete") {
 	echo "<tr><td class=\"blank\" colspan=\"2\"><table width=\"70%\" align=\"center\" class=\"steelgraulight\" >";
 	echo "<tr><td><br>" . _("Die ausgewählte Einrichtung wurde gel&ouml;scht.") . "<br>";
 	printf(_("Bitte wählen Sie über das Schlüsselsymbol %s eine andere Einrichtung aus."), "<a href=\"admin_institut.php?list=TRUE\"><img " . tooltip(_("Neue Auswahl")) . " align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/admin.gif\" border=\"0\"></a>");
-	echo "<br><br></td></tr></table><br><br></td></tr></table></html>";
+	echo '<br><br></td></tr></table><br><br></td></tr></table>';
+	include ('html_end.inc.php');
 	page_close();
 	die;
 }
@@ -458,10 +459,8 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 	<?
 }
 
-
-echo"</table>";
+echo '</table>';
+include ('html_end.inc.php');
 page_close();
+//<!-- $Id$ -->
 ?>
-</body>
-</html>
-<!-- $Id$ -->

@@ -81,7 +81,9 @@ include("./locale/$_language_path/LC_HELP/pages/nutzung.html");
 }
 ?>
 
-<?php page_close() ?>
-</body>
-</html>
-<!-- $Id$ -->
+<?php 
+include ('html_end.inc.php');
+page_close() 
+
+// <!-- $Id$ -->
+?>

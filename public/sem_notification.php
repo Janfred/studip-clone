@@ -46,7 +46,7 @@ if (!$MAIL_NOTIFICATION_ENABLE) {
 	require_once ("msg.inc.php");
 	$message = _("Die Benachrichtigungsfunktion ist nicht eingebunden. Die Benachrichtigungsfunktion wurde in den Systemeinstellungen nicht freigeschaltet. Wenden Sie sich bitte an die zust&auml;ndigen Administrierenden.");
 	parse_window ("error§$message", "§", _("Benachrichtigungsfunktion ist nicht eingebunden!"));
-	print("</body></html>");
+	include ('html_end.inc.php');
 	exit;
 }
 
@@ -408,9 +408,12 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 }
 
 if ($_REQUEST['view'] != 'notification') {
-	echo "</td></tr></table>\n</body>\n</html>";
+	echo "</td></tr></table>\n";
+	
+	include ('html_end.inc.php');
   // Save data back to database.
   page_close();
 }
+
+// <!-- $Id$ -->
 ?>
-<!-- $Id$ -->

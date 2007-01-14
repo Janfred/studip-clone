@@ -802,8 +802,6 @@ $db6=new DB_Seminar;
 	    		echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
 		echo "<br><br></td></tr></table>";
 	}
+	include ('html_end.inc.php');
 	page_close();
 ?>
-</body>
-</html>
-

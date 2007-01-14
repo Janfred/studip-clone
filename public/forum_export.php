@@ -50,9 +50,7 @@ echo Export_Topic($SessSemName[1]);
 echo "<table width=100% border=0 cellpadding=2 cellspacing=0>";
 echo "<tr><td><i><font size=-1>" . _("Stand:") . " ".date("d.m.y, G:i",time())."</font></i></td><td align=\"right\"><font size=-2><img src=\"".$GLOBALS['ASSETS_URL']."images/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
 echo "</table>\n";
-
+include ('html_end.inc.php');
   // Save data back to database.
   page_close()
  ?>
-</body></body>
-</html>

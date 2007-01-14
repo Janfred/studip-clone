@@ -72,7 +72,9 @@ include ("header.php");   // Output of Stud.IP head
 </tr>	
 </table>
 
-<?php page_close() ?>
-</body>
-</html>
-<!-- $Id$ -->
+<?php 
+include ('html_end.inc.php');
+page_close();
+
+// <!-- $Id$ -->
+?>

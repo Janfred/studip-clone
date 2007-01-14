@@ -484,20 +484,18 @@ if ($perm->have_perm("admin"))
 			<td class="blank" colspan=3>&nbsp;
 			</td>
 		</tr>
-		<?
+		<?php
 
 //de-initialise RommRequest-object
 if (is_object($admin_rooms_data["resRequest"])) {
 	$admin_rooms_data["resRequest"] = serialize ($admin_rooms_data["resRequest"]);
 }
-
-page_close();
 ?>
 	</table>
 </td>
 </tr>
 </table>
-</body>
-</html>
-
-
+<?php
+include ('html_end.inc.php');
+page_close();
+?>

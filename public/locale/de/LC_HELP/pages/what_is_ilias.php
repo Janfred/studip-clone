@@ -70,5 +70,7 @@ Wenn Sie ein Lernmodul erstellt haben, fragen Sie den Dozenten oder
 Tutor ihrer Veranstaltung, falls Sie das Lernmodul auch anderen Nutzern
 innerhalb der Veranstaltung zur Verf&uuml;gung stellen wollen.<br>
 <p></p>
-</body>
-</html>
+
+<?php
+include ('html_end.inc.php');
+?>

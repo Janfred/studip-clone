@@ -787,8 +787,7 @@ if (($s_id) && (auth_check())) {
 }
 ?>
 </table>
-<?
+<?php
+include ('html_end.inc.php');
 page_close();
 ?>
-</body>
-</html>

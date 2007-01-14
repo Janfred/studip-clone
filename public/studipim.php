@@ -240,8 +240,7 @@ if ($auth->auth["uid"] != "nobody"){
 ?>
 </table>
 <?
+include ('html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>
-</body>
-</html>

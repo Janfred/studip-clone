@@ -343,15 +343,16 @@ if ($admin_modules_data["range_id"]) {
 			</td>
 		</tr>
 		<?
-	page_close();
 	}
-else
+else	{
 	die;
-
+}
 ?>
 	</table>
 </td>
 </tr>
 </table>
-</body>
-</html>
+<?php
+include ('html_end.inc.php');
+page_close();
+?>

@@ -543,9 +543,7 @@ if ($archiv_data["perform_search"]) {
 </table>
 <?
 }
-
+include ('html_end.inc.php');
   // Save data back to database.
-  page_close()
+  page_close();
  ?>
-</body>
-</html>

@@ -317,6 +317,7 @@ print_infobox ($infobox, "browse.jpg");
 	</td>
 </tr>
 </table>
-<? page_close() ?>
-</body>
-</html>
+<?php
+ include ('html_end.inc.php');
+ page_close();
+ ?>

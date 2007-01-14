@@ -974,10 +974,9 @@ if ($send_view) {
 	<td class="blank" colspan="2">&nbsp;
 	</td>
 </tr>
-</table> <?
-
+</table>
+<?php
 // Save data back to database.
-page_close() ?>
-
-</body>
-</html>
+include ('html_end.inc.php');
+page_close();
+?>

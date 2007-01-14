@@ -139,12 +139,9 @@ if (is_array($_lit_data)){
 	}
 }
 
-?>
-</body>
-</html>
-<?
+include ('html_end.inc.php');
 // Save data back to database.
 my_session_close(md5('admin_literatur_overview.php'));
-page_close()
+page_close();
+// <!-- $Id$ -->
 ?>
-<!-- $Id$ -->

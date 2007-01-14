@@ -83,9 +83,7 @@ if ($db->num_rows()) {
 	}
 	echo "</table>\n";
 	}
-
-page_close()
+echo '</td></tr></table>';
+include ('html_end.inc.php');
+page_close();
 ?>
-</td></tr></table>
-</body>
-</html>

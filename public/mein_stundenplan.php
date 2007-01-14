@@ -669,10 +669,10 @@ if ((!$print_view) && (!$inst_id)) {
 }
 ob_end_flush(); //end outputbuffering
 // Save data back to database.
-page_close();
+
 if (!$print_view) {
+	echo '</table>';
+ } 
+include ('html_end.inc.php');
+page_close();
 ?>
-</table>
-<? } ?>
-</body>
-</html>

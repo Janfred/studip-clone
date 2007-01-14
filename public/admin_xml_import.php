@@ -1109,10 +1109,9 @@ if ($assi_page == 6)
 	<input type=submit name="show" value="Weiter">
 	<?
 }
+
+echo '</td></tr></table>
+</form>';
+include ('html_end.inc.php');
 page_close();
 ?>
-</td></tr></table>
-</form>
-
-</body>
-</html>

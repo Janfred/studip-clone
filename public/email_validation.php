@@ -115,9 +115,8 @@ include ("header.php");   // Output of Stud.IP head
 	} else {
 		; // hier sollten wir nie hinkommen
 	}
-
+include ('html_end.inc.php');
   page_close();
+
+// <!-- $Id$ -->
 ?>
-</body>
-</html>
-<!-- $Id$ -->

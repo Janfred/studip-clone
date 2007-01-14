@@ -561,9 +561,8 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 		</td>
 	</tr>
 	</table>
-	<?
+<?php
 	} 
+	include ('html_end.inc.php');
 	page_close();
-	?>
-</body>
-</html>
+?>

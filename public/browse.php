@@ -361,8 +361,7 @@ if (isset($query)) {
 ?>
 
 </table>
-<?
-  page_close()
+<?php
+include ('html_end.inc.php');
+  page_close();
 ?>
-</body>
-</html>

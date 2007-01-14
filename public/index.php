@@ -446,12 +446,12 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 				<td colspan="3" align="center" height="30"></td>
 
 				</tr>
-<?
+<?php
 			}
 		}
 	}
 }
+
+echo '</table>';
+include ('html_end.inc.php');
 ?>
-</table>
-</body>
-</html>

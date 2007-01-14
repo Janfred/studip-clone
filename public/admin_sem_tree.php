@@ -225,7 +225,7 @@ $the_tree->showSemTree();
 </td></tr>
 </td></tr>
 </table>
-</body>
-<?
+<?php
+include ('html_end.inc.php');
 page_close()
 ?>

@@ -135,9 +135,8 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 	</tr>
 	</table>
 	<p>&nbsp;</p>
-	</body>
-	</html>
-<?
+<?php
+	include ('html_end.inc.php');
 }
 elseif ($export_error_num > 0)
 {

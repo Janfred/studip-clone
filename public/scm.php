@@ -266,12 +266,9 @@ function scm_change_content($scm_id, $range_id, $name, $preset, $content) {
 
 echo "</td></tr></table>";
 
-?>
-</body>
-</html>
-<?php
+include ('html_end.inc.php');
   // Save data back to database.
   page_close();
+  
+// <!-- $Id$ -->
 ?>
-<!-- $Id$ -->
-

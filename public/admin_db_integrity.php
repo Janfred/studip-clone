@@ -186,9 +186,11 @@ if(!$_REQUEST['plugin']) {
 			."><img " . makeButton("jetzttesten", "src") . " border=\"0\" align=\"middle\" hspace=\"10\" vspace=\"10\"></a></td></tr>";
 		$_csw->switchClass();
 	}
-	?><tr><td colspan="3">&nbsp;</td></tr></table><?
+	?><tr><td colspan="3">&nbsp;</td></tr></table>
+	<?php
 }
+echo '</td></tr></table>';
+include ('html_end.inc.php');
 page_close();
+// <!--$Id$-->
 ?>
-</td></tr></table></body></html>
-<!--$Id$-->

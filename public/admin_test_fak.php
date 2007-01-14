@@ -373,8 +373,7 @@ if ($_REQUEST['cmd'] == "user_course_change"){
 }
 ?>
 </table>
-</body>
-</html>
-<?
+<?php
+include ('html_end.inc.php');
 page_close();
 ?>

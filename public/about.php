@@ -476,9 +476,7 @@ if ($perm->get_perm($user_id) == 'dozent'){
 		printf($ausgabe_format, _("Veranstaltungen"), '', $output);
 	}
 }
-
+include ('html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>
-</body>
-</html>

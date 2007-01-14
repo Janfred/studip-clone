@@ -270,9 +270,8 @@ $db3=new DB_Seminar;
 </td>
 </tr>
 </table>
-<?
+<?php
+include ('html_end.inc.php');
 page_close();
+ // <!-- $Id$ -->
  ?>
-</body>
-</html>
-<!-- $Id$ -->

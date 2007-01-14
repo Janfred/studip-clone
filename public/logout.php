@@ -100,11 +100,11 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 			</td>
 		</tr>
 	</table>
-	</body>
-</html>
 <?
+include ('html_end.inc.php');
 page_close();
 }
 ob_end_flush();
+
+// <!-- $Id$ -->
 ?>
-<!-- $Id$ -->

@@ -275,8 +275,8 @@ if (!$edit_id) {
 	echo 	"<br><font size=\"2\" color=\"#555555\">"._("Bedienung:").$hints;
 }
 echo "<br>&nbsp; </td></tr></table>";
-page_close()
 
- ?>
-</body>
-</html>
+include ('html_end.inc.php');
+page_close();
+
+?>

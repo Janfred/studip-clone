@@ -190,11 +190,8 @@ if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])){
 if ($GLOBALS['VOTE_ENABLE']) {
 	show_votes ($auswahl, $auth->auth["uid"], $perm, YES);
 }
-
-?>
-</body>
-</html>
-<?php
+  
+  include ('html_end.inc.php');
   // Save data back to database.
   page_close()
  ?>

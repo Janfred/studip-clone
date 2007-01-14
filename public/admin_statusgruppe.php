@@ -557,12 +557,10 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 	parse_msg($msg);
 	?>
 </table>
-<?
+<?php
 }
 // Ende Gruppenuebersicht
-
+include ('html_end.inc.php');
 // Ende Darstellungsteil
 page_close();
 ?>
-</body>
-</html>

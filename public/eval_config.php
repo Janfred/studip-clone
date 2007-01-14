@@ -277,8 +277,6 @@ if (isset($eval_id) && $can_change) {
 
 
   // Save data back to database.
+include ('html_end.inc.php');
   page_close();
-
 ?>
-</body>
-</html>

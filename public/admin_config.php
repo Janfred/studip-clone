@@ -229,8 +229,7 @@ if ($_REQUEST["change_config"]) {
 		</td>
 	</tr>
 </table>
-</body>
-</html>
-<?
+<?php
+include ('html_end.inc.php');
 page_close();
 ?>

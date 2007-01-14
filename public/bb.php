@@ -66,8 +66,7 @@ include ("links_admin.inc.php");  //Linkleiste fuer admins
 ?>
 		</td></tr></table>
 
-<?
-	 page_close();
+<?php
+	include ('html_end.inc.php');
+	page_close();
  ?>
-</body>
-</html>

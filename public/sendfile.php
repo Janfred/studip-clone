@@ -290,8 +290,8 @@ if ($no_access) {
 	include ('header.php');   // Output of Stud.IP head
 
 	parse_window('error§' . _("Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!"), '§', _("Download nicht m&ouml;glich"), $add_msg);
+	include ('html_end.inc.php');
 	page_close();
-	echo '</body>';
 	die;
 }
 
@@ -304,8 +304,8 @@ if ($type == 6) {
 		include ('header.php');   // Output of Stud.IP head
 		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Downloadbereich"), '<a href="folder.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br />&nbsp;' ;
 		parse_window('error§' . _("Diese Datei wird von einem externen Server geladen und ist dort momentan nicht erreichbar!"), '§', _("Download nicht m&ouml;glich"), $add_msg);
+		include ('html_end.inc.php');
 		page_close();
-		echo '</body>';
 		die;
 	}
 }

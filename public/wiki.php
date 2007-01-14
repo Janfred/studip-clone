@@ -130,7 +130,8 @@ if ($view=="listall") {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu editieren!"));
 		end_blank_table();
-		echo "</td></tr></table></body></html>";
+		echo '</td></tr></table>';
+		include ('html_end.inc.php');
 		die;
 	}
 
@@ -139,7 +140,8 @@ if ($view=="listall") {
 		begin_blank_table();
 		parse_msg("error§" . _("Es wurde keine zu editierende Seite übergeben!"));
 		end_blank_table();
-		echo "</td></tr></table></body></html>";
+		echo '</td></tr></table>';
+		include ('html_end.inc.php');
 		die;
 	}
 
@@ -157,7 +159,8 @@ if ($view=="listall") {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu editieren!"));
 		end_blank_table();
-		echo "</td></tr></table></body></html>";
+		echo '</td></tr></table>';
+		include ('html_end.inc.php');
 		die;
 	}
 	// set lock

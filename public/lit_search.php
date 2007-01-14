@@ -328,7 +328,7 @@ echo $_the_clip_form->getFormEnd();
 </tr>
 <tr><td class="blank" colspan="2">&nbsp;</td></tr>
 </table>
-</body>
-<?
-page_close()
+<?php
+include ('html_end.inc.php');
+page_close();
 ?>

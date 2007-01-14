@@ -297,9 +297,8 @@ ob_start();
 	echo "\n</tr></table>";
 ?>
 </tr></table></td></tr></table>
-</body>
-</html>
 <?
+include ('html_end.inc.php');
 ob_end_flush();
   // Save data back to database.
 page_close();

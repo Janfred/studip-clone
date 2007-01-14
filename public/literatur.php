@@ -80,9 +80,9 @@ print_infobox ($infobox,"literaturelist.jpg");
 </tr>
 <tr><td class="blank" colspan="2">&nbsp;</td></tr>
 </table>
-</body>
 <?
+include ('html_end.inc.php');
 // Save data back to database.
-page_close()
+page_close();
+// <!-- $Id$ -->
 ?>
-<!-- $Id$ -->

@@ -362,13 +362,11 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
   	. "§");
     ?>
   </table>
-<?
+<?php
 }
 // Ende Gruppenuebersicht
 
 // Ende Darstellungsteil
-
+include ('html_end.inc.php');
 page_close();
 ?>
-</body>
-</html>

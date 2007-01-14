@@ -27,7 +27,7 @@ $sess->register("banner_data");
 
 if (!$BANNER_ADS_ENABLE) {
 	echo '<p>', _("Banner-Modul abgeschaltet."), "</p>\n";
-	echo "</body></html>\n";
+	include ('html_end.inc.php');
 	page_close();
 	die;
 }
@@ -444,9 +444,7 @@ if ($i_view=="new") {
 echo $content->close();
 echo $container->blankRow();
 echo $container->close();
-
+include ('html_end.inc.php');
 page_close();
+// <!-- $Id$ -->
 ?>
-</body>
-</html>
-<!-- $Id$ -->

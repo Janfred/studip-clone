@@ -64,7 +64,7 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 			$db=new DB_Seminar;
 			$db->query("SELECT * FROM px_topics WHERE topic_id='$topic_id' AND Seminar_id ='$SessSemName[1]'");
 			if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
-				echo "</body></html>";
+				include ('html_end.inc.php');
 				page_close();
 				die;
 			}
@@ -143,8 +143,8 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 			$db=new DB_Seminar;
 			$db->query("SELECT * FROM px_topics WHERE topic_id='$parent_id' AND Seminar_id ='$SessSemName[1]'");
 			if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
-				echo "</body></html>";
-		  	page_close();
+				include ('html_end.inc.php');
+		  		page_close();
 				die;
 			}
 		}
@@ -157,10 +157,8 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 	$msg=have_sem_write_perm();
 	parse_window($msg, "§", _("Schreiben nicht m&ouml;glich"), "&nbsp;");
 }
-
+echo '</blockquote></td></tr></table>';
   // Save data back to database.
-  page_close()
+  include ('html_end.inc.php');
+  page_close();
 ?>
-</blockquote></td></tr></table>
-</body>
-</html>

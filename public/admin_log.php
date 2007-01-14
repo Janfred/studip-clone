@@ -38,7 +38,7 @@ $perm->check("root");
 
 if (!$LOG_ENABLE) {
         print '<p>' . _("Log-Modul abgeschaltet."). '</p>';
-        print '</body></html>';
+	include ('html_end.inc.php');
         page_close();
         die;
 }
@@ -240,8 +240,7 @@ if ($_REQUEST['action']=="change") {
 		</td>
 	</tr>
 </table>
-</body>
-</html>
-<?
+<?php
+include ('html_end.inc.php');
 page_close();
 ?>

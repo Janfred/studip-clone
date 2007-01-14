@@ -571,15 +571,14 @@ if ($sms_data["time"] == "all") {
 <tr>
 	<td class="blank" colspan="2">&nbsp;</td>
 </tr>
-</table><?
+</table>
+<?php
 
 // i was here
 if ($my_messaging_settings["last_box_visit"] < time()) {
 	$my_messaging_settings["last_box_visit"] = time();
 }
-
+include ('html_end.inc.php');
 // Save data back to database.
-page_close() ?>
-
-</body>
-</html>
+page_close();
+?>

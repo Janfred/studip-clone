@@ -211,7 +211,7 @@ else {
 // restore the domain
 textdomain("studip");
 // close the page
-include ("html_end.inc.php");
+include ('html_end.inc.php');
 page_close();
 ob_end_flush();
 ?>

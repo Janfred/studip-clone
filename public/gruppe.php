@@ -172,11 +172,9 @@ FOR ($i=0; $i<8; $i++)
 
 ?>
 </table>
-</body>
-</html>
 <?php
+include ('html_end.inc.php');
   // Save data back to database.
-  page_close()
- ?>
-<!-- $Id$ -->
-
+  page_close();
+// <!-- $Id$ --> 
+?>

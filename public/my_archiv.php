@@ -193,10 +193,9 @@ print_infobox ($infobox, "folders.jpg");
     	</td>
     </tr>
 </table>
-</body>
-</html>
-<?
+<?php
+include ('html_end.inc.php');
   // Save data back to database.
 ob_end_flush(); //Outputbuffering beenden
 page_close();
-  ?>
+?>

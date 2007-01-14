@@ -115,10 +115,9 @@ if ($dclose)
 			</table>
 		</td>
 	</tr>
-</body>
-</html>
 
-<?
+<?php
+include ('html_end.inc.php');
 //Save data back to database.
 page_close()
 ?>
