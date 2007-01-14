@@ -148,7 +148,7 @@ class FoafDisplay {
 			$print_arrow=0;
 			foreach ($this->foaf_list as $uid) {
 				if ($print_arrow) {
-					$msg.="<td valign=center align=center>&nbsp;>&nbsp;</td>";
+					$msg.='<td valign="middle" align="center">&nbsp;>&nbsp;</td>';
 				} else {
 					$print_arrow=1;
 				}

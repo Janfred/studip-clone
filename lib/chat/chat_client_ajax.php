@@ -193,22 +193,22 @@ echo "\n<b>" . sprintf(_("Hallo %s,<br> willkommen im Raum: %s"),htmlReady($chat
 <form name="inputform" onSubmit="return doSubmit();">
 	<table width="98%" border="0" bgcolor="white" cellspacing="0" cellpadding="0" align="center">
 		<tr>
-			<td align="center" colspan=2 valign="center">
+			<td align="center" colspan=2 valign="middle">
 				<table width="100%" border="0" cellspacing="3">
 				<tr valign="middle">
-					<td align="left" valign="center">Message:</td>
-					<td width="60%" valign="center">
-						<div align="center" valign="center">
+					<td align="left" valign="middle">Message:</td>
+					<td width="60%" valign="middle">
+						<div align="center" valign="middle">
 						<input type="text" name="chatInput" size=18 style="width: 100%" >
 						</div>
 					</td>
-					<td align="left" valign="center" id="color_chooser">
+					<td align="left" valign="middle" id="color_chooser">
 					</td>
-					<td align="center" valign="center">
+					<td align="center" valign="middle">
 						<input type="IMAGE" name="Submit"
 							<?=makeButton("absenden","src") . tooltip(_("Nachricht senden"))?> border="0" value="senden">
 					</td>
-					<td align="right" valign="center">
+					<td align="right" valign="middle">
 						<a href="javascript:doQuit();"><img <?=tooltip(_("Chat verlassen")) . makeButton("chatbeenden","src")?> border="0"></a>
 					</td>
 				</tr>

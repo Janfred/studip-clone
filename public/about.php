@@ -202,7 +202,7 @@ if ($msg)
 }
 ?>
 
-<tr><td class="steel1" align="center" valign="center"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=205 height=5><br />
+<tr><td class="steel1" align="center" valign="middle"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=205 height=5><br />
 <?
 
 // hier wird das Bild ausgegeben

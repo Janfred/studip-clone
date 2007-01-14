@@ -399,9 +399,9 @@ function print_cell ($params) {
 	echo $params['form'];
 	echo "<div><font size=\"-1\">";
 	echo $params['content'];
-	echo "<div style=\"text-align:center; vertical-align:center;\">\n";
+	echo "<div style=\"text-align:center; vertical-align:middle;\">\n";
 	echo "&nbsp;\n";
-	echo "<div style=\"text-align:center; vertical-align:center;\">\n";
+	echo "<div style=\"text-align:center; vertical-align:middle;\">\n";
 	echo $params['button'];
 	echo "<input type=\"hidden\" name=\"expmod\" value=\"{$params['expmod']}\">\n";
 	echo "</div>\n</form>\n</td></tr>\n";

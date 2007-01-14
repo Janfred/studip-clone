@@ -855,7 +855,7 @@ if ($send_view) {
 		<table border="0" cellpadding="5" cellspacing="0" width="99%" align="center">
 			<?=show_chatselector()?>
 			<tr>
-				<td class="steelgraulight" width="80%" valign="center">
+				<td class="steelgraulight" width="80%" valign="middle">
 					<?=show_msgform()?>
 				</td>
 			</tr>

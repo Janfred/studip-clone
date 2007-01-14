@@ -101,7 +101,7 @@ class ShowSemSchedules extends ShowSchedules {
 				</td>
 			</tr>
 			<tr>
-			<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="center">
+			<td class="<? echo $cssSw->getClass() ?>" width="40%" valign="middle">
 				<font size="-1">
 				<input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" <?=($this->timespan == 'course_time' ? 'checked' : '')?> name="sem_time_choose" value="course_time">
 				<?=_("Vorlesungszeit")?>

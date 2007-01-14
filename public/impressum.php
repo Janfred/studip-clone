@@ -367,7 +367,7 @@ if ($view=="statistik") {?>
 if ($view == 'history') {?>
 	
 	<tr>
-		<td valign="center" class="blank">
+		<td valign="middle" class="blank">
 		<blockquote>
 		<b>Stud.IP history.txt</b><br /><br />		
 		<? 
