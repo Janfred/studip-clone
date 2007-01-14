@@ -56,7 +56,7 @@ if ($forumsend=="bla"){
 		<?
 		echo "<form action=\"$PHP_SELF?view=$view\" method=\"POST\">";
 		?>
-		<table width="70%" align="center"cellpadding=8 cellspacing=0 border=0>
+		<table width="70%" align="center" cellpadding=8 cellspacing=0 border=0>
 			<tr>
 				<th width="50%" align=center><?=_("Option")?></th>
 				<th align=center><?=_("Auswahl")?></th>
@@ -127,7 +127,7 @@ if ($forumsend=="bla"){
 				</td>
 			</tr>
 			<tr <? $cssSw->switchClass() ?>>
-				<td align="right" class="blan"k style="border-bottom:1px dotted black;">
+				<td align="right" class="blank" style="border-bottom:1px dotted black;">
 					<font size=-1><?echo _("Anzeigemodus der Themenanzeige");?></font>
 				</td>
 				<td align="left" <?=$cssSw->getFullClass()?>>
