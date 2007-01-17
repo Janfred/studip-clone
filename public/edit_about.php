@@ -804,6 +804,10 @@ if(check_ticket($studipticket)){
 			else $my_about->get_auth_user($username);
 			$username = $my_about->auth_user["username"];
 		}
+		if (get_config("ENABLE_SKYPE_INFO")) {
+			$user->cfg->setValue(preg_replace('/[^a-zA-Z0-9.,_-]/', '', $_REQUEST['skype_name']), $my_about->auth_user['user_id'], 'SKYPE_NAME');
+			$user->cfg->setValue((int)$_REQUEST['skype_online_status'], $my_about->auth_user['user_id'], 'SKYPE_ONLINE_STATUS');
+		}
 	}
 
 	if ($cmd=="edit_leben")  {
@@ -1283,6 +1287,15 @@ if ($view == 'Daten') {
 		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.6)."\" name=\"anschrift\" value=\"".htmlReady($my_about->user_info["privadr"])."\">";
 	}
 	echo "</td></tr>\n";
+	if (get_config("ENABLE_SKYPE_INFO")) {
+		$cssSw->switchClass();
+		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Skype:") . " </b></blockquote></td>";
+		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">";
+		echo "<font size=\"-1\">&nbsp; " . _("Skype Name:") . "</font><br>&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"skype_name\" value=\"".htmlReady($user->cfg->getValue($my_about->auth_user['user_id'], 'SKYPE_NAME'))."\"></td>";
+		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">";
+		echo "<font size=\"-1\">&nbsp; "  . _("Skype Online Status anzeigen:") . "</font><br>&nbsp;<input type=\"checkbox\" name=\"skype_online_status\" value=\"1\" ". ($user->cfg->getValue($my_about->auth_user['user_id'], 'SKYPE_ONLINE_STATUS') ? 'checked' : '') . "\"></td>";
+		echo "</td></tr>\n";
+	}
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Motto:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.motto", $my_about->auth_user['auth_plugin'])) {
@@ -1290,7 +1303,7 @@ if ($view == 'Daten') {
 	} else {
 		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.6)."\" name=\"motto\" value=\"".htmlReady($my_about->user_info["motto"])."\">";
 
-	}
+	}	echo "</td></tr>\n";
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Homepage:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.Home", $my_about->auth_user['auth_plugin'])) {

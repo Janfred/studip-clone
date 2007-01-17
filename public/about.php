@@ -225,6 +225,16 @@ if (!get_visibility_by_state($db->f("visible"))) {
 echo "<br><b>&nbsp;" . _("E-mail:") . " </b><a href=\"mailto:". $db->f("Email")."\">".htmlReady($db->f("Email"))."</a><br>";
 IF ($db->f("privatnr")!="") echo "<b>&nbsp;" . _("Telefon (privat):") . " </b>". htmlReady($db->f("privatnr"))."<br>";
 IF ($db->f("privatcell")!="") echo "<b>&nbsp;" . _("Mobiltelefon:") . " </b>". htmlReady($db->f("privatcell"))."<br>";
+if (get_config("ENABLE_SKYPE_INFO") && $user->cfg->getValue($user_id, 'SKYPE_NAME')) {
+	if($user->cfg->getValue($user_id, 'SKYPE_ONLINE_STATUS')){
+		$img = sprintf('<img src="http://mystatus.skype.com/smallicon/%s" style="border: none;vertical-align:middle" width="16" height="16" alt="My status">', htmlReady($user->cfg->getValue($user_id, 'SKYPE_NAME')));
+	} else {
+		$img = '<img src="' . $GLOBALS['ASSETS_URL'] . 'images/icon_small_skype.gif" style="border: none;vertical-align:middle">';
+	}
+	echo "<b>&nbsp;" . _("Skype:") . " </b>";
+	printf('<a href="skype:%1$s?call">%2$s&nbsp;%1$s</a><br>',
+	htmlReady($user->cfg->getValue($user_id, 'SKYPE_NAME')), $img);
+}
 IF ($db->f("privadr")!="") echo "<b>&nbsp;" . _("Adresse (privat):") . " </b>". htmlReady($db->f("privadr"))."<br>";
 IF ($db->f("Home")!="") {
 	$home=$db->f("Home");
