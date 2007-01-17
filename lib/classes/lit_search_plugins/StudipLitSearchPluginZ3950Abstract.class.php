@@ -349,9 +349,25 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	
 	function ConvertUmlaute($text){
 		$text = str_replace("ä","ae",$text);
+		$text = str_replace("Ä","Ae",$text);
 		$text = str_replace("ö","oe",$text);
+		$text = str_replace("Ö","Oe",$text);
 		$text = str_replace("ü","ue",$text);
+		$text = str_replace("Ü","Ue",$text);
 		$text = str_replace("ß","ss",$text);
+	
+		$text = str_replace("É","E",$text);
+		$text = str_replace("È","E",$text);
+		$text = str_replace("Ê","E",$text);
+		$text = str_replace("á","ae",$text);
+		$text = str_replace("à","ae",$text);
+		$text = str_replace("é","e",$text);
+		$text = str_replace("è","e",$text);
+		$text = str_replace("î","i",$text);
+		$text = str_replace("í","i",$text);
+		$text = str_replace("ì","i",$text);
+		$text = str_replace("ç","c",$text);
+		
 		return $text;
 	}
 }
