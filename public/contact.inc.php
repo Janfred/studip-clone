@@ -197,6 +197,7 @@ function GetExtraUserinfo ($contact_id)
 
 function GetUserInfo($user_id)
 {
+	global $user;
 	$db=new DB_Seminar;
 	$db->query ("SELECT * FROM user_info WHERE user_id = '$user_id'");	
 	if ($db->next_record()) {	
@@ -204,8 +205,20 @@ function GetUserInfo($user_id)
 			$userinfo[_("Homepage")] = FixLinks(HtmlReady($db->f("Home")));
 		if ($db->f("privatnr")!="")
 			$userinfo[_("Tel. (privat)")] = HtmlReady($db->f("privatnr"));
+		if ($db->f("privatcell")!="")
+			$userinfo[_("Mobiltelefon")] = HtmlReady($db->f("privatcell"));
+		if (get_config("ENABLE_SKYPE_INFO") && $user->cfg->getValue($user_id, 'SKYPE_NAME')) {
+			if($user->cfg->getValue($user_id, 'SKYPE_ONLINE_STATUS')){
+				$img = sprintf('<img src="http://mystatus.skype.com/smallicon/%s" style="border: none;vertical-align:middle" width="16" height="16" alt="My status">', htmlReady($user->cfg->getValue($user_id, 'SKYPE_NAME')));
+			} else {
+				$img = '<img src="' . $GLOBALS['ASSETS_URL'] . 'images/icon_small_skype.gif" style="border: none;vertical-align:middle">';
+			}
+			$userinfo[_("Skype")] = sprintf('<a href="skype:%1$s?call">%2$s&nbsp;%1$s</a><br>',
+									htmlReady($user->cfg->getValue($user_id, 'SKYPE_NAME')), $img);
+		}
 		if ($db->f("privadr")!="")
 			$userinfo[_("Adresse")] = HtmlReady($db->f("privadr"),1);
+		
 	}
 	return $userinfo;
 }
