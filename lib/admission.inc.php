@@ -75,7 +75,7 @@ function insert_seminar_user($seminar_id, $user_id, $status, $copy_studycourse=F
 	$db->next_record();
 	$group = select_group ($db->f("start_time"), $user_id); //ok, here ist the "colored-group" meant (for grouping on meine_seminare), not the grouped seminars as above!
 	
-	$query = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', admission_studiengang_id ='%s', comment ='%s', gruppe='%s', mkdate = '%s' ", $seminar_id, $user_id, $status, $studiengang_id, $comment, $group, time());
+	$query = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', admission_studiengang_id ='%s', comment ='%s', gruppe='%s', mkdate = '%s' ", $seminar_id, $user_id, $status, $studiengang_id, mysql_escape_string($comment), $group, time());
 	$db->query($query);
 	
 	if ($db->affected_rows()) {
