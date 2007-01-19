@@ -22,9 +22,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once "datei.inc.php";  // benötigt zum Löschen von Dokumenten
 require_once "config.inc.php";  //Daten
 require_once 'lib/functions.php';  //Daten
-require_once "lib/classes/SemesterData.class.php";  //Daten
-require_once "lib/classes/Seminar.class.php";  //Daten
-require_once ("calendar_functions.inc.php");
+require_once 'lib/classes/SemesterData.class.php';  //Daten
+require_once 'lib/classes/Seminar.class.php';  //Daten
+require_once 'lib/calendar_functions.inc.php';
 
 /**
 * This function creates the assigned room name for range_id

@@ -23,8 +23,8 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 require_once ("lib/classes/StudipScmEntry.class.php");
 require_once 'lib/functions.php';
 require_once("msg.inc.php");
@@ -50,14 +50,14 @@ if ($i_view == 'kill' && $perm->have_studip_perm('tutor', $SessSemName[1])){
 }
 switch ($i_view) {
 	case "edit":
-		include ("links_openobject.inc.php");
+		include ('include/links_openobject.inc.php');
 		scm_edit_content($SessSemName[1], $_show_scm);
 		break;
 	case "change":
 		$_show_scm = scm_change_content($_show_scm, $SessSemName[1], $scm_name, $scm_preset, $content);
 		$msg = "msg§"._("Die Änderungen wurden übernommen.");
 	default:
-		include ("links_openobject.inc.php");
+		include ('include/links_openobject.inc.php');
 		scm_show_content($SessSemName[1], $msg, $_show_scm);
 		break;
 }
@@ -266,7 +266,7 @@ function scm_change_content($scm_id, $range_id, $name, $preset, $content) {
 
 echo "</td></tr></table>";
 
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
   // Save data back to database.
   page_close();
   

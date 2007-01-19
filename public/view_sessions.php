@@ -17,9 +17,9 @@ $t->heading = "on";
 $t->check   = "sid";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
-include ("links_admin.inc.php");  //Linkleiste fuer admins
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_admin.inc.php');  //Linkleiste fuer admins
 ?>
 
 <table border=0 align="center" cellspacing=0 cellpadding=0 width=100%>
@@ -101,7 +101,7 @@ if ($del) {
 
 <?php 
 
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 //<!-- $Id$ -->
 ?>

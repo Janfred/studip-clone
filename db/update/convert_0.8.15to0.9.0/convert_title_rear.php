@@ -1,7 +1,7 @@
 <?php
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("root");
-include("html_head.inc.php");
+include('include/html_head.inc.php');
 ?>
 <script type="text/javascript">
 function invert_selection(){

@@ -72,8 +72,8 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE')){
 $HELP_KEYWORD="Basis.Homepage";
 
 // Start  of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');
 
 if ($rssusername) $username = $rssusername;
 
@@ -186,7 +186,7 @@ $db->next_record();
 
 //daten anzeigen
 IF (($user_id==$user->id AND $perm->have_perm("autor")) OR $perm->have_perm("root") OR $admin_darf == TRUE) { // Es werden die Editreiter angezeigt, wenn ich &auml;ndern darf
-	include ("links_about.inc.php");
+	include ('include/links_about.inc.php');
 }
 
 ?>
@@ -486,7 +486,7 @@ if ($perm->get_perm($user_id) == 'dozent'){
 		printf($ausgabe_format, _("Veranstaltungen"), '', $output);
 	}
 }
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>

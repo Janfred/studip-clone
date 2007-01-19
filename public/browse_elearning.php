@@ -42,8 +42,8 @@ if ($ELEARNING_INTERFACE_ENABLE)
 
 	include_once ($RELATIVE_PATH_ELEARNING_INTERFACE ."/" . "ELearningUtils.class.php");
 
-	include ("html_head.inc.php"); // Output of html head
-	include ("header.php");   // Output of Stud.IP head
+	include ('include/html_head.inc.php'); // Output of html head
+	include ('include/header.php');   // Output of Stud.IP head
 
 	if ($elearning_open_close["type"] != "search")
 	{
@@ -189,11 +189,11 @@ if ($ELEARNING_INTERFACE_ENABLE)
 else
 {
 	// Start of Output
-	include ("html_head.inc.php"); // Output of html head
-	include ("header.php");   // Output of Stud.IP head
+	include ('include/html_head.inc.php'); // Output of html head
+	include ('include/header.php');   // Output of Stud.IP head
 	parse_window ("error§" . _("Die Schnittstelle für die Integration von Lernmodulen ist nicht aktiviert. Damit Lernmodule verwendet werden können, muss die Verbindung zu einem LCM-System in der Konfigurationsdatei von Stud.IP hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",
 				_("E-Learning-Schnittstelle nicht eingebunden"));
 }
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

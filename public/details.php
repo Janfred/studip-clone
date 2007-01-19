@@ -27,17 +27,17 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.InVeranstaltungDetails";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");	 // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');	 // Output of Stud.IP head
 
 require_once ("msg.inc.php");
 require_once ("dates.inc.php"); //Funktionen zum Anzeigen der Terminstruktur
 require_once ("config.inc.php");
 require_once ("visual.inc.php"); // wir brauchen htmlReady
-require_once ("admission.inc.php");
+require_once ('lib/admission.inc.php');
 require_once 'lib/functions.php';
-require_once ("lib/classes/StudipSemTree.class.php");
-require_once ("lib/classes/DataFields.class.php");
+require_once ('lib/classes/StudipSemTree.class.php');
+require_once ('lib/classes/DataFields.class.php');
 
 ?>
 <body>
@@ -60,8 +60,8 @@ if (!isset($sem_id)) {
 
 //wenn Seminar gesetzt und kein externer Aufruf uebernahme der SessionVariable
 if (($SessSemName[1] != "") && (!isset($sem_id) || $SessSemName[1] == $sem_id)) {
-	include "links_openobject.inc.php";
-	$sem_id=$SessSemName[1];
+	include 'include/links_openobject.inc.php';
+	$sem_id = $SessSemName[1];
 }
 
 $DataFields = new DataFields($sem_id);
@@ -707,7 +707,7 @@ print_infobox ($infobox,"details.jpg");
 </tr>
 </table>
 <?php
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>

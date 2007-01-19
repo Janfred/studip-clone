@@ -53,13 +53,13 @@ closeObject();
 $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
 // Start of Output
-include ('html_head.inc.php'); // Output of html head
-include ('header.php');   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 
 if (!$perm->have_perm('root'))
-	include ('links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
+	include ('include/links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
 
 if (!isset($sortby))
 	$sortby="name";
@@ -194,7 +194,7 @@ print_infobox ($infobox, "folders.jpg");
     </tr>
 </table>
 <?php
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
   // Save data back to database.
 ob_end_flush(); //Outputbuffering beenden
 page_close();

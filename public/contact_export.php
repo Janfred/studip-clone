@@ -49,9 +49,9 @@ if (!( (isset($_POST["export_vcard_x"]))
 	|| (isset($_GET["contactid"]))
 	|| (isset($_GET["username"]))
 	|| (isset($_GET["groupid"])) )){
-	require_once("html_head.inc.php");
-	require_once("header.php");
-	require_once("links_sms.inc.php");
+	require_once('include/html_head.inc.php');
+	require_once('include/header.php');
+	require_once('include/links_sms.inc.php');
 }
 /* **END*of*initialize*post/get*variables*********************************** */
 

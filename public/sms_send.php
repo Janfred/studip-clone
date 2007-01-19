@@ -42,7 +42,7 @@ require_once ("visual.inc.php");
 require_once ("messagingSettings.inc.php");
 require_once ("messaging.inc.php");
 require_once ("statusgruppe.inc.php");
-require_once ("reiter.inc.php");
+require_once ('include/reiter.inc.php');
 require_once ("sms_functions.inc.php");
 require_once ("user_visible.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
@@ -639,9 +639,9 @@ if ($change_view) {
 }
 
 // includes
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
-include ("links_sms.inc.php"); // include reitersystem
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_sms.inc.php'); // include reitersystem
 check_messaging_default();
 
 if (($change_view) || ($delete_user) || ($view=="Messaging")) {
@@ -977,6 +977,6 @@ if ($send_view) {
 </table>
 <?php
 // Save data back to database.
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

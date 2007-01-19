@@ -41,6 +41,27 @@ require_once ("config_tools_semester.inc.php");
 require_once 'lib/functions.php';
 require_once ("language.inc.php");
 
+//vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
+if ($schedule_cmd=="change_view_insert") {
+	$my_schedule_settings=array(
+		"glb_start_time"=>$beginn_zeit,
+		"glb_end_time"=>$ende_zeit,
+		"glb_days"=>array(
+			"mo"=>$mo,
+			"di"=>$di,
+			"mi"=>$mi,
+			"do"=>$do,
+			"fr"=>$fr,
+			"sa"=>$sa,
+			"so"=>$so
+			),
+		"glb_sem"=>$sem,
+		"glb_inst_id"=>$institut_id,
+		"changed"=>"TRUE"
+		);
+}
+
+
 //Funktion zum ueberpruefen der Einstellungen
 function check_schedule_settings() {
 	global $my_schedule_settings,$_my_admin_inst_id, $perm,$auth, $user, $SEM_NAME_NEXT, $SEM_NAME, $VORLES_ENDE;
@@ -90,26 +111,6 @@ function check_schedule_settings() {
 		$my_schedule_settings["glb_inst_id"] = $_my_admin_inst_id;
 	}
 
-	}
-
-//vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
-if ($schedule_cmd=="change_view_insert") {
-	$my_schedule_settings=array(
-		"glb_start_time"=>$beginn_zeit,
-		"glb_end_time"=>$ende_zeit,
-		"glb_days"=>array(
-			"mo"=>$mo,
-			"di"=>$di,
-			"mi"=>$mi,
-			"do"=>$do,
-			"fr"=>$fr,
-			"sa"=>$sa,
-			"so"=>$so
-			),
-		"glb_sem"=>$sem,
-		"glb_inst_id"=>$institut_id,
-		"changed"=>"TRUE"
-		);
 	}
 
 

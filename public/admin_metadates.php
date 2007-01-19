@@ -43,9 +43,9 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenZeiten";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
-include ("links_admin.inc.php");
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_admin.inc.php');
 
 require_once("msg.inc.php");//ja auch die...
 require_once("config.inc.php");//ja,ja auch die...
@@ -853,6 +853,6 @@ echo '	</table>
 </tr>
 </table>';
 
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

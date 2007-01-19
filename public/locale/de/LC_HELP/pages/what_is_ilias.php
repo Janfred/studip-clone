@@ -72,5 +72,5 @@ innerhalb der Veranstaltung zur Verf&uuml;gung stellen wollen.<br>
 <p></p>
 
 <?php
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 ?>

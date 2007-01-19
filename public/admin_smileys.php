@@ -24,7 +24,7 @@ $perm->check('root');
 
 if (!$SMILEYADMIN_ENABLE) {
 	print '<p>' . _("Smiley-Modul abgeschaltet."). '</p>';
-	include ('html_end.inc.php');
+	include ('include/html_end.inc.php');
 	page_close();
 	die;
 }
@@ -34,9 +34,9 @@ include ('seminar_open.php'); // initialise Stud.IP-Session
 require_once('lib/classes/smiley.class.php');
 
 // Start of Output
-include ('html_head.inc.php'); // Output of html head
-include ('header.php');   // Output of Stud.IP head
-include ('links_admin.inc.php');  //Linkleiste fuer admins
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_admin.inc.php');  //Linkleiste fuer admins
 
 
 $sm = new smiley(true);
@@ -83,7 +83,7 @@ echo $content->close();
 echo $container->blankRow();
 echo $container->close();
 
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 <!-- $Id$ -->
 ?>

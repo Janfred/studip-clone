@@ -27,8 +27,8 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 
 require_once ("config.inc.php");
 
-//include ("html_head.inc.php"); // Output of html head
-//include ("header.php");   // Output of Stud.IP head
+//include ('include/html_head.inc.php'); // Output of html head
+//include ('include/header.php');   // Output of Stud.IP head
 
 if ($ELEARNING_INTERFACE_ENABLE)
 {
@@ -48,15 +48,15 @@ if ($ELEARNING_INTERFACE_ENABLE)
 		$connected_cms[$cms_select]->terminate();
 		ob_end_clean();
 		if (!$sess_id){
-			include ('html_head.inc.php'); // Output of html head
-			include ('header.php');   // Output of Stud.IP head
+			include ('include/html_head.inc.php'); // Output of html head
+			include ('include/header.php');   // Output of Stud.IP head
 			parse_window('error§'
 					. sprintf(_("Automatischer Login für das System <b>%s</b> (Nutzername:%s) fehlgeschlagen."), htmlReady($connected_cms[$cms_select]->getName()), $connected_cms[$cms_select]->user->getUsername()),'§'
 					, _("Login nicht m&ouml;glich")
 					, '<div style="margin:10px">'
 					._("Dieser Fehler kann dadurch hervorgerufen werden, dass sie Ihr Passwort geändert haben. In diesem Fall versuchen sie bitte Ihren Account erneut zu verknüpfen.")
 					.  '<br>' . sprintf(_("%sZur&uuml;ck%s zu Meine Lernmodule"), '<a href="my_elearning.php"><b>', '</b></a>') . '</div>');
-			include ('html_end.inc.php');
+			include ('include/html_end.inc.php');
 			page_close();
 			die;
 		}

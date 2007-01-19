@@ -27,9 +27,9 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 // chdir ('/usr/local/httpd/htdocs/studip/');
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
-include ("links_admin.inc.php");  //Linkleiste fuer admins
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_admin.inc.php');  //Linkleiste fuer admins
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -67,6 +67,6 @@ include ("links_admin.inc.php");  //Linkleiste fuer admins
 		</td></tr></table>
 
 <?php
-	include ('html_end.inc.php');
+	include ('include/html_end.inc.php');
 	page_close();
  ?>

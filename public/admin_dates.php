@@ -28,8 +28,8 @@ require_once("dates.inc.php");
 require_once 'lib/functions.php';
 require_once("forum.inc.php");
 require_once("visual.inc.php");
-require_once("calendar_functions.inc.php");
-require_once("lib/classes/Modules.class.php");
+require_once 'lib/calendar_functions.inc.php';
+require_once 'lib/classes/Modules.class.php';
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -79,9 +79,9 @@ if ($RESOURCES_ENABLE) {
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenAblaufplan";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
-include ("links_admin.inc.php");
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_admin.inc.php');
 
 checkObjectModule("schedule");
 
@@ -1017,6 +1017,6 @@ if (!sizeof($term_data["turnus_data"])) {
 </form>
 </td></tr></table>
 <?php
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

@@ -21,15 +21,15 @@
 
 require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
 require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
-require_once("archiv.inc.php");
+require_once('lib/archiv.inc.php');
 require_once 'lib/functions.php';
 require_once("config_tools_semester.inc.php");
 require_once("visual.inc.php");
 require_once("statusgruppe.inc.php"); //Enthaelt Funktionen fuer Statusgruppen
 require_once("log_events.inc.php"); // Logging
-require_once("lib/classes/DataFields.class.php"); //Enthaelt Funktionen fuer Statusgruppen
-require_once("lib/classes/StudipLitList.class.php");
-require_once("lib/classes/StudipNews.class.php");
+require_once('lib/classes/DataFields.class.php'); //Enthaelt Funktionen fuer Statusgruppen
+require_once('lib/classes/StudipLitList.class.php');
+require_once('lib/classes/StudipNews.class.php');
 
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
@@ -55,9 +55,9 @@ $db4 = new DB_Seminar;
 $sess->register("archiv_assi_data");
 $cssSw = new cssClassSwitcher; 
 // Start of Output
-include ('html_head.inc.php'); // Output of html head
-include ('header.php'); // Output of Stud.IP head
-include ('links_admin.inc.php'); //Linkleiste fuer admins
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php'); // Output of Stud.IP head
+include ('include/links_admin.inc.php'); //Linkleiste fuer admins
 
 // single delete (a Veranstaltung is open)
 if ($SessSemName[1]) {
@@ -563,6 +563,6 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 	</table>
 <?php
 	} 
-	include ('html_end.inc.php');
+	include ('include/html_end.inc.php');
 	page_close();
 ?>

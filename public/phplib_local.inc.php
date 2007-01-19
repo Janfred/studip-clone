@@ -383,9 +383,9 @@ class Seminar_Auth extends Auth {
 		if ($cfg->getValue('MAINTENANCE_MODE_ENABLE') && $actual_perms != 'root'){
 			$this->unauth();
 			include_once 'msg.inc.php';
-			include_once 'html_head.inc.php';
+			include_once 'include/html_head.inc.php';
 			parse_window('error§' . _("Das System befindet sich im Wartungsmodus. Zur Zeit ist kein Zugriff möglich."), '§', $GLOBALS['UNI_NAME'] . ' ' . _("Wartungsmodus"), '&nbsp;');
-			include_once 'html_end.inc.php';
+			include_once 'include/html_end.inc.php';
 			die;
 		}
 		return parent::is_authenticated();
@@ -473,7 +473,7 @@ class Seminar_Auth extends Auth {
         $sess->register("challenge");
     }
 
-		include("crcloginform.ihtml");
+		include('include/crcloginform.ihtml');
 	}
 
 	function auth_validatelogin() {
@@ -563,7 +563,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$challenge = md5(uniqid($this->magic));
 		$sess->register("challenge");
 
-		include("crcregister.ihtml");
+		include('include/crcregister.ihtml');
 	}
 
 	function auth_doregister() {
@@ -725,7 +725,7 @@ class Seminar_Perm extends Perm {
 	function perm_invalid($does_have, $must_have) {
 		global $perm, $auth, $sess;
 		global $RELATIVE_PATH_CHAT;
-		include("perminvalid.ihtml");
+		include('include/perminvalid.ihtml');
 	}
 
 	function get_perm($user_id = false){

@@ -45,8 +45,8 @@ require_once ("visual.inc.php");
 require_once 'lib/functions.php';
 require_once ("msg.inc.php");
 
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 
 checkObject();
 checkObjectModule("ilias_connect");
@@ -118,7 +118,7 @@ if ($ILIAS_CONNECT_ENABLE)
 		die();
 	}
 
-	include ("links_openobject.inc.php");
+	include ('include/links_openobject.inc.php');
 
 	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_db_functions.inc.php");
 	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
@@ -341,6 +341,6 @@ else
 	parse_window ("error§" . _("Das Verbindungsmodul für ILIAS-Lernmodule ist nicht eingebunden. Damit Lernmodule verwendet werden können, muss die Verbindung zu einer ILIAS-Installation in den Systemeinstellungen hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",
 				_("Lernmodule nicht eingebunden"));
 }
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

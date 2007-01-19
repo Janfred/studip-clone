@@ -13,7 +13,6 @@ $PHP_SELF = $_SERVER['PHP_SELF'] = $_SERVER['SCRIPT_NAME'];
 $STUDIP_BASE_PATH = realpath( dirname(__FILE__) . '/../..');
 $include_path = get_include_path();
 $include_path .= PATH_SEPARATOR . $STUDIP_BASE_PATH . DIRECTORY_SEPARATOR . 'config';
-$include_path .= PATH_SEPARATOR . $STUDIP_BASE_PATH . DIRECTORY_SEPARATOR . 'include';
 $include_path .= PATH_SEPARATOR . $STUDIP_BASE_PATH . DIRECTORY_SEPARATOR . 'public';
 $include_path .= PATH_SEPARATOR . $STUDIP_BASE_PATH;
 set_include_path($include_path);

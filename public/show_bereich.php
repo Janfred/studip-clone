@@ -28,11 +28,11 @@ require_once "lib/classes/SemBrowse.class.php";
 
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 
 if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
-	include ("links_openobject.inc.php");
+	include ('include/links_openobject.inc.php');
 }
 
 	$sess->register ("show_bereich_data");
@@ -164,6 +164,6 @@ print_infobox ($infobox,"browse.jpg");
 
 <?
 $sem_browse_data = $save_me;
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close()
 ?>

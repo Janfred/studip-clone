@@ -28,8 +28,8 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 require_once ("config.inc.php");
 require_once ("visual.inc.php");
 
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 
 
 if ($ELEARNING_INTERFACE_ENABLE)
@@ -38,7 +38,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	ELearningUtils::bench("start");
 
 
-	include ("links_about.inc.php");
+	include ('include/links_about.inc.php');
 
 	if ($elearning_open_close["type"] != "user")
 	{
@@ -231,6 +231,6 @@ else
 				_("E-Learning-Schnittstelle nicht eingebunden"));
 }
 
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

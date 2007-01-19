@@ -43,7 +43,7 @@ require_once ("visual.inc.php");
 require_once ("messagingSettings.inc.php");
 require_once ("messaging.inc.php");
 require_once ("statusgruppe.inc.php");
-require_once ("reiter.inc.php");
+require_once ('include/reiter.inc.php');
 require_once ("sms_functions.inc.php");
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
@@ -69,8 +69,8 @@ if ($change_view) {
 }
 
 // Output of html head and Stud.IP head
-include ("html_head.inc.php");
-include ("header.php");
+include ('include/html_head.inc.php');
+include ('include/header.php');
 
 //
 if ($neux) {
@@ -86,7 +86,7 @@ if ($sms_inout && !$neux) {
 }
 
 // include
-include ("links_sms.inc.php");
+include ('include/links_sms.inc.php');
 
 // check the messaging settings, avoids severals errors
 check_messaging_default();
@@ -578,7 +578,7 @@ if ($sms_data["time"] == "all") {
 if ($my_messaging_settings["last_box_visit"] < time()) {
 	$my_messaging_settings["last_box_visit"] = time();
 }
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>

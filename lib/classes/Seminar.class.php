@@ -34,8 +34,8 @@
 // +---------------------------------------------------------------------------+
 
 require_once 'lib/functions.php';
-require_once ("admission.inc.php");
-require_once ("lib/classes/Modules.class.php");
+require_once ('lib/admission.inc.php');
+require_once ('lib/classes/Modules.class.php');
 require_once ("dates.inc.php");
 
 

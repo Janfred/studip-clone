@@ -25,8 +25,8 @@ $my_auth = ($GLOBALS['ENABLE_SELF_REGISTRATION'] ? "Seminar_Register_Auth" : "Se
 page_open(array("sess" => "Seminar_Session", "auth" => $my_auth, "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 if (!$GLOBALS['ENABLE_SELF_REGISTRATION']){
-	include ("html_head.inc.php"); // Output of html head
-	include ("header.php");   // Output of Stud.IP head
+	include ('include/html_head.inc.php'); // Output of html head
+	include ('include/header.php');   // Output of Stud.IP head
 	parse_window ("error§" . _("In dieser Installation ist die M&ouml;glichkeit zur Registrierung ausgeschaltet."), "§",
 				_("Registrierung ausgeschaltet"), 
 				'<div style="margin:10px">'.$UNI_LOGIN_ADD.'</div>'
@@ -48,8 +48,8 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.AnmeldungRegistrierung";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 
 ?>
 <table width ="100%" border="0" cellspacing="0" cellpadding="0">
@@ -73,7 +73,7 @@ include ("header.php");   // Output of Stud.IP head
 </table>
 
 <?php 
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 
 // <!-- $Id$ -->

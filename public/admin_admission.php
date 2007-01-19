@@ -45,8 +45,8 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenZugangsberechtigungen";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 ?>
 	<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 
@@ -84,14 +84,14 @@ include ("header.php");   // Output of Stud.IP head
 
 <?
 
-include ("links_admin.inc.php");	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+include ('include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
 require_once("msg.inc.php");	//Ausgaben
 require_once("config.inc.php");	//Settings....
 require_once 'lib/functions.php';	//basale Funktionen
 require_once("visual.inc.php");	//Darstellungsfunktionen
 require_once("messaging.inc.php");	//Nachrichtenfunktionen
-require_once("admission.inc.php");	//load functions from admission system
+require_once('lib/admission.inc.php');	//load functions from admission system
 
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
@@ -923,6 +923,6 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 </table>
 
 <?php
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

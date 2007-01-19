@@ -36,12 +36,12 @@ $perm->check($needed_perm);
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php"); // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php'); // Output of Stud.IP head
 
 // most of the logic happens in links_admin
 // 
-include ("links_admin.inc.php"); //Linkleiste fuer admins
+include ('include/links_admin.inc.php'); //Linkleiste fuer admins
 
 function visibility_change_message($old_vis, $new_vis) {
 	if ($old_vis) {
@@ -157,6 +157,6 @@ echo $contentTable->close();
 
 echo $containerTable->blankRow();
 echo $containerTable->close();
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

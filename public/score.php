@@ -10,8 +10,8 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.VerschiedenesScore"; // external help keyword
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 
 require_once 'lib/functions.php';
 require_once("visual.inc.php");
@@ -84,6 +84,6 @@ if ($db->num_rows()) {
 	echo "</table>\n";
 	}
 echo '</td></tr></table>';
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

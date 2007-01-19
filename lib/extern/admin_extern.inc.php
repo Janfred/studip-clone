@@ -43,14 +43,14 @@ require_once($RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
 // -- here you have to put initialisations for the current page
 
 // Start of Output
-include("html_head.inc.php"); // Output of html head
-include("header.php");   // Output of Stud.IP head
+include('include/html_head.inc.php'); // Output of html head
+include('include/header.php');   // Output of Stud.IP head
 
 require_once("msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
 require_once("cssClassSwitcher.inc.php");
 require_once("language.inc.php");
 
-include("links_admin.inc.php");  //Linkleiste fuer admins
+include('include/links_admin.inc.php');  //Linkleiste fuer admins
 
 //get ID from an open Institute
 if ($SessSemName[1])

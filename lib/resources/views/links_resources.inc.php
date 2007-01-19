@@ -34,7 +34,7 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once ("reiter.inc.php");
+require_once ('include/reiter.inc.php');
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
 
 

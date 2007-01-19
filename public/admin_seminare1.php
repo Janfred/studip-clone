@@ -31,18 +31,18 @@ require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
 require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
 require_once 'lib/functions.php';
 require_once("visual.inc.php");
-require_once("admission.inc.php");
+require_once('lib/admission.inc.php');
 require_once("statusgruppe.inc.php");	//Funktionen der Statusgruppen
-require_once("lib/classes/StudipSemTreeSearch.class.php");
-require_once("lib/classes/DataFields.class.php");
+require_once('lib/classes/StudipSemTreeSearch.class.php');
+require_once('lib/classes/DataFields.class.php');
 
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGrunddaten";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
-include ("links_admin.inc.php");
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_admin.inc.php');
 ?>
 
 <SCRIPT language="JavaScript">
@@ -788,6 +788,6 @@ if (($s_id) && (auth_check())) {
 ?>
 </table>
 <?php
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

@@ -26,7 +26,7 @@ include "seminar_open.php"; //hier werden die sessions initialisiert
 require_once ("msg.inc.php");
 require_once ("visual.inc.php");
 require_once 'lib/functions.php';
-require_once ("admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
+require_once ('lib/admission.inc.php');	//Funktionen der Teilnehmerbegrenzung
 require_once ("statusgruppe.inc.php");	//Funktionen der Statusgruppen
 require_once ("messaging.inc.php");	//Funktionen des Nachrichtensystems
 require_once ("config.inc.php");		//We need the config for some parameters of the class of the Veranstaltung
@@ -77,13 +77,13 @@ if ($rechte) {
 }
 
 // Start  of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   //hier wird der "Kopf" nachgeladen
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   //hier wird der "Kopf" nachgeladen
 
 checkObject();
 checkObjectModule("participants");
 
-include ("links_openobject.inc.php");
+include ('include/links_openobject.inc.php');
 
 $messaging=new messaging;
 $cssSw=new cssClassSwitcher;
@@ -1388,7 +1388,7 @@ if ($rechte) {
 
 
 echo '</td></tr></table>';
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>

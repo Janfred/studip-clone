@@ -32,7 +32,7 @@
 // +---------------------------------------------------------------------------+
 
 require_once('visual.inc.php');
-require_once('calendar_functions.inc.php');
+require_once('lib/calendar_functions.inc.php');
 
 // Tabellenansicht der Termine eines Tages erzeugen
 function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol = TRUE,

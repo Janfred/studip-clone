@@ -44,7 +44,7 @@ if (isset($print_view))
 	$_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
+include ('include/html_head.inc.php'); // Output of html head
 
 require_once "config.inc.php"; //Daten laden
 require_once "config_tools_semester.inc.php";
@@ -66,13 +66,13 @@ if ($change_view) {
 }
 
 if (!$print_view) {
-	include "header.php";   //hier wird der "Kopf" nachgeladen
+	include 'include/header.php';   //hier wird der "Kopf" nachgeladen
 	if ($inst_id) //Links if we show in the instiute-object-view
-		include "links_openobject.inc.php";
+		include 'include/links_openobject.inc.php';
 	elseif (!$perm->have_perm("admin")) //if not in the adminview, it's the user view!
-		include ("links_sms.inc.php");
+		include ('include/links_sms.inc.php');
 	else
-		include ("links_sms.inc.php");
+		include ('include/links_sms.inc.php');
 	}
 
 if ($change_view) {
@@ -225,9 +225,9 @@ while ($db->next_record())
 			if ($i>1)
 				$dozenten.=", ";
 			if (!$print_view)
-				$dozenten.="<a href =\"about.php?username=".$db2->f("username")."\">".$db2->f("Nachname")."</a>";
+				$dozenten.="<a href =\"about.php?username=".$db2->f("username")."\">".htmlReady($db2->f("Nachname"))."</a>";
 			else
-				$dozenten.=$db2->f("Nachname");
+				$dozenten.= htmlReady($db2->f("Nachname"));
 			$i++;
 			}
 
@@ -303,7 +303,7 @@ if ((is_array($my_personal_sems)) && (!$inst_id))
 			$tmp_day=date("w", $mps["start_time"]);
 			if ($tmp_day==0) $tmp_day=7;
 
-			$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"])+$idx_corr_h.(int)((date("i", $mps["start_time"])+$idx_corr_m) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>$mps["room"], "row_span"=>$tmp_row_span, "dozenten"=>$mps["doz"], "personal_sem"=>TRUE);
+			$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"])+$idx_corr_h.(int)((date("i", $mps["start_time"])+$idx_corr_m) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>$mps["room"], "row_span"=>$tmp_row_span, "dozenten"=>htmlReady($mps["doz"]), "personal_sem"=>TRUE);
 		}
 
 //Array der Zellenbelegungen erzeugen
@@ -559,7 +559,7 @@ for ($i; $i<$global_end_time+1; $i++)
 						if ($my_sems[$cc["seminar_id"]]["nummer"]) {
 							echo htmlReady($my_sems[$cc["seminar_id"]]["nummer"]) . "&nbsp;";
 						}
-						echo substr($my_sems[$cc["seminar_id"]]["name"], 0,50);
+						echo htmlReady(substr($my_sems[$cc["seminar_id"]]["name"], 0,50));
 						if (strlen($my_sems[$cc["seminar_id"]]["name"])>50)
 							echo "...";
 						echo "</font>";
@@ -673,6 +673,6 @@ ob_end_flush(); //end outputbuffering
 if (!$print_view) {
 	echo '</table>';
  } 
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

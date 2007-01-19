@@ -166,9 +166,9 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenModule";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
-include ("links_admin.inc.php");	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
 //get ID
 if ($SessSemName[1])
@@ -353,6 +353,6 @@ else	{
 </tr>
 </table>
 <?php
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

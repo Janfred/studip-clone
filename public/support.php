@@ -42,8 +42,8 @@ if ($SUPPORT_ENABLE){
 	include ("$RELATIVE_PATH_SUPPORT/support.inc.php");
 } else {
 	// Start of Output
-	include ("html_head.inc.php"); // Output of html head
-	include ("header.php");   // Output of Stud.IP head
+	include ('include/html_head.inc.php'); // Output of html head
+	include ('include/header.php');   // Output of Stud.IP head
 	require_once ("msg.inc.php");
 	parse_window ("error§" . _("Das SupportDB-Modul ist nicht eingebunden. Bitte aktivieren Sie es in den Systemeinstellungen oder wenden Sie sich an eine Person mit administrativen Rechten im System."), "§",
 				_("SupportDB nicht eingebunden"));

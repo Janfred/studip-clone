@@ -38,10 +38,10 @@
 if (isset($SessSemName) && $SessSemName[0] != "") {
 
 require_once ("visual.inc.php");
-require_once ("reiter.inc.php");
+require_once ('include/reiter.inc.php');
 require_once 'lib/functions.php';
-require_once ("lib/classes/Modules.class.php");
-require_once ("lib/classes/StudipScmEntry.class.php");
+require_once ('lib/classes/Modules.class.php');
+require_once ('lib/classes/StudipScmEntry.class.php');
 
 $db=new DB_Seminar;
 $reiter=new reiter;

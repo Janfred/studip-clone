@@ -12,15 +12,15 @@ require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
 require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/reiter.inc.php");
+require_once ('include/reiter.inc.php');
 
 // need kontact to mothership
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 
 // Output of html head and Stud.IP head
-include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
-include ("$ABSOLUTE_PATH_STUDIP/header.php");
+include ('include/html_head.inc.php');
+include ('include/header.php');
 
 
 // do we use javascript?

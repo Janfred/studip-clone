@@ -43,7 +43,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // hier muessen Seiten-Initialisierungen passieren
 
-	include "header.php";   //hier wird der "Kopf" nachgeladen 
+	include 'include/header.php';   //hier wird der "Kopf" nachgeladen 
 	include "forum.inc.php"; 	
 	
 ?>

@@ -16,5 +16,6 @@ $export_icon["htm"] = "txt-icon.gif";
 $export_icon["txt"] = "txt-icon.gif";
 
 $xml_filename = "data.xml";
-if ($xslt_filename == "") $xslt_filename = "studip";
+if (array_key_exists('xslt_filename', $_REQUEST)) $xslt_filename = basename($_REQUEST['xslt_filename']);
+if ($xslt_filename == '') $xslt_filename = 'studip';
 ?>

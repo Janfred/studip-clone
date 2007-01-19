@@ -27,8 +27,8 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.Suchen";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 
 ?>
 <table width="70%" border=0 cellpadding=0 cellspacing=0 align="center">
@@ -86,7 +86,7 @@ include ("header.php");   // Output of Stud.IP head
 </tr>
 </table>
 <?php
-  include ('html_end.inc.php');
+  include ('include/html_end.inc.php');
   // Save data back to database.
   page_close();
  ?>

@@ -49,9 +49,9 @@ $sess->register("admin_config_data");
 //$admin_config_data["range_id"] = '';
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
-include ("links_admin.inc.php");	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
 if ($_REQUEST["select_username"]) {
 	$admin_config_data["range_id"] = get_userid ($_REQUEST["select_username"]);
@@ -230,6 +230,6 @@ if ($_REQUEST["change_config"]) {
 	</tr>
 </table>
 <?php
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

@@ -26,7 +26,7 @@ if (!$_POST["pass"])
     echo "<input type=\"password\" size=\"15\" name=\"pass\"><br><br><a href=\"javascript:doSubmit();\"><img " . makeButton("herunterladen", "src") . " border=\"0\" " . tooltip(_("Die heruntergeladene Datei bitte mit der Endung .html speichern!")) . "></a>";
     echo "&nbsp;&nbsp;<a href=\"javascript:window.close()\"><img " . makeButton("abbrechen", "src") . " border=\"0\" " . tooltip(_("Fenster schließen")) . "></a></form></div>";
     ?><script type="text/javascript">document.forms[0].pass.focus();</script><?php
-    include ('html_end.inc.php');
+    include ('include/html_end.inc.php');
     page_close();
     die;
     }

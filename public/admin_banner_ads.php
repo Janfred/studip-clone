@@ -27,7 +27,7 @@ $sess->register("banner_data");
 
 if (!$BANNER_ADS_ENABLE) {
 	echo '<p>', _("Banner-Modul abgeschaltet."), "</p>\n";
-	include ('html_end.inc.php');
+	include ('include/html_end.inc.php');
 	page_close();
 	die;
 }
@@ -43,9 +43,9 @@ require_once("lib/classes/Table.class.php");
 require_once("lib/classes/ZebraTable.class.php");
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
-include ("links_admin.inc.php");  //Linkleiste fuer admins
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_admin.inc.php');  //Linkleiste fuer admins
 
 // Get a database connection
 $db = new DB_Seminar;
@@ -444,7 +444,7 @@ if ($i_view=="new") {
 echo $content->close();
 echo $container->blankRow();
 echo $container->close();
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 // <!-- $Id$ -->
 ?>

@@ -57,16 +57,16 @@ require_once("lib/classes/DataFields.class.php");
 require_once ("config.inc.php");
 
 # Include all required files ================================================ #
-require_once("lib/evaluation/evaluation.config.php");
-require_once("lib/evaluation/classes/EvaluationQuestion.class.php");
-require_once("lib/evaluation/classes/db/EvaluationQuestionDB.class.php");
-require_once("lib/evaluation/classes/EvaluationAnswer.class.php");
-require_once("lib/evaluation/classes/db/EvaluationAnswerDB.class.php");
+require_once('lib/evaluation/evaluation.config.php');
+require_once('lib/evaluation/classes/EvaluationQuestion.class.php');
+require_once('lib/evaluation/classes/db/EvaluationQuestionDB.class.php');
+require_once('lib/evaluation/classes/EvaluationAnswer.class.php');
+require_once('lib/evaluation/classes/db/EvaluationAnswerDB.class.php');
 
 require_once ("seminar_open.php");
-require_once ("html_head.inc.php");
-require_once ("header.php");
-/*equire_once ("links_admin.inc.php");*/
+require_once ('include/html_head.inc.php');
+require_once ('include/header.php');
+/*equire_once ('include/links_admin.inc.php');*/
 require_once (EVAL_LIB_COMMON);
 require_once (EVAL_LIB_OVERVIEW);
 require_once (EVAL_FILE_EVAL);
@@ -185,8 +185,8 @@ if ($EXPORT_ENABLE)
 else
 {
 	// Start of Output
-	include ("html_head.inc.php"); // Output of html head
-	include ("header.php");   // Output of Stud.IP head
+	include ('include/html_head.inc.php'); // Output of html head
+	include ('include/header.php');   // Output of Stud.IP head
 	parse_window ("error§" . _("Das Exportmodul ist nicht eingebunden. Damit Daten im XML-Format exportiert werden k&ouml;nnen, muss das Exportmodul in den Systemeinstellungen freigeschaltet werden. Wenden Sie sich bitte an die Administratoren."), "§",
 				_("Exportmodul nicht eingebunden"));
 }

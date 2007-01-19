@@ -159,10 +159,10 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 require_once ("config.inc.php");			// Klarnamen fuer den Veranstaltungsstatus
 require_once ("visual.inc.php");			// htmlReady fuer die Veranstaltungsnamen
 require_once ("dates.inc.php");			// Semester-Namen fuer Admins
-require_once ("admission.inc.php");		// Funktionen der Teilnehmerbegrenzung
+require_once ('lib/admission.inc.php');		// Funktionen der Teilnehmerbegrenzung
 require_once ("messaging.inc.php");
-require_once ("lib/classes/Modules.class.php");	// modul-config class
-require_once ("lib/classes/ModulesNotification.class.php");
+require_once ('lib/classes/Modules.class.php');	// modul-config class
+require_once ('lib/classes/ModulesNotification.class.php');
 require_once ("statusgruppe.inc.php");		// Funktionen für Statusgruppen
 require_once ("object.inc.php");
 require_once ("meine_seminare_func.inc.php");
@@ -188,13 +188,13 @@ $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen g
 $HELP_KEYWORD="Basis.MeineVeranstaltungen";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 
 if (!$perm->have_perm("root"))
-	include ("links_seminare.inc.php");	   //hier wird die Navigation nachgeladen
+	include ('include/links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
 
 //Ausgabe bei bindenden Veranstaltungen, loeschen nicht moeglich!
 if ($cmd == "no_kill") {
@@ -1122,7 +1122,7 @@ ELSEIF ($perm->have_perm("root")){
 
 echo '</table>';
 
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
   // Save data back to database.
 ob_end_flush(); //Outputbuffering beenden
 page_close();

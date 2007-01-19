@@ -27,9 +27,9 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
-include ("links_admin.inc.php");  //Linkleiste fuer admins
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_admin.inc.php');  //Linkleiste fuer admins
 
 require_once("msg.inc.php"); //Ausgaberoutinen an den User
 require_once("config.inc.php"); //Grunddaten laden
@@ -448,6 +448,6 @@ if ($inst_id != "" && $inst_id !="0") {
 
 </table>
 <?php
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

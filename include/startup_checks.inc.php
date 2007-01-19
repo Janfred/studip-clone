@@ -115,7 +115,7 @@ if ($problems_found) {
 </tr>
 </table>
 <?php
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 die;
 }
 ?>

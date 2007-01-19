@@ -47,9 +47,9 @@ require_once("lib/classes/StudipRangeTreeViewAdmin.class.php");
 
 
 include("seminar_open.php"); //hier werden die sessions initialisiert
-include("html_head.inc.php");
-include("header.php");   //hier wird der "Kopf" nachgeladen 
-include("links_admin.inc.php");  //Linkleiste fuer admins
+include('include/html_head.inc.php');
+include('include/header.php');   //hier wird der "Kopf" nachgeladen 
+include('include/links_admin.inc.php');  //Linkleiste fuer admins
 
 ?>
 <table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">
@@ -65,7 +65,7 @@ $the_tree->open_ranges['root'] = true;
 $the_tree->showTree();
 
 echo '</td></tr></table><br /></td></tr></table>';
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 
 // <!--$Id$-->

@@ -73,7 +73,7 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 require_once "dates.inc.php";
 require_once "lib/classes/DbSnapshot.class.php";
 require_once "forum.inc.php";
-require_once("admission.inc.php");	 //Enthaelt Funktionen zum Updaten der Wartelisten
+require_once('lib/admission.inc.php');	 //Enthaelt Funktionen zum Updaten der Wartelisten
 require_once("statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
 require_once("contact.inc.php");	 //Enthaelt Funktionen fuer Adressbuchverwaltung
 
@@ -86,8 +86,8 @@ if ($ILIAS_CONNECT_ENABLE) {
 }
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 ?>
 <script type="text/javascript">
 function invert_selection(formname){
@@ -374,6 +374,6 @@ if ($_REQUEST['cmd'] == "user_course_change"){
 ?>
 </table>
 <?php
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

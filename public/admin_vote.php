@@ -39,8 +39,8 @@ $perm->check ("autor");
 $HELP_KEYWORD="Basis.Votings";
 
 include_once("seminar_open.php");
-include_once("html_head.inc.php");
-include_once("header.php");
+include_once('include/html_head.inc.php');
+include_once('include/header.php');
 $the_range = isset($showrangeID) ? $showrangeID : $rangeID;
 
 if (!empty($the_range) && $the_range != $auth->auth['uname'] && $the_range != 'studip'){
@@ -48,14 +48,14 @@ if (!empty($the_range) && $the_range != $auth->auth['uname'] && $the_range != 's
 	if ($view_mode == "fak"){
 		$view_mode = "inst";
 	}
-	include ("links_admin.inc.php");
+	include ('include/links_admin.inc.php');
 } else {
-	include ("links_about.inc.php");
+	include ('include/links_about.inc.php');
 }
 if ($page == "edit")
-	include ("lib/vote/vote_edit.inc.php");
+	include ('lib/vote/vote_edit.inc.php');
 else
-	include ("lib/vote/vote_overview.inc.php");
+	include ('lib/vote/vote_overview.inc.php');
 
 page_close ();
 ?>

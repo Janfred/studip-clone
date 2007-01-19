@@ -79,8 +79,8 @@ $HELP_KEYWORD="Basis.Startseite"; // set keyword for new help
 
 // Start of Output
 
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');
 
 // only for authenticated users
 if ($auth->is_authenticated() && $user->id != 'nobody') {
@@ -241,7 +241,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 	// Display banner ad
 	if ($GLOBALS['BANNER_ADS_ENABLE']) {
-		require_once('banner_show.inc.php');
+		require_once('lib/banner_show.inc.php');
 		banner_show();
 	}
 
@@ -453,5 +453,5 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 }
 
 echo '</table>';
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 ?>

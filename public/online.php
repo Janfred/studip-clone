@@ -42,9 +42,9 @@ $cssSw=new cssClassSwitcher;
 $HELP_KEYWORD="Basis.InteraktionWhosOnline";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
-include ("links_sms.inc.php");
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_sms.inc.php');
 
 ob_start();
 
@@ -298,7 +298,7 @@ ob_start();
 ?>
 </tr></table></td></tr></table>
 <?
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 ob_end_flush();
   // Save data back to database.
 page_close();

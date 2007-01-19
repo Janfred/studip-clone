@@ -148,7 +148,7 @@ class EventObject {
 			$BASE_DATE_FROM_REQUEST, $CHANGE_RATE;
 
 		if ($CALENDAR_ENABLE)
-			include_once ("calendar_functions.inc.php");
+			include_once ('lib/calendar_functions.inc.php');
 
 
 		if ($BASE_DATE_FROM_REQUEST) {

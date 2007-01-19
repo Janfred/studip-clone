@@ -26,17 +26,17 @@ require_once("msg.inc.php"); 		// Funktionen fuer Nachrichtenmeldungen
 require_once("config.inc.php"); 		// Wir brauchen den Namen der Uni
 require_once("visual.inc.php");
 require_once("user_visible.inc.php");
-require_once("lib/classes/UserManagement.class.php");
+require_once('lib/classes/UserManagement.class.php');
 
-$cssSw=new cssClassSwitcher;
+$cssSw = new cssClassSwitcher;
 
 //-- hier muessen Seiten-Initialisierungen passieren --
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");	 //hier wird der "Kopf" nachgeladen
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');	 //hier wird der "Kopf" nachgeladen
 
-include ("links_admin.inc.php");	//Linkleiste fuer admins
+include ('include/links_admin.inc.php');	//Linkleiste fuer admins
 
 
 // Get a database connection
@@ -581,6 +581,6 @@ if (isset($_GET['details'])) {
 
 
 }
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

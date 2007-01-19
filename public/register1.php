@@ -27,8 +27,8 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.AnmeldungRegistrierung";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 
 require_once("msg.inc.php");
 
@@ -82,7 +82,7 @@ include("./locale/$_language_path/LC_HELP/pages/nutzung.html");
 ?>
 
 <?php 
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close() 
 
 // <!-- $Id$ -->

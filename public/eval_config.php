@@ -50,9 +50,9 @@ $no_permissons = EvaluationObjectDB::getEvalUserRangesWithNoPermission ($eval);
 // Gehoert die benutzende Person zum Seminar-Stab (Dozenten, Tutoren) oder ist es ein ROOT?
 $staff_member = $perm->have_studip_perm("tutor",$SessSemName[1]);;
 
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");    //hier wird der "Kopf" nachgeladen
-include ("links_about.inc.php");
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');    //hier wird der "Kopf" nachgeladen
+include ('include/links_about.inc.php');
 
 
 $graphtypes_mchoice = array("bars"=>"Balken",
@@ -277,6 +277,6 @@ if (isset($eval_id) && $can_change) {
 
 
   // Save data back to database.
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
   page_close();
 ?>

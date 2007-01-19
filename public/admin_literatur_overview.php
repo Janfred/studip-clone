@@ -2,19 +2,19 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 my_session_open();
 $perm->check("admin");
-require_once ("lib/classes/SemesterData.class.php");
-require_once ("lib/dbviews/literatur.view.php");
-require_once ("lib/classes/StudipLitCatElement.class.php");
-require_once ("lib/classes/StudipLitSearch.class.php");
+require_once ('lib/classes/SemesterData.class.php');
+require_once ('lib/dbviews/literatur.view.php');
+require_once ('lib/classes/StudipLitCatElement.class.php');
+require_once ('lib/classes/StudipLitSearch.class.php');
 
 require_once ("visual.inc.php");
 require_once ("config.inc.php");
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   //hier wird der "Kopf" nachgeladen
-include ("links_admin.inc.php");  //Linkleiste fuer admins
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   //hier wird der "Kopf" nachgeladen
+include ('include/links_admin.inc.php');  //Linkleiste fuer admins
 
 function my_session_open($id = false){
 	if (!$id){

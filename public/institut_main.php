@@ -93,12 +93,12 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && $SessSemName[1]){
 $HELP_KEYWORD="Basis.Einrichtungen";
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
 
 checkObject();
 
-include "links_openobject.inc.php";
+include 'include/links_openobject.inc.php';
 include "show_news.php";
 
 $sess->register("institut_main_data");
@@ -191,7 +191,7 @@ if ($GLOBALS['VOTE_ENABLE']) {
 	show_votes ($auswahl, $auth->auth["uid"], $perm, YES);
 }
   
-  include ('html_end.inc.php');
+  include ('include/html_end.inc.php');
   // Save data back to database.
   page_close()
  ?>

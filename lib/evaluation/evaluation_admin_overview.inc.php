@@ -43,9 +43,9 @@
 # Include all required files ================================================ #
 require_once("lib/evaluation/evaluation.config.php");
 #require_once ("seminar_open.php");
-#require_once ("html_head.inc.php");
-#require_once ("header.php");
-#require_once ("links_admin.inc.php");
+#require_once ('include/html_head.inc.php');
+#require_once ('include/header.php');
+#require_once ("include/links_admin.inc.php");
 require_once (EVAL_LIB_COMMON);
 require_once (EVAL_LIB_OVERVIEW);
 require_once (EVAL_FILE_EVAL);
@@ -104,7 +104,7 @@ if (! ($perm->have_studip_perm ("tutor", $rangeID)) &&
     $safeguard = $lib->createSafeguard("ausruf", sprintf(_("Sie haben keinen Zugriff auf diesen Bereich.")));
     $table->addContent ($lib->createHeader ($safeguard));
     echo $table->createContent ();
-    require_once ("html_end.inc.php");
+    include_once ('include/html_end.inc.php');
     page_close ();
     exit;
 }
@@ -283,7 +283,7 @@ if( $evalAction == "search_showrange" && $_REQUEST["search"] ) {
     $table->addContent ($tr);
     $table->addContent ($lib->createClosingRow());
     echo $table->createContent();
-    require_once ("html_end.inc.php");
+    include_once ('include/html_end.inc.php');
     page_close ();
     exit;
 }
@@ -416,7 +416,7 @@ if ($debug) {
 }
 
 # PHP-LIB: close session ==================================================== #
-require_once ("html_end.inc.php");
+include_once ('include/html_end.inc.php');
 //page_close ();
 # ============================================================== end: PHP-LIB #
 

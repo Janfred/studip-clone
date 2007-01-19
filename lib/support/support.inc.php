@@ -55,8 +55,8 @@ $db=new DB_Seminar;
 /*****************************************************************************
 headers
 /*****************************************************************************/
-include ("html_head.inc.php");
-include ("header.php");
+include ('include/html_head.inc.php');
+include ('include/header.php');
 
 //We need a stud.ip object opened before
 checkObject();
@@ -70,7 +70,7 @@ evaluate values and handle commands
 include ("$RELATIVE_PATH_SUPPORT/lib/evaluate_values.php");
 
 //load content, text, pictures and stuff
-include ("links_openobject.inc.php");
+include ('include/links_openobject.inc.php');
 include ("$RELATIVE_PATH_SUPPORT/views/page_intros.inc.php");
 
 ?>

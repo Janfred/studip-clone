@@ -31,9 +31,9 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 $_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
+include ('include/html_head.inc.php'); // Output of html head
 
-require_once("archiv.inc.php");
+require_once('lib/archiv.inc.php');
 
 print (dump_sem($SessSemName[1], true));
 
@@ -41,7 +41,7 @@ echo "<table width=100% border=0 cellpadding=2 cellspacing=0>";
 echo "<tr><td><i><font size=-1>" . _("Stand:") . " ".date("d.m.y",time()).", ".date("G:i", time())." Uhr.</font></i></td><td align=\"right\"><font size=-2><img src=\"".$GLOBALS['ASSETS_URL']."images/logo2b.gif\"><br />&copy; ".date("Y", time())." v.$SOFTWARE_VERSION&nbsp; &nbsp; </font></td></tr>";
 echo "</table>\n";
 
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>

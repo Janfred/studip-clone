@@ -455,7 +455,7 @@ function showDeleteDialog($keyword, $version) {
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
 		end_blank_table();
 		echo '</td></tr></table>';
-		include ('html_end.inc.php');
+		include ('include/html_end.inc.php');
 		die;
 	}
 	$islatest=0; // will another version become latest version?
@@ -474,7 +474,7 @@ function showDeleteDialog($keyword, $version) {
 		parse_msg("error§" . _("Die Version, die Sie l&ouml;schen wollen, ist nicht die aktuellste. &Uuml;berpr&uuml;fen Sie, ob inzwischen eine aktuellere Version erstellt wurde."));
 		end_blank_table();
 		echo '</td></tr></table>';
-		include ('html_end.inc.php');
+		include ('include/html_end.inc.php');
 		die;
 	}
 	begin_blank_table();
@@ -507,7 +507,7 @@ function showDeleteAllDialog($keyword) {
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
 		end_blank_table();
 		echo '</td></tr></table>';
-		include ('html_end.inc.php');
+		include ('include/html_end.inc.php');
 		die;
 	}
 	begin_blank_table();
@@ -551,7 +551,7 @@ function deleteWikiPage($keyword, $version, $range_id) {
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
 		end_blank_table();
 		echo '</td></tr></table>';
-		include ('html_end.inc.php');
+		include ('include/html_end.inc.php');
 		die;
 	}
 	$lv=getLatestVersion($keyword, $SessSemName[1]);
@@ -560,7 +560,7 @@ function deleteWikiPage($keyword, $version, $range_id) {
 		parse_msg("error§" . _("Die Version, die Sie l&ouml;schen wollen, ist nicht die aktuellste. &Uuml;berpr&uuml;fen Sie, ob inzwischen eine aktuellere Version erstellt wurde."));
 		end_blank_table();
 		echo '</td></tr></table>';
-		include ('html_end.inc.php');
+		include ('include/html_end.inc.php');
 		die;
 	}
 	$q="DELETE FROM wiki WHERE keyword='$keyword' AND version='$version' AND range_id='$range_id'";
@@ -602,7 +602,7 @@ function deleteAllWikiPage($keyword, $range_id) {
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
 		end_blank_table();
 		echo '</td></tr></table>';
-		include ('html_end.inc.php');
+		include ('include/html_end.inc.php');
 		die;
 	}
 	$q="DELETE FROM wiki WHERE keyword='$keyword' AND range_id='$range_id'";
@@ -687,7 +687,7 @@ function listPages($mode, $sortby=NULL) {
 		begin_blank_table();
 		parse_msg ("info\xa7" . $nopages);
 		echo '</table></td></tr></table>';
-		include ('html_end.inc.php');
+		include ('include/html_end.inc.php');
 		die;
 	}
 
@@ -838,7 +838,7 @@ function printWikiPage($keyword, $version) {
 	echo "<hr><p><font size=-1>created by Stud.IP Wiki-Module ";
 	echo date("d.m.Y, H:i", time());
 	echo " </font></p>";
-	include ('html_end.inc.php');
+	include ('include/html_end.inc.php');
 }
 
 /**
@@ -1185,7 +1185,7 @@ function showDiffs($keyword, $versions_since) {
 		parse_msg ("info§" . _("Es gibt keine zu vergleichenden Versionen."));
 		end_blank_table();
 		echo '</td></tr></table>';
-		include ('html_end.inc.php');
+		include ('include/html_end.inc.php');
 		die;
 	}
 

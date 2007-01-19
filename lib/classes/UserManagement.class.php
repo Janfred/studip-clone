@@ -36,15 +36,15 @@
 require_once 'lib/functions.php';
 require_once "language.inc.php";
 require_once "config.inc.php"; 		// We need the uni name for emails
-require_once "admission.inc.php";	// remove user from waiting lists
+require_once 'lib/admission.inc.php';	// remove user from waiting lists
 require_once "datei.inc.php";	// remove documents of user
 require_once "statusgruppe.inc.php";	// remove user from statusgroups
 require_once "dates.inc.php";	// remove appointments of user
 require_once "messaging.inc.php";	// remove messages send or recieved by user
 require_once "contact.inc.php";	// remove user from adressbooks
-require_once "lib/classes/DataFields.class.php";	// remove extra data of user
-require_once "lib/classes/auth_plugins/StudipAuthAbstract.class.php";
-require_once "lib/classes/StudipNews.class.php";
+require_once 'lib/classes/DataFields.class.php';	// remove extra data of user
+require_once 'lib/classes/auth_plugins/StudipAuthAbstract.class.php';
+require_once 'lib/classes/StudipNews.class.php';
 require_once "object.inc.php";
 if ($GLOBALS['RESOURCES_ENABLE']) {
 	include_once ($GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/DeleteResourcesUser.class.php");

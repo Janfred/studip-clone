@@ -321,9 +321,9 @@ edit/add assigns
 
 //Objektbelegung erstellen/aendern
 if ($change_object_schedules) {
-	require_once ("calendar_functions.inc.php"); //needed for extended checkdate
+	require_once ('lib/calendar_functions.inc.php'); //needed for extended checkdate
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
-	require_once ("lib/classes/SemesterData.class.php");
+	require_once ('lib/classes/SemesterData.class.php');
 	
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
@@ -935,7 +935,7 @@ if ($edit_lock) {
 //edit locks
 if (($lock_sent_x)) {
 	if ($globalPerm == "admin") { //check for resources root or global root
-		require_once ("calendar_functions.inc.php"); //needed for extended checkdate
+		require_once ('lib/calendar_functions.inc.php'); //needed for extended checkdate
 		
 		foreach ($lock_id as $key=>$id) {
 			$illegal_begin = FALSE;

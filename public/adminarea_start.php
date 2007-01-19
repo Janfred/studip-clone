@@ -29,11 +29,11 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.VeranstaltungenVerwalten";
 
 // Start of Output
-include "html_head.inc.php"; // Output of html head
-include "header.php";   // Output of Stud.IP head
-include "links_admin.inc.php"; //Output the nav
+include 'include/html_head.inc.php'; // Output of html head
+include 'include/header.php';   // Output of Stud.IP head
+include 'include/links_admin.inc.php'; //Output the nav
 
-require_once"visual.inc.php";
+require_once "visual.inc.php";
 
 if ($SessSemName[1]) {
 	?>
@@ -56,6 +56,6 @@ if ($SessSemName[1]) {
 	</table>
 <?
 }
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close();
 ?>

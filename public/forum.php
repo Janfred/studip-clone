@@ -42,8 +42,8 @@ if ($forumsend && $forumsend!="bla") {
 }
 
 // Start of Output
-	include ("html_head.inc.php"); // Output of html head
-	include ("header.php");   // Output of Stud.IP head
+	include ('include/html_head.inc.php'); // Output of html head
+	include ('include/header.php');   // Output of Stud.IP head
 
 	if ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu auch JS Check auf Name
 ?>
@@ -121,7 +121,7 @@ if ($forumsend) {
 		$forum["changed"] = "TRUE";
 		$txt = _("Anpassungen durchgeführt.");
 	} else
-		include("forumsettings.inc.php");
+		include('include/forumsettings.inc.php');
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -172,7 +172,7 @@ $view = $forum["view"];
 // Reiterleiste einbinden
 //////////////////////////////////////////////////////////////////////////////////
 
-include "links_openobject.inc.php";
+include 'include/links_openobject.inc.php';
 
 //////////////////////////////////////////////////////////////////////////////////
 // Behandlung der Suche
@@ -501,7 +501,7 @@ else
 
 
 // echo "Zeit:".(getMsTime()-$stoppuhr);
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
   // Save data back to database.
   page_close();
  ?>

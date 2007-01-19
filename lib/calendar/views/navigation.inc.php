@@ -38,7 +38,7 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require("links_sms.inc.php");
+require('include/links_sms.inc.php');
 
 if ($cmd != "changeview") {
 	echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";

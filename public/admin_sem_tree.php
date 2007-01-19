@@ -34,9 +34,9 @@ require_once ("lib/classes/StudipSemSearch.class.php");
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // Start of Output
-include ("html_head.inc.php"); // Output of html head
-include ("header.php");   // Output of Stud.IP head
-include ("links_admin.inc.php");	//Linkleiste fuer admins
+include ('include/html_head.inc.php'); // Output of html head
+include ('include/header.php');   // Output of Stud.IP head
+include ('include/links_admin.inc.php');	//Linkleiste fuer admins
 
 $view = new DbView();
 $the_tree = new StudipSemTreeViewAdmin($_REQUEST['start_item_id']);
@@ -226,6 +226,6 @@ $the_tree->showSemTree();
 </td></tr>
 </table>
 <?php
-include ('html_end.inc.php');
+include ('include/html_end.inc.php');
 page_close()
 ?>

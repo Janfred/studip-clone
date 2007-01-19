@@ -41,7 +41,7 @@ $perm->check ("autor");
 # Include all required files ================================================ #
 require_once ("lib/evaluation/evaluation.config.php");
 require_once ("seminar_open.php");
-require_once ("html_head.inc.php");
+require_once ('include/html_head.inc.php');
 require_once ("visual.inc.php");
 
 require_once( EVAL_FILE_EVAL );
