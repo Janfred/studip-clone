@@ -126,7 +126,8 @@ function get_snapshot() {
 		serialize($admin_admission_data["admission_prelim"]).
 		serialize($admin_admission_data["admission_prelim_txt"]).
 		serialize($admin_admission_data["sem_admission_start_date"]).
-		serialize($admin_admission_data["sem_admission_end_date"]);
+		serialize($admin_admission_data["sem_admission_end_date"]).
+		serialize($admin_admission_data["admission_disable_waitlist"]);
 }
 
 //get ID
@@ -159,7 +160,11 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$admin_admission_data["admission_prelim_txt"]=$db->f("admission_prelim_txt");
 	$admin_admission_data["sem_admission_start_date"]=$db->f("admission_starttime");
 	$admin_admission_data["sem_admission_end_date"]=$db->f("admission_endtime_sem");
-	if (!$admin_admission_data["admission_endtime"]) $admin_admission_data["admission_endtime"] =-1;
+	$admin_admission_data["admission_disable_waitlist"] = $db->f("admission_disable_waitlist");
+	$admin_admission_data["admission_disable_waitlist_org"] = $db->f("admission_disable_waitlist");
+	if ($admin_admission_data["admission_endtime"] <= 0){
+		$admin_admission_data["admission_endtime"] = veranstaltung_beginn($admin_admission_data["metadata_dates"]["art"], $admin_admission_data["start_time"], $admin_admission_data["metadata_dates"]["start_woche"], $admin_admission_data["metadata_dates"]["start_termin"], $admin_admission_data["metadata_dates"]["turnus_data"], "int");
+	}
 	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id'");
 	while ($db->next_record()) {
 		if ($db->f("studiengang_id") == "all")
@@ -229,10 +234,12 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		$admin_admission_data["admission_binding"]=TRUE;
 	settype($admin_admission_data["admission_binding"], integer);
 
-	$admin_admission_data["admission_turnout"]=$admission_turnout;
+	if(isset($admission_turnout)) $admin_admission_data["admission_turnout"]=$admission_turnout;
 
 	$admin_admission_data["admission_prelim_txt"]=$admission_prelim_txt;
 
+	if(isset($_REQUEST['uebernehmen_x']) && isset($_REQUEST["admission_waitlist"])) $admin_admission_data["admission_disable_waitlist"] = (int)(!$_REQUEST["admission_waitlist"]);
+	
 	if (!$admin_admission_data["admission_type"]) {
 		$admin_admission_data["read_level"]=$read_level;
 		$admin_admission_data["write_level"]=$write_level;
@@ -394,8 +401,26 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		if ($admin_admission_data["admission_type"] > 0)
 			$infomsg.=sprintf ("info§"._("Sie haben ein Anmeldeverfahren vorgesehen. Beachten Sie bitte, dass nach dem &Uuml;bernehmen dieser Einstellung alle bereits eingetragenen Nutzerinnen und Nutzer aus der Veranstaltung entfernt werden und das Anmeldeverfahren anschließend nicht mehr abgeschaltet werden kann!")."§");
 
+	
 	//Daten speichern
 	if (($uebernehmen_x) && (!$errormsg)) {
+		
+		//Warteliste aktivieren / deaktivieren
+		if($admin_admission_data["admission_disable_waitlist"] != $admin_admission_data["admission_disable_waitlist_org"]){
+			if($admin_admission_data["admission_disable_waitlist_org"] == 0){ //Warteliste war eingeschaltet
+				$db3->query("SELECT admission_seminar_user.user_id ,auth_user_md5.username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '".$admin_admission_data["sem_id"]."' AND status='awaiting'");
+				while ($db3->next_record()) {
+					$db4->query("DELETE FROM admission_seminar_user WHERE user_id='".$db3->f("user_id")."' AND seminar_id='".$admin_admission_data["sem_id"]."' AND status='awaiting'");
+					if ($db4->affected_rows()){
+						setTempLanguage($db3->f("user_id"));
+						$message= sprintf(_("Die Warteliste der Veranstaltung **%s** wurde von einem/r DozentIn oder AdministratorIn deaktiviert, sie sind damit __nicht__ zugelassen worden."), $admin_admission_data["name"]);
+						$messaging->insert_message(addslashes($message), $db3->f('username'), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("nicht zugelassen in Veranstaltung"), TRUE);
+						restoreLanguage();
+					}
+				}
+			}
+		}
+		
 		//for admission it have to be always 3
 		if ($admission_prelim == 1) {
 			if ($admin_admission_data["admission_prelim"] == 0) { //we have to move the students to status "temporaly accepted", if put on
@@ -450,7 +475,8 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 				admission_prelim_txt = '".$admin_admission_data["admission_prelim_txt"]."',
 				Passwort = '".$admin_admission_data["passwort"]."',
 				Lesezugriff = '".$admin_admission_data["read_level"]."',
-				Schreibzugriff  = '".$admin_admission_data["write_level"]."'
+				Schreibzugriff  = '".$admin_admission_data["write_level"]."',
+				admission_disable_waitlist = '".$admin_admission_data['admission_disable_waitlist']."'
 				WHERE seminar_id = '".$admin_admission_data["sem_id"]."' ");
 
 		//check, if we need to update the admission data after saving new settings
@@ -532,6 +558,22 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
  if (($errormsg) && ((!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg)))
  	$errormsg='';
 
+//check, ob Warteliste gefüllt.
+$db->query("SELECT count(*) FROM admission_seminar_user WHERE seminar_id = '$seminar_id' AND status='awaiting'");
+$db->next_record();
+$num_waitlist = $db->f(0);
+
+$num_all = $admin_admission_data["admission_turnout"];
+
+if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission_turnout"]){
+	foreach ($admin_admission_data["studg"] as $key => $val){
+		if ($val["ratio"]) {
+			$num_stg[$key] = round($admin_admission_data["admission_turnout"] * $val["ratio"] / 100);
+			$num_all -= $num_stg[$key];
+		}
+	}
+	if ($num_all < 0) $num_all = 0;
+}
 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
@@ -789,10 +831,10 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 								</td>
 								<td class="<? echo $cssSw->getClass() ?>" valign="bottom"  colspan=2 nowrap width="75%">
 								<? if (($admin_admission_data["admission_type_org"]) && (!$perm->have_perm("admin"))) {
-									printf ("&nbsp; &nbsp; <font size=-1>%s %%</font>", $admin_admission_data["all_ratio"]);
+									printf ("&nbsp; &nbsp; <font size=-1>%s %% (%s Teilnehmer)</font>", $admin_admission_data["all_ratio"], $num_all);
 								} else {
 									printf ("<input type=\"HIDDEN\" name=\"all_ratio_old\" value=\"%s\" />", ($admin_admission_data["studg"]) ? $admin_admission_data["all_ratio"] : "100");
-									printf ("<input type=\"TEXT\" name=\"all_ratio\" size=5 maxlength=5 value=\"%s\" /> <font size=-1> %%</font>", ($admin_admission_data["studg"]) ? $admin_admission_data["all_ratio"] : "100");
+									printf ("<input type=\"TEXT\" name=\"all_ratio\" size=5 maxlength=5 value=\"%s\" /> <font size=-1> %% (%s Teilnehmer)</font>", ($admin_admission_data["studg"]) ? $admin_admission_data["all_ratio"] : "100", $num_all);
 									} ?>
 								</td>
 							</tr>
@@ -812,10 +854,10 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 								<input type="HIDDEN" name="studg_id[]" value="<? echo $key ?>" />
 								<input type="HIDDEN" name="studg_name[]" value="<? echo $val["name"] ?>" />
 								<? if (($admin_admission_data["admission_type_org"]) && (!$perm->have_perm("admin"))) {
-									printf ("&nbsp; &nbsp; <font size=-1>%s %%</font>", $val["ratio"]);
+									printf ("&nbsp; &nbsp; <font size=-1>%s %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
 								} else {
 									printf ("<input type=\"HIDDEN\" name=\"studg_ratio_old[]\" value=\"%s\" />", $val["ratio"]);
-									printf ("<input type=\"TEXT\" name=\"studg_ratio[]\" size=5 maxlength=5 value=\"%s\" /><font size=-1> %%</font>", $val["ratio"]);
+									printf ("<input type=\"TEXT\" name=\"studg_ratio[]\" size=5 maxlength=5 value=\"%s\" /><font size=-1> %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
 									printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", $PHP_SELF, $key, $val["name"]);
 								}
 								?>
@@ -893,6 +935,25 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					<? } ?>
 					</td>
 			</tr>
+			<?if (get_config('ADMISSION_ALLOW_DISABLE_WAITLIST')) {?>
+			<tr <? $cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" width="4%">
+					&nbsp;
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
+					<font size=-1><b><?=_("Warteliste:")?> </b></font><br />
+					<font size=-1><?=_("Bitte aktivieren Sie diese Einstellung, wenn eine Warteliste erstellt werden soll falls die Anmeldungen die maximale Teilnehmeranzahl überschreiten:")?></font><br />
+					<?if ($num_waitlist && !$admin_admission_data["admission_disable_waitlist"]){
+						?>
+						<font size=-1 color="red"><b><?=_("Achtung:")?></b></font>&nbsp;
+						<font size=-1>
+						<?=sprintf(_("Es existiert eine Warteliste mit %s Einträgen. Wenn Sie die Warteliste ausschalten, werden diese Einträge gelöscht."), $num_waitlist)?>
+						</font><br /><br />
+					<?}?>
+					<font size=-1><input type="CHECKBOX" name="admission_waitlist" value="1" <? if (!$admin_admission_data["admission_disable_waitlist"]) echo "checked"; ?> /><?=_("Warteliste aktivieren")?></font>
+				</td>
+			</tr>
+			<?}?>
 			<tr <? $cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" width="4%">
 					&nbsp;
@@ -916,7 +977,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			<td class="blank" colspan=3>&nbsp;
 			</td>
 		</tr>
-		
+		<?
+page_close();
+?>
 	</table>
 </td>
 </tr>

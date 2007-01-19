@@ -443,7 +443,7 @@ function check_admission ($send_message=TRUE) {
 	$messaging=new messaging;
 
 	//Daten holen / Abfrage ob ueberhaupt begrenzt
-	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time FROM seminare WHERE admission_endtime <= '".time()."' AND admission_type > 0 AND (admission_selection_take_place = '0' OR admission_selection_take_place IS NULL) AND visible='1'"); // OK_VISIBLE
+	$db->query("SELECT Seminar_id, Name, admission_endtime, admission_turnout, admission_type, start_time, admission_disable_waitlist FROM seminare WHERE admission_endtime <= '".time()."' AND admission_type > 0 AND (admission_selection_take_place = '0' OR admission_selection_take_place IS NULL) AND visible='1'"); // OK_VISIBLE
 	while ($db->next_record()) {
 
 		$db2->query("SELECT Name,admission_prelim FROM seminare WHERE Seminar_id='".$db->f("Seminar_id")."'");
@@ -518,14 +518,20 @@ function check_admission ($send_message=TRUE) {
 		//evtl. verbliebene Plaetze auffuellen
 		normal_update_admission($db->f("Seminar_id"), $send_message);
 
-		//User benachrichten (nur bei Losverfahren, da Warteliste erst waehrend des Losens generiert wurde).
+		//User benachrichten (nur bei Losverfahren, da Warteliste erst waehrend des Losens generiert wurde)
+		//verbleibende Warteliste löschen, wenn keine Warteliste vorgesehen
 		if (($send_message) && ($db->f("admission_type") == '1')) {
-			$db2->query("SELECT admission_seminar_user.user_id, username, position FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("Seminar_id")."' ORDER BY position ");
+			$db2->query("SELECT admission_seminar_user.user_id, username, position FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("Seminar_id")."' AND status != 'accepted' ORDER BY position ");
 			while ($db2->next_record()) {
 				setTempLanguage($db2->f("user_id"));
+				if (!$db->f('admission_disable_waitlist')){
 				$message = sprintf(_("Sie wurden leider im Losverfahren der Veranstaltung **%s** __nicht__ ausgelost. Sie wurden jedoch auf Position %s auf die Warteliste gesetzt. Das System wird Sie automatisch eintragen und benachrichtigen, sobald ein Platz für Sie frei wird."), $db->f("Name"), $db2->f("position"));
-				restoreLanguage();
+				} else {
+					$message = sprintf(_("Sie wurden leider im Losverfahren der Veranstaltung **%s** __nicht__ ausgelost. Für diese Veranstaltung wurde keine Warteliste vorgesehen."), $db->f("Name"));
+					$db3->query("DELETE FROM admission_seminar_user WHERE user_id = '".$db2->f("user_id")."' AND seminar_id = '".$db->f("Seminar_id")."' ");
+				}
 				$messaging->insert_message(addslashes($message), $db2->f("username"), "____%system%____", FALSE, FALSE, "1");
+				restoreLanguage();
 			}
 		}
 	}
