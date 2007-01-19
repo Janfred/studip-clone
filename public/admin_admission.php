@@ -950,6 +950,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 						<?=sprintf(_("Es existiert eine Warteliste mit %s Einträgen. Wenn Sie die Warteliste ausschalten, werden diese Einträge gelöscht."), $num_waitlist)?>
 						</font><br /><br />
 					<?}?>
+					<input type="hidden" name="admission_waitlist" value="0">
 					<font size=-1><input type="CHECKBOX" name="admission_waitlist" value="1" <? if (!$admin_admission_data["admission_disable_waitlist"]) echo "checked"; ?> /><?=_("Warteliste aktivieren")?></font>
 				</td>
 			</tr>
