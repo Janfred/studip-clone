@@ -20,9 +20,9 @@ $Id: admin_extern.inc.php 6924 2006-11-09 14:32:56Z mlunzena $
 */
 
 
-require_once("lib/functions.php");
-require_once("msg.inc.php");
-require_once("datei.inc.php");
+require_once('lib/functions.php');
+require_once('lib/msg.inc.php');
+require_once('lib/datei.inc.php');
 
 function show_posts_guestbook($user_id,$range_id) {
 	global $PHP_SELF;

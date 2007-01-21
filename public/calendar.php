@@ -70,9 +70,9 @@ switch ($cmd) {
 	
 if ($CALENDAR_ENABLE)
 	//Kalenderfrontend einbinden
-	include($RELATIVE_PATH_CALENDAR."/calendar.inc.php");
+	include($RELATIVE_PATH_CALENDAR.'/calendar.inc.php');
 else {
-	require_once ("msg.inc.php");
+	require_once ('lib/msg.inc.php');
 	// Start of Output
 	include ('include/html_head.inc.php'); // Output of html head
 	include ('include/header.php');   // Output of Stud.IP head

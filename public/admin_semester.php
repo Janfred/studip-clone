@@ -18,12 +18,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("root");
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
-require_once("lib/classes/SemesterData.class.php");
-require_once("lib/classes/HolidayData.class.php");
+require_once('lib/classes/SemesterData.class.php');
+require_once('lib/classes/HolidayData.class.php');
 // -- here you have to put initialisations for the current page
 
 // Set this to something, just something different...
@@ -37,16 +37,16 @@ require_once("lib/classes/HolidayData.class.php");
 	include ('include/header.php');   // Output of Stud.IP head
 	include ('include/links_admin.inc.php');  //Linkleiste fuer admins
 
-	require_once ("msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
-	require_once ("visual.inc.php");
+	require_once ('lib/msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
+	require_once ('lib/visual.inc.php');
 	
 	$cssSw=new cssClassSwitcher;
 ?>
-<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=5 width=100%>
-<tr valign=top align=middle>
-	<td class="topic"colspan=2 align="left"><b>&nbsp;<?=_("Verwaltung der Semester und Ferien")?></b></td>
+<table border="0" bgcolor="#000000" align="center" cellspacing="0" cellpadding="5" width="100%">
+<tr valign="top" align="middle">
+	<td class="topic" colspan="2" align="left"><b>&nbsp;<?=_("Verwaltung der Semester und Ferien")?></b></td>
 </tr>
-<tr><td class="blank" colspan=2>&nbsp;</td></tr>
+<tr><td class="blank" colspan="2">&nbsp;</td></tr>
 
 
 <?php

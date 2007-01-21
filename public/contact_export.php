@@ -35,8 +35,8 @@ page_open (array ("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 	"perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check ("autor");
 include ("seminar_open.php");
-require_once ("statusgruppe.inc.php");
-require_once ("user_visible.inc.php");
+require_once ('lib/statusgruppe.inc.php');
+require_once ('lib/user_visible.inc.php');
 /* **END*of*initialise*Stud.IP-Session*********************************** */
 
 /* ************************************************************************** *

@@ -34,11 +34,11 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 include ("seminar_open.php");             // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once("msg.inc.php");
-require_once("visual.inc.php");
-require_once("config.inc.php");
+require_once('lib/msg.inc.php');
+require_once('lib/visual.inc.php');
+require_once('config.inc.php');
 require_once 'lib/functions.php';
-require_once("lib/evaluation/evaluation.config.php");
+require_once('lib/evaluation/evaluation.config.php');
 require_once(EVAL_FILE_EVAL);
 require_once(EVAL_FILE_OBJECTDB);
 

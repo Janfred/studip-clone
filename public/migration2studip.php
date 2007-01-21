@@ -122,15 +122,15 @@ function studip_auth_user()
 	$auth_mode = false;
 }
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("user");
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once ("config.inc.php");
-include_once ("visual.inc.php");
+require_once ('config.inc.php');
+include_once ('lib/visual.inc.php');
 include_once 'lib/functions.php';
-include_once ("msg.inc.php");
+include_once ('lib/msg.inc.php');
 
 if ($ILIAS_CONNECT_ENABLE)
 {

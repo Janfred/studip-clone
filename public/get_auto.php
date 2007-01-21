@@ -3,7 +3,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check("autor");
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
-require_once ("visual.inc.php");
+require_once ('lib/visual.inc.php');
 
 if (!$_POST["pass"])
    {

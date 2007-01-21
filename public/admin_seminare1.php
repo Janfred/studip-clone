@@ -20,19 +20,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // $Id$
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $auth->login_if($auth->auth["uid"] == "nobody");
 $perm->check("tutor");
 
 $hash_secret = "dslkjjhetbjs";
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
-require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
-require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
+require_once('lib/dates.inc.php'); // Funktionen zum Loeschen von Terminen
+require_once('lib/datei.inc.php'); // Funktionen zum Loeschen von Dokumenten
 require_once 'lib/functions.php';
-require_once("visual.inc.php");
+require_once('lib/visual.inc.php');
 require_once('lib/admission.inc.php');
-require_once("statusgruppe.inc.php");	//Funktionen der Statusgruppen
+require_once('lib/statusgruppe.inc.php');	//Funktionen der Statusgruppen
 require_once('lib/classes/StudipSemTreeSearch.class.php');
 require_once('lib/classes/DataFields.class.php');
 

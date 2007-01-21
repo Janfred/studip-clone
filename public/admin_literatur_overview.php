@@ -7,8 +7,8 @@ require_once ('lib/dbviews/literatur.view.php');
 require_once ('lib/classes/StudipLitCatElement.class.php');
 require_once ('lib/classes/StudipLitSearch.class.php');
 
-require_once ("visual.inc.php");
-require_once ("config.inc.php");
+require_once ('lib/visual.inc.php');
+require_once ('config.inc.php');
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
 

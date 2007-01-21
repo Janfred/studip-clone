@@ -29,12 +29,12 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head
 
-require_once ("contact.inc.php");
-require_once ("config.inc.php");
-require_once ("visual.inc.php");
+require_once ('lib/contact.inc.php');
+require_once ('config.inc.php');
+require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
-require_once ("statusgruppe.inc.php");
-require_once ("user_visible.inc.php");
+require_once ('lib/statusgruppe.inc.php');
+require_once ('lib/user_visible.inc.php');
 #include ("calendar/calendar_links.inc.php");
 include('include/links_sms.inc.php');
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design

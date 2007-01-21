@@ -156,16 +156,16 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once ("config.inc.php");			// Klarnamen fuer den Veranstaltungsstatus
-require_once ("visual.inc.php");			// htmlReady fuer die Veranstaltungsnamen
-require_once ("dates.inc.php");			// Semester-Namen fuer Admins
+require_once ('config.inc.php');			// Klarnamen fuer den Veranstaltungsstatus
+require_once ('lib/visual.inc.php');			// htmlReady fuer die Veranstaltungsnamen
+require_once ('lib/dates.inc.php');			// Semester-Namen fuer Admins
 require_once ('lib/admission.inc.php');		// Funktionen der Teilnehmerbegrenzung
-require_once ("messaging.inc.php");
+require_once ('lib/messaging.inc.php');
 require_once ('lib/classes/Modules.class.php');	// modul-config class
 require_once ('lib/classes/ModulesNotification.class.php');
-require_once ("statusgruppe.inc.php");		// Funktionen für Statusgruppen
-require_once ("object.inc.php");
-require_once ("meine_seminare_func.inc.php");
+require_once ('lib/statusgruppe.inc.php');		// Funktionen für Statusgruppen
+require_once ('lib/object.inc.php');
+require_once ('lib/meine_seminare_func.inc.php');
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);

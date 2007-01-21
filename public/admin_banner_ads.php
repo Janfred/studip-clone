@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("root");
 
 // keep data copies for search etc.
@@ -36,11 +36,11 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-require_once ("msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
-require_once ("visual.inc.php");
-require_once ("config.inc.php");
-require_once("lib/classes/Table.class.php");
-require_once("lib/classes/ZebraTable.class.php");
+require_once ('lib/msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
+require_once ('lib/visual.inc.php');
+require_once ('config.inc.php');
+require_once('lib/classes/Table.class.php');
+require_once('lib/classes/ZebraTable.class.php');
 
 // Start of Output
 include ('include/html_head.inc.php'); // Output of html head

@@ -28,17 +28,17 @@ $auth->login_if(!$logout && ($auth->auth["uid"] == "nobody"));
 if ($usr_name)  $username=$usr_name; //wenn wir von den externen Seiten kommen, nehmen wir den Usernamen aus usr_name, falls dieser gesetzt ist, um die Anmeldeprozedur nicht zu verwirren....
 
 require_once('config.inc.php');
-require_once('my_rss_feed.inc.php');
-require_once('kategorien.inc.php');
-require_once('msg.inc.php');
-require_once('messaging.inc.php');
-require_once('visual.inc.php');
+require_once('lib/my_rss_feed.inc.php');
+require_once('lib/kategorien.inc.php');
+require_once('lib/msg.inc.php');
+require_once('lib/messaging.inc.php');
+require_once('lib/visual.inc.php');
 require_once 'lib/functions.php';
-require_once('statusgruppe.inc.php');
-require_once('language.inc.php');
+require_once('lib/statusgruppe.inc.php');
+require_once('lib/language.inc.php');
 require_once('lib/classes/DataFields.class.php');
 require_once('lib/classes/UserConfig.class.php');
-require_once('log_events.inc.php');
+require_once('lib/log_events.inc.php');
 
 include ('seminar_open.php'); // initialise Stud.IP-Session
 
@@ -1600,7 +1600,7 @@ if ($view=="rss") {
 
 
 if($view == "allgemein") {
-	require_once("mystudip.inc.php");
+	require_once('lib/mystudip.inc.php');
 	change_general_view();
 }
 

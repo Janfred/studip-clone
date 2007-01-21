@@ -30,8 +30,8 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head
 
-require_once("config.inc.php");
-require_once("visual.inc.php");
+require_once('config.inc.php');
+require_once('lib/visual.inc.php');
 require_once 'include/reiter.inc.php';
 
 function write_toplist($rubrik,$query) {

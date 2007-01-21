@@ -22,12 +22,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-require_once('datei.inc.php');
+require_once('lib/datei.inc.php');
 include ('seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once('msg.inc.php');
-require_once('visual.inc.php');
+require_once('lib/msg.inc.php');
+require_once('lib/visual.inc.php');
 require_once('config.inc.php');
 require_once 'lib/functions.php';
 require_once('lib/classes/StudipDocumentTree.class.php');

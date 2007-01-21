@@ -20,15 +20,15 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("autor");
 
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once ("config.inc.php");
-include_once ("visual.inc.php");
-require_once ("messaging.inc.php");
+require_once ('config.inc.php');
+include_once ('lib/visual.inc.php');
+require_once ('lib/messaging.inc.php');
 
 if (isset($do_open))
 	$print_open_search[$do_open] = true;

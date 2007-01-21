@@ -25,9 +25,9 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once("dates.inc.php"); //Funktionen zur Anzeige der Terminstruktur
-require_once("config.inc.php");
-require_once("visual.inc.php");
+require_once('lib/dates.inc.php'); //Funktionen zur Anzeige der Terminstruktur
+require_once('config.inc.php');
+require_once('lib/visual.inc.php');
 require_once 'lib/functions.php';
 
 if ($GLOBALS['CHAT_ENABLE']){
@@ -95,7 +95,7 @@ checkObject();
 
 include 'include/links_openobject.inc.php';
 include "show_news.php";
-include "show_dates.inc.php";
+include 'lib/show_dates.inc.php';
 
 $sess->register("smain_data");
 //Auf und Zuklappen Termine

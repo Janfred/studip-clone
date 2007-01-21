@@ -79,11 +79,11 @@ if ($auth->auth["jscript"]) { // JS an
 }
 
 require_once 'lib/functions.php';
-require_once ("visual.inc.php");
-require_once ("forum.inc.php");
-require_once ("object.inc.php");
-require_once ("msg.inc.php");
-require_once ("dates.inc.php");
+require_once ('lib/visual.inc.php');
+require_once ('lib/forum.inc.php');
+require_once ('lib/object.inc.php');
+require_once ('lib/msg.inc.php');
+require_once ('lib/dates.inc.php');
 
 checkObject();
 checkObjectModule("forum");

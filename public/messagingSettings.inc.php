@@ -29,14 +29,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once ("language.inc.php");
-require_once ("config.inc.php");
+require_once ('lib/language.inc.php');
+require_once ('config.inc.php');
 require_once 'lib/functions.php';
-require_once ("visual.inc.php");
-require_once ("user_visible.inc.php");
-require_once ("messaging.inc.php");
-require_once ("contact.inc.php");
-require_once ("lib/classes/UserConfig.class.php");
+require_once ('lib/visual.inc.php');
+require_once ('lib/user_visible.inc.php');
+require_once ('lib/messaging.inc.php');
+require_once ('lib/contact.inc.php');
+require_once ('lib/classes/UserConfig.class.php');
 
 // access to user's config setting
 $user_cfg=new UserConfig();

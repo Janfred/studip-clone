@@ -36,8 +36,8 @@
 
 $perm->check("tutor");
 
-require_once ("$PATH_EXPORT/export_xslt_vars.inc.php");   // Liste der XSLT-Skripts
-require_once ("dates.inc.php");   // Datumsfunktionen
+require_once ($PATH_EXPORT.'/export_xslt_vars.inc.php');   // Liste der XSLT-Skripts
+require_once ('lib/dates.inc.php');   // Datumsfunktionen
 
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();

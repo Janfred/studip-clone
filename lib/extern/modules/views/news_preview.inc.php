@@ -1,5 +1,5 @@
 <?
-require_once("visual.inc.php");
+require_once('lib/visual.inc.php');
 
 $error_message = "";
 

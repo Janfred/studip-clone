@@ -18,14 +18,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 */
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("admin");
 
 include ("seminar_open.php"); 		// initialise Stud.IP-Session
-require_once("msg.inc.php"); 		// Funktionen fuer Nachrichtenmeldungen
-require_once("config.inc.php"); 		// Wir brauchen den Namen der Uni
-require_once("visual.inc.php");
-require_once("user_visible.inc.php");
+require_once('lib/msg.inc.php'); 		// Funktionen fuer Nachrichtenmeldungen
+require_once('config.inc.php'); 		// Wir brauchen den Namen der Uni
+require_once('lib/visual.inc.php');
+require_once('lib/user_visible.inc.php');
 require_once('lib/classes/UserManagement.class.php');
 
 $cssSw = new cssClassSwitcher;

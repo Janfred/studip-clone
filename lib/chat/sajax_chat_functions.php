@@ -43,10 +43,10 @@ if (!function_exists("ob_get_clean")) {
 if (!is_object($chatServer)){
 	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 	$perm->check("user");
-	require_once 'visual.inc.php';
+	require_once 'lib/visual.inc.php';
 	require_once 'lib/functions.php';
-	require_once 'messaging.inc.php';
-	require_once $RELATIVE_PATH_CHAT."/ChatServer.class.php";
+	require_once 'lib/messaging.inc.php';
+	require_once $RELATIVE_PATH_CHAT.'/ChatServer.class.php';
 
 	include ("seminar_open.php"); // initialise Stud.IP-Session
 

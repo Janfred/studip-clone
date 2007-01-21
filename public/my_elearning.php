@@ -25,8 +25,8 @@ $perm->check("autor");
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once ("config.inc.php");
-require_once ("visual.inc.php");
+require_once ('config.inc.php');
+require_once ('lib/visual.inc.php');
 
 include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head

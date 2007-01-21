@@ -34,10 +34,10 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once ("messaging.inc.php");
+require_once ('lib/messaging.inc.php');
 require_once 'lib/functions.php';
-require_once ("language.inc.php");
-require_once ("dates.inc.php");
+require_once ('lib/language.inc.php');
+require_once ('lib/dates.inc.php');
 //set handling for script execution
 ignore_user_abort(TRUE);
 if( !ini_get('safe_mode')) set_time_limit(0);

@@ -34,18 +34,18 @@
 // +---------------------------------------------------------------------------+
 
 require_once 'lib/functions.php';
-require_once "language.inc.php";
-require_once "config.inc.php"; 		// We need the uni name for emails
+require_once 'lib/language.inc.php';
+require_once 'config.inc.php'; 		// We need the uni name for emails
 require_once 'lib/admission.inc.php';	// remove user from waiting lists
-require_once "datei.inc.php";	// remove documents of user
-require_once "statusgruppe.inc.php";	// remove user from statusgroups
-require_once "dates.inc.php";	// remove appointments of user
-require_once "messaging.inc.php";	// remove messages send or recieved by user
-require_once "contact.inc.php";	// remove user from adressbooks
+require_once 'lib/datei.inc.php';	// remove documents of user
+require_once 'lib/statusgruppe.inc.php';	// remove user from statusgroups
+require_once 'lib/dates.inc.php';	// remove appointments of user
+require_once 'lib/messaging.inc.php';	// remove messages send or recieved by user
+require_once 'lib/contact.inc.php';	// remove user from adressbooks
 require_once 'lib/classes/DataFields.class.php';	// remove extra data of user
 require_once 'lib/classes/auth_plugins/StudipAuthAbstract.class.php';
 require_once 'lib/classes/StudipNews.class.php';
-require_once "object.inc.php";
+require_once 'lib/object.inc.php';
 if ($GLOBALS['RESOURCES_ENABLE']) {
 	include_once ($GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/DeleteResourcesUser.class.php");
 }
@@ -57,7 +57,7 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 	include_once ($GLOBALS['RELATIVE_PATH_CALENDAR']
 	. "/lib/driver/{$GLOBALS['CALENDAR_DRIVER']}/CalendarDriver.class.php");
 }
-require_once "log_events.inc.php";	// Event logging
+require_once 'lib/log_events.inc.php';	// Event logging
 
 
 class UserManagement {

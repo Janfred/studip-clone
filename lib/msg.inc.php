@@ -24,7 +24,7 @@ ACHTUNG: Die Funktion wird innerhalb einer Tabelle aufgerufen, daher
 wird eine eigene Tabellenzelle geoeffnet
 */
 
-
+// $Id$
 
 //Displays Errormessages (kritischer Abbruch, Symbol "X")
 function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false) {

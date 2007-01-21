@@ -45,10 +45,10 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 }
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
-require_once ("config.inc.php");
+require_once ('config.inc.php');
 require_once 'lib/functions.php';
-require_once ("visual.inc.php");
-include_once("lib/classes/RSSFeed.class.php");
+require_once ('lib/visual.inc.php');
+include_once('lib/classes/RSSFeed.class.php');
 // -- hier muessen Seiten-Initialisierungen passieren --
 
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
@@ -277,7 +277,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		echo "<br />\n";
 	// display dates
 	if (!$perm->have_perm('admin')) { // only dozent, tutor, autor, user
-		include('show_dates.inc.php');
+		include('lib/show_dates.inc.php');
 		$start = time();
 		$end = $start + 60 * 60 * 24 * 7;
 		if ($GLOBALS['CALENDAR_ENABLE']) {

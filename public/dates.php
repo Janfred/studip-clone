@@ -13,10 +13,10 @@
 * @package		studip_core
 */
 
-//object.inc.php - Verwaltung von Objektoperationen
+
 //Copyright (C) 2004 André Noack <noack@data-quest.de>, Cornelis Kater <kater@data-quest.de>, Stefan Suchi <suchi@data-quest.de>, data-quest GmbH <info@data-quest.de>
 // This file is part of Stud.IP
-// object.inc.php
+// dates.inc.php
 // Script zur Anzeige des Ablaufplans einer Veranstaltung
 // Copyright (C) 2004 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -46,9 +46,9 @@ $HELP_KEYWORD="Basis.InVeranstaltungAblauf";
 include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head
 
-require_once("show_dates.inc.php");
-require_once("config.inc.php");
-require_once("visual.inc.php");
+require_once('lib/show_dates.inc.php');
+require_once('config.inc.php');
+require_once('lib/visual.inc.php');
 
 checkObject();
 checkObjectModule("schedule");

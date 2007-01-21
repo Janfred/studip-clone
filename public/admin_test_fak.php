@@ -70,12 +70,12 @@ if (!$perm->have_studip_perm("admin",$_test_institut_id)){
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once "dates.inc.php";
-require_once "lib/classes/DbSnapshot.class.php";
-require_once "forum.inc.php";
+require_once 'lib/dates.inc.php';
+require_once 'lib/classes/DbSnapshot.class.php';
+require_once 'lib/forum.inc.php';
 require_once('lib/admission.inc.php');	 //Enthaelt Funktionen zum Updaten der Wartelisten
-require_once("statusgruppe.inc.php");	 //Enthaelt Funktionen fuer Statusgruppen
-require_once("contact.inc.php");	 //Enthaelt Funktionen fuer Adressbuchverwaltung
+require_once('lib/statusgruppe.inc.php');	 //Enthaelt Funktionen fuer Statusgruppen
+require_once('lib/contact.inc.php');	 //Enthaelt Funktionen fuer Adressbuchverwaltung
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");

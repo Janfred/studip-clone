@@ -1,11 +1,12 @@
 <?
-require_once 'forum.inc.php';
 // wikiMarkups are used by the wikiDirective function
 // after all other conversions,
 // wikiMarkup patterns are replaced
 // args to wikiMarkup are passed to preg_replace
 //
 // $Id$
+
+require_once 'lib/forum.inc.php';
 
 wikiMarkup('/\\(:stepform:\\)/e',"wiki_stepform('step')", 'dozent');
 wikiMarkup('/\\(:steplist\\s*(.*?):\\)/e',"wiki_steplist('step',array('q'=>'$1'))");

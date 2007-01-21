@@ -34,8 +34,8 @@ include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head
 include ('include/links_admin.inc.php');  //Linkleiste fuer admins
 
-require_once("config.inc.php"); //Grunddaten laden
-require_once("visual.inc.php"); //htmlReady
+require_once('config.inc.php'); //Grunddaten laden
+require_once('lib/visual.inc.php'); //htmlReady
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;

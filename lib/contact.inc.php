@@ -13,7 +13,7 @@
 */
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// statusgruppe.inc.php
+// contact.inc.php
 // Copyright (c) 2002 Ralf Stockmann <rstockm@gwdg.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or

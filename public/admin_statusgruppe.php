@@ -31,11 +31,11 @@ include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head
 include ('include/links_admin.inc.php');
 
-require_once ("config.inc.php");
-require_once ("visual.inc.php");
+require_once ('config.inc.php');
+require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/admission.inc.php');
-require_once ("statusgruppe.inc.php");
+require_once ('lib/statusgruppe.inc.php');
 
 //get ID, if a object is open
 if ($SessSemName[1])

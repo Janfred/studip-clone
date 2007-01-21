@@ -25,12 +25,12 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once "dates.inc.php"; //Funktionen zur Anzeige der Terminstruktur
-require_once "datei.inc.php";
-require_once "config.inc.php";
-require_once "visual.inc.php";
+require_once 'lib/dates.inc.php'; //Funktionen zur Anzeige der Terminstruktur
+require_once 'lib/datei.inc.php';
+require_once 'config.inc.php';
+require_once 'lib/visual.inc.php';
 require_once 'lib/functions.php';
-require_once "lib/classes/DataFields.class.php";
+require_once 'lib/classes/DataFields.class.php';
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";

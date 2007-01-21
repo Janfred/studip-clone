@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once("msg.inc.php");
+require_once('lib/msg.inc.php');
 
 $my_auth = ($GLOBALS['ENABLE_SELF_REGISTRATION'] ? "Seminar_Register_Auth" : "Seminar_Default_Auth");
 

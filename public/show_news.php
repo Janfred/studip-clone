@@ -20,12 +20,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //$Id$
 
 require_once 'lib/functions.php';
-require_once ("visual.inc.php");
-require_once ("language.inc.php");
-require_once ("object.inc.php");
-require_once ("lib/classes/StudipNews.class.php");
-require_once ("lib/classes/StudipComments.class.php");
-require_once ("lib/classes/Seminar.class.php");
+require_once ('lib/visual.inc.php');
+require_once ('lib/language.inc.php');
+require_once ('lib/object.inc.php');
+require_once ('lib/classes/StudipNews.class.php');
+require_once ('lib/classes/StudipComments.class.php');
+require_once ('lib/classes/Seminar.class.php');
 
 function process_news_commands(&$cmd_data) {
 	global $nopen, $nclose, $comopen, $comnew, $comsubmit, $comdel, $comdelnews;

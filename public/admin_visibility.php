@@ -18,15 +18,15 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
-require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
+require_once('lib/dates.inc.php'); // Funktionen zum Loeschen von Terminen
+require_once('lib/datei.inc.php'); // Funktionen zum Loeschen von Dokumenten
 require_once 'lib/functions.php';
-require_once("visual.inc.php");
-require_once("log_events.inc.php");
-require_once("lib/classes/Table.class.php");
-require_once("lib/classes/ZebraTable.class.php");
+require_once('lib/visual.inc.php');
+require_once('lib/log_events.inc.php');
+require_once('lib/classes/Table.class.php');
+require_once('lib/classes/ZebraTable.class.php');
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $auth->login_if($auth->auth["uid"] == "nobody");
 
 $needed_perm = (get_config('ALLOW_DOZENT_VISIBILITY') ? 'dozent' : 'admin');

@@ -37,7 +37,7 @@
 
 if (isset($SessSemName) && $SessSemName[0] != "") {
 
-require_once ("visual.inc.php");
+require_once ('lib/visual.inc.php');
 require_once ('include/reiter.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/classes/Modules.class.php');

@@ -45,7 +45,7 @@ global $homepage_cache_own, $i_page, $i_query, $_language, $_language_path,
 
 
 if ($SHOW_TERMS_ON_FIRST_LOGIN){
-	require_once ("terms.inc.php");
+	require_once ('lib/terms.inc.php');
 	check_terms($user->id, $_language_path);
 }
 
@@ -54,7 +54,7 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 }
 
 if ($USER_VISIBILITY_CHECK) {
-	require_once("user_visible.inc.php");
+	require_once('lib/user_visible.inc.php');
 	first_decision($user->id);
 }
 
@@ -63,9 +63,9 @@ ob_start();
 if (!$perm->have_perm("user"))
 	$my_messaging_settings["active_time"]=5;
 
-require_once ("visual.inc.php");
+require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
-require_once ("sms_functions.inc.php");
+require_once ('lib/sms_functions.inc.php');
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";

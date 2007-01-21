@@ -30,10 +30,10 @@ $HELP_KEYWORD="Basis.InVeranstaltungDetails";
 include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');	 // Output of Stud.IP head
 
-require_once ("msg.inc.php");
-require_once ("dates.inc.php"); //Funktionen zum Anzeigen der Terminstruktur
-require_once ("config.inc.php");
-require_once ("visual.inc.php"); // wir brauchen htmlReady
+require_once ('lib/msg.inc.php');
+require_once ('lib/dates.inc.php'); //Funktionen zum Anzeigen der Terminstruktur
+require_once ('config.inc.php');
+require_once ('lib/visual.inc.php'); // wir brauchen htmlReady
 require_once ('lib/admission.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/classes/StudipSemTree.class.php');

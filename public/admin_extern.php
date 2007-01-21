@@ -50,7 +50,7 @@ if ($EXTERN_ENABLE) {
 	// Start of Output
 	include ('include/html_head.inc.php'); // Output of html head
 	include ('include/header.php');   // Output of Stud.IP head
-	require_once ("msg.inc.php");
+	require_once ('lib/msg.inc.php');
 	parse_window ("error§" . _("Die Verwaltung externer Seiten ist nicht eingebunden. Bitte aktivieren Sie diese in den Systemeinstellungen, oder wenden Sie sich an den oder die SystemadministratorIn."), "§",
 				_("Modul \"externe Seiten\" nicht eingebunden"));
 }

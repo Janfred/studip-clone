@@ -40,11 +40,11 @@ foreach($_never_globalize_request_params as $one_param){
 	}
 }
 
-require_once("language.inc.php");
-require_once("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
-require_once("lib/classes/Config.class.php");
-require_once("lib/classes/UserConfig.class.php");
-require_once("lib/classes/StudipNews.class.php");
+require_once('lib/language.inc.php');
+require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
+require_once('lib/classes/Config.class.php');
+require_once('lib/classes/UserConfig.class.php');
+require_once('lib/classes/StudipNews.class.php');
 
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";
@@ -382,7 +382,7 @@ class Seminar_Auth extends Auth {
 		}
 		if ($cfg->getValue('MAINTENANCE_MODE_ENABLE') && $actual_perms != 'root'){
 			$this->unauth();
-			include_once 'msg.inc.php';
+			include_once 'lib/msg.inc.php';
 			include_once 'include/html_head.inc.php';
 			parse_window('error§' . _("Das System befindet sich im Wartungsmodus. Zur Zeit ist kein Zugriff möglich."), '§', $GLOBALS['UNI_NAME'] . ' ' . _("Wartungsmodus"), '&nbsp;');
 			include_once 'include/html_end.inc.php';

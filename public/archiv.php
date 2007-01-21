@@ -33,12 +33,12 @@ elseif (($dump_id) || ($forum_dump_id) || ($wiki_dump_id))
 // Start of Output
 include('include/html_head.inc.php'); // Output of html head
 
-require_once('msg.inc.php');
+require_once('lib/msg.inc.php');
 require_once('config.inc.php');
-require_once('visual.inc.php');
+require_once('lib/visual.inc.php');
 require_once 'lib/functions.php';
-require_once('datei.inc.php');
-require_once('log_events.inc.php');
+require_once('lib/datei.inc.php');
+require_once('lib/log_events.inc.php');
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;

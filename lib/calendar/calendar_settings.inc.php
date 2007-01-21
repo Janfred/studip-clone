@@ -24,7 +24,7 @@ if ($i_page == "calendar.php") {
 	require('include/header.php');
 	require($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
 }
-require_once("visual.inc.php");
+require_once('lib/visual.inc.php');
 
 // store user-settings
 if($cmd_cal == 'chng_cal_settings'){

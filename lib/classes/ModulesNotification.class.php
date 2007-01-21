@@ -33,10 +33,10 @@
 // +---------------------------------------------------------------------------+
 
 require_once 'lib/classes/Modules.class.php';
-require_once 'meine_seminare_func.inc.php';
+require_once 'lib/meine_seminare_func.inc.php';
 
 if ($GLOBALS['ILIAS_CONNECT_ENABLE']) {
-	include_once ($RELATIVE_PATH_LEARNINGMODULES."/lernmodul_db_functions.inc.php"); 
+	include_once ($RELATIVE_PATH_LEARNINGMODULES.'/lernmodul_db_functions.inc.php'); 
 }
 
 class ModulesNotification extends Modules {

@@ -33,13 +33,13 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObject.class.php");
-require_once ($RELATIVE_PATH_RESOURCES."/lib/AssignObjectPerms.class.php");
-require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
-require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
-require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomGroups.class.php");
-require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
-require_once ("dates.inc.php");
+require_once ($RELATIVE_PATH_RESOURCES.'/lib/AssignObject.class.php');
+require_once ($RELATIVE_PATH_RESOURCES.'/lib/AssignObjectPerms.class.php');
+require_once ($RELATIVE_PATH_RESOURCES.'/lib/ResourceObject.class.php');
+require_once ($RELATIVE_PATH_RESOURCES.'/lib/ResourceObjectPerms.class.php');
+require_once ($RELATIVE_PATH_RESOURCES.'/lib/RoomGroups.class.php');
+require_once ($RELATIVE_PATH_RESOURCES.'/lib/RoomRequest.class.php');
+require_once ('lib/dates.inc.php');
 
 //a temp session-variable...
 $sess->register("new_assign_object");
@@ -1844,10 +1844,10 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 
 //inform the owner of the requests
 if ($snd_closed_request_sms) {
-	require_once ($GLOBALS["RELATIVE_PATH_RESOURCES"]."/lib/RoomRequest.class.php");
-	require_once ("lib/classes/Seminar.class.php");
-	require_once ("messaging.inc.php");
-	require_once ("language.inc.php");
+	require_once ($GLOBALS['RELATIVE_PATH_RESOURCES'].'/lib/RoomRequest.class.php');
+	require_once ('lib/classes/Seminar.class.php');
+	require_once ('lib/messaging.inc.php');
+	require_once ('lib/language.inc.php');
 	
 	
 	$messaging = new messaging;

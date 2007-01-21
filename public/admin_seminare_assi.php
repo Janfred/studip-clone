@@ -29,14 +29,14 @@ $hash_secret = "nirhtak";
 
 include ('seminar_open.php'); 	//hier werden die sessions initialisiert
 
-require_once ('msg.inc.php'); 		//Funktionen fuer Nachrichtenmeldungen
+require_once ('lib/msg.inc.php'); 		//Funktionen fuer Nachrichtenmeldungen
 require_once ('config.inc.php'); 		//wir brauchen die Seminar-Typen
 require_once ('config_tools_semester.inc.php');  //Bereitstellung weiterer Daten
 require_once 'lib/functions.php';		//noch mehr Stuff
-require_once ('forum.inc.php');		//damit wir Themen anlegen koennen
-require_once ('visual.inc.php');		//Aufbereitungsfunktionen
-require_once ('dates.inc.php');		//Terminfunktionen
-require_once ('log_events.inc.php');
+require_once ('lib/forum.inc.php');		//damit wir Themen anlegen koennen
+require_once ('lib/visual.inc.php');		//Aufbereitungsfunktionen
+require_once ('lib/dates.inc.php');		//Terminfunktionen
+require_once ('lib/log_events.inc.php');
 require_once ('lib/classes/StudipSemTreeSearch.class.php');
 require_once ('lib/classes/Modules.class.php');
 require_once ('lib/classes/DataFields.class.php');

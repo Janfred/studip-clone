@@ -38,7 +38,7 @@ $FOP_ENABLE = true;
 if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 	$perm->check("tutor");
 
-require_once('datei.inc.php');
+require_once('lib/datei.inc.php');
 
 
 /**

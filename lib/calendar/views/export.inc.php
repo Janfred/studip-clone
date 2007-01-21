@@ -39,12 +39,12 @@ define("PHPDOC_DUMMY",true);
 // +---------------------------------------------------------------------------+
 
 
-require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarImportFile.class.php");
-require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarParserICalendar.class.php");
-require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarExportFile.class.php");
-require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarWriterICalendar.class.php");
-require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarSynchronizer.class.php");
-require_once("msg.inc.php");
+require_once($RELATIVE_PATH_CALENDAR.'/lib/sync/CalendarImportFile.class.php');
+require_once($RELATIVE_PATH_CALENDAR.'/lib/sync/CalendarParserICalendar.class.php');
+require_once($RELATIVE_PATH_CALENDAR.'/lib/sync/CalendarExportFile.class.php');
+require_once($RELATIVE_PATH_CALENDAR.'/lib/sync/CalendarWriterICalendar.class.php');
+require_once($RELATIVE_PATH_CALENDAR.'/lib/sync/CalendarSynchronizer.class.php');
+require_once('lib/msg.inc.php');
 
 if ($experiod != 'period') {
 	unset($exstartmonth);

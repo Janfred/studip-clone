@@ -40,9 +40,9 @@ $perm->check("user");
 include ('seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once ('visual.inc.php');		// htmlReady fuer die Veranstaltungsnamen
-require_once ('dates.inc.php');		// Semester-Namen fuer Admins
-require_once ('datei.inc.php');
+require_once ('lib/visual.inc.php');		// htmlReady fuer die Veranstaltungsnamen
+require_once ('lib/dates.inc.php');		// Semester-Namen fuer Admins
+require_once ('lib/datei.inc.php');
 
 $cssSw = new cssClassSwitcher;							// Klasse für Zebra-Design
 $cssSw->enableHover();

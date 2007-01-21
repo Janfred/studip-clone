@@ -19,10 +19,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 */
 
-require_once("visual.inc.php");
-require_once("dates.inc.php");
-require_once("config.inc.php");
-require_once("msg.inc.php");
+require_once('lib/visual.inc.php');
+require_once('lib/dates.inc.php');
+require_once('config.inc.php');
+require_once('lib/msg.inc.php');
 
 if ($GLOBALS["CALENDAR_ENABLE"])
 	require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEventList.class.php");

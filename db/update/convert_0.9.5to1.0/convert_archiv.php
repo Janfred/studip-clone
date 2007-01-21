@@ -1,8 +1,8 @@
 <?php
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("root");
-include_once "functions.php";
-include_once "visual.inc.php";
+include_once 'lib/functions.php';
+include_once 'lib/visual.inc.php';
 set_time_limit(0);
 
 $db=new DB_Seminar;

@@ -1,6 +1,6 @@
 <?
-require_once("visual.inc.php");
-require_once("dates.inc.php");
+require_once('lib/visual.inc.php');
+require_once('lib/dates.inc.php');
 require_once 'lib/functions.php';
 
 global $SEM_CLASS, $SEM_TYPE;

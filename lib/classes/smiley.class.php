@@ -22,8 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 require_once('config.inc.php');
-require_once('msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
-require_once('visual.inc.php');
+require_once('lib/msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
+require_once('lib/visual.inc.php');
 require_once('lib/classes/Table.class.php');
 require_once('lib/classes/ZebraTable.class.php');
 

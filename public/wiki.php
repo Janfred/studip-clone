@@ -31,9 +31,9 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-require_once("wiki.inc.php");
+require_once('lib/wiki.inc.php');
 require_once 'lib/functions.php';
-require_once("visual.inc.php");
+require_once('lib/visual.inc.php');
 
 // -- Load Wiki Plugins -------------------
 // $WIKI_PLUGINS is defined in local.inc
@@ -42,7 +42,7 @@ $wiki_plugin_messages=array();
 
 if (is_array($WIKI_PLUGINS)) {
 	foreach ($WIKI_PLUGINS as $plugin) {
-		require_once($plugin);
+		require_once('lib/'.$plugin);
 	}
 }
 

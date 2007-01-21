@@ -19,14 +19,14 @@
 */
 // $Id$
 
-require_once("dates.inc.php"); // Funktionen zum Loeschen von Terminen
-require_once("datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
+require_once('lib/dates.inc.php'); // Funktionen zum Loeschen von Terminen
+require_once('lib/datei.inc.php'); // Funktionen zum Loeschen von Dokumenten
 require_once('lib/archiv.inc.php');
 require_once 'lib/functions.php';
 require_once("config_tools_semester.inc.php");
-require_once("visual.inc.php");
-require_once("statusgruppe.inc.php"); //Enthaelt Funktionen fuer Statusgruppen
-require_once("log_events.inc.php"); // Logging
+require_once('lib/visual.inc.php');
+require_once('lib/statusgruppe.inc.php'); //Enthaelt Funktionen fuer Statusgruppen
+require_once('lib/log_events.inc.php'); // Logging
 require_once('lib/classes/DataFields.class.php'); //Enthaelt Funktionen fuer Statusgruppen
 require_once('lib/classes/StudipLitList.class.php');
 require_once('lib/classes/StudipNews.class.php');

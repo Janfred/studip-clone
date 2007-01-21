@@ -37,14 +37,14 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 require_once 'lib/functions.php';
-require_once ("msg.inc.php");
-require_once ("visual.inc.php");
+require_once ('lib/msg.inc.php');
+require_once ('lib/visual.inc.php');
 require_once ("messagingSettings.inc.php");
-require_once ("messaging.inc.php");
-require_once ("statusgruppe.inc.php");
+require_once ('lib/messaging.inc.php');
+require_once ('lib/statusgruppe.inc.php');
 require_once ('include/reiter.inc.php');
-require_once ("sms_functions.inc.php");
-require_once ("user_visible.inc.php");
+require_once ('lib/sms_functions.inc.php');
+require_once ('lib/user_visible.inc.php');
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);

@@ -5,7 +5,7 @@
  * @version $Revision$
  * $Id$
  */
-require_once("visual.inc.php");
+require_once('lib/visual.inc.php');
 require_once("PluginAdministrationVisualization.class.php");
 require_once("PluginAdministration.class.php");
 

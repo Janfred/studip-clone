@@ -32,10 +32,10 @@ function pruefe_name(){
 <?
 }
 
-	require_once("forum.inc.php");
-	require_once("visual.inc.php");
+	require_once('lib/forum.inc.php');
+	require_once('lib/visual.inc.php');
 	require_once 'lib/functions.php';
-	require_once("msg.inc.php");
+	require_once('lib/msg.inc.php');
 
 	checkObject();
 

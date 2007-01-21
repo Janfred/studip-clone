@@ -21,10 +21,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 // $Id$
-require_once ("visual.inc.php");
-require_once ("lib/classes/StudipLitSearch.class.php");
-require_once ("lib/classes/StudipLitClipBoard.class.php");
-require_once ("lib/classes/StudipLitCatElement.class.php");
+require_once ('lib/visual.inc.php');
+require_once ('lib/classes/StudipLitSearch.class.php');
+require_once ('lib/classes/StudipLitClipBoard.class.php');
+require_once ('lib/classes/StudipLitCatElement.class.php');
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("autor");

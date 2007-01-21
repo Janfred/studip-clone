@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("admin");
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
@@ -31,19 +31,19 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 ## If is set 'cancel', we leave the adminstration form...
 if (isset($cancel)) unset ($i_view);
 
-require_once("msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
-require_once("visual.inc.php");
-require_once("config.inc.php");
-require_once("forum.inc.php");
-require_once("datei.inc.php");
-require_once("statusgruppe.inc.php");
+require_once('lib/msg.inc.php'); //Funktionen f&uuml;r Nachrichtenmeldungen
+require_once('lib/visual.inc.php');
+require_once('config.inc.php');
+require_once('lib/forum.inc.php');
+require_once('lib/datei.inc.php');
+require_once('lib/statusgruppe.inc.php');
 require_once 'lib/functions.php';
-require_once("lib/classes/Modules.class.php");
-require_once("lib/classes/DataFields.class.php");
-require_once("lib/classes/StudipLitList.class.php");
-require_once ("lib/classes/StudipLitSearch.class.php");
-require_once ("lib/classes/StudipNews.class.php");
-require_once("log_events.inc.php");
+require_once('lib/classes/Modules.class.php');
+require_once('lib/classes/DataFields.class.php');
+require_once('lib/classes/StudipLitList.class.php');
+require_once('lib/classes/StudipLitSearch.class.php');
+require_once('lib/classes/StudipNews.class.php');
+require_once('lib/log_events.inc.php');
 
 
 if ($RESOURCES_ENABLE) {

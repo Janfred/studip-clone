@@ -47,12 +47,12 @@ if (!$CHAT_ENABLE) {
 }
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
+require_once $RELATIVE_PATH_CHAT.'/chat_func_inc.php';
 //Studip includes
-require_once "msg.inc.php";
-require_once "messaging.inc.php";
+require_once 'lib/msg.inc.php';
+require_once 'lib/messaging.inc.php';
 require_once 'lib/functions.php';
-require_once "visual.inc.php";
+require_once 'lib/visual.inc.php';
 
 //korrekte chatid ?
 if (!$chatid || !in_array(get_object_type($chatid), array('user','sem','inst','fak','global'))) {

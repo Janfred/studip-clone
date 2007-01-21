@@ -41,8 +41,8 @@ ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 require_once ('config.inc.php');
-require_once ('datei.inc.php');
-require_once ('visual.inc.php');
+require_once ('lib/datei.inc.php');
+require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/classes/StudipLitList.class.php');
 

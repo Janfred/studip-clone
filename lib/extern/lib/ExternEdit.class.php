@@ -35,9 +35,9 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once("visual.inc.php");
+require_once('lib/visual.inc.php');
 require_once("cssClassSwitcher.inc.php");
-require_once("language.inc.php");
+require_once('lib/language.inc.php');
 
 class ExternEdit {
 

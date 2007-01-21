@@ -20,8 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-require_once("config.inc.php");
-require_once("msg.inc.php");
+require_once('config.inc.php');
+require_once('lib/msg.inc.php');
 require_once 'lib/functions.php';
 
 // wichtiger Teil aus seminar_open.php

@@ -30,7 +30,7 @@ $HELP_KEYWORD="Basis.AnmeldungRegistrierung";
 include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head
 
-require_once("msg.inc.php");
+require_once('lib/msg.inc.php');
 
 if (!$GLOBALS['ENABLE_SELF_REGISTRATION']){
 	parse_window ("error§" . _("In dieser Installation ist die M&ouml;glichkeit zur Registrierung ausgeschaltet."), "§",

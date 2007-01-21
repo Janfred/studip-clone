@@ -36,7 +36,7 @@ include ('include/html_head.inc.php'); // Output of html head
 
 echo "<body bgcolor=\"white\">";
 
-require_once("visual.inc.php");
+require_once('lib/visual.inc.php');
 require_once('lib/archiv.inc.php');
 
 if ($htmlversion)

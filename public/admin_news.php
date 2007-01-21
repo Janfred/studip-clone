@@ -22,10 +22,10 @@ page_open(array("sess"=> "Seminar_Session", "auth" =>"Seminar_Auth", "perm" => "
 $auth->login_if($auth->auth["uid"] == "nobody");
 $perm->check("autor");
 
-require_once "messaging.inc.php";
-require_once "visual.inc.php";
+require_once 'lib/messaging.inc.php';
+require_once 'lib/visual.inc.php';
 require_once 'lib/functions.php';
-require_once "lib/classes/AdminNewsController.class.php";
+require_once 'lib/classes/AdminNewsController.class.php';
 
 
 include ("seminar_open.php"); // initialise Stud.IP-Session

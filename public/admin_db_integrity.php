@@ -43,8 +43,8 @@ define("PHPDOC_DUMMY",true);
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $perm->check("root");
 
-require_once "msg.inc.php"; 
-require_once "visual.inc.php";
+require_once 'lib/msg.inc.php'; 
+require_once 'lib/visual.inc.php';
 
 include "seminar_open.php"; //hier werden die sessions initialisiert
 include 'include/html_head.inc.php';

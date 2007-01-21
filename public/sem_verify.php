@@ -127,7 +127,7 @@ function seminar_preliminary($seminar_id,$user_id=NULL) {
 // Start of Output
 include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head
-require_once ("dates.inc.php");
+require_once ('lib/dates.inc.php');
 ?>
 <script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 <script type="text/javascript" language="javascript">
@@ -140,7 +140,7 @@ require_once ("dates.inc.php");
 </script>
 
 <?php
-require_once "msg.inc.php";
+require_once 'lib/msg.inc.php';
 require_once 'lib/functions.php';
 require_once 'lib/admission.inc.php';
 

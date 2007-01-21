@@ -28,8 +28,8 @@ include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); // initialise Stud.IP-Sessio
 include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head
 
-require_once "$ABSOLUTE_PATH_STUDIP/config.inc.php";
-require_once "$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php";
+require_once 'config.inc.php';
+require_once 'lib/statusgruppe.inc.php';
 
 ?>
 <body>

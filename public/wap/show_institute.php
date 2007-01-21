@@ -54,7 +54,7 @@ include_once("wap_adm.inc.php");
 include_once("wap_txt.inc.php");
 include_once("wap_hlp.inc.php");
 include_once("wap_buttons.inc.php");
-require_once("statusgruppe.inc.php");
+require_once('lib/statusgruppe.inc.php');
 
 $session_user_id = wap_adm_start_card($session_id);
 

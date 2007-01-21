@@ -14,14 +14,14 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-require_once ("msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
-require_once ("visual.inc.php");
+require_once ('lib/msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
+require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
-require_once ("config.inc.php");
-require_once ("log_events.inc.php");
-require_once("lib/classes/Table.class.php");
-require_once("lib/classes/ZebraTable.class.php");
-require_once("$RELATIVE_PATH_RESOURCES/lib/ResourceObject.class.php");
+require_once ('config.inc.php');
+require_once ('lib/log_events.inc.php');
+require_once('lib/classes/Table.class.php');
+require_once('lib/classes/ZebraTable.class.php');
+require_once($RELATIVE_PATH_RESOURCES.'/lib/ResourceObject.class.php');
 
 // Start of Output
 include ('include/html_head.inc.php'); // Output of html head

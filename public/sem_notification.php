@@ -43,7 +43,7 @@ if (!$MAIL_NOTIFICATION_ENABLE) {
 	} else {
 		echo '<br><br>';
 	}
-	require_once ("msg.inc.php");
+	require_once ('lib/msg.inc.php');
 	$message = _("Die Benachrichtigungsfunktion ist nicht eingebunden. Die Benachrichtigungsfunktion wurde in den Systemeinstellungen nicht freigeschaltet. Wenden Sie sich bitte an die zust&auml;ndigen Administrierenden.");
 	parse_window ("error§$message", "§", _("Benachrichtigungsfunktion ist nicht eingebunden!"));
 	include ('include/html_end.inc.php');
@@ -64,10 +64,10 @@ if ($_REQUEST['view'] != 'notification') {
 
 // -- here you have to put initialisations for the current page
 require_once 'lib/functions.php';
-require_once("visual.inc.php");
+require_once('lib/visual.inc.php');
 require_once("cssClassSwitcher.inc.php");
-require_once("meine_seminare_func.inc.php");
-require_once("lib/classes/ModulesNotification.class.php");
+require_once('lib/meine_seminare_func.inc.php');
+require_once('lib/classes/ModulesNotification.class.php');
 
 
 function print_module_icons ($m_enabled) {

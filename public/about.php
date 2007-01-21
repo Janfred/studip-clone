@@ -30,23 +30,23 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 // -- hier muessen Seiten-Initialisierungen passieren --
 
 require_once 'lib/functions.php';
-require_once("config.inc.php");
-require_once("dates.inc.php");
-require_once("messaging.inc.php");
-require_once("msg.inc.php");
-require_once("statusgruppe.inc.php");
+require_once('config.inc.php');
+require_once('lib/dates.inc.php');
+require_once('lib/messaging.inc.php');
+require_once('lib/msg.inc.php');
+require_once('lib/statusgruppe.inc.php');
 require_once("show_news.php");
-require_once("show_dates.inc.php");
-require_once("lib/classes/DbView.class.php");
-require_once("lib/dbviews/sem_tree.view.php");
-require_once("lib/classes/DbSnapshot.class.php");
-require_once("lib/classes/DataFields.class.php");
-require_once("lib/classes/guestbook.class.php");
-require_once("object.inc.php");
-require_once("lib/classes/score.class.php");
-require_once("lib/classes/SemesterData.class.php");
-require_once("user_visible.inc.php");
-require_once("lib/classes/StudipLitList.class.php");
+require_once('lib/show_dates.inc.php');
+require_once('lib/classes/DbView.class.php');
+require_once('lib/dbviews/sem_tree.view.php');
+require_once('lib/classes/DbSnapshot.class.php');
+require_once('lib/classes/DataFields.class.php');
+require_once('lib/classes/guestbook.class.php');
+require_once('lib/object.inc.php');
+require_once('lib/classes/score.class.php');
+require_once('lib/classes/SemesterData.class.php');
+require_once('lib/user_visible.inc.php');
+require_once('lib/classes/StudipLitList.class.php');
 
 
 if ($GLOBALS['CHAT_ENABLE']){

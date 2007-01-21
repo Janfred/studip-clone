@@ -8,10 +8,10 @@ $perm->check("root");
 include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
 	
 // -- here you have to put initialisations for the current page
-require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+require_once ('lib/functions.php');
+require_once ('lib/msg.inc.php');
+require_once ('lib/visual.inc.php');
+require_once ('lib/statusgruppe.inc.php');
 require_once ('include/reiter.inc.php');
 
 // need kontact to mothership

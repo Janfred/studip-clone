@@ -33,7 +33,7 @@ include 'include/html_head.inc.php'; // Output of html head
 include 'include/header.php';   // Output of Stud.IP head
 include 'include/links_admin.inc.php'; //Output the nav
 
-require_once "visual.inc.php";
+require_once 'lib/visual.inc.php';
 
 if ($SessSemName[1]) {
 	?>

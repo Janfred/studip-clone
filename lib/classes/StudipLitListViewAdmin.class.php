@@ -24,7 +24,7 @@
 require_once('lib/classes/TreeView.class.php');
 require_once('lib/classes/StudipLitList.class.php');
 require_once('lib/classes/StudipLitClipBoard.class.php');
-require_once('datei.inc.php');
+require_once('lib/datei.inc.php');
 
 /**
 *

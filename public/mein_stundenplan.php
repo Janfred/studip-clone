@@ -49,8 +49,8 @@ include ('include/html_head.inc.php'); // Output of html head
 require_once "config.inc.php"; //Daten laden
 require_once "config_tools_semester.inc.php";
 require_once "ms_stundenplan.inc.php";
-require_once "visual.inc.php";
-require_once "lib/classes/SemesterData.class.php";
+require_once 'lib/visual.inc.php';
+require_once 'lib/classes/SemesterData.class.php';
 
 if ($RESOURCES_ENABLE)
  	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");

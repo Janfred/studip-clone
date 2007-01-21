@@ -142,7 +142,7 @@ function startpage_redirect($page_code) {
 }
 
 
-require_once("language.inc.php");
+require_once('lib/language.inc.php');
 
 global $i_page, $i_query,
        $SessionStart, $SessionSeminar, $SessSemName, $messenger_started,

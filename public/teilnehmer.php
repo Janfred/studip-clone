@@ -23,14 +23,14 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 include "seminar_open.php"; //hier werden die sessions initialisiert
 
-require_once ("msg.inc.php");
-require_once ("visual.inc.php");
+require_once ('lib/msg.inc.php');
+require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/admission.inc.php');	//Funktionen der Teilnehmerbegrenzung
-require_once ("statusgruppe.inc.php");	//Funktionen der Statusgruppen
-require_once ("messaging.inc.php");	//Funktionen des Nachrichtensystems
-require_once ("config.inc.php");		//We need the config for some parameters of the class of the Veranstaltung
-require_once("user_visible.inc.php");
+require_once ('lib/statusgruppe.inc.php');	//Funktionen der Statusgruppen
+require_once ('lib/messaging.inc.php');	//Funktionen des Nachrichtensystems
+require_once ('config.inc.php');	//We need the config for some parameters of the class of the Veranstaltung
+require_once('lib/user_visible.inc.php');
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 }

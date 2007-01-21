@@ -25,11 +25,11 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-require_once ("config.inc.php");   //wir brauchen die Auto-Eintrag-Seminare
-require_once ("visual.inc.php");
+require_once ('config.inc.php');   //wir brauchen die Auto-Eintrag-Seminare
+require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
-require_once("statusgruppe.inc.php");
-require_once("user_visible.inc.php");
+require_once('lib/statusgruppe.inc.php');
+require_once('lib/user_visible.inc.php');
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 }

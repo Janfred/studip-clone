@@ -20,20 +20,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once ("config.inc.php");
-require_once ("dates.inc.php");
-require_once ("datei.inc.php");
-require_once ("wiki.inc.php"); // getAllWikiPages for dump
-require_once ("visual.inc.php");
+require_once ('config.inc.php');
+require_once ('lib/dates.inc.php');
+require_once ('lib/datei.inc.php');
+require_once ('lib/wiki.inc.php'); // getAllWikiPages for dump
+require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
-require_once ("language.inc.php");
-require_once ("lib/classes/DataFields.class.php");
-require_once ("lib/classes/Modules.class.php");
-require_once("lib/classes/StudipLitList.class.php");
-require_once ("lib/classes/SemesterData.class.php");
-require_once ("lib/classes/StudipScmEntry.class.php");
-require_once ("lib/classes/StudipDocumentTree.class.php");
-require_once("user_visible.inc.php");
+require_once ('lib/language.inc.php');
+require_once ('lib/classes/DataFields.class.php');
+require_once ('lib/classes/Modules.class.php');
+require_once ('lib/classes/StudipLitList.class.php');
+require_once ('lib/classes/SemesterData.class.php');
+require_once ('lib/classes/StudipScmEntry.class.php');
+require_once ('lib/classes/StudipDocumentTree.class.php');
+require_once ('lib/user_visible.inc.php');
 
 // Liefert den dump des Seminars
 function dump_sem($sem_id, $print_view = false) {

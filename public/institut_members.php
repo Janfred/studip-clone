@@ -23,11 +23,11 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 include("seminar_open.php"); //hier werden die sessions initialisiert
-require_once("language.inc.php");
-require_once("config.inc.php");
-require_once("visual.inc.php");
+require_once('lib/language.inc.php');
+require_once('config.inc.php');
+require_once('lib/visual.inc.php');
 require_once('include/html_head.inc.php');
-require_once("statusgruppe.inc.php");
+require_once('lib/statusgruppe.inc.php');
 require_once 'lib/functions.php';
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";

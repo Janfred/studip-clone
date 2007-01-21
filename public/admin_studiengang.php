@@ -36,8 +36,8 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 	include ('include/header.php');   // Output of Stud.IP head
 	include ('include/links_admin.inc.php');  //Linkleiste fuer admins
 
-	require_once ("msg.inc.php"); //Funktionen fuer Nachrichtenmeldungen
-	require_once ("visual.inc.php");
+	require_once ('lib/msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
+	require_once ('lib/visual.inc.php');
 	
 	$cssSw=new cssClassSwitcher;
 ?>

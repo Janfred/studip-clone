@@ -39,16 +39,16 @@ define("PHPDOC_DUMMY",true);
 // +---------------------------------------------------------------------------+
 
 
-require_once("config.inc.php");
-require_once("visual.inc.php");
+require_once('config.inc.php');
+require_once('lib/visual.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/calendar_functions.inc.php');
-require($RELATIVE_PATH_CALENDAR . "/calendar_visual.inc.php");
-require($RELATIVE_PATH_CALENDAR . "/lib/calendar_misc_func.inc.php");
+require($RELATIVE_PATH_CALENDAR . '/calendar_visual.inc.php');
+require($RELATIVE_PATH_CALENDAR . '/lib/calendar_misc_func.inc.php');
 require_once($RELATIVE_PATH_CALENDAR
 		. "/lib/driver/$CALENDAR_DRIVER/CalendarDriver.class.php");
-require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEvent.class.php");
-require_once($RELATIVE_PATH_CALENDAR . "/lib/SeminarEvent.class.php");
+require_once($RELATIVE_PATH_CALENDAR . '/lib/DbCalendarEvent.class.php');
+require_once($RELATIVE_PATH_CALENDAR . '/lib/SeminarEvent.class.php');
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 // -- wir sind jetzt definitiv in keinem Seminar, also... --

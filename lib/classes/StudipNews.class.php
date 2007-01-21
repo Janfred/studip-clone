@@ -33,7 +33,7 @@
 require_once 'lib/classes/SimpleORMap.class.php';
 require_once 'lib/classes/StudipComments.class.php';
 require_once 'lib/classes/Config.class.php';
-require_once 'object.inc.php';
+require_once 'lib/object.inc.php';
 
 define('STUDIPNEWS_DB_TABLE', 'news');
 

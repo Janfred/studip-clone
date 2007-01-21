@@ -49,12 +49,12 @@ if (!$CHAT_ENABLE) {
 }
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
-require_once $RELATIVE_PATH_CHAT."/ChatServer.class.php";
+require_once $RELATIVE_PATH_CHAT.'/ChatServer.class.php';
 //Studip includes
-require_once "msg.inc.php";
-require_once "visual.inc.php";
-require_once "messaging.inc.php";
-require_once "user_visible.inc.php";
+require_once 'lib/msg.inc.php';
+require_once 'lib/visual.inc.php';
+require_once 'lib/messaging.inc.php';
+require_once 'lib/user_visible.inc.php';
 
 
 //Hilfsfunktion, druckt script tags

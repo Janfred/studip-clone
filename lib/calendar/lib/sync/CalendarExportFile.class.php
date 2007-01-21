@@ -36,8 +36,8 @@
 
 global $RELATIVE_PATH_CALENDAR;
  
-require_once("$RELATIVE_PATH_CALENDAR/lib/sync/CalendarExport.class.php");
-require_once('datei.inc.php');
+require_once($RELATIVE_PATH_CALENDAR.'/lib/sync/CalendarExport.class.php');
+require_once('lib/datei.inc.php');
 
 class CalendarExportFile extends CalendarExport {
 	

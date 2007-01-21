@@ -36,7 +36,7 @@
 
 
 include("seminar_open.php"); // initialise Stud.IP-Session
-require_once("config.inc.php"); 		//wir brauchen die Seminar-Typen
+require_once('config.inc.php'); 		//wir brauchen die Seminar-Typen
 require_once($RELATIVE_PATH_EXTERN . "/extern_config.inc.php");
 require_once($RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
 
@@ -46,9 +46,9 @@ require_once($RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
 include('include/html_head.inc.php'); // Output of html head
 include('include/header.php');   // Output of Stud.IP head
 
-require_once("msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
+require_once('lib/msg.inc.php'); //Funktionen f&uuml;r Nachrichtenmeldungen
 require_once("cssClassSwitcher.inc.php");
-require_once("language.inc.php");
+require_once('lib/language.inc.php');
 
 include('include/links_admin.inc.php');  //Linkleiste fuer admins
 

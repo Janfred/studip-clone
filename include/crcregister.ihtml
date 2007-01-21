@@ -1,6 +1,6 @@
 <?
 // first of all init I18N because seminar_open is not called here...
-require_once("language.inc.php");
+require_once('lib/language.inc.php');
 global $_language,$_language_path;
 $_language_path = init_i18n($_language);
 $validator = new email_validation_class;
@@ -124,8 +124,8 @@ function checkdata(){
 	<?
 	global $username, $Vorname, $Nachname, $Email, $title_front, $title_rear;
 
-	require_once("msg.inc.php");
-	include("config.inc.php");
+	require_once('lib/msg.inc.php');
+	include('config.inc.php');
 
 	if (!$_COOKIE[$sess->name] || !$_COOKIE[$sess->cookiename]) {
   		?>

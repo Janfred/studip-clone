@@ -182,7 +182,7 @@ require_once("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 
 		include_once("wap_buttons.inc.php");
 		include_once("wap_hlp.inc.php");
-		include_once("language.inc.php");
+		include_once('lib/language.inc.php');
 
 		$session_expired = FALSE;
 

@@ -31,8 +31,8 @@
 // +---------------------------------------------------------------------------+
 
 require_once 'lib/classes/StudipNews.class.php';
-require_once 'messaging.inc.php';
-require_once 'visual.inc.php';
+require_once 'lib/messaging.inc.php';
+require_once 'lib/visual.inc.php';
 require_once 'lib/functions.php';
 
 class AdminNewsController {

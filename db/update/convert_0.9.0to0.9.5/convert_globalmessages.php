@@ -3,11 +3,11 @@ set_time_limit(0);
 
 ## convert globalmessages to message and message_user ##
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("root");
 
-require_once $ABSOLUTE_PATH_STUDIP . "/functions.php";
-require_once("$ABSOLUTE_PATH_STUDIP/messaging.inc.php");
+require_once 'lib/functions.php';
+require_once('lib/messaging.inc.php');
 
 
 $msging=new messaging;

@@ -44,10 +44,10 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 //$ABSOLUTE_PATH_ILIAS = "/ilias/";
 // -- here you have to put initialisations for the current page
 
-require_once ("config.inc.php");
-require_once ("visual.inc.php");
+require_once ('config.inc.php');
+require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
-require_once ("msg.inc.php");
+require_once ('lib/msg.inc.php');
 
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 

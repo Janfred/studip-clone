@@ -46,7 +46,7 @@ if (!$CHAT_ENABLE) {
 }
 include ("seminar_open.php"); // initialise Stud.IP-Session
 require_once $RELATIVE_PATH_CHAT."/ChatServer.class.php";
-require_once "visual.inc.php";
+require_once 'lib/visual.inc.php';
 
 $chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 $chatServer->caching = true;

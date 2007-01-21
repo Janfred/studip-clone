@@ -21,10 +21,10 @@ include ("seminar_open.php"); // initialise Stud.IP-Session
 	session_register("xml_import_titel");
 }/**/
 
-require_once ("config.inc.php"); 		//wir brauchen die Seminar-Typen
+require_once ('config.inc.php'); 		//wir brauchen die Seminar-Typen
 //require_once 'lib/functions.php';	//noch mehr Stuff
 //require_once ("forum.inc");		//damit wir Themen anlegen koennen
-require_once ("msg.inc.php"); //Funktionen f&uuml;r Nachrichtenmeldungen
+require_once ('lib/msg.inc.php'); //Funktionen f&uuml;r Nachrichtenmeldungen
 //if (!$xml_import_person)
 //if ($sess->is_registered("xml_import_person")) echo "JOJO";
 /*{

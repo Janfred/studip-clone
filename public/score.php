@@ -14,10 +14,10 @@ include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head
 
 require_once 'lib/functions.php';
-require_once("visual.inc.php");
-require_once("lib/classes/score.class.php");
-require_once("object.inc.php");
-require_once("user_visible.inc.php");
+require_once('lib/visual.inc.php');
+require_once('lib/classes/score.class.php');
+require_once('lib/object.inc.php');
+require_once('lib/user_visible.inc.php');
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>

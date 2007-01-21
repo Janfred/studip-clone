@@ -1,12 +1,13 @@
 <?
 // $Id$
 
-require_once 'forum.inc.php';
 // wikiMarkups are used by the wikiDirective function
 // after all other conversions,
 // wikiMarkup patterns are replaced
 // args to wikiMarkup are passed to preg_replace
 //
+
+require_once 'lib/forum.inc.php';
 
 wikiMarkup('/\\(:biestform:\\)/e',"wiki_biestform('biest')", 'autor');
 wikiMarkup('/\\(:biestlist\\s*(.*?):\\)/e',"wiki_biestlist('biest',array('q'=>'$1'))");

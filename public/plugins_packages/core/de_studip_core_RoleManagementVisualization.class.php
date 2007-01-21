@@ -3,7 +3,7 @@
  * @author Dennis Reil, <Dennis.Reil@offis.de>
  * @version $Revision$
  */
-require_once("language.inc.php");
+require_once('lib/language.inc.php');
 
 class de_studip_core_RoleManagementVisualization extends AbstractStudIPPluginVisualization {
 	

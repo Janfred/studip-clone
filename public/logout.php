@@ -23,7 +23,7 @@ ob_start();
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-require_once ("messaging.inc.php");
+require_once ('lib/messaging.inc.php');
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
 }
@@ -65,8 +65,8 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	include ("seminar_open.php"); // initialise Stud.IP-Session
 
 	// -- here you have to put initialisations for the current page
-	include("config.inc.php");
-	require_once("msg.inc.php");
+	include('config.inc.php');
+	require_once('lib/msg.inc.php');
 
 	$HELP_KEYWORD="Basis.Logout";
 

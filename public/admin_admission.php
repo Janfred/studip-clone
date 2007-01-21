@@ -86,11 +86,11 @@ include ('include/header.php');   // Output of Stud.IP head
 
 include ('include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
-require_once("msg.inc.php");	//Ausgaben
-require_once("config.inc.php");	//Settings....
+require_once('lib/msg.inc.php');	//Ausgaben
+require_once('config.inc.php');	//Settings....
 require_once 'lib/functions.php';	//basale Funktionen
-require_once("visual.inc.php");	//Darstellungsfunktionen
-require_once("messaging.inc.php");	//Nachrichtenfunktionen
+require_once('lib/visual.inc.php');	//Darstellungsfunktionen
+require_once('lib/messaging.inc.php');	//Nachrichtenfunktionen
 require_once('lib/admission.inc.php');	//load functions from admission system
 
 $db = new DB_Seminar;

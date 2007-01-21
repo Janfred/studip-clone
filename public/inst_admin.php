@@ -31,11 +31,11 @@ include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head
 include ('include/links_admin.inc.php');  //Linkleiste fuer admins
 
-require_once("msg.inc.php"); //Ausgaberoutinen an den User
-require_once("config.inc.php"); //Grunddaten laden
-require_once("visual.inc.php"); //htmlReady
-require_once ("statusgruppe.inc.php");	//Funktionen der Statusgruppen
-require_once ("log_events.inc.php");	// Logging
+require_once('lib/msg.inc.php'); //Ausgaberoutinen an den User
+require_once('config.inc.php'); //Grunddaten laden
+require_once('lib/visual.inc.php'); //htmlReady
+require_once ('lib/statusgruppe.inc.php');	//Funktionen der Statusgruppen
+require_once ('lib/log_events.inc.php');	// Logging
 	
 $db=new DB_Seminar;
 $db2=new DB_Seminar;

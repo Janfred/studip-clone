@@ -1,6 +1,6 @@
 <?php
 
-require_once("msg.inc.php");
+require_once('lib/msg.inc.php');
 
 /**
  * @author Dennis Reil, <dennis.reil@offis.de>

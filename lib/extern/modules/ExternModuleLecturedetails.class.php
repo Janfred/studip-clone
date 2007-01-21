@@ -35,15 +35,15 @@
 // +---------------------------------------------------------------------------+
 
 
-require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
-require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
-require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/modules/views/ExternSemBrowse.class.php");
-require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"].'/lib/ExternModule.class.php');
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"].'/views/extern_html_templates.inc.php');
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"].'/modules/views/ExternSemBrowse.class.php');
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"].'/lib/extern_functions.inc.php');
 
-require_once("lib/classes/DataFields.class.php");
-require_once("language.inc.php");
-require_once("visual.inc.php");
-require_once("dates.inc.php");
+require_once('lib/classes/DataFields.class.php');
+require_once('lib/language.inc.php');
+require_once('lib/visual.inc.php');
+require_once('lib/dates.inc.php');
 require_once 'lib/functions.php';
 
 class ExternModuleLecturedetails extends ExternModule {

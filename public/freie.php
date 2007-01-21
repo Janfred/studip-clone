@@ -140,9 +140,9 @@ $HELP_KEYWORD="Basis.SymboleFreieVeranstaltungen";
 include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head
 
-require_once("config.inc.php");
-require_once("msg.inc.php");
-require_once("visual.inc.php");
+require_once('config.inc.php');
+require_once('lib/msg.inc.php');
+require_once('lib/visual.inc.php');
 
 // we are definitely not in an lexture or institute
 closeObject();

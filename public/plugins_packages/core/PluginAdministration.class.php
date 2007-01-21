@@ -5,7 +5,7 @@
  * @version $Revision$
  * $Id$
  */
-require_once("datei.inc.php");
+require_once('lib/datei.inc.php');
 define("PLUGIN_UPLOAD_ERROR",1);
 define("PLUGIN_MANIFEST_ERROR",2);
 define("PLUGIN_ALLREADY_INSTALLED_ERROR",3);

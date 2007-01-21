@@ -25,11 +25,11 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 include ("seminar_open.php"); // initialise Stud.IP-Session
 include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   // Output of Stud.IP head
-require_once ("lib/classes/StudipScmEntry.class.php");
+require_once ('lib/classes/StudipScmEntry.class.php');
 require_once 'lib/functions.php';
-require_once("msg.inc.php");
-require_once("visual.inc.php");
-require_once("lib/classes/Table.class.php");
+require_once('lib/msg.inc.php');
+require_once('lib/visual.inc.php');
+require_once('lib/classes/Table.class.php');
 
 checkObject(); // do we have an open object?
 checkObjectModule("scm");

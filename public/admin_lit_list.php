@@ -24,10 +24,10 @@
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("autor");
-require_once ("visual.inc.php");
-require_once ("lib/classes/StudipLitListViewAdmin.class.php");
-require_once ("lib/classes/StudipLitClipBoard.class.php");
-include_once("lit_import.inc.php");
+require_once ('lib/visual.inc.php');
+require_once ('lib/classes/StudipLitListViewAdmin.class.php');
+require_once ('lib/classes/StudipLitClipBoard.class.php');
+include_once('lib/lit_import.inc.php');
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
 

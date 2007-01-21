@@ -40,9 +40,9 @@ Requires & Registers
 /*****************************************************************************/
 
 require_once ('include/reiter.inc.php');
-require_once ("msg.inc.php");
-require_once ("visual.inc.php");
-require_once ("config.inc.php");
+require_once ('lib/msg.inc.php');
+require_once ('lib/visual.inc.php');
+require_once ('config.inc.php');
 require_once ("config_tools_semester.inc.php");
 require_once 'lib/functions.php';
 require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");

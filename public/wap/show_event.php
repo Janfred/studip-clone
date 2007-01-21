@@ -49,7 +49,7 @@
 	include_once("wap_txt.inc.php");
 	include_once("wap_hlp.inc.php");
 	include_once("wap_buttons.inc.php");
-	include_once("dates.inc.php");
+	include_once('lib/dates.inc.php');
 
 	$session_user_id = wap_adm_start_card($session_id);
     if ($session_user_id)

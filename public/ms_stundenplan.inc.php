@@ -39,7 +39,7 @@
 require_once ("config.inc.php");
 require_once ("config_tools_semester.inc.php");
 require_once 'lib/functions.php';
-require_once ("language.inc.php");
+require_once ('lib/language.inc.php');
 
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
 if ($schedule_cmd=="change_view_insert") {

@@ -39,7 +39,7 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 	$perm->check("tutor");
 
 require_once ($GLOBALS['PATH_EXPORT'] . '/export_xslt_vars.inc.php');   // Liste der XSLT-Skripts
-require_once('datei.inc.php');
+require_once('lib/datei.inc.php');
 
 /**
 * Checks given parameters

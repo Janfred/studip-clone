@@ -27,9 +27,9 @@ if (!$perm->is_fak_admin()){
 	page_close();
 	die;
 }
-require_once ("visual.inc.php");
-require_once ("lib/classes/StudipSemTreeViewAdmin.class.php");
-require_once ("lib/classes/StudipSemSearch.class.php");
+require_once ('lib/visual.inc.php');
+require_once ('lib/classes/StudipSemTreeViewAdmin.class.php');
+require_once ('lib/classes/StudipSemSearch.class.php');
 
 include ("seminar_open.php"); // initialise Stud.IP-Session
 
