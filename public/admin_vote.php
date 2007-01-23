@@ -38,7 +38,7 @@ $perm->check ("autor");
 
 $HELP_KEYWORD="Basis.Votings";
 
-include_once("seminar_open.php");
+include_once('lib/seminar_open.php');
 include_once('include/html_head.inc.php');
 include_once('include/header.php');
 $the_range = isset($showrangeID) ? $showrangeID : $rangeID;

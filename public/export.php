@@ -38,7 +38,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 {
 	$perm->check("tutor");
-	include ("seminar_open.php"); // initialise Stud.IP-Session
+	include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 }
 
 //$i_page = "meine_seminare.php";

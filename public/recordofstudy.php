@@ -43,8 +43,8 @@
 page_open (array ("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 		  "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check ("autor");
-include ("seminar_open.php");
-require_once("config.inc.php");
+include ('lib/seminar_open.php');
+require_once('config.inc.php');
 {
 // needed session-variables
 $sess->register("seminars");

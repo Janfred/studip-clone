@@ -68,7 +68,7 @@ if (!$perm->have_studip_perm("admin",$_test_institut_id)){
 }
 
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 require_once 'lib/dates.inc.php';
 require_once 'lib/classes/DbSnapshot.class.php';

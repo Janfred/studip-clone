@@ -10,7 +10,7 @@ require_once ('lib/classes/StudipLitSearch.class.php');
 require_once ('lib/visual.inc.php');
 require_once ('config.inc.php');
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 include ('include/html_head.inc.php'); // Output of html head
 include ('include/header.php');   //hier wird der "Kopf" nachgeladen

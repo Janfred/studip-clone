@@ -46,7 +46,7 @@ require_once('lib/visual.inc.php');
 require_once('lib/classes/StudipRangeTreeViewAdmin.class.php');
 
 
-include("seminar_open.php"); //hier werden die sessions initialisiert
+include('lib/seminar_open.php'); //hier werden die sessions initialisiert
 include('include/html_head.inc.php');
 include('include/header.php');   //hier wird der "Kopf" nachgeladen 
 include('include/links_admin.inc.php');  //Linkleiste fuer admins

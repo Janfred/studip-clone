@@ -25,7 +25,7 @@ if (!isset($SessSemName[0]) || $SessSemName[0] == "") {
    die;
 }
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 if (!isset($htmlversion))

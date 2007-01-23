@@ -39,7 +39,7 @@ $perm->check("user");
 
 $HELP_KEYWORD="Basis.VeranstaltungenAbonnieren";
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 require_once 'lib/functions.php';	//hier wird der "Kopf" nachgeladen

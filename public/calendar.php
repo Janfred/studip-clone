@@ -50,7 +50,7 @@ if ($perm->have_perm("admin")) {
 }
 $perm->check("user");
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 

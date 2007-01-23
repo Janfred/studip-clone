@@ -33,10 +33,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once ("cssClassSwitcher.inc.php");
-require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
-require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomGroups.class.php");
-require_once ("lib/classes/Seminar.class.php");
+require_once ('lib/classes/cssClassSwitcher.inc.php');
+require_once ($RELATIVE_PATH_RESOURCES.'/lib/RoomRequest.class.php');
+require_once ($RELATIVE_PATH_RESOURCES.'/lib/RoomGroups.class.php');
+require_once ('lib/classes/Seminar.class.php');
 
 
 $cssSw = new cssClassSwitcher;

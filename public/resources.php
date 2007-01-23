@@ -37,7 +37,7 @@ $auth->login_if($auth->auth['uid'] == 'nobody');
 
 $perm->check("autor");
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.Ressourcen";// META:in resourcesControl.inc.php verlagern,wenn detaillierter vorhanden
 
 if ($RESOURCES_ENABLE) {

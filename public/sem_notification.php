@@ -53,7 +53,7 @@ if (!$MAIL_NOTIFICATION_ENABLE) {
 if ($_REQUEST['view'] != 'notification') {
 	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 	$auth->login_if($auth->auth["uid"] == "nobody");
-	include("seminar_open.php"); // initialise Stud.IP-Session
+	include('lib/seminar_open.php'); // initialise Stud.IP-Session
 	// Start of Output
 	include('include/html_head.inc.php'); // Output of html head
 	include('include/header.php');   // Output of Stud.IP head
@@ -65,7 +65,7 @@ if ($_REQUEST['view'] != 'notification') {
 // -- here you have to put initialisations for the current page
 require_once 'lib/functions.php';
 require_once('lib/visual.inc.php');
-require_once("cssClassSwitcher.inc.php");
+require_once('lib/classes/cssClassSwitcher.inc.php');
 require_once('lib/meine_seminare_func.inc.php');
 require_once('lib/classes/ModulesNotification.class.php');
 

@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("admin");
 
-include ("seminar_open.php"); 		// initialise Stud.IP-Session
+include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
 require_once('lib/msg.inc.php'); 		// Funktionen fuer Nachrichtenmeldungen
 require_once('config.inc.php'); 		// Wir brauchen den Namen der Uni
 require_once('lib/visual.inc.php');
@@ -501,7 +501,7 @@ if (isset($_GET['details'])) {
 		echo "<p>&nbsp;" . _("Die Standard Authentifizierung ist ausgeschaltet. Das Anlegen von neuen Benutzern ist nicht möglich!") . "</p>";
 	}
 
-	include ("pers_browse.inc.php");
+	include ('include/pers_browse.inc.php');
 	print "<br>\n";
 	parse_msg($msg);
 

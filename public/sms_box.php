@@ -34,13 +34,13 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check("user");
 
 // initialise session
-include ("seminar_open.php");
+include ('lib/seminar_open.php');
 
 // -- here you have to put initialisations for the current page
 require_once 'lib/functions.php';
 require_once ('lib/msg.inc.php');
 require_once ('lib/visual.inc.php');
-require_once ("messagingSettings.inc.php");
+require_once ('include/messagingSettings.inc.php');
 require_once ('lib/messaging.inc.php');
 require_once ('lib/statusgruppe.inc.php');
 require_once ('include/reiter.inc.php');

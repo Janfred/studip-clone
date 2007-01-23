@@ -5,7 +5,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check("root");
 
 // initialise session
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
+include ('lib/seminar_open.php');
 	
 // -- here you have to put initialisations for the current page
 require_once ('lib/functions.php');

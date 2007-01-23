@@ -3,7 +3,7 @@
 // $Id$
 
 require_once('config.inc.php');
-require_once('cssClassSwitcher.inc.php');
+require_once('lib/classes/cssClassSwitcher.inc.php');
 include_once('lib/classes/idna_convert.class.php');
 include_once('lib/classes/UserConfig.class.php');
 

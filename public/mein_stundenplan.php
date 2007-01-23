@@ -37,7 +37,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 ob_start(); //Outputbuffering for max performance
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 if (isset($print_view))
@@ -46,14 +46,14 @@ if (isset($print_view))
 // Start of Output
 include ('include/html_head.inc.php'); // Output of html head
 
-require_once "config.inc.php"; //Daten laden
-require_once "config_tools_semester.inc.php";
-require_once "ms_stundenplan.inc.php";
+require_once 'config.inc.php'; //Daten laden
+require_once 'config_tools_semester.inc.php';
+require_once 'include/ms_stundenplan.inc.php';
 require_once 'lib/visual.inc.php';
 require_once 'lib/classes/SemesterData.class.php';
 
 if ($RESOURCES_ENABLE)
- 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+ 	require_once ($RELATIVE_PATH_RESOURCES.'/resourcesFunc.inc.php');
 
 
 //eingebundene Daten auf Konsitenz testen (Semesterwechsel? nicht mehr Admin im gespeicherten Institut?)

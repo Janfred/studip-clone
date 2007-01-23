@@ -17,7 +17,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $auth->login_if($auth->auth["uid"] == "nobody");
 // ini_set("display_errors","on");
 
-include ("seminar_open.php"); 		// initialise Stud.IP-Session
+include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
 include ('include/html_head.inc.php');
 include ('include/header.php');
 

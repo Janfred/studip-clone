@@ -23,11 +23,11 @@
 
 
 // Including all needed files
-require_once ("lib/classes/StudipObject.class.php");
+require_once ('lib/classes/StudipObject.class.php');
 
 # wozu diese Datei?
 
-require_once ("phplib_local.inc.php");
+//require_once ("lib/phplib_local.inc.php");
 
 require_once 'lib/functions.php'; // <- für getHeaderLine
 

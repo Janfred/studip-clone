@@ -153,7 +153,7 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
 } // Ende function print_seminar_content
 
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 require_once ('config.inc.php');			// Klarnamen fuer den Veranstaltungsstatus

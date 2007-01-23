@@ -30,7 +30,7 @@ $perm->check("root");
 $sess->register('_kill_user');
 $db = new DB_Seminar();
 
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); 		// initialise Stud.IP-Session
+include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
 
 $msg = array();
 

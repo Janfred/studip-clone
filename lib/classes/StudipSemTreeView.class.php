@@ -222,7 +222,7 @@ class StudipSemTreeView extends TreeView {
 //test
 //page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 //include "include/html_head.inc.php";
-//include ("seminar_open.php"); // initialise Stud.IP-Session
+//include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 //$test = new StudipSemTreeView();
 //$test->showTree("c2942084b6140fc2635dfecdf65bf20d");
 //page_close();

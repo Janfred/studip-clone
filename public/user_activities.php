@@ -124,7 +124,7 @@ function get_user_documents($user_id, $seminar_id = null){
 	return $ret;
 }
 ob_start();
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("root");
 if (!$sess->is_registered('_user_activities')){
 	$sess->register('_user_activities');
@@ -214,7 +214,7 @@ $queries[$c]['desc'] = _("Gesamtgröße der hochgeladenen Dateien (MB)");
 $queries[$c]['query'] = "SELECT FORMAT(SUM(filesize)/1024/1024,2) FROM dokumente WHERE user_id='$user_id' AND (url IS NULL OR url='' ) GROUP BY user_id";
 $queries[$c]['details'] = "details=files";
 ++$c;
-include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php"); 		// initialise Stud.IP-Session
+include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
 
 
 // Start of Output

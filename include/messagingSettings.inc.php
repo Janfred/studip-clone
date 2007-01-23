@@ -4,6 +4,7 @@
 * displays editable personal messaging-settings
 *
 * @author       Nils K. Windisch <studip@nkwindisch.de>
+* @version	$Id$
 * @access       public
 * @modulegroup  Messaging
 * @module       sms_box.php

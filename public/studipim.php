@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 define("CLOSE_ON_LOGIN_SCREEN",true);
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-	require_once ("seminar_open.php");
+	require_once ('lib/seminar_open.php');
 	require_once ('lib/visual.inc.php');
 	require_once 'lib/functions.php';
 	require_once ('config.inc.php');

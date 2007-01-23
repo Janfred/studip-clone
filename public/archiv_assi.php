@@ -23,7 +23,7 @@ require_once('lib/dates.inc.php'); // Funktionen zum Loeschen von Terminen
 require_once('lib/datei.inc.php'); // Funktionen zum Loeschen von Dokumenten
 require_once('lib/archiv.inc.php');
 require_once 'lib/functions.php';
-require_once("config_tools_semester.inc.php");
+require_once('config_tools_semester.inc.php');
 require_once('lib/visual.inc.php');
 require_once('lib/statusgruppe.inc.php'); //Enthaelt Funktionen fuer Statusgruppen
 require_once('lib/log_events.inc.php'); // Logging
@@ -39,7 +39,7 @@ $check_perm = (get_config('ALLOW_DOZENT_ARCHIV') ? 'dozent' : 'admin');
 
 $perm->check($check_perm);
 
-include ('seminar_open.php'); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 

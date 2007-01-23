@@ -23,7 +23,7 @@ $auth->login_if($auth->auth["uid"] == "nobody");
 $perm->check("user");
 // nobody hat hier nix zu suchen...
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once('lib/msg.inc.php');
 require_once('config.inc.php'); 
 require_once 'lib/functions.php';

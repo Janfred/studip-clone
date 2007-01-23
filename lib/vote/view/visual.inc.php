@@ -15,7 +15,7 @@
 
 # Include all required files ================================================ #
 require_once ('config.inc.php');
-require_once ('cssClassSwitcher.inc.php');
+require_once ('lib/classes/cssClassSwitcher.inc.php');
 # ====================================================== end: including files #
 
 

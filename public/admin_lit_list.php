@@ -29,7 +29,7 @@ require_once ('lib/classes/StudipLitListViewAdmin.class.php');
 require_once ('lib/classes/StudipLitClipBoard.class.php');
 include_once('lib/lit_import.inc.php');
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 
 $HELP_KEYWORD="Basis.LiteraturListen";

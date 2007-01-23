@@ -34,7 +34,7 @@
 // +---------------------------------------------------------------------------+
 
 require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
-require_once ("cssClassSwitcher.inc.php");
+require_once ('lib/classes/cssClassSwitcher.inc.php');
 
 $cssSw = new cssClassSwitcher;
 

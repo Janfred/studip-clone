@@ -44,7 +44,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	}
 }
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once ('config.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/visual.inc.php');
@@ -57,7 +57,7 @@ closeObject();
 $sess->register('index_data');
 
 //Auf und Zuklappen News
-require_once ("show_news.php");
+require_once ('lib/showNews.inc.php');
 process_news_commands($index_data);
 
 // Auf- und Zuklappen Termine

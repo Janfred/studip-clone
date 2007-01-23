@@ -65,9 +65,9 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 my_session_open(md5('admin_literatur_overview.php'));
 $perm->check('admin');
 
-require_once("lib/classes/StudipLitCatElement.class.php");
+require_once('lib/classes/StudipLitCatElement.class.php');
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 $_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 // Start of Output

@@ -40,7 +40,7 @@ $perm->check("tutor");
 if ((!$RESOURCES_ENABLE) || (!$RESOURCES_ALLOW_ROOM_REQUESTS)) //we need resources management and room request ability
 	die;
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 

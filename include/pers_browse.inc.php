@@ -17,32 +17,32 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
+//$Id$
 
 function perm_select($name,$default) {
 	$possible_perms=array(_("alle"),"user","autor","tutor","dozent","admin","root");
 	$counter=0;
-	echo "<select name=\"$name\">";
+	echo '<select name="'.$name.'">';
 	while ($counter <= 6 ) {
-		echo "<option";
-		if ($default==$possible_perms[$counter])
-			echo" selected";
-		echo ">$possible_perms[$counter]</option>";
+		echo '<option';
+		if ($default == $possible_perms[$counter])
+			echo ' selected';
+		echo '>'.$possible_perms[$counter].'</option>';
 		$counter++;
 	}
-	echo "</select>";
+	echo '</select>';
 	return;
 }
 
 function crit_select($name,$default) {
 	$possible_crits=array(">=","=","<",_("nie"));
 	$counter=0;
-	echo "<select name=\"$name\">";
+	echo '<select name="'.$name.'">';
 	while ($counter <= 3 ) {
 		echo "<option";
 		if ($default==$possible_crits[$counter])
-			echo" selected";
-		echo ">$possible_crits[$counter]</option>";
+			echo ' selected';
+		echo '>'.$possible_crits[$counter].'</option>';
 		$counter++;
 	}
 	echo "</select>";

@@ -35,7 +35,7 @@ if (!isset($EVAL_AUSWERTUNG_GRAPH_FORMAT)) $EVAL_AUSWERTUNG_GRAPH_FORMAT = 'jpg'
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 
-include ("seminar_open.php");             // initialise Stud.IP-Session
+include ('lib/seminar_open.php');             // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 require_once('lib/msg.inc.php');

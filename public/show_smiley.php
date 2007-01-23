@@ -21,7 +21,7 @@
 // $Id$
 page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
 
-include_once('seminar_open.php');
+include_once('lib/seminar_open.php');
 require_once('config.inc.php');
 require_once('lib/classes/smiley.class.php');
 

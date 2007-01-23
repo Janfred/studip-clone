@@ -35,11 +35,11 @@
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user"); 
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 if ($SUPPORT_ENABLE){
 	//Steuerung der SupportDB einbinden
-	include ("$RELATIVE_PATH_SUPPORT/support.inc.php");
+	include ($RELATIVE_PATH_SUPPORT.'/support.inc.php');
 } else {
 	// Start of Output
 	include ('include/html_head.inc.php'); // Output of html head

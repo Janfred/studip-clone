@@ -25,7 +25,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 $perm->check("user");
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 
@@ -35,7 +35,7 @@ require_once('lib/dates.inc.php');
 require_once('lib/messaging.inc.php');
 require_once('lib/msg.inc.php');
 require_once('lib/statusgruppe.inc.php');
-require_once("show_news.php");
+require_once('lib/showNews.inc.php');
 require_once('lib/show_dates.inc.php');
 require_once('lib/classes/DbView.class.php');
 require_once('lib/dbviews/sem_tree.view.php');

@@ -48,7 +48,7 @@ if (!is_object($chatServer)){
 	require_once 'lib/messaging.inc.php';
 	require_once $RELATIVE_PATH_CHAT.'/ChatServer.class.php';
 
-	include ("seminar_open.php"); // initialise Stud.IP-Session
+	include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 	//chat eingeschaltet?
 	if (!$CHAT_ENABLE) {

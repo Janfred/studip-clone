@@ -44,8 +44,8 @@ if (!$CHAT_ENABLE) {
 	page_close();
 	die;
 }
-include ("seminar_open.php"); // initialise Stud.IP-Session
-require_once $RELATIVE_PATH_CHAT."/ChatServer.class.php";
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+require_once $RELATIVE_PATH_CHAT.'/ChatServer.class.php';
 require_once 'lib/visual.inc.php';
 
 $chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);

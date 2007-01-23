@@ -40,7 +40,7 @@ require_once('lib/classes/DataFields.class.php');
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/log_events.inc.php');
 
-include ('seminar_open.php'); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 if (!isset($ALLOW_CHANGE_NAME)) $ALLOW_CHANGE_NAME = TRUE; //wegen Abwärtskompatibilität, erst ab 1.1 bekannt
 
@@ -1609,7 +1609,7 @@ if($view == "Forum") {
 }
 
 if ($view == "Stundenplan") {
-	require_once("ms_stundenplan.inc.php");
+	require_once('include/ms_stundenplan.inc.php');
 	check_schedule_default();
 	change_schedule_view();
 }
@@ -1619,7 +1619,7 @@ if($view == 'calendar' && $GLOBALS['CALENDAR_ENABLE']) {
 }
 
 if ($view == "Messaging") {
-	require_once("messagingSettings.inc.php");
+	require_once('include/messagingSettings.inc.php');
 	check_messaging_default();
 	change_messaging_view();
 }

@@ -62,7 +62,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 
 } else {        //wir sind nobody, also wahrscheinlich gerade ausgeloggt
 
-	include ("seminar_open.php"); // initialise Stud.IP-Session
+	include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 	// -- here you have to put initialisations for the current page
 	include('config.inc.php');

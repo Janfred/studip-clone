@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Set this to something, just something different...
 $hash_secret = "nirhtak";
 
-include ('seminar_open.php'); 	//hier werden die sessions initialisiert
+include ('lib/seminar_open.php'); 	//hier werden die sessions initialisiert
 
 require_once ('lib/msg.inc.php'); 		//Funktionen fuer Nachrichtenmeldungen
 require_once ('config.inc.php'); 		//wir brauchen die Seminar-Typen

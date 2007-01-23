@@ -19,9 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/HolidayData.class.php");
-require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
+require_once ("lib/classes/SemesterData.class.php");
+require_once ("lib/classes/HolidayData.class.php");
+require_once ("config.inc.php");
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("root");

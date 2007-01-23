@@ -1,6 +1,6 @@
 <?php
 /*
-show_news.php - Anzeigefunktion fuer News
+showNews.inc.php - Anzeigefunktion fuer News
 Copyright (C) 2001 Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
 This program is free software; you can redistribute it and/or

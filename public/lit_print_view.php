@@ -20,9 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
-require_once("lib/classes/StudipLitList.class.php");
+require_once('lib/classes/StudipLitList.class.php');
 
 $_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 // Start of Output

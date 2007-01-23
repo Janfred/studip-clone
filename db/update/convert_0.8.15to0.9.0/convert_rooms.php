@@ -39,7 +39,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 <?php
-	include "seminar_open.php"; //hier werden die sessions initialisiert
+	include 'lib/seminar_open.php'; //hier werden die sessions initialisiert
 
 // hier muessen Seiten-Initialisierungen passieren
 

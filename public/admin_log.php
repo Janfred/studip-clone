@@ -43,7 +43,7 @@ if (!$LOG_ENABLE) {
         die;
 }
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once('lib/msg.inc.php');	//messages
 require_once('config.inc.php');	//Settings....
 require_once 'lib/functions.php';	//whatever ;)

@@ -42,7 +42,7 @@ define("PHPDOC_DUMMY",true);
 if (($o_mode != "direct") AND ($o_mode != "passthrough")) {
   page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
   $perm->check("tutor");
-  include ("seminar_open.php"); // initialise Stud.IP-Session
+  include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 }
 
 //$i_page = "meine_seminare.php";
@@ -63,7 +63,7 @@ require_once('lib/evaluation/classes/db/EvaluationQuestionDB.class.php');
 require_once('lib/evaluation/classes/EvaluationAnswer.class.php');
 require_once('lib/evaluation/classes/db/EvaluationAnswerDB.class.php');
 
-require_once ("seminar_open.php");
+require_once ('lib/seminar_open.php');
 require_once ('include/html_head.inc.php');
 require_once ('include/header.php');
 /*equire_once ('include/links_admin.inc.php');*/

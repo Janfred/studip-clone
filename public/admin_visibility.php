@@ -33,7 +33,7 @@ $needed_perm = (get_config('ALLOW_DOZENT_VISIBILITY') ? 'dozent' : 'admin');
 
 $perm->check($needed_perm);
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // Start of Output
 include ('include/html_head.inc.php'); // Output of html head

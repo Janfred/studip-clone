@@ -23,7 +23,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 $perm->check('user');
 
-include "seminar_open.php"; //hier werden die sessions initialisiert
+include 'lib/seminar_open.php'; //hier werden die sessions initialisiert
 
 require_once ('lib/msg.inc.php');
 require_once ('lib/visual.inc.php');

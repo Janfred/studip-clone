@@ -130,7 +130,7 @@ function print_seminar_content($semid,$my_sem_values) {
 
 } // Ende function print_seminar_content
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 

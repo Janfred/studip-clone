@@ -31,7 +31,7 @@ require_once ('lib/visual.inc.php');
 require_once ('lib/classes/StudipSemTreeViewAdmin.class.php');
 require_once ('lib/classes/StudipSemSearch.class.php');
 
-include ("seminar_open.php"); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // Start of Output
 include ('include/html_head.inc.php'); // Output of html head

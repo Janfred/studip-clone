@@ -577,7 +577,7 @@ $ABSOLUTE_PATH_USER_PIC = $ABSOLUTE_PATH_STUDIP . $USER_PIC_PATH;
 $UNI_NAME=htmlentities($UNI_NAME_CLEAN, ENT_QUOTES);
 
 
-require_once $ABSOLUTE_PATH_STUDIP . "phplib_local.inc.php";
+require_once 'lib/phplib_local.inc.php';
 
 //$Id$
 ?>

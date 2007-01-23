@@ -36,8 +36,8 @@
 //Variable registrieren
 //$user->register("my_schedule_settings");
 
-require_once ("config.inc.php");
-require_once ("config_tools_semester.inc.php");
+require_once ('config.inc.php');
+require_once ('config_tools_semester.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/language.inc.php');
 
@@ -139,10 +139,10 @@ function change_schedule_view() {
 				<font size="-1"><b><?print _("Hier k&ouml;nnen Sie sie Ansicht ihres pers&ouml;nlichen Stundenplans nach Ihren Vorstellungen anpassen.")."<br>"._("Sie k&ouml;nnen den Zeitraum, den der Stundenplan umfasst, und die Tage, die der Stundenplan anzeigt, bestimmen.");?>
 			</blockquote>
 			<form method="POST" action="<? echo $PHP_SELF ?>?schedule_cmd=change_view_insert">
-			<table width="70%" align="center"cellpadding=8 cellspacing=0 border=0>
+			<table width="70%" align="center" cellpadding=8 cellspacing=0 border=0>
 				<tr>
-					<th width="50%" align=center><?=_("Option")?></th>
-					<th align=center><?=_("Auswahl")?></th>
+					<th width="50%" align="center"><?=_("Option")?></th>
+					<th align="center"><?=_("Auswahl")?></th>
 				</tr>
 				<tr  <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
@@ -151,7 +151,7 @@ function change_schedule_view() {
 					<td <?=$cssSw->getFullClass()?>>
 						<font size="-1">&nbsp;<?=_("Anfangszeit:");?>&nbsp; </font>
 						<?
-				   		echo"<select name=\"beginn_zeit\">";
+				   		echo "<select name=\"beginn_zeit\">";
 		   					for ($i=0; $i<=23; $i++)
 			  					{
 						  		if ($i==$my_schedule_settings["glb_start_time"])
@@ -169,11 +169,11 @@ function change_schedule_view() {
 						  			echo "</option>";
 						  			}
 			  					}
-				    		echo"</select>";
+				    		echo "</select>";
 						?>
 						<font size="-1">&nbsp;<?=_("Uhr"). "<br /><br />&nbsp;"._("Endzeit:")?>&nbsp;</font>
 						<?
-				   		echo"<select name=\"ende_zeit\">";
+				   		echo "<select name=\"ende_zeit\">";
 		   					for ($i=0; $i<=23; $i++)
 			  					{
 						  		if ($i==$my_schedule_settings["glb_end_time"])
@@ -191,7 +191,7 @@ function change_schedule_view() {
 						  			echo "</option>";
 						  			}
 			  					}
-				    		echo"</select>";
+				    		echo "</select>";
 						?>
 						<font size="-1">&nbsp;<?=_("Uhr")?></font>
 					</td>
@@ -230,7 +230,7 @@ function change_schedule_view() {
 							}
 
 						foreach ($all_semester as $a) {
-							if ((time() <$a["vorles_ende"]) && ($a["name"] != $tmp_name)){
+							if ((time() < $a["vorles_ende"]) && ($a["name"] != $tmp_name)){
 								if ($my_schedule_settings ["glb_sem"] == $a["name"])
 									echo "<option selected>".$a["name"]."</option>";
 								else
