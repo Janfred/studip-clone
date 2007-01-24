@@ -495,7 +495,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				echo '</td><td class="blue_gradient" align= "right" valign="top" colspan="4" nowrap>';
 
 				if ($last_modified){
-					echo '&nbsp;<span style="font-size:0.8em"><sup>letzte &Auml;nderung:&nbsp;</sup></span><span style="color:red;font-size:0.8em"><sup>' . date("d.m.Y, H:m",$last_modified) . '</sup></span>';
+					echo '&nbsp;<span style="font-size:0.8em"><sup>letzte &Auml;nderung:&nbsp;</sup></span><span style="color:red;font-size:0.8em"><sup>' . date("d.m.Y, H:i",$last_modified) . '</sup></span>';
 				}
 				echo '</a></td></tr>';
 			} else {

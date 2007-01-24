@@ -114,7 +114,7 @@ function check_group_new($group_members, $my_obj){
 			|| $seminar_content['neuscmcontent']
 			|| $seminar_content['neuewikiseiten']
 			|| $seminar_content['neuevotes']){
-			$last_modified = ($seminar_content["chdate"] > $seminar_content['last_modified'] ? $seminar_content["chdate"] : $seminar_content['last_modified']);
+			$last_modified = ($seminar_content['visitdate'] <= $seminar_content["chdate"] && $seminar_content["chdate"] > $seminar_content['last_modified'] ? $seminar_content["chdate"] : $seminar_content['last_modified']);
 			if ($last_modified > $group_last_modified){
 				$group_last_modified = $last_modified;
 			}
