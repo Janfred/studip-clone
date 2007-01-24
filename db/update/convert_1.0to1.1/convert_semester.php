@@ -19,9 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 
-require_once ("lib/classes/SemesterData.class.php");
-require_once ("lib/classes/HolidayData.class.php");
-require_once ("config.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/SemesterData.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/lib/classes/HolidayData.class.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/config.inc.php");
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("root");
@@ -35,7 +35,7 @@ if (semester_insert_into_semester_from_array($SEMESTER)) {
 	echo "<table border=1><tr>";
 	echo "<th></th><th>Name</th><th>Beginn</th><th>Ende</th>";
 	echo "</tr>";
-	for ($i=1;$i<=count($SEMESTER);$i++) {
+	for ($i=1;$i<count($SEMESTER);$i++) {
 		echo "<tr><td><b>".$i."</b></td><td>".$SEMESTER[$i]["name"]."</td><td>".date("d-m-Y",$SEMESTER[$i]["beginn"])."</td><td>".date("d-m-Y",$SEMESTER[$i]["ende"])."</td></tr>";
 	}
 	echo "</table>";
@@ -45,7 +45,7 @@ if (holiday_insert_into_semester_from_array($HOLIDAY)) {
 	echo "<table border=1><tr>";
 	echo "<th></th><th>Name</th><th>Beginn</th><th>Ende</th>";
 	echo "</tr>";
-	for ($i=1;$i<=count($HOLIDAY);$i++) {
+	for ($i=1;$i<count($HOLIDAY);$i++) {
 		echo "<tr><td><b>".$i."</b></td><td>".$HOLIDAY[$i]["name"]."</td><td>".date("d-m-Y",$HOLIDAY[$i]["beginn"])."</td><td>".date("d-m-Y",$HOLIDAY[$i]["ende"])."</td></tr>";
 	}
 	echo "</table>";
