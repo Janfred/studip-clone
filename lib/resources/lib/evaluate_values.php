@@ -987,6 +987,13 @@ if (($kill_lock)) {
 /*****************************************************************************
 evaluate the commands from schedule navigator
 /*****************************************************************************/
+
+// fixed BIEST0210; ermoeglicht sofortiges zurueckblaettern im Belegungsplan; 
+if ($resources_data['schedule_week_offset']==null)
+{
+  $resources_data['schedule_week_offset']=0;
+}
+
 if ($view == "view_schedule" || $view == "openobject_schedule") {
 	if ($next_week)
 		$resources_data["schedule_week_offset"]++;
