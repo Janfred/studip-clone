@@ -44,11 +44,11 @@ if (isset($print_view))
 	$_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
+include ('lib/include/html_head.inc.php'); // Output of html head
 
 require_once 'config.inc.php'; //Daten laden
 require_once 'config_tools_semester.inc.php';
-require_once 'include/ms_stundenplan.inc.php';
+require_once 'lib/include/ms_stundenplan.inc.php';
 require_once 'lib/visual.inc.php';
 require_once 'lib/classes/SemesterData.class.php';
 
@@ -66,13 +66,13 @@ if ($change_view) {
 }
 
 if (!$print_view) {
-	include 'include/header.php';   //hier wird der "Kopf" nachgeladen
+	include 'lib/include/header.php';   //hier wird der "Kopf" nachgeladen
 	if ($inst_id) //Links if we show in the instiute-object-view
-		include 'include/links_openobject.inc.php';
+		include 'lib/include/links_openobject.inc.php';
 	elseif (!$perm->have_perm("admin")) //if not in the adminview, it's the user view!
-		include ('include/links_sms.inc.php');
+		include ('lib/include/links_sms.inc.php');
 	else
-		include ('include/links_sms.inc.php');
+		include ('lib/include/links_sms.inc.php');
 	}
 
 if ($change_view) {
@@ -673,6 +673,6 @@ ob_end_flush(); //end outputbuffering
 if (!$print_view) {
 	echo '</table>';
  } 
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

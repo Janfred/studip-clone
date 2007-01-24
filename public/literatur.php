@@ -30,14 +30,14 @@ require_once('lib/classes/StudipLitList.class.php');
 $HELP_KEYWORD="Basis.Literatur";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 checkObject(); // do we have an open object?
 checkObjectModule("literature");
 object_set_visit_module("literature");
 
-include ('include/links_openobject.inc.php');
+include ('lib/include/links_openobject.inc.php');
 ?>
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
@@ -81,7 +81,7 @@ print_infobox ($infobox,"literaturelist.jpg");
 <tr><td class="blank" colspan="2">&nbsp;</td></tr>
 </table>
 <?
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 // Save data back to database.
 page_close();
 // <!-- $Id$ -->

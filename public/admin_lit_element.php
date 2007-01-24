@@ -31,8 +31,8 @@ require_once ('lib/classes/StudipLitClipBoard.class.php');
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 //html attributes for form
 $_attributes['text'] = array('style' => 'width:100%');
@@ -316,6 +316,6 @@ echo $_the_clip_form->getHiddenField(md5("is_sended"),1) . $_the_form->getFormEn
 </tr>
 </table>
 <?
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

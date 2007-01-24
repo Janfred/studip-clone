@@ -29,9 +29,9 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.VeranstaltungenVerwalten";
 
 // Start of Output
-include 'include/html_head.inc.php'; // Output of html head
-include 'include/header.php';   // Output of Stud.IP head
-include 'include/links_admin.inc.php'; //Output the nav
+include 'lib/include/html_head.inc.php'; // Output of html head
+include 'lib/include/header.php';   // Output of Stud.IP head
+include 'lib/include/links_admin.inc.php'; //Output the nav
 
 require_once 'lib/visual.inc.php';
 
@@ -56,6 +56,6 @@ if ($SessSemName[1]) {
 	</table>
 <?
 }
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

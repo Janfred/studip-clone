@@ -35,8 +35,8 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.News";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 
 
@@ -64,9 +64,9 @@ $news = new AdminNewsController();
 
 
 if ($list || $view || (($news_range_id != $user->id) && ($news_range_id != 'studip')) ){
-		include ('include/links_admin.inc.php');	//Linkleiste fuer admins
+		include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
 } else {
-		include ('include/links_about.inc.php'); //Linkliste persönlicher Bereich
+		include ('lib/include/links_about.inc.php'); //Linkliste persönlicher Bereich
 }
 
 
@@ -250,6 +250,6 @@ if (!$cmd OR $cmd=="show") {
 	}
 }
 echo"\n</table>";
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

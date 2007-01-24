@@ -71,7 +71,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 $_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
+include ('lib/include/html_head.inc.php'); // Output of html head
 
 $element = new StudipLitCatElement();
 $db = new DB_Seminar();
@@ -139,7 +139,7 @@ if (is_array($_lit_data)){
 	}
 }
 
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 // Save data back to database.
 my_session_close(md5('admin_literatur_overview.php'));
 page_close();

@@ -79,8 +79,8 @@ $HELP_KEYWORD="Basis.Startseite"; // set keyword for new help
 
 // Start of Output
 
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');
 
 // only for authenticated users
 if ($auth->is_authenticated() && $user->id != 'nobody') {
@@ -453,5 +453,5 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 }
 
 echo '</table>';
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 ?>

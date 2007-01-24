@@ -44,14 +44,14 @@ require_once ('lib/visual.inc.php');
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
 
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 $cssSw->switchClass();
 
-// include "include/links_openobject.inc.php";
+// include 'lib/include/links_openobject.inc.php';
 
 if (!$contact["filter"])
 	$contact["filter"]="all";
@@ -73,7 +73,7 @@ if ($contact["view"]=="alpha" && strlen($filter) > 3)
 if ($contact["view"]=="gruppen" && strlen($filter) < 4)
 	$filter="";
 
-include ('include/links_sms.inc.php');
+include ('lib/include/links_sms.inc.php');
 
 // Aktionen //////////////////////////////////////
 
@@ -276,7 +276,7 @@ if (!$edit_id) {
 }
 echo "<br>&nbsp; </td></tr></table>";
 
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 
 ?>

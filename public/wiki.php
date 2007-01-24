@@ -60,14 +60,14 @@ if ($view=="wikiprint") {
 $HELP_KEYWORD="Basis.Wiki"; // Hilfeseite im Hilfewiki
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 checkObject(); // do we have an open object?
 checkObjectModule("wiki"); //are we allowed to use this module here?
 object_set_visit_module("wiki");
 
 
-include ('include/links_openobject.inc.php');
+include ('lib/include/links_openobject.inc.php');
 
 
 echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>\n";
@@ -131,7 +131,7 @@ if ($view=="listall") {
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu editieren!"));
 		end_blank_table();
 		echo '</td></tr></table>';
-		include ('include/html_end.inc.php');
+		include ('lib/include/html_end.inc.php');
 		die;
 	}
 
@@ -141,7 +141,7 @@ if ($view=="listall") {
 		parse_msg("error§" . _("Es wurde keine zu editierende Seite übergeben!"));
 		end_blank_table();
 		echo '</td></tr></table>';
-		include ('include/html_end.inc.php');
+		include ('lib/include/html_end.inc.php');
 		die;
 	}
 
@@ -160,7 +160,7 @@ if ($view=="listall") {
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu editieren!"));
 		end_blank_table();
 		echo '</td></tr></table>';
-		include ('include/html_end.inc.php');
+		include ('lib/include/html_end.inc.php');
 		die;
 	}
 	// set lock

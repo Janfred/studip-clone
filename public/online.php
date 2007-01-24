@@ -27,7 +27,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once 'lib/functions.php';
 require_once ('lib/msg.inc.php');
 require_once ('lib/visual.inc.php');
-require_once ('include/messagingSettings.inc.php');
+require_once ('lib/include/messagingSettings.inc.php');
 require_once ('lib/messaging.inc.php');
 require_once ('lib/contact.inc.php');
 require_once ('lib/user_visible.inc.php');
@@ -42,9 +42,9 @@ $cssSw=new cssClassSwitcher;
 $HELP_KEYWORD="Basis.InteraktionWhosOnline";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
-include ('include/links_sms.inc.php');
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_sms.inc.php');
 
 ob_start();
 
@@ -298,7 +298,7 @@ ob_start();
 ?>
 </tr></table></td></tr></table>
 <?
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 ob_end_flush();
   // Save data back to database.
 page_close();

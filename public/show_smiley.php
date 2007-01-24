@@ -114,5 +114,5 @@ if ($sm->error) { // old code is used
 
 
 }
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 ?>

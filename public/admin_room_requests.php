@@ -45,9 +45,9 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
-include ('include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
 require_once('lib/msg.inc.php');	//Ausgaben
 require_once('config.inc.php');	//Settings....
@@ -496,6 +496,6 @@ if (is_object($admin_rooms_data["resRequest"])) {
 </tr>
 </table>
 <?php
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

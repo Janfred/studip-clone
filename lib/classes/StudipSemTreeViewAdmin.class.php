@@ -759,7 +759,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 }
 //test
 //page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-//include "include/html_head.inc.php";
+//include 'lib/include/html_head.inc.php';
 //include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 //$test = new StudipSemTreeViewAdmin($_REQUEST['start_item_id']);
 //$test->showSemTree();

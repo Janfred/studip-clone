@@ -12,8 +12,8 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.VerschiedenesScore"; // external help keyword
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 require_once 'lib/functions.php';
 require_once('lib/visual.inc.php');
@@ -86,6 +86,6 @@ if ($db->num_rows()) {
 	echo "</table>\n";
 	}
 echo '</td></tr></table>';
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

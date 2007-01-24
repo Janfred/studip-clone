@@ -44,13 +44,13 @@ $HELP_KEYWORD="Basis.Evaluationen";
 require_once ('lib/evaluation/evaluation.config.php');
 
 include_once('lib/seminar_open.php');
-include_once('include/html_head.inc.php');
-include_once('include/header.php');
+include_once('lib/include/html_head.inc.php');
+include_once('lib/include/header.php');
 
 if ($list || $view)
-	include ('include/links_admin.inc.php');
+	include ('lib/include/links_admin.inc.php');
 else
-	include ('include/links_about.inc.php');
+	include ('lib/include/links_about.inc.php');
 
 if (($SessSemName[1]) && (($view == "vote_sem") || ($view == "vote_inst"))) 
 	$the_range = $SessSemName[1];

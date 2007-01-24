@@ -32,8 +32,8 @@ require_once ('lib/meine_seminare_func.inc.php');
 $HELP_KEYWORD="Basis.VeranstaltungenOrdnen";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 $db=new DB_Seminar;
 
@@ -175,7 +175,7 @@ FOR ($i=0; $i<8; $i++)
 ?>
 </table>
 <?php
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
   // Save data back to database.
   page_close();
 // <!-- $Id$ --> 

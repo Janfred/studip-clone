@@ -20,8 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 if ($i_page == "calendar.php") {
-	require('include/html_head.inc.php');
-	require('include/header.php');
+	require('lib/include/html_head.inc.php');
+	require('lib/include/header.php');
 	require($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
 }
 require_once('lib/visual.inc.php');

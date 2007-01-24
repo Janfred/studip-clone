@@ -47,9 +47,9 @@ require_once 'lib/msg.inc.php';
 require_once 'lib/visual.inc.php';
 
 include 'lib/seminar_open.php'; //hier werden die sessions initialisiert
-include 'include/html_head.inc.php';
-include 'include/header.php';   //hier wird der "Kopf" nachgeladen 
-include 'include/links_admin.inc.php';  //Linkleiste fuer admins
+include 'lib/include/html_head.inc.php';
+include 'lib/include/header.php';   //hier wird der "Kopf" nachgeladen 
+include 'lib/include/links_admin.inc.php';  //Linkleiste fuer admins
 
 //global variables
 $_integrity_plugins = array("User","Seminar","Institut","Archiv","Studiengang");
@@ -190,7 +190,7 @@ if(!$_REQUEST['plugin']) {
 	<?php
 }
 echo '</td></tr></table>';
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 // <!--$Id$-->
 ?>

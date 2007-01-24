@@ -61,9 +61,9 @@ $sess->register("template");
 /* ************************************************************************* */
 // if you wanna create a pdf no html-header should be send to the browser
 if (!isset($_GET["create_pdf"])){
-	require_once('include/html_head.inc.php');
-	require_once('include/header.php');
-	require_once('include/links_seminare.inc.php');
+	require_once('lib/include/html_head.inc.php');
+	require_once('lib/include/header.php');
+	require_once('lib/include/links_seminare.inc.php');
 	include_once($PATH_EXPORT ."/recordofstudy.lib.php");
 	include_once($PATH_EXPORT ."/recordofstudyDB.php");
 }

@@ -27,8 +27,8 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.InVeranstaltungDetails";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');	 // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');	 // Output of Stud.IP head
 
 require_once ('lib/msg.inc.php');
 require_once ('lib/dates.inc.php'); //Funktionen zum Anzeigen der Terminstruktur
@@ -60,7 +60,7 @@ if (!isset($sem_id)) {
 
 //wenn Seminar gesetzt und kein externer Aufruf uebernahme der SessionVariable
 if (($SessSemName[1] != "") && (!isset($sem_id) || $SessSemName[1] == $sem_id)) {
-	include 'include/links_openobject.inc.php';
+	include 'lib/include/links_openobject.inc.php';
 	$sem_id = $SessSemName[1];
 }
 
@@ -707,7 +707,7 @@ print_infobox ($infobox,"details.jpg");
 </tr>
 </table>
 <?php
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>

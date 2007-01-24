@@ -140,8 +140,8 @@ if ($ILIAS_CONNECT_ENABLE)
 	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
 	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
 
-	include ('include/html_head.inc.php'); // Output of html head
-	include ('include/header.php');   // Output of Stud.IP head
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');   // Output of Stud.IP head
 
 	if (isset($do_open))
 		$print_open_admin[$do_open] = true;
@@ -174,7 +174,7 @@ if ($ILIAS_CONNECT_ENABLE)
 	$out = true;
 
 	$username = $auth->auth["uname"];
-	include ('include/links_about.inc.php');
+	include ('lib/include/links_about.inc.php');
 ?>
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 		<tr>
@@ -369,11 +369,11 @@ if ($ILIAS_CONNECT_ENABLE)
 else
 {
 	// Start of Output
-	include ('include/html_head.inc.php'); // Output of html head
-	include ('include/header.php');   // Output of Stud.IP head
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');   // Output of Stud.IP head
 	parse_window ("error§" . _("Das Verbindungsmodul f&uuml;r ILIAS-Lernmodule ist nicht eingebunden. Damit Lernmodule verwendet werden k&ouml;nnen, muss die Verbindung zu einer ILIAS-Installation in den Systemeinstellungen hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",
 				_("Lernmodule nicht eingebunden"));
 }
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

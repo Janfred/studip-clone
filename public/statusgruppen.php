@@ -30,13 +30,13 @@ require_once 'lib/functions.php';
 
 $HELP_KEYWORD="Basis.InVeranstaltungGruppen";
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 checkObject();
 checkObjectModule("participants");
 
-include ('include/links_openobject.inc.php');
+include ('lib/include/links_openobject.inc.php');
 
 $cssSw=new cssClassSwitcher;
 
@@ -341,6 +341,6 @@ if ($delete_id)
 <?php
 
 // Ende Darstellungsteil
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

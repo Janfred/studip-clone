@@ -30,8 +30,8 @@ require_once ('lib/visual.inc.php');
 
 $HELP_KEYWORD="Basis.Ilias";
 
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 {
@@ -128,7 +128,7 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 		$connected_modules = $object_connections->getConnections();
 		ELearningUtils::bench("connections");
 	}
-	include ('include/links_openobject.inc.php');
+	include ('lib/include/links_openobject.inc.php');
 
 	?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
@@ -391,6 +391,6 @@ else
 	parse_window ("error§" . _("Die Schnittstelle für die Integration von Lernmodulen ist nicht aktiviert. Damit Lernmodule verwendet werden können, muss die Verbindung zu einem LCM-System in der Konfigurationsdatei von Stud.IP hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",
 				_("E-Learning-Schnittstelle nicht eingebunden"));
 }
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

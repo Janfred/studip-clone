@@ -27,9 +27,9 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGruppen";
 
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
-include ('include/links_admin.inc.php');
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php');
 
 require_once ('config.inc.php');
 require_once ('lib/visual.inc.php');
@@ -560,7 +560,7 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 <?php
 }
 // Ende Gruppenuebersicht
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 // Ende Darstellungsteil
 page_close();
 ?>

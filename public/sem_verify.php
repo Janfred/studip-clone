@@ -125,8 +125,8 @@ function seminar_preliminary($seminar_id,$user_id=NULL) {
 }
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 require_once ('lib/dates.inc.php');
 ?>
 <script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
@@ -847,6 +847,6 @@ $db6=new DB_Seminar;
 	    		echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
 		echo "<br><br></td></tr></table>";
 	}
-	include ('include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
 	page_close();
 ?>

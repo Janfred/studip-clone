@@ -37,8 +37,8 @@ $magic     = "dsdfjhgretha";  // Challenge seed.
 $HELP_KEYWORD="Basis.AnmeldungMail";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 
 ?>
@@ -115,7 +115,7 @@ include ('include/header.php');   // Output of Stud.IP head
 	} else {
 		; // hier sollten wir nie hinkommen
 	}
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
   page_close();
 
 // <!-- $Id$ -->

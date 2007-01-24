@@ -55,9 +55,9 @@ $db4 = new DB_Seminar;
 $sess->register("archiv_assi_data");
 $cssSw = new cssClassSwitcher; 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php'); // Output of Stud.IP head
-include ('include/links_admin.inc.php'); //Linkleiste fuer admins
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php'); // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php'); //Linkleiste fuer admins
 
 // single delete (a Veranstaltung is open)
 if ($SessSemName[1]) {
@@ -563,6 +563,6 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 	</table>
 <?php
 	} 
-	include ('include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
 	page_close();
 ?>

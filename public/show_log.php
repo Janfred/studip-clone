@@ -5,7 +5,7 @@ $perm->check("root");
 
 if (!$LOG_ENABLE) {
         print '<p>' . _("Log-Modul abgeschaltet."). '</p>';
-	include ('include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
         page_close();
         die;
 }
@@ -24,9 +24,9 @@ require_once('lib/classes/ZebraTable.class.php');
 require_once($RELATIVE_PATH_RESOURCES.'/lib/ResourceObject.class.php');
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
-include ('include/links_admin.inc.php');  //Linkleiste fuer admins
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 function get_log_action($action_id) {
 	static $actions=array();
@@ -404,7 +404,7 @@ echo $content->close();
 echo $container->blankRow();
 echo $container->close();
 end_form($from);
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 //<!-- $Id$ -->
 ?>

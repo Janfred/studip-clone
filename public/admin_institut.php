@@ -292,9 +292,9 @@ if ($i_view == "new")
 
 //Output starts here
 
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   //hier wird der "Kopf" nachgeladen
-include ('include/links_admin.inc.php');  //Linkleiste fuer admins
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 //get ID from a open Institut
 if ($SessSemName[1])
@@ -335,7 +335,7 @@ if ($i_view=="delete") {
 	echo "<tr><td><br>" . _("Die ausgewählte Einrichtung wurde gel&ouml;scht.") . "<br>";
 	printf(_("Bitte wählen Sie über das Schlüsselsymbol %s eine andere Einrichtung aus."), "<a href=\"admin_institut.php?list=TRUE\"><img " . tooltip(_("Neue Auswahl")) . " align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/admin.gif\" border=\"0\"></a>");
 	echo '<br><br></td></tr></table><br><br></td></tr></table>';
-	include ('include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
 	page_close();
 	die;
 }
@@ -460,7 +460,7 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 }
 
 echo '</table>';
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 //<!-- $Id$ -->
 ?>

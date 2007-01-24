@@ -71,8 +71,8 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	$HELP_KEYWORD="Basis.Logout";
 
 	// Start of Output
-	include ('include/html_head.inc.php'); // Output of html head
-	include ('include/header.php');   // Output of Stud.IP head
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');   // Output of Stud.IP head
 
 	?>
 	<table width="80%" align="center" border="0" cellpadding="0" cellspacing="0">
@@ -101,7 +101,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 		</tr>
 	</table>
 <?
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 }
 ob_end_flush();

@@ -39,10 +39,10 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once 'lib/functions.php';
 require_once ('lib/msg.inc.php');
 require_once ('lib/visual.inc.php');
-require_once ('include/messagingSettings.inc.php');
+require_once ('lib/include/messagingSettings.inc.php');
 require_once ('lib/messaging.inc.php');
 require_once ('lib/statusgruppe.inc.php');
-require_once ('include/reiter.inc.php');
+require_once ('lib/include/reiter.inc.php');
 require_once ('lib/sms_functions.inc.php');
 require_once ('lib/user_visible.inc.php');
 if ($GLOBALS['CHAT_ENABLE']){
@@ -639,9 +639,9 @@ if ($change_view) {
 }
 
 // includes
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
-include ('include/links_sms.inc.php'); // include reitersystem
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_sms.inc.php'); // include reitersystem
 check_messaging_default();
 
 if (($change_view) || ($delete_user) || ($view=="Messaging")) {
@@ -977,6 +977,6 @@ if ($send_view) {
 </table>
 <?php
 // Save data back to database.
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

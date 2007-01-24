@@ -27,12 +27,12 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 require_once('config.inc.php');
 require_once('lib/visual.inc.php');
-require_once 'include/reiter.inc.php';
+require_once 'lib/include/reiter.inc.php';
 
 function write_toplist($rubrik,$query) {
 	global $PHP_SELF;

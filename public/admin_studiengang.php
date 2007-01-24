@@ -32,9 +32,9 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
  if (isset($cancel_x)) unset ($i_view);
 
 // Start of Output
-	include ('include/html_head.inc.php'); // Output of html head
-	include ('include/header.php');   // Output of Stud.IP head
-	include ('include/links_admin.inc.php');  //Linkleiste fuer admins
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');   // Output of Stud.IP head
+	include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 	require_once ('lib/msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
 	require_once ('lib/visual.inc.php');
@@ -278,7 +278,7 @@ if (!$i_view) {
 }
 
 echo '</table>';
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 
 //<!-- $Id$ -->

@@ -17,11 +17,11 @@
 if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 {
 // Start of Output
-	include ('include/html_head.inc.php'); // Output of html head
-	include ('include/header.php');   // Output of Stud.IP head
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');   // Output of Stud.IP head
 	if ($page == 1)
 		echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
-	include ('include/links_admin.inc.php');
+	include ('lib/include/links_admin.inc.php');
 	if ($page == 1)
 		$cssSw->enableHover();
 
@@ -136,7 +136,7 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 	</table>
 	<p>&nbsp;</p>
 <?php
-	include ('include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
 }
 elseif ($export_error_num > 0)
 {

@@ -79,13 +79,13 @@ if ($rechte) {
 }
 
 // Start  of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   //hier wird der "Kopf" nachgeladen
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 
 checkObject();
 checkObjectModule("participants");
 
-include ('include/links_openobject.inc.php');
+include ('lib/include/links_openobject.inc.php');
 
 $messaging=new messaging;
 $cssSw=new cssClassSwitcher;
@@ -1452,7 +1452,7 @@ if ($rechte) {
 
 
 echo '</td></tr></table>';
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>

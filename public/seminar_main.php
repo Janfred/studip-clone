@@ -88,12 +88,12 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && $SessSemName[1]){
 $HELP_KEYWORD="Basis.InVeranstaltungKurzinfo";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 checkObject();
 
-include 'include/links_openobject.inc.php';
+include 'lib/include/links_openobject.inc.php';
 include 'lib/showNews.inc.php';
 include 'lib/show_dates.inc.php';
 
@@ -193,7 +193,7 @@ if ($GLOBALS['VOTE_ENABLE']) {
 	show_votes ($auswahl, $auth->auth["uid"], $perm, YES);
 }
 
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>

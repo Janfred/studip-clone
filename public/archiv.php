@@ -31,7 +31,7 @@ elseif (($dump_id) || ($forum_dump_id) || ($wiki_dump_id))
 	$_include_stylesheet = 'style_dump.css';
 
 // Start of Output
-include('include/html_head.inc.php'); // Output of html head
+include('lib/include/html_head.inc.php'); // Output of html head
 
 require_once('lib/msg.inc.php');
 require_once('config.inc.php');
@@ -201,7 +201,7 @@ $HELP_KEYWORD="Basis.SuchenArchiv";
 
 // dann eben den Rest...
 
-include('include/header.php');   //hier wird der "Kopf" nachgeladen
+include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0 border=0>
 	<tr>
@@ -543,7 +543,7 @@ if ($archiv_data["perform_search"]) {
 </table>
 <?
 }
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
   // Save data back to database.
   page_close();
  ?>

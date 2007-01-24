@@ -18,8 +18,8 @@ $auth->login_if($auth->auth["uid"] == "nobody");
 // ini_set("display_errors","on");
 
 include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
-include ('include/html_head.inc.php');
-include ('include/header.php');
+include ('lib/include/html_head.inc.php');
+include ('lib/include/header.php');
 
 // read in the command and pluginid
 $cmd = 'Action' . $_GET["cmd"];
@@ -73,11 +73,11 @@ $pluginparams = $_GET["plugin_subnavi_params"];
 if ($type == "Standard"){
 	// diplay the admin_menu
 	if (($cmd == "showConfigurationPage") && $perm->have_perm("admin")){
-		include('include/links_admin.inc.php');
+		include('lib/include/links_admin.inc.php');
 		
 	}
 	// display the course menu
-	include ('include/links_openobject.inc.php');
+	include ('lib/include/links_openobject.inc.php');
 	
 	// let the plugin show its view	
 	$pluginnav = $plugin->getNavigation();
@@ -110,7 +110,7 @@ else if ($type == "Administration") {
 	// Administration-Plugins only accessible by users with admin rights
 	if ($perm->have_perm("admin")){
 	   // display the admin menu
-	   include ('include/links_admin.inc.php');
+	   include ('lib/include/links_admin.inc.php');
 	   
 	   // let the plugin show its view	
 	   $pluginnav = $plugin->getNavigation();
@@ -188,7 +188,7 @@ else if ($type == "Homepage"){
 	IF ($perm->have_perm("root") OR $admin_darf == TRUE) { // Es werden die Editreiter angezeigt, wenn ich &auml;ndern darf
 		// rights should be checked
 		$username = $hpusername;
-		include('include/links_about.inc.php');	
+		include('lib/include/links_about.inc.php');	
 	}
 	textdomain($domain);
 	$pluginnav = $plugin->getNavigation();
@@ -211,7 +211,7 @@ else {
 // restore the domain
 textdomain("studip");
 // close the page
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ob_end_flush();
 ?>

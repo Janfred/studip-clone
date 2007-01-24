@@ -85,12 +85,12 @@ if ($experiod == 'period') {
 }
 
 if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == 'exp' && !empty($err))) {
-	require('include/html_head.inc.php');
+	require('lib/include/html_head.inc.php');
 
 	print_js_import();
 	echo "\n<body onUnLoad=\"upload_end()\">";
 
-	require('include/header.php');
+	require('lib/include/header.php');
 	require($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
 }
 

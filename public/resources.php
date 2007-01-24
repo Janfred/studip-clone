@@ -45,8 +45,8 @@ if ($RESOURCES_ENABLE) {
 	include ("$RELATIVE_PATH_RESOURCES/resourcesControl.inc.php");
 } else {
 	// Start of Output
-	include ('include/html_head.inc.php'); // Output of html head
-	include ('include/header.php');   // Output of Stud.IP head
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');   // Output of Stud.IP head
 	require_once ('lib/msg.inc.php');
 	parse_window ("error§" . _("Die Ressurcenverwaltung ist nicht eingebunden. Bitte aktivieren Sie sie in den Systemeinstellungen oder wenden Sie sich an die Systemadministratoren."), "§",
 				_("Ressourcenverwaltung nicht eingebunden"));

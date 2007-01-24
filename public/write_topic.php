@@ -6,7 +6,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
+include ('lib/include/html_head.inc.php'); // Output of html head
 
 if  ($user->id == "nobody") {  // nicht angemeldete muessen Namen angeben, dazu auch JS Check auf Name
 ?>
@@ -39,7 +39,7 @@ function pruefe_name(){
 
 	checkObject();
 
-	include 'include/check_sem_entry.inc.php'; //hier wird der Zugang zum Seminar ueberprueft	
+	include 'lib/include/check_sem_entry.inc.php'; //hier wird der Zugang zum Seminar ueberprueft	
 
 ?>
 
@@ -64,7 +64,7 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 			$db=new DB_Seminar;
 			$db->query("SELECT * FROM px_topics WHERE topic_id='$topic_id' AND Seminar_id ='$SessSemName[1]'");
 			if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
-				include ('include/html_end.inc.php');
+				include ('lib/include/html_end.inc.php');
 				page_close();
 				die;
 			}
@@ -143,7 +143,7 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 			$db=new DB_Seminar;
 			$db->query("SELECT * FROM px_topics WHERE topic_id='$parent_id' AND Seminar_id ='$SessSemName[1]'");
 			if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
-				include ('include/html_end.inc.php');
+				include ('lib/include/html_end.inc.php');
 		  		page_close();
 				die;
 			}
@@ -159,6 +159,6 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 }
 echo '</blockquote></td></tr></table>';
   // Save data back to database.
-  include ('include/html_end.inc.php');
+  include ('lib/include/html_end.inc.php');
   page_close();
 ?>

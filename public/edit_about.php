@@ -726,8 +726,8 @@ if ($logout && $auth->auth["uid"] == "nobody")  // wir wurden gerade ausgeloggt.
 	{
 
 	// Start of Output
-	include ('include/html_head.inc.php'); // Output of html head
-	include ('include/header.php');   // Output of Stud.IP head
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');   // Output of Stud.IP head
 
 	echo '<table cellspacing="0" cellpadding="0" border="0" width="100%">';
 	echo '<tr><td class="topic" colspan="2"><b>&nbsp;'. _("Daten ge&auml;ndert!") .'</b></td></tr>';
@@ -740,7 +740,7 @@ if ($logout && $auth->auth["uid"] == "nobody")  // wir wurden gerade ausgeloggt.
 
 
 	echo '</table>';
-	include ('include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
 	page_close();
 	die;
 	}
@@ -750,13 +750,13 @@ if (!$my_about->check)
  {
 	// -- here you have to put initialisations for the current page
 	// Start of Output
-	include ('include/html_head.inc.php'); // Output of html head
-	include ('include/header.php');   // Output of Stud.IP head
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');   // Output of Stud.IP head
 	parse_window ('error§' . _("Zugriff verweigert.")."<br />\n<font size=-1 color=black>". sprintf(_("Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen.<br /> <br /> Eine andere Ursache kann der Versuch des Zugriffs auf Userdaten, die Sie nicht bearbeiten d&uuml;rfen, sein. Nutzen Sie den untenstehenden Link, um zurück auf die Startseite zu gelangen."), $AUTH_LIFETIME).'</font>', '§',
 	_("Zugriff auf Userdaten verweigert"),
 	sprintf(_("%s Hier%s geht es wieder zur Anmeldung beziehungsweise Startseite."),'<a href="index.php"><b>&nbsp;','</b></a>')."<br />\n&nbsp;");
 
-	include ('include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
 	page_close();
 	die;
 	}
@@ -878,7 +878,7 @@ if(check_ticket($studipticket)){
 }
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
+include ('lib/include/html_head.inc.php'); // Output of html head
 
 if ($auth->auth["jscript"]) { // nur wenn JS aktiv
 if ($view == 'Daten') {
@@ -1038,7 +1038,7 @@ switch($view) {
 		break;
 }
 
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 
 if (!$cmd)
@@ -1052,7 +1052,7 @@ if (!$cmd)
 	 else $max_col =  64 ; //default für 640x480
 
 // Reitersystem
-include ('include/links_about.inc.php');
+include ('lib/include/links_about.inc.php');
 
 //Kopfzeile bei allen eigenen Modulen ausgeben
 $table_open = FALSE;
@@ -1605,11 +1605,11 @@ if($view == "allgemein") {
 }
 
 if($view == "Forum") {
-	require_once('include/forumsettings.inc.php');
+	require_once('lib/include/forumsettings.inc.php');
 }
 
 if ($view == "Stundenplan") {
-	require_once('include/ms_stundenplan.inc.php');
+	require_once('lib/include/ms_stundenplan.inc.php');
 	check_schedule_default();
 	change_schedule_view();
 }
@@ -1619,7 +1619,7 @@ if($view == 'calendar' && $GLOBALS['CALENDAR_ENABLE']) {
 }
 
 if ($view == "Messaging") {
-	require_once('include/messagingSettings.inc.php');
+	require_once('lib/include/messagingSettings.inc.php');
 	check_messaging_default();
 	change_messaging_view();
 }
@@ -1655,7 +1655,7 @@ if ($view == 'Login') {
 
 	if ($table_open) echo "\n</table>\n";
 	
-	include ('include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
 }
 
 page_close();

@@ -74,16 +74,16 @@ if ($cmd == 'all') {
 
 $HELP_KEYWORD="Basis.Dateien";
 
-include ('include/html_head.inc.php'); // Output of html head
+include ('lib/include/html_head.inc.php'); // Output of html head
 
 
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 checkObject();
 checkObjectModule('documents');
 object_set_visit_module('documents');
 
-include ('include/links_openobject.inc.php');
+include ('lib/include/links_openobject.inc.php');
 
 //obskuren id+_?_ string zerpflücken
 if (strpos($open, "_") !== false){
@@ -512,7 +512,7 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 </table>
 <br>
 <?php
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>

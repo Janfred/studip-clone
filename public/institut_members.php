@@ -26,7 +26,7 @@ include('lib/seminar_open.php'); //hier werden die sessions initialisiert
 require_once('lib/language.inc.php');
 require_once('config.inc.php');
 require_once('lib/visual.inc.php');
-require_once('include/html_head.inc.php');
+require_once('lib/include/html_head.inc.php');
 require_once('lib/statusgruppe.inc.php');
 require_once 'lib/functions.php';
 if ($GLOBALS['CHAT_ENABLE']){
@@ -35,7 +35,7 @@ if ($GLOBALS['CHAT_ENABLE']){
 $css_switcher = new CssClassSwitcher();
 echo $css_switcher->GetHoverJSFunction();
 
-require('include/header.php');   //hier wird der "Kopf" nachgeladen
+require('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 
 $db_institut_members = new DB_Seminar();
 
@@ -82,7 +82,7 @@ else{
 checkObject();
 checkObjectModule("personal");
 
-require('include/links_openobject.inc.php');
+require('lib/include/links_openobject.inc.php');
 
 // group by function as preset
 switch ($institut_members_data["show"]) {
@@ -325,7 +325,7 @@ else {
 	printf(_("Der Einrichtung <b>%s</b> wurden noch keine MitarbeiterInnen zugeordnet!"), htmlReady($SessSemName[0]));
 	echo "\n<br /><br /></blockquote>\n";
 	echo "</td></tr></table\n";
-	include ('include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
 	page_close();
 	die;
 }
@@ -523,7 +523,7 @@ if (($EXPORT_ENABLE) AND ($db_institut_members->num_rows() > 0) AND ($perm->have
 }
 echo "<tr><td class=\"blank\" colspan=\"$colspan\">&nbsp;</td></tr>\n";
 echo "</table></td></tr></table>\n";
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 
 function table_head ($structure, $css_switcher) {
 	echo "<colgroup>\n";

@@ -35,8 +35,8 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.LiteraturListen";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 $_attributes['lit_select'] = array('style' => 'font-size:8pt;width:100%');
 
@@ -59,10 +59,10 @@ if (!$_range_id){
 <body>
 <?
 if ($list  || $view || $view_mode || $_range_id != $auth->auth['uid']){
-	include ('include/links_admin.inc.php');	//Linkleiste fuer admins
+	include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
 	$_range_id = ($SessSemName[1]) ? $SessSemName[1] : $_range_id;
 } else {
-	include ('include/links_about.inc.php'); //Linkliste persönlicher Bereich
+	include ('lib/include/links_about.inc.php'); //Linkliste persönlicher Bereich
 }
 $_lit_range = $_range_id;
 
@@ -224,6 +224,6 @@ echo $_the_clip_form->getFormEnd();
 <tr><td class="blank" colspan="2">&nbsp;</td></tr>
 </table>
 <?
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

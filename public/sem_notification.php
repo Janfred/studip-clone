@@ -38,15 +38,15 @@ if (!$MAIL_NOTIFICATION_ENABLE) {
 	if ($_REQUEST['view'] != 'notification') {
 		page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 		$auth->login_if($auth->auth["uid"] == "nobody");
-		include('include/html_head.inc.php'); // Output of html head
-		include('include/header.php');   // Output of Stud.IP head
+		include('lib/include/html_head.inc.php'); // Output of html head
+		include('lib/include/header.php');   // Output of Stud.IP head
 	} else {
 		echo '<br><br>';
 	}
 	require_once ('lib/msg.inc.php');
 	$message = _("Die Benachrichtigungsfunktion ist nicht eingebunden. Die Benachrichtigungsfunktion wurde in den Systemeinstellungen nicht freigeschaltet. Wenden Sie sich bitte an die zust&auml;ndigen Administrierenden.");
 	parse_window ("error§$message", "§", _("Benachrichtigungsfunktion ist nicht eingebunden!"));
-	include ('include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
 	exit;
 }
 
@@ -55,8 +55,8 @@ if ($_REQUEST['view'] != 'notification') {
 	$auth->login_if($auth->auth["uid"] == "nobody");
 	include('lib/seminar_open.php'); // initialise Stud.IP-Session
 	// Start of Output
-	include('include/html_head.inc.php'); // Output of html head
-	include('include/header.php');   // Output of Stud.IP head
+	include('lib/include/html_head.inc.php'); // Output of html head
+	include('lib/include/header.php');   // Output of Stud.IP head
 	$link_param = '';
 } else {
 	$link_param = '&view=notification';
@@ -410,7 +410,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 if ($_REQUEST['view'] != 'notification') {
 	echo "</td></tr></table>\n";
 	
-	include ('include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
   // Save data back to database.
   page_close();
 }

@@ -26,8 +26,8 @@ $hash_secret = "dslkjjhetbjs";
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 require_once ('lib/contact.inc.php');
 require_once ('config.inc.php');
@@ -36,7 +36,7 @@ require_once 'lib/functions.php';
 require_once ('lib/statusgruppe.inc.php');
 require_once ('lib/user_visible.inc.php');
 #include ("calendar/calendar_links.inc.php");
-include('include/links_sms.inc.php');
+include('lib/include/links_sms.inc.php');
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
 
@@ -367,6 +367,6 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 // Ende Gruppenuebersicht
 
 // Ende Darstellungsteil
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

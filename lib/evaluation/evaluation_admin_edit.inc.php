@@ -41,9 +41,9 @@ $perm->check ("autor");*/
 # Include all required files ================================================ #
 
 #require_once ('lib/seminar_open.php');
-#require_once ('include/html_head.inc.php');
-#require_once ('include/header.php');
-#require_once ("include/links_admin.inc.php");
+#require_once ('lib/include/html_head.inc.php');
+#require_once ('lib/include/header.php');
+#require_once ('lib/include/links_admin.inc.php');
 
 require_once ('lib/evaluation/evaluation.config.php');
 require_once (EVAL_LIB_EDIT);
@@ -241,7 +241,7 @@ if ($error_msgs){
 	
 	echo EvalEdit::createSite ($errors . $back_button, " " );
 
-	include_once ('include/html_end.inc.php');
+	include_once ('lib/include/html_end.inc.php');
 	page_close ();
 	exit ();
 
@@ -326,7 +326,7 @@ $debug .= "</pre>";
 #echo $debug;
 */
 # PHP-LIB: close session ==================================================== #
-include_once ('include/html_end.inc.php');
+include_once ('lib/include/html_end.inc.php');
 //page_close ();
 # ============================================================== end: PHP-LIB #
 ?>

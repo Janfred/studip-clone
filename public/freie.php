@@ -137,8 +137,8 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.SymboleFreieVeranstaltungen";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 require_once('config.inc.php');
 require_once('lib/msg.inc.php');
@@ -234,7 +234,7 @@ if ($num_my_sem){
 
 </table>
 <?php
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
   // Save data back to database.
   page_close()
 ?>

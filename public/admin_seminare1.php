@@ -40,9 +40,9 @@ require_once('lib/classes/DataFields.class.php');
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGrunddaten";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
-include ('include/links_admin.inc.php');
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php');
 ?>
 
 <SCRIPT language="JavaScript">
@@ -788,6 +788,6 @@ if (($s_id) && (auth_check())) {
 ?>
 </table>
 <?php
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

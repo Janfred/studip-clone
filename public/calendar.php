@@ -74,10 +74,10 @@ if ($CALENDAR_ENABLE)
 else {
 	require_once ('lib/msg.inc.php');
 	// Start of Output
-	include ('include/html_head.inc.php'); // Output of html head
-	include ('include/header.php');   // Output of Stud.IP head
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');   // Output of Stud.IP head
 	$message = _("Der Terminkalender ist nicht eingebunden. Der Terminkalender wurde in den Systemeinstellungen nicht freigeschaltet. Wenden Sie sich bitte an die zust&auml;ndigen Administrierenden.");
 	parse_window ("error§$message", "§", _("Terminkalender ist nicht eingebunden!"));
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 }
 ?>

@@ -38,7 +38,7 @@ $perm->check("root");
 
 if (!$LOG_ENABLE) {
         print '<p>' . _("Log-Modul abgeschaltet."). '</p>';
-	include ('include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
         page_close();
         die;
 }
@@ -56,9 +56,9 @@ $cssSw=new cssClassSwitcher;
 //$admin_config_data["range_id"] = '';
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
-include ('include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 include ('lib/classes/Table.class.php');
 include ('lib/classes/ZebraTable.class.php');
 
@@ -241,6 +241,6 @@ if ($_REQUEST['action']=="change") {
 	</tr>
 </table>
 <?php
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

@@ -394,7 +394,7 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 ob_end_flush();
 
-include 'include/check_sem_entry.inc.php'; //hier wird der Zugang zum Seminar ueberprueft
+include 'lib/include/check_sem_entry.inc.php'; //hier wird der Zugang zum Seminar ueberprueft
 
 //<!-- $Id$ -->
 ?>

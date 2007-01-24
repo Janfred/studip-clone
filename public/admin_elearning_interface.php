@@ -33,10 +33,10 @@ require_once ('lib/elearning/ConnectedCMS.class.php');
 
 $HELP_KEYWORD="Basis.Ilias";
 
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
-include ('include/links_admin.inc.php');
+include ('lib/include/links_admin.inc.php');
 
 if ($ELEARNING_INTERFACE_ENABLE)
 {
@@ -248,6 +248,6 @@ else
 	parse_window ("error§" . _("Die Schnittstelle für die Integration von Lernmodulen ist nicht aktiviert. Damit Lernmodule verwendet werden können, muss die Verbindung zu einem LCM-System in der Konfigurationsdatei von Stud.IP hergestellt werden. Wenden Sie sich bitte an den/die AdministratorIn."), "§",
 				_("E-Learning-Schnittstelle nicht eingebunden"));
 }
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

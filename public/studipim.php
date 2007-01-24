@@ -84,7 +84,7 @@ if ($auth->auth["uid"] != "nobody"){
 // Start of Output
 $_html_head_title = "Stud.IP IM (" . $auth->auth["uname"] . ")";
 $messenger_started = true; //html_head should NOT try to open us again!
-include ('include/html_head.inc.php'); // Output of html head
+include ('lib/include/html_head.inc.php'); // Output of html head
 ?>
 <script language="JavaScript">
 <!--
@@ -240,7 +240,7 @@ if ($auth->auth["uid"] != "nobody"){
 ?>
 </table>
 <?
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>

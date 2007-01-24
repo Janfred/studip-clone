@@ -1619,12 +1619,12 @@ switch ($level) {
 
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
-include ('include/links_admin.inc.php');  		//Linkleiste fuer admins
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php');  		//Linkleiste fuer admins
 
 if (!$sem_create_data["sem_class"])
-	include ('include/startup_checks.inc.php');
+	include ('lib/include/startup_checks.inc.php');
 
 ?>
 	<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
@@ -3805,7 +3805,7 @@ if ($level == 8)
 if (is_object($sem_create_data["resRequest"])) {
 	$sem_create_data["resRequest"] = serialize ($sem_create_data["resRequest"]);
 }
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 //save all the data back to database
 page_close();
 ?>

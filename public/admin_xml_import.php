@@ -35,10 +35,10 @@ require_once ('lib/msg.inc.php'); //Funktionen f&uuml;r Nachrichtenmeldungen
 }/**/
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 $i_page = "admin_institut.php";
-include ('include/links_admin.inc.php');  //Linkleiste fuer admins
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 //$xml_import_person = "MMM";
 ?>
@@ -1112,6 +1112,6 @@ if ($assi_page == 6)
 
 echo '</td></tr></table>
 </form>';
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

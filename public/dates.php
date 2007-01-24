@@ -43,8 +43,8 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.InVeranstaltungAblauf";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 require_once('lib/show_dates.inc.php');
 require_once('config.inc.php');
@@ -54,7 +54,7 @@ checkObject();
 checkObjectModule("schedule");
 object_set_visit_module("schedule");
 
-include ('include/links_openobject.inc.php');
+include ('lib/include/links_openobject.inc.php');
 
 $sess->register("dates_data");
 
@@ -117,7 +117,7 @@ if ($dclose)
 	</tr>
 
 <?php
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 //Save data back to database.
 page_close()
 ?>

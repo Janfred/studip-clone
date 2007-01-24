@@ -39,7 +39,7 @@
 Requires & Registers
 /*****************************************************************************/
 
-require_once ('include/reiter.inc.php');
+require_once ('lib/include/reiter.inc.php');
 require_once ('lib/msg.inc.php');
 require_once ('lib/visual.inc.php');
 require_once ('config.inc.php');
@@ -89,13 +89,13 @@ if (isset($_REQUEST['print_view'])){
 	$_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 }
 
-include ('include/html_head.inc.php');
+include ('lib/include/html_head.inc.php');
 if ($quick_view_mode != "no_nav" && !isset($_REQUEST['print_view']))
-	include ('include/header.php');
+	include ('lib/include/header.php');
 
 //load correct nav
 if ($view_mode == "oobj")
-	include ('include/links_openobject.inc.php');
+	include ('lib/include/links_openobject.inc.php');
 elseif (($view_mode == "no_nav") || ($view_mode == "search") || isset($_REQUEST['print_view']))
 	;
 else

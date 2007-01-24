@@ -33,10 +33,10 @@ $cssSw = new cssClassSwitcher;
 //-- hier muessen Seiten-Initialisierungen passieren --
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');	 //hier wird der "Kopf" nachgeladen
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');	 //hier wird der "Kopf" nachgeladen
 
-include ('include/links_admin.inc.php');	//Linkleiste fuer admins
+include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
 
 
 // Get a database connection
@@ -501,7 +501,7 @@ if (isset($_GET['details'])) {
 		echo "<p>&nbsp;" . _("Die Standard Authentifizierung ist ausgeschaltet. Das Anlegen von neuen Benutzern ist nicht möglich!") . "</p>";
 	}
 
-	include ('include/pers_browse.inc.php');
+	include ('lib/include/pers_browse.inc.php');
 	print "<br>\n";
 	parse_msg($msg);
 
@@ -581,6 +581,6 @@ if (isset($_GET['details'])) {
 
 
 }
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

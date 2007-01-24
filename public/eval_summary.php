@@ -69,9 +69,9 @@ if (!isset($ausgabeformat)) $ausgabeformat = 1;
 $HELP_KEYWORD="Basis.Evaluationen";
 
 if ($ausgabeformat==1) {
-	include ('include/html_head.inc.php'); // Output of html head
-	include ('include/header.php');    //hier wird der "Kopf" nachgeladen
-	include ('include/links_about.inc.php');
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');    //hier wird der "Kopf" nachgeladen
+	include ('lib/include/links_about.inc.php');
 }
 require_once('lib/visual.inc.php'); // fuer CSS etc.
 
@@ -501,7 +501,7 @@ if ($db->next_record()) {
   echo "&nbsp;"._("Evaluation NICHT vorhanden oder keine Rechte vorhanden!");
 }
 
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
   // Save data back to database.
   page_close();
 

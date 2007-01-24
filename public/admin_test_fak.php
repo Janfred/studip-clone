@@ -86,8 +86,8 @@ if ($ILIAS_CONNECT_ENABLE) {
 }
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 ?>
 <script type="text/javascript">
 function invert_selection(formname){
@@ -374,6 +374,6 @@ if ($_REQUEST['cmd'] == "user_course_change"){
 ?>
 </table>
 <?php
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

@@ -12,9 +12,9 @@ require_once ('config.inc.php');
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   //hier wird der "Kopf" nachgeladen
-include ('include/links_admin.inc.php');  //Linkleiste fuer admins
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 function my_session_open($id = false){
 	if (!$id){

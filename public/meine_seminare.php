@@ -188,13 +188,13 @@ $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen g
 $HELP_KEYWORD="Basis.MeineVeranstaltungen";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 
 if (!$perm->have_perm("root"))
-	include ('include/links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
+	include ('lib/include/links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
 
 //Ausgabe bei bindenden Veranstaltungen, loeschen nicht moeglich!
 if ($cmd == "no_kill") {
@@ -1122,7 +1122,7 @@ ELSEIF ($perm->have_perm("root")){
 
 echo '</table>';
 
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
   // Save data back to database.
 ob_end_flush(); //Outputbuffering beenden
 page_close();

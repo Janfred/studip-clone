@@ -33,8 +33,8 @@ $perm->check("autor");
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 $_attributes['lit_select'] = array('style' => 'font-size:8pt;width:100%');
 $_attributes['text'] = array('style' => 'width:90%');
@@ -329,6 +329,6 @@ echo $_the_clip_form->getFormEnd();
 <tr><td class="blank" colspan="2">&nbsp;</td></tr>
 </table>
 <?php
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

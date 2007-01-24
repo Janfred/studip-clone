@@ -31,8 +31,8 @@ require_once ('lib/classes/StudipRangeTreeView.class.php');
 $HELP_KEYWORD="Basis.SuchenEinrichtungen";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 $view = new DbView();
 $the_tree = new StudipRangeTreeView();
@@ -113,6 +113,6 @@ print_infobox ($infobox,"einrichtungen.jpg");
 </td></tr>
 </table>
 <?
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
 page_close();
 ?>

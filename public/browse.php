@@ -39,8 +39,8 @@ if ($GLOBALS['CHAT_ENABLE']){
 $HELP_KEYWORD="Basis.SuchenPersonen";
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 $sess->register("browse_data");
 
@@ -364,6 +364,6 @@ if (isset($query)) {
 
 </table>
 <?php
-include ('include/html_end.inc.php');
+include ('lib/include/html_end.inc.php');
   page_close();
 ?>

@@ -89,11 +89,11 @@ if (isset($_REQUEST['kill_accounts_x']) && check_ticket($_POST['ticket'])){
 }
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');	 //hier wird der "Kopf" nachgeladen 
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');	 //hier wird der "Kopf" nachgeladen 
 //fake
 $i_page = 'new_user_md5.php';
-include ('include/links_admin.inc.php');	//Linkleiste fuer admins
+include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
 
 ?>
 <script type="text/javascript">
@@ -187,6 +187,6 @@ include ('include/links_admin.inc.php');	//Linkleiste fuer admins
 	</tr>
 </table>
 <?
-include ('include/html_end.inc.php'); // Output of html head
+include ('lib/include/html_end.inc.php'); // Output of html head
 page_close();
 ?>

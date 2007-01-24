@@ -56,8 +56,8 @@ if (isset($auswahl) && $auswahl!="") {
 
 if ($SessSemName[1] =="") {
 	// Start of Output
-	include ('include/html_head.inc.php'); // Output of html head
-	include ('include/header.php');   // Output of Stud.IP head
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');   // Output of Stud.IP head
 	parse_window ("error§Die aufgerufene Einrichtung existiert nicht!<br /><font size=-1 color=black>Der Autor der aufrufenden Seite hat keine Einrichtung gew&auml;hlt oder die angegebene Einrichtung existiert nicht mehr.<br /></font>", "§",
 				"Keine Einrichtung gew&auml;hlt", 
 				"&nbsp;Bitte informieren Sie den zust&auml;ndigen Webmaster.");

@@ -47,8 +47,8 @@ require_once 'config.inc.php';		//wir brauchen die Seminar-Typen
 require_once 'lib/visual.inc.php';	//wir brauchen die Seminar-Typen
 require_once 'lib/classes/SemBrowse.class.php';
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');   // Output of Stud.IP head
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 $db=new DB_Seminar;
 
@@ -134,7 +134,7 @@ if ($sem_portal["bereich"] != "all") {
 }
 
 
-include ('include/links_seminare.inc.php');   	//hier wird die Navigation nachgeladen
+include ('lib/include/links_seminare.inc.php');   	//hier wird die Navigation nachgeladen
 
 $init_data = array(	"level" => "f",
 					"cmd"=>"qs",
@@ -318,6 +318,6 @@ print_infobox ($infobox, "browse.jpg");
 </tr>
 </table>
 <?php
- include ('include/html_end.inc.php');
+ include ('lib/include/html_end.inc.php');
  page_close();
  ?>

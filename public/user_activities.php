@@ -218,11 +218,11 @@ include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
 
 
 // Start of Output
-include ('include/html_head.inc.php'); // Output of html head
-include ('include/header.php');	 //hier wird der "Kopf" nachgeladen 
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');	 //hier wird der "Kopf" nachgeladen 
 //fake
 $i_page = 'new_user_md5.php';
-include ('include/links_admin.inc.php');	//Linkleiste fuer admins
+include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
 $pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 ?>
 <table border="0" bgcolor="#000000" align="center" cellspacing="0" cellpadding="0" width="100%">
@@ -438,6 +438,6 @@ $pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 	</tr>
 </table>
 <?
-include ('include/html_end.inc.php'); // Output of html head
+include ('lib/include/html_end.inc.php'); // Output of html head
 page_close();
 ?>
