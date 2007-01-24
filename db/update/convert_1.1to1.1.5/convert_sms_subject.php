@@ -5,22 +5,22 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check("root");
 
 // initialise session
-include ('lib/seminar_open.php');
-	
+include ("$ABSOLUTE_PATH_STUDIP/seminar_open.php");
+
 // -- here you have to put initialisations for the current page
-require_once ('lib/functions.php');
-require_once ('lib/msg.inc.php');
-require_once ('lib/visual.inc.php');
-require_once ('lib/statusgruppe.inc.php');
-require_once ('include/reiter.inc.php');
+require_once ("$ABSOLUTE_PATH_STUDIP/functions.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/msg.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/visual.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/statusgruppe.inc.php");
+require_once ("$ABSOLUTE_PATH_STUDIP/reiter.inc.php");
 
 // need kontact to mothership
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 
 // Output of html head and Stud.IP head
-include ('include/html_head.inc.php');
-include ('include/header.php');
+include ("$ABSOLUTE_PATH_STUDIP/html_head.inc.php");
+include ("$ABSOLUTE_PATH_STUDIP/header.php");
 
 
 // do we use javascript?
