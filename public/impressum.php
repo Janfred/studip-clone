@@ -154,7 +154,7 @@ $reiter->create($structure, $view);
 <?php
 			foreach($developer as $dev){
 				echo '<b>'.$dev[0].'</b>, ';
-				echo 'E-Mail: <a href="mailto'.$dev[1].'?subject='.$mailsub.'">'.$dev[1].'</a> ';
+				echo 'E-Mail: <a href="mailto:'.$dev[1].'?subject='.$mailsub.'">'.$dev[1].'</a> ';
 				echo $dev[2].'<br />'."\n";
 			}
 ?>
