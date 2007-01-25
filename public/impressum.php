@@ -90,6 +90,9 @@ $structure["main"]=array ("topKat"=>"kontakt", "name"=>_("Entwickler"), "link"=>
 $structure["technik"]=array ("topKat"=>"programm", "name"=>_("Technik"), "link"=>"impressum.php?view=technik", "active"=>FALSE);
 $structure["statistik"]=array ("topKat"=>"programm", "name"=>_("Statistik"), "link"=>"impressum.php?view=statistik", "active"=>FALSE);
 $structure["history"]=array ("topKat"=>"programm", "name"=>_("History"), "link"=>"impressum.php?view=history", "active"=>FALSE);
+$structure['blog']=array ('topKat'=>'programm', 'name'=>_("Stud.IP-Blog"), 'link'=>'http://blog.studip.de/', 'active'=>FALSE, 'target'=>'_blank');
+
+$mailsub = '['.$_SERVER['SERVER_NAME'].']';
 
 if (!$view)
 	$view="ansprechpartner";
@@ -97,19 +100,38 @@ if (!$view)
 $reiter->create($structure, $view);
 
 ?>
-<table width="100%" border=0 cellpadding=0 cellspacing=0>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
 
 
-<? if ($view=="main") {?>
+<?php
+     if ($view=="main") {
+	$developer[] = array('Marco Bohnsack', 'bohnsack@data-quest.de', _("(Projektmanagement, Hilfe)"));
+	$developer[] = array('Torsten Heinrich', 'to.heinrich@fh-osnabrueck.de', _("(?)"));
+	$developer[] = array('Cornelius Hempel', 'cornelius.hempel@studip.uni-halle.de', _("(Fehlersuche)"));
+	$developer[] = array('Cornelis Kater', 'info@ckater.de', _("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)"));
+	$developer[] = array('Hartje Kriete', 'kriete@math.uni-goettingen.de', _("(&Uuml;bersetzung)"));
+	$developer[] = array('Jan Kulmann', 'jankul@tzi.de', _("(Evaluationen)"));
+	$developer[] = array('Marcus Lunzenhauer', 'mlunzena@uos.de', _("(?)"));
+	$developer[] = array('André Noack', 'noack@data-quest.de', _("(Chat, Literaturverwaltung, Authentifizierung, Verzeichnisse)"));
+	$developer[] = array('Frank Ollermann', 'follerma@uni-osnabrueck.de', _("(Usability)"));
+	$developer[] = array('Dennis Reil', 'studip@reil-online.de', _("(PlugIn-Schnittstelle)"));
+	$developer[] = array('Jens Schmelzer', 'jens.schmelzer@fh-jena.de', _("(Security, Distribution)"));
+	$developer[] = array('Ralf Stockmann', 'rstockm@gwdg.de', _("(Forensystem, Adressbuch, Design)"));
+	$developer[] = array('Stefan Suchi', 'suchi@data-quest.de', _("(Projektmanagement, Datenbankstruktur, Rechtesystem, Internationalisierung)"));
+	$developer[] = array('Tobias Thelen', 'tthelen@uni-osnabrueck.de', _("(WikiWeb, Hilfe)"));
+	$developer[] = array('Peter Thienel', 'thienel@data-quest.de', _("(Externe Seiten, Terminkalender)"));
+	$developer[] = array('Nils Kolja Windisch', 'info@nkwindisch.de', _("(Systeminterne Nachrichten)"));
+
+?>
 
 	<tr>
 		<td valign="top" class="blank">
 			<blockquote><br />
 <?
-			echo _("Stud.IP ist ein Open Source Projekt zur Unterst&uuml;tzung von Pr&auml;senzlehre an der Universit&auml;t G&ouml;ttingen.") . "<br>";
-			echo _("Das System wird entwickelt vom Zentrum f&uuml;r interdisziplin&auml;re Medienwissenschaft (ZiM), Universit&auml;t G&ouml;ttingen und der Suchi &amp; Berg GmbH (data-quest), G&ouml;ttingen.") . "<br>";
-			echo _("Stud.IP steht unter der GNU General Public License, Version 2 oder neuer.") . "<br /><br />";
-			printf(_("Weitere Informationen finden sie auf %swww.studip.de%s"), "<a target=\"_new\" href=\"http://www.studip.de\">" , "</a>") . "<br />";
+			echo _("Stud.IP ist ein Open Source Projekt zur Unterst&uuml;tzung von Pr&auml;senzlehre an der Universit&auml;t G&ouml;ttingen.") . "<br />\n";
+			echo _("Das System wird entwickelt vom Zentrum f&uuml;r interdisziplin&auml;re Medienwissenschaft (ZiM), Universit&auml;t G&ouml;ttingen und der Suchi &amp; Berg GmbH (data-quest), G&ouml;ttingen.") . "<br />\n";
+			echo _("Stud.IP steht unter der GNU General Public License, Version 2 oder neuer.") . "<br /><br />\n";
+			printf(_("Weitere Informationen finden sie auf %swww.studip.de%s, %sdevelop.studip.de%s und %sblog.studip.de%s."), '<a target="_blank" href="http://www.studip.de" style="font-weight:bold;">' , '</a>', '<a target="_blank" href="http://develop.studip.de" style="font-weight:bold;">' , '</a>', '<a target="_blank" href="http://blog.studip.de" style="font-weight:bold;">' , '</a></span>') . "<br />\n";
 ?>
 		</td>
 		<td class="blank" align="left" valign="top">
@@ -126,40 +148,33 @@ $reiter->create($structure, $view);
 	</tr>
 
 	<tr>
-		<td class="steel1"colspan=2>
+		<td class="steel1" colspan="2">
 			<br>&nbsp; &nbsp; <?=_("<b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und Weiterentwicklung des Systems befasst:")?><br>
-			<blockquote>
-			<font size=-1><b>Marco Bohnsack</b>, E-Mail: <a href="mailto:bohnsack@data-quest.de">bohnsack@data-quest.de</a> <?=_("(Projektmanagement, Hilfe)")?></font>
-			<br><font size=-1><b>Cornelius Hempel</b>, E-Mail: <a href="mailto:cornelius.hempel@studip.uni-halle.de">cornelius.hempel@studip.uni-halle.de</a> <?=_("(Fehlersuche)")?></font>
-			<br><font size=-1><b>Cornelis Kater</b>, E-Mail: <a href="mailto:info@ckater.de">info@ckater.de</a> <?=_("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)")?></font>
-			<br><font size=-1><b>Hartje Kriete</b>, E-Mail: <a href="mailto:kriete@math.uni-goettingen.de">kriete@math.uni-goettingen.de</a> <?=_("(&Uuml;bersetzung)")?></font>
-			<br><font size=-1><b>Jan Kulmann</b>, E-Mail: <a href="mailto:jankul@tzi.de">jankul@tzi.de</a> <?=_("(Evaluationen)")?></font>
-			<br><font size=-1><b>André Noack</b>, E-Mail: <a href="mailto:noack@data-quest.de">noack@data-quest.de</a> <?=_("(Chat, Literaturverwaltung, Authentifizierung, Verzeichnisse)")?></font>
-			<br><font size=-1><b>Frank Ollermann</b>, E-Mail: <a href="mailto:follerma@uni-osnabrueck.de">follerma@uni-osnabrueck.de</a> <?=_("(Usability)")?></font>
-			<br><font size=-1><b>Dennis Reil</b>, E-Mail: <a href="mailto:Dennis.Reil@offis.de">Dennis.Reil@offis.de</a> <?=_("(PlugIn-Schnittstelle)")?></font>
-			<br><font size=-1><b>Jens Schmelzer</b>, E-Mail: <a href="mailto:jens.schmelzer@fh-jena.de">jens.schmelzer@fh-jena.de</a> <?=_("(Security, Distribution)")?></font>
-			<br><font size=-1><b>Ralf Stockmann</b>, E-Mail: <a href="mailto:rstockm@uni-goettingen.de">rstockm@uni-goettingen.de</a> <?=_("(Forensystem, Adressbuch, Design)")?></font>
-			<br><font size=-1><b>Stefan Suchi</b>, E-Mail: <a href="mailto:suchi@data-quest.de">suchi@data-quest.de</a> <?=_("(Projektmanagement, Datenbankstruktur, Rechtesystem, Internationalisierung)")?></font>
-			<br><font size=-1><b>Tobias Thelen</b>, E-Mail: <a href="mailto:tthelen@uni-osnabrueck.de">tthelen@uni-osnabrueck.de</a> <?=_("(WikiWeb, Hilfe)")?></font>
-			<br><font size=-1><b>Peter Thienel</b>, E-Mail: <a href="mailto:thienel@data-quest.de">thienel@data-quest.de</a> <?=_("(Externe Seiten, Terminkalender)")?></font>
-			<br><font size=-1><b>Nils Kolja Windisch</b>, E-Mail: <a href="mailto:info@nkwindisch.de">info@nkwindisch.de</a> <?=_("(Systeminterne Nachrichten)")?></font>
-			<br></blockquote><br>
+			<blockquote><span style="font-size:smaller;">
+<?php
+			foreach($developer as $dev){
+				echo '<b>'.$dev[0].'</b>, ';
+				echo 'E-Mail: <a href="mailto'.$dev[1].'?subject='.$mailsub.'">'.$dev[1].'</a> ';
+				echo $dev[2].'<br />'."\n";
+			}
+?>
+			</span></blockquote><br>
 			&nbsp; &nbsp; <?=_("Sie erreichen uns auch &uuml;ber folgende <b>Mailinglisten:")?></b><br>
 			<blockquote>
-			<font size=-1><b><?=_("Nutzer-Anfragen")?></b>, E-Mail: <a href="mailto:studip-users@lists.sourceforge.net">studip-users@lists.sourceforge.net</a>: <?=_("Fragen, Anregungen und Vorschl&auml;ge an die Entwickler - bitte <u>keine</u> Passwort Anfragen!")?></font><br />
-			<font size=-1><b><?=_("News-Mailingsliste")?></b>, E-Mail: <a target="new" href="http://lists.sourceforge.net/mailman/listinfo/studip-news">studip-news@lists.sourceforge.net</a>: <?=_("News rund um Stud.IP (Eintragung notwendig)")?></font><br />
+			<span style="font-size:smaller;"><b><?=_("Nutzer-Anfragen")?></b>, E-Mail: <a href="mailto:studip-users@lists.sourceforge.net?subject=<?=$mailsub ?>">studip-users@lists.sourceforge.net</a>: <?=_("Fragen, Anregungen und Vorschl&auml;ge an die Entwickler - bitte <u>keine</u> Passwort Anfragen!")?><br />
+			<b><?=_("News-Mailingsliste")?></b>, E-Mail: <a target="new" href="http://lists.sourceforge.net/mailman/listinfo/studip-news">studip-news@lists.sourceforge.net</a>: <?=_("News rund um Stud.IP (Eintragung notwendig)")?></span><br />
 			<br>
-			<? printf(_("Wir laden alle Entwickler, Betreiber und Nutzer von Stud.IP ein, sich auf dem Developer-Server %s an den Diskussionen rund um die Weiterentwicklung und Nutzung der Plattform zu beteiligen."), "<a href=\"http://develop.studip.de\" target=\"_blank\">http://develop.studip.de</a>")?>
+			<? printf(_("Wir laden alle Entwickler, Betreiber und Nutzer von Stud.IP ein, sich auf dem Developer-Server %s an den Diskussionen rund um die Weiterentwicklung und Nutzung der Plattform zu beteiligen."), '<a href="http://develop.studip.de" target="_blank">http://develop.studip.de</a>')?>
 			</blockquote>
 		</td>
 	</tr>
 	</table>
-	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="blank" colspan=4>
+		<td class="blank" colspan="4">
 			 <br />&nbsp; &nbsp; <font size=-1><b><?=_("Entwicklung und Support:")?> </b></font><br />&nbsp;
 		</td>
-		<td class="blank" colspan=3>
+		<td class="blank" colspan="3">
 			 <br /><font size=-1><b><?=_("gef&ouml;rdert von:")?> </b></font><br />&nbsp;
 		</td>
 	</tr>
@@ -186,7 +201,7 @@ $reiter->create($structure, $view);
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan=7>
+		<td class="blank" colspan="7">
 			<br />
 		</td>
 	</tr>
@@ -470,7 +485,7 @@ echo _("Seminare oder Arbeitsgruppen können mit Passwörtern geschützt werden - d
 echo "<br><br>";
 echo _("Das System ist zu 100% über das Internet administrierbar, es sind keine zusätzlichen Werkzeuge nötig. Ein Webbrowser der 5. Generation wird empfohlen.");
 echo "<br><br>";
-printf(_("Das System wird ständig weiterentwickelt und an die Wünsche unserer Nutzer angepasst - %ssagen Sie uns Ihre Meinung!%s"), "<a href=\"mailto:studip-users@lists.sourceforge.net\">", "</a>");
+printf(_("Das System wird ständig weiterentwickelt und an die Wünsche unserer Nutzer angepasst - %ssagen Sie uns Ihre Meinung!%s"), '<a href="mailto:studip-users@lists.sourceforge.net?subject='.$mailsub.'">', '</a>');
 
 ?>
 
