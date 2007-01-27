@@ -208,48 +208,49 @@ if (!$cmd OR $cmd=="show") {
 			echo "</blockquote></td></tr>";
 
 		if ($news->search_result) {
-			echo "\n<tr><td width=\"100%\" class=\"blank\"><blockquote>";
-			echo "<table width=\"".round(0.88*$news->xres)."\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
+			uasort($news->search_result, 'callback_cmp_newsarray');
+			echo "\n".'<tr><td width="100%" class="blank"><blockquote>';
+			echo '<table width="'.round(0.88*$news->xres).'" cellspacing="0" cellpadding="2" border="0">';
 			$css = new CssClassSwitcher(array("steel1","steel1"));
 			$css->hoverenabled = TRUE;
 			$css->switchClass();
 			while (list($typen_key,$typen_value)=each ($typen)) {
 				if (!$perm->have_perm("root") AND $typen_key=="user")
 					continue;
-				echo "\n<td class=\"steel1\" width=\"".floor(100/$my_cols)."%\" align=\"center\" valign=\"top\"><b>$typen_value</b><br><font size=\"-1\">";
+				echo "\n".'<td class="steel1" width="'.floor(100/$my_cols).'%" align="center" valign="top"><b>'.$typen_value.'</b><br><div style="font-size:smaller;text-align:left;"><ul>';
 				reset($news->search_result);
 				while (list ($range,$details) = each ($news->search_result)) {
-					if ($details["type"]==$typen_key) {
-						echo "\n<div ".$css->getHover()."><a href=\"".$news->p_self("range_id=$range&view_mode=$typen_key")."\">".htmlReady($details["name"]);
-						echo ($details["anzahl"]) ? " (".$details["anzahl"].")" : " (0)";
-						echo "</a></div>";
+					if ($details['type'] == $typen_key) {
+						echo "\n<li " . $css->getHover() . '><a href="'. $news->p_self("range_id=$range&view_mode=$typen_key").'">' .htmlReady($details['name']);
+						echo ($details['anzahl']) ? ' ('.$details['anzahl'].')' : ' (0)';
+						echo '</a></li>';
 					}
 				}
-				echo "\n</font></td>";
+				echo "\n</ul></div></td>";
 			}
-			echo"\n</table></blockquote></td></tr>";
+			echo "\n</table></blockquote></td></tr>";
 		}
 	}
 	echo "\n<tr><td class=\"blank\"><br /><blockquote>";
 	echo "<form action=\"".$news->p_self("cmd=new_entry&range_id=$news_range_id&view_mode=$view_mode")."\" method=\"POST\">";
 	echo "<hr width=\"100%\"><br /><b>" . _("gew&auml;hlter Bereich:") . " </b>".htmlReady($news_range_name). "<br /><br />";
 	if (get_config('NEWS_RSS_EXPORT_ENABLE') && $news->get_news_range_perm($news_range_id) > 1){
-		echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/rss.gif\" border=\"0\" align=\"absmiddle\">&nbsp;";
-		echo "\n<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Die News des gew&auml;hlten Bereiches als RSS-feed zur Verf&uuml;gung stellen") . "</font>&nbsp;";
-		vprintf("\n<input type=\"image\" src=\"".$GLOBALS['ASSETS_URL']."images/%s\" %s border=\"0\" name=\"change_rss\" align=\"absmiddle\"/>",
+		echo '<img src="'.$GLOBALS['ASSETS_URL'].'images/rss.gif" border="0" align="absmiddle">&nbsp;';
+		echo "\n".'<font size="-1" style="vertical-align:middle;">' . _("Die News des gew&auml;hlten Bereiches als RSS-feed zur Verf&uuml;gung stellen") . '</font>&nbsp;';
+		vprintf("\n".'<input type="image" src="'.$GLOBALS['ASSETS_URL'].'images/%s" %s border="0" name="change_rss" align="absmiddle"/>',
 				(StudipNews::GetRssIdFromRangeId($news_range_id) ? array('haken.gif',tooltip(_("RSS Export ist eingeschaltet"))) : array('x2.gif',tooltip(_("RSS Export ist ausgeschaltet")))));
 		echo "\n<br><br>";
 	}
-	echo "\n<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Eine neue News im gew&auml;hlten Bereich erstellen") . "</font>&nbsp;";
+	echo "\n".'<font size="-1" style="vertical-align:middle;">' . _("Eine neue News im gew&auml;hlten Bereich erstellen") . '</font>&nbsp;';
 	echo makeButton('erstellen', 'input', _("Eine neue News erstellen"), 'new_entry');
 	echo "</b>\n</blockquote>\n</form>\n</td>\n</tr>\n ";
 	if (!$news->show_news($news_range_id)) {
-		echo "\n<tr><td class=\"blank\"><blockquote>";
-		echo "<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Im gew&auml;hlten Bereich sind keine News vorhanden!") . "<br><br>";
-		echo "</blockquote></td></tr>";
+		echo "\n".'<tr><td class="blank"><blockquote>';
+		echo '<font size="-1" style="vertical-align:middle;">' . _("Im gew&auml;hlten Bereich sind keine News vorhanden!") . '<br><br>';
+		echo '</blockquote></td></tr>';
 	}
 }
-echo"\n</table>";
+echo "\n</table>";
 include ('lib/include/html_end.inc.php');
 page_close();
 ?>
