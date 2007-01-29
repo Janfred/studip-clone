@@ -440,11 +440,10 @@ function latex($text, $extern = FALSE) {
 
 	if ($LATEXRENDER_ENABLE && isset($LATEX_FORMATS)) {
 		include_once("lib/classes/latexrender.class.php");
-		$path_here = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 		if ($extern) {
-			$latex = new LatexRender($path_here.$TEXCACHE_PATH, $GLOBALS['ABSOLUTE_URI_STUDIP'].$TEXCACHE_PATH);
+			$latex = new LatexRender($GLOBALS['ABSOLUTE_PATH_STUDIP'].$TEXCACHE_PATH, $GLOBALS['ABSOLUTE_URI_STUDIP'].$TEXCACHE_PATH);
 		} else {
-			$latex = new LatexRender($path_here.$TEXCACHE_PATH, $CANONICAL_RELATIVE_PATH_STUDIP.$TEXCACHE_PATH);
+			$latex = new LatexRender($GLOBALS['ABSOLUTE_PATH_STUDIP'].$TEXCACHE_PATH, $CANONICAL_RELATIVE_PATH_STUDIP.$TEXCACHE_PATH);
 		}
 		$latex->_latex_path = $LATEX_PATH;
 		$latex->_dvips_path = $DVIPS_PATH;
