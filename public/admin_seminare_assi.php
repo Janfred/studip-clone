@@ -21,13 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // $Id$
 
 
- page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
- $perm->check('dozent');
-
-// Set this to something, just something different...
-$hash_secret = "nirhtak";
-
-include ('lib/seminar_open.php'); 	//hier werden die sessions initialisiert
+page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
 
 require_once ('lib/msg.inc.php'); 		//Funktionen fuer Nachrichtenmeldungen
 require_once ('config.inc.php'); 		//wir brauchen die Seminar-Typen
@@ -40,6 +34,17 @@ require_once ('lib/log_events.inc.php');
 require_once ('lib/classes/StudipSemTreeSearch.class.php');
 require_once ('lib/classes/Modules.class.php');
 require_once ('lib/classes/DataFields.class.php');
+
+$sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
+
+$perm->check($sem_create_perm);
+
+// Set this to something, just something different...
+$hash_secret = "nirhtak";
+
+include ('lib/seminar_open.php'); 	//hier werden die sessions initialisiert
+
+
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");

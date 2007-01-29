@@ -153,6 +153,8 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			}
 		}
 	}
+	
+	$sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
 
 	if ($perm->have_perm('root')) { // root
 		$ueberschrift = _("Startseite f&uuml;r Root bei Stud.IP");
@@ -191,7 +193,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	} elseif ($perm->have_perm('dozent')) { // dozent
 		$ueberschrift = _("Startseite f&uuml;r DozentInnen bei Stud.IP");
 		$menue_auswahl[] = array( 1, array());
-		$menue_auswahl[] = array(20, array(21));
+		$menue_auswahl[] = array(20, ($sem_create_perm == 'dozent' ? array(21) : array()));
 		$menue_auswahl[] = array( 3, array(4, 5, 6));
 		$menue_auswahl[] = array( 7, array(8));
 		$menue_auswahl[] = array( 9, array(10, 11));

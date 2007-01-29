@@ -817,6 +817,8 @@ if ( !$perm->have_perm("root")) {
 				)
 			)
 		);
+		$sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
+		if ($sem_create_perm != 'dozent') unset($infobox[1]['eintrag'][1]);
 	}	else {
 
 	// View for Students

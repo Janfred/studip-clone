@@ -314,21 +314,18 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	if (($modules["participants"]) || (!$SessSemName[1]))
 		$structure["statusgruppe_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Gruppen&nbsp;/&nbsp;Funktionen"), 'link'=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
 	$structure["modules_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Module/Plugins"), 'link'=>"admin_modules.php?list=TRUE&view=modules_sem", 'active'=>FALSE);
-	if ($perm->have_perm("dozent")) {
+	$sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
+	if ($perm->have_perm($sem_create_perm)) {
 		$structure["copysem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Veranstaltung&nbsp;kopieren"), 'link'=>"copy_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
 		$structure["new_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("neue&nbsp;Veranstaltung&nbsp;anlegen"), 'link'=>"admin_seminare_assi.php?new_session=TRUE", 'active'=>FALSE);
-		if (get_config('ALLOW_DOZENT_ARCHIV')){
+		if (get_config('ALLOW_DOZENT_ARCHIV') || $perm->have_perm("admin")){
 			$structure["archiv"]=array ('topKat'=>"veranstaltungen", 'name'=>_("archivieren"), 'link'=>"archiv_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE);
 		}
-		if (get_config('ALLOW_DOZENT_VISIBILITY')){
+		if (get_config('ALLOW_DOZENT_VISIBILITY') || $perm->have_perm("admin")){
 			$structure["visibility"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sichtbarkeit"), 'link'=>"admin_visibility.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'newline'=>TRUE);
 		}
 	}
-	if ($perm->have_perm("admin")) {
-		$structure["archiv"]=array ('topKat'=>"veranstaltungen", 'name'=>_("archivieren"), 'link'=>"archiv_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE);
-		$structure["visibility"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sichtbarkeit"), 'link'=>"admin_visibility.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'newline'=>TRUE);
-	}
-
+	
 	//
 	if ($perm->have_perm("admin")) {
 		$structure["grunddaten_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Grunddaten"), 'link'=>"admin_institut.php?list=TRUE", 'active'=>FALSE);
