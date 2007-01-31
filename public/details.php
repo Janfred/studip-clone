@@ -91,7 +91,14 @@ if ($sem_id) {
 				if ($db->f("status") == "user") $abo_msg = _("Schreibrechte aktivieren");
 			}
 		}
+
+		$db->query("SELECT * FROM seminar_user_schedule WHERE range_id = '$sem_id' AND user_id = '".$auth->auth['uid']."'");
+		if ($db->num_rows() == 0) {
+			$plan_msg = "<a href=\"mein_stundenplan.php?cmd=add_entry&semid=$sem_id\">"._("Nur im Stundenplan vormerken")."</a>";
+		}
+
 	}
+
 	if ($perm->have_studip_perm("user",$sem_id) && !$perm->have_studip_perm("tutor",$sem_id)) {
 		if ($db2->f("admission_binding"))
 			$info_msg = _("Das Austragen aus der Veranstaltung ist nicht mehr m&ouml;glich, da das Abonnement bindend ist.<br />Bitte wenden Sie sich an die DozentIn der Veranstaltung!");
@@ -210,7 +217,7 @@ else
 		)
 	);
 
-if ($abo_msg || $back_msg || $delete_msg || $info_msg || $mein_status || $perm->have_studip_perm("admin",$sem_id) ) {
+if ($abo_msg || $back_msg || $delete_msg || $info_msg || $plan_msg || $mein_status || $perm->have_studip_perm("admin",$sem_id) ) {
 	$infobox[2]["kategorie"] = _("Aktionen:");
 	if (($abo_msg) && (!$skip_verify)) {
 		$infobox[2]["eintrag"][] = array (	"icon" => "link_intern.gif" ,
@@ -236,6 +243,12 @@ if ($abo_msg || $back_msg || $delete_msg || $info_msg || $mein_status || $perm->
 									"text"	=> $info_msg
 								);
 	}
+	if ($plan_msg) {
+		$infobox[2]["eintrag"][] = array (  "icon" => "link_intern.gif" ,
+									"text"  => $plan_msg
+								);
+	}
+
 }
 
 

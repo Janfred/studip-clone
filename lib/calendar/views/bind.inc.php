@@ -84,39 +84,50 @@ echo $css_switcher->GetHoverJSFunction();
 $css_switcher->enableHover();
 $css_switcher->switchClass();
 
-while($db->next_record()){
-	$style = $css_switcher->getFullClass();
-	echo "<tr" . $css_switcher->getHover() . "><td width=\"1%\" class=\"gruppe" . $db->f("gruppe") . "\">";
-	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" alt=\"Gruppe\" border=\"0\" width=\"7\" height=\"12\"></td>\n";
-	echo "<td$style>&nbsp; </td>";
-	echo "<td$style><font size=\"-1\">";
-	echo "<a href=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
-	echo "seminar_main.php?auswahl=" . $db->f("Seminar_id") . "\">";
-	echo htmlReady(mila($db->f("Name")));
-	echo "</a></font></td>\n";
-	echo "<td$style align=\"center\"><font size=\"-1\">";
-	echo $db->f("count");
-	echo "</font></td>\n";
-	if ($loginfilenow[$db->f("Seminar_id")] == 0) {
-		echo "<td$style align=\"center\"><font size=\"-1\">";
-		echo _("nicht besucht") . "</font></td>\n";
+for ($seminar_user_schedule = 0; $seminar_user_schedule <= 1; $seminar_user_schedule++) {
+	if ($seminar_user_schedule) {
+		$query  = "SELECT b.* FROM seminar_user_schedule a LEFT JOIN seminare b ON (a.range_id = b.Seminar_id) LEFT JOIN termine t ON (t.range_id = b.Seminar_id) WHERE a.user_id = '".$user->id."'";
+		$query .= "GROUP BY Seminar_id ORDER BY b.Name $order";
+		$db->query($query);
 	}
-	else{
+	while($db->next_record()) {
+		$style = $css_switcher->getFullClass();
+		echo "<tr" . $css_switcher->getHover() . "><td width=\"1%\" class=\"gruppe" . $db->f("gruppe") . "\">";
+		echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" alt=\"Gruppe\" border=\"0\" width=\"7\" height=\"12\"></td>\n";
+		echo "<td$style>&nbsp; </td>";
+		echo "<td$style><font size=\"-1\">";
+		echo "<a href=\"" . $CANONICAL_RELATIVE_PATH_STUDIP;
+		if ($seminar_user_schedule) {
+			echo "details.php?sem_id=" . $db->f("Seminar_id") . "\">";
+		} else {
+			echo "seminar_main.php?auswahl=" . $db->f("Seminar_id") . "\">";
+		}
+		echo htmlReady(mila($db->f("Name")));
+		echo "</a></font></td>\n";
 		echo "<td$style align=\"center\"><font size=\"-1\">";
-		echo strftime("%x", $loginfilenow[$db->f("Seminar_id")]);
-		echo "</font></td>";
+		echo $db->f("count");
+		echo "</font></td>\n";
+		if ($loginfilenow[$db->f("Seminar_id")] == 0) {
+			echo "<td$style align=\"center\"><font size=\"-1\">";
+			echo _("nicht besucht") . "</font></td>\n";
+		}
+		else{
+			echo "<td$style align=\"center\"><font size=\"-1\">";
+			echo strftime("%x", $loginfilenow[$db->f("Seminar_id")]);
+			echo "</font></td>";
+		}
+		echo "<td$style align=\"center\"><font size=\"-1\">";
+		echo $db->f("status");
+		echo "</font></td>\n";
+		if($calendar_user_control_data["bind_seminare"][$db->f("Seminar_id")])
+			$is_checked = " checked";
+		else
+			$is_checked = "";
+		echo "<td$style>";
+		echo "<input type=\"checkbox\" name=\"sem[" . $db->f("Seminar_id")
+			. "]\" value=\"TRUE\"$is_checked></td></tr>\n",
+		$css_switcher->switchClass();
 	}
-	echo "<td$style align=\"center\"><font size=\"-1\">";
-	echo $db->f("status");
-	echo "</font></td>\n";
-	if($calendar_user_control_data["bind_seminare"][$db->f("Seminar_id")])
-		$is_checked = " checked";
-	else
-		$is_checked = "";
-	echo "<td$style>";
-	echo "<input type=\"checkbox\" name=\"sem[" . $db->f("Seminar_id")
-		. "]\" value=\"TRUE\"$is_checked></td></tr>\n",
-	$css_switcher->switchClass();
 }
 
 echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";

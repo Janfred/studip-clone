@@ -98,6 +98,22 @@ if ($my_schedule_settings["glb_days"]["fr"]) $glb_colspan++;
 if ($my_schedule_settings["glb_days"]["sa"]) $glb_colspan++;
 if ($my_schedule_settings["glb_days"]["so"]) $glb_colspan++;
 
+// Hat man sich inzwischen fest eingetragen, Eintrag aus dem virtuellen Stundenplan löschen
+$db->query("SELECT * FROM seminar_user_schedule a, seminar_user b WHERE a.range_id = b.Seminar_id AND a.user_id = b.user_id AND a.user_id = '".$auth->auth['uid']."'");
+while ($db->next_record()) {
+	$db2->query("DELETE FROM seminar_user_schedule WHERE range_id = '".$db->f('Seminar_id')."' AND user_id = '".$db->f('user_id')."'");
+}
+
+// Virtuellen Stundenplaneintrag erstellen
+if ($cmd == "add_entry") {
+	$db->query("INSERT INTO seminar_user_schedule SET range_id = '$semid', user_id = '".$auth->auth['uid']."'");
+}
+
+// Virtuellen Stundenplaneintrag löschen
+if ($cmd == "delete_entry") {
+	$db->query("DELETE FROM seminar_user_schedule WHERE range_id = '$semid' AND user_id = '".$auth->auth['uid']."'");
+}
+
 //persoenlichen Eintrag wegloeschen
 if ($cmd=="delete")
  {
@@ -206,7 +222,15 @@ if ($view=="inst") {
 }
 
 //Array der Seminare erzeugen
-while ($db->next_record())
+for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_schedule++) {
+	if ($seminar_user_schedule == 2) {
+		if (!$inst_id) {
+			// Das gleiche nochmal mit den virtuellen Veranstaltungseintragungen
+			$db->query($query = "SELECT b.* FROM seminar_user_schedule a, seminare b WHERE a.range_id = b.Seminar_id AND a.user_id = '".$auth->auth['uid']."'");
+		}
+	}
+
+	while ($db->next_record())
 	{
 	//Bestimmen, ob die Veranstaltung in dem Semester liegt, was angezeigt werden soll
 	$use_this=FALSE;
@@ -272,10 +296,11 @@ while ($db->next_record())
 
 				$i++; //<pfusch>$i (fuer alle einzelnen Objekte eines Seminars) wird hier zur Kennzeichnung der einzelen Termine eines Seminars untereinander verwendet. Unten wird die letzte Stelle jeweils weggelassen. </pfusch>
 
-				$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>$db->f("Name"), "nummer"=>$db->f("VeranstaltungsNummer"), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$tmp_room, "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE,'desc'=>$data['desc']);
+				$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>$db->f("Name"), "nummer"=>$db->f("VeranstaltungsNummer"), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$tmp_room, "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE, 'desc'=>$data['desc'], "virtual" => ($seminar_user_schedule == 2) ? true : false);
 			}
 		}
 	}
+}
 
 //Daten aus der Sessionvariable hinzufuegen
 if ((is_array($my_personal_sems)) && (!$inst_id))
@@ -535,16 +560,29 @@ for ($i; $i<$global_end_time+1; $i++)
 					echo ">", date ("H:i",  $my_sems[$cc["seminar_id"]]["start_time"]);
 					if  ($my_sems[$cc["seminar_id"]]["start_time"] <> $my_sems[$cc["seminar_id"]]["end_time"])
 						echo " - ",  date ("H:i",  $my_sems[$cc["seminar_id"]]["end_time"]);
-					if ($my_sems[$cc["seminar_id"]]['desc']) echo ' ('.htmlReady($my_sems[$cc["seminar_id"]]['desc']).')';
-					if ($my_sems[$cc["seminar_id"]]["ort"]) echo ",  ", htmlReady($my_sems[$cc["seminar_id"]]["ort"]);
-					echo "</font></td></tr><tr><td class=\"blank\">";
-					if ((!$my_sems[$cc["seminar_id"]]["personal_sem"]) && (!$print_view))
-						{
-						if ($view=="inst")
-							echo  "<a href=\"details.php?sem_id=";
-						else
-							echo  "<a href=\"seminar_main.php?auswahl=";
-						echo substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32), "\"><font size=-1>";
+					if (!$my_sems[$cc['seminar_id']]['virtual']) {
+						if ($my_sems[$cc["seminar_id"]]['desc']) echo ' ('.htmlReady($my_sems[$cc["seminar_id"]]['desc']).')';
+					}
+					if ($my_sems[$cc['seminar_id']]['ort']) echo ",  ", htmlReady($my_sems[$cc["seminar_id"]]["ort"]);
+					echo '</font></td>';
+					echo "<td class=\"topic\" align=\"right\">";
+					if ($my_sems[$cc['seminar_id']]['virtual']) {
+						echo "<a href=\"$PHP_SELF?cmd=delete_entry&semid=".substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32)."\">";
+						echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" align=\"absmiddle\" border=\"0\"></a>";
+					}
+
+					echo "</td></tr><tr><td class=\"blank\">";
+					if ((!$my_sems[$cc["seminar_id"]]["personal_sem"]) && (!$print_view)) {
+						if ($my_sems[$cc['seminar_id']]['virtual']) {
+							echo "<a href=\"details.php?sem_id=".substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32)."\">";
+							echo "<FONT size=\"-1\" color=\"green\">";
+						} else {
+							if ($view=="inst")
+								echo  "<a href=\"details.php?sem_id=";
+							else
+								echo  "<a href=\"seminar_main.php?auswahl=";
+							echo substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32), "\"><font size=-1>";
+						}
 						if ($my_sems[$cc["seminar_id"]]["nummer"]) {
 							echo htmlReady($my_sems[$cc["seminar_id"]]["nummer"]) . "&nbsp;";
 						}

@@ -219,6 +219,10 @@ if ($archive_kill) {
 			$killAssign->delete();
 		} 
 
+		// kill virtual seminar-entries in calendar
+		$query = "DELETE FROM seminar_user_schedule WHERE range_id = '$s_id'";
+		$db->query($query);
+
 		if ($liste)
 			$msg .= "info§<font size=-1>$liste</font>§"; 
 		

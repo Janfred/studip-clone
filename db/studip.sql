@@ -1465,6 +1465,20 @@ CREATE TABLE `seminar_user` (
 -- --------------------------------------------------------
 
 -- 
+-- Tabellenstruktur für Tabelle `seminar_user_schedule`
+-- 
+
+DROP TABLE IF EXISTS `seminar_user_schedule`;
+CREATE TABLE `seminar_user_schedule` (
+	`range_id` varchar(32) NOT NULL default '',
+	`user_id` varchar(32) NOT NULL default '',
+	KEY `user_id` (`user_id`),
+	KEY `range_id` (`range_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
 -- Tabellenstruktur für Tabelle `seminare`
 -- 
 

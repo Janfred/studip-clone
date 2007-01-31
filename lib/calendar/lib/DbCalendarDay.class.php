@@ -164,6 +164,7 @@ class DbCalendarDay extends CalendarDay {
 	function bindSeminarEvents ($sem_id = "") {
 		global $TERMIN_TYP;
 	
+		$db =& new DB_Seminar;	
 		if ($sem_id == "")
 			$query = sprintf("SELECT t.*, s.Name "
 						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
@@ -173,17 +174,25 @@ class DbCalendarDay extends CalendarDay {
 		else if ($sem_id != "") {
 			if (is_array($sem_id))
 				$sem_id = implode("','", $sem_id);
-			$query = sprintf("SELECT t.*, s.Name "
-						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
-						 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
-			       . "user_id = '%s' AND range_id IN ('%s') AND date_typ!=-1 "
-						 . "AND date_typ!=-2 AND date BETWEEN %s AND %s"
-						 , $this->user_id, $sem_id, $this->getStart(), $this->getEnd());
+
+			$query = "SELECT * FROM seminar_user_schedule WHERE range_id = '$sem_id' AND user_id ='{$this->user_id}'";
+			$db->query($query);
+
+			$query = "SELECT t.*, s.Name ";
+			if ($db->num_rows() > 0) {
+				$query .= "FROM termine t LEFT JOIN seminar_user_schedule su ON su.range_id=t.range_id ";
+				$query .= "LEFT JOIN seminare s ON (su.range_id = s.Seminar_id) WHERE ";
+			} else {
+				$query .= "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id ";
+				$query .= "LEFT JOIN seminare s USING(Seminar_id) WHERE ";
+			}
+			$query .= sprintf("user_id = '%s' AND t.range_id IN ('%s') AND date_typ!=-1 "
+							. "AND date_typ!=-2 AND date BETWEEN %s AND %s"
+							, $this->user_id, $sem_id, $this->getStart(), $this->getEnd());
 		}
 		else
 			return FALSE;
 			
-		$db =& new DB_Seminar;	
 		$db->query($query);
 		
 		if ($db->num_rows() != 0) {
