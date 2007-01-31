@@ -38,8 +38,8 @@ class LatexRender {
 	var $_convert_path = "/usr/bin/convert";
 	var $_identify_path="/usr/bin/identify";
 	var $_formula_density = 120;
-	var $_xsize_limit = 500;
-	var $_ysize_limit = 500;
+	var $_xsize_limit = 700;
+	var $_ysize_limit = 700;
 	var $_tmp_filename;
 	var $_format = ""; // no default format 
 	var $_template = ""; // no default template 
@@ -249,7 +249,7 @@ class LatexRender {
 		
 		if ( ($dim["x"] > $this->_xsize_limit) or ($dim["y"] > $this->_ysize_limit)) {
 			$this->cleanTemporaryDirectory(); 
-			chdir($current_dir); 
+			chdir($current_dir);
 			return false;
 		}
 		
