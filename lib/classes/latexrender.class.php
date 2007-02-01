@@ -38,11 +38,11 @@ class LatexRender {
 	var $_convert_path = "/usr/bin/convert";
 	var $_identify_path="/usr/bin/identify";
 	var $_formula_density = 120;
-	var $_xsize_limit = 700;
+	var $_xsize_limit = 1024;
 	var $_ysize_limit = 700;
 	var $_tmp_filename;
-	var $_format = ""; // no default format 
-	var $_template = ""; // no default template 
+	var $_format = ''; // no default format 
+	var $_template = ''; // no default template 
 	// this most certainly needs to be extended. in the long term it is planned to use
 	// a positive list for more security. this is hopefully enough for now. i'd be glad
 	// to receive more bad tags !
@@ -50,11 +50,11 @@ class LatexRender {
 	"include","def","command","loop","repeat","open","toks","output","line","input",
 	"catcode","mathcode","name","item","section","%","^^","\$\$","mbox"
 	);
-	
+	var $_err_string = '';	
 	// ====================================================================================
 	// constructor
 	// ====================================================================================
-	
+		
 	/**
 	* Initializes the class
 	*
@@ -71,6 +71,10 @@ class LatexRender {
 	// ====================================================================================
 	// public functions
 	// ====================================================================================
+	
+	function getErrorString(){
+		return $this->_err_string;
+	}
 	
 	/**
 	* Format mutator function
@@ -142,7 +146,8 @@ class LatexRender {
 			return $this->getPicturePathHTTPD()."/".$filename;
 		} else {
 			// security filter: reject too long formulas
-			if (strlen($latex_formula) > 500) {
+			if (strlen($latex_formula) > 1024) {
+				$this->_err_string = _("Latexfehler: Formel zu lang.");
 				return false;
 			}
 			
@@ -234,22 +239,22 @@ class LatexRender {
 		if (!$status_code) { $this->cleanTemporaryDirectory(); chdir($current_dir); return false; }
 		
 		// convert dvi file to postscript using dvips
-		$command = $this->_dvips_path." -E ".$this->_tmp_filename.".dvi -o ".$this->_tmp_filename.".ps";
+		$command = $this->_dvips_path.' -E '.$this->_tmp_filename.'.dvi -o '.$this->_tmp_filename.'.ps';
 		$status_code = exec($command);
 		
 		// imagemagick convert ps to png and trim picture
-		$command = $this->_convert_path." -density ".$this->_formula_density.
-		" -trim -transparent '#FFFFFF' ".$this->_tmp_filename.".ps ".
-		$this->_tmp_filename.".png";
+		$command = $this->_convert_path.' -density '.$this->_formula_density.
+		' -trim -transparent \'#FFFFFF\' -resize \'' . $this->_xsize_limit . 'x' . $this->_ysize_limit . '>\' ' . $this->_tmp_filename.'.ps ' . $this->_tmp_filename.'.png';
 		
 		$status_code = exec($command);
 		
 		// test picture for correct dimensions
-		$dim = $this->getDimensions($this->_tmp_filename.".png");
+		$dim = $this->getDimensions($this->_tmp_filename.'.png');
 		
-		if ( ($dim["x"] > $this->_xsize_limit) or ($dim["y"] > $this->_ysize_limit)) {
+		if ( ($dim['x'] > $this->_xsize_limit) or ($dim['y'] > $this->_ysize_limit)) {
 			$this->cleanTemporaryDirectory(); 
 			chdir($current_dir);
+			$this->_err_string = _("Latexfehler: Grafik zu gro&szlig;.");
 			return false;
 		}
 		
