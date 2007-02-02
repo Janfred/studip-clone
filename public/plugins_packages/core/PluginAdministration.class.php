@@ -160,9 +160,8 @@ class PluginAdministration {
    				$this->deletePlugindir($tmppackagedir);
    						
 				// instantiate plugin
-				if (!$pluginregistered){
-					require_once($newpluginpath . '/' . $pluginclassname . ".class.php");
-				}
+				require_once($newpluginpath . '/' . $pluginclassname . ".class.php");
+
 				$plugin = new $pluginclassname();
 				if ($plugin == null){
 					// delete Plugin directory
