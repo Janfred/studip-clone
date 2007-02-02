@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: studip_eval\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-02 17:05+0100\n"
+"POT-Creation-Date: 2007-02-02 15:53+0100\n"
 "PO-Revision-Date: 2006-08-21 21:17+GMT\n"
 "Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
 "Language-Team:  <de@li.org>\n"
@@ -26872,14 +26872,6 @@ msgstr "Last change on %s by %s"
 msgid "Literaturliste kopieren"
 msgstr "Copy literature lists"
 
-#: ../lib/classes/latexrender.class.php:150
-msgid "Latexfehler: Formel zu lang."
-msgstr ""
-
-#: ../lib/classes/latexrender.class.php:257
-msgid "Latexfehler: Grafik zu gro&szlig;."
-msgstr ""
-
 #: ../lib/classes/StudipSemRangeTreeViewSimple.class.php:91
 #: ../lib/classes/StudipSemTreeViewSimple.class.php:92
 #, c-format
@@ -31640,19 +31632,15 @@ msgstr "Citation:"
 msgid "Kommentar von"
 msgstr "Comment by"
 
-#: ../lib/visual.inc.php:477
-msgid "unparseable or potentially dangerous latex formula"
-msgstr ""
-
-#: ../lib/visual.inc.php:1089
+#: ../lib/visual.inc.php:1087
 msgid "Objekt aufklappen"
 msgstr "Open object"
 
-#: ../lib/visual.inc.php:1092
+#: ../lib/visual.inc.php:1090
 msgid "Objekt zuklappen"
 msgstr "Close object"
 
-#: ../lib/visual.inc.php:1129
+#: ../lib/visual.inc.php:1127
 msgid "Bewertungsbereich öffnen"
 msgstr "Open rating area"
 
