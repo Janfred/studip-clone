@@ -93,7 +93,12 @@ if ($sem_id) {
 		}
 
 		$db->query("SELECT * FROM seminar_user_schedule WHERE range_id = '$sem_id' AND user_id = '".$auth->auth['uid']."'");
-		if ($db->num_rows() == 0) {
+		$sem_user_schedule = $db->num_rows();
+
+		$db->query("SELECT * FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '".$auth->auth['uid']."'");
+		$sem_user = $db->num_rows();
+
+		if (!$sem_user && !$sem_user_schedule) {
 			$plan_msg = "<a href=\"mein_stundenplan.php?cmd=add_entry&semid=$sem_id\">"._("Nur im Stundenplan vormerken")."</a>";
 		}
 
