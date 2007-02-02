@@ -47,7 +47,7 @@ class LatexRender {
 	// a positive list for more security. this is hopefully enough for now. i'd be glad
 	// to receive more bad tags !
 	var $_latex_tags_blacklist = array(
-	"include","def","command","loop","repeat","open","toks","output","line","input",
+	"include","def","command","loop","repeat","open","toks","output",/*"line",*/"input",
 	"catcode","mathcode","name","item","section","%","^^","\$\$","mbox"
 	);
 	var $_err_string = '';	
@@ -154,6 +154,7 @@ class LatexRender {
 			// security filter: try to match against LaTeX-Tags Blacklist
 			for ($i=0;$i<sizeof($this->_latex_tags_blacklist);$i++) {
 				if (stristr($latex_formula,$this->_latex_tags_blacklist[$i])) {
+					$this->_err_string = sprintf(_("Latexfehler: nicht erlaubtes Element: '%s'"), $this->_latex_tags_blacklist[$i]);
 					return false;
 				}
 			}
@@ -236,7 +237,12 @@ class LatexRender {
 		$command = $this->_latex_path." --interaction=nonstopmode ".$this->_tmp_filename.".tex";
 		$status_code = exec($command);
 		
-		if (!$status_code) { $this->cleanTemporaryDirectory(); chdir($current_dir); return false; }
+		if (!$status_code) { 
+			$this->cleanTemporaryDirectory(); 
+			chdir($current_dir); 
+			$this->_err_string = sprintf(_("Latexfehler: Aktion fehlgeschlagen: '%s'."),$this->_latex_path);
+			return false; 
+		}
 		
 		// convert dvi file to postscript using dvips
 		$command = $this->_dvips_path.' -E '.$this->_tmp_filename.'.dvi -o '.$this->_tmp_filename.'.ps';
@@ -266,7 +272,11 @@ class LatexRender {
 		
 		$this->cleanTemporaryDirectory();	
 		
-		if (!$status_code) { chdir($current_dir); return false; }
+		if (!$status_code) { 
+			chdir($current_dir); 
+			$this->_err_string = _("Latexfehler: Kopieren fehlgeschlagen.");
+			return false; 
+		}
 		chdir($current_dir);
 		
 		return true;
