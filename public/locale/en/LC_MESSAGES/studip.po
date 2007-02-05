@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: studip_eval\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-02 17:05+0100\n"
+"POT-Creation-Date: 2007-02-05 14:00+0100\n"
 "PO-Revision-Date: 2006-08-21 21:17+GMT\n"
 "Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
 "Language-Team:  <de@li.org>\n"
@@ -50,6 +50,7 @@ msgstr "Username:"
 #: ../public/edit_about.php:1210 ../public/migration2studip.php:49
 #: ../public/migration2studip.php:119 ../public/admin_admission.php:781
 #: ../lib/elearning/ELearningUtils.class.php:412
+#: ../lib/include/crcregister.ihtml:209 ../lib/include/crcloginform.ihtml:153
 msgid "Passwort:"
 msgstr "Password:"
 
@@ -173,13 +174,13 @@ msgstr "Search"
 
 #: ../public/wap/directory.php:58 ../public/edit_about.php:1189
 #: ../public/new_user_md5.php:174 ../public/new_user_md5.php:283
-#: ../lib/include/pers_browse.inc.php:127
+#: ../lib/include/pers_browse.inc.php:127 ../lib/include/crcregister.ihtml:253
 msgid "Nachname:"
 msgstr "Surname:"
 
 #: ../public/wap/directory.php:62 ../public/edit_about.php:1183
 #: ../public/new_user_md5.php:170 ../public/new_user_md5.php:271
-#: ../lib/include/pers_browse.inc.php:123
+#: ../lib/include/pers_browse.inc.php:123 ../lib/include/crcregister.ihtml:248
 msgid "Vorname:"
 msgstr "First name:"
 
@@ -1405,6 +1406,7 @@ msgstr "for"
 #: ../lib/resources/lib/ResourceObject.class.php:307
 #: ../lib/classes/SemBrowse.class.php:30 ../lib/vote/vote_overview.inc.php:134
 #: ../lib/functions.php:88 ../lib/functions.php:175 ../lib/contact.inc.php:236
+#: ../config/config.inc.php:343
 msgid "Einrichtung"
 msgstr "Institute"
 
@@ -2246,7 +2248,7 @@ msgstr "."
 #: ../public/admin_seminare_assi.php:3743
 #: ../public/lit_overview_print_view.php:97
 #: ../lib/classes/SemBrowse.class.php:263
-#: ../lib/vote/view/vote_edit.lib.php:204
+#: ../lib/vote/view/vote_edit.lib.php:204 ../lib/include/crcregister.ihtml:219
 msgid "Titel:"
 msgstr "Title:"
 
@@ -3499,6 +3501,7 @@ msgstr "Name:"
 #: ../public/edit_about.php:1199 ../public/edit_about.php:1214
 #: ../public/new_user_md5.php:205 ../public/new_user_md5.php:358
 #: ../public/institut_main.php:147 ../lib/include/pers_browse.inc.php:125
+#: ../lib/include/crcregister.ihtml:263
 msgid "E-Mail:"
 msgstr "E-mail:"
 
@@ -3507,24 +3510,24 @@ msgid "Adminzugriff hier nicht möglich!"
 msgstr "Administrative access not possible here!"
 
 #: ../public/edit_about.php:1234 ../public/new_user_md5.php:189
-#: ../public/new_user_md5.php:319
+#: ../public/new_user_md5.php:319 ../lib/include/crcregister.ihtml:233
 msgid "Titel nachgest.:"
 msgstr "Second title:"
 
 #: ../public/edit_about.php:1251 ../public/new_user_md5.php:200
-#: ../public/new_user_md5.php:343
+#: ../public/new_user_md5.php:343 ../lib/include/crcregister.ihtml:258
 msgid "Geschlecht:"
 msgstr "Gender:"
 
 #: ../public/edit_about.php:1253 ../public/edit_about.php:1255
 #: ../public/new_user_md5.php:201 ../public/new_user_md5.php:347
-#: ../public/new_user_md5.php:350
+#: ../public/new_user_md5.php:350 ../lib/include/crcregister.ihtml:259
 msgid "m&auml;nnlich"
 msgstr "male"
 
 #: ../public/edit_about.php:1253 ../public/edit_about.php:1259
 #: ../public/new_user_md5.php:202 ../public/new_user_md5.php:347
-#: ../public/new_user_md5.php:351
+#: ../public/new_user_md5.php:351 ../lib/include/crcregister.ihtml:259
 msgid "weiblich"
 msgstr "female"
 
@@ -5217,7 +5220,8 @@ msgstr "Please enter the login data of your ILIAS-Account!"
 
 #: ../public/migration2studip.php:47 ../public/migration2studip.php:117
 #: ../public/new_user_md5.php:158 ../public/new_user_md5.php:243
-#: ../lib/include/pers_browse.inc.php:121
+#: ../lib/include/pers_browse.inc.php:121 ../lib/include/crcregister.ihtml:204
+#: ../lib/include/crcloginform.ihtml:143
 msgid "Benutzername:"
 msgstr "Username:"
 
@@ -7457,7 +7461,7 @@ msgstr "Create new data field for user"
 #: ../lib/include/links_admin.inc.php:307
 #: ../lib/include/links_admin.inc.php:336
 #: ../lib/include/links_admin.inc.php:1027
-#: ../lib/include/links_about.inc.php:93
+#: ../lib/include/links_about.inc.php:93 ../config/config.inc.php:372
 #, c-format
 msgid "Literatur"
 msgstr "Literature"
@@ -9619,7 +9623,7 @@ msgstr "Clipboard for general folder and documents of the course"
 
 #: ../public/admin_seminare_assi.php:1532
 #: ../lib/include/links_openobject.inc.php:78
-#: ../lib/include/links_openobject.inc.php:103
+#: ../lib/include/links_openobject.inc.php:103 ../config/config.inc.php:371
 msgid "Informationen"
 msgstr "Information "
 
@@ -12398,6 +12402,7 @@ msgstr ""
 #: ../lib/extern/modules/views/lecturedetails_preview.inc.php:52
 #: ../lib/extern/modules/ExternModuleLecturedetails.class.php:89
 #: ../lib/extern/modules/ExternModuleLecturedetails.class.php:313
+#: ../config/config.inc.php:411
 msgid "Sonstiges"
 msgstr "Miscellaneous"
 
@@ -14434,7 +14439,8 @@ msgstr ""
 "You are probably still entered in an earlier chat session. It takes ca. 3-5 "
 "seconds until you are automatically removed from a chat. Try again later."
 
-#: ../lib/chat/chat_login.php:127
+#: ../lib/chat/chat_login.php:127 ../lib/include/perminvalid.ihtml:23
+#: ../lib/include/perminvalid.ihtml:31
 msgid "Zugriff verweigert"
 msgstr "Access denied"
 
@@ -16362,14 +16368,18 @@ msgid "Untertitel der Veranstaltung %s"
 msgstr "Sub title for course %s"
 
 #: ../lib/extern/modules/views/lecturestable_preview.inc.php:42
+#: ../config/config.inc.php:91 ../config/config.inc.php:348
 msgid "Seminar"
 msgstr "Seminar"
 
 #: ../lib/extern/modules/views/lecturestable_preview.inc.php:43
+#: ../config/config.inc.php:88 ../config/config.inc.php:406
+#: ../config/config.inc.php:425
 msgid "Vorlesung"
 msgstr "Lecture"
 
 #: ../lib/extern/modules/views/lecturestable_preview.inc.php:44
+#: ../config/config.inc.php:103
 msgid "Praktikum"
 msgstr "Practical"
 
@@ -16559,6 +16569,7 @@ msgstr "Font "
 #: ../lib/extern/elements/ExternElementLinkInternSimple.class.php:59
 #: ../lib/extern/elements/ExternElementLink.class.php:54
 #: ../lib/extern/elements/ExternElementLinkIntern.class.php:55
+#: ../config/config.inc.php:373
 msgid "Links"
 msgstr "Links"
 
@@ -20899,6 +20910,7 @@ msgstr "Termination date was <b>%s</b> at <b>%s</b>."
 #: ../lib/evaluation/evaluation_admin_overview.lib.php:1985
 #: ../lib/evaluation/evaluation_admin_overview.lib.php:2337
 #: ../lib/evaluation/evaluation_admin_overview.lib.php:2344
+#: ../config/config.inc.php:349
 msgid "Fakultät"
 msgstr "Faculty"
 
@@ -31749,6 +31761,48 @@ msgstr ""
 msgid "(Beachten Sie bitte die angegebene Reihenfolge!)"
 msgstr "(Please heed the stated order!)"
 
+#: ../lib/include/perminvalid.ihtml:29
+msgid "Zugriff verweigert (Sie sind nicht angemeldet!)"
+msgstr "Access denied (You are not logged on!)"
+
+#: ../lib/include/perminvalid.ihtml:29
+msgid ""
+"Sie sind nicht im System angemeldet und k&ouml;nnen daher nicht auf diesen "
+"Teil des Systems zugreifen. Um den vollen Funktionsumfang des Systems "
+"benutzen zu k&ouml;nnen, m&uuml;ssen sie sich mit ihrem Nutzernamen und "
+"Passwort anmelden."
+msgstr ""
+"You are not registered in the system and therefore can not access this part "
+"of the system. In order to be able to use the full range of functions of the "
+"system, you must sign on with your user name and password."
+
+#: ../lib/include/perminvalid.ihtml:31
+#, c-format
+msgid ""
+"Wahrscheinlich ist Ihre Session abgelaufen. Wenn Sie sich länger als %s "
+"Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. "
+"Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur "
+"Anmeldung zu gelangen."
+msgstr ""
+"It is most likely that your session has ended. If you have been in the "
+"system for longer than %s minutes without moving, you will be automatically "
+"logged out. In this case, please use the link below to go back to log on."
+
+#: ../lib/include/perminvalid.ihtml:31
+msgid ""
+"Eine andere Ursache kann der versuchte Zugriff auf Teile des System sein, "
+"für die Sie keine Berechtigung haben. In diesem Fall gelangen Sie über den "
+"untenstehenden Link zurück auf die Startseite."
+msgstr ""
+"Another reason can be the attempted access to a part of the system for which "
+"you do not have authorisation. In this case please use the link below to go "
+"back to the start page."
+
+#: ../lib/include/perminvalid.ihtml:33
+#, c-format
+msgid "%sHier%s geht es wieder zur Anmeldungs- bzw. Startseite."
+msgstr "%sThis%s takes you back to the registration and start page. "
+
 #: ../lib/include/links_openobject.inc.php:80
 msgid "Literatur zur Einrichtung"
 msgstr "Literature for the institute"
@@ -32174,6 +32228,163 @@ msgstr "Current semester"
 msgid "angezeigte Einrichtung"
 msgstr "Displayed institute"
 
+#: ../lib/include/crcregister.ihtml:120
+msgid "Stud.IP - Registrierung"
+msgstr "Stud.IP - Registration"
+
+#: ../lib/include/crcregister.ihtml:134 ../lib/include/crcloginform.ihtml:71
+msgid "Cookies sind nicht aktiviert!"
+msgstr "Cookies are not activated!"
+
+#: ../lib/include/crcregister.ihtml:134 ../lib/include/crcloginform.ihtml:71
+#, c-format
+msgid ""
+"Die Anmeldung für Stud.IP ist nur möglich, wenn Sie das Setzen von Cookies "
+"erlauben! Bitte &auml;ndern Sie die Einstellungen Ihres Browsers und "
+"wiederholen Sie den %sLogin%s"
+msgstr ""
+"Registration for Stud.IP is only possible when cookies are allowed!  Please "
+"change your browser settings and repeat the %sLogin%s."
+
+#: ../lib/include/crcregister.ihtml:139 ../lib/include/crcloginform.ihtml:75
+msgid "Was sind Cookies?"
+msgstr "What are cookies?"
+
+#: ../lib/include/crcregister.ihtml:141 ../lib/include/crcloginform.ihtml:77
+msgid ""
+"Cookies werden normalerweise benutzt, damit der Browser BenutzerInnen der "
+"Seiten beim wiederholten Aufrufen dieser Seiten wiedererkennen kann "
+"<br>Innerhalb von Stud.IP werden Cookies benutzt, um den Namen und die Daten "
+"der Nutzenden auf jeder Seite neu verf&uuml;gbar zu machen.<br>Ohne Cookies "
+"m&uuml;ssten Sie sich beim Betreten jeder Seite neu anmelden!"
+msgstr ""
+"Cookies are normally used so that the browser can recognise the user while "
+"repeatedly calling up these pages.  <br>Within Stud.IP, cookies are used so "
+"that the name and the data of the registered user is made available on every "
+"page.  <br>Without cookies you would have to log on every time you access a "
+"new page!"
+
+#: ../lib/include/crcregister.ihtml:144 ../lib/include/crcloginform.ihtml:80
+msgid "Sind Cookies gef&auml;hrlich?"
+msgstr "Are cookies dangerous?"
+
+#: ../lib/include/crcregister.ihtml:146 ../lib/include/crcloginform.ihtml:82
+msgid ""
+"Das Zulassen von Cookies stellt - leider - ein geringf&uuml;giges "
+"Sicherheitsrisiko dar. Jedoch sollten Sie Ihr Augenmerk darauf richten, dass "
+"in den meisten Browsern Techniken integriert sind, die ein deutlich gr&ouml;"
+"&szlig;eres Sicherheitsrisiko darstellen (etwa AktiveX-Elemente)."
+"<br>Au&szlig;erdem gibt es zwei verschiedene Arten von Cookies: Jene, die "
+"auf der Festplatte gespeichert werden und auf dem Rechner verbleiben, und "
+"solche, die nur solange aktiv sind, wie Sie die entsprechenden Seiten "
+"benutzen.<br>Das Stud.IP-System nutzt nur die ungef&auml;hrlicheren Cookies, "
+"die sich nur f&uuml;r die Dauer der Sitzung im Speicher des Browser befinden "
+"und danach automatisch verschwinden.<br>Sie brauchen sich also keine Sorgen "
+"zu machen!"
+msgstr ""
+"The acceptance of cookies unfortunately represents a small security risk.  "
+"However you should be aware that in most browsers, techniques are integrated "
+"which clearly represent a greater security risk (e.g.Active X-Elements). "
+"<br>In addition there are two types of cookies: those which are saved on the "
+"hard drive and stay in the computer and those which are only active as long "
+"as the corresponding page is used. <br> The Stud.IP-system uses only these "
+"harmless cookies that are only stored in the memory of the browser for the "
+"duration of the session and afterwards automatically disappear.  <br>You do "
+"not need to worry!"
+
+#: ../lib/include/crcregister.ihtml:149
+msgid "Hinweise f&uuml;r Benutzer des Internet Explorers 6.0"
+msgstr "Tips for users of Internet Explorers 6.0"
+
+#: ../lib/include/crcregister.ihtml:151
+msgid ""
+"Wenn Sie den Internet Explorer 6.0 benutzen, kann es vorkommen, dass Sie auf "
+"diese Seite gelangen, da der Browser Cookies vom Stud.IP-System nicht "
+"akzeptiert<br>Gehen Sie dann bitte so vor:"
+msgstr ""
+"If you use Internet Explorer 6.0, it may be the case that you have arrived "
+"at this page because your browser does not accept cookies from the Stud.IP "
+"System. <br> Please do the following:"
+
+#: ../lib/include/crcregister.ihtml:153
+msgid "&Ouml;ffnen Sie das Menu \"Extras\" in der Kopfzeile des Browsers"
+msgstr "Open the menu labelled \"Tools\" on the browser tool bar"
+
+#: ../lib/include/crcregister.ihtml:154
+msgid "Gehen Sie auf \"Internetoptionen\""
+msgstr "Go to \"Internet options\""
+
+#: ../lib/include/crcregister.ihtml:155
+msgid "W&auml;hlen Sie den Punkt \"Datenschutz\""
+msgstr "Select the tab \"Privacy\""
+
+#: ../lib/include/crcregister.ihtml:156
+msgid "Stellen Sie den Regler auf die Einstellung \"Alle Cookies annehmen\""
+msgstr "Set the slider on the setting \"Accept all cookies\""
+
+#: ../lib/include/crcregister.ihtml:160 ../lib/include/crcloginform.ihtml:85
+msgid "Hinweise f&uuml;r BenutzerInnen des Netscape Navigator 4.x"
+msgstr "Tips for users with Netscape Navigator 4.x "
+
+#: ../lib/include/crcregister.ihtml:162 ../lib/include/crcloginform.ihtml:87
+msgid ""
+"Wenn Sie den Netscape Navigator 4.x benutzen, k&ouml;nnen Sie das Annehmen "
+"von Cookies auf folgende Weise einschalten:"
+msgstr ""
+"If you use Netscape Navigator 4.x, you can activate cookies in the following "
+"way:"
+
+#: ../lib/include/crcregister.ihtml:165 ../lib/include/crcloginform.ihtml:90
+msgid "&Ouml;ffnen Sie das Menu \"Bearbeiten\" in der Kopfzeile des Browsers"
+msgstr "Open the menu labelled \"Edit\" on the browser tool bar"
+
+#: ../lib/include/crcregister.ihtml:166 ../lib/include/crcloginform.ihtml:91
+msgid "Gehen Sie auf \"Einstellungen\""
+msgstr "Click on \"Preferences\""
+
+#: ../lib/include/crcregister.ihtml:167 ../lib/include/crcloginform.ihtml:92
+msgid ""
+"W&auml;hlen Sie jetzt auf der linken Seite der Einstellungsseite den "
+"Menüpunkt \"Erweitert\""
+msgstr "Then select the menu heading \"Advanced\" on the left-hand side. "
+
+#: ../lib/include/crcregister.ihtml:168 ../lib/include/crcloginform.ihtml:93
+msgid "Aktivieren Sie jetzt auf der rechten Seite die Punkte:"
+msgstr "Now activate the cookies in the right-hand side box: "
+
+#: ../lib/include/crcregister.ihtml:170 ../lib/include/crcloginform.ihtml:95
+msgid "\"Benutze JavaScript\""
+msgstr "\"Use Java Script\""
+
+#: ../lib/include/crcregister.ihtml:171 ../lib/include/crcloginform.ihtml:96
+msgid "\"Benutze Style Sheets\""
+msgstr "\"Use Style Sheets\""
+
+#: ../lib/include/crcregister.ihtml:172 ../lib/include/crcloginform.ihtml:97
+msgid ""
+"\"Erlaube Cookies nur von dem Server, von dem die aktuelle Seite stammt\""
+msgstr "\"Enable cookies from the originating web site only\""
+
+#: ../lib/include/crcregister.ihtml:186
+msgid "Herzlich Willkommen!"
+msgstr "Welcome!"
+
+#: ../lib/include/crcregister.ihtml:187
+msgid "Bitte f&uuml;llen Sie zur Anmeldung das Formular aus:"
+msgstr "Please fill out the registration form:"
+
+#: ../lib/include/crcregister.ihtml:194
+msgid "Bei der Registrierung ist ein Fehler aufgetreten:"
+msgstr "An error occurred during the registration:"
+
+#: ../lib/include/crcregister.ihtml:194
+msgid "Bitte korrigieren Sie Ihre Eingaben und versuchen Sie es erneut"
+msgstr "Please correct the given information and try again"
+
+#: ../lib/include/crcregister.ihtml:214
+msgid "Passwortbest&auml;tigung:"
+msgstr "Password confirmation:"
+
 #: ../lib/include/messagingSettings.inc.php:131
 msgid ""
 "Durch das Zurücksetzen werden die persönliche Messaging-Einstellungen auf "
@@ -32409,6 +32620,25 @@ msgstr "Group administration"
 #: ../lib/include/links_sms.inc.php:77
 msgid "VCF-Export"
 msgstr "VCF-Export"
+
+#: ../lib/include/crcloginform.ihtml:54
+#, fuzzy
+msgid "Stud.IP - Login"
+msgstr "Stud.IP - login (%s)"
+
+#: ../lib/include/crcloginform.ihtml:116
+msgid "Bitte identifizieren Sie sich mit Benutzername und Passwort:"
+msgstr "Please identify yourself with username and password:"
+
+#: ../lib/include/crcloginform.ihtml:124
+#, fuzzy
+msgid "Bei der Anmeldung trat ein Fehler auf:"
+msgstr "An error occurred while converting."
+
+#: ../lib/include/crcloginform.ihtml:124
+#, c-format
+msgid "Bitte wenden Sie sich bei Problemen an: <br />%s"
+msgstr "In the event of problems, please contact: <br />%s"
 
 #: ../lib/include/check_sem_entry.inc.php:41
 msgid "&Uuml;berpr&uuml;fung der Rechte"
@@ -32736,6 +32966,261 @@ msgstr "Logout"
 msgid "Aus dem System abmelden"
 msgstr "Logout of the system"
 
+#: ../config/config.inc.php:81
+#, c-format
+msgid "Und hier geht's direkt zum %sMensaplan%s&nbsp;;-)"
+msgstr "And this directly takes you to the %scafeteria's menu%s&nbsp;;-)"
+
+#: ../config/config.inc.php:89
+msgid "Grundstudium"
+msgstr "Basic studies"
+
+#: ../config/config.inc.php:90
+msgid "Hauptstudium"
+msgstr "Advanced studies"
+
+#: ../config/config.inc.php:92
+msgid "Praxisveranstaltung"
+msgstr "Practical course"
+
+#: ../config/config.inc.php:93
+msgid "Kolloquium"
+msgstr "Colloquium"
+
+#: ../config/config.inc.php:94 ../config/config.inc.php:97
+msgid "Forschungsgruppe"
+msgstr "Research group"
+
+#: ../config/config.inc.php:95 ../config/config.inc.php:350
+msgid "Arbeitsgruppe"
+msgstr "Work group"
+
+#: ../config/config.inc.php:96 ../config/config.inc.php:98
+#: ../config/config.inc.php:100 ../config/config.inc.php:102
+msgid "sonstige"
+msgstr "Miscellaneous"
+
+#: ../config/config.inc.php:99
+msgid "Gremiumsveranstaltung"
+msgstr "Committee"
+
+#: ../config/config.inc.php:101
+msgid "Community-Forum"
+msgstr "Community"
+
+#: ../config/config.inc.php:104
+msgid "Lehrveranstaltung nach PVO-Lehr I"
+msgstr "Lecture course in compliance with PVO-Lehr I"
+
+#: ../config/config.inc.php:105
+msgid "Anleitung zu selbständigen wissenschaftlichen Arbeiten"
+msgstr "Training for independent studies"
+
+#: ../config/config.inc.php:106
+msgid "Sprachkurs"
+msgstr "Language course"
+
+#: ../config/config.inc.php:107
+msgid "Fachdidaktik"
+msgstr "Subject specific didactics"
+
+#: ../config/config.inc.php:108
+msgid "Übung"
+msgstr "Exercise"
+
+#: ../config/config.inc.php:109
+msgid "Proseminar"
+msgstr "Proseminar"
+
+#: ../config/config.inc.php:110
+msgid "Oberseminar"
+msgstr "Advanced seminar"
+
+#: ../config/config.inc.php:111
+msgid "Arbeitsgemeinschaft"
+msgstr "Work group"
+
+#: ../config/config.inc.php:116
+msgid "Lehre"
+msgstr "Teaching"
+
+#: ../config/config.inc.php:139
+msgid "Hier finden Sie alle in Stud.IP registrierten Lehrveranstaltungen"
+msgstr "Here you can find all the courses registered in Stud.IP "
+
+#: ../config/config.inc.php:140
+msgid "Verwenden Sie diese Kategorie, um normale Lehrveranstaltungen anzulegen"
+msgstr "Use this category to set up a normal course"
+
+#: ../config/config.inc.php:142
+msgid "Forschung"
+msgstr "Research"
+
+#: ../config/config.inc.php:160
+msgid ""
+"Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der "
+"Universit&auml;t"
+msgstr ""
+"Here you can find virtual courses on research topics at the university."
+
+#: ../config/config.inc.php:161
+msgid ""
+"In dieser Kategorie k&ouml;nnen sie virtuelle Veranstaltungen f&uuml;r "
+"Forschungsprojekte anlegen."
+msgstr "In this category you can set up virtual courses for research projects."
+
+#: ../config/config.inc.php:163
+msgid "Organisation"
+msgstr "Organisation"
+
+#: ../config/config.inc.php:181
+msgid ""
+"Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Gremien an der "
+"Universit&auml;t"
+msgstr "Here you can find virtual courses for the different university boards."
+
+#: ../config/config.inc.php:182
+msgid ""
+"Um virtuelle Veranstaltungen f&uuml;r Uni-Gremien anzulegen, verwenden Sie "
+"diese Kategorie"
+msgstr ""
+"Use this category in order to set up virtual events for university boards."
+
+#: ../config/config.inc.php:184
+msgid "Community"
+msgstr "Community"
+
+#: ../config/config.inc.php:200
+msgid "Hier finden Sie virtuelle Veranstaltungen zu unterschiedlichen Themen"
+msgstr "Here you can find virtual courses on different topics"
+
+#: ../config/config.inc.php:201
+msgid ""
+"Wenn Sie Veranstaltungen als Diskussiongruppen zu unterschiedlichen Themen "
+"anlegen m&ouml;chten, verwenden Sie diese Kategorie."
+msgstr ""
+"Use this category in order to create virtual courses as discussion groups on "
+"different topics."
+
+#: ../config/config.inc.php:203
+msgid "Arbeitsgruppen"
+msgstr "Work groups"
+
+#: ../config/config.inc.php:221
+#, c-format
+msgid "Hier finden Sie verschiedene Arbeitsgruppen an der %s"
+msgstr "Here you can find different work groups at %s"
+
+#: ../config/config.inc.php:222
+msgid ""
+"Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen."
+msgstr "Use this category to create different work groups."
+
+#: ../config/config.inc.php:344
+msgid "Zentrum"
+msgstr "Centre"
+
+#: ../config/config.inc.php:345
+msgid "Lehrstuhl"
+msgstr "Professorship"
+
+#: ../config/config.inc.php:346
+msgid "Abteilung"
+msgstr "Department"
+
+#: ../config/config.inc.php:347
+msgid "Fachbereich"
+msgstr "Subject area"
+
+#: ../config/config.inc.php:374
+msgid "Verschiedenes"
+msgstr "Miscellaneous"
+
+#: ../config/config.inc.php:400 ../config/config.inc.php:412
+msgid "Sitzung"
+msgstr "Meeting"
+
+#: ../config/config.inc.php:401 ../config/config.inc.php:413
+msgid "Vorbesprechung"
+msgstr "Preliminary discussion"
+
+#: ../config/config.inc.php:402 ../config/config.inc.php:414
+msgid "Klausur"
+msgstr "Written examination"
+
+#: ../config/config.inc.php:403 ../config/config.inc.php:415
+msgid "Exkursion"
+msgstr "Excursion"
+
+#: ../config/config.inc.php:404
+msgid "anderer Termin"
+msgstr "Other appointments"
+
+#: ../config/config.inc.php:405 ../config/config.inc.php:416
+msgid "Sondersitzung"
+msgstr "Special meeting"
+
+#: ../config/config.inc.php:417
+msgid "Prüfung"
+msgstr "Exam"
+
+#: ../config/config.inc.php:418
+msgid "Telefonat"
+msgstr "Telephone call"
+
+#: ../config/config.inc.php:419
+msgid "Besprechung"
+msgstr "Conference"
+
+#: ../config/config.inc.php:420
+msgid "Verabredung"
+msgstr "Appointment"
+
+#: ../config/config.inc.php:421
+msgid "Geburtstag"
+msgstr "Birthday"
+
+#: ../config/config.inc.php:422
+msgid "Familie"
+msgstr "Family"
+
+#: ../config/config.inc.php:423
+msgid "Urlaub"
+msgstr "Holiday"
+
+#: ../config/config.inc.php:424
+msgid "Reise"
+msgstr "Journey"
+
+#: ../config/config.inc.php:451
+msgid "Titel1 Vorname Nachname Titel2"
+msgstr "title1 first name surname title2"
+
+#: ../config/config.inc.php:452
+msgid "Nachname, Vorname, Titel1, Titel2"
+msgstr "surname, first name, title1, title2"
+
+#: ../config/config.inc.php:453
+msgid "Vorname Nachname"
+msgstr "first name surname"
+
+#: ../config/config.inc.php:454
+msgid "Nachname, Vorname"
+msgstr "surname, first name"
+
+#: ../config/config.inc.php:455
+msgid "Nachname, V."
+msgstr "Surname, I"
+
+#: ../config/config.inc.php:456
+msgid "Vorname Nachname, Motto"
+msgstr "first name, surname, motto"
+
+#: ../cli/send_mail_notifications.php:53
+#, fuzzy
+msgid "Tägliche Benachrichtigung"
+msgstr "Notification"
+
 #~ msgid "Netter Versuch"
 #~ msgstr "Nice try"
 
@@ -32745,17 +33230,8 @@ msgstr "Logout of the system"
 #~ msgid "Und hier geht's zur %sStud.IP Portalseite%s&nbsp;"
 #~ msgstr "And this takes you directly to %sStud.IP Portalpage%s&nbsp;"
 
-#~ msgid "sonstige"
-#~ msgstr "Miscellaneous"
-
-#~ msgid "Übung"
-#~ msgstr "Exercise"
-
 #~ msgid "Colloquium"
 #~ msgstr "Colloquium"
-
-#~ msgid "Forschungsgruppe"
-#~ msgstr "Research group"
 
 #~ msgid "Gremium"
 #~ msgstr "Board"
@@ -32769,260 +33245,6 @@ msgstr "Logout of the system"
 #~ msgid "Veranstaltungsboard"
 #~ msgstr "Course board"
 
-#~ msgid "Lehre"
-#~ msgstr "Teaching"
-
-#~ msgid "Hier finden Sie alle in Stud.IP registrierten Lehrveranstaltungen"
-#~ msgstr "Here you can find all the courses registered in Stud.IP "
-
-#~ msgid ""
-#~ "Verwenden Sie diese Kategorie, um normale Lehrveranstaltungen anzulegen"
-#~ msgstr "Use this category to set up a normal course"
-
-#~ msgid "Organisation"
-#~ msgstr "Organisation"
-
-#~ msgid ""
-#~ "Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der "
-#~ "Universit&auml;t"
-#~ msgstr ""
-#~ "Here you can find virtual courses on research topics at the university."
-
-#~ msgid ""
-#~ "In dieser Kategorie k&ouml;nnen sie virtuelle Veranstaltungen f&uuml;r "
-#~ "Forschungsprojekte anlegen."
-#~ msgstr ""
-#~ "In this category you can set up virtual courses for research projects."
-
-#~ msgid "Community"
-#~ msgstr "Community"
-
-#~ msgid ""
-#~ "Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Gremien an der "
-#~ "Universit&auml;t"
-#~ msgstr ""
-#~ "Here you can find virtual courses for the different university boards."
-
-#~ msgid ""
-#~ "Um virtuelle Veranstaltungen f&uuml;r Uni-Gremien anzulegen, verwenden "
-#~ "Sie diese Kategorie"
-#~ msgstr ""
-#~ "Use this category in order to set up virtual events for university boards."
-
-#~ msgid "Zentrum"
-#~ msgstr "Centre"
-
-#~ msgid "Lehrstuhl"
-#~ msgstr "Professorship"
-
-#~ msgid "Abteilung"
-#~ msgstr "Department"
-
-#~ msgid "Fachbereich"
-#~ msgstr "Subject area"
-
-#~ msgid "Arbeitsgruppe"
-#~ msgstr "Work group"
-
-#~ msgid "Sitzung"
-#~ msgstr "Meeting"
-
-#~ msgid "Vorbesprechung"
-#~ msgstr "Preliminary discussion"
-
-#~ msgid "Klausur"
-#~ msgstr "Written examination"
-
-#~ msgid "Exkursion"
-#~ msgstr "Excursion"
-
-#~ msgid "anderer Termin"
-#~ msgstr "Other appointments"
-
-#~ msgid "Sondersitzung"
-#~ msgstr "Special meeting"
-
-#~ msgid "Prüfung"
-#~ msgstr "Exam"
-
-#~ msgid "Telefonat"
-#~ msgstr "Telephone call"
-
-#~ msgid "Besprechung"
-#~ msgstr "Conference"
-
-#~ msgid "Verabredung"
-#~ msgstr "Appointment"
-
-#~ msgid "Geburtstag"
-#~ msgstr "Birthday"
-
-#~ msgid "Familie"
-#~ msgstr "Family"
-
-#~ msgid "Urlaub"
-#~ msgstr "Holiday"
-
-#~ msgid "Reise"
-#~ msgstr "Journey"
-
-#~ msgid "Titel1 Vorname Nachname Titel2"
-#~ msgstr "title1 first name surname title2"
-
-#~ msgid "Nachname, Vorname, Titel1, Titel2"
-#~ msgstr "surname, first name, title1, title2"
-
-#~ msgid "Vorname Nachname"
-#~ msgstr "first name surname"
-
-#~ msgid "Nachname, Vorname"
-#~ msgstr "surname, first name"
-
-#~ msgid "Nachname, V."
-#~ msgstr "Surname, I"
-
-#~ msgid "Vorname Nachname, Motto"
-#~ msgstr "first name, surname, motto"
-
-#~ msgid "Verschiedenes"
-#~ msgstr "Miscellaneous"
-
-#~ msgid "Cookies sind nicht aktiviert!"
-#~ msgstr "Cookies are not activated!"
-
-#~ msgid ""
-#~ "Die Anmeldung für Stud.IP ist nur möglich, wenn Sie das Setzen von "
-#~ "Cookies erlauben! Bitte &auml;ndern Sie die Einstellungen Ihres Browsers "
-#~ "und wiederholen Sie den %sLogin%s"
-#~ msgstr ""
-#~ "Registration for Stud.IP is only possible when cookies are allowed!  "
-#~ "Please change your browser settings and repeat the %sLogin%s."
-
-#~ msgid "Was sind Cookies?"
-#~ msgstr "What are cookies?"
-
-#~ msgid ""
-#~ "Cookies werden normalerweise benutzt, damit der Browser BenutzerInnen der "
-#~ "Seiten beim wiederholten Aufrufen dieser Seiten wiedererkennen kann "
-#~ "<br>Innerhalb von Stud.IP werden Cookies benutzt, um den Namen und die "
-#~ "Daten der Nutzenden auf jeder Seite neu verf&uuml;gbar zu machen.<br>Ohne "
-#~ "Cookies m&uuml;ssten Sie sich beim Betreten jeder Seite neu anmelden!"
-#~ msgstr ""
-#~ "Cookies are normally used so that the browser can recognise the user "
-#~ "while repeatedly calling up these pages.  <br>Within Stud.IP, cookies are "
-#~ "used so that the name and the data of the registered user is made "
-#~ "available on every page.  <br>Without cookies you would have to log on "
-#~ "every time you access a new page!"
-
-#~ msgid "Sind Cookies gef&auml;hrlich?"
-#~ msgstr "Are cookies dangerous?"
-
-#~ msgid ""
-#~ "Das Zulassen von Cookies stellt - leider - ein geringf&uuml;giges "
-#~ "Sicherheitsrisiko dar. Jedoch sollten Sie Ihr Augenmerk darauf richten, "
-#~ "dass in den meisten Browsern Techniken integriert sind, die ein deutlich "
-#~ "gr&ouml;&szlig;eres Sicherheitsrisiko darstellen (etwa AktiveX-Elemente)."
-#~ "<br>Au&szlig;erdem gibt es zwei verschiedene Arten von Cookies: Jene, die "
-#~ "auf der Festplatte gespeichert werden und auf dem Rechner verbleiben, und "
-#~ "solche, die nur solange aktiv sind, wie Sie die entsprechenden Seiten "
-#~ "benutzen.<br>Das Stud.IP-System nutzt nur die ungef&auml;hrlicheren "
-#~ "Cookies, die sich nur f&uuml;r die Dauer der Sitzung im Speicher des "
-#~ "Browser befinden und danach automatisch verschwinden.<br>Sie brauchen "
-#~ "sich also keine Sorgen zu machen!"
-#~ msgstr ""
-#~ "The acceptance of cookies unfortunately represents a small security "
-#~ "risk.  However you should be aware that in most browsers, techniques are "
-#~ "integrated which clearly represent a greater security risk (e.g.Active X-"
-#~ "Elements). <br>In addition there are two types of cookies: those which "
-#~ "are saved on the hard drive and stay in the computer and those which are "
-#~ "only active as long as the corresponding page is used. <br> The Stud.IP-"
-#~ "system uses only these harmless cookies that are only stored in the "
-#~ "memory of the browser for the duration of the session and afterwards "
-#~ "automatically disappear.  <br>You do not need to worry!"
-
-#~ msgid "Hinweise f&uuml;r BenutzerInnen des Netscape Navigator 4.x"
-#~ msgstr "Tips for users with Netscape Navigator 4.x "
-
-#~ msgid ""
-#~ "Wenn Sie den Netscape Navigator 4.x benutzen, k&ouml;nnen Sie das "
-#~ "Annehmen von Cookies auf folgende Weise einschalten:"
-#~ msgstr ""
-#~ "If you use Netscape Navigator 4.x, you can activate cookies in the "
-#~ "following way:"
-
-#~ msgid ""
-#~ "&Ouml;ffnen Sie das Menu \"Bearbeiten\" in der Kopfzeile des Browsers"
-#~ msgstr "Open the menu labelled \"Edit\" on the browser tool bar"
-
-#~ msgid "Gehen Sie auf \"Einstellungen\""
-#~ msgstr "Click on \"Preferences\""
-
-#~ msgid ""
-#~ "W&auml;hlen Sie jetzt auf der linken Seite der Einstellungsseite den "
-#~ "Menüpunkt \"Erweitert\""
-#~ msgstr "Then select the menu heading \"Advanced\" on the left-hand side. "
-
-#~ msgid "Aktivieren Sie jetzt auf der rechten Seite die Punkte:"
-#~ msgstr "Now activate the cookies in the right-hand side box: "
-
-#~ msgid "\"Benutze JavaScript\""
-#~ msgstr "\"Use Java Script\""
-
-#~ msgid "\"Benutze Style Sheets\""
-#~ msgstr "\"Use Style Sheets\""
-
-#~ msgid ""
-#~ "\"Erlaube Cookies nur von dem Server, von dem die aktuelle Seite stammt\""
-#~ msgstr "\"Enable cookies from the originating web site only\""
-
-#~ msgid "Bitte identifizieren Sie sich mit Benutzername und Passwort:"
-#~ msgstr "Please identify yourself with username and password:"
-
-#~ msgid "Bitte wenden Sie sich bei Problemen an: <br />%s"
-#~ msgstr "In the event of problems, please contact: <br />%s"
-
-#~ msgid "Stud.IP - Registrierung"
-#~ msgstr "Stud.IP - Registration"
-
-#~ msgid "Hinweise f&uuml;r Benutzer des Internet Explorers 6.0"
-#~ msgstr "Tips for users of Internet Explorers 6.0"
-
-#~ msgid ""
-#~ "Wenn Sie den Internet Explorer 6.0 benutzen, kann es vorkommen, dass Sie "
-#~ "auf diese Seite gelangen, da der Browser Cookies vom Stud.IP-System nicht "
-#~ "akzeptiert<br>Gehen Sie dann bitte so vor:"
-#~ msgstr ""
-#~ "If you use Internet Explorer 6.0, it may be the case that you have "
-#~ "arrived at this page because your browser does not accept cookies from "
-#~ "the Stud.IP System. <br> Please do the following:"
-
-#~ msgid "&Ouml;ffnen Sie das Menu \"Extras\" in der Kopfzeile des Browsers"
-#~ msgstr "Open the menu labelled \"Tools\" on the browser tool bar"
-
-#~ msgid "Gehen Sie auf \"Internetoptionen\""
-#~ msgstr "Go to \"Internet options\""
-
-#~ msgid "W&auml;hlen Sie den Punkt \"Datenschutz\""
-#~ msgstr "Select the tab \"Privacy\""
-
-#~ msgid "Stellen Sie den Regler auf die Einstellung \"Alle Cookies annehmen\""
-#~ msgstr "Set the slider on the setting \"Accept all cookies\""
-
-#~ msgid "Herzlich Willkommen!"
-#~ msgstr "Welcome!"
-
-#~ msgid "Bitte f&uuml;llen Sie zur Anmeldung das Formular aus:"
-#~ msgstr "Please fill out the registration form:"
-
-#~ msgid "Bei der Registrierung ist ein Fehler aufgetreten:"
-#~ msgstr "An error occurred during the registration:"
-
-#~ msgid "Bitte korrigieren Sie Ihre Eingaben und versuchen Sie es erneut"
-#~ msgstr "Please correct the given information and try again"
-
-#~ msgid "Passwortbest&auml;tigung:"
-#~ msgstr "Password confirmation:"
-
 #~ msgid ""
 #~ "Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Stud.IP "
 #~ "Bereiche zu navigieren."
@@ -33035,43 +33257,6 @@ msgstr "Logout of the system"
 
 #~ msgid "%s Plugins, %s neue"
 #~ msgstr "%s Plugins, %s new"
-
-#~ msgid "Zugriff verweigert (Sie sind nicht angemeldet!)"
-#~ msgstr "Access denied (You are not logged on!)"
-
-#~ msgid ""
-#~ "Sie sind nicht im System angemeldet und k&ouml;nnen daher nicht auf "
-#~ "diesen Teil des Systems zugreifen. Um den vollen Funktionsumfang des "
-#~ "Systems benutzen zu k&ouml;nnen, m&uuml;ssen sie sich mit ihrem "
-#~ "Nutzernamen und Passwort anmelden."
-#~ msgstr ""
-#~ "You are not registered in the system and therefore can not access this "
-#~ "part of the system. In order to be able to use the full range of "
-#~ "functions of the system, you must sign on with your user name and "
-#~ "password."
-
-#~ msgid ""
-#~ "Wahrscheinlich ist Ihre Session abgelaufen. Wenn Sie sich länger als %s "
-#~ "Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. "
-#~ "Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur "
-#~ "Anmeldung zu gelangen."
-#~ msgstr ""
-#~ "It is most likely that your session has ended. If you have been in the "
-#~ "system for longer than %s minutes without moving, you will be "
-#~ "automatically logged out. In this case, please use the link below to go "
-#~ "back to log on."
-
-#~ msgid ""
-#~ "Eine andere Ursache kann der versuchte Zugriff auf Teile des System sein, "
-#~ "für die Sie keine Berechtigung haben. In diesem Fall gelangen Sie über "
-#~ "den untenstehenden Link zurück auf die Startseite."
-#~ msgstr ""
-#~ "Another reason can be the attempted access to a part of the system for "
-#~ "which you do not have authorisation. In this case please use the link "
-#~ "below to go back to the start page."
-
-#~ msgid "%sHier%s geht es wieder zur Anmeldungs- bzw. Startseite."
-#~ msgstr "%sThis%s takes you back to the registration and start page. "
 
 #~ msgid "Inhalt ge&auml;ndert"
 #~ msgstr "Contents changed"
@@ -33822,73 +34007,6 @@ msgstr "Logout of the system"
 
 #~ msgid "Dieses Plugin hat keinen Hilfetext bereitgestellt."
 #~ msgstr "This plugin doesn't provide any help text."
-
-#~ msgid "Und hier geht's direkt zum %sMensaplan%s&nbsp;;-)"
-#~ msgstr "And this directly takes you to the %scafeteria's menu%s&nbsp;;-)"
-
-#~ msgid "Grundstudium"
-#~ msgstr "Basic studies"
-
-#~ msgid "Hauptstudium"
-#~ msgstr "Advanced studies"
-
-#~ msgid "Praxisveranstaltung"
-#~ msgstr "Practical course"
-
-#~ msgid "Kolloquium"
-#~ msgstr "Colloquium"
-
-#~ msgid "Gremiumsveranstaltung"
-#~ msgstr "Committee"
-
-#~ msgid "Community-Forum"
-#~ msgstr "Community"
-
-#~ msgid "Lehrveranstaltung nach PVO-Lehr I"
-#~ msgstr "Lecture course in compliance with PVO-Lehr I"
-
-#~ msgid "Anleitung zu selbständigen wissenschaftlichen Arbeiten"
-#~ msgstr "Training for independent studies"
-
-#~ msgid "Sprachkurs"
-#~ msgstr "Language course"
-
-#~ msgid "Fachdidaktik"
-#~ msgstr "Subject specific didactics"
-
-#~ msgid "Proseminar"
-#~ msgstr "Proseminar"
-
-#~ msgid "Oberseminar"
-#~ msgstr "Advanced seminar"
-
-#~ msgid "Arbeitsgemeinschaft"
-#~ msgstr "Work group"
-
-#~ msgid "Forschung"
-#~ msgstr "Research"
-
-#~ msgid ""
-#~ "Hier finden Sie virtuelle Veranstaltungen zu unterschiedlichen Themen"
-#~ msgstr "Here you can find virtual courses on different topics"
-
-#~ msgid ""
-#~ "Wenn Sie Veranstaltungen als Diskussiongruppen zu unterschiedlichen "
-#~ "Themen anlegen m&ouml;chten, verwenden Sie diese Kategorie."
-#~ msgstr ""
-#~ "Use this category in order to create virtual courses as discussion groups "
-#~ "on different topics."
-
-#~ msgid "Arbeitsgruppen"
-#~ msgstr "Work groups"
-
-#~ msgid "Hier finden Sie verschiedene Arbeitsgruppen an der %s"
-#~ msgstr "Here you can find different work groups at %s"
-
-#~ msgid ""
-#~ "Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen "
-#~ "anzulegen."
-#~ msgstr "Use this category to create different work groups."
 
 #~ msgid "Objekt in diesen Ordner verschieben / kopieren"
 #~ msgstr "Move / copy object to this folder"
