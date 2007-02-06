@@ -79,8 +79,8 @@ global
     // der Name wird in der local.inc festgelegt
 $UNI_URL = "http://www.studip.de";
 $UNI_LOGOUT_ADD=sprintf(_("Und hier geht's direkt zum %sMensaplan%s&nbsp;;-)"), "<a href=\"http://studentenwerk.stud.uni-goettingen.de/mensa/mensen/alle_heute.php\"><b>", "</b></a>");
-$UNI_CONTACT = "goettingen@studip.de";
-$UNI_INFO = "Kontakt:\nStud.IP Crew c/o data-quest Suchi & Berg GmbH\nGeismar Landstr. 17b\n37083 Göttingen\nTel. 0551-3819850\nFax 0551-3819853\nstudip@data-quest.de";
+$UNI_CONTACT = "studip-users@lists.sourceforge.net";
+$UNI_INFO = "Kontakt:\nStud.IP Crew c/o data-quest Suchi & Berg GmbH\nFriedländer Weg 20a\n37085 Göttingen\nTel. 0551-3819850\nFax 0551-3819853\nstudip@data-quest.de";
 
 
 //Festlegen der zulaessigen Typen fuer Veranstaltungen
