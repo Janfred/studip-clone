@@ -315,12 +315,15 @@ if ($admin_modules_data["range_id"]) {
 						$admininfo = $plugin->getPluginAdminInfo();
 						if (!is_null($admininfo)){
 							if ($plugin->isActivated() || $globalactivated){
-								// TODO: Fallunterscheidung, welches AdminInfo angezeigt werden muss.
-								if ($globalactivated){
-									print ("(per Voreinstellung aktiviert) <font color=\"red\">".$admininfo->getMsg_pre_warning()."</font>");
+								if ($globalactivated) {
+									print ('(per Voreinstellung aktiviert) ');
+								}
+								if (!method_exists($plugin, 'getPluginExistingItems') ||
+								    $plugin->getPluginExistingItems($admin_modules_data['range_id'])) {
+									print ('<font color="red">'.$admininfo->getMsg_pre_warning().'</font>');
 								}
 								else {
-									print ("<font color=\"red\">".$admininfo->getMsg_pre_warning()."</font>");
+									print ($admininfo->getMsg_deactivate());
 								}
 							}
 							else {

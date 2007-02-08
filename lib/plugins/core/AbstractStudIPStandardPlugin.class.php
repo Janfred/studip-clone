@@ -105,7 +105,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     /**
     * Shows the standard configuration.
     */
-    function showConfigurationPage(){
+    function actionShowConfigurationPage(){
     	$user = $this->getUser();
     	$permission = $user->getPermission();
 

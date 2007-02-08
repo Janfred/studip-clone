@@ -345,7 +345,7 @@ if ($PLUGINS_ENABLE){
     						$params = $submenuitem->getLinkParams();
     						    						
     						foreach ($params as $key => $val){
-        						if (isset($_GET["$key"]) && $_GET["$key"] == $val){
+        						if (isset($_REQUEST["$key"]) && $_REQUEST["$key"] == $val){
         						   $reiter_view="plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname();
         						   break;
         						}

@@ -18,8 +18,6 @@ $auth->login_if($auth->auth["uid"] == "nobody");
 // ini_set("display_errors","on");
 
 include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
-include ('lib/include/html_head.inc.php');
-include ('lib/include/header.php');
 
 // read in the command and pluginid
 $cmd = 'Action' . $_GET["cmd"];
@@ -62,6 +60,10 @@ if (array_search('initialize',array_map('strtolower', get_class_methods($plugin)
 	$plugin->initialize();
 }
 
+// moved down to allow the plugin to add extra headers
+include ('lib/include/html_head.inc.php');
+include ('lib/include/header.php');
+
 $type = PluginEngine::getTypeOfPlugin($plugin);
 
 // set the gettext-domain
@@ -72,7 +74,7 @@ $pluginparams = $_GET["plugin_subnavi_params"];
 
 if ($type == "Standard"){
 	// diplay the admin_menu
-	if (($cmd == "showConfigurationPage") && $perm->have_perm("admin")){
+	if ($cmd == "actionshowConfigurationPage" && $perm->have_perm("admin")){
 		include('lib/include/links_admin.inc.php');
 		
 	}

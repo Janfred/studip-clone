@@ -330,7 +330,7 @@ class AbstractStudIPPlugin {
 	}
 
 	/**
-	* @param $subnavigationparam - set if a subnavigation item was clicked. The value is plugin dependant and specified by the plugins subnavigation link params.
+	* @param $subnavigationparam - set if a subnavigation item was clicked. The value is plugin dependent and specified by the plugins subnavigation link params.
 	*/
 	function show($subnavigationparam=null){
 	}
@@ -380,6 +380,10 @@ class AbstractStudIPPlugin {
 	
 	function actionShowDescriptionalPage(){
 		return $this->showDescriptionalPage();
+	}
+	
+	function actionShowAdministrationPage(){
+		return $this->showAdministrationPage();
 	}
 }
 ?>
