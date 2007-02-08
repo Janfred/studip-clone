@@ -50,7 +50,7 @@ if ($SHOW_TERMS_ON_FIRST_LOGIN){
 }
 
 if ($GLOBALS["PLUGINS_ENABLE"]){
-	$pluginengine = PluginEngine::getPluginPersistence("System");
+	$header_pluginengine = PluginEngine::getPluginPersistence("System");
 }
 
 if ($USER_VISIBILITY_CHECK) {
@@ -281,23 +281,23 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		}
 
 		if ($GLOBALS["PLUGINS_ENABLE"]){
-			$plugins = $pluginengine->getAllActivatedPlugins();
+			$header_plugins = $header_pluginengine->getAllActivatedPlugins();
 
-			foreach ($plugins as $plugin){
+			foreach ($header_plugins as $header_plugin){
 				// does the plugin have a navigation entry?
-				if ($plugin->hasNavigation()){
-					$navi = $plugin->getNavigation();
+				if ($header_plugin->hasNavigation()){
+					$navi = $header_plugin->getNavigation();
 					if ($navi->hasIcon()){
-						echo MakeToolbar($plugin->getPluginpath() . "/" . $navi->getIcon(),htmlReady(PluginEngine::getLink($plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");
+						echo MakeToolbar($header_plugin->getPluginpath() . "/" . $navi->getIcon(),htmlReady(PluginEngine::getLink($header_plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");
 					}
 					else {
-						echo MakeToolbar($plugin->getPluginiconname(),htmlReady(PluginEngine::getLink($plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");
+						echo MakeToolbar($header_plugin->getPluginiconname(),htmlReady(PluginEngine::getLink($header_plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,"_top","left");
 					}
 		 		}
 		 		// now ask for background tasks
-		 		if ($plugin->hasBackgroundTasks()){
+		 		if ($header_plugin->hasBackgroundTasks()){
 		 			// and run them
-		 			$plugin->doBackgroundTasks();
+		 			$header_plugin->doBackgroundTasks();
 		 		}
 			}
 		 }
