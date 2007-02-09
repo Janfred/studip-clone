@@ -32,6 +32,7 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 
 require_once('config.inc.php');
 require_once('lib/visual.inc.php');
+require_once('lib/user_visible.inc.php'); // user visibility
 require_once 'lib/include/reiter.inc.php';
 
 function write_toplist($rubrik,$query) {
@@ -406,7 +407,7 @@ if ($view=="ansprechpartner") {?>
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 
-	$db->query("SELECT " . $_fullname_sql['full'] ." AS fullname, Email, username FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE perms='root' ORDER BY Nachname");
+	$db->query("SELECT " . $_fullname_sql['full'] ." AS fullname, Email, username FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE perms='root' AND ".get_vis_query()." ORDER BY Nachname");
 	if ($db->affected_rows() ==0) { echo _("keine. Na sowas. Das kann ja eigentlich gar nicht sein..."); }
 	while ($db->next_record())
 		{
@@ -441,7 +442,7 @@ if ($view=="ansprechpartner") {?>
 
 <?
 
-	$db->query("SELECT " . $_fullname_sql['full'] ." AS fullname,auth_user_md5.Email,username, Institute.Institut_id, Institute.Name FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN Institute ON (user_inst.institut_id = Institute.Institut_id) WHERE user_inst.inst_perms='admin' AND Institute.Name NOT LIKE '%- - -%' ORDER BY Institute.Name, Nachname");
+	$db->query("SELECT " . $_fullname_sql['full'] ." AS fullname,auth_user_md5.Email,username, Institute.Institut_id, Institute.Name FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN Institute ON (user_inst.institut_id = Institute.Institut_id) WHERE user_inst.inst_perms='admin' AND Institute.Name NOT LIKE '%- - -%' AND ".get_vis_query()." ORDER BY Institute.Name, Nachname");
 	$count=$db->affected_rows()-1;
 	$half=$db->affected_rows()/2;
 	$change=0;
