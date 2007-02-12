@@ -44,8 +44,6 @@ $hash_secret = "nirhtak";
 
 include ('lib/seminar_open.php'); 	//hier werden die sessions initialisiert
 
-
-
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
@@ -717,24 +715,115 @@ if (($form == 1) && ($jump_next_x))
 		$level=2;
 	}
 
+// move Dozenten
+if ($moveup_doz) 
+{
+   $move_uid = get_userid($moveup_doz);
+   $move_pos = $sem_create_data["sem_doz"][$move_uid];
+
+   foreach($sem_create_data["sem_doz"] as $key=>$val) 
+   {
+      if ($val == ($move_pos - 1))
+      {
+         $sem_create_data["sem_doz"][$key]      = $move_pos;
+         $sem_create_data["sem_doz"][$move_uid] = $move_pos - 1;
+      }  
+   }
+	$level=2;
+}
+if ($movedown_doz) 
+{
+   $move_uid = get_userid($movedown_doz);
+   $move_pos = $sem_create_data["sem_doz"][$move_uid];
+
+   foreach($sem_create_data["sem_doz"] as $key=>$val) 
+   {
+      if ($val == ($move_pos + 1))
+      {
+         $sem_create_data["sem_doz"][$key]      = $move_pos;
+         $sem_create_data["sem_doz"][$move_uid] = $move_pos + 1;
+      }  
+   }
+	$level=2;
+}
+// move Tutoren
+if ($moveup_tut) 
+{
+   $move_uid = get_userid($moveup_tut);
+   $move_pos = $sem_create_data["sem_tut"][$move_uid];
+
+   foreach($sem_create_data["sem_tut"] as $key=>$val) 
+   {
+      if ($val == ($move_pos - 1))
+      {
+         $sem_create_data["sem_tut"][$key]      = $move_pos;
+         $sem_create_data["sem_tut"][$move_uid] = $move_pos - 1;
+      }  
+   }
+	$level=2;
+}
+if ($movedown_tut) 
+{
+   $move_uid = get_userid($movedown_tut);
+   $move_pos = $sem_create_data["sem_tut"][$move_uid];
+
+   foreach($sem_create_data["sem_tut"] as $key=>$val) 
+   {
+      if ($val == ($move_pos + 1))
+      {
+         $sem_create_data["sem_tut"][$key]      = $move_pos;
+         $sem_create_data["sem_tut"][$move_uid] = $move_pos + 1;
+      }  
+   }
+	$level=2;
+}
+
+function re_sort_dozenten_array($sem_doz, $position)
+{
+   foreach($sem_doz["sem_doz"] as $key=>$val) 
+   {
+      if ($val > $position)
+      {
+         $sem_doz["sem_doz"][$key] -= 1;
+      }  
+   }
+
+}
+function re_sort_tutoren_array($sem_tut, $position)
+{
+   foreach($sem_tut["sem_tut"] as $key=>$val) 
+   {
+      if ($val > $position)
+      {
+         $sem_tut["sem_tut"][$key] -= 1;
+      }  
+   }
+
+}
 //delete Tutoren/Dozenten
 if ($delete_doz) {
+   $position = $sem_create_data["sem_doz"][get_userid($delete_doz)];
 	unset($sem_create_data["sem_doz"][get_userid($delete_doz)]);
+   re_sort_dozenten_array(&$sem_create_data, $position);
 	$level=2;
 }
 
 if ($delete_tut) {
+   $position = $sem_create_data["sem_tut"][get_userid($delete_tut)];
 	unset($sem_create_data["sem_tut"][get_userid($delete_tut)]);
+   re_sort_tutoren_array(&$sem_create_data, $position);
 	$level=2;
 }
 
 if (($send_doz_x) && (!$reset_search_x)) {
-	$sem_create_data["sem_doz"][get_userid($add_doz)]=TRUE;
+   $next_position = sizeof($sem_create_data["sem_doz"]) + 1;
+	$sem_create_data["sem_doz"][get_userid($add_doz)]= $next_position;
 	$level=2;
 }
 
 if (($send_tut_x) && (!$reset_search_x)) {
-	$sem_create_data["sem_tut"][get_userid($add_tut)]=TRUE;
+   $next_position = sizeof($sem_create_data["sem_tut"]) + 1;
+	$sem_create_data["sem_tut"][get_userid($add_tut)]= $next_position;
 	$level=2;
 }
 
@@ -1375,10 +1464,14 @@ if (($form == 6) && ($jump_next_x))
 
 					if ($key == $user_id)
 						$self_included=TRUE;
+
+               $next_pos = get_next_position("dozent",$sem_create_data["sem_id"]); 
+
 					$query = "insert into seminar_user SET Seminar_id = '".
-						$sem_create_data["sem_id"]."', user_id = '".
-						$key."', status = 'dozent', gruppe = '$group', mkdate = '".time()."'";
-					$db3->query($query);// Dozenten eintragen
+					$sem_create_data["sem_id"]."', user_id = '".
+					$key."', status = 'dozent', gruppe = '$group', mkdate = '".time()."', position = '$next_pos'";
+					$db3->query($query);// Dozenten eintragen:w
+
 					if ($db3->affected_rows() >=1)
 						$count_doz++;
 					}
@@ -1387,10 +1480,12 @@ if (($form == 6) && ($jump_next_x))
 			if (!$perm->have_perm("admin") && !$self_included) // wenn nicht admin, aktuellen Dozenten eintragen
 				{
 				$group=select_group($sem_create_data["sem_start_time"]);
+				
+				$next_pos = get_next_position("dozent",$sem_create_data["sem_id"]);
 
 				$query = "insert into seminar_user SET Seminar_id = '".
 					$sem_create_data["sem_id"]."', user_id = '".
-					$user_id."', status = 'dozent', gruppe = '$group', mkdate = '".time()."'";
+					$user_id."', status = 'dozent', gruppe = '$group', mkdate = '".time()."', position = '$next_pos'";
 				$db3->query($query);
 				if ($db3->affected_rows() >=1)
 					$count_doz++;
@@ -1410,9 +1505,10 @@ if (($form == 6) && ($jump_next_x))
 						;
 					else // User noch nicht da
 						{
+                  $next_pos = get_next_position("tutor",$sem_create_data["sem_id"]);  
 						$query = "insert into seminar_user SET Seminar_id = '".
 							$sem_create_data["sem_id"]."', user_id = '".
-							$key."', status = 'tutor', gruppe = '$group', mkdate = '".time()."'";
+							$key."', status = 'tutor', gruppe = '$group', mkdate = '".time()."', position = '$next_pos'";
 						$db3->query($query);			     // Tutor eintragen
 							if ($db3->affected_rows() >= 1)
 								$count_tut++;
@@ -2079,10 +2175,54 @@ if ($level == 2)
 						<td class="<? echo $cssSw->getClass() ?>" width="40%">
 							<?
 							if (sizeof($sem_create_data["sem_doz"]) >0) {
+                        asort(&$sem_create_data["sem_doz"]);
+                        echo "<table>";
+                        $i = 0;
 								foreach($sem_create_data["sem_doz"] as $key=>$val) {
-									printf ("&nbsp; <a href=\"%s?delete_doz=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), get_fullname($key,"full_rev",true), get_username($key));
-								}
-							} else {
+									echo "<tr>";
+									 $img_src = "images/trash.gif"; 
+									 $href = "?delete_doz=".get_username($key)."#anker";
+									
+									 echo "<td>";
+									 echo "<a href='{$PHP_SELF}{$href}'>";
+									 echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
+									 echo "</a>";
+									 echo "</td>";
+                                 
+                           // move up (if not first)
+                           echo "<td>";
+                           if ($i > 0)
+                           { 
+															$href = "?moveup_doz=".get_username($key)."&".time()."#anker";
+															$img_src = "images/move_up.gif";
+															echo "<a href='{$PHP_SELF}{$href}'>";
+															echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
+															echo "</a>";
+                           } 
+                           echo "</td>";
+                           // move down (if not last)
+                           echo "<td>";
+                           if ($i < (sizeof($sem_create_data["sem_doz"]) - 1)) 
+                           {
+															$href = "?movedown_doz=".get_username($key)."&".time()."#anker"; 
+															$img_src = "images/move_down.gif"; 
+															echo "<a href='{$PHP_SELF}{$href}'>";
+															echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
+															echo "</a>";
+                           } 
+                           echo "</td>";
+			                  echo "<td>";
+			                  echo "<font size=\"-1\"><b>".htmlReady(get_fullname($key, "full_rev",false)). 
+                           " (". get_username($key) . ")</b></font>";
+
+			                  echo "</td>";
+
+								   echo "</tr>";// end of row	
+                           $i++;
+                        }
+                           echo "</table>"; 
+                     //     printf ("&nbsp; <a href=\"%s?delete_doz=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\"></a> &nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), get_fullname($key,"full_rev",true), get_username($key));
+						 } else {
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
 									printf ("<font size=\"-1\">&nbsp;  "._("Keine LeiterIn gew&auml;hlt.")."</font><br >");
 								else
@@ -2147,9 +2287,55 @@ if ($level == 2)
 						<td class="<? echo $cssSw->getClass() ?>" width="40%">
 							<?
 							if (sizeof($sem_create_data["sem_tut"]) >0) {
+                        asort(&$sem_create_data["sem_tut"]);
+                        echo "<table>";
+                        $i = 0;
 								foreach($sem_create_data["sem_tut"] as $key=>$val) {
-									printf ("&nbsp; <a href=\"%s?delete_tut=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\"></a>&nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), get_fullname($key,"full_rev",true), get_username($key));
-								}
+															echo "<tr>";
+															echo "<td>";
+
+															$href = "?delete_tut=".get_username($key)."#anker";
+															$img_src = "images/trash.gif"; 
+
+															echo "<a href='{$PHP_SELF}{$href}'>";
+															echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
+															echo "</a>";
+															echo "</td>";
+                                 
+                           // move up (if not first)
+                           echo "<td>";
+                           if ($i > 0)
+                           { 
+															$href = "?moveup_tut=".get_username($key)."&".time()."#anker";
+															$img_src ="images/move_up.gif"; 
+
+															echo "<a href='{$PHP_SELF}{$href}'>";
+															echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
+															echo "</a>";
+                           } 
+                           echo "</td>";
+                           // move down (if not last)
+                           echo "<td>";
+                           if ($i < (sizeof($sem_create_data["sem_tut"]) - 1)) 
+                           {
+															$href = "?movedown_tut=".get_username($key)."&".time()."#anker"; 
+															$img_src = "images/move_down.gif"; 
+
+															echo "<a href='{$PHP_SELF}{$href}'>";
+															echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
+															echo "</a>";
+                           } 
+                           echo "</td>";
+			                  echo "<td>";
+			                  echo "<font size=\"-1\"><b>".htmlReady(get_fullname($key, "full_rev",true)). 
+                           " (". get_username($key) . ")</b></font>";
+
+			                  echo "</td>";
+
+								   echo "</tr>";// end of row	
+                           $i++;
+                        }
+                        echo "</table>"; 
 							} else {
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
 									printf ("<font size=\"-1\">&nbsp;  "._("Kein Mitglied gew&auml;hlt.")."</font><br >");

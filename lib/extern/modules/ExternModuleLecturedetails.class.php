@@ -165,9 +165,9 @@ class ExternModuleLecturedetails extends ExternModule {
 					$name_sql = "full";
 				$name_sql = $GLOBALS['_fullname_sql'][$name_sql];
 				$db_lecturer =& new DB_Seminar();
-				$db_lecturer->query("SELECT $name_sql AS name, username FROM seminar_user su LEFT JOIN
+				$db_lecturer->query("SELECT $name_sql AS name, username, position FROM seminar_user su LEFT JOIN
 						auth_user_md5 USING(user_id) LEFT JOIN user_info USING(user_id)
-						WHERE su.Seminar_id='{$this->seminar_id}' AND su.status='dozent'");
+						WHERE su.Seminar_id='{$this->seminar_id}' AND su.status='dozent' ORDER BY position, username");
 				while ($db_lecturer->next_record()) {
 					$data["lecturer"][] = $this->elements["LinkInternSimple"]->toString(
 							array("module" => "Persondetails",

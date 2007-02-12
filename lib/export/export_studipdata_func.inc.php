@@ -355,10 +355,10 @@ function export_sem($inst_id, $ex_sem_id = "all")
 				elseif ($db->f($key) != "") 
 					$data_object .= xml_tag($val, $db->f($key));
 			}
-			$db2->query('SELECT auth_user_md5.user_id,auth_user_md5.username, auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title_front, user_info.title_rear FROM seminar_user 
+			$db2->query('SELECT seminar_user.position, auth_user_md5.user_id,auth_user_md5.username, auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title_front, user_info.title_rear FROM seminar_user 
 						LEFT JOIN user_info USING(user_id) 
 						LEFT JOIN auth_user_md5 USING(user_id) 
-						WHERE (seminar_user.status = "dozent") AND (seminar_user.Seminar_id = "' . $db->f("seminar_id") . '")');
+						WHERE (seminar_user.status = "dozent") AND (seminar_user.Seminar_id = "' . $db->f("seminar_id") . '") ORDER BY seminar_user.position ');
 			$data_object .= "<" . $xml_groupnames_lecture["childgroup2"] . ">\n";
 			while ($db2->next_record()) 
 				{
@@ -478,7 +478,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 			$db->query ("SELECT * FROM seminar_user  
 				LEFT JOIN user_info USING(user_id) 
 				LEFT JOIN auth_user_md5 USING(user_id) 
-				WHERE seminar_id = '$ex_sem_id' AND seminar_user.status = '" . $key1 . "'  ORDER BY Nachname");
+				WHERE seminar_id = '$ex_sem_id' AND seminar_user.status = '" . $key1 . "'  ORDER BY position, Nachname");
 		}
 		
 		$data_object_tmp = '';

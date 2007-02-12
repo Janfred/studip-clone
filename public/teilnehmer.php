@@ -207,7 +207,8 @@ if (Seminar_Session::check_ticket($studipticket)){
 				if ($db->next_record()) {
 					$userchange = $db->f("user_id");
 					$fullname = $db->f("fullname");
-					$db->query("UPDATE seminar_user SET status='tutor', visible='yes' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
+					$next_pos = get_next_position("tutor",$id); 
+					$db->query("UPDATE seminar_user SET status='tutor', position='$next_pos' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");	
 					if($db->affected_rows()) $msgs[] = $fullname;
 				}
 			}
@@ -232,7 +233,15 @@ if (Seminar_Session::check_ticket($studipticket)){
 				$db->next_record();
 				$userchange = $db->f("user_id");
 				$fullname = $db->f("fullname");
-				$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='tutor'");
+
+        		$db->query("SELECT position FROM seminar_user WHERE user_id = '$userchange'");
+         		$db->next_record();
+         		$pos = $db->f("position");
+         
+				$db->query("UPDATE seminar_user SET status='autor', position=0 WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='tutor'");
+          
+         		re_sort_tutoren($id, $pos);
+ 
 				if($db->affected_rows()) $msgs[] = $fullname;
 			}
 			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
@@ -531,7 +540,8 @@ if (Seminar_Session::check_ticket($studipticket)){
 						// der Dozent hat Tomaten auf den Augen, der Mitarbeiter sitzt schon im Seminar. Na, auch egal...
 						if ($db2->f("status") == "autor" || $db2->f("status") == "user") {
 							// gehen wir ihn halt hier hochstufen
-							$db2->query("UPDATE seminar_user SET status='tutor' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
+                     $next_pos = get_next_position("tutor",$id); 
+							$db2->query("UPDATE seminar_user SET status='tutor', position='$next_pos' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
 							if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 								$msg = "msg§" . sprintf (_("%s wurde zum Mitglied bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
 							} else {

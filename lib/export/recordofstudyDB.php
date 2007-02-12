@@ -221,7 +221,7 @@ function getSeminare($semesterid,$onlyseminars){
 			$sem_number_start = $db->f("sem_number");
 			$sem_number_end = $db->f("sem_number_end");
 
-			$db2->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id)  LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '".$seminarid."' AND status = 'dozent' ORDER BY Nachname");
+			$db2->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status, position FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id)  LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '".$seminarid."' AND status = 'dozent' ORDER BY position, Nachname");
 			$tutor = '';
 			while($db2->next_record()){
 				if ($tutor) $tutor .= "; ";

@@ -992,7 +992,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			}
 			echo "</font></td>";
 			echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>";
-			$db4->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) where Seminar_id = '$seminar_id' and status = 'dozent'");
+			$db4->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, position FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) where Seminar_id = '$seminar_id' and status = 'dozent' ORDER BY position ");
 			$k=0;
 			if (!$db4->num_rows())
 				echo "&nbsp; ";

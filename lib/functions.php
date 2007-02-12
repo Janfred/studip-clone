@@ -799,7 +799,7 @@ function get_config($key, $default = FALSE) {
 // sondern vom Admin oder vom root kopiert wird (sonst wird das Dozentenfeld leer gelassen, was ja keiner will...)
 function get_seminar_dozent($seminar_id) {
 	$db = new DB_Seminar;
-	$sql = "SELECT user_id FROM seminar_user WHERE Seminar_id='".$seminar_id."' AND status='dozent'";
+	$sql = "SELECT user_id FROM seminar_user WHERE Seminar_id='".$seminar_id."' AND status='dozent' ORDER BY position";
 	if (!$db->query($sql)) {
 		echo "Fehler bei DB-Abfrage in get_seminar_user!";
 		return 0;
@@ -813,10 +813,75 @@ function get_seminar_dozent($seminar_id) {
 	}
 	return $dozent;
 }
+/*
+function get_seminar_next_position($seminar_id)
+{
+   $db_pos = new DB_Seminar;
+   $db_pos->query("SELECT max(position) + 1 as next_pos " . 
+                  " FROM seminar_user" . 
+                  " WHERE status = 'dozent' AND Seminar_id = '$seminar_id'"); 
+
+   $db_pos->next_record();
+      
+   return $db_pos->f("next_pos"); 
+   
+}*/
+function re_sort_dozenten($s_id, $position) 
+{
+    $db = new DB_Seminar;
+    $db->query("SELECT user_id, position" . 
+               " FROM seminar_user" .
+               " WHERE Seminar_id = '$s_id'" .
+               " AND status = 'dozent' " .
+               " AND position > '$position'");
+
+   while ($db->next_record()) 
+   {
+      $new_position = $db->f("position") - 1;
+      $user_id = $db->f("user_id");
+      $db2 = new DB_Seminar;
+      $db2->query("UPDATE seminar_user" . 
+                  " SET position =  '$new_position'" . 
+                  " WHERE Seminar_id = '$s_id'" .
+                  " AND user_id = '$user_id'");   
+   }
+}
+function re_sort_tutoren($s_id, $position) 
+{
+    $db = new DB_Seminar;
+    $db->query("SELECT user_id, position" . 
+               " FROM seminar_user" .
+               " WHERE Seminar_id = '$s_id'" .
+               " AND status = 'tutor' " .
+               " AND position > '$position'");
+
+   while ($db->next_record()) 
+   {
+      $new_position = $db->f("position") - 1;
+      $user_id = $db->f("user_id");
+      $db2 = new DB_Seminar;
+      $db2->query("UPDATE seminar_user" . 
+                  " SET position =  '$new_position'" . 
+                  " WHERE Seminar_id = '$s_id'" .
+                  " AND user_id = '$user_id'");   
+   }
+}
+function get_next_position($status,$seminar_id)
+{
+   $db_pos = new DB_Seminar;
+   $db_pos->query("SELECT max(position) + 1 as next_pos " . 
+                  " FROM seminar_user" . 
+                  " WHERE status = '$status' " . 
+                  " AND   Seminar_id = '$seminar_id'"); 
+
+   $db_pos->next_record();
+      
+   return $db_pos->f("next_pos"); 
+}
 
 function get_seminar_tutor($seminar_id) {
 	$db = new DB_Seminar;
-	$sql = "SELECT user_id FROM seminar_user WHERE Seminar_id='".$seminar_id."' AND status='tutor'";
+	$sql = "SELECT user_id position FROM seminar_user WHERE Seminar_id='".$seminar_id."' AND status='tutor' ORDER BY position";
 	if (!$db->query($sql)) {
 		echo "Fehler bei DB-Abfrage in get_seminar_user!";
 		return 0;

@@ -489,6 +489,9 @@ class UserManagement {
 		
 		// Upgrade to admin or root?
 		if ($newuser['auth_user_md5.perms'] == "admin" || $newuser['auth_user_md5.perms'] == "root") {
+   
+         $this->re_sort_position_in_seminar_user();
+         
 			// delete all seminar entries
 			$query = "SELECT seminar_id FROM seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 			$query2 = "DELETE FROM seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
@@ -699,6 +702,8 @@ class UserManagement {
 			$killAssign->delete();
 		}
 
+      $this->re_sort_position_in_seminar_user();
+
 		// delete user from seminars (postings will be preserved)
 		$query = "DELETE FROM seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
@@ -844,6 +849,23 @@ class UserManagement {
 		return TRUE;
 
 	}
+   function re_sort_position_in_seminar_user()
+   {
+
+     $query = "SELECT Seminar_id, position, status FROM seminar_user WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
+		while ($this->db->next_record())
+      {
+          if ($this->db->f("status") == 'tutor')
+          {
+            re_sort_tutoren($this->db->f("Seminar_id"), $this->db->f("position"));
+          }
+          else if ($this->db->f("status") == 'dozent')
+          {
+            re_sort_dozenten($this->db->f("Seminar_id"), $this->db->f("position"));
+          }
+		}
+   }
 
 }
 ?>

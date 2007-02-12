@@ -241,7 +241,7 @@ for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_sche
 	if (($use_this) && (!$term_data["art"]) && (is_array($term_data["turnus_data"])))
 		{
 		//Zusammenbasteln Dozentenfeld
-		$db2->query("SELECT Nachname, username FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status='dozent' AND Seminar_id ='".$db->f("Seminar_id")."'");
+		$db2->query("SELECT Nachname, username, position FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status='dozent' AND Seminar_id ='".$db->f("Seminar_id")."' ORDER BY position ");
 		$dozenten='';
 		$i=1;
 		while ($db2->next_record())

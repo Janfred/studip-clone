@@ -173,7 +173,9 @@ class ExternSemBrowseTable extends SemBrowse {
 			$query = "SELECT seminare.* 
 				, Institute.Name AS Institut,Institute.Institut_id,
 				seminar_sem_tree.sem_tree_id AS bereich, " . $_fullname_sql[$nameformat] ." AS fullname, auth_user_md5.username,
-				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
+				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end, " . 
+            " seminar_user.position AS position " . 
+            " FROM seminare 
 				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
 				LEFT JOIN auth_user_md5 USING (user_id) 
 				LEFT JOIN user_info USING (user_id) 
@@ -332,10 +334,11 @@ class ExternSemBrowseTable extends SemBrowse {
 							$data["content"]["zeiten"] .= "...";
 						}
 						$data["content"]["zeiten"] = htmlReady($data["content"]["zeiten"]);
+						$doz_position = array_keys($sem_data[$seminar_id]['position']);
 						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
 						$doz_uname = array_keys($sem_data[$seminar_id]['username']);
 						if (is_array($doz_name)){
-							uasort($doz_name, 'strnatcasecmp');
+                     array_multisort(&$doz_position, &$doz_name, &$doz_uname);
 							$data["content"]["dozent"] = "";
 							$i = 0;
 							foreach ($doz_name as $index => $value) {

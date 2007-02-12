@@ -1057,7 +1057,7 @@ elseif ($auth->auth["perm"]=="admin") {
 
 			echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">&nbsp;" . $SEM_TYPE[$values["status"]]["name"] . "&nbsp;</font></td>";
 			// Dozenten
-			$db2->query ("SELECT Nachname, username FROM  seminar_user LEFT JOIN auth_user_md5  USING (user_id) WHERE Seminar_id='$semid' AND status='dozent' ORDER BY Nachname ASC");
+			$db2->query ("SELECT position, Nachname, username FROM  seminar_user LEFT JOIN auth_user_md5  USING (user_id) WHERE Seminar_id='$semid' AND status='dozent' ORDER BY position, Nachname ASC");
 			$temp = "";
 			while ($db2->next_record()) {
 				$temp .= "<a href=\"about.php?username=" . $db2->f("username") . "\">" . htmlReady($db2->f("Nachname")) . "</a>, ";

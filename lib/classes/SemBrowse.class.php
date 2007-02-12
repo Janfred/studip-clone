@@ -421,8 +421,10 @@ function print_result(){
 						echo "<td class=\"steel1\" align=\"right\"><font size=-1>(";
 						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
 						$doz_uname = array_keys($sem_data[$seminar_id]['username']);
+						$doz_position = array_keys($sem_data[$seminar_id]['position']);
+
 						if (is_array($doz_name)){
-							uasort($doz_name, 'strnatcasecmp');
+                     array_multisort($doz_position, $doz_name, $doz_uname);
 							$i = 0;
 							foreach ($doz_name as $index => $value){
 								echo "<a href=\"about.php?username=" . $doz_uname[$index] ."\">" . htmlReady($value) . "</a>";
@@ -609,7 +611,7 @@ function print_result(){
 		
 		$query = ("SELECT seminare.Seminar_id,VeranstaltungsNummer, seminare.status, IF(seminare.visible=0,CONCAT(seminare.Name, ' ". _("(versteckt)") ."'), seminare.Name) AS Name, seminare.metadata_dates,
 				$add_fields" . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
-				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end FROM seminare 
+				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end, seminar_user.position AS position FROM seminare 
 				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
 				LEFT JOIN auth_user_md5 USING (user_id) 
 				LEFT JOIN user_info USING (user_id) 

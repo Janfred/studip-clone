@@ -378,9 +378,9 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 						}
 					}
 				if (!is_array($_lit_data[$cid]['doz_data'])){
-						$db->query("SELECT Nachname,username,su.user_id FROM seminar_user su INNER JOIN auth_user_md5 USING(user_id)
+						$db->query("SELECT position, Nachname,username,su.user_id FROM seminar_user su INNER JOIN auth_user_md5 USING(user_id)
 									WHERE status='dozent' AND seminar_id IN('" . join("','", array_keys($_lit_data[$cid]['sem_data'])) . "')
-									ORDER BY Nachname");
+									ORDER BY position, Nachname");
 						$_lit_data[$cid]['doz_data'] = array();
 						while ($db->next_record()){
 							$_lit_data[$cid]['doz_data'][$db->f('user_id')] = $db->Record;
