@@ -896,14 +896,11 @@ if (($s_id) && (auth_check())) {
 				else
 					printf ("<td %s align=right>%s</td>", $cssSw->getFullClass(), (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("DozentInnen") : _("LeiterInnen"));
 				?>
-				<td class="<? echo $cssSw->getClass() ?>" align="left" colspan=2>
+				<td class="<? echo $cssSw->getClass() ?>" align="left" colspan=1>
    
             <?= get_dozent_data($s_id,$_fullname_sql) ?>
   
 				</td>
-				</tr>
-				<tr>	
-				<td></td>
 				<td class="<? echo $cssSw->getClass() ?>" align="left" valign="top">
 					<?
 					$no_doz_found=TRUE;
