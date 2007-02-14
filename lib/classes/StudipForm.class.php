@@ -66,7 +66,7 @@ class StudipForm {
 	}
 
 	function StudipForm($form_fields, $form_buttons, $form_name = "studipform", $persistent_values = true){
-		global $_REQUEST, $sess;
+		global $sess;
 
 		$this->form_name = $form_name;
 		$this->persistent_values = $persistent_values;
@@ -147,7 +147,6 @@ class StudipForm {
 	}
 
 	function getFormField($name, $attributes = false, $default = false, $subtype = false){
-		global $_REQUEST;
 		if (!$attributes){
 			$attributes = $this->field_attributes_default;
 		}
@@ -176,9 +175,10 @@ class StudipForm {
 		$ret = "\n<span ";
 		$ret .= $this->getAttributes($attributes);
 		$ret .= ">";
+		if(is_array($default)) $default = join('; ', $default);
 		$ret .= htmlReady($default,1,1);
-		$ret .= $this->getFormFieldInfo($name);
 		$ret .= "</span>";
+		if (!$attributes['disabled']) $ret .= $this->getHiddenField($name, $default);
 		return $ret;
 	}
 
@@ -237,6 +237,17 @@ class StudipForm {
 		$ret .= $this->getFormFieldText($name . "_month", array_merge(array('size'=>2,'maxlength'=>2), (array)$attributes), $date_values[1]);
 		$ret .= "\n" . $this->form_fields[$name]['separator'];
 		$ret .= $this->getFormFieldText($name . "_year", array_merge(array('size'=>4,'maxlength'=>4), (array)$attributes), $date_values[0]);
+		if ($this->form_fields[$name]['date_popup']) {
+			if(array_sum($date_values)){
+				$atime = mktime(12, 0, 0, $date_values[1], $date_values[2], $date_values[0]);
+			} else {
+				$atime = time();
+			}
+			$ret .= "&nbsp; <img align=\"absmiddle\" src=\"{$GLOBALS['ASSETS_URL']images/popupkalender.gif\" border=\"0\" ";
+			$ret .= "onClick=\"window.open('";
+			$ret .= "termin_eingabe_dispatch.php?form_name={$this->form_name}&element_switch={$this->form_name}_{$name}&imt={$atime}&atime={$atime}', 'InsertDate', ";
+			$ret .= "'dependent=yes, width=210, height=210, left=500, top=150')\">";
+		}
 		return $ret;
 	}
 
@@ -275,8 +286,50 @@ class StudipForm {
 		return $ret;
 	}
 
-	function getFormFieldCombo($name, $attributes, $default , $subtyp = false){
-		global $_REQUEST;
+	function getFormFieldSelectBox($name, $attributes, $default){
+		$box_attributes = $this->form_fields[$name]['box_attributes'] ? $this->form_fields[$name]['box_attributes'] : array('style' => 'border:1px solid;background-color:white;');
+		$ret = "\n<div ".$this->getAttributes($box_attributes)." >";
+		if ($this->form_fields[$name]['multiple']) {
+			$element = 'checkbox';
+			$element_name = $this->form_name . '_' . $name . '[]';
+		} else {
+			$element = 'radio';
+			$element_name = $this->form_name . '_' . $name;
+		}
+		if ($default === false){
+			$default = $this->form_fields[$name]['default_value'];
+		}
+		if (is_array($this->form_fields[$name]['options'])){
+			$options = $this->form_fields[$name]['options'];
+		} else if ($this->form_fields[$name]['options_callback']){
+			$options = call_user_func($this->form_fields[$name]['options_callback'],$this,$name);
+		}
+		for ($i = 0; $i < count($options); ++$i){
+			$options_name = (is_array($options[$i])) ? $options[$i]['name'] : $options[$i];
+			$options_value = (is_array($options[$i])) ? $options[$i]['value'] : $options[$i];
+			$selected = false;
+			if ((is_array($default) && in_array("" . $options_value, $default))
+			|| (!is_array($default) && ($default == "" . $options_value))){
+				$selected = true;
+			}
+			if ($this->form_fields[$name]['max_length']){
+				$options_name = my_substr($options_name,0, $this->form_fields[$name]['max_length']);
+			}
+			$id = $this->form_name . '_' . $name . '_' . $i;
+			$ret .= "\n<div ";
+			$ret .= $this->getAttributes($attributes);
+			$ret .= ">";
+			$ret .= "\n<input style=\"vertical-align:middle;\" id=\"$id\" type=\"$element\" name=\"$element_name\" value=\"".htmlReady($options_value)."\" " . (($selected) ? " checked " : "");
+			$ret .= ">&nbsp;";
+			$ret .= "<span onClick=\"document.getElementById('$id').checked = (document.getElementById('$id').checked == true ? false : true);return false;\">";
+			$ret .= htmlReady($options_name) . "</span>";
+			$ret .= "\n</div>";
+		}
+		$ret .= "\n</div>";
+		return $ret;
+	}
+
+	function getFormFieldCombo($name, $attributes, $default , $subtype = false){
 		$ret = "";
 		$combo_text_name = $this->form_fields[$name]['text'];
 		$combo_select_name = $this->form_fields[$name]['select'];
