@@ -18,3 +18,9 @@ CREATE TABLE `seminar_user_schedule` (
 	`user_id` varchar(32) NOT NULL default '',
 	PRIMARY KEY  (`range_id`,`user_id`)
 ) TYPE=MyISAM;
+
+#
+# StEP00075: Dozentenreihenfolge und -bezeichnung
+#
+
+ALTER TABLE `seminar_user` ADD `position` INT NOT NULL AFTER `status`;
