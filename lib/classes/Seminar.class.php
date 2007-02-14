@@ -141,7 +141,7 @@ class Seminar {
 						".$GLOBALS['_fullname_sql']['full']." as fullname
 							FROM seminar_user su INNER JOIN auth_user_md5 USING(user_id)
 							LEFT JOIN user_info USING(user_id)
-							WHERE status='$status' AND su.seminar_id='".$this->getId()."' ORDER BY su.mkdate");
+							WHERE status='$status' AND su.seminar_id='".$this->getId()."' ORDER BY su.position");
 		while($this->db->next_record()){
 			$this->members[$status][$this->db->f('user_id')] = $this->db->Record;
 		}
