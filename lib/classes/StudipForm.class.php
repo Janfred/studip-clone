@@ -243,7 +243,7 @@ class StudipForm {
 			} else {
 				$atime = time();
 			}
-			$ret .= "&nbsp; <img align=\"absmiddle\" src=\"{$GLOBALS['ASSETS_URL']images/popupkalender.gif\" border=\"0\" ";
+			$ret .= "&nbsp; <img align=\"absmiddle\" src=\"{$GLOBALS['ASSETS_URL']}images/popupkalender.gif\" border=\"0\" ";
 			$ret .= "onClick=\"window.open('";
 			$ret .= "termin_eingabe_dispatch.php?form_name={$this->form_name}&element_switch={$this->form_name}_{$name}&imt={$atime}&atime={$atime}', 'InsertDate', ";
 			$ret .= "'dependent=yes, width=210, height=210, left=500, top=150')\">";
@@ -437,7 +437,6 @@ class StudipForm {
 	}
 
 	function IsSended($form_name = false){
-		global $_REQUEST;
 		if ($form_name === false){
 			$form_name = $this->form_name;
 		}
@@ -445,7 +444,6 @@ class StudipForm {
 	}
 
 	function IsClicked($button, $form_name = false){
-		global $_REQUEST;
 		if ($form_name === false){
 			$form_name = $this->form_name;
 		}
