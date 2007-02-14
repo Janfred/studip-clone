@@ -1451,6 +1451,7 @@ CREATE TABLE `seminar_user` (
   `Seminar_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `status` enum('user','autor','tutor','dozent') NOT NULL default 'user',
+  `position` int(11) NOT NULL default '0',
   `gruppe` tinyint(4) NOT NULL default '0',
   `admission_studiengang_id` varchar(32) NOT NULL default '',
   `notification` int(10) NOT NULL default '0',
