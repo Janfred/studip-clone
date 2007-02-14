@@ -413,6 +413,7 @@ class StudipAuthAbstract {
 	* @return	string	the username
 	*/
 	function verifyUsername($username){
+		if($this->username_case_insensitiv) $username = strtolower($username);
 		if ($this->bad_char_regex){
 			return preg_replace($this->bad_char_regex, '', $username);
 		} else {
