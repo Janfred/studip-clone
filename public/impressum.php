@@ -107,12 +107,12 @@ $reiter->create($structure, $view);
 <?php
      if ($view=="main") {
 	$developer[] = array('Marco Bohnsack', 'bohnsack@data-quest.de', _("(Projektmanagement, Hilfe)"));
-	$developer[] = array('Torsten Heinrich', 'to.heinrich@fh-osnabrueck.de', _("(?)"));
+	$developer[] = array('Torsten Heinrich', 'to.heinrich@fh-osnabrueck.de', _("(...)"));
 	$developer[] = array('Cornelius Hempel', 'cornelius.hempel@studip.uni-halle.de', _("(Fehlersuche)"));
 	$developer[] = array('Cornelis Kater', 'info@ckater.de', _("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)"));
 	$developer[] = array('Hartje Kriete', 'kriete@math.uni-goettingen.de', _("(&Uuml;bersetzung, Internationalisierung)"));
 	$developer[] = array('Jan Kulmann', 'jankul@tzi.de', _("(Evaluationen)"));
-	$developer[] = array('Marcus Lunzenhauer', 'mlunzena@uos.de', _("(?)"));
+	$developer[] = array('Marcus Lunzenhauer', 'mlunzena@uos.de', _("(...)"));
 	$developer[] = array('André Noack', 'noack@data-quest.de', _("(Chat, Literaturverwaltung, Authentifizierung, Verzeichnisse)"));
 	$developer[] = array('Frank Ollermann', 'follerma@uni-osnabrueck.de', _("(Usability)"));
 	$developer[] = array('Dennis Reil', 'studip@reil-online.de', _("(PlugIn-Schnittstelle)"));
@@ -129,10 +129,13 @@ $reiter->create($structure, $view);
 		<td valign="top" class="blank">
 			<blockquote><br />
 <?
-			echo _("Stud.IP ist ein Open Source Projekt zur Unterst&uuml;tzung von Pr&auml;senzlehre an der Universit&auml;t G&ouml;ttingen.") . "<br />\n";
-			echo _("Das System wird entwickelt vom Zentrum f&uuml;r interdisziplin&auml;re Medienwissenschaft (ZiM), Universit&auml;t G&ouml;ttingen und der Suchi &amp; Berg GmbH (data-quest), G&ouml;ttingen.") . "<br />\n";
-			echo _("Stud.IP steht unter der GNU General Public License, Version 2 oder neuer.") . "<br /><br />\n";
-			printf(_("Weitere Informationen finden sie auf %swww.studip.de%s, %sdevelop.studip.de%s und %sblog.studip.de%s."), '<a target="_blank" href="http://www.studip.de" style="font-weight:bold;">' , '</a>', '<a target="_blank" href="http://develop.studip.de" style="font-weight:bold;">' , '</a>', '<a target="_blank" href="http://blog.studip.de" style="font-weight:bold;">' , '</a></span>') . "<br />\n";
+
+printf(_("Stud.IP ist ein Open Source Projekt zur Unterst&uuml;tzung von Pr&auml;senzlehre an Universit&auml;ten, Hochschulen und anderen Bildungseinrichtungen. Das System entstand am %sZentrum für interdisziplin&auml;re Medienwissenschaft (ZiM)%s der %sGeorg-August-Universit&auml;t G&ouml;ttingen%s unter Mitwirkung der %sSuchi & Berg GmbH (data-quest)%s , G&ouml;ttingen. Heute erfolgt die Weiterentwicklung von Stud.IP verteilt an vielen Standorten (G&ouml;ttingen, Osnabr&uuml;ck, Oldenburg, Bremen, Hannover, Jena und weiteren). Die Koordination der Entwicklung erfolgt durch die %sStud.IP-CoreGroup.%s "), '<a href="http://zim.uni-goettingen.de/" target="_blank">', '</a>', '<a href="http://www.uni-goettingen.de/" target="_blank">', '</a>', '<a href="http://www.data-quest.de/" target="_blank">', '</a>', '<a href="http://blog.studip.de/entwickler/" target="_blank">', '</a>');
+
+echo "\n<br />" . _("Stud.IP steht unter der GNU General Public License, Version 2.") . "\n<br />&nbsp;<br />\n";
+
+printf(_("Weitere Informationen finden sie auf %s, %s und %s."), '<a target="_blank" href="http://www.studip.de" style="font-weight:bold;">www.studip.de</a>', '<a target="_blank" href="http://develop.studip.de" style="font-weight:bold;">develop.studip.de</a>', '<a target="_blank" href="http://blog.studip.de" style="font-weight:bold;">blog.studip.de</a>') . "<br />\n";
+
 ?>
 		</td>
 		<td class="blank" align="left" valign="top">
