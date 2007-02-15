@@ -42,8 +42,8 @@ class PmWikiContentModule extends ContentModule
 		parent::ContentModule($module_id, $module_type, $cms_type);
 		$this->link = $GLOBALS['connected_cms'][$this->cms_type]->ABSOLUTE_PATH_ELEARNINGMODULES.$this->id."/";
 		$this->client = WebserviceClient::instance(	$this->link. '?' . 
-																								$GLOBALS['ELEARNING_INTERFACE_MODULES'][$this->cms_type]['URL_PARAMS'], 
-																								$GLOBALS['ELEARNING_INTERFACE_MODULES'][$this->cms_type]['WEBSERVICE_CLASS']);
+													$GLOBALS['ELEARNING_INTERFACE_MODULES'][$this->cms_type]['URL_PARAMS'], 
+													$GLOBALS['ELEARNING_INTERFACE_MODULES'][$this->cms_type]['WEBSERVICE_CLASS']);
 	}
 
 	/**
@@ -99,7 +99,7 @@ class PmWikiContentModule extends ContentModule
 		} else 
 		{
 			# old authorization
-			if (in_array($username, $this->accepted_users))
+			if (is_array($this->accepted_users) && in_array($username, $this->accepted_users))
 				return true;
 			else
 				return false;
