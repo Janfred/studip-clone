@@ -190,11 +190,12 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 				$connected_cms[$connection["cms"]]->newContentModule($connection["id"], $connection["type"], true);
 				$connected_modules[$key]['title'] = $connected_cms[$connection["cms"]]->content_module[$connection["id"]]->getTitle();
 				$title_tmp[$key] = str_replace(array('ä','ö','ü','ß'),array('ae','oe','ue','ss'),strtolower($connected_modules[$key]['title']));
-				$type_tmp[$key] = ($connected_modules[$key]['type'] == 'tst' ? 2 : 1);
+				$type_tmp[$key] = array_search($connection['type'], array_keys($ELEARNING_INTERFACE_MODULES[$connection["cms"]]['types']));
+				$class_tmp[$key] = $ELEARNING_INTERFACE_MODULES[$connection["cms"]]["CLASS_PREFIX"];
 			}
 		}
 
-		array_multisort($type_tmp, SORT_ASC, $title_tmp, SORT_ASC, $connected_modules);
+		array_multisort($class_tmp, SORT_ASC, $type_tmp, SORT_ASC, $title_tmp, SORT_ASC, $connected_modules);
 
 		foreach ($connected_modules as $connection)
 		{
