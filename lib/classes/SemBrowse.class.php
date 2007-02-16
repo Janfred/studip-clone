@@ -422,9 +422,9 @@ function print_result(){
 						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
 						$doz_uname = array_keys($sem_data[$seminar_id]['username']);
 						$doz_position = array_keys($sem_data[$seminar_id]['position']);
-
 						if (is_array($doz_name)){
-                     array_multisort($doz_position, $doz_name, $doz_uname);
+							if(count($doz_position) != count($doz_uname)) $doz_position = range(1, count($doz_uname));
+							array_multisort($doz_position, $doz_name, $doz_uname);
 							$i = 0;
 							foreach ($doz_name as $index => $value){
 								echo "<a href=\"about.php?username=" . $doz_uname[$index] ."\">" . htmlReady($value) . "</a>";
