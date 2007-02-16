@@ -112,7 +112,7 @@ $reiter->create($structure, $view);
 	$developer[] = array('Cornelis Kater', 'info@ckater.de', _("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)"));
 	$developer[] = array('Hartje Kriete', 'kriete@math.uni-goettingen.de', _("(&Uuml;bersetzung, Internationalisierung)"));
 	$developer[] = array('Jan Kulmann', 'jankul@tzi.de', _("(Evaluationen)"));
-	$developer[] = array('Marcus Lunzenhauer', 'mlunzena@uos.de', _("(...)"));
+	$developer[] = array('Marcus Lunzenauer', 'mlunzena@uos.de', _("(...)"));
 	$developer[] = array('André Noack', 'noack@data-quest.de', _("(Chat, Literaturverwaltung, Authentifizierung, Verzeichnisse)"));
 	$developer[] = array('Frank Ollermann', 'follerma@uni-osnabrueck.de', _("(Usability)"));
 	$developer[] = array('Dennis Reil', 'studip@reil-online.de', _("(PlugIn-Schnittstelle)"));
