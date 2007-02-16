@@ -1550,7 +1550,7 @@ CREATE TABLE `session_data` (
 
 DROP TABLE IF EXISTS `smiley`;
 CREATE TABLE `smiley` (
-  `smiley_id` int(11) unsigned NOT NULL,
+  `smiley_id` int(11) unsigned NOT NULL auto_increment,
   `smiley_name` varchar(50) NOT NULL default '',
   `smiley_width` int(11) NOT NULL default '0',
   `smiley_height` int(11) NOT NULL default '0',

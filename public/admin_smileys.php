@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
+//<!-- $Id$ -->
 page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
 $perm->check('root');
 
@@ -85,5 +85,5 @@ echo $container->close();
 
 include ('lib/include/html_end.inc.php');
 page_close();
-<!-- $Id$ -->
+
 ?>
