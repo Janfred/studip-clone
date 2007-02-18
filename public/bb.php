@@ -40,28 +40,30 @@ include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 	<tr><td class="blank" colspan=2><br><br><?=_("Unsch&ouml;n dass wir uns hier sehen... diese Seite ist das geheime Easteregg von Stud.IP. Wenn es jemand hierher geschafft hat, der nicht zum Team geh&ouml;rt, dann k&uuml;ndige ich.")?><br><br>
 	<i>Cornelis</i><br><br>
 	<?
-	$folder=opendir("user/");
-	$i=0;
-	while ($entry=readdir($folder))
+	$folder = opendir($GLOBALS['USER_PIC_PATH']);
+	$i = 0;
+	while ($entry = readdir($folder))
 		{
-		$i++;
-		if (($entry!="..") && ($entry!=".") && ($entry!="")) $file[$i]=array("time"=>filemtime("user/".$entry), "file"=>$entry);
+		    $i++;
+		    if (($entry != '..') && ($entry != '.') && ($entry != '') && strpos($entry, '.jpg')) {
+			$file[$i] = array('time' => filemtime($GLOBALS['USER_PIC_PATH'].'/'.$entry), 'file' => $entry);
+		    }
 		}
 	rsort ($file);
-	$i=5;
+	$i = 5;
 	?><table border="0" cellpadding="0" cellspacing="2" width="100%" align="center"><?
-	echo "<tr>";
+	echo '<tr>';
 	for ($i; $i-5 <sizeof($file); $i++)
 		{
-		$usid=substr($file[$i-5]["file"], 0, strrpos($file[$i-5]["file"], "."));
+		$usid = substr($file[$i-5]['file'], 0, strrpos($file[$i-5]['file'], '.'));
 		$db->query("SELECT username FROM auth_user_md5 WHERE user_id='$usid'");
 		$db->next_record();
-		$usame=$db->f("username");
-		echo "<td class=\"angemeldet\" width=\"25%\" align=\"center\" valign=\"center\"><a href=\"about.php?username=", $usame, "\"><img border=0 src=\"user/", $file[$i-5]["file"],"\"></a><br />";
-		echo "<font size=-1>".get_fullname($usid,'full',true)."<br/>".date("d.m.Y", $file [$i-5]["time"])."</font></td>";
-		if ((($i % 4) ==0)  && (!$i==0))  echo"</tr><tr>";
+		$usame = $db->f('username');
+		echo '<td class="angemeldet" width="25%" align="center" valign="center"><a href="about.php?username='. $usame. '"><img border="0" src="'.$GLOBALS['USER_PIC_PATH'] . '/' . $file[$i-5]['file'].'"></a><br />';
+		echo '<font size="-1">'.get_fullname($usid,'full',true).'<br/>'.date('d.m.Y', $file [$i-5]['time']).'</font></td>'."\n";
+		if ((($i % 4) ==0)  && (!$i==0))  echo "</tr><tr>\n";
 		}
-	echo "</tr></table>";
+	echo '</tr></table>';
 
 ?>
 		</td></tr></table>
