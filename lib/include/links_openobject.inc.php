@@ -151,7 +151,7 @@ if ($PLUGINS_ENABLE){
 		foreach ($plugins as $plugin){
 			if ($plugin->hasNavigation()){
 				$pluginnavi = $plugin->getNavigation();
-				$structure["plugin_" . $plugin->getPluginId()] = array('topKat' => '', 'name' => $pluginnavi->getDisplayname(),'link' => PluginEngine::getLink($plugin),'active' => false);
+				$structure["plugin_" . $plugin->getPluginId()] = array('topKat' => '', 'name' => $plugin->getDisplaytitle(),'link' => PluginEngine::getLink($plugin),'active' => false);
 				
 				$pluginsubmenu["_plugin_" . $plugin->getPluginId()] = array('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $pluginnavi->getDisplayname(), 'link' => PluginEngine::getLink($plugin), 'active' => false);
 				$submenu = $pluginnavi->getSubMenu();
