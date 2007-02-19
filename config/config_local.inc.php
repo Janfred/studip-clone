@@ -125,6 +125,8 @@ $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 $ELEARNING_INTERFACE_ENABLE = TRUE;							//Stud.IP module: elearning interface
 $SOAP_ENABLE = TRUE;
 
+$WEBSERVICES_ENABLE = TRUE;
+
 $ELEARNING_INTERFACE_MODULES["ilias36x"] = array(
 	"name" => "ILIAS 3.6.X Testserver",
 	"ABSOLUTE_PATH_ELEARNINGMODULES" =>	"http://develop.studip.de/ilias_3_6_x/",
@@ -233,22 +235,6 @@ array(
 		"root" => "admin")
 );
 					
-$ELEARNING_INTERFACE_MODULES["pmwiki-farm-virtuos"] = array(
-            "name" => "Wikifarm Zentrum virtUOS",
-            "ABSOLUTE_PATH_ELEARNINGMODULES" => "http://zentrum.virtuos.uos.de/wikifarm/fields/",
-            "WEBSERVICE_CLASS" => "xml_rpc_webserviceclient",
-            "ABSOLUTE_PATH_SOAP" => "http://zentrum.virtuos.uos.de/wikifarm/pmwiki.php",
-            "URL_PARAMS" => "action=xmlrpc",
-            "CLASS_PREFIX" => "PmWiki",
-            "auth_necessary" => false,
-            "field_script" => "field.php",
-            "logo_file" => "assets/images/pmwiki-32.gif",
-		"soap_data" => array("api-key" => "ClatupCul"), //Passwort
-		"types" =>  array("wiki" => array(
-					"name" => "PmWiki-Lerneinheit",
-					"icon" => "assets/images/icon-lern.gif"),
-					)
-);	
 
 $PLUGINS_ENABLE = TRUE;
 $PLUGINS_UPLOAD_ENABLE = TRUE; 					//Upload of Plugins is enabled
