@@ -20,7 +20,7 @@ $auth->login_if($auth->auth["uid"] == "nobody");
 include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
 
 // read in the command and pluginid
-$cmd = 'Action' . $_GET["cmd"];
+$cmd = 'action' . $_GET["cmd"];
 $pluginid = $_GET["id"];
 
 // create plugin persistence objects
