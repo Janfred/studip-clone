@@ -211,30 +211,13 @@ class PluginAdministration {
 	 */
 	function createDBSchemeForPlugin($schemafile){
 		$conn = PluginEngine::getPluginDatabaseConnection();		
-		$fp = fopen($schemafile,"r");
-		$sqlstatement = "";
- 		while (!feof($fp)){
- 			$line = trim(fgets($fp));			 			
- 			if (strpos($line,"--") === 0){
- 				// commentary skip entry
- 				continue;
- 			}
- 			else {
- 				// add it to the 
- 				$sqlstatement .= $line; 	 				
- 				if (strpos($sqlstatement,";") === (strlen($sqlstatement)-1)){
- 					// we reached the end of the statement
- 					// execute it
- 					$conn->execute($sqlstatement);					 					
- 					$sqlstatement="";
- 				}
- 			} 			
- 		}
- 		fclose($fp);		
+		// this should use file_get_contents() in PHP 5
+		$statements = split(";[[:space:]]*\n", implode('', file($schemafile)));
+		foreach ($statements as $statement) {
+			$conn->execute($statement);
+		}
 	}
-	
-	
-	
+
 	/**
 	 * recursive copy 
 	 *

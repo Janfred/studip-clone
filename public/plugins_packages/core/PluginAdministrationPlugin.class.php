@@ -171,10 +171,9 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		if (isset($deinstall)){
 			$plugin = $pluginengine->getPlugin($deinstall);
 			if (is_object($plugin)){
-			   if (isset($forcedeinstall)){
+			       if (isset($forcedeinstall)){
 			   		// Plugin notwendige Änderungen vor der deinstallation durchführen lassen
-			   		$plugin->prepareUninstallation();
- 				    $this->pluginmgmt->deinstallPlugin($plugin);
+					$this->pluginmgmt->deinstallPlugin($plugin);
 				}
 				else {
 					// ask, if it should really be deleted
