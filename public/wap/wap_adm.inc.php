@@ -183,6 +183,7 @@ require_once("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 		include_once("wap_buttons.inc.php");
 		include_once("wap_hlp.inc.php");
 		include_once('lib/language.inc.php');
+		include_once('lib/functions.php');
 
 		$session_expired = FALSE;
 
@@ -195,7 +196,15 @@ require_once("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 		echo "    <meta http-equiv=\"Cache-Control\" content=\"no-store\" forua=\"true\"/>\n";
 		echo "</head>\n";
 		echo "<card newcontext=\"true\">\n\n";
-
+		
+		if(!get_config('WAP_ENABLE')){
+			echo "<p>";
+			echo _("Der WAP Zugriff ist in dieser Installation ausgeschaltet.") . "<br/>";
+			echo "</p>\n";
+			wap_adm_end_card();
+			die();
+		}
+		
 		if (!$session_id)
 		{
 			$_language      = wap_hlp_get_language(FALSE);

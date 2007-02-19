@@ -128,6 +128,8 @@ $SOAP_ENABLE = TRUE;
 
 $WEBSERVICES_ENABLE = FALSE;							//Stud.IP module: webservices
 
+$WAP_ENABLE = FALSE;							//Stud.IP module: WAP
+
 $ELEARNING_INTERFACE_MODULES = array(
 	"ilias3" =>	array(
 		"name" => "ILIAS 3",

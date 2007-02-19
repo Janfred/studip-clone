@@ -127,6 +127,8 @@ $SOAP_ENABLE = TRUE;
 
 $WEBSERVICES_ENABLE = TRUE;
 
+$WAP_ENABLE = TRUE;							//Stud.IP module: WAP
+
 $ELEARNING_INTERFACE_MODULES["ilias36x"] = array(
 	"name" => "ILIAS 3.6.X Testserver",
 	"ABSOLUTE_PATH_ELEARNINGMODULES" =>	"http://develop.studip.de/ilias_3_6_x/",
