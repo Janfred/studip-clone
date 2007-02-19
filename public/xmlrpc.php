@@ -33,6 +33,12 @@ require_once 'lib/webservices/services/contentmodule_webservice.php';
 require_once 'lib/webservices/services/lecture_tree_webservice.php';
 require_once 'lib/webservices/services/institute_webservice.php';
 
+if (empty($GLOBALS['STUDIP_API_KEY'])
+		|| ! $GLOBALS['WEBSERVICES_ENABLE'])
+{
+	die("Webservices not available");
+}
+
 # create server
 $dispatcher =& new Studip_Ws_XmlrpcDispatcher('UserService', 'SessionService', 'SeminarService', 'ContentmoduleService', 'LectureTreeService', 'InstituteService');
 

@@ -35,6 +35,12 @@ require_once 'lib/webservices/services/seminar_webservice.php';
 require_once 'lib/webservices/services/lecture_tree_webservice.php';
 require_once 'lib/webservices/services/institute_webservice.php';
 
+if (empty($GLOBALS['STUDIP_API_KEY'])
+		|| ! $GLOBALS['WEBSERVICES_ENABLE'])
+{
+	die("Webservices not available");
+}
+
 # create server
 $dispatcher =& new Studip_Ws_JsonrpcDispatcher('UserService', 'SessionService', 'SeminarService', 'ContentmoduleService', 'LectureTreeService', 'InstituteService');
 $server =& new jsonrpc_server($dispatcher->get_dispatch_map(), 0);
