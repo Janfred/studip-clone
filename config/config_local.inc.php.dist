@@ -123,8 +123,10 @@ $SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the mai
 
 $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 
-$ELEARNING_INTERFACE_ENABLE = TRUE;							//Stud.IP module: elearning interface
+$ELEARNING_INTERFACE_ENABLE = TRUE;						//Stud.IP module: elearning interface
 $SOAP_ENABLE = TRUE;
+
+$WEBSERVICES_ENABLE = FALSE;							//Stud.IP module: webservices
 
 $ELEARNING_INTERFACE_MODULES = array(
 	"ilias3" =>	array(
@@ -164,7 +166,7 @@ $ELEARNING_INTERFACE_MODULES = array(
 		)
 	);
 
-$PLUGINS_ENABLE = true;
+$PLUGINS_ENABLE = TRUE;
 $PLUGINS_UPLOAD_ENABLE = TRUE; 					//Upload of Plugins is enabled
 			     								//if disabled for security reasons, uploads have to go into $NEW_PLUGINS_PATH
 $NEW_PLUGINS_PATH = ""; 							//The place from which new plugins should be loaded
