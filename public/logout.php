@@ -28,38 +28,49 @@ if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
 }
 if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir dies tun!
-
+	
 	$sms = new messaging();
 	//User aus allen Chatraeumen entfernen
 	if ($CHAT_ENABLE) {
 		$chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 		$chatServer->logoutUser($user->id);
 	}
-
+	
 	//Wenn Option dafuer gewaehlt, vorliegende Nachrichen loeschen
 	if ($my_messaging_settings["delete_messages_after_logout"]) {
 		$sms->delete_all_messages();
 	}
-
+	
 	//Wenn Option dafuer gewaehlt, alle ungelsesenen Nachrichten als gelesen speichern
 	if ($my_messaging_settings["logout_markreaded"]) {
 		$sms->set_read_all_messages();
 	}
-
+	
 	$logout_user=$user->id;
 	$logout_language = $_language;
+	
+	//erweiterung cas
+	if ($auth->auth["auth_plugin"] == "cas"){
+		$casauth = StudipAuthAbstract::GetInstance('cas');			
+		$docaslogout = true;
+	}
 	//Logout aus dem Sessionmanagement
 	$auth->logout();
 	$sess->delete();
-
+	
 	page_close();
-
+	
 	//Session changed zuruecksetzen
 	$timeout=(time()-(15 * 60));
 	$user->set_last_action($timeout);
-
+	
+	//der logout() Aufruf fuer CAS (dadurch wird das Cookie (Ticket) im Browser zerstoert) 
+	if ($docaslogout){
+		$casauth->logout();
+	}
+	
 	header("Location:$PHP_SELF?_language=$logout_language"); //Seite neu aufrufen um eine nobody Session zu erzeugen
-
+	
 } else {        //wir sind nobody, also wahrscheinlich gerade ausgeloggt
 
 	include ('lib/seminar_open.php'); // initialise Stud.IP-Session
