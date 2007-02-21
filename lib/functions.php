@@ -192,9 +192,19 @@ function openInst ($inst_id) {
 function checkObject() {
 	global $SessSemName, $AUTH_LIFETIME;
 	if ($SessSemName[1] =="") {
-		parse_window ("error§" . _("Sie haben kein Objekt gew&auml;hlt.") . " <br /><font size=-1 color=black>" . _("Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt (Veranstaltung oder Einrichtung) gew&auml;hlt haben.") . "<br /><br /> " . sprintf(_("Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME) . " </font>", "§",
-				_("Kein Objekt gew&auml;hlt"),
-				sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
+		$last_edited = stripslashes(trim($_REQUEST['content'] . $_REQUEST['description'] . $_REQUEST['body']));
+		parse_window("error§"
+		. _("Sie haben kein Objekt gew&auml;hlt.")
+		. " <br /><font size=-1 color=black>"
+		. _("Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt (Veranstaltung oder Einrichtung) gew&auml;hlt haben.")
+		. "<br /><br /> "
+		. sprintf(_("Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME)
+		. ($last_edited ? '<br><br>'._("Folgender von ihnen eingegebener Text konnte nicht gespeichert werden:") . '<div class="steel1" style="margin-top:5px;padding:5px;border:1px solid">'.htmlReady($last_edited).'</div>' : "")
+		. " </font>",
+		"§",
+		_("Kein Objekt gew&auml;hlt"),
+		sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite.")
+				, "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
 		die;
 	}
 }
