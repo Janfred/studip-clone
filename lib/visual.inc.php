@@ -1288,7 +1288,7 @@ function tooltip ($text, $with_alt = TRUE, $with_popup = FALSE) {
 * @accesskey	string			key used for the shortcut
 * @return       string
 */
-function MakeToolbar ($icon,$URL,$text,$tooltip,$size,$target="_top",$align="center",$toolwindow="FALSE", $accesskey=FALSE) {
+function MakeToolbar ($icon,$URL,$text,$tooltip,$size,$target,$align="center",$toolwindow="FALSE", $accesskey=FALSE) {
 	global $user;
 	if (is_object($user) && !$user->cfg->getValue(null,"ACCESSKEY_ENABLE"))
 		$accesskey = FALSE;
@@ -1299,10 +1299,16 @@ function MakeToolbar ($icon,$URL,$text,$tooltip,$size,$target="_top",$align="cen
 	} else {
 		$tool = tooltip($tooltip,TRUE,TRUE);
 	}
+
+	if ($target != '')
+		$target = ' target="'.$target.'"';
+	if ($accesskey !== FALSE)
+		$accesskey = ' accesskey="'.$accesskey.'"';
+
 	$toolbar = '<td class="toolbar" align="'.$align.'">';
 
 	$toolbar .= '<img border="0" src="'. $GLOBALS['ASSETS_URL'] . 'images/blank.gif" height="1" width="45"><br>'
-			  .'<a class="toolbar" href="'.$URL.'" target="'.$target.'" '.(($accesskey !== FALSE) ? "accesskey=\"$accesskey\"" : '').'><img border="0" src="'.$icon.'" '.$tool.'><br>'
+			  .'<a class="toolbar" href="'.$URL.'"'.$target.$accesskey.'><img border="0" src="'.$icon.'" '.$tool.'><br>'
 			  .'<img border="0" src="'. $GLOBALS['ASSETS_URL'] .'images/blank.gif" height="6" width="'.$size.'"><br>'
 			  .'<b><font size="2">'.$text.'</font></b></a><br>'
 			  .'<img border="0" src="'. $GLOBALS['ASSETS_URL'] . 'images/blank.gif" height="4" width="30">';
