@@ -289,10 +289,12 @@ $INST_MODULES["default"] = array(
 
 // Set presets for course appointment types
 /*
-* The appointment type marked as "sitzung"=>1 is used for the designation of regular meetings 
-* and will be labeled accordingly in the schedule.
+* The first array element is used for the designation of regular meetings and will be labeled
+* accordingly in the schedule. 
 * The second array element is always used to denominate preliminary discussions. 
 * Both names can be chosen freely.
+* The appointment types marked as "sitzung"=>1 are shown in the course creation assistent and
+* while editing dates as templates for the description of regular turnus meetings.
 */
 
 $TERMIN_TYP[1]=array("name"=>_("Sitzung"), "sitzung"=>1, "color"=>"#2D2C64");
