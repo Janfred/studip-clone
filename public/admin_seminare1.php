@@ -330,21 +330,17 @@ function move_dozent ($username, $s_id, $direction)
 	$user_id = get_userid($username);
 
 	$db=new DB_Seminar;
+	$db2=new DB_Seminar;
 	$db->query("SELECT position FROM seminar_user" . 
                    " WHERE Seminar_id = '$s_id'" .
                    " AND user_id ='$user_id' ");
 
 	if ($db->next_record()) 
    {
-		if ($direction == "up")
-      {
-			$position = $db->f("position") - 1;
-      }
-		if ($direction == "down")
-      {
-			$position = $db->f("position") + 1;
-		}
-      $position_alt = $db->f("position");
+		$position = $db->f('position');
+		$position_alt = $position;
+		if ($direction == "up") $position--;
+		if ($direction == "down") $position++;
 
 		$db->query( "UPDATE seminar_user" .
                   " SET position =  '$position_alt'" .
@@ -352,22 +348,15 @@ function move_dozent ($username, $s_id, $direction)
                   "  AND status = 'dozent' " .
                   "  AND position = '$position'");
 
-		if (!$db->affected_rows()) 
-      {
-         return false;
-      }
-
-		$db->query( "UPDATE seminar_user" . 
+		$db2->query( "UPDATE seminar_user" . 
                   " SET position =  '$position'" .
                   " WHERE Seminar_id = '$s_id'" .
                   " AND status = 'dozent' " .
                   " AND user_id = '$user_id'");
-		if (!$db->affected_rows()) 
-      {
-         return false;
-      }
-      return true;
+		
+		if ($db->affected_rows() && $db2->affected_rows()) return true;
 	}
+	return false;
 }
 // move Tutoren
 if ($moveup_tut) 
@@ -924,7 +913,7 @@ if (($s_id) && (auth_check())) {
 						if ($db4->num_rows()) {
 							$no_doz_found=FALSE;
 							printf ("<font size=-1>" . _("<b>%s</b> NutzerIn gefunden:") . "<br />", $db4->num_rows());
-							print "<input type=\"IMAGE\" src=\"".$GLOBALS['ASSETS_URL']."images/move_up.gif\" ".tooltip(_("NutzerIn hinzufügen"))." border=\"0\" name=\"add_doz\" />";
+							print "<input type=\"IMAGE\" src=\"".$GLOBALS['ASSETS_URL']."images/move_left.gif\" ".tooltip(_("NutzerIn hinzufügen"))." border=\"0\" name=\"add_doz\" />";
 							print "&nbsp; <select name=\"add_doz\">";
 							while ($db4->next_record()) {
 								printf ("<option value=\"%s\">%s </option>", $db4->f("username"), htmlReady(my_substr($db4->f("fullname") ." (" . $db4->f("username"). ")",  0, 30)));

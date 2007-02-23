@@ -285,7 +285,7 @@ if ($start_level) { //create defaults
 		$sem_create_data['sem_sec_schreib'] = $SEM_CLASS[$class]['default_write_level'];
 
 	if ($auth->auth['perm'] == 'dozent')
-		$sem_create_data['sem_doz'][$user->id] = TRUE;
+		$sem_create_data['sem_doz'][$user->id] = 1;
 }
 
 if ($form == 1)
@@ -747,7 +747,7 @@ if ($movedown_doz)
 	$level=2;
 }
 // move Tutoren
-if ($moveup_tut) 
+if ($moveup_tut)
 {
    $move_uid = get_userid($moveup_tut);
    $move_pos = $sem_create_data["sem_tut"][$move_uid];
@@ -762,7 +762,7 @@ if ($moveup_tut)
    }
 	$level=2;
 }
-if ($movedown_tut) 
+if ($movedown_tut)
 {
    $move_uid = get_userid($movedown_tut);
    $move_pos = $sem_create_data["sem_tut"][$move_uid];
@@ -773,14 +773,14 @@ if ($movedown_tut)
       {
          $sem_create_data["sem_tut"][$key]      = $move_pos;
          $sem_create_data["sem_tut"][$move_uid] = $move_pos + 1;
-      }  
+      }
    }
 	$level=2;
 }
 
 function re_sort_dozenten_array(&$sem_doz, $position)
 {
-   foreach($sem_doz["sem_doz"] as $key=>$val) 
+   foreach($sem_doz["sem_doz"] as $key=>$val)
    {
       if ($val > $position)
       {
@@ -796,7 +796,7 @@ function re_sort_tutoren_array(&$sem_tut, $position)
       if ($val > $position)
       {
          $sem_tut["sem_tut"][$key] -= 1;
-      }  
+      }
    }
 
 }
@@ -832,10 +832,11 @@ if (($search_doz_x) || ($search_tut_x) || ($reset_search_x) || $sem_bereich_do_s
 
 } elseif (($form == 2) && ($jump_next_x)) //wenn alles stimmt, Checks und Sprung auf Schritt 3
 	{
-	if (is_array($sem_create_data["sem_tut"]))
-		foreach ($sem_create_data["sem_tut"] as $key=>$val)
-			if ($sem_create_data["sem_doz"][$key])
-				$badly_dozent_is_tutor=TRUE;
+	if (is_array($sem_create_data['sem_tut']))
+		foreach ($sem_create_data['sem_tut'] as $key=>$val){
+			if (array_key_exists($key, $sem_create_data['sem_doz']))
+				$badly_dozent_is_tutor = TRUE;
+		}
 	if ($badly_dozent_is_tutor) {
 		$level=2; //wir bleiben auf der zweiten Seite
 		$errormsg=$errormsg."error§"._("Sie d&uuml;rfen dieselben DozentInnen nicht gleichzeitig als TutorInnen eintragen!")."§";
@@ -848,10 +849,10 @@ if (($search_doz_x) || ($search_tut_x) || ($reset_search_x) || $sem_bereich_do_s
 		}
 	elseif ((!$perm->have_perm("root")) && (!$perm->have_perm("admin")))
 		{
-		if (!$sem_create_data["sem_doz"][$user_id]) {
+		if (!array_key_exists($user_id, $sem_create_data['sem_doz'])) {
 			$level=2;
 			$errormsg=$errormsg."error§"._("Sie m&uuml;ssen wenigstens sich selbst als DozentIn f&uuml;r diese Veranstaltung angeben! Der Eintrag wird automatisch gesetzt.")."§";
-			$sem_create_data["sem_doz"][$user_id]=TRUE;
+			$sem_create_data['sem_doz'][$user_id]= count($sem_create_data['sem_doz']) + 1;
 			}
 		}
 	if ($SEM_CLASS[$sem_create_data["sem_class"]]["bereiche"]) {
@@ -2212,7 +2213,7 @@ if ($level == 2)
                            } 
                            echo "</td>";
 			                  echo "<td>";
-			                  echo "<font size=\"-1\"><b>".htmlReady(get_fullname($key, "full_rev",false)). 
+			                  echo "<font size=\"-1\"><b>". get_fullname($key, "full_rev", true). 
                            " (". get_username($key) . ")</b></font>";
 
 			                  echo "</td>";
@@ -2287,7 +2288,7 @@ if ($level == 2)
 						<td class="<? echo $cssSw->getClass() ?>" width="40%">
 							<?
 							if (sizeof($sem_create_data["sem_tut"]) >0) {
-                        asort(&$sem_create_data["sem_tut"]);
+                        asort($sem_create_data["sem_tut"]);
                         echo "<table>";
                         $i = 0;
 								foreach($sem_create_data["sem_tut"] as $key=>$val) {
@@ -2327,7 +2328,7 @@ if ($level == 2)
                            } 
                            echo "</td>";
 			                  echo "<td>";
-			                  echo "<font size=\"-1\"><b>".htmlReady(get_fullname($key, "full_rev",true)). 
+			                  echo "<font size=\"-1\"><b>".get_fullname($key, "full_rev",true). 
                            " (". get_username($key) . ")</b></font>";
 
 			                  echo "</td>";

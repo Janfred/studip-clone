@@ -809,7 +809,7 @@ function get_config($key, $default = FALSE) {
 // sondern vom Admin oder vom root kopiert wird (sonst wird das Dozentenfeld leer gelassen, was ja keiner will...)
 function get_seminar_dozent($seminar_id) {
 	$db = new DB_Seminar;
-	$sql = "SELECT user_id FROM seminar_user WHERE Seminar_id='".$seminar_id."' AND status='dozent' ORDER BY position";
+	$sql = "SELECT user_id, position FROM seminar_user WHERE Seminar_id='".$seminar_id."' AND status='dozent' ORDER BY position";
 	if (!$db->query($sql)) {
 		echo "Fehler bei DB-Abfrage in get_seminar_user!";
 		return 0;
@@ -819,7 +819,7 @@ function get_seminar_dozent($seminar_id) {
 		return 0;
 	}
 	while ($db->next_record()) {
-		$dozent[$db->f("user_id")] = TRUE;
+		$dozent[$db->f('user_id')] = $db->f('position');
 	}
 	return $dozent;
 }
@@ -891,7 +891,7 @@ function get_next_position($status,$seminar_id)
 
 function get_seminar_tutor($seminar_id) {
 	$db = new DB_Seminar;
-	$sql = "SELECT user_id position FROM seminar_user WHERE Seminar_id='".$seminar_id."' AND status='tutor' ORDER BY position";
+	$sql = "SELECT user_id, position FROM seminar_user WHERE Seminar_id='".$seminar_id."' AND status='tutor' ORDER BY position";
 	if (!$db->query($sql)) {
 		echo "Fehler bei DB-Abfrage in get_seminar_user!";
 		return 0;
@@ -900,7 +900,7 @@ function get_seminar_tutor($seminar_id) {
 		return null;
 	}
 	while ($db->next_record()) {
-		$tutor[$db->f("user_id")] = TRUE;
+		$tutor[$db->f('user_id')] = $db->f('position');
 	}
 	return $tutor;
 }
