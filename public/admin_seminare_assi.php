@@ -778,7 +778,7 @@ if ($movedown_tut)
 	$level=2;
 }
 
-function re_sort_dozenten_array($sem_doz, $position)
+function re_sort_dozenten_array(&$sem_doz, $position)
 {
    foreach($sem_doz["sem_doz"] as $key=>$val) 
    {
@@ -789,7 +789,7 @@ function re_sort_dozenten_array($sem_doz, $position)
    }
 
 }
-function re_sort_tutoren_array($sem_tut, $position)
+function re_sort_tutoren_array(&$sem_tut, $position)
 {
    foreach($sem_tut["sem_tut"] as $key=>$val) 
    {
@@ -804,14 +804,14 @@ function re_sort_tutoren_array($sem_tut, $position)
 if ($delete_doz) {
    $position = $sem_create_data["sem_doz"][get_userid($delete_doz)];
 	unset($sem_create_data["sem_doz"][get_userid($delete_doz)]);
-   re_sort_dozenten_array(&$sem_create_data, $position);
+   re_sort_dozenten_array($sem_create_data, $position);
 	$level=2;
 }
 
 if ($delete_tut) {
    $position = $sem_create_data["sem_tut"][get_userid($delete_tut)];
 	unset($sem_create_data["sem_tut"][get_userid($delete_tut)]);
-   re_sort_tutoren_array(&$sem_create_data, $position);
+   re_sort_tutoren_array($sem_create_data, $position);
 	$level=2;
 }
 
@@ -2175,7 +2175,7 @@ if ($level == 2)
 						<td class="<? echo $cssSw->getClass() ?>" width="40%">
 							<?
 							if (sizeof($sem_create_data["sem_doz"]) >0) {
-                        asort(&$sem_create_data["sem_doz"]);
+                        asort($sem_create_data["sem_doz"]);
                         echo "<table>";
                         $i = 0;
 								foreach($sem_create_data["sem_doz"] as $key=>$val) {
