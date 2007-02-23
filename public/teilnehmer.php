@@ -1258,7 +1258,7 @@ if ($rechte) {
 					<input type=\"checkbox\" name=\"admission_delete[%s]\" value=\"1\"></td>", $cssSw->getClass(), $db->f("username"), $db->f("username"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td></tr>\n", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"));
 		}
-		echo '<tr><td class="blank" colspan="3">&nbsp;</td>';
+		echo '<tr><td class="blank" colspan="4">&nbsp;</td>';
 		echo '<td class="blank" align="center">' . makeButton('eintragen','input',_("Ausgewählte Nutzer aus der Warteliste in die Veranstaltung eintragen"),'do_admission_insert') . '</td>';
 		echo '<td class="blank" align="center">' . makeButton('entfernen','input',_("Ausgewählte Nutzer aus der Warteliste entfernen"),'do_admission_delete') . '</td>';
 		echo '<td class="blank">&nbsp;</td></tr>';
