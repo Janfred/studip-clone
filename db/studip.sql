@@ -942,7 +942,7 @@ CREATE TABLE `object_views` (
 
 DROP TABLE IF EXISTS `plugins`;
 CREATE TABLE `plugins` (
-  `pluginid` int(10) unsigned NOT NULL,
+  `pluginid` int(10) unsigned NOT NULL auto_increment,
   `pluginclassname` varchar(255) NOT NULL default '',
   `pluginpath` varchar(255) NOT NULL default '',
   `pluginname` varchar(45) NOT NULL default '',
@@ -1255,7 +1255,7 @@ CREATE TABLE `resources_user_resources` (
 
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
-  `roleid` int(10) unsigned NOT NULL,
+  `roleid` int(10) unsigned NOT NULL auto_increment,
   `rolename` varchar(80) NOT NULL default '',
   `system` enum('y','n') NOT NULL default 'n',
   PRIMARY KEY  (`roleid`)
