@@ -71,7 +71,7 @@ class AbstractPluginIntegratorEnginePersistence {
 			}
 			else {
 				if (is_null($dependentonplugin)){
-					$result =& $this->connection->execute("insert into plugins (pluginid,pluginclassname,pluginname,pluginpath,plugintype,enabled,navigationpos) select 0,?,?,?,?,'no',max(navigationpos)+1 from plugins where plugintype=?", array($pluginclassname,$plugin->getPluginname(), $pluginpath,$type,$type));
+					$result =& $this->connection->execute("insert into plugins (pluginclassname,pluginname,pluginpath,plugintype,enabled,navigationpos) select ?,?,?,?,'no',max(navigationpos)+1 from plugins where plugintype=?", array($pluginclassname,$plugin->getPluginname(), $pluginpath,$type,$type));
 				}
 				else {
 					$result =& $this->connection->execute("insert into plugins (pluginclassname,pluginname,pluginpath,plugintype,enabled,navigationpos,dependentonid) select ?,?,?,?,'no',max(navigationpos)+1,? from plugins where plugintype=?", array($pluginclassname,$plugin->getPluginname(), $pluginpath,$type,$dependentonplugin->getPluginid(),$type));
