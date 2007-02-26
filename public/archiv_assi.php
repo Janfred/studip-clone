@@ -72,9 +72,9 @@ if ($new_session)
 
 // A list was sent
 if (is_array($archiv_sem)) {
-	unset($archiv_assi_data["sems"]);
-	unset($archiv_assi_data["sem_check"]);
-	$archiv_assi_data["pos"] = 0;
+	$archiv_assi_data['sems'] = array();
+	$archiv_assi_data['sem_check'] = array();
+	$archiv_assi_data['pos'] = 0;
 	foreach($archiv_sem as $key => $val) {
 		if ((substr($val, 0, 4) == "_id_") && (substr($$archiv_sem[$key + 1], 0, 4) != "_id_"))
 				if ($archiv_sem[$key + 1] == "on") {
