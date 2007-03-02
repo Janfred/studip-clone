@@ -51,8 +51,7 @@ class PluginEngine {
 		$connection =& NewADOConnection($env->dbtype);
 
 		// connect to the database
-		// TODO: persistent connection ok ?
-  		$connection->PConnect($env->dbhost,$env->dbuser,$env->dbpassword,$env->dbname);
+  		$connection->Connect($env->dbhost,$env->dbuser,$env->dbpassword,$env->dbname);
 
     	return $connection;
 	}
