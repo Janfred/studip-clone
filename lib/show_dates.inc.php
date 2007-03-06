@@ -170,6 +170,10 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 		print "\n</tr></td>\n<tr><td class=\"blank\" colspan=2>";
 		}
 
+		else {
+		  echo "\n<tr>\n<td>";
+		}
+
 		if ($username)
 			$add_to_link = "&username=$username";
 		if ($show_not)
@@ -295,7 +299,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 		printf("\n<td align =\"right\" class=\"topic\">&nbsp;$admin_link<img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" %s></a>&nbsp;</td></tr>", tooltip(_("Termine einstellen")));
 		print("\n<tr><td class=\"steel1\" colspan=\"2\"><blockquote><br /><font size=-1>");
 		print(_("Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie auf die Doppelpfeile."));
-		print("<br />&nbsp; </blockquote>\n</td></tr></table>\n");
+		print("</font><br />&nbsp; </blockquote>\n</td></tr></table>\n");
 		if (!$full_width)
 			echo "</td></tr></table>\n";
 		return TRUE;
