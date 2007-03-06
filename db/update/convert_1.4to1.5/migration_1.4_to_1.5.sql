@@ -40,10 +40,6 @@ MD5( 'SEM_VISIBILITY_PERM' ) , '', 'SEM_VISIBILITY_PERM', 'root', '1', 'string',
 );
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES (MD5('ENABLE_SKYPE_INFO'), '', 'ENABLE_SKYPE_INFO', '1', '1', 'boolean', 'global', '', '0', UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 'Ermöglicht die Eingabe / Anzeige eines Skype Namens ', '', '');
 
-#
-# StEP00079: Themenordner im Forum schreibgeschützt
-#
-ALTER TABLE `px_topics` ADD `read_only` TINYINT UNSIGNED NOT NULL AFTER `user_id` ;
 
 #
 # StEP00082: Erweiterung SCM

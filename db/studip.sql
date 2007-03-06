@@ -949,7 +949,7 @@ CREATE TABLE `plugins` (
   `plugindesc` varchar(45) NOT NULL default '',
   `plugintype` enum('Standard','Administration','System','Homepage','Portal','Core') NOT NULL default 'Standard',
   `enabled` enum('yes','no') NOT NULL default 'no',
-  `navigationpos` int(10) unsigned NOT NULL default '4294967295',
+  `navigationpos` int(10) unsigned NOT NULL default '0',
   `dependentonid` int(10) unsigned default NULL,
   PRIMARY KEY  (`pluginid`)
 ) TYPE=MyISAM;
@@ -1000,7 +1000,6 @@ CREATE TABLE `px_topics` (
   `author_host` varchar(255) default NULL,
   `Seminar_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
-  `read_only` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`topic_id`),
   KEY `root_id` (`root_id`),
   KEY `Seminar_id` (`Seminar_id`),
