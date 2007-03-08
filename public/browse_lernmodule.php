@@ -57,7 +57,7 @@ if ($ILIAS_CONNECT_ENABLE)
 	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_linking_functions.inc.php");
 	include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_view_functions.inc.php");
 
-	include ('inclued/html_head.inc.php'); // Output of html head
+	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   // Output of Stud.IP head
 
 	checkObjectModule("ilias_connect");
