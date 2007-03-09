@@ -56,13 +56,18 @@ include('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 if ($SessSemName[1])
 	$range_id = $SessSemName[1];
 
+$com = '';
+if (isset($_REQUEST['com'])) {
+	$com = $_REQUEST['com'];
+}
+
 echo "<table border=\"0\" class=\"blank\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
 echo "<tr valign=\"top\" align=\"center\">\n";
 echo "<td class=\"topic\" align=\"left\" colspan=\"2\">&nbsp;<b>\n";
 echo getHeaderLine($range_id) . " - ";
 echo _("Verwaltung der externen Anzeigemodule");
 foreach ($EXTERN_MODULE_TYPES as $key => $type) {
-	if ($type["module"] == $mod) {
+	if ($type["module"] == $_REQUEST['mod']) {
 		echo " ({$EXTERN_MODULE_TYPES[$key]['name']})";
 		break;
 	}
@@ -78,11 +83,10 @@ echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 
 
 if ($com == "delete_sec") {
-	$config = get_configuration($range_id, $config_id);
+	$config = get_configuration($range_id, $_REQUEST['config_id']);
 
-	$message = sprintf(_("Wollen Sie die Konfiguration <b>&quot;%s&quot;</b> des Moduls <b>%s</b> wirklich l&ouml;schen?"),
-							$config["name"], $GLOBALS["EXTERN_MODULE_TYPES"][$config["type"]]["name"]);
-	$message .= "<br><br><a href=\"$PHP_SELF?com=delete&config_id=$config_id\">";
+	$message = sprintf(_("Wollen Sie die Konfiguration <b>&quot;%s&quot;</b> des Moduls <b>%s</b> wirklich l&ouml;schen?"), $config["name"], $GLOBALS["EXTERN_MODULE_TYPES"][$config["type"]]["name"]);
+	$message .= "<br><br><a href=\"$PHP_SELF?com=delete&config_id={$config['id']}\">";
 	$message .= makeButton("ja2") . "</a>&nbsp; &nbsp;";
 	$message .= "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst\">";
 	$message .= makeButton("nein") . "</a>";
@@ -101,8 +105,10 @@ if ($com == "info") {
 	exit;
 }
 
+
+
 $element_command = FALSE;
-if ($edit) {
+if ($_REQUEST['edit']) {
 	$element_commands = array('show', 'hide', 'move_left', 'move_right', 'show_group', 'hide_group', 'do_search_x');
 	foreach ($element_commands as $element_command) {
 		$element_command_form = $edit . "_" . $element_command;
@@ -112,7 +118,7 @@ if ($edit) {
 				$pos = $pos_tmp[0];
 			}
 			$execute_command = $element_command;
-			$com = "store";
+			$com = 'store';
 		}
 	}
 }
@@ -129,14 +135,14 @@ if ($com == "new" || $com == "edit" || $com == "open" ||
 // Some browsers don't reload the site by clicking the same link twice again.
 // So it's better to use different commands to do the same job.
 if ($com == "set_default" || $com == "unset_default") {
-	if (!set_default_config($range_id, $config_id)) {
+	if (!set_default_config($range_id, $_REQUEST['config_id'])) {
 		page_close();
 		exit;
 	}
 }
 
 if ($com == "delete") {
-	if (!delete_config($range_id, $config_id)) {
+	if (!delete_config($range_id, $_REQUEST['config_id'])) {
 		page_close();
 		exit;
 	}
@@ -233,10 +239,10 @@ else {
 			echo "<tr>\n<td class=\"" . $css_switcher_2->getHeaderClass() . "\">";
 			echo "<font size=\"2\"><b>&nbsp; ";
 
-			if ($configurations[$module_type["module"]][$config_id])
+			if ($configurations[$module_type["module"]][$_REQUEST['config_id']])
 				echo "<a name=\"anker\">\n";
 			echo $module_type["name"];
-			if ($configurations[$module_type["module"]][$config_id])
+			if ($configurations[$module_type["module"]][$_REQUEST['config_id']])
 				echo "</a>\n";;
 
 			echo "</b></font>\n</td></tr>\n";

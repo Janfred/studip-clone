@@ -328,7 +328,7 @@ class ExternElement {
 			// fields begin with an underscore. The alternative input field overwrites
 			// the input field having the same name but without the leading underscore.
 			if (isset($_POST["_$form_name"])) {
-				if ($_POST[$form_name] == $this->config[$this->name][$attribute]
+				if ($_POST[$form_name] == $this->config->config[$this->name][$attribute]
 						&& $_POST["_$form_name"] != "")
 					$_POST[$form_name] = $_POST["_$form_name"];
 			}

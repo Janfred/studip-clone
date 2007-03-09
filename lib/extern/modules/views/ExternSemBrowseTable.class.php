@@ -181,7 +181,7 @@ class ExternSemBrowseTable extends SemBrowse {
 				LEFT JOIN user_info USING (user_id) 
 				LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id)
 				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
-				LEFT JOIN Institute USING (Institut_id) 
+				LEFT JOIN Institute ON (Institute.Institut_id = seminar_inst.institut_id) 
 				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result']))
 				 . "') $sem_inst_query $sem_range_query $sem_types_query";
 			
@@ -338,7 +338,7 @@ class ExternSemBrowseTable extends SemBrowse {
 						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
 						$doz_uname = array_keys($sem_data[$seminar_id]['username']);
 						if (is_array($doz_name)){
-                     array_multisort(&$doz_position, &$doz_name, &$doz_uname);
+                     array_multisort($doz_position, $doz_name, $doz_uname);
 							$data["content"]["dozent"] = "";
 							$i = 0;
 							foreach ($doz_name as $index => $value) {

@@ -189,8 +189,8 @@ if ($this->config->getValue("Main", "studiplink") == "bottom") {
 
 echo "</table>\n";
 
-function news (&$this, $data, $alias_content, $text_div, $text_div_end) {
-	if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin")) {
+function news (&$module, $data, $alias_content, $text_div, $text_div_end) {
+	if ($margin = $module->config->getValue("TableParagraphSubHeadline", "margin")) {
 		$subheadline_div = "<div style=\"margin-left:$margin;\">";
 		$subheadline_div_end = "</div>";
 	}
@@ -200,31 +200,31 @@ function news (&$this, $data, $alias_content, $text_div, $text_div_end) {
 	}
 		
 	echo "<tr><td width=\"100%\">\n";
-	echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
-	echo "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr") . ">";
-	echo "<td" . $this->config->getAttributes("TableParagraphHeadline", "td") . ">";
-	echo "<font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">";
+	echo "<table" . $module->config->getAttributes("TableParagraph", "table") . ">\n";
+	echo "<tr" . $module->config->getAttributes("TableParagraphHeadline", "tr") . ">";
+	echo "<td" . $module->config->getAttributes("TableParagraphHeadline", "td") . ">";
+	echo "<font" . $module->config->getAttributes("TableParagraphHeadline", "font") . ">";
 	echo "$alias_content</font></td></tr>\n";
 	foreach ($data as $dat) {
-		echo "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
-		echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
+		echo "<tr" . $module->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
+		echo "<td" . $module->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
 		echo $subheadline_div;
-		echo "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
+		echo "<font" . $module->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
 		echo $dat["topic"];
 		echo "</font>$subheadline_div_end</td></tr>\n";
-		echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
+		echo "<tr" . $module->config->getAttributes("TableParagraphText", "tr") . ">";
 		list ($content, $admin_msg) = explode("<admin_msg>", $dat["body"]);
-		echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-		echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
+		echo "<td" . $module->config->getAttributes("TableParagraphText", "td") . ">";
+		echo "$text_div<font" . $module->config->getAttributes("TableParagraphText", "font") . ">";
 		echo $content;
 		echo "</font>$text_div_end</td></tr>\n";
 	}
 	echo "</table>\n</td></tr>\n";
 }
 
-function termine (&$this, $data, $alias_content, $text_div, $text_div_end) {
+function termine (&$module, $data, $alias_content, $text_div, $text_div_end) {
 	if ($GLOBALS["CALENDAR_ENABLE"]) {
-		if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin")) {
+		if ($margin = $module->config->getValue("TableParagraphSubHeadline", "margin")) {
 			$subheadline_div = "<div style=\"margin-left:$margin;\">";
 			$subheadline_div_end = "</div>";
 		}
@@ -234,27 +234,27 @@ function termine (&$this, $data, $alias_content, $text_div, $text_div_end) {
 		}
 	
 		echo "<tr><td width=\"100%\">\n";
-		echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
-		echo "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr") . ">";
-		echo "<td" . $this->config->getAttributes("TableParagraphHeadline", "td") . ">";
-		echo "<font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">";
+		echo "<table" . $module->config->getAttributes("TableParagraph", "table") . ">\n";
+		echo "<tr" . $module->config->getAttributes("TableParagraphHeadline", "tr") . ">";
+		echo "<td" . $module->config->getAttributes("TableParagraphHeadline", "td") . ">";
+		echo "<font" . $module->config->getAttributes("TableParagraphHeadline", "font") . ">";
 		echo "$alias_content</font></td></tr>\n";
 		
 		foreach ($data as $dat) {
-			echo "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
-			echo "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
+			echo "<tr" . $module->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
+			echo "<td" . $module->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
 			echo $subheadline_div;
-			echo "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
-			echo strftime($this->config->getValue("Main", "dateformat") . " %H.%m", $dat["start"]);
+			echo "<font" . $module->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
+			echo strftime($module->config->getValue("Main", "dateformat") . " %H.%m", $dat["start"]);
 			if (date("dmY", $dat["start"]) == date("dmY", $dat["end"]))
 				echo strftime(" - %H.%m", $dat["end"]);
 			else
-				echo strftime(" - " . $this->config->getValue("Main", "dateformat") . " %H.%m", $dat["end"]);
+				echo strftime(" - " . $module->config->getValue("Main", "dateformat") . " %H.%m", $dat["end"]);
 			echo " &nbsp;" . $dat["title"];
 			echo "</font>$subheadline_div_end</td></tr>\n";
-			echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
-			echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-			echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
+			echo "<tr" . $module->config->getAttributes("TableParagraphText", "tr") . ">";
+			echo "<td" . $module->config->getAttributes("TableParagraphText", "td") . ">";
+			echo "$text_div<font" . $module->config->getAttributes("TableParagraphText", "font") . ">";
 			echo $dat["content"];
 			echo "</font>$text_div_end</td></tr>\n";
 		} 
@@ -262,29 +262,29 @@ function termine (&$this, $data, $alias_content, $text_div, $text_div_end) {
 	}
 }
 
-function kategorien (&$this, $data, $alias_content, $text_div, $text_div_end) {
+function kategorien (&$module, $data, $alias_content, $text_div, $text_div_end) {
 	echo "<tr><td width=\"100%\">\n";
-	echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
-	echo "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr") . ">";
-	echo "<td" . $this->config->getAttributes("TableParagraphHeadline", "td") . ">";
-	echo "<font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">";
+	echo "<table" . $module->config->getAttributes("TableParagraph", "table") . ">\n";
+	echo "<tr" . $module->config->getAttributes("TableParagraphHeadline", "tr") . ">";
+	echo "<td" . $module->config->getAttributes("TableParagraphHeadline", "td") . ">";
+	echo "<font" . $module->config->getAttributes("TableParagraphHeadline", "font") . ">";
 	echo $data["headline"];
 	echo "</font></td></tr>\n";
-	echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
-	echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
-	echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
+	echo "<tr" . $module->config->getAttributes("TableParagraphText", "tr") . ">";
+	echo "<td" . $module->config->getAttributes("TableParagraphText", "td") . ">";
+	echo "$text_div<font" . $module->config->getAttributes("TableParagraphText", "font") . ">";
 	echo $data["content"];
 	echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 }
 
-function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
+function lehre (&$module, $data, $alias_content, $text_div, $text_div_end) {
 	global $attr_text_td;
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
 	// old hard coded $SEMESTER-array starts with index 1
 	array_unshift($all_semester, 0);
 	
-	if ($margin = $this->config->getValue("TableParagraphSubHeadline", "margin")) {
+	if ($margin = $module->config->getValue("TableParagraphSubHeadline", "margin")) {
 		$subheadline_div = "<div style=\"margin-left:$margin;\">";
 		$subheadline_div_end = "</div>";
 	}
@@ -292,7 +292,7 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 		$subheadline_div = "";
 		$subheadline_div_end = "";
 	}
-	if ($margin = $this->config->getValue("List", "margin")) {
+	if ($margin = $module->config->getValue("List", "margin")) {
 		$list_div = "<div style=\"margin-left:$margin;\">";
 		$list_div_end = "</div>";
 	}
@@ -309,11 +309,11 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 	
 	
 	$switch_time = mktime(0, 0, 0, date("m"),
-			date("d") + 7 * $this->config->getValue("PersondetailsLectures", "semswitch"), date("Y"));
+			date("d") + 7 * $module->config->getValue("PersondetailsLectures", "semswitch"), date("Y"));
 	// get current semester
 	$current_sem = get_sem_num($switch_time) + 1;
 	
-	switch ($this->config->getValue("PersondetailsLectures", "semstart")) {
+	switch ($module->config->getValue("PersondetailsLectures", "semstart")) {
 		case "previous" :
 			if (isset($all_semester[$current_sem - 1]))
 				$current_sem--;
@@ -325,11 +325,11 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 		case "current" :
 			break;
 		default :
-			if (isset($all_semester[$this->config->getValue("PersondetailsLectures", "semstart")]))
-				$current_sem = $this->config->getValue("PersondetailsLectures", "semstart");
+			if (isset($all_semester[$module->config->getValue("PersondetailsLectures", "semstart")]))
+				$current_sem = $module->config->getValue("PersondetailsLectures", "semstart");
 	}
 	
-	$last_sem = $current_sem + $this->config->getValue("PersondetailsLectures", "semrange") - 1;
+	$last_sem = $current_sem + $module->config->getValue("PersondetailsLectures", "semrange") - 1;
 	if ($last_sem < $current_sem)
 		$last_sem = $current_sem;
 	if (!isset($all_semester[$last_sem]))
@@ -337,35 +337,35 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 	
 	$out = "";
 	for (;$current_sem <= $last_sem; $last_sem--) {			
-		if (!($this->config->getValue("PersondetailsLectures", "semstart") == "current"
-				&& $this->config->getValue("PersondetailsLectures", "semrange") == 1)) {
-			$out .= "<tr" . $this->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
-			$out .= "<td" . $this->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
+		if (!($module->config->getValue("PersondetailsLectures", "semstart") == "current"
+				&& $module->config->getValue("PersondetailsLectures", "semrange") == 1)) {
+			$out .= "<tr" . $module->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
+			$out .= "<td" . $module->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
 			$out .= $subheadline_div;
-			$out .= "<font" . $this->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
+			$out .= "<font" . $module->config->getAttributes("TableParagraphSubHeadline", "font") . ">";
 			$month = date("n", $all_semester[$last_sem]["beginn"]);
 			if($month > 9) {
-				$out .= $this->config->getValue("PersondetailsLectures", "aliaswise");
+				$out .= $module->config->getValue("PersondetailsLectures", "aliaswise");
 				$out .= date(" Y/", $all_semester[$last_sem]["beginn"]) . date("y", $all_semester[$last_sem]["ende"]);
 			}
 			else if($month > 3 && $month < 10) {
-				$out .= $this->config->getValue("PersondetailsLectures", "aliassose");
+				$out .= $module->config->getValue("PersondetailsLectures", "aliassose");
 				$out .= date(" Y", $all_semester[$last_sem]["beginn"]);
 			}
 			$out .= "</font>$subheadline_div_end</td></tr>\n";
 		}
 		
-		$out .= "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
-		$out .= "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
+		$out .= "<tr" . $module->config->getAttributes("TableParagraphText", "tr") . ">";
+		$out .= "<td" . $module->config->getAttributes("TableParagraphText", "td") . ">";
 		
-		if ($this->config->getValue("PersondetailsLectures", "aslist")) {
-			$out .= "$list_div<ul" . $this->config->getAttributes("List", "ul") . ">\n";
+		if ($module->config->getValue("PersondetailsLectures", "aslist")) {
+			$out .= "$list_div<ul" . $module->config->getAttributes("List", "ul") . ">\n";
 			foreach ($data as $dat) {
-				$out .= "<li" . $this->config->getAttributes("List", "li") . ">";
-				$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
-				$out .= "<a href=\"\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
+				$out .= "<li" . $module->config->getAttributes("List", "li") . ">";
+				$out .= "<font" . $module->config->getAttributes("LinkIntern", "font") . ">";
+				$out .= "<a href=\"\"" . $module->config->getAttributes("LinkIntern", "a") . ">";
 				$out .= $dat["name"] . "</a></font>\n";
-				$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . "><br>";
+				$out .= "<font" . $module->config->getAttributes("TableParagraphText", "font") . "><br>";
 				$out .= $dat["untertitel"] . "</font>\n";
 			}
 			$out .= "</ul>$list_div_end";
@@ -375,10 +375,10 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 			$j = 0;
 			foreach ($data as $dat) {
 				if ($j) $out .= "<br><br>";
-				$out .= "<font" . $this->config->getAttributes("LinkIntern", "font") . ">";
-				$out .= "<a href=\"$lnk\"" . $this->config->getAttributes("LinkIntern", "a") . ">";
+				$out .= "<font" . $module->config->getAttributes("LinkIntern", "font") . ">";
+				$out .= "<a href=\"$lnk\"" . $module->config->getAttributes("LinkIntern", "a") . ">";
 				$out .= $dat["name"] . "</a></font>\n";
-				$out .= "<font" . $this->config->getAttributes("TableParagraphText", "font") . ">";
+				$out .= "<font" . $module->config->getAttributes("TableParagraphText", "font") . ">";
 				$out .= "<br>" . $dat["untertitel"] . "</font>\n";
 				$j = 1;
 			}
@@ -389,68 +389,68 @@ function lehre (&$this, $data, $alias_content, $text_div, $text_div_end) {
 	
 	if ($out) {
 		$out_title = "<tr><td width=\"100%\">\n";
-		$out_title .= "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
-		$out_title .= "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr") . ">";
-		$out_title .= "<td" . $this->config->getAttributes("TableParagraphHeadline", "td") . ">";
-		$out_title .= "<font" . $this->config->getAttributes("TableParagraphHeadline", "font") . ">";
+		$out_title .= "<table" . $module->config->getAttributes("TableParagraph", "table") . ">\n";
+		$out_title .= "<tr" . $module->config->getAttributes("TableParagraphHeadline", "tr") . ">";
+		$out_title .= "<td" . $module->config->getAttributes("TableParagraphHeadline", "td") . ">";
+		$out_title .= "<font" . $module->config->getAttributes("TableParagraphHeadline", "font") . ">";
 		$out_title .= $alias_content . "</font></td></tr>\n";
 		echo $out_title . $out . "</table>\n</td></tr>\n";
 	}
 }
 
-function head (&$this, $data, $a) {
-	if ($this->config->getValue("Main", "showcontact")
-			&& $this->config->getValue("Main", "showimage"))
+function head (&$module, $data, $a) {
+	if ($module->config->getValue("Main", "showcontact")
+			&& $module->config->getValue("Main", "showimage"))
 		$colspan = " colspan=\"2\"";
 	else
 		$colspan = "";
 	
 	echo "<tr><td width=\"100%\">\n";
-	echo "<table" . $this->config->getAttributes("PersondetailsHeader", "table") . ">\n";
-	if (!$this->config->getValue('PersondetailsHeader', 'hidename')) {
-		echo "<tr" . $this->config->getAttributes("PersondetailsHeader", "tr") . ">";
+	echo "<table" . $module->config->getAttributes("PersondetailsHeader", "table") . ">\n";
+	if (!$module->config->getValue('PersondetailsHeader', 'hidename')) {
+		echo "<tr" . $module->config->getAttributes("PersondetailsHeader", "tr") . ">";
 		echo "<td$colspan width=\"100%\"";
-		echo $this->config->getAttributes("PersondetailsHeader", "headlinetd") . ">";
-		echo "<font" . $this->config->getAttributes("PersondetailsHeader", "font") . ">";
+		echo $module->config->getAttributes("PersondetailsHeader", "headlinetd") . ">";
+		echo "<font" . $module->config->getAttributes("PersondetailsHeader", "font") . ">";
 		echo $data["fullname"];
 		echo "</font></td></tr>\n";
 	}
 	
-	if ($this->config->getValue("Main", "showimage")
-			|| $this->config->getValue("Main", "showcontact")) {
+	if ($module->config->getValue("Main", "showimage")
+			|| $module->config->getValue("Main", "showcontact")) {
 		echo "<tr>";
-		if ($this->config->getValue("Main", "showcontact")
-				&& ($this->config->getValue("Main", "showimage") == "right"
-				|| !$this->config->getValue("Main", "showimage"))) {
-				echo "<td" . $this->config->getAttributes("PersondetailsHeader", "contacttd") . ">";
-				echo kontakt($this, $data) . "</td>\n";
+		if ($module->config->getValue("Main", "showcontact")
+				&& ($module->config->getValue("Main", "showimage") == "right"
+				|| !$module->config->getValue("Main", "showimage"))) {
+				echo "<td" . $module->config->getAttributes("PersondetailsHeader", "contacttd") . ">";
+				echo kontakt($module, $data) . "</td>\n";
 		}
 		
-		if ($this->config->getValue("Main", "showimage")) {
-			echo "<td" . $this->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
+		if ($module->config->getValue("Main", "showimage")) {
+			echo "<td" . $module->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
 			if (file_exists("{$GLOBALS['ABSOLUTE_PATH_USER_PIC']}/nobody.jpg")) {
 				echo "<img src=\"{$GLOBALS['ABSOLUTE_URI_STUDIP']}{$GLOBALS['USER_PIC_PATH']}/";
 				echo "nobody.jpg\" alt=\"Foto " . $data["fullname"] . "\"";
-				echo $this->config->getAttributes("PersondetailsHeader", "img") . ">";
+				echo $module->config->getAttributes("PersondetailsHeader", "img") . ">";
 			}
 			else
 				echo "&nbsp;";
 		}
 		
-		if ($this->config->getValue("Main", "showcontact")
-				&& $this->config->getValue("Main", "showimage") == "left") {
-			echo "<td" . $this->config->getAttributes("PersondetailsHeader", "contacttd") . ">";
-			echo kontakt($this, $data) . "</td>\n";
+		if ($module->config->getValue("Main", "showcontact")
+				&& $module->config->getValue("Main", "showimage") == "left") {
+			echo "<td" . $module->config->getAttributes("PersondetailsHeader", "contacttd") . ">";
+			echo kontakt($module, $data) . "</td>\n";
 		}
 		
 		echo "</tr>\n";
-		if ($this->config->getValue('Main', 'showcontact')
-				&& $this->config->getValue('Contact', 'separatelinks')) {
+		if ($module->config->getValue('Main', 'showcontact')
+				&& $module->config->getValue('Contact', 'separatelinks')) {
 			echo "<tr><td";
-			if ($this->config->getValue('Main', 'showimage'))
+			if ($module->config->getValue('Main', 'showimage'))
 				echo ' colspan="2"';
-			echo $this->config->getAttributes('PersondetailsHeader', 'contacttd') . ">\n";
-			echo kontakt($this, $data, TRUE);
+			echo $module->config->getAttributes('PersondetailsHeader', 'contacttd') . ">\n";
+			echo kontakt($module, $data, TRUE);
 			echo "</td></tr>\n";
 		}
 	}
@@ -458,53 +458,53 @@ function head (&$this, $data, $a) {
 	echo "</table>\n</td></tr>\n";
 }
 
-function kontakt (&$this, $data, $separate = FALSE) {
-	$attr_table = $this->config->getAttributes("Contact", "table");
-	$attr_tr = $this->config->getAttributes("Contact", "table");
-	$attr_td = $this->config->getAttributes("Contact", "td");
-	$attr_fonttitle = $this->config->getAttributes("Contact", "fonttitle");
-	$attr_fontcontent = $this->config->getAttributes("Contact", "fontcontent");
+function kontakt (&$module, $data, $separate = FALSE) {
+	$attr_table = $module->config->getAttributes("Contact", "table");
+	$attr_tr = $module->config->getAttributes("Contact", "table");
+	$attr_td = $module->config->getAttributes("Contact", "td");
+	$attr_fonttitle = $module->config->getAttributes("Contact", "fonttitle");
+	$attr_fontcontent = $module->config->getAttributes("Contact", "fontcontent");
 	
 	$out = "<table$attr_table>\n";
 	if (!$separate) {
 		$out .= "<tr$attr_tr>";
 		$out .= "<td colspan=\"2\"$attr_td>";
 		$out .= "<font$attr_fonttitle>";
-		if ($headline = $this->config->getValue("Contact", "headline"))
+		if ($headline = $module->config->getValue("Contact", "headline"))
 			$out .= "$headline</font>\n";
 		else
 			$out .= "</font>\n";
 		$out .= "<font$attr_fontcontent>";
 		
-		if (!$this->config->getValue("Contact", "hidepersname"))
+		if (!$module->config->getValue("Contact", "hidepersname"))
 			$out .= "<br><br>" . $data["fullname"] . "\n";
-		if ($this->config->getValue('Contact', 'showinstgroup'))
+		if ($module->config->getValue('Contact', 'showinstgroup'))
 			$out .= "<br>{$data['instfunction']}\n";
 		
-		if ($this->config->getValue("Contact", "hideinstname") != '1') {
-			if ($this->config->getValue("Contact", "hideinstname") == 'link')
+		if ($module->config->getValue("Contact", "hideinstname") != '1') {
+			if ($module->config->getValue("Contact", "hideinstname") == 'link')
 				$out .= "<br><br><a href=\"\">" . $data["Name"] . "</a><br>";
 			else
 				$out .= "<br><br>" . $data["Name"] . "<br>";
 		}
-		if ($this->config->getValue("Contact", "adradd"))
-			$out .= "<br>" . $this->config->getValue("Contact", "adradd");
+		if ($module->config->getValue("Contact", "adradd"))
+			$out .= "<br>" . $module->config->getValue("Contact", "adradd");
 		
 		$out .= "<br><br>" . $data["Strasse"];
 		$out .= "<br>" . $data["Plz"];
 		
 	  $out .= "<br><br></font></td></tr>\n";
 	}
-	$order = $this->config->getValue("Contact", "order");
-	$visible = $this->config->getValue("Contact", "visible");
-	$alias_contact = $this->config->getValue("Contact", "aliases");
+	$order = $module->config->getValue("Contact", "order");
+	$visible = $module->config->getValue("Contact", "visible");
+	$alias_contact = $module->config->getValue("Contact", "aliases");
 	foreach ($order as $position) {
 		if (!$visible[$position])
 			continue;
-		$data_field = $this->data_fields["contact"][$position];
+		$data_field = $module->data_fields["contact"][$position];
 		switch ($data_field) {
 			case 'Email' :
-				if ($separate || !$this->config->getValue('Contact', 'separatelinks')) {
+				if ($separate || !$module->config->getValue('Contact', 'separatelinks')) {
 					$out .= "<tr$attr_tr>";
 					$out .= "<td$attr_td>";
 					$out .= "<font$attr_fonttitle>";
@@ -515,7 +515,7 @@ function kontakt (&$this, $data, $separate = FALSE) {
 				}
 				break;
 			case 'Home' :
-				if ($separate || !$this->config->getValue('Contact', 'separatelinks')) {
+				if ($separate || !$module->config->getValue('Contact', 'separatelinks')) {
 					$out .= "<tr$attr_tr>";
 					$out .= "<td$attr_td>";
 					$out .= "<font$attr_fonttitle>";

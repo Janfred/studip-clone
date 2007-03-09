@@ -125,7 +125,7 @@ foreach ($visible_groups as $group_id => $group) {
 		if ($defaultadr) {
 			$query = "SELECT ui.user_id FROM statusgruppe_user su LEFT JOIN user_inst ui ";
 			$query .= "USING(user_id) WHERE su.statusgruppe_id = '$group_id' AND ";
-			$query .= "Institut_id = '$range_id'$query_order";
+			$query .= "Institut_id = '$range_id'";
 		}
 		else {
 			$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, aum.user_id, username, ";
@@ -160,6 +160,7 @@ foreach ($visible_groups as $group_id => $group) {
 				$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, ";
 				$query .= "aum.user_id, username, " . $_fullname_sql[$nameformat];
 				$query .= " AS fullname, aum.Nachname FROM auth_user_md5 aum LEFT JOIN ";
+				$query .= " user_info USING(user_id) LEFT JOIN ";
 				$query .= "user_inst ui USING(user_id) WHERE aum.user_id = '" . $db->f('user_id');
 				$query .= "' AND ".get_ext_vis_query()." AND externdefault = 1";
 				$db_defaultadr->query($query);
@@ -168,6 +169,7 @@ foreach ($visible_groups as $group_id => $group) {
 					$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, ";
 					$query .= "aum.user_id, username, " . $_fullname_sql[$nameformat];
 					$query .= " AS fullname, aum.Nachname FROM auth_user_md5 aum LEFT JOIN ";
+					$query .= " user_info USING(user_id) LEFT JOIN ";
 					$query .= "user_inst ui USING(user_id) WHERE aum.user_id = '" . $db->f('user_id');
 					$query .= "' AND ".get_ext_vis_query()." AND Institut_id = '$range_id'";
 					$db_defaultadr->query($query);
