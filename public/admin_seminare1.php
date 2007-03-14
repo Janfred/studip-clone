@@ -593,19 +593,22 @@ if ($s_send) {
 		if ($add_doz_x && $perm->have_studip_perm("dozent",$s_id)) {
 			$add_doz_id=get_userid($add_doz);
 			$group=select_group($temp_admin_seminare_start_time);
-			$query = "SELECT user_id FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$add_doz_id'";
-			$db2->query($query);
-			if ($db2->next_record())					//User schon da
-				$query = "UPDATE seminar_user SET status = \"dozent\" WHERE Seminar_id = '$s_id' AND user_id = '$add_doz_id'";
-			else								//User noch nicht da
-		   {		
             $next_pos = get_next_position("dozent",$s_id);  
-             
-            $query = "INSERT INTO seminar_user SET Seminar_id = '$s_id', user_id = '$add_doz_id', status = 'dozent', gruppe = '$group', admission_studiengang_id = '', mkdate = '".time()."', position = '$next_pos'";
-			
-         }
-         $db3->query($query);					//Dozent eintragen
-			$user_added=TRUE;
+			$query = "SELECT user_id, status FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$add_doz_id'";
+			$db2->query($query);
+			if ($db2->next_record()){ //User schon da
+				if($db2->f('status') != 'dozent'){
+					$query = "UPDATE seminar_user SET status = 'dozent', position='$next_pos' WHERE Seminar_id = '$s_id' AND user_id = '$add_doz_id'";
+				} else {
+					$query = '';
+				}
+			} else {						//User noch nicht da
+				$query = "INSERT INTO seminar_user SET Seminar_id = '$s_id', user_id = '$add_doz_id', status = 'dozent', gruppe = '$group', admission_studiengang_id = '', mkdate = '".time()."', position = '$next_pos'";
+			}
+			if($query){
+				$db3->query($query);					//Dozent eintragen
+				$user_added = TRUE;
+			}
 		}
 
 		//a Tutor was added
@@ -614,21 +617,22 @@ if ($s_send) {
 			$group=select_group($temp_admin_seminare_start_time);
 			$query = "SELECT user_id, status FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$add_tut_id'";
 			$db2->query($query);
-         $next_pos = get_next_position("tutor", $s_id);
+			$next_pos = get_next_position("tutor", $s_id);
 			if ($db2->next_record()) {
-				if ($db2->f("status") == "dozent")		// User schon da aber Dozent, also nix tun! (Selbstdegradierung ist zwar schoen, wollen wir aber nicht, sonst ist der Dozent futsch)
-				$query = '';
-			else							//User schon da aber was anderes (unterhalb Tutor), also Hochstufen.
-				$query = "UPDATE seminar_user SET status = \"tutor\", position='$next_pos' WHERE Seminar_id = '$s_id' AND user_id = '$add_tut_id'";
-			} else								//User noch nicht da
+				if ($db2->f("status") == "dozent"){		// User schon da aber Dozent, also nix tun! (Selbstdegradierung ist zwar schoen, wollen wir aber nicht, sonst ist der Dozent futsch)
+					$query = '';
+				} else {							//User schon da aber was anderes (unterhalb Tutor), also Hochstufen.
+					$query = "UPDATE seminar_user SET status = 'tutor', position='$next_pos' WHERE Seminar_id = '$s_id' AND user_id = '$add_tut_id'";
+				}
+			} else {								//User noch nicht da
 				$query = "INSERT INTO seminar_user SET Seminar_id = '$s_id', user_id = '$add_tut_id', status = 'tutor', gruppe = '$group', mkdate = '".time()."', position='$next_pos'";
+			}
 			if ($query) {
 				$db3->query($query);				//Tutor eintragen
-				$user_added=TRUE;
+				$user_added = TRUE;
 				$query = "DELETE FROM admission_seminar_user WHERE seminar_id = '$s_id' AND user_id = '$add_tut_id' ";
 				$db3->query($query);				//delete possible entrys in wainting list
-				if ($db3->affected_rows())
-					renumber_admission($s_id);
+				if ($db3->affected_rows()) renumber_admission($s_id);
 			}
 		}
 
