@@ -367,7 +367,7 @@ $STUDIP_AUTH_CONFIG_CAS = array("host" => "cas.studip.de",
 						                                "auth_user_md5.Vorname" => array("callback" => "getUserData", "map_args" => "givenname"),
 						                                "auth_user_md5.Nachname" => array("callback" => "getUserData", "map_args" => "surname"),
 						                                "auth_user_md5.Email" => array("callback" => "getUserData", "map_args" => "email"),
-						                                "auth_user_md5.perms" => array("callback" => "getUserData", "map_args" => "status"))        
+						                                "auth_user_md5.perms" => array("callback" => "getUserData", "map_args" => "status")));        
 $STUDIP_AUTH_CONFIG_LDAPREADER = array(	"host" => "localhost",
 										"base_dn" => "dc=studip,dc=de",
 										"protocol_version" => 3,
@@ -383,7 +383,7 @@ $STUDIP_AUTH_CONFIG_LDAPREADER = array(	"host" => "localhost",
 										"error_head" =>	"LDAP reader plugin",
 										"user_data_mapping" =>
 										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
-												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""));
+												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => "")));
 												
 $STUDIP_AUTH_CONFIG_LDAP = array(		"host" => "localhost",
 										"base_dn" => "dc=data-quest,dc=de",
@@ -398,7 +398,7 @@ $STUDIP_AUTH_CONFIG_LDAP = array(		"host" => "localhost",
 										"error_head" =>	"LDAP plugin",
 										"user_data_mapping" =>
 										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
-												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""));
+												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => "")));
 
 $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array(	"db_host" => "localhost",
 										"db_username" => "extern",
