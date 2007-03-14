@@ -493,25 +493,38 @@ function print_result(){
 			$caption_format->set_align("left");
 			$caption_format->set_align("vcenter");
 			$caption_format->set_bold();
-			$caption_format->set_text_wrap();
+			//$caption_format->set_text_wrap();
 			
 			$data_format =& $workbook->addformat();
 			$data_format->set_size(10);
 			$data_format->set_align("left");
 			$data_format->set_align("vcenter");
-	
+
+			$caption_format_merged =& $workbook->addformat();
+			$caption_format_merged->set_size(10);
+			$caption_format_merged->set_merge();
+			$caption_format_merged->set_align("left");
+			$caption_format_merged->set_align("vcenter");
+			$caption_format_merged->set_bold();
+
+
 			// Creating the first worksheet
 			$worksheet1 =& $workbook->addworksheet(_("Veranstaltungen"));
 			$worksheet1->set_row(0, 20);
-			$worksheet1->write_string(0, 0, _("Stud.IP Veranstaltungen") . ' - ' . $GLOBALS['UNI_NAME_CLEAN'] ,$head_format_merged);
+			$worksheet1->write_string(0, 0, _("Stud.IP Veranstaltungen") . ' - ' . $GLOBALS['UNI_NAME_CLEAN'] ,$head_format);
 			$worksheet1->set_row(1, 20);
 			$worksheet1->write_string(1, 0, sprintf(_(" %s Veranstaltungen gefunden %s, Gruppierung: %s"),count($sem_data),
 				(($this->sem_browse_data['sset']) ? _("(Suchergebnis)") : ""),
-				$this->group_by_fields[$this->sem_browse_data['group_by']]['name']), $head_format_merged);
+				$this->group_by_fields[$this->sem_browse_data['group_by']]['name']), $caption_format);
 			
-			$worksheet1->write_blank(0,1,$head_format_merged);
-			$worksheet1->write_blank(0,2,$head_format_merged);
-			$worksheet1->write_blank(0,3,$head_format_merged);
+			$worksheet1->write_blank(0,1,$head_format);
+			$worksheet1->write_blank(0,2,$head_format);
+			$worksheet1->write_blank(0,3,$head_format);
+			
+			$worksheet1->write_blank(1,1,$head_format);
+			$worksheet1->write_blank(1,2,$head_format);
+			$worksheet1->write_blank(1,3,$head_format);
+			
 			$worksheet1->set_column(0, 0, 70);
 			$worksheet1->set_column(0, 1, 25);
 			$worksheet1->set_column(0, 2, 25);
@@ -572,8 +585,10 @@ function print_result(){
 						$worksheet1->write_string($row, 2, $temp_turnus_string, $data_format);
 
 						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
+						$doz_position = array_keys($sem_data[$seminar_id]['position']);
 						if (is_array($doz_name)){
-							usort($doz_name, 'strnatcasecmp');
+							if(count($doz_position) != count($doz_name)) $doz_position = range(1, count($doz_name));
+							array_multisort($doz_position, $doz_name);
 							$worksheet1->write_string($row, 3, join(', ', $doz_name), $data_format);
 						}
 						++$row;
