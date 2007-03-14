@@ -408,6 +408,7 @@ class ExternSemBrowse extends SemBrowse {
 
 									if (is_array($doz_name)){
 										$lecturer_link["module"] = "Persondetails";
+										if(count($doz_position) != count($doz_uname)) $doz_position = range(1, count($doz_uname));
 										array_multisort($doz_position, $doz_name, $doz_uname); 
 										$i = 0;
 										foreach ($doz_name as $index => $value) {
