@@ -190,7 +190,9 @@ $form->cont( $table );
 /* ----------------------- */
 echo $form->createContent();
 /* ----------------------- */
-
+// Ende Darstellungsteil
+include ('lib/include/html_end.inc.php');
+page_close();
 
 
 # Define private functions ================================================== #
@@ -249,22 +251,4 @@ echo $form->createContent();
 }
 
 # ==================================================== end: private functions #
-
-
-### ================ >>
-$dbg = "<pre class=\"steelgroup6\" style=\"font-size:10pt\">"
-	. "<pre class=\"steelgroup3\" style=\"font-size:10pt\"><font color=\"purple\">"
-	. "Welcome to BugReport 0.95b"
-	. "</font></pre>";
-
-#echo $dbg;
-#echo $debug;
-#echo "start_item_id = {$tree->start_item_id}\n".
-#print_r( $_POST );
-#echo "mandatories:\n";
-#print_r( $GLOBALS["mandatories"] );
-#print_r( $tree->tree->tree_data );
-
-/* ------------------------------------------------------------------------- */
-
 ?>

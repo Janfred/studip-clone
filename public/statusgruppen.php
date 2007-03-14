@@ -245,7 +245,7 @@ if ($delete_id)
 	}
 	?>
 	<tr valign="top">
-     <td width="90%" NOWRAP class="blank">
+     <td width="90%" class="blank">
 			<?
 			PrintAktualStatusgruppen();
 			$anzahltext = PrintNonMembers($SessSemName[1]);
@@ -270,7 +270,7 @@ if ($delete_id)
 	</tr>
 	</table>
 	</td>
-	<td width="270" NOWRAP class="blank" align="center" valign="top">
+	<td width="270" class="blank" align="center" valign="top">
 
 	<?
 	$infobox = array	(
