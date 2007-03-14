@@ -367,7 +367,8 @@ $STUDIP_AUTH_CONFIG_CAS = array("host" => "cas.studip.de",
 						                                "auth_user_md5.Vorname" => array("callback" => "getUserData", "map_args" => "givenname"),
 						                                "auth_user_md5.Nachname" => array("callback" => "getUserData", "map_args" => "surname"),
 						                                "auth_user_md5.Email" => array("callback" => "getUserData", "map_args" => "email"),
-						                                "auth_user_md5.perms" => array("callback" => "getUserData", "map_args" => "status")));        
+						                                "auth_user_md5.perms" => array("callback" => "getUserData", "map_args" => "status")));
+														
 $STUDIP_AUTH_CONFIG_LDAPREADER = array(	"host" => "localhost",
 										"base_dn" => "dc=studip,dc=de",
 										"protocol_version" => 3,
@@ -385,6 +386,23 @@ $STUDIP_AUTH_CONFIG_LDAPREADER = array(	"host" => "localhost",
 										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
 												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => "")));
 												
+$STUDIP_AUTH_CONFIG_LDAPREADANDBIND = array("host" => "localhost",
+										"base_dn" => "dc=studip,dc=de",
+										"protocol_version" => 3,
+										"start_tls" => false,
+										"send_utf8_credentials" => false,
+										"decode_utf8_values" => false,
+										"bad_char_regex" => '/[^0-9_a-zA-Z]/',
+										"username_case_insensitiv" => false,
+										"username_attribute" => "uid",
+										"user_password_attribute" => "userpassword",
+										"reader_dn" => "uid=reader,dc=studip,dc=de",
+										"reader_password" => "<password>",
+										"error_head" =>	"LDAP read-and-bind plugin",
+										"user_data_mapping" =>
+										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
+												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => "")));
+
 $STUDIP_AUTH_CONFIG_LDAP = array(		"host" => "localhost",
 										"base_dn" => "dc=data-quest,dc=de",
 										"protocol_version" => 3,
