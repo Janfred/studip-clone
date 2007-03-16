@@ -46,6 +46,8 @@ require_once('lib/datei.inc.php');
 require_once('lib/evaluation/evaluation.config.php');
 require_once(EVAL_FILE_EVAL);
 require_once(EVAL_FILE_OBJECTDB);
+require_once('lib/export/export_tmp_gc.inc.php');
+
 // Start of Output
 
 $eval = new Evaluation($eval_id);
@@ -63,6 +65,9 @@ $staff_member = $perm->have_studip_perm("tutor",$SessSemName[1]);
 $has_template = 0;
 $db_template = new DB_Seminar();
 $question_type = "";
+
+$tmp_path_export = $GLOBALS['TMP_PATH']. '/export/';
+export_tmp_gc();
 
 if (!isset($ausgabeformat)) $ausgabeformat = 1;
 
@@ -125,7 +130,7 @@ function do_graph_template() {
 }
 
 function do_graph($data, $evalquestion_id) {
-	global $TMP_PATH, $auth, $PATH_EXPORT;
+	global $tmp_path_export, $auth, $PATH_EXPORT;
 
 	$type = do_graph_template();
 
@@ -162,7 +167,7 @@ function do_graph($data, $evalquestion_id) {
 
         $graph->SetDataType("text-data");
         $graph->SetFileFormat($GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT']);
-        $graph->SetOutputFile($TMP_PATH."/export/evalsum".$evalquestion_id.$auth->auth["uid"].".".$GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT']);
+        $graph->SetOutputFile($tmp_path_export."/evalsum".$evalquestion_id.$auth->auth["uid"].".".$GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT']);
         $graph->SetIsInline(true);
         $graph->SetDataValues($data);
         $graph->SetPlotType($type);
