@@ -95,6 +95,8 @@ include ('lib/include/header.php');	 //hier wird der "Kopf" nachgeladen
 $i_page = 'new_user_md5.php';
 include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
 
+echo "\n" . cssClassSwitcher::GetHoverJSFunction() . "\n";
+
 ?>
 <script type="text/javascript">
 			function invert_selection(){
