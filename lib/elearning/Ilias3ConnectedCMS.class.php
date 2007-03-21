@@ -182,7 +182,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		if ($encrypt_passwords == "md5")
 			echo " checked";
 		echo ">&nbsp;" . _("ILIAS-Passw&ouml;rter verschl&uuml;sselt speichern.");
-		echo "<img  src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" " . tooltip(_("Wählen Sie diese Option, wenn die ILIAS-Passw&ouml;rter der zugeordneten Accounts verschl&uuml;sselt in der Stud.IP-Datenbank abgelegt werden sollen."), TRUE, TRUE) . ">"	;
+		echo "<img  src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" " . tooltip(_("Wählen Sie diese Option, wenn die ILIAS-Passwörter der zugeordneten Accounts verschlüsselt in der Stud.IP-Datenbank abgelegt werden sollen."), TRUE, TRUE) . ">"	;
 		echo "</td></tr><tr><td></td><td><font size=\"-1\">";
 		echo "<br>\n";
 		echo "<br>\n";
