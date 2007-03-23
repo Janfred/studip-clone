@@ -113,9 +113,8 @@ function getToplist($rubrik, $query, $type="count") {
 <body>
 <?
 
-$_sem_status = array();
 if ($sem_portal["bereich"] != "all") {
-
+	$_sem_status = array();
 	foreach ($SEM_CLASS as $key => $value){
 		if ($key == $sem_portal["bereich"]){
 			foreach($SEM_TYPE as $type_key => $type_value){
@@ -131,6 +130,8 @@ if ($sem_portal["bereich"] != "all") {
 	$db->query($query);
 	if ($db->next_record())
 		$anzahl_seminare_class = $db->f("count");
+} else {
+	$_sem_status = false;
 }
 
 
