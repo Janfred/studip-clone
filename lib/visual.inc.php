@@ -1176,7 +1176,7 @@ function print_infobox($content, $picture = '', $html = FALSE) {
     $picture = sprintf('%simages/%s', $GLOBALS['ASSETS_URL'], $picture);
 
   # prefix icons
-  foreach ($content as $i => $value) {
+  foreach ((array)$content as $i => $value) {
     if (!$value) continue;
     if (is_array($content[$i]['eintrag']))
     foreach ($content[$i]['eintrag'] as $j => $eintrag) {

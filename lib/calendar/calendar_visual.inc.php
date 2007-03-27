@@ -175,7 +175,7 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 		else {
 			$day_event_row[0] = "<td class=\"precol1w\" width=\"".($width_precol_1 + $width_precol_2)."\" colspan=\"2\">";
 			$day_event_row[0] .= "<a class=\"calhead\" href=\"$PHP_SELF?cmd=edit&atime=";
-			$day_event_row[0] .= $day_obj->getTs() . '&devent=1\">' . _("Tag") . "</a></td>";
+			$day_event_row[0] .= $day_obj->getTs() . '&devent=1">' . _("Tag") . "</a></td>";
 			$day_event_row[0] .= "<td height=\"40\" class=\"$style_cell\" width=\"".(100 - $width_precol_1 - $width_precol_2)."%\"";
 	  }
 	}

@@ -33,7 +33,7 @@ class DBConnection
 	{
 		static $connection = Array(); // static: -> save connection handle across multiple calls
 		$key = md5($db_sql->Host.$db_sql->User.$db_sql->Password.$db_sql->Database);
-		if (!$connection[$key])
+		if (empty($connection[$key]))
 		{
 			$connection[$key]=mysql_connect($db_sql->Host, $db_sql->User, $db_sql->Password, true); // connect to db with the credentials from the db_sql-object
 			
@@ -46,7 +46,7 @@ class DBConnection
 				$db_sql->halt("cannot use database ".$db_sql->Database);
 				return 0;
 			}
-		} 
+		}
 		return $connection[$key];
 	}
 }
