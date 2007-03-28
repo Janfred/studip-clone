@@ -108,7 +108,7 @@ $reiter->create($structure, $view);
      if ($view=="main") {
 	$developer[] = array('Marco Bohnsack', 'bohnsack@data-quest.de', _("(Projektmanagement, Hilfe)"));
 	$developer[] = array('Torsten Heinrich', 'to.heinrich@fh-osnabrueck.de', _("(...)"));
-	$developer[] = array('Cornelius Hempel', 'cornelius.hempel@studip.uni-halle.de', _("(Fehlersuche)"));
+	//$developer[] = array('Cornelius Hempel', 'cornelius.hempel@studip.uni-halle.de', _("(Fehlersuche)"));
 	$developer[] = array('Cornelis Kater', 'info@ckater.de', _("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)"));
 	$developer[] = array('Hartje Kriete', 'kriete@math.uni-goettingen.de', _("(&Uuml;bersetzung, Internationalisierung)"));
 	$developer[] = array('Jan Kulmann', 'jankul@tzi.de', _("(Evaluationen)"));

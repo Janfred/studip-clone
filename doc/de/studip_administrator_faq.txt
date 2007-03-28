@@ -8,11 +8,11 @@ zugeordnet werden.
 
 Q: Wie lege ich ein bestimmte Sorte von Veranstaltungen an ?
 
-A: Dies erfolgt innerhalb der Datei config.php im Abschnitt $SEM_TYPE & $SEM_CLASS.
+A: Dies erfolgt innerhalb der Datei config/config.inc.php im Abschnitt $SEM_TYPE & $SEM_CLASS.
 
 Q: Wie lege ich fest, welche Dateitypen hochgeladen werden können?
 
-A: Dies erfolgt innerhalb der Datei config.inc.php mit hilfe des
+A: Dies erfolgt innerhalb der Datei config/config.inc.php mit hilfe des
 Arrays $UPLOAD_TYPES getrennt für die einzelnen Veranstaltungstypen und Rechtestufen
 
 Q: Warum bekommt der User, den ich per Hand angelegt habe, keine Bestätigungsmail ?

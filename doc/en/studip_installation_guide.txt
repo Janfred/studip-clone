@@ -1,4 +1,5 @@
-Stud.IP Installation Guide
+!!deprecated!! Stud.IP Installation Guide !!deprecated!!
+
 Version 1.2 (based on Stud.IP 1.0 - some details may differ)
 
 Contents:
