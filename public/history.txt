@@ -1,3 +1,15 @@
+__27.03.2007 v 1.5.0__
+- PmWiki läßt sich jetzt über die Ilias-Schnittstelle anbinden
+- Anzeige des Skype Namen und Links von Usern auf der Homepage
+- Erweiterung SCM-Seite in Seminaren
+- die Reihenfolge von  Dozenten in Seminaren läßt sich jetzt ändern
+- bei Anmeldeverfahren lassen sich die Wartelisten deaktivieren
+- Nicht abonnieren, sondern nur in Stundenplan eintragen nun möglich
+- neue user management tools für Admins
+- Einführung eines abstrakten Interfaces für einen Template-Mechanismus
+- Umstellung der Verzeichnisstruktur und Anpassungen an PHP5 
+- weitere Detailverbesserungen und Bugfixes
+
 __25.08.2006 v 1.4.0__
 - Sichtbarkeit von NutzerInnen
 - Neues Hilfe-System basierend auf einer zentralen Wiki-Seite
