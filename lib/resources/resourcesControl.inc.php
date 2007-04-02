@@ -73,7 +73,8 @@ if ($view == "edit_request") {
 	}
 
 	$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
-	page_close(NULL);
+	//hmm, zu früh an dieser Stelle. Notwendig?
+	//page_close(NULL);
 }
 
 //handle values

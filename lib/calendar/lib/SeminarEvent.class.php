@@ -167,9 +167,10 @@ class SeminarEvent extends Event {
 	}
 
 	function getCategoryStyle ($image_size = 'small') {
-		global $TERMIN_TYP, $CANONICAL_RELATIVE_PATH_STUDIP;
+		global $TERMIN_TYP;
 
 		$index = $this->getProperty('STUDIP_CATEGORY');
+		if($index > 7) $index = 7;
 		return array('image' => $image_size == 'small' ?
 					$GLOBALS['ASSETS_URL'].'images/calendar/category_sem'.$index.'_small.jpg' :
 					$GLOBALS['ASSETS_URL'].'images/calendar/category_sem'.$index.'.jpg',

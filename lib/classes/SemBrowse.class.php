@@ -188,6 +188,10 @@ class SemBrowse {
 	}
 
 	function get_sem_range($item_id, $with_kids){
+		if (!is_object($this->sem_tree)){
+			$sem_status = (is_array($this->sem_browse_data['sem_status'])) ? $this->sem_browse_data['sem_status'] : false;
+			$this->sem_tree = new StudipSemTreeViewSimple($this->sem_browse_data["start_item_id"], $this->sem_number, $sem_status, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM'))));
+		}
 		$sem_ids = $this->sem_tree->tree->getSemIds($item_id,$with_kids);
 		if (is_array($sem_ids)){
 			$this->sem_browse_data['search_result'] = array_flip($sem_ids);

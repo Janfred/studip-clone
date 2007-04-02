@@ -193,7 +193,7 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 				. ">" . _("Nur meine Veranstaltungstermine") . "</option>\n"
 				. "<option value=\"ALL\"" . ($extype == 'ALL' ? 'selected="selected"' : '')
 				. ">" . _("Alle Termine") . "</option>\n</select>"
-				. "&nbsp;&nbsp;&nbsp;<img src=\"" . $GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"]
+				. "&nbsp;&nbsp;&nbsp;<img src=\""
 				. $GLOBALS['ASSETS_URL']."images/info.gif\"" . tooltip($tooltip, TRUE, TRUE) . ">\n"
 				. "<br>&nbsp;\n<div><font size=\"-1\">"
 				. _("Geben Sie an, aus welchem Zeitbereich Termine exportiert werden sollen:")

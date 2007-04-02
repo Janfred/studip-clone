@@ -62,7 +62,7 @@ $GLOBALS['_views']["SEM_TREE_GET_NUM_LONELY_SEM"] = array("query" => "SELECT COU
 										AND a.fakultaets_id LIKE ? AND NOT ISNULL(b.seminar_id) GROUP BY sem_number,sem_number_end § ");
 $GLOBALS['_views']["SEM_TREE_GET_LONELY_FAK"] = array("query" => "SELECT Institut_id,a.Name FROM Institute a LEFT JOIN sem_tree b ON(studip_object_id=Institut_id) WHERE Institut_id = fakultaets_id AND ISNULL(studip_object_id) ORDER BY a.Name");
 $GLOBALS['_views']["SEM_TREE_UPD_PRIO"] = array("query" => "UPDATE sem_tree SET priority=§ WHERE sem_tree_id=?");
-$GLOBALS['_views']["SEM_TREE_INS_ITEM"] = array("query" => "INSERT INTO sem_tree (sem_tree_id,parent_id,name,priority,info,studip_object_id) VALUES (?,?,?,§,?,§)");
+$GLOBALS['_views']["SEM_TREE_INS_ITEM"] = array("query" => "INSERT INTO sem_tree (sem_tree_id,parent_id,name,priority,info,studip_object_id) VALUES (?,?,?,?,?,?)");
 $GLOBALS['_views']["SEM_TREE_UPD_ITEM"] = array("query" => "UPDATE sem_tree SET name=?, info=? WHERE sem_tree_id=?");
 $GLOBALS['_views']["SEM_TREE_DEL_ITEM"] = array("query" => "DELETE FROM sem_tree WHERE sem_tree_id IN (&)");
 $GLOBALS['_views']["SEM_TREE_MOVE_ITEM"] = array("query" => "UPDATE sem_tree SET parent_id=?, priority=§ WHERE sem_tree_id=?");
