@@ -320,8 +320,8 @@ class StudipSemSearch {
 			$range_object =& RangeTreeObject::GetInstance($_REQUEST[$this->form_name . "_range_choose"]);
 			$this->view->params[0] = $range_object->getAllObjectKids();
 			$this->view->params[0][] = $range_object->item_data['studip_object_id'];
-			$this->view->params[1] = $clause . ($this->visible_only ? " AND c.visible=1 " : "");
-			$this->view->params[2] = '';
+			$this->view->params[1] = ($this->visible_only ? " AND c.visible=1 " : "");
+			$this->view->params[2] = $clause;
 			$snap = new DbSnapshot($this->view->get_query("view:SEM_INST_GET_SEM"));
 			if ($snap->numRows){
 				$clause = " AND c.seminar_id IN('" . join("','",$snap->getRows("Seminar_id")) ."')" . $clause;
