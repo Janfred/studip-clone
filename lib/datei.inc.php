@@ -871,7 +871,7 @@ function upload($the_file, $refresh = false) {
 		$newfile = "$UPLOAD_PATH/$dokument_id";
 
 		//Kopieren und Fehlermeldung
-		if (!@copy($the_file,$newfile)) {
+		if (!@move_uploaded_file($the_file,$newfile)) {
 			$msg.= "error§" . _("Datei&uuml;bertragung gescheitert!");
 			return FALSE;
 		} else {

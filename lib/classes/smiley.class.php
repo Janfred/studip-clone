@@ -280,7 +280,7 @@ class smiley {
 		}
 
 		//na dann kopieren wir mal...
-		$uploaddir=$GLOBALS['SMILE_PATH'];
+		$uploaddir= $GLOBALS['ABSOLUTE_PATH_STUDIP'] .'/'. $GLOBALS['SMILE_PATH'];
 		$newfile = $uploaddir . '/' . $img_name;
 
 		$smiley_id = 0;
@@ -292,7 +292,7 @@ class smiley {
 				return false;
 			}
 		}
-		if(!@copy($GLOBALS['imgfile'],$newfile)) {
+		if(!move_uploaded_file($GLOBALS['imgfile'],$newfile)) {
 			$this->msg .= 'error§' . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!"). '§';
 			$this->error = true;
 			return false;

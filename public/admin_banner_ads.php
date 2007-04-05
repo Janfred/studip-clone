@@ -72,11 +72,11 @@ function imaging($img, $img_size, $img_name) {
 	}
 
 	//na dann kopieren wir mal...
-	$uploaddir = 'pictures/banner';
+	$uploaddir = $GLOBALS['ABSOLUTE_PATH_STUDIP'] . '/pictures/banner';
 	$md5hash = md5($img_name+time());
 	$newfile = $uploaddir . '/' . $md5hash . '.' . $ext;
 	$banner_data["banner_path"] = $md5hash . '.' . $ext;
-	if(!@copy($img,$newfile)) {
+	if(!@move_uploaded_file($img,$newfile)) {
 		$msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
 		return $msg;
 	} else {

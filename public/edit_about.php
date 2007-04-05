@@ -179,26 +179,26 @@ function imaging($img,$img_size,$img_name) {
 	}
 	//na dann kopieren wir mal...
 	$newfile =  $GLOBALS['ABSOLUTE_PATH_USER_PIC'] . "/" . $this->auth_user["user_id"].".jpg";
-	if(!@copy($img,$newfile)) {
+	if(!@move_uploaded_file($img,$newfile)) {
 		$this->msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
 		return;
 	} else {
-		list($width, $height, $img_type, ) = getimagesize($img);
+		list($width, $height, $img_type, ) = getimagesize($newfile);
 		if (extension_loaded('gd')){
 			switch ($ext) {  //original Bild einlesen
 				case 'gif': //GIF
 				if (function_exists('ImageCreateFromGIF')){
-					$img_org = @ImageCreateFromGIF($img);
+					$img_org = @ImageCreateFromGIF($newfile);
 				}
 				break;
 				case 'jpg': //JPG
 				if (function_exists('ImageCreateFromJPEG')){
-					$img_org = @ImageCreateFromJPEG($img);
+					$img_org = @ImageCreateFromJPEG($newfile);
 				}
 				break;
 				case 'png': //PNG
 				if (function_exists('ImageCreateFromPNG')){
-					$img_org = @ImageCreateFromPNG($img);
+					$img_org = @ImageCreateFromPNG($newfile);
 				}
 				break;
 				default:
@@ -765,7 +765,7 @@ if(check_ticket($studipticket)){
 	//ein Bild wurde hochgeladen
 	if ($cmd == "copy")
 	 {
-		$my_about->imaging($imgfile,$imgfile_size,$imgfile_name);
+		$my_about->imaging($_FILES['imgfile']['tmp_name'],$_FILES['imgfile']['size'],$_FILES['imgfile']['name']);
 		}
 
 	//Veränderungen an Studiengängen
