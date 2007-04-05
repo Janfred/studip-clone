@@ -1039,14 +1039,16 @@ function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = 
 				(date("i", $db->f("date")) == $val["start_minute"]) &&
 				(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
 				(date("i", $db->f("end_time")) == $val["end_minute"])){
-					foreach ($term_data['turnus_data'] as $val2){
-						if ($val['start_stunde'] == $val2['start_stunde']
-						&& 	$val['start_minute'] == $val2['start_minute']
-						&& 	$val['end_stunde'] == $val2['end_stunde']
-						&& 	$val['end_minute'] == $val2['end_minute']
-						&& 	$val['day'] == $val2['day']){
-							$saved_dates[md5($db->f('date').$db->f('end_time'))] = $db->f("termin_id");
-							break;
+					if(is_array($term_data['turnus_data'])){
+						foreach ($term_data['turnus_data'] as $val2){
+							if ($val['start_stunde'] == $val2['start_stunde']
+							&& 	$val['start_minute'] == $val2['start_minute']
+							&& 	$val['end_stunde'] == $val2['end_stunde']
+							&& 	$val['end_minute'] == $val2['end_minute']
+							&& 	$val['day'] == $val2['day']){
+								$saved_dates[md5($db->f('date').$db->f('end_time'))] = $db->f("termin_id");
+								break;
+							}
 						}
 					}
 					if ($saved_dates[md5($db->f('date').$db->f('end_time'))]) break;
