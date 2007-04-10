@@ -196,10 +196,10 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
 			$infobox = array	(
 						array  ("kategorie"  => _("Hinweise:"),
 								"eintrag" => array	(
-									array (	"icon" => "pictures/ausruf_small.gif",
+									array (	"icon" => "ausruf_small.gif",
 													"text"  => _("Wählen Sie die Institute, in deren Veranstaltungen das Plugin standardmäßig eingeschaltet werden soll.")
 									),
-									array (	"icon" => "pictures/ausruf_small.gif",
+									array (	"icon" => "ausruf_small.gif",
 													"text"  => _("Eine Mehrfachauswahl ist durch Drücken der Strg-Taste möglich.")
 									)
 								)
