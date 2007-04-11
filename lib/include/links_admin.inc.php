@@ -167,11 +167,11 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$links_admin_data["view"]=$view;
 
 	if ($srch_send) {
-		$links_admin_data["srch_sem"]=$srch_sem;
-		$links_admin_data["srch_doz"]=$srch_doz;
-		$links_admin_data["srch_inst"]=$srch_inst;
-		$links_admin_data["srch_fak"]=$srch_fak;
-		$links_admin_data["srch_exp"]=$srch_exp;
+		$links_admin_data["srch_sem"]= trim($srch_sem);
+		$links_admin_data["srch_doz"]= trim($srch_doz);
+		$links_admin_data["srch_inst"]= trim($srch_inst);
+		$links_admin_data["srch_fak"]= trim($srch_fak);
+		$links_admin_data["srch_exp"]= trim($srch_exp);
 		$links_admin_data["select_old"]=$select_old;
 		$links_admin_data["select_inactive"]=$select_inactive;
 		$links_admin_data["srch_on"]=TRUE;
