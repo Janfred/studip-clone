@@ -629,23 +629,24 @@ if ($form == 5) {
 	}
 
 	//Datum fuer ersten Termin umwandeln. Checken muessen wir es auch leider direkt hier, da wir es sonst nicht umwandeln duerfen
-	if (($jahr>0) && ($jahr<100))
-		 $jahr=$jahr+2000;
-
-	if ($monat == _("mm")) $monat=0;
-	if ($tag == _("tt")) $tag=0;
-	if ($jahr == _("jjjj")) $jahr=0;
-	if (!checkdate((int)$monat, (int)$tag, (int)$jahr))
+	if ($sem_create_data["term_start_woche"] == -1 && $sem_create_data["term_art"] == 0){
+		if (($jahr>0) && ($jahr<100)) $jahr=$jahr+2000;
+		
+		if ($monat == _("mm")) $monat=0;
+		if ($tag == _("tt")) $tag=0;
+		if ($jahr == _("jjjj")) $jahr=0;
+		if (!checkdate((int)$monat, (int)$tag, (int)$jahr))
 		{
-		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum ein!")."§";
-		$sem_create_data["sem_start_termin"] = -1;
+			$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum ein!")."§";
+			$sem_create_data["sem_start_termin"] = -1;
 		}
-	else {
-	 	$sem_create_data["sem_start_termin"] = mktime((int)$stunde,(int)$minute,0,(int)$monat,(int)$tag,(int)$jahr);
-		$sem_create_data["metadata_termin"]["start_termin"] = $sem_create_data["sem_start_termin"];
-		//check overlaps...
-		if ($RESOURCES_ENABLE) {
-			$checkResult = $resAssign->changeMetaAssigns($sem_create_data["metadata_termin"], $sem_create_data["sem_start_time"], $sem_create_data["sem_duration_time"],TRUE);
+		else {
+			$sem_create_data["sem_start_termin"] = mktime((int)$stunde,(int)$minute,0,(int)$monat,(int)$tag,(int)$jahr);
+			$sem_create_data["metadata_termin"]["start_termin"] = $sem_create_data["sem_start_termin"];
+			//check overlaps...
+			if ($RESOURCES_ENABLE) {
+				$checkResult = $resAssign->changeMetaAssigns($sem_create_data["metadata_termin"], $sem_create_data["sem_start_time"], $sem_create_data["sem_duration_time"],TRUE);
+			}
 		}
 	}
 }
