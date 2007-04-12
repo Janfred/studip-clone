@@ -91,7 +91,7 @@ $GLOBALS['_views']["SEM_GET_INST"] = array("query" => "SELECT Institut_id FROM s
 $GLOBALS['_views']["SEM_TREE_GET_FAK"] = array("query" => "SELECT sem_tree_id FROM Institute LEFT JOIN sem_tree ON (fakultaets_id=studip_object_id) WHERE Institut_id=? AND NOT ISNULL(sem_tree_id)");
 
 
-$GLOBALS['_views']["SEM_INST_GET_SEM"] = array("query" => "SELECT c.Seminar_id, c.visible, " . $GLOBALS['_views']['sem_number_sql'] . " AS sem_number , " . $GLOBALS['_views']['sem_number_end_sql'] . " AS sem_number_end FROM seminar_inst a LEFT JOIN seminare c USING (seminar_id) WHERE a.Institut_id IN (&) AND c.Seminar_id IS NOT NULL
+$GLOBALS['_views']["SEM_INST_GET_SEM"] = array("query" => "SELECT c.Seminar_id, " . $GLOBALS['_views']['sem_number_sql'] . " AS sem_number , " . $GLOBALS['_views']['sem_number_end_sql'] . " AS sem_number_end FROM seminar_inst a LEFT JOIN seminare c USING (seminar_id) WHERE a.Institut_id IN (&) AND c.Seminar_id IS NOT NULL
 												§ § ");
 
 $GLOBALS['_views']["SEM_USER_GET_SEM"] = array("query" =>"SELECT b.Seminar_id,b.Name, " . $GLOBALS['_views']['sem_number_sql'] . " AS sem_number , " . $GLOBALS['_views']['sem_number_end_sql'] . " AS sem_number_end FROM seminar_user a LEFT JOIN seminare b USING(Seminar_id)
