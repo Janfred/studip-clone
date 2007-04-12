@@ -473,9 +473,9 @@ if ($form == 3)
 
 			//erster Termin wird gepeichert, wird fuer spaetere Checks benoetigt
 			if ((($sem_create_data["term_first_date"] == 0)
-				|| ($sem_create_data["term_first_date"] >mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i])))
-				&& (mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]) > 0)) {
-				$sem_create_data["term_first_date"]=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+				|| ($sem_create_data["term_first_date"] >mktime((int)$sem_create_data["term_start_stunde"][$i], (int)$sem_create_data["term_start_minute"][$i], 0, (int)$sem_create_data["term_monat"][$i], (int)$sem_create_data["term_tag"][$i], (int)$sem_create_data["term_jahr"][$i])))
+				&& (mktime((int)$sem_create_data["term_start_stunde"][$i], (int)$sem_create_data["term_start_minute"][$i], 0, (int)$sem_create_data["term_monat"][$i], (int)$sem_create_data["term_tag"][$i], (int)$sem_create_data["term_jahr"][$i]) > 0)) {
+				$sem_create_data["term_first_date"]=mktime((int)$sem_create_data["term_start_stunde"][$i], (int)$sem_create_data["term_start_minute"][$i], 0, (int)$sem_create_data["term_monat"][$i], (int)$sem_create_data["term_tag"][$i], (int)$sem_create_data["term_jahr"][$i]);
 			}
 		}
 	}
@@ -635,14 +635,13 @@ if ($form == 5) {
 	if ($monat == _("mm")) $monat=0;
 	if ($tag == _("tt")) $tag=0;
 	if ($jahr == _("jjjj")) $jahr=0;
-
-	if ((!checkdate((int)$monat, (int)$tag, (int)$jahr)) && ($monat) && ($tag) && ($jahr))
+	if (!checkdate((int)$monat, (int)$tag, (int)$jahr))
 		{
 		$errormsg=$errormsg."error§"._("Bitte geben Sie ein g&uuml;ltiges Datum ein!")."§";
 		$sem_create_data["sem_start_termin"] = -1;
 		}
 	else {
-	 	$sem_create_data["sem_start_termin"] = mktime($stunde,$minute,0,$monat,$tag,$jahr);
+	 	$sem_create_data["sem_start_termin"] = mktime((int)$stunde,(int)$minute,0,(int)$monat,(int)$tag,(int)$jahr);
 		$sem_create_data["metadata_termin"]["start_termin"] = $sem_create_data["sem_start_termin"];
 		//check overlaps...
 		if ($RESOURCES_ENABLE) {
@@ -974,7 +973,7 @@ if (($form == 3) && ($jump_next_x))
 							$errormsg=$errormsg."error§"._("Sie haben eine ung&uuml;ltige Zeit eingegeben. Bitte korrigieren Sie dies!")."§";
 						$just_informed3=TRUE;
 						}
-				if (mktime($sem_create_data["term_turnus_start_stunde"][$i], $sem_create_data["term_turnus_start_minute"][$i], 0, 1, 1, 2001) >= mktime($sem_create_data["term_turnus_end_stunde"][$i], $sem_create_data["term_turnus_end_minute"][$i], 0, 1, 1, 2001))
+				if (mktime((int)$sem_create_data["term_turnus_start_stunde"][$i], (int)$sem_create_data["term_turnus_start_minute"][$i], 0, 1, 1, 2001) >= mktime((int)$sem_create_data["term_turnus_end_stunde"][$i], (int)$sem_create_data["term_turnus_end_minute"][$i], 0, 1, 1, 2001))
 					if ((!$just_informed5) && (!$just_informed)) {
 						$errormsg=$errormsg."error§"._("Der Endzeitpunkt eines regul&auml;ren Termins muss nach dem jeweiligen Startzeitpunkt liegen!")."§";
 						$just_informed5=TRUE;
@@ -1010,7 +1009,7 @@ if (($form == 3) && ($jump_next_x))
 							$errormsg=$errormsg."error§"._("Sie haben eine ung&uuml;ltige Zeit eingegeben, bitte korrigieren Sie dies!")."§";
 						$just_informed3=TRUE;
 						}
-				if (mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, 1, 1, 2001) > mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, 1, 1, 2001))
+				if (mktime((int)$sem_create_data["term_start_stunde"][$i], (int)$sem_create_data["term_start_minute"][$i], 0, 1, 1, 2001) > mktime((int)$sem_create_data["term_end_stunde"][$i], (int)$sem_create_data["term_end_minute"][$i], 0, 1, 1, 2001))
 					if ((!$just_informed5) && (!$just_informed)) {
 						$errormsg=$errormsg."error§"._("Der Endzeitpunkt der Termine muss nach dem jeweiligen Startzeitpunkt liegen!")."§";
 						$just_informed5=TRUE;
@@ -1089,8 +1088,8 @@ if (($form == 4) && ($jump_next_x)) {
 		for ($i=0; $i<$sem_create_data["term_count"]; $i++) {
 			//check overlaps
 			if ((!$errormsg) && ($RESOURCES_ENABLE)) {
-				$tmp_chk_date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
-				$tmp_chk_end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+				$tmp_chk_date=mktime((int)$sem_create_data["term_start_stunde"][$i], (int)$sem_create_data["term_start_minute"][$i], 0, (int)$sem_create_data["term_monat"][$i], (int)$sem_create_data["term_tag"][$i], (int)$sem_create_data["term_jahr"][$i]);
+				$tmp_chk_end_time=mktime((int)$sem_create_data["term_end_stunde"][$i], (int)$sem_create_data["term_end_minute"][$i], 0, (int)$sem_create_data["term_monat"][$i], (int)$sem_create_data["term_tag"][$i], (int)$sem_create_data["term_jahr"][$i]);
 				$checkResult = array_merge((array)$checkResult, (array)$resAssign->insertDateAssign(FALSE, $sem_create_data["term_resource_id"][$i], $tmp_chk_date, $tmp_chk_end_time, TRUE));
 			}
 		}
@@ -1528,11 +1527,11 @@ if (($form == 6) && ($jump_next_x))
 			//Eintrag der zugelassen Studiengänge
 			if ($sem_create_data["sem_admission"]) {
 				if (is_array($sem_create_data["sem_studg"]))
-					foreach($sem_create_data["sem_studg"] as $key=>$val)
-						if ($val["ratio"]) {
-							$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', '$key', '".$val["ratio"]."' )";
-							$db3->query($query);// Studiengang eintragen
-						}
+				foreach($sem_create_data["sem_studg"] as $key=>$val)
+				if ($val["ratio"]) {
+					$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', '$key', '".$val["ratio"]."' )";
+					$db3->query($query);// Studiengang eintragen
+				}
 				if ($sem_create_data["sem_all_ratio"]) {
 					$query = "INSERT INTO admission_seminar_studiengang VALUES('".$sem_create_data["sem_id"]."', 'all', '".$sem_create_data["sem_all_ratio"]."' )";
 					$db3->query($query);// Studiengang eintragen
@@ -1597,8 +1596,8 @@ if (($form == 6) && ($jump_next_x))
 					if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i] !== '') && ($sem_create_data["term_end_stunde"][$i] !== '')) {
 						$termin_id=md5(uniqid($hash_secret));
 						$mkdate=time();
-						$date=mktime($sem_create_data["term_start_stunde"][$i], $sem_create_data["term_start_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
-						$end_time=mktime($sem_create_data["term_end_stunde"][$i], $sem_create_data["term_end_minute"][$i], 0, $sem_create_data["term_monat"][$i], $sem_create_data["term_tag"][$i], $sem_create_data["term_jahr"][$i]);
+						$date=mktime((int)$sem_create_data["term_start_stunde"][$i], (int)$sem_create_data["term_start_minute"][$i], 0, (int)$sem_create_data["term_monat"][$i], (int)$sem_create_data["term_tag"][$i], (int)$sem_create_data["term_jahr"][$i]);
+						$end_time=mktime((int)$sem_create_data["term_end_stunde"][$i], (int)$sem_create_data["term_end_minute"][$i], 0, (int)$sem_create_data["term_monat"][$i], (int)$sem_create_data["term_tag"][$i], (int)$sem_create_data["term_jahr"][$i]);
 
 						//if we have a resource_id, we flush the room name
 						if ($sem_create_data["term_resource_id"][$i])
