@@ -102,14 +102,7 @@ INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, 
 -- Daten für Tabelle `semester_data`
 -- 
 
-INSERT INTO `semester_data` (`semester_id`, `name`, `description`, `semester_token`, `beginn`, `ende`, `vorles_beginn`, `vorles_ende`) VALUES ('cc448ebc6edf11b180d288629f5acdc3', 'SS 2006', '', '', 1143842400, 1159653599, 1144706400, 1153000799);
-INSERT INTO `semester_data` (`semester_id`, `name`, `description`, `semester_token`, `beginn`, `ende`, `vorles_beginn`, `vorles_ende`) VALUES ('e0d5482e40c7994b67ba521080449f9a', 'WS 2006/07', '', '', 1159653600, 1175378399, 1160949600, 1171234799);
-
--- 
--- Daten für Tabelle `semester_holiday`
--- 
-
-INSERT INTO `semester_holiday` (`holiday_id`, `semester_id`, `name`, `description`, `beginn`, `ende`) VALUES ('c121c20d8bfb2381274fad682f401999', '1', 'Weihnachtsferien 2006/07', '', 1166742000, 1168210799);
+INSERT INTO `semester_data` (`semester_id`, `name`, `description`, `semester_token`, `beginn`, `ende`, `vorles_beginn`, `vorles_ende`) VALUES ('cc448ebc6edf11b180d288629f5acdc3', 'SS 2007', '', '', 1175378400, 1191189599, 1176328800, 1184536799);
 
 -- 
 -- Daten für Tabelle `log_actions`
