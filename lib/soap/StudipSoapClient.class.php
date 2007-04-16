@@ -25,13 +25,13 @@ class StudipSoapClient
 		{
 			$this->faultstring = $result["faultstring"];
 			if ($this->faultstring != "Session not valid")
-				$this->error .= "<b>" . sprintf(_("Soap-Fehler, Funktion \"%s\":"), $method) . "</b> " . $result["faultstring"] . " (" . $result["faultcode"] . ")<br>"; //.implode($params,"-");
+				$this->error .= "<b>" . sprintf(_("SOAP-Fehler, Funktion \"%s\":"), $method) . "</b> " . $result["faultstring"] . " (" . $result["faultcode"] . ")<br>"; //.implode($params,"-");
 		}
 		else 
 		{
 			$err = $this->soap_client->getError();
 			if ($err)
-				$this->error .= "<b>" . sprintf(_("Soap-Error, Funktion \"%s\":"), $method) . "</b> " . $err . "<br>"; //.implode($params,"-") . htmlspecialchars($this->soap_client->response, ENT_QUOTES);
+				$this->error .= "<b>" . sprintf(_("SOAP-Fehler, Funktion \"%s\":"), $method) . "</b> " . $err . "<br>"; //.implode($params,"-") . htmlspecialchars($this->soap_client->response, ENT_QUOTES);
 			else
 				return $result;
 		}

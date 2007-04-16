@@ -139,7 +139,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 
 		echo "<table>";
 		echo "<tr valign=\"top\"><td width=30% align=\"left\"><font size=\"-1\">";
-		echo "<b>" . _("Soap-Verbindung: ") . "</b>";
+		echo "<b>" . _("SOAP-Verbindung: ") . "</b>";
 		echo "</td><td><font size=\"-1\">";
 		$error = $this->soap_client->getError();
 		if ($error != false)

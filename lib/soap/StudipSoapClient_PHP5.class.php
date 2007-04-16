@@ -29,7 +29,7 @@ class StudipSoapClient
 		} catch  (SoapFault $fault){
 			$this->faultstring = $fault->faultstring;
 			if ($this->faultstring != "Session not valid")
-				$this->error .= "<b>" . sprintf(_("Soap-Fehler, Funktion \"%s\":"), $method) . "</b> " . $fault->faultstring . " (" .  $fault->faultcode . ")<br>".print_r($params,1);
+				$this->error .= "<b>" . sprintf(_("SOAP-Fehler, Funktion \"%s\":"), $method) . "</b> " . $fault->faultstring . " (" .  $fault->faultcode . ")<br>".print_r($params,1);
 				echo $this->error;
 				$this->soap_client->fault = true;
 			return false;

@@ -10,10 +10,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: studip\n"
-"POT-Creation-Date: 2007-04-12 18:58+0200\n"
-"PO-Revision-Date: 2007-04-12 19:07+0200\n"
-"Last-Translator: \n"
-"Language-Team:  <en@li.org>\n"
+"POT-Creation-Date: 2007-04-16 18:31+0200\n"
+"PO-Revision-Date: 2007-04-16 18:41+GMT\n"
+"Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
+"Language-Team:  <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -92,8 +92,8 @@ msgid "News"
 msgstr "News"
 
 #: ../public/wap/login_index.php:89 ../public/wap/events.php:54
-#: ../public/browse.php:133 ../public/about.php:486
-#: ../public/admin_studiengang.php:260
+#: ../public/browse.php:133 ../public/admin_test_fak.php:349
+#: ../public/about.php:486 ../public/admin_studiengang.php:260
 #: ../lib/include/links_openobject.inc.php:178
 #: ../lib/include/links_admin.inc.php:271
 #: ../lib/include/links_admin.inc.php:273 ../lib/include/header.php:203
@@ -444,6 +444,7 @@ msgstr ""
 #: ../public/institut_members.php:280 ../public/admin_datafields.php:145
 #: ../public/admin_datafields.php:359 ../public/admin_datafields.php:574
 #: ../public/archiv.php:409 ../public/admin_log.php:135
+#: ../public/admin_test_fak.php:327 ../public/admin_test_fak.php:354
 #: ../public/meine_seminare.php:438 ../public/meine_seminare.php:1002
 #: ../public/admin_studiengang.php:239 ../lib/include/links_admin.inc.php:916
 #: ../lib/extern/modules/ExternModulePersons.class.php:57
@@ -1118,6 +1119,8 @@ msgstr "Add entry to clipboard"
 #: ../lib/resources/views/page_intros.inc.php:97
 #: ../lib/resources/views/page_intros.inc.php:240
 #: ../lib/resources/views/page_intros.inc.php:264
+#: ../lib/support/views/page_intros.inc.php:42
+#: ../lib/support/views/page_intros.inc.php:57
 #: ../lib/vote/view/vote_edit.lib.php:467
 msgid "Information:"
 msgstr "Information:"
@@ -1188,6 +1191,10 @@ msgstr ""
 #: ../lib/resources/views/page_intros.inc.php:206
 #: ../lib/resources/views/page_intros.inc.php:244
 #: ../lib/resources/views/page_intros.inc.php:284
+#: ../lib/support/views/page_intros.inc.php:45
+#: ../lib/support/views/page_intros.inc.php:60
+#: ../lib/support/views/page_intros.inc.php:64
+#: ../lib/support/views/page_intros.inc.php:68
 #: ../lib/vote/view/vote_edit.lib.php:470
 msgid "Aktionen:"
 msgstr "Actions:"
@@ -1493,7 +1500,7 @@ msgstr "for"
 #: ../lib/resources/lib/ResourceObject.class.php:307
 #: ../lib/vote/vote_overview.inc.php:134 ../lib/contact.inc.php:236
 #: ../lib/functions.php:88 ../lib/functions.php:175
-#: ../config/config.inc.php:253
+#: ../config/config.inc.php:343
 msgid "Einrichtung"
 msgstr "Institute"
 
@@ -2253,7 +2260,7 @@ msgid "Der Ablaufplan wurde erstellt. Es wurden %s Termine erstellt."
 msgstr "The schedule has been created. %s appointments have been created."
 
 #: ../public/admin_dates.php:200 ../public/admin_metadates.php:215
-#: ../public/admin_seminare_assi.php:641 ../lib/dates.inc.php:693
+#: ../public/admin_seminare_assi.php:640 ../lib/dates.inc.php:693
 msgid "Bitte geben Sie ein g&uuml;ltiges Datum ein!"
 msgstr "Please enter a valid date!"
 
@@ -2504,6 +2511,7 @@ msgstr "from"
 #: ../lib/resources/views/EditResourceData.class.php:310
 #: ../lib/resources/views/ResourcesBrowse.class.php:181
 #: ../lib/resources/views/ResourcesBrowse.class.php:184
+#: ../lib/support/views/Request.class.php:172
 msgid "Uhr"
 msgstr "O'clock"
 
@@ -2779,9 +2787,13 @@ msgstr "Your name:"
 #: ../public/new_user_md5.php:572 ../public/admin_literatur_overview.php:429
 #: ../public/admin_seminare1.php:1090 ../public/admin_seminare1.php:1093
 #: ../public/teilnehmer.php:1060 ../public/lit_overview_print_view.php:117
-#: ../lib/forum.inc.php:125 ../lib/user_visible.inc.php:106
-#: ../lib/functions.php:512 ../lib/functions.php:538 ../lib/functions.php:568
-#: ../lib/functions.php:588
+#: ../lib/support/views/Request.class.php:129
+#: ../lib/support/views/Request.class.php:133
+#: ../lib/support/views/Request.class.php:141
+#: ../lib/support/views/Request.class.php:162
+#: ../lib/support/views/Request.class.php:252 ../lib/forum.inc.php:125
+#: ../lib/user_visible.inc.php:106 ../lib/functions.php:512
+#: ../lib/functions.php:538 ../lib/functions.php:568 ../lib/functions.php:588
 msgid "unbekannt"
 msgstr "unknown"
 
@@ -3091,7 +3103,7 @@ msgstr "Surname"
 msgid "Alle NutzerInnen"
 msgstr "All users"
 
-#: ../public/browse.php:299
+#: ../public/browse.php:299 ../public/admin_test_fak.php:290
 msgid "Status in der Veranstaltung"
 msgstr "Status in the course"
 
@@ -4399,16 +4411,6 @@ msgstr "The requested plugin is not available."
 msgid "Das Plugin verfügt nicht über die gewünschte Operation"
 msgstr "The plugin does not provide the requested feature"
 
-#: ../public/plugins.php:97
-#, fuzzy, c-format
-msgid "%s - %s"
-msgstr "%s - %s"
-
-#: ../public/plugins.php:100
-#, fuzzy, c-format
-msgid "%s"
-msgstr "%s"
-
 #: ../public/plugins.php:131
 msgid "fehlende Rechte"
 msgstr "missing permission"
@@ -4493,8 +4495,8 @@ msgid ""
 "rderung festhalten wollen, kontaktieren Sie bitte eineN der "
 "Systemadministrierenden."
 msgstr ""
-"You can not promote the user to AUTHOR, since he or she only hasthe status "
-"of USER within the whole system. If you still wish to proceed=20then please "
+"You can not promote the user to AUTHOR, since he or she only has the status "
+"of USER within the whole system. If you still wish to proceed then please "
 "contact one of the system administrators."
 
 #: ../public/inst_admin.php:207
@@ -4648,6 +4650,8 @@ msgstr "Office hours"
 #: ../lib/extern/elements/main/ExternElementMainPersons.class.php:71
 #: ../lib/extern/elements/ExternElementContact.class.php:96
 #: ../lib/extern/elements/ExternElementRangeTreeLevelContent.class.php:85
+#: ../lib/support/views/Request.class.php:143
+#: ../lib/support/views/Request.class.php:153
 msgid "Telefon"
 msgstr "Telephone"
 
@@ -5078,6 +5082,7 @@ msgstr "Your search criteria must comprise at least 3 symbols!"
 #: ../public/contact.php:146 ../public/contact.php:155
 #: ../public/admin_statusgruppe.php:518
 #: ../public/contact_statusgruppen.php:321
+#: ../lib/support/views/page_intros.inc.php:65
 msgid "neue Suche"
 msgstr "new search"
 
@@ -6776,7 +6781,7 @@ msgstr "Username"
 #: ../public/new_user_md5.php:548 ../public/institut_members.php:118
 #: ../public/institut_members.php:137 ../public/institut_members.php:159
 #: ../public/institut_members.php:180 ../public/institut_members.php:197
-#: ../lib/contact.inc.php:268
+#: ../lib/support/views/Request.class.php:142 ../lib/contact.inc.php:268
 msgid "E-Mail"
 msgstr "E-mail"
 
@@ -7500,6 +7505,7 @@ msgstr "Week day:"
 #: ../public/mein_stundenplan.php:655 ../lib/calendar/views/edit.inc.php:100
 #: ../lib/resources/views/EditSettings.class.php:560
 #: ../lib/resources/views/EditSettings.class.php:642
+#: ../lib/support/views/Request.class.php:216
 msgid "Beginn:"
 msgstr "Begin:"
 
@@ -7507,6 +7513,7 @@ msgstr "Begin:"
 #: ../lib/calendar/views/edit.inc.php:145
 #: ../lib/resources/views/EditSettings.class.php:564
 #: ../lib/resources/views/EditSettings.class.php:646
+#: ../lib/support/views/Request.class.php:216
 #: ../lib/admin_semester.inc.php:306 ../lib/admin_semester.inc.php:402
 #: ../lib/admin_semester.inc.php:726
 msgid "Ende:"
@@ -7664,7 +7671,7 @@ msgstr "Create new data field for user"
 #: ../lib/include/links_admin.inc.php:1027
 #: ../lib/include/links_about.inc.php:93
 #: ../lib/classes/ModulesNotification.class.php:66
-#: ../config/config.inc.php:366
+#: ../config/config.inc.php:372
 msgid "Literatur"
 msgstr "Literature"
 
@@ -8822,6 +8829,19 @@ msgstr "Graphic type for Likert scales"
 msgid "Grafiktyp f&uuml;r Multiplechoice"
 msgstr "Graphic type for multiple choice"
 
+#: ../public/support.php:48
+msgid ""
+"Das SupportDB-Modul ist nicht eingebunden. Bitte aktivieren Sie es in den "
+"Systemeinstellungen oder wenden Sie sich an eine Person mit administrativen "
+"Rechten im System."
+msgstr ""
+"The SupportDB module is not connected. Please activate it in the system "
+"settings or contact someone with administrative access to the system."
+
+#: ../public/support.php:49
+msgid "SupportDB nicht eingebunden"
+msgstr "SupportDB is not connected"
+
 #: ../public/admin_modules.php:201 ../public/admin_modules.php:217
 msgid "Module konfigurieren"
 msgstr "Configure module"
@@ -9223,7 +9243,7 @@ msgstr "Clipboard for general folder and documents of the course"
 
 #: ../public/admin_seminare_assi.php:1629
 #: ../lib/include/links_openobject.inc.php:78
-#: ../lib/include/links_openobject.inc.php:103 ../config/config.inc.php:365
+#: ../lib/include/links_openobject.inc.php:103 ../config/config.inc.php:371
 msgid "Informationen"
 msgstr "Information "
 
@@ -9749,6 +9769,7 @@ msgstr "The course takes place on these dates:"
 #: ../public/admin_seminare_assi.php:2729
 #: ../public/admin_seminare_assi.php:2770
 #: ../public/admin_seminare_assi.php:3613
+#: ../lib/support/views/Request.class.php:166
 msgid "Datum:"
 msgstr "Date:"
 
@@ -10629,7 +10650,7 @@ msgstr "(Internal system messages)"
 msgid ""
 "Stud.IP ist ein Open Source Projekt zur Unterst&uuml;tzung von Pr&auml;"
 "senzlehre an Universit&auml;ten, Hochschulen und anderen "
-"Bildungseinrichtungen. Das System entstand am %sZentrum für "
+"Bildungseinrichtungen. Das System entstand am %sZentrum f&uuml;r "
 "interdisziplin&auml;re Medienwissenschaft (ZiM)%s der %sGeorg-August-"
 "Universit&auml;t G&ouml;ttingen%s unter Mitwirkung der %sSuchi & Berg GmbH "
 "(data-quest)%s , G&ouml;ttingen. Heute erfolgt die Weiterentwicklung von "
@@ -10639,7 +10660,7 @@ msgid ""
 msgstr ""
 "Stud.IP is an opensource project for supporting attendance courses offered "
 "by universities, institutions of higher education and other educational "
-"institutions. The system was established at the %sZentrum für "
+"institutions. The system was established at the %sZentrum f&uuml;r "
 "interdisziplin&auml;re Medienwissenschaft (ZiM)%s in the  %sGeorg-August-"
 "Universit&auml;t G&ouml;ttingen%s in cooperation with %sSuchi & Berg GmbH "
 "(data-quest)%s , G&ouml;ttingen. At the present further developing takes "
@@ -11151,6 +11172,110 @@ msgid ""
 msgstr ""
 "When you have set up this group, you can assign users to it. Every group can "
 "be assigned several users. Every user can be assigned to several groups."
+
+#: ../public/admin_test_fak.php:145
+#, c-format
+msgid "Es wurden %s NutzerInnen mit der Berechtigung '%s' erzeugt."
+msgstr "%s users with the access authorisation '%s' have been created."
+
+#: ../public/admin_test_fak.php:186
+#, c-format
+msgid "Es wurden %s NutzerInnen gelöscht."
+msgstr "%s users have been deleted. "
+
+#: ../public/admin_test_fak.php:212
+#, c-format
+msgid "Es wurden %s Veranstaltungen erzeugt."
+msgstr "%s courses were created."
+
+#: ../public/admin_test_fak.php:234
+#, c-format
+msgid "Es wurden %s Veranstaltungen gelöscht."
+msgstr "%s courses were deleted."
+
+#: ../public/admin_test_fak.php:247
+msgid "NutzerIn wurde zugeordnet."
+msgstr "User has been allocated. "
+
+#: ../public/admin_test_fak.php:256
+#, c-format
+msgid "%s Zuordnungen wurden aufgehoben."
+msgstr "%s allocations have been removed."
+
+#: ../public/admin_test_fak.php:269
+msgid "Administration der Testumgebung: "
+msgstr "Administration of the test area:"
+
+#: ../public/admin_test_fak.php:283
+msgid "Veranstaltungen des Nutzenden"
+msgstr "Users courses "
+
+#: ../public/admin_test_fak.php:287 ../public/admin_test_fak.php:351
+msgid "Keine Veranstaltungen gefunden."
+msgstr "No courses found."
+
+#: ../public/admin_test_fak.php:290 ../public/admin_seminare1.php:728
+#: ../lib/extern/modules/views/lecturedetails_preview.inc.php:19
+#: ../lib/extern/modules/ExternModuleLecturedetails.class.php:100
+#: ../lib/extern/modules/ExternModuleLecturedetails.class.php:280
+msgid "Name der Veranstaltung"
+msgstr "Course name"
+
+#: ../public/admin_test_fak.php:290
+#: ../lib/elearning/Ilias3ConnectedLink.class.php:101
+#: ../lib/elearning/ConnectedLink.class.php:88
+msgid "Entfernen"
+msgstr "Remove "
+
+#: ../public/admin_test_fak.php:314
+msgid "NutzerIn eintragen"
+msgstr "Enter user  "
+
+#: ../public/admin_test_fak.php:320
+msgid "zur Verwaltung der Einrichtung"
+msgstr "To institute administration"
+
+#: ../public/admin_test_fak.php:322
+#: ../lib/resources/lib/AssignObject.class.php:187
+#: ../lib/resources/lib/ResourceObject.class.php:298
+msgid "NutzerIn"
+msgstr "User"
+
+#: ../public/admin_test_fak.php:324
+msgid "Keine NutzerInnen gefunden."
+msgstr "No users found."
+
+#: ../public/admin_test_fak.php:327
+msgid "Status in der Einrichtung"
+msgstr "Status in the institute"
+
+#: ../public/admin_test_fak.php:327 ../lib/admin_semester.inc.php:553
+msgid "Anzahl Veranstaltungen"
+msgstr "Number of courses"
+
+#: ../public/admin_test_fak.php:327 ../public/admin_test_fak.php:354
+#: ../public/admin_studiengang.php:217
+#: ../lib/classes/AdminNewsController.class.php:179
+#: ../lib/vote/view/vote_edit.lib.php:284
+#: ../lib/vote/vote_overview.inc.php:650
+msgid "L&ouml;schen"
+msgstr "Delete"
+
+#: ../public/admin_test_fak.php:345
+msgid "NutzerIn neu anlegen"
+msgstr "Add new user"
+
+#: ../public/admin_test_fak.php:354
+msgid "angelegt am"
+msgstr "Created on"
+
+#: ../public/admin_test_fak.php:354
+msgid "Anzahl Nutzende"
+msgstr "Number of users "
+
+#: ../public/admin_test_fak.php:371
+msgid "Veranstaltung(en) neu anlegen"
+msgstr "Set up course(s) again"
 
 #: ../public/my_elearning.php:62
 msgid "Meine Lernmodule und Benutzer-Accounts"
@@ -12187,13 +12312,6 @@ msgstr "%s Subject areas added."
 msgid "%s Studienbereiche gel&ouml;scht."
 msgstr "%s Subject areas deleted."
 
-#: ../public/admin_seminare1.php:728
-#: ../lib/extern/modules/views/lecturedetails_preview.inc.php:19
-#: ../lib/extern/modules/ExternModuleLecturedetails.class.php:100
-#: ../lib/extern/modules/ExternModuleLecturedetails.class.php:280
-msgid "Name der Veranstaltung"
-msgstr "Course name"
-
 #: ../public/admin_seminare1.php:732
 #: ../lib/extern/modules/views/lecturedetails_preview.inc.php:20
 #: ../lib/extern/modules/ExternModuleLecturedetails.class.php:281
@@ -12288,7 +12406,7 @@ msgstr ""
 #: ../lib/extern/modules/views/lecturedetails_preview.inc.php:52
 #: ../lib/extern/modules/ExternModuleLecturedetails.class.php:89
 #: ../lib/extern/modules/ExternModuleLecturedetails.class.php:313
-#: ../config/config.inc.php:311
+#: ../config/config.inc.php:411
 msgid "Sonstiges"
 msgstr "Miscellaneous"
 
@@ -13624,13 +13742,6 @@ msgstr ""
 msgid "&lt;keinem anderen Studiengang zuordnen - direkt l&ouml;schen&gt;"
 msgstr "&lt; do not allocate to another program of study - delete direct;"
 
-#: ../public/admin_studiengang.php:217
-#: ../lib/classes/AdminNewsController.class.php:179
-#: ../lib/vote/view/vote_edit.lib.php:284
-#: ../lib/vote/vote_overview.inc.php:650
-msgid "L&ouml;schen"
-msgstr "Delete"
-
 #: ../public/admin_studiengang.php:223
 msgid "Anlegen"
 msgstr "Add"
@@ -14580,11 +14691,6 @@ msgstr "The allocation couldn't be saved."
 msgid "Die Zuordnung konnte nicht entfernt werden."
 msgstr "The allocation couldn't be deleted. "
 
-#: ../lib/elearning/Ilias3ConnectedLink.class.php:101
-#: ../lib/elearning/ConnectedLink.class.php:88
-msgid "Entfernen"
-msgstr "Remove "
-
 #: ../lib/elearning/Ilias3ConnectedLink.class.php:105
 msgid "Mit Schreibrechten f&uuml;r alle Dozenten/Tutoren dieser Veranstaltung"
 msgstr "With write access for all lecturers/tutors of this course"
@@ -14872,7 +14978,7 @@ msgid "Das Rollen-Template mit dem Namen \"%s\" wurde im System %s nicht gefunde
 msgstr "No role template with name \"%s\" was found in system %s."
 
 #: ../lib/elearning/Ilias3ConnectedCMS.class.php:142
-msgid "Soap-Verbindung: "
+msgid "SOAP-Verbindung: "
 msgstr "SOAP connection:"
 
 #: ../lib/elearning/Ilias3ConnectedCMS.class.php:146
@@ -14925,11 +15031,10 @@ msgid "ILIAS-Passw&ouml;rter verschl&uuml;sselt speichern."
 msgstr "Encrypt stored passwords."
 
 #: ../lib/elearning/Ilias3ConnectedCMS.class.php:185
-#, fuzzy
 msgid ""
 "Wählen Sie diese Option, wenn die ILIAS-Passwörter der zugeordneten Accounts "
 "verschlüsselt in der Stud.IP-Datenbank abgelegt werden sollen."
-msgstr "Option in."
+msgstr ""
 
 #: ../lib/elearning/Ilias3ConnectedCMS.class.php:191
 msgid "Style / Skin: "
@@ -15630,11 +15735,6 @@ msgstr ""
 "You do not have the authorisation to invite other users into any active chat "
 "room!"
 
-#: ../lib/plugins/engine/StudIPTemplateEngine.class.php:121
-#, fuzzy, c-format
-msgid "%s <br>"
-msgstr "%s <br>"
-
 #: ../lib/plugins/core/AbstractStudIPStandardPlugin.class.php:65
 msgid "geändert"
 msgstr "changed"
@@ -16146,6 +16246,7 @@ msgid "Lernmodule hinzuf&uuml;gen / entfernen"
 msgstr "Add / delete learning modules"
 
 #: ../lib/include/links_openobject.inc.php:312
+#: ../lib/support/views/page_intros.inc.php:56
 msgid "Anfragen"
 msgstr "Requests"
 
@@ -17704,14 +17805,14 @@ msgstr "You have selected an empty file to upload!"
 #: ../lib/classes/lit_import_plugins/StudipLitImportPluginAbstract.class.php:105
 msgid ""
 "Es ist ein Fehler beim Kopieren der Datei $this->xmlfile aufgetreten. Die "
-"Datei wurde nicht hochgeladen!§"
+"Datei wurde nicht hochgeladen!"
 msgstr ""
 "An error has occurred while copying the file $this->xmlfile. The file has "
-"not been uploaded!§"
+"not been uploaded!"
 
 #: ../lib/classes/lit_import_plugins/StudipLitImportPluginAbstract.class.php:110
-msgid "could not open input file"
-msgstr "could not open input file"
+msgid "Importdatei konnte nicht geöffnet werden"
+msgstr "The import file could not be opened"
 
 #: ../lib/classes/lit_import_plugins/StudipLitImportPluginAbstract.class.php:156
 msgid "Neue importierte Liste vom"
@@ -20516,14 +20617,10 @@ msgstr "The folder authorisations require activating of <b>%s</b>"
 
 #: ../lib/soap/StudipSoapClient_PHP5.class.php:32
 #: ../lib/soap/StudipSoapClient.class.php:28
-#, c-format
-msgid "Soap-Fehler, Funktion \"%s\":"
-msgstr "Soap error, function \"%s\":"
-
 #: ../lib/soap/StudipSoapClient.class.php:34
 #, c-format
-msgid "Soap-Error, Funktion \"%s\":"
-msgstr "Soap error, function \"%s\":"
+msgid "SOAP-Fehler, Funktion \"%s\":"
+msgstr "SOAP error, function \"%s\":"
 
 #: ../lib/extern/lib/ExternElementMain.class.php:68
 #: ../lib/extern/elements/main/ExternElementMainPersondetails.class.php:53
@@ -20883,18 +20980,18 @@ msgid "Untertitel der Veranstaltung %s"
 msgstr "Sub title for course %s"
 
 #: ../lib/extern/modules/views/lecturestable_preview.inc.php:42
-#: ../config/config.inc.php:168 ../config/config.inc.php:258
+#: ../config/config.inc.php:91 ../config/config.inc.php:348
 msgid "Seminar"
 msgstr "Seminar"
 
 #: ../lib/extern/modules/views/lecturestable_preview.inc.php:43
-#: ../config/config.inc.php:167 ../config/config.inc.php:306
-#: ../config/config.inc.php:325
+#: ../config/config.inc.php:88 ../config/config.inc.php:406
+#: ../config/config.inc.php:425
 msgid "Vorlesung"
 msgstr "Lecture"
 
 #: ../lib/extern/modules/views/lecturestable_preview.inc.php:44
-#: ../config/config.inc.php:170
+#: ../config/config.inc.php:103
 msgid "Praktikum"
 msgstr "Practical"
 
@@ -21049,7 +21146,7 @@ msgstr "Font "
 #: ../lib/extern/elements/ExternElementLinkInternSimple.class.php:59
 #: ../lib/extern/elements/ExternElementLink.class.php:54
 #: ../lib/extern/elements/ExternElementLinkIntern.class.php:55
-#: ../config/config.inc.php:367
+#: ../config/config.inc.php:373
 msgid "Links"
 msgstr "Links"
 
@@ -22451,11 +22548,11 @@ msgstr "Display all study areas:"
 #: ../lib/extern/elements/ExternElementSelectSubjectAreas.class.php:96
 msgid ""
 "Wählen Sie diese Option, wenn alle Veranstaltungen aus allen "
-"Studienbereichen angezeigt werden sollen. Unabhängig von unten vorgenommener "
-"Auswahl."
+"Studienbereichen angezeigt werden sollen - unabhängig von unten "
+"vorgenommener Auswahl."
 msgstr ""
 "Choose this option, if all the courses from all study areas should be "
-"displayed. Independently of the selection made below."
+"displayed, independently of the selection made below."
 
 #: ../lib/extern/elements/ExternElementTreePath.class.php:54
 msgid "Navigations-Pfad"
@@ -25180,7 +25277,7 @@ msgstr "Termination date was <b>%s</b> at <b>%s</b>."
 #: ../lib/evaluation/evaluation_admin_overview.lib.php:1985
 #: ../lib/evaluation/evaluation_admin_overview.lib.php:2337
 #: ../lib/evaluation/evaluation_admin_overview.lib.php:2344
-#: ../config/config.inc.php:259
+#: ../config/config.inc.php:349
 msgid "Fakultät"
 msgstr "Faculty"
 
@@ -26699,13 +26796,9 @@ msgstr "public appointment "
 
 #: ../lib/resources/lib/ShowTreeRow.class.php:15
 #: ../lib/resources/views/ShowTreeRow.class.php:48
+#: ../lib/support/views/ShowTreeRow.class.php:15
 msgid "Keine Beschreibung"
 msgstr "No description"
-
-#: ../lib/resources/lib/AssignObject.class.php:187
-#: ../lib/resources/lib/ResourceObject.class.php:298
-msgid "NutzerIn"
-msgstr "User"
 
 #: ../lib/resources/lib/AssignObject.class.php:460
 #: ../lib/resources/views/EditResourceData.class.php:381
@@ -26996,6 +27089,7 @@ msgstr "%s allocated from <b>%s</b> until <b>%s</b>, by <b>%s</b>"
 
 #: ../lib/resources/views/Msg.class.php:73
 #: ../lib/resources/views/Msg.class.php:81
+#: ../lib/support/views/Msg.class.php:67 ../lib/support/views/Msg.class.php:75
 msgid "zur&uuml;ck"
 msgstr "back"
 
@@ -27819,6 +27913,7 @@ msgstr "hh"
 
 #: ../lib/resources/views/EditSettings.class.php:604
 #: ../lib/resources/views/EditSettings.class.php:686
+#: ../lib/support/views/Request.class.php:261
 msgid "Diesen Eintrag speichern"
 msgstr "Save this entry"
 
@@ -27826,12 +27921,15 @@ msgstr "Save this entry"
 #: ../lib/resources/views/EditSettings.class.php:611
 #: ../lib/resources/views/EditSettings.class.php:687
 #: ../lib/resources/views/EditSettings.class.php:693
-#: ../lib/contact.inc.php:459 ../lib/contact.inc.php:461
+#: ../lib/support/views/Request.class.php:262
+#: ../lib/support/views/Request.class.php:270 ../lib/contact.inc.php:459
+#: ../lib/contact.inc.php:461
 msgid "Diesen Eintrag löschen"
 msgstr "Delete this entry"
 
 #: ../lib/resources/views/EditSettings.class.php:610
 #: ../lib/resources/views/EditSettings.class.php:692
+#: ../lib/support/views/Request.class.php:270
 msgid "Diesen Eintrag bearbeiten"
 msgstr "Edit this entry"
 
@@ -28920,6 +29018,208 @@ msgstr "everyone"
 #: ../lib/resources/resourcesFunc.inc.php:872
 msgid "Starten Sie hier Ihre Suche"
 msgstr "Start your search here"
+
+#: ../lib/support/views/Overview.class.php:87
+msgid "Laufzeit: "
+msgstr "Validity period:"
+
+#: ../lib/support/views/Overview.class.php:95
+#, c-format
+msgid "Supportvertrag vom %s bis %s"
+msgstr "Support contract from %s to %s"
+
+#: ../lib/support/views/Overview.class.php:139
+msgid "Punkte in diesem Vertrag:"
+msgstr "Credit points in this contract:"
+
+#: ../lib/support/views/Overview.class.php:141
+msgid "Anfragen:"
+msgstr "Requests:"
+
+#: ../lib/support/views/Overview.class.php:142
+msgid "verbrauchte Punkte:"
+msgstr "Spent credit points:"
+
+#: ../lib/support/views/Overview.class.php:143
+msgid "Bearbeitungen:"
+msgstr "Processing:"
+
+#: ../lib/support/views/Overview.class.php:145
+msgid "verbleibende Punkte:"
+msgstr "Remaining points:"
+
+#: ../lib/support/views/Request.class.php:113
+msgid "kein Titel"
+msgstr "no title"
+
+#: ../lib/support/views/Request.class.php:123
+#: ../lib/support/views/Request.class.php:129
+#: ../lib/support/views/Request.class.php:131
+#: ../lib/support/views/Request.class.php:133
+msgid "von:"
+msgstr "from:"
+
+#: ../lib/support/views/Request.class.php:138
+msgid "Medium:"
+msgstr "Medium:"
+
+#: ../lib/support/views/Request.class.php:144
+msgid "Feedback-Forum"
+msgstr "Feedback forum"
+
+#: ../lib/support/views/Request.class.php:145
+#: ../lib/support/views/Request.class.php:159
+msgid "Support-Forum"
+msgstr "Support forum"
+
+#: ../lib/support/views/Request.class.php:150
+msgid "eMail"
+msgstr "E-mail"
+
+#: ../lib/support/views/Request.class.php:156
+msgid "Feedback-Forum der Installation"
+msgstr "Feedback forum for the installation"
+
+#: ../lib/support/views/Request.class.php:183
+#: ../lib/support/views/Request.class.php:197
+msgid "Beitrag im Forum:"
+msgstr "Entry in forum:"
+
+#: ../lib/support/views/Request.class.php:189
+msgid "kein Forenthema"
+msgstr "no forum topic"
+
+#: ../lib/support/views/Request.class.php:208
+msgid "Bearbeitungszeiten:"
+msgstr "Processing times:"
+
+#: ../lib/support/views/Request.class.php:216
+msgid "Punkte:"
+msgstr "Points:"
+
+#: ../lib/support/views/Request.class.php:216
+msgid "bearbeitet von:"
+msgstr "Edited by:"
+
+#: ../lib/support/views/Request.class.php:247
+msgid "werden automatisch berechnet"
+msgstr "automatically calculated"
+
+#: ../lib/support/views/Request.class.php:276
+msgid "Diese Anfrage wurde noch nicht bearbeitet"
+msgstr "These requests have not yet been processed"
+
+#: ../lib/support/views/Request.class.php:279
+msgid "Bearbeitungszeit hinzufügen"
+msgstr "Processing time to be added"
+
+#: ../lib/support/views/Request.class.php:283
+msgid "Daten der Anfrage übernehmen"
+msgstr "Apply request data"
+
+#: ../lib/support/views/Request.class.php:290
+msgid "Die Anfrage bearbeiten"
+msgstr "Process request"
+
+#: ../lib/support/views/msgs_support.inc.php:39
+msgid ""
+"Sie k&ouml;nnen die Punktzahl nicht kleiner als die bereits verbrauchten "
+"Punkte einstellen!"
+msgstr ""
+"You can set the credit points number at a lower value than the already spent "
+"credit points! "
+
+#: ../lib/support/views/msgs_support.inc.php:42
+msgid "Ung&uuml;ltiges Anfangsdatum des Vertrages!"
+msgstr "Invalid start date for the contract!"
+
+#: ../lib/support/views/msgs_support.inc.php:45
+msgid "Ung&uuml;ltiges Enddatum des Vertrages!"
+msgstr "Invalid end date for the contract!"
+
+#: ../lib/support/views/msgs_support.inc.php:48
+msgid "Der Vertrag wurde gel&ouml;scht"
+msgstr "The contract has been deleted"
+
+#: ../lib/support/views/msgs_support.inc.php:51
+msgid "Die Anfrage wurde gel&ouml;scht"
+msgstr "The request has been deleted"
+
+#: ../lib/support/views/msgs_support.inc.php:54
+msgid "Ung&uuml;ltiges Datum der Anfrage!"
+msgstr "Invalid request date!"
+
+#: ../lib/support/views/msgs_support.inc.php:57
+msgid ""
+"Bitte geben Sie einen Bearbeiter/eine Bearbeiterin f&uuml;r die "
+"Bearbeitungszeit an!"
+msgstr "Please enter a processor for the processing time!"
+
+#: ../lib/support/views/msgs_support.inc.php:60
+msgid ""
+"Bitte w&auml;hlen Sie zun&auml;chst einen Vertrag aus, um die Anfragen "
+"einzusehen oder zu bearbeiten!"
+msgstr "Please first select a contract in order to see the request or to edit it!"
+
+#: ../lib/support/views/msgs_support.inc.php:63
+msgid ""
+"Es existieren keine TutorInnen oder AutorInnen, die mit der Anfrage "
+"verkn&uuml;pft werden k&ouml;nnten."
+msgstr "No tutors or authors exist with which the request could be linked."
+
+#: ../lib/support/views/page_intros.inc.php:40
+msgid ""
+"Hier k&ouml;nnen Sie Einzelheiten zu ihrem abgeschlossenen Supportvertrag "
+"(wie den Punktestand oder die Laufzeit) einsehen."
+msgstr ""
+"Here you view details of your completed support contract (e.g. point status "
+"or the validity period)."
+
+#: ../lib/support/views/page_intros.inc.php:41
+msgid "&Uuml;berblick &uuml;ber ihre Supportvertr&auml;ge"
+msgstr "Overview of your support contracts"
+
+#: ../lib/support/views/page_intros.inc.php:43
+#, c-format
+msgid "Insgesamt <b>%s</b> Punkte, davon noch <b>%s</b> verf&uuml;gbar"
+msgstr "Total of <b>%s</b> points, of which still <b>%s</b> available"
+
+#: ../lib/support/views/page_intros.inc.php:46
+#, c-format
+msgid "Einen neuen Vertrag %sanlegen%s"
+msgstr "%sAdd%s a new contract "
+
+#: ../lib/support/views/page_intros.inc.php:53
+#, c-format
+msgid ""
+"Sie sehen hier die letzten Anfragen, die im Rahmen des Supportvertrages vom "
+"<b>%s</b> bis <b>%s</b> gestellt wurden."
+msgstr ""
+"Here you can see the last requests made from <b>%s</b> until <b>%s</b> made "
+"within the context of the support contract."
+
+#: ../lib/support/views/page_intros.inc.php:58
+#, c-format
+msgid "Es liegen noch <b>%s</b> unbeantwortete Anfragen im Forum vor"
+msgstr "There are <b>%s</b> unanswered requests in the forum."
+
+#: ../lib/support/views/page_intros.inc.php:58
+msgid ""
+"Im Augenblick sind alle Themen im Forum mit Anfragen verkn&uuml;pft oder es "
+"liegen keine Themen vor."
+msgstr ""
+"At the moment all topics in the forum are linked with requests or no topics "
+"are presented."
+
+#: ../lib/support/views/page_intros.inc.php:61
+#, c-format
+msgid "Eine neue Anfrage %sanlegen%s"
+msgstr "%sAdd%s a new request"
+
+#: ../lib/support/views/page_intros.inc.php:69
+#, c-format
+msgid "%sAlle%s Anfragen anzeigen."
+msgstr "Show %sall%s requests."
 
 #: ../lib/vote/view/vote_show.lib.php:113
 msgid "Geben Sie hier Ihre Stimme ab!"
@@ -30185,6 +30485,36 @@ msgstr "No messages "
 msgid "%s von %s Nachrichten"
 msgstr "%s from %s messages"
 
+#: ../lib/wiki_steps.inc.php:20
+msgid "Neuer StEP-Eintrag"
+msgstr "New StEP-entry"
+
+#: ../lib/wiki_steps.inc.php:20
+msgid "Name des Autoren und Erstellungszeit werden automatisch hinzugefügt."
+msgstr "Author's name and time of creation will automatically been added."
+
+#: ../lib/wiki_steps.inc.php:143
+#, c-format
+msgid "Die aktuellste Fassung dieses StEPs finden Sie immer im %sWiki%s"
+msgstr "The most recent version of this StEP can always been found in the %sWiki%s"
+
+#: ../lib/wiki_steps.inc.php:145 ../lib/wiki_biests.inc.php:135
+msgid "Ein neues Thema im Forum wurde angelegt."
+msgstr "In the forum a new thread has been created."
+
+#: ../lib/wiki_steps.inc.php:146
+msgid "Link zum Forumsbeitrag"
+msgstr "Link to the associated forum entry"
+
+#: ../lib/wiki_steps.inc.php:151 ../lib/wiki_biests.inc.php:133
+#, c-format
+msgid ""
+"Ein neuer Eintrag wurde angelegt. Sie können ihn nun weiter bearbeiten oder %"
+"szurück zur Ausgangsseite%s gehen."
+msgstr ""
+"A new entry has been added. You can further edit it or %s return to the "
+"start page%s."
+
 #: ../lib/lit_import.inc.php:65
 msgid "Literaturlisten importieren:"
 msgstr "Import literature lists"
@@ -30704,10 +31034,6 @@ msgstr "The starting date of semesters without any courses can be changed, only!
 msgid "Anfang:"
 msgstr "Start:"
 
-#: ../lib/admin_semester.inc.php:553
-msgid "Anzahl Veranstaltungen"
-msgstr "Number of courses"
-
 #: ../lib/admin_semester.inc.php:588
 msgid "implizit"
 msgstr "implicit"
@@ -31114,6 +31440,14 @@ msgstr "You have rated the object with \"$rate\"."
 #: ../lib/object.inc.php:214
 msgid "Sie haben dieses Objekt bereits bewertet."
 msgstr "You have already rated this object."
+
+#: ../lib/wiki_biests.inc.php:21
+msgid "Neuer BIEST-Eintrag"
+msgstr "New BIEST entry"
+
+#: ../lib/wiki_biests.inc.php:21
+msgid "Name des Autoren und Erstellungszeit werden automatisch hinzugef&uuml;gt."
+msgstr "Name of the author and time of creation will automatically been added."
 
 #: ../lib/showNews.inc.php:58
 #, c-format
@@ -32086,7 +32420,7 @@ msgid "Kommentar von"
 msgstr "Comment by"
 
 #: ../lib/visual.inc.php:477
-msgid "unparseable or potentially dangerous latex formula"
+msgid "Nicht interpretierbare oder möglicherweise gefährliche Latex Formel"
 msgstr "unparseable or potentially dangerous latex formula"
 
 #: ../lib/visual.inc.php:1089
@@ -32179,493 +32513,258 @@ msgstr "%s has invited you into the chat room %s! "
 msgid "Sie wurden von <b>%s</b> in den Chatraum <b>%s</b> eingeladen!"
 msgstr "<b>%s</b> has invited you into the chat room <b>%s</b>! "
 
-#: ../config/config.inc.php:84
+#: ../config/config.inc.php:81
 #, c-format
-msgid "Und hier geht's zur %sStud.IP Portalseite%s&nbsp;"
+msgid "Und hier geht's direkt zum %sMensaplan%s&nbsp;;-)"
 msgstr ""
 
-#: ../config/config.inc.php:97
+#: ../config/config.inc.php:89
+#, fuzzy
+msgid "Grundstudium"
+msgstr "Lecture in 'Grundstudium'"
+
+#: ../config/config.inc.php:90
+#, fuzzy
+msgid "Hauptstudium"
+msgstr "Lecture in 'Hauptstudium'"
+
+#: ../config/config.inc.php:92
+#, fuzzy
+msgid "Praxisveranstaltung"
+msgstr "Trial course"
+
+#: ../config/config.inc.php:93
+msgid "Kolloquium"
+msgstr ""
+
+#: ../config/config.inc.php:94 ../config/config.inc.php:97
+msgid "Forschungsgruppe"
+msgstr "Research group"
+
+#: ../config/config.inc.php:95 ../config/config.inc.php:350
+msgid "Arbeitsgruppe"
+msgstr "Work group"
+
+#: ../config/config.inc.php:96 ../config/config.inc.php:98
+#: ../config/config.inc.php:100 ../config/config.inc.php:102
+msgid "sonstige"
+msgstr "Miscellaneous"
+
+#: ../config/config.inc.php:99
+#, fuzzy
+msgid "Gremiumsveranstaltung"
+msgstr "Trial course"
+
+#: ../config/config.inc.php:101
+msgid "Community-Forum"
+msgstr "Community forum"
+
+#: ../config/config.inc.php:104
+msgid "Lehrveranstaltung nach PVO-Lehr I"
+msgstr ""
+
+#: ../config/config.inc.php:105
+msgid "Anleitung zu selbständigen wissenschaftlichen Arbeiten"
+msgstr ""
+
+#: ../config/config.inc.php:106
+msgid "Sprachkurs"
+msgstr ""
+
+#: ../config/config.inc.php:107
+msgid "Fachdidaktik"
+msgstr ""
+
+#: ../config/config.inc.php:108
+msgid "Übung"
+msgstr "Exercise"
+
+#: ../config/config.inc.php:109
+msgid "Proseminar"
+msgstr ""
+
+#: ../config/config.inc.php:110
+msgid "Oberseminar"
+msgstr ""
+
+#: ../config/config.inc.php:111
+msgid "Arbeitsgemeinschaft"
+msgstr ""
+
+#: ../config/config.inc.php:116
 msgid "Lehre"
 msgstr "Teaching"
 
-#: ../config/config.inc.php:121
+#: ../config/config.inc.php:139
 msgid "Hier finden Sie alle in Stud.IP registrierten Lehrveranstaltungen"
 msgstr "Here you can find all the courses registered in Stud.IP "
 
-#: ../config/config.inc.php:122
+#: ../config/config.inc.php:140
 msgid "Verwenden Sie diese Kategorie, um normale Lehrveranstaltungen anzulegen"
 msgstr "Use this category to set up a normal course"
 
-#: ../config/config.inc.php:124
-msgid "Organisation"
-msgstr "Organisation"
+#: ../config/config.inc.php:142
 
-#: ../config/config.inc.php:141
+msgid "Forschung"
+msgstr "Research group"
+
+#: ../config/config.inc.php:160
 msgid ""
 "Hier finden Sie virtuelle Veranstaltungen zum Thema Forschung an der "
 "Universit&auml;t"
 msgstr "Here you can find virtual courses on research topics at the university."
 
-#: ../config/config.inc.php:142
+#: ../config/config.inc.php:161
 msgid ""
 "In dieser Kategorie k&ouml;nnen sie virtuelle Veranstaltungen f&uuml;r "
 "Forschungsprojekte anlegen."
 msgstr "In this category you can set up virtual courses for research projects."
 
-#: ../config/config.inc.php:144
-msgid "Community"
-msgstr "Community"
+#: ../config/config.inc.php:163
+msgid "Organisation"
+msgstr "Organisation"
 
-#: ../config/config.inc.php:158
+#: ../config/config.inc.php:181
 msgid ""
 "Hier finden Sie virtuelle Veranstaltungen zu verschiedenen Gremien an der "
 "Universit&auml;t"
 msgstr "Here you can find virtual courses for the different university boards."
 
-#: ../config/config.inc.php:159
+#: ../config/config.inc.php:182
 msgid ""
 "Um virtuelle Veranstaltungen f&uuml;r Uni-Gremien anzulegen, verwenden Sie "
 "diese Kategorie"
 msgstr "Use this category in order to set up virtual events for university boards."
 
-#: ../config/config.inc.php:166 ../config/config.inc.php:173
-#: ../config/config.inc.php:176 ../config/config.inc.php:179
-msgid "sonstige"
-msgstr "Miscellaneous"
+#: ../config/config.inc.php:184
+msgid "Community"
+msgstr "Community"
 
-#: ../config/config.inc.php:169
-msgid "Übung"
-msgstr "Exercise"
-
-#: ../config/config.inc.php:171
-msgid "Colloquium"
+#: ../config/config.inc.php:200
+msgid "Hier finden Sie virtuelle Veranstaltungen zu unterschiedlichen Themen"
 msgstr ""
 
-#: ../config/config.inc.php:172
-msgid "Forschungsgruppe"
-msgstr "Research group"
-
-#: ../config/config.inc.php:174
-msgid "Gremium"
-msgstr ""
-
-#: ../config/config.inc.php:175
+#: ../config/config.inc.php:201
 #, fuzzy
-msgid "Projektgruppe"
-msgstr "Contact groups"
+msgid ""
+"Wenn Sie Veranstaltungen als Diskussiongruppen zu unterschiedlichen Themen "
+"anlegen m&ouml;chten, verwenden Sie diese Kategorie."
+msgstr "Use this category in order to set up virtual events for university boards."
 
-#: ../config/config.inc.php:177
-msgid "Kulturforum"
+#: ../config/config.inc.php:203
+#, fuzzy
+msgid "Arbeitsgruppen"
+msgstr "Work group"
+
+#: ../config/config.inc.php:221
+#, c-format
+msgid "Hier finden Sie verschiedene Arbeitsgruppen an der %s"
 msgstr ""
 
-#: ../config/config.inc.php:178
-#, fuzzy
-msgid "Veranstaltungsboard"
-msgstr "Course style"
+#: ../config/config.inc.php:222
+msgid "Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen."
+msgstr ""
 
-#: ../config/config.inc.php:254
+#: ../config/config.inc.php:344
 msgid "Zentrum"
 msgstr "Centre"
 
-#: ../config/config.inc.php:255
+#: ../config/config.inc.php:345
 msgid "Lehrstuhl"
 msgstr "Professorship"
 
-#: ../config/config.inc.php:256
+#: ../config/config.inc.php:346
 msgid "Abteilung"
 msgstr "Department"
 
-#: ../config/config.inc.php:257
-#, fuzzy
+#: ../config/config.inc.php:347
 msgid "Fachbereich"
-msgstr "Subject area"
+msgstr ""
 
-#: ../config/config.inc.php:260
-msgid "Arbeitsgruppe"
-msgstr "Work group"
-
-#: ../config/config.inc.php:300 ../config/config.inc.php:312
-msgid "Sitzung"
-msgstr "Meeting"
-
-#: ../config/config.inc.php:301 ../config/config.inc.php:313
-msgid "Vorbesprechung"
-msgstr "Preliminary discussion"
-
-#: ../config/config.inc.php:302 ../config/config.inc.php:314
-msgid "Klausur"
-msgstr "Written examination"
-
-#: ../config/config.inc.php:303 ../config/config.inc.php:315
-msgid "Exkursion"
-msgstr "Excursion"
-
-#: ../config/config.inc.php:304
-msgid "anderer Termin"
-msgstr "Other appointment"
-
-#: ../config/config.inc.php:305 ../config/config.inc.php:316
-msgid "Sondersitzung"
-msgstr "Special meeting"
-
-#: ../config/config.inc.php:317
-msgid "Prüfung"
-msgstr "Exam"
-
-#: ../config/config.inc.php:318
-msgid "Telefonat"
-msgstr "Telephone call"
-
-#: ../config/config.inc.php:319
-msgid "Besprechung"
-msgstr "Conference"
-
-#: ../config/config.inc.php:320
-msgid "Verabredung"
-msgstr "Appointment"
-
-#: ../config/config.inc.php:321
-msgid "Geburtstag"
-msgstr "Birthday"
-
-#: ../config/config.inc.php:322
-msgid "Familie"
-msgstr "Family"
-
-#: ../config/config.inc.php:323
-msgid "Urlaub"
-msgstr "Holiday"
-
-#: ../config/config.inc.php:324
-msgid "Reise"
-msgstr "Journey"
-
-#: ../config/config.inc.php:356
-msgid "Titel1 Vorname Nachname Titel2"
-msgstr "title1 first name surname title2"
-
-#: ../config/config.inc.php:357
-msgid "Nachname, Vorname, Titel1, Titel2"
-msgstr "surname, first name, title1, title2"
-
-#: ../config/config.inc.php:358
-msgid "Vorname Nachname"
-msgstr "first name surname"
-
-#: ../config/config.inc.php:359
-msgid "Nachname, Vorname"
-msgstr "surname, first name"
-
-#: ../config/config.inc.php:360
-msgid "Nachname, V."
-msgstr "Surname, F."
-
-#: ../config/config.inc.php:361
-msgid "Vorname Nachname, Motto"
-msgstr "first name, surname, motto"
-
-#: ../config/config.inc.php:368
+#: ../config/config.inc.php:374
 msgid "Verschiedenes"
 msgstr "Miscellaneous"
 
+#: ../config/config.inc.php:400 ../config/config.inc.php:412
+msgid "Sitzung"
+msgstr "Meeting"
+
+#: ../config/config.inc.php:401 ../config/config.inc.php:413
+msgid "Vorbesprechung"
+msgstr "Preliminary discussion"
+
+#: ../config/config.inc.php:402 ../config/config.inc.php:414
+msgid "Klausur"
+msgstr "Written examination"
+
+#: ../config/config.inc.php:403 ../config/config.inc.php:415
+msgid "Exkursion"
+msgstr "Excursion"
+
 #: ../config/config.inc.php:404
-#, fuzzy
-msgid ""
-"Exportieren Sie Ihre Literaturliste aus EndNote / Reference Manager als XML-"
-"Datei."
-msgstr "Export off."
+msgid "anderer Termin"
+msgstr "Other appointment"
 
-#: ../config/config.inc.php:405
-msgid "Einfaches XML nach fester Vorgabe"
-msgstr ""
+#: ../config/config.inc.php:405 ../config/config.inc.php:416
+msgid "Sondersitzung"
+msgstr "Special meeting"
 
-#: ../config/config.inc.php:406
-#, fuzzy
-msgid "Die XML-Datei muss folgende Struktur besitzen:"
-msgstr "Structure:"
+#: ../config/config.inc.php:417
+msgid "Prüfung"
+msgstr "Exam"
+
+#: ../config/config.inc.php:418
+msgid "Telefonat"
+msgstr "Telephone call"
 
 #: ../config/config.inc.php:419
-#, fuzzy
-msgid ""
-"Jeder Abschnitt darf mehrfach vorkommen oder kann weggelassen werden, "
-"mindestens ein Titel pro Eintrag muss vorhanden sein."
-msgstr "Title."
+msgid "Besprechung"
+msgstr "Conference"
 
 #: ../config/config.inc.php:420
-msgid "CSV mit Semikolon als Trennzeichen"
-msgstr ""
-
-#: ../config/config.inc.php:420
-#, fuzzy
-msgid ""
-"Exportieren Sie Ihre Literaturliste in eine mit Trennzeichen getrennte Datei "
-"(CSV). Wichtig hierbei ist die Verwendung des Semikolons als Trennzeichen. "
-"Folgende Formatierung wird dabei in jeder Zeile erwartet:"
-msgstr "Export in in:"
-
-#: ../config/config.inc.php:420
-#, fuzzy
-msgid "Titel;Verfasser oder Urheber;Verleger;Herausgeber;Thema und Stichworte;ISBN"
-msgstr "Title Topic ISBN"
+msgid "Verabredung"
+msgstr "Appointment"
 
 #: ../config/config.inc.php:421
-#, fuzzy
-msgid "Literaturliste im Stud.IP Format"
-msgstr "Format"
+msgid "Geburtstag"
+msgstr "Birthday"
 
-#: ../config/config.inc.php:421
-#, fuzzy
-msgid ""
-"Benutzen Sie die Export-Funktion innerhalb von Stud.IP, um eine "
-"Literaturliste im Stud.IP Format zu exportieren."
-msgstr "Export Function from at Format."
+#: ../config/config.inc.php:422
+msgid "Familie"
+msgstr "Family"
+
+#: ../config/config.inc.php:423
+msgid "Urlaub"
+msgstr "Holiday"
+
+#: ../config/config.inc.php:424
+msgid "Reise"
+msgstr "Journey"
+
+#: ../config/config.inc.php:451
+msgid "Titel1 Vorname Nachname Titel2"
+msgstr "title1 first name surname title2"
+
+#: ../config/config.inc.php:452
+msgid "Nachname, Vorname, Titel1, Titel2"
+msgstr "surname, first name, title1, title2"
+
+#: ../config/config.inc.php:453
+msgid "Vorname Nachname"
+msgstr "first name surname"
+
+#: ../config/config.inc.php:454
+msgid "Nachname, Vorname"
+msgstr "surname, first name"
+
+#: ../config/config.inc.php:455
+msgid "Nachname, V."
+msgstr "Surname, F."
+
+#: ../config/config.inc.php:456
+msgid "Vorname Nachname, Motto"
+msgstr "first name, surname, motto"
 
 #: ../cli/send_mail_notifications.php:53
 msgid "Tägliche Benachrichtigung"
 msgstr "Daily notification"
-
-#~ msgid ""
-#~ "Das SupportDB-Modul ist nicht eingebunden. Bitte aktivieren Sie es in den "
-#~ "Systemeinstellungen oder wenden Sie sich an eine Person mit "
-#~ "administrativen Rechten im System."
-#~ msgstr ""
-#~ "The SupportDB module is not connected. Please activate it in the system "
-#~ "settings or contact someone with administrative access to the system."
-
-#~ msgid "SupportDB nicht eingebunden"
-#~ msgstr "SupportDB is not connected"
-
-#~ msgid "(Fehlersuche)"
-#~ msgstr "(Testing)"
-
-#~ msgid "Es wurden %s NutzerInnen mit der Berechtigung '%s' erzeugt."
-#~ msgstr "%s users with the access authorisation '%s' have been created."
-
-#~ msgid "Es wurden %s NutzerInnen gelöscht."
-#~ msgstr "%s users have been deleted. "
-
-#~ msgid "Es wurden %s Veranstaltungen erzeugt."
-#~ msgstr "%s courses were created."
-
-#~ msgid "Es wurden %s Veranstaltungen gelöscht."
-#~ msgstr "%s courses were deleted."
-
-#~ msgid "NutzerIn wurde zugeordnet."
-#~ msgstr "User has been allocated. "
-
-#~ msgid "%s Zuordnungen wurden aufgehoben."
-#~ msgstr "%s allocations have been removed."
-
-#~ msgid "Administration der Testumgebung: "
-#~ msgstr "Administration of the test area:"
-
-#~ msgid "Veranstaltungen des Nutzenden"
-#~ msgstr "Users courses "
-
-#~ msgid "Keine Veranstaltungen gefunden."
-#~ msgstr "No courses found."
-
-#~ msgid "NutzerIn eintragen"
-#~ msgstr "Enter user  "
-
-#~ msgid "zur Verwaltung der Einrichtung"
-#~ msgstr "To institute administration"
-
-#~ msgid "Keine NutzerInnen gefunden."
-#~ msgstr "No users found."
-
-#~ msgid "Status in der Einrichtung"
-#~ msgstr "Status in the institute"
-
-#~ msgid "NutzerIn neu anlegen"
-#~ msgstr "Add new user"
-
-#~ msgid "angelegt am"
-#~ msgstr "Created on"
-
-#~ msgid "Anzahl Nutzende"
-#~ msgstr "Number of users "
-
-#~ msgid "Veranstaltung(en) neu anlegen"
-#~ msgstr "Set up course(s) again"
-
-#~ msgid "Laufzeit: "
-#~ msgstr "Validity period:"
-
-#~ msgid "Supportvertrag vom %s bis %s"
-#~ msgstr "Support contract from %s to %s"
-
-#~ msgid "Punkte in diesem Vertrag:"
-#~ msgstr "Credit points in this contract:"
-
-#~ msgid "Anfragen:"
-#~ msgstr "Requests:"
-
-#~ msgid "verbrauchte Punkte:"
-#~ msgstr "Spent credit points:"
-
-#~ msgid "Bearbeitungen:"
-#~ msgstr "Processing:"
-
-#~ msgid "verbleibende Punkte:"
-#~ msgstr "Remaining points:"
-
-#~ msgid "kein Titel"
-#~ msgstr "no title"
-
-#~ msgid "von:"
-#~ msgstr "from:"
-
-#~ msgid "Medium:"
-#~ msgstr "Medium:"
-
-#~ msgid "Feedback-Forum"
-#~ msgstr "Feedback forum"
-
-#~ msgid "Support-Forum"
-#~ msgstr "Support forum"
-
-#~ msgid "eMail"
-#~ msgstr "E-mail"
-
-#~ msgid "Feedback-Forum der Installation"
-#~ msgstr "Feedback forum for the installation"
-
-#~ msgid "Beitrag im Forum:"
-#~ msgstr "Entry in forum:"
-
-#~ msgid "kein Forenthema"
-#~ msgstr "no forum topic"
-
-#~ msgid "Bearbeitungszeiten:"
-#~ msgstr "Processing times:"
-
-#~ msgid "Punkte:"
-#~ msgstr "Points:"
-
-#~ msgid "bearbeitet von:"
-#~ msgstr "Edited by:"
-
-#~ msgid "werden automatisch berechnet"
-#~ msgstr "automatically calculated"
-
-#~ msgid "Diese Anfrage wurde noch nicht bearbeitet"
-#~ msgstr "These requests have not yet been processed"
-
-#~ msgid "Bearbeitungszeit hinzufügen"
-#~ msgstr "Processing time to be added"
-
-#~ msgid "Daten der Anfrage übernehmen"
-#~ msgstr "Apply request data"
-
-#~ msgid "Die Anfrage bearbeiten"
-#~ msgstr "Process request"
-
-#~ msgid ""
-#~ "Sie k&ouml;nnen die Punktzahl nicht kleiner als die bereits verbrauchten "
-#~ "Punkte einstellen!"
-#~ msgstr ""
-#~ "You can set the credit points number at a lower value than the already "
-#~ "spent credit points! "
-
-#~ msgid "Ung&uuml;ltiges Anfangsdatum des Vertrages!"
-#~ msgstr "Invalid start date for the contract!"
-
-#~ msgid "Ung&uuml;ltiges Enddatum des Vertrages!"
-#~ msgstr "Invalid end date for the contract!"
-
-#~ msgid "Der Vertrag wurde gel&ouml;scht"
-#~ msgstr "The contract has been deleted"
-
-#~ msgid "Die Anfrage wurde gel&ouml;scht"
-#~ msgstr "The request has been deleted"
-
-#~ msgid "Ung&uuml;ltiges Datum der Anfrage!"
-#~ msgstr "Invalid request date!"
-
-#~ msgid ""
-#~ "Bitte geben Sie einen Bearbeiter/eine Bearbeiterin f&uuml;r die "
-#~ "Bearbeitungszeit an!"
-#~ msgstr "Please enter a processor for the processing time!"
-
-#~ msgid ""
-#~ "Bitte w&auml;hlen Sie zun&auml;chst einen Vertrag aus, um die Anfragen "
-#~ "einzusehen oder zu bearbeiten!"
-#~ msgstr ""
-#~ "Please first select a contract in order to see the request or to edit it!"
-
-#~ msgid ""
-#~ "Es existieren keine TutorInnen oder AutorInnen, die mit der Anfrage "
-#~ "verkn&uuml;pft werden k&ouml;nnten."
-#~ msgstr "No tutors or authors exist with which the request could be linked."
-
-#~ msgid ""
-#~ "Hier k&ouml;nnen Sie Einzelheiten zu ihrem abgeschlossenen Supportvertrag "
-#~ "(wie den Punktestand oder die Laufzeit) einsehen."
-#~ msgstr ""
-#~ "Here you view details of your completed support contract (e.g. point "
-#~ "status or the validity period)."
-
-#~ msgid "&Uuml;berblick &uuml;ber ihre Supportvertr&auml;ge"
-#~ msgstr "Overview of your support contracts"
-
-#~ msgid "Insgesamt <b>%s</b> Punkte, davon noch <b>%s</b> verf&uuml;gbar"
-#~ msgstr "Total of <b>%s</b> points, of which still <b>%s</b> available"
-
-#~ msgid "Einen neuen Vertrag %sanlegen%s"
-#~ msgstr "%sAdd%s a new contract "
-
-#~ msgid ""
-#~ "Sie sehen hier die letzten Anfragen, die im Rahmen des Supportvertrages "
-#~ "vom <b>%s</b> bis <b>%s</b> gestellt wurden."
-#~ msgstr ""
-#~ "Here you can see the last requests made from <b>%s</b> until <b>%s</b> "
-#~ "made within the context of the support contract."
-
-#~ msgid "Es liegen noch <b>%s</b> unbeantwortete Anfragen im Forum vor"
-#~ msgstr "There are <b>%s</b> unanswered requests in the forum."
-
-#~ msgid ""
-#~ "Im Augenblick sind alle Themen im Forum mit Anfragen verkn&uuml;pft oder "
-#~ "es liegen keine Themen vor."
-#~ msgstr ""
-#~ "At the moment all topics in the forum are linked with requests or no "
-#~ "topics are presented."
-
-#~ msgid "Eine neue Anfrage %sanlegen%s"
-#~ msgstr "%sAdd%s a new request"
-
-#~ msgid "%sAlle%s Anfragen anzeigen."
-#~ msgstr "Show %sall%s requests."
-
-#~ msgid "Neuer StEP-Eintrag"
-#~ msgstr "New StEP-entry"
-
-#~ msgid "Name des Autoren und Erstellungszeit werden automatisch hinzugefügt."
-#~ msgstr "Author's name and time of creation will automatically been added."
-
-#~ msgid "Die aktuellste Fassung dieses StEPs finden Sie immer im %sWiki%s"
-#~ msgstr ""
-#~ "The most recent version of this StEP can always been found in the %sWiki%s"
-
-#~ msgid "Ein neues Thema im Forum wurde angelegt."
-#~ msgstr "In the forum a new thread has been created."
-
-#~ msgid "Link zum Forumsbeitrag"
-#~ msgstr "Link to the associated forum entry"
-
-#~ msgid ""
-#~ "Ein neuer Eintrag wurde angelegt. Sie können ihn nun weiter bearbeiten "
-#~ "oder %szurück zur Ausgangsseite%s gehen."
-#~ msgstr ""
-#~ "A new entry has been added. You can further edit it or %s return to the "
-#~ "start page%s."
-
-#~ msgid "Neuer BIEST-Eintrag"
-#~ msgstr "New BIEST entry"
-
-#~ msgid ""
-#~ "Name des Autoren und Erstellungszeit werden automatisch hinzugef&uuml;gt."
-#~ msgstr ""
-#~ "Name of the author and time of creation will automatically been added."
-

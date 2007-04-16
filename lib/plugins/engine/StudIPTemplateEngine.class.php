@@ -118,7 +118,7 @@ class StudIPTemplateEngine {
 		<tr>
 			<td valign="top"><img src="<?=$GLOBALS['ASSETS_URL']?>images/ausruf.gif"></td>
 			<td valign="top" colspan=<?= $colspan?>>
-			<?= sprintf(_("%s <br>"), htmlReady($text))?>
+			<?= sprintf("%s <br>", htmlReady($text))?>
 			<?= sprintf("<a href=\"%s\">" . makeButton("ja2") . "</a>&nbsp; \n",$GLOBALS["PHP_SELF"])?>
 			<?= sprintf("<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n")?>
 			</td>

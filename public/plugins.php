@@ -94,10 +94,10 @@ if ($type == "Standard"){
 		}
 		
 		if (isset($SessSemName["header_line"])){
-			StudIPTemplateEngine::makeHeadline(sprintf(_("%s - %s"),$SessSemName["header_line"],$plugin->getDisplaytitle()),true,$iconname);
+			StudIPTemplateEngine::makeHeadline(sprintf("%s - %s",$SessSemName["header_line"],$plugin->getDisplaytitle()),true,$iconname);
 		}
 		else {
-			StudIPTemplateEngine::makeHeadline(sprintf(_("%s"),$plugin->getDisplaytitle()),true,$iconname);
+			StudIPTemplateEngine::makeHeadline(sprintf("%s",$plugin->getDisplaytitle()),true,$iconname);
 		}
 	}
 	else {

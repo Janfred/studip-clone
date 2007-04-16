@@ -474,7 +474,7 @@ function latex($text, $extern = FALSE) {
 						$text = '';
 					} else {
 						$errtxt = $latex->getErrorString();
-						if (!$errtxt) $errtxt = _("unparseable or potentially dangerous latex formula");
+						if (!$errtxt) $errtxt = _("Nicht interpretierbare oder möglicherweise gefährliche Latex Formel");
 						$text = substr_replace($text, '['.$errtxt.']',$pos,strlen($tex_matches[0][$i]));
 					}
 				}

@@ -102,12 +102,12 @@ class StudipLitImportPluginAbstract {
                 $newfile = $TMP_PATH."/".$this->xmlfile_name;
                 if(!@move_uploaded_file($this->xmlfile,$newfile)) {
                         @unlink($newfile);
-                        $this->addError("error","Error 3: " . _("Es ist ein Fehler beim Kopieren der Datei $this->xmlfile aufgetreten. Die Datei wurde nicht hochgeladen!§"));
+                        $this->addError("error","Error 3: " . _("Es ist ein Fehler beim Kopieren der Datei $this->xmlfile aufgetreten. Die Datei wurde nicht hochgeladen!"));
                         return FALSE;
                 } else {
                         // na dann lesen wir mal...
                         if (!($fp = fopen($newfile, "r"))) {
-                                $this->addError("error","Error 4: "._("could not open input file"));
+                                $this->addError("error","Error 4: "._("Importdatei konnte nicht geöffnet werden"));
                                 @unlink($newfile);
                                 return FALSE;
                         }

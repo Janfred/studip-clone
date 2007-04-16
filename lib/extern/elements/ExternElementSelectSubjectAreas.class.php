@@ -93,7 +93,7 @@ class ExternElementSelectSubjectAreas extends ExternElement {
 		$element_headline = $this->getEditFormHeadline($edit_form);
 		
 		$title = _("Alle Studienbereiche anzeigen:");
-		$info = _("Wählen Sie diese Option, wenn alle Veranstaltungen aus allen Studienbereichen angezeigt werden sollen. Unabhängig von unten vorgenommener Auswahl.");
+		$info = _("Wählen Sie diese Option, wenn alle Veranstaltungen aus allen Studienbereichen angezeigt werden sollen - unabhängig von unten vorgenommener Auswahl.");
 		$values = '1';
 		$names = '';
 		$table = $edit_form->editCheckboxGeneric('selectallsubjectareas', $title, $info, $values, $names);
