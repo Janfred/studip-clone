@@ -259,16 +259,20 @@ class DbView {
 			$query = "";
 			for($i = 0; $i < count($this->params); ++$i){
 				$query .= $tokens[$i];
+				if (is_null($this->params[$i])){
+					$query .= 'NULL';
+				} else {
 				switch ($types[$i]) {
-					case 1:
-					$query .= "'" . $this->params[$i] . "'";
-					break;
-					case 2:
-					$query .= $this->params[$i];
-					break;
-					case 3:
-					$query .= (is_array($this->params[$i])) ? "'".join("','",$this->params[$i])."'" : "'".$this->params[$i]."'";
-					break;
+						case 1:
+						$query .= "'" . $this->params[$i] . "'";
+						break;
+						case 2:
+						$query .= $this->params[$i];
+						break;
+						case 3:
+						$query .= (is_array($this->params[$i])) ? "'".join("','",$this->params[$i])."'" : "'".$this->params[$i]."'";
+						break;
+					}
 				}
 			}
 			$query .= $tokens[$i];
