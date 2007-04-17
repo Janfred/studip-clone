@@ -198,8 +198,7 @@ function getStudentname(){
 		 . "IF(duration_time=-1,-1,INTERVAL(start_time+duration_time," . join(",",$sem_start_times) .")) AS sem_number_end "
 		 . "FROM seminar_user a LEFT JOIN seminare b USING(Seminar_id) WHERE ";
 		 
-		 if($onlyseminars)
-		 $query .= ((is_array($allowed_sem_status)) ? " b.status IN('" . join("','",$allowed_sem_status) . "') AND " : "") ." ";
+		 if($onlyseminars) $query .= ((is_array($allowed_sem_status)) ? " b.status IN('" . join("','",$allowed_sem_status) . "') AND " : "") ." ";
 		 
 		 $query .= " a.user_id='".$user->id."' AND a.status='".$status."' "
 		 . "HAVING (sem_number <= ".$semestersAR[$semesterid]["id"]." AND (sem_number_end >= ".$semestersAR[$semesterid]["id"]." OR sem_number_end = -1))";
@@ -232,36 +231,33 @@ function getStudentname(){
 			 );
 			 $i++;
 		 }
-	 } else {
-		 
-		 //archiv seminars
-		 $db->query ("SELECT archiv.name, archiv.seminar_id, archiv_user.status, archiv.VeranstaltungsNummer, archiv.name, archiv.semester, archiv.untertitel, archiv.studienbereiche, archiv.dozenten "
-		 . "FROM archiv_user LEFT JOIN archiv  USING (seminar_id) "
-		 . "WHERE archiv_user.user_id = '".$user->id."' AND archiv.semester = '".$semestersAR[$semesterid]["idname"]."'");
-		 while($db->next_record()){
-			 
-			 $seminarid = $db->f("seminar_id");
-			 $name = $db->f("name");
-			 $seminarnumber = $db->f("VeranstaltungsNummer");
-			 $description = $db->f("untertitel");
-			 if ($description)
-			 $name .= ": ".$description;	
-			 $tutor = $db->f("dozenten");
-			 $semesterDB = $db->f("semester");
-			 
-			 if( (!$onlyseminars) || 
-			 ($onlyseminars && $db->f("studienbereiche")))
-			 $seminare[$i] = array(
-			 "id" 			=> $i,
-			 "seminarid" 	=> $seminarid,
-			 "seminarnumber" => $seminarnumber,
-			 "tutor" 		=> $tutor,
-			 "description" 	=> $name 
-			 );
-			 $i++;
-		 }
 	 }
-	 
-	 return $seminare;
+	 //archiv seminars
+	 $db->query ("SELECT archiv.name, archiv.seminar_id, archiv_user.status, archiv.VeranstaltungsNummer, archiv.name, archiv.semester, archiv.untertitel, archiv.studienbereiche, archiv.dozenten "
+	 . "FROM archiv_user LEFT JOIN archiv  USING (seminar_id) "
+	 . "WHERE archiv_user.user_id = '".$user->id."' AND archiv.semester = '".$semestersAR[$semesterid]["idname"]."'");
+	 while($db->next_record()){
+		 
+		 $seminarid = $db->f("seminar_id");
+		 $name = $db->f("name");
+		 $seminarnumber = $db->f("VeranstaltungsNummer");
+		 $description = $db->f("untertitel");
+		 if ($description)
+		 $name .= ": ".$description;	
+		 $tutor = $db->f("dozenten");
+		 $semesterDB = $db->f("semester");
+		 
+		 if( (!$onlyseminars) || 
+		 ($onlyseminars && $db->f("studienbereiche")))
+		 $seminare[$i] = array(
+		 "id" 			=> $i,
+		 "seminarid" 	=> $seminarid,
+		 "seminarnumber" => $seminarnumber,
+		 "tutor" 		=> $tutor,
+		 "description" 	=> $name 
+		 );
+		 $i++;
+	 }
+ return $seminare;
  }
 ?>
