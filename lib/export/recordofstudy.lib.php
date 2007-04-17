@@ -58,8 +58,8 @@ function printSelectSemester($infobox,$semestersAR){
 		  . "	   <form action=\"".$_SERVER['PHP_SELF']."\" method=post>\n"
 		  . "       &nbsp;<select name=\"semesterid\" style=\"vertical-align:middle;\">\n";
 	// the semester
-	for ($i=0;$i<sizeof($semestersAR);$i++){
-		$html .= "        <option value=\"".$semestersAR[$i]["id"]."\">".$semestersAR[$i]["name"]."</option>\n";
+	foreach ($semestersAR as $semester){
+		$html .= "        <option value=\"".$semester["id"]."\">".$semester["name"]."</option>\n";
 	}
 	$html .="       </select>\n"
 		  . createButton("auswaehlen",_("Semester und Kriterium auswählen."),"semester_selected")
@@ -103,14 +103,14 @@ function printSelectSemester($infobox,$semestersAR){
 function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 	global $semesterid;
 	$html = "<table border=\"0\" class=\"blank\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n"
-		  . " <form action=\"$PHP_SELF\" method=post>\n"
-		  . " <input type=\"hidden\" name=\"semesterid\" value=\"".$semesterid."\">\n"
-		  . " <tr valign=\"top\">\n"
-		  . "  <td width=\"99%\" NOWRAP class=\"blank\">&nbsp;\n"
-		  . "   <table align=\"center\" width=\"99%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n"
-		  . "	 <tr>"
-		  . "	  <td valign=\"top\">"
-		  . "	   <table align=\"center\" width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n";
+		. " <form action=\"{$_SERVER['PHP_SELF']}\" method=post>\n"
+		. " <input type=\"hidden\" name=\"semesterid\" value=\"".$semesterid."\">\n"
+		. " <tr valign=\"top\">\n"
+		. "  <td width=\"99%\" NOWRAP class=\"blank\">&nbsp;\n"
+		. "   <table align=\"center\" width=\"99%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n"
+		. "	 <tr>"
+		. "	  <td valign=\"top\">"
+		. "	   <table align=\"center\" width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n";
 
 	// displays some infos for the user
 	if ($notice){

@@ -45,6 +45,8 @@ page_open (array ("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 $perm->check ("autor");
 include ('lib/seminar_open.php');
 require_once('config.inc.php');
+require_once('lib/datei.inc.php');
+
 {
 // needed session-variables
 $sess->register("seminars");
@@ -215,9 +217,7 @@ elseif($mode == "pdf_assortment"){
 	$seminars["numberofpages"] = $j;
 }
 elseif($mode == 'create_pdf'){
-	global $record_of_study_templates;
-	$smtp = new studip_smtp_class();
-	$pdf_file['full_path'] = $smtp->url . $PATH_EXPORT . '/' . $record_of_study_templates[$template]['template'];
+	$pdf_file['full_path'] = $ABSOLUTE_URI_STUDIP . sprintf('sendfile.php?type=3&file_id=%1$s&file_name=%1$s', $record_of_study_templates[$template]['template']);
 	$pdf_file['filename'] = $record_of_study_templates[$template]['template'];
 	$fdfAR = createFdfAR($seminars);
 };
@@ -305,33 +305,35 @@ function createFdfAR($seminars){
  * @param   array $pdf_data		the key and values to send
  *
  */
-function printPDF ($pdf_file, $pdf_data) {
-	$fdf = "%FDF-1.2\n%‚„œ”\n";
-	$fdf .= "1 0 obj \n<< /FDF ";
-	$fdf .= "<< /Fields [\n";
-
-	foreach ($pdf_data as $key => $val)
-		$fdf .= "<< /V ($val)/T ($key) >> \n";
-
-	$fdf .= "]\n/F (".$pdf_file["full_path"].") >>";
-	$fdf .= ">>\nendobj\ntrailer\n<<\n";
-	$fdf .= "/Root 1 0 R \n\n>>\n";
-	$fdf .= "%%EOF";
-
-	// Now we display the FDF data which causes Acrobat to start
-	header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
-	header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
-	header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
-	header("Cache-Control: post-check=0, pre-check=0", false);
-	if ($_SERVER['HTTPS'] == "on")
-		header("Pragma: public");
-	else
-		header("Pragma: no-cache");
-	header("Cache-Control: private");
-	header("Content-Type: application/vnd.fdf");
-	header("Content-disposition: inline; filename=\"".$pdf_file["filename"]."\"");
-	echo $fdf;
-}
+ function printPDF ($pdf_file, $pdf_data) {
+	 $fdf = "%FDF-1.2\n%‚„œ”\n";
+	 $fdf .= "1 0 obj \n<< /FDF ";
+	 $fdf .= "<< /Fields [\n";
+	 
+	 foreach ($pdf_data as $key => $val)
+	 	$fdf .= "<< /V ($val)/T ($key) >> \n";
+	 
+	 $fdf .= "]\n/F (".$pdf_file["full_path"].") >>";
+	 $fdf .= ">>\nendobj\ntrailer\n<<\n";
+	 $fdf .= "/Root 1 0 R \n\n>>\n";
+	 $fdf .= "%%EOF";
+	 
+	 // Now we display the FDF data which causes Acrobat to start
+	 header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
+	 header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
+	 if ($_SERVER['HTTPS'] == "on"){
+		 header("Pragma: public");
+		 header("Cache-Control: private");
+	 } else {
+		 header("Pragma: no-cache");
+		 header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
+	 }
+	 header("Cache-Control: post-check=0, pre-check=0", false);
+	 header("Content-Type: application/vnd.fdf");
+	 header("Content-disposition: attachment; filename=\"".$pdf_file["filename"]."\"");
+	 header("Content-Length: " . strlen($fdf));
+	 echo $fdf;
+ }
 
 /**
  * replaces the semester token
@@ -407,50 +409,4 @@ function createInfoxboxArray($mode){
 
 	return $infobox;
 }
-
-/**
- * sorts an multidim-array
- *
- * @access  private
- * @param   array $array		the array to sort
- * @param   int/string $sort	the index to be sorted
- * @param   string $order		ASC/DESC
- * @param   int $left			the left end index
- * @param   int $right			the rigt end index
- * @returns array				the sorted array
- *
- */
-function sortSemestersArray($array,$sort = 0,$order = "ASC",$left = 0,$right = -1){
-	if ($right == -1){
-		$right = count($array);
-	}
-
-	$left_dump = $left;
-	$right_dump = $right;
-	$mitte = $array[($left + $right) / 2][$sort];
-
-	if($right_dump > $left_dump){
-		do {
-			if ($order == "ASC"){
-				while($array[$left_dump][$sort]<$mitte) $left_dump++;
-				while($array[$right_dump][$sort]>$mitte) $right_dump--;
-			} else {
-				while($array[$left_dump][$sort]>$mitte) $left_dump++;
-				while($array[$right_dump][$sort]<$mitte) $right_dump--;
-			}
-
-			if($left_dump <= $right_dump){
-				$tmp = $array[$left_dump];
-				$array[$left_dump++] = $array[$right_dump];
-				$array[$right_dump--] = $tmp;
-			}
-
-		} while($left_dump <= $right_dump);
-
-		$array = sortSemestersArray($array,$sort,$order,$left, $right_dump);
-		$array = sortSemestersArray($array,$sort,$order,$left_dump,$right);
-	}
-	return $array;
-}
-
 ?>

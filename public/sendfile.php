@@ -63,7 +63,7 @@ switch ($type) {
 	break;
 	//We want to download an XSL-Script
 	case 3:
-		$path_file=$PATH_EXPORT . "/".$file_id;
+		$path_file=$STUDIP_BASE_PATH . "/" . $PATH_EXPORT . "/".$file_id;
 	break;
 	//we want to download from the studip-tmp folder (this mode performs perm checks)
 	case 4:
