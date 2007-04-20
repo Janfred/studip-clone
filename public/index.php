@@ -364,7 +364,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	<table class="blank" width="600"  border="0" cellpadding="0" cellspacing="0" align="center">
 	<tr><td colspan=3 class="topic" valign="middle">&nbsp;<b><? echo $UNI_NAME;?></b><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="16" width="5" border="0"></td></tr>
 	<tr>
-		<td valign="middle" height="260" colspan=3 background="<?= $GLOBALS['ASSETS_URL'] ?>images/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>"">
+		<td valign="middle" height="260" colspan=3 background="<?= $GLOBALS['ASSETS_URL'] ?>images/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>">
 			<?
 			echo sprintf($mtxt, 'index.php?again=yes', _("Login"), _("f&uuml;r registrierte NutzerInnen"));
 			if (array_search("CAS",$GLOBALS["STUDIP_AUTH_PLUGIN"])){
@@ -439,7 +439,7 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 			if ($activatedplugin->hasUnauthorizedView()){
 ?>
 				<tr>
-					<td colspan="3"class="topic">&nbsp;<b><?= $activatedplugin->getDisplaytitle() ?></b></td>
+					<td colspan="3" class="topic">&nbsp;<b><?= $activatedplugin->getDisplaytitle() ?></b></td>
 				</tr>
 				<tr>
 					<td colspan="3" class="steel1"><blockquote><?= $activatedplugin->showOverview(false) ?><blockquote></td>
