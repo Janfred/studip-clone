@@ -255,7 +255,6 @@ function showlog_entries($from, $mode, $actionfilter, $searchmode, $object) {
 	if ($searchmode=='found' && $object) {
 		$add.="AND (affected_range_id='$object' OR coaffected_range_id='$object') ";
 	}
-	$to=$from+50;
 
 	$q="SELECT COUNT(*) as c FROM log_events WHERE 1 $add ORDER BY mkdate";
 	$db->query($q);
@@ -265,7 +264,7 @@ function showlog_entries($from, $mode, $actionfilter, $searchmode, $object) {
 		$from = max(0,$numentries-50);
 	}
 
-	$q="SELECT * FROM log_events WHERE 1 $add ORDER BY mkdate DESC, event_id DESC LIMIT $from,$to";
+	$q="SELECT * FROM log_events WHERE 1 $add ORDER BY mkdate DESC, event_id DESC LIMIT $from,50";
 	$db->query($q);
 
 	while ($db->next_record()) {
@@ -289,11 +288,15 @@ function showlog_entries($from, $mode, $actionfilter, $searchmode, $object) {
 	//echo $table->closeRow();
 	echo $table->close();
 	echo "<p>&nbsp;<br><font size=-1>"
-		. sprintf(_("Eintrag %s - %s von %s. "),$from,min($to,$numentries),$numentries)
-		. "</font> <input type=image name=\"zurueck\" "
-		. makeButton("zurueck","src")
-		. "> <input type=image name=\"weiter\" "
-		. makeButton("weiter","src").">";
+		. sprintf(_("Eintrag %s - %s von %s. "),$from,min($from+50-1,$numentries),$numentries)
+		. "</font>";
+	if ($from>0) {
+		echo "<input type=image name=\"zurueck\" ".makeButton("zurueck","src")."> ";
+	}
+	if ($from+50 < $numentries) {
+		echo "<input type=image name=\"weiter\" ".makeButton("weiter","src").">";
+	echo "</p>";
+	}
 }
 
 function showlog_search_seminar($needle) {
@@ -388,9 +391,9 @@ echo $content->openRow();
 echo $content->openCell(array("colspan"=>"2"));
 
 if (isset($weiter_x)) {
-		$from=$from+40;
+		$from=$from+50;
 } else if (isset($zurueck_x)) {
-		$from=$from-40;
+		$from=max(0,$from-50);
 } else {
 	$from=0;
 }
