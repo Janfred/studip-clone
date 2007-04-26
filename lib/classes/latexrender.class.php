@@ -137,7 +137,8 @@ class LatexRender {
 		$latex_formula = preg_replace("/&gt;/i", ">", $latex_formula);
 		$latex_formula = preg_replace("/&lt;/i", "<", $latex_formula);
 		
-		$formula_hash = md5($latex_formula);
+		// hash value is computed from formatname and texcode
+		$formula_hash = md5($this->_format.$latex_formula);
 		
 		$filename = $formula_hash.".png";
 		$full_path_filename = $this->getPicturePath()."/".$filename;
@@ -265,7 +266,8 @@ class LatexRender {
 		}
 		
 		// copy temporary formula file to cahed formula directory
-		$latex_hash = md5($latex_text);
+		// hash value is computed from formatname and texcode
+		$latex_hash = md5($this->_format.$latex_text);
 		$filename = $this->getPicturePath()."/".$latex_hash.".png";
 		
 		$status_code = @copy($this->_tmp_filename.".png",$filename);
