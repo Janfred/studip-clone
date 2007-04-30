@@ -328,26 +328,6 @@ $DEFAULT_LANGUAGE = "de_DE";  // which language should we use if we can gather n
 
 $_language_domain = "studip";  // the name of the language file. Should not be changed except in cases of individual translations or special terms.
 
-// Literature-Import Plugins
-$LIT_IMPORT_PLUGINS[] = array('name' => 'EndNote', 'visual_name' => 'EndNote ab Version 7 / Reference Manager 11', 'description' => 'Exportieren Sie Ihre Literaturliste aus EndNote / Reference Manager als XML-Datei.');
-$LIT_IMPORT_PLUGINS[] = array('name' => 'GenericXML', 'visual_name' => 'Einfaches XML nach fester Vorgabe',
-	'description' => 'Die XML-Datei muss folgende Struktur besitzen:[code]
-	<?xml version="1.0" encoding="UTF-8"?>
-	<xml>
-	<eintrag>
-	  <titel></titel>
-	  <autor></autor>
-	  <beschreibung></beschreibung>
-	  <herausgeber></herausgeber>
-	  <ort></ort>
-	  <isbn></isbn>
-	  <jahr></jahr>
-	</eintrag>
-	</xml>[/code]
-	Jeder Abschnitt darf mehrfach vorkommen oder kann weggelassen werden, mindestens ein Titel pro Eintrag muss vorhanden sein.');
-$LIT_IMPORT_PLUGINS[] = array('name' => 'CSV', 'visual_name' => 'CSV mit Semikolon als Trennzeichen', 'description' => 'Exportieren Sie Ihre Literaturliste als mit Trennzeichen getrennter Datei (CSV). Wichtig hierbei ist die Verwendung des Semikolons als Trennzeichen.');
-$LIT_IMPORT_PLUGINS[] = array('name' => 'StudipLitList', 'visual_name' => 'Literaturliste im Stud.IP Format', 'description' => 'Benutzen Sie die Export-Funktion innerhalb von Stud.IP, um eine Literaturliste im Stud.IP Format zu exportieren.');
-
 /*literature search plugins 
 ----------------------------------------------------------------
 If you write your own plugin put it in studip-htdocs/lib/classes/lit_search_plugins 
