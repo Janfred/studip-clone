@@ -88,7 +88,6 @@ class StudipLitListViewAdmin extends TreeView{
 	}
 
 	function parseCommand(){
-		global $_REQUEST;
 		if ($_REQUEST['mode'])
 			$this->mode = $_REQUEST['mode'];
 		if ($_REQUEST['cmd']){
@@ -103,7 +102,6 @@ class StudipLitListViewAdmin extends TreeView{
 
 
 	function execCommandEditItem(){
-		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
 		$this->mode = "EditItem";
 		$this->anchor = $item_id;
@@ -112,7 +110,6 @@ class StudipLitListViewAdmin extends TreeView{
 	}
 
 	function execCommandInClipboard(){
-		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
 		if (is_object($this->clip_board)){
 			if ($this->tree->isElement($item_id)){
@@ -133,7 +130,6 @@ class StudipLitListViewAdmin extends TreeView{
 	}
 
 	function execCommandInsertItem(){
-		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
 		$parent_id = $_REQUEST['parent_id'];
 		$user_id = $GLOBALS['auth']->auth['uid'];
@@ -170,7 +166,6 @@ class StudipLitListViewAdmin extends TreeView{
 	}
 
 	function execCommandCopyList(){
-		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
 		if ($new_list_id = $this->tree->copyList($item_id)){
 			$this->anchor = $new_list_id;
@@ -185,7 +180,6 @@ class StudipLitListViewAdmin extends TreeView{
 	}
 
 	function execCommandCopyUserList(){
-		global $_REQUEST;
 		$list_id = $_REQUEST['user_list'];
 		if ($new_list_id = $this->tree->copyList($list_id)){
 			$this->anchor = $new_list_id;
@@ -200,7 +194,6 @@ class StudipLitListViewAdmin extends TreeView{
 	}
 
 	function execCommandToggleVisibility(){
-		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
 		$user_id = $GLOBALS['auth']->auth['uid'];
 		$visibility = ($this->tree->tree_data[$item_id]['visibility']) ? 0 : 1;
@@ -214,7 +207,6 @@ class StudipLitListViewAdmin extends TreeView{
 	}
 
 	function execCommandOrderItem(){
-		global $_REQUEST;
 		$direction = $_REQUEST['direction'];
 		$item_id = $_REQUEST['item_id'];
 		$items_to_order = $this->tree->getKids($this->tree->tree_data[$item_id]['parent_id']);
@@ -245,7 +237,6 @@ class StudipLitListViewAdmin extends TreeView{
 	}
 
 	function execCommandAssertDeleteItem(){
-		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
 		$this->mode = "AssertDeleteItem";
 		$this->msg[$item_id] = "info§" ._("Sie beabsichtigen diese Liste inklusive aller Eintr&auml;ge, zu l&ouml;schen. ")
@@ -261,7 +252,6 @@ class StudipLitListViewAdmin extends TreeView{
 	}
 
 	function execCommandDeleteItem(){
-		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
 		$deleted = 0;
 		$item_name = $this->tree->tree_data[$item_id]['name'];
@@ -287,20 +277,9 @@ class StudipLitListViewAdmin extends TreeView{
 	}
 
 	function execCommandNewItem(){
-		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
-		$level_items = $this->tree->getKids($item_id);
 		$new_item_id = md5(uniqid("listblubb",1));
-		if (!is_array($level_items)){
-			$level_items[0] = $new_item_id;
-		} else {
-			$level_items[] = $new_item_id;
-		}
-		$this->tree->tree_childs[$item_id] = $level_items;
 		$this->tree->tree_data[$new_item_id] = array(
-			'parent_id' => $item_id,
-			'name' => _("Neue Liste"),
-			'priority' => ($this->tree->getMaxPriority($item_id) + 1),
 			'chdate' => time(),
 			'format'=> $this->tree->format_default,
 			'user_id' => $GLOBALS['auth']->auth['uid'],
@@ -308,6 +287,7 @@ class StudipLitListViewAdmin extends TreeView{
 			'fullname' => get_fullname($GLOBALS['auth']->auth['uid'],'no_title_short'),
 			'visibility' => 0
 			);
+		$this->tree->storeItem($new_item_id, $item_id, _("Neue Liste"),$this->tree->getMaxPriority($item_id) + 1);
 		$this->anchor = $new_item_id;
 		$this->edit_item_id = $new_item_id;
 		$this->open_ranges[$item_id] = true;
@@ -318,7 +298,6 @@ class StudipLitListViewAdmin extends TreeView{
 	}
 
 	function execCommandCancel(){
-		global $_REQUEST;
 		$item_id = $_REQUEST['item_id'];
 		$this->mode = "";
 		$this->anchor = $item_id;

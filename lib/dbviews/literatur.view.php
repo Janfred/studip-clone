@@ -53,7 +53,7 @@ $GLOBALS['_views']["LIT_GET_LIST_CONTENT"] = array("query" => "SELECT a.*," . $G
 $GLOBALS['_views']["LIT_UPD_LIST_CONTENT"] = array("query" => "UPDATE lit_list_content SET list_id=?, catalog_id=?, user_id=?,note=?,priority=?, chdate=UNIX_TIMESTAMP() WHERE list_element_id=?");
 $GLOBALS['_views']["LIT_INS_LIST_CONTENT"] = array("query" => "INSERT INTO lit_list_content (list_id,catalog_id,user_id,note,priority,chdate,mkdate,list_element_id) VALUES (?,?,?,?,?,UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),?)");
 $GLOBALS['_views']["LIT_UPD_LIST"] = array("query" => "UPDATE lit_list SET range_id=?, name=?, user_id=?,format=?,priority=?,visibility=§, chdate=UNIX_TIMESTAMP() WHERE list_id=?");
-$GLOBALS['_views']["LIT_INS_LIST"] = array("query" => "INSERT INTO lit_list (range_id,name,user_id,format,priority,visibility,chdate,mkdate,list_id) VALUES (?,?,?,?,?,&,UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),?)");
+$GLOBALS['_views']["LIT_INS_LIST"] = array("query" => "INSERT INTO lit_list (range_id,name,user_id,format,priority,visibility,chdate,mkdate,list_id) VALUES (?,?,?,?,?,?,UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),?)");
 $GLOBALS['_views']["LIT_DEL_LIST"] = array("query" => "DELETE FROM lit_list WHERE list_id IN(&)");
 $GLOBALS['_views']["LIT_DEL_LIST_CONTENT_ALL"] = array("query" => "DELETE FROM lit_list_content WHERE list_id IN(&)");
 $GLOBALS['_views']["LIT_DEL_LIST_CONTENT"] = array("query" => "DELETE FROM lit_list_content WHERE list_element_id=?");
