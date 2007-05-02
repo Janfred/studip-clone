@@ -20,6 +20,7 @@
 
 # Include all required files ================================================ #
 require_once("lib/evaluation/evaluation.config.php");
+require_once('lib/export/export_tmp_gc.inc.php');
 require_once(EVAL_FILE_EVALDB);
 require_once(EVAL_FILE_ANSWERDB);
 require_once(EVAL_FILE_OBJECT);
@@ -253,8 +254,8 @@ class EvaluationExportManager extends Object {
    function createNewFile () {
       $randomID       = StudipObject::createNewID ();
       $this->filename = EVALEXPORT_PREFIX.$randomID.".".$this->extension;
-
-      if (!is_dir (EVALEXPORT_PATH_TEMP))
+	  export_tmp_gc();
+	  if (!is_dir (EVALEXPORT_PATH_TEMP))
          return $this->throwError (1, sprintf (_("ExportManager::Das Verzeichnis %s existiert nicht."), EVALEXPORT_PATH_TEMP));
       if (!is_writable (EVALEXPORT_PATH_TEMP))
          return $this->throwError (2, sprintf (_("ExportManager::Das Verzeichnis %s ist nicht schreibbar nicht."), EVALEXPORT_PATH_TEMP));
