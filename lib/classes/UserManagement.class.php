@@ -789,8 +789,13 @@ class UserManagement {
 		// delete the datafields
 		$DataFields = new DataFields($this->user_data['auth_user_md5.user_id']);
 		$DataFields->killAllEntries();				
-			
+		
+		$user_cfg = new UserConfig();
+		$user_cfg->unsetAll($this->user_data['auth_user_md5.user_id']);
+		
 		// delete all remaining user data
+		$query = "DELETE FROM seminar_user_schedule WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
+		$this->db->query($query);
 		$query = "DELETE FROM rss_feeds WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
 		$query = "DELETE FROM kategorien WHERE range_id = '" . $this->user_data['auth_user_md5.user_id'] . "'";
@@ -802,8 +807,9 @@ class UserManagement {
 		object_kill_views($this->user_data['auth_user_md5.user_id']);
 		
 		// delete picture
-		if(@file_exists("user/" . $this->user_data['auth_user_md5.user_id'] . ".jpg")) {
-			if (@unlink('' . "user/" . $this->user_data['auth_user_md5.user_id'] . ".jpg"))
+		$user_picture = $GLOBALS['ABSOLUTE_PATH_USER_PIC'] . "/" . $this->user_data["auth_user_md5.user_id"].".jpg";
+		if(@file_exists($user_picture)) {
+			if (@unlink($user_picture))
 				$this->msg .= "info§" . _("Bild gel&ouml;scht.") . "§";
 			else
 				$this->msg .= "error§" . _("Bild konnte nicht gel&ouml;scht werden.") . "§";
