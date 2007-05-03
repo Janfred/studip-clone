@@ -47,6 +47,7 @@ class RoomRequest {
 	var $seminar_id;				//seminar_id from the assigned seminar
 	var $properties = array();			//the assigned property-requests
 	var $last_search_result_count;			//the number of found rooms from last executed search
+	var $reply_comment;
 
 	//Konstruktor
 	function RoomRequest($id='') {
@@ -108,7 +109,11 @@ class RoomRequest {
 	function getComment() {
 		return $this->comment;
 	}
-	
+
+	function getReplyComment() {
+		return $this->reply_comment;
+	}
+
 	function getClosed() {
 		return $this->closed;
 	}
@@ -189,6 +194,11 @@ class RoomRequest {
 		$this->chng_flag=TRUE;
 	}
 	
+	function setReplyComment($value) {
+		$this->reply_comment=$value;
+		$this->chng_flag=TRUE;
+	}
+
 	function setClosed($value) {
 		$this->closed=$value;
 		$this->chng_flag=TRUE;
@@ -297,6 +307,7 @@ class RoomRequest {
 			$this->comment = $this->db->f("comment");
 			$this->closed = $this->db->f("closed");
 			$this->chdate = $this->db->f("chdate");
+			$this->reply_comment = $this->db->f('reply_comment');
 			
 			$query = sprintf("SELECT a.*, b.type, b.name, b.options, b.system FROM resources_requests_properties a LEFT JOIN resources_properties b USING (property_id) WHERE a.request_id='%s' ", $this->id);
 			$this->db->query($query);
@@ -418,9 +429,9 @@ class RoomRequest {
 			} else {
 				$query = sprintf("UPDATE resources_requests SET resource_id='%s', " 
 					."user_id='%s', seminar_id='%s', termin_id = '%s', category_id = '%s', comment='%s', "	
-					."closed='%s' WHERE request_id='%s' "
+					."closed='%s', reply_comment = '%s' WHERE request_id='%s' "
 							 , $this->resource_id, $this->user_id, $this->seminar_id, $this->termin_id, $this->category_id, $this->comment
-							 , $this->closed, $this->id);
+							 , $this->closed, $this->reply_comment, $this->id);
 			}
 			$this->db->query($query);
 			

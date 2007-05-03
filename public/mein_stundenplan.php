@@ -259,12 +259,22 @@ for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_sche
 		foreach 	($term_data["turnus_data"] as $data)
 			if ($data["end_stunde"] >= $global_start_time) {
 				//generate the room
-				if (($RESOURCES_ENABLE) && ($data["resource_id"]))
-					$tmp_room = getResourceObjectName($data["resource_id"]);
-				elseif (!$data["room"])
-					$tmp_room =_("n. A.");
-				else
-					$tmp_room =$data["room"];
+
+				if ($RESOURCES_ENABLE) {
+                    $roomIDsArray = CycleDataDB::getPredominantRoomDB($data["metadate_id"]);
+                    if( $roomIDsArray) {
+                        $tmp_room = getResourceObjectName($roomIDsArray[0]); 
+                    } else {
+                        $tmp_room = _("n. A.");
+                    }
+                } else {
+                    $roomName = CycleDataDB::getFreeTextPredominantRoomDB($data["metadate_id"]);
+                    if( $roomName) {
+                        $tmp_room = $roomName; 
+                    } else {
+                        $tmp_room = _("n. A.");
+                    }
+                }
 
 				//Patch fuer Problem mit alten Versionwn <=0.7 (Typ war falsch gesetzt), wird nur fuer rueckwaerts-Kompatibilitaet benoetigt
 				settype ($data["start_stunde"], "integer");

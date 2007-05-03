@@ -186,8 +186,8 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 	$sem_create_data["sem_name"] = $db->f("Name");
 	$sem_create_data["sem_untert"] = $db->f("Untertitel");
 	$sem_create_data["sem_status"] = $db->f("status");
-	$sem_create_data["sem_class"] = $SEM_TYPE[$sem_create_data["sem_status"]]["class"];
 	$class = $SEM_TYPE[$sem_create_data["sem_status"]]["class"];
+	$sem_create_data["sem_class"] = $class;
 	$sem_create_data["sem_desc"] = $db->f("Beschreibung");
 	$sem_create_data["sem_room"] = $db->f("Ort");
 	$sem_create_data["sem_sonst"] = $db->f("Sonstiges");
@@ -202,13 +202,16 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 	$sem_create_data["sem_orga"] = $db->f("lernorga");
 	$sem_create_data["sem_leistnw"] = $db->f("leistungsnachweis");
 	$sem_create_data["sem_ects"] = $db->f("ects");
-	$sem_create_data["sem_admission_date"] = $db->f("admission_endtime");
+	//$sem_create_data["sem_admission_date"] = $db->f("admission_endtime");
+	$sem_create_data["sem_admission_date"] = -1;
 	$sem_create_data["sem_turnout"] = $db->f("admission_turnout");
-	$sem_create_data["sem_admission"] = $db->f("admission_type");
+	//$sem_create_data["sem_admission"] = $db->f("admission_type");
 	$sem_create_data["sem_payment"] = $db->f("admission_prelim");
 	$sem_create_data["sem_paytxt"] = $db->f("admission_prelim_txt");
-	$sem_create_data["sem_admission_start_date"] = $db->f("admission_starttime");
-	$sem_create_data["sem_admission_end_date"] = $db->f("admission_endtime_sem");
+	//$sem_create_data["sem_admission_start_date"] = $db->f("admission_starttime");
+	//$sem_create_data["sem_admission_end_date"] = $db->f("admission_endtime_sem");
+	$sem_create_data["sem_admission_start_date"] = -1;
+	$sem_create_data["sem_admission_end_date"] = -1;
 	$sem_create_data["timestamp"] = time(); // wichtig, da sonst beim ersten Aufruf sofort sem_create_data resetted wird!
 	// eintragen der sem_tree_ids
 	$sem_create_data["sem_bereich"] = get_seminar_sem_tree_entries($cp_id);
@@ -415,8 +418,9 @@ if ($form == 3)
 																"start_minute" => $sem_create_data["term_turnus_start_minute"][$i],
 																"end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i],
 																"end_minute" => $sem_create_data["term_turnus_end_minute"][$i],
-																"room"=>$sem_create_data["term_turnus_room"][$i],
-																"resource_id"=>$sem_create_data["term_turnus_resource_id"][$i],
+																// they are not needed anymore, but who knows...
+																//"room"=>$sem_create_data["term_turnus_room"][$i],
+																//"resource_id"=>$sem_create_data["term_turnus_resource_id"][$i],
 																"desc"=>$sem_create_data["term_turnus_desc"][$i]
 																);
 				}
@@ -664,7 +668,7 @@ if ($form == 8)
 //jump-logic
 if ($jump_back_x) {
 	if ($form > 1) {
-		//jump from form 4 (rooms and room-rewusts) back
+		//jump from form 4 (rooms and room-requests) back
 		if ($form == 4) {
 			if ($sem_create_data["term_art"] == -1) {
 				$level = 2;
@@ -1032,7 +1036,7 @@ if (($form == 3) && ($jump_next_x))
 
 		//check for room management: we dont allow the preliminary discussion matches a turnus date (in this case, a schedule schoudl be used!)
 		if ((!$sem_create_data["term_art"]) && ($RESOURCES_ENABLE)) {
-			$sem_start_timestamp = veranstaltung_beginn($sem_create_data["term_art"],$sem_create_data["sem_start_time"],$sem_create_data['term_start_woche'],$sem_create_data['sem_start_termin'],$sem_create_data['metadata_termin']['turnus_data'],1,1);
+			$sem_start_timestamp = veranstaltung_beginn_from_metadata($sem_create_data["term_art"],$sem_create_data["sem_start_time"],$sem_create_data['term_start_woche'],$sem_create_data['sem_start_termin'],$sem_create_data['metadata_termin']['turnus_data']);
 			if ($sem_start_timestamp > 0 && $sem_create_data["sem_vor_termin"] >= $sem_start_timestamp){
 				$tmp_vor_day = date("w", $sem_create_data["sem_vor_termin"]);
 				if ($tmp_vor_day == 0)
@@ -1202,7 +1206,7 @@ if (($form == 5) && ($jump_next_x))
 			else
 				$errormsg.= "error§"._("Bitte geben Sie einen Termin f&uuml;r das Enddatum der Kontingentierung an!")."§";
 		elseif ($sem_create_data["term_art"]==0){
-			$tmp_first_date=veranstaltung_beginn ($sem_create_data["term_art"], $sem_create_data["sem_start_time"], $sem_create_data["term_start_woche"], $sem_create_data["sem_start_termin"], $sem_create_data["metadata_termin"]["turnus_data"], "int");
+			$tmp_first_date=veranstaltung_beginn_from_metadata ($sem_create_data["term_art"], $sem_create_data["sem_start_time"], $sem_create_data["term_start_woche"], $sem_create_data["sem_start_termin"], $sem_create_data["metadata_termin"]["turnus_data"], "int");
 			if (($sem_create_data["sem_admission_date"] > $tmp_first_date) && ($tmp_first_date >0)){
 				if ($tmp_first_date > 0)
 					if ($sem_create_data["sem_admission"] == 1)
@@ -1315,10 +1319,7 @@ if (($form == 6) && ($jump_next_x))
       		$run = FALSE;
       		}
 
-      	if ($run) {
-		//Seminar_id erzeugen und Seminar eintrag
-		$sem_create_data["sem_id"]=md5(uniqid($hash_secret));
-
+	if ($run) {
 		//Termin-Metadaten-Array zusammenmatschen zum besseren speichern in der Datenbank
 		if ($sem_create_data['term_art'] == -1) {
 			$sem_create_data['metadata_termin'] = array();
@@ -1345,122 +1346,128 @@ if (($form == 6) && ($jump_next_x))
 		else
 			$visible = FALSE;
 
-		$query = "INSERT INTO seminare SET
-				Seminar_id = '".			$sem_create_data["sem_id"]."',
-				VeranstaltungsNummer = '".		$sem_create_data["sem_nummer"]."',
-				Institut_id = '".			$sem_create_data["sem_inst_id"]."',
-				Name = '".				$sem_create_data["sem_name"]."',
-				Untertitel = '".			$sem_create_data["sem_untert"]."',
-				status = '".				$sem_create_data["sem_status"]."',
-				Beschreibung = '".			$sem_create_data["sem_desc"]."',
-				Ort = '".				$sem_create_data["sem_room"]."',
-				Sonstiges = '".				$sem_create_data["sem_sonst"]."',
-				Passwort= '".				$sem_create_data["sem_pw"]."',
-				Lesezugriff = '".			$sem_create_data["sem_sec_lese"]."',
-				Schreibzugriff = '".			$sem_create_data["sem_sec_schreib"]."',
-				start_time = '".			$sem_create_data["sem_start_time"]."',
-				duration_time = '".			$sem_create_data["sem_duration_time"]."',
-				art = '".				$sem_create_data["sem_art"]."',
-				teilnehmer = '".			$sem_create_data["sem_teiln"]."',
-				vorrausetzungen = '".			$sem_create_data["sem_voraus"]."',
-				lernorga = '".				$sem_create_data["sem_orga"]."',
-				leistungsnachweis = '".			$sem_create_data["sem_leistnw"]."',
-				metadata_dates= '".			$serialized_metadata."',
-				mkdate = '".				time()."',
-				chdate = '".				time()."',
-				ects = '".				$sem_create_data["sem_ects"]."',
-				admission_endtime = '".			$sem_create_data["sem_admission_date"]."',
-				admission_turnout = '".			$sem_create_data["sem_turnout"]."',
-				admission_binding = 			NULL ,
-				admission_type = '".			$sem_create_data["sem_admission"]."',
-				admission_selection_take_place = 	'0',
-				admission_group = 			NULL ,
-				admission_prelim = '".			$sem_create_data["sem_payment"]."',
-				admission_prelim_txt = '".		$sem_create_data["sem_paytxt"]."',
-				admission_starttime = '".		$sem_create_data["sem_admission_start_date"]."',
-				admission_endtime_sem = '".		$sem_create_data["sem_admission_end_date"]."',
-				visible =  '". 				(($visible) ? 1 : 0) . "',
-				showscore =				'0',
-				modules = '" .				((array_key_exists('sem_modules', $sem_create_data))? $sem_create_data['sem_modules']:'NULL') . "'";
+		$sem = new Seminar();
+
+		// MetaDate erstellen
+		$sem->metadate = new MetaDate();
+		if ($sem_create_data['metadata_termin']['art'] == 0)  {
+			$sem->metadate->createMetaDateFromArray($sem_create_data['metadata_termin']);
+		}	else {
+			if ($sem_create_data['term_count'] > 0)
+			for ($i = 0; $i < $sem_create_data['term_count']; $i++) {
+				$termin = new SingleDate(array('seminar_id' => $sem->getId()));
+				$start = mktime($sem_create_data['term_start_stunde'][$i], $sem_create_data['term_start_minute'][$i], 0, $sem_create_data['term_monat'][$i], $sem_create_data['term_tag'][$i], $sem_create_data['term_jahr'][$i]);
+				$end = mktime($sem_create_data['term_end_stunde'][$i], $sem_create_data['term_end_minute'][$i], 0, $sem_create_data['term_monat'][$i], $sem_create_data['term_tag'][$i], $sem_create_data['term_jahr'][$i]);
+				$termin->setTime($start, $end);
+				if ($sem_create_data['term_resource_id'][$i]) {
+					$termin->bookRoom($sem_create_data['term_resource_id'][$i]);
+				} else if ($sem_create_data['term_room'][$i]){
+					$termin->setFreeRoomText($sem_create_data['term_room']);
+				}
+				if ($termin->validate()) {
+					$sem->addSingleDate($termin);
+				}
+				unset($termin);
+			}
+		}
+		$sem->metadate->setSeminarStartTime($sem_create_data['sem_start_time']);
+		$sem->metadate->setSeminarDurationTime($sem_create_data['sem_duration_time']);
+		$sem->metadate->seminar_id = $sem->getId();
+
+		$sem->semester_start_time = $sem_create_data['sem_start_time'];
+		$sem->semester_duration_time = $sem_create_data['sem_duration_time'];
+		$sem->seminar_number = $sem_create_data['sem_nummer'];
+		$sem->institut_id =	$sem_create_data['sem_inst_id'];
+		$sem->name = $sem_create_data['sem_name'];
+		$sem->subtitle = $sem_create_data['sem_untert'];
+		$sem->status = $sem_create_data['sem_status'];
+		$sem->description = $sem_create_data['sem_desc'];
+		$sem->location = $sem_create_data['sem_room'];
+		$sem->misc = $sem_create_data['sem_sonst'];
+		$sem->password = $sem_create_data['sem_pw'];
+		$sem->read_level = $sem_create_data['sem_sec_lese'];
+		$sem->write_level = $sem_create_data['sem_sec_schreib'];
+		$sem->form = $sem_create_data['sem_art'];
+		$sem->participants = $sem_create_data['sem_teiln'];
+		$sem->requirements = $sem_create_data['sem_voraus'];
+		$sem->orga = $sem_create_data['sem_orga'];
+		$sem->leistungsnachweis = $sem_create_data['sem_leistnw'];
+		$sem->ects = $sem_create_data['sem_ects'];
+		$sem->admission_endtime = $sem_create_data['sem_admission_date'];
+		$sem->admission_turnout = $sem_create_data['sem_turnout'];
+		$sem->admission_type = $sem_create_data['sem_admission'];
+		$sem->admission_prelim = $sem_create_data['sem_payment'];
+		$sem->admission_prelim_txt = $sem_create_data['sem_paytxt'];
+		$sem->admission_starttime = $sem_create_data['sem_admission_start_date'];
+		$sem->admission_endtime_sem = $sem_create_data['sem_admission_end_date'];
+		$sem->visible = (($visible) ? '1' : '0');
+		$sem->showscore = '0';
+		$sem->modules = ((array_key_exists('sem_modules', $sem_create_data))? $sem_create_data['sem_modules']:'NULL');
+
+		$sem->user_number = ($sem_create_data['user_number']) ? '1' : '0';
+
+		$sem_create_data["sem_id"] = $sem->getId();
+
+		// Raumanfrage erzeugen
+
+		if (!$sem_create_data['skip_room_request']) {
+			$sem_create_data['resRequest']->setSeminarId($sem->getId());
+			$sem_create_data['resRequest']->store();
+		}
+
+		// logging
+		log_event("SEM_CREATE",$sem_create_data['sem_id'],NULL,NULL,$query);
+		log_event(($visible ? "SEM_VISIBLE" : "SEM_INVISIBLE"), $sem_create_data['sem_id'],NULL,NULL,'admin_seminare_assi',"SYSTEM");
 
 		//und jetzt wirklich eintragen
 		if (!$sem_create_data["sem_entry"]) {
-			$db->query($query);
-			if ($db->affected_rows() == 0) {
-				$errormsg .= "error§"._("<b>Fehler:</b>")." $query §";
-				$successful_entry=0;
-				$sem_create_data["sem_entry"]=FALSE;
-				die;
-    			} else {
-    				//completing the internal settings....
-    				$successful_entry=1;
+			foreach ($sem->getMetaDates() as $key => $val) {
+				$sem->metadate->createSingleDates($key);
 
-				// logging
-				log_event("SEM_CREATE",$sem_create_data['sem_id'],NULL,NULL,$query);
-				log_event(($visible ? "SEM_VISIBLE" : "SEM_INVISIBLE"), $sem_create_data['sem_id'],NULL,NULL,'admin_seminare_assi',"SYSTEM");
-
-				$sem_create_data["sem_entry"]=TRUE;
-				openSem($sem_create_data["sem_id"]); //open Veranstaltung to administrate in the admin-area
-				$links_admin_data["referred_from"]="assi";
-				$links_admin_data["assi"]=FALSE; //protected Assi-mode off
-
-				if (!array_key_exists('sem_modules', $sem_create_data)){
-					//write the default module-config
-					$Modules = new Modules;
-					$Modules->writeDefaultStatus($sem_create_data["sem_id"]);
-				}
-				//BIEST00072
-				//$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE); //the scm has to be turned off, because an empty free informations page isn't funny
-
-    				//update/insert the assigned roomes
-    				if ($RESOURCES_ENABLE) {
-						//store room-quests and room-property-requests
-						if (!$sem_create_data['skip_room_request'] && is_object($sem_create_data["resRequest"])) {
-							$sem_create_data["resRequest"]->setSeminarId($sem_create_data["sem_id"]);
-							$sem_create_data["resRequest"]->store();
-						}
-    					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
-    					$updateResult=$updateAssign->updateAssign();
-
-	    			//are there overlaps, in the meanwhile since the check at step 4? In the case the sem is regular, we have to touch the metadata
-					//dieser check wird in VeranstaltungResourcesAssign::updateAssign() grundsätzlich durchgeführt
-					/*
-					if ((is_array($updateResult)) && ($sem_create_data["term_art"] != -1)) {
-						$overlaps_detected=FALSE;
-						foreach ($updateResult as $key=>$val)
-							if ($val["overlap_assigns"] == TRUE) {
-								list($key2, $val2) = each($val["overlap_assigns"]);
-								$begin = $val2["begin"];
-								$end = $val2["end"];
-								$resource_id = $val["resource_id"];
-								foreach ($sem_create_data["metadata_termin"]["turnus_data"] as $key3 =>$val3) {
-									$day = date("w", $begin);
-									if (!$day )
-										$day = 7;
-									if (($val3["day"] == $day) && ($val3["start_stunde"] == date("G", $begin)) && ($val3["start_minute"] == date("i", $begin)) && ($val3["end_stunde"] == date("G", $end)) && ($val3["end_minute"] == date("i", $end)) && ($val["resource_id"] == $resource_id)) {
-										$sem_create_data["metadata_termin"]["turnus_data"][$key3]["resource_id"]='';
-										$sem_create_data["metadata_termin"]["turnus_data"][$key3]["room"]='';
-										$metadata_changed = TRUE;
-									}
+				// Raum buchen, wenn eine Angabe gemacht wurde, oder Freitextangabe, falls vorhanden
+				if ($RESOURCES_ENABLE) {
+					if (($val['resource_id'] != '') || ($val['room'] != '')) {
+						$singleDates =& $sem->getSingleDatesForCycle($key);
+						foreach ($singleDates as $sd_key => $sd_val) {
+							if ($val['resource_id'] != '') {
+								$singleDates[$sd_key]->bookRoom($val['resource_id']);
+								if ($msg = $singleDates[$sd_key]->getMessages()) {
+									$errormsg .= $msg;
 								}
+							} else {
+								$singleDates[$sd_key]->setFreeRoomText($val['room']);
 							}
-						//ok, we have a need to update the metadata again...
-						if ($metadata_changed) {
-							$serialized_metadata=mysql_escape_string(serialize($sem_create_data["metadata_termin"]));
-							$query = sprintf ("UPDATE seminare SET metadata_dates = '%s' WHERE Seminar_id = '%s' ", $serialized_metadata, $sem_create_data["sem_id"]);
-							$db->query($query);
 						}
 					}
-					*/
-    				}
+				}
+
 			}
 
+			// Speichern der Veranstaltungsdaten -> anlegen des Seminars
+			$sem->store();
+
+			//completing the internal settings....
+			$successful_entry=1;
+			$sem_create_data["sem_entry"]=TRUE;
+
+			// Logging
+			log_event("SEM_CREATE",$sem_create_data['sem_id'],NULL,NULL,$query);
+			log_event(($visible ? "SEM_VISIBLE" : "SEM_INVISIBLE"), $sem_create_data['sem_id'],NULL,NULL,'admin_seminare_assi',"SYSTEM");
+			openSem($sem_create_data["sem_id"]); //open Veranstaltung to administrate in the admin-area
+			$links_admin_data["referred_from"]="assi";
+			$links_admin_data["assi"]=FALSE; //protected Assi-mode off
+
+			//write the default module-config
+			$Modules = new Modules;
+			$Modules->writeDefaultStatus($sem_create_data["sem_id"]);
+			$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE); //the scm has to be turned off, because an empty free informations page isn't funny
+
 			if (is_array($sem_create_data["sem_doz"]))  // alle ausgewählten Dozenten durchlaufen
-				{
+			{
 				$self_included = FALSE;
 				$count_doz=0;
 				foreach ($sem_create_data["sem_doz"] as $key=>$val)
-					{
+				{
 					$group=select_group($sem_create_data["sem_start_time"]);
 
 					if ($key == $user_id)
@@ -1475,11 +1482,11 @@ if (($form == 6) && ($jump_next_x))
 
 					if ($db3->affected_rows() >=1)
 						$count_doz++;
-					}
 				}
+			}
 
 			if (!$perm->have_perm("admin") && !$self_included) // wenn nicht admin, aktuellen Dozenten eintragen
-				{
+			{
 				$group=select_group($sem_create_data["sem_start_time"]);
 				
 				$next_pos = get_next_position("dozent",$sem_create_data["sem_id"]);
@@ -1490,13 +1497,13 @@ if (($form == 6) && ($jump_next_x))
 				$db3->query($query);
 				if ($db3->affected_rows() >=1)
 					$count_doz++;
-				}
+			}
 
 			if (is_array($sem_create_data["sem_tut"]))  // alle ausgewählten Tutoren durchlaufen
-				{
+			{
 				$count_tut=0;
 				foreach ($sem_create_data["sem_tut"] as $key=>$val)
-					{
+				{
 					$group=select_group($sem_create_data["sem_start_time"]);
 
 					$query = "SELECT user_id FROM seminar_user WHERE Seminar_id = '".
@@ -1566,16 +1573,27 @@ if (($form == 6) && ($jump_next_x))
 
 			//Vorbesprechung, falls vorhanden, in Termintabelle eintragen
 			if ($sem_create_data["sem_vor_termin"] <>-1) {
-				$termin_id=md5(uniqid($hash_secret));
-				$mkdate=time();
+				$vorbesprechung = new SingleDate(array('seminar_id' => $sem->getId()));
+				$vorbesprechung->setTime($sem_create_data['sem_vor_termin'], $sem_create_data['sem_vor_end_termin']);
+				foreach ($TERMIN_TYP as $key => $val) {
+					if ($val['name'] == 'Vorbesprechung') {
+						$vorbesprechung->setDateType($key);
+					}
+				}
+				if ($sem_create_data['sem_vor_resource_id']) {
+					$vorbesprechung->bookRoom($sem_create_data['sem_vor_resource_id']);
+				} else {
+					$vorbesprechung->setFreeRoomText($sem_create_data['sem_vor_raum']);
+				}
 
-				//if we have a resource_id, we flush the room name
-				if ($sem_create_data["sem_vor_resource_id"])
-					$sem_create_data["sem_vor_raum"]='';
+				$issue = new Issue(array('seminar_id' => $sem->getId()));
+				$issue->setTitle('Vorbesprechung');
+				$issue->store();
 
-				$db->query("INSERT INTO termine SET termin_id = '$termin_id', range_id='".$sem_create_data["sem_id"]."', autor_id='$user_id', content ='Vorbesprechung', date='".$sem_create_data["sem_vor_termin"]."', mkdate='$mkdate', chdate='$mkdate', date_typ='2', end_time='".$sem_create_data["sem_vor_end_termin"]."', raum='".$sem_create_data["sem_vor_raum"]."'");
+				$vorbesprechung->addIssueId($issue->getIssueId());
+				$vorbesprechung->store();
 
-				//update/insert the assigned roomes
+				/*//update/insert the assigned roomes
 				if ($RESOURCES_ENABLE && $db->affected_rows()) {
 					$updateAssign = new VeranstaltungResourcesAssign($sem_create_data["sem_id"]);
 					$updateResult = array_merge((array)$updateResult, (array)$updateAssign->insertDateAssign($termin_id, $sem_create_data["sem_vor_resource_id"]));
@@ -1588,14 +1606,14 @@ if (($form == 6) && ($jump_next_x))
 					$sem_create_data["resRequest"]->setTerminId($termin_id);
 					$sem_create_data["resRequest"]->store();
 					$sem_create_data["resRequest"]->checkOpen(true);
-				}
+				}*/
 			}
 
 			//Wenn der Veranstaltungs-Termintyp Blockseminar ist, dann tragen wir diese Termine auch schon mal ein
 			if ($sem_create_data["term_art"] ==1) {
 				for ($i=0; $i<$sem_create_data["term_count"]; $i++)
 					if (($sem_create_data["term_tag"][$i]) && ($sem_create_data["term_monat"][$i]) && ($sem_create_data["term_jahr"][$i]) && ($sem_create_data["term_start_stunde"][$i] !== '') && ($sem_create_data["term_end_stunde"][$i] !== '')) {
-						$termin_id=md5(uniqid($hash_secret));
+						$termin_id=md5(uniqid(rand()));
 						$mkdate=time();
 						$date=mktime((int)$sem_create_data["term_start_stunde"][$i], (int)$sem_create_data["term_start_minute"][$i], 0, (int)$sem_create_data["term_monat"][$i], (int)$sem_create_data["term_tag"][$i], (int)$sem_create_data["term_jahr"][$i]);
 						$end_time=mktime((int)$sem_create_data["term_end_stunde"][$i], (int)$sem_create_data["term_end_minute"][$i], 0, (int)$sem_create_data["term_monat"][$i], (int)$sem_create_data["term_tag"][$i], (int)$sem_create_data["term_jahr"][$i]);
@@ -1627,7 +1645,7 @@ if (($form == 6) && ($jump_next_x))
 			//BIEST00072
 			if ($sem_create_data["modules_list"]["scm"]){
 				$sem_create_data["sem_scm_name"] = ($SCM_PRESET[1]['name'] ? $SCM_PRESET[1]['name'] : _("Informationen"));
-				$sem_create_data["sem_scm_id"] = md5(uniqid($hash_secret));
+				$sem_create_data["sem_scm_id"] = md5(uniqid(rand()));
 				$db->query("INSERT INTO scm SET scm_id='".$sem_create_data["sem_scm_id"]."', tab_name='".$sem_create_data["sem_scm_name"]."', range_id='".$sem_create_data["sem_id"]."', user_id='$user_id', content='".$sem_create_data["sem_scm_content"]."', mkdate='".time()."', chdate='".time()."' ");
 			}
 
@@ -1646,7 +1664,9 @@ if (($form == 7) && ($jump_next_x)) {
 		header ("Location: admin_seminare1.php");
 		die;
 	} elseif (!$sem_create_data["modules_list"]["scm"]) {
-		header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
+		//header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
+		// ## RAUMZEIT : Welche Zeile ist hier die richtige? raumzeit.php oder themen.php?
+		header ("Location: raumzeit.php?seminar_id=".$sem_create_data["sem_id"]);
 		die;
 	}
 	$level=8;
@@ -1660,13 +1680,13 @@ if (($form == 8) && ($jump_next_x)) {
 		if ($sem_create_data["sem_scm_id"]) {
 			$db->query("UPDATE scm SET content='".$sem_create_data["sem_scm_content"]."', tab_name='".$sem_create_data["sem_scm_name"]."', chdate='".time()."' WHERE scm_id='".$sem_create_data["sem_scm_id"]."'");
 		} else {
-			$sem_create_data["sem_scm_id"]=md5(uniqid($hash_secret));
+			$sem_create_data["sem_scm_id"]=md5(uniqid(rand()));
 			$db->query("INSERT INTO scm SET scm_id='".$sem_create_data["sem_scm_id"]."', tab_name='".$sem_create_data["sem_scm_name"]."', range_id='".$sem_create_data["sem_id"]."', user_id='$user_id', content='".$sem_create_data["sem_scm_content"]."', mkdate='".time()."', chdate='".time()."' ");
 		}
 		if ($db->affected_rows()) {
-			if ($sem_create_data["modules_list"]["schedule"])
-				header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
-			else
+			//if ($sem_create_data["modules_list"]["schedule"])	// ## RAUMZEIT : schedule duerfte veraltet sein, muesste als komplett weg
+				//header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
+			//else
 				header ("Location: admin_seminare1.php");
 			page_close();
 			die;
@@ -1679,9 +1699,9 @@ if (($form == 8) && ($jump_next_x)) {
 	} else {
 		//if no content is created yet, we disable the module and jump to the schedule (if activated)
 		//$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE); //BIEST00072
-		if ($sem_create_data["modules_list"]["schedule"])
-			header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
-		else
+		//if ($sem_create_data["modules_list"]["schedule"])	// ## RAUMZEIT : siehe oben
+		//	header ("Location: admin_dates.php?assi=yes&ebene=sem&range_id=".$sem_create_data["sem_id"]);
+		//else
 			header ("Location: admin_seminare1.php");
 		page_close();
 		die;
@@ -2607,10 +2627,11 @@ if ($level == 3) {
 										echo "<option selected value=1>"._("2. Semesterwoche")." ".date("d.m.Y",$tmp_first_date).")</option>";
 									else
 										echo "<option value=1>"._("2. Semesterwoche")." ("._("ab")." ".date("d.m.Y",$tmp_first_date).")</option>";
-									if ($sem_create_data["term_start_woche"] == -1)
+									// "anderer Startzeitpunkt" ist bei der Raum-Zeit-Seite nicht vorgehesen. Diskussionsbedarf?
+									/*if ($sem_create_data["term_start_woche"] == -1)
 										echo "<option selected value=-1>"._("anderer Startzeitpunkt")."</option>";
 									else
-										echo "<option value=-1>"._("anderer Startzeitpunkt")."</option>";
+										echo "<option value=-1>"._("anderer Startzeitpunkt")."</option>";*/
 
 									?>
 									</select>
@@ -2622,7 +2643,7 @@ if ($level == 3) {
 										if ($i>0) echo "<br>\n";
 										echo '&nbsp; <font size=-1><select name="term_turnus_date[', $i, ']">';
 										$ttd = (empty($sem_create_data["term_turnus_date"][$i]))? 1 : $sem_create_data["term_turnus_date"][$i];
-										for($kk = 1; $kk <= 7; $kk++ ){
+										for($kk = 0; $kk <= 6; $kk++ ){
 											echo '<option ', (($kk == $ttd)? 'selected ':'');
 											echo 'value="',$kk,'">';
 											switch ($kk){
@@ -2631,7 +2652,7 @@ if ($level == 3) {
 												case 4: echo _("Donnerstag"); break;
 												case 5: echo _("Freitag"); break;
 												case 6: echo _("Samstag"); break;
-												case 7: echo _("Sonntag"); break;
+												case 0: echo _("Sonntag"); break;
 												case 1:
 												default: echo _("Montag");
 											}

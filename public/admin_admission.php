@@ -373,7 +373,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					$end_date_name="Enddatum der Kontingentierung";
 				if ($admin_admission_data["admission_endtime"] == -1)
 					$errormsg.="error§Bitte geben Sie einen Termin f&uuml;r das $end_date_name an!§";
-				$tmp_first_date=veranstaltung_beginn ($admin_admission_data["metadata_dates"]["art"], $admin_admission_data["start_time"], $admin_admission_data["metadata_dates"]["start_woche"], $admin_admission_data["metadata_dates"]["start_termin"], $admin_admission_data["metadata_dates"]["turnus_data"], "int");
+				$tmp_first_date = veranstaltung_beginn($admin_admission_data['sem_id'], 'int');
 				if($admin_admission_data["admission_type"] == 1){
 					if ($admin_admission_data["admission_endtime"] > $tmp_first_date)
 						if ($tmp_first_date > 0) {

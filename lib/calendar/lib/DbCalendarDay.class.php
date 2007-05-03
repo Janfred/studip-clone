@@ -173,12 +173,14 @@ class DbCalendarDay extends CalendarDay {
 		else if ($sem_id != "") {
 			if (is_array($sem_id))
 				$sem_id = implode("','", $sem_id);
-			$query = sprintf("SELECT t.*, s.Name "
-						 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
-						 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
-			       . "user_id = '%s' AND range_id IN ('%s') AND date_typ!=-1 "
-						 . "AND date_typ!=-2 AND date BETWEEN %s AND %s"
-						 , $this->user_id, $sem_id, $this->getStart(), $this->getEnd());
+			$query = sprintf("SELECT t.*, th.title, th.description as details, s.Name "
+				. "FROM termine t LEFT JOIN themen_termine tt ON tt.termin_id = t.termin_id "
+        	        	. "LEFT JOIN themen th ON th.issue_id = tt.issue_id "
+		            	. "LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
+		            	. "LEFT JOIN seminare s USING(Seminar_id) WHERE "
+				. "user_id = '%s' AND range_id IN ('%s') AND date_typ!=-1 "
+				. "AND date_typ!=-2 AND date BETWEEN %s AND %s"
+				, $this->user_id, $sem_id, $this->getStart(), $this->getEnd());
 		}
 		else
 			return FALSE;
@@ -216,5 +218,3 @@ class DbCalendarDay extends CalendarDay {
 }
 
 // class Day
-
-?>

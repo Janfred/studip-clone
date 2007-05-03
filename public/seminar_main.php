@@ -97,6 +97,8 @@ include 'lib/include/links_openobject.inc.php';
 include 'lib/showNews.inc.php';
 include 'lib/show_dates.inc.php';
 
+$sem = new Seminar($SessSemName[1]);
+
 $sess->register("smain_data");
 //Auf und Zuklappen Termine
 if ($dopen)
@@ -127,11 +129,27 @@ $quarter_year = 60 * 60 * 24 * 90;
 		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
 	}
 
-	echo "<br><font size=\"-1\"><b>" . _("Zeit:") . " </b>".htmlReady(view_turnus($SessionSeminar, FALSE, FALSE, (time() - $quarter_year)))."</font>";
+?>
+	<br />
+	<font size="-1">
+		<b><?=_("Zeit")?>:</b><br />
+		<?=getRegularOverview($SessSemName[1])?><br/>
+		<br/>
+		<?
+		$next_date = $sem->getNextDate();
+		if ($next_date) {
+			echo '<b>'._("Nächster Termin").':</b><br />';
+			echo $next_date;
+		} else {
+			echo '<b>'._("Erster Termin").':</b><br />';
+			echo $sem->getFirstDate();
+			echo '<br/>';
+		}
+		?>
+		<a href="dates.php">alle Termine</a><br/>
+	</font>
 
-	if (getRoom($SessSemName[1],true,0,"sem")) {
-		echo "<br><font size=\"-1\"><b>" . _("Ort:") . " </b>".getRoom($SessSemName[1], TRUE, (time() - $quarter_year),"sem")."</font>";
-	}
+<?
 
 	$db=new DB_Seminar;
 	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, " . $_fullname_sql['no_title_short'] . " AS shortname,username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id)  LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = 'dozent' ORDER BY position, Nachname");

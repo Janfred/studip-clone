@@ -114,6 +114,7 @@ class CheckMultipleOverlaps {
 	}
 	
 	function checkOverlap ($events, &$result, $index_mode = "assign_id") {
+		if (sizeof($events) == 0) return false;
 		if ($this->resource_ids) {
 			foreach ($events as $obj) {
 				$clause = sprintf ("((begin <= %s AND end > %s) OR (begin >=%s AND end <= %s) OR (begin <= %s AND end >= %s) OR (begin < %s AND end >= %s))", $obj->getBegin(), $obj->getBegin(), $obj->getBegin(), $obj->getEnd(),$obj->getBegin(), $obj->getEnd(), $obj->getEnd(), $obj->getEnd());

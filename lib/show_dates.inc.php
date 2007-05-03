@@ -55,7 +55,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 			// Für persönliche Termine Einsprung in Terminkalender
 			$admin_link="<a href=\"calendar.php?cmd=edit\">";
 		else {
-			$admin_link="<a href=\"admin_dates.php?new_sem=TRUE&ebene=sem&range_id=".$range_id."\">";
+			$admin_link="<a href=\"raumzeit.php?seminar_id=".$range_id."\">";
 		}
 	}
 
@@ -161,7 +161,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 			print "\n<tr>";
 			print "\n<td width=\"5%\" class=\"steelgraulight\" align=\"left\">&nbsp;";
 			if ($rechte)
-				print "<a href=\"admin_dates.php?insert_new=TRUE#anchor\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/add_sheet.gif\"".tooltip(_("Einen neuen Termin anlegen"))." border=0></a></td>";
+				print "<a href=\"raumzeit.php?cmd=createNewSingleDate#newSingleDate\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/add_sheet.gif\"".tooltip(_("Einen neuen Termin anlegen"))." border=0></a></td>";
 			print "\n<td class=\"steelgraulight\" align=\"center\">";
 			if ($open == "all")
 				print "<a href=\"$PHP_SELF?dclose=1\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/close_all.gif\" ".tooltip(_("Alle schließen"))." border=\"0\"></a>";
@@ -188,8 +188,14 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 								. "&nbsp;</font></a>";
 			}
 			else {
-				if ($room_desc = getRoom($db->f("termin_id"), 1, 0, "date"))
-					$zusatz .= _("Raum:") . " " . $room_desc . "&nbsp;";
+				$termin = new SingleDate($db->f('termin_id'));
+				if( $termin->hasRoom() ){
+					$zusatz .= _("Raum:") . " " . $termin->getRoom() . "&nbsp;";
+                }elseif( $freeroomtext = $termin->getFreeRoomText() ){
+                    $zusatz .= " (" . $freeroomtext . ")&nbsp;";
+                }else{
+                    $zusatz .= _("k.A.") . "&nbsp;";  
+                }                    
 			}
 
 			//Dokumente zaehlen
@@ -274,9 +280,9 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 				$content.="<b>" . _("angelegt von:") . "</b> ".get_fullname($db->f("autor_id"),'full',true)."<br />";
 
 				if ($show_admin)
-					$content .= sprintf("<br /><div align=\"center\"><a href=\"./admin_dates.php?show_id=%s#anchor\">"
+					$content .= sprintf("<br /><div align=\"center\"><a href=\"./raumzeit.php?cmd=open&open_close_id=%s#%s\">"
 							. makeButton("terminaendern", "img")
-							. "</a></div>", $db->f("termin_id"));
+							. "</a></div>", $db->f("termin_id"), $db->f('termin_id'));
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 				printcontent(0,0, $content, $edit);
@@ -628,9 +634,9 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 				if ($have_write_permission) {
 					// Seminar appointment
 					if ($termin->getType() == 1) {
-						$edit = sprintf("<a href=\"./admin_dates.php?range_id=%s&show_id=%s#anchor\">"
+						$edit = sprintf("<a href=\"./raumzeit.php?seminar_id=%s&cmd=open&open_close_id=%s#%s\">"
 									. makeButton("terminaendern", "img")
-									. "</a>", $termin->getSeminarId(), $termin->getId());
+									. "</a>", $termin->getSeminarId(), $termin->getId(), $termin->getId());
 					}
 					else {
 						// Personal appointment

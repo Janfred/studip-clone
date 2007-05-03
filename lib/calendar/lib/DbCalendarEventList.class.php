@@ -107,19 +107,21 @@ class DbCalendarEventList {
 		if ($this->range_id != $this->user_id)
 			return FALSE;
 			
-		if ($sem_ids == "")
-			$query = "SELECT su.status, su.gruppe, s.Name, t.* FROM seminar_user su "
+        if ($sem_ids == "") {
+			$query = "SELECT su.status, su.gruppe, s.Name, t.*, th.title as content FROM seminar_user su "
 						 . "LEFT JOIN seminare s USING(Seminar_id) LEFT JOIN termine t ON "
-						 . "s.Seminar_id=range_id WHERE user_id = '" . $this->user_id
+						 . "s.Seminar_id=range_id LEFT JOIN themen_termine tt ON (t.termin_id=tt.termin_id) "
+						 . "LEFT JOIN themen th ON (tt.issue_id = th.issue_id) WHERE user_id = '" . $this->user_id
 						 . "' AND ((date BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
 						 . ") OR (end_time BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
-						 . "))";
-		else {
+						 . "))";                         
+		} else {
 			if (is_array($sem_ids))
 				$sem_ids = implode("','", $sem_ids);
-			$query = "SELECT su.status, su.gruppe, s.Name, t.* FROM seminar_user su "
+			$query = "SELECT su.status, su.gruppe, s.Name, t.*, th.title as content FROM seminar_user su "
 						 . "LEFT JOIN seminare s USING(Seminar_id) LEFT JOIN termine t ON "
-						 . "s.Seminar_id=range_id WHERE user_id = '" . $this->user_id
+						 . "s.Seminar_id=range_id LEFT JOIN themen_termine tt ON (t.termin_id=tt.termin_id) "
+						 . "LEFT JOIN themen th ON (tt.issue_id = th.issue_id) WHERE user_id = '" . $this->user_id
 						 . "' AND range_id IN ('$sem_ids') AND "
 						 . "((date BETWEEN " . $this->getStart() . " AND " . $this->getEnd()
 						 . ") OR (end_time BETWEEN " . $this->getStart() . " AND " . $this->getEnd()

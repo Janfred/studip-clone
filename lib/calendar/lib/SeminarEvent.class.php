@@ -25,6 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once("config.inc.php");
 require_once($GLOBALS["RELATIVE_PATH_CALENDAR"]
 		. "/lib/Event.class.php");
+require_once($GLOBALS["RELATIVE_PATH_CALENDAR"]
+        . "/lib/driver/MySQL/CalendarDriver.class.php");
 
 class SeminarEvent extends Event {
 
@@ -83,6 +85,9 @@ class SeminarEvent extends Event {
 	}
 
 	function getTitle () {
+		if ($this->getProperty('SUMMARY') == '') {
+			return 'Kein Titel';
+		}
 		return $this->getProperty('SUMMARY');
 	}
 
@@ -113,16 +118,19 @@ class SeminarEvent extends Event {
 		else
 			$this->id = $id;
 		$db =& new DB_Seminar();
-		$query = "SELECT t.*, su.*, s.Seminar_id, s.Name "
-						.	"FROM termine t LEFT JOIN seminar_user su ON (t.range_id=su.Seminar_id) "
+		$query = "SELECT t.*, su.*, s.Seminar_id, s.Name, th.title, th.description "						
+                        . "FROM termine t "
+                        . "LEFT JOIN themen_termine tt ON tt.termin_id = t.termin_id "
+                        . "LEFT JOIN themen th ON th.issue_id = tt.issue_id "
+                        . "LEFT JOIN seminar_user su ON (t.range_id=su.Seminar_id) "
 						. "LEFT JOIN seminare s USING(Seminar_id) WHERE t.termin_id='{$this->id}' "
 						. "AND su.user_id='{$user->id}'";
+
 		$db->query($query);
 		if ($db->num_rows() == 1 && $db->next_record()) {
-			$this->setProperty('SUMMARY',         $db->f('content'));
+			$this->setProperty('SUMMARY',         $db->f('title'));
 			$this->setProperty('DTSTART',         $db->f('date'));
 			$this->setProperty('DTEND',           $db->f('end_time'));
-			$this->setProperty('LOCATION',        $db->f('raum'));
 			$this->setProperty('DESCRIPTION',     $db->f('description'));
 			$this->setProperty('CLASS',           'PRIVATE');
 			$this->setProperty('SEMNAME',         $db->f('Name'));
@@ -134,6 +142,17 @@ class SeminarEvent extends Event {
 			$this->sem_id   = $db->f('Seminar_id');
 			if ($db->f('status') == 'tutor' || $db->f('status') == 'dozent')
 				$this->setWritePermission(TRUE);
+
+            // get room name
+            $db2 = new DB_Seminar();
+            $db2->query("SELECT ro.name FROM resources_assign as ra LEFT JOIN resources_objects as ro USING (resource_id) WHERE ra.assign_user_id = '".$db->f('termin_id')."'");
+            if ($db2->next_record()) {
+                $this->setProperty('LOCATION', $db2->f('name'));
+            } elseif( $db->f('raum') ) {
+                $this->setProperty('LOCATION', $db->f('raum'));
+            } else {
+                $this->setProperty('LOCATION', _("Keine Raumangabe"));
+            }
 
 			return TRUE;
 		}

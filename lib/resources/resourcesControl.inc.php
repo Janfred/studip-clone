@@ -591,12 +591,6 @@ if (!$suppress_infobox) {
 	</tr>
 </table>
 <?
-//<debug>
-/*
-echo "<pre>";
-print_r($resources_data);
-*/
-//</debug>
 $resources_data = serialize($resources_data);
 page_close();
 ?>

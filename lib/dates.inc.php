@@ -25,6 +25,9 @@ require_once 'lib/functions.php';  //Daten
 require_once 'lib/classes/SemesterData.class.php';  //Daten
 require_once 'lib/classes/Seminar.class.php';  //Daten
 require_once 'lib/calendar_functions.inc.php';
+require_once "lib/raumzeit/CycleDataDB.class.php";			// Turnus-Daten
+require_once "lib/raumzeit/SingleDate.class.php";  			// Einzeltermin
+require_once "lib/raumzeit/raumzeit_functions.inc.php";	// Helper-Funktionen
 
 /**
 * This function creates the assigned room name for range_id
@@ -34,324 +37,234 @@ require_once 'lib/calendar_functions.inc.php';
 *
 */
 
-function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false) {
-	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP;
+function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false, $showRoomList = false) {
+	$semester = new SemesterData();
+	$data = $semester->getCurrentSemesterData();
+	return getRoomOverviewUnsteady ($range_id, $data['semester_id'], $link, $start_time, $range_typ, $showRoomList);
+}
+
+function getRegularOverview($range_id) {
+	$semester = new SemesterData();
+	$data = $semester->getCurrentSemesterData();
+	return getRoomOverviewUnsteady ($range_id, $data['semester_id'], false, false, false, false, array('hideRooms'));
+}
+
+/* Diese Funktion gibt eine Übersicht über alle Termine und die zugeordneten Räume (soweit vorhanden) für entweder
+ * ein ganzes Seminar oder für einen einzelnen Termin als HTML-String zurück.
+ *
+ * range_id	string	Ist eine termin_id oder eine seminar_id
+ * semester_id	string	Ist die ID eines Semesters. Es werden nur Zeiten zurückgegeben, die innerhalb dieses Semesters liegen
+ * link	boolean	Wenn gesetzt, werden die Raumangaben als Link zum Belegungsplan zurückgegeben, ansonsten als einfacher String
+ * start_time	string	wird nicht mehr verwendet!
+ * range_typ	string	gibt die Art der übergebenen range_id an. Entweder 'sem' oder 'date'. Wenn nichts angegeben wird, wird die typ selbstständig ermittelt
+ * showRoomList	boolean	Wenn gesetzt, wird eine Liste der am häufigsten verwendeten Räume für ein Metadate ausgegeben (falls vorhanden)
+ * additionalParameters	array Im Array können folgende Paramter gesetzt werden: xml_export.
+ */
+function getRoomOverviewUnsteady ($range_id, $semester_id, $link=TRUE, $start_time = 0, $range_typ = false, $showRoomList = false, $additionalParameters = false) {
+
+	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP, $srch_sem;
+
+    // steuert, ob die Raumanzeige als XML-Export oder als Tabelle zurückgeliefert wird
+	if ($additionalParameters['xml_export']) {
+		$xml_export = true;
+		$link = FALSE;
+	}
+
+	if ($additionalParameters) {
+		foreach ($additionalParameters as $trash => $name) {
+			$$name = true;
+		}
+	}
 
 	if ($RESOURCES_ENABLE) {
 	 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 	 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
-	 }
+	}
+     
 	$not_booked_hint = get_config('RESOURCES_SHOW_ROOM_NOT_BOOKED_HINT');
-	$db = new DB_Seminar;
-	$db2 = new DB_Seminar;
+
 	if (!$range_typ){
 		$range_typ = get_object_type($range_id);
 	}
+    
 	switch ($range_typ) {
-		case ("sem"):
-			$query = sprintf ("SELECT metadata_dates, Ort FROM seminare WHERE Seminar_id = '%s'", $range_id);
-			$db->query($query);
-			if ($db->next_record()) {
-				//get the metatdata array
-				$term_data=unserialize($db->f("metadata_dates"));
-				$i=0;
-				if (is_array($term_data["turnus_data"])) {
-					foreach ($term_data["turnus_data"] as $data) {
-						if ($i)
-							$ret.=", ";
-						if (sizeof($term_data["turnus_data"]) > 1)
-							switch ($data["day"]) {
-								case "1": $ret .=_("Mo.: "); break;
-								case "2": $ret .=_("Di.: "); break;
-								case "3": $ret .=_("Mi.: "); break;
-								case "4": $ret .=_("Do.: "); break;
-								case "5": $ret .=_("Fr.: "); break;
-								case "6": $ret .=_("Sa.: "); break;
-								case "7": $ret .=_("So.: "); break;
-							}
-						if (($RESOURCES_ENABLE) && ($data["resource_id"])) {
-							$resObj =& ResourceObject::Factory($data["resource_id"]);
-							if ($resObj->getName())
-								if ($link)
-									$ret .= $resObj->getFormattedLink();
-								else
-									$ret .= htmlReady($resObj->getName());
-							else
-								$ret .= htmlReady($data["room"]) . ($not_booked_hint ? '&nbsp;' . _("(nicht gebucht)") : '');
-						}
-						elseif ((!$data["room"]) && (sizeof($term_data["turnus_data"]) >1))
-							$ret .=_("n. A.");
-						else
-							$ret .= htmlReady($data["room"]) . ($RESOURCES_ENABLE && $not_booked_hint ? '&nbsp;' . _("(nicht gebucht)") : '');
-						$i++;
-					}
-					if ($ret)
-						return $ret;
-					elseif ($db->f("Ort"))
-						return htmlReady($db->f("Ort"));
-					else
-						return _("nicht angegeben");
-				} else {
-					//Load all TERMIN_TYPs that are "Sitzungstermine" and build query-clause
-					$i=0;
-					$typ_clause = "(";
-					foreach ($TERMIN_TYP as $key=>$val) {
-						if ($val["sitzung"]) {
-							if ($i)
-								$typ_clause .= ", ";
-							$typ_clause .= "'".$key."' ";
-							$i++;
-						}
-					}
-					$typ_clause .= ")";
+		/* * * * * * * * * * * * * * * * *
+		 *   S E M I N A R   D A T E S   *
+		 * * * * * * * * * * * * * * * * */
+		case 'sem':
+			require_once('lib/classes/Seminar.class.php');
+			require_once('lib/raumzeit/decorator/RoomOverviewUnsteadyDecorator.class.php');
 
-					$query = sprintf ("SELECT termin_id, date, raum FROM termine WHERE date_typ IN $typ_clause AND range_id='%s' AND date >= $start_time ORDER BY date", $range_id);
-					$db2->query($query);
-					$i=0;
-					while ($db2->next_record()) {
-						$tmp_room='';
-						if ($RESOURCES_ENABLE) {
-							$assigned_room = getDateAssigenedRoom($db2->f("termin_id"));
-							if ($assigned_room) {
-								$resObj =& ResourceObject::Factory($assigned_room);
-								if ($link)
-									$tmp_room .= $resObj->getFormattedLink();
-								else
-									$tmp_room .= htmlReady($resObj->getName());
-							}
-						}
-						if (($tmp_room) || ($db2->f("raum"))) {
-							if ($i)
-								$ret .= ", ";
-							$i++;
-						}
-						if ($tmp_room)
-							$ret .= date ("d.m", $db2->f("date")).": ".$tmp_room;
-						elseif ($db2->f("raum"))
-							$ret .= date ("d.m", $db2->f("date")).": ".htmlReady($db2->f("raum")).($RESOURCES_ENABLE && $not_booked_hint ? '&nbsp;' . _("(nicht gebucht)") : '');
-					}
-					if ($ret)
-						return $ret;
-					elseif ($db->f("Ort"))
-						return htmlReady($db->f("Ort"));
-					else
-						return _("nicht angegeben");
-				}
-			} else
-				return FALSE;
-		break;
-		case ("date"):
-			$query = sprintf ("SELECT termin_id, date, raum FROM termine WHERE termin_id='%s' ", $range_id);
-			$db->query($query);
-			$db->next_record();
+			$filter = getFilterForSemester($semester_id);
 
-			if ($RESOURCES_ENABLE) {
-				$assigned_room = getDateAssigenedRoom($range_id);
-				if ($assigned_room) {
-					$resObj =& ResourceObject::Factory($assigned_room);
-					if ($link)
-						$tmp_room .= $resObj->getFormattedLink($db->f("date"));
-					else
-						$tmp_room .= htmlReady($resObj->getName());
+			$sem = new Seminar($range_id);
+
+			// only filter if lecture's duration is longer than 1 term
+			if ($sem->metadate->seminarDurationTime != 0)
+			{
+				$semester_data_handler = new SemesterData();
+
+				$semester_data = $semester_data_handler->getSemesterData($semester_id);
+
+				// if lecture starts after the given term, use start term of seminar to filter
+				if ($sem->semester_start_time > $semester_data['beginn'])
+				{
+					$semester_data = $semester_data_handler->getSemesterDataByDate($sem->semester_start_time);
+					$semester_id = $semester_data['semester_id'];
 				}
+				
+				// generate filter data
+				$filter = getFilterForSemester($semester_id);
+
+				// apply filter
+				$sem->applyTimeFilter($filter['filterStart'], $filter['filterEnd']);
 			}
-			if ($tmp_room)
-				$ret .= $tmp_room;
-			elseif ($db->f("raum"))
-				$ret .= htmlReady($db->f("raum")) . ($RESOURCES_ENABLE && $not_booked_hint ? '&nbsp;' . _("(nicht gebucht)") : '');
-			return $ret;
+
+			$decorator = new RoomOverviewUnsteadyDecorator($sem->getUndecoratedData());
+			// TODO: a faster decorater, that uses direct queries to receive information
+
+			$decorator->sem =& $sem;
+			$decorator->xml_export = $xml_export;
+			$decorator->link = $link;
+			$decorator->showRoomList = $showRoomList;
+			$decorator->hideRooms = $hideRooms;
+			$decroator->onlyRegular = $onlyRegular;
+			if (isset($perm) && $perm->have_perm('admin')) {
+				$decorator->admin_view = true;
+			}
+
+			return $decorator->toString(); 
 		break;
+
+		/* * * * * * * * * * * * * * *
+		 *   S I N G L E   D A T E   *
+		 * * * * * * * * * * * * * * */
+		case 'date':
+			require_once('lib/raumzeit/SingleDate.class.php');
+			require_once('lib/raumzeit/decorator/SingleDateDecorator.class.php');
+
+			$termin = new SingleDate($range_id);
+
+			$decorator = new SingleDateDecorator('');
+			$decorator->termin =& $termin;
+			$decorator->xml_export = $xml_export;
+			$decorator->link = $link;
+
+			return $decorator->toString();
+		break;
+
+		/* * * * * * * * * * * * * * *
+		 *     R O O M   O N L Y     *
+		 * * * * * * * * * * * * * * */
+		case 'room':
+			require_once('lib/raumzeit/SingleDate.class.php');
+			require_once('lib/raumzeit/decorator/RoomDecorator.class.php');
+
+			$termin = new SingleDate($range_id);
+
+			$decorator = new RoomDecorator('');
+			$decorator->termin =& $termin;
+			$decorator->xml_export = $xml_export;
+			$decorator->link = $link;
+
+			return $decorator->toString();
+		break;
+
 	}
 }
 
 
 /*
-Die Funktion veranstaltung_beginn errechnet den ersten Seminartermin aus dem Turnus Daten.
-Zurueckgegeben wird ein String oder Timestamp. je nach return_mode (TRUE = Timestamp)
-Evtl. Ergaenzungen werden im Stringmodus mit ausgegeben.
-Die Funktion kann mit einer Seminar_id aufgerufen werden, dann werden saemtliche gespeicherten Daten
-beruecksichtigt. Im 'ad hoc' Modus koennen der Funktion auch die eizelnen Variabeln des Metadaten-Arrays
-uebergeben werden. Dann werden konkrete Termine nur mit berruecksichtigt, sofern sie schon angelegt wurden.
-*/
+ * getWeekday liefert einen String mit einem Tagesnamen.
+ *
+ * day_num	integer	PHP-konformer Tag (0-6)
+ * short	boolean	Wenn gesetzt wird der Tag verkürzt zurückgegeben.
+ */
+function getWeekday($day_num, $short = TRUE) {
+	switch ($day_num) {
+		case 0:
+			$short ? $day = 'So' : $day = 'Sonntag';
+			break;
+		case 1:
+			$short ? $day = 'Mo' : $day = 'Montag';
+			break;
+		case 2:
+			$short ? $day = 'Di' : $day = 'Dienstag';
+			break;
+		case 3:
+			$short ? $day = 'Mi' : $day = 'Mittwoch';
+			break;
+		case 4:
+			$short ? $day = 'Do' : $day = 'Donnerstag';
+			break;
+		case 5:
+			$short ? $day = 'Fr' : $day = 'Freitag';
+			break;
+		case 6:
+			$short ? $day = 'Sa' : $day = 'Samstag';
+			break;
+	}
 
-function veranstaltung_beginn ($seminar_id='', $art='', $semester_start_time='', $start_woche='', $start_termin='', $turnus_data='', $return_mode='') {
-	global $TERMIN_TYP;
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-	$all_semester = SemesterData::GetSemesterArray();
-	if ((func_num_args()==1) || (func_num_args()==2)){
-		$seminar_id=func_get_arg(0);
-		if (func_num_args()==2)
-			$return_mode=func_get_arg(1);
-		$db->query("SELECT metadata_dates, start_time, duration_time FROM seminare WHERE seminar_id='$seminar_id'");
-		$db->next_record();
-		$term_data=unserialize($db->f("metadata_dates"));
-		$term_data["start_time"]=$db->f("start_time");
+	// return i18n of day
+	return _($day);
+}
+
+
+function leadingZero($num) {
+	if ($num == '') return '00';
+	if (strlen($num) < 2) {
+		return '0'.$num;
 	} else {
-		$term_data["art"]=func_get_arg(0);
-		$term_data["start_time"]=func_get_arg(1);
-		$term_data["start_woche"]=func_get_arg(2);
-		$term_data["start_termin"]=func_get_arg(3);
-		$term_data["turnus_data"]=func_get_arg(4);
-		if (func_num_args()==6)
-			$return_mode=func_get_arg(1);
+		return $num;
 	}
-	//Regelmaessige Termine. also Turnus aus Metadaten
-	if ($term_data["art"]==0) {
-		if (($term_data["start_woche"] ==0) || ($term_data["start_woche"] ==1)) // Startzeitpunkt 1. oder 2. Semesterwoche
-			if (is_array($term_data["turnus_data"])) {
-				//first, determine the correct the start for $vorles_bginn
-				foreach ($all_semester as $sem)
-					if (($term_data["start_time"] >= $sem["beginn"]) AND ($term_data["start_time"] <= $sem["ende"]))
+}
 
-				$vorles_beginn=$sem["vorles_beginn"];
+/* veranstaltung_beginn liefert den tatsächlichen ersten Termin einer Veranstaltung */
+function veranstaltung_beginn($seminar_id = '', $return_mode = '') {
+	if ($seminar_id == '') return 'dates.inc.php:veranstaltung_beginn - Fehlerhafter Aufruf!';
+	$sem = new Seminar($seminar_id);
+	return $sem->getFirstDate($return_mode);
+}
 
-				//correct the vorles_beginn to match monday, if necessary
-				$dow = date("w", $vorles_beginn);
+/*
+Die Funktion veranstaltung_beginn_from_metadata errechnet den ersten Seminartermin aus dem Turnus Daten.
+Zurueckgegeben wird ausschließlich ein Timestamp
+Diese Funktion arbeitet im 'ad hoc' Modus und erwartet die einzelnen Variabeln des Metadaten-Arrays als Uebergabe.
+Konkrete Termine werde dabei NICHT mit beruecksichtigt!
+*/
+function veranstaltung_beginn_from_metadata($reg_irreg, $sem_begin, $start_woche, $start_termin,$turnus_data, $return_mode='int') {
+	// TODO: needs to be checked on correct output
+	// TODO!!: der parameter start_termin ist bei der RaumZeit nicht mehr vorgesehen
 
-				if ($dow <= 5)
-					$corr = ($dow -1) * -1;
-				elseif ($dow == 6)
-					$corr = 2;
-				elseif ($dow == 0)
-					$corr = 1;
-				else
-					$corr = 0;
+	$ret_time = 0;
+    
+    if( $return_mode != 'int'){
+        echo "<br>Fehler in dates.inc.php: veranstaltung_beginn_from_metadata() unterstuetzt nur den return mode 'int'.";
+        die();
+    }
+    
+	$dow = date("w", $sem_begin);
+    if ($dow <= 5)
+      $corr = ($dow -1) * -1;     
+    elseif ($dow == 6)
+      $corr = 2;
+    elseif ($dow == 0)
+      $corr = 1;
+    else
+      $corr = 0;
 
-				if ($corr) {
-					$vorles_beginn_uncorrected = $vorles_beginn;
-					$vorles_beginn = mktime(date("G",$vorles_beginn), date("i",$vorles_beginn), 0, date("n",$vorles_beginn), date("j",$vorles_beginn)+$corr,  date("Y",$vorles_beginn));
-				}
+	$start_woche++;
 
-				//now create possible start dates and do checks for holidays or calculatable off-days
-				$cycle=0;
-				do {
-					foreach ($term_data["turnus_data"] as $turnus_arr) {
-						$date_ok = TRUE;
-						$start_termin=$vorles_beginn+(($turnus_arr["day"]-1)*24*60*60)+($turnus_arr["start_stunde"]*60*60)+($turnus_arr["start_minute"]*60) + (($term_data["start_woche"] + $cycle) * 7 * 24 * 60 *60);
-						$end_termin=$vorles_beginn+(($turnus_arr["day"]-1)*24*60*60)+($turnus_arr["end_stunde"]*60*60)+($turnus_arr["end_minute"]*60) + (($term_data["start_woche"] + $cycle) * 7 * 24 * 60 *60);
-
-						//correct the start_termin if the start_termin is ealier than $vorles_beginn_uncorrected
-						$corr = 0;
-						if ($vorles_beginn_uncorrected)
-							if ($start_termin < $vorles_beginn_uncorrected) {
-								if ($term_data["turnus"])
-									$corr = $corr + 7;
-							}
-
-						if ($corr) {
-							$start_termin = mktime(date("G",$start_termin), date("i",$start_termin), 0, date("n",$start_termin), date("j",$start_termin)+$corr,  date("Y",$start_termin));
-							$end_termin = mktime(date("G",$end_termin), date("i",$end_termin), 0, date("n",$end_termin), date("j",$end_termin)+$corr,  date("Y",$end_termin));
-						}
-
-						//and, correct the start_termin, if de dayligt saving time plays a trick with us
-						if (date("G", $start_termin) != $term_data["turnus_data"][0]["start_stunde"])
-							$start_termin = mktime($term_data["turnus_data"][0]["start_stunde"], date("i",$start_termin), 0, date("n",$start_termin), date("j",$start_termin),  date("Y",$start_termin));
-						if (date("G", $end_termin) != $term_data["turnus_data"][0]["end_stunde"])
-							$end_termin = mktime($term_data["turnus_data"][0]["end_stunde"], date("i",$end_termin), 0, date("n",$end_termin), date("j",$end_termin),  date("Y",$end_termin));
-
-						//check for holidays. You should use it only for special holidays
-						$all_holiday = HolidayData::GetAllHolidaysArray(); // fetch all Holidays
-						// get all holidays from db
-						foreach ($all_holiday as $val)
-							if (($val["beginn"] <= $start_termin) && ($start_termin <=$val["ende"]))
-								$date_ok = FALSE;
-
-						//check for calculatable holidays
-						$holy_type = holiday($start_termin);
-						if ($holy_type["col"] == 3) {
-							$date_ok = FALSE;
-						}
-
-						//cancel running the foreach-loop, if one of my matadates (not the last) already is fine
-						if ($date_ok)
-							break;
-					}
-					$cycle ++;
-				} while (!$date_ok &&  $cycle < 50);
-				$return_string=date ("d.m.Y, G:i", $start_termin);
-				$return_int=$start_termin;
-				if ($start_termin != $end_termin)
-					$return_string.=" - ".date ("G:i", $end_termin);
-				}
-			else {
-				$return_string=_("nicht angegeben");
-				$return_int=-1;
-			}
-		//anderer Startzeitpunkt gewaehlt
-		else {
-			//no $start_termin given
-			if ($term_data["start_termin"]<1) {
-				$return_string.= _("nicht angegeben");
-				$return_int=-1;
-			//$start_termin given, this is the first date
-			} else {
-				$return_string.=date ("d.m.Y", $term_data["start_termin"]);
-				$return_int=$term_data["start_termin"];
-				//just an algorhytmus to fit the given start_termin (only a date without hour an minute!) to given meta_dates, if they are on the same day
-				if (is_array($term_data["turnus_data"]))
-					foreach ($term_data["turnus_data"] as $val) {
-						$dow = $val["day"];
-						if ($dow == 7)
-							$dow=0;
-						if ($dow == date("w", $term_data["start_termin"])) {
-							if ($val["start_stunde"]) {
-								$return_string.=", ". $val["start_stunde"]. ":";
-								if (($val["start_minute"] > 0)  &&  ($val["start_minute"] < 10))
-									$return_string.="0". $val["start_minute"];
-								elseif ($val["start_minute"] > 10)
-									$return_string.=$val["start_minute"];
-								if (!$val["start_minute"])
-									$return_string.="00";
-								if (!(($val["end_stunde"] != $val["start_stunde"]) && ($val["end_minute"] !=$val["start_minute"]))) {
-									$return_string.= " - ". $val["end_stunde"]. ":";
-									if (($val["end_minute"] > 0)  &&  ($val["end_minute"] < 10))
-										$return_string.="0".$val["end_minute"];
-									elseif ($val["end_minute"] > 10)
-										$return_string.=$val["end_minute"];
-									if (!$val["end_minute"])
-										$return_string.="00";
-									}
-								}
-							break;
-							}
-						}
-				}
-			}
-		}
-	//Unregelmaessige Termine, also konkrete Termine aus Termintabelle
-	else {
-
-		//Load all TERMIN_TYPs that are "Sitzungstermine" and build query-clause
-		$i=0;
-		$typ_clause = "(";
-		foreach ($TERMIN_TYP as $key=>$val) {
-			if ($val["sitzung"]) {
-				if ($i)
-					$typ_clause .= ", ";
-				$typ_clause .= "'".$key."' ";
-				$i++;
-			}
-		}
-		$typ_clause .= ")";
-
-		$db2->query("SELECT date, end_time FROM termine WHERE date_typ IN $typ_clause AND range_id='$seminar_id' ORDER BY date");
-		$db2->next_record();
-		if ($db->affected_rows()) {
-			$return_string=date ("d.m.Y, G:i", $db2->f("date"))." - ".date ("G:i",  $db2->f("end_time"));
-			$return_int=$db2->f("date");
-		} else {
-			$return_string.= _("nicht angegeben");
-			$return_int=-1;
-
+	foreach ($turnus_data as $key => $val) {
+		$start_time = mktime ($val['start_stunde'], $val['start_minute'], 0, date("n", $sem_begin), (date("j", $sem_begin)+$corr) + ($val['day'] -1) + ($start_woche * 7), date("Y", $sem_begin));
+		if (($start_time < $ret_time) || ($ret_time == 0)) {
+			$ret_time = $start_time;
 		}
 	}
 
-	if ($return_mode)
-		return $return_int;
-	else
-		return $return_string;
-	}
+	return $ret_time;
+}
+
 
 /*
 Die Funktion view_turnus zeigt in einer kompakten Ansicht den Turnus eines Seminars an.
@@ -361,196 +274,18 @@ Der Parameter short verkuerzt die Ansicht nochmals (fuer besonders platzsparende
 Bei regelmaessigen Veranstaltungen werden die einzelen Zeiten ausgegeben, bei zweiwoechentlichem
 Turnus mit dem enstprechenden Zusatz. Short verkuerzt die Ansicht nochmals.
 */
-
-function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_time = false) {
-
-	static $turnus_cache;
-
+function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_time = false)
+{
 	global $TERMIN_TYP;
-
-	if ($turnus_cache[$seminar_id][$short]){
-		return $turnus_cache[$seminar_id][$short];
-	}
 
 	if (!$start_time){
 		$start_time = 0;
 	}
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
 
-	if ($meta_data === false){
-		$db->query("SELECT metadata_dates FROM seminare WHERE Seminar_id = '$seminar_id'");
-		$db->next_record();
-		$term_data = unserialize($db->f("metadata_dates"));
-	} else {
-		$term_data = unserialize($meta_data);
-	}
-	if ($term_data["art"] == 1)
-		{
-		//Load all TERMIN_TYPs that are "Sitzungstermine" and build query-clause
-		$i=0;
-		$typ_clause = "(";
-		foreach ($TERMIN_TYP as $key=>$val) {
-			if ($val["sitzung"]) {
-				if ($i)
-					$typ_clause .= ", ";
-				$typ_clause .= "'".$key."' ";
-				$i++;
-			}
-		}
-		$typ_clause .= ")";
+  $sem = new Seminar($seminar_id);
 
-		$db2->query("SELECT * FROM termine WHERE range_id='$seminar_id' AND date_typ IN $typ_clause AND date >= $start_time ORDER BY date");
-		if ($db2->affected_rows() == 0)
-			{
-			if ($short)
-				$return_string= _("Termin: n. A.");
-			elseif (!$start_time)
-				$return_string= _("unregelmäßige Veranstaltung oder Blockveranstaltung. Die Termine stehen nicht fest.") . " ";
-			else
-				$return_string= _("unregelmäßige Veranstaltung oder Blockveranstaltung. Keine aktuellen oder zukünftigen Termine.") . " ";
-			}
-		else
-			if ($short)
-				$return_string= _("Termine am") . " ";
-			else
-				$return_string= _("unregelmäßige Veranstaltung oder Blockveranstaltung am") . " ";
-
-			while ($db2->next_record())
-				$dates[]=array("start_time"=>$db2->f("date"), "end_time"=>$db2->f("end_time"), "conjuncted"=>FALSE, "time_match"=>FALSE);
-
-			for ($i=1; $i<sizeof($dates); $i++)
-				{
-				if (((date("G", $dates[$i-1]["start_time"])) == date("G", $dates[$i]["start_time"])) && ((date("i", $dates[$i-1]["start_time"])) == date("i", $dates[$i]["start_time"])) && ((date("G", $dates[$i-1]["end_time"])) == date("G", $dates[$i]["end_time"])) && ((date("i", $dates[$i-1]["end_time"])) == date("i", $dates[$i]["end_time"])))
-					$dates[$i]["time_match"]=TRUE;
-
-				if (((date ("z", $dates[$i]["start_time"])-1) == date ("z", $dates[$i-1]["start_time"])) || ((date ("z", $dates[$i]["start_time"]) == 0) && (date ("j", $dates[$i-1]["start_time"]) == 0)))
-					if ($dates[$i]["time_match"])
-						$dates[$i]["conjuncted"]=TRUE;
-				}
-
-			for ($i=0; $i<sizeof($dates); $i++)
-				{
-				if (!$dates[$i]["conjuncted"])
-					$conjuncted=FALSE;
-
-				if ((!$dates[$i]["conjuncted"]) || (!$dates[$i+1]["conjuncted"]))
-					$return_string.=date (" j.n.", $dates[$i]["start_time"]);
-
-				if ((!$conjuncted) && ($dates[$i+1]["conjuncted"]))
-					{
-					$return_string.=" -";
-					$conjuncted=TRUE;
-					}
-				elseif ((!$dates[$i+1]["conjuncted"]) && ($dates[$i+1]["time_match"]))
-					$return_string.=",";
-
-				if (!$dates[$i+1]["time_match"])
-					{
-					$return_string.=" ".date("G:i", $dates[$i]["start_time"]);
-					if (date("G:i", $dates[$i]["start_time"]) != date("G:i", $dates[$i]["end_time"]))
-						$return_string.=" - ".date("G:i", $dates[$i]["end_time"]);
-					if ($i+1 != sizeof ($dates))
-						$return_string.=",";
-					}
-				}
-		}
-	else
-		{
-		if ($short)
-			if (is_array($term_data["turnus_data"])) {
-				$k=0;
-				foreach ($term_data["turnus_data"] as $data)
-					{
-					if ($k)
-						$return_string.=", ";
-					$k++;
-					switch ($data["day"])
-						{
-						case "1": $return_string.= _("Mo."); break;
-						case "2": $return_string.= _("Di."); break;
-						case "3": $return_string.= _("Mi."); break;
-						case "4": $return_string.= _("Do."); break;
-						case "5": $return_string.= _("Fr."); break;
-						case "6": $return_string.= _("Sa."); break;
-						case "7": $return_string.= _("So."); break;
-						}
-					$return_string.=" ".$data["start_stunde"].":";
-					if (!$data["start_minute"])
-						$return_string.="00";
-					elseif (($data["start_minute"] <10) && ($data["start_minute"] >0))
-						$return_string.="0".$data["start_minute"];
-					else
-						$return_string.=$data["start_minute"];
-					if (!(($data["end_stunde"] == $data["start_stunde"]) && ($data["end_minute"] == $data["start_minute"])))
-						{
-						$return_string.=" - ".$data["end_stunde"].":";
-						if (!$data["end_minute"])
-							$return_string.="00";
-						elseif (($data["end_minute"] <10) && ($data["end_minute"] >0))
-							$return_string.="0".$data["end_minute"];
-						else
-							$return_string.=$data["end_minute"];
-						}
-					else
-						$return_string.=" ";
-					}
-				}
-			else {
-				$return_string= _("Zeiten: n. A.");
-				}
-		else
-			if (is_array($term_data["turnus_data"])) {
-				$k=0;
-				foreach ($term_data["turnus_data"] as $data)
-					{
-					if ($k)
-						$return_string.=", ";
-					$k++;
-
-					switch ($data["day"])
-						{
-						case "1": $return_string.= _("Montag"); break;
-						case "2": $return_string.= _("Dienstag"); break;
-						case "3": $return_string.= _("Mittwoch"); break;
-						case "4": $return_string.= _("Donnerstag"); break;
-						case "5": $return_string.= _("Freitag"); break;
-						case "6": $return_string.= _("Samstag"); break;
-						case "7": $return_string.= _("Sonntag"); break;
-						}
-					$return_string.=" ".$data["start_stunde"].":";
-					if (!$data["start_minute"])
-						$return_string.="00";
-					elseif (($data["start_minute"] <10) && ($data["start_minute"] >0))
-						$return_string.="0".$data["start_minute"];
-					else
-						$return_string.=$data["start_minute"];
-					if (!(($data["end_stunde"] == $data["start_stunde"]) && ($data["end_minute"] == $data["start_minute"])))
-						{
-						$return_string.=" - ".$data["end_stunde"].":";
-						if (!$data["end_minute"])
-							$return_string.="00";
-						elseif (($data["end_minute"] <10) && ($data["end_minute"] >0))
-							$return_string.="0".$data["end_minute"];
-						else
-							$return_string.=$data["end_minute"];
-						}
-					else
-						$return_string.=" ";
-					if ($data['desc']){
-						$return_string.= " ({$data['desc']})" ;
-					}
-					}
-				}
-			else {
-				$return_string= _("Die Zeiten der Veranstaltung stehen nicht fest.");
-				}
-			if ($term_data["turnus"] == 1)
-				$return_string.= " " . _("(zweiwöchentlich)");
-		$turnus_cache[$seminar_id][$short] = $return_string;
-		}
-	return $return_string;
-	}
+  return $sem->getFormattedTurnus();
+}
 
 
 /*
@@ -558,17 +293,33 @@ Die Funktion Vorbesprechung ueberpueft, ob es eine Vorbesprechung gibt und gibt 
 Falle den entsprechenden Timestamp zurueck. Ansonsten wird FALSE zurueckgegeben.
 */
 
-function vorbesprechung ($seminar_id)
-	{
+function vorbesprechung ($seminar_id, $type = 'standard')
+{
 	$db=new DB_Seminar;
-	$db->query("SELECT * FROM termine WHERE range_id='$seminar_id' AND date_typ='2' ORDER by date");
-	if ($db->next_record())
-		$return_string=date ("d.m.Y, G:i", $db->f("date"))." - ".date ("G:i", $db->f("end_time"));
-	if ($db->f("raum"))
-		$return_string .= ", " . sprintf(_("Ort: %s"), $db->f("raum"));
-	return $return_string;
-	}
+	$db->query("SELECT termin_id FROM termine WHERE range_id='$seminar_id' AND date_typ='2' ORDER by date");
+	if ($db->next_record()) {
+		$termin = new SingleDate($db->f('termin_id'));
+		$ret = $termin->toString();
+		if ($termin->getResourceID()) {
+			$ret .= ', '._("Ort:").' ';
+			switch ($type) {
+				case 'export':
+					$resObj =& ResourceObject::Factory($termin->getResourceID());
+					$ret .= $resObj->getName();
+					break;
 
+				case 'standard':
+				default:
+					$resObj =& ResourceObject::Factory($termin->getResourceID());
+					$ret .= $resObj->getFormattedLink(TRUE, TRUE, TRUE);
+					break;
+			}
+		}
+		return $ret;
+	} else {
+		return FALSE;
+	}
+}
 
 /*
 Die Funktion get_sem_name gibt den Namen eines Semester, in dem ein uebergebener Timestamp liegt, zurueck
@@ -660,211 +411,6 @@ function getCorrectedSemesterVorlesBegin ($semester_num) {
 	return $vorles_beginn;
 }
 
-
-/*
-Die Funktion edit_dates veraendert den zu der Uebergebenen termin_id passenden Termin.
-Dazu wird die Beschreibung des Ordners angepasst, falls es einen gibt.
-Dabei werden die Beschriftungen der Ordner im Forensystem und im Dateisystem aktualisiert.
-*/
-
-
-function edit_dates($stunde,$minute,$monat,$tag,$jahr,$end_stunde, $end_minute, $termin_id,$art,$titel,$description,$topic_id,$raum,$resource_id,$range_id,$save_changes_with_request = FALSE) {
-	global $user,$auth, $TERMIN_TYP, $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $PHP_SELF;
-
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-	$db3=new DB_Seminar;
-	$db4=new DB_Seminar;
-	$semester = new SemesterData;
-	$semObj =& Seminar::GetInstance($range_id);
-
-	//workaround anoack: hope this helps - örgs
-	if ($resource_id == "FALSE") $resource_id = false;
-
-	if ($RESOURCES_ENABLE) {
-		include_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
-		include_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
-		include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
-	}
-
-	$do=TRUE;
-	if (!checkdate((int)$monat,(int)$tag,(int)$jahr)) {
-		$do=FALSE;
-		$result="error§" . _("Bitte geben Sie ein g&uuml;ltiges Datum ein!") . "§";
-	}
-
-	$times = array(0,0);
-
-	if (!check_and_set_date($tag,$monat,$jahr,$stunde,$minute,$times,0)
-	|| !check_and_set_date($tag,$monat,$jahr,$end_stunde,$end_minute,$times,1)) {
-		$do=FALSE;
-		$result.="error§" . _("Bitte geben Sie eine g&uuml;ltige Start- und Endzeit an!") . "§";
-	}
-
-	list($start_time, $end_time) = $times;
-
-	if ($do && $start_time >= $end_time) {
-		$do=FALSE;
-		$result.="error§" . _("Der Endzeitpunkt muss nach dem Startzeitpunkt liegen!") . "§";
-	}
-
-	//check, if a single date should be created when it is forbidden (no single dates corresponding to metadates are allowed when using resources, only a whole schedule creating with date-assi is fine...!)
-	if ($GLOBALS["RESOURCES_ENABLE"]) {
-		if ((isMetadateCorrespondingDate($termin_id, $start_time, $end_time, $range_id)) && (!$semObj->getMetaDateType()) && (!isSchedule($range_id))) {
-			$do = FALSE;
-				if ($TERMIN_TYP[$art]["sitzung"])
-					$add_result .= "info§" . sprintf(_("Sie wollen einen oder mehrere Sitzungstermine auf die regelm&auml;&szlig;igen Veranstaltungszeiten &auml;ndern. Bitte verwenden Sie f&uuml;r diese Termine den Ablaufplanassistenten, um die entsprechenden Termine f&uuml;r den gesamten Veranstaltungszeitraum anzulegen.")) . "§";
-				else
-					$add_result .= "info§" . sprintf(_("Sie wollen einen oder mehrere Sondertermine auf die regelm&auml;&szlig;igen Veranstaltungszeiten &auml;ndern. Bitte verwenden Sie f&uuml;r diese Termine den Ablaufplanassistenten und &auml;ndern dann die Terminart f&uuml;r den gew&uuml;nschten Termin.")). "§";
-
-		} elseif ($GLOBALS["RESOURCES_ALLOW_ROOM_REQUESTS"]) {
-			if (($resource_id) && ($resource_id != "FALSE") && ($resource_id != "NULL")){
-				$check_resource_id = $resource_id;
-			} elseif ($resource_id == "NULL") {
-				$check_resource_id = getDateAssigenedRoom($termin_id);
-			} elseif ($resource_id == "FALSE") {
-				$check_resource_id = FALSE;
-				$resource_id = FALSE;
-			}
-
-			if ($check_resource_id) {
-				$resObjPrm =& ResourceObjectPerms::Factory($check_resource_id);
-				if (!$resObjPrm->havePerm("autor")) {
-					//load the saved state to check for changes to date and time
-					$query = sprintf("SELECT date, end_time FROM termine WHERE termin_id = '%s' ", $termin_id);
-					$db->query($query);
-					if ($db->next_record()) {
-						if (($db->f("date") != $start_time) || ($db->f("end_time") != $end_time)) {
-							if ($save_changes_with_request) {
-								$create_update_request = TRUE;
-							} else {
-								$do = FALSE;
-								$add_result .= "info§" . sprintf(_("Sie wollen die Zeiten eines oder mehrerer Termine &auml;ndern, f&uuml;r die bereits ein Raum durch den Raumadministrator zugewiesen wurde. Wenn Sie die Zeiten dieser Termine &auml;ndern, verlieren Sie diese Buchung und es mu&szlig; eine neue Anfrage an den Raumadministrator gestellt werden. <br /> Wollen Sie diese Termin dennoch &auml;ndern und daf&uuml;r jeweils neue Anfragen erstellen?"));
-								$add_result .= "<br /><a href=\"$PHP_SELF?save_changes_with_request=1\">".makeButton("ja2")."</a>&nbsp;<a href=\"$PHP_SELF?reset_edit=1\">".makeButton("nein")."</a>§";
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	//create a request or reopen a given one
-	if ($create_update_request) {
-		if ($request_id = getDateRoomRequest($termin_id)) {
-			$reqObj = new RoomRequest ($request_id);
-			$reqObj->setClosed(0);
-			if (!$reqObj->getResourceId())
-				$reqObj->setResourceId($resObjPrm->getId());
-			$reqObj->store();
-			$create_req = TRUE;
-		} elseif ($request_id = getSeminarRoomRequest($range_id)) {
-			$reqObj = new RoomRequest ($request_id);
-			$reqObj->copy();
-			$reqObj->setTerminId($termin_id);
-			if (!$reqObj->getResourceId())
-				$reqObj->setResourceId($resObjPrm->getId());
-			$reqObj->store();
-			$create_req = TRUE;
-		} else {
-			$add_result .= "info§" . sprintf(_("Sie haben die Zeiten eines oder mehrerer Termine ge&auml;ndert und damit die Raumbuchung verloren. Bitte stellen Sie f&uuml;r diese Termine Raumanfragen, um einen Raum durch den Raumadministrator zugewiesen zu bekommen."). "§");
-		}
-		if ($create_req)
-			$add_result .= "info§" . sprintf(_("Sie haben die Zeiten eines oder mehrerer Termine ge&auml;ndert und damit die Raumbuchung verloren. Eine entsprechende Raumanfrage wurde erstellt. Sie k&ouml;nnen diese Raumanfrage jederzeit bearbeiten, in dem Sie auf \"Raumanfrage bearbeiten\" klicken.")."§");
-	}
-
-	//Check auf Konsistenz mit Metadaten, Semestercheck bei allen Sitzungsterminen
-	$all_semester = $semester->getAllSemesterData();
-	if (($do) && ($TERMIN_TYP[$art]["sitzung"]==1) && (is_array($term_data ["turnus_data"]))) {
-		foreach ($all_semester as $a) {
-			if (($term_data["start_time"] >= $a["beginn"]) && ($term_data["start_time"] <= $a["ende"]))  {
-				$sem_beginn=$a["beginn"];
-				$sem_ende=$a["ende"];
-			}
-			if (($term_data["duration_time"] > 0) && ((($term_data["start_time"] + $term_data["duration_time"]) >= $a["beginn"]) && (($term_data["start_time"] + $term_data["duration_time"]) < $a["ende"])))
-				$sem_ende=$a["ende"];
-			}
-
-		if (($start_time < $sem_beginn) || ($start_time > $sem_ende))
-			$add_result .= "info§" . _("Sie haben einen oder mehrere Termine eingegeben, die ausserhalb des Semesters liegen, in dem die Veranstaltung stattfindet. Es wird empfohlen, diese Termine anzupassen.") . "§";
-
-		//Und dann noch auf regelmaessige Termine checken, wenn dieser Typ gewaehlt ist
-		if ((!$term_data["art"]) && (!isMetadateCorrespondingDate($termin_id, $start_time, $end_time, $range_id))) {
-			$add_result .= "info§" . _("Sie haben einen oder mehrere Termine eingegeben, der nicht zu den allgemeinen Veranstaltungszeiten stattfindet. Es wird empfohlen, Sitzungstermine von regelm&auml;&szlig;igen Veranstaltungen nur zu den allgemeinen Zeiten stattfinden zu lassen.") . "§";
-		}
-	}
-
-	if ($do) {
-		$author = get_fullname();
-
-		$titel=$titel;
-		$description=$description;
-
-		//if we have a resource_id, we take the room name from resource_id
-		if (($resource_id) && ($resource_id != "NULL") && ($resource_id != "FALSE"))
-			$raum=getResourceObjectName($resource_id);
-
-		$db->query("UPDATE  termine SET autor_id='$user->id', content='$titel', date= '$start_time', end_time='$end_time', date_typ='$art', raum='$raum', description='$description'  WHERE termin_id='$termin_id'");
-		if ($db->affected_rows()) {
-			$db->query ("UPDATE termine SET chdate='".time()."' WHERE termin_id='$termin_id'"); //Nur wenn Daten geaendert wurden, schreiben wir auch ein chdate
-			$result.= sprintf ("msg§" ._("Der Termin <b>%s</b> wurde ge&auml;ndert!")."§", htmlReady(stripslashes($titel)));
-			$date_changed = TRUE;
-		}
-
-		//Workaround fuer Forenbug. Dies ist keine Loesung, sondern Schadensvermeidung!!
-		$db3->query("SELECT Seminar_id FROM px_topics WHERE topic_id ='$topic_id'");
-		$db3->next_record();
-
-		$db4->query("SELECT range_id FROM termine WHERE termin_id ='$termin_id'");
-		$db4->next_record();
-
-		if ($db3->f("Seminar_id") == $db4->f("range_id")) {
-		//WA Ende
-
-			if ($topic_id)
-				$db->query("UPDATE px_topics SET name='".$TERMIN_TYP[$art]["name"].": $titel am ".date("d.m.Y ", $start_time)."', author='$author', user_id='".$user->id."' WHERE topic_id='$topic_id'");
-			if ($db->affected_rows())
-				$db2->query("UPDATE px_topics SET chdate='".time()."' WHERE topic_id='$topic_id'");
-
-		//WA Teil zwei, wo gefunden, so korrigieren
-		} else {
-			if ($topic_id)
-				$db->query("UPDATE termine SET topic_id=''  WHERE termin_id='$termin_id'");
-			}
-		//WA Ende
-
-		//Aendern des Titels des zugehoerigen Ordners
-		$titel_f=$TERMIN_TYP[$art]["name"].": $titel";
-		$titel_f .= " " . _("am") . " " . date("d.m.Y ", $start_time);
-
-		$db->query("SELECT folder_id FROM folder WHERE range_id ='$termin_id'");
-		if ($db->num_rows() == 1) {
-			$db->next_record();
-			$db2->query ("UPDATE folder SET name='$titel_f' WHERE folder_id = '".$db->f("folder_id")."'");
-			if ($db2->affected_rows())
-				$db3->query("UPDATE folder SET chdate='".time()."' WHERE folder_id = '".$db->f("folder_id")."'");
-		}
-
-		//update assigned resources, if resource manangement activ
-		if ($RESOURCES_ENABLE) {
-			$updateAssign = new VeranstaltungResourcesAssign($range_id);
-			if (($resource_id) && ($resource_id != "NULL"))
-				$resources_result=$updateAssign->changeDateAssign($termin_id, $resource_id);
-			if (($create_update_request) || (!$resource_id))
-				$resources_result=$updateAssign->killDateAssign($termin_id);
-		}
-
-	} else
-		$result.= sprintf ("error§" ._("Der Termin <b>%s</b> wurde <u>nicht</u> ge&auml;ndert!")."§", htmlReady(stripslashes($titel)));
-
-	$result_a["changed"]=$date_changed;
-	$result_a["msg"]=$result;
-	$result_a["add_msg"]=$add_result;
-	$result_a["resources_result"]=$resources_result;
-
-	return ($result_a);
-}
-
 /*
 Die Funktion delete_topic löscht rekursiv alle Postings ab der übergebenen topic_id, der zweite Parameter
 muss(!) eine Variable sein, diese wird für jedes gelöschte Posting um eins erhöht
@@ -919,7 +465,7 @@ function delete_date($termin_id, $topic_delete = TRUE, $folder_move = TRUE, $sem
 
 	$db = new DB_Seminar;
 
-	## Eventuell rekursiv Postings loeschen
+	// Eventuell rekursiv Postings loeschen
 	/*if ($topic_delete) { //deprecated at the moment because of bad usabilty (delete date kill whole topic in forum without a notice, that's bad...)
 		$db->query("SELECT topic_id FROM termine WHERE termin_id ='$termin_id'");
 		$db->next_record();
@@ -985,324 +531,18 @@ function delete_range_of_dates($range_id, $topics = FALSE) {
 }
 
 
-//Erstellt automatisch einen Ablaufplan oder aktualisiert ihn
-function dateAssi($sem_id, $mode="update", $topic=FALSE, $folder=FALSE, $full = FALSE, $old_turnus = FALSE, $dont_check_overlaps = TRUE, $update_resources = TRUE, $presence_dates_only = TRUE, $check_locks = TRUE) {
-	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP, $user;
-
-	//hmmm, workaround ?!
-	if ($mode != 'update')
-		$check_locks = false;
-
-	if ($RESOURCES_ENABLE)	{
-	 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
-		$insertAssign = new VeranstaltungResourcesAssign($sem_id);
-	}
-
-	$hash_secret = "blubbersuppe";
-	$date_typ=1; //type to use for new dates
-	$author = get_fullname();
-
-	$db = new DB_Seminar;
-	$db2 = new DB_Seminar;
-	$semester = new SemesterData;
-
-	//load data of the Veranstaltung
-	$query = sprintf("SELECT start_time, duration_time, metadata_dates FROM seminare WHERE Seminar_id = '%s'", $sem_id);
-	$db->query($query);
-	$db->next_record();
-
-	$term_data = unserialize ($db->f("metadata_dates"));
-	$veranstaltung_start_time = $db->f("start_time");
-	$veranstaltung_duration_time = $db->f("duration_time");
-
-	if (($mode == "update") && (!$old_turnus))
-		$old_turnus = $term_data['turnus_data'];
-
-	//load the ids from already created dates
-	if ($mode == "update") {
-
-		//first, we load all dates that exists
-		$query = sprintf("SELECT termin_id, date, end_time FROM termine WHERE range_id='%s' %s ORDER BY date", $sem_id, ($presence_dates_only) ? "AND date_typ IN".getPresenceTypeClause() : "");
-		$db->query($query);
-
-		//than we check, which ones matches to our metadates
-		while ($db->next_record()) {
-			foreach ($old_turnus as $val) {
-				//compense php sunday = 0 bullshit
-				if ($val["day"] == 7)
-				$t_day = 0;
-				else
-				$t_day = $val["day"];
-
-				if ((date("w", $db->f("date")) == $t_day) &&
-				(date("G", $db->f("date")) == $val["start_stunde"]) &&
-				(date("i", $db->f("date")) == $val["start_minute"]) &&
-				(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
-				(date("i", $db->f("end_time")) == $val["end_minute"])){
-					if(is_array($term_data['turnus_data'])){
-						foreach ($term_data['turnus_data'] as $val2){
-							if ($val['start_stunde'] == $val2['start_stunde']
-							&& 	$val['start_minute'] == $val2['start_minute']
-							&& 	$val['end_stunde'] == $val2['end_stunde']
-							&& 	$val['end_minute'] == $val2['end_minute']
-							&& 	$val['day'] == $val2['day']){
-								$saved_dates[md5($db->f('date').$db->f('end_time'))] = $db->f("termin_id");
-								break;
-							}
-						}
-					}
-					if ($saved_dates[md5($db->f('date').$db->f('end_time'))]) break;
-					else $kill_dates[] = $db->f('termin_id');
-				}
-			}
-
-		}
-		if (is_array($kill_dates)){
-			foreach($kill_dates as $one_kill_date){
-				delete_date($one_kill_date, true, true, $sem_id);
-			}
-		}
-	}
-
-	//determine first day of the start-week as sem_begin
-	$all_semester = $semester->getAllSemesterData();
-	if ($term_data["start_woche"] >= 0) {
-		foreach ($all_semester as $key => $val)
-			if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"])) {
-				$sem_begin = mktime(0, 0, 0, date("n",$val["vorles_beginn"]), date("j",$val["vorles_beginn"])+($term_data["start_woche"] * 7),  date("Y",$val["vorles_beginn"]));
-				$first_sem_key = $key;
-			}
-	} else
-		$sem_begin = $term_data["start_termin"];
-
-	$dow = date("w", $sem_begin);
-
-	if ($dow <= 5)
-		$corr = ($dow -1) * -1;
-	elseif ($dow == 6)
-		$corr = 2;
-	elseif ($dow == 0)
-		$corr = 1;
-	else
-		$corr = 0;
-
-	if ($corr)
-		$sem_begin_uncorrected = $sem_begin;
-
-	$sem_begin = mktime(0, 0, 0, date("n",$sem_begin), date("j",$sem_begin)+$corr,  date("Y",$sem_begin));
-
-	foreach ($all_semester as $val)
-		if (($veranstaltung_start_time >= $val["beginn"]) AND ($veranstaltung_start_time <= $val["ende"])) {
-			$sem_end = $val["vorles_ende"];
-		}
-
-	//determine the last day as sem_end when $full (Veranstaltung uses multiple Semesters)
-	if ($full)
-		if ($veranstaltung_duration_time == -1) {
-			$last_sem = array_pop($all_semester);
-			$sem_end = $last_sem["vorles_ende"];
-			$last_sem_key = count($all_semester)-1;
-		} else
-			foreach ($all_semester as $val)
-			if  ((($veranstaltung_start_time + $veranstaltung_duration_time + 1) >= $val["beginn"]) AND (($veranstaltung_start_time + $veranstaltung_duration_time +1) <= $val["ende"])){
-				$sem_end = $val["vorles_ende"];
-				$last_sem_key = $key;
-			}
-
-	$interval = $term_data["turnus"] + 1;
-
-	// get all holidays from db
-
-	$all_holiday = HolidayData::GetAllHolidaysArray(); // fetch all Holidays
-
-	//create the dates
-	$affected_dates=0;
-	if (is_array($term_data["turnus_data"]))
-		do {
-			foreach ($term_data["turnus_data"] as $val) {
-				$do = TRUE;
-				$old_turnus_key = false;
-				if (is_array($old_turnus)){
-					foreach ($old_turnus as $old_key => $old_val){
-						if (	$old_val['start_stunde'] == $val['start_stunde']
-							&& 	$old_val['start_minute'] == $val['start_minute']
-							&& 	$old_val['end_stunde'] == $val['end_stunde']
-							&& 	$old_val['end_minute'] == $val['end_minute']
-							&& 	$old_val['day'] == $val['day']){
-							$old_turnus_key = $old_key;
-							break;
-						}
-					}
-				}
-
-				//create new dates
-				$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($week * 7), date("Y", $sem_begin));
-				$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($week * 7), date("Y", $sem_begin));
-
-				foreach ($all_holiday as $val2)
-					if (($val2["beginn"] <= $start_time) && ($start_time <=$val2["ende"]))
-						$do = FALSE;
-
-				//check for calculatable holidays
-				if ($do) {
-					$holy_type = holiday($start_time);
-					if ($holy_type["col"] == 3)
-						$do = FALSE;
-				}
-				if ($do && $full){
-					for ($i = $first_sem_key; $i <= $last_sem_key; ++$i){
-						if ( ($all_semester[$i]['beginn'] <= $start_time && $start_time <= $all_semester[$i]['vorles_beginn'])
-							|| ($all_semester[$i]['vorles_ende'] <= $start_time && $start_time <= $all_semester[$i]['ende'])){
-							$do = false;
-							break;
-						}
-					}
-				}
-
-				//check if corrected $sem_begin
-				if (($do) && ($sem_begin_uncorrected))
-					if ($start_time < $sem_begin_uncorrected) {
-						$do = FALSE;
-						if ($term_data["turnus"])
-							$cor_interval = -1;
-					}
-
-				if (($do) && ($end_time < $sem_end)){
-					//ids
-					$date_id=md5(uniqid("lisa",1));
-					$folder_id=md5(uniqid("alexandra",1));
-					$aktuell=time();
-
-					if ($val['desc']){
-						$date_typ = get_guessed_date_type($val['desc']);
-					}
-
-					//if we have a resource_id, we take the room name from resource_id
-					if (($val["resource_id"]) && ($RESOURCES_ENABLE))
-						$room = getResourceObjectName($val["resource_id"]);
-					else
-						$room = $val["room"];
-
-					//create topic
-					if (($topic) && (!$saved_dates[md5($start_time.$end_time)]))
-						$topic_id=CreateTopic($TERMIN_TYP[$date_typ]["name"]." " . _("am") . " ".date("d.m.Y", $start_time), $author, _("Hier kann zu diesem Termin diskutiert werden"), 0, 0, $sem_id);
-
-					//create folder
-					if (($folder) && (!$saved_dates[md5($start_time.$end_time)])) {
-						$titel = sprintf (_("%s am %s"), $TERMIN_TYP[$date_typ]["name"], date("d.m.Y", $start_time));
-						$description= _("Ablage für Ordner und Dokumente zu diesem Termin");
-						$db2->query("INSERT INTO folder SET folder_id='$folder_id', range_id='$date_id', description='$description', user_id='$user->id', name='$titel', mkdate='$aktuell', chdate='$aktuell'");
-					} else
-						$folder_id='';
-
-					$action = '';
-					//insert/update dates
-					if (!$saved_dates[md5($start_time.$end_time)]) {
-						$query2 = "INSERT INTO termine SET termin_id='$date_id', range_id='$sem_id', autor_id='$user->id', content='" . _("Kein Titel") . "', date='$start_time', mkdate='$aktuell', chdate='$aktuell', date_typ='$date_typ', topic_id='$topic_id', end_time='$end_time', raum='".mysql_escape_string($room)."' ";
-						$db2->query($query2);
-						$action = 'insert';
-					} else {
-						$action = 'update';
-						$query2 = "UPDATE termine SET chdate='$aktuell', raum='".mysql_escape_string($room)."' ,date_typ='$date_typ' WHERE termin_id='".$saved_dates[md5($start_time.$end_time)]."'";
-						$db2->query($query2);
-					}
-					//insert an entry for the linked resource, if resource management activ
-					if ($RESOURCES_ENABLE) {
-						$insertAssign->dont_check = $dont_check_overlaps;
-						//only if we get a resource_id, we update assigns...
-						if ($val["resource_id"]){
-							if ($action == 'update' && $val['resource_id'] != $old_turnus[$old_turnus_key]['resource_id'] ) {
-								$resources_result = array_merge((array)$resources_result, (array)$insertAssign->changeDateAssign($saved_dates[md5($start_time.$end_time)], $val["resource_id"], FALSE, FALSE, FALSE, $check_locks));
-							} elseif ($action == 'insert') {
-								$resources_result = array_merge((array)$resources_result, (array)$insertAssign->insertDateAssign($date_id, $val["resource_id"], FALSE, FALSE, FALSE, $check_locks));
-							}
-						} elseif ($action == 'update'){
-							$insertAssign->killDateAssign($saved_dates[md5($start_time.$end_time)]);
-						}
-					}
-					if ($action == 'update'){
-						unset($saved_dates[md5($start_time.$end_time)]);
-					}
-					$affected_dates++;
-				}
-			}
-			//inc the week
-			$week = $week + $interval + $cor_interval;
-
-			if ($cor_interval)
-				unset($cor_interval);
-
-		} while ($end_time <$sem_end);
-
-		//kill dates
-		if (is_array($saved_dates) && count($saved_dates)) {
-				foreach ($saved_dates as $one_date) {
-					delete_date($one_date, true, true, $sem_id);
-				}
-		}
-
-	$result_a["changed"]=$affected_dates;
-	$result_a["resources_result"]=$resources_result;
-
-	return ($result_a);
-}
-
 //Checkt, ob Ablaufplantermine zu gespeicherten Metadaten vorliegen
 function isSchedule ($sem_id, $presence_dates_only = TRUE, $clearcache = FALSE) {
-	static $cache;
-
-	if ($clearcache)
-		$cache = '';
-
-	if (isset($cache[$sem_id]))
-		return $cache[$sem_id];
 
 	$db = new DB_Seminar;
-	$query = sprintf ("SELECT metadata_dates FROM seminare WHERE Seminar_id = '%s'", $sem_id);
+	$query = sprintf("SELECT COUNT(*) as count FROM termine WHERE range_id='%s' AND metadate_id != '' AND metadate_id IS NOT NULL %s ORDER BY date", $sem_id, ($presence_dates_only) ? "AND date_typ IN".getPresenceTypeClause() : "");
 
 	$db->query($query);
 	$db->next_record();
 
-	$term_metadata=unserialize($db->f("metadata_dates"));
-
-	//first, we load all dates that exists
-	$query = sprintf("SELECT termin_id, date, end_time FROM termine WHERE range_id='%s' %s ORDER BY date", $sem_id, ($presence_dates_only) ? "AND date_typ IN".getPresenceTypeClause() : "");
-	$db->query($query);
-
-	if ($term_metadata["art"] == 1) {
-		$cache[$sem_id] = 0;
-		return $cache[$sem_id];
-
-	} else {
-
-		//than we check, which ones matches to our metadates
-		while ($db->next_record()) {
-			if (is_array($term_metadata["turnus_data"]))
-			foreach ($term_metadata["turnus_data"] as $val) {
-				//compense php sunday = 0 bullshit
-				if ($val["day"] == 7)
-					$t_day = 0;
-				else
-					$t_day = $val["day"];
-
-				if ((date("w", $db->f("date")) == $t_day) &&
-					(date("G", $db->f("date")) == $val["start_stunde"]) &&
-					(date("i", $db->f("date")) == $val["start_minute"]) &&
-					(date("G", $db->f("end_time")) == $val["end_stunde"]) &&
-					(date("i", $db->f("end_time")) == $val["end_minute"]))
-					$matched_dates[$db->f("termin_id")] = TRUE;
-			}
-		}
-
-		if (isset($matched_dates)) {
-			$cache[$sem_id] = sizeof($matched_dates);
-			return $cache[$sem_id];
-		} else {
-			$cache[$sem_id] = FALSE;
-			return FALSE;
-		}
-	}
+	return $db->f('count');
 }
+
 
 //Checkt, ob bereits angelegte Termine ueber mehrere Semester laufen
 function isDatesMultiSem ($sem_id) {
@@ -1339,35 +579,25 @@ function isDatesMultiSem ($sem_id) {
 function getMetadateCorrespondingDates ($sem_id, $presence_dates_only) {
 
 	$semObj =& Seminar::GetInstance($sem_id);
-	$db = new DB_Seminar;
 
-	//first, we load all dates that exists
-	$query = sprintf("SELECT termin_id, date, end_time FROM termine WHERE range_id='%s' %s ORDER BY date", $sem_id, ($presence_dates_only) ? "AND date_typ IN".getPresenceTypeClause() : "");
-	$db->query($query);
-
-	//than we check, which ones matches to our metadates
-	while ($db->next_record()) {
-
-		foreach ($semObj->getMetaDates() as $key=>$val) {
-			//compense php sunday = 0 bullshit
-			if ($val["day"] == 7)
-				$t_day = 0;
-			else
-				$t_day = $val["day"];
-
-			if ((date("w", $db->f("date")) == $t_day) &&
-				(date("G", $db->f("date")) == $val["start_hour"]) &&
-				(date("i", $db->f("date")) == $val["start_minute"]) &&
-				(date("G", $db->f("end_time")) == $val["end_hour"]) &&
-				(date("i", $db->f("end_time")) == $val["end_minute"]))
-				$result[$key][$db->f("termin_id")] = TRUE;
+	foreach ($sem->getMetaDates() as $key=>$val) {
+		$termine = $sem->getSingleDatesForCycle($key);
+		foreach ($termine as $val) {
+			if ($presence_dates_only) {
+				foreach ($types as $tp) {
+					if ($val->getDateType() == $tp) {
+						$zw[$val->getSingleDateID()] = TRUE;
+						break;
+					}
+				}
+			} else {
+				$zw[$val->getSingleDateID()] = TRUE;
+			}
 		}
+		$result[] = $zw;
+		$zw = '';
 	}
-
-	if (is_array($result))
-		return $result;
-	else
-		return FALSE;
+	return $result;
 }
 
 /**
@@ -1377,49 +607,37 @@ function getMetadateCorrespondingDates ($sem_id, $presence_dates_only) {
 * @return		boolean	TRUE, if the date corresponds to a metadate
 *
 */
-function isMetadateCorrespondingDate ($termin_id, $begin = '', $end = '', $seminar_id='') {
-	$db = new DB_Seminar;
-
-	//first, we load the date
-	$query = sprintf("SELECT termin_id, date, end_time, range_id FROM termine WHERE termin_id ='%s' ", $termin_id);
-	$db->query($query);
-	if (!$db->next_record()){
-		return false;
-	}
-	if ((!$begin) && (!$end) && (!$seminar_id)) {
-		$begin = $db->f("date");
-		$end = $db->f("end_time");
-		$seminar_id = $db->f("range_id");
+function isMetadateCorrespondingDate ($termin_id, $begin = '', $end = '', $seminar_id='')
+{
+	$termin = new SingleDate($termin_id);
+	if ($termin->getMetaDateID()) {
+		return $termin->getRangeId();
 	}
 
-	$semObj =& Seminar::GetInstance($seminar_id);
+	return false;
+}
 
-	//than we check, if the date matches a metadate
-	if (is_array($semObj->getMetaDates())) {
-		foreach ($semObj->getMetaDates() as $key=>$val) {
-			//compense php sunday = 0 bullshit
-			if ($val["day"] == 7)
-				$t_day = 0;
-			else
-				$t_day = $val["day"];
+// get_csv_raumbelegung.php
+function getCorrespondingMetadates ($termin_id, $begin = '', $end = '', $seminar_id='')
+{
+	$termin = new SingleDate($termin_id);
+	if (!$termin->getMetaDateID()) return false;
 
-			if ((date("w", $begin) == $t_day) &&
-				(date("G", $begin) == $val["start_hour"]) &&
-				(date("i", $begin) == $val["start_minute"]) &&
-				(date("G", $end) == $val["end_hour"]) &&
-				(date("i", $db->f("end_time")) == $val["end_minute"]))
-				$result = $seminar_id;
-		}
+	if (!$seminar_id) {
+		$seminar_id = $termin->getRangeID();
 	}
-	return $result;
+
+	$sem = new Seminar($seminar_id);
+	$turnus = $sem->getFormattedTurnusDates();
+	return $turnus[$termin->getMetaDateID()];
 }
 
 /**
 * a small helper funktion to get the type query for "Sitzungstermine"
-* (this dates are important to get he regularly, presence dates
+* (this dates are important to get the regularly, presence dates
 * for a seminar
 *
-* @return		string	the SQL-clause to select only the "Sitzungstermine"
+* @return	string	the SQL-clause to select only the "Sitzungstermine"
 *
 */
 function getPresenceTypeClause() {
@@ -1440,6 +658,17 @@ function getPresenceTypeClause() {
 	return $typ_clause;
 }
 
+function getPresenceTypes() {
+	global $TERMIN_TYP;
+
+	foreach ($TERMIN_TYP as $key=>$val) {
+		if ($val["sitzung"]) {
+			$types[] = $key;
+		}
+	}
+
+	return $types;
+}
 
 /**
 * TerminEingabeHilfe
@@ -1468,24 +697,11 @@ function Termin_Eingabe_javascript ($t = 0, $n = 0, $atime=0, $ss = '', $sm = ''
 	$at = ($atime)? '&atime='.$atime:'';
 	$q = ($ss !== '')? "&ss={$ss}&sm={$sm}&es={$es}&em={$em}":'';
 	$txt .= "<a href=\"javascript:window.open('";
-	$txt .= "termin_eingabe_dispatch.php?mcount={$km}&element_switch={$t}&c={$n}{$at}{$q}', 'kalender', 'dependent=yes $sb, width=$kx, height=$ky');void(0);";
+	$txt .= "insert_date_popup.php?mcount={$km}&element_switch={$t}&c={$n}{$at}{$q}', 'kalender', 'dependent=yes $sb, width=$kx, height=$ky');void(0);";
 	$txt .= '"><img src="'.$GLOBALS['ASSETS_URL'].'images/popupkalender.gif" width="17" height="18" border="0" style="vertical-align:bottom" ';
 	$txt .= tooltip(_("Für eine Eingabehilfe zur einfacheren Terminwahl bitte hier klicken."),TRUE,FALSE);
 	$txt .= '></a>';
 
 	return  $txt;
-}
-
-function get_guessed_date_type($desc){
-	$ret = 1;
-	if (is_array($GLOBALS['TERMIN_TYP'])){
-		foreach($GLOBALS['TERMIN_TYP'] as $key => $value){
-			if (trim(strtolower($desc)) == strtolower($value['name'])){
-				$ret = $key;
-				break;
-			}
-		}
-	}
-	return $ret;
-}
+}																								
 ?>

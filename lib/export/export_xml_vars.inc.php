@@ -110,5 +110,3 @@ $xml_names_studiengaenge = array(
 	"name"		=>		"name",
 	"count"		=>		"anzahl"
 );
-
-?>

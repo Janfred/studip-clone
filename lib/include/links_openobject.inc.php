@@ -98,7 +98,7 @@ if ($SessSemName["class"]=="inst") {
 	if ($modules["documents"])
 		$structure["folder"]=array ('topKat' => '', 'name' => _("Dateien"), 'link' => "folder.php?cmd=tree", 'active' => FALSE);
 	if ($modules["schedule"])
-		$structure["dates"]=array ('topKat' => '', 'name' => _("Ablaufplan"), 'link' => "dates.php", 'active' => FALSE);
+		$structure["dates"]=array ('topKat' => '', 'name' => _("Ablaufplan"), 'link' => "dates.php?cmd=setType&type=all", 'active' => FALSE);
 	if ($modules["scm"]) {
 		$structure["scm"]=array ('topKat' => '', 'name' => ($scms[0]['tab_name'] ? $scms[0]['tab_name'] : _("Informationen")), 'link' => "scm.php", 'active' => FALSE);
 	}
@@ -214,11 +214,11 @@ if ($modules["forum"]) {
 }
 //
 if (($SessSemName["class"]=="sem") && ($modules["schedule"])){
-	$structure["_dates"]=array ('topKat' => "dates", 'name' => _("alle Termine"), 'link' => "dates.php", 'active' => FALSE);
-	$structure["sitzung"]=array ('topKat' => "dates", 'name' => _("Sitzungstermine"), 'link' => "dates.php?show_not=sem", 'active' => FALSE);
-	$structure["andere_t"]=array ('topKat' => "dates", 'name' => _("andere Termine"), 'link' => "dates.php?show_not=other", 'active' => FALSE);
+	$structure["_dates"]=array ('topKat' => "dates", 'name' => _("alle Termine"), 'link' => "dates.php?cmd=setType&type=all", 'active' => FALSE);
+	$structure["sitzung"]=array ('topKat' => "dates", 'name' => _("Sitzungstermine"), 'link' => "dates.php?cmd=setType&type=1", 'active' => FALSE);
+	$structure["andere_t"]=array ('topKat' => "dates", 'name' => _("andere Termine"), 'link' => "dates.php?cmd=setType&type=other", 'active' => FALSE);
 	if ($rechte)
-		$structure["admin_dates"]=array ('topKat' => "dates", 'name' => _("Ablaufplan bearbeiten"), 'link' => "admin_dates.php?new_sem=TRUE&range_id=".$SessSemName[1], 'active' => FALSE);
+		$structure["themen"]=array ('topKat' => "dates", 'name' => _("Ablaufplan bearbeiten"), 'link' => "themen.php?seminar_id=".$SessSemName[1], 'active' => FALSE);
 }
 //
 if ($modules["documents"]) {
@@ -426,11 +426,12 @@ if (!$found){
 			}
 		break;
 		case "dates.php": 
-			switch ($show_not) {
+			switch ($type) {
 				case "":
+				case "all":
 					$reiter_view="dates";
 				break;
-				case "sem":
+				case "1":
 					$reiter_view="sitzung";
 				break;
 				case "other":

@@ -120,8 +120,16 @@ class ShowToolsRequests {
 	}
 
 	function selectDates($seminar_id, $termin_id = '') {
-		$query = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id)
-						WHERE range_id = '%s' %s ORDER BY date, content", $seminar_id, ($termin_id) ? "AND termin_id = '".$termin_id."'" : "AND date_typ IN".getPresenceTypeClause());
+		if (!$termin_id) {
+			if ($GLOBALS['RESOURCES_HIDE_PAST_SINGLE_DATES']) {
+				$query = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) WHERE date >= ".(time()-3600)." AND range_id = '%s' ORDER BY date, content", $seminar_id);
+			} else {
+				$query = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) WHERE range_id = '%s' ORDER BY date, content", $seminar_id);
+			}
+		} else {
+			$query = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) WHERE range_id = '%s' %s ORDER BY date, content", $seminar_id, "AND termin_id = '".$termin_id."'");
+		}
+
 		$this->db->query($query);
 		return;
 	}
@@ -339,16 +347,19 @@ class ShowToolsRequests {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan="2" width="96%" valign="top">
 					<a href="<?=$sem_link?>">
-						<b><?=htmlReady($semObj->getName())?></b>
+						<b><?= $semObj->seminar_number ? htmlReady($semObj->seminar_number).':' : '' ?><?=htmlReady($semObj->getName())?></b>
 					</a>
 					<font size="-1">
 						<br />
 						<?
 						$this->selectSemInstituteNames($semObj->getInstitutId());
-						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Art der Anfrage:")." ".(($reqObj->getTerminId()) ? _("Einzeltermin einer Veranstaltung") : (($semObj->getMetaDateType() == 1) ?_("alle Termine einer unregelm&auml;&szlig;igen Veranstaltung") :_("regelm&auml;&szlig;ige Veranstaltungszeiten")))."<br />";
-						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Erstellt von:")." <a href=\"about.php?username=".get_username($reqObj->getUserId())."\">".get_fullname($reqObj->getUserId(),'full',true)."</a><br />";
+
+						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Art der Anfrage:")." ".(($reqObj->getTerminId()) ? _("Einzeltermin einer Veranstaltung") : _("alle Termine einer Veranstaltung"))."<br />";
+						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Erstellt von:")." <a href=\"about.php?username=".get_username($reqObj->getUserId())."\">".htmlReady(get_fullname($reqObj->getUserId(), 'full', true))."</a><br />";
+
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Einrichtung:")." ".htmlReady($this->db->f("inst_name"))."<br />";
-						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Fakult&auml;t:")." ".htmlReady($this->db->f("fak_name"))."<br />&nbsp;";
+						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Fakult&auml;t:")." ".htmlReady($this->db->f("fak_name"))."<br />";
+						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("aktuelle Teilnehmerzahl:")." ".$semObj->getNumberOfParticipants('total').'<br />';
 						?>
 					</font>
 				</td>
@@ -360,55 +371,50 @@ class ShowToolsRequests {
 					<font size="-1"><b><?=_("angeforderte Belegungszeiten:")?></b><br /><br />
 					<?
 					if (!$reqObj->getTerminId()) {
-						if ($semObj->getMetaDateType() == 0) {
-							if ($metadates = $semObj->getFormattedTurnusDates()) {
-								$i=0;
-								$tmp_assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
-								foreach ($metadates as $key=>$val) {
-									printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s<br />", $key+1, htmlReady($val));
-									if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"])
-										$resObj =& ResourceObject::Factory($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"][$i]["resource_id"]);
-									else
-										$resObj =& ResourceObject::Factory($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$tmp_assign_ids[$i]]["resource_id"]);
-									if ($link = $resObj->getFormattedLink($semObj->getFirstDate()))
-										print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
-									$i++;
-								}
+						$this->selectDates($reqObj->getSeminarId());
+						if ($this->db->num_rows() > 0) {
 
-								if ($semObj->getCycle() == 1)
-									print "<br />"._("w&ouml;chentlich");
-								elseif ($semObj->getCycle() == 2)
-									print "<br />"._("zweiw&ouml;chentlich");
-								print ", "._("ab:")." ".date("d.m.Y", $semObj->getFirstDate());
-							} else
-								print _("nicht angegeben");
+							$dates = $semObj->getGroupedDates();
+							$i = 1;
+							foreach ($dates['info'] as $info) {
+								printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s<br />", $i, $info['name']);
+								$i++;
+							}
+
+							if ($semObj->getTurnus() == 0) {
+								print "<br />"._("w&ouml;chentlich");
+							} elseif ($semObj->getTurnus() == 1) {
+								print "<br />"._("zweiw&ouml;chentlich");
+							}
+
+							print ", "._("ab:")." ".date("d.m.Y", $semObj->getFirstDate('int'));
 						} else {
-							$this->selectDates($reqObj->getSeminarId());
-							if ($this->db->nf()) {
-								$i=1;
-								while ($this->db->next_record()) {
-									printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, strftime("%a, %d.%m.%Y, %H:%M", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
-									$resObj =& ResourceObject::Factory($this->db->f("resource_id"));
-									if ($link = $resObj->getFormattedLink($this->db->f("date")))
-											print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
-									$i++;
-								}
-							} else
-								print _("nicht angegeben");
+							print _("nicht angegeben");
 						}
 					} else {
+
 						$this->selectDates($reqObj->getSeminarId(), $reqObj->getTerminId());
+						
 						if ($this->db->nf() ) {
 							$i=1;
 							while ($this->db->next_record()) {
-								printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s%s<br />", $i, strftime("%a, %d.%m.%Y, %H:%M", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
+								$zw_day = date('w', $this->db->f('date'));
+								if ($zw_day == 0 || $zw_day == 6) {
+									$day_name = '<font color="red">'.getWeekDay($zw_day).'.</font>';
+								} else {
+									$day_name = getWeekDay($zw_day).'.';
+								}
+
+								printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s %s%s<br />", $i, $day_name, date("d.m.Y, H:i", $this->db->f("date")), ($this->db->f("date") != $this->db->f("end_time")) ? " - ".date("H:i", $this->db->f("end_time")) : "");
 								$resObj =& ResourceObject::Factory($this->db->f("resource_id"));
 								if ($link = $resObj->getFormattedLink($this->db->f("date")))
 									print "&nbsp;&nbsp;&nbsp;&nbsp;$link<br />";
 								$i++;
 							}
-						} else
+						} else {
 							print _("nicht angegeben");
+						}
+
 					}
 					?>
 					</font>
@@ -426,7 +432,7 @@ class ShowToolsRequests {
 								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"]))
 									foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key => $val) {
 										$cols++;
-										print "<td width=\1%\" align=\"left\"><font size=\"-1\" color=\"blue\"><i><b>".$cols.".</b></i></font></td>";
+										print "<td width=\"1%\" align=\"left\"><font size=\"-1\" color=\"blue\"><i><b>".$cols.".</b></i></font></td>";
 									}
 							} else {
 								if (is_array($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]))
@@ -456,6 +462,7 @@ class ShowToolsRequests {
 							</td>
 							<?
 							$i=0;
+
 							if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["grouping"]) {
 								foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["groups"] as $key => $val) {
 									print "<td width=\"1%\" nowrap><font size=\"-1\">";
@@ -466,7 +473,7 @@ class ShowToolsRequests {
 											$overlap_status = $this->showGroupOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$request_resource_id], $val["events_count"], $val["overlap_events_count"][$request_resource_id], $val["termin_ids"]);
 											print $overlap_status["html"];
 											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>",
-											($semObj->getMetaDateType() == 1) ? $val["termin_id"] : $i, $request_resource_id,
+											$i, $request_resource_id,
 											($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i] == $request_resource_id) ? "checked" : "",
 											($overlap_status["status"] == 2 || !ResourcesUserRoomsList::CheckUserResource($request_resource_id)) ? "disabled" : "");
 										}
@@ -566,9 +573,7 @@ class ShowToolsRequests {
 										} else {
 											$overlap_status = $this->showGroupOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()], $val2["termin_ids"]);
 											print $overlap_status["html"];
-											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>",
-											(($semObj->getMetaDateType() == 1) && (!$reqObj->getTerminId())) ? $val2["termin_id"] : $i,
-											$key,
+											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>", $i, $key,
 											($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i] == $key) ? "checked" : "",
 											($overlap_status["status"] == 2 || !ResourcesUserRoomsList::CheckUserResource($key)) ? "disabled" : "");
 										}
@@ -660,7 +665,7 @@ class ShowToolsRequests {
 											$overlap_status = $this->showGroupOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()], $val2["termin_ids"]);
 											print $overlap_status["html"];
 											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>",
-											(($semObj->getMetaDateType() == 1) && (!$reqObj->getTerminId())) ? $val2["termin_id"] : $i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i] == $key) ? "checked" : "",
+											$i, $key, ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i] == $key) ? "checked" : "",
 											($overlap_status["status"] == 2 || !ResourcesUserRoomsList::CheckUserResource($key)) ? "disabled" : "");
 										}
 										print "</font></td>";
@@ -677,8 +682,7 @@ class ShowToolsRequests {
 											$overlap_status = $this->showOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key][$key2], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()]);
 											print $overlap_status["html"];
 											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>",
-											(($semObj->getMetaDateType() == 1) && (!$reqObj->getTerminId())) ? $val2["termin_id"] : $i,
-											$key,
+											$i, $key,
 											($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][($semObj->getMetaDateType() == 1) ? $val2["termin_id"] : $i] == $key) ? "checked" : "",
 											($overlap_status["status"] == 2 || !ResourcesUserRoomsList::CheckUserResource($key)) ? "disabled" : "");
 										}
@@ -730,7 +734,6 @@ class ShowToolsRequests {
 						} else
 							print "<tr><td width=\"100%\" colspan=\"".($cols+1)."\"><font size=\"-1\">"._("keine gefunden")."</font></td></tr>";
 
-
 						//Clipped Rooms
 						if (sizeof($clipped_rooms)) {
 						?>
@@ -762,8 +765,7 @@ class ShowToolsRequests {
 											$overlap_status = $this->showGroupOverlapStatus($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["detected_overlaps"][$key], $val2["events_count"], $val2["overlap_events_count"][$resObj->getId()], $val2["termin_ids"]);
 											print $overlap_status["html"];
 											printf ("<input type=\"radio\" name=\"selected_resource_id[%s]\" value=\"%s\" %s %s/>",
-											(($semObj->getMetaDateType() == 1) && (!$reqObj->getTerminId())) ? $val2["termin_id"] : $i,
-											$key,
+											$i,	$key,
 											($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i] == $key) ? "checked" : "",
 											($overlap_status["status"] == 2 || !ResourcesUserRoomsList::CheckUserResource($key)) ? "disabled" : "");
 										}
@@ -880,6 +882,8 @@ class ShowToolsRequests {
 					?>
 					</font>
 				</td>
+
+			</tr>
 
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
@@ -1008,5 +1012,3 @@ class ShowToolsRequests {
 	}
 
 }
-?>
-

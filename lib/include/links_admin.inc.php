@@ -205,8 +205,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	//here are all the pages/views listed, which require the search form for Veranstaltungen
 	if ($i_page == "admin_seminare1.php"
-			OR $i_page == "admin_dates.php"
-			OR $i_page == "admin_metadates.php"
+			OR $i_page == "themen.php"
+			OR $i_page == "raumzeit.php"
 			OR $i_page == "admin_admission.php"
 			OR $i_page == "admin_room_requests.php"
 			OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"]=="statusgruppe_sem")
@@ -297,11 +297,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	//Bottomkats
 	$structure["grunddaten_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Grunddaten"), 'link'=>"admin_seminare1.php?list=TRUE", 'active'=>FALSE);
-	$structure["zeiten"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zeiten"), 'link'=>"admin_metadates.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
+	$structure["zeiten"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zeiten / Räume"), 'link'=>"raumzeit.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["schedule"]) || (!$SessSemName[1]))
-		$structure["ablaufplan"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Ablaufplan"), 'link'=>"admin_dates.php?list=TRUE", 'active'=>FALSE);
-	if (($RESOURCES_ALLOW_ROOM_REQUESTS) && ($RESOURCES_ENABLE))
-		$structure["room_requests"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Raumanfragen"), 'link'=>"admin_room_requests.php?list=TRUE", 'active'=>FALSE);
+		$structure["ablaufplan"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Ablaufplan"), 'link'=>"themen.php?list=TRUE", 'active'=>FALSE);
 	$structure["news_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("News"), 'link'=>"admin_news.php?list=TRUE&view=news_sem", 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["literature"]) || (!$SessSemName[1]))
 		$structure["literatur_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Literatur"), 'link'=>"admin_lit_list.php?list=TRUE&view=literatur_sem", 'active'=>FALSE);
@@ -439,7 +437,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	//View festlegen
 	switch ($i_page) {
 		case "admin_room_requests.php" :
-			$reiter_view="room_requests";
+			$reiter_view="zeiten";
 		break;
 		case "admin_admission.php" :
 			$reiter_view="zugang";
@@ -447,7 +445,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		case "admin_bereich.php" :
 			$reiter_view="bereich";
 		break;
-		case "admin_dates.php" :
+		case "themen.php" :
 			$reiter_view="ablaufplan";
 		break;
 		case "admin_db_integrity.php" :
@@ -471,7 +469,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			else
 				$reiter_view="literatur_inst";
 		break;
-		case "admin_metadates.php" :
+		case "raumzeit.php" :
 			$reiter_view="zeiten";
 		break;
 		case "admin_news.php":
@@ -1011,11 +1009,11 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				case "adminarea_start.php":
 					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"adminarea_start.php?select_sem_id=%s\">%s</a></font>", $seminar_id, makeButton("auswaehlen"));
 					break;
-				case "admin_dates.php":
-					printf("<font size=-1>" . _("Ablaufplan") . "<br /><a href=\"admin_dates.php?range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+				case "themen.php":
+					printf("<font size=-1>" . _("Ablaufplan") . "<br /><a href=\"themen.php?seminar_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
 					break;
-				case "admin_metadates.php":
-					printf("<font size=-1>" . _("Zeiten") . "<br /><a href=\"admin_metadates.php?seminar_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+				case "raumzeit.php":
+					printf("<font size=-1>" . _("Zeiten / Räume") . "<br /><a href=\"raumzeit.php?seminar_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
 					break;
 				case "admin_admission.php":
 					printf("<font size=-1>" . _("Zugangsberechtigungen") . "<br /><a href=\"admin_admission.php?seminar_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));

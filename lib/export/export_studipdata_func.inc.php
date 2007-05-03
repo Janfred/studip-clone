@@ -345,11 +345,11 @@ function export_sem($inst_id, $ex_sem_id = "all")
 				elseif ($key == "metadata_dates") 
 				{
 					$data_object .= xml_open_tag( $xml_groupnames_lecture["childgroup1"] );
-					$vorb = vorbesprechung($db->f("seminar_id"));
+					$vorb = vorbesprechung($db->f("Seminar_id"), 'export');
 					if ($vorb != false) 
 						$data_object .= xml_tag($val[0], $vorb);
-					$data_object .= xml_tag($val[1], veranstaltung_beginn($db->f("seminar_id")));
-					$data_object .= xml_tag($val[2], view_turnus($db->f("seminar_id")));
+					$data_object .= xml_tag($val[1], veranstaltung_beginn($db->f("Seminar_id"), 'export'));
+					$data_object .= xml_tag($val[2], view_turnus($db->f("Seminar_id")));
 					$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup1"] );
 				}
 				elseif ($db->f($key) != "") 

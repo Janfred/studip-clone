@@ -50,41 +50,36 @@ require_once('lib/classes/HolidayData.class.php');
 
 
 <?php
-/*echo "<pre>";
-print_r($_POST);
-echo "</pre>";
-*/
 $db = new DB_Seminar;
 $semester = new SemesterData;
 $holiday = new HolidayData;
 //got data, now check, whether data is correct
 if ($create=="Anlegen") {
-        // print_r($_POST);
-        $checkForm = semester_check_form_field($semesterdata); 
-    if ($checkForm!=1) {	// Formular war falsch ausgefüllt
-        $checkForm = "error§".$checkForm;
-        parse_msg($checkForm);
-        echo semester_show_new_semester_form($PHP_SELF, $cssSw, $semesterdata);
-        unset($new);
+	$checkForm = semester_check_form_field($semesterdata); 
+	if ($checkForm!=1) {	// Formular war falsch ausgefüllt
+		$checkForm = "error§".$checkForm;
+		parse_msg($checkForm);
+		echo semester_show_new_semester_form($PHP_SELF, $cssSw, $semesterdata);
+		unset($new);
 	} elseif (semester_check_overlap_semester($semesterdata)) { // Semesterdaten überschneiden sich!
 		$overlap = "error§"._("Semesterdaten &uuml;berschneiden sich!");
 		parse_msg($overlap);
 		echo semester_show_new_semester_form($PHP_SELF, $cssSw, $semesterdata);
 		unset($new);
-    } else {	// neu eingfügen
+	} else {	// neu eingfügen
 		// wandle day, month, year in start bzw. enddate um
 		$semesterdata = semester_make_single_data_to_timestamp($semesterdata);
 		$inserted = $semester->insertNewSemester($semesterdata); 
-        unset($checkForm);
-        unset($new);
-        if ($inserted) {
-            $luck1 = "msg§";
-            $luck2 = _("Erfolgreich eingef&uuml;gt!");
-            $msg = $luck1.$luck2;
+		unset($checkForm);
+		unset($new);
+		if ($inserted) {
+			$luck1 = "msg§";
+			$luck2 = _("Erfolgreich eingef&uuml;gt!");
+			$msg = $luck1.$luck2;
 			parse_msg($msg);
 			echo semester_show_overview($PHP_SELF); // Übersicht
-        }
-    }
+		}
+	}
 
 }
 

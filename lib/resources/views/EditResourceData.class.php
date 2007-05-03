@@ -227,7 +227,7 @@ class EditResourceData {
 								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>" :
 								"<a href=\"details.php?&sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>");
 						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
-							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie die %sZeiten%s der Veranstaltung"), "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_metadates.php?select_sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">", "</a>");
+							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie diese auf der Seite %sZeiten / R&auml;ume%s der Veranstaltung"), "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"raumzeit.php?seminar_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">", "</a>");
 						print "</font>";
 					} elseif ($owner_type == "date") {
 						print "<img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
@@ -236,7 +236,7 @@ class EditResourceData {
 								"<a href=\"seminar_main.php?auswahl=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>" :
 								"<a href=\"details.php?&sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">".htmlReady($this->db->f("Name"))."</a>");
 						if ($perm->have_studip_perm("tutor", $this->db->f("Seminar_id")))
-							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den Termin im %sAblaufplan%s der Veranstaltung"), "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"admin_dates.php?select_sem_id=".$this->db->f("Seminar_id")."\" onClick=\"return check_opener(this)\">", "</a>");
+							printf ("<br />"._("Um die Belegung zu ver&auml;ndern, &auml;ndern Sie bitte den Termin auf der Seite %sZeiten / R&auml;ume%s der Veranstaltung"), "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\"/>&nbsp;<a href=\"raumzeit.php?seminar_id=".$this->db->f("Seminar_id")."#irregular_dates\" onClick=\"return check_opener(this)\">", "</a>");
 						print "</font>";
 					} else {
 						print "<br /><img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
@@ -631,7 +631,7 @@ class EditResourceData {
 						while ($this->db->next_record()) {
 							printf ("<option style=\"font-weight:bold;\" value=\"%s\" %s>%s</option>", $this->db->f("Institut_id"), ($this->db->f("Institut_id") == $this->resObject->getInstitutId()) ? "selected" : "", my_substr($this->db->f("Name"),0,50));
 							$this->selectInstitutes($this->db->f("fakultaets_id"));
-								print_r ($this->db2);
+								//print_r ($this->db2);
 								while ($this->db2->next_record()) {
 									printf ("<option value=\"%s\" %s>&nbsp;&nbsp;&nbsp;&nbsp;%s</option>", $this->db2->f("Institut_id"), ($this->db2->f("Institut_id") == $this->resObject->getInstitutId()) ? "selected" : "", my_substr($this->db2->f("Name"),0,50));
 								}

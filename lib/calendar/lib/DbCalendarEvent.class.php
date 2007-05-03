@@ -29,9 +29,9 @@ class DbCalendarEvent extends CalendarEvent {
 		elseif ($description = event_get_description($this->id)) {
 			$this->properties['DESCRIPTION'] = $description;
 			return $this->properties['DESCRIPTION'];
-		}
-		else
+		} else {
 			return $this->properties['DESCRIPTION'] = '';
+		}
 	}
 	
 	// Store event in database

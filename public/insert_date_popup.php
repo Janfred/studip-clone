@@ -4,7 +4,7 @@
 *
 * popup calendar for studip
 *
-* @author			Peter Tienel <pthienel@web.de>
+* @author			Peter Tienel <pthienel@web.de>, Till Glöggler <tgloeggl@uos.de>
 * @version			$Id$
 * @access			public
 * @module			insert_date_popup.ph
@@ -29,8 +29,9 @@
 // +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+include ('seminar_open.php'); // initialise Stud.IP-Session
 require_once ('config.inc.php');
+require_once ('visual.inc.php');
 
 $element_switch = (isset($_REQUEST['element_switch']))? $_REQUEST['element_switch']:0; // Wert von 1 - 7 für Auswahl der Feldbezeichner
 $c = (isset($_REQUEST['c']))? $_REQUEST['c'] : 0;                   // Zähler wenn mehrere gleiche Eingabefelder im Zielformular
@@ -46,7 +47,7 @@ if (isset($GLOBALS['TIME_PRESETS']) && is_array($GLOBALS['TIME_PRESETS']) && cou
 	$zz = $GLOBALS['TIME_PRESETS'];
 	$preset_error = '';
 } else {
-	include_once('lib/msg.inc.php');
+	include_once('msg.inc.php');
 	$zz = array();
 	$preset_error = _("Ihr Systemverwalter hat leider keine Standardzeiten vorgegeben.");
 }
@@ -58,36 +59,40 @@ for($z = 0; $z < count($zz); $z++) {
 }
 $jsarray .= "zz[$z] = new Array('$ss','$sm','$es','$em');\n";
 
+$form_name = 'Formular';
+$function_addition = '';
 switch ($element_switch){  // Auswahl der Zielparameter
-	case 1:  // admin_dates.php Einzeltermin
-		$txt_day   = 'tag';
-		$txt_month = 'monat';
-		$txt_year  = 'jahr';
-		$txt_ss = 'stunde';
-		$txt_sm = 'minute';
+	case 1:	// raumzeit.php Einzeltermin bearbeiten, neuer Einzeltermin
+		$txt_day   = 'day';
+		$txt_month = 'month';
+		$txt_year  = 'year';
+		$txt_ss = 'start_stunde';
+		$txt_sm = 'start_minute';
 		$txt_es = 'end_stunde';
 		$txt_em = 'end_minute';
 		$zeiten = true;
 		$kalender = true;
+		$form_name = 'EditCycle';
+		$function_addition = '_noform';
 		break;
-	case 2:  // admin_dates.php alle Termine
-		$txt_day   = "tag[$c]";
-		$txt_month = "monat[$c]";
-		$txt_year  = "jahr[$c]";
-		$txt_ss = "stunde[$c]";
-		$txt_sm = "minute[$c]";
-		$txt_es = "end_stunde[$c]";
-		$txt_em = "end_minute[$c]";
-		$zeiten = true;
-		$kalender = true;
-		break;
-	case 3:  // admin_metadates.php regelmäßige Veranstaltungstermine
-		$txt_ss = "turnus_start_stunde[$c]";
-		$txt_sm = "turnus_start_minute[$c]";
-		$txt_es = "turnus_end_stunde[$c]";
-		$txt_em = "turnus_end_minute[$c]";
+
+	case 2:  // raumzeit.php Metadate bearbeiten
+		$txt_ss = "start_stunde";
+		$txt_sm = "start_minute";
+		$txt_es = "end_stunde";
+		$txt_em = "end_minute";
 		$zeiten = true;
 		$kalender = false;
+		$form_name = 'EditCycle';
+		break;
+	case 3: // raumzeit.php neues Metadate, Metadate bearbeiten
+		$txt_ss = "start_stunde";
+		$txt_sm = "start_minute";
+		$txt_es = "end_stunde";
+		$txt_em = "end_minute";
+		$zeiten = true;
+		$kalender = false;
+		$function_addition = '_noform';
 		break;
 	case 4:  //admin_seminare_assi.php regelmäßige Veranstaltungen (kein Kalender)
 		$txt_ss = "term_turnus_start_stunde[$c]";
@@ -206,6 +211,45 @@ echo <<<EOT
 <!--
 window.setTimeout("window.close()", 120000); // Fenster automatisch wieder schließen :-)
 $resize
+function insert_time_noform() {
+	if (opener) {
+		$jsarray
+		var t;
+    var c = 999;
+    for (i=0; i < document.forms['TimeForm'].elements.timei.length; i++){
+    	if (document.forms['TimeForm'].elements.timei[i].checked == true) c = i;
+    }
+    if(c != 999){
+			t = opener.document.getElementById('$txt_ss');
+			t.value = zz[c][0];
+			t = opener.document.getElementById('$txt_sm');
+			t.value = zz[c][1];
+			t = opener.document.getElementById('$txt_es');
+			t.value = zz[c][2];
+			t = opener.document.getElementById('$txt_em');
+			t.value = zz[c][3];
+    }
+	}
+	window.close();
+}
+
+function insert_date_noform(m, d, y) {
+	if (opener) {
+		var t;
+		t = opener.document.getElementById('$txt_month');
+		t.value = m;
+		t = opener.document.getElementById('$txt_day');
+		t.value = d;
+		t = opener.document.getElementById('$txt_year');
+		t.value = y;
+	}
+	if (document.forms['TimeForm']) {
+		insert_time_noform();
+	} else {
+		window.close();
+	}
+}
+
 function insert_time () {
    if (opener && document.forms['TimeForm']) {
      $jsarray
@@ -214,19 +258,19 @@ function insert_time () {
      	if (document.forms['TimeForm'].elements.timei[i].checked == true) c = i;
      }
      if(c != 999){
-     	opener.document.Formular.elements['$txt_ss'].value = zz[c][0];
-     	opener.document.Formular.elements['$txt_sm'].value = zz[c][1];
-     	opener.document.Formular.elements['$txt_es'].value = zz[c][2];
-     	opener.document.Formular.elements['$txt_em'].value = zz[c][3];
+     	opener.document.$form_name.elements['$txt_ss'].value = zz[c][0];
+     	opener.document.$form_name.elements['$txt_sm'].value = zz[c][1];
+     	opener.document.$form_name.elements['$txt_es'].value = zz[c][2];
+     	opener.document.$form_name.elements['$txt_em'].value = zz[c][3];
      }
    }
    window.close();
 }
 function insert_date (m, d, y) {
    if (opener) {
-     opener.document.Formular.elements['$txt_month'].value = m;
-     opener.document.Formular.elements['$txt_day'].value = (d < 10) ? '0' + d : d;
-     opener.document.Formular.elements['$txt_year'].value = y;
+     opener.document.$form_name.elements['$txt_month'].value = m;
+     opener.document.$form_name.elements['$txt_day'].value = (d < 10) ? '0' + d : d;
+     opener.document.$form_name.elements['$txt_year'].value = y;
    }
    if (document.forms['TimeForm']) {
       insert_time();
@@ -244,7 +288,7 @@ require_once($RELATIVE_PATH_CALENDAR . '/calendar_visual.inc.php');
 
 $atime =  (isset($_REQUEST['atime']) && $_REQUEST['atime'])? $_REQUEST['atime']: time();
 
-$js['function'] = 'insert_date';
+$js['function'] = 'insert_date'.$function_addition;
 
 // mehr als einen Monat anzeigen?
 if ($mcount > 3) {
@@ -297,7 +341,7 @@ if ($mcount > 3) {
 		// navigation arrows
 
 		echo '<tr>';
-		$zeiten_buttons = '<a href="javascript:insert_time();">'. makeButton('uebernehmen', 'img') . '</a> &nbsp; <a href="javascript:window.close();">' . makeButton('abbrechen', 'img').'</a>';
+		$zeiten_buttons = '<a href="javascript:insert_time'.$function_addition.'();">'. makeButton('uebernehmen', 'img') . '</a> &nbsp; <a href="javascript:window.close();">' . makeButton('abbrechen', 'img').'</a>';
 		if ($kalender) {
 			echo '<td class="blank">&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcount,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="'.$GLOBALS['ASSETS_URL'].'images/calendar_previous_double_small.gif"', tooltip($mcount . ' ' . _("Monate zurück")),' border="0"></a>';
 			echo '&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcounth,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="'.$GLOBALS['ASSETS_URL'].'images/calendar_previous_small.gif"', tooltip($mcounth .' ' . _("Monate zurück")),' border="0"></a></td>', "\n";

@@ -34,6 +34,9 @@
 // +---------------------------------------------------------------------------+
 
 
+// temporary link to this help page untill a separate page is available 
+$HELP_KEYWORD="Basis.VeranstaltungenVerwaltenAendernVonZeitenUndTerminen";
+
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 $perm->check("tutor");
@@ -89,8 +92,12 @@ function get_snapshot() {
 
 
 //get ID
-if ($SessSemName[1])
+if ($SessSemName[1]) {
 	$seminar_id=$SessSemName[1];
+} else if ($_REQUEST['seminar_id']) {
+	$seminar_id = $_REQUEST['seminar_id'];
+}
+
 
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
 if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) && (!$reset_room_search_x) && (!$send_room_x)
@@ -219,7 +226,9 @@ if ($perm->have_perm("admin"))
 			if ($my_requests[$admin_rooms_data["resRequest"]->getId()])
 				printf (_("Sie k&ouml;nnen diese Anfrage auch selbst %saufl&ouml;sen%s."), "<a href=\"resources.php?view=edit_request&single_request=".$admin_rooms_data["resRequest"]->getId()."\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\" />&nbsp;", "</a>");
 			else
-				print _("Diese Anfragen werden von den zust&auml;ndigen Raumadministratoren bearbeitet. Ihnen wird ein passender Raum f&uuml;r ihre Veranstaltung zugewiesen.");			?>
+				print _("Diese Anfragen werden von den zust&auml;ndigen Raumadministratoren bearbeitet. Ihnen wird ein passender Raum f&uuml;r ihre Veranstaltung zugewiesen."); ?>
+      <br /><br />
+      <A href="raumzeit.php?seminar_id=<?=$seminar_id?>"><img src="<?=$GLOBALS['ASSETS_URL']?>images/link_intern.gif" border="0" />&nbsp;<?=_("Zurück zur Seite Zeiten / Räume");?></A><br />
 			<br />
 			</blockqoute>
 		</td>

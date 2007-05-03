@@ -64,6 +64,7 @@ if (($SessSemName[1] != "") && (!isset($sem_id) || $SessSemName[1] == $sem_id)) 
 	$sem_id = $SessSemName[1];
 }
 
+$sem = new Seminar($sem_id);
 $DataFields = new DataFields($sem_id);
 
 //load all the data
@@ -291,9 +292,22 @@ print_infobox ($infobox,"details.jpg");
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
-				<?
-				printf ("<font size=-1><b>" . _("Erster Termin:") . "</b></font><br /><font size=-1>%s</font>",veranstaltung_beginn($sem_id));
+					<font size="-1">
+					<?	
+					$next_date = $sem->getNextDate();
+					if ($next_date) {
+						echo '<b>'._("Nächster Termin").':</b><br />';
+						echo $next_date;
+					} else {
+						echo '<b>'._("Erster Termin").':</b><br />';
+						echo $sem->getFirstDate();
+						echo '<br/>';
+					}
+					if ($mein_status || $perm->have_perm('admin')) {
+						echo '<a href="dates.php">alle Termine</a><br/>';
+					}
 				?>
+					</font>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="25%">
 				<?

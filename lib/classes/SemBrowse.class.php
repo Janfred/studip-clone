@@ -150,13 +150,6 @@ class SemBrowse {
 			$this->get_sem_class();
 		}
 
-		/*
-		echo "<hr><pre>";
-		print_r($this->sem_browse_data);
-		print var_dump($this->show_result);
-		echo "</pre><hr>";
-		*/
-
 	}
 
 	function show_class(){

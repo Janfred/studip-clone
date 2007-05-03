@@ -668,4 +668,3 @@ class ResourceObject {
 		return join($delimeter, array_reverse(array_values($this->getPathArray($include_self))));
 	}
 }
-?>

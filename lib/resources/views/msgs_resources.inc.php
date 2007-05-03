@@ -180,9 +180,14 @@ $this->msg[42] = array (
 		"msg"=> _("Folgenden Einzelterminen wurde kein Raum zugewiesen, da gesonderte Anfragen zu diesem Termine vorliegen, die einzeln bearbeitet werden m&uuml;ssen:")."<font size=\"-1\" color=\"black\">%s</font>");
 $this->msg[43] = array (
 		"mode" => "info",
-		"msg"=> _("Wollen Sie die Anfrage wirklich ablehnen?")
-			."<br /><a href=\"%s?decline_request=1\">".makeButton("ja2")."</a>"
-			."&nbsp;<a href=\"%s?decline_request=0\">".makeButton("nein")."</a>");
+		"msg"=> "<form action=\"%s\" method=\"post\"><table border=\"0\" cellspacing=\"5\" cellpadding=\"0\"><tr><td valign=\"top\">"
+			. _("Wollen Sie die Anfrage wirklich ablehnen?")
+			."<br /><input type=\"image\" ".makeButton('ja2', 'src')." align=\"middle\"></a>"
+			."&nbsp;<a href=\"%s?decline_request=0\">".makeButton("nein")."</a><br/>"
+			.'<input type="hidden" name="decline_request" value="1"></td><td valign=\"top\">'
+			.'<font size="-1">'._("Grund der Ablehnung:").'</font><br/>'
+			.'<textarea cols="30" rows="3" name="decline_message"></textarea></td></tr></table>'
+			.'</form>');
 $this->msg[44] = array (
 		"mode" => "error",
 		"msg"=> _("Die Belegungen konnte nicht gespeichert werden, da sie mit folgenden Sperrzeiten kollidiert:")

@@ -64,10 +64,10 @@ class ScheduleView {
 
 		//the categories configuration (color's and bg-image)
 		$this->categories = array(
-			"0" => array("bg-picture"   => $GLOBALS['ASSETS_URL']."images/calendar/category5_small.jpg",
+			"0" => array("bg-picture"   => $GLOBALS['ASSETS_URL']."images/calendar/category3_small.jpg",
+			             "border-color" => "#5C2D64"),	// is now obsolete
+			"1" => array("bg-picture"   => $GLOBALS['ASSETS_URL']."images/calendar/category5_small.jpg",
 			             "border-color" => "#505064"),
-			"1" => array("bg-picture"   => $GLOBALS['ASSETS_URL']."images/calendar/category3_small.jpg",
-			             "border-color" => "#5C2D64"),
 			"2" => array("bg-picture"   => $GLOBALS['ASSETS_URL']."images/calendar/category9_small.jpg",
 			             "border-color" => "#957C29"),
 			"3" => array("bg-picture"   => $GLOBALS['ASSETS_URL']."images/calendar/category11_small.jpg",

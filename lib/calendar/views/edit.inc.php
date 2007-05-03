@@ -621,7 +621,7 @@ if (isset($atermin) && strtolower(get_class($atermin)) == "seminarevent") {
 	$info_box['sem2'] = sprintf(_("%sW&auml;hlen%s Sie aus, welche Veranstaltungstermine in Ihrem Terminkalender angezeigt werden sollen.")
 			, '<a href="' . $PHP_SELF . '?cmd=bind">', '</a>');
 	if ($permission == "tutor" || $permission == "dozent") {
-		$link_to_seminar = sprintf("<a href=\"%sadmin_dates.php?range_id=%s&show_id=%s\">"
+		$link_to_seminar = sprintf("<a href=\"%sraumzeit.php?seminar_id=%s&open_close_id=%s&cmd=open\">"
 				, $CANONICAL_RELATIVE_PATH_STUDIP, $atermin->getSeminarId(), $atermin->getId());
 		$info_box['sem3'] = sprintf(_("Um diesen Termin zu bearbeiten, wechseln Sie bitte in die %sTerminverwaltung%s.")
 				, $link_to_seminar, '</a>');
