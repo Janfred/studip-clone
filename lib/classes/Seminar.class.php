@@ -602,7 +602,6 @@ class Seminar {
 				lernorga = '".				mysql_escape_string($this->orga)."',
 				leistungsnachweis = '".			mysql_escape_string($this->leistungsnachweis)."',
 				metadata_dates= '".			mysql_escape_string($this->getSerializedMetadata())."',
-				chdate = '".				time()."',
 				ects = '".				mysql_escape_string($this->ects)."',
 				admission_endtime = '".			$this->admission_endtime."',
 				admission_turnout = '".			$this->admission_turnout."',
