@@ -129,25 +129,30 @@ $quarter_year = 60 * 60 * 24 * 90;
 		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
 	}
 
-?>
-	<br />
-	<font size="-1">
-		<b><?=_("Zeit")?>:</b><br />
-		<?=getRegularOverview($SessSemName[1])?><br/>
-		<br/>
-		<?
-		$next_date = $sem->getNextDate();
-		if ($next_date) {
-			echo '<b>'._("Nächster Termin").':</b><br />';
-			echo $next_date;
-		} else {
-			echo '<b>'._("Erster Termin").':</b><br />';
-			echo $sem->getFirstDate();
-			echo '<br/>';
-		}
-		?>
-		<a href="dates.php">alle Termine</a><br/>
-	</font>
+    $$regularOverviewHtml = getRegularOverview($SessSemName[1]);
+    if($$regularOverviewHtml != '') {
+        ?>
+    	<br />
+    	<font size="-1">
+    		<b><?=_("Zeit")?>:</b><br />
+    		'<?=$$regularOverviewHtml?>'<br/>
+    		<br/>
+    		<?
+    		$next_date = $sem->getNextDate();
+    		if ($next_date) {
+    			echo '<b>'._("Nächster Termin").':</b><br />';
+    			echo $next_date;
+    		} else {
+    			echo '<b>'._("Erster Termin").':</b><br />';
+    			echo $sem->getFirstDate();
+    			echo '<br/>';
+    		}
+    		?>
+    		<a href="dates.php">alle Termine</a><br/>
+    	</font>
+        <?
+    }
+    ?>
 
 <?
 
