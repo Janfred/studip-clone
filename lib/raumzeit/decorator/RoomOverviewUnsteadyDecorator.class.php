@@ -104,7 +104,7 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 					}
 					$ret .= '</tr>';
 				} else {
-					if ($commas > 0) $ret .= ', ';
+					if ($commas > 0) $ret .= ',<br/>';
 					$ret .= getWeekDay($val['day']).'.&nbsp;'.$repeat.'&nbsp;';
 					$ret .= $zeit.'&nbsp;';
 					if (!$this->hideRooms) {
