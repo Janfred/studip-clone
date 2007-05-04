@@ -134,88 +134,90 @@ $sem->processCommands();
 				$semester = new SemesterData();
 				$all_semester = $semester->getAllSemesterData();
 
-				foreach ($termine as $singledate_id => $singledate) {
-
-					if ( ($grenze == 0) || ($grenze < $singledate->getStartTime()) ) {
-						foreach ($all_semester as $zwsem) {
-							if ( ($zwsem['beginn'] < $singledate->getStartTime()) && ($zwsem['ende'] > $singledate->getStartTime()) ) {
-								$grenze = $zwsem['ende'];
-								?>
-								<TR>
-									<TD class="steelgraulight" align="center" colspan="9">
-										<FONT size="-1"><B><?=$zwsem['name']?></B></FONT>
-									</TD>
-								</TR>
-								<?
-							}
-						}
-					}
-
-					// Template fuer einzelnes Datum
-					$showSpecialDays = FALSE;
-					$tpl = getTemplateDataForSingleDate($singledate, $metadate_id);
-					// If "Sitzung" shall not be shown, uncomment this
-					/*if ($tpl['type'] == 1 || $tpl['type'] == 7) {
-						unset($tpl['art']);
-					}*/
-					
-					//calendar jump
-					$tpl['calendar'] = "&nbsp;<a href=\"calendar.php?cmd=showweek&atime=" . $singledate->getStartTime();
-					$tpl['calendar'] .= "\"><img style=\"vertical-align:bottom\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" ";
-					$tpl['calendar'] .= tooltip(sprintf(_("Zum %s in den persönlichen Terminkalender springen"), date("m.d", $singledate->getStartTime()))); 
-					$tpl['calendar'] .= ' border="0"></a>';
-
-					if ($showDatesFilter) {
-						switch ($showDatesFilter) {
-							case 'all':
-								break;
-
-							case 'others':
-								if ($tpl['type'] == 1) {
-									$tpl['deleted'] = true;
-								}
-								break;
-
-							default:
-								if ($tpl['type'] != $type) {
-									$tpl['deleted'] = true;
-								}
-								break;
-						}
-					}
-
-					if (!$tpl['deleted'] || $tpl['comment'])  {
-						$tpl['class'] = 'printhead';
-						$tpl['cycle_id'] = $metadate_id;
-
-						$issue_id = '';
-						if (is_array($tmp_ids = $singledate->getIssueIDs())) {
-							foreach ($tmp_ids as $val) {
-								if (empty($issue_id)) {
-									if (is_object($themen[$val])) {
-										$issue_id = $val;
-									}
-								} else {
-									if (is_object($themen[$val])) {
-										$tpl['additional_themes'][] = array('title' => $themen[$val]->getTitle(), 'desc' => $themen[$val]->getDescription());
-									}
-								}
-							}
-						}
-						if (is_object($themen[$issue_id])) {
-							$tpl['issue_id'] = $issue_id;
-							$thema =& $themen[$issue_id];
-							$tpl['theme_title'] = $thema->getTitle();
-							$tpl['theme_description'] = formatReady($thema->getDescription());
-							$tpl['folder_id'] = $thema->getFolderID();
-							$tpl['forumEntry'] = $thema->hasForum();
-							$tpl['fileEntry'] = $thema->hasFile();								
-							$tpl['forumCount'] = get_not_visited('forum', $id, $thema->getIssueId());
-							$tpl['fileCount'] = get_not_visited('document', $id, $thema->getFolderId());
-						}
-
-						include('lib/raumzeit/templates/singledate_student.tpl');
-					}
+				if (is_array($termine)){
+    				foreach ($termine as $singledate_id => $singledate) {
+    
+    					if ( ($grenze == 0) || ($grenze < $singledate->getStartTime()) ) {
+    						foreach ($all_semester as $zwsem) {
+    							if ( ($zwsem['beginn'] < $singledate->getStartTime()) && ($zwsem['ende'] > $singledate->getStartTime()) ) {
+    								$grenze = $zwsem['ende'];
+    								?>
+    								<TR>
+    									<TD class="steelgraulight" align="center" colspan="9">
+    										<FONT size="-1"><B><?=$zwsem['name']?></B></FONT>
+    									</TD>
+    								</TR>
+    								<?
+    							}
+    						}
+    					}
+    
+    					// Template fuer einzelnes Datum
+    					$showSpecialDays = FALSE;
+    					$tpl = getTemplateDataForSingleDate($singledate, $metadate_id);
+    					// If "Sitzung" shall not be shown, uncomment this
+    					/*if ($tpl['type'] == 1 || $tpl['type'] == 7) {
+    						unset($tpl['art']);
+    					}*/
+    					
+    					//calendar jump
+    					$tpl['calendar'] = "&nbsp;<a href=\"calendar.php?cmd=showweek&atime=" . $singledate->getStartTime();
+    					$tpl['calendar'] .= "\"><img style=\"vertical-align:bottom\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" ";
+    					$tpl['calendar'] .= tooltip(sprintf(_("Zum %s in den persönlichen Terminkalender springen"), date("m.d", $singledate->getStartTime()))); 
+    					$tpl['calendar'] .= ' border="0"></a>';
+    
+    					if ($showDatesFilter) {
+    						switch ($showDatesFilter) {
+    							case 'all':
+    								break;
+    
+    							case 'others':
+    								if ($tpl['type'] == 1) {
+    									$tpl['deleted'] = true;
+    								}
+    								break;
+    
+    							default:
+    								if ($tpl['type'] != $type) {
+    									$tpl['deleted'] = true;
+    								}
+    								break;
+    						}
+    					}
+    
+    					if (!$tpl['deleted'] || $tpl['comment'])  {
+    						$tpl['class'] = 'printhead';
+    						$tpl['cycle_id'] = $metadate_id;
+    
+    						$issue_id = '';
+    						if (is_array($tmp_ids = $singledate->getIssueIDs())) {
+    							foreach ($tmp_ids as $val) {
+    								if (empty($issue_id)) {
+    									if (is_object($themen[$val])) {
+    										$issue_id = $val;
+    									}
+    								} else {
+    									if (is_object($themen[$val])) {
+    										$tpl['additional_themes'][] = array('title' => $themen[$val]->getTitle(), 'desc' => $themen[$val]->getDescription());
+    									}
+    								}
+    							}
+    						}
+    						if (is_object($themen[$issue_id])) {
+    							$tpl['issue_id'] = $issue_id;
+    							$thema =& $themen[$issue_id];
+    							$tpl['theme_title'] = $thema->getTitle();
+    							$tpl['theme_description'] = formatReady($thema->getDescription());
+    							$tpl['folder_id'] = $thema->getFolderID();
+    							$tpl['forumEntry'] = $thema->hasForum();
+    							$tpl['fileEntry'] = $thema->hasFile();								
+    							$tpl['forumCount'] = get_not_visited('forum', $id, $thema->getIssueId());
+    							$tpl['fileCount'] = get_not_visited('document', $id, $thema->getFolderId());
+    						}
+    
+    						include('lib/raumzeit/templates/singledate_student.tpl');
+    					}
+                    }
 				}
 				?>
 			</TABLE>
