@@ -29,9 +29,9 @@
 // +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-include ('seminar_open.php'); // initialise Stud.IP-Session
-require_once ('config.inc.php');
-require_once ('visual.inc.php');
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+require_once ('config/config.inc.php');
+require_once ('lib/visual.inc.php');
 
 $element_switch = (isset($_REQUEST['element_switch']))? $_REQUEST['element_switch']:0; // Wert von 1 - 7 für Auswahl der Feldbezeichner
 $c = (isset($_REQUEST['c']))? $_REQUEST['c'] : 0;                   // Zähler wenn mehrere gleiche Eingabefelder im Zielformular
