@@ -34,33 +34,31 @@
 class SingleDateDB {
 	function storeSingleDate($termin) {
 		$db = new DB_Seminar();
-		if (get_class($termin) != 'singledate') {
-			return 'Wrong Class Type';
-		}
 
-		if ($termin->ex_termin) {
+		if ($termin->isExTermin()) {
 			$table = 'ex_termine';
-			$db->query("SELECT assign_id FROM resources_assign WHERE assign_user_id = '{$termin->termin_id}'");
+			$db->query("SELECT assign_id FROM resources_assign WHERE assign_user_id = '".$termin->getTerminID()."'");
 			if ($db->next_record()) {
 				$assign_id = $db->f('assign_id');
-				$db->query("DELETE FROM resources_assign WHERE assign_user_id = '{$termin->termin_id}'");
-				$db->query("DELETE FROM resources_requests WHERE termin_id = '{$termin->termin_id}'");
+				$db->query("DELETE FROM resources_assign WHERE assign_user_id = '".$termin->getTerminID()."'");
+				$db->query("DELETE FROM resources_requests WHERE termin_id = '".$termin->getTerminID()."'");
 				$db->query("DELETE FROM resources_temporary_events WHERE assign_id = '$assign_id'");
 			}
 		} else {
 			$table = 'termine';
 		}
 
-		if (is_array($termin->issues)) {
-			foreach ($termin->issues as $val) {
-				$db->query($query = "REPLACE INTO themen_termine (termin_id, issue_id) VALUES ('{$termin->termin_id}', '$val')");
+		$issueIDs = $termin->getIssueIDs();
+		if (is_array($issueIDs)) {
+			foreach ($issueIDs as $val) {
+				$db->query($query = "REPLACE INTO themen_termine (termin_id, issue_id) VALUES ('".$termin->getTerminID()."', '$val')");
 			}
 		}
 
-		if ($termin->update) {
-			$db->query($query = "UPDATE $table SET metadate_id = '{$termin->metadate_id}', date_typ = '{$termin->date_typ}', date = '{$termin->date}', end_time = '{$termin->end_time}', chdate = '{$termin->chdate}', range_id = '{$termin->range_id}', autor_id = '{$termin->author_id}',raum = '{$termin->raum}', content = '{$termin->content}'  WHERE termin_id = '{$termin->termin_id}'");
+		if ($termin->isUpdate()) {
+			$db->query($query = "UPDATE $table SET metadate_id = '".$termin->getMetaDateID()."', date_typ = '".$termin->getDateType()."', date = '".$termin->getStartTime()."', end_time = '".$termin->getEndTime()."', chdate = '".$termin->getChDate()."', range_id = '".$termin->getRangeID()."', autor_id = '".$termin->getAuthorID()."',raum = '".$termin->getFreeRoomText()."', content = '".$termin->getComment()."'  WHERE termin_id = '".$termin->getTerminID()."'");
 		} else {
-			$db->query($query = "REPLACE INTO $table (metadate_id, date_typ, date, end_time, mkdate, chdate, termin_id, range_id, autor_id, raum, content) VALUES ('{$termin->metadate_id}', '{$termin->date_typ}', '{$termin->date}', '{$termin->end_time}', '{$termin->mkdate}', '{$termin->chdate}', '{$termin->termin_id}', '{$termin->range_id}', '{$termin->author_id}', '{$termin->raum}', '{$termin->content}')");
+			$db->query($query = "REPLACE INTO $table (metadate_id, date_typ, date, end_time, mkdate, chdate, termin_id, range_id, autor_id, raum, content) VALUES ('".$termin->getMetaDateID()."', '".$termin->getDateType()."', '".$termin->getStartTime()."', '".$termin->getEndTime()."', '".$termin->getMkDate()."', '".$termin->getChDate()."', '".$termin->getTerminID()."', '".$termin->getRangeID()."', '".$termin->getAuthorID()."', '".$termin->getFreeRoomText()."', '".$termin->getComment()."')");
 		}
 		return TRUE;
 	}

@@ -93,39 +93,36 @@ $sem->registerCommand('close', 'dates_close');
 $sem->registerCommand('setType', 'dates_settype');
 $sem->processCommands();
 
+if ($cmd == 'openAll') $openAll = true;
 ?>
-<TABLE width="100%" border="0" cellpadding="0" cellspacing="0">
+<TABLE width="100%" border="0" cellpadding="2" cellspacing="0">
 	<TR>
 		<TD colspan="2" class="topic">
 			&nbsp; <B><?=getHeaderLine($id)." -  "._("Ablaufplan");?></B>
 		</TD>
 	</TR>
-	<TR>
-		<TD class="blank" align="center">
-			<TABLE border="0" cellpadding="0" cellspacing="0" width="100%">
+  <TR>
+		<TD align="center" class="blank" width="80%" valign="top">
+			<TABLE width="99%" cellspacing="0" cellpadding="0" border="0">
 				<TR>
-					<TD width="30">&nbsp;</TD>
-					<TD class="blank">
+					<TD colspan="10">
 						<BR/>
 						<?=_("Hier finden Sie alle Termine der Veranstaltung.")?><BR/>
 						<BR/>
 						<?=_("Klicken Sie auf ein Text-Icon, um zu den hochgeladenen Dateien des jeweiligen Termins zu gelangen.")?><BR/>
 						<BR/>
 					</TD>
-					<TD class="blank" align="right">
-						<IMG src="<?= $GLOBALS['ASSETS_URL'] ?>images/termine.jpg">
+				</TR>
+				<TR>
+					<TD class="steelgraulight" colspan="10" height="24" align="center">
+						<A href="<?=$PHP_SELF?>?cmd=<?=($openAll) ? 'close' : 'open'?>All">
+							<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/<?=($openAll) ? 'close' : 'open'?>_all.gif" border="0" <?=tooltip(sprintf("Alle Termine %sklappen", ($openAll) ? 'zu' : 'auf'))?>>
+						</A>
 					</TD>
 				</TR>
-			</TABLE>
-		</TD>
-	</TR>
-</TABLE>
-<TABLE width="100%" border="0" cellpadding="2" cellspacing="0">
-  <TR>
-		<TD align="center" class="blank" width="80%" valign="top">
-			<TABLE width="99%" cellspacing="0" cellpadding="0" border="0">
 				<TR>
-					<TD class="blank" colspan="5" height="10"></TD>
+					<TD colspan="10" height="3">
+					</TD>
 				</TR>
 				<?
 
@@ -185,6 +182,8 @@ $sem->processCommands();
     						}
     					}
     
+							if ($openAll) $tpl['openall'] = true;
+
     					if (!$tpl['deleted'] || $tpl['comment'])  {
     						$tpl['class'] = 'printhead';
     						$tpl['cycle_id'] = $metadate_id;
@@ -198,7 +197,7 @@ $sem->processCommands();
     									}
     								} else {
     									if (is_object($themen[$val])) {
-    										$tpl['additional_themes'][] = array('title' => $themen[$val]->getTitle(), 'desc' => $themen[$val]->getDescription());
+    										$tpl['additional_themes'][] = array('title' => htmlReady($themen[$val]->getTitle()), 'desc' => formatReady($themen[$val]->getDescription()));
     									}
     								}
     							}
@@ -206,7 +205,7 @@ $sem->processCommands();
     						if (is_object($themen[$issue_id])) {
     							$tpl['issue_id'] = $issue_id;
     							$thema =& $themen[$issue_id];
-    							$tpl['theme_title'] = $thema->getTitle();
+    							$tpl['theme_title'] = htmlReady($thema->getTitle());
     							$tpl['theme_description'] = formatReady($thema->getDescription());
     							$tpl['folder_id'] = $thema->getFolderID();
     							$tpl['forumEntry'] = $thema->hasForum();
@@ -217,10 +216,30 @@ $sem->processCommands();
     
     						include('lib/raumzeit/templates/singledate_student.tpl');
     					}
-                    }
+           }
 				}
 				?>
 			</TABLE>
+		</TD>
+		<TD class="blank" align="right" valign="top">
+		<?
+			//Build an infobox
+			$infobox[0]["kategorie"] = _("Informationen:");
+			$infobox[0]["eintrag"][] = array ('icon' => "ausruf_small.gif",
+					"text"  =>_("Hier finden Sie alle Termine der Veranstaltung."));
+			if ($rechte) {
+					$infobox[1]["kategorie"] = _("Aktionen:");
+					$infobox[1]["eintrag"][] = array ('icon' => "link_intern.gif",
+							"text"  =>"<a href=\"raumzeit.php?cmd=createNewSingleDate#newSingleDate\">"._("Einen neuen Termin anlegen")."</a>");
+					$infobox[1]["eintrag"][] = array ('icon' => "link_intern.gif",
+							"text"  =>"<a href=\"raumzeit.php\">"._("Zur Terminverwaltung")."</a>");
+
+					$infobox[1]["eintrag"][] = array ('icon' => "link_intern.gif",
+							"text"  =>"<a href=\"themen.php\">"._("Zur Themenverwaltung")."</a>");
+	
+			}
+			print_infobox ($infobox, "schedules.jpg");
+		?>
 		</TD>
 	</TR>
 	<TR>

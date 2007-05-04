@@ -16,11 +16,11 @@ function getTemplateDataForSingleDate($val, $cycle_id = '') {
 	$tpl['type'] = $val->getDateType();
 	$tpl['art'] = $val->getTypeName();
 	$tpl['freeRoomText'] = $val->getFreeRoomText();
-	$tpl['comment'] = $val->getComment();
+	$tpl['comment'] = htmlReady($val->getComment());
 
 	/* css-Klasse und deleted-Status für das Template festlegen,
    * je nachdem ob es sich um einen gelöschten Termin handelt oder nicht */
-	if ($val->ex_termin) {
+	if ($val->isExTermin()) {
 		$tpl['deleted'] = true;
 		$tpl['class'] = 'steelred';
 	} else {
@@ -74,7 +74,7 @@ function getTemplateDataForSingleDate($val, $cycle_id = '') {
 			$tpl['class'] = 'steelgreen';
 		} else {
 			$tpl['room'] = '('._("kein gebuchter Raum").')';
-			if ($val->ex_termin) {
+			if ($val->isExTermin()) {
 				if ($name = $val->isHoliday()) {
 					$tpl['room'] = '('._($name).')';
 				} else {

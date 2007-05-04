@@ -47,8 +47,9 @@ function themen_doAddIssue() {
 	$issue->setDescription($_REQUEST['theme_description']);
 	$issue->setForum(($_REQUEST['forumFolder'] == 'on') ? TRUE : FALSE);
 	$issue->setFile(($_REQUEST['fileFolder'] == 'on') ? TRUE : FALSE);
+	$issue->store();
 	$sem->addIssue($issue);
-	$sem->createMessage(_("Folgendes Thema wurde hinzugefügt:").'<br/><li>'.$issue->toString());
+	$sem->createMessage(_("Folgendes Thema wurde hinzugefügt:").'<br/><li>'.htmlReady($issue->toString()));
 }
 
 function themen_deleteIssueID() {  
@@ -61,11 +62,12 @@ function themen_deleteIssueID() {
 function themen_changeIssue() {
 	global $sem, $_REQUEST, $themen;
 
-	$msg .= sprintf(_("Das Thema \"%s\" wurde geändert."), $themen[$_REQUEST['issue_id']]->toString()) . '<br/>';
+	$msg .= sprintf(_("Das Thema \"%s\" wurde geändert."), htmlReady($themen[$_REQUEST['issue_id']]->toString())) . '<br/>';
 	$themen[$_REQUEST['issue_id']]->setDescription($_REQUEST['theme_description']);	
 	$themen[$_REQUEST['issue_id']]->setTitle($_REQUEST['theme_title']);	
 	$themen[$_REQUEST['issue_id']]->setForum(($_REQUEST['forumFolder'] == 'on') ? TRUE : FALSE);
 	$themen[$_REQUEST['issue_id']]->setFile(($_REQUEST['fileFolder'] == 'on') ? TRUE : FALSE);
+	$themen[$_REQUEST['issue_id']]->store();
 	if ($zw = $themen[$_REQUEST['issue_id']]->getMessages()) {
 		foreach ($zw as $val) {
 			$msg .= $val.'<br/>';
@@ -77,7 +79,7 @@ function themen_changeIssue() {
 function themen_deleteIssue() {
 	global $sem, $_REQUEST, $themen;
 
-	$sem->createMessage(_("Folgendes Thema wurde gelöscht:").'<br/><li>'.$themen[$_REQUEST['issue_id']]->toString());
+	$sem->createMessage(_("Folgendes Thema wurde gelöscht:").'<br/><li>'.htmlReady($themen[$_REQUEST['issue_id']]->toString()));
 	$sem->deleteIssue($_REQUEST['issue_id']);
 }
 
@@ -94,6 +96,7 @@ function themen_addIssue() {
 		for ($i = 1; $i <= $numIssues; $i++) {
 			$issue = new Issue(array('seminar_id' => $id));
 			$issue->setTitle(_("Thema").' '.$i);
+			$issue->store();
 			$sem->addIssue($issue);
 			unset($issue);
 		}
@@ -105,9 +108,9 @@ function themen_changePriority() {
 	global $sem, $_REQUEST, $themen;
 
 	if ($themen[$_REQUEST['issueID']]->getPriority() > $_REQUEST['newPriority']) {
-		$sem->createMessage(sprintf(_("Das Thema \"%s\" wurde um eine Position nach oben verschoben."), $themen[$_REQUEST['issueID']]->toString()));
+		$sem->createMessage(sprintf(_("Das Thema \"%s\" wurde um eine Position nach oben verschoben."), htmlReady($themen[$_REQUEST['issueID']]->toString())));
 	} else {
-		$sem->createMessage(sprintf(_("Das Thema \"%s\" wurde um eine Position nach unten verschoben."), $themen[$_REQUEST['issueID']]->toString()));
+		$sem->createMessage(sprintf(_("Das Thema \"%s\" wurde um eine Position nach unten verschoben."), htmlReady($themen[$_REQUEST['issueID']]->toString())));
 	}
 	$sem->changeIssuePriority($_REQUEST['issueID'], $_REQUEST['newPriority']);
 }
@@ -131,12 +134,13 @@ function themen_saveAll() {
 				($themen[$key]->hasForum() != $forumValue) ||
 				($themen[$key]->hasFile() != $fileValue)
 			 ) {
-			$msg .= '<li>'.$themen[$key]->toString().'<br/>';
+			$msg .= '<li>'.htmlReady($themen[$key]->toString()).'<br/>';
 		}
 		$themen[$key]->setTitle($val);
 		$themen[$key]->setDescription($changeDescription[$key]);
 		$themen[$key]->setForum($forumValue);
 		$themen[$key]->setFile($fileValue);
+		$themen[$key]->store();
 	}
 
 	$msg .= '<br/>'._("Folgende weitere Aktionen wurde durchgeführt:").'<br/>';
@@ -172,7 +176,7 @@ function themen_checkboxAction() {
 			$msg = _("Folgende Themen wurden gelöscht:").'<br/>';
 			foreach ($_REQUEST['themen'] as $val) {
 				$thema =& $sem->getIssue($val);
-				$msg .= '<li>'.$thema->toString().'<br/>';
+				$msg .= '<li>'.htmlReady($thema->toString()).'<br/>';
 				unset($thema);
 				$sem->deleteIssue($val);
 			}

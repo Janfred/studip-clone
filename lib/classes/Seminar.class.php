@@ -250,23 +250,23 @@ class Seminar {
 		
 		foreach ($dates as $val) {
 			$zw = array(
-					'metadate_id' => $val->metadate_id,
-					'termin_id' => $val->termin_id,
-					'date_typ' => $val->date_typ,
-					'start_time' => $val->date,
-					'end_time' => $val->end_time,
-					'mkdate' => $val->mkdate,
-					'chdate' => $val-> chdate,
-					'ex_termin' => $val->ex_termin,
-					'orig_ex' => $val->ex_termin,
-					'range_id' => $val->range_id,
-					'author_id' => $val->autor_id,
-					'resource_id' => $val->resource_id,
-					'raum' => $val->raum,
-					'typ' => $val->date_typ
+					'metadate_id' => $val->getMetaDateID(),
+					'termin_id' => $val->getTerminID(),
+					'date_typ' => $val->getDateType(),
+					'start_time' => $val->getStartTime(),
+					'end_time' => $val->getEndTime(),
+					'mkdate' => $val->getMkDate(),
+					'chdate' => $val-> getMkDate(),
+					'ex_termin' => $val->isExTermin(),
+					'orig_ex' => $val->isExTermin(),
+					'range_id' => $val->getRangeID(),
+					'author_id' => $val->getAuthorID(),
+					'resource_id' => $val->getResourceID(),
+					'raum' => $val->getFreeRoomText(),
+					'typ' => $val->getDateType()
 				);
 
-			$ret['irregular'][$val->termin_id] = $zw; 
+			$ret['irregular'][$val->getTerminID()] = $zw; 
 		}
 		return $ret;
 	}
@@ -380,20 +380,13 @@ class Seminar {
 						case "6": $return_string[$key]= _("Samstag"); break;
 					}
 				$return_string[$key].=", ".$val["start_hour"].":";
-				if (!$val["start_minute"])
-					$return_string[$key].="00";
-				elseif (($val["start_minute"] <10) && ($val["start_minute"] >0))
-					$return_string[$key].="0".$val["start_minute"];
-				else
-					$return_string[$key].=$val["start_minute"];
+
+				$return_string[$key] .= leadingZero($val['start_minute']);
+				
 				if (!(($val["end_hour"] == $val["start_hour"]) && ($val["end_minute"] == $val["start_minute"]))) {
 					$return_string[$key].=" - ".$val["end_hour"].":";
-					if (!$val["end_minute"])
-						$return_string[$key].="00";
-					elseif (($val["end_minute"] <10) && ($val["end_minute"] >0))
-						$return_string[$key].="0".$val["end_minute"];
-					else
-						$return_string[$key].=$val["end_minute"];
+
+					$return_string[$key] .= leadingZero($val['end_minute']);
 				}
 				if ($val['desc']){
 					$return_string[$key].= " ({$val['desc']})";
@@ -1109,8 +1102,8 @@ class Seminar {
 		return $return;
 	}
 
-	function &getIssues() {
-		$this->readIssues();
+	function &getIssues($force = false) {
+		$this->readIssues($force);
 		$this->renumberIssuePrioritys();
 		if (is_array($this->issues)) {
 			uasort($this->issues, 'myIssueSort');

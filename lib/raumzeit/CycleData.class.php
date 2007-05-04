@@ -192,7 +192,7 @@ class CycleData {
 				unset($termin);
 				$termin = new SingleDate();
 				$termin->fillValuesFromArray($val);
-				$termin->ex_termin = $val['ex_termin'];
+				$termin->setExTermin($val['ex_termin']);
 				$this->termine[$val['termin_id']] =& $termin;
 			}
 			return TRUE;

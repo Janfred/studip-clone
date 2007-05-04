@@ -92,7 +92,7 @@ $sem->registerCommand('addIssue', 'themen_doAddIssue');
 $sem->processCommands();
 
 unset($themen);
-$themen =& $sem->getIssues();	// read again, so we have the actual sort order and so on
+$themen =& $sem->getIssues(true);	// read again, so we have the actual sort order and so on
 ?>
 <FORM action="<?=$PHP_SELF?>" method="post">
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="0">
@@ -207,16 +207,16 @@ $themen =& $sem->getIssues();	// read again, so we have the actual sort order an
 						} else {
 							$tpl['submit_name'] = 'editIssue';
 							$tpl['issue_id'] = $issue_id;
-							if (!empty($themen[$issue_id])) {
+							if ($themen[$issue_id]) {
 								$thema =& $themen[$issue_id];
 								$tpl['theme_title'] = htmlReady($thema->getTitle());
-								$tpl['theme_description'] = htmlReady($thema->getDescription());
+								$tpl['theme_description'] = formatReady($thema->getDescription());
+								$tpl['forumEntry'] = ($thema->hasForum()) ? SELECTED : NOT_SELECTED;
+								$tpl['fileEntry'] = ($thema->hasFile()) ? SELECTED : NOT_SELECTED;
 							} else {
 								$tpl['theme_title'] = '';
 								$tpl['theme_description'] = '';
 							}
-							$tpl['forumEntry'] = ($thema->hasForum()) ? SELECTED : NOT_SELECTED;
-							$tpl['fileEntry'] = ($thema->hasFile()) ? SELECTED : NOT_SELECTED;
 						}
 
 						include('lib/raumzeit/templates/singledate_ablaufplan.tpl');
@@ -282,4 +282,3 @@ $themen =& $sem->getIssues();	// read again, so we have the actual sort order an
 <?
 	$sem->store();
 	page_close();
-?>

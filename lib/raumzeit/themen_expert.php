@@ -151,7 +151,7 @@ $sem->registerCommand('checkboxAction', 'themen_checkboxAction');
 $sem->processCommands();
 
 unset($themen);
-$themen =& $sem->getIssues();	// read again, so we have the actual sort order and so on
+$themen =& $sem->getIssues(true);	// read again, so we have the actual sort order and so on
 ?>
 <FORM action="<?=$PHP_SELF?>" method="post">
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="0">
@@ -432,8 +432,8 @@ $themen =& $sem->getIssues();	// read again, so we have the actual sort order an
 								include('lib/raumzeit/templates/singledate_themen.tpl');
 								if ($iss = $singledate->getIssueIDs()) {
 									foreach ($iss as $issue_id) {
-										if (is_object($themen[$issue_id])) {
-											$tpl['name'] = $themen[$issue_id]->getTitle();
+										if ($themen[$issue_id]) {
+											$tpl['name'] = htmlReady($themen[$issue_id]->getTitle());
 											$tpl['class'] = 'steelgraulight';
 											$tpl['space'] = true;
 											$tpl['issue_id'] = $issue_id;
@@ -481,7 +481,7 @@ $themen =& $sem->getIssues();	// read again, so we have the actual sort order an
 						include('lib/raumzeit/templates/singledate_themen.tpl');
 						if ($iss = $singledate->getIssueIDs()) {
 							foreach ($iss as $issue_id) {
-								$tpl['name'] = $themen[$issue_id]->getTitle();
+								$tpl['name'] = htmlReady($themen[$issue_id]->getTitle());
 								$tpl['class'] = 'steelgraulight';
 								$tpl['space'] = false;
 								$tpl['issue_id'] = $issue_id;
@@ -549,7 +549,7 @@ $themen =& $sem->getIssues();	// read again, so we have the actual sort order an
 
 						if ($iss = $singledate->getIssueIDs()) {
 							foreach ($iss as $issue_id) {
-								$tpl['name'] = $themen[$issue_id]->getTitle();
+								$tpl['name'] = htmlReady($themen[$issue_id]->getTitle());
 								$tpl['class'] = 'steelgraulight';
 								$tpl['space'] = false;
 								$tpl['issue_id'] = $issue_id;

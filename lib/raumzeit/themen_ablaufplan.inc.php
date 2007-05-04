@@ -20,22 +20,24 @@ function themen_doAddIssue() {
 	$issue->setDescription($_REQUEST['theme_description']);
 	$issue->setForum(($_REQUEST['forumFolder'] == 'on') ? TRUE : FALSE);
 	$issue->setFile(($_REQUEST['fileFolder'] == 'on') ? TRUE : FALSE);
+	$issue->store();
 	$sem->addIssue($issue);
 
 	$termin = new SingleDate($_REQUEST['singledate_id']);
 	$termin->addIssueID($issue->getIssueID());
 	$termin->store();
-	$sem->createMessage(_("Folgendes Thema wurde hinzugefügt:").'<br/><li>'.$issue->toString());
+	$sem->createMessage(_("Folgendes Thema wurde hinzugefügt:").'<br/><li>'.htmlReady($issue->toString()));
 }
 
 function themen_changeIssue() {
 	global $sem, $_REQUEST, $themen;
 
-	$msg .= sprintf(_("Das Thema \"%s\" wurde geändert."), $themen[$_REQUEST['issue_id']]->toString()) . '<br/>';
+	$msg .= sprintf(_("Das Thema \"%s\" wurde geändert."), htmlReady($themen[$_REQUEST['issue_id']]->toString())) . '<br/>';
 	$themen[$_REQUEST['issue_id']]->setDescription($_REQUEST['theme_description']);
 	$themen[$_REQUEST['issue_id']]->setTitle($_REQUEST['theme_title']);
 	$themen[$_REQUEST['issue_id']]->setForum(($_REQUEST['forumFolder'] == 'on') ? TRUE : FALSE);
 	$themen[$_REQUEST['issue_id']]->setFile(($_REQUEST['fileFolder'] == 'on') ? TRUE : FALSE);
+	$themen[$_REQUEST['issue_id']]->store();
 	if ($zw = $themen[$_REQUEST['issue_id']]->getMessages()) {
 		foreach ($zw as $val) {
 			$msg .= $val.'<br/>';
@@ -73,6 +75,7 @@ function themen_saveAll() {
 				$termin->addIssueID($cur_issue_id);
 				$termin->store();
 				$themen[$issue->getIssueID()] =& $issue;
+				$issue->store();
 				unset($issue);
 			} else {
 				$cur_issue_id = array_pop($issue_ids);
@@ -93,6 +96,7 @@ function themen_saveAll() {
 				$themen[$cur_issue_id]->setDescription($changeDescription[$key]);
 				$themen[$cur_issue_id]->setForum($forumValue);
 				$themen[$cur_issue_id]->setFile($fileValue);
+				$themen[$cur_issue_id]->store();
 			}
 		}
 	}
@@ -108,4 +112,3 @@ function themen_saveAll() {
 	}
 	$sem->createMessage($msg);
 }
-?>

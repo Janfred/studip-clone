@@ -157,6 +157,10 @@ class SingleDate {
 		return $TERMIN_TYP[$this->date_typ]['name'];
 	}
 
+    function getAuthorID() {
+        return $this->author_id;
+    }
+
 	function getChDate() {
 		return $this->chdate;
 	}
@@ -241,6 +245,10 @@ class SingleDate {
 		return $this->ex_termin;
 	}
 
+    function isUpdate() {
+        return $this->update;
+    }
+
 	function isHoliday() {
 		$ho = new HolidayData();
 		$holiday = $ho->getAllHolidays();
@@ -262,7 +270,7 @@ class SingleDate {
 		}
 	}
 
-	function fillValuesFromArray($daten) {		;
+	function fillValuesFromArray($daten) {
 		$this->metadate_id = $daten['metadate_id'];
 		$this->termin_id = $daten['termin_id'];
 		if ($daten['date_typ'] != 0) {  // TODO: should it be allowed, that there can be unspecified singledates?
@@ -392,7 +400,7 @@ class SingleDate {
 
 	function getRoom() {
 		if (!$this->resource_id) {
-			return _("k.A.");
+			return null;
 		} else {
 			$resObj =& ResourceObject::Factory($this->resource_id);
 			return $resObj->getName();
