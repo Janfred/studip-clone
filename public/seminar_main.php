@@ -129,13 +129,13 @@ $quarter_year = 60 * 60 * 24 * 90;
 		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
 	}
 
-    $$regularOverviewHtml = getRegularOverview($SessSemName[1]);
-    if($$regularOverviewHtml != '') {
+    $regularOverviewHtml = getRegularOverview($SessSemName[1]);
+    if($regularOverviewHtml != '') {
         ?>
     	<br />
     	<font size="-1">
     		<b><?=_("Zeit")?>:</b><br />
-    		'<?=$$regularOverviewHtml?>'<br/>
+    		<?=$regularOverviewHtml?><br/>
     		<br/>
     		<?
     		$next_date = $sem->getNextDate();
