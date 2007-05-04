@@ -16,7 +16,7 @@ function getTemplateDataForSingleDate($val, $cycle_id = '') {
 	$tpl['type'] = $val->getDateType();
 	$tpl['art'] = $val->getTypeName();
 	$tpl['freeRoomText'] = $val->getFreeRoomText();
-	$tpl['comment'] = $val->getComment(); 
+	$tpl['comment'] = $val->getComment();
 
 	/* css-Klasse und deleted-Status für das Template festlegen,
    * je nachdem ob es sich um einen gelöschten Termin handelt oder nicht */
@@ -64,7 +64,7 @@ function getTemplateDataForSingleDate($val, $cycle_id = '') {
 			$tpl['checked'] = 'checked';
 		}
 	}
-	
+
 	/* css-Klasse auswählen, sowie Template-Feld für den Raum mit Text füllen */
 	if ($GLOBALS['RESOURCES_ENABLE']) {
 		if ($val->getResourceID()) {
@@ -152,6 +152,7 @@ function getAllSortedSingleDates(&$sem) {
 
 	$turnus = $sem->getFormattedTurnusDates();
 
+  $termine = array();
 	foreach ($sem->metadate->cycles as $metadate_id => $val) {
 		$termine = array_merge($termine, $sem->getSingleDatesForCycle($metadate_id));
 	}
