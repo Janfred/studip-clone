@@ -34,7 +34,7 @@
 require_once('lib/raumzeit/SingleDateDB.class.php');
 require_once('lib/dates.inc.php');
 require_once('lib/classes/HolidayData.class.php');
-require_once($RELATIVE_PATH_RESOURCES.'/lib/RoomRequest.class.php');
+require_once($GLOBALS['RELATIVE_PATH_RESOURCES'].'/lib/RoomRequest.class.php');
 //require_once($RELATIVE_PATH_RESOURCES.'/lib/VeranstaltungResourcesAssign.class.php');
 
 class SingleDate {
@@ -101,7 +101,7 @@ class SingleDate {
 					$this->killAssign();
 					$this->bookRoom($tmp_resource_id);
 				}
-				
+
 				$after = $this->toString();
 				// logging >>>>>>
 				log_event("SINGLEDATE_CHANGE_TIME", $this->range_id, $before, $before.' -> '.$after);
@@ -109,7 +109,7 @@ class SingleDate {
 				return TRUE;
 			}
 			return FALSE;
-		} 
+		}
 
 		return FALSE;
 	}
@@ -208,7 +208,7 @@ class SingleDate {
 		if ($this->ex_termin) {
 			$this->killAssign();
 		}
-		
+
 		// if date_typ is 0, it defaults to the TERMIN_TYP[1], so we have to set it to 1 for matching real world to date_typ
 		if (!$this->date_typ) $this->date_typ = 1;
 
@@ -398,7 +398,7 @@ class SingleDate {
 			return $resObj->getName();
 		}
 	}
-	
+
 	function hasRoomRequest() {
 		if (getDateRoomRequest($this->termin_id)) {
 			if (!$this->request_id) {
@@ -501,7 +501,7 @@ class SingleDate {
 		$this->messages = NULL;
 		return $temp;
 	}
-	
+
 	// checks, if the single-date has plausible values
 	function validate($start = 0, $end = 0) {
 		if ($start == 0) {
@@ -510,7 +510,7 @@ class SingleDate {
 		if ($end == 0) {
 			$end = $this->end_time;
 		}
-		
+
 		if ($start < 100000) return FALSE;
 		if ($end < 100000)  return FALSE;
 		if ($start > $end) {
