@@ -102,14 +102,14 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 	}
 
 	if (is_array($range_id)) {
-		$query = "SELECT t.*, s.Name FROM termine t LEFT JOIN seminare s ON (range_id = Seminar_id) ";
+		$query = "SELECT t.*, th.title as Titel, th.description as Info, s.Name FROM termine t LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen as th USING (issue_id) LEFT JOIN seminare s ON (range_id = Seminar_id) ";
 		$query .= "WHERE (Seminar_id IN '" . implode(",", $range_id);
 		$query .= "' $show_query $tmp_query ) ORDER BY date";
 	}
 	else if (strlen($range_id))
-		$query = "SELECT * FROM termine t WHERE (range_id='$range_id' $show_query $tmp_query ) ORDER BY date";
+		$query = "SELECT t.*, th.title as Titel, th.description as Info FROM termine t LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen as th USING (issue_id) WHERE (range_id='$range_id' $show_query $tmp_query ) ORDER BY date";
 	else {
-		$query = "SELECT t.*, s.Name, su.* FROM termine t LEFT JOIN seminare s ON (range_id = s.Seminar_id) ";
+		$query = "SELECT t.*, th.title as Titel, th.description as Info, s.Name, su.* FROM termine t LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen as th USING (issue_id) LEFT JOIN seminare s ON (range_id = s.Seminar_id) ";
 		$query .= "LEFT JOIN seminar_user su USING (Seminar_id) ";
 		$query .= "WHERE (user_id = '" . $user->id . "' $show_query $tmp_query ) ORDER BY date";
 	}
@@ -214,9 +214,9 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 			$titel .= date(". d.m.Y, H:i", $db->f("date"));
 			if ($db->f("date") < $db->f("end_time"))
 				$titel .= " - " . date("H:i", $db->f("end_time"));
-			if ($db->f("content")) {
+			if ($db->f("Titel")) {
 				//Beschneiden des Titels
-				$tmp_titel = htmlReady(mila($db->f("content"), 60 / (($full_width ? 100 : 70) / 100)));
+				$tmp_titel = htmlReady(mila($db->f("Titel"), 60 / (($full_width ? 100 : 70) / 100)));
 				$titel .= ", " . $tmp_titel;
 				}
 
@@ -271,8 +271,8 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 			echo "</tr></table>	";
 			if (($open == $db->f("termin_id")) || ($open == "all") || ($new)) {
 				$content='';
-				if ($db->f("description"))
-					$content.= formatReady($db->f("description"), TRUE, FALSE)."<br /><br />";
+				if ($db->f("Info"))
+					$content.= formatReady($db->f("Info"), TRUE, FALSE)."<br /><br />";
 				else
 					$content.=_("Keine Beschreibung vorhanden") . "<br /><br />";
 
