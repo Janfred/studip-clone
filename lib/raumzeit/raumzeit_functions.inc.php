@@ -15,7 +15,7 @@ function getTemplateDataForSingleDate($val, $cycle_id = '') {
 	$tpl['sd_id'] = $val->getSingleDateID();	// Die ID des aktuellen Einzeltermins (kann an CycleData oder Seminar hängen)
 	$tpl['type'] = $val->getDateType();
 	$tpl['art'] = $val->getTypeName();
-	$tpl['freeRoomText'] = $val->getFreeRoomText();
+	$tpl['freeRoomText'] = htmlReady($val->getFreeRoomText());
 	$tpl['comment'] = htmlReady($val->getComment());
 
 	/* css-Klasse und deleted-Status für das Template festlegen,
@@ -82,7 +82,7 @@ function getTemplateDataForSingleDate($val, $cycle_id = '') {
 				}
 			} else {
 				if ($val->getFreeRoomText()) {
-					$tpl['room'] = '('.$val->getFreeRoomText().')';
+					$tpl['room'] = '('.htmlReady($val->getFreeRoomText()).')';
 				}
 				if (($name = $val->isHoliday()) && $showSpecialDays) {
 					$tpl['room'] .= '&nbsp;('._($name).')';
