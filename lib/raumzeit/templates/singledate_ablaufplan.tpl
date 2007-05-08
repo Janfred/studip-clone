@@ -20,11 +20,14 @@
 			<?=$tpl['room']?>
 		</FONT>
 	</TD>
-	<TD width="45%" nowrap class="<?=$tpl['class']?>" valign="bottom">
-		<FONT size="-1" color="#000000">
+	<td width="40%" nowrap class="<?=$tpl['class']?>" valign="bottom">
+		<font size="-1" color="#000000">
 			<?=mila($tpl['theme_title'])?>
-		</FONT>
-	</TD>
+		</font>
+	</td>
+	<td width="5%" class="<?=$tpl['class']?>" nowrap valign="bottom">
+		<?=$tpl['calendar']?>
+	</td>
 </TR>
 <? if ($issue_open[$tpl['sd_id']] || $openAll) { ?>
 <TR>
@@ -56,6 +59,9 @@
 						} else { ?>
 							<INPUT type="checkbox" name="fileFolder<?=$openAll ? '§'.$tpl['sd_id']: ''?>"<?=$tpl['fileEntry']?>> <?=_("Dateiordner anlegen")?>
 						<? } ?>
+						<br/>
+						<br/>
+						<b><?=_("Art des Termins")?>:</b> <?=$tpl['art']?>
 					</FONT>
 				</TD>
 			</TR>
@@ -79,5 +85,4 @@
 </TR>
 <?
 }
-unset($tpl)
-?>
+unset($tpl);

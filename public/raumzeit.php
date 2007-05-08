@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-$perm->check("user");
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
@@ -63,6 +62,10 @@ if ($RESOURCES_ENABLE) {
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 include ('lib/include/links_admin.inc.php');
+
+if (!$perm->have_studip_perm('tutor', $id)) {
+	die;
+}
 
 unQuoteAll();
 

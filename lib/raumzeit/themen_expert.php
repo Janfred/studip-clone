@@ -42,10 +42,14 @@ include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php");   // Output of Stud.IP head
 include ("lib/include/links_admin.inc.php");
 
+if (!$perm->have_studip_perm('tutor', $id)) {
+	die;
+}
+
 define('SELECTED', ' checked');
 define('NOT_SELECTED', '');
 
-$powerFeatures = TRUE;
+$powerFeatures = true;
 
 $sem = new Seminar($id);
 $sem->checkFilter();

@@ -44,7 +44,11 @@ include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php");   // Output of Stud.IP head
 include ("lib/include/links_admin.inc.php");
 
-$powerFeatures = TRUE;
+if (!$perm->have_studip_perm('tutor', $id)) {
+	die;
+}
+
+$powerFeatures = true;
 
 $sem = new Seminar($id);
 $sem->checkFilter();
@@ -189,12 +193,14 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
 					if (!$tpl['deleted']) {
 						$tpl['class'] = 'printhead';
 						$tpl['cycle_id'] = $metadate_id;
-						if ($tpl['type'] != 1) {
-							$tpl['art'] = $TERMIN_TYP[$tpl['type']]['name'];
-						} else {
-							$tpl['art'] = FALSE;
-						}
+						$tpl['art'] = $TERMIN_TYP[$tpl['type']]['name'];
 
+    				//calendar jump
+    				$tpl['calendar'] = "&nbsp;<a href=\"calendar.php?cmd=showweek&atime=" . $singledate->getStartTime();
+    				$tpl['calendar'] .= "\"><img style=\"vertical-align:bottom\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" ";
+    				$tpl['calendar'] .= tooltip(sprintf(_("Zum %s in den persönlichen Terminkalender springen"), date("m.d", $singledate->getStartTime()))); 
+    				$tpl['calendar'] .= ' border="0"></a>';
+ 
 						$issue_id = '';
 						if (is_array($tmp_ids = $singledate->getIssueIDs())) {
 							foreach ($tmp_ids as $val) {
