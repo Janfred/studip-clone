@@ -46,7 +46,7 @@
 	<TD class="blank" colspan="2">
 		<FONT size="-1">
 			<B><?=("Titel:")?></B><BR/>
-			<INPUT type="text" name="theme_title<?=$tpl['openAll'] ? '§'.$tpl['issue_id']: ''?>" maxlength="255" size="50" value="<?=$tpl['theme_title']?>"><BR/>
+			<INPUT type="text" name="theme_title<?=$tpl['openAll'] ? '§'.$tpl['issue_id']: ''?>" maxlength="255" size="50" value="<?=$tpl['theme_title']?>" style="width: 98%"><BR/>
 			<B><?=_("Beschreibung:")?></B><BR/>
 			<TEXTAREA name="theme_description<?=$tpl['openAll'] ? '§'.$tpl['issue_id']: ''?>" rows="5" cols="50"><?=$tpl['theme_description']?></TEXTAREA><BR/>
 			<B><?=_("Verknüfpungen mit diesem Termin:")?></B>
@@ -55,7 +55,7 @@
 				echo _("Forenthema vorhanden").'<BR/>';
 				echo '<INPUT type="hidden" name="forumFolder" value="on">';
 			} else { ?>
-			<INPUT type="checkbox" name="forumFolder<?=$tpl['openAll'] ? '§'.$tpl['issue_id']: ''?>"> <?=_("Thema im Forum anlegen")?><BR/>
+			<INPUT type="checkbox" name="forumFolder<?=$tpl['openAll'] ? '§'.$tpl['issue_id']: ''?>" style="width: 98%"> <?=_("Thema im Forum anlegen")?><BR/>
 			<? } ?>
 			<? if ($tpl['fileEntry']) {
 				echo _("Dateiordner vorhanden");

@@ -25,7 +25,7 @@
 			<?=$tpl['room']?>
 		</FONT>
 		<? if ($tpl['ausruf']) { ?>
-			<A href="javascript:;" onClick="MM_popupMsg('<?=$tpl['ausruf']?>')">
+			<A href="javascript:;" onClick="alert('<?=$tpl['ausruf']?>')">
 				<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/ausrufezeichen_rot.gif" alt="<?=$tpl['ausruf']?>" border="0" align="absmiddle">
 			</A>
 		<? } ?>

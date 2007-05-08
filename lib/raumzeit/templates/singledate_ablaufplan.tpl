@@ -35,9 +35,9 @@
 				<TD class="steel1">
 					<FONT size="-1">
 						<B><?=("Titel:")?></B><BR/>
-						<INPUT type="text" name="theme_title<?=$openAll ? '§'.$tpl['sd_id']: ''?>" maxlength="255" size="50" value="<?=$tpl['theme_title']?>"><BR/>
+						<INPUT type="text" name="theme_title<?=$openAll ? '§'.$tpl['sd_id']: ''?>" maxlength="255" size="50" value="<?=$tpl['theme_title']?>" style="width: 98%"><BR/>
 						<B><?=_("Beschreibung:")?></B><BR/>
-						<TEXTAREA name="theme_description<?=$openAll ? '§'.$tpl['sd_id']: ''?>" rows="5" cols="50"><?=$tpl['theme_description']?></TEXTAREA><BR/>
+						<TEXTAREA name="theme_description<?=$openAll ? '§'.$tpl['sd_id']: ''?>" rows="5" cols="50" style="width: 98%"><?=$tpl['theme_description']?></TEXTAREA><BR/>
 					</FONT>
 				</TD>
 				<TD class="steel1" valign="top" nowrap>

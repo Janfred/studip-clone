@@ -111,6 +111,5 @@ if (($my_messaging_settings['start_messenger_at_startup']) && ($auth->auth['jscr
 	$messenger_started = TRUE;
 }
 ?>
-	<script>function MM_popupMsg(msg){alert(msg);}</script>
 	</head>
 	<body>

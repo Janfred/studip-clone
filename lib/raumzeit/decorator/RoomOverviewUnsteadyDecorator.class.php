@@ -76,8 +76,8 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 							$title = str_replace('\n', '  ', $info);
 
 							if ($this->link) {
-								$raum .= ", <A href=\"javascript:MM_popupMsg('$info')\" alt=\"$title\" title=\"$title\">und ".(sizeof($raum_list)-3).' weitere</A>';
-								$raum .= " <img src=\"{$GLOBALS['ASSETS_URL']}/images/info.gif\" border=\"0\" align=\"absMiddle\" onClick=\"MM_popupMsg('";
+								$raum .= ", <A href=\"javascript:alert('$info')\" alt=\"$title\" title=\"$title\">und ".(sizeof($raum_list)-3).' weitere</A>';
+								$raum .= " <img src=\"{$GLOBALS['ASSETS_URL']}/images/info.gif\" border=\"0\" align=\"absMiddle\" onClick=\"alert('";
 								$raum .= $info."')\" alt=\"$title\" title=\"$title\">";
 							} else {
 								$raum .= ', und '.(sizeof($raum_list)-3).' weitere';
@@ -200,8 +200,8 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 						$title = str_replace('\n', '  ', $info);
 
 						if ($this->link) {
-							$raum .= ", <A href=\"javascript:MM_popupMsg('$info')\" alt=\"$title\" title=\"$title\">und ".(sizeof($termine)-3).' weitere</A>';
-							$raum .= " <img src=\"{$GLOBALS['ASSETS_URL']}/images/info.gif\" border=\"0\" align=\"absMiddle\" onClick=\"MM_popupMsg('";
+							$raum .= ", <A href=\"javascript:alert('$info')\" alt=\"$title\" title=\"$title\">und ".(sizeof($termine)-3).' weitere</A>';
+							$raum .= " <img src=\"{$GLOBALS['ASSETS_URL']}/images/info.gif\" border=\"0\" align=\"absMiddle\" onClick=\"alert('";
 							$raum .= $info."')\" alt=\"$title\" title=\"$title\">";
 						} else {
 							$raum .= ', und '.(sizeof($raum_list)-3).' weitere';

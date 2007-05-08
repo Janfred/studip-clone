@@ -291,7 +291,7 @@ $sem->processCommands();
 			?>
 			<DIV style="{border:1px solid black;background:#FFFFDD}">
 				&nbsp;<?=_("Für diese Veranstaltung liegt eine noch offene Raumanfrage vor.")?>
-				<A href="javascript:;" onClick="MM_popupMsg('<?=$req_info?>')">
+				<A href="javascript:alert('<?=$req_info?>')">
 					<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/info.gif" alt="<?=$req_info?>" border="0" align="absmiddle">
 				</A>
 			</DIV>
