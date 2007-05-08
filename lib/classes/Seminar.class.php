@@ -169,9 +169,7 @@ class Seminar {
 		return $this->metadate->getSerializedMetaData();
 	}
 
-	function formatDate($return_mode = 'string') {
-		if (!$termin_id = SeminarDB::getFirstDate($this->id)) return FALSE;
-		$termin = new SingleDate($termin_id);
+	function formatDate($return_mode = 'string', $termin) {
 		switch ($return_mode) {
 			case 'int':
 				return $termin->getStartTime();
@@ -225,8 +223,11 @@ class Seminar {
 			} else {
 				return $missing_date;
 			}
+		} else {
+			return $next_date;
 		}
-		return FALSE;
+		
+		return false;
 	}
 
 	function getFirstDate($return_mode = 'string') {
@@ -389,7 +390,7 @@ class Seminar {
 					$return_string[$key] .= leadingZero($val['end_minute']);
 				}
 				if ($val['desc']){
-					$return_string[$key].= " ({$val['desc']})";
+					$return_string[$key].= ' ('. htmlReady($val['desc']) .')';
 				}
 			}
 			return $return_string;

@@ -129,30 +129,41 @@ $quarter_year = 60 * 60 * 24 * 90;
 		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
 	}
 
-    $regularOverviewHtml = getRegularOverview($SessSemName[1]);
-    if($regularOverviewHtml != '') {
-        ?>
-    	<br />
-    	<font size="-1">
-    		<b><?=_("Zeit")?>:</b><br />
-    		<?=$regularOverviewHtml?><br/>
-    		<br/>
-    		<?
-    		$next_date = $sem->getNextDate();
-    		if ($next_date) {
-    			echo '<b>'._("NÃ¤chster Termin").':</b><br />';
-    			echo $next_date;
-    		} else {
-    			echo '<b>'._("Erster Termin").':</b><br />';
-    			echo $sem->getFirstDate();
-    			echo '<br/>';
-    		}
-    		?>
-    		<a href="dates.php">alle Termine</a><br/>
-    	</font>
-        <?
-    }
-    ?>
+?>
+	<font size="-1">
+	<?
+		echo '<br/>';
+		echo '<b>'. _("Zeit") .':</b><br />';
+
+		$data = getRegularOverview($SessSemName[1]);
+		if ($data) {
+			echo $data, '<br/>';
+		} else {
+			echo _("Die Zeiten der Veranstaltung stehen nicht fest."). '<br/>';
+		}
+
+		$next_date = $sem->getNextDate();
+		if ($next_date) {
+			echo '<br/>';
+			echo '<b>'._("Nächster Termin").':</b><br />';
+			echo $next_date, '<br/>';
+			if ($perm->have_studip_perm('autor', $SessSemName[1])) {
+				echo '<a href="seminar_main.php?auswahl='.$SessSemName[1].'&redirect_to=dates.php">alle Termine</a><br/>';
+			}
+		} else if ($first_date = $sem->getFirstDate()) {
+			echo '<br/>';
+			echo '<b>'._("Erster Termin").':</b><br />';
+			echo $first_date, '<br/>';
+			if ($perm->have_studip_perm('autor', $SessSemName[1])) {
+				echo '<a href="seminar_main.php?auswahl='.$SessSemName[1].'&redirect_to=dates.php">alle Termine</a><br/>';
+			}
+		} else {
+			echo '<br/>';
+			echo '<b>'._("Erster Termin").':</b><br />';
+			echo _("Die Zeiten der Veranstaltung stehen nicht fest."). '<br/>';
+		}
+		?>
+	</font>
 
 <?
 

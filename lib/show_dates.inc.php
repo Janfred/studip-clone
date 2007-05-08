@@ -192,7 +192,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 				if( $termin->hasRoom() ){
 					$zusatz .= _("Raum:") . " " . $termin->getRoom() . "&nbsp;";
                 }elseif( $freeroomtext = $termin->getFreeRoomText() ){
-                    $zusatz .= " (" . $freeroomtext . ")&nbsp;";
+                    $zusatz .= " (" . htmlReady($freeroomtext) . ")&nbsp;";
                 }else{
                     $zusatz .= _("k.A.") . "&nbsp;";  
                 }                    

@@ -64,6 +64,8 @@ include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 include ('lib/include/links_admin.inc.php');
 
+unQuoteAll();
+
 $sem = new Seminar($id);
 $sem->checkFilter();
 
@@ -376,7 +378,7 @@ $sem->processCommands();
 			$tpl['mdEndHour'] = $val->end_stunde;
 			$tpl['mdStartMinute'] = $val->start_minute;
 			$tpl['mdEndMinute'] = $val->end_minute;
-			$tpl['mdDescription'] = $val->description;
+			$tpl['mdDescription'] = htmlReady($val->description);
 
 			include('lib/raumzeit/templates/metadate.tpl');
 			if ($sd_open[$metadate_id]) {

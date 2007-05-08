@@ -294,17 +294,24 @@ print_infobox ($infobox,"details.jpg");
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
 					<font size="-1">
 					<?	
-					$next_date = $sem->getNextDate();
+					
+					$show_link = true;
+		      $next_date = $sem->getNextDate();
 					if ($next_date) {
 						echo '<b>'._("Nächster Termin").':</b><br />';
 						echo $next_date;
+					} else if ($first_date = $sem->getFirstDate()) {
+						echo '<b>'._("Erster Termin").':</b><br />';
+						echo $first_date;
 					} else {
 						echo '<b>'._("Erster Termin").':</b><br />';
-						echo $sem->getFirstDate();
-						echo '<br/>';
+						echo _("Die Zeiten der Veranstaltung stehen nicht fest.");
+						$show_link = false;
 					}
-					if ($mein_status || $perm->have_perm('admin')) {
-						echo '<a href="dates.php">alle Termine</a><br/>';
+
+					if (($mein_status || $perm->have_perm('admin')) && ($show_link)) {
+						echo '<br/>';
+						echo '<a href="seminar_main.php?auswahl='.$SessSemName[1].'&redirect_to=dates.php">alle Termine</a><br/>';
 					}
 				?>
 					</font>
