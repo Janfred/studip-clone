@@ -309,9 +309,9 @@ print_infobox ($infobox,"details.jpg");
 						$show_link = false;
 					}
 
-					if (($mein_status || $perm->have_perm('admin')) && ($show_link)) {
+					if (($mein_status || $perm->have_studip_perm("admin",$sem_id)) && ($show_link)) {
 						echo '<br/>';
-						echo '<a href="seminar_main.php?auswahl='.$SessSemName[1].'&redirect_to=dates.php">alle Termine</a><br/>';
+						echo '<a href="seminar_main.php?auswahl='.$sem_id.'&redirect_to=dates.php">' . _("alle Termine") .'</a><br/>';
 					}
 				?>
 					</font>
