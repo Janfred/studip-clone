@@ -480,8 +480,8 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
 							</FONT>
 						</TD>
 					</TR>
-						<?
-						$termine =& $sem->getSingleDates();
+					<?
+					$termine =& $sem->getSingleDates(true);
 					foreach ($termine as $singledate_id => $singledate) {
 						$tpl = getTemplateDataForSingleDate($singledate);
 						$tpl['space'] = false;
