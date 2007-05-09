@@ -284,27 +284,31 @@ function raumzeit_editSingleDate() {
 
 function raumzeit_freeText() {
 	global $_REQUEST, $sem, $sd_open;
-	foreach($_REQUEST['singledate'] as $termin_id)
-	{
-		if ($_REQUEST['cycle_id'] != '') {
-			$termin = $sem->getSingleDate($termin_id, $_REQUEST['cycle_id']);
-			$sem->bookRoomForSingleDate($termin_id, $_REQUEST['room'], $_REQUEST['cycle_id']);
-			$sem->metadate->cycles[$_REQUEST['cycle_id']]->termine = null;
-		} else {
-			$termin = $sem->getSingleDate($termin_id);
-			$sem->bookRoomForSingleDate($termin_id, $_REQUEST['room']);
-			$sem->irregularSingleDates = null;
-		}
-		if ($termin->setTime($start, $ende) 
-				|| $termin->getFreeRoomText()!=$_REQUEST['freeRoomText']
-				|| $termin->getDateType!=$_REQUEST['dateType'] ) {
+	if (is_array($_REQUEST['singledate'])) {
+		foreach($_REQUEST['singledate'] as $termin_id)
+		{
+			if ($_REQUEST['cycle_id'] != '') {
+				$termin = $sem->getSingleDate($termin_id, $_REQUEST['cycle_id']);
+				$sem->bookRoomForSingleDate($termin_id, $_REQUEST['room'], $_REQUEST['cycle_id']);
+				$sem->metadate->cycles[$_REQUEST['cycle_id']]->termine = null;
+			} else {
+				$termin = $sem->getSingleDate($termin_id);
+				$sem->bookRoomForSingleDate($termin_id, $_REQUEST['room']);
+				$sem->irregularSingleDates = null;
+			}
+			if ($termin->setTime($start, $ende) 
+					|| $termin->getFreeRoomText()!=$_REQUEST['freeRoomText']
+					|| $termin->getDateType!=$_REQUEST['dateType'] ) {
 
-			$termin->setDateType($_REQUEST['dateType']);
-			$termin->setFreeRoomText($_REQUEST['freeRoomText']);
-			$termin->store();
-			$sem->createMessage(sprintf(_("Der Termin %s wurde geändert!"), '<b>'.$termin->toString().'</b>'));
+				$termin->setDateType($_REQUEST['dateType']);
+				$termin->setFreeRoomText($_REQUEST['freeRoomText']);
+				$termin->store();
+				$sem->createMessage(sprintf(_("Der Termin %s wurde geändert!"), '<b>'.$termin->toString().'</b>'));
+			}
+			$sem->appendMessages($termin->getMessages());
 		}
-		$sem->appendMessages($termin->getMessages());
+	} else {
+		$sem->createInfo(_("Sie haben keinen Termin ausgewählt!"));
 	}
 }
 

@@ -86,7 +86,7 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 
 					} else if ($raum = $this->sem->getFreeTextPredominantRoom($key)) {
 						if (!$this->xml_export) {
-							$raum = '('.$raum.')';
+							$raum = '('.htmlReady($raum).')';
 						} else {
 							$xml_raum_freetext = $raum;
 						}
@@ -164,7 +164,7 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 									$zraum[] = _("k.A.");
 								}
 							} else {
-								$zraum[] = '('.$id['raum'].')';
+								$zraum[] = '('.htmlReady($id['raum']).')';
 								$xml_zraum_freetext[] = $id['raum'];
 							}
 						}

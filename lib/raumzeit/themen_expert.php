@@ -125,11 +125,15 @@ if (isset($submitter_id)) {
 	if ($submitter_id == 'autoAssign') {
 		$cmd = 'autoAssign';
 	} else {
-		$termin =& $sem->getSingleDate($submitter_id, $cycle_id);
-		foreach ($_REQUEST['themen'] as $iss_id) {
-			$termin->addIssueID($iss_id);
+		if (is_array($_REQUEST['themen'])) {
+			$termin =& $sem->getSingleDate($submitter_id, $cycle_id);
+			foreach ($_REQUEST['themen'] as $iss_id) {
+				$termin->addIssueID($iss_id);
+			}
+			$termin->store();
+		} else {
+			$sem->createInfo(_("Sie haben kein Thema für die Zuordnung ausgewählt!"));
 		}
-		$termin->store();
 	}
 }
 

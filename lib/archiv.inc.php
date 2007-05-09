@@ -227,7 +227,7 @@ function dump_sem($sem_id, $print_view = false) {
 
 	// Ablaufplan
 	if ($Modules["schedule"]) {
-		$db->query("SELECT *  FROM termine WHERE (range_id='$sem_id' AND date_typ ='1') ORDER BY date");
+		$db->query("SELECT termine.*, themen.title as th_title, themen.description as th_desc  FROM termine LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen USING (issue_id) WHERE (range_id='$sem_id' AND date_typ ='1') ORDER BY date");
 		if ($db->num_rows()) {
 			$dump.="<br>";
 			$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
@@ -241,18 +241,18 @@ function dump_sem($sem_id, $print_view = false) {
 				$dump.= strftime("%d. %b. %Y, %H:%M", $db->f("date"));
 				$dump.= "</td>";
 				$dump.= "<td width=\"75%\" align=\"left\"> ";
-				$dump.= $TERMIN_TYP[$db->f("date_typ")]["name"].": ".htmlReady($db->f("content"),1,1);
+				$dump.= $TERMIN_TYP[$db->f("date_typ")]["name"].": ".htmlReady($db->f("th_title"),1,1);
 				$dump.= "&nbsp;</td></tr>\n";
 				if ($db->f("description")) {
 					$dump.="<tr><td width=\"25%\">&nbsp;</td>";
-					$dump.= "<td width=\"75%\">".formatReady($db->f("description"),1,1)."</td></tr>\n";
+					$dump.= "<td width=\"75%\">".formatReady($db->f("th_description"),1,1)."</td></tr>\n";
 				}
 			}
 		$dump .= "</table>\n";
 		}
 
 		// zusaetzliche Termine
-		$db->query("SELECT *  FROM termine WHERE (range_id='$sem_id' AND date_typ!='1') ORDER BY date");
+		$db->query("SELECT termine.*, themen.title as th_title, themen.description as th_desc  FROM termine LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen USING (issue_id) WHERE (range_id='$sem_id' AND date_typ != '1') ORDER BY date");
 		if ($db->num_rows()) {
 			$dump.="<br>";
 			$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
@@ -266,11 +266,11 @@ function dump_sem($sem_id, $print_view = false) {
 				$dump.= strftime("%d. %b. %Y, %H:%M", $db->f("date"));
 				$dump.= "</td>";
 				$dump.= "<td width=\"75%\" align=\"left\"> ";
-				$dump.= $TERMIN_TYP[$db->f("date_typ")]["name"].": ".htmlReady($db->f("content"),1,1);
+				$dump.= $TERMIN_TYP[$db->f("date_typ")]["name"].": ".htmlReady($db->f("th_title"),1,1);
 				$dump.= "&nbsp;</td></tr>\n";
 				if ($db->f("description")) {
 					$dump.="<tr><td width=\"25%\">&nbsp;</td>";
-					$dump.= "<td width=\"75%\">".formatReady($db->f("description"),1,1)."</td></tr>\n";
+					$dump.= "<td width=\"75%\">".formatReady($db->f("th_desc"),1,1)."</td></tr>\n";
 				}
 			}
 		$dump .= "</table>\n";
