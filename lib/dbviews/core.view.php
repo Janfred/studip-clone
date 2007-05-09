@@ -39,6 +39,9 @@ $GLOBALS["_views"]["FOLDER_GET_DATA_BY_RANGE"] = array("pk"=>"folder_id","temp_t
 							"query"=>"SELECT * FROM folder WHERE range_id=? ORDER BY mkdate");
 $GLOBALS["_views"]["FOLDER_GET_DATA_BY_TERMIN"] = array("pk"=>"folder_id","temp_table_type"=>"HEAP",
 							"query"=>"SELECT folder.* FROM termine INNER JOIN folder ON(termin_id=folder.range_id) WHERE termine.range_id=? ORDER BY date");					
+$GLOBALS["_views"]["FOLDER_GET_DATA_BY_THEMA"] = array("pk"=>"folder_id","temp_table_type"=>"HEAP",
+							"query"=>"SELECT folder.* FROM themen INNER JOIN folder ON(issue_id=folder.range_id) WHERE themen.seminar_id=? ORDER BY priority");					
+
 $GLOBALS["_views"]["FOLDER_UPDATE_PERMISSION"] = array("query" => "UPDATE folder SET permission=? WHERE folder_id=?");
 $GLOBALS["_views"]["FOLDER_UPDATE_CHDATE"] = array("query" => "UPDATE folder SET chdate=UNIX_TIMESTAMP() WHERE folder_id=?");
 

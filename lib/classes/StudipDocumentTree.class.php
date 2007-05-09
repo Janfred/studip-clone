@@ -76,7 +76,7 @@ class StudipDocumentTree extends TreeAbstract {
 		$p = 0;
 		$top_folders[] = array($this->range_id,'FOLDER_GET_DATA_BY_RANGE');
 		$top_folders[] = array(md5($this->range_id . 'top_folder'),'FOLDER_GET_DATA_BY_RANGE');
-		if ($this->entity_type == 'sem') $top_folders[] = array($this->range_id,'FOLDER_GET_DATA_BY_TERMIN');
+		if ($this->entity_type == 'sem') $top_folders[] = array($this->range_id,'FOLDER_GET_DATA_BY_THEMA');
 
 		foreach ($top_folders as $folder){
 			$this->view->params[0] = $folder[0];

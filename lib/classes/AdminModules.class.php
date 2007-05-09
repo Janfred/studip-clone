@@ -160,24 +160,9 @@ class AdminModules extends ModulesNotification {
 		
 		$items = $this->db->f("items"); 
 									
-		//folder (seminar-folders) 
-		$query = sprintf ("SELECT COUNT(folder_id) as items FROM folder WHERE range_id = '%s' ", $range_id); 
-    
-		$this->db->query($query); 
-		$this->db->next_record(); 
-		$items += $this->db->f("items"); 
-	
-		//folder (schedule-folders) 
-		$query = sprintf ("SELECT termin_id FROM termine WHERE range_id = '%s' ", $range_id); 
-		$this->db->query($query); 
+		$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $range_id));
 
-		while ($this->db->next_record()) { 
-			$query2 = sprintf ("SELECT COUNT(folder_id) as items FROM folder WHERE range_id = '%s' ", $this->db->f("termin_id")); 
-			$this->db2->query($query2); 
-			$this->db2->next_record(); 
-			$items += $this->db2->f("items"); 
-		} 
-
+		$items += $folder_tree->getNumKidsKids('root') - $folder_tree->getNumKids('root');
 		return $items; 
 	}
 

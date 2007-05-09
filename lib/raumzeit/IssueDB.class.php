@@ -90,5 +90,12 @@ class IssueDB {
 			return FALSE;
 		}
 	}*/
+	
+	function getDatesforIssue($issue_id){
+		$ret = array();
+		$db = new DB_Seminar("SELECT termine.* FROM themen_termine INNER JOIN termine USING(termin_id) WHERE issue_id='$issue_id' ORDER BY date ASC");
+		while($db->next_record()) $ret[$db->f('termin_id')] = $db->Record;
+		return $ret;
+	}
 }
 ?>

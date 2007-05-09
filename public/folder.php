@@ -124,15 +124,11 @@ if (($rechte) || ($owner)) {
 			$titel = $_REQUEST['top_folder_name'] ? stripslashes($_REQUEST['top_folder_name']) : _("Neuer Ordner");
 			$open_id = md5($SessionSeminar . 'top_folder');
 		} else {
-			$db->query("SELECT date, date_typ, content FROM termine WHERE termin_id='".$open_id."'");
+			$db->query("SELECT title FROM themen WHERE issue_id='".$open_id."'");
 			if ($db->next_record()) {
-				//Titel basteln
-				$titel=$TERMIN_TYP[$db->f("date_typ")]["name"].": ".substr($db->f("content"), 0, 35);
-				if (strlen($db->f("content")) >=35)
-					$titel.="...";
-				$titel.=" " . _("am") . " ".date("d.m.Y ", $db->f("date"));
-				$description= _("Ablage für Ordner und Dokumente zu diesem Termin");
-				}
+				$titel = $db->f("title");
+				$description= _("Themenbezogener Dateiordner");
+			}
 		}
 		$change = create_folder(addslashes($titel), $description, $open_id);
 		$folder_system_data["open"][$change] = TRUE;
@@ -434,9 +430,9 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 			if (!$db2->affected_rows())
 				$select.="\n<option value=\"".$range_id."_a_\">" . _("Allgemeiner Dateiordner") . "</option>";
 
-			$db2->query("SELECT termine.date, folder.name, termin_id, date_typ FROM termine LEFT JOIN folder ON (termin_id = folder.range_id) WHERE termine.range_id='$range_id' ORDER BY name, termine.date");
-			while (($db2->next_record()) && (!$db2->f("name"))) {
-				$select.="\n<option value=\"".$db2->f("termin_id")."_a_\">" . sprintf(_("Dateiordner zum Termin am %s [%s]"), date("d.m.Y", $db2->f("date")), $TERMIN_TYP[$db2->f("date_typ")]["name"]) . "</option>";
+			$db2->query("SELECT issue_id, title FROM themen LEFT JOIN folder ON (issue_id = range_id) WHERE themen.seminar_id='$range_id' AND folder_id IS NULL ORDER BY priority");
+			while ($db2->next_record()) {
+				$select.="\n<option value=\"".$db2->f("issue_id")."_a_\">" . sprintf(_("Dateiordner zum Thema: %s"), htmlReady($db2->f("title"))) . "</option>";
 				}
 
 			if ($select) {
@@ -485,11 +481,11 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 
 		display_folder_system(md5($SessionSeminar . 'top_folder'), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
 
-		//Alle Termine der Veranstaltung holen
-		$db->query("SELECT termin_id FROM termine INNER JOIN folder ON(termin_id=folder.range_id) WHERE termine.range_id='$range_id' ORDER BY date");
+		//Alle Themen der Veranstaltung holen
+		$db->query("SELECT issue_id FROM themen INNER JOIN folder ON(issue_id=folder.range_id) WHERE themen.seminar_id='$range_id' ORDER BY priority");
 		while ($db->next_record()) {
 			//und einzelne Termine
-			display_folder_system($db->f("termin_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
+			display_folder_system($db->f("issue_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
 			}
 		}
 

@@ -627,12 +627,12 @@ function in_archiv ($sem_id) {
 		$tmp_full_path = "$TMP_PATH/$archiv_file_id";
 		mkdir($tmp_full_path, 0700);
 
-		$query = sprintf ("SELECT termin_id FROM termine WHERE range_id = '%s'", $seminar_id);
+		$query = sprintf ("SELECT issue_id FROM themen WHERE seminar_id = '%s'", $seminar_id);
 		$db->query ($query);
 		$list[] = $seminar_id;
 		$list[] = md5($seminar_id.'top_folder');
 		while ($db->next_record()) {
-			$list[] = $db->f("termin_id");
+			$list[] = $db->f("issue_id");
 		}
 		//copy documents in the temporary folder-system
 		$query = sprintf ("SELECT folder_id, name FROM folder WHERE range_id IN ('%s') ORDER BY name", join("','", $list));

@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once('lib/classes/idna_convert.class.php');
 require_once('lib/classes/StudipDocument.class.php');
 require_once('lib/classes/StudipDocumentTree.class.php');
+require_once('lib/raumzeit/IssueDB.class.php');
 
 
 if ($GLOBALS['ZIP_USE_INTERNAL']) include_once('vendor/pclzip/pclzip.lib.php');
@@ -536,7 +537,7 @@ function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "
 	if ($protected == "on") $protected=1;
 
 	if ($type){
-		$db->query("UPDATE folder SET name='$name', description='$description' WHERE folder_id ='$item_id'");
+		$db->query("UPDATE folder SET description='$description' " . (strlen($name) ? ", name='$name'" : "" ). " WHERE folder_id ='$item_id'");
 		if ($folder_tree->permissions_activated) {
 			foreach(array('r'=>'read','w'=>'write','x'=>'exec') as $p => $v){
 				if ($_REQUEST["perm_$v"]) $folder_tree->setPermission($item_id, $p);
@@ -1288,7 +1289,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$dont_move_to = getFolderId($db->f("folder_id"));
 			$dont_move_to[] = $db->f('folder_id');
 		}
-
+		
+		$is_issue_folder = ($level == 0 && IssueDB::isIssue($db->f("range_id")));
+		
 		$anker = '';
 		//Ankerlogik
 		if (($change) || ($move) || ($upload)) {
@@ -1322,7 +1325,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 			//Titelbereich erstellen
 			$tmp_titel=htmlReady(mila($db->f("name")));
-			if ($change == $db->f("folder_id")) { //Aenderungsmodus, Anker + Formular machen, Font tag direkt ausgeben (muss ausserhalb einer td stehen!
+			if ($change == $db->f("folder_id") && ($level != 0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder')) ) { //Aenderungsmodus, Anker + Formular machen, Font tag direkt ausgeben (muss ausserhalb einer td stehen!
 				$titel= "<a $anker ></a><input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db->f("name"))."\" />";
 				if ($folder_tree->permissions_activated) $titel .= '&nbsp;<span style="color:red">['.$folder_tree->getPermissionString($db->f("folder_id")).']</span>';
 			}
@@ -1390,6 +1393,19 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						. '<br><b>' . htmlReady(join('; ', get_user_documents_in_folder($db->f("folder_id"), $GLOBALS['user']->id))).'</b>' : '')
 						. '<hr>';
 			}
+			
+			if ($is_issue_folder){
+				$dates = array();
+				foreach(IssueDB::getDatesforIssue($db->f('range_id')) as $date){
+					$dates[] = strftime("%x", $date['date']); 
+				}
+				$content .= _("Dieser Ordner ist ein themenbezogener Dateiordner.");
+				if(count($dates)){
+					$content .= '&nbsp;' ._("Folgende Termine sind diesem Thema zugeordnet:")
+					. '<br><b>' . htmlReady(join('; ', $dates)).'</b>';
+				}
+				$content .=  '<hr>';
+			}
 
 			//Contentbereich erstellen
 			if ($change == $db->f("folder_id")) { //Aenderungsmodus, zweiter Teil
@@ -1451,15 +1467,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							$edit .= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_z_&rand="
 								. rand()."#anker\">" . makeButton("ziphochladen", "img") . "</a>";
 						}
-						if (!$level==0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder') || Seminar::GetSemIdByDateId($db->f('range_id'))){
-							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_d_\">" . makeButton("loeschen", "img") . "</a>";
-							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_c_#anker\">" . makeButton("bearbeiten", "img") . "</a>";
+						$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_d_\">" . makeButton("loeschen", "img") . "</a>";
+						$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_c_#anker\">" . makeButton("bearbeiten", "img") . "</a>";
+						if($level != 0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder')) {
 							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_m_#anker\">" . makeButton("verschieben", "img") . "</a>";
-							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_co_#anker\">" . makeButton("kopieren", "img") . "</a>";
-						} else {
-							$edit.= ' <a href="'. $PHP_SELF. '?open='. $db->f('folder_id') . '_c_#anker">' . makeButton('bearbeiten', 'img') . '</a>';
-							$edit.= ' <a href="'.$PHP_SELF.'?open='.$db->f('folder_id').'_co_#anker">' . makeButton('kopieren', 'img') . '</a>';
 						}
+						$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_co_#anker\">" . makeButton("kopieren", "img") . "</a>";
 					}
 				}
 			}
@@ -1912,11 +1925,11 @@ function delete_all_documents($range_id){
 	$count += recursiv_folder_delete($range_id);
 	//delete top level folders
 	$count += recursiv_folder_delete(md5($range_id.'top_folder'));
-	$query = sprintf ("SELECT termin_id FROM termine WHERE range_id = '%s' ", $range_id);
+	$query = sprintf ("SELECT issue_id FROM themen WHERE seminar_id = '%s' ", $range_id);
 	$db->query($query);
 	//then delete the folder with parent = termin_id
 	while ($db->next_record()) {
-		$count += recursiv_folder_delete($db->f("termin_id"));
+		$count += recursiv_folder_delete($db->f(0));
 	}
 	return $count;
 }
