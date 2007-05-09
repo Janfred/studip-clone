@@ -74,8 +74,9 @@ class PluginAdministration {
 		}
 		// create new filename
 		$newuploadfilename = $tmppackagedir . basename($uploadfilename);
-		// move package 
-		if (!@move_uploaded_file($uploadfilename,$newuploadfilename)){
+		// move package
+		$copy_func = is_uploaded_file($uploadfilename) ? 'move_uploaded_file' : 'copy';
+		if (!@$copy_func($uploadfilename,$newuploadfilename)){
 			return PLUGIN_UPLOAD_ERROR;
 		}
 		else {
