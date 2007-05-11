@@ -163,7 +163,8 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$admin_admission_data["admission_disable_waitlist"] = $db->f("admission_disable_waitlist");
 	$admin_admission_data["admission_disable_waitlist_org"] = $db->f("admission_disable_waitlist");
 	if ($admin_admission_data["admission_endtime"] <= 0){
-		$admin_admission_data["admission_endtime"] = veranstaltung_beginn($admin_admission_data["metadata_dates"]["art"], $admin_admission_data["start_time"], $admin_admission_data["metadata_dates"]["start_woche"], $admin_admission_data["metadata_dates"]["start_termin"], $admin_admission_data["metadata_dates"]["turnus_data"], "int");
+		$admin_admission_data["admission_endtime"] = veranstaltung_beginn($seminar_id, 'int');
+		if(!$admin_admission_data["admission_endtime"]) $admin_admission_data["admission_endtime"] = -1;
 	}
 	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id'");
 	while ($db->next_record()) {
