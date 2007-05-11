@@ -47,7 +47,7 @@ if (isset($GLOBALS['TIME_PRESETS']) && is_array($GLOBALS['TIME_PRESETS']) && cou
 	$zz = $GLOBALS['TIME_PRESETS'];
 	$preset_error = '';
 } else {
-	include_once('msg.inc.php');
+	include_once('lib/msg.inc.php');
 	$zz = array();
 	$preset_error = _("Ihr Systemverwalter hat leider keine Standardzeiten vorgegeben.");
 }
