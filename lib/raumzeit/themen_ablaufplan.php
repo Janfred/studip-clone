@@ -157,14 +157,14 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
 		<TD align="center" class="blank" width="80%" valign="top">
 			<TABLE width="99%" cellspacing="0" cellpadding="0" border="0">
 				<TR>
-					<TD class="steelgraulight" colspan="5" height="24" align="center">
+					<TD class="steelgraulight" colspan="6" height="24" align="center">
 						<A href="<?=$PHP_SELF?>?cmd=<?=($openAll) ? 'close' : 'open'?>All">
 							<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/<?=($openAll) ? 'close' : 'open'?>_all.gif" border="0" <?=tooltip(sprintf("Alle Termine %sklappen", ($openAll) ? 'zu' : 'auf'))?>>
 						</A>
 					</TD>
 				</TR>
 				<TR>
-					<TD class="blank" colspan="5" height="2"></TD>
+					<TD class="blank" colspan="6" height="2"></TD>
 				</TR>
 				<?
 

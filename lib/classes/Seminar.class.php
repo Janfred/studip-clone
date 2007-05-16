@@ -1142,10 +1142,13 @@ class Seminar {
 		foreach ($this->issues as $id => $issue) {								// search for the concuring issue
 			if ($issue->getPriority() == $new_priority) {
 				$this->issues[$id]->setPriority($old_priority);				// the concuring issue gets the old id of the changed issue
+				$this->issues[$id]->store();													// ###store_problem###
 			}
 		}
 
 		$this->issues[$issue_id]->setPriority($new_priority);			// changed issue gets the new priority
+		$this->issues[$issue_id]->store();												// ###store_problem###
+
 	}
 
 	function renumberIssuePrioritys() {
