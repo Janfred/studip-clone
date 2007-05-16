@@ -1457,10 +1457,12 @@ if (($form == 6) && ($jump_next_x))
 			$links_admin_data["referred_from"]="assi";
 			$links_admin_data["assi"]=FALSE; //protected Assi-mode off
 
-			//write the default module-config
-			$Modules = new Modules;
-			$Modules->writeDefaultStatus($sem_create_data["sem_id"]);
-			$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE); //the scm has to be turned off, because an empty free informations page isn't funny
+			if (!array_key_exists('sem_modules', $sem_create_data)){ 
+				//write the default module-config 
+				$Modules = new Modules(); 
+				$Modules->writeDefaultStatus($sem_create_data["sem_id"]); 
+			}
+			//$Modules->writeStatus("scm", $sem_create_data["sem_id"], FALSE); //the scm has to be turned off, because an empty free informations page isn't funny
 
 			if (is_array($sem_create_data["sem_doz"]))  // alle ausgewählten Dozenten durchlaufen
 			{
