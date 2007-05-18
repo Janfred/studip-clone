@@ -545,7 +545,7 @@ function showDeleteAllDialog($keyword) {
 *
 **/
 function deleteWikiPage($keyword, $version, $range_id) {
-	global $perm, $SessSemName;
+	global $perm, $SessSemName, $dellatest;
 	if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
