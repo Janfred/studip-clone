@@ -89,7 +89,7 @@ will be detected automatically.
 If you activate the MAIL_NOTIFICATION feature, you MUST set this variable!
 */
 $ABSOLUTE_URI_STUDIP = "http://develop.studip.de/studip/";
-$ASSETS_URL = "";        	//path to constant assets, defaults to $ABSOLUTE_URI_STUDIP . "assets/"
+$ASSETS_URL = "http://develop.studip.de:8080/studip/assets/";        	//path to constant assets, defaults to $ABSOLUTE_URI_STUDIP . "assets/"
 
 
 /*Stud.IP modules
