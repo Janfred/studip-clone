@@ -196,6 +196,17 @@ function restoreLanguage() {
 	setLocaleEnv($_language, $_language_domain);
 }
 
+/**
+* set locale to a given language and select translation domain
+*
+* This function tries to set the appropriate environment variables and
+* locale settings for the given language and also (optionally) sets the
+* translation domain.
+* Note: To support non-POSIX compliant systems (SuSE 9.x, OpenSolaris?),
+* the environment variables LANG and LC_ALL are also set to $language.
+*
+* @access	public
+*/
 function setLocaleEnv($language, $language_domain = ''){
 	putenv("LANG=$language");
 	putenv("LC_ALL=$language");
