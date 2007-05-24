@@ -576,7 +576,7 @@ function deleteWikiPage($keyword, $version, $range_id) {
 	begin_blank_table();
 	parse_msg("info§" . sprintf(_("Version %s der Seite %s gel&ouml;scht."), $version, '<b>'.$keyword.'</b>') . $addmsg);
 	end_blank_table();
-	if ($dellatest) {
+	if ($dellatest) { 
 		$lv=getLatestVersion($keyword, $SessSemName[1]);
 		if ($lv) {
 			$body="";
@@ -733,6 +733,183 @@ function listPages($mode, $sortby=NULL) {
 	}
 	echo "</table><p>&nbsp;</p>";
 	end_blank_table();
+}
+
+/**
+* Search Wiki
+*
+* @param  searchfor  string  String to search for.
+* @param  searchcurrentversions  bool  it true, only consider most recent versions or pages
+* @param  keyword  string  last shown page or keyword for local (one page) search
+* @param keyword bool if localsearch is set, only one page (all versions) is searched
+**/
+function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) {
+	global $SessSemName, $user_id, $PHP_SELF;
+	$range_id=$SessSemName[1];
+
+	$db=new DB_Seminar;
+	$result=NULL;
+
+	// check for invalid search string
+	if (strlen($searchfor)<3) {
+		$invalid_searchstring=1;
+	} else if ($localsearch && !$keyword) {
+		$invalid_searchstring=1;
+	} else {
+		// make search string 
+		$searchfori=addslashes($searchfor);
+		if ($localsearch) {
+			$q="SELECT * FROM wiki WHERE range_id='$range_id' AND body LIKE '%$searchfori%' AND keyword='$keyword' ORDER BY version DESC";
+		} else if (!$searchcurrentversions) {
+			// search in all versions of all pages
+			$q="SELECT * FROM wiki WHERE range_id='$range_id' AND body LIKE '%$searchfori%' ORDER BY keyword ASC, version DESC";
+		} else {
+			// search only latest versions of all pages
+			$q="SELECT * FROM wiki AS w1 WHERE range_id='$range_id' AND version=(SELECT MAX(version) FROM wiki AS w2 WHERE w2.range_id='$range_id' AND w2.keyword=w1.keyword) AND w1.body LIKE '%$searchfori%' ORDER BY w1.keyword ASC";
+		}
+		$result=$db->query($q);
+	}
+
+	showPageFrameStart();
+	begin_blank_table();
+	echo "<tr><td>";
+	begin_blank_table();
+	
+	// quit if no pages found / search string was invalid
+	if ($invalid_searchstring || $db->affected_rows() == 0) {
+		if ($db->affected_rows()==0) {
+			$tmplt=_("Die Suche nach &raquo;%s&laquo; lieferte keine Treffer.");
+			$msg="error\xa7" . sprintf($tmplt, htmlReady($searchfor));
+		} else {
+			$msg="error\xa7" . _("Suchbegriff zu kurz. Geben Sie mindestens drei Zeichen ein.");
+		}
+		if ($keyword) {
+			return showWikiPage($keyword, NULL, $msg);
+		} else {
+			parse_msg($msg);
+			end_blank_table();
+			$infobox = array ();
+			$infobox[] = getSearchBox($searchfor, $keyword);
+			end_blank_table();
+			echo "</td>"; // end of content area
+			showPageFrameEnd($infobox);
+			return;
+		}
+	}
+
+	// show hits
+	echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
+	echo "<tr><td class=\"blank\" colspan=\"2\">";
+	echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
+	echo "<tr><td colspan=3><font size=+1>"._("Treffer für Suche nach")."&nbsp;&raquo;".htmlReady($searchfor)."&laquo;";
+	if ($localsearch) {
+		echo "&nbsp;".sprintf(_("in allen Versionen der Seite &raquo;%s&laquo;"),$keyword);
+	} else if ($searchcurrentversions) {
+		echo "&nbsp;"._("in aktuellen Versionen");
+	} else {
+		echo "&nbsp;"._("in allen Versionen");
+	}
+	echo "</font></td></tr>";
+	echo "<tr height=28>";
+	$s = "<td class=\"steel\" width=\"%d%%\" align=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"20\"><font size=-1><b>%s</b></font></td>";
+	printf($s, 1, "left", "&nbsp;");
+	printf($s, 10,"left",  _("Seite"));
+	printf($s, 64,"left",  _("Treffer"));
+	printf($s, 25,"left",  _("Version"));
+	echo "</tr>";
+
+	$c=1;
+	$last_keyword="";
+	$last_keyword_count=0;
+	while ($db->next_record()) {
+
+		if (!$localsearch) {
+			// don't display more than one hit in a page's versions
+			// offer link instead
+			if ($db->f("keyword")==$last_keyword) {
+				$last_keyword_count++;
+				continue;
+			} else if ($last_keyword_count>0) {
+				print("<tr>".$tdheadleft."&nbsp;".$tdtail);
+				print($tdheadleft."&nbsp;".$tdtail);
+				if ($last_keyword_count==1) {
+					$hitstring=_("Weitere Treffer in %s älteren Version. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
+				} else {
+					$hitstring=_("Weitere Treffer in %s älteren Versionen. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
+				}
+				print($tdheadleft."<em>".sprintf($hitstring,$last_keyword_count,"<b><a href=\"$PHP_SELF?view=search&searchfor=$searchfor&keyword=".urlencode($last_keyword)."&localsearch=1\">","</a></b>")."</em>".$tdtail);
+				print($tdheadleft."&nbsp;".$tdtail);
+				print("</tr>");
+			}
+			$last_keyword=$db->f("keyword");
+			$last_keyword_count=0;
+		}
+
+		$class = ($c++ % 2) ? "steel1" : "steelgraulight";
+		$tdheadleft="<td class=\"$class\" align=\"left\" valign=\"top\"><font size=\"-1\">";
+		$tdheadcenter="<td class=\"$class\" align=\"center\"><font size=\"-1\">";
+		$tdtail="</font></td>";
+
+		print("<tr>".$tdheadleft."&nbsp;"."$tdtail");
+		// Pagename
+		print($tdheadleft);
+		print("<a href=\"$PHP_SELF?keyword=".$db->f("keyword")."&version=".$db->f("version")."&hilight=".htmlReady($searchfor)."&searchfor=".htmlReady($searchfor)."\">");
+		print($db->f("keyword")."</a>");
+		print($tdtail);
+		// display hit previews
+		$offset=0; // step through text
+		$ignore_next_hits=0; // don't show hits more than once
+		$first_line=1; // don't print <br/> before first hit	
+		print($tdheadleft);
+		// find all occurences
+		while ($offset < strlen($db->f("body"))) {
+			$pos=stripos($db->f("body"), $searchfor,$offset);
+			if ($pos===FALSE) break;
+			$offset=$pos+1;
+			if (($ignore_next_hits--)>0) {
+				// if more than one occurence is found 
+				// in a fragment to be displayed, 
+				// the fragment is only shown once
+				continue; 
+			}
+			// show max 80 chars
+			$fragment=substr($db->f("body"),max(0, $pos-40), 80);
+			#$fragment=formatReady($fragment);
+			$found_in_fragment=0; // number of hits in fragment
+			$fragment=preg_replace("/($searchfor)/i","<span style='background-color:#FFFF88'>\\1</span>",$fragment,-1,$found_in_fragment);
+			$ignore_next_hits= ($found_in_fragment>1) ? $found_in_fragment-1 : 0;
+			print("...".$fragment."...");
+			print "<br/>";
+		}
+		print($tdtail);
+		// version info
+		print($tdheadleft);
+		print(date("d.m.Y, H:i", $db->f("chdate"))." ("._("Version")." ".$db->f("version").")");
+		print($tdtail);
+		print "</tr>";
+
+	}
+
+	if (!$localsearch && $last_keyword_count>0) {
+		print("<tr>".$tdheadleft."&nbsp;".$tdtail);
+		print($tdheadleft."&nbsp;".$tdtail);
+		if ($last_keyword_count==1) {
+			$hitstring=_("Weitere Treffer in %s älteren Version. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
+		} else {
+			$hitstring=_("Weitere Treffer in %s älteren Versionen. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
+		}
+		print($tdheadleft."<em>".sprintf($hitstring,$last_keyword_count,"<b><a href=\"$PHP_SELF?view=search&searchfor=$searchfor&keyword=".urlencode($last_keyword)."&localsearch=1\">","</a></b>")."</em>".$tdtail);
+		print($tdheadleft."&nbsp;".$tdtail);
+		print("</tr>");
+	}
+
+	echo "</table><p>&nbsp;</p>";
+	end_blank_table();
+	$infobox = array ();
+	$infobox[] = getSearchBox($searchfor, $keyword);
+	end_blank_table();
+	echo "</td>"; // end of content area
+	showPageFrameEnd($infobox);
 }
 
 
@@ -961,6 +1138,28 @@ function showPageFrameEnd($infobox) {
 }
 
 /**
+* Returns an infobox category string for a searchbox
+* 
+* @param	string	preselection - put in searchbox
+*
+**/
+function getSearchbox($preselection, $keyword) {
+	// search
+	$search_text="<form method=get action=$PHP_SELF>";
+	$search_text.="<input type='hidden' name='view' value='search'>";
+	$search_text.="<input type='hidden' name='keyword' value='".htmlReady($keyword)."'>";
+	$search_text.="<input type='text' size='10' name='searchfor' value='".htmlReady($preselection)."'>";
+	$search_text.="&nbsp;<input type='image' ".makeButton("suchen","src")." align='top' border='0'>";
+	$search_text.="<br/>";
+	$search_text.="<input type='checkbox' name='searchcurrentversions' checked>&nbsp;"._("Nur in aktuellen Versionen");
+	$search_text.="</form>";
+	return array("kategorie"=> _("Suche:"),
+		"eintrag" => array(array(
+			"icon" => "suchen.gif",
+			"text"=>$search_text)));
+}
+
+/**
 * Returns an infobox string holding information and action links for
 * current page.
 * If newest version is displayed, infobox includes backlinks.
@@ -1007,17 +1206,25 @@ function getShowPageInfobox($keyword, $latest_version) {
 	}
 	$backlinktext= array(array('icon' => "icon-leer.gif", "text" =>
  $backlinktext));
+
+ 	// assemble infobox
 	$infobox = array ();
 	if (!$latest_version) {
 		$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array('icon' => "ausruf_small.gif", "text"=> sprintf(_("Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die %saktuelle Version%s."), '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">','</a>'))));
 	}
 	$infobox[] = array("kategorie"  => _("Ansicht:"), "eintrag" => $views);
+
+	// search
+	$infobox[]= getSearchBox($_REQUEST["searchfor"], $keyword);
+
 	if ($latest_version) {
 		// no backlinks for old versions!
 		$infobox[] = array("kategorie" => _("Seiten, die auf diese Seite verweisen:"), "eintrag" => $backlinktext);
 	}
 	$infobox[] = array("kategorie" => _("Alte Versionen dieser Seite:"),
 			"eintrag" => array(array('icon' => "blank.gif","text"=>$versiontext)));
+
+	// comments
 	$comment_all="<a href=\"$PHP_SELF?keyword=".urlencode($keyword)."&wiki_comments=all\">"._("einblenden")."</a>";
 	$comment_icon="<a href=\"$PHP_SELF?keyword=".urlencode($keyword)."&wiki_comments=icon\">"._("als Icons einblenden")."</a>";
 	$comment_none="<a href=\"$PHP_SELF?keyword=".urlencode($keyword)."&wiki_comments=none\">"._("ausblenden")."</a>";
@@ -1081,7 +1288,7 @@ function getDiffPageInfobox($keyword) {
 * @param	string  Comment show mode (all, none, icon)
 *
 **/
-function showWikiPage($keyword, $version, $special="", $show_comments="icon") {
+function showWikiPage($keyword, $version, $special="", $show_comments="icon", $hilight=NULL) {
 	global $perm, $SessSemName, $PHP_SELF;
 
 	showPageFrameStart();
@@ -1101,6 +1308,13 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon") {
 	$wikiData = getWikiPage($keyword, $version);
 	if (!$version) {
 		$latest_version=1;
+	} else {
+		$wikiLatest= getLatestVersion($keyword, $SessSemName[1]);
+		if ($version==$wikiLatest["version"]) {
+			$latest_version=1;
+		} else {
+			$latest_version=0;
+		}
 	}
 
 	// show page logic
@@ -1134,6 +1348,9 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon") {
 	begin_blank_table();
 	echo "<tr>\n";
 	$cont = wikiLinks(wikiReady($wikiData["body"],TRUE,FALSE,$show_comments), $keyword, "wiki");
+	if ($hilight) {
+		$cont=preg_replace("/($hilight)/i","<span style='background-color:#FFFF88'>\\1</span>",$cont,-1);
+	}
 	$num_body_lines=substr_count($wikiData['body'], "\n");
 	if ($num_body_lines<15) {
 		$cont .= "<p>";
