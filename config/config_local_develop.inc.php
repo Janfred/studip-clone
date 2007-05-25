@@ -26,7 +26,7 @@ $DB_ILIAS_USER = "<username>";
 $DB_ILIAS_PASSWORD = "<password>";
 $DB_ILIAS_DATABASE = "ilias";
 
-					
+
 #####    ##   ##### #    #  ####
 #    #  #  #    #   #    # #
 #    # #    #   #   ######  ####
@@ -70,8 +70,8 @@ $EXTERN_CONFIG_FILE_PATH =  $STUDIP_BASE_PATH . "/data/extern_config/";
 
 
 // path and url for dynamically generated static content like smilies..
-$DYNAMIC_CONTENT_PATH = $ABSOLUTE_PATH_STUDIP . "/shared";
-$DYNAMIC_CONTENT_URL  = $ABSOLUTE_URI_STUDIP . "/shared";
+$DYNAMIC_CONTENT_PATH = $ABSOLUTE_PATH_STUDIP . "/pictures";
+$DYNAMIC_CONTENT_URL  = $ABSOLUTE_URI_STUDIP . "/pictures";
 
 
 //path to the temporary folder
@@ -105,7 +105,7 @@ $RELATIVE_PATH_SUPPORT = "lib/support";
 
 $PATH_EXPORT = "lib/export";								//Stud.IP module: export
 
-$FAVICON = "http://www.studip.de/favicon.ico";						//the place where the favicon is stored. 
+$FAVICON = "http://www.studip.de/favicon.ico";						//the place where the favicon is stored.
 
 
 
@@ -115,7 +115,7 @@ enable or disable the Stud.IP internal modules, set and basic settings*/
 
 $RESOURCES_ENABLE = TRUE;								//Stud.IP module: resource management
 
-$CALENDAR_ENABLE = TRUE;								//Stud.IP module: calendar 
+$CALENDAR_ENABLE = TRUE;								//Stud.IP module: calendar
 $CALENDAR_DRIVER = "MySQL"; 								//calendar driver: database to use (MySQL in default installation)*/
 
 $CHAT_ENABLE = TRUE;									//Stud.IP module: chat
@@ -182,7 +182,7 @@ $ELEARNING_INTERFACE_MODULES["ilias36x"] = array(
 	)
 );
 
-$ELEARNING_INTERFACE_MODULES["ilias371"] = 
+$ELEARNING_INTERFACE_MODULES["ilias371"] =
 array(
 	"name" => "ILIAS 3.7.1 Testserver",
 	"ABSOLUTE_PATH_ELEARNINGMODULES" => "http://develop.studip.de/ilias3/",
@@ -217,7 +217,7 @@ array(
 		"root" => "admin")
 );
 
-$ELEARNING_INTERFACE_MODULES["ilias36x-2"] = 
+$ELEARNING_INTERFACE_MODULES["ilias36x-2"] =
 array(
 	"name" => "ILIAS 3.6.x Testserver (zweite Verknüpfung)",
 	"ABSOLUTE_PATH_ELEARNINGMODULES" =>
@@ -253,13 +253,13 @@ array(
 		"admin" => "admin",
 		"root" => "admin")
 );
-					
+
 
 $PLUGINS_ENABLE = TRUE;
 $PLUGINS_UPLOAD_ENABLE = TRUE; 					//Upload of Plugins is enabled
 			     								//if disabled for security reasons, uploads have to go into $NEW_PLUGINS_PATH
 $NEW_PLUGINS_PATH = ""; 							//The place from which new plugins should be loaded
-$PLUGINS_CACHING = TRUE;  						//enable caching 
+$PLUGINS_CACHING = TRUE;  						//enable caching
 $PLUGINS_CACHE_TIME = 300; 						//Time in seconds, the cache is valid
 
 
@@ -283,7 +283,7 @@ and add all used domain names. Below, some examples are given.
 */
 
 //server-root is stud.ip root dir, or virtual server for stud.ip
-//$STUDIP_DOMAINS[1] = "<your.server.name>"; 
+//$STUDIP_DOMAINS[1] = "<your.server.name>";
 //$STUDIP_DOMAINS[2] = "<your.server.ip>";
 //$STUDIP_DOMAINS[3] = "<your.virtual.server.name>";
 //
@@ -317,22 +317,22 @@ $MESSAGING_FORWARD_DEFAULT = 3;								//the default setting: if 1, the user has
 /*advanced system settings
 ----------------------------------------------------------------
 this are some settings to activate some special features, special
-behaviour of some features and other advanced options. Change on your 
+behaviour of some features and other advanced options. Change on your
 own risk :) */
 
 $ALLOW_GROUPING_SEMINARS = TRUE;							//if true, administrators can group seminars - students
 											//will only be able to register for one of the grouped seminars
 
-$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 							//if true, students are allowed to set or change 
+$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 							//if true, students are allowed to set or change
 											//their studycourse (studiengang)
 
 $SHOW_TERMS_ON_FIRST_LOGIN = FALSE;							//if true, the user has to accept the terms on his first login
 											//(this feature makes only sense, if you use disable $ENABLE_SELF_REGISTRATION).
-							
+
 $BANNER_ADS_ENABLE = FALSE; 								//enable the Banner ads functions (config as root in "global settings")
 											//you'll need an additional folder in the pictures folder named banner. The Webserver
 											//needs write accees for this folder.
-							
+
 $CONVERT_IDNA_URL = TRUE;								//if true, urls with german "umlauts" are converted
 
 /*language settings
@@ -341,14 +341,14 @@ $CONVERT_IDNA_URL = TRUE;								//if true, urls with german "umlauts" are conve
 $INSTALLED_LANGUAGES["de_DE"] = array ("path"=>"de", "picture"=>"lang_de.gif", "name"=>"Deutsch");
 $INSTALLED_LANGUAGES["en_GB"] =	array ("path"=>"en", "picture"=>"lang_en.gif", "name"=>"English");
 
-$DEFAULT_LANGUAGE = "de_DE";  // which language should we use if we can gather no information from user? 
+$DEFAULT_LANGUAGE = "de_DE";  // which language should we use if we can gather no information from user?
 
 $_language_domain = "studip";  // the name of the language file. Should not be changed except in cases of individual translations or special terms.
 
-/*literature search plugins 
+/*literature search plugins
 ----------------------------------------------------------------
-If you write your own plugin put it in studip-htdocs/lib/classes/lit_search_plugins 
-and enable it here. The name of the plugin is the classname excluding "StudipLitSearchPlugin". 
+If you write your own plugin put it in studip-htdocs/lib/classes/lit_search_plugins
+and enable it here. The name of the plugin is the classname excluding "StudipLitSearchPlugin".
 If the catalog your plugin is designed for offers the possibility to create a link to an entry, you
 could provide the link here. Place templates for the needed attributes in curly braces. (see examples below)*/
 
@@ -433,10 +433,10 @@ LdapReader		authentication using an LDAP server, this plugin binds to the server
 			Using this plugin allows to keep the md5 challenge-response mechanism during the login process, provided a md5
 			hash of the user password is available in LDAP
 
-If you write your own plugin put it in studip-htdocs/lib/classes/auth_plugins 
-and enable it here. The name of the plugin is the classname excluding "StudipAuth". 
+If you write your own plugin put it in studip-htdocs/lib/classes/auth_plugins
+and enable it here. The name of the plugin is the classname excluding "StudipAuth".
 
-You could also place your configuration here, name it $STUDIP_AUTH_CONFIG_<plugin name>, 
+You could also place your configuration here, name it $STUDIP_AUTH_CONFIG_<plugin name>,
 all uppercase each item of the configuration array will become a member of your plugin class.*/
 
 //$STUDIP_AUTH_PLUGIN[] = "LdapReader";
@@ -456,7 +456,7 @@ $STUDIP_AUTH_CONFIG_CAS = array("host" => "cas.studip.de",
 						                                "auth_user_md5.Vorname" => array("callback" => "getUserData", "map_args" => "givenname"),
 						                                "auth_user_md5.Nachname" => array("callback" => "getUserData", "map_args" => "surname"),
 						                                "auth_user_md5.Email" => array("callback" => "getUserData", "map_args" => "email"),
-						                                "auth_user_md5.perms" => array("callback" => "getUserData", "map_args" => "status"))        
+						                                "auth_user_md5.perms" => array("callback" => "getUserData", "map_args" => "status"))
 $STUDIP_AUTH_CONFIG_LDAPREADER = array(		"host" => "localhost",
 										"base_dn" => "dc=studip,dc=de",
 										"protocol_version" => 3,
@@ -470,7 +470,7 @@ $STUDIP_AUTH_CONFIG_LDAPREADER = array(		"host" => "localhost",
 										"user_data_mapping" =>
 										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
 												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""));
-												
+
 $STUDIP_AUTH_CONFIG_LDAP = array(		"host" => "localhost",
 										"base_dn" => "dc=data-quest,dc=de",
 										"protocol_version" => 3,
@@ -538,16 +538,16 @@ $LATEX_FORMATS = array(
 /*
 	Format of entries:
 	------------------
-	
-	Internal format name => array ( 
+
+	Internal format name => array (
 		Format tag (e.g. "tex" --> [tex]...[/tex])
 		Format template (must contain structure of an entire valid LaTeX-document and must contain exactly one %s placeholder that will be replaced be the code entered between [tag]....[/tag].
 	)
-  	
+
   	Examples for additional formats:
   	--------------------------------
 
-	IPA Phonetic font (needs LaTeX package tipa installed):  
+	IPA Phonetic font (needs LaTeX package tipa installed):
 		"ipa" => array("tag" => "ipa", "template" => "\documentclass[12pt]{article}\n \usepackage[latin1]{inputenc}\n \usepackage{tipa}\n \pagestyle{empty}\n \begin{document}\n \\textipa{%s}\n \end{document}\n")
 
 	Arab font (needs LaTeX package arabtex installed):
@@ -559,7 +559,7 @@ $LATEX_FORMATS = array(
 // uncomment/change below to activate
 //
 $WIKI_PLUGINS=array(
-	"wiki_steps.inc.php",  // Stud.IP Enhancement Proposal System	
+	"wiki_steps.inc.php",  // Stud.IP Enhancement Proposal System
 	"wiki_biests.inc.php"  // Bug and Inconsistency Detection System
 	);
 
