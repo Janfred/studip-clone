@@ -123,7 +123,7 @@ if ($view=="listall") {
 	exportWiki();
 
 } else if ($view=="search") {
-	searchWiki($_REQUEST["searchfor"], $_REQUEST["searchcurrentversions"], $_REQUEST["keyword"], $_REQUEST["localsearch"]);
+	searchWiki(stripslashes($_REQUEST["searchfor"]), $_REQUEST["searchcurrentversions"], $_REQUEST["keyword"], $_REQUEST["localsearch"]);
 
 } else if ($view=="edit") {
 	//
@@ -237,7 +237,7 @@ if ($view=="listall") {
 	} elseif ($wiki_comments=="icon") {  // show comments as icons
 		$show_wiki_comments="icon";
 	}
-	showWikiPage($keyword, $version, $special, $show_wiki_comments, $_REQUEST["hilight"]);
+	showWikiPage($keyword, $version, $special, $show_wiki_comments, stripslashes($_REQUEST["hilight"]));
 
 } // end default action
 

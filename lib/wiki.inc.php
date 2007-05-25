@@ -876,7 +876,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 			$fragment=substr($db->f("body"),max(0, $pos-40), 80);
 			#$fragment=formatReady($fragment);
 			$found_in_fragment=0; // number of hits in fragment
-			$fragment=preg_replace("/($searchfor)/i","<span style='background-color:#FFFF88'>\\1</span>",$fragment,-1,$found_in_fragment);
+			$fragment=preg_replace("/(".preg_quote($searchfor,"/").")/i","<span style='background-color:#FFFF88'>\\1</span>",$fragment,-1,$found_in_fragment);
 			$ignore_next_hits= ($found_in_fragment>1) ? $found_in_fragment-1 : 0;
 			print("...".$fragment."...");
 			print "<br/>";
@@ -1349,7 +1349,18 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon", $h
 	echo "<tr>\n";
 	$cont = wikiLinks(wikiReady($wikiData["body"],TRUE,FALSE,$show_comments), $keyword, "wiki");
 	if ($hilight) {
-		$cont=preg_replace("/($hilight)/i","<span style='background-color:#FFFF88'>\\1</span>",$cont,-1);
+		// Highlighting must only take place outside HTML tags, so
+		// 1. save all html tags in array $founds[0]
+		// 2. replace all html tags with  \007\007
+		// 3. highlight
+		// 4. replace all \007\007 with corresponding saved tags
+		$founds=array();
+		preg_match_all("/<[^>].*>/U",$cont,$founds);
+		$cont=preg_replace("/<[^>].*>/U","\007\007",$cont);
+		$cont=preg_replace("/(".preg_quote(htmlReady($hilight),"/").")/i","<span style='background-color:#FFFF88'>\\1</span>",$cont,-1);
+		foreach($founds[0] as $f) {
+			$cont=preg_replace("/\007\007/",$f,$cont,1);
+		}
 	}
 	$num_body_lines=substr_count($wikiData['body'], "\n");
 	if ($num_body_lines<15) {
