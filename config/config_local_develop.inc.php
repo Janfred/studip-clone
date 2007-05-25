@@ -27,22 +27,52 @@ $DB_ILIAS_PASSWORD = "<password>";
 $DB_ILIAS_DATABASE = "ilias";
 
 					
-/*paths
-----------------------------------------------------------------
-configure Stud.IP folders*/
+#####    ##   ##### #    #  ####
+#    #  #  #    #   #    # #
+#    # #    #   #   ######  ####
+#####  ######   #   #    #      #
+#      #    #   #   #    # #    #
+#      #    #   #   #    #  ####
 
-$ABSOLUTE_PATH_STUDIP = $STUDIP_BASE_PATH . "/public/";
-// where to store plugins
-$PLUGINS_PATH = $ABSOLUTE_PATH_STUDIP . "plugins_packages";
-//where ro store documents and the archive
-$UPLOAD_PATH = $STUDIP_BASE_PATH . "/data/upload_doc";						//path to uploaded documents (wwwrun needs write-perm there)
-$ARCHIV_PATH = $STUDIP_BASE_PATH . "/data/archiv";						//path to Stud.IP archive (wwwrun needs write-perm there)
-$EXTERN_CONFIG_FILE_PATH =  $STUDIP_BASE_PATH . "/data/extern_config/";				//path to store configs (wwwrun needs write-perm there)		
 
-//path to smileys and symbols
-$SMILE_PATH = "pictures/smile";								//smileys
-$SYMBOL_PATH = "assets/images/symbol";						//symbols !Problem!
-$USER_PIC_PATH = "pictures/user";
+// ABSOLUTE_PATH_STUDIP should end with a '/'
+$ABSOLUTE_PATH_STUDIP = $STUDIP_BASE_PATH . '/public/';
+
+
+// CANONICAL_RELATIVE_PATH_STUDIP should end with a '/'
+$CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']) . '/';
+
+
+// automagically computing ABSOLUTE_URI_STUDIP
+// customize if required
+// change this, if MAIL_NOTIFICATION activated
+# $ABSOLUTE_URI_STUDIP = sprintf('http%s://%s%s%s',
+#   $_SERVER['SERVER_PORT'] == 443 || $_SERVER['HTTPS'] == 'on' ? 's' : '',
+#   $_SERVER['SERVER_NAME'],
+#   in_array($_SERVER['SERVER_PORT'], array(80, 443)) ? '' : ':' . $_SERVER['SERVER_PORT'],
+#   $CANONICAL_RELATIVE_PATH_STUDIP);
+$ABSOLUTE_URI_STUDIP = "http://develop.studip.de/studip/";
+
+// default ASSETS_URL, customize if required
+# $ASSETS_URL = $ABSOLUTE_URI_STUDIP . 'assets/';
+$ASSETS_URL = "http://develop.studip.de:8080/studip/assets/";
+
+// absolute filesystem path to the plugin packages
+$PLUGINS_PATH = $ABSOLUTE_PATH_STUDIP . 'plugins_packages';
+
+
+// path to uploaded documents (wwwrun needs write-perm there)
+$UPLOAD_PATH = $STUDIP_BASE_PATH . "/data/upload_doc";
+// path to Stud.IP archive (wwwrun needs write-perm there)
+$ARCHIV_PATH = $STUDIP_BASE_PATH . "/data/archiv";
+//path to store configs (wwwrun needs write-perm there)
+$EXTERN_CONFIG_FILE_PATH =  $STUDIP_BASE_PATH . "/data/extern_config/";
+
+
+// path and url for dynamically generated static content like smilies..
+$DYNAMIC_CONTENT_PATH = $ABSOLUTE_PATH_STUDIP . "/shared";
+$DYNAMIC_CONTENT_URL  = $ABSOLUTE_URI_STUDIP . "/shared";
+
 
 //path to the temporary folder
 $TMP_PATH ="/tmp/studip";									//the system temp path
@@ -54,7 +84,6 @@ $ZIP_OPTIONS = "-K";									//command line options for zip, e.g. when using SuS
 $UNZIP_PATH = "/usr/bin/unzip";
 
 //latexrender settings
-$TEXCACHE_PATH = "pictures/tex";
 $LATEX_PATH = "/usr/bin/latex";
 $DVIPS_PATH = "/usr/bin/dvips";
 
@@ -78,18 +107,6 @@ $PATH_EXPORT = "lib/export";								//Stud.IP module: export
 
 $FAVICON = "http://www.studip.de/favicon.ico";						//the place where the favicon is stored. 
 
-
-/*URL
-----------------------------------------------------------------
-Your Stud.IP url
-ie
-http://www.your_web.net/path_to_your_studip_directory/
-In most cases you can leave this variable empty, as the correct value
-will be detected automatically.
-If you activate the MAIL_NOTIFICATION feature, you MUST set this variable!
-*/
-$ABSOLUTE_URI_STUDIP = "http://develop.studip.de/studip/";
-$ASSETS_URL = "http://develop.studip.de:8080/studip/assets/";        	//path to constant assets, defaults to $ABSOLUTE_URI_STUDIP . "assets/"
 
 
 /*Stud.IP modules
@@ -547,15 +564,6 @@ $WIKI_PLUGINS=array(
 	);
 
 //path generation
-if (substr($ABSOLUTE_PATH_STUDIP,-1) != "/"){
-	$ABSOLUTE_PATH_STUDIP .= "/";
-}
-$CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']);
-if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
-	$CANONICAL_RELATIVE_PATH_STUDIP .= "/";
-}
-
-$ABSOLUTE_PATH_USER_PIC = $ABSOLUTE_PATH_STUDIP . $USER_PIC_PATH;
 
 //create the html-version of $UNI_NAME clean
 $UNI_NAME=htmlentities($UNI_NAME_CLEAN, ENT_QUOTES);

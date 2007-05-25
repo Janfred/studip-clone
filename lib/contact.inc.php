@@ -302,8 +302,8 @@ function ShowUserInfo ($contact_id)
 			$output .= "<tr><td class=\"steel1\" colspan=\"2\"><img src=\"".$GLOBALS['ASSETS_URL']."images/border.jpg\"></td></tr>";
 		}
 		
-	if(file_exists($GLOBALS['ABSOLUTE_PATH_USER_PIC']."/".$user_id.".jpg")) {
-			$output.="<tr><td align=\"center\" class=\"steel1\" colspan=\"2\" width=\"350\"><br><img src=\"{$GLOBALS['USER_PIC_PATH']}/{$user_id}.jpg\" border=1></td>";
+	if(file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$user_id.".jpg")) {
+			$output.="<tr><td align=\"center\" class=\"steel1\" colspan=\"2\" width=\"350\"><br><img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/{$user_id}.jpg\" border=1></td>";
 		}
 		$owner_id = $user->id;
 		$db->query ("SELECT DISTINCT name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE user_id = '$user_id' AND range_id= '$owner_id'");	

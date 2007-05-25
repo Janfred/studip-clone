@@ -207,10 +207,10 @@ if ($msg)
 
 // hier wird das Bild ausgegeben
 
-if(!file_exists($GLOBALS['ABSOLUTE_PATH_USER_PIC']."/".$user_id.".jpg")) {
-	echo "&nbsp;<img src=\"{$GLOBALS['USER_PIC_PATH']}/nobody.jpg\" width=\"200\" height=\"250\"" . tooltip(_("kein persönliches Bild vorhanden")).">";
+if(!file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$user_id.".jpg")) {
+	echo "&nbsp;<img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/nobody.jpg\" width=\"200\" height=\"250\"" . tooltip(_("kein persönliches Bild vorhanden")).">";
 } else {
-	?>&nbsp;<img src="<?="{$GLOBALS['USER_PIC_PATH']}/$user_id"?>.jpg" border=1 <?=tooltip($db->f("fullname"));?>></td><?
+	?>&nbsp;<img src="<?="{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/$user_id"?>.jpg" border=1 <?=tooltip($db->f("fullname"));?>></td><?
 }
 
 // Hier der Teil fuer die Ausgabe der normalen Daten

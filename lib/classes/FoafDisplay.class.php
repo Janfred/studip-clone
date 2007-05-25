@@ -197,14 +197,14 @@ class FoafDisplay {
 			$this->db->next_record();
 			$ret["uname"]=$this->db->f("username");
 			$ret["name"]=$this->db->f("fullname");
-			if(!file_exists($GLOBALS['ABSOLUTE_PATH_USER_PIC']."/".$user_id.".jpg")) {
-				$ret["pic"]="<a href=\"about.php?username=".$ret['uname']."\"><img border=1 src=\"{$GLOBALS['USER_PIC_PATH']}/nobody.jpg\" height=\"100\" " .tooltip(_("kein persönliches Bild vorhanden"))."></a>";
+			if(!file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$user_id.".jpg")) {
+				$ret["pic"]="<a href=\"about.php?username=".$ret['uname']."\"><img border=1 src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/nobody.jpg\" height=\"100\" " .tooltip(_("kein persönliches Bild vorhanden"))."></a>";
 			} else {
-				$ret["pic"]="<a href=\"about.php?username=".$ret['uname']."\"><img src=\"{$GLOBALS['USER_PIC_PATH']}/{$user_id}.jpg\" height=\"100\" border=\"1\" ".tooltip("ein Nutzer")."></a>";
+				$ret["pic"]="<a href=\"about.php?username=".$ret['uname']."\"><img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/{$user_id}.jpg\" height=\"100\" border=\"1\" ".tooltip("ein Nutzer")."></a>";
 			}
 			$ret["link"]="<font size=-1><a href=\"about.php?username=".$ret['uname']."\">".htmlReady($ret['name'])."</a></font>";
 		} else {
-			$ret["pic"]="<img border=1 src=\"{$GLOBALS['USER_PIC_PATH']}/nobody.jpg\" width=\"80\" " .tooltip(_("anonyme NutzerIn")).">";
+			$ret["pic"]="<img border=1 src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/nobody.jpg\" width=\"80\" " .tooltip(_("anonyme NutzerIn")).">";
 			$ret["link"]=_("<font size=-1>anonyme NutzerIn</font>");
 		}
 		return $ret;

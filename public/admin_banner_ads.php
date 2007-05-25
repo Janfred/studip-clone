@@ -72,7 +72,7 @@ function imaging($img, $img_size, $img_name) {
 	}
 
 	//na dann kopieren wir mal...
-	$uploaddir = $GLOBALS['ABSOLUTE_PATH_STUDIP'] . '/pictures/banner';
+	$uploaddir = $GLOBALS['DYNAMIC_CONTENT_PATH'] . '/banner';
 	$md5hash = md5($img_name+time());
 	$newfile = $uploaddir . '/' . $md5hash . '.' . $ext;
 	$banner_data["banner_path"] = $md5hash . '.' . $ext;
@@ -113,7 +113,7 @@ function show_banner_list($table) {
 	$count=0;
 	while ($db->next_record($result)) {
 		$count++;
-		print $table->row(array(_("Banner"),"<img src=\"pictures/banner/".$db->f("banner_path")."\" alt=\"".$db->f("alttext")."\">"),"",1);
+		print $table->row(array(_("Banner"),"<img src=\"".$GLOBALS['DYNAMIC_CONTENT_URL']."/banner/".$db->f("banner_path")."\" alt=\"".$db->f("alttext")."\">"),"",1);
 		print $table->row(array(_("Beschreibung"),$db->f("description")),"",0);
 		print $table->row(array(_("Ziel"),"(".$db->f("target_type").") " . $db->f("target")),"",0);
 		print $table->row(array(_("Anzeigezeitraum"), ($db->f("startdate") ? date("d.m.Y, H:i",$db->f("startdate")) : _("sofort")) . " " . _("bis") . " " . ($db->f("enddate") ? date("d.m.Y, H:i",$db->f("enddate")) : _("unbegrenzt"))),"",0);
@@ -233,7 +233,7 @@ function edit_banner_pic($banner_data) {
 
 	print _("Aktuelles Banner:");
 	if ($banner_data["banner_path"]) {
-		print "<p><img src=\"pictures/banner/" . $banner_data["banner_path"] . "\"></p>";
+		print "<p><img src=\"".$GLOBALS['DYNAMIC_CONTENT_URL']."/banner/" . $banner_data["banner_path"] . "\"></p>";
 	} else {
 		print "<p>" . _("noch kein Bild hochgeladen") . "</p>";
 	}

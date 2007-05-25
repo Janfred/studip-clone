@@ -116,7 +116,7 @@ class smiley {
 
 	function search_smileys(){
 		if ($this->error) return false;
-		global $DB_STUDIP_DATABASE, $SMILE_SHORT, $SMILE_PATH;
+		global $DB_STUDIP_DATABASE, $SMILE_SHORT;
 
 		$this->fill_smiley_array(1);
 		$smiley_tab = &$this->smiley_tab;
@@ -192,7 +192,7 @@ class smiley {
 		$this->fill_smiley_array(0);
 		$smiley_tab = &$this->smiley_tab;
 
-		$path = realpath($GLOBALS['SMILE_PATH']);
+		$path = realpath($GLOBALS['DYNAMIC_CONTENT_PATH'] . '/smile');
 		$folder = dir($path);
 
 		while ($entry = $folder->read()){
@@ -280,8 +280,7 @@ class smiley {
 		}
 
 		//na dann kopieren wir mal...
-		$uploaddir= $GLOBALS['ABSOLUTE_PATH_STUDIP'] .'/'. $GLOBALS['SMILE_PATH'];
-		$newfile = $uploaddir . '/' . $img_name;
+		$newfile = $GLOBALS['DYNAMIC_CONTENT_PATH'] . '/smile/' . $img_name;
 
 		$smiley_id = 0;
 		$this->db->query('SELECT smiley_id FROM smiley WHERE smiley_name LIKE "'.$smiley_name.'"');
@@ -417,7 +416,7 @@ class smiley {
 			$urlname=urlencode($smile_name);
 			echo $table->openRow();
 			echo $table->cell($count.'&nbsp;', array('align'=>'right'));
-			echo $table->cell('<img src="' . $GLOBALS['SMILE_PATH'] . '/' . $urlname . '.gif" alt="' . $smile_name . '" title="' . $smile_name . '" width="'.$this->db->f('smiley_width').'" height="'.$this->db->f('smiley_height').'">', array('align' => 'center'));
+			echo $table->cell('<img src="' . $GLOBALS['DYNAMIC_CONTENT_URL'] . '/smile/' . $urlname . '.gif" alt="' . $smile_name . '" title="' . $smile_name . '" width="'.$this->db->f('smiley_width').'" height="'.$this->db->f('smiley_height').'">', array('align' => 'center'));
 			echo $table->cell('<input name="rename_'.$urlname.'" value="'.$smile_name.'" size=20>');
 			echo $table->cell($this->db->f('smiley_counter'), array('align'=>'center'));
 			//echo $table->cell('<input readonly name="short_'.$urlname.'.gif" value="'.$db->f('short').'" size="5">');
@@ -503,7 +502,7 @@ class smiley {
 			} else {
 				$tooltiptxt = $smile_name;
 			}
-			echo '<img src="' , $GLOBALS['SMILE_PATH'] , '/' , $urlname , '.gif" ',  tooltip($tooltiptxt), ' width="', $this->db->f('smiley_width'), '" height="', $this->db->f('smiley_height'), '" border="0">';
+			echo '<img src="' , $GLOBALS['DYNAMIC_CONTENT_URL'] , '/smile/' , $urlname , '.gif" ',  tooltip($tooltiptxt), ' width="', $this->db->f('smiley_width'), '" height="', $this->db->f('smiley_height'), '" border="0">';
 			if ($this->user_id != 'nobody') echo '</a>';
 			echo '</td><td align="center" class="blank"> :'.$smile_name.': </td>';
 			echo '<td align="center" class="blank">', $this->db->f('short_name'), '</td>';
@@ -521,7 +520,7 @@ class smiley {
 	function process_commands() {
 		if ($this->error) return false;
 		$count=0;
-		$path = $GLOBALS['SMILE_PATH'].'/';
+		$path = $GLOBALS['DYNAMIC_CONTENT_PATH'].'/smile/';
 		foreach($_POST as $key => $val) {
 			$matches=array();
 			preg_match('/(short|rename)_(.*)/', $key, $matches);
@@ -559,7 +558,7 @@ class smiley {
 		$this->db->query('SELECT * FROM smiley WHERE smiley_id = ' . $img);
 		if ($this->db->next_record()) {
 			$file = $this->db->f('smiley_name') . '.gif';
-			if (unlink(''.$GLOBALS['SMILE_PATH'].'/'.$file)) {
+			if (unlink(''.$GLOBALS['DYNAMIC_CONTENT_PATH'].'/smile/'.$file)) {
 				$this->db->query('DELETE FROM smiley WHERE smiley_id = ' . $img);
 				$this->msg .= 'msg§' .sprintf( _("Smiley \"%s\" erfolgreich gelöscht."),$file) . '§';
 				return true;
@@ -623,7 +622,7 @@ class smiley {
 				$i = ($c <= 10)? 0:1;
 				$zeile[$i][1] .= '<td class="smiley_th">'.$c++.'</td>';
 				$zeile[$i][2] .= '<td class="blank"><a href="'.$GLOBALS['PHP_SELF'].'?cmd=delfav&fc='.$this->fc.'&img='.$value['id'].'">';
-				$zeile[$i][2] .= '<img src="' . $GLOBALS['SMILE_PATH'] . '/' . $smile . '.gif" ' . tooltip(sprintf(_("%s  entfernen"),$smile)) . ' width="'. $value['width']. '" height="'. $value['height']. '" border="0"></a></td>'."\n";
+				$zeile[$i][2] .= '<img src="' . $GLOBALS['DYNAMIC_CONTENT_URL'] . '/smile/' . $smile . '.gif" ' . tooltip(sprintf(_("%s  entfernen"),$smile)) . ' width="'. $value['width']. '" height="'. $value['height']. '" border="0"></a></td>'."\n";
 				$zeile[$i][3] .= '<td class="blank">&nbsp;:'.$smile.':&nbsp;</td>'."\n";
 			}
 			echo '<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="0" >', "\n";

@@ -178,7 +178,7 @@ function imaging($img,$img_size,$img_name) {
 		return;
 	}
 	//na dann kopieren wir mal...
-	$newfile =  $GLOBALS['ABSOLUTE_PATH_USER_PIC'] . "/" . $this->auth_user["user_id"].".jpg";
+	$newfile =  $GLOBALS['DYNAMIC_CONTENT_PATH'] . "/user/" . $this->auth_user["user_id"].".jpg";
 	if(!@move_uploaded_file($img,$newfile)) {
 		$this->msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
 		return;
@@ -852,8 +852,8 @@ if(check_ticket($studipticket)){
 	if ($cmd) {
 		if ($view=="Bild" && $cmd=="bild_loeschen" && $_SERVER["REQUEST_METHOD"]=="POST") {
 			if ($user_id==$auth->auth["uid"] || $perm->have_perm("admin")) {
-				if(file_exists($GLOBALS['ABSOLUTE_PATH_USER_PIC']."/".$user_id.".jpg")) {
-					unlink($GLOBALS['ABSOLUTE_PATH_USER_PIC']."/".$user_id.".jpg");
+				if(file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$user_id.".jpg")) {
+					unlink($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$user_id.".jpg");
 					$my_about->msg.="msg§"._("Das Bild wurde gel&ouml;scht");
 				}
                }
@@ -1119,10 +1119,10 @@ if ($view == 'Bild') {
 	echo '<tr><td width="30%" class="'.$cssSw->getClass().'" align="center">';
 	echo '<font size="-1"><b>' . _("Aktuell angezeigtes Bild:") . '<br /><br /></b></font>';
 
-	if(!file_exists($GLOBALS['ABSOLUTE_PATH_USER_PIC']."/".$my_about->auth_user['user_id'].".jpg")) {
-		echo '<img src="'.$GLOBALS['USER_PIC_PATH'].'/nobody.jpg" width="200" height="250" alt="' . _("Kein pers&ouml;nliches Bild vorhanden") . '" ><br />&nbsp; ';
+	if(!file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$my_about->auth_user['user_id'].".jpg")) {
+		echo '<img src="'.$GLOBALS['DYNAMIC_CONTENT_URL'].'/user/nobody.jpg" width="200" height="250" alt="' . _("Kein pers&ouml;nliches Bild vorhanden") . '" ><br />&nbsp; ';
 	} else {
-		echo '<img border="1" src="'.$GLOBALS['USER_PIC_PATH'].'/'.$my_about->auth_user['user_id'] . '.jpg" alt="'. $my_about->auth_user['Vorname'].' '.$my_about->auth_user['Nachname']."\"><br />\n&nbsp; ";
+		echo '<img border="1" src="'.$GLOBALS['DYNAMIC_CONTENT_URL'].'/user'.$my_about->auth_user['user_id'] . '.jpg" alt="'. $my_about->auth_user['Vorname'].' '.$my_about->auth_user['Nachname']."\"><br />\n&nbsp; ";
 		if ($my_about->auth_user["user_id"]==$auth->auth["uid"] || $perm->have_perm("admin")) {
                         echo "\n<FORM NAME=\"bild_loeschen\" METHOD=\"POST\" ACTION=\"$PHP_SELF?studipticket=".get_ticket()."\">\n";
                         echo "  <INPUT TYPE=\"hidden\" NAME=\"user_id\" VALUE=\"".$my_about->auth_user["user_id"]."\">\n";

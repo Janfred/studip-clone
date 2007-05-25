@@ -435,16 +435,17 @@ function format_wiki_comment($comment, $metainfo, $show_comment) {
 
 
 function latex($text, $extern = FALSE) {
-	global $CANONICAL_RELATIVE_PATH_STUDIP,$TEXCACHE_PATH,$LATEXRENDER_ENABLE;
-	global $LATEX_PATH,$DVIPS_PATH,$CONVERT_PATH,$IDENTIFY_PATH,$TMP_PATH, $LATEX_FORMATS;
+	global $LATEXRENDER_ENABLE,
+	       $LATEX_PATH,
+	       $DVIPS_PATH,
+	       $CONVERT_PATH,
+	       $IDENTIFY_PATH,
+	       $TMP_PATH,
+	       $LATEX_FORMATS;
 
 	if ($LATEXRENDER_ENABLE && isset($LATEX_FORMATS)) {
 		include_once("lib/classes/latexrender.class.php");
-		if ($extern) {
-			$latex = new LatexRender($GLOBALS['ABSOLUTE_PATH_STUDIP'].$TEXCACHE_PATH, $GLOBALS['ABSOLUTE_URI_STUDIP'].$TEXCACHE_PATH);
-		} else {
-			$latex = new LatexRender($GLOBALS['ABSOLUTE_PATH_STUDIP'].$TEXCACHE_PATH, $CANONICAL_RELATIVE_PATH_STUDIP.$TEXCACHE_PATH);
-		}
+		$latex = new LatexRender($GLOBALS['DYNAMIC_CONTENT_PATH'].'/tex', $GLOBALS['DYNAMIC_CONTENT_URL'].'/tex');
 		$latex->_latex_path = $LATEX_PATH;
 		$latex->_dvips_path = $DVIPS_PATH;
 		$latex->_convert_path = $CONVERT_PATH;
@@ -916,7 +917,7 @@ function idna_link($link, $mail = false){
 * @return		string	convertet text
 */
 function smile ($text = "", $extern = FALSE) {
-	global $SMILE_SHORT, $SMILE_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
+	global $SMILE_SHORT, $CANONICAL_RELATIVE_PATH_STUDIP;
 
 	if(empty($text))
 		return $text;
@@ -925,14 +926,14 @@ function smile ($text = "", $extern = FALSE) {
 	$pattern = "'(\>|^|\s):([_a-zA-Z][_a-z0-9A-Z-]*):(?=$|\<|\s)'m";
 	$replace = "\\1";
 	if (!$extern) {
-		$path = $CANONICAL_RELATIVE_PATH_STUDIP;
+		$path = $GLOBALS['DYNAMIC_CONTENT_URL'] . '/smile';
 		$replace .= "<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">";
 		$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
-		$replace .= "$path$SMILE_PATH/\\2.gif\"></a>\\3";
+		$replace .= "$path/\\2.gif\"></a>\\3";
 	} else {
-		$path = $GLOBALS['ABSOLUTE_URI_STUDIP'];
+		$path = $GLOBALS['DYNAMIC_CONTENT_URL'] . '/smile';
 		$replace .= "<img alt=\"\\2\" title=\"\\2\" border=\"0\" src=\"";
-		$replace .= "$path$SMILE_PATH/\\2.gif\">\\3";
+		$replace .= "$path/\\2.gif\">\\3";
 	}
 	$text = preg_replace($pattern, $replace, $text);
 
@@ -945,10 +946,10 @@ function smile ($text = "", $extern = FALSE) {
 		if (!$extern) {
 			$replaces[] = "\\1<a href=\"{$CANONICAL_RELATIVE_PATH_STUDIP}show_smiley.php\" target=\"_blank\">"
 					. "<img alt=\"$value\" title=\"$value\" border=\"0\" src=\""
-					. "$path$SMILE_PATH/$value.gif\"></a>\\2";
+					. "$path/$value.gif\"></a>\\2";
 		} else {
 			$replaces[] = "\\1<img alt=\"$value\" title=\"$value\" border=\"0\" src=\""
-					. "$path$SMILE_PATH/$value.gif\">\\2";
+					. "$path/$value.gif\">\\2";
 		}
 	}
 	return preg_replace($patterns, $replaces, $text);
@@ -970,15 +971,12 @@ function smile ($text = "", $extern = FALSE) {
 * @return		string	convertet text
 */
 function symbol ($text = "", $extern = FALSE) {
-	global $SYMBOL_SHORT, $SYMBOL_PATH, $CANONICAL_RELATIVE_PATH_STUDIP;
+	global $SYMBOL_SHORT, $CANONICAL_RELATIVE_PATH_STUDIP;
 
 	if(empty($text))
 		return $text;
 
-	if ($extern)
-		$path = $GLOBALS['ABSOLUTE_URI_STUDIP'];
-	else
-		$path = $CANONICAL_RELATIVE_PATH_STUDIP;
+		$path = $GLOBALS['DYNAMIC_CONTENT_URL'] . '/symbol';
 
 	$patterns = array();
 	$replaces = array();
@@ -987,7 +985,7 @@ function symbol ($text = "", $extern = FALSE) {
 	while (list($key, $value) = each($SYMBOL_SHORT)) {
 		$patterns[] = "'" . preg_quote($key) . "'m";
 		$replaces[] = "<img " . tooltip($key)
-				. " border=\"0\" src=\"$path$SYMBOL_PATH/$value.gif\">";
+				. " border=\"0\" src=\"$path/$value.gif\">";
 	}
 
 	return preg_replace($patterns, $replaces, $text);

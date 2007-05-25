@@ -428,8 +428,8 @@ function head (&$module, $data, $a) {
 		
 		if ($module->config->getValue("Main", "showimage")) {
 			echo "<td" . $module->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
-			if (file_exists("{$GLOBALS['ABSOLUTE_PATH_USER_PIC']}/nobody.jpg")) {
-				echo "<img src=\"{$GLOBALS['ABSOLUTE_URI_STUDIP']}{$GLOBALS['USER_PIC_PATH']}/";
+			if (file_exists("{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user/nobody.jpg")) {
+				echo "<img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/";
 				echo "nobody.jpg\" alt=\"Foto " . $data["fullname"] . "\"";
 				echo $module->config->getAttributes("PersondetailsHeader", "img") . ">";
 			}

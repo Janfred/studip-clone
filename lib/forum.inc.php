@@ -1218,10 +1218,10 @@ function printposting ($forumposting) {
 			$addon = "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"140\" height=\"5\">";
 
 			if ($forum["showimages"]==TRUE) { // es werden Porträts angezeigt
-				if(!file_exists($GLOBALS['ABSOLUTE_PATH_USER_PIC']."/".$forumposting["userid"].".jpg")) {
-					$addon .= "<br><div align=\"center\"><img border=1 src=\"{$GLOBALS['USER_PIC_PATH']}/nobody.jpg\" width=\"80\" " .tooltip(_("kein persönliches Bild vorhanden"))."></div>";
+				if(!file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$forumposting["userid"].".jpg")) {
+					$addon .= "<br><div align=\"center\"><img border=1 src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/nobody.jpg\" width=\"80\" " .tooltip(_("kein persönliches Bild vorhanden"))."></div>";
 				} else {
-					$addon .= "<br><div align=\"center\"><img src=\"{$GLOBALS['USER_PIC_PATH']}/".$forumposting["userid"].".jpg\" width=\"80\" border=\"1\" ".tooltip($forumposting["author"])."></div>";
+					$addon .= "<br><div align=\"center\"><img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/".$forumposting["userid"].".jpg\" width=\"80\" border=\"1\" ".tooltip($forumposting["author"])."></div>";
 				}
 			}
 

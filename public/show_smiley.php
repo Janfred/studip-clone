@@ -33,7 +33,7 @@ $sm = new smiley(false);
 
 if ($sm->error) { // old code is used
 
-	$path = realpath($SMILE_PATH);
+	$path = realpath($GLOBALS['DYNAMIC_CONTENT_PATH'] . '/smile');
 	$folder=dir($path);
 	$SMILE_SHORT_R=array_flip($SMILE_SHORT);
 	$i_smile = array();
@@ -63,7 +63,7 @@ if ($sm->error) { // old code is used
 	ob_start();
 	$tabspalten = 1;
 	for($i=0;$i < count($i_smile);++$i){
-			echo "\n<tr><td class=\"blank\" align=\"center\"><img src=\"$SMILE_PATH/".$i_smile[$i][0]."\"></td>";
+			echo "\n<tr><td class=\"blank\" align=\"center\"><img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL]}/smile/".$i_smile[$i][0]."\"></td>";
 			echo "\n<td class=\"blank\" align=\"center\">:".$i_smile[$i][1].":</td>";
 			($SMILE_SHORT_R[$i_smile[$i][1]]) ? print "\n<td class=\"blank\" align=\"center\">".$SMILE_SHORT_R[$i_smile[$i][1]]."</td>" : print "\n<td class=\"blank\" align=\"center\">&nbsp</td>";
 			echo "\n</tr>";

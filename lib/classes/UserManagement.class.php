@@ -807,7 +807,7 @@ class UserManagement {
 		object_kill_views($this->user_data['auth_user_md5.user_id']);
 		
 		// delete picture
-		$user_picture = $GLOBALS['ABSOLUTE_PATH_USER_PIC'] . "/" . $this->user_data["auth_user_md5.user_id"].".jpg";
+		$user_picture = $GLOBALS['DYNAMIC_CONTENT_PATH'] . '/user/' . $this->user_data["auth_user_md5.user_id"].".jpg";
 		if(@file_exists($user_picture)) {
 			if (@unlink($user_picture))
 				$this->msg .= "info§" . _("Bild gel&ouml;scht.") . "§";

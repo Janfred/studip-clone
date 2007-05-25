@@ -49,15 +49,6 @@ require_once('lib/classes/StudipNews.class.php');
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";
 
-if (!$GLOBALS['ABSOLUTE_URI_STUDIP']){
-	$GLOBALS['ABSOLUTE_URI_STUDIP'] = ( ($_SERVER["SERVER_PORT"] == 443 || $_SERVER["HTTPS"] == "on") ? "https://" : "http://")
-									. $_SERVER["SERVER_NAME"] . (($_SERVER["SERVER_PORT"] != 443 && $_SERVER["SERVER_PORT"] != 80) ? ":" . $_SERVER["SERVER_PORT"] : "")
-									. $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']; // link to system
-}
-if (!$GLOBALS['ASSETS_URL']){
-	$GLOBALS['ASSETS_URL'] = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'assets/';
-}
-
 //Besser hier globale Variablen definieren...
 $GLOBALS['_fullname_sql']['full'] = "TRIM(CONCAT(title_front,' ',Vorname,' ',Nachname,IF(title_rear!='',CONCAT(', ',title_rear),'')))";
 $GLOBALS['_fullname_sql']['full_rev'] = "TRIM(CONCAT(Nachname,', ',Vorname,IF(title_front!='',CONCAT(', ',title_front),''),IF(title_rear!='',CONCAT(', ',title_rear),'')))";

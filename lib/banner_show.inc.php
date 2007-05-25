@@ -42,7 +42,7 @@ function banner_show() {
 		$db->query($q);
 		$db->next_record();
 		print '<table width="100%" cellpadding="5"><tr><td align="center">';
-		$pic='<img src="pictures/banner/'.$db->f('banner_path').'" border=0 ' . tooltip($db->f('alttext')) .'>';
+		$pic='<img src="'.$GLOBALS['DYNAMIC_CONTENT_URL'].'/banner/'.$db->f('banner_path').'" border="0" ' . tooltip($db->f('alttext')) .'>';
 		switch ($db->f('target_type')) {
 			case 'url':
 				$link='<a href="'.$db->f('target').'" target="_new">'.$pic.'</a>';
