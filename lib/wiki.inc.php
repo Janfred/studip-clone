@@ -1215,7 +1215,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 	$infobox[] = array("kategorie"  => _("Ansicht:"), "eintrag" => $views);
 
 	// search
-	$infobox[]= getSearchBox($_REQUEST["searchfor"], $keyword);
+	$infobox[]= getSearchBox(stripslashes($_REQUEST["searchfor"]), $keyword);
 
 	if ($latest_version) {
 		// no backlinks for old versions!
