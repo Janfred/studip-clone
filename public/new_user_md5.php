@@ -164,7 +164,7 @@ if (isset($_GET['details'])) {
 				</tr>
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("Sichtbarkeit")?>&nbsp;</b></td>
-					<td>&nbsp;&nbsp;<?=vis_chooser($db->f("visible")) ?></td>
+					<td>&nbsp;<?=vis_chooser('', TRUE) ?></td>
 				</tr>
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("Vorname:")?></b></td>
@@ -265,7 +265,7 @@ if (isset($_GET['details'])) {
 				</tr>
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Sichtbarkeit:")?>&nbsp;</b></td>
-					<td class="steel1">&nbsp;&nbsp;<?=vis_chooser($db->f("visible"))?></td>
+					<td class="steel1">&nbsp;&nbsp;<?=vis_chooser($db->f('visible'))?>&nbsp;<small>(<?=$db->f('visible')?>)</small></td>
 				</tr>
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Vorname:")?></b></td>
@@ -528,20 +528,20 @@ if (isset($_GET['details'])) {
 			print "</tr><tr><td class=\"blank\">&nbsp;</td></tr></table>";
 
 		} else { // wir haben ein Suchergebnis
-			print "<table border=0 bgcolor=\"#eeeeee\" align=\"center\" cellspacing=0 class=blank cellpadding=2 width=\"100%\">";
+			echo '<table border="0" bgcolor="#eeeeee" align="center" cellspacing="0" class="blank" cellpadding="2" width="100%">';
 
 			if ($perm->have_perm('root')){
-				echo "<tr valign=\"top\"><td colspan=\"7\"><a href=\"admin_user_kill.php?transfer_search=1\">"._("Suchergebnis in Löschformular übernehmen")."</a></td></tr>";
+				echo '<tr valign="top"><td colspan="8"><a href="admin_user_kill.php?transfer_search=1">'._("Suchergebnis in Löschformular übernehmen").'</a></td></tr>';
 			}
 			
-			print "<tr valign=\"top\" align=\"middle\">";
+			echo '<tr valign="top" align="middle">';
 				if ($db->num_rows() == 1)
-			 		print("<td colspan=7>" . _("Suchergebnis: Es wurde <b>1</b> Person gefunden.") . "</td></tr>\n");
+			 		echo '<td colspan="8">' . _("Suchergebnis: Es wurde <b>1</b> Person gefunden.") . "</td></tr>\n";
 				else
-			 		printf("<td colspan=7>" . _("Suchergebnis: Es wurden <b>%s</b> Personen gefunden.") . "</td></tr>\n", $db->num_rows());
+			 		printf('<td colspan="8">' . _("Suchergebnis: Es wurden <b>%s</b> Personen gefunden.") . "</td></tr>\n", $db->num_rows());
 			?>
 			 <tr valign="top" align="middle">
-				<th align="left"><a href="new_user_md5.php?sortby=username"><?=_("Benutzername")?></a></th>
+				<th align="left"><a href="new_user_md5.php?sortby=username"><?=_("Benutzername")?></a>&nbsp;<span style="font-size:smaller;font-weight:normal;color:#f8f8f8;">(<?=_("Sichtbarkeit")?>)</span></th>
 				<th align="left"><a href="new_user_md5.php?sortby=perms"><?=_("Status")?></a></th>
 				<th align="left"><a href="new_user_md5.php?sortby=Vorname"><?=_("Vorname")?></a></th>
 				<th align="left"><a href="new_user_md5.php?sortby=Nachname"><?=_("Nachname")?></a></th>
@@ -561,9 +561,13 @@ if (isset($_GET['details'])) {
 				}
 				?>
 				<tr valign=middle align=left>
-					<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?php echo $PHP_SELF . "?details=" . $db->f("username") ?>"><?php $db->p("username") ?></a>
-					<? if ($db->f("locked")=="1") echo "<FONT SIZE=\"-1\" COLOR=\"RED\">&nbsp;<B>"._("gesperrt!")."</B></FONT>"; ?>
-					</TD>
+					<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?php echo $PHP_SELF . "?details=" . $db->f("username") ?>"><?php $db->p("username") ?></a>&nbsp;<?
+					if ($db->f('locked')=='1'){ 
+						echo '<span style="font-size:smaller;color:red;font-weight:bold;">' . _("gesperrt!") .'</span>'; 
+					} else {
+						echo '<span style="font-size:smaller;color:#888;">('.$db->f('visible').')</span>';
+					}
+					?></TD>
 					<td class="<? echo $cssSw->getClass() ?>"><?=$db->f("perms") ?></td>
 					<td class="<? echo $cssSw->getClass() ?>"><?=htmlReady($db->f("Vorname")) ?>&nbsp;</td>
 					<td class="<? echo $cssSw->getClass() ?>"><?=htmlReady($db->f("Nachname")) ?>&nbsp;</td>

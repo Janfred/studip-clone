@@ -97,17 +97,18 @@ function get_ext_vis_query($table_alias = 'aum') {
  * @param	$vis	visibility-state
  * @returns string	gives back a string with the chooser
  */
-function vis_chooser($vis) {
-	if ($vis == "") $vis = "unknown";
-	$txt = "<SELECT name=\"visible\">\n";
-	$txt .= "<OPTION value=\"$vis\">"._("keine &Auml;nderung")."</OPTION>\n";
-	$txt .= "<OPTION value=\"always\">"._("immer")."</OPTION>\n";
-	/*$txt .= "<OPTION value=\"yes\"".(($vis == "yes") ? "selected" : "").">"._("ja")."</OPTION>\n";*/
-	$txt .= "<OPTION value=\"unknown\">"._("unbekannt")."</OPTION>\n";
-	/*$txt .= "<OPTION value=\"no\"".(($vis == "no") ? "selected" : "").">"._("nein")."</OPTION>\n";*/
-	$txt .= "<OPTION value=\"never\">"._("niemals")."</OPTION>\n";
-	$txt .= "</SELECT>\n";
-	return $txt;
+function vis_chooser($vis, $new = false) {
+	if ($vis == '') $vis = 'unknown';
+	$txt = array();
+	$txt[] = '<SELECT name="visible">';
+	if (!$new) $txt[] = '<OPTION value="'.$vis.'">'._("keine &Auml;nderung").'</OPTION>';
+	$txt[] = '<OPTION value="always">'._("immer").'</OPTION>';
+	/* $txt[] = '<OPTION value="yes">'._("ja").'</OPTION>'; */
+	$txt[] = '<OPTION value="unknown"'.(($new)? ' selected="selected"':'').'>'._("unbekannt").'</OPTION>';
+	/* $txt[] = '<OPTION value="no">'._("nein").'</OPTION>'; */
+	$txt[] = '<OPTION value="never">'._("niemals").'</OPTION>';
+	$txt[] = '</SELECT>';
+	return implode("\n", $txt);
 }
 
 function first_decision($userid) {
