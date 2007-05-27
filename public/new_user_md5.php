@@ -381,7 +381,17 @@ if (isset($_GET['details'])) {
 				</tr>
 
 				<?
-				if ($perm->have_perm("root") || ($db->f("perms") != "admin" && $db->f("perms") != "root") || $db2->f("admin_ok")) {
+				$admin_ok = false;
+				if ($perm->is_fak_admin() && $db->f('perms') == 'admin'){
+					$db2->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a
+							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id)
+							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '".$user->id."' AND c.inst_perms='admin')
+							WHERE a.user_id ='".$db->f('user_id')."' AND a.inst_perms = 'admin'");
+					$db2->next_record();
+					$admin_ok = $db2->f('admin_ok');
+				}
+
+				if ($perm->have_perm('root') || ($db->f('perms') != 'admin' && $db->f('perms') != 'root') || $admin_ok) {
 
 					echo "<tr>\n";
                                 	echo "  <td class=\"steel1\"><b>&nbsp;"._("Benutzer sperren:")."</b></td>\n";
@@ -399,19 +409,9 @@ if (isset($_GET['details'])) {
 				?>
 
 				<td class="steel1" colspan=3 align=center>&nbsp;
-				<input type="hidden" name="u_id"	 value="<?= $db->f("user_id") ?>">
+				<input type="hidden" name="u_id" value="<?= $db->f("user_id") ?>">
 				<?
-				if ($perm->is_fak_admin() && $db->f("perms") == "admin"){
-					$db2->query("SELECT IF(count(a.Institut_id) - count(c.inst_perms),0,1) AS admin_ok FROM user_inst AS a
-							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id)
-							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id AND c.user_id = '$user->id' AND c.inst_perms='admin')
-							WHERE a.user_id ='".$db->f("user_id")."' AND a.inst_perms = 'admin'");
-					$db2->next_record();
-				}
-
-				if ($perm->have_perm("root") ||
-					($db->f("perms") != "admin" && $db->f("perms") != "root") ||
-					$db2->f("admin_ok")) {
+				if ($perm->have_perm('root') || ($db->f('perms') != 'admin' && $db->f('perms') != 'root') || $admin_ok) {
 					?>
 					<input type="IMAGE" name="u_edit" <?=makeButton("uebernehmen", "src")?> value=" <?=_("Ver&auml;ndern")?> ">&nbsp;
 					<?
