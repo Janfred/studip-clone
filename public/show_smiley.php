@@ -63,10 +63,11 @@ if ($sm->error) { // old code is used
 	ob_start();
 	$tabspalten = 1;
 	for($i=0;$i < count($i_smile);++$i){
-			echo "\n<tr><td class=\"blank\" align=\"center\"><img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL]}/smile/".$i_smile[$i][0]."\"></td>";
-			echo "\n<td class=\"blank\" align=\"center\">:".$i_smile[$i][1].":</td>";
-			($SMILE_SHORT_R[$i_smile[$i][1]]) ? print "\n<td class=\"blank\" align=\"center\">".$SMILE_SHORT_R[$i_smile[$i][1]]."</td>" : print "\n<td class=\"blank\" align=\"center\">&nbsp</td>";
-			echo "\n</tr>";
+			echo "\n".'<tr><td class="blank" align="center"><img src="'.$GLOBALS['DYNAMIC_CONTENT_URL'].'/smile/'.$i_smile[$i][0].'"></td>';
+			echo "\n".'<td class="blank" align="center">:'.$i_smile[$i][1].':</td>';
+			echo "\n".'<td class="blank" align="center">';
+			echo ($SMILE_SHORT_R[$i_smile[$i][1]])?  $SMILE_SHORT_R[$i_smile[$i][1]] : '&nbsp';
+			echo "</td>\n</tr>";
 			$max = ceil(count($i_smile)/3)+1;
 			if (!(($i+1) % $max )) {
 				?>
