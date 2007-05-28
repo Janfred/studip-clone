@@ -1144,8 +1144,9 @@ function showPageFrameEnd($infobox) {
 *
 **/
 function getSearchbox($preselection, $keyword) {
+	global $PHP_SELF;
 	// search
-	$search_text="<form method=get action=$PHP_SELF>";
+	$search_text="<form method='get' action='$PHP_SELF'>";
 	$search_text.="<input type='hidden' name='view' value='search'>";
 	$search_text.="<input type='hidden' name='keyword' value='".htmlReady($keyword)."'>";
 	$search_text.="<input type='text' size='10' name='searchfor' value='".htmlReady($preselection)."'>";
