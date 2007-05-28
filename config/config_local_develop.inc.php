@@ -70,8 +70,10 @@ $EXTERN_CONFIG_FILE_PATH =  $STUDIP_BASE_PATH . "/data/extern_config/";
 
 
 // path and url for dynamically generated static content like smilies..
-$DYNAMIC_CONTENT_PATH = $ABSOLUTE_PATH_STUDIP . "/pictures";
-$DYNAMIC_CONTENT_URL  = $ABSOLUTE_URI_STUDIP . "/pictures";
+//$DYNAMIC_CONTENT_PATH = $ABSOLUTE_PATH_STUDIP . "/pictures";
+//$DYNAMIC_CONTENT_URL  = $ABSOLUTE_URI_STUDIP . "/pictures";
+$DYNAMIC_CONTENT_PATH = "/srv/www2/htdocs/studip/pictures";
+$DYNAMIC_CONTENT_URL  = "http://develop.studip.de:8080/studip/pictures";
 
 
 //path to the temporary folder
