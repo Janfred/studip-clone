@@ -1122,7 +1122,7 @@ if ($view == 'Bild') {
 	if(!file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$my_about->auth_user['user_id'].".jpg")) {
 		echo '<img src="'.$GLOBALS['DYNAMIC_CONTENT_URL'].'/user/nobody.jpg" width="200" height="250" alt="' . _("Kein pers&ouml;nliches Bild vorhanden") . '" ><br />&nbsp; ';
 	} else {
-		echo '<img border="1" src="'.$GLOBALS['DYNAMIC_CONTENT_URL'].'/user'.$my_about->auth_user['user_id'] . '.jpg" alt="'. $my_about->auth_user['Vorname'].' '.$my_about->auth_user['Nachname']."\"><br />\n&nbsp; ";
+		echo '<img border="1" src="'.$GLOBALS['DYNAMIC_CONTENT_URL'].'/user/'.$my_about->auth_user['user_id'] . '.jpg" alt="'. $my_about->auth_user['Vorname'].' '.$my_about->auth_user['Nachname']."\"><br />\n&nbsp; ";
 		if ($my_about->auth_user["user_id"]==$auth->auth["uid"] || $perm->have_perm("admin")) {
                         echo "\n<FORM NAME=\"bild_loeschen\" METHOD=\"POST\" ACTION=\"$PHP_SELF?studipticket=".get_ticket()."\">\n";
                         echo "  <INPUT TYPE=\"hidden\" NAME=\"user_id\" VALUE=\"".$my_about->auth_user["user_id"]."\">\n";
