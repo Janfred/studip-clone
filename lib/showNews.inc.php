@@ -102,6 +102,10 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 		$rss_id = StudipNews::GetRssIdFromRangeId($range_id);
 	}
 
+	if($show_admin && $_REQUEST['touch_news']){
+		StudipNews::TouchNews($_REQUEST['touch_news']);
+	}
+	
 	$news =& StudipNews::GetNewsByRange($range_id, true);
 
 	if ($SessSemName[1] == $range_id){
@@ -204,6 +208,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 
 				if ($auth->auth["uid"]==$news_detail["user_id"] || $show_admin) {
 					$edit="<a href=\"admin_news.php?cmd=edit&edit_news=".$news_id."&$admin_link\">" . makeButton("bearbeiten") . "</a>";
+					$edit.="&nbsp;<a href=\"{$_SERVER['PHP_SELF']}?touch_news=".$news_id."#anker\">" . makeButton("aktualisieren") . "</a>";
 					$edit.="&nbsp;<a href=\"admin_news.php?cmd=kill&kill_news=".$news_id."&$admin_link\">" . makeButton("loeschen") . "</a>";
 				}
 

@@ -246,7 +246,7 @@ class AdminNewsController {
 			. "<INPUT TYPE=\"IMAGE\" name=\"news_submit\" " . makeButton("uebernehmen","src") . tooltip(_("Änderungen übernehmen")) ."  border=\"0\" ></center></td></tr>";
 
 		$news_date = $this->news_query['date'];
-		if ($news_date > $aktuell) {
+		if ($news_date != $aktuell) {
 			$date_offset = 0;
 		} else {
 			$date_offset = 1;

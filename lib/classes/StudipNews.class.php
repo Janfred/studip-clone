@@ -167,6 +167,18 @@ class StudipNews extends SimpleORMap {
 		}
 	}
 
+	function TouchNews($news_id, $touch_stamp = null){
+		$ret = false;
+		if(!$touch_stamp) $touch_stamp = time();
+		$news =& new StudipNews($news_id);
+		if(!$news->is_new){
+			$news->setValue('date', mktime(0,0,0,strftime("%m",$touch_stamp),strftime("%d",$touch_stamp),strftime("%y",$touch_stamp)));
+			$ret = $news->store();
+			$news->triggerChdate();
+		}
+		return $ret;
+	}
+	
 	function DeleteNewsRanges($range_id){
 		$db =& new DB_Seminar("DELETE FROM news_range WHERE range_id='$range_id'");
 		$ret = $db->affected_rows();
