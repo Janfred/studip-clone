@@ -63,8 +63,17 @@ class AbstractStudIPPlugin {
 	 *
 	 */
 	function prepareUninstallation(){
-		$manifest = PluginEngine::getPluginManifest($this->environment->getBasepath() . "/" . $this->getPluginpath());
+                $pluginpath = $this->environment->getBasepath() . "/" . $this->getPluginpath();
+		$manifest = PluginEngine::getPluginManifest($pluginpath);
 		if (is_array($manifest)){
+                        if (is_dir($pluginpath.'/migrations')) {
+                                // use same logic here as in PluginAdministration::installPlugin()
+                                $pluginname = $manifest['pluginname'] ?
+                                                $manifest['pluginname'] : $manifest["pluginclassname"];
+                                $schema_version =& new DBSchemaVersion($pluginname);
+                                $migrator =& new Migrator($pluginpath.'/migrations', $schema_version);
+                                $migrator->migrate_to(0);
+                        }
 			if (isset($manifest["uninstalldbscheme"])) {
 				$schemafile = $this->getPluginpath() . "/" . $manifest["uninstalldbscheme"];
 				$conn = PluginEngine::getPluginDatabaseConnection();
