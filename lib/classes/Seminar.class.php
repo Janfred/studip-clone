@@ -1,9 +1,9 @@
 <?
 /**
 * Seminar.class.php
-* 
+*
 * the seminar main-class
-* 
+*
 *
 * @author		Till Glöggler <tgloeggl@uni-osnabrueck.de>; Stefan Suchi <suchi@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -42,7 +42,7 @@ require_once ('lib/raumzeit/Issue.class.php');
 require_once ('lib/raumzeit/SingleDate.class.php');
 require_once ('lib/classes/SemesterData.class.php');
 require_once ('lib/log_events.inc.php');
-require_once ($RELATIVE_PATH_RESOURCES.'/lib/ResourceObject.class.php');
+require_once ($GLOBALS['RELATIVE_PATH_RESOURCES'].'/lib/ResourceObject.class.php');
 
 class Seminar {
 
@@ -61,9 +61,9 @@ class Seminar {
 	var $user_number = 0;
 
 	function &GetInstance($id = false, $refresh_cache = false){
-		
+
 		static $seminar_object_pool;
-		
+
 		if ($id){
 			if ($refresh_cache){
 				$seminar_object_pool[$id] = null;
@@ -106,7 +106,7 @@ class Seminar {
 		$db->next_record();
 		return $db->f(0);
 	}
-	
+
 	/**
 	*
 	* creates an new id for this object
@@ -123,7 +123,7 @@ class Seminar {
 		}
 		return $this->members[$status];
 	}
-	
+
 	function restoreMembers($status = 'dozent'){
 		$this->members[$status] = array();
 		$this->db->query("SELECT su.user_id,username,Vorname,Nachname,
@@ -136,7 +136,7 @@ class Seminar {
 		}
 		return $this->db->num_rows();
 	}
-	
+
 	function getId() {
 		return $this->id;
 	}
@@ -156,7 +156,7 @@ class Seminar {
 	function getSemesterDurationTime() {
 		return $this->semester_duration_time;
 	}
-	
+
 //	function getCycle() {
 //		return $this->cycle;
 //	}
@@ -183,7 +183,7 @@ class Seminar {
 					$ret .= $resObj->getName();
 				}
 				return $ret;
-			break;	
+			break;
 
 			case 'string':
 			default:
@@ -212,7 +212,7 @@ class Seminar {
 		}
 		if ($termine['ex_termin']) {
 			$ex_termin = new SingleDate($termine['ex_termin']);
-			$missing_date  = '<div style="{border:1px solid black;background:#FFFFDD}">'; 
+			$missing_date  = '<div style="{border:1px solid black;background:#FFFFDD}">';
 			$missing_date .= sprintf(_("Der Termin am %s findet nicht statt."), $this->formatDate($return_mode, $ex_termin));
 			$missing_date .= '<br/>Kommentar: '.$ex_termin->getComment();
 			$missing_date .= '</div>';
@@ -226,7 +226,7 @@ class Seminar {
 		} else {
 			return $next_date;
 		}
-		
+
 		return false;
 	}
 
@@ -248,7 +248,7 @@ class Seminar {
 		$ret['regular']['art'] = $this->metadate->art;
 		$ret['regular']['start_woche'] = $this->metadate->start_woche;
 		$ret['regular']['turnus'] = $this->metadate->turnus;
-		
+
 		foreach ($dates as $val) {
 			$zw = array(
 					'metadate_id' => $val->getMetaDateID(),
@@ -267,7 +267,7 @@ class Seminar {
 					'typ' => $val->getDateType()
 				);
 
-			$ret['irregular'][$val->getTerminID()] = $zw; 
+			$ret['irregular'][$val->getTerminID()] = $zw;
 		}
 		return $ret;
 	}
@@ -290,7 +290,7 @@ class Seminar {
 		if (!$turnus && !$irregular) {
 			return _("Die Zeiten der Veranstaltung stehen nicht fest.");
 		}
-	
+
 		if ($turnus) {
 			$first = TRUE;
 			foreach ($turnus as $val) {
@@ -301,7 +301,7 @@ class Seminar {
 				$return_string.= " " . _("(zweiwöchentlich)");
 			}
 		}
-		
+
 		if ($irregular) {
 			if ($turnus) {
 				$return_string .= ', ';
@@ -314,32 +314,32 @@ class Seminar {
 					}
 				}
 			}
-	
+
 			// Kompakte Ausgabe der Einzeltermine
 			for ($i=1; $i<sizeof($dates); $i++) {
 				if (((date("G", $dates[$i-1]["start_time"])) == date("G", $dates[$i]["start_time"])) && ((date("i", $dates[$i-1]["start_time"])) == date("i", $dates[$i]["start_time"])) && ((date("G", $dates[$i-1]["end_time"])) == date("G", $dates[$i]["end_time"])) && ((date("i", $dates[$i-1]["end_time"])) == date("i", $dates[$i]["end_time"])))
 						$dates[$i]["time_match"]=TRUE;
-	
+
 				if (((date ("z", $dates[$i]["start_time"])-1) == date ("z", $dates[$i-1]["start_time"])) || ((date ("z", $dates[$i]["start_time"]) == 0) && (date ("j", $dates[$i-1]["start_time"]) == 0)))
 						if ($dates[$i]["time_match"])
 							$dates[$i]["conjuncted"]=TRUE;
 			}
-	
+
 			for ($i=0; $i<sizeof($dates); $i++)	{
 				if (!$dates[$i]["conjuncted"])
 					$conjuncted=FALSE;
-	
+
 				if ((!$dates[$i]["conjuncted"]) || (!$dates[$i+1]["conjuncted"])) {
 					$return_string.=date (" j.n.", $dates[$i]["start_time"]);
 				}
-	
+
 				if ((!$conjuncted) && ($dates[$i+1]["conjuncted"]))	{
 					$return_string.=" -";
 					$conjuncted=TRUE;
 				}	else if ((!$dates[$i+1]["conjuncted"]) && ($dates[$i+1]["time_match"])) {
 					$return_string.=",";
 				}
-	
+
 				if (!$dates[$i+1]["time_match"]) {
 					$return_string.=" ".date("G:i", $dates[$i]["start_time"]);
 					if (date("G:i", $dates[$i]["start_time"]) != date("G:i", $dates[$i]["end_time"])) {
@@ -383,7 +383,7 @@ class Seminar {
 				$return_string[$key].=", ".$val["start_hour"].":";
 
 				$return_string[$key] .= leadingZero($val['start_minute']);
-				
+
 				if (!(($val["end_hour"] == $val["start_hour"]) && ($val["end_minute"] == $val["start_minute"]))) {
 					$return_string[$key].=" - ".$val["end_hour"].":";
 
@@ -429,7 +429,7 @@ class Seminar {
 		}
 		return $ret;
 	}
-	
+
 	function getMetaDateValue($key, $value_name) {
 		return $this->metadate->cycles[$key]->$value_name;
 	}
@@ -454,7 +454,7 @@ class Seminar {
 		$query = sprintf("SELECT * FROM seminare WHERE Seminar_id='%s' ",$this->id);
 		$this->db->query($query);
 		if ($this->db->num_rows() == 0) {
-			echo 'Fehler: Konnte das Seminar mit der ID '.$this->id.' nicht finden!<br/>'; 
+			echo 'Fehler: Konnte das Seminar mit der ID '.$this->id.' nicht finden!<br/>';
 			//folgender Code gibt DB-Passwort mit aus!!!
 			//echo '<pre>', print_r($this, true), '</pre>';
 			//echo '<pre>', print_r(debug_backtrace(), true), '</pre>';
@@ -831,7 +831,7 @@ class Seminar {
 		// logging >>>>>>
 		log_event("SEM_ADD_SINGLEDATE", $this->getId(), $singledate->toString(), 'SingleDateID: '.$singledate->getTerminID());
 		// logging <<<<<<
-		
+
 		$this->readSingleDates();
 		$this->irregularSingleDates[$singledate->getSingleDateID()] =& $singledate;
 		return TRUE;
@@ -1024,7 +1024,7 @@ class Seminar {
 				if (!$this->metadate->cycles[$cycle_id]->termine[$singleDateID]->bookRoom($roomID)) {
 					$this->appendMessages($this->metadate->cycles[$cycle_id]->termine[$singleDateID]->getMessages());
 					return FALSE;
-				} 
+				}
 				/*if ($append_messages)
 					$this->appendMessages($this->metadate->cycles[$cycle_id]->termine[$singleDateID]->getMessages());*/
 			}
@@ -1336,7 +1336,7 @@ class Seminar {
 		$first_event = FALSE;
 		$semesterData = new SemesterData();
 		$all_semester = $semesterData->getAllSemesterData();
-		
+
 		if ($GLOBALS['RESOURCES_HIDE_PAST_SINGLE_DATES']) {
 			// filtering
 			foreach ($all_semester as $semester) {
@@ -1346,7 +1346,7 @@ class Seminar {
 			}
 			$all_semester = $new_as;
 		}
-		
+
 		if (!$singledate) {
 			foreach ($all_semester as $semester) {
 				foreach ($this->metadate->cycles as $metadate_id => $cycle) {
@@ -1371,7 +1371,7 @@ class Seminar {
 					if ($metadate_has_termine) {
 						$info[$i]['name'] = $cycle->toString().' ('.$semester['name'].')';
 						$this->applyTimeFilter($semester['beginn'], $semester['ende']);
-						$raum = $this->getFormattedPredominantRooms($metadate_id);					
+						$raum = $this->getFormattedPredominantRooms($metadate_id);
 						if ($raum) {
 							$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$raum;
 						}
@@ -1393,7 +1393,7 @@ class Seminar {
 			} else {
 				$anzahl = sizeof($irreg);
 			}
-	
+
 			if ($anzahl > $GLOBALS["RESOURCES_ALLOW_SINGLE_DATE_GROUPING"]) {
 				$single = true;
 				$first = true;
@@ -1406,7 +1406,7 @@ class Seminar {
 						if (!$first) $info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;';
 						$info[$i]['name'] .= $termin->toString();
 						$resObj =& ResourceObject::Factory($termin->resource_id);
-		
+
 						if ($link = $resObj->getFormattedLink($termin->getStartTime())) {
 							$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
 							if (empty($info[$i]['raum'])) {
@@ -1428,7 +1428,7 @@ class Seminar {
 						$groups[$i]["termin_ids"][$termin->getSingleDateId()] = TRUE;
 						$info[$i]['name'] = $termin->toString();
 						$resObj =& ResourceObject::Factory($termin->resource_id);
-		
+
 						if ($link = $resObj->getFormattedLink($termin->getStartTime())) {
 							$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
 							$info[$i]['raum'] = $termin->resource_id;
@@ -1488,7 +1488,7 @@ class Seminar {
 			return FALSE;
 		}
 	}
-	
+
 	function removeSeminarRequest() {
 		// logging >>>>>>
 		log_event("SEM_DELETE_REQUEST", $this->getId());
