@@ -41,6 +41,12 @@ if ($start_at == 0) {
         $db2->query("INSERT INTO themen_termine (issue_id, termin_id) VALUES ('$new_issue_id', '".$db->f('termin_id')."')");
         $db2->query("INSERT INTO themen (issue_id, seminar_id, author_id, title, description, mkdate, chdate) VALUES ('$new_issue_id', '".$db->f('range_id')."', '".$db->f('author_id')."', '".mysql_escape_string($db->f('content'))."', '".mysql_escape_string($db->f('description'))."', '".$db->f('mkdate')."', '".$db->f('chdate')."')");
         $db2->query("UPDATE termine SET content = '', description = '' WHERE termin_id = '".$db->f('termin_id')."'");
+	$db2->query("UPDATE folder SET range_id = '$new_issue_id' WHERE range_id = '".$db->f('termin_id')."'");
+	if($db->f('topic_id')){
+		$db2->query("UPDATE px_topics SET topic_id = '$new_issue_id' WHERE topic_id = '".$db->f('topic_id')."'");
+		$db2->query("UPDATE px_topics SET root_id = '$new_issue_id'  WHERE root_id = '".$db->f('topic_id')."'");
+		$db2->query("UPDATE px_topics SET parent_id = '$new_issue_id'  WHERE parent_id = '".$db->f('topic_id')."'");
+	}
     }
 }
 
