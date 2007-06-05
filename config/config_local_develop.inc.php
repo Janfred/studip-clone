@@ -127,7 +127,7 @@ $EXPORT_ENABLE = TRUE;									//Stud.IP module: export
 $XSLT_ENABLE = TRUE;
 $FOP_ENABLE = TRUE;
 $FOP_SH_CALL = "/usr/local/fop-0.20.5/fop.sh";    					//path to fop
-$JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     					//used to set environment for JRE
+$JAVA_ENV_CALL = "export JAVA_HOME=/usr/lib/jvm/jre";     					//used to set environment for JRE
 
 $ILIAS_CONNECT_ENABLE = FALSE;								//Stud.IP module: ilias 2 connect
 $ABSOLUTE_PATH_ILIAS = "http://<your.server.name/ilias/>";
