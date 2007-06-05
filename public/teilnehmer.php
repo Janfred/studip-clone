@@ -78,12 +78,42 @@ if ($rechte) {
 	$HELP_KEYWORD="Basis.InVeranstaltungTeilnehmer";
 }
 
-// Start  of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
+	// Start  of Output
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 
-checkObject();
-checkObjectModule("participants");
+	checkObject();
+	checkObjectModule("participants");
+
+} else {
+	if ($cmd == "send_sms_to_all" && $who != "accepted") {
+		$sess->register("sms_data");
+		$db->query("SELECT b.username FROM seminar_user a, auth_user_md5 b WHERE a.Seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND a.status = '$who'");
+		$sms_data = "";
+		$sms_data['tmpsavesnd'] = 1;
+		while ($db->next_record()) {
+			$data[] = $db->f("username");
+		}
+		$sms_data['p_rec'] = $data;
+		page_close(NULL);
+		header("Location: sms_send.php");
+		die;
+	} else if ($cmd == "send_sms_to_waiting" || $who == "accepted") {
+		$sess->register("sms_data");
+		if (!$who) $who = "awaiting";
+		$db->query("SELECT b.username FROM admission_seminar_user a, auth_user_md5 b WHERE a.seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND status = '$who'");
+		$sms_data = "";
+		$sms_data['tmpsavesnd'] = 1;
+		while ($db->next_record()) {
+			$data[] = $db->f("username");
+		}
+		$sms_data['p_rec'] = $data;
+		page_close(NULL);
+		header("Location: sms_send.php");
+		die;
+	}
+}
 
 include ('lib/include/links_openobject.inc.php');
 
@@ -892,8 +922,35 @@ while (list ($key, $val) = each ($gruppe)) {
 	} else {
 		print "&nbsp; ";
 	}
+	
 	print "</td>";
-	printf("<td class=\"steel\" width=\"29%%\" align=\"left\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font></td>", $val);
+	printf("<td class=\"steel\" width=\"19%%\" align=\"left\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font> </td>",$val);
+	// mail button einfügen
+		if ($rechte) {
+		
+		// hier kann ne flag setzen um mail extern zu nutzen	
+		if($ENABLE_EMAIL_TO_STATUSGROUP){
+			$db_mail = new DB_Seminar();
+			$db_mail-> query("SELECT Email FROM seminar_user su LEFT JOIN auth_user_md5  au ON (su.user_id = au.user_id) WHERE su.seminar_id = '".$SessSemName[1]."' AND status = '$key'");
+			$users = Array();
+			while($db_mail->next_record()){
+				
+				$users []= $db_mail->f("Email");
+			
+			}
+			$all_user = implode(",",$users);
+			echo '<td class="steel" width="10%" >&nbsp;<a href="mailto:'.$all_user.'"><img border="0" title="E-Mail an alle Gruppenmitglieder verschicken" alt="E-Mail an alle Gruppenmitglieder verschicken" src="'.$GLOBALS['ASSETS_URL'].'images/mailnachricht.gif" border="0" align="absmiddle	"/></a>';
+		}
+			echo "&nbsp;<a href=\"teilnehmer.php?cmd=send_sms_to_all&who=$key\" title=\"Nachricht an alle $val schicken\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" border=\"0\" align=\"absmiddle\"></a></td>";
+		
+		}
+		
+	
+	
+	print("</b></font></td>");
+
+	
+	
 	if ($key != "dozent" && $rechte) {
 		printf("<td class=\"steel\" width=\"1%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Anmeldedatum"));
 	} else if ($key == "dozent" && $rechte) {
@@ -1040,7 +1097,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		$anker = '';
 	}
 	printf ("<td class=\"%s\" nowrap>%s<font size=\"-1\">&nbsp;%s.</td>", $class, $anker, $c);
-	printf ("<td class=\"%s\">", $class);
+	printf ("<td colspan=2 class=\"%s\">", $class);
 	if ($rechte) {
 		printf ("<A href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/%s\" border=\"0\"", $link, $img);
 		echo tooltip(sprintf(_("Weitere Informationen über %s"), $db->f("username")));
