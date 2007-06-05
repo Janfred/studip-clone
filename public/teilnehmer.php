@@ -220,7 +220,7 @@ if (Seminar_Session::check_ticket($studipticket)){
 		}
 		$cmd = "moreinfos";
 	}
-	
+
 	// Hier will jemand die Karriereleiter rauf...
 
 	if ( ($cmd == "pleasure" && $username) || (isset($_REQUEST['do_autor_to_tutor_x']) && is_array($_REQUEST['autor_to_tutor'])) ){
@@ -237,8 +237,8 @@ if (Seminar_Session::check_ticket($studipticket)){
 				if ($db->next_record()) {
 					$userchange = $db->f("user_id");
 					$fullname = $db->f("fullname");
-					$next_pos = get_next_position("tutor",$id); 
-					$db->query("UPDATE seminar_user SET status='tutor', position='$next_pos' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");	
+					$next_pos = get_next_position("tutor",$id);
+					$db->query("UPDATE seminar_user SET status='tutor', position='$next_pos' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
 					if($db->affected_rows()) $msgs[] = $fullname;
 				}
 			}
@@ -246,9 +246,9 @@ if (Seminar_Session::check_ticket($studipticket)){
 		}
 		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
-	
+
 	// jemand ist der anspruchsvollen Aufgabe eines Tutors nicht gerecht geworden...
-	
+
 	if ( ($cmd == "pain" && $username) || (isset($_REQUEST['do_tutor_to_autor_x']) && is_array($_REQUEST['tutor_to_autor'])) ){
 		//erst mal sehen, ob er hier wirklich Dozent ist... Tutoren d&uuml;rfen andere Tutoren nicht rauskicken!
 		if ($rechte AND $SemUserStatus != "tutor") {
@@ -267,11 +267,11 @@ if (Seminar_Session::check_ticket($studipticket)){
         		$db->query("SELECT position FROM seminar_user WHERE user_id = '$userchange'");
          		$db->next_record();
          		$pos = $db->f("position");
-         
+
 				$db->query("UPDATE seminar_user SET status='autor', position=0 WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='tutor'");
-          
+
          		re_sort_tutoren($id, $pos);
- 
+
 				if($db->affected_rows()) $msgs[] = $fullname;
 			}
 			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
@@ -282,9 +282,9 @@ if (Seminar_Session::check_ticket($studipticket)){
 		}
 		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
-	
+
 	// jemand ist zu bloede, sein Seminar selbst zu abbonieren...
-	
+
 	if ( ($cmd == "schreiben" && $username) || (isset($_REQUEST['do_user_to_autor_x']) && is_array($_REQUEST['user_to_autor'])) ){
 		//erst mal sehen, ob er hier wirklich Dozent ist...
 		if ($rechte) {
@@ -307,9 +307,9 @@ if (Seminar_Session::check_ticket($studipticket)){
 		}
 		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
-	
+
 	// jemand sollte erst mal das Maul halten...
-	
+
 	if ( ($cmd == "lesen" && $username) || (isset($_REQUEST['do_autor_to_user_x']) && is_array($_REQUEST['autor_to_user'])) ){
 		//erst mal sehen, ob er hier wirklich Dozent ist...
 		if ($rechte) {
@@ -333,9 +333,9 @@ if (Seminar_Session::check_ticket($studipticket)){
 		}
 		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
-	
+
 	// und tschuess...
-	
+
 	if ( ($cmd == "raus" && $username) || (isset($_REQUEST['do_user_to_null_x']) && is_array($_REQUEST['user_to_null'])) ){
 		//erst mal sehen, ob er hier wirklich Dozent ist...
 		if ($rechte) {
@@ -367,14 +367,14 @@ if (Seminar_Session::check_ticket($studipticket)){
 			}
 			//Pruefen, ob es Nachruecker gibt
 			update_admission($id);
-	
+
 			$msg = "msg§" . sprintf(_("LeserIn %s wurde aus der Veranstaltung entfernt."), htmlReady(join(', ',$msgs))) . "§";
 			$msg.= "info§" . _("Um jemanden permanent am Lesen zu hindern, m&uuml;ssen Sie die Veranstaltung auf \"Lesen nur mit Passwort\" setzen und ein Veranstaltungs-Passwort vergeben.") . "<br>\n"
 					. _("Dann k&ouml;nnen sich weitere BenutzerInnen nur noch mit Kenntnis des Veranstaltungs-Passworts anmelden.") . "§";
 		}
 		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
-	
+
 	//aus der Anmelde- oder Warteliste entfernen
 	if ( ($cmd == "admission_raus" && $username)  || (isset($_REQUEST['do_admission_delete_x']) && is_array($_REQUEST['admission_delete']) ) ) {
 		//erst mal sehen, ob er hier wirklich Dozent ist...
@@ -407,9 +407,9 @@ if (Seminar_Session::check_ticket($studipticket)){
 						}
 					}
 					restoreLanguage();
-					
+
 					$messaging->insert_message(mysql_escape_string($message), $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("nicht zugelassen in Veranstaltung"), TRUE);
-					
+
 					$msgs[] = $fullname;
 				}
 			}
@@ -433,18 +433,18 @@ if (Seminar_Session::check_ticket($studipticket)){
 				$user_add = (is_array($_REQUEST['admission_insert']) ? array_keys($_REQUEST['admission_insert']) : array());
 			}
 			foreach($user_add as $username){
-				
+
 				$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, a.* FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE username = '$username'");
 				$db->next_record();
 				$userchange = $db->f("user_id");
 				$fullname = $db->f("fullname");
-				
+
 				if ($cmd == "add_user" && !$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))){
 					$status = 'tutor';
 				} else {
 					$status = 'autor';
 				}
-				
+
 				$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted) ? TRUE : FALSE);
 				//Only if user was on the waiting list
 				if ($admission_user) {
@@ -467,10 +467,10 @@ if (Seminar_Session::check_ticket($studipticket)){
 				}
 				$msgs[] = $fullname;
 			}
-			
+
 			//Warteliste neu sortieren
 			renumber_admission($id);
-			
+
 			if ($cmd=="add_user") {
 				$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung mit dem Status <b>%s</b> eingetragen."), htmlReady($fullname[0]), $status) . "§";
 			} else {
@@ -484,7 +484,7 @@ if (Seminar_Session::check_ticket($studipticket)){
 			$msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 		}
 	}
-	
+
 	// import users from a csv-list
 	if ($_REQUEST['cmd'] == 'csv' && $rechte) {
 		$csv_mult_founds = array();
@@ -549,9 +549,9 @@ if (Seminar_Session::check_ticket($studipticket)){
 			}
 		}
 	}
-	
+
 	// so bin auch ich berufen?
-	
+
 	if (isset($add_tutor_x)) {
 		//erst mal sehen, ob er hier wirklich Dozent ist...
 		if ($rechte AND $SemUserStatus!="tutor") {
@@ -570,7 +570,7 @@ if (Seminar_Session::check_ticket($studipticket)){
 						// der Dozent hat Tomaten auf den Augen, der Mitarbeiter sitzt schon im Seminar. Na, auch egal...
 						if ($db2->f("status") == "autor" || $db2->f("status") == "user") {
 							// gehen wir ihn halt hier hochstufen
-                     $next_pos = get_next_position("tutor",$id); 
+                     $next_pos = get_next_position("tutor",$id);
 							$db2->query("UPDATE seminar_user SET status='tutor', position='$next_pos' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
 							if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 								$msg = "msg§" . sprintf (_("%s wurde zum Mitglied bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
@@ -587,13 +587,13 @@ if (Seminar_Session::check_ticket($studipticket)){
 						}
 					} else {  // ok, einfach aufnehmen.
 						insert_seminar_user($id, $u_id, "tutor", FALSE);
-	
+
 						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 							$msg = "msg§" . sprintf (_("%s wurde als Mitglied in die Veranstaltung aufgenommen."), get_fullname($u_id,'full',1));
 						} else {
 							$msg = "msg§" . sprintf (_("%s wurde als Tutor in die Veranstaltung aufgenommen."), get_fullname($u_id,'full',1));
 						}
-	
+
 						setTempLanguage($userchange);
 						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 							$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
@@ -661,7 +661,7 @@ $multiaction['accepted'] = array('insert' => array('admission_insert',_("Ausgewä
 				}
 			return false;
 			}
-				
+
 		</script>
 		<table cellspacing="0" border="0" width="100%">
 		<tr>
@@ -891,12 +891,12 @@ while (list ($key, $val) = each ($gruppe)) {
 
 	$db->query ("SELECT $tbl.visible, $tbl.mkdate, comment, $tbl.user_id, ". $_fullname_sql['full'] ." AS fullname,
 				username, status, count(topic_id) AS doll,  studiengaenge.name, ".$tbl.".".$tbl2."studiengang_id
-				AS studiengang_id 
+				AS studiengang_id
 				FROM $tbl LEFT JOIN px_topics USING (user_id,".$tbl3."eminar_id)
 				LEFT JOIN auth_user_md5 ON (".$tbl.".user_id=auth_user_md5.user_id)
 				LEFT JOIN user_info ON (auth_user_md5.user_id=user_info.user_id)
 				LEFT JOIN studiengaenge ON (".$tbl.".".$tbl2."studiengang_id = studiengaenge.studiengang_id)
-				WHERE ".$tbl.".".$tbl3."eminar_id = '$SessionSeminar' 
+				WHERE ".$tbl.".".$tbl3."eminar_id = '$SessionSeminar'
 				AND status = '$key'$visio GROUP by ".$tbl.".user_id $sort");
 
 	if ($db->num_rows()) { //Only if Users were found...
@@ -922,35 +922,39 @@ while (list ($key, $val) = each ($gruppe)) {
 	} else {
 		print "&nbsp; ";
 	}
-	
-	print "</td>";
-	printf("<td class=\"steel\" width=\"19%%\" align=\"left\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font> </td>",$val);
-	// mail button einfügen
-		if ($rechte) {
-		
-		// hier kann ne flag setzen um mail extern zu nutzen	
-		if($ENABLE_EMAIL_TO_STATUSGROUP){
-			$db_mail = new DB_Seminar();
-			$db_mail-> query("SELECT Email FROM seminar_user su LEFT JOIN auth_user_md5  au ON (su.user_id = au.user_id) WHERE su.seminar_id = '".$SessSemName[1]."' AND status = '$key'");
-			$users = Array();
-			while($db_mail->next_record()){
-				
-				$users []= $db_mail->f("Email");
-			
-			}
-			$all_user = implode(",",$users);
-			echo '<td class="steel" width="10%" >&nbsp;<a href="mailto:'.$all_user.'"><img border="0" title="E-Mail an alle Gruppenmitglieder verschicken" alt="E-Mail an alle Gruppenmitglieder verschicken" src="'.$GLOBALS['ASSETS_URL'].'images/mailnachricht.gif" border="0" align="absmiddle	"/></a>';
-		}
-			echo "&nbsp;<a href=\"teilnehmer.php?cmd=send_sms_to_all&who=$key\" title=\"Nachricht an alle $val schicken\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" border=\"0\" align=\"absmiddle\"></a></td>";
-		
-		}
-		
-	
-	
-	print("</b></font></td>");
 
-	
-	
+	print "</td>";
+
+	echo '<td class="steel" width="19%" align="left">'.
+	       '<img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="1" height="20">'.
+	       '<font size="-1"><b>' . $val . '</b></font>'.
+	     '</td>';
+
+	// mail button einfügen
+	if ($rechte) {
+		echo '<td class="steel" width="10%">';
+		// hier kann ne flag setzen um mail extern zu nutzen
+		if ($ENABLE_EMAIL_TO_STATUSGROUP) {
+			$db_mail = new DB_Seminar();
+			$db_mail->query("SELECT Email FROM seminar_user su ".
+			                "LEFT JOIN auth_user_md5 au ON (su.user_id = au.user_id) ".
+			                "WHERE su.seminar_id = '".$SessSemName[1]."' ".
+			                "AND status = '$key'");
+			$users = array();
+			while ($db_mail->next_record()) {
+				$users[] = $db_mail->f("Email");
+			}
+			$all_user = implode(',', $users);
+
+			echo '<a href="mailto:'.$all_user.'"><img src="'.$GLOBALS['ASSETS_URL'].'images/mailnachricht.gif" title="'._("E-Mail an alle Gruppenmitglieder verschicken").'" alt="'.("E-Mail an alle Gruppenmitglieder verschicken").'" border="0" align="absmiddle"/></a>';
+		}
+
+		echo '<a href="teilnehmer.php?cmd=send_sms_to_all&amp;who='.$key.'"><img src="'.$GLOBALS['ASSETS_URL'].'images/nachricht1.gif" title="'.sprintf(_("Nachricht an alle %s schicken"), $val).'" alt="'.sprintf(_("Nachricht an alle %s schicken"), $val).'" border="0" align="absmiddle"></a>';
+		echo '</td>';
+	}
+
+	echo "</b></font></td>";
+
 	if ($key != "dozent" && $rechte) {
 		printf("<td class=\"steel\" width=\"1%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Anmeldedatum"));
 	} else if ($key == "dozent" && $rechte) {
