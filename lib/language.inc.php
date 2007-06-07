@@ -99,15 +99,29 @@ function init_i18n($_language) {
 * @return	string	html output of the button
 */
 function makeButton($name, $mode = "img", $tooltip = false, $inputname = false) {
-	global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
-	$path = "{$CANONICAL_RELATIVE_PATH_STUDIP}locale/$_language_path/LC_BUTTONS";
+
+	$url = localeButtonUrl($name . '-button.gif');
 	$tooltext = ($tooltip ? tooltip($tooltip) : '');
-	if ($mode == "img")
-		$tag = sprintf ("\n<img src=\"%s/%s-button.gif\" %s border=\"0\" align=\"absmiddle\"/>", $path, $name, $tooltext);
-	elseif ($mode == 'input')
-		$tag = sprintf ("\n<input type=\"image\" src=\"%s/%s-button.gif\" %s border=\"0\" name=\"%s\" align=\"absmiddle\"/>", $path, $name, $tooltext, $inputname);
-	else
-		$tag = sprintf ("src=\"%s/%s-button.gif\"", $path, $name);
+
+	switch ($mode) {
+
+		case 'img':
+			$tag = "\n" . sprintf('<img src="%s" %s border="0" align="absmiddle" />',
+			                      $url, $tooltext);
+			break;
+
+
+		case 'input':
+			$tag = "\n" . sprintf('<input type="image" src="%s" %s border="0" '.
+			                      'name="%s" align="absmiddle" />',
+		                        $url, $tooltext, $inputname);
+			break;
+
+
+		default:
+			$tag = sprintf('src="%s"', $url);
+
+	}
 
 	return $tag;
 }

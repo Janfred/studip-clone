@@ -72,13 +72,12 @@ function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID =
 			$value1 = "setResultvisibility_confirmed";
 			$value2 = "setResultvisibility_aborted";
 		}
-		global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
 		$html .="<font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&voteaction=".$value1."&voteID=".$voteID."&showrangeID=".$showrangeID;
 		if ($referer) $html .= "&referer=".$referer;
-		$html .="\" title=\"".$label["yes"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/ja2-button.gif\" width=\"93\" alt=\"".$label["yes"]."\" title=\"".$label["yes"]."\" border=\"0\" align=\"middle\"></a></font>\n";
+		$html .="\" title=\"".$label["yes"]."\"><img src=\"".localeButtonUrl('ja2-button.gif')."\" width=\"93\" alt=\"".$label["yes"]."\" title=\"".$label["yes"]."\" border=\"0\" align=\"middle\"></a></font>\n";
 		$html .="<font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&voteaction=".$value2."&voteID=".$voteID."&showrangeID=".$showrangeID;
 		if ($referer) $html .= "&referer=".$referer;
-		$html .="\" title=\"".$label["no"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/nein-button.gif\" width=\"93\" alt=\"".$label["no"]."\" title=\"".$label["no"]."\" border=\"0\" align=\"middle\"></a></font>\n";
+		$html .="\" title=\"".$label["no"]."\"><img src=\"".localeButtonUrl('nein-button.gif')."\" width=\"93\" alt=\"".$label["no"]."\" title=\"".$label["no"]."\" border=\"0\" align=\"middle\"></a></font>\n";
 	}
 	$html .="	 </td>\n"
 		  . "	</tr>\n";
@@ -598,7 +597,6 @@ function makeTableDataCellForm( $displayclass = "steel1",
 								$hidden3_value= NULL,
 								$hidden4_name = NULL,
 								$hidden4_value= NULL){
-	global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
 	$link =	VOTE_FILE_ADMIN."?page=".$action;
 	if (!empty($hidden1_name)) $link .="&".$hidden1_name."=".$hidden1_value;
 	if (!empty($hidden2_name)) $link .="&".$hidden2_name."=".$hidden2_value;
@@ -606,7 +604,7 @@ function makeTableDataCellForm( $displayclass = "steel1",
 	if (!empty($hidden4_name)) $link .="&".$hidden4_name."=".$hidden4_value;
 
 	if ($hidden2_value != "change_visibility"){
-		$src = "{$CANONICAL_RELATIVE_PATH_STUDIP}locale/$_language_path/LC_BUTTONS/".$button_name."-button.gif";
+		$src = localeButtonUrl($button_name . '-button.gif');
 		$imgwidth = "93";
 	}
 	else{

@@ -1649,7 +1649,6 @@ class EvalOverview {
    * @param evalID string needed if you want to delete an evaluation (not needed)
    */
   function createSafeguard( $sign, $text, $mode = NULL, $evalID = NULL, $showrangeID = NULL, $referer = NULL ) {
-      global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
 
       $label = array(
            "referer" => _("Zum vorherigen Bereich zur&uuml;ckkehren."),
@@ -1692,12 +1691,12 @@ class EvalOverview {
       if ($request) {
      $html .="<a href=\"admin_evaluation.php?evalAction=".$value1."&evalID=".$evalID."&rangeID=".$showrangeID;
      if ($referer) $html .= "&referer=".$referer;
-     $html .="\" title=\"".$label["yes"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/ja2-button.gif\" width=\"93\" alt=\"".$label["yes"]."\" title=\"".$label["yes"]."\" border=\"0\" align=\"middle\"></a>\n";
+     $html .="\" title=\"".$label["yes"]."\"><img src=\"".localeButtonUrl('ja2-button.gif')."\" width=\"93\" alt=\"".$label["yes"]."\" title=\"".$label["yes"]."\" border=\"0\" align=\"middle\"></a>\n";
      $html .="<a href=\"admin_evaluation.php?evalAction=".$value2."&evalID=".$evalID."&rangeID=".$showrangeID;
 
      if ($referer) $html .= "&referer=".$referer;
 
-     $html .="\" title=\"".$label["no"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/nein-button.gif\" width=\"93\" alt=\"".$label["no"]."\" title=\"".$label["no"]."\" border=\"0\" align=\"middle\"></a>\n";
+     $html .="\" title=\"".$label["no"]."\"><img src=\"".localeButtonUrl('nein-button.gif')."\" width=\"93\" alt=\"".$label["no"]."\" title=\"".$label["no"]."\" border=\"0\" align=\"middle\"></a>\n";
       }
 
       if ($mode == "unlink_delete_request") {
