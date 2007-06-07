@@ -1006,7 +1006,7 @@ function print_rating($rate, $id, $username) {
 	 		$ol_txt2 .= "<input type=radio name=rate[$id] value=3><input type=radio name=rate[$id] value=4>";
   			$ol_txt2 .= "<input type=radio name=rate[$id] value=5><font size=2 color=#990000>5&nbsp;<br><br>";
   			$ol_txt2 .= "<input type=hidden name=open value=$openorig><input type=hidden name=flatviewstartposting value=$start>";
- 	 		$ol_txt2 .= "<input type=image name=sidebar value=$id src=\"".localeButtonUrl('bewerten-button.gif')."\" align=absmiddle border=0></form></font></div>";
+ 	 		$ol_txt2 .= "<input type=image name=sidebar value=$id src=".localeButtonUrl('bewerten-button.gif')." align=absmiddle border=0></form></font></div>";
   			$ol_txt2 .= "', CAPTION, '$txt2', CSSOFF, STICKY, LEFT, ABOVE, WIDTH, 200, HEIGHT, 100";
   			$bar = '<a href="javascript:overlib('.$ol_txt2.'), void(0);" onmouseover="return overlib('.$ol_txt.');"  onmouseout="return nd();">' . $bar . '</a>&nbsp;';
   		}
