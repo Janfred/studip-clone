@@ -178,7 +178,7 @@ function setTempLanguage ($uid = FALSE, $temp_language = "") {
 		// we got no arguments, best we can do is to set system default
 		$temp_language = $DEFAULT_LANGUAGE;
 	}
-	
+
 	setLocaleEnv($temp_language, $_language_domain);
 }
 
@@ -217,6 +217,22 @@ function setLocaleEnv($language, $language_domain = ''){
 		textdomain($language_domain);
 	}
 	return $ret;
+}
+
+function localeButtonUrl($filename) {
+  return localeUrl($filename, 'LC_BUTTONS');
+}
+
+function localePictureUrl($filename) {
+  return localeUrl($filename, 'LC_PICTURES');
+}
+
+function localeUrl($filename, $category) {
+  return sprintf('%slocale/%s/%s/%s',
+                 $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'],
+                 $GLOBALS['_language_path'],
+                 $category,
+                 $filename);
 }
 
 ?>

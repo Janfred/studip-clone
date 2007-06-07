@@ -164,7 +164,7 @@ echo '<title>'.$_html_head_title.'</title>'."\n";
 	</table>
 	</blockquote></td>
 	<td align=right class=blank valign=top><img src="<?=$GLOBALS['ASSETS_URL']?>images/maus.jpg"></td></tr>
-	<tr><td class=blank colspan=2 align=center><br><br><img src="<?=$GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']?>locale/<?=$_language_path ?>/LC_PICTURES/willkommen.gif" /></td></tr>
+	<tr><td class=blank colspan=2 align=center><br><br><img src="<?= localePictureUrl('willkommen.jpg') ?>" /></td></tr>
 	<tr><td class=blank colspan=2>&nbsp;</td></tr>
 	</table>
 	</form>
