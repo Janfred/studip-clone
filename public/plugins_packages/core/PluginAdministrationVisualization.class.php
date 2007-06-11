@@ -222,9 +222,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 			<input type="hidden" value="install" name="action">
 			<input name="upload_file" type="file" size="50" maxlength="100000">								
 			<?= makeButton("hinzufuegen","input",_("neues Plugin installieren")) ?><br>
-                        <label>
-			<input type="checkbox" name="update" value="force"><?= _("Aktualisieren, falls Plugin schon vorhanden.")?>
-                        </label>
+			<input type="checkbox" name="update" value="force"><?= _("Aktualisieren, falls Plugin schon vorhanden.")?>								
 		</form>
 		<?php
 		}
@@ -259,9 +257,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 				</tr>
 			</table>			
 			<?= makeButton("hinzufuegen","input",_("neues Plugin installieren")) ?><br>
-                        <label>
-			<input type="checkbox" name="update" value="force"><?= _("Aktualisieren, falls Plugin schon vorhanden.")?>
-                        </label>
+			<input type="checkbox" name="update" value="force"><?= _("Aktualisieren, falls Plugin schon vorhanden.")?>								
 		</form>
 		<?php
 		}

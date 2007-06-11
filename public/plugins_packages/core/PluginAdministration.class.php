@@ -6,10 +6,6 @@
  * $Id$
  */
 require_once('lib/datei.inc.php');
-require_once 'lib/migrations/db_migration.php';
-require_once 'lib/migrations/db_schema_version.php';
-require_once 'lib/migrations/migrator.php';
-
 define("PLUGIN_UPLOAD_ERROR",1);
 define("PLUGIN_MANIFEST_ERROR",2);
 define("PLUGIN_ALLREADY_INSTALLED_ERROR",3);
@@ -18,7 +14,6 @@ define("PLUGIN_MISSING_METHOD_ERROR",6);
 define("PLUGIN_INSTALLATION_SUCCESSFUL",7);
 define("PLUGIN_MISSING_MANIFEST_ERROR",8);
 define("PLUGIN_ALREADY_REGISTERED_ERROR",9);
-
 class PluginAdministration {
 	var $environment;
 	
@@ -150,18 +145,6 @@ class PluginAdministration {
 							// forced update
 							// only delete the plugin directory
 							// registration info will be updated automatically							
-                                                        if (is_dir($newpluginpath.'/migrations')) {
-                                                                $schema_version =& new DBSchemaVersion($pluginname);
-                                                                $new_version = 0;
-
-                                                                if (is_dir($tmppackagedir.'/migrations')) {
-                                                                        $migrator =& new Migrator($tmppackagedir.'/migrations', $schema_version);
-                                                                        $new_version = $migrator->top_version();
-                                                                }
-
-                                                                $migrator =& new Migrator($newpluginpath.'/migrations', $schema_version);
-                                                                $migrator->migrate_to($new_version);
-                                                        }
 							$this->deletePlugindir($newpluginpath);
 						}						
     				}
@@ -196,15 +179,9 @@ class PluginAdministration {
 					 		$plugin->setPluginid($newpluginid);
 					 	}
 					 	// create database if needed					 	
-                                                // TODO this probably should not happen during update
 					 	if ($plugininfos["dbscheme"] != ""){
 					 		$this->createDBSchemeForPlugin($newpluginpath . "/" . $plugininfos["dbscheme"]);
 					 	}		
-                                                if (is_dir($newpluginpath.'/migrations')) {
-                                                        $schema_version =& new DBSchemaVersion($pluginname);
-                                                        $migrator =& new Migrator($newpluginpath.'/migrations', $schema_version);
-                                                        $migrator->migrate_to(null);
-                                                }
 					 	// do we have additional plugin classes in this package?
 					 	$additionalclasses = $plugininfos["additionalclasses"];
 					 	if (is_array($additionalclasses)){					 		

@@ -1323,19 +1323,6 @@ CREATE TABLE `rss_feeds` (
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `schema_version`
--- 
-
-DROP TABLE IF EXISTS `schema_version`;
-CREATE TABLE `schema_version` (
-  `domain` varchar(255) NOT NULL default '',
-  `version` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`domain`)
-) TYPE=MyISAM;
-
--- --------------------------------------------------------
-
--- 
 -- Tabellenstruktur für Tabelle `scm`
 -- 
 
