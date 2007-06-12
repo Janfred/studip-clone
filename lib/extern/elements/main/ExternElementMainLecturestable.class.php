@@ -52,7 +52,7 @@ class ExternElementMainLecturestable extends ExternElementMain {
 				'grouping', 'semstart', 'semrange', 'semswitch', 'allseminars', 'rangepathlevel',
 				'addinfo', 'time', 'lecturer', 'repeatheadrow', 'semclasses', 'textlectures',
 				'textgrouping', 'textnogroups', 'aliasesgrouping', 'wholesite', 'nameformat',
-				'language', 'urlcss', 'title', 'copyright', 'author'
+				'language', 'urlcss', 'title', 'copyright', 'author', 'genericdatafields'
 		);
 		$this->real_name = _("Grundeinstellungen");
 		$this->description = _("In den Grundeinstellungen k&ouml;nnen Sie allgemeine Daten des Moduls &auml;ndern.");
