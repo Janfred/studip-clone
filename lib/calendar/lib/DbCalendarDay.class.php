@@ -195,8 +195,8 @@ class DbCalendarDay extends CalendarDay {
 				$app =& new SeminarEvent($db->f('termin_id'), array(
 						'DTSTART'            => $db->f('date'),
 						'DTEND'              => $db->f('end_time'),
-						'SUMMARY'            => $db->f('content'),
-						'DESCRIPTION'        => $db->f('description'),
+						'SUMMARY'            => $db->f('title'),
+						'DESCRIPTION'        => $db->f('details'),
 						'STUDIP_CATEGORY'    => $db->f('date_typ'),
 						'SEMNAME'            => $db->f('Name'),
 						'LOCATION'           => $db->f('raum'),
