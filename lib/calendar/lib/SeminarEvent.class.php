@@ -123,7 +123,7 @@ class SeminarEvent extends Event {
                         . "LEFT JOIN themen_termine tt ON tt.termin_id = t.termin_id "
                         . "LEFT JOIN themen th ON th.issue_id = tt.issue_id "
                         . "LEFT JOIN seminar_user su ON (t.range_id=su.Seminar_id) "
-						. "LEFT JOIN seminare s USING(Seminar_id) WHERE t.termin_id='{$this->id}' "
+						. "LEFT JOIN seminare s ON su.Seminar_id=s.Seminar_id WHERE t.termin_id='{$this->id}' "
 						. "AND su.user_id='{$user->id}'";
 
 		$db->query($query);
