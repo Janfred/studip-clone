@@ -195,5 +195,10 @@ class SeminarEvent extends Event {
 					$GLOBALS['ASSETS_URL'].'images/calendar/category_sem'.$index.'.jpg',
 					'color' => $TERMIN_TYP[$index]['color']);
 	}
-
+	
+	function getClone () {
+		$clone =& new SeminarEvent($this->id, $this->properties, $this->sem_id);
+		return $clone;
+	}
+	
 } // class SeminarEvent
