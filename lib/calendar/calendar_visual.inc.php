@@ -89,14 +89,14 @@ function createDayTable ($day_obj, $start = 6, $end = 19, $step = 900, $precol =
 			if ($day_obj->events[$i]->isDayEvent()
 					|| ($day_obj->events[$i]->getStart() <= $day_obj->getStart()
 					&& $day_obj->events[$i]->getEnd() >= $day_obj->getEnd())) {
-				$cloned_day_event =& $day_obj->events[$i]->getClone();
+				$cloned_day_event = $day_obj->events[$i]->getClone();
 				$cloned_day_event->setStart($day_obj->getStart());
 				$cloned_day_event->setEnd($day_obj->getEnd());
 				$tmp_day_event[] = $cloned_day_event;
 				$map_day_events[] = $i;
 			}
 			else {
-				$cloned_event =& $day_obj->events[$i]->getClone();
+				$cloned_event = $day_obj->events[$i]->getClone();
 				$end_corr = $cloned_event->getEnd() % $step;
 				if ($end_corr > 0) {
 					$end_corr = $cloned_event->getEnd() + ($step - $end_corr);
