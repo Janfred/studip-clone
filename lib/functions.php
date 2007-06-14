@@ -109,14 +109,12 @@ function get_object_name($range_id, $object_type){
 *	$SessSemName["art_generic"]		Veranstaltung generic type in alhanumeric form (self description)<br>
 *	$SessSemName["class"]				Veranstaltung class (sem or inst, in this function always sem)<br>
 *	$SessSemName["header_line"]		the header-line to use on every page of the Veranstaltung<br />
-*	$loginfilelast[$sem_id]				last login-time to the Veranstaltung<br>
-*	$loginfilenowt[$sem_id]				current login-time to the Veranstaltung<br>
 *
 * @param		string	the id of the Veranstaltung
 *
 */
 function openSem ($sem_id) {
-	global $SEM_TYPE, $SessionSeminar, $SessSemName, $loginfilenow, $loginfilelast;
+	global $SEM_TYPE, $SessionSeminar, $SessSemName;
 
 	$db=new DB_Seminar;
 
@@ -156,14 +154,12 @@ function openSem ($sem_id) {
 *	$SessSemName["art_generic"]		Einrichtung generic type in alhanumeric form (self description)<br>
 *	$SessSemName["class"]				Einrichtung class (sem or inst, in this function always inst)<br>
 *	$SessSemName["header_line"]		the header-line to use on every page of the Einrichtung<br />
-*	$loginfilelast[$sem_id]				last login-time to the Einrichtung<br>
-*	$loginfilenowt[$sem_id]				current login-time to the Einrichtung<br>
 *
 * @param		string	the id of the Veranstaltung
 *
 */
 function openInst ($inst_id) {
-	global $SessionSeminar, $SessSemName, $loginfilenow, $loginfilelast, $INST_TYPE;
+	global $SessionSeminar, $SessSemName, $INST_TYPE;
 
 	$db=new DB_Seminar;
 
