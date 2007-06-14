@@ -73,7 +73,7 @@ while ($db->next_record()) {
 	$i++;
 	if ($i >= $schwelle) {
 		$id = $db->f('Seminar_id');
-		echo "(".($i+$start_at)." von ".($max+$start_at)." [".(date('H', time() -$cur) -1).date(':i:s', (time()-$cur))."]) (".$db->f('Seminar_id').") Konvertiere ".$db->f('Name').'<br/>';
+		echo "(".($i+$start_at)." von ".($max+$start_at)." [".(date('H', time() -$cur) -1).date(':i:s', (time()-$cur))."]) (".$db->f('Seminar_id').") Konvertiere ".htmlReady($db->f('Name')).'<br/>';
 		flush();
 		unset($sem);
 		$sem = new Seminar($db->f('Seminar_id'));
