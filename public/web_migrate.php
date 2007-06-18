@@ -13,7 +13,6 @@ require_once 'lib/migrations/db_migration.php';
 require_once 'lib/migrations/db_schema_version.php';
 require_once 'lib/migrations/migrator.php';
 require_once 'lib/visual.inc.php';
-require_once 'vendor/flexi/flexi.php';
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
                 "perm" => "Seminar_Perm", "user" => "Seminar_User"));
@@ -55,9 +54,7 @@ foreach ($entries as $number => $entry)
     }
 }
 
-$template_factory =& new Flexi_TemplateFactory($STUDIP_BASE_PATH.'/templates');
-
-$template =& $template_factory->open('web_migrate');
+$template =& $GLOBALS['template_factory']->open('web_migrate');
 $template->set_attribute('assets', $GLOBALS['ASSETS_URL']);
 $template->set_attribute('current', $current);
 $template->set_attribute('migrations', $migrations);
