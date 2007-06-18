@@ -69,7 +69,7 @@ class RSSFeed {
 				$desc = decodeHTML(preg_replace ("'<[\/\!]*?[^<>]*?>'si", "", ($v["description"] ? $v["description"] : $v['summary'])));
 				if (strlen($desc) > 100) $desc = substr($desc, 0, 100) . "...";
 				if ($i > $this->max_items && $more != $this->class_id) {
-					echo "<TR><TD ALIGN=\"left\" VALIGN=\"TOP\" COLSPAN=\"2\"<A HREF=\"$PHP_SELF?more=".$this->class_id."#news_anchor\"><FONT SIZE=\"-1\"><I>mehr...</I></FONT></A></TD></TR>\n";
+					echo "<TR><TD ALIGN=\"left\" VALIGN=\"TOP\" COLSPAN=\"2\"><A HREF=\"$PHP_SELF?more=".$this->class_id."#news_anchor\"><FONT SIZE=\"-1\"><I>mehr...</I></FONT></A></TD></TR>\n";
 					break;
 				}
 				echo "<TR>
