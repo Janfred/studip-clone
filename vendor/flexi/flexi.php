@@ -21,4 +21,12 @@
 require_once 'template.php';
 require_once 'template_factory.php';
 require_once 'php_template.php';
+require_once 'js_template.php';
+
+require_once 'helper/js_helper.php';
+require_once 'helper/json.php';
+require_once 'helper/prototype_helper.php';
+require_once 'helper/scriptaculous_helper.php';
+require_once 'helper/tag_helper.php';
+require_once 'helper/text_helper.php';
 

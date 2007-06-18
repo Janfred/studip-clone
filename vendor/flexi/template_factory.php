@@ -116,6 +116,9 @@ class Flexi_TemplateFactory {
       case 'php':
         $class = 'Flexi_PhpTemplate'; break;
 
+      case 'pjs':
+        $class = 'Flexi_JsTemplate'; break;
+
       default:
         trigger_error(sprintf('Could not find class of "%s": "%s".',
                               $template, $matches[1]),

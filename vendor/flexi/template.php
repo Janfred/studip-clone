@@ -163,53 +163,16 @@ class Flexi_Template {
   /**
    * Set the template's layout.
    *
-   * @param string A name of a layout template.
+   * @param mixed A name of a layout template or a layout template.
    *
    * @return void
    */
   function set_layout($layout) {
-    if ($layout !== NULL)
+    if (is_string($layout)) {
       $this->layout =& $this->factory->open($layout);
-  }
-
-
-#
-# HIER BEGINNT DER GIFTSCHRANK...
-#
-
-
-  var $_mixins = array();
-
-
-  function __call($method, $arguments) {
-
-    if (isset($this->_mixins[$method])) {
-
-      $receiver = $this->_mixins[$method];
-
-      $args = array();
-      while (list($key, ) = each($arguments))
-        $args[] = '$arguments[' . $key . ']';
-
-      if (is_object($receiver)) {
-        $eval = sprintf('return $receiver->%s(%s);',
-                        $method, implode(', ', $args));
-      }
-
-      else {
-        $eval = sprintf('return %s::%s(%s);',
-                        $receiver, $method, implode(', ', $args));
-      }
-
-      return eval($eval);
     }
-    trigger_error(sprintf('Call to undefined method %s::%s()',
-                          get_class($this), $method),
-                  E_USER_ERROR);
-  }
-
-
-  function mixin($class, $method) {
-    $this->_mixins[$method] = $class;
+    else if (is_null($layout) || is_object($layout)) {
+      $this->layout = $layout;
+    }
   }
 }

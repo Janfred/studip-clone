@@ -33,12 +33,6 @@ class Flexi_PhpTemplate extends Flexi_Template {
     # extract attributes
     extract($this->attributes, EXTR_REFS);
 
-    if (!isset($this->attributes['attributes']))
-      unset($attributes);
-    if (!isset($this->attributes['layout']))
-      unset($layout);
-
-
     # include template, parse it and get output
     ob_start();
     require $this->template;
@@ -48,7 +42,7 @@ class Flexi_PhpTemplate extends Flexi_Template {
     # include layout, parse it and get output
     if (isset($this->layout)) {
       $defined = get_defined_vars();
-      unset($defined['this'], $defined['attributes'], $defined['layout']);
+      unset($defined['this']);
       $content_for_layout = $this->layout->render($defined);
     }
 
