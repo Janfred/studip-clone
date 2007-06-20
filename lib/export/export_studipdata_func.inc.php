@@ -249,6 +249,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
+	$db3=new DB_Seminar;
 
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
@@ -339,17 +340,22 @@ function export_sem($inst_id, $ex_sem_id = "all")
                                 }
 				elseif ($key == "admission_turnout")
 				{
-					if ($db->f("admission_type") != "0")
-						$data_object .= xml_open_tag($val, sprintf ("%s", $db->f("admission_type")) ? _("max.") : _("erw.")) . $db->f($key) . xml_close_tag($val);
+					$data_object .= xml_open_tag($val, sprintf ("%s", $db->f("admission_type")) ? _("max.") : _("erw.")) . $db->f($key) . xml_close_tag($val);
+				}
+				elseif ($key == "teilnehmer_anzahl_aktuell")
+				{
+					$db3->query("SELECT COUNT(user_id) FROM seminar_user WHERE seminar_id='".$db->f('seminar_id')."' AND status='autor'");
+					$db3->next_record();
+					$data_object .= xml_tag($val, $db3->f(0));
 				}
 				elseif ($key == "metadata_dates") 
 				{
 					$data_object .= xml_open_tag( $xml_groupnames_lecture["childgroup1"] );
-					$vorb = vorbesprechung($db->f("Seminar_id"), 'export');
+					$vorb = vorbesprechung($db->f("seminar_id"), 'export');
 					if ($vorb != false) 
 						$data_object .= xml_tag($val[0], $vorb);
-					$data_object .= xml_tag($val[1], veranstaltung_beginn($db->f("Seminar_id"), 'export'));
-					$data_object .= xml_tag($val[2], view_turnus($db->f("Seminar_id")));
+					$data_object .= xml_tag($val[1], veranstaltung_beginn($db->f("seminar_id"), 'export'));
+					$data_object .= xml_tag($val[2], view_turnus($db->f("seminar_id")));
 					$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup1"] );
 				}
 				elseif ($db->f($key) != "") 
