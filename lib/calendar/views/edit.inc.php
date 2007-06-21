@@ -149,7 +149,7 @@ if (!$set_recur_x) {
 	echo " . <input type=\"text\" name=\"end_month\" size=\"2\" maxlength=\"2\" value=\"";
 	echo ((strlen($end_month) < 2) ? '0' . $end_month : $end_month) . "\"$disabled>\n";
 	echo " . <input type=\"text\" name=\"end_year\" size=\"4\" maxlength=\"4\" value=\"$end_year\"$disabled>\n";
-	echo to_string_popupcalendar(8, $disabled);
+	echo to_string_popupcalendar(51, $disabled);
 	echo "&nbsp; &nbsp;";
 	echo _("Uhrzeit");
 	echo " <select name=\"end_h\" size=\"1\"$disabled>\n";
