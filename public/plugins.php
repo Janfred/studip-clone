@@ -45,16 +45,16 @@ else {
 if (is_null($plugin)) {
 
 	if ($pluginengine->pluginExists($pluginid)) {
+		$auth->login_if(TRUE);
+	}
+
+	else {
 		include 'lib/include/html_head.inc.php';
 		include 'lib/include/header.php';
 		StudIPTemplateEngine::makeHeadline(_("Plugin nicht vorhanden"));
 		StudIPTemplateEngine::showErrorMessage(_("Das angeforderte Plugin ist nicht vorhanden."));
 		include 'lib/include/html_end.inc.php';
 		exit;
-	}
-
-	else {
-		$auth->login_if(TRUE);
 	}
 }
 

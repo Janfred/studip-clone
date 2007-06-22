@@ -268,7 +268,7 @@ class AbstractPluginIntegratorEnginePersistence {
 			if (!$result) {
 				return FALSE;
 			}
-			$return = $result->EOF;
+			$return = !$result->EOF;
 			$result->Close();
 			return $return;
 		}
