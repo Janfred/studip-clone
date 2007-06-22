@@ -4,9 +4,6 @@
  * router.php - Routing requests to appropriate controller
  *
  * Copyright (C) 2006 - Marcus Lunzenauer <mlunzena@uos.de>
- * Copyright (c) 2006, Cake Software Foundation, Inc.
- *                     1785 E. Sahara Avenue, Suite 490-204
- *                     Las Vegas, Nevada 89104
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -14,18 +11,35 @@
  * the License, or (at your option) any later version.
  */
 
+
 /**
  * Parses and maps requests to controllers and actions.
  *
  * @package   trails
  *
  * @author    mlunzena
- * @author    Cake Software Foundation, Inc.
  * @copyright (c) Authors
- * @version   $Id: router.php 3410 2006-05-23 17:00:30Z mlunzena $
+ * @version   $Id: router.php 5838 2007-05-31 09:07:03Z mlunzena $
  */
 
 class Trails_Router {
+
+
+  var $dispatcher;
+
+
+  /**
+   * <MethodDescription>
+   *
+   * @param type <description>
+   * @param type <description>
+   *
+   * @return void
+   */
+  function Trails_Router(&$dispatcher) {
+    $this->dispatcher =& $dispatcher;
+  }
+
 
   /**
    * Parses given URL and returns an array of controllers, action and parameters
@@ -39,26 +53,23 @@ class Trails_Router {
 
     $out = array();
 
-    # load config
-    $config =& Trails_Config::instance();
-
     # remove everything after a '?'
     if (FALSE !== strpos($url, '?'))
       $url = substr($url, 0, strpos($url, '?'));
 
     # remove leading slash
-    if ($url{0} == '/')
+    if ($url[0] == '/')
       $url = substr($url, 1);
-    
+
     $request = explode('/', $url);
 
     ### get controller ###
 
     # load default controller
     if ($url == '') {
-      $controller = $config->get('default_controller');
+      $controller = $this->dispatcher->default_controller;
     }
-    
+
     # check tokens
     else {
 
@@ -70,12 +81,12 @@ class Trails_Router {
         $token = current($request);
         if (FALSE === $token) break;
         next($request);
-        
+
         # check sanity
         if (!preg_match('/^[a-z0-9\-_]+$/', $token)) break;
         $controller .= ($controller == '' ? '' : '/') . $token;
-        
-        $found = is_readable(Trails_Dispatcher::get_path($controller));
+
+        $found = is_readable($this->dispatcher->get_path($controller));
 
       } while (!$found);
 
@@ -87,8 +98,8 @@ class Trails_Router {
 
 
     # ### get action ###
-    $out['action'] = !($token = current($request))
-                     ? $config->get('default_action') : $token;
+    $out['action'] = ($token = current($request))
+                     ? $token : $this->dispatcher->default_action;
 
 
     # ### prepare parameters ###

@@ -11,6 +11,7 @@
  * the License, or (at your option) any later version.
  */
 
+
 /**
  * <ClassDescription>
  *
@@ -18,42 +19,57 @@
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: dispatcher.php 4191 2006-10-24 10:43:31Z mlunzena $
+ * @version   $Id: dispatcher.php 5838 2007-05-31 09:07:03Z mlunzena $
  */
 
 class Trails_Dispatcher {
+
+
+  var $trails_root, $trails_uri, $default_controller, $default_action;
+
+
+  function Trails_Dispatcher($trails_root, $trails_uri,
+                             $default_controller, $default_action) {
+    $this->trails_root = $trails_root;
+    $this->trails_uri = $trails_uri;
+    $this->default_controller = $default_controller;
+    $this->default_action = $default_action;
+  }
+
 
   /**
    * <MethodDescription>
    *
    * @param string The requested URI.
+   * @param string The requested URI.
    *
    * @return void
    */
-  function dispatch() {
-
-    $request_uri = substr($_SERVER['REQUEST_URI'],
-                          strlen(dirname($_SERVER['PHP_SELF'])));
+  function dispatch($request_uri, $trails_root, $trails_uri, $default_controller, $default_action) {
 
     # instantiate dispatcher
-    $dispatcher =&  new Trails_Dispatcher();
+    $dispatcher =&  new Trails_Dispatcher($trails_root, $trails_uri,
+                                          $default_controller,
+                                          $default_action);
 
     # get controller, action and args from router
-    $router =&  new Trails_Router();
-    # list($controller_path, $action, $args) = $router->parse($request_uri);
+    $router =& new Trails_Router($dispatcher);
     $route = $router->parse($request_uri);
 
     if (!$route)
       Trails_Dispatcher::controller_missing($request_uri);
+
 
     # load controller
     $controller =& $dispatcher->load_controller($route['controller']);
     if (is_null($controller))
       Trails_Dispatcher::controller_missing($request_uri);
 
+
     # send action
     echo $controller->perform($route['action'], $route['args']);
   }
+
 
   /**
    * <MethodDescription>
@@ -63,8 +79,10 @@ class Trails_Dispatcher {
    * @return string <description>
    */
   function get_path($controller_path) {
-    return TRAILS_ROOT . sprintf('app/controllers/%s.php', $controller_path);
+    return sprintf('%s/app/controllers/%s.php',
+                   $this->trails_root, $controller_path);
   }
+
 
   /**
    * <MethodDescription>
@@ -78,15 +96,16 @@ class Trails_Dispatcher {
     $obj = NULL;
 
     # load controller
-    require_once Trails_Dispatcher::get_path($controller_path);
-    $class = Trails_Inflector::camelize($controller_path) . 'Controller';
+    require_once $this->get_path($controller_path);
+    $class = Trails_Dispatcher::camelize($controller_path) . 'Controller';
 
     # class found; instantiate
     if (class_exists($class))
-      $obj =&  new $class($controller_path);
+      $obj =& new $class($this, $controller_path);
 
     return $obj;
   }
+
 
   /**
    * <MethodDescription>
@@ -105,6 +124,7 @@ class Trails_Dispatcher {
     exit;
   }
 
+
   /**
    * <MethodDescription>
    *
@@ -112,12 +132,30 @@ class Trails_Dispatcher {
    *
    * @return void
    */
-  function method_missing($request) {
+  function method_missing($request, $action, $args) {
     header('HTTP/1.0 404 Not Found');
     ?>
     <h1>Method missing</h1>
     <pre><? var_dump($request) ?></pre>
+    <pre><? var_dump($action) ?></pre>
+    <pre><? var_dump($args) ?></pre>
     <?
     exit;
+  }
+
+
+  /**
+   * Returns a camelized string from a lower case and underscored string by
+   * replacing slash with underscore and upper-casing each letter preceded
+   * by an underscore.
+   *
+   * @param string String to camelize.
+   *
+   * @return string Camelized string.
+   */
+  function camelize($word) {
+    return str_replace(' ', '', ucwords(str_replace(array('_', '/'),
+                                                    array(' ', ' '),
+                                                    $word)));
   }
 }

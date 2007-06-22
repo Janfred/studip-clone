@@ -12,6 +12,7 @@
  * the License, or (at your option) any later version.
  */
 
+
 /**
  * The flash provides a way to pass temporary objects between actions.
  * Anything you place in the flash will be exposed to the very next action and
@@ -26,10 +27,11 @@
  * @author    mlunzena
  * @author    Ruby-On-Rails-Team <http://www.rubyonrails.org/core>
  * @copyright (c) Authors
- * @version   $Id: flash.php 4570 2006-11-30 15:20:41Z mlunzena $
+ * @version   $Id: flash.php 5838 2007-05-31 09:07:03Z mlunzena $
  */
 
 class Trails_Flash {
+
 
   /**
    * @ignore
@@ -37,15 +39,17 @@ class Trails_Flash {
   var
     $flash, $used;
 
+
   /**
    * Constructor
    *
    * @return void
    */
-  function Trails_Flash() {
-    $this->flash = array();
-    $this->used  = array();
+  function Trails_Flash($flash = array(), $used = array()) {
+    $this->flash = $flash;
+    $this->used  = $used;
   }
+
 
   /**
    * Class field replacement.
@@ -64,6 +68,7 @@ class Trails_Flash {
 
     return $flash;
   }
+
 
   /**
    * Used internally by the <tt>keep</tt> and <tt>discard</tt> methods
@@ -89,6 +94,7 @@ class Trails_Flash {
         $this->_use($k, $v);
   }
 
+
   /**
    * Marks the entire flash or a single flash entry to be discarded by the end
    * of the current action.
@@ -108,6 +114,7 @@ class Trails_Flash {
     $this->_use($k);
   }
 
+
   /**
    * Marks flash entries as used and expose the flash to the view.
    *
@@ -115,18 +122,18 @@ class Trails_Flash {
    */
   function fire() {
     $flash = NULL;
-    if (!isset($_SESSION['flash'])) {
+    if (!isset($_SESSION['trails_flash'])) {
       $flash =& Trails_Flash::flash(new Trails_Flash());
-      $_SESSION['flash'] = $flash;
+      $_SESSION['trails_flash'] = array($flash->flash, $flash->used);
     }
     else {
-      $flash =& Trails_Flash::flash(
-        unserialize(base64_decode($_SESSION['flash'])));
+      list($_flash, $_used) = $_SESSION['trails_flash'];
+      $flash =& Trails_Flash::flash(new Trails_Flash($_flash, $_used));
     }
 
     $flash->discard();
-    register_shutdown_function(array('Trails_Flash', 'sweep'));
   }
+
 
   /**
    * Returns the value to the specified key.
@@ -141,6 +148,7 @@ class Trails_Flash {
       $return =& $this->flash[$k];
     return $return;
   }
+
 
   /**
    * Keeps either the entire current flash or a specific flash entry available
@@ -157,6 +165,7 @@ class Trails_Flash {
   function keep($k = NULL) {
     $this->_use($k, FALSE);
   }
+
 
   /**
    * Sets a flash that will not be available to the next action, only to the
@@ -183,6 +192,7 @@ class Trails_Flash {
     $this->flash[$k] = $v;
   }
 
+
   /**
    * Sets a key's value.
    *
@@ -195,6 +205,7 @@ class Trails_Flash {
     $this->keep($k);
     $this->flash[$k] = $v;
   }
+
 
   /**
    * Sets a key's value by reference.
@@ -209,6 +220,7 @@ class Trails_Flash {
     $this->flash[$k] =& $v;
   }
 
+
   /**
    * Deletes the flash entries that were not marked for keeping.
    *
@@ -216,14 +228,8 @@ class Trails_Flash {
    */
   function sweep(){
 
-    # call sweep only once
-# TODO
-#     static $once;
-#     if (!is_null($once)) return;
-#     $once = TRUE;
-
     # no flash, no sweep
-    if (!isset($_SESSION['flash']))
+    if (!isset($_SESSION['trails_flash']))
       return;
 
     # get flash
@@ -247,6 +253,6 @@ class Trails_Flash {
       unset($flash->used[$k]);
 
     // serialize it
-    $_SESSION['flash'] = base64_encode(serialize($flash));
+    $_SESSION['trails_flash'] = array($flash->flash, $flash->used);
   }
 }

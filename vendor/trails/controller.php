@@ -11,6 +11,7 @@
  * the License, or (at your option) any later version.
  */
 
+
 /**
  * <ClassDescription>
  *
@@ -18,27 +19,28 @@
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: controller.php 4192 2006-10-24 10:57:01Z mlunzena $
+ * @version   $Id: controller.php 5838 2007-05-31 09:07:03Z mlunzena $
  */
 
 class Trails_Controller {
+
 
   /**
    * @ignore
    */
   var
+    $dispatcher,
     $controller_name,
+
     $response,
     $assigns,
+
     $performed_render,
     $performed_redirect,
-    $request;
 
-  /**
-   * <VariableDescription>
-   */
-  var
-    $flash;
+    $template_factory,
+    $layout;
+
 
   /**
    * Constructor.
@@ -47,12 +49,22 @@ class Trails_Controller {
    *
    * @return void
    */
-  function Trails_Controller($controller_name) {
-    $this->assigns         = array();
+  function Trails_Controller(&$dispatcher, $controller_name) {
+
+    $this->dispatcher =& $dispatcher;
     $this->controller_name = $controller_name;
-    $this->flash           =& Trails_Flash::flash();
-    $this->request         =& Trails_Request::instance();
+
+    $this->response = ' ';
+    $this->assigns = array();
+
+    $this->performed_render = FALSE;
+    $this->performed_redirect = FALSE;
+
+    $this->template_factory =&
+      new Flexi_TemplateFactory($dispatcher->trails_root . '/app/views/');
+    $this->set_layout(NULL);
   }
+
 
   /**
    * Callback function being called before an action is executed. If this
@@ -64,9 +76,10 @@ class Trails_Controller {
    *
    * @return bool <description>
    */
-  function before_filter($action, &$args) {
+  function before_filter(&$action, &$args) {
     return TRUE;
   }
+
 
   /**
    * Callback function being called after an action is executed.
@@ -76,8 +89,9 @@ class Trails_Controller {
    *
    * @return void
    */
-  function after_filter($action, &$args) {
+  function after_filter($action, $args) {
   }
+
 
   /**
    * <MethodDescription>
@@ -89,40 +103,37 @@ class Trails_Controller {
    */
   function perform($action, $args) {
 
-    $action_name = $action . '_action';
-
-    # is action callable?
-    if (!method_exists($this, $action_name))
-      # TODO
-      Trails_Dispatcher::method_missing($this);
-
-    # mute controller - begin
-    set_error_handler(array('Trails_ErrorHandler', 'error_handler'));
-    ob_start();
-
     # call before filter
     $before_filter_result = $this->before_filter($action, $args);
 
     # send action to controller
     if ($before_filter_result !== FALSE && !$this->has_performed()) {
-      call_user_func_array(array(&$this, $action_name), $args);
 
-      # call after filter
-      $this->after_filter($action, $args);
+      $mapped_action = $this->map_action($action);
+
+      # is action callable?
+      if (!method_exists($this, $mapped_action))
+        # TODO (mlunzena) should not the user provide a method missing action?
+        Trails_Dispatcher::method_missing($this, $action, $args);
+
+
+      call_user_func_array(array(&$this, $mapped_action), $args);
 
       if (!$this->has_performed())
         $this->render_action($action);
-    }
 
-    # mute controller - end
-    ob_end_clean();
-    restore_error_handler();
-    # TODO
-    if (sizeof($errors = Trails_ErrorHandler::errors()))
-      var_dump(join("\n", $errors));
+      # call after filter
+      $this->after_filter($action, $args);
+    }
 
     return $this->response;
   }
+
+
+  function map_action($action) {
+    return $action . '_action';
+  }
+
 
   /**
    * <MethodDescription>
@@ -132,6 +143,7 @@ class Trails_Controller {
   function has_performed() {
     return $this->performed_render || $this->performed_redirect;
   }
+
 
   /**
    * <MethodDescription>
@@ -151,16 +163,14 @@ class Trails_Controller {
     $host = $_SERVER['HTTP_HOST'];
 
     # get uri
-    $uri = UrlHelper::url_for($to);
-
-    $url = 'http://'.$host.$uri;
-    #die($url);
+    $url = $this->url_for($to);
 
     # redirect
     header('Location: '.$url);
     printf('<html><head><meta http-equiv="refresh" content="0;url=%s"/>'.
            '</head></html>', $url);
   }
+
 
   /**
    * <MethodDescription>
@@ -179,6 +189,7 @@ class Trails_Controller {
     $this->response = $text;
   }
 
+
   /**
    * <MethodDescription>
    *
@@ -188,6 +199,7 @@ class Trails_Controller {
     $this->render_text(' ');
   }
 
+
   /**
    * <MethodDescription>
    *
@@ -196,9 +208,10 @@ class Trails_Controller {
    * @return void
    */
   function render_action($action) {
-    $this->render_template($this->controller_name.'/'.$action,
-                           $this->controller_name);
+    $this->render_template($this->controller_name.DIRECTORY_SEPARATOR.$action,
+                           $this->layout);
   }
+
 
   /**
    * <MethodDescription>
@@ -207,10 +220,24 @@ class Trails_Controller {
    *
    * @return void
    */
-  function render_template($template, $layout = NULL) {
+  function render_template($template_name, $layout = NULL) {
 
     # open template
-    $template = Trails_Template::create_template($template);
+    $template =& $this->template_factory->open($template_name);
+    if (is_null($template)) {
+      trigger_error(sprintf('No such template: "%s"', $template_name),
+                    E_USER_ERROR);
+      return;
+    }
+
+    # template requires setup ?
+    if ($this->does_template_require_setup($template)) {
+      switch (get_class($template)) {
+        case 'Flexi_JsTemplate':
+          header('Content-Type: text/javascript');
+          break;
+      }
+    }
 
     # set attributes
     $attributes =& $this->get_assigned_variables();
@@ -218,10 +245,11 @@ class Trails_Controller {
 
     # set layout
     if (isset($layout))
-      $template->set_layout($layout);
+      $template->set_layout('layouts' . DIRECTORY_SEPARATOR . $layout);
 
     $this->render_text($template->render());
   }
+
 
   /**
    * <MethodDescription>
@@ -237,6 +265,31 @@ class Trails_Controller {
       if (!array_key_exists($var, $protected))
         $assigns[$var] =& $this->$var;
 
+    $assigns['controller'] = $this;
+
     return $assigns;
+  }
+
+
+  /**
+   * <MethodDescription>
+   *
+   * @param type <description>
+   *
+   * @return type <description>
+   */
+  function set_layout($layout) {
+    $this->layout = $layout;
+  }
+
+
+  function url_for($to) {
+
+    $base = $this->dispatcher->trails_uri;
+
+    # absolute URL?
+    return preg_match('#^[a-z]+://#', $to)
+           ? $to
+           : $base . '/' . $to;
   }
 }
