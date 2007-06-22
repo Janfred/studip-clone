@@ -3,7 +3,7 @@
  * Central point of access to plugins. Builds the top navigation and shows
  * the result of a plugins show implementation in the middle
  *
- * 
+ *
  * @author Dennis Reil, CELab <dennis.reil@offis.de>
  * @date 04.07.2005
  * @version $Revision$
@@ -14,8 +14,6 @@
  */
 ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-$auth->login_if($auth->auth["uid"] == "nobody");
-// ini_set("display_errors","on");
 
 include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
 
@@ -26,32 +24,47 @@ $pluginid = $_GET["id"];
 // create plugin persistence objects
 $pluginengine = PluginEngine::getPluginPersistence();
 
-// create an instance of the queried pluginid
-$plugin = $pluginengine->getPlugin($pluginid);
+$plugin = NULL;
 
-if ($plugin == null){
-	// maybe the pluginid is not a number
-	// try to find a plugin class, satisfying the request
-	$pluginid = $pluginengine->getPluginId($pluginid);
-
-	if ($pluginid == UNKNOWN_PLUGIN_ID){
-		StudIPTemplateEngine::makeHeadline(_("Plugin nicht vorhanden"));
-		StudIPTemplateEngine::showErrorMessage(_("Das angeforderte Plugin ist nicht vorhanden."));
-		die();
-	}
-	else {
-		// create an instance of the queried pluginid
-		$plugin = $pluginengine->getPlugin($pluginid);
-		if ($plugin == null){
-			StudIPTemplateEngine::makeHeadline(_("Plugin nicht vorhanden"));
-			StudIPTemplateEngine::showErrorMessage(_("Das angeforderte Plugin ist nicht vorhanden."));
-			die();
-		}
-	}	
+// pluginid is a real numeric id
+if (is_numeric($pluginid)) {
+	$plugin = $pluginengine->getPlugin($pluginid);
 }
 
-if (!array_search(strtolower($cmd),array_map('strtolower', get_class_methods($plugin)))) {	
-	die(_("Das Plugin verfügt nicht über die gewünschte Operation"));
+// pluginid is probably a plugin classname
+else {
+	// try to find a plugin class, satisfying the request
+	$pluginid = $pluginengine->getPluginId($pluginid);
+	if (UNKNOWN_PLUGIN_ID !== $pluginid) {
+		$plugin = $pluginengine->getPlugin($pluginid);
+	}
+}
+
+
+// either there is no such plugin or I am not permitted
+if (is_null($plugin)) {
+
+	if ($pluginengine->pluginExists($pluginid)) {
+		include 'lib/include/html_head.inc.php';
+		include 'lib/include/header.php';
+		StudIPTemplateEngine::makeHeadline(_("Plugin nicht vorhanden"));
+		StudIPTemplateEngine::showErrorMessage(_("Das angeforderte Plugin ist nicht vorhanden."));
+		include 'lib/include/html_end.inc.php';
+		exit;
+	}
+
+	else {
+		$auth->login_if(TRUE);
+	}
+}
+
+if (!array_search(strtolower($cmd),array_map('strtolower', get_class_methods($plugin)))) {
+	include 'lib/include/html_head.inc.php';
+	include 'lib/include/header.php';
+	StudIPTemplateEngine::makeHeadline(_("Plugin-Operation nicht vorhanden"));
+	StudIPTemplateEngine::showErrorMessage(_("Das Plugin verfügt nicht über die gewünschte Operation"));
+	include 'lib/include/html_end.inc.php';
+	exit;
 }
 
 if (array_search('initialize',array_map('strtolower', get_class_methods($plugin)))){
@@ -76,14 +89,14 @@ if ($type == "Standard"){
 	// diplay the admin_menu
 	if ($cmd == "actionshowConfigurationPage" && $perm->have_perm("admin")){
 		include('lib/include/links_admin.inc.php');
-		
+
 	}
 	// display the course menu
 	include ('lib/include/links_openobject.inc.php');
-	
-	// let the plugin show its view	
+
+	// let the plugin show its view
 	$pluginnav = $plugin->getNavigation();
-	
+
 	if (is_object($pluginnav)){
 		$iconname = "";
 		if ($pluginnav->hasIcon()){
@@ -92,7 +105,7 @@ if ($type == "Standard"){
 		else {
 			$iconname = $plugin->getPluginiconname();
 		}
-		
+
 		if (isset($SessSemName["header_line"])){
 			StudIPTemplateEngine::makeHeadline(sprintf("%s - %s",$SessSemName["header_line"],$plugin->getDisplaytitle()),true,$iconname);
 		}
@@ -103,29 +116,29 @@ if ($type == "Standard"){
 	else {
 		StudIPTemplateEngine::makeHeadline($plugin->getPluginname(),true,$plugin->getPluginiconname());
 	}
-	
+
 	StudIPTemplateEngine::startContentTable(true);
 	$plugin->$cmd($pluginparams);
-	StudIPTemplateEngine::endContentTable();	
+	StudIPTemplateEngine::endContentTable();
 }
 else if ($type == "Administration") {
 	// Administration-Plugins only accessible by users with admin rights
 	if ($perm->have_perm("admin")){
 	   // display the admin menu
 	   include ('lib/include/links_admin.inc.php');
-	   
-	   // let the plugin show its view	
+
+	   // let the plugin show its view
 	   $pluginnav = $plugin->getNavigation();
 	   if ($pluginnav->hasIcon()){
 	   		StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(),true,$plugin->getPluginpath() . "/" .$pluginnav->getIcon());
 	   }
 	   else {
 	   		StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(),true,$plugin->getPluginiconname());
-	   }	   
+	   }
 	   StudIPTemplateEngine::startContentTable(true);
-	   $plugin->$cmd($pluginparams);   
+	   $plugin->$cmd($pluginparams);
 	   StudIPTemplateEngine::endContentTable();
-	   
+
 	}
 	else {
 		StudIPTemplateEngine::makeHeadline(_("fehlende Rechte"));
@@ -135,32 +148,32 @@ else if ($type == "Administration") {
 else if ($type == "System") {
 	$pluginnav = $plugin->getNavigation();
 	if ($pluginnav->hasIcon()){
-		StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(),true,$plugin->getPluginpath() . "/" .$pluginnav->getIcon());	
+		StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(),true,$plugin->getPluginpath() . "/" .$pluginnav->getIcon());
 	}
 	else {
 		StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(),true,$plugin->getPluginiconname());
 	}
-	
+
 	StudIPTemplateEngine::startContentTable();
-	// let the plugin show its view	 
+	// let the plugin show its view
 	$plugin->$cmd($pluginparams);
 	StudIPTemplateEngine::endContentTable();
 }
 else if ($type == "Homepage"){
 	textdomain('studip');
 	// show the admin-Tabs
-	$hpusername = $_GET["requesteduser"];	
+	$hpusername = $_GET["requesteduser"];
 	$admin_darf = FALSE;
 	$db = new DB_Seminar();
-	
+
 	if (empty($hpusername)){
 		$hpusername = $GLOBALS["auth"]->auth["uname"];
 	}
-	
+
 	if ($GLOBALS["auth"]->auth["uname"] == $hpusername){
 		$admin_darf = true;
-	}	
-		
+	}
+
 	$db->query("SELECT * FROM auth_user_md5  WHERE username ='$hpusername'");
 	$db->next_record();
 	if (!$db->nf()) {
@@ -169,7 +182,7 @@ else if ($type == "Homepage"){
 	} else{
 		$user_id=$db->f("user_id");
 	}
-	
+
 	$requser = new StudIPUser();
 	$requser->setUserid($user_id);
 	$plugin->setRequestedUser($requser);
@@ -190,19 +203,19 @@ else if ($type == "Homepage"){
 	IF ($perm->have_perm("root") OR $admin_darf == TRUE) { // Es werden die Editreiter angezeigt, wenn ich &auml;ndern darf
 		// rights should be checked
 		$username = $hpusername;
-		include('lib/include/links_about.inc.php');	
+		include('lib/include/links_about.inc.php');
 	}
 	textdomain($domain);
 	$pluginnav = $plugin->getNavigation();
 	StudIPTemplateEngine::makeHeadline($plugin->getDisplaytitle(),true,$plugin->getPluginiconname());
 	StudIPTemplateEngine::startContentTable();
-	// let the plugin show its view	 
+	// let the plugin show its view
 	$plugin->$cmd($pluginparams);
 	StudIPTemplateEngine::endContentTable();
 } else if ($type == "Portal" || $type == "Core"){
 	StudIPTemplateEngine::makeHeadline($plugin->getDisplaytitle(),true,$plugin->getPluginiconname());
 	StudIPTemplateEngine::startContentTable();
-	// let the plugin show its view	 
+	// let the plugin show its view
 	$plugin->$cmd($pluginparams);
 	StudIPTemplateEngine::endContentTable();
 }

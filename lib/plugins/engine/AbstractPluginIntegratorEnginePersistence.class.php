@@ -263,6 +263,17 @@ class AbstractPluginIntegratorEnginePersistence {
     }
 
 
+		function pluginExists($id){
+			$result = &$this->connection->execute("select * from plugins where pluginid=?", array($id));
+			if (!$result) {
+				return FALSE;
+			}
+			$return = $result->EOF;
+			$result->Close();
+			return $return;
+		}
+
+
     function deinstallPlugin($plugin){
     	// check, if there are dependent plugins
     	if ($plugin->isDependentOnOtherPlugin()){
@@ -321,7 +332,7 @@ class AbstractPluginIntegratorEnginePersistence {
 				return $result->fields("pluginid");
 			}
 			$result->Close();
-			return true;
+			return UNKNOWN_PLUGIN_ID;
 		}
 	}
 }
