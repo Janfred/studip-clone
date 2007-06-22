@@ -509,13 +509,14 @@ $skip_page_3 = true;
 // Name der erzeugten XML-Datei
 $xml_filename = "data.xml";
 // Name der erzeugten Ausgabe-Datei
-$xslt_filename = "studip";
+$xslt_filename_default = "studip";
 
 // Vorhandene Ausgabeformate
 $output_formats = array(
 	"html"		=>		"Hypertext (HTML)",
 	"rtf"		=>		"Rich Text Format (RTF)",
 	"txt"		=>		"Text (TXT)",
+	"csv"		=>		"Comma Separated Values (Excel)",
 	"fo"		=>		"Adobe Postscript (PDF)",
 	"xml"		=>		"Extensible Markup Language (XML)"
 );
@@ -530,6 +531,8 @@ $export_icon["pdf"] = "pdf-icon.gif";
 $export_icon["html"] = "txt-icon.gif";
 $export_icon["htm"] = "txt-icon.gif";
 $export_icon["txt"] = "txt-icon.gif";
+$export_icon["csv"] = "xls-icon.gif";
+
 // weitere Icons und Formate können hier angefügt werden
 
 // PDF-Vorlagen für den Veranstaltungsexport (Index von 1 bis X)

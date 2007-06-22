@@ -99,7 +99,10 @@ $xml_names_person = array(
 	"privadr"			=>		"adresse",
 	"privatnr"			=>		"privatnummer",
 	"admission_studiengang_id"	=>		"kontingent",
-	"comment" 		=>		"bemerkung"
+	"comment" 		=>		"bemerkung",
+	"admission_position" => "position_warteliste",
+	"registration_date" => "datum_anmeldung",
+	"nutzer_studiengaenge" =>	"nutzer_studiengaenge"
 );
 
 $xml_groupnames_studiengaenge = array(

@@ -83,6 +83,7 @@ global $ex_type, $xml_file_id, $page, $o_mode, $format, $choose, $xslt_files, $e
 }
 
 $export_pagename = _("Konvertierung der Daten: ");
+$xslt_filename =  strlen($_REQUEST['xslt_filename']) ? basename(stripslashes($_REQUEST['xslt_filename'])) : $xslt_filename_default;
 
 if (!CheckParamXSLT())
 {
@@ -143,7 +144,7 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 	$export_pagecontent .= "</select><br>	<br><br>";
 
 	$export_pagecontent .= "<b><font size=\"-1\">"._("Name der Datei (z.B. &raquo;Test&laquo;):")."</font></b><br />";
-	$export_pagecontent .= "<input type=\"text\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
+	$export_pagecontent .= "<input type=\"text\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"page\" value=\"1\"><br><br><br>";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"" . $o_mode . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
@@ -219,7 +220,7 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 	$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class\" value=\"" . $ex_sem_class . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
-	$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
+	$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
 
 	$export_weiter_button = "<center><input type=\"IMAGE\" " . makeButton("zurueck", "src") . " value=\"" . _("Zur&uuml;ck") . "\" name=\"back\">&nbsp;";
 	$export_weiter_button .= "<input type=\"IMAGE\" " . makeButton("weiter", "src") . " name=\"next\"";
@@ -272,7 +273,7 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
 	$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class\" value=\"" . $ex_sem_class . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
-	$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
+	$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
 
 	$export_weiter_button = "<center><input type=\"IMAGE\" " . makeButton("zurueck", "src") . " value=\"" . _("Zur&uuml;ck") . "\" name=\"back\">&nbsp;";
 	if ($XSLT_ENABLE)

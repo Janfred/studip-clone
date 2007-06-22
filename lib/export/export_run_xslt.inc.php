@@ -71,13 +71,14 @@ global $XSLT_ENABLE, $ex_type, $o_mode, $xml_file_id, $page, $format, $output_fo
 		$export_error_num++;
 		return false;
 	}
-
+	
 	return true;
 }
 
 
 $export_pagename = _("Download der Ausgabedatei");
 $xslt_process = false;
+$xslt_filename = strlen($_REQUEST['xslt_filename']) ? basename(stripslashes($_REQUEST['xslt_filename'])) : $xslt_filename_default;
 
 if (!CheckParamRUN())
 {
@@ -140,7 +141,7 @@ else
 		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class\" value=\"" . $ex_sem_class . "\">";
 		$export_weiter_button .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
 		$export_weiter_button .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
-		$export_weiter_button .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . $xslt_filename . "\">";
+		$export_weiter_button .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
 		if (isset($jump))
 			$export_weiter_button .= "<center><a href=\"./seminar_main.php?auswahl=$range_id&redirect_to=$jump\">" . makeButton("zurueck", "img") . "</a><br>";
 		else
@@ -149,9 +150,9 @@ else
 
 		if ($xslt_process)
 		{
-			$export_pagecontent .= "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"40%\"><tr><td>";
+			$export_pagecontent .= "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\"><tr><td width=\"40%\">";
 			$export_pagecontent .= "&nbsp; <b>" . _("Ausgabe-Datei: ") . "</b>";
-			$export_pagecontent .= "</td><td>" . $link2 . $xslt_filename . "." . $format . "</a>";
+			$export_pagecontent .= "</td><td>" . $link2 . htmlReady($xslt_filename) . "." . $format . "</a>";
 //			$export_pagecontent .= "</td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link1 . _("Datei &ouml;ffnen") . "</a></td></tr><tr><td colspan=\"2\">";
 //			$export_pagecontent .= "&nbsp;&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;" . $link2 . _("Datei herunterladen") . "</a></td></tr>";
@@ -172,7 +173,7 @@ else
 		if ($xslt_process)
 		{
 			$result_printimage = '<a href="'. GetDownloadLink($result_file, $xslt_filename .'.'. $format, 2) . '"><img src="'.$GLOBALS['ASSETS_URL'].'images/' . $export_icon[$format] . '" border=0></a>';
-			$result_printlink = '<a href="'. GetDownloadLink($result_file, $xslt_filename .'.'. $format, 2) . '" class="tree">' . $xslt_filename . '.' . $format . '</a>';
+			$result_printlink = '<a href="'. GetDownloadLink($result_file, $xslt_filename .'.'. $format, 2) . '" class="tree">' . htmlReady($xslt_filename) . '.' . $format . '</a>';
 			$result_printdesc = _("Ausgabe-Datei");
 			$result_printcontent = _("Dies ist die fertige Ausgabedatei.") . "<br>";
 		}

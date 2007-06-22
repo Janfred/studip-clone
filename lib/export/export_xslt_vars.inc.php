@@ -146,13 +146,39 @@ $xslt_files["pdf-liste"]["name"] = _("Vorlesungsverzeichnis");
 $xslt_files["pdf-liste"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungsverzeichnis im Adobe PDF-Format. Die Grunddaten der Veranstaltungen (DozentInnen, Titel, Status, erster Termin und Raum) werden in einer Tabelle angezeigt. Es wird automatisch ein Deckblatt und ein Inhaltsverzeichnis generiert. Die Datei kann mit dem Acrobat Reader gelesen werden.");
 $xslt_files["pdf-liste"]["file"] = "pdf-v-3.xsl";
 $xslt_files["pdf-liste"]["fo"] = true;
-//$xslt_files["pdf-liste"]["veranstaltung"] = true;
-/*
-$xslt_files["pdf-kommentar2"]["name"] = _("Vorlesungskommentar, Layout 2");
-$xslt_files["pdf-kommentar2"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als Vorlesungskommentar im Adobe PDF-Format. Deckblatt und Inhaltsverzeichnis werden automatisch generiert. Die Datei kann mit dem Acrobat Reader gelesen werden.");
-$xslt_files["pdf-kommentar2"]["file"] = "pdf-v-4.xsl";
-$xslt_files["pdf-kommentar2"]["fo"] = true;
-$xslt_files["pdf-kommentar2"]["veranstaltung"] = true;
-*/
+
+$xslt_files["csv-teiln"]["name"] = _("TeilnehmerInnenliste");
+$xslt_files["csv-teiln"]["desc"] = _("Modul zur Ausgabe von Personendaten als CSV-Datei. Es werden die Grunddaten der TeilnehmerInnen einer einzelnen Veranstaltung in eine Tabelle geschrieben. Es werden auch die Kontingente und Studieng&auml;nge ausgegeben. Die Ausgabe-Datei kann in Excel bearbeitet werden.");
+$xslt_files["csv-teiln"]["file"] = "csv-t-1.xsl";
+$xslt_files["csv-teiln"]["csv"] = true;
+
+$xslt_files["csv-warteliste"]["name"] = _("Warteliste");
+$xslt_files["csv-warteliste"]["desc"] = _("Modul zur Ausgabe von Personendaten alsCSV-Datei. Es werden die Grunddaten der Personen auf der Warteliste einer einzelnen Veranstaltung in eine Tabelle geschrieben. Es werden auch die Kontingente und Studieng&auml;nge ausgegeben. Die Ausgabe-Datei kann in Excel  bearbeitet werden.");
+$xslt_files["csv-warteliste"]["file"] = "csv-t-2.xsl";
+$xslt_files["csv-warteliste"]["csv"] = true;
+
+$xslt_files["csv-person"]["name"] = _("Standardmodul");
+$xslt_files["csv-person"]["desc"] = _("Standardmodul zur Ausgabe von Personendaten als CSV-Datei. Die Ausgabe-Datei kann in Excel oder OpenOffice angezeigt werden.");
+$xslt_files["csv-person"]["file"] = "csv-p-1.xsl";
+$xslt_files["csv-person"]["csv"] = true;
+$xslt_files["csv-person"]["person"] = true;
+
+$xslt_files["csv-person-2"]["name"] = _("&Uuml;bersicht");
+$xslt_files["csv-person-2"]["desc"] = _("Modul zur Ausgabe von Personendaten als CSV-Datei. Es werden nur Name, Telefonnummern und E-Mail-Adressen gespeichert. Die Ausgabe-Datei kann in Excel oder OpenOffice angezeigt werden.");
+$xslt_files["csv-person-2"]["file"] = "csv-p-2.xsl";
+$xslt_files["csv-person-2"]["csv"] = true;
+$xslt_files["csv-person-2"]["person"] = true;
+
+$xslt_files["csv-veranstaltung"]["name"] = _("Standardmodul");
+$xslt_files["csv-veranstaltung"]["desc"] = _("Standardmodul zur Ausgabe von Veranstaltungsdaten als CSV-Datei. Die Ausgabe-Datei kann in Excel oder OpenOffice angezeigt werden.");
+$xslt_files["csv-veranstaltung"]["file"] = "csv-v-1.xsl";
+$xslt_files["csv-veranstaltung"]["csv"] = true;
+$xslt_files["csv-veranstaltung"]["veranstaltung"] = true;
+
+$xslt_files["csv-veranstaltung-2"]["name"] = _("&Uuml;bersicht");
+$xslt_files["csv-veranstaltung-2"]["desc"] = _("Modul zur Ausgabe von Veranstaltungsdaten als CSV-Datei. Die Ausgabe-Datei kann in Excel oder OpenOffice angezeigt werden.");
+$xslt_files["csv-veranstaltung-2"]["file"] = "csv-v-2.xsl";
+$xslt_files["csv-veranstaltung-2"]["csv"] = true;
+$xslt_files["csv-veranstaltung-2"]["veranstaltung"] = true;
 
 ?>
