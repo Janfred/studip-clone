@@ -170,6 +170,11 @@ $infobox[] = $info;
 
 unset($themen);
 $themen =& $sem->getIssues(true);	// read again, so we have the actual sort order and so on
+
+$semester = new SemesterData();
+$all_semester = $semester->getAllSemesterData();
+$grenze = 0;
+
 ?>
 <FORM action="<?=$PHP_SELF?>" method="post">
 <TABLE width="100%" border="0" cellpadding="0" cellspacing="0">
