@@ -67,7 +67,7 @@ class RSSFeed {
 		foreach ($this->ausgabe->items as $v) {
 			if (strlen(trim($v["title"]))>0) {
 				$desc = decodeHTML(preg_replace ("'<[\/\!]*?[^<>]*?>'si", "", ($v["description"] ? $v["description"] : $v['summary'])));
-				if (strlen($desc) > 100) $desc = substr($desc, 0, 100) . "...";
+				if (strlen($desc) > 150) $desc = substr($desc, 0, 150) . "...";
 				if ($i > $this->max_items && $more != $this->class_id) {
 					echo "<TR><TD ALIGN=\"left\" VALIGN=\"TOP\" COLSPAN=\"2\"><A HREF=\"$PHP_SELF?more=".$this->class_id."#news_anchor\"><FONT SIZE=\"-1\"><I>mehr...</I></FONT></A></TD></TR>\n";
 					break;
@@ -77,7 +77,7 @@ class RSSFeed {
 				<IMG SRC=\"". $GLOBALS['ASSETS_URL'] . "images/".(!$this->internal_feed ? 'link_extern.gif' : 'link_intern.gif" hspace="2')."\">
 				</TD>
 				<TD ALIGN=\"left\" VALIGN=\"TOP\">
-				<A HREF=\"".TransformInternalLinks($v["link"])."\" ".(!$this->internal_feed  ? "TARGET=\"_blank\"" : "") . " TITLE=\"".htmlReady($desc)."\" ALT=\"".htmlReady($v["description"])."\">
+				<A HREF=\"".TransformInternalLinks($v["link"])."\" ".(!$this->internal_feed  ? "TARGET=\"_blank\"" : "") . " TITLE=\"".htmlReady($desc)."\">
 				<FONT SIZE=\"-1\">".htmlReady($v["title"])."</FONT>
 				</A></TD></TR>\n";
 				if ($v['enclosure_url']) {
