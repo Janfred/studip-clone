@@ -13,7 +13,7 @@ if ($GLOBALS['RESOURCE_ENABLE']) {
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
 				<TD width="5%" align="right" valign="top" class="<?=$class?>">
-					<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumrotrunt.gif" border="0" align="abstop">
+					<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
 				</TD>
 				<TD width="95%" nowrap class="<?=$class?>" colspan="8">
 					<FONT size="-1">

@@ -95,66 +95,92 @@ $sem->registerCommand('addIssue', 'themen_doAddIssue');
 //$sem->registerCommand('checkboxAction', 'themen_checkboxAction');
 $sem->processCommands();
 
+// add status-message if there are dates which are not covered by the choosable semesters
+if ($sem->hasDatesOutOfDuration()) {
+	$tpl['forceShowAll'] = TRUE;
+	if ($raumzeitFilter != 'all') {
+		$sem->createInfo(_("Es gibt weitere Termine, die au&szlig;erhalb der regul&auml;ren Laufzeit der Veranstaltung liegen.<br/> Um diese anzuzeigen w&auml;hlen Sie bitte \"Alle Semester\"!"));
+	}
+} else {
+	$tpl['forceShowAll'] = FALSE;
+}
+
+// create infobox with semester-chooser, view-chooser and status-messages
+/* * * * * * * * * * * * * * *
+ *       I N F O B O X       *
+ * * * * * * * * * * * * * * */
+
+$infobox = array();
+$messages = array();
+
+while ($msg = $sem->getNextMessage()) {
+	$messages[] = $msg;
+}
+
+if (sizeof($messages) > 0) {
+	$infobox[] = raumzeit_parse_messages($messages);
+}
+
+if ($sem->metadates->art == 0) {
+	$times_info .= '<B>'._("Typ").':</B> '._("regelm&auml;&szlig;ige Veranstaltung").'<BR/>';
+	$z = 0;
+	if (is_array($turnus = $sem->getFormattedTurnusDates())) {
+		foreach ($turnus as $val) {
+			if ($z != 0) { $times_info .= '<BR/>'; } $z = 1;
+			$times_info .= $val;
+		}
+	}
+} else {
+	$times_info .= '<B>'._("Typ").':</B> '._("unregelm&auml;&szlig;ige Veranstaltung").'<BR/>';
+}
+
+$info = array();
+$info["kategorie"] = _("Informationen:");
+$info["eintrag"][] = array ("icon" => "ausruf_small.gif",
+		"text"  => _("Hier k&ouml;nnen Sie f&uuml;r die einzelnen Termine Beschreibungen eingeben, Themen im Forum und Dateiordner anlegen."));
+$info["eintrag"][] = array ("icon" => "ausruf_small.gif",
+		"text"  => sprintf(_("Zeit&auml;nderungen, Raumbuchungen und Termine anlegen k&ouml;nnen Sie unter %s Zeiten%s."), '<a href="raumzeit.php">', '</a>'));
+$info["eintrag"][] = array ("icon" => "blank.gif",
+		"text"  => $times_info);
+$infobox[] = $info;
+
+$info = array();
+$info['kategorie'] = _("Ansicht:");
+$info['eintrag'][] = array (
+	'icon' => ($viewModeFilter == 'simple') ? 'forumrot.gif' : 'forumgrau.gif',
+	'text' => '<a href="themen.php?cmd=changeViewMode&newFilter=expert">'._("Standardansicht").'</a>'
+);
+$info['eintrag'][] = array (
+	'icon' => ($viewModeFilter == 'expert') ? 'forumrot.gif' : 'forumgrau.gif',
+	'text' => '<a href="themen.php?cmd=changeViewMode&newFilter=expert">'._("Erweiterte Ansicht").'</a>'
+);
+$infobox[] = $info;
+
+$infobox[] = raumzeit_get_semester_chooser($sem, $semester, $raumzeitFilter);
+
+$info = array();
+$info["kategorie"] = _("Aktionen:");
+$info["eintrag"][] = array ("icon" => "link_intern.gif",
+		"text"  => "<a href=\"raumzeit.php?cmd=createNewSingleDate#newSingleDate\">"._("Einen neuen Termin anlegen").'</a>');
+$info["eintrag"][] = array ("icon" => "link_intern.gif",
+		"text"  => sprintf(_("Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte den Men&uuml;punkt %s Zeiten%s."), "<a href=\"raumzeit.php\">", "</a>"));
+$infobox[] = $info;
+
+// infobox end
+
 unset($themen);
 $themen =& $sem->getIssues(true);	// read again, so we have the actual sort order and so on
 ?>
 <FORM action="<?=$PHP_SELF?>" method="post">
-<TABLE width="100%" border="0" cellpadding="2" cellspacing="0">
+<TABLE width="100%" border="0" cellpadding="0" cellspacing="0">
 	<TR>
 		<TD colspan="2" class="topic">
-			&nbsp; <B><?=getHeaderLine($id)." -  "._("Themen / Ablaufplan");?></B>
+			&nbsp; <B><?=getHeaderLine($id)." -  "._("Ablaufplanverwaltung");?></B>
 		</TD>
-	</TR>
-	<TR>
-		<TD class="blank">
-			<A name="filter">
-			<?
-				$all_semester = $semester->getAllSemesterData();
-				$passed = false;
-				foreach ($all_semester as $val) {
-					if ($sem->getStartSemester() <= $val['vorles_beginn']) $passed = true;
-					if ($passed && ($sem->getEndSemesterVorlesEnde() >= $val['vorles_ende'])) {
-						$tpl['semester'][$val['beginn']] = $val['name'];
-						if ($raumzeitFilter != ($val['beginn'])) {
-						} else {
-							$tpl['seleceted'] = $val['beginn'];
-						}
-					}
-				}
-				$tpl['selected'] = $raumzeitFilter;
-				$tpl['semester']['all'] = _("Alle Semester");
-				if ($sem->hasDatesOutOfDuration()) {
-					$tpl['forceShowAll'] = TRUE;
-					if ($raumzeitFilter != 'all') {
-						$sem->createInfo(_("Es gibt weitere Termine, die au&szlig;erhalb der regul&auml;ren Laufzeit der Veranstaltung liegen.<br/> Um diese anzuzeigen w&auml;hlen Sie bitte \"Alle Semester\"!"));
-					}
-				} else {
-					$tpl['forceShowAll'] = FALSE;
-				}
-				include('lib/raumzeit/templates/choose_filter.tpl');
-			?>
-		</TD>
-		<TD class="blank" align="right">
-		<?
-			$tpl['view']['simple'] = 'Einfach';
-			$tpl['view']['expert'] = 'Experte';
-			$tpl['selected'] = $viewModeFilter;
-			include('lib/raumzeit/templates/choose_view.tpl');
-		?>
-		</TD>
-  </TR>
-	<? while ($msg = $sem->getNextMessage()) { ?>
-	<TR>
-		<TD class="blank" colspan=2><br />
-			<?parse_msg($msg);?>
-		</TD>
-	</TR>
-	<? } ?>
-	<TR>
-		<TD class="blank" colspan="5" height="15"></TD>
 	</TR>
   <TR>
 		<TD align="center" class="blank" width="80%" valign="top">
+			<br />
 			<TABLE width="99%" cellspacing="0" cellpadding="0" border="0">
 				<TR>
 					<TD class="steelgraulight" colspan="6" height="24" align="center">
@@ -244,38 +270,7 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
 			</TABLE>
 		</TD>
 		<TD class="blank" valign="top">
-			<?
-			/* * * * * * * * * * * * * * *
-			 *       I N F O B O X       *
-			 * * * * * * * * * * * * * * */
-
-			if ($sem->metadates->art == 0) {
-				$times_info .= '<B>'._("Typ").':</B> '._("regelm&auml;&szlig;ige Veranstaltung").'<BR/>';
-				$z = 0;
-				if (is_array($turnus = $sem->getFormattedTurnusDates())) {
-					foreach ($turnus as $val) {
-						if ($z != 0) { $times_info .= '<BR/>'; } $z = 1;
-						$times_info .= $val;
-					}
-				}
-			} else {
-				$times_info .= '<B>'._("Typ").':</B> '._("unregelm&auml;&szlig;ige Veranstaltung").'<BR/>';
-			}
-
-			$infobox[0]["kategorie"] = _("Informationen:");
-			$infobox[1]["kategorie"] = _("Aktionen:");
-			$infobox[0]["eintrag"][] = array ("icon" => "ausruf_small.gif",
-					"text"  => _("Hier k&ouml;nnen Sie f&uuml;r die einzelnen Termine Beschreibungen eingeben, Themen im Forum und Dateiordner anlegen."));
-			$infobox[0]["eintrag"][] = array ("icon" => "ausruf_small.gif",
-					"text"  => sprintf(_("Zeit&auml;nderungen, Raumbuchungen und Termine anlegen k&ouml;nnen Sie unter %s Zeiten %s."), '<a href="raumzeit.php">', '</a>'));
-			$infobox[0]["eintrag"][] = array ("icon" => "blank.gif",
-					"text"  => $times_info);
-			$infobox[1]["eintrag"][] = array ("icon" => "link_intern.gif",
-					"text"  => "<a href=\"raumzeit.php?cmd=createNewSingleDate#newSingleDate\">"._("Einen neuen Termin anlegen").'</a><br/><font color="red">'._("(Link f&uuml;hrt zur Seite Zeiten!)").'</font>');
-			$infobox[1]["eintrag"][] = array ("icon" => "link_intern.gif",
-					"text"  => sprintf(_("Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte den Men&uuml;punkt %s Zeiten %s"), "<a href=\"raumzeit.php\">", "</a>"));
-			?>
-			<? print_infobox ($infobox, "schedules.jpg"); ?>
+		<?print_infobox ($infobox, "schedules.jpg");?>
 		</TD>
 	</TR>
 	<TR>

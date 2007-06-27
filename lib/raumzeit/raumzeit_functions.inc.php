@@ -1,4 +1,24 @@
-<?
+<?php
+/*
+raumzeit_functions.inc.php
+Helper functions for the "RaumZeit"-pages
+Copyright (C) 2005-2007 Till Glöggler <tgloeggl@uos.de>
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
 function getTemplateDataForSingleDate($val, $cycle_id = '') {
 	global $_REQUEST, $every2nd, $choosen, $id, $showSpecialDays, $rz_switcher;
 
@@ -92,12 +112,12 @@ function getTemplateDataForSingleDate($val, $cycle_id = '') {
 		}
 	} else {
 		$tpl['room'] = '';
-		if ($rz_switcher == 1) {
-			$tpl['class'] = 'steel1';
-			$rz_switcher  = 2;
-		} else {
-			$tpl['class'] = 'steelgraulight';
-			$rz_switcher  = 1;
+		$tpl['class'] = 'printhead';
+		if ($val->getFreeRoomText()) {
+			$tpl['room'] = '('.htmlReady($val->getFreeRoomText()).')';
+		}
+		if (($name = $val->isHoliday()) && $showSpecialDays) {
+			$tpl['room'] .= '&nbsp;('._($name).')';
 		}
 
 	}
@@ -222,4 +242,78 @@ function unQuoteAll() {
 	}
 
 }
-?>
+
+function raumzeit_parse_messages($msgs) {
+	$first = true;
+	foreach ($msgs as $msg) {
+		if ($first) {
+			$meldungen['kategorie'] = _("Statusmeldungen:");
+		}
+
+		$zw = explode('§', $msg);
+		$small = true;
+
+		switch ($zw[0]) {
+			case 'info':
+				$pic = ($small ? 'ausruf_small2.gif' : 'ausruf.gif');
+				$color = '#000000';
+				break;
+
+			case 'error':
+				$pic = ($small ? 'x_small2.gif' : 'x.gif');
+				$color = '#FF2020';
+				break;
+
+			case 'msg':
+				$pic = ($small ? 'ok_small2.gif' : 'ok.gif');
+				$color = '#008000';
+				break;
+		}
+
+		$meldungen['eintrag'][] = array (
+				'icon' => $pic,
+				'text' => '<font color="'.$color.'">'.$zw[1].'</font>'
+				);
+
+		$first = false;
+	}
+
+	return $meldungen;
+}
+
+function raumzeit_get_semester_chooser(&$sem, &$semester, $filter) {
+	$all_semester = $semester->getAllSemesterData();
+	$passed = false;
+	$semester_chooser['all'] = _("Alle Semester");
+	foreach ($all_semester as $val) {
+		if ($sem->getStartSemester() <= $val['vorles_beginn']) $passed = true;
+		if ($passed && ($sem->getEndSemesterVorlesEnde() >= $val['vorles_ende'])) {
+			$semester_chooser[$val['beginn']] = $val['name'];
+			if ($raumzeitFilter != ($val['beginn'])) {
+			} else {
+				$seleceted = $val['beginn'];
+			}
+		}
+	}
+
+	$selected = $filter;
+	
+	$info_zw = array();
+	$info_zw['kategorie'] = _("Semesterauswahl:");
+
+	foreach ($semester_chooser as $key => $val) {
+		if ($selected == $key) {
+			$info_zw['eintrag'][] = array(
+					'icon' => 'forumrot.gif',
+					'text' => '<a href="'.$PHP_SELF.'?cmd=applyFilter&newFilter='.$key.'">'.$val.'</a>'
+					);
+		} else {
+			$info_zw['eintrag'][] = array(
+					'icon' => 'forumgrau.gif',
+					'text' => '<a href="'.$PHP_SELF.'?cmd=applyFilter&newFilter='.$key.'">'.$val.'</a>'
+					);
+		}
+	}
+
+	return $info_zw;
+}

@@ -235,7 +235,7 @@ if ($cmd == 'openAll') $openAll = true;
 							"text"  =>"<a href=\"raumzeit.php\">"._("Zur Terminverwaltung")."</a>");
 
 					$infobox[1]["eintrag"][] = array ('icon' => "link_intern.gif",
-							"text"  =>"<a href=\"themen.php\">"._("Zur Themenverwaltung")."</a>");
+							"text"  =>"<a href=\"themen.php\">"._("Zur Ablaufplanverwaltung")."</a>");
 	
 			}
 			print_infobox ($infobox, "schedules.jpg");

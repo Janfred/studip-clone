@@ -1,12 +1,12 @@
 <? if (!$tpl['deleted']) : ?>
 <TR>
-	<TD class="steel1" colspan="9">
+	<TD class="printcontent" colspan="9">
 		<A name="<?=$tpl['sd_id']?>">
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
 				<TD width="5%" align="right" valign="top" class="<?=$tpl['class']?>">
 					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
-						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumrotrunt.gif" border="0" align="abstop">
+						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
 					</A>
 				</TD>
 				<TD width="45%" nowrap class="<?=$tpl['class']?>">
@@ -40,8 +40,8 @@
 				</TD>
 			</TR>
 			<TR>
-				<TD class="steel1">&nbsp;</TD>
-				<TD class="steel1" colspan="2">
+				<TD class="printcontent">&nbsp;</TD>
+				<TD class="printcontent" colspan="2">
 					<FONT size="-1">
 					<? if ($GLOBALS['RESOURCES_ENABLE']) { ?>
 					<?=_("Raum:")?>
@@ -78,7 +78,7 @@
 					<? } ?>
 					</FONT>
 				</TD>
-				<TD class="steel1" valign="top" colspan="2" align="right" nowrap>
+				<TD class="printcontent" valign="top" colspan="2" align="right" nowrap>
 					<FONT size="-1">
 					<?=_("Art:")?>
 					<SELECT name="dateType">
@@ -97,7 +97,7 @@
 				</TD>
 			</TR>
 			<TR>
-				<TD align="center" class="steel1" colspan="4">
+				<TD align="center" class="printcontent" colspan="4">
 					<INPUT type="hidden" name="cmd" value="doAddSingleDate">
 					<INPUT type="image" <?=makebutton('uebernehmen', 'src')?>>
 					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
@@ -115,13 +115,13 @@
 </TR>
 <? else : ?>
 <tr>
-	<td class="steel1" colspan="9">
+	<td class="printcontent" colspan="9">
 		<a name="<?=$tpl['sd_id']?>">
 		<table cellpadding="2" cellspacing="0" border="0" width="100%">
 			<tr>
 				<td width="5%" align="right" valign="top" class="<?=$tpl['class']?>">
 					<a href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
-						<img src="<?=$GLOBALS['ASSETS_URL']?>images/forumrotrunt.gif" border="0" align="abstop">
+						<img src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
 					</a>
 				</td>
 				<td width="43%" nowrap class="<?=$tpl['class']?>">
@@ -143,9 +143,9 @@
 				</td>
 			</tr>
 			<tr>
-				<td width="5%" valign="top" class="steel1">
+				<td width="5%" valign="top" class="printcontent">
 				</td>
-				<td valign="top" class="steel1" colspan="10">
+				<td valign="top" class="printcontent" colspan="10">
 					<font size="-1">
 						<?=_("Der hier eingegebene Kommentar wird im Ablaufplan der Veranstaltung angezeigt.")?><br/>
 						<br/>
@@ -154,7 +154,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td align="center" class="steel1" colspan="4">
+				<td align="center" class="printcontent" colspan="4">
 					<input type="image" <?=makebutton('uebernehmen', 'src')?>>
 					<a href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
 						<img <?=makebutton('abbrechen', 'src')?> border="0">

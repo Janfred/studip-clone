@@ -4,10 +4,10 @@
 		<INPUT type="checkbox" name="themen[]" value="<?=$tpl['issue_id']?>"<?=$tpl['selected']?>>
 		<? if ($issue_open[$tpl['issue_id']]) { ?>
 			<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['issue_id']?>#<?=$tpl['issue_id']?>">
-			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumrotrunt.gif" border="0" align="abstop">
+			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
 		<? } else { ?>
 			<A href="<?=$PHP_SELF?>?cmd=open&open_close_id=<?=$tpl['issue_id']?>#<?=$tpl['issue_id']?>">
-			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumrot3.gif" border="0" align="abstop">
+			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau.gif" border="0" align="abstop">
 		<? } ?>
 		</A>
 	</TD>

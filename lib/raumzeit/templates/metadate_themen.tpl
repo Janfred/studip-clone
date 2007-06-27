@@ -2,7 +2,7 @@
 	<TD class="steelgraulight" colspan="3">
 		<A name="<?=$tpl['md_id']?>">
 		<A class="tree" href="<?=$PHP_SELF?>?cmd=<?=($issue_open[$tpl['md_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
-			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumrot<?=($issue_open[$tpl['md_id']]) ? 'runt' : '3'?>.gif" border="0" align="abstop">&nbsp;
+			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($issue_open[$tpl['md_id']]) ? 'runt' : ''?>.gif" border="0" align="abstop">&nbsp;
 			<FONT size="-1">
 				<?=$tpl['date']?>
 			</FONT>

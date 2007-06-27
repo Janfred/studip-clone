@@ -1003,7 +1003,7 @@ class Seminar {
 
 	function bookRoomForSingleDate($singleDateID, $roomID, $cycle_id = '', $append_messages = true) {
 		if ($roomID == '') {
-			$this->createError('Seminar::bookRoomForSingleDate: missing roomID!');
+			//$this->createError('Seminar::bookRoomForSingleDate: missing roomID!');
 			return FALSE;
 		}
 		if ($roomID == 'nochange') return FALSE;
@@ -1097,7 +1097,7 @@ class Seminar {
 				$return = 'steelgreen';
 			}
 		} else {
-			return 'steelgraulight';
+			return 'printhead';
 		}
 
 		return $return;

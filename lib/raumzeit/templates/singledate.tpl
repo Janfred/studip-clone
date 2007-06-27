@@ -4,7 +4,7 @@
 		<A name="<?=$tpl['sd_id']?>">
 		<? if (!$_LOCKED) { ?>
 		<A href="<?=$PHP_SELF?>?cmd=<?=($sd_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
-			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumrot<?=($sd_open[$tpl['sd_id']]) ? 'runt' : '3'?>.gif" border="0" align="abstop">
+			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($sd_open[$tpl['sd_id']]) ? 'runt' : ''?>.gif" border="0" align="abstop">
 		</A>
 		<INPUT type="checkbox" name="singledate[]" value="<?=$tpl['sd_id']?>" <?=$tpl['checked']?>>
 		<? } ?>
@@ -47,7 +47,7 @@
 		<? if (!$_LOCKED) { ?>
 			<? if ($GLOBALS['perm']->have_perm('admin')) : ?>
 				<A href="<?=$PHP_SELF?>?cmd=<?=($sd_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
-					<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumrot<?=($sd_open[$tpl['sd_id']]) ? 'runt' : '3'?>.gif" border="0" align="abstop">
+					<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($sd_open[$tpl['sd_id']]) ? 'runt' : ''?>.gif" border="0" align="abstop">
 				</A>
 			<? else : ?>
 				<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau2.gif" border="0" align="abstop">

@@ -8,11 +8,11 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 				<TD width="5%" align="right" valign="top" class="<?=$tpl['class']?>">					
 					<? if (!$_LOCKED || !$sd_open[$tpl['md_id']]) { ?>
 					<A href="<?=$PHP_SELF?>?cmd=open&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
-						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumrot3.gif" border="0" align="abstop">
+						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau.gif" border="0" align="abstop">
 					</A>
 					<? } else { ?>
 					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
-						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumrotrunt.gif" border="0" align="abstop">
+						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
 					</A>
 					<? } ?>
 				</TD>
@@ -68,7 +68,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 			<TR>
 				<TD width="5%" align="right" valign="top" class="<?=$tpl['class']?>" nowrap>
 					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
-						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumrotrunt.gif" border="0" valign="absmiddle">
+						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" valign="absmiddle">
 					</A>
 				</TD>
 				<TD width="90%" nowrap class="<?=$tpl['class']?>">
@@ -82,17 +82,17 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 								<OPTION value="5"<?=($tpl['mdDayNumber']=='5') ? 'selected="selected"' : ''?>>Freitag</OPTION>
 								<OPTION value="6"<?=($tpl['mdDayNumber']=='6') ? 'selected="selected"' : ''?>>Samstag</OPTION>
 								<OPTION value="0"<?=($tpl['mdDayNumber']=='0') ? 'selected="selected"' : ''?>>Sonntag</OPTION>
-							</SELECT>,&nbsp;
-							<INPUT type="text" name="start_stunde" maxlength="2" size="2" value="<?=leadingZero($tpl['mdStartHour'])?>">&nbsp;:
+							</SELECT>,
+							<INPUT type="text" name="start_stunde" maxlength="2" size="2" value="<?=leadingZero($tpl['mdStartHour'])?>"> :
 							<INPUT type="text" name="start_minute" maxlength="2" size="2" value="<?=leadingZero($tpl['mdStartMinute'])?>">
 							bis
-							<INPUT type="text" name="end_stunde" maxlength="2" size="2" value="<?=leadingZero($tpl['mdEndHour'])?>">&nbsp;:
-							<INPUT type="text" name="end_minute" maxlength="2" size="2" value="<?=leadingZero($tpl['mdEndMinute'])?>">&nbsp;Uhr
+							<INPUT type="text" name="end_stunde" maxlength="2" size="2" value="<?=leadingZero($tpl['mdEndHour'])?>"> :
+							<INPUT type="text" name="end_minute" maxlength="2" size="2" value="<?=leadingZero($tpl['mdEndMinute'])?>"> Uhr
 							<?=Termin_Eingabe_javascript(2,0,0,$tpl['mdStartHour'],$tpl['mdStartMinute'],$tpl['mdEndHour'],$tpl['mdEndMinute']);?>
-							&nbsp;&nbsp;Beschreibung:&nbsp;<INPUT type="text" name="description" value="<?=$tpl['mdDescription']?>">
+							&nbsp;&nbsp;Beschreibung: <INPUT type="text" name="description" value="<?=$tpl['mdDescription']?>">
 							&nbsp;&nbsp;<INPUT type="image" name="editCycle" align="absmiddle" <?=makebutton('uebernehmen', 'src')?>>
+							<INPUT type="hidden" name="cycle_id" value="<?=$tpl['md_id']?>">
 						</B></FONT>
-						<INPUT type="hidden" name="cycle_id" value="<?=$tpl['md_id']?>">
 					</FORM>
 				</TD>
 				<TD width="5%" nowrap class="<?=$tpl['class']?>" align="right" nowrap>

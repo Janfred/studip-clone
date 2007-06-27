@@ -56,9 +56,9 @@ class SingleDateDB {
 		}
 
 		if ($termin->isUpdate()) {
-			$db->query($query = "UPDATE $table SET metadate_id = '".$termin->getMetaDateID()."', date_typ = '".$termin->getDateType()."', date = '".$termin->getStartTime()."', end_time = '".$termin->getEndTime()."', chdate = '".$termin->getChDate()."', range_id = '".$termin->getRangeID()."', autor_id = '".$termin->getAuthorID()."',raum = '".$termin->getFreeRoomText()."', content = '".$termin->getComment()."'  WHERE termin_id = '".$termin->getTerminID()."'");
+			$db->query($query = "UPDATE $table SET metadate_id = '".$termin->getMetaDateID()."', date_typ = '".$termin->getDateType()."', date = '".$termin->getStartTime()."', end_time = '".$termin->getEndTime()."', chdate = '".$termin->getChDate()."', range_id = '".$termin->getRangeID()."', autor_id = '".$termin->getAuthorID()."',raum = '".mysql_escape_string($termin->getFreeRoomText())."', content = '".$termin->getComment()."'  WHERE termin_id = '".$termin->getTerminID()."'");
 		} else {
-			$db->query($query = "REPLACE INTO $table (metadate_id, date_typ, date, end_time, mkdate, chdate, termin_id, range_id, autor_id, raum, content) VALUES ('".$termin->getMetaDateID()."', '".$termin->getDateType()."', '".$termin->getStartTime()."', '".$termin->getEndTime()."', '".$termin->getMkDate()."', '".$termin->getChDate()."', '".$termin->getTerminID()."', '".$termin->getRangeID()."', '".$termin->getAuthorID()."', '".$termin->getFreeRoomText()."', '".$termin->getComment()."')");
+			$db->query($query = "REPLACE INTO $table (metadate_id, date_typ, date, end_time, mkdate, chdate, termin_id, range_id, autor_id, raum, content) VALUES ('".$termin->getMetaDateID()."', '".$termin->getDateType()."', '".$termin->getStartTime()."', '".$termin->getEndTime()."', '".$termin->getMkDate()."', '".$termin->getChDate()."', '".$termin->getTerminID()."', '".$termin->getRangeID()."', '".$termin->getAuthorID()."', '".mysql_escape_string($termin->getFreeRoomText())."', '".$termin->getComment()."')");
 		}
 		return TRUE;
 	}

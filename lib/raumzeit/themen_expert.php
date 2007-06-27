@@ -165,7 +165,7 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="0">
 	<TR>
 		<TD colspan="2" class="topic">
-			&nbsp; <B><?=getHeaderLine($id)." -  "._("allgemeine Zeiten");?></B>
+			&nbsp; <B><?=getHeaderLine($id)." -  "._("Ablaufplanverwaltung");?></B>
 		</TD>
 	</TR>
 	<TR>
@@ -194,8 +194,8 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
 					 </TD>
 					 <TD class="blank" align="right">
 						<?
-							$tpl['view']['simple'] = 'Einfach';
-							$tpl['view']['expert'] = 'Experte';
+							$tpl['view']['simple'] = 'Standard';
+							$tpl['view']['expert'] = 'Erweitert';
 							$tpl['selected'] = $viewModeFilter;
 							include('lib/raumzeit/templates/choose_view.tpl');
 						?>
