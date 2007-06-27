@@ -1293,8 +1293,8 @@ if ($view == 'Daten') {
 		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">";
 		echo "<font size=\"-1\">&nbsp; " . _("Skype Name:") . "</font><br>&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"skype_name\" value=\"".htmlReady($user->cfg->getValue($my_about->auth_user['user_id'], 'SKYPE_NAME'))."\"></td>";
 		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">";
-		echo "<font size=\"-1\">&nbsp; "  . _("Skype Online Status anzeigen:") . "</font><br>&nbsp;<input type=\"checkbox\" name=\"skype_online_status\" value=\"1\" ". ($user->cfg->getValue($my_about->auth_user['user_id'], 'SKYPE_ONLINE_STATUS') ? 'checked' : '') . "\"></td>";
-		echo "</td></tr>\n";
+		echo "<font size=\"-1\">&nbsp; "  . _("Skype Online Status anzeigen:") . "</font><br>&nbsp;<input type=\"checkbox\" name=\"skype_online_status\" value=\"1\" ". ($user->cfg->getValue($my_about->auth_user['user_id'], 'SKYPE_ONLINE_STATUS') ? 'checked' : '') . "></td>";
+		echo "</tr>\n";
 	}
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Motto:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
