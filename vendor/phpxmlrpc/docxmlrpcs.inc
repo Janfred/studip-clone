@@ -696,7 +696,7 @@ input.required {
 	border: 2px #8888dd solid;
 }
 
-input[name='submit'] {
+input[name=\'submit\'] {
 	margin-top: 5px;
 	text-align: center;
 	font-weight: bold;
