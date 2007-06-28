@@ -19,7 +19,7 @@
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: dispatcher.php 5838 2007-05-31 09:07:03Z mlunzena $
+ * @version   $Id: dispatcher.php 6021 2007-06-28 08:52:03Z mlunzena $
  */
 
 class Trails_Dispatcher {
@@ -79,7 +79,7 @@ class Trails_Dispatcher {
    * @return string <description>
    */
   function get_path($controller_path) {
-    return sprintf('%s/app/controllers/%s.php',
+    return sprintf('%s/controllers/%s.php',
                    $this->trails_root, $controller_path);
   }
 

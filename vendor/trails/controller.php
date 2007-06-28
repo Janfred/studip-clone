@@ -19,7 +19,7 @@
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: controller.php 5838 2007-05-31 09:07:03Z mlunzena $
+ * @version   $Id: controller.php 6021 2007-06-28 08:52:03Z mlunzena $
  */
 
 class Trails_Controller {
@@ -61,7 +61,8 @@ class Trails_Controller {
     $this->performed_redirect = FALSE;
 
     $this->template_factory =&
-      new Flexi_TemplateFactory($dispatcher->trails_root . '/app/views/');
+      new Flexi_TemplateFactory($dispatcher->trails_root . DIRECTORY_SEPARATOR .
+                               'views' . DIRECTORY_SEPARATOR);
     $this->set_layout(NULL);
   }
 
@@ -158,9 +159,6 @@ class Trails_Controller {
       trigger_error('Double_Render_Error');
 
     $this->performed_redirect = TRUE;
-
-    # get host
-    $host = $_SERVER['HTTP_HOST'];
 
     # get uri
     $url = $this->url_for($to);
