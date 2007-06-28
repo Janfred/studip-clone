@@ -19,7 +19,7 @@
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: controller.php 6021 2007-06-28 08:52:03Z mlunzena $
+ * @version   $Id: controller.php 6028 2007-06-28 09:15:55Z mlunzena $
  */
 
 class Trails_Controller {
@@ -229,12 +229,10 @@ class Trails_Controller {
     }
 
     # template requires setup ?
-    if ($this->does_template_require_setup($template)) {
-      switch (get_class($template)) {
-        case 'Flexi_JsTemplate':
-          header('Content-Type: text/javascript');
-          break;
-      }
+    switch (get_class($template)) {
+      case 'Flexi_JsTemplate':
+        header('Content-Type: text/javascript');
+        break;
     }
 
     # set attributes
