@@ -1,4 +1,4 @@
-<?
+<?php
 // +--------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // MetaDate.class.php
@@ -26,7 +26,7 @@
  *
  *
  * @author      Till Glöggler <tgloeggl@uos.de>
- * @version     08. Februar 2007
+ * @version     28. Juni 2007
  * @access      protected
  * @package     raumzeit
  */
@@ -115,7 +115,7 @@ class MetaDate {
 				return FALSE;
 			}
 
-			if (mktime($data['start_stunde'], $data['start_minute']) < mktime($data['end_stunde'], $data['end_minute'])) {			
+			if (mktime((int)$data['start_stunde'], (int)$data['start_minute']) < mktime((int)$data['end_stunde'], (int)$data['end_minute'])) {			
 				$cycle->setDay($data['day']);
 				$cycle->setStart($data['start_stunde'], $data['start_minute']);
 				$cycle->setEnd($data['end_stunde'], $data['end_minute']);
@@ -282,6 +282,13 @@ class MetaDate {
 		return $this->cycles[$metadate_id]->readSingleDates($start, $end);
 	}
 
+	function hasDates($metadate_id, $filterStart = 0, $filterEnd = 0) {
+		if (!isset($this->hasDatesTmp[$metadate_id])) {
+			$this->hasDatesTmp[$metadate_id] = MetaDateDB::has_dates($metadate_id, $this->getSeminarID(), $filterStart, $filterEnd);
+		}
+
+		return $this->hasDatesTmp[$metadate_id];
+	}
 	/*function isLectureFreeTime($time, $all_semester) {
 		foreach ($all_semester as $val) {
 			if (($val['beginn'] <= $time) && ($val['ende'] >= $time)) {
@@ -305,14 +312,11 @@ class MetaDate {
 		$all_semester = $semester->getAllSemesterData();
 
 		// get the starting-point for creating singleDates for the choosen cycleData
-		/*if ($this->start_woche >= 0) { */
-			foreach ($all_semester as $val)
-				if (($this->seminarStartTime >= $val["beginn"]) && ($this->seminarStartTime <= $val["ende"])) {
-					$sem_begin = mktime(0, 0, 0, date("n",$val["vorles_beginn"]), date("j",$val["vorles_beginn"]),  date("Y",$val["vorles_beginn"]));
-				}
-		/* } else {
-			$sem_begin = $this->start_termin;
-		}*/
+		foreach ($all_semester as $val) {
+			if (($this->seminarStartTime >= $val["beginn"]) && ($this->seminarStartTime <= $val["ende"])) {
+				$sem_begin = mktime(0, 0, 0, date("n",$val["vorles_beginn"]), date("j",$val["vorles_beginn"]),  date("Y",$val["vorles_beginn"]));
+			}
+		}
 
 		// get the end-point
 		if ($this->seminarDurationTime == -1) {
@@ -354,47 +358,62 @@ class MetaDate {
 	function createSingleDatesForSemester($metadate_id, $sem_begin, $sem_end, $startAfterTimeStamp, $corr, &$irregularSingleDates) {
 		global $_CONVERT;
 
+		// loads the singledates of the by metadate_id denoted regular time-entry into the object
 		$this->readSingleDates($metadate_id);
+
+		// The currently existing singledates for the by metadate_id denoted  regular time-entry
 		$existingSingleDates =& $this->cycles[$metadate_id]->getSingleDates();
 
-		$holiday = new HolidayData;
+		// HolidayData is used to decide wether a date is during a holiday an should be created as an ex_termin.
+		// Additionally, it is used to show which type of holiday we've got.
+		$holiday = new HolidayData();
 
-		if ($this->start_woche == 1) {
-			$current = true;	// 14-TGL
-		} else {
-			$current = false;	// WTL
-		}
+		// This variable is used to check if a given singledate shall be created in a bi-weekly seminar.
+		$odd_or_even = 1 - ($this->start_woche % 2);
 
 		$week = 0;
 
+		// loop through all possible singledates for this regular time-entry
 		do {
-			$dateExists = FALSE;
-			if (($week == 0) && ($this->start_woche == 1)) $dateExists = TRUE;
+			// if dateExists is true, the singledate will not be created. Default is of course to create the singledate
+			$dateExists = false;
 
+			// do not create singledates, if they are earlier then the chosen start-week
+			if ($this->start_woche > $week) $dateExists = true;
+
+			// bi-weekly checkyy
 			if ($this->turnus > 0) {
-				$current = !$current;
-				if (!$current) {	// WTL , 14-TGL
-					$dateExists = TRUE;
+				if (($week % 2) == $odd_or_even) {
+					$dateExists = true;
 				}
 			}
 
-			//create new dates
+			//create timestamps for the new singledate
 			$start_time = mktime ($this->cycles[$metadate_id]->start_stunde, $this->cycles[$metadate_id]->start_minute, 0, date("n", $sem_begin), (date("j", $sem_begin)+$corr) + ($this->cycles[$metadate_id]->day -1) + ($week * 7), date("Y", $sem_begin));
 
 			$end_time = mktime ($this->cycles[$metadate_id]->end_stunde, $this->cycles[$metadate_id]->end_minute, 0, date("n", $sem_begin), (date("j", $sem_begin)+$corr) + ($this->cycles[$metadate_id]->day -1) + ($week * 7), date("Y", $sem_begin));
 
-			/* we only create dates, which do not already exist, so we do not overwrite existing dates */
+			/*
+			 * We only create dates, which do not already exist, so we do not overwrite existing dates.
+			 *
+			 * Additionally, we delete singledates which are not needed any more (bi-weekly, changed start-week, etc.)
+			 */
 			foreach ($existingSingleDates as $key => $val) {
+				// take only the singledate into account, that maps the current timepoint
 				if (($val->date == $start_time) && ($val->end_time == $end_time)) {
+
+					// bi-weekly checkyy
 					if ($this->turnus > 0) {
-						if (!$current) {			//WTL, 14-TGL - Abfrage
+						if (($week % 2) == $odd_or_even) {
 							$val->delete();
 						}
 					}
-					if (($week == 0) && ($this->start_woche == 1) && ($this->turnus == 0)) {
+					
+					// delete singledates if they are earlier than the chosen start-week
+					if ($this->start_woche > $week) {
 						$val->delete();
 					}
-					$dateExists = TRUE;
+					$dateExists = true;
 				}
 			}
 
@@ -419,11 +438,11 @@ class MetaDate {
 			// conversion end
 
 			if (!($end_time < $sem_end)) {
-				$dateExists = TRUE;
+				$dateExists = true;
 			}
 
 			if ($start_time < $startAfterTimeStamp) {
-				$dateExists = TRUE;
+				$dateExists = true;
 			}
 
 			/*if (!$this->isLectureFreeTime($start_time, $all_semester)) {
@@ -440,6 +459,7 @@ class MetaDate {
 						$termin->setExTermin(true);
 					}
 				}
+
 				//check for calculatable holidays
 				if (!$termin->isExTermin()) {
 					$holy_type = holiday($start_time);
@@ -448,6 +468,7 @@ class MetaDate {
 					}
 				}
 
+				// fill the singleDate-Object with data
 				$termin->setMetaDateID($metadate_id);
 				$termin->setTime($start_time, $end_time);
 				$termin->setDateType($date_typ);
@@ -464,6 +485,7 @@ class MetaDate {
 					}*/
 				}
 
+				// store the singleDate to database
 				$termin->store();
 			}
 
@@ -472,9 +494,8 @@ class MetaDate {
 
 		} while ($end_time < $sem_end);
 
+		// store all the other stuff
 		$this->store();
 
-		$this->readSingleDates($metadate_id);
 	}
 }
-?>

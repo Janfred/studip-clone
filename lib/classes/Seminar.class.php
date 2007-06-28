@@ -807,6 +807,7 @@ class Seminar {
 			if (!$this->metadate->cycles[$metadate_id]->termine) {
 				$this->readSingleDates();
 				$this->metadate->createSingleDates($metadate_id, $this->irregularSingleDates);
+				$this->metadate->readSingleDates($metadate_id, $this->filterStart, $this->filterEnd);
 			}
 			//$this->metadate->readSingleDates($metadate_id, $this->filterStart, $this->filterEnd);
 		}
@@ -1089,15 +1090,19 @@ class Seminar {
 	function getCycleColorClass($cycle_id) {
 		$stat = $this->getStatOfNotBookedRooms($cycle_id);
 		if ($GLOBALS['RESOURCES_ENABLE']) {
-			if (($stat['open'] > 0) && ($stat['open'] == $stat['all'])) {
+			if (!$this->metadate->hasDates($cycle_id, $this->filterStart, $this->filterEnd)) {
 				$return = 'steelred';
-			} else if ($stat['open'] > 0) {
-				$return = 'steelgelb';
 			} else {
-				$return = 'steelgreen';
+				if (($stat['open'] > 0) && ($stat['open'] == $stat['all'])) {
+					$return = 'steelred';
+				} else if ($stat['open'] > 0) {
+					$return = 'steelgelb';
+				} else {
+					$return = 'steelgreen';
+				}
 			}
 		} else {
-			return 'printhead';
+			$return = 'printhead';
 		}
 
 		return $return;

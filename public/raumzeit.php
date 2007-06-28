@@ -168,6 +168,28 @@ if ($GLOBALS['RESOURCES_ENABLE']) {
 	$infobox[] = $info;
 }
 
+
+// get possible start-weeks
+$start_weeks = array();
+
+$tmp_first_date = getCorrectedSemesterVorlesBegin(get_sem_num($sem->getStartSemester()));
+$all_semester = $semester->getAllSemesterData();
+
+foreach ($all_semester as $val) {
+	if ( ($val['beginn'] < $tmp_first_date) && ($val['ende'] > $tmp_first_date) ) {
+		$end_date = $val['vorles_ende'];
+	}
+}
+
+$i = 0;
+while ($tmp_first_date < $end_date) {
+	$start_weeks[$i]['text'] = ($i+1) .'. '. _("Startwoche") .' ('. _("ab") .' '. date("d.m.Y",$tmp_first_date);
+	$start_weeks[$i]['selected'] = ($sem->getStartWeek() == $i);
+
+	$i++;
+	$tmp_first_date = $tmp_first_date + (7 * 24 * 60 * 60);
+}
+
 // template-like output
 ?>
 <TABLE width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -178,7 +200,7 @@ if ($GLOBALS['RESOURCES_ENABLE']) {
 	</TR>
 
 	<tr>
-		<td class="blank" width="100%" align="center">
+		<td class="blank" width="100%" align="center" valign="top">
 			<br />
 			<table width="99%" border="0" cellpadding="2" cellspacing="0">
 			<tr>
@@ -284,9 +306,16 @@ if ($GLOBALS['RESOURCES_ENABLE']) {
 						&nbsp;&nbsp;
 						<?=_("beginnt in der")?>:
 						<? if (!$_LOCKED) { ?>
-						<SELECT name="startWeek">
-							<OPTION value="0"<?=($sem->getStartWeek() == '0') ? ' selected' : ''?>>1. <?=_("Semesterwoche");?></OPTION>
-							<OPTION value="1"<?=($sem->getStartWeek() == '1') ? ' selected' : ''?>>2. <?=_("Semesterwoche");?></OPTION>
+						<select name="startWeek">
+						<?
+							foreach ($start_weeks as $value => $data) :
+
+								echo '<option value="'.$value.'"';
+								if ($data['selected']) echo ' selected="selected"';
+								echo '>'.$data['text'].'</option>', "\n";
+
+							endforeach;
+						?>
 						</SELECT>
 						</FONT>
 						&nbsp;&nbsp;
@@ -294,7 +323,7 @@ if ($GLOBALS['RESOURCES_ENABLE']) {
 						<INPUT type="hidden" name="cmd" value="selectSemester">
 						</FORM>
 						<? } else {
-							echo ($sem->getStartWeek()) ? '2. ' : '1. ', _("Semesterwoche");
+							echo ($sem->getStartWeek() + 1) .'. '. _("Semesterwoche");
 						} ?>
 					</TD>
 				</TR>
@@ -371,13 +400,12 @@ if ($GLOBALS['RESOURCES_ENABLE']) {
 						$tpl['mdDescription'] = htmlReady($val->description);
 
 						include('lib/raumzeit/templates/metadate.tpl');
+
 						if ($sd_open[$metadate_id]) {
+							$termine =& $sem->getSingleDatesForCycle($metadate_id);
 							?>
 							<FORM action="<?=$PHP_SELF?>" method="post" name="Formular">
 							<INPUT type="hidden" name="cycle_id" value="<?=$metadate_id?>">
-							<?
-							$termine =& $sem->getSingleDatesForCycle($metadate_id);
-							?>
 				<TR>
 					<TD align="center" colspan="9" class="steel1">
 						<TABLE cellpadding="1" cellspacing="0" border="0" width="90%">
@@ -385,7 +413,14 @@ if ($GLOBALS['RESOURCES_ENABLE']) {
 							$every2nd = 1;
 							$all_semester = $semester->getAllSemesterData();
 							$grenze = 0;
-							foreach ($termine as $singledate_id => $val) {
+							if (sizeof($termine) == 0) {
+								foreach ($all_semester as $val) {
+									if ($val['beginn'] == $raumzeitFilter) {
+										$sem_name = $val['name'];break;
+									}
+								}
+								parse_msg('error§'.sprintf(_("Für das %s gibt es für diese regelmäßige Zeit keine Termine!"), '<b>'.$sem_name.'</b>').'§', '§', 'steel1');
+							} else foreach ($termine as $singledate_id => $val) {
 								if ( ($grenze == 0) || ($grenze < $val->getStartTime()) ) {
 									foreach ($all_semester as $zwsem) {
 										if ( ($zwsem['beginn'] < $val->getStartTime()) && ($zwsem['ende'] > $val->getStartTime()) ) {
@@ -417,6 +452,7 @@ if ($GLOBALS['RESOURCES_ENABLE']) {
 						</TABLE>
 					</TD>
 				</TR>
+				<? if (sizeof($termine) > 0) : ?>
 				<TR>
 					<TD class="steel1" colspan="9" align="center">
 						<?
@@ -427,6 +463,7 @@ if ($GLOBALS['RESOURCES_ENABLE']) {
 					</TD>
 				</TR>
 				<?
+				endif;
 						}
 						echo "</FORM>";
 					}

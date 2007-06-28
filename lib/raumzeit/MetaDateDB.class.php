@@ -1,4 +1,4 @@
-<?
+<?php
 // +--------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // MetaDateDB.class.php
@@ -49,5 +49,20 @@ class MetaDateDB {
 		}
 	}
 
+	function has_dates($metadate_id, $seminar_id, $filterStart = 0, $filterEnd = 0) {
+		$db = new DB_Seminar();
+
+		if ($filterStart == 0) {
+			$query = "SELECT * FROM termine WHERE range_id = '$seminar_id' AND metadate_id = '$metadate_id'";
+		} else {
+			$query = "SELECT * FROM termine WHERE range_id = '$seminar_id' AND metadate_id = '$metadate_id' AND date >= $filterStart AND end_time <= $filterEnd";
+		}
+
+		$db->query($query);
+		if ($db->next_record()) {
+			return true;
+		}
+
+		return false;
+	}
 }
-?>

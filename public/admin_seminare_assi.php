@@ -1409,17 +1409,19 @@ if (($form == 6) && ($jump_next_x))
 		$sem_create_data["sem_id"] = $sem->getId();
 
 		// Raumanfrage erzeugen
-
-		if (!$sem_create_data['skip_room_request']) {
-			$sem_create_data['resRequest']->setSeminarId($sem->getId());
-			$sem_create_data['resRequest']->store();
+		if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) {
+			if (!$sem_create_data['skip_room_request']) {
+				$sem_create_data['resRequest']->setSeminarId($sem->getId());
+				$sem_create_data['resRequest']->store();
+			}
 		}
 
 		// logging
 		log_event("SEM_CREATE",$sem_create_data['sem_id'],NULL,NULL,$query);
 		log_event(($visible ? "SEM_VISIBLE" : "SEM_INVISIBLE"), $sem_create_data['sem_id'],NULL,NULL,'admin_seminare_assi',"SYSTEM");
 
-		//und jetzt wirklich eintragen
+
+		// create singledates for the regular entrys
 		if (!$sem_create_data["sem_entry"]) {
 			foreach ($sem->getMetaDates() as $key => $val) {
 				$sem->metadate->createSingleDates($key);
@@ -2620,21 +2622,23 @@ if ($level == 3) {
 									<select name="term_start_woche">
 									<?
 									$tmp_first_date = getCorrectedSemesterVorlesBegin(get_sem_num($sem_create_data["sem_start_time"]));
-									if ($sem_create_data["term_start_woche"] == 0)
-										echo "<option selected value=0>"._("1. Semesterwoche")." ("._("ab")." ".date("d.m.Y",$tmp_first_date).")</option>";
-									else
-										echo "<option value=0>"._("1. Semesterwoche")." ("._("ab")." ".date("d.m.Y",$tmp_first_date).")</option>";
-									$tmp_first_date = $tmp_first_date + (7 * 24 * 60 * 60);
-									if ($sem_create_data["term_start_woche"] == 1)
-										echo "<option selected value=1>"._("2. Semesterwoche")." ".date("d.m.Y",$tmp_first_date).")</option>";
-									else
-										echo "<option value=1>"._("2. Semesterwoche")." ("._("ab")." ".date("d.m.Y",$tmp_first_date).")</option>";
-									// "anderer Startzeitpunkt" ist bei der Raum-Zeit-Seite nicht vorgehesen. Diskussionsbedarf?
-									/*if ($sem_create_data["term_start_woche"] == -1)
-										echo "<option selected value=-1>"._("anderer Startzeitpunkt")."</option>";
-									else
-										echo "<option value=-1>"._("anderer Startzeitpunkt")."</option>";*/
+									foreach ($all_semester as $val) {
+										if ( ($val['beginn'] < $tmp_first_date) && ($val['ende'] > $tmp_first_date) ) {
+											$end_date = $val['vorles_ende'];
+										}
+									}
 
+									$i = 0;
+									while ($tmp_first_date < $end_date) {
+										echo '<option';
+										if ($sem_create_data["term_start_woche"] == $i) {
+											echo ' selected="selected"';
+										}
+										echo ' value="'.$i.'">';
+										echo ($i+1).'. '._("Semesterwoche")." ("._("ab")." ".date("d.m.Y",$tmp_first_date).")</option>";
+										$i++;
+										$tmp_first_date = $tmp_first_date + (7 * 24 * 60 * 60);
+									}
 									?>
 									</select>
 									<br><br>&nbsp; <font size=-1><?=_("Die Veranstaltung findet immer zu diesen Zeiten statt:"); ?></font><br><br>
@@ -2688,6 +2692,7 @@ if ($level == 3) {
 											<?
 										}
 										echo  Termin_Eingabe_javascript(4, $i, 0, $ss,$sm,$es,$em);
+
 										//Beschreibung
 										echo "\n<br>&nbsp; " . _("Beschreibung:") . "&nbsp;";
 										echo "\n<select name=\"term_turnus_desc_chooser[$i]\" ";
