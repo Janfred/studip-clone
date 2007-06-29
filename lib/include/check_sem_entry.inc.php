@@ -18,13 +18,16 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
+  global $perm, $SessSemName, $send_from_search, $rechte;
+
 	require_once ('lib/msg.inc.php');
 
 	if (isset($SessSemName) && ($SessSemName[1] != "")) {
 		$db=new DB_Seminar;
-		
+
 		$entry_level = ($SessSemName["is_fak"]) ? "fak" : $SessSemName["class"];
-		
+
 		if ($entry_level=="sem") {
 			$db->query("SELECT Lesezugriff, Schreibzugriff, Passwort FROM seminare WHERE Seminar_id LIKE '$SessSemName[1]'");
 			while ($db->next_record()) {
@@ -32,7 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 				$SemSecLevelWrite=$db->f("Schreibzugriff");
 			$SemSecPass=$db->f("Passwort");}
 			$SemUserStatus = $perm->get_studip_perm($SessSemName[1]);
-			
+
 			//root darf alles, keine Abfrage, admins duerfen jetzt auch :(
 			if (!$SemUserStatus) {//wenn kein Status gesetzt ist (=keine Eintrag fuer das Seminar) gucken, ob man trotzdem rein darf (vielleicht als Nobody?)
 				$SemUserStatus="nobody";
@@ -64,6 +67,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 			else
 				$rechte=FALSE;
 		}
-			
+
 	}
  ?>
