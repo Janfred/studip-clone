@@ -1,10 +1,10 @@
 <?
 /*
 links_about.inc.php - Navigation fuer die Uebersichtsseiten.
-Copyright (C) 2002	Stefan Suchi <suchi@gmx.de>, 
-				Ralf Stockmann <rstockm@gwdg.de>, 
+Copyright (C) 2002	Stefan Suchi <suchi@gmx.de>,
+				Ralf Stockmann <rstockm@gwdg.de>,
 				Cornelis Kater <ckater@gwdg.de
-				Suchi & Berg GmbH <info@data-quest.de> 
+				Suchi & Berg GmbH <info@data-quest.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -46,11 +46,11 @@ if ($username == $auth->auth["uname"]) {
 	$structure['mystudip'] = array('topKat' => "", 'name' => _("My Stud.IP"), 'link' => "edit_about.php?view=allgemein&username=$username", 'active' => FALSE);
 }
 if ($GLOBALS["PLUGINS_ENABLE"]){
-	// PluginEngine aktiviert. 
+	// PluginEngine aktiviert.
 	// Prüfen, ob HomepagePlugins vorhanden sind.
 	$requser = new StudIPUser();
 	$requser->setUserid($user_id);
-	$homepagepluginpersistence = PluginEngine::getPluginPersistence("Homepage");	
+	$homepagepluginpersistence = PluginEngine::getPluginPersistence("Homepage");
 	$activatedhomepageplugins = $homepagepluginpersistence->getAllActivatedPlugins();
 	if (!is_array($activatedhomepageplugins)){
 		$activatedhomepageplugins = array();
@@ -58,7 +58,7 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 	foreach ($activatedhomepageplugins as $activatedhomepageplugin){
 		$activatedhomepageplugin->setRequestedUser($requser);
 		// hier nun die HomepagePlugins anzeigen
-		if ($activatedhomepageplugin->hasNavigation()){	
+		if ($activatedhomepageplugin->hasNavigation()){
 			$hppluginnav = $activatedhomepageplugin->getNavigation();
 			$structure["hpplugin_" . $activatedhomepageplugin->getPluginid()] = array('topKat' => '', 'name' => $hppluginnav->getDisplayname(), 'link' => PluginEngine::getLink($activatedhomepageplugin,array("requesteduser" => $username)), 'active' => FALSE);
 			$pluginsubmenu["_hpplugin_" . $activatedhomepageplugin->getPluginId()] = array('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$hppluginnav->getDisplayname(),'link'=>PluginEngine::getLink($activatedhomepageplugin,array("requesteduser" => $username)),'active'=>false);
@@ -67,7 +67,7 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 			foreach ($submenu as $submenuitem){
 				$submenuitem->addLinkParam("requesteduser",$username);
 				// create entries in a temporary structure and add it to structure later
-				$pluginsubmenu["hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$submenuitem->getDisplayname(), 'link'=>PluginEngine::getLink($activatedhomepageplugin,$submenuitem->getLinkParams()), 'active'=>false); 
+				$pluginsubmenu["hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$submenuitem->getDisplayname(), 'link'=>PluginEngine::getLink($activatedhomepageplugin,$submenuitem->getLinkParams()), 'active'=>false);
 			}
 		}
 	}
@@ -123,7 +123,7 @@ if ($PLUGINS_ENABLE){
 		// Namen der aufgerufenen Datei aus der URL herausschneiden
 		if (strlen($i_page) <= 0){
 			$i_page = basename($PHP_SELF);
-		} 
+		}
 		if ($i_page == "plugins.php"){
 			foreach ($activatedhomepageplugins as $activatedhomepageplugin){
 				$activatedhomepageplugin->setRequestedUser($requser);
@@ -132,11 +132,11 @@ if ($PLUGINS_ENABLE){
 					$reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId();
 					$navi = $activatedhomepageplugin->getNavigation();
 					$submenu = $navi->getSubMenu();
-					
-					if (submenu != null){
+
+					if ($submenu != null){
     					foreach ($submenu as $submenuitem){
     						$params = $submenuitem->getLinkParams();
-    						    						
+
     						foreach ($params as $key => $val){
         						if (isset($_GET["$key"]) && $_GET["$key"] == $val){
         						   $reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname();
@@ -156,50 +156,50 @@ if ($PLUGINS_ENABLE){
 if (!$found){
 //View festlegen
 switch ($i_page) {
-	case "about.php" : 
-		$reiter_view="alle"; 
+	case "about.php" :
+		$reiter_view="alle";
 	break;
-	case "migration2studip.php" : 
-		$reiter_view="ilias"; 
+	case "migration2studip.php" :
+		$reiter_view="ilias";
 	break;
-	case "my_elearning.php" : 
-		$reiter_view="elearning"; 
+	case "my_elearning.php" :
+		$reiter_view="elearning";
 	break;
-	case "edit_about.php" : 
+	case "edit_about.php" :
 		switch ($view) {
 			case "Bild":
-				$reiter_view="bild"; 
+				$reiter_view="bild";
 			break;
 			case "Daten":
-				$reiter_view="daten"; 
+				$reiter_view="daten";
 			break;
 			case "Karriere":
-				$reiter_view="karriere"; 
+				$reiter_view="karriere";
 			break;
 			case "Lebenslauf":
-				$reiter_view="lebenslauf"; 
+				$reiter_view="lebenslauf";
 			break;
 			case "Sonstiges":
-				$reiter_view="sonstiges"; 
+				$reiter_view="sonstiges";
 			break;
 			case "rss":
 				$reiter_view="rss";
 			break;
 			case "Login":
-				$reiter_view="login"; 
+				$reiter_view="login";
 			break;
 			case "allgemein":
-				$reiter_view="allgemein"; 
+				$reiter_view="allgemein";
 			break;
 			case "Forum":
-				$reiter_view="forum"; 
+				$reiter_view="forum";
 			break;
 			case "calendar":
 				if ($CALENDAR_ENABLE)
 					$reiter_view="calendar";
 				break;
 			case "Stundenplan":
-				$reiter_view="stundenplan"; 
+				$reiter_view="stundenplan";
 			break;
 			case "Messaging":
 				$reiter_view="messaging";
