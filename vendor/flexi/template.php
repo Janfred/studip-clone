@@ -168,11 +168,6 @@ class Flexi_Template {
    * @return void
    */
   function set_layout($layout) {
-    if (is_string($layout)) {
-      $this->layout =& $this->factory->open($layout);
-    }
-    else if (is_null($layout) || is_object($layout)) {
-      $this->layout = $layout;
-    }
+    $this->layout =& $this->factory->open($layout);
   }
 }

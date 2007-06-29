@@ -11,6 +11,7 @@
  * the License, or (at your option) any later version.
  */
 
+define('FLEXI_VERSION', '0.1.3');
 
 /**
  * Bootstrapping file for flexi. Just include this to get going.

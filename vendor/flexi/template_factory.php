@@ -76,13 +76,19 @@ class Flexi_TemplateFactory {
 
 
   /**
-   * Open a template of the given name using the factory method pattern.
+   * Open a template of the given name using the factory method pattern. This
+   * method returns it's parameter, if it is not a string. This functionality is
+   * useful for helper methods like #render_partial
    *
    * @param string A name of a template.
    *
    * @return mixed the factored object
    */
   function &open($template0) {
+
+    if (!is_string($template0)) {
+      return $template0;
+    }
 
     # if it starts with a slash, it's an absolute path
     $template = $template0[0] != '/'
