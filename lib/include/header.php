@@ -373,27 +373,15 @@ if ($auth->auth["uid"] == "nobody") { ?>
 		$infotext = sprintf (_("Sie sind angemeldet als: %s mit der Berechtigung: %s. Beginn der Session: %s,  letztes Login: %s, %s,  Auflösung: %sx%s, eingestellte Sprache: %s"),
 				$auth->auth["uname"], $auth->auth["perm"], date ("d. M Y, H:i:s", $SessionStart), date ("d. M Y, H:i:s", $LastLogin),
 				($auth->auth["jscript"]) ? _("JavaScript eingeschaltet") : _("JavaScript ausgeschaltet"), $auth->auth["xres"], $auth->auth["yres"], $INSTALLED_LANGUAGES[$_language]["name"]);
-
-
-		if ( $auth->auth['jscript']) {
-			echo MakeToolbar($GLOBALS['ASSETS_URL']."images/info_header.gif","javascript:studipNotepad('studipNote');",trim(mila($auth->auth["uname"],7)),$infotext,68, "","left","FALSE");
-		} else {
-			echo MakeToolbar($GLOBALS['ASSETS_URL']."images/info_header.gif","#",trim(mila($auth->auth["uname"],7)),$infotext,68, "","left","TRUE");
-		}
-		?>
-<?
+		echo MakeToolbar($GLOBALS['ASSETS_URL']."images/info_header.gif","#",trim(mila($auth->auth["uname"],7)),$infotext,68, "","left","TRUE");
+		
 		echo MakeToolbar($GLOBALS['ASSETS_URL']."images/hilfe.gif",$help_query,_("Hilfe"),_("Hilfe zu dieser Seite"),40, "_new","right","FALSE", "9");
 		echo MakeToolbar($GLOBALS['ASSETS_URL']."images/logout.gif","logout.php",_("Logout"),_("Aus dem System abmelden"),40, '', "center", "FALSE", "0");
 
 ?>
 	</tr>
 </table>
-<? 
-if ( $auth->auth['jscript']){
-	require_once 'lib/classes/StudipNote.class.php';
-	StudipNote::writeForm($infotext);
-}	
-?></td>
+</td>
 </tr>
 </table>
 
