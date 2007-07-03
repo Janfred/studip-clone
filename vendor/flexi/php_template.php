@@ -83,8 +83,9 @@ class Flexi_PhpTemplate extends Flexi_Template {
     $template->set_attributes($attributes);
 
     $collected = array();
+    $iterator_name = array_pop(explode('/', $partial));
     foreach ($collection as $element)
-      $collected[] = $template->render(array($partial => $element));
+      $collected[] = $template->render(array($iterator_name => $element));
 
     $spacer = isset($spacer) ? $this->render_partial($spacer, $attributes) : '';
 
