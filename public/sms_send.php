@@ -903,7 +903,7 @@ if ($send_view) {
 		} else {
 			$emailforwardinfo = _("Ihre Nachricht wird nicht gleichzeitig als E-Mail weitergeleitet.");
 		}
-		if($tmp_link_01 == 1) $emailforwardinfo .= "<br>".sprintf(_("Nutzern Sie die <a href=\"%s?send_view=1\">Experten-Ansicht</a> um die Einstellung zu ändern."), $PHP_SELF);
+		if($tmp_link_01 == 1) $emailforwardinfo .= "<br>".sprintf(_("Nutzen Sie die <a href=\"%s?send_view=1\">Experten-Ansicht</a> um die Einstellung zu ändern."), $PHP_SELF);
 		$emailforwardinfo = array("kategorie" => _("Emailweiterleitung:"),"eintrag" => array(array("icon" => "nachricht1.gif", "text" => sprintf($emailforwardinfo))));
 	}
 
