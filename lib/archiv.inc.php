@@ -227,7 +227,7 @@ function dump_sem($sem_id, $print_view = false) {
 
 	// Ablaufplan
 	if ($Modules["schedule"]) {
-		$db->query("SELECT termine.*, themen.title as th_title, themen.description as th_desc  FROM termine LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen USING (issue_id) WHERE (range_id='$sem_id' AND date_typ ='1') ORDER BY date");
+		$db->query("SELECT termine.*, themen.title as th_title, themen.description as th_desc  FROM termine LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen USING (issue_id) WHERE range_id='$sem_id' AND date_typ IN " . getPresenceTypeClause() . " ORDER BY date");
 		if ($db->num_rows()) {
 			$dump.="<br>";
 			$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
@@ -239,6 +239,7 @@ function dump_sem($sem_id, $print_view = false) {
 				$dump.="<tr align=\"center\"> ";
 				$dump.= "<td width=\"25%\" align=\"left\" >";
 				$dump.= strftime("%d. %b. %Y, %H:%M", $db->f("date"));
+				$dump.= ' - ' .  strftime("%H:%M", $db->f("end_time"));
 				$dump.= "</td>";
 				$dump.= "<td width=\"75%\" align=\"left\"> ";
 				$dump.= $TERMIN_TYP[$db->f("date_typ")]["name"].": ".htmlReady($db->f("th_title"),1,1);
@@ -252,7 +253,7 @@ function dump_sem($sem_id, $print_view = false) {
 		}
 
 		// zusaetzliche Termine
-		$db->query("SELECT termine.*, themen.title as th_title, themen.description as th_desc  FROM termine LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen USING (issue_id) WHERE (range_id='$sem_id' AND date_typ != '1') ORDER BY date");
+		$db->query("SELECT termine.*, themen.title as th_title, themen.description as th_desc  FROM termine LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen USING (issue_id) WHERE range_id='$sem_id'  AND date_typ NOT IN " . getPresenceTypeClause() . " ORDER BY date");
 		if ($db->num_rows()) {
 			$dump.="<br>";
 			$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
@@ -264,6 +265,7 @@ function dump_sem($sem_id, $print_view = false) {
 				$dump.="<tr align=\"center\"> ";
 				$dump.= "<td width=\"25%\" align=\"left\" >";
 				$dump.= strftime("%d. %b. %Y, %H:%M", $db->f("date"));
+				$dump.= ' - ' .  strftime("%H:%M", $db->f("end_time"));
 				$dump.= "</td>";
 				$dump.= "<td width=\"75%\" align=\"left\"> ";
 				$dump.= $TERMIN_TYP[$db->f("date_typ")]["name"].": ".htmlReady($db->f("th_title"),1,1);

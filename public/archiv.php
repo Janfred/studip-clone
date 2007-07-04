@@ -52,6 +52,7 @@ if ($suche) {
 	$archiv_data["name"]=$name;
 	$archiv_data["sem"]=$sem;
 	$archiv_data["inst"]=$inst;
+	$archiv_data["fak"]=$fak;
 	$archiv_data["desc"]=$desc;
 	$archiv_data["doz"]=$doz;
 	$archiv_data["pers"]=$pers;
@@ -233,7 +234,7 @@ include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 								<font size=-1><?=_("Name der Veranstaltung:")?></font>
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="90%">
-								<input  type="text"  size=30 maxlength=255 name="name" value="<? echo $archiv_data["name"] ?>">
+								<input  type="text"  size=30 maxlength=255 name="name" value="<? echo htmlReady(stripslashes($archiv_data["name"])) ?>">
 							</td>
 						</tr>
 						<tr <? $cssSw->switchClass() ?>>
@@ -241,7 +242,7 @@ include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 								<font size=-1><?=_("DozentIn der Veranstaltung:")?></font>
 							</td>
 							<td  class="<? echo $cssSw->getClass() ?>" width="90%">
-								<input  type="text"  size=30 maxlength=255 name="doz" value="<? echo $archiv_data["doz"] ?>">
+								<input  type="text"  size=30 maxlength=255 name="doz" value="<? echo htmlReady(stripslashes($archiv_data["doz"])) ?>">
 							</td>
 						</tr>
 						<tr <? $cssSw->switchClass() ?>>
@@ -253,7 +254,7 @@ include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 								<select name="sem">
 								<option selected value=0><?=_("alle")?></option>
 								<?
-								$db->query("SELECT DISTINCT semester FROM archiv");
+								$db->query("SELECT DISTINCT semester FROM archiv ORDER BY start_time");
 								while ($db->next_record())
 									if  ($db->f("semester"))
 										if ($db->f("semester") == $archiv_data["sem"])
@@ -279,9 +280,33 @@ include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 									{
 									if  (($db->f("Name")) && ($db->f("Name")) !="- - -")
 										if ($db->f("heimat_inst_id") == $archiv_data["inst"])
-											echo "<option selected value=", $db->f("heimat_inst_id"), ">", my_substr($db->f("Name"),0, 40), "</option>";
+											echo "<option selected value=", $db->f("heimat_inst_id"), ">", htmlReady(my_substr($db->f("Name"),0, 40)), "</option>";
 										else
-											echo "<option value=", $db->f("heimat_inst_id"), ">", my_substr($db->f("Name"),0, 40), "</option>";
+											echo "<option value=", $db->f("heimat_inst_id"), ">", htmlReady(my_substr($db->f("Name"),0, 40)), "</option>";
+
+									}
+								?>
+								</select>
+								</font>
+							</td>
+						</tr>
+						<tr <? $cssSw->switchClass() ?>>
+							<td class="<? echo $cssSw->getClass() ?>" width="10%">
+								<font size=-1><?=_("Fakultät")?> </font>
+							</td>
+							<td class="<? echo $cssSw->getClass() ?>"  width="90%">
+								<font size=-1>
+								<select name="fak">
+								<option selected value=0><?=_("alle")?></option>
+								<?
+								$db->query("SELECT DISTINCT fakultaet FROM archiv ORDER BY fakultaet");
+								while ($db->next_record())
+									{
+									if ($db->f("fakultaet"))
+										if ($db->f("fakultaet") == stripslashes($archiv_data["fak"]))
+											echo '<option selected value="'. htmlReady($db->f("fakultaet")). '">'. htmlReady(my_substr($db->f("fakultaet"),0, 40)). "</option>";
+										else
+											echo '<option value="'. htmlReady($db->f("fakultaet")). '">'. htmlReady(my_substr($db->f("fakultaet"),0, 40)). "</option>";
 
 									}
 								?>
@@ -294,7 +319,7 @@ include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 								<font size=-1><?=_("Beschreibung:")?></font>
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="90%">
-								<input  type="text"  size=30 maxlength=255 name="desc" value="<? echo $archiv_data["desc"] ?>">
+								<input  type="text"  size=30 maxlength=255 name="desc" value="<?echo htmlReady(stripslashes($archiv_data["desc"])) ?>">
 							</td>
 						</tr>
 						<tr <? $cssSw->switchClass() ?>>
@@ -302,7 +327,7 @@ include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 								<font size=-1><?=_("Suche &uuml;ber <b>alle</b> Felder:")?></font>
 							</td>
 							<td class="<? echo $cssSw->getClass() ?>" width="90%">
-								<input  type="text"  size=30 maxlength=255 name="all" value="<? echo $archiv_data["all"] ?>">
+								<input  type="text"  size=30 maxlength=255 name="all" value="<? echo htmlReady(stripslashes($archiv_data["all"])) ?>">
 							</td>
 						</tr>
 						<tr <? $cssSw->switchClass() ?>>
@@ -344,9 +369,9 @@ if ($archiv_data["perform_search"]) {
 		|| ((strlen($archiv_data["name"]) < 4) && ($archiv_data["name"]))
 		|| ((strlen($archiv_data["desc"]) < 4) && ($archiv_data["desc"]))
 		|| ((strlen($archiv_data["doz"]) < 4) && ($archiv_data["doz"])))
-		&& (!$archiv_data["pers"]) && (!$archiv_data["inst"]))
+		&& (!$archiv_data["pers"]) && (!$archiv_data["inst"]) && (!$archiv_data["fak"]))
 		$string_too_short = TRUE;
-	if ((!$archiv_data["all"]) && (!$archiv_data["name"]) && (!$archiv_data["desc"]) && (!$archiv_data["doz"]) && (!$archiv_data["pers"]) && (!$archiv_data["inst"]))
+	if ((!$archiv_data["all"]) && (!$archiv_data["name"]) && (!$archiv_data["desc"]) && (!$archiv_data["doz"]) && (!$archiv_data["pers"]) && (!$archiv_data["inst"]) && (!$archiv_data["fak"]))
 		$string_too_short = TRUE;
 
 	if (!$archiv_data["sortby"])
@@ -386,6 +411,10 @@ if ($archiv_data["perform_search"]) {
 			$query .= " AND dozenten LIKE '%".trim($archiv_data["doz"])."%'";
 		else
 			$query .= " AND dozenten LIKE '%%'";
+		if ($archiv_data["fak"])
+			$query .= " AND fakultaet LIKE '%".trim($archiv_data["fak"])."%'";
+		else
+			$query .= " AND fakultaet LIKE '%%'";
 	}
 	$query .= " ORDER BY ".$archiv_data["sortby"];
 
@@ -520,7 +549,7 @@ if ($archiv_data["perform_search"]) {
 					if ((($add_user) && (!$db2->affected_rows())) || (!$add_user) || ($new_search)) {
 						echo "<form action=\"$PHP_SELF#anker\">";
 						echo "<hr><b><font size=\"-1\">" . _("Person Berechtigung erteilen:") . " </font></b><br />";
-						if (($add_user) && (!$db2->affected_rows)  && (!$new_search))
+						if (($add_user) && (!$db2->affected_rows())  && (!$new_search))
 							echo "<br /><b><font size=\"-1\">" . _("Es wurde keine Person zu dem eingegebenem Suchbegriff gefunden!") . "</font></b><br />";
 						echo "<font size=\"-1\">" . _("Bitte Namen, Vornamen oder Usernamen eingeben:") . "</font>&nbsp; ";
 						echo "<br /><input type=\"TEXT\" size=20 maxlength=255 name=\"search_exp\" />";
