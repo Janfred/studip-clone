@@ -901,7 +901,7 @@ if ($send_view) {
 		if($sms_data["tmpemailsnd"] == 1) {
 			$emailforwardinfo = _("Die Nachricht wird auch als E-Mail weitergeleitet, sofern die EmpfängerIn sich nicht ausdrücklich gegen die E-Mail-Weiterleitung entschieden hat.");
 		} else {
-			$emailforwardinfo = _("Ihre Nachricht wird nicht auch als Email versand.");
+			$emailforwardinfo = _("Ihre Nachricht wird nicht gleichzeitig als E-Mail weitergeleitet.");
 		}
 		if($tmp_link_01 == 1) $emailforwardinfo .= "<br>".sprintf(_("Nutzern Sie die <a href=\"%s?send_view=1\">Experten-Ansicht</a> um die Einstellung zu ändern."), $PHP_SELF);
 		$emailforwardinfo = array("kategorie" => _("Emailweiterleitung:"),"eintrag" => array(array("icon" => "nachricht1.gif", "text" => sprintf($emailforwardinfo))));
