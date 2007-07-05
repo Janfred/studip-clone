@@ -135,6 +135,7 @@ class EditResourceData {
 			$resAssign->setBegin($add_ts);
 			$resAssign->setEnd($add_ts + (2 * 60 * 60));
 		}
+		
 
 		$owner_type = $resAssign->getOwnerType();
 
@@ -169,8 +170,12 @@ class EditResourceData {
 			$lockedAssign = TRUE;
 		}
 
-		if ($resAssign->isNew())
+		if ($resAssign->isNew()){
 			$killButton = FALSE;
+			if($ObjectPerms->getUserPerm() == 'autor' && !$resAssign->getAssignUserId()) {
+				$resAssign->setAssignUserId($user->id);
+			}
+		}
 
 		if ($resAssign->isNew() && $lockedAssign){
 			echo "<div align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small2.gif\" align=\"absmiddle\" />&nbsp;<font size=-1>";
@@ -553,7 +558,7 @@ class EditResourceData {
 
 
 	function showPropertiesForms() {
-		global $PHP_SELF, $cssSw;
+		global $PHP_SELF, $cssSw, $user;
 
 		$ObjectPerms =& ResourceObjectPerms::Factory($this->resObject->getId());
 
@@ -749,7 +754,7 @@ class EditResourceData {
 
 	function showPermsForms() {
 		global $PHP_SELF, $search_owner, $search_perm_user, $search_string_search_perm_user, $search_string_search_owner,
-			$cssSw;
+			$cssSw, $user;
 
 		$ObjectPerms =& ResourceObjectPerms::Factory($this->resObject->getId());
 
@@ -784,7 +789,7 @@ class EditResourceData {
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=2 valign="top"><font size=-1><?=_("Berechtigungen:")?></font><br />
-				<td class="<? echo $cssSw->getClass() ?>" width="50%" valign="top"><font size=-1<?=_("Berechtigung hinzuf&uuml;gen")?></font><br />
+				<td class="<? echo $cssSw->getClass() ?>" width="50%" valign="top"><font size=-1><?=_("Berechtigung hinzuf&uuml;gen")?></font><br />
 				<? showSearchForm("search_perm_user", $search_string_search_perm_user, FALSE, FALSE, FALSE, TRUE) ?>
 				</td>
 			</tr>
