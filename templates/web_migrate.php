@@ -38,21 +38,21 @@
                 <?= _('Beschreibung') ?>
               </th>
             </tr>
-            <? foreach ($migrations as $migration): ?>
+            <? foreach ($migrations as $number => $migration): ?>
               <tr>
                 <td style="text-align: center;">
-                  <?= $migration['number'] ?>
+                  <?= $number ?>
                 </td>
                 <td>
-                  <?= $migration['name'] ?>
+                  <?= get_class($migration) ?>
                 </td>
                 <td>
-                  <? if (empty($migration['description'])): ?>
+                  <? if ($migration->description()): ?>
+                    <?= htmlspecialchars($migration->description()) ?>
+                  <? else: ?>
                     <i>
                       <?= _('keine Beschreibung vorhanden') ?>
                     </i>
-                  <? else: ?>
-                    <?= htmlspecialchars($migration['description']) ?>
                   <? endif ?>
                 </td>
               </tr>

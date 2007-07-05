@@ -220,36 +220,62 @@ class Migrator {
    */
   function migrate_to($target_version) {
 
-
-    $this->target_version =
-      is_null($target_version) ? NULL : (int) $target_version;
-
-
-    # migrate up
-    if (is_null($target_version)
-        || $this->schema_version->get() < $target_version)
-      $this->direction = 'up';
-
-    # migrate down
-    else if ($target_version < $this->schema_version->get())
-      $this->direction = 'down';
+    $migrations = $this->relevant_migrations($target_version);
 
     # you're on the right version
-    else {
+    if (empty($migrations)) {
       $this->log("You are already at %d.\n", $this->target_version);
       return;
     }
 
-
     $this->log("Currently at version %d. Now migrating %s to %s.\n",
                $this->schema_version->get(),
                $this->direction,
-               is_null($this->target_version)
-                 ? 'the top' : $this->target_version);
+               $this->target_version);
+
+
+    foreach ($migrations as $version => $migration) {
+
+      $class = get_class($migration);
+      $this->log("\n\nNext migration: %s (%d)\n\n", $class, $version);
+
+      $migration->migrate($this->direction);
+      $this->schema_version->set($this->is_down() ? $version - 1 : $version);
+    }
+  }
+
+
+  /**
+   * Invoking this method will return a list of migrations with an index between
+   * the current schema version (provided by the SchemaVersion object) and a
+   * target version calling the methods #up and #down in sequence.
+   *
+   *
+   * @param mixed  the target version as an integer or NULL thus migrating to
+   *               the top migration
+   *
+   * @return array an associative array, whose keys are the migration's
+   *               version and whose values are the migration objects
+   */
+  function relevant_migrations($target_version) {
+
+    $this->target_version =
+      is_null($target_version) ? $this->top_version() : (int) $target_version;
+
+
+    # migrate up
+    if ($this->schema_version->get() < $this->target_version)
+      $this->direction = 'up';
+
+    # migrate down
+    else if ($this->target_version < $this->schema_version->get())
+      $this->direction = 'down';
 
 
     $migrations = $this->migration_classes();
     $this->is_down() ? krsort($migrations) : ksort($migrations);
+
+    $result = array();
 
     foreach ($migrations as $version => $migration_file_and_class) {
 
@@ -259,15 +285,13 @@ class Migrator {
 
       list($file, $class) = $migration_file_and_class;
 
-      $this->log("\n\nNext migration: %s (%d)\n\n", $class, $version);
-
       require_once $file;
       $migration =& new $class($this->verbose);
 
-
-      $migration->migrate($this->direction);
-      $this->schema_version->set($this->is_down() ? $version - 1 : $version);
+      $result[$version] = $migration;
     }
+
+    return $result;
   }
 
 
@@ -289,8 +313,7 @@ class Migrator {
     if ($this->is_up())
 
       return    $current_version < $version
-             && (   is_null($this->target_version)
-                 || $version <= $this->target_version);
+             && $version <= $this->target_version;
 
     else if ($this->is_down())
 

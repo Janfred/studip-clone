@@ -37,24 +37,9 @@ if (isset($_REQUEST['start']) || isset($_REQUEST['start_x']))
 }
 
 $current = $version->get();
-$entries = $migrator->migration_classes();
-ksort($entries);
+$migrations = $migrator->relevant_migrations($target);
 
-foreach ($entries as $number => $entry)
-{
-    if ($current < $number)
-    {
-        list($file, $class) = $entry;
-        require_once $file;
-
-        $migration =& new $class();
-        $migrations[] = array('number' => $number,
-                              'name' => $class,
-                              'description' => $migration->description());
-    }
-}
-
-$template =& $GLOBALS['template_factory']->open('web_migrate');
+$template =& $template_factory->open('web_migrate');
 $template->set_attribute('assets', $GLOBALS['ASSETS_URL']);
 $template->set_attribute('current', $current);
 $template->set_attribute('migrations', $migrations);

@@ -19,12 +19,13 @@ require_once 'lib/migrations/migrator.php';
 if (isset($_SERVER["argv"])) {
 
   # check for command line options
-  $options = getopt('m:t:v');
+  $options = getopt('lm:t:v');
   if ($options === false) {
     exit(1);
   }
 
   # check for options
+  $list = false;
   $path = $STUDIP_BASE_PATH.'/db/migrations';
   $verbose = false;
   $target = NULL;
@@ -32,16 +33,29 @@ if (isset($_SERVER["argv"])) {
   foreach ($options as $option => $value) {
     switch ($option) {
 
+      case 'l': $list = true; break;
+
       case 'm': $path = $value; break;
 
       case 't': $target = (int) $value; break;
 
       case 'v': $verbose = true; break;
-
     }
   }
 
   $version =& new DBSchemaVersion('studip');
   $migrator =& new Migrator($path, $version, $verbose);
-  $migrator->migrate_to($target);
+
+  if ($list) {
+    $migrations = $migrator->relevant_migrations($target);
+
+    foreach ($migrations as $number => $migration) {
+      $description = $migration->description() ?
+            $migration->description() : '(no description)';
+
+      printf("%3d %-20s %s\n", $number, get_class($migration), $description);
+    }
+  } else {
+    $migrator->migrate_to($target);
+  }
 }
