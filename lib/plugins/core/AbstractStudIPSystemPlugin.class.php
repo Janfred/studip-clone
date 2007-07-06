@@ -61,7 +61,7 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPPlugin{
     /**
      * returns where the plugin will be visible (toolbar and/or start page)
      */
-    function getDisplayType ($filter = ~0) {
+    function getDisplayType ($filter = -1) {
         return $this->display_type & $filter;
     }
 }
