@@ -11,11 +11,17 @@
  * @subpackage core
  */
 
+define('SYSTEM_PLUGIN_TOOLBAR',   1);
+define('SYSTEM_PLUGIN_STARTPAGE', 2);
+
 class AbstractStudIPSystemPlugin extends AbstractStudIPPlugin{
+
+        var $display_type;
 
 	function AbstractStudIPSystemPlugin(){
 		parent::AbstractStudIPPlugin();
 		$this->pluginengine = PluginEngine::getPluginPersistence("System");
+                $this->display_type = SYSTEM_PLUGIN_TOOLBAR;
 	}
 
 	/**
@@ -43,6 +49,20 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPPlugin{
      */
     function getScore(){
     	return 0;
+    }
+
+    /**
+     * define where the plugin will be visible (toolbar and/or start page)
+     */
+    function setDisplayType ($display_type) {
+        $this->display_type = $display_type;
+    }
+
+    /**
+     * returns where the plugin will be visible (toolbar and/or start page)
+     */
+    function getDisplayType ($filter = ~0) {
+        return $this->display_type & $filter;
     }
 }
 ?>

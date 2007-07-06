@@ -285,7 +285,8 @@ if ($auth->auth["uid"] == "nobody") { ?>
 
 			foreach ($header_plugins as $header_plugin){
 				// does the plugin have a navigation entry?
-				if ($header_plugin->hasNavigation()){
+				if ($header_plugin->hasNavigation() &&
+                                    $header_plugin->getDisplayType(SYSTEM_PLUGIN_TOOLBAR)){
 					$navi = $header_plugin->getNavigation();
 					if ($navi->hasIcon()){
 						echo MakeToolbar($header_plugin->getPluginpath() . "/" . $navi->getIcon(),htmlReady(PluginEngine::getLink($header_plugin)),$navi->getDisplayname(),$navi->getDisplayname(),40,'',"left");
