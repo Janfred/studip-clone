@@ -78,7 +78,7 @@ function init_i18n($_language) {
 
 	if (isset($_language_domain) && isset($_language)) {
 		$_language_path = $INSTALLED_LANGUAGES[$_language]["path"];
-		setLocaleEnv($_language, ($_language != "de_DE" ? $_language_domain : ''));
+		setLocaleEnv($_language, $_language_domain);
 	}
 	return $_language_path;
 }
