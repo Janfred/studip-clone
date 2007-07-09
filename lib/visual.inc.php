@@ -1167,85 +1167,22 @@ array  ("kategorie" => "Aktionen:",
 );
 /*****************************************************************************/
 
-function print_infobox($content, $picture = '', $html = FALSE) {
+function print_infobox($content, $picture = '', $dont_display_immediatly = FALSE) {
 
-  # prefix picture if necessary
-  if ($picture)
-    $picture = sprintf('%simages/%s', $GLOBALS['ASSETS_URL'], $picture);
-
-  # prefix icons
-  foreach ((array)$content as $i => $value) {
-    if (!$value) continue;
-    if (is_array($content[$i]['eintrag']))
-    foreach ($content[$i]['eintrag'] as $j => $eintrag) {
-      $content[$i]['eintrag'][$j]['icon'] =
-        sprintf('%simages/%s',
-                $GLOBALS['ASSETS_URL'],
-                $content[$i]['eintrag'][$j]['icon']);
-    }
-  }
-
-  return print_infobox_absolute($content, $picture, $html);
+    // get template
+    $template =& $GLOBALS['template_factory']->open('infobox/infobox_untyped_content');
+    
+    // fill attributes
+    $template->set_attribute('picture', $picture);
+    $template->set_attribute('content', $content);
+    
+    // render template
+    if ($dont_display_immediatly)
+       return $template->render();
+    else
+       echo $template->render();
 }
 
-function print_infobox_absolute($content, $picture = '', $html = FALSE) {
-
-  ob_start();
-
-  ?>
-  <table align="center" width="250" border="0" cellpadding="0" cellspacing="0">
-
-    <? if ($picture) : ?>
-
-      <tr>
-        <td class="blank" width="100%" align="right">
-          <img src="<?=$picture?>">
-        </td>
-      </tr>
-
-    <? endif ?>
-
-    <tr>
-      <td class="angemeldet" width="100%">
-        <table background="<?=$GLOBALS['ASSETS_URL']?>images/white.gif" align="center" width="99%" border="0" cellpadding="4" cellspacing="0">
-
-          <? for ($i = 0; $i < count($content); $i++) : ?>
-            <? if ($content[$i]) : ?>
-
-              <tr>
-                <td class="blank" width="100%" colspan="2">
-                  <font size="-1"><b><?=$content[$i]["kategorie"]?></b></font>
-                  <br>
-                </td>
-              </tr>
-
-              <? for ($j = 0; $j < count($content[$i]["eintrag"]); $j++) : ?>
-
-                <tr>
-                  <td class="blank" width="1%" align="center" valign="top">
-                    <img src="<?=$content[$i]["eintrag"][$j]["icon"]?>">
-                  </td>
-                  <td class="blank" width="99%">
-                    <font size="-1"><?=$content[$i]["eintrag"][$j]["text"]?></font>
-                    <br>
-                  </td>
-                </tr>
-
-              <? endfor ?>
-
-            <? endif ?>
-          <? endfor ?>
-
-        </table>
-      </td>
-    </tr>
-  </table>
-  <?
-  if ($html)
-    return ob_get_clean();
-  else
-    ob_end_flush();
-}
 
 /**
 * Returns a given text as html tooltip

@@ -127,46 +127,14 @@ $sem->registerCommand('removeSeminarRequest', 'raumzeit_removeSeminarRequest');
 $sem->processCommands();
 
 // create infobox with semester-chooser and status-messages
-$infobox = array();
 $messages = array();
 
 while ($msg = $sem->getNextMessage()) {
 	$messages[] = $msg;
 }
 
-if (sizeof($messages) > 0) {
-	$infobox[] = raumzeit_parse_messages($messages);
-}
-
-$info_zw['kategorie'] = _("Informationen:");
-$info_zw['eintrag'][] = array ('icon' => 'ausruf_small.gif',
-	'text'  =>_("Hier können Sie alle Termine der Veranstaltung verwalten.")
-);
-
-$infobox[] = $info_zw;
-
-$infobox[] = raumzeit_get_semester_chooser($sem, $semester, $raumzeitFilter);
-
-// show legend for regular dates, if necessary
-if ($GLOBALS['RESOURCES_ENABLE']) {
-	$info = array();
-
-	$info['kategorie'] = _("Legende:");
-	$info['eintrag'][] = array (
-		'icon' => 'steelrot.jpg" height="20" width="25" alt="',
-		'text' => _("Kein Termin hat eine Raumbuchung!")
-	);
-	$info['eintrag'][] = array (
-		'icon' => 'steelgelb.jpg" height="20" width="25" alt="',
-		'text' => _("Mindestens ein Termin hat keine Raumbuchung!")
-	);
-	$info['eintrag'][] = array (
-		'icon' => 'steelgruen.jpg" height="20" width="25" alt="',
-		'text' => _("Alle Termine haben eine Raumbuchung.")
-	);
-
-	$infobox[] = $info;
-}
+// get a list of semesters (as display options)
+$semester_selectionlist = raumzeit_get_semesters($sem, $semester, $raumzeitFilter);
 
 
 // get possible start-weeks
@@ -579,7 +547,21 @@ while ($tmp_first_date < $end_date) {
 			</TD>
 			<td align="left" valign="top" class="blank">
 				<?
-					print_infobox ($infobox, 'board2.jpg');
+					// print info box:
+                    
+                    // get template
+                    $infobox_template =& $GLOBALS['template_factory']->open('infobox/infobox_raumzeit');
+                    
+                    // fill attributes
+                    $infobox_template->set_attribute('picture', 'board2.jpg');
+                    $infobox_template->set_attribute("selectionlist_title", "Semesterauswahl"); 
+                    $infobox_template->set_attribute('selectionlist', $semester_selectionlist);    
+                    if (sizeof($messages) > 0) {
+                        $infobox_template->set_attribute('messages', $messages);
+                    }
+                    // render template
+                    echo $infobox_template->render();
+                    
 				?>
 			</td>
 		</TR>
