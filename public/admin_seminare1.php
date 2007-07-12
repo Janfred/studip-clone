@@ -737,20 +737,25 @@ if (($s_id) && (auth_check())) {
 				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2>&nbsp; <select name="Status">
 				<?
 				if (!$perm->have_perm("admin")) {
-					$i=0;
-					for ($i=1; $i <= sizeof($SEM_TYPE); $i++) {
-						if ($SEM_TYPE[$i]["class"] == $SEM_TYPE[$db->f("status")]["class"])
-							printf ("<option %s value=%s>%s</option>", $db->f("status")== $i ? "selected" : "", $i, htmlReady($SEM_TYPE[$i]["name"]));
+					foreach ($SEM_TYPE as $sem_type_id => $sem_type) {
+						if ($sem_type["class"] == $SEM_TYPE[$db->f("status")]["class"])
+							printf("<option %s value=%s>%s</option>",
+							       $db->f("status") == $sem_type_id ? "selected" : "",
+							       $sem_type_id,
+							       htmlReady($sem_type["name"]));
 					}
 					?>
 					</select><?echo "&nbsp;" . _("in der Kategorie") . " <b>".htmlReady($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["name"])."</b>";?></td>
 					<?
 				} else {
-					$i=0;
-					foreach ($SEM_TYPE as $a) {
-						$i++;
-						if (($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) || (!$SEM_CLASS[$a["class"]]["bereiche"]))
-							printf ("<option %s value=%s>%s (%s)</option>", $db->f("status")== $i ? "selected" : "", $i, htmlReady($a["name"]), htmlReady($SEM_CLASS[$a["class"]]["name"]));
+					foreach ($SEM_TYPE as $sem_type_id => $sem_type) {
+						if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]
+						    || !$SEM_CLASS[$sem_type["class"]]["bereiche"])
+							printf("<option %s value=%s>%s (%s)</option>",
+							       $db->f("status") == $sem_type_id ? "selected" : "",
+							       $sem_type_id,
+							       htmlReady($sem_type["name"]),
+							       htmlReady($SEM_CLASS[$sem_type["class"]]["name"]));
 					}
 					printf ("</select></td>");
 				}

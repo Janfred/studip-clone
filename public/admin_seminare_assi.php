@@ -2421,9 +2421,14 @@ if ($level == 2)
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <select name="sem_status">
 							<?
-								for ($i=1; $i <= sizeof($SEM_TYPE); $i++) {
-									if ($SEM_TYPE[$i]["class"] == $sem_create_data["sem_class"])
-										printf ("<option %s value=%s>%s</option>", $sem_create_data["sem_status"] == $i ? "selected" : "", $i, $SEM_TYPE[$i]["name"]);
+								foreach ($SEM_TYPE as $sem_type_id => $sem_type) {
+									if ($sem_type["class"] == $sem_create_data["sem_class"])
+										printf("<option %s value=%s>%s</option>",
+										       $sem_create_data["sem_status"] == $sem_type_id
+										         ? "selected"
+										         : "",
+										       $sem_type_id,
+										       $sem_type["name"]);
 								}
 							?>
 							</select> <br />
