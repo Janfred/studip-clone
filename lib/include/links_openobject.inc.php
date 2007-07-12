@@ -340,7 +340,7 @@ if ($PLUGINS_ENABLE){
 					$navi = $plugin->getNavigation();
 					$submenu = $navi->getSubMenu();
 					
-					if (submenu != null){
+					if ($submenu != null){
     					foreach ($submenu as $submenuitem){
     						$params = $submenuitem->getLinkParams();
     						    						
