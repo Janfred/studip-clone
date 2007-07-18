@@ -5,14 +5,14 @@
 * Hauptseite fuer Eval-Auswertungen
 *
 *
-* @author               Jan Kulmann <jankul@tzi.de>
+* @author               Jan Kulmann <jankul@zmml.uni-bremen.de>
 * @version              $Id$
 */
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // eval_summary.php
-// Copyright (C) 2005 Jan Kulmann <jankul@tzi.de>
+// Copyright (C) 2007 Jan Kulmann <jankul@zmml.uni-bremen.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -183,7 +183,7 @@ function freetype_answers ($parent_id, $anz_nutzer) {
 	global $ausgabeformat;
 
 	$db_answers = new DB_Seminar();
-        $db_answers->query(sprintf("SELECT * FROM evalanswer WHERE parent_id='%s' AND text!='' ORDER BY position",$parent_id));
+        $db_answers->query(sprintf("SELECT ea.* FROM evalanswer ea, evalanswer_user eau WHERE ea.parent_id='%s' AND ea.text!='' AND eau.evalanswer_id=ea.evalanswer_id ORDER BY ea.position",$parent_id));
 	echo "  <TR>\n";
         echo "    <TD COLSPAN=\"2\">\n";
 	echo "      <TABLE BORDER=\"0\" WIDTH=\"100%\">\n";

@@ -5,14 +5,14 @@
 * PDF-Export fuer Eval-Auswertungen
 *
 *
-* @author               Jan Kulmann <jankul@tzi.de>
+* @author               Jan Kulmann <jankul@zmml.uni-bremen.de>
 * @version              $Id$
 */
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // eval_summary_export.php
-// Copyright (C) 2005 Jan Kulmann <jankul@tzi.de>
+// Copyright (C) 2007 Jan Kulmann <jankul@zmml.uni-bremen.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
