@@ -82,7 +82,7 @@ function do_template($column) {
 function freetype_answers ($parent_id, $anz_nutzer) {
 	global $ausgabeformat, $fo_file, $pattern, $replace;
 	$db_answers = new DB_Seminar();
-        $db_answers->query(sprintf("SELECT * FROM evalanswer WHERE parent_id='%s' AND text!='' ORDER BY position",$parent_id));
+        $db_answers->query(sprintf("SELECT ea.* FROM evalanswer ea, evalanswer_user eau WHERE ea.parent_id='%s' AND ea.text!='' AND eau.evalanswer_id=ea.evalanswer_id ORDER BY ea.position",$parent_id));
 	$counter = 1;
 	while ($db_answers->next_record()) {
 		fputs($fo_file,"                <fo:table-row>\n");
