@@ -777,11 +777,11 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 	
 	// quit if no pages found / search string was invalid
 	if ($invalid_searchstring || $db->affected_rows() == 0) {
-		if ($db->affected_rows()==0) {
+		if ($invalid_searchstring) {
+			$msg="error\xa7" . _("Suchbegriff zu kurz. Geben Sie mindestens drei Zeichen ein.");
+		} else {
 			$tmplt=_("Die Suche nach &raquo;%s&laquo; lieferte keine Treffer.");
 			$msg="error\xa7" . sprintf($tmplt, htmlReady($searchfor));
-		} else {
-			$msg="error\xa7" . _("Suchbegriff zu kurz. Geben Sie mindestens drei Zeichen ein.");
 		}
 		if ($keyword) {
 			return showWikiPage($keyword, NULL, $msg);
