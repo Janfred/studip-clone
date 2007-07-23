@@ -295,54 +295,8 @@ while ($tmp_first_date < $end_date) {
 						} ?>
 					</TD>
 				</TR>
-				<? if (!$_LOCKED && $RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) { ?>
-				<TR>
-					<TD class="blank" colspan="9">
-						&nbsp;
-					</TD>
-				</TR>
-				<TR>
-					<TD class="blank" colspan="9">
-						<?
-						if ($sem->hasRoomRequest()) {
-							$req_info = $sem->getRoomRequestInfo();
-						?>
-						<DIV style="{border:1px solid black;background:#FFFFDD}">
-							&nbsp;<?=_("Für diese Veranstaltung liegt eine noch offene Raumanfrage vor.")?>
-							<A href="javascript:alert('<?=$req_info?>')">
-								<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/info.gif" alt="<?=$req_info?>" border="0" align="absmiddle">
-							</A>
-						</DIV>
-						<BR />
-						<? } ?>
-						<FONT size="-1">
-							&nbsp;Raumanfrage
-							<A href="admin_room_requests.php?seminar_id=<?=$id?>">
-								<? if ($req_info) {
-								?>
-									<img <?=makebutton('bearbeiten', 'src')?> align="absmiddle" border="0">
-								<?
-								} else {
-								?>
-									<img <?=makebutton('erstellen', 'src')?> align="absmiddle" border="0">
-								<?
-								} ?>
-							</A>
-							<? if ($req_info) { ?>
-							&nbsp;oder&nbsp;
-							<A href="<?=$PHP_SELF?>?cmd=removeSeminarRequest">
-								<img <?=makebutton('zurueckziehen', 'src')?> align="absmiddle" border="0">
-							</A>
-						</FONT>
-						<? } ?>
-					</TD>
-				</TR>
-				<TR>
-					<TD colspan="9" class="blank">&nbsp;</TD>
-				</TR>
 				<?
-				}
-					$turnus = $sem->getFormattedTurnusDates();		// string representation of all CycleData-objects is retrieved as an associative array: key: CycleDataID, val: string
+				$turnus = $sem->getFormattedTurnusDates();		// string representation of all CycleData-objects is retrieved as an associative array: key: CycleDataID, val: string
 					//TODO: string representation should not be collected by a big array, but with the toString method of the CycleData-object
 					foreach ($sem->metadate->cycles as $metadate_id => $val) {		// cycle trough all CycleData objects
 						if (!$tpl['room'] = $sem->getFormattedPredominantRooms($metadate_id)) {		// getPredominantRoom returns the predominant booked room
@@ -474,9 +428,6 @@ while ($tmp_first_date < $end_date) {
 						&nbsp;<B><?=_("Unregelm&auml;&szlig;ige Termine/Blocktermine")?></B>
 					</TD>
 				</TR>
-				<TR>
-					<TD colspan="9" class="blank">&nbsp;</TD>
-				</TR>
 				<? if (!$_LOCKED) { ?>
 				<TR>
 					<TD>
@@ -505,8 +456,12 @@ while ($tmp_first_date < $end_date) {
 						</FONT>
 					</TD>
 				</TR>
-				<? }
-				} 
+				<? } ?>
+				<tr>
+					<td class="blank" colspan="9">&nbsp;</td>
+				</tr>
+				<?
+				}
 
 				if ($termine =& $sem->getSingleDates(true)) { ?>
 				<TR>
@@ -543,9 +498,70 @@ while ($tmp_first_date < $end_date) {
 				<TR>
 					<TD colspan="9" class="blank">&nbsp;</TD>
 				</TR>
-			</TABLE>
-			</TD>
-			<td align="left" valign="top" class="blank">
+
+				<? if (!$_LOCKED && $RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) { ?>
+				<tr>
+					<td colspan="9" class="steelkante">
+						<a name="irregular_dates">
+						&nbsp;<b><?=_("Raum anfordern")?></b>
+					</td>
+				</tr>
+				<tr>
+					<td class="blank" colspan="9" style="padding-left: 6px">
+						<font size="-1">
+							<?=_("Hier können Sie für die gesamte Veranstaltung, also für alle regelmäßigen und unregelmäßigen Termine, eine Raumanfrage erstellen. Um für einen einzelnen Termin eine Raumanfrage zu erstellen, klappen Sie diesen auf und wählen dort \"Raumanfrage erstellen\"");?>
+						</font>
+					</td>
+				</tr>
+				<tr>
+					<td class="blank" colspan="9">
+						&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td class="blank" colspan="9">
+						<?
+						if ($sem->hasRoomRequest()) {
+							$req_info = $sem->getRoomRequestInfo();
+						?>
+						<div style="{border:1px solid black;background:#FFFFDD}">
+							&nbsp;<?=_("Für diese Veranstaltung liegt eine noch offene Raumanfrage vor.")?>
+							<a href="javascript:alert('<?=$req_info?>')">
+								<img src="<?=$GLOBALS['ASSETS_URL']?>images/info.gif" alt="<?=$req_info?>" border="0" align="absmiddle">
+							</a>
+						</div>
+						<br />
+						<? } ?>
+						<font size="-1">
+							&nbsp;Raumanfrage
+							<A href="admin_room_requests.php?seminar_id=<?=$id?>">
+								<? if ($req_info) {
+								?>
+									<img <?=makebutton('bearbeiten', 'src')?> align="absmiddle" border="0">
+								<?
+								} else {
+								?>
+									<img <?=makebutton('erstellen', 'src')?> align="absmiddle" border="0">
+								<?
+								} ?>
+							</A>
+							<? if ($req_info) { ?>
+							&nbsp;oder&nbsp;
+							<A href="<?=$PHP_SELF?>?cmd=removeSeminarRequest">
+								<img <?=makebutton('zurueckziehen', 'src')?> align="absmiddle" border="0">
+							</A>
+						</FONT>
+						<? } ?>
+					</TD>
+				</TR>
+				<TR>
+					<TD colspan="9" class="blank">&nbsp;</TD>
+				</tr>
+			<? } ?>	
+
+			</table>
+		</td>
+		<td align="left" valign="top" class="blank">
 				<?
 					// print info box:
                     
@@ -564,7 +580,7 @@ while ($tmp_first_date < $end_date) {
                     
 				?>
 			</td>
-		</TR>
+		</tr>
 </TABLE>
 <?
 $sem->store();
