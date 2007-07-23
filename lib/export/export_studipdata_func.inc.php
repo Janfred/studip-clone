@@ -466,7 +466,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 			else	
 				$db->query ("SELECT DISTINCT ui.*, aum.*, su.*,FROM_UNIXTIME(su.mkdate) as registration_date, GROUP_CONCAT(studiengaenge.name SEPARATOR ', ') as nutzer_studiengaenge
 					FROM statusgruppe_user  
-					LEFT JOIN seminar_user su
+					LEFT JOIN seminar_user su USING (user_id)
 					LEFT JOIN auth_user_md5 aum USING ( user_id ) 
 					LEFT JOIN user_info ui USING ( user_id ) 
 					LEFT JOIN user_studiengang USING(user_id) 
