@@ -36,7 +36,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 					<? /* rotes Ausrufungszeichen */?>
 					<? if ($tpl['ausruf']) { ?>
 					<A href="javascript:alert('<?=$tpl['ausruf']?>')">
-						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/ausrufezeichen_rot.gif" alt="<?=$tpl['ausruf']?>" border="0" align="absmiddle">
+						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/ausrufezeichen_rot.gif" alt="<?=$tpl['ausruf']?>" border="0" align="absmiddle" <?=tooltip(_("Wichtige Informationen über Raumbuchungen anzeigen"))?>>
 					</A>
 					<? } ?>
 				</TD>
@@ -52,7 +52,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 				<TD width="20%" nowrap class="<?=$tpl['class']?>" align="right">
 					<? if (!$_LOCKED) { ?>
 					<A href="<?=$PHP_SELF?>?cmd=deleteCycle&cycle_id=<?=$tpl['md_id']?>">
-						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" align="absmiddle">
+						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" align="absmiddle" <?=tooltip(_("Regelmäßige Zeit inklusive aller zugehörigen Termine löschen!"))?>>
 					</A>
 					<? } ?>
 				</TD>
@@ -97,7 +97,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 				</TD>
 				<TD width="5%" nowrap class="<?=$tpl['class']?>" align="right" nowrap>
 					<A href="<?=$PHP_SELF?>?cmd=deleteCycle&cycle_id=<?=$tpl['md_id']?>">
-						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" valign="absmiddle">
+						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" valign="absmiddle"  <?=tooltip(_("Regelmäßige Zeit inklusive aller zugehörigen Termine löschen!"))?>>
 					</A>
 				</TD>
 			</TR>

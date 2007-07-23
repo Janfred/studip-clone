@@ -4,7 +4,7 @@
 		<A name="<?=$tpl['sd_id']?>">
 		<? if (!$_LOCKED) { ?>
 		<A href="<?=$PHP_SELF?>?cmd=<?=($sd_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
-			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($sd_open[$tpl['sd_id']]) ? 'runt' : ''?>.gif" border="0" align="abstop">
+			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($sd_open[$tpl['sd_id']]) ? 'runt' : ''?>.gif" border="0" align="abstop" <?=tooltip(_("Termin zum Bearbeiten öffnen"))?>>
 		</A>
 		<INPUT type="checkbox" name="singledate[]" value="<?=$tpl['sd_id']?>" <?=$tpl['checked']?>>
 		<? } ?>
@@ -33,10 +33,10 @@
 	<TD width="20%" nowrap class="<?=$tpl['class']?>" align="right">
 		<? if (!$_LOCKED) { ?>
 		<A href="<?=$PHP_SELF?>?cmd=<?=($sd_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
-			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/edit_transparent.gif" border="0" align="absmiddle">
+			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/edit_transparent.gif" border="0" align="absmiddle" <?=tooltip(_("Termin bearbeiten"))?>>
 		</A>
 		<A href="<?=$PHP_SELF?>?cmd=delete_singledate&sd_id=<?=$tpl['sd_id']?>&cycle_id=<?=$tpl['cycle_id']?>">
-			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" align="absmiddle">
+			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" align="absmiddle" <?=tooltip(_("Termin löschen"))?>>
 		</A>
 		<? } ?>
 	</TD>
@@ -74,7 +74,7 @@
 	<TD width="20%" nowrap class="<?=$tpl['class']?>" align="right">
 		<? if (!$_LOCKED) { ?>
 		<A href="<?=$PHP_SELF?>?cmd=undelete_singledate&sd_id=<?=$tpl['sd_id']?>&cycle_id=<?=($tpl['cycle_id']) ? $tpl['cycle_id'] : '' ?>">
-			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/untrash.gif" border="0" align="absmiddle">
+			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/untrash.gif" border="0" align="absmiddle" <?=tooltip(_("Termin wiederherstellen"))?>>
 		</A>
 		<? } ?>
 	</TD>
