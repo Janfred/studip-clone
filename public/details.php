@@ -84,6 +84,8 @@ if ($sem_id) {
 			$abo_msg = sprintf ("</A>"._("Tragen Sie sich hier von %s bis %s ein.")."<A>",date("d.m. Y, G:i",$db2->f("admission_starttime")),date("d.m.Y, G:i",$db2->f("admission_endtime_sem")));
 		} elseif (($db2->f("admission_endtime_sem") < time()) && ($db2->f("admission_endtime_sem") != -1)) {
 			if (!$db->f("status") == "user") $info_msg = _("Eintragen nicht mehr möglich, der Anmeldezeitraum ist abgelaufen");
+		} elseif ($db2->f("admission_type") == 3) {
+                        $info_msg = _("Eintragen nicht m&ouml;glich, diese Veranstaltung ist gesperrt.");
 		} else {
 			if (!$db->num_rows()) {
 				$db->query("SELECT status FROM admission_seminar_user WHERE user_id ='$user->id' AND seminar_id = '$sem_id'");
@@ -572,7 +574,7 @@ print_infobox ($infobox,"details.jpg");
 				<font size=-1><b><?=_("Anmeldeverfahren:")?></b></font><br />
 				<?
 	}
-	if ($db2->f("admission_prelim") == 1) {
+	if ($db2->f("admission_prelim") == 1 && $db2->f("admission_type") != 3) {
 		echo "<font size=-1>";
 		print(_("Die Auswahl der Teilnehmenden wird nach der Eintragung manuell vorgenommen."));
 		echo "<br/>";
@@ -606,7 +608,10 @@ print_infobox ($infobox,"details.jpg");
 		echo "<br/>";
 		echo "</font>";
 	}
-	if ($db2->f("admission_type")) {
+	if ($db2->f("admission_type") == 3) {
+                echo '<font size="-1" color="red">'. _("Diese Veranstaltung ist gesperrt, sie k&ouml;nnen sich nicht selbst eintragen!");
+                echo "<td class=\"".$cssSw->getClass()."\" colspan=2 width=\"48%\" valign=\"top\"><td>";
+        } elseif ($db2->f("admission_type")) {
 		if ($db2->f("admission_selection_take_place") == 1) {
 			if ($db2->f("admission_type") == 1) {
 				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden wurde nach dem Losverfahren am %s Uhr festgelegt.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
