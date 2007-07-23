@@ -136,15 +136,12 @@ if ($PLUGINS_ENABLE){
 					if ($submenu != null){
     					foreach ($submenu as $submenuitem){
     						$params = $submenuitem->getLinkParams();
-
-    						foreach ($params as $key => $val){
-        						if (isset($_GET["$key"]) && $_GET["$key"] == $val){
+       							if (isset($_REQUEST['plugin_subnavi_params']) && $_REQUEST['plugin_subnavi_params'] == $params['plugin_subnavi_params']){
         						   $reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname();
         						   break;
         						}
         					}
     					}
-    				}
 					$found= true;
 					break;
 				}
