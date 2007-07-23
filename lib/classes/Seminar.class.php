@@ -303,10 +303,6 @@ class Seminar {
 		}
 
 		if ($irregular) {
-			if ($turnus) {
-				$return_string .= ', ';
-			}
-			$return_string .= _("Termine am"). " ";
 			foreach ($irregular as $sid => $termin) {
 				foreach (getPresenceTypes() as $tp) {
 					if ($termin->getDateType() == $tp) {
@@ -315,41 +311,14 @@ class Seminar {
 				}
 			}
 
-			// Kompakte Ausgabe der Einzeltermine
-			for ($i=1; $i<sizeof($dates); $i++) {
-				if (((date("G", $dates[$i-1]["start_time"])) == date("G", $dates[$i]["start_time"])) && ((date("i", $dates[$i-1]["start_time"])) == date("i", $dates[$i]["start_time"])) && ((date("G", $dates[$i-1]["end_time"])) == date("G", $dates[$i]["end_time"])) && ((date("i", $dates[$i-1]["end_time"])) == date("i", $dates[$i]["end_time"])))
-						$dates[$i]["time_match"]=TRUE;
-
-				if (((date ("z", $dates[$i]["start_time"])-1) == date ("z", $dates[$i-1]["start_time"])) || ((date ("z", $dates[$i]["start_time"]) == 0) && (date ("j", $dates[$i-1]["start_time"]) == 0)))
-						if ($dates[$i]["time_match"])
-							$dates[$i]["conjuncted"]=TRUE;
+			if (sizeof($dates) > 0) {
+				if ($turnus) {
+					$return_string .= ', ';
+				}
+				$return_string .= _("Termine am"). " ";
 			}
-
-			for ($i=0; $i<sizeof($dates); $i++)	{
-				if (!$dates[$i]["conjuncted"])
-					$conjuncted=FALSE;
-
-				if ((!$dates[$i]["conjuncted"]) || (!$dates[$i+1]["conjuncted"])) {
-					$return_string.=date (" j.n.", $dates[$i]["start_time"]);
-				}
-
-				if ((!$conjuncted) && ($dates[$i+1]["conjuncted"]))	{
-					$return_string.=" -";
-					$conjuncted=TRUE;
-				}	else if ((!$dates[$i+1]["conjuncted"]) && ($dates[$i+1]["time_match"])) {
-					$return_string.=",";
-				}
-
-				if (!$dates[$i+1]["time_match"]) {
-					$return_string.=" ".date("G:i", $dates[$i]["start_time"]);
-					if (date("G:i", $dates[$i]["start_time"]) != date("G:i", $dates[$i]["end_time"])) {
-						$return_string.=" - ".date("G:i", $dates[$i]["end_time"]);
-					}
-					if ($i+1 != sizeof ($dates)) {
-							$return_string.=",";
-					}
-				}
-			}
+			
+			$return_string .= join('', shrink_dates($dates));
 		}
 		// activate this with StEP 00077
 		// $cache->write($cache_key, $return_string, 60*60);

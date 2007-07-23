@@ -8,6 +8,7 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 	var $showRoomList = FALSE;
 	var $hideRooms = FALSE;
 	var $onlyRegular = FALSE;
+	var $shrinkDates = FALSE;
 	var $admin_view = FALSE;
 
 	function RoomOverviewUnsteadyDecorator($data) {
@@ -132,113 +133,119 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 			if (is_array($data['irregular'])) {
 				// group the singledates
 				foreach ($data['irregular'] as $val) {
+					$c_dates[] = array('start_time' => $val['start_time'], 'end_time' => $val['end_time'], 'conjuncted' => FALSE, 'time_match' => FALSE);
 					$sd[$val['start_time'].'_'.$val['end_time']][] = $val;
 				}
 
-				//echo '<pre>', print_r($sd, true), '</pre>';
-				foreach ($sd as $termine) {
-					$zeit = date('H:i', $termine[0]['start_time']).'-'.date('H:i', $termine[0]['end_time']);
-					$zraum = array();
-					$xml_zraum = array();
-					$xml_zraum_freetext = array();
-					$raum = '';
-					$xml_raum = '';
-					foreach ($termine as $id) {
-						if ($RESOURCES_ENABLE && ($id['resource_id'])) {
-							$resObj =& ResourceObject::Factory($id['resource_id']);
-							if ($this->link) {
-								$zraum[] = $resObj->getFormattedLink(TRUE, TRUE, TRUE);
+				if ($this->shrinkDates && $this->hideRooms && !$this->xml_export) {
+					$ret .= '<br/>';
+					$ret .= join('<br />', shrink_dates($c_dates));
+				} else {
+
+					foreach ($sd as $termine) {
+						$zeit = date('H:i', $termine[0]['start_time']).'-'.date('H:i', $termine[0]['end_time']);
+						$zraum = array();
+						$xml_zraum = array();
+						$xml_zraum_freetext = array();
+						$raum = '';
+						$xml_raum = '';
+						foreach ($termine as $id) {
+							if ($RESOURCES_ENABLE && ($id['resource_id'])) {
+								$resObj =& ResourceObject::Factory($id['resource_id']);
+								if ($this->link) {
+									$zraum[] = $resObj->getFormattedLink(TRUE, TRUE, TRUE);
+								} else {
+									$zraum[] = $resObj->getName();
+								}
+								$xml_zraum[] = $resObj->getName();
 							} else {
-								$zraum[] = $resObj->getName();
-							}
-							$xml_zraum[] = $resObj->getName();
-						} else {
-							if ($id['raum'] == '') {
-								if ($this->admin_view) {
-									if ($id['requested_room']) {
-										$zraum[] = '<I>(angefragt: '.$id['requested_room'].')</I>';
+								if ($id['raum'] == '') {
+									if ($this->admin_view) {
+										if ($id['requested_room']) {
+											$zraum[] = '<I>(angefragt: '.$id['requested_room'].')</I>';
+										} else {
+											$zraum[] = _("k.A.");
+										}
 									} else {
 										$zraum[] = _("k.A.");
 									}
 								} else {
-									$zraum[] = _("k.A.");
+									$zraum[] = '('.htmlReady($id['raum']).')';
+									$xml_zraum_freetext[] = $id['raum'];
 								}
-							} else {
-								$zraum[] = '('.htmlReady($id['raum']).')';
-								$xml_zraum_freetext[] = $id['raum'];
 							}
 						}
-					}
 
-					for ($i = 0; $i < min(3,sizeof($zraum)); $i++) {
-						if ($i) $raum .= ', ';
-						$raum .= $zraum[$i];
-					}
-
-					$first_room = true;
-					foreach ($xml_zraum as $r) {
-						if (!$first_room) $xml_raum .= ', ';
-						$xml_raum .= $r;
-						$first_room = false;
-					}
-
-					$xml_raum_freetext = '';
-
-					$first_room = true;
-					foreach ($xml_zraum_freetext as $r) {
-						if (!$first_room) $xml_raum_freetext .= ', ';
-						$xml_raum_freetext .= $r;
-						$first_room = false;
-					}
-
-					if (sizeof($termine) > 3) {
-						$info = getWeekDay(date('w', $termine[0]['start_time'])).'.&nbsp;'.date('d.m.Y', $termine[0]['end_time']).',&nbsp;'.$zeit.', Räume:\n';
-						foreach ($zraum as $raum_info) {
-							$info .= $raum_info.'\n';
+						for ($i = 0; $i < min(3,sizeof($zraum)); $i++) {
+							if ($i) $raum .= ', ';
+							$raum .= $zraum[$i];
 						}
-						$info = strip_tags($info);
-						$title = str_replace('\n', '  ', $info);
+
+						$first_room = true;
+						foreach ($xml_zraum as $r) {
+							if (!$first_room) $xml_raum .= ', ';
+							$xml_raum .= $r;
+							$first_room = false;
+						}
+
+						$xml_raum_freetext = '';
+
+						$first_room = true;
+						foreach ($xml_zraum_freetext as $r) {
+							if (!$first_room) $xml_raum_freetext .= ', ';
+							$xml_raum_freetext .= $r;
+							$first_room = false;
+						}
+
+						if (sizeof($termine) > 3) {
+							$info = getWeekDay(date('w', $termine[0]['start_time'])).'.&nbsp;'.date('d.m.Y', $termine[0]['end_time']).',&nbsp;'.$zeit.', Räume:\n';
+							foreach ($zraum as $raum_info) {
+								$info .= $raum_info.'\n';
+							}
+							$info = strip_tags($info);
+							$title = str_replace('\n', '  ', $info);
+
+							if ($this->link) {
+								$raum .= ", <A href=\"javascript:alert('$info')\" alt=\"$title\" title=\"$title\">und ".(sizeof($termine)-3).' weitere</A>';
+								$raum .= " <img src=\"{$GLOBALS['ASSETS_URL']}/images/info.gif\" border=\"0\" align=\"absMiddle\" onClick=\"alert('";
+								$raum .= $info."')\" alt=\"$title\" title=\"$title\">";
+							} else {
+								$raum .= ', und '.(sizeof($raum_list)-3).' weitere';
+							}
+						}
+
+						$typ = '';
+						if ($termine[0]['typ'] != 1 && $termine[0]['typ'] != 7) {
+							$typ = $GLOBALS['TERMIN_TYP'][$termine[0]['typ']]['name'];
+						}
 
 						if ($this->link) {
-							$raum .= ", <A href=\"javascript:alert('$info')\" alt=\"$title\" title=\"$title\">und ".(sizeof($termine)-3).' weitere</A>';
-							$raum .= " <img src=\"{$GLOBALS['ASSETS_URL']}/images/info.gif\" border=\"0\" align=\"absMiddle\" onClick=\"alert('";
-							$raum .= $info."')\" alt=\"$title\" title=\"$title\">";
+							$ret .= '<tr><td width="20%" nowrap><font size="-1">'.getWeekDay(date('w', $termine[0]['start_time'])).'. '.date('d.m.Y', $termine[0]['end_time']).'</font>&nbsp;&nbsp;</td>';
+							$ret .= '<td width="20%" nowrap><font size="-1">'.$zeit.'</font></td>';
+							if (!$this->hideRooms) {
+								$ret .= '<td width="60%"><font size="-1">&nbsp;&nbsp;'.$raum.(($typ) ? ", <I>$typ</I>":'').'</font></td></tr>';
+							} else {
+								$ret .= '<td width="60%"><font size="-1">&nbsp;&nbsp;'.(($typ) ? ", <I>$typ</I>":'').'</font></td></tr>';
+							}
 						} else {
-							$raum .= ', und '.(sizeof($raum_list)-3).' weitere';
+							if ($commas > 0) $ret .= ',<br/>';
+							$ret .= getWeekDay(date('w', $termine[0]['start_time'])).'. '.date('d.m.Y', $termine[0]['end_time']).'&nbsp;';
+							$ret .= $zeit.'&nbsp;';
+							if (!$this->hideRooms) {
+								$ret .= $raum.(($typ) ? ", <I>$typ</I>":'');
+							}
+							$commas++;
 						}
-					}
 
-					$typ = '';
-					if ($termine[0]['typ'] != 1 && $termine[0]['typ'] != 7) {
-						$typ = $GLOBALS['TERMIN_TYP'][$termine[0]['typ']]['name'];
-					}
-
-					if ($this->link) {
-						$ret .= '<tr><td width="20%" nowrap><font size="-1">'.getWeekDay(date('w', $termine[0]['start_time'])).'. '.date('d.m.Y', $termine[0]['end_time']).'</font>&nbsp;&nbsp;</td>';
-						$ret .= '<td width="20%" nowrap><font size="-1">'.$zeit.'</font></td>';
-						if (!$this->hideRooms) {
-							$ret .= '<td width="60%"><font size="-1">&nbsp;&nbsp;'.$raum.(($typ) ? ", <I>$typ</I>":'').'</font></td></tr>';
-						} else {
-							$ret .= '<td width="60%"><font size="-1">&nbsp;&nbsp;'.(($typ) ? ", <I>$typ</I>":'').'</font></td></tr>';
+						if ($this->xml_export) {
+							$xml .= '<raumzeit>';
+							$xml .= '<datum>'.date('d.m.Y', $termine[0]['start_time']).'</datum>';
+							$xml .= '<wochentag>'.getWeekDay(date('w', $termine[0]['start_time']), true).'</wochentag>';
+							$xml .= "<zeit>$zeit</zeit>";
+							$xml .= '<termin_art>'.$typ.'</termin_art>';
+							$xml .= "<raum><gebucht>$xml_raum</gebucht><freitext>$xml_raum_freetext</freitext></raum>";
+							$xml .= '</raumzeit>';
 						}
-					} else {
-						if ($commas > 0) $ret .= ',<br/>';
-						$ret .= getWeekDay(date('w', $termine[0]['start_time'])).'. '.date('d.m.Y', $termine[0]['end_time']).'&nbsp;';
-						$ret .= $zeit.'&nbsp;';
-						if (!$this->hideRooms) {
-							$ret .= $raum.(($typ) ? ", <I>$typ</I>":'');
-						}
-						$commas++;
-					}
-
-					if ($this->xml_export) {
-						$xml .= '<raumzeit>';
-						$xml .= '<datum>'.date('d.m.Y', $termine[0]['start_time']).'</datum>';
-						$xml .= '<wochentag>'.getWeekDay(date('w', $termine[0]['start_time']), true).'</wochentag>';
-						$xml .= "<zeit>$zeit</zeit>";
-						$xml .= '<termin_art>'.$typ.'</termin_art>';
-						$xml .= "<raum><gebucht>$xml_raum</gebucht><freitext>$xml_raum_freetext</freitext></raum>";
-						$xml .= '</raumzeit>';
 					}
 				}
 			}

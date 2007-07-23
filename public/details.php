@@ -282,6 +282,11 @@ print_infobox ($infobox,"details.jpg");
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
 				<?
 				 printf ("<font size=-1><b>" . _("Zeit:") . "</b></font><br /><font size=-1>%s</font>",htmlReady(view_turnus($sem_id, FALSE, FALSE, (time() - $quarter_year))));
+					if (($mein_status || $perm->have_studip_perm("admin",$sem_id)) ) {
+						echo '<br /><font size="-1"><br />';
+						echo sprintf(_("Details zu allen Terminen im %sAblaufplan%s"), '<a href="seminar_main.php?auswahl='.$SessSemName[1].'&redirect_to=dates.php">', '</a>');
+						echo '</font><br />';
+					}
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="25%">
@@ -297,7 +302,6 @@ print_infobox ($infobox,"details.jpg");
 					<font size="-1">
 					<?	
 					
-					$show_link = true;
 		      $next_date = $sem->getNextDate();
 					if ($next_date) {
 						echo '<b>'._("Nächster Termin").':</b><br />';
@@ -308,13 +312,8 @@ print_infobox ($infobox,"details.jpg");
 					} else {
 						echo '<b>'._("Erster Termin").':</b><br />';
 						echo _("Die Zeiten der Veranstaltung stehen nicht fest.");
-						$show_link = false;
 					}
 
-					if (($mein_status || $perm->have_studip_perm("admin",$sem_id)) && ($show_link)) {
-						echo '<br/>';
-						echo '<a href="seminar_main.php?auswahl='.$sem_id.'&redirect_to=dates.php">' . _("alle Termine") .'</a><br/>';
-					}
 				?>
 					</font>
 				</td>

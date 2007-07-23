@@ -43,10 +43,18 @@ function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false, $s
 	return getRoomOverviewUnsteady ($range_id, $data['semester_id'], $link, $start_time, $range_typ, $showRoomList);
 }
 
-function getRegularOverview($range_id) {
+function getRegularOverview($range_id, $shrink_dates = false) {
 	$semester = new SemesterData();
 	$data = $semester->getCurrentSemesterData();
-	return getRoomOverviewUnsteady ($range_id, $data['semester_id'], false, false, false, false, array('hideRooms'));
+	
+	$params = array();
+	$params[] = 'hideRooms';
+
+	if ($shrink_dates) {
+		$params[] = 'shrinkDates';
+	}
+	
+	return getRoomOverviewUnsteady ($range_id, $data['semester_id'], false, false, false, false, $params);
 }
 
 /* Diese Funktion gibt eine Übersicht über alle Termine und die zugeordneten Räume (soweit vorhanden) für entweder
@@ -128,6 +136,7 @@ function getRoomOverviewUnsteady ($range_id, $semester_id, $link=TRUE, $start_ti
 			$decorator->link = $link;
 			$decorator->showRoomList = $showRoomList;
 			$decorator->hideRooms = $hideRooms;
+			$decorator->shrinkDates = $shrinkDates;
 			$decroator->onlyRegular = $onlyRegular;
 			if (isset($perm) && $perm->have_perm('admin')) {
 				$decorator->admin_view = true;
@@ -287,6 +296,56 @@ function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_ti
   return $sem->getFormattedTurnus();
 }
 
+// Kompakte Ausgabe von Einzelterminen
+function shrink_dates($dates) {
+	$ret = array();
+
+	// check which dates are follow-ups
+	for ($i=1; $i<sizeof($dates); $i++) {
+		if (((date("G", $dates[$i-1]["start_time"])) == date("G", $dates[$i]["start_time"])) && ((date("i", $dates[$i-1]["start_time"])) == date("i", $dates[$i]["start_time"])) && ((date("G", $dates[$i-1]["end_time"])) == date("G", $dates[$i]["end_time"])) && ((date("i", $dates[$i-1]["end_time"])) == date("i", $dates[$i]["end_time"])))
+			$dates[$i]["time_match"]=TRUE;
+
+		if (((date ("z", $dates[$i]["start_time"])-1) == date ("z", $dates[$i-1]["start_time"])) || ((date ("z", $dates[$i]["start_time"]) == 0) && (date ("j", $dates[$i-1]["start_time"]) == 0)))
+			if ($dates[$i]["time_match"])
+				$dates[$i]["conjuncted"]=TRUE;
+	}
+
+	$return_string = '';
+	// create text-output
+	for ($i=0; $i<sizeof($dates); $i++) {
+		if (!$dates[$i]["conjuncted"])
+			$conjuncted=FALSE;
+
+		if ((!$dates[$i]["conjuncted"]) || (!$dates[$i+1]["conjuncted"])) {
+			$return_string.=date (" j.n.", $dates[$i]["start_time"]);
+		}
+
+		if ((!$conjuncted) && ($dates[$i+1]["conjuncted"])) {
+			$return_string.=" -";
+			$conjuncted=TRUE;
+		} else if ((!$dates[$i+1]["conjuncted"]) && ($dates[$i+1]["time_match"])) {
+			$return_string.=",";
+		}
+
+		if (!$dates[$i+1]["time_match"]) {
+			$return_string.=" ".date("G:i", $dates[$i]["start_time"]);
+			if (date("G:i", $dates[$i]["start_time"]) != date("G:i", $dates[$i]["end_time"])) {
+				$return_string.=" - ".date("G:i", $dates[$i]["end_time"]);
+			}
+			if ($i+1 != sizeof ($dates)) {
+
+				$return_string.=",";
+			}
+		}
+		
+		if ($return_string != '' && !$dates[$i+1]['conjuncted'] && !$dates[$i+1]['time_match']) {
+			$ret[] = $return_string;
+			$return_string = '';
+		}
+	}
+
+	return $ret;
+}
 
 /*
 Die Funktion Vorbesprechung ueberpueft, ob es eine Vorbesprechung gibt und gibt in diesem

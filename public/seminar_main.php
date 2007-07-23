@@ -135,9 +135,14 @@ $quarter_year = 60 * 60 * 24 * 90;
 		echo '<br/>';
 		echo '<b>'. _("Zeit") .':</b><br />';
 
-		$data = getRegularOverview($SessSemName[1]);
+		$data = getRegularOverview($SessSemName[1], true);		// second parameter set option to "shrink" dates
 		if ($data) {
 			echo $data, '<br/>';
+			if ($perm->have_studip_perm('autor', $SessSemName[1])) {
+				echo '<br />';
+				echo sprintf(_("Details zu allen Terminen im %sAblaufplan%s"), '<a href="seminar_main.php?auswahl='.$SessSemName[1].'&redirect_to=dates.php">', '</a>');
+				echo '<br />';
+			}
 		} else {
 			echo _("Die Zeiten der Veranstaltung stehen nicht fest."). '<br/>';
 		}
@@ -147,16 +152,10 @@ $quarter_year = 60 * 60 * 24 * 90;
 			echo '<br/>';
 			echo '<b>'._("Nächster Termin").':</b><br />';
 			echo $next_date, '<br/>';
-			if ($perm->have_studip_perm('autor', $SessSemName[1])) {
-				echo '<a href="seminar_main.php?auswahl='.$SessSemName[1].'&redirect_to=dates.php">alle Termine</a><br/>';
-			}
 		} else if ($first_date = $sem->getFirstDate()) {
 			echo '<br/>';
 			echo '<b>'._("Erster Termin").':</b><br />';
 			echo $first_date, '<br/>';
-			if ($perm->have_studip_perm('autor', $SessSemName[1])) {
-				echo '<a href="seminar_main.php?auswahl='.$SessSemName[1].'&redirect_to=dates.php">alle Termine</a><br/>';
-			}
 		} else {
 			echo '<br/>';
 			echo '<b>'._("Erster Termin").':</b><br />';
@@ -170,9 +169,9 @@ $quarter_year = 60 * 60 * 24 * 90;
 	$db=new DB_Seminar;
 	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, " . $_fullname_sql['no_title_short'] . " AS shortname,username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id)  LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = 'dozent' ORDER BY position, Nachname");
 	if ($db->affected_rows() > 1)
-		printf ("<br><font size=\"-1\"><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("LeiterInnen") : _("DozentInnen"));
+		printf ("<font size=\"-1\"><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("LeiterInnen") : _("DozentInnen"));
 	else
-		printf ("<br><font size=\"-1\"><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("LeiterIn") : _("DozentIn"));
+		printf ("<font size=\"-1\"><b>%s: </b>", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("LeiterIn") : _("DozentIn"));
 
 	$i=0;
 	while ($db->next_record()) {
