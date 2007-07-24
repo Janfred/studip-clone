@@ -28,7 +28,6 @@ $reiter=new reiter;
 if (!$username){
 	$username = $auth->auth['uname'];
 }
-$user_id = get_userid($username);
 
 
 //Create Reitersystem
@@ -49,7 +48,7 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 	// PluginEngine aktiviert.
 	// Prüfen, ob HomepagePlugins vorhanden sind.
 	$requser = new StudIPUser();
-	$requser->setUserid($user_id);
+	$requser->setUserid(get_userid($username));
 	$homepagepluginpersistence = PluginEngine::getPluginPersistence("Homepage");
 	$activatedhomepageplugins = $homepagepluginpersistence->getAllActivatedPlugins();
 	if (!is_array($activatedhomepageplugins)){
@@ -60,12 +59,11 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 		// hier nun die HomepagePlugins anzeigen
 		if ($activatedhomepageplugin->hasNavigation()){
 			$hppluginnav = $activatedhomepageplugin->getNavigation();
-			$structure["hpplugin_" . $activatedhomepageplugin->getPluginid()] = array('topKat' => '', 'name' => $hppluginnav->getDisplayname(), 'link' => PluginEngine::getLink($activatedhomepageplugin,array("requesteduser" => $username)), 'active' => FALSE);
-			$pluginsubmenu["_hpplugin_" . $activatedhomepageplugin->getPluginId()] = array('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$hppluginnav->getDisplayname(),'link'=>PluginEngine::getLink($activatedhomepageplugin,array("requesteduser" => $username)),'active'=>false);
+			$structure["hpplugin_" . $activatedhomepageplugin->getPluginid()] = array('topKat' => '', 'name' => $hppluginnav->getDisplayname(), 'link' => PluginEngine::getLink($activatedhomepageplugin), 'active' => FALSE);
+			$pluginsubmenu["_hpplugin_" . $activatedhomepageplugin->getPluginId()] = array('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$hppluginnav->getDisplayname(),'link'=>PluginEngine::getLink($activatedhomepageplugin),'active'=>false);
 			$submenu = $hppluginnav->getSubMenu();
 			// create bottomkats for activated plugins
 			foreach ($submenu as $submenuitem){
-				$submenuitem->addLinkParam("requesteduser",$username);
 				// create entries in a temporary structure and add it to structure later
 				$pluginsubmenu["hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$submenuitem->getDisplayname(), 'link'=>PluginEngine::getLink($activatedhomepageplugin,$submenuitem->getLinkParams()), 'active'=>false);
 			}
@@ -133,19 +131,14 @@ if ($PLUGINS_ENABLE){
 					$navi = $activatedhomepageplugin->getNavigation();
 					$submenu = $navi->getSubMenu();
 
-					if ($submenu != null){
-    					foreach ($submenu as $submenuitem){
-    						$params = $submenuitem->getLinkParams();
-
-    						foreach ($params as $key => $val){
-        						if (isset($_GET["$key"]) && $_GET["$key"] == $val){
-        						   $reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname();
-        						   break;
-        						}
-        					}
-    					}
-    				}
-					$found= true;
+					if ($submenu != null) {
+                                                foreach ($submenu as $submenuitem) {
+                                                        if ($submenuitem->isActive()) {
+                                                               $reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname();
+                                                        }
+                                                }
+                                        }
+					$found = true;
 					break;
 				}
 			}

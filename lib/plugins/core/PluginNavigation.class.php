@@ -58,8 +58,14 @@ class PluginNavigation {
     	return $this->submenu;
     }
 
-    function isActive(){
-    	return $this->active;
+    function isActive() {
+        foreach ($this->linkparams as $key => $val) {
+            if (!isset($_REQUEST[$key]) || $_REQUEST[$key] != $val) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     function setDisplayname($newdisplayname){
@@ -84,7 +90,9 @@ class PluginNavigation {
     	$this->submenu = array_diff($this->submenu,$subnavigation);
     }
 
-
+    /**
+     * @deprecated
+     */
     function setActive($value=true){
     	$this->active = $value;
     }

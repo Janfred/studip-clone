@@ -340,18 +340,13 @@ if ($PLUGINS_ENABLE){
 					$navi = $plugin->getNavigation();
 					$submenu = $navi->getSubMenu();
 					
-					if ($submenu != null){
-    					foreach ($submenu as $submenuitem){
-    						$params = $submenuitem->getLinkParams();
-    						    						
-    						foreach ($params as $key => $val){
-        						if (isset($_REQUEST["$key"]) && $_REQUEST["$key"] == $val){
-        						   $reiter_view="plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname();
-        						   break;
-        						}
-        					}
-    					}
-    				}
+					if ($submenu != null) {
+                                                foreach ($submenu as $submenuitem) {
+                                                        if ($submenuitem->isActive()) {
+                                                               $reiter_view="plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname();
+                                                        }
+                                                }
+                                        }
 					$found= true;
 					break;
 				}

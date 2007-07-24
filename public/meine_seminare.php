@@ -139,7 +139,7 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
 				echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=plugins.php&cmd=show&id=" 
 				. $plugin->getPluginId() . "\"><img src='" . $plugin->getPluginiconname() 
 				. "' border=0 "
-				. tooltip($plugin->getOverviewMessage())."></a>";
+				. tooltip($plugin->getOverviewMessage(false))."></a>";
 		  	}
 		  }
   	  }
