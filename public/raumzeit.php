@@ -412,10 +412,14 @@ while ($tmp_first_date < $end_date) {
 				<? if (!$_LOCKED) { ?>
 				<TR>
 					<TD class="blank" colspan="9">
-						&nbsp;&nbsp;
-						<A href="<?=$PHP_SELF?>?cmd=addCycle#newCycle">
-							<IMG <?=makebutton('feldhinzufuegen', 'src')?> border="0">
-						</A>
+						<br />
+						<font size="-1">
+							&nbsp;&nbsp;
+							<?=_("Regelmäßigen Zeiteintrag")?>
+							<a href="<?=$PHP_SELF?>?cmd=addCycle#newCycle">
+								<img <?=makebutton('hinzufuegen', 'src')?> border="0" align="absmiddle">
+							</a>
+						</font>
 					</TD>
 				</TR>
 				<? } ?>
