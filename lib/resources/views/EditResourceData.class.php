@@ -349,14 +349,7 @@ class EditResourceData {
 				<font size=-1>
 					<?
 					$user_name=$resAssign->getUsername(FALSE);
-
-                    // automatically set the current user for this schedule, if no user is set
-                    if (!$user_name) { 
-                        $resAssign->setAssignUserId($GLOBALS['user']->id); 
-                        $user_name = $resAssign->getUsername(FALSE); 
-                    }
-                     
-    				if ($user_name)
+					if ($user_name)
 						echo "<b>$user_name&nbsp;</b></font>";
 					else
 						echo "<b>-- "._("keinE Stud.IP NutzerIn eingetragen")." -- &nbsp;</b></font>";
