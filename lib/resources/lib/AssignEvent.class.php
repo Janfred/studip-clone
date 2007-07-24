@@ -108,7 +108,8 @@ class AssignEvent {
 	
 	function getUsername($use_free_name=TRUE, $explain=true) {
 		if ($this->assign_user_id) 
-			return assignObject::getOwnerName($explain, $this);
+            // return user and free text description
+            return assignObject::getOwnerName($explain, $this)."\n".$this->getUserFreeName();
 		elseif ($use_free_name)
 			return $this->getUserFreeName();
 		else 

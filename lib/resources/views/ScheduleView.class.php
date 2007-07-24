@@ -362,7 +362,7 @@ class ScheduleView {
 		if ($print_view){
 			$out = preg_replace('/EB[0-9]+/', '<b>\0</b>', $name);
 		}
-		return $out;
+		return nl2br($out);
 	}
 
 	function showSchedule($mode="html", $print_view=false) {
