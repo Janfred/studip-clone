@@ -283,20 +283,24 @@ Der Parameter short verkuerzt die Ansicht nochmals (fuer besonders platzsparende
 Bei regelmaessigen Veranstaltungen werden die einzelen Zeiten ausgegeben, bei zweiwoechentlichem
 Turnus mit dem enstprechenden Zusatz. Short verkuerzt die Ansicht nochmals.
 */
-function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_time = false)
-{
+function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_time = false) {
 	global $TERMIN_TYP;
 
 	if (!$start_time){
 		$start_time = 0;
 	}
 
-  $sem = new Seminar($seminar_id);
+  $sem = Seminar::GetInstance($seminar_id);
 
-  return $sem->getFormattedTurnus();
+  return $sem->getFormattedTurnus($short);
 }
 
-// Kompakte Ausgabe von Einzelterminen
+/*
+ * The function shrink_dates expects an array of dates where the start_time and the end_time is noted
+ * and creates a compressed version (spanning f.e. multiple dates).
+ *
+ * Returns an array, where each element is one condensed entry. (f.e. 10.6 - 14.6 8:00 - 12:00,)
+ */
 function shrink_dates($dates) {
 	$ret = array();
 
