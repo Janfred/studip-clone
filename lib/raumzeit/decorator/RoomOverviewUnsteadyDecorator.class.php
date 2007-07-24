@@ -107,9 +107,9 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 				} else {
 					if ($commas > 0) $ret .= ',<br/>';
 					$ret .= getWeekDay($val['day']).'.&nbsp;'.$repeat.'&nbsp;';
-					$ret .= $zeit.'&nbsp;';
+					$ret .= $zeit;
 					if (!$this->hideRooms) {
-						$ret .= 'Ort: '.$raum;
+						$ret .= '&nbsp;Ort: '.$raum;
 					}
 					$commas++;
 				}
@@ -126,6 +126,10 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 		}
 
 		if (!$this->onlyRegular) {
+			if ( sizeof($data['regular']['turnus_data']) > 0 && sizeof($data['irregular']) > 0 && $this->hideRooms){
+				$ret .= ',';
+			}
+
 			// get irregular dates
 			$raum = '';
 			$zeit = '';
