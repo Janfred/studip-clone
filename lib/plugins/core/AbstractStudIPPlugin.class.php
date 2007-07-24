@@ -59,31 +59,9 @@ class AbstractStudIPPlugin {
 
 	/**
 	 * This function is called by the plugin engine directly before uninstallation.
-	 * Normally a plugin would drop all tables created and used by the plugin.
-	 *
+	 * The default implementation in AbstractStudIPPlugin is empty.
 	 */
 	function prepareUninstallation(){
-                $pluginpath = $this->environment->getBasepath() . "/" . $this->getPluginpath();
-		$manifest = PluginEngine::getPluginManifest($pluginpath);
-		if (is_array($manifest)){
-                        if (is_dir($pluginpath.'/migrations')) {
-                                // use same logic here as in PluginAdministration::installPlugin()
-                                $pluginname = $manifest['pluginname'] ?
-                                                $manifest['pluginname'] : $manifest["pluginclassname"];
-                                $schema_version =& new DBSchemaVersion($pluginname);
-                                $migrator =& new Migrator($pluginpath.'/migrations', $schema_version);
-                                $migrator->migrate_to(0);
-                        }
-			if (isset($manifest["uninstalldbscheme"])) {
-				$schemafile = $this->getPluginpath() . "/" . $manifest["uninstalldbscheme"];
-				$conn = PluginEngine::getPluginDatabaseConnection();
-				// this should use file_get_contents() in PHP 5
-				$statements = split(";[[:space:]]*\n", implode('', file($schemafile)));
-				foreach ($statements as $statement) {
-					$conn->execute($statement);
-				}
-			}
-		}
 	}
 
 	/**

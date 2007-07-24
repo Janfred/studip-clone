@@ -54,11 +54,15 @@ class PluginAdministration {
 			$engine->deinstallPlugin($plugin);
 		}			
 		$pluginenv = $plugin->getEnvironment();
+                $pluginpath = $pluginenv->getBasepath() . '/' . $plugin->getPluginpath();
+		$manifest = PluginEngine::getPluginManifest($pluginpath);
+
+                // delete database if needed					 	
+                $this->deleteDBSchema($pluginpath, $manifest);
 		// the old plugin directory has to be deleted
-		$this->deletePlugindir($pluginenv->getBasepath() . "/" . $plugin->getPluginpath());			
+		$this->deletePlugindir($pluginpath);			
 	}
-	
-	
+
 	/**
 	 * Installs a new plugin.
 	 * - grabs the uploaded file, unzips it, reads the manifest, creates a new plugin directory und
@@ -106,13 +110,6 @@ class PluginAdministration {
 						
 			// Klasse instanziieren
 			if (strlen($pluginclassname) > 0){ 
-				if (strlen($plugininfos["pluginname"]) > 0){
-					$pluginname = $plugininfos["pluginname"];
-				}
-				else {
-					$pluginname = $plugininfos["pluginclassname"];
-				}
-				
 				// Neuen Pfad bestimmen
 				$vendordir = $this->environment->getPackagebasepath() . "/" . $plugininfos["origin"];
 				$newpluginpath = $vendordir . "/" . $pluginclassname; // . "_" . $plugininfos["version"];
@@ -148,20 +145,9 @@ class PluginAdministration {
 						}
 						else {
 							// forced update
+                                                        $this->updateDBSchema($newpluginpath, $tmppackagedir, $plugininfos);
 							// only delete the plugin directory
-							// registration info will be updated automatically							
-                                                        if (is_dir($newpluginpath.'/migrations')) {
-                                                                $schema_version =& new DBSchemaVersion($pluginname);
-                                                                $new_version = 0;
-
-                                                                if (is_dir($tmppackagedir.'/migrations')) {
-                                                                        $migrator =& new Migrator($tmppackagedir.'/migrations', $schema_version);
-                                                                        $new_version = $migrator->top_version();
-                                                                }
-
-                                                                $migrator =& new Migrator($newpluginpath.'/migrations', $schema_version);
-                                                                $migrator->migrate_to($new_version);
-                                                        }
+							// registration info will be updated automatically
 							$this->deletePlugindir($newpluginpath);
 						}						
     				}
@@ -178,15 +164,7 @@ class PluginAdministration {
    				$this->deletePlugindir($tmppackagedir);
 
                                 // create database if needed					 	
-                                // TODO this probably should not happen during update
-                                if ($plugininfos['dbscheme'] != ''){
-                                        $this->createDBSchemeForPlugin($newpluginpath.'/'.$plugininfos['dbscheme']);
-                                }		
-                                if (is_dir($newpluginpath.'/migrations')) {
-                                        $schema_version =& new DBSchemaVersion($pluginname);
-                                        $migrator =& new Migrator($newpluginpath.'/migrations', $schema_version);
-                                        $migrator->migrate_to(null);
-                                }
+                                $this->createDBSchema($newpluginpath, $plugininfos);
 
 				// instantiate plugin
 				require_once($newpluginpath . '/' . $pluginclassname . ".class.php");
@@ -230,17 +208,82 @@ class PluginAdministration {
 	}
 	
 	/**
-	 * Enter description here...
+	 * Create the initial database schema for the plugin.
 	 *
-	 * @param string $schemafile the absolute path to the schemafile
+	 * @param string $pluginpath absolute path to the plugin
+	 * @param array  $manifest   plugin manifest information
 	 */
-	function createDBSchemeForPlugin($schemafile){
-		$conn = PluginEngine::getPluginDatabaseConnection();		
-		// this should use file_get_contents() in PHP 5
-		$statements = split(";[[:space:]]*\n", implode('', file($schemafile)));
-		foreach ($statements as $statement) {
-			$conn->execute($statement);
-		}
+        function createDBSchema ($pluginpath, $manifest) {
+                $pluginname = $manifest['pluginname'] ? $manifest['pluginname']
+                                                      : $manifest['pluginclassname'];
+
+                // TODO this probably should not happen during update
+                if (isset($manifest['dbscheme'])) {
+                        $schemafile = $pluginpath.'/'.$manifest['dbscheme'];
+                        $conn = PluginEngine::getPluginDatabaseConnection();		
+                        $statements = split(";[[:space:]]*\n", file_get_contents($schemafile));
+
+                        foreach ($statements as $statement) {
+                                $conn->execute($statement);
+                        }
+                }		
+
+                if (is_dir($pluginpath.'/migrations')) {
+                        $schema_version =& new DBSchemaVersion($pluginname);
+                        $migrator =& new Migrator($pluginpath.'/migrations', $schema_version);
+                        $migrator->migrate_to(null);
+                }
+        }
+
+	/**
+	 * Update the database schema maintained by the plugin.
+	 *
+	 * @param string $pluginpath absolute path to the plugin
+	 * @param array  $manifest   plugin manifest information
+	 */
+        function updateDBSchema ($pluginpath, $new_pluginpath, $manifest) {
+                $pluginname = $manifest['pluginname'] ? $manifest['pluginname']
+                                                      : $manifest['pluginclassname'];
+
+                if (is_dir($pluginpath.'/migrations')) {
+                        $schema_version =& new DBSchemaVersion($pluginname);
+                        $new_version = 0;
+
+                        if (is_dir($new_pluginpath.'/migrations')) {
+                                $migrator =& new Migrator($new_pluginpath.'/migrations', $schema_version);
+                                $new_version = $migrator->top_version();
+                        }
+
+                        $migrator =& new Migrator($pluginpath.'/migrations', $schema_version);
+                        $migrator->migrate_to($new_version);
+                }
+        }
+
+	/**
+	 * Delete the database schema maintained by the plugin.
+	 *
+	 * @param string $pluginpath absolute path to the plugin
+	 * @param array  $manifest   plugin manifest information
+	 */
+	function deleteDBSchema ($pluginpath, $manifest) {
+                $pluginname = $manifest['pluginname'] ? $manifest['pluginname']
+                                                      : $manifest['pluginclassname'];
+
+                if (is_dir($pluginpath.'/migrations')) {
+                        $schema_version =& new DBSchemaVersion($pluginname);
+                        $migrator =& new Migrator($pluginpath.'/migrations', $schema_version);
+                        $migrator->migrate_to(0);
+                }
+
+                if (isset($manifest['uninstalldbscheme'])) {
+                        $schemafile = $pluginpath.'/'.$manifest['uninstalldbscheme'];
+                        $conn = PluginEngine::getPluginDatabaseConnection();
+                        $statements = split(";[[:space:]]*\n", file_get_contents($schemafile));
+
+                        foreach ($statements as $statement) {
+                                $conn->execute($statement);
+                        }
+                }
 	}
 
 	/**
