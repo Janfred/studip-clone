@@ -355,12 +355,13 @@ function get_user_documents_in_folder($folder_id, $user_id){
 	return $ret;
 }
 
-function move_item($item_id, $new_parent, $change_sem = false) {
+function move_item($item_id, $new_parent, $change_sem_to = false) {
 	global $SessionSeminar;
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-	if ($change_sem){
-		$db->query("SELECT folder_id FROM folder WHERE range_id='$new_parent'");
+	$db = new DB_Seminar;
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+
+	if ($change_sem_to && !$folder_tree->isFolder($item_id)){
+		$db->query("SELECT folder_id FROM folder WHERE range_id='$change_sem_to'");
 		if ($db->next_record()){
 			$new_folder_id = $db->f(0);
 		} else {
@@ -370,21 +371,20 @@ function move_item($item_id, $new_parent, $change_sem = false) {
 
 	if ($item_id != $new_parent) {
 		$db->query ("UPDATE dokumente SET "
-					. (($change_sem && $new_folder_id) ? "range_id='$new_folder_id', seminar_id='$new_parent' " : "range_id='$new_parent'")
+					. (($change_sem_to && $new_folder_id) ? "range_id='$new_folder_id', seminar_id='$change_sem_to' " : "range_id='$new_parent'")
 					. " WHERE dokument_id = '$item_id'");
 		if (!$db->affected_rows()) {
 			//we want to move a folder, so we have first to check if we want to move a folder in a subordinated folder
-			$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
 
 			$folder = getFolderId($item_id);
 
 			if (is_array($folder) && in_array($new_parent, $folder)) $target_is_child = true;
 
 			if (!$target_is_child){
-				if ($change_sem && $new_folder_id){
-					$db->query("UPDATE folder SET range_id='".$new_folder_id."' WHERE folder_id = '$item_id'");
+				if ($change_sem_to){
+					$db->query("UPDATE folder SET range_id='".$new_parent."' WHERE folder_id = '$item_id'");
 					$folder[] = $item_id;
-					$db->query("UPDATE dokumente SET seminar_id='$new_parent' WHERE range_id IN('".join("','", $folder)."')");
+					$db->query("UPDATE dokumente SET seminar_id='$change_sem_to' WHERE range_id IN('".join("','", $folder)."')");
 					$folder_tree->init();
 					return array(count($folder), (int)$db->affected_rows());
 				} else {
@@ -401,30 +401,30 @@ function move_item($item_id, $new_parent, $change_sem = false) {
 	return false;
 }
 
-function copy_item($item_id, $new_parent, $change_sem = false) {
+function copy_item($item_id, $new_parent, $change_sem_to = false) {
 	global $SessionSeminar;
 
 	$db=new DB_Seminar;
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
 
-	if ($change_sem){
-		$db->query("SELECT folder_id FROM folder WHERE range_id='$new_parent'");
+	if ($change_sem_to && !$folder_tree->isFolder($item_id)){
+		$db->query("SELECT folder_id FROM folder WHERE range_id='$change_sem_to'");
 		if ($db->next_record()){
 			$new_folder_id = $db->f(0);
 		} else {
 			return false;
 		}
 	}
-
+	
 	if ($item_id != $new_parent) {
 		$db->query("SELECT dokument_id FROM dokumente WHERE dokument_id = '$item_id'");
 		if ($db->next_record()){
 			$ret = copy_doc($item_id,
-							(($change_sem && $new_folder_id) ? $new_folder_id : $new_parent),
-							(($change_sem && $new_folder_id) ? $new_parent : false));
+							(($change_sem_to) ? $new_folder_id : $new_parent),
+							$change_sem_to);
 
 			return ($ret ? array(0,1) : false);
 		} else {
-			$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
 			//we want to move a folder, so we have first to check if we want to move a folder in a subordinated folder
 			$folder = getFolderId($item_id);
 
@@ -433,19 +433,13 @@ function copy_item($item_id, $new_parent, $change_sem = false) {
 			$seed = md5(uniqid('blaofuasof',1));
 
 			if (!$target_is_child){
-				if ($change_sem && $new_folder_id){
-					if (!($folder_count = copy_folder($item_id, $new_folder_id, $seed)) ){
-						return false;
-					}
-				} else {
-					if (!($folder_count = copy_folder($item_id, $new_parent, $seed)) ){
-						return false;
-					}
+				if (!($folder_count = copy_folder($item_id, $new_parent, $seed)) ){
+					return false;
 				}
 				$folder[] = $item_id;
 				$db->query("SELECT dokument_id, range_id FROM dokumente WHERE range_id IN('".join("','", $folder)."')");
 				while($db->next_record()){
-					$doc_count += copy_doc($db->f('dokument_id'), md5($db->f('range_id').$seed), (($change_sem && $new_folder_id) ? $new_parent : false));
+					$doc_count += copy_doc($db->f('dokument_id'), md5($db->f('range_id').$seed), $change_sem_to);
 				}
 				$folder_tree->init();
 				return array($folder_count, $doc_count);
@@ -526,42 +520,45 @@ function copy_folder($folder_id, $new_range, $seed = false){
 
 function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "", $filesize="") {
 	global $SessionSeminar;
-
+	
 	$db=new DB_Seminar;
 	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
-
+	
 	if ($url != ""){
 		$url_parts = parse_url($url);
 		$the_file_name = basename($url_parts['path']);
 	}
 	if ($protected == "on") $protected=1;
-
+	
 	if ($type){
-		$db->query("UPDATE folder SET description='$description' " . (strlen($name) ? ", name='$name'" : "" ). " WHERE folder_id ='$item_id'");
-		if ($folder_tree->permissions_activated) {
-			foreach(array('r'=>'read','w'=>'write','x'=>'exec') as $p => $v){
-				if ($_REQUEST["perm_$v"]) $folder_tree->setPermission($item_id, $p);
-				else $folder_tree->unsetPermission($item_id, $p);
+		$db->query("UPDATE folder SET  description='$description' " . (strlen($name) ? ", name='$name'" : "" ). " WHERE folder_id ='$item_id'");
+		if($GLOBALS['perm']->have_studip_perm('tutor', $SessionSeminar)){
+			if ($folder_tree->permissions_activated) {
+				foreach(array('r'=>'read','w'=>'write','x'=>'exec') as $p => $v){
+					if ($_REQUEST["perm_$v"]) $folder_tree->setPermission($item_id, $p);
+					else $folder_tree->unsetPermission($item_id, $p);
+				}
 			}
+			if ($_REQUEST["perm_folder"]) $folder_tree->setPermission($item_id, 'f');
+			else $folder_tree->unsetPermission($item_id, 'f');
 		}
 	}
 	elseif ($url != "")
-		$db->query("UPDATE dokumente SET name='$name', filesize='$filesize', description='$description', protected='$protected', url='$url', filename='$the_file_name' WHERE dokument_id ='$item_id'");
+	$db->query("UPDATE dokumente SET name='$name', filesize='$filesize', description='$description', protected='$protected', url='$url', filename='$the_file_name' WHERE dokument_id ='$item_id'");
 	else
-		$db->query("UPDATE dokumente SET name='$name', description='$description', protected='$protected' WHERE dokument_id ='$item_id'");
+	$db->query("UPDATE dokumente SET name='$name', description='$description', protected='$protected' WHERE dokument_id ='$item_id'");
+	
+	if ($db->affected_rows()) return TRUE;
+}
 
-	if ($db->affected_rows())
-		return TRUE;
-	}
-
-function create_folder ($name, $description, $parent_id) {
+function create_folder ($name, $description, $parent_id, $permission = 7) {
 	global $user, $SessionSeminar;
 
 	$db=new DB_Seminar;
 	$id=md5(uniqid("salmonellen",1));
 	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
 
-	$db->query("INSERT INTO folder SET name='$name', folder_id='$id', description='$description', range_id='$parent_id', user_id='".$user->id."', mkdate='".time()."', chdate='".time()."'");
+	$db->query("INSERT INTO folder SET name='$name', folder_id='$id', description='$description', range_id='$parent_id', user_id='".$user->id."',permission='$permission', mkdate='".time()."', chdate='".time()."'");
 	if ($db->affected_rows()) {
 		$folder_tree->init();
 		return $id;
@@ -1316,7 +1313,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			if ($folder_tree->isExerciseFolder($db->f("folder_id"))) $icon .= "<img ".tooltip(_("Dieser Ordner ist ein Hausaufgabenordner. Es können nur Dateien eingestellt werden."))." src=\"".$GLOBALS['ASSETS_URL']."images/eigene2.gif\" WIDTH=\"18\" HEIGTH=\"18\">";
 
 
-			if ($move && !in_array($db->f('folder_id'), $dont_move_to) && $folder_tree->isWritable($db->f('folder_id'))){
+				if ($move && !in_array($db->f('folder_id'), $dont_move_to) && $folder_tree->isWritable($db->f('folder_id')) && (!$folder_tree->isFolder($move) || $folder_tree->checkCreateFolder($db->f('folder_id'), $user->id)) ){
 
 				$icon="&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_md_\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0></a>".$icon;
 			}
@@ -1325,9 +1322,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 			//Titelbereich erstellen
 			$tmp_titel=htmlReady(mila($db->f("name")));
-			if ($change == $db->f("folder_id") && ($level != 0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder')) ) { //Aenderungsmodus, Anker + Formular machen, Font tag direkt ausgeben (muss ausserhalb einer td stehen!
+			if ($change == $db->f("folder_id") && ($level != 0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder') || $folder_tree->isGroupFolder($db->f('folder_id'))) ) { //Aenderungsmodus, Anker + Formular machen, Font tag direkt ausgeben (muss ausserhalb einer td stehen!
 				$titel= "<a $anker ></a><input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db->f("name"))."\" />";
-				if ($folder_tree->permissions_activated) $titel .= '&nbsp;<span style="color:red">['.$folder_tree->getPermissionString($db->f("folder_id")).']</span>';
+				if ($rechte && $folder_tree->permissions_activated) $titel .= '&nbsp;<span style="color:red">['.$folder_tree->getPermissionString($db->f("folder_id")).']</span>';
 			}
 			else {
 				//create a link onto the titel, too
@@ -1406,39 +1403,53 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				}
 				$content .=  '<hr>';
 			}
-
-			//Contentbereich erstellen
-			if ($change == $db->f("folder_id")) { //Aenderungsmodus, zweiter Teil
-				$content .= chr(10) . '<table cellpadding="2" cellspacing="2" border="0">';
-				$content .= chr(10) . '<tr><td>';
-				$content.="\n<textarea name=\"change_description\" rows=3 cols=40>".htmlReady($db->f("description"))."</textarea>";
-				$content .= chr(10) . '</td><td><font size="-1">';
-				if ($folder_tree->permissions_activated){
-					$content.= "\n<INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isReadable($db->f('folder_id')) ? "CHECKED" : "" ) . " NAME=\"perm_read\">&nbsp;";
-					$content.= "<b>r</b> - " . _("Lesen (Dateien k&ouml;nnen heruntergeladen werden)");
-					$content.= "\n<br><INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isWritable($db->f('folder_id')) ? "CHECKED" : "" ) . " NAME=\"perm_write\">&nbsp;";
-					$content.= "<b>w</b> - " . _("Schreiben (Dateien k&ouml;nnen heraufgeladen werden)");
-					$content.= "\n<br><INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isExecutable($db->f('folder_id')) ? "CHECKED" : "" ) . " NAME=\"perm_exec\">&nbsp;";
-					$content.= "<b>x</b> - " . _("Sichtbarkeit (Ordner wird angezeigt)");
-				} else {
-					$content .= '&nbsp;';
-				}
-				$content .= chr(10) . '</font></td></tr>';
-				$content .= chr(10) . '<tr><td colspan="2">';
-				$content.="\n<input type=\"image\"" . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\""._("&Auml;nderungen speichern")."\">&nbsp;";
-				$content.="\n<input type=\"image\"" . makeButton("abbrechen", "src") . " align=\"absmiddle\" name=\"cancel\" value=\""._("Abbrechen")."\">";
-				$content.= "\n<input type=\"hidden\" name=\"open\" value=\"".$db->f("folder_id")."_sc_\" />";
-				$content.="\n<input type=\"hidden\" name=\"type\" value=1 />";
-				$content .= chr(10) . '</td></tr></table>';
+			
+			if ($folder_tree->isGroupFolder($db->f("folder_id"))){
+				$content .=  sprintf(_("Dieser Ordner gehört der Gruppe <b>%s</b>. Nur Mitglieder dieser Gruppe können diesen Ordner sehen."),
+				htmlReady(GetStatusgruppeName($db->f("range_id")))) . '<hr>';
 			}
-			elseif ($db->f("description"))
-				$content .= htmlReady($db->f("description"), TRUE, TRUE);
-			else
-				$content .= _("Keine Beschreibung vorhanden");
 
-			if ($move == $db->f("folder_id"))
-				$content .="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben. Wenn Sie den Ordner in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
-
+					//Contentbereich erstellen
+					if ($change == $db->f("folder_id")) { //Aenderungsmodus, zweiter Teil
+						$content .= chr(10) . '<table cellpadding="2" cellspacing="2" border="0">';
+						$content .= chr(10) . '<tr><td>';
+						$content.="\n<textarea name=\"change_description\" rows=3 cols=40>".htmlReady($db->f("description"))."</textarea>";
+						$content .= chr(10) . '</td><td><font size="-1">';
+						if($rechte){
+							if ($folder_tree->permissions_activated){ 
+								$content.= "\n<INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isReadable($db->f('folder_id')) ? "CHECKED" : "" ) . " NAME=\"perm_read\">&nbsp;";
+								$content.= "<b>r</b> - " . _("Lesen (Dateien k&ouml;nnen heruntergeladen werden)");
+								$content.= "\n<br><INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isWritable($db->f('folder_id')) ? "CHECKED" : "" ) . " NAME=\"perm_write\">&nbsp;";
+								$content.= "<b>w</b> - " . _("Schreiben (Dateien k&ouml;nnen heraufgeladen werden)");
+								$content.= "\n<br><INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isExecutable($db->f('folder_id')) ? "CHECKED" : "" ) . " NAME=\"perm_exec\">&nbsp;";
+								$content.= "<b>x</b> - " . _("Sichtbarkeit (Ordner wird angezeigt)");
+							}
+							if($level == 0 && $folder_tree->entity_type == 'sem'){
+								$content .= "\n<br><INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->checkCreateFolder($db->f('folder_id')) ? "CHECKED" : "" ) . " NAME=\"perm_folder\">&nbsp;";
+								$content .= "<b>f</b> - " . _("Ordner erstellen (Alle Nutzer können Ordner erstellen)");
+							} else {
+								$content .= '&nbsp;';
+							}
+						} else {
+							$content .= '&nbsp;';
+						}
+						$content .= chr(10) . '</font></td></tr>';
+						$content .= chr(10) . '<tr><td colspan="2">';
+						$content.="\n<input type=\"image\"" . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\""._("&Auml;nderungen speichern")."\">&nbsp;";
+						$content.="\n<input type=\"image\"" . makeButton("abbrechen", "src") . " align=\"absmiddle\" name=\"cancel\" value=\""._("Abbrechen")."\">";
+						$content.= "\n<input type=\"hidden\" name=\"open\" value=\"".$db->f("folder_id")."_sc_\" />";
+						$content.="\n<input type=\"hidden\" name=\"type\" value=1 />";
+						$content .= chr(10) . '</td></tr></table>';	
+					}
+					elseif ($db->f("description"))
+					$content .= htmlReady($db->f("description"), TRUE, TRUE);
+					else
+					$content .= _("Keine Beschreibung vorhanden");
+					
+					if ($move == $db->f("folder_id")){
+						$content .="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
+						if($rechte) $content .= _("Wenn Sie den Ordner in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus.");
+					}
 			if ($upload == $db->f("folder_id")) {
 				$content .= form($refresh);
 				}
@@ -1461,17 +1472,17 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_l_&rand=".rand()."#anker\">" . makeButton("link", "img") . "</a>";
 					if ($documents_count && $folder_tree->isReadable($db->f("folder_id"), $user->id))
 						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?folderzip=".$db->f("folder_id")."\">" . makeButton("ordneralszip", "img") . "</a>";
-					if ($rechte) {
-						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_n_#anker\">" . makeButton("neuerordner", "img") . "</a>";
-						if(get_config('ZIP_UPLOAD_ENABLE')) {
-							$edit .= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_z_&rand="
-								. rand()."#anker\">" . makeButton("ziphochladen", "img") . "</a>";
-						}
-						$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_d_\">" . makeButton("loeschen", "img") . "</a>";
-						$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_c_#anker\">" . makeButton("bearbeiten", "img") . "</a>";
-						if($level != 0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder')) {
-							$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_m_#anker\">" . makeButton("verschieben", "img") . "</a>";
-						}
+					if ($rechte || ($folder_tree->checkCreateFolder($db->f("folder_id"), $user->id)) ) {
+						if($rechte || $folder_tree->isWritable($db->f("folder_id"), $user->id)) {
+							$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_n_#anker\">" . makeButton("neuerordner", "img") . "</a>";
+							if($rechte && get_config('ZIP_UPLOAD_ENABLE')) {
+								$edit .= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_z_&rand="
+									. rand()."#anker\">" . makeButton("ziphochladen", "img") . "</a>";
+								}
+							}
+						if($rechte || (!$documents_count && $level !=0 && $folder_tree->isWritable($db->f("folder_id"), $user->id))) $edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_d_\">" . makeButton("loeschen", "img") . "</a>";
+						if($rechte || $folder_tree->isWritable($db->f("folder_id"), $user->id)) $edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_c_#anker\">" . makeButton("bearbeiten", "img") . "</a>";
+						if(($rechte && $db->f('range_id') != $SessSemName[1]) || ($level !=0 && $folder_tree->isWritable($db->f("folder_id"), $user->id))) $edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_m_#anker\">" . makeButton("verschieben", "img") . "</a>";
 						$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_co_#anker\">" . makeButton("kopieren", "img") . "</a>";
 					}
 				}
@@ -1609,7 +1620,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						}
 
 						if ($move == $db3->f("dokument_id"))
-						$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben / kopieren. Wenn Sie diese Datei in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
+							$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben / kopieren. Wenn Sie diese Datei in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus (sofern Sie Dozent oder Tutor in einer anderen Veranstaltung sind)."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
 
 						$content.= "\n";
 
@@ -1919,17 +1930,11 @@ function delete_all_documents($range_id){
 	if (!$range_id){
 		return false;
 	}
-	$db = new DB_Seminar;
-
-	//first, delete the folders with parent = range
-	$count += recursiv_folder_delete($range_id);
-	//delete top level folders
-	$count += recursiv_folder_delete(md5($range_id.'top_folder'));
-	$query = sprintf ("SELECT issue_id FROM themen WHERE seminar_id = '%s' ", $range_id);
-	$db->query($query);
-	//then delete the folder with parent = termin_id
-	while ($db->next_record()) {
-		$count += recursiv_folder_delete($db->f(0));
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $range_id));
+	if($folder_tree->getNumKids('root')){
+		foreach($folder_tree->getKids('root') as $folder_id){
+			$count += recursiv_folder_delete($folder_id);
+		}
 	}
 	return $count;
 }

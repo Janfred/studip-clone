@@ -36,6 +36,7 @@ require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/admission.inc.php');
 require_once ('lib/statusgruppe.inc.php');
+require_once ('lib/datei.inc.php');
 
 //get ID, if a object is open
 if ($SessSemName[1])
@@ -79,7 +80,15 @@ function GetPresetGroups ($view, $veranstaltung_class)
 }
 
 function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers="", $Freesearch="", $workgroup_mode=FALSE)
-{ global $_range_type,$perm;
+{ global $_range_type,$perm,$view;
+		
+		if($view == 'statusgruppe_sem'){
+			list($self_assign_all, $self_assign_exclusive) = CheckSelfAssignAll($range_id);
+			if($self_assign_exclusive){
+				$assigned = GetAllSelected($range_id);
+			}
+		}
+		
 		while (list($key, $val) = each ($_POST)) {
 			$statusgruppe_id = substr($key, 0, -2);
 		}
@@ -89,12 +98,16 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 		if ($AktualMembers != "") {
 			for ($i  = 0; $i < sizeof($AktualMembers); $i++) {
 				$user_id = get_userid($AktualMembers[$i]);
-				InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
+				if( !($self_assign_exclusive && in_array($user_id, $assigned)) ){
+					InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
+				}
 			}
 		}
 		if (isset($InstitutMembers) && $InstitutMembers != "---") {
 			$user_id = get_userid($InstitutMembers);
-			$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
+			if( !($self_assign_exclusive && in_array($user_id, $assigned)) ){
+				$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
+			}
 			if ($writedone) {
 				if ($workgroup_mode == TRUE) {
 					$globalperms = get_global_perm($user_id);
@@ -111,7 +124,9 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 		if ($Freesearch != "") {
 			for ($i  = 0; $i < sizeof($Freesearch); $i++) {
 				$user_id = get_userid($Freesearch[$i]);
-				$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
+				if( !($self_assign_exclusive && in_array($user_id, $assigned)) ){
+					$writedone = InsertPersonStatusgruppe ($user_id, $statusgruppe_id);
+				}
 				if ($writedone) {
 					if ($_range_type == "sem") {
 						if ($workgroup_mode == TRUE) {
@@ -177,11 +192,22 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 		echo "\n<table width=\"95%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
 		echo "\n\t<tr>";
 		echo "\n\t\t<td width=\"5%\">";
-		printf ("            	  <input type=\"IMAGE\" name=\"%s\" src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\" %s>&nbsp; </td>", $statusgruppe_id, tooltip(_("Markierte Personen dieser Gruppe zuordnen")));
-		printf ("	          <td width=\"85%%\" class=\"%s\">&nbsp; %s </td><td class=\"%s\" width=\"5%%\" NOWRAP>%s
+		printf ("<input type=\"IMAGE\" name=\"%s\" src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\" %s>&nbsp; </td>", $statusgruppe_id, tooltip(_("Markierte Personen dieser Gruppe zuordnen")));
+		printf ("<td width=\"85%%\" class=\"%s\">&nbsp; %s </td><td class=\"%s\" width=\"5%%\" NOWRAP>%s
+				%s
                 <a href=\"$PHP_SELF?view=".$view."&cmd=sort_by_name&statusgruppe_id=".$statusgruppe_id."#".$statusgruppe_id."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/sort.gif\" border=\"0\" ".tooltip(_("Nach Nachnamen sortieren"))."></a>
-                <a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&range_id=%s&view=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" border=\"0\" %s></a></td>",$edit_id == $statusgruppe_id?"topicwrite":"topic", htmlReady($db->f("name")), $edit_id == $statusgruppe_id?"topicwrite":"topic", CheckSelfassign($statusgruppe_id)?"<img src=\"".$GLOBALS['ASSETS_URL']."images/nutzer.gif\" ".tooltip(_("Personen können sich dieser Gruppe selbst zuordnen")).">":"", $statusgruppe_id, $range_id, $view, tooltip(_("Gruppenname oder -größe anpassen")));
-		printf ( "	          <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash_att.gif\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip(_("Gruppe mit Personenzuordnung entfernen")));
+                <a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&range_id=%s&view=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" border=\"0\" %s></a>
+				</td>",
+				$edit_id == $statusgruppe_id?"topicwrite":"topic",
+				htmlReady($db->f("name")),
+				$edit_id == $statusgruppe_id?"topicwrite":"topic",
+				CheckStatusgruppeFolder($statusgruppe_id) ? "<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-disc.gif\" ".tooltip(_("Dateiordner vorhanden")).">" : "",
+				CheckSelfassign($statusgruppe_id)?"<img src=\"".$GLOBALS['ASSETS_URL']."images/nutzer.gif\" ".tooltip(_("Personen können sich dieser Gruppe selbst zuordnen")).">":"",
+				$statusgruppe_id,
+				$range_id,
+				$view,
+				tooltip(_("Gruppenname oder -größe anpassen")));
+		printf ( "<td width=\"5%%\"><a href=\"$PHP_SELF?cmd=remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash_att.gif\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, tooltip(_("Gruppe mit Personenzuordnung entfernen")));
 		echo 	"\n\t</tr>";
 
 		$db2->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] . " AS fullname , username, position FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$statusgruppe_id' ORDER BY position ASC");
@@ -257,6 +283,7 @@ function PrintAktualMembers ($range_id)
 	global $_fullname_sql,$_range_type;
 	$bereitszugeordnet = GetAllSelected($range_id);
 	if ($_range_type == "sem") {
+		list($self_assign_all, $self_assign_exclusive) = CheckSelfAssignAll($range_id);
 		echo "<font size=\"-1\">&nbsp; " . _("TeilnehmerInnen der Veranstaltung") . "</font><br>";
 		$query = "SELECT seminar_user.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id)  WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
 	} else {
@@ -272,6 +299,7 @@ function PrintAktualMembers ($range_id)
 		} else {
 			$tmpcolor = "#000000";
 		}
+		if(!($self_assign_exclusive && in_array($db->f("user_id"), $bereitszugeordnet)) )
 		printf ("<option style=\"color:%s;\" value=\"%s\">%s - %s\n", $tmpcolor, $db->f("username"), htmlReady(my_substr($db->f("fullname"),0,35)." (".$db->f("username").")"), $db->f("perms"));
 	}
 	echo "</select>";
@@ -317,14 +345,14 @@ function PrintInstitutMembers ($range_id)
 			$veranstaltung_class = $SEM_TYPE[$db->f("status")]["class"];
 		}
 	}
-	$workgroup_mode = $SEM_CLASS[$veranstaltung_class][workgroup_mode];  // are we in a workgroup?
+	$workgroup_mode = $SEM_CLASS[$veranstaltung_class]['workgroup_mode'];  // are we in a workgroup?
 	$tmp_name=$db->f("Name");
 // Abfrage der Formulare und Aktionen
 
 	// neue Statusgruppe hinzufuegen
 
 	if (($cmd=="add_new_statusgruppe") && ($new_statusgruppe_name != "")) {
-		AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size, $new_selfassign);
+		AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size, $new_selfassign, $new_doc_folder);
 	}
 
 	// Sortierung nach Nachname
@@ -336,7 +364,7 @@ function PrintInstitutMembers ($range_id)
 	// bestehende Statusgruppe editieren
 
 	if (($cmd=="edit_existing_statusgruppe") && ($new_statusgruppe_name != "")) {
-		EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $update_id, $new_selfassign);
+		EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $update_id, $new_selfassign, $new_doc_folder);
 	}
 
 	// bestehende Statusgruppe in Textfeld
@@ -387,10 +415,23 @@ function PrintInstitutMembers ($range_id)
 	}
 
 
+	if(isset($_REQUEST['toggle_selfassign_all'])){
+		SetSelfAssignAll($range_id, !$_REQUEST['toggle_selfassign_all']);
+	}
+	
+	if(isset($_REQUEST['toggle_selfassign_exclusive'])){
+		SetSelfAssignExclusive($range_id, !$_REQUEST['toggle_selfassign_exclusive']);
+	}
+	
 // Ende Abfrage Formulare
 
-
-
+$show_doc_folder = false;
+if($view == 'statusgruppe_sem'){
+	$module_check = new Modules();
+	if($module_check->getStatus('documents', $range_id, 'sem')){
+		$show_doc_folder = true;
+	}
+}
 
 // Beginn Darstellungsteil
 
@@ -407,7 +448,7 @@ function PrintInstitutMembers ($range_id)
 
 <table class="blank" width="100%" border="0" cellspacing="0">
   <tr>
-    <td align="right" width="50%" class="blank">
+    <td align="right" width="<?=($show_doc_folder ? '40' : '50')?>%" class="blank">
 
 <?
 
@@ -425,7 +466,7 @@ function PrintInstitutMembers ($range_id)
 <?
 	}
 ?>
-    <br></td>
+    </td>
     <td align="right" width="80%" NOWRAP class="blank" valign="top">
 <?
 	if ($cmd!="edit_statusgruppe") { // normale Anzeige
@@ -441,9 +482,14 @@ function PrintInstitutMembers ($range_id)
 	        <input name="new_statusgruppe_size" type="text" value="" size="1">
 	        <font size="2">&nbsp;
 	      <?
-	      	echo _("Selbsteintrag");
-	      	echo "<input type=\"checkbox\" name=\"new_selfassign\" value=\"1\">";
-
+		if($view == 'statusgruppe_sem') {
+			echo _("Selbsteintrag");
+			echo "<input style=\"vertical-align:middle\" type=\"checkbox\" name=\"new_selfassign\" value=\"1\">";
+			if($show_doc_folder){
+				echo chr(10) . '&nbsp;' . _("Dateiordner");
+				echo chr(10) . '<input style="vertical-align:middle" type="checkbox" name="new_doc_folder" value="1">';
+			}
+		}
 	      ?>
 	        &nbsp; &nbsp; &nbsp; <b><?=_("Einf&uuml;gen")?></b>&nbsp;
 	        <?
@@ -469,21 +515,29 @@ function PrintInstitutMembers ($range_id)
 	        &nbsp; &nbsp; <font size="2"><?=_("neue Gruppengr&ouml;&szlig;e:")?></font>
 	        <input name="new_statusgruppe_size" type="text" value="<? echo $gruppe_anzahl;?>" size="3"><font size="2">&nbsp; &nbsp;
 <?	        echo _("Selbsteintrag");
-		echo "<input name=\"new_selfassign\" type=\"checkbox\" value=\"1\"";
+		echo "<input name=\"new_selfassign\" type=\"checkbox\" value=\"".CheckSelfAssign($edit_id)."\"";
 	        if (CheckSelfAssign($edit_id))
 	        	echo "checked";
 	        echo ">";
+			if($show_doc_folder){
+				if(CheckStatusgruppeFolder($edit_id)){
+					echo chr(10). '&nbsp;' . _("Dateiordner vorhanden");
+				} else {
+					echo chr(10) . '&nbsp;' . _("Dateiordner");
+					echo chr(10) . '<input style="vertical-align:middle" type="checkbox" name="new_doc_folder" value="1">';
+				}
+			}
 ?>
 	        &nbsp; &nbsp; &nbsp; <b><?=_("&Auml;ndern")?></b>&nbsp;
 	        <?
 	    	printf ("<input type=\"IMAGE\" name=\"add_new_statusgruppe\" src=\"".$GLOBALS['ASSETS_URL']."images/move_down.gif\" border=\"0\" value=\" neue Statusgruppe \" %s>&nbsp;  &nbsp; &nbsp; ", tooltip(_("Gruppe anpassen")));
 	    	?>
-	      <br></form>
+	      </form>
 <?
 	}
 ?>
 
-      <br></td>
+      </td>
   </tr>
 </table><?
 // Ende Edit-Bereich
@@ -494,11 +548,27 @@ $db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_i
 if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 	?><table width="100%" border="0" cellspacing="0">
 <tr>
-	<?
-	printf ("<td class=\"steel1\" valign=\"top\" width=\"50%%\"><br>\n");
-?>	<form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
-<? echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">\n";
-	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">\n";
+<td class="steel1" valign="top" width="50%">
+<?if($view == 'statusgruppe_sem'){
+	list($self_assign_all, $self_assign_exclusive) = CheckSelfAssignAll($range_id);
+	?>
+<table cellpadding="2" cellspacing="2" border="0" style="border:1px solid;margin:10px">
+<tr>
+<td width="300"><font size="-1"><?=_("Selbsteintrag in allen Gruppen ein/ausschalten")?></td>
+<td><a href="<?=$PHP_SELF?>?toggle_selfassign_all=<?=(int)$self_assign_all?>&range_id=<?=$range_id?>&view=statusgruppe_sem">
+<img border="0" src="<?=$GLOBALS['ASSETS_URL']?>images/<?=($self_assign_all ? 'haken_transparent.gif' : 'x_transparent.gif')?>"></a></td>
+</tr>
+<tr>
+<td width="300"><font size="-1"><?=_("Selbsteintrag nur in einer Gruppe erlauben")?></td>
+<td><a href="<?=$PHP_SELF?>?toggle_selfassign_exclusive=<?=(int)$self_assign_exclusive?>&range_id=<?=$range_id?>&view=statusgruppe_sem">
+<img border="0" src="<?=$GLOBALS['ASSETS_URL']?>images/<?=($self_assign_exclusive ? 'haken_transparent.gif' : 'x_transparent.gif')?>"></a></td>
+</tr>
+</table>
+<?}?>
+<form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
+<?
+	echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">\n";
+	echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">\n";
 	if ($db->num_rows() > 0) {
 		$nogroups = 1;
 		if ($_range_type == "sem" || $_range_type == "inst" || $_range_type == "fak") {

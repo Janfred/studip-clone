@@ -93,10 +93,12 @@ function PrintAktualStatusgruppen () {
 		$size = $db->f("size");
 		$groupmails = groupmail($statusgruppe_id);
 		echo "<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" border=\"0\"><tr>";
-		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s &nbsp;%s</b></font>",CheckAssignRights($statusgruppe_id,$user->id)?"<a href=\"$PHP_SELF?assign=$statusgruppe_id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"", htmlReady($db->f("name")));
-
+		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s &nbsp;%s</b></font>",
+		CheckAssignRights($statusgruppe_id,$user->id,$SessSemName[1])?"<a href=\"$PHP_SELF?assign=$statusgruppe_id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"",
+		htmlReady($db->f("name")));
+		
 		$limit = GetStatusgruppeLimit($statusgruppe_id);
-		if ($limit!=FALSE && $db->f("selfassign")=="1") {
+		if ($limit!=FALSE && $db->f("selfassign") > 0) {
 			$voll = CountMembersPerStatusgruppe ($statusgruppe_id);
 			if ($voll >= $limit)
 				$limitcolor = "#FF5555";
@@ -108,7 +110,10 @@ function PrintAktualStatusgruppen () {
 		}
 		printf ("</td><td width=\"10%%\"class=\"topic\" valign=\"middle\" align=\"right\" nowrap>");
 
-
+		if ((CheckUserStatusgruppe($statusgruppe_id, $user->id) || $rechte) && ($folder_id = CheckStatusgruppeFolder($statusgruppe_id)) ){
+			echo "<a href=\"folder.php?open=$folder_id#anker\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/icon-disc.gif\" ".tooltip(_("Dateiordner vorhanden"))."></a>&nbsp;";
+		}
+		
 		if ($rechte || CheckUserStatusgruppe($statusgruppe_id, $user->id)) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
 			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&emailrequest=1&subject=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/mailnachricht.gif\" " . tooltip(_("Systemnachricht mit Emailweiterleitung an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0]));
 			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&subject=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0]));
@@ -142,11 +147,11 @@ function PrintAktualStatusgruppen () {
 			if ($visio[$db2->f('user_id')] || ($db2->f('user_id') == $user->id) || $rechte) {
 				printf("<font size=\"-1\"><a href = \"about.php?username=%s\">&nbsp;%s</a>", $db2->f("username"), htmlReady($db2->f("fullname")));
 				if  (($db2->f('user_id') == $user->id) && !($visio[$db2->f('user_id')]) && !$rechte) {
-					echo ' (unsichtbar)';
+					echo ' ' . _("(unsichtbar)");
 				}
 				echo '</font>';
 			} else {
-				echo '<font color="#666666">'. _("(unsichtbareR NutzerIn)"). '</font>';
+				echo '<font size="-1" color="#666666">'. _("(unsichtbareR NutzerIn)"). '</font>';
 			}
 
 			echo '</td>';
@@ -214,7 +219,7 @@ function PrintNonMembers ($range_id)
 // Command-Parsing
 
 if ($assign)
-	if (GetRangeOfStatusgruppe($assign)==$SessSemName[1] && CheckAssignRights($assign, $user->id))
+	if (GetRangeOfStatusgruppe($assign)==$SessSemName[1] && CheckAssignRights($assign, $user->id, $SessSemName[1]))
 		InsertPersonStatusgruppe($user->id, $assign);
 
 if ($delete_id)
@@ -245,7 +250,7 @@ if ($delete_id)
 	}
 	?>
 	<tr valign="top">
-     <td width="90%" class="blank">
+     <td width="90%" NOWRAP class="blank">
 			<?
 			PrintAktualStatusgruppen();
 			$anzahltext = PrintNonMembers($SessSemName[1]);
@@ -270,9 +275,11 @@ if ($delete_id)
 	</tr>
 	</table>
 	</td>
-	<td width="270" class="blank" align="center" valign="top">
+	<td width="270" NOWRAP class="blank" align="center" valign="top">
 
 	<?
+	list($self_assign_all, $self_assign_exclusive) = CheckSelfAssignAll($SessSemName[1]);
+
 	$infobox = array	(
 		array  ("kategorie"  => _("Information:"),
 			"eintrag" => array	(
@@ -282,6 +289,13 @@ if ($delete_id)
 			)
 		)
 	);
+	if($self_assign_exclusive){
+		$infobox[0]["eintrag"][] = array ("icon" => "ausruf_small.gif" ,
+									"text"  => _("In dieser Veranstaltung können Sie sich nur in eine der möglichen Gruppen eintragen.")
+									);
+		
+	}
+	
 	$infobox[1]["kategorie"] = _("Aktionen:");
 		$infobox[1]["eintrag"][] = array (	"icon" => "nachricht1.gif" ,
 									"text"  => _("Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie bitte das normale Briefsymbol.")

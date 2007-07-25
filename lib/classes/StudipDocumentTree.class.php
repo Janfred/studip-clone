@@ -24,6 +24,7 @@ require_once("lib/classes/TreeAbstract.class.php");
 require_once("lib/classes/Modules.class.php");
 require_once("lib/dbviews/core.view.php");
 require_once 'lib/functions.php';
+require_once 'lib/statusgruppe.inc.php';
 
 
 /**
@@ -42,9 +43,19 @@ class StudipDocumentTree extends TreeAbstract {
 	var $range_id;
 	var $entity_type;
 	var $must_have_perm;
-	var $perms = array('x' => 1, 'w' => 2, 'r' => 4);
+	var $perms = array('x' => 1, 'w' => 2, 'r' => 4, 'f' => 8);
 	var $default_perm = 7;
 	var $permissions_activated = false;
+	var $group_folders = array();
+	
+	
+	function ExistsGroupFolders($seminar_id){
+		$db = new DB_Seminar();
+		$db->query("SELECT statusgruppe_id FROM statusgruppen 
+					INNER JOIN folder ON(statusgruppe_id=folder.range_id)
+					WHERE statusgruppen.range_id='$seminar_id' LIMIT 1");
+		return $db->next_record();
+	}
 	
 	/**
 	* constructor
@@ -74,11 +85,14 @@ class StudipDocumentTree extends TreeAbstract {
 	function init(){
 		parent::init();
 		$p = 0;
-		$top_folders[] = array($this->range_id,'FOLDER_GET_DATA_BY_RANGE');
-		$top_folders[] = array(md5($this->range_id . 'top_folder'),'FOLDER_GET_DATA_BY_RANGE');
-		if ($this->entity_type == 'sem') $top_folders[] = array($this->range_id,'FOLDER_GET_DATA_BY_THEMA');
-
-		foreach ($top_folders as $folder){
+		$top_folders['allgemein'] = array($this->range_id,'FOLDER_GET_DATA_BY_RANGE');
+		$top_folders['top'] = array(md5($this->range_id . 'top_folder'),'FOLDER_GET_DATA_BY_RANGE');
+		if ($this->entity_type == 'sem') {
+			$top_folders['termin'] = array($this->range_id,'FOLDER_GET_DATA_BY_THEMA');
+			$top_folders['gruppe'] = array($this->range_id,'FOLDER_GET_DATA_BY_GRUPPE');
+		}
+		
+		foreach ($top_folders as $type => $folder){
 			$this->view->params[0] = $folder[0];
 			$db = $this->view->get_query("view:" . $folder[1]);
 			while ($db->next_record()){
@@ -87,6 +101,7 @@ class StudipDocumentTree extends TreeAbstract {
 				$this->tree_data[$db->f("folder_id")]["entries"] = 0;
 				$this->tree_data[$db->f("folder_id")]["permission"] = $db->f('permission');
 				$this->storeItem($db->f("folder_id"), $db->f('range_id'), $db->f('name'), $p++);
+				if($type == 'gruppe') $this->group_folders[$db->f("folder_id")] = array();
 				$this->initSubfolders($db->f("folder_id"));
 			}
 		}
@@ -111,16 +126,36 @@ class StudipDocumentTree extends TreeAbstract {
 	
 	function getPermissionString($folder_id){
 		$perm = (int)$this->getValue($folder_id,'permission');
-		$r = array_flip($this->perms);
-		foreach($this->perms as $v => $p) if(!($perm & $p)) $r[$p] = '-';
+		$perms = $this->perms;
+		array_pop($perms);
+		$r = array_flip($perms);
+		foreach($perms as $v => $p) if(!($perm & $p)) $r[$p] = '-';
 		return join('', array_reverse($r));
 	}
 	
 	function checkPermission($folder_id, $perm, $user_id = null){
-		if (!$this->permissions_activated || ($user_id && is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_studip_perm($this->must_have_perm, $this->range_id, $user_id))){
+		if ($user_id && is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_studip_perm($this->must_have_perm, $this->range_id, $user_id)){
+			return true;
+		} 
+		if ($user_id && !$this->checkGroupFolder($folder_id, $user_id)){
+			return false;
+		}
+		if ($perm != 'f' && !$this->permissions_activated){
 			return true;
 		} else {
 			return (bool)($this->getValue($folder_id, 'permission') & $this->perms[$perm]);
+		}
+	}
+	
+	function checkGroupFolder($folder_id, $user_id){
+		if($this->isGroupFolder($folder_id)){
+			$statusgruppe_id = $this->getValue($folder_id, 'parent_id');
+			if(!isset($this->group_folders[$folder_id][$user_id])){
+				$this->group_folders[$folder_id][$user_id] = CheckUserStatusgruppe($statusgruppe_id, $user_id);
+			}
+			return $this->group_folders[$folder_id][$user_id];
+		} else {
+			return true;
 		}
 	}
 	
@@ -172,6 +207,14 @@ class StudipDocumentTree extends TreeAbstract {
 		return $this->checkPermission($folder_id,'x', $user_id);
 	}
 	
+	function checkCreateFolder($folder_id, $user_id = null){
+		return $this->checkPermission($this->getRootFolder($folder_id), 'f', $user_id);
+	}
+	
+	function isGroupFolder($folder_id){
+		return isset($this->group_folders[$folder_id]);
+	}
+		
 	function getNextSuperFolder($folder_id){
 		$parents = $this->getParents($folder_id);
 		if (is_array($parents)){
@@ -181,6 +224,17 @@ class StudipDocumentTree extends TreeAbstract {
 			}
 		}
 		return false;
+	}
+	
+	function getRootFolder($folder_id){
+		$parents = $this->getParents($folder_id);
+		if (is_array($parents) && count($parents) > 2){
+			array_pop($parents);
+			array_pop($parents);
+			return array_pop($parents);
+		} else {
+			return $folder_id;
+		}
 	}
 	
 	function isLockedFolder($folder_id, $user_id = null){
@@ -207,7 +261,7 @@ class StudipDocumentTree extends TreeAbstract {
 	}
 	
 	function getReadableFolders($user_id){
-		if(!$this->permissions_activated || (is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_studip_perm($this->must_have_perm, $this->range_id, $user_id))){
+		if(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_studip_perm($this->must_have_perm, $this->range_id, $user_id)){
 			return $this->getKidsKids('root');
 		} else {
 			return $this->getReadableKidsKids('root', $user_id);
@@ -215,7 +269,7 @@ class StudipDocumentTree extends TreeAbstract {
 	}
 	
 	function getUnreadableFolders($user_id){
-		if(!$this->permissions_activated || (is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_studip_perm($this->must_have_perm, $this->range_id, $user_id))){
+		if(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_studip_perm($this->must_have_perm, $this->range_id, $user_id)){
 			return array();
 		} else {
 			return array_diff($this->getKidsKids('root'), $this->getReadableKidsKids('root', $user_id));
@@ -248,6 +302,9 @@ class StudipDocumentTree extends TreeAbstract {
 		return (!$in_recursion) ? $kidskids : null;
 	}
 	
+	function isFolder($item_id){
+		return ($item_id != 'root' && isset($this->tree_data[$item_id]));
+	}	
 }
 //test
 /*

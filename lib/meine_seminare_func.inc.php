@@ -234,7 +234,8 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 	$unreadable_folders = array();
 	if (!$GLOBALS['perm']->have_perm('admin')){
 		foreach( array_keys($my_obj) as $obj_id){
-			if($my_obj[$obj_id]['modules']['documents_folder_permissions']){
+			if($my_obj[$obj_id]['modules']['documents_folder_permissions'] 
+			|| ($my_obj[$obj_id]['obj_type'] == 'sem' && StudipDocumentTree::ExistsGroupFolders($obj_id))){
 				$must_have_perm = $my_obj[$obj_id]['obj_type'] == 'sem' ? 'tutor' : 'autor';
 				if ($GLOBALS['perm']->permissions[$my_obj[$obj_id]['status']] < $GLOBALS['perm']->permissions[$must_have_perm]){
 					$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $obj_id,'entity_type' => $my_obj[$obj_id]['obj_type']));

@@ -218,10 +218,20 @@ function dump_sem($sem_id, $print_view = false) {
 	$db3->next_record();
 	$dump.= "<tr><td width=\"15%\"><b>" . _("Postings:") . "&nbsp;</b></td><td>".$db3->f("anzahl")."</td></tr>\n";
 
-	$db3->query("SELECT count(*) as anzahl FROM dokumente WHERE Seminar_id='$sem_id'");
-	$db3->next_record();
-	$docs=$db3->f("anzahl");
-	$dump.= "<tr><td width=\"15%\"><b>" . _("Dokumente:") . "&nbsp;</b></td><td>".$docs."</td></tr>\n";
+	if ($Modules["documents"]) {
+		//do not show hidden documents
+		if (!$GLOBALS['perm']->have_studip_perm('tutor', $sem_id)){
+			 $folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $sem_id,'entity_type' => 'sem'));
+			$unreadable_folders = $folder_tree->getUnReadableFolders($GLOBALS['user']->id);
+		} else {
+			$unreadable_folders = array();
+		}
+		$db3->query("SELECT count(*) as anzahl FROM dokumente 
+					WHERE seminar_id = '$sem_id'" . (count($unreadable_folders) ? " AND range_id NOT IN('".join("','", $unreadable_folders)."')" : ""));
+		$db3->next_record();
+		$docs=$db3->f("anzahl");
+	}
+	$dump.= "<tr><td width=\"15%\"><b>" . _("Dokumente:") . "&nbsp;</b></td><td>".(int)$docs."</td></tr>\n";
 
 	$dump.= "</table>\n";
 
@@ -312,7 +322,7 @@ function dump_sem($sem_id, $print_view = false) {
 		//do not show hidden documents
 		$unreadable_folders = array();
 		if($print_view){
-			if($Modules['documents_folder_permissions']){
+			if($Modules['documents_folder_permissions'] || StudipDocumentTree::ExistsGroupFolders($sem_id)){
 				if (!$GLOBALS['perm']->have_studip_perm('tutor', $sem_id)){
 					$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $sem_id,'entity_type' => 'sem'));
 					$unreadable_folders = $folder_tree->getUnReadableFolders($GLOBALS['user']->id);
@@ -629,13 +639,11 @@ function in_archiv ($sem_id) {
 		$tmp_full_path = "$TMP_PATH/$archiv_file_id";
 		mkdir($tmp_full_path, 0700);
 
-		$query = sprintf ("SELECT issue_id FROM themen WHERE seminar_id = '%s'", $seminar_id);
-		$db->query ($query);
-		$list[] = $seminar_id;
-		$list[] = md5($seminar_id.'top_folder');
-		while ($db->next_record()) {
-			$list[] = $db->f("issue_id");
+		$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $seminar_id));
+		if($folder_tree->getNumKids('root')){
+			$list = $folder_tree->getKids('root');
 		}
+		if(is_array($list)){
 		//copy documents in the temporary folder-system
 		$query = sprintf ("SELECT folder_id, name FROM folder WHERE range_id IN ('%s') ORDER BY name", join("','", $list));
 		$db->query ($query);
@@ -651,6 +659,7 @@ function in_archiv ($sem_id) {
 		$archiv_full_path = "$ARCHIV_PATH/$archiv_file_id";
 		create_zip_from_directory($tmp_full_path, $tmp_full_path);
 	 	@rename($tmp_full_path . '.zip', $archiv_full_path);
+		}
 		rmdirr($tmp_full_path);
 	} else
 		$archiv_file_id = "";

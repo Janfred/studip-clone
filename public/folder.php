@@ -100,14 +100,18 @@ if ((!$rechte) && $open_cmd) {
 		$owner=FALSE;
 } else
 	$owner=FALSE;
-
+if(!$rechte && in_array($open_cmd, array('n','d','c','sc','m','co')) && $SemUserStatus == "autor"){
+	$create_folder_perm = $folder_tree->checkCreateFolder($open_id, $user->id);
+} else {
+	$create_folder_perm = false;
+}
 //verschiebemodus abbrechen, wenn andere Aktion ausgewählt wurde
 if($folder_system_data["mode"] != '' && ($open_cmd && !in_array($open_cmd, array('n','md')))){
 	$folder_system_data["move"]='';
 	$folder_system_data["mode"]='';
 }
 
-if (($rechte) || ($owner)) {
+if ($rechte || $owner || $create_folder_perm) {
 	//wurde Code fuer Anlegen von Ordnern ubermittelt (=id+"_n_"), wird entsprechende Funktion aufgerufen
 	if ($open_cmd == 'n' && (!$cancel_x)) {
 		$change = create_folder(_("Neuer Ordner"), '', $open_id );
@@ -117,12 +121,17 @@ if (($rechte) || ($owner)) {
 
 	//wurde Code fuer Anlegen von Ordnern der obersten Ebene ubermittelt (=id+"_a_"), wird entsprechende Funktion aufgerufen
 	if ($open_cmd == 'a') {
+		$permission = 7;
 		if ($open_id == $SessionSeminar) {
 			$titel=_("Allgemeiner Dateiordner");
 			$description= sprintf(_("Ablage für allgemeine Ordner und Dokumente der %s"), $SessSemName["art_generic"]);
 		} else if ($open_id == md5('new_top_folder')){
 			$titel = $_REQUEST['top_folder_name'] ? stripslashes($_REQUEST['top_folder_name']) : _("Neuer Ordner");
 			$open_id = md5($SessionSeminar . 'top_folder');
+		} elseif($titel = GetStatusgruppeName($open_id)) {
+			$titel = _("Dateiordner der Gruppe:") . ' ' . $titel;
+			$description = _("Ablage für Ordner und Dokumente dieser Gruppe");
+			$permission = 15;
 		} else {
 			$db->query("SELECT title FROM themen WHERE issue_id='".$open_id."'");
 			if ($db->next_record()) {
@@ -130,7 +139,7 @@ if (($rechte) || ($owner)) {
 				$description= _("Themenbezogener Dateiordner");
 			}
 		}
-		$change = create_folder(addslashes($titel), $description, $open_id);
+		$change = create_folder(addslashes($titel), $description, $open_id, $permission);
 		$folder_system_data["open"][$change] = TRUE;
 		$folder_system_data['open']['anker'] = $change;
 		}
@@ -277,21 +286,27 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 			$folder_system_data["linkerror"]=TRUE;
 		}
 	}
-
-	if ($_POST['move_to_sem_x'] || $_POST['move_to_inst_x']){
-		$new_range_id = ($_POST['move_to_sem_x'] ? $_POST['sem_move_id'] : $_POST['inst_move_id']);
+	//verschieben / kopieren in andere Veranstaltung
+	if ($rechte && ($_POST['move_to_sem_x'] || $_POST['move_to_inst_x'] || $_POST['move_to_top_folder_x'])){
+		if(!$_POST['move_to_top_folder_x']){
+			$new_sem_id = ($_POST['move_to_sem_x'] ? $_POST['sem_move_id'] : $_POST['inst_move_id']);
+		} else {
+			$new_sem_id = false;
+		}
+		if($new_sem_id) $new_range_id = md5($new_sem_id . 'top_folder');
+		else $new_range_id = md5($SessSemName[1] . 'top_folder');
 		if ($new_range_id){
 			if ($folder_system_data["mode"] == 'move'){
-				$done = move_item($folder_system_data["move"], $new_range_id, true);
+				$done = move_item($folder_system_data["move"], $new_range_id, $new_sem_id);
 				if (!$done){
-					$msg .= "error§" . _("Verschiebung konnte nicht durchgeführt werden.") . "§";
+					$msg .= "error§" . _("Verschiebung konnte nicht durchgeführt werden. Eventuell wurde im Ziel der Allgemeine Dateiordner nicht angelegt.") . "§";
 				} else {
 					$msg .= "msg§" . sprintf(_("%s Ordner, %s Datei(en) wurden verschoben."), $done[0], $done[1]) . '§';
 				}
 			} else {
-				$done = copy_item($folder_system_data["move"], $new_range_id, true);
+				$done = copy_item($folder_system_data["move"], $new_range_id, $new_sem_id);
 				if (!$done){
-					$msg .= "error§" . _("Kopieren konnte nicht durchgeführt werden.") . "§";
+					$msg .= "error§" . _("Kopieren konnte nicht durchgeführt werden. Eventuell wurde im Ziel der Allgemeine Dateiordner nicht angelegt.") . "§";
 				} else {
 					$msg .= "msg§" . sprintf(_("%s Ordner, %s Datei(en) wurden kopiert."), $done[0], $done[1]) . '§';
 				}
@@ -312,9 +327,9 @@ if (($SemUserStatus == "autor") || ($rechte)) {
 		unset($cmd);
 	}
 }
-
+//verschieben / kopieren innerhalb der Veranstaltung
 //wurde Code fuer Starten der Verschiebung uebermittelt (=id+"_md_"), wird entsprechende Funktion aufgerufen (hier kein Rechtecheck noetig, da Dok_id aus Sess_Variable.
-if ($open_cmd == 'md' && $folder_tree->isWritable($open_id) && !$cancel_x) {
+if ($open_cmd == 'md' && $folder_tree->isWritable($open_id) && !$cancel_x && (!$folder_tree->isFolder($folder_system_data["move"]) || ($folder_tree->isFolder($folder_system_data["move"]) && $folder_tree->checkCreateFolder($open_id, $user->id)))) {
 	if ($folder_system_data["mode"] == 'move'){
 		$done = move_item($folder_system_data["move"], $open_id);
 		if (!$done){
@@ -389,8 +404,20 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 			echo "\n" . '<tr><td class="blank" colspan="3" width="100%" style="font-size:80%;">';
 			echo "\n" . '<div style="margin-left:25px;">';
 			echo "\n<b>" . ($folder_system_data["mode"] == 'move' ? _("Verschiebemodus") : _("Kopiermodus")) . "</b><br>";
-			echo _("Ausgewähltes Objekt in den Allgemeinen Dateiordner einer anderen Veranstaltung oder einer anderen Einrichtung verschieben / kopieren:");
+			if(!$folder_tree->isFolder($folder_system_data["move"])){
+				echo _("Ausgewählte Datei in den Allgemeinen Dateiordner einer anderen Veranstaltung oder einer anderen Einrichtung verschieben / kopieren:");
+			} else {
+				echo _("Ausgewählten Ordner in eine andere Veranstaltung, eine andere Einrichtung oder auf die obere Ebene verschieben / kopieren:");
+			}
 			echo "\n</div></td></tr><tr>";
+			if($folder_tree->isFolder($folder_system_data["move"])){
+				echo "\n" . '<td class="blank">&nbsp;</td>';
+				echo "\n" . '<td class="blank" width="60%" style="font-size:80%;">';
+				echo "\n" . '<input type="image" border="0" src="'.$GLOBALS['ASSETS_URL'].'images/move.gif" name="move_to_top_folder" ' . tooltip(_("Auf die obere Ebene verschieben / kopieren")) . '>';
+				echo '&nbsp;' . _("Auf die obere Ebene verschieben / kopieren") . '</td>';
+				echo "\n" . '<td class="blank"><input type="image" border="0" vspace="2" ' . makeButton($button_name,'src') . ' name="move_to_top_folder" ' . tooltip(_("Auf die obere Ebene verschieben / kopieren")) . '>';
+				echo "\n</td></tr><tr>";
+			}
 			echo "\n" .'<td class="blank" width="20%" style="font-size:80%;">';
 			echo "\n" . '<div style="margin-left:25px;">';
 			echo _("Veranstaltung") .':';
@@ -433,8 +460,13 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 			$db2->query("SELECT issue_id, title FROM themen LEFT JOIN folder ON (issue_id = range_id) WHERE themen.seminar_id='$range_id' AND folder_id IS NULL ORDER BY priority");
 			while ($db2->next_record()) {
 				$select.="\n<option value=\"".$db2->f("issue_id")."_a_\">" . sprintf(_("Dateiordner zum Thema: %s"), htmlReady($db2->f("title"))) . "</option>";
+			}
+			if($SessSemName['class'] == 'sem'){
+				$db2->query("SELECT statusgruppen.name, statusgruppe_id FROM statusgruppen LEFT JOIN folder ON (statusgruppe_id = folder.range_id) WHERE statusgruppen.range_id='$range_id' AND folder_id IS NULL ORDER BY position");
+				while ($db2->next_record()) {
+					$select.="\n<option value=\"".$db2->f("statusgruppe_id")."_a_\">" . sprintf(_("Dateiordner der Gruppe: %s"), htmlReady($db2->f('name'))) . "</option>";
 				}
-
+			}
 			if ($select) {
 				?>
 				<tr>
@@ -481,13 +513,22 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 
 		display_folder_system(md5($SessionSeminar . 'top_folder'), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
 
+		if($SessSemName['class'] == 'sem'){
 		//Alle Themen der Veranstaltung holen
 		$db->query("SELECT issue_id FROM themen INNER JOIN folder ON(issue_id=folder.range_id) WHERE themen.seminar_id='$range_id' ORDER BY priority");
 		while ($db->next_record()) {
 			//und einzelne Termine
 			display_folder_system($db->f("issue_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
 			}
+			//Gruppenordner
+			$db->query("SELECT sg.statusgruppe_id FROM statusgruppen sg "
+					. (!$rechte ? "INNER JOIN statusgruppe_user sgu ON sgu.statusgruppe_id=sg.statusgruppe_id AND sgu.user_id='$user->id'" : "")
+					. " INNER JOIN folder ON sg.statusgruppe_id=folder.range_id WHERE sg.range_id='$range_id' ORDER BY sg.position");
+			while ($db->next_record()) {
+				display_folder_system($db->f("statusgruppe_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
+			}
 		}
+	}
 
 	//Alle / Listview
 	else {
@@ -497,8 +538,8 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 		}
 
 	//und Form wieder schliessen
-	if ($change)
-		echo "</form>";
+	if ($change || $folder_system_data["cmd"]=="all")
+		echo "\n</form>";
 
 	$folder_system_data["linkerror"]="";
 ?>

@@ -52,7 +52,7 @@ function MakeUniqueStatusgruppeID () {
 
 // Funktionen zum veraendern der Gruppen
 
-function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size, $new_selfassign="0") {
+function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size, $new_selfassign = 0, $new_doc_folder = false) {
 
 	$statusgruppe_id = MakeUniqueStatusgruppeID();
 	$mkdate = time();
@@ -65,33 +65,42 @@ function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgrupp
 		$position = "1";
 	}
 	$db->query("INSERT INTO statusgruppen SET statusgruppe_id = '$statusgruppe_id', name = '$new_statusgruppe_name', range_id= '$range_id', position='$position', size = '$new_statusgruppe_size', selfassign = '$new_selfassign', mkdate = '$mkdate', chdate = '$chdate'");
-	return $statusgruppe_id;	
+	if($db->affected_rows() && $new_doc_folder){
+		create_folder(mysql_escape_string(_("Dateiordner der Gruppe:") . ' ' . $new_statusgruppe_name), mysql_escape_string(_("Ablage für Ordner und Dokumente dieser Gruppe")), $statusgruppe_id, 15);
+	}
+	return $statusgruppe_id;
 } 
 
-function CheckSelfAssign ($statusgruppe_id) {
+function CheckSelfAssign($statusgruppe_id) {
 	$db=new DB_Seminar;
-	$db->query ("SELECT selfassign FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id' AND selfassign='1'");
+	$db->query ("SELECT selfassign FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id'");
 	if ($db->next_record()) {
-		$tmp = TRUE;
+		$tmp = $db->f(0);
 	} else {
 		$tmp = FALSE;
 	}
 	return $tmp;		
 }
 
-function ReturnSelfAssign ($statusgruppe_id) {
-	
-	
-	
+function CheckSelfAssignAll($seminar_id) {
+	$db = new DB_Seminar("SELECT SUM(selfassign), COUNT( IF( selfassign > 0, 1, NULL ) ) , MIN(selfassign) FROM statusgruppen WHERE range_id='$seminar_id' ");
+	$db->next_record();
+	$ret = array();
+	if($db->f(2)) $ret[0] = true;
+	if($db->f(1) && $db->f(0) == $db->f(1) * 2) $ret[1] = true;
+	return $ret;
 }
 
-function CheckAssignRights($statusgruppe_id, $user_id) {
+function CheckAssignRights($statusgruppe_id, $user_id, $seminar_id) {
 	global $perm;
+	list($self_assign_all, $self_assign_exclusive) = CheckSelfAssignAll($seminar_id);
 	if (CheckSelfAssign($statusgruppe_id) 
 	&& !CheckUserStatusgruppe($statusgruppe_id, $user_id) 
 	&& !$perm->have_perm("admin") 
 	&& $perm->have_perm("autor") 
-	&& ((GetStatusgruppeLimit($statusgruppe_id)==FALSE) || (GetStatusgruppeLimit($statusgruppe_id) > CountMembersPerStatusgruppe($statusgruppe_id))))
+	&& ((GetStatusgruppeLimit($statusgruppe_id)==FALSE) || (GetStatusgruppeLimit($statusgruppe_id) > CountMembersPerStatusgruppe($statusgruppe_id)))
+	&& !($self_assign_exclusive && in_array($user_id, GetAllSelected($seminar_id)))
+	)
 		$assign = TRUE;
 	else
 		$assign = FALSE;
@@ -103,8 +112,20 @@ function SetSelfAssign ($statusgruppe_id, $flag="0") {
 	$db->query("UPDATE statusgruppen SET selfassign = '$flag' WHERE statusgruppe_id = '$statusgruppe_id'");
 }
 
+function SetSelfAssignAll ($seminar_id, $flag = false) {
+	$db=new DB_Seminar;
+	$db->query("UPDATE statusgruppen SET selfassign = '".(int)$flag."' WHERE range_id = '$seminar_id'");
+	return $db->affected_rows();
+}
+
+function SetSelfAssignExclusive ($seminar_id, $flag = false) {
+	$db=new DB_Seminar;
+	$db->query("UPDATE statusgruppen SET selfassign = '".($flag ? 2 : 1)."' WHERE  range_id = '$seminar_id' AND selfassign > 0");
+	return $db->affected_rows();
+}
+
 function GetAllSelected ($range_id) {	
-	$zugeordnet[] = "";
+	$zugeordnet = array();
   	$db3=new DB_Seminar;
 	$db3->query ("SELECT DISTINCT user_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$range_id'");
 	while ($db3->next_record()) {
@@ -115,11 +136,14 @@ function GetAllSelected ($range_id) {
 	return $zugeordnet;
 }
 
-function EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit_id, $new_selfassign="0") {
+function EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit_id, $new_selfassign="0", $new_doc_folder = false) {
 
 	$chdate = time();
 	$db=new DB_Seminar;
 	$db->query("UPDATE statusgruppen SET name = '$new_statusgruppe_name', size = '$new_statusgruppe_size', chdate = '$chdate', selfassign = '$new_selfassign' WHERE statusgruppe_id = '$edit_id'");
+	if($new_doc_folder){
+		create_folder(mysql_escape_string(_("Dateiordner der Gruppe:") . ' '. $new_statusgruppe_name), mysql_escape_string(_("Ablage für Ordner und Dokumente dieser Gruppe")), $edit_id, 15);
+	}
 }
 
 function InsertPersonStatusgruppe ($user_id, $statusgruppe_id) {
@@ -359,5 +383,11 @@ function GetStatusgruppeLimit ($group_id) {
 		return $db->f("size");
 	else
 		return FALSE;
+}
+
+function CheckStatusgruppeFolder($group_id){
+	$db = new DB_Seminar("SELECT folder_id FROM folder WHERE range_id='$group_id'");
+	$db->next_record();
+	return $db->f(0);
 }
 ?>
