@@ -707,7 +707,7 @@ function export_datafields($range_id, $childgroup_tag, $childobject_tag){
 			if (!$d_fields)
 				$ret .= xml_open_tag( $childgroup_tag );
 			$ret .= xml_open_tag($childobject_tag , $entry->getName());
-			$ret .= string_to_unicode($entry->getDisplayValue(false), true);
+			$ret .= htmlspecialchars($entry->getDisplayValue(false));
 			$ret .= xml_close_tag($childobject_tag);
 			$d_fields = true;
 		}
