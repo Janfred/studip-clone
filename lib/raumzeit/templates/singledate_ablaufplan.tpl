@@ -31,7 +31,7 @@
 </TR>
 <? if ($issue_open[$tpl['sd_id']] || $openAll) { ?>
 <TR>
-	<TD colspan="5" class="steel1" align="center">
+	<TD colspan="6" class="steel1" align="center">
 		<? if (!$openAll) { ?><FORM action="<?=$PHP_SELF?>" method="post"><? } ?>
 		<TABLE border="0" cellspacing="0" cellpadding="1" width="99%">
 			<TR>
