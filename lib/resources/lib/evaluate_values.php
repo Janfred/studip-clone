@@ -1300,18 +1300,6 @@ if ($save_state_x) {
 	elseif (is_array ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"])) {
 		$i=0;
 		//check, if one assignment should assigned to a room, which is only particularly free - so we have treat every single date
-		if (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE))) {
-			foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"] as $key=>$val) {
-				if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]) {
-					$overlap_events_count = $val["overlap_events_count"][$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]];
-					if (($overlap_events_count > 0) && ($overlap_events_count < round($val["events_count"] * ($GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE'] / 100)))) {
-						$particular_free = TRUE;
-						$close_request = TRUE;
-					}
-				}
-				$i++;
-			}
-		}
 
 		if (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE))) {
 			$assignObjects =& $semResAssign->getDateAssignObjects(TRUE);
@@ -1350,22 +1338,10 @@ if ($save_state_x) {
 						} else
 							$skipped_termin_ids[$key2]=TRUE;
 					}
-					if ($semObj->getMetaDateType() == 0) {
-						$semObj->setMetaDateValue($key, "resource_id", $val);
-					}
 				}
 				$close_request = TRUE;
 				$semObj->store();
 			//normal metadate mode
-			} elseif (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE) && (!$dateRequest))) {
-				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
-					$assignObjects[$key]->setResourceId($val);
-					$semResAssign->deleteAssignedRooms();
-					if (!$particular_free) {
-						$result = $semResAssign->changeMetaAssigns($assignObjects);
-					}
-				}
-			//multiple dates mode
 			} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE))) {
 				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val){
 					if (!$dates_with_request[$key]) {
@@ -1411,74 +1387,7 @@ if ($save_state_x) {
 					$i++;
 				}
 
-			//create msgs, normal metadate mode, and update the matadata (we save the resource there too), if no overlaps detected and create msg's
-			} elseif (($semObj->getMetaDateType() == 0) && (!$particular_free) && (!isSchedule($semObj->getId(), FALSE))) {
-				/* entfaellt, es MetaDateType nie mehr 0 ist
-				$i=0;
-				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
-				foreach ($result as $key=>$val) {
-					$resObj =& ResourceObject::Factory($val["resource_id"]);
-					if (!$val["overlap_assigns"]) {
-						$semObj->setMetaDateValue($i, "resource_id", $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]);
-						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $resObj->getId();
-						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
-						$succesful_assigned++;
-					} else {
-						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = FALSE;
-						$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
-					}
-					$i++;
-				}
-				*/
-				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
-				foreach ($assign_ids as $i=>$ass_id) {
-					if ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"][$i]){
-						list($key,$val) = each($result);
-						$resObj =& ResourceObject::Factory($val["resource_id"]);
-						if (!$val["overlap_assigns"]) {
-							$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$ass_id]["resource_id"] = $resObj->getId();
-							$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
-							$succesful_assigned++;
-						} else {
-							$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$ass_id]["resource_id"] = FALSE;
-							$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$i]->getFormattedShortInfo());
-						}
-					}
-				}
-
-			//create msgs, metadate mode, but create individual dates (a complete schedule) in case of trouble with the suggested room (it isn't free at all, but for most dates ok)
-			} elseif ($semObj->getMetaDateType() == 0) {
-				/* entfaellt, es MetaDateType nie mehr 0 ist
-				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
-				foreach ($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"] as $key=>$val) {
-					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$key]]["resource_id"] = $val;
-					$semObj->setMetaDateValue($key, "resource_id", $val);
-				}
-				$semObj->store();
-
-				//use the assi to create all the dates (and do the checks again)
-				$assi_result = dateAssi ($semObj->getId(), "update", FALSE, FALSE, FALSE, FALSE, FALSE);
-
-				//reload the assignObject - now we are dealing with indivual dates instead of a regularly assign
-				$assignObjects =& $semResAssign->getDateAssignObjects();
-
-				foreach ($assi_result["resources_result"] as $key=>$val) {
-					$resObj =& ResourceObject::Factory($val["resource_id"]);
-					if (!$val["overlap_assigns"]) {
-						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$val["termin_id"]]->getFormattedShortInfo());
-						$succesful_assigned++;;
-					} else {
-						$req_added_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_new\">".$resObj->getName()."</a>", $assignObjects[$val["termin_id"]]->getFormattedShortInfo());
-						$copyReqObj = $reqObj;
-						$copyReqObj->copy();
-						$copyReqObj->setTerminId($val["termin_id"]);
-						$copyReqObj->store();
-					}
-				}
-
-			//create msgs, multiple	date mode
-			*/
-			} else {
+		} else {
 				$i=0;
 				$assign_ids = array_keys($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"]);
 				foreach ($result as $key=>$val) {
@@ -1504,15 +1413,8 @@ if ($save_state_x) {
 				}
 			}
 
-			//update seminar-date (save the new resource_ids)
-			if ($succesful_assigned) {
-				if (($semObj->getMetaDateType() == 0) && (!isSchedule($semObj->getId(), FALSE)))
-					$semObj->store();
-			}
-
 			//set reload flag for this request (the next time the user skips to the request, we reload all data)
 			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
-
 
 			//create msg's
 			if ($good_msg)
@@ -1905,43 +1807,18 @@ $users = Array($reqObj->getUserId());
 				$message = sprintf (_("Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet.")." \n"._("Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:")."\n\n", $semObj->getName());
 
 		if (!$reqObj->getTerminId()) {
-			if ($semObj->getMetaDateType() == 0) {
-				if ($metadates = $semObj->getFormattedTurnusDates()) {
-					$i=0;
-					$tmp_assign_ids = array_keys($request_data[$_sendMessage['request_id']]["assign_objects"]);
-					foreach ($metadates as $key=>$val) {
-						if ($request_data[$_sendMessage['request_id']]["grouping"])
-							$resObj =& ResourceObject::Factory($request_data[$_sendMessage['request_id']]["groups"][$i]["resource_id"]);
-						else
-							$resObj =& ResourceObject::Factory($request_data[$_sendMessage['request_id']]["assign_objects"][$tmp_assign_ids[$i]]["resource_id"]);
-						
-						$message.= $val." : ".$resObj->getName()."\n";
-						$i++;
-					}
+			$query2 = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) WHERE range_id = '%s' ORDER BY date, content", $reqObj->getSeminarId());
+			$db2->query($query2);
 
-					if ($semObj->getCycle() == 1)
+			if ($db2->nf()) {
+				while ($db2->next_record()) {
+					if (in_array($db2->f('termin_id'),$GLOBALS['assigned_dates'])) 
 					{
-						$message.= "\n"._("w&ouml;chentlich");
-					} elseif ($semObj->getCycle() == 2)
-					{
-						$message.= "\n"._("zweiw&ouml;chentlich");
-					}
-					$message.= ", "._("ab:")." ".date("d.m.Y", $semObj->getFirstDate());
-				}
-			} else {
-				$query2 = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) WHERE range_id = '%s' ORDER BY date, content", $reqObj->getSeminarId());
-				$db2->query($query2);
-
-				if ($db2->nf()) {
-					while ($db2->next_record()) {
-            if (in_array($db2->f('termin_id'),$GLOBALS['assigned_dates'])) 
-            {
-              if ($db2->f("resource_id")) {
-                $message.= date("d.m.Y, H:i", $db2->f("date")).", ".(($db2->f("date") != $db2->f("end_time")) ? " - ".date("H:i", $db2->f("end_time")) : "")." ";
-                $resObj =& ResourceObject::Factory($db2->f("resource_id"));
-                $message.= $resObj->getName()."\n";
-              }
-            }
+						if ($db2->f("resource_id")) {
+							$message.= date("d.m.Y, H:i", $db2->f("date")).", ".(($db2->f("date") != $db2->f("end_time")) ? " - ".date("H:i", $db2->f("end_time")) : "")." ";
+							$resObj =& ResourceObject::Factory($db2->f("resource_id"));
+							$message.= $resObj->getName()."\n";
+						}
 					}
 				}
 			}
