@@ -48,6 +48,19 @@ function getTemplateDataForSingleDate($val, $cycle_id = '') {
 		$tpl['class'] = 'steelgreen';
 	}
 
+	/* Aging */
+	$timecolor = '#BBBBBB';
+	if ($val->getChDate() > 0) {
+		$timediff = (int) log((time() - $val->getChDate()) / 86400 + 1) * 15;
+		if ($timediff >= 68)
+			$timediff = 68;
+		$red = dechex(255 - $timediff);
+		$other = dechex(119 + $timediff);
+		$timecolor= "#" . $red . $other . $other;
+	}
+
+	$tpl['aging_color'] = $timecolor;
+
 	/* entscheidet, ob der aktuelle Termin ausgewählt ist oder nicht,
    * je nachdem, welche Auswahlart aktiviert wurde */
 	$tpl['checked'] = '';

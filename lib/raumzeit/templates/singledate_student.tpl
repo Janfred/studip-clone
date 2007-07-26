@@ -18,10 +18,10 @@
 																		
 		printhead(FALSE, FALSE, $link, $open, FALSE, $icon, $tpl['theme_title'], $zusatz);*/
 	?>
-	<TD width="1%" align="right" valign="top" class="<?=$tpl['class']?>" nowrap>
+	<TD width="1%" align="left" valign="top" bgcolor="<?=$tpl['aging_color']?>" class="<?=$tpl['class']?><?=($issue_open[$tpl['sd_id']] || $tpl['openall']) ? '3' : '2'?>" nowrap>
 		<A name="<?=$tpl['sd_id']?>">
 		<A href="<?=$PHP_SELF?>?cmd=<?=($issue_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
-			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($issue_open[$tpl['sd_id']] || $tpl['openall']) ? 'runt' : ''?>.gif" border="0" align="abstop">
+			&nbsp;<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($issue_open[$tpl['sd_id']] || $tpl['openall']) ? 'runt' : ''?>2.gif" border="0" align="abstop">
 		</A>
 	</TD>
 	<TD width="1%" align="right" valign="top" class="<?=$tpl['class']?>" nowrap>
