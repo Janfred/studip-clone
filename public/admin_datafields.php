@@ -42,13 +42,52 @@ require_once('lib/msg.inc.php');	//Ausgaben
 require_once('config.inc.php');	//Settings....
 require_once 'lib/functions.php';	//basale Funktionen
 require_once('lib/visual.inc.php');	//Darstellungsfunktionen
-require_once('lib/classes/DataFields.class.php');	//class DataFields
+require_once('lib/classes/DataFieldStructure.class.php');
+require_once('lib/classes/DataFieldEntry.class.php');
+
 
 $db=new DB_Seminar;
-$db2=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
 $sess->register("admin_datafields_data");
-$DataFields=new DataFields;
+
+
+// handles output of column "Feldtyp"
+function printDataFieldType ($targetID, $currStruct) {
+	echo '<font size="-1">';
+	if ($currStruct == 0 || ($targetID == $currStruct->getID() && $currStruct->getCachedNumEntries() == 0)) {
+		print "<select name=\"datafield_type\">";
+		foreach (DataFieldEntry::getSupportedTypes() as $type) {
+			$sel = ($currStruct != 0 && $currStruct->getType() == $type) ? 'selected' : '';
+			print "<option value=\"$type\" $sel>$type</option>";
+		}
+		print "</select>";
+	}
+	else {
+		print $currStruct->getType();
+		if ($_GET['edit_typeparam'] == $currStruct->getID()) {  // edit button clicked?
+			print '<br><a name="a">' . $currStruct->getHTMLEditor('typeparam') . "</a>";
+			printf('<input type="hidden" name="datafield_id" value="%s">', $currStruct->getID());
+			print ' <input type="image" name="save" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" align="middle" title="&Auml;nderungen speichern">';
+			print ' <input type="image" name="preview" src="'.$GLOBALS['ASSETS_URL'].'images/preview.gif" border="0" align="middle" title="Vorschau">';
+			printf(' <a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" align="middle" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+		}
+		elseif ($_POST['preview_x'] && $_POST['datafield_id'] == $currStruct->getID()) { // preview button clicked?
+			print '<br>';
+			$currStruct->setTypeParam($_POST['typeparam']);
+			$sbox = DataFieldEntry::createDataFieldEntry($currStruct);
+			print '<a name="a">' . $sbox->getHTML('') . '</a>';
+			printf(' <a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" align="middle" title="Fertig"></a>', $PHP_SELF);
+			printf(' <a href="%s?edit_typeparam=%s#a"><img src="'.$GLOBALS['ASSETS_URL'].'images/edit_transparent.gif" border="0" align="middle" title="Eintr&auml;ge bearbeiten"></a>',
+					 $PHP_SELF, $_POST['datafield_id']);
+		}
+		else
+			if ($currStruct->getType() == 'selectbox' && $currStruct->getCachedNumEntries() == 0) {
+				printf(" <a href=\"$PHP_SELF?edit_typeparam=%s#a\">", $currStruct->getID());
+				print  '<img src="'.$GLOBALS['ASSETS_URL'].'images/edit_transparent.gif" border="0" align="middle" title="Eintr&auml;ge bearbeiten"></a>';
+			}
+	}
+	echo '</font>';
+}
 
 
 // Start of Output
@@ -67,36 +106,53 @@ if ($create_new) {
 	$admin_datafields_data["change_datafield"] = FALSE;
 }
 
-if ($cancel) {
+if ($cancel || $_GET['edit_typeparam']) {
 	$admin_datafields_data["create_datafield"] = FALSE;
 	$admin_datafields_data["change_datafield"] = FALSE;
 }
 
-if (($send) && (($admin_datafields_data["change_datafield"]) || ($admin_datafields_data["create_datafield"]))) {
 
-	function datafield_check_array($datafield) {	// we do not want duplicated code. Used for datafield_class & datafield_view_perms
 
-		global $DataFields;
+if ($_POST['save_x'] || $_POST['preview_x']) {  // do we edit or preview a (selectbox) type parameter?
+	$struct = new DataFieldStructure(array('datafield_id' => $_POST['datafield_id']));
+	$struct->setTypeParam($_POST['typeparam']);
+	$struct->store();
+}
+elseif ($send && ($admin_datafields_data["change_datafield"]
+|| $admin_datafields_data["create_datafield"])) {
 
+
+
+
+	function datafield_check_array($datafield) {	// we do not want duplicated code (guter Scherz :-)
+		$class = $datafield;
 		if (is_array($datafield)) {
-			$tmp_datafield = $datafield;
-			$datafield = 0;
-			foreach ($tmp_datafield as $val) {
+			$class = 0;
+			foreach ($datafield as $val) {
 				if ($val == "FALSE")
-					$datafield = "NULL";
-				else {
-					$datafield+= $DataFields->perms_mask[$val];
-				}
+					$class = "NULL";
+				else
+					$class |= DataFieldStructure::permMask($val);
 			}
-		} elseif ($datafield == "FALSE")
-			$datafield = "NULL";
+		}
+		elseif ($datafield == "FALSE")
+			$class = "NULL";
 
-		return $datafield;
+		return $class;
 	}
 
 	$datafield_class = datafield_check_array($datafield_class);
 
-	$DataFields->storeDataField($admin_datafields_data["change_datafield"], $datafield_name, $admin_datafields_data["create_datafield"], $datafield_class, $datafield_edit_perms, $datafield_priority, $datafield_view_perms);
+	$fieldStruct = new DataFieldStructure(array('datafield_id' => $admin_datafields_data['change_datafield']));
+	$fieldStruct->setName($datafield_name);
+	$fieldStruct->setType($datafield_type);
+	$fieldStruct->setObjectClass($datafield_class);
+	$fieldStruct->setObjectType($admin_datafields_data["create_datafield"]);
+	$fieldStruct->setPriority($datafield_priority);
+	$fieldStruct->setEditPerms($datafield_edit_perms);
+	$fieldStruct->setViewPerms($datafield_view_perms);
+
+	$fieldStruct->store();
 	if ($admin_datafields_data["change_datafield"]) {
 		$admin_datafields_data["change_datafield"] = FALSE;
 		$msg = "msg§"._("Die &Auml;nderungen am Datenfeld wurden &uuml;bernommen.");
@@ -106,8 +162,8 @@ if (($send) && (($admin_datafields_data["change_datafield"]) || ($admin_datafiel
 	}
 }
 
-if ($kill_datafield) {
-	$DataFields->killDataField($kill_datafield);
+if ($kill_datafield) { // contains a datafield_id
+	DataFieldStructure::remove($kill_datafield);
 	$msg = "msg§"._("Das Datenfeld wurde gel&ouml;scht.");
 }
 
@@ -133,7 +189,7 @@ if ($kill_datafield) {
 			&nbsp;
 		</td>
 	</tr>
-	<form method="POST" name="modules" action="<? echo $PHP_SELF ?>?send=TRUE">
+	<form method="POST" name="modules" action="<?=  $_SERVER['PHP_SELF'] ?>?send=TRUE#a">
 	<tr>
 		<td class="blank" colspan=2>
 		&nbsp;<b><font size="-1"><?=_("Datenfelder f&uuml;r Veranstaltungen")?></font></b>
@@ -145,29 +201,28 @@ if ($kill_datafield) {
 					<b><?=_("Name")?></b>
 					</font>
 				</td>
+				<td class="steel" width="12%" align="center" valign="bottom">
+					<font size="-1"><b><?=_("Feldtyp")?></b></font>
+				</td>
 				<td class="steel" width="20%" align="center" valign="bottom">
 					<font size="-1">
-					<b><?=_("Veranstaltungs-Kategorie")?></b>
+					<b><?=_("Veranstaltungskategorie")?></b>
 					</font>
 				</td>
-				<td class="steel" width="15%" align="center" valign="bottom">
-					<font size="-1">
-					<b><?=_("ben&ouml;tigter Status")?></b>
-					</font>
+				<td class="steel" width="12%" align="center" valign="bottom">
+					<font size="-1"><b><?=_("ben&ouml;tigter Status")?></b></font>
 				</td>
-				<td class="steel" width="15%" align="center" valign="bottom">
-					<font size="-1">
-					<b><?=_("Sichtbarkeit")?></b>
-					</font>
+				<td class="steel" width="12%" align="center" valign="bottom">
+					<font size="-1"><b><?=_("Sichtbarkeit")?></b></font>
 				</td>
-				<td class="steel" width="8%" align="center" valign="bottom">
+				<td class="steel" width="7%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("Reihenfolge")?></b>
 					</font>
 				</td>
-				<td class="steel" width="15%" align="center" valign="bottom">
+				<td class="steel" width="10%" align="center" valign="bottom">
 					<font size="-1">
-					<b><?=_("Anzahl der Eintr&auml;ge")?></b>
+					<b><?=_("Eintr&auml;ge")?></b>
 					</font>
 				</td>
 				<td class="steel" width="7%" align="center" valign="bottom">
@@ -177,104 +232,111 @@ if ($kill_datafield) {
 				</td>
 			</tr>
 			<?
-			$datafields_list = $DataFields->getFields("sem");
-			foreach ($datafields_list as $key=>$val) {	//** start of loop **
-				$cssSw->switchClass()
+			$datafields_list = DataFieldStructure::getDataFieldStructures("sem");
+			foreach ($datafields_list as $key=>$val) {
+				$cssSw->switchClass();
 				?>
 			<tr>
 				<td class="<?=$cssSw->getClass()?>" align="left">
 					<font size="-1">
 					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<a name=\"a\"></a>";
-						printf ("<input type=\"TEXT\" maxlength=\"255\" size=\"30\" style=\"{font-size:8 pt; width: 90%%;}\" value=\"%s\" name=\"datafield_name\" />", $val["name"]);
-					} else
-						print $val["name"]
+						printf ("<input type=\"TEXT\" maxlength=\"255\" size=\"25\" style=\"{font-size:8 pt; width: 90%%;}\" value=\"%s\" name=\"datafield_name\" />", $val->getName());
+					}
+					else
+						print $val->getName();
 					?>
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
+				<?
+					printDataFieldType($admin_datafields_data['change_datafield'], $val);
+				?>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if (($admin_datafields_data["change_datafield"] == $val["datafield_id"]) && (!$val["used_entries"])) {
+					if (($admin_datafields_data["change_datafield"] == $val->getID()) && (!$val->getCachedNumEntries())) {
 						print "<select name=\"datafield_class\" style=\"{font-size:8 pt;}\">";
 						echo "<option value=\"FALSE\">". _("alle") ."</option>";
-						foreach ($SEM_CLASS as $key2=>$val2) {
-							printf ("<option %s value=\"%s\">%s</option>", ($val["object_class"] == $key2) ? "selected" : "", $key2, $val2["name"]);
-						}
+						foreach ($SEM_CLASS as $key2=>$val2)
+							printf ("<option %s value=\"%s\">%s</option>", ($val->getObjectClass() == $key2) ? "selected" : "", $key2, $val2["name"]);
 						print "</select>";
-					} else
-						print ($val["object_class"]) ? $SEM_CLASS[$val["object_class"]]["name"] : _("alle")
-					?>
-					</font>
-				</td>
-				<td class="<?=$cssSw->getClass()?>" align="center">
-					<font size="-1">
-					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
-						print "<select name=\"datafield_edit_perms\" style=\"{font-size:8 pt;}\">";
-						printf ("<option %s value=\"user\">user</option>", ($val["edit_perms"] == "user") ? "selected" : "");
-						printf ("<option %s value=\"autor\">autor</option>", ($val["edit_perms"] == "autor") ? "selected" : "");
-						printf ("<option %s value=\"tutor\">tutor</option>", ($val["edit_perms"] == "tutor") ? "selected" : "");
-						printf ("<option %s value=\"dozent\">dozent</option>", ($val["edit_perms"] == "dozent") ? "selected" : "");
-						printf ("<option %s value=\"admin\">admin</option>", ($val["edit_perms"] == "admin") ? "selected" : "");
-						printf ("<option %s value=\"root\">root</option>", ($val["edit_perms"] == "root") ? "selected" : "");
-						print "</select>";
-					} else
-						print $val["edit_perms"]
-					?>
-					</font>
-				</td>
-				<td class="<?=$cssSw->getClass()?>" align="center">
-					<font size="-1">
-					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
-						print "<select name=\"datafield_view_perms\" style=\"{font-size:8 pt;}\">";
-						printf ("<option %s value=\"all\">%s</option>", ($val["view_perms"] == "all") ? "selected" : "", _("alle"));
-						printf ("<option %s value=\"user\">user</option>", ($val["view_perms"] == "user") ? "selected" : "");
-						printf ("<option %s value=\"autor\">autor</option>", ($val["view_perms"] == "autor") ? "selected" : "");
-						printf ("<option %s value=\"tutor\">tutor</option>", ($val["view_perms"] == "tutor") ? "selected" : "");
-						printf ("<option %s value=\"dozent\">dozent</option>", ($val["view_perms"] == "dozent") ? "selected" : "");
-						printf ("<option %s value=\"admin\">admin</option>", ($val["view_perms"] == "admin") ? "selected" : "");
-						printf ("<option %s value=\"root\">root</option>", ($val["view_perms"] == "root") ? "selected" : "");
-						print "</select>";
-					} else
-						if ($val["view_perms"] == "all") {
-							print _("alle");
 						}
-						else {
-							print $val["view_perms"];
-						}
-					?>
-					</font>
-				</td>
-				<td class="<?=$cssSw->getClass()?>" align="center">
-					<font size="-1">
-					<?if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
-						printf ("<input type=\"TEXT\" maxlength=\"10\" size=\"5\" style=\"{font-size:8 pt; width: 30%%; text-align: center;}\" value=\"%s\" name=\"datafield_priority\" />", $val["priority"]);
-					} else
-						print $val["priority"]
-					?>
-					</font>
-				</td>
-				<td class="<?=$cssSw->getClass()?>" align="center">
-					<font size="-1">
-					<?=$val["used_entries"]?>
-					</font>
-				</td>
-				<td class="<?=$cssSw->getClass()?>" align="center">
-					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"])
-						printf ("&nbsp;&nbsp;<input type=\"IMAGE\" name=\"send_datafield\" src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" border=\"0\" %s />", tooltip(_("Änderungen übernehmen")));
 					else
-						printf ("&nbsp;&nbsp;<a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Datenfeld verändern")));
-					if (!$val["used_entries"])
-						printf ("&nbsp;&nbsp;<a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Diese Kategorie löschen (wird von keiner Veranstaltung verwendet)")));
+						print ($val->getObjectClass()) ? $SEM_CLASS[$val->getObjectClass()]["name"] : _("alle")
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print "<select name=\"datafield_edit_perms\" style=\"{font-size:8 pt;}\">";
+						printf ("<option %s value=\"user\">user</option>", ($val->getEditPerms() == "user") ? "selected" : "");
+						printf ("<option %s value=\"autor\">autor</option>", ($val->getEditPerms() == "autor") ? "selected" : "");
+						printf ("<option %s value=\"tutor\">tutor</option>", ($val->getEditPerms() == "tutor") ? "selected" : "");
+						printf ("<option %s value=\"dozent\">dozent</option>", ($val->getEditPerms() == "dozent") ? "selected" : "");
+						printf ("<option %s value=\"admin\">admin</option>", ($val->getEditPerms() == "admin") ? "selected" : "");
+						printf ("<option %s value=\"root\">root</option>", ($val->getEditPerms() == "root") ? "selected" : "");
+						print "</select>";
+					} else
+						print $val->getEditPerms()
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print "<select name=\"datafield_view_perms\" style=\"{font-size:8 pt;}\">";
+						printf ("<option %s value=\"all\">%s</option>", ($val->getViewPerms() == "all") ? "selected" : "", _("alle"));
+						printf ("<option %s value=\"user\">user</option>", ($val->getViewPerms() == "user") ? "selected" : "");
+						printf ("<option %s value=\"autor\">autor</option>", ($val->getViewPerms() == "autor") ? "selected" : "");
+						printf ("<option %s value=\"tutor\">tutor</option>", ($val->getViewPerms() == "tutor") ? "selected" : "");
+						printf ("<option %s value=\"dozent\">dozent</option>", ($val->getViewPerms() == "dozent") ? "selected" : "");
+						printf ("<option %s value=\"admin\">admin</option>", ($val->getViewPerms() == "admin") ? "selected" : "");
+						printf ("<option %s value=\"root\">root</option>", ($val->getViewPerms() == "root") ? "selected" : "");
+						print "</select>";
+					}
+					elseif ($val->getViewPerms() == "all")
+						print _("alle");
+					else
+						print $val->getViewPerms();
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID())
+						printf ("<input type=\"TEXT\" maxlength=\"10\" size=\"5\" style=\"{font-size:8 pt; width: 30%%; text-align: center;}\" value=\"%s\" name=\"datafield_priority\" />", $val->getPriority());
+					else
+						print $val->getPriority()
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?=$val->getCachedNumEntries()?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print  ' <input type="IMAGE" name="send_datafield" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" title="Änderungen übernehmen">';
+						printf ('<a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+					}
+					else
+						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
+					if (!$val->getCachedNumEntries())
+						printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
 			<?
-			}
+			}  // foreach
 			if ($admin_datafields_data["create_datafield"] == "sem") {
 				$cssSw->switchClass()
 			?>
@@ -282,17 +344,21 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="left">
 					<a name="a"></a>
 					<font size="-1">
-						<input type="TEXT" maxlength="255" size="30" style="{font-size:8 pt; width: 90%;}" name="datafield_name" />
+						<input type="TEXT" maxlength="255" size="25" style="{font-size:8 pt; width: 90%;}" name="datafield_name" />
 					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+				<?
+					printDataFieldType(0, 0);
+				?>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 						<select name="datafield_class" style="{font-size:8 pt;}">";
 						<option value="FALSE"><?=_("alle")?></option>
 						<?
-						foreach ($SEM_CLASS as $key=>$val) {
-							printf ("<option value=\"%s\">%s</option>", $key, $val["name"]);
-						}
+						foreach ($SEM_CLASS as $key=>$val)
+							printf ("<option value=\"%s\">%s</option>", $key, $val['name']);
 						?>
 						</select>
 					</font>
@@ -332,8 +398,8 @@ if ($kill_datafield) {
 					&nbsp;
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
-					&nbsp;&nbsp;<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
-					&nbsp;<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
+					<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
+					<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
 				</td>
 			</tr>
 			<?
@@ -359,29 +425,34 @@ if ($kill_datafield) {
 					<b><?=_("Name")?></b>
 					</font>
 				</td>
-				<td class="steel" width="20%" align="center" valign="bottom">
+				<td class="steel" width="12%" align="center" valign="bottom">
 					<font size="-1">
-					<b><?=_("Einrichtungs-Typ")?></b>
+					<b><?=_("Feldtyp")?></b>
 					</font>
 				</td>
-				<td class="steel" width="15%" align="center" valign="bottom">
+				<td class="steel" width="20%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Einrichtungstyp")?></b>
+					</font>
+				</td>
+				<td class="steel" width="12%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("ben&ouml;tigter Status")?></b>
 					</font>
 				</td>
-				<td class="steel" width="15%" align="center" valign="bottom">
+				<td class="steel" width="12%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("Sichtbarkeit")?></b>
 					</font>
 				</td>
-				<td class="steel" width="8%" align="center" valign="bottom">
+				<td class="steel" width="7%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("Reihenfolge")?></b>
 					</font>
 				</td>
-				<td class="steel" width="15%" align="center" valign="bottom">
+				<td class="steel" width="10%" align="center" valign="bottom">
 					<font size="-1">
-					<b><?=_("Anzahl der Eintr&auml;ge")?></b>
+					<b><?=_("Eintr&auml;ge")?></b>
 					</font>
 				</td>
 				<td class="steel" width="7%" align="center" valign="bottom">
@@ -391,7 +462,7 @@ if ($kill_datafield) {
 				</td>
 			</tr>
 			<?
-			$datafields_list = $DataFields->getFields("inst");
+			$datafields_list = DataFieldStructure::getDataFieldStructures("inst");
 			$cssSw->resetClass();
 			foreach ($datafields_list as $key=>$val) {
 				$cssSw->switchClass()
@@ -400,65 +471,72 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="left">
 					<font size="-1">
 					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
+					      if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<a name=\"a\"></a>";
-						printf ("<input type=\"TEXT\" maxlength=\"255\" size=\"30\" style=\"{font-size:8 pt; width: 90%%;}\" value=\"%s\" name=\"datafield_name\" />", $val["name"]);
-					} else
-						print $val["name"]
+						      print "<input type=\"TEXT\" maxlength=\"255\" size=\"25\" style=\"{font-size:8 pt; width: 90%%;}\" ";
+							   print "value=\"".$val->getName()."\" name=\"datafield_name\" />";
+					      }
+					      else
+						      print $val->getName()
 					?>
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
+				<?
+					printDataFieldType($admin_datafields_data['change_datafield'], $val);
+				?>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if (($admin_datafields_data["change_datafield"] == $val["datafield_id"]) && (!$val["used_entries"])) {
+					if (($admin_datafields_data["change_datafield"] == $val->getID()) && (!$val->getCachedNumEntries())) {
 						print "<select name=\"datafield_class\" style=\"{font-size:8 pt}\">";
 						echo "<option value=\"FALSE\">". _("alle") ."</option>";
-						foreach ($INST_TYPE as $key2=>$val2) {
-							printf ("<option %s value=\"%s\">%s</option>", ($val["object_class"] == $key2) ? "selected" : "", $key2, $val2["name"]);
+						foreach ($INST_TYPE as $key2=>$val2)
+							printf ("<option %s value=\"%s\">%s</option>", ($val->getObjectClass() == $key2) ? "selected" : "", $key2, $val2["name"]);
+						print "</select>";
 						}
-						print "</select>";
-					} else
-						print ($val["object_class"]) ? $INST_TYPE[$val["object_class"]]["name"] : _("alle")
+					else
+						print ($val->getObjectClass()) ? $INST_TYPE[$val->getObjectClass()]["name"] : _("alle")
 					?>
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<select name=\"datafield_edit_perms\" style=\"{font-size:8 pt;}\">";
-						printf ("<option %s value=\"user\">user</option>", ($val["edit_perms"] == "user") ? "selected" : "");
-						printf ("<option %s value=\"autor\">autor</option>", ($val["edit_perms"] == "autor") ? "selected" : "");
-						printf ("<option %s value=\"tutor\">tutor</option>", ($val["edit_perms"] == "tutor") ? "selected" : "");
-						printf ("<option %s value=\"dozent\">dozent</option>", ($val["edit_perms"] == "dozent") ? "selected" : "");
-						printf ("<option %s value=\"admin\">admin</option>", ($val["edit_perms"] == "admin") ? "selected" : "");
-						printf ("<option %s value=\"root\">root</option>", ($val["edit_perms"] == "root") ? "selected" : "");
+						printf ("<option %s value=\"user\">user</option>", ($val->getEditPerms() == "user") ? "selected" : "");
+						printf ("<option %s value=\"autor\">autor</option>", ($val->getEditPerms() == "autor") ? "selected" : "");
+						printf ("<option %s value=\"tutor\">tutor</option>", ($val->getEditPerms() == "tutor") ? "selected" : "");
+						printf ("<option %s value=\"dozent\">dozent</option>", ($val->getEditPerms() == "dozent") ? "selected" : "");
+						printf ("<option %s value=\"admin\">admin</option>", ($val->getEditPerms() == "admin") ? "selected" : "");
+						printf ("<option %s value=\"root\">root</option>", ($val->getEditPerms() == "root") ? "selected" : "");
 						print "</select>";
 					} else
-						print $val["edit_perms"]
+						print $val->getEditPerms()
 					?>
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<select name=\"datafield_view_perms\" style=\"{font-size:8 pt;}\">";
-						printf ("<option %s value=\"all\">%s</option>", ($val["view_perms"] == "all") ? "selected" : "", _("alle"));
-						printf ("<option %s value=\"user\">user</option>", ($val["view_perms"] == "user") ? "selected" : "");
-						printf ("<option %s value=\"autor\">autor</option>", ($val["view_perms"] == "autor") ? "selected" : "");
-						printf ("<option %s value=\"tutor\">tutor</option>", ($val["view_perms"] == "tutor") ? "selected" : "");
-						printf ("<option %s value=\"dozent\">dozent</option>", ($val["view_perms"] == "dozent") ? "selected" : "");
-						printf ("<option %s value=\"admin\">admin</option>", ($val["view_perms"] == "admin") ? "selected" : "");
-						printf ("<option %s value=\"root\">root</option>", ($val["view_perms"] == "root") ? "selected" : "");
+						printf ("<option %s value=\"all\">%s</option>", ($val->getViewPerms() == "all") ? "selected" : "", _("alle"));
+						printf ("<option %s value=\"user\">user</option>", ($val->getViewPerms() == "user") ? "selected" : "");
+						printf ("<option %s value=\"autor\">autor</option>", ($val->getViewPerms() == "autor") ? "selected" : "");
+						printf ("<option %s value=\"tutor\">tutor</option>", ($val->getViewPerms() == "tutor") ? "selected" : "");
+						printf ("<option %s value=\"dozent\">dozent</option>", ($val->getViewPerms() == "dozent") ? "selected" : "");
+						printf ("<option %s value=\"admin\">admin</option>", ($val->getViewPerms() == "admin") ? "selected" : "");
+						printf ("<option %s value=\"root\">root</option>", ($val->getViewPerms() == "root") ? "selected" : "");
 						print "</select>";
 					} else
-						if ($val["view_perms"] == "all") {
+						if ($val->getViewPerms() == "all") {
 							print _("alle");
 						}
 						else {
-							print $val["view_perms"];
+							print $val->getViewPerms();
 						}
 					?>
 					</font>
@@ -466,26 +544,28 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
-						printf ("<input type=\"TEXT\" maxlength=\"10\" size=\"5\" style=\"{font-size:8 pt; width: 30%%; text-align: center;}\" value=\"%s\" name=\"datafield_priority\" />", $val["priority"]);
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						printf ("<input type=\"TEXT\" maxlength=\"10\" size=\"5\" style=\"{font-size:8 pt; width: 30%%; text-align: center;}\" value=\"%s\" name=\"datafield_priority\" />", $val->getPriority());
 					} else
-						print $val["priority"]
+						print $val->getPriority()
 					?>
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
-					<?=$val["used_entries"]?>
+					<?=$val->getCachedNumEntries()?>
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"])
-						printf ("&nbsp;&nbsp;<input type=\"IMAGE\" name=\"send_datafield\" src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" border=\"0\" %s />", tooltip(_("Änderungen übernehmen")));
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print  ' <input type="IMAGE" name="send_datafield" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" title="Änderungen übernehmen">';
+						printf ('<a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+					}
 					else
-						printf ("&nbsp;&nbsp;<a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Datenfeld verändern")));
-					if (!$val["used_entries"])
-						printf ("&nbsp;&nbsp;<a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Diese Kategorie löschen (wird von keiner Veranstaltung verwendet)")));
+						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
+					if (!$val->getCachedNumEntries())
+						printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -498,8 +578,13 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="left">
 					<a name="a"></a>
 					<font size="-1">
-						<input type="TEXT" maxlength="255" size="30" style="{font-size:8 pt; width: 90%}" name="datafield_name" />
+						<input type="TEXT" maxlength="255" size="25" style="{font-size:8 pt; width: 90%}" name="datafield_name" />
 					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+				<?
+					printDataFieldType(0, 0);
+				?>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
@@ -507,7 +592,7 @@ if ($kill_datafield) {
 						<option value="FALSE"><?=_("alle")?></option>
 						<?
 						foreach ($INST_TYPE as $key=>$val) {
-							printf ("<option value=\"%s\">%s</option>", $key, $val["name"]);
+							printf ("<option value=\"%s\">%s</option>", $key, $val['name']);
 						}
 						?>
 						</select>
@@ -547,8 +632,8 @@ if ($kill_datafield) {
 					&nbsp;
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
-					&nbsp;&nbsp;<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
-					&nbsp;<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
+					<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
+					<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
 				</td>
 			</tr>
 			<?
@@ -574,29 +659,34 @@ if ($kill_datafield) {
 					<b><?=_("Name")?></b>
 					</font>
 				</td>
-				<td class="steel" width="20%" align="center" valign="bottom">
+				<td class="steel" width="12%" align="center" valign="bottom">
 					<font size="-1">
-					<b><?=_("Nutzer-Status")?></b>
+					<b><?=_("Feldtyp")?></b>
 					</font>
 				</td>
-				<td class="steel" width="15%" align="center" valign="bottom">
+				<td class="steel" width="20%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Nutzerstatus")?></b>
+					</font>
+				</td>
+				<td class="steel" width="12%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("ben&ouml;tigter Status")?></b>
 					</font>
 				</td>
-				<td class="steel" width="15%" align="center" valign="bottom">
+				<td class="steel" width="12%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("Sichtbarkeit")?></b>
 					</font>
 				</td>
-				<td class="steel" width="8%" align="center" valign="bottom">
+				<td class="steel" width="7%" align="center" valign="bottom">
 					<font size="-1">
 					<b><?=_("Reihenfolge")?></b>
 					</font>
 				</td>
-				<td class="steel" width="15%" align="center" valign="bottom">
+				<td class="steel" width="10%" align="center" valign="bottom">
 					<font size="-1">
-					<b><?=_("Anzahl der Eintr&auml;ge")?></b>
+					<b><?=_("Eintr&auml;ge")?></b>
 					</font>
 				</td>
 				<td class="steel" width="7%" align="center" valign="bottom">
@@ -606,7 +696,7 @@ if ($kill_datafield) {
 				</td>
 			</tr>
 			<?
-			$datafields_list = $DataFields->getFields("user");
+			$datafields_list = DataFieldStructure::getDataFieldStructures("user");
 			$cssSw->resetClass();
 			foreach ($datafields_list as $key=>$val) {
 				$cssSw->switchClass()
@@ -615,69 +705,74 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="left">
 					<font size="-1">
 					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<a name=\"a\"></a>";
-						printf ("<input type=\"TEXT\" maxlength=\"255\" size=\"30\" style=\"{font-size:8 pt; width: 90%%;}\" value=\"%s\" name=\"datafield_name\" />", $val["name"]);
+						printf ("<input type=\"TEXT\" maxlength=\"255\" size=\"25\" style=\"{font-size:8 pt; width: 90%%;}\" value=\"%s\" name=\"datafield_name\" />", $val->getName());
 					} else
-						print $val["name"]
+						print $val->getName()
 					?>
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
+				<?
+					printDataFieldType($admin_datafields_data['change_datafield'], $val);
+				?>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if (($admin_datafields_data["change_datafield"] == $val["datafield_id"]) && (!$val["used_entries"])) {
+					if (($admin_datafields_data["change_datafield"] == $val->getID()) && (!$val->getCachedNumEntries())) {
 						print "<select name=\"datafield_class[]\"  multiple size=\"7\" style=\"{font-size:8 pt;}\">";
-						printf ("<option %s value=\"FALSE\">"._("alle")."</option>", (!$val["object_class"]) ? "selected" : "");
-						printf ("<option %s value=\"user\">user</option>", ($val["object_class"] & $DataFields->perms_mask["user"]) ? "selected" : "");
-						printf ("<option %s value=\"autor\">autor</option>", ($val["object_class"] & $DataFields->perms_mask["autor"]) ? "selected" : "");
-						printf ("<option %s value=\"tutor\">tutor</option>", ($val["object_class"] & $DataFields->perms_mask["tutor"]) ? "selected" : "");
-						printf ("<option %s value=\"dozent\">dozent</option>", ($val["object_class"] & $DataFields->perms_mask["dozent"]) ? "selected" : "");
-						printf ("<option %s value=\"admin\">admin</option>", ($val["object_class"] & $DataFields->perms_mask["admin"]) ? "selected" : "");
-						printf ("<option %s value=\"root\">root</option>", ($val["object_class"] & $DataFields->perms_mask["root"]) ? "selected" : "");
+						printf ("<option %s value=\"FALSE\">"._("alle")."</option>", (!$val->getObjectClass()) ? "selected" : "");
+						printf ("<option %s value=\"user\">user</option>", ($val->getObjectClass() & DataFieldStructure::permMask("user")) ? "selected" : "");
+						printf ("<option %s value=\"autor\">autor</option>", ($val->getObjectClass() & DataFieldStructure::permMask("autor")) ? "selected" : "");
+						printf ("<option %s value=\"tutor\">tutor</option>", ($val->getObjectClass() & DataFieldStructure::permMask("tutor")) ? "selected" : "");
+						printf ("<option %s value=\"dozent\">dozent</option>", ($val->getObjectClass() & DataFieldStructure::permMask("dozent")) ? "selected" : "");
+						printf ("<option %s value=\"admin\">admin</option>", ($val->getObjectClass() & DataFieldStructure::permMask("admin")) ? "selected" : "");
+						printf ("<option %s value=\"root\">root</option>", ($val->getObjectClass() & DataFieldStructure::permMask("root")) ? "selected" : "");
 						print "</select>";
-					} else {
-						print ($val["object_class"]) ? $DataFields->getReadableUserClass($val["object_class"]) : _("alle");
 					}
+					else
+						print ($val->getObjectClass()) ? DataFieldStructure::getReadableUserClass($val->getObjectClass()) : _("alle");
 					?>
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<select name=\"datafield_edit_perms\" style=\"{font-size:8 pt;}\">";
-						printf ("<option %s value=\"user\">user</option>", ($val["edit_perms"] == "user") ? "selected" : "");
-						printf ("<option %s value=\"autor\">autor</option>", ($val["edit_perms"] == "autor") ? "selected" : "");
-						printf ("<option %s value=\"tutor\">tutor</option>", ($val["edit_perms"] == "tutor") ? "selected" : "");
-						printf ("<option %s value=\"dozent\">dozent</option>", ($val["edit_perms"] == "dozent") ? "selected" : "");
-						printf ("<option %s value=\"admin\">admin</option>", ($val["edit_perms"] == "admin") ? "selected" : "");
-						printf ("<option %s value=\"root\">root</option>", ($val["edit_perms"] == "root") ? "selected" : "");
+						printf ("<option %s value=\"user\">user</option>", ($val->getEditPerms() == "user") ? "selected" : "");
+						printf ("<option %s value=\"autor\">autor</option>", ($val->getEditPerms() == "autor") ? "selected" : "");
+						printf ("<option %s value=\"tutor\">tutor</option>", ($val->getEditPerms() == "tutor") ? "selected" : "");
+						printf ("<option %s value=\"dozent\">dozent</option>", ($val->getEditPerms() == "dozent") ? "selected" : "");
+						printf ("<option %s value=\"admin\">admin</option>", ($val->getEditPerms() == "admin") ? "selected" : "");
+						printf ("<option %s value=\"root\">root</option>", ($val->getEditPerms() == "root") ? "selected" : "");
 						print "</select>";
 					} else
-						print $val["edit_perms"]
+						print $val->getEditPerms()
 					?>
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<select name=\"datafield_view_perms\" style=\"{font-size:8 pt;}\">";
-						printf ("<option %s value=\"all\">%s</option>", ($val["view_perms"] == "user") ? "selected" : "", _("alle"));
-						printf ("<option %s value=\"user\">user</option>", ($val["view_perms"] == "user") ? "selected" : "");
-						printf ("<option %s value=\"autor\">autor</option>", ($val["view_perms"] == "autor") ? "selected" : "");
-						printf ("<option %s value=\"tutor\">tutor</option>", ($val["view_perms"] == "tutor") ? "selected" : "");
-						printf ("<option %s value=\"dozent\">dozent</option>", ($val["view_perms"] == "dozent") ? "selected" : "");
-						printf ("<option %s value=\"admin\">admin</option>", ($val["view_perms"] == "admin") ? "selected" : "");
-						printf ("<option %s value=\"root\">root</option>", ($val["view_perms"] == "root") ? "selected" : "");
+						printf ("<option %s value=\"all\">%s</option>", ($val->getViewPerms() == "user") ? "selected" : "", _("alle"));
+						printf ("<option %s value=\"user\">user</option>", ($val->getViewPerms() == "user") ? "selected" : "");
+						printf ("<option %s value=\"autor\">autor</option>", ($val->getViewPerms() == "autor") ? "selected" : "");
+						printf ("<option %s value=\"tutor\">tutor</option>", ($val->getViewPerms() == "tutor") ? "selected" : "");
+						printf ("<option %s value=\"dozent\">dozent</option>", ($val->getViewPerms() == "dozent") ? "selected" : "");
+						printf ("<option %s value=\"admin\">admin</option>", ($val->getViewPerms() == "admin") ? "selected" : "");
+						printf ("<option %s value=\"root\">root</option>", ($val->getViewPerms() == "root") ? "selected" : "");
 						print "</select>";
 					} else
-						if ($val["view_perms"] == "all") {
+						if ($val->getViewPerms() == "all") {
 							print _("alle");
 						}
 						else {
-							print $val["view_perms"];
+							print $val->getViewPerms();
 						}
 					?>
 					</font>
@@ -685,26 +780,28 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"]) {
-						printf ("<input type=\"TEXT\" maxlength=\"10\" size=\"5\" style=\"{font-size:8 pt; width: 30%%; text-align: center;}\" value=\"%s\" name=\"datafield_priority\" />", $val["priority"]);
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						printf ("<input type=\"TEXT\" maxlength=\"10\" size=\"5\" style=\"{font-size:8 pt; width: 30%%; text-align: center;}\" value=\"%s\" name=\"datafield_priority\" />", $val->getPriority());
 					} else
-						print $val["priority"]
+						print $val->getPriority()
 					?>
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
-					<?=$val["used_entries"]?>
+					<?=$val->getCachedNumEntries()?>
 					</font>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<?
-					if ($admin_datafields_data["change_datafield"] == $val["datafield_id"])
-						printf ("&nbsp;&nbsp;<input type=\"IMAGE\" name=\"send_datafield\" src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" border=\"0\" %s />", tooltip(_("Änderungen übernehmen")));
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print  ' <input type="IMAGE" name="send_datafield" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" title="Änderungen übernehmen">';
+						printf ('<a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+					}
 					else
-						printf ("&nbsp;&nbsp;<a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Datenfeld verändern")));
-					if (!$val["used_entries"])
-						printf ("&nbsp;&nbsp;<a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val["datafield_id"], tooltip(_("Diese Kategorie löschen (wird von keiner Veranstaltung verwendet)")));
+						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
+					if (!$val->getCachedNumEntries())
+						printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -717,8 +814,13 @@ if ($kill_datafield) {
 				<td class="<?=$cssSw->getClass()?>" align="left">
 					<a name="a"></a>
 					<font size="-1">
-						<input type="TEXT" maxlength="255" size="30" style="{font-size:8 pt; width: 90%;}" name="datafield_name" />
+						<input type="TEXT" maxlength="255" size="25" style="{font-size:8 pt; width: 90%;}" name="datafield_name" />
 					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+				<?
+					printDataFieldType(0, 0);
+				?>
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
@@ -767,8 +869,8 @@ if ($kill_datafield) {
 					&nbsp;
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
-					&nbsp;&nbsp;<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> />
-					&nbsp;<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> />
+					<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> >
+					<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> ></a>
 				</td>
 			</tr>
 			<?
@@ -780,9 +882,729 @@ if ($kill_datafield) {
 			?>&nbsp;<a href="<?=$PHP_SELF?>?create_new=user#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer anlegen"))?> /></a><?
 		}
 		?>
-		<br />&nbsp;
+		<br>&nbsp;
 		</td>
 	</tr>
+	<tr>
+		<td class="blank" colspan=2>
+		&nbsp;<b><font size="-1"><?=_("Datenfelder f&uuml;r Nutzerrollen in Einrichtungen")?></font></b>
+		<table width = "99%" border="0" cellpadding="2" cellspacing="0" align="center">
+			<tr>
+				<td class="steel" width="20%" align="left" valign="bottom">
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="1" height="18" border="0" />
+					<font size="-1">
+					<b><?=_("Name")?></b>
+					</font>
+				</td>
+				<td class="steel" width="12%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Feldtyp")?></b>
+					</font>
+				</td>
+				<td class="steel" width="20%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Nutzerstatus")?></b>
+					</font>
+				</td>
+				<td class="steel" width="12%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("ben&ouml;tigter Status")?></b>
+					</font>
+				</td>
+				<td class="steel" width="12%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Sichtbarkeit")?></b>
+					</font>
+				</td>
+				<td class="steel" width="7%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Reihenfolge")?></b>
+					</font>
+				</td>
+				<td class="steel" width="10%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Eintr&auml;ge")?></b>
+					</font>
+				</td>
+				<td class="steel" width="7%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Aktion")?></b>
+					</font>
+				</td>
+			</tr>
+			<?
+			$datafields_list = DataFieldStructure::getDataFieldStructures("userinstrole");
+			$cssSw->resetClass();
+			foreach ($datafields_list as $key=>$val) {
+				$cssSw->switchClass()
+				?>
+			<tr>
+				<td class="<?=$cssSw->getClass()?>" align="left">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print "<a name=\"a\"></a>";
+						printf ("<input type=\"TEXT\" maxlength=\"255\" size=\"25\" style=\"{font-size:8 pt; width: 90%%;}\" value=\"%s\" name=\"datafield_name\" />", $val->getName());
+					} else
+						print $val->getName()
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+				<?
+					printDataFieldType($admin_datafields_data['change_datafield'], $val);
+				?>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if (($admin_datafields_data["change_datafield"] == $val->getID()) && (!$val->getCachedNumEntries())) {
+						print "<select name=\"datafield_class[]\"  multiple size=\"7\" style=\"{font-size:8 pt;}\">";
+						printf("<option %s value=\"FALSE\">"._("alle")."</option>", (!$val->getObjectClass()) ? "selected" : "");
+						printf("<option %s value=\"user\">user</option>", ($val->getObjectClass() & DataFieldStructure::permMask("user")) ? "selected" : "");
+						printf("<option %s value=\"autor\">autor</option>", ($val->getObjectClass() & DataFieldStructure::permMask("autor")) ? "selected" : "");
+						printf("<option %s value=\"tutor\">tutor</option>", ($val->getObjectClass() & DataFieldStructure::permMask("tutor")) ? "selected" : "");
+						printf("<option %s value=\"dozent\">dozent</option>", ($val->getObjectClass() & DataFieldStructure::permMask("dozent")) ? "selected" : "");
+						printf("<option %s value=\"admin\">admin</option>", ($val->getObjectClass() & DataFieldStructure::permMask("admin")) ? "selected" : "");
+						printf("<option %s value=\"root\">root</option>", ($val->getObjectClass() & DataFieldStructure::permMask("root")) ? "selected" : "");
+						print "</select>";
+					}
+					else
+						print ($val->getObjectClass()) ? DataFieldStructure::getReadableUserClass($val->getObjectClass()) : _("alle");
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print "<select name=\"datafield_edit_perms\" style=\"{font-size:8 pt;}\">";
+						printf("<option %s value=\"user\">user</option>", ($val->getEditPerms() == "user") ? "selected" : "");
+						printf("<option %s value=\"autor\">autor</option>", ($val->getEditPerms() == "autor") ? "selected" : "");
+						printf("<option %s value=\"tutor\">tutor</option>", ($val->getEditPerms() == "tutor") ? "selected" : "");
+						printf("<option %s value=\"dozent\">dozent</option>", ($val->getEditPerms() == "dozent") ? "selected" : "");
+						printf("<option %s value=\"admin\">admin</option>", ($val->getEditPerms() == "admin") ? "selected" : "");
+						printf("<option %s value=\"root\">root</option>", ($val->getEditPerms() == "root") ? "selected" : "");
+						print "</select>";
+					} else
+						print $val->getEditPerms()
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print "<select name=\"datafield_view_perms\" style=\"{font-size:8 pt;}\">";
+						printf ("<option %s value=\"all\">%s</option>", ($val->getViewPerms() == "user") ? "selected" : "", _("alle"));
+						printf ("<option %s value=\"user\">user</option>", ($val->getViewPerms() == "user") ? "selected" : "");
+						printf ("<option %s value=\"autor\">autor</option>", ($val->getViewPerms() == "autor") ? "selected" : "");
+						printf ("<option %s value=\"tutor\">tutor</option>", ($val->getViewPerms() == "tutor") ? "selected" : "");
+						printf ("<option %s value=\"dozent\">dozent</option>", ($val->getViewPerms() == "dozent") ? "selected" : "");
+						printf ("<option %s value=\"admin\">admin</option>", ($val->getViewPerms() == "admin") ? "selected" : "");
+						printf ("<option %s value=\"root\">root</option>", ($val->getViewPerms() == "root") ? "selected" : "");
+						print "</select>";
+					}
+					elseif ($val->getViewPerms() == "all")
+						print _("alle");
+					else
+						print $val->getViewPerms();
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						printf ("<input type=\"TEXT\" maxlength=\"10\" size=\"5\" style=\"{font-size:8 pt; width: 30%%; text-align: center;}\" value=\"%s\" name=\"datafield_priority\" />", $val->getPriority());
+					} else
+						print $val->getPriority()
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?=$val->getCachedNumEntries()?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print  ' <input type="IMAGE" name="send_datafield" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" title="Änderungen übernehmen">';
+						printf ('<a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+					}
+					else
+						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
+					if (!$val->getCachedNumEntries())
+						printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+					?>
+				</td>
+			</tr>
+				<?
+			}
+			if ($admin_datafields_data["create_datafield"] == "userinstrole") {
+				$cssSw->switchClass()
+			?>
+			<tr>
+				<td class="<?=$cssSw->getClass()?>" align="left">
+					<a name="a"></a>
+					<font size="-1">
+						<input type="TEXT" maxlength="255" size="25" style="{font-size:8 pt; width: 90%;}" name="datafield_name" />
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+				<?
+					printDataFieldType(0, 0);
+				?>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<select name="datafield_class[]"  multiple size="7" style="{font-size:8 pt;}">";
+						<option value="FALSE"><?=_("alle")?></option>
+						<option value="user">user</option>
+						<option value="autor">autor</option>
+						<option value="tutor">tutor</option>
+						<option value="dozent">dozent</option>
+						<option value="admin">admin</option>
+						<option value="root">root</option>
+						</select>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<select name="datafield_edit_perms" style="{font-size:8 pt;}">";
+						<option value="user">user</option>
+						<option value="autor">autor</option>
+						<option value="tutor">tutor</option>
+						<option value="dozent">dozent</option>
+						<option value="admin">admin</option>
+						<option value="root">root</option>
+						</select>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<select name="datafield_view_perms" style="{font-size:8 pt;}">";
+						<option value="all"><?=_("alle")?></option>
+						<option value="user">user</option>
+						<option value="autor">autor</option>
+						<option value="tutor">tutor</option>
+						<option value="dozent">dozent</option>
+						<option value="admin">admin</option>
+						<option value="root">root</option>
+						</select>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<input type="TEXT" maxlength="10" size="5" style="{font-size:8 pt; width: 30%; text-align: center;}" name="datafield_priority" />
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					&nbsp;
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
+					<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> >
+					<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> ></a>
+				</td>
+			</tr>
+			<?
+			}
+			?>
+		</table>
+		<?
+		if ($admin_datafields_data["create_datafield"] != "userinstrole") {
+			?>&nbsp;<a href="<?=$PHP_SELF?>?create_new=userinstrole#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer anlegen"))?> /></a><?
+		}
+		?>
+		<br>&nbsp;
+		</td>
+	</tr>
+
+
+	<?
+	 /*
+	  * Datenfelder für Nutzer-Zusatzangaben in Veranstaltungen
+		*/
+	?>
+	<tr>
+		<td class="blank" colspan=2>
+		&nbsp;<b><font size="-1"><?=_("Datenfelder f&uuml;r Nutzer-Zusatzangaben in Veranstaltungen")?></font></b>
+		<table width = "99%" border="0" cellpadding="2" cellspacing="0" align="center">
+			<tr>
+				<td class="steel" width="20%" align="left" valign="bottom">
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="1" height="18" border="0" />
+					<font size="-1">
+					<b><?=_("Name")?></b>
+					</font>
+				</td>
+				<td class="steel" width="12%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Feldtyp")?></b>
+					</font>
+				</td>
+				<td class="steel" width="20%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Nutzerstatus")?></b>
+					</font>
+				</td>
+				<td class="steel" width="12%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("ben&ouml;tigter Status")?></b>
+					</font>
+				</td>
+				<td class="steel" width="12%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Sichtbarkeit")?></b>
+					</font>
+				</td>
+				<td class="steel" width="7%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Reihenfolge")?></b>
+					</font>
+				</td>
+				<td class="steel" width="10%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Eintr&auml;ge")?></b>
+					</font>
+				</td>
+				<td class="steel" width="7%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Aktion")?></b>
+					</font>
+				</td>
+			</tr>
+			<?
+			$datafields_list = DataFieldStructure::getDataFieldStructures("usersemdata");
+			$cssSw->resetClass();
+			foreach ($datafields_list as $key=>$val) {
+				$cssSw->switchClass()
+				?>
+			<tr>
+				<td class="<?=$cssSw->getClass()?>" align="left">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print "<a name=\"a\"></a>";
+						printf ("<input type=\"TEXT\" maxlength=\"255\" size=\"25\" style=\"{font-size:8 pt; width: 90%%;}\" value=\"%s\" name=\"datafield_name\" />", $val->getName());
+					} else
+						print $val->getName()
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+				<?
+					printDataFieldType($admin_datafields_data['change_datafield'], $val);
+				?>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if (($admin_datafields_data["change_datafield"] == $val->getID()) && (!$val->getCachedNumEntries())) {
+						print "<select name=\"datafield_class[]\"  multiple size=\"7\" style=\"{font-size:8 pt;}\">";
+						printf("<option %s value=\"FALSE\">"._("alle")."</option>", (!$val->getObjectClass()) ? "selected" : "");
+						printf("<option %s value=\"user\">user</option>", ($val->getObjectClass() & DataFieldStructure::permMask("user")) ? "selected" : "");
+						printf("<option %s value=\"autor\">autor</option>", ($val->getObjectClass() & DataFieldStructure::permMask("autor")) ? "selected" : "");
+						printf("<option %s value=\"tutor\">tutor</option>", ($val->getObjectClass() & DataFieldStructure::permMask("tutor")) ? "selected" : "");
+						printf("<option %s value=\"dozent\">dozent</option>", ($val->getObjectClass() & DataFieldStructure::permMask("dozent")) ? "selected" : "");
+						printf("<option %s value=\"admin\">admin</option>", ($val->getObjectClass() & DataFieldStructure::permMask("admin")) ? "selected" : "");
+						printf("<option %s value=\"root\">root</option>", ($val->getObjectClass() & DataFieldStructure::permMask("root")) ? "selected" : "");
+						print "</select>";
+					}
+					else
+						print ($val->getObjectClass()) ? DataFieldStructure::getReadableUserClass($val->getObjectClass()) : _("alle");
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print "<select name=\"datafield_edit_perms\" style=\"{font-size:8 pt;}\">";
+						printf("<option %s value=\"user\">user</option>", ($val->getEditPerms() == "user") ? "selected" : "");
+						printf("<option %s value=\"autor\">autor</option>", ($val->getEditPerms() == "autor") ? "selected" : "");
+						printf("<option %s value=\"tutor\">tutor</option>", ($val->getEditPerms() == "tutor") ? "selected" : "");
+						printf("<option %s value=\"dozent\">dozent</option>", ($val->getEditPerms() == "dozent") ? "selected" : "");
+						printf("<option %s value=\"admin\">admin</option>", ($val->getEditPerms() == "admin") ? "selected" : "");
+						printf("<option %s value=\"root\">root</option>", ($val->getEditPerms() == "root") ? "selected" : "");
+						print "</select>";
+					} else
+						print $val->getEditPerms()
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print "<select name=\"datafield_view_perms\" style=\"{font-size:8 pt;}\">";
+						printf ("<option %s value=\"all\">%s</option>", ($val->getViewPerms() == "user") ? "selected" : "", _("alle"));
+						printf ("<option %s value=\"user\">user</option>", ($val->getViewPerms() == "user") ? "selected" : "");
+						printf ("<option %s value=\"autor\">autor</option>", ($val->getViewPerms() == "autor") ? "selected" : "");
+						printf ("<option %s value=\"tutor\">tutor</option>", ($val->getViewPerms() == "tutor") ? "selected" : "");
+						printf ("<option %s value=\"dozent\">dozent</option>", ($val->getViewPerms() == "dozent") ? "selected" : "");
+						printf ("<option %s value=\"admin\">admin</option>", ($val->getViewPerms() == "admin") ? "selected" : "");
+						printf ("<option %s value=\"root\">root</option>", ($val->getViewPerms() == "root") ? "selected" : "");
+						print "</select>";
+					}
+					elseif ($val->getViewPerms() == "all")
+						print _("alle");
+					else
+						print $val->getViewPerms();
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						printf ("<input type=\"TEXT\" maxlength=\"10\" size=\"5\" style=\"{font-size:8 pt; width: 30%%; text-align: center;}\" value=\"%s\" name=\"datafield_priority\" />", $val->getPriority());
+					} else
+						print $val->getPriority()
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?=$val->getCachedNumEntries()?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print  ' <input type="IMAGE" name="send_datafield" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" title="Änderungen übernehmen">';
+						printf ('<a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+					}
+					else
+						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
+					if (!$val->getCachedNumEntries())
+						printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+					?>
+				</td>
+			</tr>
+				<?
+			}
+			if ($admin_datafields_data["create_datafield"] == "usersemdata") {
+				$cssSw->switchClass()
+			?>
+			<tr>
+				<td class="<?=$cssSw->getClass()?>" align="left">
+					<a name="a"></a>
+					<font size="-1">
+						<input type="TEXT" maxlength="255" size="25" style="{font-size:8 pt; width: 90%;}" name="datafield_name" />
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+				<?
+					printDataFieldType(0, 0);
+				?>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<select name="datafield_class[]"  multiple size="7" style="{font-size:8 pt;}">";
+						<option value="FALSE"><?=_("alle")?></option>
+						<option value="user">user</option>
+						<option value="autor">autor</option>
+						<option value="tutor">tutor</option>
+						<option value="dozent">dozent</option>
+						<option value="admin">admin</option>
+						<option value="root">root</option>
+						</select>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<select name="datafield_edit_perms" style="{font-size:8 pt;}">";
+						<option value="user">user</option>
+						<option value="autor">autor</option>
+						<option value="tutor">tutor</option>
+						<option value="dozent">dozent</option>
+						<option value="admin">admin</option>
+						<option value="root">root</option>
+						</select>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<select name="datafield_view_perms" style="{font-size:8 pt;}">";
+						<option value="all"><?=_("alle")?></option>
+						<option value="user">user</option>
+						<option value="autor">autor</option>
+						<option value="tutor">tutor</option>
+						<option value="dozent">dozent</option>
+						<option value="admin">admin</option>
+						<option value="root">root</option>
+						</select>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<input type="TEXT" maxlength="10" size="5" style="{font-size:8 pt; width: 30%; text-align: center;}" name="datafield_priority" />
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					&nbsp;
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
+					<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> >
+					<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> ></a>
+				</td>
+			</tr>
+			<?
+			}
+			?>
+		</table>
+		<?
+		if ($admin_datafields_data["create_datafield"] != "usersemdata") {
+			?>&nbsp;<a href="<?=$PHP_SELF?>?create_new=usersemdata#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer-Zusatzangaben anlegen"))?> /></a><?
+		}
+		?>
+		<br>&nbsp;
+		</td>
+	</tr>
+
+	<?
+	 /*
+	  * Datenfelder für Rollen in Einrichtungen
+		*/
+	?>
+	<tr>
+		<td class="blank" colspan=2>
+		&nbsp;<b><font size="-1"><?=_("Datenfelder f&uuml;r Rollen in Einrichtungen")?></font></b>
+		<table width = "99%" border="0" cellpadding="2" cellspacing="0" align="center">
+			<tr>
+				<td class="steel" width="20%" align="left" valign="bottom">
+					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="1" height="18" border="0" />
+					<font size="-1">
+					<b><?=_("Name")?></b>
+					</font>
+				</td>
+				<td class="steel" width="12%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Feldtyp")?></b>
+					</font>
+				</td>
+				<td class="steel" width="20%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Nutzerstatus")?></b>
+					</font>
+				</td>
+				<td class="steel" width="12%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("ben&ouml;tigter Status")?></b>
+					</font>
+				</td>
+				<td class="steel" width="12%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Sichtbarkeit")?></b>
+					</font>
+				</td>
+				<td class="steel" width="7%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Reihenfolge")?></b>
+					</font>
+				</td>
+				<td class="steel" width="10%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Eintr&auml;ge")?></b>
+					</font>
+				</td>
+				<td class="steel" width="7%" align="center" valign="bottom">
+					<font size="-1">
+					<b><?=_("Aktion")?></b>
+					</font>
+				</td>
+			</tr>
+			<?
+			$datafields_list = DataFieldStructure::getDataFieldStructures("roleinstdata");
+			$cssSw->resetClass();
+			foreach ($datafields_list as $key=>$val) {
+				$cssSw->switchClass()
+				?>
+			<tr>
+				<td class="<?=$cssSw->getClass()?>" align="left">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print "<a name=\"a\"></a>";
+						printf ("<input type=\"TEXT\" maxlength=\"255\" size=\"25\" style=\"{font-size:8 pt; width: 90%%;}\" value=\"%s\" name=\"datafield_name\" />", $val->getName());
+					} else
+						print $val->getName()
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+				<?
+					printDataFieldType($admin_datafields_data['change_datafield'], $val);
+				?>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if (($admin_datafields_data["change_datafield"] == $val->getID()) && (!$val->getCachedNumEntries())) {
+						print "<select name=\"datafield_class[]\"  multiple size=\"7\" style=\"{font-size:8 pt;}\">";
+						printf("<option %s value=\"FALSE\">"._("alle")."</option>", (!$val->getObjectClass()) ? "selected" : "");
+						printf("<option %s value=\"user\">user</option>", ($val->getObjectClass() & DataFieldStructure::permMask("user")) ? "selected" : "");
+						printf("<option %s value=\"autor\">autor</option>", ($val->getObjectClass() & DataFieldStructure::permMask("autor")) ? "selected" : "");
+						printf("<option %s value=\"tutor\">tutor</option>", ($val->getObjectClass() & DataFieldStructure::permMask("tutor")) ? "selected" : "");
+						printf("<option %s value=\"dozent\">dozent</option>", ($val->getObjectClass() & DataFieldStructure::permMask("dozent")) ? "selected" : "");
+						printf("<option %s value=\"admin\">admin</option>", ($val->getObjectClass() & DataFieldStructure::permMask("admin")) ? "selected" : "");
+						printf("<option %s value=\"root\">root</option>", ($val->getObjectClass() & DataFieldStructure::permMask("root")) ? "selected" : "");
+						print "</select>";
+					}
+					else
+						print ($val->getObjectClass()) ? DataFieldStructure::getReadableUserClass($val->getObjectClass()) : _("alle");
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print "<select name=\"datafield_edit_perms\" style=\"{font-size:8 pt;}\">";
+						printf("<option %s value=\"user\">user</option>", ($val->getEditPerms() == "user") ? "selected" : "");
+						printf("<option %s value=\"autor\">autor</option>", ($val->getEditPerms() == "autor") ? "selected" : "");
+						printf("<option %s value=\"tutor\">tutor</option>", ($val->getEditPerms() == "tutor") ? "selected" : "");
+						printf("<option %s value=\"dozent\">dozent</option>", ($val->getEditPerms() == "dozent") ? "selected" : "");
+						printf("<option %s value=\"admin\">admin</option>", ($val->getEditPerms() == "admin") ? "selected" : "");
+						printf("<option %s value=\"root\">root</option>", ($val->getEditPerms() == "root") ? "selected" : "");
+						print "</select>";
+					} else
+						print $val->getEditPerms()
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print "<select name=\"datafield_view_perms\" style=\"{font-size:8 pt;}\">";
+						printf ("<option %s value=\"all\">%s</option>", ($val->getViewPerms() == "user") ? "selected" : "", _("alle"));
+						printf ("<option %s value=\"user\">user</option>", ($val->getViewPerms() == "user") ? "selected" : "");
+						printf ("<option %s value=\"autor\">autor</option>", ($val->getViewPerms() == "autor") ? "selected" : "");
+						printf ("<option %s value=\"tutor\">tutor</option>", ($val->getViewPerms() == "tutor") ? "selected" : "");
+						printf ("<option %s value=\"dozent\">dozent</option>", ($val->getViewPerms() == "dozent") ? "selected" : "");
+						printf ("<option %s value=\"admin\">admin</option>", ($val->getViewPerms() == "admin") ? "selected" : "");
+						printf ("<option %s value=\"root\">root</option>", ($val->getViewPerms() == "root") ? "selected" : "");
+						print "</select>";
+					}
+					elseif ($val->getViewPerms() == "all")
+						print _("alle");
+					else
+						print $val->getViewPerms();
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						printf ("<input type=\"TEXT\" maxlength=\"10\" size=\"5\" style=\"{font-size:8 pt; width: 30%%; text-align: center;}\" value=\"%s\" name=\"datafield_priority\" />", $val->getPriority());
+					} else
+						print $val->getPriority()
+					?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+					<?=$val->getCachedNumEntries()?>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<?
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
+						print  ' <input type="IMAGE" name="send_datafield" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" title="Änderungen übernehmen">';
+						printf ('<a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+					}
+					else
+						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
+					if (!$val->getCachedNumEntries())
+						printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+					?>
+				</td>
+			</tr>
+				<?
+			}
+			if ($admin_datafields_data["create_datafield"] == "roleinstdata") {
+				$cssSw->switchClass()
+			?>
+			<tr>
+				<td class="<?=$cssSw->getClass()?>" align="left">
+					<a name="a"></a>
+					<font size="-1">
+						<input type="TEXT" maxlength="255" size="25" style="{font-size:8 pt; width: 90%;}" name="datafield_name" />
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+				<?
+					printDataFieldType(0, 0);
+				?>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<select name="datafield_class[]"  multiple size="7" style="{font-size:8 pt;}">";
+						<option value="FALSE"><?=_("alle")?></option>
+						<option value="user">user</option>
+						<option value="autor">autor</option>
+						<option value="tutor">tutor</option>
+						<option value="dozent">dozent</option>
+						<option value="admin">admin</option>
+						<option value="root">root</option>
+						</select>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<select name="datafield_edit_perms" style="{font-size:8 pt;}">";
+						<option value="user">user</option>
+						<option value="autor">autor</option>
+						<option value="tutor">tutor</option>
+						<option value="dozent">dozent</option>
+						<option value="admin">admin</option>
+						<option value="root">root</option>
+						</select>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<select name="datafield_view_perms" style="{font-size:8 pt;}">";
+						<option value="all"><?=_("alle")?></option>
+						<option value="user">user</option>
+						<option value="autor">autor</option>
+						<option value="tutor">tutor</option>
+						<option value="dozent">dozent</option>
+						<option value="admin">admin</option>
+						<option value="root">root</option>
+						</select>
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					<font size="-1">
+						<input type="TEXT" maxlength="10" size="5" style="{font-size:8 pt; width: 30%; text-align: center;}" name="datafield_priority" />
+					</font>
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center">
+					&nbsp;
+				</td>
+				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
+					<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> >
+					<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> ></a>
+				</td>
+			</tr>
+			<?
+			}
+			?>
+		</table>
+		<?
+		if ($admin_datafields_data["create_datafield"] != "roleinstdata") {
+			?>&nbsp;<a href="<?=$PHP_SELF?>?create_new=roleinstdata#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer-Zusatzangaben anlegen"))?> /></a><?
+		}
+		?>
+		<br>&nbsp;
+		</td>
+	</tr>
+
+
 	</form>
 </table>
 <?

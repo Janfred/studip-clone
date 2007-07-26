@@ -42,7 +42,7 @@ require_once 'lib/statusgruppe.inc.php';	// remove user from statusgroups
 require_once 'lib/dates.inc.php';	// remove appointments of user
 require_once 'lib/messaging.inc.php';	// remove messages send or recieved by user
 require_once 'lib/contact.inc.php';	// remove user from adressbooks
-require_once 'lib/classes/DataFields.class.php';	// remove extra data of user
+require_once 'lib/classes/DataFieldEntry.class.php';	// remove extra data of user
 require_once 'lib/classes/auth_plugins/StudipAuthAbstract.class.php';
 require_once 'lib/classes/StudipNews.class.php';
 require_once 'lib/object.inc.php';
@@ -787,8 +787,7 @@ class UserManagement {
 		}
 			
 		// delete the datafields
-		$DataFields = new DataFields($this->user_data['auth_user_md5.user_id']);
-		$DataFields->killAllEntries();				
+		$localEntries = DataFieldEntry::removeAll($this->user_data['auth_user_md5.user_id']);
 		
 		$user_cfg = new UserConfig();
 		$user_cfg->unsetAll($this->user_data['auth_user_md5.user_id']);

@@ -40,7 +40,7 @@ require_once('lib/show_dates.inc.php');
 require_once('lib/classes/DbView.class.php');
 require_once('lib/dbviews/sem_tree.view.php');
 require_once('lib/classes/DbSnapshot.class.php');
-require_once('lib/classes/DataFields.class.php');
+require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/classes/guestbook.class.php');
 require_once('lib/object.inc.php');
 require_once('lib/classes/score.class.php');
@@ -49,13 +49,36 @@ require_once('lib/user_visible.inc.php');
 require_once('lib/classes/StudipLitList.class.php');
 
 
+function prettyViewPermString ($viewPerms) {
+	switch ($viewPerms) {
+		case 'all'   : return 'alle';
+		case 'root'  : return 'Systemadministratoren';
+		case 'admin' : return 'Administratoren';
+		case 'dozent': return 'Dozenten';
+		case 'dozent': return 'Dozenten';
+		case 'tutor' : return 'Tutoren';
+		case 'autor' : return 'Studenten';
+		case 'user'  : return 'Nutzer';
+	}
+	return '';
+}
+
+
+function isDataFieldArrayEmpty ($array) {
+	foreach ($array as $v)
+		if (trim($v->getValue()) != '')
+			return false;
+	return true;
+}
+
+
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	if ($_REQUEST['kill_chat']){
 		chat_kill_chat($_REQUEST['kill_chat']);
 	}
-
 }
+
 if ($GLOBALS['VOTE_ENABLE']) {
 	include_once ("show_vote.php");
 }
@@ -156,8 +179,6 @@ if ($auth->auth["uid"]!=$user_id) {
 
 if ($auth->auth["uid"]==$user_id)
 	$homepage_cache_own = time();
-
-$DataFields = new DataFields($user_id);
 
 //Wenn er noch nicht in user_info eingetragen ist, kommt er ohne Werte rein
 $db->query("SELECT user_id FROM user_info WHERE user_id ='$user_id'");
@@ -284,6 +305,25 @@ while ($db3->next_record()) {
 	IF ($db3->f("Fax")!="")
 		echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Fax:") . " </b>", htmlReady($db3->f("Fax"));
 
+
+	$entries = DataFieldEntry::getDataFieldEntries(array($user_id, $institut));
+	if (!isDataFieldArrayEmpty($entries)) {
+		foreach ($entries as $entry) {
+			$view = DataFieldStructure::permMask($auth->auth['perm']) >= DataFieldStructure::permMask($entry->structure->getViewPerms());
+			$show_star = false;
+			if (!$view && ($user_id == $user->id)) {
+				$view = true;
+				$show_star = true;
+			}
+
+			if (trim($entry->getValue()) && $view) {
+				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . htmlReady($entry->getName()) . " </b>", $entry->getDisplayValue();
+				if ($show_star) echo ' *';
+			}
+		}
+	}
+
+
 	echo "</font><br>";
 }
 echo "</blockquote></td></tr>"
@@ -395,52 +435,61 @@ if ( ($lit_list = StudipLitList::GetFormattedListsByRange($user_id)) ) {
 }
 // Hier werden Lebenslauf, Hobbies, Publikationen und Arbeitsschwerpunkte ausgegeben:
 $ausgabe_format = '<table class="blank" width="100%%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><b>&nbsp;%s </b>%s</td></tr><tr><td class="steel1">&nbsp;</td></tr><tr><td class="steel1"><blockquote>%s</blockquote></td></tr><tr><td class="steel1">&nbsp;</td></tr></table><br />'."\n";
-$ausgabe_felder = array('lebenslauf' => _("Lebenslauf"), 
+$ausgabe_felder = array('lebenslauf' => _("Lebenslauf"),
 			'hobby' => _("Hobbies"),
 			'publi' => _("Publikationen"),
 			'schwerp' => _("Arbeitsschwerpunkte")
 			);
-			
+
 foreach ($ausgabe_felder as $key => $value) {
 	if ($db->f($key) != '') {
 		printf($ausgabe_format, $value, '', formatReady($db->f($key)));
 	}
 }
-//add the free administrable datafields (these field are system categories - the user is not allowed to change the catgeories)
-$localFields = $DataFields->getLocalFields($user_id, 'user', $auth->auth['perm']);
 
-foreach ($localFields as $val) {
-	if ($DataFields->checkPermission($perm, $val["view_perms"], $auth->auth["uid"], $user_id)) {
-		if ($val['content']) {
-			printf($ausgabe_format, htmlReady($val['name']),'', formatReady($val['content']) );
+// add the free administrable datafields (these field are system categories -
+// the user is not allowed to change the categories)
+foreach (DataFieldEntry::getDataFieldEntries($user_id) as $entry) {
+	if ($entry->structure->accessAllowed($perm, $auth->auth["uid"], $user_id)) {
+		if ($entry->getDisplayValue()) {
+			$vperms = $entry->structure->getViewPerms();
+			$visible = 'all' == $vperms
+			           ? _("sichtbar für alle")
+			           : sprintf(_("sichtbar für Sie und alle %s"),
+			                     prettyViewPermString($vperms));
+			printf($ausgabe_format,
+			       htmlReady($entry->getName()),
+			       "($visible)",
+			       $entry->getDisplayValue());
 		}
 	}
 }
+
 if ($GLOBALS["PLUGINS_ENABLE"]){
-	// PluginEngine aktiviert. 
+	// PluginEngine aktiviert.
 	// Prüfen, ob HomepagePlugins vorhanden sind.
-	$homepagepluginpersistence = PluginEngine::getPluginPersistence("Homepage");	
+	$homepagepluginpersistence = PluginEngine::getPluginPersistence("Homepage");
 	$activatedhomepageplugins = $homepagepluginpersistence->getAllActivatedPlugins();
 	if (!is_array($activatedhomepageplugins)){
 		$activatedhomepageplugins = array();
 	}
 	$requser = new StudIPUser();
 	$requser->setUserid($user_id);
-	
+
 	foreach ($activatedhomepageplugins as $activatedhomepageplugin){
 		$activatedhomepageplugin->setRequestedUser($requser);
 		// hier nun die HomepagePlugins anzeigen
 //		if ($activatedhomepageplugin->hasNavigation()){ // wieso ist hier eine Navigation erforderlich? hab das mal geaendert :-)
 		if ($activatedhomepageplugin->getStatusShowOverviewPage()){
 			echo '<table class="blank" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><img src="'. $activatedhomepageplugin->getPluginiconname() .'" border="0" /><b>&nbsp;' . $activatedhomepageplugin->getDisplaytitle() .' </b></td><td align="right" width="1%" class="topic" nowrap="nowrap">&nbsp;';
-					 
+
 			if ($requser->isSameUser($activatedhomepageplugin->getUser())){
 				echo '<a href="'. PluginEngine::getLink($activatedhomepageplugin,array(),'showAdministrationPage') .'"><img src="'. $GLOBALS['ASSETS_URL']. 'images/pfeillink.gif" border="0" alt="'._("Administration").'" title="' . _("Administration") .  '" ></a>';
 			}
 			echo '&nbsp;</td></tr>'."\n";
 			echo '<tr><td class="steel1" colspan="2">&nbsp;</td></tr><tr><td class="steel1" colspan="2"><blockquote>';
 			$activatedhomepageplugin->showOverview();
-			echo '</blockquote></td></tr><tr><td class="steel1" colspan="2">&nbsp;</td></tr></table><br>'."\n";	
+			echo '</blockquote></td></tr><tr><td class="steel1" colspan="2">&nbsp;</td></tr></table><br>'."\n";
 		}
 	}
 }

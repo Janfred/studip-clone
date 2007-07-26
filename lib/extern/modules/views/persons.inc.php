@@ -99,9 +99,9 @@ if(!$grouping) {
 }
 
 // generic data fields
-if ($generic_datafields = $this->config->getValue("Main", "genericdatafields")) {
-	$datafields_obj =& new DataFields();
-}
+$generic_datafields = $this->config->getValue("Main", "genericdatafields"); 
+//	$datafields_obj =& new DataFields();
+//}
 
 $repeat_headrow = $this->config->getValue("Main", "repeatheadrow");
 $link_persondetails = $this->getModuleLink("Persondetails",
@@ -195,12 +195,11 @@ foreach ($visible_groups as $group_id => $group) {
 
 			// generic data fields
 			if ($generic_datafields) {
-				$datafields = $datafields_obj->getLocalFields($$db_out->f("user_id"));
-				foreach ($generic_datafields as $datafield) {
-					$data["content"][$datafield] = $datafields[$datafield]["content"];
-				}
+				$localEntries = DataFieldEntry::getDataFieldEntries($$db_out->f('user_id'));
+//				$datafields = $datafields_obj->getLocalFields($$db_out->f("user_id"));
+				foreach ($generic_datafields as $id) 
+					$data['content'][$id] = is_object($localEntries[$id]) ? $localEntries[$id]->getDisplayValue() : '';
 			}
-
 			$out .= $this->elements["TableRow"]->toString($data);
 		}
 		$first_loop = FALSE;

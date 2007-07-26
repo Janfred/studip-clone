@@ -27,7 +27,7 @@ require_once('config_tools_semester.inc.php');
 require_once('lib/visual.inc.php');
 require_once('lib/statusgruppe.inc.php'); //Enthaelt Funktionen fuer Statusgruppen
 require_once('lib/log_events.inc.php'); // Logging
-require_once('lib/classes/DataFields.class.php'); //Enthaelt Funktionen fuer Statusgruppen
+require_once('lib/classes/DataFieldEntry.class.php'); //Enthaelt Funktionen fuer Statusgruppen
 require_once('lib/classes/StudipLitList.class.php');
 require_once('lib/classes/StudipNews.class.php');
 
@@ -197,8 +197,7 @@ if ($archive_kill) {
 		StudipNews::UnsetRssId($s_id);
 		
 		//kill the datafields
-		$DataFields = new DataFields($s_id);
-		$DataFields->killAllEntries();
+		DataFieldEntry::removeAll($s_id);
 		
 		//kill all wiki-pages
 		$query = sprintf ("DELETE FROM wiki WHERE range_id='%s'", $s_id);

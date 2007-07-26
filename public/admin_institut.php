@@ -39,7 +39,7 @@ require_once('lib/datei.inc.php');
 require_once('lib/statusgruppe.inc.php');
 require_once 'lib/functions.php';
 require_once('lib/classes/Modules.class.php');
-require_once('lib/classes/DataFields.class.php');
+require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/classes/StudipLitList.class.php');
 require_once('lib/classes/StudipLitSearch.class.php');
 require_once('lib/classes/StudipNews.class.php');
@@ -60,7 +60,6 @@ $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
 $Modules = new Modules;
-$DataFields = new DataFields();
 
 // Check if there was a submission
 while ( is_array($_POST)
@@ -146,10 +145,33 @@ while ( is_array($_POST)
 			break;
 		}
 
-		//Update the additional data-fields
-		if (StudipForm::IsSended('edit')) {
-			$DataFields->storeContentFromForm('edit', $i_id, 'inst');
+		// update additional datafields
+		if (is_array($datafield_id)) {
+			$ffCount = 0; // number of processed form fields
+			foreach ($datafield_id as $i=>$id) {
+				$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$datafield_type[$i]));
+				$entry  = DataFieldEntry::createDataFieldEntry($struct, $SessSemName[1]);
+				$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
+				if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
+					$entry->setValue('');
+					$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
+				}
+				elseif ($numFields == 1)
+					$entry->setValue($datafield_content[$ffCount]);
+				else
+					$entry->setValue(array_slice($datafield_content, $ffCount, $numFields));
+				$ffCount += $numFields;
+
+				if ($entry->isValid())
+					$entry->store();
+				else {
+					$invalidEntries[$struct->getID()] = $entry;
+				}
+			}
 		}
+		if (count($invalidEntries)	> 0)
+			$msg='error§<b>' . _('ung&uuml;ltige Eingaben (s.u.) wurden nicht gespeichert') .'</b>';
+		else
 		$msg="msg§<b>" . sprintf(_("Die Daten der Einrichtung \"%s\" wurden ver&auml;ndert."), htmlReady(stripslashes($Name))) . "</b>";
 		break;
 
@@ -205,10 +227,10 @@ while ( is_array($_POST)
 
 		// delete news-links
 		StudipNews::DeleteNewsRanges($i_id);
-		
+
 		//delete entry in news_rss_range
 		StudipNews::UnsetRssId($i_id);
-		
+
 		//updating range_tree
 		$query = "UPDATE range_tree SET name='$Name " . _("(in Stud.IP gelöscht)") . "',studip_object='',studip_object_id='' WHERE studip_object_id='$i_id'";
 		$db->query($query);
@@ -222,7 +244,7 @@ while ( is_array($_POST)
 		}
 
 		//kill the datafields
-		$DataFields->killAllEntries($i_id);
+		DataFieldEntry::removeAll($i_id);
 
 		//kill all wiki-pages
 		$query = sprintf ("DELETE FROM wiki WHERE range_id='%s'", $i_id);
@@ -415,25 +437,40 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 		</td></tr>
 		<?
 	}
-
-	//add the free adminstrable datafields
-			$datafield_form =& $DataFields->getLocalFieldsFormObject('edit', $i_id, "inst");
-			$datafield_form->field_attributes_default = array('style' => 'width:98%');
-			echo $datafield_form->getHiddenField(md5("is_sended"),1);
-			foreach ($datafield_form->getFormFieldsByName() as $field_id) {
-				$cssSw->switchClass();
-
-			?>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>">
-					<?=$datafield_form->getFormFieldCaption($field_id)?>:
-				</td>
-				<td class="<? echo $cssSw->getClass() ?>">
-				<?=$datafield_form->getFormField($field_id);?>
-				</td>
-			</tr>
-			<?
-			}
+	//add the free administrable datafields
+	$localEntries = DataFieldEntry::getDataFieldEntries($i_id, "inst");
+	if ($localEntries) {
+	  foreach ($localEntries as $entry) {
+	  	$value = $entry->getValue();
+	  	$color = '#000000';
+	  	$id = $entry->structure->getID();
+	  	if ($invalidEntries[$id]) {
+	  		$entry = $invalidEntries[$id];
+	  		$entry->structure->load();  // get complete structure information from database
+	  		$color = '#ff0000';
+	  	}
+	  	?>
+	  	<tr>
+	  		<td class="<? $cssSw->switchClass(); echo $cssSw->getClass(); ?>" >
+	  		   <font color="<?=$color?>"><?=htmlReady($entry->getName())?>:</font>
+	  	   </td>
+	  		<td class="<? echo $cssSw->getClass() ?>" >
+	  			<?
+	  			if ($perm->have_perm($entry->structure->getEditPerms())) {
+	  				print $entry->getHTML('datafield_content[]', $entry->structure->getID());  // submitted value of checkboxes is datafield_id
+	  				?>
+	  				<input type="HIDDEN" name="datafield_id[]" value="<?= $entry->structure->getID() ?>">
+	  				<input type="HIDDEN" name="datafield_type[]" value="<?= $entry->getType() ?>">
+	  				<?
+	  			}
+	  			else
+	  				print $entry->getValue();
+	  	?>
+	  	</td>
+	  </tr>
+	  <?
+	  }
+	}
 	?>
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" colspan=2 align="center">
 

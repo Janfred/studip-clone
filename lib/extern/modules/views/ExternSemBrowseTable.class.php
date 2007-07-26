@@ -37,7 +37,7 @@
 
 global $RELATIVE_PATH_CALENDAR;
 require_once('lib/classes/SemBrowse.class.php');
-require_once('lib/classes/DataFields.class.php');
+require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/classes/SemesterData.class.php');
 require_once('lib/dates.inc.php');
 
@@ -278,8 +278,8 @@ class ExternSemBrowseTable extends SemBrowse {
 			}
 			
 			// generic datafields
-			if ($generic_datafields = $this->module->config->getValue("Main", "genericdatafields"))
-				$datafields_obj =& new DataFields();
+			$generic_datafields = $this->module->config->getValue("Main", "genericdatafields");
+//				$datafields_obj =& new DataFields();
 			
 			if ($this->module->config->getValue("Main", "addinfo")) {
 				$info = "&nbsp;" . count($sem_data);
@@ -387,11 +387,10 @@ class ExternSemBrowseTable extends SemBrowse {
 						
 						// generic data fields
 						if (is_array($generic_datafields)) {
-							$datafields = $datafields_obj->getLocalFields($seminar_id);
-							foreach ($generic_datafields as $datafield) {
-								$data["content"][$datafield] =
-									 formatReady($datafields[$datafield]["content"], TRUE, TRUE);
-							}
+//							$datafields = $datafields_obj->getLocalFields($seminar_id);
+							$localEntries = DataFieldEntry::getDataFieldEntries($seminar_id);
+							foreach ($generic_datafields as $id)
+								$data["content"][$id] = $localEntries[$id]->getDisplayValue();
 						}
 						
 						$data["data_fields"] = $this->module->data_fields;

@@ -27,7 +27,7 @@ require_once ('lib/wiki.inc.php'); // getAllWikiPages for dump
 require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/language.inc.php');
-require_once ('lib/classes/DataFields.class.php');
+require_once ('lib/classes/DataFieldEntry.class.php');
 require_once ('lib/classes/Modules.class.php');
 require_once ('lib/classes/StudipLitList.class.php');
 require_once ('lib/classes/SemesterData.class.php');
@@ -43,7 +43,6 @@ function dump_sem($sem_id, $print_view = false) {
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
-	$DataFields = new DataFields($sem_id);
 	$Modules = new Modules;
 	$Modules = $Modules->getLocalModules($sem_id);
 
@@ -147,25 +146,24 @@ function dump_sem($sem_id, $print_view = false) {
 		}
 
 	//add the free adminstrable datafields
-	$localFields = $DataFields->getLocalFields();
+	$localEntries = DataFieldEntry::getDataFieldEntries($sem_id);
 
-	foreach ($localFields as $val) {
-		if ($val["content"]) {
-			$dump.="<tr><td width=\"15%\"><b>" . htmlReady($val["name"]) . ":&nbsp;</b></td><td align=left>";
-			$dump.= htmlReady($val["content"],1,1)."</td></tr>\n";
+
+	foreach ($localEntries as $entry) {
+		if (trim($entry->getValue())) {
+			$dump.="<tr><td width=\"15%\"><b>" . htmlReady($entry->getName()) . ":&nbsp;</b></td><td align=left>";
+			$dump.= $entry->getDisplayValue()."</td></tr>\n";
 		}
 	}
 
-	if ($db2->f("Sonstiges")!="")
-		{
+	if ($db2->f("Sonstiges")!="")	{
 		$dump.="<tr><td width=\"15%\"><b>" . _("Sonstiges:") . "&nbsp;</b></td><td align=left>";
 		$dump.= htmlReady($db2->f("Sonstiges"),1,1)."</td></tr>\n";
 		}
 
 	// Fakultaeten...
 	$db3->query("SELECT DISTINCT c.Name FROM seminar_inst a LEFT JOIN  Institute b USING(Institut_id) LEFT JOIN Institute c ON(c.Institut_id=b.fakultaets_id)  WHERE a.seminar_id = '$sem_id'");
-	IF ($db3->affected_rows() > 0)
-		{
+	if ($db3->affected_rows() > 0) {
 		$dump.= "<tr><td width=\"15%\"><b>" . _("Fakult&auml;t(en):") . "&nbsp;</b></td><td>";
 		WHILE ($db3->next_record())
 			$dump.= htmlReady($db3->f("Name"))."<br>";

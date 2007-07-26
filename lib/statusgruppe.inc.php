@@ -315,6 +315,29 @@ function GetStatusgruppen ($range_id, $user_id) {
 	return (is_array($ret)) ? $ret : FALSE;
 }
 
+
+function getOptionsOfStGroups ($userID) {
+	$db = new DB_Seminar();
+	$db->query("SELECT statusgruppe_id,visible,inherit FROM statusgruppe_user WHERE user_id='$userID'");
+	while ($db->next_record()) 
+		$ret[$db->f('statusgruppe_id')] = array('visible' => $db->f('visible') == 1, 'inherit' => $db->f('inherit') == 1);
+	return $ret;				
+}
+
+
+// visible and inherit must be '0' or '1'
+function setOptionsOfStGroup ($groupID, $userID, $visible, $inherit='') {
+	$db = new DB_Seminar();
+	$db->query("SELECT inherit, visible FROM statusgruppe_user WHERE statusgruppe_id='$groupID' AND user_id='$userID'");
+	if ($db->next_record()) {
+		$query = "REPLACE INTO statusgruppe_user SET statusgruppe_id='$groupID', user_id='$userID'";
+		$query .= ", visible='" . ($visible === '' ? $db->f('visible') : ($visible == '1' ? 1 : 0)) . "'";
+		$query .= ", inherit='" . ($inherit === '' ? $db->f('inherit') : ($inherit == '1' ? 1 : 0)) . "'";
+		$db->query($query);
+	}
+}
+
+
 /**
 * Returns the number of persons who are grouped in Statusgruppen for one range.
 * 

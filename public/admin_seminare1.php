@@ -34,7 +34,7 @@ require_once('lib/visual.inc.php');
 require_once('lib/admission.inc.php');
 require_once('lib/statusgruppe.inc.php');	//Funktionen der Statusgruppen
 require_once('lib/classes/StudipSemTreeSearch.class.php');
-require_once('lib/classes/DataFields.class.php');
+require_once('lib/classes/DataFieldEntry.class.php');
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGrunddaten";
 
@@ -121,7 +121,7 @@ if ($SessSemName[1])
 	$s_id=$SessSemName[1];
 
 $st_search = new StudipSemTreeSearch($s_id,"details");
-$DataFields = new DataFields($s_id);
+#$DataFields = new DataFields($s_id);
 
 function auth_check() {
 	global $perm,$s_id;
@@ -654,8 +654,29 @@ if ($s_send) {
 		$db3->query($query);
 
 		//Update the additional data-fields
-		if (StudipForm::IsSended('details')) {
-			$DataFields->storeContentFromForm('details');
+		if (is_array($datafield_id)) {
+			$ffCount = 0; // number of processed form fields
+			foreach ($datafield_id as $i=>$id) {
+				$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$datafield_type[$i]));
+				$entry  = DataFieldEntry::createDataFieldEntry($struct, $s_id);
+				$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
+				if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
+					$entry->setValue('');
+					$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
+				}
+				elseif ($numFields == 1)
+					$entry->setValue($datafield_content[$ffCount]);
+				else
+					$entry->setValue(array_slice($datafield_content, $ffCount, $numFields));
+				$ffCount += $numFields;
+				if ($entry->isValid())
+					$entry->store();
+				else
+					$invalidEntries[$id] = $entry;
+			}
+			$msg .= "msg§" . _("Die Grunddaten der Veranstaltung wurden ver&auml;ndert.") . "§";
+			if (count($invalidEntries) > 0)
+				$msg .= "error§" . _("Fehlerhafte Eingaben (s.u.) wurden nicht gespeichert") . "§";
 		}
 	}  // end if ($run)
 
@@ -1042,26 +1063,7 @@ if (($s_id) && (auth_check())) {
 				<input type="hidden" name="s_send" value="TRUE">
 				</td>
 			</tr>
-			<?
-			//add the free adminstrable datafields
-			$cssSw->switchClass();
-			$datafield_form =& $DataFields->getLocalFieldsFormObject('details');
-			$datafield_form->field_attributes_default = array('cols' => 58);
-			echo $datafield_form->getHiddenField(md5("is_sended"),1);
-			foreach ($datafield_form->getFormFieldsByName() as $field_id) {
-			?>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right>
-					<?=$datafield_form->getFormFieldCaption($field_id)?>
-				</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
-					&nbsp;
-				<?=$datafield_form->getFormField($field_id);?>
-				</td>
-			</tr>
-			<?
-			}
-			?>
+
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("TeilnehmerInnen")?></td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="teilnehmer" cols=58 rows=3><?php echo htmlReady($db->f("teilnehmer")) ?></textarea></td>
@@ -1085,6 +1087,45 @@ if (($s_id) && (auth_check())) {
 				<br />&nbsp; <font size="-1"><b><?=_("Achtung:")."&nbsp;</b>"._("Diese Ortsangabe wird nur angezeigt, wenn keine Angaben aus Zeiten oder Sitzungsterminen gemacht werden k&ouml;nnen.");?></font>
 				</td>
 			</tr>
+			<?
+			//add the free adminstrable datafields
+#			$localFields = $DataFields->getLocalFields($s_id);
+			$localEntries = DataFieldEntry::getDataFieldEntries($s_id);
+			foreach ($localEntries as $entry) {
+				$id = $entry->structure->getID();  // datafield id
+				$color = '#000000';
+				if ($invalidEntries[$id]) {        // if entered value is invalid...
+					$entry = $invalidEntries[$id];  // ... we keep it and show it in the corresponding form fields
+					$entry->structure->load();      // get all structure information from the database (view permissions etc.)
+					$color = 'ff0000';              // the corresponding name is highlighted
+				}
+
+			?>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right width="30%">
+					<font color="<?=$color?>"><?=htmlReady($entry->getName())?></font>
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
+					<?
+					if ($perm->have_perm($entry->structure->getEditPerms())) {
+						print '&nbsp;&nbsp;' . $entry->getHTML('datafield_content[]', $entry->structure->getID());
+					?>
+					   <input type="hidden" name="datafield_id[]" value="<?=$entry->structure->getID()?>">
+					   <input type="hidden" name="datafield_type[]" value="<?=$entry->getType() ?>">
+					<?
+					}
+					else {
+   					?>
+	   				&nbsp; <?= ($entry->getDisplayValue()) ? $entry->getDisplayValue() : "<font size=\"-1\"><b><i>"._("keine Inhalte vorhanden")."</i></b></font>";?><br />
+		   			<font size="-1>">&nbsp; <?="<i>"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</i>"?></font>
+			      <?
+					}
+					?>
+				</td>
+			</tr>
+			<?
+			}
+			?>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Sonstiges")?></td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="Sonstiges" cols=58 rows=3><?php echo htmlReady($db->f("Sonstiges")) ?></textarea></td>

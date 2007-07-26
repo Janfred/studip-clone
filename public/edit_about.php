@@ -36,7 +36,7 @@ require_once('lib/visual.inc.php');
 require_once 'lib/functions.php';
 require_once('lib/statusgruppe.inc.php');
 require_once('lib/language.inc.php');
-require_once('lib/classes/DataFields.class.php');
+require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/log_events.inc.php');
 
@@ -69,7 +69,7 @@ function about($username,$msg) {  // Konstruktor, prüft die Rechte
 
 	$this->db = new DB_Seminar;
 	$this->get_auth_user($username);
-	$this->DataFields = new DataFields($this->auth_user["user_id"]);
+	$this->dataFieldEntries = DataFieldEntry::getDataFieldEntries($this->auth_user["user_id"]);
 	$this->msg = $msg; //Meldungen restaurieren
 
 	// der user selbst natürlich auch
@@ -328,7 +328,7 @@ function inst_edit($inst_delete,$new_inst) {
 	return;
 }
 
-function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst, $visible) {
+function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst, $visible, $datafield_content, $datafield_id, $datafield_type, $datafield_sec_range_id, $group_id) {
 	if (is_array($raum)) {
 		while (list($inst_id, $detail) = each($raum)) {
 			$query = "UPDATE user_inst SET raum='$detail', sprechzeiten='$sprech[$inst_id]', ";
@@ -345,10 +345,59 @@ function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst, $visibl
 			}
 		}
 	}
-	return;
+	// process user role datafields
+	if (is_array($datafield_id)) {
+		$ffCount = 0; // number of processed form fields
+		foreach ($datafield_id as $i=>$id) {
+			$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$datafield_type[$i]));
+			$entry  = DataFieldEntry::createDataFieldEntry($struct, array($this->auth_user['user_id'], $datafield_sec_range_id[$i]));
+			$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
+			if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
+				$entry->setValue('');
+				$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
+			}
+			elseif ($numFields == 1)
+				$entry->setValue($datafield_content[$ffCount]);
+			else
+				$entry->setValue(array_slice($datafield_content, $ffCount, $numFields));
+			$ffCount += $numFields;
+
+			$entry->structure->load();
+			if ($entry->isValid())
+				$entry->store();
+			else
+				$invalidEntries[$struct->getID()] = $entry;
+		}
+		// change visibility of role data
+		foreach ($group_id as $groupID)
+			setOptionsOfStGroup($groupID, $this->auth_user['user_id'], ($visible[$groupID] == '0') ? '0' : '1');
+	}
+	return $invalidEntries;
 }
 
-function edit_leben($lebenslauf,$schwerp,$publi) {
+
+function edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $datafield_id, $datafield_type) {
+	//Update additional data-fields
+	$invalidEntries = array();
+	if (is_array($datafield_id)) {
+		$ffCount = 0; // number of processed form fields
+		foreach ($datafield_id as $i=>$id) {
+			$numFields = $this->dataFieldEntries[$id]->numberOfHTMLFields(); // number of form fields used by this datafield
+			if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
+				$this->dataFieldEntries[$id]->setValue('');
+				$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
+			}
+			elseif ($numFields == 1)
+				$this->dataFieldEntries[$id]->setValue($datafield_content[$ffCount]);
+			else
+				$this->dataFieldEntries[$id]->setValue(array_slice($datafield_content, $ffCount, $numFields));
+			$ffCount += $numFields;
+			if ($this->dataFieldEntries[$id]->isValid())
+				$resultDataFields |= $this->dataFieldEntries[$id]->store();
+			else
+				$invalidEntries[$id] = $this->dataFieldEntries[$id];
+		}
+	}
 
 	//check ob die blobs verändert wurden...
 	$this->db->query("SELECT  lebenslauf, schwerp, publi FROM user_info WHERE user_id='".$this->auth_user["user_id"]."'");
@@ -360,6 +409,7 @@ function edit_leben($lebenslauf,$schwerp,$publi) {
 		$this->priv_msg = _("Daten im Lebenslauf u.a. wurden geändert.\n");
 		restoreLanguage();
 	}
+	return $invalidEntries;
 }
 
 
@@ -720,7 +770,7 @@ if($nobodymsg && $logout && $auth->auth["uid"] == "nobody"){
 }
 $my_about = new about($username,$msg);
 $cssSw = new cssClassSwitcher;
-$DataFields = new DataFields($my_about->auth_user["user_id"]);
+#$DataFields = new DataFields($my_about->auth_user["user_id"]);
 
 if ($logout && $auth->auth["uid"] == "nobody")  // wir wurden gerade ausgeloggt...
 	{
@@ -783,8 +833,24 @@ if(check_ticket($studipticket)){
 	//Veränderungen an Raum, Sprechzeit, etc
 	if ($cmd == "special_edit")
 	 {
-		$my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst, $visible);
+		$invalidEntries = $my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst, $visible,
+																$datafield_content, $datafield_id, $datafield_type, $datafield_sec_range_id, $group_id);
+		$my_about->msg = "";
+		if (is_array($invalidEntries))
+			foreach ($invalidEntries as $entry)
+				$my_about->msg .= "error§" . sprintf(_("Fehlerhafter Eintrag im Feld <em>%s</em>: %s (Eintrag wurde nicht gespeichert)"), $entry->getName(), $entry->getDisplayValue()) . "§";
+
+		if (count($inherit) > 0) { // change inheritance state of a user role
+			$groupID = array_pop(array_keys($inherit)); // there is only 1 element in the array (and we get its key)
+			setOptionsOfStGroup($groupID, $my_about->auth_user['user_id'], '', $inherit[$groupID]);
+			$instID = GetRangeOfStatusgruppe($groupID);
+			$entries = DataFieldEntry::getDataFieldEntriesBySecondRangeID($instID);
+			foreach ($entries as $rangeID=>$entry) {
+				$entry->setSecondRangeID($groupID);  // content of institute fields is default for user role fields
+				$entry->store();
+			}
 		}
+	}
 
 	// change order of institutes
 	if ($cmd == 'move') {
@@ -811,8 +877,11 @@ if(check_ticket($studipticket)){
 	}
 
 	if ($cmd=="edit_leben")  {
-		$my_about->edit_leben($lebenslauf,$schwerp,$publi);
-		$DataFields->storeContentFromForm('pers');
+		$invalidEntries = $my_about->edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $datafield_id, $datafield_type);
+		$my_about->msg = "";
+		foreach ($invalidEntries as $entry)
+			$my_about->msg .= "error§" . sprintf(_("Fehlerhafter Eintrag im Feld <em>%s</em>: %s (Eintrag wurde nicht gespeichert)"), $entry->getName(), $entry->getDisplayValue()) . "§";
+		$my_about->get_auth_user($username);
 	}
 
 	// general settings from mystudip: language, jshover, accesskey
@@ -1386,14 +1455,6 @@ if ($view == 'Karriere') {
 					}
 					$i++;
 					echo "</td></tr>\n";
-					//statusgruppen
-					if ($gruppen = GetStatusgruppen($inst_id, $my_about->auth_user["user_id"])) {
-						$cssSw->switchClass();
-						echo "<tr><td class=\"" . $cssSw->getClass() . "\" width=\"20%\" align=\"left\">";
-						echo _("Funktion(en):") . " </td><td class=\"" . $cssSw->getClass() . "\" colspan=\"2\" ";
-						echo "width=\"80%\" align=\"left\">&nbsp; " . htmlReady(join(", ", array_values($gruppen)));
-						echo "</td></tr>\n";
-					}
 					echo "<input type=\"HIDDEN\" name=\"name[$inst_id]\" value=\"";
 					echo htmlReady($details["Name"]) . "\">\n";
 	 				$cssSw->switchClass();
@@ -1420,6 +1481,76 @@ if ($view == 'Karriere') {
 					echo "width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" ";
 					echo "size=\"" . round($max_col * 0.25 * 0.6) . "\"   name=\"fax[$inst_id]\" ";
 					echo "value=\"" . htmlReady($details["Fax"]) . "\"></td></tr>\n";
+
+					// Datenfelder für Rollen in Einrichtungen ausgeben
+				   echo '<tr><td colspan="3" align="left">';
+//				   echo '<b><font color="#0000ff"> ' . _('Daten der Einrichtung') . '</font></b>';
+				   echo "</td></tr>\n";
+				   $cssSw->resetClass();
+
+					$userID = $my_about->auth_user['user_id'];
+
+					// Default-Daten der Einrichtung
+					$entries = DataFieldEntry::getDataFieldEntries(array($userID, $inst_id));	// Default-Daten der Einrichtung
+				   foreach ($entries as $id=>$entry) {
+				   	$cssSw->switchClass();
+				   	echo '<tr><td class="' . $cssSw->getClass() . '" align="left">' . $entry->getName() . ':</td>';
+				   	echo '<td colspan="2" class="' . $cssSw->getClass() . '">&nbsp; ' . $entry->getHTML('datafield_content[]', $entry->structure->getID());
+						echo '<input type="HIDDEN" name="datafield_id[]" value="'.$entry->structure->getID().'">';
+						echo '<input type="HIDDEN" name="datafield_type[]" value="'.$entry->getType().'">';
+						echo '<input type="HIDDEN" name="datafield_sec_range_id[]" value="'.$inst_id.'">';
+				   	echo '</td></tr>';
+				   }
+					// Rollendaten anzeigen
+					if ($groups = GetStatusgruppen($inst_id, $userID)) {
+						$anchoredGroupID = $_GET['inherit'];  // id of group to be anchored
+						$groupOptions = getOptionsOfStGroups($userID);
+						$perms = $auth->auth['perm'];
+						foreach ($groups as $groupID=>$group) {
+							if ($groupID == $anchoredGroupID)
+								echo '<a name="a">';
+							echo '<tr><td></td><td align="left" colspan="2">';
+							echo '<b>' . _('Funktion:') . " " . $group . '</b>';
+//							echo '<td colspan="2" valign="middle">';
+							echo '<font size="-1"><br>' . _('Daten der Einrichtung') .' </font>';
+							$button = makeButton('uebernehmen' . ($groupOptions[$groupID]['inherit'] ? '2' : ''), 'src');
+							if ($perms == 'root' || $perms == 'admin')
+								printf('<input type="image" name="inherit[%s]" value="1" align="center" %s>', $groupID, $button);
+							else
+								print("<img align='center' $button>");
+							echo '<font size="-1"> ' . _('oder') . ' </font>';
+							$button = makeButton('abweichend' . ($groupOptions[$groupID]['inherit'] ? '' : '2'), 'src');
+							if ($perms == 'root' || $perms == 'admin')
+								printf('<input type="image" name="inherit[%s]" value="0" align="center" %s>', $groupID, $button);
+							else
+								print("<img align='center' $button>");
+							echo '<font size="-1"> ' . _('eingeben') . ', ' . _('diese Funktion ausblenden:') . '</font>';
+							printf('<input type="checkbox" name="visible[%s]" %s value="0">', $groupID, !$groupOptions[$groupID]['visible'] ? 'checked="checked"' : '');
+							echo "<input type=\"hidden\" name=\"group_id[]\" value=\"$groupID\">";
+							echo "</td></tr>\n";
+							$cssSw->resetClass();
+							if (!$groupOptions[$groupID]['inherit']) {
+								$entries = DataFieldEntry::getDataFieldEntries(array($userID, $groupID));
+								foreach ($entries as $id=>$entry) {
+									$cssSw->switchClass();
+									$td = '<td class="'.$cssSw->getClass().'" align="left">';
+									echo "<tr>$td</td>$td" . $entry->getName() . ':</td>';
+									echo '<td colspan="1" class="' . $cssSw->getClass() . '">&nbsp; ';
+									global $auth;
+									if ($entry->structure->editAllowed($auth->auth['perm'])) {
+										echo $entry->getHTML('datafield_content[]', $entry->structure->getID());
+										echo '<input type="HIDDEN" name="datafield_id[]" value="'.$entry->structure->getID().'">';
+										echo '<input type="HIDDEN" name="datafield_type[]" value="'.$entry->getType().'">';
+										echo '<input type="HIDDEN" name="datafield_sec_range_id[]" value="'.$groupID.'">';
+									}
+									else
+										echo $entry->getDisplayValue();
+									echo '</td></tr>';
+								}
+							}
+						}
+					}
+
 				}
 			}
 	 		$cssSw->switchClass();
@@ -1553,18 +1684,7 @@ if ($view == 'Lebenslauf') {
 	echo "<br>&nbsp; </blockquote></td></tr>\n<tr><td class=blank>";
 	echo '<form action="' . $_SERVER['PHP_SELF'] . '?cmd=edit_leben&username=' . $username . '&view=' . $view . '&studipticket=' . get_ticket() . '" method="POST" name="pers">';
 	echo '<table align="center" width="99%" align="center" border="0" cellpadding="2" cellspacing="0">' . "\n";
-	//add the free adminstrable datafields
-	$datafield_form =& $DataFields->getLocalFieldsFormObject('pers');
-	$datafield_form->field_attributes_default = array('cols' => round($max_col/1.3), 'style' => 'width:80%;');
-	echo $datafield_form->getHiddenField(md5("is_sended"),1);
-	foreach ($datafield_form->getFormFieldsByName() as $field_id) {
-		$cssSw->switchClass();
-		echo '<tr><td class="'. $cssSw->getClass() .'" colspan="2" align="left" valign="top"><blockquote><b>';
-		echo $datafield_form->getFormFieldCaption($field_id) .':</b><br />'."\n";
-		echo $datafield_form->getFormField($field_id);
-		echo "</blockquote></td></tr>\n";
 
-	}
 	echo '<tr><td class="'.$cssSw->getClass().'" colspan="2" align="left" valign="top"><blockquote><b>' . _("Lebenslauf:") . "</b><br />\n";
 	echo '<textarea  name="lebenslauf" style=" width: 80%" cols="'.round($max_col/1.3).'" rows="7" wrap="virtual">' . htmlReady($my_about->user_info['lebenslauf']).'</textarea><a name="lebenslauf"></a></blockquote></td></tr>'."\n";
 	if ($my_about->auth_user["perms"] == "dozent") {
@@ -1574,6 +1694,42 @@ if ($view == 'Lebenslauf') {
 		$cssSw->switchClass();
 		echo "<tr><td class=\"".$cssSw->getClass(). '" colspan="2" align="left" valign="top"><blockquote><b>' . _("Publikationen:") . "</b><br />\n";
 		echo '<textarea  name="publi" style=" width: 80%" cols="'.round($max_col/1.3) . '" rows="7" wrap="virtual">'.htmlReady($my_about->user_info['publi']).'</textarea><a name="publikationen"></a></blockquote></td></tr>'."\n";
+	}
+
+	//add the free administrable datafields
+	$userEntries = DataFieldEntry::getDataFieldEntries($my_about->auth_user['user_id']);
+	foreach ($userEntries as $entry) {
+		$id = $entry->structure->getID();
+		$color = '#000000';
+		if ($invalidEntries[$id]) {
+			$entry = $invalidEntries[$id];
+			$entry->structure->load();
+			$color = '#ff0000';
+		}
+		$db->query("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
+		$db->next_record();
+		$userid = $db->f("user_id");
+		if ($entry->structure->accessAllowed($perm, $userid, $db->f("user_id"))) {
+			$cssSw->switchClass();
+			echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>";
+			echo "<font color=\"$color\">" . htmlReady($entry->getName()). ":</font></b><br>";
+			if ($perm->have_perm($entry->structure->getEditPerms())) {
+				echo $entry->getHTML('datafield_content[]', $entry->structure->getID());
+				echo '<input type="HIDDEN" name="datafield_id[]" value="'.$entry->structure->getID().'">';
+				echo '<input type="HIDDEN" name="datafield_type[]" value="'.$entry->getType().'">';
+			}
+			else {
+				$db->query("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
+				$db->next_record();
+				$userid = $db->f("user_id");
+				if ($entry->structure->accessAllowed($perm, $userid, $db->f("user_id"))) {
+					echo formatReady($entry->getValue());
+					echo "<br><br><hr><font size=\"-1\">"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</font>";
+				}
+				else
+					echo "<font size=\"-1\">"._("Sie dürfen dieses Feld weder einsehen noch bearbeiten.")."</font>";
+			}
+		}
 	}
 
 	$cssSw->switchClass();

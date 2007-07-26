@@ -37,7 +37,7 @@ require_once ('lib/visual.inc.php'); // wir brauchen htmlReady
 require_once ('lib/admission.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/classes/StudipSemTree.class.php');
-require_once ('lib/classes/DataFields.class.php');
+require_once ('lib/classes/DataFieldEntry.class.php');
 
 ?>
 <body>
@@ -65,7 +65,7 @@ if (($SessSemName[1] != "") && (!isset($sem_id) || $SessSemName[1] == $sem_id)) 
 }
 
 $sem = new Seminar($sem_id);
-$DataFields = new DataFields($sem_id);
+#$DataFields = new DataFields($sem_id);
 
 //load all the data
 $db2->query("SELECT * FROM seminare WHERE Seminar_id = '$sem_id'");
@@ -300,8 +300,8 @@ print_infobox ($infobox,"details.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
 					<font size="-1">
-					<?	
-					
+					<?
+
 		      $next_date = $sem->getNextDate();
 					if ($next_date) {
 						echo '<b>'._("Nächster Termin").':</b><br />';
@@ -462,18 +462,18 @@ print_infobox ($infobox,"details.jpg");
 			</tr>
 			<? }
 				//add the free adminstrable datafields
-				$localFields = $DataFields->getLocalFields();
+				$localEntries = DataFieldEntry::getDataFieldEntries($sem_id);
 
-				foreach ($localFields as $val) {
-				if ($DataFields->checkPermission($perm, $val["view_perms"])) {
-					if ($val["content"]) {
+				foreach ($localEntries as $entry) {
+				if ($entry->structure->accessAllowed($perm)) {
+					if ($entry->getValue()) {
 				 ?>
 				 <tr>
 					 <td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp;
 					 </td>
 					 <td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 					 <?
-					 printf ("<font size=-1><b>" . htmlReady($val["name"]) . ":</b></font><br /><font size=-1>%s</font>", htmlReady($val["content"], TRUE, TRUE));
+					 printf ("<font size=-1><b>" . htmlReady($entry->getName()) . ":</b></font><br /><font size=-1>%s</font>", $entry->getDisplayValue());
 					 ?>
 					 </td>
 				 </tr>

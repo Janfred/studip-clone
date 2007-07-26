@@ -30,7 +30,7 @@ require_once 'lib/datei.inc.php';
 require_once 'config.inc.php';
 require_once 'lib/visual.inc.php';
 require_once 'lib/functions.php';
-require_once 'lib/classes/DataFields.class.php';
+require_once 'lib/classes/DataFieldEntry.class.php';
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
@@ -102,7 +102,6 @@ include 'lib/include/links_openobject.inc.php';
 include 'lib/showNews.inc.php';
 
 $sess->register("institut_main_data");
-$DataFields = new DataFields($SessSemName[1]);
 
 //Auf und Zuklappen News
 process_news_commands($institut_main_data);
@@ -151,13 +150,12 @@ process_news_commands($institut_main_data);
 		echo "<font size=\"-1\"><b>" . _("Fakult&auml;t:") . " </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br></font>";
 	}
 
-	$localFields = $DataFields->getLocalFields();
-
-	foreach ($localFields as $val) {
-		if ($DataFields->checkPermission($perm, $val["view_perms"]) && $val["content"]) {
-			echo "<font size=\"-1\"><b>" .htmlReady($val["name"]) . ": </b>";
-			echo htmlReady($val["content"]);
-			echo"<br></font>";
+	$localEntries = DataFieldEntry::getDataFieldEntries($SessSemName[1]);
+	foreach ($localEntries as $entry) {
+		if ($entry->structure->accessAllowed($perm) && $entry->getValue()) {
+			echo "<font size=\"-1\"><b>" .htmlReady($entry->getName()) . ": </b>";
+			echo $entry->getDisplayValue();
+			echo "<br>";
 		}
 	}
 

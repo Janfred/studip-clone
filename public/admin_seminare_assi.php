@@ -33,7 +33,7 @@ require_once ('lib/dates.inc.php');		//Terminfunktionen
 require_once ('lib/log_events.inc.php');
 require_once ('lib/classes/StudipSemTreeSearch.class.php');
 require_once ('lib/classes/Modules.class.php');
-require_once ('lib/classes/DataFields.class.php');
+require_once ('lib/classes/DataFieldEntry.class.php');
 
 $sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
 
@@ -63,7 +63,7 @@ $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
 $st_search = new StudipSemTreeSearch("dummy","sem_bereich",false);
-$DataFields = new DataFields();
+#$DataFields = new DataFields();
 $Modules = new Modules;
 $semester = new SemesterData;
 
@@ -99,15 +99,12 @@ $sess->register("links_admin_data");
 //
 if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id)) {
 
-	$sem_create_data = ''; // Zur Sicherheit: erstmal leeren
-
 	// Einträge in generischen Datenfelder auslesen und zuweisen
-	$sql = "SELECT * FROM datafields_entries WHERE range_id = '$cp_id'";
+	$sql = "SELECT datafields_entries.datafield_id, datafields_entries.content, datafields.name, datafields.type FROM datafields_entries LEFT JOIN datafields USING (datafield_id) WHERE range_id = '$cp_id'";
 	$db->query($sql);
 	while ($db->next_record()) {
-		$s_d_fields[$db->f("datafield_id")] = $db->f("content");
+		$s_d_fields[$db->f("datafield_id")] = array("type"=>$db->f("type"), "name"=>$db->f("name"), "value"=>$db->f("content"));
 	}
-	$sem_create_data["sem_datafields"] = $s_d_fields;
 
 	// Beteiligte Einrichtungen finden und zuweisen
 	$sql = "SELECT institut_id FROM seminar_inst WHERE seminar_id = '$cp_id'";
@@ -115,12 +112,14 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 	while ($db->next_record()) {
 		$sem_bet_inst[] = $db->f("institut_id");
 	}
-	$sem_create_data["sem_bet_inst"] = $sem_bet_inst;
 
 	// Veranstaltungsgrunddaten finden
 	$sql = "SELECT * FROM seminare WHERE Seminar_id = '$cp_id'";
 	$db->query($sql);
 	$db->next_record();
+	$sem_create_data = '';
+	$sem_create_data["sem_datafields"] = $s_d_fields;
+	$sem_create_data["sem_bet_inst"] = $sem_bet_inst;
 
 	// Termine
 	$serialized_metadata = $db->f("metadata_dates");
@@ -599,10 +598,22 @@ if ($form == 5) {
 	$sem_create_data["sem_paytxt"]=$sem_paytxt;
   	$sem_create_data["sem_datafields"]='';
 
-	//Update the additional data-fields
-	if (StudipForm::IsSended('form_5')) {
-		$datafield_form =& $DataFields->getLocalFieldsFormObject('form_5', false, "sem", $sem_create_data["sem_status"]);
-		$sem_create_data["sem_datafields"] = $datafield_form->form_values;
+	if (is_array($sem_datafield_id)) {
+		$ffCount = 0; // number of processed form fields
+		foreach ($sem_datafield_id as $i=>$id) {
+			$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$sem_datafield_type[$i]));
+			$entry  = DataFieldEntry::createDataFieldEntry($struct);
+			$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
+			if ($sem_datafield_type[$i] == 'bool' && $sem_datafield_content[$ffCount] != $id) { // unchecked checkbox?
+				$sem_create_data['sem_datafields'][$id] = array('type'=>'bool', 'value'=>'');
+				$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
+			}
+			elseif ($numFields == 1)
+				$sem_create_data['sem_datafields'][$id] = array('name'=>$sem_datafield_name[$i], 'type'=>$sem_datafield_type[$i], 'value'=>$sem_datafield_content[$ffCount]);
+			else
+				$sem_create_data['sem_datafields'][$id] = array('name'=>$sem_datafield_name[$i], 'type'=>$sem_datafield_type[$i], 'value'=>array_slice($sem_datafield_content, $ffCount, $numFields));
+			$ffCount += $numFields;
+		}
 	}
 
 	//Hat der User an den automatischen Werte rumgepfuscht? Dann denkt er sich wohl was :) (und wir benutzen die Automatik spaeter nicht!)
@@ -1638,8 +1649,14 @@ if (($form == 6) && ($jump_next_x))
 
 			//Store the additional datafields
 			if (is_array($sem_create_data["sem_datafields"])) {
-				foreach ($sem_create_data["sem_datafields"] as $key=>$val) {
-					$DataFields->storeContent(mysql_escape_string($val), $key, $sem_create_data["sem_id"]);
+				foreach ($sem_create_data['sem_datafields'] as $id=>$val) {
+					$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$val['type'], 'name'=>$val['name']));
+					$entry  = DataFieldEntry::createDataFieldEntry($struct, $sem_create_data['sem_id']);
+					$entry->setValue($val['value']);
+					if ($entry->isValid())
+						$entry->store();
+					else
+						$errormsg .= "error§" . sprintf(_("Fehlerhafte Eingabe im Feld '%s': %s (Eintrag wurde nicht gespeichert)"), $entry->getName(), $entry->getDisplayValue());
 				}
 			}
 
@@ -3539,41 +3556,7 @@ if ($level == 5)
 
 					<?
 					}
-					//add the free adminstrable datafields
-					$datafield_form =& $DataFields->getLocalFieldsFormObject('form_5', false, "sem", $sem_create_data["sem_status"]);
-					$datafield_form->form_values = $sem_create_data["sem_datafields"];
-					$datafield_form->field_attributes_default = array('cols' => 58);
-					echo $datafield_form->getHiddenField(md5("is_sended"),1);
-						foreach ($datafield_form->getFormFieldsByName() as $field_id) {
-						$cssSw->switchClass();
-						?>
-						<tr>
-							<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-								<?=$datafield_form->getFormFieldCaption($field_id)?>:
-							</td>
-							<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan="3">
-							<?
-							if ($datafield_form->form_fields[$field_id]['type'] == 'noform'){
-							?>
-								&nbsp;<font size="-1"><?=_("Diese Daten werden von ihrem zust&auml;ndigen Administrator erfasst.")?></font>
-								<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
-								<? echo tooltip(_("Diese Felder werden zentral durch die zuständigen Administratoren erfasst."), TRUE, TRUE) ?>
-								>
-							<?
-							} else {
-							?>
-								&nbsp;
-							<?=$datafield_form->getFormField($field_id);?>
-							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
-								<? echo tooltip(_("Bitte geben Sie in dieses Feld die entsprechenden Daten ein."), TRUE, TRUE) ?>
-							>
-							<?php
-							}
-							?>
-							</td>
-						</tr>
-						<?
-					}
+
 					if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
 					?>
 					<tr <? $cssSw->switchClass() ?>>
@@ -3616,8 +3599,47 @@ if ($level == 5)
 						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							&nbsp; <textarea name="sem_leistnw" cols=58 rows=4><? echo  htmlReady(stripslashes($sem_create_data["sem_leistnw"])) ?></textarea>
 							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
-								<? echo tooltip(_("Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden müssen."), TRUE, TRUE) ?>
+								<?= tooltip(_("Bitte geben Sie hier ein, welche Leistungsnachweise erbracht werden müssen."), TRUE, TRUE) ?>
 							>
+						</td>
+					</tr>
+					<?
+					}
+					//add the free adminstrable datafields
+					//$localFields = $DataFields->getLocalFields('', "sem", $sem_create_data["sem_class"]);
+					$dataFieldStructures = DataFieldStructure::getDataFieldStructures('sem', $sem_create_data['sem_class'], true);
+
+					foreach ($dataFieldStructures as $id=>$struct) {
+					?>
+					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<?= $cssSw->getClass() ?>" width="10%" align="right">
+							<?=htmlReady($struct->getName()) ?>
+						</td>
+						<td class="<?= $cssSw->getClass() ?>" width="90%" colspan=3>
+							<?
+							if ($perm->have_perm($struct->getEditPerms())) {
+								$entry = DataFieldEntry::createDataFieldEntry($struct, '', $sem_create_data['sem_datafields'][$id]);
+								$entry->setValue($sem_create_data["sem_datafields"][$id]['value']);
+								print "&nbsp;&nbsp;".$entry->getHTML('sem_datafield_content[]', $id);
+							?>
+<!--	&nbsp; <textarea name="sem_datafield_content[]" cols=58 rows=4><?= htmlReady(stripslashes($sem_create_data["sem_datafields"][$id])) ?></textarea> -->
+							<input type="HIDDEN" name="sem_datafield_id[]" value="<?= $id ?>">
+							<input type="HIDDEN" name="sem_datafield_type[]" value="<?= $struct->getType() ?>">
+							<input type="HIDDEN" name="sem_datafield_name[]" value="<?= $struct->getName() ?>">
+<!--							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
+								<? echo tooltip(_("Bitte geben Sie in dieses Feld die entsprechenden Daten ein."), TRUE, TRUE) ?>
+							> -->
+							<?
+							} else {
+							?>
+							&nbsp;<font size="-1"><?=_("Diese Daten werden von ihrem zust&auml;ndigen Administrator erfasst.")?></font>
+							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
+								<? echo tooltip(_("Diese Felder werden zentral durch die zuständigen Administratoren erfasst."), TRUE, TRUE) ?>
+							>
+							<?
+							}
+							?>
 						</td>
 					</tr>
 					<?

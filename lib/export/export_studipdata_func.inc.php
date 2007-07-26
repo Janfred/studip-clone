@@ -15,8 +15,8 @@
 // This file is part of Stud.IP
 // export_studipdata_func.inc.php
 // exportfunctions for the Stud.IP database
-// 
-// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de> 
+//
+// Copyright (c) 2002 Arne Schroeder <schroeder@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -34,19 +34,21 @@
 // +---------------------------------------------------------------------------+
 
 require_once("lib/classes/SemesterData.class.php");
+require_once("lib/classes/DataFieldEntry.class.php");
+require_once("lib/statusgruppe.inc.php");
 
 /**
 * Converts special charakters into unicode format.
 *
-* This function converts special charakters in the given sring into unicode format UTF-8. 
+* This function converts special charakters in the given sring into unicode format UTF-8.
 *
-* @access	public        
+* @access	public
 * @param		string	$xml_string	string to be converted
 * @return		string	converted string
 */
-function string_to_unicode ($xml_string) 
+function string_to_unicode ($xml_string)
 {
-	for ($x=0; $x<strlen($xml_string); $x++) 
+	for ($x=0; $x<strlen($xml_string); $x++)
 	{
 		$char = substr($xml_string, $x, 1);
 		$dosc = ord($char);
@@ -58,10 +60,10 @@ function string_to_unicode ($xml_string)
 /**
 * Writes the xml-stream into a file or to the screen.
 *
-* This function writes the xml-stream $object_data into a file or to the screen, 
-* depending on the content of $output_mode. 
+* This function writes the xml-stream $object_data into a file or to the screen,
+* depending on the content of $output_mode.
 *
-* @access	public        
+* @access	public
 * @param		string	$object_data	xml-stream
 * @param		string	$output_mode	switch for output target
 */
@@ -77,10 +79,10 @@ function output_data($object_data, $output_mode = "file")
 /**
 * Exports data of the given range.
 *
-* This function calls the functions that export the data sepcified by the given $export_range. 
+* This function calls the functions that export the data sepcified by the given $export_range.
 * It calls the function output_data afterwards.
 *
-* @access	public        
+* @access	public
 * @param		string	$range_id	Stud.IP-range_id for export
 */
 function export_range($range_id)
@@ -92,22 +94,22 @@ function export_range($range_id)
 
 //    Ist die Range-ID eine Einrichtungs-ID?
 	$db->query('SELECT * FROM Institute WHERE Institut_id = "' . $range_id . '"');
-	if (($db->next_record()) And ($db->f("Name") != "")) 
+	if (($db->next_record()) And ($db->f("Name") != ""))
 	{
 		$range_name = $db->f("Name");
 		output_data ( xml_header(), $o_mode);
 		$output_startet = true;
 		export_inst( $range_id );
-		
+
 	}
 
 //	Ist die Range-ID eine Fakultaets-ID? Dann auch untergeordnete Institute exportieren!
 	$db2->query('SELECT * FROM Institute WHERE fakultaets_id = "' . $range_id . '" ');
 	while ($db2->next_record())
-		if (($db2->f("Name") != "") And ($db2->f("Institut_id") != $range_id)) 
+		if (($db2->f("Name") != "") And ($db2->f("Institut_id") != $range_id))
 		{
 //			output_data ( xml_header(), $o_mode);
-			export_inst( $db2->f("Institut_id") );		
+			export_inst( $db2->f("Institut_id") );
 		}
 
 //    Ist die Range-ID eine Seminar-ID?
@@ -115,7 +117,7 @@ function export_range($range_id)
 	if (($db->next_record()) And ($db->f("Name") != ""))
 	{
 		$range_name = $db->f("Name");
-		if (!$output_startet) 
+		if (!$output_startet)
 			output_data ( xml_header(), $o_mode);
 		$output_startet = true;
 		export_inst( $db->f("Institut_id"), $db->f("Seminar_id") );
@@ -128,7 +130,7 @@ function export_range($range_id)
 //    Tree-Item ist ein Institut:
 	if ($tree_object->item_data['studip_object'] == 'inst')
 	{
-		if (!$output_startet) 
+		if (!$output_startet)
 			output_data ( xml_header(), $o_mode);
 		$output_startet = true;
 		export_inst( $tree_object->item_data['studip_object_id'] );
@@ -138,7 +140,7 @@ function export_range($range_id)
 
 	if (sizeof($inst_array) > 0)
 	{
-		if (!$output_startet) 
+		if (!$output_startet)
 			output_data ( xml_header(), $o_mode);
 		$output_startet = true;
 		while (list($key, $inst_ids) = each($inst_array))
@@ -146,7 +148,7 @@ function export_range($range_id)
 			export_inst($inst_ids);
 		}
 	}
-	
+
 	$db->query("SELECT sem_tree_id FROM sem_tree WHERE sem_tree_id = '$range_id' ");
 	if ($db->next_record()){
 		if (!$output_startet)  output_data(xml_header(), $o_mode);
@@ -160,7 +162,7 @@ function export_range($range_id)
 			}
 		}
 	}
-	
+
 	if ($ex_person_details && is_array($persons)){
 		export_persons(array_keys($persons));
 	}
@@ -171,10 +173,10 @@ function export_range($range_id)
 /**
 * Exports a Stud.IP-institute.
 *
-* This function gets the data of an institute and writes it into $data_object. 
+* This function gets the data of an institute and writes it into $data_object.
 * It calls one of the functions export_sem, export_pers or export_teilis and then output_data.
 *
-* @access	public        
+* @access	public
 * @param		string	$inst_id	Stud.IP-inst_id for export
 * @param		string	$ex_sem_id	allows to choose if only a specific lecture is to be exported
 */
@@ -192,14 +194,14 @@ function export_inst($inst_id, $ex_sem_id = "all")
 		if ($val == "") $val = $key;
 		if (($key == "type") AND ($INST_TYPE[$db->f($key)]["name"] != ""))
 			$data_object .= xml_tag($val, $INST_TYPE[$db->f($key)]["name"]);
-		elseif ($db->f($key) != "") 
+		elseif ($db->f($key) != "")
 			$data_object .= xml_tag($val, $db->f($key));
 	}
 	reset($xml_names_inst);
 	$db->query('SELECT Name FROM Institute WHERE Institut_id = "' . $db->f("fakultaets_id") . '" AND fakultaets_id = "' . $db->f("fakultaets_id") . '"');
 	$db->next_record();
 	{
-		if ($db->f("Name") != "") 
+		if ($db->f("Name") != "")
 			$data_object .= xml_tag($xml_groupnames_inst["childobject"], $db->f("Name"));
 	}
 	// freie Datenfelder ausgeben
@@ -209,18 +211,18 @@ function export_inst($inst_id, $ex_sem_id = "all")
 
 	switch ($ex_type)
 	{
-	case "veranstaltung": 
-		export_sem($inst_id, $ex_sem_id); 
+	case "veranstaltung":
+		export_sem($inst_id, $ex_sem_id);
 		break;
-	case "person": 
+	case "person":
 		if ($ex_sem_id == "all")
-			export_pers($inst_id); 
+			export_pers($inst_id);
 		elseif ($GLOBALS['perm']->have_studip_perm('tutor', $ex_sem_id) && $o_mode != "passthrough" && $o_mode != "direct")
-			export_teilis($inst_id, $ex_sem_id); 
+			export_teilis($inst_id, $ex_sem_id);
 		else
 			$data_object .= xml_tag("message", _("KEINE BERECHTIGUNG!"));
 		break;
-	default: 
+	default:
 		echo "</td></tr>";
 		my_error(_("Der gewählte Exportmodus wird nicht unterstützt."));
 		echo "</table></td></tr></table>";
@@ -236,10 +238,10 @@ function export_inst($inst_id, $ex_sem_id = "all")
 /**
 * Exports lecture-data.
 *
-* This function gets the data of the lectures at an institute and writes it into $data_object. 
+* This function gets the data of the lectures at an institute and writes it into $data_object.
 * It calls output_data afterwards.
 *
-* @access	public        
+* @access	public
 * @param		string	$inst_id	Stud.IP-inst_id for export
 * @param		string	$ex_sem_id	allows to choose if only a specific lecture is to be exported
 */
@@ -282,9 +284,9 @@ function export_sem($inst_id, $ex_sem_id = "all")
 		if (!is_array($ex_sem_id)) $ex_sem_id = array($ex_sem_id);
 		$addquery .= " AND seminare.Seminar_id IN('" . join("','", $ex_sem_id) . "') AND seminare.Institut_id='$inst_id' ";
 	}
-	
+
 	if (!$GLOBALS['perm']->have_perm('root')) $addquery .= " AND visible=1 ";
-	
+
 	$db->query('SELECT * FROM seminar_inst
 				LEFT JOIN seminare USING (Seminar_id)
 				WHERE seminar_inst.Institut_id = "' . $inst_id . '" ' . $addquery . '
@@ -292,7 +294,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 
 	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
 
-	while ($db->next_record()) 
+	while ($db->next_record())
 		if (($ex_class_array == "") OR ($ex_class_array[$SEM_TYPE[$db->f("status")]["class"]] == true))
 		// Nur gew&auml;hlte Veranstaltungsklassen exportieren
 		{
@@ -301,7 +303,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 			{
 				if ($group != "FIRSTGROUP")
 					$group_string .= xml_close_tag($xml_groupnames_lecture["subgroup1"]);
-				if ($group_tab_zelle == "status") 
+				if ($group_tab_zelle == "status")
 					$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup1"], $SEM_TYPE[$db->f($group_tab_zelle)]["name"]);
 				else
 					$group_string .= xml_open_tag($xml_groupnames_lecture["subgroup1"], $db->f($group_tab_zelle));
@@ -322,9 +324,9 @@ function export_sem($inst_id, $ex_sem_id = "all")
 			while ( list($key, $val) = each($xml_names_lecture))
 			{
 				if ($val == "") $val = $key;
-				if ($key == "status") 
+				if ($key == "status")
 					$data_object .= xml_tag($val, $SEM_TYPE[$db->f($key)]["name"]);
-				elseif ($key == "ort") 
+				elseif ($key == "ort")
 					$data_object .= xml_tag($val, decodeHTML( getRoom($db->f("seminar_id"), false) ) );
 				elseif (($key == "bereich") AND (($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"])))
 				{
@@ -340,7 +342,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
                                 }
 				elseif ($key == "admission_turnout")
 				{
-					$data_object .= xml_open_tag($val, sprintf ("%s", $db->f("admission_type")) ? _("max.") : _("erw.")) . $db->f($key) . xml_close_tag($val);
+						$data_object .= xml_open_tag($val, sprintf ("%s", $db->f("admission_type")) ? _("max.") : _("erw.")) . $db->f($key) . xml_close_tag($val);
 				}
 				elseif ($key == "teilnehmer_anzahl_aktuell")
 				{
@@ -348,31 +350,31 @@ function export_sem($inst_id, $ex_sem_id = "all")
 					$db3->next_record();
 					$data_object .= xml_tag($val, $db3->f(0));
 				}
-				elseif ($key == "metadata_dates") 
+				elseif ($key == "metadata_dates")
 				{
 					$data_object .= xml_open_tag( $xml_groupnames_lecture["childgroup1"] );
 					$vorb = vorbesprechung($db->f("seminar_id"), 'export');
-					if ($vorb != false) 
+					if ($vorb != false)
 						$data_object .= xml_tag($val[0], $vorb);
 					$data_object .= xml_tag($val[1], veranstaltung_beginn($db->f("seminar_id"), 'export'));
 					$data_object .= xml_tag($val[2], view_turnus($db->f("seminar_id")));
 					$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup1"] );
 				}
-				elseif ($db->f($key) != "") 
+				elseif ($db->f($key) != "")
 					$data_object .= xml_tag($val, $db->f($key));
 			}
-			$db2->query('SELECT seminar_user.position, auth_user_md5.user_id,auth_user_md5.username, auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title_front, user_info.title_rear FROM seminar_user 
-						LEFT JOIN user_info USING(user_id) 
-						LEFT JOIN auth_user_md5 USING(user_id) 
+			$db2->query('SELECT seminar_user.position, auth_user_md5.user_id,auth_user_md5.username, auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title_front, user_info.title_rear FROM seminar_user
+						LEFT JOIN user_info USING(user_id)
+						LEFT JOIN auth_user_md5 USING(user_id)
 						WHERE (seminar_user.status = "dozent") AND (seminar_user.Seminar_id = "' . $db->f("seminar_id") . '") ORDER BY seminar_user.position ');
 			$data_object .= "<" . $xml_groupnames_lecture["childgroup2"] . ">\n";
-			while ($db2->next_record()) 
+			while ($db2->next_record())
 				{
 					if ($ex_person_details) $persons[$db2->f('user_id')] = true;
 					$content_string = $db2->f("Vorname") . " " . $db2->f("Nachname");
-					if ($db2->f("title_front") != "") 
+					if ($db2->f("title_front") != "")
 						$content_string = $db2->f("title_front") . " " . $content_string;
-					if ($db2->f("title_rear") != "") 
+					if ($db2->f("title_rear") != "")
 						$content_string = $content_string . ", " . $db2->f("title_rear");
 					$data_object .= xml_tag($xml_groupnames_lecture["childobject2"], $content_string, array('key' => $db2->f('username')));
 				}
@@ -398,10 +400,10 @@ function export_sem($inst_id, $ex_sem_id = "all")
 /**
 * Exports member-list for a Stud.IP-lecture.
 *
-* This function gets the data of the members of a lecture and writes it into $data_object. 
+* This function gets the data of the members of a lecture and writes it into $data_object.
 * It calls output_data afterwards.
 *
-* @access	public        
+* @access	public
 * @param		string	$inst_id	Stud.IP-inst_id for export
 * @param		string	$ex_sem_id	allows to choose which lecture is to be exported
 */
@@ -413,17 +415,20 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 
 	if ($filter == "status")
 	{
-		$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$ex_sem_id' ORDER BY position ASC");
-		while ($db->next_record()) 
+		$statusgruppen = GetAllStatusgruppen($ex_sem_id);
+		$gruppe = GetRoleNames($statusgruppen, 0, '', true);
+
+		/*$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$ex_sem_id' ORDER BY position ASC");
+		while ($db->next_record())
 		{
 			$gruppe[$db->f("statusgruppe_id")] = $db->f("name");
-		}
+		}*/
 		$gruppe["no"] = _("keiner Funktion oder Gruppe zugeordnet");
 	}
 	else
-	{	
+	{
 		$db->query ("SELECT name, studiengaenge.studiengang_id FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) WHERE seminar_id = '$ex_sem_id' ");
-		while ($db->next_record()) 
+		while ($db->next_record())
 		{
 			$studiengang[$db->f("studiengang_id")] = $db->f("name");
 		}
@@ -451,61 +456,61 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 
 	$data_object .= xml_open_tag( $xml_groupnames_person["group"] );
 
-	while (list ($key1, $val1) = each ($gruppe)) 
+	while (list ($key1, $val1) = each ($gruppe))
 	{
 		if ($filter == "status") // Gruppierung nach Statusgruppen / Funktionen
-		{	
+		{
 			if ($key1 == "no")
 				$db->query ("SELECT ui.*, aum.*, su.*, FROM_UNIXTIME(su.mkdate) as registration_date, GROUP_CONCAT(studiengaenge.name SEPARATOR ', ') as nutzer_studiengaenge
 					FROM seminar_user su
-					LEFT JOIN auth_user_md5 aum USING ( user_id ) 
-					LEFT JOIN user_info ui USING ( user_id ) 
-					LEFT JOIN user_studiengang USING(user_id) 
+					LEFT JOIN auth_user_md5 aum USING ( user_id )
+					LEFT JOIN user_info ui USING ( user_id )
+					LEFT JOIN user_studiengang USING(user_id)
 					LEFT JOIN studiengaenge USING(studiengang_id)
 					WHERE seminar_id = '$ex_sem_id' GROUP BY aum.user_id ORDER BY Nachname");
-			else	
+			else
 				$db->query ("SELECT DISTINCT ui.*, aum.*, su.*,FROM_UNIXTIME(su.mkdate) as registration_date, GROUP_CONCAT(studiengaenge.name SEPARATOR ', ') as nutzer_studiengaenge
-					FROM statusgruppe_user  
+					FROM statusgruppe_user
 					LEFT JOIN seminar_user su USING (user_id)
-					LEFT JOIN auth_user_md5 aum USING ( user_id ) 
-					LEFT JOIN user_info ui USING ( user_id ) 
-					LEFT JOIN user_studiengang USING(user_id) 
+					LEFT JOIN auth_user_md5 aum USING ( user_id )
+					LEFT JOIN user_info ui USING ( user_id )
+					LEFT JOIN user_studiengang USING(user_id)
 					LEFT JOIN studiengaenge USING(studiengang_id)
 					WHERE statusgruppe_id = '$key1' AND seminar_id = '$ex_sem_id' GROUP BY aum.user_id ORDER BY Nachname");
-//					
+//
 		}
 		else // Gruppierung nach Status in der Veranstaltung / Einrichtung
 		if ($key1 == 'accepted'){
 			$db->query ("SELECT ui.*, aum.*, asu.studiengang_id as admission_studiengang_id,FROM_UNIXTIME(asu.mkdate) as registration_date , GROUP_CONCAT(studiengaenge.name SEPARATOR ', ') as nutzer_studiengaenge
 				FROM admission_seminar_user asu
-				LEFT JOIN user_info ui USING(user_id) 
-				LEFT JOIN auth_user_md5 aum USING(user_id) 
-				LEFT JOIN user_studiengang USING(user_id) 
+				LEFT JOIN user_info ui USING(user_id)
+				LEFT JOIN auth_user_md5 aum USING(user_id)
+				LEFT JOIN user_studiengang USING(user_id)
 				LEFT JOIN studiengaenge ON(user_studiengang.studiengang_id=studiengaenge.studiengang_id)
 				WHERE seminar_id = '$ex_sem_id' AND asu.status = 'accepted'  GROUP BY aum.user_id ORDER BY Nachname");
 		} elseif ($key1 == 'awaiting') {
 			$db->query("SELECT ui.*, aum.*, asu.studiengang_id as admission_studiengang_id, asu.position as admission_position, GROUP_CONCAT(studiengaenge.name SEPARATOR ', ') as nutzer_studiengaenge
 						FROM admission_seminar_user asu
-						LEFT JOIN user_info ui USING(user_id) 
-						LEFT JOIN auth_user_md5 aum USING(user_id) 
-						LEFT JOIN user_studiengang USING(user_id) 
+						LEFT JOIN user_info ui USING(user_id)
+						LEFT JOIN auth_user_md5 aum USING(user_id)
+						LEFT JOIN user_studiengang USING(user_id)
 						LEFT JOIN studiengaenge ON(user_studiengang.studiengang_id=studiengaenge.studiengang_id)
 						WHERE asu.seminar_id = '$ex_sem_id' AND asu.status != 'accepted'
 						GROUP BY aum.user_id ORDER BY position");
 		} else {
 			$db->query ("SELECT ui.*, aum.*, su.*,FROM_UNIXTIME(su.mkdate) as registration_date, GROUP_CONCAT(studiengaenge.name SEPARATOR ', ') as nutzer_studiengaenge
 				FROM seminar_user su
-				LEFT JOIN auth_user_md5 aum USING ( user_id ) 
-				LEFT JOIN user_info ui USING ( user_id ) 
-				LEFT JOIN user_studiengang USING(user_id) 
+				LEFT JOIN auth_user_md5 aum USING ( user_id )
+				LEFT JOIN user_info ui USING ( user_id )
+				LEFT JOIN user_studiengang USING(user_id)
 				LEFT JOIN studiengaenge ON(user_studiengang.studiengang_id=studiengaenge.studiengang_id)
 				WHERE seminar_id = '$ex_sem_id' AND su.status = '" . $key1 . "'   GROUP BY aum.user_id ORDER BY position, Nachname");
 		}
-		
+
 		$data_object_tmp = '';
 		$object_counter_tmp = $object_counter;
 		if ($db->num_rows())
-		{ 
+		{
 			$data_object_tmp .= xml_open_tag($xml_groupnames_person["subgroup1"], $val1);
 			while ($db->next_record()) {
 				if (($key1 != "no") OR ($person_out[$db->f("user_id")] != true)) // Nur Personen ausgeben, die entweder einer Gruppe angehoeren oder zur Veranstaltung gehoeren und noch nicht ausgegeben wurden.
@@ -517,7 +522,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 						if ($val == "") $val = $key;
 						if (($key == "admission_studiengang_id") AND ($db->f($key) != ""))
 							$data_object_tmp .= xml_tag($val, $studiengang[$db->f($key)]);
-						elseif ($db->f($key) != "") 
+						elseif ($db->f($key) != "")
 							$data_object_tmp .= xml_tag($val, $db->f($key));
 					}
 				// freie Datenfelder ausgeben
@@ -529,7 +534,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 			}
 			$data_object_tmp .= xml_close_tag($xml_groupnames_person["subgroup1"]);
 			if ($object_counter_tmp != $object_counter) $data_object .= $data_object_tmp;
-		}	
+		}
 	}
 
 	$data_object .= xml_close_tag( $xml_groupnames_person["group"]);
@@ -537,7 +542,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 	if ($filter != "status")
 	{
 		$db->query ("SELECT name, studiengaenge.studiengang_id FROM studiengaenge LEFT JOIN user_studiengang USING(studiengang_id) LEFT JOIN seminar_user USING(user_id) WHERE seminar_id = '$ex_sem_id' ");
-		while ($db->next_record()) 
+		while ($db->next_record())
 		{
 			$studiengang_count[$db->f("name")] ++;
 		}
@@ -545,7 +550,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 		{
 			$data_object .= xml_open_tag($xml_groupnames_studiengaenge["group"]);
 			for ($i2 = 0; $i2 < sizeof( $studiengang_count); $i2 ++)
-			while (list ($key, $val) = each ($studiengang_count)) 
+			while (list ($key, $val) = each ($studiengang_count))
 			{
 				$data_object .= xml_open_tag($xml_groupnames_studiengaenge["object"]);
 				$data_object .= xml_tag($xml_names_studiengaenge["name"], $key);
@@ -555,7 +560,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 			$data_object .= xml_close_tag($xml_groupnames_studiengaenge["group"]);
 		}
 	}
-	
+
 	output_data($data_object, $o_mode);
 	$data_object = "";
 }
@@ -563,11 +568,11 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 /**
 * Exports member-list for a Stud.IP-institute.
 *
-* This function gets the data of the members of an institute and writes it into $data_object. 
+* This function gets the data of the members of an institute and writes it into $data_object.
 * The order of the members depends on the grouping-option $filter.
 * It calls output_data afterwards.
 *
-* @access	public        
+* @access	public
 * @param		string	$inst_id	Stud.IP-inst_id for export
 * @param		string	$ex_sem_id	allows to choose which lecture is to be exported
 */
@@ -597,9 +602,9 @@ function export_pers($inst_id)
 
 	$data_object = xml_open_tag( $xml_groupnames_person["group"] );
 
-	$db->query('SELECT statusgruppen.name, 
+	$db->query('SELECT statusgruppen.name,
 		aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
-		ui.sprechzeiten, ui.Telefon, ui.Fax, aum.Email, 
+		ui.sprechzeiten, ui.Telefon, ui.Fax, aum.Email,
 		aum.username, info.Home, info.geschlecht, info.title_front, info.title_rear FROM statusgruppen
 		LEFT JOIN statusgruppe_user sgu USING(statusgruppe_id)
 		LEFT JOIN user_inst ui ON (ui.user_id = sgu.user_id AND ui.Institut_id = range_id AND ui.inst_perms!="user")
@@ -610,7 +615,7 @@ function export_pers($inst_id)
 
 	$data_found = false;
 
-	while ($db->next_record()) 
+	while ($db->next_record())
 	{
 		$data_found = true;
 		$group_string = "";
@@ -627,7 +632,7 @@ function export_pers($inst_id)
 		while ( list($key, $val) = each($xml_names_person))
 		{
 			if ($val == "") $val = $key;
-			if ($db->f($key) != "") 
+			if ($db->f($key) != "")
 				$data_object .= xml_tag($val, $db->f($key));
 		}
 	// freie Datenfelder ausgeben
@@ -650,7 +655,7 @@ function export_pers($inst_id)
 * Exports list of persons.
 *
 *
-* @access	public        
+* @access	public
 * @param		array	$persons	Stud.IP-user_ids for export
 */
 function export_persons($persons)
@@ -658,10 +663,10 @@ function export_persons($persons)
 	global $xml_names_person, $xml_groupnames_person, $object_counter, $o_mode, $ex_person_details;
 
 	$db = new DB_Seminar;
-	
+
 	if (is_array($persons)){
 		$db->query("SELECT * FROM auth_user_md5
-				LEFT JOIN user_info info USING(user_id) 
+				LEFT JOIN user_info info USING(user_id)
 				WHERE auth_user_md5.user_id IN('".join("','", $persons)."')");
 
 
@@ -688,7 +693,7 @@ function export_persons($persons)
 * helper function to export custom datafields
 *
 * only visible datafields are exported (depending on user perms)
-* @access	public        
+* @access	public
 * @param	string	$range_id	id for object to export
 * @param	string	$childgroup_tag	name of outer tag
 * @param	string	$childobject_tag	name of inner tags
@@ -696,18 +701,18 @@ function export_persons($persons)
 function export_datafields($range_id, $childgroup_tag, $childobject_tag){
 	$ret = '';
 	$d_fields = false;
-	$DataFields = new DataFields($range_id);
-	foreach($DataFields->getLocalFields() as $val) {
-		if ( ($val['view_perms'] == 'all' || $GLOBALS['perm']->have_perm($val['view_perms']) || $range_id == $GLOBALS['user']->id)
-		&& $val["content"] ) {
-			if (!$d_fields) $ret .= xml_open_tag($childgroup_tag);
-			$ret .= xml_open_tag($childobject_tag , $val["name"]);
-			$ret .= htmlspecialchars ($val["content"]);
+	$localEntries = DataFieldEntry::getDataFieldEntries($range_id);
+	foreach ($localEntries as $entry)
+		if ($entry->getValue()) {
+			if (!$d_fields)
+				$ret .= xml_open_tag( $childgroup_tag );
+			$ret .= xml_open_tag($childobject_tag , $entry->getName());
+			$ret .= string_to_unicode($entry->getDisplayValue(false), true);
 			$ret .= xml_close_tag($childobject_tag);
 			$d_fields = true;
 		}
-	}
-	if ($d_fields) $ret .= xml_close_tag($childgroup_tag);
+	if ($d_fields)
+		$ret .= xml_close_tag( $childgroup_tag );
 	return $ret;
 }
 ?>

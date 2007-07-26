@@ -40,7 +40,7 @@ require_once($GLOBALS["RELATIVE_PATH_EXTERN"].'/views/extern_html_templates.inc.
 require_once($GLOBALS["RELATIVE_PATH_EXTERN"].'/modules/views/ExternSemBrowse.class.php');
 require_once($GLOBALS["RELATIVE_PATH_EXTERN"].'/lib/extern_functions.inc.php');
 
-require_once('lib/classes/DataFields.class.php');
+require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/language.inc.php');
 require_once('lib/visual.inc.php');
 require_once('lib/dates.inc.php');
@@ -252,11 +252,12 @@ class ExternModuleLecturedetails extends ExternModule {
 			
 			// generic data fields
 			if ($generic_datafields = $this->config->getValue("Main", "genericdatafields")) {
-				$datafields_obj =& new DataFields($this->seminar_id);
-				$datafields = $datafields_obj->getLocalFields($this->seminar_id);
-				foreach ($generic_datafields as $datafield) {
+//				$datafields_obj =& new DataFields($this->seminar_id);
+//				$datafields = $datafields_obj->getLocalFields($this->seminar_id);
+				$localEntries = DataFieldEntry::getDataFieldEntries($this->seminar_id);
+				foreach ($generic_datafields as $id) {
 					if ($visible[++$j])
-						$data[$datafield] = formatReady($datafields[$datafield]["content"], TRUE, TRUE);
+						$data[$id] = $localEntries[$id]->getDisplayValue();
 				}
 			}
 			$out = $this->toStringMainTable($data, FALSE); 
