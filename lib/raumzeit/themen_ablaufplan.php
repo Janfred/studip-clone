@@ -197,6 +197,20 @@ $grenze = 0;
 				<TR>
 					<TD class="blank" colspan="6" height="2"></TD>
 				</TR>
+			<? if ($openAll) { ?>
+				<TR>
+					<TD class="steelgraulight" colspan="6" align="center" height="30" valign="middle">
+						<INPUT type="hidden" name="allOpen" value="TRUE">
+						<INPUT type="image" <?=makebutton('allesuebernehmen', 'src')?> name="editAll" align="absmiddle">&nbsp;&nbsp;&nbsp;
+						<A href="<?=$PHP_SELF?>?cmd=closeAll">
+							<IMG <?=makebutton('abbrechen', 'src')?> border="0" align="absmiddle">
+						</A>
+					</TD>
+				</TR>
+			<? } ?>
+				<TR>
+					<TD class="blank" colspan="6" height="2"></TD>
+				</TR>
 				<?
 
 				$termine = getAllSortedSingleDates($sem);
@@ -263,7 +277,7 @@ $grenze = 0;
 			if ($openAll) {
 				?>
 				<TR>
-					<TD class="steelgraulight" colspan="5" align="center" height="30" valign="middle">
+					<TD class="steelgraulight" colspan="6" align="center" height="30" valign="middle">
 						<INPUT type="hidden" name="allOpen" value="TRUE">
 						<INPUT type="image" <?=makebutton('allesuebernehmen', 'src')?> name="editAll" align="absmiddle">&nbsp;&nbsp;&nbsp;
 						<A href="<?=$PHP_SELF?>?cmd=closeAll">
