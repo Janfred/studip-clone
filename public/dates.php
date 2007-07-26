@@ -105,15 +105,6 @@ if ($cmd == 'openAll') $openAll = true;
 		<TD align="center" class="blank" width="80%" valign="top">
 			<TABLE width="99%" cellspacing="0" cellpadding="0" border="0">
 				<TR>
-					<TD colspan="10">
-						<BR/>
-						<?=_("Hier finden Sie alle Termine der Veranstaltung.")?><BR/>
-						<BR/>
-						<?=_("Klicken Sie auf ein Text-Icon, um zu den hochgeladenen Dateien des jeweiligen Termins zu gelangen.")?><BR/>
-						<BR/>
-					</TD>
-				</TR>
-				<TR>
 					<TD class="steelgraulight" colspan="10" height="24" align="center">
 						<A href="<?=$PHP_SELF?>?cmd=<?=($openAll) ? 'close' : 'open'?>All">
 							<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/<?=($openAll) ? 'close' : 'open'?>_all.gif" border="0" <?=tooltip(sprintf("Alle Termine %sklappen", ($openAll) ? 'zu' : 'auf'))?>>
