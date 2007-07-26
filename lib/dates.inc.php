@@ -128,8 +128,8 @@ function getRoomOverviewUnsteady ($range_id, $semester_id, $link=TRUE, $start_ti
 				$sem->applyTimeFilter($filter['filterStart'], $filter['filterEnd']);
 			}
 
+
 			$decorator = new RoomOverviewUnsteadyDecorator($sem->getUndecoratedData());
-			// TODO: a faster decorater, that uses direct queries to receive information
 
 			$decorator->sem =& $sem;
 			$decorator->xml_export = $xml_export;
@@ -192,25 +192,25 @@ function getRoomOverviewUnsteady ($range_id, $semester_id, $link=TRUE, $start_ti
 function getWeekday($day_num, $short = TRUE) {
 	switch ($day_num) {
 		case 0:
-			$short ? $day = 'So' : $day = 'Sonntag';
+			$short ? $day = _("So") : $day = _("Sonntag");
 			break;
 		case 1:
-			$short ? $day = 'Mo' : $day = 'Montag';
+			$short ? $day = _("Mo") : $day = _("Montag");
 			break;
 		case 2:
-			$short ? $day = 'Di' : $day = 'Dienstag';
+			$short ? $day = _("Di") : $day = _("Dienstag");
 			break;
 		case 3:
-			$short ? $day = 'Mi' : $day = 'Mittwoch';
+			$short ? $day = _("Mi") : $day = _("Mittwoch");
 			break;
 		case 4:
-			$short ? $day = 'Do' : $day = 'Donnerstag';
+			$short ? $day = _("Do") : $day = _("Donnerstag");
 			break;
 		case 5:
-			$short ? $day = 'Fr' : $day = 'Freitag';
+			$short ? $day = _("Fr") : $day = _("Freitag");
 			break;
 		case 6:
-			$short ? $day = 'Sa' : $day = 'Samstag';
+			$short ? $day = _("Sa") : $day = _("Samstag");
 			break;
 	}
 
@@ -242,9 +242,6 @@ Diese Funktion arbeitet im 'ad hoc' Modus und erwartet die einzelnen Variabeln d
 Konkrete Termine werde dabei NICHT mit beruecksichtigt!
 */
 function veranstaltung_beginn_from_metadata($reg_irreg, $sem_begin, $start_woche, $start_termin,$turnus_data, $return_mode='int') {
-	// TODO: needs to be checked on correct output
-	// TODO!!: der parameter start_termin ist bei der RaumZeit nicht mehr vorgesehen
-
 	$ret_time = 0;
     
     if( $return_mode != 'int'){
