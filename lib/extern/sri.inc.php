@@ -102,16 +102,16 @@ if (!$type) {
 // if there is no config_id or config_name, take the DEFAULT configuration
 if ($config_name) {
 	// check for valid configuration name and convert it into a config_id
-	if (!$config_id = get_config_by_name($range_id, $type, $config_name)) {
+	if (!$config_id = ExternConfig::GetConfigurationByName($range_id, $type, $config_name)) {
 		echo $EXTERN_ERROR_MESSAGE;
 		exit;
 	}
 }
 elseif (!$config_id) {
 	// check for standard configuration
-	if ($id = get_standard_config($range_id, $type))
+	if ($id = ExternConfig::GetStandardConfiguration($range_id, $type)) {
 		$config_id = $id;
-	else {
+	} else {
 		if ($EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG) {
 			// use default configuraion
 			$default = 'DEFAULT';
@@ -126,14 +126,14 @@ elseif (!$config_id) {
 // if there is no global_id or global_name, take the DEFAULT global configuration
 if ($global_name) {
 	// check for valid configuration name and convert it into a config_id
-	if (!$global_id = get_config_by_name($range_id, $type, $config_name)) {
+	if (!$global_id = ExternConfig::GetConfigurationByName($range_id, $type, $config_name)) {
 		echo $EXTERN_ERROR_MESSAGE;
 		exit;
 	}
 }
 elseif (!$global_id) {
 	// check for standard configuration
-	if ($id = get_global_config($range_id))
+	if ($id = ExternConfig::GetGlobalConfiguration($range_id))
 		$global_id = $id;
 	else {
 		// use no global configuration
@@ -154,12 +154,10 @@ foreach ($all_semester as $key => $sem_record) {
 if ($sem_offset == "-1") {
 	$start = $all_semester[$current - 1]["beginn"];
 	$end = $all_semester[$current - 1]["ende"];
-}
-elseif ($sem_offset == "+1") {
+} elseif ($sem_offset == "+1") {
 	$start = $all_semester[$current + 1]["beginn"];
 	$end = $all_semester[$current + 1]["ende"];
-}
-else {
+} else {
 	$start = $all_semester[$current]["beginn"];
 	$end = $all_semester[$current]["ende"];
 }
@@ -180,8 +178,9 @@ if ($_REQUEST['page_url'] != $module_obj->config->getValue('Main', 'sriurl')
 }
 
 $args = $module_obj->getArgs();
-for ($i = 0; $i < sizeof($args); $i++)
+for ($i = 0; $i < sizeof($args); $i++) {
 	$arguments[$args[$i]] = $$args[$i];
+}
 
 echo $sri_matches[1];
 $module_obj->printout($arguments);

@@ -118,7 +118,7 @@ class ExternElementMainNewsticker extends ExternElementMain {
 		$table .= $edit_form->editTextfieldGeneric("nodatatext", $title, $info, 50, 200);
 		
 		$title = _("Ticker sofort starten?");
-		$info = _("Wählen Sie diese Option, wenn das Modul den Ticker automatisch starten soll. Bei längeren Ladezeiten der Seite, in der Sie den Ticker integriert haben, kann es sinnvoll sein, den Ticker erst zu starten, wenn die Seite komplett geladen ist. Deaktivieren Sie dafür diese Option, und fügen Sie im <body>-Tag der Seite das Attribut onLoad=\"newsticker\" ein.");
+		$info = _("Wählen Sie diese Option, wenn das Modul den Ticker automatisch starten soll. Bei längeren Ladezeiten der Seite, in der Sie den Ticker integriert haben, kann es sinnvoll sein, den Ticker erst zu starten, wenn die Seite komplett geladen ist. Deaktivieren Sie dafür diese Option, und tragen Sie im <body>-Tag der Seite das Attribut onLoad=\"newsticker\" ein.");
 		$table .= $edit_form->editCheckboxGeneric("automaticstart", $title, $info, "1", "");
 		
 		$title = _("Nur JavaScript-Funktion ausgeben?");

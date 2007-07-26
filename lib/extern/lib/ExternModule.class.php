@@ -54,6 +54,7 @@ class ExternModule {
 	var $field_names = array();
 	var $data_fields = array();
 	var $args = array();
+	var $is_raw_output = FALSE;
 	
 	
 	/**
@@ -64,8 +65,6 @@ class ExternModule {
 		
 		if ($module_name != '') {
 			$class_name = "ExternModule" . $module_name;
-			// Vorläufiger Bugfix (Modul-Skript wird schon in extern.inc.php eingebunden)
-		//	require_once("extern/modules/$class_name.class.php");
 			$module =& new $class_name($range_id, $module_name, $config_id, $set_config, $global_id);
 			
 			return $module;
@@ -81,8 +80,9 @@ class ExternModule {
 		
 		// the module is called via extern.php (not via the admin area) and there is
 		// no config_id so it's necessary to check the range_id
-		if (!$config_id && !$this->checkRangeId($range_id))
+		if (!$config_id && !$this->checkRangeId($range_id)) {
 			$this->printError();
+		}
 		
 		foreach ($GLOBALS["EXTERN_MODULE_TYPES"] as $type => $module) {
 			if ($module["module"] == $module_name) {
@@ -90,15 +90,17 @@ class ExternModule {
 				break;
 			}
 		}
-		if ($this->type === NULL)
+		if (is_null($this->type)) {
 			$this->printError();
+		}
 		
 		$this->name = $module_name;
 		
-		if ($config_id)
-			$this->config =& new ExternConfig($range_id, $module_name, $config_id);
-		else 
-			$this->config =& new ExternConfig($range_id, $module_name);
+		if ($config_id) {
+			$this->config =& ExternConfig::GetInstance($range_id, $module_name, $config_id);
+		} else  {
+			$this->config =& ExternConfig::GetInstance($range_id, $module_name);
+		}
 		
 		// the "Main"-element is included in every module and needs information
 		// about the data this module handles with
@@ -107,22 +109,22 @@ class ExternModule {
 		
 		// instantiate the registered elements
 		foreach ($this->registered_elements as $name => $registered_element) {
-			if (is_int($name) || !$name)
+			if (is_int($name) || !$name) {
 				$this->elements[$registered_element] =& ExternElement::GetInstance($this->config, $registered_element);
-			else {
+			} else {
 				$this->elements[$name] =& ExternElement::GetInstance($this->config, $registered_element);
 				$this->elements[$name]->name = $name;
 			}
 		}
 				
-		if ($set_config != "" && $config_id == "") {
+		if ($set_config && !$config_id) {
 			$config = $this->getDefaultConfig();
-			$this->config->setConfiguration($set_config, $config);
+			$this->config->setDefaultConfiguration($config);
 		}
 		
 		// overwrite modules configuration with global configuration
-		if ($global_id) {
-			$this->config->setGlobalConfig(new ExternConfig($range_id, $module_name, $global_id),
+		if (!is_null($global_id)) {
+			$this->config->setGlobalConfig(ExternConfig::GetInstance($range_id, $module_name, $global_id),
 					$this->registered_elements);
 		}
 		
@@ -156,12 +158,29 @@ class ExternModule {
 	function getDefaultConfig () {
 		$default_config = array();
 		
+		if ($default_config = $this->getRangeDefaultConfig('global')) {
+			return $default_config;
+		}
 		foreach ($this->elements as $element) {
 			if ($element->isEditable())
 				$default_config[$element->getName()] = $element->getDefaultConfig();
 		}
 		
 		return $default_config;
+	}
+	
+	function getRangeDefaultConfig ($range_id = 'global') {
+		$db =& new DB_Seminar();
+		
+		$query = "SELECT config_type FROM extern_config WHERE config_id = '" . $this->getName() . "' AND range_id = '$range_id'";
+		$db->query($query);
+		if ($db->num_rows() == 1 && $db->next_record()) {
+			$config_obj =& ExternConfig::GetInstance($range_id, $this->getName(), $this->getName());
+			$config = $config_obj->getConfiguration();
+			return $config;
+		}
+		
+		return FALSE;
 	}
 	
 	/**
@@ -341,6 +360,72 @@ class ExternModule {
 	*
 	*/
 	function setup () {}
+	
+	function updateGenericDatafields ($element_name, $object_type) {
+		$datafields_config = $this->config->getValue($element_name, 'genericdatafields');
+		if (!is_array($datafields_config)) {
+			$datafields_config = array();
+		}
+		$datafields = get_generic_datafields($object_type);
+		foreach ((array) $datafields['ids'] as $df) {
+			if (!in_array($df, $datafields_config)) {
+				$datafields_config[] = $df;
+			}
+		}
+		$this->config->setValue($element_name, 'genericdatafields', $datafields_config);
+		$this->config->store();
+	}
+	
+	function insertDatafieldMarkers ($object_type, &$markers, $element_name) {
+		$datafields_config = $this->config->getValue($element_name, 'genericdatafields');
+		if (!is_array($datafields_config)) {
+			$datafields_config = array();
+		}
+		$datafields_obj =& new DataFields();
+		$datafields = $datafields_obj->getFields($object_type);
+		$i = 1;
+		foreach ((array) $datafields_config as $df_id) {
+			if (isset($datafields[$df_id])) {
+				$markers[$element_name][] = array("###DATAFIELD_$i###", $datafields[$df_id]['name']);
+			}
+			$i++;
+		}
+	}
+	
+	function setRawOutput ($raw = TRUE) {
+		$this->is_raw_output = $raw;
+	}
+	
+	function extHtmlReady ($text) {
+		if ($this->is_raw_output) {
+			return $text;
+		}
+		return htmlReady($text);
+	}
+	
+	function extFormatReady ($text) {
+		if ($this->is_raw_output) {
+			return $text;
+		}
+		return formatReady($text, TRUE, TRUE, FALSE);
+	}
+	
+	function extWikiReady ($text, $show_comments = 'all') {
+		if ($this->is_raw_output) {
+			return $text;
+		}
+		return wikiReady($text, TRUE, TRUE, $show_comments);
+	}
+	
+	function GetOrderedModuleTypes () {
+		$order = array();
+		foreach ($GLOBALS['EXTERN_MODULE_TYPES'] as $key => $module) {
+			$order[$GLOBALS['EXTERN_MODULE_TYPES'][$key]['order']] = $key;
+		}
+		ksort($order, SORT_NUMERIC);
+		return $order;
+	}
+		
 	
 }
 ?>

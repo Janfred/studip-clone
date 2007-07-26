@@ -101,39 +101,58 @@ class ExternEdit {
 		return htmlentities($this->config->getValue($this->element_name, $attribute), ENT_QUOTES);
 	}
 
-	function getEditFormContent ($attributes, $tag_headlines = "") {
-		$previous_tag = "";
+	function getEditFormContent ($attributes, $tag_headlines = NULL) {
+		$previous_tag = '';
 
-		reset($attributes);
 		foreach ($attributes as $attribute) {
-			$attribute_part = explode("_", $attribute);
+			$attribute_part = explode('_', $attribute);
+			
 			if (!$attribute_part[2] && $attribute_part[1]) {
-				$edit_function = "edit" . $attribute_part[1];
+				$edit_function = 'edit' . $attribute_part[1];
 
 				if ($attribute_part[0] != $previous_tag) {
-					if ($previous_tag != "") {
+					if ($previous_tag != '') {
 						$out .= $this->editContentTable($headline, $table);
 						$out .= $this->editBlankContent();
-						if ($tag_headlines == "")
+						if (!is_array($tag_headlines)) {
 							$headline = sprintf(_("Angaben zum HTML-Tag &lt;%s&gt;"), $attribute_part[0]);
-						else
+						} else {
 							$headline = $tag_headlines[$attribute_part[0]];
+						}
 						$headline = $this->editHeadline($headline);
-						$table = "";
-					}
-					else {
-						if ($tag_headlines == "")
+						$table = '';
+					} else {
+						if (!is_array($tag_headlines)) {
 							$headline = sprintf(_("Angaben zum HTML-Tag &lt;%s&gt;"), $attribute_part[0]);
-						else
+						} else {
 							$headline = $tag_headlines[$attribute_part[0]];
+						}
 						$headline = $this->editHeadline($headline);
 					}
-
 					$previous_tag = $attribute_part[0];
 				}
 				$table .= $this->$edit_function($attribute);
+				
+			} elseif ($attribute_part[2] && $tag_headlines["{$attribute_part[0]}_{$attribute_part[2]}"]) {
+			
+				$attribute_name = $attribute_part[0] . '_' . $attribute_part[2];
+				$edit_function = 'edit' . $attribute_part[1];
+				if ($attribute_name != $previous_tag) {
+					if ($previous_tag != '') {
+						$out .= $this->editContentTable($headline, $table);
+						$out .= $this->editBlankContent();
+						$headline = $this->editHeadline($tag_headlines[$attribute_name]);
+						$table = '';
+					} else {
+						$headline = $this->editHeadline($tag_headlines[$attribute_name]);
+					}
+					$previous_tag = $attribute_name;
+				}
+				$table .= $this->$edit_function($attribute);
 			}
+			
 		}
+		
 		$out .= $this->editContentTable($headline, $table);
 
 		return $out;
@@ -152,7 +171,7 @@ class ExternEdit {
 		return $out;
 	}
 
-	function editSubmit ($module_name, $config_id, $element_name = "") {
+	function editSubmit ($module_name, $config_id, $element_name = "", $hidden = NULL) {
 		$this->css->resetClass();
 		$this->css->switchClass();
 
@@ -165,13 +184,19 @@ class ExternEdit {
 		$out .= " border=\"0\" valign=\"absmiddle\"></a>\n";
 		$out .= "<input type=\"hidden\" name=\"config_id\" value=\"$config_id\">";
 		$out .= "<input type=\"hidden\" name=\"mod\" value=\"$module_name\">";
-		if ($element_name)
+		if ($element_name) {
 			$out .= "<input type=\"hidden\" name=\"edit\" value=\"$element_name\">";
+		}
+		if (!is_null($hidden)) {
+			foreach ($hidden as $name => $value) {
+				$out .= "<input type=\"hidden\" name=\"$name\" value=\"$value\">";
+			}
+		}
 		$out .= "</td></tr>";
 
 		return $out;
 	}
-
+	
 	function editHeadline ($headline) {
 		$headline = "&nbsp; $headline";
 
@@ -301,7 +326,7 @@ class ExternEdit {
 		}
 
 		$out = "<tr><td>\n<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
-		$out .= "<tr><td class=\"$class\"><font size=\"2\"><b>$text<b></font></td></tr>\n";
+		$out .= "<tr><td class=\"$class\">$text</td></tr>\n";
 		$out .= "</table>\n</td></tr>\n";
 
 		return $out;

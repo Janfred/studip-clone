@@ -48,7 +48,7 @@ if ($page_url) {
 
 // range_id and module are always necessary
 if ($range_id && $module) {
-	$module = ucfirst(strtolower($module));
+	// $module = ucfirst(strtolower($module));
 	
 	// Is it a valid module name?
 	reset($EXTERN_MODULE_TYPES);
@@ -66,16 +66,15 @@ if ($range_id && $module) {
 	
 	if ($config_name) {
 		// check for valid configuration name and convert it into a config_id
-		if (!$config_id = get_config_by_name($range_id, $type, $config_name)) {
+		if (!$config_id = ExternConfig::GetConfigurationByName($range_id, $type, $config_name)) {
 			echo $EXTERN_ERROR_MESSAGE;
 			exit;
 		}
-	}
-	elseif (!$config_id) {
+	} elseif (!$config_id) {
 		// check for standard configuration
-		if ($id = get_standard_config($range_id, $type))
+		if ($id = ExternConfig::GetStandardConfiguration($range_id, $type)) {
 			$config_id = $id;
-		else {
+		} else {
 			if ($EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG) {
 				// use default configuraion
 				$default = 'DEFAULT';
@@ -87,8 +86,7 @@ if ($range_id && $module) {
 		}
 	}
 	// the module itself validates the rest
-}
-else {
+} else {
 	// without a range_id and a module-name there's no chance to printout data
 	// except an error message
 	echo $EXTERN_ERROR_MESSAGE;
@@ -96,8 +94,9 @@ else {
 }
 
 // check for standard global configuration
-if (!$global_id && ($global_configuration = get_global_config($range_id)))
+if (!$global_id && ($global_configuration = ExternConfig::GetGlobalConfiguration($range_id))) {
 	$global_id = $global_configuration;
+}
 
 // all parameters ok, instantiate module and print data
 foreach ($EXTERN_MODULE_TYPES as $type) {
@@ -110,16 +109,19 @@ foreach ($EXTERN_MODULE_TYPES as $type) {
 }
 
 // Workaround to include data in scripts
-if ($incdata)
+if ($incdata) {
 	$module_obj->config->config["Main"]["incdata"] = 1;
+}
 
 $args = $module_obj->getArgs();
-for ($i = 0; $i < sizeof($args); $i++)
+for ($i = 0; $i < sizeof($args); $i++) {
 	$arguments[$args[$i]] = $$args[$i];
+}
 
-if ($preview)
+if ($preview) {
 	$module_obj->printoutPreview();
-else
+} else {
 	$module_obj->printout($arguments);
+}
 
 ?>

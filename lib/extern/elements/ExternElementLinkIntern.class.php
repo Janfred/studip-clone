@@ -5,7 +5,7 @@
 * 
 * 
 *
-* @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @author		Peter Thienel <thienel@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
 * @access		public
 * @modulegroup	extern
@@ -35,6 +35,7 @@
 // +---------------------------------------------------------------------------+
 
 require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternElement.class.php");
+require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . '/lib/ExternConfig.class.php');
 
 class ExternElementLinkIntern extends ExternElement {
 
@@ -54,8 +55,6 @@ class ExternElementLinkIntern extends ExternElement {
 		$this->name = "LinkIntern";
 		$this->real_name = _("Links");
 		$this->description = _("Eigenschaften der Schrift für Links.");
-		$this->headlines = array(_("Schriftformatierung"), _("Linkformatierung"),
-				_("Verlinkung zum Modul"));
 	}
 	
 	/**
@@ -63,7 +62,7 @@ class ExternElementLinkIntern extends ExternElement {
 	*/
 	function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
-		global $EXTERN_MODULE_TYPES;
+		
 		$out = "";
 		$table = "";
 		if ($edit_form == "")
@@ -75,29 +74,45 @@ class ExternElementLinkIntern extends ExternElement {
 		
 		$attributes = array("font_size", "font_face", "font_color", "font_class", "font_style",
 			"a_class", "a_style");
-		$headlines = array("font" => $this->headlines[0],
-				"a" => $this->headlines[1]);
+		$headlines = array("font" => _("Schriftformatierung"),
+				"a" => _("Linkformatierung"));
 		$content_table = $edit_form->getEditFormContent($attributes, $headlines);
 		$content_table .= $edit_form->editBlankContent();
 		
-		$headline = $edit_form->editHeadline($this->headlines[2]);
+		$this->toStringConfigSelector($edit_form, $content_table);
+				
+		$submit = $edit_form->editSubmit($this->config->getName(),
+				$this->config->getId(), $this->getName());
+		$out = $edit_form->editContent($content_table, $submit);
+		$out .= $edit_form->editBlank();
 		
+		return $element_headline . $out;
+	}
+	
+	function toStringConfigSelector (&$edit_form, &$content_table) {
+		global $EXTERN_MODULE_TYPES;
+		$headline = $edit_form->editHeadline(_("Verlinkung zum Modul"));
 		$title = _("Konfiguration:");
 		$info = _("Der Link ruft das Modul mit der gewählten Konfiguration auf. Wählen Sie \"Standard\", um die von Ihnen gesetzte Standardkonfiguration zu benutzen. Ist für das aufgerufene Modul noch keine Konfiguration erstellt worden, wird die Stud.IP-Default-Konfiguration verwendet.");
-		if ($configs = get_all_configurations($this->config->range_id, $this->link_module_type)) {
-			$module_name = $EXTERN_MODULE_TYPES[$this->link_module_type]["module"];
-			$values = array_keys($configs[$module_name]);
-			unset($names);
-			foreach ($configs[$module_name] as $config)
-				$names[] = $config["name"];
+		$values = array();
+		$names = array();
+		$spacer = '';
+		$first_module = TRUE;
+		foreach ((array) $this->link_module_type as $module_type) {
+			if ($configs = ExternConfig::GetAllConfigurations($this->config->range_id, $module_type)) {
+				if ($first_module) {
+					$names[] = _("Standardkonfiguration") . ' ('. $EXTERN_MODULE_TYPES[$module_type]['name'] . ')';
+					$values[] = '';
+					$first_module = FALSE;
+				}
+				$configs = $configs[$EXTERN_MODULE_TYPES[$module_type]['module']];
+				foreach ($configs as $config_id => $config) {
+					$names[] = $config['name'] . ' ('. $EXTERN_MODULE_TYPES[$module_type]['name'] . ')';
+					$values[] = $config_id;
+				}
+			}
 		}
-		else {
-			$values = array();
-			$names = array();
-		}
-		array_unshift($values, "");
-		array_unshift($names, _("Standardkonfiguration"));
-		$table = $edit_form->editOptionGeneric("config", $title, $info, $values, $names);
+		$table = $edit_form->editOptionGeneric('config', $title, $info, $values, $names);
 		
 		$title = _("SRI-Link:");
 		$info = _("Wenn Sie die SRI-Schnittstelle benutzen, müssen Sie hier die vollständige URL (mit http://) der Seite angeben, in der das Modul, das durch den Link aufgerufen wird, eingebunden ist. Lassen Sie dieses Feld unbedingt leer, falls Sie die SRI-Schnittstelle nicht nutzen.");
@@ -109,69 +124,16 @@ class ExternElementLinkIntern extends ExternElement {
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
-				
-		$submit = $edit_form->editSubmit($this->config->getName(),
-				$this->config->getId(), $this->getName());
-		$out = $edit_form->editContent($content_table, $submit);
-		$out .= $edit_form->editBlank();
-		
-		return $element_headline . $out;
 	}
 	
 	function checkValues ($attribute, $value) {
-		if ($attribute == "srilink")
+		if ($attribute == "srilink") {
 			return preg_match("|^https?://.*$|i", $value);
+		}
 	}
 	
 	function toString ($args) {
-		if (!$args["main_module"])
-			$args["main_module"] = "Main";
-		$sri_link = $this->config->getValue($this->name, "srilink");
-		$extern_link = $this->config->getValue($this->name, "externlink");
-		if ($this->config->config[$args["main_module"]]["incdata"]) {
-			$link = $sri_link;
-			if ($args["link_args"]) {
-				if (strrpos($link, '?'))
-					$link .= "&" . $args["link_args"];
-				else
-					$link .= "?" . $args["link_args"];
-			}
-			if ($this->config->global_id)
-				$link .= "&global_id=" . $this->config->global_id;
-		} else {
-			if ($sri_link) {
-				$link = $GLOBALS['EXTERN_SERVER_NAME'] . 'extern.php';
-				if ($args["link_args"])
-					$link .= "?" . $args["link_args"] . "&";
-				else
-					$link .= "?";
-				if ($this->config->global_id)
-					$link .= "global_id=" . $this->config->global_id . '&';
-				$link .= "page_url=" . $sri_link;
-			} elseif ($extern_link) {
-				if (strrpos($extern_link, '?'))
-					$link = "$extern_link&module={$args['module']}";
-				else
-					$link = "$extern_link?module={$args['module']}";
-				if ($config = $this->config->getValue($this->name, "config"))
-					$link .= "&config_id=" . $config;
-				$link .= "&range_id={$this->config->range_id}";
-				if ($args["link_args"])
-					$link .= "&" . $args["link_args"];
-				if ($this->config->global_id)
-					$link .= "&global_id=" . $this->config->global_id;
-			} else {
-				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?module={$args['module']}";
-				if ($config = $this->config->getValue($this->name, "config"))
-					$link .= "&config_id=" . $config;
-				$link .= "&range_id={$this->config->range_id}";
-				if ($args["link_args"])
-					$link .= "&" . $args["link_args"];
-				if ($this->config->global_id)
-					$link .= "&global_id=" . $this->config->global_id;
-			}
-		}
-		
+		$link = $this->createUrl($args);
 		// to set the color of the font in the style-attribute of the a-tag
 		if ($color = $this->config->getValue($this->name, "font_color")) {
 			$this->config->setValue($this->name, "a_style", "color:$color;"
@@ -187,6 +149,79 @@ class ExternElementLinkIntern extends ExternElement {
 		return $out;
 	}
 	
+	function createUrl ($args) {
+		if (!$args["main_module"]) {
+			$args["main_module"] = "Main";
+		}
+		$config_meta_data = ExternConfig::GetConfigurationMetaData($this->config->range_id, $this->config->getValue($this->name, 'config'));
+		if (is_array($config_meta_data)) {
+			$module_name = $config_meta_data['module_name'];
+		} else {
+			foreach ((array) $this->link_module_type as $type) {
+				if (is_array($GLOBALS['EXTERN_MODULE_TYPES'][$type])) {
+					$module_name = $GLOBALS['EXTERN_MODULE_TYPES'][$type]['module'];
+					break;
+				}
+			}
+		}
+		$sri_link = $this->config->getValue($this->name, "srilink");
+		$extern_link = $this->config->getValue($this->name, "externlink");
+		if ($this->config->config[$args["main_module"]]["incdata"]) {
+			$link = $sri_link;
+			if ($args["link_args"]) {
+				if (strrpos($link, '?')) {
+					$link .= "&" . $args["link_args"];
+				} else {
+					$link .= "?" . $args["link_args"];
+				}
+			}
+			if ($this->config->global_id) {
+				$link .= "&global_id=" . $this->config->global_id;
+			}
+		} else {
+			if ($sri_link) {
+				$link = $GLOBALS['EXTERN_SERVER_NAME'] . 'extern.php';
+				if ($args["link_args"]) {
+					$link .= "?" . $args["link_args"] . "&";
+				} else {
+					$link .= "?";
+				}
+				if ($this->config->global_id) {
+					$link .= "global_id=" . $this->config->global_id . '&';
+				}
+				$link .= "page_url=" . $sri_link;
+			} elseif ($extern_link) {
+				if (strrpos($extern_link, '?')) {
+					$link = "$extern_link&module=$module_name";
+				} else {
+					$link = "$extern_link?module=$module_name";
+				}
+				if ($config = $this->config->getValue($this->name, "config")) {
+					$link .= "&config_id=" . $config;
+				}
+				$link .= "&range_id={$this->config->range_id}";
+				if ($args["link_args"]) {
+					$link .= "&" . $args["link_args"];
+				}
+				if ($this->config->global_id) {
+					$link .= "&global_id=" . $this->config->global_id;
+				}
+			} else {
+				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?module=$module_name";
+				if ($config = $this->config->getValue($this->name, "config")) {
+					$link .= "&config_id=" . $config;
+				}
+				$link .= "&range_id={$this->config->range_id}";
+				if ($args["link_args"]) {
+					$link .= "&" . $args["link_args"];
+				}
+				if ($this->config->global_id) {
+					$link .= "&global_id=" . $this->config->global_id;
+				}
+			}
+		}
+		return $link;
+	}
 }
 
 ?>

@@ -54,8 +54,8 @@ class ExternModuleLectures extends ExternModule {
 			'InfoCountSem' => 'TableGroup',
 			'Grouping' => 'TableGroup',
 			'LecturesInnerTable',
-			'SemLink' => 'LinkInternSimple',
-			'LecturerLink' => 'LinkInternSimple');
+			'SemLink' => 'LinkIntern',
+			'LecturerLink' => 'LinkIntern');
 		$this->args = array('group');
 		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
 	}

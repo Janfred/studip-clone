@@ -5,7 +5,7 @@
 * basic functions for the extern interfaces
 *
 *
-* @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @author		Peter Thienel <thienel@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id$
 * @access		public
 * @modulegroup	extern
@@ -17,7 +17,7 @@
 // This file is part of Stud.IP
 // ExternEditModule.class.php
 //
-// Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
+// Copyright (C) 2003 Peter Thienel <thienel@data-quest.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ class ExternEditModule extends ExternEditHtml {
 				= $this->config->getValue($this->element_name, "order");
 		$this->form_values[$this->element_name . "_visible"]
 				= $this->config->getValue($this->element_name, "visible");
-
+		
 		$order = $this->getValue("order");
 		$aliases = $this->getValue("aliases");
 		$visible = $this->getValue("visible");
@@ -70,7 +70,8 @@ class ExternEditModule extends ExternEditHtml {
 		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
 		$out .= "<tr" . $this->css->getFullClass() . ">\n";
 		$out .= "<td><font size=\"2\"><b>" . _("Datenfeld") . "</b></font></td>\n";
-		$out .= "<td><font size=\"2\"><b>" . _("&Uuml;berschrift") . "</b></font></td>\n";
+		if (!in_array('aliases', $hide))
+			$out .= "<td><font size=\"2\"><b>" . _("&Uuml;berschrift") . "</b></font></td>\n";
 		if (!in_array("width", $hide))
 			$out .= "<td><font size=\"2\"><b>" . _("Breite") . "</b></font></td>\n";
 		if (!in_array("sort", $hide))
@@ -87,18 +88,20 @@ class ExternEditModule extends ExternEditHtml {
 			$out .= "<td><font size=\"2\">&nbsp;{$field_names[$order[$i]]}</font></td>";
 
 			// column headline
-			if (!in_array($order[$i], $hide_fields["aliases"])) {
-				$out .= "<td><input type=\"text\" name=\"{$this->element_name}_aliases[$order[$i]]\"";
-				$out .= "\" size=\"12\" maxlength=\"50\" value=\"";
-				$out .= $aliases[$order[$i]] . "\">";
-				if ($this->faulty_values[$this->element_name . "_aliases"][$order[$i]])
-					$out .= $this->error_sign;
-				$out .= "</td>\n";
-			}
-			else {
-				$out .= "<td>&nbsp;</td>\n";
-				$out .= "<input type=\"hidden\" name=\"{$this->element_name}_aliases[$order[$i]]\" ";
-				$out .= "value=\"\">";
+			if (!in_array('aliases', $hide)) {
+				if (!in_array($order[$i], $hide_fields["aliases"])) {
+					$out .= "<td><input type=\"text\" name=\"{$this->element_name}_aliases[$order[$i]]\"";
+					$out .= "\" size=\"12\" maxlength=\"50\" value=\"";
+					$out .= $aliases[$order[$i]] . "\">";
+					if ($this->faulty_values[$this->element_name . "_aliases"][$order[$i]])
+						$out .= $this->error_sign;
+					$out .= "</td>\n";
+				}
+				else {
+					$out .= "<td>&nbsp;</td>\n";
+					$out .= "<input type=\"hidden\" name=\"{$this->element_name}_aliases[$order[$i]]\" ";
+					$out .= "value=\"\">";
+				}
 			}
 
 			// width
@@ -168,7 +171,7 @@ class ExternEditModule extends ExternEditHtml {
 		}
 
 		// width in pixels or percent
-		if (!in_array("widthpp", $hide)) {
+		if (!in_array("widthpp", $hide) && !in_array('width', $hide)) {
 			$colspan = 4 - sizeof($hide);
 			$title = _("Breite in:");
 			$info = _("Wählen Sie hier, ob die Breiten der Tabellenspalten als Prozentwerte oder Pixel interpretiert werden sollen.");
@@ -192,7 +195,51 @@ class ExternEditModule extends ExternEditHtml {
 
 		return $out;
 	}
+	
+	function editSort ($field_names, $hide_fields = NULL) {
+		if (!is_array($hide_fields)) {
+			$hide_fields = array();
+		}
+		$sort = $this->getValue("sort");
+		
+		$this->css->resetClass();
+		$this->css->switchClass();
 
+		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n";
+		$out .= "<tr" . $this->css->getFullClass() . ">\n";
+		$out .= "<td><font size=\"2\"><b>" . _("Datenfeld") . "</b></font></td>\n";
+		$out .= "<td><font size=\"2\"><b>" . _("Sortierung") . "</b></font></td>\n";
+		
+		for ($i = 0; $i < sizeof($field_names); $i++) {
+			$this->css->switchClass();
+			$out .= "<tr" . $this->css->getFullClass() . " valign=\"middle\">\n";
+			$out .= "<td><font size=\"2\">&nbsp;{$field_names[$i]}</font></td>";
+			if (!in_array($i, $hide_fields)) {
+				$out .= "<td><select name=\"{$this->element_name}_sort[$i]\" ";
+				$out .= "size=\"1\">\n";
+				$out .= "<option value=\"0\"" . ($sort[$i] == 1 ? " selected" : "")
+						. ">" . _("keine") . "</option>";
+				for ($j = 1; $j <= (sizeof($field_names) - sizeof($hide_fields["sort"])); $j++) {
+					if ($sort[$i] == $j)
+						$selected = " selected";
+					else
+						$selected = "";
+					$out .= "<option value=\"$j\"$selected>$j</option>";
+				}
+				$out .= "\n</select>\n</td>\n";
+			}
+			else {
+				$out .= "<td>&nbsp;</td>\n";
+				$out .= "<input type=\"hidden\" name=\"{$this->element_name}_sort[$i]\" ";
+				$out .= "value=\"0\">\n";
+			}
+		}
+		
+		$out .= "</table>\n</td></tr>\n";
+
+		return $out;
+	}
+	
 	function editName ($attribute) {
 		$info = _("Geben Sie den Namen der Konfiguration an.");
 
@@ -220,7 +267,7 @@ class ExternEditModule extends ExternEditHtml {
 
 		$groups_aliases = $this->getValue("groupsalias");
 		$groups_visible = $this->getValue("groupsvisible");
-		if (!$groups_visible)
+		if (!is_array($groups_visible))
 			$groups_visible = array();
 
 		for ($i = 0; $i < sizeof($groups_config); $i++)
@@ -429,6 +476,82 @@ class ExternEditModule extends ExternEditHtml {
 		$out .= tooltip($info, TRUE, TRUE) . "><span style=\"vertical-align:top;\">$error_sign</span>";
 		$out .= "</td></tr><tr><td width=\"100%\" style=\"font-size:smaller;\">$info2<br />";
 		$out .= "<span style=\"color:red;\">$info3</span></td></tr></table>\n</td></tr>\n";
+		
+		return $out;
+	}
+	
+	function editMarkerDescription ($markers, $new_datafields = FALSE) {
+		$this->css->resetClass();
+		$this->css->switchClass();
+
+		$out = "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" style=\"font-size: 0.7em\">\n";
+		$out .= '<tr' . $this->css->getFullClass() . ">\n";
+		$out .= '<td><font size="2"><b>' . _("Marker") . "</b></font></td>\n";
+		$out .= '<td><font size="2"><b>' . _("Beschreibung") . "</b></font></td>\n";
+		$out .= "</tr>\n";
+		$this->css->switchClass();
+		$spacer = 0;
+		$global_vars = FALSE;
+		foreach ((array) $markers as $marker) {
+			$mark = $marker[0];
+			$description = $marker[1];
+			if ($mark == '__GLOBAL__') {
+				$out .= '<tr' . $this->css->getFullClass() . ">\n";
+				$out .= '<td colspan="2"><strong>' . htmlReady(_("Globale Variablen")) . '</strong></td>';
+				$spacer++;
+				$global_vars = TRUE;
+				$this->css->switchClass();
+			} else if ($mark{0} == '<') {
+				if ($global_vars) {
+					$out .= '<tr' . $this->css->getFullClass() . ">\n";
+					$out .= '<td colspan="2">&nbsp;</td>';
+					$spacer--;
+					$global_vars = FALSE;
+					$this->css->switchClass();
+				}
+				if (substr($mark, 0, 8) == '<!-- END') {
+					$spacer--;
+					$this->css->switchClass();
+					$out .= '<tr' . $this->css->getFullClass() . ">\n";
+					$out .= '<td colspan="2">&nbsp;</td>';
+					$this->css->switchClass();
+					$out .= '<tr' . $this->css->getFullClass() . ">\n";
+					$out .= '<td nowrap="nowrap">' . str_repeat('&nbsp;', $spacer * 4);
+					$out .= htmlReady($mark) . '</td><td>' . htmlReady($description);
+					$out .= '</td>';
+				} else {
+					if ($spacer > 0 && substr($mark, 0, 10) != '<!-- BEGIN') {
+						$this->css->switchClass();
+						$out .= '<tr' . $this->css->getFullClass() . ">\n";
+						$out .= '<td colspan="2">&nbsp;</td>';
+						$this->css->switchClass();
+					}
+					$out .= '<tr' . $this->css->getFullClass() . ">\n";
+					$out .= '<td nowrap="nowrap">' . str_repeat('&nbsp;', $spacer * 4);
+					$out .= htmlReady($mark) . '</td><td>' . htmlReady($description);
+					$out .= '</td>';
+					$spacer++;
+					$this->css->switchClass();
+					$out .= '<tr' . $this->css->getFullClass() . ">\n";
+					$out .= '<td colspan="2">&nbsp;</td>';
+					$this->css->switchClass();
+				}
+			} else {
+				$out .= '<tr' . $this->css->getFullClass() . ">\n";
+				$out .= '<td>' . str_repeat('&nbsp;', $spacer * 4);
+				$out .= $mark . '</td><td>' . htmlReady($description);
+				$out .= '</td>';
+			}
+			$out .= "</tr>\n";
+		}
+		if ($new_datafields) {
+			$this->css->resetClass();
+			$out .= '<tr' . $this->css->getFullClass() . ">\n";
+			$out .= "<td colspan=\"2\">&nbsp;</td></tr>\n";
+			$out .= '<tr' . $this->css->getFullClass() . ">\n";
+			$out .= '<td colspan="2" align="center">' . makeButton('aktualisieren', 'input'). "</td></tr>\n";
+		}
+		$out .= "</table></td></tr>\n";
 		
 		return $out;
 	}

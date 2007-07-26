@@ -69,7 +69,7 @@ class ExternModulePersons extends ExternModule {
 		$this->data_fields = array_merge((array)$this->data_fields, (array)$config_datafields);
 		
 		// setup module properties
-		$this->elements["LinkIntern"]->link_module_type = 2;
+		$this->elements["LinkIntern"]->link_module_type = array(2, 14);
 		$this->elements["LinkIntern"]->real_name = _("Link zum Modul MitarbeiterInnendetails");
 		$this->elements["Link"]->real_name = _("Email-Link");
 	}

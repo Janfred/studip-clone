@@ -205,7 +205,7 @@ class ExternElementMainLecturestable extends ExternElementMain {
 		$table .= $edit_form->editCheckboxGeneric("addinfo", $title, $info, $values, $names);
 		
 		$title = _("Spalten&uuml;berschriften<br>wiederholen:");
-		$info = _("Wiederholung der Spaltenüberschriften über oder unter der Gruppierungszeile.");
+		$info = _("Wiederholung der Spaltenberschriften ber oder unter der Gruppierungszeile.");
 		$values = array("above", "beneath", "");
 		$names = array(_("&uuml;ber"), _("unter Gruppierungszeile"), _("keine"));
 		$table .= $edit_form->editRadioGeneric("repeatheadrow", $title, $info, $values, $names);
@@ -253,14 +253,14 @@ class ExternElementMainLecturestable extends ExternElementMain {
 		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
 		
 		$title = _("Namensformat:");
-		$info = _("Wählen Sie, wie Personennamen formatiert werden sollen.");
+		$info = _("Wï¿½len Sie, wie Personennamen formatiert werden sollen.");
 		$values = array("", "no_title_short", "no_title", "no_title_rev", "full", "full_rev");
 		$names = array(_("keine Auswahl"), _("Meyer, P."), _("Peter Meyer"), _("Meyer Peter"),
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
 		$title = _("Sprache:");
-		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
+		$info = _("Wï¿½len Sie eine Sprache fr die Datumsangaben aus.");
 		$values = array("", "de_DE", "en_GB");
 		$names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
 		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);

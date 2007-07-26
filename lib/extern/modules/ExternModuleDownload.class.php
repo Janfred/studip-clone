@@ -39,6 +39,9 @@ require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
 require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/views/extern_html_templates.inc.php");
 require_once('lib/visual.inc.php');
 require_once('lib/statusgruppe.inc.php');
+require_once('lib/classes/StudipDocument.class.php');
+require_once('lib/classes/StudipDocumentTree.class.php');
+require_once('lib/datei.inc.php');
 
 
 class ExternModuleDownload extends ExternModule {
@@ -112,8 +115,9 @@ class ExternModuleDownload extends ExternModule {
 		$error_message = "";
 
 		// check for valid range_id
-		if(!$this->checkRangeId($this->config->range_id))
+		if(!$this->checkRangeId($this->config->range_id)) {
 			$error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
+		}
 		// if $args['seminar_id'] is given, check for free access
 		if ($args['seminar_id']) {
 			$seminar_id = $args['seminar_id'];
@@ -123,33 +127,39 @@ class ExternModuleDownload extends ExternModule {
 			$db->query($query);
 			if (!($db->next_record() && $db->f('Lesezugriff') == 0))
 				$error_message = $GLOBALS["EXTERN_ERROR_MESSAGE"];
-		}
-		else
+		} else {
 			$seminar_id = $this->config->range_id;
+		}
 
 		$sort = $this->config->getValue("Main", "sort");
 		$query_order = "";
 		foreach ($sort as $key => $position) {
-			if ($position > 0)
+			if ($position > 0) {
 				$query_order[$position] = $this->data_fields[$key];
+			}
 		}
 		if ($query_order) {
 			ksort($query_order, SORT_NUMERIC);
 			$query_order = " ORDER BY " . implode(",", $query_order) . " DESC";
 		}
 
-		if (!$nameformat = $this->config->getValue("Main", "nameformat"))
+		if (!$nameformat = $this->config->getValue("Main", "nameformat")) {
 			$nameformat = "no_title_short";
+		}
+		$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $seminar_id));
+		$allowed_folders = $folder_tree->getReadableFolders('nobody');
 		$query = "SELECT dokument_id, description, filename, d.mkdate, d.chdate, filesize, ";
 		$query .= $GLOBALS["_fullname_sql"][$nameformat];
 		$query .= "AS fullname, username, aum.user_id FROM dokumente d LEFT JOIN user_info USING (user_id) ";
 		$query .= "LEFT JOIN auth_user_md5 aum USING (user_id) WHERE ";
-		$query .= "seminar_id='$seminar_id'$query_order";
+		$query .= "seminar_id='$seminar_id' AND range_id IN ('";
+		$query .= implode("','", $allowed_folders) . "')$query_order";
 
 		$db->query($query);
 
-		if (!$db->num_rows())
+		if (!$db->num_rows()) {
 			$error_message = $this->config->getValue("Main", "nodatatext");
+		}
 
 		$out = $this->elements["TableHeadrow"]->toString();
 
@@ -159,10 +169,9 @@ class ExternModuleDownload extends ExternModule {
 			$this->config->setValue('Main', 'visible', array('1'));
 			$this->config->setValue('Main', 'width', array('100%'));
 			$out = $this->elements['TableRow']->toString(array('content' => array('' => $error_message)));
-		}
-		else {
+		} else {
 			$table_row_data["data_fields"] = $this->data_fields;
-			while($db->next_record()){
+			while ($db->next_record()) {
 
 				preg_match("/^.+\.([a-z1-9_-]+)$/i", $db->f("filename"), $file_suffix);
 
@@ -207,13 +216,12 @@ class ExternModuleDownload extends ExternModule {
 							$icon = "txt-icon.gif";
 				}
 
-				if ($icon)
+				if ($icon) {
 					$picture_file = $GLOBALS['ASSETS_URL']."images/$icon";
-
-				$download_link = $GLOBALS['ABSOLUTE_URI_STUDIP'];
-				$download_link .= sprintf("sendfile.php?type=0&file_id=%s&file_name=%s\"",
-						$db->f("dokument_id"), $db->f("filename"));
-
+				}
+				
+				$download_link = GetDownloadLink($db->f('dokument_id'), $db->f('filename'));
+				
 				// Aufbereiten der Daten
 				$table_row_data["content"] = array(
 					"icon"        => sprintf("<a href=\"%s\"><img border=\"0\" src=\"%s\"></a>"

@@ -53,12 +53,12 @@ class ExternModulePersondetails extends ExternModule {
 					'Home', 'sprechzeiten'),
 				'content' => array(
 					'head', 'lebenslauf', 'schwerp', 'lehre',
-					'news', 'termine', 'publi', 'kategorien')
+					'news', 'termine', 'publi', 'kategorien'/*, 'literature' */)
 		);
 		$this->registered_elements = array(
 				'Body', 'TableHeader', 'PersondetailsHeader', 'Contact',
 				'PersondetailsLectures', 'TableParagraph', 'TableParagraphHeadline',
-				'TableParagraphSubHeadline', 'TableParagraphText', 'List',
+				'TableParagraphSubHeadline', 'TableParagraphText', 'List',/* 'LitList',*/
 				'LinkIntern', 'StudipLink'
 		);
 		$this->args = array('username', 'seminar_id');
@@ -82,7 +82,8 @@ class ExternModulePersondetails extends ExternModule {
 				_("News"),
 				_("Termine"),
 				_("Publikationen"),
-				_("eigene Kategorien")
+				_("eigene Kategorien")/*,
+				_("Literaturlisten")*/
 			)
 		);
 		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);

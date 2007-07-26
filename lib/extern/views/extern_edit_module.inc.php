@@ -36,6 +36,7 @@
 
 
 require_once($RELATIVE_PATH_EXTERN.'/lib/ExternModule.class.php');
+require_once($RELATIVE_PATH_EXTERN.'/lib/ExternConfig.class.php');
 require_once('lib/msg.inc.php');
 
 echo "<table class=\"blank\" border=\"0\" width=\"100%\" ";
@@ -48,7 +49,7 @@ $module = FALSE;
 if ($com == "new") {
 	foreach ($EXTERN_MODULE_TYPES as $key => $type) {
 		if ($type["module"] == $mod) {
-			$configurations = get_all_configurations($range_id, $key);
+			$configurations = ExternConfig::GetAllConfigurations($range_id, $key);
 			if (sizeof($configurations[$type["module"]]) < $EXTERN_MAX_CONFIGURATIONS) {
 				require_once($RELATIVE_PATH_EXTERN."/modules/ExternModule$mod.class.php");
 				$module =& ExternModule::GetInstance($range_id, $mod, '', 'NEW');
@@ -121,7 +122,7 @@ if ($com == "store") {
 		// POST_VARS-values. At the moment there is only one: If the name of the
 		// configuration was changed, setup the extern_config table.
 		if ($edit == "Main" && $_POST["Main_name"] != $module->config->config_name) {
-			if (!change_config_name($module->config->range_id, $module->getType(), $module->config->getId(),
+			if (!ExternConfig::ChangeName($module->config->range_id, $module->getType(), $module->config->getId(),
 					$module->config->config_name, $_POST["Main_name"])) {
 				$message = _("Der Konfigurationsname wurde bereits für eine Konfiguration dieses Moduls vergeben. Bitte geben Sie einen anderen Namen ein.");
 				my_error($message, "blank", 1);
@@ -165,7 +166,7 @@ if ($module->getType() != 0) {
 	$info_preview .= "<a target=\"_blank\" href=\"{$GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"]}extern.php";
 	$info_preview .= "?module=" . $module->getName() . "&range_id=" . $module->config->range_id;
 	$info_preview .= "&preview=1&config_id=" . $module->config->getId();
-	if ($global_config = get_global_config($module->config->range_id))
+	if ($global_config = ExternConfig::GetGlobalConfiguration($module->config->range_id))
 		$info_preview .= "&global_id=$global_config";
 	$info_preview .= "\">";
 	$info_preview .= makeButton("vorschau") . "</a></div><br>";

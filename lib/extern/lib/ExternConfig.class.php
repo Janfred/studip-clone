@@ -2,7 +2,7 @@
 /**
 * ExternConfig.class.php
 * 
-* This class is a wrapper class for configuration files.
+* Abstract class for storing configurations.
 * 
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
@@ -35,41 +35,48 @@
 // +---------------------------------------------------------------------------+
 
 require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/extern_functions.inc.php");
-
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternModule.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternConfigDb.class.php");
+require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/lib/ExternConfigIni.class.php");
 
 class ExternConfig {
 
-	var $id;
+	var $id = NULL;
 	var $config = array();
 	var $global_id = NULL;
 	var $module_type;
 	var $module_name;
 	var $config_name;
 	var $range_id;
-	var $file_name;
 
+	function &GetInstance ($range_id, $module_name, $config_id = '') {
+		
+	//	require_once($GLOBALS["RELATIVE_PATH_EXTERN"] . '/lib/ExternConfig' . ucfirst(strtolower($GLOBALS['EXTERN_CONFIG_STORAGE_CONTAINER'])) . '.class.php');
+		
+		$class_name = 'ExternConfig' . ucfirst(strtolower($GLOBALS['EXTERN_CONFIG_STORAGE_CONTAINER']));
+		$instance = new $class_name($range_id, $module_name, $config_id);
+		return $instance;
+	}
+	
 	/**
 	*
 	*/
-	function ExternConfig ($range_id, $module_name, $config_id = "") {
+	function ExternConfig ($range_id, $module_name, $config_id = '') {
 		
-		if ($config_id != "") {
-			if ($configuration = get_configuration($range_id, $config_id)) {
+		if ($config_id != '') {
+			if ($configuration = ExternConfig::GetConfigurationMetaData($range_id, $config_id)) {
 				$this->id = $config_id;
-				$this->module_type = $configuration["type"];
-				$this->module_name = $configuration["module_name"];
-				$this->config_name = $configuration["name"];
+				$this->module_type = $configuration['type'];
+				$this->module_name = $configuration['module_name'];
+				$this->config_name = $configuration['name'];
 				$this->range_id = $range_id;
-				$this->file_name = $config_id . ".cfg";
 				$this->parse();
-			}
-			else
+			} else {
 				ExternModule::printError();
-		}
-		else {
-			$module_name = ucfirst(strtolower($module_name));
-			foreach ($GLOBALS["EXTERN_MODULE_TYPES"] as $type => $module) {
-				if ($module["module"] == $module_name) {
+			}
+		} else {
+			foreach ($GLOBALS['EXTERN_MODULE_TYPES'] as $type => $module) {
+				if ($module['module'] == $module_name) {
 					$this->module_name = $module_name;
 					$this->module_type = $type;
 					$this->range_id = $range_id;
@@ -79,7 +86,7 @@ class ExternConfig {
 		}
 		
 	}
-
+	
 	/**
 	*
 	*/
@@ -100,7 +107,7 @@ class ExternConfig {
 	function getType () {
 		global $EXTERN_MODULE_TYPES;
 		foreach ($EXTERN_MODULE_TYPES as $key => $known_module) {
-			if ($known_module["name"] == $this->module_type)
+			if ($known_module['name'] == $this->module_type)
 				return $key;
 		}
 		
@@ -121,27 +128,34 @@ class ExternConfig {
 		return $this->config;
 	}
 	
-	function setConfiguration ($type, $config) {
-		if ($type == "NEW") {
-			$this->id = $this->makeId();
-			$this->file_name = $this->id . ".cfg";
-			$this->config_name = $this->createConfigName($this->range_id);
-			
-			// take the new configuration, write the name in the configuration
-			// insert it into the database and write it to the specified path with
-			// id.cfg as file name
-			$this->config = $config;
-			$this->setValue("Main", "name", $this->config_name);
-			if (insert_config($this))
-				$this->store();
-			else
-				ExternModule::printError();
+	function setConfiguration ($config) {
+		$this->config = $config;
+	}
+	
+	function setDefaultConfiguration ($config) {
+		foreach ($config as $element_name => $element) {
+			foreach ($element as $attribute => $value) {
+				if ($value{0} == '|') {
+					$new_config[$element_name][$attribute] = explode('|', substr($value, 1));
+				} else {
+					$new_config[$element_name][$attribute] = $value;
+				}
+			}
 		}
-		elseif ($type == "DEFAULT") {
-			$this->config = $config;
-		}
-		else
+		$this->id = $this->makeId();
+		$this->file_name = $this->id . '.cfg';
+		$this->config_name = $this->createConfigName($this->range_id);
+		
+		// take the new configuration, write the name in the configuration
+		// insert it into the database and write it to the specified path with
+		// id.cfg as file name
+		$this->config = $new_config;
+		$this->setValue('Main', 'name', $this->config_name);
+		if ($this->insertConfiguration()) {
+			$this->store();
+		} else {
 			ExternModule::printError();
+		}
 	}
 	
 	/**
@@ -159,29 +173,17 @@ class ExternConfig {
 	*
 	*/
 	function getValue ($element_name, $attribute) {
-	
-		// if the first character is a pipe symbol (|) convert it
-		// into an array
-		$value = $this->config[$element_name][$attribute];
 		
-		if ($value{0} == "|")
-			return explode("|", substr($this->config[$element_name][$attribute], 1));
-		
-		return $value;
+		return $this->config[$element_name][$attribute];
 	}
 
 	/**
 	*
 	*/
 	function setValue ($element_name, $attribute, $value) {
-		
-		// if $value is an array convert it into a string, each value is separated
-		// by the pipe symbol (|) the first character of this string is |
 		if (is_array($value)) {
 			ksort($value, SORT_NUMERIC);
-			$value = "|" . implode("|", $value);
 		}
-		
 		$this->config[$element_name][$attribute] = $value;
 	}
 	
@@ -189,20 +191,21 @@ class ExternConfig {
 	*
 	*/
 	function getAttributes ($element_name, $tag, $second_set = FALSE) {
-		if (!is_array($this->config[$element_name]))
-			return "";
+		if (!is_array($this->config[$element_name])) {
+			return '';
+		}
 			
-		$attributes = "";
+		$attributes = '';
 		
 		reset($this->config);
 		if ($second_set) {
 			foreach ($this->config[$element_name] as $tag_attribute_name => $value) {
-				if ($value != "") {
-					$tag_attribute = explode("_", $tag_attribute_name);
+				if ($value != '') {
+					$tag_attribute = explode('_', $tag_attribute_name);
 					if ($tag_attribute[0] == $tag && !isset($tag_attribute[2])) {
-						if ($this->config[$element_name]["{$tag_attribute_name}2_"] == "")
+						if ($this->config[$element_name]["{$tag_attribute_name}2_"] == '') {
 							$attributes .= " {$tag_attribute[1]}=\"$value\"";
-						else {
+						} else {
 							$attributes .= " {$tag_attribute[1]}=\""
 									. $this->config[$element_name]["{$tag_attribute_name}2_"] . "\"";
 						}
@@ -212,10 +215,11 @@ class ExternConfig {
 		}
 		else {
 			foreach ($this->config[$element_name] as $tag_attribute_name => $value) {
-				if ($value != "") {
-					$tag_attribute = explode("_", $tag_attribute_name);
-					if ($tag_attribute[0] == $tag && !isset($tag_attribute[2]))
+				if ($value != '') {
+					$tag_attribute = explode('_', $tag_attribute_name);
+					if ($tag_attribute[0] == $tag && !isset($tag_attribute[2])) {
 						$attributes .= " {$tag_attribute[1]}=\"$value\"";
+					}
 				}
 			}
 		}
@@ -235,40 +239,32 @@ class ExternConfig {
 	*
 	* @access		public
 	* @param		object	 $module		The module whose configuration will be restored
-	* @param		string[] $values		These values overwrites the values in current configuration
+	* @param		string	 $element_name 	The name of the element
+	* @param		string[]	 $values		These values overwrites the values in current configuration
 	*/
-	function restore (&$module, $element_name = '', $values = '') {
-		// store the own configuration if the function is called without parameters
-		if ($values != "" && $module) {
-			if ($element_name)
+	function restore ($module, $element_name = '', $values = '') {
+		if ($values != '' && $module) {
+			if ($element_name) {
 				$module_elements[$element_name] = $module->elements[$element_name];
-			else
+			} else {
 				$module_elements = $module->elements;
+			}
 		
 			foreach ($module_elements as $element_name => $element_obj) {
-			
 				if ($element_obj->isEditable()) {
-			
 					$attributes = $element_obj->getAttributes();
-				
 					foreach ($attributes as $attribute) {
-						$form_name = $element_name . "_" . $attribute;
-					
+						$form_name = $element_name . '_' . $attribute;
 						if (isset($values[$form_name])) {
 							if (is_array($values[$form_name])) {
-								ksort($values[$form_name], SORT_NUMERIC); 
-								$form_value = "|" . implode("|", $values[$form_name]);
-								$config_tmp[$attribute] = stripslashes($form_value);
+								$form_value = array_map('stripslashes', $values[$form_name]);
+							} else {
+								$form_value = stripslashes($values[$form_name]);
 							}
-							else {
-								$config_tmp[$attribute] = stripslashes($values[$form_name]);
-							}
+							$this->setValue($element_name, $attribute, $form_value);
 						}
-						else
-							$config_tmp[$attribute] = $this->config[$element_name][$attribute];
 					}
 				}
-				$this->config[$element_name] = $config_tmp;
 			}
 		}
 	}
@@ -277,26 +273,6 @@ class ExternConfig {
 	*
 	*/
 	function store () {
-		$file_content = "; Configuration file for the extern module"
-				. " $this->module_name in Stud.IP\n"
-				. "; (range_id: $this->range_id)\n"
-				. "; DO NOT EDIT !!!\n";
-		
-		foreach ($this->config as $element => $attributes) {
-			$file_content .= "\n[" . $element . "]\n";
-			
-			reset($attributes);
-			foreach ($attributes as $attribute => $value)
-				$file_content .= $attribute . " = \"" . $value . "\"\n";
-		}
-
-		if ($file = @fopen($GLOBALS["EXTERN_CONFIG_FILE_PATH"] . $this->file_name, 'w')) {
-			fputs($file, $file_content);
-			fclose($file);
-			update_config($this->range_id, $this->id);
-		}
-		else
-			ExternModule::printError();
 		
 	}
 	
@@ -304,13 +280,7 @@ class ExternConfig {
 	*
 	*/
 	function parse () {
-		$file_name = $GLOBALS["EXTERN_CONFIG_FILE_PATH"] . $this->file_name;
-		
-		if (file_exists($file_name))
-			$this->config = parse_ini_file($file_name, TRUE);
-		else {
-			// error handling
-		}
+	
 	}
 	
 	/**
@@ -333,16 +303,16 @@ class ExternConfig {
 	*
 	*/
 	function createConfigName ($range_id) {
-		$configurations = get_all_configurations($range_id, $this->module_type);
+		$configurations = ExternConfig::GetAllConfigurations($range_id, $this->module_type);
 		
-		$config_name_prefix = _("Konfiguration") . " ";
+		$config_name_prefix = _("Konfiguration") . ' ';
 		$config_name_suffix = 1;
 		$config_name = $config_name_prefix . $config_name_suffix;
 		$all_config_names = "";
 		
-		if ($configurations) {
+		if (is_array($configurations[$this->module_name])) {
 			foreach ($configurations[$this->module_name] as $configuration)
-				$all_config_names .= $configuration["name"];
+				$all_config_names .= $configuration['name'];
 		}
 		
 		while(stristr($all_config_names, $config_name)) {
@@ -361,26 +331,366 @@ class ExternConfig {
 		
 		// the name of the global configuration has to be overwritten by the
 		// the name of the main configuration
-		$global_config->config["Main"]["name"] = $this->config["Main"]["name"];
+		$global_config->config['Main']['name'] = $this->config['Main']['name'];
 		
 		// The Main-element is not a registered element, because it is part of every
 		// module. So register it now.
-		$registered_elements[] = "Main";
+		$registered_elements[] = 'Main';
 		
 		foreach ($registered_elements as $name => $element) {
 			if ((is_int($name) || !$name) && $this->config[$element]) {
 				foreach ($this->config[$element] as $attribute => $value) {
-					if ($value === "")
+					if ($value === '') {
 						$this->config[$element][$attribute] = $global_config->config[$element][$attribute];
+					}
 				}
 			}
 			else if ($this->config[$name]) {
 				foreach ($this->config[$name] as $attribute => $value) {
-					if ($value === "")
+					if ($value === '') {
 						$this->config[$name][$attribute] = $global_config->config[$name][$attribute];
+					}
 				}
 			}
 		}
+	}
+	
+	function updateConfiguration () {
+		$db =& new DB_Seminar();
+	
+		$changed = time();
+		$query = "UPDATE extern_config SET chdate=$changed ";
+		$query .= "WHERE config_id='{$this->id}' AND range_id='{$this->range_id}'";
+		$db->query($query);
+	
+		if ($db->affected_rows() != 1) {
+			return FALSE;
+		}
+		
+		return TRUE;
+	}
+	
+	function insertConfiguration () {
+		$db =& new DB_Seminar();
+		$query = "SELECT COUNT(config_id) AS count FROM extern_config WHERE ";
+		$query .= "range_id='{$this->range_id}' AND config_type={$this->module_type}";
+		$db->query($query);
+
+		if ($db->next_record() && $db->f('count') > $GLOBALS['EXTERN_MAX_CONFIGURATIONS']) {
+			return FALSE;
+		}
+	
+		$time = time();
+		$query = "INSERT INTO extern_config SET config_id='{$this->id}', range_id='{$this->range_id}', config_type={$this->module_type}, ";
+		$query .= "name='{$this->config_name}', is_standard=0, mkdate=$time, chdate=$time";
+		$db->query($query);
+	
+		if ($db->affected_rows() != 1) {
+			return FALSE;
+		}
+	
+		return TRUE;
+	}
+	
+	function deleteConfiguration () {
+		$db =& new DB_Seminar();
+		$query = "SELECT config_id FROM extern_config WHERE config_id='{$this->id}' ";
+		$query .= "AND range_id='{$this->range_id}'";
+		$db->query($query);
+		
+		if ($db->next_record()) {
+			$query = "DELETE FROM extern_config WHERE config_id='{$this->id}' ";
+			$query .= "AND range_id='{$this->range_id}'";
+			$db->query($query);
+			
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	function &copy ($range_id) {
+		$copy_config = ExternConfig::GetInstance($range_id, $this->module_name);
+		$copy_config->setConfiguration($this->config);
+		
+		return $copy_config;
+	}
+	
+	/**
+	* Returns an array of meta data for all configurations of an institute
+	*
+	* @access	public
+	* @param	string	$range_id
+	* @param	string	$type optional parameter to check the right type of
+	* the range_id (the right type of "Einrichtung" sem or fak)
+	*
+	* @return	array		("name" the name of the configuration, "id" the config_id,
+	* "is_default" TRUE if it is the default configuration)
+	*/
+	function GetAllConfigurations ($range_id, $type = NULL) {
+		$db =& new DB_Seminar();
+		$query = "SELECT * FROM extern_config WHERE range_id='$range_id' ";
+	
+		if ($type) {
+			$query .= "AND config_type=$type ";
+		}
+		
+		$query .= 'ORDER BY name ASC';
+		$db->query($query);
+	
+		if ($db->num_rows() == 0) {
+			return FALSE;
+		}
+	
+		while ($db->next_record()) {
+			// return registered modules only!
+			$module = $GLOBALS['EXTERN_MODULE_TYPES'][$db->f('config_type')]['module'];
+			if ($module) {
+				$all_configs[$module][$db->f('config_id')] = array('name' => $db->f('name'),
+						'id' => $db->f('config_id'), 'is_default' => $db->f('is_standard'));
+			}
+		}
+
+		return $all_configs;
+	}
+
+	function GetConfigurationMetaData ($range_id, $config_id) {
+		$db =& new DB_Seminar();
+		$query = "SELECT * FROM extern_config WHERE config_id='$config_id' ";
+		$query .= "AND range_id='$range_id'";
+	
+		$db->query($query);
+		if ($db->next_record()) {
+			$module_name = $GLOBALS['EXTERN_MODULE_TYPES'][$db->f('config_type')]['module'];
+			if ($module_name) {
+				$config = array('name' => $db->f('name'), 'module_name' => $module_name,
+						'id' => $db->f('config_id'), 'is_default' => $db->f('is_standard'),
+						'type' => $db->f('config_type'));
+			}
+		} else {
+			return FALSE;
+		}
+	
+		return $config;
+	}
+	
+	function ExistConfiguration ($range_id, $config_id) {
+		$db =& new DB_Seminar();
+		$query = "SELECT config_id FROM extern_config WHERE config_id='$config_id' ";
+		$query .= "AND range_id='$range_id'";
+	
+		$db->query($query);
+	
+		if ($db->num_rows == 1) {
+			return TRUE;
+		}
+		
+		return FALSE;
+	}
+	
+	function SetStandardConfiguration ($range_id, $config_id) {
+		$db =& new DB_Seminar();
+		$query = "SELECT config_type, is_standard FROM extern_config WHERE config_id='$config_id' ";
+		$query .= " AND range_id='$range_id'";
+		$db->query($query);
+	
+		if ($db->next_record()) {
+			if ($db->f("is_standard") == 0) {
+				$query = "SELECT config_id FROM extern_config WHERE range_id='$range_id' ";
+				$query .= "AND is_standard=1 AND config_type=" . $db->f('config_type');
+	
+				$db->query($query);
+	
+				if ($db->next_record()) {
+					$query = "UPDATE extern_config SET is_standard=0 WHERE config_id='";
+					$query .= $db->f('config_id') . "'";
+		
+					$db->query($query);
+		
+					if ($db->affected_rows() != 1) {
+						return FALSE;
+					}
+				}
+			} else {
+				$query = "UPDATE extern_config SET is_standard=0 WHERE config_id='$config_id'";
+				$db->query($query);
+				if ($db->affected_rows() != 1) {
+					return FALSE;
+				}
+			
+				return TRUE;
+			}
+		
+			$query = "UPDATE extern_config SET is_standard=1 WHERE config_id='$config_id'";
+			$db->query($query);
+			if ($db->affected_rows() != 1) {
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+		
+		return TRUE;
+	}
+	
+	function DeleteAllConfigurations ($range_id) {
+		$db =& new DB_Seminar();
+		$query = "SELECT config_id FROM extern_config WHERE range_id='$range_id'";
+		$db->query($query);
+		
+		$i = 0;
+		while ($db->next_record()) {
+			$config = ExternConfig::getInstance($range_id, '', $db->f('config_id'));
+			if ($config->deleteConfiguration()) {
+				$i++;
+			}
+		}
+	
+		return $i;
+	}
+
+	
+	function GetInfo ($range_id, $config_id) {
+		$db =& new DB_Seminar();
+		$query = "SELECT * FROM extern_config WHERE config_id='$config_id' ";
+		$query .= " AND range_id='$range_id'";
+	
+		$db->query($query);
+	
+		if ($db->next_record()) {
+			$global_config = ExternConfig::GetGlobalConfiguration($range_id);
+			$module_type = $db->f("config_type");
+			$module = $GLOBALS["EXTERN_MODULE_TYPES"][$db->f("config_type")]["module"];
+			$level = $GLOBALS["EXTERN_MODULE_TYPES"][$db->f("config_type")]["level"];
+			$make = strftime("%x", $db->f("mkdate"));
+			$change = strftime("%x", $db->f("chdate"));
+			$sri = "&lt;studip_remote_include&gt;\n\t&lt;module name=\"$module\" /&gt;";
+			$sri .= "\n\t&lt;config id=\"$config_id\" /&gt;\n\t";
+			if ($global_config) {
+				$sri .= "&lt;global id=\"$global_config\" /&gt;\n\t";
+			}
+			$sri .= "&lt;range id=\"$range_id\" /&gt;";
+			$sri .= "\n&lt;/studip_remote_include&gt;";
+			$link_sri = $GLOBALS["EXTERN_SERVER_NAME"] . 'extern.php?page_url=' . _("URL_DER_INCLUDE_SEITE");
+		
+			if ($level) {
+				$link = $GLOBALS["EXTERN_SERVER_NAME"] . "extern.php?module=$module";
+				if ($global_config) {
+					$link .= "&config_id=$config_id&global_id=$global_config&range_id=$range_id";
+				} else {
+					$link .= "&config_id=$config_id&range_id=$range_id";
+				}
+				$link_structure = $link . "&view=tree";
+				$sri_structure = "&lt;studip_remote_include&gt;\n\tmodule = $module\n\t";
+				$sri_structure = "config_id = $config_id\n\t";
+				if ($global_config) {
+					$sri_structure .= "global_id = $global_config\n\t";
+				}
+				$sri_structure .= "range_id=$range_id";
+				$sri_structure .= "\n\tview = tree\n&lt;/studip_remote_include&gt;";
+				$link_br = $GLOBALS["EXTERN_SERVER_NAME"] . "extern.php?module=$module<br>";
+				if ($global_config) {
+					$link_br .= "&config_id=$config_id<br>&global_id=$global_config<br>&range_id=$range_id";
+				} else {
+					$link_br .= "&config_id=$config_id<br>&range_id=$range_id";
+				}
+			
+				$info = array("module_type" => $module_type, "module_name" => $module,
+					"name" => $db->f("name"), "make_date" => $make,
+					"change_date" => $change, "link" => $link, "link_stucture" => $link_structure,
+					"sri" => $sri, "sri_structure" => $sri_structure, "link_sri" => $link_sri,
+					"level" => $level, "link_br" => $link_br);
+			} else {
+				$info = array("module_type" => $module_type, "module_name" => $module_name,
+					"name" => $db->f("name"), "make_date" => $make,
+					"change_date" => $change,	"sri" => $sri, "link_sri" => $link_sri,
+					"level" => $level);
+			}
+		
+			return $info;
+		}
+	
+		return FALSE;	
+	}
+
+	function GetGlobalConfiguration ($range_id) {
+		$db =& new DB_Seminar();
+		$query = "SELECT config_id FROM extern_config WHERE range_id = '$range_id' ";
+		$query .= "AND config_type = 0 AND is_standard = 1";
+		$db->query($query);
+	
+		if ($db->next_record()) {
+			return ($db->f('config_id'));
+		}
+	
+		return FALSE;
+	}
+
+	function ChangeName ($range_id, $module_type, $config_id, $old_name, $new_name) {
+		$db =& new DB_Seminar();
+		$query = "SELECT name FROM extern_config WHERE range_id='$range_id' AND ";
+		$query .= "config_type=$module_type AND name='$new_name'";
+		$db->query($query);
+	
+		if ($db->num_rows()) {
+			return FALSE;
+		}
+	
+		$changed = time();
+		$query = "UPDATE extern_config SET name='$new_name', chdate=$changed ";
+		$query .= "WHERE config_id='$config_id' AND range_id='$range_id'";
+		$db->query($query);
+	
+		if ($db->affected_rows() != 1) {
+			return FALSE;
+		}
+		
+		return TRUE;
+	}
+
+	function GetConfigurationByName ($range_id, $module_type, $name) {
+		$db =& new DB_Seminar();
+		$query = "SELECT config_id FROM extern_config WHERE range_id='$range_id' AND ";
+		$query .= "config_type=$module_type AND name='$name'";
+		$db->query($query);
+	
+		if ($db->next_record()) {
+			return $db->f('config_id');
+		}
+	
+		return FALSE;
+	}
+	
+	function GetStandardConfiguration ($range_id, $type) {
+		$db =& new DB_Seminar();
+		$query = "SELECT config_id FROM extern_config WHERE range_id='$range_id' AND ";
+		$query .= "config_type=$type AND is_standard=1";
+		$db->query($query);
+	
+		if ($db->next_record()) {
+			return $db->f('config_id');
+		}
+	
+		return FALSE;
+	}
+	
+	function GetInstitutesWithConfigurations ($as_options = TRUE) {
+		$options = '';
+		$inst_array = array();
+		$db =& new DB_Seminar();
+		$db->query("SELECT DISTINCT i.Institut_id, i.Name, fakultaets_id, (i.Institut_id = i.fakultaets_id) AS is_fak FROM Institute i LEFT JOIN extern_config ec ON i.Institut_id = ec.range_id WHERE i.Institut_id = ec.range_id ORDER BY Name");
+		
+		while ($db->next_record()) {
+			if ($as_options) {
+				$options .= sprintf("<option value=\"%s\" style=\"%s\">%s </option>\n", $db->f("Institut_id"),($db->f("is_fak") ? "font-weight:bold;" : ""), htmlReady(strlen($db->f('Name')) > 60 ? substr_replace($db->f("Name"), '[...]', 30, -30) : $db->f('Name')));
+			} else {
+				$inst_array[$db->f('fakultaets_id')] = array($db->f('Institut_id'), $db->f('Name'));
+			}
+		}
+		
+		if ($as_options) {
+			return $options;
+		}
+		return $inst_array;
 	}
 	
 }

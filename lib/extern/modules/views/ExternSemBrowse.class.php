@@ -172,7 +172,7 @@ class ExternSemBrowse extends SemBrowse {
 				LEFT JOIN user_info USING (user_id) 
 				LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id)
 				LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
-				LEFT JOIN Institute ON (Institute.Institut_id = seminar_inst.institut_id) 
+				LEFT JOIN Institute ON (seminar_inst.institut_id = Institute.Institut_id) 
 				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result']))
 				 . "')$sem_inst_query $sem_range_query $sem_types_query";
 			
@@ -389,46 +389,45 @@ class ExternSemBrowse extends SemBrowse {
 							$temp_turnus_string = view_turnus($seminar_id, TRUE ,key($sem_data[$seminar_id]["metadata_dates"]));
 							//Shorten, if string too long (add link for details.php)
 							if (strlen($temp_turnus_string) >70) {
-								$temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71);
-								$temp_turnus_string .= "...";
+								$temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ',') +71);
+								$temp_turnus_string .= '...';
 							}
 							if ($show_time || $show_lecturer) {
-								echo "\n<tr" . $this->config->getAttributes("LecturesInnerTable", "tr2") . ">";
+								echo "\n<tr" . $this->config->getAttributes('LecturesInnerTable', 'tr2') . '>';
 								if ($show_time) {
 									echo "<td$td_time>";
-									echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font2") . ">";
+									echo '<font' . $this->config->getAttributes('LecturesInnerTable', 'font2') . '>';
 									echo $temp_turnus_string . "</font></td>\n";
 								}
 								if ($show_lecturer) {
 									echo "<td$td_lecturer>";
-									echo "<font" . $this->config->getAttributes("LecturesInnerTable", "font2") . ">(";
+									echo '<font' . $this->config->getAttributes('LecturesInnerTable', 'font2') . '>(';
 									$doz_position = array_keys($sem_data[$seminar_id]['position']);
 									$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
 									$doz_uname = array_keys($sem_data[$seminar_id]['username']);
-
 									if (is_array($doz_name)){
-										$lecturer_link["module"] = "Persondetails";
+										$lecturer_link['module'] = 'Persondetails';
 										if(count($doz_position) != count($doz_uname)) $doz_position = range(1, count($doz_uname));
-										array_multisort($doz_position, $doz_name, $doz_uname); 
+                              array_multisort($doz_position, $doz_name, $doz_uname); 
 										$i = 0;
 										foreach ($doz_name as $index => $value) {
-											$lecturer_link["link_args"] = "username={$doz_uname[$index]}&seminar_id=$seminar_id";
-											$lecturer_link["content"] = htmlReady($value);
-											$this->module->elements["LecturerLink"]->printout($lecturer_link);
+											$lecturer_link['link_args'] = "username={$doz_uname[$index]}&seminar_id=$seminar_id";
+											$lecturer_link['content'] = htmlReady($value);
+											$this->module->elements['LecturerLink']->printout($lecturer_link);
 											if ($i != count($doz_name) - 1) {
-												echo ", ";
+												echo ', ';
 											}
 											if ($i == 3) {
-												echo "...";
+												echo '...';
 												break;
 											}
 											++$i;
 										}
-										echo ") ";
+										echo ') ';
 									}
-									echo "</font></td>";
+									echo '</font></td>';
 								}
-								echo "</tr>";
+								echo '</tr>';
 							}
 							echo "</table></td></tr>\n";
 						}
@@ -438,5 +437,6 @@ class ExternSemBrowse extends SemBrowse {
 			echo "</table>";
 		}
 	}
+	
 }
 ?>

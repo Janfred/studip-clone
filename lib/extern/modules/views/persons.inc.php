@@ -120,20 +120,14 @@ $first_loop = TRUE;
 foreach ($visible_groups as $group_id => $group) {
 
 	if ($grouping) {
-		if (!$query_order)
+		if (!$query_order) {
 			$query_order = ' ORDER BY su.position';
-		if ($defaultadr) {
-			$query = "SELECT ui.user_id FROM statusgruppe_user su LEFT JOIN user_inst ui ";
-			$query .= "USING(user_id) WHERE su.statusgruppe_id = '$group_id' AND ";
-			$query .= "Institut_id = '$range_id'";
 		}
-		else {
-			$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, aum.user_id, username, ";
-			$query .= $_fullname_sql[$nameformat] . " AS fullname, aum.Nachname ";
-			$query .= "FROM statusgruppe_user su LEFT JOIN auth_user_md5 aum USING(user_id) ";
-			$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
-			$query .= "WHERE su.statusgruppe_id='$group_id' AND ".get_ext_vis_query()." AND Institut_id = '$range_id'$query_order";
-		}
+		$query = "SELECT ui.raum, ui.sprechzeiten, ui.Telefon, inst_perms,	Email, aum.user_id, username, ";
+		$query .= $_fullname_sql[$nameformat] . " AS fullname, aum.Nachname ";
+		$query .= "FROM statusgruppe_user su LEFT JOIN auth_user_md5 aum USING(user_id) ";
+		$query .= "LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst ui USING(user_id) ";
+		$query .= "WHERE su.statusgruppe_id='$group_id' AND ".get_ext_vis_query()." AND Institut_id = '$range_id'$query_order";
 
 		$db->query($query);
 

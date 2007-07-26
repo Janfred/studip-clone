@@ -51,7 +51,7 @@ if ($RESOURCES_ENABLE) {
 }
 
 if ($EXTERN_ENABLE) {
-	require_once($RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
+	require_once($RELATIVE_PATH_EXTERN . "/lib/ExternConfig.class.php");
 }
 
 
@@ -265,9 +265,9 @@ while ( is_array($_POST)
 
 		// delete all configuration files for the "extern modules"
 		if ($EXTERN_ENABLE) {
-			$counts = delete_all_configs($i_id);
-			if ($counts["records"]) {
-				$msg .= "msg§" . sprintf(_("%s Konfigurationsdateien gel&ouml;scht."), $counts["records"]);
+			$counts = ExternConfig::DeleteAllConfigurations($i_id);
+			if ($counts) {
+				$msg .= "msg§" . sprintf(_("%s Konfigurationsdateien f&uuml;r externe Seiten gel&ouml;scht."), $counts);
 				$msg .= "§";
 			}
 		}

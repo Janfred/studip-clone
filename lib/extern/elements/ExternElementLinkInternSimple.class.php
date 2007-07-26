@@ -88,7 +88,7 @@ class ExternElementLinkInternSimple extends ExternElement {
 		
 		$title = _("Konfiguration:");
 		$info = _("Der Link ruft das Modul mit der gewählten Konfiguration auf. Wählen Sie \"Standard\", um die von Ihnen gesetzte Standardkonfiguration zu benutzen. Ist für das aufgerufene Modul noch keine Konfiguration erstellt worden, wird die Stud.IP-Default-Konfiguration verwendet.");
-		if ($configs = get_all_configurations($this->config->range_id, $this->link_module_type)) {
+		if ($configs = ExternConfig::GetAllConfigurations($this->config->range_id, $this->link_module_type)) {
 			$module_name = $EXTERN_MODULE_TYPES[$this->link_module_type]["module"];
 			$values = array_keys($configs[$module_name]);
 			unset($names);
@@ -128,49 +128,57 @@ class ExternElementLinkInternSimple extends ExternElement {
 	}
 	
 	function toString ($args) {
-		if (!$args["main_module"])
+		if (!$args["main_module"]) {
 			$args["main_module"] = "Main";
+		}
+		$config_meta_data = ExternConfig::GetConfigurationMetaData($this->config->range_id, $this->config->getValue($this->name, 'config'));
 		$sri_link = $this->config->getValue($this->name, "srilink");
 		$extern_link = $this->config->getValue($this->name, "externlink");
 		if ($this->config->config[$args["main_module"]]["incdata"]) {
 			$link = $sri_link;
 			if ($args["link_args"]) {
-				if (preg_match("#.*\?.*#", $link))
+				if (preg_match("#.*\?.*#", $link)) {
 					$link .= "&" . $args["link_args"];
-				else
+				} else {
 					$link .= "?" . $args["link_args"];
+				}
 			}
 		} else {
 			if ($sri_link) {
 				$link = $GLOBALS['EXTERN_SERVER_NAME'] . 'extern.php';
-				if ($args["link_args"])
+				if ($args["link_args"]) {
 					$link .= "?" . $args["link_args"] . "&";
-				else
+				} else {
 					$link .= "?";
+				}
 				$link .= "page_url=" . $sri_link;
-			}
-			elseif ($extern_link) {
-				if (strrpos($extern_link, '?'))
-					$link = "$extern_link&module={$args['module']}";
-				else
-					$link = "$extern_link?module={$args['module']}";
-				if ($config = $this->config->getValue($this->name, "config"))
+			} elseif ($extern_link) {
+				if (strrpos($extern_link, '?')) {
+					$link = "$extern_link&module={$config_meta_data['module_name']}";
+				} else {
+					$link = "$extern_link?module={$config_meta_data['module_name']}";
+				}
+				if ($config = $this->config->getValue($this->name, 'config')) {
 					$link .= "&config_id=" . $config;
+				}
 				$link .= "&range_id={$this->config->range_id}";
-				if ($args["link_args"])
+				if ($args["link_args"]) {
 					$link .= "&" . $args["link_args"];
-			}
-			else {
-				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?module={$args['module']}";
-				if ($config = $this->config->getValue($this->name, "config"))
+				}
+			} else {
+				$link = $GLOBALS['EXTERN_SERVER_NAME'] . "extern.php?module={$config_meta_data['module_name']}";
+				if ($config = $this->config->getValue($this->name, 'config')) {
 					$link .= "&config_id=" . $config;
+				}
 				$link .= "&range_id={$this->config->range_id}";
-				if ($args["link_args"])
+				if ($args["link_args"]) {
 					$link .= "&" . $args["link_args"];
+				}
 			}
 		}
-		if ($this->config->global_id)
+		if ($this->config->global_id) {
 			$link .= "&global_id=" . $this->config->global_id;
+		}
 		
 		// to set the color of the font in the style-attribute of the a-tag
 		if ($color = $this->config->getValue($this->name, "font_color")) {
@@ -178,10 +186,11 @@ class ExternElementLinkInternSimple extends ExternElement {
 					. $this->config->getValue($this->name, "a_style"));
 		}
 		
-		if ($font_attr = $this->config->getAttributes($this->name, "font"))
+		if ($font_attr = $this->config->getAttributes($this->name, "font")) {
 			$out = "<font$font_attr>" . $args["content"] . "</font>";
-		else
+		} else {
 			$out = $args["content"];
+		}
 		$out = "<a href=\"$link\"" . $this->config->getAttributes($this->name, "a") . ">" . $out . "</a>";
 		
 		return $out;

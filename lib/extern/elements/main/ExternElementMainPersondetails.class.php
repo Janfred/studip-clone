@@ -61,23 +61,29 @@ class ExternElementMainPersondetails extends ExternElementMain {
 	function getDefaultConfig () {
 		
 		$config = array(
-			"name" => "",
-			"order" => "|0|1|2|3|4|5|6|7",
-			"visible" => "|1|1|1|1|1|1|1|1",
-			"aliases" => "||"._("Lebenslauf")."|"._("Schwerpunkte")."|"._("Lehrveranstaltungen")."|"
-					._("Aktuell")."|"._("Termine")."|"._("Publikationen")."|",
-			"showcontact" => "1",
-			"showimage" => "right",
-			"wholesite" => "0",
-			"nameformat" => "",
-			"dateformat" => "%d. %b. %Y",
-			"language" => "",
-			"studiplink" => "top",
-			"urlcss" => "",
+			"name" => '',
+			/*
+			"order" => '|0|1|2|3|4|5|6|7|8',
+			"visible" => '|1|1|1|1|1|1|1|1|1',
+			"aliases" => '||'._("Lebenslauf").'|'._("Schwerpunkte").'|'._("Lehrveranstaltungen").'|'
+					._("Aktuell").'|'._("Termine").'|'._("Publikationen").'|'._("Literaturlisten").'|',
+			*/
+			"order" => '|0|1|2|3|4|5|6|7',
+			"visible" => '|1|1|1|1|1|1|1|1',
+			"aliases" => '||'._("Lebenslauf").'|'._("Schwerpunkte").'|'._("Lehrveranstaltungen").'|'
+					._("Aktuell").'|'._("Termine").'|'._("Publikationen").'|',
+			"showcontact" => '1',
+			"showimage" => 'right',
+			"wholesite" => '0',
+			"nameformat" => '',
+			"dateformat" => '%d. %b. %Y',
+			"language" => '',
+			"studiplink" => 'top',
+			"urlcss" => '',
 			"title" => _("MitarbeiterInnen"),
 			"copyright" => htmlentities($GLOBALS['UNI_NAME_CLEAN']
 					. " ({$GLOBALS['UNI_CONTACT']})", ENT_QUOTES),
-			"author" => ""
+			"author" => ''
 		);
 		
 		get_default_generic_datafields($config, "user");
@@ -147,7 +153,7 @@ class ExternElementMainPersondetails extends ExternElementMain {
 		$table .= $edit_form->editOptionGeneric("dateformat", $title, $info, $values, $names);
 		
 		$title = _("Sprache:");
-		$info = _("Wählen Sie eine Sprache für die Datumsangaben aus.");
+		$info = _("Wählen Sie eine Sprache fr die Datumsangaben aus.");
 		$values = array("", "de_DE", "en_GB");
 		$names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
 		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);

@@ -52,7 +52,7 @@ class ExternElementMain extends ExternElement {
 			$main_class_name = 'ExternElementMain' . ucfirst($module_name);
 			require_once($GLOBALS['RELATIVE_PATH_EXTERN']
 					. "/elements/main/$main_class_name.class.php");
-			$main_module =& new $main_class_name($module_name, $data_fields,	$field_names, $config);
+			$main_module =& new $main_class_name($module_name, $data_fields, $field_names, $config);
 			
 			return $main_module;
 		}

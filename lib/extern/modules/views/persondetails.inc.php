@@ -10,7 +10,6 @@ if ($GLOBALS["CALENDAR_ENABLE"]) {
 	require_once($GLOBALS["RELATIVE_PATH_CALENDAR"]
 			. "/lib/DbCalendarEventList.class.php");
 }
-global $_fullname_sql;
 
 $instituts_id = $this->config->range_id;
 $username = $args["username"];
@@ -19,11 +18,12 @@ $sem_id = $args["seminar_id"];
 $db_inst =& new DB_Seminar();
 $db =& new DB_Seminar();
 
-if (!$nameformat = $this->config->getValue("Main", "nameformat"))
+if (!$nameformat = $this->config->getValue("Main", "nameformat")) {
 	$nameformat = "full";
+}
 
 $query_user_data = "SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, "
-						. $_fullname_sql[$nameformat] . " AS fullname,"
+						. $GLOBALS['_fullname_sql'][$nameformat] . " AS fullname,"
 						. "uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home "
 						. "FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) "
 	          . "LEFT JOIN auth_user_md5 aum USING(user_id) "
@@ -56,7 +56,7 @@ if (!$db_inst->num_rows() && $sem_id) {
 // ist zwar global Dozent, aber an keinem Institut eingetragen
 if (!$db_inst->num_rows() && $sem_id) {
 	$query = "SELECT aum.*, ";
-	$query .= $_fullname_sql[$nameformat] . " AS fullname ";
+	$query .= $GLOBALS['_fullname_sql'][$nameformat] . " AS fullname ";
 	$query .= "FROM auth_user_md5 aum LEFT JOIN user_info USING(user_id) ";
 	$query .= "WHERE username = '$username' AND perms = 'dozent'";
 	$db->query($query);
@@ -133,6 +133,12 @@ foreach ($order as $position) {
 			case "head" :
 				$data_field($this, $db, $aliases_content[$position], $text_div, $text_div_end);
 				break;
+			/*
+			case 'literature' :
+				$literature_content = $this->elements['LitList']->getContent(NULL);
+				literature($this, $literature_content, $aliases_content[$position], $text_div, $text_div_end);
+				break;
+			*/
 			// generic data fields
 			default :
 				// include generic datafields
@@ -471,8 +477,8 @@ function head (&$module, $db, $a) {
 		
 		if ($module->config->getValue("Main", "showimage")) {
 			echo "<td" . $module->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
-			if (file_exists("{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user/" . $db->f("user_id").".jpg")) {
-				echo "<img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/";
+			if (file_exists("{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user" . $db->f("user_id").".jpg")) {
+				echo "<img src=\"{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user/";
 				echo $db->f("user_id") . ".jpg\" alt=\"Foto " . htmlReady(trim($db->f("fullname"))) . "\"";
 				echo $module->config->getAttributes("PersondetailsHeader", "img") . "></td>";
 			}
@@ -601,5 +607,38 @@ function kontakt ($module, $db, $separate = FALSE) {
 	
 	return $out;
 }
+
+/*
+function literature (&$module, $content, $alias_content, $text_div, $text_div_end) {
+	if (count($content)) {
+		echo "<tr><td width=\"100%\">\n";
+		echo "<table" . $module->config->getAttributes("TableParagraph", "table") . ">\n";
+		echo "<tr" . $module->config->getAttributes("TableParagraphHeadline", "tr") . ">";
+		echo "<td" . $module->config->getAttributes("TableParagraphHeadline", "td") . ">";
+		echo "<font" . $module->config->getAttributes("TableParagraphHeadline", "font") . ">";
+		echo "$alias_content</font></td></tr>\n";
+		
+		$tmpl = "\n<!-- BEGIN LITLIST -->\n   ";
+		$tmpl .= '<tr' . $module->config->getAttributes('TableParagraphSubHeadline', 'tr') . '>';
+		$tmpl .= '<td' . $module->config->getAttributes('TableParagraphSubHeadline', 'td') . '>';
+		$tmpl .= $subheadline_div;
+		$tmpl .= '<font' . $module->config->getAttributes('TableParagraphSubHeadline', 'font') . '>';
+		$tmpl .= '###LITLIST_NAME###';
+		$tmpl .= "</font>$subheadline_div_end</td></tr>\n";
+		$tmpl .= "\n  <!-- BEGIN LITLIST_ITEM -->\n  ";
+		$tmpl .=		'<tr' . $module->config->getAttributes('TableParagraphText', 'tr') . '>';
+		$tmpl .=		'<td' . $module->config->getAttributes('TableParagraphText', 'td') . '>';
+		$tmpl .=		"$text_div<font" . $module->config->getAttributes('TableParagraphText', 'font') . '>';
+		$tmpl .=		'###LITLIST_ITEM_ELEMENT###';
+		$tmpl .=		"</font>$text_div_end</td></tr>\n";
+		$tmpl .= "\n   <!-- END LITLIST_ITEM -->\n   ";
+		$tmpl .= "\n  <!-- END LITLIST -->\n";
+		
+		echo $module->elements['LitList']->renderTmpl($tmpl);
+		
+		echo "</table>\n</td></tr>\n";
+	}
+}
+*/
 
 ?>

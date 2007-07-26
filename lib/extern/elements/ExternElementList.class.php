@@ -15,7 +15,7 @@
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// ExternElementListLectures.class.php
+// ExternElementList.class.php
 // 
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>

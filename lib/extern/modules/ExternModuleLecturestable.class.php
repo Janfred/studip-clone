@@ -57,8 +57,8 @@ class ExternModuleLecturestable extends ExternModule {
 			'Grouping' => 'TableGroup',
 			'TableHeadrow',
 			'TableRow',
-			'SemLink' => 'LinkInternSimple',
-			'LecturerLink' => 'LinkInternSimple');
+			'SemLink' => 'LinkIntern',
+			'LecturerLink' => 'LinkIntern');
 		$this->field_names = array(
 				_("Veranstaltungsnummer"),
 				_("Name"),
