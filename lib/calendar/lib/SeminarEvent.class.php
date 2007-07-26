@@ -86,7 +86,7 @@ class SeminarEvent extends Event {
 
 	function getTitle () {
 		if ($this->getProperty('SUMMARY') == '') {
-			return 'Kein Titel';
+			return _("Kein Titel");
 		}
 		return $this->getProperty('SUMMARY');
 	}
