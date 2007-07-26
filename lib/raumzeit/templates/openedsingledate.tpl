@@ -61,7 +61,7 @@
 					<BR/>
 					<? } ?>
 					<?=_("freie Raumangabe:")?>
-					<INPUT type="text" name="freeRoomText_sd" size="10" maxlength="255" value="<?=$tpl['freeRoomText']?>">
+					<INPUT type="text" name="freeRoomText_sd" size="20" maxlength="255" value="<?=$tpl['freeRoomText']?>">
 					<?=$GLOBALS['RESOURCES_ENABLE'] ? _("(f&uuml;hrt <em>nicht</em> zu einer Raumbuchung)"): ''?><BR/>
 					<? if ($GLOBALS['RESOURCES_ENABLE'] && $GLOBALS['RESOURCES_ALLOW_ROOM_REQUESTS']) { ?>
 					<?=_("Raumanfrage")?>
