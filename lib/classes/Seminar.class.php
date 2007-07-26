@@ -33,6 +33,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once ('lib/functions.php');
 require_once ('lib/admission.inc.php');
 require_once ('lib/classes/Modules.class.php');
 require_once ('lib/dates.inc.php');
@@ -156,10 +157,6 @@ class Seminar {
 	function getSemesterDurationTime() {
 		return $this->semester_duration_time;
 	}
-
-//	function getCycle() {
-//		return $this->cycle;
-//	}
 
 	function getMetaDateType () {
 		return $this->metadate->getArt();
@@ -424,9 +421,6 @@ class Seminar {
 		$this->db->query($query);
 		if ($this->db->num_rows() == 0) {
 			echo 'Fehler: Konnte das Seminar mit der ID '.$this->id.' nicht finden!<br/>';
-			//folgender Code gibt DB-Passwort mit aus!!!
-			//echo '<pre>', print_r($this, true), '</pre>';
-			//echo '<pre>', print_r(debug_backtrace(), true), '</pre>';
 			die;
 		}
 
