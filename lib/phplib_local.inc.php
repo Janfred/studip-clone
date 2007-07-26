@@ -45,6 +45,7 @@ require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
 require_once('lib/classes/Config.class.php');
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/classes/StudipNews.class.php');
+require_once('lib/classes/caching.php');
 
 
 // globale template factory anlegen
