@@ -36,7 +36,9 @@
 
 require_once('lib/visual.inc.php');
 require_once('lib/user_visible.inc.php');
+require_once("lib/classes/DataFieldEntry.class.php");
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/extern_functions.inc.php');
+
 global $_fullname_sql;
 
 $range_id = $this->config->range_id;
@@ -188,11 +190,12 @@ foreach ($visible_groups as $group_id => $group) {
 			);
 
 			// generic data fields
-			if ($generic_datafields) {
+			if (is_array($generic_datafields)) {
 				$localEntries = DataFieldEntry::getDataFieldEntries($$db_out->f('user_id'));
 //				$datafields = $datafields_obj->getLocalFields($$db_out->f("user_id"));
-				foreach ($generic_datafields as $id) 
+				foreach ($generic_datafields as $id) {
 					$data['content'][$id] = is_object($localEntries[$id]) ? $localEntries[$id]->getDisplayValue() : '';
+				}
 			}
 			$out .= $this->elements["TableRow"]->toString($data);
 		}

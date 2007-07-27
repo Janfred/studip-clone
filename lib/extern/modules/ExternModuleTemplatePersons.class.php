@@ -37,7 +37,7 @@
 
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/ExternModule.class.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/views/extern_html_templates.inc.php');
-require_once('lib/classes/DataFields.class.php');
+require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/visual.inc.php');
 require_once('lib/user_visible.inc.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/extern_functions.inc.php');
@@ -209,9 +209,7 @@ class ExternModuleTemplatePersons extends ExternModule {
 		}
 		
 		// generic data fields
-		if ($generic_datafields = $this->config->getValue('TemplateGeneric', 'genericdatafields')) {
-			$datafields_obj =& new DataFields();
-		}
+		$generic_datafields = $this->config->getValue('TemplateGeneric', 'genericdatafields');
 		
 		$data['data_fields'] = $this->data_fields;
 		$defaultaddress = $this->config->getValue('Main', 'defaultadr');
@@ -249,9 +247,9 @@ class ExternModuleTemplatePersons extends ExternModule {
 			if ($db->num_rows()) {
 				$aliases_groups = $this->config->getValue('Main', 'groupsalias');
 				if($aliases_groups[$position]) {
-					$content['PERSONS']['GROUP'][$i]['GROUPTITLE-SUBSTITUTE'] = $this->extHtmlReady($aliases_groups[$position]);
+					$content['PERSONS']['GROUP'][$i]['GROUPTITLE-SUBSTITUTE'] = ExternModule::ExtHtmlReady($aliases_groups[$position]);
 				}
-				$content['PERSONS']['GROUP'][$i]['GROUPTITLE'] = $this->extHtmlReady($group);
+				$content['PERSONS']['GROUP'][$i]['GROUPTITLE'] = ExternModule::ExtHtmlReady($group);
 				$content['PERSONS']['GROUP'][$i]['GROUP-NO'] = $i + 1;
 				
 				$j = 0;
@@ -280,26 +278,30 @@ class ExternModuleTemplatePersons extends ExternModule {
 						}
 					}
 					
-					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['FULLNAME'] = $this->extHtmlReady($db_out->f('fullname'));
-					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['LASTNAME'] = $this->extHtmlReady($db_out->f('Nachname'));
-					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['FIRSTNAME'] = $this->extHtmlReady($db_out->f('Vorname'));
-					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['TITLEFRONT'] = $this->extHtmlReady($db_out->f('title_front'));
-					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['TITLEREAR'] = $this->extHtmlReady($db_out->f('title_rear'));
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['FULLNAME'] = ExternModule::ExtHtmlReady($db_out->f('fullname'));
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['LASTNAME'] = ExternModule::ExtHtmlReady($db_out->f('Nachname'));
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['FIRSTNAME'] = ExternModule::ExtHtmlReady($db_out->f('Vorname'));
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['TITLEFRONT'] = ExternModule::ExtHtmlReady($db_out->f('title_front'));
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['TITLEREAR'] = ExternModule::ExtHtmlReady($db_out->f('title_rear'));
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl(array('link_args' => 'username=' . $db_out->f('username')));
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['USERNAME'] = $db_out->f('username');
-					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['PHONE'] = $this->extHtmlReady($db_out->f('Telefon'));
-					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['ROOM'] = $this->extHtmlReady($db_out->f('raum'));
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['PHONE'] = ExternModule::ExtHtmlReady($db_out->f('Telefon'));
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['ROOM'] = ExternModule::ExtHtmlReady($db_out->f('raum'));
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['EMAIL'] = $db_out->f('Email');
-					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['OFFICEHOURS'] = $this->extHtmlReady($db_out->f('sprechzeiten'));
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['OFFICEHOURS'] = ExternModule::ExtHtmlReady($db_out->f('sprechzeiten'));
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['PERSON-NO'] = $j + 1;
 					
 					// generic data fields
-					if ($generic_datafields) {
-						$datafields = $datafields_obj->getLocalFields($db_out->f('user_id'));
+					if (is_array($generic_datafields)) {
+						$localEntries = DataFieldEntry::getDataFieldEntries($db_out->f('user_id'), 'user');
+						#$datafields = $datafields_obj->getLocalFields($db_out->f('user_id'));
 						$k = 1;
 						foreach ($generic_datafields as $datafield) {
-							if (isset($datafields[$datafield]['content'])) {
-								$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['DATAFIELD_' . $k] = $datafields[$datafield]['content'];
+							if (isset($localEntries[$datafield]) && is_object($localEntries[$datafield])) {
+								$localEntry = trim($localEntries[$datafield]->getDisplayValue());
+								if ($localEntry) {
+									$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['DATAFIELD_' . $k] = ExternModule::ExtFormatReady($localEntry, TRUE, TRUE);
+								}
 							}
 							$k++;
 						}

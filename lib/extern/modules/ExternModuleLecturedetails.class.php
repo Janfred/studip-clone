@@ -257,8 +257,9 @@ class ExternModuleLecturedetails extends ExternModule {
 				$localEntries = DataFieldEntry::getDataFieldEntries($this->seminar_id);
 				print_r($localEntries);
 				foreach ($generic_datafields as $id) {
-					if ($visible[++$j])
+					if ($visible[++$j] && isset($localEntries[$id]) && is_object($localEntries[$id])) {
 						$data[$id] = $localEntries[$id]->getDisplayValue();
+					}
 				}
 			}
 			$out = $this->toStringMainTable($data, FALSE); 

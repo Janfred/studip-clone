@@ -188,9 +188,9 @@ if ($EXTERN_SRI_ENABLE_BY_ROOT && $perm->have_perm('root')) {
 echo "<tr><td class=\"blank\">\n";
 
 $configurations = ExternConfig::GetAllConfigurations($range_id);
+$module_types_ordered = ExternModule::GetOrderedModuleTypes();
 
 $choose_module_form = '';
-$module_types_ordered = ExternModule::GetOrderedModuleTypes();
 // remove global configuration
 array_shift($module_types_ordered);
 foreach ($module_types_ordered as $i) {
@@ -237,10 +237,14 @@ if ($choose_module_form != "") {
 		if ($_REQUEST['com'] == 'copychoose') {
 			$choose_module_select = "<select name=\"copyconfigid\">\n";
 			$configurations_copy = ExternConfig::GetAllConfigurations($_REQUEST['copychooseinst']);
-			foreach ($configurations_copy as $module_name_copy => $configs_module_copy) {
-				$choose_module_select .= '<option value="" style="font-weight: bold;">' . htmlReady($module_name_copy) . '</option>';
-				foreach ($configs_module_copy as $config_id_copy => $config_data_copy) {
+			foreach ($module_types_ordered as $module_type) {
+				$print_module_name = TRUE;
+				foreach ((array) $configurations_copy[$GLOBALS['EXTERN_MODULE_TYPES'][$module_type]['module']] as $config_id_copy => $config_data_copy) {
+					if ($print_module_name) {
+						$choose_module_select .= '<option value="" style="font-weight: bold;">' . htmlReady($GLOBALS['EXTERN_MODULE_TYPES'][$module_type]['name']) . '</option>';
+					}
 					$choose_module_select .= '<option value="' . $config_id_copy . '">&nbsp;&nbsp;' . htmlReady($config_data_copy['name']) . '</option>';
+					$print_module_name = FALSE;
 				}
 			}
 			

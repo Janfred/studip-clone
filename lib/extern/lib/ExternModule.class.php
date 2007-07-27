@@ -41,7 +41,8 @@ require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . "/lib/ExternConfig.class.php");
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . "/lib/ExternElement.class.php");
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . "/lib/ExternElementMain.class.php");
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . "/views/ExternEditModule.class.php");
-require_once 'lib/functions.php';
+require_once('lib/functions.php');
+require_once('lib/classes/DataFieldEntry.class.php');
 
 
 class ExternModule {
@@ -322,6 +323,7 @@ class ExternModule {
 	*/
 	function printError () {
 		
+		page_close();
 		exit;
 	}
 	
@@ -381,12 +383,22 @@ class ExternModule {
 		if (!is_array($datafields_config)) {
 			$datafields_config = array();
 		}
+		/*
 		$datafields_obj =& new DataFields();
 		$datafields = $datafields_obj->getFields($object_type);
 		$i = 1;
 		foreach ((array) $datafields_config as $df_id) {
 			if (isset($datafields[$df_id])) {
 				$markers[$element_name][] = array("###DATAFIELD_$i###", $datafields[$df_id]['name']);
+			}
+			$i++;
+		}
+		*/
+		$datafields = get_generic_datafields($object_type);
+		$i = 1;
+		foreach ((array) $datafields_config as $df_id) {
+			if (isset($datafields['ids_names'][$df_id])) {
+				$markers[$element_name][] = array("###DATAFIELD_$i###", $datafields['ids_names'][$df_id]);
 			}
 			$i++;
 		}

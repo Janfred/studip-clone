@@ -389,8 +389,11 @@ class ExternSemBrowseTable extends SemBrowse {
 						if (is_array($generic_datafields)) {
 //							$datafields = $datafields_obj->getLocalFields($seminar_id);
 							$localEntries = DataFieldEntry::getDataFieldEntries($seminar_id);
-							foreach ($generic_datafields as $id)
-								$data["content"][$id] = $localEntries[$id]->getDisplayValue();
+							foreach ($generic_datafields as $id) {
+								if (isset($localEntries[$id]) && is_object($localEntries[$id])) {
+									$data["content"][$id] = $localEntries[$id]->getDisplayValue();
+								}
+							}
 						}
 						
 						$data["data_fields"] = $this->module->data_fields;

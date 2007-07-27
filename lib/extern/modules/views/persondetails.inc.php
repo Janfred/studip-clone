@@ -2,6 +2,7 @@
 
 require_once('config.inc.php');
 require_once('lib/classes/SemesterData.class.php');
+require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/visual.inc.php');
 require_once('lib/statusgruppe.inc.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . '/lib/extern_functions.inc.php');
@@ -142,7 +143,7 @@ foreach ($order as $position) {
 			// generic data fields
 			default :
 				// include generic datafields
-				if ($fieldEntries[$data_field]->getValue()) {
+				if (isset($fieldEntries[$data_field]) && is_object($fieldEntries[$data_field]) && trim($fieldEntries[$data_field]->getValue())) {
 					echo "<tr><td width=\"100%\">\n";
 					echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
 					echo "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr");
@@ -152,7 +153,7 @@ foreach ($order as $position) {
 					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
-					echo $fieldEntries[$data_field]->getDisplayValue();
+					echo trim($fieldEntries[$data_field]->getDisplayValue());
 					echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 				}
 		}

@@ -143,7 +143,6 @@ class ExternConfig {
 			}
 		}
 		$this->id = $this->makeId();
-		$this->file_name = $this->id . '.cfg';
 		$this->config_name = $this->createConfigName($this->range_id);
 		
 		// take the new configuration, write the name in the configuration
@@ -408,9 +407,9 @@ class ExternConfig {
 		return FALSE;
 	}
 	
-	function &copy ($range_id) {
+	function copy ($range_id) {
 		$copy_config = ExternConfig::GetInstance($range_id, $this->module_name);
-		$copy_config->setConfiguration($this->config);
+		$copy_config->setDefaultConfiguration($this->getConfiguration());
 		
 		return $copy_config;
 	}

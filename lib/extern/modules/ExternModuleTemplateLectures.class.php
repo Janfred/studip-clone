@@ -37,11 +37,10 @@
 
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/ExternModule.class.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/views/extern_html_templates.inc.php');
-require_once('lib/classes/DataFields.class.php');
+require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/visual.inc.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/extern_functions.inc.php');
 require_once('lib/classes/SemBrowse.class.php');
-require_once('lib/classes/DataFields.class.php');
 require_once('lib/classes/SemesterData.class.php');
 require_once('lib/dates.inc.php');
 
@@ -424,9 +423,7 @@ class ExternSemBrowseTemplate extends SemBrowse {
 			}
 			
 			// generic datafields
-			if ($generic_datafields = $this->module->config->getValue("Main", "genericdatafields")) {
-				$datafields_obj =& new DataFields();
-			}
+			$generic_datafields = $this->module->config->getValue("Main", "genericdatafields");
 			
 			$content['__GLOBAL__']['LECTURES-COUNT'] = count($sem_data);
 			$group_by_name = $this->module->config->getValue("Main", "aliasesgrouping");
@@ -500,11 +497,15 @@ class ExternSemBrowseTemplate extends SemBrowse {
 						
 						// generic data fields
 						if (is_array($generic_datafields)) {
-							$datafields = $datafields_obj->getLocalFields($seminar_id);
+							$localEntries = DataFieldEntry::getDataFieldEntries($seminar_id, 'sem');
+							#$datafields = $datafields_obj->getLocalFields($seminar_id);
 							$l = 1;
 							foreach ($generic_datafields as $datafield) {
-								if (isset($datafields[$datafield]['content'])) {
-									$content['LECTURES']['GROUP'][$i]['LECTURE'][$j]['DATAFIELD_' . $l] = ExternModule::ExtFormatReady($datafields[$datafield]['content'], TRUE, TRUE);
+								if (isset($localEntries[$datafield]) && is_object($localEntries[$datafield])) {
+									$localEntry = trim($localEntries[$datafield]->getDisplayValue());
+									if ($localEntry) {
+										$content['LECTURES']['GROUP'][$i]['LECTURE'][$j]['DATAFIELD_' . $l] = ExternModule::ExtFormatReady($localEntry, TRUE, TRUE);
+									}
 								}
 								$l++;
 							}

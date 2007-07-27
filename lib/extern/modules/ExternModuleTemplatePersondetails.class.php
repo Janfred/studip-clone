@@ -37,7 +37,7 @@
 
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/ExternModule.class.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/views/extern_html_templates.inc.php');
-require_once('lib/classes/DataFields.class.php');
+require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/visual.inc.php');
 require_once('lib/user_visible.inc.php');
 require_once('lib/statusgruppe.inc.php');
@@ -321,12 +321,16 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		
 		// generic data fields
 		if ($generic_datafields = $this->config->getValue('Main', 'genericdatafields')) {
-			$datafields_obj =& new DataFields($user_id);
-			$datafields = $datafields_obj->getLocalFields($user_id);
+			#$datafields_obj =& new DataFields($user_id);
+			#$datafields = $datafields_obj->getLocalFields($user_id);
+			$localEntries = DataFieldEntry::getDataFieldEntries($user_id, 'user');
 			$k = 0;
 			foreach ($generic_datafields as $datafield) {
-				if (isset($datafields[$datafield]['content'])) {
-					$content['PERSONDETAILS']["DATAFIELD_$k"] = ExternModule::ExtFormatReady($datafields[$datafield]['content'], TRUE, TRUE);
+				if (isset($localEntries[$datafield]) && is_object($localEntries[$datafield])) {
+					$localEntry = trim($localEntries[$datafield]->getDisplayValue());
+					if ($localEntry) {
+						$content['PERSONDETAILS']["DATAFIELD_$k"] = ExternModule::ExtFormatReady($localEntry, TRUE, TRUE);
+					}
 				}
 				$k++;
 			}
