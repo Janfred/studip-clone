@@ -338,6 +338,17 @@ $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen
 					);
 //weitere Definitionen fuer spezielle Veranstaltungstypen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
+/*
+ * define additional fields that can be shown in participant list view. 
+ */
+
+$TEILNEHMER_VIEW[0] = array("field" => "user_picture", 
+  "name" => _("Nutzerbilder"), "table" => "special", "export" => 0, "display"=> 1);
+$TEILNEHMER_VIEW[1] = array("field" => "geschlecht", 
+  "name" => _("Geschlecht"), "table" => "datafields", "export" => 1, "display"=> 1);
+$TEILNEHMER_VIEW[2] = array("field" => "preferred_language", 
+  "name" => _("Sprache"), "table" => "user_info", "export" => 1, "display"=> 1);
+ 
 
 //Festlegen von zulaessigen Bezeichnungen fuer Einrichtungen (=Institute)
 $INST_TYPE[1]=array("name"=>_("Einrichtung"));
