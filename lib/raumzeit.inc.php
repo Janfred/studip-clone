@@ -21,10 +21,18 @@ function raumzeit_delete_singledate() {
 	$termin = $sem->getSingleDate($_REQUEST['sd_id'], $_REQUEST['cycle_id']);
 
 	if (!$_REQUEST['approveDelete'] && sizeof($termin->getIssueIDs()) > 0) {
-		$sem->createQuestion( _("Achtung: Diesem Termin ist im Ablaufplan ein Thema zugeordnet. Titel und Beschreibung des Themas bleiben erhalten und können in der Expertenansicht des Ablaufplans einem anderen Termin wieder zugeordnet werden."). '<br/>'. _("Wollen Sie diesen Termin wirklich löschen?."), $PHP_SELF."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
+		if($GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
+            $sem->createQuestion( _("Achtung: Diesem Termin ist im Ablaufplan ein Thema zugeordnet. Titel und Beschreibung des Themas bleiben erhalten und können in der Expertenansicht des Ablaufplans einem anderen Termin wieder zugeordnet werden."). '<br/>'. _("Wollen Sie diesen Termin wirklich löschen?."), $PHP_SELF."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
+        }else{
+            $sem->createQuestion( _("Wollen Sie diesen Termin wirklich löschen?."), $PHP_SELF."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
+        }
 	} else {
 		if ($_REQUEST['approveDelete']) {
-			$sem->createMessage(sprintf(_("Sie haben den Termin %s gelöscht, dem ein Thema zugeorndet war. Sie können das Thema in der %sExpertenansicht des Ablaufplans%s einem anderen Termin (z.B. einem Ausweichtermin) zuordnen."), $termin->toString(), '<a href="themen.php?cmd=changeViewMode&newFilter=expert">', '</a>'));
+            if($GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
+                $sem->createMessage(sprintf(_("Sie haben den Termin %s gelöscht, dem ein Thema zugeorndet war. Sie können das Thema in der %sExpertenansicht des Ablaufplans%s einem anderen Termin (z.B. einem Ausweichtermin) zuordnen."), $termin->toString(), '<a href="themen.php?cmd=changeViewMode&newFilter=expert">', '</a>'));
+            }else{
+                $sem->createMessage(sprintf(_("Der Termin %s wurde gelöscht!"), $termin->toString()));
+            }
 		} else {
 			$sem->createMessage(sprintf(_("Der Termin %s wurde gelöscht!"), $termin->toString()));
 		}
