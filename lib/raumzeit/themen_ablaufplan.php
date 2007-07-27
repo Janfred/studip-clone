@@ -150,10 +150,12 @@ $info['eintrag'][] = array (
 	'icon' => ($viewModeFilter == 'simple') ? 'forumrot.gif' : 'forumgrau.gif',
 	'text' => '<a href="themen.php?cmd=changeViewMode&newFilter=expert">'._("Standardansicht").'</a>'
 );
-$info['eintrag'][] = array (
-	'icon' => ($viewModeFilter == 'expert') ? 'forumrot.gif' : 'forumgrau.gif',
-	'text' => '<a href="themen.php?cmd=changeViewMode&newFilter=expert">'._("Erweiterte Ansicht").'</a>'
-);
+if($GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
+    $info['eintrag'][] = array (
+    	'icon' => ($viewModeFilter == 'expert') ? 'forumrot.gif' : 'forumgrau.gif',
+    	'text' => '<a href="themen.php?cmd=changeViewMode&newFilter=expert">'._("Erweiterte Ansicht").'</a>'
+    );
+}
 $infobox[] = $info;
 
 $infobox[] = raumzeit_get_semester_chooser($sem, $semester, $raumzeitFilter);

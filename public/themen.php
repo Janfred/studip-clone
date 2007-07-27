@@ -51,6 +51,11 @@ if ($cmd == 'changeViewMode') {
 	$viewModeFilter = $_REQUEST['newFilter'];
 }
 
+// expert view enabled ?
+if(!$GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
+    $viewModeFilter = 'simple';
+}
+
 switch ($viewModeFilter) {
 	case 'expert':
         $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenAblaufplanExpertenansicht";        
