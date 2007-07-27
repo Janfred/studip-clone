@@ -33,11 +33,15 @@ require_once ('lib/statusgruppe.inc.php');	//Funktionen der Statusgruppen
 require_once ('lib/messaging.inc.php');	//Funktionen des Nachrichtensystems
 require_once ('config.inc.php');	//We need the config for some parameters of the class of the Veranstaltung
 require_once('lib/user_visible.inc.php');
+require_once('lib/export/export_studipdata_func.inc.php');
+
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 }
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
+
+$show_user_picture = false;
 /*
 * set the user_visibility of all unkowns to their global visibility
 */
@@ -615,7 +619,30 @@ if (Seminar_Session::check_ticket($studipticket)){
 check_admission();
 
 
+$db5->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$id'");
+
 if ($perm->have_perm("dozent")) {
+	
+	
+	$sem_view_rights = array();
+  $global_view_rights = array();
+
+
+  if (is_array($GLOBALS['TEILNEHMER_VIEW']))
+  {
+    foreach($GLOBALS['TEILNEHMER_VIEW'] as $val) {
+      $global_view_rights[] = $val['field'];
+    }
+  }
+
+	$db5->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$id'");
+	while ($db5->next_record()) {
+		if (in_array($db5->f("datafield_id"), $global_view_rights))
+		{
+			$sem_view_rights[$db5->f("datafield_id")] = TRUE;
+		} 
+	}
+	
 	if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
 		$gruppe = array ("dozent" => _("DozentInnen"),
 					  "tutor" => _("TutorInnen"),
@@ -1211,6 +1238,41 @@ while (list ($key, $val) = each ($gruppe)) {
 		$show_area = "show_".$key;
 		if ((is_opened($db->f("user_id")) || isset($$show_area)) && $rechte) { // show further userinfosi
 			$info_is_open = true;
+
+			//get data for user, if dozent or higher
+			if ($perm->have_perm("dozent")) {
+				/* remark: if you change something in the data-acquisition engine
+				 * please do not forget to change it also in "export/export_studipdata_func.inc.php"
+				 * in the function export_teilis(...)
+				 */
+
+        $additional_data = get_additional_data($db->f('user_id'), $id);
+
+				$user_data = array();
+
+        foreach($additional_data as $key => $val)
+        {
+          if ($val['content'] && $val['display'])
+          {
+            if (is_array($val['content']))
+            {
+              $zw = implode(', ', $val['content']);
+
+              $user_data [] = array('name' => $val['name'], 'content' => $zw);
+            } else
+            {
+              if ($val['name'] == 'user_picture')
+              {
+                $show_user_picture = true;
+              } else
+              { 
+                $user_data [] = $val;
+              }
+            }
+          }
+        }
+			}
+
 		?>
 			<tr>
 				<td class=<?=$class?> colspan=9>
@@ -1223,7 +1285,36 @@ while (list ($key, $val) = each ($gruppe)) {
 							</td>
 							<td>&nbsp;</td>
 							<td class="<?=$class?>" align="left" valign="top" width="30%">
+								<!--<font size="-1">
+									<?=_("Anmeldedatum:")." ".date("d.m. Y, H:i:s",$db->f("mkdate"))?><br/>
+								</font>-->
+								<?
+									$split = floor((sizeof($user_data) / 2));
+									$i = 0;
+									foreach($user_data as $val) {
+										if ($val["content"] != "") {
+
+											echo "<font size=\"-1\">".$val["name"].": ".$val["content"]."</font><br/>\n";
+                      if ($i == $split) 
+                        echo "</td><td class=\"$class\" valign=\"top\" align=\"left\" width=\"30%\">\n";
+											$i ++;
+										}
+									}
+									if ((sizeof($user_data) <= 1)) 
+									  echo "</td><td class=\"$class\" valign=\"top\" align=\"left\" width=\"30%\">&nbsp;\n";
+								?>
 							</td>
+							<? 
+							if ($show_user_picture) { ?>
+							<td class="<?=$class?>" align="center">
+								<? 
+								
+								if (file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$db->f("user_id").".jpg")) {
+									 ?>
+									<img src="<?=$GLOBALS['DYNAMIC_CONTENT_URL']."/user/".$db->f("user_id")?>.jpg" border="0" width="80">
+								<? } ?>
+							</td>
+							<? } ?>
 							<td class="<?=$class?>" align="center" width="15%">
 								<font size="-1"><?=_("&Auml;nderungen")?></font><br />
 								<INPUT type="image" <?=makeButton("uebernehmen", "src")?>>

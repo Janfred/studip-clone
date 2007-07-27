@@ -269,6 +269,13 @@ if ($modules["wiki"]) {
 	$structure["wiki_export"]=array ('topKat' => "wiki", 'name' => _("Export"), 'link' => "wiki.php?view=export", 'active' => FALSE); 
 }
 		
+// adding link for configuring the user view user view
+
+if ($rechte && $modules["participants"] && is_array($GLOBALS['TEILNEHMER_VIEW'])) {
+	$structure["teilnehmer_view"] = array(topKat => "teilnehmer", name => _("Ansicht konfigurieren"), link => "teilnehmer_view.php", active => FALSE);
+}
+
+		
 
 //bottomkats for resources-management, if modul is activated
 if ($RESOURCES_ENABLE) {
@@ -379,6 +386,9 @@ if (!$found){
 		break;
 		case "statusgruppen.php" : 
 			$reiter_view="statusgruppen"; 
+		break;
+		case "teilnehmer_view.php";
+			$reiter_view="teilnehmer_view";
 		break;
 		case "institut_details.php": 
 			$reiter_view="institut_details"; 

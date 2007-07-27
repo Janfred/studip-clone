@@ -3,7 +3,7 @@
 <!-- vosshe@fh-trier.de -->
 	<xsl:output method="text" encoding="iso-8859-1"/>
 	<xsl:variable name="datafields" select="//gruppe[@key='AutorInnen' or @key='Authors']/person[position()=1]/datenfelder[position()=1]/datenfeld/@key"/>
-	<xsl:template match="/">
+	<xsl:variable name="zusatzangaben" select="//gruppe[@key='AutorInnen' or @key='Authors']/person[position()=1]/zusatzangaben[position()=1]/zusatzangabe/@key"/>	<xsl:template match="/">
 		<xsl:text>Titel;</xsl:text>
 		<xsl:text>Vorname;</xsl:text>
 		<xsl:text>Nachname;</xsl:text>
@@ -20,6 +20,12 @@
 				<xsl:text>;</xsl:text>
 			</xsl:for-each>
 		</xsl:if>
+	  <xsl:if test="$zusatzangaben">
+			<xsl:for-each select="$zusatzangaben">
+				<xsl:value-of select="."/>
+				<xsl:text>;</xsl:text>
+			</xsl:for-each>
+		</xsl:if>		
 		<xsl:text>Bemerkung</xsl:text>
 		<xsl:text>
 </xsl:text>
@@ -93,7 +99,11 @@
 			<xsl:call-template name="check_datafields">
 				<xsl:with-param name="daten" select="datenfelder"/>
 			</xsl:call-template>
-			
+
+			<xsl:call-template name="check_zusatzangaben">
+				<xsl:with-param name="daten" select="zusatzangaben"/>
+			</xsl:call-template>			
+
 			<xsl:if test="bemerkung">
 				<xsl:value-of select="translate(bemerkung,'&quot;','&#148;')"/>
 			</xsl:if>
@@ -117,10 +127,29 @@
 		</xsl:if>
 	</xsl:template>
 	
+	<xsl:template name="check_zusatzangaben">
+		<xsl:param name="daten"/>
+		<xsl:if test="$zusatzangaben">
+			<xsl:for-each select="$zusatzangaben">
+				<xsl:call-template name="show_zusatzangaben">
+					<xsl:with-param name="daten" select="$daten"/>
+					<xsl:with-param name="datatitel" select="."/>
+				</xsl:call-template>
+				<xsl:text>";"</xsl:text>
+			</xsl:for-each>
+		</xsl:if>
+	</xsl:template>
+	
 	<xsl:template name="show_datafields">
 		<xsl:param name="daten"/>
 		<xsl:param name="datatitel"/>
 		<xsl:value-of select="normalize-space($daten/datenfeld[@key=$datatitel])"/>
+	</xsl:template>
+
+	<xsl:template name="show_zusatzangaben">
+		<xsl:param name="daten"/>
+		<xsl:param name="datatitel"/>
+		<xsl:value-of select="normalize-space($daten/zusatzangabe[@key=$datatitel])"/>
 	</xsl:template>
 
 </xsl:stylesheet>
