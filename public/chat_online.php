@@ -79,8 +79,8 @@ function print_chat_info($chatids){
 	}
 }
 
-$HELP_KEYWORD="Basis.InteraktionChat";
-
+$HELP_KEYWORD = "Basis.InteraktionChat";
+$CURRENT_PAGE = _("Chat-Online");
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -114,16 +114,9 @@ if ($active_chats){
 		}
 	}
 }
+chat_get_javascript();
 ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-		<td class="topic" colspan="2">
-			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/chat1.gif" border="0" align="texttop">&nbsp;<b><? echo(_("Chat-Online")) ?></b>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td class="blank" colspan="2">&nbsp;</td>
-	</tr>
 	<tr valign="top">
 		<td valign="top" class="blank" align="center">
 			<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" valign="top" class="blank">

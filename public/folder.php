@@ -73,6 +73,8 @@ if ($cmd == 'all') {
 // Start of Output
 
 $HELP_KEYWORD="Basis.Dateien";
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Dateien");
+
 
 include ('lib/include/html_head.inc.php'); // Output of html head
 
@@ -371,18 +373,14 @@ JS_for_upload();
 echo "\n<body onUnLoad=\"upload_end()\">";
 ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
-<tr><td class="topic" colspan="3"><b>&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-disc.gif" align=absmiddle>&nbsp; <? echo $SessSemName["header_line"] . " - " . _("Dateien"); ?></b></td></tr>
-
-		<tr>
-			<td class="blank" colspan=3>&nbsp;
-				<?
-				if ($msg) parse_msg($msg);
-				?>
-			</td>
-		</tr>
-
 
 <?
+		if ($msg) {
+		 echo "<tr><td class='blank' colspan=3>&nbsp;";
+		 parse_msg($msg); 
+		 echo "</td></tr>";
+		}
+
 	//Ordner die fehlen, anlegen: Allgemeiner, wenn nicht da, Ordner zu Terminen, die keinen Ordner haben
 	if ($rechte){
 		if ($folder_system_data['mode']){
@@ -498,9 +496,9 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 
 	if ($folder_system_data["cmd"]=="all") {
 		?>
-		<blockquote>
+		<blockquote><font size='-1'>
 		<? printf (_("Hier sehen Sie alle Dateien, die zu dieser %s eingestellt wurden. Wenn Sie eine neue Datei einstellen m&ouml;chten, w&auml;hlen Sie bitte die Ordneransicht und &ouml;ffnen den Ordner, in den Sie die Datei einstellen wollen."), $SessSemName["art_generic"]); ?>
-		</blockquote>
+		</font></blockquote>
 		<?
 		if (!$folder_system_data["upload"] && !$folder_system_data["link"])
 			print ("<div align=\"right\"><a href=\"$PHP_SELF?check_all=TRUE\">".makeButton("alleauswaehlen")."</a>&nbsp;<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>");

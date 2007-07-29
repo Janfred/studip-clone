@@ -38,6 +38,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check("user");
 
 $HELP_KEYWORD="Basis.VeranstaltungenAbonnieren";
+$CURRENT_PAGE = _("Veranstaltungssuche");
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
@@ -166,15 +167,6 @@ if (isset($_REQUEST['send_excel'])){
 ob_end_flush();
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
-<tr>
-	<td class="topic" colspan="2">
-		<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinesem.gif" border="0" align="texttop"><b>&nbsp;<?=_("Anmeldung zu Veranstaltungen und Veranstaltungssuche")?></b>
-	</td>
-</tr>
-<tr>
-	<td class="blank" colspan="2">&nbsp;
-	</td>
-</tr>
 <tr>
 	<td class="blank" valign="top">
 	<table cellpadding="5" border="0" width="100%"><tr><td colspan="2">

@@ -27,14 +27,6 @@ require_once('lib/visual.inc.php');
 require_once 'lib/classes/SemBrowse.class.php';
 
 
-// Start of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-
-if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
-	include ('lib/include/links_openobject.inc.php');
-}
-
 	$sess->register ("show_bereich_data");
 	$db=new DB_Seminar;
 
@@ -99,14 +91,21 @@ if (isset($_REQUEST['send_excel'])){
 	}
 }
 ob_end_flush();
+// Start of Output
+$HELP_KEYWORD="Basis.Informationsseite";
+$CURRENT_PAGE = ($show_bereich_data['level'] == "s" ? $SessSemName["header_line"]." - " : "").$head_text;
+
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+if (($SessSemName[1]) && ($SessSemName["class"] == "inst")) {
+	include ('lib/include/links_openobject.inc.php');
+}
+
 ?>
 <body>
 <table width="100%" border=0 cellpadding=2 cellspacing=0>
 <tr>
-	<td class="topic" colspan="2"><b><? echo $head_text ?></td>
-</tr>
-<tr>
-	<td class="blank" valign="top"><br /><blockquote><font size="-1"><? echo $intro_text ?></font></blockquote><br>
+	<td class="blank" valign="top"><br />&nbsp;<font size="-1"><? echo $intro_text ?></font><br /><br />
 <?
 $sem_browse_obj->print_result();
 ?>

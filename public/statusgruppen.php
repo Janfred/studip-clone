@@ -29,6 +29,8 @@ require_once ('lib/statusgruppe.inc.php');
 require_once 'lib/functions.php';
 
 $HELP_KEYWORD="Basis.InVeranstaltungGruppen";
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Funktionen / Gruppen");
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -232,15 +234,7 @@ if ($delete_id)
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
-		<td class="topic" colspan="2"><b>&nbsp;<?=$SessSemName["header_line"]; ?> - <?=_("Funktionen / Gruppen")?></b>
-		</td>
-	</tr>
-	<tr>
-		<td class="blank" colspan="2">&nbsp;
-		</td>
-	</tr>
-	<tr>
-		<td class="blank" valign="top">
+		<td class="blank" valign="top"><br>
 		<table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<?
 	if ($sms_msg){

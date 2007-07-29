@@ -37,7 +37,7 @@ if ($GLOBALS['CHAT_ENABLE']){
 }
 
 $HELP_KEYWORD="Basis.SuchenPersonen";
-
+$CURRENT_PAGE = _("Personensuche");
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -67,7 +67,7 @@ if ($reset)
 <body>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Suche nach Personen")?></td>
+	<td class="topic" colspan=2>&nbsp;</td>
 </tr>
 <?
 if ($sms_msg)
@@ -80,7 +80,7 @@ if ($sms_msg)
 	}
 ?>
 <tr>
-<td class="blank" align = left width="60%"><br /><blockquote>
+<td class="blanksmall" align = left width="60%"><br /><blockquote>
 <?
 echo _("Hier k&ouml;nnen Sie die Homepages aller NutzerInnen abrufen, die im System registriert sind.") . "<br />";
 echo _("Sie erhalten auf den Homepages von MitarbeiternInnen an Einrichtungen auch weiterf&uuml;hrende Informationen, wie Sprechstunden und Raumangaben.") . "<br />";
@@ -88,7 +88,7 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 ?>
 <br><br><a href="score.php"><?=_("Zur Stud.IP-Rangliste")?></a>
 </blockquote></td>
-<td class="blank" align = right><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/board2.jpg" border="0"></td>
+<td class="blank" align = right><br><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/board2.jpg" border="0"></td>
 </tr>
 <tr><td class="blank" colspan=2>
 <blockquote>

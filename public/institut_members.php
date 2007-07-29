@@ -35,6 +35,9 @@ if ($GLOBALS['CHAT_ENABLE']){
 $css_switcher = new CssClassSwitcher();
 echo $css_switcher->GetHoverJSFunction();
 
+$HELP_KEYWORD="Basis.EinrichtungenPersonal";
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " ._("Personal");
+
 require('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 
 $db_institut_members = new DB_Seminar();
@@ -306,8 +309,6 @@ else
 	$count = CountMembersStatusgruppen($auswahl);
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
-printf("\n<tr><td class=\"topic\" colspan=\"2\"><b>&nbsp; %s</b></td></tr>",
-	$SessSemName["header_line"]." - " . _("MitarbeiterInnen der Einrichtung"));
 
 if ($sms_msg) {
 	echo "<tr><td class=\"blank\">";
@@ -317,20 +318,20 @@ if ($sms_msg) {
 	$sess->unregister('sms_msg');
 }
 
-echo "\n<tr><td class=\"blank\"><br /><blockquote>\n";
+echo "\n<tr><td class=\"blank\"><br />&nbsp;<font size=\"-1\">\n";
 
 if ($count > 0)
 	printf("%s <b>%s</b>", _("Alle MitarbeiterInnen der Einrichtung"), htmlReady($SessSemName[0]));
 else {
 	printf(_("Der Einrichtung <b>%s</b> wurden noch keine MitarbeiterInnen zugeordnet!"), htmlReady($SessSemName[0]));
-	echo "\n<br /><br /></blockquote>\n";
+	echo "\n<br /><br /></font>\n";
 	echo "</td></tr></table\n";
 	include ('lib/include/html_end.inc.php');
 	page_close();
 	die;
 }
 
-echo "\n</blockquote>\n";
+echo "\n\n";
 echo "</td></tr>\n<tr><td class=\"blank\">";
 echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"5\"></td></tr>\n";
 echo "<tr><td class=\"blank\">\n";

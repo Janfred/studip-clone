@@ -58,6 +58,8 @@ if ($view=="wikiprint") {
 }
 
 $HELP_KEYWORD="Basis.Wiki"; // Hilfeseite im Hilfewiki
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Wiki");
+
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -70,7 +72,7 @@ object_set_visit_module("wiki");
 include ('lib/include/links_openobject.inc.php');
 
 
-echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>\n";
+// echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>\n";
 
 $user_id=$auth->auth['uid'];
 

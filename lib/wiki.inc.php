@@ -918,12 +918,8 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 *
 **/
 function wikiSeminarHeader() {
-	global $SessSemName;
+
 	echo "\n<table width=\"100%\" class=\"blank\" border=0 cellpadding=0 cellspacing=0>\n";
-	echo "<tr>";
-	echo "<td class=\"topic\" width=\"100%\">";
-	echo "<b>&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-wiki.gif\" align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " .  _("Wiki") . "</b></td>";
-	echo "</tr>";
 	echo "<tr><td class=\"blank\" colspan=2>&nbsp; </td></tr>\n";
 	echo "</table>";
 }

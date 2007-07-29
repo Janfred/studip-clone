@@ -74,41 +74,44 @@ function createBoxHeader ($title, $width, $extraTitle = "",
 
    $html .=
       "<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" ".
-      "       cellpadding=\"2\" align=\"center\" width=\"".$width."\">\n".
-      " <tr>\n".
-      "  <td class=\"topic\" colspan=\"2\" nowrap>";
+      "       cellpadding=\"2\" align=\"center\" width=\"".$width."\">\n";
+   
+   if ($title) {
+      
+      $html .=   " <tr>\n".
+      "  <td class=\"topic\" colspan=\"2\"align=\"left\" nowrap>";
 
-   if ($imgURL) {
-      $html .=
-	 "<img src=\"".$imgURL."\" border=\"0\" alt=\"".$imgTitle."\" ".
-	 " title=\"".$imgTitle."\" align=\"texttop\">";
+      if ($imgURL) {
+	      $html .=
+	      "<img src=\"".$imgURL."\" border=\"0\" alt=\"".$imgTitle."\" ".
+	      " title=\"".$imgTitle."\" align=\"texttop\">";
+	   }
+	
+	   $html .=
+	      "<b>&nbsp;".$title."</b>";
+	
+	   if ($extraTitle) {
+	       $html .= "<font size=\"-1\">".$extraTitle."</font>";
+	   }
+	
+	   $html .=
+	      "</td>".
+	      "<td align=\"right\" class=\"topic\">".
+	      "&nbsp;";
+	
+	   if ($adminURL) {
+	      $html .=
+		  "<a href=\"".$adminURL."\"><img src=\"".$adminImgURL."\" border=\"0\" ".
+		  " alt=\"".$adminTitle."\" title=\"".$adminTitle."\"></a>&nbsp;";
+	   }
+	
+	   $html .=
+	      "  </td>\n".
+	      " </tr>\n";
    }
-
-   $html .=
-      "<b>&nbsp;".$title."</b>";
-
-   if ($extraTitle) {
-       $html .= "<font size=\"-1\">".$extraTitle."</font>";
-   }
-
-   $html .=
-      "</td>".
-      "<td align=\"right\" class=\"topic\">".
-      "&nbsp;";
-
-   if ($adminURL) {
-      $html .=
-	  "<a href=\"".$adminURL."\"><img src=\"".$adminImgURL."\" border=\"0\" ".
-	  " alt=\"".$adminTitle."\" title=\"".$adminTitle."\"></a>&nbsp;";
-   }
-
-   $html .=
-      "  </td>\n".
-      " </tr>\n".
-      " <tr>\n".
+   $html .= " <tr>\n".
       "  <td class=\"".$cssClass."\" colspan=\"3\">\n";
-
-
+  
    return $html;
 }
 

@@ -1065,11 +1065,11 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 	}
 
 	if ($open == "close") {
-		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" width=\"1%\"";
+		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap width=\"1%\"";
 		$print .= "align=left valign=\"top\" nowrap>";
 	}
 	else {
-		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead3\" width=\"1%\"";
+		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead3\" nowrap width=\"1%\"";
 		$print .= " align=left valign=\"top\" nowrap>";
 	}
 

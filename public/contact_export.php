@@ -49,6 +49,7 @@ if (!( (isset($_POST["export_vcard_x"]))
 	|| (isset($_GET["contactid"]))
 	|| (isset($_GET["username"]))
 	|| (isset($_GET["groupid"])) )){
+	$CURRENT_PAGE = _("Adressbuch exportieren");
 	require_once('lib/include/html_head.inc.php');
 	require_once('lib/include/header.php');
 	require_once('lib/include/links_sms.inc.php');
@@ -144,15 +145,7 @@ page_close ();
  *
  */
 function printSiteTitle(){
-   	$html = "<table border=0 class=blank align=center cellspacing=0 cellpadding=0 width=\"100%\">\n"
-    	  . "	<tr valign=top align=center>\n"
-    	  . "    <td class=topic align=left colspan=\"2\">\n"
-		  . "	  &nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" alt=\"export\" align=\"texttop\">&nbsp;<b>\n"
-		  . _("Adressbuch exportieren")."\n"
-		  . "	  </b>\n"
-    	  . "    </td>\n"
-    	  . "   </tr>\n"
-    	  . "</table>\n";
+   	$html = "";
    	echo $html;
 }
 

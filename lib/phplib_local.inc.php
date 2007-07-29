@@ -460,18 +460,39 @@ class Seminar_Auth extends Auth {
 	}
 
 	function auth_loginform() {
-		global $sess;
-		global $challenge;
-		global $shortcut;
-		global $order;
-
-	  $challenge = StudipAuthAbstract::CheckMD5();
-    if ($challenge){
-        $challenge = md5(uniqid($this->magic));
-        $sess->register("challenge");
-    }
-
-		include('lib/include/crcloginform.ihtml');
+		// first of all init I18N because seminar_open is not called here...
+		require_once('lib/language.inc.php');
+		require_once('lib/visual.inc.php');
+		require_once('config.inc.php');
+		require_once('lib/classes/HeaderController.class.php');
+		
+		global $_language, $_language_path, $fail_count;
+		if (!isset($_language)) {
+			$_language = get_accepted_languages();
+		}
+		$_language_path = init_i18n($_language);
+		if (StudipAuthAbstract::CheckMD5()){
+			$_SESSION['challenge'] = md5(uniqid($this->magic));
+		}
+		if ($_REQUEST['username'] && !$_COOKIE[$GLOBALS['sess']->name]){
+			$login_template =& $GLOBALS['template_factory']->open('nocookies');
+		} else {
+			$login_template =& $GLOBALS['template_factory']->open('loginform');
+			$login_template->set_attribute('loginerror', (isset($this->auth["uname"]) && $this->error_msg));
+			$login_template->set_attribute('error_msg', $this->error_msg);
+			$login_template->set_attribute('challenge', $_SESSION['challenge']);
+			$login_template->set_attribute('uname', (isset($this->auth["uname"]) ? $this->auth["uname"] : $_REQUEST['shortcut']));
+		}
+		$header_controller = new HeaderController();
+		$header_controller->help_keyword = 'Basis.AnmeldungLogin';
+		$header_controller->current_page = _("Login");
+		$header_template =& $GLOBALS['template_factory']->open('header');
+		$header_controller->fillTemplate($header_template);
+		
+		include 'lib/include/html_head.inc.php';
+		echo $header_template->render();
+		echo $login_template->render();
+		include 'lib/include/html_end.inc.php';
 	}
 
 	function auth_validatelogin() {

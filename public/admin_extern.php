@@ -44,6 +44,14 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 		"perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("admin");
 
+require_once 'lib/functions.php';
+
+$HELP_KEYWORD="Basis.EinrichtungenVerwaltenExterneSeiten";
+$CURRENT_PAGE = getHeaderLine($SessSemName[1]);
+if ($CURRENT_PAGE)
+	$CURRENT_PAGE.=" - ";
+$CURRENT_PAGE.= _("Verwaltung externer Seiten"); 
+
 if ($EXTERN_ENABLE) {
 	include($RELATIVE_PATH_EXTERN . "/admin_extern.inc.php");
 } else {

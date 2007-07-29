@@ -100,7 +100,7 @@ function my_info($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false
 }
 
 //Kombinierte Nachrichten zerlegen
-function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_row=TRUE, $small = false) {
+function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_row=TRUE, $small = true) {
   $msg = explode ($separator,$long_msg);
 	for ($i=0; $i < count($msg); $i=$i+2) {
 		switch ($msg[$i]) {

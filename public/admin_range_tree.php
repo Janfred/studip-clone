@@ -45,6 +45,8 @@ $perm->check("autor");
 require_once('lib/visual.inc.php');
 require_once('lib/classes/StudipRangeTreeViewAdmin.class.php');
 
+$CURRENT_PAGE = $UNI_NAME . " - " . _("Einrichtungshierarchie bearbeiten");
+
 
 include('lib/seminar_open.php'); //hier werden die sessions initialisiert
 include('lib/include/html_head.inc.php');
@@ -53,7 +55,6 @@ include('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 ?>
 <table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">
-	<tr><td class="topic" align="left">&nbsp; <b><?=$UNI_NAME . " - " . _("Einrichtungshierarchie bearbeiten")?></b></td></tr>
 	<tr><td  align="center" class="blank"><br />
 	<table class="blank" cellspacing="0" cellpadding="0" border="0" width="99%">
 	<tr>

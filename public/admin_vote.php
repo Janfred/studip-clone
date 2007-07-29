@@ -36,12 +36,17 @@ page_open (array ("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 		  "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check ("autor");
 
+require_once 'lib/functions.php';
+
 $HELP_KEYWORD="Basis.Votings";
+if ($SessSemName[1])
+	$CURRENT_PAGE = getHeaderLine($SessSemName[1])." - ";
+$CURRENT_PAGE.= _("Verwaltung von Umfragen und Tests"); 
 
 include_once('lib/seminar_open.php');
 include_once('lib/include/html_head.inc.php');
 include_once('lib/include/header.php');
-$the_range = isset($showrangeID) ? $showrangeID : $rangeID;
+
 
 if (!empty($the_range) && $the_range != $auth->auth['uname'] && $the_range != 'studip'){
 	$view_mode = get_object_type($the_range);

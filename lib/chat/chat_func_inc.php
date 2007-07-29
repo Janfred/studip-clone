@@ -30,7 +30,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once $RELATIVE_PATH_CHAT.'/ChatServer.class.php';
+require_once $GLOBALS['RELATIVE_PATH_CHAT'].'/ChatServer.class.php';
 //Studip includes
 require_once 'lib/visual.inc.php';
 require_once 'lib/messaging.inc.php';
@@ -133,25 +133,26 @@ function chat_get_name($chatid){
 
 function chat_show_info($chatid){
 	global $auth;
-		if ($GLOBALS['CHAT_ENABLE']){
-			$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
-			$sms = new messaging();
-			$chatter = $chatServer->isActiveChat($chatid);
-			$chatinv = $sms->check_chatinv($chatid);
-			$is_active = $chatServer->isActiveUser($auth->auth['uid'],$chatid);
-			$chatname = ($chatter) ? $chatServer->chatDetail[$chatid]['name'] : chat_get_name($chatid);
-			if (chat_get_entry_level($chatid) || $is_active || $chatinv){
-				//Ausgabe der Kopfzeile
-				echo "\n<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" >";
-				echo "\n<tr><td class=\"topic\" colspan=\"2\" width=\"100%\">";
-				echo "\n" . chat_get_chat_icon($chatter,$chatinv,$is_active);
-				echo "\n<b>&nbsp;" . _("Chatraum:") . "&nbsp;" . htmlReady($chatname) . "</b></td></tr>";
-				echo chat_get_content($chatid,$chatter,$chatinv,$chatServer->chatDetail[$chatid]['password'],$is_active,$chatServer->getUsers($chatid));
-				echo "\n</table>";
-				return true;
-			}
+	if ($GLOBALS['CHAT_ENABLE']){
+		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+		$sms = new messaging();
+		$chatter = $chatServer->isActiveChat($chatid);
+		$chatinv = $sms->check_chatinv($chatid);
+		$is_active = $chatServer->isActiveUser($auth->auth['uid'],$chatid);
+		$chatname = ($chatter) ? $chatServer->chatDetail[$chatid]['name'] : chat_get_name($chatid);
+		if (chat_get_entry_level($chatid) || $is_active || $chatinv){
+			chat_get_javascript();
+			//Ausgabe der Kopfzeile
+			echo "\n<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" >";
+			echo "\n<tr><td class=\"topic\" colspan=\"2\" width=\"100%\">";
+			echo "\n" . chat_get_chat_icon($chatter,$chatinv,$is_active);
+			echo "\n<b>&nbsp;" . _("Chatraum:") . "&nbsp;" . htmlReady($chatname) . "</b></td></tr>";
+			echo chat_get_content($chatid,$chatter,$chatinv,$chatServer->chatDetail[$chatid]['password'],$is_active,$chatServer->getUsers($chatid));
+			echo "\n</table>";
+			return true;
 		}
-		return false;
+	}
+	return false;
 }
 
 function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_user){
@@ -237,5 +238,16 @@ function chat_get_online_icon($user_id = false, $username = false, $pref_chat_id
 	} else {
 		return "&nbsp;";
 	}
+}
+
+function chat_get_javascript(){
+	global $auth;
+	echo "\t\t<script type=\"text/javascript\">\n";
+	echo "\t\tfunction open_chat(chatid) {\n";
+	echo "\t\t\tif(!chatid){\n";
+	printf ("\t\t\t\talert('%s');\n", _("Sie sind bereits in diesem Chat angemeldet!"));
+	echo "\t\t\t} else {\n\t\t\tfenster=window.open(\"chat_dispatcher.php?target=chat_login.php&chatid=\" + chatid,\"chat_\" + chatid + \"_".$auth->auth["uid"]."\",\"scrollbars=no,width=640,height=480,resizable=yes\");\n";
+	echo "\t\t}\nreturn false;\n}\n";
+	echo "\t\t</script>\n";
 }
 ?>

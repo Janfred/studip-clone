@@ -41,6 +41,7 @@ $cssSw=new cssClassSwitcher;
 
 $HELP_KEYWORD="Basis.InteraktionWhosOnline";
 
+$CURRENT_PAGE = _("Wer ist online?");
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -74,11 +75,6 @@ if ($cmd=="delete_user"){
 }
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
-<tr>
-	<td class="topic"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/nutzer.gif" border="0" align="texttop"><b>&nbsp;<?=_("Wer ist Online?")?></b></td>
-	<td nowrap class="topic" align="right"><?=_("Einstellungen &auml;ndern")?>&nbsp; <a href="<? echo $PHP_SELF ?>?change_view=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/pfeillink.gif" border=0></a>
-
-</tr>
 <?
 if ($msg)
 	{
@@ -89,7 +85,7 @@ if ($msg)
 
 	?>
 	<tr>
-		<td class="blank"><br><blockquote>
+		<td class="onlineinfo"><blockquote>
 		<?
 		print(_("Hier k&ouml;nnen Sie sehen, wer au&szlig;er Ihnen im Moment online ist.") . "<p>");
 		printf(_("Sie k&ouml;nnen diesen Usern eine Nachricht schicken %s oder sie zum Chatten %s einladen."), sprintf("<img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" width=\"24\" height=\"21\" %s border=\"0\"><br>", tooltip(_("Nachricht an User verschicken"))), sprintf("<img src=\"".$GLOBALS['ASSETS_URL']."images/chat1.gif\" width=\"24\" height=\"21\" %s border=\"0\">", tooltip(_("zum Chatten einladen"))));
@@ -149,7 +145,7 @@ if (is_array($n_buddies))
 
 	$cssSw->switchClass();
 	//Anzeige
-	echo "<table width=\"99%\" align=\"center\"cellspacing=0 border=0 cellpadding=2>\n";
+	echo "<table width=\"100%\" align=\"center\"cellspacing=0 border=0 cellpadding=2>\n";
 
 	//Kopfzeile
 	if ($my_messaging_settings["show_only_buddys"])

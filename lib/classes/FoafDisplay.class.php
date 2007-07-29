@@ -38,8 +38,8 @@ class FoafDisplay {
 	var $target_id; // end of connecting chain
 	var $foaf_list; // steps of connection
 	var $target_username; // used for open/close link on target user's hp
-	var $depth = 5; //max number of hops, 5 is max
-	var $dont_show_anonymous = false;
+	var $depth = 4; //max number of hops, 5 is max
+	var $dont_show_anonymous = true;
 	var $ucfg; //UserConfig object
 
 	/**

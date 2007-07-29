@@ -1736,27 +1736,43 @@ $sem_create_data["level"]=$level;
 switch ($level) {
 	case '1':
 		$HELP_KEYWORD="Basis.VeranstaltungsAssistentGrunddaten";
+		$CURRENT_PAGE=_("Veranstaltungs-Assistent - Schritt 1: Grunddaten");
 		break;
 	case '2':
 		$HELP_KEYWORD="Basis.VeranstaltungsAssistentPersonendatenTypUndSicherheit";
+		if ($SEM_CLASS[$sem_create_data["sem_class"]]["bereiche"])
+			$CURRENT_PAGE = _("Veranstaltungs-Assistent - Schritt 2: Personendaten, Typ, Sicherheit und Bereiche");
+		else
+			$CURRENT_PAGE = _("Veranstaltungs-Assistent - Schritt 2: Personendaten, Typ und Sicherheit");
 		break;
 	case '3':
 		$HELP_KEYWORD="Basis.VeranstaltungsAssistentTermindaten";
+		$CURRENT_PAGE=_("Veranstaltungs-Assistent - Schritt 3: Zeiten und Termine");
 		break;
 	case '4':
 		$HELP_KEYWORD="Basis.VeranstaltungsAssistentSonstiges";
+		$CURRENT_PAGE=_("Veranstaltungs-Assistent - Schritt 4: Orts- und Raumangaben");
 		break;
 	case '5':
 		$HELP_KEYWORD="Basis.VeranstaltungsAssistentBereitZumAnlegen";
+		$CURRENT_PAGE=_("Veranstaltungs-Assistent - Schritt 5: Sonstige Daten");
 		break;
 	case '6':
 		$HELP_KEYWORD="Basis.VeranstaltungsAssistentVeranstaltungAngelegt";
+		$CURRENT_PAGE=_("Veranstaltungs-Assistent - Schritt 6: Anlegen der Veranstaltung");
 		break;
 	case '7':
-		$HELP_KEYWORD="Basis.VeranstaltungsAssistentLiteratur-UndLinkliste";
+		$HELP_KEYWORD="Basis.VeranstaltungsAssistent";
+		$CURRENT_PAGE=_("Veranstaltungs-Assistent");
+		break;
+	case '8':
+		//This Help-Page won't help.... $HELP_KEYWORD="Basis.VeranstaltungsAssistentLiteratur-UndLinkliste"; 
+		$HELP_KEYWORD="Basis.VeranstaltungsAssistent";
+		$CURRENT_PAGE=_("Veranstaltungs-Assistent - Schritt 7: Freie Informationsseite");
 		break;
 	default:
 		$HELP_KEYWORD="Basis.VeranstaltungsAssistent";
+		$CURRENT_PAGE=_("Veranstaltungs-Assistent");
 		break;
 }
 
@@ -1789,10 +1805,6 @@ if (!$sem_create_data["sem_class"])
 if ((!$sem_create_data["sem_class"]) && (!$level)){
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Veranstaltungskategorie ausw&auml;hlen"); ?></b>
-			</td>
-		</tr>
 		<?
 		if ($errormsg) parse_msg($errormsg);
 		?>
@@ -1832,10 +1844,6 @@ elseif ((!$level) || ($level == 1))
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 1: Grunddaten"); ?></b>
-			</td>
-		</tr>
 		<tr>
 			<td class="blank" colspan=2>&nbsp;
 				<?
@@ -2160,16 +2168,6 @@ if ($level == 2)
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr >
-			<td class="topic" colspan=2><b>
-			<?
-				if ($SEM_CLASS[$sem_create_data["sem_class"]]["bereiche"])
-					echo "&nbsp;"._("Veranstaltungs-Assistent - Schritt 2: Personendaten, Typ, Sicherheit und Bereiche")."</b>";
-				else
-					echo "&nbsp;"._("Veranstaltungs-Assistent - Schritt 2: Personendaten, Typ und Sicherheit")."</b>";
-			?>
-			</td>
-		</tr>
-		<tr>
 			<td class="blank" colspan=2>&nbsp;
 				<?
 				if ($errormsg) parse_msg($errormsg);
@@ -2578,10 +2576,6 @@ if ($level == 3) {
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 3: Termine"); ?></b>
-			</td>
-		</tr>
-		<tr>
 			<td class="blank" colspan=2>&nbsp;
 				<?
 				if ($errormsg) parse_msg($errormsg);
@@ -2857,10 +2851,6 @@ if ($level == 4) {
 		$resList = new ResourcesUserRoomsList($user_id->id, TRUE, FALSE, TRUE);
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 4: R&auml;ume"); ?></b>
-			</td>
-		</tr>
 		<tr>
 			<td class="blank" colspan=2>&nbsp;
 				<?
@@ -3297,10 +3287,6 @@ if ($level == 5)
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr >
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 5: Sonstige Daten"); ?></b>
-			</td>
-		</tr>
-		<tr>
 			<td class="blank" colspan=2 >&nbsp;
 				<?
 				if ($errormsg) parse_msg($errormsg);
@@ -3699,10 +3685,6 @@ if ($level == 6)
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 6: Anlegen der Veranstaltung"); ?></b>
-			</td>
-		</tr>
-		<tr>
 			<td class="blank" colspan=2>&nbsp;
 				<?
 				if ($errormsg) parse_msg($errormsg);
@@ -3733,10 +3715,6 @@ if ($level == 7)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent");?></b>
-			</td>
-		</tr>
 		<tr>
 			<td class="blank" colspan=2>&nbsp;
 				<?
@@ -3928,11 +3906,6 @@ if ($level == 8)
 	{
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-		<tr>
-			<td class="topic" colspan=2><b>&nbsp;<?=_("Veranstaltungs-Assistent - Schritt 7: Freie Informatiosseite"); ?></b>
-
-			</td>
-		</tr>
 		<tr>
 			<td class="blank" colspan=2>&nbsp;
 				<?

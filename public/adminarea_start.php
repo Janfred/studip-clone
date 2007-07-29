@@ -38,7 +38,6 @@ require_once 'lib/visual.inc.php';
 if ($SessSemName[1]) {
 	?>
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr><td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="5" height="5" border="0"><b><?=_("Veranstaltung vorgew&auml;hlt")?></b></td></tr>
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 	<tr><td class="blank" colspan=2>
 	<blockquote>

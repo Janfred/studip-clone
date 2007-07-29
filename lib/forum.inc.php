@@ -954,11 +954,16 @@ function forum_check_edit($forumposting) {
 **/
 function forum_draw_topicline() {
 	global $user, $SessSemName, $view;
+/*
+
 	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 	echo "<tr><td class=\"topic\" width=\"99%\"><b>&nbsp;<img src='".$GLOBALS['ASSETS_URL']."images/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"1%\" align=\"right\" nowrap>";
 	if ($user->id != "nobody")
 		echo "<a href='forum.php?forumsend=anpassen&view=$view'><img src='".$GLOBALS['ASSETS_URL']."images/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a>";
 	echo "</td></tr>";
+*/
+echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
+
 }
 
 /**
@@ -1616,19 +1621,19 @@ function DisplayKids ($forumposting, $level=0) {
 		$forumposting["score"] = $db->f("score");
 		$forumposting["fav"] = $db->f("fav");
 
-		echo "<table class=\"blank\" border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class=\"blank\" nowrap valign=\"top\" ><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'>";
+		echo "<table class=\"blank\" border=0 cellpadding=0 cellspacing=0 width=\"100%\" valign=\"top\"><tr valign=\"top\"><td class=\"blank\" nowrap valign=\"top\" ><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'>";
 
 	//Hier eine bezaubernde Routine um die Striche exakt wiederzugeben - keine Bange ich verstehe sie auch nicht mehr
 		IF ($level){
 			$striche = "";
 			for ($i=0;$i<$level;$i++) {
 				if ($i==($level-1)) {
-					if ($forumposting["lines"][$i+1]>1) $striche.= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich3.gif' border=0>"; 		//Kreuzung
-					else $striche.= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich2.gif' border=0>"; 				//abknickend
+					if ($forumposting["lines"][$i+1]>1) $striche.= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich3.gif'>"; 		//Kreuzung
+					else $striche.= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich2.gif' heigth='22'>"; 				//abknickend
 					$forumposting["lines"][$i+1] -= 1;
 				} else {
-					if ($forumposting["lines"][$i+1]==0) $striche .= "<img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0>";		//Leerzelle
-					else $striche .= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich.gif' border=0>";				//Strich
+					if ($forumposting["lines"][$i+1]==0) $striche .= "<img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'>";		//Leerzelle
+					else $striche .= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich.gif'>";				//Strich
 				}
 			}
 			echo $striche;

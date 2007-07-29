@@ -25,12 +25,6 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $hash_secret = "dslkjjhetbjs";
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
-$HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGruppen";
-
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');
-
 require_once ('config.inc.php');
 require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
@@ -41,6 +35,15 @@ require_once ('lib/datei.inc.php');
 //get ID, if a object is open
 if ($SessSemName[1])
 	$range_id = $SessSemName[1];
+$HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGruppen";
+$CURRENT_PAGE = getHeaderLine($range_id);
+if ($CURRENT_PAGE)
+	$CURRENT_PAGE.=" - ";
+$CURRENT_PAGE.= _("Verwaltung von Gruppen und Funktionen"); 
+
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php');
 
 // Rechtecheck
 

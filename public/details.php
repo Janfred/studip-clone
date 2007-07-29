@@ -25,6 +25,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.InVeranstaltungDetails";
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Details");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -132,8 +133,6 @@ else
 
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr><td class="topic" colspan=2><b>&nbsp;<? echo getHeaderLine($sem_id)." - " . _("Details"); ?>
-	</b></td></tr>
 	<?
 	if ($msg)
 	{
@@ -269,7 +268,7 @@ if ($db2->f("admission_binding")) {
 
 // print the info_box
 
-print_infobox ($infobox,"details.jpg");
+print_infobox ($infobox,"contract.jpg");
 
 // ende Infobox
 

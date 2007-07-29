@@ -29,6 +29,8 @@ if ($druck)
 	$_include_stylesheet = 'style_print.css';
 elseif (($dump_id) || ($forum_dump_id) || ($wiki_dump_id))
 	$_include_stylesheet = 'style_dump.css';
+$HELP_KEYWORD = "Basis.Archiv";
+$CURRENT_PAGE = _("Archiv");
 
 // Start of Output
 include('lib/include/html_head.inc.php'); // Output of html head
@@ -206,8 +208,7 @@ include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0 border=0>
 	<tr>
-		<td class="topic" colspan=2><img valign="top" src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Suche im Archiv")?></>
-		</td>
+		<td class="topic" colspan=2>&nbsp;</td>
 	</tr>
 	<?
 	if ($msg) { ?>
@@ -355,7 +356,7 @@ include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 				</form>
 			</blockquote>
 		</td>
-		<td class="blank" align = right valign=top><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/archiv.jpg" border="0">
+		<td class="blank" align = right valign=top><br><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/archiv.jpg" border="0">
 		</td>
 	</tr>
 

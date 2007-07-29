@@ -25,6 +25,7 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
+$CURRENT_PAGE= _("Impressum");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head

@@ -134,7 +134,7 @@ class reiter {
 	}
 
 	function bottomkatCloseRow() {
-		printf ("</td></tr><tr><td colspan=\"2\" background=\"".$GLOBALS['ASSETS_URL']."images/%s\">&nbsp;</td></tr></table>\n", $this->bottomPic);
+		printf ("</td></tr></table>\n");
 		return;
 	}
 

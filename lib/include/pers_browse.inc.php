@@ -59,6 +59,7 @@ if (isset($pers_browse_search)) {
 	$pers_browse_old['perms'] = $pers_browse_perms;
 	$pers_browse_old['crit'] = $pers_browse_crit;
 	$pers_browse_old['changed'] = $pers_browse_changed;
+	$pers_browse_old['locked'] = $pers_browse_locked;
 	$sess->register("pers_browse_old");
 
 	// Parser
@@ -71,6 +72,8 @@ if (isset($pers_browse_search)) {
 		$pers_browse_search_string .= "Email LIKE '%" . $pers_browse_Email ."%' AND ";
 	if (isset($pers_browse_Nachname) && $pers_browse_Nachname != "")
 		$pers_browse_search_string .= "Nachname LIKE '%" . $pers_browse_Nachname ."%' AND ";
+	if (isset($pers_browse_locked) && $pers_browse_locked != "")
+		$pers_browse_search_string .= "locked = 1 AND ";
 	if (isset($pers_browse_perms) && $pers_browse_perms != _("alle"))
 		$pers_browse_search_string .= "perms = '$pers_browse_perms' AND ";
 	if (isset($pers_browse_changed) && $pers_browse_changed != "" && $pers_browse_changed >=0) {
@@ -128,11 +131,12 @@ print "\n<td class=steel1 align=\"right\" width=\"15%\">" . _("Nachname:") . " <
 print "\n<td class=steel1 colspan=2 align=\"left\" width=\"35%\"><input name=\"pers_browse_Nachname\" type=\"text\" value=\"$pers_browse_old[Nachname]\" size=30 maxlength=255></td></tr>\n";
 print "\n<tr><td class=steel1 align=\"right\" width=\"15%\">" . _("Status:") . " </td>";
 print "\n<td class=steel1 align=\"left\" width=\"35%\">";
-	perm_select("pers_browse_perms",$pers_browse_old[perms]);
+perm_select("pers_browse_perms",$pers_browse_old['perms']);
+echo "&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"pers_browse_locked\" value=\"1\" " . ($pers_browse_old['locked'] ? "checked" : "" ) . ">&nbsp;"._("gesperrt");
 print "</td>\n";
 print "\n<td class=steel1 align=\"right\" width=\"15%\">" . _("inaktiv:") . " </td>";
 print "\n<td class=steel1 align=\"left\" width=\"10%\">";
-	crit_select("pers_browse_crit",$pers_browse_old[crit]);
+	crit_select("pers_browse_crit",$pers_browse_old['crit']);
 print "</td>";
 print "\n<td class=steel1 align=\"left\" width=\"25%\"><input name=\"pers_browse_changed\" type=\"text\" value=\"$pers_browse_old[changed]\" size=10 maxlength=50> Tage</td></tr>\n";
 print "\n<tr><td class=steel1>&nbsp</td><td class=steel1 align=\"left\"><input type=\"IMAGE\" " . makeButton("suchestarten", "src") .  tooltip(_("Suche starten")) . " border=0><input type=\"HIDDEN\" name=\"pers_browse_search\" value=\"TRUE\"></td>\n";

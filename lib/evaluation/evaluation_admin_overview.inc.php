@@ -89,11 +89,6 @@ $search = $templates_search;
 $js = EvalCommon::createEvalShowJS( YES );
 echo $js->createContent();
 
-/* Blue title -------------------------------------------------------------- */
-$title = EvalCommon::createTitle (EVAL_TITLE, EVAL_PIC_ICON);
-echo $title->createContent ();
-/* -------------------------------------------------------------- end: title */
-
 /* Maintable with white border --------------------------------------------- */
 $table = $lib->createMainTable ();
 /* -----------------------------------------------------------end: maintable */

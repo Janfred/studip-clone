@@ -76,7 +76,7 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && ($auth->is_authenticated() && $user-
 }
 
 $HELP_KEYWORD="Basis.Startseite"; // set keyword for new help
-
+$CURRENT_PAGE = _("Startseite");
 // Start of Output
 
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -259,30 +259,30 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 	// display menue
 	echo	'<div align="center">', "\n", '<table width="70%" border=0 cellpadding=0 cellspacing=0 >', "\n",
-		'<tr><td class="topic" colspan=3><img src="'.$GLOBALS['ASSETS_URL'].'images/home.gif" border="0" align="texttop"><b>&nbsp;', $ueberschrift,'</b></td>',"\n",
+		'<tr><td class="topic" colspan=3 align="left"><img src="'.$GLOBALS['ASSETS_URL'].'images/home.gif" border="0" align="absmiddle"><b>&nbsp;', $ueberschrift,'</b></td>',"\n",
 		'</tr>', "\n";
 	echo	'<tr>', "\n", '<td width="5%" class="blank" valign="middle">&nbsp;</td>', "\n",
-		'<td width="90%" class="blank" valign="top">', "\n", '<table cellpadding=4>', "\n";
+		'<td class="blank" width="90%" valign="top">', "\n", '<table align="left" cellpadding=4>', "\n";
 
 		for ($i=0; $i < count($menue_auswahl); $i++) { // mainmenue
 			if ($menue[$menue_auswahl[$i][0]][1]) {
-				echo	'<tr><td class="blank"><a href="'.$menue[$menue_auswahl[$i][0]][1]. '"'.
+				echo	'<tr><td><div class="mainmenu" align="left"><a href="'.$menue[$menue_auswahl[$i][0]][1]. '"'.
 				(($menue[$menue_auswahl[$i][0]][2])? ' target="'.$menue[$menue_auswahl[$i][0]][2].'"':'').
-				'><img src="'.$GLOBALS['ASSETS_URL'].'images/forumrot.gif" border=0>&nbsp;'. $menue[$menue_auswahl[$i][0]][0]. '</a>';
+				'>'. $menue[$menue_auswahl[$i][0]][0]. '</a>';
 
 			} else {
-				echo	'<tr><td class="blank"><img src="'.$GLOBALS['ASSETS_URL'].'images/forumrot.gif" border=0>&nbsp;'. $menue[$menue_auswahl[$i][0]][0];
+				echo	'<tr><td><div class="mainmenu">'. $menue[$menue_auswahl[$i][0]][0];
 			}
 			for ($k = 0; $k < count($menue_auswahl[$i][1]); $k++) { // submenue
-				echo	(($k == 0)? '<br />&nbsp; &nbsp; ':'&nbsp;/&nbsp;');
-				echo	'<font size="-1"><a href="',$menue[$menue_auswahl[$i][1][$k]][1].'"'.
+				echo	(($k == 0)? '<br />':'&nbsp;/&nbsp;');
+				echo	'<font size="-2"><a href="',$menue[$menue_auswahl[$i][1][$k]][1].'"'.
 					(($menue[$menue_auswahl[$i][1][$k]][2])? ' target="'.$menue[$menue_auswahl[$i][1][$k]][2].'"':'').
 					'>'. $menue[$menue_auswahl[$i][1][$k]][0].'</a>';
 			}
-			echo	'</td></tr>', "\n";
+			echo	'</div></td></tr>', "\n";
 		}
 	echo	'</table>'. "\n". '</td>'. "\n".
-		'<td class="blank" align="right" valign="top" background="' . $GLOBALS['ASSETS_URL'] . 'images/indexbild.jpg"><img src="' . $GLOBALS['ASSETS_URL'] . 'images/blank.gif" width="235"></td>'. "\n". '</tr>'."\n". '</table> <br />'. "\n";
+		'<td class="indexpage" align="right" valign="top"><img src="' . $GLOBALS['ASSETS_URL'] . 'images/blank.gif" width="390" height="100"></td>'. "\n". '</tr>'."\n". '</table> <br />'. "\n";
 
 	// display news
 	if (show_news('studip', $perm->have_perm('root'), 0, $index_data['nopen'], "70%", $LastLogin, $index_data))
@@ -347,11 +347,11 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			else $feedtitle = $db->f("name");
 			echo "<table class=\"blank\" width=\"70%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 			echo "<tr><td class=\"topic\"><b>&nbsp;<FONT COLOR=\"white\">" . htmlReady($feedtitle) . "</FONT></b></td></tr>";
-			echo "<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><blockquote>";
+			echo "<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><div style=\"margin-left: 20px;margin-right: 20px;\">";
 
 			$feed->rssfeed_start();
 
-			echo "</blockquote></td></tr>";
+			echo "</div></td></tr>";
 			echo "<tr><td class=\"steel1\">&nbsp;</td></tr>";
 			echo "</table><br>\n";
 		}
@@ -360,83 +360,24 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 
 } else { //displaymodul for nobody
-	$mtxt  = '<img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="13" height="50" border="0" align="left"><br>'. "\n";
-	$mtxt .= '<table cellspacing="0" cellpadding="0" border="0"><tr>'. "\n";
-	$mtxt .= '<td class="steel1" width="280" valign="middle"><a class="index" href="%s">'. "\n";
-	$mtxt .= '<img src="'.$GLOBALS['ASSETS_URL'].'images/indexpfeil.gif" align=left border="0"><font size="4"><b>%s</b></font><br><font color="#555555" size="1">%s</font></a>&nbsp; </td>'. "\n";
-	$mtxt .= '<td class="shadowver" width="3"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="3" border="0"></td>'. "\n";
-	$mtxt .= '</tr><tr><td class="shadowhor" width="280"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="10" height="3" border="0"></td>'. "\n";
-	$mtxt .= '<td class="shadowcor" width="3"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="3" border="0"></td>'. "\n";
-	$mtxt .= '</tr></table>';
-
-	?>
-
-	<table class="blank" width="600"  border="0" cellpadding="0" cellspacing="0" align="center">
-	<tr><td colspan=3 class="topic" valign="middle">&nbsp;<b><? echo $UNI_NAME;?></b><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="16" width="5" border="0"></td></tr>
-	<tr>
-		<td valign="middle" height="260" colspan=3 background="<?= $GLOBALS['ASSETS_URL'] ?>images/startseite.jpg" alt="Stud.IP - <?=$UNI_NAME?>">
-			<?
-			echo sprintf($mtxt, 'index.php?again=yes', _("Login"), _("f&uuml;r registrierte NutzerInnen"));
-			if (array_search("CAS",$GLOBALS["STUDIP_AUTH_PLUGIN"])){
-				echo sprintf($mtxt, 'index.php?again=yes&sso=true', _("Single Sign On"), _("f&uuml;r NutzerInnen des Central Authentication Services"));
-			}
-			if ($GLOBALS['ENABLE_SELF_REGISTRATION'])
-				echo sprintf($mtxt, 'register1.php', _("Registrieren"), _("um NutzerIn zu werden"));
-			echo sprintf($mtxt, 'freie.php', _("Freier Zugang"), _("ohne Registrierung"));
-
-			if (get_config("EXTERNAL_HELP")) {
-				$help_url=format_help_url("Basis.Allgemeines");
-			} else {
-				$help_url="help/index.php";
-			}
-			echo sprintf($mtxt, $help_url, _("Hilfe"), _("zu Bedienung und Funktionsumfang")), '<br>';
-
-			if(isset($UNI_LOGIN_ADD) && ($UNI_LOGIN_ADD != '')) {
-				echo '</td></tr>';
-				echo '<tr><td align=justify colspan="3" bgcolor="#FFFFFF"><blockquote><font size="-1">&nbsp;<br>';
-				echo $UNI_LOGIN_ADD;
-				echo '</font></blockquote>';
-			}
-			?>
-		</td>
-	</tr>
-	<?
-	unset($temp_language_key); unset($temp_language);
-	?>
-	<tr>
-	<td class="blank" align="left" valign="middle">
-		<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="85" width="38" border="0">
-	</td>
-	<td class="blank" valign="middle" align="left"><a href="http://www.studip.de"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/logoklein.gif" border="0" <?=tooltip(_("Zur Portalseite"))?>></a></td>
-	<td class="blank" align=right nowrap valign="middle">
-	<?
-
-	//Statistics
-	$db=new DB_Seminar;
-	echo "<table cellspacing=\"0\" cellpadding=\"0\">";
+	$index_nobody_template =& $GLOBALS['template_factory']->open('index_nobody');
+	$index_nobody_template->set_attribute('sso_activated', array_search("CAS", $GLOBALS["STUDIP_AUTH_PLUGIN"]));
+	$index_nobody_template->set_attribute('self_registration_activated', get_config('ENABLE_SELF_REGISTRATION'));
+	$index_nobody_template->set_attribute('help_url', format_help_url("Basis.Allgemeines"));
+	$db=new DB_Seminar();
 	$db->query("SELECT count(*) from seminare");
 	$db->next_record();
-	$anzahl = $db->f(0);
-	echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Aktive Veranstaltungen").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
-	$db->query("SELECT count(*) from auth_user_md5 WHERE perms <> 'user'");
+	$index_nobody_template->set_attribute('num_active_courses', $db->f(0));
+	$db->query("SELECT count(*) from auth_user_md5");
 	$db->next_record();
-	$anzahl = $db->f(0);
-	echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Registrierte NutzerInnen").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
-	$active_time = 10; //minutes
-	$anzahl = get_users_online_count($active_time);
-	echo "<tr><td class=\"steel1\"><font size=\"2\" color=\"#555555\">&nbsp; "._("Davon online").":</font></td><td class=\"steel1\" align=right><font size=\"2\" color=\"#555555\">&nbsp; $anzahl&nbsp; </font></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
-	echo "<tr><td height=\"30\" class=\"blank\" valign=\"middle\">";
-	// choose language
-	foreach ($INSTALLED_LANGUAGES as $temp_language_key => $temp_language) {
-		printf ("&nbsp;&nbsp;<a href=\"%s?set_language=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/languages/%s\" %s border=\"0\"></a>", $PHP_SELF, $temp_language_key, $temp_language["picture"], tooltip($temp_language["name"]));
-	}
-	echo "</td><td align= right valign=\"top\" class=\"blank\"><a href=\"./impressum.php?view=statistik\"><font size=\"2\" color=#888888>"._("mehr")."... </font></a></td><td class=\"blank\">&nbsp; &nbsp; </td></tr>";
-	echo "</table>";
+	$index_nobody_template->set_attribute('num_registered_users', $db->f(0));
+	$index_nobody_template->set_attribute('num_online_users', get_users_online_count(10));
+	echo $index_nobody_template->render();
 }
 ?>
-</td></tr>
+<table width="70%" border="0" cellpadding="0" cellspacing="0" >
 <tr>
-	<td colspan="3" align="center" height="30"></td>
+	<td  align="center" height="30">&nbsp;</td>
 </tr>
 <?
 if ($GLOBALS["PLUGINS_ENABLE"]){
@@ -449,13 +390,13 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 			if ($activatedplugin->hasUnauthorizedView()){
 ?>
 				<tr>
-					<td colspan="3" class="topic">&nbsp;<b><?= $activatedplugin->getDisplaytitle() ?></b></td>
+					<td class="topic">&nbsp;<b><?= $activatedplugin->getDisplaytitle() ?></b></td>
 				</tr>
 				<tr>
-					<td colspan="3" class="steel1"><blockquote><?= $activatedplugin->showOverview(false) ?><blockquote></td>
+					<td class="steel1"><blockquote><?= $activatedplugin->showOverview(false) ?><blockquote></td>
 				</tr>
 
-				<td colspan="3" align="center" height="30"></td>
+				<td align="center" height="30">&nbsp;</td>
 
 				</tr>
 <?php

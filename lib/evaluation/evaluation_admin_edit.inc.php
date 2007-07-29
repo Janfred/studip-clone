@@ -263,10 +263,6 @@ if ( $_REQUEST["newButton_x"] ) {
 
 # ============================================ end: Send messages to the tree #
 
-/* Get the title bar ------------------------------------------------------- */
-$editTitle = EvalCommon::createTitle (_("Evaluation editieren"), EVAL_PIC_ICON);
-/* --------------------------------- end: do first all actions for templates */
-
 /* Do first all actions for templates -------------------------------------- */
 $templateSite = include(EVAL_FILE_TEMPLATE);
 /* --------------------------------- end: do first all actions for templates */
@@ -277,7 +273,6 @@ $editSite = $EditTree->showEvalTree($itemID,1);
 /* ------------------------------------- end: Do all actions for evaluations */
 
 /* Create content ---------------------------------------------------------- */
-echo $editTitle->createContent ();
 echo EvalEdit::createSite ($editSite, $templateSite );
 /* ----------------------------------------------------- end: create content */
 

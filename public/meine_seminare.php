@@ -186,6 +186,7 @@ closeObject();
 $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
 $HELP_KEYWORD="Basis.MeineVeranstaltungen";
+$CURRENT_PAGE=_("Meine Veranstaltungen und Einrichtungen");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -414,21 +415,12 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 	?>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
-		<tr>
-			<td class="topic" colspan="2">
-				<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinesem.gif" border="0" align="texttop">&nbsp;<b><? echo(_("Meine Veranstaltungen")) ?></b>
-			</td>
-		</tr>
 	<?
 
 	if ($num_my_sem) {
 	?>
 		<tr valign="top">
-			<td class="blank" colspan="2">&nbsp;
-			</td>
-		</tr>
-		<tr valign="top">
-			<td valign="top" class="blank" align="center">
+			<td valign="top" class="blank" align="center"><br>
 				<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" valign="top" class="blank">
 						<? if ($meldung) {
 							parse_msg($meldung, "§", "blank",3);
@@ -515,7 +507,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				echo "><a href='gruppe.php'><img src='".$GLOBALS['ASSETS_URL']."images/blank.gif' ".tooltip(_("Gruppe ändern"))." border=0 width=7 height=12></a></td>";
 				echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
 				// Name-field
-				echo "<td class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";
+				echo "<td align=\"left\" class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";
 				if ($lastVisit <= $values["chdate"])
 					print ("<font color=\"red\">");    // red color for new metadates
 				echo "<font size=-1>".htmlReady($values["name"]);
@@ -704,7 +696,7 @@ if ( !$perm->have_perm("root")) {
 				echo "<tr ".$cssSw->getHover().">";
 				echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
 				// Name-field
-				echo "<td class=\"".$cssSw->getClass()."\"><a href=\"institut_main.php?auswahl=$instid\">";
+				echo "<td align=\"left\" class=\"".$cssSw->getClass()."\"><a href=\"institut_main.php?auswahl=$instid\">";
 				echo "<font size=-1>".htmlReady($INST_TYPE[$values["type"]]["name"] . ": " . $values["name"])."</font>";
 				print ("</a></td>");
 				// Content-field

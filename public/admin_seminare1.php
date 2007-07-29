@@ -37,6 +37,9 @@ require_once('lib/classes/StudipSemTreeSearch.class.php');
 require_once('lib/classes/DataFieldEntry.class.php');
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGrunddaten";
+if ($s_id)
+	$CURRENT_PAGE = getHeaderLine($s_id)." - ";
+$CURRENT_PAGE.=_("Verwaltung der Grunddaten"); 
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -718,15 +721,6 @@ if (($s_id) && (auth_check())) {
 
 	?>
 	<table border=0 align="center" cellspacing=0 cellpadding=0 width="100%">
-	<tr valign="top" align="middle">
-	<?
-	echo "<td class=\"topic\" colspan=2 align=\"left\"><b>&nbsp;", $tmp_typ, ": ",htmlReady(substr($db->f("Name"), 0, 60));
-	if (strlen($db->f("Name")) > 60)
-		echo "... ";
-	echo " - ";
-	echo _("Grunddaten") . "</b></td>";
-	?>
-	</tr>
 	<tr><td class="blank" colspan=2><br>
 	<?
 	parse_msg($msg);

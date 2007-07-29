@@ -31,14 +31,12 @@ include_once('lib/lit_import.inc.php');
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
-
-$HELP_KEYWORD="Basis.LiteraturListen";
+$_attributes['lit_select'] = array('style' => 'font-size:8pt;width:100%');
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-
-$_attributes['lit_select'] = array('style' => 'font-size:8pt;width:100%');
+$HELP_KEYWORD = "Basis.LiteraturListen";
+$CURRENT_PAGE = _("Verwaltung von Literaturlisten");
 
 if (!$sess->is_registered('_lit_range')){
 	$sess->register('_lit_range');
@@ -55,19 +53,24 @@ if (!$_range_id){
 	$_range_id = $auth->auth['uid'];
 }
 
-?>
-<body>
-<?
+ob_start();
 if ($list  || $view || $view_mode || $_range_id != $auth->auth['uid']){
 	include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
 	$_range_id = ($SessSemName[1]) ? $SessSemName[1] : $_range_id;
 } else {
 	include ('lib/include/links_about.inc.php'); //Linkliste persönlicher Bereich
 }
+$links = ob_get_clean();
+
 $_lit_range = $_range_id;
 
 $_the_treeview =& new StudipLitListViewAdmin($_range_id);
 $_the_tree =& $_the_treeview->tree;
+
+$CURRENT_PAGE = $_the_tree->root_name . " - " . $CURRENT_PAGE;
+
+include ('lib/include/header.php');   // Output of Stud.IP head
+echo $links;
 
 //checking rights
 if (($_the_tree->range_type == "sem" && !$perm->have_studip_perm("tutor", $_range_id)) ||
@@ -130,9 +133,6 @@ if (is_array($_the_treeview->msg)){
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
-		<td class="topic" colspan="2"><b>&nbsp;<?=htmlReady($_the_tree->root_name) . " - " . _("Literaturlisten bearbeiten")?></b></td>
-	</tr>
-	<tr>
 	<td class="blank" width="99%" align="left" valign="top">
 	<?
 if ($_msg)	{
@@ -140,7 +140,7 @@ if ($_msg)	{
 	parse_msg ($_msg,"§","blank",1,false);
 	echo "\n</table>";
 } else {
-	echo "<br><br>";
+	echo "<br>";
 }
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">

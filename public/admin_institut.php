@@ -312,30 +312,27 @@ while ( is_array($_POST)
 if ($i_view == "new")
 	closeObject();
 
-//Output starts here
-
 include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+$CURRENT_PAGE = _("Grunddaten");
+ob_start();
+//Output starts here
 include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+$links = ob_get_clean();
 
 //get ID from a open Institut
 if ($SessSemName[1])
 	$i_view=$SessSemName[1];
 
+$CURRENT_PAGE = getHeaderLine($i_view);
+if ($CURRENT_PAGE)
+	$CURRENT_PAGE.=" - ";
+$CURRENT_PAGE.= _("Grunddaten");
+
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+echo $links;
+
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-<tr valign=top align=middle>
-	<td class="topic"colspan=2 align="left"><b>&nbsp;
-	<?
-	if ($i_view == "new") {
-		echo _("Anlegen einer neuen Einrichtung");
-	} elseif ($i_view == "delete"){
-		echo _("Einrichtung gel&ouml;scht");
-	} else {
-		print getHeaderLine($i_view)." -  " . _("Grunddaten");
-	}
-	?></b></td>
-</tr>
 <?
 if (isset($msg)) {
 ?>

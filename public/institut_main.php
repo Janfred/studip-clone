@@ -91,6 +91,7 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && $SessSemName[1]){
 
 
 $HELP_KEYWORD="Basis.Einrichtungen";
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " ._("Kurzinfo");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -109,10 +110,6 @@ process_news_commands($institut_main_data);
 ?>
 
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr>
-		<td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["header_line"]. " - " . _("Kurzinfo"); ?></b>
-		</td>
-	</tr>
 	<tr>
 		<td class="blank" valign="top">
 		<blockquote>

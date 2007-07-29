@@ -33,6 +33,8 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 require_once('lib/classes/smiley.class.php');
 
+$CURRENT_PAGE = _("Verwaltung der Smileys");
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -62,7 +64,6 @@ switch ($cmd) {
 // Start output
 //
 $container=new ContainerTable();
-echo $container->headerRow("<b>&nbsp;"._("Verwaltung der Smileys")."</b>");
 echo $container->openCell(array('align'=>'center'));
 
 $sm->display_msg();

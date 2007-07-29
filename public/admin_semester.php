@@ -32,6 +32,8 @@ require_once('lib/classes/HolidayData.class.php');
 // If is set 'cancel', we leave the adminstration form...
  if (isset($cancel_x)) unset ($i_view);
 
+$CURRENT_PAGE = _("Verwaltung von Semester- und Ferienzeiten");
+
 // Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   // Output of Stud.IP head
@@ -43,11 +45,6 @@ require_once('lib/classes/HolidayData.class.php');
 	$cssSw=new cssClassSwitcher;
 ?>
 <table border="0" bgcolor="#000000" align="center" cellspacing="0" cellpadding="5" width="100%">
-<tr valign="top" align="middle">
-	<td class="topic" colspan="2" align="left"><b>&nbsp;<?=_("Verwaltung der Semester und Ferien")?></b></td>
-</tr>
-<tr><td class="blank" colspan="2">&nbsp;</td></tr>
-
 
 <?php
 $db = new DB_Seminar;

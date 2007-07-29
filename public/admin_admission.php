@@ -42,11 +42,6 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-$HELP_KEYWORD="Basis.VeranstaltungenVerwaltenZugangsberechtigungen";
-
-// Start of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
 ?>
 	<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 
@@ -92,6 +87,16 @@ require_once 'lib/functions.php';	//basale Funktionen
 require_once('lib/visual.inc.php');	//Darstellungsfunktionen
 require_once('lib/messaging.inc.php');	//Nachrichtenfunktionen
 require_once('lib/admission.inc.php');	//load functions from admission system
+$HELP_KEYWORD="Basis.VeranstaltungenVerwaltenZugangsberechtigungen";
+if ($admin_admission_data["sem_id"] || $seminar_id)
+	$CURRENT_PAGE = ($admin_admission_data["sem_id"] ? getHeaderLine($admin_admission_data["sem_id"])." - " : getHeaderLine($seminar_id)." - ");
+$CURRENT_PAGE.= _("Verwaltung von Zugangsberechtigungen"); 
+
+// Start of Output
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+
 
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
@@ -588,13 +593,6 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 }
 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr>
-		<td class="topic" colspan=2>&nbsp; <b>
-		<?
-		echo getHeaderLine($admin_admission_data["sem_id"])." -  "._("Zugangsberechtigungen");
-		?>
-		</td>
-	</tr>
 	<?
 	$errormsg.=$infomsg;
 	if (isset($errormsg)) {

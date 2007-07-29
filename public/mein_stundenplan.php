@@ -59,10 +59,12 @@ if ($RESOURCES_ENABLE)
 //eingebundene Daten auf Konsitenz testen (Semesterwechsel? nicht mehr Admin im gespeicherten Institut?)
 check_schedule_settings();
 
-if ($change_view) {
+if (!$inst_id) {
 	$HELP_KEYWORD="Basis.MyStudIPStundenplan";
+	$CURRENT_PAGE = _("Mein Stundenplan");
 } else {
 	$HELP_KEYWORD="Basis.TerminkalenderStundenplan";
+	$CURRENT_PAGE = $SessSemName["header_line"]." - "._("Veranstaltungs-Timetable");
 }
 
 if (!$print_view) {
@@ -415,26 +417,6 @@ for ($i; $i<7; $i++)
 ?>
 <table width ="100%" cellspacing=0 cellpadding=2 border=0>
 <?
-if (!$print_view)
-if ($perm->have_perm("admin") && $view != "inst") {
-?>
-<tr>
-	<td class="topic" width = "99%"colspan=<? echo $glb_colspan?>><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo _("Mein Stundenplan"); else echo _("Veranstaltungs-Timetable") ?></b>
-	</td>
-	<td nowrap class="topic" align="right"><?=_("Ansicht anpassen")?>&nbsp; <a href="<? echo $PHP_SELF ?>?change_view=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/pfeillink.gif" border=0></a>
-	</td>
-</tr>
-<?
-	}
-else
-	{
-?>
-<tr>
-	<td class="topic" width = "99%"colspan=<? echo $glb_colspan+1?>><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinesem.gif" border="0" align="texttop"><b>&nbsp;<? if ($view=="user")  echo _("Mein Stundenplan"); else echo _("Veranstaltungs-Timetable") ?></b>
-	</td>
-</tr>
-<?
-	}
 
 if (!$print_view) {
 ?>

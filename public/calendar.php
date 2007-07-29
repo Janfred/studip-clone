@@ -57,15 +57,19 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 switch ($cmd) {
 	case 'edit':
 		$HELP_KEYWORD="Basis.TerminkalenderBearbeiten";
+		$CURRENT_PAGE=_("Terminkalender"); 
 		break;
 	case 'bind':
 		$HELP_KEYWORD="Basis.TerminkalenderEinbinden";
+		$CURRENT_PAGE=_("Terminkalender");
 		break;
 	case 'changeview':
 		$HELP_KEYWORD="Basis.TerminkalenderEinstellungen";
+		$CURRENT_PAGE=_("Einstellungen des Terminkalenders bearbeiten");
 		break;
 	default:
 		$HELP_KEYWORD="Basis.Terminkalender";
+		$CURRENT_PAGE=_("Terminkalender");
 }
 	
 if ($CALENDAR_ENABLE)

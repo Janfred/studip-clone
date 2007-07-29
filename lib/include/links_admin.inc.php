@@ -587,19 +587,17 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	}
 
-	$reiter->create($structure, $reiter_view, $tooltip, $addText);
 
 	//Einheitliches Auswahlmenu fuer Einrichtungen
 	if (((!$SessSemName[1]) || ($SessSemName["class"] == "sem")) && ($list) && ($view_mode == "inst")) {
 		//Save data back to database and start a connection  - so we avoid some problems with large search results and data is writing back to db too late
 		page_close();
 
+		if(!is_object($header_controller)) include ('lib/include/header.php');   // Output of Stud.IP head
+		$reiter->create($structure, $reiter_view, $tooltip, $addText);
+
 		?>
 		<table width="100%" cellspacing=0 cellpadding=0 border=0>
-		<tr valign=top align=middle>
-			<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Verwaltung aller Einrichtungen, auf die Sie Zugriff haben:")?></b>
-			</td>
-		</tr>
 		<?
 		if ($msg) {
 			echo "<tr> <td class=\"blank\" colspan=2><br />";
@@ -668,12 +666,10 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	if (((!$SessSemName[1]) || ($SessSemName["class"] == "inst")) && ($list) && ($view_mode == "sem")) {
 		//Save data back to database and start a connection  - so we avoid some problems with large search results and data is writing back to db too late
 		page_close();
+		if(!is_object($header_controller)) include ('lib/include/header.php');   // Output of Stud.IP head
+		$reiter->create($structure, $reiter_view, $tooltip, $addText);
 		?>
 		<table width="100%" cellspacing=0 cellpadding=0 border=0>
-		<tr valign=top align=middle>
-			<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Verwaltung aller Veranstaltungen, auf die Sie Zugriff haben:")?></b>
-			</td>
-		</tr>
 		<?
 		if ($msg)
 			parse_msg ($msg);
@@ -1086,4 +1082,5 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		die;
 	}
 }
+$reiter->create($structure, $reiter_view, $tooltip, $addText);
 ?>

@@ -29,6 +29,7 @@ require_once ('config.inc.php');
 require_once ('lib/visual.inc.php');
 
 $HELP_KEYWORD="Basis.Ilias";
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Lernmodule");
 
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -131,26 +132,6 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 	include ('lib/include/links_openobject.inc.php');
 
 	?><table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr>
-		<td class="topic" colspan="3">&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-lern.gif" align="texttop">&nbsp;
-		<b>
-		<?   if ($view=="edit")
-			{
-				if ($SessSemName["class"]=="inst")
-					echo _("Verbindung von Einrichtungen und Lernmodulen");
-				else
-					echo _("Verbindung von Veranstaltungen und Lernmodulen");
-			}
-			else
-			{
-				if ($SessSemName["class"]=="inst")
-					echo sprintf(_("Lernmodule der Einrichtung \"%s\""), $SessSemName[0]);
-				else
-					echo sprintf(_("Lernmodule der Veranstaltung \"%s\""), $SessSemName[0]);
-			}
-		?></b>
-		</td>
-	</tr>
 	<tr>
 		<td class="blank" colspan="3">&nbsp;
 		</td>

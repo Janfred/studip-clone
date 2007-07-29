@@ -26,6 +26,7 @@ $hash_secret = "dslkjjhetbjs";
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 
+$CURRENT_PAGE = _("Kontaktgruppen");
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 
@@ -235,11 +236,7 @@ function PrintAktualContacts ($range_id)
 
 // Anfang Edit-Bereich
 
-?><table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr><td class="topic" colspan=2>&nbsp;<b>
-	<?
-		echo _("Kontaktgruppen");
-	?></b></td></tr><tr><td class="blank" colspan="2">&nbsp; </td></tr></table>
+?>
 
 <table class="blank" width="100%" border="0" cellspacing="0">
   <tr>

@@ -48,9 +48,12 @@ $cssSw = new cssClassSwitcher;							// Klasse für Zebra-Design
 $cssSw->enableHover();
 $db = new DB_Seminar;
 
-// we are defintely not in an lexture or institute
+// we are defintely not in an lecture or institute
 closeObject();
 $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
+$HELP_KEYWORD="Basis.MeinArchiv";
+$CURRENT_PAGE=_("Meine archivierten Veranstaltungen");
+
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -73,21 +76,12 @@ if (!$num_my_sem)
 
  ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-		<td class="topic" colspan="2">
-			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinesem.gif" border="0" align="texttop">&nbsp;<b><? echo(_("Meine archivierten Veranstaltungen")) ?></b>
-		</td>
-	</tr>
 <?
 
 if ($num_my_sem) {
 	?>
 	<tr valign="top">
-		<td class="blank" colspan="2">&nbsp;
-		</td>
-	</tr>
-	<tr valign="top">
-		<td valign="top" class="blank" align="center">
+		<td valign="top" class="blank" align="center"><br>
 			<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" valign="top" class="blank">
 				<tr align="center" valign="top">
 					<th width="1%"></th>
@@ -134,11 +128,7 @@ if ($num_my_sem) {
 
  ?>
  <tr>
- <tr>
- 	<td class="blank" colspan="2">&nbsp;
- 	</td>
- </tr>
-	 <td valign="top" class="blank">
+	 <td valign="top" class="blank"><br>
 		<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
 	<?
 	if ($meldung)	{
@@ -173,7 +163,7 @@ $infobox = array	(
 	),
 	array  ("kategorie" => _("Aktionen:"),
 		"eintrag" => array	(
-			array	 (	'icon' => "suchen.gif",
+			array	 (	'icon' => "archiv.gif",
 								"text"  => sprintf(_("Um Informationen &uuml;ber andere archivierte Veranstaltungen anzuzeigen nutzen Sie die <br />%sSuche im Archiv%s"), '<a href="archiv.php">', '</a>')
 			)
 		)
@@ -182,7 +172,7 @@ $infobox = array	(
 
 // print the info_box
 
-print_infobox ($infobox, "folders.jpg");
+print_infobox ($infobox, "archiv.jpg");
 
 ?>
 

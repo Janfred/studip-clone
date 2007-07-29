@@ -29,6 +29,7 @@ require_once ('lib/visual.inc.php');
 require_once ('lib/classes/StudipRangeTreeView.class.php');
 
 $HELP_KEYWORD="Basis.SuchenEinrichtungen";
+$CURRENT_PAGE=_("Einrichtungssuche");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -72,7 +73,7 @@ if ($_REQUEST['cmd']=="suche"){
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
-		<td class="topic" colspan="2"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" border="0" align="absbottom"><b>&nbsp;<?=_("Suche nach Einrichtungen")?></b></td>
+		<td class="topic" colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
 	<td class="blank" width="100%" align="left" valign="top">

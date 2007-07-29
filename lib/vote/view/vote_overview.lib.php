@@ -18,14 +18,7 @@ include_once("lib/vote/view/vote_show.lib.php");
  * @access  private
  */
 function printSiteTitle(){
-	global $label;
-   	$html = "<table border=0 class=blank align=center cellspacing=0 cellpadding=0 width=\"100%\">\n"
-    	  . "	<tr valign=top align=center>\n"
-    	  . "    <td class=topic align=left colspan=\"2\"><img src=\"".VOTE_PATH_PICTURES."vote-icon.gif\" alt=\"Vote-Icon\">&nbsp;<b>".$label["sitetitle_title"].":</b>\n"
-    	  . "     </td>\n"
-    	  . "    </tr>\n"
-    	  . "</table>\n";
-   	echo $html;
+	//function deprecated, since no title_line is used at this time
 }
 
 
@@ -72,12 +65,13 @@ function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID =
 			$value1 = "setResultvisibility_confirmed";
 			$value2 = "setResultvisibility_aborted";
 		}
+		global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
 		$html .="<font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&voteaction=".$value1."&voteID=".$voteID."&showrangeID=".$showrangeID;
 		if ($referer) $html .= "&referer=".$referer;
-		$html .="\" title=\"".$label["yes"]."\"><img src=\"".localeButtonUrl('ja2-button.gif')."\" width=\"93\" alt=\"".$label["yes"]."\" title=\"".$label["yes"]."\" border=\"0\" align=\"middle\"></a></font>\n";
+		$html .="\" title=\"".$label["yes"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/ja2-button.gif\" width=\"93\" alt=\"".$label["yes"]."\" title=\"".$label["yes"]."\" border=\"0\" align=\"middle\"></a></font>\n";
 		$html .="<font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&voteaction=".$value2."&voteID=".$voteID."&showrangeID=".$showrangeID;
 		if ($referer) $html .= "&referer=".$referer;
-		$html .="\" title=\"".$label["no"]."\"><img src=\"".localeButtonUrl('nein-button.gif')."\" width=\"93\" alt=\"".$label["no"]."\" title=\"".$label["no"]."\" border=\"0\" align=\"middle\"></a></font>\n";
+		$html .="\" title=\"".$label["no"]."\"><img src=\"{$CANONICAL_RELATIVE_PATH_STUDIP}locale/".$_language_path."/LC_BUTTONS/nein-button.gif\" width=\"93\" alt=\"".$label["no"]."\" title=\"".$label["no"]."\" border=\"0\" align=\"middle\"></a></font>\n";
 	}
 	$html .="	 </td>\n"
 		  . "	</tr>\n";
@@ -597,6 +591,7 @@ function makeTableDataCellForm( $displayclass = "steel1",
 								$hidden3_value= NULL,
 								$hidden4_name = NULL,
 								$hidden4_value= NULL){
+	global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
 	$link =	VOTE_FILE_ADMIN."?page=".$action;
 	if (!empty($hidden1_name)) $link .="&".$hidden1_name."=".$hidden1_value;
 	if (!empty($hidden2_name)) $link .="&".$hidden2_name."=".$hidden2_value;
@@ -604,7 +599,7 @@ function makeTableDataCellForm( $displayclass = "steel1",
 	if (!empty($hidden4_name)) $link .="&".$hidden4_name."=".$hidden4_value;
 
 	if ($hidden2_value != "change_visibility"){
-		$src = localeButtonUrl($button_name . '-button.gif');
+		$src = "{$CANONICAL_RELATIVE_PATH_STUDIP}locale/$_language_path/LC_BUTTONS/".$button_name."-button.gif";
 		$imgwidth = "93";
 	}
 	else{

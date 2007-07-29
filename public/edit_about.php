@@ -1070,38 +1070,61 @@ function oeffne()
 switch($view) {
 	case "Bild": 
 		$HELP_KEYWORD="Basis.HomepageBild"; 
+		$CURRENT_PAGE=_("Hochladen eines persönlichen Bildes");
 		break;
 	case "Daten": 
 		$HELP_KEYWORD="Basis.HomepagePersönlicheDaten"; 
+		$CURRENT_PAGE=_("Benutzerkonto bearbeiten");
 		break;
 	case "Karriere": 
 		$HELP_KEYWORD="Basis.HomepageUniversitäreDaten"; 
+		if ($perm->have_perm ("tutor"))
+			$CURRENT_PAGE=_("Studiengang und Einrichtungen bearbeiten");
+		else
+			$CURRENT_PAGE=_("Studiengang bearbeiten");
 		break;
 	case "Lebenslauf": 
 		$HELP_KEYWORD="Basis.HomepageLebenslauf"; 
+		if ($auth->auth['perm'] == "dozent")
+			$CURRENT_PAGE =  _("Lebenslauf, Arbeitsschwerpunkte und Publikationen bearbeiten");
+		else
+			$CURRENT_PAGE =  _("Lebenslauf bearbeiten");
 		break;
 	case "Sonstiges": 
 		$HELP_KEYWORD="Basis.HomepageSonstiges"; 
+		$CURRENT_PAGE=_("Eigene Kategorien bearbeiten");
 		break;
 	case "Login": 
 		$HELP_KEYWORD="Basis.MyStudIPAutoLogin"; 
+		$CURRENT_PAGE=_("Auto-Login einrichten");
 		break;
 	case "Forum": 
 		$HELP_KEYWORD="Basis.MyStudIPForum"; 
+		$CURRENT_PAGE=_("Einstellungen des Forums anpassen");
 		break;
 	case "Terminkalender": 
 		$HELP_KEYWORD="Basis.MyStudIPTerminkalender"; 
+		$CURRENT_PAGE=_("Einstellungen des Terminkalenders anpassen");
 		break;
 	case "Tools": 
 		$HELP_KEYWORD="Basis.HomepageTools"; 
+		$CURRENT_PAGE=_("Benutzer-Tools");
 		break;
 	case "Stundenplan": 
 		$HELP_KEYWORD="Basis.MyStudIPStundenplan"; 
+		$CURRENT_PAGE=_("Einstellungen des Stundenplans anpassen");
 		break;
 	case "Messaging": 
 		$HELP_KEYWORD="Basis.MyStudIPMessaging"; 
+		$CURRENT_PAGE=_("Einstellungen des Nachrichtensystems anpassen");
+		break;
+	case "rss": 
+		$HELP_KEYWORD="Basis.MyStudIPRSS"; 
+		$CURRENT_PAGE=_("Einstellungen der RSS-Anzeige anpassen");
 		break;
 	case "allgemein":
+		$CURRENT_PAGE=_("Allgemeine Einstellungen anpassen");
+		break;
 	default: 
 		$HELP_KEYWORD="Basis.MyStudIP"; 
 		break;
@@ -1133,45 +1156,16 @@ if ($view != 'Forum'
 		&& $view != 'notification') {
 	echo '<table class="blank" cellspacing=0 cellpadding=0 border=0 width="100%">'."\n";
 
-	echo '<tr><td class="'.(($username != $auth->auth["uname"])? 'topicwrite':'topic').'" colspan=2><img src="'. $GLOBALS['ASSETS_URL'] . 'images/einst.gif" border="0" align="texttop"><b>&nbsp;';
+//	echo '<tr><td class="'.(($username != $auth->auth["uname"])? 'topicwrite':'topic').'" colspan=2><img src="'. $GLOBALS['ASSETS_URL'] . 'images/einst.gif" border="0" align="texttop"><b>&nbsp;';
 
-	switch ($view) {
-		case ("Bild") :
-			echo _("Hochladen eines pers&ouml;nlichen Bildes");
-		break;
-		case ("Daten") :
-			echo _("Benutzerdaten bearbeiten");
-		break;
-		case ("Karriere") :
-			if ($perm->have_perm ("tutor"))
-				echo _("Studienkarriere und Einrichtungen bearbeiten");
-			else
-				echo _("Studienkarriere bearbeiten");
-		break;
-		case ("Lebenslauf") :
-			if ($auth->auth['perm'] == "dozent")
-				echo _("Lebenslauf, Arbeitsschwerpunkte und Publikationen bearbeiten");
-			else
-				echo _("Lebenslauf bearbeiten");
-		break;
-		case ("Sonstiges") :
-			echo _("Eigene Kategorien bearbeiten");
-		break;
-		case ("rss") :
-                       echo _("Eigene RSS Feeds bearbeiten");
-                break;
-		case ("Login") :
-			echo _("Auto-Login einrichten");
-		break;
-	}
 
 	if ($username != $auth->auth['uname']) {
-		echo '&nbsp; &nbsp; <font size="-1">';
+		echo '<tr><td class="topicwrite" colspan="2"> &nbsp; &nbsp; <font size="-1">';
 		printf(_("Daten von: %s %s (%s), Status: %s"), htmlReady($my_about->auth_user['Vorname']), htmlReady($my_about->auth_user['Nachname']), $username, $my_about->auth_user['perms']);
 		echo '</font>';
+	echo "</b></td></tr>\n";
 	}
 
-	echo "</b></td></tr>\n";
 	echo '<tr><td class="blank" colspan="2">&nbsp;</td></tr>'."\n</table>\n".'<table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">';
 	$table_open = TRUE;
 }
@@ -1782,9 +1776,6 @@ if ($view == "Messaging") {
 
 if ($view == 'notification') {
 	echo '<table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">';
-	echo '<tr><td class="topic" width="100%">';
-	echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/einst.gif" border="0" align="texttop"><b>&nbsp;';
-	echo _("Benachrichtigung anpassen") . "</b></td></tr>\n";
 	echo "<tr><td class=\"blank\" width=\"100%\">\n";
 	require_once('sem_notification.php');
 	echo "</td></tr></table>\n";

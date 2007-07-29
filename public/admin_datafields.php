@@ -89,6 +89,7 @@ function printDataFieldType ($targetID, $currStruct) {
 	echo '</font>';
 }
 
+$CURRENT_PAGE = _("Verwaltung generischer Datenfelder");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head

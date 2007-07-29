@@ -26,10 +26,12 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
 // Set this to something, just something different...
-  $hash_secret = "dudeldoe";
+$hash_secret = "dudeldoe";
   
 // If is set 'cancel', we leave the adminstration form...
- if (isset($cancel_x)) unset ($i_view);
+if (isset($cancel_x)) unset ($i_view);
+ 
+$CURRENT_PAGE = _("Verwaltung der Studiengänge");
 
 // Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
@@ -42,9 +44,6 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 	$cssSw=new cssClassSwitcher;
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-<tr valign=top align=middle>
-	<td class="topic"colspan=2 align="left"><b>&nbsp;<?=_("Verwaltung der Studieng&auml;nge")?></b></td>
-</tr>
 <tr><td class="blank" colspan=2>&nbsp;</td></tr>
 
 
@@ -252,7 +251,10 @@ if ($i_view) {
 
 if (!$i_view) {
 	?>
-  <tr><td class="blank" colspan=2><b><a href="<?echo $PHP_SELF?>?i_view=new">&nbsp;<?=_("Neuen Studiengang anlegen")?></a><b><br><br></td></tr>
+  <tr><td class="blank" colspan=2>
+  <?
+  printf("&nbsp;&nbsp;"._("Neuen Studiengang %s")."<br /><br />", "<a href=" . $PHP_SELF . "?i_view=new><img ".makeButton("anlegen", "src")." align=\"absmiddle\"></a>");
+  ?>
   <tr><td class="blank" colspan=2>
   <table align=center bg="#ffffff" width="80%" border=0 cellpadding=2 cellspacing=0>
   <tr valign=top align=middle>

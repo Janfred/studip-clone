@@ -93,8 +93,6 @@ $form = new HTM( "form" );
 $form->attr( "action", $PHP_SELF."?evalID=".$evalID );
 $form->attr( "method", "post" );
 
-$titlebar = EvalCommon::createTitle( _("Stud.IP Online-Evaluation"),
-				     PATH_PICTURES."eval-icon.gif" );
 $form->cont( $titlebar );
 
 /* Surrounding Table ------------------------------------------------------- */

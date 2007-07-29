@@ -43,7 +43,7 @@ require_once ('lib/visual.inc.php');
 
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
-
+$CURRENT_PAGE = _("Mein Adressbuch");
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 
@@ -121,19 +121,19 @@ if ($existingowninfolabel) {
 }
 
 
+$size_of_book = GetSizeofBook()
 
 ?>
-<table width = "100%" cellspacing="0" border="0" cellpadding="0"><tr>
-	<td class="topic" colspan="2" width = "100%"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/nutzer.gif" border="0" align="texttop"><b>&nbsp; <?echo _("Mein Adressbuch");?> <font size="2">(<?=(($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book);?>)</font></b>
-	</td>
-</tr><tr><td class="blank" align="left" valign="absmiddle">
+<table width = "100%" cellspacing="0" border="0" cellpadding="0">
+
+<tr><td class="blank" align="left" valign="absmiddle">
 
 	<form action="<? echo $PHP_SELF ?>?cmd=search#anker" method="POST"><?
 
 if ($open != "all" && $size_of_book>0) {
-	echo "&nbsp; <a href=\"$PHP_SELF?view=$view&open=all&filter=$filter\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle aufklappen")."</font></a></td>";
+	echo "&nbsp; <a href=\"$PHP_SELF?view=$view&open=all&filter=$filter\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle aufklappen (").((($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book)).")</font></a></td>";
 } elseif ($size_of_book>0) {
-	echo "&nbsp; <a href=\"$PHP_SELF?filter=$filter\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurauf.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle zuklappen")."</font></a></td>";
+	echo "&nbsp; <a href=\"$PHP_SELF?filter=$filter\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurauf.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle zuklappen (").((($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book)).")</font></a></td>";
 }
 
 echo "<td class=\"blank\" align=\"right\">";

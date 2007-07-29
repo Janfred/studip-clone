@@ -95,6 +95,8 @@ if (isset ($_include_extra_stylesheet))
 if (isset ($_include_additional_header)){
 	echo "\t\t" . $_include_additional_header . "\n";
 }
+echo "\t\t".'<link rel="stylesheet" href="'.$GLOBALS['ASSETS_URL'].'stylesheets/header.css" type="text/css">'."\n";
+
 unset ($_include_extra_stylesheet);
 unset ($_include_stylesheet);
 unset ($_html_head_title);

@@ -22,9 +22,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
-include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+$HELP_KEYWORD="Basis.Informationsseite";
+
 include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once ('lib/classes/StudipScmEntry.class.php');
 require_once 'lib/functions.php';
 require_once('lib/msg.inc.php');
@@ -34,6 +35,12 @@ require_once('lib/classes/Table.class.php');
 checkObject(); // do we have an open object?
 checkObjectModule("scm");
 object_set_visit_module("scm");
+
+$scms = array_values(StudipScmEntry::GetSCMEntriesForRange($SessSemName[1]));
+
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " .($scms[0]['tab_name'] ? $scms[0]['tab_name'] : _("Informationen"));
+
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 $msg = ""; // Message to display
 
@@ -80,13 +87,6 @@ function scm_seminar_header($range_id, $site_name)
 	$t->setTableWidth("100%");
 	echo $t->open();
 	echo $t->openRow();
-	echo $t->openCell(array("class"=>"topic", "width"=>"100%"));
-	echo "<b>&nbsp;";
-	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-cont.gif\" align=absmiddle>&nbsp; ";
-	echo getHeaderLine($range_id) . " - $site_name</b>";
-	echo $t->closeCell();
-	echo $t->closeRow();
-	echo $t->openRow();
 	echo $t->blankCell(array("class"=>"blank"));
 	echo $t->openRow();
 	echo $t->openCell(array("class"=>"blank"));
@@ -113,12 +113,14 @@ function scm_change_header($table, $titel, $user_id, $chdate) {
 }
 
 function scm_show_content($range_id, $msg, $scm_id) {
-	global $rechte, $PHP_SELF;
+	global $rechte, $PHP_SELF, $CURRENT_PAGE, $SessSemName;
+
+	$scm = new StudipScmEntry($scm_id);
+	
+	$CURRENT_PAGE = ".".$SessSemName["header_line"]. " - " . $scm->getValue("tab_name");
 	
 	if ($scm_id == 'new_entry') $scm_id = null;
 	
-	$scm = new StudipScmEntry($scm_id);
-
 	$header_table = scm_seminar_header($range_id, $scm->getValue("tab_name"));
 
 	$frame_table=new Table();

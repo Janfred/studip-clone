@@ -32,6 +32,9 @@ $perm->check("autor");
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
+$HELP_KEYWORD = "Basis.Literatursuche";
+$CURRENT_PAGE = _("Literatursuche");
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -96,7 +99,7 @@ $_msg .= $_the_search->search_plugin->getError("msg");
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
-		<td class="topic" colspan="2"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-lit.gif" border="0" /><b>&nbsp;<?=_("Literatur suchen")?></b></td>
+		<td class="topic" colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
 	<td class="blank" width="99%" align="left" valign="top">

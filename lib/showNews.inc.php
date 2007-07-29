@@ -134,7 +134,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 
 		//Ausgabe der Kopfzeile vor erster auszugebener News
 		echo"\n<table  border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\" >";
-		echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"".$GLOBALS['ASSETS_URL']."images/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
+		echo"\n<tr><td class=\"topic\" align=\"left\" colspan=\"2\" width=\"99%\"><img src=\"".$GLOBALS['ASSETS_URL']."images/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
 		if ($rss_id) {
 			$colspan++;
 			echo "\n<td align=\"right\" width=\"36\" class=\"topic\">";

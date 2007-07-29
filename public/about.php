@@ -91,22 +91,6 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE')){
 	}
 }
 
-// Help
-$HELP_KEYWORD="Basis.Homepage";
-
-// Start  of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');
-
-if ($rssusername) $username = $rssusername;
-
-if (isset($username) && $username != $auth->auth["uname"] && !get_visibility_by_username($username)) {
-	parse_window ("error§" . _("Diese Homepage ist nicht verf&uuml;gbar.") . " <br /><font size=-1 color=black>" . _("Die angeforderte Homepage ist leider nicht verf&uuml;gbar.")."</font>","§",
-	_("Homepage nicht verf&uuml;gbar"),
-	sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
-	die;
-
-}
 ?>
 <script language="Javascript">
 function open_im()
@@ -116,6 +100,9 @@ function open_im()
 </script>
 
 <?php
+if ($rssusername) $username = $rssusername;
+//Wenn kein Username uebergeben wurde, wird der eigene genommen:
+if (!isset($username) || $username == "") $username = $auth->auth["uname"];
 
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
@@ -147,29 +134,36 @@ if ($sms_msg) {
 	$sess->unregister('sms_msg');
 }
 
-//Wenn kein Username uebergeben wurde, wird der eigene genommen:
-if (!isset($username) || $username == "")
-	$username = $auth->auth["uname"];
-
-
 //3 zeilen wegen username statt id zum aufruf... in $user_id steht jetzt die user_id (sic)
-
-$user_gesperrt = FALSE;
-if ($perm->have_perm("root"))
-        $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username'");
-else
-        $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username' AND locked=0");
-
+$db->query("SELECT * FROM auth_user_md5  WHERE username ='$username'");
 $db->next_record();
 
-if ($perm->have_perm("root") && $db->f("locked")==1)
-	$user_gesperrt = TRUE;
-
-if (!$db->nf()) {
-	parse_window ("error§"._("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!")."<br />"._(" Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;scht wurde.")."§", "§", _("Benutzer nicht gefunden"));
-	die;
+// Help
+$HELP_KEYWORD = "Basis.Homepage";
+if($db->f('user_id') == $user->id && !$db->f('locked')){
+	$CURRENT_PAGE = _("Meine persönliche Homepage");
+	$user_id = $db->f("user_id");
+} elseif ($db->f('user_id') && ($perm->have_perm("root") || (!$db->f('locked') && get_visibility_by_state($db->f("visible"))))) {
+	$CURRENT_PAGE = _("Persönliche Homepage")  . ' - ' . get_fullname($db->f('user_id'));
+	$user_id = $db->f("user_id");
 } else {
-	$user_id=$db->f("user_id");
+	$CURRENT_PAGE = _("Persönliche Homepage");
+	unset($user_id);
+}
+// Start  of Output
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');
+	
+if (!$user_id){
+	if ($db->f("visible") && !get_visibility_by_state($db->f("visible"))) {
+		parse_window("error§" . _("Diese Homepage ist nicht verf&uuml;gbar.") . " <br /><font size=-1 color=black>" . _("Die angeforderte Homepage ist leider nicht verf&uuml;gbar.")."</font>","§",
+		_("Homepage nicht verf&uuml;gbar"),
+		sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
+	} else {
+		parse_window("error§"._("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!")."<br />"._(" Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;scht wurde.")."§", "§", _("Benutzer nicht gefunden"));
+	}
+	page_close();
+	die;
 }
 
 // count views of Page
@@ -208,13 +202,13 @@ $db->next_record();
 //daten anzeigen
 IF (($user_id==$user->id AND $perm->have_perm("autor")) OR $perm->have_perm("root") OR $admin_darf == TRUE) { // Es werden die Editreiter angezeigt, wenn ich &auml;ndern darf
 	include ('lib/include/links_about.inc.php');
+	echo "<table align=\"center\" width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\" valign=\"top\">";
+
+} else {
+	echo "<table align=\"center\" width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"0\" valign=\"top\">";
+	echo "<tr><td class=\"topic\" align=\"right\" colspan=2>&nbsp;</td></tr>";
 }
 
-?>
-
-<table align="center" width="100%" border="0" cellpadding="1" cellspacing="0" valign="top">
-<tr><td class="topic" align="right" colspan=2>&nbsp;</td></tr>
-<?
 if ($msg)
 {
 	echo"<tr><td class=\"steel1\"colspan=2><br>";
@@ -263,7 +257,7 @@ IF ($db->f("Home")!="") {
 	echo "<b>&nbsp;" . _("Homepage:") . " </b>".$home."<br>";
 }
 
-if ($perm->have_perm("root") && $user_gesperrt) {
+if ($perm->have_perm("root") && $db->f('locked')) {
         echo "<BR><B><FONT COLOR=\"RED\" SIZE=\"+1\">"._("BENUTZER IST GESPERRT!")."</FONT></B><BR>\n";
 }
 
@@ -407,8 +401,8 @@ if (!$guestpage)
 	$guestpage = 0;
 $guest = new Guestbook($user_id,$admin_darf,$guestpage);
 
-if ($guestbook && $perm->have_perm('autor'))
-	$guest->actionsGuestbook($guestbook,$post,$deletepost,$studipticket);
+if ($_REQUEST['guestbook'] && $perm->have_perm('autor'))
+	$guest->actionsGuestbook($_REQUEST['guestbook'],$_REQUEST['post'],$_REQUEST['deletepost'],$_REQUEST['studipticket']);
 
 if ($guest->active == TRUE || $guest->rights == TRUE) {
 	$guest->showGuestbook();

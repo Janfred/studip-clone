@@ -170,10 +170,6 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 		print "\n</tr></td>\n<tr><td class=\"blank\" colspan=2>";
 		}
 
-		else {
-		  echo "\n<tr>\n<td>";
-		}
-
 		if ($username)
 			$add_to_link = "&username=$username";
 		if ($show_not)
@@ -281,7 +277,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 
 				if ($show_admin)
 					$content .= sprintf("<br /><div align=\"center\"><a href=\"./raumzeit.php?cmd=open&open_close_id=%s#%s\">"
-							. makeButton("terminaendern", "img")
+							. makeButton("bearbeiten", "img")
 							. "</a></div>", $db->f("termin_id"), $db->f('termin_id'));
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
@@ -305,7 +301,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 		printf("\n<td align =\"right\" class=\"topic\">&nbsp;$admin_link<img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" %s></a>&nbsp;</td></tr>", tooltip(_("Termine einstellen")));
 		print("\n<tr><td class=\"steel1\" colspan=\"2\"><blockquote><br /><font size=-1>");
 		print(_("Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie auf die Doppelpfeile."));
-		print("</font><br />&nbsp; </blockquote>\n</td></tr></table>\n");
+		print("<br />&nbsp; </blockquote>\n</td></tr></table>\n");
 		if (!$full_width)
 			echo "</td></tr></table>\n";
 		return TRUE;
@@ -448,7 +444,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 
 				if ($show_admin)
 					$content .= sprintf("<div align=\"center\"><a href=\"./calendar.php?cmd=edit&termin_id=%s&atime=%s&source_page=%s\">"
-										. makeButton("terminaendern", "img")
+										. makeButton("bearbeiten", "img")
 										. "</a></div>", $termin->getId(), $termin->getStart(), rawurlencode($PHP_SELF));
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
@@ -635,14 +631,14 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 					// Seminar appointment
 					if ($termin->getType() == 1) {
 						$edit = sprintf("<a href=\"./raumzeit.php?seminar_id=%s&cmd=open&open_close_id=%s#%s\">"
-									. makeButton("terminaendern", "img")
+									. makeButton("bearbeiten", "img")
 									. "</a>", $termin->getSeminarId(), $termin->getId(), $termin->getId());
 					}
 					else {
 						// Personal appointment
 						$edit = sprintf("<a href=\"./calendar.php?cmd=edit&termin_id=%s"
 									. "&atime=%s&source_page=%s\">"
-									. makeButton("terminaendern", "img") . "</a>"
+									. makeButton("bearbeiten", "img") . "</a>"
 									, $termin->getId(), $termin->getStart(), rawurlencode($PHP_SELF));
 					}
 				}

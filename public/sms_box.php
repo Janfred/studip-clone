@@ -67,7 +67,7 @@ if ($change_view) {
 } else {
 	$HELP_KEYWORD="Basis.InteraktionNachrichten";
 }
-
+$CURRENT_PAGE = _("Systeminterne Nachrichten");
 // Output of html head and Stud.IP head
 include ('lib/include/html_head.inc.php');
 include ('lib/include/header.php');
@@ -360,8 +360,6 @@ if ($sms_data["time"] == "all") {
 ?>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr><td class="topic" colspan="2"><?=$info_text_001?></td></tr>
-<tr><td class="blank" colspan="2">&nbsp;</td></tr>
 <tr>
 	<td class="blank" valign="top"> <?
 		if ($msg) { // if info ($msg) for user
@@ -371,7 +369,7 @@ if ($sms_data["time"] == "all") {
 		} ?>
 		<table cellpadding="3" cellspacing="0" border="0" width="100%">
 			<tr>
-				<td class="blank" align="left" valign="bottom">&nbsp; <?
+				<td class="blank" align="right" valign="bottom">&nbsp; <?
 					if ($cmd != "admin_folder" && !$sms_data['tmp']['move_to_folder']) {
 						echo "<a href=\"".$PHP_SELF."?cmd=admin_folder&cmd_2=new\">".makeButton("neuerordner", "img")."</a>";
 					} else {

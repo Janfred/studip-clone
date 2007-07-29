@@ -39,7 +39,12 @@ page_open (array ("sess" => "Seminar_Session",
                   "user" => "Seminar_User"));
 $perm->check ("autor");
 
+require_once 'lib/functions.php';
+
 $HELP_KEYWORD="Basis.Evaluationen";
+if ($SessSemName[1])
+	$CURRENT_PAGE = getHeaderLine($SessSemName[1])." - ";
+$CURRENT_PAGE.= _("Verwaltung von Evaluationen");
 
 require_once ('lib/evaluation/evaluation.config.php');
 

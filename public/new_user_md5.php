@@ -30,12 +30,13 @@ require_once('lib/classes/UserManagement.class.php');
 
 $cssSw = new cssClassSwitcher;
 
+$CURRENT_PAGE = _("Benutzerverwaltung");
+
 //-- hier muessen Seiten-Initialisierungen passieren --
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');	 //hier wird der "Kopf" nachgeladen
-
 include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
 
 
@@ -146,9 +147,6 @@ if (isset($_GET['details'])) {
 	if ($details=="__" && in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])) { // neuen Benutzer anlegen
 		?>
 		<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-		<tr valign=top align=middle>
-			<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Eingabe eines neuen Benutzer-Accounts")?></b></td>
-		</tr>
 		<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 		<tr><td class="blank" colspan=2>
 
@@ -231,9 +229,6 @@ if (isset($_GET['details'])) {
 			?>
 
 			<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-			<tr valign=top align=middle>
-				<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Ver&auml;ndern eines bestehenden Benutzer-Accounts")?></b></td>
-			</tr>
 			<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 			<tr><td class="blank" colspan=2>
 
@@ -484,9 +479,6 @@ if (isset($_GET['details'])) {
 	?>
 
 	<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-	<tr valign=top align=middle>
-		<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Verwaltung aller BenutzerInnen des Systems")?></b></td>
-	</tr>
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 
 	<?
@@ -496,7 +488,7 @@ if (isset($_GET['details'])) {
 	<tr><td class="blank" colspan=2>
 	<?
 	if (in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])){
-		?><p><b><a href="<? echo $PHP_SELF . "?details=__"?>">&nbsp;<?=_("Neuen Benutzer-Account anlegen")?></a></b></p><?
+		printf("&nbsp;&nbsp;"._("Neuen Benutzer-Account %s")."<br /><br />", "<a href=" . $PHP_SELF . "?details=__><img ".makeButton("anlegen", "src")." align=\"absmiddle\"></a>");
 	} else {
 		echo "<p>&nbsp;" . _("Die Standard Authentifizierung ist ausgeschaltet. Das Anlegen von neuen Benutzern ist nicht möglich!") . "</p>";
 	}

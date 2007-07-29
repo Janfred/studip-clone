@@ -163,16 +163,21 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	}
 }
 
+//get ID
+if ($SessSemName[1])
+	$range_id=$SessSemName[1];
+
+
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenModule";
+$CURRENT_PAGE = getHeaderLine($range_id);
+if ($CURRENT_PAGE)
+	$CURRENT_PAGE.=" - ";
+$CURRENT_PAGE.= _("Verwaltung verwendeter Module/Plugins"); 
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
-
-//get ID
-if ($SessSemName[1])
-	$range_id=$SessSemName[1];
 
 if (!$admin_modules_data["conflicts"])
 	$admin_modules_data["conflicts"] = array();
@@ -195,13 +200,6 @@ if ($admin_modules_data["range_id"]) {
 
 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr>
-		<td class="topic" colspan=2>&nbsp; <b>
-		<?
-		echo getHeaderLine($admin_modules_data["range_id"])." -  "._("Module konfigurieren");
-		?>
-		</td>
-	</tr>
  	<tr>
 		<td class="blank" valign="top">
 			<?

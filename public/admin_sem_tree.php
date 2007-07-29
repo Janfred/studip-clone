@@ -27,6 +27,9 @@ if (!$perm->is_fak_admin()){
 	page_close();
 	die;
 }
+
+$CURRENT_PAGE = $UNI_NAME . " - " . _("Veranstaltungshierachie bearbeiten");
+
 require_once ('lib/visual.inc.php');
 require_once ('lib/classes/StudipSemTreeViewAdmin.class.php');
 require_once ('lib/classes/StudipSemSearch.class.php');
@@ -117,9 +120,6 @@ if ($the_tree->mode == "MoveItem" || $the_tree->mode == "CopyItem"){
 ?>
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
-	<tr>
-		<td class="topic" colspan="2"><b>&nbsp;<?=$UNI_NAME." - "._("Veranstaltungshierarchie bearbeiten")?></b></td>
-	</tr>
 	<tr>
 	<td class="blank" width="75%" align="left" valign="top">
 	<?

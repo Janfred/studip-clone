@@ -48,6 +48,8 @@ $cssSw=new cssClassSwitcher;
 $sess->register("admin_config_data");
 //$admin_config_data["range_id"] = '';
 
+$CURRENT_PAGE = _("Verwaltung von Konfigurationsvariablen");
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -88,12 +90,6 @@ if ($_REQUEST["change_config"]) {
 
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr>
-		<td class="topic" colspan=2>&nbsp; <b>
-		<?=_("Zugriff auf Konfigurationsvariablen");
-		?>
-		</td>
-	</tr>
  	<tr>
 		<td class="blank" valign="top">
 			<?

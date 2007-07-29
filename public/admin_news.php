@@ -30,16 +30,6 @@ require_once 'lib/classes/AdminNewsController.class.php';
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
-// -- here you have to put initialisations for the current page
-
-$HELP_KEYWORD="Basis.News";
-
-// Start of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-
-
-
 echo "\n" . cssClassSwitcher::GetHoverJSFunction() . "\n";
 
 if(!$news_range_id) {
@@ -55,6 +45,19 @@ if ($range_id){
 	$news_range_id = $range_id;
 }
 
+$HELP_KEYWORD = "Basis.News";
+$CURRENT_PAGE = _("Verwaltung von News"); 
+
+// Start of Output
+include ('lib/include/html_head.inc.php'); // Output of html head
+ob_start();
+if ($list || $view || ($news_range_id != $user->id && $news_range_id != 'studip') && $view_mode != 'user' ){
+		include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
+} else {
+		include ('lib/include/links_about.inc.php'); //Linkliste persönlicher Bereich
+}
+$links = ob_get_clean();
+
 if ($SessSemName[1] && ($list || $view)) {
 	$news_range_id = $SessSemName[1];
 	$news_range_name = $SessSemName[0];
@@ -62,19 +65,12 @@ if ($SessSemName[1] && ($list || $view)) {
 
 $news = new AdminNewsController();
 
-
-if ($list || $view || (($news_range_id != $user->id) && ($news_range_id != 'studip')) ){
-		include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
-} else {
-		include ('lib/include/links_about.inc.php'); //Linkliste persönlicher Bereich
-}
-
-
+$CURRENT_PAGE = $news_range_name . " - " . _("Verwaltung von News"); 
+include ('lib/include/header.php');   // Output of Stud.IP head
+echo $links;
 
 ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
-<tr><td class="topic"><b>&nbsp;
-<?=_("Newsverwaltung")?></b> <font size="-1">(<?=_("gew&auml;hlter Bereich:")?> <b><?=htmlReady($news_range_name)?></b>)</font></td></tr>
 <?
 
 if ($perm->have_perm("admin"))	{

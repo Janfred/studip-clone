@@ -28,6 +28,7 @@ require_once('lib/classes/StudipLitList.class.php');
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.Literatur";
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Literatur");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -42,12 +43,9 @@ include ('lib/include/links_openobject.inc.php');
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
-		<td class="topic" colspan="2"><b><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-lit.gif" border="0" />&nbsp;<?=getHeaderLine($SessSemName[1])." - "._("Literatur")?></b></td>
-	</tr>
-	<tr>
 	<td class="blank" width="99%" align="left" valign="top">
 	<table width="100%" border="0" cellpadding="20" cellspacing="0">
-		<tr><td align="left" class="steel1">
+		<tr><td align="left" class="blank">
 <?
 if ( ($list = StudipLitList::GetFormattedListsByRange($SessSemName[1], object_get_visit($SessSemName[1], "literature"))) ){
 	echo $list;

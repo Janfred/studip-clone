@@ -154,9 +154,6 @@ function change_messaging_view() {
 	?>
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
 		<tr>
-			<td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/einst.gif" border="0" align="texttop"><b>&nbsp;<?print _("Einstellungen des Messagings anpassen");?></b></td>
-		</tr>
-		<tr>
 			<td class="blank" colspan=2>&nbsp;</td>
 		</tr>
 		<tr>

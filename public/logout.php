@@ -80,13 +80,13 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	require_once('lib/msg.inc.php');
 
 	$HELP_KEYWORD="Basis.Logout";
-
+	$CURRENT_PAGE = _("Logout");
 	// Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   // Output of Stud.IP head
 
 	?>
-	<table width="80%" align="center" border="0" cellpadding="0" cellspacing="0">
+	<table width="800" align="center" border="0" cellpadding="0" cellspacing="0">
 		<tr><td colspan="2" class="topic" valign="middle"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/logout.gif" border="0" align="texttop"><b>&nbsp;<? print _("Stud.IP - Logout");?></b></td></tr>
 		<tr>
 			<td width="99%"  class="blank" valign="middle">

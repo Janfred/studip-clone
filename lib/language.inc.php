@@ -100,26 +100,26 @@ function init_i18n($_language) {
 */
 function makeButton($name, $mode = "img", $tooltip = false, $inputname = false) {
 
-	$url = localeButtonUrl($name . '-button.gif');
+	$url = localeButtonUrl($name . '-button.png');
 	$tooltext = ($tooltip ? tooltip($tooltip) : '');
 
 	switch ($mode) {
 
 		case 'img':
-			$tag = "\n" . sprintf('<img src="%s" %s border="0" align="absmiddle" />',
+			$tag = "\n" . sprintf('<img class="button" src="%s" %s border="0" align="absmiddle" />',
 			                      $url, $tooltext);
 			break;
 
 
 		case 'input':
-			$tag = "\n" . sprintf('<input type="image" src="%s" %s border="0" '.
+			$tag = "\n" . sprintf('<input class="button" type="image" src="%s" %s border="0" '.
 			                      'name="%s" align="absmiddle" />',
 		                        $url, $tooltext, $inputname);
 			break;
 
 
 		default:
-			$tag = sprintf('src="%s"', $url);
+			$tag = sprintf('class="button" src="%s"', $url);
 
 	}
 

@@ -49,11 +49,6 @@ $css_switcher->switchClass();
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
 	<tr>
-		<td class="topic">&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinetermine.gif" border="0" align="absmiddle" alt="">
-			<b>&nbsp;<? echo _("Einstellungen des Terminkalenders anpassen"); ?></b>
-		</td>
-	</tr>
-	<tr>
 		<td class="blank" colspan=2>&nbsp;
 		</td>
 	</tr>

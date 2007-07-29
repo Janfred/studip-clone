@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 if ($forumsend && $forumsend!="bla") {
 	$HELP_KEYWORD="Basis.ForumEinstellungen";
+	$CURRENT_PAGE = _("Einstellungen des Forums anpassen");
 } else {
 	switch($view) {
 		case "neu": 
@@ -39,6 +40,7 @@ if ($forumsend && $forumsend!="bla") {
 		default:
 			$HELP_KEYWORD="Basis.Forum";
 	}
+	$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Forum");
 }
 
 // Start of Output

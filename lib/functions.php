@@ -55,7 +55,10 @@ require_once ('lib/user_visible.inc.php');
 
 function getHeaderLine($id) {
 	$object_name = get_object_name($id, get_object_type($id));
-	$header_line = $object_name['type'] . ": ". htmlReady(substr($object_name['name'], 0, 60));
+	$header_line = $object_name['type'];
+	if ($object_name['name'])
+		$header_line.=": ";
+	$header_line.= substr($object_name['name'], 0, 60);
 	if (strlen($object_name['name']) > 60)
 			$header_line.= "... ";
 	return $header_line;
@@ -114,7 +117,7 @@ function get_object_name($range_id, $object_type){
 *
 */
 function openSem ($sem_id) {
-	global $SEM_TYPE, $SessionSeminar, $SessSemName;
+	global $SEM_TYPE,$SEM_TYPE_MISC_NAME, $SessionSeminar, $SessSemName;
 
 	$db=new DB_Seminar;
 

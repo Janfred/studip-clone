@@ -27,6 +27,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.Suchen";
+$CURRENT_PAGE = _("Suche");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -84,7 +85,7 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 	<br>
 	<br>
 </td>
-<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suche.jpg" border="0"></td>
+<td class="blank" align="right" valign="top"><br><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suche.jpg" border="0"></td>
 </tr>
 </table>
 <?php

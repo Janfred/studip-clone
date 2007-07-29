@@ -30,6 +30,8 @@ require_once ('config.inc.php');
 include_once ('lib/visual.inc.php');
 require_once ('lib/messaging.inc.php');
 
+$CURRENT_PAGE = _("Lernmodulsuche");
+
 if (isset($do_open))
 	$print_open_search[$do_open] = true;
 elseif (isset($do_close))
@@ -84,7 +86,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	?>
 	<table cellspacing="0" cellpadding="0" border="0" width="100%">
 		<tr>
-			<td class="topic" colspan="3">&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" border="0" align="texttop">&nbsp;<b><? echo _("Suche nach Content-Modulen");?></b></td>
+			<td class="topic" colspan="3">&nbsp;</td>
 		</tr>
 		<tr>
 			<td class="blank" colspan="3">&nbsp;

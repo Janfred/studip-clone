@@ -86,7 +86,7 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && $SessSemName[1]){
 }
 
 $HELP_KEYWORD="Basis.InVeranstaltungKurzinfo";
-
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Kurzinfo");
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -116,14 +116,10 @@ $quarter_year = 60 * 60 * 24 * 90;
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
-		<td class="topic" colspan=2><b>&nbsp;<? echo $SessSemName["header_line"]. " - " . _("Kurzinfo"); ?></b>
-		</td>
-	</tr>
-	<tr>
 		<td class="blank" valign="top">
 		<blockquote>
 	<?
-
+	echo "<br><font size=\"+1\"><b>".$SessSemName["header_line"]. "</b>";
 	if ($SessSemName[3]) {
 		echo "<br /><font size=\"-1\"><b>" . _("Untertitel:") . " </b>";
 		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
@@ -192,7 +188,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 		</td>
 		<td class="blank" align="right" valign="top">
 			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br />
-			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/seminare.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" /><br />
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/hoersaal.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" /><br />
 			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" />
 		</td>
 	</tr>

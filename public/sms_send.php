@@ -347,6 +347,7 @@ if ($change_view) {
 	$HELP_KEYWORD="Basis.InteraktionNachrichten";
 }
 
+$CURRENT_PAGE = _("Systeminterne Nachrichten");
 // includes
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -387,13 +388,7 @@ if ($send_view) {
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
-	<td class="topic" colspan="2"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/nachricht1.gif" border="0" align="texttop"><b>&nbsp;<?=_("Systeminterne Nachricht schreiben")?></b></td>
-</tr>
-<tr>
-	<td class="blank" colspan="2">&nbsp;</td>
-</tr>
-<tr>
-	<td class="blank" valign="top" align="center"> <?
+	<td class="blank" valign="top" align="center"><br> <?
 	if ($msg) {
 		print ("<table cellpadding=\"5\" cellspacing=\"0\" border=\"0\" width=\"99%\"><tr><td valign=\"top\">");
 		parse_msg ($msg);
