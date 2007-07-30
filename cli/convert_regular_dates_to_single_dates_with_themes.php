@@ -81,7 +81,7 @@ $output = array();
 do {
     // call conversion subroutine with number of rows that should get processed
 //    $numberOfConvertedRows = system( $CONVERSION_SUBROUTINE_FILE." ".$STEP_SIZE, $exitStatus);
-    $numberOfConvertedRows = exex( $CONVERSION_SUBROUTINE_FILE." ".$STEP_SIZE, $output ,$exitStatus);
+    $numberOfConvertedRows = exec( $CONVERSION_SUBROUTINE_FILE." ".$STEP_SIZE, $output ,$exitStatus);
     if( $exitStatus == FALSE ){
         fwrite($logfile_handle, "Stopping script because of errors.\n");
         die();
