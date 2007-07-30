@@ -356,7 +356,7 @@ class MetaDate {
 	}
 
 	function createSingleDatesForSemester($metadate_id, $sem_begin, $sem_end, $startAfterTimeStamp, $corr, &$irregularSingleDates) {
-		global $_CONVERT;
+		global $CONVERT_SINGLE_DATES;
 
 		// loads the singledates of the by metadate_id denoted regular time-entry into the object
 		$this->readSingleDates($metadate_id);
@@ -420,7 +420,7 @@ class MetaDate {
 			/*
 			 * for converting existing dates, which belong to specific metadates
 			 */
-			if ($_CONVERT) {
+			if ($CONVERT_SINGLE_DATES) {
 				foreach ($irregularSingleDates as $key => $val) {
 					if (($val->date == $start_time) && ($val->end_time == $end_time)) {
 						$irregularSingleDates[$key]->setMetaDateID($metadate_id);
@@ -472,7 +472,7 @@ class MetaDate {
 				$termin->setMetaDateID($metadate_id);
 				$termin->setTime($start_time, $end_time);
 				$termin->setDateType($date_typ);
-				if ($_CONVERT) {
+				if ($CONVERT_SINGLE_DATES) {
 					if ($this->cycles[$metadate_id]->resource_id) {
 						$termin->bookRoom($this->cycles[$metadate_id]->resource_id);
 					} else {
