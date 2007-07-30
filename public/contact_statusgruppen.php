@@ -287,7 +287,7 @@ function PrintAktualContacts ($range_id)
 // Ende Edit-Bereich
 
 // Anfang Personenbereich
-
+$db = new DB_Seminar();
 $db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
 if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 	?><table width="100%" border="0" cellspacing="0">
