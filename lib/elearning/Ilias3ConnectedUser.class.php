@@ -23,12 +23,38 @@ class Ilias3ConnectedUser extends ConnectedUser
 	* @access 
 	* @param string $cms system-type
 	*/ 
-	function Ilias3ConnectedUser($cms)
+	function Ilias3ConnectedUser($cms, $user_id = false)
 	{
-		global $connected_cms, $auth;
+		global $connected_cms, $perm;
 
-		parent::ConnectedUser($cms);
-		$this->roles = array($connected_cms[$cms]->roles[$auth->auth["perm"]]);
+		parent::ConnectedUser($cms, $user_id);
+		$this->roles = array($connected_cms[$cms]->roles[$perm->get_perm($this->studip_id)]);
+	}
+
+	function readData()
+	{
+		global $connected_cms;
+		parent::readData();
+		if($this->is_connected){
+			$db = new DB_Seminar();
+			$user_id = $connected_cms[$this->cms_type]->soap_client->lookupUser($this->login);
+			if($user_id == false){
+				$db->query("DELETE FROM auth_extern WHERE studip_user_id = '" . $this->studip_id . "' LIMIT 1");
+				$this->id = '';
+				$this->login = '';
+				$this->external_password = '';
+				$this->category = '';
+				$this->type = '';
+				$this->is_connected = false;
+			} elseif($this->category != ''){
+				$cat = $connected_cms[$this->cms_type]->soap_client->checkReferenceById($this->category);
+				if(!$cat){
+					$db->query("UPDATE auth_extern SET external_user_category = '' WHERE studip_user_id = '" . $this->studip_id . "' LIMIT 1");
+					$this->category = '';
+				}
+			}
+		}
+		return $this->is_connected;
 	}
 
 	/**
@@ -116,7 +142,7 @@ class Ilias3ConnectedUser extends ConnectedUser
 		$object_data["owner"] = $this->getId();
 		
 		$cat = $connected_cms[$this->cms_type]->soap_client->getReferenceByTitle($object_data["title"]);
-		if ($cat != false)
+		if ($cat != false && $connected_cms[$this->cms_type]->soap_client->checkReferenceById($cat) )
 		{
 			$messages["info"] .= sprintf(_("Ihre persönliche Kategorie wurde bereits angelegt."), $this->login) . "<br>\n";
 			$this->category = $cat;
@@ -223,6 +249,20 @@ class Ilias3ConnectedUser extends ConnectedUser
 	*/
 	function deleteUser()
 	{
+		global $connected_cms;
+		$ret = null;
+		$connected_cms[$this->cms_type]->soap_client->user_type == "admin";
+		$connected_cms[$this->cms_type]->soap_client->caching_active = false;
+		if($this->category){
+			$ret['cat_deleted'] = $connected_cms[$this->cms_type]->soap_client->deleteObject($this->category);
+		}
+		if($this->type == 0 && $this->id){
+			$ret['iliasuser_deleted'] = $connected_cms[$this->cms_type]->soap_client->deleteUser($this->id);
+		}
+		$db = new DB_Seminar();
+		$db->query("DELETE FROM auth_extern WHERE studip_user_id = '" . $this->studip_id . "' LIMIT 1");
+		$ret['auth_extern_deleted'] = $db->affected_rows();
+		return $ret;
 	}
 
 	/**

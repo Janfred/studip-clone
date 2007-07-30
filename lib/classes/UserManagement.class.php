@@ -57,7 +57,10 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 	include_once ($GLOBALS['RELATIVE_PATH_CALENDAR']
 	. "/lib/driver/{$GLOBALS['CALENDAR_DRIVER']}/CalendarDriver.class.php");
 }
-require_once 'lib/log_events.inc.php';	// Event logging
+if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']){
+	require_once ($GLOBALS['RELATIVE_PATH_ELEARNING_INTERFACE'] . "/ELearningUtils.class.php");
+}
+require_once "lib/log_events.inc.php";	// Event logging
 
 
 class UserManagement {
@@ -821,6 +824,21 @@ class UserManagement {
 				delete_ilias_user($this_ilias_id);
 		}
 			
+		//delete connected users
+		if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']){
+			if(ElearningUtils::initElearningInterfaces()){
+				foreach($GLOBALS['connected_cms'] as $cms){
+					$userclass = strtolower(get_class($cms->user));
+					$connected_user = new $userclass($cms->cms_type, $this->user_data['auth_user_md5.user_id']);
+					if($ok = $connected_user->deleteUser()){
+						if($connected_user->is_connected){
+							$this->msg .= "info§" . sprintf(_("Der verknüpfte Nutzer %s wurde im System %s gelöscht."), $connected_user->login, $connected_user->cms_type) . "§";
+						}
+					}
+				}
+			}
+		}
+		
 		// delete Stud.IP account
 		$query = "DELETE FROM auth_user_md5 WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);

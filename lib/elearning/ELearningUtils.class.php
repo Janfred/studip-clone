@@ -32,6 +32,18 @@ class ELearningUtils
 		}
 	}
 
+	function initElearningInterfaces(){
+		global $ELEARNING_INTERFACE_MODULES, $connected_cms;
+		if(is_array($ELEARNING_INTERFACE_MODULES)){
+			foreach(array_keys($ELEARNING_INTERFACE_MODULES) as $cms){
+				if (ELearningUtils::isCMSActive($cms)) {
+					ELearningUtils::loadClass($cms);
+				}
+			}
+		}
+		return is_array($connected_cms) ? count($connected_cms) : false;
+	}
+	
 	/**
 	* get config-value
 	*

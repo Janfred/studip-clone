@@ -294,21 +294,28 @@ class Ilias3Soap extends StudipSoapClient
 		if ($result != false)
 		{
 			$objects = $this->parseXML($result);
-			foreach($objects as $count => $object_data)
+			$all_objects = array();
+			foreach($objects as $count => $object_data){
 				if (is_array($object_data["references"]))
 				{
 					foreach($object_data["references"] as $ref_data)
-						if ($ref_data["accessInfo"] != "object_deleted")
+						if ($ref_data["accessInfo"] == "granted" 
+						&& (count($all_objects[$object_data["obj_id"]]["operations"]) < count($ref_data["operations"])))
 						{
-							$all_objects[$ref_data["ref_id"]] = $object_data;
-//							unset($all_objects[$ref_id]["references"]);
-							$all_objects[$ref_data["ref_id"]]["ref_id"] = $ref_data["ref_id"];
-							$all_objects[$ref_data["ref_id"]]["accessInfo"] = $ref_data["accessInfo"];
-							$all_objects[$ref_data["ref_id"]]["operations"] = $ref_data["operations"];
+							$all_objects[$object_data["obj_id"]] = $object_data;
+							unset($all_objects[$object_data["obj_id"]]["references"]);
+							$all_objects[$object_data["obj_id"]]["ref_id"] = $ref_data["ref_id"];
+							$all_objects[$object_data["obj_id"]]["accessInfo"] = $ref_data["accessInfo"];
+							$all_objects[$object_data["obj_id"]]["operations"] = $ref_data["operations"];
 						}
 				}
-			if (sizeof($all_objects) > 0)
-				return $all_objects;
+			}
+			if (count($all_objects)){
+				foreach($all_objects as $one_object){
+					$ret[$one_object['ref_id']] = $one_object;
+				}
+				return $ret;
+			}
 		}
 		return false;
 
@@ -340,10 +347,10 @@ class Ilias3Soap extends StudipSoapClient
 				if (is_array($object_data["references"]))
 				{
 					foreach($object_data["references"] as $ref_data)
-						if ($ref_data["accessInfo"] != "object_deleted")
+						if ($ref_data["accessInfo"] != "object_deleted" && $ref == $ref_data["ref_id"])
 						{
 							$all_objects[$ref_data["ref_id"]] = $object_data;
-//							unset($all_objects[$ref_id]["references"]);
+							unset($all_objects[$ref_data["ref_id"]]["references"]);
 							$all_objects[$ref_data["ref_id"]]["ref_id"] = $ref_data["ref_id"];
 							$all_objects[$ref_data["ref_id"]]["accessInfo"] = $ref_data["accessInfo"];
 							$all_objects[$ref_data["ref_id"]]["operations"] = $ref_data["operations"];
@@ -1050,5 +1057,38 @@ class Ilias3Soap extends StudipSoapClient
 	return $xml;
 	}
 
+	/**
+	* check reference by title
+	*
+	* gets reference-id by object-title
+	* @access public
+	* @param string key keyword
+	* @param string type object-type
+	* @return string reference-id
+	*/
+	function checkReferenceById($id)
+	{
+		$param = array(
+		'sid' => $this->getSID(),
+		'reference_id'         => utf8_encode($id)
+		);
+		$result = $this->call('getObjectByReference', $param);
+		if ($result != false)
+		{
+			$objects = $this->parseXML($result);
+			//echo "<pre><hr>".print_r($objects,1);
+			//echo "\n</pre><hr>";
+			if(is_array($objects)){
+				foreach($objects as $index => $object_data){
+					if(is_array($object_data['references'])){
+						foreach($object_data['references'] as $reference){
+							if($reference['ref_id'] == $id && $reference['accessInfo'] != 'object_deleted') return $object_data['obj_id'];
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 }
 ?>

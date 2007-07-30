@@ -185,5 +185,18 @@ class ObjectConnections
 			return false;
 	}
 
+	function GetConnectedSystems($object_id){
+		$ret = array();
+		$db = new DB_Seminar("SELECT DISTINCT system_type FROM object_contentmodules WHERE object_id='$object_id'");
+		while($db->next_record()){
+			$ret[] = $db->f(0);
+		}
+		return $ret;
+	}
+	
+	function DeleteAllConnections($object_id, $cms_type){
+		$db = new DB_Seminar("DELETE FROM object_contentmodules WHERE object_id='$object_id' AND system_type='$cms_type'");
+		return $db->affected_rows();
+	}
 }
 ?>

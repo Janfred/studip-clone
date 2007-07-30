@@ -450,5 +450,9 @@ class ConnectedCMS
 	{
 		return false;
 	}
+	
+	function deleteConnectedModules($object_id){
+		return ObjectConnections::DeleteAllConnections($object_id, $this->cms_type);
+	}
 }
 ?>

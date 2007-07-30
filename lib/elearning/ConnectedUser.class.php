@@ -1,7 +1,7 @@
 <?php
 
-DEFINE (USER_TYPE_ORIGINAL, "1");
-DEFINE (USER_TYPE_CREATED, "0");
+DEFINE ("USER_TYPE_ORIGINAL" , "1");
+DEFINE ("USER_TYPE_CREATED", "0");
 
 /**
 * class to handle user-accounts
@@ -51,11 +51,11 @@ class ConnectedUser
 	* @access public
 	* @param string $cms system-type
 	*/ 
-	function ConnectedUser($cms)
+	function ConnectedUser($cms, $user_id = false)
 	{
 		global $auth, $RELATIVE_PATH_ELEARNING_INTERFACE, $ELEARNING_INTERFACE_MODULES;
 
-		$this->studip_id = $auth->auth["uid"];
+		$this->studip_id = $user_id ? $user_id : $auth->auth["uid"];
 		$this->cms_type = $cms;
 
 		if ($ELEARNING_INTERFACE_MODULES[$this->cms_type]["RELATIVE_PATH_DB_CLASSES"] != false)
@@ -85,6 +85,7 @@ class ConnectedUser
 			$this->login = $db->f("external_user_name");
 			$this->external_password = $db->f("external_user_password");
 			$this->category = $db->f("external_user_category");
+			$this->type = $db->f("external_user_type");
 			$this->is_connected = true;
 		}
 		else

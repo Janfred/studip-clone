@@ -41,6 +41,8 @@ require_once ('lib/dates.inc.php');
 require_once ('lib/classes/ModulesNotification.class.php');
 require_once ('lib/classes/StudipLitList.class.php');
 require_once ('lib/classes/StudipDocumentTree.class.php');
+require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ObjectConnections.class.php");
+require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ELearningUtils.class.php");
 
 class AdminModules extends ModulesNotification {
 	var $db;
@@ -107,7 +109,7 @@ class AdminModules extends ModulesNotification {
 		$this->registered_modules["scm"]["msg_deactivate"] = _("Die freie Informationsseite kann jederzeit deaktiviert werden.");
 
 		$this->registered_modules["elearning_interface"]["name"] = _("Lernmodul-Schnittstelle");
-		$this->registered_modules["elearning_interface"]["msg_warning"] = _("Wollen Sie wirklich die Schnittstelle f&uuml;r die Integration von Content-Modulen deaktivieren und damit alle bestehenden Verkn&uuml;pfungen mit Lernmodulen l&ouml;schen?");
+		$this->registered_modules["elearning_interface"]["msg_warning"] = _("Wollen Sie wirklich die Schnittstelle f&uuml;r die Integration von Content-Modulen deaktivieren und damit alle bestehenden Verkn&uuml;pfungen mit Lernmodulen l&ouml;schen? (Alle erstellten Inhalte im angebundenen System werden gel&ouml;scht).");
 		$this->registered_modules["elearning_interface"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der Schnittstelle f&uuml;r die Integration von Content-Modulen werden <b>%s</b> Verkn&uuml;pfungen mit Lernmodulen aufgel&ouml;st!");
 		$this->registered_modules["elearning_interface"]["msg_activate"] = _("Die Schnittstelle f&uuml;r die Integration von Content-Modulen kann jederzeit aktiviert werden.");
 		$this->registered_modules["elearning_interface"]["msg_deactivate"] = _("Die Schnittstelle f&uuml;r die Integration von Content-Modulen kann jederzeit deaktiviert werden.");
@@ -261,19 +263,16 @@ class AdminModules extends ModulesNotification {
 	}
 
 	function getModuleElearning_interfaceExistingItems($range_id) {
-		$query = sprintf ("SELECT COUNT(object_id) as items FROM object_contentmodules WHERE object_id = '%s' AND module_type != 'crs'", $range_id);
-
-		$this->db->query($query);
-		$this->db->next_record();
-		
-		return $this->db->f("items");
+		$object_connections = new ObjectConnections($range_id);
+		return count($object_connections->getConnections());
 	}
 
 	function moduleElearning_interfaceDeactivate($range_id) {
-		$db = new DB_Seminar;
-
-		$query = sprintf ("DELETE FROM object_contentmodules WHERE object_id='%s'", $range_id);
-		$db->query($query);
+		global $connected_cms;
+		foreach(ObjectConnections::GetConnectedSystems($range_id) as $system){
+			ELearningUtils::loadClass($system);
+			$connected_cms[$system]->deleteConnectedModules($range_id);
+		}
 	}
 	
 	function moduleImpuls_ECDeactivate($range_id) {

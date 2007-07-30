@@ -30,6 +30,8 @@ require_once('lib/log_events.inc.php'); // Logging
 require_once('lib/classes/DataFieldEntry.class.php'); //Enthaelt Funktionen fuer Statusgruppen
 require_once('lib/classes/StudipLitList.class.php');
 require_once('lib/classes/StudipNews.class.php');
+require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ObjectConnections.class.php");
+require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ELearningUtils.class.php");
 
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
@@ -222,6 +224,16 @@ if ($archive_kill) {
 		$query = "DELETE FROM seminar_user_schedule WHERE range_id = '$s_id'";
 		$db->query($query);
 
+		if($ELEARNING_INTERFACE_ENABLE){
+			$cms_types = ObjectConnections::GetConnectedSystems($s_id);
+			if(count($cms_types)){
+				foreach($cms_types as $system){
+					ELearningUtils::loadClass($system);
+					$del_cms += $connected_cms[$system]->deleteConnectedModules($s_id);
+				}
+				$liste .= "<li>" . sprintf(_("%s Verknüpfungen zu externen Systemen gel&ouml;scht."), $del_cms ) . "</li>";
+			}
+		}
 		if ($liste)
 			$msg .= "info§<font size=-1>$liste</font>§"; 
 		
@@ -281,6 +293,12 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 	} elseif (time() < ($db->f("start_time") + $db->f("duration_time"))) {
 		$msg .= "info§" . _("Das Archivieren k&ouml;nnte unter Umst&auml;nden nicht sinnvoll sein, da das oder die Semester, in denen die Veranstaltung stattfindet, noch nicht verstrichen sind.") . "§";
 	} 
+	if($ELEARNING_INTERFACE_ENABLE){
+		$cms_types = ObjectConnections::GetConnectedSystems($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]);
+		if(count($cms_types)){
+			$msg .= "info§" . sprintf(_("Die Veranstaltung besitzt verknüpfte Inhalte in %s externen Systemen (%s). Diese verknüpften Inhalte werden durch die Archivierung gelöscht!"), count($cms_types), join(',',$cms_types)) . "§";
+		}
+	}
 ?>
 <body>
 

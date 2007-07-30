@@ -132,7 +132,7 @@ class Ilias3ContentModule extends ContentModule
 	*/
 	function setConnection($seminar_id)
 	{
-		global $connected_cms, $messages, $SessSemName, $DEFAULT_LANGUAGE, $seminar_id, $write_permission;
+		global $connected_cms, $messages, $SessSemName, $DEFAULT_LANGUAGE, $seminar_id, $write_permission, $write_permission_autor;
 		
 		$crs_id = ObjectConnections::getConnectionModuleId($seminar_id, "crs", $this->cms_type);
 //		echo "SET?".$this->cms_type;
@@ -171,24 +171,19 @@ class Ilias3ContentModule extends ContentModule
 //			$messages["info"] .= "Neue Kurs-ID: $crs_id. <br>";
 		}
 		
-		if ($write_permission != "")
-		{
 		
-			$ref_id = $connected_cms[$this->cms_type]->soap_client->addReference($this->id, $crs_id); 
-//			echo "write permission";
-		}
-		else
-		{
-//			echo "read permission";
 			$ref_id = $this->getId();
 			$ref_id = $connected_cms[$this->cms_type]->soap_client->addReference($this->id, $crs_id); 
 			$local_roles = $connected_cms[$this->cms_type]->soap_client->getLocalRoles($crs_id);
 			$operations = $connected_cms[$this->cms_type]->permissions->getOperationArray( $connected_cms[$this->cms_type]->permissions->USER_OPERATIONS );
+		if(!$write_permission_autor) $operations = $connected_cms[$this->cms_type]->permissions->getOperationArray(array(OPERATION_VISIBLE, OPERATION_READ));
+		else $operations = $connected_cms[$this->cms_type]->permissions->getOperationArray(array(OPERATION_VISIBLE, OPERATION_READ, OPERATION_WRITE));
+		if(!$write_permission || $write_permission_autor){
 			foreach ($local_roles as $key => $role_data)
 				// check only if local role is il_crs_member, -tutor or -admin
 				if (strpos($role_data["title"], "il_crs_") === 0) 
 				{
-//					echo "revoke permission " . $role_data["title"].".";
+	//					echo "revoke permission " . $role_data["title"].".";
 					$connected_cms[$this->cms_type]->soap_client->revokePermissions($role_data["obj_id"], $ref_id);
 					$connected_cms[$this->cms_type]->soap_client->grantPermissions($operations, $role_data["obj_id"], $ref_id);
 				}

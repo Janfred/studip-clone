@@ -41,7 +41,7 @@ class ContentModuleView
 	*/
 	function show($mode = "")
 	{
-			global $connected_cms, $view, $search_key, $cms_select, $elearning_open_close, $current_module, $anker_target;
+			global $PHP_SELF, $connected_cms, $view, $search_key, $cms_select, $elearning_open_close, $current_module, $anker_target;
 
 			$content_module = $connected_cms[$this->cms_type]->content_module[$current_module];
 
@@ -111,7 +111,7 @@ class ContentModuleView
 	*/
 	function showAdmin($mode = "")
 	{
-			global $connected_cms, $view, $search_key, $cms_select, $elearning_open_close, $SessSemName, $current_module, $anker_target;
+			global $PHP_SELF, $connected_cms, $view, $search_key, $cms_select, $elearning_open_close, $SessSemName, $current_module, $anker_target;
 
 			$content_module = $connected_cms[$this->cms_type]->content_module[$current_module];
 

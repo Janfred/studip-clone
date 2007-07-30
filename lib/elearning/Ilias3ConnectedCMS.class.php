@@ -133,7 +133,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 				$encrypt_passwords = ELearningUtils::getConfigValue("encrypt_passwords", $this->cms_type);
 		}
 
-/**/
+
 		if ($messages["error"] != "")
 			echo "<b><img src=\"".$GLOBALS['ASSETS_URL']."images/x_small2.gif\" alt=\"Fehler\">&nbsp;" . $messages["error"] . "</b><br><br>";
 
@@ -200,7 +200,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		echo "<br>\n";
 
 
-/**/
+
 
 		echo "</td></tr>";
 		echo "</table>";
@@ -241,7 +241,7 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		$current_module = $module_id;
 //		echo "call module $module_id";
 
-		if ($this->is_first_call /*is_array($this->content_module)/**/ AND ($seminar_id != "") AND ($is_connected == true)/**/)
+		if ($this->is_first_call  AND ($seminar_id != "") AND ($is_connected == true))
 		{
 			$id = ObjectConnections::getConnectionModuleId( $seminar_id, "crs", $this->cms_type );
 			if ($id != false)
@@ -278,9 +278,10 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 		$obj_ids = array();
 		if (is_array($result))
 			foreach($result as $key => $object_data)
-				if (((! in_array($object_data["obj_id"], $obj_ids)) AND in_array(OPERATION_READ, $object_data["operations"]))
-					OR (is_array($object_data["operations"]) && in_array(OPERATION_WRITE, $object_data["operations"])) )
-				{
+				if (is_array($object_data["operations"]) && is_array($object_data["obj_id"]))
+					if ((!in_array($object_data["obj_id"], $obj_ids) && in_array(OPERATION_READ, $object_data["operations"]))
+					|| in_array(OPERATION_WRITE, $object_data["operations"]))
+					{
 					if (is_array($user_modules[$object_data["obj_id"]]["operations"]))
 						if (in_array(OPERATION_WRITE, $user_modules[$object_data["obj_id"]]["operations"]))
 							continue;
@@ -358,6 +359,19 @@ class Ilias3ConnectedCMS extends ConnectedCMS
 	{
 //		$this->soap_client->logout();
 		$this->soap_client->saveCacheData();
+	}
+	
+	//we have to delete the course only
+	function deleteConnectedModules($object_id){
+		global $connected_cms;
+		$connected_cms[$this->cms_type]->soap_client->setCachingStatus(false);
+		$connected_cms[$this->cms_type]->soap_client->clearCache();
+		$connected_cms[$this->cms_type]->soap_client->user_type == "admin";
+		$crs_id = ObjectConnections::getConnectionModuleId($object_id, "crs", $this->cms_type);
+		if($crs_id && $connected_cms[$this->cms_type]->soap_client->checkReferenceById($crs_id)){
+			$connected_cms[$this->cms_type]->soap_client->deleteObject($crs_id);
+		}
+		return parent::deleteConnectedModules($object_id);
 	}
 }
 ?>
