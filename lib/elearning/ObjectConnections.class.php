@@ -156,7 +156,8 @@ class ObjectConnections
 			$db->query("INSERT INTO object_contentmodules (object_id, module_id, system_type, module_type, mkdate, chdate) "
 				."VALUES ('" . $connection_object_id . "', '" . $connection_module_id . "', '" . $connection_cms . "', '" . $connection_module_type . "', '" . time() . "', '" . time() . "')");
 		}
-		$this->readData();
+		//uargl, warum immer ich
+		if(strtolower(get_class($this)) == 'objectconnections')	$this->readData();
 		return true;
 	}
 
@@ -178,7 +179,8 @@ class ObjectConnections
 		if ($db->next_record())
 		{
 			$db->query("DELETE FROM object_contentmodules WHERE object_id = '" . $connection_object_id . "' AND module_id = '" . $connection_module_id . "' AND system_type = '" . $connection_cms . "' AND module_type = '" . $connection_module_type . "'");
-			$this->readData();
+			//uargl, warum immer ich
+			if(strtolower(get_class($this)) == 'objectconnections')	$this->readData();
 			return true;
 		}
 		else
