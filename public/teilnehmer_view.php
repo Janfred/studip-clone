@@ -34,6 +34,8 @@ require_once ("config/config.inc.php");		//We need the config for some parameter
 require_once ("lib/classes/Table.class.php");
 require_once ("lib/classes/ZebraTable.class.php");
 
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Teilnehmeransicht konfigurieren");
+
 // Start  of Output
 include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php");   //hier wird der "Kopf" nachgeladen
@@ -68,11 +70,10 @@ if ($cmd == "change" && $perm->have_perm("dozent")) {
 
 $tbl_blank = array("class" => "blank", "colspan" => "2");
 
-$table = new ContainerTable(array("cellspacing" => 0, "border" => "0", "width" => "100%", "cellpadding" => "0"));
+$table = new ContainerTable(array("cellspacing" => 0, "border" => "0", "width" => "100%", "cellpadding" => "0", "style" => "padding-top:10px"));
 $tbl2 = new ZebraTable(array("width" => "99%", "align" => "center"));
 
 // Titelleiste und Leere Zeile
-echo $table->headerRow("&nbsp;<b>". _("Teilnehmeransicht konfigurieren")."</b>");
 echo $table->openRow().$table->openCell($tbl_blank);
 
 // Daten
@@ -127,9 +128,7 @@ echo $table->blankCell($tbl_blank);
 // Alles schließen
 echo $table->close();
 
+include ('lib/include/html_end.inc.php');
 // Save data back to database.
 page_close();
 ?>
-</body>
-</html>
-

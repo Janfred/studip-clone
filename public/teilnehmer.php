@@ -692,32 +692,6 @@ $multiaction['accepted'] = array('insert' => array('admission_insert',_("Ausgewä
 		</script>
 		<table cellspacing="0" border="0" width="100%">
 		<tr>
-		<td class="topic" ><b>&nbsp;<? echo $SessSemName["header_line"] . " - " . _("TeilnehmerInnen"); ?></b>
-		</td>
-		<td align="right" class="topic"> <?
-
-			$db3->query ("SELECT showscore  FROM seminare WHERE Seminar_id = '$SessionSeminar'");
-			while ($db3->next_record()) {
-				if ($db3->f("showscore") == 1) {
-					if ($rechte) {
-						printf ("<a href=\"$PHP_SELF?cmd=hidescore\"><img src=\"".$GLOBALS['ASSETS_URL']."images/showscore1.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip(_("Aktivitätsanzeige eingeschaltet. Klicken zum Ausschalten.")));
-					} else {
-						echo "&nbsp; ";
-					}
-					$showscore = TRUE;
-				} else {
-					if ($rechte) {
-						printf ("<a href=\"$PHP_SELF?cmd=showscore\"><img src=\"".$GLOBALS['ASSETS_URL']."images/showscore0.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip(_("Aktivitätsanzeige ausgeschaltet. Klicken zum Einschalten.")));
-					} else {
-						echo "&nbsp; ";
-					}
-					$showscore = FALSE;
-				}
-			}
-		?>
-		</td>
-	</tr>
-	<tr>
 		<td colspan="2" class="blank">
 			<?
 			$db3->query("SELECT status, visible FROM seminar_user WHERE user_id = '".$auth->auth['uid']."' AND Seminar_id = '$SessionSeminar'");
@@ -835,7 +809,31 @@ $multiaction['accepted'] = array('insert' => array('admission_insert',_("Ausgewä
 							&nbsp;
 						<? } ?>
 						</td>
-						<td><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/balken.jpg"></td>
+												
+							<td nowrap align="right" class="steelkante2" valign="middle"> <?
+
+			$db3->query ("SELECT showscore  FROM seminare WHERE Seminar_id = '$SessionSeminar'");
+			while ($db3->next_record()) {
+				if ($db3->f("showscore") == 1) {
+					if ($rechte) {
+						printf ("<a href=\"$PHP_SELF?cmd=hidescore\"><img src=\"".$GLOBALS['ASSETS_URL']."images/showscore1.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip(_("Aktivitätsanzeige eingeschaltet. Klicken zum Ausschalten.")));
+					} else {
+						echo "&nbsp; ";
+					}
+					$showscore = TRUE;
+				} else {
+					if ($rechte) {
+						printf ("<a href=\"$PHP_SELF?cmd=showscore\"><img src=\"".$GLOBALS['ASSETS_URL']."images/showscore0.gif\" border=\"0\" %s>&nbsp; &nbsp; </a>", tooltip(_("Aktivitätsanzeige ausgeschaltet. Klicken zum Einschalten.")));
+					} else {
+						echo "&nbsp; ";
+					}
+					$showscore = FALSE;
+				}
+			}
+		?>
+		</td>
+		
+<td><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/balken.jpg"></td>
 					<tr>
 				</table>
 			</form>
