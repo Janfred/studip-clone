@@ -34,19 +34,19 @@ class Step87ExternConfigurations extends DBMigration {
 			$new_config->setConfiguration($old_config->getConfiguration());
 	
 			if ($new_config->store()) {
-				$this->write("Konfiguration mit der id %s konvertiert!", $new_config->getId());
+				$this->write(sprintf("Konfiguration mit der id %s konvertiert!", $new_config->getId()));
 				$i++;
 			} else {
-				$this->write("FEHLER! Die Konfiguration mit der id %s konnte nicht konvertiert werden!", $this->db->f('config_id'));
+				$this->write(sprintf("FEHLER! Die Konfiguration mit der id %s konnte nicht konvertiert werden!", $this->db->f('config_id')));
 			}
 		}
 
 		if ($this->db->num_rows() == $i) {
 			$this->write("Alle Konfigurationsdateien vermutlich fehlerfrei in die Datenbank uebertragen!");
-			$this->write(">Es wurden %s Konfigurationsdateien uebertragen.", $i);
+			$this->write(sprintf("Es wurden %s Konfigurationsdateien uebertragen.", $i));
 		} else {
 			$this->write("Es wurden nicht alle Konfigurationsdateien uebertragen!");
-			$this->write("Es wurden %s Konfigurationsdateien von %s Konfigurationsdateien uebertragen!", $i, $this->db->num_rows());
+			$this->write(sprintf("Es wurden %s Konfigurationsdateien von %s Konfigurationsdateien uebertragen!", $i, $this->db->num_rows()));
 			$this->write("Bitte die fehlerhaften Konfigurationen manuell ueberpruefen.");
 		}
 		
