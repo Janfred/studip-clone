@@ -35,12 +35,12 @@ function get_linewidth($line) {
 		return ($coordinates[4] - $coordinates[0]);
 	}
 
-function RenderButton() {
+function RenderButton($direct_out = false) {
 		$black = ImageColorAllocate ($this->template, 20, 20, 20);
 		ImageTTFText ($this->template, $this->fontsize, 0, $this->offset, 14, $black, $this->font, $this->buttontext);
-		ImagePNG ($this->template, $this->path.$this->button_id."-button.png");
+		if(!$direct_out) ImagePNG ($this->template, $this->path.$this->button_id."-button.png");
+		else ImagePNG ($this->template);
 		ImageDestroy ($this->template);
 		}
-
 }
-
+?>
