@@ -55,18 +55,11 @@ class StudipStmInstancesTree extends TreeAbstract {
 	*/
 	function init(){
 		parent::init();
-		/*
-		$db = $this->view->get_query("SELECT stm_abstr_id,b.Name as fak_name,a.*  FROM stm_instances INNER JOIN Institute a ON a.Institut_id=homeinst INNER JOIN Institute b ON b.Institut_id=a.fakultaets_id WHERE complete=1");
-		
-		while ($db->next_record()){
-			$this->storeItem($db->f("fakultaets_id"), "root", $db->f('fak_name'), 0);
-			$this->storeItem($db->f("Institut_id"), $db->f("fakultaets_id"), $db->f('Name'), 0);
-		}
-		*/
+
 		$db = $this->view->get_query("SELECT DISTINCT his_stg.dtxt as studiengang,his_abschl.ltxt as abschluss, his_abschl.abint, his_stg.stg
-									FROM his_abstgv
-									LEFT JOIN his_stg ON his_stg.stg=his_abstgv.stg
-									LEFT JOIN his_abschl ON his_abschl.abint=his_abstgv.abschl
+									FROM stm_abstract_assign
+									LEFT JOIN his_stg ON his_stg.stg=stm_abstract_assign.stg
+									LEFT JOIN his_abschl ON his_abschl.abint=stm_abstract_assign.abschl
 									ORDER BY his_abschl.ltxt , his_stg.dtxt");
 		while ($db->next_record()){
 			$this->storeItem($db->f("abint"), 'root' , $db->f("abschluss") , 0);

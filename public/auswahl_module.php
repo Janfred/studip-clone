@@ -36,7 +36,7 @@ include ("lib/include/header.php");   // Output of Stud.IP head
 <tr>
 <td class="blank" width="100%">
 <blockquote>
-	<?php if ($perm->have_perm('admin') && $GLOBALS['STM_ENABLE'] ) {?>
+	<?php if ($perm->have_perm('root') && $GLOBALS['STM_ENABLE'] ) {?>
 	<br><a href="stm_abstract_assi.php"><b><?=_("Allgemeine Module anlegen und bearbeiten")?></b></a></br>
 	<font size=-1><?=_("Hier k&ouml;nnen Sie Allgemeine Module anlegen und bearbeiten.")?></font>
 	<br>

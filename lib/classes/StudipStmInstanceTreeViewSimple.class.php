@@ -84,11 +84,10 @@ class StudipStmInstanceTreeViewSimple {
 		echo "\n<table width=\"95%\" border=\"0\" cellpadding=\"0\" cellspacing=\"10\"><tr>\n<td class=\"steel1\" width=\"50%\" align=\"left\" valign=\"top\">";
 		for ($i = 0; $i < $num_kids; ++$i){
 			$num_entries = $this->tree->getNumEntries($kids[$i],true);
-			echo "<a href=\"" .$this->getSelf("start_item_id={$kids[$i]}", false) . "\">";
-			echo "<span style=\"font-size:10pt;font-weight:bold;\">" . htmlReady($this->tree->tree_data[$kids[$i]]['name']);
-			echo "</span></a>";
-			if($num_entries) echo "<span style=\"font-size:10pt;\">&nbsp;($num_entries Studienmodule)</span>";
-			else echo "<span style=\"font-size:10pt;\">&nbsp;&nbsp;(Moduleintrag folgt)</span>";
+			echo "<b><a " . tooltip(sprintf(_("%s Einträge in allen Unterebenen vorhanden"), $num_entries)) . " href=\"" .$this->getSelf("start_item_id={$kids[$i]}", false) . "\">";
+			echo "<span style=\"font-size:10pt;\">" . htmlReady($this->tree->tree_data[$kids[$i]]['name']);
+			echo "&nbsp;($num_entries)</span>";
+			echo "</a></b>";
 			if ($i == ceil($num_kids / 2)-1){
 				echo "</td>\n<td class=\"steel1\" align=\"left\" valign=\"top\">";
 			} else {
