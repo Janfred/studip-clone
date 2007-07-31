@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * Token.class.php - Token class
+ *
+ * Copyright (C) 2006 - Marco Diedrich (mdiedric@uos.de)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ */
+
 class Token
 {
 	function Token($user_id, $duration_validity = 30)
@@ -8,23 +19,7 @@ class Token
 		$this->duration_validity = $duration_validity;
 		$this->expiration_time = $this->calculate_expiration_time(time());
 		$this->token = $this->generate_token();
-		$this->init_db_structure();
 		$this->save();
-	}
-
-	function init_db_structure()
-	{
-		$db = new DB_Seminar();
-
-		$db->query( "	CREATE TABLE IF NOT EXISTS `user_token` (
-										`user_id` VARCHAR( 32 ) NOT NULL ,
-										`token` VARCHAR( 32 ) NOT NULL ,
-										`expiration` INT NOT NULL ,
-										PRIMARY KEY ( `user_id` , `token` , `expiration` ),
-										INDEX index_expiration (`expiration`),
-										INDEX index_token (`token`),
-										INDEX index_user_id (`user_id`)
-									);");
 	}
 
 	function generate_token()
@@ -73,7 +68,7 @@ class Token
 		$db = new DB_Seminar();
 
 		$db->query(sprintf("DELETE FROM user_token 
-			WHERE expiration > %u;", time()));
+			WHERE expiration < %u;", time()));
 	}
 
 	function remove($token)
@@ -86,7 +81,7 @@ class Token
 
 	function time_expired($expiration)
 	{
-		return time() < $expiration;
+		return time() > $expiration;
 	}
 
 	function is_valid($token)
@@ -98,7 +93,7 @@ class Token
 
 		if ($db->next_record())
 		{
-			if (Token::time_expired($db->f("expiration")))
+			if (! Token::time_expired($db->f("expiration")))
 			{
 				$user_id = $db->f('user_id');
 				Token::remove($token);
