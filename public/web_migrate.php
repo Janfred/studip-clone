@@ -22,7 +22,10 @@ $perm->check("root");
 
 $_language_path = init_i18n($_language);
 
+$CURRENT_PAGE = _("Datenbank Migration");
+
 include 'lib/include/html_head.inc.php';
+include 'lib/include/header.php';
 
 $path = $STUDIP_BASE_PATH.'/db/migrations';
 $verbose = false;

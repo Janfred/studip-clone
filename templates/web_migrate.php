@@ -1,8 +1,3 @@
-<table class="toolbar" border="0" width="100%" cellspacing="0" cellpadding="0" height="25">
-  <tr>
-    <?= MakeToolbar($assets.'images/logo2.gif', '', '', '', 40, ''); ?>
-  </tr>
-</table>
 <div align="center">
   <table style="width: 80%;">
     <tr>
