@@ -172,13 +172,16 @@ class SimpleORMap {
 	
 	function getWhereQuery (){
 		$where_query = null;
+		$pk_not_set = array();
 		foreach ($this->pk as $key){
 			if (isset($this->content[$key])){
-				$where_query[] = $key . "='".mysql_escape_string($this->content[$key])."'";
+				$where_query[] = "{$this->db_table}.{$key}" . "='{$this->content[$key]}'";
+			} else {
+				$pk_not_set[] = $key;
 			}
 		}
-		if (!$where_query){
-			trigger_error( get_class($this) . ": Value(s) for Primary Key not set", E_USER_WARNING);
+		if (!$where_query || count($pk_not_set)){
+			return false;
 		}
 		return $where_query;
 	}
@@ -214,7 +217,7 @@ class SimpleORMap {
 
 		foreach ($this->content as $key => $value) {
 			if (is_float($value)) $value = str_replace(',','.',$value);
-			if ($key != 'chdate' && $key != 'mkdate'){
+			if (isset($this->db_fields[$key]) && $key != 'chdate' && $key != 'mkdate'){
 				$query_part[] = "$key = '" . mysql_escape_string(trim($value)) . "' ";
 			}
 		}

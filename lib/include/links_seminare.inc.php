@@ -38,6 +38,9 @@ if (!$perm->have_perm('admin')){
 $structure["_meine_veranstaltungen"] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("&Uuml;bersicht"), 'link' => 'meine_seminare.php', 'active' => FALSE);
 if (!$perm->have_perm('admin')) {
 	$structure['meine_veranstaltungen_extendet'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("erweiterte&nbsp;&Uuml;bersicht"), 'link' => 'meine_seminare.php?view=ext', 'active' => FALSE);
+	if ($GLOBALS['STM_ENABLE'] && $perm->have_perm('dozent')){
+		$structure["my_stm"]=array ('topKat'=>"meine_veranstaltungen", 'name'=>_("meine&nbsp;Studienmodule"), 'link'=>"my_stm.php", 'active'=>FALSE);
+	}
 	$structure['my_archiv'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("meine&nbsp;archivierten&nbsp;Veranstaltungen"), 'link' => 'my_archiv.php', 'active' => FALSE);
 	if ($GLOBALS['EXPORT_ENABLE'])
 		$structure['record_of_study'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("Druckansicht"), 'link' => 'recordofstudy.php', 'active' => FALSE);
@@ -48,6 +51,9 @@ if ($perm->have_perm('admin'))
 $structure['all'] = array ('topKat' => 'veranstaltungen_suche', 'name' => _("Alle"), 'link' => 'sem_portal.php?view=all&reset_all=TRUE', 'active' => FALSE);
 foreach ($SEM_CLASS as $key => $val)  {
 	$structure['class_'.$key] = array ('topKat' => 'veranstaltungen_suche', 'name' => $val['name'], 'link' => 'sem_portal.php?view='.$key.'&reset_all=TRUE&cmd=qs', 'active' => FALSE);
+}
+if ($GLOBALS['STM_ENABLE']){
+	$structure["mod"]=array ("topKat"=>"veranstaltungen_suche", "name"=>_("Studienmodule"), "link"=>"sem_portal.php?view=mod&reset_all=TRUE", "active"=>FALSE);
 }
 //
 
@@ -62,17 +68,20 @@ switch ($i_page) {
 	case 'my_archiv.php':
 		$reiter_view = 'my_archiv'; 
 	break;	
-	case 'sem_portal.php' : 
-		if ($view == 'all')
-			$reiter_view = 'all';
+	case "sem_portal.php" : 
+		if ($view=="all") $reiter_view="all";
+		elseif ($view == 'mod')  $reiter_view="mod";
 		else
-			$reiter_view = 'class_'.$view;
+			$reiter_view="class_".$view;
 	break;
 	case 'mein_stundenplan.php' : 
 		$reiter_view = 'veranstaltungs_timetable';
 	break;
 	case 'recordofstudy.php' : 
 		$reiter_view = 'record_of_study';
+	break;
+	case "my_stm.php":
+		$reiter_view="my_stm"; 
 	break;
 	default :
 		$reiter_view = 'meine_seminare';

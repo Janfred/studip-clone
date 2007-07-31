@@ -364,8 +364,14 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		if ($perm->is_fak_admin()) {
 			$structure["sem_tree"]=array ('topKat'=>"global", 'name'=>_("Veranstaltungshierarchie"), 'link'=>"admin_sem_tree.php", 'active'=>FALSE);
 		}
+		
+	}
+	
+	if($perm->have_perm('dozent') && $GLOBALS['STM_ENABLE']){
+		$structure["stm_instance_assi"]=array ('topKat'=>"modules", 'name'=>_("Konkrete Studienmodule"), 'link'=>"stm_instance_assi.php", 'active'=>FALSE);
 	}
 	if ($perm->have_perm("root")) {
+		if($GLOBALS['STM_ENABLE']) $structure["stm_abstract_assi"]=array ('topKat'=>"modules", 'name'=>_("Allgemeine Studienmodule"), 'link'=>"stm_abstract_assi.php", 'active'=>FALSE);
 		if ($ELEARNING_INTERFACE_ENABLE){
 			$structure["elearning_interface"]=array ('topKat'=>"modules", 'name'=>_("Lernmodul-Schnittstelle"), 'link'=>"admin_elearning_interface.php", 'active'=>FALSE);
 		}
@@ -584,6 +590,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				$reiter_view = "plugins";
 			}
 		break;
+		default:
+		$reiter_view = substr($i_page,0, strpos($i_page,'.php'));
 
 	}
 

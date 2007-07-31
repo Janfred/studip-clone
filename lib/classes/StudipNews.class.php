@@ -207,9 +207,7 @@ class StudipNews extends SimpleORMap {
 	function restoreRanges(){
 		$this->ranges = array();
 		if (!$this->is_new){
-			$where_query = $this->getWhereQuery();
-			$this->db->query("SELECT range_id FROM {$this->db_table}_range WHERE "
-							. join(" AND ", $where_query));
+			$this->db->query("SELECT range_id FROM {$this->db_table}_range WHERE news_id='".$this->getId()."'");
 			while($this->db->next_record()){
 				$this->ranges[$this->db->f(0)] = true;
 			}
@@ -227,12 +225,10 @@ class StudipNews extends SimpleORMap {
 		if (!$this->is_new){
 			$where_query = $this->getWhereQuery();
 			if ($where_query){
-				$this->db->query("DELETE FROM {$this->db_table}_range WHERE "
-							. join(" AND ", $where_query));
+				$this->db->query("DELETE FROM {$this->db_table}_range WHERE  news_id='".$this->getId()."'");
 				if (count($this->ranges)){
 					foreach($this->getRanges() as $range_id){
-						$this->db->query("INSERT INTO {$this->db_table}_range SET range_id='$range_id',"
-										. join(", ", $where_query));
+						$this->db->query("INSERT INTO {$this->db_table}_range SET range_id='$range_id',news_id='".$this->getId()."'");
 					}
 				}
 				return count($this->ranges);

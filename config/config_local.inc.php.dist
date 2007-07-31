@@ -147,6 +147,8 @@ $WEBSERVICES_ENABLE = FALSE;							//Stud.IP module: webservices
 
 $WAP_ENABLE = FALSE;							//Stud.IP module: WAP
 
+$STM_ENABLE = FALSE;			//Studienmodule (experimental)
+
 $ELEARNING_INTERFACE_MODULES = array(
 	"ilias3" =>	array(
 		"name" => "ILIAS 3",

@@ -334,7 +334,7 @@ class TreeAbstract {
 		if (!$this->tree_data[$item_id])
 			return false;
 		$path = $this->tree_data[$item_id]['name'];
-		while($item_id != "root"){
+		while($item_id && $item_id != "root"){
 			$item_id = $this->tree_data[$item_id]['parent_id'];
 			$path = $this->tree_data[$item_id]['name'] . " / " . $path;
 		}
@@ -355,7 +355,7 @@ class TreeAbstract {
 		if ($item_id == "root")
 			return false;
 		$ret = array();
-		while($item_id != "root"){
+		while($item_id && $item_id != "root"){
 			$item_id = $this->tree_data[$item_id]['parent_id'];
 			$ret[] = $item_id;
 		}

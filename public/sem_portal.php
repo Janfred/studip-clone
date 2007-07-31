@@ -47,6 +47,8 @@ require_once 'lib/functions.php';	//hier wird der "Kopf" nachgeladen
 require_once 'config.inc.php';		//wir brauchen die Seminar-Typen
 require_once 'lib/visual.inc.php';	//wir brauchen die Seminar-Typen
 require_once 'lib/classes/SemBrowse.class.php';
+require_once 'lib/classes/StmBrowse.class.php';
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -114,8 +116,9 @@ function getToplist($rubrik, $query, $type="count") {
 <body>
 <?
 
-if ($sem_portal["bereich"] != "all") {
-	$_sem_status = array();
+
+if ($sem_portal["bereich"] != "all" && $sem_portal["bereich"] != "mod") {
+
 	foreach ($SEM_CLASS as $key => $value){
 		if ($key == $sem_portal["bereich"]){
 			foreach($SEM_TYPE as $type_key => $type_value){
@@ -131,10 +134,14 @@ if ($sem_portal["bereich"] != "all") {
 	$db->query($query);
 	if ($db->next_record())
 		$anzahl_seminare_class = $db->f("count");
-} else {
-	$_sem_status = false;
 }
 
+if ($sem_portal["bereich"] == "mod") {
+	$query = "SELECT count(*) AS count FROM stm_instances WHERE complete=1";
+	$db->query($query);
+	if ($db->next_record())
+		$anzahl_seminare_class = $db->f("count");
+}
 
 include ('lib/include/links_seminare.inc.php');   	//hier wird die Navigation nachgeladen
 
@@ -146,9 +153,12 @@ $init_data = array(	"level" => "f",
 					"sem_status"=>$_sem_status);
 					
 if ($reset_all) $sem_browse_data = null;
-$sem_browse_obj = new SemBrowse($init_data);
-$sem_browse_data['show_class'] = $sem_portal["bereich"];
-
+if ($GLOBALS['STM_ENABLE'] &&  $sem_portal["bereich"] == "mod"){
+	$sem_browse_obj = new StmBrowse($init_data);
+} else {
+	$sem_browse_obj = new SemBrowse($init_data);
+	$sem_browse_data['show_class'] = $sem_portal["bereich"];
+}
 if (!$perm->have_perm("root")){
 	$sem_browse_obj->target_url="details.php";
 	$sem_browse_obj->target_id="sem_id";
@@ -172,17 +182,21 @@ ob_end_flush();
 	<table cellpadding="5" border="0" width="100%"><tr><td colspan="2">
 		<?
 		//
-		if ($anzahl_seminare_class > 0) {
+		if ($sem_portal["bereich"] == "mod") {
+			print "<br>"._("Hier finden Sie alle verfügbaren Studienmodule.");
+		} elseif ($anzahl_seminare_class > 0) {
 			print $SEM_CLASS[$sem_portal["bereich"]]["description"]."<br>" ;
 		} elseif ($sem_portal["bereich"] != "all") {
 			print "<br>"._("In dieser Kategorie sind keine Veranstaltungen angelegt.<br>Bitte w&auml;hlen Sie einen andere Kategorie!");
 		}
 
 		echo "</td></tr><tr><td class=\"blank\" align=\"left\">";
-		if ($sem_browse_data['cmd'] == "xts"){
-			echo "<a href=\"$PHP_SELF?cmd=qs&level=f\"><img " . makeButton("schnellsuche", "src") . tooltip(_("Zur Schnellsuche zurückgehen")) ." border=0></a>";
-		} else {
-			echo "<a href=\"$PHP_SELF?cmd=xts&level=f\"><img " . makeButton("erweitertesuche","src") . tooltip(_("Erweitertes Suchformular aufrufen")) ." border=\"0\"></a>";
+		if ($sem_portal["bereich"] != "mod"){
+				if ($sem_browse_data['cmd'] == "xts"){
+					echo "<a href=\"$PHP_SELF?cmd=qs&level=f\"><img " . makeButton("schnellsuche", "src") . tooltip(_("Zur Schnellsuche zurückgehen")) ." border=0></a>";
+				} else {
+					echo "<a href=\"$PHP_SELF?cmd=xts&level=f\"><img " . makeButton("erweitertesuche","src") . tooltip(_("Erweitertes Suchformular aufrufen")) ." border=\"0\"></a>";
+				}
 		}
 		echo "</td>\n";
 		echo "<td class=\"blank\" align=\"right\">";
@@ -217,11 +231,13 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 							"eintrag" => array(array(	'icon' => "blank.gif",
 														"text" => $group_by_links))
 					);
-	$infobox[] = 	array(	"kategorie" => _("Aktionen:"),
+	if ($sem_portal['bereich'] != 'mod') {
+			$infobox[] = 	array(	"kategorie" => _("Aktionen:"),
 							"eintrag" => array(array(	'icon' => "blank.gif",
 														"text" => '<a href="'.$PHP_SELF.'?send_excel=1"><img src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" align="absbottom" border="0">&nbsp;'._("Download des Ergebnisses").'</a>'))
 					);
-} else {
+	}
+} elseif ($sem_portal['bereich'] != 'mod') {
 	//create TOP-lists
 	if (!$mehr) {
 		$count=5; // wieviel zeigen wir von den Listen?
@@ -297,6 +313,26 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 				)
 			)
 		);
+} else {
+	$infotxt = _("Sie können hier nach allen Modulen suchen, sich Informationen anzeigen lassen und Module abonnieren.");
+ 	                 
+	$infobox[] =
+		array  ("kategorie" => _("Aktionen:"),
+			"eintrag" => array        (        
+				array         (        "icon" => "suchen.gif",
+					"text"  =>        $infotxt
+				)
+		)
+	);
+
+	$infobox[] = ($view !="all") ? 
+		 		array  ("kategorie"  => _("Information:"),
+						"eintrag" => array	(	
+									array (	"icon" => "ausruf_small.gif",
+											"text"  => sprintf (_("Gew&auml;hlte Kategorie: <b>%s</b>")."<br />"._("%s Studienmodule vorhanden"), _("Studienmodule"), $anzahl_seminare_class)
+														. (($anzahl_seminare_class && $anzahl_seminare_class < 30) ? "<br>" . sprintf(_("Alle Studienmodule %sanzeigen%s"),"<a href=\"$PHP_SELF?do_show_class=mod\">","</a>") : ""))
+										)
+						) : FALSE;
 }
 
 print_infobox ($infobox, "browse.jpg");

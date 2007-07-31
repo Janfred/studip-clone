@@ -117,7 +117,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	$menue[31] = array( _("Verwaltung von Veranstaltungen"), 'adminarea_start.php?list=TRUE', false);
 	$menue[32] = array( _("Verwaltung von Einrichtungen"), 'admin_institut.php?list=TRUE', false);
 	$menue[33] = array( _("globale Benutzerverwaltung"), 'new_user_md5.php', false);
-	// root
+	if($GLOBALS['STM_ENABLE']) $menue[34] = array( _("Studienmodule"), 'auswahl_module.php', false);// root
 	$menue[40] = array( _("Veranstaltungs&uuml;bersicht"), 'sem_portal.php', false);
 	$menue[41] = array( _("Verwaltung globaler Einstellungen"), 'new_user_md5.php', false);
 
@@ -185,12 +185,14 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$menue_auswahl[] = array(31, array());
 		$menue_auswahl[] = array(32, array());
 		$menue_auswahl[] = array(41, array());
-		$menue_auswahl[] = array(9, array(10, 11));
+		if($GLOBALS['STM_ENABLE']) $menue_auswahl[] = array(34, array());
+
 	} elseif ($perm->have_perm('admin')) { // admin
 		$ueberschrift = _("Startseite f&uuml;r AdministratorInnen bei Stud.IP");
 		$menue_auswahl[] = array(30, array());
 		$menue_auswahl[] = array(31, array());
 		$menue_auswahl[] = array(32, array());
+		if($GLOBALS['STM_ENABLE']) $menue_auswahl[] = array(34, array());
 		$menue_auswahl[] = array( 9, array(10, 11));
 		$menue_auswahl[] = array(33, array());
 	} elseif ($perm->have_perm('dozent')) { // dozent
@@ -201,7 +203,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$menue_auswahl[] = array( 7, array(8));
 		$menue_auswahl[] = array( 9, array(10, 11));
 		$menue_auswahl[] = array(12, array(13));
-
+		if($GLOBALS['STM_ENABLE']) $menue_auswahl[] = array(34, array());
 	} elseif ($perm->have_perm('autor')) { // autor, tutor
 		$ueberschrift = _("Ihre pers&ouml;nliche Startseite bei Stud.IP");
 		$menue_auswahl[] = array( 1, array(2));

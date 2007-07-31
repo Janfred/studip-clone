@@ -39,6 +39,7 @@ require_once ('lib/admission.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/classes/StudipSemTree.class.php');
 require_once ('lib/classes/DataFieldEntry.class.php');
+require_once ('lib/classes/StudipStmInstance.class.php');
 
 ?>
 <body>
@@ -504,6 +505,30 @@ print_infobox ($infobox,"contract.jpg");
 				</td>
 			</tr>
 			<? }
+			if ($GLOBALS['STM_ENABLE']){
+				$stms = StudipStmInstance::GetStmInstancesBySeminar($sem_id);
+				if (count($stms)){
+					$stm_out = array();
+					foreach($stms as $stm_id => $stm){
+						if ($stm['complete']){
+							$stm_out[] = '<a href="stm_details.php?stm_instance_id='.$stm_id.'"><img src="'.$GLOBALS['ASSETS_URL'].'images/link_intern.gif" border="0">&nbsp;&nbsp;' . ($stm['id_number'] ? htmlReady($stm['id_number']).': ' : '') . htmlReady($stm['title']) . '</a>';
+						}
+					}
+					?>
+			<tr>
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp;
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
+				<?
+				printf ("<font size=-1><b>" . _("Studienmodule:") . "</b></font><br /><font size=-1>%s</font>",
+						join("<br>\n", $stm_out));
+				?>
+				</td>
+			</tr>
+			<?
+				}
+			}
+
 			// Anzeige der Bereiche
 			if ($SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["bereiche"]) {
 				$sem_path = get_sem_tree_path($sem_id);
