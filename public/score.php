@@ -10,7 +10,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.VerschiedenesScore"; // external help keyword
-
+$CURRENT_PAGE = _("Stud.IP-Score");
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -22,9 +22,7 @@ require_once('lib/object.inc.php');
 require_once('lib/user_visible.inc.php');
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
-<tr>
-	<td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" border="0" align="texttop"><b>&nbsp;<?=_("Stud.IP-Score")?></td>
-</tr>
+
 <tr>
 <td class="blank" align = left valign="top" width="60%"><blockquote><br><font size="-1">
 <?
@@ -64,7 +62,7 @@ else
 <?
 
 // Liste aller die mutig (oder eitel?) genug sind
-
+$db = new DB_Seminar();
 $rang = 1;
 $db->query("SELECT a.user_id,username,score,geschlecht, " .$_fullname_sql['full'] ." AS fullname FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 AND locked=0 AND ".get_vis_query('b')." ORDER BY score DESC");
 if ($db->num_rows()) {
