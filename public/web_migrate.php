@@ -40,7 +40,7 @@ $current = $version->get();
 $migrations = $migrator->relevant_migrations($target);
 
 $template =& $template_factory->open('web_migrate');
-$template->set_attribute('current_page', _("Datenbank Migration"));
+$template->set_attribute('current_page', _("Datenbank-Migration"));
 $template->set_attribute('assets', $GLOBALS['ASSETS_URL']);
 $template->set_attribute('current', $current);
 $template->set_attribute('migrations', $migrations);
