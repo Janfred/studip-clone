@@ -429,8 +429,7 @@ class ExternEditModule extends ExternEditHtml {
 	
 	function editSelectSubjectAreas ($selector) {
 		$info = _("Wählen Sie die Studienbereiche aus, deren Veranstaltungen angezeigt werden sollen.");
-		$info2 = _("Zum Ausw&auml;hlen mehrerer Bereiche oder zum Abw&auml;hlen einzelner Bereiche halten Sie die 'Strg'-Taste oder 'Ctrl'-Taste' gedr&uuml;ckt, w&auml;hrend Sie auf den entsprechenden Bereich klicken.");
-		$info3 = _("(&Uuml;berschriften k&ouml;nnen nicht ausgew&auml;hlt werden!)");
+		$info2 = _("Sie können beliebig viele Studienbereiche auswählen.");
 		$this->css->resetClass();
 		$this->css->switchClass();
 		$form_name = $this->element_name . "_" . 'subjectareasselected';
@@ -458,9 +457,10 @@ class ExternEditModule extends ExternEditHtml {
 		$selector->doSearch();
 		$out = '<tr' . $this->css->getFullClass() . '><td>';
 		$out .= "<table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
-		$out .= '<tr><td align="left" width="100%" colspan="2" nowrap="nowrap">';
+		$out .= '<tr><td align="left" style="font-size: smaller;" width="100%" nowrap="nowrap" colspan="2">' . _("Suche") . ': ';
 		$out .= $selector->getSearchField(array('size' => 30 ,'style' => 'vertical-align:middle;'));
 		$out .= $selector->getSearchButton(array('style' => 'vertical-align:middle;'));
+		$out .= '<br><span style="font-size: 0.9em;"> (' . _("Geben Sie '%%%' ein, um alle Studienbereiche zu finden.") . ')</span>';
 		if ($selector->num_search_result !== false){
 			$out .= "<br><span style=\"font-size:smaller;\"><a name=\"anker\">&nbsp;&nbsp;</a>"
 					. sprintf(_("Ihre Suche ergab %s Treffer."),$selector->num_search_result)
@@ -469,13 +469,13 @@ class ExternEditModule extends ExternEditHtml {
 		}
 		$out .= '</td></tr>';
 		$selector->form_name = $form_name_tmp;
-		$out .= '<td nowrap="nowrap" width="100%">';
-		$out .= $selector->getChooserField(array('style' => 'width:80%;','size' => 15),
+		$out .= '<td nowrap="nowrap" width="80%">';
+		$out .= $selector->getChooserField(array('style' => 'width:98%;','size' => 15),
 				70, 'subjectareasselected');
+		$out .= '</td><td width="20%" style="vertical-align: top;">';
 		$out .= ' <img align="top" src="' . $GLOBALS['ASSETS_URL'] . 'images/info.gif"';
 		$out .= tooltip($info, TRUE, TRUE) . "><span style=\"vertical-align:top;\">$error_sign</span>";
-		$out .= "</td></tr><tr><td width=\"100%\" style=\"font-size:smaller;\">$info2<br />";
-		$out .= "<span style=\"color:red;\">$info3</span></td></tr></table>\n</td></tr>\n";
+		$out .= "</td></tr></table>\n</td></tr>\n";
 		
 		return $out;
 	}
