@@ -70,7 +70,7 @@ class  AbstractStm {
 			$stgaenge = array();	
 			$db = new DB_Seminar;
 			if ($abschl) 
-				$db->query("SELECT DISTINCT stg, dtxt AS name FROM his_abstgv WHERE abschl=$abschl ORDER BY dtxt");		
+				$db->query("SELECT DISTINCT stg, dtxt AS name FROM his_abstgv WHERE abschl='$abschl' ORDER BY dtxt");		
 			else 
 				$db->query("SELECT DISTINCT stg , dtxt AS name FROM his_abstgv ORDER BY dtxt");		
 
