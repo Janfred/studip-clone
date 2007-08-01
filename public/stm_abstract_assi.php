@@ -683,6 +683,7 @@ class AbstractStmControl{
 
 $perm->check("root"); 
 // Start of Output
+$CURRENT_PAGE = _("Allgemeine Studienmodule bearbeiten");
 include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php");   // Output of Stud.IP head
 include "lib/include/links_admin.inc.php";  //Linkleiste fuer admins

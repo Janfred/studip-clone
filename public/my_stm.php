@@ -51,6 +51,7 @@ $cssSw->enableHover();
 closeObject();
 $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
+$CURRENT_PAGE = _("Meine Studienmodule");
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -63,6 +64,8 @@ if (!$perm->have_perm('root'))
 $num_my_mod = 0;
 $my_stm = array();
 $all_sems = array();
+
+$db = new DB_Seminar();
 
 $db->query("SELECT seminar_user.seminar_id, IF(seminare.visible=0,CONCAT(seminare.Name, ' "._("(versteckt)")."'), seminare.Name) AS Name , stm_instance_id,
 			sd1.name AS startsem,IF(duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem
@@ -90,11 +93,6 @@ if (!count($my_stm))
 
 ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-		<td class="topic" colspan="2">
-			<img src="<?=$GLOBALS['ASSETS_URL']?>images/meinesem.gif" border="0" align="texttop">&nbsp;<b><? echo(_("Meine Studienmodule")) ?></b>
-		</td>
-	</tr>
 <?
 
 if (count($my_stm)) {
@@ -201,7 +199,7 @@ $infobox = array	(
 
 // print the info_box
 
-print_infobox ($infobox,"folders.jpg");
+print_infobox ($infobox,"hoersaal.jpg");
 
 ?>
 
@@ -212,9 +210,8 @@ print_infobox ($infobox,"folders.jpg");
     	</td>
     </tr>
 </table>
-</body>
-</html>
 <?
+include "lib/include/html_end.inc.php";
 // Save data back to database.
 page_close();
 ?>

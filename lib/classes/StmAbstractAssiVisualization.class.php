@@ -17,13 +17,11 @@ class StmAbstractAssiVisualization {
 		$table = new Table($styles);
 		
 		echo $table->open(array('class' => 'steelgraulight'));
-		$table->setCellColspan(2);
-		echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/einst.gif" border="0" align="texttop"><b>&nbsp;Module in Stud.IP</b>', array('class' => 'topic'));
 		$table->setCellColspan(1);
 		echo $table->openRow();
 			echo $table->cell(
-			"<b>Wahl eines Allgemeinen Moduls</b><br>
-			Bitte w&auml;hlen sie das Modul aus, welches sie editieren wollen oder l&ouml;schen Sie ein Allgemeines Modul mit dem entsprechenden Knopf. Sie k&ouml;nnen alternativ auch ein neues Modul anlegen. Beachten Sie bitte, dass sie nur Allgemeine Module bearbeiten und l&ouml;schen k&ouml;nnen, zu denen kein Konkretes Modul existiert!"
+			"<b>" . _("Wahl eines Allgemeinen Moduls") . "</b><br>"
+			. _("Bitte w&auml;hlen sie das Modul aus, welches sie editieren wollen oder l&ouml;schen Sie ein Allgemeines Modul mit dem entsprechenden Knopf. Sie k&ouml;nnen alternativ auch ein neues Modul anlegen. Beachten Sie bitte, dass sie nur Allgemeine Module bearbeiten und l&ouml;schen k&ouml;nnen, zu denen kein Konkretes Modul existiert!")
 			, array('align' => 'center', 'class' => 'blank'));		
 			echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/archiv.jpg" border="0">');
 		echo $table->close();
@@ -34,8 +32,6 @@ class StmAbstractAssiVisualization {
 		$table->setCellColspan(4);
 		echo $table->cell($form->getFormButton("neuanlegen"), array('align' => 'center'));
 		$table->setCellColspan(1);
-		echo $table->blankRow();
-		echo $table->cell($form->getFormButton("sel_$name"));
 		echo $table->blankRow();
 		foreach ($form->form_fields as $name => $field) {
 			echo $table->openRow();
@@ -70,13 +66,11 @@ class StmAbstractAssiVisualization {
 		$star = "";
 		
 		echo $table->open(array('class' => 'steelgraulight'));
-		$table->setCellColspan(2);
-		echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/einst.gif" border="0" align="texttop"><b>&nbsp;Module in Stud.IP</b>', array('class' => 'topic'));
 		$table->setCellColspan(1);
 		echo $table->openRow();
 			echo $table->cell(
-			"<b>Grunddaten des Allgemeinen Moduls bearbeiten</b><br><br>
-			Hier werden die allgemeinen Informationen des Moduls eingetragen. Diese k&ouml;nnen direkt aus dem Modulhandbuch entnommen werden."
+			"<b>" . _("Grunddaten des Allgemeinen Moduls bearbeiten") . "</b><br><br>
+			" . _("Hier werden die allgemeinen Informationen des Moduls eingetragen. Diese k&ouml;nnen direkt aus dem Modulhandbuch entnommen werden.")
 			, array('align' => 'center', 'width' => '50%', 'class' => 'blank'));		
 			echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/hands01_04.jpg" border="0" align=right">', array('align' => 'right', 'width' => '70%', 'class' => 'blank'));		
 		echo $table->openRow();
@@ -156,13 +150,11 @@ class StmAbstractAssiVisualization {
 		$table = new Table($styles);
 		
 		echo $table->open(array('class' => 'steelgraulight'));
-		$table->setCellColspan(2);
-		echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/einst.gif" border="0" align="texttop"><b>&nbsp;Module in Stud.IP</b>', array('class' => 'topic'));
 		$table->setCellColspan(1);
 		echo $table->openRow();
 			echo $table->cell(
-			"<b>Zuweisen von Modulbestandteilen (Allgemeinen Veranstaltungen)</b><br><br>
-			Hier werden dem Allgemeinen Modul Veranstaltungen zugewiesen. Jedes Feld mit seinen Zeilen entspricht dabei einer m&ouml;glichen Kombination von Veranstaltungen. Wird das Modul sp&auml;ter konkret f&uuml;r ein Semester angelegt, k&ouml;nnen sowohl verschiedene Kombinationen, als auch eine Kombination mehrmals mit realen Veranstaltungen belegt werden."
+			"<b>" . _("Zuweisen von Modulbestandteilen (Allgemeinen Veranstaltungen)") . "</b><br><br>
+			" . _("Hier werden dem Allgemeinen Modul Veranstaltungen zugewiesen. Jedes Feld mit seinen Zeilen entspricht dabei einer m&ouml;glichen Kombination von Veranstaltungen. Wird das Modul sp&auml;ter konkret f&uuml;r ein Semester angelegt, k&ouml;nnen sowohl verschiedene Kombinationen, als auch eine Kombination mehrmals mit realen Veranstaltungen belegt werden.") 
 			, array('align' => 'center', 'class' => 'blank'));		
 			$table->setCellColspan(2);
 			echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/hands02_04.jpg" border="0" align=right">', array('align' => 'right', 'class' => 'blank'));		
@@ -254,14 +246,11 @@ class StmAbstractAssiVisualization {
 		$table = new Table($styles);
 		
 		echo $table->open(array('class' => 'steelgraulight'));
-		$table->setCellColspan(2);
-		echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/einst.gif" border="0" align="texttop"><b>&nbsp;Module in Stud.IP</b>', array('class' => 'topic'));
 		$table->setCellColspan(1);
 		echo $table->openRow();
 			echo $table->cell(
-			"<b>Studienprogrammverwendbarkeit</b><br><br>
-			Hier werden dem Allgemeinen Modul Studienprogramme zugewiesen. Da es nur bestimmte Kombinationen von Studiengang (Abschluss) und Studienprogramm (Fach) gibt, &auml;ndert sich die Auswahl der Studienprogramme je nach Wahl des Studiengangs."
-			, array('align' => 'center', 'class' => 'blank'));		
+			"<b>" . _("Studienprogrammverwendbarkeit") . "</b><br><br>
+			" . _("Hier werden dem Allgemeinen Modul Studienprogramme zugewiesen. Da es nur bestimmte Kombinationen von Studiengang (Abschluss) und Studienprogramm (Fach) gibt, &auml;ndert sich die Auswahl der Studienprogramme je nach Wahl des Studiengangs.")			, array('align' => 'center', 'class' => 'blank'));		
 			echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/hands03_04.jpg" border="0" align=right">', array('align' => 'right', 'class' => 'blank'));		
 		echo $form->getFormStart();
 		echo $table->close();
@@ -346,13 +335,11 @@ class StmAbstractAssiVisualization {
 		$table = new Table($styles);
 		
 		echo $table->open(array('class' => 'blank'));
-		$table->setCellColspan(2);
-		echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/einst.gif" border="0" align="texttop"><b>&nbsp;Module in Stud.IP</b>', array('class' => 'topic'));
 		$table->setCellColspan(1);
 		echo $table->openRow();
 			echo $table->cell(
-			"<b>Zusammenfassung</b><br><br>
-			Hier werden alle Daten des Allgemeinen Moduls dargestellt. Bitte &uuml;berpr&uuml;fen sie die Angaben und fahren dann entsprechend fort."
+			"<b>" . _("Zusammenfassung") . "</b><br><br>
+			" . _("Hier werden alle Daten des Allgemeinen Moduls dargestellt. Bitte &uuml;berpr&uuml;fen sie die Angaben und fahren dann entsprechend fort.")
 			, array('align' => 'center', 'class' => 'blank'));		
 			echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/hands04_04.jpg" border="0" align=right">', array('align' => 'right', 'class' => 'blank'));		
 		echo $form->getFormStart();
@@ -379,7 +366,7 @@ class StmAbstractAssiVisualization {
 			echo $table->cell($stm->getIdNumber(), array('style' => 'width:35%'));		
 			echo $table->blankCell(array('style' => 'width:2%'));
 			echo $table->cell("&nbsp;&nbsp;<b>" . $form1->getFormFieldCaption('turnus') . "</b>&nbsp;", array('align' => 'left', 'style' => 'width:15%'));		
-			echo $table->cell(($stm->getTurnus()==0?"kein":($stm->getTurnus()==1?"Sommersemester":"Wintersemester")), array('style' => 'width:40%'));		
+			echo $table->cell(($stm->getTurnus()==0?"kein":($stm->getTurnus()==1?_("Sommersemester"):_("Wintersemester"))), array('style' => 'width:40%'));		
 		echo $table->openRow();
 			echo $table->cell("&nbsp;&nbsp;<b>" . $form1->getFormFieldCaption('duration') . "</b>&nbsp;", array('align' => 'left', 'style' => 'width:15%'));		
 			echo $table->cell($stm->getDuration(), array('style' => 'width:35%'));		
@@ -418,7 +405,7 @@ class StmAbstractAssiVisualization {
 				echo $table->cell($elem_types[$elem->getElementTypeId()]['name']);
 				echo $table->cell($elem->getSws());
 				echo $table->cell($elem->getWorkload());
-				echo $table->cell(($elem->getSemester()==0?"kein":($elem->getSemester()==1?"Sommersemester":"Wintersemester")));
+				echo $table->cell(($elem->getSemester()==0?"kein":($elem->getSemester()==1?_("Sommersemester"):_("Wintersemester"))));
 			}
 			echo $table->openRow();
 			echo $table->cell("<hr>", array('colspan' => '4'));
@@ -457,7 +444,7 @@ class StmAbstractAssiVisualization {
 		$table->setCellAlign('center');	
 		echo $table->openCell();
 			echo $form->getFormButton('back');
-			echo $form->getFormButton('continue');
+			if($form->form_buttons['continue']) echo $form->getFormButton('continue');
 		echo $table->openCell();
 		echo $table->closeRow();
 	

@@ -14,13 +14,11 @@ class StmInstanceAssiVisualization{
 		$table = new Table($styles);
 		
 		echo $table->open(array('class' => 'steelgraulight'));
-		$table->setCellColspan(2);
-		echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/einst.gif" border="0" align="texttop"><b>&nbsp;Module in Stud.IP</b>', array('class' => 'topic'));
 		$table->setCellColspan(1);
 		echo $table->openRow();
 			echo $table->cell(
-			"<b>Wahl eines Konkreten Moduls</b><br>
-			Bitte w&auml;hlen sie die entsprechende Aktion f&uuml;r ein vorhandenes Konkretes Modul aus. Sie k&ouml;nnen alternativ auch ein neues Modul instanziieren."
+			"<b>" . _("Wahl eines Konkreten Moduls") . "</b><br>
+			" . _("Bitte w&auml;hlen sie die entsprechende Aktion f&uuml;r ein vorhandenes Konkretes Modul aus. Sie k&ouml;nnen alternativ auch ein neues Modul instanziieren.")
 			, array('align' => 'center', 'class' => 'blank'));		
 			echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/archiv.jpg" border="0">');
 		echo $table->close();
@@ -67,13 +65,11 @@ class StmInstanceAssiVisualization{
 		$table = new Table($styles);
 		
 		echo $table->open(array('class' => 'steelgraulight'));
-		$table->setCellColspan(2);
-		echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/einst.gif" border="0" align="texttop"><b>&nbsp;Module in Stud.IP</b>', array('class' => 'topic'));
 		$table->setCellColspan(1);
 		echo $table->openRow();
 			echo $table->cell(
-			"<b>Wahl des Allgemeinen Moduls</b><br><br>
-			Zuerst sollte man ein Allgemeines Modul ausw&auml;hlen, welches man instanziieren m&ouml;chte. Dazu muss eine Vorauswahl &uuml;ber den Studiengang getroffen werden."
+			"<b>" . _("Wahl des Allgemeinen Moduls") . "</b><br><br>
+			" . _("Zuerst sollte man ein Allgemeines Modul ausw&auml;hlen, welches man instanziieren m&ouml;chte. Dazu muss eine Vorauswahl &uuml;ber den Studiengang getroffen werden.")
 			, array('align' => 'center', 'class' => 'blank'));		
 			echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/hands01_04.jpg" border="0" align=right">', array('align' => 'right','class' => 'blank'));		
 		echo $table->close();
@@ -126,13 +122,11 @@ class StmInstanceAssiVisualization{
 		$star = "";
 		
 		echo $table->open(array('class' => 'steelgraulight'));
-		$table->setCellColspan(2);
-		echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/einst.gif" border="0" align="texttop"><b>&nbsp;Module in Stud.IP</b>', array('class' => 'topic'));
 		$table->setCellColspan(1);
 		echo $table->openRow();
 			echo $table->cell(
-			"<b>Zus&auml;tzliche Daten des Moduls bearbeiten</b><br><br>
-			Hier werden die Daten eingetragen, die spezifisch f&uuml;r diese Instanz sind. Zur &Uuml;bersicht werden die entsprechenden Daten des Allgemeinen Moduls eingeblendet."
+			"<b>" . _("Zus&auml;tzliche Daten des Moduls bearbeiten") . "</b><br><br>
+			" . _("Hier werden die Daten eingetragen, die spezifisch f&uuml;r diese Instanz sind. Zur &Uuml;bersicht werden die entsprechenden Daten des Allgemeinen Moduls eingeblendet.")
 			, array('align' => 'center', 'width' => '50%', 'class' => 'blank'));		
 			echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/hands02_04.jpg" border="0" align=right">', array('align' => 'right', 'class' => 'blank'));		
 		echo $table->openRow();
@@ -256,13 +250,11 @@ class StmInstanceAssiVisualization{
 		$star = "";
 
 		echo $table->open(array('class' => 'steelgraulight'));
-		$table->setCellColspan(2);
-		echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/einst.gif" border="0" align="texttop"><b>&nbsp;Module in Stud.IP</b>', array('class' => 'topic'));
 		$table->setCellColspan(1);
 		echo $table->openRow();
 			echo $table->cell(
-			"<b>Modulauspr&auml;gung ausw&auml;hlen</b><br><br>
-			Hier wird die Kombination allgemeiner Veranstaltungen ausgew&auml;hlt, der jetzt konkrete Veranstaltungen zugewiesen werden sollen."
+			"<b>" . _("Modulauspr&auml;gung ausw&auml;hlen") . "</b><br><br>
+			" . _("Hier wird die Kombination allgemeiner Veranstaltungen ausgew&auml;hlt, der jetzt konkrete Veranstaltungen zugewiesen werden sollen.")
 			, array('align' => 'center', 'width' => '50%', 'class' => 'blank'));		
 			echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/hands03_04.jpg" border="0" align=right">', array('align' => 'right', 'class' => 'blank'));		
 		echo $table->openRow();
@@ -328,13 +320,11 @@ class StmInstanceAssiVisualization{
 		$star = "";
 		
 		echo $table->open(array('class' => 'steelgraulight'));
-		$table->setCellColspan(2);
-		echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/einst.gif" border="0" align="texttop"><b>&nbsp;Module in Stud.IP</b>', array('class' => 'topic'));
 		$table->setCellColspan(1);
 		echo $table->openRow();
 			echo $table->cell(
-			"<b>Kombination instanziieren</b><br><br>
-			Hier werden den Elementen der gew&auml;hlten Kombination konkrete Veranstaltungen zugewiesen. Es m&uuml;ssen nicht alle Felder belegt werden, allerdings gilt dieses Modul dann als unvollst&auml;ndig und muss zu einem sp&auml;teren Zeitpunkt vervollst&auml;ndigt werden. Es k&ouml;nnen einem Feld auch mehrere Veranstaltungen zugewiesen werden. Es sind dann alle Permutationen der einzelnen Felder erlaubt."
+			"<b>" . _("Kombination instanziieren") . "</b><br><br>
+			" . _("Hier werden den Elementen der gew&auml;hlten Kombination konkrete Veranstaltungen zugewiesen. Es m&uuml;ssen nicht alle Felder belegt werden, allerdings gilt dieses Modul dann als unvollst&auml;ndig und muss zu einem sp&auml;teren Zeitpunkt vervollst&auml;ndigt werden. Es k&ouml;nnen einem Feld auch mehrere Veranstaltungen zugewiesen werden. Es sind dann alle Permutationen der einzelnen Felder erlaubt.")
 			, array('align' => 'center', 'width' => '75%', 'class' => 'blank'));		
 			echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/hands03_04.jpg" border="0" align=right">', array('align' => 'right', 'class' => 'blank'));		
 		echo $table->openRow();
@@ -364,7 +354,7 @@ class StmInstanceAssiVisualization{
 				echo $table->openCell();
 				foreach ($inst_stm->elements[$group_pos][$j] as $k => $element) {
 					$temp_sem = Seminar::GetInstance($element["sem_id"]);
-					echo $temp_sem->getName() . $form->getFormButton("remove_" . $j . "_" .$k) . "<br>";
+					echo htmlReady($temp_sem->getName()) . $form->getFormButton("remove_" . $j . "_" .$k) . "<br>";
 				}
 			} 
 			else 
@@ -385,7 +375,7 @@ class StmInstanceAssiVisualization{
 			echo $table->cell("Beginn" , array('style' =>  'font-weight: bold'));
 			echo $table->cell("Turnus" , array('style' =>  'font-weight: bold'));
 			echo $table->openRow(array('style' => 'text-align: center'));
-			echo $table->cell($cur_sem->getName());
+			echo $table->cell(htmlReady($cur_sem->getName()));
 			echo $table->cell(strftime("%d. %b. %Y", $cur_sem->getFirstDate()));
 			echo $table->cell($cur_sem->getFormattedTurnus());
 			echo $table->blankRow();
@@ -427,15 +417,13 @@ class StmInstanceAssiVisualization{
 		$table = new Table($styles);
 		
 		echo $table->open(array('class' => 'blank'));
-		$table->setCellColspan(2);
-		echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/einst.gif" border="0" align="texttop"><b>&nbsp;Module in Stud.IP</b>', array('class' => 'topic'));
 		$table->setCellColspan(1);
 		echo $table->openRow();
 			echo $table->cell(
-			"<b>Zusammenfassung</b><br><br>
-			Hier werden alle Daten des Konkreten Moduls dargestellt." . 
+			"<b>" . _("Zusammenfassung") . "</b><br><br>
+			" . _("Hier werden alle Daten des Konkreten Moduls dargestellt.") .
 			( ($is_new)?
-			 "Wenn sie ein konkretes Modul als vollst&auml;ndig deklarieren, kann es danach nicht mehr bearbeitet oder gel&ouml;scht werden! Bitte &uuml;berpr&uuml;fen sie noch einmal Ihre Angaben und speichern dann das Modul ab."
+			  _("Wenn sie ein konkretes Modul als vollst&auml;ndig deklarieren, kann es danach nicht mehr bearbeitet oder gel&ouml;scht werden! Bitte &uuml;berpr&uuml;fen sie noch einmal Ihre Angaben und speichern dann das Modul ab.")
 			 : "" )
 			, array('align' => 'center', 'class' => 'blank'));		
 			if ($is_new)
@@ -526,7 +514,7 @@ class StmInstanceAssiVisualization{
 		$table->setCellAlign('center');	
 		echo $table->openCell();
 			echo $form->getFormButton('back');
-			echo $form->getFormButton('continue');
+			if($form->form_buttons['continue']) echo $form->getFormButton('continue');
 		echo $table->openCell();
 		echo $table->closeRow();
 	
@@ -550,13 +538,11 @@ class StmInstanceAssiVisualization{
 		$table = new Table($styles);
 		
 		echo $table->open(array('class' => 'blank'));
-		$table->setCellColspan(2);
-		echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/einst.gif" border="0" align="texttop"><b>&nbsp;Module in Stud.IP</b>', array('class' => 'topic'));
 		$table->setCellColspan(1);
 		echo $table->openRow();
 			echo $table->cell(
-			"<b>Zusammenfassung</b><br><br>
-			Hier werden noch einmal alle Daten des Allgemeinen Moduls dargestellt. Bitte &uuml;berpr&uuml;fen Sie, ob sie das richtige Modul gew&auml;hlt haben."
+			"<b>" . _("Zusammenfassung") . "</b><br><br>
+			" . _("Hier werden noch einmal alle Daten des Allgemeinen Moduls dargestellt. Bitte &uuml;berpr&uuml;fen Sie, ob sie das richtige Modul gew&auml;hlt haben.")
 			, array('align' => 'center', 'class' => 'blank'));		
 			echo $table->cell('<img src="'.$GLOBALS['ASSETS_URL'].'images/hands01_04.jpg" border="0" align=right">', array('align' => 'right', 'class' => 'blank'));		
 		echo $form->getFormStart();

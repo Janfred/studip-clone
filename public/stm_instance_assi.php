@@ -684,6 +684,7 @@ class InstanceStmControl {
 
 $perm->check("dozent");
 // Start of Output
+$CURRENT_PAGE = _("Konkrete Studienmodule bearbeiten");
 include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php");   // Output of Stud.IP head
 include "lib/include/links_admin.inc.php";  //Linkleiste fuer admins

@@ -24,18 +24,13 @@ include ("lib/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-// Start of Output
-include ("lib/include/html_head.inc.php"); // Output of html head
-include ("lib/include/header.php");	 // Output of Stud.IP head
-
 require_once ("lib/msg.inc.php");
 require_once ("lib/visual.inc.php"); // wir brauchen htmlReady
 require_once ("lib/functions.php");
 require_once ("lib/classes/StudipStmInstance.class.php");
 
-?>
-<body>
-<?
+
+include ("lib/include/html_head.inc.php"); // Output of html head
 
 //Inits
 $cssSw=new cssClassSwitcher;
@@ -57,11 +52,12 @@ if (!$stm_obj->is_new){
 		if ($added) $msg[] = array('msg', _("Ihre gewünschte Belegung wurde eingetragen."));
 		else $msg[] = array('error', _("Ihre gewünschte Belegung konnte nicht eingetragen werden."));
 	}
-
+	
+// Start of Output
+	$CURRENT_PAGE = _("Studienmodul:") . ' ' . $stm_obj->getValue('title') . " - " . _("Details");
+	include ("lib/include/header.php");	 // Output of Stud.IP head
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr><td class="topic" colspan="2"><b>&nbsp;<? echo _("Studienmodul:") . '&nbsp;' .htmlReady($stm_obj->getValue('title'))." - " . _("Details"); ?>
-	</b></td></tr>
 	<?
 	if (count($msg)){
 		echo '<tr><td class="blank" colspan="2">&nbsp;</td></tr>';
@@ -197,7 +193,7 @@ if (!$stm_obj->getValue('complete')) {
 
 // print the info_box
 
-print_infobox ($infobox,"details.jpg");
+print_infobox ($infobox,"contract.jpg");
 
 // ende Infobox
 
@@ -365,11 +361,9 @@ print_infobox ($infobox,"details.jpg");
 </td>
 </tr>
 </table>
-</body>
-</html>
 <?php
 }
-
+include "lib/include/html_end.inc.php";
 // Save data back to database.
 page_close();
 ?>
