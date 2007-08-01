@@ -79,8 +79,6 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 <?
 
-include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
-
 require_once('lib/msg.inc.php');	//Ausgaben
 require_once('config.inc.php');	//Settings....
 require_once 'lib/functions.php';	//basale Funktionen
