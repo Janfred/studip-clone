@@ -62,7 +62,6 @@ class StudipSemTreeSearch {
 	var $search_result = array();
 
 	function StudipSemTreeSearch($seminar_id,$form_name = "search_sem_tree", $auto_search = true){
-		global $_REQUEST;
 		$this->view = new DbView();
 		$this->form_name = $form_name;
 		$this->tree = TreeAbstract::GetInstance("StudipSemTree");
@@ -146,37 +145,37 @@ class StudipSemTreeSearch {
 		$paths[]=htmlReady($currpath);
 		return $paths;
 	}
-
+	
 	function getChooserField($attributes = array(), $cols = 70, $field_name = 'chooser'){
 		if ($this->institut_id){
 			$this->getExpectedRanges();
 		}
-		$ret = "\n<select name=\"{$this->form_name}_{$field_name}[]\" multiple ";
+		$element_name = "{$this->form_name}_{$field_name}[]";
+		$ret = "\n<div class=\"selectbox\"";
 		foreach($attributes as $key => $value){
 			$ret .= "$key=\"$value\"";
 		}
 		$ret .= ">";
 		foreach ($this->sem_tree_ranges as $range_id => $sem_tree_id){
-			$ret .= "\n<option value=\"0\">&nbsp;</option>";
 			$paths=$this->prepRangePath($this->getPath($range_id), $cols);
 			foreach ($paths as $p) {
-				$ret .= "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . $p ."</option>";
+				$ret .= "\n<div style=\"margin-top:5px;font-weight:bold;color:red;\">" . $p ."</div>";
 			}
-			//$ret .= "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . htmlReady(my_substr($this->getPath($range_id),0,$cols)) ."</option>";
-			$ret .= "\n<option value=\"0\" style=\"font-weight:bold;color:red;\">" . str_repeat("¯",$cols) . "</option>";
+			$ret .= "\n<div style=\"font-weight:bold;color:red;\">" . str_repeat("¯",$cols) . "</div>";
 			for ($i = 0; $i < count($sem_tree_id); ++$i){
-				$ret .= "\n<option value=\"{$sem_tree_id[$i]}\" "
-						. (($this->selected[$sem_tree_id[$i]]) ? " selected " : "")
-						. (($this->search_result[$sem_tree_id[$i]]) ? " style=\"color:blue;\" " : "")
-						. ">&nbsp;-&nbsp;";
-				$text = htmlReady(my_substr($this->tree->tree_data[$sem_tree_id[$i]]['name'],0,$cols));
-				$ret .=$text . "</option>";
+				$id = $this->form_name . '_' . $field_name . '_' . $sem_tree_id[$i];
+				$ret .= "\n<div>";
+				$ret .= "\n<input style=\"vertical-align:middle;\" id=\"$id\" type=\"checkbox\" name=\"$element_name\" value=\"".$sem_tree_id[$i]."\" " . (($this->selected[$sem_tree_id[$i]]) ? " checked " : "");
+				$ret .= ">&nbsp;";
+				$ret .= "<span ". (($this->search_result[$sem_tree_id[$i]]) ? " style=\"color:blue;\" " : "") . " onClick=\"document.getElementById('$id').checked = (document.getElementById('$id').checked == true ? false : true);return false;\">";
+				$ret .= htmlReady(my_substr($this->tree->tree_data[$sem_tree_id[$i]]['name'],0,$cols)) . "</span>";
+				$ret .= "\n</div>";
 			}
 		}
-		$ret .= "</select>";
+		$ret .= "</div>";
 		return $ret;
 	}
-
+	
 	function getPath($item_id,$delimeter = ">"){
 		return $this->tree->getShortPath($item_id);
 	}
@@ -214,7 +213,6 @@ class StudipSemTreeSearch {
 	}
 
 	function doSearch(){
-		global $_REQUEST;
 		if (isset($_REQUEST[$this->form_name . "_do_search_x"]) || isset($_REQUEST[$this->form_name . "_send"])){
 			if(isset($_REQUEST[$this->form_name . "_search_field"]) && strlen($_REQUEST[$this->form_name . "_search_field"]) > 2){
 				$this->view->params[0] = "%" . $_REQUEST[$this->form_name . "_search_field"] . "%";
@@ -233,7 +231,6 @@ class StudipSemTreeSearch {
 	}
 
 	function insertSelectedRanges($selected = null){
-		global $_REQUEST;
 		if (!$selected){
 			for ($i = 0; $i < count($_REQUEST[$this->form_name . "_chooser"]); ++$i){
 				if($_REQUEST[$this->form_name . "_chooser"][$i]){

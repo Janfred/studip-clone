@@ -349,3 +349,14 @@ span.searchbar {
   width: 100%; /* Mindestbreite (der Ueberschrift) verhindert Anzeigefehler in modernen Browsern */
   background-color: #7387ad;
 }
+
+div.selectbox {
+  background-color:#FFFFFF;
+  font-size: 10pt;
+  border: 1px solid;
+  padding: 5px;
+  margin: 5px;
+  height: 200px;
+  width: 550px;
+  overflow: auto;
+}
