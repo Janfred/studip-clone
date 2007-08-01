@@ -26,15 +26,15 @@ class StudIPTemplateEngine {
 			print("\n<tr><td class=\"topic\" width=\"99%%\">&nbsp;<b>&nbsp;&nbsp;");
 		}
 		printf($title);
-		printf("</b></td></tr>");
+		printf("</b></td></tr></table>");
 	}
 
 	function startContentTable($full_width=true){
 		if (!$full_width){
-			echo ("<tr><td><table border=\"0\" width=\"70%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
+			echo ("<table border=\"0\" width=\"70%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
 		}
 		else {
-			echo ("<tr><td><table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
+			echo ("<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
 		}
 		?>
 		<tr>
@@ -87,9 +87,6 @@ class StudIPTemplateEngine {
 		</tr>
 		<tr>
 			<td height="5" colspan="3"></td>
-		</tr>
-		</table>
-		</td>
 		</tr>
 		</table>
 		<?php

@@ -202,13 +202,17 @@ class AbstractStudIPPlugin {
 	}
 
 	/**
-	 * Liefert den relativen Namen des Icons dieses Plugins zurück
-	 * @return den relativen Namen des Icons
+	 * Liefert den Pfad zum Icon dieses Plugins zurück
+	 * @return den Pfad zum Icon
 	 */
-	function getPluginiconname(){
-		return is_null($this->pluginiconname)
-		       ? $GLOBALS['ASSETS_URL'].'images/leer.gif'
-		       : $this->getPluginpath() . '/' . $this->pluginiconname;
+	function getPluginiconname() {
+		if ($this->hasNavigation() && $this->navigation->hasIcon()) {
+                        return $this->getPluginpath().'/'.$this->navigation->getIcon();
+		} else if (isset($this->pluginiconname)) {
+                        return $this->getPluginpath().'/'.$this->pluginiconname;
+		} else {
+                        return $GLOBALS['ASSETS_URL'].'images/leer.gif';
+                }
 	}
 
 	/**
@@ -263,12 +267,7 @@ class AbstractStudIPPlugin {
 	}
 
 	function hasNavigation(){
-		if ($this->navigation != null){
-		   return true;
-		}
-		else {
-		   return false;
-		}
+                return $this->navigation != null;
 	}
 
 	function isActivated(){
