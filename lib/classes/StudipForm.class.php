@@ -287,8 +287,8 @@ class StudipForm {
 	}
 
 	function getFormFieldSelectBox($name, $attributes, $default){
-		$box_attributes = $this->form_fields[$name]['box_attributes'] ? $this->form_fields[$name]['box_attributes'] : array('style' => 'border:1px solid;background-color:white;');
-		$ret = "\n<div ".$this->getAttributes($box_attributes)." >";
+		$box_attributes = $this->form_fields[$name]['box_attributes'] ? $this->form_fields[$name]['box_attributes'] : array();
+		$ret = "\n<div class=\"selectbox\" ".$this->getAttributes($box_attributes)." >";
 		if ($this->form_fields[$name]['multiple']) {
 			$element = 'checkbox';
 			$element_name = $this->form_name . '_' . $name . '[]';
