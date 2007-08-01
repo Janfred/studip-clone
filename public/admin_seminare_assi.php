@@ -2492,7 +2492,7 @@ if ($level == 2)
 							echo $st_search->getChooserField(array('style' => 'width:70%','size' => 10),70);
 							?>
 							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
-								<? echo tooltip(_("Hier können Sie die Studienbereiche, in denen die Veranstaltung angeboten wird, markieren. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten und dann auf die Einträge klicken."), TRUE, TRUE) ?>
+								<? echo tooltip(_("Hier können Sie die Studienbereiche, in denen die Veranstaltung angeboten wird, markieren. Sie können mehrere Studienbereiche auswählen."), TRUE, TRUE) ?>
 							>
 							<font color="red" size=+2>*</font></div>
 						</td>
