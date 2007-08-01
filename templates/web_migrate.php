@@ -1,3 +1,4 @@
+<?=$this->render_partial('header');?>
 <div align="center">
   <table style="width: 80%;">
     <tr>

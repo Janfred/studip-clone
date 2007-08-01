@@ -22,10 +22,7 @@ $perm->check("root");
 
 $_language_path = init_i18n($_language);
 
-$CURRENT_PAGE = _("Datenbank Migration");
-
 include 'lib/include/html_head.inc.php';
-include 'lib/include/header.php';
 
 $path = $STUDIP_BASE_PATH.'/db/migrations';
 $verbose = false;
@@ -43,6 +40,7 @@ $current = $version->get();
 $migrations = $migrator->relevant_migrations($target);
 
 $template =& $template_factory->open('web_migrate');
+$template->set_attribute('current_page', _("Datenbank Migration"));
 $template->set_attribute('assets', $GLOBALS['ASSETS_URL']);
 $template->set_attribute('current', $current);
 $template->set_attribute('migrations', $migrations);
