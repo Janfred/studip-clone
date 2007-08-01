@@ -165,10 +165,10 @@ class StudipSemTreeSearch {
 			for ($i = 0; $i < count($sem_tree_id); ++$i){
 				$id = $this->form_name . '_' . $field_name . '_' . $sem_tree_id[$i];
 				$ret .= "\n<div>";
-				$ret .= "\n<input style=\"vertical-align:middle;\" id=\"$id\" type=\"checkbox\" name=\"$element_name\" value=\"".$sem_tree_id[$i]."\" " . (($this->selected[$sem_tree_id[$i]]) ? " checked " : "");
+				$ret .= "\n<label for=\"$id\"><input style=\"vertical-align:middle;\" id=\"$id\" type=\"checkbox\" name=\"$element_name\" value=\"".$sem_tree_id[$i]."\" " . (($this->selected[$sem_tree_id[$i]]) ? " checked " : "");
 				$ret .= ">&nbsp;";
-				$ret .= "<span ". (($this->search_result[$sem_tree_id[$i]]) ? " style=\"color:blue;\" " : "") . " onClick=\"document.getElementById('$id').checked = (document.getElementById('$id').checked == true ? false : true);return false;\">";
-				$ret .= htmlReady(my_substr($this->tree->tree_data[$sem_tree_id[$i]]['name'],0,$cols)) . "</span>";
+				$ret .= "<span ". (($this->search_result[$sem_tree_id[$i]]) ? " style=\"color:blue;\" " : "") . ">";
+				$ret .= htmlReady(my_substr($this->tree->tree_data[$sem_tree_id[$i]]['name'],0,$cols)) . "</span></label>";
 				$ret .= "\n</div>";
 			}
 		}

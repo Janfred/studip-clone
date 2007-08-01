@@ -319,10 +319,9 @@ class StudipForm {
 			$ret .= "\n<div ";
 			$ret .= $this->getAttributes($attributes);
 			$ret .= ">";
-			$ret .= "\n<input style=\"vertical-align:middle;\" id=\"$id\" type=\"$element\" name=\"$element_name\" value=\"".htmlReady($options_value)."\" " . (($selected) ? " checked " : "");
+			$ret .= "\n<label for=\"$id\"><input style=\"vertical-align:middle;\" id=\"$id\" type=\"$element\" name=\"$element_name\" value=\"".htmlReady($options_value)."\" " . (($selected) ? " checked " : "");
 			$ret .= ">&nbsp;";
-			$ret .= "<span onClick=\"document.getElementById('$id').checked = (document.getElementById('$id').checked == true ? false : true);return false;\">";
-			$ret .= htmlReady($options_name) . "</span>";
+			$ret .= htmlReady($options_name) . "</label>";
 			$ret .= "\n</div>";
 		}
 		$ret .= "\n</div>";
