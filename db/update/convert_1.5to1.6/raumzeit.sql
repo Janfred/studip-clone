@@ -42,3 +42,5 @@ CREATE TABLE IF NOT EXISTS `themen_termine` (
 
 ALTER TABLE `termine` ADD `metadate_id` VARCHAR( 32 );
 ALTER TABLE `termine` ADD INDEX ( `metadate_id` );
+
+ALTER TABLE `resources_requests` ADD `reply_comment` TEXT AFTER `comment`;
