@@ -4,12 +4,16 @@
 // run untill really everything is done...
 set_time_limit(0);
 
+// we need enough memory
+ini_set( "memory_limit", "256M");
+
+
 // get command line parameters
 $parameter_count = $_SERVER['argc'];
 $parameters      = $_SERVER['argv'];
 
 // check command line parameters
-if( $parameter_count != 2 && $parameter_count != 3) {
+if( $parameter_count != 2) {
     echo "(". date("Y-m-d H:i:s T") .") ERROR: Wrong number of command line parameters. [convert_regular_dates_to_single_dates_with_themes-SUBROUTINE.php]\n";
     exit(0);
 }
@@ -20,21 +24,12 @@ require_once dirname(__FILE__).'/studip_cli_env.inc.php';
 // include business logic classes
 require_once('lib/classes/Seminar.class.php');
 require_once('lib/resources/lib/VeranstaltungResourcesAssign.class.php');
-require_once('lib/raumzeit/QueryMeasure.class.php');
+//require_once('lib/raumzeit/QueryMeasure.class.php');
 
 // read command line parameters:
 
 // number of records to be converted this time
 $step_size = $_SERVER['argv'][1];
-
-// switch: convert whole database or only records with chdate = 0?
-$convert_all_data_flag = $_SERVER['argv'][2];
-// convert value to boolean
-if( $convert_all_data_flag == "CONVERT_ALL_DATA"){
-    $convert_all_data = true;
-} else {
-    $convert_all_data = false;
-}
 
 // check if parameters are valid integers
 if( !is_numeric( $step_size) ){
@@ -59,14 +54,10 @@ $GLOBALS['CONVERT_SINGLE_DATES'] = TRUE;
 $db = new DB_Seminar();
 $db2 = new DB_Seminar();
 
-if($convert_all_data)
-    // read a bunch of seminares
-    $db->query("SELECT Seminar_id, Name FROM seminare WHERE LIMIT 0, $step_size");
-else    
-    // read a bunch of seminares where the change date is zero (chdate funtions as a marker)
-    $db->query("SELECT Seminar_id, Name FROM seminare WHERE chdate = 0 LIMIT 0, $step_size");
+// read a bunch of seminares where the change date is zero 
+// (chdate funtions as a marker, it will be modified during conversion)
+$db->query("SELECT Seminar_id, Name FROM seminare WHERE chdate = 0 LIMIT 0, $step_size");
     
-
 // get number of rows
 $number_of_rows = $db->num_rows();
 
@@ -80,7 +71,6 @@ while ($db->next_record()) {
         $seminar_id = $db->f('Seminar_id');
         
 		echo "(". date("Y-m-d H:i:s T") .") Converting Seminar ID='$seminar_id', Name '".$db->f('Name')."'";
-        //echo "Nummer $seminar_counter: (".($counter+$start_at)." von ".($number_of_rows+$start_at)." [".(date('H', time() -$cur) -1).date(':i:s', (time()-$cur))."]) (".$db->f('Seminar_id').") Konvertiere ".$db->f('Name').'<br/>';
 		flush();
 		unset($sem);
 		

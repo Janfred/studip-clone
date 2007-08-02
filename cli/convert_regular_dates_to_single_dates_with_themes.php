@@ -7,12 +7,16 @@
 // run untill really everything is done...
 set_time_limit(0); 
 
+// we need enough memory
+ini_set( "memory_limit", "256M");
+
+
 // set name of subroutine file
 // (neede because of PHP memory problems, if the conversion would be done in one step)
 $CONVERSION_SUBROUTINE_FILE = dirname(__FILE__) ."/convert_regular_dates_to_single_dates_with_themes-SUBROUTINE.php";
 
 // define step size (number of rows) for subroutine proccessing
-$STEP_SIZE= 500;
+$STEP_SIZE= 300;
 
 
 // create root user environment:
@@ -21,13 +25,11 @@ require_once dirname(__FILE__).'/studip_cli_env.inc.php';
 // include business logic
 require_once('lib/classes/Seminar.class.php');
 require_once('lib/resources/lib/VeranstaltungResourcesAssign.class.php');
-require_once('lib/raumzeit/QueryMeasure.class.php');
 
 // open log file
 $logfile_handle = fopen( $GLOBALS["TMP_PATH"] ."/Stud.IP_date_conversion.log", "ab");
 if(!$logfile_handle) {
-    echo "Error: can't open logfile ".$GLOBALS["TMP_PATH"]."/Stud.IP_date_conversion.log";
-    exit(0);
+    throw new Exception ("Can't open logfile ".$GLOBALS["TMP_PATH"]."/Stud.IP_date_conversion.log");
 }
 
 // lets go...
@@ -80,11 +82,10 @@ $output = array();
 
 do {
     // call conversion subroutine with number of rows that should get processed
-//    $numberOfConvertedRows = system( $CONVERSION_SUBROUTINE_FILE." ".$STEP_SIZE, $exitStatus);
     $numberOfConvertedRows = exec( $CONVERSION_SUBROUTINE_FILE." ".$STEP_SIZE, $output ,$exitStatus);
     if( $exitStatus == FALSE ){
-        fwrite($logfile_handle, "Stopping script because of errors.\n");
-        die();
+        fwrite($logfile_handle, "There were errors in the subroutine script. Stopping.\n");
+        throw new Exception ("There were errors in the subroutine script.\n");
     }
 
     // remove last line
