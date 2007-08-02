@@ -84,7 +84,7 @@ class DataFieldStructure {
 
   function setType($v) {
     $this->data['type'] = $v;
-    if ($v != 'selectbox')
+    if (!in_array($v, array('selectbox', 'radio', 'combo')))
       $this->setTypeParam('');
   }
 
@@ -98,7 +98,7 @@ class DataFieldStructure {
    */
   function getHTMLEditor($name) {
     $ret = '';
-    if ($this->getType() == 'selectbox') {
+    if (in_array($this->getType(), array('selectbox', 'radio', 'combo'))) {
       $content = $this->getTypeParam();
       $ret = "<textarea name=\"$name\" cols=\"20\" rows=\"8\" wrap=\"off\">$content</textarea>";
     }
@@ -171,17 +171,31 @@ class DataFieldStructure {
    *
    * @return array    <description>
    */
-  function getDataFieldStructures($objectType, $objectClass='', $includeNullClass=false) {
+  function getDataFieldStructures($objectType=NULL, $objectClass='', $includeNullClass=false) {
+
     $ret = array();
-    if ($objectType) {
-      $db = new DB_Seminar;
-      if ($objectClass)
-        $expr = "AND (object_class=$objectClass" . ($includeNullClass ? ' OR object_class IS NULL)' : ')');
-      $query = "SELECT * FROM datafields WHERE object_type='$objectType' $expr ORDER BY object_class, priority, name";
-      $db->query($query);
-      while ($db->next_record())
-        $ret[$db->f("datafield_id")] = new DataFieldStructure($db->Record);
-    }
+
+    $db = new DB_Seminar();
+
+    $expr = array();
+
+    if (isset($objectType))
+      $expr[] = "object_type='$objectType'";
+
+    if ($objectClass)
+      $expr[] = "(object_class=$objectClass" .
+                ($includeNullClass ? ' OR object_class IS NULL)' : ')');
+
+
+    $expr = empty($expr) ? '' : 'WHERE ' . join(' AND ', $expr);
+
+    $query = "SELECT * FROM datafields $expr ".
+             "ORDER BY object_class, priority, name";
+    $db->query($query);
+
+    while ($db->next_record())
+      $ret[$db->f("datafield_id")] = new DataFieldStructure($db->Record);
+
     return $ret;
   }
 
@@ -212,7 +226,7 @@ class DataFieldStructure {
     if (!$data['type'])
       $data['type'] = $db->f('type');
 
-    if ($data['type'] == 'selectbox')
+    if (in_array($data['type'], array('selectbox', 'radio', 'combo')))
       $data['typeparam'] = $data['typeparam'] ? $data['typeparam'] : $db->f('typeparam');
     else
       $data['typeparam'] = '';

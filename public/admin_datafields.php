@@ -81,7 +81,7 @@ function printDataFieldType ($targetID, $currStruct) {
 					 $PHP_SELF, $_POST['datafield_id']);
 		}
 		else
-			if ($currStruct->getType() == 'selectbox' && $currStruct->getCachedNumEntries() == 0) {
+			if (in_array($currStruct->getType(), array('selectbox', 'radio', 'combo')) && $currStruct->getCachedNumEntries() == 0) {
 				printf(" <a href=\"$PHP_SELF?edit_typeparam=%s#a\">", $currStruct->getID());
 				print  '<img src="'.$GLOBALS['ASSETS_URL'].'images/edit_transparent.gif" border="0" align="middle" title="Eintr&auml;ge bearbeiten"></a>';
 			}

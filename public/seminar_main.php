@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-// $Id$ 
+// $Id$
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
@@ -183,6 +183,46 @@ $quarter_year = 60 * 60 * 24 * 90;
 	}
 
 	?>
+		<br/>
+		<br/>
+	<?
+		// Ticket #68
+		if (!$perm->have_perm('dozent')) {
+			require_once('lib/classes/AuxLockRules.class.php');
+			$rule = AuxLockRules::getLockRuleBySemId($SessSemName[1]);
+			$show = false;
+			foreach ($rule['attributes'] as $val) {
+				if ($val == 1) {
+					// Es gibt also Zusatzangaben. Nun noch überprüfen ob der Nutzer diese Angaben schon gemacht hat...
+					$dbtg = new DB_Seminar($query = "SELECT * FROM datafields as d LEFT JOIN datafields_entries as de USING (datafield_id) WHERE d.object_type = 'usersemdata' AND de.sec_range_id = '".$SessSemName[1]."' AND de.range_id = '".$user->id."'");
+					if ($dbtg->num_rows() == 0) {
+						$show = true;
+					}
+					break;
+				}
+			}
+
+			if ($show) { ?>
+				<table cellspacing="1" cellpadding="0" border="0" style="{border:1px solid black;background:#FFFFDD}">
+					<tr>
+						<td align="center" valign="center">
+							&nbsp;<img src="<?=$GLOBALS['ASSETS_URL']?>/images/ausruf.gif">&nbsp;
+						</td>
+						<td>
+							<font size="-1">
+							<?= _("Sie haben noch nicht die für diese Veranstaltung benötigten Zusatzinformationen eingetragen.")?><br/>
+							<?= _("Um das nochzuholen gehen Sie unter \"TeilnehmerInnen\" auf \"Zusatzangaben\"")?><br/>
+							<?= _("oder klicken sie auf")?>
+							&nbsp;&nbsp;<a href="teilnehmer_aux.php"><img src="<?=$GLOBALS['ASSETS_URL']?>/images/link_intern.gif" border="0" valign="absmiddle">&nbsp;<?= _("Direkt zu den Zusatzangaben") ?></a>
+							</font>
+						</td>
+					</tr>
+				</table>
+			<?
+			}
+		}
+		?>
+
 		</font>
 		</blockquote><br />
 		</td>

@@ -87,6 +87,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	require_once 'lib/functions.php';
 	require_once 'lib/classes/Modules.class.php';
 	require_once 'lib/classes/SemesterData.class.php';
+	require_once "lib/classes/AuxLockRules.class.php";
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
@@ -95,6 +96,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	$cssSw=new cssClassSwitcher;
 	$Modules=new Modules;
 	$semester=new SemesterData;
+	$aux_rules=new AuxLockRules();
+	$all_aux_rules=$aux_rules->getAllLockRules();
 
 	$sess->register("links_admin_data");
 	$sess->register("sem_create_data");
@@ -213,6 +216,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			OR ($i_page == "admin_lit_list.php" AND $links_admin_data["view"]=="literatur_sem")
 			OR $i_page == "archiv_assi.php"
 			OR $i_page == "admin_visibility.php"
+			OR $i_page == "admin_aux.php"
 			OR $i_page == "copy_assi.php"
 			OR $i_page == "adminarea_start.php"
 			OR ($i_page == "admin_modules.php" AND $links_admin_data["view"] == "modules_sem")
@@ -323,6 +327,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			$structure["visibility"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sichtbarkeit"), 'link'=>"admin_visibility.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'newline'=>TRUE);
 		}
 	}
+
+	$structure["aux"]=array (topKat=>"veranstaltungen", name=>_("Zusatzangaben"), link=>"admin_aux.php?list=TRUE&new_session=TRUE", active=>FALSE);
 	
 	//
 	if ($perm->have_perm("admin")) {
@@ -364,7 +370,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		if ($perm->is_fak_admin()) {
 			$structure["sem_tree"]=array ('topKat'=>"global", 'name'=>_("Veranstaltungshierarchie"), 'link'=>"admin_sem_tree.php", 'active'=>FALSE);
 		}
-		
+		$structure["aux_adjust"]=array (topKat=>"global", name=>("Zusatzangaben definieren"), link=>"admin_aux_adjust.php", active=>FALSE);
 	}
 	
 	if($perm->have_perm('dozent') && $GLOBALS['STM_ENABLE']){
@@ -514,6 +520,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			else
 				$reiter_view="modules_inst";
 		break;
+		case "admin_aux_adjust.php":
+			$reiter_view="aux_adjust";
+		break;
 		case "admin_studiengang.php":
 			$reiter_view="studiengang";
 		break;
@@ -525,6 +534,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		break;
 		case "admin_visibility.php":
 			$reiter_view="visibility";
+		break;
+		case "admin_aux.php":
+			$reiter_view="aux";
 		break;
 		case "copy_assi.php":
 			$reiter_view="copysem";
@@ -974,6 +986,36 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				</tr>
 				<?
 			}
+			//more Options for lock changing
+			if ($i_page == "admin_aux.php") {
+				?>
+				<tr <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" colspan="3" nowrap>
+						&nbsp; <font size=-1><?=_("Zusatzangaben-Template den angezeigten Veranstaltungen")?>&nbsp;<input type="IMAGE" <?=makeButton("zuweisen", "src")?> border=0 align="absmiddle" /></font><br />
+					</td>
+					<td class="<? echo $cssSw->getClass() ?>" colspan="4" align="right">
+					<?
+					if ($auth->auth["jscript"]) {
+						echo '<select name="aux_all" size="1">';
+						echo '<option value="-1">'. _("Bitte ausw&auml;hlen"). '</option>';
+						echo '<option value="null">-- '. _("keine Zusatzangaben") .' --</option>';
+						foreach ((array)$all_aux_rules as $lock_id => $data) {
+							echo '<option value="'.$lock_id.'"';
+							if (isset($aux_all) && $aux_all==$lock_id) {
+								echo ' selected ';
+							}
+							echo '>'.$data['name'].'</option>';
+						}
+						// ab hier die verschiedenen Sperrlevel für alle Veranstaltungen
+						echo '</select>';
+						echo '<input type="image" '.makeButton("uebernehmen","aux_rule").' name="aux_rule">';
+	
+					}
+					?>&nbsp;
+					</td>
+				</tr>
+				<?
+			}
 		}
 
 		while ($db->next_record()) {
@@ -1043,6 +1085,31 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				case "copy_assi.php":
 					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare_assi.php?cmd=do_copy&cp_id=%s&start_level=TRUE&class=1\">%s</a></font>", $seminar_id, makeButton("kopieren"));
 					break;
+			case "admin_aux.php":
+				$db5 = new Db_Seminar;
+				$db5->query("SELECT aux_lock_rule from seminare WHERE Seminar_id='$seminar_id'");
+				$db5->next_record();
+				if ($perm->have_perm("admin")) {
+					?>
+					<input type="hidden" name="make_aux" value="1">
+					<select name=aux_sem[<? echo $seminar_id ?>]>
+					<option value="null">-- <?=_("keine Zusatzangaben")?> --</option>
+					<?
+						foreach ((array)$all_aux_rules as $lock_id => $data) {
+							echo '<option value="'.$lock_id.'"';
+							if (isset($aux_all) && $aux_all==$lock_id) {
+								echo ' selected ';
+							} elseif (!isset($aux_all) && ($lock_id == $db5->f("aux_lock_rule"))) {
+								echo ' selected ';
+							}
+							echo '>'.$data['name'].'</option>';
+						}
+					?>
+					</select>
+				<?
+				}
+				break;
+
 				case "admin_visibility.php":
 					if ($perm->have_perm("admin") || (get_config('ALLOW_DOZENT_VISIBILITY') && $perm->have_perm('dozent'))) {
 					?>

@@ -247,6 +247,21 @@ if ($modules["literature"]) {
 	}
 }
 
+// Ticket #68
+require_once('lib/classes/AuxLockRules.class.php');
+$rule = AuxLockRules::getLockRuleBySemId($SessSemName[1]);
+$show = false;
+foreach ((array)$rule['attributes'] as $val) {
+	if ($val == 1) {
+		$show = true;
+		break;
+	}
+}
+
+if ($show)  {
+	$structure["teilnehmer_aux"] = array(topKat => "teilnehmer", name => _("Zusatzangaben"), link => "teilnehmer_aux.php", active => FALSE);
+}
+
 if ($SessSemName["class"]=="sem" && $modules["participants"] && (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)  || $rechte))
 	$structure["statusgruppen"]=array ('topKat' => "teilnehmer", 'name' => _("Funktionen / Gruppen"), 'link' => "statusgruppen.php?view=statusgruppe_sem", 'active' => FALSE);
 
@@ -391,6 +406,9 @@ if (!$found){
 		break;
 		case "teilnehmer_view.php";
 			$reiter_view="teilnehmer_view";
+		break;
+		case "teilnehmer_aux.php";
+			$reiter_view="teilnehmer_aux";
 		break;
 		case "institut_details.php": 
 			$reiter_view="institut_details"; 

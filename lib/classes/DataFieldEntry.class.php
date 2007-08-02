@@ -180,7 +180,7 @@ class DataFieldEntry {
 
   // @static
   function getSupportedTypes () {
-    return array("bool", "textline", "textarea", "selectbox", "date", "time", "email", "phone");
+    return array("bool", "textline", "textarea", "selectbox", "date", "time", "email", "phone", "radio", "combo");
   }
 
   // "statische" Methode: liefert neues Datenfeldobjekt zu gegebenem Typ
@@ -197,6 +197,8 @@ class DataFieldEntry {
       case 'date'     : $entry = new DataFieldDateEntry;      break;
       case 'time'     : $entry = new DataFieldTimeEntry;      break;
       case 'selectbox': $entry = new DataFieldSelectboxEntry($structure); break;
+      case 'radio':     $entry = new DataFieldRadioEntry($structure); break;
+      case 'combo':     $entry = new DataFieldComboEntry($structure); break;
       default         : return false;
     }
     $entry->structure   = $structure;
@@ -292,6 +294,71 @@ class DataFieldSelectboxEntry extends DataFieldEntry {
       $ret .= "<option value=\"$val\" $sel>$val</option>";
     }
     return $ret . "</select>";
+  }
+}
+
+
+class DataFieldRadioEntry extends DataFieldSelectboxEntry {
+  function getHTML ($name) {
+    $values = explode("\n", $this->structure->getTypeParam());
+    $ret = '';
+    foreach ($values as $val) {
+      $val = trim(htmlentities($val, ENT_QUOTES));
+      $ret .= sprintf('<input type="radio" value="%s" name="%s"%s> %s',
+                      $val, $name,
+                      $val == $this->getDisplayValue()
+                        ? ' checked="checked"' : '',
+                      $val);
+    }
+    return $ret;
+  }
+}
+
+
+class DataFieldComboEntry extends DataFieldEntry {
+  function DataFieldComboEntry ($struct) {
+    parent::DataFieldEntry($struct);
+    $values = explode("\n", $this->structure->getTypeParam());
+    $this->value = trim($values[0]);  // first selectbox entry is default
+  }
+
+  function numberOfHTMLFields () {
+    return 2;
+  }
+
+  function setValue ($value) {
+    if ($_REQUEST['combo_' . $this->structure->getID()] == 'select')
+      $this->value = $value[0];
+    else
+      $this->value = $value[1];
+  }
+
+  function getHTML ($name) {
+    $values = array_map('trim', explode("\n", $this->structure->getTypeParam()));
+
+    $id = $this->structure->getID();
+
+    $ret = sprintf('<input type="radio" value="select" id="combo_%s_select" name="combo_%s"%s>',
+                   $id, $id,
+                   ($select = in_array($this->value, $values))
+                     ? ' checked="checked"' : '');
+    $ret .= sprintf('<select onFocus="$(\'combo_%s_select\').checked = \'checked\';" name="%s">', $id, $name);
+    foreach ($values as $val) {
+      $val = trim(htmlentities($val, ENT_QUOTES));
+      $sel = $val == $this->getDisplayValue() ? 'selected' : '';
+      $ret .= "<option value=\"$val\" $sel>$val</option>";
+    }
+    $ret .= "</select>&nbsp;";
+
+    $ret .= sprintf('<input type="radio" value="text" id="combo_%s_text" name="combo_%s"%s>',
+                    $id, $id,
+                    $select ? '' : ' checked="checked"');
+
+    if ($this->value && !$select)
+      $valattr = 'value="' . $this->getDisplayValue() . '"';
+    $ret .= sprintf('<input name="%s" onFocus="$(\'combo_%s_text\').checked = \'checked\';" %s>', $name, $id, $valattr);
+
+    return $ret;
   }
 }
 
