@@ -13,7 +13,7 @@ ini_set( "memory_limit", "256M");
 
 // set name of subroutine file
 // (neede because of PHP memory problems, if the conversion would be done in one step)
-$CONVERSION_SUBROUTINE_FILE = dirname(__FILE__) ."/convert_regular_dates_to_single_dates_with_themes-SUBROUTINE.php";
+$CONVERSION_SUBROUTINE_FILE = dirname(__FILE__) ."/convert_dates_for_imported_seminars-SUBROUTINE.php";
 
 // define step size (number of rows) for subroutine proccessing
 $STEP_SIZE= 300;
