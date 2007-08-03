@@ -463,6 +463,7 @@ class Seminar {
 			$this->admission_prelim_txt = $this->db->f("admission_prelim_txt");
 			$this->admission_starttime = $this->db->f("admission_starttime");
 			$this->admission_endtime_sem = $this->db->f("admission_endtime_sem");
+			$this->admission_disable_waitlist = $this->db->f("admission_disable_waitlist");
 			$this->visible = $this->db->f("visible");
 			$this->showscore = $this->db->f("showscore");
 			$this->modules = $this->db->f("modules");
@@ -531,6 +532,7 @@ class Seminar {
 				admission_prelim_txt = '".		mysql_escape_string($this->admission_prelim_txt)."',
 				admission_starttime = '".		$this->admission_starttime."',
 				admission_endtime_sem = '".		$this->admission_endtime_sem."',
+				admission_disable_waitlist = '".$this->admission_disable_waitlist . "',
 				visible =  				'".		$this->visible."',
 				showscore =				'0',
 				modules = NULL";
@@ -570,6 +572,7 @@ class Seminar {
 				admission_prelim_txt = '".		mysql_escape_string($this->admission_prelim_txt)."',
 				admission_starttime = '".		$this->admission_starttime."',
 				admission_endtime_sem = '".		$this->admission_endtime_sem."',
+				admission_disable_waitlist = '".$this->admission_disable_waitlist . "',
 				visible = '". 				$this->visible."',
 				showscore ='".				$this->showscore."',
 				modules = ".(($this->modules == NULL) ? 'NULL' : "'".$this->modules."'")."

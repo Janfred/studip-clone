@@ -36,10 +36,82 @@ include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 require_once('config.inc.php'); //Grunddaten laden
 require_once('lib/visual.inc.php'); //htmlReady
+require_once('lib/classes/StudipAdmissionGroup.class.php'); //htmlReady
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
+$sem_condition = '';
+$admission_condition = array();
+
+if(isset($_REQUEST['choose_institut_x'])){
+	if(isset($_REQUEST['select_sem'])){
+		$_default_sem = $_REQUEST['select_sem'];
+	}
+	$_SESSION['show_admission']['check_admission'] = isset($_REQUEST['check_admission']);
+	$_SESSION['show_admission']['check_prelim'] = isset($_REQUEST['check_prelim']);
+}
+if(!$_SESSION['show_admission']['check_admission'] && !$_SESSION['show_admission']['check_prelim']){
+	$_SESSION['show_admission']['check_admission'] = true;
+}
+if ($_default_sem){
+	$semester =& SemesterData::GetInstance();
+	$one_semester = $semester->getSemesterData($_default_sem);
+	if($one_semester["beginn"]){
+		$sem_condition = "AND seminare.start_time <=".$one_semester["beginn"]." AND (".$one_semester["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
+	}
+}
+if($_SESSION['show_admission']['check_admission']) $admission_condition[] = "admission_type > 0";
+else $admission_condition[] = "admission_type = 0";
+if($_SESSION['show_admission']['check_prelim']) $admission_condition[] = "admission_prelim = 1";
+else $admission_condition[] = "admission_prelim <> 1";
+$seminare_condition = "AND (" . join(" AND ", $admission_condition) . ") " .  $sem_condition;
+if($perm->have_perm('root')){
+	$db->query("SELECT COUNT(*) FROM seminare WHERE 1 $seminare_condition");
+	$db->next_record();
+	$_my_inst['all'] = array("name" => _("alle") , "num_sem" => $db->f(0));
+	$db->query("SELECT a.Institut_id,a.Name, 1 AS is_fak, count(seminar_id) AS num_sem FROM Institute a
+	LEFT JOIN seminare ON(seminare.Institut_id=a.Institut_id $seminare_condition  ) WHERE a.Institut_id=fakultaets_id GROUP BY a.Institut_id ORDER BY is_fak,Name,num_sem DESC");
+} else {
+	$db->query("SELECT a.Institut_id,b.Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,count(seminar_id) AS num_sem FROM user_inst a LEFT JOIN Institute b USING (Institut_id)
+	LEFT JOIN seminare ON(seminare.Institut_id=b.Institut_id $seminare_condition  )	WHERE a.user_id='$user->id' AND a.inst_perms='admin' GROUP BY a.Institut_id ORDER BY is_fak,Name,num_sem DESC");
+}
+while($db->next_record()){
+	$_my_inst[$db->f("Institut_id")] = array("name" => $db->f("Name"), "is_fak" => $db->f("is_fak"), "num_sem" => $db->f("num_sem"));
+	if ($db->f("is_fak")){
+		$db2->query("SELECT a.Institut_id, a.Name,count(seminar_id) AS num_sem FROM Institute a
+		LEFT JOIN seminare ON(seminare.Institut_id=a.Institut_id $seminare_condition  ) WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "'
+		GROUP BY a.Institut_id ORDER BY a.Name,num_sem DESC");
+		$num_inst = 0;
+		while ($db2->next_record()){
+			if(!$_my_inst[$db2->f("Institut_id")]){
+				++$num_inst;
+			}
+			$_my_inst[$db2->f("Institut_id")] = array("name" => $db2->f("Name"), "is_fak" => 0 , "num_sem" => $db2->f("num_sem"));
+		}
+		$_my_inst[$db->f("Institut_id")]["num_inst"] = $num_inst;
+	}
+}
+
+if (!is_array($_my_inst)){
+	$_msg[] = array("info", sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"impressum.php?view=ansprechpartner\">", "</a>"));
+} else {
+	$_my_inst_arr = array_keys($_my_inst);
+	if(!$_SESSION['show_admission']['institut_id']){
+		$_SESSION['show_admission']['institut_id'] = $_my_inst_arr[0];
+	}
+	if($_REQUEST['institut_id']){
+		$_SESSION['show_admission']['institut_id'] = ($_my_inst[$_REQUEST['institut_id']]) ? $_REQUEST['institut_id'] : $_my_inst_arr[0];
+	}
+}
+
+if(isset($_REQUEST['group_sem_x']) && count($_REQUEST['gruppe']) > 1){
+	$group_obj = new StudipAdmissionGroup();
+	foreach($_REQUEST['gruppe'] as $sid){
+		$group_obj->addMember($sid);
+	}
+	
+}
 
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
@@ -50,44 +122,136 @@ $db3=new DB_Seminar;
 		?></b>
 		</td>
 	</tr>
+<?
+if(is_object($group_obj)){
+	?>
 	<tr>
 		<form action="<?=$PHP_SELF?>" method="post">
-		<td class="blank" width="100%" >
-			<br />
-			<div style="font-weight:bold;font-size:10pt;margin-left:10px;">
-			<?=_("Bitte w&auml;hlen Sie eine Einrichtung aus:")?>
-			</div>
-			<div style="margin-left:10px;">
-			<select name="institut_id" style="vertical-align:middle;">
-				<?
-				if ($perm->have_perm("root"))
-					printf ("<option %s value=\"%s\"> %s</option>", (($institut_id == "all") || (!$institut_id)) ? "selected" :"", "all", "alle");
-
-				if ($perm->have_perm("root"))
-					$db3->query("SELECT Name,Institut_id,1 AS is_fak,'admin' AS inst_perms FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
-				elseif ($perm->have_perm("admin"))
-					$db3->query("SELECT Name,a.Institut_id,IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user->id' AND inst_perms = 'admin') ORDER BY is_fak,Name");
-
-				while ($db3->next_record()) {
-					printf ("<option %s style=\"%s\" value=\"%s\"> %s</option>", $db3->f("Institut_id") == $institut_id ? "selected" : "",
-						($db3->f("is_fak")) ? "font-weight:bold;" : "", $db3->f("Institut_id"), htmlReady(my_substr($db3->f("Name"),0,60)));
-					if ($db3->f("is_fak") && $db3->f("inst_perms") == "admin"){
-						$db2->query("SELECT a.Institut_id, a.Name FROM Institute a
-									 WHERE fakultaets_id='" . $db3->f("Institut_id") . "' AND a.Institut_id!='" .$db3->f("Institut_id") . "' ORDER BY Name");
-						while($db2->next_record()){
-							printf ("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s</option>", $db2->f("Institut_id") == $institut_id ? "selected" : "",
-								$db2->f("Institut_id"), htmlReady(my_substr($db2->f("Name"),0,60)));
+		<td class="blank" width="100%">
+		<div class="steel1" style="margin:10px;padding:5px;border: 1px solid;">
+		<div style="font-weight:bold;"><?=_("Gruppierte Veranstaltungen bearbeiten")?></div>
+		<div style="font-size:10pt;">
+		<?=_("Gruppierte Veranstaltungen müssen ein identisches Anmeldeverfahren benutzen.")?>
+		<?=_("Alle Einstellungen die sie an dieser Stelle vornehmen können, werden in allen Veranstaltungen dieser Gruppe gesetzt, wenn sie die entsprechende Option auswählen.")?>
+		<br><br>
+		<b><?=_("Veranstaltungen in dieser Gruppe:")?></b>
+		<ol>
+		<?foreach($group_obj->members as $member){?>
+			<li><?=htmlReady($member->getName())?></li>
+		<?}?>
+		</ol>
+		<span style="display:block;float:left;width:200px;"><?=_("Name der Gruppe (optional):")?></span>
+		<input type="text" name="admission_group_name" value="<?=htmlReady($group_obj->getValue('name'))?>" size="80" style="vertical-align:middle">
+		<br>
+		<span style="display:block;float:left;width:200px;"><?=_("Typ der Gruppe:")?></span>
+		<input style="vertical-align:top" type="radio" name="admission_group_status" <?=($group_obj->getValue('status') == 0 ? 'checked' : '')?> value="0">
+		&nbsp;
+		<?=_("Eintrag in einer Veranstaltung und einer Warteliste")?>
+		&nbsp;
+		<input style="vertical-align:top" type="radio" name="admission_group_status" <?=($group_obj->getValue('status') == 1 ? 'checked' : '')?> value="1">
+		&nbsp;
+		<?=_("Eintrag nur in einer Veranstaltung")?>
+		<br>
+		<span style="display:block;float:left;width:200px;"><?=_("Anmeldeverfahren der Gruppe:")?></span>
+		<input style="vertical-align:top" type="radio" name="admission_group_type" <?=($group_obj->getUniqueMemberValue('admission_type') == 2 ? 'checked' : '')?> value="2">
+		&nbsp;
+		<?=_("chronologische Anmeldung")?>
+		&nbsp;
+		<input style="vertical-align:top" type="radio" name="admission_group_type" <?=($group_obj->getUniqueMemberValue('admission_type') == 1 ? 'checked' : '')?> value="1">
+		&nbsp;
+		<?=_("Losverfahren")?>
+		<br>
+		<span style="display:block;float:left;width:200px;"><?=_("Startdatum für Anmeldungen:")?></span>
+		<input style="vertical-align:top" type="checkbox" name="admission_change_starttime" value="1">
+		&nbsp;
+		<?=_("ändern")?>
+		&nbsp;
+		<input type="text" style="vertical-align:middle" name="adm_s_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_start_date"]); else echo _("tt") ?>">.
+		<input type="text" style="vertical-align:middle" name="adm_s_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_start_date"]); else echo _("mm") ?>">.
+		<input type="text" style="vertical-align:middle" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_start_date"]); else echo _("jjjj") ?>">
+		<?=_("um");?>
+		&nbsp;<input type="text" style="vertical-align:middle"  name="adm_s_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_start_date"]); else echo "00" ?>">:
+		<input type="text" style="vertical-align:middle"  name="adm_s_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_start_date"]); else  echo "00" ?>">&nbsp;<?=_("Uhr");?>
+		<?=Termin_Eingabe_javascript(20,0,($admin_admission_data["sem_admission_start_date"] != -1 ? $admin_admission_data["sem_admission_start_date"] : 0));?>
+		<br>
+		<span style="display:block;float:left;width:200px;"><?=_("Enddatum für Anmeldungen:")?></span>
+		<input style="vertical-align:top" type="checkbox" name="admission_change_endtime_sem" value="1">
+		&nbsp;
+		<?=_("ändern")?>
+		&nbsp;
+		<input style="vertical-align:middle" type="text" name="adm_s_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_start_date"]); else echo _("tt") ?>">.
+		<input style="vertical-align:middle"  type="text" name="adm_s_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_start_date"]); else echo _("mm") ?>">.
+		<input style="vertical-align:middle" type="text" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_start_date"]); else echo _("jjjj") ?>">
+		<?=_("um");?>
+		&nbsp;<input style="vertical-align:middle" type="text" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_start_date"]); else echo "00" ?>">:
+		<input style="vertical-align:middle" type="text" name="adm_s_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_start_date"]); else  echo "00" ?>">&nbsp;<?=_("Uhr");?>
+		<?=Termin_Eingabe_javascript(20,0,($admin_admission_data["sem_admission_start_date"] != -1 ? $admin_admission_data["sem_admission_start_date"] : 0));?>
+		<br>
+		<span style="display:block;float:left;width:200px;"><?=_("Ende Kontingente / Losdatum:")?></span>
+		<input style="vertical-align:top" type="checkbox" name="admission_change_endtime" value="1">
+		&nbsp;
+		<?=_("ändern")?>
+		&nbsp;
+		<input type="text" style="vertical-align:middle" name="adm_s_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_start_date"]); else echo _("tt") ?>">.
+		<input type="text" style="vertical-align:middle" name="adm_s_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_start_date"]); else echo _("mm") ?>">.
+		<input type="text" style="vertical-align:middle" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_start_date"]); else echo _("jjjj") ?>">
+		<?=_("um");?>
+		&nbsp;<input type="text" style="vertical-align:middle" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_start_date"]); else echo "00" ?>">:
+		<input type="text" style="vertical-align:middle" name="adm_s_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_start_date"]); else  echo "00" ?>">&nbsp;<?=_("Uhr");?>
+		<?=Termin_Eingabe_javascript(20,0,($admin_admission_data["sem_admission_start_date"] != -1 ? $admin_admission_data["sem_admission_start_date"] : 0));?>
+		<br>
+		<span style="display:block;float:left;width:200px;"><?=_("max. Teilnehmer:")?></span>
+		<input style="vertical-align:top" type="checkbox" name="admission_change_turnout" value="1">
+		&nbsp;
+		<?=_("ändern")?>
+		&nbsp;
+		<input style="vertical-align:middle" type="text" size="3">
+		</div>
+		</div>
+	<?
+} else {
+	if (is_array($_my_inst)) {
+	?>
+		<tr>
+			<form action="<?=$PHP_SELF?>" method="post">
+			<td class="blank" width="100%" >
+				<div style="font-weight:bold;font-size:10pt;margin:10px;">
+				<?=_("Bitte w&auml;hlen Sie eine Einrichtung aus:")?>
+				</div>
+				<div style="margin-left:10px;">
+				<select name="institut_id" style="vertical-align:middle;">
+					<?
+					reset($_my_inst);
+					while (list($key,$value) = each($_my_inst)){
+						printf ("<option %s value=\"%s\" style=\"%s\">%s (%s)</option>\n",
+								($key == $_SESSION['show_admission']['institut_id']) ? "selected" : "" , $key,($value["is_fak"] ? "font-weight:bold;" : ""),
+								htmlReady($value["name"]), $value["num_sem"]);
+						if ($value["is_fak"]){
+							$num_inst = $value["num_inst"];
+							for ($i = 0; $i < $num_inst; ++$i){
+								list($key,$value) = each($_my_inst);
+								printf("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s (%s)</option>\n",
+									($key == $_SESSION['show_admission']['institut_id']) ? "selected" : "", $key,
+									htmlReady($value["name"]), $value["num_sem"]);
+							}
 						}
 					}
-				}
-				?>
-				</select>&nbsp;
-				<input <?=makeButton("auswaehlen","src")?> <?=tooltip(_("Einrichtung auswählen"))?> type="image" border="0" style="vertical-align:middle;">
-				<br>&nbsp;
-			</div>
-		</td>
-		</form>
-	</tr>
+					?>
+					</select>&nbsp;
+					<?=SemesterData::GetSemesterSelector(array('name'=>'select_sem', 'style'=>'vertical-align:middle;'), $_default_sem)?>
+					<?=makeButton("auswaehlen","input",_("Einrichtung auswählen"), "choose_institut")?>
+				</div>
+				<div style="font-size:10pt;margin:10px;">
+				<b><?=_("Angezeigte Veranstaltungen einschränken:")?></b>
+				<span style="margin-left:10px;font-size:10pt;">
+				<input type="checkbox" name="check_admission" <?=$_SESSION['show_admission']['check_admission'] ? 'checked' : ''?> value="1" style="vertical-align:middle;">&nbsp;<?=_("Anmeldeverfahren")?>
+				<input type="checkbox" name="check_prelim" <?=$_SESSION['show_admission']['check_prelim'] ? 'checked' : ''?> value="1" style="vertical-align:middle;">&nbsp;<?=_("vorläufige Teilnahme")?>
+				</span>
+				</div>
+			</td>
+			</form>
+		</tr>
+<?}?>
 	<tr>
 		<td class="blank">
 <?
@@ -153,38 +317,37 @@ $db3=new DB_Seminar;
 			}
 		}
 
-		if ((($institut_id == "all") || (!$institut_id)) && ($perm->have_perm("root")))
-		$query = "SELECT * FROM seminare WHERE admission_type > 0 OR admission_starttime > ". time() ."  OR admission_endtime_sem > -1 OR (admission_starttime <= ". time(). " AND admission_starttime > 0) OR (admission_prelim = 1) ORDER BY admission_group DESC, start_time DESC, Name";
-      else
-	$query = "SELECT * FROM seminare LEFT JOIN seminar_inst USING (Institut_id) WHERE (admission_type > 0 OR admission_starttime > ".time()." OR admission_endtime_sem > -1 OR (admission_starttime <= ".time()." AND admission_starttime > 1) OR (admission_prelim = 1)) AND seminar_inst.institut_id = '$institut_id' GROUP BY seminare.Seminar_id ORDER BY admission_group DESC, start_time DESC, Name";
+		if ($_SESSION['show_admission']['institut_id'] == "all"  && $perm->have_perm("root"))
+			$query = "SELECT * FROM seminare WHERE 1 $seminare_condition ORDER BY admission_group DESC, start_time DESC, Name";
+		else
+			$query = "SELECT * FROM seminare LEFT JOIN seminar_inst USING (Institut_id) WHERE seminar_inst.institut_id = '{$_SESSION['show_admission']['institut_id']}' $seminare_condition GROUP BY seminare.Seminar_id ORDER BY admission_group DESC, start_time DESC, Name";
 
 		$db->query($query);
 		$tag = 0;
 		if ($db->nf()) {
-			print ("<table width=\"99%\" border=0 cellspacing=0 cellpadding=2>");
-			print ("<tr>");
-			echo "<td width=\"3%\"></td>";
+			print ("<table width=\"99%\" border=0 cellspacing=2 cellpadding=2>");
+			print ("<tr style=\"font-size:80%\">");
 			if ($ALLOW_GROUPING_SEMINARS) {
-				echo "<th width=\"5%\">". _("Gruppieren") ."</th>";
-				echo "<th width=\"1%\"></th>";
+				echo "<th width=\"1%\">". _("Gruppieren") ."</th>";
 			}
 			echo "<th width=\"25%\">". _("Veranstaltung") ."</th>";
-			echo "<th width=\"8%\">". _("Teilnehmer") ."</th>";
-			echo "<th width=\"8%\">". _("Max. Teilnehmer") ."</th>";
-			echo "<th width=\"8%\">". _("Anmelde & Akzeptiertliste") ."</th>";
-			echo "<th width=\"8%\">". _("Warteliste") ."</th>";
-			echo "<th width=\"15%\">". _("Enddatum Kontingente") ."</th>";
+			echo "<th width=\"10%\">". _("Status") ."</th>";
+			echo "<th width=\"10%\">". _("Kontingent Teilnehmer") ."</th>";
+			echo "<th width=\"10%\">". _("Max. Teilnehmer") ."</th>";
+			echo "<th width=\"10%\">". _("Anmelde & Akzeptiertliste") ."</th>";
+			echo "<th width=\"10%\">". _("Warteliste") ."</th>";
+			echo "<th width=\"10%\">". _("Losdatum / Ende Kontingente") ."</th>";
 			echo "<th width=\"20%\">". _("Anmeldezeitraum") ."</th>";
 			echo "</tr>";
 		} elseif ($institut_id) {
-			print ("<table width=\"99%\" border=0 cellspacing=0 cellpadding=2>");
+			print ("<table width=\"99%\" border=0 cellspacing=2 cellpadding=2>");
 			parse_msg ("info§"._("Im gew&auml;hlten Bereich existieren keine teilnahmebeschr&auml;nkten Veranstaltungen")."§", "§", "steel1",2, FALSE);
 		}
 
 		if ($db->nf()) printf("<form action=\"%s\" method=\"post\">\n",$PHP_SELF);
 	  	while ($db->next_record()) {
 			$seminar_id = $db->f("Seminar_id");
-	  		$query2 = "SELECT * FROM seminar_user WHERE seminar_id='$seminar_id'";
+	  		$query2 = "SELECT * FROM seminar_user WHERE seminar_id='$seminar_id' AND admission_studiengang_id != ''";
 			$db2->query($query2);
 			$teilnehmer = $db2->num_rows();
 	  		$cssSw->switchClass();
@@ -202,37 +365,66 @@ $db3=new DB_Seminar;
 				$count3 = $db2->f("count3");
 			}
 			$datum = $db->f("admission_endtime");
-			/*if ($datum <1)
-				$datum = 1;*/
-			echo "<tr><td></td>";
+			$status = array();
+			if($db->f('admission_type') == 2) $status[] = _("Chronologisch");
+			if($db->f('admission_type') == 1) $status[] = _("Losverfahren");
+			if($db->f('admission_prelim'))  $status[] = _("vorläufig");
+			echo "<tr>";
 			if ($ALLOW_GROUPING_SEMINARS) {
-				printf("<td class=\"%s\" align=\"center\">",$cssSw->getClass());
-				if (!$db->f("admission_group")) { //wenn keiner Gruppe zugeordnet, dann cechkbox ausgeben
-					unset($last_group);
-					printf("<input type=\"checkbox\" name=\"gruppe[]\" value=\"%s\">",$db->f("Seminar_id"));
-				} else {
-					if($db->f("admission_group") != $last_group) {
+				if($db->f('admission_type') > 0){
+					if (!$db->f("admission_group") ) { //wenn keiner Gruppe zugeordnet, dann cechkbox ausgeben
+						printf("<td class=\"%s\" align=\"center\">",$cssSw->getClass());
 						unset($last_group);
-						$tag = 1 - $tag;
-					}
+						printf("<input type=\"checkbox\" name=\"gruppe[]\" value=\"%s\">",$db->f("Seminar_id"));
+						echo '</td>';
+					} else {
+						if($db->f("admission_group") != $last_group) {
+							unset($last_group);
+						}
 						if (!isset($last_group)) { //Wenn erstes "Mitglied" einer Gruppe, dann Muelleimer ausgeben
-						$last_group = $db->f("admission_group");
-						printf("<a href=\"show_admission.php?seminarid=%s&institut_id=%s&group=ungroup\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\"></a>",$db->f("admission_group"),$institut_id);
+							$last_group = $db->f("admission_group");
+							$group_obj = new StudipAdmissionGroup($last_group);
+							echo '<td class="'.$cssSw->getClass().'" style="border:1px solid;" align="center" valign="middle" rowspan="'.$group_obj->getNumMembers().'">';
+							printf("<a title=\"%s\" href=\"show_admission.php?group_id=%s&cmd=edit\">
+									<img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\"></a>"
+									,_("Gruppe bearbeiten"), $db->f("admission_group"));
+							echo '</td>';
+						}
 					}
-				}
-				print("</td>");
-			}
-			if ($ALLOW_GROUPING_SEMINARS) {
-				if(($db->f("admission_group")) && ($db->f("admission_group") == $last_group)) {
-					print ("<td bgcolor=\"");
-					if ($tag == 0) print ("#CC0000"); else print ("#00CC00");
-					print ("\"></td>");
 				} else {
-					 printf("<td class=\"%s\"></td>",$cssSw->getClass());
+					printf("<td class=\"%s\" align=\"center\">&nbsp;</td>",$cssSw->getClass());
 				}
+				
 			}
-			printf ("<td class=\"%s\"><a href=\"seminar_main.php?auswahl=%s&redirect_to=teilnehmer.php\"><font size=\"-1\">%s%s</font></a></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\"><font size=\"-1\">%s</font></td><td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>",
-			$cssSw->getClass(), $db->f("Seminar_id"), htmlready(substr($db->f("Name"), 0, 50)), (strlen($db->f("Name"))>50) ? "..." : "", $cssSw->getClass(), $teilnehmer, $cssSw->getClass(), $quota, $cssSw->getClass(), $count2, $cssSw->getClass(), $count3, ($datum != -1) ? ($datum < time() ? "steelgroup4" : "steelgroup1") : $cssSw->getClass(), ($datum != -1) ? date("d.m.Y, G:i", $datum) : "");
+			printf ("<td class=\"%s\">
+			<a title=\"%s\" href=\"seminar_main.php?auswahl=%s&redirect_to=teilnehmer.php\">
+					<font size=\"-1\">%s%s</font>
+					</a></td>
+					<td class=\"%s\" align=\"center\">
+					<a title=\"%s\" href=\"admin_admission.php?select_sem_id=%s\"><font size=\"-1\">%s</font></a></td>
+					<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
+					<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
+					<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
+					<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
+					<td class=\"%s\" align=\"left\" nowrap><font size=\"-1\">%s</font></td>",
+					$cssSw->getClass(),
+					_("Teilnehmerliste aufrufen"),
+					$db->f("Seminar_id"),
+					htmlready(substr($db->f("Name"), 0, 50)), (strlen($db->f("Name"))>50) ? "..." : "",
+					$cssSw->getClass(),
+					_("Zugangsbeschränkungen aufrufen"),
+					$db->f("Seminar_id"),
+					join('/', $status),
+					$cssSw->getClass(),
+					$teilnehmer,
+					$cssSw->getClass(),
+					$quota,
+					$cssSw->getClass(),
+					$count2,
+					$cssSw->getClass(),
+					$count3,
+					($datum != -1) ? ($datum < time() ? "steelgroup4" : "steelgroup1") : $cssSw->getClass(),
+					($datum != -1) ? date("d.m.Y, G:i", $datum) : "");
 			if (($db->f("admission_endtime_sem") != -1)  || ($db->f("admission_starttime") != -1)) {  // last tabel-data: "Anmeldeverfahren"
 				$class = "";  //we have to parse the correct color for the background
 				if ($db->f("admission_starttime") != -1) {
@@ -244,7 +436,7 @@ $db3=new DB_Seminar;
 						else if($class != "steelgroup1") $class = "steelgroup4";
 				}
 				// print out table-data
-				printf ("<td class=\"%s\" align=\"center\"><font size=\"-1\">", $class);
+				printf ("<td class=\"%s\" align=\"left\" nowrap><font size=\"-1\">", $class);
 				if ($db->f("admission_starttime") != -1) echo _("Start:")." ".date("d.m.Y, G:i", $db->f("admission_starttime"))." <br/>";
 				if ($db->f("admission_endtime_sem") != -1) echo _("Ende:")." ".date("d.m.Y, G:i", $db->f("admission_endtime_sem"));
 				echo "</font></td>";
@@ -255,16 +447,13 @@ $db3=new DB_Seminar;
 		}
 
 		if ($db->nf() && $ALLOW_GROUPING_SEMINARS) {
-			print ("<tr><td></td><td>\n");
-			echo "<input ".makeButton("gruppieren","src")." ".tooltip(_("Markierte Veranstaltungen gruppieren"))." type=\"image\" border=\"0\" style=\"vertical-align:left;\" align=\"left\">";
-			print("<input type=\"hidden\" name=\"group\" value=\"group\">\n");
-			printf("<input type=\"hidden\" name=\"institut_id\" value=\"%s\">\n",$institut_id);
-			print("</form>\n");
-			print("</td></tr>\n");
+			echo '<tr><td align="left">'. "\n";
+			echo makeButton("gruppieren", 'input', _("Markierte Veranstaltungen gruppieren"), 'group_sem');
+			echo "</form>\n";
+			echo "</td></tr>\n";
 		}
-
-		print("</table>");
-
+		echo "</table>";
+}
 ?>
 <br>&nbsp;
 </td>
