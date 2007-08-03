@@ -36,7 +36,7 @@ function process_news_commands(&$cmd_data) {
 	$cmd_data["comsubmit"]='';
 	$cmd_data["comdel"]='';
 	$cmd_data["comdelnews"]='';
-	
+
 	if ($comsubmit) $cmd_data["comsubmit"]=$comopen=$comsubmit;
 	if ($comdelnews) $cmd_data["comdelnews"]=$comopen=$comdelnews;
 	if ($comopen) $cmd_data["comopen"]=$nopen=$comopen;
@@ -44,11 +44,10 @@ function process_news_commands(&$cmd_data) {
 	if ($nclose)  $cmd_data["nopen"]='';
 	if ($comnew) $cmd_data["comnew"]=$comnew;
 	if ($comdel) $cmd_data["comdel"]=$comdel;
-	
+
 }
 
 function commentbox($num, $authorname, $authoruname, $date, $dellink, $content) {
-	global $PHP_SELF;
 	$out=array();
 	$out[]="<table style=\"border: 1px black solid;\" cellpadding=3 cellspacing=0 width=100%>";
 	$out[].="<tr style=\"background:#ffffcc\">";
@@ -91,10 +90,11 @@ function delete_comment($comment_id) {
 	return $ok;
 }
 
-function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%", $last_visited=0, $cmd_data) {
-	global $_fullname_sql,$PHP_SELF,$auth , $SessSemName;
+function show_news($range_id, $show_admin = FALSE, $limit = "", $open,
+                   $width = "100%", $last_visited = 0, $cmd_data) {
+	global $auth, $SessSemName;
 
-	$db2=new DB_Seminar;
+	$db2 = new DB_Seminar;
 
 	$aktuell=time();
 
@@ -105,7 +105,7 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 	if($show_admin && $_REQUEST['touch_news']){
 		StudipNews::TouchNews($_REQUEST['touch_news']);
 	}
-	
+
 	$news =& StudipNews::GetNewsByRange($range_id, true);
 
 	if ($SessSemName[1] == $range_id){
@@ -150,136 +150,13 @@ function show_news($range_id, $show_admin=FALSE,$limit="", $open, $width="100%",
 		echo "\n</tr>\n<tr><td colspan=$colspan>";
 
 		// Ausgabe der Daten
-		foreach ($news as $news_id => $news_detail) {
-			$tmp_titel=htmlReady(mila($news_detail["topic"]));
-			$titel='';
-			if ($open == $news_id) {
-				$link=$PHP_SELF."?nclose=true";
-				if ($cmd_data['comopen'] != $news_id) $titel = $tmp_titel."<a name=\"anker\"> </a>";
-				else $titel = $tmp_titel;
-				if ($news_detail["user_id"] != $auth->auth["uid"]) object_add_view($news_id);  //Counter for news - not my own
-				object_set_visit($news_id, "news"); //and, set a visittime
-			} else {
-				$link=$PHP_SELF."?nopen=".$news_id;
-				$titel=$tmp_titel;
-			}
+		foreach ($news as $id => $news_item) {
+			$news_item['open'] = ($id == $open);
+			echo '<div id="news_item_'.$id.'">';
+			echo show_news_item($news_item, $cmd_data, $show_admin);
+			echo '</div>';
+		}
 
-			$icon="&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/news-icon.gif\" border=0>";
-
-			$db2->query("SELECT username, " . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id='".$news_detail["user_id"]."'");
-			$db2->next_record();
-			$link .= "&username=".$db2->f("username") . "#anker";
-			$zusatz="<a href=\"about.php?username=".$db2->f("username")."\"><font size=-1 color=\"#333399\">".htmlReady($db2->f("fullname"))."</font></a><font size=-1>&nbsp;".date("d.m.Y",$news_detail["date"])." | <font color=\"#005500\">".object_return_views($news_id)."<font color=\"black\"> |</font>";
-
-			$unamelink = '&username='.$db2->f('username');
-			$uname = $db2->f('username');
-
-			if ($news_detail['allow_comments']==1) {
-				$numcomments = StudipComments::NumCommentsForObject($news_detail['news_id']);
-				$numnewcomments = StudipComments::NumCommentsForObjectSinceLastVisit($news_detail['news_id'], object_get_visit($news_detail['news_id'],'news',false,false), $auth->auth['uid']);
-				$zusatz .= " <font ".($numnewcomments ? tooltip(sprintf(_("%s neue(r) Kommentar(e)"),$numnewcomments),false) : '')." color=\"".($numnewcomments ? 'red' : '#aaaa66')."\">".$numcomments."</font><font color=\"black\"> |</font>";
-			}
-
-			if ($link)
-			$titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
-
-			$tempnew = (($news_detail['chdate'] >= object_get_visit($news_id,'news',false,false)) && ($news_detail['user_id'] != $auth->auth["uid"]));
-			echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
-			if ($open == $news_id)
-			printhead(0, 0, $link, "open", $tempnew, $icon, $titel, $zusatz, $news_detail["date"]);
-			else
-			printhead(0, 0, $link, "close", $tempnew, $icon, $titel, $zusatz, $news_detail["date"]);
-
-			echo "</tr></table>	";
-
-			if ($open == $news_id) {
-				list ($content,$admin_msg)=explode("<admin_msg>",$news_detail['body']);
-				$content = formatReady($content);
-				if ($news_detail['chdate_uid']){
-					$admin_msg = StudipNews::GetAdminMsg($news_detail['chdate_uid'],$news_detail['chdate']);
-				}
-				if ($admin_msg) {
-					$content.="<br><br><i>".htmlReady($admin_msg)."</i>";
-				}
-				if (!$content)
-				$content=_("Keine Beschreibung vorhanden.") . "\n";
-				else
-				$content.="<br>";
-
-				if ($auth->auth["uid"]==$news_detail["user_id"] || $show_admin) {
-					$edit="<a href=\"admin_news.php?cmd=edit&edit_news=".$news_id."&$admin_link\">" . makeButton("bearbeiten") . "</a>";
-					$edit.="&nbsp;<a href=\"{$_SERVER['PHP_SELF']}?touch_news=".$news_id."#anker\">" . makeButton("aktualisieren") . "</a>";
-					$edit.="&nbsp;<a href=\"admin_news.php?cmd=kill&kill_news=".$news_id."&$admin_link\">" . makeButton("loeschen") . "</a>";
-				}
-
-				//
-				// Kommentare
-				//
-				if ($news_detail['allow_comments']==1) {
-					$showcomments=0;
-					if ($cmd_data["comsubmit"]==$news_detail['news_id']) {
-						if (trim($_REQUEST['comment_content'])){
-							$comment=new StudipComments();
-							$comment->setValue('object_id', $news_detail['news_id']);
-							$comment->setValue('user_id', $auth->auth['uid']);
-							$comment->setValue('content', stripslashes(trim($_REQUEST['comment_content'])));
-							$comment->store();
-						}
-						$showcomments=1;
-					} else if ($cmd_data["comdelnews"]==$news_detail['news_id']) {
-						delete_comment($cmd_data["comdel"]);
-						$showcomments=1;
-					}
-					if ($showcomments || $cmd_data["comopen"]==$news_detail['news_id']) {
-						$comments="\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"90%\" align=\"center\" style=\"margin-top:10px\">";
-						$comments.="<tr align=center><td><font size=-1><b>"._("Kommentare")."<b></font><a name=\"anker\"> </a></td></tr>";
-						$c=StudipComments::GetCommentsForObject($news_detail['news_id']);
-						if (count($c)) {
-							$num=0;
-							foreach ($c as $comment) {
-								$comments.="<tr><td>";
-								//if (get_userid($comment[2])==$auth->auth["uid"] || $news_detail['user_id']==$auth->auth["uid"] || $show_admin) {
-								if ($show_admin){
-									$dellink="$PHP_SELF?comdel=".$comment[4]."&comdelnews=".$news_detail['news_id']."#anker";
-								} else {
-									$dellink=NULL;
-								}
-
-								$comments.=commentbox(++$num, $comment[1], $comment[2], $comment[3], $dellink, $comment[0]);
-								$comments.="</td></tr>";
-							}
-						}
-						$comments.="</table>";
-						$content.=$comments;
-						$formular="&nbsp;<br>\n<form action=\"".$PHP_SELF."#anker\" method=\"POST\">";
-						$formular.="<input type=hidden name=\"comsubmit\" value=\"".$news_detail['news_id']."\">";
-						$formular.="<input type=hidden name=\"username\" value=\"$uname\">";
-						$formular.="<p align=\"center\">"._("Geben Sie hier Ihren Kommentar ein!")."</p>";
-						$formular.="<div align=\"center\">";
-						$formular.="<textarea name=\"comment_content\" style=\"width:70%\" rows=8 cols=38 wrap=virtual></textarea>";
-						$formular.="<br><br>";
-						$formular.="<input type=\"image\" ".makeButton("absenden","src").">";
-
-						if (get_config("EXTERNAL_HELP")) {
-							$help_url=format_help_url("Basis.VerschiedenesFormat");
-						} else {
-							$help_url="help/index.php?help_page=ix_forum6.htm";
-						}
-						$formular.="&nbsp;&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;<a href=\"".$help_url."\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br><br>";
-						$formular.="</div></form><p>&nbsp;</p>";
-						$content.=$formular;
-					} else {
-						$cmdline = "<p align=center><font size=-1><a href=".$PHP_SELF."?comopen=".$news_detail['news_id'].$unamelink."#anker>"
-									.sprintf(_("Kommentare lesen (%s) / Kommentar schreiben"), $numcomments)."</a></font></p>";
-						$content .= $cmdline;
-					}
-				}
-
-				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
-				printcontent(0,0, $content, $edit);
-				echo "</tr></table>";
-			}
-	  	}
 	}
 	echo "</td></tr></table>";
 
@@ -318,7 +195,7 @@ function show_rss_news($range_id, $type){
 	}
 	$title = htmlspecialchars($title);
 	$RssChannelDesc = htmlspecialchars($RssChannelDesc);
-	
+
 	foreach(StudipNews::GetNewsByRange($range_id, true) as  $news_id => $details) {
 		list ($body,$admin_msg) = explode("<admin_msg>",$details["body"]);
 		$items .= "<item>
@@ -349,4 +226,166 @@ function show_rss_news($range_id, $type){
     echo "</channel>\n</rss>";
 	return true;
 }
-?>
+
+
+function show_news_item($news_item, $cmd_data, $show_admin) {
+
+  global $auth, $_fullname_sql;
+
+  $db2 = new DB_Seminar();
+
+  $id = $news_item['news_id'];
+
+  ob_start();
+
+  $tmp_titel=htmlReady(mila($news_item['topic']));
+  $titel='';
+
+  if ($news_item['open']) {
+  	$link = "?nclose=true";
+
+  	if ($cmd_data['comopen'] != $id)
+  	  $titel = $tmp_titel."<a name=\"anker\"> </a>";
+  	else
+  	  $titel = $tmp_titel;
+
+  	if ($news_item['user_id'] != $auth->auth["uid"])
+  	  object_add_view($id);  //Counter for news - not my own
+
+  	object_set_visit($id, "news"); //and, set a visittime
+  } else {
+  	$link = "?nopen=".$id;
+  	$titel=$tmp_titel;
+  }
+
+
+  $db2->query("SELECT username, " . $_fullname_sql['full'] ." AS fullname FROM auth_user_md5 a LEFT JOIN user_info USING (user_id) WHERE a.user_id='".$news_item['user_id']."'");
+  $db2->next_record();
+
+  $link .= "&username=".$db2->f("username") . "#anker";
+  $zusatz="<a href=\"about.php?username=".$db2->f("username")."\"><font size=-1 color=\"#333399\">".htmlReady($db2->f("fullname"))."</font></a><font size=-1>&nbsp;".date("d.m.Y",$news_item['date'])." | <font color=\"#005500\">".object_return_views($id)."<font color=\"black\"> |</font>";
+
+  $unamelink = '&username='.$db2->f('username');
+  $uname = $db2->f('username');
+
+  if ($news_item['allow_comments'] == 1) {
+  	$numcomments = StudipComments::NumCommentsForObject($id);
+  	$numnewcomments = StudipComments::NumCommentsForObjectSinceLastVisit($id, object_get_visit($id,'news',false,false), $auth->auth['uid']);
+  	$zusatz .= " <font ".($numnewcomments ? tooltip(sprintf(_("%s neue(r) Kommentar(e)"),$numnewcomments),false) : '')." color=\"".($numnewcomments ? 'red' : '#aaaa66')."\">".$numcomments."</font><font color=\"black\"> |</font>";
+  }
+
+  $open_or_close = $news_item['open'] ? 'close' : 'open';
+  $ajax = PrototypeHelper::remote_function(
+    array('url' => 'dispatch.php/news/'.$open_or_close.'/'.$id));
+  $link .= '" onClick="' . $ajax . ';return false;';
+
+  if ($link)
+    $titel = "<a href=\"$link\" class=\"tree\" >".$titel."</a>";
+
+  $tempnew = (($news_item['chdate'] >= object_get_visit($id,'news',false,false))
+             && ($news_item['user_id'] != $auth->auth["uid"]));
+  echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
+
+  $icon="&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/news-icon.gif\" border=0>";
+
+  if ($news_item['open'])
+    printhead(0, 0, $link, "open", $tempnew, $icon, $titel, $zusatz, $news_item['date']);
+  else
+    printhead(0, 0, $link, "close", $tempnew, $icon, $titel, $zusatz, $news_item['date']);
+
+  echo "</tr></table>	";
+
+  if ($news_item['open']) {
+
+  	list($content, $admin_msg) = explode("<admin_msg>", $news_item['body']);
+  	$content = formatReady($content);
+
+  	if ($news_item['chdate_uid']){
+  		$admin_msg = StudipNews::GetAdminMsg($news_item['chdate_uid'], $news_item['chdate']);
+  	}
+
+  	if ($admin_msg) {
+  		$content.="<br><br><i>".htmlReady($admin_msg)."</i>";
+  	}
+
+  	if (!$content)
+  	  $content=_("Keine Beschreibung vorhanden.") . "\n";
+  	else
+  	  $content.="<br>";
+
+  	if ($auth->auth["uid"] == $news_item['user_id'] || $show_admin) {
+  		$edit="<a href=\"admin_news.php?cmd=edit&edit_news=".$id."&$admin_link\">" . makeButton("bearbeiten") . "</a>";
+  		$edit.="&nbsp;<a href=\"?touch_news=".$id."#anker\">" . makeButton("aktualisieren") . "</a>";
+  		$edit.="&nbsp;<a href=\"admin_news.php?cmd=kill&kill_news=".$id."&$admin_link\">" . makeButton("loeschen") . "</a>";
+  	}
+
+  	//
+  	// Kommentare
+  	//
+  	if ($news_item['allow_comments'] == 1) {
+  		$showcomments = 0;
+  		if ($cmd_data["comsubmit"] == $id) {
+  			if (trim($_REQUEST['comment_content'])) {
+  				$comment = new StudipComments();
+  				$comment->setValue('object_id', $id);
+  				$comment->setValue('user_id', $auth->auth['uid']);
+  				$comment->setValue('content', stripslashes(trim($_REQUEST['comment_content'])));
+  				$comment->store();
+  			}
+  			$showcomments = 1;
+  		} else if ($cmd_data["comdelnews"] == $id) {
+  			delete_comment($cmd_data["comdel"]);
+  			$showcomments = 1;
+  		}
+
+  		if ($showcomments || $cmd_data["comopen"] == $id) {
+  			$comments = "\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"90%\" align=\"center\" style=\"margin-top:10px\">";
+  			$comments .= "<tr align=center><td><font size=-1><b>"._("Kommentare")."<b></font><a name=\"anker\"> </a></td></tr>";
+  			$c=StudipComments::GetCommentsForObject($id);
+  			if (count($c)) {
+  				$num = 0;
+  				foreach ($c as $comment) {
+  					$comments.="<tr><td>";
+  					if ($show_admin) {
+  						$dellink = "?comdel=".$comment[4]."&comdelnews=".$id."#anker";
+  					} else {
+  						$dellink = NULL;
+  					}
+
+  					$comments .= commentbox(++$num, $comment[1], $comment[2], $comment[3], $dellink, $comment[0]);
+  					$comments .= "</td></tr>";
+  				}
+  			}
+  			$comments .= "</table>";
+  			$content  .= $comments;
+  			$formular="&nbsp;<br>\n<form action=\"#anker\" method=\"POST\">";
+  			$formular.="<input type=hidden name=\"comsubmit\" value=\"".$id."\">";
+  			$formular.="<input type=hidden name=\"username\" value=\"$uname\">";
+  			$formular.="<p align=\"center\">"._("Geben Sie hier Ihren Kommentar ein!")."</p>";
+  			$formular.="<div align=\"center\">";
+  			$formular.="<textarea name=\"comment_content\" style=\"width:70%\" rows=8 cols=38 wrap=virtual></textarea>";
+  			$formular.="<br><br>";
+  			$formular.="<input type=\"image\" ".makeButton("absenden","src").">";
+
+  			if (get_config("EXTERNAL_HELP")) {
+  				$help_url=format_help_url("Basis.VerschiedenesFormat");
+  			} else {
+  				$help_url="help/index.php?help_page=ix_forum6.htm";
+  			}
+  			$formular.="&nbsp;&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;<a href=\"".$help_url."\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br><br>";
+  			$formular.="</div></form><p>&nbsp;</p>";
+  			$content.=$formular;
+  		} else {
+  			$cmdline = "<p align=center><font size=-1><a href=\"?comopen=".$id.$unamelink."#anker\">"
+  						.sprintf(_("Kommentare lesen (%s) / Kommentar schreiben"), $numcomments)."</a></font></p>";
+  			$content .= $cmdline;
+  		}
+  	}
+
+  	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
+  	printcontent(0,0, $content, $edit);
+  	echo "</tr></table>";
+  }
+
+  return ob_get_clean();
+}
