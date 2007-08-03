@@ -19,7 +19,7 @@
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: dispatcher.php 6021 2007-06-28 08:52:03Z mlunzena $
+ * @version   $Id: dispatcher.php 6141 2007-08-03 09:52:39Z mlunzena $
  */
 
 class Trails_Dispatcher {
@@ -120,25 +120,6 @@ class Trails_Dispatcher {
     <h1>Controller missing</h1>
     <pre><? var_dump($request) ?></pre>
     <pre><? var_dump(debug_backtrace()) ?></pre>
-    <?
-    exit;
-  }
-
-
-  /**
-   * <MethodDescription>
-   *
-   * @param array ToDo
-   *
-   * @return void
-   */
-  function method_missing($request, $action, $args) {
-    header('HTTP/1.0 404 Not Found');
-    ?>
-    <h1>Method missing</h1>
-    <pre><? var_dump($request) ?></pre>
-    <pre><? var_dump($action) ?></pre>
-    <pre><? var_dump($args) ?></pre>
     <?
     exit;
   }

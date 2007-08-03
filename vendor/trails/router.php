@@ -19,7 +19,7 @@
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: router.php 5799 2007-05-29 10:46:49Z mlunzena $
+ * @version   $Id: router.php 6141 2007-08-03 09:52:39Z mlunzena $
  */
 
 class Trails_Router {

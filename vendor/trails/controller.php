@@ -19,7 +19,7 @@
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: controller.php 6028 2007-06-28 09:15:55Z mlunzena $
+ * @version   $Id: controller.php 6141 2007-08-03 09:52:39Z mlunzena $
  */
 
 class Trails_Controller {
@@ -114,11 +114,9 @@ class Trails_Controller {
 
       # is action callable?
       if (!method_exists($this, $mapped_action))
-        # TODO (mlunzena) should not the user provide a method missing action?
-        Trails_Dispatcher::method_missing($this, $action, $args);
-
-
-      call_user_func_array(array(&$this, $mapped_action), $args);
+        $this->does_not_understand($action, $args);
+      else
+        call_user_func_array(array(&$this, $mapped_action), $args);
 
       if (!$this->has_performed())
         $this->render_action($action);
@@ -241,7 +239,7 @@ class Trails_Controller {
 
     # set layout
     if (isset($layout))
-      $template->set_layout('layouts' . DIRECTORY_SEPARATOR . $layout);
+      $template->set_layout($layout);
 
     $this->render_text($template->render());
   }
@@ -287,5 +285,62 @@ class Trails_Controller {
     return preg_match('#^[a-z]+://#', $to)
            ? $to
            : $base . '/' . $to;
+  }
+
+
+  # TODO (mlunzena) das darf nur einmal aufgerufen werden..
+  function set_status($status) {
+    header(sprintf('HTTP/1.0 %d %s',
+                   $status, $this->get_reason_phrase($status)),
+           TRUE, $status);
+  }
+
+
+  /**
+   * Returns the reason phrase of this response according to RFC2616.
+   *
+   * @param int      the response's status
+   *
+   * @return string  the reason phrase for this response's status
+   */
+  function get_reason_phrase($status) {
+    $reason = array(
+      100 => 'Continue', 'Switching Protocols',
+      200 => 'OK', 'Created', 'Accepted', 'Non-Authoritative Information',
+             'No Content', 'Reset Content', 'Partial Content',
+      300 => 'Multiple Choices', 'Moved Permanently', 'Found', 'See Other',
+             'Not Modified', 'Use Proxy', '(Unused)', 'Temporary Redirect',
+      400 => 'Bad Request', 'Unauthorized', 'Payment Required','Forbidden',
+             'Not Found', 'Method Not Allowed', 'Not Acceptable',
+             'Proxy Authentication Required', 'Request Timeout', 'Conflict',
+             'Gone', 'Length Required', 'Precondition Failed',
+             'Request Entity Too Large', 'Request-URI Too Long',
+             'Unsupported Media Type', 'Requested Range Not Satisfiable',
+             'Expectation Failed',
+      500 => 'Internal Server Error', 'Not Implemented', 'Bad Gateway',
+             'Service Unavailable', 'Gateway Timeout',
+             'HTTP Version Not Supported');
+
+    return isset($reason[$status]) ? $reason[$status] : '';
+  }
+
+
+  /**
+   * <MethodDescription>
+   *
+   * @param type <description>
+   * @param type <description>
+   *
+   * @return void
+   */
+  function does_not_understand($action, $args) {
+    header('HTTP/1.0 404 Not Found');
+    ?>
+    <h1>Action missing</h1>
+    <pre><? var_dump($action) ?></pre>
+    <pre><? var_dump($args) ?></pre>
+    <pre><? var_dump($this) ?></pre>
+    <?
+    exit;
   }
 }

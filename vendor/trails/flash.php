@@ -27,7 +27,7 @@
  * @author    mlunzena
  * @author    Ruby-On-Rails-Team <http://www.rubyonrails.org/core>
  * @copyright (c) Authors
- * @version   $Id: flash.php 6020 2007-06-28 08:49:59Z mlunzena $
+ * @version   $Id: flash.php 6141 2007-08-03 09:52:39Z mlunzena $
  */
 
 class Trails_Flash {

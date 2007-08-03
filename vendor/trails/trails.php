@@ -11,7 +11,7 @@
  * the License, or (at your option) any later version.
  */
 
-define('TRAILS_VERSION', '0.2.1');
+define('TRAILS_VERSION', '0.2.2');
 
 /**
  * Bootstrapping file for trails. Just include this to get going.
