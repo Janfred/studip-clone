@@ -84,7 +84,7 @@ function getToplist($rubrik, $query, $type="count") {
 	global $PHP_SELF;
 	$result .= "<table cellpadding=\"0\" cellspacing=\"2\" border=\"0\">";
 	$db=new DB_Seminar;
-	$db->query($query);
+	$db->cache_query($query);
 	if  ($db->affected_rows() > 0) {
 		$result .= "<tr><td colspan=\"2\"><font size=\"-1\"><b>$rubrik</b></font></td></tr>";
 		$i=1;

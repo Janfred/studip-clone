@@ -103,7 +103,7 @@ class SemesterData {
 		// alle Semester holen
 		$i=0;
 		$sql = "SELECT * FROM semester_data order by beginn";
-		if  (!$this->db->query($sql)) {
+		if  (!$this->db->cache_query($sql)) {
 			echo "Error! query not succeeded";
 			return 0;
 		}
@@ -129,7 +129,7 @@ class SemesterData {
 	function getSemesterData($semester_id) {
 		// ein bestimmtes Semester holen
 		$sql = "SELECT * FROM semester_data WHERE semester_id='".$semester_id."'";
-		if  (!$this->db->query($sql)) {
+		if  (!$this->db->cache_query($sql)) {
 			echo "Error! query not succeeded";
 			return 0;
 		}

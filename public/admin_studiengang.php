@@ -171,7 +171,7 @@ while ( is_array($_POST)
 
 if ($i_view) {
 	if ($i_view <> "new") {
-		$db->query("SELECT studiengaenge.*, count(admission_seminar_studiengang.seminar_id) AS number FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) WHERE studiengaenge.studiengang_id = '$i_view' GROUP BY studiengang_id");
+		$db->cache_query("SELECT studiengaenge.*, count(admission_seminar_studiengang.seminar_id) AS number FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) WHERE studiengaenge.studiengang_id = '$i_view' GROUP BY studiengang_id");
 		$db->next_record();
 	}
 	$i_id= $db->f("studiengang_id");
@@ -265,8 +265,8 @@ if (!$i_view) {
 	<?  
   
   // Traverse the result set
-  $db->query("SELECT studiengaenge.*, count(admission_seminar_studiengang.seminar_id) AS count_sem FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) GROUP BY studiengang_id ORDER BY name");
-  $db2->query("SELECT studiengaenge.*, count(user_studiengang.studiengang_id) AS count_user FROM studiengaenge LEFT JOIN user_studiengang USING(studiengang_id) GROUP BY studiengang_id ORDER BY name");
+  $db->cache_query("SELECT studiengaenge.*, count(admission_seminar_studiengang.seminar_id) AS count_sem FROM studiengaenge LEFT JOIN admission_seminar_studiengang USING(studiengang_id) GROUP BY studiengang_id ORDER BY name");
+  $db2->cache_query("SELECT studiengaenge.*, count(user_studiengang.studiengang_id) AS count_user FROM studiengaenge LEFT JOIN user_studiengang USING(studiengang_id) GROUP BY studiengang_id ORDER BY name");
   while ($db->next_record() && $db2->next_record()) {        //Aufbauen der &Uuml;bersichtstabelle
 		$cssSw->switchClass(); 
 		print("<tr valign=\"middle\" align=\"left\">");

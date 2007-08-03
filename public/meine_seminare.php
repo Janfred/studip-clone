@@ -771,11 +771,11 @@ if ( !$perm->have_perm("root")) {
 
 	// Berechnung der uebrigen Seminare und Einrichtungen
 
-	$db->query("SELECT count(*) as count  FROM Institute");
+	$db->cache_query("SELECT count(*) as count  FROM Institute");
 	$db->next_record();
 	$anzahlinst = $db->f("count")-$num_my_inst;
 
-	$db->query("SELECT count(*) as count  FROM seminare");
+	$db->cache_query("SELECT count(*) as count  FROM seminare");
 	$db->next_record();
 	$anzahltext = sprintf(_("Es sind noch %s weitere Veranstaltungen sowie %s weitere Einrichtungen vorhanden."), ($db->f("count")-$num_my_sem),$anzahlinst);
 

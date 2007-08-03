@@ -389,7 +389,7 @@ function getMyRoomRequests($user_id = '') {
 							LEFT JOIN seminare s USING(seminar_id)
 							LEFT JOIN termine t ON(s.Seminar_id = t.range_id) GROUP BY request_id");
 							
-		$db->query($query);
+		$db->cache_query($query);
 		while ($db->next_record()) {
 			$requests [$db->f("request_id")] = array("my_sem"=>TRUE, "my_res"=>TRUE, "closed"=>$db->f("closed"));
 			$requests [$db->f("request_id")]["have_times"] = ($db->f("termin_id") || ($db->f("anzahl_termine")));
@@ -418,7 +418,7 @@ function getMyRoomRequests($user_id = '') {
 								INNER JOIN seminare s USING(seminar_id)
 								LEFT JOIN termine t ON(s.Seminar_id = t.range_id)  WHERE rr.resource_id IN %s GROUP BY request_id", $in_resource_id);
 
-			$db2->query($query_res);
+			$db2->cache_query($query_res);
 			while ($db2->next_record()) {
 				$requests [$db2->f("request_id")]["my_res"] = TRUE;
 				$requests [$db2->f("request_id")]["closed"] = $db2->f("closed");
@@ -432,7 +432,7 @@ function getMyRoomRequests($user_id = '') {
 								FROM resources_requests rr
 								INNER JOIN seminare s USING(seminar_id)
 								LEFT JOIN termine t ON(s.Seminar_id = t.range_id)  WHERE rr.seminar_id IN %s GROUP BY request_id", $in_seminar_id);
-			$db->query($query_sem);
+			$db->cache_query($query_sem);
 			while ($db->next_record()) {
 				$requests [$db->f("request_id")]["my_sem"] = TRUE;
 				$requests [$db->f("request_id")]["closed"] = $db->f("closed");

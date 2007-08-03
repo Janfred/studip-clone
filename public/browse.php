@@ -137,7 +137,7 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
  	<?
 	$db2=new DB_Seminar;
 	if ($perm->have_perm("admin"))
-		$db2->query("SELECT * FROM seminare ORDER BY Name");
+		$db2->cache_query("SELECT * FROM seminare ORDER BY Name");
 	else {
 		if ($AUTO_INSERT_SEM) {
 			$templist = "'" . implode ("', '", $AUTO_INSERT_SEM) . "'";

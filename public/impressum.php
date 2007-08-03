@@ -62,7 +62,7 @@ function write_toplist_person($rubrik,$query) {
 	global $PHP_SELF;
 
 	$db=new DB_Seminar;
-	$db->query($query);
+	$db->cache_query($query);
 	$tmp_link="$PHP_SELF?view=statistik";
 	if  ($db->affected_rows() > 0) {
 		echo "<tr><td class=links1>&nbsp; $rubrik</td></tr><tr><td class=steel1><ol type='1' start='1'>";
@@ -240,13 +240,13 @@ if ($view=="statistik") {?>
 			$db=new DB_Seminar;
 			$cssSw=new cssClassSwitcher;
 
-			$db->query("SELECT count(*) from seminare");
+			$db->cache_query("SELECT count(*) from seminare");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Aktive Veranstaltungen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from archiv");
+			$db->cache_query("SELECT count(*) from archiv");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" nowrap>" . _("Archivierte Veranstaltungen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
@@ -255,13 +255,13 @@ if ($view=="statistik") {?>
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) FROM Institute WHERE Institut_id != fakultaets_id");
+			$db->cache_query("SELECT count(*) FROM Institute WHERE Institut_id != fakultaets_id");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("beteiligte Einrichtungen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) FROM Institute WHERE Institut_id = fakultaets_id");
+			$db->cache_query("SELECT count(*) FROM Institute WHERE Institut_id = fakultaets_id");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("beteiligte Fakult&auml;ten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
@@ -270,25 +270,25 @@ if ($view=="statistik") {?>
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from auth_user_md5 WHERE perms='admin'");
+			$db->cache_query("SELECT count(*) from auth_user_md5 WHERE perms='admin'");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("registrierte Administratoren:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from auth_user_md5 WHERE perms='dozent'");
+			$db->cache_query("SELECT count(*) from auth_user_md5 WHERE perms='dozent'");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("registrierte Dozenten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from auth_user_md5 WHERE perms='tutor'");
+			$db->cache_query("SELECT count(*) from auth_user_md5 WHERE perms='tutor'");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("registrierte Tutoren:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from auth_user_md5 WHERE perms='autor'");
+			$db->cache_query("SELECT count(*) from auth_user_md5 WHERE perms='autor'");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("registrierte Studierende:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
@@ -297,62 +297,62 @@ if ($view=="statistik") {?>
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" colspan=2>&nbsp; </td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from px_topics");
+			$db->cache_query("SELECT count(*) from px_topics");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" >" . _("Postings:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from dokumente WHERE url = ''");
+			$db->cache_query("SELECT count(*) from dokumente WHERE url = ''");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Dateien:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from dokumente WHERE url != ''");
+			$db->cache_query("SELECT count(*) from dokumente WHERE url != ''");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("verlinkte Dateien:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from lit_list");
+			$db->cache_query("SELECT count(*) from lit_list");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\" >" . _("Literaturlisten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from termine");
+			$db->cache_query("SELECT count(*) from termine");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Termine:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from news");
+			$db->cache_query("SELECT count(*) from news");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("News:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			$cssSw->switchClass();
-			$db->query("SELECT count(*) from user_info WHERE guestbook='1'");
+			$db->cache_query("SELECT count(*) from user_info WHERE guestbook='1'");
 			$db->next_record();
 			$anzahl = $db->f(0);
 			echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Gästebücher:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 			if ($GLOBALS['VOTE_ENABLE']) {
 				$cssSw->switchClass();
-				$db->query("SELECT count(*) from vote WHERE type='vote'");
+				$db->cache_query("SELECT count(*) from vote WHERE type='vote'");
 				$db->next_record();
 				$anzahl = $db->f(0);
 				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Umfragen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 				$cssSw->switchClass();
-				$db->query("SELECT count(*) from vote WHERE type='test'");
+				$db->cache_query("SELECT count(*) from vote WHERE type='test'");
 				$db->next_record();
 				$anzahl = $db->f(0);
 				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Tests:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 
 				$cssSw->switchClass();
-				$db->query("SELECT count(*) from eval");
+				$db->cache_query("SELECT count(*) from eval");
 				$db->next_record();
 				$anzahl = $db->f(0);
 				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Evaluationen:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
@@ -360,7 +360,7 @@ if ($view=="statistik") {?>
 
 			if ($GLOBALS['WIKI_ENABLE']) {
 				$cssSw->switchClass();
-				$db->query("SELECT COUNT(DISTINCT keyword) as count from wiki");
+				$db->cache_query("SELECT COUNT(DISTINCT keyword) as count from wiki");
 				$db->next_record();
 				$anzahl = $db->f(0);
 				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("WikiWeb Seiten:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
@@ -368,14 +368,14 @@ if ($view=="statistik") {?>
 
 			if ($GLOBALS['ILIAS_CONNECT_ENABLE']){
 				$cssSw->switchClass();
-				$db->query("SELECT COUNT(DISTINCT co_id) as count from seminar_lernmodul");
+				$db->cache_query("SELECT COUNT(DISTINCT co_id) as count from seminar_lernmodul");
 				$db->next_record();
 				$anzahl = $db->f(0);
 				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("ILIAS-Lernmodule:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
 			}
 			if ($RESOURCES_ENABLE) {
 				$cssSw->switchClass();
-				$db->query("SELECT COUNT(*) from resources_objects");
+				$db->cache_query("SELECT COUNT(*) from resources_objects");
 				$db->next_record();
 				$anzahl = $db->f(0);
 				echo "<tr><td class=\"".$cssSw->getClass() ."\">" . _("Ressourcen-Objekte:") . "</td><td class=\"".$cssSw->getClass() ."\" align=right>$anzahl</td></tr>";
