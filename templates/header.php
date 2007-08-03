@@ -54,6 +54,21 @@
 		</li>
 	</ul>
 </div>
+<!-- AJAX indicator -->
+<div id="barTopAJAXIndicatorNKW" style="display:none;">
+	<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ajax_indicator.gif" alt="AJAX indicator">
+	<script type="text/javascript" language="javascript">
+	// <![CDATA[
+	Event.observe(window, 'load', function() {
+		var indicator = $('barTopAJAXIndicatorNKW');
+		Ajax.Responders.register({
+			onCreate:   function() { indicator.show(); },
+			onComplete: function() { indicator.hide(); }
+		});
+	});
+	// ]]>
+	</script>
+</div>
 <!-- Stud.IP Logo -->
 <div id="barTopStudipNKW">
 	<a href="http://www.studip.de/" title="Studip Homepage">
@@ -64,13 +79,13 @@
   <img src="<?=$GLOBALS['ASSETS_URL']?>images/studipdot.gif">
 </div>
 <!-- Leiste unten -->
-<div id="barBottomLeftNKW">&nbsp; 
+<div id="barBottomLeftNKW">&nbsp;
 	<?=($current_page != "" ? _("Aktuelle Seite:") : "")?>
-	&nbsp; 
+	&nbsp;
 </div>
-<div id="barBottommiddleNKW">&nbsp; 
+<div id="barBottommiddleNKW">&nbsp;
 	<?=($current_page != "" ? htmlReady($current_page) : "")?>
-	&nbsp; 
+	&nbsp;
 </div>
 <!-- Dynamische Links ohne Icons -->
 <div id="barBottomrightNKW">
@@ -83,7 +98,7 @@
 				 }
 				 ?>
 				 <li>
-				 <a <?=tooltip($item['info'] . ($item['accesskey'] ? "  [ALT] + $accesskey" : ""), false)?> 
+				 <a <?=tooltip($item['info'] . ($item['accesskey'] ? "  [ALT] + $accesskey" : ""), false)?>
 				 	href="<?=$item['link']?>" <?=($item['target'] ? "target=\"{$item['target']}\"" : "")?>
 					 <?=($item['accesskey'] ? 'accesskey="' . $accesskey . '"' : '')?>>
 				 <?=htmlReady($item['text'])?>

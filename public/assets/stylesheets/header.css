@@ -59,7 +59,7 @@ div#barBottomrightNKW a {
 	padding-bottom: 0.19em;
 }
 div#barBottomrightNKW a:hover {
-	color: #FFF; 
+	color: #FFF;
     background-image: url('../images/fill1.gif');
 }
 
@@ -91,7 +91,7 @@ div#barTopToolsNKW a {
 	padding-right: 6px;
 }
 div#barTopToolsNKW a:hover {
-	color: #FFF; 
+	color: #FFF;
     background-image: url('../images/fill1.gif');
 }
 div#barTopToolsNKW {
@@ -99,6 +99,13 @@ div#barTopToolsNKW {
 	top: 2px;
 	right: 2px;
 	text-align: right;
+}
+
+div#barTopAJAXIndicatorNKW {
+	position: absolute;
+	top: 50px;
+	right: 156px;
+	padding-right: 2em;
 }
 
 div#barTopStudipNKW {
