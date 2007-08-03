@@ -242,8 +242,8 @@ function localePictureUrl($filename) {
 }
 
 function localeUrl($filename, $category) {
-  return sprintf('%slocale/%s/%s/%s',
-                 $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'],
+  return sprintf('%simages/locale/%s/%s/%s',
+                 $GLOBALS['ASSETS_URL'],
                  $GLOBALS['_language_path'],
                  $category,
                  $filename);
