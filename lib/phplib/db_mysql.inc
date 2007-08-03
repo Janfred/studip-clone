@@ -398,11 +398,12 @@ class DB_Sql {
     // do something
     return $this->query(vsprintf($format, $args));
   } 
-  }
 
   /* public: perform a query with caching directive for mysql*/
   function cache_query($Query_String)
   {
    return $this->query(preg_replace("/^select\b/i", "SELECT SQL_CACHE", $Query_String));
   }
+}
+
 ?>
