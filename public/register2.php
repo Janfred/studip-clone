@@ -46,7 +46,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.AnmeldungRegistrierung";
-
+$CURRENT_PAGE = _("Registrierung erfolgreich");
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head

@@ -576,13 +576,41 @@ class Seminar_Register_Auth extends Seminar_Auth {
 	var $error_msg = ""; // Was läuft falsch bei der Registrierung ?
 
 	function auth_registerform() {
-		global $sess;
-		global $challenge;
-
-		$challenge = md5(uniqid($this->magic));
-		$sess->register("challenge");
-
-		include('lib/include/crcregister.ihtml');
+		
+		require_once('lib/language.inc.php');
+		require_once('lib/visual.inc.php');
+		require_once('config.inc.php');
+		require_once('lib/classes/HeaderController.class.php');
+		global $_language, $_language_path;
+		// first of all init I18N because seminar_open is not called here...
+		if (!isset($_language)) {
+			$_language = get_accepted_languages();
+		}
+		$_language_path = init_i18n($_language);
+		if (!$_COOKIE[$GLOBALS['sess']->name]){
+			$register_template =& $GLOBALS['template_factory']->open('nocookies');
+		} else {
+			$register_template =& $GLOBALS['template_factory']->open('registerform');
+			$register_template->set_attribute('validator',  new email_validation_class());
+			$register_template->set_attribute('error_msg', $this->error_msg);
+			$register_template->set_attribute('username', $_POST['username']);
+			$register_template->set_attribute('Vorname', $_POST['Vorname']);
+			$register_template->set_attribute('Nachname', $_POST['Nachname']);
+			$register_template->set_attribute('Email', $_POST['Email']);
+			$register_template->set_attribute('title_front', $_POST['title_front']);
+			$register_template->set_attribute('title_rear', $_POST['title_rear']);
+			$register_template->set_attribute('geschlecht', $_POST['geschlecht']);
+		}
+		$header_controller = new HeaderController();
+		$header_controller->help_keyword = 'Basis.AnmeldungRegistrierung';
+		$header_controller->current_page = _("Registrierung");
+		$header_template =& $GLOBALS['template_factory']->open('header');
+		$header_controller->fillTemplate($header_template);
+		
+		include 'lib/include/html_head.inc.php';
+		echo $header_template->render();
+		echo $register_template->render();
+		include 'lib/include/html_end.inc.php';
 	}
 
 	function auth_doregister() {
@@ -604,7 +632,10 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$validator=new email_validation_class;	// Klasse zum Ueberpruefen der Eingaben
 		$validator->timeout=10;									// Wie lange warten wir auf eine Antwort des Mailservers?
 
-
+		if (!Seminar_Session::check_ticket($_REQUEST['login_ticket'])){
+			return false;
+		}
+		
 		$username = trim($username);
 		$Vorname = trim($Vorname);
 		$Nachname = trim($Nachname);

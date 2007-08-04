@@ -55,7 +55,7 @@ function check_terms($userid, $_language_path) {
 		<li><?=_("die M&ouml;glichkeit anderen TeilnehmerInnen Nachrichten zu schicken oder mit ihnen zu chatten,")?>
 		<li><?=_("und vieles mehr.")?></li></blockquote><br>
 		<?=_("Mit der Anmeldung werden die nachfolgenden Nutzungsbedingungen akzeptiert:")?><br><br>
-		<? include("./locale/$_language_path/LC_HELP/pages/nutzung.html"); ?>
+		<? include("locale/$_language_path/LC_HELP/pages/nutzung.html"); ?>
 		<center><a href="index.php?i_accept_the_terms=yes"><b><?=_("Ich erkenne die Nutzungsbedingungen an")?></b></a></center>
 		<br/>
 		</blockquote>

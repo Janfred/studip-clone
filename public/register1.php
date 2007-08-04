@@ -25,7 +25,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.AnmeldungRegistrierung";
-
+$CURRENT_PAGE = _("Nutzungsbedingungen");
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -67,7 +67,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 <?=_("Mit der Anmeldung werden die nachfolgenden Nutzungsbedingungen akzeptiert:")?><br><br>
 
 <?
-include("./locale/$_language_path/LC_HELP/pages/nutzung.html");
+include("locale/$_language_path/LC_HELP/pages/nutzung.html");
 ?>
 
 <a href="register2.php"><b><?=_("Ich erkenne die Nutzungsbedingungen an")?></b></a><br>
