@@ -5,8 +5,8 @@
 #  extract all Stud.IP message strings and merge them with the existing translations
 #
 
-LOCALE_RELATIVE_PATH="../public/locale"
-TRANSLATIONFILES_RELAVITVE_PATHS="../public ../lib ../config ../cli"
+LOCALE_RELATIVE_PATH="."
+TRANSLATIONFILES_RELAVITVE_PATHS="../public ../lib ../config ../cli ../template"
 
 for language in en
 do

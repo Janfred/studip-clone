@@ -227,7 +227,7 @@ function setLocaleEnv($language, $language_domain = ''){
 	$ret = setlocale(LC_ALL, '');
 	setlocale(LC_NUMERIC, 'C');
 	if($language_domain){
-		bindtextdomain($language_domain, "locale");
+		bindtextdomain($language_domain, $GLOBALS['STUDIP_BASE_PATH'] . "/locale");
 		textdomain($language_domain);
 	}
 	return $ret;

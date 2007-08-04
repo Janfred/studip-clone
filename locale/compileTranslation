@@ -5,7 +5,7 @@
 #  convert all Stud.IP message strings into a binary format
 #
 
-LOCALE_RELATIVE_PATH="../public/locale"
+LOCALE_RELATIVE_PATH="."
 
 for language in en
 do
