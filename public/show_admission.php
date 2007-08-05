@@ -28,6 +28,7 @@ $hash_secret = "trubatik";
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
+$CURRENT_PAGE = _("Teilnehmerbeschränkte Veranstaltungen");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -51,9 +52,11 @@ if(isset($_REQUEST['choose_institut_x'])){
 	$_SESSION['show_admission']['check_admission'] = isset($_REQUEST['check_admission']);
 	$_SESSION['show_admission']['check_prelim'] = isset($_REQUEST['check_prelim']);
 }
+/*
 if(!$_SESSION['show_admission']['check_admission'] && !$_SESSION['show_admission']['check_prelim']){
 	$_SESSION['show_admission']['check_admission'] = true;
 }
+*/
 if ($_default_sem){
 	$semester =& SemesterData::GetInstance();
 	$one_semester = $semester->getSemesterData($_default_sem);
@@ -62,7 +65,7 @@ if ($_default_sem){
 	}
 }
 if($_SESSION['show_admission']['check_admission']) $admission_condition[] = "admission_type > 0";
-else $admission_condition[] = "admission_type = 0";
+//else $admission_condition[] = "admission_type = 0";
 if($_SESSION['show_admission']['check_prelim']) $admission_condition[] = "admission_prelim = 1";
 else $admission_condition[] = "admission_prelim <> 1";
 $seminare_condition = "AND (" . join(" AND ", $admission_condition) . ") " .  $sem_condition;
@@ -115,18 +118,11 @@ if(isset($_REQUEST['group_sem_x']) && count($_REQUEST['gruppe']) > 1){
 
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-	<tr>
-		<td class="topic">&nbsp;<b>
-		<?
-		echo _("Teilnehmerbeschr&auml;nkte Veranstaltungen");
-		?></b>
-		</td>
-	</tr>
 <?
 if(is_object($group_obj)){
 	?>
 	<tr>
-		<form action="<?=$PHP_SELF?>" method="post">
+		<form action="<?=$PHP_SELF?>" name="Formular" method="post">
 		<td class="blank" width="100%">
 		<div class="steel1" style="margin:10px;padding:5px;border: 1px solid;">
 		<div style="font-weight:bold;"><?=_("Gruppierte Veranstaltungen bearbeiten")?></div>
@@ -140,9 +136,12 @@ if(is_object($group_obj)){
 			<li><?=htmlReady($member->getName())?></li>
 		<?}?>
 		</ol>
+		<ul style="list-style: none; margin:0px;padding:0px;">
+		<li style="margin-top:5px;">
 		<span style="display:block;float:left;width:200px;"><?=_("Name der Gruppe (optional):")?></span>
-		<input type="text" name="admission_group_name" value="<?=htmlReady($group_obj->getValue('name'))?>" size="80" style="vertical-align:middle">
-		<br>
+		<input type="text" name="admission_group_name" value="<?=htmlReady($group_obj->getValue('name'))?>" size="80" >
+		</li>
+		<li style="margin-top:5px;">
 		<span style="display:block;float:left;width:200px;"><?=_("Typ der Gruppe:")?></span>
 		<input style="vertical-align:top" type="radio" name="admission_group_status" <?=($group_obj->getValue('status') == 0 ? 'checked' : '')?> value="0">
 		&nbsp;
@@ -151,7 +150,8 @@ if(is_object($group_obj)){
 		<input style="vertical-align:top" type="radio" name="admission_group_status" <?=($group_obj->getValue('status') == 1 ? 'checked' : '')?> value="1">
 		&nbsp;
 		<?=_("Eintrag nur in einer Veranstaltung")?>
-		<br>
+		</li>
+		<li style="margin-top:5px;">
 		<span style="display:block;float:left;width:200px;"><?=_("Anmeldeverfahren der Gruppe:")?></span>
 		<input style="vertical-align:top" type="radio" name="admission_group_type" <?=($group_obj->getUniqueMemberValue('admission_type') == 2 ? 'checked' : '')?> value="2">
 		&nbsp;
@@ -160,52 +160,82 @@ if(is_object($group_obj)){
 		<input style="vertical-align:top" type="radio" name="admission_group_type" <?=($group_obj->getUniqueMemberValue('admission_type') == 1 ? 'checked' : '')?> value="1">
 		&nbsp;
 		<?=_("Losverfahren")?>
-		<br>
+		</li>
+		<li style="margin-top:5px;">
 		<span style="display:block;float:left;width:200px;"><?=_("Startdatum für Anmeldungen:")?></span>
 		<input style="vertical-align:top" type="checkbox" name="admission_change_starttime" value="1">
 		&nbsp;
 		<?=_("ändern")?>
 		&nbsp;
-		<input type="text" style="vertical-align:middle" name="adm_s_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_start_date"]); else echo _("tt") ?>">.
-		<input type="text" style="vertical-align:middle" name="adm_s_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_start_date"]); else echo _("mm") ?>">.
-		<input type="text" style="vertical-align:middle" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_start_date"]); else echo _("jjjj") ?>">
+		<?
+		$group_admission_start_date = $group_obj->getUniqueMemberValue('admission_starttime');
+		?>
+		<input type="text" style="vertical-align:middle" name="adm_s_tag" size=2 maxlength=2 value="<? if (!is_null($group_admission_start_date)) echo date("d",$group_admission_start_date); else echo _("tt") ?>">.
+		<input type="text" style="vertical-align:middle" name="adm_s_monat" size=2 maxlength=2 value="<? if (!is_null($group_admission_start_date)) echo date("m",$group_admission_start_date); else echo _("mm") ?>">.
+		<input type="text" style="vertical-align:middle" name="adm_s_jahr" size=4 maxlength=4 value="<? if (!is_null($group_admission_start_date)) echo date("Y",$group_admission_start_date); else echo _("jjjj") ?>">
 		<?=_("um");?>
-		&nbsp;<input type="text" style="vertical-align:middle"  name="adm_s_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_start_date"]); else echo "00" ?>">:
-		<input type="text" style="vertical-align:middle"  name="adm_s_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_start_date"]); else  echo "00" ?>">&nbsp;<?=_("Uhr");?>
-		<?=Termin_Eingabe_javascript(20,0,($admin_admission_data["sem_admission_start_date"] != -1 ? $admin_admission_data["sem_admission_start_date"] : 0));?>
-		<br>
+		&nbsp;<input type="text" style="vertical-align:middle"  name="adm_s_stunde" size=2 maxlength=2 value="<? if (!is_null($group_admission_start_date)) echo date("H",$group_admission_start_date); else echo "00" ?>">:
+		<input type="text" style="vertical-align:middle"  name="adm_s_minute" size=2 maxlength=2 value="<? if (!is_null($group_admission_start_date)) echo date("i",$group_admission_start_date); else  echo "00" ?>">&nbsp;<?=_("Uhr");?>
+		<?=Termin_Eingabe_javascript(20,0,(!is_null($group_admission_start_date) ? $group_admission_start_date : 0));
+		echo '&nbsp;(' . _("aktuelle Einstellung:") . '&nbsp;' . (!is_null($group_admission_start_date) ? _("identisches Datum in allen Veranstaltungen") : _("unterschiedliches Datum in allen Veranstaltungen") ) . ')';
+		?>
+		</li>
+		<li style="margin-top:5px;">
 		<span style="display:block;float:left;width:200px;"><?=_("Enddatum für Anmeldungen:")?></span>
 		<input style="vertical-align:top" type="checkbox" name="admission_change_endtime_sem" value="1">
 		&nbsp;
 		<?=_("ändern")?>
 		&nbsp;
-		<input style="vertical-align:middle" type="text" name="adm_s_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_start_date"]); else echo _("tt") ?>">.
-		<input style="vertical-align:middle"  type="text" name="adm_s_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_start_date"]); else echo _("mm") ?>">.
-		<input style="vertical-align:middle" type="text" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_start_date"]); else echo _("jjjj") ?>">
+		<?
+		$group_admission_end_date = $group_obj->getUniqueMemberValue('admission_endtime_sem');
+		?>
+		<input style="vertical-align:middle" type="text" name="adm_e_tag" size=2 maxlength=2 value="<? if (!is_null($group_admission_end_date)) echo date("d",$group_admission_end_date); else echo _("tt") ?>">.
+		<input style="vertical-align:middle"  type="text" name="adm_e_monat" size=2 maxlength=2 value="<? if (!is_null($group_admission_end_date)) echo date("m",$group_admission_end_date); else echo _("mm") ?>">.
+		<input style="vertical-align:middle" type="text" name="adm_e_jahr" size=4 maxlength=4 value="<? if (!is_null($group_admission_end_date)) echo date("Y",$group_admission_end_date); else echo _("jjjj") ?>">
 		<?=_("um");?>
-		&nbsp;<input style="vertical-align:middle" type="text" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_start_date"]); else echo "00" ?>">:
-		<input style="vertical-align:middle" type="text" name="adm_s_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_start_date"]); else  echo "00" ?>">&nbsp;<?=_("Uhr");?>
-		<?=Termin_Eingabe_javascript(20,0,($admin_admission_data["sem_admission_start_date"] != -1 ? $admin_admission_data["sem_admission_start_date"] : 0));?>
-		<br>
+		&nbsp;<input style="vertical-align:middle" type="text" name="adm_e_stunde" size=2 maxlength=2 value="<? if (!is_null($group_admission_end_date)) echo date("H",$group_admission_end_date); else echo "00" ?>">:
+		<input style="vertical-align:middle" type="text" name="adm_e_minute" size=2 maxlength=2 value="<? if (!is_null($group_admission_end_date)) echo date("i",$group_admission_end_date); else  echo "00" ?>">&nbsp;<?=_("Uhr");?>
+		<?=Termin_Eingabe_javascript(21,0,(!is_null($group_admission_end_date) ? $group_admission_end_date : 0));
+		echo '&nbsp;(' . _("aktuelle Einstellung:") . '&nbsp;' . (!is_null($group_admission_end_date) ? _("identisches Datum in allen Veranstaltungen") : _("unterschiedliches Datum in allen Veranstaltungen") ) . ')';
+		?>
+		</li>
+		<li style="margin-top:5px;">
 		<span style="display:block;float:left;width:200px;"><?=_("Ende Kontingente / Losdatum:")?></span>
 		<input style="vertical-align:top" type="checkbox" name="admission_change_endtime" value="1">
 		&nbsp;
 		<?=_("ändern")?>
 		&nbsp;
-		<input type="text" style="vertical-align:middle" name="adm_s_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_start_date"]); else echo _("tt") ?>">.
-		<input type="text" style="vertical-align:middle" name="adm_s_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_start_date"]); else echo _("mm") ?>">.
-		<input type="text" style="vertical-align:middle" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_start_date"]); else echo _("jjjj") ?>">
+		<?
+		$group_admission_end = $group_obj->getUniqueMemberValue('admission_endtime');
+		?>
+		<input type="text" style="vertical-align:middle" name="adm_tag" size=2 maxlength=2 value="<? if (!is_null($group_admission_end)) echo date("d",$group_admission_end); else echo _("tt") ?>">.
+		<input type="text" style="vertical-align:middle" name="adm_monat" size=2 maxlength=2 value="<? if (!is_null($group_admission_end)) echo date("m",$group_admission_end); else echo _("mm") ?>">.
+		<input type="text" style="vertical-align:middle" name="adm_jahr" size=4 maxlength=4 value="<? if (!is_null($group_admission_end)) echo date("Y",$group_admission_end); else echo _("jjjj") ?>">
 		<?=_("um");?>
-		&nbsp;<input type="text" style="vertical-align:middle" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_start_date"]); else echo "00" ?>">:
-		<input type="text" style="vertical-align:middle" name="adm_s_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_start_date"]); else  echo "00" ?>">&nbsp;<?=_("Uhr");?>
-		<?=Termin_Eingabe_javascript(20,0,($admin_admission_data["sem_admission_start_date"] != -1 ? $admin_admission_data["sem_admission_start_date"] : 0));?>
-		<br>
+		&nbsp;<input type="text" style="vertical-align:middle" name="adm_stunde" size=2 maxlength=2 value="<? if (!is_null($group_admission_end)) echo date("H",$group_admission_end); else echo "00" ?>">:
+		<input type="text" style="vertical-align:middle" name="adm_minute" size=2 maxlength=2 value="<? if (!is_null($group_admission_end)) echo date("i",$group_admission_end); else  echo "00" ?>">&nbsp;<?=_("Uhr");?>
+		<?=Termin_Eingabe_javascript(22,0,(!is_null($group_admission_end) ? $group_admission_end : 0));
+		echo '&nbsp;(' . _("aktuelle Einstellung:") . '&nbsp;' . (!is_null($group_admission_end) ? _("identisches Datum in allen Veranstaltungen") : _("unterschiedliches Datum in allen Veranstaltungen") ) . ')';
+		?></li>
+		<li style="margin-top:5px;">
 		<span style="display:block;float:left;width:200px;"><?=_("max. Teilnehmer:")?></span>
 		<input style="vertical-align:top" type="checkbox" name="admission_change_turnout" value="1">
 		&nbsp;
 		<?=_("ändern")?>
 		&nbsp;
-		<input style="vertical-align:middle" type="text" size="3">
+		<input style="vertical-align:middle" type="text" size="3" value="<?=$group_obj->getUniqueMemberValue('admission_turnout')?>">
+		<?
+		echo '&nbsp;(' . _("aktuelle Einstellung:") . '&nbsp;' . (!is_null($group_obj->getUniqueMemberValue('admission_turnout')) ? _("identische Anzahl in allen Veranstaltungen") : _("unterschiedliche Anzahl in allen Veranstaltungen") ) . ')';
+		?>
+		</li>
+		<li style="margin-top:5px;">
+		<span style="padding-left:200px;">
+		<?=makeButton('uebernehmen', 'input', _("Einstellungen übernehmen"), 'admissiongroupchange')?>
+		&nbsp;
+		<?=makeButton('abbrechen', 'input', _("Eingabe abbrechen"), 'admissiongroupcancel')?>
+		</span>
+		</li>
+		</ul>
 		</div>
 		</div>
 	<?
@@ -371,7 +401,6 @@ if(is_object($group_obj)){
 			if($db->f('admission_prelim'))  $status[] = _("vorläufig");
 			echo "<tr>";
 			if ($ALLOW_GROUPING_SEMINARS) {
-				if($db->f('admission_type') > 0){
 					if (!$db->f("admission_group") ) { //wenn keiner Gruppe zugeordnet, dann cechkbox ausgeben
 						printf("<td class=\"%s\" align=\"center\">",$cssSw->getClass());
 						unset($last_group);
@@ -391,9 +420,6 @@ if(is_object($group_obj)){
 							echo '</td>';
 						}
 					}
-				} else {
-					printf("<td class=\"%s\" align=\"center\">&nbsp;</td>",$cssSw->getClass());
-				}
 				
 			}
 			printf ("<td class=\"%s\">
