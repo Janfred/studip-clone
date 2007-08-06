@@ -73,24 +73,22 @@ class StudipAdmissionGroup extends SimpleORMap {
 	}
 
 	function store(){
-		$ret = parent::store();
 		$this->storeMembers();
+		$ret = parent::store();
 		return $ret;
 	}
 
 	function storeMembers(){
-		if (!$this->is_new){
 			if (count($this->members)){
-				foreach($this->members as $sem_obj){
-					$sem_obj->store();
+				foreach($this->getMemberIds() as $seminar_id){
+					$this->members[$seminar_id]->store();
 				}
 			}
 			if (count($this->deleted_members)){
-				foreach($this->members as $sem_obj){
-					$sem_obj->store();
+				foreach(array_keys($this->deleted_members) as $seminar_id){
+					$this->deleted_members[$seminar_id]->store();
 				}
 			}
-		}
 		return count($this->members);
 	}
 
@@ -107,6 +105,7 @@ class StudipAdmissionGroup extends SimpleORMap {
 	}
 
 	function addMember($seminar_id){
+		if($this->is_new && !$this->getId()) $this->setId($this->getNewId());
 		if (!$this->isMember($seminar_id)){
 			$this->members[$seminar_id] =& Seminar::GetInstance($seminar_id);
 			if(!$this->members[$seminar_id]->is_new){
@@ -159,8 +158,16 @@ class StudipAdmissionGroup extends SimpleORMap {
 	
 	function getMemberValues($field){
 		$ret = array();
-		foreach($this->members as $sem){
-			$ret[] = $sem->$field;
+		foreach($this->getMemberIds() as $sem){
+			$ret[] = (string)$this->members[$sem]->$field;
+		}
+		return $ret;
+	}
+	
+	function setUniqueMemberValue($field, $value){
+		$ret = array();
+		foreach($this->getMemberIds() as $sem){
+			$ret[] = ( $this->members[$sem]->$field = trim($value) );
 		}
 		return $ret;
 	}
@@ -170,6 +177,17 @@ class StudipAdmissionGroup extends SimpleORMap {
 		$uvalue = array_unique($values);
 		if(count($uvalue) > 1) return null;
 		else return current($uvalue);
+	}
+	
+	function setMinimumContingent(){
+		foreach($this->getMemberIds() as $seminar_id){
+			$this->db->query("SELECT studiengang_id FROM admission_seminar_studiengang WHERE seminar_id = '$seminar_id' LIMIT 1");
+			if(!$this->db->next_record()){
+				$this->db->query("INSERT INTO admission_seminar_studiengang (studiengang_id,quota,seminar_id) VALUES('all', '100', '$seminar_id')");
+				if($this->db->affected_rows()) $ret[] = $seminar_id;
+			}
+		}
+		return $ret;
 	}
 }
 ?>

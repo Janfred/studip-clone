@@ -73,7 +73,7 @@ function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_ro
   return;
 }
 
-function parse_msg_array($msg, $class = "blank", $colspan = 2, $add_row = true, $small = false){
+function parse_msg_array($msg, $class = "blank", $colspan = 2, $add_row = true, $small = true){
 	if(is_array($msg)){
 		foreach($msg as $one_msg){
 			list($type, $content) = $one_msg;
@@ -82,7 +82,7 @@ function parse_msg_array($msg, $class = "blank", $colspan = 2, $add_row = true, 
 	}
 }
 
-function parse_msg_to_string($long_msg, $separator="§", $class="blank", $colspan=2, $add_row=TRUE, $small = false){
+function parse_msg_to_string($long_msg, $separator="§", $class="blank", $colspan=2, $add_row=TRUE, $small = true){
 	ob_start();
 	parse_msg($long_msg, $separator, $class, $colspan, $add_row, $small);
 	$out = ob_get_contents();
@@ -90,7 +90,7 @@ function parse_msg_to_string($long_msg, $separator="§", $class="blank", $colspan
 	return $out;
 }
 
-function parse_msg_array_to_string($msg, $class = "blank", $colspan = 2, $add_row = true, $small = false){
+function parse_msg_array_to_string($msg, $class = "blank", $colspan = 2, $add_row = true, $small = true){
 	ob_start();
 	parse_msg_array($msg, $class, $colspan, $add_row, $small);
 	$out = ob_get_contents();
