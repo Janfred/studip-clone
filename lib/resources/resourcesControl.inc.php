@@ -117,19 +117,14 @@ function check_opener(obj){
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
 	<?
 	if (!isset($_REQUEST['print_view'])){
-	?>
-	<tr>
-		<td class="topic" >&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinetermine.gif" border="0" align="absmiddle" alt="Ressourcen"><b>&nbsp;<? echo $title; ?></b></td>
-	</tr>
-	<?
-	if ($infobox) {
+		if ($infobox) {
 	?>
 	<tr>
 		<td class="blank">&nbsp;
 		</td>
 	</tr>
 	<?
-	}
+		}
 	?>
 	<tr>
 		<td class="blank" valign ="top">
