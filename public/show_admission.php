@@ -28,7 +28,7 @@ $hash_secret = "trubatik";
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-$CURRENT_PAGE = _("Teilnehmerbeschränkte Veranstaltungen");
+$CURRENT_PAGE = _("Übersicht laufender Anmeldeverfahren");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
