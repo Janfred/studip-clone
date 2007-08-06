@@ -17,6 +17,7 @@
 if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 {
 // Start of Output
+	$CURRENT_PAGE = $export_pagename;
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   // Output of Stud.IP head
 	if ($page == 1)
@@ -27,10 +28,6 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 
  ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr>
-		<td class="topic" colspan="3">&nbsp; <b><? echo $export_pagename; ?></b>
-		</td>
-	</tr>
 	<tr>
 		<td class="blank" colspan="3">&nbsp;
 		</td>
