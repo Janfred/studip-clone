@@ -170,13 +170,6 @@ if ($kill_datafield) { // contains a datafield_id
 
 ?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr>
-		<td class="topic" colspan=2>&nbsp; <b>
-		<?
-		print _("generische Datenfelder konfigurieren");
-		?>
-		</td>
-	</tr>
  	<tr>
 		<td class="blank" valign="top">
 			<?

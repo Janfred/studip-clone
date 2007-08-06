@@ -46,6 +46,8 @@ $perm->check("root");
 require_once 'lib/msg.inc.php'; 
 require_once 'lib/visual.inc.php';
 
+$CURRENT_PAGE = _("Überprüfen der Datenbank-Integrität");
+
 include 'lib/seminar_open.php'; //hier werden die sessions initialisiert
 include 'lib/include/html_head.inc.php';
 include 'lib/include/header.php';   //hier wird der "Kopf" nachgeladen 
@@ -57,7 +59,6 @@ $_csw = new cssClassSwitcher();
 
 ?>
 <table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">
-	<tr><td class="topic" align="left">&nbsp; <b><?=_("Datenbank Integrit&auml;t pr&uuml;fen")?></b></td></tr>
 	<tr><td  align="center">
 		
 <?

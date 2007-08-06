@@ -12,6 +12,8 @@ require_once ('config.inc.php');
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
+$CURRENT_PAGE = _("Übersicht verwendeter Literatur");
+
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
@@ -177,10 +179,6 @@ if ($preferred_plugin && in_array($preferred_plugin, $_search_plugins)){
 
 ?>
 <table width="100%" cellspacing=0 cellpadding=0 border=0>
-	<tr valign=top align=middle>
-		<td class="topic" colspan=2 align="left"><b>&nbsp;<?=_("Verwendete Literatur:")?></b>
-		</td>
-	</tr>
 	<?
 	if ($msg) {
 		echo "<tr> <td class=\"blank\" colspan=2><br />";

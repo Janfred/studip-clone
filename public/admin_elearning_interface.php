@@ -32,6 +32,7 @@ require_once ('lib/elearning/ELearningUtils.class.php');
 require_once ('lib/elearning/ConnectedCMS.class.php');
 
 $HELP_KEYWORD="Basis.Ilias";
+$CURRENT_PAGE=_("Verwaltung der Lernmodul-Schnittstelle");
 
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -65,15 +66,6 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	}
 
 	?><table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr>
-		<td class="topic" colspan="3">&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-lern.gif" align="texttop">&nbsp;
-		<b>
-	<?
-			echo _("Administration der Lernmodul-Schnittstelle");
-	?>
-		</b>
-		</td>
-	</tr>
 	<tr>
 		<td class="blank" colspan="3">&nbsp;
 		</td>
