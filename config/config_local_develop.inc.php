@@ -115,7 +115,7 @@ $FAVICON = "http://www.studip.de/favicon.ico";						//the place where the favico
 ----------------------------------------------------------------
 enable or disable the Stud.IP internal modules, set and basic settings*/
 
-$RESOURCES_ENABLE = FALSE;								//Stud.IP module: resource management
+$RESOURCES_ENABLE = TRUE;								//Stud.IP module: resource management
 
 $CALENDAR_ENABLE = TRUE;								//Stud.IP module: calendar
 $CALENDAR_DRIVER = "MySQL"; 								//calendar driver: database to use (MySQL in default installation)*/
