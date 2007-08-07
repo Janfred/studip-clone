@@ -223,7 +223,7 @@ if(isset($_REQUEST['group_sem_x']) && (count($_REQUEST['gruppe']) > 1 || isset($
 			$contingent = $group_obj->setMinimumContingent();
 			if(count($contingent)){
 				foreach($contingent as $sem_id) $sem_names[] = $group_obj->members[$sem_id]->getName();
-				$msg[] = array('msg', sprintf(_("In den Veranstaltungen <b>%s</b> wurde ein Kontingent mit 100% für alle Studiengänge eingerichtet."), htmlready(join(", ", $sem_names))));
+				$msg[] = array('msg', sprintf(_("In den Veranstaltungen <b>%s</b> wurde ein Kontingent mit 100%% für alle Studiengänge eingerichtet."), htmlready(join(", ", $sem_names))));
 			}
 		}
 	}
