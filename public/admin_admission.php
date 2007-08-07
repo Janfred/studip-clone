@@ -85,6 +85,8 @@ require_once 'lib/functions.php';	//basale Funktionen
 require_once('lib/visual.inc.php');	//Darstellungsfunktionen
 require_once('lib/messaging.inc.php');	//Nachrichtenfunktionen
 require_once('lib/admission.inc.php');	//load functions from admission system
+require_once('lib/classes/StudipAdmissionGroup.class.php'); //htmlReady
+
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenZugangsberechtigungen";
 if ($admin_admission_data["sem_id"] || $seminar_id)
 	$CURRENT_PAGE = ($admin_admission_data["sem_id"] ? getHeaderLine($admin_admission_data["sem_id"])." - " : getHeaderLine($seminar_id)." - ");
@@ -117,26 +119,36 @@ $messaging = new messaging;
 */
 function get_snapshot() {
 	global $admin_admission_data;
-	return	serialize($admin_admission_data["admission_turnout"]).
-		serialize($admin_admission_data["admission_type"]).
-		serialize($admin_admission_data["admission_endtime"]).
-		serialize($admin_admission_data["admission_binding"]).
-		serialize($admin_admission_data["passwort"]).
-		serialize($admin_admission_data["read_level"]).
-		serialize($admin_admission_data["write_level"]).
+	return	md5($admin_admission_data["admission_turnout"].
+		$admin_admission_data["admission_type"].
+		$admin_admission_data["admission_endtime"].
+		$admin_admission_data["admission_binding"].
+		$admin_admission_data["passwort"].
+		$admin_admission_data["read_level"].
+		$admin_admission_data["write_level"].
 		serialize($admin_admission_data["studg"]).
-		serialize($admin_admission_data["all_ratio"]).
-		serialize($admin_admission_data["admission_prelim"]).
-		serialize($admin_admission_data["admission_prelim_txt"]).
-		serialize($admin_admission_data["sem_admission_start_date"]).
-		serialize($admin_admission_data["sem_admission_end_date"]).
-		serialize($admin_admission_data["admission_disable_waitlist"]);
+		$admin_admission_data["all_ratio"].
+		$admin_admission_data["admission_prelim"].
+		$admin_admission_data["admission_prelim_txt"].
+		$admin_admission_data["sem_admission_start_date"].
+		$admin_admission_data["sem_admission_end_date"].
+		$admin_admission_data["admission_disable_waitlist"]);
 }
 
 //get ID
 if ($SessSemName[1])
 	$seminar_id=$SessSemName[1];
 
+$errormsg = '';
+
+//check, if seminar is grouped
+$group_obj = StudipAdmissionGroup::GetAdmissionGroupBySeminarId($seminar_id);
+if (is_object($group_obj)) { //if so, do not allow to change admission_type
+	$is_grouped = TRUE;
+} else {
+	$is_grouped = FALSE;
+}
+	
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
 if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg) && (!$adm_gesperrt_x)) {
 	$db->query("SELECT * FROM seminare WHERE Seminar_id = '$seminar_id' ");
@@ -186,15 +198,6 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		die;
 	}
 
-	//check, if seminar is grouped
-	$db->query("SELECT admission_group FROM seminare WHERE Seminar_id = '$seminar_id'");
-	$db->next_record();
-	if ($db->f("admission_group")) { //if so, do not allow to change admission_type
-		$is_grouped = TRUE;
-	} else {
-		$is_grouped = FALSE;
-	}
-
 	//check start / enddate
 	if (!check_and_set_date($adm_s_tag, $adm_s_monat, $adm_s_jahr, $adm_s_stunde, $adm_s_minute, $admin_admission_data, "sem_admission_start_date")) {
 		$errormsg=$errormsg."error§"._("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r das Startdatum ein!")."§";
@@ -212,29 +215,28 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	}
 
 	//Umschalter zwischen den Typen
-	if ($adm_null_x)
-		if ($is_grouped) {
-			$admin_admission_data["admission_type"]=2;
-			$errormsg=$errormsg."error§"._("Gruppierte Veranstaltungen m&uuml;ssen das chronologische Anmeldeverfahren haben! Bei gruppierten Veranstaltungen können Sie das Anmeldeverfahren nicht mehr ändern.")."§";
+	if ($adm_null_x || $adm_los_x || $adm_chrono_x || $adm_gesperrt_x){
+		if ($is_grouped){
+			$errormsg = $errormsg."error§"._("Gruppierte Veranstaltungen m&uuml;ssen ein einheitliches Anmeldeverfahren haben! Bei gruppierten Veranstaltungen können Sie das Anmeldeverfahren an dieser Stelle nicht mehr ändern.")."§";
 		} else {
-			$admin_admission_data["admission_type"]=0;
-			$admin_admission_data["sem_admission_end_date"]=-1;
-			$admin_admission_data["sem_admission_start_date"]=-1;
-			$admin_admission_data["admission_endtime"]=-1;
-			$admin_admission_data["admission_selection_take_place"] = 0;
-		}
-	if ($adm_los_x)
-		if ($is_grouped) {
-			$admin_admission_data["admission_type"]=2;
-			$errormsg=$errormsg."error§"._("Gruppierte Veranstaltungen m&uuml;ssen das chronologische Anmeldeverfahren haben! Bei gruppierten Veranstaltungen können Sie das Anmeldeverfahren nicht mehr ändern.")."§";
-		} else {
-			$admin_admission_data["admission_type"]=1;
-		}
-	if ($adm_chrono_x)
-		$admin_admission_data["admission_type"]=2;
-
-	if ($adm_gesperrt_x)
+			if($adm_null_x){
+				$admin_admission_data["admission_type"]=0;
+				$admin_admission_data["sem_admission_end_date"]=-1;
+				$admin_admission_data["sem_admission_start_date"]=-1;
+				$admin_admission_data["admission_endtime"]=-1;
+				$admin_admission_data["admission_selection_take_place"] = 0;
+			}
+			if ($adm_los_x){
+				$admin_admission_data["admission_type"]=1;
+			}
+			if ($adm_chrono_x){
+				$admin_admission_data["admission_type"]=2;
+			}
+			if ($adm_gesperrt_x){
                 $admin_admission_data["admission_type"] = 3;
+			}
+		}
+	}
 
 	//Aenderungen ubernehmen
 	$admin_admission_data["admission_binding"]=$admission_binding;
@@ -570,7 +572,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 }
 
 //Beim Umschalten keine Fehlermeldung
- if (($errormsg) && ((!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg)))
+ if (($errormsg) && ((!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$adm_gesperrt_x) && (!$add_studg_x) && (!$delete_studg)))
  	$errormsg='';
 
 //check, ob Warteliste gefüllt.
@@ -623,7 +625,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 		<tr <? $cssSw->switchClass() ?>>
 			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
 				<input type="IMAGE" name="uebernehmen" <?=makeButton("uebernehmen", "src")?> border=0 value="uebernehmen">
-				<? if ($admin_admission_data["original"] != get_snapshot()) {
+				<?if ($admin_admission_data["original"] != get_snapshot()) {
 					?> <br /><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ausruf_small2.gif" align="absmiddle" />&nbsp;<font size=-1><?=_("Diese Daten sind noch nicht gespeichert.")?></font><br /> <?
 					}
 				?>
@@ -645,13 +647,31 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 					while ($db->next_record()) {
 						printf ("<li><font size=-1><a href=\"about.php?username=%s\">%s</a></font></li>", $db->f("username"), htmlReady($db->f("fullname")));
 					}
-				} else { ?>
-				<font size=-1><?=_("Sie k&ouml;nnen hier eine Teilnahmebeschr&auml;nkung per Anmeldeverfahren festlegen. Sie k&ouml;nnen per Losverfahren beschr&auml;nken oder Anmeldungen in der Reihenfolge ihres Eintreffens (chronologische Anmeldung) zulassen. Wenn Sie eine Veranstaltung sperren, kann sich niemand zu dieser Veranstaltung anmelden. Bestehende Teilnehmer- und Wartelisteneintr&auml;ge bleiben bei einem Wechsel von <B>keins</B> auf <B>gesperrt</B> unber&uuml;hrt.")?><br /></font>
+				} else {
+					if(is_object($group_obj)){
+						?>
+						<font size="-1">
+						<?=_("Diese Veranstaltung ist Mitglied einer Gruppe. Die Art des Anmeldeverfahrens können sie nur für die Gruppe insgesamt ändern.")?>
+						<br>
+						<a href="show_admission.php?group_sem_x=1&group_id=<?=$group_obj->getId()?>">
+						<img src="<?=$GLOBALS['ASSETS_URL']?>images/link_intern.gif" align="absmiddle" border="0">&nbsp;&nbsp;<?=_("Gruppenverwaltung")?></a>
+						<div style="margin-top:5px;">
+						<?=_("Veranstaltungsgruppe:")?>&nbsp;<?=htmlReady($group_obj->getValue('name'))?>
+						<ol>
+						<?foreach($group_obj->getMemberIds() as $m_id){?>
+							<li><a href="admin_admission.php?select_sem_id=<?=$m_id?>"><?=htmlReady($group_obj->members[$m_id]->getName())?></a></li>
+						<?}?>
+						</ol>
+						</div>
+						<?
+					} else {
+				?><font size=-1><?=_("Sie k&ouml;nnen hier eine Teilnahmebeschr&auml;nkung per Anmeldeverfahren festlegen. Sie k&ouml;nnen per Losverfahren beschr&auml;nken oder Anmeldungen in der Reihenfolge ihres Eintreffens (chronologische Anmeldung) zulassen. Wenn Sie eine Veranstaltung sperren, kann sich niemand zu dieser Veranstaltung anmelden. Bestehende Teilnehmer- und Wartelisteneintr&auml;ge bleiben bei einem Wechsel von <B>keins</B> auf <B>gesperrt</B> unber&uuml;hrt.")?><br /></font>
 				<br /><input type="IMAGE" name="adm_null" <? if  ($admin_admission_data["admission_type"] == 0) print makeButton ("keins2", "src");  else print makeButton ("keins", "src") ?> border=0 value="keins">&nbsp;
 				<input type="IMAGE" name="adm_los" <? if  ($admin_admission_data["admission_type"] == 1) print makeButton ("los2", "src");  else print makeButton ("los", "src") ?> border=0 value="los">&nbsp;
 				<input type="IMAGE" name="adm_chrono" <? if  ($admin_admission_data["admission_type"] == 2) print makeButton ("chronolog2", "src");  else print makeButton ("chronolog", "src") ?>border=0 value="chronolog">
 				<input type="IMAGE" name="adm_gesperrt" <? if  ($admin_admission_data["admission_type"] == 3) print makeButton ("gesperrt2", "src");  else print makeButton ("gesperrt", "src") ?>border=0 value="gesperrt">
-				<? } ?>
+				<? }
+				}?>
 				<input type="HIDDEN" name="adm_type_old" value="<? echo $admin_admission_data["admission_type"] ?>" /><br />
 			</td>
 		</tr>

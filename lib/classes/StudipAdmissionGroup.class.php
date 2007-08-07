@@ -73,23 +73,24 @@ class StudipAdmissionGroup extends SimpleORMap {
 	}
 
 	function store(){
-		$this->storeMembers();
-		$ret = parent::store();
+		$ret = $this->storeMembers();
+		$ret += parent::store();
 		return $ret;
 	}
 
 	function storeMembers(){
+			$ret = 0;
 			if (count($this->members)){
 				foreach($this->getMemberIds() as $seminar_id){
-					$this->members[$seminar_id]->store();
+					$ret += $this->members[$seminar_id]->store();
 				}
 			}
 			if (count($this->deleted_members)){
 				foreach(array_keys($this->deleted_members) as $seminar_id){
-					$this->deleted_members[$seminar_id]->store();
+					$ret += $this->deleted_members[$seminar_id]->store();
 				}
 			}
-		return count($this->members);
+		return $ret;
 	}
 
 	function getMemberIds(){
@@ -188,6 +189,17 @@ class StudipAdmissionGroup extends SimpleORMap {
 			}
 		}
 		return $ret;
+	}
+	
+	function checkUserSubscribedtoGroup($user_id, $waitlist = false){
+		$table = $waitlist ? 'admission_seminar_user' : 'seminar_user' ;
+		$this->db->query("SELECT seminar_id FROM $table WHERE seminar_id IN ('".join("','", $this->getMemberIds())."') AND user_id='$user_id'");
+		$this->db->next_record();
+		return $this->db->f('seminar_id');
+	}
+	
+	function checkUserSubscribedtoGroupWaitingList($user_id){
+		return $this->checkUserSubscribedtoGroup($user_id, true);
 	}
 }
 ?>

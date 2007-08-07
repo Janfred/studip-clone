@@ -40,7 +40,7 @@ require_once 'lib/functions.php';
 require_once ('lib/classes/StudipSemTree.class.php');
 require_once ('lib/classes/DataFieldEntry.class.php');
 require_once ('lib/classes/StudipStmInstance.class.php');
-
+require_once('lib/classes/StudipAdmissionGroup.class.php'); 
 ?>
 <body>
 <?
@@ -663,21 +663,27 @@ print_infobox ($infobox,"contract.jpg");
 				}
 			}
 		}
-
-			$query = "SELECT Seminar_id,admission_group FROM seminare WHERE Seminar_id='$sem_id'";
-			$db4->query($query);
-			if ($db4->next_record() && ($a_group = $db4->f("admission_group"))) {
-				print ("<br/><font size=-1>"._("Diese Veranstaltung ist gruppiert mit:")."</font>");
-				$db4->query("SELECT Name,Seminar_id,admission_group FROM seminare WHERE admission_group='$a_group'");
-				 while ($db4->next_record()) {
-					if ($perm->have_studip_perm("autor",$db4->f("Seminar_id")) | $perm->have_perm("admin"))
-						printf("<br/><font size=\"-1\"><a href=\"seminar_main.php?auswahl=%s\">%s</a> (%s)</font>",$db4->f("Seminar_id"),$db4->f("Name"),htmlReady(view_turnus($db4->f("Seminar_id"), FALSE)));
-					else
-						printf("<br/><font size=\"-1\"><a href=\"details.php?sem_id=%s&send_from_search=1&send_from_search_page=sem_portal.php?keep_result_set=1\">%s</a> (%s)</font>",$db4->f("Seminar_id"),$db4->f("Name"),htmlReady(view_turnus($db4->f("Seminar_id"), FALSE)));
-					}
-			}
-
-			?>
+		//check, if seminar is grouped
+		$group_obj = StudipAdmissionGroup::GetAdmissionGroupBySeminarId($sem_id);
+		if (is_object($group_obj)) {
+				?>
+				<div style="margin-top:5px;">
+					<?=_("Veranstaltungsgruppe:")?>&nbsp;<?=htmlReady($group_obj->getValue('name'))?>
+					<ol>
+					<?foreach($group_obj->getMemberIds() as $m_id){
+						$target = $perm->have_studip_perm("autor", $m_id) ? 'seminar_main.php?auswahl=' : 'details.php?sem_id=';
+						$target .= $m_id;
+						?>
+						<li><a href="<?=$target?>">
+						<?=htmlReady($group_obj->members[$m_id]->getName())?>
+						</a>
+						&nbsp;
+						(<?=htmlReady($group_obj->members[$m_id]->getFormattedTurnus(true))?>)
+						</li>
+					<?}?>
+					</ol>
+				</div>
+			<?}?>
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
 			<?

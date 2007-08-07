@@ -38,7 +38,7 @@ include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 require_once('config.inc.php'); //Grunddaten laden
 require_once('lib/visual.inc.php'); //htmlReady
-require_once('lib/classes/StudipAdmissionGroup.class.php'); //htmlReady
+require_once('lib/classes/StudipAdmissionGroup.class.php');
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -111,7 +111,17 @@ if (!is_array($_my_inst)){
 		$_SESSION['show_admission']['institut_id'] = ($_my_inst[$_REQUEST['institut_id']]) ? $_REQUEST['institut_id'] : $_my_inst_arr[0];
 	}
 }
-
+if(isset($_REQUEST['admissiongroupdelete_x']) && isset($_REQUEST['group_id'])){
+	$msg[] = array('info', _("Wollen Sie die Gruppierung f&uuml;r die ausgew&auml;hlte Gruppe aufl&ouml;sen?") 
+							. '<br>' . _("Beachten Sie, dass f&uuml;r bereits eingetragene / auf der Warteliste stehende TeilnehmerInnen keine &Auml;nderungen vorgenommen werden.")
+							. '<form action="'.$PHP_SELF.'" method="post">'
+							. '<input type="hidden" name="group_sem_x" value="1"><div style="padding:3px;">'
+							. '<input type="hidden" name="group_id" value="'.$_REQUEST['group_id'].'">'
+							. makeButton('ja', 'input', _("Gruppe auflösen"), 'admissiongroupreallydelete')
+							. '&nbsp;'
+							. makeButton('nein', 'input', _("abbrechen"))
+							. '</div></form>');
+}
 if(isset($_REQUEST['group_sem_x']) && (count($_REQUEST['gruppe']) > 1 || isset($_REQUEST['group_id'])) && !isset($_REQUEST['admissiongroupcancel_x'])){
 	if(isset($_REQUEST['group_id'])){
 			$group_obj = new StudipAdmissionGroup($_REQUEST['group_id']);
@@ -154,12 +164,14 @@ if(isset($_REQUEST['group_sem_x']) && (count($_REQUEST['gruppe']) > 1 || isset($
 			}
 		}
 		if(isset($_REQUEST['admission_change_starttime'])){
+			$admission_times["admission_starttime"] = -1;
 			if (!check_and_set_date($_POST['adm_s_tag'], $_POST['adm_s_monat'], $_POST['adm_s_jahr'], $_POST['adm_s_stunde'], $_POST['adm_s_minute'], $admission_times, "admission_starttime")) {
 				$msg[] = array("error", _("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r das Startdatum für Anmeldungen ein!"));
 				$ok = false;
 			}
 		}
 		if(isset($_REQUEST['admission_change_endtime_sem'])){
+			$admission_times["admission_endtime_sem"] = -1;
 			if (!check_and_set_date($_POST['adm_e_tag'], $_POST['adm_e_monat'], $_POST['adm_e_jahr'], $_POST['adm_e_stunde'], $_POST['adm_e_minute'], $admission_times, "admission_endtime_sem")) {
 				$msg[] = array("error", _("Bitte geben Sie g&uuml;ltige Zeiten f&uuml;r das Enddatum für Anmeldungen ein!"));
 				$ok = false;
@@ -201,15 +213,24 @@ if(isset($_REQUEST['group_sem_x']) && (count($_REQUEST['gruppe']) > 1 || isset($
 			}
 		}
 		if($ok){
+			if($group_obj->getValue('status') == 0 && $group_obj->getUniqueMemberValue('admission_type') == 1){
+				$group_obj->setValue('status', 1);
+				$msg[] = array('info', _("Das Losverfahren kann nur mit der Einstellung <b>Eintrag nur in einer Veranstaltung</b> kombiniert werden."));
+			}
 			if($group_obj->store()){
 				$msg[] = array('msg', sprintf(_("Die Gruppe wurde erstellt / modifiziert.")));
 			}
 			$contingent = $group_obj->setMinimumContingent();
-			print_r($contingent);
 			if(count($contingent)){
 				foreach($contingent as $sem_id) $sem_names[] = $group_obj->members[$sem_id]->getName();
 				$msg[] = array('msg', sprintf(_("In den Veranstaltungen <b>%s</b> wurde ein Kontingent mit 100% für alle Studiengänge eingerichtet."), htmlready(join(", ", $sem_names))));
 			}
+		}
+	}
+	if($_REQUEST['admissiongroupreallydelete_x']){
+		if($group_obj->delete()){
+			$msg[] = array('msg', sprintf(_("Die Gruppe wurde aufgelöst.")));
+			unset($group_obj);
 		}
 	}
 
@@ -337,6 +358,8 @@ if(is_object($group_obj)){
 		<li style="margin-top:5px;">
 		<span style="padding-left:200px;">
 		<?=makeButton('uebernehmen', 'input', _("Einstellungen übernehmen"), 'admissiongroupchange')?>
+		&nbsp;
+		<?=makeButton('loeschen', 'input', _("Gruppe auflösen"), 'admissiongroupdelete')?>
 		&nbsp;
 		<?=makeButton('abbrechen', 'input', _("Eingabe abbrechen"), 'admissiongroupcancel')?>
 		</span>
