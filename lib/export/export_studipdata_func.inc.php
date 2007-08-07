@@ -813,6 +813,9 @@ function get_additional_data($user_id, $range_id)
             break;
 
           case "preferred_language":
+            if (is_null($content) || $content == '')
+              $content = $GLOBALS['DEFAULT_LANGUAGE'];
+
             if ($content == "de_DE")
               $content = _("Deutsch");
             else
@@ -837,10 +840,7 @@ function get_additional_data($user_id, $range_id)
           $user_data['display'] = 1;
         }  
 
-        if ($user_data['content']) 
-        {
-          $collected_data [$val["field"]]= $user_data;
-        }
+        $collected_data [$val["field"]]= $user_data;
       }
     }
   }
@@ -857,7 +857,7 @@ function export_additional_data($user_id, $range_id, $childgroup_tag)
   $additional_data = get_additional_data($user_id, $range_id);
 
 	foreach($additional_data as $val) {
-    if ($val['content'] && $val['export']) 
+    if ($val['export']) 
     {
       if (!$a_fields) $ret .= xml_open_tag($childgroup_tag);
 
