@@ -75,7 +75,9 @@ class AdministrationPluginIntegratorEnginePersistence extends AbstractPluginInte
 					join roles_studipperms rps on rps.roleid=rp.roleid
 					join auth_user_md5 au on rps.permname = au.perms
 					where
-					au.user_id=? and a.poiid=? and p.plugintype='Administration'",array(PLUGIN_ADMINISTRATION_POIID,$userid,$userid,PLUGIN_ADMINISTRATION_POIID));
+					au.user_id=? and a.poiid=? and p.plugintype='Administration'
+					ORDER BY navigationpos, pluginname",
+					array(PLUGIN_ADMINISTRATION_POIID,$userid,$userid,PLUGIN_ADMINISTRATION_POIID));
 
 
     	//$result = &$this->connection->execute("SELECT p.* FROM plugins_activated a left join plugins p on p.pluginid=a.pluginid where a.poiid=? and p.plugintype='Administration' order by p.navigationpos",array(PLUGIN_ADMINISTRATION_POIID));
