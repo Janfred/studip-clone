@@ -751,8 +751,7 @@ $multiaction['accepted'] = array('insert' => array('admission_insert',_("Ausgewä
 	<? if ($rechte) { ?>
 
 	<tr>
-		<td class="blank" colspan="10" align="left">
-			<form name="sortierung" method="post" action="<?=$PHP_SELF?>">
+		<td class="blank" colspan="2" align="left">
     		<table class="blank" border=0 cellpadding=0 cellspacing=0>
 					<tr>
 						<td class="blank">&nbsp;</td>
@@ -836,10 +835,17 @@ $multiaction['accepted'] = array('insert' => array('admission_insert',_("Ausgewä
 <td><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/balken.jpg"></td>
 					<tr>
 				</table>
-			</form>
 		</td>
 	</tr>
-
+	<tr>
+		<td class="blank" width="100%" colspan="2">
+		<a href="sms_send.php?sms_source_page=teilnehmer.php&course_id=<?=$SessSemName[1]?>&emailrequest=1&subject=<?=rawurlencode($SessSemName[0])?>&filter=all">
+		<img src="<?=$GLOBALS['ASSETS_URL']?>images/mailnachricht.gif" border="0" vspace="3" hspace="3" align="absmiddle">
+		<span style="font-size:80%">
+		<?=_("Systemnachricht mit Emailweiterleitung an alle Teilnehmer verschicken")?> 
+		</span></a>
+		</td>
+	</tr>
 	<? } ?>
 
 	<tr>
