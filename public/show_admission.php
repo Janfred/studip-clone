@@ -135,6 +135,8 @@ if(isset($_REQUEST['group_sem_x']) && (count($_REQUEST['gruppe']) > 1 || isset($
 		$group_obj->setValue('name', trim(stripslashes($_REQUEST['admission_group_name'])));
 		$group_obj->setValue('status', (int)$_REQUEST['admission_group_status']);
 		$group_obj->setUniqueMemberValue('admission_type', (int)$_REQUEST['admission_group_type']);
+		$group_obj->setUniqueMemberValue('read_level', 3);
+		$group_obj->setUniqueMemberValue('write_level', 3);
 		$admission_times = array();
 		$ok = true;
 		if(isset($_REQUEST['admission_change_endtime'])){
