@@ -74,13 +74,13 @@ function export_form($range_id, $ex_type = "", $filename = "", $format = "", $fi
 * @param		string	$filter	grouping-category for export
 * @return		string
 */
-function export_link($range_id, $ex_type = "", $filename = "", $format = "", $choose = "", $filter = "", $content = "")
+function export_link($range_id, $ex_type = "", $filename = "", $format = "", $choose = "", $filter = "", $content = "", $o_mode = 'processor')
 {
 	global $PATH_EXPORT, $xslt_filename, $i_page;
 
 	$export_string = "";
 	if ($choose != "")
-		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=".rawurlencode($filename)."&format=$format&choose=$choose&o_mode=processor&filter=$filter&jump=$i_page\">";
+		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=".rawurlencode($filename)."&format=$format&choose=$choose&o_mode=$o_mode&filter=$filter&jump=$i_page\">";
 	elseif ($ex_type != "")
 		$export_string .= "<a href=\"" . "export.php?range_id=$range_id&ex_type=$ex_type&xslt_filename=".rawurlencode($filename)."&o_mode=choose&filter=$filter\">";
 	else

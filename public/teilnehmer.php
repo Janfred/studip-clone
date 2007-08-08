@@ -1603,14 +1603,14 @@ if ($rechte) {
 		include_once($PATH_EXPORT . "/export_linking_func.inc.php");
 		echo chr(10) . '<table width="90%" border="0">';
 		echo chr(10) . '<tr>';
-		echo chr(10) . "<td><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("TeilnehmerInnen") . ' '. $SessSemName[0], "rtf", "rtf-teiln", "", _("TeilnehmerInnen exportieren als rtf Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/rtf-icon.gif" border="0">'). "</font></b></td>";
-		echo chr(10) . "<td><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("TeilnehmerInnen") . ' '. $SessSemName[0], "csv", "csv-teiln", "", _("TeilnehmerInnen exportieren als csv Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0">') . "</font></b></td>";
+		echo chr(10) . "<td><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("TeilnehmerInnen") . ' '. $SessSemName[0], "rtf", "rtf-teiln", "", _("TeilnehmerInnen exportieren als rtf Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/rtf-icon.gif" border="0">', 'passthrough'). "</font></b></td>";
+		echo chr(10) . "<td><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("TeilnehmerInnen") . ' '. $SessSemName[0], "csv", "csv-teiln", "", _("TeilnehmerInnen exportieren als csv Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0">', 'passthrough') . "</font></b></td>";
 		echo chr(10) . '</tr>';
 
 		if ($awaiting){
 			echo chr(10) . '<tr>';
-			echo chr(10) . "<td><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("Warteliste") .' ' . $SessSemName[0], "rtf", "rtf-warteliste","awaiting",_("Warteliste exportieren als rtf Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/rtf-icon.gif" border="0">') . "</font></b></td>";
-			echo chr(10) . "<td><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("Warteliste") .' ' . $SessSemName[0], "csv", "csv-warteliste","awaiting",_("Warteliste exportieren csv Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0">') . "</font></b></td>";
+			echo chr(10) . "<td><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("Warteliste") .' ' . $SessSemName[0], "rtf", "rtf-warteliste","awaiting",_("Warteliste exportieren als rtf Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/rtf-icon.gif" border="0">', 'passthrough') . "</font></b></td>";
+			echo chr(10) . "<td><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("Warteliste") .' ' . $SessSemName[0], "csv", "csv-warteliste","awaiting",_("Warteliste exportieren csv Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0">', 'passthrough') . "</font></b></td>";
 			echo chr(10) . '</tr>';
 		}
 		echo chr(10) . '</table>';

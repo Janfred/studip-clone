@@ -38,6 +38,8 @@ require_once ('lib/messaging.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/language.inc.php');
 require_once ('lib/dates.inc.php');
+require_once('lib/classes/StudipAdmissionGroup.class.php');
+
 //set handling for script execution
 ignore_user_abort(TRUE);
 if( !ini_get('safe_mode')) set_time_limit(0);
@@ -311,7 +313,10 @@ function group_update_admission($seminar_id, $send_message = TRUE) {
  *
  **/
 function update_admission ($seminar_id, $send_message = TRUE) {
-	group_update_admission($seminar_id, $send_message);
+	$group = StudipAdmissionGroup::GetAdmissionGroupBySeminarId($seminar_id);
+	if(is_object($group) && $group->getValue('status') == 0){
+		group_update_admission($seminar_id, $send_message);
+	}
 	normal_update_admission($seminar_id, $send_message);
 }
 
@@ -392,6 +397,7 @@ function normal_update_admission($seminar_id, $send_message = TRUE) {
 			$db3->query("SELECT user_id FROM seminar_user WHERE Seminar_id =  '".$db->f("Seminar_id")."' AND admission_studiengang_id ='".$db2->f("studiengang_id")."' ");
 			$db6->query("SELECT user_id FROM admission_seminar_user WHERE seminar_id = '".$db->f("Seminar_id")."' AND status = 'accepted' AND studiengang_id = '".$db2->f("studiengang_id")."'");
 			$free_quota=$tmp_admission_quota - $db3->num_rows() - $db6->num_rows();
+			if ($free_quota < 0) $free_quota = 0;
 			//Studis auswaehlen, die jetzt aufsteigen koennen
 			$db4->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id =  '".$db->f("Seminar_id")."' AND studiengang_id = '".$db2->f("studiengang_id")."' AND status != 'accepted' ORDER BY position LIMIT $free_quota");
 			while ($db4->next_record()) {
@@ -471,6 +477,7 @@ function check_admission ($send_message=TRUE) {
 					$tmp_admission_quota=get_all_quota($db->f("Seminar_id"));
 				else
 					$tmp_admission_quota=round ($db->f("admission_turnout") * ($db2->f("quota") / 100));
+				if($tmp_admission_quota < 0) $tmp_admission_quota = 0;
 				//Losfunktion
 				$db3->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("Seminar_id")."' AND studiengang_id = '".$db2->f("studiengang_id")."' AND status != 'accepted' ORDER BY RAND() LIMIT ".$tmp_admission_quota);
 				//User aus admission_Seminar_user in seminar_user verschieben oder in Status "vorläufig akzeptiert" setzen

@@ -217,7 +217,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 	case "person":
 		if ($ex_sem_id == "all")
 			export_pers($inst_id);
-		elseif ($GLOBALS['perm']->have_studip_perm('tutor', $ex_sem_id) && $o_mode != "passthrough" && $o_mode != "direct")
+		elseif ($GLOBALS['perm']->have_studip_perm('tutor', $ex_sem_id))
 			export_teilis($inst_id, $ex_sem_id);
 		else
 			$data_object .= xml_tag("message", _("KEINE BERECHTIGUNG!"));

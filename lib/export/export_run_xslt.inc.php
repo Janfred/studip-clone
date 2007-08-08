@@ -123,9 +123,10 @@ else
 
 	if ($o_mode == "passthrough")
 	{
-		readfile( $TMP_PATH . "/export/" . $result_file);
+		header("Location: " . GetDownloadLink($result_file, $xslt_filename .'.'. $format, 2));
+		//readfile( $TMP_PATH . "/export/" . $result_file);
 		unlink( $TMP_PATH . "/export/" . $xml_file_id);
-		unlink( $TMP_PATH . "/export/" . $result_file);
+		//unlink( $TMP_PATH . "/export/" . $result_file);
 	}
 	else
 	{

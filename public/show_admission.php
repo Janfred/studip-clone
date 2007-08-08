@@ -456,9 +456,14 @@ if(is_object($group_obj)){
 	if ($db->nf()) printf("<form action=\"%s\" method=\"post\">\n",$PHP_SELF);
 	while ($db->next_record()) {
 		$seminar_id = $db->f("Seminar_id");
-		$query2 = "SELECT * FROM seminar_user WHERE seminar_id='$seminar_id' AND admission_studiengang_id != ''";
+		$query2 = "SELECT COUNT(user_id) FROM seminar_user WHERE seminar_id='$seminar_id' AND admission_studiengang_id != ''";
 		$db2->query($query2);
-		$teilnehmer = $db2->num_rows();
+		$db2->next_record();
+		$teilnehmer = $db2->f(0);
+		if($teilnehmer){
+			$teilnehmer .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("TeilnehmerInnen") . ' '. $db->f('Name')).'&format=csv&choose=csv-teiln&o_mode=passthrough">';
+			$teilnehmer .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Teilnehmerliste downloaden")).' ></a>';
+		}
 		$cssSw->switchClass();
 		$quota = $db->f("admission_turnout");
 		$count2 = 0;
@@ -467,14 +472,23 @@ if(is_object($group_obj)){
 		$db2->query($query2);
 		if ($db2->next_record()) {
 			$count2 = $db2->f("count2");
+			if($count2){
+				$count2 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Anmeldungen") . ' '. $db->f('Name')).'&format=csv&choose=csv-warteliste&filter=awaiting&o_mode=passthrough">';
+				$count2 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Anmeldeliste downloaden")).' ></a>';
+			}
 		}
 		$query2 = "SELECT status, count(*) AS count3 FROM admission_seminar_user WHERE seminar_id='$seminar_id' AND status='awaiting' GROUP BY status";
 		$db2->query($query2);
 		if ($db2->next_record()) {
 			$count3 = $db2->f("count3");
+			if($count3){
+				$count3 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Warteliste") . ' '. $db->f('Name')).'&format=csv&choose=csv-warteliste&filter=awaiting&o_mode=passthrough">';
+				$count3 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Warteliste downloaden")).' ></a>';
+			}
 		}
 		$datum = $db->f("admission_endtime");
 		$status = array();
+		if($db->f('admission_type') == 3) $status[] = _("gesperrt");
 		if($db->f('admission_type') == 2) $status[] = _("Chronologisch");
 		if($db->f('admission_type') == 1) $status[] = _("Losverfahren");
 		if($db->f('admission_type') == 0) $status[] = _("kein Anmeldeverfahren");
