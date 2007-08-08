@@ -667,6 +667,7 @@ print_infobox ($infobox,"contract.jpg");
 		$group_obj = StudipAdmissionGroup::GetAdmissionGroupBySeminarId($sem_id);
 		if (is_object($group_obj)) {
 				?>
+				<font size="-1">
 				<div style="margin-top:5px;">
 					<?=_("Veranstaltungsgruppe:")?>&nbsp;<?=htmlReady($group_obj->getValue('name'))?>
 					<ol>
@@ -683,6 +684,7 @@ print_infobox ($infobox,"contract.jpg");
 					<?}?>
 					</ol>
 				</div>
+				</font>
 			<?}?>
 			</td>
 			<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
