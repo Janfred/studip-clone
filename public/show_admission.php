@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
+ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("admin");
 
@@ -31,20 +31,175 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 $CURRENT_PAGE = _("Übersicht laufender Anmeldeverfahren / Grupppierung von Veranstaltungen");
 
-// Start of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
-
 require_once('config.inc.php'); //Grunddaten laden
 require_once('lib/visual.inc.php'); //htmlReady
 require_once('lib/classes/StudipAdmissionGroup.class.php');
+
+function get_semadmission_data($seminare_condition){
+	global $perm;
+	$db = new DB_Seminar();
+	$db2 = new DB_Seminar();
+	$ret = array();
+	if ($_SESSION['show_admission']['institut_id'] == "all"  && $perm->have_perm("root"))
+		$query = "SELECT * FROM seminare WHERE 1 $seminare_condition ORDER BY admission_group DESC, start_time DESC, Name";
+	else
+		$query = "SELECT seminare.* FROM seminare LEFT JOIN seminar_inst USING (Institut_id) WHERE seminar_inst.institut_id = '{$_SESSION['show_admission']['institut_id']}' $seminare_condition GROUP BY seminare.Seminar_id ORDER BY admission_group DESC, start_time DESC, Name";
+	$db->query($query);
+	while($db->next_record()){
+		$seminar_id = $db->f("Seminar_id");
+		$ret[$seminar_id] = $db->Record;
+		$query2 = "SELECT COUNT(user_id) FROM seminar_user WHERE seminar_id='$seminar_id' AND admission_studiengang_id != ''";
+		$db2->query($query2);
+		$db2->next_record();
+		$ret[$seminar_id]['count_teilnehmer'] = $db2->f(0);
+		$query2 = "SELECT COUNT(IF(status='claiming' OR status='accepted', 1, NULL)) AS count2,
+					COUNT(IF(status='awaiting', 1, NULL)) AS count3
+					FROM admission_seminar_user WHERE seminar_id='$seminar_id' GROUP BY seminar_id";
+		$db2->query($query2);
+		$db2->next_record();
+		$ret[$seminar_id]['count_anmeldung'] = $db2->f("count2");
+		$ret[$seminar_id]['count_wartende'] = $db2->f("count3");
+		$status = array();
+		if($db->f('admission_type') == 3) $status[] = _("gesperrt");
+		if($db->f('admission_type') == 2) $status[] = _("Chronologisch");
+		if($db->f('admission_type') == 1) $status[] = _("Losverfahren");
+		if($db->f('admission_type') == 0) $status[] = _("kein Anmeldeverfahren");
+		if($db->f('admission_prelim'))  $status[] = _("vorläufig");
+		$ret[$seminar_id]['admission_status_text'] = $status;
+	}
+	return $ret;
+}
+
+function semadmission_create_result_xls($data){
+	require_once "vendor/write_excel/OLEwriter.php";
+	require_once "vendor/write_excel/BIFFwriter.php";
+	require_once "vendor/write_excel/Worksheet.php";
+	require_once "vendor/write_excel/Workbook.php";
+	
+	global $_default_sem, $_my_inst;
+	$tempfile = null;
+	if (count($data)) {
+		$tmpfile = $GLOBALS['TMP_PATH'] . '/' . md5(uniqid('write_excel',1));
+		// Creating a workbook
+		$workbook = new Workbook($tmpfile);
+		$head_format =& $workbook->addformat();
+		$head_format->set_size(12);
+		$head_format->set_bold();
+		$head_format->set_align("left");
+		$head_format->set_align("vcenter");
+		
+		$head_format_merged =& $workbook->addformat();
+		$head_format_merged->set_size(12);
+		$head_format_merged->set_bold();
+		$head_format_merged->set_align("left");
+		$head_format_merged->set_align("vcenter");
+		$head_format_merged->set_merge();
+		$head_format_merged->set_text_wrap();
+		
+		$caption_format =& $workbook->addformat();
+		$caption_format->set_size(10);
+		$caption_format->set_align("left");
+		$caption_format->set_align("vcenter");
+		$caption_format->set_bold();
+		//$caption_format->set_text_wrap();
+		
+		$data_format =& $workbook->addformat();
+		$data_format->set_size(10);
+		$data_format->set_align("left");
+		$data_format->set_align("vcenter");
+		
+		$caption_format_merged =& $workbook->addformat();
+		$caption_format_merged->set_size(10);
+		$caption_format_merged->set_merge();
+		$caption_format_merged->set_align("left");
+		$caption_format_merged->set_align("vcenter");
+		$caption_format_merged->set_bold();
+		
+		// Creating the first worksheet
+		$worksheet1 =& $workbook->addworksheet(_("laufende Anmeldeverfahren"));
+		$worksheet1->set_row(0, 20);
+		$worksheet1->write_string(0, 0, _("Stud.IP Veranstaltungen") . ' - ' . $GLOBALS['UNI_NAME_CLEAN'] ,$head_format);
+		$worksheet1->set_row(1, 20);
+		if(!$_default_sem){
+			$semester = _("alle");
+		} else {
+			$sem_array =& SemesterData::GetSemesterArray();
+			$semester = $sem_array[SemesterData::GetSemesterIndexById($_default_sem)]['name'];
+		}
+		$worksheet1->write_string(1, 0, sprintf(_("Einrichtung: %s, Semester: %s"),
+		$_my_inst[$_SESSION['show_admission']['institut_id']]['name'],
+		$semester), $caption_format);
+		
+		foreach(range(1,9) as $c) $worksheet1->write_blank(0,$c,$head_format);
+		foreach(range(1,9) as $c) $worksheet1->write_blank(1,$c,$head_format);
+		$worksheet1->set_column(1, 1, 40);
+		foreach(range(2,9) as $c) $worksheet1->set_column(1, $c, 15);
+		
+		$row = 2;
+		
+		$worksheet1->write_string($row,0, _("Gruppe"), $caption_format);
+		$worksheet1->write_string($row,1, _("Veranstaltung"), $caption_format);
+		$worksheet1->write_string($row,2, _("Status"), $caption_format);
+		$worksheet1->write_string($row,3, _("Kontingent Teilnehmer"), $caption_format);
+		$worksheet1->write_string($row,4, _("Max. Teilnehmer"), $caption_format);
+		$worksheet1->write_string($row,5, _("Anmelde & Akzeptiertliste"), $caption_format);
+		$worksheet1->write_string($row,6, _("Warteliste"), $caption_format);
+		$worksheet1->write_string($row,7, _("Losdatum / Ende Kontingente"), $caption_format);
+		$worksheet1->write_string($row,8, _("Anmeldestartzeit"), $caption_format);
+		$worksheet1->write_string($row,9, _("Anmeldeendzeit"), $caption_format);
+		
+		++$row;
+		
+		$groupcount = 0;
+		foreach($data as $seminar_id => $semdata) {
+			$teilnehmer = $semdata['count_teilnehmer'];
+			$quota = $semdata['admission_turnout'];
+			$count2 = $semdata['count_anmeldung'];
+			$count3 = $semdata['count_wartende'];;
+			$datum = $semdata['admission_endtime'];
+			$startdatum = $semdata['admission_starttime'];
+			$enddatum = $semdata['admission_endtime_sem'];
+			$status = $semdata['admission_status_text'];
+			if (!$semdata['admission_group']) {
+				$groupname = '';
+				unset($last_group);
+			} else {
+				if($semdata['admission_group'] != $last_group) {
+					unset($last_group);
+				}
+				if (!isset($last_group)) {
+					$last_group = $semdata['admission_group'];
+					$group_obj = new StudipAdmissionGroup($semdata['admission_group']);
+					$groupname = $group_obj->getValue('name');
+					if(!$groupname) $groupname = _("Gruppe") . ++$groupcount;
+				}
+			}
+			$worksheet1->write_string($row, 0, $groupname, $data_format);
+			$worksheet1->write_string($row, 1, $semdata['Name'], $data_format);
+			$worksheet1->write_string($row, 2, join('/', $status), $data_format);
+			$worksheet1->write_number($row, 3, (int)$teilnehmer, $data_format);
+			$worksheet1->write_number($row, 4, (int)$quota, $data_format);
+			$worksheet1->write_number($row, 5, (int)$count2, $data_format);
+			$worksheet1->write_number($row, 6, (int)$count3, $data_format);
+			$worksheet1->write_string($row, 7, ($datum != -1 ? date("d.m.Y G:i", $datum) : '') , $data_format);
+			$worksheet1->write_string($row, 8, ($startdatum != -1 ? date("d.m.Y G:i", $startdatum) : '') , $data_format);
+			$worksheet1->write_string($row, 9, ($enddatum != -1 ? date("d.m.Y G:i", $enddatum) : '') , $data_format);
+			++$row;
+		}
+		$workbook->close();
+	}
+	return $tmpfile;
+}
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
 $sem_condition = '';
 $admission_condition = array();
+
+if(!isset($_SESSION['show_admission']['check_admission'])){
+	$_SESSION['show_admission']['check_admission'] = true;
+}
 
 if(isset($_REQUEST['choose_institut_x'])){
 	if(isset($_REQUEST['select_sem'])){
@@ -54,11 +209,7 @@ if(isset($_REQUEST['choose_institut_x'])){
 	$_SESSION['show_admission']['check_prelim'] = isset($_REQUEST['check_prelim']);
 	$_SESSION['show_admission']['sem_name_prefix'] = trim(stripslashes($_REQUEST['sem_name_prefix']));
 }
-/*
-if(!$_SESSION['show_admission']['check_admission'] && !$_SESSION['show_admission']['check_prelim']){
-	$_SESSION['show_admission']['check_admission'] = true;
-}
-*/
+
 if ($_default_sem){
 	$semester =& SemesterData::GetInstance();
 	$one_semester = $semester->getSemesterData($_default_sem);
@@ -235,11 +386,22 @@ if(isset($_REQUEST['group_sem_x']) && (count($_REQUEST['gruppe']) > 1 || isset($
 			unset($group_obj);
 		}
 	}
-
 }
 
+if ($_REQUEST['cmd'] == 'send_excel_sheet'){
+	$tmpfile = basename(semadmission_create_result_xls(get_semadmission_data($seminare_condition)));
+	if($tmpfile){
+		header('Location: ' . getDownloadLink( $tmpfile, _("LaufendeAnmeldeverfahren.xls"), 4));
+		page_close();
+		die;
+	}
+}
 
-
+// Start of Output
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+ob_end_flush();
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing="0" cellpadding="0" width="100%">
 <?
@@ -413,12 +575,16 @@ if(is_object($group_obj)){
 				<input type="checkbox" name="check_prelim" <?=$_SESSION['show_admission']['check_prelim'] ? 'checked' : ''?> value="1" style="vertical-align:middle;">&nbsp;<?=_("vorläufige Teilnahme")?>
 				</span>
 				</div>
-				<div style="font-size:10pt;margin:10px;">
+				<div style="font-size:10pt;margin-top:10px;;margin-left:10px;">
 				<b><?=_("Präfix des Veranstaltungsnamens:")?></b>
 				<span style="margin-left:10px;font-size:10pt;">
 				<input type="test" name="sem_name_prefix" value="<?=htmlReady($_SESSION['show_admission']['sem_name_prefix'])?>" style="vertical-align:middle;" size="20">
 				</span>
 				</div>
+				<div style="font-size: 10pt; margin-bottom: 5px;margin-right:5px;" align="right">
+				<a href="<?=$PHP_SELF?>?cmd=send_excel_sheet">
+				<img src="<?=$GLOBALS['ASSETS_URL']?>images/xls-icon.gif" align="absbottom" border="0"></a>
+				<img src="<?=$GLOBALS['ASSETS_URL']?>images/symbol04.gif" align="absbottom" border="0" hspace="5"><?=_("Download als Excel Datei")?></div>
 			</td>
 			</form>
 		</tr>
@@ -426,15 +592,10 @@ if(is_object($group_obj)){
 	<tr>
 		<td class="blank">
 <?
-	if ($_SESSION['show_admission']['institut_id'] == "all"  && $perm->have_perm("root"))
-		$query = "SELECT * FROM seminare WHERE 1 $seminare_condition ORDER BY admission_group DESC, start_time DESC, Name";
-	else
-		$query = "SELECT * FROM seminare LEFT JOIN seminar_inst USING (Institut_id) WHERE seminar_inst.institut_id = '{$_SESSION['show_admission']['institut_id']}' $seminare_condition GROUP BY seminare.Seminar_id ORDER BY admission_group DESC, start_time DESC, Name";
-
-	$db->query($query);
+	$data = get_semadmission_data($seminare_condition);
 	$tag = 0;
-	if ($db->nf()) {
-		print ("<table width=\"99%\" border=0 cellspacing=2 cellpadding=2>");
+	if (count($data)) {
+		print ("<table width=\"99%\" align=\"center\" border=0 cellspacing=2 cellpadding=2>");
 		print ("<tr style=\"font-size:80%\">");
 		if ($ALLOW_GROUPING_SEMINARS) {
 			echo "<th width=\"1%\">". _("Gruppieren") ."</th>";
@@ -448,70 +609,49 @@ if(is_object($group_obj)){
 		echo "<th width=\"10%\">". _("Losdatum / Ende Kontingente") ."</th>";
 		echo "<th width=\"20%\">". _("Anmeldezeitraum") ."</th>";
 		echo "</tr>";
+		printf("<form action=\"%s\" method=\"post\">\n",$PHP_SELF);
 	} elseif ($institut_id) {
 		print ("<table width=\"99%\" border=0 cellspacing=2 cellpadding=2>");
 		parse_msg ("info§"._("Im gew&auml;hlten Bereich existieren keine teilnahmebeschr&auml;nkten Veranstaltungen")."§", "§", "steel1",2, FALSE);
 	}
-
-	if ($db->nf()) printf("<form action=\"%s\" method=\"post\">\n",$PHP_SELF);
-	while ($db->next_record()) {
-		$seminar_id = $db->f("Seminar_id");
-		$query2 = "SELECT COUNT(user_id) FROM seminar_user WHERE seminar_id='$seminar_id' AND admission_studiengang_id != ''";
-		$db2->query($query2);
-		$db2->next_record();
-		$teilnehmer = $db2->f(0);
+	foreach($data as $seminar_id => $semdata) {
+		$teilnehmer = $semdata['count_teilnehmer'];
 		if($teilnehmer){
-			$teilnehmer .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("TeilnehmerInnen") . ' '. $db->f('Name')).'&format=csv&choose=csv-teiln&o_mode=passthrough">';
+			$teilnehmer .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("TeilnehmerInnen") . ' '. $sem_data['Name']) .'&format=csv&choose=csv-teiln&o_mode=passthrough">';
 			$teilnehmer .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Teilnehmerliste downloaden")).' ></a>';
 		}
 		$cssSw->switchClass();
-		$quota = $db->f("admission_turnout");
-		$count2 = 0;
-		$count3 = 0;
-		$query2 = "SELECT status, count(*) AS count2 FROM admission_seminar_user WHERE seminar_id='$seminar_id' AND (status='claiming' OR status='accepted') GROUP BY status";
-		$db2->query($query2);
-		if ($db2->next_record()) {
-			$count2 = $db2->f("count2");
-			if($count2){
-				$count2 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Anmeldungen") . ' '. $db->f('Name')).'&format=csv&choose=csv-warteliste&filter=awaiting&o_mode=passthrough">';
-				$count2 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Anmeldeliste downloaden")).' ></a>';
-			}
+		$quota = $semdata['admission_turnout'];
+		$count2 = $semdata['count_anmeldung'];
+		if($count2){
+			$count2 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Anmeldungen") . ' '. $sem_data['Name']).'&format=csv&choose=csv-warteliste&filter=awaiting&o_mode=passthrough">';
+			$count2 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Anmeldeliste downloaden")).' ></a>';
 		}
-		$query2 = "SELECT status, count(*) AS count3 FROM admission_seminar_user WHERE seminar_id='$seminar_id' AND status='awaiting' GROUP BY status";
-		$db2->query($query2);
-		if ($db2->next_record()) {
-			$count3 = $db2->f("count3");
-			if($count3){
-				$count3 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Warteliste") . ' '. $db->f('Name')).'&format=csv&choose=csv-warteliste&filter=awaiting&o_mode=passthrough">';
-				$count3 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Warteliste downloaden")).' ></a>';
-			}
+		$count3 = $semdata['count_wartende'];;
+		if($count3){
+			$count3 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Warteliste") . ' '. $sem_data['Name']).'&format=csv&choose=csv-warteliste&filter=awaiting&o_mode=passthrough">';
+			$count3 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Warteliste downloaden")).' ></a>';
 		}
-		$datum = $db->f("admission_endtime");
-		$status = array();
-		if($db->f('admission_type') == 3) $status[] = _("gesperrt");
-		if($db->f('admission_type') == 2) $status[] = _("Chronologisch");
-		if($db->f('admission_type') == 1) $status[] = _("Losverfahren");
-		if($db->f('admission_type') == 0) $status[] = _("kein Anmeldeverfahren");
-
-		if($db->f('admission_prelim'))  $status[] = _("vorläufig");
+		$datum = $semdata['admission_endtime'];
+		$status = $semdata['admission_status_text'];
 		echo "<tr>";
 		if ($ALLOW_GROUPING_SEMINARS) {
-				if (!$db->f("admission_group") ) { //wenn keiner Gruppe zugeordnet, dann cechkbox ausgeben
+				if (!$semdata['admission_group']) { //wenn keiner Gruppe zugeordnet, dann cechkbox ausgeben
 					printf("<td class=\"%s\" align=\"center\">",$cssSw->getClass());
 					unset($last_group);
-					printf("<input type=\"checkbox\" name=\"gruppe[]\" value=\"%s\">",$db->f("Seminar_id"));
+					printf("<input type=\"checkbox\" name=\"gruppe[]\" value=\"%s\">",$seminar_id);
 					echo '</td>';
 				} else {
-					if($db->f("admission_group") != $last_group) {
+					if($semdata['admission_group'] != $last_group) {
 						unset($last_group);
 					}
 					if (!isset($last_group)) { //Wenn erstes "Mitglied" einer Gruppe, dann Muelleimer ausgeben
-						$last_group = $db->f("admission_group");
+						$last_group = $semdata['admission_group'];
 						$group_obj = new StudipAdmissionGroup($last_group);
 						echo '<td class="'.$cssSw->getClass().'" style="border:1px solid;" align="center" valign="middle" rowspan="'.$group_obj->getNumMembers().'">';
 						printf("<a title=\"%s\" href=\"show_admission.php?group_id=%s&group_sem_x=1\">
 								<img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\"></a>"
-								,_("Gruppe bearbeiten"), $db->f("admission_group"));
+								,_("Gruppe bearbeiten"), $semdata['admission_group']);
 						echo '</td>';
 					}
 				}
@@ -530,11 +670,11 @@ if(is_object($group_obj)){
 				<td class=\"%s\" align=\"left\" nowrap><font size=\"-1\">%s</font></td>",
 				$cssSw->getClass(),
 				_("Teilnehmerliste aufrufen"),
-				$db->f("Seminar_id"),
-				htmlready(substr($db->f("Name"), 0, 50)), (strlen($db->f("Name"))>50) ? "..." : "",
+				$seminar_id,
+				htmlready(substr($semdata['Name'], 0, 50)), (strlen($semdata['Name'])>50) ? "..." : "",
 				$cssSw->getClass(),
 				_("Zugangsbeschränkungen aufrufen"),
-				$db->f("Seminar_id"),
+				$seminar_id,
 				join('/', $status),
 				$cssSw->getClass(),
 				$teilnehmer,
@@ -546,20 +686,20 @@ if(is_object($group_obj)){
 				$count3,
 				($datum != -1) ? ($datum < time() ? "steelgroup4" : "steelgroup1") : $cssSw->getClass(),
 				($datum != -1) ? date("d.m.Y, G:i", $datum) : "");
-		if (($db->f("admission_endtime_sem") != -1)  || ($db->f("admission_starttime") != -1)) {  // last tabel-data: "Anmeldeverfahren"
+		if (($semdata['admission_endtime_sem'] != -1)  || ($semdata['admission_starttime'] != -1)) {  // last tabel-data: "Anmeldeverfahren"
 			$class = "";  //we have to parse the correct color for the background
-			if ($db->f("admission_starttime") != -1) {
-				if ($db->f("admission_starttime") > time()) $class = "steelgroup1";
+			if ($semdata['admission_starttime'] != -1) {
+				if ($semdata['admission_starttime'] > time()) $class = "steelgroup1";
 					else $class="steelgroup4";
 			}
-			if ($db->f("admission_endtime_sem") != -1) {
-				if ($db->f("admission_endtime_sem") < time()) $class = "steelgroup1";
+			if ($semdata['admission_endtime_sem'] != -1) {
+				if ($semdata['admission_endtime_sem'] < time()) $class = "steelgroup1";
 					else if($class != "steelgroup1") $class = "steelgroup4";
 			}
 			// print out table-data
 			printf ("<td class=\"%s\" align=\"left\" nowrap><font size=\"-1\">", $class);
-			if ($db->f("admission_starttime") != -1) echo _("Start:")." ".date("d.m.Y, G:i", $db->f("admission_starttime"))." <br/>";
-			if ($db->f("admission_endtime_sem") != -1) echo _("Ende:")." ".date("d.m.Y, G:i", $db->f("admission_endtime_sem"));
+			if ($semdata['admission_starttime'] != -1) echo _("Start:")." ".date("d.m.Y, G:i", $semdata['admission_starttime'])." <br/>";
+			if ($semdata['admission_endtime_sem'] != -1) echo _("Ende:")." ".date("d.m.Y, G:i", $semdata['admission_endtime_sem']);
 			echo "</font></td>";
 		} else {
 			printf("<td class=\"%s\" align=\"center\"></td>", $cssSw->getClass());
@@ -567,7 +707,7 @@ if(is_object($group_obj)){
 		print ("</tr>");
 	}
 
-	if ($db->nf() && $ALLOW_GROUPING_SEMINARS) {
+	if (count($data) && $ALLOW_GROUPING_SEMINARS) {
 		echo '<tr><td align="left">'. "\n";
 		echo makeButton("gruppieren", 'input', _("Markierte Veranstaltungen gruppieren"), 'group_sem');
 		echo "</form>\n";
