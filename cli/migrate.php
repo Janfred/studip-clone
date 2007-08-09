@@ -23,7 +23,8 @@ if (isset($_SERVER["argv"])) {
   if ($options === false) {
     exit(1);
   }
-
+  print_r($options);
+die();
   # check for options
   $list = false;
   $path = $STUDIP_BASE_PATH.'/db/migrations';

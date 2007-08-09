@@ -233,7 +233,7 @@ class StudipStmInstance extends SimpleORMap {
 	function restore () {
 		$where_query = $this->getWhereQuery();
 		if ($where_query){
-			$query = "SELECT stm_instances.*,stm_abstract.*,stm_instances_text.*,stm_abstract_text.aims,semester_data.name as sem_name, Institute.Name as homeinst_name FROM stm_instances
+			$query = "SELECT stm_instances.*,stm_abstract.id_number,stm_abstract.duration,credits,stm_abstract.workload,stm_abstract.turnus, stm_instances_text.*,stm_abstract_text.aims,semester_data.name as sem_name, Institute.Name as homeinst_name FROM stm_instances
 						INNER JOIN stm_abstract ON stm_instances.stm_abstr_id = stm_abstract.stm_abstr_id
 						INNER JOIN stm_instances_text ON stm_instances.stm_instance_id =stm_instances_text.stm_instance_id AND stm_instances_text.lang_id='".LANGUAGE_ID."'
 						INNER JOIN stm_abstract_text ON stm_instances.stm_abstr_id = stm_abstract_text.stm_abstr_id AND stm_abstract_text.lang_id='".LANGUAGE_ID."'

@@ -1,37 +1,30 @@
-<?
-class TableTokenClass extends DBMigration {
+<?php
+class Step_0111_admission extends DBMigration {
 
 	function description () {
-		return 'creates table for Token class';
+		return 'creates table admission groups';
 	}
 
 	function up () {
-		set_time_limit(0);
-		$this->announce(" creating table...");
+		$this->announce(" creating table `admission_group`...");
 		
-		$this->db->query( "	CREATE TABLE IF NOT EXISTS `user_token` (
-										`user_id` VARCHAR( 32 ) NOT NULL ,
-										`token` VARCHAR( 32 ) NOT NULL ,
-										`expiration` INT NOT NULL ,
-										PRIMARY KEY ( `user_id` , `token` , `expiration` ),
-										INDEX index_expiration (`expiration`),
-										INDEX index_token (`token`),
-										INDEX index_user_id (`user_id`)
-									);");
+		$this->db->query( "CREATE TABLE IF NOT EXISTS `admission_group` (
+						  `group_id` varchar(32) NOT NULL,
+						  `name` varchar(255) NOT NULL,
+						  `status` tinyint(3) unsigned NOT NULL,
+						  `chdate` int(10) unsigned NOT NULL,
+						  `mkdate` int(10) unsigned NOT NULL,
+						  PRIMARY KEY  (`group_id`)
+						) TYPE=MyISAM");
 		
 		$this->announce("done.");
 		
 	}
 	
 	function down () {
-		set_time_limit(0);
-		$this->announce(" removing table...");
-		$this->db->query("
-      DROP TABLE `user_token` 
-		");
-		
+		$this->announce(" removing table `admission_group`...");
+		$this->db->query("DROP TABLE IF EXISTS `admission_group` ");
 		$this->announce("done.");
-		
 	}
 }
 ?>
