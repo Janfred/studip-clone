@@ -1336,10 +1336,10 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon", $h
 	}
 
 	begin_blank_table();
-	echo "<tr class=\"printcontent\">";
-	echo "<td class=\"printcontent\" width=\"22\">&nbsp;&nbsp;</td>";
-	echo "<td class=\"printcontent\" align=\"center\">&nbsp;<br>\n";
+	echo "<tr>";
+	echo "<td class=\"printcontent\"><div align=\"center\">&nbsp;<br>";
 	echo $edit;
+	echo "</div></td></tr>";
 	end_blank_table();
 
 	begin_blank_table();
