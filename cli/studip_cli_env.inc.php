@@ -50,7 +50,7 @@ $STUDIP_BASE_PATH = realpath( dirname(__FILE__) . '/..');
 $include_path = get_include_path();
 $include_path .= PATH_SEPARATOR . $STUDIP_BASE_PATH . DIRECTORY_SEPARATOR . 'public';
 set_include_path($include_path);
-require_once $STUDIP_BASE_PATH . "/lib/phplib/my_prepend4.php";
+require_once $STUDIP_BASE_PATH . "/lib/phplib/prepend4.php";
 
 set_error_handler('CliErrorHandler');
 

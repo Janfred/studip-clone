@@ -47,7 +47,6 @@ require_once('lib/classes/UserConfig.class.php');
 require_once('lib/classes/StudipNews.class.php');
 if (version_compare(PHP_VERSION,'5','>=')) require_once('lib/classes/caching.php');
 
-
 // globale template factory anlegen
 require_once 'vendor/flexi/flexi.php';
 $GLOBALS['template_factory'] = new Flexi_TemplateFactory($STUDIP_BASE_PATH . '/templates');

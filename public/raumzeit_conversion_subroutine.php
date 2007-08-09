@@ -1,4 +1,5 @@
 <?php
+try {
     $output .= "";
     
     // run until really everything is done...
@@ -20,12 +21,12 @@
     if($db->query("SELECT value FROM config WHERE config_id = 'migration5'"))
         $db->next_record();
     else
-        die("Error accessing database in raumzeit_conversion_subroutine script.");
+        throw new Exception("Error accessing database in raumzeit_conversion_subroutine script.");
     
     // get parameters:
 
     if (!$_REQUEST['secret'] || $_REQUEST['secret'] != $db->f("value")) {
-        die("Invalid access to raumzeit_conversion_subroutine script.");
+        throw new Exception("Invalid access to raumzeit_conversion_subroutine script.");
     }    
     
     // number of records to be converted this time
@@ -60,7 +61,7 @@
     
     //if($convert_all_data)
         // read a bunch of seminares
-        $db->query("SELECT Seminar_id, Name FROM seminare WHERE Seminar_id='6dbab76485834514a878718c6bd569de' LIMIT $start_at, $step_size");
+        $db->query("SELECT Seminar_id, Name FROM seminare LIMIT $start_at, $step_size");
     //else    
     //    // read a bunch of seminares where the change date is zero (chdate funtions as a marker)
     //    $db->query("SELECT Seminar_id, Name FROM seminare WHERE chdate = 0 LIMIT 0, $step_size");
@@ -111,5 +112,7 @@
 
     echo $output;
 
-
+} catch (Exception $e) {
+    echo "ERROR: ". $e->__toString();
+}
 ?>

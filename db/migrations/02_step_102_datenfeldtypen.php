@@ -53,7 +53,7 @@ class Step102Datenfeldtypen extends DBMigration {
   function migrate_datafields() {
 
     require_once 'config/config_datafields.inc.php';
-    require_once 'lib/classes/DataFieldStructure.class.php';
+    require 'lib/classes/DataFieldStructure.class.php';
 
     $ids = array_keys(DataFieldStructure::getDataFieldStructures());
 

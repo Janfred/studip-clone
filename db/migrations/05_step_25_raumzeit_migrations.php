@@ -11,11 +11,11 @@ class Step25RaumzeitMigrations extends DBMigration
         // open log file
         $logfile_handle = fopen( $GLOBALS["TMP_PATH"] ."/Stud.IP_date_conversion.log", "ab");
         if(!$logfile_handle) {
-            die ("Can't open logfile ".$GLOBALS["TMP_PATH"]."/Stud.IP_date_conversion.log");
+            throw new Exception ("Can't open logfile ".$GLOBALS["TMP_PATH"]."/Stud.IP_date_conversion.log");
         }
         
         $this->write( get_class($this)." - Creating db schema...");
-        /*
+        
         $this->db->query("
             CREATE TABLE IF NOT EXISTS `themen` (
               `issue_id` varchar(32) NOT NULL default '',
@@ -75,9 +75,9 @@ class Step25RaumzeitMigrations extends DBMigration
         $this->db->query("
             ALTER TABLE `resources_requests` ADD `reply_comment` TEXT AFTER `comment`;        
         ");
-        */
+        
         $this->db->query("
-            INSERT IGNORE INTO `config` ( `config_id` , `parent_id` , `field` , `value` , `is_default` , `type` , `range` , `section` , `position` , `mkdate` , `chdate` , `description` , `comment` , `message_template` )
+            INSERT INTO `config` ( `config_id` , `parent_id` , `field` , `value` , `is_default` , `type` , `range` , `section` , `position` , `mkdate` , `chdate` , `description` , `comment` , `message_template` )
             VALUES (
             '93da66ca9e2d17df5bc61bd56406add7' , '', 'RESOURCES_ROOM_REQUEST_DEFAULT_ACTION', 'NO_ROOM_INFO_ACTION', '1', 'string', 'global', '', '0', '0', '0', 'Designates the pre-selected action for the room request dialog', 'Valid values are: NO_ROOM_INFO_ACTION, ROOM_REQUEST_ACTION, BOOKING_OF_ROOM_ACTION, FREETEXT_ROOM_ACTION', ''
             );
@@ -105,7 +105,6 @@ class Step25RaumzeitMigrations extends DBMigration
         ");
 
         $this->write( get_class($this)."Finished with data conversion...");
-		die('Ende 05');
     }
     
     
@@ -204,14 +203,14 @@ class Step25RaumzeitMigrations extends DBMigration
             // success ?
             if( $response == FALSE ){
                 fwrite($logfile_handle, "Error while executing subroutine. Stopping.\n");
-                die("Error while executing subroutine.");
+                throw new Exception("Error while executing subroutine.");
             }
             // some not quite nice error handling:
             if( substr($response,0,5) == "ERROR" ){
                 // write output to logfile
                 fwrite( $logfile_handle, $response);
                 fwrite($logfile_handle, "Error while executing subroutine. Stopping.\n");
-                die("Error while executing subroutine.". $response);
+                throw new Exception("Error while executing subroutine.". $response);
             }
 
             // get last line (holds the number of converted rows)
