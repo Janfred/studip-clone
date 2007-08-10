@@ -57,6 +57,7 @@ if ($RESOURCES_ENABLE) {
 	$resList = new ResourcesUserRoomsList($user->id, TRUE, FALSE, TRUE);
 }
 
+$CURRENT_PAGE = getHeaderLine($id).' - '._("Zeiten / Räume");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -160,16 +161,9 @@ while ($tmp_first_date < $end_date) {
 
 // template-like output
 ?>
-<TABLE width="100%" border="0" cellpadding="0" cellspacing="0">
-	<TR>
-		<TD colspan="9" class="topic">
-			&nbsp; <B><?=getHeaderLine($id)." -  "._("allgemeine Zeiten");?></B>
-		</TD>
-	</TR>
-
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td class="blank" width="100%" align="center" valign="top">
-			<br />
 			<table width="99%" border="0" cellpadding="2" cellspacing="0">
 			<tr>
 				<td colspan="9" class="steelkante">

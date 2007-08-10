@@ -52,6 +52,8 @@ if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
 }
 
+$CURRENT_PAGE = getHeaderLine($id).' - '._("Ablaufplan");
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -93,17 +95,15 @@ $sem->registerCommand('close', 'dates_close');
 $sem->registerCommand('setType', 'dates_settype');
 $sem->processCommands();
 
+$termine = getAllSortedSingleDates($sem);
+
 if ($cmd == 'openAll') $openAll = true;
 ?>
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="0">
-	<TR>
-		<TD colspan="2" class="topic">
-			&nbsp; <B><?=getHeaderLine($id)." -  "._("Ablaufplan");?></B>
-		</TD>
-	</TR>
   <TR>
 		<TD align="center" class="blank" width="80%" valign="top">
 			<TABLE width="99%" cellspacing="0" cellpadding="0" border="0">
+				<? if (is_array($termine) && sizeof($termine) > 0) : ?>
 				<TR>
 					<TD class="steelgraulight" colspan="10" height="24" align="center">
 						<A href="<?=$PHP_SELF?>?cmd=<?=($openAll) ? 'close' : 'open'?>All">
@@ -111,13 +111,12 @@ if ($cmd == 'openAll') $openAll = true;
 						</A>
 					</TD>
 				</TR>
+				<? endif; ?>
 				<TR>
 					<TD colspan="10" height="3">
 					</TD>
 				</TR>
 				<?
-
-				$termine = getAllSortedSingleDates($sem);
 
 				$semester = new SemesterData();
 				$all_semester = $semester->getAllSemesterData();

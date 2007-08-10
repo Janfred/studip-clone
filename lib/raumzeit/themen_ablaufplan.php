@@ -39,6 +39,8 @@ if ($RESOURCES_ENABLE) {
 	$resList = new ResourcesUserRoomsList($user->id, TRUE, FALSE, TRUE);
 }
 
+$CURRENT_PAGE = getHeaderLine($id).' - '._("Ablaufplanverwaltung");
+
 // Start of Output
 include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php");   // Output of Stud.IP head
@@ -177,18 +179,15 @@ $semester = new SemesterData();
 $all_semester = $semester->getAllSemesterData();
 $grenze = 0;
 
+$termine = getAllSortedSingleDates($sem);
+
 ?>
 <FORM action="<?=$PHP_SELF?>" method="post">
 <TABLE width="100%" border="0" cellpadding="0" cellspacing="0">
-	<TR>
-		<TD colspan="2" class="topic">
-			&nbsp; <B><?=getHeaderLine($id)." -  "._("Ablaufplanverwaltung");?></B>
-		</TD>
-	</TR>
   <TR>
 		<TD align="center" class="blank" width="80%" valign="top">
-			<br />
 			<TABLE width="99%" cellspacing="0" cellpadding="0" border="0">
+				<? if (is_array($termine) && sizeof($termine) > 0) : ?>
 				<TR>
 					<TD class="steelgraulight" colspan="6" height="24" align="center">
 						<A href="<?=$PHP_SELF?>?cmd=<?=($openAll) ? 'close' : 'open'?>All">
@@ -196,6 +195,7 @@ $grenze = 0;
 						</A>
 					</TD>
 				</TR>
+				<? endif; ?>
 				<TR>
 					<TD class="blank" colspan="6" height="2"></TD>
 				</TR>
@@ -214,8 +214,6 @@ $grenze = 0;
 					<TD class="blank" colspan="6" height="2"></TD>
 				</TR>
 				<?
-
-				$termine = getAllSortedSingleDates($sem);
 
 				foreach ($termine as $singledate_id => $singledate) {
 
