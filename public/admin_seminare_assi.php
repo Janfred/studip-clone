@@ -1994,17 +1994,21 @@ elseif ((!$level) || ($level == 1))
 						<td class="<? echo $cssSw->getClass() ?>" width="20%">
 							&nbsp;
 							<?
-							echo "<select name=\"sem_start_time\">";
 							$all_semester = $semester->getAllSemesterData();
-							for ($i=0; $i<sizeof($all_semester); $i++)
-								if ((!$all_semester[$i]["past"]) && ($all_semester[$i]["vorles_ende"] > time()))
-									{
-									if ($sem_create_data["sem_start_time"] ==$all_semester[$i]["beginn"])
-										echo "<option value=".$all_semester[$i]["beginn"]." selected>", $all_semester[$i]["name"], "</option>";
-									else
-										echo "<option value=".$all_semester[$i]["beginn"].">", $all_semester[$i]["name"], "</option>";
+
+							echo "<select name=\"sem_start_time\">";
+
+							foreach ($all_semester as $key => $semester) {
+								if ((!$semester["past"]) && ($semester["ende"] > time())) {
+									if ($sem_create_data["sem_start_time"] ==$semester["beginn"]) {
+										echo "<option value=".$semester["beginn"]." selected>", $semester["name"], "</option>";
+									} else {
+										echo "<option value=".$semester["beginn"].">", $semester["name"], "</option>";
 									}
+								}
+							}
 							echo "</select>";
+
 							?>
 							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
 								<? echo tooltip(_("Bitte geben Sie hier ein, welchem Semester die Veranstaltung zugeordnet werden soll."), TRUE, TRUE) ?>
