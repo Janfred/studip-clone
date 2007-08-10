@@ -65,13 +65,12 @@ function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID =
 			$value1 = "setResultvisibility_confirmed";
 			$value2 = "setResultvisibility_aborted";
 		}
-		global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
 		$html .="<font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&voteaction=".$value1."&voteID=".$voteID."&showrangeID=".$showrangeID;
 		if ($referer) $html .= "&referer=".$referer;
-		$html .="\" title=\"".$label["yes"]."\"><img src=\"".localeButtonUrl('ja2-button.gif')."\" width=\"93\" alt=\"".$label["yes"]."\" title=\"".$label["yes"]."\" border=\"0\" align=\"middle\"></a></font>\n";
+		$html .="\" title=\"".$label["yes"]."\">" . makeButton('ja','img',$label["yes"]) . "</a></font>\n";
 		$html .="<font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&voteaction=".$value2."&voteID=".$voteID."&showrangeID=".$showrangeID;
 		if ($referer) $html .= "&referer=".$referer;
-		$html .="\" title=\"".$label["no"]."\"><img src=\"".localeButtonUrl('nein-button.gif')."\" width=\"93\" alt=\"".$label["no"]."\" title=\"".$label["no"]."\" border=\"0\" align=\"middle\"></a></font>\n";
+		$html .="\" title=\"".$label["no"]."\">" . makeButton('nein','img',$label["no"]) . "</a></font>\n";
 	}
 	$html .="	 </td>\n"
 		  . "	</tr>\n";
@@ -591,7 +590,6 @@ function makeTableDataCellForm( $displayclass = "steel1",
 								$hidden3_value= NULL,
 								$hidden4_name = NULL,
 								$hidden4_value= NULL){
-	global $_language_path, $CANONICAL_RELATIVE_PATH_STUDIP;
 	$link =	VOTE_FILE_ADMIN."?page=".$action;
 	if (!empty($hidden1_name)) $link .="&".$hidden1_name."=".$hidden1_value;
 	if (!empty($hidden2_name)) $link .="&".$hidden2_name."=".$hidden2_value;
@@ -599,16 +597,14 @@ function makeTableDataCellForm( $displayclass = "steel1",
 	if (!empty($hidden4_name)) $link .="&".$hidden4_name."=".$hidden4_value;
 
 	if ($hidden2_value != "change_visibility"){
-		$src = localeButtonUrl($button_name.'-button.gif');
-		$imgwidth = "93";
+		$button = makeButton($button_name, 'img', decodeHTML($button_tooltip));
 	}
 	else{
-		$src = $GLOBALS['ASSETS_URL']."images/vote-icon-".$button_name.".gif";
-		$imgwidth = "18";
+		$button = "<img src=\"{$GLOBALS['ASSETS_URL']}images/vote-icon-$button_name.gif\" width=\"18\" alt=\"".$button_name."\" title=\"".$button_tooltip."\" border=\"0\" align=\"middle\">";
 	}
 
 	$html.="	 <td class=$displayclass width=\"93\" align=\"center\" style=\"vertical-align:middle;\">\n"
-		 . "	  <font size=\"-1\"><a href=\"$link\" alt=\"".$button_name."\"><img src=\"$src\" width=\"$imgwidth\" alt=\"".$button_name."\" title=\"".$button_tooltip."\" border=\"0\" align=\"middle\"></a></font>\n"
+		 . "	  <font size=\"-1\"><a href=\"$link\">$button</a></font>\n"
 		 . "	 </td>\n";
 	return $html;
 }
