@@ -97,7 +97,7 @@
 				</TD>
 			</TR>
 			<TR>
-				<TD align="center" class="printcontent" colspan="4">
+				<TD align="center" class="printcontent" colspan="4" style="text-align: center">
 					<INPUT type="hidden" name="cmd" value="doAddSingleDate">
 					<INPUT type="image" <?=makebutton('uebernehmen', 'src')?>>
 					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
@@ -154,7 +154,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td align="center" class="printcontent" colspan="4">
+				<td align="center" class="printcontent" colspan="4" style="text-align: center">
 					<input type="image" <?=makebutton('uebernehmen', 'src')?>>
 					<a href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
 						<img <?=makebutton('abbrechen', 'src')?> border="0">

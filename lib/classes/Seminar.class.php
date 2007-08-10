@@ -175,7 +175,7 @@ class Seminar {
 			case 'export':
 				$ret = $termin->toString();
 				if ($termin->getResourceID()) {
-					$ret .= ', '._("Raum:").' ';
+					$ret .= ', '._("Ort:").' ';
 					$resObj =& ResourceObject::Factory($termin->getResourceID());
 					$ret .= $resObj->getName();
 				}
@@ -186,9 +186,11 @@ class Seminar {
 			default:
 				$ret = $termin->toString();
 				if ($termin->getResourceID()) {
-					$ret .= ', '._("Raum:").' ';
+					$ret .= ', '._("Ort:").' ';
 					$resObj =& ResourceObject::Factory($termin->getResourceID());
 					$ret .= $resObj->getFormattedLink(TRUE, TRUE, TRUE);
+				} else if ($termin->getFreeRoomText()) {
+					$ret .= ', ('.$termin->getFreeRoomText().')';
 				}
 				return $ret;
 			break;

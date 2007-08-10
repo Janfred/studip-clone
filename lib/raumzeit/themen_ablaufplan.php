@@ -146,19 +146,20 @@ $info["eintrag"][] = array ("icon" => "blank.gif",
 		"text"  => $times_info);
 $infobox[] = $info;
 
-$info = array();
-$info['kategorie'] = _("Ansicht:");
-$info['eintrag'][] = array (
-	'icon' => ($viewModeFilter == 'simple') ? 'forumrot.gif' : 'forumgrau.gif',
-	'text' => '<a href="themen.php?cmd=changeViewMode&newFilter=expert">'._("Standardansicht").'</a>'
-);
 if($GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
-    $info['eintrag'][] = array (
-    	'icon' => ($viewModeFilter == 'expert') ? 'forumrot.gif' : 'forumgrau.gif',
-    	'text' => '<a href="themen.php?cmd=changeViewMode&newFilter=expert">'._("Erweiterte Ansicht").'</a>'
-    );
+	$info = array();
+	$info['kategorie'] = _("Ansicht:");
+	$info['eintrag'][] = array (
+		'icon' => ($viewModeFilter == 'simple') ? 'forumrot.gif' : 'forumgrau.gif',
+		'text' => '<a href="themen.php?cmd=changeViewMode&newFilter=expert">'._("Standardansicht").'</a>'
+	);
+  $info['eintrag'][] = array (
+		'icon' => ($viewModeFilter == 'expert') ? 'forumrot.gif' : 'forumgrau.gif',
+		'text' => '<a href="themen.php?cmd=changeViewMode&newFilter=expert">'._("Erweiterte Ansicht").'</a>'
+	);
+
+	$infobox[] = $info;
 }
-$infobox[] = $info;
 
 $infobox[] = raumzeit_get_semester_chooser($sem, $semester, $raumzeitFilter);
 
