@@ -22,6 +22,7 @@
 
 require_once("lib/classes/StudipForm.class.php");
 require_once("lib/classes/StudipLitSearch.class.php");
+require_once("lib/classes/StudipLitList.class.php");
 require_once("lib/dbviews/literatur.view.php");
 require_once("lib/classes/DbView.class.php");
 
@@ -163,6 +164,7 @@ class StudipLitCatElement {
 			$this->fields['chdate']['value'] = time();
 			$this->fields['user_id']['value'] = $GLOBALS['auth']->auth['uid'];
 			$this->fields['lit_plugin']['value'] = 'Studip';
+			$this->reference_count = 0;
 		}
 		if ($this->init_form){
 			$this->setFormObject();
@@ -180,6 +182,13 @@ class StudipLitCatElement {
 	function setFormObject(){
 		$form_fields = array();
 		$form_name = $this->form_name;
+		if($this->isNewEntry()){
+			$this->fields['default_lit_list'] = array('caption'	=> _("Eintrag in diese Literaturliste"),
+												'info'	=> _("Wählen Sie hier eine persönliche Literaturliste aus, in die der neue Eintrag aufgenommen werden soll."),
+												'len'	=> 255,
+												'type'	=> 'select',
+												'options'=> StudipLitList::GetListsByRange($GLOBALS['user']->id, 'form_options'));
+		}
 		foreach ($this->fields as $field_name => $field_detail){
 			if ($field_detail['caption']){
 				if ($field_detail['select_list']){
@@ -250,6 +259,8 @@ class StudipLitCatElement {
 		if ($this->isNewEntry()){
 			$this->fields['catalog_id']['value'] = md5(uniqid("litblablubb",1));
 			$this->fields['chdate']['value'] = $this->fields['mkdate']['value'] = time();
+			$default_list_entry = $this->fields['default_lit_list']['value'];
+			unset($this->fields['default_lit_list']);
 			foreach($this->fields as $name => $detail){
 				$field_names[] = $name;
 				$field_values[] = mysql_escape_string(trim($detail['value']));
@@ -270,6 +281,13 @@ class StudipLitCatElement {
 		}
 		$this->getElementData();
 		if ($rs->affected_rows()){
+			if($default_list_entry){
+				$list =& TreeAbstract::GetInstance("StudipLitList", $GLOBALS['user']->id);
+				$list->insertElement(array('catalog_id' => $this->getValue('catalog_id'), 'list_id' => $default_list_entry,
+											'list_element_id' => $list->getNewListElementId(),
+											'user_id' => $GLOBALS['user']->id,
+											'note' => '', 'priority' => ($list->getMaxPriority($default_list_entry) + 1) ));
+			}
 			$this->msg .= $msg;
 		}
 		return $rs->affected_rows();
@@ -401,6 +419,12 @@ class StudipLitCatElement {
 		$clone->getElementData('new_entry');
 		$clone->insertData();
 		return ($clone->getValue('catalog_id') == $catalog_id ? false : $clone->getValue('catalog_id'));
+	}
+	
+	function &GetClonedElement($catalog_id){
+		$clone = new StudipLitCatElement($catalog_id);
+		$clone->getElementData('new_entry');
+		return $clone;
 	}
 }
 ?>

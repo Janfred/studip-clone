@@ -29,7 +29,7 @@ require_once ('lib/classes/StudipLitCatElement.class.php');
 require_once ('lib/classes/StudipLitClipBoard.class.php');
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
-
+$CURRENT_PAGE = _("Literatureintrag bearbeiten");
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -68,18 +68,20 @@ if ($_catalog_id{0} == "_"){
 }
 
 if ($_REQUEST['cmd'] == 'clone_entry'){
-	$new_cat_id = StudipLitCatElement::CloneElement($_catalog_id);
-	if ($new_cat_id){
+	$_the_element =& StudipLitCatElement::GetClonedElement($_catalog_id);
+	if ($_the_element->isNewEntry()){
 		$_msg = "msg§" . _("Der Eintrag wurde kopiert, Sie können die Daten jetzt ändern.") . "§";
-		$old_cat_id = $_catalog_id;
-		$_catalog_id = $new_cat_id;
+		$_msg .= "info§" . _("Der kopierte Eintrag wurde noch nicht gespeichert.") . "§";
+		//$old_cat_id = $_catalog_id;
+		$_catalog_id = $_the_element->getValue('catalog_id');
 	} else {
 		$_msg = "error§" . _("Der Eintrag konnte nicht kopiert werden!.") . "§";
 	}
 }
 
-
-$_the_element =& new StudipLitCatElement($_catalog_id, true);
+if(!is_object($_the_element)){
+	$_the_element =& new StudipLitCatElement($_catalog_id, true);
+}
 $_the_form =& $_the_element->getFormObject();
 $_the_clipboard =& StudipLitClipBoard::GetInstance();
 $_the_clip_form =& $_the_clipboard->getFormObject();
@@ -170,11 +172,7 @@ $_msg .= $_the_element->msg;
 $_msg .= $_the_clipboard->msg;
 
 ?>
-<body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
-	<tr>
-		<td class="topic" colspan="2"><b>&nbsp;<?=_("Literatureintrag bearbeiten")?></b></td>
-	</tr>
 	<tr>
 	<td class="blank" width="99%" align="left" valign="top">
 
@@ -196,7 +194,6 @@ echo "<tr><td " . $class_changer->getFullClass() . " align=\"left\" width=\"40%\
 echo "<td " . $class_changer->getFullClass() . " align=\"center\">";
 if ($_the_element->isChangeable()){
 	echo $_the_form->getFormButton("send") .  $_the_form->getFormButton("delete") . $_the_form->getFormButton("reset");
-} elseif ($_catalog_id != "new_entry") {
 	echo "<a href=\"$PHP_SELF?cmd=clone_entry&_catalog_id=$_catalog_id\"><img border=\"0\" "
 	. makeButton('kopieerstellen','src') . tooltip(_("Eine Kopie dieses Eintrages anlegen")) ."></a>";
 }

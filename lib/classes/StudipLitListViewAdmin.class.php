@@ -235,7 +235,26 @@ class StudipLitListViewAdmin extends TreeView{
 		$this->msg[$item_id] = "msg§" . (($direction == "up") ? _("Element wurde um eine Position nach oben verschoben.") : _("Element wurde um eine Position nach unten verschoben."));
 		return true;
 	}
-
+	
+	function execCommandSortKids(){
+		$item_id = $_REQUEST['item_id'];
+		$kids = $this->tree->getKids($item_id);
+		usort($kids, create_function('$a,$b',
+				'$the_tree =& TreeAbstract::GetInstance("StudipLitList", "'.$this->tree->range_id.'");
+				return strnatcasecmp($the_tree->getValue($a, "name"),$the_tree->getValue($b, "name"));
+				'));
+		foreach($kids as $pos => $kid_id){
+			if ($this->tree->isElement($kid_id)){
+				$this->tree->updateElement(array('priority' => $pos, 'list_element_id' => $kid_id));
+			} else {
+				$this->tree->updateList(array('priority' => $pos, 'list_id' => $kid_id));
+			}
+		}
+		$this->mode = "";
+		$this->msg[$item_id] = "msg§" . _("Die Unterelemente wurden alphabetisch sortiert.") . '§';
+		return true;
+	}
+	
 	function execCommandAssertDeleteItem(){
 		$item_id = $_REQUEST['item_id'];
 		$this->mode = "AssertDeleteItem";
@@ -370,6 +389,9 @@ class StudipLitListViewAdmin extends TreeView{
 						$cmd = "AssertDeleteItem";
 						$content .= "<a href=\"" . $this->getSelf("cmd=CopyList&item_id=$item_id") . "\">"
 						. "<img " .makeButton("kopieerstellen","src") . tooltip(_("Eine Kopie dieser Liste erstellen"))
+						. " border=\"0\"></a>&nbsp;";
+						$content .= "<a href=\"" . $this->getSelf("cmd=SortKids&item_id=$item_id") . "\">"
+						. "<img " .makeButton("sortieren","src") . tooltip(_("Elemente dieser Liste alphabetisch sortieren"))
 						. " border=\"0\"></a>&nbsp;";
 						$content .= '<a href="' . GetDownloadLink('', $this->tree->tree_data[$item_id]['name'] . '.txt', 5, 'force', $this->tree->range_id, $item_id) . '">'
 						. "<img " .makeButton("export","src") . tooltip(_("Export der Liste in EndNote kompatiblem Format"))

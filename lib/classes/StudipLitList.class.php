@@ -353,12 +353,14 @@ class StudipLitList extends TreeAbstract {
 		return array("visible_list" => $rs->f("visible_list"),"invisible_list" => $rs->f("invisible_list"));;
 	}
 
-	function GetListsByRange($range_id){
+	function GetListsByRange($range_id, $format = 'default'){
 		$view = new DbView();
 		$view->params[] = $range_id;
 		$rs = $view->get_query("view:LIT_GET_LIST_BY_RANGE");
+		$list_ids = array();
 		while ($rs->next_record()){
-			$list_ids[$rs->f("list_id")] =  $rs->f("name");
+			if($format == 'default') $list_ids[$rs->f("list_id")] =  $rs->f("name");
+			if($format == 'form_options') $list_ids[] = array('name' => $rs->f("name"), 'value' => $rs->f("list_id"));
 		}
 		return $list_ids;
 	}

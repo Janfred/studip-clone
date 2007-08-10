@@ -95,9 +95,9 @@ class StudipLitSearch {
 			$this->outer_form->form_values['search_term_count']--;
 		}
 		$plugin_name = false;
-		if ($this->outer_form->isClicked("reset") ||  $this->outer_form->isChanged("search_plugin")){
+		if ($this->outer_form->isClicked("reset") || $this->outer_form->isChanged("search_plugin")){
 			$plugin_name = $this->outer_form->getFormFieldValue("search_plugin");
-			$this->outer_form->doFormReset();
+			if($this->outer_form->isClicked("reset")) $this->outer_form->doFormReset();
 			$this->outer_form->form_values["search_plugin"] = $plugin_name;
 		}
 		
@@ -109,7 +109,7 @@ class StudipLitSearch {
 		}
 		$this->inner_form =& new StudipForm($inner_form_fields, null, "lit_search");
 		if ($plugin_name !== false){
-			$this->inner_form->doFormReset();
+			if($this->outer_form->isClicked("reset")) $this->inner_form->doFormReset();
 			$this->outer_form->form_values["search_plugin"] = $plugin_name;
 		}
 		if ( ($init_plugin_name = $this->outer_form->getFormFieldValue("search_plugin")) ){

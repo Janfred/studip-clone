@@ -81,7 +81,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 										'260' => array('field' => 'dc_publisher', 'callback' => 'simpleMap', 'cb_args' => '$a $b'),
 										'256' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10)),
 										'300' => array('field' => 'dc_format', 'callback' => 'simpleMap', 'cb_args' => '$a $b $c $e'),
-										'440' => array('field' => 'dc_relation', 'callback' => 'simpleMap', 'cb_args' => '$a, $v'),
+										'440' => array('field' => 'dc_relation', 'callback' => 'simpleMap', 'cb_args' => '$a $v'),
 										'500' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10)),
 										'502' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => 'Dissertation note:$a' . chr(10)),
 										'518' => array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10)),
@@ -231,6 +231,8 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	function getZRecord($rn){
 		$record = yaz_record($this->z_id,$rn,"string");
 		$plugin_mapping = $this->mapping[$this->z_syntax];
+							echo "<hr><pre>".print_r($record,1)."</pre><hr>";
+
 		if ($record){
 			$cat_element = new StudipLitCatElement();
 			$cat_element->setValue("user_id", $GLOBALS['auth']->auth['uid']);
@@ -261,6 +263,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 			$this->addError("error",sprintf(_("Datensatz Nummer %s konnte nicht abgerufen werden."), $rn));
 			return 0;
 		}
+
 	}
 	
 	function simpleMap(&$cat_element, $data, $field, $args){
