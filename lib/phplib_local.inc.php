@@ -40,12 +40,22 @@ foreach($_never_globalize_request_params as $one_param){
 	}
 }
 
+// set default pdo connection
+require_once('lib/classes/DBManager.class.php');
+DBManager::getInstance()
+  ->setConnection('studip',
+                  'mysql:host='.$GLOBALS['DB_STUDIP_HOST'].
+                  ';dbname='.$GLOBALS['DB_STUDIP_DATABASE'],
+                  $GLOBALS['DB_STUDIP_USER'],
+                  $GLOBALS['DB_STUDIP_PASSWORD']);
+
+
 require_once('lib/language.inc.php');
 require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
 require_once('lib/classes/Config.class.php');
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/classes/StudipNews.class.php');
-if (version_compare(PHP_VERSION,'5','>=')) require_once('lib/classes/caching.php');
+require_once('lib/classes/caching.php');
 
 // globale template factory anlegen
 require_once 'vendor/flexi/flexi.php';
@@ -464,7 +474,7 @@ class Seminar_Auth extends Auth {
 		require_once('lib/visual.inc.php');
 		require_once('config.inc.php');
 		require_once('lib/classes/HeaderController.class.php');
-		
+
 		global $_language, $_language_path, $fail_count;
 		if (!isset($_language)) {
 			$_language = get_accepted_languages();
@@ -487,7 +497,7 @@ class Seminar_Auth extends Auth {
 		$header_controller->current_page = _("Login");
 		$header_template =& $GLOBALS['template_factory']->open('header');
 		$header_controller->fillTemplate($header_template);
-		
+
 		include 'lib/include/html_head.inc.php';
 		echo $header_template->render();
 		echo $login_template->render();
@@ -575,7 +585,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 	var $error_msg = ""; // Was läuft falsch bei der Registrierung ?
 
 	function auth_registerform() {
-		
+
 		require_once('lib/language.inc.php');
 		require_once('lib/visual.inc.php');
 		require_once('config.inc.php');
@@ -605,7 +615,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$header_controller->current_page = _("Registrierung");
 		$header_template =& $GLOBALS['template_factory']->open('header');
 		$header_controller->fillTemplate($header_template);
-		
+
 		include 'lib/include/html_head.inc.php';
 		echo $header_template->render();
 		echo $register_template->render();
@@ -634,7 +644,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		if (!Seminar_Session::check_ticket($_REQUEST['login_ticket'])){
 			return false;
 		}
-		
+
 		$username = trim($username);
 		$Vorname = trim($Vorname);
 		$Nachname = trim($Nachname);
