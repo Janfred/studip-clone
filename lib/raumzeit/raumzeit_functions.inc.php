@@ -135,6 +135,10 @@ function getTemplateDataForSingleDate($val, $cycle_id = '') {
 
 	}
 
+	if ($GLOBALS['ROOMTIME_HIDE_LEGEND']) {
+		$tpl['class'] = 'printhead';
+	}
+
 	/* Füllt die Variablen für Edit-Felder */
 	$tpl['day'] = date('d',$val->getStartTime());
 	$tpl['month'] = date('m',$val->getStartTime());

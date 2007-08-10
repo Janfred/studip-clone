@@ -562,20 +562,19 @@ while ($tmp_first_date < $end_date) {
 		<td align="left" valign="top" class="blank">
 				<?
 					// print info box:
-                    
-                    // get template
-                    $infobox_template =& $GLOBALS['template_factory']->open('infobox/infobox_raumzeit');
-                    
-                    // fill attributes
-                    $infobox_template->set_attribute('picture', 'board2.jpg');
-                    $infobox_template->set_attribute("selectionlist_title", "Semesterauswahl"); 
-                    $infobox_template->set_attribute('selectionlist', $semester_selectionlist);    
-                    if (sizeof($messages) > 0) {
-                        $infobox_template->set_attribute('messages', $messages);
-                    }
-                    // render template
-                    echo $infobox_template->render();
-                    
+					// get template
+					$infobox_template =& $GLOBALS['template_factory']->open('infobox/infobox_raumzeit');
+
+					// fill attributes
+					$infobox_template->set_attribute('picture', 'board2.jpg');
+					$infobox_template->set_attribute("selectionlist_title", "Semesterauswahl"); 
+					$infobox_template->set_attribute('selectionlist', $semester_selectionlist);    
+					if (sizeof($messages) > 0) {
+							$infobox_template->set_attribute('messages', $messages);
+					}
+					// render template
+					echo $infobox_template->render();
+
 				?>
 			</td>
 		</tr>

@@ -46,7 +46,7 @@
       ?>
 
 
-      <? if ($GLOBALS['RESOURCES_ENABLE']) : ?>
+      <? if ($GLOBALS['RESOURCES_ENABLE'] && !$GLOBALS['ROOMTIME_HIDE_LEGEND']) : ?>
       
       <!-- Legende -->
 
