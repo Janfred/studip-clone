@@ -233,7 +233,7 @@ if (!$sem_create_data["sem_entry"]) {
 } else
 	$links_admin_data["assi"]=FALSE;
 
-if (((time() - $sem_create_data["timestamp"]) >$auth->lifetime*60) || ($new_session))
+if (($auth->lifetime != 0 && ((time() - $sem_create_data["timestamp"]) >$auth->lifetime*60)) || ($new_session))
 	{
 	$sem_create_data='';
 	$links_admin_data='';
