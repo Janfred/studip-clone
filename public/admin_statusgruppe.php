@@ -35,16 +35,26 @@ require_once ('lib/datei.inc.php');
 //get ID, if a object is open
 if ($SessSemName[1])
 	$range_id = $SessSemName[1];
+	
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGruppen";
-$CURRENT_PAGE = getHeaderLine($range_id);
-if ($CURRENT_PAGE)
-	$CURRENT_PAGE.=" - ";
-$CURRENT_PAGE.= _("Verwaltung von Gruppen und Funktionen"); 
+
+//Output starts here
 
 include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');
+$CURRENT_PAGE = _("Verwaltung von Gruppen und Funktionen");
 
+//prebuild navi and the object switcher (important to do already here and to use ob!)
+ob_start();
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+$links = ob_get_clean();
+
+//Change header_line if open object
+$header_line = getHeaderLine($range_id);
+if ($header_line)
+	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
+
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+echo $links;
 // Rechtecheck
 
 $_range_type = get_object_type($range_id);
@@ -441,13 +451,7 @@ if($view == 'statusgruppe_sem'){
 // Anfang Edit-Bereich
 
 ?><table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr><td class="topic" colspan=2>&nbsp;<b>
-	<?
-	echo $tmp_typ, ": ", htmlReady(substr($tmp_name, 0, 60));
-		if (strlen($tmp_name) > 60)
-			echo "... ";
-		echo " -  " . _("Funktionen / Gruppen");
-	?></b></td></tr><tr><td class="blank" colspan="2">&nbsp; </td></tr></table>
+	</tr><tr><td class="blank" colspan="2">&nbsp; </td></tr></table>
 
 <table class="blank" width="100%" border="0" cellspacing="0">
   <tr>

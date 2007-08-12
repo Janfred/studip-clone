@@ -57,12 +57,23 @@ if ($RESOURCES_ENABLE) {
 	$resList = new ResourcesUserRoomsList($user->id, TRUE, FALSE, TRUE);
 }
 
-$CURRENT_PAGE = getHeaderLine($id).' - '._("Zeiten / Räume");
+//Output starts here
 
-// Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');
+$CURRENT_PAGE = _("Verwaltung von Zeiten und Raumangaben");
+
+//prebuild navi and the object switcher (important to do already here and to use ob!)
+ob_start();
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+$links = ob_get_clean();
+
+//Change header_line if open object
+$header_line = getHeaderLine($id);
+if ($header_line)
+	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
+
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+echo $links;
 
 if (!$perm->have_studip_perm('tutor', $id)) {
 	die;

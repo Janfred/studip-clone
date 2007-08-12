@@ -90,13 +90,30 @@ require_once('lib/classes/StudipAdmissionGroup.class.php'); //htmlReady
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenZugangsberechtigungen";
 if ($admin_admission_data["sem_id"] || $seminar_id)
 	$CURRENT_PAGE = ($admin_admission_data["sem_id"] ? getHeaderLine($admin_admission_data["sem_id"])." - " : getHeaderLine($seminar_id)." - ");
-$CURRENT_PAGE.= _("Verwaltung von Zugangsberechtigungen"); 
+	
+//Output starts here
 
-// Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+$CURRENT_PAGE = _("Verwaltung von Zugangsberechtigungen");
 
+//prebuild navi and the object switcher (important to do already here and to use ob!)
+ob_start();
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+$links = ob_get_clean();
+
+//get ID from a open Seminar
+if ($SessSemName[1])
+	$header_object_id = $SessSemName[1];
+else
+	$header_object_id = $admin_admission_data["sem_id"];
+
+//Change header_line if open object
+$header_line = getHeaderLine($header_object_id);
+if ($header_line)
+	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
+
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+echo $links;
 
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
@@ -134,10 +151,6 @@ function get_snapshot() {
 		$admin_admission_data["sem_admission_end_date"].
 		$admin_admission_data["admission_disable_waitlist"]);
 }
-
-//get ID
-if ($SessSemName[1])
-	$seminar_id=$SessSemName[1];
 
 $errormsg = '';
 

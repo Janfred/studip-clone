@@ -37,14 +37,28 @@ require_once('lib/classes/StudipSemTreeSearch.class.php');
 require_once('lib/classes/DataFieldEntry.class.php');
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGrunddaten";
-if ($s_id)
-	$CURRENT_PAGE = getHeaderLine($s_id)." - ";
+
+//Start of Output
+include ('lib/include/html_head.inc.php'); // Output of html head
 $CURRENT_PAGE.=_("Verwaltung der Grunddaten"); 
 
-// Start of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
+//prebuild navi and the object switcher (important to do already here and to use ob!)
+ob_start();
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+$links = ob_get_clean();
+
+//get ID from a open Seminar
+if ($SessSemName[1])
+	$s_id=$SessSemName[1];
+
+//Change header_line if open object
+$header_line = getHeaderLine($s_id);
+if ($header_line)
+	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
+
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');
+echo $links;
+
 ?>
 
 <SCRIPT language="JavaScript">

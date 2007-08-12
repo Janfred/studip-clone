@@ -323,10 +323,9 @@ $links = ob_get_clean();
 if ($SessSemName[1])
 	$i_view=$SessSemName[1];
 
-$CURRENT_PAGE = getHeaderLine($i_view);
-if ($CURRENT_PAGE)
-	$CURRENT_PAGE.=" - ";
-$CURRENT_PAGE.= _("Grunddaten");
+$header_line = getHeaderLine($i_view);
+if ($header_line)
+	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
 
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 echo $links;

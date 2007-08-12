@@ -167,17 +167,23 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 if ($SessSemName[1])
 	$range_id=$SessSemName[1];
 
+//Output starts here
 
-$HELP_KEYWORD="Basis.VeranstaltungenVerwaltenModule";
-$CURRENT_PAGE = getHeaderLine($range_id);
-if ($CURRENT_PAGE)
-	$CURRENT_PAGE.=" - ";
-$CURRENT_PAGE.= _("Verwaltung verwendeter Module/Plugins"); 
-
-// Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
+$CURRENT_PAGE = _("Verwaltung verwendeter Module und Plugins");
+
+//prebuild navi and the object switcher (important to do already here and to use ob!)
+ob_start();
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+$links = ob_get_clean();
+
+//Change header_line if open object
+$header_line = getHeaderLine($range_id);
+if ($header_line)
+	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
+
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+echo $links;
 
 if (!$admin_modules_data["conflicts"])
 	$admin_modules_data["conflicts"] = array();
