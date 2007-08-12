@@ -56,31 +56,41 @@ if( !ini_get('safe_mode')) set_time_limit(0);
 * @return		boolean
 *
 */
-function insert_seminar_user($seminar_id, $user_id, $status, $copy_studycourse=FALSE) {
+function insert_seminar_user($seminar_id, $user_id, $status, $copy_studycourse = false, $consider_contingent = false) {
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 		
 	$query = sprintf("SELECT comment, studiengang_id FROM admission_seminar_user WHERE user_id = '%s' AND seminar_id ='%s' ", $user_id, $seminar_id);
 	$db->query($query);
-	if ($db->nf()) {
-		$db->next_record();
+	if ($db->next_record()) {
 		$admission_entry = TRUE;
 		$comment = $db->f("comment");
 		if ($copy_studycourse)
 			$studiengang_id = $db->f("studiengang_id");
 		else
-			$studiengang_id = FALSE;
+			$studiengang_id = '';
 	}
-
-	$query = sprintf("SELECT start_time FROM seminare WHERE Seminar_id ='%s' ", $seminar_id);
+	if(strlen($consider_contingent) > 1) $studiengang_id = $consider_contingent;
+	
+	$query = sprintf("SELECT * FROM seminare WHERE Seminar_id ='%s' ", $seminar_id);
 	$db->query($query);
 	$db->next_record();
-	$group = select_group ($db->f("start_time"), $user_id); //ok, here ist the "colored-group" meant (for grouping on meine_seminare), not the grouped seminars as above!
+	
+	if($copy_studycourse && $consider_contingent && ($db->f('admission_type') == 1 || $db->f('admission_type') == 2)){
+		if(!$db->f('admission_selection_take_place')){
+			$admission_info = get_admission_quota_info($seminar_id);
+			if(!$admission_info[$studiengang_id]['num_available']) return false;
+		} else {
+			if(!get_free_admission($seminar_id)) return false;
+		}
+	}
+
+	$group = select_group($db->f("start_time"), $user_id); //ok, here ist the "colored-group" meant (for grouping on meine_seminare), not the grouped seminars as above!
 	
 	$query = sprintf("INSERT INTO seminar_user SET Seminar_id = '%s', user_id = '%s', status= '%s', admission_studiengang_id ='%s', comment ='%s', gruppe='%s', mkdate = '%s' ", $seminar_id, $user_id, $status, $studiengang_id, mysql_escape_string($comment), $group, time());
 	$db->query($query);
 	
-	if ($db->affected_rows()) {
+	if ($ret = $db->affected_rows()) {
 		$query2 = sprintf("DELETE FROM admission_seminar_user WHERE user_id = '%s' AND seminar_id ='%s'", $user_id, $seminar_id);
 		$db2->query($query2);
 	}
@@ -88,9 +98,9 @@ function insert_seminar_user($seminar_id, $user_id, $status, $copy_studycourse=F
 	if ($db2->affected_rows()) {
 		//renumber the waiting list, if a user was deleted from it
 		renumber_admission($seminar_id);
-		return TRUE;
-	} else
-		return FALSE;
+		return 2;
+	}
+	return $ret;
 }
 
 
@@ -106,7 +116,7 @@ function insert_seminar_user($seminar_id, $user_id, $status, $copy_studycourse=F
 */
 
 function get_all_quota($seminar_id) {
-	$db=new DB_Seminar;
+	/*$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 
 	//Daten holen
@@ -124,8 +134,44 @@ function get_all_quota($seminar_id) {
 		$all_quota = 0;
 
 	return $all_quota;
+	*/
+	$info = get_admission_quota_info($seminar_id);
+	return $info['all']['num_total'];
 }
 
+function get_admission_quota_info($seminar_id) {
+	$db = new DB_Seminar();
+	$ret = array();
+	$count = 0;
+	$ret['all']['name'] = _("alle Studiengänge");
+	//Daten holen
+	$db->query("SELECT admission_turnout FROM seminare WHERE Seminar_id = '$seminar_id'");
+	$db->next_record();
+	$admission_turnout = $db->f('admission_turnout');
+	$db->query("SELECT quota, name FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING(studiengang_id) WHERE seminar_id = '$seminar_id' AND studiengang_id !='all'");
+	while($db->next_record()){
+		$ret[$db->f('studiengang_id')]['name'] = $db->f('name');
+		$ret[$db->f('studiengang_id')]['num_total'] = round($admission_turnout * ($db->f("quota") / 100));
+		$count += $ret[$db->f('studiengang_id')]['num_total'];
+	}
+	$ret['all']['num_total'] = $admission_turnout - $count;
+	if($ret['all']['num_total'] < 0) $ret['all']['num_total'] = 0;
+	foreach($ret as $studiengang_id => $data){
+		if($data['num_total']){
+			$ret[$studiengang_id]['num_available'] = $data['num_total'];
+			$db->query("SELECT COUNT(user_id) FROM seminar_user WHERE seminar_id = '$seminar_id' AND admission_studiengang_id='$studiengang_id'");
+			$db->next_record();
+			$ret[$studiengang_id]['num_available'] -= $db->f(0);
+			$db->query("SELECT COUNT(user_id) FROM admission_seminar_user WHERE seminar_id = '$seminar_id' AND status = 'accepted' AND studiengang_id='$studiengang_id'");
+			$db->next_record();
+			$ret[$studiengang_id]['num_available'] -= $db->f(0);
+			if($ret[$studiengang_id]['num_available'] < 0) $ret[$studiengang_id]['num_available'] = 0;
+		} else {
+			$ret[$studiengang_id]['num_available'] = 0;
+		}
+	}
+	return $ret;
+}
 
 /**
 * This function calculate the remaining places for the complete seminar
@@ -139,6 +185,7 @@ function get_all_quota($seminar_id) {
 */
 
 function get_free_admission ($seminar_id) {
+	/*
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
@@ -167,6 +214,12 @@ function get_free_admission ($seminar_id) {
 	else
 		$count = 0;
 
+	return $count;
+	*/
+	$count = 0;
+	foreach(get_admission_quota_info($seminar_id) as $info){
+		$count += $info['num_available'];
+	}
 	return $count;
 }
 

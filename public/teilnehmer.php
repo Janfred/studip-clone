@@ -425,7 +425,10 @@ if (Seminar_Session::check_ticket($studipticket)){
 			$msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 		}
 	}
-
+	if(isset($_REQUEST['admission_rein_x'])){
+		$cmd = 'admission_rein';
+		$username = $_REQUEST['admission_rein'];
+	}
 	//aus der Anmelde- oder Warteliste in die Veranstaltung hochstufen / aus der freien Suche als Tutoren oder Autoren eintragen
 	if ((isset($_REQUEST['do_admission_insert_x']) && is_array($_REQUEST['admission_insert'])) || (($cmd == "admission_rein" || $cmd == "add_user") && $username)){
 		//erst mal sehen, ob er hier wirklich Dozent ist...
@@ -449,9 +452,9 @@ if (Seminar_Session::check_ticket($studipticket)){
 					$status = 'autor';
 				}
 
-				$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted) ? TRUE : FALSE);
+				$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted || $_REQUEST['consider_contingent'] ? TRUE : FALSE), $_REQUEST['consider_contingent']);
 				//Only if user was on the waiting list
-				if ($admission_user) {
+				if ($admission_user == 2) {
 					setTempLanguage($userchange);
 					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 						if (!$accepted) {
@@ -475,17 +478,21 @@ if (Seminar_Session::check_ticket($studipticket)){
 			//Warteliste neu sortieren
 			renumber_admission($id);
 
-			if ($cmd=="add_user") {
-				$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung mit dem Status <b>%s</b> eingetragen."), htmlReady($fullname[0]), $status) . "§";
-			} else {
-				if (!$accepted) {
-					$msg = "msg§" . sprintf(_("NutzerIn %s wurde aus der Anmelde bzw. Warteliste mit dem Status <b>%s</b> in die Veranstaltung eingetragen."), htmlReady(join(', ', $msgs)), $status) . "§";
+			if($admission_user){
+				if ($cmd=="add_user") {
+					$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung mit dem Status <b>%s</b> eingetragen."), htmlReady($fullname), $status) . "§";
 				} else {
-					$msg = "msg§" . sprintf(_("NutzerIn %s wurde mit dem Status <b>%s</b> endgültig akzeptiert und damit in die Veranstaltung aufgenommen."), htmlReady(join(', ', $msgs)), $status) . "§";
+					if (!$accepted) {
+						$msg = "msg§" . sprintf(_("NutzerIn %s wurde aus der Anmelde bzw. Warteliste mit dem Status <b>%s</b> in die Veranstaltung eingetragen."), htmlReady(join(', ', $msgs)), $status) . "§";
+					} else {
+						$msg = "msg§" . sprintf(_("NutzerIn %s wurde mit dem Status <b>%s</b> endgültig akzeptiert und damit in die Veranstaltung aufgenommen."), htmlReady(join(', ', $msgs)), $status) . "§";
+					}
 				}
+			} else if($_REQUEST['consider_contingent']){
+				$msg = "error§" . _("Es stehen keine weiteren Plätze mehr im Teilnehmerkontingent zur Verfügung.") . "§";
 			}
 		} else {
-			$msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
+			$msg = "error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 		}
 	}
 
@@ -514,8 +521,11 @@ if (Seminar_Session::check_ticket($studipticket)){
 						$csv_count_multiple++;
 					} else if ($db->num_rows() > 0) {
 						$db->next_record();
-						insert_seminar_user($id, $db->f('user_id'), 'autor');
-						$csv_count_insert++;
+						if(insert_seminar_user($id, $db->f('user_id'), 'autor', isset($_REQUEST['consider_contingent']), $_REQUEST['consider_contingent'])){
+							$csv_count_insert++;
+						} elseif (isset($_REQUEST['consider_contingent'])){
+							$csv_count_contingent_full++;
+						}
 					} else {
 						// not found
 						$csv_not_found[] = stripslashes($csv_nachname) . ($csv_vorname ? ', ' . stripslashes($csv_vorname) : '');
@@ -526,8 +536,11 @@ if (Seminar_Session::check_ticket($studipticket)){
 		if (sizeof($_REQUEST['selected_users'])) {
 			foreach ($_REQUEST['selected_users'] as $selected_user) {
 				if ($selected_user) {
-					insert_seminar_user($id, get_userid($selected_user), 'autor');
-					$csv_count_insert++;
+					if(insert_seminar_user($id, get_userid($selected_user), 'autor', isset($_REQUEST['consider_contingent']), $_REQUEST['consider_contingent'])){
+						$csv_count_insert++;
+					} elseif (isset($_REQUEST['consider_contingent'])){
+						$csv_count_contingent_full++;
+					}
 				}
 			}
 		}
@@ -550,6 +563,10 @@ if (Seminar_Session::check_ticket($studipticket)){
 			if (sizeof($csv_not_found)) {
 				$msg .= 'error§' . sprintf(_("%s NutzerInnen konnten <b>nicht</b> zugeordnet werden! Am Ende dieser Seite finden Sie die Namen, die nicht zugeordnet werden konnten."),
 						sizeof($csv_not_found)) . '§';
+			}
+			if($csv_count_contingent_full){
+				$msg .= 'error§' . sprintf(_("%s NutzerInnen konnten <b>nicht</b> zugeordnet werden, da das ausgewählte Kontingent keine freien Plätze hat."),
+						$csv_count_contingent_full) . '§';
 			}
 		}
 	}
@@ -673,6 +690,10 @@ $multiaction['autor'] = array('insert' => array('autor_to_tutor',(!$SEM_CLASS[$S
 $multiaction['user'] = array('insert' => array('user_to_autor',_("Ausgewählten Benutzern das Schreibrecht erteilen")), 'delete' => array('user_to_null', _("Ausgewählte Benutzer aus der Veranstaltung entfernen")));
 $multiaction['accepted'] = array('insert' => array('admission_insert',_("Ausgewählte Benutzer akzeptieren")), 'delete' => array('admission_delete', _("Ausgewählte Benutzer aus der Veranstaltung entfernen")));
 
+$db->query("SELECT COUNT(user_id) as teilnehmer, COUNT(IF(admission_studiengang_id <> '',1,NULL)) as teilnehmer_kontingent FROM seminar_user WHERE seminar_id='".$SessSemName[1]."' AND status IN('autor','user')");
+$db->next_record();
+$anzahl_teilnehmer = $db->f('teilnehmer');
+$anzahl_teilnehmer_kontingent = $db->f('teilnehmer_kontingent');
 ?>
 
 		<script type="text/javascript">
@@ -878,8 +899,16 @@ if ($db3->next_record() && $db3->f("count_pers")) {
 }
 
 //Veranstaltungsdaten holen
-$db3->query ("SELECT admission_type, admission_selection_take_place FROM seminare WHERE Seminar_id = '$SessionSeminar'");
+$db3->query ("SELECT admission_type, admission_selection_take_place, admission_turnout FROM seminare WHERE Seminar_id = '$SessionSeminar'");
 $db3->next_record();
+if ($rechte) {
+	if ($db3->f("admission_type") == 1 || $db3->f("admission_type") == 2)
+		$colspan=10;
+	else
+		$colspan=9;
+} else
+	$colspan=7;
+if ($showscore==TRUE) $colspan++;
 
 $accepted_columns = array('Nachname', 'mkdate', 'doll DESC');
 if (!isset($sortby)  || !in_array($sortby, $accepted_columns))  $sortby = '';
@@ -935,6 +964,12 @@ while (list ($key, $val) = each ($gruppe)) {
 		$tutor_count = 0;
 	// die eigentliche Teil-Tabelle
 	if($key != 'dozent') echo "<form name=\"$key\" action=\"$PHP_SELF?studipticket=$studipticket\" method=\"post\">";
+	if($rechte && $key == 'autor' 	&& (($db3->f("admission_type") == 1 || $db3->f("admission_type") == 2))){
+		echo '<tr><td class="blank" colspan="'.$colspan.'" align="right"><font size="-1">';
+		printf(_("<b>Teilnahmebeschränkte Veranstaltung</b> -  Teilnehmerkontingent: %s, davon belegt: %s, zusätzlich belegt: %s"),
+			$db3->f('admission_turnout'), $anzahl_teilnehmer_kontingent, $anzahl_teilnehmer - $anzahl_teilnehmer_kontingent);
+		echo '</font></td></tr>';
+	}
 	echo "<tr height=28>";
 	if ($showscore==TRUE)
 		echo "<td class=\"steel\" width=\"1%\">&nbsp; </td>";
@@ -982,6 +1017,8 @@ while (list ($key, $val) = each ($gruppe)) {
 
 		echo '<a href="teilnehmer.php?cmd=send_sms_to_all&amp;who='.$key.'"><img src="'.$GLOBALS['ASSETS_URL'].'images/nachricht1.gif" title="'.sprintf(_("Nachricht an alle %s schicken"), $val).'" alt="'.sprintf(_("Nachricht an alle %s schicken"), $val).'" border="0" align="absmiddle"></a>';
 		echo '</td>';
+	} else {
+		echo '<td class="steel">&nbsp;</td>';
 	}
 
 	echo "</b></font></td>";
@@ -1228,10 +1265,10 @@ while (list ($key, $val) = each ($gruppe)) {
 		}
 
 		else { // hier sind wir bei den Dozenten
-			echo "<td colspan=\"3\" class=\"$class\" >&nbsp;</td>";
+			echo "<td colspan=\"2\" class=\"$class\" >&nbsp;</td>";
 		}
 
-		if ($db3->f("admission_type")) {
+		if ($db3->f("admission_type") == 1 || $db3->f("admission_type") == 2) {
 			if ($key == "autor" || $key == "user")
 				printf ("<td width=\"80%%\" align=\"center\" class=\"%s\"><font size=-1>%s%s</font></td>", $class, ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"), (!$db->f("name") && !$db->f("studiengang_id") == "all") ?  "&nbsp; ": "");
 			else
@@ -1341,16 +1378,8 @@ while (list ($key, $val) = each ($gruppe)) {
 	$c++;
 } // eine Zeile zuende
 
-if ($rechte) {
-	if ($db3->f("admission_type"))
-		$colspan=9;
-	else
-		$colspan=8;
-} else
-	$colspan=6;
-if ($showscore==TRUE) $colspan++;
 if($key != 'dozent' && $rechte && !$info_is_open) {
-	echo '<tr><td class="blank" colspan="'.($showscore ? 7 : 6).'">&nbsp;</td>';
+	echo '<tr><td class="blank" colspan="'.($showscore ? 8 : 7).'">&nbsp;</td>';
 	if (isset($multiaction[$key]['insert'][0]) && !($key == 'autor' && !$tutor_count)) echo '<td class="blank" align="center">' . makeButton('eintragen','input', $multiaction[$key]['insert'][1],'do_' . $multiaction[$key]['insert'][0]) . '</td>';
 	else echo '<td class="blank">&nbsp;</td>';
 	echo '<td class="blank" align="center">' . makeButton('entfernen','input', $multiaction[$key]['delete'][1],'do_' . $multiaction[$key]['delete'][0]) . '</td>';
@@ -1408,13 +1437,17 @@ if ($rechte) {
 
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" %s border=\"0\"></a></td>",$cssSw->getClass(), $db->f("username"), tooltip(_("Nachricht an User verschicken")));
 
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_rein&username=%s&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\"></a>
+			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><input type=\"image\" name=\"admission_rein\" value=\"".$db->f("username")."\" border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\">
 					<input type=\"checkbox\" name=\"admission_insert[%s]\" value=\"1\"></td>", $cssSw->getClass(), $db->f("username"), $db->f("username"));
 			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"$PHP_SELF?cmd=admission_raus&username=%s&studipticket=$studipticket\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/down.gif\" width=\"21\" height=\"16\"></a>
 					<input type=\"checkbox\" name=\"admission_delete[%s]\" value=\"1\"></td>", $cssSw->getClass(), $db->f("username"), $db->f("username"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td></tr>\n", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"));
 		}
-		echo '<tr><td class="blank" colspan="4">&nbsp;</td>';
+		echo '<tr><td class="blank" colspan="4" align="right"><font size="-1">';
+		echo '<img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="absmiddle" hspace="3" border="0" '.tooltip(_("Mit dieser Einstellung beeinflussen Sie, ob Teilnehmer die Sie hinzufügen auf die Kontingentplätze angerechnet werden."),1,1).' >';
+		echo '<label for="kontingent">'._("Kontingent berücksichtigen:");
+		echo '<input id="kontingent" type="checkbox" checked name="consider_contingent" value="1" style="vertical-align:middle"></label>';
+		echo '&nbsp;</font></td>';
 		echo '<td class="blank" align="center">' . makeButton('eintragen','input',_("Ausgewählte Nutzer aus der Warteliste in die Veranstaltung eintragen"),'do_admission_insert') . '</td>';
 		echo '<td class="blank" align="center">' . makeButton('entfernen','input',_("Ausgewählte Nutzer aus der Warteliste entfernen"),'do_admission_delete') . '</td>';
 		echo '<td class="blank">&nbsp;</td></tr>';
@@ -1492,7 +1525,20 @@ if ($rechte) {
 		while ($db->next_record())
 			printf("<option value=\"%s\">%s - %s\n", $db->f("username"), htmlReady(my_substr($db->f("fullname")." (".$db->f("username"),0,35)).")", $db->f("perms"));
 		?>
-		</select></td>
+		</select>
+		<?if($db3->f("admission_type") == 1 || $db3->f("admission_type") == 2){
+			echo '<br><br><img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="absmiddle" hspace="3" border="0" '.tooltip(_("Mit dieser Einstellung beeinflussen Sie, ob Teilnehmer die Sie hinzufügen auf die Kontingentplätze angerechnet werden."),1,1).' >';
+			echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
+			echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
+			echo '<option value="">'._("Kein Kontingent").'</option>';
+			$admission_info = get_admission_quota_info($SessSemName[1]);
+			foreach($admission_info as $studiengang => $data){
+				echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$data['num_available'].')').'</option>';
+			}
+			echo '</select></label></font>';
+		}
+		?>
+		</td>
 		<td class="steel1" width="20%" align="center"><font size=-1>
 		<?
 		if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && $perm->have_studip_perm("dozent",$SessSemName[1])){
@@ -1500,7 +1546,7 @@ if ($rechte) {
 		} else {
 			echo _("als AutorIn");
 		}
-		?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><br />
+		?></font><br />
 		<input type="image" name="add_user" <?=makeButton("eintragen", "src")?> align="absmiddle" border=0 value=" <?=_("Als AutorIn berufen")?> ">&nbsp;<a href="<? echo $PHP_SELF ?>"><?=makeButton("neuesuche")?></a></td>
 
 	</tr></form></table>
@@ -1541,9 +1587,21 @@ if ($rechte) {
 		echo '<br>' . _("Eingabeformat: <b>Nachname, Vorname &crarr;<b>");
 		echo "</div></td>\n";
 		echo "<td width=\"40%\" class=\"steel1\">";
-		echo "<textarea name=\"csv_import\" rows=\"6\" cols=\"40\">";
-			foreach($csv_not_found as $line) echo htmlReady($line) . chr(10);
-			echo "</textarea></td>\n";
+		echo "<textarea name=\"csv_import\" rows=\"6\" cols=\"50\">";
+		foreach($csv_not_found as $line) echo htmlReady($line) . chr(10);
+		echo "</textarea>";
+		if($db3->f("admission_type") == 1 || $db3->f("admission_type") == 2){
+			echo '<br><br><img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="absmiddle" hspace="3" border="0" '.tooltip(_("Mit dieser Einstellung beeinflussen Sie, ob Teilnehmer die Sie hinzufügen auf die Kontingentplätze angerechnet werden."),1,1).' >';
+			echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
+			echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
+			echo '<option value="">'._("Kein Kontingent").'</option>';
+			$admission_info = get_admission_quota_info($SessSemName[1]);
+			foreach($admission_info as $studiengang => $data){
+				echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$data['num_available'].')').'</option>';
+			}
+			echo '</select></label></font>';
+		}
+		echo "</td>\n";
 		echo "<td width=\"20%\" class=\"steel1\" align=\"center\"><input type=\"image\" name=\"submit\" ";
 		echo makeButton('eintragen', 'src') . " border=\"0\">";
 		if (sizeof($csv_not_found)) {
@@ -1577,10 +1635,21 @@ if ($rechte) {
 			$cssSw->resetClass();
 			$cssSw->switchClass();
 			echo "<tr><td class=\"steel1\" colspan=\"2\" align=\"right\" nowrap=\"nowrap\">";
-			echo '<input type="image" border="0" ' . makeButton('eintragen', 'src');
-			echo ' />&nbsp; &nbsp; ';
-			echo "<a href=\"$PHP_SELF\"><img border=\"0\" ";
-			echo makeButton('abbrechen', 'src') . '></a>';
+			if($db3->f("admission_type") == 1 || $db3->f("admission_type") == 2){
+				echo '<img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="absmiddle" hspace="3" border="0" '.tooltip(_("Mit dieser Einstellung beeinflussen Sie, ob Teilnehmer die Sie hinzufügen auf die Kontingentplätze angerechnet werden."),1,1).' >';
+				echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
+				echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
+				echo '<option value="">'._("Kein Kontingent").'</option>';
+				$admission_info = get_admission_quota_info($SessSemName[1]);
+				foreach($admission_info as $studiengang => $data){
+					echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$data['num_available'].')').'</option>';
+				}
+				echo '</select></label></font>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ';
+			}
+			echo makeButton('eintragen', 'input');
+			echo '&nbsp; &nbsp; ';
+			echo "<a href=\"$PHP_SELF\">";
+			echo makeButton('abbrechen', 'img') . '</a>';
 			echo "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </td></tr>\n";
 
 		if (sizeof($csv_not_found)) {
