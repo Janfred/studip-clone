@@ -26,10 +26,27 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
-// Start of Output
+//Output starts here
+
 include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
+$CURRENT_PAGE = _("Verwaltung der Mitarbeiter");
+
+//prebuild navi and the object switcher (important to do already here and to use ob!)
+ob_start();
 include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+$links = ob_get_clean();
+
+//get ID from a open Institut
+if ($SessSemName[1])
+	$inst_id = $SessSemName[1];
+
+	//Change header_line if open object
+$header_line = getHeaderLine($inst_id);
+if ($header_line)
+	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
+
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+echo $links;
 
 require_once('lib/msg.inc.php'); //Ausgaberoutinen an den User
 require_once('config.inc.php'); //Grunddaten laden
@@ -42,9 +59,6 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
 
-//get ID from a open Institut
-if ($SessSemName[1])
-	$inst_id=$SessSemName[1];
 
 function perm_select($name,$global_perm,$default) {
 	$possible_perms=array("user","autor","tutor","dozent");
@@ -69,13 +83,6 @@ function perm_select($name,$global_perm,$default) {
 
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-	<tr valign=top align=middle>
-		<td class="topic" colspan=2 align="left">&nbsp;<b>
-		<?
-		print getHeaderLine($inst_id)." -  " . _("Mitarbeiter");
-		?></b>
-		</td>
-	</tr>
 	<tr>
 		<td class="blank" colspan=2>&nbsp;
 		</td>

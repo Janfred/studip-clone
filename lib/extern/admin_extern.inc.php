@@ -44,33 +44,41 @@ require_once($RELATIVE_PATH_EXTERN . '/lib/ExternModule.class.php');
 
 // -- here you have to put initialisations for the current page
 
-// Start of Output
-include('lib/include/html_head.inc.php'); // Output of html head
-include('lib/include/header.php');   // Output of Stud.IP head
+//Output starts here
+
+include ('lib/include/html_head.inc.php'); // Output of html head
+$CURRENT_PAGE = _("Verwaltung externer Seiten");
+
+//prebuild navi and the object switcher (important to do already here and to use ob!)
+ob_start();
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+$links = ob_get_clean();
+
+//get ID from a open Institut
+if ($SessSemName[1])
+	$range_id = $SessSemName[1];
+
+//Change header_line if open object
+$header_line = getHeaderLine($range_id);
+if ($header_line) {
+	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
+	foreach ($EXTERN_MODULE_TYPES as $key => $type) {
+		if ($type["module"] == $mod) {
+			$CURRENT_PAGE = $CURRENT_PAGE . " ({$EXTERN_MODULE_TYPES[$key]['name']})";
+			break;
+		}
+	}
+}
+
+
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+echo $links;
 
 require_once('lib/msg.inc.php'); //Funktionen f&uuml;r Nachrichtenmeldungen
 require_once('lib/classes/cssClassSwitcher.inc.php');
 require_once('lib/language.inc.php');
 
-include('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
-
-//get ID from an open Institute
-if ($SessSemName[1]) {
-	$range_id = $SessSemName[1];
-}
-
 echo "<table border=\"0\" class=\"blank\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
-echo "<tr valign=\"top\" align=\"center\">\n";
-echo "<td class=\"topic\" align=\"left\" colspan=\"2\">&nbsp;<b>\n";
-echo getHeaderLine($range_id) . " - ";
-echo _("Verwaltung der externen Anzeigemodule");
-foreach ($EXTERN_MODULE_TYPES as $key => $type) {
-	if ($type["module"] == $mod) {
-		echo " ({$EXTERN_MODULE_TYPES[$key]['name']})";
-		break;
-	}
-}
-echo "</b></td></tr>";
 echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
 if ($com != "info") {
 	echo "<tr><td class=\"blank\" align=\"center\" valign=\"top\" width=\"90%\">\n";

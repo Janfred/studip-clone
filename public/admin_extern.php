@@ -47,9 +47,6 @@ $perm->check("admin");
 require_once 'lib/functions.php';
 
 $HELP_KEYWORD="Basis.EinrichtungenVerwaltenExterneSeiten";
-$CURRENT_PAGE = getHeaderLine($SessSemName[1]);
-if ($CURRENT_PAGE)
-	$CURRENT_PAGE.=" - ";
 $CURRENT_PAGE.= _("Verwaltung externer Seiten"); 
 
 if ($EXTERN_ENABLE) {

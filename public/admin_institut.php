@@ -313,7 +313,7 @@ if ($i_view == "new")
 	closeObject();
 
 include ('lib/include/html_head.inc.php'); // Output of html head
-$CURRENT_PAGE = _("Grunddaten");
+$CURRENT_PAGE = _("Verwaltung der Grunddaten");
 ob_start();
 //Output starts here
 include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
