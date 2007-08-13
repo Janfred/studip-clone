@@ -29,13 +29,27 @@ require_once('lib/classes/ZebraTable.class.php');
 require_once('lib/classes/AuxLockRules.class.php');
 require_once('lib/classes/DataFieldEntry.class.php');
 
-// Start of Output
-include ("lib/include/html_head.inc.php"); // Output of html head
-include ("lib/include/header.php"); // Output of Stud.IP head
+//Output starts here
 
-// something happens in links_admin
-//
-include ("lib/include/links_admin.inc.php"); //Linkleiste fuer admins
+include ('lib/include/html_head.inc.php'); // Output of html head
+$CURRENT_PAGE = _("Verwaltung der Regeln für Zusatzangaben");
+
+//prebuild navi and the object switcher (important to do already here and to use ob!)
+ob_start();
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+$links = ob_get_clean();
+
+//get ID from a open Seminar
+if ($SessSemName[1])
+	$header_object_id = $SessSemName[1];
+
+//Change header_line if open object
+$header_line = getHeaderLine($header_object_id);
+if ($header_object_id)
+	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
+
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+echo $links;
 
 $sem_id = $SessionSemName[1];
 
@@ -235,7 +249,6 @@ switch ($_REQUEST['cmd']) {
 }
 
 $containerTable = new ContainerTable();
-echo $containerTable->headerRow("<b>&nbsp;Zusatzangaben definieren</b>");
 echo $containerTable->openRow();
 echo $containerTable->openCell(array("colspan"=>"2"));
 if (is_array($msg)) {

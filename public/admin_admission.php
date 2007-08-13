@@ -105,7 +105,7 @@ $links = ob_get_clean();
 if ($SessSemName[1])
 	$header_object_id = $SessSemName[1];
 else
-	$header_object_id = $admin_admission_data["sem_id"];
+	$header_object_id = $seminar_id;
 
 //Change header_line if open object
 $header_line = getHeaderLine($header_object_id);

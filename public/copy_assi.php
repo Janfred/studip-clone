@@ -27,12 +27,29 @@ require_once 'lib/functions.php';
 
 // -- here you have to put initialisations for the current page
 
-$CURRENT_PAGE=getHeaderLine($SessSemName[1])." - "._("Kopieren der Veranstaltung");
+//Output starts here
 
-// Start of Output
-include 'lib/include/html_head.inc.php'; // Output of html head
-include 'lib/include/header.php';   // Output of Stud.IP head
-include 'lib/include/links_admin.inc.php'; //Output the nav
+include ('lib/include/html_head.inc.php'); // Output of html head
+$CURRENT_PAGE = _("Kopieren der Veranstaltung");
+
+//prebuild navi and the object switcher (important to do already here and to use ob!)
+ob_start();
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+$links = ob_get_clean();
+
+//get ID from a open Institut
+if ($SessSemName[1])
+	$header_object_id = $SessSemName[1];
+else
+	$header_object_id = $admin_admission_data["sem_id"];
+
+//Change header_line if open object
+$header_line = getHeaderLine($header_object_id);
+if ($header_line)
+	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
+
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+echo $links;
 
 require_once 'lib/visual.inc.php';
 
