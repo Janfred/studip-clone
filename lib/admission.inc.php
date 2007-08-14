@@ -148,7 +148,7 @@ function get_admission_quota_info($seminar_id) {
 	$db->query("SELECT admission_turnout FROM seminare WHERE Seminar_id = '$seminar_id'");
 	$db->next_record();
 	$admission_turnout = $db->f('admission_turnout');
-	$db->query("SELECT quota, name FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING(studiengang_id) WHERE seminar_id = '$seminar_id' AND studiengang_id !='all'");
+	$db->query("SELECT quota, name FROM admission_seminar_studiengang ass LEFT JOIN studiengaenge st USING(studiengang_id) WHERE seminar_id = '$seminar_id' AND ass.studiengang_id !='all'");
 	while($db->next_record()){
 		$ret[$db->f('studiengang_id')]['name'] = $db->f('name');
 		$ret[$db->f('studiengang_id')]['num_total'] = round($admission_turnout * ($db->f("quota") / 100));
