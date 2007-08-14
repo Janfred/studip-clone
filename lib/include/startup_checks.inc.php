@@ -118,4 +118,3 @@ if ($problems_found) {
 include ('lib/include/html_end.inc.php');
 die;
 }
-?>

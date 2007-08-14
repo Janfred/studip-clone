@@ -35,6 +35,7 @@
 
 require_once 'lib/functions.php';
 require_once ("config.inc.php");
+require_once('lib/classes/SemesterData.class.php');
 
 class StartupChecks {
 	var $registered_checks = array (
@@ -45,7 +46,10 @@ class StartupChecks {
 		"dozent" => array("perm" => "admin"),
 		"institutesDozent" => array("perm" => "admin"),
 		"myInstitutesDozent" => array("perm" => "admin"),
-		"myInstitutes" => array("perm" => "dozent")
+		"myInstitutes" => array("perm" => "dozent"),
+		"semester" => array("perm" => "root"),
+		"semesterAdmin" => array("perm" => "admin"),
+		"semesterDozent" => array("perm" => "dozent")
 	);
 	var $db;
 	var $db2;
@@ -85,6 +89,18 @@ class StartupChecks {
 		$this->registered_checks["myInstitutes"]["msg"] = _("Um Veranstaltungen anlegen zu k&ouml;nnen, muss ihr Account der Einrichtung, f&uuml;r die Sie eine Veranstaltung anlegen m&ouml;chten, zugeordnet werden. Bitte wenden Sie sich an einen der Administratoren des Systems.");
 		$this->registered_checks["myInstitutes"]["link"] = "impressum.php?view=ansprechpartner";
 		$this->registered_checks["myInstitutes"]["link_name"] = _("Kontakt zu den Administratoren");
+
+		$this->registered_checks["semester"]["msg"] = _("Um Veranstaltungen anlegen zu können muss mindestens ein Semester existieren, welches den jetzigen Zeitpunkt beinhaltet. Bitte legen Sie ein passendes Semester an.");
+		$this->registered_checks["semester"]["link"] = "admin_semester.php";
+		$this->registered_checks["semester"]["link_name"] = _("Neues Semester anlegen");
+
+		$this->registered_checks["semesterAdmin"]["msg"] = _("Um Veranstaltungen anlegen zu können muss mindestens ein Semester existieren, welches den jetzigen Zeitpunkt beinhaltet. Um ein neues Semester anzulegen werden root-Rechte benötigt. Bitte wenden Sie sich an jemanden mit den nötigen Rechten.");
+		$this->registered_checks["semesterAdmin"]["link"] = "impressum.php?view=ansprechpartner";
+		$this->registered_checks["semesterAdmin"]["link_name"] = _("Kontakt zu den Administratoren");
+
+		$this->registered_checks["semesterDozent"]["msg"] = _("Um Veranstaltungen anlegen zu können muss mindestens ein Semester existieren, welches den jetzigen Zeitpunkt beinhaltet. Bitte wenden Sie sich an einen der Administratoren des Systems.");
+		$this->registered_checks["semesterDozent"]["link"] = "impressum.php?view=ansprechpartner";
+		$this->registered_checks["semesterDozent"]["link_name"] = _("Kontakt zu den Administratoren");
 
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
@@ -236,6 +252,32 @@ class StartupChecks {
 		}
 	}
 	
+	function semester() {
+		$semester = new SemesterData();
+		$all_semester = $semester->getAllSemesterData();
+
+		foreach ($all_semester as $key => $semester) {
+			if ((!$semester["past"]) && ($semester["ende"] > time())) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	function semesterDozent() {
+		return $this->semester();
+	}
+
+	function semesterAdmin() {
+		global $perm;
+		if (!$perm->have_perm('root')) {
+			return $this->semester();
+		}
+
+		return false;
+	}
+
 	function getCheckList() {
 		global $perm;
 		$list = array();
