@@ -60,7 +60,7 @@
       
         <tr>
           <td class="infobox" width="1%" align="center" valign="top">
-            <img src="http://develop.studip.de:8080/studip/assets/images/steelrot.jpg" height="20" width="25" alt="">
+            <img src="<?=$GLOBALS['ASSETS_URL']?>/images/plastic_red_small.jpg" height="20" width="25" alt="">
           </td>
           <td class="infobox" width="99%" align="left">
             <font size="-1"><?=_("Kein Termin hat eine Raumbuchung!")?></font>
@@ -72,7 +72,7 @@
       
         <tr>
           <td class="infobox" width="1%" align="center" valign="top">
-            <img src="http://develop.studip.de:8080/studip/assets/images/steelgelb.jpg" height="20" width="25" alt="">
+            <img src="<?=$GLOBALS['ASSETS_URL']?>/images/plastic_yellow_small.jpg" height="20" width="25" alt="">
           </td>
           <td class="infobox" width="99%" align="left">
             <font size="-1"><?=_("Mindestens ein Termin hat keine Raumbuchung!")?></font>
@@ -84,7 +84,7 @@
   
         <tr>
           <td class="infobox" width="1%" align="center" valign="top">
-            <img src="http://develop.studip.de:8080/studip/assets/images/steelgruen.jpg" height="20" width="25" alt="">
+            <img src="<?=$GLOBALS['ASSETS_URL']?>/images/plastic_green_small.jpg" height="20" width="25" alt="">
           </td>
           <td class="infobox" width="99%" align="left">
             <font size="-1"><?=_("Alle Termine haben eine Raumbuchung.")?></font>

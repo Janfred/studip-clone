@@ -127,9 +127,9 @@ h2.topic, h3.topic { font-family: Arial, Helvetica, sans-serif; color: #FFFFFF; 
 .steelblau_schatten { background-color: #FFFFFF; background-image: url('../images/steelblau_schatten.jpg');	font-family: Arial, Helvetica, sans-serif;}
 .blue_gradient { background-color: #FFFFFF; background-image: url('../images/blue_gradient.jpg');	font-family: Arial, Helvetica, sans-serif;}
 .quote {margin-left: 20px; padding:3px; margin-right: 8em; border: 1px solid black; background: none; background-color: #EEEEEE;}
-.steelgelb {background-image: url('../images/steelgelb.jpg'); font-family: Arial, Helvetica, sans-serif;}
-.steelgreen {background-image: url('../images/steelgruen.jpg'); font-family: Arial, Helvetica, sans-serif;}
-.steelred {background-image: url('../images/steelrot.jpg'); font-family: Arial, Helvetica, sans-serif;}
+.steelgelb {background-image: url('../images/plastic_yellow.jpg'); font-family: Arial, Helvetica, sans-serif; font-size:10pt}
+.steelgreen {background-image: url('../images/plastic_green.jpg'); font-family: Arial, Helvetica, sans-serif; font-size:10pt}
+.steelred {background-image: url('../images/plastic_red.jpg'); font-family: Arial, Helvetica, sans-serif; font-size:10pt}
 
 /* Styles fuer printhead und printcontent */
 td.printhead {background-image: url('../images/steelblau.jpg');  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
