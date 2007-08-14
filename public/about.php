@@ -153,7 +153,7 @@ if($db->f('user_id') == $user->id && !$db->f('locked')){
 // Start  of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');
-	
+
 if (!$user_id){
 	if ($db->f("visible") && !get_visibility_by_state($db->f("visible"))) {
 		parse_window("error§" . _("Diese Homepage ist nicht verf&uuml;gbar.") . " <br /><font size=-1 color=black>" . _("Die angeforderte Homepage ist leider nicht verf&uuml;gbar.")."</font>","§",
@@ -313,6 +313,23 @@ while ($db3->next_record()) {
 			if (trim($entry->getValue()) && $view) {
 				echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . htmlReady($entry->getName()) . " </b>", $entry->getDisplayValue();
 				if ($show_star) echo ' *';
+			}
+		}
+	}
+
+	if ($groups = GetStatusgruppen($institut,$user_id)) {
+		$options = getOptionsOfStGroups($user_id);
+		foreach ($groups as $groupID=>$group) {
+			if ($options[$groupID]['visible'] && !$options[$groupID]['inherit']) {
+				$entries = DataFieldEntry::getDataFieldEntries(array($user_id, $groupID));
+				if (!isDataFieldArrayEmpty($entries)) {
+					echo '<br/>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <font color="#000000"><b>Funktion:</b> ' . htmlReady($group) . '</font><br>';
+					foreach ($entries as $entry) {
+						$view = DataFieldStructure::permMask($auth->auth['perm']) >= DataFieldStructure::permMask($entry->structure->getViewPerms());
+						if ($view && trim($entry->getValue()))
+							echo "<b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ". htmlReady($entry->getName()) . "</b> " . $entry->getDisplayValue() . "<br>";
+					}
+				}
 			}
 		}
 	}

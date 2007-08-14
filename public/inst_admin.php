@@ -126,7 +126,7 @@ if (!isset($details) || isset($set)) {
 				setOptionsOfStGroup($groupID, $u_id, '', $inherit[$groupID]);
 				$instID = GetRangeOfStatusgruppe($groupID);
 				$entries = DataFieldEntry::getDataFieldEntriesBySecondRangeID($instID);
-				foreach ($entries as $rangeID=>$entry) {
+				foreach ((array)$entries as $rangeID=>$entry) {
 					$entry->setSecondRangeID($groupID);  // content of institute fields is default for user role fields
 					$entry->store();
 				}
