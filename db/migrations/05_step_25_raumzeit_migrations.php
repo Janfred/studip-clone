@@ -77,7 +77,7 @@ class Step25RaumzeitMigrations extends DBMigration
         ");
         
         // move "RESOURCES_ENABLE" from config_local.inc.php to config table
-        if( $GLOBALS["RESOURCES_ENABLE"] ){
+        if( $GLOBALS["RESOURCES_ENABLE"] != NULL ){
             // use existing value
             $this->db->query("
                 INSERT INTO `config` ( `config_id` , `parent_id` , `field` , `value` , `is_default` , `type` , `range` , `section` , `position` , `mkdate` , `chdate` , `description` , `comment` , `message_template` )
