@@ -4,7 +4,7 @@
 		<A name="<?=$tpl['sd_id']?>">
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
-				<TD width="5%" align="right" valign="top" class="<?=$tpl['class']?>">
+				<TD width="2%" align="right" valign="top" class="<?=$tpl['class']?>">
 					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
 						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
 					</A>

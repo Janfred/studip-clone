@@ -1,6 +1,6 @@
 <? if (!$tpl['deleted']) { ?>
 <TR>
-	<TD width="7%" align="right" valign="top" class="<?=$tpl['class']?>" nowrap height="25">
+	<TD width="2%" align="right" valign="top" class="<?=$tpl['class']?>" nowrap height="25">
 		<A name="<?=$tpl['sd_id']?>">
 		<? if (!$_LOCKED) { ?>
 		<A href="<?=$PHP_SELF?>?cmd=<?=($sd_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
@@ -43,7 +43,7 @@
 </TR>
 <? } else { ?>
 <TR>
-	<TD width="7%" align="right" valign="top" class="<?=$tpl['class']?>" nowrap>
+	<TD width="2%" align="right" valign="top" class="<?=$tpl['class']?>" nowrap>
 		<? if (!$_LOCKED) { ?>
 			<? if ($GLOBALS['perm']->have_perm('admin')) : ?>
 				<A href="<?=$PHP_SELF?>?cmd=<?=($sd_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">

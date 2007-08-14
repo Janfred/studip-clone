@@ -72,7 +72,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 					</A>
 				</TD>
 				<TD width="90%" nowrap class="<?=$tpl['class']?>">
-					<FORM action="<?=$PHP_SELF?>" method="post" name="EditCycle">
+					<FORM action="<?=$PHP_SELF?>" method="post" name="EditCycle" style="display: inline">
 						<FONT size="-1"><B>
 							<SELECT name="day">
 								<OPTION value="1"<?=($tpl['mdDayNumber']=='1') ? 'selected="selected"' : ''?>>Montag</OPTION>
@@ -93,8 +93,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 							&nbsp;&nbsp;<INPUT type="image" name="editCycle" align="absmiddle" <?=makebutton('uebernehmen', 'src')?>>
 							<INPUT type="hidden" name="cycle_id" value="<?=$tpl['md_id']?>">
 						</B></FONT>
-					</FORM>
-				</TD>
+					</FORM></TD>
 				<TD width="5%" nowrap class="<?=$tpl['class']?>" align="right" nowrap>
 					<A href="<?=$PHP_SELF?>?cmd=deleteCycle&cycle_id=<?=$tpl['md_id']?>">
 						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" valign="absmiddle"  <?=tooltip(_("Regelmäßige Zeit inklusive aller zugehörigen Termine löschen!"))?>>
