@@ -44,27 +44,19 @@ if ((!$RESOURCES_ENABLE) || (!$RESOURCES_ALLOW_ROOM_REQUESTS)) //we need resourc
 	die;
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
-
-// -- here you have to put initialisations for the current page
-
-// Start of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
-
 require_once('lib/msg.inc.php');	//Ausgaben
 require_once('config.inc.php');	//Settings....
 require_once 'lib/functions.php';	//basale Funktionen
 require_once('lib/visual.inc.php');	//Darstellungsfunktionen
 require_once('lib/classes/Seminar.class.php');	//Seminar-class
 
+// -- here you have to put initialisations for the current page
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
 }
-
 
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
@@ -97,6 +89,13 @@ if ($SessSemName[1]) {
 } else if ($_REQUEST['seminar_id']) {
 	$seminar_id = $_REQUEST['seminar_id'];
 }
+
+$CURRENT_PAGE = getHeaderLine($seminar_id)." -  "._("Raumanfrage");
+
+// Start of Output
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
 
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
@@ -200,13 +199,6 @@ if ($perm->have_perm("admin"))
 	//Output & Forms
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
-	<tr>
-		<td class="topic" colspan=2>&nbsp; <b>
-		<?
-		echo getHeaderLine($admin_rooms_data["sem_id"])." -  "._("Raumanfragen");
-		?>
-		</td>
-	</tr>
 	<?
 	$errormsg.=$infomsg;
 	if (isset($errormsg)) {
@@ -507,4 +499,3 @@ if (is_object($admin_rooms_data["resRequest"])) {
 <?php
 include ('lib/include/html_end.inc.php');
 page_close();
-?>
