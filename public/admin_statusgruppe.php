@@ -32,10 +32,6 @@ require_once ('lib/admission.inc.php');
 require_once ('lib/statusgruppe.inc.php');
 require_once ('lib/datei.inc.php');
 
-//get ID, if a object is open
-if ($SessSemName[1])
-	$range_id = $SessSemName[1];
-	
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGruppen";
 
 //Output starts here
@@ -47,7 +43,9 @@ $CURRENT_PAGE = _("Verwaltung von Gruppen und Funktionen");
 ob_start();
 include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 $links = ob_get_clean();
-
+//get ID, if a object is open
+if ($SessSemName[1])
+	$range_id = $SessSemName[1];
 //Change header_line if open object
 $header_line = getHeaderLine($range_id);
 if ($header_line)

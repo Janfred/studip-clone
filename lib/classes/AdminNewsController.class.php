@@ -84,18 +84,9 @@ class AdminNewsController {
 				$object_type = get_object_type($news_range_id);
 				switch ($object_type){
 					case "sem":
-					$query="SELECT Name FROM seminare WHERE Seminar_id='$news_range_id'";
-					$this->db->query($query);
-					$this->db->next_record();
-					$news_range_name = $this->db->f("Name");
-					break;
-
 					case "inst":
 					case "fak":
-					$query="SELECT Name FROM Institute WHERE Institut_id='$news_range_id'";
-					$this->db->query($query);
-					$this->db->next_record();
-					$news_range_name = $this->db->f("Name");
+					$news_range_name = getHeaderLine($news_range_id);
 					break;
 
 					default:

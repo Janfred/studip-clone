@@ -163,10 +163,6 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	}
 }
 
-//get ID
-if ($SessSemName[1])
-	$range_id=$SessSemName[1];
-
 //Output starts here
 
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -176,6 +172,9 @@ $CURRENT_PAGE = _("Verwaltung verwendeter Module und Plugins");
 ob_start();
 include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 $links = ob_get_clean();
+//get ID
+if ($SessSemName[1])
+	$range_id=$SessSemName[1];
 
 //Change header_line if open object
 $header_line = getHeaderLine($range_id);

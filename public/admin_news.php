@@ -60,13 +60,12 @@ $links = ob_get_clean();
 
 if ($SessSemName[1] && ($list || $view)) {
 	$news_range_id = $SessSemName[1];
-	$news_range_name = $SessSemName[0];
-	$news_header_name = $SessSemname["header_line"];
+	$news_range_name = $SessSemname["header_line"];
 } 
 
 $news = new AdminNewsController();
 
-$CURRENT_PAGE = $news_header_name . " - " . _("Verwaltung von News"); 
+$CURRENT_PAGE = $news_range_name . " - " . _("Verwaltung von News"); 
 include ('lib/include/header.php');   // Output of Stud.IP head
 echo $links;
 
