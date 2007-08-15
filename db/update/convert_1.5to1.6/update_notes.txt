@@ -1,0 +1,5 @@
+
+
+Bei einem Update der Stud.IP-installation muss nach der Ausführung der Migrations noch 
+der Eintrag RESOURCES_ENABLE aus der Datei config_local.inc.php entfernt werden. Dieser
+Schalter kann nun ebenfalls über die Stud.IP-Interne Konfigurationsseite verändert werden.
