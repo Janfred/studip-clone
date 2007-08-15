@@ -21,11 +21,15 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+require_once 'lib/functions.php';
 
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.InVeranstaltungDetails";
-$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Details");
+if ($SessSemName[1])
+	$header_object_id = $SessSemName[1];
+$header_object_id = $sem_id;
+$CURRENT_PAGE = getHeaderLine($header_object_id). " - " . _("Details");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -38,7 +42,7 @@ require_once ('lib/visual.inc.php'); // wir brauchen htmlReady
 require_once ('lib/admission.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/classes/StudipSemTree.class.php');
-require_once ('lib/classes/DataFieldEntry.class.php');
+require_once ('lib/classes/DataFieldEntry.class.php');                            
 require_once ('lib/classes/StudipStmInstance.class.php');
 require_once('lib/classes/StudipAdmissionGroup.class.php'); 
 ?>
@@ -135,6 +139,13 @@ else
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<?
+	if ($sem_id) {
+	?>
+		<tr>
+			<td class="topic">&nbsp</td>
+		</tr>
+	<?
+	}
 	if ($msg)
 	{
 		echo "<tr><td class=\"blank\" colspan=2>&nbsp;</td></tr>";
