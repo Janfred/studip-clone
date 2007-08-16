@@ -484,12 +484,12 @@ function createStoppedVoteHeader (&$vote, $evalDB = NULL) {
       $number       = $evalDB->getNumberOfVotes ($vote->getObjectID ());
 
     $html .= "<table align=center width=\"92%\" cellpadding=1 cellspacing=0><tr>\n";
-    $html .= "<td class=toolbar align=left>\n";
+    $html .= "<td class=toolbar align=\"left\" valign=\"bottom\">\n";
     $html .= "<font size=-1><b>\n";
     $html .= "&nbsp;".$title;
     $html .= "</b></font>";
     $html .= "</td>";
-    $html .= "<td class=toolbar align=right>\n";
+    $html .= "<td class=toolbar align=\"right\" valign=\"bottom\">\n";
     $html .= "<a href=\"about.php?username=".$authorUsername."\">\n";
     $html .= "<font size=\"-1\" color=\"#333333\">".htmlReady($authorName)."</font>";
     $html .= "</a>\n";
