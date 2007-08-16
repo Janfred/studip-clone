@@ -7,7 +7,6 @@ set_time_limit(0);
 // we need enough memory
 ini_set( "memory_limit", "256M");
 
-
 // get command line parameters
 $parameter_count = $_SERVER['argc'];
 $parameters      = $_SERVER['argv'];
@@ -17,6 +16,7 @@ if( $parameter_count != 2) {
     echo "(". date("Y-m-d H:i:s T") .") ERROR: Wrong number of command line parameters. [convert_regular_dates_to_single_dates_with_themes-SUBROUTINE.php]\n";
     exit(0);
 }
+
 
 // create root user environment:
 require_once dirname(__FILE__).'/studip_cli_env.inc.php';
@@ -37,6 +37,7 @@ if( !is_numeric( $step_size) ){
     exit(0);
 }
 
+
 // set counter for this round...
 $seminar_counter = 0;
 
@@ -48,7 +49,6 @@ $GLOBALS['FORCE_THROW_AWAY'] = TRUE;
 // - ressources assign: termine mit raum verknüpft
 // creates 
 $GLOBALS['CONVERT_SINGLE_DATES'] = TRUE;
-
 
 
 $db = new DB_Seminar();
@@ -70,13 +70,13 @@ while ($db->next_record()) {
 		// get seminar ID
         $seminar_id = $db->f('Seminar_id');
         
-		echo "(". date("Y-m-d H:i:s T") .") Converting Seminar ID='$seminar_id', Name '".$db->f('Name')."'";
+		echo "(". date("Y-m-d H:i:s T") .") Converting Seminar ID='$seminar_id', Name '".$db->f('Name')."'\n";
 		flush();
 		unset($sem);
 		
         // create new seminar object
         $sem = new Seminar( $seminar_id);
-        
+
         // loop through every regular date
 		foreach ($sem->metadate->cycles as $key => $val) {
 
@@ -94,6 +94,9 @@ while ($db->next_record()) {
         
         // update the seminar object (modifies the chdate)
 		$sem->store();
+
+        $query = sprintf("UPDATE seminare SET chdate='%s' WHERE Seminar_id='%s' ", time(), $db->f('Seminar_id'));
+        $db2->query($query);
         
         $seminar_counter++;        
 }

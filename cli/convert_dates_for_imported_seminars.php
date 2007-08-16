@@ -91,8 +91,8 @@ do {
     // remove last line
     array_pop( $output);
     
-    // write output to logfile
-    fwrite( $logfile_handle, $output);
+    // write output to logfile    
+    fwrite( $logfile_handle, implode("\n", $output));
 
     // count total amount of converted seminars
     $counter += $numberOfConvertedRows;
