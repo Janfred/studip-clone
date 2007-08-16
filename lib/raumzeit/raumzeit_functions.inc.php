@@ -347,10 +347,6 @@ function raumzeit_get_semesters(&$sem, &$semester, $filter) {
 		if ($sem->getStartSemester() <= $val['vorles_beginn']) $passed = true;
 		if ($passed && ($sem->getEndSemesterVorlesEnde() >= $val['vorles_ende'])) {
 			$semester_chooser[$val['beginn']] = $val['name'];
-			/*if ($filter != ($val['beginn'])) {
-			} else {
-				$selected = $val['beginn'];
-			}*/
 		}
 	}
 
