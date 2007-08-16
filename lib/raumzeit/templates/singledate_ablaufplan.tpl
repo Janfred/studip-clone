@@ -1,8 +1,8 @@
 <TR>
-	<TD width="1%" align="right" valign="top" class="<?=$tpl['class']?>" nowrap>
+	<TD width="1%" align="right" valign="center" class="<?=$tpl['class']?>" nowrap>
 		<A name="<?=$tpl['sd_id']?>">
 		<A href="<?=$PHP_SELF?>?cmd=<?=($issue_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
-			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($issue_open[$tpl['sd_id']]) ? 'runt' : ''?>.gif" border="0" align="abstop">
+			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($issue_open[$tpl['sd_id']]) ? 'runt' : ''?>.gif" border="0">
 		</A>
 	</TD>
 	<TD width="1%" align="right" valign="top" class="<?=$tpl['class']?>" nowrap>
