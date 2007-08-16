@@ -6,17 +6,11 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
 				<TD width="2%" align="right" valign="center" class="<?=$tpl['class']?>">
-					<? if (!$_LOCKED || !$sd_open[$tpl['md_id']]) { ?>
 					<A href="<?=$PHP_SELF?>?cmd=open&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
 						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/simple_indicator_gray.gif" border="0">
 					</A>
-					<? } else { ?>
-					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
-						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
-					</A>
-					<? } ?>
 				</TD>
-				<TD width="23%" nowrap class="<?=$tpl['class']?>">
+				<TD width="23%" nowrap="nowrap" class="<?=$tpl['class']?>">
 					<? if (!$_LOCKED || !$sd_open[$tpl['md_id']]) { ?>
 					<A class="tree" href="<?=$PHP_SELF?>?cmd=open&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
 					<? } else { ?>
@@ -28,7 +22,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 					</A>
 				</TD>
 				<? if ($GLOBALS['RESOURCES_ENABLE']) { ?>
-				<TD width="35%" nowrap class="<?=$tpl['class']?>">
+				<TD width="35%" nowrap="nowrap" class="<?=$tpl['class']?>">
 					<FONT size="-1">
 						<B><?=_("Raum:")?></B>
 						<?=$tpl['room']?>
@@ -40,7 +34,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 					</A>
 					<? } ?>
 				</TD>
-				<TD width="20%" nowrap class="<?=$tpl['class']?>">
+				<TD width="20%" nowrap="nowrap" class="<?=$tpl['class']?>">
 					<FONT size="-1">
 						<B><?=_("Raumanfragen:")?></B>
 						<?=$tpl['anfragen']?>
@@ -49,7 +43,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 				<? } else { ?>
 				<TD width="55%" class="<?=$tpl['class']?>">&nbsp;</TD>
 				<? } ?>
-				<TD width="20%" nowrap class="<?=$tpl['class']?>" align="right">
+				<TD width="20%" nowrap="nowrap" class="<?=$tpl['class']?>" align="right">
 					<? if (!$_LOCKED) { ?>
 					<A href="<?=$PHP_SELF?>?cmd=deleteCycle&cycle_id=<?=$tpl['md_id']?>">
 						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" align="absmiddle" <?=tooltip(_("Regelmäßige Zeit inklusive aller zugehörigen Termine löschen!"))?>>
@@ -66,12 +60,12 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 		<A name="<?=$tpl['md_id']?>">
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
-				<TD width="5%" align="right" valign="top" class="<?=$tpl['class']?>" nowrap>
+				<TD width="2%" align="left" valign="top" class="<?=$tpl['class']?>" nowrap="nowrap">
 					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
 						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" valign="absmiddle">
 					</A>
 				</TD>
-				<TD width="90%" nowrap class="<?=$tpl['class']?>">
+				<TD width="93%" nowrap="nowrap" class="<?=$tpl['class']?>">
 					<FORM action="<?=$PHP_SELF?>" method="post" name="EditCycle" style="display: inline">
 						<FONT size="-1"><B>
 							<SELECT name="day">
@@ -94,7 +88,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 							<INPUT type="hidden" name="cycle_id" value="<?=$tpl['md_id']?>">
 						</B></FONT>
 					</FORM></TD>
-				<TD width="5%" nowrap class="<?=$tpl['class']?>" align="right" nowrap>
+				<TD width="5%" nowrap="nowrap" class="<?=$tpl['class']?>" align="right">
 					<A href="<?=$PHP_SELF?>?cmd=deleteCycle&cycle_id=<?=$tpl['md_id']?>">
 						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" valign="absmiddle"  <?=tooltip(_("Regelmäßige Zeit inklusive aller zugehörigen Termine löschen!"))?>>
 					</A>

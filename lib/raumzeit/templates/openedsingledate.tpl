@@ -4,12 +4,12 @@
 		<A name="<?=$tpl['sd_id']?>">
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
-				<TD width="2%" align="right" valign="top" class="<?=$tpl['class']?>">
+				<TD width="2%" align="left" valign="top" class="<?=$tpl['class']?>">
 					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
-						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
+						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0">
 					</A>
 				</TD>
-				<TD width="45%" nowrap class="<?=$tpl['class']?>">
+				<TD width="43%" nowrap class="<?=$tpl['class']?>">
 					<FONT size="-1">
 						<INPUT type="text" id="day" name="day" maxlength="2" size="2" value="<?=$tpl['day']?>">.
 						<INPUT type="text" id="month" name="month" maxlength="2" size="2" value="<?=$tpl['month']?>">.
@@ -61,7 +61,7 @@
 					<BR/>
 					<? } ?>
 					<?=_("freie Raumangabe:")?>
-					<INPUT type="text" name="freeRoomText_sd" size="20" maxlength="255" value="<?=$tpl['freeRoomText']?>">
+					<INPUT type="text" name="freeRoomText_sd" size="50" maxlength="255" value="<?=$tpl['freeRoomText']?>">
 					<?=$GLOBALS['RESOURCES_ENABLE'] ? _("(f&uuml;hrt <em>nicht</em> zu einer Raumbuchung)"): ''?><BR/>
 					<? if ($GLOBALS['RESOURCES_ENABLE'] && $GLOBALS['RESOURCES_ALLOW_ROOM_REQUESTS']) { ?>
 					<?=_("Raumanfrage")?>
@@ -119,7 +119,7 @@
 		<a name="<?=$tpl['sd_id']?>">
 		<table cellpadding="2" cellspacing="0" border="0" width="100%">
 			<tr>
-				<td width="5%" align="right" valign="top" class="<?=$tpl['class']?>">
+				<td width="2%" align="left" valign="center" class="<?=$tpl['class']?>" nowrap="nowrap">
 					<a href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
 						<img src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
 					</a>

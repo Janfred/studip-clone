@@ -173,7 +173,7 @@ while ($tmp_first_date < $end_date) {
 		<td class="blank" width="100%" align="center" valign="top">
 			<table width="99%" border="0" cellpadding="2" cellspacing="0">
 			<tr>
-				<td colspan="9" class="steelkante">
+				<td colspan="9" class="blue_gradient">
 					&nbsp;<B><?=_("Regelmäßige Zeiten")?></B>
 				</td>
 			</td>
@@ -428,7 +428,7 @@ while ($tmp_first_date < $end_date) {
 					<TD colspan="9" class="blank">&nbsp;</TD>
 				</TR>
 				<TR>
-					<TD colspan="9" class="steelkante">
+					<TD colspan="9" class="blue_gradient">
 						<A name="irregular_dates">
 						&nbsp;<B><?=_("Unregelm&auml;&szlig;ige Termine/Blocktermine")?></B>
 					</TD>
@@ -524,7 +524,7 @@ while ($tmp_first_date < $end_date) {
 
 				if (!$_LOCKED && $RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) { ?>
 				<tr>
-					<td colspan="9" class="steelkante">
+					<td colspan="9" class="blue_gradient">
 						<a name="irregular_dates">
 						&nbsp;<b><?=_("Raum anfordern")?></b>
 					</td>

@@ -1165,7 +1165,7 @@ class Seminar {
 	function createQuestion($question, $approvalCmd) {
 		$msg = $question;
 		$msg .= "<br/><br/><a href=\"$approvalCmd\">";
-		$msg .= '<img '.makebutton('ja2', 'src').' border="0"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+		$msg .= '<img '.makebutton('ja2', 'src').' border="0"></a>&nbsp;&nbsp;';
 		$msg .= "<a href=\"$PHP_SELF?\">";
 		$msg .= '<img '.makebutton('nein', 'src').' border="0"></a>';
 
