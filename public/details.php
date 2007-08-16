@@ -26,9 +26,8 @@ require_once 'lib/functions.php';
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.InVeranstaltungDetails";
-if ($SessSemName[1])
-	$header_object_id = $SessSemName[1];
-$header_object_id = $sem_id;
+if ($SessSemName[1] && !isset($sem_id)) $header_object_id = $SessSemName[1];
+else $header_object_id = $sem_id;
 $CURRENT_PAGE = getHeaderLine($header_object_id). " - " . _("Details");
 
 // Start of Output
@@ -45,9 +44,6 @@ require_once ('lib/classes/StudipSemTree.class.php');
 require_once ('lib/classes/DataFieldEntry.class.php');                            
 require_once ('lib/classes/StudipStmInstance.class.php');
 require_once('lib/classes/StudipAdmissionGroup.class.php'); 
-?>
-<body>
-<?
 
 //Inits
 $cssSw=new cssClassSwitcher;
@@ -139,7 +135,7 @@ else
 	?>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<?
-	if ($sem_id) {
+	if ($SessSemName[1] != $sem_id) {
 	?>
 		<tr>
 			<td class="topic">&nbsp</td>
