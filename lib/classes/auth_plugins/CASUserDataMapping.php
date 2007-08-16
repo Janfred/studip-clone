@@ -1,10 +1,10 @@
 <?
 /**
- * Abstract interface for the user mapping used by StudIPAuthCAS
+ * Interface for the user mapping used by StudIPAuthCAS
  */
 interface CASUserDataMapping {
 
     // reads one attribute identified by a key of a given user
-	function getUserData( $key, $username);
+	function getUserData ($key, $username);
 }
 ?>
