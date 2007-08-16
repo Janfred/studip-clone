@@ -485,15 +485,15 @@ function createStoppedVoteHeader (&$vote, $evalDB = NULL) {
 
     $html .= "<table align=center width=\"92%\" cellpadding=1 cellspacing=0><tr>\n";
     $html .= "<td class=toolbar align=left>\n";
-    $html .= "<font size=-1 color=\"#ffffff\"><b>\n";
+    $html .= "<font size=-1><b>\n";
     $html .= "&nbsp;".$title;
     $html .= "</b></font>";
     $html .= "</td>";
     $html .= "<td class=toolbar align=right>\n";
     $html .= "<a href=\"about.php?username=".$authorUsername."\">\n";
-    $html .= "<font size=\"-1\" color=\"#EEEEEE\">".htmlReady($authorName)."</font>";
+    $html .= "<font size=\"-1\" color=\"#333333\">".htmlReady($authorName)."</font>";
     $html .= "</a>\n";
-    $html .= "<font size=\"-1\" color=white>&nbsp;".date ("d.m.Y", $date)."</font>&nbsp;";
+    $html .= "<font size=\"-1\">&nbsp;".date ("d.m.Y", $date)."</font>&nbsp;";
     $html .= "</td>\n";
     $html .= "</tr>\n";
     $html .= "<tr>\n";
