@@ -27,6 +27,13 @@ require_once('lib/msg.inc.php');
 if ($GLOBALS["CALENDAR_ENABLE"])
 	require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarEventList.class.php");
 
+/*
+ *TODO: Bedarf eine kompletten Überarbeitung!!!!
+ *
+ * Es wird kein Seminar-Objekt instanziert
+ * -> es werden hier noch keine neuen Termine angelegt, wenn ein neues Semester eingetragen wurden
+ */
+
 function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 0,
 		$show_docs = TRUE, $show_admin = FALSE, $full_width = TRUE, $show_as_window = TRUE) {
 	global $PHP_SELF, $TERMIN_TYP, $SessSemName, $user, $username, $rechte;

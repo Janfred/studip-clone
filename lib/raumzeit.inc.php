@@ -166,7 +166,7 @@ function raumzeit_selectSemester() {
 function raumzeit_addCycle() {
 	global $sem, $newCycle;
 	$sem->createInfo(_("Geben Sie nun unten die Zeiten für den neu zu erstellenden regelmäßigen Termin an!"));
-	$newCycle=true;		// when newCycle is set, the template 'addsingledate.tpl' is shown at 'unregelmäßige Termine / Blocktermine' and the user can enter the data
+	$newCycle=true;
 }
 
 function raumzeit_doAddCycle() {
@@ -197,15 +197,21 @@ function raumzeit_doDeleteCycle() {
 }
 
 function raumzeit_doAddSingleDate() {
-	global $_REQUEST, $sem;
+	global $_REQUEST, $sem, $raumzeitFilter;
 	$termin = new SingleDate();
 	$start = mktime($_REQUEST['start_stunde'], $_REQUEST['start_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
 	$ende = mktime($_REQUEST['end_stunde'], $_REQUEST['end_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
 	$termin->setTime($start, $ende);
 	$termin->setDateType($_REQUEST['dateType']);
+
+	if ($start < $sem->filterStart || $ende > $sem->filterEnd) {
+		$raumzeitFilter = 'all';
+		$sem->applyTimeFilter(0, 0);
+	}
 	$sem->addSingleDate($termin);
 	$sem->bookRoomForSingleDate($termin->getSingleDateID(), $_REQUEST['room']);
 	$sem->createMessage(sprintf(_("Der Termin %s wurde hinzugefügt!"), '<b>'.$termin->toString().'</b>'));
+	$sem->store();
 }
 
 function raumzeit_editDeletedSingleDate() {

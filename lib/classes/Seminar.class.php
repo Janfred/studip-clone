@@ -764,8 +764,8 @@ class Seminar {
 		}
 	}
 
-	function &getSingleDates($filter = FALSE) {
-		$this->readSingleDates(FALSE, $filter);
+	function &getSingleDates($filter = false, $force = false) {
+		$this->readSingleDates($force, $filter);
 		return $this->irregularSingleDates;
 	}
 
@@ -1279,8 +1279,8 @@ class Seminar {
 		return TRUE;
 	}
 
-	function hasDatesOutOfDuration() {
-		if ($this->hasDatesOutOfDuration == -1) {
+	function hasDatesOutOfDuration($force = false) {
+		if ($this->hasDatesOutOfDuration == -1 || $force) {
 			$this->hasDatesOutOfDuration = SeminarDB::hasDatesOutOfDuration($this->getStartSemester(), $this->getEndSemesterVorlesEnde(), $this->id);
 		}
 		return $this->hasDatesOutOfDuration;
@@ -1554,4 +1554,3 @@ class Seminar {
 	}
 
 }
-?>

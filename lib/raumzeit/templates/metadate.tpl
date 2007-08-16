@@ -5,10 +5,10 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 		<A name="<?=$tpl['md_id']?>">
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
-				<TD width="5%" align="right" valign="top" class="<?=$tpl['class']?>">					
+				<TD width="2%" align="right" valign="center" class="<?=$tpl['class']?>">
 					<? if (!$_LOCKED || !$sd_open[$tpl['md_id']]) { ?>
 					<A href="<?=$PHP_SELF?>?cmd=open&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
-						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau.gif" border="0" align="abstop">
+						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/simple_indicator_gray.gif" border="0">
 					</A>
 					<? } else { ?>
 					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
@@ -16,7 +16,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 					</A>
 					<? } ?>
 				</TD>
-				<TD width="20%" nowrap class="<?=$tpl['class']?>">
+				<TD width="23%" nowrap class="<?=$tpl['class']?>">
 					<? if (!$_LOCKED || !$sd_open[$tpl['md_id']]) { ?>
 					<A class="tree" href="<?=$PHP_SELF?>?cmd=open&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
 					<? } else { ?>
@@ -47,7 +47,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 					</FONT>
 				</TD>
 				<? } else { ?>
-				<TD width="75%" class="<?=$tpl['class']?>">&nbsp;</TD>
+				<TD width="55%" class="<?=$tpl['class']?>">&nbsp;</TD>
 				<? } ?>
 				<TD width="20%" nowrap class="<?=$tpl['class']?>" align="right">
 					<? if (!$_LOCKED) { ?>

@@ -145,10 +145,6 @@ while ($msg = $sem->getNextMessage()) {
 	$messages[] = $msg;
 }
 
-// get a list of semesters (as display options)
-$semester_selectionlist = raumzeit_get_semesters($sem, $semester, $raumzeitFilter);
-
-
 // get possible start-weeks
 $start_weeks = array();
 
@@ -437,6 +433,60 @@ while ($tmp_first_date < $end_date) {
 						&nbsp;<B><?=_("Unregelm&auml;&szlig;ige Termine/Blocktermine")?></B>
 					</TD>
 				</TR>
+				<? if ($termine =& $sem->getSingleDates(true, true)) { ?>
+				<TR>
+					<TD align="center" colspan="9" class="steel1">
+						<FORM action="<?=$PHP_SELF?>" method="post" name="Formular">
+						<TABLE cellpadding="1" cellspacing="0" border="0" width="100%">
+							<?
+							$count = 0;
+							$every2nd = 1;
+							$grenze = 0;
+							foreach ($termine as $key => $val) {
+								$tpl['checked'] = '';
+								$tpl = getTemplateDataForSingleDate($val);
+
+								if ( ($grenze == 0) || ($grenze < $val->getStartTime()) ) {
+									foreach ($all_semester as $zwsem) {
+										if ( ($zwsem['beginn'] < $val->getStartTime()) && ($zwsem['ende'] > $val->getStartTime()) ) {
+											$grenze = $zwsem['ende'];
+											?>
+											<TR>
+												<TD class="steelgraulight" align="center" colspan="9">
+													<B><?=$zwsem['name']?></B>
+												</TD>
+											</TR>
+											<?
+										}
+									}
+								}
+
+								if ($sd_open[$val->getSingleDateID()] && ($open_close_id == $val->getSingleDateID())) {
+									include('lib/raumzeit/templates/openedsingledate.tpl');
+								} else {
+									unset($sd_open[$val->getSingleDateID()]);
+									include('lib/raumzeit/templates/singledate.tpl');
+								}
+								$count++;
+							}
+							?>
+						</TABLE>
+				<? } ?>
+				<? if ($count) { ?>
+						<?
+							$tpl['width'] = '100%';
+							include('lib/raumzeit/templates/actions.tpl');
+						?>
+						</FORM>
+					</TD>
+				</TR>
+				<? } ?>
+
+
+				<tr>
+					<td colspan="9" class="blank">&nbsp;</td>
+				</tr>
+
 				<? if (!$_LOCKED) { ?>
 				<TR>
 					<TD>
@@ -472,43 +522,7 @@ while ($tmp_first_date < $end_date) {
 				<?
 				}
 
-				if ($termine =& $sem->getSingleDates(true)) { ?>
-				<TR>
-					<TD align="center" colspan="9" class="steel1">
-						<FORM action="<?=$PHP_SELF?>" method="post" name="Formular">
-						<TABLE cellpadding="1" cellspacing="0" border="0" width="100%">
-							<?
-							$count = 0;
-							$every2nd = 1;
-							foreach ($termine as $key => $val) {
-								$tpl['checked'] = '';
-								$tpl = getTemplateDataForSingleDate($val);
-
-								if ($sd_open[$val->getSingleDateID()] && ($open_close_id == $val->getSingleDateID())) {
-									include('lib/raumzeit/templates/openedsingledate.tpl');
-								} else {
-									unset($sd_open[$val->getSingleDateID()]);
-									include('lib/raumzeit/templates/singledate.tpl');
-								}
-								$count++;
-							}
-							?>
-						</TABLE>
-				<? } ?>
-				<? if ($count) { ?>
-						<?
-							$tpl['width'] = '100%';
-							include('lib/raumzeit/templates/actions.tpl');
-						?>
-						</FORM>
-					</TD>
-				</TR>
-				<? } ?>
-				<TR>
-					<TD colspan="9" class="blank">&nbsp;</TD>
-				</TR>
-
-				<? if (!$_LOCKED && $RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) { ?>
+				if (!$_LOCKED && $RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) { ?>
 				<tr>
 					<td colspan="9" class="steelkante">
 						<a name="irregular_dates">
@@ -575,6 +589,9 @@ while ($tmp_first_date < $end_date) {
 					// print info box:
 					// get template
 					$infobox_template =& $GLOBALS['template_factory']->open('infobox/infobox_raumzeit');
+
+					// get a list of semesters (as display options)
+					$semester_selectionlist = raumzeit_get_semesters($sem, $semester, $raumzeitFilter);
 
 					// fill attributes
 					$infobox_template->set_attribute('picture', 'board2.jpg');

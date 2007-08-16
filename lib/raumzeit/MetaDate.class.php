@@ -115,7 +115,7 @@ class MetaDate {
 				return FALSE;
 			}
 
-			if (mktime((int)$data['start_stunde'], (int)$data['start_minute']) < mktime((int)$data['end_stunde'], (int)$data['end_minute'])) {			
+			if (mktime($data['start_stunde'], $data['start_minute']) < mktime($data['end_stunde'], $data['end_minute'])) {			
 				$cycle->setDay($data['day']);
 				$cycle->setStart($data['start_stunde'], $data['start_minute']);
 				$cycle->setEnd($data['end_stunde'], $data['end_minute']);
@@ -126,7 +126,16 @@ class MetaDate {
 		return FALSE;
 	}
 
+	/*
+	 * adds a regular time entry
+	 */
 	function addCycle($data = array()) {
+		$data['day'] = (int)$data['day'];
+		$data['start_stunde'] = (int)$data['start_stunde'];
+		$data['start_minute'] = (int)$data['start_minute'];
+		$data['end_stunde'] = (int)$data['end_stunde'];
+		$data['end_minute'] = (int)$data['end_minute'];
+
 		$cycle = new CycleData();
 		if ($this->setCycleData($data, $cycle)) {
 			$this->cycles[$cycle->getMetadateID()] =& $cycle;
@@ -308,6 +317,7 @@ class MetaDate {
 			$metadate_id = $data;
 			$startAfterTimeStamp = 0;
 		}
+
 		$semester = new SemesterData;
 		$all_semester = $semester->getAllSemesterData();
 
