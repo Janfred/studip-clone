@@ -143,7 +143,7 @@ $html = "\n" . $cssSw->GetHoverJSFunction() . "\n";
 	  			elseif (($counter % 2) == 0)	$displayclass = "steel1";
 	  			else							$displayclass = "steelgraulight";
 				$html .="	<tr ".$cssSw->getHover().">"
-					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\">".$range["name"]."</td>"
+					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\">".htmlReady($range["name"])."</td>"
 					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=edit&rangeID=".$range["id"]."&type=vote&showrangeID=".$range["id"]."\" alt=\"Voting erstellen.\">Voting erstellen</a></font></td>"
 					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=edit&rangeID=".$range["id"]."&type=test&showrangeID=".$range["id"]."\" alt=\"Voting erstellen.\">Test erstellen</a></font></td>"
 					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&showrangeID=".$range["id"]."\" alt=\"Diesen Bereich anzeigen.\">Bereich Anzeigen</a></font></td>"
@@ -267,7 +267,7 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 	  	   . "   <table align=\"center\" width=99% class=\"blank\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n"
 	  	   . "	<tr>\n"
 	  	   . "	 <td colspan=\"9\" align=\"left\" valign=\"top\" class=\"blank\" style=\"vertical-align:middle;\">\n"
-	  	   . "	  <font size=\"2\" style=\"vertical-align:middle;\"><br><b>".$label["table_title"]." \"".$votes."\":</b></font>\n"
+	  	   . "	  <font size=\"2\" style=\"vertical-align:middle;\"><br><b>".$label["table_title"]." \"".htmlReady($votes)."\":</b></font>\n"
 	  	   . "	 </td>\n"
 	  	   . "   </tr>\n"
 	  	   . "   </table>\n"
@@ -647,7 +647,7 @@ function makeNewVoteSelectForm($action){
 			// select current range
 			if($showrangeID == $range[$counter][0])
 				$html .= " selected";
-			$html .=	   ">".my_substr ($range[$counter][1], 0, 40)."</option>\n";
+			$html .=	   ">".htmlReady(my_substr ($range[$counter][1], 0, 40))."</option>\n";
 			$counter++;
 		}
 		$html .="	   </select>\n";
@@ -692,7 +692,7 @@ function makeDisplaySelectForm($action){
 		if($showrangeID == $range[$counter][0]){
 			$html .= " selected";
 		}
-		$html .=	   ">".my_substr ($range[$counter][1],0, 40)."</option>\n";
+		$html .=	   ">".htmlReady(my_substr ($range[$counter][1],0, 40))."</option>\n";
 
 		$counter++;
 	}

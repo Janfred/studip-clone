@@ -119,7 +119,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 		<td class="blank" valign="top">
 		<blockquote>
 	<?
-	echo "<br><font size=\"+1\"><b>".$SessSemName["header_line"]. "</b>";
+	echo "<br><font size=\"+1\"><b>".htmlReady($SessSemName["header_line"]). "</b>";
 	if ($SessSemName[3]) {
 		echo "<br /><font size=\"-1\"><b>" . _("Untertitel:") . " </b>";
 		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
@@ -133,7 +133,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 
 		$data = getRegularOverview($SessSemName[1], true);		// second parameter set option to "shrink" dates
 		if ($data) {
-			echo $data, '<br/>';
+			echo $data . '<br/>';
 			if ($perm->have_studip_perm('autor', $SessSemName[1])) {
 				echo '<br />';
 				echo sprintf(_("Details zu allen Terminen im %sAblaufplan%s"), '<a href="seminar_main.php?auswahl='.$SessSemName[1].'&redirect_to=dates.php">', '</a>');
@@ -147,11 +147,11 @@ $quarter_year = 60 * 60 * 24 * 90;
 		if ($next_date) {
 			echo '<br/>';
 			echo '<b>'._("Nächster Termin").':</b><br />';
-			echo $next_date, '<br/>';
+			echo $next_date . '<br/>';
 		} else if ($first_date = $sem->getFirstDate()) {
 			echo '<br/>';
 			echo '<b>'._("Erster Termin").':</b><br />';
-			echo $first_date, '<br/>';
+			echo $first_date . '<br/>';
 		} else {
 			echo '<br/>';
 			echo '<b>'._("Erster Termin").':</b><br />';

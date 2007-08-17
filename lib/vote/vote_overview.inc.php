@@ -135,7 +135,7 @@ $typen = array("user"=>_("Benutzer"),"sem"=>_("Veranstaltung"),"inst"=>_("Einric
 
 if ($rangemode == "root"){
 	$range[] = array("studip",_("Systemweite Votings/Tests"));
-	$range[] = array(get_username($userID),_("pers&ouml;nliche Homepage"));
+	$range[] = array(get_username($userID),_("persönliche Homepage"));
 	if (($showrangeID != "studip") &&
 	    ($showrangeID != get_username ($userID))
 		&& ($showrangeID != NULL))
@@ -143,13 +143,13 @@ if ($rangemode == "root"){
 }
 elseif ($rangemode == "admin"){
 //	$range[] = array("studip",_("Fak/InstSystemweite Votings/Tests"));
-	$range[] = array(get_username($userID),_("pers&ouml;nliche Homepage"));
+	$range[] = array(get_username($userID),_("persönliche Homepage"));
 	if (($showrangeID != get_username ($userID))
 		&& ($showrangeID != NULL))
 		$range[] = array($showrangeID,$voteDB->getRangename($showrangeID));
 }
 elseif ($rangemode == "dozent" OR $rangemode == "tutor") {
-	$range[] = array(get_username($userID),_("pers&ouml;nliche Homepage"));
+	$range[] = array(get_username($userID),_("persönliche Homepage"));
 	$rangeARUser = $voteDB->search_range("");
 	if(!empty($rangeARUser)){
 	foreach ($rangeARUser as $k => $v) {
@@ -163,7 +163,7 @@ elseif ($rangemode == "dozent" OR $rangemode == "tutor") {
 	}
 }
 elseif ($rangemode == "autor"){
-	$range[] = array(get_username($userID),_(" auf der pers&ouml;nlichen Homepage"));
+	$range[] = array(get_username($userID),_(" auf der persönlichen Homepage"));
 }
 
 
