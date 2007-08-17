@@ -531,6 +531,7 @@ function format ($text) {
 					"'((--)+|(\+\+)+)(\S|\S.*?\S)\\1'se",        // ML-kleiner / ML-groesser
 					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",     // ML-hochgestellt
 					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",     // ML-tiefgestellt
+					"'{-(\S|\S.*?\S)-}'s",                  // ML-strike-through
 					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se",   // Absatz eingerueckt
 					"'\n?(</?h[1-4r]>)\n?'"                        // removes newline delimiters
 					);
@@ -558,6 +559,7 @@ function format ($text) {
 					"preg_call_format_text('\\1', format('\\4'))",
 					"<sup>\\1</sup>",
 					"<sub>\\1</sub>",
+					"<strike>\\1</strike>",
 					"'<blockquote>'.format(stripslashes('\\1')).'</blockquote>'",
 					"\\1"
 					);
