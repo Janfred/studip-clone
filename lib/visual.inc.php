@@ -363,9 +363,9 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_comments="icon") {
 
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
-		$what = preg_replace("'\[nop\].+\[/nop\]'isU", '{-*~*%}', $what);
+		$what = preg_replace("'\[nop\].+\[/nop\]'isU", '{_*~*%}', $what);
 		$what = str_replace("\n", '<br />', format_help($what, $trim, $extern, $wiki, $show_comments));
-		$what = explode('{-*~*%}', $what);
+		$what = explode('{_*~*%}', $what);
 		$i = 0; $all = '';
 		foreach ($what as $w) {
 			if ($matches[1][$i] == '') {
