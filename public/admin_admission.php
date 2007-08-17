@@ -88,8 +88,6 @@ require_once('lib/admission.inc.php');	//load functions from admission system
 require_once('lib/classes/StudipAdmissionGroup.class.php'); //htmlReady
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenZugangsberechtigungen";
-if ($admin_admission_data["sem_id"] || $seminar_id)
-	$CURRENT_PAGE = ($admin_admission_data["sem_id"] ? getHeaderLine($admin_admission_data["sem_id"])." - " : getHeaderLine($seminar_id)." - ");
 	
 //Output starts here
 
@@ -100,7 +98,6 @@ $CURRENT_PAGE = _("Verwaltung von Zugangsberechtigungen");
 ob_start();
 include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 $links = ob_get_clean();
-
 //get ID from a open Seminar
 if ($SessSemName[1])
 	$header_object_id = $SessSemName[1];
@@ -153,6 +150,7 @@ function get_snapshot() {
 }
 
 $errormsg = '';
+if ($SessSemName[1]) $seminar_id = $SessSemName[1];
 
 //check, if seminar is grouped
 $group_obj = StudipAdmissionGroup::GetAdmissionGroupBySeminarId($seminar_id);
