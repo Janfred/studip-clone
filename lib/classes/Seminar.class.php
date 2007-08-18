@@ -179,7 +179,7 @@ class Seminar {
 					$resObj =& ResourceObject::Factory($termin->getResourceID());
 					$ret .= $resObj->getName();
 				}
-				return htmlReady($ret);
+				return $ret;
 			break;
 
 			case 'string':
@@ -190,9 +190,9 @@ class Seminar {
 					$resObj =& ResourceObject::Factory($termin->getResourceID());
 					$ret .= $resObj->getFormattedLink(TRUE, TRUE, TRUE);
 				} else if ($termin->getFreeRoomText()) {
-					$ret .= ', ('.$termin->getFreeRoomText().')';
+					$ret .= ', ('.htmlReady($termin->getFreeRoomText()).')';
 				}
-				return htmlReady($ret);
+				return $ret;
 			break;
 
 		}
