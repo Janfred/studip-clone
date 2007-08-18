@@ -288,7 +288,7 @@ while ($tmp_first_date < $end_date) {
 						</SELECT>
 						</FONT>
 						&nbsp;&nbsp;
-						<INPUT type="image" <?=makebutton('auswaehlen', 'src')?> align="absmiddle">
+						<INPUT type="image" <?=makebutton('uebernehmen', 'src')?> align="absmiddle">
 						<INPUT type="hidden" name="cmd" value="selectSemester">
 						</FORM>
 						<? } else {
