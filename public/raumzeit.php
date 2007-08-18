@@ -594,7 +594,7 @@ while ($tmp_first_date < $end_date) {
 					$semester_selectionlist = raumzeit_get_semesters($sem, $semester, $raumzeitFilter);
 
 					// fill attributes
-					$infobox_template->set_attribute('picture', 'board2.jpg');
+					$infobox_template->set_attribute('picture', 'schedule.jpg');
 					$infobox_template->set_attribute("selectionlist_title", "Semesterauswahl"); 
 					$infobox_template->set_attribute('selectionlist', $semester_selectionlist);    
 					if (sizeof($messages) > 0) {
