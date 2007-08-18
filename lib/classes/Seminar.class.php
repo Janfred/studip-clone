@@ -179,7 +179,7 @@ class Seminar {
 					$resObj =& ResourceObject::Factory($termin->getResourceID());
 					$ret .= $resObj->getName();
 				}
-				return $ret;
+				return htmlReady($ret);
 			break;
 
 			case 'string':
@@ -192,7 +192,7 @@ class Seminar {
 				} else if ($termin->getFreeRoomText()) {
 					$ret .= ', ('.$termin->getFreeRoomText().')';
 				}
-				return $ret;
+				return htmlReady($ret);
 			break;
 
 		}
