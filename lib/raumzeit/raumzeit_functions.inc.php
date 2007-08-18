@@ -366,7 +366,8 @@ function raumzeit_get_semesters(&$sem, &$semester, $filter) {
 	foreach ($semester_chooser as $key => $val) {
 
 		// add text and link for each semester
-		$selectionlist[$i]["url"]  = $PHP_SELF.'?cmd=applyFilter&newFilter='.$key;
+		$selectionlist[$i]["url"]  = '?cmd=applyFilter&newFilter='.$key;
+		$selectionlist[$i]["value"]  = $key;
 		$selectionlist[$i]["linktext"] = $val;
 
 		// set "selected" status

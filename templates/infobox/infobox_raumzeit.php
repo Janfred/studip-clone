@@ -4,7 +4,7 @@
   
   <tr>
     <td class="infobox" width="100%" align="right">
-      <img src="<?=$GLOBALS['ASSETS_URL']?>images/schedules.jpg">
+      <img src="<?=$GLOBALS['ASSETS_URL']?>images/board2.jpg">
     </td>
   </tr>
 
@@ -42,7 +42,7 @@
       
       <?       
         // render "semesterauswahl" selection list partial  
-        echo $this->render_partial("infobox/infobox_selectionlist_partial.php"); 
+        echo $this->render_partial("infobox/infobox_dropdownlist_partial.php"); 
       ?>
 
 
