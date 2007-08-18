@@ -210,7 +210,7 @@ while ($tmp_first_date < $end_date) {
 						<SELECT name="endSemester">
 							<OPTION value="0"<?=($sem->getEndSemester() == 0) ? ' selected' : ''?>>1 <?=_("Semester")?></OPTION>
 							<?
-							if ($perm->have_perm("admin")) {		// admins or higher may do everything
+							//if ($perm->have_perm("admin")) {		// admins or higher may do everything
 								foreach ($all_semester as $val) {
 									if ($val['beginn'] > $sem->getStartSemester()) {		// can be removed, if we always need all Semesters
 										echo '<OPTION value="'.$val['beginn'].'"';
@@ -223,7 +223,7 @@ while ($tmp_first_date < $end_date) {
 								?>
 								<OPTION value="-1"<?=($sem->getEndSemester() == -1) ? 'selected' : ''?>><?=_("unbegrenzt")?></OPTION>
 								<?
-							} else {		// dozent or tutor may only selecte a duration of one or two semesters or what admin has choosen
+							/*} else {		// dozent or tutor may only selecte a duration of one or two semesters or what admin has choosen
 								$sem2 = '';
 								foreach ($all_semester as $val) {
 									if (($sem2 == '') && ($val['beginn'] > $sem->getStartSemester())) {
@@ -239,7 +239,7 @@ while ($tmp_first_date < $end_date) {
 									<OPTION value="-1" selected>unbegrenzt</OPTION>
 									<?
 								}
-							}
+							}*/
 							?>
 						</SELECT>
 						<? } else {
