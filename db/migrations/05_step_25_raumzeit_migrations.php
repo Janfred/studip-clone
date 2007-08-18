@@ -52,7 +52,9 @@ class Step25RaumzeitMigrations extends DBMigration
               `resource_id` varchar(32) NOT NULL default '',
               PRIMARY KEY  (`termin_id`),
               KEY `range_id` (`range_id`),
-              KEY `autor_id` (`autor_id`)
+              KEY `autor_id` (`autor_id`),
+							KEY `metadate_id` (`metadate_id`),
+							KEY `date` (`date`)
             ) TYPE=MyISAM PACK_KEYS=1;
         ");
             
@@ -70,6 +72,10 @@ class Step25RaumzeitMigrations extends DBMigration
 
         $this->db->query("
             ALTER TABLE `termine` ADD INDEX ( `metadate_id` );
+        ");
+            
+        $this->db->query("
+            ALTER TABLE `termine` ADD INDEX ( `date` );
         ");
             
         $this->db->query("
