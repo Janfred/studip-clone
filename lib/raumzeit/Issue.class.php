@@ -47,6 +47,7 @@ class Issue {
 	var $forum = FALSE;
 	var $folder_id = '';
 	var $messages = array();
+	var $new = false;
 
 	/**
 	 * Constructor for class Issue
@@ -69,6 +70,7 @@ class Issue {
 			$this->mkdate = time();
 			$this->chdate = time();
 			$this->author_id = $user->id;
+			$this->new = true;
 		} else {
 			return NULL;
 		}

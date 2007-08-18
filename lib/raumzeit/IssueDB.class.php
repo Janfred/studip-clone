@@ -65,7 +65,21 @@ class IssueDB {
 			//$db->query("DELETE FROM px_topics WHERE topic_id = '{$issue->issue_id}'");
 		}
 
-		$db->query("REPLACE INTO themen (issue_id, seminar_id, author_id, title, description, mkdate, chdate, priority) VALUES ('{$issue->issue_id}', '{$issue->seminar_id}', '{$issue->author_id}', '".mysql_escape_string($issue->title)."', '".mysql_escape_string($issue->description)."', '{$issue->mkdate}', '{$issue->chdate}', '{$issue->priority}')");
+		if ($issue->new) {
+			$db->query("INSERT INTO themen (issue_id, seminar_id, author_id, title, description, mkdate, chdate, priority) VALUES ('{$issue->issue_id}', '{$issue->seminar_id}', '{$issue->author_id}', '".mysql_escape_string($issue->title)."', '".mysql_escape_string($issue->description)."', '{$issue->mkdate}', '{$issue->chdate}', '{$issue->priority}')");
+		} else {
+			$db->query("UPDATE themen SET seminar_id = '{$issue->seminar_id}', author_id = '{$issue->author_id}', title = '".mysql_escape_string($issue->title)."', description = '".mysql_escape_string($issue->description)."', mkdate = '{$issue->mkdate}', priority = '{$issue->priority}' WHERE issue_id = '{$issue->issue_id}'");
+
+			if ($db->affected_rows()) {
+				$db->query("UPDATE themen SET chdate = ".time()." WHERE issue_id = '{$issue->issue_id}'");
+				$db->query("SELECT termin_id FROM themen_termine WHERE issue_id = '{$issue->issue_id}'");
+				$db2 = new DB_Seminar();
+				while ($db->next_record()) {
+					$db2->query("UPDATE termine SET chdate = ".time()." WHERE termin_id = '".$db->f('termin_id')."'");
+				}
+			}
+
+		}
 		return TRUE;
 	}
 
