@@ -57,7 +57,7 @@ function list_restore_assign(&$assEvtLst, $resource_id, $begin, $end, $user_id='
 	if ($range_id) $query.= sprintf("resources_user_resources.user_id = '%s'  AND ", $range_id);
 	$query .= sprintf("(begin BETWEEN %s AND %s OR (begin <= %s AND (repeat_end > %s OR end > %s)))"
 				 . "%s ORDER BY begin ASC", $begin, $end, $end, $begin, $begin,
-				 ($day_of_week ? " AND DAYOFWEEK(FROM_UNIXTIME(begin)) = $day_of_week " : "") );
+				 ($day_of_week ? " AND (DAYOFWEEK(FROM_UNIXTIME(begin)) = $day_of_week OR (repeat_interval > 0 AND repeat_day_of_week = 0))" : "") );
 
 	//send the query
 	$db->query($query);
@@ -236,7 +236,8 @@ function isFiltered($filter, $mode) {
 	$filters = array(	// filter rules (a filter consists of one or more repeat_modes)
 		"all"=>array("na", "sd", "meta", "d", "m", "y", "w"),
 		"single"=>array("na", "sd"),
-		"repeated"=>array("meta", "d", "m", "y", "w"));
+		"repeated"=>array("meta", "d","m", "y", "w"),
+		"semschedulesingle" => array('na','sd','d','m','y'));
 	if ($filter) {
 		if (in_array($mode, $filters[$filter]))
 			return FALSE;

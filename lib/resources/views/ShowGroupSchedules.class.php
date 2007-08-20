@@ -121,12 +121,12 @@ class ShowGroupSchedules extends ShowSemSchedules {
 	function showScheduleGraphical($print_view = false) {
 		global $RELATIVE_PATH_RESOURCES, $PHP_SELF, $cssSw, $view_mode, $resources_data, $ActualObjectPerms;
 
-	 	$categories["na"] = 4;
+		$categories["na"] = 4;
 	 	$categories["sd"] = 4;
-	 	$categories["y"] = 0;
-	 	$categories["m"] = 0;
+	 	$categories["y"] = 3;
+	 	$categories["m"] = 3;
 	 	$categories["w"] = 0;
-	 	$categories["d"] = 0;
+	 	$categories["d"] = 2;
 
 	 	//an assign for a date corresponding to a (seminar-)metadate
 	 	$categories["meta"] = 1;
@@ -170,7 +170,8 @@ class ShowGroupSchedules extends ShowSemSchedules {
 					foreach($events as $id => $event){
 						$repeat_mode = $event['repeat_mode'];
 						$add_info = ($event['sem_doz_names'] ? '('.$event['sem_doz_names'].') ' : '');
-						$add_info .= ($event['repeat_interval'] == 2 ? '('._("zweiwöchentlich").')' : '');
+						$add_info .= ($repeat_mode == 'w' && $event['repeat_interval'] == 1 ? '('._("wöchentlich").')' : '');
+						$add_info .= ($repeat_mode == 'w' && $event['repeat_interval'] > 1 ? '('.$event['repeat_interval'].'-'._("wöchentlich").')' : '');
 						$name = $event['name'];
 						$schedule->addEvent($room_to_show_id, $name, $event['begin'], $event['end'],
 									"$PHP_SELF?show_object=$room_id&cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event['assign_id'], $add_info, $categories[$repeat_mode]);
@@ -185,10 +186,29 @@ class ShowGroupSchedules extends ShowSemSchedules {
 					}
 
 					$a_end_time = ($print_view ? $a_start_time + 86400 * 14 : $end_time);
-					$assign_events = new AssignEventList ($a_start_time, $a_end_time, $room_id, '', '', TRUE, 'single', $this->dow);
+					$assign_events = new AssignEventList ($a_start_time, $a_end_time, $room_id, '', '', TRUE, 'semschedulesingle', $this->dow);
 					while ($event = $assign_events->nextEvent()) {
+						if(in_array($event->repeat_mode, array('d','m','y'))){
+							if(strftime('%u', $event->getBegin()) != $this->dow) continue;
+							$assign =& AssignObject::Factory($event->getAssignId());
+							switch($event->repeat_mode){
+								case 'd':
+								$add_info = '('.sprintf(_("täglich, %s bis %s"), strftime('%x',$assign->getBegin()), strftime('%x',$assign->getRepeatEnd())).')';
+								break;
+								case 'm':
+								if($assign->getRepeatInterval() == 1) $add_info = '('._("monatlich").')';
+								else  $add_info = '('.$assign->getRepeatInterval().'-'._("monatlich").')';
+								break;
+								case 'y':
+								if($assign->getRepeatInterval() == 1) $add_info = '('._("jährlich").')';
+								else  $add_info = '('.$assign->getRepeatInterval().'-'._("jährlich").')';
+								break;
+							}
+						} else {
+							$add_info = '';
+						}
 						$schedule->addEvent($room_to_show_id, 'EB'.$num++.':' . $event->getName(get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME')), $event->getBegin(), $event->getEnd(),
-						"$PHP_SELF?show_object=$room_id&cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), FALSE, $categories[$event->repeat_mode]);
+						"$PHP_SELF?show_object=$room_id&cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&edit_assign_object=".$event->getAssignId(), $add_info, $categories[$event->repeat_mode]);
 						++$num_single_events;
 						$single_assigns[] = $event;
 					}

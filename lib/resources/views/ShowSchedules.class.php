@@ -221,12 +221,12 @@ class ShowSchedules {
 	function showScheduleGraphical() {
 		global $RELATIVE_PATH_RESOURCES, $PHP_SELF, $cssSw, $view_mode, $resources_data, $ActualObjectPerms;
 
-	 	$categories["na"] = 4;
+		$categories["na"] = 4;
 	 	$categories["sd"] = 4;
-	 	$categories["y"] = 0;
-	 	$categories["m"] = 0;
+	 	$categories["y"] = 3;
+	 	$categories["m"] = 3;
 	 	$categories["w"] = 0;
-	 	$categories["d"] = 0;
+	 	$categories["d"] = 2;
 
 	 	//an assign for a date corresponding to a (seminar-)metadate
 	 	$categories["meta"] = 1;
