@@ -27,6 +27,8 @@ require_once('lib/classes/ZebraTable.class.php');
 require_once('lib/classes/AuxLockRules.class.php');
 require_once('lib/dates.inc.php');
 
+$GLOBALS['CURRENT_PAGE'] = $SessSemName["header_line"]. " - " . _("Zusatzangaben");
+
 if (!$_REQUEST['display_type']) {
 	// Start  of Output
 	include ("lib/include/html_head.inc.php"); // Output of html head
