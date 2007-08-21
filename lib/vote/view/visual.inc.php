@@ -241,15 +241,17 @@ function createErrorReport (&$object, $errortitle = "") {
 				  VOTE_COLOR_ERROR);
 
    $html .= "<ul>\n";
-   foreach ($object->getErrors () as $error) {
-      $html .= " <li><font size=\"-1\">".$error["string"]."</font>\n";
-      if ($error["type"] == ERROR_CRITICAL) {
-	 $html .= "<ul>\n";
-	 $html .= "<li>"._("Datei: ")."<b>".$error["file"]."</b></li>\n";
-	 $html .= "<li>"._("Zeile: ")."<b>".$error["line"]."</b></li>\n";
-	 $html .= "</ul>\n";
-      }
-      $html .= "</li>\n";
+   if(is_object($object)){
+	   foreach ($object->getErrors () as $error) {
+	      $html .= " <li><font size=\"-1\">".$error["string"]."</font>\n";
+	      if ($error["type"] == ERROR_CRITICAL) {
+		 $html .= "<ul>\n";
+		 $html .= "<li>"._("Datei: ")."<b>".$error["file"]."</b></li>\n";
+		 $html .= "<li>"._("Zeile: ")."<b>".$error["line"]."</b></li>\n";
+		 $html .= "</ul>\n";
+	      }
+	      $html .= "</li>\n";
+	   }
    }
    $html .= "</ul>\n";
 
