@@ -47,6 +47,7 @@
 				</tr>
 			</table>
 			<?}?>
+			<?if($free_access_activated){?>
 			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
 				<tr>
 					<td width="270">
@@ -58,6 +59,7 @@
 					</td>
 				</tr>
 			</table>
+			<?}?>
 			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
 				<tr>
 					<td width="270">

@@ -787,7 +787,11 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 				?>
 				<font size=-1><u><?=("Lesezugriff:")?></u> </font><br />
 				<font size=-1>
-				<input type="radio" name="read_level" value="0" <?php print $admin_admission_data["read_level"] == 0 ? "checked" : ""?>> <?=_("freier Zugriff")?> &nbsp;<br />
+				<?if (get_config('ENABLE_FREE_ACCESS')) {?>
+					<input type="radio" name="read_level" value="0" <?php print $admin_admission_data["read_level"] == 0 ? "checked" : ""?>> <?=_("freier Zugriff")?> &nbsp;<br />
+				<?} else {?>
+					<font color=#BBBBBB>&nbsp; &nbsp; &nbsp;  <?=_("freier Zugriff")?> &nbsp;</font><br />
+				<?}?>
 				<input type="radio" name="read_level" value="1" <?php print $admin_admission_data["read_level"] == 1 ? "checked" : ""?>> <?=_("in Stud.IP angemeldet")?> &nbsp;<br />
 				<input type="radio" name="read_level" value="2" <?php print $admin_admission_data["read_level"] == 2 ? "checked" : ""?>> <?=_("nur mit Passwort")?> &nbsp;<br />
 				</font>
@@ -798,7 +802,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 			<?
 			if (!isset($admin_admission_data["write_level"]) || $admin_admission_data["write_level"]==3)
 				$admin_admission_data["write_level"] = "1";	//Vorgabe: nur angemeldet
-				if ($SEM_CLASS[$SEM_TYPE[$admin_admission_data["status"]]["class"]]["write_access_nobody"]) {
+				if (get_config('ENABLE_FREE_ACCESS') && $SEM_CLASS[$SEM_TYPE[$admin_admission_data["status"]]["class"]]["write_access_nobody"]) {
 				?>
 				<input type="radio" name="write_level" value="0" <?php print $admin_admission_data["write_level"] == 0 ? "checked" : ""?>> <?=_("freier Zugriff")?> &nbsp;<br />
 				<?

@@ -518,7 +518,7 @@ $ALLOW_CHANGE_EMAIL = TRUE;							//if true, users are allowed to change their e
 $ALLOW_CHANGE_NAME = TRUE;							//if true, users are allowed to change their name
 $ALLOW_CHANGE_TITLE = TRUE;							//if true, users are allowed to change their titles
 $ENABLE_SELF_REGISTRATION = TRUE;						//should it be possible for an user to register himself
-
+$ENABLE_FREE_ACCESS = TRUE;							//if true, courses with public access are available
 
 /*IDs of courses, in which users were entered when they are promoted to 'autor'
 -----------------------------------------------------------------*/

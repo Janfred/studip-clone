@@ -207,6 +207,7 @@ class HeaderController {
 	function getHeaderItemCourses(){
 		global $user, $perm;
 		if(!is_object($user) || $user->id == 'nobody'){
+			if(!$GLOBALS['ENABLE_FREE_ACCESS']) return null;
 			$courseinfo = _("Freie Veranstaltungen");
 			$coursetext = _("Freie");
 			$courselink = "freie.php";
@@ -273,6 +274,17 @@ class HeaderController {
 		} else {
 			$ret['text'] = _("Login");
 			$ret['link'] = "index.php?again=yes";
+		}
+		return $ret;
+	}
+	
+	function getHeaderItemSSOLogin(){
+		global $user;
+		if((!is_object($user) || $user->id == 'nobody') && array_search("CAS", $GLOBALS["STUDIP_AUTH_PLUGIN"])){
+			$ret['text'] = _("Login CAS");
+			$ret['link'] = "index.php?again=yes&sso=true";
+		} else {
+			$ret = null;
 		}
 		return $ret;
 	}

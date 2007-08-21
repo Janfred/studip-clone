@@ -135,7 +135,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.SymboleFreieVeranstaltungen";
-
+$CURRENT_PAGE = _("Öffentliche Veranstaltungen");
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -150,15 +150,16 @@ closeObject();
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
-
-  if (!isset($sortby)) $sortby="Name";
+$num_my_sem = false;
+if(get_config('ENABLE_FREE_ACCESS')){
+	if (!isset($sortby)) $sortby="Name";
 	$db->query("SELECT seminare.*, Institute.Name AS Institut, Institute.Institut_id AS id FROM seminare LEFT JOIN Institute USING (institut_id) WHERE Lesezugriff='0' AND seminare.visible='1' ORDER BY $sortby");
-	$num_my_sem=$db->num_rows();
-  if (!$num_my_sem) $meldung="error§". _("Es gibt keine Veranstaltungen, die einen freien Zugriff erlauben!")."§".$meldung;
+	$num_my_sem = $db->num_rows();
+}
+if (!$num_my_sem) $meldung="error§". _("Es gibt keine Veranstaltungen, die einen freien Zugriff erlauben!")."§".$meldung;
 
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0 align=center>
-<tr><td class="topic" colspan="2">&nbsp;<b><? echo _("&Ouml;ffentliche Veranstaltungen"); echo " - "; echo $UNI_NAME ?></b></td></tr>
 <tr><td class="blank" width="99%"><br>
 <?
 	print("<blockquote>");

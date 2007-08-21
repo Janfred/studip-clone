@@ -2513,8 +2513,16 @@ if ($level == 2)
 							if (!$sem_create_data["sem_admission"]) {
 								if (!isset($sem_create_data["sem_sec_lese"]) || $sem_create_data["sem_sec_lese"]==3)
 									$sem_create_data["sem_sec_lese"] = "1";	//Vorgabe: nur angemeldet oder es war Teilnahmebegrenzung gesetzt
-							?>
-								<input type="radio" name="sem_sec_lese" value="0" <?php print $sem_create_data["sem_sec_lese"] == 0 ? "checked" : ""?>> <?=_("freier Zugriff"); ?> &nbsp;
+								if (get_config('ENABLE_FREE_ACCESS')){
+									?>
+									<input type="radio" name="sem_sec_lese" value="0" <?php print $sem_create_data["sem_sec_lese"] == 0 ? "checked" : ""?>> <?=_("freier Zugriff"); ?> &nbsp;
+									<?
+								} else {
+									?>
+									<font color=#BBBBBB>&nbsp; &nbsp; &nbsp;  <?=_("freier Zugriff")?> &nbsp;</font>
+									<?
+								}
+								?>
 								<input type="radio" name="sem_sec_lese" value="1" <?php print $sem_create_data["sem_sec_lese"] == 1 ? "checked" : ""?>> <?=_("in Stud.IP angemeldet"); ?> &nbsp;
 								<input type="radio" name="sem_sec_lese" value="2" <?php print $sem_create_data["sem_sec_lese"] == 2 ? "checked" : ""?>> <?=_("nur mit Passwort"); ?> &nbsp;
 								<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
@@ -2535,7 +2543,7 @@ if ($level == 2)
 							if (!$sem_create_data["sem_admission"]) {
 								if (!isset($sem_create_data["sem_sec_schreib"]) || $sem_create_data["sem_sec_schreib"]==3)
 									$sem_create_data["sem_sec_schreib"] = "1";	//Vorgabe: nur angemeldet
-								if ($SEM_CLASS[$sem_create_data["sem_class"]]["write_access_nobody"]) {
+								if (get_config('ENABLE_FREE_ACCESS') && $SEM_CLASS[$sem_create_data["sem_class"]]["write_access_nobody"]) {
 									?>
 								<input type="radio" name="sem_sec_schreib" value="0" <?php print $sem_create_data["sem_sec_schreib"] == 0 ? "checked" : ""?>> <?=_("freier Zugriff"); ?> &nbsp;
 									<?
