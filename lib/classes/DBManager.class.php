@@ -115,6 +115,9 @@ class DBManager {
     $this->connections[$database] = new PDO($dsn, $user, $pass);
     $this->connections[$database]->setAttribute(PDO::ATTR_ERRMODE,
                                                 PDO::ERRMODE_EXCEPTION);
+	if($this->connections[$database]->getAttribute(PDO::ATTR_DRIVER_NAME) == 'mysql'){
+		$this->connections[$database]->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+	}
     return $this;
   }
 

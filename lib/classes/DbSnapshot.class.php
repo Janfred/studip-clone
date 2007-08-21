@@ -116,7 +116,7 @@ class DbSnapshot {
 	function isDbResult(){
 		if(!is_subclass_of($this->dbResult,$this->DbClass))
 			$this->halt("Result set has wrong type!");
-		if(!$this->dbResult->Query_ID)
+		if(!$this->dbResult->query_id())
 			$this->halt("No result set (missing query?)");
 		return true;
 	}
