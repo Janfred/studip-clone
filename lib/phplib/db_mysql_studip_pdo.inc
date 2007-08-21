@@ -114,9 +114,10 @@ class DB_Sql {
 		
 		$this->Record = $this->resultSet->fetch();
 		$this->Row   += 1;
-		$this->Errno  = $this->pdo->errorCode();
-		$this->Error  = $this->pdo->errorInfo();
-		
+		/*
+		$this->Errno  = $this->resultSet->errorCode();
+		$this->Error  = $this->resultSet->errorInfo();
+		*/
 		$stat = is_array($this->Record);
 		if (!$stat && $this->Auto_Free) {
 			$this->free();
