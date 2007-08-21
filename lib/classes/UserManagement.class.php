@@ -828,11 +828,13 @@ class UserManagement {
 		if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']){
 			if(ElearningUtils::initElearningInterfaces()){
 				foreach($GLOBALS['connected_cms'] as $cms){
-					$userclass = strtolower(get_class($cms->user));
-					$connected_user = new $userclass($cms->cms_type, $this->user_data['auth_user_md5.user_id']);
-					if($ok = $connected_user->deleteUser()){
-						if($connected_user->is_connected){
-							$this->msg .= "info§" . sprintf(_("Der verknüpfte Nutzer %s wurde im System %s gelöscht."), $connected_user->login, $connected_user->cms_type) . "§";
+					if(is_object($cms->user)){
+						$userclass = strtolower(get_class($cms->user));
+						$connected_user = new $userclass($cms->cms_type, $this->user_data['auth_user_md5.user_id']);
+						if($ok = $connected_user->deleteUser()){
+							if($connected_user->is_connected){
+								$this->msg .= "info§" . sprintf(_("Der verknüpfte Nutzer %s wurde im System %s gelöscht."), $connected_user->login, $connected_user->cms_type) . "§";
+							}
 						}
 					}
 				}
