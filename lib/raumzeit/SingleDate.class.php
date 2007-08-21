@@ -292,7 +292,7 @@ class SingleDate {
 	}
 
 	function toString() {
-		return getWeekDay(date('w', $this->date)).'., '.date('d.m. Y, H:i', $this->date).' - '.date('H:i', $this->end_time);
+		return getWeekDay(date('w', $this->date)).'., '.date('d.m.Y, H:i', $this->date).' - '.date('H:i', $this->end_time);
 	}
 
 	function bookRoom($roomID) {

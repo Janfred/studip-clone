@@ -144,6 +144,7 @@ class Issue {
 	function store() {
 		$this->chdate = time();
 		IssueDB::storeIssue($this);
+		$this->new = false;
 	}
 
 	function restore() {
@@ -170,8 +171,9 @@ class Issue {
 		$this->file = ($data['range_id'] == '') ? FALSE : TRUE;
 		$this->forum = ($data['topic_id'] == '') ? FALSE : TRUE;
 		if ($this->file) {
-			$this->folder_id = $data['folder_id'];
+			$this->folder_id = $data['folder_id'];		
 		}
+		$this->new = false;
 		$this->readSingleDates();
 	}
 

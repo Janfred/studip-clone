@@ -130,10 +130,6 @@ while ($msg = $sem->getNextMessage()) {
 	$messages[] = $msg;
 }
 
-if (sizeof($messages) > 0) {
-	$infobox[] = raumzeit_parse_messages($messages);
-}
-
 if ($sem->metadates->art == 0) {
 	$times_info .= '<B>'._("Typ").':</B> '._("regelm&auml;&szlig;ige Veranstaltung").'<BR/>';
 	$z = 0;
@@ -146,41 +142,6 @@ if ($sem->metadates->art == 0) {
 } else {
 	$times_info .= '<B>'._("Typ").':</B> '._("unregelm&auml;&szlig;ige Veranstaltung").'<BR/>';
 }
-
-$info = array();
-$info["kategorie"] = _("Informationen:");
-$info["eintrag"][] = array ("icon" => "ausruf_small.gif",
-		"text"  => _("Hier k&ouml;nnen Sie f&uuml;r die einzelnen Termine Beschreibungen eingeben, Themen im Forum und Dateiordner anlegen."));
-$info["eintrag"][] = array ("icon" => "ausruf_small.gif",
-		"text"  => sprintf(_("Zeit&auml;nderungen, Raumbuchungen und Termine anlegen k&ouml;nnen Sie unter %s Zeiten%s."), '<a href="raumzeit.php">', '</a>'));
-$info["eintrag"][] = array ("icon" => "blank.gif",
-		"text"  => $times_info);
-$infobox[] = $info;
-
-if($GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
-	$info = array();
-	$info['kategorie'] = _("Ansicht:");
-	$info['eintrag'][] = array (
-		'icon' => ($viewModeFilter == 'simple') ? 'forumrot.gif' : 'forumgrau.gif',
-		'text' => '<a href="themen.php?cmd=changeViewMode&newFilter=expert">'._("Standardansicht").'</a>'
-	);
-  $info['eintrag'][] = array (
-		'icon' => ($viewModeFilter == 'expert') ? 'forumrot.gif' : 'forumgrau.gif',
-		'text' => '<a href="themen.php?cmd=changeViewMode&newFilter=expert">'._("Erweiterte Ansicht").'</a>'
-	);
-
-	$infobox[] = $info;
-}
-
-$infobox[] = raumzeit_get_semester_chooser($sem, $semester, $raumzeitFilter);
-
-$info = array();
-$info["kategorie"] = _("Aktionen:");
-$info["eintrag"][] = array ("icon" => "link_intern.gif",
-		"text"  => "<a href=\"raumzeit.php?cmd=createNewSingleDate#newSingleDate\">"._("Einen neuen Termin anlegen").'</a>');
-$info["eintrag"][] = array ("icon" => "link_intern.gif",
-		"text"  => sprintf(_("Um die allgemeinen Zeiten der Veranstaltung zu &auml;ndern, nutzen Sie bitte den Men&uuml;punkt %s Zeiten%s."), "<a href=\"raumzeit.php\">", "</a>"));
-$infobox[] = $info;
 
 // infobox end
 
@@ -301,7 +262,28 @@ $termine = getAllSortedSingleDates($sem);
 			</TABLE>
 		</TD>
 		<TD class="blank" valign="top">
-		<?print_infobox ($infobox, "schedules.jpg");?>
+		<?
+
+			// print info box:
+			// get template
+			$infobox_template =& $GLOBALS['template_factory']->open('infobox/infobox_topic_admin');
+
+			// get a list of semesters (as display options)
+			$semester_selectionlist = raumzeit_get_semesters($sem, $semester, $raumzeitFilter);
+
+			// fill attributes
+			$infobox_template->set_attribute('picture', 'schedules.jpg');
+			$infobox_template->set_attribute("selectionlist_title", "Semesterauswahl");
+			$infobox_template->set_attribute('selectionlist', $semester_selectionlist);
+			$infobox_template->set_attribute('times_info', $times_info);
+			if (sizeof($messages) > 0) {
+				$infobox_template->set_attribute('messages', $messages);
+			}
+
+			// render template
+			echo $infobox_template->render();
+
+		?>
 		</TD>
 	</TR>
 	<TR>
