@@ -86,7 +86,9 @@ class DB_Seminar extends DB_Sql {
 		$this->Database = $GLOBALS['DB_STUDIP_DATABASE'];
 		$this->User = $GLOBALS['DB_STUDIP_USER'];
 		$this->Password = $GLOBALS['DB_STUDIP_PASSWORD'];
-		parent::DB_Sql($query);
+		if ($query){
+			$this->query($query);
+		}
 	}
 }
 
@@ -97,7 +99,9 @@ class DB_Ilias extends DB_Sql {
 		$this->Database = $GLOBALS['DB_ILIAS_DATABASE'];
 		$this->User = $GLOBALS['DB_ILIAS_USER'];
 		$this->Password = $GLOBALS['DB_ILIAS_PASSWORD'];
-		parent::DB_Sql($query);
+		if ($query){
+			$this->query($query);
+		}
 	}
 }
 
