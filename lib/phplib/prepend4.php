@@ -19,7 +19,7 @@ set_include_path($include_path);
 define('PHPLIB_SESSIONDATA_TABLE', 'session_data');
 define('PHPLIB_USERDATA_TABLE', 'user_data');
 
-require('lib/phplib/db_mysql_studip.inc');  /* Change this to match your database. */
+require('lib/phplib/db_mysql_studip_pdo.inc');  /* Change this to match your database. */
 require('lib/phplib/ct_sql_studip.inc');    /* Change this to match your data storage container */
 require('lib/phplib/session4_custom.inc');   /* Required for everything below.      */
 require('lib/phplib/auth4.inc');      /* Disable this, if you are not using authentication. */
