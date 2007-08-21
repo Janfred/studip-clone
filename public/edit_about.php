@@ -1068,65 +1068,65 @@ function oeffne()
 } // Ende nur wenn JS aktiv
 
 switch($view) {
-	case "Bild": 
-		$HELP_KEYWORD="Basis.HomepageBild"; 
+	case "Bild":
+		$HELP_KEYWORD="Basis.HomepageBild";
 		$CURRENT_PAGE=_("Hochladen eines persönlichen Bildes");
 		break;
-	case "Daten": 
-		$HELP_KEYWORD="Basis.HomepagePersönlicheDaten"; 
+	case "Daten":
+		$HELP_KEYWORD="Basis.HomepagePersönlicheDaten";
 		$CURRENT_PAGE=_("Benutzerkonto bearbeiten");
 		break;
-	case "Karriere": 
-		$HELP_KEYWORD="Basis.HomepageUniversitäreDaten"; 
+	case "Karriere":
+		$HELP_KEYWORD="Basis.HomepageUniversitäreDaten";
 		if ($perm->have_perm ("tutor"))
 			$CURRENT_PAGE=_("Studiengang und Einrichtungen bearbeiten");
 		else
 			$CURRENT_PAGE=_("Studiengang bearbeiten");
 		break;
-	case "Lebenslauf": 
-		$HELP_KEYWORD="Basis.HomepageLebenslauf"; 
+	case "Lebenslauf":
+		$HELP_KEYWORD="Basis.HomepageLebenslauf";
 		if ($auth->auth['perm'] == "dozent")
 			$CURRENT_PAGE =  _("Lebenslauf, Arbeitsschwerpunkte und Publikationen bearbeiten");
 		else
 			$CURRENT_PAGE =  _("Lebenslauf bearbeiten");
 		break;
-	case "Sonstiges": 
-		$HELP_KEYWORD="Basis.HomepageSonstiges"; 
+	case "Sonstiges":
+		$HELP_KEYWORD="Basis.HomepageSonstiges";
 		$CURRENT_PAGE=_("Eigene Kategorien bearbeiten");
 		break;
-	case "Login": 
-		$HELP_KEYWORD="Basis.MyStudIPAutoLogin"; 
+	case "Login":
+		$HELP_KEYWORD="Basis.MyStudIPAutoLogin";
 		$CURRENT_PAGE=_("Auto-Login einrichten");
 		break;
-	case "Forum": 
-		$HELP_KEYWORD="Basis.MyStudIPForum"; 
+	case "Forum":
+		$HELP_KEYWORD="Basis.MyStudIPForum";
 		$CURRENT_PAGE=_("Einstellungen des Forums anpassen");
 		break;
-	case "Terminkalender": 
-		$HELP_KEYWORD="Basis.MyStudIPTerminkalender"; 
+	case "Terminkalender":
+		$HELP_KEYWORD="Basis.MyStudIPTerminkalender";
 		$CURRENT_PAGE=_("Einstellungen des Terminkalenders anpassen");
 		break;
-	case "Tools": 
-		$HELP_KEYWORD="Basis.HomepageTools"; 
+	case "Tools":
+		$HELP_KEYWORD="Basis.HomepageTools";
 		$CURRENT_PAGE=_("Benutzer-Tools");
 		break;
-	case "Stundenplan": 
-		$HELP_KEYWORD="Basis.MyStudIPStundenplan"; 
+	case "Stundenplan":
+		$HELP_KEYWORD="Basis.MyStudIPStundenplan";
 		$CURRENT_PAGE=_("Einstellungen des Stundenplans anpassen");
 		break;
-	case "Messaging": 
-		$HELP_KEYWORD="Basis.MyStudIPMessaging"; 
+	case "Messaging":
+		$HELP_KEYWORD="Basis.MyStudIPMessaging";
 		$CURRENT_PAGE=_("Einstellungen des Nachrichtensystems anpassen");
 		break;
-	case "rss": 
-		$HELP_KEYWORD="Basis.MyStudIPRSS"; 
+	case "rss":
+		$HELP_KEYWORD="Basis.MyStudIPRSS";
 		$CURRENT_PAGE=_("Einstellungen der RSS-Anzeige anpassen");
 		break;
 	case "allgemein":
 		$CURRENT_PAGE=_("Allgemeine Einstellungen anpassen");
 		break;
-	default: 
-		$HELP_KEYWORD="Basis.MyStudIP"; 
+	default:
+		$HELP_KEYWORD="Basis.MyStudIP";
 		break;
 }
 
@@ -1700,6 +1700,7 @@ if ($view == 'Lebenslauf') {
 			$entry->structure->load();
 			$color = '#ff0000';
 		}
+		$db = new DB_Seminar();
 		$db->query("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
 		$db->next_record();
 		$userid = $db->f("user_id");
@@ -1801,7 +1802,7 @@ if ($view == 'Login') {
 }
 
 	if ($table_open) echo "\n</table>\n";
-	
+
 	include ('lib/include/html_end.inc.php');
 }
 
