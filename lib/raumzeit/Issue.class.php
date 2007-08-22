@@ -143,9 +143,6 @@ class Issue {
 
 	function store() {
 		$this->chdate = time();
-		if (!$this->getTitle()) {
-			$this->setTitle('Kein Titel');
-		}
 		IssueDB::storeIssue($this);
 		$this->new = false;
 	}
