@@ -185,7 +185,7 @@ $termine = getAllSortedSingleDates($sem);
 
 				<tr>
 					<td class="steel1" colspan="4"></td>
-					<td class="steel1" colspan="2" align="left">
+					<td class="steel1" colspan="2" align="left" nowrap="nowrap">
 						<font size="-1">
 							<input type="checkbox" name="createAllForumFolders"> <?=_("Für alle Termine einen Forumsordner anlegen")?>
 							<br />
