@@ -209,6 +209,7 @@ function getFilterForSemester($semester_id) {
 	}
 }
 
+/*
 function get_not_visited($type, $seminar_id, $range_id = '') {
 	global $user;
 	$db = new DB_Seminar();
@@ -238,6 +239,7 @@ function get_not_visited($type, $seminar_id, $range_id = '') {
 			break;
 	}
 }
+*/
 
 function unQuoteAll() {
 	global $_REQUEST, $_POST, $_COOKIE, $_GET;

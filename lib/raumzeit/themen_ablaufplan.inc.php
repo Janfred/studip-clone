@@ -66,7 +66,7 @@ function themen_saveAll() {
 	foreach ($changeTitle as $key => $val) {	// we use the changeTitle-array for running through all themes ($key = issue_id and $val = title)
 
 		unset($termin);
-		if (($changeTitle[$key] != '') || ($changeDescription[$key] != '') || ($changeForum[$key] == 'on') || ($changeFile[$key] == 'on')) {
+		if (($changeTitle[$key] != '') || ($changeDescription[$key] != '') || ($changeForum[$key] == 'on') || ($changeFile[$key] == 'on') || $_REQUEST['createAllFileFolders'] == 'on' || $_REQUEST['createAllForumFolders'] == 'on') {
 			$termin =& new SingleDate($key);
 			$issue_ids = $termin->getIssueIDs();
 			if (sizeof($issue_ids) == 0) {
@@ -82,9 +82,13 @@ function themen_saveAll() {
 			}
 
 			if (!$already_worked_on[$cur_issue_id]) {
-				$already_worked_on[$cur_issue_id] = TRUE;
-				$forumValue = ($changeForum[$key] == 'on') ? TRUE : FALSE;
-				$fileValue = ($changeFile[$key] == 'on') ? TRUE : FALSE;
+				$already_worked_on[$cur_issue_id] = true;
+				$forumValue = ($changeForum[$key] == 'on') ? true : false;
+				$fileValue = ($changeFile[$key] == 'on') ? true : false;
+
+				if ($_REQUEST['createAllForumFolders'] == 'on') $forumValue = true;
+				if ($_REQUEST['createAllFileFolders'] == 'on')	$fileValue = true;
+
 				if (	($themen[$cur_issue_id]->getTitle() != $val) ||
 						($themen[$cur_issue_id]->getDescription() != $changeDescription[$key]) ||
 						($themen[$cur_issue_id]->hasForum() != $forumValue) ||

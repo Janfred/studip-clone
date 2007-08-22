@@ -43,6 +43,8 @@ $issue_open = array();
 $sess->register('showDatesFilter');
 
 require_once ('lib/classes/Seminar.class.php');
+require_once ('lib/datei.inc.php');
+require_once ('lib/forum.inc.php');
 require_once ('lib/raumzeit/raumzeit_functions.inc.php');
 
 if ($RESOURCES_ENABLE) {
@@ -200,8 +202,8 @@ if ($cmd == 'openAll') $openAll = true;
     							$tpl['folder_id'] = $thema->getFolderID();
     							$tpl['forumEntry'] = $thema->hasForum();
     							$tpl['fileEntry'] = $thema->hasFile();								
-    							$tpl['forumCount'] = get_not_visited('forum', $id, $thema->getIssueId());
-    							$tpl['fileCount'] = get_not_visited('document', $id, $thema->getFolderId());
+    							$tpl['forumCount'] = forum_count($thema->getIssueId(), $id);
+    							$tpl['fileCountAll'] = doc_count($thema->getFolderId());
     						}
     
     						include('lib/raumzeit/templates/singledate_student.tpl');

@@ -1,34 +1,38 @@
 <TR>
-	<TD width="1%" align="right" valign="center" class="<?=$tpl['class']?>" nowrap>
+	<TD width="1%" align="right" valign="center" class="<?=$tpl['class']?>" nowrap="nowrap">
 		<A name="<?=$tpl['sd_id']?>">
 		<A href="<?=$PHP_SELF?>?cmd=<?=($issue_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
 			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($issue_open[$tpl['sd_id']]) ? 'runt' : ''?>.gif" border="0">
 		</A>
 	</TD>
-	<TD width="1%" align="right" valign="top" class="<?=$tpl['class']?>" nowrap>
+	<TD width="1%" align="right" valign="top" class="<?=$tpl['class']?>" nowrap="nowrap">
 		<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/termin-icon.gif" border="0" align="abstop">&nbsp;
 	</TD>
-	<TD width="30%" nowrap class="<?=$tpl['class']?>" valign="bottom">
+
+	<TD nowrap="nowrap" class="<?=$tpl['class']?>" valign="bottom">
 		<A class="tree" href="<?=$PHP_SELF?>?cmd=<?=($issue_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
 			<FONT size="-1">
-				<?=$tpl['date']?>
+				<?=$tpl['date']?>&nbsp;&nbsp;&nbsp;&nbsp;
 			</FONT>
 		</A>
 	</TD>
-	<TD width="23%" nowrap class="<?=$tpl['class']?>" valign="bottom">
-		<FONT size="-1" color="#000000">
-			<?=$tpl['room']?>
-		</FONT>
-	</TD>
-	<td width="40%" nowrap class="<?=$tpl['class']?>" valign="bottom">
+
+	<td width="80%" nowrap="nowrap" class="<?=$tpl['class']?>" valign="bottom">
 		<font size="-1" color="#000000">
 			<?=mila($tpl['theme_title'])?>
 		</font>
 	</td>
-	<td width="5%" class="<?=$tpl['class']?>" nowrap valign="bottom">
-		<?=$tpl['calendar']?>
+
+	<td width="10%" nowrap="nowrap" class="<?=$tpl['class']?>" valign="bottom">
+		<font size="-1" color="#000000">
+			<?=$tpl['room']?>
+		</font>
 	</td>
-</TR>
+
+	<td width="1%" class="<?=$tpl['class']?>" nowrap="nowrap" valign="bottom" align="right">
+		<?=$tpl['calendar']?>&nbsp;
+	</td>
+</tr>
 <? if ($issue_open[$tpl['sd_id']] || $openAll) { ?>
 <TR>
 	<TD colspan="6" class="steel1" align="center">
@@ -43,10 +47,10 @@
 						<TEXTAREA name="theme_description<?=$openAll ? '§'.$tpl['sd_id']: ''?>" rows="5" cols="50" style="width: 98%"><?=$tpl['theme_description']?></TEXTAREA><BR/>
 					</FONT>
 				</TD>
-				<TD class="steel1" valign="top" nowrap>
+				<TD class="steel1" valign="top" nowrap="nowrap">
 					<FONT size="-1">
 						<B><?=_("Verknüfpungen mit diesem Termin:")?></B>
-						<BR/>
+						<br />
 						<? if ($tpl['forumEntry']) {
 							echo _("Forenthema vorhanden").'<BR/>';
 							echo '<INPUT type="hidden" name="forumFolder" value="on">';

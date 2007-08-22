@@ -1246,7 +1246,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 	$lines[$level] = $check_folder[1];
 
 	if (($check_folder[1]) || ($all)) {
-	$db->query("SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, range_id, a.user_id, name, description, a.mkdate, a.chdate FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '$folder_id' ORDER BY a.name, a.chdate");
+	$db->query($query = "SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, a.range_id, a.user_id, name, a.description, a.mkdate, a.chdate, t.date as date_start, t.end_time as date_end FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN themen_termine tt ON (a.range_id = tt.issue_id) LEFT JOIN termine t ON (tt.termin_id = t.termin_id) WHERE a.range_id = '$folder_id' ORDER BY a.name, a.chdate");
 	
 	while ($db->next_record() || ($all && !$cnt) ) {
 		if ($folder_tree->isExecutable($db->f('folder_id'), $user->id) || ($all && !$cnt)){
@@ -1321,9 +1321,24 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$link=$PHP_SELF."?close=".$db->f("folder_id")."#anker";
 
 			//Titelbereich erstellen
-			$tmp_titel=htmlReady(mila($db->f("name")));
+			$title_name = $db->f('name');
+
+			if ($db->f('date_start')) {
+				$title_name = sprintf(_("Sitzung am: %s"), date('d.m.Y, H:i', $db->f('date_start')).' - '.date('H:i', $db->f('date_end')));
+				if (!$db->f('name')) {
+					$title_name .= _(", kein Titel");
+				} else {
+					$title_name .= ', '.$db->f('name');
+				}
+			} else {
+				if (!$db->f('name')) {	
+					$title_name = _("Kein Titel");
+				}
+			}
+
+			$tmp_titel=htmlReady(mila($title_name));
 			if ($change == $db->f("folder_id") && ($level != 0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder') || $folder_tree->isGroupFolder($db->f('folder_id'))) ) { //Aenderungsmodus, Anker + Formular machen, Font tag direkt ausgeben (muss ausserhalb einer td stehen!
-				$titel= "<a $anker ></a><input style=\"font-size:8 pt; width: 100%;\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db->f("name"))."\" />";
+				$titel= "<a $anker ></a><input style=\"font-size:8 pt; width: 100%;\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($title_name)."\" />";
 				if ($rechte && $folder_tree->permissions_activated) $titel .= '&nbsp;<span style="color:red">['.$folder_tree->getPermissionString($db->f("folder_id")).']</span>';
 			}
 			else {

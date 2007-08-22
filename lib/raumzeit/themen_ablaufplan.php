@@ -173,15 +173,26 @@ $termine = getAllSortedSingleDates($sem);
 					<TD class="blank" colspan="6" height="2"></TD>
 				</TR>
 			<? if ($openAll) { ?>
-				<TR>
-					<TD class="steelgraulight" colspan="6" align="center" height="30" valign="middle">
-						<INPUT type="hidden" name="allOpen" value="TRUE">
-						<INPUT type="image" <?=makebutton('allesuebernehmen', 'src')?> name="editAll" align="absmiddle">&nbsp;&nbsp;&nbsp;
-						<A href="<?=$PHP_SELF?>?cmd=closeAll">
-							<IMG <?=makebutton('abbrechen', 'src')?> border="0" align="absmiddle">
-						</A>
-					</TD>
-				</TR>
+				<tr>
+					<td class="steelgraulight" colspan="6" align="center" height="30" valign="middle">
+						<input type="hidden" name="allOpen" value="TRUE">
+						<input type="image" <?=makebutton('allesuebernehmen', 'src')?> name="editAll" align="absmiddle">&nbsp;&nbsp;&nbsp;
+						<a href="<?=$PHP_SELF?>?cmd=closeAll">
+							<img <?=makebutton('abbrechen', 'src')?> border="0" align="absmiddle">
+						</a>
+					</td>
+				</tr>
+
+				<tr>
+					<td class="steel1" colspan="4"></td>
+					<td class="steel1" colspan="2" align="left">
+						<font size="-1">
+							<input type="checkbox" name="createAllForumFolders"> <?=_("Für alle Termine einen Forumsordner anlegen")?>
+							<br />
+							<input type="checkbox" name="createAllFileFolders"> <?=_("Für alle Termine einen Dateiordner anlegen")?>
+						</font>
+					</td>
+				</tr>
 			<? } ?>
 				<TR>
 					<TD class="blank" colspan="6" height="2"></TD>

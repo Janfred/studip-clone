@@ -1853,4 +1853,18 @@ function forum_move_navi ($topic_id) {
   		</table></td></tr>
 <?
 }
-?>
+
+function forum_count($parent_id, $seminar_id = '') {
+	global $SessSemName;
+
+	if ($seminar_id == '') {
+		$seminar_id = $SessSemName[1];
+	}
+
+	$db = new DB_Seminar("SELECT COUNT(*) AS count FROM px_topics WHERE Seminar_id = '$seminar_id' AND parent_id != '0' AND root_id = '$parent_id'");
+	if ($db->next_record()) {
+		return $db->f('count');
+	}
+
+	return false;
+}
