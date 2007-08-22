@@ -43,7 +43,6 @@ class Ilias3ContentModule extends ContentModule
 		global $connected_cms;
 
 		$object_data = $connected_cms[$this->cms_type]->soap_client->getObjectByReference($this->id, $connected_cms[$this->cms_type]->user->getId());
-
 		if ( (! ($object_data == false)) AND ($connected_cms[$this->cms_type]->types[$object_data["type"]] != "") )
 		{
 			// If User has no external Account, show module and link to user-assignment
@@ -172,23 +171,25 @@ class Ilias3ContentModule extends ContentModule
 		}
 		
 		
-			$ref_id = $this->getId();
-			$ref_id = $connected_cms[$this->cms_type]->soap_client->addReference($this->id, $crs_id); 
-			$local_roles = $connected_cms[$this->cms_type]->soap_client->getLocalRoles($crs_id);
-			$operations = $connected_cms[$this->cms_type]->permissions->getOperationArray( $connected_cms[$this->cms_type]->permissions->USER_OPERATIONS );
-		if(!$write_permission_autor) $operations = $connected_cms[$this->cms_type]->permissions->getOperationArray(array(OPERATION_VISIBLE, OPERATION_READ));
-		else $operations = $connected_cms[$this->cms_type]->permissions->getOperationArray(array(OPERATION_VISIBLE, OPERATION_READ, OPERATION_WRITE));
-		if(!$write_permission || $write_permission_autor){
-			foreach ($local_roles as $key => $role_data)
-				// check only if local role is il_crs_member, -tutor or -admin
-				if (strpos($role_data["title"], "il_crs_") === 0) 
-				{
-	//					echo "revoke permission " . $role_data["title"].".";
-					$connected_cms[$this->cms_type]->soap_client->revokePermissions($role_data["obj_id"], $ref_id);
-					$connected_cms[$this->cms_type]->soap_client->grantPermissions($operations, $role_data["obj_id"], $ref_id);
+		$ref_id = $this->getId();
+		$ref_id = $connected_cms[$this->cms_type]->soap_client->addReference($this->id, $crs_id); 
+		$local_roles = $connected_cms[$this->cms_type]->soap_client->getLocalRoles($crs_id);
+		$member_operations = $connected_cms[$this->cms_type]->permissions->getOperationArray(array(OPERATION_VISIBLE, OPERATION_READ));
+		$admin_operations = $connected_cms[$this->cms_type]->permissions->getOperationArray(array(OPERATION_VISIBLE, OPERATION_READ, OPERATION_WRITE));
+		foreach ($local_roles as $key => $role_data){
+			// check only if local role is il_crs_member, -tutor or -admin
+			if (strpos($role_data["title"], "il_crs_") === 0) {
+				if(strpos($role_data["title"], 'il_crs_member') === 0){
+					$operations = $write_permission_autor ? $admin_operations : $member_operations;
+				} else if(strpos($role_data["title"], 'il_crs_tutor') === 0){
+					$operations = $write_permission_autor || $write_permission ? $admin_operations : $member_operations;
+				} else {
+					continue;
 				}
+				$connected_cms[$this->cms_type]->soap_client->revokePermissions($role_data["obj_id"], $ref_id);
+				$connected_cms[$this->cms_type]->soap_client->grantPermissions($operations, $role_data["obj_id"], $ref_id);
+			}
 		}
-		
 		if ($ref_id)
 		{
 			$this->setId($ref_id);
