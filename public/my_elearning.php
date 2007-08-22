@@ -28,6 +28,8 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once ('config.inc.php');
 require_once ('lib/visual.inc.php');
 
+$CURRENT_PAGE = _("Meine Lernmodule und Benutzer-Accounts");
+
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 
@@ -55,14 +57,6 @@ if ($ELEARNING_INTERFACE_ENABLE)
 
 
 	?><table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr>
-		<td class="topic" colspan="3">&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/icon-lern.gif" align="texttop">&nbsp;
-		<b>
-		<?
-			echo _("Meine Lernmodule und Benutzer-Accounts");
-		?></b>
-		</td>
-	</tr>
 	<tr>
 		<td class="blank" colspan="3">&nbsp;
 		</td>
