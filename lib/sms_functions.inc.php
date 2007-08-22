@@ -191,7 +191,7 @@ function print_snd_message($psm) {
 	} else {
 		$tmp_cmd = "safe_selected";
 		$tmp_picture = "openlock2";
-		$tmp_tooltip = tooltip(_("Diese Nachricht nicht löschen."));
+		$tmp_tooltip = tooltip(_("Löschschutz für diese Nachricht aktivieren."));
 		$trash = "<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_sms[1]=".$psm['message_id']."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash2.gif\" border=0 ".tooltip(_("Diese Nachricht löschen."))."></a>";
 	}
 
@@ -317,7 +317,7 @@ function print_rec_message($prm) {
 	} else {
 		$tmp_cmd = "safe_selected";
 		$tmp_picture = "openlock2";
-		$tmp_tooltip = tooltip(_("Diese Nachricht nicht löschen."));
+		$tmp_tooltip = tooltip(_("Löschschutz für diese Nachricht aktivieren."));
 		$trash = "<a href=\"".$PHP_SELF."?cmd=delete_selected&sel_sms[1]=".$prm['message_id']."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash2.gif\" border=0 ".tooltip(_("Diese Nachricht löschen."))."></a>";
 	}
 	// zusatz
