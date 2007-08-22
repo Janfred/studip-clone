@@ -143,6 +143,12 @@ class Issue {
 
 	function store() {
 		$this->chdate = time();
+
+		// If we don't do this, we have empty forum entries
+		if (!$this->getTitle()) {
+			$this->setTitle(_("Ohne Titel"));
+		}
+
 		IssueDB::storeIssue($this);
 		$this->new = false;
 	}
