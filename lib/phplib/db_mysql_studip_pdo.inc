@@ -108,7 +108,7 @@ class DB_Sql {
 	/* public: walk result set */
 	function next_record() {
 		if (!$this->resultSet) {
-			$this->halt("next_record called with no query pending.");
+			//$this->halt("next_record called with no query pending.");
 			return 0;
 		}
 		
