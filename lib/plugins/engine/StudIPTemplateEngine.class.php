@@ -97,15 +97,15 @@ class StudIPTemplateEngine {
 	}
 
 	function showErrorMessage($text,$colspan=2){
-		my_error($text,"blank",$colspan);
+                parse_msg_array(array(array('error', $text)));
 	}
 
 	function showSuccessMessage($text,$colspan=2){
-		my_msg($text,"blank",$colspan);
+                parse_msg_array(array(array('msg', $text)));
 	}
 
 	function showInfoMessage($text,$colspan=2){
-		my_info($text,"blank",$colspan);
+                parse_msg_array(array(array('info', $text)));
 	}
 
 	function showQuestionMessage($text,$colspan=2,$newrow=true){
