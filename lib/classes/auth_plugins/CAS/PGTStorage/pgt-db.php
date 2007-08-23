@@ -7,9 +7,9 @@
 
 // include phpDB library (the test was introduced in release 0.4.8 for 
 // the integration into Tikiwiki).
-if (!class_exists('DB')) {
+/*if (!class_exists('DB')) {
   include_once('DB.php');
-}
+}*/
 
 /**
  * @class PGTStorageDB
