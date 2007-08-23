@@ -62,7 +62,6 @@ class SingleDate {
 
 	function SingleDate ($data = '') {
 		global $user, $id;
-		$db = new DB_Seminar();
 		if (is_array($data)) {
 			if ($data['termin_id']) $termin_id = $data['termin_id'];
 			if ($data['seminar_id']) $id = $data['seminar_id'];
@@ -74,7 +73,7 @@ class SingleDate {
 			$this->update = TRUE;
 			$this->restore();
 		} else {
-			$this->termin_id = md5(uniqid('SingleDate'));
+			$this->termin_id = md5(uniqid('SingleDate',1));
 			$this->author_id = $user->id;
 			$this->range_id = $id;
 			$this->mkdate = time();
@@ -250,9 +249,7 @@ class SingleDate {
     }
 
 	function isHoliday() {
-		$ho = new HolidayData();
-		$holiday = $ho->getAllHolidays();
-		foreach ($holiday as $val) {
+		foreach (HolidayData::GetAllHolidaysArray() as $val) {
 			if (($val['beginn'] <= $this->date) && ($val['ende'] >= $this->end_time)) {
 				$name = $val['name'];
 			}

@@ -748,7 +748,7 @@ class Seminar {
 
 		foreach ($data as $val) {
 			unset($termin);
-			$termin = new SingleDate($this->id);
+			$termin = new SingleDate();
 			$termin->fillValuesFromArray($val);
 			$this->irregularSingleDates[$val['termin_id']] =& $termin;
 		}
