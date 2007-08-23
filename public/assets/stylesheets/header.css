@@ -10,8 +10,8 @@ div#barBottomNKW {
 }
 div#barBottomLeftNKW {
 	background-color: #5d74a0;
-	width: 231px;
-	padding: 0em;
+	padding-left: 15px;
+	padding-right: 15px;
 	font-size: 0.8em;
 	height: 1.4em;
 	text-align: right;

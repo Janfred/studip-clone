@@ -79,9 +79,8 @@
   <img src="<?=$GLOBALS['ASSETS_URL']?>images/studipdot.gif">
 </div>
 <!-- Leiste unten -->
-<div id="barBottomLeftNKW">&nbsp;
+<div id="barBottomLeftNKW">
 	<?=($current_page != "" ? _("Aktuelle Seite:") : "")?>
-	&nbsp;
 </div>
 <div id="barBottommiddleNKW">&nbsp;
 	<?=($current_page != "" ? htmlReady($current_page) : "")?>
