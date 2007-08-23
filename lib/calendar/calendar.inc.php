@@ -250,25 +250,25 @@ if ($cmd == 'add') {
 switch ($cmd) {
 	case 'showday':
 		$calendar_sess_control_data['view_prv'] = $cmd;
-		$title = _("Mein pers&ouml;nlicher Terminkalender - Tagesansicht");
+		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Tagesansicht");
 		break;
 	case 'add':
 		switch($calendar_sess_control_data['view_prv']){
 			case 'showday':
-				$title = _("Mein pers&ouml;nlicher Terminkalender - Tagesansicht");
+				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Tagesansicht");
 				break;
 			case 'showweek':
-				$title = _("Mein pers&ouml;nlicher Terminkalender - Wochenansicht");
+				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Wochenansicht");
 				break;
 			case 'showmonth':
-				$title = _("Mein pers&ouml;nlicher Terminkalender - Monatsansicht");
+				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Monatsansicht");
 				break;
 			case 'showyear':
-				$title = _("Mein pers&ouml;nlicher Terminkalender - Jahresansicht");
+				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Jahresansicht");
 		}
 		break;
 	case 'del':
-		$title = _("Mein pers&ouml;nlicher Terminkalender - Tagesansicht");
+		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Tagesansicht");
 		$atermin =& new DbCalendarEvent($termin_id);
 		$atermin->delete();
 		
@@ -290,26 +290,26 @@ switch ($cmd) {
 		break;
 		
 	case 'showweek':
-		$title = _("Mein pers&ouml;nlicher Terminkalender - Wochenansicht");
+		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Wochenansicht");
 		$calendar_sess_control_data['view_prv'] = $cmd;
 		break;
 		
 	case 'showmonth':
-		$title = _("Mein pers&ouml;nlicher Terminkalender - Monatsansicht");
+		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Monatsansicht");
 		$calendar_sess_control_data['view_prv'] = $cmd;
 		break;
 		
 	case 'showyear':
-		$title = _("Mein pers&ouml;nlicher Terminkalender - Jahresansicht");
+		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Jahresansicht");
 		$calendar_sess_control_data['view_prv'] = $cmd;
 		break;
 	
 	case 'export':
-		$title = _("Mein pers&ouml;nlicher Terminkalender - Termindaten importieren, exportieren und synchronisieren");
+		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Termindaten importieren, exportieren und synchronisieren");
 		break;
 		
 	case 'bind':
-		$title = _("Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermine einbinden");
+		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Veranstaltungstermine einbinden");
 		break;
 		
 	case 'edit':
@@ -324,17 +324,17 @@ switch ($cmd) {
 							. $calendar_sess_control_data['view_prv'] . "&atime=$atime");
 					exit;
 				}
-				$title = _("Mein pers&ouml;nlicher Terminkalender - Veranstaltungstermin");
+				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Veranstaltungstermin");
 			}
 			else {	
 				$atermin =& new DbCalendarEvent($termin_id);
 				if (!$mod)
 					$mod = $atermin->getRepeat('rtype');
-				$title = _("Mein pers&ouml;nlicher Terminkalender - Termin bearbeiten");
+				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Termin bearbeiten");
 			}
 		}
 		else {
-			$title = _("Mein pers&ouml;nlicher Terminkalender - Termin anlegen/bearbeiten");
+			$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Termin anlegen/bearbeiten");
 			// call from dayview for new event -> set default values
 			if ($atime && empty($_POST)) {
 				if ($devent) {

@@ -42,11 +42,6 @@ require('lib/include/links_sms.inc.php');
 
 if ($cmd != "changeview") {
 	echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
-	echo "<tr>\n";
-	echo "<td class=\"topic\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/meinetermine.gif\" ";
-	$tooltip = tooltip(_("Termine"));
-	echo "border=\"0\" align=\"absmiddle\" $tooltip><b>&nbsp;";
-	echo $title . "</b></td></tr>\n";
 	echo "<tr><td class=\"blank\" width=\"100%\">&nbsp;</td></tr>\n";
 	echo "</table>\n";
 }
