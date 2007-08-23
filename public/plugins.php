@@ -94,9 +94,12 @@ if ($type == 'Homepage') {
 
 global $CURRENT_PAGE, $SessSemName;
 
-$header_line = $SessSemName['header_line'];
-$CURRENT_PAGE = $header_line != '' ? $header_line.' - ' : '';
-$CURRENT_PAGE .= $plugin->getDisplayTitle();
+if ($type == 'Standard') {
+        $CURRENT_PAGE = $SessSemName['header_line'].' - '.$plugin->getDisplayTitle();
+} else {
+        $CURRENT_PAGE = $plugin->getDisplayTitle();
+}
+
 $iconname = $plugin->getPluginiconname();       // currently unused
 
 // moved down to allow the plugin to add extra headers
