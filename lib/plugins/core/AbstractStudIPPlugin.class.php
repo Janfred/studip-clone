@@ -81,6 +81,7 @@ class AbstractStudIPPlugin {
 	   $origname = $plugininfos["pluginname"];
 	   StudIPTemplateEngine::makeContentHeadline(_("Plugin-Details"),2);
 		?>
+                        <table>
 				<tr>
 					<td>Name:</td>
 					<td align="left">&nbsp;<?= $this->pluginname ?></td>
@@ -104,6 +105,7 @@ class AbstractStudIPPlugin {
 				<tr>
 					<td colspan="2" align="center"><a href="<?= PluginEngine::getLinkToAdministrationPlugin()?>"><?= makeButton("zurueck","img",_("zurück zur Plugin-Verwaltung"))?></a></td>
 				</tr>
+                        </table>
 		<?php
 	}
 
