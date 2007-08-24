@@ -639,8 +639,8 @@ check_admission();
 $db5->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$id'");
 
 if ($perm->have_perm("dozent")) {
-	
-	
+
+
 	$sem_view_rights = array();
   $global_view_rights = array();
 
@@ -657,9 +657,9 @@ if ($perm->have_perm("dozent")) {
 		if (in_array($db5->f("datafield_id"), $global_view_rights))
 		{
 			$sem_view_rights[$db5->f("datafield_id")] = TRUE;
-		} 
+		}
 	}
-	
+
 	if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
 		$gruppe = array ("dozent" => _("DozentInnen"),
 					  "tutor" => _("TutorInnen"),
@@ -829,7 +829,7 @@ $anzahl_teilnehmer_kontingent = $db->f('teilnehmer_kontingent');
 							&nbsp;
 						<? } ?>
 						</td>
-												
+
 							<td nowrap align="right" class="steelkante2" valign="middle"> <?
 
 			$db3->query ("SELECT showscore  FROM seminare WHERE Seminar_id = '$SessionSeminar'");
@@ -852,7 +852,7 @@ $anzahl_teilnehmer_kontingent = $db->f('teilnehmer_kontingent');
 			}
 		?>
 		</td>
-		
+
 <td><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/balken.jpg"></td>
 					<tr>
 				</table>
@@ -863,7 +863,7 @@ $anzahl_teilnehmer_kontingent = $db->f('teilnehmer_kontingent');
 		<a href="sms_send.php?sms_source_page=teilnehmer.php&course_id=<?=$SessSemName[1]?>&emailrequest=1&subject=<?=rawurlencode($SessSemName[0])?>&filter=all">
 		<img src="<?=$GLOBALS['ASSETS_URL']?>images/mailnachricht.gif" border="0" vspace="3" hspace="3" align="absmiddle">
 		<span style="font-size:80%">
-		<?=_("Systemnachricht mit Emailweiterleitung an alle Teilnehmer verschicken")?> 
+		<?=_("Systemnachricht mit Emailweiterleitung an alle Teilnehmer verschicken")?>
 		</span></a>
 		</td>
 	</tr>
@@ -1175,12 +1175,23 @@ while (list ($key, $val) = each ($gruppe)) {
 		echo tooltip(sprintf(_("Weitere Informationen über %s"), $db->f("username")));
 		echo ">&nbsp;</A>";
 	}
-	if ($db->f('visible') == 'yes' || $i_see_everybody || $db->f('user_id') == $user->id) {
-		printf ("<font size=\"-1\"><a href = about.php?username=%s>", $db->f("username"));
-		echo htmlReady($db->f("fullname")) ."</a></font></td>";
-	} else {
-		echo '<font size="-1" color="#666666">'. _("(unsichtbareR NutzerIn)") . '</font>';
-	}
+
+	if ($db->f('visible') == 'yes'
+	    || $i_see_everybody
+	    || $db->f('user_id') == $user->id) {
+		?>
+		<font size="-1">
+			<a href="about.php?username=<?= $db->f("username") ?>">
+				<img src="<?= get_user_pic_url($db->f('user_id')) ?>" height="25" align="middle" border="0">
+				<?= htmlReady($db->f("fullname")) ?>
+			</a>
+		</font>
+		</td>
+	<? } else { ?>
+		<font size="-1" color="#666666">
+			<?= _("(unsichtbareR NutzerIn)") ?>
+		</font>
+	<? }
 
 	if ($key != "dozent" && $rechte) {
 		if ($db->f("mkdate")) {
@@ -1306,7 +1317,7 @@ while (list ($key, $val) = each ($gruppe)) {
               {
                 $show_user_picture = true;
               } else
-              { 
+              {
                 $user_data [] = $val;
               }
             }
@@ -1315,62 +1326,52 @@ while (list ($key, $val) = each ($gruppe)) {
 			}
 
 		?>
-			<tr>
-				<td class=<?=$class?> colspan=9>
-					<form action="<?=$PHP_SELF."#".$db->f("username")?>" method="POST">
-					<table border="0">
-						<tr>
-							<td width="25%">
-								<font size="-1"><?=_("Bemerkungen:")?></font><br/>
-								<TEXTAREA name="userinfo" rows=3 cols=30><?=$db->f("comment")?></TEXTAREA>
-							</td>
-							<td>&nbsp;</td>
-							<td class="<?=$class?>" align="left" valign="top" width="30%">
-								<!--<font size="-1">
-									<?=_("Anmeldedatum:")." ".date("d.m. Y, H:i:s",$db->f("mkdate"))?><br/>
-								</font>-->
-								<?
-									$split = floor((sizeof($user_data) / 2));
-									$i = 0;
-									foreach($user_data as $val) {
-										if ($val["content"] != "") {
+			<tr class="<?= $class ?>">
 
-											echo "<font size=\"-1\">".$val["name"].": ".$val["content"]."</font><br/>\n";
-                      if ($i == $split) 
-                        echo "</td><td class=\"$class\" valign=\"top\" align=\"left\" width=\"30%\">\n";
-											$i ++;
-										}
-									}
-									if ((sizeof($user_data) <= 1)) 
-									  echo "</td><td class=\"$class\" valign=\"top\" align=\"left\" width=\"30%\">&nbsp;\n";
-								?>
-							</td>
-							<? 
-							if ($show_user_picture) { ?>
-							<td class="<?=$class?>" align="center">
-								<? 
-								
-								if (file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$db->f("user_id").".jpg")) {
-									 ?>
-									<img src="<?=$GLOBALS['DYNAMIC_CONTENT_URL']."/user/".$db->f("user_id")?>.jpg" border="0" width="80">
-								<? } ?>
-							</td>
-							<? } ?>
-							<td class="<?=$class?>" align="center" width="15%">
-								<font size="-1"><?=_("&Auml;nderungen")?></font><br />
-								<INPUT type="image" <?=makeButton("uebernehmen", "src")?>>
-								<INPUT type="hidden" name="user_id" value="<?=$db->f("user_id")?>">
-								<INPUT type="hidden" name="cmd" value="change_userinfo">
-								<INPUT type="hidden" name="username" value="<?=$db->f("username")?>">
-								<INPUT type="hidden" name="studipticket" value="<?=$studipticket?>">
-							</td>
-						</tr>
-					</table>
-				</form>
+				<td>&nbsp;</td>
+
+				<td valign="top">
+					<font size="-1">
+						<dl style="margin-left:2em;">
+						<? $user_data[] = array('content' => 'abra', 'name' => 'lorem'); ?>
+						<? $user_data[] = array('content' => 'cadabra', 'name' => 'ipsum'); ?>
+							<? foreach ($user_data as $val) : ?>
+								<? if ($val["content"] == "") continue; ?>
+								<dt><?= $val["name"] ?> :</dt>
+								<dd><?= $val["content"] ?></dd>
+								<!--
+								<font size="-1">
+									<?= $val["name"] ?>: <?= $val["content"] ?>
+								</font>
+								<br/>
+								-->
+							<? endforeach ?>
+						</dl>
+					</font>
 				</td>
+
+				<? if ($show_user_picture) : ?>
+					<td>
+						<img src="<?= get_user_pic_url($db->f('user_id')) ?>" border="0" width="80">
+					</td>
+				<? endif ?>
+
+				<td colspan="<?= $colspan - 2 - ($show_user_picture ? 1 : 0) ?>">
+					<form action="#<?= $db->f("username") ?>" method="POST">
+						<font size="-1"><?=_("Bemerkungen:")?></font><br/>
+						<textarea name="userinfo" rows="3" cols="30"><?= $db->f("comment") ?></textarea>
+						<br>
+						<font size="-1"><?= _("&Auml;nderungen") ?></font>
+						<input type="image" <?= makeButton("uebernehmen", "src") ?>>
+						<input type="hidden" name="user_id" value="<?=$db->f("user_id")?>">
+						<input type="hidden" name="cmd" value="change_userinfo">
+						<input type="hidden" name="username" value="<?= $db->f("username") ?>">
+						<input type="hidden" name="studipticket" value="<?= $studipticket ?>">
+					</form>
+				</td>
+			</tr>
 		<?
 		}
-
 	} // Ende der Dozenten/Tutorenspalten
 
 
