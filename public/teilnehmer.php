@@ -1328,7 +1328,11 @@ while (list ($key, $val) = each ($gruppe)) {
 		?>
 			<tr class="<?= $class ?>">
 
-				<td>&nbsp;</td>
+				<? if ($showscore) : ?>
+					<td colspan="2">&nbsp;</td>
+				<? else : ?>
+					<td>&nbsp;</td>
+				<? endif ?>
 
 				<td valign="top">
 					<font size="-1">
@@ -1354,7 +1358,7 @@ while (list ($key, $val) = each ($gruppe)) {
 					</td>
 				<? endif ?>
 
-				<td colspan="<?= $colspan - 2 - ($show_user_picture ? 1 : 0) ?>">
+				<td colspan="<?= $colspan - 2 - ($show_user_picture ? 1 : 0) - ($showscore ? 1 : 0)?>">
 					<form action="#<?= $db->f("username") ?>" method="POST">
 						<font size="-1"><?=_("Bemerkungen:")?></font><br/>
 						<textarea name="userinfo" rows="3" cols="30"><?= $db->f("comment") ?></textarea>
