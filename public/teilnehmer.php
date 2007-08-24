@@ -1333,8 +1333,6 @@ while (list ($key, $val) = each ($gruppe)) {
 				<td valign="top">
 					<font size="-1">
 						<dl style="margin-left:2em;">
-						<? $user_data[] = array('content' => 'abra', 'name' => 'lorem'); ?>
-						<? $user_data[] = array('content' => 'cadabra', 'name' => 'ipsum'); ?>
 							<? foreach ($user_data as $val) : ?>
 								<? if ($val["content"] == "") continue; ?>
 								<dt><?= $val["name"] ?> :</dt>
