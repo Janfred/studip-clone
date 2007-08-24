@@ -74,13 +74,13 @@ $sem->checkFilter();
 $themen =& $sem->getIssues();
 
 function dates_open() {
-	global $issue_open, $_REQUEST;
+	global $issue_open;
 
 	$issue_open[$_REQUEST['open_close_id']] = true;
 }
 
 function dates_close() {
-	global $issue_open, $_REQUEST;
+	global $issue_open;
 
 	$issue_open[$_REQUEST['open_close_id']] = false;
 	unset ($issue_open[$_REQUEST['open_close_id']]);
@@ -202,8 +202,16 @@ if ($cmd == 'openAll') $openAll = true;
     							$tpl['folder_id'] = $thema->getFolderID();
     							$tpl['forumEntry'] = $thema->hasForum();
     							$tpl['fileEntry'] = $thema->hasFile();								
-    							$tpl['forumCount'] = forum_count($thema->getIssueId(), $id);
-    							$tpl['fileCountAll'] = doc_count($thema->getFolderId());
+    							if($tpl['forumEntry']) {
+									$tpl['forumCount'] = forum_count($thema->getIssueId(), $id);
+								} else {
+									$tpl['forumCount'] = 0;
+								}
+    							if($tpl['fileEntry']){
+									$tpl['fileCountAll'] = doc_count($thema->getFolderId());
+								} else {
+									$tpl['fileCountAll'] = 0;
+								}
     						}
     
     						include('lib/raumzeit/templates/singledate_student.tpl');
