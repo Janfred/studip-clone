@@ -231,7 +231,6 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	function getZRecord($rn){
 		$record = yaz_record($this->z_id,$rn,"string");
 		$plugin_mapping = $this->mapping[$this->z_syntax];
-							echo "<hr><pre>".print_r($record,1)."</pre><hr>";
 
 		if ($record){
 			$cat_element = new StudipLitCatElement();
