@@ -643,6 +643,21 @@ function get_userid($username="") {
 }
 
 
+/**
+ * This function returns the URL of a user's picture. If that user did not
+ * upload a custom one, an anonymous picture is used.
+ *
+ * @param  string  the user's id
+ *
+ * @return string  an URL to the user's picture
+ *
+ */
+function get_user_pic_url($id) {
+  return file_exists($GLOBALS['DYNAMIC_CONTENT_PATH'].'/user/'.$id.'.jpg')
+         ? $GLOBALS['DYNAMIC_CONTENT_URL'].'/user/'.$id.'.jpg'
+         : $GLOBALS['DYNAMIC_CONTENT_URL'].'/user/nobody.jpg';
+}
+
 
 /**
 * This function tracks user acces to several Data (only dokuments by now, to be extended)
@@ -731,7 +746,7 @@ function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field
 			|| ($stunde == 24 && $minute > 0) ) {
 			$check=FALSE;
 		}
-		
+
 		if ($stunde == 24) {
 			$stunde = 23;
 			$minute = 59;
@@ -826,66 +841,66 @@ function get_seminar_dozent($seminar_id) {
 function get_seminar_next_position($seminar_id)
 {
    $db_pos = new DB_Seminar;
-   $db_pos->query("SELECT max(position) + 1 as next_pos " . 
-                  " FROM seminar_user" . 
-                  " WHERE status = 'dozent' AND Seminar_id = '$seminar_id'"); 
+   $db_pos->query("SELECT max(position) + 1 as next_pos " .
+                  " FROM seminar_user" .
+                  " WHERE status = 'dozent' AND Seminar_id = '$seminar_id'");
 
    $db_pos->next_record();
-      
-   return $db_pos->f("next_pos"); 
-   
+
+   return $db_pos->f("next_pos");
+
 }*/
-function re_sort_dozenten($s_id, $position) 
+function re_sort_dozenten($s_id, $position)
 {
     $db = new DB_Seminar;
-    $db->query("SELECT user_id, position" . 
+    $db->query("SELECT user_id, position" .
                " FROM seminar_user" .
                " WHERE Seminar_id = '$s_id'" .
                " AND status = 'dozent' " .
                " AND position > '$position'");
 
-   while ($db->next_record()) 
+   while ($db->next_record())
    {
       $new_position = $db->f("position") - 1;
       $user_id = $db->f("user_id");
       $db2 = new DB_Seminar;
-      $db2->query("UPDATE seminar_user" . 
-                  " SET position =  '$new_position'" . 
+      $db2->query("UPDATE seminar_user" .
+                  " SET position =  '$new_position'" .
                   " WHERE Seminar_id = '$s_id'" .
-                  " AND user_id = '$user_id'");   
+                  " AND user_id = '$user_id'");
    }
 }
-function re_sort_tutoren($s_id, $position) 
+function re_sort_tutoren($s_id, $position)
 {
     $db = new DB_Seminar;
-    $db->query("SELECT user_id, position" . 
+    $db->query("SELECT user_id, position" .
                " FROM seminar_user" .
                " WHERE Seminar_id = '$s_id'" .
                " AND status = 'tutor' " .
                " AND position > '$position'");
 
-   while ($db->next_record()) 
+   while ($db->next_record())
    {
       $new_position = $db->f("position") - 1;
       $user_id = $db->f("user_id");
       $db2 = new DB_Seminar;
-      $db2->query("UPDATE seminar_user" . 
-                  " SET position =  '$new_position'" . 
+      $db2->query("UPDATE seminar_user" .
+                  " SET position =  '$new_position'" .
                   " WHERE Seminar_id = '$s_id'" .
-                  " AND user_id = '$user_id'");   
+                  " AND user_id = '$user_id'");
    }
 }
 function get_next_position($status,$seminar_id)
 {
    $db_pos = new DB_Seminar;
-   $db_pos->query("SELECT max(position) + 1 as next_pos " . 
-                  " FROM seminar_user" . 
-                  " WHERE status = '$status' " . 
-                  " AND   Seminar_id = '$seminar_id'"); 
+   $db_pos->query("SELECT max(position) + 1 as next_pos " .
+                  " FROM seminar_user" .
+                  " WHERE status = '$status' " .
+                  " AND   Seminar_id = '$seminar_id'");
 
    $db_pos->next_record();
-      
-   return $db_pos->f("next_pos"); 
+
+   return $db_pos->f("next_pos");
 }
 
 function get_seminar_tutor($seminar_id) {
@@ -999,7 +1014,7 @@ function get_users_online($active_time = 5, $name_format = 'full_rev'){
 	}
 	$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
 	$query = "SELECT " . $_fullname_sql[$name_format] . " AS full_name,UNIX_TIMESTAMP()-UNIX_TIMESTAMP(changed) AS lastaction,
-		a.username,a.user_id,contact_id, " . get_vis_query('a') . " AS is_visible 
+		a.username,a.user_id,contact_id, " . get_vis_query('a') . " AS is_visible
 		FROM $user_table LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id)
 		LEFT JOIN contact ON (owner_id='".$user->id."' AND contact.user_id=a.user_id AND buddy=1)
 		WHERE changed > '" . date("YmdHis", ($now - ($active_time * 60)))."'
