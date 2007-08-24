@@ -396,6 +396,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		}
 
 		$structure["semester"]=array ('topKat'=>"global", 'name'=>_("Semester"), 'link'=>"admin_semester.php", 'active'=>FALSE);
+    	$structure["admin_teilnehmer_view"]=array (topKat=>"global", name=>_("Teilnehmeransicht"), link=>"admin_teilnehmer_view.php", active=>FALSE);
+	
 		if ($LOG_ENABLE) {
 			$structure["show_log"]=array ('topKat'=>"log", 'name'=>_("Log"), 'link'=>"show_log.php", 'active'=>FALSE);
 			$structure["admin_log"]=array ('topKat'=>"log", 'name'=>_("Einstellungen"), 'link'=>"admin_log.php", 'active'=>FALSE);
@@ -469,7 +471,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		case "admin_semester.php":
 			$reiter_view ="semester";
 		break;
-
+    	case "admin_teilnehmer_view.php";
+    		$reiter_view = "admin_teilnehmer_view";
+    	break;
 		case "admin_institut.php" :
 			$reiter_view="grunddaten_inst";
 		break;

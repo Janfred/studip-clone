@@ -285,14 +285,6 @@ if ($modules["wiki"]) {
 	$structure["wiki_listall"]=array ('topKat' => "wiki", 'name' => _("Alle Seiten"), 'link' => "wiki.php?view=listall", 'active' => FALSE); 
 	$structure["wiki_export"]=array ('topKat' => "wiki", 'name' => _("Export"), 'link' => "wiki.php?view=export", 'active' => FALSE); 
 }
-		
-// adding link for configuring the user view user view
-
-if ($rechte && $modules["participants"] && is_array($GLOBALS['TEILNEHMER_VIEW'])) {
-	$structure["teilnehmer_view"] = array(topKat => "teilnehmer", name => _("Ansicht konfigurieren"), link => "teilnehmer_view.php", active => FALSE);
-}
-
-		
 
 //bottomkats for resources-management, if modul is activated
 if ($RESOURCES_ENABLE) {
@@ -313,6 +305,7 @@ if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])){
 		else		
 			$structure["lernmodule_show"]=array ('topKat' => "lernmodule", 'name' => _("Lernmodule dieser Veranstaltung"), 'link' => "seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 	}
+	
 	if  ($perm->have_studip_perm("tutor",$SessSemName[1]))
 		$structure["lernmodule_edit"]=array ('topKat' => "lernmodule", 'name' => _("Lernmodule hinzuf&uuml;gen / entfernen"), 'link' => "seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 }

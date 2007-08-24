@@ -639,25 +639,14 @@ check_admission();
 $db5->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$id'");
 
 if ($perm->have_perm("dozent")) {
-
-
+	$sem_type = $SessSemName["art_num"];  
+	
 	$sem_view_rights = array();
-  $global_view_rights = array();
 
-
-  if (is_array($GLOBALS['TEILNEHMER_VIEW']))
-  {
-    foreach($GLOBALS['TEILNEHMER_VIEW'] as $val) {
-      $global_view_rights[] = $val['field'];
-    }
-  }
-
-	$db5->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$id'");
+	$db5->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$sem_type'");
+	
 	while ($db5->next_record()) {
-		if (in_array($db5->f("datafield_id"), $global_view_rights))
-		{
-			$sem_view_rights[$db5->f("datafield_id")] = TRUE;
-		}
+	    $sem_view_rights[$db5->f("datafield_id")] = TRUE;
 	}
 
 	if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])

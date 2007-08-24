@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
-<!-- vosshe@fh-trier.de -->
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+	xmlns:exsl="http://exslt.org/common" 
+	xmlns:func="http://exslt.org/functions">
+	
 	<xsl:output method="text" encoding="iso-8859-1"/>
-	<xsl:variable name="datafields" select="//gruppe[@key='AutorInnen' or @key='Authors']/person[position()=1]/datenfelder[position()=1]/datenfeld/@key"/>
-	<xsl:variable name="zusatzangaben" select="//gruppe[@key='AutorInnen' or @key='Authors']/person[position()=1]/zusatzangaben[position()=1]/zusatzangabe/@key"/>	<xsl:template match="/">
+
+	<xsl:key name="datafields-by-key" match="//datenfeld" use="@key"/>
+
+	<xsl:variable name="collect-datafields">
+		<xsl:for-each select="//datenfeld[generate-id(.) = generate-id(key('datafields-by-key', @key)[1])]">
+			<xsl:sort select="@key"/>
+			<entry><xsl:value-of select="@key"/></entry>
+			<!--xsl:message>Datenfeld: <xsl:value-of select="@key"/></xsl:message-->
+		</xsl:for-each>
+	</xsl:variable>
+
+	<xsl:variable name="datafields" select="exsl:node-set($collect-datafields)/entry"/>
+
+	<xsl:key name="zusatzangaben-by-key" match="//zusatzangabe" use="@key"/>
+
+	<xsl:variable name="collect-zusatzangaben">
+		<xsl:for-each select="//zusatzangabe[generate-id(.) = generate-id(key('zusatzangaben-by-key', @key)[1])]">
+			<xsl:sort select="@key"/>
+			<entry><xsl:value-of select="@key"/></entry>
+			<!--xsl:message>Datenfeld: <xsl:value-of select="@key"/></xsl:message-->
+		</xsl:for-each>
+	</xsl:variable>
+
+	<xsl:variable name="zusatzangaben" select="exsl:node-set($collect-zusatzangaben)/entry"/>
+
+  <xsl:template match="/">
 		<xsl:text>Titel;</xsl:text>
 		<xsl:text>Vorname;</xsl:text>
 		<xsl:text>Nachname;</xsl:text>
