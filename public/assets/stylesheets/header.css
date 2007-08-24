@@ -1,14 +1,14 @@
-div#wrap2NKW {
+div#wrap2 {
 	position: absolute;
 	top: 150px;
 }
-div#barBottomNKW {
+div#barBottom {
 	position: absolute;
 	top: 100px;
 	left: 0px;
 	background-color: #7387ac;
 }
-div#barBottomLeftNKW {
+div#barBottomLeft {
 	background-color: #5d74a0;
 	padding-left: 15px;
 	padding-right: 15px;
@@ -21,7 +21,7 @@ div#barBottomLeftNKW {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-div#barBottommiddleNKW {
+div#barBottommiddle {
 	background-color: #7387ac;
 	text-align: left;
 	vertical-align: middle;
@@ -35,7 +35,7 @@ div#barBottommiddleNKW {
 	font-weight: bold;
 }
 
-div#barBottomrightNKW {
+div#barBottomright {
 	background-color: #7387ac;
 	text-align: right;
 	vertical-align: middle;
@@ -43,29 +43,29 @@ div#barBottomrightNKW {
 	height: 1.4em;
 }
 
-div#barBottomrightNKW ul {
+div#barBottomright ul {
 	margin: 0px;
 	padding-bottom: 0px;
 }
-div#barBottomrightNKW li {
+div#barBottomright li {
 	display: inline;
 	list-style-type: none;
 	font-family: Arial, Helvetica, sans-serif;
 }
-div#barBottomrightNKW a {
+div#barBottomright a {
 	text-decoration: none;
 	color: #e3e3e3;
 	padding-left: 6px;
 	padding-right: 6px;
 	padding-bottom: 0.19em;
 }
-div#barBottomrightNKW a:hover {
+div#barBottomright a:hover {
 	color: #FFF;
     background-image: url('../images/fill1.gif');
 }
 
 
-div#barTopFontNKW {
+div#barTopFont {
 	position: absolute;
 	top: 10px;
 	left: 15px;
@@ -74,75 +74,75 @@ div#barTopFontNKW {
 	color: #cccccc;
 }
 
-div#barTopToolsNKW ul {
+div#barTopTools ul {
 	margin: 0;
 	padding: 0;
 }
-div#barTopToolsNKW li {
+div#barTopTools li {
 	display: inline;
 	list-style-type: none;
 	font-size: 9pt;
 	font-family: Arial, Helvetica, sans-serif;
 }
-div#barTopToolsNKW a {
+div#barTopTools a {
 	text-decoration: none;
 	font-weight: bold;
 	color: #7387ac;
 	padding-left: 6px;
 	padding-right: 6px;
 }
-div#barTopToolsNKW a:hover {
+div#barTopTools a:hover {
 	color: #FFF;
     background-image: url('../images/fill1.gif');
 }
-div#barTopToolsNKW {
+div#barTopTools {
 	position: absolute;
 	top: 2px;
 	right: 2px;
 	text-align: right;
 }
 
-div#barTopAJAXIndicatorNKW {
+div#barTopAJAXIndicator {
 	position: absolute;
 	top: 50px;
 	right: 156px;
 	padding-right: 2em;
 }
 
-div#barTopStudipNKW {
+div#barTopStudip {
 	position: absolute;
 	top: 50px;
 	right: 5px;
 	text-align: right;
 	border: none;
 }
-div#barTopStudipNKW img {
+div#barTopStudip img {
 	border: none;
 }
 
-div#barTopLogoNKW {
+div#barTopLogo {
 	position: absolute;
 	top: 0;
 	left: 0;
 }
-div#headerNKW {
+div#header {
 	height: 100px;
 	background-image: url("../images/headerbackground4.jpg");
 	background-repeat: repeat-x;
 }
 
-div#barTopMenuNKW {
+div#barTopMenu {
 	position: absolute;
 	top: 48px;
 	left: 0px;
 	text-align: right;
 }
-div#barTopMenuNKW ul {
+div#barTopMenu ul {
 	margin: 0;
 	padding: 0;
 	text-align: center;
 }
-div#barTopMenuNKW li {
+div#barTopMenu li {
 	float: left;
 	list-style-type: none;
 	font-size: 9pt;
@@ -150,18 +150,18 @@ div#barTopMenuNKW li {
 	font-weight: bold;
 }
 
-div#barTopMenuNKW li:hover {
+div#barTopMenu li:hover {
  	background-image: url('../images/headnaviback2.jpg');
 }
 
-div#barTopMenuNKW a {
+div#barTopMenu a {
 	list-style-type: none;
 	color: #7387ac;
 }
-div#barTopMenuNKW a:hover {
+div#barTopMenu a:hover {
 	list-style-type: none;
 	color: white;
 }
-div#barTopMenuNKW img {
+div#barTopMenu img {
 	border: none;
 }

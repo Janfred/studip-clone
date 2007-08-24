@@ -1,13 +1,13 @@
 <!-- Dynamische Links mit Icons -->
-<div id='headerNKW'>
-	<!--<div id='barTopLogoNKW'>
+<div id='header'>
+	<!--<div id='barTopLogo'>
 		<img src="<?=$GLOBALS['ASSETS_URL']?>images/logoneu.jpg" alt="Logo Uni Göttingen">
 	</div>
 	 -->
-	<div id="barTopFontNKW">
+	<div id="barTopFont">
 	<?=$GLOBALS['UNI_NAME']?>
 	</div>
-	<div id="barTopMenuNKW">
+	<div id="barTopMenu">
 		<ul>
 		<?
 		$accesskey = 0;
@@ -45,7 +45,7 @@
 	</div>
 </div>
 <!--Statische Text Links -->
-<div id="barTopToolsNKW">
+<div id="barTopTools">
 	<ul>
 		<li>
 			<a href="http://blog.studip.de" target="_blank">
@@ -55,12 +55,12 @@
 	</ul>
 </div>
 <!-- AJAX indicator -->
-<div id="barTopAJAXIndicatorNKW" style="display:none;">
+<div id="barTopAJAXIndicator" style="display:none;">
 	<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ajax_indicator.gif" alt="AJAX indicator">
 	<script type="text/javascript" language="javascript">
 	// <![CDATA[
 	Event.observe(window, 'load', function() {
-		var indicator = $('barTopAJAXIndicatorNKW');
+		var indicator = $('barTopAJAXIndicator');
 		Ajax.Responders.register({
 			onCreate:   function() { indicator.show(); },
 			onComplete: function() { indicator.hide(); }
@@ -70,7 +70,7 @@
 	</script>
 </div>
 <!-- Stud.IP Logo -->
-<div id="barTopStudipNKW">
+<div id="barTopStudip">
 	<a href="http://www.studip.de/" title="Studip Homepage">
 		<img src="<?=$GLOBALS['ASSETS_URL']?>images/studipmirror.jpg" alt="Studip Homepage">
 	</a>
@@ -79,15 +79,15 @@
   <img src="<?=$GLOBALS['ASSETS_URL']?>images/studipdot.gif">
 </div>
 <!-- Leiste unten -->
-<div id="barBottomLeftNKW">
+<div id="barBottomLeft">
 	<?=($current_page != "" ? _("Aktuelle Seite:") : "")?>
 </div>
-<div id="barBottommiddleNKW">&nbsp;
+<div id="barBottommiddle">&nbsp;
 	<?=($current_page != "" ? htmlReady($current_page) : "")?>
 	&nbsp;
 </div>
 <!-- Dynamische Links ohne Icons -->
-<div id="barBottomrightNKW">
+<div id="barBottomright">
 	<ul>
 		<?
 		foreach (array($search, $imprint, $help, $ssologin,$loginlogout) as $item) {
