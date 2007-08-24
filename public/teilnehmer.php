@@ -1361,7 +1361,7 @@ while (list ($key, $val) = each ($gruppe)) {
 				<td colspan="<?= $colspan - 2 - ($show_user_picture ? 1 : 0) - ($showscore ? 1 : 0)?>">
 					<form action="#<?= $db->f("username") ?>" method="POST">
 						<font size="-1"><?=_("Bemerkungen:")?></font><br/>
-						<textarea name="userinfo" rows="3" cols="30"><?= $db->f("comment") ?></textarea>
+						<textarea name="userinfo" rows="3" cols="50"><?= $db->f("comment") ?></textarea>
 						<br>
 						<font size="-1"><?= _("&Auml;nderungen") ?></font>
 						<input type="image" <?= makeButton("uebernehmen", "src") ?>>
