@@ -1182,7 +1182,9 @@ while (list ($key, $val) = each ($gruppe)) {
 		?>
 		<font size="-1">
 			<a href="about.php?username=<?= $db->f("username") ?>">
-				<img src="<?= get_user_pic_url($db->f('user_id')) ?>" height="25" align="middle" border="0">
+				<div style="width:20px;height:25px;overflow:hidden;">
+				<img src="<?= get_user_pic_url($db->f('user_id')) ?>" width="20" align="middle" border="0">
+				</div>
 				<?= htmlReady($db->f("fullname")) ?>
 			</a>
 		</font>
