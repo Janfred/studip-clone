@@ -306,7 +306,7 @@ class ResourcesBrowse {
 				$sublevels = TRUE;
 		}
 		if ($sublevels)
-			$this->db->seek(0);
+			$this->db->query($query);
 
 		?>
 		<tr>
