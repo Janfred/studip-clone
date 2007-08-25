@@ -509,8 +509,6 @@ function format ($text) {
   $cache = StudipCacheFactory::getCache();
   if (!($formatted_text = $cache->read($key = 'formatted_text/' . md5($text)))) {
     $cache->write($key, $formatted_text = _real_format($text));
-    var_dump($key);
-
   }
   return $formatted_text;
 }
