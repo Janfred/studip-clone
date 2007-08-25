@@ -27,6 +27,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwalten";
+$CURRENT_PAGE = _('Verwaltung von Veranstaltungen');
 
 // Start of Output
 include 'lib/include/html_head.inc.php'; // Output of html head
