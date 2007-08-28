@@ -71,6 +71,8 @@ class StudipCacheFactory {
                    'cache_init_args',
                    'JSON-kodiertes Array von Argumenten für die '.
                    'Instanziierung der StudipCache-Klasse');
+
+    StudipCacheFactory::$cache = NULL;
   }
 
 
@@ -81,6 +83,8 @@ class StudipCacheFactory {
     $cfg->unsetValue('cache_class_file');
     $cfg->unsetValue('cache_class');
     $cfg->unsetValue('cache_init_args');
+
+    StudipCacheFactory::$cache = NULL;
   }
 
 
