@@ -33,6 +33,7 @@
 
 require_once('lib/raumzeit/CycleDataDB.class.php');
 require_once('lib/raumzeit/SingleDate.class.php');
+require_once('lib/raumzeit/IssueDB.class.php');
 
 class CycleData {
 	var $metadate_id = '';
@@ -161,8 +162,15 @@ class CycleData {
 			if (!$this->termine) {
 				$this->readSingleDates();
 			}
-			foreach ($this->termine as $val) {
-				$val->delete();
+			foreach ($this->termine as $termin) {
+				// delete issues, if the schedule expert view is off
+                if(!$GLOBALS["RESOURCES_ENABLES_EXPERT_SCHEDULE_VIEW"]){
+                    foreach($termin->getIssueIDs() as $issue_id){
+                        // delete this issue
+                        IssueDB::deleteIssue($issue_id);
+                    }
+                }
+                $termin->delete();
 			}
 		}
 		return TRUE;

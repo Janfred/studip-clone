@@ -173,15 +173,62 @@ class MetaDate {
 		} else {
 			if ($this->setCycleData($data, $cycle)) {
 
+                // collect all existing themes (issues) for this cycle:
+                
+                $issues = array();
+                $singledate_count = 0;
+                
+                // loop through the single dates and look for themes (issues)
+                $termine = $cycle->getSingleDates();
+                foreach ($termine as $key => $termin) {
+                    // get all isues of this date ( zero, one, or more, if the expert view is activated)
+                    // and store them at the relative position of this single date 
+                    $issues[$singledate_count] = $termin->getIssueIDs();
+                    $singledate_count++;
+                }
 				// remove all SingleDates in the future for this CycleData
 				$count = CycleDataDB::deleteNewerSingleDates($data['cycle_id'], time());
 
 				// create new SingleDates
 				$this->createSingleDates(array('metadate_id' => $cycle->getMetaDateId(), 'startAfterTimeStamp' => time()));
-				$cycle->readSingleDates();
 
-				// clear all loaded SingleDates so no odd ones remain. The Seminar-Class will load them fresh when needed
-				$cycle->termine = NULL;
+                // clear all loaded SingleDates so no odd ones remain. The Seminar-Class will load them fresh when needed
+                $cycle->termine = NULL;
+                
+                // read all new single dates
+                $termine = $cycle->getSingleDates();
+                
+                // new dates counter
+                $new_singledate_count = 0;               
+                
+                 // loop through the single dates and add the themes (issues)
+                foreach ($termine as $key => $termin) {
+                    // check, if there are issues for this single date 
+                    if( $issues[$new_singledate_count] != NULL ) {
+                        // add all issues:
+                        foreach( $issues[$new_singledate_count] as $issue_key => $issue_id){
+                            $termin->addIssueID( $issue_id);
+                            $termin->store();
+                        }
+                    }
+                    $new_singledate_count++;
+                }
+                
+                // delete issues, that are not assigned to a single date because of to few dates
+                // (only if the schedule expert view is off)           
+                if(!$GLOBALS["RESOURCES_ENABLES_EXPERT_SCHEDULE_VIEW"]){
+                    if( $new_singledate_count < $singledate_count) {
+                        for($i = $new_singledate_count; $i < $singledate_count; $i++){
+                            if( $issues[$i] != NULL) {
+                                foreach( $issues[$i] as $issue_id){
+                                    // delete this issue
+                                    IssueDB::deleteIssue($issue_id);
+                                }
+                            }
+                        }
+                    }
+                }
+                
 				return $count;
 			}
 		}
