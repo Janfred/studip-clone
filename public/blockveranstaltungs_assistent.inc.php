@@ -81,7 +81,7 @@ $messages =  Array('seminar_id'=> _("Kein Seminar gewählt!"),
 		return array('ready' => false, 'errors' => $errors);
 	}
 
-	if ($form_data["block_submit"] && $errors==null)
+	if ($form_data["block_submit_x"] && $errors==null)
 	{ /// create the schedule dates
 		$start_time = mktime($form_data["start_hour"],
 				$form_data["start_minute"],
@@ -170,7 +170,7 @@ $messages =  Array('seminar_id'=> _("Kein Seminar gewählt!"),
 	}
 
 	//echo "<pre>".print_r($GLOBALS,true)."<pre>";;
-	if (!isset($form_data["block_submit"]) || $errors != null)
+	if (!isset($form_data["block_submit_x"]) || $errors != null)
 	{ // show the form
 		return array('ready' => false, 'errors' => $errors);
 	} else
