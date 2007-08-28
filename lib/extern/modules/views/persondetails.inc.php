@@ -530,7 +530,7 @@ function kontakt ($module, $db, $separate = FALSE) {
 		if (!$module->config->getValue("Contact", "hidepersname"))
 			$out .= "<br><br>" . htmlReady($db->f("fullname"), TRUE) . "\n";
 		if ($module->config->getValue('Contact', 'showinstgroup')) {
-			if ($gruppen = GetRoleNames(GetStatusgruppen($module->config->range_id, $db->f('user_id'))))
+			if ($gruppen = GetStatusgruppen($module->config->range_id, $db->f('user_id')))
 				$out .= "<br>" . htmlReady(join(", ", array_values($gruppen)));
 		}
 		// display name of institution (as link)

@@ -413,28 +413,4 @@ function CheckStatusgruppeFolder($group_id){
 	$db->next_record();
 	return $db->f(0);
 }
-
-function GetRoleNames($roles, $level = 0, $pred = '', $all = false) {
-	$out = array();
-
-	foreach ((array)$roles as $role_id => $role) {
-		if ($level == 0) $inst_id = $role_id;
-
-		if ($pred != '') {
-			$new_pred = $pred.' > '.$role['name'];
-		} else {
-			$new_pred = $role['name'];
-		}
-
-		if ($role['user_there'] || $all) {
-			$out[$role_id] = $new_pred;
-		}
-
-		if ($role['child']) {
-			$out = array_merge($out, GetRoleNames($role['child'], $level+1, $new_pred, $all));
-		}
-	}
-
-	return (sizeof($out) > 0 ? $out : null);
-}
 ?>

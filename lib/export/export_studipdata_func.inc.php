@@ -416,14 +416,11 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 
 	if ($filter == "status")
 	{
-		$statusgruppen = GetAllStatusgruppen($ex_sem_id);
-		$gruppe = GetRoleNames($statusgruppen, 0, '', true);
-
-		/*$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$ex_sem_id' ORDER BY position ASC");
+		$db->query ("SELECT name, statusgruppe_id FROM statusgruppen WHERE range_id = '$ex_sem_id' ORDER BY position ASC");
 		while ($db->next_record())
 		{
 			$gruppe[$db->f("statusgruppe_id")] = $db->f("name");
-		}*/
+		}
 		$gruppe["no"] = _("keiner Funktion oder Gruppe zugeordnet");
 	}
 	else
@@ -528,11 +525,11 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 					}
 				// freie Datenfelder ausgeben
 					$data_object_tmp .= export_datafields($db->f("user_id"), $xml_groupnames_person["childgroup1"], $xml_groupnames_person["childobject1"]);
-					
+
 					$data_object_tmp .= export_additional_data($db->f("user_id"), $range_id, $xml_groupnames_person['childgroup2']);
-					
+
 					// export additional fields
-					
+
 					$data_object_tmp .= xml_close_tag( $xml_groupnames_person["object"] );
 					reset($xml_names_person);
 					$person_out[$db->f("user_id")] = true;
@@ -726,7 +723,7 @@ function export_datafields($range_id, $childgroup_tag, $childobject_tag){
 * helper function to export custom datafields
 *
 * only visible datafields are exported (depending on user perms)
-* @access	public        
+* @access	public
 * @param	string	$range_id	id for object to export
 * @param	string	$childgroup_tag	name of outer tag
 * @param	string	$childobject_tag	name of inner tags
@@ -737,7 +734,7 @@ function get_additional_data($user_id, $range_id)
   $collected_data = array();
 
 	$db = new DB_Seminar();
-	
+
   $global_view_rights = array();
 
   if(is_array($GLOBALS['TEILNEHMER_VIEW']))
@@ -806,7 +803,7 @@ function get_additional_data($user_id, $range_id)
           case "geschlecht":
             if ($content == "0")
               $content = _("m&#228;nnlich");
-            else 							
+            else
               $content = _("weiblich");
 
             $user_data = array("name" => $val["name"], "content" => $content);
@@ -832,13 +829,13 @@ function get_additional_data($user_id, $range_id)
         if (!isset($val['export']) || !empty($val["export"]))
         {
           $user_data['export'] = 1;
-        }  
+        }
 
         // display by default, even if display isn't set in config
         if (!isset($val['display']) || !empty($val['display']))
         {
           $user_data['display'] = 1;
-        }  
+        }
 
         $collected_data [$val["field"]]= $user_data;
       }
@@ -857,14 +854,14 @@ function export_additional_data($user_id, $range_id, $childgroup_tag)
   $additional_data = get_additional_data($user_id, $range_id);
 
 	foreach($additional_data as $val) {
-    if ($val['export']) 
+    if ($val['export'])
     {
       if (!$a_fields) $ret .= xml_open_tag($childgroup_tag);
 
       $childobject_tag = $GLOBALS['xml_groupnames_person']['childobject2'];
-      
+
       $ret .= xml_open_tag($childobject_tag, $val["name"]);
-      
+
       if (is_array($val['content']))
       {
         $ret .= htmlspecialchars (implode(',',$val['content']));
@@ -873,13 +870,13 @@ function export_additional_data($user_id, $range_id, $childgroup_tag)
         $ret .= htmlspecialchars($val['content']);
       }
       $ret .= xml_close_tag($childobject_tag);
-      
+
       $a_fields = true;
     }
   }
-  	
+
   if ($a_fields) $ret .= xml_close_tag($childgroup_tag);
-  	
+
 	return $ret;
 }
 
