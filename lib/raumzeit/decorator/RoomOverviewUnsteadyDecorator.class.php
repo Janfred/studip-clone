@@ -126,8 +126,8 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 		}
 
 		if (!$this->onlyRegular) {
-			if ( sizeof($data['regular']['turnus_data']) > 0 && sizeof($data['irregular']) > 0 && $this->hideRooms){
-				$ret .= ',';
+			if ($data['regular']['turnus_data'] && sizeof($data['regular']['turnus_data']) > 0 && $data['irregular'] && sizeof($data['irregular']) > 0 && $this->hideRooms){
+				$ret .= ',<br/>';
 			}
 
 			// get irregular dates
@@ -142,7 +142,6 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 				}
 
 				if ($this->shrinkDates && $this->hideRooms && !$this->xml_export) {
-					$ret .= '<br/>';
 					$ret .= join('<br />', shrink_dates($c_dates));
 				} else {
 
