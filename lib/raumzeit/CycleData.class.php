@@ -180,6 +180,12 @@ class CycleData {
 		if (!$this->termine) {
 			$this->readSingleDates($filterStart, $filterEnd);
 		}
+        if(!$GLOBALS["RESOURCES_ENABLES_EXPERT_SCHEDULE_VIEW"]){
+            foreach( $this->termine[$date_id]->getIssueIDs() as $issue_id){
+                // delete this issue
+                IssueDB::deleteIssue($issue_id);
+            }
+        }
 		$this->termine[$date_id]->setExTermin(true);
 		$this->termine[$date_id]->store();
 	}
