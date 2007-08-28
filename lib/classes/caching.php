@@ -55,14 +55,32 @@ class StudipCacheFactory {
 
   function configure($file, $class, $arguments) {
 
-    # TODO encoding for strings...
+    # TODO encoding for strings... but probably the caller should care..
     $arguments = json_encode($arguments);
 
     $cfg = self::getConfig();
 
-    $cfg->setValue($file,      'cache_class_file', '');
-    $cfg->setValue($class,     'cache_class',      '');
-    $cfg->setValue($arguments, 'cache_init_args',  '');
+    $cfg->setValue($file,
+                   'cache_class_file',
+                   'Absoluter Pfad der Datei, die die StudipCache-Klasse '.
+                   'enthält');
+    $cfg->setValue($class,
+                   'cache_class',
+                   'Klassenname des zu verwendenden StudipCaches');
+    $cfg->setValue($arguments,
+                   'cache_init_args',
+                   'JSON-kodiertes Array von Argumenten für die '.
+                   'Instanziierung der StudipCache-Klasse');
+  }
+
+
+  function unconfigure() {
+
+    $cfg = self::getConfig();
+
+    $cfg->unsetValue('cache_class_file');
+    $cfg->unsetValue('cache_class');
+    $cfg->unsetValue('cache_init_args');
   }
 
 
@@ -83,7 +101,7 @@ class StudipCacheFactory {
 
       # default class
       if (is_null($cache_class)) {
-        $cache_class = 'StudipArrayCache';
+        $cache_class = 'StudipNullCache';
       }
 
       # load class file before
@@ -102,7 +120,10 @@ class StudipCacheFactory {
                    : array();
 
       $reflection_class = new ReflectionClass($cache_class);
-      StudipCacheFactory::$cache = $reflection_class->newInstanceArgs($arguments);
+      StudipCacheFactory::$cache =
+        sizeof($arguments)
+          ? $reflection_class->newInstanceArgs($arguments)
+          : $reflection_class->newInstance();
     }
 
     return StudipCacheFactory::$cache;
@@ -135,7 +156,7 @@ interface StudipCache {
    *
    * @param   string  a single key.
    *
-   * @returns TODO
+   * @returns void
    *
    */
   function expire($arg);
@@ -183,15 +204,7 @@ interface StudipCache {
  * @since     1.6
  */
 
-class StudipArrayCache implements StudipCache {
-
-
-  private $cache;
-
-
-  function __construct($array = array()) {
-    $this->cache = (array) $array;
-  }
+class StudipNullCache implements StudipCache {
 
 
   /**
@@ -202,7 +215,6 @@ class StudipArrayCache implements StudipCache {
    * @return void
    */
   function expire($key) {
-    unset($this->cache[$key]);
   }
 
 
@@ -214,7 +226,7 @@ class StudipArrayCache implements StudipCache {
    * @return mixed   the corresponding value
    */
   function read($key) {
-    return isset($this->cache[$key]) ? $this->cache[$key] : NULL;
+    return FALSE;
   }
 
 
@@ -229,8 +241,7 @@ class StudipArrayCache implements StudipCache {
    *
    */
   function write($name, $content, $expire = 43200) {
-    $this->cache[$name] = $content;
-    return TRUE;
+    return FALSE;
   }
 }
 
