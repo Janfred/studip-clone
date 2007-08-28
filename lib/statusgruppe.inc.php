@@ -1,8 +1,8 @@
 <?
 /**
-* helper functions for handling statusgruppen 
-* 
-* helper functions for handling statusgruppen 
+* helper functions for handling statusgruppen
+*
+* helper functions for handling statusgruppen
 *
 * @author				Ralf Stockmann <rstockm@gwdg.de>
 * @version			$Id$
@@ -43,8 +43,8 @@ function MakeUniqueStatusgruppeID () {
 	$db=new DB_Seminar;
 	$tmp_id=md5(uniqid($hash_secret));
 
-	$db->query ("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$tmp_id'");	
-	IF ($db->next_record()) 	
+	$db->query ("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$tmp_id'");
+	IF ($db->next_record())
 		$tmp_id = MakeUniqueStatusgruppeID(); //ID gibt es schon, also noch mal
 	RETURN $tmp_id;
 }
@@ -69,7 +69,7 @@ function AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgrupp
 		create_folder(mysql_escape_string(_("Dateiordner der Gruppe:") . ' ' . $new_statusgruppe_name), mysql_escape_string(_("Ablage für Ordner und Dokumente dieser Gruppe")), $statusgruppe_id, 15);
 	}
 	return $statusgruppe_id;
-} 
+}
 
 function CheckSelfAssign($statusgruppe_id) {
 	$db=new DB_Seminar;
@@ -79,7 +79,7 @@ function CheckSelfAssign($statusgruppe_id) {
 	} else {
 		$tmp = FALSE;
 	}
-	return $tmp;		
+	return $tmp;
 }
 
 function CheckSelfAssignAll($seminar_id) {
@@ -94,17 +94,17 @@ function CheckSelfAssignAll($seminar_id) {
 function CheckAssignRights($statusgruppe_id, $user_id, $seminar_id) {
 	global $perm;
 	list($self_assign_all, $self_assign_exclusive) = CheckSelfAssignAll($seminar_id);
-	if (CheckSelfAssign($statusgruppe_id) 
-	&& !CheckUserStatusgruppe($statusgruppe_id, $user_id) 
-	&& !$perm->have_perm("admin") 
-	&& $perm->have_perm("autor") 
+	if (CheckSelfAssign($statusgruppe_id)
+	&& !CheckUserStatusgruppe($statusgruppe_id, $user_id)
+	&& !$perm->have_perm("admin")
+	&& $perm->have_perm("autor")
 	&& ((GetStatusgruppeLimit($statusgruppe_id)==FALSE) || (GetStatusgruppeLimit($statusgruppe_id) > CountMembersPerStatusgruppe($statusgruppe_id)))
 	&& !($self_assign_exclusive && in_array($user_id, GetAllSelected($seminar_id)))
 	)
 		$assign = TRUE;
 	else
 		$assign = FALSE;
-	return $assign;	
+	return $assign;
 }
 
 function SetSelfAssign ($statusgruppe_id, $flag="0") {
@@ -124,7 +124,7 @@ function SetSelfAssignExclusive ($seminar_id, $flag = false) {
 	return $db->affected_rows();
 }
 
-function GetAllSelected ($range_id) {	
+function GetAllSelected ($range_id) {
 	$zugeordnet = array();
   	$db3=new DB_Seminar;
 	$db3->query ("SELECT DISTINCT user_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$range_id'");
@@ -150,7 +150,7 @@ function InsertPersonStatusgruppe ($user_id, $statusgruppe_id) {
 	$position = CountMembersPerStatusgruppe($statusgruppe_id)+1;
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
-	if (!$db->next_record()) {			
+	if (!$db->next_record()) {
 		$db->query("INSERT INTO statusgruppe_user SET statusgruppe_id = '$statusgruppe_id', user_id = '$user_id', position = '$position'");
 		$writedone = TRUE;
 	} else {
@@ -167,7 +167,7 @@ function RemovePersonStatusgruppe ($username, $statusgruppe_id) {
 	if ($db->next_record())
 		$position = $db->f("position");
 	$db->query("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
-	
+
 	// Neusortierung
 	$db->query("SELECT * FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND position > '$position'");
 	while ($db->next_record()) {
@@ -191,7 +191,7 @@ function RemovePersonStatusgruppeComplete ($username, $range_id) {
 
 	$user_id = get_userid($username);
 	$db=new DB_Seminar;
-	$db->query("SELECT DISTINCT statusgruppe_user.statusgruppe_id FROM statusgruppe_user LEFT JOIN statusgruppen USING(statusgruppe_id) WHERE range_id = '$range_id' AND user_id = '$user_id'");	
+	$db->query("SELECT DISTINCT statusgruppe_user.statusgruppe_id FROM statusgruppe_user LEFT JOIN statusgruppen USING(statusgruppe_id) WHERE range_id = '$range_id' AND user_id = '$user_id'");
 	while ($db->next_record()) {
 		RemovePersonStatusgruppe($username, $db->f("statusgruppe_id"));
 	}
@@ -210,7 +210,7 @@ function DeleteStatusgruppe ($statusgruppe_id) {
 	$db->query("DELETE FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id'");
 
 	// Neusortierung
-		
+
 	$db->query("SELECT * FROM statusgruppen WHERE range_id = '$range_id' AND position > '$position'");
 	while ($db->next_record()) {
 		$new_position = $db->f("position")-1;
@@ -307,7 +307,7 @@ function GetRangeOfStatusgruppe ($statusgruppe_id) {
 */
 function GetStatusgruppen ($range_id, $user_id) {
 	$db = new DB_Seminar();
-	$db->query("SELECT a.statusgruppe_id,a.name FROM statusgruppen a 
+	$db->query("SELECT a.statusgruppe_id,a.name FROM statusgruppen a
 				LEFT JOIN statusgruppe_user b USING(statusgruppe_id) WHERE user_id='$user_id' AND range_id='$range_id'");
 	while ($db->next_record()) {
 		$ret[$db->f("statusgruppe_id")] = $db->f("name");
@@ -319,9 +319,9 @@ function GetStatusgruppen ($range_id, $user_id) {
 function getOptionsOfStGroups ($userID) {
 	$db = new DB_Seminar();
 	$db->query("SELECT statusgruppe_id,visible,inherit FROM statusgruppe_user WHERE user_id='$userID'");
-	while ($db->next_record()) 
+	while ($db->next_record())
 		$ret[$db->f('statusgruppe_id')] = array('visible' => $db->f('visible') == 1, 'inherit' => $db->f('inherit') == 1);
-	return $ret;				
+	return $ret;
 }
 
 
@@ -340,7 +340,7 @@ function setOptionsOfStGroup ($groupID, $userID, $visible, $inherit='') {
 
 /**
 * Returns the number of persons who are grouped in Statusgruppen for one range.
-* 
+*
 * Persons who are members in more than one Statusgruppe will be count only once
 *
 * @access public
@@ -391,7 +391,7 @@ function GetAllStatusgruppen ($range_id) {
 function GetStatusgruppeName ($group_id) {
 	$db = new DB_Seminar();
 	$db->query("SELECT name FROM statusgruppen WHERE statusgruppe_id='$group_id' ");
-	
+
 	if ($db->next_record())
 		return $db->f("name");
 	else
@@ -401,7 +401,7 @@ function GetStatusgruppeName ($group_id) {
 function GetStatusgruppeLimit ($group_id) {
 	$db = new DB_Seminar();
 	$db->query("SELECT size FROM statusgruppen WHERE statusgruppe_id='$group_id' ");
-	
+
 	if ($db->next_record())
 		return $db->f("size");
 	else
@@ -412,5 +412,29 @@ function CheckStatusgruppeFolder($group_id){
 	$db = new DB_Seminar("SELECT folder_id FROM folder WHERE range_id='$group_id'");
 	$db->next_record();
 	return $db->f(0);
+}
+
+function GetRoleNames($roles, $level = 0, $pred = '', $all = false) {
+	$out = array();
+
+	foreach ((array)$roles as $role_id => $role) {
+		if ($level == 0) $inst_id = $role_id;
+
+		if ($pred != '') {
+			$new_pred = $pred.' > '.$role['name'];
+		} else {
+			$new_pred = $role['name'];
+		}
+
+		if ($role['user_there'] || $all) {
+			$out[$role_id] = $new_pred;
+		}
+
+		if ($role['child']) {
+			$out = array_merge($out, GetRoleNames($role['child'], $level+1, $new_pred, $all));
+		}
+	}
+
+	return (sizeof($out) > 0 ? $out : null);
 }
 ?>
