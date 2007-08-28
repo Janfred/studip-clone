@@ -24,7 +24,7 @@
 					<?=Termin_Eingabe_javascript(1,0,mktime(12,0,0,$tpl['month'],$tpl['day'],$tpl['year']),$tpl['start_stunde'],$tpl['start_minute'],$tpl['end_stunde'],$tpl['end_minute']);?>
 				</TD>
 				<TD width="45%" nowrap class="<?=$tpl['class']?>">
-				  <FONT size="-1"<?=($tpl['class'] == 'steelred') ? ' color="#666666"' : ''?>>
+				  <FONT size="-1"<?=($tpl['class'] == 'steelred') ? ' color="#000000"' : ''?>>
 			      <?=$tpl['room']?>
 			    </FONT>
 					<? if ($tpl['ausruf']) { ?>
@@ -34,7 +34,7 @@
 					<? } ?>
 				</TD>
 				<TD width="5%" class="<?=$tpl['class']?>" align="right">
-					<A href="<?=$PHP_SELF?>?cmd=delete_singledate&sd_id=<?=$tpl['sd_id']?>&cycle_id=">
+					<A href="<?=$PHP_SELF?>?cmd=delete_singledate&sd_id=<?=$tpl['sd_id']?>&cycle_id=<?=($tpl['cycle_id']) ? $tpl['cycle_id'] : '' ?>">
 						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" align="absmiddle">
 					</A>
 				</TD>
