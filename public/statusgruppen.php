@@ -98,7 +98,7 @@ function PrintAktualStatusgruppen () {
 		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s &nbsp;%s</b></font>",
 		CheckAssignRights($statusgruppe_id,$user->id,$SessSemName[1])?"<a href=\"$PHP_SELF?assign=$statusgruppe_id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"",
 		htmlReady($db->f("name")));
-		
+
 		$limit = GetStatusgruppeLimit($statusgruppe_id);
 		if ($limit!=FALSE && $db->f("selfassign") > 0) {
 			$voll = CountMembersPerStatusgruppe ($statusgruppe_id);
@@ -115,7 +115,7 @@ function PrintAktualStatusgruppen () {
 		if ((CheckUserStatusgruppe($statusgruppe_id, $user->id) || $rechte) && ($folder_id = CheckStatusgruppeFolder($statusgruppe_id)) ){
 			echo "<a href=\"folder.php?open=$folder_id#anker\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/icon-disc.gif\" ".tooltip(_("Dateiordner vorhanden"))."></a>&nbsp;";
 		}
-		
+
 		if ($rechte || CheckUserStatusgruppe($statusgruppe_id, $user->id)) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
 			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&emailrequest=1&subject=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/mailnachricht.gif\" " . tooltip(_("Systemnachricht mit Emailweiterleitung an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0]));
 			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&subject=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0]));
@@ -244,7 +244,7 @@ if ($delete_id)
 	}
 	?>
 	<tr valign="top">
-     <td width="90%" NOWRAP class="blank">
+     <td width="90%" class="blank">
 			<?
 			PrintAktualStatusgruppen();
 			$anzahltext = PrintNonMembers($SessSemName[1]);
@@ -269,7 +269,7 @@ if ($delete_id)
 	</tr>
 	</table>
 	</td>
-	<td width="270" NOWRAP class="blank" align="center" valign="top">
+	<td width="270" class="blank" align="center" valign="top">
 
 	<?
 	list($self_assign_all, $self_assign_exclusive) = CheckSelfAssignAll($SessSemName[1]);
@@ -287,9 +287,9 @@ if ($delete_id)
 		$infobox[0]["eintrag"][] = array ("icon" => "ausruf_small.gif" ,
 									"text"  => _("In dieser Veranstaltung können Sie sich nur in eine der möglichen Gruppen eintragen.")
 									);
-		
+
 	}
-	
+
 	$infobox[1]["kategorie"] = _("Aktionen:");
 		$infobox[1]["eintrag"][] = array (	"icon" => "nachricht1.gif" ,
 									"text"  => _("Um Personen eine systeminterne Kurznachricht zu senden, benutzen Sie bitte das normale Briefsymbol.")
