@@ -378,22 +378,19 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	echo $index_nobody_template->render();
 }
 ?>
-<table width="70%" border="0" cellpadding="0" cellspacing="0" >
-<tr>
-	<td  align="center" height="30">&nbsp;</td>
-</tr>
+<br>
+<table class="blank" width="800" cellspacing="0" cellpadding="0" border="0" align="center" valign="top">
 <?
-if ($GLOBALS["PLUGINS_ENABLE"]){
+if ($GLOBALS["PLUGINS_ENABLE"]&&!($auth->is_authenticated() && $user->id != 'nobody')){
 	$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");
 	$activatedportalplugins = $portalpluginpersistence->getAllActivatedPlugins();
 	// we already should have the activatedportalplugins here
 	if (!empty($activatedportalplugins)){
 		foreach ($activatedportalplugins as $activatedplugin){
-
-			if ($activatedplugin->hasUnauthorizedView()){
-?>
+		if ($activatedplugin->hasUnauthorizedView()){
+ 			?> 
 				<tr>
-					<td class="topic">&nbsp;<b><?= $activatedplugin->getDisplaytitle() ?></b></td>
+					<td class="topic">&nbsp;<b><?=$activatedplugin->getDisplaytitle() ?></b></td>
 				</tr>
 				<tr>
 					<td class="steel1"><blockquote><?= $activatedplugin->showOverview(false) ?><blockquote></td>
@@ -401,8 +398,10 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 
 				<td align="center" height="30">&nbsp;</td>
 
-				</tr>
-<?php
+				</tr> 
+ <?php
+	
+	
 			}
 		}
 	}
