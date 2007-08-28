@@ -50,7 +50,9 @@ function getTemplateDataForSingleDate($val, $cycle_id = '') {
 
 	/* Aging */
 	$timecolor = '#BBBBBB';
-	if ($val->getChDate() > 0) {
+	if ( $val->getChdate() >  (time() - 86400)) {
+		$timecolor = '#FF0000';
+	} else if ($val->getChDate() > 0) {
 		$timediff = (int) log((time() - $val->getChDate()) / 86400 + 1) * 15;
 		if ($timediff >= 68)
 			$timediff = 68;

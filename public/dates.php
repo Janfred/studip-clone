@@ -41,6 +41,7 @@ $id = $SessSemName[1];
 $issue_open = array();
 
 $sess->register('showDatesFilter');
+$sess->register('raumzeitFilter');
 
 require_once ('lib/classes/Seminar.class.php');
 require_once ('lib/datei.inc.php');
@@ -69,7 +70,9 @@ include ("lib/include/links_openobject.inc.php");
 $sem = new Seminar($id);
 $semester = new SemesterData();
 $data = $semester->getCurrentSemesterData();
-$raumzeitFilter = $data['beginn'];
+if (!$raumzeitFilter) {
+	$raumzeitFilter = $data['beginn'];
+}
 $sem->checkFilter();
 $themen =& $sem->getIssues();
 
@@ -224,21 +227,22 @@ if ($cmd == 'openAll') $openAll = true;
 		<TD class="blank" align="right" valign="top">
 		<?
 			//Build an infobox
-			$infobox[0]["kategorie"] = _("Informationen:");
-			$infobox[0]["eintrag"][] = array ('icon' => "ausruf_small.gif",
-					"text"  =>_("Hier finden Sie alle Termine der Veranstaltung."));
-			if ($rechte) {
-					$infobox[1]["kategorie"] = _("Aktionen:");
-					$infobox[1]["eintrag"][] = array ('icon' => "link_intern.gif",
-							"text"  =>"<a href=\"raumzeit.php?cmd=createNewSingleDate#newSingleDate\">"._("Einen neuen Termin anlegen")."</a>");
-					$infobox[1]["eintrag"][] = array ('icon' => "link_intern.gif",
-							"text"  =>"<a href=\"raumzeit.php\">"._("Zur Terminverwaltung")."</a>");
+			$infobox_template =& $GLOBALS['template_factory']->open('infobox/infobox_dates');
 
-					$infobox[1]["eintrag"][] = array ('icon' => "link_intern.gif",
-							"text"  =>"<a href=\"themen.php\">"._("Zur Ablaufplanverwaltung")."</a>");
-	
+			// get a list of semesters (as display options)
+			$semester_selectionlist = raumzeit_get_semesters($sem, $semester, $raumzeitFilter);
+
+			// fill attributes
+			$infobox_template->set_attribute('picture', 'schedules.jpg');
+			$infobox_template->set_attribute("selectionlist_title", "Semesterauswahl");
+			$infobox_template->set_attribute('selectionlist', $semester_selectionlist);
+			$infobox_template->set_attribute('rechte', $rechte);
+			if (sizeof($messages) > 0) {
+				$infobox_template->set_attribute('messages', $messages);
 			}
-			print_infobox ($infobox, "schedules.jpg");
+
+			// render template
+			echo $infobox_template->render();
 		?>
 		</TD>
 	</TR>

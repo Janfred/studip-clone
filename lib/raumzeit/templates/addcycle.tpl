@@ -12,10 +12,10 @@ if ($GLOBALS['RESOURCE_ENABLE']) {
 		<FORM action="<?=$PHP_SELF?>" method="post" name="Formular">
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
-				<TD width="5%" align="right" valign="top" class="<?=$class?>">
+				<TD width="2%" align="right" valign="top" class="<?=$class?>">
 					<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
 				</TD>
-				<TD width="95%" nowrap class="<?=$class?>" colspan="8">
+				<TD width="98%" nowrap class="<?=$class?>" colspan="8">
 					<FONT size="-1">
 						<SELECT name="day">
 							<OPTION value="1" <?=$tpl['day']==1?SELECTED:''?>><?=_("Montag")?></OPTION>
