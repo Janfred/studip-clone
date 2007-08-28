@@ -42,6 +42,7 @@ $issue_open = array();
 
 $sess->register('showDatesFilter');
 $sess->register('raumzeitFilter');
+$sess->register('rzSeminar');
 
 require_once ('lib/classes/Seminar.class.php');
 require_once ('lib/datei.inc.php');
@@ -70,8 +71,9 @@ include ("lib/include/links_openobject.inc.php");
 $sem = new Seminar($id);
 $semester = new SemesterData();
 $data = $semester->getCurrentSemesterData();
-if (!$raumzeitFilter) {
+if (!$raumzeitFilter || ($rzSeminar != $SessSemName[1])) {
 	$raumzeitFilter = $data['beginn'];
+	$rzSeminar = $SessSemName[1];
 }
 $sem->checkFilter();
 $themen =& $sem->getIssues();
