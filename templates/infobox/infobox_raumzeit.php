@@ -46,7 +46,7 @@
       ?>
 
 
-      <? if ($GLOBALS['RESOURCES_ENABLE'] && !$GLOBALS['RESOURCES_HIDE_BOOKINGSTATUS_COLORING']) : ?>
+      <? if ($GLOBALS['RESOURCES_ENABLE'] && $GLOBALS['RESOURCES_ENABLE_BOOKINGSTATUS_COLORING']) : ?>
       
       <!-- Legende -->
 
