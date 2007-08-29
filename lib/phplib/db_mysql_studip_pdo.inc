@@ -72,6 +72,7 @@ class DB_Sql {
 	/* public: perform a query */
 	function query($Query_String) {
 		
+		$Query_String = trim($Query_String);
 		if ($Query_String == "") {
 			return 0;
 		}
