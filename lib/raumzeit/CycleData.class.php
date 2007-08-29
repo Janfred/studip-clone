@@ -164,13 +164,16 @@ class CycleData {
 			}
 			foreach ($this->termine as $termin) {
 				// delete issues, if the schedule expert view is off
-                if(!$GLOBALS["RESOURCES_ENABLES_EXPERT_SCHEDULE_VIEW"]){
-                    foreach($termin->getIssueIDs() as $issue_id){
-                        // delete this issue
-                        IssueDB::deleteIssue($issue_id);
-                    }
-                }
-                $termin->delete();
+				if(!$GLOBALS["RESOURCES_ENABLES_EXPERT_SCHEDULE_VIEW"]){
+					$issue_ids = $termin->getIssueIDs();
+					if (is_array($issue_ids)) {
+						foreach($issue_ids as $issue_id){
+							// delete this issue
+							IssueDB::deleteIssue($issue_id);
+						}
+					}
+				}
+				$termin->delete();
 			}
 		}
 		return TRUE;
