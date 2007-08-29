@@ -175,7 +175,7 @@ if ($_REQUEST["change_config"]) {
 					$out[] = '<tr><td><b><font size="-1">&nbsp;'.$key.'</font></b></td>';
 					$out[] = '<td width="3%" class="steelgraulight" nowrap valign="top">';
 					if ($_REQUEST["edit_config"] == $key) {
-						$out[].= '<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border=0>';
+						$out[].= '<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/GruenerHakenButton.png" border=0>';
 					} else {
 						$out[].= '<a href="'.$PHP_SELF.'?edit_config='.$key.'#anker">';
 						$out[].= '&nbsp;<img src="'.$GLOBALS['ASSETS_URL'].'images/edit_transparent.gif" border=0>';
