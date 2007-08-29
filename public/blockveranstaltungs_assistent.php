@@ -39,7 +39,8 @@ $cssSw = new cssClassSwitcher();
 <table border="0" cellspacing="0" cellpadding="1" align="center">
 	<tr>
 		<td class="blue_gradient" align="center">
-			<b><?=_("Blockveranstaltungstermine anlegen")?></b>
+			<b><?=_("Blockveranstaltungstermine anlegen")?></b><br/>
+			<?=getHeaderLine($SessSemName[1])?>
 		</td>
 	</tr>
 	<? if (!$return['ready'] && ($return['errors'])) :

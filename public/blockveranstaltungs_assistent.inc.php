@@ -52,29 +52,37 @@ function create_block_schedule_dates($seminar_id, $form_data)
 {
 
 $messages =  Array('seminar_id'=> _("Kein Seminar gewählt!"),
-									 'start_day' => _("Startdatum: kein Tag angegeben."),
-									 'start_month'=> _("Startdatum: kein Monat angegeben."),
-									 'start_year' => _("Startdatum: kein Jahr angegeben."),
-									 'end_day' => _("Enddatum: kein Tag angegeben."),
-									 'end_month'=> _("Enddatum: kein Monat angegeben."),
-									 'end_year' => _("Enddatum: kein Jahr angegeben."),
-									'start_hour' => _("Startzeitpunkt: keine Stunde angegeben."),
-									'start_minute'=> _("Startzeitpunkt: keine Minuten angegeben.") ,
-									'end_hour'=> _("Endzeitpunkt: keine Stunde angegeben."),
-									'end_minute'=> _("Endzeitpunkt: keine Minuten angegeben."),
+									 'start_day' => _("Startdatum: Sie haben keinen Tag angegeben."),
+									 'start_month'=> _("Startdatum: Sie haben keinen Monat angegeben."),
+									 'start_year' => _("Startdatum: Sie haben kein Jahr angegeben."),
+									 'end_day' => _("Enddatum: Sie haben keinen Tag angegeben."),
+									 'end_month'=> _("Enddatum: Sie haben keinen Monat angegeben."),
+									 'end_year' => _("Enddatum: Sie haben kein Jahr angegeben."),
+									'start_hour' => _("Startzeitpunkt: Sie haben keine Stunde angegeben."),
+									'start_minute'=> _("Startzeitpunkt: Sie haben keine Minuten angegeben.") ,
+									'end_hour'=> _("Endzeitpunkt: Sie haben keine Stunde angegeben."),
+									'end_minute'=> _("Endzeitpunkt: Sie haben keine Minuten angegeben."),
 									'no_days_in_timeslot' => _("Keiner der ausgewählten Tage liegt in dem angegebenen Zeitraum!"));
 
 	// do checks
+	$k = 0;
+	$errors = array();
+
 	foreach($form_data as $key=>$value)
 	{
 		// check if form was filled
-		if(in_array($key, array_keys($messages))
-				&& $value==null)
-		{
-			$errors[] = $messages[$key];
+		if(in_array($key, array_keys($messages)))	{
+			if ($value == null) {
+				$errors[] = $messages[$key];
+			}
+			$k++;
 		}
 	}
 
+	if ($k == sizeof($errors)) {
+		$errors = array();
+		$errors[] = _("Sie haben keine Daten angegeben!");
+	}
 
 	// done checks, if $error is filled, an error occurred
 	if ($errors != null) {
@@ -97,16 +105,12 @@ $messages =  Array('seminar_id'=> _("Kein Seminar gewählt!"),
 				$form_data["start_day"],
 				$form_data["start_year"]);
 
-		if ($start_time == -1 || $end_time ==-1)
-		{
+		if ($start_time == -1 || $end_time ==-1) {
 			$errors[] = "Startdatum: fehlerhafte Zeitangabe";
-		} else
-		{
-			if ($start_time==$end_time)
-			{
+		} else {
+			if ($start_time==$end_time)	{
 				$errors[] = "Start- und Endzeitpunkt sind gleich!";
-			} else if ($start_time>$end_time)
-			{
+			} else if ($start_time>$end_time)	{
 				$errors[] = "Startzeitpunkt liegt vor Endzeitpunkt!";
 			}
 		}
