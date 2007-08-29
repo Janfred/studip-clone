@@ -32,23 +32,23 @@
 		<TD align="left" class="steelgraulight">&nbsp;</TD>
 		<TD colspan="8" class="steelgraulight">
 			<FONT size="-1">
-			<? if ($GLOBALS['RESOURCES_ENABLE']) { ?>
-			<?=_("Raum:")?>
+			<?
+				$resList->reset();
+				if ($GLOBALS['RESOURCES_ENABLE'] && $resList->numberOfRooms()) :
+					echo _("Raum:");
+			?>
 			<SELECT name="room">
 				<OPTION value="nochange" selected><?=_("keine &Auml;nderung")?></option>
 				<OPTION value="retreat"><?=_("Raumbuchung aufheben")?></option>
 				<OPTION value="nothing"><?=_("keine Buchung, nur Textangabe")?></option>
 				<?
-				$resList->reset();
-				if ($resList->numberOfRooms()) {
 					while ($res = $resList->next()) {
 						echo '<OPTION value="'.$res['resource_id'].'">'.my_substr(htmlReady($res["name"]), 0, 30).'</OPTION>';
 					}
-				}
 				?>
 			</SELECT>
 			<INPUT type="image" <?=makebutton('buchen', 'src')?> name="bookRoom" align="absmiddle"><BR/>
-			<? } ?>
+			<? endif; ?>
 			<?=_("freie Ortsangabe")?>:
 			<INPUT type="text" name="freeRoomText" size="50" maxlength="255">
 			<?=$GLOBALS['RESOURCES_ENABLE']? _("(f&uuml;hrt <em>nicht</em> zu einer Raumbuchung)") : ''?>
