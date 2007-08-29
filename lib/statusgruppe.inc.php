@@ -413,4 +413,20 @@ function CheckStatusgruppeFolder($group_id){
 	$db->next_record();
 	return $db->f(0);
 }
+
+function CheckStatusgruppeMultipleAssigns($range_id){
+	$ret = array();
+	$db = new DB_Seminar("
+	SELECT count( statusgruppe_id ) as count , user_id, group_concat( name ) as gruppen
+	FROM statusgruppen
+	INNER JOIN statusgruppe_user
+	USING ( statusgruppe_id )
+	WHERE range_id = '$range_id'
+	AND selfassign = 2
+	GROUP BY user_id HAVING count > 1");
+	while($db->next_record()){
+		$ret[] = $db->Record;
+	}
+	return $ret;
+}
 ?>

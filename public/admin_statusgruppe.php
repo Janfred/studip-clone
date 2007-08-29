@@ -23,6 +23,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 	$perm->check("tutor");
 
 $hash_secret = "dslkjjhetbjs";
+$msg = array();
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 require_once ('config.inc.php');
@@ -426,12 +427,20 @@ function PrintInstitutMembers ($range_id)
 	}
 
 
-	if(isset($_REQUEST['toggle_selfassign_all'])){
-		SetSelfAssignAll($range_id, !$_REQUEST['toggle_selfassign_all']);
-	}
-	
-	if(isset($_REQUEST['toggle_selfassign_exclusive'])){
-		SetSelfAssignExclusive($range_id, !$_REQUEST['toggle_selfassign_exclusive']);
+	if(isset($_REQUEST['change_self_assign_x'])){
+		SetSelfAssignAll($range_id, (bool)$_REQUEST['toggle_selfassign_all']);
+		SetSelfAssignExclusive($range_id, (bool)$_REQUEST['toggle_selfassign_exclusive']);
+		$check_multiple = CheckStatusgruppeMultipleAssigns($range_id);
+		if(count($check_multiple)){
+			$multis = '<ul>';
+			foreach($check_multiple as $one){
+				$multis .= '<li>' . htmlReady(get_fullname($one['user_id']) . ' ('. $one['gruppen'] . ')').'</li>';
+			}
+			$multis .= '</ul>';
+			$msg[] = array('info', 
+			_("Achtung, folgende Teilnehmer sind bereits in mehr als einer Gruppe eingetragen. Sie müssen die Eintragungen manuell korrigieren.")
+			. '<br>'. $multis);
+		}
 	}
 	
 // Ende Abfrage Formulare
@@ -546,9 +555,15 @@ if($view == 'statusgruppe_sem'){
   </tr>
 </table><?
 // Ende Edit-Bereich
+if(count($msg)){
+?>
+<table width="100%" border="0" cellspacing="0">
+<?=parse_msg_array($msg)?>
+</table>
+<?
+}
 
 // Anfang Personenbereich
-
 $db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
 if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 	?><table width="100%" border="0" cellspacing="0">
@@ -559,15 +574,25 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 	?>
 <table cellpadding="2" cellspacing="2" border="0" style="border:1px solid;margin:10px">
 <tr>
-<td width="300"><font size="-1"><?=_("Selbsteintrag in allen Gruppen ein/ausschalten")?></td>
-<td><a href="<?=$PHP_SELF?>?toggle_selfassign_all=<?=(int)$self_assign_all?>&range_id=<?=$range_id?>&view=statusgruppe_sem">
-<img border="0" src="<?=$GLOBALS['ASSETS_URL']?>images/<?=($self_assign_all ? 'haken_transparent.gif' : 'x_transparent.gif')?>"></a></td>
+<form action="<?=$PHP_SELF?>?range_id=<?=$range_id?>&view=statusgruppe_sem" method="post">
+<td width="300"><font size="-1"><?=_("Selbsteintrag in allen Gruppen eingeschaltet")?></td>
+<td>
+<input type="checkbox" name="toggle_selfassign_all" value="1" <?=($self_assign_all ? 'checked' : '')?>>
+</td>
+<td rowspan="2">
+&nbsp;
+<?=makeButton('uebernehmen2','input',_("Einstellungen zum Selbsteintrag ändern"),'change_self_assign')?>
+&nbsp;
+
+</td>
 </tr>
 <tr>
 <td width="300"><font size="-1"><?=_("Selbsteintrag nur in einer Gruppe erlauben")?></td>
-<td><a href="<?=$PHP_SELF?>?toggle_selfassign_exclusive=<?=(int)$self_assign_exclusive?>&range_id=<?=$range_id?>&view=statusgruppe_sem">
-<img border="0" src="<?=$GLOBALS['ASSETS_URL']?>images/<?=($self_assign_exclusive ? 'haken_transparent.gif' : 'x_transparent.gif')?>"></a></td>
+<td>
+<input type="checkbox" name="toggle_selfassign_exclusive" value="1" <?=($self_assign_exclusive ? 'checked' : '')?>>
+</td>
 </tr>
+</form>
 </table>
 <?}?>
 <form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">

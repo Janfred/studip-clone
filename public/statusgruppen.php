@@ -113,7 +113,7 @@ function PrintAktualStatusgruppen () {
 		printf ("</td><td width=\"10%%\"class=\"topic\" valign=\"middle\" align=\"right\" nowrap>");
 
 		if ((CheckUserStatusgruppe($statusgruppe_id, $user->id) || $rechte) && ($folder_id = CheckStatusgruppeFolder($statusgruppe_id)) ){
-			echo "<a href=\"folder.php?open=$folder_id#anker\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/icon-disc.gif\" ".tooltip(_("Dateiordner vorhanden"))."></a>&nbsp;";
+			echo "<a href=\"folder.php?cmd=tree&open=$folder_id#anker\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/icon-disc.gif\" ".tooltip(_("Dateiordner vorhanden"))."></a>&nbsp;";
 		}
 
 		if ($rechte || CheckUserStatusgruppe($statusgruppe_id, $user->id)) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
