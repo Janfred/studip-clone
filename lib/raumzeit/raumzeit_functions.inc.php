@@ -137,7 +137,7 @@ function getTemplateDataForSingleDate($val, $cycle_id = '') {
 
 	}
 
-	if ($GLOBALS['RESOURCES_HIDE_BOOKINGSTATUS_COLORING']) {
+	if (!$GLOBALS['RESOURCES_ENABLE_BOOKINGSTATUS_COLORING']) {
 		$tpl['class'] = 'printhead';
 	}
 
