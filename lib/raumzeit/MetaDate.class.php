@@ -446,9 +446,9 @@ class MetaDate {
 			}
 
 			//create timestamps for the new singledate
-			$start_time = mktime ($this->cycles[$metadate_id]->start_stunde, $this->cycles[$metadate_id]->start_minute, 0, date("n", $sem_begin), (date("j", $sem_begin)+$corr) + ($this->cycles[$metadate_id]->day -1) + ($week * 7), date("Y", $sem_begin));
+			$start_time = mktime ((int)$this->cycles[$metadate_id]->start_stunde, (int)$this->cycles[$metadate_id]->start_minute, 0, date("n", $sem_begin), (date("j", $sem_begin)+$corr) + ($this->cycles[$metadate_id]->day -1) + ($week * 7), date("Y", $sem_begin));
 
-			$end_time = mktime ($this->cycles[$metadate_id]->end_stunde, $this->cycles[$metadate_id]->end_minute, 0, date("n", $sem_begin), (date("j", $sem_begin)+$corr) + ($this->cycles[$metadate_id]->day -1) + ($week * 7), date("Y", $sem_begin));
+			$end_time = mktime ((int)$this->cycles[$metadate_id]->end_stunde, (int)$this->cycles[$metadate_id]->end_minute, 0, date("n", $sem_begin), (date("j", $sem_begin)+$corr) + ($this->cycles[$metadate_id]->day -1) + ($week * 7), date("Y", $sem_begin));
 
 			/*
 			 * We only create dates, which do not already exist, so we do not overwrite existing dates.
