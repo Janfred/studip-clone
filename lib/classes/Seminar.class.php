@@ -1057,7 +1057,7 @@ class Seminar {
 
 	function getCycleColorClass($cycle_id) {
 		$stat = $this->getStatOfNotBookedRooms($cycle_id);
-		if ($GLOBALS['RESOURCES_ENABLE'] && !$GLOBALS['RESOURCES_ENABLE_BOOKINGSTATUS_COLORING']) {
+		if ($GLOBALS['RESOURCES_ENABLE'] && $GLOBALS['RESOURCES_ENABLE_BOOKINGSTATUS_COLORING']) {
 			if (!$this->metadate->hasDates($cycle_id, $this->filterStart, $this->filterEnd)) {
 				$return = 'steelred';
 			} else {
