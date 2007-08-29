@@ -49,7 +49,7 @@
 			</SELECT>
 			<INPUT type="image" <?=makebutton('buchen', 'src')?> name="bookRoom" align="absmiddle"><BR/>
 			<? } ?>
-			<?=_("freie Raumangabe")?>:
+			<?=_("freie Ortsangabe")?>:
 			<INPUT type="text" name="freeRoomText" size="50" maxlength="255">
 			<?=$GLOBALS['RESOURCES_ENABLE']? _("(f&uuml;hrt <em>nicht</em> zu einer Raumbuchung)") : ''?>
 			<INPUT type="image" <?=makebutton('uebernehmen', 'src')?> name="freeText" align="absmiddle"><BR/>
