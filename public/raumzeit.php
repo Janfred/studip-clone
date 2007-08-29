@@ -606,7 +606,10 @@ while ($tmp_first_date < $end_date) {
 				?>
 			</td>
 		</tr>
-</TABLE>
+</table>
 <?
+if ($_REQUEST['open_close_id']) {
+	echo "\n", '<script language="javascript">new Effect.Highlight(\''.$_REQUEST['open_close_id'].'\', {duration:3})</script>', "\n";
+}
 $sem->store();
 page_close();

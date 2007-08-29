@@ -41,7 +41,7 @@
 			</TR>
 			<TR>
 				<TD class="printcontent">&nbsp;</TD>
-				<TD class="printcontent" colspan="2">
+				<TD class="printcontent" colspan="2" id="<?=$tpl['sd_id']?>">
 					<FONT size="-1">
 					<?
 						$resList->reset();
