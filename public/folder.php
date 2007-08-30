@@ -455,16 +455,49 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 			if (!$db2->affected_rows())
 				$select.="\n<option value=\"".$range_id."_a_\">" . _("Allgemeiner Dateiordner") . "</option>";
 
-			$db2->query("SELECT issue_id, title FROM themen LEFT JOIN folder ON (issue_id = range_id) WHERE themen.seminar_id='$range_id' AND folder_id IS NULL ORDER BY priority");
+			/*$db2->query("SELECT issue_id, title FROM themen LEFT JOIN folder ON (issue_id = range_id) WHERE themen.seminar_id='$range_id' AND folder_id IS NULL ORDER BY priority");
 			while ($db2->next_record()) {
 				$select.="\n<option value=\"".$db2->f("issue_id")."_a_\">" . sprintf(_("Dateiordner zum Thema: %s"), htmlReady($db2->f("title"))) . "</option>";
-			}
+			}*/
+
 			if($SessSemName['class'] == 'sem'){
 				$db2->query("SELECT statusgruppen.name, statusgruppe_id FROM statusgruppen LEFT JOIN folder ON (statusgruppe_id = folder.range_id) WHERE statusgruppen.range_id='$range_id' AND folder_id IS NULL ORDER BY position");
 				while ($db2->next_record()) {
 					$select.="\n<option value=\"".$db2->f("statusgruppe_id")."_a_\">" . sprintf(_("Dateiordner der Gruppe: %s"), htmlReady($db2->f('name'))) . "</option>";
 				}
+
+				$db2->query("SELECT themen_termine.issue_id, termine.date, folder.name, termine.termin_id, date_typ FROM termine LEFT JOIN themen_termine USING (termin_id) LEFT JOIN folder ON (themen_termine.issue_id = folder.range_id) WHERE termine.range_id='$range_id' AND folder.folder_id IS NULL ORDER BY name, termine.date");
+
+				$issues = array();
+				$shown_dates = array();
+
+				while (($db2->next_record()) && (!$db2->f("name"))) {
+
+					if (!$shown_dates[$db2->f('termin_id')]) {
+						$shown_dates[$db2->f('termin_id')] = true;
+						$issue_name = false;
+						if ($db2->f('issue_id')) {
+							if (!$issues[$db2->f('issue_id')]) {
+								$issues[$db2->f('issue_id')] = new Issue(array('issue_id' => $db2->f('issue_id')));
+							}					
+							$issue_name = $issues[$db2->f('issue_id')]->toString();
+							$issue_name = my_substr($issue_name, 0, 20);
+						}
+
+						$select .= "\n".sprintf('<option value="%s_a_">%s</option>',
+							$db2->f("issue_id"),
+							sprintf(_("Ordner für %s [%s]%s"),	
+								date("d.m.Y", $db2->f("date")),
+								$TERMIN_TYP[$db2->f("date_typ")]["name"],
+								($issue_name ? ', '.$issue_name : '') 
+							)
+						);
+
+					}
+				}
+
 			}
+
 			if ($select) {
 				?>
 				<tr>
@@ -550,4 +583,3 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 include ('lib/include/html_end.inc.php');
 // Save data back to database.
 page_close();
-?>
