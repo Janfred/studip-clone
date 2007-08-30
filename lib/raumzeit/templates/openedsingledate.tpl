@@ -44,9 +44,9 @@
 				<TD class="printcontent" colspan="2" id="<?=$tpl['sd_id']?>">
 					<FONT size="-1">
 					<?
-						$resList->reset();
 						if ($GLOBALS['RESOURCES_ENABLE'] && $resList->numberOfRooms()) :
-						echo _("Raum:");
+							$resList->reset();
+							echo _("Raum:");
 					?>
 					<SELECT name="room_sd">
 						<OPTION value="nochange" selected><?=_("keine &Auml;nderung")?></option>

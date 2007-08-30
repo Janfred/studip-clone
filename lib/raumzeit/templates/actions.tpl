@@ -33,8 +33,8 @@
 		<TD colspan="8" class="steelgraulight">
 			<FONT size="-1">
 			<?
-				$resList->reset();
 				if ($GLOBALS['RESOURCES_ENABLE'] && $resList->numberOfRooms()) :
+					$resList->reset();
 					echo _("Raum:");
 			?>
 			<SELECT name="room">
