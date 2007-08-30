@@ -157,10 +157,21 @@ function raumzeit_bookRoom() {
 
 function raumzeit_selectSemester() {
 	global $_REQUEST, $sem;
-	$sem->setStartSemester($_REQUEST['startSemester']);
-	$sem->setEndSemester($_REQUEST['endSemester']);
-	$sem->setTurnus($_REQUEST['turnus']);
-	$sem->setStartWeek($_REQUEST['startWeek']);
+
+    $start_semester = $_REQUEST['startSemester'];
+    $end_semester   = $_REQUEST['endSemester'];
+
+    // test, if start semester is before the end semester
+    // btw.: end_semester == 0 means a duration of one semester (ja logisch! :) )
+    if( $end_semester != 0 && $start_semester >= $end_semester ){
+        $sem->createError(_("Das Startsemester liegt nach dem Endsemester!"));
+        return FALSE;
+    } else {
+    	$sem->setStartSemester($_REQUEST['startSemester']);
+    	$sem->setEndSemester($_REQUEST['endSemester']);
+    	$sem->setTurnus($_REQUEST['turnus']);
+    	$sem->setStartWeek($_REQUEST['startWeek']);
+    }
 }
 
 function raumzeit_addCycle() {
