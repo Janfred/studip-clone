@@ -1,14 +1,14 @@
 <?
 define('SELECTED', ' checked');
-if ($GLOBALS['RESOURCE_ENABLE']) {
+if ($GLOBALS['RESOURCES_ENABLE'] && $GLOBALS['RESOURCES_ENABLE_BOOKINGSTATUS_COLORING']) {
 	$class = 'steelred';
 } else {
-	$class = 'steelgraulight';
+	$class = 'printhead';
 }
 ?>
 <TR>
 	<TD class="steel1" colspan="9">
-		<A name="newCycle">
+		<A name="newCycle" />
 		<FORM action="<?=$PHP_SELF?>" method="post" name="Formular">
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>

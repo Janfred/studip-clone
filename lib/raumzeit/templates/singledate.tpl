@@ -1,7 +1,7 @@
 <? if (!$tpl['deleted']) { ?>
 <TR>
 	<TD width="2%" align="right" valign="center" class="<?=$tpl['class']?>" nowrap="nowrap" height="25">
-		<A name="<?=$tpl['sd_id']?>">
+		<A name="<?=$tpl['sd_id']?>" />
 		<? if (!$_LOCKED) { ?>
 		<A href="<?=$PHP_SELF?>?cmd=<?=($sd_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
 			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/<?=($sd_open[$tpl['sd_id']]) ? 'forumgraurunt' : 'simple_indicator_gray'?>.gif" border="0" align="abstop" <?=tooltip(_("Termin zum Bearbeiten öffnen"))?>>

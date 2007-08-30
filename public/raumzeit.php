@@ -429,7 +429,7 @@ while ($tmp_first_date < $end_date) {
 				</TR>
 				<TR>
 					<TD colspan="9" class="blue_gradient">
-						<A name="irregular_dates">
+						<A name="irregular_dates" />
 						&nbsp;<B><?=_("Unregelm&auml;&szlig;ige Termine/Blocktermine")?></B>
 					</TD>
 				</TR>
@@ -503,6 +503,12 @@ while ($tmp_first_date < $end_date) {
 					</TD>
 				</TR>
 				<? if (isset($cmd) && ($cmd == 'createNewSingleDate')) {
+					if ($GLOBALS['RESOURCES_ENABLE_BOOKINGSTATUS_COLORING']) {
+						$tpl['class'] = 'steelred';
+					} else {
+						$tpl['class'] = 'printhead';
+					}
+
 					include('lib/raumzeit/templates/addsingledate.tpl');
 				} else { ?>
 				<TR>
@@ -525,7 +531,7 @@ while ($tmp_first_date < $end_date) {
 				if (!$_LOCKED && $RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS) { ?>
 				<tr>
 					<td colspan="9" class="blue_gradient">
-						<a name="irregular_dates">
+						<a name="irregular_dates" />
 						&nbsp;<b><?=_("Raum anfordern")?></b>
 					</td>
 				</tr>

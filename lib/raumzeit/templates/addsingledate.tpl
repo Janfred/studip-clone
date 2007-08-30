@@ -7,14 +7,14 @@
 </TR>
 <TR>
 	<TD class="steelgraulight" colspan="9">
-		<A name="newSingleDate">
+		<A name="newSingleDate" />
 		<FORM action="<?=$PHP_SELF?>" method="post">
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
-				<TD width="5%" align="right" valign="top" class="steelred">
+				<TD width="2%" align="right" valign="top" class="<?=$tpl['class']?>">
 					<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
 				</TD>
-				<TD width="95%" nowrap class="steelred" colspan="8">
+				<TD width="98%" nowrap class="<?=$tpl['class']?>" colspan="8">
 					<FONT size="-1">
 						<INPUT type="text" id="day" name="day" maxlength="2" size="2" value="<?=_("dd")?>">.
 						<INPUT type="text" id="month" name="month" maxlength="2" size="2" value="<?=_("mm")?>">.

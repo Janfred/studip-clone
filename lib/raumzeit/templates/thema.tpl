@@ -1,6 +1,6 @@
 <TR>
 	<TD width="10%" class="steel" nowrap>
-		<A name="<?=$tpl['issue_id']?>">
+		<A name="<?=$tpl['issue_id']?>" />
 		<INPUT type="checkbox" name="themen[]" value="<?=$tpl['issue_id']?>"<?=$tpl['selected']?>>
 		<? if ($issue_open[$tpl['issue_id']]) { ?>
 			<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['issue_id']?>#<?=$tpl['issue_id']?>">

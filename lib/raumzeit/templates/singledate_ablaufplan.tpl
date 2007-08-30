@@ -1,6 +1,6 @@
 <TR>
 	<TD width="1%" align="right" valign="center" class="<?=$tpl['class']?>" nowrap="nowrap">
-		<A name="<?=$tpl['sd_id']?>">
+		<A name="<?=$tpl['sd_id']?>" />
 		<A href="<?=$PHP_SELF?>?cmd=<?=($issue_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
 			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($issue_open[$tpl['sd_id']]) ? 'runt' : ''?>.gif" border="0">
 		</A>
@@ -48,25 +48,34 @@
 					</FONT>
 				</TD>
 				<TD class="steel1" valign="top" nowrap="nowrap">
-					<FONT size="-1">
-						<B><?=_("Verknüfpungen mit diesem Termin:")?></B>
-						<br />
-						<? if ($tpl['forumEntry']) {
-							echo _("Forenthema vorhanden").'<BR/>';
-							echo '<INPUT type="hidden" name="forumFolder" value="on">';
-						} else { ?>
-							<INPUT type="checkbox" name="forumFolder<?=$openAll ? '§'.$tpl['sd_id']: ''?>"> <?=_("Thema im Forum anlegen")?><BR/>
-						<? } ?>
-						<? if ($tpl['fileEntry']) {
-							echo _("Dateiordner vorhanden");
-							echo '<INPUT type="hidden" name="fileFolder" value="on">';
-						} else { ?>
-							<INPUT type="checkbox" name="fileFolder<?=$openAll ? '§'.$tpl['sd_id']: ''?>"<?=$tpl['fileEntry']?>> <?=_("Dateiordner anlegen")?>
-						<? } ?>
-						<br/>
-						<br/>
+					<font size="-1">
+						<? if ($modules['forum'] || $modules['documents']) : ?>
+						<b><?=_("Verknüfpungen mit diesem Termin:")?></b><br />
+						<? 
+						if ($modules['forum']) :
+							if ($tpl['forumEntry']) :
+								echo _("Forenthema vorhanden").'<br />';
+								echo '<INPUT type="hidden" name="forumFolder" value="on">';
+							else : 
+								echo '<input type="checkbox" name="forumFolder'.($openAll ? '§'.$tpl['sd_id']: '').'"> ';
+								echo _("Thema im Forum anlegen"). '<br/>';
+							endif;
+						endif;
+
+						if ($modules['documents']) :
+							if ($tpl['fileEntry']) :
+								echo _("Dateiordner vorhanden");
+								echo '<INPUT type="hidden" name="fileFolder" value="on">';
+							else :
+								echo '<input type="checkbox" name="fileFolder'.($openAll ? '§'.$tpl['sd_id']: '').'"'.$tpl['fileEntry'].'>';
+								echo _("Dateiordner anlegen");
+							endif;
+						endif;
+
+						echo '<br /><br />';
+					endif; ?>
 						<b><?=_("Art des Termins")?>:</b> <?=$tpl['art']?>
-					</FONT>
+					</font>
 				</TD>
 			</TR>
 			<TR>

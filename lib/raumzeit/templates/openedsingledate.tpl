@@ -1,7 +1,7 @@
 <? if (!$tpl['deleted']) : ?>
 <TR>
 	<TD class="printcontent" colspan="9">
-		<A name="<?=$tpl['sd_id']?>">
+		<a name="<?=$tpl['sd_id']?>" />
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
 				<TD width="2%" align="left" valign="top" class="<?=$tpl['class']?>">
@@ -116,7 +116,7 @@
 <? else : ?>
 <tr>
 	<td class="printcontent" colspan="9">
-		<a name="<?=$tpl['sd_id']?>">
+		<a name="<?=$tpl['sd_id']?>" />
 		<table cellpadding="2" cellspacing="0" border="0" width="100%">
 			<tr>
 				<td width="2%" align="left" valign="center" class="<?=$tpl['class']?>" nowrap="nowrap">

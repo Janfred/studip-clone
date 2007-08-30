@@ -28,6 +28,7 @@ $sess->register('raumzeitFilter');
 $issue_open = array();
 
 require_once ('lib/classes/Seminar.class.php');
+require_once ('lib/classes/Modules.class.php');
 require_once ('lib/raumzeit/raumzeit_functions.inc.php');
 require_once ('lib/raumzeit/themen_ablaufplan.inc.php');
 
@@ -38,6 +39,9 @@ if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
 	$resList = new ResourcesUserRoomsList($user->id, TRUE, FALSE, TRUE);
 }
+
+$moduleClass = new Modules();
+$modules = $moduleClass->getLocalModules($id);
 
 //Output starts here
 
@@ -187,9 +191,12 @@ $termine = getAllSortedSingleDates($sem);
 					<td class="steel1" colspan="4"></td>
 					<td class="steel1" colspan="2" align="left" nowrap="nowrap">
 						<font size="-1">
+							<? if ($modules['forum']) : ?>
 							<input type="checkbox" name="createAllForumFolders"> <?=_("Für alle Termine einen Forumsordner anlegen")?>
 							<br />
+							<? endif;	if ($modules['documents']) : ?>
 							<input type="checkbox" name="createAllFileFolders"> <?=_("Für alle Termine einen Dateiordner anlegen")?>
+							<? endif; ?>
 						</font>
 					</td>
 				</tr>
@@ -224,11 +231,14 @@ $termine = getAllSortedSingleDates($sem);
 						$tpl['cycle_id'] = $metadate_id;
 						$tpl['art'] = $TERMIN_TYP[$tpl['type']]['name'];
 
-    				//calendar jump
+    				// calendar jump
     				$tpl['calendar'] = "&nbsp;<a href=\"calendar.php?cmd=showweek&atime=" . $singledate->getStartTime();
     				$tpl['calendar'] .= "\"><img style=\"vertical-align:bottom\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" ";
     				$tpl['calendar'] .= tooltip(sprintf(_("Zum %s in den persönlichen Terminkalender springen"), date("m.d", $singledate->getStartTime()))); 
     				$tpl['calendar'] .= ' border="0"></a>';
+
+						// activated modules
+						$tpl['modules'] = $modules;
  
 						$issue_id = '';
 						if (is_array($tmp_ids = $singledate->getIssueIDs())) {
