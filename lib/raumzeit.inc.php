@@ -174,6 +174,7 @@ function raumzeit_selectSemester() {
     } else {
     	$sem->setStartSemester($_REQUEST['startSemester']);
     	$sem->setEndSemester($_REQUEST['endSemester']);
+			$sem->removeAndUpdateSingleDates();
     	$sem->setTurnus($_REQUEST['turnus']);
     	$sem->setStartWeek($_REQUEST['startWeek']);
     }

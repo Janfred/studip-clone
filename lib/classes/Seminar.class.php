@@ -598,16 +598,23 @@ class Seminar {
 			// logging <<<<<<
 			$this->semester_start_time = $start;
 			$this->metadate->setSeminarStartTime($start);
-			SeminarDB::removeOutRangedSingleDates($this->semester_start_time, $this->getEndSemesterVorlesEnde(), $this->id);
 			$this->createMessage(_("Das Startsemester wurde geändert."));
 			$this->createInfo(_("Beachten Sie, dass Termine, die nicht mit den Einstellungen der regelmäßigen Zeit übereinstimmen (z.B. auf Grund einer Verschiebung der regelmäßigen Zeit), teilweise gelöscht sein könnten!"));
-			foreach ($this->metadate->cycles as $key => $val) {
-				$this->metadate->createSingleDates($key);
-				$this->metadate->cycles[$key]->termine = NULL;
-			}
 			return TRUE;
 		}
 		return FALSE;
+	}
+
+	function removeAndUpdateSingleDates() {
+		SeminarDB::removeOutRangedSingleDates($this->semester_start_time, $this->getEndSemesterVorlesEnde(), $this->id);
+
+		foreach ($this->metadate->cycles as $key => $val) {
+			$this->metadate->cycles[$key]->readSingleDates();
+			$this->metadate->createSingleDates($key);
+			$this->metadate->cycles[$key]->termine = NULL;
+		}
+
+		$this->metadate->cycles[$key]->readSingleDates($this->filterStart, $this->filterEnd);	// load the SingleDates with the appropriate filter
 	}
 
 	function getStartSemester() {
@@ -629,7 +636,6 @@ class Seminar {
 			if ($end == 0) {					// the seminar takes place just in the selected start-semester
 				$this->semester_duration_time = 0;
 				$this->metadate->setSeminarDurationTime(0);
-				SeminarDB::removeOutRangedSingleDates($this->semester_start_time, $this->getEndSemesterVorlesEnde(), $this->id);
 				// logging >>>>>>
 				log_event("SEM_SET_ENDSEMESTER", $this->getId(), $end, 'Laufzeit: 1 Semester');
 				// logging <<<<<<
@@ -646,7 +652,6 @@ class Seminar {
 				// logging <<<<<<
 				$this->semester_duration_time = $end - $this->semester_start_time;	// the duration is stored, not the real end-point
 				$this->metadate->setSeminarDurationTime($this->semester_duration_time);
-				SeminarDB::removeOutRangedSingleDates($this->semester_start_time, $this->getEndSemesterVorlesEnde(), $this->id);	// delete obsolete SingleDates
 			}
 
 			$this->createMessage(_("Die Dauer wurde geändert."));
@@ -676,7 +681,6 @@ class Seminar {
 				foreach ($this->metadate->cycles as $key => $val) {
 					$this->metadate->createSingleDates(array('metadate_id' => $key, 'startAfterTimeStamp' => $startAfterTimeStamp));
 					$this->metadate->cycles[$key]->termine = NULL;	// emtpy the SingleDates for each cycle, so that SingleDates, which were not in the current view, are not loaded and therefore should not be visible
-					$this->metadate->cycles[$key]->readSingleDates($this->filterStart, $this->filterEnd);	// load the SingleDates with the appropriate filter
 				}
 			}
 		}
