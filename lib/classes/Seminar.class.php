@@ -625,11 +625,7 @@ class Seminar {
 		$previousEndSemester = $this->getEndSemester();		// save the end-semester before it is changed, so we can choose lateron in which semesters we need to be rebuilt the SingleDates
 
 		if ($end != $this->getEndSemester()) {	// only change Duration if it differs from the current one
-			if ($end > ($this->getStartSemester() + strtotime('+8 month', 0)) && !$perm->have_perm('admin')) {
-				$this->createError(_("Nur Admin oder höher kann die Dauer einer Veranstaltung auf länger als 2 Semester setzen!"));
-				return FALSE;
-			}
-
+        
 			if ($end == 0) {					// the seminar takes place just in the selected start-semester
 				$this->semester_duration_time = 0;
 				$this->metadate->setSeminarDurationTime(0);
@@ -638,17 +634,12 @@ class Seminar {
 				log_event("SEM_SET_ENDSEMESTER", $this->getId(), $end, 'Laufzeit: 1 Semester');
 				// logging <<<<<<
 			} else if ($end == -1) {	// the seminar takes place in every semester above and including the start-semester
-				if ($perm->have_perm("admin")) {	// only admin or higher may choose eternal duration
-					// logging >>>>>>
-					log_event("SEM_SET_ENDSEMESTER", $this->getId(), $end, 'Laufzeit: unbegrenzt');
-					// logging <<<<<<
-					$this->semester_duration_time = -1;
-					$this->metadate->setSeminarDurationTime(-1);
-					SeminarDB::removeOutRangedSingleDates($this->semester_start_time, $this->getEndSemesterVorlesEnde(), $this->id);
-				} else {
-					$this->createError(_("Nur Admin oder höher kann die Dauer einer Veranstaltung auf \"ungebrenzt\" setzen!"));
-					return FALSE;
-				}
+				// logging >>>>>>
+				log_event("SEM_SET_ENDSEMESTER", $this->getId(), $end, 'Laufzeit: unbegrenzt');
+				// logging <<<<<<
+				$this->semester_duration_time = -1;
+				$this->metadate->setSeminarDurationTime(-1);
+				SeminarDB::removeOutRangedSingleDates($this->semester_start_time, $this->getEndSemesterVorlesEnde(), $this->id);
 			} else {									// the seminar takes place  between the selected start~ and end-semester
 				// logging >>>>>>
 				log_event("SEM_SET_ENDSEMESTER", $this->getId(), $end);
