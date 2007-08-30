@@ -53,8 +53,8 @@ class Step25RaumzeitMigrations extends DBMigration
               PRIMARY KEY  (`termin_id`),
               KEY `range_id` (`range_id`),
               KEY `autor_id` (`autor_id`),
-							KEY `metadate_id` (`metadate_id`),
-							KEY `date` (`date`)
+                            KEY `metadate_id` (`metadate_id`),
+                            KEY `date` (`date`)
             ) TYPE=MyISAM PACK_KEYS=1;
         ");
             
@@ -209,29 +209,44 @@ class Step25RaumzeitMigrations extends DBMigration
         do {
             // call the conversion subroutine with number of rows that should get processed           
 
-            // create cURL-Handle
-            $ch = curl_init();
+            // removed curl access, in favor of file_get_contents (with fopen wrappers)
+// curl:
+//            // create cURL-Handle
+//            $ch = curl_init();
+//
+//            // set url and other option
+//            curl_setopt($ch, CURLOPT_URL, $CONVERSION_SUBROUTINE_URL ."?step_size=".$STEP_SIZE."&start_at=".$start_at."&secret=".$secret_password);
+//            curl_setopt($ch, CURLOPT_HEADER, 0);
+//            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+//
+//            // make the call to the url
+//            $response = curl_exec ($ch);
+//
+//            // close cURL-Handle und gebe die Systemresourcen frei
+//            curl_close($ch);
+//
+//            // success ?
+//            if( $response == FALSE ){
+//                fwrite($logfile_handle, "Error while executing subroutine. Stopping.\n");
+//                throw new Exception("Error while executing subroutine.");
+//            }
 
-            // set url and other option
-            curl_setopt($ch, CURLOPT_URL, $CONVERSION_SUBROUTINE_URL ."?step_size=".$STEP_SIZE."&start_at=".$start_at."&secret=".$secret_password);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
-
-            // make the call to the url
-            $response = curl_exec ($ch);
-
-            // close cURL-Handle und gebe die Systemresourcen frei
-            curl_close($ch);
-
-
+            // open URL via fopen = "call" subroutine
+            $subroutine_url = $CONVERSION_SUBROUTINE_URL ."?step_size=".$STEP_SIZE."&start_at=".$start_at."&secret=".$secret_password; 
+            $response = file_get_contents( $subroutine_url );
+            
             // success ?
             if( $response == FALSE ){
-                fwrite($logfile_handle, "Error while executing subroutine. Stopping.\n");
+                $this->write( get_class($this)." - Error while executing subroutine. Can't open URL. Stopping.\n");
+                fwrite($logfile_handle, "Error while executing subroutine. Can't open URL '$subroutine_url'. Stopping.\n");
                 throw new Exception("Error while executing subroutine.");
-            }
+            }            
+            
+
             // some not quite nice error handling:
             if( substr($response,0,5) == "ERROR" ){
                 // write output to logfile
+                $this->write( get_class($this)." - Error while executing subroutine. Please see logfile for details. Stopping.\n");
                 fwrite( $logfile_handle, $response);
                 fwrite($logfile_handle, "Error while executing subroutine. Stopping.\n");
                 throw new Exception("Error while executing subroutine.". $response);
@@ -240,6 +255,15 @@ class Step25RaumzeitMigrations extends DBMigration
             // get last line (holds the number of converted rows)
             $begin_of_last_line = strrpos( $response, "\n")+1;
             $numberOfConvertedRows = substr($response, $begin_of_last_line, strlen($response)-$begin_of_last_line);
+
+            // check, if $numberOfConvertedRows is really a number
+            if( !is_numeric($numberOfConvertedRows) ){
+                $this->write( get_class($this)." - Error while executing subroutine. Please see logfile for details. Stopping.\n");
+                // write output to logfile
+                fwrite( $logfile_handle, $response."\n");
+                fwrite($logfile_handle, "Error while executing subroutine. Invalid number of converted lines found. Stopping.\n");
+                throw new Exception("Error while executing subroutine.\n ". $response);
+            }
 
             // cutoff last line
             $response = substr($response, 0, $begin_of_last_line);
