@@ -161,9 +161,14 @@ function raumzeit_selectSemester() {
     $start_semester = $_REQUEST['startSemester'];
     $end_semester   = $_REQUEST['endSemester'];
 
+		// The user meant actually to choose "1 Semester"
+		if ($start_semester == $end_semester) {
+			$end_semester = 0;
+		}
+
     // test, if start semester is before the end semester
     // btw.: end_semester == 0 means a duration of one semester (ja logisch! :) )
-    if( $end_semester != 0 && $start_semester >= $end_semester ){
+    if ($end_semester != 0 && $start_semester >= $end_semester) {
         $sem->createError(_("Das Startsemester liegt nach dem Endsemester!"));
         return FALSE;
     } else {
