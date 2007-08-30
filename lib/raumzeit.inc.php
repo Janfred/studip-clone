@@ -156,7 +156,9 @@ function raumzeit_bookRoom() {
 }
 
 function raumzeit_selectSemester() {
-	global $_REQUEST, $sem;
+	global $_REQUEST, $sem, $semester;
+		
+		if (!$semester) $semester = new SemesterData();
 
     $start_semester = $_REQUEST['startSemester'];
     $end_semester   = $_REQUEST['endSemester'];
@@ -168,7 +170,7 @@ function raumzeit_selectSemester() {
 
     // test, if start semester is before the end semester
     // btw.: end_semester == 0 means a duration of one semester (ja logisch! :) )
-    if ($end_semester != 0 && $start_semester >= $end_semester) {
+    if ($end_semester != 0 && $end_semester != -1 && $start_semester >= $end_semester) {
         $sem->createError(_("Das Startsemester liegt nach dem Endsemester!"));
         return FALSE;
     } else {
@@ -177,6 +179,17 @@ function raumzeit_selectSemester() {
 			$sem->removeAndUpdateSingleDates();
     	$sem->setTurnus($_REQUEST['turnus']);
     	$sem->setStartWeek($_REQUEST['startWeek']);
+
+			// apply new filter for choosen semester (if necessary)
+			$current_semester = $semester->getCurrentSemesterData();
+
+			// If the new duration includes the current semester, we set the semester-chooser to the current semester
+			if ($current_semester['beginn'] >= $sem->getStartSemester() && $current_semester['beginn'] <= $sem->getEndSemesterVorlesEnde()) {
+				$sem->setFilter($current_semester['beginn']);
+			} else {
+				// otherwise we set it to the first semester
+				$sem->setFilter($sem->getStartSemester());
+			}
     }
 }
 
@@ -214,7 +227,7 @@ function raumzeit_doDeleteCycle() {
 }
 
 function raumzeit_doAddSingleDate() {
-	global $_REQUEST, $sem, $raumzeitFilter;
+	global $_REQUEST, $sem;
 	$termin = new SingleDate();
 	$start = mktime($_REQUEST['start_stunde'], $_REQUEST['start_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
 	$ende = mktime($_REQUEST['end_stunde'], $_REQUEST['end_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
@@ -222,8 +235,7 @@ function raumzeit_doAddSingleDate() {
 	$termin->setDateType($_REQUEST['dateType']);
 
 	if ($start < $sem->filterStart || $ende > $sem->filterEnd) {
-		$raumzeitFilter = 'all';
-		$sem->applyTimeFilter(0, 0);
+		$sem->setFilter('all');
 	}
 	$sem->addSingleDate($termin);
 	$sem->bookRoomForSingleDate($termin->getSingleDateID(), $_REQUEST['room']);

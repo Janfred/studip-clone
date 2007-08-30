@@ -614,7 +614,6 @@ class Seminar {
 			$this->metadate->cycles[$key]->termine = NULL;
 		}
 
-		$this->metadate->cycles[$key]->readSingleDates($this->filterStart, $this->filterEnd);	// load the SingleDates with the appropriate filter
 	}
 
 	function getStartSemester() {
@@ -1155,6 +1154,21 @@ class Seminar {
 	function applyTimeFilter($start, $end) {
 		$this->filterStart = $start;
 		$this->filterEnd = $end;
+	}
+
+	function setFilter($timestamp) {
+		global $raumzeitFilter, $semester;
+
+		if ($timestamp == 'all') {
+			$raumzeitFilter = 'all';
+			$this->applyTimeFilter(0, 0);
+		} else {
+			if (!$semester) $semester = new SemesterData();
+
+			$filterSemester = $semester->getSemesterDataByDate($timestamp);
+	    $raumzeitFilter = $filterSemester['beginn'];
+			$this->applyTimeFilter($filterSemester['beginn'], $filterSemester['ende']);
+		}
 	}
 
 	function createQuestion($question, $approvalCmd) {
