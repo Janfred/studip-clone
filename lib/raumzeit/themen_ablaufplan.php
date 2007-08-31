@@ -172,6 +172,9 @@ $termine = getAllSortedSingleDates($sem);
 						</A>
 					</TD>
 				</TR>
+                <? else : ?>
+                    <br> 
+                    <?= _("Im ausgewählten Zeitraum sind keine Termine vorhanden."); ?>
 				<? endif; ?>
 				<TR>
 					<TD class="blank" colspan="6" height="2"></TD>
