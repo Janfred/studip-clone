@@ -41,7 +41,7 @@
 			<TR>
 				<TD class="steel1">
 					<FONT size="-1">
-						<B><?=("Titel:")?></B><BR/>
+						<B><?=("Thema:")?></B><BR/>
 						<INPUT type="text" name="theme_title<?=$openAll ? '§'.$tpl['sd_id']: ''?>" maxlength="255" size="50" value="<?=$tpl['theme_title']?>" style="width: 98%"><BR/>
 						<B><?=_("Beschreibung:")?></B><BR/>
 						<TEXTAREA name="theme_description<?=$openAll ? '§'.$tpl['sd_id']: ''?>" rows="5" cols="50" style="width: 98%"><?=$tpl['theme_description']?></TEXTAREA><BR/>
@@ -67,7 +67,7 @@
 								echo _("Dateiordner vorhanden");
 								echo '<INPUT type="hidden" name="fileFolder" value="on">';
 							else :
-								echo '<input type="checkbox" name="fileFolder'.($openAll ? '§'.$tpl['sd_id']: '').'"'.$tpl['fileEntry'].'>';
+								echo '<input type="checkbox" name="fileFolder'.($openAll ? '§'.$tpl['sd_id']: '').'"'.$tpl['fileEntry'].'> ';
 								echo _("Dateiordner anlegen");
 							endif;
 						endif;
