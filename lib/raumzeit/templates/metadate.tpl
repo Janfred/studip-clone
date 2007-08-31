@@ -35,10 +35,12 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 					<? } ?>
 				</TD>
 				<TD width="20%" nowrap="nowrap" class="<?=$tpl['class']?>">
+				<? if( $GLOBALS['RESOURCES_ALLOW_ROOM_REQUESTS']) : ?>
 					<FONT size="-1">
 						<B><?=_("Raumanfragen:")?></B>
 						<?=$tpl['anfragen']?>
 					</FONT>
+				<? endif; ?>
 				</TD>
 				<? } else { ?>
 				<TD width="55%" class="<?=$tpl['class']?>">&nbsp;</TD>
