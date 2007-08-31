@@ -473,8 +473,8 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 
 				while (($db2->next_record()) && (!$db2->f("name"))) {
 
-					if (!$shown_dates[$db2->f('termin_id')]) {
-						$shown_dates[$db2->f('termin_id')] = true;
+					/*if (!$shown_dates[$db2->f('termin_id')]) {
+						$shown_dates[$db2->f('termin_id')] = true;*/
 						$issue_name = false;
 						if ($db2->f('issue_id')) {
 							if (!$issues[$db2->f('issue_id')]) {
@@ -493,7 +493,7 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 							)
 						);
 
-					}
+					//}
 				}
 
 			}
