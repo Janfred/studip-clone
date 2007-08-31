@@ -128,7 +128,8 @@ if ($cmd == 'openAll') $openAll = true;
 				$semester = new SemesterData();
 				$all_semester = $semester->getAllSemesterData();
 
-				if (is_array($termine)){
+				if (is_array($termine) && sizeof($termine) > 0) {
+                    
     				foreach ($termine as $singledate_id => $singledate) {
     
     					if ( ($grenze == 0) || ($grenze < $singledate->getStartTime()) ) {
@@ -222,7 +223,16 @@ if ($cmd == 'openAll') $openAll = true;
     						include('lib/raumzeit/templates/singledate_student.tpl');
     					}
            }
-				}
+				} else {
+                ?>
+                    <TR>
+                        <TD align="center">
+                            <br> 
+                            <?= _("Im ausgewählten Zeitraum sind keine Termine vorhanden."); ?>
+                        </TD>
+                    </TR>
+                <?                    
+                }
 				?>
 			</TABLE>
 		</TD>
