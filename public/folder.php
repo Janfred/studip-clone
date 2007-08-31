@@ -134,6 +134,18 @@ if ($rechte || $owner || $create_folder_perm) {
 			$titel = _("Dateiordner der Gruppe:") . ' ' . $titel;
 			$description = _("Ablage für Ordner und Dokumente dieser Gruppe");
 			$permission = 15;
+		} else if ($data = SingleDateDB::restoreSingleDate($open_id)) {
+			// If we create a folder which has not yet an issue, we just create one
+			$issue = new Issue(array('seminar_id' => $SessionSeminar));
+			$issue->setTitle(_("Ohne Titel"));
+			$termin = new SingleDate($open_id);
+			$termin->addIssueID($issue->getIssueID());
+			$issue->store();
+			$termin->store();
+
+			$open_id = $issue->getIssueID();
+			$titel = $issue->getTitle();
+			$description= _("Themenbezogener Dateiordner");
 		} else {
 			$db->query("SELECT title FROM themen WHERE issue_id='".$open_id."'");
 			if ($db->next_record()) {
@@ -482,10 +494,13 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 							}					
 							$issue_name = $issues[$db2->f('issue_id')]->toString();
 							$issue_name = my_substr($issue_name, 0, 20);
+							$option_id = $db2->f('issue_id');
+						} else {
+							$option_id = $db2->f('termin_id');
 						}
 
 						$select .= "\n".sprintf('<option value="%s_a_">%s</option>',
-							$db2->f("issue_id"),
+							$option_id,
 							sprintf(_("Ordner für %s [%s]%s"),	
 								date("d.m.Y", $db2->f("date")),
 								$TERMIN_TYP[$db2->f("date_typ")]["name"],

@@ -141,5 +141,5 @@ class SingleDateDB {
 		$db->query("DELETE FROM resources_requests WHERE termin_id = '$termin_id'");
 		return TRUE;
 	}
+
 }
-?>
