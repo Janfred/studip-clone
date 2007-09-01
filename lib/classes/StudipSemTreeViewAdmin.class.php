@@ -694,7 +694,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 			$head .= " (" . $this->tree->getNumEntries($item_id,true) . ") " ;
 		}
 		if ($item_id != $this->start_item_id && $this->isParentAdmin($item_id) && $item_id != $this->edit_item_id){
-			$head .= "</td><td align=\"rigth\" valign=\"bottom\" class=\"printhead\">";
+			$head .= "</td><td nowrap align=\"right\" valign=\"bottom\" class=\"printhead\">";
 			if (!$this->tree->isFirstKid($item_id)){
 				$head .= "<a href=\"". $this->getSelf("cmd=OrderItem&direction=up&item_id=$item_id") .
 				"\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" " .
