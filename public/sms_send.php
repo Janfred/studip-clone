@@ -418,7 +418,7 @@ if ($send_view) {
 		}
 	}
 	// we simply answer, not more or less
-	if ($_REQUEST['answer_to'] && !$quote) {
+	else if (!isset($_REQUEST['messagesubject']) && $_REQUEST['answer_to']) {
 		$db->query ("SELECT subject, message FROM message WHERE message_id = '". $_REQUEST['answer_to']. "' ");
 		$db->next_record();
 		if(substr($db->f("subject"), 0, 3) != "RE:") {
