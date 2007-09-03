@@ -112,8 +112,8 @@ class Step25RaumzeitMigrations extends DBMigration
             VALUES ( 'bc3004618b17b29dc65e10e89be9a7a0', '', 'RESOURCES_ENABLE_BOOKINGSTATUS_COLORING', '1', '1', 'boolean', 'global', '', '0', '0', '0', 'Enable the colored presentation of the room booking status of a date', '', '');
         ");
         
-        $this->write( get_class($this)."Finished with creating db schema.");
-        $this->write( get_class($this)."Starting data conversion... - this may take a very long time");
+        $this->write( get_class($this).": Finished with creating db schema.");
+        $this->write( get_class($this).": Starting data conversion... - this may take a very long time");
 
         // create secret password for subroutine authentication
         $secret_password = md5(uniqid("ditnuc6532ktn"));
@@ -133,7 +133,7 @@ class Step25RaumzeitMigrations extends DBMigration
             DELETE FROM `config` WHERE config_id = 'migration5';
         ");
 
-        $this->write( get_class($this)."Finished with data conversion...");
+        $this->write( get_class($this).": Finished with data conversion...");
     }
     
     
@@ -287,6 +287,8 @@ class Step25RaumzeitMigrations extends DBMigration
         fwrite($logfile_handle, "(". date("Y-m-d H:i:s T") .") Finished Step 2. Converted $counter seminars.\n");
         
         fwrite($logfile_handle, "(". date("Y-m-d H:i:s T") .") Conversion finished.");
+
+        $this->write( get_class($this).": Converted $counter seminars.");
         
         // close logfile
         fclose($logfile_handle);        
