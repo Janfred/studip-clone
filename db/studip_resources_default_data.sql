@@ -3,9 +3,9 @@
 -- 
 
 INSERT INTO `resources_categories` (`category_id`, `name`, `description`, `system`, `is_room`, `iconnr`) VALUES ('3cbcc99c39476b8e2c8eef5381687461', 'Gebäude', '', 0, 0, 1);
-INSERT INTO `resources_categories` (`category_id`, `name`, `description`, `system`, `is_room`, `iconnr`) VALUES ('85d62e2a8a87a2924db8fc4ed3fde09d', 'Hörsaäle', '', 0, 1, 1);
-INSERT INTO `resources_categories` (`category_id`, `name`, `description`, `system`, `is_room`, `iconnr`) VALUES ('f3351baeca8776d4ffe4b672f568cbed', 'Geräte', '', 0, 0, 1);
-INSERT INTO `resources_categories` (`category_id`, `name`, `description`, `system`, `is_room`, `iconnr`) VALUES ('5a72dfe3f0c0295a8fe4e12c86d4c8f4', 'Übungsräume', '', 0, 1, 1);
+INSERT INTO `resources_categories` (`category_id`, `name`, `description`, `system`, `is_room`, `iconnr`) VALUES ('85d62e2a8a87a2924db8fc4ed3fde09d', 'Hörsaal', '', 0, 1, 1);
+INSERT INTO `resources_categories` (`category_id`, `name`, `description`, `system`, `is_room`, `iconnr`) VALUES ('f3351baeca8776d4ffe4b672f568cbed', 'Gerät', '', 0, 0, 1);
+INSERT INTO `resources_categories` (`category_id`, `name`, `description`, `system`, `is_room`, `iconnr`) VALUES ('5a72dfe3f0c0295a8fe4e12c86d4c8f4', 'Übungsraum', '', 0, 1, 1);
 
 -- 
 -- Daten für Tabelle `resources_categories_properties`
