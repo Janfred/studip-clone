@@ -437,9 +437,10 @@ function PrintInstitutMembers ($range_id)
 				$multis .= '<li>' . htmlReady(get_fullname($one['user_id']) . ' ('. $one['gruppen'] . ')').'</li>';
 			}
 			$multis .= '</ul>';
-			$msg[] = array('info', 
-			_("Achtung, folgende Teilnehmer sind bereits in mehr als einer Gruppe eingetragen. Sie müssen die Eintragungen manuell korrigieren.")
+			$msg[] = array('error', 
+			_("Achtung, folgende Teilnehmer sind bereits in mehr als einer Gruppe eingetragen. Sie müssen die Eintragungen manuell korrigieren, um den exklusiven Selbsteintrag einzuschalten.")
 			. '<br>'. $multis);
+			SetSelfAssignExclusive($range_id, false);
 		}
 	}
 	
@@ -529,8 +530,9 @@ if($view == 'statusgruppe_sem'){
 	        &nbsp; &nbsp; <font size="2"><?=_("neue Gruppengr&ouml;&szlig;e:")?></font>
 	        <input name="new_statusgruppe_size" type="text" value="<? echo $gruppe_anzahl;?>" size="3"><font size="2">&nbsp; &nbsp;
 <?	        echo _("Selbsteintrag");
-		echo "<input name=\"new_selfassign\" type=\"checkbox\" value=\"".CheckSelfAssign($edit_id)."\"";
-	        if (CheckSelfAssign($edit_id))
+		$check_self_assign = CheckSelfAssign($edit_id);
+		echo "<input name=\"new_selfassign\" type=\"checkbox\" value=\"".($check_self_assign == 0 ? 1 : $check_self_assign)."\"";
+	        if ($check_self_assign)
 	        	echo "checked";
 	        echo ">";
 			if($show_doc_folder){
