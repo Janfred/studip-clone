@@ -183,7 +183,7 @@ function aux_rtf() {
 
 	$data = '{\rtf1\ansi\ansicpg1252\deff0\deflang1031{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}'."\n";
 
-	$data .= '\tdrow'."\n";
+	$data .= '\trowd'."\n";
 	$step = floor(8305 / $max);
 	$cur = 0;
 	for ($i = 0; $i < $max; $i++) {
