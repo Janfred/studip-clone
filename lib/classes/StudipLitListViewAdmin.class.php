@@ -25,6 +25,7 @@ require_once('lib/classes/TreeView.class.php');
 require_once('lib/classes/StudipLitList.class.php');
 require_once('lib/classes/StudipLitClipBoard.class.php');
 require_once('lib/datei.inc.php');
+require_once('lib/classes/lit_search_plugins/StudipLitSearchPluginZ3950Abstract.class.php');
 
 /**
 *
@@ -241,7 +242,7 @@ class StudipLitListViewAdmin extends TreeView{
 		$kids = $this->tree->getKids($item_id);
 		usort($kids, create_function('$a,$b',
 				'$the_tree =& TreeAbstract::GetInstance("StudipLitList", "'.$this->tree->range_id.'");
-				return strnatcasecmp($the_tree->getValue($a, "name"),$the_tree->getValue($b, "name"));
+				return strnatcasecmp(StudipLitSearchPluginZ3950Abstract::ConvertUmlaute($the_tree->getValue($a, "name")),StudipLitSearchPluginZ3950Abstract::ConvertUmlaute($the_tree->getValue($b, "name")));
 				'));
 		foreach($kids as $pos => $kid_id){
 			if ($this->tree->isElement($kid_id)){
