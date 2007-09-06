@@ -428,13 +428,64 @@ class MetaDate {
 		// This variable is used to check if a given singledate shall be created in a bi-weekly seminar.
 		$odd_or_even = 1 - ($this->start_woche % 2);
 
+        if ($CONVERT_SINGLE_DATES) {
+            // calculate the number of matching single dates for this metadate (regular date):
+            $single_date_count = 0;
+            
+            // loop through every (unconverted) single date
+            foreach ($irregularSingleDates as $key => $val) {
+
+                // loop through every week
+                $week = 0;
+                do {
+                    //create timestamps for the singledate to be tested
+                    $start_time = mktime ((int)$this->cycles[$metadate_id]->start_stunde, (int)$this->cycles[$metadate_id]->start_minute, 0, date("n", $sem_begin), (date("j", $sem_begin)+$corr) + ($this->cycles[$metadate_id]->day -1) + ($week * 7), date("Y", $sem_begin));
+                    $end_time = mktime ((int)$this->cycles[$metadate_id]->end_stunde, (int)$this->cycles[$metadate_id]->end_minute, 0, date("n", $sem_begin), (date("j", $sem_begin)+$corr) + ($this->cycles[$metadate_id]->day -1) + ($week * 7), date("Y", $sem_begin));
+                
+                    // compare the calculated "would-be" dates (start_time, end_time) with the existing single dates
+                    if (($val->date == $start_time) && ($val->end_time == $end_time)) {
+                        // match found: count as single date for this regular date
+                        $single_date_count++;
+                    }                
+                    $week++;
+                }while($end_time < $sem_end);            
+            } 
+            
+            // were there any matching single dates?
+            if($single_date_count > 0 ) {
+
+                // check, if array is already created, if not, do so
+                if($GLOBALS["TEMP_METADATE_HAS_EXISTING_SCHEDULE_PLAN"] == NULL){
+                    $GLOBALS["TEMP_METADATE_HAS_EXISTING_SCHEDULE_PLAN"] = array();
+                } 
+
+                // set flag for further calls of this method here, that 
+                // for this regular (meta)date there have been matching single dates;
+                // this means that there was an "ablaufplan" created;
+                // if so, no additional dates should be created for 
+                // this regular date, only existing dates should be used                
+                $GLOBALS["TEMP_METADATE_HAS_EXISTING_SCHEDULE_PLAN"][$metadate_id] = TRUE;
+            }
+        
+        }
+            
 		$week = 0;
 
 		// loop through all possible singledates for this regular time-entry
 		do {
+            
 			// if dateExists is true, the singledate will not be created. Default is of course to create the singledate
-			$dateExists = false;
-
+            $dateExists = false;
+            
+            // (TODO: This code an the code below should be perfomance optimized. Many follow up check's are unecessary, if $dateExists gets true.)
+            
+            // check, if this metadate has been marked
+            if($GLOBALS["TEMP_METADATE_HAS_EXISTING_SCHEDULE_PLAN"] != NULL && $GLOBALS["TEMP_METADATE_HAS_EXISTING_SCHEDULE_PLAN"][$metadate_id] != NULL) {
+                if( $GLOBALS["TEMP_METADATE_HAS_EXISTING_SCHEDULE_PLAN"][$metadate_id] == TRUE){
+                           $dateExists = true;
+                }
+            }
+            
 			// do not create singledates, if they are earlier then the chosen start-week
 			if ($this->start_woche > $week) $dateExists = true;
 
