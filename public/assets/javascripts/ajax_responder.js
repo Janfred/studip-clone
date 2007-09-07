@@ -2,12 +2,15 @@ Event.observe(window, 'load', function() {
   var indicator = $('ajax_notification');
   if (indicator) {
     Ajax.Responders.register({
-      onCreate:   function() {
+      onCreate:   function(request) {
         if (Ajax.activeRequestCount) {
-          indicator.show();
+          request.usability_timer = setTimeout(function() {
+            indicator.show();
+          }, 300);
         }
       },
-      onComplete: function() {
+      onComplete: function(request) {
+        clearTimeout(request.usability_timer);
         if (!Ajax.activeRequestCount) {
           indicator.hide();
         }
