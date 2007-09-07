@@ -317,7 +317,7 @@ function groups ($parent_id) {
 					if (!($freetype)) {
 	 					fputs($fo_file,"          <fo:table-cell ><fo:block start-indent=\"3mm\" end-indent=\"3mm\" padding-left=\"3mm\" padding-right=\"3mm\" padding-top=\"4mm\" padding-bottom=\"4mm\">\n");
 						if (do_template("show_graphics")) {
-	 						fputs($fo_file,"            <fo:external-graphic content-width=\"70pt\" content-height=\"60pt\" src=\"url(".$tmp_path_export."/evalsum".$db_questions->f("evalquestion_id").$auth->auth["uid"].".".$GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT'].")\"/>\n");
+	 						fputs($fo_file,"            <fo:external-graphic content-width=\"70mm\" content-height=\"60mm\" src=\"url('file:///".$tmp_path_export."/evalsum".$db_questions->f("evalquestion_id").$auth->auth["uid"].".".$GLOBALS['EVAL_AUSWERTUNG_GRAPH_FORMAT']."')\"/>\n");
 						}
 	 					fputs($fo_file,"          </fo:block></fo:table-cell>\n");
 	 				}
