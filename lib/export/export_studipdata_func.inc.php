@@ -605,7 +605,7 @@ function export_pers($inst_id)
 
 	$data_object = xml_open_tag( $xml_groupnames_person["group"] );
 
-	$db->query('SELECT statusgruppen.name,
+	$db->query('SELECT statusgruppen.name,aum.user_id,
 		aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
 		ui.sprechzeiten, ui.Telefon, ui.Fax, aum.Email,
 		aum.username, info.Home, info.geschlecht, info.title_front, info.title_rear FROM statusgruppen
