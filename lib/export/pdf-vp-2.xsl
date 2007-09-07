@@ -8,14 +8,14 @@
 					<fo:region-body margin-top="3cm"/>
 				</fo:simple-page-master>
 				<fo:simple-page-master master-name="leftPage" page-height="29.7cm" page-width="21cm" margin-left="0.5cm" margin-right="1.5cm" margin-top="0.5cm" margin-bottom="0.5cm">
+					<fo:region-body margin-top="2.5cm" margin-bottom="2.5cm"/>
 					<fo:region-before extent="2cm"/>
 					<fo:region-after extent="2cm"/>
-					<fo:region-body margin-top="2.5cm" margin-bottom="2.5cm"/>
 				</fo:simple-page-master>
 				<fo:simple-page-master master-name="rightPage" page-height="29.7cm" page-width="21cm" margin-left="1.5cm" margin-right="0.5cm" margin-top="0.5cm" margin-bottom="0.5cm">
+					<fo:region-body margin-top="2.5cm" margin-bottom="2.5cm"/>
 					<fo:region-before extent="2cm"/>
 					<fo:region-after extent="2cm"/>
-					<fo:region-body margin-top="2.5cm" margin-bottom="2.5cm"/>
 				</fo:simple-page-master>
 				<fo:page-sequence-master master-name="contents">
 					<fo:repeatable-page-master-alternatives>

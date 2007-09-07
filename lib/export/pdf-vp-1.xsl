@@ -8,9 +8,9 @@
 					<fo:region-body margin-top="3cm"/>
 				</fo:simple-page-master>
 				<fo:simple-page-master master-name="contents" page-height="29.7cm" page-width="21cm" margin-left="2cm" margin-right="2cm" margin-top="0.5cm" margin-bottom="0.5cm">
+					<fo:region-body margin-top="2.5cm" margin-bottom="2.5cm"/>
 					<fo:region-before extent="2cm"/>
 					<fo:region-after extent="2cm"/>
-					<fo:region-body margin-top="2.5cm" margin-bottom="2.5cm"/>
 				</fo:simple-page-master>
 			</fo:layout-master-set>
 			<fo:page-sequence master-reference="cover">
