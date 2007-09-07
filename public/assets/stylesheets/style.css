@@ -367,3 +367,21 @@ dt {
 dd {
   margin-left: 1.5em;
 }
+
+/* ***** AJAX indicator ***************************************************** */
+
+#ajax_notification {
+	position: fixed;
+	bottom: 0;
+	padding: 0;
+	height: 20px;
+	margin: 0;
+	width: 100%;
+	background-color: #7387ac;
+	color: white;
+	display: block;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.3em;
+	padding-top: 5px;
+}

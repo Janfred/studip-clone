@@ -54,21 +54,6 @@
 		</li>
 	</ul>
 </div>
-<!-- AJAX indicator -->
-<div id="barTopAJAXIndicator" style="display:none;">
-	<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ajax_indicator.gif" alt="AJAX indicator">
-	<script type="text/javascript" language="javascript">
-	// <![CDATA[
-	Event.observe(window, 'load', function() {
-		var indicator = $('barTopAJAXIndicator');
-		Ajax.Responders.register({
-			onCreate:   function() { indicator.show(); },
-			onComplete: function() { indicator.hide(); }
-		});
-	});
-	// ]]>
-	</script>
-</div>
 <!-- Stud.IP Logo -->
 <div id="barTopStudip">
 	<a href="http://www.studip.de/" title="Studip Homepage">

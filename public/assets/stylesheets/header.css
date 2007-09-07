@@ -102,13 +102,6 @@ div#barTopTools {
 	text-align: right;
 }
 
-div#barTopAJAXIndicator {
-	position: absolute;
-	top: 50px;
-	right: 156px;
-	padding-right: 2em;
-}
-
 div#barTopStudip {
 	position: absolute;
 	top: 50px;
