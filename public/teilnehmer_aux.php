@@ -199,9 +199,9 @@ function aux_rtf() {
 	$data .= '\row'."\n";
 
 	foreach ($aux_data['aux'] as $uid => $cur_user) {
+		$data .= '\trowd' . "\n";
 		$data .= $cur_user['fullname'].'\cell'."\n";
 		foreach ($aux_data['header'] as $showkey => $dontcare) {
-		//foreach ($cur_user['entry'] as $id => $value) {
 			$data .= $cur_user['entry'][$showkey].'\cell'."\n";
 		}
 
