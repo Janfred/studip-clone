@@ -175,43 +175,36 @@ function aux_csv() {
 function aux_rtf() {
 	$aux_data = get_aux_data();
 
-	$max = count($aux_data['header']);
-	$max++;
+	$max = count($aux_data['header']) + 1;
+	$step = floor(8305 / $max);
+	$cellx = '\cellx'.join('\cellx', range($step, $max * $step, $step))."\n";
 
 	header("Content-Type: application/rtf");
 	header("Content-Disposition: attachment; filename=export.rtf");
 
-	$data = '{\rtf1\ansi\ansicpg1252\deff0\deflang1031{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}'."\n";
 
-	$data .= '\trowd'."\n";
-	$step = floor(8305 / $max);
-	$cur = 0;
-	for ($i = 0; $i < $max; $i++) {
-		$cur += $step;
-		$data .= '\cellx'.$cur."\n";
-	}
+	?>
+{\rtf1\ansi\ansicpg1252\deff0\deflang1031{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
+{\pard
+\trowd<?= $cellx ?>
+\pard\intbl Name\cell
+<? foreach ($aux_data['header'] as $name) : ?>
+\pard\intbl <?= $name ?>\cell
+<? endforeach ?>
+\row
 
-	$data .= 'Name'.'\cell'."\n";
+<? foreach ($aux_data['aux'] as $cur_user) : ?>
+\trowd<?= $cellx ?>
+\pard\intbl <?= $cur_user['fullname'] ?>\cell
+<? foreach ($aux_data['header'] as $showkey => $dontcare) : ?>
+\pard\intbl <?= $cur_user['entry'][$showkey] ?>\cell
+<? endforeach ?>
+\row
 
-	foreach ($aux_data['header'] as $id => $name) {
-		$data .= $name.'\cell'."\n";
-	}
-	$data .= '\row'."\n";
-
-	foreach ($aux_data['aux'] as $uid => $cur_user) {
-		$data .= '\trowd' . "\n";
-		$data .= $cur_user['fullname'].'\cell'."\n";
-		foreach ($aux_data['header'] as $showkey => $dontcare) {
-			$data .= $cur_user['entry'][$showkey].'\cell'."\n";
-		}
-
-		$data .= '\row'."\n";
-	}
-
-	$data .= '\pard'."\n";
-	$data .= '}'."\n";
-
-	echo $data;
+<? endforeach ?>
+}
+}
+<?
 }
 
 function aux_html() {
