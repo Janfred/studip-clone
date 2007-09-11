@@ -188,8 +188,10 @@ if (!isset($details) || isset($set)) {
 							$invalidEntries[$struct->getID()] = $entry;
 					}
 					// change visibility of role data
-					foreach ($group_id as $groupID)
-						setOptionsOfStGroup($groupID, $u_id, ($visible[$groupID] == '0') ? '0' : '1');
+					if (is_array($group_id)) {
+						foreach ($group_id as $groupID)
+							setOptionsOfStGroup($groupID, $u_id, ($visible[$groupID] == '0') ? '0' : '1');
+					}
 					if (is_array($invalidEntries))
 						my_error('<b>Fehlerhafte Eingaben (s.u.)');
 				}
