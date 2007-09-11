@@ -214,32 +214,30 @@ class Step25RaumzeitMigrations extends DBMigration
         do {
             // call the conversion subroutine with number of rows that should get processed           
 
-            // removed curl access, in favor of file_get_contents (with fopen wrappers)
-// curl:
-//            // create cURL-Handle
-//            $ch = curl_init();
-//
-//            // set url and other option
-//            curl_setopt($ch, CURLOPT_URL, $CONVERSION_SUBROUTINE_URL ."?step_size=".$STEP_SIZE."&start_at=".$start_at."&secret=".$secret_password);
-//            curl_setopt($ch, CURLOPT_HEADER, 0);
-//            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
-//
-//            // make the call to the url
-//            $response = curl_exec ($ch);
-//
-//            // close cURL-Handle und gebe die Systemresourcen frei
-//            curl_close($ch);
-//
-//            // success ?
-//            if( $response == FALSE ){
-//                fwrite($logfile_handle, "Error while executing subroutine. Stopping.\n");
-//                throw new Exception("Error while executing subroutine.");
-//            }
-
-            // open URL via fopen = "call" subroutine
             $subroutine_url = $CONVERSION_SUBROUTINE_URL ."?step_size=".$STEP_SIZE."&start_at=".$start_at."&secret=".$secret_password; 
-            $response = file_get_contents( $subroutine_url );
-            
+
+// curl:
+            // create cURL-Handle
+            $ch = curl_init();
+
+            // set url and other option
+            curl_setopt($ch, CURLOPT_URL, $subroutine_url);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+
+            // make the call to the url
+            $response = curl_exec ($ch);
+
+            // close cURL-Handle und gebe die Systemresourcen frei
+            curl_close($ch);
+
+// file_get_contents (fopen wrappers)
+//   removed file_get_contents access, in favor of curl because file_get_contents could not access the desired URL with 
+//   every data we had for testing; it was not possible to reproduce this error e.g. by calling file_get_contents 
+//   directly from the shell
+//            // open URL via fopen = "call" subroutine
+//            $response = file_get_contents( $subroutine_url );
+
             // success ?
             if( $response == FALSE ){
                 $this->write( get_class($this)." - Error while executing subroutine. Can't open URL. Stopping.\n");
