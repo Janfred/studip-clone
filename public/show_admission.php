@@ -48,11 +48,12 @@ function get_semadmission_data($seminare_condition){
 	while($db->next_record()){
 		$seminar_id = $db->f("Seminar_id");
 		$ret[$seminar_id] = $db->Record;
-		$query2 = "SELECT COUNT(user_id) FROM seminar_user WHERE seminar_id='$seminar_id' AND admission_studiengang_id != ''";
+		$query2 = "SELECT COUNT(IF(admission_studiengang_id <> '', user_id, NULL)) as t1,COUNT(IF(admission_studiengang_id = '', user_id, NULL)) as t2  FROM seminar_user WHERE seminar_id='$seminar_id' AND status IN('autor','user')";
 		$db2->query($query2);
 		$db2->next_record();
-		$ret[$seminar_id]['count_teilnehmer'] = $db2->f(0);
-		$query2 = "SELECT COUNT(IF(status='claiming' OR status='accepted', 1, NULL)) AS count2,
+		$ret[$seminar_id]['count_teilnehmer'] = $db2->f('t1');
+		$ret[$seminar_id]['count_teilnehmer_aux'] = $db2->f('t2');
+				$query2 = "SELECT COUNT(IF(status='claiming' OR status='accepted', 1, NULL)) AS count2,
 					COUNT(IF(status='awaiting', 1, NULL)) AS count3
 					FROM admission_seminar_user WHERE seminar_id='$seminar_id' GROUP BY seminar_id";
 		$db2->query($query2);
@@ -130,10 +131,10 @@ function semadmission_create_result_xls($data){
 		$_my_inst[$_SESSION['show_admission']['institut_id']]['name'],
 		$semester), $caption_format);
 		
-		foreach(range(1,9) as $c) $worksheet1->write_blank(0,$c,$head_format);
-		foreach(range(1,9) as $c) $worksheet1->write_blank(1,$c,$head_format);
+		foreach(range(1,10) as $c) $worksheet1->write_blank(0,$c,$head_format);
+		foreach(range(1,10) as $c) $worksheet1->write_blank(1,$c,$head_format);
 		$worksheet1->set_column(1, 1, 40);
-		foreach(range(2,9) as $c) $worksheet1->set_column(1, $c, 15);
+		foreach(range(2,10) as $c) $worksheet1->set_column(1, $c, 15);
 		
 		$row = 2;
 		
@@ -141,18 +142,20 @@ function semadmission_create_result_xls($data){
 		$worksheet1->write_string($row,1, _("Veranstaltung"), $caption_format);
 		$worksheet1->write_string($row,2, _("Status"), $caption_format);
 		$worksheet1->write_string($row,3, _("Kontingent Teilnehmer"), $caption_format);
-		$worksheet1->write_string($row,4, _("Max. Teilnehmer"), $caption_format);
-		$worksheet1->write_string($row,5, _("Anmelde & Akzeptiertliste"), $caption_format);
-		$worksheet1->write_string($row,6, _("Warteliste"), $caption_format);
-		$worksheet1->write_string($row,7, _("Losdatum / Ende Kontingente"), $caption_format);
-		$worksheet1->write_string($row,8, _("Anmeldestartzeit"), $caption_format);
-		$worksheet1->write_string($row,9, _("Anmeldeendzeit"), $caption_format);
+		$worksheet1->write_string($row,4, _("zusätzliche Teilnehmer"), $caption_format);
+		$worksheet1->write_string($row,5, _("Max. Teilnehmer"), $caption_format);
+		$worksheet1->write_string($row,6, _("Anmelde & Akzeptiertliste"), $caption_format);
+		$worksheet1->write_string($row,7, _("Warteliste"), $caption_format);
+		$worksheet1->write_string($row,8, _("Losdatum / Ende Kontingente"), $caption_format);
+		$worksheet1->write_string($row,9, _("Anmeldestartzeit"), $caption_format);
+		$worksheet1->write_string($row,10, _("Anmeldeendzeit"), $caption_format);
 		
 		++$row;
 		
 		$groupcount = 0;
 		foreach($data as $seminar_id => $semdata) {
 			$teilnehmer = $semdata['count_teilnehmer'];
+			$teilnehmer_aux = $semdata['count_teilnehmer_aux'];
 			$quota = $semdata['admission_turnout'];
 			$count2 = $semdata['count_anmeldung'];
 			$count3 = $semdata['count_wartende'];;
@@ -178,12 +181,13 @@ function semadmission_create_result_xls($data){
 			$worksheet1->write_string($row, 1, $semdata['Name'], $data_format);
 			$worksheet1->write_string($row, 2, join('/', $status), $data_format);
 			$worksheet1->write_number($row, 3, (int)$teilnehmer, $data_format);
-			$worksheet1->write_number($row, 4, (int)$quota, $data_format);
-			$worksheet1->write_number($row, 5, (int)$count2, $data_format);
-			$worksheet1->write_number($row, 6, (int)$count3, $data_format);
-			$worksheet1->write_string($row, 7, ($datum != -1 ? date("d.m.Y G:i", $datum) : '') , $data_format);
-			$worksheet1->write_string($row, 8, ($startdatum != -1 ? date("d.m.Y G:i", $startdatum) : '') , $data_format);
-			$worksheet1->write_string($row, 9, ($enddatum != -1 ? date("d.m.Y G:i", $enddatum) : '') , $data_format);
+			$worksheet1->write_number($row, 4, (int)$teilnehmer_aux, $data_format);
+			$worksheet1->write_number($row, 5, (int)$quota, $data_format);
+			$worksheet1->write_number($row, 6, (int)$count2, $data_format);
+			$worksheet1->write_number($row, 7, (int)$count3, $data_format);
+			$worksheet1->write_string($row, 8, ($datum != -1 ? date("d.m.Y G:i", $datum) : '') , $data_format);
+			$worksheet1->write_string($row, 9, ($startdatum != -1 ? date("d.m.Y G:i", $startdatum) : '') , $data_format);
+			$worksheet1->write_string($row, 10, ($enddatum != -1 ? date("d.m.Y G:i", $enddatum) : '') , $data_format);
 			++$row;
 		}
 		$workbook->close();
@@ -603,6 +607,7 @@ if(is_object($group_obj)){
 		echo "<th width=\"25%\">". _("Veranstaltung") ."</th>";
 		echo "<th width=\"10%\">". _("Status") ."</th>";
 		echo "<th width=\"10%\">". _("Kontingent Teilnehmer") ."</th>";
+		echo "<th width=\"10%\">". _("zusätzliche Teilnehmer") ."</th>";
 		echo "<th width=\"10%\">". _("Max. Teilnehmer") ."</th>";
 		echo "<th width=\"10%\">". _("Anmelde & Akzeptiertliste") ."</th>";
 		echo "<th width=\"10%\">". _("Warteliste") ."</th>";
@@ -621,6 +626,7 @@ if(is_object($group_obj)){
 			$teilnehmer .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Teilnehmerliste downloaden")).' ></a>';
 		}
 		$cssSw->switchClass();
+		$teilnehmer_aux = $semdata['count_teilnehmer_aux'];
 		$quota = $semdata['admission_turnout'];
 		$count2 = $semdata['count_anmeldung'];
 		if($count2){
@@ -667,6 +673,7 @@ if(is_object($group_obj)){
 				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
 				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
 				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
+				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
 				<td class=\"%s\" align=\"left\" nowrap><font size=\"-1\">%s</font></td>",
 				$cssSw->getClass(),
 				_("Teilnehmerliste aufrufen"),
@@ -678,6 +685,8 @@ if(is_object($group_obj)){
 				join('/', $status),
 				$cssSw->getClass(),
 				$teilnehmer,
+				$cssSw->getClass(),
+				$teilnehmer_aux,
 				$cssSw->getClass(),
 				$quota,
 				$cssSw->getClass(),

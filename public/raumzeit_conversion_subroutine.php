@@ -1,5 +1,5 @@
 <?php
-try {
+//try {
     $output .= "";
     
     // run until really everything is done...
@@ -21,18 +21,18 @@ try {
     if($db->query("SELECT value FROM config WHERE config_id = 'migration5'"))
         $db->next_record();
     else
-        throw new Exception("Error accessing database in raumzeit_conversion_subroutine script.");
+        die("Error accessing database in raumzeit_conversion_subroutine script.");
     
     // get parameters:
 
-    if (!$_REQUEST['secret'] || $_REQUEST['secret'] != $db->f("value")) {
-        throw new Exception("Invalid access to raumzeit_conversion_subroutine script.");
-    }    
+   // if (!$_REQUEST['secret'] || $_REQUEST['secret'] != $db->f("value")) {
+    //    die("Invalid access to raumzeit_conversion_subroutine script.");
+    //}    
     
     // number of records to be converted this time
     if (!$_REQUEST['step_size']) {
         // default ste size
-        $step_size = 300;
+        $step_size = 1;
     } else {
         $step_size = $_REQUEST['step_size'];
     }
@@ -61,10 +61,10 @@ try {
     
     //if($convert_all_data)
         // read a bunch of seminares
-        $db->query("SELECT Seminar_id, Name FROM seminare LIMIT $start_at, $step_size");
+     //   $db->query("SELECT Seminar_id, Name FROM seminare LIMIT $start_at, $step_size");
     //else    
     //    // read a bunch of seminares where the change date is zero (chdate funtions as a marker)
-    //    $db->query("SELECT Seminar_id, Name FROM seminare WHERE chdate = 0 LIMIT 0, $step_size");
+        $db->query("SELECT Seminar_id, Name FROM seminare WHERE chdate = 0 LIMIT 0, $step_size");
         
     
     // get number of rows
@@ -111,8 +111,9 @@ try {
     $output .= "$seminar_counter"; // return the number of convertet dates (last output is return value)
 
     echo $output;
-
+/*
 } catch (Exception $e) {
     echo "ERROR: ". $e->__toString();
 }
+*/
 ?>
