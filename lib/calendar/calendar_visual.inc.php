@@ -582,19 +582,14 @@ function jumpTo ($month, $day, $year, $colsp = 1) {
 	echo ">&nbsp;</td></tr>\n";
 }
 
-function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
+function includeMonth ($imt, $href, $mod = "", $js_include = "", $ptime = "") {
 	global $RELATIVE_PATH_CALENDAR, $CANONICAL_RELATIVE_PATH_STUDIP;
 	require_once($RELATIVE_PATH_CALENDAR . "/lib/CalendarMonth.class.php");
-	global $imt, $atime;
-
-	if ($imt)
-		$xtime = $imt;
-	else
-		$xtime = $ptime;
+	
 
 	//$js_include = " " . $js_include;
 
-	$amonth = new CalendarMonth($xtime);
+	$amonth = new CalendarMonth($imt);
 	$now = mktime(12, 0, 0, date("n", time()), date("j", time()), date("Y", time()), 0);
 	$width = "25";
 	$height = "25";
@@ -626,7 +621,7 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 
 	// navigation arrows right
 	$ret .= "<td class=\"steelgroup0\" align=\"center\" valign=\"top\">";
-	if ($mod == 'NONAV') {
+	if ($mod == 'NONAV' || $mod == 'NONAVARROWS') {
 		$ret .= '&nbsp;';
 	} else {
 		$ret .=	"<a href=\"$href$ptime&imt=" . ($amonth->getEnd() + 1) . "\">";
@@ -697,7 +692,7 @@ function includeMonth ($ptime, $href, $mod = "", $js_include = "") {
 				$js_inc .= implode(", ", $js_include['parameters']) . ", ";
 			$js_inc .= "'" . date('m', $i) . "', '$aday', '" . date('Y', $i) . "')\"";
 		}
-		if (abs($atime - $i) < 43199 )
+		if (abs($ptime - $i) < 43199 )
 			$aday = "<span style=\"border-width: 2px; border-style: solid; "
 					. "border-color: #DD0000; padding: 2px;\">$aday</span>";
 

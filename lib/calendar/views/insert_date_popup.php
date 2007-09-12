@@ -30,11 +30,16 @@
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
-require_once ('config/config.inc.php');
+require_once ('config.inc.php');
 require_once ('lib/visual.inc.php');
 
-$element_switch = (isset($_REQUEST['element_switch']))? $_REQUEST['element_switch']:0; // Wert von 1 - 7 für Auswahl der Feldbezeichner
-$c = (isset($_REQUEST['c']))? $_REQUEST['c'] : 0;                   // Zähler wenn mehrere gleiche Eingabefelder im Zielformular
+$element_switch = (isset($_REQUEST['element_switch']) ? $_REQUEST['element_switch'] : 0); // Wert fr Auswahl der Feldbezeichner
+$element_depending = (isset($_REQUEST['element_depending'])
+		&& preg_match('!^[0-9a-z_-]{2,40}$!i', $_REQUEST['element_depending'])) ? $_REQUEST['element_depending'] : '';
+$form_name = (isset($_REQUEST['form_name'])
+	 && preg_match('!^[0-9a-z_-]{2,40}$!i', $_REQUEST['form_name'])) ? $_REQUEST['form_name'] : '';
+$submit = intval($_REQUEST['submit']);
+$c = (isset($_REQUEST['c']))? $_REQUEST['c'] : 0;                   // Zï¿½ler wenn mehrere gleiche Eingabefelder im Zielformular
 $mcount = (isset($_REQUEST['mcount']))? $_REQUEST['mcount'] : 1;    // Anzahl der anzuzeigenden Monate
 $ss = (isset($_REQUEST['ss']))? sprintf('%02d',$_REQUEST['ss']):''; // Startstunde
 $sm = (isset($_REQUEST['sm']))? sprintf('%02d',$_REQUEST['sm']):''; // Startminute
@@ -59,8 +64,33 @@ for($z = 0; $z < count($zz); $z++) {
 }
 $jsarray .= "zz[$z] = new Array('$ss','$sm','$es','$em');\n";
 
-$form_name = 'Formular';
 $function_addition = '';
+if (strlen($element_switch) > 2 && $form_name != '') {
+	$txt_day = $element_switch . '_day';
+	$txt_month = $element_switch . '_month';
+	$txt_year = $element_switch . '_year';
+	if ($element_depending != '') {
+		$txt2_day = $element_depending . '_day';
+		$txt2_month = $element_depending . '_month';
+		$txt2_year = $element_depending . '_year';
+		$depending_field_js = "
+		if (opener.document.$form_name.elements['$txt2_month']
+				&& opener.document.$form_name.elements['$txt2_day']
+				&& opener.document.$form_name.elements['$txt2_year']) {
+		 opener.document.$form_name.elements['$txt2_month'].value = m;
+     opener.document.$form_name.elements['$txt2_day'].value = (d < 10) ? '0' + d : d;
+     opener.document.$form_name.elements['$txt2_year'].value = y;
+		 }
+		 ";
+	} else {
+		$depend_field_js = '';
+	}
+	$kalender = TRUE;
+	$zeiten = FALSE;
+	$studipform = TRUE;
+}
+else { 
+	$form_name = 'Formular';
 switch ($element_switch){  // Auswahl der Zielparameter
 	case 1:	// raumzeit.php Einzeltermin bearbeiten, neuer Einzeltermin
 		$txt_day   = 'day';
@@ -194,12 +224,20 @@ switch ($element_switch){  // Auswahl der Zielparameter
 		$kalender = true;
 
 }
+}
 
 $title = _("Kalender");
 $resize = '';
 if ($zeiten && !$kalender) {  // popup Fenster verkleinern wenn kein Kalender
 	$resize = 'window.resizeTo('.(($auth->auth["xres"] > 650)? 780 : 600).',160);'. "\n";
 	$resize .= 'window.moveBy(0,330);'."\n";
+}
+if (intval($submit) == 1) {
+	$do_submit = 'opener.document.'.$form_name.'.submit();';
+	$submit = '1';
+} else {
+	$do_submit = '';
+	$submit = '';
 }
 if ($preset_error != '') $zeiten = false;
 echo <<<EOT
@@ -271,6 +309,8 @@ function insert_date (m, d, y) {
      opener.document.$form_name.elements['$txt_month'].value = m;
      opener.document.$form_name.elements['$txt_day'].value = (d < 10) ? '0' + d : d;
      opener.document.$form_name.elements['$txt_year'].value = y;
+		 $depending_field_js;
+		 $do_submit;
    }
    if (document.forms['TimeForm']) {
       insert_time();
@@ -281,12 +321,12 @@ function insert_date (m, d, y) {
 -->
 </script>
 </head>
-<body>
+<body{$onunload}>
 EOT;
 
 require_once($RELATIVE_PATH_CALENDAR . '/calendar_visual.inc.php');
 
-$atime =  (isset($_REQUEST['atime']) && $_REQUEST['atime'])? $_REQUEST['atime']: time();
+$imt =  (isset($_REQUEST['imt']) && $_REQUEST['imt']) ? intval($_REQUEST['imt']) : time();
 
 $js['function'] = 'insert_date'.$function_addition;
 
@@ -295,7 +335,7 @@ if ($mcount > 3) {
 	if ($mcount > 12) $mcount = 12;
 	if ($mcount % 2 == 1) $mcount++; // nur gerade Werte erlaubt
 	$mcounth = $mcount / 2;
-	$atimex = getdate($atime);
+	$atimex = getdate($imt);
 	$i = 0;
 	if (!$kalender && $preset_error != '') {
 		parse_window ('info§' .$preset_error,'§', '', '<div align="center"><a href="javascript:window.close();">' . makeButton('schliessen', 'img').'</a></div>');
@@ -304,7 +344,7 @@ if ($mcount > 3) {
 		while ($kalender && ($i < $mcount)) {
 			if (($i % $mcounth == 0) && $i > 0) echo '</tr><tr valign=top>', "\n";
 			echo '<td class="blank">';
-			echo includeMonth(mktime(12,0,0,$atimex['mon'] + $i++,10,$atimex['year']), 'javascript:void(0);//', 'NONAV', $js);
+			echo includeMonth(mktime(12,0,0,$atimex['mon'] + $i++,10,$atimex['year']), 'javascript:void(0);//', 'NONAV', $js, $atime);
 			echo '</td>';
 		}
 		if (!$kalender) echo '<td class="blank" colspan="',$mcounth,'">&nbsp;</td>';
@@ -343,23 +383,47 @@ if ($mcount > 3) {
 		echo '<tr>';
 		$zeiten_buttons = '<a href="javascript:insert_time'.$function_addition.'();">'. makeButton('uebernehmen', 'img') . '</a> &nbsp; <a href="javascript:window.close();">' . makeButton('abbrechen', 'img').'</a>';
 		if ($kalender) {
-			echo '<td class="blank">&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcount,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="'.$GLOBALS['ASSETS_URL'].'images/calendar_previous_double_small.gif"', tooltip($mcount . ' ' . _("Monate zurück")),' border="0"></a>';
-			echo '&nbsp;<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] - $mcounth,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="'.$GLOBALS['ASSETS_URL'].'images/calendar_previous_small.gif"', tooltip($mcounth .' ' . _("Monate zurück")),' border="0"></a></td>', "\n";
+			echo '<td class="blank">&nbsp;<a href="',$PHP_SELF,'?imt=',mktime(0,0,0,$atimex['mon'] - $mcount,10,$atimex['year']);
+			echo ($form_name ? "&form_name=$form_name" : '');
+			echo ($submit ? '&submit=1' : '');
+			echo '&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,'&atime=',$atime,$q,'">';
+			echo '<img border="0" src="',$GLOBALS['ASSETS_URL'],'images/calendar_previous_double_small.gif"';
+			echo tooltip($mcount . ' ' . _('Monate zurück')),' border="0"></a>';
+			echo '&nbsp;<a href="',$PHP_SELF,'?imt=',mktime(0,0,0,$atimex['mon'] - $mcounth,10,$atimex['year']);
+			echo ($form_name ? "&form_name=$form_name" : '');
+			echo ($submit ? '&submit=1' : '');
+			echo '&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,'&atime=',$atime,$q,'">';
+			echo '<img border="0" src="',$GLOBALS['ASSETS_URL'],'images/calendar_previous_small.gif"';
+			echo tooltip($mcounth .' ' . _('Monate zurück')),' border="0"></a></td>', "\n";
 			if ($mcounth - 2 > 0) {
 				echo '<td class="blank" colspan="' , ($mcounth - 2) , '" align=center>';
 				if ($zeiten) echo $zeiten_buttons;
 				echo '&nbsp;</td>';
 			}
-			echo '<td class="blank" align="right"><a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcounth,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="'.$GLOBALS['ASSETS_URL'].'images/calendar_next_small.gif"', tooltip($mcounth . ' ' . _("Monate vor")),' border="0"></a>&nbsp;', "\n";
-			echo '<a href="',$PHP_SELF,'?atime=',mktime(0,0,0,$atimex['mon'] + $mcount,10,$atimex['year']),'&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,$q,'"><img border="0" src="'.$GLOBALS['ASSETS_URL'].'images/calendar_next_double_small.gif"', tooltip($mcount .' ' . _("Monate vor")),' border="0"></a>&nbsp;</td>';
+			echo '<td class="blank" align="right"><a href="',$PHP_SELF,'?imt=';
+			echo mktime(0,0,0,$atimex['mon'] + $mcounth,10,$atimex['year']),'&mcount=',$mcount;
+			echo ($form_name ? "&form_name=$form_name" : '');
+			echo ($submit ? '&submit=1' : '');
+			echo '&element_switch=',$element_switch,'&c=',$c,'&atime=',$atime,$q,'">';
+			echo '<img border="0" src="',$GLOBALS['ASSETS_URL'],'images/calendar_next_small.gif"';
+			echo tooltip($mcounth . ' ' . _('Monate vor')),' border="0"></a>&nbsp;', "\n";
+			echo '<a href="',$PHP_SELF,'?imt=',mktime(0,0,0,$atimex['mon'] + $mcount,10,$atimex['year']);
+			echo ($form_name ? "&form_name=$form_name" : '');
+			echo ($submit ? '&submit=1' : '');
+			echo '&mcount=',$mcount,'&element_switch=',$element_switch,'&c=',$c,'&atime=',$atime,$q,'">';
+			echo '<img border="0" src="',$GLOBALS['ASSETS_URL'],'images/calendar_next_double_small.gif"';
+			echo tooltip($mcount .' ' . _('Monate vor')),' border="0"></a>&nbsp;</td>';
 		} elseif ($zeiten) {
 			echo '<td class="blank" colspan="',$mcounth,'" align="center">', $zeiten_buttons, "</td>\n";
 		}
 		echo '</tr></table>', "\n";
 	}
 } else { // nur einen Monat anzeigen
-
-	echo includeMonth($atime, $PHP_SELF . '?element_switch='.$element_switch.'&c='.$c.'&atime=', 'NOKW', $js);
+	if ($studipform) {
+		echo includeMonth($imt, "$PHP_SELF?form_name=$form_name&submit=$submit&element_switch=$element_switch&c=$c&atime=", 'NOKW', $js, $atime);
+	} else {
+		echo includeMonth($imt, "$PHP_SELF?element_switch=$element_switch&c=$c&atime=", 'NOKW', $js, $atime);
+	}
 }
 echo "</body>\n</html>";
 
