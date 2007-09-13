@@ -421,8 +421,7 @@ function head (&$module, $db, $a) {
 
 	// fit size of image
 	if ($pic_max_width && $pic_max_height) {
-		$pic_size = @getimagesize("user/"
-				. $db->f("user_id") . ".jpg");
+		$pic_size = @getimagesize("{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user/" . $db->f("user_id").".jpg");
 	
 		if ($pic_size[0] > $pic_max_width || $pic_size[1] > $pic_max_height) {
 			$fak_width = $pic_size[0] / $pic_max_width;
@@ -478,8 +477,8 @@ function head (&$module, $db, $a) {
 		
 		if ($module->config->getValue("Main", "showimage")) {
 			echo "<td" . $module->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
-			if (file_exists("{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user" . $db->f("user_id").".jpg")) {
-				echo "<img src=\"{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user/";
+			if (file_exists("{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user/" . $db->f("user_id").".jpg")) {
+				echo "<img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/";
 				echo $db->f("user_id") . ".jpg\" alt=\"Foto " . htmlReady(trim($db->f("fullname"))) . "\"";
 				echo $module->config->getAttributes("PersondetailsHeader", "img") . "></td>";
 			}
