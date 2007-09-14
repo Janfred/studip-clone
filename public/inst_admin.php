@@ -1,4 +1,5 @@
 <?php
+/* vim: noexpandtab */
 /*
 inst_admin.php - Instituts-Mitarbeiter-Verwaltung von Stud.IP
 Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>
@@ -122,12 +123,13 @@ if (!isset($details) || isset($set)) {
 				}
 			}
 			if (isset($inherit)) {
-				$groupID = array_pop(array_keys($inherit)); // there is only 1 element in the array (and we get its key)
-				setOptionsOfStGroup($groupID, $u_id, '', $inherit[$groupID]);
+				$groupID = key($inherit); // there is only 1 element in the array (and we get its key)
+				setOptionsOfStGroup($groupID, $u_id, '', key($inherit[$groupID]));
 				$instID = GetRangeOfStatusgruppe($groupID);
 				$entries = DataFieldEntry::getDataFieldEntriesBySecondRangeID($instID);
 				foreach ((array)$entries as $rangeID=>$entry) {
 					$entry->setSecondRangeID($groupID);  // content of institute fields is default for user role fields
+					$entry->setValue(addslashes($entry->getValue()));
 					$entry->store();
 				}
 			}
@@ -496,21 +498,53 @@ if (isset($details)) {
 				foreach ($gruppen as $groupID=>$group) {
 					echo '<tr><td align="left" colspan="2"><br>';
 					echo '<font size="+1"><b>' . _('Funktion:') . " " . $group . '</b></font>';
-//							echo '<td colspan="2" valign="middle">';
-					echo '<font size="-1"><br>' . _('Daten der Einrichtung') .' </font>';
-					$button = makeButton('uebernehmen' . ($groupOptions[$groupID]['inherit'] ? '2' : ''), 'src');
-					if ($perms == 'root' || $perms == 'admin')
-						printf('<input type="image" name="inherit[%s]" value="1" align="center" %s>', $groupID, $button);
-					else
-						print("<img align='center' $button>");
-					echo '<font size="-1"> ' . _('oder') . ' </font>';
-					$button = makeButton('abweichend' . ($groupOptions[$groupID]['inherit'] ? '' : '2'), 'src');
-					if ($perms == 'root' || $perms == 'admin')
-						printf('<input type="image" name="inherit[%s]" value="0" align="center" %s>', $groupID, $button);
-					else
-						print("<img align='center' $button>");
-					echo '<font size="-1"> ' . _('eingeben') . ', ' . _('diese Funktion ausblenden:') . '</font>';
-					printf('<input type="checkbox" name="visible[%s]" %s value="0">', $groupID, !$groupOptions[$groupID]['visible'] ? 'checked="checked"' : '');
+					?>
+
+					<font size="-1">
+						<label>
+							<?= _("Diese Funktion ausblenden:") ?>
+							<input type="checkbox" name="visible[<?= $groupID ?>]" <?= !$groupOptions[$groupID]['visible'] ? 'checked="checked"' : '' ?> value="0">
+							&nbsp;
+							<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
+								<?= tooltip(_("Die Angaben zu dieser Funktion werden nicht auf Ihrer Homepage ausgegeben."), TRUE, TRUE) ?>>
+						</label>
+					</font>
+					<br><br>
+
+					<? if ($perms == 'root' || $perms == 'admin') : ?>
+
+
+						<font size="-1">
+						<? if ($groupOptions[$groupID]['inherit']) : ?>
+							<?= _('Daten der Einrichtung') ?>
+							<input type="image" name="inherit[<?= $groupID ?>][1]" value="1" align="center" <?= makeButton('uebernehmen2', 'src') ?>>
+							<?= _('oder') ?>
+							<input type="image" name="inherit[<?= $groupID ?>][0]" value="0" align="center" <?= makeButton('abweichend', 'src') ?>>
+							<?= _('eingeben') ?>.
+						<? else : ?>
+							<?= _('Daten der Einrichtung') ?>
+							<input type="image" name="inherit[<?= $groupID ?>][1]" value="1" align="center" <?= makeButton('uebernehmen', 'src') ?>>
+							<?= _('oder') ?>
+							<input type="image" name="inherit[<?= $groupID ?>][0]" value="0" align="center" <?= makeButton('abweichend2', 'src') ?>>
+							<?= _('eingeben') ?>.
+						<? endif ?>
+						</font>
+
+					<? else : ?>
+
+						<font size="-1">
+						<? if ($groupOptions[$groupID]['inherit']) : ?>
+							<?= _('Die Daten der Einrichtung werden übernommen.') ?>
+						<? else: ?>
+							<?= _('Die Daten der Einrichtung können abweichend eingegeben werden.') ?>
+						<? endif ?>
+						</font>
+
+					<? endif ?>
+
+					<br><br>
+
+					<?
 					echo "<input type=\"hidden\" name=\"group_id[]\" value=\"$groupID\">";
 					echo "</td></tr>\n";
 					$cssSw->resetClass();
