@@ -61,7 +61,7 @@ try {
     
     //if($convert_all_data)
         // read a bunch of seminares
-        $db->query("SELECT Seminar_id, Name FROM seminare LIMIT $start_at, $step_size");
+        $db->query("SELECT Seminar_id, chdate, Name FROM seminare LIMIT $start_at, $step_size");
     //else    
     //    // read a bunch of seminares where the change date is zero (chdate funtions as a marker)
     //    $db->query("SELECT Seminar_id, Name FROM seminare WHERE chdate = 0 LIMIT 0, $step_size");
@@ -102,7 +102,10 @@ try {
             
             // update the seminar object (modifies the chdate)
             $sem->store();
-            
+            //revert chdate
+			$query = sprintf("UPDATE seminare SET chdate='%s' WHERE Seminar_id='%s' ", $db->f('chdate') , $db->f('Seminar_id'));
+			$db2->query($query);
+			
             $seminar_counter++;        
     }
     
