@@ -18,16 +18,17 @@ class Step25RaumzeitMigrations extends DBMigration
         
         $this->db->query("
             CREATE TABLE IF NOT EXISTS `themen` (
-              `issue_id` varchar(32) NOT NULL default '',
-              `seminar_id` varchar(32) NOT NULL default '',
-              `author_id` varchar(32) NOT NULL default '',
-              `title` varchar(255) NOT NULL default '',
-              `description` mediumtext NOT NULL,
-              `priority` int(11) NOT NULL default '0',
-              `mkdate` int(11) NOT NULL default '0',
-              `chdate` int(11) NOT NULL default '0',
-              PRIMARY KEY (`issue_id`)
-            );
+			  `issue_id` varchar(32) NOT NULL default '',
+			  `seminar_id` varchar(32) NOT NULL default '',
+			  `author_id` varchar(32) NOT NULL default '',
+			  `title` varchar(255) NOT NULL default '',
+			  `description` text NOT NULL,
+			  `priority` smallint(5) unsigned NOT NULL default '0',
+			  `mkdate` int(10) unsigned NOT NULL default '0',
+			  `chdate` int(10) unsigned NOT NULL default '0',
+			  PRIMARY KEY  (`issue_id`),
+			  KEY `seminar_id` (`seminar_id`,`priority`)
+			) TYPE=MyISAM;
         ");
 
         $this->db->query("
@@ -50,11 +51,9 @@ class Step25RaumzeitMigrations extends DBMigration
               `raum` varchar(255) default NULL,
               `metadate_id` varchar(32) default NULL,
               `resource_id` varchar(32) NOT NULL default '',
-              PRIMARY KEY  (`termin_id`),
-              KEY `range_id` (`range_id`),
-              KEY `autor_id` (`autor_id`),
-                            KEY `metadate_id` (`metadate_id`),
-                            KEY `date` (`date`)
+			  PRIMARY KEY  (`termin_id`),
+			  KEY `range_id` (`range_id`,`date`),
+			  KEY `metadate_id` (`metadate_id`,`date`)
             ) TYPE=MyISAM PACK_KEYS=1;
         ");
             
@@ -62,20 +61,26 @@ class Step25RaumzeitMigrations extends DBMigration
             CREATE TABLE IF NOT EXISTS `themen_termine` (
               `issue_id` varchar(32) NOT NULL default '',
               `termin_id` varchar(32) NOT NULL default '',
-              PRIMARY KEY  (`issue_id`,`termin_id`)
+              PRIMARY KEY  (`issue_id`,`termin_id`),
+			    KEY `termin_id` (`termin_id`,`issue_id`)
             ) TYPE=MyISAM;
         ");
-            
+        $this->db->query("
+			ALTER TABLE `termine` DROP INDEX `autor_id` 
+		");
+		$this->db->query("
+			ALTER TABLE `termine` DROP INDEX `range_id` 
+		");
         $this->db->query("
             ALTER TABLE `termine` ADD `metadate_id` VARCHAR( 32 );
         ");
 
         $this->db->query("
-            ALTER TABLE `termine` ADD INDEX ( `metadate_id` );
+            ALTER TABLE `termine` ADD INDEX ( `metadate_id` , `date` ) 
         ");
             
         $this->db->query("
-            ALTER TABLE `termine` ADD INDEX ( `date` );
+            ALTER TABLE `termine` ADD INDEX ( `range_id` , `date` );
         ");
             
         $this->db->query("
