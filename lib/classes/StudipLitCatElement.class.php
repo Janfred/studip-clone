@@ -187,7 +187,7 @@ class StudipLitCatElement {
 												'info'	=> _("Wählen Sie hier eine persönliche Literaturliste aus, in die der neue Eintrag aufgenommen werden soll."),
 												'len'	=> 255,
 												'type'	=> 'select',
-												'options'=> StudipLitList::GetListsByRange($GLOBALS['user']->id, 'form_options'));
+												'options'=> array_merge(array('---'), (array)StudipLitList::GetListsByRange($GLOBALS['user']->id, 'form_options')));
 		}
 		foreach ($this->fields as $field_name => $field_detail){
 			if ($field_detail['caption']){
@@ -281,7 +281,7 @@ class StudipLitCatElement {
 		}
 		$this->getElementData();
 		if ($rs->affected_rows()){
-			if($default_list_entry){
+			if($default_list_entry && $default_list_entry != '---'){
 				$list =& TreeAbstract::GetInstance("StudipLitList", $GLOBALS['user']->id);
 				$list->insertElement(array('catalog_id' => $this->getValue('catalog_id'), 'list_id' => $default_list_entry,
 											'list_element_id' => $list->getNewListElementId(),
