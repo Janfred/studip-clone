@@ -176,6 +176,16 @@ $db6=new DB_Seminar;
 	    }
 	
 	$current_seminar = Seminar::getInstance($id);
+
+	if ($current_seminar->admission_type == 3) {
+		parse_msg ("info§"._("Die Veranstaltung ist gesperrt, Sie k&ouml;nnen sich nicht eintragen!"));
+	    	echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
+	    	if ($send_from_search)
+	    		echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
+		echo "<br><br></td></tr></table>";
+	    	page_close();
+	    	die;
+	}
 	
 	$group = select_group ($current_seminar->semester_start_time, $user->id);
 
