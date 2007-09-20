@@ -191,7 +191,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 			require_once('lib/classes/AuxLockRules.class.php');
 			$rule = AuxLockRules::getLockRuleBySemId($SessSemName[1]);
 			$show = false;
-			foreach ($rule['attributes'] as $val) {
+			foreach (array($rule['attributes']) as $val) {
 				if ($val == 1) {
 					// Es gibt also Zusatzangaben. Nun noch überprüfen ob der Nutzer diese Angaben schon gemacht hat...
 					$dbtg = new DB_Seminar($query = "SELECT * FROM datafields as d LEFT JOIN datafields_entries as de USING (datafield_id) WHERE d.object_type = 'usersemdata' AND de.sec_range_id = '".$SessSemName[1]."' AND de.range_id = '".$user->id."'");
