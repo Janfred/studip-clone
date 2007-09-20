@@ -125,7 +125,9 @@ class SingleDateDB {
 		if ($db->num_rows() == 0) return NULL;
 
 		while ($db->next_record()) {
-			$ret[] = $db->Record;
+			if ($db->f('issue_id')) {
+				$ret[] = $db->Record;
+			}
 		}
 		return $ret;
 	}

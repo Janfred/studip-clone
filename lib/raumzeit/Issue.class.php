@@ -1,4 +1,4 @@
-<?
+<?php
 // +--------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // Issue.class.php
@@ -162,7 +162,23 @@ class Issue {
 	}
 
 	function delete() {
-		IssueDB::deleteIssue($this->issue_id);
+		$dates = IssueDB::getDatesforIssue($this->issue_id);
+
+		$titles = array();
+		$title = '';
+
+		foreach ($dates as $termin_id => $termin_data) {
+			$titles[] = date('d.m.y, H:i', $termin_data['date']).' - '.date('H:i', $termin_data['end_time']);
+		}
+
+		if (sizeof($titles) > 0) {
+			$title = implode(', ', $titles).', '.$this->getTitle() . ' ' ._("(Thema gelöscht)");
+		} else {
+			$title = $this->getTitle() . ' ' ._("(Thema gelöscht)");
+		}
+		$description = _("Dateiordner bezieht sich auf ein nicht mehr vorhandenes Thema.");
+
+		IssueDB::deleteIssue($this->issue_id, $this->seminar_id, $title, $description);
 	}
 
 	function fillValuesFromArray($data) {
@@ -239,4 +255,3 @@ class Issue {
 		return IssueDB::isIssue($issue_id);
 	}
 }
-?>

@@ -83,8 +83,12 @@ class IssueDB {
 		return TRUE;
 	}
 
-	function deleteIssue($issue_id) {
+	function deleteIssue($issue_id, $seminar_id, $title = '', $description = '') {
 		$db = new DB_Seminar();
+		if ($title) {
+			$new_id = md5($seminar_id . 'top_folder');
+			$db->query("UPDATE folder SET name = '".mysql_escape_string($title)."', description= '".mysql_escape_string($description)."', range_id = '$new_id' WHERE range_id = '{$issue_id}'");
+		}
 		$db->query("DELETE FROM themen WHERE issue_id = '$issue_id'");
 		$db->query("DELETE FROM themen_termine WHERE issue_id = '$issue_id'");
 	}
@@ -92,7 +96,7 @@ class IssueDB {
 	function isIssue($issue_id) {
 		$db = new DB_Seminar();
 		$db->query("SELECT * FROM themen WHERE issue_id = '$issue_id'");
-		return $db->num_rows()?TRUE:FALSE;
+		return $db->num_rows() ? true : false;
 	}
 
 	/*function checkFile($issue_id) {

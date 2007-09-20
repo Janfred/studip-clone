@@ -1324,22 +1324,26 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$link=$PHP_SELF."?close=".$db->f("folder_id")."#anker";
 
 			//Titelbereich erstellen
-			$title_name = $db->f('name');
+			if (!$db->f('name')) {	
+				$title_name = _("Ohne Titel");
+			} else {
+				$title_name = $db->f('name');
+			}
 
 			if ($is_issue_folder) {
 				$dates_title = array();
 				foreach ($dates_for_issue as $date) {
-					$dates_title[] .= date('d.m.y', $date['date']);
+					$dates_title[] .= date('d.m.y, H:i', $date['date']).' - '.date('H:i', $date['end_time']);
 				}
-				$title_name = sprintf(_("Sitzung am: %s"), implode(', ', $dates_title));
-				if (!$db->f('name')) {
-					$title_name .= _(", kein Titel");
-				} else {
-					$title_name .= ', '.$db->f('name');
-				}
-			} else {
-				if (!$db->f('name')) {	
-					$title_name = _("Kein Titel");
+
+				if (sizeof($dates_title) > 0) {
+					$title_name = sprintf(_("Sitzung am: %s"), implode(', ', $dates_title));
+
+					if (!$db->f('name')) {
+						$title_name .= _(", ohne Titel");
+					} else {
+						$title_name .= ', '.$db->f('name');
+					}
 				}
 			}
 
@@ -1415,7 +1419,6 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			
 			if ($is_issue_folder){
 				$dates = array();
-				//foreach(IssueDB::getDatesforIssue($db->f('range_id')) as $date){
 				foreach ($dates_for_issue as $date) {
 					$dates[] = strftime("%x", $date['date']); 
 				}

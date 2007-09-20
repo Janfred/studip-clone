@@ -200,9 +200,22 @@ class SingleDate {
 		return $this->metadate_id;
 	}
 
+	function killIssue() {
+		// We delete the issue, cause there is now chance, anybody can get to it without expert view
+		if(!$GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
+			foreach( $this->getIssueIDs() as $issue_id){
+				// delete this issue
+				$issue = new Issue(array('issue_id' => $issue_id));
+				$issue->delete();
+			}
+		}
+	}
+
 	function delete() {
 		$this->chdate = time();
 		$this->killAssign();
+		$this->killIssue();
+
 		return SingleDateDB::deleteSingleDate($this->termin_id, $this->ex_termin);
 	}
 
@@ -210,6 +223,7 @@ class SingleDate {
 		$this->chdate = time();
 		if ($this->ex_termin) {
 			$this->killAssign();
+			$this->killIssue();
 		}
 
 		// if date_typ is 0, it defaults to the TERMIN_TYP[1], so we have to set it to 1 for matching real world to date_typ
