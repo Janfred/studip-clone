@@ -622,7 +622,7 @@ if(is_object($group_obj)){
 	foreach($data as $seminar_id => $semdata) {
 		$teilnehmer = $semdata['count_teilnehmer'];
 		if($teilnehmer){
-			$teilnehmer .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("TeilnehmerInnen") . ' '. $sem_data['Name']) .'&format=csv&choose=csv-teiln&o_mode=passthrough">';
+			$teilnehmer .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("TeilnehmerInnen") . ' '. $semdata['Name']) .'&format=csv&choose=csv-teiln&o_mode=passthrough">';
 			$teilnehmer .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Teilnehmerliste downloaden")).' ></a>';
 		}
 		$cssSw->switchClass();
@@ -630,12 +630,12 @@ if(is_object($group_obj)){
 		$quota = $semdata['admission_turnout'];
 		$count2 = $semdata['count_anmeldung'];
 		if($count2){
-			$count2 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Anmeldungen") . ' '. $sem_data['Name']).'&format=csv&choose=csv-warteliste&filter=awaiting&o_mode=passthrough">';
+			$count2 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Anmeldungen") . ' '. $semdata['Name']).'&format=csv&choose=csv-warteliste&filter=accepted&o_mode=passthrough">';
 			$count2 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Anmeldeliste downloaden")).' ></a>';
 		}
 		$count3 = $semdata['count_wartende'];;
 		if($count3){
-			$count3 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Warteliste") . ' '. $sem_data['Name']).'&format=csv&choose=csv-warteliste&filter=awaiting&o_mode=passthrough">';
+			$count3 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Warteliste") . ' '. $semdata['Name']).'&format=csv&choose=csv-warteliste&filter=awaiting&o_mode=passthrough">';
 			$count3 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Warteliste downloaden")).' ></a>';
 		}
 		$datum = $semdata['admission_endtime'];
