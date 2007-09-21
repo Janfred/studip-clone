@@ -80,10 +80,11 @@ function raumzeit_checkboxAction() {
 			if (!$_REQUEST['singledate']) break;	// if there were no singleDates choosen, stop.
 			$msg = _("Folgende Termine wurden wieder hergestellt:").'<br/>';
 			foreach ($_REQUEST['singledate'] as $val) {
-				$termin = $sem->getSingleDate($val, $_REQUEST['cycle_id']);		// retrieve singleDate
-				$msg .= $termin->toString().'<br/>';													// add string representation to message
-				unset($termin);																								// we never now, if the variable persists...
-				$sem->unDeleteSingleDate($val, $_REQUEST['cycle_id']);				// undelete retrieved singleDate
+				if ($sem->unDeleteSingleDate($val, $_REQUEST['cycle_id'])) {		// undelete retrieved singleDate
+					$termin = $sem->getSingleDate($val, $_REQUEST['cycle_id']);		// retrieve singleDate
+					$msg .= $termin->toString().'<br/>';													// add string representation to message
+					unset($termin);																								// we never now, if the variable persists...
+				}
 			}
 			$sem->createMessage($msg);
 			break;

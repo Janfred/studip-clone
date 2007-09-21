@@ -246,7 +246,7 @@ class MetaDate {
 	}
 
 	function unDeleteSingleDate($cycle_id, $date_id, $filterStart, $filterEnd) {
-		$this->cycles[$cycle_id]->unDeleteSingleDate($date_id, $filterStart, $filterEnd);
+		return $this->cycles[$cycle_id]->unDeleteSingleDate($date_id, $filterStart, $filterEnd);
 	}
 
 	function store() {

@@ -192,8 +192,14 @@ class CycleData {
 		if (!$this->termine) {
 			$this->readSingleDates($filterStart, $filterEnd);
 		}
+
+		if (!$this->termine[$date_id]->isExTermin()) {
+			return false;
+		}
+
 		$this->termine[$date_id]->setExTermin(false);
 		$this->termine[$date_id]->store();
+		return true;
 	}
 
 	function readSingleDates($start = 0, $end = 0) {

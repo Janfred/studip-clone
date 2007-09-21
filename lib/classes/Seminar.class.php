@@ -840,11 +840,15 @@ class Seminar {
 		// logging <<<<<<
 		if ($cycle_id == '') {
 			$this->readSingleDates();
+
+			if (!$this->irregularSingleDates[$date_id]->isExTermin()) {
+				return false;
+			}
+
 			$this->irregularSingleDates[$date_id]->setExTermin(false);
-			return TRUE;
+			return true;
 		} else {
-			$this->metadate->unDeleteSingleDate($cycle_id, $date_id, $this->filterStart, $this->filterEnd);
-			return TRUE;
+			return $this->metadate->unDeleteSingleDate($cycle_id, $date_id, $this->filterStart, $this->filterEnd);
 		}
 	}
 
