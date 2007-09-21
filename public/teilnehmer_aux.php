@@ -49,9 +49,11 @@ function filterDatafields($entries) {
 	global $rule;
 
 	$new_entries = array();
-	foreach ($entries as $key => $val) {
-		if ($rule['attributes'][$key] == 1) {
-			$new_entries[$key] = $val;
+	if (isset($rule)) {
+		foreach ($entries as $key => $val) {
+			if ($rule['attributes'][$key] == 1) {
+				$new_entries[$key] = $val;
+			}
 		}
 	}
 

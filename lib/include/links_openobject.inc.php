@@ -1,9 +1,10 @@
 <?php
+/* vim: noexpandtab */
 /**
 * links_openobject.inc.php
-* 
+*
 * links for the Stud.IP objects (institutes and Veranstaltungen)
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -144,21 +145,21 @@ if (($SUPPORT_ENABLE) && ($modules["support"])) {
 // create the structure array for activated plugins
 if ($PLUGINS_ENABLE){
 	// list all activated plugins
-	
+
 	$plugins = $Modules->pluginengine->getAllActivatedPlugins();
-	
+
 	if (is_array($plugins)){
 		foreach ($plugins as $plugin){
 			if ($plugin->hasNavigation()){
 				$pluginnavi = $plugin->getNavigation();
 				$structure["plugin_" . $plugin->getPluginId()] = array('topKat' => '', 'name' => $plugin->getDisplaytitle(),'link' => PluginEngine::getLink($plugin),'active' => false);
-				
+
 				$pluginsubmenu["_plugin_" . $plugin->getPluginId()] = array('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $pluginnavi->getDisplayname(), 'link' => PluginEngine::getLink($plugin), 'active' => false);
 				$submenu = $pluginnavi->getSubMenu();
 				// create bottomkats for activated plugins
 				foreach ($submenu as $submenuitem){
 					// create entries in a temporary structure and add it to structure later
-					$pluginsubmenu["plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $submenuitem->getDisplayname(), 'link' => PluginEngine::getLink($plugin,$submenuitem->getLinkParams()), 'active' => false); 
+					$pluginsubmenu["plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $submenuitem->getDisplayname(), 'link' => PluginEngine::getLink($plugin,$submenuitem->getLinkParams()), 'active' => false);
 				}
 			}
 			else {
@@ -173,7 +174,7 @@ if ($PLUGINS_ENABLE){
 //Bottomkats
 if ($SessSemName["class"]=="inst") {
 	$structure["_institut_main"]=array ('topKat' => "institut_main", 'name' => _("Info"), 'link' => "institut_main.php", 'active' => FALSE);
-	if ($modules["personal"])	
+	if ($modules["personal"])
 		$structure["institut_members"]=array ( 'topKat' => "personal", 'name' => _("MitarbeiterInnen"), 'link' => "institut_members.php", 'active' => FALSE);
 	$structure["institut_veranstaltungen"]=array ('topKat' => "institut_main", 'name' => _("Veranstaltungen"), 'link' => "show_bereich.php?level=s&id=$SessSemName[1]", 'active' => FALSE);
 	$structure["timetable"]=array ('topKat' => "institut_main", 'name' => _("Veranstaltungs-Timetable"), 'link' => "mein_stundenplan.php?inst_id=$SessSemName[1]", 'active' => FALSE);
@@ -182,7 +183,7 @@ if ($SessSemName["class"]=="inst") {
 		if ($perm->have_perm("admin"))
 			$structure["administration_e"]=array ('topKat' => "institut_main", 'name' => _("Administration der Einrichtung"), 'link' => "admin_institut.php?new_inst=TRUE", 'active' => FALSE);
 		else
-			$structure["administration_e"]=array ('topKat' => "institut_main", 'name' => _("Administration der Einrichtung"), 'link' => "admin_lit_list.php?new_inst=TRUE&view=literatur_inst", 'active' => FALSE);		
+			$structure["administration_e"]=array ('topKat' => "institut_main", 'name' => _("Administration der Einrichtung"), 'link' => "admin_lit_list.php?new_inst=TRUE&view=literatur_inst", 'active' => FALSE);
 } else {
 //
 	$structure["_seminar_main"]=array ('topKat' => "seminar_main", 'name' => _("Kurzinfo"), 'link' => "seminar_main.php", 'active' => FALSE);
@@ -212,7 +213,7 @@ if ($modules["forum"]) {
 	if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"]))
 		$structure["neues_thema"]=array ('topKat' => "forum", 'name' => _("neues Thema anlegen"), 'link' => "forum.php?view=".$forum["themeview"]."&neuesthema=TRUE#anker", 'active' => FALSE);
 		$structure["admin"]=array ('topKat' => "forum", 'name' => _("Forum anpassen"), 'link' => "forum.php?forumsend=anpassen&view=$view", 'active' => FALSE);
-		
+
 }
 //
 if (($SessSemName["class"]=="sem") && ($modules["schedule"])){
@@ -250,16 +251,18 @@ if ($modules["literature"]) {
 // Ticket #68
 require_once('lib/classes/AuxLockRules.class.php');
 $rule = AuxLockRules::getLockRuleBySemId($SessSemName[1]);
-$show = false;
-foreach ((array)$rule['attributes'] as $val) {
-	if ($val == 1) {
-		$show = true;
-		break;
+if (isset($rule)) {
+	$show = false;
+	foreach ((array)$rule['attributes'] as $val) {
+		if ($val == 1) {
+			$show = true;
+			break;
+		}
 	}
-}
 
-if ($show)  {
-	$structure["teilnehmer_aux"] = array(topKat => "teilnehmer", name => _("Zusatzangaben"), link => "teilnehmer_aux.php", active => FALSE);
+	if ($show)  {
+		$structure["teilnehmer_aux"] = array(topKat => "teilnehmer", name => _("Zusatzangaben"), link => "teilnehmer_aux.php", active => FALSE);
+	}
 }
 
 if ($SessSemName["class"]=="sem" && $modules["participants"] && (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)  || $rechte))
@@ -282,8 +285,8 @@ if (($rechte) && ($modules["literature"]))
 if ($modules["wiki"]) {
 	$structure["_wiki"]=array ('topKat' => "wiki", 'name' => _("WikiWikiWeb"), 'link' => "wiki.php", 'active' => FALSE);
 	$structure["wiki_listnew"]=array ('topKat' => "wiki", 'name' => _("Neue Seiten"), 'link' => "wiki.php?view=listnew", 'active' => FALSE);
-	$structure["wiki_listall"]=array ('topKat' => "wiki", 'name' => _("Alle Seiten"), 'link' => "wiki.php?view=listall", 'active' => FALSE); 
-	$structure["wiki_export"]=array ('topKat' => "wiki", 'name' => _("Export"), 'link' => "wiki.php?view=export", 'active' => FALSE); 
+	$structure["wiki_listall"]=array ('topKat' => "wiki", 'name' => _("Alle Seiten"), 'link' => "wiki.php?view=listall", 'active' => FALSE);
+	$structure["wiki_export"]=array ('topKat' => "wiki", 'name' => _("Export"), 'link' => "wiki.php?view=export", 'active' => FALSE);
 }
 
 //bottomkats for resources-management, if modul is activated
@@ -300,12 +303,12 @@ if ($RESOURCES_ENABLE) {
 if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])){
 	if (get_seminar_modules($SessSemName[1]) != false)
 	{
-		if ($SessSemName["class"]=="inst") 
+		if ($SessSemName["class"]=="inst")
 			$structure["lernmodule_show"]=array ('topKat' => "lernmodule", 'name' => _("Lernmodule dieser Einrichtung"), 'link' => "seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], 'active' => FALSE);
-		else		
+		else
 			$structure["lernmodule_show"]=array ('topKat' => "lernmodule", 'name' => _("Lernmodule dieser Veranstaltung"), 'link' => "seminar_lernmodule.php?view=show&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 	}
-	
+
 	if  ($perm->have_studip_perm("tutor",$SessSemName[1]))
 		$structure["lernmodule_edit"]=array ('topKat' => "lernmodule", 'name' => _("Lernmodule hinzuf&uuml;gen / entfernen"), 'link' => "seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 }
@@ -314,9 +317,9 @@ if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])){
 if (($ELEARNING_INTERFACE_ENABLE) && ($modules["elearning_interface"])){
 	if (ObjectConnections::isConnected($SessSemName[1]))
 	{
-		if ($SessSemName["class"]=="inst") 
+		if ($SessSemName["class"]=="inst")
 			$structure["elearning_interface_show"]=array ('topKat' => "elearning_interface", 'name' => _("Lernmodule dieser Einrichtung"), 'link' => "elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], 'active' => FALSE);
-		else		
+		else
 			$structure["elearning_interface_show"]=array ('topKat' => "elearning_interface", 'name' => _("Lernmodule dieser Veranstaltung"), 'link' => "elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 	}
 	if  ($perm->have_studip_perm("tutor",$SessSemName[1]))
@@ -348,7 +351,7 @@ if ($PLUGINS_ENABLE){
 		// Namen der aufgerufenen Datei aus der URL herausschneiden
 		if (strlen($i_page) <= 0){
 			$i_page = basename($PHP_SELF);
-		} 
+		}
 		if ($i_page == "plugins.php"){
 			foreach ($plugins as $plugin){
 				if ($plugin->hasNavigation() && ($plugin->getPluginId() == $pluginid)){
@@ -356,7 +359,7 @@ if ($PLUGINS_ENABLE){
 					$reiter_view="plugin_" . $plugin->getPluginId();
 					$navi = $plugin->getNavigation();
 					$submenu = $navi->getSubMenu();
-					
+
 					if ($submenu != null) {
                                                 foreach ($submenu as $submenuitem) {
                                                         if ($submenuitem->isActive()) {
@@ -376,26 +379,26 @@ if (!$found){
 
 	//View festlegen
 	switch ($i_page) {
-		case "show_bereich.php" : 
-			$reiter_view="institut_veranstaltungen"; 
+		case "show_bereich.php" :
+			$reiter_view="institut_veranstaltungen";
 		break;
-		case "institut_main.php" : 
-			$reiter_view="institut_main"; 
+		case "institut_main.php" :
+			$reiter_view="institut_main";
 		break;
 		case "institut_members.php" :
 			$reiter_view = "institut_members";
 		break;
-		case "seminar_main.php" : 
-			$reiter_view="seminar_main"; 
+		case "seminar_main.php" :
+			$reiter_view="seminar_main";
 		break;
-		case "details.php" : 
-			$reiter_view="details"; 
+		case "details.php" :
+			$reiter_view="details";
 		break;
-		case "teilnehmer.php" : 
-			$reiter_view="teilnehmer"; 
+		case "teilnehmer.php" :
+			$reiter_view="teilnehmer";
 		break;
-		case "statusgruppen.php" : 
-			$reiter_view="statusgruppen"; 
+		case "statusgruppen.php" :
+			$reiter_view="statusgruppen";
 		break;
 		case "teilnehmer_view.php";
 			$reiter_view="teilnehmer_view";
@@ -403,22 +406,22 @@ if (!$found){
 		case "teilnehmer_aux.php";
 			$reiter_view="teilnehmer_aux";
 		break;
-		case "institut_details.php": 
-			$reiter_view="institut_details"; 
+		case "institut_details.php":
+			$reiter_view="institut_details";
 		break;
-		case "inst_admin.php": 
-			$reiter_view="inst_admin"; 
+		case "inst_admin.php":
+			$reiter_view="inst_admin";
 		break;
-		case "admin_institut.php": 
-			$reiter_view="admin_institut"; 
+		case "admin_institut.php":
+			$reiter_view="admin_institut";
 		break;
-		case "admin_literatur.php": 
-			$reiter_view="admin_literatur"; 
+		case "admin_literatur.php":
+			$reiter_view="admin_literatur";
 		break;
-		case "admin_news.php": 
-			$reiter_view="admin_news"; 
+		case "admin_news.php":
+			$reiter_view="admin_news";
 		break;
-		case "forum.php": 
+		case "forum.php":
 			switch ($view) {
 				case "":
 					$reiter_view="forum";
@@ -443,7 +446,7 @@ if (!$found){
 				break;
 			}
 		break;
-		case "dates.php": 
+		case "dates.php":
 			switch ($type) {
 				case "":
 				case "all":
@@ -460,7 +463,7 @@ if (!$found){
 				break;
 			}
 		break;
-		case "folder.php": 
+		case "folder.php":
 			switch ($folder_system_data["cmd"]) {
 				case "":
 					$reiter_view="folder";
@@ -476,12 +479,12 @@ if (!$found){
 				break;
 			}
 		break;
-		case "suchen.php": 
-			$reiter_view="suchen"; 
-		break;	
-		case "mein_stundenplan.php": 
-			$reiter_view="timetable"; 
-		break;	
+		case "suchen.php":
+			$reiter_view="suchen";
+		break;
+		case "mein_stundenplan.php":
+			$reiter_view="timetable";
+		break;
 		case "scm.php":
 			if ($_show_scm){
 				$reiter_view = "_scm_" . $_show_scm;
@@ -490,13 +493,13 @@ if (!$found){
 				$_show_scm = $scms[0]['scm_id'];
 			}
 		break;
-		case "literatur.php": 
+		case "literatur.php":
 			$reiter_view="literatur";
 		break;
-		case "migration2studip.php": 
+		case "migration2studip.php":
 			$reiter_view="lernmodule_user";
 		break;
-		case "seminar_lernmodule.php": 
+		case "seminar_lernmodule.php":
 			switch ($view) {
 				case "edit":
 					$reiter_view="lernmodule_edit";
@@ -506,7 +509,7 @@ if (!$found){
 				break;
 			}
 		break;
-		case "elearning_interface.php": 
+		case "elearning_interface.php":
 			switch ($view) {
 				case "edit":
 					$reiter_view="elearning_interface_edit";
@@ -516,7 +519,7 @@ if (!$found){
 				break;
 			}
 		break;
-		case "resources.php": 
+		case "resources.php":
 			switch ($view) {
 				case "openobject_main":
 					$reiter_view="resources";
@@ -535,7 +538,7 @@ if (!$found){
 				break;
 			}
 		break;
-		case "support.php": 
+		case "support.php":
 			switch ($supportdb_data["view"]) {
 				case "overview":
 					$reiter_view="support_overview";
@@ -571,10 +574,10 @@ if (!$found){
 				$reiter_view="seminar_main";
 		break;
 	}
-	
-	
+
+
 	}
-	
+
 	$reiter->create($structure, $reiter_view, $tooltip);
 }
 ?>

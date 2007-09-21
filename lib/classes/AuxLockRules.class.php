@@ -47,8 +47,11 @@ class AuxLockRules {
 
 	function getLockRuleBySemId($sem_id) {
 		$db = new DB_Seminar("SELECT aux_lock_rule FROM seminare WHERE Seminar_id = '$sem_id'");
-		$db->next_record();
-		return AuxLockRules::getLockRuleById($db->f('aux_lock_rule'));
+		if ($db->num_rows()) {
+			$db->next_record();
+			return AuxLockRules::getLockRuleById($db->f('aux_lock_rule'));
+		}
+		return NULL;
 	}
 
 	function createLockRule($name, $description, $fields, $order) {
