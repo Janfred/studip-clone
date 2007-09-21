@@ -1,4 +1,4 @@
-<?
+<?php
 // +--------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // SingleDate.class.php
@@ -203,10 +203,12 @@ class SingleDate {
 	function killIssue() {
 		// We delete the issue, cause there is now chance, anybody can get to it without expert view
 		if(!$GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
-			foreach( $this->getIssueIDs() as $issue_id){
-				// delete this issue
-				$issue = new Issue(array('issue_id' => $issue_id));
-				$issue->delete();
+			if ($issue_ids = $this->getIssueIDs()) {
+				foreach ($issue_ids as $issue_id) {
+					// delete this issue
+					$issue = new Issue(array('issue_id' => $issue_id));
+					$issue->delete();
+				}
 			}
 		}
 	}
@@ -539,4 +541,3 @@ class SingleDate {
 		return TRUE;
 	}
 }
-?>
