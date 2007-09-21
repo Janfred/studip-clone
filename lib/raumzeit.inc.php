@@ -290,6 +290,7 @@ function raumzeit_editSingleDate() {
 			if ($new_termin->setTime($start, $ende)) {
 				$new_termin->setDateType($_REQUEST['dateType']);
 				$new_termin->setFreeRoomText($_REQUEST['freeRoomText_sd']);
+				$new_termin->store();
 				$sem->addSingleDate($new_termin);
 				$sem->bookRoomForSingleDate($new_termin->getSingleDateID(), $_REQUEST['room_sd']);
 
