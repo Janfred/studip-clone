@@ -100,7 +100,7 @@ function get_aux_data() {
 					}
 					$data[$db->f('user_id')]['entry'][$id] = $text;
 				} else {
-					$data[$db->f('user_id')]['entry'][$id] = $entry->getValue();
+					$data[$db->f('user_id')]['entry'][$id] = htmlready($entry->getValue());
 				}
 			}
 		}
