@@ -99,7 +99,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 	//	$this->elements["LinkIntern"]->real_name = _("Link zum Modul MitarbeiterInnendetails");
 		
 		$this->elements['LinkInternLecturedetails']->real_name = _("Link zum Modul Veranstaltungsdetails");
-		$this->elements['LinkInternLecturedetails']->link_module_type = 4;
+		$this->elements['LinkInternLecturedetails']->link_module_type = array(4, 13);
 		$this->elements['PersondetailsLectures']->real_name = _("Einstellungen für Lehrveranstaltungen");
 		$this->elements['LitList']->real_name = _("Einstellungen für Literaturlisten");
 		$this->elements['TemplateMain']->real_name = _("Haupttemplate");
