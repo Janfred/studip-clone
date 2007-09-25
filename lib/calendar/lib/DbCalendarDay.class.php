@@ -169,7 +169,7 @@ class DbCalendarDay extends CalendarDay {
 				. "FROM termine t LEFT JOIN themen_termine tt ON tt.termin_id = t.termin_id "
         	        	. "LEFT JOIN themen th ON th.issue_id = tt.issue_id "
 		            	. "LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
-		            	. "LEFT JOIN seminare s USING(Seminar_id) WHERE "
+		            	. "LEFT JOIN seminare s ON s.Seminar_id=t.range_id WHERE "
 			       . "user_id = '%s' AND date_typ!=-1 AND date_typ!=-2 AND date BETWEEN %s AND %s"
 						 , $this->user_id, $this->getStart(), $this->getEnd());
 		else if ($sem_id != "") {
