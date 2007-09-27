@@ -86,7 +86,47 @@ class Step25RaumzeitMigrations extends DBMigration
         $this->db->query("
             ALTER TABLE `resources_requests` ADD `reply_comment` TEXT AFTER `comment`;        
         ");
-        
+
+				$this->db->query("
+					INSERT INTO `log_actions` VALUES (MD5('SEM_UNDELETE_SINGLEDATE'), 'SEM_UNDELETE_SINGLEDATE', 'Einzeltermin wiederherstellen', '%user stellt Einzeltermin %singledate(%affected) in %sem(%coaffected) wieder her.', 1, NULL);
+        ");
+
+				$this->db->query("
+					INSERT INTO `log_actions` VALUES (MD5('SEM_DELETE_SINGLEDATE'), 'SEM_DELETE_SINGLEDATE', 'Einzeltermin löschen', '%user löscht Einzeltermin %singledate(%affected) in %sem(%coaffected).', 1, NULL);
+        ");
+
+				$this->db->query("
+					INSERT INTO `log_actions` VALUES (MD5('SEM_SET_STARTSEMESTER'), 'SEM_SET_STARTSEMESTER', 'Startsemester ändern', '%user hat in %sem(%affected) das Startsemester auf %semester(%coaffected) geändert.', 1, NULL);
+        ");
+
+				$this->db->query("
+					INSERT INTO `log_actions` VALUES (MD5('SEM_SET_ENDSEMESTER'), 'SEM_SET_ENDSEMESTER', 'Semesterlaufzeit ändern', '%user hat in %sem(%affected) die Laufzeit auf %semester(%coaffected) geändert', 1, NULL);
+        ");
+
+				$this->db->query("
+					INSERT INTO `log_actions` VALUES (MD5('SEM_ADD_CYCLE'), 'SEM_ADD_CYCLE', 'Regelmäßige Zeit hinzugefügt', '%user hat in %sem(%affected) die regelmäßige Zeit <em>%coaffected</em> hinzugefügt.', 1, NULL);
+        ");
+
+				$this->db->query("
+					INSERT INTO `log_actions` VALUES (MD5('SEM_DELETE_CYCLE'), 'SEM_DELETE_CYCLE', 'Regelmäßige Zeit gelöscht', '%user hat in %sem(%affected) die regelmäßige Zeit <em>%coaffected</em> gelöscht.', 1, NULL);
+        ");
+
+				$this->db->query("
+					INSERT INTO `log_actions` VALUES (MD5('SEM_ADD_SINGLEDATE'), 'SEM_ADD_SINGLEDATE', 'Einzeltermin hinzufügen', '%user hat in %sem(%affected) den Einzeltermin <em>%coaffected</em> hinzugefügt', 1, NULL);
+        ");
+
+				$this->db->query("
+					INSERT INTO `log_actions` VALUES (MD5('SEM_DELETE_REQUEST'), 'SEM_DELETE_REQUEST', 'Raumanfrage gelöscht', '%user hat in %sem(%affected) die Raumanfrage für die gesamte Veranstaltung gelöscht.', 1, NULL);
+        ");
+
+				$this->db->query("
+					INSERT INTO `log_actions` VALUES (MD5('SEM_DELETE_SINGLEDATE_REQUEST'), 'SEM_DELETE_SINGLEDATE_REQUEST', 'Einzeltermin, Raumanfrage gelöscht', '%user hat in %sem(%affected) die Raumanfrage für den Termin <em>%coaffected</em> gelöscht.', 1, NULL);
+        ");
+
+				$this->db->query("
+					INSERT INTO `log_actions` VALUES (MD5('SINGLEDATE_CHANGE_TIME'), 'SINGLEDATE_CHANGE_TIME', 'Einzeltermin bearbeiten', '%user hat in %sem(%affected) den Einzeltermin %coaffected geändert.', 1, NULL);
+        ");
+
         // move "RESOURCES_ENABLE" from config_local.inc.php to config table:
         if( $GLOBALS["RESOURCES_ENABLE"] ){
             // if "true", insert this as a local customization

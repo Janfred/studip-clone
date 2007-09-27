@@ -214,6 +214,24 @@ function showlog_format_studyarea($area_id) {
 	}
 }
 
+function showlog_format_singledate($sd_id) {
+	require_once('lib/raumzeit/SingleDate.class.php');
+	$termin = new SingleDate($sd_id);
+	return '<em>'.$termin->toString().'</em>';
+}
+
+function showlog_format_semester($sem_start_time) {
+	require_once('lib/classes/SemesterData.class.php');
+	$semester = new SemesterData();
+	$all_semester = $semester->getAllSemesterData();
+	foreach ($all_semester as $val) {
+		if ($val['beginn'] == $sem_start_time) {
+			return '<em>'.$val['name'].'</em>';
+		}
+	}
+	return $sem_start_time;
+}
+
 function showlog_format_infotemplate($action, $user_id, $affected, $coaffected, $info, $dbg_info) {
 	$info = htmlReady($info);
 	$dbg_info = htmlReady($dbg_info);
@@ -229,6 +247,8 @@ function showlog_format_infotemplate($action, $user_id, $affected, $coaffected, 
 	$text=preg_replace('/%user\(%affected\)/',showlog_format_username($affected),$text);
 	$text=preg_replace('/%user\(%coaffected\)/',showlog_format_username($coaffected),$text);
 	$text=preg_replace('/%user/',showlog_format_username($user_id),$text);
+	$text=preg_replace('/%singledate\(%affected\)/',showlog_format_singledate($affected),$text);
+	$text=preg_replace('/%semester\(%coaffected\)/',showlog_format_semester($coaffected),$text);
 	$text=preg_replace('/%affected/',$affected,$text);
 	$text=preg_replace('/%coaffected/',$coaffected,$text);
 	$text=preg_replace('/%info/',$info,$text);
