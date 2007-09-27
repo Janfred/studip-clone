@@ -904,7 +904,7 @@ function idna_link($link, $mail = false){
 		if ($mail){
 			if (preg_match('#^([^@]*)@(.*)$#i',$link, $matches)) {
 				$out = $IDN->encode(utf8_encode(decodeHTML($matches[2]))); // false by error
-				$out = ($out)? $matches[1].'@'.$out : link;
+				$out = ($out)? $matches[1].'@'.$out : $link;
 			}
 		}elseif (preg_match('#^([^/]*)//([^/?]*)(((/|\?).*$)|$)#i',$link, $matches)) {
 			$out = $IDN->encode(utf8_encode(decodeHTML($matches[2]))); // false by error
