@@ -226,6 +226,10 @@ class SingleDate {
 		if ($this->ex_termin) {
 			$this->killAssign();
 			$this->killIssue();
+			if (!$this->metadate_id) {
+				SingleDateDB::deleteSingleDate($this->termin_id, $this->orig_ex);
+				return true;
+			}
 		}
 
 		// if date_typ is 0, it defaults to the TERMIN_TYP[1], so we have to set it to 1 for matching real world to date_typ
