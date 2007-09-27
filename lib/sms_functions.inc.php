@@ -361,9 +361,9 @@ function print_rec_message($prm) {
 
 		if($my_messaging_settings['show_sndpicture'] == 1) {
 			$tmp_snd_id = get_userid($prm['uname_snd']);
-			if(file_exists("user/".$tmp_snd_id.".jpg") && $prm['user_id_snd'] != "____%system%____") {
+			if(file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$tmp_snd_id.".jpg") && $prm['user_id_snd'] != "____%system%____") {
 				$content = "<table width=\"100%\" cellpadding=0 cellmargin=0><tr><td valign=\"top\" width=\"99%\"><font size=\"-1\">".$content."</font><td>";
-				$content .= "<td align=\"right\" style=\"border-left: 1px dotted black;\">&nbsp;<img src=\"user/".$tmp_snd_id.".jpg\" width=\"80\" border=0 alt=\"\">&nbsp;</td>";
+				$content .= "<td align=\"right\" style=\"border-left: 1px dotted black;\">&nbsp;<img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/".$tmp_snd_id.".jpg\" width=\"80\" border=0 alt=\"\">&nbsp;</td>";
 				$content .= "</tr></table>";
 			}
 
