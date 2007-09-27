@@ -237,10 +237,11 @@ for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_sche
 	//Bestimmen, ob die Veranstaltung in dem Semester liegt, was angezeigt werden soll
 	$use_this=FALSE;
 	$term_data=unserialize($db->f("metadata_dates"));
+
 	if (($db->f("start_time") <=$tmp_sem_beginn) && ($tmp_sem_beginn <= ($db->f("start_time") + $db->f("duration_time")))) {
 		$use_this=TRUE;
 	}
-	if (($use_this) && (!$term_data["art"]) && (is_array($term_data["turnus_data"])))
+	if (($use_this) && (is_array($term_data["turnus_data"]) && count($term_data["turnus_data"])))
 		{
 		//Zusammenbasteln Dozentenfeld
 		$db2->query("SELECT Nachname, username, position FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status='dozent' AND Seminar_id ='".$db->f("Seminar_id")."' ORDER BY position ");
@@ -310,10 +311,10 @@ for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_sche
 
 				$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>$db->f("Name"), "nummer"=>$db->f("VeranstaltungsNummer"), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$tmp_room, "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE, 'desc'=>$data['desc'], "virtual" => ($seminar_user_schedule == 2) ? true : false);
 			}
+
 		}
 	}
 }
-
 //Daten aus der Sessionvariable hinzufuegen
 if ((is_array($my_personal_sems)) && (!$inst_id))
 	foreach ($my_personal_sems as $mps)
