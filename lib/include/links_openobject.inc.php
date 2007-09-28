@@ -358,24 +358,14 @@ if ($PLUGINS_ENABLE){
 					// Hauptmenü gefunden
 					$reiter_view="plugin_" . $plugin->getPluginId();
 					$navi = $plugin->getNavigation();
-
 					$submenu = $navi->getSubMenu();
-
-					if ($submenu != null){
-    					foreach ($submenu as $submenuitem){
-    						$params = $submenuitem->getLinkParams();
-    						$c = 0;						
-    						foreach ($params as $key => $val){
-        						if (isset($_REQUEST["$key"]) && $_REQUEST["$key"] == $val){
-									$c++;
-        						}
-        					}
-							if($c && $c == count($params)){
-        						$reiter_view="plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname();
-								break;
+					if ($submenu != null) {
+						foreach ($submenu as $submenuitem) {
+							if ($submenuitem->isActive()) {
+								$reiter_view="plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname();
 							}
 						}
-    				}
+					}
 					$found= true;
 					break;
 				}
