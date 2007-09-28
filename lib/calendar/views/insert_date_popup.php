@@ -66,9 +66,9 @@ $jsarray .= "zz[$z] = new Array('$ss','$sm','$es','$em');\n";
 
 $function_addition = '';
 if (strlen($element_switch) > 2 && $form_name != '') {
-	$txt_day = $element_switch . '_day';
-	$txt_month = $element_switch . '_month';
-	$txt_year = $element_switch . '_year';
+	$txt_day = $element_switch . '_day' . ($c ? "[$c]" : "");
+	$txt_month = $element_switch . '_month' . ($c ? "[$c]" : "");
+	$txt_year = $element_switch . '_year' . ($c ? "[$c]" : "");
 	if ($element_depending != '') {
 		$txt2_day = $element_depending . '_day';
 		$txt2_month = $element_depending . '_month';
