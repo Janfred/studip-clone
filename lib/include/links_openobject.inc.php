@@ -152,9 +152,9 @@ if ($PLUGINS_ENABLE){
 		foreach ($plugins as $plugin){
 			if ($plugin->hasNavigation()){
 				$pluginnavi = $plugin->getNavigation();
-				$structure["plugin_" . $plugin->getPluginId()] = array('topKat' => '', 'name' => $plugin->getDisplaytitle(),'link' => PluginEngine::getLink($plugin),'active' => false);
+				$structure["plugin_" . $plugin->getPluginId()] = array('topKat' => '', 'name' => $plugin->getDisplaytitle(),'link' => PluginEngine::getLink($plugin, $pluginnavi->getLinkParams()),'active' => false);
 
-				$pluginsubmenu["_plugin_" . $plugin->getPluginId()] = array('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $pluginnavi->getDisplayname(), 'link' => PluginEngine::getLink($plugin), 'active' => false);
+				$pluginsubmenu["_plugin_" . $plugin->getPluginId()] = array('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $pluginnavi->getDisplayname(), 'link' => PluginEngine::getLink($plugin,$pluginnavi->getLinkParams()), 'active' => false);
 				$submenu = $pluginnavi->getSubMenu();
 				// create bottomkats for activated plugins
 				foreach ($submenu as $submenuitem){
@@ -351,22 +351,31 @@ if ($PLUGINS_ENABLE){
 		// Namen der aufgerufenen Datei aus der URL herausschneiden
 		if (strlen($i_page) <= 0){
 			$i_page = basename($PHP_SELF);
-		}
+		} 
 		if ($i_page == "plugins.php"){
 			foreach ($plugins as $plugin){
 				if ($plugin->hasNavigation() && ($plugin->getPluginId() == $pluginid)){
 					// Hauptmenü gefunden
 					$reiter_view="plugin_" . $plugin->getPluginId();
 					$navi = $plugin->getNavigation();
+
 					$submenu = $navi->getSubMenu();
 
-					if ($submenu != null) {
-                                                foreach ($submenu as $submenuitem) {
-                                                        if ($submenuitem->isActive()) {
-                                                               $reiter_view="plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname();
-                                                        }
-                                                }
-                                        }
+					if ($submenu != null){
+    					foreach ($submenu as $submenuitem){
+    						$params = $submenuitem->getLinkParams();
+    						$c = 0;						
+    						foreach ($params as $key => $val){
+        						if (isset($_REQUEST["$key"]) && $_REQUEST["$key"] == $val){
+									$c++;
+        						}
+        					}
+							if($c && $c == count($params)){
+        						$reiter_view="plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname();
+								break;
+							}
+						}
+    				}
 					$found= true;
 					break;
 				}
