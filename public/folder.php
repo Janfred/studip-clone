@@ -478,7 +478,7 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 					$select.="\n<option value=\"".$db2->f("statusgruppe_id")."_a_\">" . sprintf(_("Dateiordner der Gruppe: %s"), htmlReady($db2->f('name'))) . "</option>";
 				}
 
-				$db2->query("SELECT themen_termine.issue_id, termine.date, folder.name, termine.termin_id, date_typ FROM termine LEFT JOIN themen_termine USING (termin_id) LEFT JOIN folder ON (themen_termine.issue_id = folder.range_id) WHERE termine.range_id='$range_id' AND folder.folder_id IS NULL ORDER BY name, termine.date");
+				$db2->query("SELECT themen_termine.issue_id, termine.date, folder.name, termine.termin_id, date_typ FROM termine LEFT JOIN themen_termine USING (termin_id) LEFT JOIN folder ON (themen_termine.issue_id = folder.range_id) WHERE termine.range_id='$range_id' AND folder.folder_id IS NULL ORDER BY termine.date, name");
 
 				$issues = array();
 				$shown_dates = array();
@@ -560,10 +560,10 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 		display_folder_system(md5($SessionSeminar . 'top_folder'), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
 
 		if($SessSemName['class'] == 'sem'){
-		//Alle Themen der Veranstaltung holen
-		$db->query("SELECT issue_id FROM themen INNER JOIN folder ON(issue_id=folder.range_id) WHERE themen.seminar_id='$range_id' ORDER BY priority");
+		// get all issues for the seminar and order them by assigned dates, if any 
+		$db->query("SELECT th.issue_id FROM themen as th LEFT JOIN themen_termine as tt ON(th.issue_id = tt.issue_id) LEFT JOIN termine as t ON (t.termin_id = tt.termin_id) INNER JOIN folder ON (th.issue_id=folder.range_id) WHERE th.seminar_id='$range_id' ORDER BY t.date, priority");
 		while ($db->next_record()) {
-			//und einzelne Termine
+			// display the issue-connected folders
 			display_folder_system($db->f("issue_id"), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
 			}
 			//Gruppenordner
