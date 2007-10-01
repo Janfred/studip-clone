@@ -160,15 +160,14 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
                 $pluginid = $activatedplugin->getPluginid();
                 $menue["pluginnav_" . $pluginid] = array(
                     $pluginnav->getDisplayname(),
-                    PluginEngine::getLink($activatedplugin),
+                    PluginEngine::getLink($activatedplugin, $pluginnav->getLinkParams()),
                     false);
 
                 $submenu = array();
                 foreach ($pluginnav->getSubMenu() as $subkey => $subitem) {
                     $menue["pluginnav_" . $pluginid . '_' . $subkey] = array(
                         $subitem->getDisplayname(),
-                        PluginEngine::getLink($activatedplugin,
-                                              $subitem->getLinkParams()),
+                        PluginEngine::getLink($activatedplugin, $subitem->getLinkParams()),
                         false);
                     $submenu[] = "pluginnav_" . $pluginid . '_' . $subkey;
                 }

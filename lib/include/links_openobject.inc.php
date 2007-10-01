@@ -152,14 +152,14 @@ if ($PLUGINS_ENABLE){
 		foreach ($plugins as $plugin){
 			if ($plugin->hasNavigation()){
 				$pluginnavi = $plugin->getNavigation();
-				$structure["plugin_" . $plugin->getPluginId()] = array('topKat' => '', 'name' => $plugin->getDisplaytitle(),'link' => PluginEngine::getLink($plugin, $pluginnavi->getLinkParams()),'active' => false);
+				$structure["plugin_" . $plugin->getPluginId()] = array('topKat' => '', 'name' => $plugin->getDisplaytitle(), 'link' => PluginEngine::getLink($plugin, $pluginnavi->getLinkParams()), 'active' => false);
 
-				$pluginsubmenu["_plugin_" . $plugin->getPluginId()] = array('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $pluginnavi->getDisplayname(), 'link' => PluginEngine::getLink($plugin,$pluginnavi->getLinkParams()), 'active' => false);
+				$pluginsubmenu["_plugin_" . $plugin->getPluginId()] = array('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $pluginnavi->getDisplayname(), 'link' => PluginEngine::getLink($plugin, $pluginnavi->getLinkParams()), 'active' => false);
 				$submenu = $pluginnavi->getSubMenu();
 				// create bottomkats for activated plugins
 				foreach ($submenu as $submenuitem){
 					// create entries in a temporary structure and add it to structure later
-					$pluginsubmenu["plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $submenuitem->getDisplayname(), 'link' => PluginEngine::getLink($plugin,$submenuitem->getLinkParams()), 'active' => false);
+					$pluginsubmenu["plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $submenuitem->getDisplayname(), 'link' => PluginEngine::getLink($plugin, $submenuitem->getLinkParams()), 'active' => false);
 				}
 			}
 			else {
@@ -167,7 +167,7 @@ if ($PLUGINS_ENABLE){
 			}
 		}
 		// now insert the bottomkats
-		$structure = array_merge((array)$structure,(array)$pluginsubmenu);
+		$structure = array_merge((array)$structure, (array)$pluginsubmenu);
 	}
 }
 
@@ -351,7 +351,7 @@ if ($PLUGINS_ENABLE){
 		// Namen der aufgerufenen Datei aus der URL herausschneiden
 		if (strlen($i_page) <= 0){
 			$i_page = basename($PHP_SELF);
-		} 
+		}
 		if ($i_page == "plugins.php"){
 			foreach ($plugins as $plugin){
 				if ($plugin->hasNavigation() && ($plugin->getPluginId() == $pluginid)){
@@ -359,6 +359,7 @@ if ($PLUGINS_ENABLE){
 					$reiter_view="plugin_" . $plugin->getPluginId();
 					$navi = $plugin->getNavigation();
 					$submenu = $navi->getSubMenu();
+
 					if ($submenu != null) {
 						foreach ($submenu as $submenuitem) {
 							if ($submenuitem->isActive()) {

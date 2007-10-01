@@ -296,7 +296,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link'=>"seminar_main.php?auswahl=".$SessSemName[1], 'active'=>FALSE);
 
 	if ($perm->have_perm("root") && $GLOBALS["PLUGINS_ENABLE"]) {
-		$structure["plugins"]=array ('topKat'=>"", 'name'=>_("Administrations-Plugins"), 'link'=>"plugins.php?cmd=show&id=1", 'active'=>FALSE);
+		$structure["plugins"]=array ('topKat'=>"", 'name'=>_("Administrations-Plugins"), 'link'=>PluginEngine::getLinkToAdministrationPlugin(), 'active'=>FALSE);
 	}
 
 	//Bottomkats
@@ -411,7 +411,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			foreach ($plugins as $adminplugin) {
 				if ($adminplugin->hasNavigation()){
 					$nav = $adminplugin->getNavigation();
-					$structure["plugins_" . $adminplugin->getPluginid()]=array ('topKat'=>"plugins", 'name'=>$nav->getDisplayname(), 'link'=>"plugins.php?cmd=show&id=" . $adminplugin->getPluginid(), 'active'=>FALSE);
+					$structure["plugins_" . $adminplugin->getPluginid()]=array ('topKat'=>"plugins", 'name'=>$nav->getDisplayname(), 'link'=>PluginEngine::getLink($adminplugin, $nav->getLinkParams()), 'active'=>FALSE);
 				}
 			}
 		}

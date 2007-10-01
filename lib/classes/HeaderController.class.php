@@ -411,7 +411,7 @@ class HeaderController {
 						$pluginicon = $header_plugin->getPluginiconname();
 					}
 					$pluginlink['text'] = $navi->getDisplayname();
-					$pluginlink['link'] = PluginEngine::getLink($header_plugin);
+					$pluginlink['link'] = PluginEngine::getLink($header_plugin, $navi->getLinkParams());
 					$pluginlink['image'] = $pluginicon;
 					$pluginlink['info'] = $navi->getDisplayname();
 					$pluginlink['is_plugin'] = true;

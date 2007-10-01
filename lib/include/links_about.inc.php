@@ -59,13 +59,13 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 		// hier nun die HomepagePlugins anzeigen
 		if ($activatedhomepageplugin->hasNavigation()){
 			$hppluginnav = $activatedhomepageplugin->getNavigation();
-			$structure["hpplugin_" . $activatedhomepageplugin->getPluginid()] = array('topKat' => '', 'name' => $hppluginnav->getDisplayname(), 'link' => PluginEngine::getLink($activatedhomepageplugin), 'active' => FALSE);
-			$pluginsubmenu["_hpplugin_" . $activatedhomepageplugin->getPluginId()] = array('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$hppluginnav->getDisplayname(),'link'=>PluginEngine::getLink($activatedhomepageplugin),'active'=>false);
+			$structure["hpplugin_" . $activatedhomepageplugin->getPluginid()] = array('topKat' => '', 'name' => $hppluginnav->getDisplayname(), 'link' => PluginEngine::getLink($activatedhomepageplugin, $hppluginnav->getLinkParams()), 'active' => FALSE);
+			$pluginsubmenu["_hpplugin_" . $activatedhomepageplugin->getPluginId()] = array('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$hppluginnav->getDisplayname(), 'link'=>PluginEngine::getLink($activatedhomepageplugin, $hppluginnav->getLinkParams()), 'active'=>false);
 			$submenu = $hppluginnav->getSubMenu();
 			// create bottomkats for activated plugins
 			foreach ($submenu as $submenuitem){
 				// create entries in a temporary structure and add it to structure later
-				$pluginsubmenu["hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$submenuitem->getDisplayname(), 'link'=>PluginEngine::getLink($activatedhomepageplugin,$submenuitem->getLinkParams()), 'active'=>false);
+				$pluginsubmenu["hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$submenuitem->getDisplayname(), 'link'=>PluginEngine::getLink($activatedhomepageplugin, $submenuitem->getLinkParams()), 'active'=>false);
 			}
 		}
 	}
@@ -132,12 +132,12 @@ if ($PLUGINS_ENABLE){
 					$submenu = $navi->getSubMenu();
 
 					if ($submenu != null) {
-                                                foreach ($submenu as $submenuitem) {
-                                                        if ($submenuitem->isActive()) {
-                                                               $reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname();
-                                                        }
-                                                }
-                                        }
+						foreach ($submenu as $submenuitem) {
+							if ($submenuitem->isActive()) {
+								$reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname();
+							}
+						}
+					}
 					$found = true;
 					break;
 				}
