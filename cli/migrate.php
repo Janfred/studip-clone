@@ -19,12 +19,13 @@ require_once 'lib/migrations/migrator.php';
 if (isset($_SERVER["argv"])) {
 
   # check for command line options
-  $options = getopt('lm:t:v');
+  $options = getopt('d:lm:t:v');
   if ($options === false) {
     exit(1);
   }
 
   # check for options
+  $domain = 'studip';
   $list = false;
   $path = $STUDIP_BASE_PATH.'/db/migrations';
   $verbose = false;
@@ -32,6 +33,8 @@ if (isset($_SERVER["argv"])) {
 
   foreach ($options as $option => $value) {
     switch ($option) {
+
+      case 'd': $domain = (string) $value; break;
 
       case 'l': $list = true; break;
 
@@ -43,7 +46,7 @@ if (isset($_SERVER["argv"])) {
     }
   }
 
-  $version =& new DBSchemaVersion('studip');
+  $version =& new DBSchemaVersion($domain);
   $migrator =& new Migrator($path, $version, $verbose);
 
   if ($list) {
