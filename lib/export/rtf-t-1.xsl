@@ -41,7 +41,7 @@
 					<xsl:if test="studiengaenge/studiengang">
 						<xsl:text>\fs28\b Studiengänge:\b0</xsl:text>
 						<xsl:for-each select="studiengaenge/studiengang">
-							<xsl:text>\par\fs24</xsl:text><xsl:value-of select="name"/><xsl:text>: </xsl:text><xsl:value-of select="anzahl"/>
+							<xsl:text>\par\fs24 </xsl:text><xsl:value-of select="name"/><xsl:text>: </xsl:text><xsl:value-of select="anzahl"/>
 						</xsl:for-each>
 						<xsl:text>\par</xsl:text>
 					</xsl:if>				
