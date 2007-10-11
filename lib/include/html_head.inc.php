@@ -75,7 +75,6 @@ switch (basename($_SERVER['SCRIPT_NAME'])) {
 }
 
 echo "\t\t".'<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">'. "\n";
-echo "\t\t".'<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">'. "\n";
 
 if (isset($FAVICON))
 		echo "\t\t".'<link rel="SHORTCUT ICON" href="'. $FAVICON.'">'."\n";

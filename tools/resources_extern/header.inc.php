@@ -2,7 +2,6 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
 		<title>Raum und Ressourcenpl&auml;ne</title>
 		<link rel="stylesheet" href="my_style.css" type="text/css">
 	</head>

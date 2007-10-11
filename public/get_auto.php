@@ -10,7 +10,6 @@ if (!$_POST["pass"])
     ?>
 		<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
     <html><head><title><?=_("Autologin Datei erzeugen")?></title>
-		<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
 		<script type="text/javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
     <script type="text/javascript">
     function doSubmit(){
@@ -38,7 +37,6 @@ $link = "http" . ($_SERVER['HTTPS'] ? 's' : '') . "://" . $_SERVER["HTTP_HOST"].
 <html>
 <head>
 	<title><?=_("Autologin")?></title>
-	<meta name="copyright" content="Stud.IP-Crew (crew@studip.de)">
 <script src="<? echo $link;?>get_key.php" type="text/javascript">
 </script>
 <script type="text/javascript">
