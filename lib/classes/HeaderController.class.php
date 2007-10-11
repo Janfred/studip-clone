@@ -282,7 +282,7 @@ class HeaderController {
 		global $user;
 		if((!is_object($user) || $user->id == 'nobody') && array_search("CAS", $GLOBALS["STUDIP_AUTH_PLUGIN"])){
 			$ret['text'] = _("Login CAS");
-			$ret['link'] = "index.php?again=yes&sso=true";
+			$ret['link'] = "index.php?again=yes&sso=cas";
 		} else {
 			$ret = null;
 		}

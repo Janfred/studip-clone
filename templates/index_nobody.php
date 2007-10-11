@@ -25,7 +25,7 @@
 			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
 				<tr>
 					<td width="270">
-					<a class="index" href="index.php?again=yes&sso=true">
+					<a class="index" href="index.php?again=yes&sso=cas">
 					<font size="4"><b><?=_("Login")?></b></font>
 					<font color="#555555" size="1"><br><?=_("f&uuml;r Single Sign On mit CAS")?></font>
 					</a>

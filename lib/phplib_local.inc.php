@@ -389,8 +389,8 @@ class Seminar_Auth extends Auth {
 		// is Single Sign On activated?
 		if ($GLOBALS["sso"]){
 			// then do login
-			require_once("lib/classes/auth_plugins/StudipAuthCAS.class.php");
-			$authplugin = StudipAuthAbstract::GetInstance("CAS");
+			$provider = $_REQUEST['sso'];
+			$authplugin = StudipAuthAbstract::GetInstance($provider);
 			$authplugin->authenticateUser("","","");
 			if ($authplugin->getUser()){
 				$uid = $authplugin->getStudipUserid($authplugin->getUser());
