@@ -21,7 +21,7 @@
 					</td>
 				</tr>
 			</table>
-			<?if($sso_activated){?>
+			<?if($sso_cas){?>
 			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
 				<tr>
 					<td width="270">

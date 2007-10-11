@@ -278,7 +278,7 @@ class HeaderController {
 		return $ret;
 	}
 	
-	function getHeaderItemSSOLogin(){
+	function getHeaderItemCASLogin(){
 		global $user;
 		if((!is_object($user) || $user->id == 'nobody') && array_search("CAS", $GLOBALS["STUDIP_AUTH_PLUGIN"])){
 			$ret['text'] = _("Login CAS");

@@ -75,7 +75,7 @@
 <div id="barBottomright">
 	<ul>
 		<?
-		foreach (array($search, $imprint, $help, $ssologin,$loginlogout) as $item) {
+		foreach (array($search, $imprint, $help, $caslogin, $loginlogout) as $item) {
 			 if(isset($item)){
  				 if($item['accesskey']){
 					 $accesskey = ++$accesskey % 10;

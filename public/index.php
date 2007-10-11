@@ -362,7 +362,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 } else { //displaymodul for nobody
 	$index_nobody_template =& $GLOBALS['template_factory']->open('index_nobody');
-	$index_nobody_template->set_attribute('sso_activated', array_search("CAS", $GLOBALS["STUDIP_AUTH_PLUGIN"]));
+	$index_nobody_template->set_attribute('sso_cas', array_search("CAS", $GLOBALS["STUDIP_AUTH_PLUGIN"]));
 	$index_nobody_template->set_attribute('self_registration_activated', get_config('ENABLE_SELF_REGISTRATION'));
 	$index_nobody_template->set_attribute('free_access_activated', get_config('ENABLE_FREE_ACCESS'));
 	$index_nobody_template->set_attribute('help_url', format_help_url("Basis.Allgemeines"));

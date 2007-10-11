@@ -49,6 +49,7 @@ if ($auth->auth["uid"]!="nobody") {   //nur wenn wir angemeldet sind sollten wir
 	$logout_user=$user->id;
 	$logout_language = $_language;
 	
+	// TODO this needs to be generalized or removed
 	//erweiterung cas
 	if ($auth->auth["auth_plugin"] == "cas"){
 		$casauth = StudipAuthAbstract::GetInstance('cas');			

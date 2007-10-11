@@ -1,7 +1,4 @@
 <?php
-
-require_once ("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
-
 /**
 * Stud.IP authentication against CAS Server
 *
@@ -10,9 +7,12 @@ require_once ("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 * @version	$Id$
 * @package	
 */
+
+require_once ('StudipAuthSSO.class.php');
+
 // import phpCAS lib
 include_once('CAS/CAS.php');
-class StudipAuthCAS extends StudipAuthAbstract {
+class StudipAuthCAS extends StudipAuthSSO {
 	
 	var $host;
 	var $port;

@@ -196,8 +196,8 @@ class StudipAuthAbstract {
 		$error = false;
 		$uid = false;
 		foreach($plugins as $object){
-			// the cas class can't be used
-			if ($object->plugin_name == "cas"){
+			// SSO plugins can't be used
+			if ($object instanceof StudipAuthSSO){
 				continue;
 			}
 			if ($uid = $object->authenticateUser($username,$password,$jscript)){
