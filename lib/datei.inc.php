@@ -2004,7 +2004,7 @@ function create_zip_from_file($file_name, $zip_file_name){
 	if (strtolower(substr($zip_file_name, -3)) != 'zip' ) $zip_file_name = $zip_file_name . '.zip';
 	if ($GLOBALS['ZIP_USE_INTERNAL']){
 		$archiv = new PclZip($zip_file_name);
-		$v_list = $archiv->create($file_name, PCLZIP_OPT_REMOVE_ALL_PATH);
+		$v_list = $archiv->create($file_name, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_CB_PRE_ADD, 'pclzip_convert_filename_cb');
 		return $v_list;
 	} else if (@file_exists($GLOBALS['ZIP_PATH']) || ini_get('safe_mode')){
 		exec($GLOBALS['ZIP_PATH'] . ' -q ' . $GLOBALS['ZIP_OPTIONS'] . " -j {$zip_file_name} $file_name", $output, $ret);
@@ -2016,7 +2016,7 @@ function create_zip_from_directory($fullpath, $zip_file_name){
 	if (strtolower(substr($zip_file_name, -3)) != 'zip' ) $zip_file_name = $zip_file_name . '.zip';
 	if ($GLOBALS['ZIP_USE_INTERNAL']){
 		$archiv = new PclZip($zip_file_name);
-		$v_list = $archiv->create($fullpath, PCLZIP_OPT_REMOVE_PATH, $fullpath);
+		$v_list = $archiv->create($fullpath, PCLZIP_OPT_REMOVE_PATH, $fullpath, PCLZIP_CB_PRE_ADD, 'pclzip_convert_filename_cb');
 		return $v_list;
 	} else if (@file_exists($GLOBALS['ZIP_PATH']) || ini_get('safe_mode')){
 		//zip stuff
@@ -2197,5 +2197,10 @@ function upload_zip_file($dir_id, $file) {
 		}
 	}
 	return false;
+}
+
+function pclzip_convert_filename_cb($p_event, &$p_header) {
+	$p_header['stored_filename'] = iconv("ISO-8859-1", "IBM437", $p_header['stored_filename']);
+	return 1;
 }
 ?>
