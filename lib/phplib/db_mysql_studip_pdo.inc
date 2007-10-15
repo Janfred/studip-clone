@@ -27,6 +27,7 @@ class DB_Sql {
 	public $Record   = array();
 	public $Row;
 	public $RowCount;
+	public $ColumnCount;
 	
 	/* public: current error number and error text */
 	public $Errno    = 0;
@@ -68,6 +69,7 @@ class DB_Sql {
 		$this->Error     = NULL;
 		$this->Row       = 0;
 		$this->RowCount  = null;
+		$this->ColumnCount  = null;
 	}
 	
 	/* public: perform a query */
@@ -121,23 +123,24 @@ class DB_Sql {
 		$this->Error  = $this->resultSet->errorInfo();
 		*/
 		$stat = is_array($this->Record);
-		if ($this->Auto_Free && $this->Row == $this->num_rows()) {
-			$this->free();
+		if ($this->Row == $this->num_rows()) {
+			$this->columnCount = $this->resultSet->columnCount();
+			$this->resultSet = null;
 		}
 		return $stat;
 	}
 	
 	/* public: evaluate the result (size, width) */
 	function affected_rows() {
-		return (!is_null($this->RowCount) ? $this->RowCount : ($this->resultSet ? ($this->RowCount = $this->resultSet->rowCount()) : FALSE));
+		return $this->num_rows();
 	}
 	
 	function num_rows() {
-		return $this->resultSet ? $this->resultSet->rowCount() : FALSE;
+		return (!is_null($this->RowCount) ? $this->RowCount : ($this->resultSet ? ($this->RowCount = $this->resultSet->rowCount()) : FALSE));
 	}
 	
 	function num_fields() {
-		return $this->resultSet ? $this->resultSet->columnCount() : FALSE;
+		return (!is_null($this->columnCount) ? $this->columnCount : ($this->resultSet ? ($this->columnCount = $this->resultSet->columnCount()) : FALSE));
 	}
 	
 	/* public: shorthand notation */
