@@ -101,17 +101,17 @@ class UserManagement {
 	function getFromDatabase($user_id) {
 
 		$this->db->query("SELECT * FROM auth_user_md5 WHERE user_id = '$user_id'");  //ein paar userdaten brauchen wir schon mal
-		if ($this->db->next_record()) {
 			$fields = $this->db->metadata();
-			for ($i=0; $i<count($fields); $i++) {
-				$field_name = $fields[$i]["name"];
-				$this->user_data["auth_user_md5.".$field_name] = $this->db->f("$field_name");
+			if ($this->db->next_record()) {
+				for ($i=0; $i<count($fields); $i++) {
+					$field_name = $fields[$i]["name"];
+					$this->user_data["auth_user_md5.".$field_name] = $this->db->f("$field_name");
 			}
 		}
 
 		$this->db->query("SELECT * FROM user_info WHERE user_id = '".$this->user_data["auth_user_md5.user_id"]."'");
+		$fields = $this->db->metadata();
 		if ($this->db->next_record()) {
-			$fields = $this->db->metadata();
 			for ($i=0; $i<count($fields); $i++) {
 				$field_name = $fields[$i]["name"];
 				$this->user_data["user_info.".$field_name] = $this->db->f("$field_name");

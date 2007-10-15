@@ -123,13 +123,13 @@ class DbSnapshot {
 	
 	function getSnapshot(){
 		if($this->isDbResult()){
+			$this->numFields = $this->dbResult->num_fields();
+			$this->numRows = $this->dbResult->num_rows();
+			$this->metaData = $this->dbResult->metadata();
 			$this->result = array();
 			while($this->dbResult->next_record()){
 				$this->result[] = $this->dbResult->Record;
 			}
-			$this->numFields = $this->dbResult->num_fields();
-			$this->numRows = $this->dbResult->num_rows();
-			$this->metaData = $this->dbResult->metadata();
 			unset($this->dbResult);
 			$this->pos = false;
 			return true;

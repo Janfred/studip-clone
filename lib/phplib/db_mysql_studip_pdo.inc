@@ -19,7 +19,7 @@ class DB_Sql {
 	public $Password = "";
 	
 	/* public: configuration parameters */
-	public $Auto_Free     = 0;     ## Set to 1 for automatic mysql_free_result()
+	public $Auto_Free     = 1;     ## Set to 1 for automatic mysql_free_result()
 	public $Debug         = 0;     ## Set to 1 for debugging messages.
 	public $Halt_On_Error = "yes"; ## "yes" (halt with message), "no" (ignore errors quietly), "report" (ignore errror, but spit a warning)
 	
@@ -34,6 +34,7 @@ class DB_Sql {
 	
 	protected $pdo;
 	protected $resultSet;
+
 	
 	static protected $connected = false;
 	
@@ -120,7 +121,7 @@ class DB_Sql {
 		$this->Error  = $this->resultSet->errorInfo();
 		*/
 		$stat = is_array($this->Record);
-		if (!$stat && $this->Auto_Free) {
+		if ($this->Auto_Free && $this->Row == $this->num_rows()) {
 			$this->free();
 		}
 		return $stat;
