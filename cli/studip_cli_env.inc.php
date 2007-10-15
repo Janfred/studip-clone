@@ -35,6 +35,7 @@ function CliErrorHandler($errno, $errstr, $errfile, $errline) {
 		fwrite(STDERR,"$errstr \n$errfile line $errline\n");
 		exit(1);
 	}
+	return true;
 }
 
 function parse_msg_to_clean_text($long_msg,$separator="§") {
@@ -50,9 +51,11 @@ $STUDIP_BASE_PATH = realpath( dirname(__FILE__) . '/..');
 $include_path = get_include_path();
 $include_path .= PATH_SEPARATOR . $STUDIP_BASE_PATH . DIRECTORY_SEPARATOR . 'public';
 set_include_path($include_path);
+set_error_handler('CliErrorHandler');
+
 require_once $STUDIP_BASE_PATH . "/lib/phplib/prepend4.php";
 
-set_error_handler('CliErrorHandler');
+
 
 $PLUGINS_CACHING = FALSE;	//maybe only the www user is allowed to create tmp dirs?
 
