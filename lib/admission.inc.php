@@ -148,7 +148,7 @@ function get_admission_quota_info($seminar_id) {
 	$db->query("SELECT admission_turnout FROM seminare WHERE Seminar_id = '$seminar_id'");
 	$db->next_record();
 	$admission_turnout = $db->f('admission_turnout');
-	$db->query("SELECT quota, name FROM admission_seminar_studiengang ass LEFT JOIN studiengaenge st USING(studiengang_id) WHERE seminar_id = '$seminar_id' AND ass.studiengang_id !='all'");
+	$db->query("SELECT quota, name, ass.studiengang_id FROM admission_seminar_studiengang ass LEFT JOIN studiengaenge st USING(studiengang_id) WHERE seminar_id = '$seminar_id' AND ass.studiengang_id !='all'");
 	while($db->next_record()){
 		$ret[$db->f('studiengang_id')]['name'] = $db->f('name');
 		$ret[$db->f('studiengang_id')]['num_total'] = round($admission_turnout * ($db->f("quota") / 100));
@@ -523,16 +523,11 @@ function check_admission ($send_message=TRUE) {
 			$db2->query("UPDATE seminare SET admission_selection_take_place ='-1' WHERE Seminar_id = '".$db->f("Seminar_id")."' ");
 
 			//Alle zugelassenen Studiengaenge einzeln auslosen
-			$db2->query("SELECT studiengang_id, quota FROM admission_seminar_studiengang WHERE seminar_id = '".$db->f("Seminar_id")."' ");
-			while ($db2->next_record()) {
-				//Wenn Kontingent "alle" bearbeitet wird, wird die Teilnehmerzahl aus den anderen Kontingenten gebildet
-				if ($db2->f("studiengang_id") == "all")
-					$tmp_admission_quota=get_all_quota($db->f("Seminar_id"));
-				else
-					$tmp_admission_quota=round ($db->f("admission_turnout") * ($db2->f("quota") / 100));
+			foreach(get_admission_quota_info($db->f("Seminar_id")) as $studiengang_id => $quota_info){
+				$tmp_admission_quota = (int)$quota_info['num_available'];
 				if($tmp_admission_quota < 0) $tmp_admission_quota = 0;
 				//Losfunktion
-				$db3->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("Seminar_id")."' AND studiengang_id = '".$db2->f("studiengang_id")."' AND status != 'accepted' ORDER BY RAND() LIMIT ".$tmp_admission_quota);
+				$db3->query("SELECT admission_seminar_user.user_id, username, studiengang_id FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE seminar_id = '".$db->f("Seminar_id")."' AND studiengang_id = '".$studiengang_id."' AND status != 'accepted' ORDER BY RAND() LIMIT ".$tmp_admission_quota);
 				//User aus admission_Seminar_user in seminar_user verschieben oder in Status "vorläufig akzeptiert" setzen
 				while ($db3->next_record())   {
 					if ($sem_preliminary) {

@@ -1391,6 +1391,17 @@ if ($rechte) {
 	$db->query ("SELECT admission_seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname , username, studiengaenge.name, position, admission_seminar_user.studiengang_id, status FROM admission_seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) LEFT JOIN studiengaenge ON (admission_seminar_user.studiengang_id=studiengaenge.studiengang_id)  WHERE admission_seminar_user.seminar_id = '$SessionSeminar' AND admission_seminar_user.status != 'accepted' ORDER BY position, name");
 	if ($db->num_rows()) { //Only if Users were found...
 		$awaiting = true;
+		?>
+		<tr>
+		<td class="blank" width="100%" colspan="2">
+		<a href="sms_send.php?sms_source_page=teilnehmer.php&course_id=<?=$SessSemName[1]?>&emailrequest=1&subject=<?=rawurlencode($SessSemName[0])?>&filter=waiting">
+		<img src="<?=$GLOBALS['ASSETS_URL']?>images/mailnachricht.gif" border="0" vspace="3" hspace="3" align="absmiddle">
+		<span style="font-size:80%">
+		<?=_("Systemnachricht mit Emailweiterleitung an alle Wartenden verschicken")?> 
+		</span></a>
+		</td>
+		</tr>
+		<?
 		// die eigentliche Teil-Tabelle
 		echo '<form name="waitlist" action="'.$PHP_SELF.'?studipticket='.$studipticket.'" method="post">';
 		echo "<tr><td class=\"blank\" colspan=\"2\">";
