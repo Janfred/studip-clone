@@ -2037,7 +2037,7 @@ function unzip_file($file_name, $dir_name = '', $testonly = false){
 			$prop = $archive->properties();
 			$ret = (!is_array($prop));
 		} else {
-			$ok = $archive->extract(PCLZIP_OPT_PATH, $dir_name);
+			$ok = $archive->extract(PCLZIP_OPT_PATH, $dir_name, PCLZIP_CB_PRE_EXTRACT, 'pclzip_convert_filename_cb');
 			$ret = (!is_array($ok));
 		}
 	} else if (@file_exists($GLOBALS['UNZIP_PATH']) || ini_get('safe_mode')){
@@ -2200,7 +2200,11 @@ function upload_zip_file($dir_id, $file) {
 }
 
 function pclzip_convert_filename_cb($p_event, &$p_header) {
-	$p_header['stored_filename'] = iconv("ISO-8859-1", "IBM437", $p_header['stored_filename']);
+	if($p_event == PCLZIP_CB_PRE_EXTRACT){
+		$p_header['filename'] = iconv("IBM437", "ISO-8859-1", $p_header['filename']);
+	} elseif ($p_event == PCLZIP_CB_PRE_ADD) {
+		$p_header['stored_filename'] = iconv("ISO-8859-1", "IBM437", $p_header['stored_filename']);
+	}
 	return 1;
 }
 ?>
