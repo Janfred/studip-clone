@@ -97,15 +97,21 @@ class StudIPTemplateEngine {
 	}
 
 	function showErrorMessage($text,$colspan=2){
+                echo '<table style="width: 100%;">';
                 parse_msg_array(array(array('error', $text)));
+                echo '</table>';
 	}
 
 	function showSuccessMessage($text,$colspan=2){
+                echo '<table style="width: 100%;">';
                 parse_msg_array(array(array('msg', $text)));
+                echo '</table>';
 	}
 
 	function showInfoMessage($text,$colspan=2){
+                echo '<table style="width: 100%;">';
                 parse_msg_array(array(array('info', $text)));
+                echo '</table>';
 	}
 
 	function showQuestionMessage($text,$colspan=2,$newrow=true){

@@ -102,6 +102,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		  	<form action="<?= PluginEngine::getLink($this->pluginref) ?>" method="post">
 		  	<input type="hidden" name="action" value="config" />
 		  				
+                        <table style="width: 100%;" cellspacing="0">
 			<tr>
 				<th align="left" width="2%"></th>
 				<th align="left"><?= _("Name")?></th>
@@ -160,7 +161,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 					</select>
 				</td>				
 				<td align="right" width="5%" class="<?=$cssSw->getClass()?>"><input name="navposition_<?= $pluginid?>" type="text" size="2" value="<?= $plugin->getNavigationPosition()?>"></td>
-				<td class="<?=$cssSw->getClass()?>">&nbsp;<a href="<?= PluginEngine::getLink($roleplugin,array("pluginid"=>$pluginid),"doPluginRoleAssignment")?>"><?= makeButton("bearbeiten","img",_("Rollenberechtigungen bearbeiten")) ?></a></td>
+				<td align="center" class="<?=$cssSw->getClass()?>">&nbsp;<a href="<?= PluginEngine::getLink($roleplugin,array("pluginid"=>$pluginid),"doPluginRoleAssignment")?>"><?= makeButton("bearbeiten","img",_("Rollenberechtigungen bearbeiten")) ?></a></td>
 				<td align="right" class="<?=$cssSw->getClass()?>">
 				<?
 					if (!$plugin->isDependentOnOtherPlugin()){
@@ -183,14 +184,9 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		  	 <tr>		  	 	
 		  	 	 <td colspan="8" height="10"></td>
 		  	 </tr>		  	 
+                         </table>
 			 </form>
-			 <tr>
-			 	
-			 	<td colspan="8">
-			 		<?= $this->showInstallationForm($installableplugins);?>
-			 		
-			 	</td>
-			 </tr>
+                         <?= $this->showInstallationForm($installableplugins);?>
 		<?php
 		
 		StudIPTemplateEngine::createInfoBoxTableCell();

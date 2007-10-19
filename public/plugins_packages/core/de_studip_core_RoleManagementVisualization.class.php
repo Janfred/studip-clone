@@ -174,7 +174,7 @@ class de_studip_core_RoleManagementVisualization extends AbstractStudIPPluginVis
 		?>
 		<form action="<?= PluginEngine::getLink($this->pluginref,array(),"doPluginRoleAssignment")?>" method="POST">
 		<input type="hidden" name="pluginid" value="<?= $plugin->getPluginid()?>">
-		<table border="0">		
+		<table style="width: 100%;" cellspacing="0">		
 		<thead>
 			<th width="30%" align="center"><?=_("Gegenwärtig zugewiesene Rollen")?></th>
 			<th width="1%" align="center">&nbsp;</th>
