@@ -28,4 +28,6 @@ $request_uri = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
 $default_controller = 'default';
 $default_action     = 'index';
 
-Trails_Dispatcher::dispatch($request_uri, $trails_root, $trails_uri, $default_controller, $default_action);
+$dispatcher = new Trails_Dispatcher($trails_root, $trails_uri,
+                                    $default_controller, $default_action);
+$dispatcher->dispatch($request_uri);
