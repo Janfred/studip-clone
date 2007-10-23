@@ -51,14 +51,14 @@ class NewsController extends Trails_Controller {
 
     if (is_null($id)) {
       $this->set_status(400);
-      return;
+      return $this->render_nothing();
     }
 
     # get news item
     $this->news = new StudipNews($id);
     if ($this->news->is_new) {
       $this->set_status(404);
-      return;
+      return $this->render_nothing();
     }
 
 
@@ -66,7 +66,7 @@ class NewsController extends Trails_Controller {
     list($permitted, $show_admin) = ajaxified_news_has_permission($this->news);
     if (!$permitted) {
       $this->set_status(401);
-      return;
+      return $this->render_nothing();
     }
 
     # show news
