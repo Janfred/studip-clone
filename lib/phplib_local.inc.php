@@ -40,6 +40,17 @@ foreach($_never_globalize_request_params as $one_param){
 	}
 }
 
+// set default pdo connection
+require_once('lib/classes/DBManager.class.php');
+DBManager::getInstance()
+  ->setConnection('studip',
+                  'mysql:host='.$GLOBALS['DB_STUDIP_HOST'].
+                  ';dbname='.$GLOBALS['DB_STUDIP_DATABASE'],
+                  $GLOBALS['DB_STUDIP_USER'],
+                  $GLOBALS['DB_STUDIP_PASSWORD']);
+
+require_once('lib/language.inc.php');
+require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
 require_once('lib/language.inc.php');
 require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
 require_once('lib/classes/Config.class.php');
