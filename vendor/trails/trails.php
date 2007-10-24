@@ -25,23 +25,28 @@ define('TRAILS_VERSION', '0.4.0');
 
 
 /**
- * TODO
+ * Class: Trails_Dispatcher
  *
  * @package   trails
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6361 2007-10-19 12:29:29Z mlunzena $
+ * @version   $Id: trails.php 6380 2007-10-24 16:17:19Z mlunzena $
  */
 
 class Trails_Dispatcher {
 
   # TODO (mlunzena) Konfiguration muss anders geschehen
+  /**
+   * <FieldDescription>
+   *
+   * @access private
+   * @var <type>
+   */
   public
     $trails_root,
     $trails_uri,
-    $default_controller,
-    $default_action;
+    $default_controller;
 
 
   /**
@@ -55,14 +60,12 @@ class Trails_Dispatcher {
    * @return void
    */
   function __construct($trails_root,
-                              $trails_uri,
-                              $default_controller,
-                              $default_action) {
+                       $trails_uri,
+                       $default_controller) {
 
     $this->trails_root        = $trails_root;
     $this->trails_uri         = $trails_uri;
     $this->default_controller = $default_controller;
-    $this->default_action     = $default_action;
   }
 
 
@@ -73,7 +76,7 @@ class Trails_Dispatcher {
    *
    * @return void
    */
-  function dispatch($request_uri) {
+  function dispatch($uri) {
 
     $old_handler = set_error_handler(array('Trails_Exception',
                                            'errorHandlerCallback'),
@@ -82,41 +85,7 @@ class Trails_Dispatcher {
     ob_start();
     $level = ob_get_level();
 
-    try {
-
-      $clean_uri = $this->clean_uri((string) $request_uri);
-      $response = $this->choose_controller($clean_uri)->perform();
-
-    } catch (Trails_Exception $e) {
-
-      ob_clean();
-
-      $response = array('status'  => array($e->getCode(), $e->getMessage()),
-                        'headers' => $e->headers);
-
-      $response['body'] =
-        sprintf('<html><head><title>Trails Error</title></head>'.
-                '<body><h1>%s</h1><pre>%s</pre></body></html>',
-                htmlentities($e),
-                htmlentities($e->getTraceAsString()));
-    }
-
-    # output of response
-    # TODO (mlunzena) response should be an object
-    # TODO (mlunzena) should not we use HTTP/1.1 ?
-    if (sizeof($response['status'])) {
-      header(sprintf('HTTP/1.0 %d %s',
-                     $response['status'][0],
-                     $response['status'][1]),
-             TRUE, $response['status'][0]);
-    }
-
-    foreach ($response['headers'] as $k => $v) {
-      header("$k: $v");
-    }
-
-    echo $response['body'];
-
+    $this->map_uri_to_response($this->clean_uri((string) $uri))->output();
 
     while (ob_get_level() >= $level) {
       ob_end_flush();
@@ -135,14 +104,32 @@ class Trails_Dispatcher {
    *
    * @return type <description>
    */
-  private function clean_uri($uri) {
+  protected function map_uri_to_response($uri) {
 
-    # remove "query" part
-    if (FALSE !== ($pos = strpos($uri, '?'))) {
-      $uri = substr($uri, 0, $pos);
+    try {
+
+
+      list($controller_path, $unconsumed) = '' === $uri
+        ? array($this->default_controller, $uri) : $this->parse($uri);
+
+      $class = $this->load_controller($controller_path);
+      $controller = new $class($this);
+      $response = $controller->perform($unconsumed);
+
+    } catch (Trails_Exception $e) {
+
+      ob_clean();
+
+      $body = sprintf('<html><head><title>Trails Error</title></head>'.
+                      '<body><h1>%s</h1><pre>%s</pre></body></html>',
+                      htmlentities($e),
+                      htmlentities($e->getTraceAsString()));
+
+      $response = new Trails_Response($body, $e->headers,
+                                      $e->getCode(), $e->getMessage());
     }
 
-    return ltrim($uri, '/');
+    return $response;
   }
 
 
@@ -153,19 +140,14 @@ class Trails_Dispatcher {
    *
    * @return type <description>
    */
-  protected function choose_controller($uri) {
+  private function clean_uri($uri) {
 
-    # default controller
-    if ('' === $uri) {
-      $controller_path = $this->default_controller;
-      $unconsumed = $uri;
+    # remove "query" part
+    if (FALSE !== ($pos = strpos($uri, '?'))) {
+      $uri = substr($uri, 0, $pos);
     }
 
-    else {
-      list($controller_path, $unconsumed) = $this->parse($uri);
-    }
-
-    return $this->load_controller($controller_path, $unconsumed);
+    return ltrim($uri, '/');
   }
 
 
@@ -192,7 +174,6 @@ class Trails_Dispatcher {
 
       if (is_readable($this->get_path($exploded))) {
 
-        # TODO (mlunzena) check this!!!
         $unconsumed = substr($uri, strlen($exploded) + 1);
         if (FALSE === $unconsumed) {
           $unconsumed = '';
@@ -223,11 +204,10 @@ class Trails_Dispatcher {
    * <MethodDescription>
    *
    * @param string   <description>
-   * @param string   <description>
    *
    * @return object  <description>
    */
-  protected function load_controller($controller_path, $unconsumed) {
+  protected function load_controller($controller_path) {
 
     require_once $this->get_path($controller_path);
     $class = Trails_Inflector::camelize($controller_path) . 'Controller';
@@ -235,7 +215,144 @@ class Trails_Dispatcher {
       throw new Trails_Exception(501, 'Controller missing: ' . $class);
     }
 
-    return new $class($this, $unconsumed);
+    return $class;
+  }
+}
+
+
+
+/**
+ * TODO
+ *
+ * @package   trails
+ *
+ * @author    mlunzena
+ * @copyright (c) Authors
+ * @version   $Id: trails.php 6380 2007-10-24 16:17:19Z mlunzena $
+ */
+
+class Trails_Response {
+
+
+  private
+    $body = '',
+    $status,
+    $reason,
+    $headers = array();
+
+
+  /**
+   * <MethodDescription>
+   *
+   * @param type <description>
+   * @param type <description>
+   * @param type <description>
+   * @param type <description>
+   *
+   * @return type <description>
+   */
+  function __construct($body = '', $headers = NULL,
+                       $status = NULL, $reason = NULL) {
+
+    $this->set_body($body);
+
+    if (isset($headers)) {
+      $this->headers = $headers;
+    }
+
+    if (isset($status)) {
+      $this->set_status($status, $reason);
+    }
+  }
+
+
+  /**
+   * <MethodDescription>
+   *
+   * @param type <description>
+   *
+   * @return type <description>
+   */
+  function set_body($body) {
+    $this->body = $body;
+    return $this;
+  }
+
+
+  /**
+   * <MethodDescription>
+   *
+   * @param type <description>
+   * @param type <description>
+   *
+   * @return type <description>
+   */
+  function set_status($status, $reason = NULL) {
+    $this->status = $status;
+    $this->reason = isset($reason) ? $reason : $this->get_reason($status);
+    return $this;
+  }
+
+
+  /**
+   * Returns the reason phrase of this response according to RFC2616.
+   *
+   * @param int      the response's status
+   *
+   * @return string  the reason phrase for this response's status
+   */
+  protected function get_reason_phrase($status) {
+    $reason = array(
+      100 => 'Continue', 'Switching Protocols',
+      200 => 'OK', 'Created', 'Accepted', 'Non-Authoritative Information',
+             'No Content', 'Reset Content', 'Partial Content',
+      300 => 'Multiple Choices', 'Moved Permanently', 'Found', 'See Other',
+             'Not Modified', 'Use Proxy', '(Unused)', 'Temporary Redirect',
+      400 => 'Bad Request', 'Unauthorized', 'Payment Required','Forbidden',
+             'Not Found', 'Method Not Allowed', 'Not Acceptable',
+             'Proxy Authentication Required', 'Request Timeout', 'Conflict',
+             'Gone', 'Length Required', 'Precondition Failed',
+             'Request Entity Too Large', 'Request-URI Too Long',
+             'Unsupported Media Type', 'Requested Range Not Satisfiable',
+             'Expectation Failed',
+      500 => 'Internal Server Error', 'Not Implemented', 'Bad Gateway',
+             'Service Unavailable', 'Gateway Timeout',
+             'HTTP Version Not Supported');
+
+    return isset($reason[$status]) ? $reason[$status] : '';
+  }
+
+
+  /**
+   * <MethodDescription>
+   *
+   * @param type <description>
+   * @param type <description>
+   *
+   * @return type <description>
+   */
+  function add_header($key, $value) {
+    $this->headers[$key] = $value;
+    return $this;
+  }
+
+
+  /**
+   * <MethodDescription>
+   *
+   * @return type <description>
+   */
+  function output() {
+    if (isset($this->status)) {
+      header(sprintf('HTTP/1.1 %d %s', $this->status, $this->reason),
+             TRUE, $this->status);
+    }
+
+    foreach ($this->headers as $k => $v) {
+      header("$k: $v");
+    }
+
+    echo $this->body;
   }
 }
 
@@ -247,7 +364,7 @@ class Trails_Dispatcher {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6361 2007-10-19 12:29:29Z mlunzena $
+ * @version   $Id: trails.php 6380 2007-10-24 16:17:19Z mlunzena $
  */
 
 class Trails_Controller {
@@ -258,14 +375,8 @@ class Trails_Controller {
    */
   protected
     $dispatcher,
-    $unconsumed,
-
-    $response = array('body' => ' ', 'status' => array(), 'headers' => array()),
-
-    $performed_render = FALSE,
-    $performed_redirect = FALSE,
-
-    $template_factory,
+    $response,
+    $performed = FALSE,
     $layout = NULL;
 
 
@@ -276,40 +387,38 @@ class Trails_Controller {
    *
    * @return void
    */
-  function __construct($dispatcher, $unconsumed) {
-
+  function __construct($dispatcher) {
     $this->dispatcher = $dispatcher;
-    $this->unconsumed = $unconsumed;
-
-    $this->template_factory =
-      new Flexi_TemplateFactory($dispatcher->trails_root . '/views/');
   }
 
 
   /**
    * <MethodDescription>
    *
-   * @param array  <description>
+   * @param type <description>
    *
-   * @return string <description>
+   * @return type <description>
    */
-  function perform() {
+  function perform($unconsumed) {
 
     # TODO (mlunzena) das muss geändert werden
-    if ('' === $this->unconsumed) {
+    if ('' === $unconsumed) {
       $args = array();
-      $action = $this->dispatcher->default_action;
+      $action = 'index';
     }
     else {
-      $args = explode('/', $this->unconsumed);
+      $args = explode('/', $unconsumed);
       $action = array_shift($args);
     }
+
+    # initialize response
+    $this->response = new Trails_Response();
 
     # call before filter
     $before_filter_result = $this->before_filter($action, $args);
 
     # send action to controller
-    if (!(FALSE === $before_filter_result || $this->has_performed())) {
+    if (!(FALSE === $before_filter_result || $this->performed)) {
 
       $mapped_action = $this->map_action($action);
 
@@ -321,7 +430,7 @@ class Trails_Controller {
         call_user_func_array(array(&$this, $mapped_action), $args);
       }
 
-      if (!$this->has_performed()) {
+      if (!$this->performed) {
         $this->render_action($action);
       }
 
@@ -388,36 +497,26 @@ class Trails_Controller {
   /**
    * <MethodDescription>
    *
-   * @return bool <description>
-   */
-  protected function has_performed() {
-    return $this->performed_render || $this->performed_redirect;
-  }
-
-
-  /**
-   * <MethodDescription>
-   *
    * @param string <description>
    *
    * @return void
    */
   protected function redirect($to) {
 
-    if ($this->has_performed()) {
+    if ($this->performed) {
       throw new Trails_Exception(500, 'Double Render Error');
     }
 
-    $this->performed_redirect = TRUE;
+    $this->performed = TRUE;
 
     # get uri
     $url = $this->url_for($to);
 
     # redirect
-    $this->response['headers']['Location'] = $url;
-    $this->response['body'] =
-      sprintf('<html><head><meta http-equiv="refresh" content="0;url=%s"/>'.
-              '</head></html>', $url);
+    $this->response
+      ->add_header('Location', $url)
+      ->set_body(sprintf('<html><head><meta http-equiv="refresh" content="0;'.
+                         'url=%s"/></head></html>', $url));
   }
 
 
@@ -430,13 +529,13 @@ class Trails_Controller {
    */
   protected function render_text($text = ' ') {
 
-    if ($this->has_performed()) {
+    if ($this->performed) {
       throw new Trails_Exception(500, 'Double Render Error');
     }
 
-    $this->performed_render = TRUE;
+    $this->performed = TRUE;
 
-    $this->response['body'] = $text;
+    $this->response->set_body($text);
   }
 
 
@@ -476,7 +575,10 @@ class Trails_Controller {
   protected function render_template($template_name, $layout = NULL) {
 
     # open template
-    $template = $this->template_factory->open($template_name);
+    $factory =
+      new Flexi_TemplateFactory($this->dispatcher->trails_root . '/views/');
+
+    $template = $factory->open($template_name);
     if (is_null($template)) {
       throw new Trails_Exception(500, sprintf('No such template: "%s"',
                                               $template_name));
@@ -552,39 +654,7 @@ class Trails_Controller {
 
 
   function set_status($status, $reason_phrase = NULL) {
-    $reason_phrase = isset($reason_phrase)
-                     ? $reason_phrase
-                     : $this->get_reason_phrase($status);
-    $this->response['status'] = array($status => $reason_phrase);
-  }
-
-
-  /**
-   * Returns the reason phrase of this response according to RFC2616.
-   *
-   * @param int      the response's status
-   *
-   * @return string  the reason phrase for this response's status
-   */
-  protected function get_reason_phrase($status) {
-    $reason = array(
-      100 => 'Continue', 'Switching Protocols',
-      200 => 'OK', 'Created', 'Accepted', 'Non-Authoritative Information',
-             'No Content', 'Reset Content', 'Partial Content',
-      300 => 'Multiple Choices', 'Moved Permanently', 'Found', 'See Other',
-             'Not Modified', 'Use Proxy', '(Unused)', 'Temporary Redirect',
-      400 => 'Bad Request', 'Unauthorized', 'Payment Required','Forbidden',
-             'Not Found', 'Method Not Allowed', 'Not Acceptable',
-             'Proxy Authentication Required', 'Request Timeout', 'Conflict',
-             'Gone', 'Length Required', 'Precondition Failed',
-             'Request Entity Too Large', 'Request-URI Too Long',
-             'Unsupported Media Type', 'Requested Range Not Satisfiable',
-             'Expectation Failed',
-      500 => 'Internal Server Error', 'Not Implemented', 'Bad Gateway',
-             'Service Unavailable', 'Gateway Timeout',
-             'HTTP Version Not Supported');
-
-    return isset($reason[$status]) ? $reason[$status] : '';
+    $this->response->set_status($status, $reason_phrase);
   }
 
 
@@ -594,7 +664,7 @@ class Trails_Controller {
    * @return void
    */
   protected function set_content_type($type) {
-    $this->response['headers']['Content-Type'] = $type;
+    $this->response->add_header('Content-Type', $type);
   }
 }
 
@@ -606,7 +676,7 @@ class Trails_Controller {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6361 2007-10-19 12:29:29Z mlunzena $
+ * @version   $Id: trails.php 6380 2007-10-24 16:17:19Z mlunzena $
  */
 
 class Trails_Inflector {
@@ -661,7 +731,7 @@ class Trails_Inflector {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6361 2007-10-19 12:29:29Z mlunzena $
+ * @version   $Id: trails.php 6380 2007-10-24 16:17:19Z mlunzena $
  */
 
 class Trails_Flash {
@@ -900,7 +970,7 @@ class Trails_Flash {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6361 2007-10-19 12:29:29Z mlunzena $
+ * @version   $Id: trails.php 6380 2007-10-24 16:17:19Z mlunzena $
  */
 
 class Trails_Exception extends Exception {

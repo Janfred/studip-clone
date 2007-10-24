@@ -26,8 +26,7 @@ require_once 'vendor/trails/trails.php';
 $request_uri = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
 
 $default_controller = 'default';
-$default_action     = 'index';
 
 $dispatcher = new Trails_Dispatcher($trails_root, $trails_uri,
-                                    $default_controller, $default_action);
+                                    $default_controller);
 $dispatcher->dispatch($request_uri);
