@@ -1302,11 +1302,11 @@ $forum["update"] = $update;
 if (!$forum["postingsperside"])
 	$forum["postingsperside"] = 15;
 $postingsperside = $forum["postingsperside"];
-if (!$flatviewstartposting) {
+if (!(int)$flatviewstartposting) {
 	$forum["flatviewstartposting"] = 0;
 	$flatviewstartposting = 0;
 } else {
-	$forum["flatviewstartposting"] = $flatviewstartposting;
+	$forum["flatviewstartposting"] = (int)$flatviewstartposting;
 }
 
 /////////////////////////////// Abfrage der Postings
