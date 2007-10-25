@@ -73,9 +73,6 @@ class AbstractStudIPPortalPlugin extends AbstractStudIPLegacyPlugin {
 
     $pluginparams = $_GET["plugin_subnavi_params"];
 
-    StudIPTemplateEngine::makeHeadline($this->getDisplaytitle(), true,
-                                       $this->getPluginiconname());
-
     StudIPTemplateEngine::startContentTable();
     $this->$action($pluginparams);
     StudIPTemplateEngine::endContentTable();

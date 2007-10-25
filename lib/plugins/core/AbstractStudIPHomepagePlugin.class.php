@@ -68,6 +68,14 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
    */
   function display($action) {
 
+    $username = isset($_GET['requesteduser']) ?
+                      $_GET['requesteduser'] : $GLOBALS["auth"]->auth["uname"];
+
+    $requser = new StudIPUser();
+    $user_id = get_userid($username);
+    $requser->setUserid($user_id);
+    $this->setRequestedUser($requser);
+
     $GLOBALS['CURRENT_PAGE'] = $this->getDisplayTitle();
 
     include 'lib/include/html_head.inc.php';
@@ -75,68 +83,35 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
 
     $pluginparams = $_GET["plugin_subnavi_params"];
 
-    // show the admin-Tabs
-    $hpusername = $_GET["requesteduser"];
-    $admin_darf = FALSE;
-    $db = new DB_Seminar();
+    if ($user_id != '') {
+      $db = new DB_Seminar();
+      $admin_darf = false;
 
-    if (empty($hpusername)){
-      $hpusername = $GLOBALS["auth"]->auth["uname"];
-    }
+      // Bin ich ein Inst_admin, und ist der user in meinem Inst Tutor oder Dozent?
+      $db->query("SELECT b.inst_perms FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.user_id = '$user_id') AND (b.inst_perms = 'autor' OR b.inst_perms = 'tutor' OR b.inst_perms = 'dozent') AND (a.user_id = '$user->id') AND (a.inst_perms = 'admin')");
 
-    if ($GLOBALS["auth"]->auth["uname"] == $hpusername){
-      $admin_darf = true;
-    }
+      if ($GLOBALS['perm']->have_perm("root"))
+        $admin_darf = true;
+      else if ($GLOBALS["auth"]->auth["uname"] == $username)
+        $admin_darf = true;
+      else if ($db->num_rows())
+        $admin_darf = true;
+      else if ($GLOBALS['perm']->is_fak_admin()) {
+        $db->query("SELECT c.user_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.fakultaets_id)  LEFT JOIN user_inst c ON(b.Institut_id=c.Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND c.user_id='$user_id'");
+        if ($db->next_record())
+          $admin_darf = true;
+      }
 
-    $db->query("SELECT * FROM auth_user_md5  WHERE username ='$hpusername'");
-    $db->next_record();
-    if (!$db->nf()) {
+      if ($admin_darf == true) {
+        // show the admin tabs if user may edit
+        // $username is passed to links_about.inc.php
+        include 'lib/include/links_about.inc.php';
+      }
+    } else {
       throw new Exception(_("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!").
                           "<br />".
-                          _(" Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;scht wurde."));
-    } else{
-      $user_id=$db->f("user_id");
+                          _("Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers geändert hat oder der Nutzer gelöscht wurde."));
     }
-
-    $requser = new StudIPUser();
-    $requser->setUserid($user_id);
-    $this->setRequestedUser($requser);
-
-    //Bin ich ein Inst_admin, und ist der user in meinem Inst Tutor oder Dozent?
-    $db->query("SELECT b.inst_perms FROM user_inst AS a ".
-               "LEFT JOIN user_inst AS b USING (Institut_id) ".
-               "WHERE (b.user_id = '$user_id') AND ".
-               "(b.inst_perms = 'autor' OR ".
-               "b.inst_perms = 'tutor' OR ".
-               "b.inst_perms = 'dozent') AND ".
-               "(a.user_id = '$user->id') AND (a.inst_perms = 'admin')");
-    if ($db->num_rows())
-      $admin_darf = TRUE;
-
-    if ($GLOBALS['perm']->is_fak_admin()){
-      $db->query("SELECT c.user_id FROM user_inst a ".
-                 "LEFT JOIN Institute b ON (a.Institut_id = b.fakultaets_id) ".
-                 "LEFT JOIN user_inst c ON (b.Institut_id = c.Institut_id) ".
-                 "WHERE a.user_id = '$user->id' AND a.inst_perms = 'admin' ".
-                 "AND c.user_id='$user_id'");
-      if ($db->next_record())
-      $admin_darf = TRUE;
-    }
-
-    if ($GLOBALS['perm']->have_perm("root")) {
-      $admin_darf=TRUE;
-    }
-
-    // Es werden die Editreiter angezeigt, wenn ich ändern darf
-    if ($GLOBALS['perm']->have_perm("root") OR $admin_darf == TRUE) {
-      // rights should be checked
-      $username = $hpusername;
-      include 'lib/include/links_about.inc.php';
-    }
-
-    $pluginnav = $this->getNavigation();
-    StudIPTemplateEngine::makeHeadline($this->getDisplaytitle(), true,
-                                       $this->getPluginiconname());
 
     StudIPTemplateEngine::startContentTable();
     $this->$action($pluginparams);

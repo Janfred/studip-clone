@@ -22,7 +22,7 @@ class PluginEngine {
    *
    * @var mixed
    */
-  private static $currentPluginId = UNKNOWN_PLUGINTYPE;
+  private static $currentPluginId;
 
 
   /**

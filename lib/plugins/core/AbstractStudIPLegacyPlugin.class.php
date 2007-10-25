@@ -41,10 +41,21 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
     # get action
     $action = $this->route($unconsumed_path);
 
+    if (in_array($action,
+          array('showConfigurationPage', 'actionshowDescriptionalPage'))) {
+      if ($GLOBALS['perm']->have_perm('admin')) {
+        include ('lib/include/links_admin.inc.php');
+      }
+      else {
+        throw new Exception(_("Sie verfügen nicht über ausreichend Rechte für diese Aktion."));
+      }
+    }
+
     # it's action time
     try {
 
       ob_start();
+
       $this->display($action);
       ob_end_flush();
 

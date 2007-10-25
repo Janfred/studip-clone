@@ -101,19 +101,6 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin{
 
     $pluginparams = $_GET["plugin_subnavi_params"];
 
-    $pluginnav = $this->getNavigation();
-
-    if ($pluginnav->hasIcon()) {
-      StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(), true,
-                                         $this->getPluginpath() . "/" .
-                                         $pluginnav->getIcon());
-    }
-    else {
-      StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(), true,
-                                         $this->getPluginiconname());
-    }
-
-
     // let the plugin show its view
     StudIPTemplateEngine::startContentTable();
     $this->$action($pluginparams);

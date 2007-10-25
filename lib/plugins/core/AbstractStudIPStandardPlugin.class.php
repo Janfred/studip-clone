@@ -248,34 +248,6 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin{
     include 'lib/include/links_openobject.inc.php';
 
     // let the plugin show its view
-    $pluginnav = $this->getNavigation();
-
-    if (is_object($pluginnav)){
-      $iconname = "";
-      if ($pluginnav->hasIcon()){
-        $iconname = $this->getPluginpath() . "/" . $pluginnav->getIcon();
-      }
-      else {
-        $iconname = $this->getPluginiconname();
-      }
-
-      if (isset($GLOBALS['SessSemName']["header_line"])){
-        StudIPTemplateEngine::makeHeadline(
-          sprintf("%s - %s", $GLOBALS['SessSemName']["header_line"],
-                  $this->getDisplaytitle()),
-          true,
-          $iconname);
-      }
-      else {
-        StudIPTemplateEngine::makeHeadline($this->getDisplaytitle(), true,
-                                           $iconname);
-      }
-    }
-    else {
-      StudIPTemplateEngine::makeHeadline($this->getPluginname(), true,
-                                         $this->getPluginiconname());
-    }
-
     StudIPTemplateEngine::startContentTable(true);
     $this->$action($pluginparams);
     StudIPTemplateEngine::endContentTable();

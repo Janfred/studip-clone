@@ -105,7 +105,4 @@ class StudipPluginNavigation {
     $this->submenu = array();
     return $this;
   }
-
-  function getCurrentSubmenuItem() {
-  }
 }

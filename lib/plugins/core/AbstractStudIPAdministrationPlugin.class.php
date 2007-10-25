@@ -76,17 +76,6 @@ class AbstractStudIPAdministrationPlugin extends AbstractStudIPLegacyPlugin{
     include 'lib/include/links_admin.inc.php';
 
     // let the plugin show its view
-    $pluginnav = $this->getNavigation();
-    if ($pluginnav->hasIcon()) {
-      StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(), true,
-                                         $this->getPluginpath() . "/" .
-                                         $pluginnav->getIcon());
-    }
-    else {
-      StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(), true,
-                                         $this->getPluginiconname());
-    }
-
     StudIPTemplateEngine::startContentTable(true);
     $this->$action($pluginparams);
     StudIPTemplateEngine::endContentTable();
