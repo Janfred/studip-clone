@@ -41,6 +41,7 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
     # get action
     $action = $this->route($unconsumed_path);
 
+    # TODO (mlunzena) das sollte hier nicht rein...
     if (in_array($action,
           array('showConfigurationPage', 'actionshowDescriptionalPage'))) {
       if ($GLOBALS['perm']->have_perm('admin')) {
