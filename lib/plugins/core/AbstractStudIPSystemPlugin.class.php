@@ -94,6 +94,8 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin{
    */
   function display($action) {
 
+    $GLOBALS['CURRENT_PAGE'] = $this->getDisplayTitle();
+
     include 'lib/include/html_head.inc.php';
     include 'lib/include/header.php';
 

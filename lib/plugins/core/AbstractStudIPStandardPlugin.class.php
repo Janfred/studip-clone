@@ -229,6 +229,9 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin{
    */
   function display($action) {
 
+    $GLOBALS['CURRENT_PAGE'] =
+      $GLOBALS['SessSemName']['header_line'] . ' - ' . $this->getDisplayTitle();
+
     include 'lib/include/html_head.inc.php';
     include 'lib/include/header.php';
 

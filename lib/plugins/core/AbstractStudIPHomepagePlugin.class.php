@@ -27,7 +27,7 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
 	function showOverview(){
 		// has to be implemented
 	}
-	
+
 	/**
 	 * true:  overviewpage is enabled
 	 * false: overviewpage is disabled
@@ -67,6 +67,8 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
    * @return void
    */
   function display($action) {
+
+    $GLOBALS['CURRENT_PAGE'] = $this->getDisplayTitle();
 
     include 'lib/include/html_head.inc.php';
     include 'lib/include/header.php';
