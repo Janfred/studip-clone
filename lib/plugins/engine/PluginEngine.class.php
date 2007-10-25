@@ -16,6 +16,67 @@ define("UNKNOWN_PLUGINTYPE", "undefined");
 
 class PluginEngine {
 
+
+  /**
+   * Contains the current plugin's ID
+   *
+   * @var mixed
+   */
+  private static $currentPluginId = UNKNOWN_PLUGINTYPE;
+
+
+  /**
+   * TODO
+   *
+   * @return int  returns the current plugin's ID
+   */
+  public static function getCurrentPluginId() {
+    return PluginEngine::$currentPluginId;
+  }
+
+
+  /**
+   * TODO
+   *
+   * @param  int  the current plugin's ID
+   *
+   * @return int  returns the current plugin's ID
+   */
+  public static function setCurrentPluginId($id) {
+    return (PluginEngine::$currentPluginId = $id);
+  }
+
+
+	/**
+	 * TODO
+	 *
+	 * @param $params - an array with name value pairs
+	 *
+	 * @return int the plugin ID of the requested plugin
+	 */
+	public static function getPluginIdFromRequest(&$unconsumed){
+
+		$dispatch_to = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
+
+		# retrieve plugin class
+		list($_, $plugin_class) = explode('/', $dispatch_to);
+
+		if (empty($plugin_class)) {
+			throw new Exception(_("Es wurde kein Plugin gewählt."));
+		}
+
+		# retrieve corresponding plugin id
+		$plugin_engine = PluginEngine::getPluginPersistence();
+		$plugin_id = $plugin_engine->getPluginId($plugin_class);
+		PluginEngine::setCurrentPluginId($plugin_id);
+
+		# fill reference to unconsumed path
+		$unconsumed = substr($dispatch_to, strlen($plugin_class) + 1);
+
+		return $plugin_id;
+	}
+
+
 	/**
 	* Returns the plugin persistence object for the required plugin type.
 	* @param $plugintype - Standard, Administration, System
@@ -67,17 +128,22 @@ class PluginEngine {
 		if (is_null($plugin)){
 			return "";
 		}
-		$link = "plugins.php?cmd=$cmd&id=" . urlencode($plugin->getPluginid());
+		$link = sprintf("plugins.php/%s/%s", urlencode($plugin->getPluginclassname()), urlencode($cmd));
 		if (PluginEngine::getTypeOfPlugin($plugin) == "Homepage"){
 			$requser = $plugin->getRequestedUser();
 			if (is_object($requser)){
 				$params["requesteduser"] = $requser->getUsername();
 			}
 		}
-		// add Params
-		foreach ($params as $paramkey=>$paramval){
-			$link .= "&" . urlencode($paramkey) . "=" . urlencode($paramval);
+
+		// add params
+		if (sizeof($params)) {
+			$query_string = array();
+	 		foreach ($params as $key => $val)
+	 			$query_string[] = urlencode($key) . '=' . urlencode($val);
+	 		$link .= '?' . join('&amp;', $query_string);
 		}
+
 		return $link;
 	}
 
@@ -87,11 +153,16 @@ class PluginEngine {
 	* @return a link to the administration plugin with the additional $params
 	*/
 	function getLinkToAdministrationPlugin($params=array()){
-		$link = "plugins.php?cmd=show&id=1";
-		// add Params
-		foreach ($params as $paramkey=>$paramval){
-			$link .= "&" . urlencode($paramkey) . "=" . urlencode($paramval);
+		$link = "plugins.php/pluginadministrationplugin/show";
+
+		// add params
+		if (sizeof($params)) {
+			$query_string = array();
+	 		foreach ($params as $key => $val)
+	 			$query_string[] = urlencode($key) . '=' . urlencode($val);
+	 		$link .= '?' . join('&amp;', $query_string);
 		}
+
 		return $link;
 	}
 

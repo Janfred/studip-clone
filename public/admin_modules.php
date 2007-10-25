@@ -51,7 +51,7 @@ $cssSw=new cssClassSwitcher;
 $sess->register("admin_modules_data");
 $messaging=new messaging;
 $amodules=new AdminModules;
-if ($PLUGINS_ENABLE){
+if ($GLOBALS['PLUGINS_ENABLE']){
 	$plugins = $amodules->pluginengine->getAllEnabledPlugins(); // get all installed and enabled plugins
 }
 
@@ -105,7 +105,7 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					$amodules->clearBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
 				}
 			}
-			if ($PLUGINS_ENABLE && is_array($plugins)){
+			if ($GLOBALS['PLUGINS_ENABLE'] && is_array($plugins)){
 				foreach ($plugins as $plugin){
 					$key = "plugin_".$plugin->getPluginId();
 					if ($$key == "TRUE"){
@@ -248,7 +248,7 @@ if ($admin_modules_data["range_id"]) {
 					$method = 'module' . $key . 'Preconditions';
 					if(method_exists($amodules, $method)) $pre_check = $amodules->$method($admin_modules_data["range_id"],$val['preconditions']);
 				}
-				
+
 				?>
 			<tr <? $cssSw->switchClass() ?> rowspan=2>
 				<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
@@ -280,7 +280,7 @@ if ($admin_modules_data["range_id"]) {
 			<? }
 
 		}
-		if ($PLUGINS_ENABLE){
+		if ($GLOBALS['PLUGINS_ENABLE']){
 			$plugins = $amodules->pluginengine->getAllEnabledPlugins();
 
 		 	// $defactplugins = $amodules->pluginengine->getDefaultActivationsForPOI($GLOBALS["SessSemName"][1]);

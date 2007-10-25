@@ -1,5 +1,19 @@
 <?php
 
+  /*
+   * AbstractStudIPSystemPlugin.class.php - abstract superclass for legacy
+   *                                        system plugins
+   *
+   * Copyright (C) 2007 - Marcus Lunzenauer <mlunzena@uos.de>
+   *
+   * This program is free software; you can redistribute it and/or
+   * modify it under the terms of the GNU General Public License as
+   * published by the Free Software Foundation; either version 2 of
+   * the License, or (at your option) any later version.
+   */
+
+
+
 /**
  * Starting point for system plugins. System plugins can be integrated into the main menu for system wide
  * functions or can do background tasks like logging without having a menu entry.
@@ -14,15 +28,16 @@
 define('SYSTEM_PLUGIN_TOOLBAR',   1);
 define('SYSTEM_PLUGIN_STARTPAGE', 2);
 
-class AbstractStudIPSystemPlugin extends AbstractStudIPPlugin{
+class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin{
 
         var $display_type;
 
 	function AbstractStudIPSystemPlugin(){
-		parent::AbstractStudIPPlugin();
+		parent::AbstractStudIPLegacyPlugin();
 		$this->pluginengine = PluginEngine::getPluginPersistence("System");
                 $this->display_type = SYSTEM_PLUGIN_TOOLBAR;
 	}
+
 
 	/**
 	 * A system plugin can do system tasks like logging in the background.
@@ -35,13 +50,14 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPPlugin{
 		return false;
 	}
 
+
 	/**
 	 * abstract function for doing all background tasks
 	 *
 	 */
 	function doBackgroundTasks(){
-
 	}
+
 
 	 /**
      * returns the score which the current user get's for activities in this plugin
@@ -51,6 +67,7 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPPlugin{
     	return 0;
     }
 
+
     /**
      * define where the plugin will be visible (toolbar and/or start page)
      */
@@ -58,11 +75,50 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPPlugin{
         $this->display_type = $display_type;
     }
 
+
     /**
      * returns where the plugin will be visible (toolbar and/or start page)
      */
     function getDisplayType ($filter = -1) {
         return $this->display_type & $filter;
     }
+
+
+  /**
+   * This abstract method sets everything up to perform the given action and
+   * displays the results or anything you want to.
+   *
+   * @param  string the name of the action to accomplish
+   *
+   * @return void
+   */
+  function display($action) {
+
+    include 'lib/include/html_head.inc.php';
+    include 'lib/include/header.php';
+
+    $pluginparams = $_GET["plugin_subnavi_params"];
+
+    $pluginnav = $this->getNavigation();
+
+    if ($pluginnav->hasIcon()) {
+      StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(), true,
+                                         $this->getPluginpath() . "/" .
+                                         $pluginnav->getIcon());
+    }
+    else {
+      StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(), true,
+                                         $this->getPluginiconname());
+    }
+
+
+    // let the plugin show its view
+    StudIPTemplateEngine::startContentTable();
+    $this->$action($pluginparams);
+    StudIPTemplateEngine::endContentTable();
+
+    // close the page
+    include 'lib/include/html_end.inc.php';
+    page_close();
+  }
 }
-?>

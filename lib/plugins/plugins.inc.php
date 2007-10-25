@@ -7,7 +7,7 @@
  * @package pluginengine
  */
 
-if ($PLUGINS_ENABLE){
+if ($GLOBALS['PLUGINS_ENABLE']){
 	// AdoDB-Database Interface
 	require_once("vendor/adodb/adodb.inc.php");
 
@@ -17,12 +17,14 @@ if ($PLUGINS_ENABLE){
 	require_once("core/AdminInfo.class.php");
 	require_once("core/ChangeMessage.class.php");
 	require_once("core/HelpInfo.class.php");
+	require_once("core/StudipPluginNavigation.class.php");
 	require_once("core/PluginNavigation.class.php");
 	require_once("core/Permission.class.php");
 	require_once("core/StudIPUser.class.php");
 	require_once("core/Environment.class.php");
 	require_once("core/DBEnvironment.class.php");
 	require_once("core/AbstractStudIPPlugin.class.php");
+	require_once("core/AbstractStudIPLegacyPlugin.class.php");
 	require_once("core/AbstractStudIPCorePlugin.class.php");
 	require_once("core/AbstractStudIPAdministrationPlugin.class.php");
 	require_once("core/AbstractStudIPStandardPlugin.class.php");

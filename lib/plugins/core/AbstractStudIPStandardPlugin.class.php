@@ -11,7 +11,7 @@ require_once("lib/classes/TreeAbstract.class.php");
  * @subpackage core
  */
 
-class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
+class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin{
 
 	var $changeindicatoriconname; 	// relativer Name des Icons für Änderungen an diesem Plugin
 	/**
@@ -24,7 +24,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
 	 */
     function AbstractStudIPStandardPlugin() {
     	// Konstruktor der Basisklasse aufrufen
-    	AbstractStudIPPlugin::AbstractStudIPPlugin();
+    	parent::AbstractStudIPLegacyPlugin();
     	$this->pluginiconname = "";
     	$this->changeindicatoriconname = "";
     	$this->id = UNKNOWN_ID;
@@ -217,5 +217,68 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPPlugin{
     function getScore(){
     	return 0;
     }
+
+
+  /**
+   * This abstract method sets everything up to perform the given action and
+   * displays the results or anything you want to.
+   *
+   * @param  string the name of the action to accomplish
+   *
+   * @return void
+   */
+  function display($action) {
+
+    include 'lib/include/html_head.inc.php';
+    include 'lib/include/header.php';
+
+    $pluginparams = $_GET["plugin_subnavi_params"];
+
+
+    // diplay the admin_menu
+    if ($action == "actionshowConfigurationPage"
+        && $GLOBALS['perm']->have_perm("admin")){
+      include 'lib/include/links_admin.inc.php';
+    }
+
+    // display the course menu
+    include 'lib/include/links_openobject.inc.php';
+
+    // let the plugin show its view
+    $pluginnav = $this->getNavigation();
+
+    if (is_object($pluginnav)){
+      $iconname = "";
+      if ($pluginnav->hasIcon()){
+        $iconname = $this->getPluginpath() . "/" . $pluginnav->getIcon();
+      }
+      else {
+        $iconname = $this->getPluginiconname();
+      }
+
+      if (isset($GLOBALS['SessSemName']["header_line"])){
+        StudIPTemplateEngine::makeHeadline(
+          sprintf("%s - %s", $GLOBALS['SessSemName']["header_line"],
+                  $this->getDisplaytitle()),
+          true,
+          $iconname);
+      }
+      else {
+        StudIPTemplateEngine::makeHeadline($this->getDisplaytitle(), true,
+                                           $iconname);
+      }
+    }
+    else {
+      StudIPTemplateEngine::makeHeadline($this->getPluginname(), true,
+                                         $this->getPluginiconname());
+    }
+
+    StudIPTemplateEngine::startContentTable(true);
+    $this->$action($pluginparams);
+    StudIPTemplateEngine::endContentTable();
+
+    // close the page
+    include 'lib/include/html_end.inc.php';
+    page_close();
+  }
 }
-?>

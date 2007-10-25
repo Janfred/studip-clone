@@ -143,7 +143,7 @@ if (($SUPPORT_ENABLE) && ($modules["support"])) {
 
 // last topkats, insert new topkats in front of this statement
 // create the structure array for activated plugins
-if ($PLUGINS_ENABLE){
+if ($GLOBALS['PLUGINS_ENABLE']){
 	// list all activated plugins
 
 	$plugins = $Modules->pluginengine->getAllActivatedPlugins();
@@ -152,14 +152,14 @@ if ($PLUGINS_ENABLE){
 		foreach ($plugins as $plugin){
 			if ($plugin->hasNavigation()){
 				$pluginnavi = $plugin->getNavigation();
-				$structure["plugin_" . $plugin->getPluginId()] = array('topKat' => '', 'name' => $plugin->getDisplaytitle(), 'link' => PluginEngine::getLink($plugin, $pluginnavi->getLinkParams()), 'active' => false);
+				$structure["plugin_" . $plugin->getPluginId()] = array('topKat' => '', 'name' => $plugin->getDisplaytitle(), 'link' => $pluginnavi->getLink(), 'active' => false);
 
-				$pluginsubmenu["_plugin_" . $plugin->getPluginId()] = array('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $pluginnavi->getDisplayname(), 'link' => PluginEngine::getLink($plugin, $pluginnavi->getLinkParams()), 'active' => false);
+				$pluginsubmenu["_plugin_" . $plugin->getPluginId()] = array('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $pluginnavi->getDisplayname(), 'link' => $pluginnavi->getLink(), 'active' => false);
 				$submenu = $pluginnavi->getSubMenu();
 				// create bottomkats for activated plugins
 				foreach ($submenu as $submenuitem){
 					// create entries in a temporary structure and add it to structure later
-					$pluginsubmenu["plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $submenuitem->getDisplayname(), 'link' => PluginEngine::getLink($plugin, $submenuitem->getLinkParams()), 'active' => false);
+					$pluginsubmenu["plugin_" . $plugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat' => "plugin_" . $plugin->getPluginId(), 'name' => $submenuitem->getDisplayname(), 'link' => $submenuitem->getLink(), 'active' => false);
 				}
 			}
 			else {
@@ -345,12 +345,12 @@ if ($SessSemName["class"]=="inst") {
 
 // check if view is maintained by a plugin
 $found = false;
-if ($PLUGINS_ENABLE){
+if ($GLOBALS['PLUGINS_ENABLE']){
 	if (is_array($plugins)){
-		$pluginid = $_GET["id"];
+		$pluginid = PluginEngine::getCurrentPluginId();
 		// Namen der aufgerufenen Datei aus der URL herausschneiden
 		if (strlen($i_page) <= 0){
-			$i_page = basename($PHP_SELF);
+			$i_page = basename($GLOBALS['PHP_SELF']);
 		}
 		if ($i_page == "plugins.php"){
 			foreach ($plugins as $plugin){

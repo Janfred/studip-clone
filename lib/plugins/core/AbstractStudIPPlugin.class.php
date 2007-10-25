@@ -13,7 +13,7 @@
  * @subpackage core
  */
 
-class AbstractStudIPPlugin {
+abstract class AbstractStudIPPlugin {
 	var $pluginname;
 	var $pluginid;
 	var $pluginpath;
@@ -262,10 +262,9 @@ class AbstractStudIPPlugin {
 		return $this->navigation;
 	}
 
-	function setNavigation($newnavigation){
-		if (is_a($newnavigation,'PluginNavigation') || is_subclass_of($newnavigation,'PluginNavigation')){
-		    $this->navigation = $newnavigation;
-		}
+	function setNavigation(StudipPluginNavigation $newnavigation){
+		$this->navigation = $newnavigation;
+		$this->navigation->setPlugin($this);
 	}
 
 	function hasNavigation(){
@@ -358,5 +357,15 @@ class AbstractStudIPPlugin {
 	function actionShowAdministrationPage(){
 		return $this->showAdministrationPage();
 	}
+
+
+  /**
+   * This method dispatches all actions.
+   *
+   * @param  string  the part of the dispatch path, that were not consumed yet
+   *
+   * @return void
+  */
+  abstract function perform($unconsumed_path);
 }
-?>
+

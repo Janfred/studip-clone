@@ -8,13 +8,13 @@
  * @subpackage core
  */
 
-class AbstractStudIPAdministrationPlugin extends AbstractStudIPPlugin{
+class AbstractStudIPAdministrationPlugin extends AbstractStudIPLegacyPlugin{
 
 	var $topnavigation;
 
 	function AbstractStudIPAdministrationPlugin(){
 		// Konstruktor der Basisklasse aufrufen
-    	AbstractStudIPPlugin::AbstractStudIPPlugin();
+    	parent::AbstractStudIPLegacyPlugin();
     	$this->topnavigation = null;
     	$this->pluginengine = PluginEngine::getPluginPersistence("Administration");
 	}
@@ -45,11 +45,53 @@ class AbstractStudIPAdministrationPlugin extends AbstractStudIPPlugin{
     /**
      * Setzt das Hauptmenü des Plugins
      */
-    function setTopnavigation($newnavigation){
-    	if (is_a($newnavigation,'PluginNavigation') || is_subclass_of($newnavigation,'PluginNavigation')){
-	    	// $newnavigation->setPluginpath($this->getPluginpath());
+    function setTopnavigation(StudipPluginNavigation $newnavigation){
     		$this->topnavigation = $newnavigation;
-    	}
+   	}
+
+
+  /**
+   * This abstract method sets everything up to perform the given action and
+   * displays the results or anything you want to.
+   *
+   * @param  string the name of the action to accomplish
+   *
+   * @return void
+   */
+  function display($action) {
+
+    include 'lib/include/html_head.inc.php';
+    include 'lib/include/header.php';
+
+    $pluginparams = $_GET["plugin_subnavi_params"];
+
+    // Administration-Plugins only accessible by users with admin rights
+    if (!$GLOBALS['perm']->have_perm("admin")) {
+      throw new Exception(_("Sie verfügen nicht über ausreichend Rechte für diese Aktion."));
+    }
+
+    // display the admin menu
+    include 'lib/include/links_admin.inc.php';
+
+    // let the plugin show its view
+    $pluginnav = $this->getNavigation();
+    if ($pluginnav->hasIcon()) {
+      StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(), true,
+                                         $this->getPluginpath() . "/" .
+                                         $pluginnav->getIcon());
+    }
+    else {
+      StudIPTemplateEngine::makeHeadline($pluginnav->getDisplayname(), true,
+                                         $this->getPluginiconname());
+    }
+
+    StudIPTemplateEngine::startContentTable(true);
+    $this->$action($pluginparams);
+    StudIPTemplateEngine::endContentTable();
+
+    // close the page
+    include 'lib/include/html_end.inc.php';
+    page_close();
     }
 }
 ?>

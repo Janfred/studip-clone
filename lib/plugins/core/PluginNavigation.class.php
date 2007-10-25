@@ -9,35 +9,20 @@
  *
  */
 
-class PluginNavigation {
+class PluginNavigation extends StudipPluginNavigation {
 
-	var $displayname;
-	var $link;
-	var $submenu;
-	var $active;
-	var $linkparams;
-	var $icon;
+  var $active = FALSE;
+  var $linkparams = array();
 
-    function PluginNavigation() {
-    	$this->displayname = "";
-    	$this->link = "";
-    	$this->submenu = array();
-    	$this->active = false;
-    	$this->linkparams = array();
-    	$this->icon = "";
+
+  function getLink(){
+    return PluginEngine::getLink($this->plugin, $this->getLinkParams());
     }
 
     /**
      * Getter und Setter zu den Attributen
      */
 
-
-    /**
-    * Returns the displayname, usually used for creating a link
-    */
-    function getDisplayname(){
-    	return $this->displayname;
-    }
 
     /**
     *
@@ -54,9 +39,6 @@ class PluginNavigation {
     	$this->linkparams[$key] = $value;
     }
 
-    function getSubmenu(){
-    	return $this->submenu;
-    }
 
     function isActive() {
         foreach ($this->linkparams as $key => $val) {
@@ -68,9 +50,6 @@ class PluginNavigation {
         return true;
     }
 
-    function setDisplayname($newdisplayname){
-    	$this->displayname = $newdisplayname;
-    }
 
     /**
      * @deprecated
@@ -79,16 +58,6 @@ class PluginNavigation {
 	$this->addLinkParam('plugin_subnavi_params', $newlink);
     }
 
-    function addSubmenu($subnavigation){
-    	if (is_a($subnavigation,'PluginNavigation') || is_subclass_of($subnavigation,'PluginNavigation')){
-	    	//$subnavigation->setPluginpath($this->pluginpath);
-    		$this->submenu[] = $subnavigation;
-    	}
-    }
-
-    function removeSubmenu($subnavigation){
-    	$this->submenu = array_diff($this->submenu,$subnavigation);
-    }
 
     /**
      * @deprecated
@@ -102,18 +71,6 @@ class PluginNavigation {
      */
     function clearSubmenu(){
     	$this->submenu = array();
-    }
-
-     function getIcon(){
-    	return $this->icon;
-    }
-
-    function setIcon($newicon){
-    	$this->icon = trim($newicon);
-    }
-
-    function hasIcon(){
-    	return (strlen($this->icon) > 0);
     }
 }
 ?>

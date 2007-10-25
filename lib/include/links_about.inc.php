@@ -59,13 +59,13 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 		// hier nun die HomepagePlugins anzeigen
 		if ($activatedhomepageplugin->hasNavigation()){
 			$hppluginnav = $activatedhomepageplugin->getNavigation();
-			$structure["hpplugin_" . $activatedhomepageplugin->getPluginid()] = array('topKat' => '', 'name' => $hppluginnav->getDisplayname(), 'link' => PluginEngine::getLink($activatedhomepageplugin, $hppluginnav->getLinkParams()), 'active' => FALSE);
-			$pluginsubmenu["_hpplugin_" . $activatedhomepageplugin->getPluginId()] = array('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$hppluginnav->getDisplayname(), 'link'=>PluginEngine::getLink($activatedhomepageplugin, $hppluginnav->getLinkParams()), 'active'=>false);
+			$structure["hpplugin_" . $activatedhomepageplugin->getPluginid()] = array('topKat' => '', 'name' => $hppluginnav->getDisplayname(), 'link' => $hppluginnav->getLink(), 'active' => FALSE);
+			$pluginsubmenu["_hpplugin_" . $activatedhomepageplugin->getPluginId()] = array('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$hppluginnav->getDisplayname(), 'link'=>$hppluginnav->getLink(), 'active'=>false);
 			$submenu = $hppluginnav->getSubMenu();
 			// create bottomkats for activated plugins
 			foreach ($submenu as $submenuitem){
 				// create entries in a temporary structure and add it to structure later
-				$pluginsubmenu["hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$submenuitem->getDisplayname(), 'link'=>PluginEngine::getLink($activatedhomepageplugin, $submenuitem->getLinkParams()), 'active'=>false);
+				$pluginsubmenu["hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$submenuitem->getDisplayname(), 'link'=> $submenuitem->getLink(), 'active'=>false);
 			}
 		}
 	}
@@ -115,12 +115,12 @@ if (!$perm->have_perm("admin")) {
 }
 // check if view is maintained by a plugin
 $found = false;
-if ($PLUGINS_ENABLE){
+if ($GLOBALS['PLUGINS_ENABLE']){
 	if (is_array($activatedhomepageplugins)){
-		$pluginid = $_GET["id"];
+		$pluginid = PluginEngine::getCurrentPluginId();
 		// Namen der aufgerufenen Datei aus der URL herausschneiden
 		if (strlen($i_page) <= 0){
-			$i_page = basename($PHP_SELF);
+			$i_page = basename($GLOBALS['PHP_SELF']);
 		}
 		if ($i_page == "plugins.php"){
 			foreach ($activatedhomepageplugins as $activatedhomepageplugin){

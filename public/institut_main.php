@@ -76,7 +76,7 @@ if (isset($auswahl) && $auswahl!="") {
 		}
 		unset($redirect_to);
 		page_close();
-		$new_query = preg_replace('/[^0-9a-z+_?#&=.-]/i', '', $new_query);
+		$new_query = preg_replace('/[^0-9a-z+_?#&=.-\/]/i', '', $new_query);
 		header("Location: $new_query");
 		die;
 	}

@@ -2,7 +2,7 @@
 
 /**
 * displays tabs for messaging pages
-* 
+*
 * @author				Suchi & Berg GmbH <info@data-quest.de>, Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>, Nils K. Windisch <studip@nkwindisch.de>
 * @access				public
 * @modulegroup	Messaging
@@ -12,10 +12,10 @@
 
 /*
 links_sms.inc.php - Navigation fuer die Uebersichtsseiten.
-Copyright (C) 2002	Stefan Suchi <suchi@gmx.de>, 
-				Ralf Stockmann <rstockm@gwdg.de>, 
-				Cornelis Kater <ckater@gwdg.de, 
-				Suchi & Berg GmbH <info@data-quest.de> 
+Copyright (C) 2002	Stefan Suchi <suchi@gmx.de>,
+				Ralf Stockmann <rstockm@gwdg.de>,
+				Cornelis Kater <ckater@gwdg.de,
+				Suchi & Berg GmbH <info@data-quest.de>
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -54,9 +54,9 @@ $structure["online"]=array ("topKat"=>"", "name"=>_("Online"), "link"=>"online.p
 $structure["in"] = array ("topKat"=>"post", "name"=>_("empfangene"), "link"=>"sms_box.php?sms_inout=in", "active"=>FALSE);
 $structure["out"] = array ("topKat"=>"post", "name"=>_("gesendete"), "link"=>"sms_box.php?sms_inout=out", "active"=>FALSE);
 $structure["write"] = array ("topKat"=>"post", "name"=>_("Neue Nachricht schreiben"), "link"=>"sms_send.php", "active"=>FALSE);
-$structure["adjust"] = array ("topKat"=>"post", "name"=>_("Messaging anpassen"), "link"=>"".$PHP_SELF."?change_view=TRUE", "active"=>FALSE);
+$structure["adjust"] = array ("topKat"=>"post", "name"=>_("Messaging anpassen"), "link"=>"".$GLOBALS['PHP_SELF']."?change_view=TRUE", "active"=>FALSE);
 $structure["online2"] = array ("topKat"=>"online", "name"=>_("Wer ist online?"), "link"=>"online.php", "active"=>FALSE);
-$structure["adjust_online"] = array ("topKat"=>"online", "name"=>_("Messaging anpassen"), "link"=>"".$PHP_SELF."?change_view=TRUE", "active"=>FALSE);
+$structure["adjust_online"] = array ("topKat"=>"online", "name"=>_("Messaging anpassen"), "link"=>"".$GLOBALS['PHP_SELF']."?change_view=TRUE", "active"=>FALSE);
 if ($GLOBALS['CALENDAR_ENABLE']) {
 	$structure["calendar_day"] = array ("topKat"=>"calendar", "name"=>_("Tag"), "link"=>"calendar.php?cmd=showday&atime=$atime", "active"=>FALSE);
 	$structure["calendar_week"] = array ("topKat"=>"calendar", "name"=>_("Woche"), "link"=>"calendar.php?cmd=showweek&atime=$atime", "active"=>FALSE);
@@ -78,29 +78,29 @@ $structure["contact_export"] = array ("topKat"=>"contact", "name"=>_("VCF-Export
 
 //View festlegen
 switch ($i_page) {
-	case "sms_box.php" : 
+	case "sms_box.php" :
 		if ($change_view == TRUE || $messaging_cmd == "change_view_insert") {
 			$reiter_view = "adjust";
 		} else {
-			$reiter_view = $sms_data["view"]; 
+			$reiter_view = $sms_data["view"];
 		}
 	break;
-	case "sms_send.php" : 
+	case "sms_send.php" :
 		if ($change_view == TRUE || $messaging_cmd == "change_view_insert") {
 			$reiter_view = "adjust";
 		} else {
-			$reiter_view = "write"; 
+			$reiter_view = "write";
 		}
 	break;
-	case "online.php" : 
+	case "online.php" :
 		if ($change_view == TRUE || $messaging_cmd == "change_view_insert") {
 			$reiter_view = "adjust_online";
 		} else	{
 			$reiter_view = "online";
 		}
 	break;
-	case "chat_online.php" : 
-		$reiter_view = "chat"; 
+	case "chat_online.php" :
+		$reiter_view = "chat";
 	break;
 	case "contact.php":
 		if ($contact["view"] == "gruppen") {
@@ -112,31 +112,31 @@ switch ($i_page) {
 	break;
 	case "calendar.php" :
 		if (!$GLOBALS['CALENDAR_ENABLE'])
-			break; 
+			break;
 		switch($cmd) {
 			case "showday":
-				$reiter_view = "calendar_day"; 
+				$reiter_view = "calendar_day";
 			break;
 			case "showweek":
-				$reiter_view = "calendar_week"; 
+				$reiter_view = "calendar_week";
 			break;
 			case "showmonth":
-				$reiter_view = "calendar_month"; 
+				$reiter_view = "calendar_month";
 			break;
 			case "showyear":
-				$reiter_view = "calendar_year"; 
+				$reiter_view = "calendar_year";
 			break;
 			case "edit":
-				$reiter_view = "calendar_edit"; 
+				$reiter_view = "calendar_edit";
 			break;
 			case "bind":
-				$reiter_view = "calendar_bind"; 
+				$reiter_view = "calendar_bind";
 			break;
 			case "export":
 				$reiter_view = "calendar_export";
 			break;
 			case "changeview":
-				$reiter_view = "calendar_changeview"; 
+				$reiter_view = "calendar_changeview";
 			break;
 		}
 	break;

@@ -9,10 +9,10 @@
  * @subpackage core
  */
 
-class AbstractStudIPPortalPlugin extends AbstractStudIPPlugin {
+class AbstractStudIPPortalPlugin extends AbstractStudIPLegacyPlugin {
 
 	function AbstractStudIPPortalPlugin(){
-		parent::AbstractStudIPPlugin();
+		parent::AbstractStudIPLegacyPlugin();
 	}
 
 	/**
@@ -54,5 +54,33 @@ class AbstractStudIPPortalPlugin extends AbstractStudIPPlugin {
 	function hasAuthorizedView(){
 		return true;
 	}
+
+
+  /**
+   * This abstract method sets everything up to perform the given action and
+   * displays the results or anything you want to.
+   *
+   * @param  string the name of the action to accomplish
+   *
+   * @return void
+   */
+  function display($action) {
+
+    include 'lib/include/html_head.inc.php';
+    include 'lib/include/header.php';
+
+    $pluginparams = $_GET["plugin_subnavi_params"];
+
+    StudIPTemplateEngine::makeHeadline($this->getDisplaytitle(), true,
+                                       $this->getPluginiconname());
+
+    StudIPTemplateEngine::startContentTable();
+    $this->$action($pluginparams);
+    StudIPTemplateEngine::endContentTable();
+
+    // close the page
+    include 'lib/include/html_end.inc.php';
+    page_close();
+  }
 }
 ?>

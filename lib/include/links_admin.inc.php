@@ -25,7 +25,6 @@ global  $BANNER_ADS_ENABLE,
         $EXTERN_ENABLE,
         $ILIAS_CONNECT_ENABLE,
         $LOG_ENABLE,
-        $PHP_SELF,
         $RESOURCES_ALLOW_ROOM_REQUESTS,
         $RESOURCES_ENABLE,
         $SEM_BEGINN_NEXT,
@@ -329,7 +328,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	}
 
 	$structure["aux"]=array (topKat=>"veranstaltungen", name=>_("Zusatzangaben"), link=>"admin_aux.php?list=TRUE&new_session=TRUE", active=>FALSE);
-	
+
 	//
 	if ($perm->have_perm("admin")) {
 		$structure["grunddaten_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Grunddaten"), 'link'=>"admin_institut.php?list=TRUE", 'active'=>FALSE);
@@ -372,7 +371,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		}
 		$structure["aux_adjust"]=array (topKat=>"global", name=>("Zusatzangaben definieren"), link=>"admin_aux_adjust.php", active=>FALSE);
 	}
-	
+
 	if($perm->have_perm('dozent') && $GLOBALS['STM_ENABLE']){
 		$structure["stm_instance_assi"]=array ('topKat'=>"modules", 'name'=>_("Konkrete Studienmodule"), 'link'=>"stm_instance_assi.php", 'active'=>FALSE);
 	}
@@ -397,7 +396,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 		$structure["semester"]=array ('topKat'=>"global", 'name'=>_("Semester"), 'link'=>"admin_semester.php", 'active'=>FALSE);
     	$structure["admin_teilnehmer_view"]=array (topKat=>"global", name=>_("Teilnehmeransicht"), link=>"admin_teilnehmer_view.php", active=>FALSE);
-	
+
 		if ($LOG_ENABLE) {
 			$structure["show_log"]=array ('topKat'=>"log", 'name'=>_("Log"), 'link'=>"show_log.php", 'active'=>FALSE);
 			$structure["admin_log"]=array ('topKat'=>"log", 'name'=>_("Einstellungen"), 'link'=>"admin_log.php", 'active'=>FALSE);
@@ -411,7 +410,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			foreach ($plugins as $adminplugin) {
 				if ($adminplugin->hasNavigation()){
 					$nav = $adminplugin->getNavigation();
-					$structure["plugins_" . $adminplugin->getPluginid()]=array ('topKat'=>"plugins", 'name'=>$nav->getDisplayname(), 'link'=>PluginEngine::getLink($adminplugin, $nav->getLinkParams()), 'active'=>FALSE);
+					$structure["plugins_" . $adminplugin->getPluginid()]=array ('topKat'=>"plugins", 'name'=>$nav->getDisplayname(), 'link'=> $nav->getLink(), 'active'=>FALSE);
 				}
 			}
 		}
@@ -598,7 +597,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			break;
 		case "plugins.php":
 			// check if view is delegated to a bottomkat
-		    $pid = $_GET["id"];
+			$pid = PluginEngine::getCurrentPluginId();
 			$reiter_view = "plugins_" . $pid;
 			$ppersist = PluginEngine::getPluginPersistence();
 			$viewplugin = $ppersist->getPlugin($pid);
@@ -631,7 +630,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		?>
 		<tr>
 			<td class="blank" colspan=2>&nbsp;
-				<form name="links_admin_search" action="<? echo $PHP_SELF,"?", "view=$view"?>" method="POST">
+				<form name="links_admin_search" action="<? echo $GLOBALS['PHP_SELF'],"?", "view=$view"?>" method="POST">
 				<table cellpadding="0" cellspacing="0" border="0" width="99%" align="center">
 					<tr>
 						<td class="steel1">
@@ -704,7 +703,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		//Umfangreiches Auswahlmenu nur ab Admin, alles darunter sollte eine uberschaubare Anzahl von Seminaren haben
 		if ($perm->have_perm("admin")) {
 		?>
-			<form name="links_admin_search" action="<? echo $PHP_SELF ?>" method="POST">
+			<form name="links_admin_search" action="<? echo $GLOBALS['PHP_SELF'] ?>" method="POST">
 				<table cellpadding="0" cellspacing="0" border="0" width="99%" align="center">
 					<tr>
 						<td class="steel1" colspan=5>
@@ -913,7 +912,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			$db->query($query);
 
 		?>
-		<form name="links_admin_action" action="<? echo $PHP_SELF ?>" method="POST">
+		<form name="links_admin_action" action="<? echo $GLOBALS['PHP_SELF'] ?>" method="POST">
 		<table border=0  cellspacing=0 cellpadding=2 align=center width="99%">
 		<?
 
@@ -923,21 +922,21 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			<tr height=28>
 				<td width="%10" class="steel" valign=bottom>
 					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>
-					&nbsp;<a href="<? echo $PHP_SELF ?>?adminarea_sortby=start_time"><b><?=_("Semester")?></b></a>
+					&nbsp;<a href="<? echo $GLOBALS['PHP_SELF'] ?>?adminarea_sortby=start_time"><b><?=_("Semester")?></b></a>
 				</td>
 				<td width="5%" class="steel" valign=bottom>
 					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>
-					&nbsp; <a href="<? echo $PHP_SELF ?>?adminarea_sortby=VeranstaltungsNummer"><b><?=_("Nr.")?></b></a>
+					&nbsp; <a href="<? echo $GLOBALS['PHP_SELF'] ?>?adminarea_sortby=VeranstaltungsNummer"><b><?=_("Nr.")?></b></a>
 				</td>
 				<td width="45%" class="steel" valign=bottom>
 					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>
-					&nbsp; <a href="<? echo $PHP_SELF ?>?adminarea_sortby=Name"><b><?=_("Name")?></b></a>
+					&nbsp; <a href="<? echo $GLOBALS['PHP_SELF'] ?>?adminarea_sortby=Name"><b><?=_("Name")?></b></a>
 				</td>
 				<td width="15%" align="center" class="steel" valign=bottom>
 					<b><?=_("DozentIn")?></b>
 				</td>
 				<td width="25%"align="center" class="steel" valign=bottom>
-					<a href="<? echo $PHP_SELF ?>?adminarea_sortby=status"><b><?=_("Status")?></b></a>
+					<a href="<? echo $GLOBALS['PHP_SELF'] ?>?adminarea_sortby=status"><b><?=_("Status")?></b></a>
 				</td>
 				<td width="10%" align="center" class="steel" valign=bottom>
 					<b><?
@@ -963,7 +962,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					<td class="<? echo $cssSw->getClass() ?>" colspan=3 align="right">
 					<?
 					if ($auth->auth["jscript"]) {
-						printf("<font size=-1><a href=\"%s?select_all=TRUE&list=TRUE\">%s</a></font>", $PHP_SELF, makeButton("alleauswaehlen"));
+						printf("<font size=-1><a href=\"%s?select_all=TRUE&list=TRUE\">%s</a></font>", $GLOBALS['PHP_SELF'], makeButton("alleauswaehlen"));
 					}
 					?>&nbsp;
 					</td>
@@ -981,9 +980,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					<input type="HIDDEN" name="change_visible" value="1">
 					<?
 					if ($auth->auth["jscript"]) {
-						printf("<font size=-1><a href=\"%s?select_all=TRUE&list=TRUE\">%s</a></font>", $PHP_SELF, makeButton("alleauswaehlen"));
+						printf("<font size=-1><a href=\"%s?select_all=TRUE&list=TRUE\">%s</a></font>", $GLOBALS['PHP_SELF'], makeButton("alleauswaehlen"));
 						// echo "&nbsp;<br>";
-						// printf("<font size=-1><a href=\"%s?select_none=TRUE&list=TRUE\">%s</a></font>", $PHP_SELF, makeButton("alleauswaehlen"));
+						// printf("<font size=-1><a href=\"%s?select_none=TRUE&list=TRUE\">%s</a></font>", $GLOBALS['PHP_SELF'], makeButton("alleauswaehlen"));
 					}
 					?>&nbsp;
 					</td>
@@ -1013,7 +1012,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 						// ab hier die verschiedenen Sperrlevel für alle Veranstaltungen
 						echo '</select>';
 						echo '<input type="image" '.makeButton("uebernehmen","aux_rule").' name="aux_rule">';
-	
+
 					}
 					?>&nbsp;
 					</td>

@@ -70,7 +70,7 @@ switch (basename($_SERVER['SCRIPT_NAME'])) {
 		echo "\t\t".'<base href="' . $GLOBALS['ABSOLUTE_URI_STUDIP'] . '">'. "\n";
 	default:
 	if ($AUTH_LIFETIME) {
-		echo "\t\t".'<meta http-equiv="REFRESH" CONTENT="'.$AUTH_LIFETIME*60 .'; URL=logout.php">'. "\n";
+		echo "\t\t".'<meta http-equiv="REFRESH" CONTENT="'.$AUTH_LIFETIME*60 .'; URL=' . $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'logout.php">'. "\n";
 	}
 }
 
@@ -119,6 +119,7 @@ if (($my_messaging_settings['start_messenger_at_startup']) && ($auth->auth['jscr
 		<script src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/ajax_responder.js" type="text/javascript"></script>
 	<? endif ?>
 
+		<base href="<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>">
 	</head>
 	<body>
       <div id="ajax_notification" style="display: none;"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ajax_indicator.gif" alt="AJAX indicator" align="absmiddle">&nbsp;Working...</div>
