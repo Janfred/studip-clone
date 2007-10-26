@@ -326,9 +326,9 @@ class Assets {
    */
   private function tag_options($options) {
     $result = '';
-    $lambda = create_function('$value, $key, &$user',
-                              '$user .= sprintf(\' %s="%s"\', $key, $value);');
-    array_walk($options, $lambda, &$result);
+    foreach ($options as $key => $value) {
+      $result .= sprintf(' %s="%s"', $key, $value);
+    }
     return $result;
   }
 
