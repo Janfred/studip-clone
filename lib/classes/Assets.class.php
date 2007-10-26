@@ -33,6 +33,20 @@
 
 class Assets {
 
+  /**
+   * @ignore
+   */
+  private static $prefix_cache, $counter_cache;
+
+
+  /**
+   * @ignore
+   */
+  function clear_cache() {
+    Assets::$prefix_cache = NULL;
+    Assets::$counter_cache = NULL;
+  }
+
 
   /**
    * This class method is an accessor to the URL "prefix" for all things "asset"
@@ -81,21 +95,16 @@ class Assets {
    */
   function url($to = '') {
 
-    # static ASSETS_URL
-    static $static_prefix;
-
-    if (isset($static_prefix))
-      return $static_prefix . $to;
+    if (isset(Assets::$prefix_cache))
+      return Assets::$prefix_cache . $to;
 
     if (strpos($GLOBALS['ASSETS_URL'], '%d') === FALSE)
-      return ($static_prefix = $GLOBALS['ASSETS_URL']) . $to;
-
-    static $counter = 0;
+      return (Assets::$prefix_cache = $GLOBALS['ASSETS_URL']) . $to;
 
     # dynamic ASSETS_URL
     return sprintf($GLOBALS['ASSETS_URL'],
                   $to == ''
-                    ? $counter++ % 4
+                    ? Assets::$counter_cache++ % 4
                     # alternative implementation
                     # : hexdec(substr(sha1($to),-1)) & 3)
                     : ord($to[1]) & 3)
@@ -152,7 +161,7 @@ class Assets {
    *   like "rss.gif", that gets expanded to "/images/rss.gif"
    *
    * file name without extension,
-   *   like "logo", that gets expanded to "/images/logo.png"
+   *   like "logo", that gets expanded to "/images/logo.gif"
    */
   function image_path($source) {
     return Assets::compute_public_path($source, 'images', 'gif');
@@ -262,11 +271,11 @@ class Assets {
     if (FALSE === strpos($source, ':')) {
 
       # add dir if url does not contain a path
-      if ('/' != $source[0])
-        $source = "/$dir/$source";
+      if ('/' !== $source[0])
+        $source = "$dir/$source";
 
       # consider asset host
-      $source = Assets::url($source);
+      $source = Assets::url(ltrim($source, '/'));
     }
 
     return $source;
@@ -287,6 +296,7 @@ class Assets {
   private function tag($name, $options = array(), $open = FALSE) {
     if (!$name)
       return '';
+    ksort($options);
     return '<' . $name . Assets::tag_options($options) . ($open ? '>' :' />');
   }
 
