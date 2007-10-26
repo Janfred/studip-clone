@@ -25,9 +25,9 @@
 error_reporting(E_ALL);
 
 # load required files
-require_once 'simpletest/unit_tester.php';
-require_once 'simpletest/reporter.php';
-require_once 'simpletest/collector.php';
+require_once dirname(__FILE__) . '/../vendor/simpletest/unit_tester.php';
+require_once dirname(__FILE__) . '/../vendor/simpletest/reporter.php';
+require_once dirname(__FILE__) . '/../vendor/simpletest/collector.php';
 
 
 # collect all tests
