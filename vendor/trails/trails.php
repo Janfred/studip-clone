@@ -21,11 +21,26 @@
 # SOFTWARE.
 
 
+/**
+ * The version of the trails library.
+ */
 define('TRAILS_VERSION', '0.4.0');
 
 
 /**
- * Class: Trails_Dispatcher
+ * The Dispatcher is used to map an incoming HTTP request to a Controller
+ * producing a response which is then rendered. To initialize an instance of
+ * class Trails_Dispatcher you have to give three condfiguration settings:
+ *
+ *          trails_root - the absolute file path to a directory containing the
+ *                        applications controllers, views etc.
+ *           trails_uri - the URI to which routes to mapped Controller/Actions
+ *                        are appended
+ *   default_controller - the route to a controller, that is used if no
+ *                        controller is given, that is the route is equal to '/'
+ *
+ * After instantiation of a dispatcher you have to call method #dispatch with
+ * the request uri to be mapped to a controller/action pair.
  *
  * @package   trails
  *
@@ -37,25 +52,23 @@ define('TRAILS_VERSION', '0.4.0');
 class Trails_Dispatcher {
 
   # TODO (mlunzena) Konfiguration muss anders geschehen
-  /**
-   * <FieldDescription>
-   *
-   * @access private
-   * @var <type>
-   */
   public
     $trails_root,
-    $trails_uri,
+    $trails_uri;
+
+  protected
     $default_controller;
 
 
   /**
-   * <MethodDescription>
+   * Constructor.
    *
-   * @param type <description>
-   * @param type <description>
-   * @param type <description>
-   * @param type <description>
+   * @param  string  absolute file path to a directory containing the
+   *                 applications controllers, views etc.
+   * @param  string  the URI to which routes to mapped Controller/Actions
+   *                 are appended
+   * @param  string  the route to a controller, that is used if no
+   *                 controller is given, that is the route is equal to '/'
    *
    * @return void
    */
@@ -70,7 +83,7 @@ class Trails_Dispatcher {
 
 
   /**
-   * <MethodDescription>
+   * Maps a string to a response which is then rendered.
    *
    * @param string The requested URI.
    *
@@ -98,16 +111,18 @@ class Trails_Dispatcher {
 
 
   /**
-   * <MethodDescription>
+   * Maps an URI to a response by figuring out first what controller to
+   * instantiate, then delegating the unconsumed part of the URI to the
+   * controller who returns an appropriate response object or throws a
+   * Trails_Exception.
    *
-   * @param type <description>
+   * @param  string  the URI string
    *
-   * @return type <description>
+   * @return mixed   a response object
    */
   protected function map_uri_to_response($uri) {
 
     try {
-
 
       list($controller_path, $unconsumed) = '' === $uri
         ? array($this->default_controller, $uri) : $this->parse($uri);
@@ -134,11 +149,11 @@ class Trails_Dispatcher {
 
 
   /**
-   * <MethodDescription>
+   * Clean up URI string by removing the query part and leading slashes.
    *
-   * @param type <description>
+   * @param  string  an URI string
    *
-   * @return type <description>
+   * @return string  the cleaned string
    */
   private function clean_uri($uri) {
 
@@ -152,12 +167,13 @@ class Trails_Dispatcher {
 
 
   /**
-   * Parses given URL and returns an array of controllers, action and parameters
-   * taken from that URL.
+   * Parses given URI and returns an array of controllers, action and parameters
+   * taken from that URI.
    *
-   * @param string  <description>
+   * @param string  the URI to be processed
    *
-   * @return type   <description>
+   * @return array  an array containing the controller path and the
+   *                unconsumed part of the string
    */
   protected function parse($uri) {
 
@@ -188,11 +204,11 @@ class Trails_Dispatcher {
 
 
   /**
-   * <MethodDescription>
+   * Returns the absolute file path to a given relative controller path.
    *
-   * @param string   <description>
+   * @param string   the relative path
    *
-   * @return string  <description>
+   * @return string  the absolute path
    */
   protected function get_path($controller_path) {
     return
@@ -201,11 +217,13 @@ class Trails_Dispatcher {
 
 
   /**
-   * <MethodDescription>
+   * Loads the controller file for a given controller path and returns the
+   * class name of that controller. If an error occures, an exception will be
+   * thrown.
    *
-   * @param string   <description>
+   * @param  string  the relative controller path
    *
-   * @return object  <description>
+   * @return mixed   the controller's class name
    */
   protected function load_controller($controller_path) {
 
@@ -222,7 +240,9 @@ class Trails_Dispatcher {
 
 
 /**
- * TODO
+ * This class represents a response returned by a controller that was asked to
+ * perform for a given request. A Trails_Response contains the body, status and
+ * additional headers which can be renderer back to the client.
  *
  * @package   trails
  *
@@ -242,23 +262,24 @@ class Trails_Response {
 
 
   /**
-   * <MethodDescription>
+   * Constructor.
    *
-   * @param type <description>
-   * @param type <description>
-   * @param type <description>
-   * @param type <description>
+   * @param  string   the body of the response defaulting to ''
+   * @param  array    an array of additional headers defaulting to an
+   *                  empty array
+   * @param  integer  the status code of the response defaulting to a
+   *                  regular 200
+   * @param  string   the descriptional reason for a status code defaulting to
+   *                  the standard reason phrases defined in RFC 2616
    *
-   * @return type <description>
+   * @return void
    */
-  function __construct($body = '', $headers = NULL,
+  function __construct($body = '', $headers = array(),
                        $status = NULL, $reason = NULL) {
 
     $this->set_body($body);
 
-    if (isset($headers)) {
-      $this->headers = $headers;
-    }
+    $this->headers = $headers;
 
     if (isset($status)) {
       $this->set_status($status, $reason);
@@ -267,11 +288,11 @@ class Trails_Response {
 
 
   /**
-   * <MethodDescription>
+   * Sets the body of the response.
    *
-   * @param type <description>
+   * @param  string  the body
    *
-   * @return type <description>
+   * @return mixed   this response object. Useful for cascading method calls.
    */
   function set_body($body) {
     $this->body = $body;
@@ -280,12 +301,13 @@ class Trails_Response {
 
 
   /**
-   * <MethodDescription>
+   * Sets the status code and an optional custom reason. If none is given, the
+   * standard reason phrase as of RFC 2616 is used.
    *
-   * @param type <description>
-   * @param type <description>
+   * @param  integer  the status code
+   * @param  string   the custom reason, defaulting to the one given in RFC 2616
    *
-   * @return type <description>
+   * @return mixed    this response object. Useful for cascading method calls.
    */
   function set_status($status, $reason = NULL) {
     $this->status = $status;
@@ -301,7 +323,7 @@ class Trails_Response {
    *
    * @return string  the reason phrase for this response's status
    */
-  protected function get_reason_phrase($status) {
+  protected function get_reason($status) {
     $reason = array(
       100 => 'Continue', 'Switching Protocols',
       200 => 'OK', 'Created', 'Accepted', 'Non-Authoritative Information',
@@ -324,12 +346,12 @@ class Trails_Response {
 
 
   /**
-   * <MethodDescription>
+   * Adds an additional header to the response.
    *
-   * @param type <description>
-   * @param type <description>
+   * @param  string  the left hand key part
+   * @param  string  the right hand value part
    *
-   * @return type <description>
+   * @return mixed   this response object. Useful for cascading method calls.
    */
   function add_header($key, $value) {
     $this->headers[$key] = $value;
@@ -338,9 +360,9 @@ class Trails_Response {
 
 
   /**
-   * <MethodDescription>
+   * Outputs this response to the client using "echo" and "header".
    *
-   * @return type <description>
+   * @return void
    */
   function output() {
     if (isset($this->status)) {
@@ -358,7 +380,17 @@ class Trails_Response {
 
 
 /**
- * TODO
+ * A Trails_Controller is responsible for matching the unconsumed part of an URI
+ * to an action using the left over words as arguments for that action. The
+ * action is then mapped to method of the controller instance which is called
+ * with the just mentioned arguments. That method can send the #render_action,
+ * #render_template, #render_text, #render_nothing or #redirect method.
+ * Otherwise the #render_action is called with the current action as argument.
+ * If the action method sets instance variables during performing, they will be
+ * be used as attributes for the flexi-template opened by #render_action or
+ * #render_template. A controller's response's body is populated with the output
+ * of the #render_* methods. The action methods can add additional headers or
+ * change the status of that response.
  *
  * @package   trails
  *
@@ -377,7 +409,7 @@ class Trails_Controller {
     $dispatcher,
     $response,
     $performed = FALSE,
-    $layout = NULL;
+    $layout;
 
 
   /**
@@ -393,7 +425,10 @@ class Trails_Controller {
 
 
   /**
-   * <MethodDescription>
+   * This method extracts an action string and further arguments from it's
+   * parameter. The action string is mapped to a method being called afterwards
+   * using the said arguments. That method is called and a response object is
+   * generated, populated and sent back to the dispatcher.
    *
    * @param type <description>
    *
@@ -401,18 +436,9 @@ class Trails_Controller {
    */
   function perform($unconsumed) {
 
-    # TODO (mlunzena) das muss geändert werden
-    if ('' === $unconsumed) {
-      $args = array();
-      $action = 'index';
-    }
-    else {
-      $args = explode('/', $unconsumed);
-      $action = array_shift($args);
-    }
-
-    # initialize response
     $this->response = new Trails_Response();
+
+    list($action, $args) = $this->extract_action_and_args($unconsumed);
 
     # call before filter
     $before_filter_result = $this->before_filter($action, $args);
@@ -423,11 +449,11 @@ class Trails_Controller {
       $mapped_action = $this->map_action($action);
 
       # is action callable?
-      if (!method_exists($this, $mapped_action)) {
-        $this->does_not_understand($action, $args);
+      if (method_exists($this, $mapped_action)) {
+        call_user_func_array(array(&$this, $mapped_action), $args);
       }
       else {
-        call_user_func_array(array(&$this, $mapped_action), $args);
+        $this->does_not_understand($action, $args);
       }
 
       if (!$this->performed) {
@@ -443,11 +469,31 @@ class Trails_Controller {
 
 
   /**
-   * <MethodDescription>
+   * Extracts action and args from a string.
    *
-   * @param type <description>
+   * @param  string       the processed string
    *
-   * @return type <description>
+   * @return arraye       an array with two elements - a string containing the
+   *                      action and an array of strings representing the args
+   */
+  protected function extract_action_and_args($string) {
+
+    if ('' === $string) {
+      return array('index', array());
+    }
+
+    $args = explode('/', $string);
+    $action = array_shift($args);
+    return array($action, $args);
+  }
+
+
+  /**
+   * Maps the action to an actual method name.
+   *
+   * @param  string  the action
+   *
+   * @return string  the mapped method name
    */
   protected function map_action($action) {
     return $action . '_action';
@@ -521,9 +567,9 @@ class Trails_Controller {
 
 
   /**
-   * <MethodDescription>
+   * Renders the given text as the body of the response.
    *
-   * @param string <description>
+   * @param string  the text to be rendered
    *
    * @return void
    */
@@ -540,19 +586,19 @@ class Trails_Controller {
 
 
   /**
-   * <MethodDescription>
+   * Renders the empty string as the response's body.
    *
    * @return void
    */
   protected function render_nothing() {
-    $this->render_text(' ');
+    $this->render_text('');
   }
 
 
   /**
-   * <MethodDescription>
+   * Renders the template of the given action as the response's body.
    *
-   * @param string <description>
+   * @param string  the action
    *
    * @return void
    */
@@ -566,9 +612,10 @@ class Trails_Controller {
 
 
   /**
-   * <MethodDescription>
+   * Renders a template using an optional layout template.
    *
-   * @param string <description>
+   * @param mixed  a flexi template
+   * @param mixes  a flexi template which is used as layout
    *
    * @return void
    */
@@ -602,9 +649,11 @@ class Trails_Controller {
 
 
   /**
-   * <MethodDescription>
+   * This method returns all the set instance variables to be used as attributes
+   * for a template. This controller is returned too as value for
+   * key 'controller'.
    *
-   * @return void
+   * @return array  an associative array of variables for the template
    */
   protected function get_assigned_variables() {
 
@@ -624,11 +673,11 @@ class Trails_Controller {
 
 
   /**
-   * <MethodDescription>
+   * Sets the layout to be used by this controller per default.
    *
-   * @param type <description>
+   * @param  mixed  a flexi template to be used as layout
    *
-   * @return type <description>
+   * @return void
    */
   protected function set_layout($layout) {
     $this->layout = $layout;
@@ -638,9 +687,9 @@ class Trails_Controller {
   /**
    * <MethodDescription>
    *
-   * @param type <description>
+   * @param  string  <description>
    *
-   * @return type <description>
+   * @return string  <description>
    */
   function url_for($to) {
 
@@ -653,12 +702,21 @@ class Trails_Controller {
   }
 
 
+  /**
+   * <MethodDescription>
+   *
+   * @param  type       <description>
+   *
+   * @return type       <description>
+   */
   function set_status($status, $reason_phrase = NULL) {
     $this->response->set_status($status, $reason_phrase);
   }
 
 
   /**
+   * Sets the content type of the controller's response.
+   *
    * @param  string  the content type
    *
    * @return void
@@ -670,7 +728,7 @@ class Trails_Controller {
 
 
 /**
- * TODO
+ * The Inflector class is a namespace for inflections methods.
  *
  * @package   trails
  *
@@ -975,21 +1033,47 @@ class Trails_Flash {
 
 class Trails_Exception extends Exception {
 
-
+  /**
+   * <FieldDescription>
+   *
+   * @access private
+   * @var <type>
+   */
   public $headers;
 
 
+  /**
+   * <MethodDescription>
+   *
+   * @param  type       <description>
+   *
+   * @return type       <description>
+   */
   function __construct($status, $reason, $headers = array()) {
     parent::__construct($reason, $status);
     $this->headers = $headers;
   }
 
 
+  /**
+   * <MethodDescription>
+   *
+   * @param  type       <description>
+   *
+   * @return type       <description>
+   */
   function __toString() {
     return "{$this->code} {$this->message}";
   }
 
 
+  /**
+   * <MethodDescription>
+   *
+   * @param  type       <description>
+   *
+   * @return type       <description>
+   */
   static function errorHandlerCallback($errno, $string, $file, $line, $context) {
 
     if (!($errno & error_reporting())) {
