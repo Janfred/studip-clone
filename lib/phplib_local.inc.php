@@ -49,6 +49,10 @@ DBManager::getInstance()
                   $GLOBALS['DB_STUDIP_USER'],
                   $GLOBALS['DB_STUDIP_PASSWORD']);
 
+// set assets url
+require_once('lib/classes/Assets.class.php');
+Assets::set_assets_url($GLOBALS['ASSETS_URL']);
+
 require_once('lib/language.inc.php');
 require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
 require_once('lib/language.inc.php');

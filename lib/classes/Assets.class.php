@@ -36,15 +36,20 @@ class Assets {
   /**
    * @ignore
    */
-  private static $prefix_cache, $counter_cache;
+  private static $assets_url, $dynamic, $counter_cache;
 
 
   /**
-   * @ignore
+   * This method sets the URL to your assets.
+   *
+   * @param  string       the URL to the assets
+   *
+   * @return void
    */
-  function clear_cache() {
-    Assets::$prefix_cache = NULL;
+  static function set_assets_url($url) {
+    Assets::$assets_url    = $url;
     Assets::$counter_cache = NULL;
+    Assets::$dynamic       = strpos($url, '%d') !== FALSE;
   }
 
 
@@ -93,16 +98,13 @@ class Assets {
    *
    * @return string the URL "prefix"
    */
-  function url($to = '') {
+  static function url($to = '') {
 
-    if (isset(Assets::$prefix_cache))
-      return Assets::$prefix_cache . $to;
-
-    if (strpos($GLOBALS['ASSETS_URL'], '%d') === FALSE)
-      return (Assets::$prefix_cache = $GLOBALS['ASSETS_URL']) . $to;
+    if (!Assets::$dynamic)
+      return Assets::$assets_url . $to;
 
     # dynamic ASSETS_URL
-    return sprintf($GLOBALS['ASSETS_URL'],
+    return sprintf(Assets::$assets_url,
                   $to == ''
                     ? Assets::$counter_cache++ % 4
                     # alternative implementation
@@ -125,7 +127,7 @@ class Assets {
    * * file name, like "rss.gif", that gets expanded to "/images/rss.gif"
    * * file name without extension, like "logo", that gets expanded to "/images/logo.png"
    */
-  function img($source, $opt = array()) {
+  static function img($source, $opt = array()) {
 
     if (!$source)
       return '';
@@ -163,7 +165,7 @@ class Assets {
    * file name without extension,
    *   like "logo", that gets expanded to "/images/logo.gif"
    */
-  function image_path($source) {
+  static function image_path($source) {
     return Assets::compute_public_path($source, 'images', 'gif');
   }
 
@@ -180,7 +182,7 @@ class Assets {
    *     <script language="JavaScript" type="text/javascript" src="/js/common.javascript"></script>
    *     <script language="JavaScript" type="text/javascript" src="/elsewhere/cools.js"></script>
    */
-  function script($atLeastOneArgument) {
+  static function script($atLeastOneArgument) {
     $html = '';
     foreach (func_get_args() as $source) {
       $source = Assets::javascript_path($source);
@@ -200,7 +202,7 @@ class Assets {
    *
    *   Assets::javascript_path('ajax') => /javascripts/ajax.js
    */
-  function javascript_path($source) {
+  static function javascript_path($source) {
     return Assets::compute_public_path($source, 'javascripts', 'js');
   }
 
@@ -220,7 +222,7 @@ class Assets {
    *     <link href="/stylesheets/random.styles" media="screen" rel="stylesheet" type="text/css" />
    *     <link href="/css/stylish.css" media="screen" rel="stylesheet" type="text/css" />
    */
-  function stylesheet($atLeastOneArgument) {
+  static function stylesheet($atLeastOneArgument) {
     $sources = func_get_args();
     $sourceOptions = (func_num_args() > 1 &&
                       is_array($sources[func_num_args() - 1]))
@@ -249,7 +251,7 @@ class Assets {
    *
    *   stylesheet_path('style') => /stylesheets/style.css
    */
-  function stylesheet_path($source) {
+  static function stylesheet_path($source) {
     return Assets::compute_public_path($source, 'stylesheets', 'css');
   }
 
@@ -293,7 +295,7 @@ class Assets {
    *
    * @return string
    */
-  private function tag($name, $options = array(), $open = FALSE) {
+  private static function tag($name, $options = array(), $open = FALSE) {
     if (!$name)
       return '';
     ksort($options);
@@ -310,7 +312,7 @@ class Assets {
    *
    * @return type <description>
    */
-  private function content_tag($name, $content = '', $options = array()) {
+  private static function content_tag($name, $content = '', $options = array()) {
     if (!$name) return '';
     return '<' . $name . Assets::tag_options($options) . '>' .
            $content .
@@ -324,7 +326,7 @@ class Assets {
    *
    * @ignore
    */
-  private function tag_options($options) {
+  private static function tag_options($options) {
     $result = '';
     foreach ($options as $key => $value) {
       $result .= sprintf(' %s="%s"', $key, $value);
@@ -338,7 +340,7 @@ class Assets {
    *
    * @ignore
    */
-  private function parse_attributes($stringOrArray) {
+  private static function parse_attributes($stringOrArray) {
 
     if (is_array($stringOrArray))
       return $stringOrArray;
