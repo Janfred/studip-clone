@@ -114,6 +114,17 @@ $cfg = &Config::GetInstance();
 $cfg->extractAllGlobal(FALSE);
 unset($cfg);
 
+/* set default umask to a sane value */
+umask(022);
+
+/* set permissions for uploaded files */
+foreach ($_FILES as $file)
+{
+	if (is_uploaded_file($file['tmp_name']))
+	{
+		chmod($file['tmp_name'], 0666 & ~umask());
+	}
+}
 
 /*mail settings
 ----------------------------------------------------------------*/
