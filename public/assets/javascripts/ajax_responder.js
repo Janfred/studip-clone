@@ -1,4 +1,4 @@
-window.observe('dom:loaded', function() {
+document.observe('dom:loaded', function() {
   var indicator = $('ajax_notification');
   if (indicator) {
     Ajax.Responders.register({
