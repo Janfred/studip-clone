@@ -73,8 +73,8 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 								);
 		
 		//MARC mapping
-		$this->mapping['MARC'] = array(	'001' => array('field' => 'accession_number', 'callback' => 'simpleMap', 'cb_args' => ''),
-										'008' => array(	array('field' => 'dc_language', 'callback' => 'simpleFixFieldMap', 'cb_args' => array('start'=>35,'length'=>3)),
+		$this->mapping['USMARC'] = array('001' => array('field' => 'accession_number', 'callback' => 'simpleMap', 'cb_args' => ''),
+										'008' => array(	array('field' => 'dc_language', 'callback' => 'simpleFixFieldMap', 'cb_args' => array('start'=>34,'length'=>3)),
 												array('field' => 'dc_date', 'callback' => 'simpleFixFieldMap', 'cb_args' => array('start'=>7,'length'=>4,'template'=>'{result}-01-01'))),
 										'020' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'ISBN: $a'),
 										'245' => array('field' => 'dc_title', 'callback' => 'simpleMap', 'cb_args' => '$a $b $h'),
@@ -229,9 +229,8 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	}
 
 	function getZRecord($rn){
-		$record = yaz_record($this->z_id,$rn,"string");
+		$record = yaz_record($this->z_id,$rn,'string');
 		$plugin_mapping = $this->mapping[$this->z_syntax];
-
 		if ($record){
 			$cat_element = new StudipLitCatElement();
 			$cat_element->setValue("user_id", $GLOBALS['auth']->auth['uid']);

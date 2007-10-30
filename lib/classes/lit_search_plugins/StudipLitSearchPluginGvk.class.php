@@ -40,7 +40,7 @@ class StudipLitSearchPluginGvk extends StudipLitSearchPluginZ3950Abstract{
 		$this->description = "Gemeinsamer Verbundkatalog - GVK";
 		$this->z_host = "z3950.gbv.de:20010/gsogvk";
 		$this->z_options = array('user' => '999', 'password' => 'abc');
-		$this->z_syntax = "MARC";
+		$this->z_syntax = "USMARC";
 		$this->convert_umlaute = true;
 		$this->z_accession_bib = "12";
 		$this->z_accession_re = '/[0-9]{8}[0-9X]{1}/';
