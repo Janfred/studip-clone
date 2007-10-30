@@ -202,7 +202,7 @@ if (!isset($SAJAX_INCLUDED)) {
 				uri += "&rsrnd=" + new Date().getTime();
 				
 				for (i = 0; i < args.length-1; i++) 
-					uri += "&rsargs[]=" + escape(args[i]);
+					uri += "&rsargs[]=" + encodeURIComponent(args[i]);
 
 				post_data = null;
 			} 
@@ -212,7 +212,7 @@ if (!isset($SAJAX_INCLUDED)) {
 				post_data += "&rsrnd=" + new Date().getTime();
 				
 				for (i = 0; i < args.length-1; i++) 
-					post_data = post_data + "&rsargs[]=" + escape(args[i]);
+					post_data = post_data + "&rsargs[]=" + encodeURIComponent(args[i]);
 			}
 			else {
 				alert("Illegal request type: " + sajax_request_type);
