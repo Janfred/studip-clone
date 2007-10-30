@@ -115,9 +115,29 @@ class DBManager {
     $this->connections[$database] = new PDO($dsn, $user, $pass);
     $this->connections[$database]->setAttribute(PDO::ATTR_ERRMODE,
                                                 PDO::ERRMODE_EXCEPTION);
-	if($this->connections[$database]->getAttribute(PDO::ATTR_DRIVER_NAME) == 'mysql'){
-		$this->connections[$database]->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-	}
+    if ($this->connections[$database]->getAttribute(PDO::ATTR_DRIVER_NAME) == 'mysql') {
+      $this->connections[$database]->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+    }
+    return $this;
+  }
+
+
+  /**
+   * This method creates an alias for a database connection.
+   *
+   * @param  string    the new key of the database connection
+   * @param  string    the old key of the database connection
+   *
+   * @return DBManager this instance, useful for cascading method calls
+   */
+  public function aliasConnection($new, $old) {
+
+    if (!isset($this->connections[$old])) {
+      throw new DBManagerException('No database found using key: ' . $old);
+    }
+
+    $this->connections[$new] = $this->connections[$old];
+
     return $this;
   }
 
