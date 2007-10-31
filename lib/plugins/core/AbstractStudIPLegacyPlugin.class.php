@@ -43,13 +43,9 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
 
     # TODO (mlunzena) das sollte hier nicht rein...
     if (in_array($action,
-          array('showConfigurationPage', 'actionshowDescriptionalPage'))) {
-      if ($GLOBALS['perm']->have_perm('admin')) {
-        include ('lib/include/links_admin.inc.php');
-      }
-      else {
-        throw new Exception(_("Sie verfügen nicht über ausreichend Rechte für diese Aktion."));
-      }
+          array('showConfigurationPage', 'showDescriptionalPage'))
+        && !$GLOBALS['perm']->have_perm('admin')) {
+      throw new Exception(_("Sie verfügen nicht über ausreichend Rechte für diese Aktion."));
     }
 
     # it's action time

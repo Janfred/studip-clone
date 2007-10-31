@@ -101,6 +101,12 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin{
 
     $pluginparams = $_GET["plugin_subnavi_params"];
 
+    if (in_array($action,
+                 array('showConfigurationPage', 'showDescriptionalPage'))
+        && $GLOBALS['perm']->have_perm("admin")) {
+      include 'lib/include/links_admin.inc.php';
+    }
+
     // let the plugin show its view
     StudIPTemplateEngine::startContentTable();
     $this->$action($pluginparams);

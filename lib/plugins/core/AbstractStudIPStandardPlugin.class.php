@@ -238,14 +238,11 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin{
     $pluginparams = $_GET["plugin_subnavi_params"];
 
 
-    // diplay the admin_menu
-    if ($action == "actionshowConfigurationPage"
-        && $GLOBALS['perm']->have_perm("admin")){
-      include 'lib/include/links_admin.inc.php';
-    }
-
-    // display the course menu
-    include 'lib/include/links_openobject.inc.php';
+    include in_array($action,
+                     array('showConfigurationPage', 'showDescriptionalPage'))
+            && $GLOBALS['perm']->have_perm("admin")
+            ? 'lib/include/links_admin.inc.php'
+            : 'lib/include/links_openobject.inc.php';
 
     // let the plugin show its view
     StudIPTemplateEngine::startContentTable(true);

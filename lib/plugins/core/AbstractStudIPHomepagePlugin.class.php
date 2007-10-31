@@ -83,6 +83,12 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
 
     $pluginparams = $_GET["plugin_subnavi_params"];
 
+    if (in_array($action,
+                 array('showConfigurationPage', 'showDescriptionalPage'))
+        && $GLOBALS['perm']->have_perm("admin")) {
+      include 'lib/include/links_admin.inc.php';
+    }
+
     if ($user_id != '') {
       $db = new DB_Seminar();
       $admin_darf = false;
