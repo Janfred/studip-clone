@@ -118,7 +118,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		  	 	   continue;
 		  	 	}
 		  	 	
-		  	 	if ($_POST["available_" . $id] == "an"){
+		  	 	if ($_POST["available_" . $id] == "1"){
 		  	 	   $plugin->setEnabled(true);
 		  	 	}
 		  	 	else {
@@ -132,7 +132,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		  	 	$plugin->setNavigationPosition($navpos);
 		  	 	$type = PluginEngine::getTypeOfPlugin($plugin);
 		  	 	if ($type == "Administration"){
-		  	 	   if ($_POST["available_" . $id] == "an"){
+		  	 	   if ($_POST["available_" . $id] == "1"){
     		  	 	   $plugin->setActivated(true);
     		  	 	}
     		  	 	else {

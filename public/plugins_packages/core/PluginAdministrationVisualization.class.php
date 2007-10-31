@@ -156,8 +156,8 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 				<td width="5%" align="left" class="<?=$cssSw->getClass()?>"><?= $type ?></td>
 				<td align="center" class="<?=$cssSw->getClass()?>">
 					<select name="available_<?= $pluginid?>"> 
-						<option <? if ($plugin->isEnabled()) echo ("selected") ?>><?= _("an")?></option>
-						<option <? if (!($plugin->isEnabled())) echo ("selected") ?>><?= _("aus")?></option>
+						<option value="1" <? if ($plugin->isEnabled()) echo ("selected") ?>><?= _("an")?></option>
+						<option value="0" <? if (!($plugin->isEnabled())) echo ("selected") ?>><?= _("aus")?></option>
 					</select>
 				</td>				
 				<td align="right" width="5%" class="<?=$cssSw->getClass()?>"><input name="navposition_<?= $pluginid?>" type="text" size="2" value="<?= $plugin->getNavigationPosition()?>"></td>
