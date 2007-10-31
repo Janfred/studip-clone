@@ -57,7 +57,7 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
 
       ob_start();
 
-      $this->display($action);
+      $this->display_action($action);
       ob_end_flush();
 
     } catch (Exception $e) {
