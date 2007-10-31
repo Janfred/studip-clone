@@ -88,7 +88,7 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	if (($uebernehmen_x) || ($retry)) {
 		$msg='';
 
-		if ($uebernehmen_x)
+		if ($uebernehmen_x){
 			foreach ($amodules->registered_modules as $key => $val) {
 				//after sending, set all "conflicts" to TRUE (we check them later)
 				$admin_modules_data["conflicts"][$key] = TRUE;
@@ -118,6 +118,7 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 				}
 				$plugins = $amodules->pluginengine->getAllEnabledPlugins();
 			}
+		}
 
 		//consistency checks
 		foreach ($amodules->registered_modules as $key => $val) {
