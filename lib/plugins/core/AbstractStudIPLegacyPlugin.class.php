@@ -103,6 +103,6 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
    *
    * @return void
    */
-  abstract function display($action);
+  abstract function display_action($action);
 }
 

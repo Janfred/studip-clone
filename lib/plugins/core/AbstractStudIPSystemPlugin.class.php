@@ -92,7 +92,7 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin{
    *
    * @return void
    */
-  function display($action) {
+  function display_action($action) {
 
     $GLOBALS['CURRENT_PAGE'] = $this->getDisplayTitle();
 

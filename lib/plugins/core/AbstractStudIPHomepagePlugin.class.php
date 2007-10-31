@@ -66,7 +66,7 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
    *
    * @return void
    */
-  function display($action) {
+  function display_action($action) {
 
     $username = isset($_GET['requesteduser']) ?
                       $_GET['requesteduser'] : $GLOBALS["auth"]->auth["uname"];
