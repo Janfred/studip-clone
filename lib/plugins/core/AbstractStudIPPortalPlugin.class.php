@@ -73,8 +73,8 @@ class AbstractStudIPPortalPlugin extends AbstractStudIPLegacyPlugin {
 
     $pluginparams = $_GET["plugin_subnavi_params"];
 
-    if (in_array($action,
-                 array('showConfigurationPage', 'showDescriptionalPage'))
+    if (in_array($action, array('actionshowConfigurationPage',
+                                'actionshowDescriptionalPage'))
         && $GLOBALS['perm']->have_perm("admin")) {
       include 'lib/include/links_admin.inc.php';
     }
