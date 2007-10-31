@@ -1160,5 +1160,12 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		die;
 	}
 }
+if ($SessSemName["class"] == "sem" && $SessSemName[1] && !$perm->have_studip_perm('tutor', $SessSemName[1])){
+	if(!is_object($header_controller)) include ('lib/include/header.php');   // Output of Stud.IP head
+	parse_window('error§' . _("Sie haben keine ausreichende Zugriffsberechtigung!"), '§', _("Zugriff verweigert"));
+	include ('lib/include/html_end.inc.php');
+	page_close();
+	die();
+}
 $reiter->create($structure, $reiter_view, $tooltip, $addText);
 ?>
