@@ -898,7 +898,8 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 */
 function idna_link($link, $mail = false){
 	if (!$GLOBALS['CONVERT_IDNA_URL']) return $link;
-	if (preg_match('/&\w+;/i',$link)) { //umlaute?  (html-coded)
+	$pu = @parse_url($link);
+	if (preg_match('/&\w+;/i',$pu['host'])) { //umlaute?  (html-coded)
 		$IDN = new idna_convert();
 		$out = false;
 		if ($mail){
