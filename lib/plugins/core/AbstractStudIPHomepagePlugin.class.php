@@ -71,10 +71,16 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
     $username = isset($_GET['requesteduser']) ?
                       $_GET['requesteduser'] : $GLOBALS["auth"]->auth["uname"];
 
-    $requser = new StudIPUser();
     $user_id = get_userid($username);
+    if ($user_id == '') {
+      throw new Exception(_("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!").
+                          _("Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers geändert hat oder der Nutzer gelöscht wurde."));
+    }
+
+    $requser = new StudIPUser();
     $requser->setUserid($user_id);
     $this->setRequestedUser($requser);
+
 
     $GLOBALS['CURRENT_PAGE'] = $this->getDisplayTitle();
 
@@ -88,8 +94,7 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
         && $GLOBALS['perm']->have_perm("admin")) {
       include 'lib/include/links_admin.inc.php';
     }
-
-    if ($user_id != '') {
+    else {
       $db = new DB_Seminar();
       $admin_darf = false;
 
@@ -108,15 +113,11 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
           $admin_darf = true;
       }
 
+      // show the admin tabs if user may edit
+      // $username is passed to links_about.inc.php
       if ($admin_darf == true) {
-        // show the admin tabs if user may edit
-        // $username is passed to links_about.inc.php
         include 'lib/include/links_about.inc.php';
       }
-    } else {
-      throw new Exception(_("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!").
-                          "<br />".
-                          _("Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers geändert hat oder der Nutzer gelöscht wurde."));
     }
 
     StudIPTemplateEngine::startContentTable();
