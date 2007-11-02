@@ -74,7 +74,7 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
     $user_id = get_userid($username);
     if ($user_id == '') {
       throw new Exception(_("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!").
-                          _("Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers geÃ¤ndert hat oder der Nutzer gelÃ¶scht wurde."));
+                          _("Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers geändert hat oder der Nutzer gelöscht wurde."));
     }
 
     $requser = new StudIPUser();
@@ -99,7 +99,7 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
       $admin_darf = false;
 
       // Bin ich ein Inst_admin, und ist der user in meinem Inst Tutor oder Dozent?
-      $db->query("SELECT b.inst_perms FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.user_id = '$user_id') AND (b.inst_perms = 'autor' OR b.inst_perms = 'tutor' OR b.inst_perms = 'dozent') AND (a.user_id = '$user->id') AND (a.inst_perms = 'admin')");
+      $db->query("SELECT b.inst_perms FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.user_id = '$user_id') AND (b.inst_perms = 'autor' OR b.inst_perms = 'tutor' OR b.inst_perms = 'dozent') AND (a.user_id = '{$GLOBALS['user']->id}') AND (a.inst_perms = 'admin')");
 
       if ($GLOBALS['perm']->have_perm("root"))
         $admin_darf = true;
@@ -108,7 +108,7 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
       else if ($db->num_rows())
         $admin_darf = true;
       else if ($GLOBALS['perm']->is_fak_admin()) {
-        $db->query("SELECT c.user_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.fakultaets_id)  LEFT JOIN user_inst c ON(b.Institut_id=c.Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND c.user_id='$user_id'");
+        $db->query("SELECT c.user_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.fakultaets_id)  LEFT JOIN user_inst c ON(b.Institut_id=c.Institut_id) WHERE a.user_id='{$GLOBALS['user']->id}' AND a.inst_perms='admin' AND c.user_id='$user_id'");
         if ($db->next_record())
           $admin_darf = true;
       }
