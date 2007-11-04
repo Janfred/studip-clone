@@ -54,8 +54,15 @@ function readfile_chunked($filename,$retbytes=true) {
 }
 
 function parse_header($header){
+	$ret = array();
 	if (!is_array($header)){
 		$header = explode("\n",trim($header));
+	}
+	if (preg_match("|^HTTP/[^\s]*\s(.*?)\s|", $header[0], $status)) {
+		$ret['response_code'] = $status[1];
+		$ret['response'] = trim($header[0]);
+	} else {
+		return $ret;
 	}
 	for($i = 0; $i < count($header); ++$i){
 		$parts = null;

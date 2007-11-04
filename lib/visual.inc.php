@@ -821,6 +821,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 	&& ($pu['host'] == $_SERVER['HTTP_HOST'] || $pu['host'].':'.$pu['port'] == $_SERVER['HTTP_HOST'])
 	&& strpos($pu['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0){
 		$intern = true;
+		list($pu['first_target']) = explode('/',substr($pu['path'],strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'])));
 	}
 	if ($extern)
 		$link_pic = '';
@@ -838,11 +839,15 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 			$tbr = '<a href="'.idna_link($params[4]).'"'.($intern ? '' : ' target="_blank"').">$link_pic{$params[3]}</a>";
 		}
 		elseif ($img) {
-			// Don't execute scripts
-			if ((basename($pu['path']) != 'sendfile.php') && $intern && $pu['query'])
+			$cfg = &Config::GetInstance();
+			$EXTERNAL_IMAGE_EMBEDDING = $cfg->getValue('EXTERNAL_IMAGE_EMBEDDING');
+			// Don't execute scripts internal scripts
+			if ($intern && !in_array($pu['first_target'], array('sendfile.php','download','assets','pictures')))
+				return $params[0];
+			else if ((!$EXTERNAL_IMAGE_EMBEDDING || $EXTERNAL_IMAGE_EMBEDDING == 'deny') && !$intern)
 				return $params[0];
 			else if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:i', $params[0]))
-				$tbr = $params[0];
+				return $params[0];
 			else {
 				if ($params[2]) {
 					$width = '';
@@ -860,7 +865,15 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 						$width = ($params[2] < $max_width) ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
 					}
 				}
-				$tbr = '<img src="'.idna_link($params[4])."\" $width border=\"0\" alt=\"{$params[1]}\" title=\"{$params[1]}\">";
+				if(!$intern && substr($EXTERNAL_IMAGE_EMBEDDING,0,5) == 'proxy'){
+					$proxyurl = strstr($EXTERNAL_IMAGE_EMBEDDING,':');
+					if($proxyurl) $proxyurl = substr($proxyurl,1);
+					else $proxyurl = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'image_proxy.php?url=';
+					$image_url = $proxyurl . urlencode(idna_link($params[4]));
+				} else {
+					$image_url = idna_link($params[4]);
+				}
+				$tbr = '<img src="'.$image_url."\" $width border=\"0\" alt=\"{$params[1]}\" title=\"{$params[1]}\">";
 				if (preg_match('#(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s\]<])*)#i', $params[7])) {
 					$pum = @parse_url($params[7]);
 					if (($pum['scheme'] == 'http' || $pum['scheme'] == 'https')
