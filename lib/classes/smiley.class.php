@@ -305,6 +305,7 @@ class smiley {
 			$sql_smile = 'INSERT INTO smiley (smiley_name, smiley_width, smiley_height, short_name, smiley_counter, short_counter, fav_counter, mkdate, chdate) VALUES ';
 			$sql_smile .= '("'.$smiley_name.'", '.$img[0].', '. $img[1].', "", 0, 0, 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )';
 		}
+		chmod($newfile, 0666 & ~umask());       // set permissions for uploaded file
 		$this->db->query($sql_smile);
 		$this->fc = $smiley_name{0};
 		return true;

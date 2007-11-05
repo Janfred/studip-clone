@@ -183,6 +183,7 @@ function imaging($img,$img_size,$img_name) {
 		$this->msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
 		return;
 	} else {
+		chmod($newfile, 0666 & ~umask());       // set permissions for uploaded file
 		list($width, $height, $img_type, ) = getimagesize($newfile);
 		if (extension_loaded('gd')){
 			switch ($ext) {  //original Bild einlesen

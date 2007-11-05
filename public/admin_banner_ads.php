@@ -81,6 +81,7 @@ function imaging($img, $img_size, $img_name) {
 		return $msg;
 	} else {
 		$msg = "msg§" . _("Die Bilddatei wurde erfolgreich hochgeladen.");
+		chmod($newfile, 0666 & ~umask());       // set permissions for uploaded file
 	}
 	return $msg;
 }
