@@ -77,8 +77,10 @@
 	<?endif;?>
 	<font size="-1"><a href="mailto:<?=$GLOBALS['UNI_CONTACT']?>?<?="subject=".rawurlencode("Stud.IP Passwort vergessen - ".$GLOBALS['UNI_NAME_CLEAN'])."&amp;body=".rawurlencode("Ich habe mein Passwort vergessen. Bitte senden sie mir ein Neues.\nMein Nutzername: ".htmlReady($uname)."\n")?>">
 	<?=_("Passwort vergessen")?></a>
-	&nbsp;/&nbsp; 
-	<a href="register1.php?cancel_login=1"><?=_("Registrieren")?></a>
+	<?if($self_registration_activated){?>
+		&nbsp;/&nbsp; 
+		<a href="register1.php?cancel_login=1"><?=_("Registrieren")?></a>
+	<?}?>
 	</font>
 	</div>
 	</td>
