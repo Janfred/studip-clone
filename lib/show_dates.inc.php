@@ -494,7 +494,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 
 	if ($list->existEvent()) {
 
-		echo "\n\n<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"100%\">";
+		echo "\n\n<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
 		echo "\n<tr><td>\n";
 		// Ausgabe der Kopfzeile
 		echo "<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
@@ -664,7 +664,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 	}
 	// keine Termine da, aber die Moeglichkeit welche einzustellen
 	else if($show_admin) {
-		echo "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"100%\">";
+		echo "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
 		echo "\n<tr><td>\n";
 		echo "\n<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 		echo "\n<tr><td class=\"topic\" width=\"99%\"><img src=\"".$GLOBALS['ASSETS_URL']."images/meinetermine.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;" . _("Termine") . "</b></td>";
