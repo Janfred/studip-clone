@@ -39,31 +39,45 @@ function check_terms($userid, $_language_path) {
 	global $i_accept_the_terms;
 
 	if ($i_accept_the_terms == "yes") return;
-	if ($GLOBALS['auth']->auth['uid'] != 'nobody' && !$GLOBALS['user']->get_last_action()) {
-		?>
-		<table width="80%" align="center" border=0 cellpadding=0 cellspacing=0>
-		<tr><td class="topic"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/login.gif" border="0"><b>&nbsp;<?=_("Nutzungsbedingungen")?></b></td></tr>
-		<tr><td class="blank">
-		<blockquote><br><br>
-		<?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der st&auml;ndigen Weiterentwicklung.")?>
-		<br><br>
-		<?=_("Um den vollen Funktionsumfang von Stud.IP nutzen zu k&ouml;nnen, m&uuml;ssen Sie sich am System anmelden.")?><br>
-		<?=_("Das hat viele Vorz&uuml;ge:")?><br>
-		<blockquote><li><?=_("Zugriff auf Ihre Daten von jedem internetf&auml;higen Rechner weltweit,")?>
-		<li><?=_("Anzeige neuer Mitteilungen oder Dateien seit Ihrem letzten Besuch,")?>
-		<li><?=_("Eine eigene Homepage im System,")?>
-		<li><?=_("die M&ouml;glichkeit anderen TeilnehmerInnen Nachrichten zu schicken oder mit ihnen zu chatten,")?>
-		<li><?=_("und vieles mehr.")?></li></blockquote><br>
-		<?=_("Mit der Anmeldung werden die nachfolgenden Nutzungsbedingungen akzeptiert:")?><br><br>
+	// if ($GLOBALS['auth']->auth['uid'] != 'nobody' && !$GLOBALS['user']->get_last_action())
+	if ($GLOBALS['auth']->auth['uid'] != 'nobody' && !empty($GLOBALS['user']) && !$GLOBALS['user']->get_last_action())
+	{
+?>
+
+<table align="center" border="0" cellpadding="1" cellspacing="0">
+	<tr>
+		<td class="topic">
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/login.gif" border="0" align="absmiddle"> <b><?=_("Nutzungsbedingungen")?></b>
+		</td>
+	</tr>
+	<tr>
+		<td class="blank">
+		<p><br/><?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der st&auml;ndigen Weiterentwicklung.")?></p>
+		<p><?=_("Um den vollen Funktionsumfang von Stud.IP nutzen zu k&ouml;nnen, m&uuml;ssen Sie sich am System anmelden.")?><br/>
+		<?=_("Das hat viele Vorz&uuml;ge:")?></p>
+		<ul>
+			<li><?=_("Zugriff auf Ihre Daten von jedem internetf&auml;higen Rechner weltweit,")?></li>
+			<li><?=_("Anzeige neuer Mitteilungen oder Dateien seit Ihrem letzten Besuch,")?></li>
+			<li><?=_("Eine eigene Homepage im System,")?></li>
+			<li><?=_("die M&ouml;glichkeit anderen TeilnehmerInnen Nachrichten zu schicken oder mit ihnen zu chatten,")?></li>
+			<li><?=_("und vieles mehr.")?></li>
+		</ul>
+		<p><?=_("Mit der Anmeldung werden die nachfolgenden Nutzungsbedingungen akzeptiert:")?></p>
 		<? include("locale/$_language_path/LC_HELP/pages/nutzung.html"); ?>
-		<center><a href="index.php?i_accept_the_terms=yes"><b><?=_("Ich erkenne die Nutzungsbedingungen an")?></b></a></center>
+		<p align="center">
+		<a href="index.php?i_accept_the_terms=yes"><b><?=_("Ich erkenne die Nutzungsbedingungen an")?></b></a>
 		<br/>
-		</blockquote>
-		</table>
-		<?
-		die;
+		<a href="index.php?i_accept_the_terms=no"><b><?=_("Ich erkenne die Datenschutzerkl&auml;rung nicht an")?></b></a>
+		</p>
+		</td>
+	</tr>
+</table>
+
+<?php
+	include ('lib/include/html_end.inc.php');
+	page_close();
+	die;
 	}
 }
-
 ?>
 

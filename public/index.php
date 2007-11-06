@@ -174,7 +174,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
                 $pluginmenue[] = array("pluginnav_" . $pluginid, $submenu);
             }
         }
-	
+
 	$sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
 
 	if ($perm->have_perm('root')) { // root
@@ -276,9 +276,9 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			}
 			for ($k = 0; $k < count($menue_auswahl[$i][1]); $k++) { // submenue
 				echo	(($k == 0)? '<br />':'&nbsp;/&nbsp;');
-				echo	'<font size="-2"><a href="',$menue[$menue_auswahl[$i][1][$k]][1].'"'.
+				echo	'<font size="-1"><a href="',$menue[$menue_auswahl[$i][1][$k]][1].'"'.
 					(($menue[$menue_auswahl[$i][1][$k]][2])? ' target="'.$menue[$menue_auswahl[$i][1][$k]][2].'"':'').
-					'>'. $menue[$menue_auswahl[$i][1][$k]][0].'</a>';
+					'>'. $menue[$menue_auswahl[$i][1][$k]][0].'</a></font>';
 			}
 			echo	'</div></td></tr>', "\n";
 		}
@@ -376,34 +376,40 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	$index_nobody_template->set_attribute('num_online_users', get_users_online_count(10));
 	echo $index_nobody_template->render();
 
-        echo '<br>';
-        echo '<table class="blank" width="800" cellspacing="0" cellpadding="0" border="0" align="center" valign="top">';
-
-        if ($GLOBALS["PLUGINS_ENABLE"]) {
-                $portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");
-                $activatedportalplugins = $portalpluginpersistence->getAllActivatedPlugins();
-                // we already should have the activatedportalplugins here
-                if (!empty($activatedportalplugins)){
-                        foreach ($activatedportalplugins as $activatedplugin){
-                        if ($activatedplugin->hasUnauthorizedView()){
-                                ?> 
-                                        <tr>
-                                                <td class="topic">&nbsp;<b><?=$activatedplugin->getDisplaytitle() ?></b></td>
-                                        </tr>
-                                        <tr>
-                                                <td class="steel1"><blockquote><?= $activatedplugin->showOverview(false) ?><blockquote></td>
-                                        </tr>
-
-                                        <td align="center" height="30">&nbsp;</td>
-
-                                        </tr> 
-                                <?php
-                                }
-                        }
-                }
-        }
-
-        echo '</table>';
 }
+?>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+<tr>
+	<td  align="center" height="30">&nbsp;</td>
+</tr>
+<?
+if ($GLOBALS["PLUGINS_ENABLE"]){
+	$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");
+	$activatedportalplugins = $portalpluginpersistence->getAllActivatedPlugins();
+	// we already should have the activatedportalplugins here
+	if (!empty($activatedportalplugins))
+	{
+		foreach ($activatedportalplugins as $activatedplugin)
+		{
+			if ($activatedplugin->hasUnauthorizedView())
+			{
+?>
+				<tr>
+					<td class="topic">&nbsp;<b><?= $activatedplugin->getDisplaytitle() ?></b></td>
+				</tr>
+				<tr>
+					<td class="steel1"><blockquote><?= $activatedplugin->showOverview(false) ?><blockquote></td>
+				</tr>
+					<td align="center" height="30">&nbsp;</td>
+				</tr>
+<?php
+			}
+		}
+	}
+}
+echo '</table>';
+
 include ('lib/include/html_end.inc.php');
+page_close();
 ?>
