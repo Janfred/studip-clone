@@ -494,6 +494,7 @@ class Seminar_Auth extends Auth {
 			$login_template->set_attribute('error_msg', $this->error_msg);
 			$login_template->set_attribute('challenge', $_SESSION['challenge']);
 			$login_template->set_attribute('uname', (isset($this->auth["uname"]) ? $this->auth["uname"] : $_REQUEST['shortcut']));
+			$login_template->set_attribute('self_registration_activated', $GLOBALS['ENABLE_SELF_REGISTRATION']);
 		}
 		$header_controller = new HeaderController();
 		$header_controller->help_keyword = 'Basis.AnmeldungLogin';
