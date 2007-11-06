@@ -62,20 +62,20 @@
 </tr>
 <? if ($issue_open[$tpl['sd_id']] || $tpl['openall']) { ?>
 <TR>
-	<TD colspan="7" class="steel1" align="left">
+	<TD colspan="7" class="steel1" align="left" style="padding-left: 10px">
 			<FONT size="-1">
-				&nbsp;&nbsp;<BR/>
-				&nbsp;&nbsp;<B><?=($tpl['theme_title']) ? $tpl['theme_title'] : _("Keine Titel vorhanden.")?></B><BR/>
-				&nbsp;&nbsp;<?=($tpl['theme_description']) ? $tpl['theme_description'] : _("Keine Beschreibung vorhanden.")?><BR/>
-				&nbsp;&nbsp;<BR/>
-				&nbsp;&nbsp;<B><?=_("Art des Termins:")?></B>&nbsp;<?=$tpl['art']?><BR/>
-				&nbsp;&nbsp;<BR/>
+				<BR/>
+				<B><?=($tpl['theme_title']) ? $tpl['theme_title'] : _("Keine Titel vorhanden.")?></B><BR/>
+				<?=($tpl['theme_description']) ? $tpl['theme_description'] : _("Keine Beschreibung vorhanden.")?><BR/>
+				<BR/>
+				<B><?=_("Art des Termins:")?></B>&nbsp;<?=$tpl['art']?><BR/>
+				<BR/>
 				<? if ($tpl['additional_themes']) { ?>
-				&nbsp;&nbsp;<U><?=_("Weitere Themen:")?></U><BR/>
+				<U><?=_("Weitere Themen:")?></U><BR/>
 				<?	foreach ($tpl['additional_themes'] as $val) { ?>
-					&nbsp;&nbsp;<B><?=$val['title']?></B><BR/>
-					&nbsp;&nbsp;<?=$val['desc']?><BR/>
-					&nbsp;&nbsp;<BR/>
+					<B><?=$val['title']?></B><BR/>
+					<?=$val['desc']?><BR/>
+					<BR/>
 				<? 	}
 					}
 				?>
