@@ -68,8 +68,6 @@ class ModulesNotification extends Modules {
 				"chat" => array('mes' => FALSE, 'name' => _("Chat")),
 				"wiki" => array('mes' => TRUE, 'name' => _("Wiki-Web")),
 				"support" => array('mes' => FALSE, 'name' => _("SupportDB")),
-				"vips" => array('mes' => FALSE, 'name' => _("ViPS (Virtuelles Prüfungssystem)")),
-				"impuls_ec" => array('mes' => FALSE, 'name' => _("Impuls EC")),
 				"scm" => array('mes' => TRUE, 'name' => _("Freie Informationsseite")),
 				"elearning_interface" => array('mes' => TRUE, 'name' => _("Lernmodule")));
 		$this->registered_modules = array_merge_recursive($this->registered_modules,

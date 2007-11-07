@@ -48,8 +48,6 @@ class Modules {
 				"chat" => array("id" => 7, "const" => "CHAT_ENABLE", "sem" => TRUE, "inst" => TRUE),
 				"wiki" => array("id" => 8, "const" => "WIKI_ENABLE", "sem" => TRUE, "inst" => TRUE),
 				"support" => array("id" => 9, "const" => "SUPPORT_ENABLE", "sem" => TRUE, "inst" => FALSE),
-				"vips" => array("id" => 10, "const" => "VIPS_ENABLE", "sem" => TRUE, "inst" => FALSE),
-				"impuls_ec" => array("id" => 11, "const" => "IMPULS_EC_ENABLE", "sem" => TRUE, "inst" => FALSE),
 				"scm" => array("id" => 12, "const" => "SCM_ENABLE", "sem" => TRUE, "inst" => TRUE),
 				"elearning_interface" => array("id" => 13, "const" => "ELEARNING_INTERFACE_ENABLE", "sem" => TRUE, "inst" => TRUE),
 				"documents_folder_permissions" => array("id" => 14, "const" => "", "sem" => TRUE, "inst" => TRUE)
