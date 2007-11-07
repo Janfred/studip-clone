@@ -28,8 +28,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-// Die Variable EVAL_AUSWERTUNG_CONFIG_ENABLE kann in der Datei local.inc gesetzt werden.
-if (!isset($EVAL_AUSWERTUNG_CONFIG_ENABLE)) $EVAL_AUSWERTUNG_CONFIG_ENABLE = FALSE;
 if (!isset($EVAL_AUSWERTUNG_GRAPH_FORMAT)) $EVAL_AUSWERTUNG_GRAPH_FORMAT = 'jpg';
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
@@ -86,7 +84,7 @@ require_once("lib/classes/phplot.php");
 
 
 
-if (isset($cmd) && $EVAL_AUSWERTUNG_CONFIG_ENABLE) {
+if (isset($cmd)) {
 	if ($cmd=="change_group_type" && isset($evalgroup_id) && isset($group_type)) {
 		$db = new DB_Seminar();
 		$db->query(sprintf("SELECT * FROM eval_group_template WHERE evalgroup_id='%s'",$evalgroup_id));
@@ -107,8 +105,7 @@ if (isset($cmd) && $EVAL_AUSWERTUNG_CONFIG_ENABLE) {
 
 
 function do_template($column) {
-	global $has_template, $db_template, $EVAL_AUSWERTUNG_CONFIG_ENABLE;
-	if (!($EVAL_AUSWERTUNG_CONFIG_ENABLE)) return TRUE;
+	global $has_template, $db_template;
 	if ($has_template==0 || ($has_template==1 && $db_template->f($column)))
 		return true;
 	else
@@ -117,8 +114,7 @@ function do_template($column) {
 
 
 function do_graph_template() {
-	global $db_template, $has_template, $question_type, $EVAL_AUSWERTUNG_CONFIG_ENABLE;
-	if (!($EVAL_AUSWERTUNG_CONFIG_ENABLE)) return "bars";
+	global $db_template, $has_template, $question_type;
 	if ($has_template==1) {
 		if ($question_type=="likertskala") return $db_template->f("likertscale_gfx_type");
 		if ($question_type=="multiplechoice") return $db_template->f("mchoice_scale_gfx_type");
@@ -312,7 +308,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
 }
 
 function groups ($parent_id) {
-	global $ausgabeformat, $global_counter, $local_counter, $question_type, $eval_id, $PHP_SELF, $evalgroup_id, $EVAL_AUSWERTUNG_CONFIG_ENABLE;
+	global $ausgabeformat, $global_counter, $local_counter, $question_type, $eval_id, $PHP_SELF, $evalgroup_id;
 
 	$db_groups = new DB_Seminar();
 	$db_groups->query(sprintf("SELECT * FROM evalgroup WHERE parent_id='%s' ORDER BY position",$parent_id));
@@ -341,17 +337,14 @@ function groups ($parent_id) {
 
 			$group_type = "normal";
 
-			if ($EVAL_AUSWERTUNG_CONFIG_ENABLE) {
-				$db_group_type = new DB_Seminar();
-				$db_group_type->query(sprintf("SELECT * FROM eval_group_template WHERE evalgroup_id='%s'",$db_groups->f("evalgroup_id")));
-				if ($db_group_type->next_record()) $group_type = $db_group_type->f("group_type");
-			}
+			$db_group_type = new DB_Seminar();
+			$db_group_type->query(sprintf("SELECT * FROM eval_group_template WHERE evalgroup_id='%s'",$db_groups->f("evalgroup_id")));
+			if ($db_group_type->next_record()) $group_type = $db_group_type->f("group_type");
 
 			echo "  <TR><TD CLASS=\"".($ausgabeformat==1 ? "steelgraulight" : "blank")."\" COLSPAN=\"2\">\n";
 			if (do_template("show_questionblock_headline")) {
 				echo "    <BR><TABLE WIDTH=\"100%\" BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"0\"><TR><TD ALIGN=\"left\"><B>".$global_counter.".".$local_counter.". ".formatReady($db_groups->f("title"))."</B></TD>";
-				if ($EVAL_AUSWERTUNG_CONFIG_ENABLE) echo "<TD ALIGN=\"RIGHT\">".($ausgabeformat==1 && !($freetype) ? "<A HREF=\"$PHP_SELF?eval_id=$eval_id&evalgroup_id=".$db_groups->f("evalgroup_id")."&group_type=".($group_type=="normal" ? "table" : "normal")."&cmd=change_group_type#anker\"><IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/rewind3.gif\" TITLE=\""._("Zum Darstellungstyp")." ".($group_type=="normal"?_("Tabelle"):_("Normal"))." "._("wechseln").".\" BORDER=\"0\"></A>" : "&nbsp;"). "</TD>";
-				else echo "<TD>&nbsp;</TD>";
+				echo "<TD ALIGN=\"RIGHT\">".($ausgabeformat==1 && !($freetype) ? "<A HREF=\"$PHP_SELF?eval_id=$eval_id&evalgroup_id=".$db_groups->f("evalgroup_id")."&group_type=".($group_type=="normal" ? "table" : "normal")."&cmd=change_group_type#anker\"><IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/rewind3.gif\" TITLE=\""._("Zum Darstellungstyp")." ".($group_type=="normal"?_("Tabelle"):_("Normal"))." "._("wechseln").".\" BORDER=\"0\"></A>" : "&nbsp;"). "</TD>";
 				echo "</TR></TABLE><BR><BR>\n";
 			} else echo "&nbsp;";
 			if ($evalgroup_id == $db_groups->f("evalgroup_id")) echo "  <A NAME=\"anker\"></A>\n";
@@ -454,10 +447,8 @@ else
 
 if ($db->next_record()) {
 
-  if ($EVAL_AUSWERTUNG_CONFIG_ENABLE) {
-  	$db_template->query(sprintf("SELECT t.* FROM eval_templates t, eval_templates_eval te WHERE te.eval_id='%s' AND t.template_id=te.template_id",$eval_id));
-  	if ($db_template->next_record()) $has_template = 1;
-  }
+  $db_template->query(sprintf("SELECT t.* FROM eval_templates t, eval_templates_eval te WHERE te.eval_id='%s' AND t.template_id=te.template_id",$eval_id));
+  if ($db_template->next_record()) $has_template = 1;
 
   $db_owner = new DB_Seminar();
   $db_owner->query(sprintf("SELECT ".$_fullname_sql['no_title']." AS fullname FROM auth_user_md5 WHERE user_id='%s'", $db->f("author_id")));
@@ -473,7 +464,7 @@ if ($db->next_record()) {
   // Evaluation existiert auch...
   echo "<TABLE BORDER=\"0\" WIDTH=\"100%\" CELLSPACING=\"0\" CELLPADDING=\"0\">\n";
   echo "<tr><td class=\"topic\" align=\"left\"><FONT COLOR=\"".($ausgabeformat==1 ? "white" : "black")."\">".($ausgabeformat==1 ? "<IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/eval-icon.gif\" BORDER=\"0\">&nbsp;" : "" )."<B>"._("Evaluations-Auswertung")."</B></FONT></td>\n";
-  echo "<TD CLASS=\"".($ausgabeformat==1 ? "topic" : "blank" )."\" ALIGN=\"RIGHT\">".($ausgabeformat==1 ? "<A HREF=\"eval_summary_export.php?eval_id=".$eval_id."\" TARGET=\"_blank\"><FONT COLOR=\"WHITE\">"._("PDF-Export")."</FONT></A><B>&nbsp;|&nbsp;</B><A HREF=\"".$PHP_SELF."?eval_id=".$eval_id."&ausgabeformat=2\" TARGET=\"_blank\"><FONT COLOR=\"WHITE\">"._("Druckansicht")."</FONT></A>&nbsp;".($EVAL_AUSWERTUNG_CONFIG_ENABLE ? "&nbsp;<A HREF=\"eval_config.php?eval_id=".$eval_id."\"><IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" BORDER=\"0\" ALT=\""._("Auswertung konfigurieren")."\" TITLE=\""._("Auswertung konfigurieren")."\"></A>" : "") : "" ) ."&nbsp;</TD>\n";
+  echo "<TD CLASS=\"".($ausgabeformat==1 ? "topic" : "blank" )."\" ALIGN=\"RIGHT\">".($ausgabeformat==1 ? "<A HREF=\"eval_summary_export.php?eval_id=".$eval_id."\" TARGET=\"_blank\"><FONT COLOR=\"WHITE\">"._("PDF-Export")."</FONT></A><B>&nbsp;|&nbsp;</B><A HREF=\"".$PHP_SELF."?eval_id=".$eval_id."&ausgabeformat=2\" TARGET=\"_blank\"><FONT COLOR=\"WHITE\">"._("Druckansicht")."</FONT></A>&nbsp;&nbsp;<A HREF=\"eval_config.php?eval_id=".$eval_id."\"><IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" BORDER=\"0\" ALT=\""._("Auswertung konfigurieren")."\" TITLE=\""._("Auswertung konfigurieren")."\"></A>" : "" ) ."&nbsp;</TD>\n";
   echo "</TR>\n";
   echo "<tr><td class=\"blank\" COLSPAN=\"2\" align=\"left\">&nbsp;</td></TR>\n";
   echo "<tr><td class=\"blank\" COLSPAN=\"2\" align=\"left\"><FONT SIZE=\"+1\"><B>&nbsp;&nbsp;".formatReady($db->f("title"))."</B></FONT></td>\n";

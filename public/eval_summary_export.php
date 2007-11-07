@@ -28,8 +28,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-// Die Variable EVAL_AUSWERTUNG_CONFIG_ENABLE kann in der Datei local.inc gesetzt werden.
-if (!isset($EVAL_AUSWERTUNG_CONFIG_ENABLE)) $EVAL_AUSWERTUNG_CONFIG_ENABLE = FALSE;
 if (!isset($EVAL_AUSWERTUNG_GRAPH_FORMAT)) $EVAL_AUSWERTUNG_GRAPH_FORMAT = 'jpg';
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
@@ -70,8 +68,7 @@ $replace = array("<fo:external-graphic src=\"url(\\1)\"/>");
 
 
 function do_template($column) {
-        global $has_template, $db_template, $EVAL_AUSWERTUNG_CONFIG_ENABLE;
-	if (!($EVAL_AUSWERTUNG_CONFIG_ENABLE)) return TRUE;
+        global $has_template, $db_template;
         if ($has_template==0 || ($has_template==1 && $db_template->f($column)))
                 return true;
         else
@@ -209,7 +206,7 @@ function answers ($parent_id, $anz_nutzer, $question_type) {
 }
 
 function groups ($parent_id) {
-	global $cssSw, $ausgabeformat, $fo_file, $auth, $global_counter, $local_counter, $tmp_path_export, $EVAL_AUSWERTUNG_CONFIG_ENABLE, $pattern, $replace;
+	global $cssSw, $ausgabeformat, $fo_file, $auth, $global_counter, $local_counter, $tmp_path_export, $pattern, $replace;
 	$db_groups = new DB_Seminar();
 	$db_groups->query(sprintf("SELECT * FROM evalgroup WHERE parent_id='%s' ORDER BY position",$parent_id));
 
@@ -237,11 +234,9 @@ function groups ($parent_id) {
 
                         $group_type = "normal";
 
-			if ($EVAL_AUSWERTUNG_CONFIG_ENABLE) {
-				$db_group_type = new DB_Seminar();
-                        	$db_group_type->query(sprintf("SELECT * FROM eval_group_template WHERE evalgroup_id='%s'",$db_groups->f("evalgroup_id")));
-                        	if ($db_group_type->next_record()) $group_type = $db_group_type->f("group_type");
-			}
+			$db_group_type = new DB_Seminar();
+                       	$db_group_type->query(sprintf("SELECT * FROM eval_group_template WHERE evalgroup_id='%s'",$db_groups->f("evalgroup_id")));
+                       	if ($db_group_type->next_record()) $group_type = $db_group_type->f("group_type");
 
  			fputs($fo_file,"    <!-- Questionblock -->\n");
 			fputs($fo_file,"    <fo:block font-variant=\"small-caps\" font-weight=\"bold\" text-align=\"start\" background-color=\"grey\" color=\"white\" space-after.optimum=\"10pt\">\n");
@@ -437,10 +432,8 @@ else $db->query(sprintf("SELECT * FROM eval WHERE eval_id='%s' AND author_id='%s
 if ($db->next_record()) {
 	// Evaluation existiert auch...
 	
-	if ($EVAL_AUSWERTUNG_CONFIG_ENABLE) {
-		$db_template->query(sprintf("SELECT t.* FROM eval_templates t, eval_templates_eval te WHERE te.eval_id='%s' AND t.template_id=te.template_id",$eval_id));
-		if ($db_template->next_record()) $has_template = 1;
-	}
+	$db_template->query(sprintf("SELECT t.* FROM eval_templates t, eval_templates_eval te WHERE te.eval_id='%s' AND t.template_id=te.template_id",$eval_id));
+	if ($db_template->next_record()) $has_template = 1;
 	
 	$db_owner = new DB_Seminar();
 	$db_owner->query(sprintf("SELECT ".$_fullname_sql['no_title']." AS fullname FROM auth_user_md5 WHERE user_id='%s'", $db->f("author_id")));
@@ -474,7 +467,7 @@ if ($db->next_record()) {
 	fputs($fo_file,"  <fo:page-sequence master-reference=\"first\">\n");
 	fputs($fo_file,"  <fo:static-content flow-name=\"xsl-region-after\">\n");
 	fputs($fo_file,"    <fo:block text-align=\"center\" font-size=\"8pt\" font-family=\"serif\" line-height=\"14pt\" >\n");
-	fputs($fo_file,"    Erstellt mit Stud.IP $SOFTWARE_VERSION - Seite <fo:page-number/>\n");
+	fputs($fo_file,"    "._("Erstellt mit Stud.IP")." $SOFTWARE_VERSION - "._("Seite")." <fo:page-number/>\n");
 	fputs($fo_file,"    </fo:block>\n");
 	fputs($fo_file,"    <fo:block text-align=\"center\" font-size=\"8pt\" font-family=\"serif\" line-height=\"14pt\" >\n");
 	fputs($fo_file,"      <fo:basic-link color=\"blue\" external-destination=\"$ABSOLUTE_URI_STUDIP\">$UNI_NAME_CLEAN</fo:basic-link>\n");
@@ -528,6 +521,7 @@ if ($db->next_record()) {
 		unlink($tmp_path_export."/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo");
 	} else {
 		echo "Fehler beim PDF-Export!<BR>".$err;
+		echo "<BR>\n".$str;
 	}
 } else {
 	// Evaluation existiert nicht...
