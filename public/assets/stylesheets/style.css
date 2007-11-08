@@ -67,7 +67,7 @@ TD.nix {background-color: transparent;}
 TD.aufklapp {background-color : #FFFAEE;}
 TD.suche {background-image: url('../images/suche2.jpg');}
 
-BODY { background-color: #91A2B6; background : url('../images/bathtile.jpg'); font-family: Arial, Helvetica, sans-serif}
+BODY {margin: 0px; background-color: #91A2B6; background : url('../images/bathtile.jpg'); font-family: Arial, Helvetica, sans-serif}
 
 /* the Body-Background color should be similar to A:link.toolbar and A:visited.toolbar for best effect!! */
 
@@ -185,108 +185,10 @@ td.smiley_redborder {border:1px solid #D00000;}
 
 code  { font-size:10pt; }
 
-span.button { float:left; margin-bottom:5px; margin-left:2px; margin-right:2px; text-align:center; width:100px;
-         border-style:solid; border-width:1px; padding:2px; text-decoration:none; border-color:#AAAAAA; font-size: 9pt;
-         background-image: url('../images/steelblau4.jpg');
-		 }
-
-span.button:link    { font-size: 9pt; color:#00f; background-color:transparent; background-image: url('../images/steelgraulight.jpg');}
-span.button:visited { font-size: 9pt; color:#00f; background-color:transparent; background-image: url('../images/steelgraulight.jpg');}
-span.button:hover   { font-size: 9pt; color:#FFFFFF; background-image: url('../images/steelgraudunkel.gif'); }
-span.button:active  { font-size: 9pt; color:#f00; background-color:transparent; background-image: url('../images/steelblau4.jpg'); }
-
-.headtable {height: 100px; background-image: url('../images/headerbackground4.jpg');margin-top: -20px;}
-
 table.logintable {background-image: url('../images/login.jpg');}
 td.indexpage {background-image: url('../images/indexpage.jpg'); text-align:left;}
 
-div#headlogo {
- 	width:128; height:98; background-image: url('../images/logoneu.jpg');
-	float:left;
-
-}
-
-body { margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:0px }
-
 .mainmenu {margin-top: 7px; text-align:left;}
-
-div#unitext {
-  float:left;
-  margin-left: 16px;
-  margin-top: 0px;
-  min-width: 16em; /* Mindestbreite (der Ueberschrift) verhindert Anzeigefehler in modernen Browsern */
-}
-
-
-ul#unilinks {
-  height: 0px;
-  float:right;
-  margin-right: 4px;
-  margin-top: 0px;
-  width: 0px;
-  min-width: 600px; /* Mindestbreite (der Ueberschrift) verhindert Anzeigefehler in modernen Browsern */
-}
-ul#unilinks li {
-  color:#AAD;
-  text-align:right; font-size: 9pt; font-family: Arial, Helvetica, sans-serif;
-  list-style: none;
-  float:right;
-  margin-right: 5px;
-}
-ul#unilinks a {
-    display:block;
-    padding: 0.2em;
-    text-decoration: none; font-weight: bold;
-    color: #7387ac; background-color: transparent;
-}
-ul#unilinks a:hover {
-    color: #FFF;
-    background-image: url('../images/fill1.gif');
-  }
-
-
-li#studiplinks {
- margin-left: 0px;
- background-image:url('$navibereich[pic]')
-}
-
-ul#navilinks {
-  height: 0px;
-  float:left;
-  margin-left: -46px;
-  margin-right: 0px;
-  margin-top: -15px;
-  width: 0px;
-  min-width: 850px; /* Mindestbreite (der Ueberschrift) verhindert Anzeigefehler in modernen Browsern */
-}
-ul#navilinks li {
-  text-align:center; font-size: 10pt; font-family: Arial, Helvetica, sans-serif;
-  list-style: none;
-  line-height:27px;
-  float:left;
-  /*background-image: url('../images/headnaviback1.gif');*/
-}
-ul#navilinks a {
-    float:left;
-    display:block;
-    height: 45px;
-    padding: 0.2em;
-    margin-top: 15px;
-    margin-right: 0px;
-    margin-left: 0px;
-    text-decoration: none; font-weight: bold;
-    color: #7387ac; background-color: transparent;
-}
-ul#navilinks a:hover {
-    float:left;
-    display:block;
-    height: 45px;
-    margin-right: 0px;
-    margin-left: 0px;
-    color: #FFF;
-    background-image: url('../images/headnaviback2.jpg');
-  }
-
 
 .button {
  border-style:solid; border-width:1px;
@@ -302,53 +204,6 @@ ul#navilinks a:hover {
  border-left-color:#f00;
  border-right-color:#f55;
  border-bottom-color:#f55;}
-
-
-
-.titelbereich {
-  margin-left: 27px;
-  margin-top: -27px;
-  font-weight: bold;
-  color: #55A;
-  text-align:left; font-size: 18pt; font-family: Arial, Helvetica, sans-serif;
-  float:left;
-
-}
-
-.bereichsname {
-  height: 23px;
-  margin-top: -24px;
-  padding-left: 8px;
-  padding-top: 3px;
-  width: 500px;
-  color: #e3e8ed;
-  text-align:left; font-size: 15pt; font-family: 'Times New Roman',Times,serif;
-  background-image: url('../images/bereichsback.gif');
-}
-
-.positionbartable {height: 18px; background-image: url('../images/positionbar.jpg');margin-top: -2px;}
-
-div#positionbar {
-  color:#aeb9cf;
-  text-align:right; font-size: 10pt; font-family: Arial, Helvetica, sans-serif;
-  float:left;
-  margin-right: 0px;
-  margin-left: -100px;
-  margin-top: 20px;
-  width: 235px; /* Mindestbreite (der Ueberschrift) verhindert Anzeigefehler in modernen Browsern */
-  background-color: #5c739f;
-}
-
-span.searchbar {
-  color:#aeb9cf;
-  text-align:right; font-size: 10pt; font-family: Arial, Helvetica, sans-serif;
-  float:left;
-  margin-right: 0px;
-  margin-left: 0px;
-  margin-top: 20px;
-  width: 100%; /* Mindestbreite (der Ueberschrift) verhindert Anzeigefehler in modernen Browsern */
-  background-color: #7387ad;
-}
 
 div.selectbox {
   background-color:#FFFFFF;
