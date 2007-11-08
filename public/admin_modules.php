@@ -70,18 +70,19 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 			$amodules->$moduleXxDeactivate($admin_modules_data["range_id"]);
 			$amodules->clearBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
 			unset($admin_modules_data["conflicts"][$key]);
-			$resolve_comflicts = TRUE;
+			$resolve_conflicts = TRUE;
 		}
 	}
 
-	//consitency: cancel kill objects
+	//consistency: cancel kill objects
 	foreach ($amodules->registered_modules as $key => $val) {
+		$moduleXxDeactivate = "module".$key."Deactivate";
 		$cancel_xx = "cancel_".$key;
 
 		if (($$cancel_xx) && (method_exists($amodules,$moduleXxDeactivate))) {
 			$amodules->setBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
 			unset($admin_modules_data["conflicts"][$key]);
-			$resolve_comflicts = TRUE;
+			$resolve_conflicts = TRUE;
 		}
 	}
 
@@ -185,15 +186,13 @@ if ($header_line)
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 echo $links;
 
-if (!$admin_modules_data["conflicts"])
-	$admin_modules_data["conflicts"] = array();
-
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
-if (($range_id) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_documents) && ((!count($admin_modules_data["conflicts"]) && (is_array($admin_modules_data["conflicts"]))))) {
+if (($range_id) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_documents) && (!$resolve_conflicts)) {
 	$admin_modules_data["modules_list"] = $amodules->getLocalModules($range_id);
 	$admin_modules_data["orig_bin"] = $amodules->getBin($range_id);
 	$admin_modules_data["changed_bin"] = $amodules->getBin($range_id);
 	$admin_modules_data["range_id"] = $range_id;
+	$admin_modules_data["conflicts"] = array();
 } else {
 	//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
 	if (!$admin_modules_data["range_id"]) {
