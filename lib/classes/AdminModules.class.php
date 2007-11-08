@@ -97,12 +97,6 @@ class AdminModules extends ModulesNotification {
 		$this->registered_modules["wiki"]["msg_activate"] = _("Das Wiki-Web kann jederzeit aktiviert werden.");
 		$this->registered_modules["wiki"]["msg_deactivate"] = _("Das Wiki-Web kann jederzeit deaktiviert werden.");
 
-		$this->registered_modules["impuls_ec"]["msg_activate"] = _("Die Impuls-Module können jederzeit aktiviert werden.");
-		$this->registered_modules["impuls_ec"]["msg_deactivate"] = _("Die Impuls-Module können jederzeit deaktiviert werden.");
-
-		$this->registered_modules["vips"]["msg_activate"] = _("ViPS kann jederzeit aktiviert werden.");
-		$this->registered_modules["vips"]["msg_deactivate"] = _("ViPS kann jederzeit deaktiviert werden.");
-
 		$this->registered_modules["scm"]["msg_activate"] = _("Die freie Informationsseite kann jederzeit aktiviert werden.");
 		$this->registered_modules["scm"]["msg_warning"] = _("Wollen Sie wirklich die freie Informationsseite deaktivieren und damit den erfassten Inhalt l&ouml;schen?");
 		$this->registered_modules["scm"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der freien Informationsseite werden die eingestellten Inhalte gel&ouml;scht!");
