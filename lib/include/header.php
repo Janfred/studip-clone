@@ -4,8 +4,8 @@
 *
 * head line of Stud.IP
 *
-*
 * @author		Stefan Suchi <suchi@data-quest.de>
+* @author		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
 * @version		$Id$
 * @access		public
 * @modulegroup	visual
@@ -34,23 +34,35 @@
 // +---------------------------------------------------------------------------+
 require_once ('lib/classes/HeaderController.class.php');
 
-if ($GLOBALS['SHOW_TERMS_ON_FIRST_LOGIN']) {
-	require_once ('lib/terms.inc.php');
-	check_terms($user->id, $GLOBALS['language_path']);
-}
-
-if ($GLOBALS['USER_VISIBILITY_CHECK']) {
+if ($GLOBALS['USER_VISIBILITY_CHECK']) 
+{
 	require_once('lib/user_visible.inc.php');
 	first_decision($GLOBALS['user']->id);
 }
 
-$header_controller = new HeaderController();
-$header_controller->help_keyword = $GLOBALS['HELP_KEYWORD'];
-$header_controller->current_page = $GLOBALS['CURRENT_PAGE'];
-$header_template =& $GLOBALS['template_factory']->open('header');
-$header_controller->fillTemplate($header_template);
-echo $header_template->render();
+if (!isset($header_controller))
+{
+	$header_controller = new HeaderController();
+	$header_controller->help_keyword = $GLOBALS['HELP_KEYWORD'];
+	$header_controller->current_page = $GLOBALS['CURRENT_PAGE'];
+	if($_NOHEADER == true) //Einige Seiten benötigen keinen Header, sprich Navigation (Evaluation usw.)
+	{
+		$header_template =& $GLOBALS['template_factory']->open('noheader');
+	}
+	else
+	{
+		$header_template =& $GLOBALS['template_factory']->open('header');
+	}
+	$header_controller->fillTemplate($header_template);
+	echo $header_template->render();
+}
+
+if ($GLOBALS['SHOW_TERMS_ON_FIRST_LOGIN'] && $GLOBALS['auth']->is_authenticated() && $GLOBALS['user']->id != 'nobody')
+{
+	require_once('lib/terms.inc.php');
+	check_terms($GLOBALS['user']->id, $GLOBALS['language_path']);
+}
 
 include 'lib/include/check_sem_entry.inc.php'; //hier wird der Zugang zum Seminar ueberprueft
-//<!-- $Id$ -->
+
 ?>

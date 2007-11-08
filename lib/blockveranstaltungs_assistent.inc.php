@@ -1,21 +1,32 @@
 <?
-/*
-blockveranstaltungs_assistent.inc.php - Terminverwaltung von Stud.IP
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* blockveranstaltungs_assistent.inc.php - Terminverwaltung von Stud.IP
+*
+* @author		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
+* @version		$Id: header.php 7904 2007-07-29 15:05:13Z anoack $
+* @access		public
+* @module		blockveranstaltungs_assistent.inc.php
+* @package		studip_core
 */
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// Copyright (C) 2001-2007 Stud.IP
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
 
 /*  Diese funktion bekommt als eingabe die seminar_id und die Daten, die aus der
 		Form kommen. Das sind:
@@ -38,7 +49,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		Funktion liefert messages oder errors...
 */
 
-function day_checked($day) {
+function day_checked($day) 
+{
 	global $_POST;
 	if (isset($_POST['days'])) {
 		foreach ($_POST['days'] as $cur_day) {
@@ -51,7 +63,7 @@ function day_checked($day) {
 function create_block_schedule_dates($seminar_id, $form_data)
 {
 
-$messages =  Array('seminar_id'=> _("Kein Seminar gewählt!"),
+	$messages =  Array('seminar_id'=> _("Kein Seminar gewählt!"),
 									 'start_day' => _("Startdatum: Sie haben keinen Tag angegeben."),
 									 'start_month'=> _("Startdatum: Sie haben keinen Monat angegeben."),
 									 'start_year' => _("Startdatum: Sie haben kein Jahr angegeben."),

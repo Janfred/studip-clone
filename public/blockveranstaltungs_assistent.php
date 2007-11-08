@@ -1,31 +1,48 @@
 <?
-/*
-blockveranstaltungs_assistent.php - Terminverwaltung von Stud.IP
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* blockveranstaltungs_assistent.php - Terminverwaltung von Stud.IP
+*
+* @author		André Noack
+* @author		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
+* @version		$Id: header.php 7904 2007-07-29 15:05:13Z anoack $
+* @access		public
+* @module		blockveranstaltungs_assistent.php
+* @package		studip_core
 */
+
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// Copyright (C) 2001-2007 Stud.IP
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("tutor");
 
-include ("lib/seminar_open.php"); // initialise Stud.IP-Session
-require_once("blockveranstaltungs_assistent.inc.php");
+
+require_once("lib/seminar_open.php"); // initialise Stud.IP-Session
+require_once("lib/blockveranstaltungs_assistent.inc.php");
 require_once("lib/functions.php");
 
-include ("lib/include/html_head.inc.php"); // Output of html head
+$_NOHEADER = true; //keinen Header anzeigen
+/* Ausgabe erzeugen---------------------------------------------------------- */
+//Header
+include ('lib/include/html_head.inc.php');
+include ('lib/include/header.php');
 
+//Content
 echo "<SCRIPT> function reload_opener() { opener.location.href='".$CANONICAL_RELATIVE_PATH_STUDIP."raumzeit.php#irregular_dates'; return true;} </SCRIPT>";
 
 if (isset($_POST['command']) && ($_POST['command'] == 'create')) {
@@ -36,12 +53,12 @@ $cssSw = new cssClassSwitcher();
 // HTML Template
 ?>
 <form method="post" action="<?=$PHP_SELF?>">
-<table border="0" cellspacing="0" cellpadding="1" align="center">
+<table width="100%" border="0" cellspacing="0" cellpadding="1" >
 	<tr>
-		<td class="blue_gradient" align="center">
-			<b><?=_("Blockveranstaltungstermine anlegen")?></b><br/>
-			<?=getHeaderLine($SessSemName[1])?>
-		</td>
+		<td class="topic"><b><?=_("Blockveranstaltungstermine anlegen")?></b></td>
+	</tr>
+	<tr>
+		<th><?=getHeaderLine($SessSemName[1])?></th>
 	</tr>
 	<? if (!$return['ready'] && ($return['errors'])) :
 			foreach($return['errors'] as $error) {
@@ -129,12 +146,11 @@ $cssSw = new cssClassSwitcher();
 							<br/>
 						</td>
 					</tr>
+					<?$cssSw->switchClass()?>
 					<tr>
-						<td colspan="2" align="center">
-							<br />
-							<?=_("Veranstaltungstermine")?> <input type="image" name="block_submit" align="absmiddle" <?=makebutton('erstellen', 'src')?>>
-							<br /><br />
-							<?=_("Blockveranstaltungsassistent")?><a href="javascript:reload_opener();self.close()"><?=makebutton('schliessen')?></a>
+						<td class="<?=$cssSw->getClass()?>" colspan="2" align="center">
+							<input type="image" name="block_submit" align="absmiddle" <?=makebutton('erstellen', 'src')?>>
+							<a href="javascript:window.close()"><?=makebutton('schliessen')?></a>
 						</td>
 					</tr>
 				</table>
@@ -142,4 +158,11 @@ $cssSw = new cssClassSwitcher();
 	</tr>
 </table>
 </form>
-<?page_close(NULL);?>
+<br/>
+<?php
+
+//Footer
+include ('lib/include/html_end.inc.php');
+page_close();
+
+?>
