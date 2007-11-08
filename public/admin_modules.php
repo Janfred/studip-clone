@@ -76,10 +76,9 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 
 	//consistency: cancel kill objects
 	foreach ($amodules->registered_modules as $key => $val) {
-		$moduleXxDeactivate = "module".$key."Deactivate";
 		$cancel_xx = "cancel_".$key;
 
-		if (($$cancel_xx) && (method_exists($amodules,$moduleXxDeactivate))) {
+		if ($$cancel_xx) {
 			$amodules->setBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
 			unset($admin_modules_data["conflicts"][$key]);
 			$resolve_conflicts = TRUE;
