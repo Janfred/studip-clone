@@ -164,11 +164,13 @@ if ($EXPORT_ENABLE)
 }
 else
 {
+	//TODO: Globales Fehlertemplate erzeugen und nur die Fehlermeldung übergeben
 	// Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   // Output of Stud.IP head
 	parse_window ("error§" . _("Das Exportmodul ist nicht eingebunden. Damit Daten im XML-Format exportiert werden k&ouml;nnen, muss das Exportmodul in den Systemeinstellungen freigeschaltet werden. Wenden Sie sich bitte an die Administratoren."), "§",
 				_("Exportmodul nicht eingebunden"));
+	include ('lib/include/html_end.inc.php');
 }
 page_close();
 ?>

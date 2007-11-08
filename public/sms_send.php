@@ -357,8 +357,10 @@ check_messaging_default();
 if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 
 	change_messaging_view();
-	echo "</td></tr></table>";
-	page_close();
+	echo "</td></tr></table>\n<br/>";
+	// Save data back to database.
+	include ('lib/include/html_end.inc.php');
+	page_close();	
 	die;
 
 }
@@ -682,6 +684,7 @@ if ($send_view) {
 	</td>
 </tr>
 </table>
+<br/>
 <?php
 // Save data back to database.
 include ('lib/include/html_end.inc.php');
