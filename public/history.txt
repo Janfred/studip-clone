@@ -1,3 +1,26 @@
+__02.10.2007 v 1.6.0__
+- Abbildung von Studienmodulstrukturen (Hallesche Lösung)
+- Erweiterung der Teilnehmeransicht
+- Introducing Safiré (Einführung eines neuen generischen Designs)
+- Anzeige des Nutzernamens und des Freitexts im Belegungsplan von Ressourcen
+- Darstellung von Systemsplugins auf der Startseite
+- Erweiterung Anmeldesystem
+- "Flexi"-bilisierung der Infobox ( = als Templateversion)
+- Erweiterung der Gruppenfunktion / Dateiordner für Gruppen
+- Erweiterungen IIlias Verknüpfung
+- Erweiterung des Teilnehmerexports bzgl. Sortierung nach Anmeldedatum
+- Query-Caching on Demand
+- Online-Konfiguration der Typisierung generischer Datenfelder
+- Suchfunktion für Wikis
+- Migrations
+- Vereinfachte Nachrichten an Rechtegruppen innerhalb einer Veranstaltung
+- Hinzufügen von Konfigurationsoptionen für Verzeichnisse mit dynamischen Inhalt
+- Externe Seiten templatebasiert
+- Sperrung von Veranstaltung gegen Selbsteintrag
+- Caching
+- Neue Admin-Seiten für "Zeiten" und "Ablaufplan"
+- weitere Detailverbesserungen und Bugfixes
+
 __27.03.2007 v 1.5.0__
 - PmWiki läßt sich jetzt über die E-Learning-Schnittstelle anbinden
 - Anzeige des Skype Namen und Links von Usern auf der Homepage

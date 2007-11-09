@@ -109,21 +109,22 @@ $reiter->create($structure, $view);
 <?php
      if ($view=="main") {
 	$developer[] = array('Marco Bohnsack', 'bohnsack@data-quest.de', _("(Projektmanagement, Hilfe)"));
+	$developer[] = array('Thomas Hackl', 'thomas.hackl@uni-passau.de', _("(Typo3-Anbindung)"));
 	$developer[] = array('Torsten Heinrich', 'to.heinrich@fh-osnabrueck.de', _("(...)"));
-	//$developer[] = array('Cornelius Hempel', 'cornelius.hempel@studip.uni-halle.de', _("(Fehlersuche)"));
 	$developer[] = array('Cornelis Kater', 'info@ckater.de', _("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)"));
 	$developer[] = array('Hartje Kriete', 'kriete@math.uni-goettingen.de', _("(&Uuml;bersetzung, Internationalisierung)"));
 	$developer[] = array('Jan Kulmann', 'jankul@tzi.de', _("(Evaluationen)"));
+	$developer[] = array('Elmar Ludwig', 'elmar.ludwig@uos.de', _("(...)"));
 	$developer[] = array('Marcus Lunzenauer', 'mlunzena@uos.de', _("(...)"));
+	$developer[] = array('Nico M&uuml;ller', 'nico.mueller@uni-oldenburg.de', _("(PlugIn-Schnittstelle)"));
 	$developer[] = array('André Noack', 'noack@data-quest.de', _("(Chat, Literaturverwaltung, Authentifizierung, Verzeichnisse)"));
 	$developer[] = array('Frank Ollermann', 'follerma@uni-osnabrueck.de', _("(Usability)"));
-	$developer[] = array('Dennis Reil', 'studip@reil-online.de', _("(PlugIn-Schnittstelle)"));
+	$developer[] = array('J&ouml;rg R&ouml;pke', 'roepke@uni-trier.de', _("(Ilias-Anbindung, Evaluationen)"));
 	$developer[] = array('Jens Schmelzer', 'jens.schmelzer@fh-jena.de', _("(Security, Distribution)"));
 	$developer[] = array('Ralf Stockmann', 'rstockm@gwdg.de', _("(Forensystem, Adressbuch, Design)"));
 	$developer[] = array('Stefan Suchi', 'suchi@data-quest.de', _("(Projektmanagement, Datenbankstruktur, Rechtesystem, Internationalisierung)"));
 	$developer[] = array('Tobias Thelen', 'tthelen@uni-osnabrueck.de', _("(WikiWeb, Hilfe)"));
 	$developer[] = array('Peter Thienel', 'thienel@data-quest.de', _("(Externe Seiten, Terminkalender)"));
-	$developer[] = array('Nils Kolja Windisch', 'info@nkwindisch.de', _("(Systeminterne Nachrichten)"));
 
 ?>
 
