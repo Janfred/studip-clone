@@ -1323,7 +1323,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			if ($folder_tree->isExerciseFolder($db->f("folder_id"))) $icon .= "<img ".tooltip(_("Dieser Ordner ist ein Hausaufgabenordner. Es können nur Dateien eingestellt werden."))." src=\"".$GLOBALS['ASSETS_URL']."images/eigene2.gif\" WIDTH=\"18\" HEIGTH=\"18\">";
 
 
-				if ($move && !in_array($db->f('folder_id'), $dont_move_to) && $folder_tree->isWritable($db->f('folder_id')) && (!$folder_tree->isFolder($move) || $folder_tree->checkCreateFolder($db->f('folder_id'), $user->id)) ){
+				if ($move && !in_array($db->f('folder_id'), $dont_move_to) && $folder_tree->isWritable($db->f('folder_id'), $user->id) && (!$folder_tree->isFolder($move) || $folder_tree->checkCreateFolder($db->f('folder_id'), $user->id)) ){
 
 				$icon="&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_md_\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0></a>".$icon;
 			}
