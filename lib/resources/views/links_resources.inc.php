@@ -1,9 +1,9 @@
 <?
 /**
 * links_resources.inc.php
-* 
+*
 * navigation data for resources
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -42,7 +42,8 @@ $reiter=new reiter;
 
 //Create Reitersystem
 
-//oberen Reiter 
+//oberen Reiter
+$structure = array();
 $structure["resources"]=array (topKat=>"", name=>_("&Uuml;bersicht"), link=>"resources.php?view=search&reset=TRUE", active=>FALSE);
 if ($resources_data["list_open"])
 	$structure["lists"]=array (topKat=>"", name=>_("Liste"), link=>"resources.php?view=lists#a", active=>FALSE);
@@ -92,7 +93,7 @@ if ($resources_data["actual_object"]) {
 		if ($ActualObjectPerms->havePerm ("autor"))
 			$structure["edit_object_assign"]=array (topKat=>"objects", name=>_("Belegung&nbsp;bearbeiten"), link=>"resources.php?view=edit_object_assign", active=>FALSE);
 		else
-			$structure["edit_object_assign"]=array (topKat=>"objects", name=>_("Belegung&nbsp;anzeigen"), link=>"resources.php?view=edit_object_assign", active=>FALSE);		
+			$structure["edit_object_assign"]=array (topKat=>"objects", name=>_("Belegung&nbsp;anzeigen"), link=>"resources.php?view=edit_object_assign", active=>FALSE);
 	}
  }
 

@@ -48,6 +48,7 @@ if (!$username){
 //Create Reitersystem
 
 //Topkats
+$structure = array();
 $structure["alle"] = array('topKat' => '', 'name' => _("Alle"), 'link' => "about.php?username=$username", 'active' => FALSE);
 $structure["bild"] = array('topKat' => '', 'name' => _("Bild"), 'link' => "edit_about.php?view=Bild&username=$username", 'active' => FALSE);
 $structure["daten"] = array('topKat' => '', 'name' => _("Nutzerdaten"), 'link' => "edit_about.php?view=Daten&username=$username", 'active' => FALSE);

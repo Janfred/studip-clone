@@ -25,6 +25,7 @@ $reiter = new reiter;
 //Create Reitersystem
 
 //Topkats
+$structure = array();
 if (!$perm->have_perm('root')){
 	$structure['meine_veranstaltungen'] = array ('topKat' => '', 'name' => _("Meine&nbsp;Veranstaltungen"), 'link' => 'meine_seminare.php', 'active' => FALSE);
 }
@@ -59,29 +60,29 @@ if ($GLOBALS['STM_ENABLE']){
 
 //View festlegen
 switch ($i_page) {
-	case 'meine_seminare.php' : 
-		if (isset($view) && ($view == 'ext')) 
-			$reiter_view = 'meine_veranstaltungen_extendet'; 
+	case 'meine_seminare.php' :
+		if (isset($view) && ($view == 'ext'))
+			$reiter_view = 'meine_veranstaltungen_extendet';
 		else
-			$reiter_view = 'meine_veranstaltungen'; 
+			$reiter_view = 'meine_veranstaltungen';
 	break;
 	case 'my_archiv.php':
-		$reiter_view = 'my_archiv'; 
-	break;	
-	case "sem_portal.php" : 
+		$reiter_view = 'my_archiv';
+	break;
+	case "sem_portal.php" :
 		if ($view=="all") $reiter_view="all";
 		elseif ($view == 'mod')  $reiter_view="mod";
 		else
 			$reiter_view="class_".$view;
 	break;
-	case 'mein_stundenplan.php' : 
+	case 'mein_stundenplan.php' :
 		$reiter_view = 'veranstaltungs_timetable';
 	break;
-	case 'recordofstudy.php' : 
+	case 'recordofstudy.php' :
 		$reiter_view = 'record_of_study';
 	break;
 	case "my_stm.php":
-		$reiter_view="my_stm"; 
+		$reiter_view="my_stm";
 	break;
 	default :
 		$reiter_view = 'meine_seminare';

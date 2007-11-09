@@ -94,6 +94,7 @@ if ($ELEARNING_INTERFACE_ENABLE) {
 }
 
 //Topkats
+$structure = array();
 if ($SessSemName["class"]=="inst") {
 	$structure["institut_main"]=array ('topKat' => '', 'name'=>_("&Uuml;bersicht"), 'link'=>"institut_main.php", 'active'=>FALSE);
 	if ($modules["forum"])

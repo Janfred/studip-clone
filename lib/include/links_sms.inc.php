@@ -39,6 +39,7 @@ $reiter=new reiter;
 //Create Reitersystem
 $reiter=new reiter;
 //Topkats
+$structure = array();
 if (!$perm->have_perm("admin")) {
 	if ($GLOBALS['CALENDAR_ENABLE'])
 		$structure["calendar"]=array ("topKat"=>"", "name"=>_("Terminkalender"), "link"=>"calendar.php", "active"=>FALSE);
