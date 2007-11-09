@@ -40,7 +40,7 @@ $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGrunddaten";
 
 //Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
-$CURRENT_PAGE.=_("Verwaltung der Grunddaten"); 
+$CURRENT_PAGE.=_("Verwaltung der Grunddaten");
 
 //prebuild navi and the object switcher (important to do already here and to use ob!)
 ob_start();
@@ -145,59 +145,59 @@ function auth_check() {
 	return $perm->have_studip_perm("tutor",$s_id);
 }
 
-function get_dozent_data($s_id, $_fullname_sql) 
+function get_dozent_data($s_id, $_fullname_sql)
 {
 	global $PHP_SELF;
 	$db = new DB_Seminar();
-	$db->query("SELECT ". $_fullname_sql['full_rev'] . 
+	$db->query("SELECT ". $_fullname_sql['full_rev'] .
              " AS fullname, seminar_user.user_id, seminar_user.position," .
-                " status, username" . 
-             " FROM seminar_user " . 
-                " LEFT JOIN auth_user_md5 USING(user_id)" . 
-                " LEFT JOIN user_info USING(user_id)" . 
-             " WHERE Seminar_id = '$s_id'" . 
-             " AND Status = 'dozent'" . 
+                " status, username" .
+             " FROM seminar_user " .
+                " LEFT JOIN auth_user_md5 USING(user_id)" .
+                " LEFT JOIN user_info USING(user_id)" .
+             " WHERE Seminar_id = '$s_id'" .
+             " AND Status = 'dozent'" .
              " ORDER BY seminar_user.position, Nachname");
-    
-	if ($db->nf()) 
+
+	if ($db->nf())
   {
 		$out[] = "<table>";
 		$i = 0;
-		while ($db->next_record()) 
+		while ($db->next_record())
     {
 			$out[] = "<tr>";
 			$out[]= "<td>";
 
-			$href = "?delete_doz=".$db->f("username"). "&s_id=".$s_id."#anker"; 
-			$img_src = "images/trash.gif"; 
+			$href = "?delete_doz=".$db->f("username"). "&s_id=".$s_id."#anker";
+			$img_src = "images/trash.gif";
 			$out[] = "<a href='{$PHP_SELF}{$href}'>";
 			$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
 			$out[] = "</a>";
 			$out[]= "</td>";
 
-			if ($db->nf() > 1) 
+			if ($db->nf() > 1)
       {
 				// move up (if not first)
 				$out[] = "<td>";
 				if ($i > 0)
-        { 
-						$href = "?moveup_doz=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker"; 
-            $img_src = "images/move_up.gif"; 
+        {
+						$href = "?moveup_doz=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker";
+            $img_src = "images/move_up.gif";
 						$out[] = "<a href='{$PHP_SELF}{$href}'>";
 						$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
 						$out[] = "</a>";
-        } 
+        }
         $out[] = "</td>";
 				// move down (if not last)
 				$out[] = "<td>";
-				if ($i < $db->nf() - 1) 
+				if ($i < $db->nf() - 1)
         {
-						$href = "?movedown_doz=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker"; 
-						$img_src = "images/move_down.gif"; 
+						$href = "?movedown_doz=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker";
+						$img_src = "images/move_down.gif";
 						$out[] = "<a href='{$PHP_SELF}{$href}'>";
 						$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
 						$out[] = "</a>";
-				} 
+				}
         $out[] = "</td>";
 			}
 			$out[] = "<td>";
@@ -205,7 +205,7 @@ function get_dozent_data($s_id, $_fullname_sql)
                " (". $db->f("username") . ")</b></font>";
 
 			$out[] = "</td>";
-			if ($GLOBALS['DENOTATIONS']) 
+			if ($GLOBALS['DENOTATIONS'])
       {
 				$out[] = "<td>";
 				$out[] = "<select name=\"\" size=1>";
@@ -221,8 +221,8 @@ function get_dozent_data($s_id, $_fullname_sql)
     }
 		$out[] = "</table>";
   }
-	else 
-  {   // FIXME: How to detemine workgroup_mode.  
+	else
+  {   // FIXME: How to detemine workgroup_mode.
       // Case not possible, at least one project leader is needed.
       $workgroup_mode = 1;
 		$name = $workgroup_mode ? _("LeiterInnen") : _("DozentInnen");
@@ -232,30 +232,30 @@ function get_dozent_data($s_id, $_fullname_sql)
 	}
 	return implode("\n", $out);
 }
-function get_tutor_data($s_id, $_fullname_sql) 
+function get_tutor_data($s_id, $_fullname_sql)
 {
 	global $PHP_SELF;
 	$db = new DB_Seminar();
-	$db->query("SELECT ". $_fullname_sql['full_rev'] . 
+	$db->query("SELECT ". $_fullname_sql['full_rev'] .
              " AS fullname, seminar_user.user_id, seminar_user.position," .
-                " status, username" . 
-             " FROM seminar_user " . 
-                " LEFT JOIN auth_user_md5 USING(user_id)" . 
-                " LEFT JOIN user_info USING(user_id)" . 
-             " WHERE Seminar_id = '$s_id'" . 
-             " AND Status = 'tutor'" . 
+                " status, username" .
+             " FROM seminar_user " .
+                " LEFT JOIN auth_user_md5 USING(user_id)" .
+                " LEFT JOIN user_info USING(user_id)" .
+             " WHERE Seminar_id = '$s_id'" .
+             " AND Status = 'tutor'" .
              " ORDER BY seminar_user.position, Nachname");
-    
-	if ($db->nf()) 
+
+	if ($db->nf())
   {
 		$out[] = "<table>";
 		$i = 0;
-		while ($db->next_record()) 
+		while ($db->next_record())
     {
 			$out[] = "<tr>";
 			$out[]= "<td>";
-			$href =   "?delete_tut=".$db->f("username"). "&s_id=".$s_id."#anker"; 
-			$img_src = "images/trash.gif"; 
+			$href =   "?delete_tut=".$db->f("username"). "&s_id=".$s_id."#anker";
+			$img_src = "images/trash.gif";
 
 			$out[] = "<a href='{$PHP_SELF}{$href}'>";
 			$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
@@ -263,31 +263,31 @@ function get_tutor_data($s_id, $_fullname_sql)
 
 			$out[]= "</td>";
 
-			if ($db->nf() > 1) 
+			if ($db->nf() > 1)
       {
 				// move up (if not first)
 				$out[] = "<td>";
 				if ($i > 0)
-        { 
-						$href = "?moveup_tut=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker"; 
-						$img_src = "images/move_up.gif"; 
+        {
+						$href = "?moveup_tut=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker";
+						$img_src = "images/move_up.gif";
 
 						$out[] = "<a href='{$PHP_SELF}{$href}'>";
 						$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
 						$out[] = "</a>";
-        } 
+        }
         $out[] = "</td>";
 				// move down (if not last)
 				$out[] = "<td>";
-				if ($i < $db->nf() - 1) 
+				if ($i < $db->nf() - 1)
         {
-					$href = "?movedown_tut=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker"; 
-					$img_src = "images/move_down.gif"; 
+					$href = "?movedown_tut=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker";
+					$img_src = "images/move_down.gif";
 
 					$out[] = "<a href='{$PHP_SELF}{$href}'>";
 					$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
 					$out[] = "</a>";
-				} 
+				}
         $out[] = "</td>";
 			}
 			$out[] = "<td>";
@@ -300,8 +300,8 @@ function get_tutor_data($s_id, $_fullname_sql)
     }
 		$out[] = "</table>";
   }
-	else 
-  {   // FIXME: How to detemine workgroup_mode.  
+	else
+  {   // FIXME: How to detemine workgroup_mode.
       // Case not possible, at least one project leader is needed.
       $workgroup_mode = 1;
 		$name = $workgroup_mode ? _("Mitglieder") : _("TutorInnen");
@@ -313,9 +313,9 @@ function get_tutor_data($s_id, $_fullname_sql)
 }
 
 // move Dozenten
-if ($moveup_doz) 
+if ($moveup_doz)
 {
-   if ($perm->have_studip_perm("dozent",$s_id)) 
+   if ($perm->have_studip_perm("dozent",$s_id))
    {
       move_dozent($moveup_doz, $s_id, "up");
 
@@ -324,35 +324,35 @@ if ($moveup_doz)
 	else
    {
 		$msg .= "error§" . _("Sie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.") . "§";
-   
+
    }
 }
 
-if ($movedown_doz) 
+if ($movedown_doz)
 {
-	if ($perm->have_studip_perm("dozent",$s_id)) 
+	if ($perm->have_studip_perm("dozent",$s_id))
    {
       move_dozent($movedown_doz, $s_id, "down");
 
       $user_moved = TRUE;
-	} 
-   else 
+	}
+   else
    {
 		$msg .= "error§" . _("Sie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.") . "§";
    }
 }
 
-function move_dozent ($username, $s_id, $direction) 
+function move_dozent ($username, $s_id, $direction)
 {
 	$user_id = get_userid($username);
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
-	$db->query("SELECT position FROM seminar_user" . 
+	$db->query("SELECT position FROM seminar_user" .
                    " WHERE Seminar_id = '$s_id'" .
                    " AND user_id ='$user_id' ");
 
-	if ($db->next_record()) 
+	if ($db->next_record())
    {
 		$position = $db->f('position');
 		$position_alt = $position;
@@ -361,24 +361,24 @@ function move_dozent ($username, $s_id, $direction)
 
 		$db->query( "UPDATE seminar_user" .
                   " SET position =  '$position_alt'" .
-                  " WHERE Seminar_id = '$s_id'" . 
+                  " WHERE Seminar_id = '$s_id'" .
                   "  AND status = 'dozent' " .
                   "  AND position = '$position'");
 
-		$db2->query( "UPDATE seminar_user" . 
+		$db2->query( "UPDATE seminar_user" .
                   " SET position =  '$position'" .
                   " WHERE Seminar_id = '$s_id'" .
                   " AND status = 'dozent' " .
                   " AND user_id = '$user_id'");
-		
+
 		if ($db->affected_rows() && $db2->affected_rows()) return true;
 	}
 	return false;
 }
 // move Tutoren
-if ($moveup_tut) 
+if ($moveup_tut)
 {
-   if ($perm->have_studip_perm("dozent",$s_id)) 
+   if ($perm->have_studip_perm("dozent",$s_id))
    {
       move_tutor($moveup_tut, $s_id, "up");
 
@@ -387,34 +387,34 @@ if ($moveup_tut)
 	else
    {
 		$msg .= "error§" . _("Sie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.") . "§";
-   
+
    }
 }
 
-if ($movedown_tut) 
+if ($movedown_tut)
 {
-	if ($perm->have_studip_perm("dozent",$s_id)) 
+	if ($perm->have_studip_perm("dozent",$s_id))
    {
       move_tutor($movedown_tut, $s_id, "down");
 
       $user_moved = TRUE;
-	} 
-   else 
+	}
+   else
    {
 		$msg .= "error§" . _("Sie haben keine Berechtigung diese Veranstaltung zu ver&auml;ndern.") . "§";
    }
 }
 
-function move_tutor ($username, $s_id, $direction) 
+function move_tutor ($username, $s_id, $direction)
 {
 	$user_id = get_userid($username);
 
 	$db=new DB_Seminar;
-	$db->query("SELECT position FROM seminar_user" . 
+	$db->query("SELECT position FROM seminar_user" .
                    " WHERE Seminar_id = '$s_id'" .
                    " AND user_id ='$user_id' ");
 
-	if ($db->next_record()) 
+	if ($db->next_record())
    {
 		if ($direction == "up")
       {
@@ -428,21 +428,21 @@ function move_tutor ($username, $s_id, $direction)
 
 		$db->query( "UPDATE seminar_user" .
                   " SET position =  '$position_alt'" .
-                  " WHERE Seminar_id = '$s_id'" . 
+                  " WHERE Seminar_id = '$s_id'" .
                   "  AND status = 'tutor' " .
                   "  AND position = '$position'");
 
-		if (!$db->affected_rows()) 
+		if (!$db->affected_rows())
       {
          return false;
       }
 
-		$db->query( "UPDATE seminar_user" . 
+		$db->query( "UPDATE seminar_user" .
                   " SET position =  '$position'" .
                   " WHERE Seminar_id = '$s_id'" .
                   " AND status = 'tutor' " .
                   " AND user_id = '$user_id'");
-		if (!$db->affected_rows()) 
+		if (!$db->affected_rows())
       {
          return false;
       }
@@ -460,19 +460,19 @@ if ($delete_doz) {
 			$msg .= sprintf ("error§" . _("Die Veranstaltung muss wenigstens <b>einen</b> %s eingetragen haben! Tragen Sie zun&auml;chst einen anderen ein, um diesen zu l&ouml;schen.") . "§", ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["workgroup_mode"]) ? _("Leiter") : _("Dozenten"));
 		else {
 
-         $db2->query ( "SELECT position " . 
-                       " FROM seminar_user " . 
-                       " WHERE Seminar_id = '$s_id' " . 
+         $db2->query ( "SELECT position " .
+                       " FROM seminar_user " .
+                       " WHERE Seminar_id = '$s_id' " .
                        " AND user_id = '".get_userid($delete_doz)."' ");
 
-         $db2->next_record();   
+         $db2->next_record();
          $position = $db2->f("position");
 
 			$db2->query ("DELETE FROM seminar_user" .
-                      " WHERE Seminar_id = '$s_id'" .  
+                      " WHERE Seminar_id = '$s_id'" .
                       " AND user_id ='".get_userid($delete_doz)."' ");
 
-			if ($db2->affected_rows()) 
+			if ($db2->affected_rows())
          {
             re_sort_dozenten($s_id, $position);
 
@@ -488,17 +488,17 @@ if ($delete_doz) {
 if ($delete_tut) {
 	if ($perm->have_studip_perm("dozent",$s_id)) {
 
-         $db2->query ( "SELECT position " . 
-                       " FROM seminar_user " . 
-                       " WHERE Seminar_id = '$s_id' " . 
+         $db2->query ( "SELECT position " .
+                       " FROM seminar_user " .
+                       " WHERE Seminar_id = '$s_id' " .
                        " AND user_id = '".get_userid($delete_tut)."' ");
 
-         $db2->next_record();   
+         $db2->next_record();
          $position = $db2->f("position");
 
 		   $db2->query ("DELETE FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id ='".get_userid($delete_tut)."' ");
 		if ($db2->affected_rows()) {
-         
+
          re_sort_tutoren($s_id, $position);
 
 			$msg .= "msg§" . sprintf(_("Der Nutzer <b>%s</b> wurde aus der Veranstaltung gel&ouml;scht."), get_fullname_from_uname($delete_tut,'full',true)) . "§";
@@ -610,7 +610,7 @@ if ($s_send) {
 		if ($add_doz_x && $perm->have_studip_perm("dozent",$s_id)) {
 			$add_doz_id=get_userid($add_doz);
 			$group=select_group($temp_admin_seminare_start_time);
-            $next_pos = get_next_position("dozent",$s_id);  
+            $next_pos = get_next_position("dozent",$s_id);
 			$query = "SELECT user_id, status FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$add_doz_id'";
 			$db2->query($query);
 			if ($db2->next_record()){ //User schon da
@@ -639,10 +639,10 @@ if ($s_send) {
 				if ($db2->f("status") == "dozent"){		// User schon da aber Dozent, also nix tun! (Selbstdegradierung ist zwar schoen, wollen wir aber nicht, sonst ist der Dozent futsch)
 					$query = '';
 				} else {							//User schon da aber was anderes (unterhalb Tutor), also Hochstufen.
-					$query = "UPDATE seminar_user SET status = 'tutor', position='$next_pos' WHERE Seminar_id = '$s_id' AND user_id = '$add_tut_id'";
+					$query = "UPDATE seminar_user SET status = 'tutor', position='$next_pos', visible='yes' WHERE Seminar_id = '$s_id' AND user_id = '$add_tut_id'";
 				}
 			} else {								//User noch nicht da
-				$query = "INSERT INTO seminar_user SET Seminar_id = '$s_id', user_id = '$add_tut_id', status = 'tutor', gruppe = '$group', mkdate = '".time()."', position='$next_pos'";
+				$query = "INSERT INTO seminar_user SET Seminar_id = '$s_id', user_id = '$add_tut_id', status = 'tutor', gruppe = '$group', mkdate = '".time()."', position='$next_pos', visible='yes'";
 			}
 			if ($query) {
 				$db3->query($query);				//Tutor eintragen
@@ -924,9 +924,9 @@ if (($s_id) && (auth_check())) {
 					printf ("<td %s align=right>%s</td>", $cssSw->getFullClass(), (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("DozentInnen") : _("LeiterInnen"));
 				?>
 				<td class="<? echo $cssSw->getClass() ?>" align="left" colspan=1>
-   
+
             <?= get_dozent_data($s_id,$_fullname_sql) ?>
-  
+
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align="left" valign="top">
 					<?

@@ -1531,7 +1531,7 @@ if (($form == 6) && ($jump_next_x))
                   $next_pos = get_next_position("tutor",$sem_create_data["sem_id"]);
 						$query = "insert into seminar_user SET Seminar_id = '".
 							$sem_create_data["sem_id"]."', user_id = '".
-							$key."', status = 'tutor', gruppe = '$group', mkdate = '".time()."', position = '$next_pos'";
+							$key."', status = 'tutor', gruppe = '$group', mkdate = '".time()."', position = '$next_pos', visible='yes'";
 						$db3->query($query);			     // Tutor eintragen
 							if ($db3->affected_rows() >= 1)
 								$count_tut++;
@@ -1766,7 +1766,7 @@ switch ($level) {
 		$CURRENT_PAGE=_("Veranstaltungs-Assistent");
 		break;
 	case '8':
-		//This Help-Page won't help.... $HELP_KEYWORD="Basis.VeranstaltungsAssistentLiteratur-UndLinkliste"; 
+		//This Help-Page won't help.... $HELP_KEYWORD="Basis.VeranstaltungsAssistentLiteratur-UndLinkliste";
 		$HELP_KEYWORD="Basis.VeranstaltungsAssistent";
 		$CURRENT_PAGE=_("Veranstaltungs-Assistent - Schritt 7: Freie Informationsseite");
 		break;

@@ -242,7 +242,7 @@ if (Seminar_Session::check_ticket($studipticket)){
 					$userchange = $db->f("user_id");
 					$fullname = $db->f("fullname");
 					$next_pos = get_next_position("tutor",$id);
-					$db->query("UPDATE seminar_user SET status='tutor', position='$next_pos' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
+					$db->query("UPDATE seminar_user SET status='tutor', position='$next_pos', visible='yes' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
 					if($db->affected_rows()) $msgs[] = $fullname;
 				}
 			}
@@ -639,12 +639,12 @@ check_admission();
 $db5->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$id'");
 
 if ($perm->have_perm("dozent")) {
-	$sem_type = $SessSemName["art_num"];  
-	
+	$sem_type = $SessSemName["art_num"];
+
 	$sem_view_rights = array();
 
 	$db5->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$sem_type'");
-	
+
 	while ($db5->next_record()) {
 	    $sem_view_rights[$db5->f("datafield_id")] = TRUE;
 	}
@@ -1397,7 +1397,7 @@ if ($rechte) {
 		<a href="sms_send.php?sms_source_page=teilnehmer.php&course_id=<?=$SessSemName[1]?>&emailrequest=1&subject=<?=rawurlencode($SessSemName[0])?>&filter=waiting">
 		<img src="<?=$GLOBALS['ASSETS_URL']?>images/mailnachricht.gif" border="0" vspace="3" hspace="3" align="absmiddle">
 		<span style="font-size:80%">
-		<?=_("Systemnachricht mit Emailweiterleitung an alle Wartenden verschicken")?> 
+		<?=_("Systemnachricht mit Emailweiterleitung an alle Wartenden verschicken")?>
 		</span></a>
 		</td>
 		</tr>
