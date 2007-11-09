@@ -670,6 +670,8 @@ function form($refresh = FALSE) {
 		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" /></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
 		$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
+		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("geschützter Inhalt:") . "&nbsp;</font>";
+		$print.= "\n<input style=\"vertical-align:middle\" type=\"checkbox\" value=\"1\" name=\"protected\"></td></tr>";
 		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen") . "</font></td></tr>";
 	} else if ($folder_system_data['zipupload']){
 		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("2. Klicken Sie auf <b>'absenden'</b>, um das Ziparchiv hochzuladen und in diesem Ordner zu entpacken.") . "</font></td></tr>";
@@ -894,7 +896,7 @@ function upload($the_file, $refresh = false) {
 
 //Erzeugen des Datenbankeintrags zur Datei
 function insert_entry_db($range_id, $sem_id=0, $refresh = FALSE) {
-	global $the_file_name, $the_file_size, $dokument_id, $description, $name, $user, $upload_seminar_id;
+	global $the_file_name, $the_file_size, $dokument_id, $description, $name, $user, $upload_seminar_id, $protected;
 
 	$fn1 = strrchr($the_file_name,"/");  // Unix-Pfadtrenner
 	$fn2 = strrchr($the_file_name,"\\"); // Windows-Pfadtrenner
@@ -914,6 +916,7 @@ function insert_entry_db($range_id, $sem_id=0, $refresh = FALSE) {
 			$doc->setValue('seminar_id' , $upload_seminar_id);
 			$doc->setValue('description' , stripslashes($description));
 			$doc->setValue('name' , stripslashes($name));
+			$doc->setValue('protected' , (int)$protected);
 		} else {
 			if (!$doc->getValue('name') || $doc->getValue('filename') == $doc->getValue('name')){
 				$doc->setValue('name' , stripslashes($name));
