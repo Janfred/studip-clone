@@ -34,6 +34,33 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+global
+	$auth,
+	$AUTO_INSERT_SEM,
+	$ELEARNING_INTERFACE_ENABLE,
+	$folder_system_data,
+	$forum,
+	$ILIAS_CONNECT_ENABLE,
+	$i_page,
+	$perm,
+	$rechte,
+	$RELATIVE_PATH_ELEARNING_INTERFACE,
+	$RELATIVE_PATH_LEARNINGMODULES,
+	$RELATIVE_PATH_RESOURCES,
+	$RESOURCES_ENABLE,
+	$SEM_CLASS,
+	$SEM_TYPE,
+	$SemUserStatus,
+	$SessSemName,
+	$_show_scm,
+	$supportdb_data,
+	$SUPPORT_ENABLE,
+	$tooltip,
+	$type,
+	$user,
+	$view;
+
+
 //only if there's an open object
 
 if (isset($SessSemName) && $SessSemName[0] != "") {

@@ -1,4 +1,5 @@
 <?
+/* vim: noexpandtab */
 /*
 links_about.inc.php - Navigation fuer die Uebersichtsseiten.
 Copyright (C) 2002	Stefan Suchi <suchi@gmx.de>,
@@ -20,6 +21,20 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
+global
+	$alt,
+	$auth,
+	$CALENDAR_ENABLE,
+	$ELEARNING_INTERFACE_ENABLE,
+	$ILIAS_CONNECT_ENABLE,
+	$i_page,
+	$js,
+	$MAIL_NOTIFICATION_ENABLE,
+	$perm,
+	$username,
+	$view;
+
 
 require_once 'lib/include/reiter.inc.php';
 
