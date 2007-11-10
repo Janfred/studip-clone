@@ -27,6 +27,8 @@ $IMAGE_PROXY_CACHE_LIFETIME = 86400;
 $IMAGE_PROXY_MAX_FILES_IN_CACHE = 3000;
 $IMAGE_PROXY_GC_PROBABILITY = 1;
 
+ini_set('default_socket_timeout', 5);
+
 function get_error_image($error){
 	global $IMAGE_PROXY_PATH;
 	$errorstring = "image proxy error - " . $error;
@@ -106,24 +108,30 @@ if(!($check = check_image_cache($id))){
 		$c = 0;
 		$f = fopen($url, 'rb');
 		if($f){
+			stream_set_timeout($f, 3);
 			while (!feof($f)) {
 				$image .= fread($f, 8192);
 				++$c;
 				if($c * 8192 > $IMAGE_PROXY_MAX_CONTENT_LENGTH)	break;		
 			}
 			fclose($f);
-		}
-		if($c * 8192 < $IMAGE_PROXY_MAX_CONTENT_LENGTH){
-			$f = fopen($imagefile, 'wb');
-			fwrite($f, $image);
-			fclose($f);
-			$check = refresh_image_cache($id, $headers['Content-Type'] ,filesize($imagefile), '');
+			if($c * 8192 < $IMAGE_PROXY_MAX_CONTENT_LENGTH){
+				$f = fopen($imagefile, 'wb');
+				fwrite($f, $image);
+				fclose($f);
+				$check = refresh_image_cache($id, $headers['Content-Type'] ,filesize($imagefile), '');
+			} else {
+				list(, $length) = get_error_image('too big');
+				$check = refresh_image_cache($id,'image/gif',$length,'too big');
+			}
 		} else {
-			list(, $length) = get_error_image('too big');
-			$check = refresh_image_cache($id,'image/gif',$length,'too big');
+			list(, $length) = get_error_image('no response');
+			$check = refresh_image_cache($id,'image/gif',$length,'no response');
 		}
+		
 	}
 }
+
 list($id, $last_modified, $length, $type) = $check;
 $if_modified_since = strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']);
 if($if_modified_since == $last_modified){
