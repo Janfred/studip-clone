@@ -1,5 +1,3 @@
 document.observe('dom:loaded', function() {
-  document.getElementsByClassName("effect_highlight").each(
-    function(e) { new Effect.Highlight(e); }
-  );
+  $$(".effect_highlight").invoke('highlight', {startcolor:"#fc42bc"});
 });
