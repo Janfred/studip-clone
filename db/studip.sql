@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 2.7.0-pl1
+-- version 2.6.4-pl4
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Erstellungszeit: 31. Januar 2007 um 12:31
+-- Erstellungszeit: 28. September 2007 um 17:27
 -- Server Version: 5.0.26
--- PHP-Version: 4.4.4-0.dotdeb.1
+-- PHP-Version: 5.2.0
 -- 
--- Datenbank: `studip15`
+-- Datenbank: `studip`
 -- 
 
 -- --------------------------------------------------------
@@ -36,6 +36,22 @@ CREATE TABLE `Institute` (
   PRIMARY KEY  (`Institut_id`),
   KEY `fakultaets_id` (`fakultaets_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `admission_group`
+-- 
+
+DROP TABLE IF EXISTS `admission_group`;
+CREATE TABLE `admission_group` (
+  `group_id` varchar(32) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `status` tinyint(3) unsigned NOT NULL,
+  `chdate` int(10) unsigned NOT NULL,
+  `mkdate` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`group_id`)
+) TYPE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -155,6 +171,22 @@ CREATE TABLE `auth_user_md5` (
   PRIMARY KEY  (`user_id`),
   UNIQUE KEY `k_username` (`username`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `aux_lock_rules`
+-- 
+
+DROP TABLE IF EXISTS `aux_lock_rules`;
+CREATE TABLE `aux_lock_rules` (
+  `lock_id` varchar(32) NOT NULL default '',
+  `name` varchar(255) NOT NULL default '',
+  `description` text NOT NULL,
+  `attributes` text NOT NULL,
+  `sorting` text NOT NULL,
+  PRIMARY KEY  (`lock_id`)
+) TYPE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -323,13 +355,15 @@ DROP TABLE IF EXISTS `datafields`;
 CREATE TABLE `datafields` (
   `datafield_id` varchar(32) NOT NULL default '',
   `name` varchar(255) default NULL,
-  `object_type` enum('sem','inst','user') default NULL,
+  `object_type` enum('sem','inst','user','userinstrole','usersemdata','roleinstdata') default NULL,
   `object_class` varchar(10) default NULL,
   `edit_perms` enum('user','autor','tutor','dozent','admin','root') default NULL,
-  `view_perms` enum('all','user','autor','tutor','dozent','admin','root') NOT NULL default 'all',
+  `view_perms` enum('all','user','autor','tutor','dozent','admin','root') default NULL,
   `priority` tinyint(3) unsigned NOT NULL default '0',
   `mkdate` int(20) unsigned default NULL,
   `chdate` int(20) unsigned default NULL,
+  `type` enum('bool','textline','textarea','selectbox','date','time','email','url','phone','radio','combo') NOT NULL default 'textline',
+  `typeparam` text NOT NULL,
   PRIMARY KEY  (`datafield_id`),
   KEY `object_type` (`object_type`)
 ) TYPE=MyISAM;
@@ -347,7 +381,10 @@ CREATE TABLE `datafields_entries` (
   `content` text,
   `mkdate` int(20) unsigned default NULL,
   `chdate` int(20) unsigned default NULL,
-  PRIMARY KEY  (`datafield_id`,`range_id`)
+  `sec_range_id` varchar(32) NOT NULL default '',
+  PRIMARY KEY  (`datafield_id`,`range_id`,`sec_range_id`),
+  KEY `range_id` (`range_id`,`datafield_id`),
+  KEY `datafield_id_2` (`datafield_id`,`sec_range_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
@@ -570,6 +607,37 @@ CREATE TABLE `evalquestion` (
 -- --------------------------------------------------------
 
 -- 
+-- Tabellenstruktur für Tabelle `ex_termine`
+-- 
+
+DROP TABLE IF EXISTS `ex_termine`;
+CREATE TABLE `ex_termine` (
+  `termin_id` varchar(32) NOT NULL default '',
+  `range_id` varchar(32) NOT NULL default '',
+  `autor_id` varchar(32) NOT NULL default '',
+  `content` varchar(255) NOT NULL default '',
+  `description` text,
+  `date` int(20) NOT NULL default '0',
+  `end_time` int(20) NOT NULL default '0',
+  `mkdate` int(20) NOT NULL default '0',
+  `chdate` int(20) NOT NULL default '0',
+  `date_typ` tinyint(4) NOT NULL default '0',
+  `topic_id` varchar(32) default NULL,
+  `expire` int(20) default NULL,
+  `repeat` varchar(128) default NULL,
+  `color` varchar(20) default NULL,
+  `priority` tinyint(4) default NULL,
+  `raum` varchar(255) default NULL,
+  `metadate_id` varchar(32) default NULL,
+  `resource_id` varchar(32) NOT NULL default '',
+  PRIMARY KEY  (`termin_id`),
+  KEY `range_id` (`range_id`,`date`),
+  KEY `metadate_id` (`metadate_id`,`date`)
+) TYPE=MyISAM PACK_KEYS=1;
+
+-- --------------------------------------------------------
+
+-- 
 -- Tabellenstruktur für Tabelle `extern_config`
 -- 
 
@@ -580,6 +648,7 @@ CREATE TABLE `extern_config` (
   `config_type` int(4) NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
   `is_standard` int(4) NOT NULL default '0',
+  `config` mediumtext NOT NULL,
   `mkdate` int(20) NOT NULL default '0',
   `chdate` int(20) NOT NULL default '0',
   PRIMARY KEY  (`config_id`,`range_id`)
@@ -626,6 +695,105 @@ CREATE TABLE `guestbook` (
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `his_abschl`
+-- 
+
+DROP TABLE IF EXISTS `his_abschl`;
+CREATE TABLE `his_abschl` (
+  `abint` char(2) NOT NULL default '',
+  `aikz` char(1) default NULL,
+  `ktxt` char(10) default NULL,
+  `dtxt` char(25) default NULL,
+  `ltxt` char(100) default NULL,
+  `astat` char(2) default NULL,
+  `hrst` char(10) default NULL,
+  `part` char(2) default NULL,
+  `anzstg` smallint(6) default NULL,
+  `kzfaarray` char(10) default NULL,
+  `mag_laa` char(1) default NULL,
+  `sortkz1` char(2) default NULL,
+  `anzstgmin` smallint(6) default NULL,
+  `sprache` char(3) default NULL,
+  `refabint` char(2) default NULL,
+  `efh` char(4) default NULL,
+  PRIMARY KEY  (`abint`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `his_abstgv`
+-- 
+
+DROP TABLE IF EXISTS `his_abstgv`;
+CREATE TABLE `his_abstgv` (
+  `ktxt` varchar(50) default NULL,
+  `dtxt` varchar(50) default NULL,
+  `ltxt` varchar(100) default NULL,
+  `fb` char(2) default NULL,
+  `kzfa` char(1) NOT NULL default '',
+  `kzfaarray` char(3) default NULL,
+  `abschl` char(2) NOT NULL default '',
+  `stg` char(3) NOT NULL default '',
+  `pversion` int(11) NOT NULL default '0',
+  `regelstz` tinyint(2) default NULL,
+  `login_part` char(2) default NULL,
+  `studip_studiengang` varchar(32) NOT NULL default '',
+  PRIMARY KEY  (`abschl`,`stg`,`kzfa`,`pversion`),
+  KEY `studip_studiengang` (`studip_studiengang`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `his_pvers`
+-- 
+
+DROP TABLE IF EXISTS `his_pvers`;
+CREATE TABLE `his_pvers` (
+  `pvers` smallint(6) NOT NULL default '0',
+  `aikz` char(1) default NULL,
+  `ktxt` char(10) default NULL,
+  `dtxt` char(25) default NULL,
+  `ltxt` char(50) default NULL,
+  `sprache` char(3) default NULL,
+  `refpvers` smallint(6) default NULL,
+  PRIMARY KEY  (`pvers`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `his_stg`
+-- 
+
+DROP TABLE IF EXISTS `his_stg`;
+CREATE TABLE `his_stg` (
+  `stg` char(3) NOT NULL default '',
+  `ktxt` varchar(10) default NULL,
+  `dtxt` varchar(25) default NULL,
+  `ltxt` varchar(100) default NULL,
+  `fb` char(2) default NULL,
+  PRIMARY KEY  (`stg`)
+) TYPE=MyISAM COMMENT='Studienfaecher aus der HIS DB';
+
+-- --------------------------------------------------------
+-- 
+-- Tabellenstruktur für Tabelle `image_proxy_cache`
+-- 
+
+DROP TABLE IF EXISTS `image_proxy_cache`;
+CREATE TABLE `image_proxy_cache` (
+  `id` char(32) NOT NULL,
+  `type` char(10) NOT NULL,
+  `length` int(10) unsigned NOT NULL,
+  `error` char(15) NOT NULL,
+  `chdate` timestamp NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `chdate` (`chdate`,`id`)
+) TYPE=MyISAM;
 
 -- 
 -- Tabellenstruktur für Tabelle `kategorien`
@@ -1182,6 +1350,7 @@ CREATE TABLE `resources_requests` (
   `resource_id` varchar(32) NOT NULL default '',
   `category_id` varchar(32) NOT NULL default '',
   `comment` text,
+  `reply_comment` text,
   `closed` tinyint(3) unsigned default NULL,
   `mkdate` int(20) unsigned default NULL,
   `chdate` int(20) unsigned default NULL,
@@ -1483,9 +1652,9 @@ CREATE TABLE `seminar_user` (
 
 DROP TABLE IF EXISTS `seminar_user_schedule`;
 CREATE TABLE `seminar_user_schedule` (
-	`range_id` varchar(32) NOT NULL default '',
-	`user_id` varchar(32) NOT NULL default '',
-	PRIMARY KEY  (`range_id`,`user_id`)
+  `range_id` varchar(32) NOT NULL default '',
+  `user_id` varchar(32) NOT NULL default '',
+  PRIMARY KEY  (`range_id`,`user_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
@@ -1533,6 +1702,7 @@ CREATE TABLE `seminare` (
   `visible` tinyint(2) unsigned NOT NULL default '1',
   `showscore` tinyint(3) default '0',
   `modules` int(10) unsigned default NULL,
+  `aux_lock_rule` varchar(32) default NULL,
   PRIMARY KEY  (`Seminar_id`),
   KEY `Institut_id` (`Institut_id`),
   KEY `visible` (`visible`),
@@ -1588,6 +1758,8 @@ CREATE TABLE `statusgruppe_user` (
   `statusgruppe_id` varchar(32) NOT NULL default '',
   `user_id` varchar(32) NOT NULL default '',
   `position` int(11) NOT NULL default '0',
+  `visible` tinyint(4) NOT NULL default '1',
+  `inherit` tinyint(4) NOT NULL default '1',
   PRIMARY KEY  (`statusgruppe_id`,`user_id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
@@ -1612,6 +1784,165 @@ CREATE TABLE `statusgruppen` (
   KEY `range_id` (`range_id`),
   KEY `position` (`position`)
 ) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `stm_abstract`
+-- 
+
+DROP TABLE IF EXISTS `stm_abstract`;
+CREATE TABLE `stm_abstract` (
+  `stm_abstr_id` varchar(32) NOT NULL default '',
+  `id_number` varchar(10) default NULL COMMENT 'alphanummerische Identifikationsnummer für das Modul',
+  `duration` varchar(155) default NULL,
+  `credits` tinyint(3) unsigned default NULL COMMENT 'Anzahl der Leistungspunkte/Kreditpunkte',
+  `workload` smallint(6) unsigned default NULL COMMENT 'Studentischer Arbeitsaufwand in Stunden',
+  `turnus` tinyint(1) default NULL COMMENT '(optional) Angebotsturnus - Modulbeginn',
+  `mkdate` int(20) default NULL COMMENT 'Erstellungdatum',
+  `chdate` int(20) default NULL COMMENT 'Datum der letzten Aenderung',
+  `homeinst` varchar(32) default NULL,
+  PRIMARY KEY  (`stm_abstr_id`)
+) TYPE=MyISAM COMMENT='abstrakte Module';
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `stm_abstract_assign`
+-- 
+
+DROP TABLE IF EXISTS `stm_abstract_assign`;
+CREATE TABLE `stm_abstract_assign` (
+  `stm_abstr_id` varchar(32) NOT NULL default '',
+  `stm_type_id` varchar(32) NOT NULL default '' COMMENT 'ID eines Modultyps',
+  `abschl` char(3) NOT NULL default '' COMMENT 'ID eines Studienabschlusses',
+  `stg` char(3) NOT NULL default '' COMMENT 'ID eines Studienprogramms/-fachs',
+  `pversion` varchar(8) NOT NULL default '' COMMENT 'Version der Prüfungsordnung',
+  `earliest` tinyint(4) default NULL COMMENT 'frührester Zeitpunkt (Semester)',
+  `latest` tinyint(4) default NULL COMMENT 'spätester Zpkt.',
+  `recommed` tinyint(4) default NULL COMMENT 'empfohlener Zpkt.',
+  PRIMARY KEY  (`stm_abstr_id`,`abschl`,`stg`,`pversion`),
+  KEY `studycourse` (`abschl`,`stg`)
+) TYPE=MyISAM COMMENT='Zuordnung abstrakte Module <-> Studienprogramme';
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `stm_abstract_elements`
+-- 
+
+DROP TABLE IF EXISTS `stm_abstract_elements`;
+CREATE TABLE `stm_abstract_elements` (
+  `element_id` varchar(32) NOT NULL default '' COMMENT 'ID eines abstrakten Modulbestandzeiles',
+  `stm_abstr_id` varchar(32) NOT NULL default '' COMMENT 'ID eines abstrakten Studienmodules',
+  `element_type_id` varchar(32) NOT NULL default '' COMMENT 'um welche Art von Element handelt es sich',
+  `custom_name` varchar(50) default NULL COMMENT 'selbstgewählter Name',
+  `sws` tinyint(4) NOT NULL default '0' COMMENT 'Semesterwochenstunden für den Bestandteil',
+  `workload` int(4) NOT NULL default '0',
+  `semester` tinyint(1) default NULL COMMENT 'Sommer od. Winter (Sommer = 1; Winter = 2)',
+  `elementgroup` tinyint(4) NOT NULL default '0' COMMENT 'Kombinationsvariante',
+  `position` tinyint(4) NOT NULL default '0' COMMENT 'Reihenfolge ',
+  PRIMARY KEY  (`element_id`),
+  UNIQUE KEY `elem_integr` (`stm_abstr_id`,`elementgroup`,`position`)
+) TYPE=MyISAM COMMENT='Bestandteile eines Abstrakten Moduls (Elemente)';
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `stm_abstract_text`
+-- 
+
+DROP TABLE IF EXISTS `stm_abstract_text`;
+CREATE TABLE `stm_abstract_text` (
+  `stm_abstr_id` varchar(32) NOT NULL default '' COMMENT 'ID des abstrakten Studienmodules',
+  `lang_id` varchar(32) NOT NULL default '' COMMENT 'ID der verwendeten Sprache',
+  `title` varchar(155) NOT NULL default '' COMMENT 'Allgemeiner Modultitel (Name des Moduls)',
+  `subtitle` varchar(155) default NULL COMMENT 'optionaler Untertitel',
+  `topics` text NOT NULL COMMENT 'Inhalte (behandelte Themen etc.)',
+  `aims` text NOT NULL COMMENT 'Lernziele',
+  `hints` text,
+  PRIMARY KEY  (`stm_abstr_id`,`lang_id`)
+) TYPE=MyISAM COMMENT='(mehrsprachige) Texte der abstrakten Module';
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `stm_abstract_types`
+-- 
+
+DROP TABLE IF EXISTS `stm_abstract_types`;
+CREATE TABLE `stm_abstract_types` (
+  `stm_type_id` varchar(32) NOT NULL default '' COMMENT 'ID eines Modultyps',
+  `lang_id` varchar(32) NOT NULL default '' COMMENT 'ID der verwendeten Sprache',
+  `abbrev` varchar(5) NOT NULL default '' COMMENT 'Abkuerzung',
+  `name` varchar(25) NOT NULL default '' COMMENT 'vollstaendige Bezeichnung',
+  PRIMARY KEY  (`stm_type_id`,`lang_id`)
+) TYPE=MyISAM COMMENT='Typen abstrakter Module';
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `stm_element_types`
+-- 
+
+DROP TABLE IF EXISTS `stm_element_types`;
+CREATE TABLE `stm_element_types` (
+  `element_type_id` varchar(32) NOT NULL default '' COMMENT 'ID des Modulbestandteils',
+  `lang_id` varchar(32) NOT NULL default '' COMMENT 'ID der verwendeten Sprache',
+  `abbrev` varchar(5) default NULL COMMENT 'Kurzname',
+  `name` varchar(50) NOT NULL default '' COMMENT 'Name',
+  PRIMARY KEY  (`element_type_id`,`lang_id`)
+) TYPE=MyISAM COMMENT='Typen von möglichen Bestandteilen eines abstrakten Moduls';
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `stm_instances`
+-- 
+
+DROP TABLE IF EXISTS `stm_instances`;
+CREATE TABLE `stm_instances` (
+  `stm_instance_id` varchar(32) NOT NULL default '' COMMENT 'ID eines konkreten Studienmodules',
+  `stm_abstr_id` varchar(32) NOT NULL default '' COMMENT 'ID eines abstrakten Studienmodules',
+  `semester_id` varchar(32) NOT NULL default '' COMMENT 'ID des ersten Semesters in dem die Instanz stattfindet',
+  `lang_id` varchar(32) NOT NULL default '' COMMENT 'ID der Sprache in der das Modul angeboten wird',
+  `homeinst` varchar(32) default NULL COMMENT 'ID des anbietenden Institutes',
+  `creator` varchar(32) NOT NULL,
+  `responsible` varchar(32) default NULL COMMENT 'ID des Modulverantwortlichen Dozenten',
+  `complete` tinyint(1) NOT NULL default '0' COMMENT 'Erfassung komplett (0=FALSE)',
+  PRIMARY KEY  (`stm_instance_id`)
+) TYPE=MyISAM COMMENT='Instanzen der abstrakten Module';
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `stm_instances_elements`
+-- 
+
+DROP TABLE IF EXISTS `stm_instances_elements`;
+CREATE TABLE `stm_instances_elements` (
+  `stm_instance_id` varchar(32) NOT NULL default '' COMMENT 'ID eines konkreten Studienmodules',
+  `element_id` varchar(32) NOT NULL default '' COMMENT 'ID des abstrakten Modulbestandteils',
+  `sem_id` varchar(32) NOT NULL default '' COMMENT 'ID der konkreten Veranstaltung',
+  PRIMARY KEY  (`stm_instance_id`,`element_id`,`sem_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `stm_instances_text`
+-- 
+
+DROP TABLE IF EXISTS `stm_instances_text`;
+CREATE TABLE `stm_instances_text` (
+  `stm_instance_id` varchar(32) NOT NULL default '' COMMENT 'ID eines konkreten Studienmodules',
+  `lang_id` varchar(32) NOT NULL default '' COMMENT 'ID der verwendeten Sprache',
+  `title` varchar(155) NOT NULL default '' COMMENT 'Allgemeiner Modultitel',
+  `subtitle` varchar(155) default NULL COMMENT 'optionaler Untertitel',
+  `topics` text NOT NULL COMMENT 'Inhalte',
+  `hints` text,
+  PRIMARY KEY  (`stm_instance_id`,`lang_id`)
+) TYPE=MyISAM COMMENT='(mehrsprachige) Texte der instanziierten abstrakten Module';
 
 -- --------------------------------------------------------
 
@@ -1647,6 +1978,20 @@ CREATE TABLE `studip_ilias` (
 -- --------------------------------------------------------
 
 -- 
+-- Tabellenstruktur für Tabelle `teilnehmer_view`
+-- 
+
+DROP TABLE IF EXISTS `teilnehmer_view`;
+CREATE TABLE `teilnehmer_view` (
+  `datafield_id` varchar(40) NOT NULL default '',
+  `seminar_id` varchar(40) NOT NULL default '',
+  `active` tinyint(4) default NULL,
+  PRIMARY KEY  (`datafield_id`,`seminar_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
 -- Tabellenstruktur für Tabelle `termine`
 -- 
 
@@ -1664,10 +2009,45 @@ CREATE TABLE `termine` (
   `date_typ` tinyint(4) NOT NULL default '0',
   `topic_id` varchar(32) default NULL,
   `raum` varchar(255) default NULL,
+  `metadate_id` varchar(32) default NULL,
   PRIMARY KEY  (`termin_id`),
-  KEY `autor_id` (`autor_id`),
-  KEY `range_id` (`range_id`,`topic_id`)
+  KEY `metadate_id` (`metadate_id`,`date`),
+  KEY `range_id` (`range_id`,`date`)
 ) TYPE=MyISAM PACK_KEYS=1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `themen`
+-- 
+
+DROP TABLE IF EXISTS `themen`;
+CREATE TABLE `themen` (
+  `issue_id` varchar(32) NOT NULL default '',
+  `seminar_id` varchar(32) NOT NULL default '',
+  `author_id` varchar(32) NOT NULL default '',
+  `title` varchar(255) NOT NULL default '',
+  `description` text NOT NULL,
+  `priority` smallint(5) unsigned NOT NULL default '0',
+  `mkdate` int(10) unsigned NOT NULL default '0',
+  `chdate` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`issue_id`),
+  KEY `seminar_id` (`seminar_id`,`priority`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `themen_termine`
+-- 
+
+DROP TABLE IF EXISTS `themen_termine`;
+CREATE TABLE `themen_termine` (
+  `issue_id` varchar(32) NOT NULL default '',
+  `termin_id` varchar(32) NOT NULL default '',
+  PRIMARY KEY  (`issue_id`,`termin_id`),
+  KEY `termin_id` (`termin_id`,`issue_id`)
+) TYPE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -1773,6 +2153,23 @@ CREATE TABLE `user_studiengang` (
   `user_id` varchar(32) NOT NULL default '',
   `studiengang_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`user_id`,`studiengang_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `user_token`
+-- 
+
+DROP TABLE IF EXISTS `user_token`;
+CREATE TABLE `user_token` (
+  `user_id` varchar(32) NOT NULL,
+  `token` varchar(32) NOT NULL,
+  `expiration` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`,`token`,`expiration`),
+  KEY `index_expiration` (`expiration`),
+  KEY `index_token` (`token`),
+  KEY `index_user_id` (`user_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
