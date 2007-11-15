@@ -475,6 +475,7 @@ class Seminar_Auth extends Auth {
 		// first of all init I18N because seminar_open is not called here...
 		require_once('lib/language.inc.php');
 		require_once('lib/visual.inc.php');
+		require_once('lib/msg.inc.php');
 		require_once('config.inc.php');
 		require_once('lib/classes/HeaderController.class.php');
 

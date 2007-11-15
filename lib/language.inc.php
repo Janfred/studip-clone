@@ -223,6 +223,7 @@ function restoreLanguage() {
 */
 function setLocaleEnv($language, $language_domain = ''){
 	putenv("LANG=$language");
+	putenv("LANGUAGE=$language");
 	putenv("LC_ALL=$language");
 	$ret = setlocale(LC_ALL, '');
 	setlocale(LC_NUMERIC, 'C');
