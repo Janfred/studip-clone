@@ -19,7 +19,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-//$Id:$
+// $Id: $
 
 $IMAGE_PROXY_PATH = $GLOBALS['STUDIP_BASE_PATH'] . '/data/image_proxy_cache/';
 $IMAGE_PROXY_MAX_CONTENT_LENGTH = 1000000;
@@ -85,6 +85,9 @@ function garbage_collect_image_cache(){
 		$db->query("DELETE FROM image_proxy_cache WHERE id IN('".join("','",$delete)."')");
 	}
 }
+
+Config::GetInstance()->getValue('EXTERNAL_IMAGE_EMBEDDING') == 'proxy' OR die();
+
 ob_start();
 require_once "lib/datei.inc.php";
 if ((mt_rand() % 100) < $IMAGE_PROXY_GC_PROBABILITY ){
