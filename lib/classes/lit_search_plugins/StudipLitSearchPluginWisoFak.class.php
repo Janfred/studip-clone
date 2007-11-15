@@ -38,7 +38,7 @@ class StudipLitSearchPluginWisoFak extends StudipLitSearchPluginGvk{
 	function StudipLitSearchPluginWisoFak(){
 		parent::StudipLitSearchPluginGvk();
 		$this->description = "Bibliotheken der Wirtschafts- und Sozialwiss. Fakultäten";
-		$this->z_host = "z3950.gbv.de:20010/wisof_opc";
+		$this->z_host = "z3950.gbv.de:20010/2@goopc4.sub.uni-goettingen.de";
 		$this->z_profile = array('1016' => _("Basisindex [ALL]"), '4' => _("Titelstichwörter [TIT]"),
 								'5' => _("Serienstichwörter [SER]"), '21' => _("alle Klassifikationen [SYS]"),
 								'1004' => _("Person, Author [PER]"), '1005' => _("Körperschaften [KOR]"),
