@@ -33,6 +33,8 @@
 
 class Assets {
 
+  const NUMBER_OF_ALIASES = 2;
+
   /**
    * @ignore
    */
@@ -106,10 +108,10 @@ class Assets {
     # dynamic ASSETS_URL
     return sprintf(Assets::$assets_url,
                   $to == ''
-                    ? Assets::$counter_cache++ % 4
+                    ? Assets::$counter_cache++ % Assets::NUMBER_OF_ALIASES
                     # alternative implementation
                     # : hexdec(substr(sha1($to),-1)) & 3)
-                    : ord($to[1]) & 3)
+                    : ord($to[1]) & (Assets::NUMBER_OF_ALIASES - 1))
 
            . $to;
   }

@@ -70,18 +70,19 @@ class DynamicAssetsTestCase extends UnitTestCase {
 
 
   function test_url_without_arg_should_cycle() {
-    $this->assertEqual(Assets::url(), sprintf(DYNAMIC_ASSETS_URL, 0));
-    $this->assertEqual(Assets::url(), sprintf(DYNAMIC_ASSETS_URL, 1));
-    $this->assertEqual(Assets::url(), sprintf(DYNAMIC_ASSETS_URL, 2));
-    $this->assertEqual(Assets::url(), sprintf(DYNAMIC_ASSETS_URL, 3));
-    $this->assertEqual(Assets::url(), sprintf(DYNAMIC_ASSETS_URL, 0));
+    for ($i = 0; $i < Assets::NUMBER_OF_ALIASES + 1; ++$i)
+      $this->assertEqual(Assets::url(),
+                         sprintf(DYNAMIC_ASSETS_URL,
+                                 $i % Assets::NUMBER_OF_ALIASES));
   }
 
 
   function test_url_with_paramater_should_not_cycle() {
     $url = Assets::url('prototype.js');
     $url2 = Assets::url('prototype.js');
-    $this->assertWantedPattern('@http://www[0-3].example.com/public/@', $url);
+    $pattern = sprintf('@http://www[0-%d].example.com/public/@',
+                       Assets::NUMBER_OF_ALIASES - 1);
+    $this->assertWantedPattern($pattern, $url);
     $this->assertEqual($url, $url2);
   }
 }
