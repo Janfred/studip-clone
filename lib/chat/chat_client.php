@@ -64,7 +64,7 @@ function printJs($code){
 
 function fullNick($userid) {
 	global $chatServer,$chatid;
-	return $chatServer->getNick($userid,$chatid);
+	return (CHAT_NICKNAME == 'username' ? $chatServer->getNick($userid,$chatid) : $chatServer->getFullname($userid,$chatid));
 }
 
 //Hilfsfunktion, unterscheidet zwischen öffentlichen und privaten System Nachrichten
@@ -362,7 +362,7 @@ function outputLoop($chatid){
 				}
 				if (!$output){
 					$output = "<font color=\"".$chatServer->chatDetail[$chatid]['users'][$msg[0]]["color"]."\">"
-					. strftime("%H:%M:%S",$msg[2][1])." [".fullNick($msg[0])."] "
+					. strftime("%H:%M:%S",$msg[2][1])." [".htmlReady(fullNick($msg[0]))."] "
 					. formatReady($msg[1])."</font><br>";
 					if ($chatServer->chatDetail[$chatid]['log'][$user->id]){
 						$chat_log[] = strftime("%H:%M:%S",$msg[2][1])." [".fullNick($msg[0])."] " . $msg[1];

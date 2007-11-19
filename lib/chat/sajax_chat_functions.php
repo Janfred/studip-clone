@@ -220,7 +220,7 @@ function insert_message($chatid, $msg){
 		global $user, $chatServer, $do_page_close;
 		if (!$chatServer->isActiveUser($user->id,$chatid)) return ;
 		if ($chatid){
-			$chatServer->addMsg($user->id,$chatid,stripslashes($msg));
+			$chatServer->addMsg($user->id,$chatid,utf8_decode(stripslashes($msg)));
 			$user->set_last_action();
 		}
 		return;
@@ -256,7 +256,7 @@ function check_and_get_messages($chatid){
 			}
 			if (!$system){
 				$output .= "<font color=\"".$chatServer->chatDetail[$chatid]['users'][$msg[0]]["color"]."\">"
-				. strftime("%H:%M:%S",$msg[2][1])." [".fullNick($msg[0],$chatid)."] "
+				. strftime("%H:%M:%S",$msg[2][1])." [".htmlReady(fullNick($msg[0],$chatid))."] "
 				. formatReady($msg[1])."</font><br>";
 				if ($chatServer->chatDetail[$chatid]['log'][$user->id]){
 					$chat_log[] = strftime("%H:%M:%S",$msg[2][1])." [".fullNick($msg[0],$chatid)."] " . $msg[1];
@@ -291,7 +291,7 @@ function printJs($code){
 
 function fullNick($userid, $chatid) {
 	global $chatServer;
-	return $chatServer->getNick($userid,$chatid);
+	return (CHAT_NICKNAME == 'username' ? $chatServer->getNick($userid,$chatid) : $chatServer->getFullname($userid,$chatid));
 }
 
 //Hilfsfunktion, unterscheidet zwischen öffentlichen und privaten System Nachrichten

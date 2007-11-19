@@ -120,6 +120,13 @@ define("CHAT_SLEEP_TIME",500000);       //in usleep(micro s)
 */
 define("CHAT_TO_PREV_TIME",2.5);       //in Sekunden
 /**
+* Show username or fullname in front of messages
+*
+* 
+* @const CHAT_NICKNAME
+*/
+define("CHAT_NICKNAME", "fullname");       //"username" or "fullname"
+/**
 * Global array, contains pre-defined colors (use HTML compliant names)
 * @var array $chatColors
 */
