@@ -2651,7 +2651,7 @@ if ($level == 3) {
 									<?
 									$tmp_first_date = getCorrectedSemesterVorlesBegin(get_sem_num($sem_create_data["sem_start_time"]));
 									foreach ($all_semester as $val) {
-										if ( ($val['beginn'] < $tmp_first_date) && ($val['ende'] > $tmp_first_date) ) {
+										if ( ($val['beginn'] <= $tmp_first_date) && ($val['ende'] > $tmp_first_date) ) {
 											$end_date = $val['vorles_ende'];
 										}
 									}

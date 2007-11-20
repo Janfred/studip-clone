@@ -152,7 +152,7 @@ $tmp_first_date = getCorrectedSemesterVorlesBegin(get_sem_num($sem->getStartSeme
 $all_semester = $semester->getAllSemesterData();
 
 foreach ($all_semester as $val) {
-	if ( ($val['beginn'] < $tmp_first_date) && ($val['ende'] > $tmp_first_date) ) {
+	if ( ($val['beginn'] <= $tmp_first_date) && ($val['ende'] > $tmp_first_date) ) {
 		$end_date = $val['vorles_ende'];
 	}
 }

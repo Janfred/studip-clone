@@ -1181,7 +1181,7 @@ class Seminar {
 		$msg .= '<table cellspacing="0" cellpadding="0" border="0" height="100%" widht="100%"><tr><td valign="middle" align="center">'.$question;
 		$msg .= "<br/><br/><a href=\"$approvalCmd\">";
 		$msg .= '<img '.makebutton('ja2', 'src').' border="0"></a>&nbsp;&nbsp;';
-		$msg .= "<a href=\"$PHP_SELF?\">";
+		$msg .= "<a href=\"{$GLOBALS['PHP_SELF']}\">";
 		$msg .= '<img '.makebutton('nein', 'src').' border="0"></a>';
 		$msg .= '</td></tr></table>';
 		$msg .= '</div>';

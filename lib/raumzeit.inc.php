@@ -218,7 +218,7 @@ function raumzeit_editCycle() {
 
 function raumzeit_deleteCycle() {
 	global $_REQUEST, $sem;
-	$sem->createQuestion(sprintf(_("Sind Sie sicher, dass Sie den regelm&auml;&szlig;igen Eintrag \"%s\" l&ouml;schen m&ouml;chten?"), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'</b>'), $PHP_SELF."?cmd=doDeleteCycle&cycle_id=".$_REQUEST['cycle_id']);
+	$sem->createQuestion(sprintf(_("Sind Sie sicher, dass Sie den regelm&auml;&szlig;igen Eintrag \"%s\" l&ouml;schen m&ouml;chten?"), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'</b>'), $GLOBALS['PHP_SELF']."?cmd=doDeleteCycle&cycle_id=".$_REQUEST['cycle_id']);
 }
 
 function raumzeit_doDeleteCycle() {

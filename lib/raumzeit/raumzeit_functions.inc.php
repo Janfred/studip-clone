@@ -326,12 +326,12 @@ function raumzeit_get_semester_chooser(&$sem, &$semester, $filter) {
 		if ($selected == $key) {
 			$info_zw['eintrag'][] = array(
 					'icon' => 'forumrot.gif',
-					'text' => '<a href="'.$PHP_SELF.'?cmd=applyFilter&newFilter='.$key.'">'.$val.'</a>'
+					'text' => '<a href="'.$GLOBALS['PHP_SELF'].'?cmd=applyFilter&newFilter='.$key.'">'.$val.'</a>'
 					);
 		} else {
 			$info_zw['eintrag'][] = array(
 					'icon' => 'forumgrau.gif',
-					'text' => '<a href="'.$PHP_SELF.'?cmd=applyFilter&newFilter='.$key.'">'.$val.'</a>'
+					'text' => '<a href="'.$GLOBALS['PHP_SELF'].'?cmd=applyFilter&newFilter='.$key.'">'.$val.'</a>'
 					);
 		}
 	}
