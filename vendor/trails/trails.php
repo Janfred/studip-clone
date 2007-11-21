@@ -68,7 +68,7 @@ class Trails_Dispatcher {
    * @access public
    * @var    string
    */
-  public $e instanceof Trails_Exception$trails_uri;
+  public $trails_uri;
 
 
   /**
