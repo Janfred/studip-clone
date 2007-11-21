@@ -46,18 +46,38 @@ define('TRAILS_VERSION', '0.4.0');
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6380 2007-10-24 16:17:19Z mlunzena $
+ * @version   $Id: trails.php 6504 2007-11-21 11:42:43Z mlunzena $
  */
 
 class Trails_Dispatcher {
 
   # TODO (mlunzena) Konfiguration muss anders geschehen
-  public
-    $trails_root,
-    $trails_uri;
 
-  protected
-    $default_controller;
+  /**
+   * This is the absolute file path to the trails application directory.
+   *
+   * @access public
+   * @var    string
+   */
+  public $trails_root;
+
+
+  /**
+   * This is the URI to which routes to controller/actions are appended.
+   *
+   * @access public
+   * @var    string
+   */
+  public $e instanceof Trails_Exception$trails_uri;
+
+
+  /**
+   * This variable contains the route to the default controller.
+   *
+   * @access public
+   * @var    string
+   */
+  protected $default_controller;
 
 
   /**
@@ -131,7 +151,7 @@ class Trails_Dispatcher {
       $controller = new $class($this);
       $response = $controller->perform($unconsumed);
 
-    } catch (Trails_Exception $e) {
+    } catch (Exception $e) {
 
       ob_clean();
 
@@ -140,8 +160,13 @@ class Trails_Dispatcher {
                       htmlentities($e),
                       htmlentities($e->getTraceAsString()));
 
-      $response = new Trails_Response($body, $e->headers,
-                                      $e->getCode(), $e->getMessage());
+      if ($e instanceof Trails_Exception) {
+        $response = new Trails_Response($body, $e->headers, $e->getCode(),
+                                        $e->getMessage());
+      }
+      else {
+        $response = new Trails_Response($body, array(), 500, $e->getMessage());
+      }
     }
 
     return $response;
@@ -206,7 +231,7 @@ class Trails_Dispatcher {
   /**
    * Returns the absolute file path to a given relative controller path.
    *
-   * @param string   the relative path
+   * @param  string  the relative path
    *
    * @return string  the absolute path
    */
@@ -248,12 +273,15 @@ class Trails_Dispatcher {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6380 2007-10-24 16:17:19Z mlunzena $
+ * @version   $Id: trails.php 6504 2007-11-21 11:42:43Z mlunzena $
  */
 
 class Trails_Response {
 
 
+  /**
+   * @ignore
+   */
   private
     $body = '',
     $status,
@@ -396,7 +424,7 @@ class Trails_Response {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6380 2007-10-24 16:17:19Z mlunzena $
+ * @version   $Id: trails.php 6504 2007-11-21 11:42:43Z mlunzena $
  */
 
 class Trails_Controller {
@@ -444,6 +472,7 @@ class Trails_Controller {
     $before_filter_result = $this->before_filter($action, $args);
 
     # send action to controller
+    # TODO (mlunzena) shouldn't the after filter be triggered too?
     if (!(FALSE === $before_filter_result || $this->performed)) {
 
       $mapped_action = $this->map_action($action);
@@ -502,16 +531,17 @@ class Trails_Controller {
 
   /**
    * Callback function being called before an action is executed. If this
-   * function returns TRUE, the action will actually be called, otherwise
-   * an error will be generated and processing will be aborted.
+   * function does not return FALSE, the action will be called, otherwise
+   * an error will be generated and processing will be aborted. If this function
+   * already #rendered or #redirected, further processing of the action is
+   * withheld.
    *
-   * @param string Name of the action to perform.
-   * @param array  An array of arguments to the action.
+   * @param string  Name of the action to perform.
+   * @param array   An array of arguments to the action.
    *
-   * @return bool <description>
+   * @return bool
    */
   protected function before_filter(&$action, &$args) {
-    return TRUE;
   }
 
 
@@ -734,7 +764,7 @@ class Trails_Controller {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6380 2007-10-24 16:17:19Z mlunzena $
+ * @version   $Id: trails.php 6504 2007-11-21 11:42:43Z mlunzena $
  */
 
 class Trails_Inflector {
@@ -789,7 +819,7 @@ class Trails_Inflector {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6380 2007-10-24 16:17:19Z mlunzena $
+ * @version   $Id: trails.php 6504 2007-11-21 11:42:43Z mlunzena $
  */
 
 class Trails_Flash {
@@ -1028,7 +1058,7 @@ class Trails_Flash {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6380 2007-10-24 16:17:19Z mlunzena $
+ * @version   $Id: trails.php 6504 2007-11-21 11:42:43Z mlunzena $
  */
 
 class Trails_Exception extends Exception {
