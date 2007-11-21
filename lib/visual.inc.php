@@ -835,7 +835,6 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 			if ($params[3] == '')
 				$params[3] = $params[4];
 			else $params[3] = format($params[3]);
-			$params[4] = str_replace('&amp;', '&', $params[4]);
 			$tbr = '<a href="'.idna_link($params[4]).'"'.($intern ? '' : ' target="_blank"').">$link_pic{$params[3]}</a>";
 		}
 		elseif ($img) {
@@ -917,11 +916,11 @@ function idna_link($link, $mail = false){
 		$out = false;
 		if ($mail){
 			if (preg_match('#^([^@]*)@(.*)$#i',$link, $matches)) {
-				$out = $IDN->encode(utf8_encode(decodeHTML($matches[2]))); // false by error
+				$out = $IDN->encode(utf8_encode(html_entity_decode($matches[2]), ENT_NOQUOTES)); // false by error
 				$out = ($out)? $matches[1].'@'.$out : $link;
 			}
 		}elseif (preg_match('#^([^/]*)//([^/?]*)(((/|\?).*$)|$)#i',$link, $matches)) {
-			$out = $IDN->encode(utf8_encode(decodeHTML($matches[2]))); // false by error
+			$out = $IDN->encode(utf8_encode(html_entity_decode($matches[2], ENT_NOQUOTES))); // false by error
 			$out = ($out)? $matches[1].'//'.$out.$matches[3] : $link;
 		}
 		return ($out)? $out:$link;
