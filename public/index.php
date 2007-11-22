@@ -379,7 +379,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 }
 ?>
 
-<table width="70%" border="0" cellpadding="0" cellspacing="0" >
+<table width="70%" align="center" border="0" cellpadding="0" cellspacing="0" >
 <tr>
 	<td  align="center" height="30">&nbsp;</td>
 </tr>
