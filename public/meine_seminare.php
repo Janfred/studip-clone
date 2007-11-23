@@ -920,7 +920,8 @@ elseif ($auth->auth["perm"]=="admin") {
 					seminare.start_time,seminare.admission_binding,seminare.visible, seminare.modules,
 					COUNT(seminar_user.user_id) AS teilnehmer,IFNULL(visitdate,0) as visitdate,
 					sd1.name AS startsem,IF(duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem
-					FROM Institute INNER JOIN seminare ON(seminare.Institut_id=Institute.Institut_id $sem_condition ) INNER JOIN seminar_user USING(Seminar_id)
+					FROM Institute INNER JOIN seminare ON(seminare.Institut_id=Institute.Institut_id $sem_condition ) 
+					STRAIGHT_JOIN seminar_user on seminare.seminar_id=seminar_user.seminar_id
 					LEFT JOIN object_user_visits ouv ON (ouv.object_id=seminare.Seminar_id AND ouv.user_id='$user->id' AND ouv.type='sem')
 					LEFT JOIN semester_data sd1 ON ( start_time BETWEEN sd1.beginn AND sd1.ende)
 					LEFT JOIN semester_data sd2 ON ((start_time + duration_time) BETWEEN sd2.beginn AND sd2.ende)
