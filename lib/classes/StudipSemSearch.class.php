@@ -121,7 +121,7 @@ class StudipSemSearch {
 	}
 	
 	function getSearchFieldtext($name,$attributes, $default){
-		$ret = "\n<input type=\"text\" name=\"{$this->form_name}_{$name}\" " . (($default) ? "value=\"$default\" " : "");
+		$ret = "\n<input type=\"text\" name=\"{$this->form_name}_{$name}\" " . (($default) ? "value=\"".htmlReady($default)."\" " : "");
 		foreach($attributes as $key => $value){
 			$ret .= " $key=\"$value\"";
 		}
@@ -209,7 +209,7 @@ class StudipSemSearch {
 		if (!$value && $this->search_fields[$name]){
 			$value = $this->search_fields[$name]['default_value'];
 		}
-		return "\n<input type=\"hidden\" name=\"{$this->form_name}_{$name}\" value=\"{$value}\"";
+		return "\n<input type=\"hidden\" name=\"{$this->form_name}_{$name}\" value=\"".htmlReady($value)."\"";
 	}
 	
 	function getSearchButton($attributes = false, $tooltip = false){

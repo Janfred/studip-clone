@@ -416,7 +416,7 @@ class StudipForm {
 		if (!$value){
 			$value = $this->getFormFieldValue($name);
 		}
-		return "\n<input type=\"hidden\" name=\"{$this->form_name}_{$name}\" value=\"{$value}\">";
+		return "\n<input type=\"hidden\" name=\"{$this->form_name}_{$name}\" value=\"".htmlReady($value)."\">";
 	}
 
 	function doFormReset(){
