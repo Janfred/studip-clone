@@ -26,6 +26,7 @@ $IMAGE_PROXY_MAX_CONTENT_LENGTH = 1000000;
 $IMAGE_PROXY_CACHE_LIFETIME = 86400;
 $IMAGE_PROXY_MAX_FILES_IN_CACHE = 3000;
 $IMAGE_PROXY_GC_PROBABILITY = 1;
+$IMAGE_PROXY_MAX_IMAGE_SIZE = 1500; //x or y
 
 ini_set('default_socket_timeout', 5);
 
@@ -88,6 +89,8 @@ function garbage_collect_image_cache(){
 
 Config::GetInstance()->getValue('EXTERNAL_IMAGE_EMBEDDING') == 'proxy' OR die();
 
+page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
+
 ob_start();
 require_once "lib/datei.inc.php";
 if ((mt_rand() % 100) < $IMAGE_PROXY_GC_PROBABILITY ){
@@ -95,14 +98,24 @@ if ((mt_rand() % 100) < $IMAGE_PROXY_GC_PROBABILITY ){
 }
 $url = urldecode($_GET['url']);
 $id = md5($url);
-if(!($check = check_image_cache($id))){
+
+if (!$perm->have_perm('user')){
+	$id = md5('denied');
+	list(, $length) = get_error_image('denied');
+	$check = refresh_image_cache($id,'image/gif',$length,'denied');
+} elseif(!($check = check_image_cache($id))){
 	$error = '';
 	$headers = parse_link($url,3);
-	if($headers['response_code'] != 200 || $headers['Content-Length'] > $IMAGE_PROXY_MAX_CONTENT_LENGTH || (strpos($headers['Content-Type'],'image') === false)){
-		if (!$headers['response_code']) $error = 'no response';
-		elseif ($headers['response_code'] != 200) $error = (int)$headers['response_code'];
-		elseif ($headers['Content-Length'] > $IMAGE_PROXY_MAX_CONTENT_LENGTH) $error = 'too big';
-		elseif (strpos($headers['Content-Type'],'image') === false) $error = 'no image';
+	if (!$headers['response_code']) {
+		$error = 'no response';
+	} elseif ($headers['response_code'] != 200) {
+		$error = (int)$headers['response_code'];
+	} elseif ($headers['Content-Length'] > $IMAGE_PROXY_MAX_CONTENT_LENGTH) {
+		$error = 'too big';
+	} elseif (strpos($headers['Content-Type'],'image') === false) {
+		$error = 'no image';
+	}
+	if ($error) {
 		list(, $length) = get_error_image($error);
 		$check = refresh_image_cache($id,'image/gif',$length,$error);
 	} else {
@@ -122,7 +135,21 @@ if(!($check = check_image_cache($id))){
 				$f = fopen($imagefile, 'wb');
 				fwrite($f, $image);
 				fclose($f);
-				$check = refresh_image_cache($id, $headers['Content-Type'] ,filesize($imagefile), '');
+				$error = '';
+				$size = GetImageSize($imagefile);
+				// $size[2]: 1=GIF, 2=JPG, 3=PNG, false=not a valid image
+				if($size === false || $size[2] > 3 || $size[2] < 1) {
+					$error = 'bad file';
+				} elseif ($size[0] > $IMAGE_PROXY_MAX_IMAGE_SIZE ||  $size[1] > $IMAGE_PROXY_MAX_IMAGE_SIZE) {
+					$error = 'to big';
+				}
+				if ($error) {
+					@unlink($imagefile);
+					list(, $length) = get_error_image($error);
+					$check = refresh_image_cache($id,'image/gif',$length,$error);
+				} else {
+					$check = refresh_image_cache($id, $headers['Content-Type'] ,filesize($imagefile), '');
+				}
 			} else {
 				list(, $length) = get_error_image('too big');
 				$check = refresh_image_cache($id,'image/gif',$length,'too big');
