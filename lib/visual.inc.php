@@ -864,7 +864,8 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 						$width = ($params[2] < $max_width) ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
 					}
 				}
-				if(!$intern && substr($EXTERNAL_IMAGE_EMBEDDING,0,5) == 'proxy'){
+				$is_auth = (is_object($auth) && $auth->is_authenticated() && $user->id != 'nobody')?  true: false;
+				if(!$intern && substr($EXTERNAL_IMAGE_EMBEDDING,0,5) == 'proxy' && $is_auth ) {
 					$proxyurl = strstr($EXTERNAL_IMAGE_EMBEDDING,':');
 					if($proxyurl) $proxyurl = substr($proxyurl,1);
 					else $proxyurl = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'image_proxy.php?url=';
