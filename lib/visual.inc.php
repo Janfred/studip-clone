@@ -864,12 +864,18 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 						$width = ($params[2] < $max_width) ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
 					}
 				}
-				$is_auth = (is_object($auth) && $auth->is_authenticated() && $GLOBALS['user']->id != 'nobody')?  true: false;
-				if(!$intern && substr($EXTERNAL_IMAGE_EMBEDDING,0,5) == 'proxy' && $is_auth ) {
-					$proxyurl = strstr($EXTERNAL_IMAGE_EMBEDDING,':');
-					if($proxyurl) $proxyurl = substr($proxyurl,1);
-					else $proxyurl = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'image_proxy.php?url=';
-					$image_url = $proxyurl . urlencode(idna_link($params[4]));
+				if(!$intern && substr($EXTERNAL_IMAGE_EMBEDDING,0,5) == 'proxy' ) {
+					if (!is_object($auth)){
+						page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
+					}
+					if ($auth->is_authenticated() && $GLOBALS['user']->id != 'nobody') {
+						$proxyurl = strstr($EXTERNAL_IMAGE_EMBEDDING,':');
+						if($proxyurl) $proxyurl = substr($proxyurl,1);
+						else $proxyurl = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'image_proxy.php?url=';
+						$image_url = $proxyurl . urlencode(idna_link($params[4]));
+					} else {
+						$image_url = idna_link($params[4]);
+					}
 				} else {
 					$image_url = idna_link($params[4]);
 				}
