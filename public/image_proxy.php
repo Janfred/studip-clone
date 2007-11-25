@@ -136,9 +136,9 @@ if (!$perm->have_perm('user')){
 				fwrite($f, $image);
 				fclose($f);
 				$error = '';
-				$size = GetImageSize($imagefile);
+				$size = @GetImageSize($imagefile);
 				// $size[2]: 1=GIF, 2=JPG, 3=PNG, false=not a valid image
-				if($size === false || $size[2] > 3 || $size[2] < 1) {
+				if(!$size || $size[2] > 3 || $size[2] < 1) {
 					$error = 'bad file';
 				} elseif ($size[0] > $IMAGE_PROXY_MAX_IMAGE_SIZE ||  $size[1] > $IMAGE_PROXY_MAX_IMAGE_SIZE) {
 					$error = 'to big';
@@ -148,7 +148,7 @@ if (!$perm->have_perm('user')){
 					list(, $length) = get_error_image($error);
 					$check = refresh_image_cache($id,'image/gif',$length,$error);
 				} else {
-					$check = refresh_image_cache($id, $headers['Content-Type'] ,filesize($imagefile), '');
+					$check = refresh_image_cache($id, $size['mime'] ,filesize($imagefile), '');
 				}
 			} else {
 				list(, $length) = get_error_image('too big');
