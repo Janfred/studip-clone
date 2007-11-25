@@ -866,6 +866,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 				}
 				if(!$intern && substr($EXTERNAL_IMAGE_EMBEDDING,0,5) == 'proxy' ) {
 					if (!is_object($auth)){
+						$_GET['cancel_login'] = 1;
 						page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
 					}
 					if ($auth->is_authenticated() && $GLOBALS['user']->id != 'nobody') {
