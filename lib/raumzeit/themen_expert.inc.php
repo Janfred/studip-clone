@@ -1,17 +1,17 @@
 <?
 function themen_autoAssign() {
-	global $sem, $_REQUEST, $cycle_id;
+	global $sem, $cycle_id;
 
 	$sem->autoAssignIssues($_REQUEST['themen'], $cycle_id);
 }
 
 function themen_changeChronoGroupedFilter() {
-	global $chronoGroupedFilter, $_REQUEST;
+	global $chronoGroupedFilter;
 	$chronoGroupedFilter = $_REQUEST['newFilter'];
 }
 
 function themen_chronoAutoAssign() {
-	global $sem, $_REQUEST;
+	global $sem;
 	
 	$termine = getAllSortedSingleDates($sem);
 	foreach ($termine as $singledate_id => $singledate) {	
@@ -27,20 +27,20 @@ function themen_chronoAutoAssign() {
 }
 
 function themen_open() {
-	global $issue_open, $_REQUEST;
+	global $issue_open;
 	
 	$issue_open[$_REQUEST['open_close_id']] = true;
 }
 
 function themen_close() {
-	global $issue_open, $_REQUEST;
+	global $issue_open;
 
 	$issue_open[$_REQUEST['open_close_id']] = false;
 	unset ($issue_open[$_REQUEST['open_close_id']]);
 }
 
 function themen_doAddIssue() {
-	global $id, $_REQUEST, $sem;
+	global $id, $sem;
 
 	$issue = new Issue(array('seminar_id' => $id));
 	$issue->setTitle($_REQUEST['theme_title']);
@@ -53,14 +53,14 @@ function themen_doAddIssue() {
 }
 
 function themen_deleteIssueID() {  
-	global $sem, $_REQUEST;
+	global $sem ;
 
 	$termin = $sem->getSingleDate($_REQUEST['sd_id'], $_REQUEST['cycle_id']);
 	$termin->deleteIssueID($_REQUEST['issue_id']);
 }
 
 function themen_changeIssue() {
-	global $sem, $_REQUEST, $themen;
+	global $sem,$themen;
 
 	$msg .= sprintf(_("Das Thema \"%s\" wurde geändert."), htmlReady($themen[$_REQUEST['issue_id']]->toString())) . '<br/>';
 	$themen[$_REQUEST['issue_id']]->setDescription($_REQUEST['theme_description']);	
@@ -77,14 +77,14 @@ function themen_changeIssue() {
 }
 
 function themen_deleteIssue() {
-	global $sem, $_REQUEST, $themen;
+	global $sem, $themen;
 
 	$sem->createMessage(_("Folgendes Thema wurde gelöscht:").'<br/><li>'.htmlReady($themen[$_REQUEST['issue_id']]->toString()));
 	$sem->deleteIssue($_REQUEST['issue_id']);
 }
 
 function themen_addIssue() {
-	global $sem, $_REQUEST, $numIssues, $cmd, $id;
+	global $sem, $numIssues, $cmd, $id;
 
 	if ($numIssues > 20) {		// for security reasons, it should not be possible to add thousands of issues at one time
 		unset($cmd);
@@ -105,7 +105,7 @@ function themen_addIssue() {
 }
 
 function themen_changePriority() {
-	global $sem, $_REQUEST, $themen;
+	global $sem,$themen;
 
 	if ($themen[$_REQUEST['issueID']]->getPriority() > $_REQUEST['newPriority']) {
 		$sem->createMessage(sprintf(_("Das Thema \"%s\" wurde um eine Position nach oben verschoben."), htmlReady($themen[$_REQUEST['issueID']]->toString())));
@@ -123,7 +123,7 @@ function themen_openAll() {
 }
 
 function themen_saveAll() {
-	global $sem, $_REQUEST, $themen, $changeTitle, $changeFile, $changeForum, $changeDescription;
+	global $sem, $themen, $changeTitle, $changeFile, $changeForum, $changeDescription;
 
 	$msg = _("Folgende Themen wurden bearbeitet:").'<br/>';
 	foreach ($changeTitle as $key => $val) {	// we use the changeTitle-array for running through all themes ($key = issue_id and $val = title)
@@ -156,7 +156,7 @@ function themen_saveAll() {
 }
 
 function themen_checkboxAction() {
-	global $sem, $_REQUEST, $choosen;
+	global $sem, $choosen;
 
 	switch ($_REQUEST['checkboxAction']) {
 		case 'chooseAll':
@@ -186,9 +186,9 @@ function themen_checkboxAction() {
 		case 'deleteAll':
 			if ($_REQUEST['approveDeleteAll'] != TRUE) {	// security-question
 				$msg = _("Sind Sie sicher, dass Sie alle Themen löschen möchten?");
-				$msg .= "<br/><a href=\"$PHP_SELF?cmd=checkboxAction&checkboxAction=deleteAll&approveDeleteAll=TRUE\">";
+				$msg .= "<br/><a href=\"{$GLOBALS['PHP_SELF']}?cmd=checkboxAction&checkboxAction=deleteAll&approveDeleteAll=TRUE\">";
 				$msg .= '<img '.makebutton('ja2', 'src').' border="0"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-				$msg .= "<a href=\"$PHP_SELF\">";
+				$msg .= "<a href=\"{$GLOBALS['PHP_SELF']}\">";
 				$msg .= '<img '.makebutton('nein', 'src').' border="0"></a>';
 				$sem->createInfo($msg);			// create an info
 			} else {											// deletion approved, so we do the job

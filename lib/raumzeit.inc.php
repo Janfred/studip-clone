@@ -5,26 +5,26 @@ define('DO_NOT_APPEND_MESSAGES', false);
  * Command handlers
  */
 function raumzeit_open() {
-	global $sd_open, $_REQUEST;
+	global $sd_open;
 	$sd_open[$_REQUEST['open_close_id']] = true;
 }
 
 function raumzeit_close() {
-	global $sd_open, $_REQUEST;
+	global $sd_open;
 	$sd_open[$_REQUEST['open_close_id']] = false;
 	unset ($sd_open[$_REQUEST['open_close_id']]);
 }
 
 function raumzeit_delete_singledate() {
-	global $_REQUEST, $sem;
+	global $sem;
 
 	$termin = $sem->getSingleDate($_REQUEST['sd_id'], $_REQUEST['cycle_id']);
 
 	if (!$_REQUEST['approveDelete'] && $termin->getIssueIDs()) {
 		if($GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
-			$sem->createQuestion( _("Achtung: Diesem Termin ist im Ablaufplan ein Thema zugeordnet. Titel und Beschreibung des Themas bleiben erhalten und können in der Expertenansicht des Ablaufplans einem anderen Termin wieder zugeordnet werden."). '<br/>'. _("Wollen Sie diesen Termin wirklich löschen?"), $PHP_SELF."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
+			$sem->createQuestion( _("Achtung: Diesem Termin ist im Ablaufplan ein Thema zugeordnet. Titel und Beschreibung des Themas bleiben erhalten und können in der Expertenansicht des Ablaufplans einem anderen Termin wieder zugeordnet werden."). '<br/>'. _("Wollen Sie diesen Termin wirklich löschen?"), $GLOBALS['PHP_SELF']."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
 		}else{
-			$sem->createQuestion( _("Diesem Termin ist ein Thema zugeordnet. Wollen Sie diesen Termin wirklich löschen?"), $PHP_SELF."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
+			$sem->createQuestion( _("Diesem Termin ist ein Thema zugeordnet. Wollen Sie diesen Termin wirklich löschen?"), $GLOBALS['PHP_SELF']."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
 		}
 	} else {
 		if ($_REQUEST['approveDelete']) {
@@ -41,7 +41,7 @@ function raumzeit_delete_singledate() {
 }
 
 function raumzeit_undelete_singledate() {
-	global $_REQUEST, $sem;
+	global $sem;
 
 	$termin = $sem->getSingleDate($_REQUEST['sd_id'], $_REQUEST['cycle_id']);
 	$sem->createMessage(sprintf(_("Der Termin %s wurde wiederhergestellt!"), $termin->toString()));
@@ -49,7 +49,7 @@ function raumzeit_undelete_singledate() {
 }
 
 function raumzeit_checkboxAction() {
-	global $_REQUEST, $sem, $choosen;
+	global $sem, $choosen;
 	switch ($_REQUEST['checkboxAction']) {
 		case 'chooseAll':
 			break;
@@ -92,7 +92,7 @@ function raumzeit_checkboxAction() {
 		case 'deleteAll':
 			if ($_REQUEST['cycle_id']) {
 				if ($_REQUEST['approveDeleteAll'] != TRUE) {	// security-question
-					$sem->createQuestion(_("Sie haben ausgewählt, alle Termine eines regelmäßigen Eintrages zu löschen. Dies hat zur Folge, dass der regelmäßige Termin ebenfalls gelöscht wird.").'<br/>'.sprintf(_("Sind Sie sicher, dass Sie den regelmäßigen Eintrag \"%s\" löschen möchten?"), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'</b>'), $PHP_SELF."?cmd=checkboxAction&checkboxAction=deleteAll&cycle_id={$_REQUEST['cycle_id']}&approveDeleteAll=TRUE");
+					$sem->createQuestion(_("Sie haben ausgewählt, alle Termine eines regelmäßigen Eintrages zu löschen. Dies hat zur Folge, dass der regelmäßige Termin ebenfalls gelöscht wird.").'<br/>'.sprintf(_("Sind Sie sicher, dass Sie den regelmäßigen Eintrag \"%s\" löschen möchten?"), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'</b>'), $GLOBALS['PHP_SELF']."?cmd=checkboxAction&checkboxAction=deleteAll&cycle_id={$_REQUEST['cycle_id']}&approveDeleteAll=TRUE");
 				} else {											// deletion approved, so we do the job
 					$msg = sprintf(_("Der regelmäßige Termin \"%s\" wurde gelöscht."), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'<b/>');
 					$sem->createMessage($msg);	// create a message
@@ -100,7 +100,7 @@ function raumzeit_checkboxAction() {
 				}
 			} else {
 				if ($_REQUEST['approveDeleteAll'] != TRUE) {	// security question
-					$sem->createQuestion( _("Sie haben ausgewählt, alle unregelmäßigen Termine dieser Veranstaltung zu löschen.").'<br/>'._("Sind Sie sicher, dass Sie alle unregelmäßigen Termine dieser Veranstaltung löschen möchten?"), $PHP_SELF."?cmd=checkboxAction&checkboxAction=deleteAll&cycle_id={$_REQUEST['cycle_id']}&approveDeleteAll=TRUE");
+					$sem->createQuestion( _("Sie haben ausgewählt, alle unregelmäßigen Termine dieser Veranstaltung zu löschen.").'<br/>'._("Sind Sie sicher, dass Sie alle unregelmäßigen Termine dieser Veranstaltung löschen möchten?"), $GLOBALS['PHP_SELF']."?cmd=checkboxAction&checkboxAction=deleteAll&cycle_id={$_REQUEST['cycle_id']}&approveDeleteAll=TRUE");
 				} else {									// deletion approved, so we do the job
 					$msg = _("Folgende Termine wurden gelöscht:").'<br/>';
 					$singleDates =& $sem->getSingleDates();	// get all irrgeular singleDates of the seminar
@@ -121,7 +121,7 @@ function raumzeit_checkboxAction() {
 }
 
 function raumzeit_bookRoom() {
-	global $_REQUEST, $sem;
+	global  $sem;
 	if (!$_REQUEST['singledate']) return;
 	$resObj =& ResourceObject::Factory($_REQUEST['room']);
 	$raum = $resObj->getFormattedLink(TRUE, TRUE, TRUE);
@@ -157,7 +157,7 @@ function raumzeit_bookRoom() {
 }
 
 function raumzeit_selectSemester() {
-	global $_REQUEST, $sem, $semester;
+	global $sem, $semester;
 		
 		if (!$semester) $semester = new SemesterData();
 
@@ -201,7 +201,7 @@ function raumzeit_addCycle() {
 }
 
 function raumzeit_doAddCycle() {
-	global $_REQUEST, $sem, $newCycle;
+	global $sem, $newCycle;
 	if ($cycle_id = $sem->addCycle($_REQUEST)) {	// the template 'addmetadate.tpl' has form-fields, just passed through here.
 		$info = $sem->metadate->cycles[$cycle_id]->toString();
 		$sem->createMessage(sprintf(_("Die regelmäßige Veranstaltungszeit \"%s\" wurde hinzugefügt!"),'<b>'.$info.'</b>'));
@@ -212,23 +212,23 @@ function raumzeit_doAddCycle() {
 }
 
 function raumzeit_editCycle() {
-	global $_REQUEST, $sem;
+	global $sem;
 	$sem->editCycle($_REQUEST);
 }
 
 function raumzeit_deleteCycle() {
-	global $_REQUEST, $sem;
+	global $sem;
 	$sem->createQuestion(sprintf(_("Sind Sie sicher, dass Sie den regelm&auml;&szlig;igen Eintrag \"%s\" l&ouml;schen m&ouml;chten?"), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'</b>'), $GLOBALS['PHP_SELF']."?cmd=doDeleteCycle&cycle_id=".$_REQUEST['cycle_id']);
 }
 
 function raumzeit_doDeleteCycle() {
-	global $_REQUEST, $sem;
+	global $sem;
 	$sem->createMessage(sprintf(_("Der regelm&auml;&szlig;ige Eintrag \"%s\" wurde gel&ouml;scht."), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'</b>'));
 	$sem->deleteCycle($_REQUEST['cycle_id']);
 }
 
 function raumzeit_doAddSingleDate() {
-	global $_REQUEST, $sem;
+	global $sem;
 	$termin = new SingleDate();
 	$start = mktime($_REQUEST['start_stunde'], $_REQUEST['start_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
 	$ende = mktime($_REQUEST['end_stunde'], $_REQUEST['end_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
@@ -245,7 +245,7 @@ function raumzeit_doAddSingleDate() {
 }
 
 function raumzeit_editDeletedSingleDate() {
-	global $_REQUEST, $sem, $sd_open, $perm;
+	global $sem, $sd_open, $perm;
 
 	if (!$perm->have_perm('admin')) {
 		$sem->createError(_("Ihnen fehlt die Berechtigung um den Kommentar von gelöschten Terminen zu ändern!"));
@@ -273,7 +273,7 @@ function raumzeit_editDeletedSingleDate() {
 }
 
 function raumzeit_editSingleDate() {
-	global $_REQUEST, $sem, $sd_open;
+	global $sem, $sd_open;
 	unset($sd_open[$_REQUEST['singleDateID']]);	// we close the choosen singleDate, that it does not happen that we have multiple singleDates open -> could lead to confusion, which singleDate is meant to be edited
 	// generate time-stamps to we can compare directly
 	$start = mktime($_REQUEST['start_stunde'], $_REQUEST['start_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
@@ -328,7 +328,7 @@ function raumzeit_editSingleDate() {
 
 
 function raumzeit_freeText() {
-	global $_REQUEST, $sem, $sd_open;
+	global $sem, $sd_open;
 	if (is_array($_REQUEST['singledate'])) {
 		foreach($_REQUEST['singledate'] as $termin_id)
 		{
@@ -341,7 +341,7 @@ function raumzeit_freeText() {
 				$sem->bookRoomForSingleDate($termin_id, $_REQUEST['room']);
 				$sem->irregularSingleDates = null;
 			}
-			if ($termin->setTime($start, $ende) 
+			if ($termin->setTime($start, $ende) //äh $start, $ende? woher?
 					|| $termin->getFreeRoomText()!=$_REQUEST['freeRoomText']
 					|| $termin->getDateType!=$_REQUEST['dateType'] ) {
 
@@ -358,7 +358,7 @@ function raumzeit_freeText() {
 }
 
 function raumzeit_removeRequest() {
-	global $_REQUEST, $sem;
+	global $sem;
 	
 	$termin =& $sem->getSingleDate($_REQUEST['singleDateID'], $_REQUEST['cycle_id']);
 	// logging >>>>>>
@@ -369,7 +369,8 @@ function raumzeit_removeRequest() {
 }
 
 function raumzeit_removeSeminarRequest() {
-	global $_REQUEST, $sem;
+	global $sem;
 	$sem->removeSeminarRequest();
 	$sem->createMessage(sprintf(_("Die Raumanfrage für die Veranstaltung wurde gelöscht.")));
 }
+?>

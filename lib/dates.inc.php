@@ -70,7 +70,7 @@ function getRegularOverview($range_id, $shrink_dates = false) {
  */
 function getRoomOverviewUnsteady ($range_id, $semester_id, $link=TRUE, $start_time = 0, $range_typ = false, $showRoomList = false, $additionalParameters = false) {
 
-	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP, $srch_sem;
+	global $RESOURCES_ENABLE, $RELATIVE_PATH_RESOURCES, $TERMIN_TYP, $srch_sem,$perm;
 
     // steuert, ob die Raumanzeige als XML-Export oder als Tabelle zurückgeliefert wird
 	if ($additionalParameters['xml_export']) {
@@ -137,7 +137,7 @@ function getRoomOverviewUnsteady ($range_id, $semester_id, $link=TRUE, $start_ti
 			$decorator->showRoomList = $showRoomList;
 			$decorator->hideRooms = $hideRooms;
 			$decorator->shrinkDates = $shrinkDates;
-			$decroator->onlyRegular = $onlyRegular;
+			$decorator->onlyRegular = $onlyRegular;
 			if (isset($perm) && $perm->have_perm('admin')) {
 				$decorator->admin_view = true;
 			}
@@ -638,8 +638,8 @@ function isDatesMultiSem ($sem_id) {
 */
 function getMetadateCorrespondingDates ($sem_id, $presence_dates_only) {
 
-	$semObj =& Seminar::GetInstance($sem_id);
-
+	$sem =& Seminar::GetInstance($sem_id);
+	$types = getPresenceTypes();
 	foreach ($sem->getMetaDates() as $key=>$val) {
 		$termine = $sem->getSingleDatesForCycle($key);
 		foreach ($termine as $val) {

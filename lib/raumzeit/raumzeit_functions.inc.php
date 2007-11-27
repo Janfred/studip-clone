@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 function getTemplateDataForSingleDate($val, $cycle_id = '') {
-	global $_REQUEST, $every2nd, $choosen, $id, $showSpecialDays, $rz_switcher;
+	global $every2nd, $choosen, $id, $showSpecialDays, $rz_switcher;
 
 	if (!isset($rz_switcher)) {
 		$rz_switcher = 1;
@@ -244,8 +244,6 @@ function get_not_visited($type, $seminar_id, $range_id = '') {
 */
 
 function unQuoteAll() {
-	global $_REQUEST, $_POST, $_COOKIE, $_GET;
-
 	function cleanArray(&$arr) {
 		foreach($arr as $k => $v)
 			if (is_array($v))
@@ -310,9 +308,9 @@ function raumzeit_get_semester_chooser(&$sem, &$semester, $filter) {
 		if ($sem->getStartSemester() <= $val['vorles_beginn']) $passed = true;
 		if ($passed && ($sem->getEndSemesterVorlesEnde() >= $val['vorles_ende'])) {
 			$semester_chooser[$val['beginn']] = $val['name'];
-			if ($raumzeitFilter != ($val['beginn'])) {
+			if ($GLOBALS['raumzeitFilter'] != ($val['beginn'])) {
 			} else {
-				$seleceted = $val['beginn'];
+				$selected = $val['beginn']; //hä? 
 			}
 		}
 	}

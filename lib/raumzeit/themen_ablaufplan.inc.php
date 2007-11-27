@@ -1,19 +1,19 @@
 <?
 function themen_open() {
-	global $issue_open, $_REQUEST;
+	global $issue_open;
 
 	$issue_open[$_REQUEST['open_close_id']] = true;
 }
 
 function themen_close() {
-	global $issue_open, $_REQUEST;
+	global $issue_open;
 
 	$issue_open[$_REQUEST['open_close_id']] = false;
 	unset ($issue_open[$_REQUEST['open_close_id']]);
 }
 
 function themen_doAddIssue() {
-	global $id, $_REQUEST, $sem;
+	global $id, $sem;
 
 	$issue = new Issue(array('seminar_id' => $id));
 	$issue->setTitle($_REQUEST['theme_title']);
@@ -30,7 +30,7 @@ function themen_doAddIssue() {
 }
 
 function themen_changeIssue() {
-	global $sem, $_REQUEST, $themen;
+	global $sem, $themen;
 
 	$msg .= sprintf(_("Das Thema \"%s\" wurde geändert."), htmlReady($themen[$_REQUEST['issue_id']]->toString())) . '<br/>';
 	$themen[$_REQUEST['issue_id']]->setDescription($_REQUEST['theme_description']);
@@ -60,7 +60,7 @@ function themen_closeAll() {
 }
 
 function themen_saveAll() {
-	global $sem, $_REQUEST, $themen, $changeTitle, $changeForum, $changeDescription, $changeFile, $id;
+	global $sem, $themen, $changeTitle, $changeForum, $changeDescription, $changeFile, $id;
 
 	$msg = _("Folgende Termine wurden bearbeitet:").'<br/>';
 	foreach ($changeTitle as $key => $val) {	// we use the changeTitle-array for running through all themes ($key = issue_id and $val = title)

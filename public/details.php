@@ -291,7 +291,7 @@ print_infobox ($infobox,"contract.jpg");
 				 printf ("<font size=-1><b>" . _("Zeit:") . "</b></font><br /><font size=-1>%s</font>",htmlReady(view_turnus($sem_id, FALSE, FALSE, (time() - $quarter_year))));
 					if (($mein_status || $perm->have_studip_perm("admin",$sem_id)) ) {
 						echo '<br /><font size="-1"><br />';
-						echo sprintf(_("Details zu allen Terminen im %sAblaufplan%s"), '<a href="seminar_main.php?auswahl='.$SessSemName[1].'&redirect_to=dates.php">', '</a>');
+						echo sprintf(_("Details zu allen Terminen im %sAblaufplan%s"), '<a href="seminar_main.php?auswahl='.$sem_id.'&redirect_to=dates.php">', '</a>');
 						echo '</font><br />';
 					}
 				?>

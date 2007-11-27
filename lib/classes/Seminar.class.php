@@ -659,7 +659,7 @@ class Seminar {
 			 * If the duration has been changed, we have to create new SingleDates
 			 * if the new duration is longer than the previous one
 			 */
-			if ( ($previousEndSemester != -1) && ( ($previousEndSemester < $this->getEndSemester()) || (($previousSemester == 0) && ($this->getEndSemester() == -1) ) )) {
+			if ( ($previousEndSemester != -1) && ( ($previousEndSemester < $this->getEndSemester()) || (($previousEndSemester == 0) && ($this->getEndSemester() == -1) ) )) {
 				// if the previous duration was unlimited, the only option choosable is
 				// a shorter duration then 'ever', so there cannot be any new SingleDates
 
@@ -1194,7 +1194,7 @@ class Seminar {
 	}
 
 	function processCommands() {
-		global $_REQUEST, $_LOCKED, $cmd;
+		global $_LOCKED, $cmd;
 
 		if (!isset($cmd) && isset($_REQUEST['cmd'])) $cmd = $_REQUEST['cmd'];
 		if (!isset($cmd)) return FALSE;
@@ -1261,7 +1261,7 @@ class Seminar {
 	}
 
 	function checkFilter() {
-		global $raumzeitFilter, $cmd, $_REQUEST, $semester;
+		global $raumzeitFilter, $cmd, $semester;
 		if (isset($cmd) && ($cmd == 'applyFilter')) {
 			$raumzeitFilter = $_REQUEST['newFilter'];
 		}
