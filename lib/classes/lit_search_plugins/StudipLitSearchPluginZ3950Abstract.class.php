@@ -46,6 +46,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	var $convert_umlaute = false;
 	var $z_accession_bib = "";
 	var $z_accession_re = false; // RegEx to check for valid accession number
+	var $z_record_encoding = 'latin1';
 	
 	function StudipLitSearchPluginZ3950Abstract(){
 		parent::StudipLitSearchPluginAbstract();
@@ -116,28 +117,49 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 			}
 			$this->search_result['rpn'] = $rpn;
 		}
-		$this->z_id = yaz_connect($this->z_host,$this->z_options);
-		if (!$this->z_id){
+		if(!$this->z_id){
+			$this->z_id = $this->doZConnect();
+		}
+		if($this->z_id){
+			$hits = $this->doZSearch($this->z_id, $rpn, $this->z_start_range, 5);
+			if($hits !== false){
+				$this->z_hits = $hits;
+				$this->search_result['z_hits'] = $this->z_hits;
+				$fetched_records = 0;
+				$end_range = (($this->z_start_range + 5) > $this->z_hits) ? $this->z_hits : $this->z_start_range + 5;
+				for ($i = $this->z_start_range; $i <= $end_range; ++$i){
+					if($this->search_result[$i] = $this->getZRecord($this->z_id, $i)){
+						$fetched_records++;
+					}
+				}
+				return $fetched_records;
+			} else {
+				$this->doResetSearch();
+				return false;
+			}
+		}
+	}
+	
+	function doZConnect(){
+		$zid = yaz_connect($this->z_host,$this->z_options);
+		if (!$zid){
 			$this->addError("error", sprintf(_("Verbindung zu %s kann nicht aufgebaut werden!"), $this->z_host));
 			return false;
 		}
-        yaz_range($this->z_id, $this->z_start_range, 5);
-        yaz_syntax($this->z_id, $this->z_syntax);
-		yaz_search($this->z_id,"rpn", $rpn);
-        yaz_wait(($options = array('timeout' => $this->z_timeout)));
-		if (yaz_errno($this->z_id)){
+		return $zid;
+	}
+	
+	function doZSearch($zid, $rpn, $start, $number){
+		
+		yaz_range($zid, $start, $number);
+		yaz_syntax($zid, $this->z_syntax);
+		yaz_search($zid,"rpn", $rpn);
+		yaz_wait(($options = array('timeout' => $this->z_timeout)));
+		if (yaz_errno($zid)){
 			$this->addError("error", sprintf(_("Fehler bei der Suche: %s"), yaz_error($this->z_id)));
-			$this->doResetSearch();
 			return false;
 		} else {
-			$this->z_hits = yaz_hits($this->z_id);
-			$this->search_result['z_hits'] = $this->z_hits;
-			$fetched_records = 0;
-			$end_range = (($this->z_start_range + 5) > $this->z_hits) ? $this->z_hits : $this->z_start_range + 5;
-			for ($i = $this->z_start_range; $i <= $end_range; ++$i){
-				$fetched_records += $this->getZRecord($i);
-			}
-			return $fetched_records;
+			return yaz_hits($zid);
 		}
 	}
 	
@@ -154,14 +176,17 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 			$this->addError("error", sprintf(_("Zugriffsnummer hat falsches Format für diesen Katalog!")));
 			return false;
 		}
+		if(!$this->z_id){
+			$this->z_id = $this->doZConnect();
+		}
 		if ($this->z_hits){
 			$save_result = $this->search_result;
 			$save_z_hits = $this->z_hits;
 			$this->search_result = array();
 			$restore_result = true;
 		}
-		$this->search_result['rpn'] = '@attr 1=' . $this->z_accession_bib . ' ' . $accession_number ;
-		$ret = $this->doSearch();
+		$rpn = '@attr 1=' . $this->z_accession_bib . ' ' . $accession_number ;
+		$ret = $this->doZSearch($this->z_id, $rpn, 1, 1);
 		if ($restore_result){
 				$this->search_result = $save_result;
 				$this->z_hits = $save_z_hits;
@@ -228,24 +253,37 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 		return (strlen($rpn)) ? $rpn : false;
 	}
 
-	function getZRecord($rn){
-		$record = yaz_record($this->z_id,$rn,'string');
+	function getZRecord($zid, $rn){
+		$syntax = 'xml';
+		if($this->z_record_encoding != 'utf-8') $syntax .= ";charset={$this->z_record_encoding},utf-8";
+		$record = yaz_record($zid,$rn,$syntax);
+		//echo "<pre>" .htmlReady( print_R($record,1)). '</pre>';
 		$plugin_mapping = $this->mapping[$this->z_syntax];
 		if ($record){
 			$cat_element = new StudipLitCatElement();
 			$cat_element->setValue("user_id", $GLOBALS['auth']->auth['uid']);
 			$cat_element->setValue("catalog_id", $this->sess_var_name . "__" . $rn );
 			$cat_element->setValue("lit_plugin", $this->getPluginName());
-			$lines = explode("\n", $record);
-			for ($i = 0; $i < count($lines); ++$i){
-				$data = trim($lines[$i]);
-				$code = substr($data,0,3);
-				$data = trim(substr($data,3));
-				$subcode =  substr($data, 0, strpos($data,' '));
-				if (is_numeric($subcode) && strlen($subcode) < 3){
-					$data = trim(strstr($data,' '));
-				} else {
-					$data = trim($data);
+			$xmlrecord = new SimpleXMLElement($record);
+			foreach($xmlrecord->controlfield as $field){
+				$code = (string)$field['tag'];
+				$data = utf8_decode((string)$field);
+				if (isset($plugin_mapping[$code])){
+					$mapping = (is_array($plugin_mapping[$code][0])) ? $plugin_mapping[$code] : array($plugin_mapping[$code]);
+					for ($j = 0; $j < count($mapping); ++$j){
+						$map_method = $mapping[$j]['callback'];
+						$this->$map_method($cat_element, $data, $mapping[$j]['field'], $mapping[$j]['cb_args']);
+					}
+				}
+			}
+			foreach($xmlrecord->datafield as $field){
+				$code = (string)$field['tag'];
+				$data = array();
+				foreach($field->subfield as $subfield){
+					$subcode = (string)$subfield['code'];
+					if($subcode && !isset($data[$subcode])){
+						$data[$subcode] =  utf8_decode((string)$subfield);
+					}
 				}
 				if (isset($plugin_mapping[$code])){
 					$mapping = (is_array($plugin_mapping[$code][0])) ? $plugin_mapping[$code] : array($plugin_mapping[$code]);
@@ -255,8 +293,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 					}
 				}
 			}
-			$this->search_result[$rn] = $cat_element->getValues();
-			return 1;
+			return $cat_element->getValues();
 		} else {
 			$this->addError("error",sprintf(_("Datensatz Nummer %s konnte nicht abgerufen werden."), $rn));
 			return 0;
@@ -265,33 +302,29 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	}
 	
 	function simpleMap(&$cat_element, $data, $field, $args){
-		$trim_chars = array('/',',',':');
-		if ($args != ""){
-			$result = $args;
-			$splitted_data = preg_split('/(\$[0-9a-z])/', $data, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-			for ($i = 0; $i < count($splitted_data); ++$i){
-				if ($splitted_data[$i]{0} == '$'){
-					$token[] = $splitted_data[$i];
-					$content[] = trim($splitted_data[$i+1]);
-					++$i;
-				}
+		$trim_chars = " \t\n\r\0/,:.";
+		if ($args != "" && is_array($data)){
+			foreach($data as $key => $value){
+				$search[] = '$' . $key;
+				$replace[] = $value;
 			}
-			$result = str_replace($token, $content, $result);
-			$result = trim(preg_replace('/(\$[0-9a-z])/', "", $result));
-			$last_char = substr($result,-1);
-			if (in_array($last_char,$trim_chars)){
-				$result = substr($result,0,-1);
-			}
+			$result = str_replace($search, $replace, $args);
+			$result = preg_replace('/\$[0-9a-z]\s*/', "", $result);
 
 		} else {
-			$result = trim($data);
+			$result = $data;
 		}
+		$result = trim($result, $trim_chars);
 		$cat_element->setValue($field, $cat_element->getValue($field) . " " . $result);
 		return;
 	}
 	
 	function simpleListMap(&$cat_element, $data, $field, $args){
-		$result = trim(preg_replace('/\s*\$[0-9a-z]\s*/', "; ", $data),';');
+		if(is_array($data)){
+			$result = join('; ', $data);
+		} else {
+			$result = $data;
+		}
 		$result = (($cat_element->getValue($field)) ? $cat_element->getValue($field) . '; ' . $result : $result);
 		$cat_element->setValue($field, $result);
 		return;
