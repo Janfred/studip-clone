@@ -47,6 +47,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 	var $z_accession_bib = "";
 	var $z_accession_re = false; // RegEx to check for valid accession number
 	var $z_record_encoding = 'latin1';
+	var $z_sort = '';
 	
 	function StudipLitSearchPluginZ3950Abstract(){
 		parent::StudipLitSearchPluginAbstract();
@@ -153,6 +154,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 		
 		yaz_range($zid, $start, $number);
 		yaz_syntax($zid, $this->z_syntax);
+		if($this->z_sort) yaz_sort($zid, $this->z_sort);
 		yaz_search($zid,"rpn", $rpn);
 		yaz_wait(($options = array('timeout' => $this->z_timeout)));
 		if (yaz_errno($zid)){

@@ -32,6 +32,7 @@ class StudipLitSearchPluginUB_Trier extends StudipLitSearchPluginZ3950Abstract_A
 		$this->z_options = array('user' => 'z39studip', 'password' => 'ubtstudip');
 		$this->z_syntax = "USMARC";
 		$this->convert_umlaute = true;
+		$this->z_sort = '1=30 > 1=1 < 1=4 <';
 		$this->z_profile = array('1016' => _("Basisindex [ALL]"),
 									'4' => _("Titelstichwörter [TIT]"),
 								 '1004' => _("Person, Author [PER]"), 
