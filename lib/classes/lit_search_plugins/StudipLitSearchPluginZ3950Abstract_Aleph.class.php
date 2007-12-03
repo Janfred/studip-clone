@@ -44,7 +44,7 @@ class StudipLitSearchPluginZ3950Abstract_Aleph extends StudipLitSearchPluginZ395
 										 '108' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a$b','dc_contributor','$a$b;')),
 										 '112' => array('field' => 'dc_creator', 'callback' => 'notEmptyMap', 'cb_args' => array('$a','dc_contributor','$a;')),
 										 '331' => array('field' => 'dc_title', 'callback' => 'titleMap', 'cb_args' => FALSE),
- 										 '335' => array('field' => 'dc_title', 'callback' => 'simpleMap', 'cb_args' => ' $a'),
+ 										 '335' => array('field' => 'dc_title', 'callback' => 'simpleMap', 'cb_args' => ' - $a'),
 										 //'403' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'ISBN: $a'),
 										 '433' => array('field' => 'dc_format', 'callback' => 'simpleMap', 'cb_args' => '$a'),
 										 '410' => array('field' => 'dc_publisher', 'callback' => 'simpleMap', 'cb_args' => '$a'),
