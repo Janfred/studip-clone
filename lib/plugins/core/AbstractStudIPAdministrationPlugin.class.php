@@ -47,6 +47,7 @@ class AbstractStudIPAdministrationPlugin extends AbstractStudIPLegacyPlugin{
      */
     function setTopnavigation(StudipPluginNavigation $newnavigation){
     		$this->topnavigation = $newnavigation;
+    		$this->topnavigation->setPlugin($this);
    	}
 
 
