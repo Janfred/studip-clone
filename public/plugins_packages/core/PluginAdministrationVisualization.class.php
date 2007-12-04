@@ -18,6 +18,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 			return;
 		}
 		?>
+		<table style="width: 100%;">
 		<tr>
 			<td valign="top"><img src="<?=$GLOBALS['ASSETS_URL']?>/images/ausruf.gif"></td>
 			<td valign="top">
@@ -29,6 +30,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		<tr>
 			<td colspan="2" height="5">&nbsp;</td>
 		</tr>		
+		</table>
 		<?php
 	}
 	
