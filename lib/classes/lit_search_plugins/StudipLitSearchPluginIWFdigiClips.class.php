@@ -45,15 +45,16 @@ class StudipLitSearchPluginIWFdigiClips extends StudipLitSearchPluginGvk {
 								'5' => _("Serienstichwörter [SER]"),
 								'12' => _("PICA Prod.-Nr. [PPN]"),
 								'21' => _("Schlagwörter [SLW]"),
-								'31' => _("Erscheinungsjahr [ERJ]"),
+								'59' => _("Erscheinungsort [PLC]"),
 								'1004' => _("Person, Author [PER]"),
 								'1007' => _("alle Nummern [NUM]"),
 								'1018' => _("Ort,Verlag (Stichwort) [PUB]"),
-								'1031' => _("Materialart [MAT]"),
-								'8572' => _("URL (Phrase) [URL]"),
-								'8600' => _("Bibliogr. Gattung und Status [MAK]"),
-								'8618' => _("URL, URN (Stichwort) [URK]")
+								'1031' => _("Materialart [MAT]")
 								);
+		$this->mapping['USMARC'][500] = array('field' => 'dc_relation', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10));
+		$this->mapping['USMARC'][520] = array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10));
+		$this->mapping['USMARC'][773] = array('field' => 'dc_relation', 'callback' => 'simpleMap', 'cb_args' => '$t, $g, $d');
+
 	}
 }
 ?>
