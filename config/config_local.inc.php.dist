@@ -45,7 +45,7 @@ $CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']) . '/';
 
 
 // ABSOLUTE_URI_STUDIP: insert the absolute URL to your Stud.IP installation; it should end with a '/'
-$ABSOLUTE_URI_STUDIP = ""
+$ABSOLUTE_URI_STUDIP = "";
 // optional automagically computing ABSOLUTE_URI_STUDIP
 //   Warning: this can only be enabled AFTER executing the migration scripts for Stud.IP 1.6
 //   customize if required
