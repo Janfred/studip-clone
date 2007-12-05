@@ -258,36 +258,48 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		banner_show();
 	}
 
-	// display menue
-	echo	'<div align="center">', "\n", '<table width="70%" border=0 cellpadding=0 cellspacing=0 >', "\n",
-		'<tr><td class="topic" colspan=3 align="left"><img src="'.$GLOBALS['ASSETS_URL'].'images/home.gif" border="0" align="absmiddle"><b>&nbsp;', $ueberschrift,'</b></td>',"\n",
-		'</tr>', "\n";
-	echo	'<tr>', "\n", '<td width="5%" class="blank" valign="middle">&nbsp;</td>', "\n",
-		'<td class="blank" width="90%" valign="top">', "\n", '<table align="left" cellpadding=4>', "\n";
+// display menue
+?>
 
-		for ($i=0; $i < count($menue_auswahl); $i++) { // mainmenue
-			if ($menue[$menue_auswahl[$i][0]][1]) {
-				echo	'<tr><td><div class="mainmenu" align="left"><a href="'.$menue[$menue_auswahl[$i][0]][1]. '"'.
-				(($menue[$menue_auswahl[$i][0]][2])? ' target="'.$menue[$menue_auswahl[$i][0]][2].'"':'').
-				'>'. $menue[$menue_auswahl[$i][0]][0]. '</a>';
+	<div align="center">
+		<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
+			<tr>
+				<td class="topic" colspan="2" align="left"><img src="<?=$GLOBALS['ASSETS_URL']?>images/home.gif" border="0" align="absmiddle" /> <b><?=$ueberschrift?></b></td>
+			</tr>
+			<tr>
+				<td class="blank" valign="top" style="padding-left:25px; width:80%;">
+				<table align="left" cellpadding="4">
+<?
+				for ($i=0; $i < count($menue_auswahl); $i++) { // mainmenue
+					if ($menue[$menue_auswahl[$i][0]][1]) {
+						echo	'<tr><td><div class="mainmenu" align="left"><a href="'.$menue[$menue_auswahl[$i][0]][1]. '"'.
+						(($menue[$menue_auswahl[$i][0]][2])? ' target="'.$menue[$menue_auswahl[$i][0]][2].'"':'').
+						'>'. $menue[$menue_auswahl[$i][0]][0]. '</a>';
 
-			} else {
-				echo	'<tr><td><div class="mainmenu">'. $menue[$menue_auswahl[$i][0]][0];
-			}
-			for ($k = 0; $k < count($menue_auswahl[$i][1]); $k++) { // submenue
-				echo	(($k == 0)? '<br />':'&nbsp;/&nbsp;');
-				echo	'<font size="-1"><a href="',$menue[$menue_auswahl[$i][1][$k]][1].'"'.
-					(($menue[$menue_auswahl[$i][1][$k]][2])? ' target="'.$menue[$menue_auswahl[$i][1][$k]][2].'"':'').
-					'>'. $menue[$menue_auswahl[$i][1][$k]][0].'</a></font>';
-			}
-			echo	'</div></td></tr>', "\n";
-		}
-	echo	'</table>'. "\n". '</td>'. "\n".
-		'<td class="indexpage" align="right" valign="top"><img src="' . $GLOBALS['ASSETS_URL'] . 'images/blank.gif" width="390" height="100"></td>'. "\n". '</tr>'."\n". '</table> <br />'. "\n";
+					} else {
+						echo	'<tr><td><div class="mainmenu">'. $menue[$menue_auswahl[$i][0]][0];
+					}
+					for ($k = 0; $k < count($menue_auswahl[$i][1]); $k++) { // submenue
+						echo	(($k == 0)? '<br />':'&nbsp;/&nbsp;');
+						echo	'<font size="-1"><a href="',$menue[$menue_auswahl[$i][1][$k]][1].'"'.
+							(($menue[$menue_auswahl[$i][1][$k]][2])? ' target="'.$menue[$menue_auswahl[$i][1][$k]][2].'"':'').
+							'>'. $menue[$menue_auswahl[$i][1][$k]][0].'</a></font>';
+					}
+					echo	'</div></td></tr>', "\n";
+				}
+?>
+				</table>
+				</td>
+				<td class="indexpage" align="right" valign="top"><img src="<?=$GLOBALS['ASSETS_URL']?>images/blank.gif" width="390" height="100"></td>
+			</tr>
+		</table>
+		<br/>
+<?
 
 	// display news
 	if (show_news('studip', $perm->have_perm('root'), 0, $index_data['nopen'], "70%", $LastLogin, $index_data))
-		echo "<br />\n";
+		echo "<br/>\n";
+
 	// display dates
 	if (!$perm->have_perm('admin')) { // only dozent, tutor, autor, user
 		include('lib/show_dates.inc.php');
@@ -299,6 +311,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			show_dates($start, $end, $index_data['dopen']);
 		}
 	}
+
 	// display votes
 	if ($GLOBALS['VOTE_ENABLE']) {
 		include ('show_vote.php');
@@ -324,37 +337,50 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			bindtextdomain($domain,$plugindbenv->getBasepath() . $activatedportalplugin->getPluginpath() . "/locale");
 			textdomain($domain);
 			// hier nun die PortalPlugins anzeigen
-			if ($activatedportalplugin->hasAdministration()){
-				echo "<table class=\"blank\" width=\"70%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedportalplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedportalplugin->getDisplaytitle() .
-				 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;<a href=\"". PluginEngine::getLink($activatedportalplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" ></a>&nbsp;</tr>";
-			}
-			else {
-				echo "<table class=\"blank\" width=\"70%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><img src=\"" . $activatedportalplugin->getPluginiconname() . "\" border=0 /><b>&nbsp;" . $activatedportalplugin->getDisplaytitle() .
-				 " </b></td><td align = \"right\" width=\"1%\" class=\"topic\" nowrap>&nbsp;&nbsp;</tr>";
-			}
-			echo ("<tr><td class=\"steel1\" colspan=\"2\">&nbsp;</td></tr><tr><td class=\"steel1\" colspan=\"2\"><blockquote>");
-			$activatedportalplugin->showOverview();
-			echo ("</blockquote></td></tr></table><br>\n");
+?>
+			<table class="index_box" border="0" cellpadding="2" cellspacing="0">
+				<tr>
+					<td class="topic"><img src="<?=$activatedportalplugin->getPluginiconname()?>" border="0" align="absmiddle" /> <b><?=$activatedportalplugin->getDisplaytitle()?></b></td>
+					<td class="topic" align="right">
+						<? if ($activatedportalplugin->hasAdministration())
+						{
+							echo "<a href=\"". PluginEngine::getLink($activatedportalplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" align=\"absmiddle\" /></a>";
+						} ?>
+					</td>
+				</tr>
+				<tr>
+					<td class="index_box_cell" colspan="2">
+					<?=$activatedportalplugin->showOverview()?>
+					</td>
+				</tr>
+			</table>
+			<br/>
+<?
 			// restore the domain
 			textdomain("studip");
 		}
 	}
 	page_close(); // end session
+
 	$db->query(sprintf("SELECT * FROM rss_feeds WHERE user_id='%s' AND hidden=0 ORDER BY priority",$auth->auth["uid"]));
 	while ($db->next_record()) {
 		if ($db->f("name")!="" && $db->f("url")!="") {
 			$feed = new RSSFeed($db->f("url"));
 			if($db->f('fetch_title') && $feed->ausgabe->channel['title']) $feedtitle = $feed->ausgabe->channel['title'];
 			else $feedtitle = $db->f("name");
-			echo "<table class=\"blank\" width=\"70%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
-			echo "<tr><td class=\"topic\"><b>&nbsp;<FONT COLOR=\"white\">" . htmlReady($feedtitle) . "</FONT></b></td></tr>";
-			echo "<tr><td class=\"steel1\">&nbsp;</td></tr><tr><td class=\"steel1\"><div style=\"margin-left: 20px;margin-right: 20px;\">";
 
-			$feed->rssfeed_start();
-
-			echo "</div></td></tr>";
-			echo "<tr><td class=\"steel1\">&nbsp;</td></tr>";
-			echo "</table><br>\n";
+			echo '<table class="index_box" border="0" cellpadding="2" cellspacing="0">
+					<tr>
+						<td class="topic"><b>' . htmlReady($feedtitle) . '</b></td>
+					</tr>
+					<tr>
+						<td class="index_box_cell">'
+						.$feed->rssfeed_start().
+						'</td>
+					</tr>
+					<tr>
+				</table>
+				<br/>';
 		}
 	}
 
@@ -379,12 +405,9 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 }
 ?>
 
-<table width="70%" align="center" border="0" cellpadding="0" cellspacing="0" >
-<tr>
-	<td  align="center" height="30">&nbsp;</td>
-</tr>
 <?
-if ($GLOBALS["PLUGINS_ENABLE"]){
+if ($GLOBALS["PLUGINS_ENABLE"])
+{
 	$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");
 	$activatedportalplugins = $portalpluginpersistence->getAllActivatedPlugins();
 	// we already should have the activatedportalplugins here
@@ -395,20 +418,22 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 			if ($activatedplugin->hasUnauthorizedView())
 			{
 ?>
+			<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
 				<tr>
-					<td class="topic">&nbsp;<b><?= $activatedplugin->getDisplaytitle() ?></b></td>
+					<td class="topic"><img src="<?=$activatedplugin->getPluginiconname()?>"" border="0" align="absmiddle" /><b>&nbsp;<?= $activatedplugin->getDisplaytitle() ?></b></td>
 				</tr>
 				<tr>
-					<td class="steel1"><blockquote><?= $activatedplugin->showOverview(false) ?><blockquote></td>
+					<td class="index_box_cell">
+						<?= $activatedplugin->showOverview(false) ?>
+					</td>
 				</tr>
-					<td align="center" height="30">&nbsp;</td>
-				</tr>
+			</table>
+			<br/>
 <?php
 			}
 		}
 	}
 }
-echo '</table>';
 
 include ('lib/include/html_end.inc.php');
 page_close();

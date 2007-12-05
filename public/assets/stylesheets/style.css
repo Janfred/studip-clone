@@ -240,3 +240,14 @@ dd {
 	font-size: 1.3em;
 	padding-top: 5px;
 }
+
+/* index.php anpassungen an den boxen zur vereinheitlichung */
+table.index_box {
+	width:70%;
+
+}
+
+td.index_box_cell {
+	padding:4px;
+	background-image: url('../images/steel1.jpg');
+}
