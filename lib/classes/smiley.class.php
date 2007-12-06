@@ -593,11 +593,11 @@ class smiley {
 	}
 
 	function read_favorite(){
-		if ($this->error) return false;
-		$this->db->query('SHOW COLUMNS FROM user_info LIKE "smiley_favorite%"');
+		if ($this->error) return false;		
+		$this->db->query("SHOW COLUMNS FROM user_info LIKE 'smiley_favorite%'");
 		if (!$this->db->next_record()) return false;
 		$this->my_smiley = array();
-		$this->db->query('SELECT smiley_favorite FROM user_info WHERE user_id = "'.$this->user_id.'"');
+		$this->db->queryf("SELECT smiley_favorite FROM user_info WHERE user_id = '%s'", $this->user_id);
 		if ($this->db->next_record()){
 			$sm_list = $this->db->f('smiley_favorite');
 			if (strlen($sm_list) > 1) {
