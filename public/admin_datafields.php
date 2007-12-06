@@ -53,6 +53,7 @@ $sess->register("admin_datafields_data");
 
 // handles output of column "Feldtyp"
 function printDataFieldType ($targetID, $currStruct) {
+	global $PHP_SELF;
 	echo '<font size="-1">';
 	if ($currStruct == 0 || ($targetID == $currStruct->getID() && $currStruct->getCachedNumEntries() == 0)) {
 		print "<select name=\"datafield_type\">";
