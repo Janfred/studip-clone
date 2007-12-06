@@ -1,5 +1,6 @@
 <!-- Startseite (nicht eingeloggt) -->
-<table class="blank" width="800"  border="0" cellpadding="0" cellspacing="0" align="center" valign="top">
+<div align="center">
+<table class="index_box"  border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="3" class="topic">
 			&nbsp;<b><?=$GLOBALS['UNI_NAME']?></b>
@@ -7,7 +8,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td height="270" valign="top" colspan="3" background="<?=$GLOBALS['ASSETS_URL']?>images/startseite.jpg">
+		<td class="blank" height="270" valign="top" colspan="3" style="background:url(<?=$GLOBALS['ASSETS_URL']?>images/startseite.jpg) no-repeat left top; background-color:#FFFFFF;">
 			<img src="<?=$GLOBALS['ASSETS_URL']?>images/blank.gif" height="30" width="5" border="0">
 			<br>
 			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
@@ -145,9 +146,5 @@
 			</table>
 		</td>
 	</tr>
-	<tr>
-		<td colspan="3" align="center" height="30">
-		&nbsp;
-		</td>
-	</tr>
 </table>
+</div>

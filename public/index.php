@@ -338,23 +338,24 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			textdomain($domain);
 			// hier nun die PortalPlugins anzeigen
 ?>
-			<table class="index_box" border="0" cellpadding="2" cellspacing="0">
-				<tr>
-					<td class="topic"><img src="<?=$activatedportalplugin->getPluginiconname()?>" border="0" align="absmiddle" /> <b><?=$activatedportalplugin->getDisplaytitle()?></b></td>
-					<td class="topic" align="right">
-						<? if ($activatedportalplugin->hasAdministration())
-						{
-							echo "<a href=\"". PluginEngine::getLink($activatedportalplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" align=\"absmiddle\" /></a>";
-						} ?>
-					</td>
-				</tr>
-				<tr>
-					<td class="index_box_cell" colspan="2">
-					<?=$activatedportalplugin->showOverview()?>
-					</td>
-				</tr>
-			</table>
-			<br/>
+		<table class="index_box" border="0" cellpadding="2" cellspacing="0">
+			<tr>
+				<td class="topic"><img src="<?=$activatedportalplugin->getPluginiconname()?>" border="0" align="absmiddle" /> <b><?=$activatedportalplugin->getDisplaytitle()?></b></td>
+				<td class="topic" align="right">
+					<? if ($activatedportalplugin->hasAdministration())
+					{
+						echo "<a href=\"". PluginEngine::getLink($activatedportalplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" align=\"absmiddle\" /></a>";
+					} ?>
+				</td>
+			</tr>
+			<tr>
+				<td class="index_box_cell" colspan="2">
+				<?=$activatedportalplugin->showOverview()?>
+				</td>
+			</tr>
+		</table>
+		<br/>
+
 <?
 			// restore the domain
 			textdomain("studip");
@@ -368,24 +369,25 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			$feed = new RSSFeed($db->f("url"));
 			if($db->f('fetch_title') && $feed->ausgabe->channel['title']) $feedtitle = $feed->ausgabe->channel['title'];
 			else $feedtitle = $db->f("name");
+?>
+		<table class="index_box" border="0" cellpadding="2" cellspacing="0">
+			<tr>
+				<td class="topic"><b><?=htmlReady($feedtitle)?></b></td>
+			</tr>
+			<tr>
+				<td class="index_box_cell">
+					<? $feed->rssfeed_start(); ?>
+				</td>
+			</tr>
+		</table>
+		<br/>
 
-			echo '<table class="index_box" border="0" cellpadding="2" cellspacing="0">
-					<tr>
-						<td class="topic"><b>' . htmlReady($feedtitle) . '</b></td>
-					</tr>
-					<tr>
-						<td class="index_box_cell">'
-						.$feed->rssfeed_start().
-						'</td>
-					</tr>
-					<tr>
-				</table>
-				<br/>';
+<?
 		}
 	}
-
-
-
+?>
+	</div>
+<?
 } else { //displaymodul for nobody
 	$index_nobody_template =& $GLOBALS['template_factory']->open('index_nobody');
 	$index_nobody_template->set_attribute('sso_cas', array_search("CAS", $GLOBALS["STUDIP_AUTH_PLUGIN"]));
@@ -418,17 +420,20 @@ if ($GLOBALS["PLUGINS_ENABLE"])
 			if ($activatedplugin->hasUnauthorizedView())
 			{
 ?>
-			<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
-				<tr>
-					<td class="topic"><img src="<?=$activatedplugin->getPluginiconname()?>"" border="0" align="absmiddle" /><b>&nbsp;<?= $activatedplugin->getDisplaytitle() ?></b></td>
-				</tr>
-				<tr>
-					<td class="index_box_cell">
-						<?= $activatedplugin->showOverview(false) ?>
-					</td>
-				</tr>
-			</table>
-			<br/>
+		<div align="center">
+		<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
+			<tr>
+				<td class="topic"><img src="<?=$activatedplugin->getPluginiconname()?>"" border="0" align="absmiddle" /><b>&nbsp;<?= $activatedplugin->getDisplaytitle() ?></b></td>
+			</tr>
+			<tr>
+				<td class="index_box_cell">
+					<?= $activatedplugin->showOverview(false) ?>
+				</td>
+			</tr>
+		</table>
+		</div>
+		<br/>
+
 <?php
 			}
 		}
