@@ -52,9 +52,8 @@ $sess->register("admin_modules_data");
 $messaging=new messaging;
 $amodules=new AdminModules;
 if ($GLOBALS['PLUGINS_ENABLE']){
-	$plugins = $amodules->pluginengine->getAllEnabledPlugins(); // get all installed and enabled plugins
+	$admin_modules_plugins = $amodules->pluginengine->getAllEnabledPlugins(); // get all installed and enabled plugins
 }
-
 if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
 	if ($default_x) {
@@ -105,8 +104,8 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					$amodules->clearBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
 				}
 			}
-			if ($GLOBALS['PLUGINS_ENABLE'] && is_array($plugins)){
-				foreach ($plugins as $plugin){
+			if ($GLOBALS['PLUGINS_ENABLE'] && is_array($admin_modules_plugins)){
+				foreach ($admin_modules_plugins as $plugin){
 					$key = "plugin_".$plugin->getPluginId();
 					if ($$key == "TRUE"){
 						$plugin->setActivated(true);
@@ -116,7 +115,7 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					}
 					$amodules->pluginengine->savePlugin($plugin);
 				}
-				$plugins = $amodules->pluginengine->getAllEnabledPlugins();
+				//$plugins = $amodules->pluginengine->getAllEnabledPlugins();
 			}
 		}
 
@@ -280,14 +279,14 @@ if ($admin_modules_data["range_id"]) {
 
 		}
 		if ($GLOBALS['PLUGINS_ENABLE']){
-			$plugins = $amodules->pluginengine->getAllEnabledPlugins();
+			//$plugins = $amodules->pluginengine->getAllEnabledPlugins();
 
 		 	// $defactplugins = $amodules->pluginengine->getDefaultActivationsForPOI($GLOBALS["SessSemName"][1]);
 
-			if ($plugins == null){
-				$plugins = array();
+			if ($admin_modules_plugins == null){
+				$admin_modules_plugins = array();
 			}
-			foreach ($plugins as $plugin){
+			foreach ($admin_modules_plugins as $plugin){
 				/*
 				$globalactivated = false;
 				foreach ($defactplugins as $actplugin) {

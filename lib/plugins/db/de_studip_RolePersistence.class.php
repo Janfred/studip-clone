@@ -54,13 +54,13 @@ class de_studip_RolePersistence {
 			$result = $conn->execute("insert into roles (roleid,rolename) values (0,?)", array($role->getRolename()));
 			$result =& $conn->execute("select last_insert_id() as roleid from roles");
 			$roleid = $result->fields("roleid");
-			$conn->CacheFlush();
+			if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
 		}
 		else {
 			// role is already in database
 			$result = $conn->execute("update roles set rolename=? where roleid=?",array($role->getRolename(),$role->getRoleid()));
 			$roleid = $role->getRoleid();
-			$conn->CacheFlush();
+			if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
 		}
 		return $roleid;
 	}
@@ -78,7 +78,7 @@ class de_studip_RolePersistence {
 			$conn->execute("delete from roles_plugins where roleid=?",array($role->getRoleid()));
 			$conn->execute("delete from roles_studipperms where roleid=?",array($role->getRoleid()));
 		}
-		$conn->CacheFlush();
+		if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
 	}
 
 	/**
@@ -99,7 +99,7 @@ class de_studip_RolePersistence {
 		}
 		$conn =& PluginEngine::getPluginDatabaseConnection();
 		$conn->execute("replace into roles_user (roleid,userid) values (?,?)",array($roleid,$user->getUserid()));
-		$conn->CacheFlush();
+		if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
 	}
 
 	function getAssignedRoles($userid,$implicit=false){
@@ -144,7 +144,7 @@ class de_studip_RolePersistence {
 	function deleteRoleAssignment($user,$role){
 		$conn =& PluginEngine::getPluginDatabaseConnection();
 		$conn->execute("delete from roles_user where roleid=? and userid=?",array($role->getRoleid(),$user->getUserid()));
-		$conn->CacheFlush();
+		if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
 	}
 
 	/**
@@ -191,7 +191,7 @@ class de_studip_RolePersistence {
 		foreach ($roleids as $roleid){
 			$conn->Execute("replace into roles_plugins (roleid,pluginid) values (?,?)",array($roleid,$pluginid));
 		}
-		$conn->CacheFlush();
+		if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
 	}
 
 	function deleteAssignedPluginRoles($pluginid,$roleids){
@@ -199,7 +199,7 @@ class de_studip_RolePersistence {
 		foreach ($roleids as $roleid){
 			$conn->Execute("delete from roles_plugins where roleid=? and pluginid=?",array($roleid,$pluginid));
 		}
-		$conn->CacheFlush();
+		if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
 	}
 
 	function getAssignedPluginRoles($pluginid=-1){

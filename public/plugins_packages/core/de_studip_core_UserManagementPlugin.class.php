@@ -12,7 +12,7 @@ class de_studip_core_UserManagementPlugin extends AbstractStudIPCorePlugin{
 	 * @param array of StudIPUser $searchtxt
 	 */
 	function searchUser($searchtxt){
-		$conn =& PluginEngine::getPluginDatabaseConnection();
+		$conn = PluginEngine::getPluginDatabaseConnection();
 		$searchtxt = "%" . $searchtxt . "%";		
 		$result = $conn->execute("select user_id from auth_user_md5 where username like ? or Vorname like ? or Nachname like ? order by Vorname,Nachname,username",array($searchtxt,$searchtxt,$searchtxt));		
 		$users = array();

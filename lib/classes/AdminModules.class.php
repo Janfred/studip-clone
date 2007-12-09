@@ -49,10 +49,9 @@ class AdminModules extends ModulesNotification {
 	var $db2;
 	
 	function AdminModules() {
-		Modules::Modules();
+		parent::ModulesNotification();
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
-		parent::ModulesNotification();
 		//please add here the special messages for modules you need consistency checks (defined below in this class)
 		$this->registered_modules["forum"]["msg_warning"] = _("Wollen Sie wirklich das Forum deaktivieren und damit alle Diskussionbeitr&auml;ge l&ouml;schen?");
 		$this->registered_modules["forum"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Forums werden <b>%s</b> Postings ebenfalls gel&ouml;scht!");

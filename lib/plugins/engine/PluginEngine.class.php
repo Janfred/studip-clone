@@ -59,7 +59,7 @@ class PluginEngine {
 		$dispatch_to = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
 
 		# retrieve plugin class
-		list($_, $plugin_class) = explode('/', $dispatch_to);
+		list(, $plugin_class) = explode('/', $dispatch_to);
 
 		if (empty($plugin_class)) {
 			throw new Exception(_("Es wurde kein Plugin gewählt."));
@@ -82,10 +82,10 @@ class PluginEngine {
 	* @param $plugintype - Standard, Administration, System
 	* @return a persistence object
 	*/
-	function &getPluginPersistence($plugintype="Abstract"){
+	public static function getPluginPersistence($plugintype="Abstract"){
 		$classname = $plugintype . "PluginIntegratorEnginePersistence";
-		$persistence =& new $classname();
-		$conn =& PluginEngine::getPluginDatabaseConnection();
+		$persistence = new $classname();
+		$conn = PluginEngine::getPluginDatabaseConnection();
 
 		$persistence->setConnection($conn);
 		$persistence->setEnvironment($GLOBALS["plugindbenv"]);
@@ -98,7 +98,7 @@ class PluginEngine {
 	/**
 	* @param the plugin for which a persistence object should be instantiated
 	*/
-	function &getPluginPersistenceByPlugin($plugin){
+	public static function getPluginPersistenceByPlugin($plugin){
 		return PluginEngine::getPluginPersistence(PluginEngine::getTypeOfPlugin($plugin));
 	}
 
@@ -107,9 +107,9 @@ class PluginEngine {
 	* @return active connection to the database
 	* @todo Caching of database connections ?
 	*/
-	function &getPluginDatabaseConnection(){
+	public static function getPluginDatabaseConnection(){
 		$env = $GLOBALS["plugindbenv"]; // get the environment
-		$connection =& NewADOConnection($env->dbtype);
+		$connection = NewADOConnection($env->dbtype);
 
 		// connect to the database
   		$connection->Connect($env->dbhost,$env->dbuser,$env->dbpassword,$env->dbname);
@@ -124,7 +124,7 @@ class PluginEngine {
 	* @param $cmd - command to execute by clicking the link
 	* @return a link to the current plugin with the additional $params
 	*/
-	function getLink($plugin, $params=array(), $cmd="show"){
+	public static function getLink($plugin, $params=array(), $cmd="show"){
 		if (is_null($plugin)){
 			return "";
 		}
@@ -152,7 +152,7 @@ class PluginEngine {
 	* @param $params - an array with name value pairs
 	* @return a link to the administration plugin with the additional $params
 	*/
-	function getLinkToAdministrationPlugin($params=array()){
+	public static function getLinkToAdministrationPlugin($params=array()){
 		$link = "plugins.php/pluginadministrationplugin/show";
 
 		// add params
@@ -171,18 +171,18 @@ class PluginEngine {
 	* @return returns the type of the plugin if known by the engine
 			  otherwise returns undefined
 	*/
-	function getTypeOfPlugin($plugin){
-	  if (is_a($plugin,'AbstractStudIPStandardPlugin') || is_subclass_of($plugin,'AbstractStudIPStandardPlugin')){
+	public static function getTypeOfPlugin($plugin){
+	  if ($plugin instanceof AbstractStudIPStandardPlugin){
 			return "Standard";
-		} else if (is_a($plugin,'AbstractStudIPAdministrationPlugin') || is_subclass_of($plugin,'AbstractStudIPAdministrationPlugin')) {
+		} else if ($plugin instanceof AbstractStudIPAdministrationPlugin) {
 			return "Administration";
-		} else if (is_a($plugin,'AbstractStudIPSystemPlugin') || is_subclass_of($plugin,'AbstractStudIPSystemPlugin')) {
+		} else if ($plugin instanceof AbstractStudIPSystemPlugin) {
 			return "System";
-		} else if (is_a($plugin, 'AbstractStudIPHomepagePlugin') || is_subclass_of($plugin, 'AbstractStudIPHomepagePlugin')){
+		} else if ($plugin instanceof AbstractStudIPHomepagePlugin){
 			return "Homepage";
-		} else if (is_a($plugin, 'AbstractStudIPPortalPlugin') || is_subclass_of($plugin, 'AbstractStudIPPortalPlugin')){
+		} else if ($plugin instanceof AbstractStudIPPortalPlugin){
 			return "Portal";
-		} else if (is_a($plugin, 'AbstractStudIPCorePlugin') || is_subclass_of($plugin, 'AbstractStudIPCorePlugin')){
+		} else if ($plugin instanceof AbstractStudIPCorePlugin){
 			return "Core";
 		}
 		return UNKNOWN_PLUGINTYPE;
@@ -195,7 +195,7 @@ class PluginEngine {
     * @param pluginpath - the path to the plugin
     * @return an instance of the desired plugin or null otherwise
     */
-   function &instantiatePlugin($pluginclassname, $pluginpath){
+   public static function instantiatePlugin($pluginclassname, $pluginpath){
    		$env = $GLOBALS["plugindbenv"];
 	    $absolutepluginfile = $env->getPackagebasepath() . "/" . $pluginpath . "/" . $pluginclassname . ".class.php";
 	    if (!file_exists($absolutepluginfile)){
@@ -205,7 +205,7 @@ class PluginEngine {
 			//anoack: unschöner workaround, aber auf die Schnelle kaum anders zu lösen, solange Plugins auch vorhandenen Stud.IP code nutzen wollen :)
 			global $RELATIVE_PATH_RESOURCES, $RELATIVE_PATH_CALENDAR,$RELATIVE_PATH_LEARNINGMODULES,$RELATIVE_PATH_CHAT;
 			require_once($absolutepluginfile);
-		    $plugin =& new $pluginclassname();
+		    $plugin = new $pluginclassname();
 		    $plugin->setEnvironment($env);
 		    $plugin->setPluginpath($env->getRelativepackagepath() . "/" . $pluginpath);
 		    $plugin->setBasepluginpath($pluginpath);
@@ -218,7 +218,7 @@ class PluginEngine {
 	* @return array containing the manifest information
 	* @todo Klasse für die Rückgabe realisieren
 	*/
-	function getPluginManifest($pluginpath){
+	public static function getPluginManifest($pluginpath){
 	   $pluginpath = trim($pluginpath);
 	   if (!(strrpos($pluginpath,"/") == strlen($pluginpath)-1)) $pluginpath .= "/";
 	   if (!file_exists($pluginpath . "plugin.manifest")){
@@ -264,7 +264,7 @@ class PluginEngine {
 	 * @return list of installable names of plugin packages
 	 *
 	 */
-	function getInstallablePlugins(){
+	public static function getInstallablePlugins(){
 		$newpluginsdir = $GLOBALS["NEW_PLUGINS_PATH"];
 
 		if (!isset($newpluginsdir)){
@@ -294,7 +294,7 @@ class PluginEngine {
 	 * @param string $key - a key for the value. has to be unique for the calling plugin
 	 * @param string $value - the value, which should be saved into the session
 	 */
-	function saveToSession($plugin,$key,$value){
+	public static function saveToSession($plugin,$key,$value){
 		$_SESSION["PLUGIN_SESSION_SPACE"][strtolower(get_class($plugin))][$key] =serialize($value);
 	}
 
@@ -303,7 +303,7 @@ class PluginEngine {
 	 * Retrieves the value to key from the global plugin session
 	 *
 	 */
-	function getValueFromSession($plugin,$key){
+	public static function getValueFromSession($plugin,$key){
 		return unserialize($_SESSION["PLUGIN_SESSION_SPACE"][strtolower(get_class($plugin))][$key]);
 	}
 
@@ -313,7 +313,7 @@ class PluginEngine {
 	 * @param unknown_type $key
 	 * @return unknown
 	 */
-	function getEngineValueFromSession($key){
+	public static function getEngineValueFromSession($key){
 		return unserialize($_SESSION["PLUGIN_SESSION_SPACE"]["PLUGINENGINE"][$key]);
 	}
 
@@ -323,7 +323,7 @@ class PluginEngine {
 	 * @param unknown_type $key
 	 * @param unknown_type $value
 	 */
-	function saveEngineValueToSession($key,$value){
+	public static function saveEngineValueToSession($key,$value){
 		$_SESSION["PLUGIN_SESSION_SPACE"]["PLUGINENGINE"][$key] = serialize($value);
 	}
 }

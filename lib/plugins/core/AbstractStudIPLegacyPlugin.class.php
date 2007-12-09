@@ -26,7 +26,11 @@
 
 abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
 
-
+	
+	function AbstractStudIPLegacyPlugin(){
+		parent::AbstractStudIPPlugin();
+	}
+	
   /**
    * This method dispatches and displays all actions. It uses the template
    * method design pattern, so you may want to implement the methods #route

@@ -11,6 +11,8 @@
 class SystemPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEnginePersistence {
 
     function SystemPluginIntegratorEnginePersistence(){
+		// Konstruktor der Oberklasse aufrufen
+    	parent::AbstractPluginIntegratorEnginePersistence();
     }
 
     /**

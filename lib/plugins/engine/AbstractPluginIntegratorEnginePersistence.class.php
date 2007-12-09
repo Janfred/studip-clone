@@ -51,7 +51,7 @@ class AbstractPluginIntegratorEnginePersistence {
 		$this->connection = $newconnection;
 	}
 
-	function &getConnection(){
+	function getConnection(){
 		return $this->connection;
 	}
 
@@ -117,7 +117,7 @@ class AbstractPluginIntegratorEnginePersistence {
     /**
     *
     */
-    function &executePluginQuery($filter,$params=array(),$attendroles=true){
+    function executePluginQuery($filter,$params=array(),$attendroles=true){
     	$user = $this->getUser();
 		$userid = $user->getUserid();
 

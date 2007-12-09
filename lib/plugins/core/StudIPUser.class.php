@@ -35,7 +35,7 @@ class StudIPUser {
 
     function setUserid($newuserid){
 	    $this->userid = $newuserid;
-		$dbconn =& PluginEngine::getPluginDatabaseConnection();
+		$dbconn = PluginEngine::getPluginDatabaseConnection();
 		if ($GLOBALS['PLUGINS_CACHING']){
     		$result =& $dbconn->CacheExecute($GLOBALS['PLUGINS_CACHE_TIME'],"SELECT * FROM auth_user_md5 WHERE user_id=?",array($newuserid));
 		}

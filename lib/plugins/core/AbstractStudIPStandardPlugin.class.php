@@ -108,7 +108,6 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin{
     function actionShowConfigurationPage(){
     	$user = $this->getUser();
     	$permission = $user->getPermission();
-
     	if (!$permission->hasAdminPermission()){
     		StudIPTemplateEngine::showErrorMessage(_("Sie besitzen keine Berechtigung, um dieses Plugin zu konfigurieren."));
 		}

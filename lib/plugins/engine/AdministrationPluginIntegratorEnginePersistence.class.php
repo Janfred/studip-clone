@@ -16,6 +16,8 @@ define("PLUGIN_ADMINISTRATION_POIID","admin");
 class AdministrationPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEnginePersistence {
 
     function AdministrationPluginIntegratorEnginePersistence(){
+		// Konstruktor der Oberklasse aufrufen
+    	parent::AbstractPluginIntegratorEnginePersistence();
     }
 
     /**
