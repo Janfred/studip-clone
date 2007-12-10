@@ -43,6 +43,8 @@ global
   $export_ex_types,
   $export_icon,
   $export_o_modes,
+  $FLASHPLAYER_DEFAULT_CONFIG_MIN,
+  $FLASHPLAYER_DEFAULT_CONFIG_MAX,
   $ilias_status,
   $ilias_systemgroup,
   $INST_MODULES,

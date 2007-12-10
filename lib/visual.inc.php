@@ -912,9 +912,9 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 						$width = ($params[2] < $max_width) ? $params[2] : $max_width;
 					}
 					if ($width > 200) {
-						$flash_config  = $GLOBALS['FLASPLAYER_DEFAULT_CONFIG_MAX'];
+						$flash_config  = $GLOBALS['FLASHPLAYER_DEFAULT_CONFIG_MAX'];
 					} else {
-						$flash_config = $GLOBALS['FLASPLAYER_DEFAULT_CONFIG_MIN'];
+						$flash_config = $GLOBALS['FLASHPLAYER_DEFAULT_CONFIG_MIN'];
 					}
 					$height = round($width * 0.75);
 					$flash_object  = "<object type=\"application/x-shockwave-flash\" id=\"FlashPlayer\" data=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\" width=\"$width\" height=\"$height\">"; // height=\"323\" width=\"404\"
