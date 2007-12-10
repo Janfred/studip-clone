@@ -1,4 +1,5 @@
 <?php
+/* vim: noexpandtab */
 /*
 meine_seminare.php - Anzeige der eigenen Seminare (anhaengig vom Status)
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>
@@ -130,14 +131,14 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
 
 		  	if ($plugin->hasChanged($my_obj_values["visitdate"])){
 		  		// something new
-		  		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=" 
+		  		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to="
 				. PluginEngine::getLink($plugin) . "\"><img src='" . $plugin->getChangeindicatoriconname() . "' border=0 "
 				. tooltip($plugin->getOverviewMessage(true)) ."></a>";
 		  	}
 		  	else {
 		  		// nothing changed, show empty icon
-				echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=" 
-				. PluginEngine::getLink($plugin) . "\"><img src='" . $plugin->getPluginiconname() 
+				echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to="
+				. PluginEngine::getLink($plugin) . "\"><img src='" . $plugin->getPluginiconname()
 				. "' border=0 "
 				. tooltip($plugin->getOverviewMessage(false))."></a>";
 		  	}
@@ -329,21 +330,21 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	$groups = array();
 
 	$all_semester = SemesterData::GetSemesterArray();
-	
+
 	$add_fields = '';
 	$add_query = '';
-	
+
 	if($group_field == 'sem_tree_id'){
 		$add_fields = ',sem_tree_id';
 		$add_query = "LEFT JOIN seminar_sem_tree sst ON (sst.seminar_id=seminar_user.seminar_id)";
 	}
-	
+
 	if($group_field == 'dozent_id'){
 		$add_fields = ', su1.user_id as dozent_id';
 		$add_query = "LEFT JOIN seminar_user as su1 ON (su1.seminar_id=seminare.Seminar_id AND su1.status='dozent')";
 	}
-	
-	
+
+
 	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe,
 				seminare.chdate, seminare.visible, admission_binding,modules,IFNULL(visitdate,0) as visitdate,
 				{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end $add_fields
@@ -920,7 +921,7 @@ elseif ($auth->auth["perm"]=="admin") {
 					seminare.start_time,seminare.admission_binding,seminare.visible, seminare.modules,
 					COUNT(seminar_user.user_id) AS teilnehmer,IFNULL(visitdate,0) as visitdate,
 					sd1.name AS startsem,IF(duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem
-					FROM Institute INNER JOIN seminare ON(seminare.Institut_id=Institute.Institut_id $sem_condition ) 
+					FROM Institute INNER JOIN seminare ON(seminare.Institut_id=Institute.Institut_id $sem_condition )
 					STRAIGHT_JOIN seminar_user on seminare.seminar_id=seminar_user.seminar_id
 					LEFT JOIN object_user_visits ouv ON (ouv.object_id=seminare.Seminar_id AND ouv.user_id='$user->id' AND ouv.type='sem')
 					LEFT JOIN semester_data sd1 ON ( start_time BETWEEN sd1.beginn AND sd1.ende)
