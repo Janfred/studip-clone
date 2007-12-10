@@ -788,7 +788,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 	$fixed_text = TransformInternalLinks($fixed_text);
 
 	$pattern = array(
-					'#((\[(img)(\=([^\n\f:]+?))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img)([^\n\f\[]+)\])?(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s\]<])*))#ie',
+		'#((\[(img|flash)(\=([^\n\f:]+?))?(:(\d{1,3}%?))?(:(center|right))?(:([^\]]+))?\]|\[(?!img|flash)([^\n\f\[]+)\])?(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s\]<])*))#ie',
 					'#(?<=\s|^|\>)(\[([^\n\f]+?)\])?(['.$chars.']+(\.['.$chars.']+)*@(['.$chars.']+(\.['.$chars.']+)+))#ie'
 					);
 	$replace = array(
@@ -823,82 +823,120 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 		$intern = true;
 		list($pu['first_target']) = explode('/',substr($pu['path'],strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'])));
 	}
-	if ($extern)
+
+	if ($extern) {
 		$link_pic = '';
-	elseif ($intern)
+	} elseif ($intern) {
 		$link_pic = "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\" hspace=\"2\" />";
-	else
+	} else {
 		$link_pic = "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_extern.gif\" border=\"0\" />";
+	}
 
 	if ($mod == 'LINK') {
-		if ($params[5] != 'img') {
+		if ($params[5] != 'img' && $params[5] != 'flash') {
 			if ($params[3] == '')
 				$params[3] = $params[4];
 			else $params[3] = format($params[3]);
 			$tbr = '<a href="'.idna_link($params[4]).'"'.($intern ? '' : ' target="_blank"').">$link_pic{$params[3]}</a>";
 		}
 		elseif ($img) {
-			$cfg = &Config::GetInstance();
-			$EXTERNAL_IMAGE_EMBEDDING = $cfg->getValue('EXTERNAL_IMAGE_EMBEDDING');
-			// Don't execute scripts internal scripts
-			if ($intern && !in_array($pu['first_target'], array('sendfile.php','download','assets','pictures')))
-				return $params[0];
-			else if ((!$EXTERNAL_IMAGE_EMBEDDING || $EXTERNAL_IMAGE_EMBEDDING == 'deny') && !$intern)
-				return $params[0];
-			else if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:i', $params[0]))
-				return $params[0];
-			else {
-				if ($params[2]) {
-					$width = '';
-					// width in percent
-					if (substr($params[2], -1) == '%') {
-						$width = (int) substr($params[2], 0, -1) < 100 ? " width=\"{$params[2]}\"" : ' width="100%"';
+			if ($params[5] == 'img') {
+				$cfg = &Config::GetInstance();
+				$EXTERNAL_IMAGE_EMBEDDING = $cfg->getValue('EXTERNAL_IMAGE_EMBEDDING');
+				// Don't execute scripts internal scripts
+				if ($intern && !in_array($pu['first_target'], array('sendfile.php','download','assets','pictures')))
+					return $params[0];
+				else if ((!$EXTERNAL_IMAGE_EMBEDDING || $EXTERNAL_IMAGE_EMBEDDING == 'deny') && !$intern)
+					return $params[0];
+				else if (!preg_match(':.+(\.jpg|\.jpeg|\.png|\.gif)$:i', $params[0]))
+					return $params[0];
+				else {
+					if ($params[2]) {
+						$width = '';
+						// width in percent
+						if (substr($params[2], -1) == '%') {
+							$width = (int) substr($params[2], 0, -1) < 100 ? " width=\"{$params[2]}\"" : ' width="100%"';
+						}
+						else {
+							// width of image in pixels
+							if (is_object($auth) && $auth->auth['xres'])
+								// 50% of x-resolution maximal
+								$max_width = floor($auth->auth['xres'] / 2);
+							else
+								$max_width = 400;
+							$width = ($params[2] < $max_width) ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
+						}
 					}
-					else {
+					if(!$intern && substr($EXTERNAL_IMAGE_EMBEDDING,0,5) == 'proxy' ) {
+						if (!is_object($auth)){
+							$_GET['cancel_login'] = 1;
+							page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
+						}
+						if ($auth->is_authenticated() && $GLOBALS['user']->id != 'nobody') {
+							$proxyurl = strstr($EXTERNAL_IMAGE_EMBEDDING,':');
+							if($proxyurl) $proxyurl = substr($proxyurl,1);
+							else $proxyurl = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'image_proxy.php?url=';
+							$image_url = $proxyurl . urlencode(idna_link($params[4]));
+						} else {
+							$image_url = idna_link($params[4]);
+						}
+					} else {
+						$image_url = idna_link($params[4]);
+					}
+					$tbr = '<img src="'.$image_url."\" $width border=\"0\" alt=\"{$params[1]}\" title=\"{$params[1]}\">";
+					if (preg_match('#(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s\]<])*)#i', $params[7])) {
+						$pum = @parse_url($params[7]);
+						if (($pum['scheme'] == 'http' || $pum['scheme'] == 'https')
+						&& ($pum['host'] == $_SERVER['HTTP_HOST'] || $pum['host'].':'.$pum['port'] == $_SERVER['HTTP_HOST'])
+						&& strpos($pum['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0){
+							$imgintern = true;
+						}
+						$tbr = '<a href="'.idna_link($params[7]).'"'.($imgintern ? '' : ' target="_blank"').'>'.$tbr.'</a>';
+					}
+					if ($params[6])
+						$tbr = "<div align=\"{$params[6]}\">$tbr</div>";
+				}
+			} elseif ($params[5] == 'flash') {
+				$width = 200;
+				// Don't execute scripts
+				if ((basename($pu['path']) != 'sendfile.php') && $intern && $pu['query']) {
+					return $params[0];
+				} else {
+					if ($params[2]) {
 						// width of image in pixels
 						if (is_object($auth) && $auth->auth['xres'])
 							// 50% of x-resolution maximal
 							$max_width = floor($auth->auth['xres'] / 2);
 						else
 							$max_width = 400;
-						$width = ($params[2] < $max_width) ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
+						$width = ($params[2] < $max_width) ? $params[2] : $max_width;
 					}
-				}
-				if(!$intern && substr($EXTERNAL_IMAGE_EMBEDDING,0,5) == 'proxy' ) {
-					if (!is_object($auth)){
-						$_GET['cancel_login'] = 1;
-						page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
-					}
-					if ($auth->is_authenticated() && $GLOBALS['user']->id != 'nobody') {
-						$proxyurl = strstr($EXTERNAL_IMAGE_EMBEDDING,':');
-						if($proxyurl) $proxyurl = substr($proxyurl,1);
-						else $proxyurl = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'image_proxy.php?url=';
-						$image_url = $proxyurl . urlencode(idna_link($params[4]));
+					if ($width > 200) {
+						$flash_config  = $GLOBALS['FLASPLAYER_DEFAULT_CONFIG_MAX'];
 					} else {
-						$image_url = idna_link($params[4]);
+						$flash_config = $GLOBALS['FLASPLAYER_DEFAULT_CONFIG_MIN'];
 					}
-				} else {
-					$image_url = idna_link($params[4]);
-				}
-				$tbr = '<img src="'.$image_url."\" $width border=\"0\" alt=\"{$params[1]}\" title=\"{$params[1]}\">";
-				if (preg_match('#(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s\]<])*)#i', $params[7])) {
-					$pum = @parse_url($params[7]);
-					if (($pum['scheme'] == 'http' || $pum['scheme'] == 'https')
-					&& ($pum['host'] == $_SERVER['HTTP_HOST'] || $pum['host'].':'.$pum['port'] == $_SERVER['HTTP_HOST'])
-					&& strpos($pum['path'], $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0){
-						$imgintern = true;
+					$height = round($width * 0.75);
+					$flash_object  = "<object type=\"application/x-shockwave-flash\" id=\"FlashPlayer\" data=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\" width=\"$width\" height=\"$height\">"; // height=\"323\" width=\"404\"
+					$flash_object .= "<param name=\"movie\" value=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\">";
+					$flash_object .= "<param name=\"FlashVars\" value=\"flv={$params[4]}&amp;startimage={$params[7]}{$flash_config}\">";
+					$flash_object .= "<embed src=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\" movie=\"$params[4]\" type=\"application/x-shockwave-flash\" FlashVars=\"flv={$params[4]}&amp;startimage={$params[7]}{$flash_config}\">";
+					$flash_object .= "</object>";
+					
+					$tbr = $flash_object;
+					if ($params[6]) {
+						$tbr = "<div align=\"{$params[6]}\">$tbr</div>";
 					}
-					$tbr = '<a href="'.idna_link($params[7]).'"'.($imgintern ? '' : ' target="_blank"').'>'.$tbr.'</a>';
 				}
-				if ($params[6])
-					$tbr = "<div align=\"{$params[6]}\">$tbr</div>";
+			
+			} else {
+				return $params[0];
 			}
-		}
-		else
+		} else {
 			return $params[0];
-
-	}
-	elseif ($mod == 'MAIL') {
+		}
+		
+	} elseif ($mod == 'MAIL') {
 		if ($params[0] != '')
 			$tbr = '<a href="mailto:'.idna_link($params[1], true). "\">$link_pic{$params[0]}</a>";
 		else

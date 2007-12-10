@@ -1647,10 +1647,16 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							$content.= "<input type=\"hidden\" name=\"type\" value=0 />";
 						}
 						else {
-							if ($db3->f("description"))
-							$content= htmlReady($db3->f("description"), TRUE, TRUE);
-							else
-							$content= _("Keine Beschreibung vorhanden");
+							$content = '';
+							if (strtolower(getFileExtension($db3->f('filename'))) == 'flv') {
+								$flash_player = get_flash_player($db3->f('dokument_id'), $db3->f('filename'), $type);
+								$content = "<div style=\"margin-bottom: 10px; height: {$flash_player['height']}; width: {$flash_player['width']};\">" . $flash_player['player'] . '</div>';
+							}
+							if ($db3->f("description")) {
+								$content .= htmlReady($db3->f("description"), TRUE, TRUE);
+							} else {
+								$content .= _("Keine Beschreibung vorhanden");
+							}
 							$content.=  "<br /><br />" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db3->f("filesize") / 1024));
 							$content.=  "&nbsp; " . sprintf(_("<b>Dateiname:</b> %s "),$db3->f("filename"));
 						}
@@ -2216,5 +2222,34 @@ function pclzip_convert_filename_cb($p_event, &$p_header) {
 		$p_header['stored_filename'] = iconv("ISO-8859-1", "IBM437", $p_header['stored_filename']);
 	}
 	return 1;
+}
+
+function get_flash_player ($document_id, $filename, $type) {
+	global $auth;
+	$width = 200;
+	// Don't execute scripts
+	// width of image in pixels
+	if (is_object($auth) && $auth->auth['xres']) {
+		// 50% of x-resolution maximal
+		$max_width = floor($auth->auth['xres'] / 4);
+	} else {
+		$max_width = 400;
+	}
+	$width = $max_width;
+	$height = round($width * 0.75);
+	if ($width > 200) {
+		$flash_config = $GLOBALS['FLASHPLAYER_DEFAULT_CONFIG_MAX'];
+	} else {
+		$flash_config = $GLOBALS['FLASHPLAYER_DEFAULT_CONFIG_MIN'];
+	}
+	$flash_config .= '&amp;autoplay=1&amp;autoload=1';
+	$movie_url = GetDownloadLink($document_id, $filename, $type, 'force');
+	$flash_object  = "\n<object type=\"application/x-shockwave-flash\" id=\"FlashPlayer\" data=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\" width=\"$width\" height=\"$height\">\n";
+	$flash_object .= "<param name=\"movie\" value=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\">\n";
+	$flash_object .= "<param name=\"FlashVars\" value=\"flv=" . urlencode($movie_url) . $flash_config . "\">\n";
+	$flash_object .= "<embed src=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\" movie=\"{$movie_url}\" type=\"application/x-shockwave-flash\" FlashVars=\"flv={$movie_url}{$flash_config}\">\n";
+	$flash_object .= "</object>\n";
+	
+	return array('player' => $flash_object, 'width' => $width, 'height' => $height);
 }
 ?>

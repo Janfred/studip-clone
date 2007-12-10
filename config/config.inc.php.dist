@@ -502,4 +502,9 @@ $ilias_systemgroup = array(
 "root" => "1",
 );
 // E-LEARNING-MODULES -->>
+
+// cofiguration for flash player
+$FLASHPLAYER_DEFAULT_CONFIG_MIN = "&amp;showstop=1&amp;showvolume=1&amp;bgcolor1=2C2C2C&amp;bgcolor2=2C2C2C&amp;playercolor=2C2C2C&amp;buttoncolor=837E00&amp;buttonovercolor=837E00&amp;slidercolor1=837E00&amp;slidercolor2=837E00&amp;sliderovercolor=E9B21A&amp;loadingcolor=E9B21A&amp;buffer=2&amp;buffercolor=white&amp;buffershowbg=0&amp;playeralpha=90&amp;playertimeout=500&amp;shortcut=1&amp;phpstream=0&amp;onclick=none";
+$FLASHPLAYER_DEFAULT_CONFIG_MAX = "&amp;showstop=1&amp;showvolume=1&amp;bgcolor1=2C2C2C&amp;bgcolor2=2C2C2C&amp;playercolor=2C2C2C&amp;buttoncolor=837E00&amp;buttonovercolor=837E00&amp;slidercolor1=837E00&amp;slidercolor2=837E00&amp;sliderovercolor=E9B21A&amp;loadingcolor=E9B21A&amp;buffer=2&amp;buffercolor=white&amp;buffershowbg=0&amp;playeralpha=90&amp;playertimeout=500&amp;shortcut=1&amp;showtime=1&amp;showfullscreen=1&amp;showplayer=always&amp;phpstream=0&amp;onclick=none";
+
 ?>
