@@ -32,7 +32,7 @@ class Flexi_JsTemplate extends Flexi_PhpTemplate {
   function _render() {
 
     # put attributes into scope
-    extract($this->attributes, EXTR_REFS);
+    extract($this->attributes);
 
     # get generator object
     $update_page =& new Flexi_JavascriptGenerator();

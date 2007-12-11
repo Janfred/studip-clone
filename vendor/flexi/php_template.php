@@ -30,8 +30,7 @@ class Flexi_PhpTemplate extends Flexi_Template {
    */
   function _render() {
 
-    # extract attributes
-    extract($this->attributes, EXTR_REFS);
+    extract($this->attributes);
 
     # include template, parse it and get output
     ob_start();
