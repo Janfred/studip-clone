@@ -299,8 +299,8 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 			$content['PERSONDETAILS']['STATUSGROUPS'] = ExternModule::ExtHtmlReady(join(', ', array_values($statusgroups)));
 		}
 		$content['PERSONDETAILS']['USERNAME'] = $db->f('username');
-		if (file_exists("{$GLOBALS['ABSOLUTE_PATH_USER_PIC']}/{$this->user_id}.jpg")) {
-			$content['PERSONDETAILS']['IMAGE-HREF'] = "{$GLOBALS['ABSOLUTE_URI_STUDIP']}{$GLOBALS['USER_PIC_PATH']}/{$this->user_id}.jpg";
+		if (file_exists("{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user/{$this->user_id}.jpg")) {
+			$content['PERSONDETAILS']['IMAGE-HREF'] = "{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/{$this->user_id}.jpg";
 		}
 		
 		$gruppen = GetStatusgruppen($this->config->range_id, $db->f('user_id'));
