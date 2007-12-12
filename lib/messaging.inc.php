@@ -200,7 +200,7 @@ class messaging {
 
 		setTempLanguage($db4->f("user_id"));
 
-		$title = "[Stud.IP - " . $GLOBALS['UNI_NAME_CLEAN'] . "] ".stripslashes(kill_format($subject));
+		$title = "[Stud.IP - " . $GLOBALS['UNI_NAME_CLEAN'] . "] ".stripslashes(kill_format(str_replace(array("\r","\n"), '', $subject)));
 
 		if ($snd_user_id != "____%system%____") {
 			$snd_fullname = get_fullname($snd_user_id);
