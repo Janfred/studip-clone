@@ -51,7 +51,7 @@ class StudipSemTreeSearch {
 
 	var $seminar_id;
 
-	var $institut_id;
+	var $institut_id = array();
 
 	var $sem_tree_ranges = array();
 
@@ -69,7 +69,7 @@ class StudipSemTreeSearch {
 		$this->view->params[0] = $seminar_id;
 		$rs = $this->view->get_query("view:SEM_GET_INST");
 		while($rs->next_record()){
-			$this->institut_id = $rs->f(0);
+			$this->institut_id[] = $rs->f(0);
 		}
 		$this->init();
 		if($auto_search){
@@ -109,7 +109,7 @@ class StudipSemTreeSearch {
 	function getExpectedRanges(){
 		$this->view->params[0] = $this->institut_id;
 		$rs = $this->view->get_query("view:SEM_TREE_GET_FAK");
-		if ($rs->next_record()){
+		while($rs->next_record()){
 			$the_kids = $this->tree->getKidsKids($rs->f("sem_tree_id"));
 			$the_kids[] = $rs->f("sem_tree_id");
 			for ($i = 0; $i < count($the_kids); ++$i){

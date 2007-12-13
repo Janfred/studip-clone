@@ -87,8 +87,8 @@ $GLOBALS['_views']["SEM_SEARCH_LECTURER"] = array("query" => "SELECT b.seminar_i
 													LEFT JOIN seminare c USING (seminar_id) WHERE § AND NOT ISNULL(b.seminar_id) AND (a.username LIKE ? OR a.Vorname LIKE ? OR a.Nachname LIKE ?) §");
 $GLOBALS['_views']["SEM_SEARCH_SEM"] = array("query" =>"SELECT c.seminar_id, " . $GLOBALS['_views']['sem_number_sql'] . " AS sem_number , " . $GLOBALS['_views']['sem_number_end_sql'] . " AS sem_number_end FROM seminare c WHERE § §");
 $GLOBALS['_views']["SEM_GET_FAKS"] = array("query" => "SELECT DISTINCT b.fakultaets_id,d.sem_tree_id FROM seminar_inst a LEFT JOIN  Institute b USING(Institut_id) LEFT JOIN sem_tree d ON (b.fakultaets_id=d.studip_object_id) WHERE a.seminar_id=?");
-$GLOBALS['_views']["SEM_GET_INST"] = array("query" => "SELECT Institut_id FROM seminare WHERE Seminar_id=?");
-$GLOBALS['_views']["SEM_TREE_GET_FAK"] = array("query" => "SELECT sem_tree_id FROM Institute LEFT JOIN sem_tree ON (fakultaets_id=studip_object_id) WHERE Institut_id=? AND NOT ISNULL(sem_tree_id)");
+$GLOBALS['_views']["SEM_GET_INST"] = array("query" => "SELECT institut_id FROM seminar_inst WHERE seminar_id=?");
+$GLOBALS['_views']["SEM_TREE_GET_FAK"] = array("query" => "SELECT DISTINCT sem_tree_id FROM Institute LEFT JOIN sem_tree ON (fakultaets_id=studip_object_id) WHERE Institut_id IN (&) AND NOT ISNULL(sem_tree_id)");
 
 
 $GLOBALS['_views']["SEM_INST_GET_SEM"] = array("query" => "SELECT c.Seminar_id, " . $GLOBALS['_views']['sem_number_sql'] . " AS sem_number , " . $GLOBALS['_views']['sem_number_end_sql'] . " AS sem_number_end FROM seminar_inst a LEFT JOIN seminare c USING (seminar_id) WHERE a.Institut_id IN (&) AND c.Seminar_id IS NOT NULL

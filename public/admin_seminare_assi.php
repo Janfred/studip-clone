@@ -76,7 +76,7 @@ if (is_array($sem_create_data["sem_bereich"])){
 		}
 }
 
-$st_search->institut_id = $sem_create_data["sem_inst_id"];
+$st_search->institut_id = array_merge((array)$sem_create_data["sem_inst_id"],(array)$sem_create_data["sem_bet_inst"]);
 $st_search->doSearch();
 $user_id = $auth->auth["uid"];
 $errormsg='';
@@ -328,7 +328,7 @@ if ($form == 1)
 		$sem_create_data["sem_bet_inst"]=$tmp_create_data_bet_inst;
 		}
 	$i=0;
-	$st_search->institut_id = $sem_create_data["sem_inst_id"];
+	$st_search->institut_id = array_merge((array)$sem_create_data["sem_inst_id"],(array)$sem_create_data["sem_bet_inst"]);
 
 	}
 
