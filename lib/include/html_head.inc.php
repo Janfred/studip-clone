@@ -1,4 +1,5 @@
 <?php
+/* vim: noexpandtab */
 /**
 * html_head.inc.php
 *
@@ -106,13 +107,7 @@ if (($my_messaging_settings['start_messenger_at_startup']) && ($auth->auth['jscr
 	$messenger_started = TRUE;
 }
 ?>
-	<? if ( $auth->auth['jscript']) : ?>
-		<script src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/prototype.js" type="text/javascript"></script>
-		<script src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/scriptaculous.js" type="text/javascript"></script>
-		<script src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/highlight_messages.js" type="text/javascript"></script>
-		<script src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/ajax_responder.js" type="text/javascript"></script>
-	<? endif ?>
-
+	<?= Assets::script('prototype', 'scriptaculous', 'application') ?>
 	</head>
 	<body>
       <div id="ajax_notification" style="display: none;"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ajax_indicator.gif" alt="AJAX indicator" align="absmiddle">&nbsp;Working...</div>

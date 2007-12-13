@@ -1,4 +1,9 @@
 document.observe('dom:loaded', function() {
+
+  // message highlighting
+  $$(".effect_highlight").invoke('highlight');
+
+  // ajax responder
   var indicator = $('ajax_notification');
   if (indicator) {
     Ajax.Responders.register({
