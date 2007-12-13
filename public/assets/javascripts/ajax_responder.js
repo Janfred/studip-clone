@@ -6,7 +6,7 @@ document.observe('dom:loaded', function() {
         if (Ajax.activeRequestCount) {
           request.usability_timer = setTimeout(function() {
             indicator.show();
-          }, 300);
+          }, 100);
         }
       },
       onComplete: function(request) {
