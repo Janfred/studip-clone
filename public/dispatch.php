@@ -15,7 +15,7 @@
 # define root
 $trails_root = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'app';
 
-$trails_uri = rtrim($ABSOLUTE_URI_STUDIP, '/');
+$trails_uri = rtrim($ABSOLUTE_URI_STUDIP, '/') . '/dispatch.php';
 
 # load trails
 require_once 'vendor/trails/trails.php';
