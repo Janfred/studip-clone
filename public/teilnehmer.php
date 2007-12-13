@@ -81,7 +81,7 @@ if ($rechte) {
 } else {
 	$HELP_KEYWORD="Basis.InVeranstaltungTeilnehmer";
 }
-$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("TeinehmerInnen");
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("TeilnehmerInnen");
 if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 	// Start  of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
