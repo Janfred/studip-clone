@@ -266,12 +266,35 @@ class StudipRangeTreeViewAdmin extends TreeView{
 				$this->mode = "";
 				$this->anchor = $item_id;
 				$this->open_items[$item_id] = true;
-
 			}
 		}
 		return true;
 	}
-
+	
+	function execCommandInsertFak(){
+		$studip_object_id = $_REQUEST['insert_fak'];
+		$parent_id = 'root';
+		if ($this->isItemAdmin($parent_id)){
+			$item_id = DbView::get_uniqid();
+			$priority = count($this->tree->getKids($parent_id));
+			$affected_rows = $this->tree->InsertItem($item_id,$parent_id,'',$priority,'fak',$studip_object_id);
+			if($affected_rows){
+				$view = new DbView();
+				$priority = 0;
+				$rs = $view->get_query("SELECT * FROM Institute WHERE fakultaets_id <> Institut_id AND fakultaets_id = '$studip_object_id' ORDER BY Name");
+				while($rs->next_record()){
+					$affected_rows += $this->tree->InsertItem(DbView::get_uniqid(),$item_id,mysql_escape_string($rs->f('name')),$priority++,'inst',$rs->f('Institut_id'));
+				}
+				$this->msg[$item_id] = "msg§" . sprintf(_("%s Elemente wurden eingefügt.") , $affected_rows);
+				$this->mode = "";
+				$this->anchor = $item_id;
+				$this->open_items[$item_id] = true;
+				$this->open_ranges[$item_id] = true;
+			}
+		}
+		return true;
+	}
+	
 	function execCommandAssertDeleteItem(){
 		$item_id = $_REQUEST['item_id'];
 		if ($this->isParentAdmin($item_id)){
@@ -511,6 +534,18 @@ class StudipRangeTreeViewAdmin extends TreeView{
 		$content .= "</td></tr></table>";
 		$content .= "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt\">";
 		if ($item_id == "root"){
+			if ($this->isItemAdmin($item_id)){
+				$view = new DbView();
+				$rs = $view->get_query("SELECT i1.Name,i1.Institut_id,COUNT(i2.Institut_id) as num FROM Institute i1 LEFT JOIN Institute i2 ON i1.Institut_id = i2.fakultaets_id AND i2.fakultaets_id<>i2.Institut_id WHERE i1.fakultaets_id=i1.Institut_id GROUP BY i1.Institut_id ORDER BY Name");
+				$content .= "\n<tr><td align=\"center\">";
+				$content .= "\n<form action=\"" . $this->getSelf("cmd=InsertFak") . "\" method=\"post\">" . _("Stud.IP Fakult&auml;t einf&uuml;gen:")
+				. "&nbsp;\n<select style=\"width:300px;vertical-align:middle;\" name=\"insert_fak\">";
+				while($rs->next_record()){
+					$content .= "\n<option value=\"" . $rs->f("Institut_id") . "\">" . htmlReady(my_substr($rs->f("Name") . '('.$rs->f('num').')',0,60)) . "</option>";
+				}
+				$content .= "</select>&nbsp;<input border=\"0\" type=\"image\" style=\"vertical-align:middle;\" " .makeButton("eintragen","src") . tooltip(_("Fakultät einfügen")) . "></form>";
+				$content .= " </td></tr>";
+			}
 			$content .= "\n<tr><td class=\"topic\" align=\"left\">" . htmlReady($this->tree->root_name) ." </td></tr>";
 			$content .= "\n<tr><td class=\"blank\" align=\"left\">" . htmlReady($this->root_content) ." </td></tr>";
 			$content .= "\n</table>";
