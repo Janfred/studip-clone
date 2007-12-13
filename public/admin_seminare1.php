@@ -74,28 +74,11 @@ function checkname(){
  return checked;
 }
 
-function checkbereich(){
- var checked = true;
- if (document.details["details_chooser[]"].selectedIndex < 0) {
-    alert("<?=_("Bitte geben Sie mindestens einen Studienbereich für die Veranstaltung ein!")?>");
- 		document.details["details_chooser[]"].focus();
-    checked = false;
- } else {
-		if (document.details["details_chooser[]"].options[document.details["details_chooser[]"].selectedIndex].value == 0) {
-			alert("<?=_("Die Zeilen, die unterstrichen sind, dienen nur der Orientierung.\\nBitte geben Sie einen gültigen Bereich ein!")?>");
- 			document.details["details_chooser[]"].focus();
-    	checked = false;
-		}
- }
- return checked;
-}
-
 function checkdata(command){
  var checked = true;
  if (!checkname())
  	checked = false;
- if (!checkbereich())
- 	checked = false;
+
  if (checked) {
    document.details.method = "post";
    document.details.action = "<?php echo $PHP_SELF ?>";
