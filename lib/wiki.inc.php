@@ -1172,7 +1172,7 @@ function getSearchbox($preselection, $keyword) {
 *
 **/
 function getShowPageInfobox($keyword, $latest_version) {
-	global $PHP_SELF, $show_wiki_comments, $SessionSemName, $perm;
+	global $PHP_SELF, $show_wiki_comments;
 
 	$versions=getWikiPageVersions($keyword);
 	$versiontext = '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">' . _("Aktuelle Version"). '</a><br>';
@@ -1244,7 +1244,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 					"text"=>$comment_text)));
 
 	// table of contents
-	if ($perm->have_studip_perm("autor", $SessSemName[1])) {
+	if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
 		$toc_create="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("erstellen")."</a>";
 		$toc_edit="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("bearbeiten")."</a>";
 		$toc=getWikiPage("toc",0);
@@ -1254,7 +1254,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 		} else {
 			$toc_text.=$toc_create."<br>";
 		}
-		$infobox[] = array("kategorie"=> _("Inhaltsverzeichnis").$comment_addon.":",
+		$infobox[] = array("kategorie"=> _("Inhaltsverzeichnis").":",
 					"eintrag" => array(array('icon' => "blank.gif",
 						"text"=>$toc_text)));
 	}
