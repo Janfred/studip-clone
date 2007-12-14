@@ -251,3 +251,13 @@ td.index_box_cell {
 	padding:4px;
 	background-image: url('../images/steel1.jpg');
 }
+
+div.wikitocfloat { 
+    font-size: 0.8em; margin-bottom: 10px;
+    border-top: 1px dotted #555555; border-bottom: 1px dotted #555555;
+    padding-top: 5px; padding-bottom: 5px; 
+    width: 30%; float: right; margin-left: 10px;
+    margin-right:3px; padding-right: 13px; padding-left: 13px;
+    background-color: #eeeeee; 
+}
+

@@ -388,7 +388,9 @@ function getBacklinks($keyword) {
 	$db->query($q);
 	$backlinks=array();
 	while ($db->next_record()) {
-		$backlinks[]=$db->f("from_keyword");
+		if ($db->f("from_keyword")!='toc') { // don't show references from Table of contents
+			$backlinks[]=$db->f("from_keyword");
+		}
 	}
 
 	return $backlinks;
@@ -967,6 +969,10 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 	if ($locks && $lock["user_id"]!=$user_id) {
 		parse_msg("info§" . "<p>&nbsp;</p>". sprintf(_("Die Seite wird eventuell von %s bearbeitet."), $locks) . "<br>" . _("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen.") . "<br>" . _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden.") . "<br>" . _("Klicken Sie auf Abbrechen, um zurückzukehren."), "§", "printcontent");
 	}
+	if ($keyword=='toc') {
+		parse_msg("info§" . "<p>&nbsp;</p>". _("Sie bearbeiten das Inhaltsverzeichnis.") . "<br>" . _("Verwenden Sie Aufzählungszeichen (-, --, ---), um Verweise auf Seiten hinzuzufügen.") , "§", "printcontent");
+		if (!$body) { $body=_("- WikiWikiWeb\n- BeispielSeite\n-- UnterSeite1\n-- UnterSeite2"); }
+	}
 
 	$cont .= "<p><form method=\"post\" action=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&cmd=edit\">";
 	$cont .= "<textarea name=\"body\" cols=\"80\" rows=\"15\">".htmlready($body)."</textarea>\n";
@@ -1166,7 +1172,7 @@ function getSearchbox($preselection, $keyword) {
 *
 **/
 function getShowPageInfobox($keyword, $latest_version) {
-	global $PHP_SELF, $show_wiki_comments;
+	global $PHP_SELF, $show_wiki_comments, $SessionSemName, $perm;
 
 	$versions=getWikiPageVersions($keyword);
 	$versiontext = '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">' . _("Aktuelle Version"). '</a><br>';
@@ -1236,6 +1242,23 @@ function getShowPageInfobox($keyword, $latest_version) {
 	$infobox[] = array("kategorie"=> _("Kommentare").$comment_addon.":",
 			"eintrag" => array(array('icon' => "blank.gif",
 					"text"=>$comment_text)));
+
+	// table of contents
+	if ($perm->have_studip_perm("autor", $SessSemName[1])) {
+		$toc_create="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("erstellen")."</a>";
+		$toc_edit="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("bearbeiten")."</a>";
+		$toc=getWikiPage("toc",0);
+		$toc_text="";
+		if ($toc) {
+			$toc_text.=$toc_edit."<br>";
+		} else {
+			$toc_text.=$toc_create."<br>";
+		}
+		$infobox[] = array("kategorie"=> _("Inhaltsverzeichnis").$comment_addon.":",
+					"eintrag" => array(array('icon' => "blank.gif",
+						"text"=>$toc_text)));
+	}
+
 // export
 //	$infobox[] = array("kategorie"=> _("Export ab dieser Seite:"),
 //			"eintrag" => array(array('icon' => "blank.gif","text"=>"<a href=\"wiki.php?view=exportparts&keyword=".urlencode($keyword)."\">exportieren</a>")));
@@ -1344,7 +1367,36 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon", $h
 
 	begin_blank_table();
 	echo "<tr>\n";
-	$cont = wikiLinks(wikiReady($wikiData["body"],TRUE,FALSE,$show_comments), $keyword, "wiki");
+	$cont="";
+	// Table of Contents / Wiki navigation
+	$toc=getWikiPage("toc",0);
+	if ($toc) {
+		$ToggleText=array(_("verstecken"),_("anzeigen"));
+		$toccont.="<script type=\"text/javascript\">
+			function toggle(obj) {
+			    var elstyle = document.getElementById(obj).style;
+			    var text    = document.getElementById(obj + \"tog\");
+			    if (elstyle.display == 'none') {
+				elstyle.display = 'block';
+				text.innerHTML = \"{$ToggleText[0]}\";
+			    } else {
+				elstyle.display = 'none';
+				text.innerHTML = \"{$ToggleText[1]}\";
+			    }
+			}
+			</script>";
+		$toccont.="<div class='wikitocfloat'>";
+		$toccont.="<p>"._("Inhaltsverzeichnis")." (<a id=\"00toctog\" href=\"javascript:toggle('00toc');\">{$ToggleText[0]}</a>)";
+		$toccont.="<div id='00toc'>";
+		$toccont.= wikiLinks(wikiReady($toc["body"],TRUE,FALSE,$show_comments), "toc", "wiki");
+		if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
+			$toccont.="<p><a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("bearbeiten")."</a></p>";
+		}
+		$toccont.="</div>";
+		$toccont.="</div>\n";
+		$cont.=$toccont;
+	}	
+	$cont .= wikiLinks(wikiReady($wikiData["body"],TRUE,FALSE,$show_comments), $keyword, "wiki");
 	if ($hilight) {
 		// Highlighting must only take place outside HTML tags, so
 		// 1. save all html tags in array $founds[0]
