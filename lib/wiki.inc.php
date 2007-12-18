@@ -1313,6 +1313,7 @@ function get_toc_toggler() {
 	return $cont;
 }
 function get_toc_content() {
+	global $perm, $SessSemName, $PHP_SELF;
 	// Table of Contents / Wiki navigation
 	$toc=getWikiPage("toc",0);
 	if ($toc) {
