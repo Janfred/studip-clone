@@ -1212,6 +1212,15 @@ function getShowPageInfobox($keyword, $latest_version) {
 
  	// assemble infobox
 	$infobox = array ();
+
+	// toc
+	$toccont=get_toc_content();
+	if ($toccont) {
+		$infobox[] = array("kategorie"=> _("Inhaltsverzeichnis")."&nbsp;".get_toc_toggler(),
+			"eintrag" => array(array('icon' => "blank.gif",
+			"text"=>$toccont)));
+	}
+
 	if (!$latest_version) {
 		$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array('icon' => "ausruf_small.gif", "text"=> sprintf(_("Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die %saktuelle Version%s."), '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">','</a>'))));
 	}
@@ -1243,21 +1252,6 @@ function getShowPageInfobox($keyword, $latest_version) {
 			"eintrag" => array(array('icon' => "blank.gif",
 					"text"=>$comment_text)));
 
-	// table of contents
-	if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
-		$toc_create="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("erstellen")."</a>";
-		$toc_edit="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("bearbeiten")."</a>";
-		$toc=getWikiPage("toc",0);
-		$toc_text="";
-		if ($toc) {
-			$toc_text.=$toc_edit."<br>";
-		} else {
-			$toc_text.=$toc_create."<br>";
-		}
-		$infobox[] = array("kategorie"=> _("Inhaltsverzeichnis").":",
-					"eintrag" => array(array('icon' => "blank.gif",
-						"text"=>$toc_text)));
-	}
 
 // export
 //	$infobox[] = array("kategorie"=> _("Export ab dieser Seite:"),
@@ -1297,7 +1291,48 @@ function getDiffPageInfobox($keyword) {
 	return $infobox;
 }
 
-
+function get_toc_toggler() {
+	$toc=getWikiPage("toc",0);
+	if (!$toc) return '';
+	$cont="";
+	$ToggleText=array(_("verstecken"),_("anzeigen"));
+	$cont.="<script type=\"text/javascript\">
+		function toggle(obj) {
+		    var elstyle = document.getElementById(obj).style;
+		    var text    = document.getElementById(obj + \"tog\");
+		    if (elstyle.display == 'none') {
+			elstyle.display = 'block';
+			text.innerHTML = \"{$ToggleText[0]}\";
+		    } else {
+			elstyle.display = 'none';
+			text.innerHTML = \"{$ToggleText[1]}\";
+		    }
+		}
+		</script>";
+	$cont.="<span class='wikitoc_toggler'> (<a id=\"00toctog\" href=\"javascript:toggle('00toc');\">{$ToggleText[0]}</a>)</span>";
+	return $cont;
+}
+function get_toc_content() {
+	// Table of Contents / Wiki navigation
+	$toc=getWikiPage("toc",0);
+	if ($toc) {
+		$toccont.="<div class='wikitoc'>";
+		$toccont.="<div id='00toc'>";
+		$toccont.= wikiLinks(wikiReady($toc["body"],TRUE,FALSE,$show_comments), "toc", "wiki");
+		$toccont.="</div>";
+		$toccont.="</div>\n";
+	} 
+	if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
+		$toccont.="<div class='wikitoc_editlink'>";
+		if ($toc) {
+			$toccont.="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("bearbeiten")."</a>";
+		} else {
+			$toccont.="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("erstellen")."</a>";
+		}
+		$toccont.="</div>";
+	}
+	return $toccont;
+}
 
 /**
 * Display wiki page.
@@ -1368,34 +1403,7 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon", $h
 	begin_blank_table();
 	echo "<tr>\n";
 	$cont="";
-	// Table of Contents / Wiki navigation
-	$toc=getWikiPage("toc",0);
-	if ($toc) {
-		$ToggleText=array(_("verstecken"),_("anzeigen"));
-		$toccont.="<script type=\"text/javascript\">
-			function toggle(obj) {
-			    var elstyle = document.getElementById(obj).style;
-			    var text    = document.getElementById(obj + \"tog\");
-			    if (elstyle.display == 'none') {
-				elstyle.display = 'block';
-				text.innerHTML = \"{$ToggleText[0]}\";
-			    } else {
-				elstyle.display = 'none';
-				text.innerHTML = \"{$ToggleText[1]}\";
-			    }
-			}
-			</script>";
-		$toccont.="<div class='wikitocfloat'>";
-		$toccont.="<p>"._("Inhaltsverzeichnis")." (<a id=\"00toctog\" href=\"javascript:toggle('00toc');\">{$ToggleText[0]}</a>)";
-		$toccont.="<div id='00toc'>";
-		$toccont.= wikiLinks(wikiReady($toc["body"],TRUE,FALSE,$show_comments), "toc", "wiki");
-		if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
-			$toccont.="<p><a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("bearbeiten")."</a></p>";
-		}
-		$toccont.="</div>";
-		$toccont.="</div>\n";
-		$cont.=$toccont;
-	}	
+
 	$cont .= wikiLinks(wikiReady($wikiData["body"],TRUE,FALSE,$show_comments), $keyword, "wiki");
 	if ($hilight) {
 		// Highlighting must only take place outside HTML tags, so
