@@ -70,8 +70,23 @@ if (check_ticket($studipticket)){
 												'user_info.geschlecht' => stripslashes(trim($geschlecht)),
 											);
 
-			$UserManagement->createNewUser($newuser);
-
+			if($UserManagement->createNewUser($newuser)){
+				if ($_REQUEST['select_inst_id'] && $perm->have_studip_perm('admin', $_REQUEST['select_inst_id'])){
+					$db = new DB_Seminar();
+					$db->query(sprintf("SELECT Name, Institut_id FROM Institute WHERE Institut_id='%s'", $_REQUEST['select_inst_id']));
+					if($db->next_record()){
+						$inst_name = $db->f('Name');
+						$db->query(sprintf("INSERT INTO user_inst (user_id,Institut_id,inst_perms) VALUES ('%s','%s','%s')",
+						$UserManagement->user_data['auth_user_md5.user_id'], $_REQUEST['select_inst_id'], $UserManagement->user_data['auth_user_md5.perms']));
+						if ($db->affected_rows()){
+							$UserManagement->msg .= "msg§" . sprintf(_("Benutzer in Einrichtung \"%s\" mit dem Status \"%s\" eingetragen."), htmlReady($inst_name), $UserManagement->user_data['auth_user_md5.perms']) . "§";
+						} else {
+							$UserManagement->msg .= "error§" . sprintf(_("Benutzer konnte nicht in  Einrichtung \"%s\" eingetragen werden."), htmlReady($inst_name)) . "§";
+						}
+					}
+				}
+			}
+			
 			break;
 
 
@@ -202,6 +217,30 @@ if (isset($_GET['details'])) {
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("E-Mail:")?></b></td>
 					<td>&nbsp;<input type="text" name="Email" size=48 maxlength=63 value="">&nbsp;</td>
+				</tr>
+				<tr>
+				<td colspan="2"><b>&nbsp;<?=_("Einrichtung:")?></b></td>
+					<td>&nbsp;<select name="select_inst_id">
+					<?
+			if ($auth->auth['perm'] == "root"){
+				$db->query("SELECT Institut_id, Name, 1 AS is_fak  FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
+			} elseif ($auth->auth['perm'] == "admin") {
+				$db->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN Institute b USING (Institut_id)  
+				WHERE a.user_id='$user->id' AND a.inst_perms='admin' ORDER BY is_fak,Name");
+			}
+			printf ("<option value=\"0\">%s</option>\n", _("-- bitte Einrichtung ausw&auml;hlen (optional) --"));
+			while ($db->next_record()){
+				printf ("<option value=\"%s\" style=\"%s\">%s </option>\n", $db->f("Institut_id"),($db->f("is_fak") ? "font-weight:bold;" : ""), htmlReady(substr($db->f("Name"), 0, 70)));
+				if ($db->f("is_fak")){
+					$db2->query("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "' ORDER BY Name");
+					while ($db2->next_record()){
+						printf("<option value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s </option>\n", $db2->f("Institut_id"), htmlReady(substr($db2->f("Name"), 0, 70)));
+					}
+				}
+			}
+			?>
+			</select>
+					&nbsp;</td>
 				</tr>
 				<tr>
 				<td colspan=3 align=center>&nbsp;

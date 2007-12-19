@@ -88,6 +88,8 @@ if (isset($_REQUEST['kill_accounts_x']) && check_ticket($_POST['ticket'])){
 	}
 }
 
+$CURRENT_PAGE = _("Löschen von Benutzer-Accounts");
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');	 //hier wird der "Kopf" nachgeladen 
@@ -112,9 +114,6 @@ echo "\n" . cssClassSwitcher::GetHoverJSFunction() . "\n";
 			}
 </script>
 <table border="0" bgcolor="#000000" align="center" cellspacing="0" cellpadding="0" width="100%">
-	<tr>
-		<td class="topic" align="left"><b>&nbsp;<?=_("Löschen von Benutzer-Accounts")?></b></td>
-	</tr>
 	<tr>
 		<td class="blank">&nbsp;</td>
 	</tr>
