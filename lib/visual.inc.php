@@ -917,25 +917,25 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 						$flash_config = $GLOBALS['FLASHPLAYER_DEFAULT_CONFIG_MIN'];
 					}
 					$height = round($width * 0.75);
-					$flash_object  = "<object type=\"application/x-shockwave-flash\" id=\"FlashPlayer\" data=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\" width=\"$width\" height=\"$height\">"; // height=\"323\" width=\"404\"
-					$flash_object .= "<param name=\"movie\" value=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\">";
+					$flash_object  = "<object type=\"application/x-shockwave-flash\" id=\"FlashPlayer\" data=\"".Assets::url()."flash/player_flv.swf\" width=\"$width\" height=\"$height\">"; // height=\"323\" width=\"404\"
+					$flash_object .= "<param name=\"movie\" value=\"".Assets::url()."flash/player_flv.swf\">";
 					$flash_object .= "<param name=\"FlashVars\" value=\"flv={$params[4]}&amp;startimage={$params[7]}{$flash_config}\">";
-					$flash_object .= "<embed src=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\" movie=\"$params[4]\" type=\"application/x-shockwave-flash\" FlashVars=\"flv={$params[4]}&amp;startimage={$params[7]}{$flash_config}\">";
+					$flash_object .= "<embed src=\"".Assets::url()."flash/player_flv.swf\" movie=\"$params[4]\" type=\"application/x-shockwave-flash\" FlashVars=\"flv={$params[4]}&amp;startimage={$params[7]}{$flash_config}\">";
 					$flash_object .= "</object>";
-					
+
 					$tbr = $flash_object;
 					if ($params[6]) {
 						$tbr = "<div align=\"{$params[6]}\">$tbr</div>";
 					}
 				}
-			
+
 			} else {
 				return $params[0];
 			}
 		} else {
 			return $params[0];
 		}
-		
+
 	} elseif ($mod == 'MAIL') {
 		if ($params[0] != '')
 			$tbr = '<a href="mailto:'.idna_link($params[1], true). "\">$link_pic{$params[0]}</a>";

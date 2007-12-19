@@ -422,7 +422,7 @@ function copy_item($item_id, $new_parent, $change_sem_to = false) {
 			return false;
 		}
 	}
-	
+
 	if ($item_id != $new_parent) {
 		$db->query("SELECT dokument_id FROM dokumente WHERE dokument_id = '$item_id'");
 		if ($db->next_record()){
@@ -527,16 +527,16 @@ function copy_folder($folder_id, $new_range, $seed = false){
 
 function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "", $filesize="") {
 	global $SessionSeminar;
-	
+
 	$db=new DB_Seminar;
 	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
-	
+
 	if ($url != ""){
 		$url_parts = parse_url($url);
 		$the_file_name = basename($url_parts['path']);
 	}
 	if ($protected == "on") $protected=1;
-	
+
 	if ($type){
 		$db->query("UPDATE folder SET  description='$description' " . (strlen($name) ? ", name='$name'" : "" ). " WHERE folder_id ='$item_id'");
 		if($GLOBALS['perm']->have_studip_perm('tutor', $SessionSeminar)){
@@ -554,7 +554,7 @@ function edit_item ($item_id, $type, $name, $description, $protected=0, $url = "
 	$db->query("UPDATE dokumente SET name='$name', filesize='$filesize', description='$description', protected='$protected', url='$url', filename='$the_file_name' WHERE dokument_id ='$item_id'");
 	else
 	$db->query("UPDATE dokumente SET name='$name', description='$description', protected='$protected' WHERE dokument_id ='$item_id'");
-	
+
 	if ($db->affected_rows()) return TRUE;
 }
 
@@ -1257,7 +1257,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 	if (($check_folder[1]) || ($all)) {
 	$db->query($query = "SELECT ". $_fullname_sql['full'] ." AS fullname , username, folder_id, a.range_id, a.user_id, name, a.description, a.mkdate, a.chdate FROM folder a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE a.range_id = '$folder_id' ORDER BY a.name, a.chdate");
-	
+
 	while ($db->next_record() || ($all && !$cnt) ) {
 		if ($folder_tree->isExecutable($db->f('folder_id'), $user->id) || ($all && !$cnt)){
 		$cnt++; //a very hard hack to fix the problem, that no documents in view "all documents" are shown, if the "general folder" was deleted. Not good. But works...
@@ -1296,12 +1296,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$dont_move_to = getFolderId($db->f("folder_id"));
 			$dont_move_to[] = $db->f('folder_id');
 		}
-		
+
 		$is_issue_folder = ($level == 0 && IssueDB::isIssue($db->f("range_id")));
 		if ($is_issue_folder) {
 			$dates_for_issue = IssueDB::getDatesforIssue($db->f('range_id'));
 		}
-		
+
 		$anker = '';
 		//Ankerlogik
 		if (($change) || ($move) || ($upload)) {
@@ -1334,7 +1334,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$link=$PHP_SELF."?close=".$db->f("folder_id")."#anker";
 
 			//Titelbereich erstellen
-			if (!$db->f('name')) {	
+			if (!$db->f('name')) {
 				$title_name = _("Ohne Titel");
 			} else {
 				$title_name = $db->f('name');
@@ -1426,11 +1426,11 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						. '<br><b>' . htmlReady(join('; ', get_user_documents_in_folder($db->f("folder_id"), $GLOBALS['user']->id))).'</b>' : '')
 						. '<hr>';
 			}
-			
+
 			if ($is_issue_folder){
 				$dates = array();
 				foreach ($dates_for_issue as $date) {
-					$dates[] = strftime("%x", $date['date']); 
+					$dates[] = strftime("%x", $date['date']);
 				}
 				$content .= _("Dieser Ordner ist ein themenbezogener Dateiordner.");
 				if(count($dates)){
@@ -1439,7 +1439,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 				}
 				$content .=  '<hr>';
 			}
-			
+
 			if ($folder_tree->isGroupFolder($db->f("folder_id"))){
 				$content .=  sprintf(_("Dieser Ordner gehört der Gruppe <b>%s</b>. Nur Mitglieder dieser Gruppe können diesen Ordner sehen."),
 				htmlReady(GetStatusgruppeName($db->f("range_id")))) . '<hr>';
@@ -1452,7 +1452,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$content.="\n<textarea name=\"change_description\" rows=3 cols=40>".htmlReady($db->f("description"))."</textarea>";
 						$content .= chr(10) . '</td><td><font size="-1">';
 						if($rechte){
-							if ($folder_tree->permissions_activated){ 
+							if ($folder_tree->permissions_activated){
 								$content.= "\n<INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isReadable($db->f('folder_id')) ? "CHECKED" : "" ) . " NAME=\"perm_read\">&nbsp;";
 								$content.= "<b>r</b> - " . _("Lesen (Dateien k&ouml;nnen heruntergeladen werden)");
 								$content.= "\n<br><INPUT style=\"vertical-align:middle\" TYPE=\"checkbox\" VALUE=\"1\" ".($folder_tree->isWritable($db->f('folder_id')) ? "CHECKED" : "" ) . " NAME=\"perm_write\">&nbsp;";
@@ -1475,13 +1475,13 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$content.="\n<input type=\"image\"" . makeButton("abbrechen", "src") . " align=\"absmiddle\" name=\"cancel\" value=\""._("Abbrechen")."\">";
 						$content.= "\n<input type=\"hidden\" name=\"open\" value=\"".$db->f("folder_id")."_sc_\" />";
 						$content.="\n<input type=\"hidden\" name=\"type\" value=1 />";
-						$content .= chr(10) . '</td></tr></table>';	
+						$content .= chr(10) . '</td></tr></table>';
 					}
 					elseif ($db->f("description"))
 					$content .= htmlReady($db->f("description"), TRUE, TRUE);
 					else
 					$content .= _("Keine Beschreibung vorhanden");
-					
+
 					if ($move == $db->f("folder_id")){
 						$content .="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
 						if($rechte) $content .= _("Wenn Sie den Ordner in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus.");
@@ -2244,12 +2244,12 @@ function get_flash_player ($document_id, $filename, $type) {
 	}
 	$flash_config .= '&amp;autoplay=1&amp;autoload=1';
 	$movie_url = GetDownloadLink($document_id, $filename, $type, 'force');
-	$flash_object  = "\n<object type=\"application/x-shockwave-flash\" id=\"FlashPlayer\" data=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\" width=\"$width\" height=\"$height\">\n";
-	$flash_object .= "<param name=\"movie\" value=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\">\n";
+	$flash_object  = "\n<object type=\"application/x-shockwave-flash\" id=\"FlashPlayer\" data=\"".Assets::url()."flash/player_flv.swf\" width=\"$width\" height=\"$height\">\n";
+	$flash_object .= "<param name=\"movie\" value=\"".Assets::url()."flash/player_flv.swf\">\n";
 	$flash_object .= "<param name=\"FlashVars\" value=\"flv=" . urlencode($movie_url) . $flash_config . "\">\n";
-	$flash_object .= "<embed src=\"{$GLOBALS['ASSETS_URL']}player_flv.swf\" movie=\"{$movie_url}\" type=\"application/x-shockwave-flash\" FlashVars=\"flv={$movie_url}{$flash_config}\">\n";
+	$flash_object .= "<embed src=\"".Assets::url()."flash/player_flv.swf\" movie=\"{$movie_url}\" type=\"application/x-shockwave-flash\" FlashVars=\"flv={$movie_url}{$flash_config}\">\n";
 	$flash_object .= "</object>\n";
-	
+
 	return array('player' => $flash_object, 'width' => $width, 'height' => $height);
 }
 ?>
