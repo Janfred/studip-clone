@@ -56,9 +56,11 @@ $sem_id = $SessionSemName[1];
 function mainView() {
 	global $zt;
 
+  $link = htmlspecialchars($GLOBALS['PHP_SELF']);
+
 	echo $zt->openRow();
 	echo $zt->cell('&nbsp;', array('class' => 'blank'));
-	echo $zt->cell('<a href="'.$PHP_SELF.'?cmd=new_rule">'. _("Neue Regel anlegen") .'</a><br/><br/>', array('colspan' => '20', 'class' => 'blank'));
+	echo $zt->cell('<a href="'.$link.'?cmd=new_rule">'. _("Neue Regel anlegen") .'</a><br/><br/>', array('colspan' => '20', 'class' => 'blank'));
 	echo $zt->closeRow();
 
 	echo $zt->openHeaderRow();
@@ -76,7 +78,8 @@ function mainView() {
 		echo $zt->cell('&nbsp;', array('class' => 'blank'));
 		echo $zt->cell('&nbsp;'.$data['name']);
 		echo $zt->cell('&nbsp;'.$data['description']);
-		echo $zt->cell('<a href="'.$PHP_SELF.'?cmd=edit&id='.$id.'">'. makebutton('bearbeiten').'</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="'.$PHP_SELF.'?cmd=delete&id='.$id.'">'. makebutton('loeschen').'</a>', array('width' => '30%', 'align' => 'center'));
+		echo $zt->cell('<a href="'.$link.'?cmd=edit&id='.$id.'">'. makebutton('bearbeiten').'</a>&nbsp;&nbsp;&nbsp;&nbsp;'.
+		               '<a href="'.$link.'?cmd=delete&id='.$id.'">'. makebutton('loeschen').'</a>', array('width' => '30%', 'align' => 'center'));
 		echo $zt->cell('&nbsp;', array('class' => 'blank'));
 		echo $zt->closeRow();
 	}
