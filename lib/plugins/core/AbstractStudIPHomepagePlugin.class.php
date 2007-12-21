@@ -89,35 +89,28 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
 
     $pluginparams = $_GET["plugin_subnavi_params"];
 
-    if (in_array($action, array('actionshowConfigurationPage',
-                                'actionshowDescriptionalPage'))
-        && $GLOBALS['perm']->have_perm("admin")) {
-      include 'lib/include/links_admin.inc.php';
+    $db = new DB_Seminar();
+    $admin_darf = false;
+
+    // Bin ich ein Inst_admin, und ist der user in meinem Inst Tutor oder Dozent?
+    $db->query("SELECT b.inst_perms FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.user_id = '$user_id') AND (b.inst_perms = 'autor' OR b.inst_perms = 'tutor' OR b.inst_perms = 'dozent') AND (a.user_id = '{$GLOBALS['user']->id}') AND (a.inst_perms = 'admin')");
+
+    if ($GLOBALS['perm']->have_perm("root"))
+      $admin_darf = true;
+    else if ($GLOBALS["auth"]->auth["uname"] == $username)
+      $admin_darf = true;
+    else if ($db->num_rows())
+      $admin_darf = true;
+    else if ($GLOBALS['perm']->is_fak_admin()) {
+      $db->query("SELECT c.user_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.fakultaets_id)  LEFT JOIN user_inst c ON(b.Institut_id=c.Institut_id) WHERE a.user_id='{$GLOBALS['user']->id}' AND a.inst_perms='admin' AND c.user_id='$user_id'");
+      if ($db->next_record())
+        $admin_darf = true;
     }
-    else {
-      $db = new DB_Seminar();
-      $admin_darf = false;
 
-      // Bin ich ein Inst_admin, und ist der user in meinem Inst Tutor oder Dozent?
-      $db->query("SELECT b.inst_perms FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.user_id = '$user_id') AND (b.inst_perms = 'autor' OR b.inst_perms = 'tutor' OR b.inst_perms = 'dozent') AND (a.user_id = '{$GLOBALS['user']->id}') AND (a.inst_perms = 'admin')");
-
-      if ($GLOBALS['perm']->have_perm("root"))
-        $admin_darf = true;
-      else if ($GLOBALS["auth"]->auth["uname"] == $username)
-        $admin_darf = true;
-      else if ($db->num_rows())
-        $admin_darf = true;
-      else if ($GLOBALS['perm']->is_fak_admin()) {
-        $db->query("SELECT c.user_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.fakultaets_id)  LEFT JOIN user_inst c ON(b.Institut_id=c.Institut_id) WHERE a.user_id='{$GLOBALS['user']->id}' AND a.inst_perms='admin' AND c.user_id='$user_id'");
-        if ($db->next_record())
-          $admin_darf = true;
-      }
-
-      // show the admin tabs if user may edit
-      // $username is passed to links_about.inc.php
-      if ($admin_darf == true) {
-        include 'lib/include/links_about.inc.php';
-      }
+    // show the admin tabs if user may edit
+    // $username is passed to links_about.inc.php
+    if ($admin_darf == true) {
+      include 'lib/include/links_about.inc.php';
     }
 
     StudIPTemplateEngine::startContentTable();

@@ -1,5 +1,5 @@
 <?php
-
+/* vim: noexpandtab */
 /**
  * plugin type unknown
  */
@@ -17,42 +17,57 @@ define("UNKNOWN_PLUGINTYPE", "undefined");
 class PluginEngine {
 
 
-  /**
-   * Contains the current plugin's ID
-   *
-   * @var mixed
-   */
-  private static $currentPluginId;
-
-
-  /**
-   * TODO
-   *
-   * @return int  returns the current plugin's ID
-   */
-  public static function getCurrentPluginId() {
-    return PluginEngine::$currentPluginId;
-  }
-
-
-  /**
-   * TODO
-   *
-   * @param  int  the current plugin's ID
-   *
-   * @return int  returns the current plugin's ID
-   */
-  public static function setCurrentPluginId($id) {
-    return (PluginEngine::$currentPluginId = $id);
-  }
+	/**
+	 * Contains the current plugin's ID
+	 *
+	 * @var mixed
+	 */
+	private static $currentPluginId;
 
 
 	/**
 	 * TODO
 	 *
-	 * @param $params - an array with name value pairs
+	 * @return int  returns the current plugin's ID
+	 */
+	public static function getCurrentPluginId() {
+		return PluginEngine::$currentPluginId;
+	}
+
+
+	/**
+	 * TODO
 	 *
-	 * @return int the plugin ID of the requested plugin
+	 * @param  int  the current plugin's ID
+	 *
+	 * @return int  returns the current plugin's ID
+	 */
+	public static function setCurrentPluginId($id) {
+		return (PluginEngine::$currentPluginId = $id);
+	}
+
+	/**
+	 * This function maps an incoming request to a tuple
+	 * (pluginclassname, unconsumed rest).
+	 *
+	 * @return array the above mentioned tuple
+	 */
+	public static function routeRequest($dispatch_to) {
+		$dispatch_to = ltrim($dispatch_to, '/');
+		$pos = strpos($dispatch_to, '/');
+		if ($pos === FALSE) {
+			throw new Studip_PluginNotFoundException(
+			  _("Es wurde kein Plugin gewählt."));
+		}
+		return array(substr($dispatch_to, 0, $pos), substr($dispatch_to, $pos + 1));
+	}
+
+	/**
+	 * TODO
+	 *
+	 * @param  string  TODO
+	 *
+	 * @return int     the plugin ID of the requested plugin
 	 */
 	public static function getPluginIdFromRequest(&$unconsumed){
 
@@ -62,7 +77,8 @@ class PluginEngine {
 		list(, $plugin_class) = explode('/', $dispatch_to);
 
 		if (empty($plugin_class)) {
-			throw new Exception(_("Es wurde kein Plugin gewählt."));
+			throw new Studip_PluginNotFoundException(
+			  _("Es wurde kein Plugin gewählt."));
 		}
 
 		# retrieve corresponding plugin id
@@ -75,7 +91,6 @@ class PluginEngine {
 
 		return $plugin_id;
 	}
-
 
 	/**
 	* Returns the plugin persistence object for the required plugin type.
@@ -148,19 +163,22 @@ class PluginEngine {
 	}
 
 	/**
-	* Generates a Link to the plugin administration which can be shown in user interfaces
-	* @param $params - an array with name value pairs
-	* @return a link to the administration plugin with the additional $params
-	*/
-	public static function getLinkToAdministrationPlugin($params=array()){
-		$link = "plugins.php/pluginadministrationplugin/show";
+	 * Generates a Link to the plugin administration which can be shown in user interfaces
+	 *
+	 * @param   array   an optional array with name value pairs
+	 * @param   string  an optional command defaulting to 'show'
+	 *
+	 * @return  string  a link to the administration plugin with the additional $params
+	 */
+	public static function getLinkToAdministrationPlugin($params = array(), $cmd = 'show') {
+		$link = "plugins.php/pluginadministrationplugin/" . $cmd;
 
 		// add params
 		if (sizeof($params)) {
 			$query_string = array();
-	 		foreach ($params as $key => $val)
-	 			$query_string[] = urlencode($key) . '=' . urlencode($val);
-	 		$link .= '?' . join('&amp;', $query_string);
+			foreach ($params as $key => $val)
+				$query_string[] = urlencode($key) . '=' . urlencode($val);
+			$link .= '?' . join('&amp;', $query_string);
 		}
 
 		return $link;

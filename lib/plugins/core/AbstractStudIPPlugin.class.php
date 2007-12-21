@@ -64,51 +64,6 @@ abstract class AbstractStudIPPlugin {
 	function prepareUninstallation(){
 	}
 
-	/**
-	* Shows a page describing the plugin's functionality, dependence on other plugins, ...
-	*/
-	function showDescriptionalPage(){
-
-		if (is_object($this->user)){
-		   $permission = $this->user->getPermission();
-		   if (!$permission->hasAdminPermission()){
-		   	  return;
-		   }
-		}
-	   $plugininfos = PluginEngine::getPluginManifest($this->environment->getBasepath() . $this->pluginpath . "/");
-	   $version = $plugininfos["version"];
-	   $vendor = $plugininfos["origin"];
-	   $origname = $plugininfos["pluginname"];
-	   StudIPTemplateEngine::makeContentHeadline(_("Plugin-Details"),2);
-		?>
-                        <table>
-				<tr>
-					<td>Name:</td>
-					<td align="left">&nbsp;<?= $this->pluginname ?></td>
-				</tr>
-				<tr>
-					<td>Name (original):</td>
-					<td align="left">&nbsp;<?= $origname ?></td>
-				</tr>
-				<tr>
-					<td>Klasse:</td>
-					<td align="left">&nbsp;<?= $this->getPluginclassname() ?></td>
-				</tr>
-				<tr>
-					<td>Origin:</td>
-					<td align="left">&nbsp;<?= $vendor ?></td>
-				</tr>
-				<tr>
-					<td>Version:</td>
-					<td align="left">&nbsp;<?= $version ?></td>
-				</tr>
-				<tr>
-					<td colspan="2" align="center"><a href="<?= PluginEngine::getLinkToAdministrationPlugin()?>"><?= makeButton("zurueck","img",_("zurück zur Plugin-Verwaltung"))?></a></td>
-				</tr>
-                        </table>
-		<?php
-	}
-
 	function showAdministrationPage(){
 		echo (_("Eine Administrationsseite ist für dieses Plugin nicht vorhanden"));
 	}
@@ -179,7 +134,7 @@ abstract class AbstractStudIPPlugin {
 			$this->pluginadmininfo = $admininfo;
 		}
 		else {
-			echo "Incompatible Paramter type";
+			echo "Incompatible Parameter type";
 		}
 	}
 
@@ -349,15 +304,6 @@ abstract class AbstractStudIPPlugin {
 	function actionShow($param = null){
 		return $this->show($param);
 	}
-	
-	function actionShowDescriptionalPage(){
-		return $this->showDescriptionalPage();
-	}
-	
-	function actionShowAdministrationPage(){
-		return $this->showAdministrationPage();
-	}
-
 
   /**
    * This method dispatches all actions.

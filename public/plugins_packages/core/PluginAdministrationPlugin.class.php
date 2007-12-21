@@ -1,4 +1,5 @@
 <?php
+/* vim: noexpandtab */
 /*
  * Plugin for the administration of plugins and a good example for an Administration-Plugin
  * @author Dennis Reil <dennis.reil@offis.de>
@@ -11,22 +12,22 @@ require_once("PluginAdministration.class.php");
 
 class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 	// management
-	var $pluginmgmt; 
+	var $pluginmgmt;
 	// Visualization
-	var $pluginvis;	
-	
+	var $pluginvis;
+
 	/**
-	 * 
+	 *
 	 */
 	function PluginAdministrationPlugin(){
 		AbstractStudIPAdministrationPlugin::AbstractStudIPAdministrationPlugin();
 		$tab = new PluginNavigation();
 		$tab->setDisplayname(_("Verwaltung von Plugins"));
-		$this->setNavigation($tab); 
+		$this->setNavigation($tab);
 		$this->setTopNavigation($tab);
 		$this->setPluginiconname("img/einst.gif");
 	}
-	
+
 	/**
 	 * Initializes basic functions like the PluginVisualization and the PluginAdministration
 	 *
@@ -39,32 +40,32 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 			$this->pluginvis = new PluginAdministrationVisualization($this);
 		}
 	}
-	
+
 	function showDefaultView($pluginengine,$msg=""){
 		// $this->init();
 		$plugins = $pluginengine->getAllInstalledPlugins();
 		$installableplugins = PluginEngine::getInstallablePlugins();
-		
-		$roleplugin = $pluginengine->getPlugin($pluginengine->getPluginid("de_studip_core_RoleManagementPlugin"));		
+
+		$roleplugin = $pluginengine->getPlugin($pluginengine->getPluginid("de_studip_core_RoleManagementPlugin"));
 		$this->pluginvis->showPluginAdministrationList($plugins,$msg,$installableplugins,$roleplugin);
 	}
-	
+
 	function actionInstallPlugin(){
 		$forceupdate = $_POST["update"];
-		$pluginfilename = $_POST["pluginfilename"];		
+		$pluginfilename = $_POST["pluginfilename"];
 		$user = $this->getUser();
 		$permission = $user->getPermission();
 		// check if user has the permission to check in / update plugins
 		if (!$permission->hasRootPermission() && $permission->hasAdminPermission()){
-		   // show nothing		   
+		   // show nothing
 		   return;
 		}
-		
+
 		if ($GLOBALS['PLUGINS_UPLOAD_ENABLE']){
 			$upload_file = $_FILES["upload_file"]["tmp_name"];
-	    	// process the upload 
+	    	// process the upload
 	    	// and register plugin in the database;
-	    	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);  
+	    	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);
 	    	$pluginengine = PluginEngine::getPluginPersistence();
 	    	$this->showDefaultView($pluginengine,$result);
 		}
@@ -72,16 +73,16 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 			// no plugin upload enabled
 			if (isset($pluginfilename) && isset($GLOBALS['NEW_PLUGINS_PATH'])){
 				$newpluginfilename = $GLOBALS['NEW_PLUGINS_PATH'] . "/" . $pluginfilename;
-				$result = $this->pluginmgmt->installPlugin($newpluginfilename,$forceupdate);  	    		
+				$result = $this->pluginmgmt->installPlugin($newpluginfilename,$forceupdate);
 			}
 			else {
-				// nothing to do			
+				// nothing to do
 			}
 			$pluginengine = PluginEngine::getPluginPersistence();
 	    	$this->showDefaultView($pluginengine,$result);
 		}
 	}
-	
+
 	/**
 	 * Shows the plugins view
 	 *
@@ -93,21 +94,20 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$adminpluginengine = PluginEngine::getPluginPersistence("Administration");
 		$systempluginengine = PluginEngine::getPluginPersistence("System");
 		$standardpluginengine = PluginEngine::getPluginPersistence("Standard");
-		
+
 		// check if user has the permission to check in / update plugins
 		if (!$permission->hasRootPermission() && $permission->hasAdminPermission()){
 		   // show nothing
 		   // $this->pluginvis->showPluginList($pluginengine->getAllEnabledPlugins());
 		   return;
 		}
-		
-		$detailpage = $_GET["detailpage"];
+
 		$zip = $_GET["zip"];
 		$deinstall = $_GET["deinstall"];
-		$action = $_POST["action"]; 
+		$action = $_POST["action"];
 		$forceupdate = $_POST["update"];
 		$forcedeinstall = $_REQUEST["forcedeinstall"];
-		
+
 		if (isset($action)){
 		  if ($action == "config"){
 		  	 // user changed the configuration of plugins
@@ -117,7 +117,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		  	 	if (!isset($_POST["available_" . $id]) && !isset($_POST["navposition_" . $id])){
 		  	 	   continue;
 		  	 	}
-		  	 	
+
 		  	 	if ($_POST["available_" . $id] == "1"){
 		  	 	   $plugin->setEnabled(true);
 		  	 	}
@@ -140,34 +140,21 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
     		  	 	}
     		   	   $adminpluginengine->savePlugin($plugin);
     		    }
-    		    /*
-    		    else if ($type == "Standard") {
-    			  // keine spezielle Behandlung nötig
-    			  $pluginengine->savePlugin($plugin);
-    		    }
-    		    else if ($type == "System"){
-    			  // keine spezielle Behandlung nötig
-    			  $pluginengine->savePlugin($plugin);
-    		    }	
-    		    else if ($type == "Homepage"){
-    			  // keine spezielle Behandlung nötig
-    			  $pluginengine->savePlugin($plugin);
-    		    }*/	  	 	
     			else {
     			  // keine spezielle Behandlung nötig
-    			  $pluginengine->savePlugin($plugin); 
+    			  $pluginengine->savePlugin($plugin);
     			}
     		}
-    		 
+
     	  } else if ($action == "install"){
     	  	// if ($update == "force")
     	  	$upload_file = $_FILES["upload_file"]["tmp_name"];
-    	  	// process the upload 
+    	  	// process the upload
     	  	// and register plugin in the database;
-    	  	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);    	  	
+    	  	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);
 		  }
 		}
-				
+
 		if (isset($deinstall)){
 			$plugin = $pluginengine->getPlugin($deinstall);
 			if (is_object($plugin)){
@@ -183,21 +170,74 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 			// show the default view
 			$this->showDefaultView($pluginengine);
 		}
-		else if (isset($detailpage)){
-			 // let the Plugin show its descriptional page
-			 $plugin = $pluginengine->getPlugin($detailpage);
-			 $plugin->showDescriptionalPage();
-		}
 		else if (isset($zip)){
 			 $link = $this->pluginmgmt->zipPluginPackage($zip);
 			 $this->pluginvis->showPluginPackageDownloadView($link);
 			 $this->showDefaultView($pluginengine);
-		}	
+		}
 		else {
 			 // the plugin was called without any parameters
 			 // show the default view
 			$this->showDefaultView($pluginengine,$result);
 		}
 	}
+
+	/**
+	 * Shows a page describing the plugin's functionality, dependence on other plugins, ...
+	 */
+	function actionDescription() {
+
+		if (is_object($this->user)) {
+			$permission = $this->user->getPermission();
+			if (!$permission->hasAdminPermission()) {
+				throw new Studip_AccessDeniedException();
+			}
+		}
+
+		# unconsumed_path contains the plugin's class name
+		$plugin_class = current(explode('/', $this->unconsumed_path));
+		if ($plugin_class === '') {
+			throw new Studip_PluginNotFoundException(_("Kein Plugin angegeben."));
+		}
+
+		# retrieve corresponding plugin id
+		$plugin_persistence = PluginEngine::getPluginPersistence();
+		$plugin_id = $plugin_persistence->getPluginId($plugin_class);
+
+		# create an instance of the queried plugin
+		$plugin = $plugin_persistence->getPlugin($plugin_id);
+
+		# retrieve manifest
+		$plugininfos =
+			PluginEngine::getPluginManifest($plugin->environment->getBasepath() .
+			                                $plugin->pluginpath . '/');
+		StudIPTemplateEngine::makeContentHeadline(_("Plugin-Details"), 2);
+		?>
+			<table>
+				<tr>
+					<td>Name:</td>
+					<td align="left">&nbsp;<?= $plugin->pluginname ?></td>
+				</tr>
+				<tr>
+					<td>Name (original):</td>
+					<td align="left">&nbsp;<?= $plugininfos["pluginname"] ?></td>
+				</tr>
+				<tr>
+					<td>Klasse:</td>
+					<td align="left">&nbsp;<?= $plugin->getPluginclassname() ?></td>
+				</tr>
+				<tr>
+					<td>Origin:</td>
+					<td align="left">&nbsp;<?= $plugininfos["origin"] ?></td>
+				</tr>
+				<tr>
+					<td>Version:</td>
+					<td align="left">&nbsp;<?= $plugininfos["version"] ?></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><a href="<?= PluginEngine::getLinkToAdministrationPlugin() ?>"><?= makeButton("zurueck","img",_("zurück zur Plugin-Verwaltung")) ?></a></td>
+				</tr>
+			</table>
+		<?
+	}
 }
-?>

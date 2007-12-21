@@ -26,11 +26,11 @@
 
 abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
 
-	
+
 	function AbstractStudIPLegacyPlugin(){
 		parent::AbstractStudIPPlugin();
 	}
-	
+
   /**
    * This method dispatches and displays all actions. It uses the template
    * method design pattern, so you may want to implement the methods #route
@@ -43,14 +43,7 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
   function perform($unconsumed_path) {
 
     # get action
-    $action = $this->route($unconsumed_path);
-
-    # TODO (mlunzena) das sollte hier nicht rein...
-    if (in_array($action,
-          array('showConfigurationPage', 'showDescriptionalPage'))
-        && !$GLOBALS['perm']->have_perm('admin')) {
-      throw new Exception(_("Sie verfügen nicht über ausreichend Rechte für diese Aktion."));
-    }
+    list($action, $this->unconsumed_path) = $this->route($unconsumed_path);
 
     # it's action time
     try {
@@ -82,16 +75,15 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
    */
   function route($unconsumed_path) {
 
-    list($_, $action) = explode('/', $unconsumed_path);
-
-    $action = 'action' . $action;
+    $tokens = preg_split('@/@', $unconsumed_path, -1, PREG_SPLIT_NO_EMPTY);
+    $action = 'action' . array_shift($tokens);
 
     $class_methods = array_map('strtolower', get_class_methods($this));
     if (!in_array(strtolower($action), $class_methods)) {
       throw new Exception(_("Das Plugin verfügt nicht über die gewünschte Operation"));
     }
 
-    return $action;
+    return array($action, join('/', $tokens));
   }
 
 
@@ -99,7 +91,8 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
    * This abstract method sets everything up to perform the given action and
    * displays the results or anything you want to.
    *
-   * @param  string the name of the action to accomplish
+   * @param  string  the name of the action to accomplish
+   * @param  string  the unconsumed rest
    *
    * @return void
    */

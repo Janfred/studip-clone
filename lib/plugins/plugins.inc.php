@@ -41,6 +41,7 @@ if ($GLOBALS['PLUGINS_ENABLE']){
 	require_once("engine/PortalPluginIntegratorEnginePersistence.class.php");
 	require_once("engine/StudIPTemplateEngine.class.php");
 	require_once("engine/PluginEngine.class.php");
+	require_once("engine/PluginNotFound.class.php");
 	require_once("core/de_studip_Role.class.php");
 	require_once("db/de_studip_RolePersistence.class.php");
 
