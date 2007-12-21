@@ -149,14 +149,14 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 				?>
 				</td>
 				<td width="35%" align="left"class="<?=$cssSw->getClass()?>">
-					<a href="<?= PluginEngine::getLinkToAdministrationPlugin(array(), 'description/'.$plugin->getPluginclassname()) ?>">
+					<a href="<?= PluginEngine::getLinkToAdministrationPlugin(array(), 'manifest/'.$plugin->getPluginclassname()) ?>">
 						<?= $plugin->getPluginname() ?>
 					</a>
 					&nbsp;
 				<?php
 				if (PluginEngine::getTypeOfPlugin($plugin) == "Standard"){
 				?>
-					<a href="<?= PluginEngine::getLink($plugin,array(),"showConfigurationPage") ?>"><?= _("(Default-Aktivierung)")?></a></td>
+					<a href="<?= PluginEngine::getLinkToAdministrationPlugin(array(), "DefaultActivation/".$plugin->getPluginclassname()) ?>"><?= _("(Default-Aktivierung)")?></a></td>
 				<?php
 				}
 				?>
