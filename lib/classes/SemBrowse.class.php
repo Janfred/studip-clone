@@ -241,14 +241,41 @@ class SemBrowse {
 		echo $this->search_obj->getSearchField("sem",array('style' => 'vertical-align:middle;font-size:9pt;'),$this->sem_browse_data['default_sem']);
 		echo "&nbsp;";
 		echo $this->search_obj->getSemChangeButton(array('style' => 'vertical-align:middle'));
-		echo "</font></td></tr><tr><td class=\"steel1\" align=\"center\" valign=\"middle\"><font size=\"-1\">";
-		echo $this->search_obj->getSearchField("quick_search",array( 'style' => 'vertical-align:middle;font-size:9pt;','size' => 45));
+		echo "</font></td></tr><tr><td class=\"steel1\" align=\"center\" valign=\"middle\">";
+		echo $this->search_obj->getSearchField("quick_search",
+			array('style' => 'vertical-align:middle;font-size:9pt;',
+			      'size' => 45,
+			      'id' => "autocomplete"));
+		?>
+		<div id="autocomplete_choices" class="autocomplete"></div>
+		<?
 		echo "&nbsp;";
 		echo $this->search_obj->getSearchButton(array('style' => 'vertical-align:middle'));
-		echo "</font></td></tr>";
+		echo "</td></tr>";
 		echo $this->search_obj->getFormEnd();
 		echo "</table>\n";
 		echo '<script type="text/javascript">document.'.$this->search_obj->form_name.'.'.$this->search_obj->form_name.'_quick_search.focus();</script>' . chr(10);
+		?>
+		<script type="text/javascript">
+			Event.observe(window, 'load', function() {
+				new Ajax.Autocompleter('autocomplete',
+				                       'autocomplete_choices',
+				                       'dispatch.php/autocomplete/course',
+				                       {
+				  minChars: 3,
+				  paramName: 'value',
+				  callback: function(element, entry) {
+				    var category = $$('input[name="<?= $this->search_obj->form_name ?>_category"]');
+				    return entry + '&' + Object.toQueryString({
+				      'semester': $F($$('select[name="<?= $this->search_obj->form_name ?>_sem"]')[0]),
+				      'what':     $F($$('select[name="<?= $this->search_obj->form_name ?>_qs_choose"]')[0]),
+				      'category': category.size() === 0 ? 'all' : $F(category.first())
+				    });
+				  }
+				});
+			});
+		</script>
+		<?
 	}
 
 	function print_xts(){
@@ -349,7 +376,7 @@ class SemBrowse {
 function print_result(){
 		ob_start();
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS;
-		
+
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
 			if (!is_object($this->sem_tree)){
 				$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
@@ -452,15 +479,15 @@ function print_result(){
 		}
 	ob_end_flush();
 	}
-	
+
 	function create_result_xls(){
 		require_once "vendor/write_excel/OLEwriter.php";
 		require_once "vendor/write_excel/BIFFwriter.php";
 		require_once "vendor/write_excel/Worksheet.php";
 		require_once "vendor/write_excel/Workbook.php";
-		
+
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS,$TMP_PATH;
-		
+
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
 			if (!is_object($this->sem_tree)){
 				$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
@@ -476,7 +503,7 @@ function print_result(){
 			$head_format->set_bold();
 			$head_format->set_align("left");
 			$head_format->set_align("vcenter");
-			
+
 			$head_format_merged =& $workbook->addformat();
 			$head_format_merged->set_size(12);
 			$head_format_merged->set_bold();
@@ -484,14 +511,14 @@ function print_result(){
 			$head_format_merged->set_align("vcenter");
 			$head_format_merged->set_merge();
 			$head_format_merged->set_text_wrap();
-			
+
 			$caption_format =& $workbook->addformat();
 			$caption_format->set_size(10);
 			$caption_format->set_align("left");
 			$caption_format->set_align("vcenter");
 			$caption_format->set_bold();
 			//$caption_format->set_text_wrap();
-			
+
 			$data_format =& $workbook->addformat();
 			$data_format->set_size(10);
 			$data_format->set_align("left");
@@ -513,22 +540,22 @@ function print_result(){
 			$worksheet1->write_string(1, 0, sprintf(_(" %s Veranstaltungen gefunden %s, Gruppierung: %s"),count($sem_data),
 				(($this->sem_browse_data['sset']) ? _("(Suchergebnis)") : ""),
 				$this->group_by_fields[$this->sem_browse_data['group_by']]['name']), $caption_format);
-			
+
 			$worksheet1->write_blank(0,1,$head_format);
 			$worksheet1->write_blank(0,2,$head_format);
 			$worksheet1->write_blank(0,3,$head_format);
-			
+
 			$worksheet1->write_blank(1,1,$head_format);
 			$worksheet1->write_blank(1,2,$head_format);
 			$worksheet1->write_blank(1,3,$head_format);
-			
+
 			$worksheet1->set_column(0, 0, 70);
 			$worksheet1->set_column(0, 1, 25);
 			$worksheet1->set_column(0, 2, 25);
 			$worksheet1->set_column(0, 3, 50);
-			
+
 			$row = 2;
-			
+
 			foreach ($group_by_data as $group_field => $sem_ids){
 				switch ($this->sem_browse_data["group_by"]){
 					case 0:
@@ -596,7 +623,7 @@ function print_result(){
 		}
 		return $tmpfile;
 	}
-	
+
 	function get_result() {
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS;;
 		if ($this->sem_browse_data['group_by'] == 1){
@@ -614,19 +641,19 @@ function print_result(){
 			$add_query = "LEFT JOIN seminar_sem_tree ON (seminare.Seminar_id = seminar_sem_tree.seminar_id $sem_tree_query)";
 		} else if ($this->sem_browse_data['group_by'] == 4){
 			$add_fields = "Institute.Name AS Institut,Institute.Institut_id,";
-			$add_query = "LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id) 
+			$add_query = "LEFT JOIN seminar_inst ON (seminare.Seminar_id = seminar_inst.Seminar_id)
 			LEFT JOIN Institute ON (Institute.Institut_id = seminar_inst.institut_id)";
 		} else {
 			$add_fields = "";
 			$add_query = "";
 		}
-		
+
 		$query = ("SELECT seminare.Seminar_id,VeranstaltungsNummer, seminare.status, IF(seminare.visible=0,CONCAT(seminare.Name, ' ". _("(versteckt)") ."'), seminare.Name) AS Name, seminare.metadata_dates,
 				$add_fields" . $_fullname_sql['no_title_short'] ." AS fullname, auth_user_md5.username,
-				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end, seminar_user.position AS position FROM seminare 
-				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent') 
-				LEFT JOIN auth_user_md5 USING (user_id) 
-				LEFT JOIN user_info USING (user_id) 
+				" . $_views['sem_number_sql'] . " AS sem_number, " . $_views['sem_number_end_sql'] . " AS sem_number_end, seminar_user.position AS position FROM seminare
+				LEFT JOIN seminar_user ON (seminare.Seminar_id=seminar_user.Seminar_id AND seminar_user.status='dozent')
+				LEFT JOIN auth_user_md5 USING (user_id)
+				LEFT JOIN user_info USING (user_id)
 				$add_query
 				WHERE seminare.Seminar_id IN('" . join("','", array_keys($this->sem_browse_data['search_result'])) . "')");
 		$db = new DB_Seminar($query);
@@ -671,11 +698,11 @@ function print_result(){
 				}
 			}
 		}
-		
+
 		//release memory
 		unset($snap);
 		unset($tmp_group_by_data);
-		
+
 		foreach ($group_by_data as $group_field => $sem_ids){
 			foreach ($sem_ids['Seminar_id'] as $seminar_id => $foo){
 				$name = strtolower(key($sem_data[$seminar_id]["Name"]));
@@ -686,12 +713,12 @@ function print_result(){
 			}
 			uasort($group_by_data[$group_field]['Seminar_id'], 'strnatcmp');
 		}
-		
+
 		switch ($this->sem_browse_data["group_by"]){
 			case 0:
 			krsort($group_by_data, SORT_NUMERIC);
 			break;
-			
+
 			case 1:
 			uksort($group_by_data, create_function('$a,$b',
 			'$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
@@ -699,7 +726,7 @@ function print_result(){
 			return (int)($the_tree->tree_data[$a]["index"] - $the_tree->tree_data[$b]["index"]);
 			'));
 			break;
-			
+
 			case 3:
 			uksort($group_by_data, create_function('$a,$b',
 			'global $SEM_CLASS,$SEM_TYPE;
@@ -709,7 +736,7 @@ function print_result(){
 			default:
 			uksort($group_by_data, 'strnatcasecmp');
 			break;
-			
+
 		}
 		return array($group_by_data, $sem_data);
 	}

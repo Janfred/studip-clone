@@ -223,24 +223,6 @@ dd {
   margin-left: 1.5em;
 }
 
-/* ***** AJAX indicator ***************************************************** */
-
-#ajax_notification {
-	position: fixed;
-	bottom: 0;
-	padding: 0;
-	height: 20px;
-	margin: 0;
-	width: 100%;
-	background-color: #7387ac;
-	color: white;
-	display: block;
-	text-align: center;
-	font-weight: bold;
-	font-size: 1.3em;
-	padding-top: 5px;
-}
-
 /* index.php anpassungen an den boxen zur vereinheitlichung */
 table.index_box {
 	width:70%;
@@ -313,4 +295,63 @@ div.wikitoc ul {
     margin-bottom:0px;
 }
 
+/* ***** AJAX indicator ***************************************************** */
 
+#ajax_notification {
+	position: fixed;
+	bottom: 0;
+	padding: 0;
+	height: 20px;
+	margin: 0;
+	width: 100%;
+	background-color: #7387ac;
+	color: white;
+	display: block;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.3em;
+	padding-top: 5px;
+}
+
+/* ***** Autocompleter ****************************************************** */
+
+div.autocomplete {
+  position:absolute;
+  width:250px;
+  background-color:white;
+  border:1px solid #888;
+  margin:0px;
+  padding:0px;
+}
+
+div.autocomplete ul {
+  list-style-type:none;
+  margin:0px;
+  padding:0px;
+}
+
+div.autocomplete ul li.selected {
+  background-color: #ffb;
+}
+
+div.autocomplete ul li {
+  list-style-type:none;
+  display:block;
+  margin:0;
+  padding:2px;
+  height:40px;
+  cursor:pointer;
+  text-align: left;
+  font-size: 0.75em;
+}
+
+div.autocomplete .informal .number,
+div.autocomplete .informal .title,
+div.autocomplete .informal .lecturer,
+div.autocomplete .informal .comment {
+  font-size: 0.75em;
+}
+
+div.autocomplete .informal .comment {
+  font-style: italic;
+}

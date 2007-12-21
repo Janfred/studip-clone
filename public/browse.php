@@ -170,13 +170,15 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 		<b><font size=-1>&nbsp;<?=_("Vorname")?></font></b>
 	</td>
   	<td width="30%" class="steel1" align="left">
-		<input type="text" style="width: 75%" size=10 length=255 name="Vorname" value="<? echo htmlReady(stripslashes($browse_data["Vorname"])) ?>">
+		<input id="Vorname" type="text" style="width: 75%" size=10 length=255 name="Vorname" value="<? echo htmlReady(stripslashes($browse_data["Vorname"])) ?>">
+		<div id="Vorname_choices" class="autocomplete"></div>
 	</td>
 	<td width="10%" class="steel1" align="left">
 		<b><font size=-1>&nbsp;<?=_("Nachname")?></font></b>
 	</td>
   	<td width="30%" class="steel1" align="left">
-		<input type="text" style="width: 75%" size=10 maxlength=255 name="Nachname" value="<? echo htmlReady(stripslashes($browse_data["Nachname"])) ?>">
+		<input id="Nachname" type="text" style="width: 75%" size=10 maxlength=255 name="Nachname" value="<? echo htmlReady(stripslashes($browse_data["Nachname"])) ?>">
+		<div id="Nachname_choices" class="autocomplete"></div>
 	</td>
 	<td width="10%" class="steel1" align="center">
 		<input type="HIDDEN" name="group" value="Search">
@@ -184,6 +186,20 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 		<input type="HIDDEN" name="send" value="TRUE">
 	</td>
 </tr></form>
+
+<script type="text/javascript">
+	Event.observe(window, 'load', function() {
+		new Ajax.Autocompleter('Vorname',
+		                       'Vorname_choices',
+		                       'dispatch.php/autocomplete/person/given',
+		                       { minChars: 3, paramName: 'value' });
+		new Ajax.Autocompleter('Nachname',
+		                       'Nachname_choices',
+		                       'dispatch.php/autocomplete/person/family',
+		                       { minChars: 3, paramName: 'value' });
+	});
+</script>
+
 
 <?php
 if ($perm->have_perm("admin")):

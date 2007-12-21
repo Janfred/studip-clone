@@ -1189,4 +1189,60 @@ function format_help_url($keyword) {
 	return $help_query;
 }
 
+/**
+ * Remove slashes if magic quotes are enabled
+ *
+ * @param  mixed  string or array to strip slashes from
+ *
+ * @return mixed  cleaned string or array
+ */
+
+function remove_magic_quotes($mixed) {
+	if (get_magic_quotes_gpc()) {
+		if (is_array($mixed)) {
+			foreach ($mixed as $k => $v) {
+				$mixed[$k] = remove_magic_quotes($v);
+			}
+		}
+		else {
+			$mixed = stripslashes($mixed);
+		}
+	}
+	return $mixed;
+}
+
+/**
+  * Extracts an excerpt from the 'text' surrounding the 'phrase' with a number
+  * of characters on each side determined by 'radius'. If the phrase isn't
+  * found, null is returned.
+  * Ex: text_excerpt("hello my world", "my", 3) => "...lo my wo..."
+  *
+  * @param string  the text to excerpted
+  * @param string  the search phrase
+  * @param integer the radius around the phrase
+  * @param string  the excerpt string
+  *
+  * @return type <description>
+*/
+function text_excerpt($text, $phrase, $radius = 100, $excerpt_string = '...') {
+  if ($text != '' && $phrase != '') {
+    $phrase = preg_quote($phrase);
+
+    $found_pos = strpos(strtolower($text), strtolower($phrase));
+    if ($found_pos !== FALSE) {
+      $start_pos = max($found_pos - $radius, 0);
+      $end_pos = min($found_pos + strlen($phrase) + $radius, strlen($text));
+    }
+    else {
+      $start_pos = 0;
+      $end_pos = min($radius, strlen($text));
+    }
+
+    $prefix = $start_pos > 0 ? $excerpt_string : '';
+    $postfix = $end_pos < strlen($text) ? $excerpt_string : '';
+
+    return $prefix.substr($text, $start_pos, $end_pos - $start_pos).$postfix;
+  }
+  return '';
+}
 ?>
