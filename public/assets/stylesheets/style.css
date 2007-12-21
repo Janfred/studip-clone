@@ -237,12 +237,12 @@ td.index_box_cell {
 /* Inhaltsverzeichnis Wikis */
 
 div.wikitoc {
-    font-size: 1em; 
+    font-size: 1em;
     margin-bottom: 5px;
 }
 
 div.wikitoc_editlink {
-    font-size: 1em; 
+    font-size: 1em;
     padding-top: 5px;
     margin-bottom: -10px;
 }
@@ -345,11 +345,9 @@ div.autocomplete ul li {
   font-size: 0.75em;
 }
 
-div.autocomplete .informal .number,
-div.autocomplete .informal .title,
-div.autocomplete .informal .lecturer,
-div.autocomplete .informal .comment {
+div.autocomplete .informal {
   font-size: 0.75em;
+  color: #777;
 }
 
 div.autocomplete .informal .comment {
