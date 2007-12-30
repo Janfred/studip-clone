@@ -34,7 +34,17 @@ class Autocomplete_CourseController extends Trails_Controller {
     if (is_numeric($category)) {
       $this->options['category'] = (int) $category;
     }
-
+	
+	$scope = self::get_param('scope');
+    if (!empty($scope)) {
+      $this->options['scope'] = $scope;
+    }
+	
+	$range = self::get_param('range');
+    if (!empty($range)) {
+      $this->options['range'] = $range;
+    }
+	
     $this->courses = autocomplete_course_get_courses($this->search_term,
                                                      $this->options);
     $this->semesters = autocomplete_course_get_semesters();

@@ -40,9 +40,7 @@ class SemBrowse {
 			$this->sem_browse_data[$this->persistent_fields[$i]] = $_REQUEST[$this->persistent_fields[$i]];
 			}
 		}
-		$this->search_obj = new StudipSemSearch("search_sem", false, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM'))));
-		$this->search_obj->search_fields['qs_choose']['content'] = array('title' => _("Titel"), 'lecturer' => _("DozentIn"),'number' => _("Nummer"), 'comment' => _("Kommentar"));
-		$this->search_obj->search_fields['type']['class'] = $this->sem_browse_data['show_class'];
+		$this->search_obj = new StudipSemSearch("search_sem", false, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM'))),$this->sem_browse_data['show_class']);
 
 		if (isset($_REQUEST[$this->search_obj->form_name . "_scope_choose"])){
 			$this->sem_browse_data["start_item_id"] = $_REQUEST[$this->search_obj->form_name . "_scope_choose"];
@@ -216,8 +214,8 @@ class SemBrowse {
 	function print_qs(){
 		global $PHP_SELF;
 		//Quicksort Formular... fuer die eiligen oder die DAUs....
-		echo "<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 		echo $this->search_obj->getFormStart("$PHP_SELF?send=yes");
+		echo "<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 		echo "<tr><td class=\"steel1\" align=\"center\" valign=\"middle\"><font size=\"-1\">";
 		echo _("Schnellsuche:") . "&nbsp;";
 		echo $this->search_obj->getSearchField("qs_choose",array('style' => 'vertical-align:middle;font-size:9pt;'));
@@ -254,6 +252,7 @@ class SemBrowse {
 		echo "</td></tr>";
 		echo $this->search_obj->getFormEnd();
 		echo "</table>\n";
+		
 		echo '<script type="text/javascript">document.'.$this->search_obj->form_name.'.'.$this->search_obj->form_name.'_quick_search.focus();</script>' . chr(10);
 		?>
 		<script type="text/javascript">
@@ -266,10 +265,14 @@ class SemBrowse {
 				  paramName: 'value',
 				  callback: function(element, entry) {
 				    var category = $$('input[name="<?= $this->search_obj->form_name ?>_category"]');
+				    var scope = $$('select[name="<?= $this->search_obj->form_name ?>_scope_choose"]');
+				    var range = $$('select[name="<?= $this->search_obj->form_name ?>_range_choose"]');
 				    return entry + '&' + Object.toQueryString({
 				      'semester': $F($$('select[name="<?= $this->search_obj->form_name ?>_sem"]')[0]),
 				      'what':     $F($$('select[name="<?= $this->search_obj->form_name ?>_qs_choose"]')[0]),
-				      'category': category.size() === 0 ? 'all' : $F(category.first())
+				      'category': category.size() === 0 ? 'all' : $F(category.first()),
+					  'scope': scope.size() === 0 ? null : $F(scope.first()),
+					  'range': range.size() === 0 ? null : $F(range.first())
 				    });
 				  }
 				});

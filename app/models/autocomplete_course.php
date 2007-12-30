@@ -22,7 +22,7 @@ function autocomplete_course_get_semesters() {
 
 function autocomplete_course_get_courses($search_term, $options) {
 
-  $db = DBManager::get();
+  /*$db = DBManager::get();
 
   # get semester starts
   $sem_start_times = array();
@@ -99,7 +99,19 @@ function autocomplete_course_get_courses($search_term, $options) {
   $stmt->execute(array_merge($what_filter[1], $semester_filter[1]));
   $result = array_unique(array_merge($result,
                                      $stmt->fetchAll(PDO::FETCH_COLUMN, 0)));
+*/
 
+  require_once('lib/classes/StudipSemSearchHelper.class.php');
+  $search_helper = new StudipSemSearchHelper();
+  $search_helper->setParams(array('quick_search' => utf8_decode($search_term),
+									'qs_choose' => $options['what'] ? $options['what'] : 'all',
+									'sem' => isset($options['semester']) ? $options['semester'] : 'all',
+									'category' => $options['category'],
+									'scope_choose' => $options['scope'],
+									'range_choose' => $options['range'])
+							, !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm(Config::GetInstance()->getValue('SEM_VISIBILITY_PERM'))));
+  $search_helper->doSearch();
+  $result = $search_helper->getSearchResultAsArray();
   return empty($result)
     ? array() : autocomplete_course_get_courses_by_id($result);
 }
