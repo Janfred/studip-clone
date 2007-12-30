@@ -112,7 +112,7 @@ class DB_Sql {
 		*/
 		$stat = is_array($this->Record);
 		if ($this->Row == $this->num_rows()) {
-			$this->columnCount = $this->resultSet->columnCount();
+			$this->ColumnCount = $this->resultSet->ColumnCount();
 			$this->resultSet = null;
 		}
 		return $stat;
@@ -128,7 +128,7 @@ class DB_Sql {
 	}
 
 	function num_fields() {
-		return (!is_null($this->columnCount) ? $this->columnCount : ($this->resultSet ? ($this->columnCount = $this->resultSet->columnCount()) : FALSE));
+		return (!is_null($this->ColumnCount) ? $this->ColumnCount : ($this->resultSet ? ($this->ColumnCount = $this->resultSet->ColumnCount()) : FALSE));
 	}
 
 	/* public: shorthand notation */
@@ -193,7 +193,7 @@ class DB_Sql {
 				$this->halt("No query specified.");
 			}
 
-			$count = $this->resultSet->columnCount();
+			$count = $this->resultSet->ColumnCount();
 
 			// made this IF due to performance (one if is faster than $count if's)
 			if (!$full) {
