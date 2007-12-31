@@ -38,8 +38,12 @@ function autocomplete_course_get_courses($search_term, $options) {
         Config::GetInstance()->getValue('SEM_VISIBILITY_PERM'))));
   $search_helper->doSearch();
   $result = $search_helper->getSearchResultAsArray();
-  return empty($result)
-    ? array() : autocomplete_course_get_courses_by_id($result);
+
+  if (empty($result)) {
+    return array();
+  }
+
+  return autocomplete_course_get_courses_by_id(array_slice($result, 0, 10));
 }
 
 function autocomplete_course_get_courses_by_id($ids) {
