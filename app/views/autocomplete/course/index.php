@@ -11,10 +11,10 @@
     <? endif ?>
     <br/>
 
-    <span class="lecturer"><?= htmlready(text_excerpt($course['lecturer'], 15)) ?></span>
+    <span class="lecturer"><?= htmlready(text_excerpt($course['lecturer'], $search_term, 20)) ?></span>
     <br/>
 
-    <span class="comment"><?= htmlready(text_excerpt($course['Beschreibung'], $search_term, 15)) ?></span>
+    <span class="comment"><?= htmlready(text_excerpt($course['Beschreibung'], $search_term, 20)) ?></span>
     </span></li>
   <? endforeach ?>
 </ul>
