@@ -39,6 +39,7 @@ if(!$news_range_id) {
 
 if ($range_id == 'self') {
 	$range_id = $user->id;
+	$view_mode = 'user';
 }
 
 if ($range_id){
@@ -58,7 +59,7 @@ if ($list || $view || ($news_range_id != $user->id && $news_range_id != 'studip'
 }
 $links = ob_get_clean();
 
-if ($SessSemName[1] && ($list || $view)) {
+if ($SessSemName[1] && ($list || $view || ($view_mode != 'user'))) {
 	$news_range_id = $SessSemName[1];
 	$news_range_name = $SessSemname["header_line"];
 } 
@@ -185,12 +186,15 @@ if (!$cmd OR $cmd=="show") {
 		echo "<hr>";
 		echo "<br /><b>" . _("verf&uuml;gbare Bereiche");
 		echo "</b></blockquote></td></tr>\n ";
-		$typen = array("user"=>_("Benutzer"),"sem"=>_("Veranstaltung"),"inst"=>_("Einrichtung"),"fak"=>_("Fakult&auml;t"));
+		$typen = array(	"user"=> array('name' => _("Benutzer"), 'view_mode' => 'user', 'id_param' => 'range_id'),
+						"sem"=>  array('name' => _("Veranstaltung"), 'view_mode' => 'sem', 'id_param' => 'select_sem_id'),
+						"inst"=> array('name' => _("Einrichtung"), 'view_mode' => 'inst', 'id_param' => 'admin_inst_id'),
+						"fak"=>  array('name' => _("Fakult&auml;t"), 'view_mode' => 'inst', 'id_param' => 'admin_inst_id'));
 		$my_cols=3;
 		if ($perm->have_perm("tutor")){
 			echo "\n<tr><td class=\"blank\"><blockquote>";
 			echo "<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Sie k&ouml;nnen&nbsp; <b>Pers&ouml;nliche News</b> bearbeiten") . "</font>&nbsp;";
-			echo "<a href=\"".$news->p_self("range_id=$user->id")."\">&nbsp; <img style=\"vertical-align:middle;\" " . makeButton("bearbeiten","src") . tooltip(_("Persönliche News bearbeiten")) ." border=\"0\"></a>";
+			echo "<a href=\"".$news->p_self("range_id=self")."\">&nbsp; <img style=\"vertical-align:middle;\" " . makeButton("bearbeiten","src") . tooltip(_("Persönliche News bearbeiten")) ." border=\"0\"></a>";
 		}
 		if ($perm->have_perm("root")) {
 			$my_cols=4;
@@ -213,11 +217,11 @@ if (!$cmd OR $cmd=="show") {
 			while (list($typen_key,$typen_value)=each ($typen)) {
 				if (!$perm->have_perm("root") AND $typen_key=="user")
 					continue;
-				echo "\n".'<td class="steel1" width="'.floor(100/$my_cols).'%" align="center" valign="top"><b>'.$typen_value.'</b><br><div style="font-size:smaller;text-align:left;"><ul>';
+				echo "\n".'<td class="steel1" width="'.floor(100/$my_cols).'%" align="center" valign="top"><b>'.$typen_value['name'].'</b><br><div style="font-size:smaller;text-align:left;"><ul>';
 				reset($news->search_result);
 				while (list ($range,$details) = each ($news->search_result)) {
 					if ($details['type'] == $typen_key) {
-						echo "\n<li " . $css->getHover() . '><a href="'. $news->p_self("range_id=$range&view_mode=$typen_key").'">' .htmlReady($details['name']);
+						echo "\n<li " . $css->getHover() . '><a href="'. $news->p_self("{$typen_value['id_param']}=$range&range_id=$range&view_mode={$typen_value['view_mode']}").'">' .htmlReady($details['name']);
 						echo ($details['anzahl']) ? ' ('.$details['anzahl'].')' : ' (0)';
 						echo '</a></li>';
 					}
