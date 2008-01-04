@@ -1235,7 +1235,7 @@ function text_excerpt($text, $phrase, $radius = 100, $excerpt_string = '...') {
     }
     else {
       $start_pos = 0;
-      $end_pos = min($radius, strlen($text));
+      $end_pos = min(2 * $radius + strlen($phrase), strlen($text));
     }
 
     $prefix = $start_pos > 0 ? $excerpt_string : '';
