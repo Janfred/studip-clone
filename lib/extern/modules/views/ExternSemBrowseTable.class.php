@@ -231,6 +231,9 @@ class ExternSemBrowseTable extends SemBrowse {
 					}
 				}
 			}
+			//release memory
+			unset($snap);
+			unset($tmp_group_by_data);
 			
 			foreach ($group_by_data as $group_field => $sem_ids){
 				foreach ($sem_ids['Seminar_id'] as $seminar_id => $foo){
