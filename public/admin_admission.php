@@ -200,7 +200,10 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			$admin_admission_data["studg"][$db->f("studiengang_id")] = array("name"=>$db->f("name"), "ratio"=>$db->f("quota"));
 	}
 	$admin_admission_data["original"]=get_snapshot();
-
+	if($reset_admission_time_x){
+		$admin_admission_data["sem_admission_end_date"]=-1;
+		$admin_admission_data["sem_admission_start_date"]=-1;
+	}
 //nur wenn wir schon Daten haben kann was zurueckkommen
 } else {
 	//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
@@ -704,7 +707,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 					<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="10%">
 						<font size=-1><? echo _("Startdatum f&uuml;r Anmeldungen");?>:</font>
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" valign="top" width="40%">
+					<td class="<? echo $cssSw->getClass() ?>" valign="top" width="30%">
 						<font size=-1>&nbsp; <input type="text" name="adm_s_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_start_date"]); else echo _("tt") ?>">.
 						<input type="text" name="adm_s_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_start_date"]); else echo _("mm") ?>">.
 						<input type="text" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_start_date"]); else echo _("jjjj") ?>"><?=_("um");?>&nbsp;</font><br />
@@ -715,13 +718,16 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 					<td class="<? echo $cssSw->getClass() ?>" valign="top" align="right" width="10%">
 						<font size=-1><? echo _("Enddatum f&uuml;r Anmeldungen");?>:</font>
 					</td>
-					<td class="<? echo $cssSw->getClass() ?>" valign="top" width="40%">
+					<td class="<? echo $cssSw->getClass() ?>" valign="top" width="30%">
 						<font size=-1>&nbsp; <input type="text" name="adm_e_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_end_date"]); else echo _("tt") ?>">.
 						<input type="text" name="adm_e_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_end_date"]); else echo _("mm") ?>">.
 						<input type="text" name="adm_e_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_end_date"]); else echo _("jjjj") ?>"><?=_("um");?>&nbsp;</font><br />
 						<font size=-1>&nbsp; <input type="text" name="adm_e_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_end_date"]); else echo "23" ?>">:
 						<input type="text" name="adm_e_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_end_date"]); else echo "59" ?>">&nbsp;<?=_("Uhr");?></font>
 					<?=Termin_Eingabe_javascript(21,0,($admin_admission_data["sem_admission_end_date"] != -1 ? $admin_admission_data["sem_admission_end_date"] : 0));?>
+					</td>
+					<td class="<? echo $cssSw->getClass() ?>" >
+						<?=makeButton('loeschen', 'input' , _("Start- und Enddatum zurücksetzen"), 'reset_admission_time')?>
 					</td>
 				</tr>
 				</table>
