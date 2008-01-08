@@ -59,14 +59,14 @@ if ($list || $view || ($news_range_id != $user->id && $news_range_id != 'studip'
 }
 $links = ob_get_clean();
 
-if ($SessSemName[1] && ($list || $view || ($view_mode != 'user'))) {
+if ($SessSemName[1] && ($list || $view || ($news_range_id != $user->id && $news_range_id != 'studip') && $view_mode != 'user' )) {
 	$news_range_id = $SessSemName[1];
-	$news_range_name = $SessSemname["header_line"];
+	$news_range_name = '';
 } 
 
 $news = new AdminNewsController();
 
-$CURRENT_PAGE = $news_range_name . " - " . _("Verwaltung von News"); 
+$CURRENT_PAGE = ($SessSemName[1] && ($list || $view || ($news_range_id != $user->id && $news_range_id != 'studip') && $view_mode != 'user' ) ?  $SessSemName["header_line"] : $news->range_name ) . " - " . _("Verwaltung von News"); 
 include ('lib/include/header.php');   // Output of Stud.IP head
 echo $links;
 

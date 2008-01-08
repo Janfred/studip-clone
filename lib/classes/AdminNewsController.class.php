@@ -52,6 +52,7 @@ class AdminNewsController {
 	var $user_id;
 	var $news_range;
 	var $range_name;
+	var $range_type;
 	var $full_username;
 	var $news_perm=array();
 	var $max_col;
@@ -79,6 +80,7 @@ class AdminNewsController {
 			}
 			elseif ($news_range_id=="studip"){
 				$news_range_name="Stud.IP System News";
+				$news_range_type='studip';
 			}
 			elseif ($news_range_id!=""){
 				$object_type = get_object_type($news_range_id);
@@ -86,23 +88,29 @@ class AdminNewsController {
 					case "sem":
 					case "inst":
 					case "fak":
-					$news_range_name = getHeaderLine($news_range_id);
+						$object_name = get_object_name($news_range_id, $object_type);
+						$news_range_name = $object_name['name'];
+						$news_range_type = $object_type;
 					break;
 
 					default:
 					$news_range_name = get_fullname($news_range_id, 'full', false);
+					$news_range_type = 'user';
 				}
 			} else {
 				$this->news_range=$news_range_id=$this->user_id;
 				$this->range_name=$news_range_name=$this->full_username;
+				$this->range_type=$news_range_type='user';
 			}
 		} else {
 			$this->modus = "";
 			$this->news_range=$news_range_id=$this->user_id;
 			$this->range_name=$news_range_name=$this->full_username;
+			$this->range_type=$news_range_type='user';
 		}
 		$this->news_range=$news_range_id;
 		$this->range_name=$news_range_name;
+		$this->range_type=$news_range_type;
 	}
 
 	function get_news_by_range($range) {
@@ -205,7 +213,7 @@ class AdminNewsController {
 										"expire" => 604800,
 										"allow_comments" => 0);
 			if ($perm->have_perm("admin")){
-				$this->search_range(mysql_escape_string($this->range_name));
+				$this->search_result[$this->news_range] = array('type' => $this->range_type, 'name' => $this->range_name);
 			}
 		}
 		if (isset($_REQUEST['news_range_search_x'])) {
@@ -503,7 +511,6 @@ class AdminNewsController {
 		else
 			$add = '';
 		if ($perm->have_perm('tutor') && is_array($this->search_result)) {
-			uasort($this->search_result, 'callback_cmp_newsarray');
 			reset($this->search_result);
 			while (list ($range,$details) = each($this->search_result)) {
 				if ($details["type"]==$type) {
