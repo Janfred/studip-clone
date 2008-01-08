@@ -493,7 +493,7 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 								$issues[$db2->f('issue_id')] = new Issue(array('issue_id' => $db2->f('issue_id')));
 							}					
 							$issue_name = $issues[$db2->f('issue_id')]->toString();
-							$issue_name = my_substr($issue_name, 0, 20);
+							$issue_name = htmlReady(my_substr($issue_name, 0, 20));
 							$option_id = $db2->f('issue_id');
 						} else {
 							$option_id = $db2->f('termin_id');
