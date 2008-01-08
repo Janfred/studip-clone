@@ -169,7 +169,7 @@ class CycleData {
 					if (is_array($issue_ids)) {
 						foreach($issue_ids as $issue_id){
 							// delete this issue
-							IssueDB::deleteIssue($issue_id);
+							IssueDB::deleteIssue($issue_id, $termin->getRangeID());
 						}
 					}
 				}
@@ -264,4 +264,3 @@ class CycleData {
 		$this->termine[$singledate_id]->removeRequest();
 	}
 }
-?>
