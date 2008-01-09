@@ -89,6 +89,8 @@ $structure["kontakt"]=array ("topKat"=>"", "name"=>_("Kontakt"), "link"=>"impres
 $structure["programm"]=array ("topKat"=>"", "name"=>_("&Uuml;ber Stud.IP"), "link"=>"impressum.php?view=technik", "active"=>FALSE);
 //Bottomkats
 $structure["ansprechpartner"]=array ("topKat"=>"kontakt", "name"=>_("Ansprechpartner"), "link"=>"impressum.php?view=ansprechpartner", "active"=>FALSE);
+if($GLOBALS['SHOW_TERMS_ON_FIRST_LOGIN'])
+	{$structure['terms']=array ('topKat'=>'kontakt', 'name'=>_("Datenschutzerkl&auml;rung"), "link"=>"impressum.php?view=terms", "active"=>FALSE);}
 $structure["main"]=array ("topKat"=>"kontakt", "name"=>_("Entwickler"), "link"=>"impressum.php?view=main", "active"=>FALSE);
 $structure["technik"]=array ("topKat"=>"programm", "name"=>_("Technik"), "link"=>"impressum.php?view=technik", "active"=>FALSE);
 $structure["statistik"]=array ("topKat"=>"programm", "name"=>_("Statistik"), "link"=>"impressum.php?view=statistik", "active"=>FALSE);
@@ -519,6 +521,13 @@ printf(_("Das System wird ständig weiterentwickelt und an die Wünsche unserer Nu
 	</tr>
 
 <?}
+
+/************************************************************************
+ * Start: Ansicht Kategorie "Datenschutz" bzw. Nutzungsbedingungen (terms)
+ ************************************************************************/
+if ($view == "terms") {
+	include("locale/$_language_path/LC_HELP/pages/nutzung.html");
+}
 
 ?>
 </table>
