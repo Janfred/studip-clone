@@ -927,12 +927,12 @@ class Seminar {
 					// logging >>>>>>
 					log_event("SEM_CHANGE_TURNUS", $this->getId(), $cycle->toString());
 					// logging <<<<<<
-					$this->createMessage(sprintf(_("Die regelmäßige Veranstaltungszeit \"%s\" wurde für alle in der Zukunft liegenden Termine geändert!"), '<b>'.$cycle->toString().'</b>'));
+					$this->createMessage(sprintf(_("Die regelmäßige Veranstaltungszeit wurde auf \"%s\" für alle in der Zukunft liegenden Termine geändert!"), '<b>'.$cycle->toString().'</b>'));
 					$message = true;
 				}
 			} else {
 				if (!$same_time) {
-					$this->createInfo(sprintf(_("Die regelmäßige Veranstaltungszeit \"%s\" wurde geändert, jedoch gab es keine Termine die davon betroffen waren."), '<b>'.$cycle->toString().'</b>'));
+					$this->createInfo(sprintf(_("Die regelmäßige Veranstaltungszeit wurde auf \"%s\" geändert, jedoch gab es keine Termine die davon betroffen waren."), '<b>'.$cycle->toString().'</b>'));
 					$message = true;
 				}
 			}

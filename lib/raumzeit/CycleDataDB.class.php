@@ -76,16 +76,18 @@ class CycleDataDB {
 	function deleteNewerSingleDates($metadate_id, $timestamp) {
 		$db = new DB_Seminar();
 
+		$c = 0;
 		$db->query("SELECT * FROM termine WHERE metadate_id = '$metadate_id' AND date > $timestamp");
 		while ($db->next_record()) {
 			$termin =& new SingleDate($db->f('termin_id'));
 			$termin->delete();
+			$c++;
 			unset($termin);
 		}
 
 		$db->query("DELETE FROM termine WHERE metadate_id = '$metadate_id' AND date > $timestamp");
 		$db->query("DELETE FROM ex_termine WHERE metadate_id = '$metadate_id' AND date > $timestamp");
-		return $db->affected_rows();
+		return $c;
 	}
 
 	function getPredominantRoomDB($metadate_id, $filterStart = 0, $filterEnd = 0) {

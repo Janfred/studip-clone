@@ -95,6 +95,7 @@ class SingleDateDB {
 		}
 
 		$db->query("DELETE FROM $table WHERE termin_id = '$id'");
+		$db->query("DELETE FROM themen_termine WHERE termin_id = '$id'");
 
 		return TRUE;
 	}
