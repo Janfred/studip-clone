@@ -122,7 +122,7 @@ class SingleDateDB {
 
 	function getIssueIDs($termin_id) {
 		$db = new DB_Seminar();
-		$db->query("SELECT * FROM themen_termine WHERE termin_id = '$termin_id'");
+		$db->query("SELECT tt.* FROM themen_termine as tt LEFT JOIN themen as t ON (tt.issue_id = t.issue_id) WHERE termin_id = '$termin_id' AND t.issue_id IS NOT NULL");
 
 		if ($db->num_rows() == 0) return NULL;
 

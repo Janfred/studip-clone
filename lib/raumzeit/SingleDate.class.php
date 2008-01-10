@@ -213,10 +213,12 @@ class SingleDate {
 		}
 	}
 
-	function delete() {
+	function delete($keepIssues = false) {
 		$this->chdate = time();
 		$this->killAssign();
-		$this->killIssue();
+		if (!$keepIssues) {
+			$this->killIssue();
+		}
 
 		return SingleDateDB::deleteSingleDate($this->termin_id, $this->ex_termin);
 	}

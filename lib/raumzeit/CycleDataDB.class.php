@@ -73,14 +73,14 @@ class CycleDataDB {
 		return ($a['date'] < $b['date']) ? -1 : 1;
 	}
 
-	function deleteNewerSingleDates($metadate_id, $timestamp) {
+	function deleteNewerSingleDates($metadate_id, $timestamp, $keepIssues = false) {
 		$db = new DB_Seminar();
 
 		$c = 0;
 		$db->query("SELECT * FROM termine WHERE metadate_id = '$metadate_id' AND date > $timestamp");
 		while ($db->next_record()) {
 			$termin =& new SingleDate($db->f('termin_id'));
-			$termin->delete();
+			$termin->delete($keepIssues);
 			$c++;
 			unset($termin);
 		}
