@@ -17,7 +17,10 @@ class LockRules extends DBMigration {
 				`attributes` text NOT NULL,
 				PRIMARY KEY  (`lock_id`)
 			)");
-		
+
+		$this->db->query( "
+			ALTER TABLE `seminare` ADD `lock_rule` VARCHAR( 32 ) NULL ; ");
+
 		$this->announce("done.");
 		
 	}
@@ -28,7 +31,10 @@ class LockRules extends DBMigration {
 		$this->db->query("
       DROP TABLE `lock_rules` 
 		");
-		
+
+		$this->db->query("
+			ALTER TABLE `seminare` DROP `lock_rule`");
+
 		$this->announce("done.");
 		
 	}
