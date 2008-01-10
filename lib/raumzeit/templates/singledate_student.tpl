@@ -62,7 +62,7 @@
 </tr>
 <? if ($issue_open[$tpl['sd_id']] || $tpl['openall']) { ?>
 <TR>
-	<TD colspan="7" class="steel1" align="left" style="padding-left: 10px">
+	<TD colspan="8" class="steel1" align="left" style="padding-left: 10px">
 			<FONT size="-1">
 				<BR/>
 				<B><?=($tpl['theme_title']) ? $tpl['theme_title'] : _("Keine Titel vorhanden.")?></B><BR/>
