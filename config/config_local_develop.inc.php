@@ -148,6 +148,8 @@ $WAP_ENABLE = TRUE;							//Stud.IP module: WAP
 
 $STM_ENABLE = TRUE;
 
+$SEMINAR_LOCK_ENABLE = FALSE; // locking of fields in seminar administration
+
 $ELEARNING_INTERFACE_MODULES["ilias38x"] = array(
 	"name" => "ILIAS 3.8.X Testserver",
 	"ABSOLUTE_PATH_ELEARNINGMODULES" =>	"http://develop.studip.de/ilias38/",
@@ -225,7 +227,6 @@ $PLUGINS_UPLOAD_ENABLE = TRUE; 					//Upload of Plugins is enabled
 $NEW_PLUGINS_PATH = ""; 							//The place from which new plugins should be loaded
 $PLUGINS_CACHING = TRUE;  						//enable caching
 $PLUGINS_CACHE_TIME = 300; 						//Time in seconds, the cache is valid
-
 
 /*system functions
 ----------------------------------------------------------------
