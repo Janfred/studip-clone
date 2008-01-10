@@ -86,8 +86,8 @@ $sem->checkFilter();
 
 $semester = new SemesterData();
 $_LOCKED = FALSE;
-if ($SEMINAR_LOCK_RULE) {
-	require_once ('/lib/classes/LockRules.class.php');
+if ($SEMINAR_LOCK_ENABLE) {
+	require_once ('lib/classes/LockRules.class.php');
 	$lockRule = new LockRules();
 	$data = $lockRule->getSemLockRule($id);
 	if ($data['attributes']['room_time'] && !$perm->have_perm('admin')) {
@@ -185,7 +185,7 @@ while ($tmp_first_date < $end_date) {
 						<FONT size="-1">
 						&nbsp;<?=_("Startsemester")?>:&nbsp;
 						<?
-							if ($perm->have_perm('tutor')) {
+							if ($perm->have_perm('tutor') && !$_LOCKED) {
 								echo "<SELECT name=\"startSemester\">\n";
 								$all_semester = $semester->getAllSemesterData();
 								foreach ($all_semester as $val) {

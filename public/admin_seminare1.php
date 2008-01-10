@@ -111,6 +111,8 @@ $db2 = new DB_Seminar;
 $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
 $db5 = new DB_Seminar;
+$db6 = new DB_Seminar;
+
 $cssSw = new cssClassSwitcher;
 
 $user_id = $auth->auth["uid"];
@@ -123,12 +125,73 @@ if ($SessSemName[1])
 $st_search = new StudipSemTreeSearch($s_id,"details");
 #$DataFields = new DataFields($s_id);
 
+
+$label_lock_text = '<img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="middle"';
+$label_lock_text .= tooltip(_("Sie dürfen nicht alle Daten dieser Veranstaltung verändern. Diese Sperrung ist von einem/einer AdministratorIn vorgenommen worden."),TRUE,TRUE).">";
+
+
 function auth_check() {
 	global $perm,$s_id;
 	return $perm->have_studip_perm("tutor",$s_id);
 }
 
-function get_dozent_data($s_id, $_fullname_sql)
+
+if (isset($s_id) && !$perm->have_perm("admin") && $SEMINAR_LOCK_ENABLE) {
+	$lock_status = "attributes";
+	$lockdata = $lock_rules->getSemLockRule($s_id);
+  $lock_text = $lock_rules->getLockText();
+}
+
+function get_Institutes($id) {
+	$db8 = new DB_Seminar;
+	$db9 = new DB_Seminar;
+	$i=0;
+	$inst_tree = array();
+	$db8->query("SELECT sem_tree_id FROM seminar_sem_tree s WHERE s.seminar_id='".$id."'");
+	while ($db8->next_record()) {
+		$inst_tree[$i]["tree"] = get_sem_tree($db8->f("sem_tree_id"));
+        $inst_tree[$i]["id"] = $db8->f("sem_tree_id");
+		//echo $db->f("sem_tree_id")."<br>";
+		$i++;
+	}
+	return $inst_tree;
+}
+
+
+function get_sem_tree($id,$path=array()) {
+    $db = new DB_Seminar;
+    $sql = "SELECT parent_id,name,studip_object_id FROM sem_tree WHERE sem_tree_id = '$id'";
+    $db->query($sql);
+    $db->next_record();
+    if (($db->f("parent_id")=="root") && ($db->f("name")=="")) {
+        $db2 = new DB_Seminar;
+        $sql2 = "SELECT * FROM Institute WHERE Institut_id='".$db->f("studip_object_id")."'";
+        $db2->query($sql2);
+        $db2->next_record();
+        $path[] = $db2->f("Name");
+    }
+    if ($db->f("name")!="") {
+        $path[] = $db->f("name");
+    }
+    if ($db->f("parent_id")!="root" && $db->f("parent_id")!='') {
+        return get_sem_tree($db->f("parent_id"),$path);
+    }
+    krsort($path);
+    return $path;
+}
+
+function format_sem_tree($array) {
+    foreach($array as $key=>$val) {
+        $string .= $val."&nbsp;>&nbsp;";
+    }
+    $string = substr($string,0,strlen($string)-8);
+    return $string;
+}
+
+
+
+
+function get_dozent_data($s_id, $_fullname_sql, $locked = false, $lock_text = '') 
 {
 	global $PHP_SELF;
 	$db = new DB_Seminar();
@@ -149,59 +212,74 @@ function get_dozent_data($s_id, $_fullname_sql)
 		while ($db->next_record())
     {
 			$out[] = "<tr>";
-			$out[]= "<td>";
 
-			$href = "?delete_doz=".$db->f("username"). "&s_id=".$s_id."#anker";
-			$img_src = "images/trash.gif";
-			$out[] = "<a href='{$PHP_SELF}{$href}'>";
-			$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
-			$out[] = "</a>";
-			$out[]= "</td>";
-
-			if ($db->nf() > 1)
+      if (!$locked)
       {
-				// move up (if not first)
-				$out[] = "<td>";
-				if ($i > 0)
+			  $out[]= "<td>";
+			$href = "?delete_doz=".$db->f("username"). "&s_id=".$s_id."#anker"; 
+			$img_src = "images/trash.gif"; 
+  			$out[] = "<a href='{$PHP_SELF}{$href}'>";
+  			$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
+  			$out[] = "</a>";
+  			$out[]= "</td>";
+
+			if ($db->nf() > 1) 
         {
-						$href = "?moveup_doz=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker";
-            $img_src = "images/move_up.gif";
-						$out[] = "<a href='{$PHP_SELF}{$href}'>";
-						$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
-						$out[] = "</a>";
-        }
-        $out[] = "</td>";
-				// move down (if not last)
-				$out[] = "<td>";
-				if ($i < $db->nf() - 1)
-        {
-						$href = "?movedown_doz=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker";
-						$img_src = "images/move_down.gif";
-						$out[] = "<a href='{$PHP_SELF}{$href}'>";
-						$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
-						$out[] = "</a>";
-				}
-        $out[] = "</td>";
-			}
+  				// move up (if not first)
+  				$out[] = "<td>";
+  				if ($i > 0)
+        { 
+						$href = "?moveup_doz=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker"; 
+            $img_src = "images/move_up.gif"; 
+  						$out[] = "<a href='{$PHP_SELF}{$href}'>";
+  						$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
+  						$out[] = "</a>";
+        } 
+          $out[] = "</td>";
+  				// move down (if not last)
+  				$out[] = "<td>";
+				if ($i < $db->nf() - 1) 
+          {
+						$href = "?movedown_doz=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker"; 
+						$img_src = "images/move_down.gif"; 
+  						$out[] = "<a href='{$PHP_SELF}{$href}'>";
+  						$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
+  						$out[] = "</a>";
+				} 
+          $out[] = "</td>";
+  			}
+  		}
 			$out[] = "<td>";
 			$out[] = "<font size=\"-1\"><b>".htmlReady($db->f("fullname")).
                " (". $db->f("username") . ")</b></font>";
 
 			$out[] = "</td>";
-			if ($GLOBALS['DENOTATIONS'])
-      {
-				$out[] = "<td>";
-				$out[] = "<select name=\"\" size=1>";
-				foreach ($GLOBALS['DENOTATIONS'] as $denot) {
-					$out[] = "<option>$denot";
-				}
-				$out[] = "</select>";
-				$out[] = "</td>";
-			}
-
+			if (!$locked)
+			{
+			if ($GLOBALS['DENOTATIONS']) 
+        {
+  				$out[] = "<td>";
+  				$out[] = "<select name=\"\" size=1>";
+  				foreach ($GLOBALS['DENOTATIONS'] as $denot) {
+  					$out[] = "<option>$denot";
+  				}
+  				$out[] = "</select>";
+  				$out[] = "</td>";
+  			}
+      }
 			$out[] = "</tr>";
 			$i++;
     }
+
+    if ($locked)
+    {
+      $out[] = "<tr>";
+      $out[] = "<td>";
+      $out[] = "{$lock_text}";      
+      $out[] = "</td>";
+      $out[] = "</tr>";
+    }
+
 		$out[] = "</table>";
   }
 	else
@@ -212,10 +290,17 @@ function get_dozent_data($s_id, $_fullname_sql)
 		$out[] = "<font size=\"-1\">&nbsp;  ";
 		$out[] = sprintf(_("Keine %s gew&auml;hlt."), $name);
 		$out[] = "</font><br >";
+
+    if ($locked)
+    {
+      $out[] = "{$lock_text}<br/>";      
+    }
+		
 	}
 	return implode("\n", $out);
 }
-function get_tutor_data($s_id, $_fullname_sql)
+
+function get_tutor_data($s_id, $_fullname_sql, $locked = false, $lock_text = '') 
 {
 	global $PHP_SELF;
 	$db = new DB_Seminar();
@@ -236,43 +321,46 @@ function get_tutor_data($s_id, $_fullname_sql)
 		while ($db->next_record())
     {
 			$out[] = "<tr>";
-			$out[]= "<td>";
-			$href =   "?delete_tut=".$db->f("username"). "&s_id=".$s_id."#anker";
-			$img_src = "images/trash.gif";
+			if (!$locked)
+			{
+  			$out[]= "<td>";
+			$href =   "?delete_tut=".$db->f("username"). "&s_id=".$s_id."#anker"; 
+			$img_src = "images/trash.gif"; 
 
-			$out[] = "<a href='{$PHP_SELF}{$href}'>";
-			$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
-			$out[] = "</a>";
+  			$out[] = "<a href='{$PHP_SELF}{$href}'>";
+  			$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
+  			$out[] = "</a>";
 
-			$out[]= "</td>";
+  			$out[]= "</td>";
 
-			if ($db->nf() > 1)
-      {
-				// move up (if not first)
-				$out[] = "<td>";
-				if ($i > 0)
+			if ($db->nf() > 1) 
         {
-						$href = "?moveup_tut=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker";
-						$img_src = "images/move_up.gif";
+  				// move up (if not first)
+  				$out[] = "<td>";
+  				if ($i > 0)
+        { 
+						$href = "?moveup_tut=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker"; 
+						$img_src = "images/move_up.gif"; 
 
-						$out[] = "<a href='{$PHP_SELF}{$href}'>";
-						$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
-						$out[] = "</a>";
-        }
-        $out[] = "</td>";
-				// move down (if not last)
-				$out[] = "<td>";
-				if ($i < $db->nf() - 1)
-        {
-					$href = "?movedown_tut=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker";
-					$img_src = "images/move_down.gif";
+  						$out[] = "<a href='{$PHP_SELF}{$href}'>";
+  						$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
+  						$out[] = "</a>";
+        } 
+          $out[] = "</td>";
+  				// move down (if not last)
+  				$out[] = "<td>";
+				if ($i < $db->nf() - 1) 
+          {
+					$href = "?movedown_tut=".$db->f("username"). "&s_id=".$s_id."&".time()."#anker"; 
+					$img_src = "images/move_down.gif"; 
 
-					$out[] = "<a href='{$PHP_SELF}{$href}'>";
-					$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
-					$out[] = "</a>";
-				}
-        $out[] = "</td>";
-			}
+  					$out[] = "<a href='{$PHP_SELF}{$href}'>";
+  					$out[] = "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
+  					$out[] = "</a>";
+				} 
+          $out[] = "</td>";
+  			}
+  		}
 			$out[] = "<td>";
 			$out[] = "<font size=\"-1\"><b>".htmlReady($db->f("fullname")).
                " (". $db->f("username") . ")</b></font>";
@@ -281,6 +369,16 @@ function get_tutor_data($s_id, $_fullname_sql)
 			$out[] = "</tr>";
 			$i++;
     }
+
+    if ($locked)
+    {
+      $out[] = "<tr>";
+      $out[] = "<td>";
+      $out[] = "{$lock_text}";      
+      $out[] = "</td>";
+      $out[] = "</tr>";
+    }
+
 		$out[] = "</table>";
   }
 	else
@@ -291,6 +389,12 @@ function get_tutor_data($s_id, $_fullname_sql)
 		$out[] = "<font size=\"-1\">&nbsp;  ";
 		$out[] = sprintf(_("Keine %s gew&auml;hlt."), $name);
 		$out[] = "</font><br >";
+		
+    if ($locked)
+    {
+      $out[] = "{$lock_text}<br/>";      
+    }
+		
 	}
 	return implode("\n", $out);
 }
@@ -506,7 +610,7 @@ if ($s_send) {
 	$db->next_record();
 
 	// Do we have all necessary data?
-	if (empty($Name)) {
+	if (empty($Name) && !$lockdata[$lock_status]['Name']) {
 		$msg .= "error§" . _("Bitte geben Sie den <b>Namen der Veranstaltung</b> ein!") . "§";
 		$run = FALSE;
 	}
@@ -517,6 +621,10 @@ if ($s_send) {
 	}
 
 	if ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["bereiche"]) {
+	
+	if (!$lockdata[$lock_status]['sem_tree']
+			|| $perm->have_perm('admin'))
+	{
     if (empty($_REQUEST['details_chooser'])) {
       $msg .= "error§" . _("Bitte geben Sie wenigstens einen <b>Studienbereich</b> an!") . "§";
       $run = FALSE;
@@ -531,6 +639,9 @@ if ($s_send) {
 		}
 	}
 
+	}
+		
+
 	//we have to select at least one Dozent!
 	if (($perm->have_perm("admin")) && (!$add_doz)) {
 		$db2->query ("SELECT user_id FROM seminar_user WHERE Seminar_id = '$s_id' AND status = 'dozent' ");
@@ -541,7 +652,7 @@ if ($s_send) {
 	}
 
 	//Checks for admission turnout (only important if an admission is set)
-	if ($db->f("admission_type")) {
+	if ($db->f("admission_type") && !$lockdata[$lock_status]['admission_turnout']) {
 		if ($turnout < 1) {
 			$msg .= "error§" . _("Diese Veranstaltung ist teilnahmebeschr&auml;nkt. Daher m&uuml;ssen Sie wenigstens einen Teilnehmenden zulassen!") . "§";
 			$run=FALSE;
@@ -561,6 +672,108 @@ if ($s_send) {
 			$Schreibzugriff = $Lesezugriff;			// hier wusste ein Dozent nicht, was er tat
 
     ## Update Seminar information.
+    
+    $update_data = array();    
+
+    if (!$lockdata[$lock_status]['VeranstaltungsNummer'])
+    {
+    	$update_data['Veranstaltungsnummer'] = $VeranstaltungsNummer;
+    }
+
+    if (!$lockdata[$lock_status]['Institut_id'])
+    {
+    	if ($perm->have_studip_perm("dozent",$s_id))
+    	{
+    		$update_data['Institut_id'] = $Institut;
+    	}
+    }
+
+    if (!$lockdata[$lock_status]['Name'])
+    {
+    	$update_data['Name'] = $Name;
+    }
+    
+    if (!$lockdata[$lock_status]['Untertitel'])
+    {
+    	$update_data['Untertitel'] = $Untertitel;
+    }
+
+    if (!$lockdata[$lock_status]['Beschreibung'])
+    {
+    	$update_data['Beschreibung'] = $Beschreibung;
+    }
+
+    if (!$lockdata[$lock_status]['Sonstiges'])
+    {
+    	$update_data['Sonstiges'] = $Sonstiges;
+    }
+
+    if (!$lockdata[$lock_status]['art'])
+    {
+    	$update_data['art'] = $art;
+    }
+
+    if (!$lockdata[$lock_status]['teilnehmer'])
+    {
+    	$update_data['teilnehmer'] = $teilnehmer;
+    }
+    
+    if (!$lockdata[$lock_status]['voraussetzungen'])
+    {
+    	$update_data['vorrausetzungen'] = $vorrausetzungen;
+    }
+    
+    if (!$lockdata[$lock_status]['lernorga'])
+    {
+    	$update_data['lernorga'] = $lernorga;
+    }
+    
+    if (!$lockdata[$lock_status]['ects'])
+    {
+    	$update_data['ects'] = $ects;
+    }
+    
+    if (!$lockdata[$lock_status]['admission_turnout'])
+    {
+    	$update_data['admission_turnout'] = $turnout;
+    }
+    
+     if (!$lockdata[$lock_status]['Ort'])
+    {
+    	$update_data['Ort'] = $room;
+    }
+    
+    $query = null;
+     
+    $updated_seminar = false;
+    
+    if (sizeof($update_data) > 0)
+    {
+   		$count = 0;
+
+   		$query = "UPDATE seminare SET ";
+   		
+   		foreach($update_data as $key => $value)
+   		{
+   			if ($count > 0)
+   			{
+   				$query .= ", ";
+   			}  			
+   			
+   			$query .= " $key='$value' ";
+
+  			
+   			$count ++;
+   		}	
+   		
+		$query .= "WHERE Seminar_id='$s_id'";
+		
+   		$db->query($query);
+   		
+   		$updated_seminar = true;
+    }
+    
+/*
     $query = "UPDATE seminare SET Veranstaltungsnummer='$VeranstaltungsNummer', ";
     if ($perm->have_studip_perm("dozent",$s_id))
 			$query .="Institut_id='$Institut', ";
@@ -569,16 +782,13 @@ if ($s_send) {
 			Sonstiges='$Sonstiges', art='$art', teilnehmer='$teilnehmer',
 			vorrausetzungen='$vorrausetzungen', lernorga='$lernorga',
 			leistungsnachweis='$leistungsnachweis', ects='$ects', admission_turnout='$turnout', Ort='$room' ";
-
-	$query .= "WHERE Seminar_id='$s_id'";
-
-    $db->query($query);
+*/
 
     if ($do_update_admission)
     	update_admission($s_id);
 
-
-    if ($db->affected_rows()) {
+    if ($updated_seminar	
+    		&& $db->affected_rows()) {
 			$msg .= "msg§" . _("Die Grund-Daten der Veranstaltung wurden ver&auml;ndert.") . "§";
 			$db->query("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id='$s_id'");
 		}
@@ -590,7 +800,10 @@ if ($s_send) {
 		$temp_admin_seminare_start_time=$db->f("start_time");
 
 		//a Dozent was added
-		if ($add_doz_x && $perm->have_studip_perm("dozent",$s_id)) {
+		
+		if ($add_doz_x 
+				&& $perm->have_studip_perm("dozent",$s_id) 
+				&& !$lockdata[$lock_status]['dozent']) {
 			$add_doz_id=get_userid($add_doz);
 			$group=select_group($temp_admin_seminare_start_time);
             $next_pos = get_next_position("dozent",$s_id);
@@ -612,7 +825,9 @@ if ($s_send) {
 		}
 
 		//a Tutor was added
-		if ($add_tut_x && $perm->have_studip_perm("dozent",$s_id)) {
+		if ($add_tut_x 
+				&& $perm->have_studip_perm("dozent",$s_id)
+				&& !$lockdata[$lock_status]['tutor']) {
 			$add_tut_id=get_userid($add_tut);
 			$group=select_group($temp_admin_seminare_start_time);
 			$query = "SELECT user_id, status FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$add_tut_id'";
@@ -636,6 +851,8 @@ if ($s_send) {
 			}
 		}
 
+		if (!$lockdata[$lock_status]['seminar_inst'])
+		{		
 		// delete all old participating institutions, then write new list
 		if (($b_institute) || ($Institut)) {
 			$query = "DELETE from seminar_inst where Seminar_id='$s_id'";
@@ -653,6 +870,8 @@ if ($s_send) {
 		$query = "INSERT IGNORE INTO seminar_inst values('$s_id','$Institut')";
 		$db3->query($query);
 
+		}
+
 		//Update the additional data-fields
 		if (is_array($datafield_id)) {
 			$ffCount = 0; // number of processed form fields
@@ -669,7 +888,7 @@ if ($s_send) {
 				else
 					$entry->setValue(array_slice($datafield_content, $ffCount, $numFields));
 				$ffCount += $numFields;
-				if ($entry->isValid())
+				if ($entry->isValid() && !$lockdata[$lock_status][$id])
 					$entry->store();
 				else
 					$invalidEntries[$id] = $entry;
@@ -737,65 +956,145 @@ if (($s_id) && (auth_check())) {
 				</td>
 			</tr>
 			<tr <?$cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><b><?=_("Name der Veranstaltung")?></b></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="Name" onchange="checkname()" size=58 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td>
+        <td class="<?= $cssSw->getClass() ?>" align=right><b><?=_("Name der Veranstaltung")?></b> 
+        <? if ($lockdata[$lock_status]["Name"]) : ?>
+          <?=  $label_lock_text;?> 
+        <? endif; ?>
+      </td>
+				<td class="<?= $cssSw->getClass()?>" align=left colspan=2>&nbsp;
+        <? if (! $lockdata[$lock_status]["Name"]) : ?>
+              <input type="text" name="Name" onchange="checkname()" size=58 maxlength=254 value="<?= htmlReady($db->f("Name")) ?>" >
+        <? else : ?>
+              <input readonly disabled type="text" name="Name" onchange="checkname()" size=58 maxlength=254 value="<?= htmlReady($db->f("Name")) ?>" >
+        <? endif; ?>
+				</td> 
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Untertitel der Veranstaltung")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="Untertitel" size=58 maxlength=254 value="<?php echo htmlReady($db->f("Untertitel")) ?>"></td>
+        <td class="<?= $cssSw->getClass() ?>" align=right><?=_("Untertitel der Veranstaltung")?>
+          <? if ($lockdata[$lock_status]["Untertitel"]) { echo $label_lock_text; }?></td>
+        </td>
+        <td class="<?= $cssSw->getClass() ?>" align=left colspan=2>
+          &nbsp; 
+          <?if (! $lockdata[$lock_status]["Untertitel"]) : ?> 
+            <input type="text" name="Untertitel" size=58 maxlength=254 value="<?php echo htmlReady($db->f("Untertitel")) ?>" >
+          <? else : ?>
+            <input readonly disabled type="text" name="Untertitel" size=58 maxlength=254 value="<?php echo htmlReady($db->f("Untertitel")) ?>" >
+          <? endif; ?>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><b><?=_("Typ der Veranstaltung")?></b></td>
-				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2>&nbsp; <select name="Status">
+        <td class="<?= $cssSw->getClass() ?>" align=right><b><?=_("Typ der Veranstaltung")?></b>
+          <? if ($lockdata[$lock_status]["status"]) { echo $label_lock_text;}?>
+        </td>
+				<td class="<?= $cssSw->getClass() ?>"  align=left colspan=2>&nbsp;
+        <? if ($lockdata[$lock_status]["status"]) : ?>
+          <input type="hidden" name="Status" value="<?= $db->f("status"); ?>">
+          <?= $SEM_TYPE[$db->f("status")]["name"]; ?>
+          <?= "&nbsp;" . _("in der Kategorie") . " <b>".htmlReady($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["name"])."</b>" ?>
+          <br/><?= $lock_text ?>
+
+        <? else : ?>
+          <select name="Status">
+          <?
+          if (!$perm->have_perm("admin")) {
+            $i=0;
+            for ($i=1; $i <= sizeof($SEM_TYPE); $i++) {
+              if ($SEM_TYPE[$i]["class"] == $SEM_TYPE[$db->f("status")]["class"])
+                printf ("<option %s value=%s>%s</option>", $db->f("status")== $i ? "selected" : "", $i, htmlReady($SEM_TYPE[$i]["name"]));
+            }
+          } else {
+            foreach ($SEM_TYPE as $sem_type_id => $sem_type) {
+              if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]
+                  || !$SEM_CLASS[$sem_type["class"]]["bereiche"])
+                printf("<option %s value=%s>%s (%s)</option>",
+                      $db->f("status") == $sem_type_id ? "selected" : "",
+                      $sem_type_id,
+                      htmlReady($sem_type["name"]),
+                      htmlReady($SEM_CLASS[$sem_type["class"]]["name"]));
+            }
+            printf ("</select></td>");
+          } ?>
+        <? endif; ?>
+			</tr>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Art der Veranstaltung")?>
+				  
+				  <? if ($lockdata[$lock_status]["art"]) : ?>
+	          <?= $label_lock_text ?>
+	        <? endif; ?>
+	      </td>
+        <td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; 
+
+        <? if (! $lockdata[$lock_status]["art"]) : ?>
+          <input type="text" name="art" size=30 maxlength=254 value="<?php echo htmlReady($db->f("art")) ?>" >
+        <? else: ?>
+          <input readonly disabled type="text" name="art" size=30 maxlength=254 value="<?php echo htmlReady($db->f("art")) ?>" >
+        <? endif; ?>
+				</td>
+			</tr>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Veranstaltungs-Nummer")?>
+				  <? if ($lockdata[$lock_status]["VeranstaltungsNummer"]) : ?>
+            <?= $label_lock_text; ?>
+          <? endif; ?>
+        </td>
+        <td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; 
+        <? if (! $lockdata[$lock_status]["VeranstaltungsNummer"]) : ?>
+          <input type="text" name="VeranstaltungsNummer" size="20" maxlength="32" value="<?php echo htmlReady($db->f("VeranstaltungsNummer")) ?>">
+        <? else : ?>
+          <input readonly disabled type="text" name="VeranstaltungsNummer" size="20" maxlength="32" value="<?php echo htmlReady($db->f("VeranstaltungsNummer")) ?>">
+        <? endif; ?>
+      </td>
+			</tr>
+			<tr>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("ECTS-Punkte")?>
+				  <? if ($lockdata[$lock_status]["ects"]) : ?>
+            <?= $label_lock_text;?>
+          <? endif; ?>
+				  
+				</td>
+        <td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp;
+          <? if (!$lockdata[$lock_status]["ects"]) : ?>
+            <input type="text" name="ects" size="6" maxlength="32" value="<?php echo htmlReady($db->f("ects")) ?>">
+          <? else: ?>
+            <input readonly disabled type="text" name="ects" size="6" maxlength="32" value="<?php echo htmlReady($db->f("ects")) ?>">
+          <? endif; ?>
+        </td>
+			</tr>
+			<tr>
+        <td class="<? echo $cssSw->getClass() ?>" align=right>
+          <? printf ("%s" . _("max. TeilnehmerInnenanzahl") . "%s", ($db->f("admission_type")) ? "<b>" : "",  ($db->f("admission_type")) ? "</b>" : ""); ?>
+          <? if ($lockdata[$lock_status]["admission_turnout"]) : ?>
+            <?= $label_lock_text ?>
+          <? endif; ?>
+          
+        </td>
+        <td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2>&nbsp; 
+          <? if (! $lockdata[$lock_status]["admission_turnout"]) : ?>
+            <input type="int" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>">
+          <? else : ?>
+            <input readonly disabled type="int" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>">
+          <? endif; ?>
+        </td>
+			</tr>
+			<tr>
+        <td class="<? echo $cssSw->getClass() ?>" align=right>
+          <?=_("Beschreibung")?>
+          <? if ($lockdata[$lock_status]["Beschreibung"]) : ?> 
+            <?= $label_lock_text; ?>
+          <? endif; ?>
+        </td>
+        <td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; 
+          <? if (! $lockdata[$lock_status]["Beschreibung"]) : ?>
+            <textarea name="Beschreibung" cols=58 rows=6 ><?php echo htmlReady($db->f("Beschreibung")) ?></textarea>
+          <? else: ?>
+            <textarea readonly disabled name="Beschreibung" cols=58 rows=6 ><?php echo htmlReady($db->f("Beschreibung")) ?></textarea>
+          <? endif; ?>
+        </td>
+			</tr>
+			<tr>
 				<?
-				if (!$perm->have_perm("admin")) {
-					foreach ($SEM_TYPE as $sem_type_id => $sem_type) {
-						if ($sem_type["class"] == $SEM_TYPE[$db->f("status")]["class"])
-							printf("<option %s value=%s>%s</option>",
-							       $db->f("status") == $sem_type_id ? "selected" : "",
-							       $sem_type_id,
-							       htmlReady($sem_type["name"]));
-					}
-					?>
-					</select><?echo "&nbsp;" . _("in der Kategorie") . " <b>".htmlReady($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["name"])."</b>";?></td>
-					<?
-				} else {
-					foreach ($SEM_TYPE as $sem_type_id => $sem_type) {
-						if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]
-						    || !$SEM_CLASS[$sem_type["class"]]["bereiche"])
-							printf("<option %s value=%s>%s (%s)</option>",
-							       $db->f("status") == $sem_type_id ? "selected" : "",
-							       $sem_type_id,
-							       htmlReady($sem_type["name"]),
-							       htmlReady($SEM_CLASS[$sem_type["class"]]["name"]));
-					}
-					printf ("</select></td>");
-				}
-				?>
-			</tr>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Art der Veranstaltung")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="art" size=30 maxlength=254 value="<?php echo htmlReady($db->f("art")) ?>"></td>
-			</tr>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Veranstaltungs-Nummer")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="VeranstaltungsNummer" size="20" maxlength="32" value="<?php echo htmlReady($db->f("VeranstaltungsNummer")) ?>"></td>
-			</tr>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("ECTS-Punkte")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <input type="text" name="ects" size="6" maxlength="32" value="<?php echo htmlReady($db->f("ects")) ?>"></td>
-			</tr>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><? printf ("%s" . _("max. TeilnehmerInnenanzahl") . "%s", ($db->f("admission_type")) ? "<b>" : "",  ($db->f("admission_type")) ? "</b>" : ""); ?></td>
-				<td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2>&nbsp; <input type="int" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>"></td>
-			</tr>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Beschreibung")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="Beschreibung" cols=58 rows=6><?php echo htmlReady($db->f("Beschreibung")) ?></textarea></td>
-			</tr>
-			<tr>
-				<?
-					if ($my_perms != "tutor") {
+          if ($my_perms != "tutor"
+                && !$lockdata[$lock_status]["Institut_id"] ) {
 						echo "<td class=\"".$cssSw->getClass()."\" align=right><b>" . _("Heimat-Einrichtung") . "</b></td>";
 						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>&nbsp; ";
 						echo "<select name=\"Institut\">";
@@ -825,18 +1124,27 @@ if (($s_id) && (auth_check())) {
 						}
 						echo "</select>";
 					} else {
-						echo "<td class=\"".$cssSw->getClass()."\" align=right>" . _("Heimat-Einrichtung") . "</td>";
+						echo "<td class=\"".$cssSw->getClass()."\" align=right>" . _("Heimat-Einrichtung") ;
+            if ($lockdata[$lock_status]["Institut_id"]) { echo $label_lock_text;}
+						echo "</td>";
 						echo "<td class=\"".$cssSw->getClass()."\" align=left colspan=2>&nbsp; ";
 						echo "<input type=\"HIDDEN\" name=\"Institut\" value=\"".$db->f("Institut_id")."\" />";
 						echo "<b>".htmlReady($db->f("Institut"))."</b>";
+						echo "<br/>" . $lock_rules->getLockText();
 					}
 
 				?>
 				</td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("beteiligte Einrichtungen")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <select  name="b_institute[]" MULTIPLE SIZE=8>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("beteiligte Einrichtungen")?>
+          <? if ($lockdata[$lock_status]["seminar_inst"]) : ?>
+				          <?= $label_lock_text; ?>
+        <? endif; ?>
+        </td>
+        <td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; 
+          <? if (! $lockdata[$lock_status]["seminar_inst"]) : ?>
+            <select  name="b_institute[]" MULTIPLE SIZE=8 >
 					<?php
 					$db3->query("SELECT Name,a.Institut_id,b.Institut_id as beteiligt FROM Institute a LEFT JOIN seminar_inst b ON(a.Institut_id=b.Institut_id AND Seminar_id='$s_id') WHERE a.Institut_id=a.fakultaets_id ORDER BY Name");
 					while ($db3->next_record()) {
@@ -850,7 +1158,34 @@ if (($s_id) && (auth_check())) {
 						}
 					}
 					?>
-				</select></td>
+            </select>
+          <? else: ?>
+            <? 
+              $db3->query("SELECT a.Name,a.Institut_id,b.Institut_id as beteiligt 
+                FROM seminare s
+                LEFT JOIN seminar_inst b 
+                ON (s.Seminar_id = b.Seminar_id)
+                LEFT JOIN Institute a 
+                ON (a.Institut_id=b.Institut_id AND s.Seminar_id='$s_id') 
+                WHERE a.Institut_id=a.fakultaets_id 
+                AND s.Institut_id != b.institut_id ORDER BY a.Name");
+
+              ?> 
+              <? if ($db3->num_rows() == 0) : ?>
+                <?= _('keine beteiligte Einrichtung'); ?>
+              <? else : ?> 
+                <ul>
+                  <? while($db3->next_record()) : ?>
+                    <li>
+                      <?= htmlReady(my_substr($db3->f("Name"),0,60)) ?>
+                    </li>
+                  <? endwhile ; ?>
+                </ul>
+              <? endif; ?>
+  						<? echo "<br/>" . $lock_rules->getLockText(); ?>
+
+        <? endif; ?>
+        </td>
 			</tr>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" align="center" colspan=3>
@@ -868,6 +1203,9 @@ if (($s_id) && (auth_check())) {
 			if ($my_perms == "tutor") {
 				?>
 				<td class="<? echo $cssSw->getClass() ?>" align="right"><? if (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) echo  _("DozentInnen"); else echo _("LeiterInnen");?>
+				<? if ($lockdata[$lock_status]["dozent"]) : ?>
+				  <?= $label_lock_text; ?>
+        <? endif; ?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align="left" colspan="2">&nbsp;
 				<?
@@ -901,14 +1239,16 @@ if (($s_id) && (auth_check())) {
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <font color="#FF0000"><?=_("Die Personendaten k&ouml;nnen Sie mit Ihrem Status nicht bearbeiten!")?></font></td>
 				<?
 			} else {
+			
 				if ($perm->have_perm("admin"))
 					printf ("<td %s align=right><b>%s</b></td>", $cssSw->getFullClass(), (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("DozentInnen") : _("LeiterInnen"));
-				else
-					printf ("<td %s align=right>%s</td>", $cssSw->getFullClass(), (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("DozentInnen") : _("LeiterInnen"));
+				else 
+					printf ("<td %s align=right>%s %s</td>", $cssSw->getFullClass(), (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("DozentInnen") : _("LeiterInnen"), $lockdata[$lock_status]["dozent"] ? $label_lock_text : '');
+				
 				?>
 				<td class="<? echo $cssSw->getClass() ?>" align="left" colspan=1>
 
-            <?= get_dozent_data($s_id,$_fullname_sql) ?>
+            <?= get_dozent_data($s_id,$_fullname_sql, $lockdata[$lock_status]['dozent'], $lock_rules->getLockText()) ?>
 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align="left" valign="top">
@@ -945,6 +1285,7 @@ if (($s_id) && (auth_check())) {
 					}
 					if ($no_doz_found) {
 						?>
+						<?if (!$lockdata[$lock_status]["dozent"]) { ?>
 						<font size=-1>
 						<? printf ("%s %s", (($search_exp_doz) && ($no_doz_found)) ? _("Keinen Nutzenden gefunden.") . " <a name=\"anker\"></a>" : "",   (!$search_exp_doz) ? (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("DozentIn hinzuf&uuml;gen") : _("LeiterIn hinzuf&uuml;gen")  : "");?>
 						</font><br />
@@ -952,6 +1293,7 @@ if (($s_id) && (auth_check())) {
 						<input type="IMAGE" src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" <? echo tooltip(_("Suche starten")) ?> border="0" name="search_doz" /><br />
 						<font size=-1><?=_("Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein.")?></font>
 						<?
+					}
 					}
 					?>
 				</td>
@@ -963,15 +1305,23 @@ if (($s_id) && (auth_check())) {
 				<td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align="right"><? if (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) echo _("TutorInnen"); else echo _("Mitglieder");?></td>
+				<td class="<? echo $cssSw->getClass() ?>" align="right">
+				  <? if (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) 
+				    echo _("TutorInnen"); else echo _("Mitglieder");?>
+					  <? if ($lockdata[$lock_status]["tutor"]) : ?>
+						  <?= $label_lock_text ?>
+						<? endif; ?>
+				  
+				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align="left">
 
-               <?= get_tutor_data($s_id,$_fullname_sql) ?>
+               <?= get_tutor_data($s_id,$_fullname_sql, $lockdata[$lock_status]['tutor'], $lock_rules->getLockText()) ?>
 
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align="left" valign="top">
 					<?
 					$no_tut_found=TRUE;
+					if (!$lockdata[$lock_status]["tutor"]) {
 					if (($search_exp_tut) && ($search_tut_x)) {
 						$search_exp_tut = trim($search_exp_tut);
 						if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["only_inst_user"]) {
@@ -1011,6 +1361,8 @@ if (($s_id) && (auth_check())) {
 						<font size=-1><?=_("Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein.")?></font>
 						<?
 					}
+          }
+      }
 					?>
 				</td>
 				</td>
@@ -1029,9 +1381,25 @@ if (($s_id) && (auth_check())) {
 			if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) {
 			?>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><b><?=_("Studienbereich(e)")?></b></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp;
+				<td class="<? echo $cssSw->getClass() ?>" align=right><b><?=_("Studienbereich(e)")?></b>
+                <? if ($lockdata[$lock_status]["sem_tree"]) { echo $label_lock_text;}?>
+                </td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
 					<?
+                        if ($lockdata[$lock_status]["sem_tree"]) {
+                            $institutes = get_Institutes($s_id);
+                            $SET_SEM_PATHS = Array();
+                            $sess->register("SET_SEM_PATHS");
+                            foreach($institutes as $sem_path)
+                            {
+                                $SET_SEM_PATHS[implode("|",get_sem_tree($sem_path["id"]))] = true;
+                            }
+                            for ($i=0;$i<count($institutes);$i++) {
+                                echo "<font size=-1>".format_sem_tree($institutes[$i]["tree"])."</font>";
+                                echo "<br>";
+                            }
+                            echo $lock_text;
+                        } else {
 					echo "\n<div align=\"left\">&nbsp;";
 					echo $st_search->getSearchField(array('style' => 'vertical-align:middle;','size'=>30));
 					echo "&nbsp;";
@@ -1056,25 +1424,72 @@ if (($s_id) && (auth_check())) {
 			</tr>
 
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("TeilnehmerInnen")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="teilnehmer" cols=58 rows=3><?php echo htmlReady($db->f("teilnehmer")) ?></textarea></td>
+	<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("TeilnehmerInnen")?>
+          <? if ($lockdata[$lock_status]["teilnehmer"]) : ?>				
+            <?= $label_lock_text; ?>
+          <? endif; ?>
+        </td>
+        <td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; 
+          <? if (!$lockdata[$lock_status]["teilnehmer"]) : ?>
+            <textarea name="teilnehmer" cols=58 rows=3 ><?= htmlReady($db->f("teilnehmer")) ?></textarea>
+          <? else: ?>
+             <textarea disabled readonly name="teilnehmer" cols=58 rows=3 ><?= htmlReady($db->f("teilnehmer")) ?></textarea>
+          <? endif; ?>
+        </td>
 			</tr>
 
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Voraussetzungen")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="vorrausetzungen" cols=58 rows=3><?php echo htmlReady($db->f("vorrausetzungen")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Voraussetzungen")?>
+          <? if ($lockdata[$lock_status]["voraussetzungen"]) : ?>
+            <?= $label_lock_text; ?>
+          <? endif; ?>
+				</td>
+        <td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; 
+          <? if (! $lockdata[$lock_status]["vorraussetzungen"]) : ?>
+            <textarea name="vorrausetzungen" cols=58 rows=3><?= htmlReady($db->f("vorrausetzungen")) ?></textarea>
+          <? else : ?>
+            <textarea disabled readonly name="vorrausetzungen" cols=58 rows=3><?= htmlReady($db->f("vorrausetzungen")) ?></textarea>
+          <? endif; ?>
+      </td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Lernorganisation")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="lernorga" cols=58 rows=3><?php echo htmlReady($db->f("lernorga")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Lernorganisation")?>
+          <? if ($lockdata[$lock_status]["lernorga"]) : ?>		
+            <?= $label_lock_text; ?>
+          <? endif; ?>
+        </td>
+        <td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; 
+        <? if (! $lockdata[$lock_status]["lernorga"]) : ?>
+          <textarea name="lernorga" cols=58 rows=3 ><?php echo htmlReady($db->f("lernorga")) ?></textarea>
+        <? else: ?>
+          <textarea disabled readonly name="lernorga" cols=58 rows=3 ><?php echo htmlReady($db->f("lernorga")) ?></textarea>        <? endif; ?>
+        </td>
 			</tr>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Leistungsnachweis")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="leistungsnachweis" cols=58 rows=3><?php echo htmlReady($db->f("leistungsnachweis")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Leistungsnachweis")?>
+          <? if ($lockdata[$lock_status]["leistungsnachweis"]) : ?>			
+            <?= $label_lock_text; ?>
+          <? endif; ?>
+				</td>
+        <td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; 
+          <? if (! $lockdata[$lock_status]["leistungsnachweis"]) : ?>
+            <textarea name="leistungsnachweis" cols=58 rows=3 ><?= htmlReady($db->f("leistungsnachweis")) ?></textarea>
+          <? else: ?>
+            <textarea disabled readonly name="leistungsnachweis" cols=58 rows=3 ><?= htmlReady($db->f("leistungsnachweis")) ?></textarea>          <? endif; ?>
+        </td>
 			</tr>
 			<tr>
-	        	<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Ort")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="room" cols=58 rows=3><?php echo htmlReady($db->f("Ort")) ?></textarea>
+        <td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Ort")?>
+          <? if ($lockdata[$lock_status]["Ort"]) : ?>
+            <?= $label_lock_text; ?>
+          <? endif; ?>
+        </td>
+        <td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; 
+          <? if (! $lockdata[$lock_status]["Ort"]) : ?>
+            <textarea name="room" cols=58 rows=3 ><?= htmlReady($db->f("Ort")) ?></textarea>
+          <? else: ?>
+						<textarea disabled readonly name="room" cols=58 rows=3 ><?= htmlReady($db->f("Ort")) ?></textarea>          
+					<? endif; ?>
 				<br />&nbsp; <font size="-1"><b><?=_("Achtung:")."&nbsp;</b>"._("Diese Ortsangabe wird nur angezeigt, wenn keine Angaben aus Zeiten oder Sitzungsterminen gemacht werden k&ouml;nnen.");?></font>
 				</td>
 			</tr>
@@ -1095,10 +1510,16 @@ if (($s_id) && (auth_check())) {
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align=right width="30%">
 					<font color="<?=$color?>"><?=htmlReady($entry->getName())?></font>
-				</td>
+					
+					<? if ($lockdata[$lock_status][$entry->structure->getID()]) : ?>
+            <?= $label_lock_text ?>
+          <? endif; ?>    
+    		</td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
 					<?
-					if ($perm->have_perm($entry->structure->getEditPerms())) {
+					if ($perm->have_perm($entry->structure->getEditPerms()) 
+						&& !$lockdata[$lock_status][$entry->structure->getID()]) 
+					{
 						print '&nbsp;&nbsp;' . $entry->getHTML('datafield_content[]', $entry->structure->getID());
 					?>
 					   <input type="hidden" name="datafield_id[]" value="<?=$entry->structure->getID()?>">
@@ -1106,8 +1527,11 @@ if (($s_id) && (auth_check())) {
 					<?
 					}
 					else {
+							$input_field = $entry->getHTML('datafield_content[]', $entry->structure->getID());
+							$input_field_locked = preg_replace('/<input /', '<input disabled readonly ', $input_field);
    					?>
-	   				&nbsp; <?= ($entry->getDisplayValue()) ? $entry->getDisplayValue() : "<font size=\"-1\"><b><i>"._("keine Inhalte vorhanden")."</i></b></font>";?><br />
+
+	   				<?= $input_field_locked ?><br />
 		   			<font size="-1>">&nbsp; <?="<i>"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</i>"?></font>
 			      <?
 					}
@@ -1118,8 +1542,19 @@ if (($s_id) && (auth_check())) {
 			}
 			?>
 			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Sonstiges")?></td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp; <textarea name="Sonstiges" cols=58 rows=3><?php echo htmlReady($db->f("Sonstiges")) ?></textarea></td>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><?=_("Sonstiges")?>
+          <? if ($lockdata[$lock_status]["Sonstiges"]) : ?>
+            <?= $label_lock_text ?>
+          <? endif; ?>
+	
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp;
+          <? if (! $lockdata[$lock_status]["Sonstiges"]) : ?>
+            <textarea name="Sonstiges" cols=58 rows=3 ><?= htmlReady($db->f("Sonstiges")) ?></textarea>
+          <? else: ?>
+						<textarea disabled readonly name="Sonstiges" cols=58 rows=3 ><?= htmlReady($db->f("Sonstiges")) ?></textarea>          
+					<? endif; ?>
+				</td>
 			</tr>
 			<?
 			$mkstring=date ("d.m.Y, G:i", $db->f("mkdate"));

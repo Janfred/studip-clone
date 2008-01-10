@@ -86,6 +86,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	require_once 'lib/functions.php';
 	require_once 'lib/classes/Modules.class.php';
 	require_once 'lib/classes/SemesterData.class.php';
+	require_once "lib/classes/LockRules.class.php";
 	require_once "lib/classes/AuxLockRules.class.php";
 
 	$db=new DB_Seminar;
@@ -95,6 +96,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	$cssSw=new cssClassSwitcher;
 	$Modules=new Modules;
 	$semester=new SemesterData;
+	$lock_rules=new LockRules;
+	$all_lock_rules=$lock_rules->getAllLockRules();
 	$aux_rules=new AuxLockRules();
 	$all_aux_rules=$aux_rules->getAllLockRules();
 
@@ -216,6 +219,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			OR $i_page == "archiv_assi.php"
 			OR $i_page == "admin_visibility.php"
 			OR $i_page == "admin_aux.php"
+			OR $i_page == "admin_lock.php"
 			OR $i_page == "copy_assi.php"
 			OR $i_page == "adminarea_start.php"
 			OR ($i_page == "admin_modules.php" AND $links_admin_data["view"] == "modules_sem")
@@ -324,6 +328,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		}
 		if (get_config('ALLOW_DOZENT_VISIBILITY') || $perm->have_perm("admin")){
 			$structure["visibility"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sichtbarkeit"), 'link'=>"admin_visibility.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'newline'=>TRUE);
+			
+			if ($SEMINAR_LOCK_ENABLE)
+			$structure["lock"]=array (topKat=>"veranstaltungen", name=>_("Sperren"), link=>"admin_lock.php?list=TRUE&new_session=TRUE", active=>FALSE);
 		}
 	}
 
@@ -370,6 +377,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			$structure["sem_tree"]=array ('topKat'=>"global", 'name'=>_("Veranstaltungshierarchie"), 'link'=>"admin_sem_tree.php", 'active'=>FALSE);
 		}
 		$structure["aux_adjust"]=array (topKat=>"global", name=>("Zusatzangaben definieren"), link=>"admin_aux_adjust.php", active=>FALSE);
+		if ($SEMINAR_LOCK_ENABLE) 
+		$structure["lock_adjust"]=array (topKat=>"global", name=>("Sperrebenen anpassen"), link=>"admin_lock_adjust.php", active=>FALSE);
 	}
 
 	if($perm->have_perm('dozent') && $GLOBALS['STM_ENABLE']){
@@ -525,6 +534,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		break;
 		case "admin_aux_adjust.php":
 			$reiter_view="aux_adjust";
+                break;
+	        case "admin_lock_adjust.php":
+		        $reiter_view="lock_adjust";
 		break;
 		case "admin_studiengang.php":
 			$reiter_view="studiengang";
@@ -540,6 +552,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		break;
 		case "admin_aux.php":
 			$reiter_view="aux";
+		break;
+		case "admin_lock.php":
+			$reiter_view="lock";
 		break;
 		case "copy_assi.php":
 			$reiter_view="copysem";
@@ -944,6 +959,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 							echo _("Archivieren");
 						} elseif ($i_page=="admin_visibility.php") {
 							echo _("Sichtbarkeit");
+						} elseif ($i_page=="admin_lock.php") {
+						echo _("Sperrebene");
 						} else {
 							echo _("Aktion");
 						}
@@ -989,7 +1006,39 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				</tr>
 				<?
 			}
-			//more Options for lock changing
+		//more Options for lock changing
+		if ($i_page == "admin_lock.php") {
+			?>
+			<tr <? $cssSw->switchClass() ?>>
+				<td class="<? echo $cssSw->getClass() ?>" colspan="3">
+					&nbsp; <font size=-1><?=_("Sperrebene der angezeigten Veranstaltungen")?>&nbsp;<input type="IMAGE" <?=makeButton("zuweisen", "src")?> border=0 align="absmiddle" /></font><br />
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" colspan="4" align="right">
+				<?
+				if ($auth->auth["jscript"]) {
+					printf("<select name=\"lock_all\" size=1>");
+					printf("<option value='-1'>"._("Bitte w&auml;hlen")."</option>");
+					for ($i=0;$i<count($all_lock_rules);$i++) {
+						printf("<option value=\"".$all_lock_rules[$i]["lock_id"]."\" ");
+						if (isset($lock_all) && $lock_all==$all_lock_rules[$i]["lock_id"]) {
+							printf(" selected ");
+						}
+						printf(">".$all_lock_rules[$i]["name"]."</option>");
+					}
+					// ab hier die verschiedenen Sperrlevel f�r alle Veranstaltungen
+					printf("</select>");
+					printf("<input type=\"IMAGE\" ".makeButton("uebernehmen","general_lock")." name=\"general_lock\">");
+
+					// echo "&nbsp;<br>";
+					// printf("<font size=-1><a href=\"%s?select_none=TRUE&list=TRUE\">%s</a></font>", $PHP_SELF, makeButton("alleauswaehlen"));
+				}
+				?>&nbsp;
+				</td>
+			</tr>
+			<?
+		}
+
+		//more Options for lock changing
 			if ($i_page == "admin_aux.php") {
 				?>
 				<tr <? $cssSw->switchClass() ?>>
@@ -1019,6 +1068,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				</tr>
 				<?
 			}
+			
+			
 		}
 
 		while ($db->next_record()) {
@@ -1088,7 +1139,32 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				case "copy_assi.php":
 					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare_assi.php?cmd=do_copy&cp_id=%s&start_level=TRUE&class=1\">%s</a></font>", $seminar_id, makeButton("kopieren"));
 					break;
-			case "admin_aux.php":
+	case "admin_lock.php":
+				$db5 = new Db_Seminar;
+				$db5->query("SELECT lock_rule from seminare WHERE Seminar_id='".$seminar_id."'");
+				$db5->next_record();
+				if ($perm->have_perm("admin")) {
+					?>
+					<input type="hidden" name="make_lock" value=1>
+					<select name=lock_sem[<? echo $seminar_id ?>]>
+						<option value="none">-- keine --</option>
+					<?
+						for ($i=0;$i<count($all_lock_rules);$i++) {
+							echo "<option value=".$all_lock_rules[$i]["lock_id"]."";
+							if (isset($lock_all) && $lock_all==$all_lock_rules[$i]["lock_id"]) {
+								echo " selected ";
+							} elseif (!isset($lock_all) && ($all_lock_rules[$i]["lock_id"]==$db5->f("lock_rule"))) {
+								echo " selected ";
+							}
+							echo ">".$all_lock_rules[$i]["name"]."</option>";
+						}
+					?>
+					</select>
+
+				<?
+				}
+				break;					
+		case "admin_aux.php":
 				$db5 = new Db_Seminar;
 				$db5->query("SELECT aux_lock_rule from seminare WHERE Seminar_id='$seminar_id'");
 				$db5->next_record();
