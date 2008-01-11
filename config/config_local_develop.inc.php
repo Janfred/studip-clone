@@ -148,7 +148,7 @@ $WAP_ENABLE = TRUE;							//Stud.IP module: WAP
 
 $STM_ENABLE = TRUE;
 
-$SEMINAR_LOCK_ENABLE = FALSE; // locking of fields in seminar administration
+$SEMINAR_LOCK_ENABLE = TRUE; // locking of fields in seminar administration
 
 $ELEARNING_INTERFACE_MODULES["ilias38x"] = array(
 	"name" => "ILIAS 3.8.X Testserver",
