@@ -76,7 +76,8 @@ class AdminNewsController {
 		if ($this->news_perm[$news_range_id]["perm"]>=2 OR $perm->have_perm("root")) {
 			$this->modus = "admin";
 			if ($this->news_perm[$news_range_id]["name"]){
-				$news_range_name=$this->news_perm[$news_range_id]["name"];
+				$news_range_name = $this->news_perm[$news_range_id]["name"];
+				$news_range_type = get_object_type($news_range_id);
 			}
 			elseif ($news_range_id=="studip"){
 				$news_range_name="Stud.IP System News";
