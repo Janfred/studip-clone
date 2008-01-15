@@ -329,10 +329,11 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		if (get_config('ALLOW_DOZENT_VISIBILITY') || $perm->have_perm("admin")){
 			$structure["visibility"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sichtbarkeit"), 'link'=>"admin_visibility.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'newline'=>TRUE);
 			
-			if ($SEMINAR_LOCK_ENABLE)
-			$structure["lock"]=array (topKat=>"veranstaltungen", name=>_("Sperren"), link=>"admin_lock.php?list=TRUE&new_session=TRUE", active=>FALSE);
 		}
 	}
+
+	if ($SEMINAR_LOCK_ENABLE && $perm->have_perm("admin"))
+		$structure["lock"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sperren"), 'link'=>"admin_lock.php?list=TRUE&new_session=TRUE", 'active'=>FALSE);
 
 	$structure["aux"]=array (topKat=>"veranstaltungen", name=>_("Zusatzangaben"), link=>"admin_aux.php?list=TRUE&new_session=TRUE", active=>FALSE);
 
@@ -1011,13 +1012,14 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			?>
 			<tr <? $cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" colspan="3">
-					&nbsp; <font size=-1><?=_("Sperrebene der angezeigten Veranstaltungen")?>&nbsp;<input type="IMAGE" <?=makeButton("zuweisen", "src")?> border=0 align="absmiddle" /></font><br />
+					&nbsp; <font size=-1><?=_("Gewählte Sperrebenen den angezeigten Veranstaltungen ")?>&nbsp;<input type="IMAGE" <?=makeButton("zuweisen", "src")?> border=0 align="absmiddle" /></font><br />
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan="4" align="right">
 				<?
 				if ($auth->auth["jscript"]) {
 					printf("<select name=\"lock_all\" size=1>");
 					printf("<option value='-1'>"._("Bitte w&auml;hlen")."</option>");
+					printf("<option value='none'>--"._("keine Sperrebene")."--</option>");
 					for ($i=0;$i<count($all_lock_rules);$i++) {
 						printf("<option value=\"".$all_lock_rules[$i]["lock_id"]."\" ");
 						if (isset($lock_all) && $lock_all==$all_lock_rules[$i]["lock_id"]) {
@@ -1147,7 +1149,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					?>
 					<input type="hidden" name="make_lock" value=1>
 					<select name=lock_sem[<? echo $seminar_id ?>]>
-						<option value="none">-- keine --</option>
+					<option value="none">-- <?= _("keine Sperrebene") ?> --</option>
 					<?
 						for ($i=0;$i<count($all_lock_rules);$i++) {
 							echo "<option value=".$all_lock_rules[$i]["lock_id"]."";
