@@ -851,6 +851,13 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 							&nbsp;
 						</td>
 					</tr>
+					<? if (! empty($message)) : ?>
+					<tr>
+						<td class="blank" colspan=5>
+							<? parse_msg($message); ?>
+						</td>
+					</tr>
+					<? endif; ?>
 				</table>
 			</form>
 			<?
@@ -1019,20 +1026,18 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				if ($auth->auth["jscript"]) {
 					printf("<select name=\"lock_all\" size=1>");
 					printf("<option value='-1'>"._("Bitte w&auml;hlen")."</option>");
-					printf("<option value='none'>--"._("keine Sperrebene")."--</option>");
+					printf("<option value='none' %s>--"._("keine Sperrebene")."--</option>", $lock_all == 'none' ? 'selected=selected' : '' );
 					for ($i=0;$i<count($all_lock_rules);$i++) {
 						printf("<option value=\"".$all_lock_rules[$i]["lock_id"]."\" ");
 						if (isset($lock_all) && $lock_all==$all_lock_rules[$i]["lock_id"]) {
-							printf(" selected ");
+							printf(" selected=selected ");
 						}
 						printf(">".$all_lock_rules[$i]["name"]."</option>");
 					}
-					// ab hier die verschiedenen Sperrlevel fï¿½r alle Veranstaltungen
+					// ab hier die verschiedenen Sperrlevel für alle Veranstaltungen
 					printf("</select>");
-					printf("<input type=\"IMAGE\" ".makeButton("uebernehmen","general_lock")." name=\"general_lock\">");
-
-					// echo "&nbsp;<br>";
-					// printf("<font size=-1><a href=\"%s?select_none=TRUE&list=TRUE\">%s</a></font>", $PHP_SELF, makeButton("alleauswaehlen"));
+					printf("<font size='-1'> als Vorauswahl </font>");
+					printf("<input type=\"IMAGE\" ".makeButton("auswaehlen","src")." border=0 align=\"absmiddle\" name=\"general_lock\">");
 				}
 				?>&nbsp;
 				</td>
@@ -1052,18 +1057,17 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					if ($auth->auth["jscript"]) {
 						echo '<select name="aux_all" size="1">';
 						echo '<option value="-1">'. _("Bitte ausw&auml;hlen"). '</option>';
-						echo '<option value="null">-- '. _("keine Zusatzangaben") .' --</option>';
+						echo '<option value="null" ' . ($aux_all == 'null' ? 'selected=selected' : '') . '>-- '. _("keine Zusatzangaben") .' --</option>';
 						foreach ((array)$all_aux_rules as $lock_id => $data) {
 							echo '<option value="'.$lock_id.'"';
 							if (isset($aux_all) && $aux_all==$lock_id) {
-								echo ' selected ';
+								echo ' selected=selected ';
 							}
 							echo '>'.$data['name'].'</option>';
 						}
 						// ab hier die verschiedenen Sperrlevel für alle Veranstaltungen
 						echo '</select>';
-						echo '<input type="image" '.makeButton("uebernehmen","aux_rule").' name="aux_rule">';
-
+						echo '<input type="image" '.makeButton("uebernehmen","aux_rule").' border=0 align="absmiddle" name="aux_rule">';
 					}
 					?>&nbsp;
 					</td>

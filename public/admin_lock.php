@@ -58,7 +58,9 @@ $perm->check("admin");
 if ($general_lock_x && $general_lock_y) {
 	$list=TRUE;
 	$new_session=TRUE;
+	$message = 'info§' . _("Diese Daten sind noch nicht gespeichert.");
 }
+
 include ("lib/seminar_open.php"); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
@@ -90,7 +92,6 @@ if (isset($SessSemName[1]) && (!$make_lock)) {
 $db = new DB_Seminar;
 $lock_rules = new LockRules;
 $all_lock_rules = $lock_rules->getAllLockRules();
-
 
 //echo "<body>";
 $containerTable=new ContainerTable();
