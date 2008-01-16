@@ -173,14 +173,13 @@ class Vote extends StudipObject {
 
       /* For good OOP: Call constructor and set destruktor ----------------- */
       parent::StudipObject ();
-      register_shutdown_function (array (&$this, 'finalize'));
       $this->instanceof = INSTANCEOF_VOTE;
       /* ------------------------------------------------------------------- */
 
       /* Set default values ------------------------------------------------ */
       $this->setAuthorEmail ("mail@AlexanderWillner.de");
       $this->setAuthorName ("Alexander Willner");
-      srand ((double) microtime () * 1000000);
+
 
       $this->voteDB           = NULL;
       $this->errorArray       = array ();

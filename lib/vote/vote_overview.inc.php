@@ -180,7 +180,6 @@ if ($voteaction && $voteaction != "search") $safeguard .= callSafeguard($voteact
 // and the selection of displayed votes/tests
 printSelections($range,$searchRange,$safeguard);
 
-
 // starting waiting votes
 $voteDB = &new VoteDB();
 $voteDB->startWaitingVotes ();
@@ -555,6 +554,8 @@ function createVoteArray($mode){
 						"isAssociated" => $isAssociated,
 						"username" => $username,
 						"type" => $votemode);
+		unset($vote->voteDB->vote);
+		unset($vote);
 	}
 
 	return $votes;

@@ -328,6 +328,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
       }
       /* ------------------------------------------------------------------- */
       echo createBoxLineFooter ();
+	  unset($vote->voteDB->vote);
+	unset($vote);
    }
    /* ---------------------------------------------------------------------- */
 
@@ -392,6 +394,8 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
 	    echo createFormFooter ($vote, $userID, $perm, $rangeID);
 	    echo createStoppedVoteFooter ();
 	    echo createBoxContentFooter ();
+		unset($vote->voteDB->vote);
+		unset($vote);
 	 }
       }
       echo createBoxLineFooter ();
