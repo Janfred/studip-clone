@@ -1535,11 +1535,17 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 			$s=0;
 			if ($all) {
-				$visible_folders_sql = "'".join("','", $folder_tree->getReadableFolders($user->id))."'";
-				$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IF(IFNULL(a.name,'')='', a.filename,a.name) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id IN ($visible_folders_sql) ORDER BY a.chdate DESC");
-				$documents_count = $db3->num_rows();
+				$visible_folders = $folder_tree->getReadableFolders($user->id);
+				if(count($visible_folders)){
+					$visible_folders_sql = "'".join("','", $visible_folders)."'";
+					$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IF(IFNULL(a.name,'')='', a.filename,a.name) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id IN ($visible_folders_sql) ORDER BY a.chdate DESC");
+					$documents_count = $db3->num_rows();
+				} else {
+					$documents_count = 0;
+				}
 			} elseif ($folder_tree->isReadable($db->f("folder_id"), $user->id)) {
 				$db3->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, a.user_id, a.*, IF(IFNULL(a.name,'')='', a.filename,a.name) AS t_name FROM dokumente a LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE range_id = '".$db->f("folder_id")."' ORDER BY t_name, a.chdate DESC");
+				$documents_count = $db3->num_rows();
 			}
 			//Hier wird der Ordnerinhalt (Dokumente) gelistet
 			if ($documents_count){
