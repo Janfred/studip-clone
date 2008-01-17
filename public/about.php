@@ -47,6 +47,7 @@ require_once('lib/classes/score.class.php');
 require_once('lib/classes/SemesterData.class.php');
 require_once('lib/user_visible.inc.php');
 require_once('lib/classes/StudipLitList.class.php');
+require_once('lib/classes/UserPic.class.php');
 
 
 function prettyViewPermString ($viewPerms) {
@@ -218,18 +219,19 @@ if ($msg)
 ?>
 
 <tr><td class="steel1" align="center" valign="middle"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=205 height=5><br />
+&nbsp;
 <?
 
 // hier wird das Bild ausgegeben
 
-if(!file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$user_id.".jpg")) {
-	echo "&nbsp;<img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/nobody.jpg\" width=\"200\" height=\"250\"" . tooltip(_("kein persönliches Bild vorhanden")).">";
-} else {
-	?>&nbsp;<img src="<?="{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/$user_id"?>.jpg" border=1 <?=tooltip($db->f("fullname"));?>></td><?
-}
+$user_pic = new UserPic($user_id);
+echo $user_pic->getImageTag(UserPic::NORMAL, $db->f("fullname"));
+
+
 
 // Hier der Teil fuer die Ausgabe der normalen Daten
 ?>
+</td>
 <td class="steel1"  width="99%" valign ="top" rowspan=2><br><blockquote>
 <? echo "<b><font size=7>".htmlReady($db->f("fullname"))."</font></b><br>";
 if ($db->f('motto')) echo '<b><font size="5">'.htmlReady($db->f('motto')).'</font></b><br>';

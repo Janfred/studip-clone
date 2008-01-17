@@ -1,4 +1,5 @@
 <?
+/* vim: noexpandtab */
 /**
 * helper functions for handling the board
 *
@@ -30,15 +31,16 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once 'lib/classes/UserPic.class.php';
 
 /**
-* deletes the edit-string from content
-*
-* @param	string	description
-*
-* @return	string	description
-*
-**/
+ * deletes the edit-string from content
+ *
+ * @param	string	description
+ *
+ * @return	string	description
+ *
+ */
 function forum_kill_edit ($description) {
 	if (preg_match('/^(.*)(<admin_msg.*?)$/s',$description, $match)) { // wurde schon mal editiert
 		return $match[1];
@@ -47,13 +49,13 @@ function forum_kill_edit ($description) {
 }
 
 /**
-* adds the edit-string to a content
-*
-* @param	string	description
-*
-* @return	string	description
-*
-**/
+ * adds the edit-string to a content
+ *
+ * @param	string	description
+ *
+ * @return	string	description
+ *
+ */
 function forum_append_edit ($description) {
 	$edit = "<admin_msg autor=\"".addslashes(get_fullname())."\" chdate=\"".time()."\">";
 	//$description = forum_kill_edit($description).$edit;
@@ -61,13 +63,13 @@ function forum_append_edit ($description) {
 }
 
 /**
-* parses content for output with added edit-string
-*
-* @param	string	description
-*
-* @return	string	description
-*
-**/
+ * parses content for output with added edit-string
+ *
+ * @param	string	description
+ *
+ * @return	string	description
+ *
+ */
 function forum_parse_edit ($description) {
 	if (preg_match('/^.*(<admin_msg.*?)$/s',$description, $match)) { // wurde schon mal editiert
 		$tmp = explode('"',$match[1]);
@@ -1222,12 +1224,12 @@ function printposting ($forumposting) {
 
 			$addon = "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"140\" height=\"5\">";
 
-			if ($forum["showimages"]==TRUE) { // es werden Porträts angezeigt
-				if(!file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$forumposting["userid"].".jpg")) {
-					$addon .= "<br><div align=\"center\"><img border=1 src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/nobody.jpg\" width=\"80\" " .tooltip(_("kein persönliches Bild vorhanden"))."></div>";
-				} else {
-					$addon .= "<br><div align=\"center\"><img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/".$forumposting["userid"].".jpg\" width=\"80\" border=\"1\" ".tooltip($forumposting["author"])."></div>";
-				}
+			// es werden Porträts angezeigt
+			if ($forum["showimages"] == TRUE) {
+				$user_pic = new UserPic($forumposting["userid"]);
+				$addon .= "<br><div align=\"center\">";
+				$addon .= $user_pic->getImageTag(UserPic::MEDIUM, $forumposting['author']);
+				$addon .= "</div>";
 			}
 
 			$addon .= "<font size=\"-1\" color=\"555555\"><br>&nbsp;&nbsp;Views: $objectviews<br>&nbsp;&nbsp;Relevanz: ".$forumposting["score"]."<br>&nbsp;&nbsp;";

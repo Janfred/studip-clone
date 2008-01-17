@@ -1245,4 +1245,14 @@ function text_excerpt($text, $phrase, $radius = 100, $excerpt_string = '...') {
   }
   return '';
 }
-?>
+
+/**
+ * Splits a string by space characters and returns these words as an array.
+ *
+ * @param  string       the string to split
+ *
+ * @return array        the words of the string as array
+ */
+function _w($string) {
+  return preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
+}

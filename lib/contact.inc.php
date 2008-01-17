@@ -1,7 +1,8 @@
 <?php
+/* vim: noexpandtab */
 /**
 * helper functions for handling contacts
-* 
+*
 * helper functions for handling contacts
 *
 * @author				Ralf Stockmann <rstockm@gwdg.de>
@@ -42,8 +43,8 @@ function MakeUniqueContactID ()
 	$hash_secret = "kertoiisdfgz";
 	$db=new DB_Seminar;
 	$tmp_id=md5(uniqid($hash_secret));
-	$db->query ("SELECT contact_id FROM contact WHERE contact_id = '$tmp_id'");	
-	IF ($db->next_record()) 	
+	$db->query ("SELECT contact_id FROM contact WHERE contact_id = '$tmp_id'");
+	IF ($db->next_record())
 		$tmp_id = MakeUniqueContactID(); //ID gibt es schon, also noch mal
 	RETURN $tmp_id;
 }
@@ -54,8 +55,8 @@ function MakeUniqueUserinfoID ()
 	$hash_secret = "kertoiisdfgz";
 	$db=new DB_Seminar;
 	$tmp_id=md5(uniqid($hash_secret));
-	$db->query ("SELECT userinfo_id FROM contact_userinfo WHERE userinfo_id = '$tmp_id'");	
-	IF ($db->next_record()) 	
+	$db->query ("SELECT userinfo_id FROM contact_userinfo WHERE userinfo_id = '$tmp_id'");
+	IF ($db->next_record())
 		$tmp_id = MakeUniqueContactID(); //ID gibt es schon, also noch mal
 	RETURN $tmp_id;
 }
@@ -63,7 +64,7 @@ function MakeUniqueUserinfoID ()
 function ChangeBuddy($contact_id)
 {
 	$db=new DB_Seminar;
-	$db->query ("SELECT buddy FROM contact WHERE contact_id = '$contact_id'");	
+	$db->query ("SELECT buddy FROM contact WHERE contact_id = '$contact_id'");
 	while ($db->next_record()) {
 		$buddynew = abs($db->f("buddy")-1);  //setzt buddy auf den anderen Wert
 		$db->query("UPDATE contact SET buddy=$buddynew WHERE contact_id = '$contact_id'");
@@ -76,7 +77,7 @@ function RemoveBuddy($username)
 	$user_id = get_userid($username);
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
-	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id'");	
+	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id'");
 	if ($db->next_record()) {
 		$contact_id = $db->f("contact_id")	;
 		$db2->query("UPDATE contact SET buddy='0' WHERE contact_id = '$contact_id'");
@@ -84,12 +85,12 @@ function RemoveBuddy($username)
 }
 
 function RemoveUserFromBuddys($user_id)
-{ 
+{
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
-	$db->query ("SELECT contact_id FROM contact WHERE user_id = '$user_id'");	
+	$db->query ("SELECT contact_id FROM contact WHERE user_id = '$user_id'");
 	while ($db->next_record()) {   // erst mal die selbstzugefügten weg
-		$contact_id = $db->f("contact_id")	;		
+		$contact_id = $db->f("contact_id")	;
 		$db2->query ("DELETE FROM contact_userinfo WHERE contact_id = '$contact_id'");
 	}
 	$db->query ("DELETE FROM contact WHERE user_id = '$user_id'");	   // jetzt alle Zuordnungen
@@ -104,7 +105,7 @@ function CheckBuddy($username, $owner_id=FALSE)
 	$buddy = "";
 	$user_id = get_userid($username);
 	$db=new DB_Seminar;
-	$db->query ("SELECT buddy FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");	
+	$db->query ("SELECT buddy FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id' AND buddy = '1'");
 	if ($db->next_record()) {
 		$buddy = TRUE;
 	} else {
@@ -114,10 +115,10 @@ function CheckBuddy($username, $owner_id=FALSE)
 }
 
 function GetNumberOfBuddies()
-{ 
+{
 	global $user;
 	$db=new DB_Seminar;
-	$db->query("SELECT count(*) FROM contact WHERE owner_id = '$user->id' AND buddy=1");	
+	$db->query("SELECT count(*) FROM contact WHERE owner_id = '$user->id' AND buddy=1");
 	$db->next_record();
 	return $db->f(0);
 }
@@ -127,7 +128,7 @@ function GetSizeofBook()
 	global $user;
 	$owner_id = $user->id;
 	$db=new DB_Seminar;
-	$db->query("SELECT count(*) FROM contact WHERE owner_id = '$owner_id'");	
+	$db->query("SELECT count(*) FROM contact WHERE owner_id = '$owner_id'");
 	$db->next_record();
 	return $db->f(0);
 }
@@ -143,7 +144,7 @@ function GetSizeOfBookByLetter()
  	}
  	return $ret;
  }
- 
+
 
 function AddBuddy($username)
 { global $user;
@@ -152,7 +153,7 @@ function AddBuddy($username)
 	$user_id = get_userid($username);
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
-	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id'");	
+	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id'");
 	if ($db->next_record()) {
 		$contact_id = $db->f("contact_id")	;
 		$db2->query("UPDATE contact SET buddy='1' WHERE contact_id = '$contact_id'");
@@ -165,32 +166,32 @@ function AddNewContact ($user_id)
 	$contact_id = MakeUniqueContactID();
 	$owner_id = $user->id;
 	$db=new DB_Seminar;
-	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id'");	
+	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id' AND user_id = '$user_id'");
 	if (!$db->next_record()) 	// nur wenn es die Kombination owner/user noch nicht gibt
 		$db->query("INSERT INTO contact SET contact_id = '$contact_id', owner_id = '$owner_id', user_id= '$user_id', buddy=0");
-	return $contact_id;	
-} 
+	return $contact_id;
+}
 
 function AddNewUserinfo ($contact_id, $name, $content)
 { 	// Inserting an new contact
 	global $user;
 	$userinfo_id = MakeUniqueUserinfoID();
 	$db=new DB_Seminar;
-	$db->query ("SELECT MAX(priority) as maximum FROM contact_userinfo WHERE contact_id = '$contact_id'");	
+	$db->query ("SELECT MAX(priority) as maximum FROM contact_userinfo WHERE contact_id = '$contact_id'");
 	if ($db->next_record()) {
-		$priority = $db->f("maximum")+1;	
+		$priority = $db->f("maximum")+1;
 	}
 	$db->query("INSERT INTO contact_userinfo SET userinfo_id = '$userinfo_id', contact_id = '$contact_id', name = '$name', content= '$content', priority= '$priority'");
-	return $userinfo_id;	
-} 
+	return $userinfo_id;
+}
 
 function GetExtraUserinfo ($contact_id)
 { 	// Build an array with extrauserinfos
-		$output = "";	
+		$output = "";
 		$db=new DB_Seminar;
-		$db->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' ORDER BY priority");	
+		$db->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' ORDER BY priority");
 		while ($db->next_record()) 	{
-			$userinfo[$db->f("name")] = $db->f("content");	
+			$userinfo[$db->f("name")] = $db->f("content");
 		}
 		return $userinfo;
 }
@@ -199,8 +200,8 @@ function GetUserInfo($user_id)
 {
 	global $user;
 	$db=new DB_Seminar;
-	$db->query ("SELECT * FROM user_info WHERE user_id = '$user_id'");	
-	if ($db->next_record()) {	
+	$db->query ("SELECT * FROM user_info WHERE user_id = '$user_id'");
+	if ($db->next_record()) {
 		if ($db->f("Home")!="")
 			$userinfo[_("Homepage")] = FixLinks(HtmlReady($db->f("Home")));
 		if ($db->f("privatnr")!="")
@@ -218,7 +219,7 @@ function GetUserInfo($user_id)
 		}
 		if ($db->f("privadr")!="")
 			$userinfo[_("Adresse")] = HtmlReady($db->f("privadr"),1);
-		
+
 	}
 	return $userinfo;
 }
@@ -231,8 +232,8 @@ function GetinstInfo ($user_id)
 	$query .= "Institute.Institut_id FROM user_inst LEFT JOIN Institute USING(Institut_id) ";
 	$query .= "WHERE user_id = '$user_id' AND inst_perms != 'user' AND visible = 1 ";
 	$query .= "ORDER BY priority ASC";
-	$db->query($query);	
-	while ($db->next_record()) {	
+	$db->query($query);
+	while ($db->next_record()) {
 		$userinfo[$i][_("Einrichtung")] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>";
 		if ($gruppen = GetStatusgruppen($db->f("Institut_id"), $user_id))
 			$userinfo[$i][_("Funktion")] = htmlReady(join(", ", array_values($gruppen)));
@@ -241,7 +242,7 @@ function GetinstInfo ($user_id)
 		if ($db->f("sprechzeiten")!="")
 			$userinfo[$i][_("Sprechzeiten")] = FormatReady($db->f("sprechzeiten"));
 		if ($db->f("telefon")!="")
-			$userinfo[$i][_("Tel. (dienstl.)")] =FormatReady($db->f("telefon"));			
+			$userinfo[$i][_("Tel. (dienstl.)")] =FormatReady($db->f("telefon"));
 		if ($db->f("fax")!="")
 			$userinfo[$i][_("Fax (dienstl.)")] = FormatReady($db->f("fax"));
 		$i++;
@@ -259,12 +260,12 @@ function ShowUserInfo ($contact_id)
 	$output = "";
 	$basicinfo = array();
 	$db=new DB_Seminar;
-	$db->query ("SELECT user_id FROM contact WHERE contact_id = '$contact_id'");	
-	if ($db->next_record()) {	
+	$db->query ("SELECT user_id FROM contact WHERE contact_id = '$contact_id'");
+	if ($db->next_record()) {
 		$user_id = $db->f("user_id");
 	}
-	$db->query ("SELECT Email, username FROM auth_user_md5 WHERE user_id = '$user_id'");	
-	if ($db->next_record()) {	
+	$db->query ("SELECT Email, username FROM auth_user_md5 WHERE user_id = '$user_id'");
+	if ($db->next_record()) {
 		$basicinfo[_("E-Mail")] = "<a href=\"mailto:".$db->f("Email")."\">".$db->f("Email")."</a>";
 		$basicinfo["Stud.IP"] = "<a href=\"about.php?username=".$db->f("username")."\">".$db->f("username")." (".get_global_perm($user_id).")</a>";
 	}
@@ -301,44 +302,43 @@ function ShowUserInfo ($contact_id)
 			}
 			$output .= "<tr><td class=\"steel1\" colspan=\"2\"><img src=\"".$GLOBALS['ASSETS_URL']."images/border.jpg\"></td></tr>";
 		}
-		
-	if(file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$user_id.".jpg")) {
-			$output.="<tr><td align=\"center\" class=\"steel1\" colspan=\"2\" width=\"350\"><br><img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/{$user_id}.jpg\" border=1></td>";
-		}
+
+		$user_pic = new UserPic($user_id);
+		$output .= '<tr><td align="center" class="steel1" colspan="2" width="350"><br>'.$user_pic->getImageTag(UserPic::NORMAL).'</td>';
 		$owner_id = $user->id;
-		$db->query ("SELECT DISTINCT name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE user_id = '$user_id' AND range_id= '$owner_id'");	
+		$db->query ("SELECT DISTINCT name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE user_id = '$user_id' AND range_id= '$owner_id'");
 		if ($db->num_rows()) {
-			while ($db->next_record()) {		
-				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">"._("Gruppe").":</font></td><td class=\"steel1\" width=\"250\"><a href=\"$PHP_SELF?view=gruppen&filter=".$db->f("statusgruppe_id")."\"><font size=\"2\">".htmlready($db->f("name"))."</font></a></td></tr>";		
+			while ($db->next_record()) {
+				$output .= "<tr><td class=\"steel1\" width=\"100\"><font size=\"2\">"._("Gruppe").":</font></td><td class=\"steel1\" width=\"250\"><a href=\"$PHP_SELF?view=gruppen&filter=".$db->f("statusgruppe_id")."\"><font size=\"2\">".htmlready($db->f("name"))."</font></a></td></tr>";
 			}
 		$output .= "<tr><td class=\"steel1\" colspan=\"2\"><img src=\"".$GLOBALS['ASSETS_URL']."images/border.jpg\"></td></tr>";
 		}
 	}
-	return $output;	
-} 
+	return $output;
+}
 
 function ShowContact ($contact_id)
 {	// Ausgabe eines Kontaktes
 	global $PHP_SELF, $open, $filter, $forum, $auth, $view;
 	$db=new DB_Seminar;
-	$db->query ("SELECT contact_id, user_id, buddy FROM contact WHERE contact_id = '$contact_id'");	
+	$db->query ("SELECT contact_id, user_id, buddy FROM contact WHERE contact_id = '$contact_id'");
 	if ($db->next_record()) {
 		if ($open == $contact_id || $open == "all") {
 			$rnd = rand(0,10000);
 			if ($db->f("buddy")=="1") {
 				$buddy = "<a href=\"$PHP_SELF?view=$view&cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nutzeronline.gif\" border=\"0\" ".tooltip(_("Als Buddy entfernen"))."></a>&nbsp; ";
 			} else {
-				$buddy = "<a href=\"$PHP_SELF?view=$view&cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nutzer.gif\" border=\"0\" ".tooltip(_("Zu Buddies hinzufügen"))."></a>&nbsp; ";			
+				$buddy = "<a href=\"$PHP_SELF?view=$view&cmd=changebuddy&contact_id=$contact_id&open=$open&rnd=$rnd#anker\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nutzer.gif\" border=\"0\" ".tooltip(_("Zu Buddies hinzufügen"))."></a>&nbsp; ";
 			}
 			$lastrow =  	"<tr><td colspan=\"2\" class=\"steel1\" align=\"right\">"
-						.$buddy		
+						.$buddy
 						."<a href=\"$PHP_SELF?edit_id=$contact_id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" border=\"0\" ".tooltip(_("Editieren"))."></a>&nbsp; "
 						."<a href=\"contact_export.php?contactid=$contact_id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("Als vCard exportieren"))."></a>&nbsp; "
 						."<a href=\"$PHP_SELF?view=$view&cmd=delete&contact_id=$contact_id&open=$open\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" ".tooltip(_("Kontakt löschen"))."></a></td></tr>"
 						."<tr><td colspan=\"2\" class=\"steelgraulight\" align=\"center\"><a href=\"$PHP_SELF?view=$view&filter=$filter\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurauf.gif\" border=\"0\" ".tooltip(_("Kontakte schließen"))."></a></td></tr>";
 		} else {
 			if ($forum["jshover"]==1 AND $auth->auth["jscript"]) { // Hovern
-				$description = "";	
+				$description = "";
 				$userinfo = GetUserInfo($db->f("user_id"));
 				if (sizeof($userinfo)>0) {
 					while(list($key,$value) = each($userinfo)) {
@@ -378,7 +378,7 @@ function ShowContact ($contact_id)
 			}
 
 			$lastrow = "<tr><td colspan=\"3\" class=\"steelgraulight\" align=\"center\">".$link."</td></tr>";
-		}			
+		}
 		if ($open == $contact_id) {		//es ist ein einzelner Beitrag aufgeklappt, also Anker setzen
 			$output = "<a name=\"anker\"></a>";
 		} else {
@@ -450,15 +450,15 @@ function ShowEditContact ($contact_id)
 					</tr>"
 						.ShowUserInfo ($contact_id)."</table><table cellspacing=\"0\" width=\"700\" class=\"blank\">"
 						."<form action=\"$PHP_SELF?edit_id=$contact_id\" method=\"POST\">";
-						
-		$db2->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' ORDER BY priority");	
+
+		$db2->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' ORDER BY priority");
 		$i = 0;
 		$output .= "<tr><td class=\"steel1\" colspan=\"3\">&nbsp; </td></tr>";
 		while ($db2->next_record()) 	{
 			if ($i ==0) {
 				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP>&nbsp; <input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\"><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."></a></td></tr>";
 			} else {
-				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP>&nbsp; <input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td NOWRAP class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\" nowrap><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."></a>&nbsp; <a href=\"$PHP_SELF?edit_id=$contact_id&move=".$db2->f("userinfo_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_up.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag nach oben schieben"))."></a></td></tr>";			
+				$output .= "<tr><td class=\"steel1\" width=\"100\" NOWRAP>&nbsp; <input type=\"HIDDEN\" name=\"userinfo_id[]\" value=\"".$db2->f("userinfo_id")."\"><input type=\"text\" name=\"existingowninfolabel[]\" value=\"".$db2->f("name")."\"></td><td NOWRAP class=\"steel1\" width=\"250\"><textarea name=\"existingowninfocontent[]\" value=\"".$db2->f("content")."\" style=\"width: 90%\" cols=\"20\" rows\"3\" wrap=virtual>".$db2->f("content")."</textarea></td><td class=\"steel1\" width=\"50\" nowrap><a href=\"$PHP_SELF?edit_id=$contact_id&deluserinfo=".$db2->f("userinfo_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag löschen"))."></a>&nbsp; <a href=\"$PHP_SELF?edit_id=$contact_id&move=".$db2->f("userinfo_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_up.gif\" border=\"0\" ".tooltip(_("Diesen Eintrag nach oben schieben"))."></a></td></tr>";
 			}
 			$i++;
 		}
@@ -476,15 +476,15 @@ function ShowEditContact ($contact_id)
 function MoveUserinfo($userinfo_id)
 {
 	$db=new DB_Seminar;
-	$db->query ("SELECT * FROM contact_userinfo WHERE userinfo_id = '$userinfo_id'");	
+	$db->query ("SELECT * FROM contact_userinfo WHERE userinfo_id = '$userinfo_id'");
 	if ($db->next_record()) {
-		$priority = $db->f("priority");		
-		$prioritybevore = $db->f("priority")-1;		
-		$contact_id = $db->f("contact_id");		
+		$priority = $db->f("priority");
+		$prioritybevore = $db->f("priority")-1;
+		$contact_id = $db->f("contact_id");
 	}
-	$db->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' AND priority = '$prioritybevore'");	
+	$db->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' AND priority = '$prioritybevore'");
 	if ($db->next_record()) {
-		$userinfobevore_id = $db->f("userinfo_id");			
+		$userinfobevore_id = $db->f("userinfo_id");
 	}
 	$db->query("UPDATE contact_userinfo SET priority = '$prioritybevore' WHERE userinfo_id = '$userinfo_id'");
 	$db->query("UPDATE contact_userinfo SET priority = '$priority' WHERE userinfo_id = '$userinfobevore_id'");
@@ -501,7 +501,7 @@ function ResortUserinfo($contact_id)
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$i = 0;
-	$db->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' ORDER BY priority");	
+	$db->query ("SELECT * FROM contact_userinfo WHERE contact_id = '$contact_id' ORDER BY priority");
 	while ($db->next_record()) {
 		$userinfo_id = $db->f("userinfo_id");
 		$db2->query("UPDATE contact_userinfo SET priority =  '$i' WHERE userinfo_id = '$userinfo_id'");
@@ -512,11 +512,11 @@ function ResortUserinfo($contact_id)
 function DeleteUserinfo ($userinfo_id)
 {	// loeschen einer Userinfo
 	$db=new DB_Seminar;
-	$db->query ("SELECT contact_id FROM contact_userinfo WHERE userinfo_id = '$userinfo_id'");	
+	$db->query ("SELECT contact_id FROM contact_userinfo WHERE userinfo_id = '$userinfo_id'");
 	if ($db->next_record()) {
-		$contact_id = $db->f("contact_id");	
+		$contact_id = $db->f("contact_id");
 	}
-	$db->query ("DELETE FROM contact_userinfo WHERE userinfo_id = '$userinfo_id'");	
+	$db->query ("DELETE FROM contact_userinfo WHERE userinfo_id = '$userinfo_id'");
 	ResortUserinfo($contact_id);
 }
 
@@ -526,19 +526,19 @@ function DeleteContact ($contact_id)
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
-	$db->query ("SELECT owner_id, user_id FROM contact WHERE contact_id = '$contact_id'");	
+	$db->query ("SELECT owner_id, user_id FROM contact WHERE contact_id = '$contact_id'");
 	if ($db->next_record()) {
 		if ($db->f("owner_id")!=$user->id) {
-			$output = _("Sie haben kein Zugriffsrecht auf diesen Kontakt!");	
+			$output = _("Sie haben kein Zugriffsrecht auf diesen Kontakt!");
 		} else {
 			$user_id = $db->f("user_id");
 			$owner_id = $db->f("owner_id");
-			$db->query ("DELETE FROM contact WHERE contact_id = '$contact_id'");	
+			$db->query ("DELETE FROM contact WHERE contact_id = '$contact_id'");
 			$db->query ("DELETE FROM contact_userinfo WHERE contact_id = '$contact_id'");
-			$db2->query ("SELECT DISTINCT statusgruppe_user.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id'");		
-			WHILE ($db2->next_record()) {	
+			$db2->query ("SELECT DISTINCT statusgruppe_user.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$owner_id' AND user_id = '$user_id'");
+			WHILE ($db2->next_record()) {
 				$statusgruppe_id = $db2->f("statusgruppe_id");
-				$db3->query ("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");	
+				$db3->query ("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '$statusgruppe_id' AND user_id = '$user_id'");
 			}
 			$output = _("Kontakt gelöscht");
 		}
@@ -551,14 +551,14 @@ function DeleteAdressbook($owner_id) {
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$i = 0;
-	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id'");	
+	$db->query ("SELECT contact_id FROM contact WHERE owner_id = '$owner_id'");
 	WHILE ($db->next_record()) {	// remove all selfmade entries
 		$contact_id = $db->f("contact_id");
 		$db2->query ("DELETE FROM contact_userinfo WHERE contact_id = '$contact_id'");
 		$i++;
 	}
 	$db->query ("DELETE FROM contact WHERE owner_id = '$owner_id'");
-	if ($db->affected_rows()) // remove all contacts 
+	if ($db->affected_rows()) // remove all contacts
 		$return = sprintf(_("Adressbuch mit %d Einträgen gelöscht."), $i);
 	else
 		$return = FALSE;
@@ -569,7 +569,7 @@ function PrintEditContact($edit_id)
 {	global $user;
 	$owner_id = $user->id;
 	$db=new DB_Seminar;
-	$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' AND contact_id = '$edit_id'");	
+	$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' AND contact_id = '$edit_id'");
 	echo "<table class=\"blank\" width=\"700\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"700\" class=\"blank\">";
 	while ($db->next_record()) {
 			$contact_id = $db->f("contact_id");
@@ -585,14 +585,14 @@ function PrintAllContact($filter="")
 	$owner_id = $user->id;
 	$db=new DB_Seminar;
 
-	if ($contact["view"]=="alpha" && $filter!="") 
-		$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' AND LEFT(nachname,1) = '$filter' ORDER BY nachname");	
-	if ($contact["view"]=="alpha" && $filter=="") 
-		$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' ORDER BY nachname");		
-	if ($contact["view"]=="gruppen" && $filter=="") 
-		$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' ORDER BY nachname");		
-	if ($contact["view"]=="gruppen" && $filter!="") 
-		$db->query ("SELECT nachname, contact_id FROM contact LEFT JOIN statusgruppe_user USING(user_id) LEFT JOIN auth_user_md5 USING(user_id)  WHERE statusgruppe_id = '$filter' AND owner_id =  '$owner_id' ORDER BY nachname");		
+	if ($contact["view"]=="alpha" && $filter!="")
+		$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' AND LEFT(nachname,1) = '$filter' ORDER BY nachname");
+	if ($contact["view"]=="alpha" && $filter=="")
+		$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' ORDER BY nachname");
+	if ($contact["view"]=="gruppen" && $filter=="")
+		$db->query ("SELECT contact_id, nachname FROM contact LEFT JOIN auth_user_md5 using(user_id) WHERE owner_id = '$owner_id' ORDER BY nachname");
+	if ($contact["view"]=="gruppen" && $filter!="")
+		$db->query ("SELECT nachname, contact_id FROM contact LEFT JOIN statusgruppe_user USING(user_id) LEFT JOIN auth_user_md5 USING(user_id)  WHERE statusgruppe_id = '$filter' AND owner_id =  '$owner_id' ORDER BY nachname");
 
 	$spalten = 0;
 	if ($auth->auth["xres"] > 800) {
@@ -608,7 +608,7 @@ function PrintAllContact($filter="")
 	}
 
 	if ($db->num_rows() == 0) {
-		echo "<table class=\"blank\" width=\"$maxwidth\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"300\" class=\"white\">"._("Keine Einträge in diesem Bereich")."";	
+		echo "<table class=\"blank\" width=\"$maxwidth\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"300\" class=\"white\">"._("Keine Einträge in diesem Bereich")."";
 		echo "</td><td valign=\"top\" width=\"300\" class=\"blank\">";
 	} else {
 		echo "<table class=\"blank\" width=\"$maxwidth\" align=center cellpadding=\"10\"><tr><td valign=\"top\" width=\"280\" class=\"white\">";

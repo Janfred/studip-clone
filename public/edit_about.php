@@ -1,4 +1,5 @@
 <?php
+/* vim: noexpandtab */
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // edit_about.php
@@ -39,6 +40,10 @@ require_once('lib/language.inc.php');
 require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/log_events.inc.php');
+require_once('lib/classes/UserPic.class.php');
+
+
+
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
@@ -57,8 +62,6 @@ var $check = "";    //Hilfsvariable für den Rechtecheck
 var $special_user = FALSE;  // Hilfsvariable für bes. Institutsfunktionen
 var $msg = ""; //enthält evtl Fehlermeldungen
 var $max_file_size = 100; //max Größe der Bilddatei in KB
-var $img_max_h = 250; // max picture height
-var $img_max_w = 200; // max picture width
 var $logout_user = FALSE; //Hilfsvariable, zeigt an, ob der User ausgeloggt werden muß
 var $priv_msg = "";  //Änderungsnachricht bei Adminzugriff
 var $default_url = "http://www"; //default fuer private URL
@@ -152,130 +155,6 @@ function get_user_details() {
 
 	return;
 }
-
-function imaging($img,$img_size,$img_name) {
-	global $TMP_PATH, $CONVERT_PATH;
-
-	if ($img_size > ($this->max_file_size*1024)) { //Bilddatei ist zu groß
-		$this->msg = "error§" . sprintf(_("Die hochgeladene Bilddatei ist %s KB groß.<br>Die maximale Dateigröße beträgt %s KB!"), round($img_size/1024), $this->max_file_size);
-		return;
-	}
-
-	if (!$img_name) { //keine Datei ausgewählt!
-		$this->msg = "error§" . _("Sie haben keine Datei zum Hochladen ausgewählt!");
-		return;
-	}
-
-	//Dateiendung bestimmen
-	$dot = strrpos($img_name,".");
-	if ($dot) {
-		$l = strlen($img_name) - $dot;
-		$ext = strtolower(substr($img_name,$dot+1,$l));
-	}
-	//passende Endung ?
-	if ($ext != "jpg" && $ext != "gif" && $ext != "png") {
-		$this->msg = "error§" . sprintf(_("Der Dateityp der Bilddatei ist falsch (%s).<br>Es sind nur die Dateiendungen .gif, .png und .jpg erlaubt!"), $ext);
-		return;
-	}
-	//na dann kopieren wir mal...
-	$newfile =  $GLOBALS['DYNAMIC_CONTENT_PATH'] . "/user/" . $this->auth_user["user_id"].".jpg";
-	if(!@move_uploaded_file($img,$newfile)) {
-		$this->msg = "error§" . _("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!");
-		return;
-	} else {
-		chmod($newfile, 0666 & ~umask());       // set permissions for uploaded file
-		list($width, $height, $img_type, ) = getimagesize($newfile);
-		if (extension_loaded('gd')){
-			switch ($ext) {  //original Bild einlesen
-				case 'gif': //GIF
-				if (function_exists('ImageCreateFromGIF')){
-					$img_org = @ImageCreateFromGIF($newfile);
-				}
-				break;
-				case 'jpg': //JPG
-				if (function_exists('ImageCreateFromJPEG')){
-					$img_org = @ImageCreateFromJPEG($newfile);
-				}
-				break;
-				case 'png': //PNG
-				if (function_exists('ImageCreateFromPNG')){
-					$img_org = @ImageCreateFromPNG($newfile);
-				}
-				break;
-				default:
-				$img_org = FALSE;
-			} // end switch
-		}
-		if (!$width && $img_org){
-			$width = @ImageSX($img_org);
-			$height = @ImageSY($img_org);
-		}
-		// Check picture size
-		$hscale = $height / $this->img_max_h;
-		$wscale = $width / $this->img_max_w;
-		if ($width && ($hscale > 1) || ($wscale > 1)) {
-			$scale = ($hscale > $wscale)? $hscale : $wscale;
-			$newwidth = floor($width / $scale);
-			$newheight= floor($height / $scale);
-			$ret_val = false;
-			//try ImageMagick...
-			if (file_exists($CONVERT_PATH)){
-				$out = array();
-				$identify_path = dirname($CONVERT_PATH) . '/identify';
-				if (file_exists($identify_path)){
-					exec($identify_path . ' -format "%n" ' . $newfile, $out, $ret_val);
-					if (!$ret_val){
-						if (count($out) > 1 || $out[0] > 1){
-							$ret_val = true;
-						} else {
-							exec($CONVERT_PATH . ' -resize ' . $newwidth . 'x' . $newheight . '! ' . $newfile .' ' . $newfile, $out, $ret_val);
-						}
-					}
-				} else {
-					$ret_val = true;
-				}
-			} else {
-				$ret_val = true;
-			}
-			//no luck, lets try GD...
-			if ($ret_val){
-				if (function_exists('imagecopyresampled')){
-					// leeres Bild erzeugen
-					$img_res = @ImageCreateTrueColor($newwidth, $newheight);
-					if (!$img_org) {
-						$ret_val = true;
-					} else {
-						// resampeln und als jpg speichern
-						$ret_val = @ImageCopyResampled ( $img_res, $img_org, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-						$ret_val = @ImageJPEG ( $img_res, $newfile , 70);
-						$ret_val = $ret_val ? false : true;
-						@ImageDestroy ( $img_res);
-						@ImageDestroy ( $img_org);
-					}
-				} else {
-					$ret_val = true; //still no luck, picture can not be resized
-				}
-			}
-		}
-		//resizing not possible or dimensions not available
-		if ($ret_val || !$width){
-			@unlink($newfile);
-			$this->msg = "error§" . _("Es ist ein Fehler beim Bearbeiten des Bildes aufgetreten.");
-			if (!$width){
-				$this->msg .= " ". _("Die Gr&ouml;&szlig;e des Bildes konnte nicht ermittelt werden.");
-			} elseif ($ret_val){
-				$this->msg .= " ". _("Die Gr&ouml;&szlig;e des Bildes konnte nicht angepasst werden.") . " " . sprintf(_("Die maximale Gr&ouml;&szlig;e betr&auml;gt %s x %s Pixel."),$this->img_max_w,$this->img_max_h);
-			}
-			return;
-		}
-		$this->msg = "msg§" . _("Die Bilddatei wurde erfolgreich hochgeladen. Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 dr&uuml;cken).");
-		setTempLanguage($this->auth_user["user_id"]);
-		$this->priv_msg = _("Ein neues Bild wurde hochgeladen.\n");
-		restoreLanguage();
-	}
-	return;
-}
-
 
 function studiengang_edit($studiengang_delete,$new_studiengang) {
 	if (is_array($studiengang_delete)) {
@@ -797,26 +676,38 @@ if ($logout && $auth->auth["uid"] == "nobody")  // wir wurden gerade ausgeloggt.
 	}
 
 //No Permission to change userdata
-if (!$my_about->check)
- {
+if (!$my_about->check) {
 	// -- here you have to put initialisations for the current page
 	// Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   // Output of Stud.IP head
-	parse_window ('error§' . _("Zugriff verweigert.")."<br />\n<font size=-1 color=black>". sprintf(_("Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen.<br /> <br /> Eine andere Ursache kann der Versuch des Zugriffs auf Userdaten, die Sie nicht bearbeiten d&uuml;rfen, sein. Nutzen Sie den untenstehenden Link, um zurück auf die Startseite zu gelangen."), $AUTH_LIFETIME).'</font>', '§',
-	_("Zugriff auf Userdaten verweigert"),
-	sprintf(_("%s Hier%s geht es wieder zur Anmeldung beziehungsweise Startseite."),'<a href="index.php"><b>&nbsp;','</b></a>')."<br />\n&nbsp;");
+	parse_window('error§' . _("Zugriff verweigert.").
+	             "<br />\n<font size=-1 color=black>".
+	             sprintf(_("Wahrscheinlich ist Ihre Session abgelaufen. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen.<br /> <br /> Eine andere Ursache kann der Versuch des Zugriffs auf Userdaten, die Sie nicht bearbeiten d&uuml;rfen, sein. Nutzen Sie den untenstehenden Link, um zurück auf die Startseite zu gelangen."), $AUTH_LIFETIME).
+	             '</font>', '§', _("Zugriff auf Userdaten verweigert"),
+	             sprintf(_("%s Hier%s geht es wieder zur Anmeldung beziehungsweise Startseite."),'<a href="index.php"><b>&nbsp;','</b></a>')."<br />\n&nbsp;");
 
 	include ('lib/include/html_end.inc.php');
 	page_close();
-	die;
-	}
+	exit;
+}
 
-if(check_ticket($studipticket)){
+if (check_ticket($studipticket)) {
 	//ein Bild wurde hochgeladen
-	if ($cmd == "copy")
-	 {
-		$my_about->imaging($_FILES['imgfile']['tmp_name'],$_FILES['imgfile']['size'],$_FILES['imgfile']['name']);
+	if ($cmd == "copy") {
+		try {
+			$user_pic = new UserPic($user->cfg->user_id);
+			$user_pic->createFromUpload('imgfile');
+			# TODO (mlunzena) das ist nicht immer erfolgreich!
+			$my_about->msg = "msg§" . _("Die Bilddatei wurde erfolgreich hochgeladen. Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 dr&uuml;cken).") . '§';
+			}
+		} catch (Exception $e) {
+			$my_about->msg = 'error§' . $e->getMessage() . '§';
+		}
+
+		setTempLanguage($my_about->auth_user["user_id"]);
+		$my_about->priv_msg = _("Ein neues Bild wurde hochgeladen.\n");
+		restoreLanguage();
 		}
 
 	//Veränderungen an Studiengängen
@@ -921,14 +812,16 @@ if(check_ticket($studipticket)){
 		}
 
 	if ($cmd) {
-		if ($view=="Bild" && $cmd=="bild_loeschen" && $_SERVER["REQUEST_METHOD"]=="POST") {
-			if ($user_id==$auth->auth["uid"] || $perm->have_perm("admin")) {
-				if(file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$user_id.".jpg")) {
-					unlink($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$user_id.".jpg");
-					$my_about->msg.="msg§"._("Das Bild wurde gel&ouml;scht");
-				}
-               }
-        	}
+		if ($view == "Bild" &&
+		    $cmd == "bild_loeschen" &&
+		    $_SERVER["REQUEST_METHOD"] == "POST") {
+			if ($user_id==$auth->auth["uid"] ||
+			    $perm->have_perm("admin")) {
+				$user_pic = new UserPic($user_id);
+				$user_pic->reset();
+				$my_about->msg .= "info§" . _("Bild gel&ouml;scht.") . "§";
+			}
+		}
 
 		if (($my_about->check != "user") && ($my_about->priv_msg != "")) {
 			$m_id=md5(uniqid("smswahn"));
@@ -1184,20 +1077,19 @@ if ($view == 'Bild') {
 	echo '<tr><td width="30%" class="'.$cssSw->getClass().'" align="center">';
 	echo '<font size="-1"><b>' . _("Aktuell angezeigtes Bild:") . '<br /><br /></b></font>';
 
-	if(!file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$my_about->auth_user['user_id'].".jpg")) {
-		echo '<img src="'.$GLOBALS['DYNAMIC_CONTENT_URL'].'/user/nobody.jpg" width="200" height="250" alt="' . _("Kein pers&ouml;nliches Bild vorhanden") . '" ><br />&nbsp; ';
-	} else {
-		echo '<img border="1" src="'.$GLOBALS['DYNAMIC_CONTENT_URL'].'/user/'.$my_about->auth_user['user_id'] . '.jpg" alt="'. $my_about->auth_user['Vorname'].' '.$my_about->auth_user['Nachname']."\"><br />\n&nbsp; ";
-		if ($my_about->auth_user["user_id"]==$auth->auth["uid"] || $perm->have_perm("admin")) {
-                        echo "\n<FORM NAME=\"bild_loeschen\" METHOD=\"POST\" ACTION=\"$PHP_SELF?studipticket=".get_ticket()."\">\n";
-                        echo "  <INPUT TYPE=\"hidden\" NAME=\"user_id\" VALUE=\"".$my_about->auth_user["user_id"]."\">\n";
-                        echo "  <INPUT TYPE=\"hidden\" NAME=\"username\" VALUE=\"$username\">\n";
-                        echo "  <INPUT TYPE=\"hidden\" NAME=\"view\" VALUE=\"Bild\">\n";
-                        echo "  <INPUT TYPE=\"hidden\" NAME=\"cmd\" VALUE=\"bild_loeschen\">\n";
-                        echo "  <FONT SIZE=\"-1\"><B>"._("Aktuelles Bild")."</B></FONT><BR><INPUT TYPE=\"image\" ".makeButton("loeschen","src")." BORDER=\"0\">\n";
-                        echo "</FORM>\n";
-                }
-
+	$user_pic = new UserPic($my_about->auth_user['user_id']);
+	echo $user_pic->getImageTag(UserPic::NORMAL);
+	if ($my_about->auth_user["user_id"] == $auth->auth["uid"] ||
+	    $perm->have_perm("admin")) {
+		?>
+		<form name="bild_loeschen" method="POST" action="<?= $GLOBALS['PHP_SELF'] ?>?studipticket=<?= get_ticket() ?>">
+			<input type="hidden" name="user_id" value="<?= $my_about->auth_user["user_id"] ?>">
+			<input type="hidden" name="username" VALUE="<?= $username ?>">
+			<input type="hidden" name="view" value="Bild">
+			<input type="hidden" name="cmd" value="bild_loeschen">
+			<font size="-1"><b><?= _("Aktuelles Bild") ?></b></font><br><input type="image" <?= makeButton("loeschen", "src") ?> border="0">
+		</form>
+	<?
 	}
 
 	echo '</td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top"><blockquote>';

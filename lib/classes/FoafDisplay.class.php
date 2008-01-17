@@ -21,6 +21,7 @@
 
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/visual.inc.php');
+require_once('lib/classes/UserPic.class.php');
 
 /**
 * Calculate and display "Friend of a friend lists"
@@ -197,11 +198,12 @@ class FoafDisplay {
 			$this->db->next_record();
 			$ret["uname"]=$this->db->f("username");
 			$ret["name"]=$this->db->f("fullname");
-			if(!file_exists($GLOBALS['DYNAMIC_CONTENT_PATH']."/user/".$user_id.".jpg")) {
-				$ret["pic"]="<a href=\"about.php?username=".$ret['uname']."\"><img border=1 src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/nobody.jpg\" height=\"100\" " .tooltip(_("kein persönliches Bild vorhanden"))."></a>";
-			} else {
-				$ret["pic"]="<a href=\"about.php?username=".$ret['uname']."\"><img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/{$user_id}.jpg\" height=\"100\" border=\"1\" ".tooltip("ein Nutzer")."></a>";
-			}
+			$user_pic = new UserPic($user_id);
+			$ret["pic"] ="<a href=\"about.php?username=".$ret['uname']."\">";
+			$ret["pic"].= $user_pic->getImageTag(UserPic::MEDIUM);
+			$ret["pic"].= "</a>";
+
+
 			$ret["link"]="<font size=-1><a href=\"about.php?username=".$ret['uname']."\">".htmlReady($ret['name'])."</a></font>";
 		} else {
 			$ret["pic"]="<img border=1 src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/nobody.jpg\" width=\"80\" " .tooltip(_("anonyme NutzerIn")).">";
