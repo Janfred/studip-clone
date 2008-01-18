@@ -23,6 +23,7 @@ class Step120Userpic extends Migration {
       if (preg_match('/\/([0-9a-f]+).jpg$/', $value, $matches)) {
         $user_pic = new UserPic($matches[1]);
         $user_pic->createFrom($value);
+        unlink($value);
       }
     }
   }
