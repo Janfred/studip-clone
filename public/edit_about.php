@@ -698,7 +698,6 @@ if (check_ticket($studipticket)) {
 		try {
 			$user_pic = new UserPic($user->cfg->user_id);
 			$user_pic->createFromUpload('imgfile');
-			# TODO (mlunzena) das ist nicht immer erfolgreich!
 			$my_about->msg = "msg§" . _("Die Bilddatei wurde erfolgreich hochgeladen. Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 dr&uuml;cken).") . '§';
 		} catch (Exception $e) {
 			$my_about->msg = 'error§' . $e->getMessage() . '§';

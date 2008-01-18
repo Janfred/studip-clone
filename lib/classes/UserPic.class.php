@@ -1,3 +1,4 @@
+
 <?php
 
 /*
@@ -24,31 +25,64 @@
  */
 class UserPic {
 
+  /**
+   * This constant stands for the maximal size of a user picture.
+   */
   const NORMAL = 'normal';
+
+  /**
+   * This constant stands for a medium size of a user picture.
+   */
   const MEDIUM = 'medium';
+
+  /**
+   * This constant stands for an icon size of a user picture.
+   */
   const SMALL  = 'small';
 
 
   /**
-   * max Größe der Bilddatei in Bytes
-   *
-   * @access public
-   * @var integer
+   * This constant represents the maximal size of a user picture in bytes.
    */
   const MAX_FILE_SIZE = 102400;
 
 
+  /**
+   * Constructs a new UserPic object belonging to a user with the given id.
+   *
+   * @param  string  the user's' id
+   *
+   * @return void
+   */
   function __construct($user_id) {
     $this->user_id = $user_id;
   }
 
 
+  /**
+   * Returns the file name of a user's picture.
+   *
+   * @param  string  the user's id
+   * @param  string  one of the constants UserPic::(NORMAL|MEDIUM|SMALL)
+   * @param  string  an optional extension of the user's picture
+   *
+   * @return string  the absolute file path to the user's picture
+   */
   private static function getFilename($id, $size, $ext = 'png') {
     return sprintf('%s/user/%s_%s.%s',
       $GLOBALS['DYNAMIC_CONTENT_PATH'], $id, $size, $ext);
   }
 
 
+  /**
+   * Returns the URL of a user's picture.
+   *
+   * @param  string  the user's id
+   * @param  string  one of the constants UserPic::(NORMAL|MEDIUM|SMALL)
+   * @param  string  an optional extension of the user's picture
+   *
+   * @return string  the URL to the user's picture
+   */
   private static function getURL($id, $size, $ext = 'png') {
     return sprintf('%s/user/%s_%s.%s',
       $GLOBALS['DYNAMIC_CONTENT_URL'], $id, $size, $ext);
@@ -56,11 +90,12 @@ class UserPic {
 
 
   /**
-   * Constructs a desired HTML-Image tag for an UserPic.
+   * Constructs a desired HTML image tag for a UserPic.
    *
-   * @param constant size UserPic::(NORMAL,MEDIUM,SMALL)
-   * @param String tooltip
-   * @return String containing HTML-Image Tag
+   * @param string  one of the constants UserPic::(NORMAL|MEDIUM|SMALL)
+   * @param string  the tooltip for the user's picture
+   *
+   * @return string returns the HTML image tag
    */
   function getImageTag($size = UserPic::MEDIUM, $tooltip = '') {
 
@@ -74,6 +109,17 @@ class UserPic {
   }
 
 
+  /**
+   * Creates all the different sized thumbnails for an uploaded file.
+   *
+   * @param  string  the key of the uploaded file,
+   *                 see documentation about $_FILES
+   *
+   * @return void
+   *
+   * @throws several Exceptions if the uploaded file does not satisfy the
+   *         requirements
+   */
   public function createFromUpload($userfile) {
 
     // Bilddatei ist zu groß
@@ -109,11 +155,8 @@ class UserPic {
     // set permissions for uploaded file
     chmod($filename, 0666 & ~umask());
 
-    $status = $this->createFrom($filename);
-
+    $this->createFrom($filename);
     unlink($filename);
-
-    return $status;
   }
 
 
@@ -126,7 +169,6 @@ class UserPic {
    */
   public function createFrom($filename) {
 
-    # TODO (mlunzena) muss das geprüft werden?
     if (!extension_loaded('gd')) {
       throw new Exception(_("Es ist ein Fehler beim Bearbeiten des Bildes aufgetreten."));
     }
@@ -137,9 +179,9 @@ class UserPic {
   }
 
   /**
-   * Removes all uploaded UserPics of an User.
+   * Removes all uploaded pictures of a user.
    *
-   * @return bool  $success
+   * @return void
    */
   function reset() {
     @unlink(self::getFilename($this->user_id, UserPic::NORMAL));
@@ -172,7 +214,7 @@ class UserPic {
       IMAGETYPE_JPEG => "imagecreatefromjpeg",
       IMAGETYPE_PNG  => "imagecreatefrompng");
     if (!isset($lookup[$type])) {
-      return FALSE;
+      throw new Exception(_("Der Typ des Bilds wird nicht unterstützt."));
     }
     $image = $lookup[$type]($filename);
 
@@ -204,7 +246,6 @@ class UserPic {
     imagecopy($i, $image, $xpos, $ypos, 0, 0, $resized_width, $resized_height);
 
     imagepng($i, self::getFilename($this->user_id, $size));
-    return TRUE;
   }
 
 
