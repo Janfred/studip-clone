@@ -1572,7 +1572,21 @@ if ($rechte) {
 		<td class="steel1" width="40%" align="left">&nbsp; <font size=-1><b><?=_("Nutzer in die Veranstaltung eintragen")?></b></font>
 		<br /><font size=-1>&nbsp; <? printf(_("Bitte geben Sie den Vornamen, Nachnamen %s oder Usernamen zur Suche ein"), "<br />&nbsp;")?> </font></td>
 		<td class="steel1" width="40%" align="left">
-		<input type="TEXT" name="search_exp" size="40" maxlength="255" />
+		<input id="search_exp" type="TEXT" name="search_exp" size="40" maxlength="255" />
+		<div id="search_exp_choices" class="autocomplete"></div>
+		<script type="text/javascript">
+			Event.observe(window, 'load', function() {
+			  new Ajax.Autocompleter('search_exp',
+			                         'search_exp_choices',
+			                         'dispatch.php/autocomplete/person/family',
+			                         {
+			                           minChars: 3,
+			                           paramName: 'value',
+			                           method: 'get'
+			                         });
+			});
+		</script>
+		</td>
 		<td class="steel1" width="20%" align="center">
 		<input type="IMAGE" name="start_search" <?=makeButton("suchestarten", "src")?> border=0 value=" <?=_("Suche starten")?> "></td>
 	</tr></form></table></tr>
