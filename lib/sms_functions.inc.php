@@ -1,5 +1,5 @@
 <?
-
+/* vim: noexpandtab */
 /**
 * several functions used for the systeminternal messages
 *
@@ -660,8 +660,27 @@ function show_addrform() {
 			}
 		}
 	} else {
-		$tmp .= "<input type=\"text\" name=\"search_exp\" size=\"30\">";
-		$tmp .= "<input type=\"image\" name=\"\" src=\"".$GLOBALS['ASSETS_URL']."images/suchen.gif\" border=\"0\">";
+		ob_start();
+		?>
+		<input id="addressee" type="text" name="search_exp" size="30">
+		<div id="addressee_choices" class="autocomplete"></div>
+
+		<input type="image" name="" src="<?= Assets::url('images/suchen.gif') ?>" border="0">
+
+		<script type="text/javascript">
+			Event.observe(window, 'load', function() {
+			  new Ajax.Autocompleter('addressee',
+			                         'addressee_choices',
+			                         'dispatch.php/autocomplete/person/family',
+			                         {
+			                           minChars: 3,
+			                           paramName: 'value',
+			                           method: 'get'
+			                         });
+			});
+		</script>
+		<?
+		$tmp .= ob_get_clean();
 	}
 	return $tmp;
 }
