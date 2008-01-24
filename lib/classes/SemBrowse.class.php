@@ -252,7 +252,7 @@ class SemBrowse {
 		echo "</td></tr>";
 		echo $this->search_obj->getFormEnd();
 		echo "</table>\n";
-		
+
 		echo '<script type="text/javascript">document.'.$this->search_obj->form_name.'.'.$this->search_obj->form_name.'_quick_search.focus();</script>' . chr(10);
 		?>
 		<script type="text/javascript">
@@ -263,6 +263,7 @@ class SemBrowse {
 				                       {
 				  minChars: 3,
 				  paramName: 'value',
+				  method: 'get',
 				  callback: function(element, entry) {
 				    var category = $$('input[name="<?= $this->search_obj->form_name ?>_category"]');
 				    var scope = $$('select[name="<?= $this->search_obj->form_name ?>_scope_choose"]');

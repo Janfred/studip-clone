@@ -32,7 +32,7 @@ class Autocomplete_PersonController extends Trails_Controller {
   }
 
   private static function get_param($key) {
-    return remove_magic_quotes(@$_POST[$key]);
+    return remove_magic_quotes(@$_GET[$key]);
   }
 
   function before_filter($action, &$args) {
