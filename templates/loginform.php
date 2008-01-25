@@ -75,7 +75,12 @@
 	<?if  (!$loginerror):?>
 	<font size="6"><b><?=_("Herzlich Willkommen!")?></b></font><br>
 	<?endif;?>
-	<font size="-1"><a href="mailto:<?=$GLOBALS['UNI_CONTACT']?>?<?="subject=".rawurlencode(_("Stud.IP Passwort vergessen"). " - ".$GLOBALS['UNI_NAME_CLEAN'])."&amp;body=".rawurlencode(sprintf(_("Ich habe mein Passwort vergessen. Bitte senden sie mir ein Neues.\nMein Nutzername: %s"),htmlReady($uname))."\n")?>">
+	<font size="-1">
+	<?if ($GLOBALS['ENABLE_REQUEST_NEW_PASSWORD_BY_USER']):?>
+	<a href="request_new_password.php?cancel_login=1">
+	<?else:?>
+		<font size="-1"><a href="mailto:<?=$GLOBALS['UNI_CONTACT']?>?<?="subject=".rawurlencode("Stud.IP Passwort vergessen - ".$GLOBALS['UNI_NAME_CLEAN'])."&amp;body=".rawurlencode("Ich habe mein Passwort vergessen. Bitte senden sie mir ein Neues.\nMein Nutzername: ".htmlReady($uname)."\n")?>">
+	<?endif;?>
 	<?=_("Passwort vergessen")?></a>
 	<?if($self_registration_activated){?>
 		&nbsp;/&nbsp; 
