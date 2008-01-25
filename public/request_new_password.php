@@ -140,7 +140,7 @@ if( $_POST['email'] != "" ) {
 				$username = $db->f('username');
 				$vorname  = $db->f('Vorname');
 				$nachname = $db->f('Nachname');
-				$id = md5( $username . $REQUEST_NEW_PASSWORD_SECRET );
+				$id = md5($username . $GLOBALS['REQUEST_NEW_PASSWORD_SECRET');
 
 				$smtp =& new studip_smtp_class();
 				// include language-specific subject and mailbody
@@ -175,7 +175,7 @@ if ($_GET['id'] != '') {
 		$username = mysql_escape_string($username);
 		$db =& new DB_Seminar();
 		$db->query( "SELECT user_id FROM auth_user_md5 WHERE username='{$username}'" );
-		if ($db->num_rows() == 1 && trim($_GET['id']) == md5($username . $REQUEST_NEW_PASSWORD_SECRET)) {
+		if ($db->num_rows() == 1 && trim($_GET['id']) == md5($username . $GLOBALS['REQUEST_NEW_PASSWORD_SECRET'])) {
 			$db->next_record();
 			$user_management =& new UserManagementRequestNewPassword($db->f('user_id'));
 			if ($user_management->setPassword()) {
