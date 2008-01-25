@@ -13,6 +13,7 @@ class email_validation_class
 	var $name_regular_expression='^[-_ a-zA-ZÀ-ÿ]+$';
 	var $telefon_regular_expression="^([0-9 \(\)\\/+_-]*)\$";
 	var $email_regular_expression='^([-.0-9=?A-Z_a-z{|}~])+@([-.0-9=?A-Z_a-z{|}~])+\.[a-zA-Z]{2,6}$';
+	var $email_regular_expression_restricted_part = "^([a-z0-9_]|\\-|\\.)+";
 	var $timeout=10;
 	var $data_timeout=10;
 	var $localhost="studip.de";
@@ -103,8 +104,20 @@ class email_validation_class
 		return(ereg($this->telefon_regular_expression,$telefon)!=0);
 	}
 	
-	Function ValidateEmailAddress($email)
+	Function ValidateEmailAddress($email, $restriction = '')
 	{
+		if ($restriction) {
+			$restrictions = array();
+			$restriction_split = explode(',', $restriction);
+			foreach ($restriction_split as $restriction_part) {
+				$restrictions[] = '@' . trim($restriction_part);
+			}
+			$restriction = implode('|', $restrictions);
+			$restriction = str_replace(array('.', '-'), array('\.', '\-'), $restriction);
+			$email_regular_expression_restricted = $this->email_regular_expression_restricted_part
+			. '(' . $restriction . ')$';
+			return (eregi($email_regular_expression_restricted, $email) != 0);
+		}
 		return(eregi($this->email_regular_expression,$email)!=0);
 	}
 	

@@ -1,3 +1,7 @@
+<?php
+	$cfg =& Config::GetInstance();
+	$email_restriction = $cfg->getValue('EMAIL_DOMAIN_RESTRICTION');
+?>
 <script type="text/javascript" language="javascript" src="<?=$GLOBALS['ASSETS_URL']?>javascripts/md5.js"></script>
 <script type="text/javascript" language="javaScript">
 <!--
@@ -60,7 +64,13 @@ function checkNachname(){
 }
 
 function checkEmail(){
- var re_email = /<?=$validator->email_regular_expression?>/;
+ <? if (trim($email_restriction)) {
+			echo 'var re_email = /' . $validator->email_regular_expression_restricted_part . '/;';
+		} else {
+			echo 'var re_email = /' . $validator->email_regular_expression . '/;';
+		}
+?>
+
  var Email = document.login.Email.value;
  var checked = true;
  if ((re_email.test(Email))==false || Email.length==0) {
@@ -183,9 +193,28 @@ function checkdata(){
   <td><input type="RADIO" <? if (!$geschlecht) echo "checked" ?> name="geschlecht" value="0"><?=_("m&auml;nnlich")?>&nbsp; <input type="RADIO" name="geschlecht" <? if ($geschlecht) echo "checked" ?> value="1"><?=_("weiblich")?></td>
  </tr>
 
- <tr valign=top align=left>
+<tr valign=top align=left>
   <td colspan="2"><?=_("E-Mail:")?></td>
-  <td><input type="text" name="Email" onchange="checkEmail()"  value="<?php print (isset($Email) ? $Email : "" ) ?>"size=32 maxlength=63></td>
+	<?
+	echo '<td nowrap="nowrap"><input type="text" name="Email" onchange="checkEmail()"  value="';
+	if (trim($email_restriction)) {
+		echo (isset($Email) ? preg_replace('|@.*|', '', trim($Email)) : '' );
+		echo "\" size=20 maxlength=63>\n";
+		$email_restriction_parts = explode(',', $email_restriction);
+		echo '&nbsp;<select name="emaildomain">';
+		foreach ($email_restriction_parts as $email_restriction_part) {
+			echo '<option value="' . trim($email_restriction_part) . '"';
+			if (trim($email_restriction_part) == $_REQUEST['emaildomain']) {
+				echo ' selected="selected"';
+			}
+			echo '>@' . trim($email_restriction_part) . "</option>\n";
+		}
+		echo '</select>';
+	} else {
+		echo (isset($Email) ? trim($Email) : '' ) ."\" size=32 maxlength=63>\n" ;
+	}
+	?>
+	</td>
  </tr>
 
  <tr>

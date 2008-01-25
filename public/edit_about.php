@@ -424,8 +424,26 @@ function edit_pers($password, $check_pass, $response, $new_username, $vorname, $
 				$REMOTE_ADDR=$_SERVER["REMOTE_ADDR"];
 				$Zeit=date("H:i:s, d.m.Y",time());
 
-				if (!$validator->ValidateEmailAddress($email)) {
+				// accept only registered domains if set
+				$email_restriction = trim(get_config('EMAIL_DOMAIN_RESTRICTION'));
+				if (!$validator->ValidateEmailAddress($email, $email_restriction)) {
+					if ($email_restriction) {
+						$email_restriction_msg_part = '';
+						$email_restriction_parts = explode(',', $email_restriction);
+						for ($email_restriction_count = 0; $email_restriction_count < count($email_restriction_parts); $email_restriction_count++) {
+							if ($email_restriction_count == count($email_restriction_parts) - 1) {
+								$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . '<br />';
+							} else if (($email_restriction_count + 1) % 3) {
+								$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ', ';
+							} else {
+								$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ',<br />';
+							}
+						}
+						$this->msg = $this->msg . 'error§'
+								. sprintf(_("Die E-Mail-Adresse fehlt, ist falsch geschrieben oder gehört nicht zu folgenden Domains:%s"), '<br>' . $email_restriction_msg_part);
+					} else {
 					$this->msg=$this->msg . "error§" . _("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!") . "§";
+					}
 					return false;        // E-Mail syntaktisch nicht korrekt oder fehlend
 				}
 
