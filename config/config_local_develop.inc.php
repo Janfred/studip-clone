@@ -480,6 +480,9 @@ $ALLOW_CHANGE_USERNAME = TRUE;							//if true, users are allowed to change thei
 $ALLOW_CHANGE_EMAIL = TRUE;							//if true, users are allowed to change their email-address
 $ALLOW_CHANGE_NAME = TRUE;							//if true, users are allowed to change their name
 $ALLOW_CHANGE_TITLE = TRUE;							//if true, users are allowed to change their titles
+
+$ENABLE_REQUEST_NEW_PASSWORD_BY_USER = TRUE;			//if true, users are able to request a new password themselves
+
 $ENABLE_SELF_REGISTRATION = TRUE;						//should it be possible for an user to register himself
 $ENABLE_FREE_ACCESS = TRUE;							//if true, courses with public access are available
 

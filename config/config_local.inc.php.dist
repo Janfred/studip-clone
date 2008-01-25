@@ -504,7 +504,7 @@ $ALLOW_CHANGE_TITLE = TRUE;							//if true, users are allowed to change their t
 $ENABLE_SELF_REGISTRATION = TRUE;					//should it be possible for an user to register himself
 
 $ENABLE_REQUEST_NEW_PASSWORD_BY_USER = TRUE;			//if true, users are able to request a new password themselves
-$REQUEST_NEW_PASSWORD_SECRET = 'jh*d ajshHuwd7z237zd hGfaMhlf' // if the above feature is used, set this to somthing different!!!
+$REQUEST_NEW_PASSWORD_SECRET = 'jh*d ajshHuwd7z237zd hGfaMhlf'; // if the above feature is used, set this to somthing different!!!
 
 $ENABLE_FREE_ACCESS = TRUE;							//if true, courses with public access are available
 
