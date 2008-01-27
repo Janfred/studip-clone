@@ -405,11 +405,7 @@ class HeaderController {
 				// does the plugin have a navigation entry?
 				if ($header_plugin->hasNavigation()){
 					$navi = $header_plugin->getNavigation();
-					if ($navi->hasIcon()){
-					 	$pluginicon = $header_plugin->getPluginpath() . "/" . $navi->getIcon();
-					} else {
-						$pluginicon = $header_plugin->getPluginiconname();
-					}
+                                        $pluginicon = $header_plugin->getPluginiconname();
 					$pluginlink['text'] = $navi->getDisplayname();
 					$pluginlink['link'] = PluginEngine::getLink($header_plugin, $navi->getLinkParams());
 					$pluginlink['image'] = $pluginicon;
