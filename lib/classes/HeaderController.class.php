@@ -289,6 +289,17 @@ class HeaderController {
 		return $ret;
 	}
 	
+	function getHeaderItemShibLogin(){
+		global $user;
+		if((!is_object($user) || $user->id == 'nobody') && array_search("Shib", $GLOBALS["STUDIP_AUTH_PLUGIN"])){
+			$ret['text'] = _("Login Shibboleth");
+			$ret['link'] = "index.php?again=yes&sso=shib";
+		} else {
+			$ret = null;
+		}
+		return $ret;
+	}
+	
 	function getHeaderItemMessages(){
 		global $user;
 		if(is_object($user) && $user->id != 'nobody'){

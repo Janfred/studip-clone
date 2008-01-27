@@ -35,6 +35,19 @@
 				</tr>
 			</table>
 			<?}?>
+			<?if($sso_shib){?>
+			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
+				<tr>
+					<td width="270">
+					<a class="index" href="index.php?again=yes&sso=shib">
+					<font size="4"><b><?=_("Shibboleth Login")?></b></font>
+					<font color="#555555" size="1"><br><?=_("f&uuml;r Single Sign On mit Shibboleth")?></font>
+					</a>
+					&nbsp;
+					</td>
+				</tr>
+			</table>
+			<?}?>
 			<?if($self_registration_activated){?>
 			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
 				<tr>
