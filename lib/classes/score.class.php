@@ -313,11 +313,11 @@ function GetMyScore() {
 					GROUP BY user_id");
 		$db->next_record();
 		$vote += $db->f(0);
-						
+
 		$db->query("SELECT count(*) FROM eval WHERE author_id = '$user_id' AND startdate < UNIX_TIMESTAMP( ) AND (stopdate > UNIX_TIMESTAMP( ) OR startdate + timespan > UNIX_TIMESTAMP( ) OR (stopdate IS NULL AND timespan IS NULL))");
 		$db->next_record();
 		$vote += 2*$db->f(0);
-		
+
 		$db->query("SELECT count(*) FROM eval_user WHERE user_id = '$user_id'");
 		$db->next_record();
 		$vote += $db->f(0);
@@ -330,7 +330,7 @@ function GetMyScore() {
 	}
 
 	$visits = object_return_views($user_id);
-		
+
 	if ($GLOBALS['PLUGINS_ENABLE'])	{
 		$sysengine = PluginEngine::getPluginPersistence("System");
 		$scoreplugins = array();
@@ -342,28 +342,30 @@ function GetMyScore() {
 		$pluginscore = 0;
 		$pluginscount = 0;
 		if (is_array($scoreplugins) && (count($scoreplugins) > 0 )){
-			
+
 			foreach ($scoreplugins as $scoreplugin) {
-				$pluginscore += $scoreplugin->getScore();			
+				$pluginscore += $scoreplugin->getScore();
 				$pluginscount++;
 			}
 			if ($pluginscount > 0 ){
 				$pluginscore = round($pluginscore / $pluginscount);
 			}
 		}
-	}	
+	}
 
 
 ///////////////////////// Die HOCHGEHEIME Formel:
 
 	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (2*$institut) + (10*$archiv*$age) + (10*$contact) + (20*$katcount) + (5*$seminare) + (1*$gaeste) + (5*$vote) + (5*$wiki) + (3*$visits);
-	
+
 	if ($GLOBALS['PLUGINS_ENABLE']){
 		$score += $pluginscore;
 	}
-	
+
 	$score = round($score/$age);
-	if(file_exists($GLOBALS['DYNAMIC_CONTENT_PATH'].'/user/'.$user_id.'.jpg')) {
+
+	$user_picture = new UserPic($user_id);
+	if ($user_picture->is_customized()) {
 		$score *=10;
 	}
 /// Schreiben des neuen Wertes

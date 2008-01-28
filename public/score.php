@@ -20,6 +20,7 @@ require_once('lib/visual.inc.php');
 require_once('lib/classes/score.class.php');
 require_once('lib/object.inc.php');
 require_once('lib/user_visible.inc.php');
+require_once('lib/classes/UserPic.class.php');
 ?>
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 
@@ -73,8 +74,9 @@ if ($db->num_rows()) {
 			if ($db->f("user_id")==$user->id) {
 				$kill = "&nbsp; &nbsp; <a href=\"score.php?cmd=kill\">" . _("[löschen]") . "</a>";
 			}
+			$user_pic = new UserPic($db->f("user_id"));
 			echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"1%\" nowrap align=\"right\"><font size=\"-1\">".$rang.".</td><td class=\"".$cssSw->getClass()."\" width=\"39%\" nowrap>"
-			."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'><font size=\"-1\">".htmlReady($db->f("fullname"))."</a></td>"
+			."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".$user_pic->getImageTag(UserPic::SMALL, $db->f("fullname"))." <font size=\"-1\">".htmlReady($db->f("fullname"))."</a></td>"
 			."<td class=\"".$cssSw->getClass()."\" width=\"10%\">".$score->GetScoreContent($db->f("user_id"))."</td>"
 			."<td class=\"".$cssSw->getClass()."\" width=\"20%\"><font size=\"-1\">".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=\"30%\"><font size=\"-1\">".$score->GetTitel($db->f("score"), $db->f("geschlecht"))
 			.$kill

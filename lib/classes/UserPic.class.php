@@ -1,4 +1,3 @@
-
 <?php
 
 /*
@@ -90,6 +89,17 @@ class UserPic {
 
 
   /**
+   * Returns whether a user has uploaded a custom picture.
+   *
+   * @return boolean  returns TRUE if the user customized her picture, FALSE
+   *                  otherwise.
+   */
+  function is_customized() {
+    return file_exists(self::getFilename($this->user_id, UserPic::MEDIUM));
+  }
+
+
+  /**
    * Constructs a desired HTML image tag for a UserPic.
    *
    * @param string  one of the constants UserPic::(NORMAL|MEDIUM|SMALL)
@@ -100,7 +110,7 @@ class UserPic {
   function getImageTag($size = UserPic::MEDIUM, $tooltip = '') {
 
     // check wether userpic is avaible if not use corresponding nobody pic
-    $filename = file_exists(self::getFilename($this->user_id, $size))
+    $filename = $this->is_customized()
       ? self::getURL($this->user_id, $size)
       : self::getURL('nobody', $size);
 
