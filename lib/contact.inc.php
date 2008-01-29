@@ -305,8 +305,8 @@ function ShowUserInfo ($contact_id)
 			$output .= "<tr><td class=\"steel1\" colspan=\"2\"><img src=\"".$GLOBALS['ASSETS_URL']."images/border.jpg\"></td></tr>";
 		}
 
-		$user_pic = new Avatar($user_id);
-		$output .= '<tr><td align="center" class="steel1" colspan="2" width="350"><br>'.$user_pic->getImageTag(Avatar::NORMAL).'</td>';
+		$avatar = new Avatar($user_id);
+		$output .= '<tr><td align="center" class="steel1" colspan="2" width="350"><br>'.$avatar->getImageTag(Avatar::NORMAL).'</td>';
 		$owner_id = $user->id;
 		$db->query ("SELECT DISTINCT name, statusgruppen.statusgruppe_id FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE user_id = '$user_id' AND range_id= '$owner_id'");
 		if ($db->num_rows()) {

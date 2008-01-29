@@ -1174,8 +1174,8 @@ while (list ($key, $val) = each ($gruppe)) {
 		<font size="-1">
 			<a href="about.php?username=<?= $db->f("username") ?>">
 				<?
-				$user_pic = new Avatar($db->f("user_id"));
-				echo $user_pic->getImageTag(Avatar::SMALL);
+				$avatar = new Avatar($db->f("user_id"));
+				echo $avatar->getImageTag(Avatar::SMALL);
 				?>
 				<?= htmlReady($db->f("fullname")) ?>
 			</a>
@@ -1349,8 +1349,8 @@ while (list ($key, $val) = each ($gruppe)) {
 				<? if ($show_user_picture) : ?>
 					<td>
 						<?
-							$user_pic = new Avatar($db->f('user_id'));
-							echo $user_pic->getImageTag(Avatar::MEDIUM);
+							$avatar = new Avatar($db->f('user_id'));
+							echo $avatar->getImageTag(Avatar::MEDIUM);
 						?>
 					</td>
 				<? endif ?>

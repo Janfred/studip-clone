@@ -478,8 +478,8 @@ function head (&$module, $db, $a) {
 
 		if ($module->config->getValue("Main", "showimage")) {
 			echo "<td" . $module->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
-			$user_pic = new Avatar($db->f("user_id"));
-			if ($user_pic->is_customized()) {
+			$avatar = new Avatar($db->f("user_id"));
+			if ($avatar->is_customized()) {
 				echo "<img src=\"".Avatar::getURL($db->f("user_id"), Avatar::NORMAL) .
 				     "\" alt=\"Foto " . htmlReady(trim($db->f("fullname"))) . "\"";
 				echo $module->config->getAttributes("PersondetailsHeader", "img") . "></td>";

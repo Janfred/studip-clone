@@ -21,8 +21,8 @@ class Step120Userpic extends Migration {
   function up() {
     foreach (glob($GLOBALS['DYNAMIC_CONTENT_PATH'].'/user/*.jpg') as $value) {
       if (preg_match('/\/([0-9a-f]+).jpg$/', $value, $matches)) {
-        $user_pic = new Avatar($matches[1]);
-        $user_pic->createFrom($value);
+        $avatar = new Avatar($matches[1]);
+        $avatar->createFrom($value);
         unlink($value);
       }
     }

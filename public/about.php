@@ -224,8 +224,8 @@ if ($msg)
 
 // hier wird das Bild ausgegeben
 
-$user_pic = new Avatar($user_id);
-echo $user_pic->getImageTag(Avatar::NORMAL, $db->f("fullname"));
+$avatar = new Avatar($user_id);
+echo $avatar->getImageTag(Avatar::NORMAL, $db->f("fullname"));
 
 
 

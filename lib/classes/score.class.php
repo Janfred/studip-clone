@@ -364,8 +364,8 @@ function GetMyScore() {
 
 	$score = round($score/$age);
 
-	$user_picture = new Avatar($user_id);
-	if ($user_picture->is_customized()) {
+	$avatar = new Avatar($user_id);
+	if ($avatar->is_customized()) {
 		$score *=10;
 	}
 /// Schreiben des neuen Wertes

@@ -714,8 +714,8 @@ if (check_ticket($studipticket)) {
 	//ein Bild wurde hochgeladen
 	if ($cmd == "copy") {
 		try {
-			$user_pic = new Avatar($user->cfg->user_id);
-			$user_pic->createFromUpload('imgfile');
+			$avatar = new Avatar($user->cfg->user_id);
+			$avatar->createFromUpload('imgfile');
 			$my_about->msg = "msg§" . _("Die Bilddatei wurde erfolgreich hochgeladen. Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 dr&uuml;cken).") . '§';
 		} catch (Exception $e) {
 			$my_about->msg = 'error§' . $e->getMessage() . '§';
@@ -833,8 +833,8 @@ if (check_ticket($studipticket)) {
 		    $_SERVER["REQUEST_METHOD"] == "POST") {
 			if ($user_id==$auth->auth["uid"] ||
 			    $perm->have_perm("admin")) {
-				$user_pic = new Avatar($user_id);
-				$user_pic->reset();
+				$avatar = new Avatar($user_id);
+				$avatar->reset();
 				$my_about->msg .= "info§" . _("Bild gel&ouml;scht.") . "§";
 			}
 		}
@@ -1093,8 +1093,8 @@ if ($view == 'Bild') {
 	echo '<tr><td width="30%" class="'.$cssSw->getClass().'" align="center">';
 	echo '<font size="-1"><b>' . _("Aktuell angezeigtes Bild:") . '<br /><br /></b></font>';
 
-	$user_pic = new Avatar($my_about->auth_user['user_id']);
-	echo $user_pic->getImageTag(Avatar::NORMAL);
+	$avatar = new Avatar($my_about->auth_user['user_id']);
+	echo $avatar->getImageTag(Avatar::NORMAL);
 	if ($my_about->auth_user["user_id"] == $auth->auth["uid"] ||
 	    $perm->have_perm("admin")) {
 		?>
