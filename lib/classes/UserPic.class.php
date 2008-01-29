@@ -1,7 +1,7 @@
 <?php
 
 /*
- * UserPic.class.php - UserPic class
+ * Avatar.class.php - Avatar class
  *
  * Copyright (C) 2007 - André Klaßen (aklassen@uos.de)
  *
@@ -13,7 +13,7 @@
 
 
 /**
- * UserPic Class
+ * Avatar Class
  *
  * @package    studip
  * @subpackage lib
@@ -22,7 +22,7 @@
  * @copyright (c) Authors
  * @since     1.6
  */
-class UserPic {
+class Avatar {
 
   /**
    * This constant stands for the maximal size of a user picture.
@@ -47,7 +47,7 @@ class UserPic {
 
 
   /**
-   * Constructs a new UserPic object belonging to a user with the given id.
+   * Constructs a new Avatar object belonging to a user with the given id.
    *
    * @param  string  the user's' id
    *
@@ -62,7 +62,7 @@ class UserPic {
    * Returns the file name of a user's picture.
    *
    * @param  string  the user's id
-   * @param  string  one of the constants UserPic::(NORMAL|MEDIUM|SMALL)
+   * @param  string  one of the constants Avatar::(NORMAL|MEDIUM|SMALL)
    * @param  string  an optional extension of the user's picture
    *
    * @return string  the absolute file path to the user's picture
@@ -77,7 +77,7 @@ class UserPic {
    * Returns the URL of a user's picture.
    *
    * @param  string  the user's id
-   * @param  string  one of the constants UserPic::(NORMAL|MEDIUM|SMALL)
+   * @param  string  one of the constants Avatar::(NORMAL|MEDIUM|SMALL)
    * @param  string  an optional extension of the user's picture
    *
    * @return string  the URL to the user's picture
@@ -95,19 +95,19 @@ class UserPic {
    *                  otherwise.
    */
   function is_customized() {
-    return file_exists(self::getFilename($this->user_id, UserPic::MEDIUM));
+    return file_exists(self::getFilename($this->user_id, Avatar::MEDIUM));
   }
 
 
   /**
-   * Constructs a desired HTML image tag for a UserPic.
+   * Constructs a desired HTML image tag for a Avatar.
    *
-   * @param string  one of the constants UserPic::(NORMAL|MEDIUM|SMALL)
+   * @param string  one of the constants Avatar::(NORMAL|MEDIUM|SMALL)
    * @param string  the tooltip for the user's picture
    *
    * @return string returns the HTML image tag
    */
-  function getImageTag($size = UserPic::MEDIUM, $tooltip = '') {
+  function getImageTag($size = Avatar::MEDIUM, $tooltip = '') {
 
     // check wether userpic is avaible if not use corresponding nobody pic
     $filename = $this->is_customized()
@@ -183,9 +183,9 @@ class UserPic {
       throw new Exception(_("Es ist ein Fehler beim Bearbeiten des Bildes aufgetreten."));
     }
 
-    $this->resize(UserPic::NORMAL, $filename);
-    $this->resize(UserPic::MEDIUM, $filename);
-    $this->resize(UserPic::SMALL,  $filename);
+    $this->resize(Avatar::NORMAL, $filename);
+    $this->resize(Avatar::MEDIUM, $filename);
+    $this->resize(Avatar::SMALL,  $filename);
   }
 
   /**
@@ -194,9 +194,9 @@ class UserPic {
    * @return void
    */
   function reset() {
-    @unlink(self::getFilename($this->user_id, UserPic::NORMAL));
-    @unlink(self::getFilename($this->user_id, UserPic::MEDIUM));
-    @unlink(self::getFilename($this->user_id, UserPic::SMALL));
+    @unlink(self::getFilename($this->user_id, Avatar::NORMAL));
+    @unlink(self::getFilename($this->user_id, Avatar::MEDIUM));
+    @unlink(self::getFilename($this->user_id, Avatar::SMALL));
   }
 
 
@@ -211,9 +211,9 @@ class UserPic {
   function resize($size, $filename) {
 
     $sizes = array();
-    $sizes[UserPic::NORMAL] = array(200, 250);
-    $sizes[UserPic::MEDIUM] = array( 80, 100);
-    $sizes[UserPic::SMALL]  = array( 20,  25);
+    $sizes[Avatar::NORMAL] = array(200, 250);
+    $sizes[Avatar::MEDIUM] = array( 80, 100);
+    $sizes[Avatar::SMALL]  = array( 20,  25);
     list($thumb_width, $thumb_height) = $sizes[$size];
 
     list($width, $height, $type) = getimagesize($filename);

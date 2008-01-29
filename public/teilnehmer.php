@@ -35,7 +35,7 @@ require_once ('lib/messaging.inc.php');	//Funktionen des Nachrichtensystems
 require_once ('config.inc.php');	//We need the config for some parameters of the class of the Veranstaltung
 require_once('lib/user_visible.inc.php');
 require_once('lib/export/export_studipdata_func.inc.php');
-require_once('lib/classes/UserPic.class.php');
+require_once('lib/classes/Avatar.class.php');
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
@@ -1174,8 +1174,8 @@ while (list ($key, $val) = each ($gruppe)) {
 		<font size="-1">
 			<a href="about.php?username=<?= $db->f("username") ?>">
 				<?
-				$user_pic = new UserPic($db->f("user_id"));
-				echo $user_pic->getImageTag(UserPic::SMALL);
+				$user_pic = new Avatar($db->f("user_id"));
+				echo $user_pic->getImageTag(Avatar::SMALL);
 				?>
 				<?= htmlReady($db->f("fullname")) ?>
 			</a>

@@ -40,7 +40,7 @@ require_once('lib/language.inc.php');
 require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/log_events.inc.php');
-require_once('lib/classes/UserPic.class.php');
+require_once('lib/classes/Avatar.class.php');
 
 
 
@@ -714,7 +714,7 @@ if (check_ticket($studipticket)) {
 	//ein Bild wurde hochgeladen
 	if ($cmd == "copy") {
 		try {
-			$user_pic = new UserPic($user->cfg->user_id);
+			$user_pic = new Avatar($user->cfg->user_id);
 			$user_pic->createFromUpload('imgfile');
 			$my_about->msg = "msg§" . _("Die Bilddatei wurde erfolgreich hochgeladen. Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 dr&uuml;cken).") . '§';
 		} catch (Exception $e) {
@@ -833,7 +833,7 @@ if (check_ticket($studipticket)) {
 		    $_SERVER["REQUEST_METHOD"] == "POST") {
 			if ($user_id==$auth->auth["uid"] ||
 			    $perm->have_perm("admin")) {
-				$user_pic = new UserPic($user_id);
+				$user_pic = new Avatar($user_id);
 				$user_pic->reset();
 				$my_about->msg .= "info§" . _("Bild gel&ouml;scht.") . "§";
 			}
@@ -1093,8 +1093,8 @@ if ($view == 'Bild') {
 	echo '<tr><td width="30%" class="'.$cssSw->getClass().'" align="center">';
 	echo '<font size="-1"><b>' . _("Aktuell angezeigtes Bild:") . '<br /><br /></b></font>';
 
-	$user_pic = new UserPic($my_about->auth_user['user_id']);
-	echo $user_pic->getImageTag(UserPic::NORMAL);
+	$user_pic = new Avatar($my_about->auth_user['user_id']);
+	echo $user_pic->getImageTag(Avatar::NORMAL);
 	if ($my_about->auth_user["user_id"] == $auth->auth["uid"] ||
 	    $perm->have_perm("admin")) {
 		?>

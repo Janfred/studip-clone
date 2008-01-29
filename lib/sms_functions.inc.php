@@ -29,7 +29,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once 'lib/classes/UserPic.class.php';
+require_once 'lib/classes/Avatar.class.php';
 
 /**
  * returns the key from a val
@@ -366,8 +366,8 @@ function print_rec_message($prm) {
 			if ($prm['user_id_snd'] != '____%system%____') {
 				$content = "<table width=\"100%\" cellpadding=0 cellmargin=0><tr><td valign=\"top\" width=\"99%\"><font size=\"-1\">".$content."</font><td>";
 				$content .= "<td align=\"right\" style=\"border-left: 1px dotted black;\">&nbsp;";
-				$user_pic = new UserPic($tmp_snd_id);
-				$content .= $user_pic->getImageTag(UserPic::MEDIUM);
+				$user_pic = new Avatar($tmp_snd_id);
+				$content .= $user_pic->getImageTag(Avatar::MEDIUM);
 				$content .= "&nbsp;</td></tr></table>";
 			}
 		}

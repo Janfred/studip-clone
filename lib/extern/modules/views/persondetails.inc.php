@@ -3,7 +3,7 @@
 require_once('config.inc.php');
 require_once('lib/classes/SemesterData.class.php');
 require_once('lib/classes/DataFieldEntry.class.php');
-require_once('lib/classes/UserPic.class.php');
+require_once('lib/classes/Avatar.class.php');
 require_once('lib/visual.inc.php');
 require_once('lib/statusgruppe.inc.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . '/lib/extern_functions.inc.php');
@@ -422,7 +422,7 @@ function head (&$module, $db, $a) {
 
 	// fit size of image
 	if ($pic_max_width && $pic_max_height) {
-		$pic_size = @getimagesize(UserPic::getFilename($db->f("user_id"), UserPic::NORMAL));
+		$pic_size = @getimagesize(Avatar::getFilename($db->f("user_id"), Avatar::NORMAL));
 
 		if ($pic_size[0] > $pic_max_width || $pic_size[1] > $pic_max_height) {
 			$fak_width = $pic_size[0] / $pic_max_width;
@@ -478,9 +478,9 @@ function head (&$module, $db, $a) {
 
 		if ($module->config->getValue("Main", "showimage")) {
 			echo "<td" . $module->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
-			$user_pic = new UserPic($db->f("user_id"));
+			$user_pic = new Avatar($db->f("user_id"));
 			if ($user_pic->is_customized()) {
-				echo "<img src=\"".UserPic::getURL($db->f("user_id"), UserPic::NORMAL) .
+				echo "<img src=\"".Avatar::getURL($db->f("user_id"), Avatar::NORMAL) .
 				     "\" alt=\"Foto " . htmlReady(trim($db->f("fullname"))) . "\"";
 				echo $module->config->getAttributes("PersondetailsHeader", "img") . "></td>";
 			}

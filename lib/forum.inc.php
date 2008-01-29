@@ -31,7 +31,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once 'lib/classes/UserPic.class.php';
+require_once 'lib/classes/Avatar.class.php';
 
 /**
  * deletes the edit-string from content
@@ -1226,9 +1226,9 @@ function printposting ($forumposting) {
 
 			// es werden Porträts angezeigt
 			if ($forum["showimages"] == TRUE) {
-				$user_pic = new UserPic($forumposting["userid"]);
+				$user_pic = new Avatar($forumposting["userid"]);
 				$addon .= "<br><div align=\"center\">";
-				$addon .= $user_pic->getImageTag(UserPic::MEDIUM, $forumposting['author']);
+				$addon .= $user_pic->getImageTag(Avatar::MEDIUM, $forumposting['author']);
 				$addon .= "</div>";
 			}
 

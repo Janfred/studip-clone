@@ -10,7 +10,7 @@
  * the License, or (at your option) any later version.
  */
 
-require_once 'lib/classes/UserPic.class.php';
+require_once 'lib/classes/Avatar.class.php';
 
 class Step120Userpic extends Migration {
 
@@ -21,7 +21,7 @@ class Step120Userpic extends Migration {
   function up() {
     foreach (glob($GLOBALS['DYNAMIC_CONTENT_PATH'].'/user/*.jpg') as $value) {
       if (preg_match('/\/([0-9a-f]+).jpg$/', $value, $matches)) {
-        $user_pic = new UserPic($matches[1]);
+        $user_pic = new Avatar($matches[1]);
         $user_pic->createFrom($value);
         unlink($value);
       }

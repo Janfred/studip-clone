@@ -38,7 +38,7 @@
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/ExternModule.class.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/views/extern_html_templates.inc.php');
 require_once('lib/classes/DataFieldEntry.class.php');
-require_once('lib/classes/UserPic.class.php');
+require_once('lib/classes/Avatar.class.php');
 require_once('lib/visual.inc.php');
 require_once('lib/user_visible.inc.php');
 require_once('lib/statusgruppe.inc.php');
@@ -300,8 +300,8 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 			$content['PERSONDETAILS']['STATUSGROUPS'] = ExternModule::ExtHtmlReady(join(', ', array_values($statusgroups)));
 		}
 		$content['PERSONDETAILS']['USERNAME'] = $db->f('username');
-		if (file_exists(UserPic::getFilename($this->user_id, UserPic::NORMAL))) {
-			$content['PERSONDETAILS']['IMAGE-HREF'] = UserPic::getURL($this->user_id, UserPic::NORMAL);
+		if (file_exists(Avatar::getFilename($this->user_id, Avatar::NORMAL))) {
+			$content['PERSONDETAILS']['IMAGE-HREF'] = Avatar::getURL($this->user_id, Avatar::NORMAL);
 		}
 
 		$gruppen = GetStatusgruppen($this->config->range_id, $db->f('user_id'));

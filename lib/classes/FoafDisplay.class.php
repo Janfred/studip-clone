@@ -21,7 +21,7 @@
 
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/visual.inc.php');
-require_once('lib/classes/UserPic.class.php');
+require_once('lib/classes/Avatar.class.php');
 
 /**
 * Calculate and display "Friend of a friend lists"
@@ -198,15 +198,15 @@ class FoafDisplay {
 			$this->db->next_record();
 			$ret["uname"]=$this->db->f("username");
 			$ret["name"]=$this->db->f("fullname");
-			$user_pic = new UserPic($user_id);
+			$user_pic = new Avatar($user_id);
 			$ret["pic"] ="<a href=\"about.php?username=".$ret['uname']."\">";
-			$ret["pic"].= $user_pic->getImageTag(UserPic::MEDIUM);
+			$ret["pic"].= $user_pic->getImageTag(Avatar::MEDIUM);
 			$ret["pic"].= "</a>";
 
 
 			$ret["link"]="<font size=-1><a href=\"about.php?username=".$ret['uname']."\">".htmlReady($ret['name'])."</a></font>";
 		} else {
-			$ret["pic"]="<img border=1 src=\"".UserPic::getURL('nobody', UserPic::NORMAL)."\" width=\"80\" " .tooltip(_("anonyme NutzerIn")).">";
+			$ret["pic"]="<img border=1 src=\"".Avatar::getURL('nobody', Avatar::NORMAL)."\" width=\"80\" " .tooltip(_("anonyme NutzerIn")).">";
 			$ret["link"]=_("<font size=-1>anonyme NutzerIn</font>");
 		}
 		return $ret;

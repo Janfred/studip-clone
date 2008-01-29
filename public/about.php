@@ -47,7 +47,7 @@ require_once('lib/classes/score.class.php');
 require_once('lib/classes/SemesterData.class.php');
 require_once('lib/user_visible.inc.php');
 require_once('lib/classes/StudipLitList.class.php');
-require_once('lib/classes/UserPic.class.php');
+require_once('lib/classes/Avatar.class.php');
 
 
 function prettyViewPermString ($viewPerms) {
@@ -224,8 +224,8 @@ if ($msg)
 
 // hier wird das Bild ausgegeben
 
-$user_pic = new UserPic($user_id);
-echo $user_pic->getImageTag(UserPic::NORMAL, $db->f("fullname"));
+$user_pic = new Avatar($user_id);
+echo $user_pic->getImageTag(Avatar::NORMAL, $db->f("fullname"));
 
 
 

@@ -62,7 +62,7 @@ if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']){
 }
 require_once "lib/log_events.inc.php";	// Event logging
 
-require_once 'lib/classes/UserPic.class.php'; // remove UserPicture
+require_once 'lib/classes/Avatar.class.php'; // remove Avatarture
 
 class UserManagement {
 	var $user_data = array();		// associative array, contains userdata from tables auth_user_md5 and user_info
@@ -810,7 +810,7 @@ class UserManagement {
 		object_kill_views($this->user_data['auth_user_md5.user_id']);
 
 		// delete picture
-		$user_pic = new UserPic($this->user_data["auth_user_md5.user_id"]);
+		$user_pic = new Avatar($this->user_data["auth_user_md5.user_id"]);
 		$user_pic->reset();
 		$this->msg .= "info§" . _("Bild gel&ouml;scht.") . "§";
 
