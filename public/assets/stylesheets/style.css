@@ -29,6 +29,8 @@ A:link.tree {color: #000000; text-decoration: none;font-family: Arial, Helvetica
 A:visited.tree {color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:10pt;}
 A:hover.tree {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-size:10pt;}
 
+A IMG { border: 0; }
+
 .linksdisabled {color: #999999; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:10pt;}
 
 
