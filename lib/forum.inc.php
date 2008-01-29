@@ -1226,9 +1226,8 @@ function printposting ($forumposting) {
 
 			// es werden Porträts angezeigt
 			if ($forum["showimages"] == TRUE) {
-				$avatar = new Avatar($forumposting["userid"]);
 				$addon .= "<br><div align=\"center\">";
-				$addon .= $avatar->getImageTag(Avatar::MEDIUM, $forumposting['author']);
+				$addon .= Avatar::getAvatar($forumposting["userid"])->getImageTag(Avatar::MEDIUM, $forumposting['author']);
 				$addon .= "</div>";
 			}
 

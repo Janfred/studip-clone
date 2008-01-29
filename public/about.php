@@ -221,13 +221,8 @@ if ($msg)
 <tr><td class="steel1" align="center" valign="middle"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=205 height=5><br />
 &nbsp;
 <?
-
 // hier wird das Bild ausgegeben
-
-$avatar = new Avatar($user_id);
-echo $avatar->getImageTag(Avatar::NORMAL, $db->f("fullname"));
-
-
+echo Avatar::getAvatar($user_id)->getImageTag(Avatar::NORMAL, $db->f("fullname"));
 
 // Hier der Teil fuer die Ausgabe der normalen Daten
 ?>

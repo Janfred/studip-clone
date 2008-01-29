@@ -1,9 +1,8 @@
 <?php
 
 /*
- * Avatar.class.php - Avatar class
- *
  * Copyright (C) 2007 - André Klaßen (aklassen@uos.de)
+ * Copyright (C) 2008 - Marcus Lunzenauer (mlunzena@uos)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -13,14 +12,15 @@
 
 
 /**
- * Avatar Class
+ * TODO
  *
  * @package    studip
  * @subpackage lib
  *
  * @author    André Klaßen (aklassen@uos)
+ * @author    Marcus Lunzenauer (mlunzena@uos)
  * @copyright (c) Authors
- * @since     1.6
+ * @since     1.7
  */
 class Avatar {
 
@@ -47,13 +47,25 @@ class Avatar {
 
 
   /**
+   * Returns an avatar object of the appropriate class.
+   *
+   * @param  string  the user's id
+   *
+   * @return mixed   the user's avatar.
+   */
+  static function getAvatar($user_id) {
+    return new Avatar($user_id);
+  }
+
+
+  /**
    * Constructs a new Avatar object belonging to a user with the given id.
    *
    * @param  string  the user's' id
    *
    * @return void
    */
-  function __construct($user_id) {
+  protected function __construct($user_id) {
     $this->user_id = $user_id;
   }
 

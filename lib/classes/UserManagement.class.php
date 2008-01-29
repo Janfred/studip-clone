@@ -810,8 +810,7 @@ class UserManagement {
 		object_kill_views($this->user_data['auth_user_md5.user_id']);
 
 		// delete picture
-		$avatar = new Avatar($this->user_data["auth_user_md5.user_id"]);
-		$avatar->reset();
+		Avatar::getAvatar($this->user_data["auth_user_md5.user_id"])->reset();
 		$this->msg .= "info§" . _("Bild gel&ouml;scht.") . "§";
 
 		// delete ILIAS-Account (if it was automatically generated)

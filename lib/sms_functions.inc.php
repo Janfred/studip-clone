@@ -366,8 +366,7 @@ function print_rec_message($prm) {
 			if ($prm['user_id_snd'] != '____%system%____') {
 				$content = "<table width=\"100%\" cellpadding=0 cellmargin=0><tr><td valign=\"top\" width=\"99%\"><font size=\"-1\">".$content."</font><td>";
 				$content .= "<td align=\"right\" style=\"border-left: 1px dotted black;\">&nbsp;";
-				$avatar = new Avatar($tmp_snd_id);
-				$content .= $avatar->getImageTag(Avatar::MEDIUM);
+				$content .= Avatar::getAvatar($tmp_snd_id)->getImageTag(Avatar::MEDIUM);
 				$content .= "&nbsp;</td></tr></table>";
 			}
 		}

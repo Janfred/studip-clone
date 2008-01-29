@@ -198,9 +198,8 @@ class FoafDisplay {
 			$this->db->next_record();
 			$ret["uname"]=$this->db->f("username");
 			$ret["name"]=$this->db->f("fullname");
-			$avatar = new Avatar($user_id);
 			$ret["pic"] ="<a href=\"about.php?username=".$ret['uname']."\">";
-			$ret["pic"].= $avatar->getImageTag(Avatar::MEDIUM);
+			$ret["pic"].= Avatar::getAvatar($user_id)->getImageTag(Avatar::MEDIUM);
 			$ret["pic"].= "</a>";
 
 
