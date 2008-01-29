@@ -206,7 +206,7 @@ class FoafDisplay {
 
 			$ret["link"]="<font size=-1><a href=\"about.php?username=".$ret['uname']."\">".htmlReady($ret['name'])."</a></font>";
 		} else {
-			$ret["pic"]="<img border=1 src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/nobody.jpg\" width=\"80\" " .tooltip(_("anonyme NutzerIn")).">";
+			$ret["pic"]="<img border=1 src=\"".UserPic::getURL('nobody', UserPic::NORMAL)."\" width=\"80\" " .tooltip(_("anonyme NutzerIn")).">";
 			$ret["link"]=_("<font size=-1>anonyme NutzerIn</font>");
 		}
 		return $ret;

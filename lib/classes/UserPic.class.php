@@ -67,7 +67,7 @@ class UserPic {
    *
    * @return string  the absolute file path to the user's picture
    */
-  private static function getFilename($id, $size, $ext = 'png') {
+  static function getFilename($id, $size, $ext = 'png') {
     return sprintf('%s/user/%s_%s.%s',
       $GLOBALS['DYNAMIC_CONTENT_PATH'], $id, $size, $ext);
   }
@@ -82,7 +82,7 @@ class UserPic {
    *
    * @return string  the URL to the user's picture
    */
-  private static function getURL($id, $size, $ext = 'png') {
+  static function getURL($id, $size, $ext = 'png') {
     return sprintf('%s/user/%s_%s.%s',
       $GLOBALS['DYNAMIC_CONTENT_URL'], $id, $size, $ext);
   }

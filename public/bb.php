@@ -45,7 +45,8 @@ include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 	while ($entry = readdir($folder))
 		{
 		    $i++;
-		    if (($entry != '..') && ($entry != '.') && ($entry != '') && strpos($entry, '.jpg')) {
+		    if (strpos($entry, '_normal.png') !== FALSE &&
+		        $entry !== 'nobody_normal.png') {
 			$file[$i] = array('time' => filemtime($GLOBALS['DYNAMIC_CONTENT_PATH'].'/user/'.$entry), 'file' => $entry);
 		    }
 		}
@@ -55,7 +56,7 @@ include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 	echo '<tr>';
 	for ($i; $i-5 <sizeof($file); $i++)
 		{
-		$usid = substr($file[$i-5]['file'], 0, strrpos($file[$i-5]['file'], '.'));
+		$usid = substr($file[$i-5]['file'], 0, strrpos($file[$i-5]['file'], '_'));
 		$db->query("SELECT username FROM auth_user_md5 WHERE user_id='$usid'");
 		$db->next_record();
 		$usame = $db->f('username');

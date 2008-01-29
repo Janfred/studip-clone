@@ -3,6 +3,7 @@
 require_once('config.inc.php');
 require_once('lib/classes/SemesterData.class.php');
 require_once('lib/classes/DataFieldEntry.class.php');
+require_once('lib/classes/UserPic.class.php');
 require_once('lib/visual.inc.php');
 require_once('lib/statusgruppe.inc.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . '/lib/extern_functions.inc.php');
@@ -178,7 +179,7 @@ function news (&$module, $db, $alias_content, $text_div, $text_div_end) {
 		$subheadline_div = "";
 		$subheadline_div_end = "";
 	}
-	
+
 	$db_news = new DB_Seminar();
 	$query = "SELECT * FROM news_range nr LEFT JOIN news n USING(news_id) WHERE "
 					. "nr.range_id = '" . $db->f("user_id") . "' AND user_id = '" . $db->f("user_id")
@@ -191,7 +192,7 @@ function news (&$module, $db, $alias_content, $text_div, $text_div_end) {
 		echo "<td" . $module->config->getAttributes("TableParagraphHeadline", "td") . ">";
 		echo "<font" . $module->config->getAttributes("TableParagraphHeadline", "font") . ">";
 		echo "$alias_content</font></td></tr>\n";
-	
+
 		while ($db_news->next_record()) {
 			echo "<tr" . $module->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
 			echo "<td" . $module->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
@@ -220,7 +221,7 @@ function termine (&$module, $db, $alias_content, $text_div, $text_div_end) {
 			$subheadline_div = "";
 			$subheadline_div_end = "";
 		}
-	
+
 		$event_list = new DbCalendarEventList($db->f("user_id"));
 		if ($event_list->existEvent()) {
 			echo "<tr><td width=\"100%\">\n";
@@ -229,7 +230,7 @@ function termine (&$module, $db, $alias_content, $text_div, $text_div_end) {
 			echo "<td" . $module->config->getAttributes("TableParagraphHeadline", "td") . ">";
 			echo "<font" . $module->config->getAttributes("TableParagraphHeadline", "font") . ">";
 			echo "$alias_content</font></td></tr>\n";
-			
+
 			while ($event = $event_list->nextEvent()) {
 				echo "<tr" . $module->config->getAttributes("TableParagraphSubHeadline", "tr") . ">";
 				echo "<td" . $module->config->getAttributes("TableParagraphSubHeadline", "td") . ">";
@@ -249,7 +250,7 @@ function termine (&$module, $db, $alias_content, $text_div, $text_div_end) {
 					echo htmlReady($event->getDescription());
 					echo "</font>$text_div_end</td></tr>\n";
 				}
-			} 
+			}
 			echo "</table>\n</td></tr>\n";
 		}
 	}
@@ -259,10 +260,10 @@ function kategorien (&$module, $db, $alias_content, $text_div, $text_div_end) {
 	$db_kategorien = new DB_Seminar();
 	$query = "SELECT * FROM auth_user_md5 aum LEFT JOIN kategorien k ON (k.range_id=user_id) "
 	       ."WHERE username='" . $db->f("username") . "' AND hidden=0";
-	
+
 	$db_kategorien->query($query);
 	while ($db_kategorien->next_record()) {
-		
+
 		echo "<tr><td width=\"100%\">\n";
 		echo "<table" . $module->config->getAttributes("TableParagraph", "table") . ">\n";
 		echo "<tr" . $module->config->getAttributes("TableParagraphHeadline", "tr") . ">";
@@ -275,17 +276,17 @@ function kategorien (&$module, $db, $alias_content, $text_div, $text_div_end) {
 		echo "$text_div<font" . $module->config->getAttributes("TableParagraphText", "font") . ">";
 		echo formatReady($db_kategorien->f("content"), TRUE, TRUE, TRUE);
 		echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
-	} 
+	}
 }
 
 function lehre (&$module, $db, $alias_content, $text_div, $text_div_end) {
-	global $attr_text_td, $end, $start; 
+	global $attr_text_td, $end, $start;
 	$db1 = new DB_Seminar();
 	$semester = new SemesterData();
 	$all_semester = $semester->getAllSemesterData();
 	// old hard coded $SEMESTER-array starts with index 1
 	array_unshift($all_semester, 0);
-	
+
 	if ($margin = $module->config->getValue("TableParagraphSubHeadline", "margin")) {
 		$subheadline_div = "<div style=\"margin-left:$margin;\">";
 		$subheadline_div_end = "</div>";
@@ -302,19 +303,19 @@ function lehre (&$module, $db, $alias_content, $text_div, $text_div_end) {
 		$list_div = "";
 		$list_div_end = "";
 	}
-	
+
 	// sem-types in class 1 (Lehre)
 	foreach ($GLOBALS["SEM_TYPE"] as $key => $type) {
 		if ($type["class"] == 1)
 			$types[] = $key;
 	}
 	$types = implode("','", $types);
-	
+
 	$switch_time = mktime(0, 0, 0, date("m"),
 			date("d") + 7 * $module->config->getValue("PersondetailsLectures", "semswitch"), date("Y"));
 	// get current semester
 	$current_sem = get_sem_num($switch_time) + 1;
-	
+
 	switch ($module->config->getValue("PersondetailsLectures", "semstart")) {
 		case "previous" :
 			if (isset($all_semester[$current_sem - 1]))
@@ -330,13 +331,13 @@ function lehre (&$module, $db, $alias_content, $text_div, $text_div_end) {
 			if (isset($all_semester[$module->config->getValue("PersondetailsLectures", "semstart")]))
 				$current_sem = $module->config->getValue("PersondetailsLectures", "semstart");
 	}
-	
+
 	$last_sem = $current_sem + $module->config->getValue("PersondetailsLectures", "semrange") - 1;
 	if ($last_sem < $current_sem)
 		$last_sem = $current_sem;
 	if (!isset($all_semester[$last_sem]))
 		$last_sem = sizeof($all_semester) - 1;
-	
+
 	$out = "";
 	for (;$current_sem <= $last_sem; $last_sem--) {
 		$query = "SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) "
@@ -345,9 +346,9 @@ function lehre (&$module, $db, $alias_content, $text_div, $text_div_end) {
 			       ."AND start_time <= {$all_semester[$last_sem]['beginn']}) OR (start_time <= {$all_semester[$last_sem]['ende']} "
 						 ."AND duration_time = -1)) AND s.status IN ('$types') AND s.visible = 1 "
 						 ."ORDER BY s.mkdate DESC";
-			
+
 		$db1->query($query);
-			
+
 		if ($db1->num_rows()) {
 			if (!($module->config->getValue("PersondetailsLectures", "semstart") == "current"
 					&& $module->config->getValue("PersondetailsLectures", "semrange") == 1)) {
@@ -366,7 +367,7 @@ function lehre (&$module, $db, $alias_content, $text_div, $text_div_end) {
 				}
 				$out .= "</font>$subheadline_div_end</td></tr>\n";
 			}
-			
+
 			$out .= "<tr" . $module->config->getAttributes("TableParagraphText", "tr") . ">";
 			$out .= "<td" . $module->config->getAttributes("TableParagraphText", "td") . ">";
 
@@ -403,7 +404,7 @@ function lehre (&$module, $db, $alias_content, $text_div, $text_div_end) {
 			$out .= "</td></tr>\n";
 		}
 	}
-	
+
 	if ($out) {
 		$out_title = "<tr><td width=\"100%\">\n";
 		$out_title .= "<table" . $module->config->getAttributes("TableParagraph", "table") . ">\n";
@@ -421,8 +422,8 @@ function head (&$module, $db, $a) {
 
 	// fit size of image
 	if ($pic_max_width && $pic_max_height) {
-		$pic_size = @getimagesize("{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user/" . $db->f("user_id").".jpg");
-	
+		$pic_size = @getimagesize(UserPic::getFilename($db->f("user_id"), UserPic::NORMAL));
+
 		if ($pic_size[0] > $pic_max_width || $pic_size[1] > $pic_max_height) {
 			$fak_width = $pic_size[0] / $pic_max_width;
 			$fak_height = $pic_size[1] / $pic_max_height;
@@ -445,16 +446,16 @@ function head (&$module, $db, $a) {
 
 	$module->config->config["PersondetailsHeader"]["img_width"] = $pic_max_width;
 	$module->config->config["PersondetailsHeader"]["img_height"] = $pic_max_height;
-	
+
 	if ($module->config->getValue("Main", "showcontact")
 			&& $module->config->getValue("Main", "showimage"))
 		$colspan = " colspan=\"2\"";
 	else
 		$colspan = "";
-	
+
 	echo "<tr><td width=\"100%\">\n";
 	echo "<table" . $module->config->getAttributes("PersondetailsHeader", "table") . ">\n";
-	
+
 	// display name as headline
 	if (!$module->config->getValue('PersondetailsHeader', 'hidename')) {
 		echo "<tr" . $module->config->getAttributes("PersondetailsHeader", "tr") . ">";
@@ -464,7 +465,7 @@ function head (&$module, $db, $a) {
 		echo htmlReady($db->f("fullname"), TRUE);
 		echo "</font></td></tr>\n";
 	}
-	
+
 	if ($module->config->getValue("Main", "showimage")
 			|| $module->config->getValue("Main", "showcontact")) {
 		echo "<tr>";
@@ -474,24 +475,25 @@ function head (&$module, $db, $a) {
 				echo "<td" . $module->config->getAttributes("PersondetailsHeader", "contacttd") . ">";
 				echo kontakt($module, $db) . "</td>\n";
 		}
-		
+
 		if ($module->config->getValue("Main", "showimage")) {
 			echo "<td" . $module->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
-			if (file_exists("{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user/" . $db->f("user_id").".jpg")) {
-				echo "<img src=\"{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/";
-				echo $db->f("user_id") . ".jpg\" alt=\"Foto " . htmlReady(trim($db->f("fullname"))) . "\"";
+			$user_pic = new UserPic($db->f("user_id"));
+			if ($user_pic->is_customized()) {
+				echo "<img src=\"".UserPic::getURL($db->f("user_id"), UserPic::NORMAL) .
+				     "\" alt=\"Foto " . htmlReady(trim($db->f("fullname"))) . "\"";
 				echo $module->config->getAttributes("PersondetailsHeader", "img") . "></td>";
 			}
 			else
 				echo "&nbsp;</td>";
 		}
-		
+
 		if ($module->config->getValue("Main", "showcontact")
 				&& $module->config->getValue("Main", "showimage") == "left") {
 			echo "<td" . $module->config->getAttributes("PersondetailsHeader", "contacttd") . ">";
 			echo kontakt($module, $db) . "</td>\n";
 		}
-		
+
 		echo "</tr>\n";
 		if ($module->config->getValue('Main', 'showcontact')
 				&& $module->config->getValue('Contact', 'separatelinks')) {
@@ -503,7 +505,7 @@ function head (&$module, $db, $a) {
 			echo "</td></tr>\n";
 		}
 	}
-	
+
 	echo  "</table>\n</td></tr>\n";
 }
 
@@ -513,7 +515,7 @@ function kontakt ($module, $db, $separate = FALSE) {
 	$attr_td = $module->config->getAttributes("Contact", "td");
 	$attr_fonttitle = $module->config->getAttributes("Contact", "fonttitle");
 	$attr_fontcontent = $module->config->getAttributes("Contact", "fontcontent");
-	
+
 	$out = "<table$attr_table>\n";
 	if (!$separate) {
 		$out .= "<tr$attr_tr>";
@@ -523,9 +525,9 @@ function kontakt ($module, $db, $separate = FALSE) {
 			$out .= "$headline</font>\n";
 		else
 			$out .= "</font>\n";
-		
+
 		$out .= "<font$attr_fontcontent>";
-		
+
 		if (!$module->config->getValue("Contact", "hidepersname"))
 			$out .= "<br><br>" . htmlReady($db->f("fullname"), TRUE) . "\n";
 		if ($module->config->getValue('Contact', 'showinstgroup')) {
@@ -549,7 +551,7 @@ function kontakt ($module, $db, $separate = FALSE) {
 			if ($module->config->getValue("Contact", "adradd"))
 				$out .= "<br>" . $module->config->getValue("Contact", "adradd");
 		}
-		
+
 		$out .= "<br>";
 		if ($db->f("Strasse")) {
 			$out .= "<br>" . htmlReady($db->f("Strasse"), TRUE);
@@ -604,7 +606,7 @@ function kontakt ($module, $db, $separate = FALSE) {
 			$out .= "</font></td></tr>\n";
 	}
 	$out .= "</table>\n";
-	
+
 	return $out;
 }
 
@@ -617,7 +619,7 @@ function literature (&$module, $content, $alias_content, $text_div, $text_div_en
 		echo "<td" . $module->config->getAttributes("TableParagraphHeadline", "td") . ">";
 		echo "<font" . $module->config->getAttributes("TableParagraphHeadline", "font") . ">";
 		echo "$alias_content</font></td></tr>\n";
-		
+
 		$tmpl = "\n<!-- BEGIN LITLIST -->\n   ";
 		$tmpl .= '<tr' . $module->config->getAttributes('TableParagraphSubHeadline', 'tr') . '>';
 		$tmpl .= '<td' . $module->config->getAttributes('TableParagraphSubHeadline', 'td') . '>';
@@ -633,9 +635,9 @@ function literature (&$module, $content, $alias_content, $text_div, $text_div_en
 		$tmpl .=		"</font>$text_div_end</td></tr>\n";
 		$tmpl .= "\n   <!-- END LITLIST_ITEM -->\n   ";
 		$tmpl .= "\n  <!-- END LITLIST -->\n";
-		
+
 		echo $module->elements['LitList']->renderTmpl($tmpl);
-		
+
 		echo "</table>\n</td></tr>\n";
 	}
 }

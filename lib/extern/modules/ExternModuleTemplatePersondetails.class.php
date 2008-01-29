@@ -1,9 +1,9 @@
 <?
 /**
 * ExternModuleTemplatePersondetails.class.php
-* 
-* 
-* 
+*
+*
+*
 *
 * @author		Peter Thienel <thienel@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version	$Id: ExternModuleTemplatePersondetails.class.php 6854 2006-10-18 16:04:09Z pthiene $
@@ -16,7 +16,7 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // ExternModuleTemplatePersondetails.class.php
-// 
+//
 // Copyright (C) 2007 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
@@ -38,6 +38,7 @@
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/ExternModule.class.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/views/extern_html_templates.inc.php');
 require_once('lib/classes/DataFieldEntry.class.php');
+require_once('lib/classes/UserPic.class.php');
 require_once('lib/visual.inc.php');
 require_once('lib/user_visible.inc.php');
 require_once('lib/statusgruppe.inc.php');
@@ -55,7 +56,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 
 	var $markers = array();
 	var $user_id;
-	
+
 	/**
 	*
 	*/
@@ -87,17 +88,17 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 		$this->field_names = array();
 		$this->args = array('username', 'seminar_id');
-		
+
 		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
-		
+
 	}
-	
+
 	function setup () {
-		
+
 		// setup module properties
 	//	$this->elements["LinkIntern"]->link_module_type = 2;
 	//	$this->elements["LinkIntern"]->real_name = _("Link zum Modul MitarbeiterInnendetails");
-		
+
 		$this->elements['LinkInternLecturedetails']->real_name = _("Link zum Modul Veranstaltungsdetails");
 		$this->elements['LinkInternLecturedetails']->link_module_type = array(4, 13);
 		$this->elements['PersondetailsLectures']->real_name = _("Einstellungen für Lehrveranstaltungen");
@@ -110,12 +111,12 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 		$this->elements['TemplateLitList']->real_name = _("Template für Literaturlisten");
 		$this->elements['TemplateOwnCategories']->real_name = _("Template für eigene Kategorien");
-	
+
 	}
-	
+
 	function toStringEdit ($open_elements = '', $post_vars = '',
 			$faulty_values = '', $anker = '') {
-		
+
 		$this->updateGenericDatafields('TemplateMain', 'user');
 		$this->elements['TemplateMain']->markers = $this->getMarkerDescription('TemplateMain');
 		$this->elements['TemplateLectures']->markers = $this->getMarkerDescription('TemplateLectures');
@@ -125,15 +126,15 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 		$this->elements['TemplateNews']->markers = $this->getMarkerDescription('TemplateNews');
 		$this->elements['TemplateOwnCategories']->markers = $this->getMarkerDescription('TemplateOwnCategories');
-		
+
 		return parent::toStringEdit($open_elements, $post_vars, $faulty_values, $anker);
-		
+
 	}
-	
+
 	function getMarkerDescription ($element_name) {
 		$markers['TemplateMain'][] = array('__GLOBAL__', _("Globale Variablen (gültig im gesamten Template)."));
 		$markers['TemplateMain'][] = array('###STUDIP-EDIT-HREF###', '');
-		
+
 		$markers['TemplateMain'][] = array('<!-- BEGIN PERSONDETAILS -->', '');
 		$markers['TemplateMain'][] = array('###FULLNAME###', '');
 		$markers['TemplateMain'][] = array('###LASTNAME###', '');
@@ -164,7 +165,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$markers['TemplateMain'][] = array('###APPOINTMENTS###', _("Inhalt aus dem Template für Termine"));
 		$markers['TemplateMain'][] = array('###OWNCATEGORIES###', _("Inhalt aus dem Template für eigene Kategorien"));
 		$markers['TemplateMain'][] = array('<!-- END PERSONDETAILS -->', '');
-		
+
 		$markers['TemplateLectures'][] = array('<!-- BEGIN LECTURES -->', '');
 		$markers['TemplateLectures'][] = array('<!-- BEGIN SEMESTER -->', '');
 		$markers['TemplateLectures'][] = array('###NAME###', '');
@@ -175,7 +176,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$markers['TemplateLectures'][] = array('<!-- END LECTURE -->', '');
 		$markers['TemplateLectures'][] = array('<!-- END SEMESTER -->', '');
 		$markers['TemplateLectures'][] = array('<!-- END LECTURES -->', '');
-		
+
 		$markers['TemplateNews'][] = array('<!-- BEGIN NEWS -->', '');
 		$markers['TemplateNews'][] = array('<!-- BEGIN NO-NEWS -->', '');
 		$markers['TemplateNews'][] = array('###NEWS_NO-NEWS-TEXT###', '');
@@ -190,7 +191,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$markers['TemplateNews'][] = array('<!-- END SINGLE-NEWS -->', '');
 		$markers['TemplateNews'][] = array('<!-- END ALL-NEWS -->', '');
 		$markers['TemplateNews'][] = array('<!-- END NEWS -->', '');
-		
+
 		if ($GLOBALS['CALENDAR_ENABLE']) {
 			$markers['TemplateAppointments'][] = array('<!-- BEGIN APPOINTMENTS -->', '');
 			$markers['TemplateAppointments'][] = array('###LIST-START###', _("Startdatum der Terminliste"));
@@ -213,9 +214,9 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 			$markers['TemplateAppointments'][] = array('<!-- END ALL-APPOINTMENTS -->', '');
 			$markers['TemplateAppointments'][] = array('<!-- END APPOINTMENTS -->', '');
 		}
-		
+
 		$markers['TemplateLitList'] = $this->elements['LitList']->getMarkerDescription('LitList');
-		
+
 		$markers['TemplateOwnCategories'][] = array('<!-- BEGIN OWNCATEGORIES -->', '');
 		$markers['TemplateOwnCategories'][] = array('<!-- BEGIN OWNCATEGORY -->', '');
 		$markers['TemplateOwnCategories'][] = array('###OWNCATEGORY_TITLE###', '');
@@ -223,19 +224,19 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$markers['TemplateOwnCategories'][] = array('###OWNCATEGORY_NO###', _("Laufende Nummer"));
 		$markers['TemplateOwnCategories'][] = array('<!-- END OWNCATEGORY -->', '');
 		$markers['TemplateOwnCategories'][] = array('<!-- END OWNCATEGORIES -->', '');
-		
+
 		return $markers[$element_name];
 	}
-	
+
 	function checkRangeId ($range_id) {
 		$range = get_object_type($range_id);
-		
+
 		if ($range == "inst" || $range == "fak")
 			return TRUE;
-			
+
 		return FALSE;
 	}
-	
+
 	function getContent ($args = NULL, $raw = FALSE) {
 		$instituts_id = $this->config->range_id;
 		$username = $args['username'];
@@ -249,7 +250,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 
 		$query_user_data = "SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, {$GLOBALS['_fullname_sql'][$nameformat]} AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home, uin.title_front, uin.title_rear FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info uin USING (user_id) WHERE";
-		
+
 		// Mitarbeiter/in am Institut
 		$db_inst->query("SELECT i.Institut_id FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) WHERE i.Institut_id = '$instituts_id' AND aum.username = '$username'");
 
@@ -268,7 +269,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 				$instituts_id = $db_inst->f('institut_id');
 			}
 		}
-		
+
 		// ist zwar global Dozent, aber an keinem Institut eingetragen
 		if (!$db_inst->num_rows() && $sem_id) {
 			$query = "SELECT aum.*, {$GLOBALS['_fullname_sql'][$nameformat]} AS fullname,  FROM auth_user_md5 aum LEFT JOIN user_info USING(user_id) WHERE username = '$username' AND perms = 'dozent'";
@@ -285,11 +286,11 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		if (!$db->next_record()) {
 			die;
 		}
-		
+
 		$this->user_id = $db->f('user_id');
-		
+
 		$content['__GLOBAL__']['STUDIP-EDIT-HREF'] = "{$GLOBALS['ABSOLUTE_URI_STUDIP']}edit_about.php?login=yes&view=Daten&usr_name=$username";
-		
+
 		$content['PERSONDETAILS']['FULLNAME'] = ExternModule::ExtHtmlReady($db->f('fullname'));
 		$content['PERSONDETAILS']['LASTNAME'] = ExternModule::ExtHtmlReady($db->f('Nachname'));
 		$content['PERSONDETAILS']['FIRSTNAME'] = ExternModule::ExtHtmlReady($db->f('Vorname'));
@@ -299,15 +300,15 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 			$content['PERSONDETAILS']['STATUSGROUPS'] = ExternModule::ExtHtmlReady(join(', ', array_values($statusgroups)));
 		}
 		$content['PERSONDETAILS']['USERNAME'] = $db->f('username');
-		if (file_exists("{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user/{$this->user_id}.jpg")) {
-			$content['PERSONDETAILS']['IMAGE-HREF'] = "{$GLOBALS['DYNAMIC_CONTENT_URL']}/user/{$this->user_id}.jpg";
+		if (file_exists(UserPic::getFilename($this->user_id, UserPic::NORMAL))) {
+			$content['PERSONDETAILS']['IMAGE-HREF'] = UserPic::getURL($this->user_id, UserPic::NORMAL);
 		}
-		
+
 		$gruppen = GetStatusgruppen($this->config->range_id, $db->f('user_id'));
 		for ($i = 0; $i < sizeof($gruppen); $i++) {
 			$content['PERSONDETAILS']['GROUPS'][$i]['GROUP'] = ExternModule::ExtHtmlReady($gruppen[$i]);
 		}
-		
+
 		$content['PERSONDETAILS']['INST-NAME'] = ExternModule::ExtHtmlReady($db->f('Name'));
 		$content['PERSONDETAILS']['INST-HREF'] = ExternModule::ExtHtmlReady(trim($db->f('url')));
 		$content['PERSONDETAILS']['STREET'] = ExternModule::ExtHtmlReady($db->f('Strasse'));
@@ -318,7 +319,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$content['PERSONDETAILS']['FAX'] = ExternModule::ExtHtmlReady($db->f('Fax'));
 		$content['PERSONDETAILS']['HOMEPAGE-HREF'] = ExternModule::ExtHtmlReady(trim($db->f('Home')));
 		$content['PERSONDETAILS']['OFFICE-HOURS'] = ExternModule::ExtHtmlReady($db->f('sprechzeiten'));
-		
+
 		// generic data fields
 		if ($generic_datafields = $this->config->getValue('Main', 'genericdatafields')) {
 			#$datafields_obj =& new DataFields($user_id);
@@ -335,11 +336,11 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 				$k++;
 			}
 		}
-		
+
 		$content['PERSONDETAILS']['CV'] = ExternModule::ExtFormatReady($db->f('lebenslauf'), TRUE, TRUE);
 		$content['PERSONDETAILS']['RESEARCH-INTERESTS'] = ExternModule::ExtFormatReady($db->f('schwerp'), TRUE, TRUE);
 		$content['PERSONDETAILS']['PUBLICATIONS'] = ExternModule::ExtFormatReady($db->f('publi'), TRUE, TRUE);
-		
+
 		$content['PERSONDETAILS']['LECTURES'] = $this->elements['TemplateLectures']->toString(array('content' => $this->getContentLectures(), 'subpart' => 'LECTURES'));
 		$content['PERSONDETAILS']['NEWS'] = $this->elements['TemplateNews']->toString(array('content' => $this->getContentNews(), 'subpart' => 'NEWS'));
 		if ($GLOBALS['CALENDAR_ENABLE']) {
@@ -347,10 +348,10 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 		$content['PERSONDETAILS']['LITERATURE'] = $this->elements['TemplateLitList']->toString(array('content' => $this->elements['LitList']->getContent(array('user_id' => $this->user_id)), 'subpart' => 'LITLISTS'));
 		$content['PERSONDETAILS']['OWNCATEGORIES'] = $this->elements['TemplateOwnCategories']->toString(array('content' => $this->getContentOwnCategories(), 'subpart' => 'OWNCATEGORIES'));
-		
+
 		return $content;
 	}
-	
+
 	function getContentOwnCategories () {
 		$db =& new DB_Seminar();
 		$db->query("SELECT * FROM kategorien WHERE range_id = '{$this->user_id}' ORDER BY priority");
@@ -363,9 +364,9 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 		return $content;
 	}
-	
+
 	function getContentNews () {
-	
+
 		$news =& StudipNews::GetNewsByRange($this->user_id, TRUE);
 		if (!count($news)) {
 			$content['NEWS']['NO-NEWS']['NEWS_NO-NEWS-TEXT'] = $this->config->getValue('Main', 'nodatatext');
@@ -387,7 +388,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 		return $content;
 	}
-	
+
 	function getContentAppointments () {
 		if ($GLOBALS['CALENDAR_ENABLE']) {
 			$event_list = new DbCalendarEventList($this->user_id);
@@ -423,26 +424,26 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 		return NULL;
 	}
-	
+
 	function getContentLectures () {
-		global $attr_text_td, $end, $start; 
+		global $attr_text_td, $end, $start;
 		$db1 = new DB_Seminar();
 		$semester = new SemesterData();
 		$all_semester = $semester->getAllSemesterData();
 		// old hard coded $SEMESTER-array starts with index 1
 		array_unshift($all_semester, 0);
-	
+
 		// sem-types in class 1 (Lehre)
 		foreach ($GLOBALS["SEM_TYPE"] as $key => $type) {
 			if ($type["class"] == 1)
 				$types[] = $key;
 		}
 		$types = implode("','", $types);
-	
+
 		$switch_time = mktime(0, 0, 0, date("m"), date("d") + 7 * $this->config->getValue("PersondetailsLectures", "semswitch"), date("Y"));
 		// get current semester
 		$current_sem = get_sem_num($switch_time) + 1;
-	
+
 		switch ($this->config->getValue("PersondetailsLectures", "semstart")) {
 			case "previous" :
 				if (isset($all_semester[$current_sem - 1])) {
@@ -461,7 +462,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 					$current_sem = $this->config->getValue("PersondetailsLectures", "semstart");
 				}
 		}
-	
+
 		$last_sem = $current_sem + $this->config->getValue("PersondetailsLectures", "semrange") - 1;
 		if ($last_sem < $current_sem) {
 			$last_sem = $current_sem;
@@ -472,9 +473,9 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$i = 0;
 		for (;$current_sem <= $last_sem; $last_sem--) {
 			$query = "SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) WHERE user_id='{$this->user_id}' AND su.status LIKE 'dozent' AND ((start_time >= {$all_semester[$last_sem]['beginn']} AND start_time <= {$all_semester[$last_sem]['beginn']}) OR (start_time <= {$all_semester[$last_sem]['ende']} AND duration_time = -1)) AND s.status IN ('$types') AND s.visible = 1 ORDER BY s.mkdate DESC";
-			
+
 			$db1->query($query);
-			
+
 			if ($db1->num_rows()) {
 				if (!($this->config->getValue('PersondetailsLectures', 'semstart') == 'current' && $this->config->getValue('PersondetailsLectures', 'semrange') == 1)) {
 					$month = date('n', $all_semester[$last_sem]['beginn']);
@@ -485,7 +486,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 					}
 				}
 				$k = 0;
-				while ($db1->next_record()) {	
+				while ($db1->next_record()) {
 					$content['LECTURES']['SEMESTER'][$i]['LECTURE'][$k]['TITLE'] = ExternModule::ExtHtmlReady($db1->f('Name'));
 					$content['LECTURES']['SEMESTER'][$i]['LECTURE'][$k]['LECTUREDETAILS-HREF'] = $this->elements['LinkInternLecturedetails']->createUrl(array('link_args' => 'seminar_id=' . $db1->f('Seminar_id')));
 					if ($db1->f("Untertitel") != '') {
@@ -498,25 +499,25 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 		return $content;
 	}
-	
+
 	function printout ($args) {
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
 		init_i18n($language);
-		
+
 		echo $this->elements['TemplateMain']->toString(array('content' => $this->getContent($args), 'subpart' => 'PERSONDETAILS'));
-		
+
 	}
-	
+
 	function printoutPreview () {
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
 		init_i18n($language);
-		
+
 		echo $this->elements['TemplateMain']->toString(array('content' => $this->getContent(), 'subpart' => 'PERSONDETAILS', 'hide_markers' => FALSE));
-		
+
 	}
-	
+
 }
 
 ?>
