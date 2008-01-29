@@ -109,7 +109,7 @@ class Avatar {
    */
   function getImageTag($size = Avatar::MEDIUM, $tooltip = '') {
 
-    // check wether userpic is avaible if not use corresponding nobody pic
+    // check wether avatar is avaible if not use corresponding nobody pic
     $filename = $this->is_customized()
       ? self::getURL($this->user_id, $size)
       : self::getURL('nobody', $size);

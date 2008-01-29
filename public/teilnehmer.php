@@ -1348,7 +1348,10 @@ while (list ($key, $val) = each ($gruppe)) {
 
 				<? if ($show_user_picture) : ?>
 					<td>
-						<img src="<?= get_user_pic_url($db->f('user_id')) ?>" border="0" width="80">
+						<?
+							$user_pic = new Avatar($db->f('user_id'));
+							echo $user_pic->getImageTag(Avatar::MEDIUM);
+						?>
 					</td>
 				<? endif ?>
 

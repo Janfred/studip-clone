@@ -644,22 +644,6 @@ function get_userid($username="") {
 
 
 /**
- * This function returns the URL of a user's picture. If that user did not
- * upload a custom one, an anonymous picture is used.
- *
- * @param  string  the user's id
- *
- * @return string  an URL to the user's picture
- *
- */
-function get_user_pic_url($id) {
-  return file_exists($GLOBALS['DYNAMIC_CONTENT_PATH'].'/user/'.$id.'.jpg')
-         ? $GLOBALS['DYNAMIC_CONTENT_URL'].'/user/'.$id.'.jpg'
-         : $GLOBALS['DYNAMIC_CONTENT_URL'].'/user/nobody.jpg';
-}
-
-
-/**
 * This function tracks user acces to several Data (only dokuments by now, to be extended)
 *
 *
