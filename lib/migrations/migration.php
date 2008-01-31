@@ -119,6 +119,6 @@ class Migration {
     $message = vsprintf(array_shift($args), $args);
     $text = sprintf('== %s: %s ', get_class($this), $message);
 
-    return $this->write($text . str_repeat('=', 79 - strlen($text)));
+    return $this->write($text . ((strlen($text)) < 79 ? str_repeat('=', 79 - strlen($text)) : ''));
   }
 }
