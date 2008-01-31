@@ -422,7 +422,7 @@ function head (&$module, $db, $a) {
 
 	// fit size of image
 	if ($pic_max_width && $pic_max_height) {
-		$pic_size = @getimagesize(Avatar::getFilename($db->f("user_id"), Avatar::NORMAL));
+		$pic_size = @getimagesize(Avatar::getAvatar($db->f("user_id"))->getFilename(Avatar::NORMAL));
 
 		if ($pic_size[0] > $pic_max_width || $pic_size[1] > $pic_max_height) {
 			$fak_width = $pic_size[0] / $pic_max_width;
@@ -478,8 +478,9 @@ function head (&$module, $db, $a) {
 
 		if ($module->config->getValue("Main", "showimage")) {
 			echo "<td" . $module->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
-			if (Avatar::getAvatar($db->f("user_id"))->is_customized()) {
-				echo "<img src=\"".Avatar::getURL($db->f("user_id"), Avatar::NORMAL) .
+			$avatar = Avatar::getAvatar($db->f("user_id"));
+			if ($avatar->is_customized()) {
+				echo "<img src=\"".$avatar->getURL(Avatar::NORMAL) .
 				     "\" alt=\"Foto " . htmlReady(trim($db->f("fullname"))) . "\"";
 				echo $module->config->getAttributes("PersondetailsHeader", "img") . "></td>";
 			}

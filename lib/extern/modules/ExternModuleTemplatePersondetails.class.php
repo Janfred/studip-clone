@@ -300,8 +300,9 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 			$content['PERSONDETAILS']['STATUSGROUPS'] = ExternModule::ExtHtmlReady(join(', ', array_values($statusgroups)));
 		}
 		$content['PERSONDETAILS']['USERNAME'] = $db->f('username');
-		if (file_exists(Avatar::getFilename($this->user_id, Avatar::NORMAL))) {
-			$content['PERSONDETAILS']['IMAGE-HREF'] = Avatar::getURL($this->user_id, Avatar::NORMAL);
+		$avatar = Avatar::getAvatar($this->user_id);
+		if ($avatar->is_customized()) {
+			$content['PERSONDETAILS']['IMAGE-HREF'] = $avatar->getURL(Avatar::NORMAL);
 		}
 
 		$gruppen = GetStatusgruppen($this->config->range_id, $db->f('user_id'));

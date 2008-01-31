@@ -47,6 +47,15 @@ class Avatar {
 
 
   /**
+   * Holds the user's id
+   *
+   * @access protected
+   * @var string
+   */
+  protected $user_id;
+
+
+  /**
    * Returns an avatar object of the appropriate class.
    *
    * @param  string  the user's id
@@ -55,6 +64,34 @@ class Avatar {
    */
   static function getAvatar($user_id) {
     return new Avatar($user_id);
+  }
+
+
+  static function getCustomAvatarUrl($user_id, $size, $ext = 'png') {
+    return sprintf('%s/user/%s_%s.%s',
+                   $GLOBALS['DYNAMIC_CONTENT_URL'],
+                   $user_id,
+                   $size,
+                   $ext);
+  }
+
+
+  static function getCustomAvatarPath($user_id, $size, $ext = 'png') {
+    return sprintf('%s/user/%s_%s.%s',
+                   $GLOBALS['DYNAMIC_CONTENT_PATH'],
+                   $user_id,
+                   $size,
+                   $ext);
+  }
+
+
+  static function getNobodyAvatarUrl($size, $ext = 'png') {
+    return self::getCustomAvatarUrl('nobody', $size, $ext);
+  }
+
+
+  static function getNobodyAvatarPath($size, $ext = 'png') {
+    return self::getCustomAvatarPath('nobody', $size, $ext);
   }
 
 
@@ -71,32 +108,33 @@ class Avatar {
 
 
   /**
-   * Returns the file name of a user's picture.
+   * Returns the file name of a user's avatar.
    *
-   * @param  string  the user's id
    * @param  string  one of the constants Avatar::(NORMAL|MEDIUM|SMALL)
-   * @param  string  an optional extension of the user's picture
+   * @param  string  an optional extension of the avatar
    *
-   * @return string  the absolute file path to the user's picture
+   * @return string  the absolute file path to the avatar
    */
-  static function getFilename($id, $size, $ext = 'png') {
-    return sprintf('%s/user/%s_%s.%s',
-      $GLOBALS['DYNAMIC_CONTENT_PATH'], $id, $size, $ext);
+  function getFilename($size, $ext = 'png') {
+    return $this->is_customized
+      ? self::getCustomAvatarPath($this->user_id, $size, $ext)
+      : self::getNobodyAvatarPath($this->user_id, $size, $ext);
   }
 
 
   /**
    * Returns the URL of a user's picture.
    *
-   * @param  string  the user's id
    * @param  string  one of the constants Avatar::(NORMAL|MEDIUM|SMALL)
    * @param  string  an optional extension of the user's picture
    *
    * @return string  the URL to the user's picture
    */
-  static function getURL($id, $size, $ext = 'png') {
-    return sprintf('%s/user/%s_%s.%s',
-      $GLOBALS['DYNAMIC_CONTENT_URL'], $id, $size, $ext);
+  # TODO (mlunzena) in Url umbenennen
+  function getURL($size, $ext = 'png') {
+    return $this->is_customized
+      ? self::getCustomAvatarUrl($this->user_id, $size, $ext)
+      : self::getNobodyAvatarUrl($this->user_id, $size, $ext);
   }
 
 
@@ -120,14 +158,9 @@ class Avatar {
    * @return string returns the HTML image tag
    */
   function getImageTag($size = Avatar::MEDIUM, $tooltip = '') {
-
-    // check wether avatar is avaible if not use corresponding nobody pic
-    $filename = $this->is_customized()
-      ? self::getURL($this->user_id, $size)
-      : self::getURL('nobody', $size);
-
     return sprintf('<img src="%s" %s align="middle" />',
-      $filename, tooltip($tooltip));
+                   $this->getURL($size),
+                   tooltip($tooltip));
   }
 
 
@@ -168,7 +201,7 @@ class Avatar {
 
     // na dann kopieren wir mal...
     $filename = sprintf('%s/user/$s.%s',
-      $GLOBALS['DYNAMIC_CONTENT_PATH'], $this->user_id, $ext);
+                        $GLOBALS['DYNAMIC_CONTENT_PATH'], $this->user_id, $ext);
 
     if (!@move_uploaded_file($_FILES[$userfile]['tmp_name'], $filename)) {
       throw new Exception(_("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!"));
@@ -206,9 +239,9 @@ class Avatar {
    * @return void
    */
   function reset() {
-    @unlink(self::getFilename($this->user_id, Avatar::NORMAL));
-    @unlink(self::getFilename($this->user_id, Avatar::MEDIUM));
-    @unlink(self::getFilename($this->user_id, Avatar::SMALL));
+    @unlink($this->getFilename(Avatar::NORMAL));
+    @unlink($this->getFilename(Avatar::MEDIUM));
+    @unlink($this->getFilename(Avatar::SMALL));
   }
 
 
@@ -220,7 +253,7 @@ class Avatar {
    *
    * @return void
    */
-  function resize($size, $filename) {
+  private function resize($size, $filename) {
 
     $sizes = array();
     $sizes[Avatar::NORMAL] = array(200, 250);
@@ -267,7 +300,7 @@ class Avatar {
 
     imagecopy($i, $image, $xpos, $ypos, 0, 0, $resized_width, $resized_height);
 
-    imagepng($i, self::getFilename($this->user_id, $size));
+    imagepng($i, $this->getFilename($size));
   }
 
 
