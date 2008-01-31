@@ -116,7 +116,7 @@ class Avatar {
    * @return string  the absolute file path to the avatar
    */
   function getFilename($size, $ext = 'png') {
-    return $this->is_customized
+    return $this->is_customized()
       ? self::getCustomAvatarPath($this->user_id, $size, $ext)
       : self::getNobodyAvatarPath($size, $ext);
   }
@@ -132,7 +132,7 @@ class Avatar {
    */
   # TODO (mlunzena) in Url umbenennen
   function getURL($size, $ext = 'png') {
-    return $this->is_customized
+    return $this->is_customized()
       ? self::getCustomAvatarUrl($this->user_id, $size, $ext)
       : self::getNobodyAvatarUrl($size, $ext);
   }
@@ -145,7 +145,8 @@ class Avatar {
    *                  otherwise.
    */
   function is_customized() {
-    return file_exists(self::getFilename($this->user_id, Avatar::MEDIUM));
+    return file_exists(self::getCustomAvatarPath($this->user_id,
+                                                 Avatar::MEDIUM));
   }
 
 
