@@ -215,7 +215,7 @@ if (isset($seminar_id) && !$perm->have_perm("admin") && $SEMINAR_LOCK_ENABLE) {
 // end new stuff	
 
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
-if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg) && (!$adm_gesperrt_x)) {
+if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg) && (!$adm_gesperrt_x) && !$toggle_admission_quota_x) {
 	$db->query("SELECT * FROM seminare WHERE Seminar_id = '$seminar_id' ");
 	$db->next_record();
 	$admin_admission_data='';
@@ -242,16 +242,16 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$admin_admission_data["sem_admission_end_date"]=$db->f("admission_endtime_sem");
 	$admin_admission_data["admission_disable_waitlist"] = $db->f("admission_disable_waitlist");
 	$admin_admission_data["admission_disable_waitlist_org"] = $db->f("admission_disable_waitlist");
+	$admin_admission_data["admission_enable_quota"] = $db->f("admission_enable_quota");
+	$admin_admission_data["admission_enable_quota_org"]= $db->f("admission_enable_quota_org");
 	if ($admin_admission_data["admission_endtime"] <= 0){
 		$admin_admission_data["admission_endtime"] = veranstaltung_beginn($seminar_id, 'int');
 		if(!$admin_admission_data["admission_endtime"]) $admin_admission_data["admission_endtime"] = -1;
 	}
-	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id'");
+	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id' ORDER BY (studiengang_id='all'),name");
 	while ($db->next_record()) {
-		if ($db->f("studiengang_id") == "all")
-			$admin_admission_data["all_ratio"] = $db->f("quota");
-		else
-			$admin_admission_data["studg"][$db->f("studiengang_id")] = array("name"=>$db->f("name"), "ratio"=>$db->f("quota"));
+		$name = $db->f("studiengang_id") == 'all' ? _("Alle Studiengänge") : $db->f("name");
+		$admin_admission_data["studg"][$db->f("studiengang_id")] = array("name"=>$name, "ratio"=>$db->f("quota"));
 	}
 	$admin_admission_data["original"]=get_snapshot();
 	if($reset_admission_time_x){
@@ -287,18 +287,20 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		if ($is_grouped){
 			$errormsg = $errormsg."error§"._("Gruppierte Veranstaltungen m&uuml;ssen ein einheitliches Anmeldeverfahren haben! Bei gruppierten Veranstaltungen können Sie das Anmeldeverfahren an dieser Stelle nicht mehr ändern.")."§";
 		} else {
+			$admin_admission_data["sem_admission_end_date"]=-1;
+			$admin_admission_data["sem_admission_start_date"]=-1;
+			$admin_admission_data["admission_endtime"]=-1;
+			$admin_admission_data["admission_selection_take_place"] = 0;
 			if($adm_null_x){
 				$admin_admission_data["admission_type"]=0;
-				$admin_admission_data["sem_admission_end_date"]=-1;
-				$admin_admission_data["sem_admission_start_date"]=-1;
-				$admin_admission_data["admission_endtime"]=-1;
-				$admin_admission_data["admission_selection_take_place"] = 0;
 			}
 			if ($adm_los_x){
 				$admin_admission_data["admission_type"]=1;
+				$admin_admission_data["studg"]['all']= array('name' => _("Alle Studiengänge"), 'ratio' => 100);
 			}
 			if ($adm_chrono_x){
 				$admin_admission_data["admission_type"]=2;
+				$admin_admission_data["studg"]['all']= array('name' => _("Alle Studiengänge"), 'ratio' => 100);
 			}
 			if ($adm_gesperrt_x){
                 $admin_admission_data["admission_type"] = 3;
@@ -320,7 +322,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
   }
 
 	if(isset($_REQUEST['uebernehmen_x']) && isset($_REQUEST["admission_waitlist"])) $admin_admission_data["admission_disable_waitlist"] = (int)(!$_REQUEST["admission_waitlist"]);
-	
+
   if (!$admin_admission_data["admission_type"]) { 
     if (isset($read_level))
 		$admin_admission_data["read_level"]=$read_level;
@@ -330,6 +332,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	//Alles was mit der Anmeldung zu tun hat ab hier
 	} elseif (!$delete_studg) {
 
+		
+		if(isset($_REQUEST['toggle_admission_quota_x'])) $admin_admission_data["admission_enable_quota"] = (int)($_REQUEST["admission_enable_quota"]);
+		
 		//Hat der User an den automatischen Werte rumgefuscht? Dann denkt er sich wohl was :) (und wir benutzen die Automatik spaeter nicht!)
 		if ($all_ratio_old != $all_ratio) {
 			$admin_admission_data["admission_ratios_changed"]=TRUE;
@@ -364,10 +369,12 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 
 	//Studiengang hinzufuegen
 	if ($add_studg_x) {
-		if ($add_studg) {
+		if ($add_studg && $add_studg != 'all') {
 			$db->query("SELECT name FROM studiengaenge WHERE studiengang_id='".$add_studg."' ");
 			$db->next_record();
 			$admin_admission_data["studg"][$add_studg]=array("name"=>$db->f("name"), "ratio"=>$add_ratio);
+		} else if ($add_studg == 'all'){
+			$admin_admission_data["studg"][$add_studg]=array("name"=>_("Alle Studiengänge"), "ratio"=>$add_ratio);
 		}
 	}
 
@@ -423,26 +430,23 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		}
 
 		//Prozentangabe checken/berechnen wenn neueer Studiengang, einer geloescht oder Seite abgeschickt
-		if (($add_studg_x) || ($delete_studg) || ($uebernehmen_x)) {
-			if ($admin_admission_data["admission_type"]) {
+		if (($add_studg_x) || ($delete_studg) || ($uebernehmen_x) || $toggle_admission_quota_x) {
+			if ($admin_admission_data["admission_type"] && $admin_admission_data["admission_enable_quota"]) {
 				if ((!$admin_admission_data["admission_ratios_changed"]) && (!$add_ratio) && (!$admin_admission_data["admission_type_org"])) {//User hat nichts veraendert oder neuen Studiengang mit Wert geschickt, wir koennen automatisch rechnen
-					if (is_array($admin_admission_data["studg"]))
-						foreach ($admin_admission_data["studg"] as $key=>$val)
-							$admin_admission_data["studg"][$key]["ratio"]=round(100 / (sizeof ($admin_admission_data["studg"]) + 1));
-					$admin_admission_data["all_ratio"]=100 - (sizeof ($admin_admission_data["studg"])) * round(100 / (sizeof ($admin_admission_data["studg"]) + 1));
-				} else {
-					$cnt=0;
-					if (is_array($admin_admission_data["studg"]))
-						foreach ($admin_admission_data["studg"] as $val)
-							$cnt+=$val["ratio"];
-					if (($cnt + $admin_admission_data["all_ratio"]) < 100)
-						$admin_admission_data["all_ratio"]=100 - $cnt;
-					if (($cnt + $admin_admission_data["all_ratio"]) > 100)
-						if ($cnt <= 100)
-							$admin_admission_data["all_ratio"]=(100 - $cnt);
-						else
-							$errormsg.= "error§". _("Die Werte der einzelnen Kontigente &uuml;bersteigen 100%. Bitte &auml;ndern Sie die Kontigente!") . "§";
+					if (is_array($admin_admission_data["studg"])){
+						foreach ($admin_admission_data["studg"] as $key=>$val){
+							$admin_admission_data["studg"][$key]["ratio"] = round(100 / (sizeof ($admin_admission_data["studg"]) ));
+						}
+					}
 				}
+				$cnt = 0;
+				if (is_array($admin_admission_data["studg"]))
+					foreach ($admin_admission_data["studg"] as $key => $val)
+						$cnt+=$val["ratio"];
+				if ($cnt <= 100)
+					$admin_admission_data["studg"][$key]["ratio"] += (100 - $cnt);
+				else
+					$errormsg.= "error§". _("Die Werte der einzelnen Kontigente &uuml;bersteigen 100%. Bitte &auml;ndern Sie die Kontigente!") . "§";
 			}
 		}
 
@@ -450,11 +454,11 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		if ($uebernehmen_x)
 			if (($admin_admission_data["admission_type"]) && ($admin_admission_data["admission_endtime"]) && ($admin_admission_data["admission_type"]!=3)) {
 				if ($admin_admission_data["admission_type"] == 1)
-					$end_date_name="Losdatum";
+					$end_date_name=_("Losdatum");
 				else
-					$end_date_name="Enddatum der Kontingentierung";
-				if ($admin_admission_data["admission_endtime"] == -1)
-					$errormsg.="error§Bitte geben Sie einen Termin f&uuml;r das $end_date_name an!§";
+					$end_date_name=_("Enddatum der Kontingentierung");
+				if ($admin_admission_data["admission_endtime"] == -1 && ($admin_admission_data["admission_enable_quota"] || $admin_admission_data["admission_type"] == 1))
+					$errormsg.="error§". sprintf(_("Bitte geben Sie einen Termin für das %s an!"),$end_date_name)."§";
 				$tmp_first_date = veranstaltung_beginn($admin_admission_data['sem_id'], 'int');
 				if($admin_admission_data["admission_type"] == 1){
 					if ($admin_admission_data["admission_endtime"] > $tmp_first_date)
@@ -567,7 +571,8 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		$data_mapping['admission_type'] = 'admission_type';
 		$data_mapping['admission_endtime'] = 'admission_endtime';
 		$data_mapping['admission_binding'] = 'admission_binding';
-		$data_mapping['admission_starttime'] = 'admission_starttime';
+		$data_mapping['admission_starttime'] = 'sem_admission_start_date';
+		$data_mapping['admission_endtime_sem'] = 'sem_admission_end_date';
 		$data_mapping['admission_prelim'] = 'admission_prelim';
 		$data_mapping['admission_prelim_txt'] = 'admission_prelim_txt';		
 		
@@ -576,6 +581,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		$data_mapping['Schreibzugriff'] = 'write_level';
 		$data_mapping['admission_disable_waitlist'] = 'admission_disable_waitlist';
 		$data_mapping['admission_selection_take_place'] = 'admission_selection_take_place';
+		$data_mapping['admission_enable_quota'] = 'admission_enable_quota';
 
 		$update_data = array();
 
@@ -642,14 +648,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		if ($perm->have_perm('admin')
 				|| !$lockdata[$lock_status]['admission_type'])
 		{
-		//check, if we need to update the admission data after saving new settings
-		if ($do_update_admission)
-    			update_admission($admin_admission_data["sem_id"]);
-
-		if ($db->affected_rows()) {
-			$errormsg.="msg§"._("Die Berechtigungseinstellungen f&uuml;r die Veranstaltung wurden aktualisiert")."§";
-			$db->query ("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id ='".$admin_admission_data["sem_id"]."'");
-			}
+		
 
 		//Variante nachtraeglich Anmeldeverfahren starten, alle alten Teilnehmer muessen raus
 		if (($admin_admission_data["admission_type"] >$admin_admission_data["admission_type_org"]) && ($admin_admission_data["admission_type_org"]==0) && $admin_admission_data["admission_type"]!=3) {
@@ -695,19 +694,13 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			$db->query($query); // Alle Eintraege rauswerfen
 
 			if (is_array($admin_admission_data["studg"]))
-				foreach($admin_admission_data["studg"] as $key=>$val)
-					if ($val["ratio"]) {
-						$query = "INSERT INTO admission_seminar_studiengang (seminar_id,studiengang_id,quota) VALUES('".$admin_admission_data["sem_id"]."', '$key', '".$val["ratio"]."' )";
-						$db->query($query);// Studiengang eintragen
-					}
-
-			if ($admin_admission_data["all_ratio"]) {
-				$query = "INSERT INTO admission_seminar_studiengang (seminar_id,studiengang_id,quota) VALUES('".$admin_admission_data["sem_id"]."', 'all', '".$admin_admission_data["all_ratio"]."' )";
-				$db->query($query);// Studiengang eintragen
+				foreach($admin_admission_data["studg"] as $key=>$val){
+					$query = "INSERT INTO admission_seminar_studiengang (seminar_id,studiengang_id,quota) VALUES('".$admin_admission_data["sem_id"]."', '$key', '".$val["ratio"]."' )";
+					$db->query($query);// Studiengang eintragen
+				}
 
 			//Save the current state as snapshot to compare with current data
 			$admin_admission_data["original"]=get_snapshot();
-			}
 		}
 
 		//Save the current state as snapshot to compare with current data
@@ -1078,7 +1071,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
                 </font>
             <? else: ?>
               <font size=-1>
-                Kein Passwort gesetzt
+                <?=_("Kein Passwort gesetzt")?>
               </font>
             <? endif; ?>
             <br/>
@@ -1108,51 +1101,49 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 					&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
+					<font size=-1><b><?=_("zugelassenene Studieng&auml;nge:")?> </b></font><br />
 					<table border=0 cellpadding=2 cellspacing=0>
 						<tr>
-							<font size=-1><b><?=_("zugelassenene Studieng&auml;nge:")?> </b></font><br />
-							<td class="<? echo $cssSw->getClass() ?>" colspan=3 width="100%">
+							<td class="<? echo $cssSw->getClass() ?>" colspan=3 >
 								<font size=-1><?=_("Bitte geben Sie hier ein, welche Studieng&auml;nge im Anmeldeverfahren zugelassen sind.")."</font>"?>
 							</td>
 						</tr>
 						<tr>
-							<td class="<? echo $cssSw->getClass() ?>" valign="bottom" width="25%">
-									<font size=-1>
-									<?
-									printf ("%s", ($admin_admission_data["studg"]) ? _("Alle anderen Studieng&auml;nge") : _("Alle Studieng&auml;nge"));
-									?>
-									</font>
-								</td>
-								<td class="<? echo $cssSw->getClass() ?>" valign="bottom"  colspan=2 nowrap width="75%">
-								<? if (($admin_admission_data["admission_type_org"]) && (!$perm->have_perm("admin"))) {
-									printf ("&nbsp; &nbsp; <font size=-1>%s %% (%s Teilnehmer)</font>", $admin_admission_data["all_ratio"], $num_all);
-								} else {
-									printf ("<input type=\"HIDDEN\" name=\"all_ratio_old\" value=\"%s\" />", ($admin_admission_data["studg"]) ? $admin_admission_data["all_ratio"] : "100");
-									printf ("<input type=\"TEXT\" name=\"all_ratio\" size=5 maxlength=5 value=\"%s\" /> <font size=-1> %% (%s Teilnehmer)</font>", ($admin_admission_data["studg"]) ? $admin_admission_data["all_ratio"] : "100", $num_all);
-									} ?>
-								</td>
-							</tr>
+							<td class="<? echo $cssSw->getClass() ?>" colspan="2" >
+							<input style="vertical-align:middle;" type="checkbox" name="admission_enable_quota" <?=($admin_admission_data["admission_enable_quota"] ? 'checked' : '')?> value="1">
+								<font size=-1><?=_("Prozentuale Kontingentierung aktivieren.")."</font>"?>
+							</td>
+							<td>
+							<?=makeButton('ok','input',_("Kontingentierung aktivieren/deaktivieren"), 'toggle_admission_quota')?>
+							</td>
+						</tr>
+						
 							<?
 							if ($admin_admission_data["studg"]) {
 								foreach ($admin_admission_data["studg"] as $key=>$val) {
 							?>
 							<tr>
-								<td class="<? echo $cssSw->getClass() ?>" width="25%">
+								<td class="<? echo $cssSw->getClass() ?>" >
 								<font size=-1>
 								<?
 								echo (htmlReady(my_substr($val["name"], 0, 40)));
 								?>
 								</font>
 								</td>
-								<td class="<? echo $cssSw->getClass() ?>" nowrap colspan=2 width="75%">
+								<td class="<? echo $cssSw->getClass() ?>" nowrap colspan=2 >
 								<input type="HIDDEN" name="studg_id[]" value="<? echo $key ?>" />
 								<input type="HIDDEN" name="studg_name[]" value="<? echo $val["name"] ?>" />
-								<? if (($admin_admission_data["admission_type_org"]) && (!$perm->have_perm("admin"))) {
-									printf ("&nbsp; &nbsp; <font size=-1>%s %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
+								<? 
+								if($admin_admission_data["admission_enable_quota"]){
+									if (($admin_admission_data["admission_type_org"]) && (!$perm->have_perm("admin"))) {
+										printf ("&nbsp; &nbsp; <font size=-1>%s %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
+									} else {
+										printf ("<input type=\"HIDDEN\" name=\"studg_ratio_old[]\" value=\"%s\" />", $val["ratio"]);
+										printf ("<input type=\"TEXT\" name=\"studg_ratio[]\" size=5 maxlength=5 value=\"%s\" /><font size=-1> %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
+										printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", $PHP_SELF, $key);
+									}
 								} else {
-									printf ("<input type=\"HIDDEN\" name=\"studg_ratio_old[]\" value=\"%s\" />", $val["ratio"]);
-									printf ("<input type=\"TEXT\" name=\"studg_ratio[]\" size=5 maxlength=5 value=\"%s\" /><font size=-1> %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
-									printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", $PHP_SELF, $key, $val["name"]);
+									printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", $PHP_SELF, $key);
 								}
 								?>
 								</td>
@@ -1160,75 +1151,79 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 							<?
 								}
 							}
-							$db->query("SELECT * FROM studiengaenge");
-							if ($db->num_rows() != sizeof($admin_admission_data["studg"])) {
-								if (($admin_admission_data["admission_type_org"]) && (!$perm->have_perm("admin"))) {
-									;
-									} else {
+							$db->queryf("SELECT * FROM studiengaenge WHERE studiengang_id NOT IN ('%s') ORDER BY name", join("','", array_keys($admin_admission_data["studg"])));
+							$stg = array();
+							if(!isset($admin_admission_data["studg"]['all'])){
+								$stg[] = array('name' => _("Alle Studiengänge"), 'studiengang_id' => 'all');
+							}
+							while($db->next_record()){
+								$stg[] = $db->Record;
+							}
+							if (count($stg) && (!$admin_admission_data["admission_type_org"] || $perm->have_perm("admin"))) {
 								?>
 							<tr>
-								<td class="<? echo $cssSw->getClass() ?>" width="25%">
+								<td class="<? echo $cssSw->getClass() ?>" >
 								<font size=-1>
 								<select name="add_studg">
 								<option value="">-- <?=_("bitte ausw&auml;hlen")?> --</option>
 								<?
-								while ($db->next_record()) {
-									if (is_array($admin_admission_data["studg"])) {
-										if (!$admin_admission_data["studg"][$db->f("studiengang_id")])
-											printf ("<option value=%s>%s</option>", $db->f("studiengang_id"), htmlReady(my_substr($db->f("name"), 0, 40)));
-										}
-									else
-										printf ("<option value=%s>%s</option>", $db->f("studiengang_id"), htmlReady(my_substr($db->f("name"), 0, 40)));
+								foreach($stg as $s) {
+									printf ("<option value=%s>%s</option>", $s["studiengang_id"], htmlReady(my_substr($s["name"], 0, 40)));
 								}
 								?>
 								</select>
 								</font>
 								</td>
-								<td class="<? echo $cssSw->getClass() ?>" nowrap width="5%">
-								<input type="TEXT" name="add_ratio" size=5 maxlength=5 /><font size=-1> %</font>
+								<td class="<? echo $cssSw->getClass() ?>" nowrap >
+								<?if($admin_admission_data["admission_enable_quota"]){
+									?><input type="TEXT" name="add_ratio" size=5 maxlength=5 /><font size=-1> %</font><?
+								} else {
+									echo '&nbsp;';
+								}?>
 								</td>
-								<td class="<? echo $cssSw->getClass() ?>" width="25%">
-									&nbsp;<input type="IMAGE" <?=makeButton("hinzufuegen", "src")?> name="add_studg" border=0 />&nbsp;
+								<td class="<? echo $cssSw->getClass() ?>">
+									<?=makeButton("hinzufuegen", "input", _("Ausgewählten Studiengang hinzufügen"), 'add_studg')?>
 								</td>
-								<td class="<? echo $cssSw->getClass() ?>" width="40%">&nbsp;
-								</td>
+								
 							</tr>
 								<?
 								}
-							}
 							?>
 					</table>
 				</td>
 			</tr>
-			<tr  <? $cssSw->switchClass() ?>>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%">
-					&nbsp;
-				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
-					<font size=-1><b><? if ($admin_admission_data["admission_type"] == 1) echo _("Losdatum"); else echo _("Enddatum der Kontingentierung");?>:</b></font><br />
-					<?
-					if ($admin_admission_data["admission_type"] == 1 && !$lockdata[$lock_status]['admission_endtime']) {
-						?>
-						<font size=-1><?=_("Bitte geben Sie hier ein, wann die Wartenden auf der Anmeldeliste in die Veranstaltung gelost werden sollen.")?></font><br /><br />
-						<?
-					} else {
-						?>
-						<font size=-1><?=_("Bitte geben Sie hier ein, wann das Anmeldeverfahren die Kontingentierung aufheben soll.")?> </font><br /><br />
-						<?
-					}
-					?>
-					<? if ($lockdata[$lock_status]['admission_endtime'] || ($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin"))) {
-						printf ("<font size=-1>%s um %s Uhr </font>", date("d.m.Y",$admin_admission_data["admission_endtime"]), date("H:i",$admin_admission_data["admission_endtime"]));
-					} else { ?>
-						<font size=-1><input type="text" name="adm_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("d",$admin_admission_data["admission_endtime"]); else echo _("tt") ?>">.
-						<input type="text" name="adm_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("m",$admin_admission_data["admission_endtime"]); else echo"mm" ?>">.
-						<input type="text" name="adm_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("Y",$admin_admission_data["admission_endtime"]); else echo _("jjjj") ?>"><?=_("um")?>&nbsp;
-						<font size=-1><input type="text" name="adm_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("H",$admin_admission_data["admission_endtime"]); else echo"23" ?>">:
-						<input type="text" name="adm_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("i",$admin_admission_data["admission_endtime"]); else echo"59" ?>">&nbsp;<?=_("Uhr")?></font>&nbsp;
-						<?=Termin_Eingabe_javascript(22,0,($admin_admission_data["admission_endtime"] != -1 ? $admin_admission_data["admission_endtime"] : 0));?>
-					<? } ?>
+			<?if($admin_admission_data["admission_enable_quota"] || $admin_admission_data["admission_type"] == 1){
+				?>
+				<tr  <? $cssSw->switchClass() ?>>
+					<td class="<? echo $cssSw->getClass() ?>" width="4%">
+						&nbsp;
 					</td>
-			</tr>
+					<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
+						<font size=-1><b><? if ($admin_admission_data["admission_type"] == 1) echo _("Losdatum"); else echo _("Enddatum der Kontingentierung");?>:</b></font><br />
+						<?
+						if ($admin_admission_data["admission_type"] == 1 && !$lockdata[$lock_status]['admission_endtime']) {
+							?>
+							<font size=-1><?=_("Bitte geben Sie hier ein, wann die Wartenden auf der Anmeldeliste in die Veranstaltung gelost werden sollen.")?></font><br /><br />
+							<?
+						} else {
+							?>
+							<font size=-1><?=_("Bitte geben Sie hier ein, wann das Anmeldeverfahren die prozentuale Kontingentierung aufheben soll.")?> </font><br /><br />
+							<?
+						}
+						?>
+						<? if ($lockdata[$lock_status]['admission_endtime'] || ($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin"))) {
+							printf ("<font size=-1>%s um %s Uhr </font>", date("d.m.Y",$admin_admission_data["admission_endtime"]), date("H:i",$admin_admission_data["admission_endtime"]));
+						} else { ?>
+							<font size=-1><input type="text" name="adm_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("d",$admin_admission_data["admission_endtime"]); else echo _("tt") ?>">.
+							<input type="text" name="adm_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("m",$admin_admission_data["admission_endtime"]); else echo"mm" ?>">.
+							<input type="text" name="adm_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("Y",$admin_admission_data["admission_endtime"]); else echo _("jjjj") ?>"><?=_("um")?>&nbsp;
+							<font size=-1><input type="text" name="adm_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("H",$admin_admission_data["admission_endtime"]); else echo"23" ?>">:
+							<input type="text" name="adm_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("i",$admin_admission_data["admission_endtime"]); else echo"59" ?>">&nbsp;<?=_("Uhr")?></font>&nbsp;
+							<?=Termin_Eingabe_javascript(22,0,($admin_admission_data["admission_endtime"] != -1 ? $admin_admission_data["admission_endtime"] : 0));?>
+						<? } ?>
+						</td>
+				</tr>
+			<?}?>
 			<?if (get_config('ADMISSION_ALLOW_DISABLE_WAITLIST')) {?>
 			<tr <? $cssSw->switchClass() ?>>
 				<td class="<? echo $cssSw->getClass() ?>" width="4%">
