@@ -118,7 +118,7 @@ class Avatar {
   function getFilename($size, $ext = 'png') {
     return $this->is_customized
       ? self::getCustomAvatarPath($this->user_id, $size, $ext)
-      : self::getNobodyAvatarPath($this->user_id, $size, $ext);
+      : self::getNobodyAvatarPath($size, $ext);
   }
 
 
@@ -134,7 +134,7 @@ class Avatar {
   function getURL($size, $ext = 'png') {
     return $this->is_customized
       ? self::getCustomAvatarUrl($this->user_id, $size, $ext)
-      : self::getNobodyAvatarUrl($this->user_id, $size, $ext);
+      : self::getNobodyAvatarUrl($size, $ext);
   }
 
 
