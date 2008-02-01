@@ -26,13 +26,14 @@ class AdministrationPluginIntegratorEnginePersistence
 		$plugins = parent::executePluginQuery("where plugintype='Administration' ".
 		                                      "order by navigationpos, pluginname");
 
-		foreach ($plugins as $plugin) {
 			$db = DBManager::get();
 			$stmt = $db->prepare("SELECT * FROM plugins_activated ".
 			                     "WHERE pluginid=? and poiid=?");
+
+		foreach ($plugins as $plugin) {
 			$result = $stmt->execute(array($plugin->getPluginid(),
 			                               PLUGIN_ADMINISTRATION_POIID));
-			$plugin->setActivated($result && $result->columnCount() === 1);
+			$plugin->setActivated($result && $result->rowCount() === 1);
 			$extplugins[] = $plugin;
 		}
 		return $extplugins;
