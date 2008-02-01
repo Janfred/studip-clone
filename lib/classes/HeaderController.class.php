@@ -197,7 +197,7 @@ class HeaderController {
 		$homeinfo .= ($global_obj['vote']['neue'] + $global_obj['eval']['neue']) ? " - " . sprintf(_(" %s neue Umfrage(n)"), ($global_obj['vote']['neue'] + $global_obj['eval']['neue'])) : "";
 
 		$ret['text'] = _("Start");
-		$ret['link'] = "index.php";
+		$ret['link'] = isset($_REQUEST['again']) ? 'index.php?cancel_login=1' : 'index.php';
 		$ret['info'] = $homeinfo;
 		$ret['image'] = $homeimage;
 		$ret['accesskey'] = $this->accesskey_enabled;
@@ -210,7 +210,7 @@ class HeaderController {
 			if(!$GLOBALS['ENABLE_FREE_ACCESS']) return null;
 			$courseinfo = _("Freie Veranstaltungen");
 			$coursetext = _("Freie");
-			$courselink = "freie.php";
+			$courselink = "freie.php?cancel_login=1";
 		} else {
 			$courseinfo = _("Meine Veranstaltungen & Einrichtungen");
 			$coursetext = _("Veranstaltungen");
