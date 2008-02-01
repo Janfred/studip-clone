@@ -86,7 +86,6 @@ class UserManagementRequestNewPassword extends UserManagement {
 
 		// include language-specific subject and mailbody
 		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']);
-		$Zeit=date("H:i:s, d.m.Y",time());
 		include("locale/$user_language/LC_MAILS/password_mail.inc.php");
 
 		// send mail
@@ -106,6 +105,7 @@ class UserManagementRequestNewPassword extends UserManagement {
 }
 
 $msg = array();
+$email = '';
 $admin_link = sprintf(_("Leider ist ein Fehler aufgetreten. Bitte fordern Sie gegebenenfalls %sper E-Mail%s ein neues Passwort an."), "<a href=\"mailto:{$GLOBALS['UNI_CONTACT']}?subject=" . rawurlencode( "Stud.IP Passwort vergessen - {$GLOBALS['UNI_NAME_CLEAN']}" ) . "&amp;body=" . rawurlencode( "Ich habe mein Passwort vergessen. Bitte senden Sie mir ein Neues.\nMein Nutzername: " . htmlReady( $uname ) . "\n" ) . "\">", "</a>");
 
 
@@ -123,31 +123,32 @@ if( $_POST['email'] != "" ) {
 	} else {
 		// Suche Benutzer über E-Mail-Adresse
 		$email = mysql_escape_string( $email );
-	    $db =& new DB_Sql("SELECT user_id, username, Vorname, Nachname, Email, IFNULL(auth_plugin, 'standard') AS auth_plugin FROM auth_user_md5 WHERE Email='{$email}'");
-	    if( $db->num_rows() == 0 ) {
-	    	// kein Benutzer mit eingegebener E-Mail
-	    	$msg[] = array( 'error', _("Es konnte kein Benutzer mit dieser E-Mail-Adresse<br/>gefunden werden!"));
-	    	$msg[] = array('info', $admin_link);
-	    } elseif( $db->num_rows() == 1 ) {
-			$db->next_record();
-			if (strtolower($db->f('auth_plugin')) != 'standard') {
+		$db = DBManager::get();
+		$stmt = $db->prepare("SELECT user_id, username, Vorname, Nachname, Email, IFNULL(auth_plugin, 'standard') AS auth_plugin FROM auth_user_md5 WHERE Email=?");
+		$success = $stmt->execute(array($email));
+		if(!$success || $stmt->rowCount() === 0) {
+			// kein Benutzer mit eingegebener E-Mail
+			$msg[] = array('error', _("Es konnte kein Benutzer mit dieser E-Mail-Adresse<br/>gefunden werden!"));
+			$msg[] = array('info', $admin_link);
+		} elseif ($stmt->rowCount() === 1) {
+			$row = $stmt->fetch();
+			if (strtolower($row['auth_plugin']) != 'standard') {
 				$msg[] = array('error', sprintf(_("Ihr Passwort kann nur durch einen Adminstrator ge&auml;ndert werden. Bitte fordern Sie gegebenenfalls %sper E-Mail%s ein neues Passwort an."), "<a href=\"mailto:{$GLOBALS['UNI_CONTACT']}?subject=" . rawurlencode( "Stud.IP Passwort vergessen - {$GLOBALS['UNI_NAME_CLEAN']}" ) . "&amp;body=" . rawurlencode( "Ich habe mein Passwort vergessen. Bitte senden Sie mir ein Neues.\nMein Nutzername: " . htmlReady( $uname ) . "\n" ) . "\">", "</a>"));
 			} else {
 				// Bestätigungslink senden
 				$step = 2;
-				$msg[] = array( 'info', sprintf(_("In Kürze wird Ihnen eine E-Mail an die Adresse %s mit einem Bestätigungslink geschickt. Bitte beachten Sie die Hinweise in dieser E-Mail. Sollte Sie keine E-Mail erhalten haben, vergewissern Sie sich, ob diese evtl. in einem Spam-Ordner abgelegt wurde."), $db->f('Email')));
-				$username = $db->f('username');
-				$vorname  = $db->f('Vorname');
-				$nachname = $db->f('Nachname');
+				$msg[] = array( 'info', sprintf(_("In Kürze wird Ihnen eine E-Mail an die Adresse %s mit einem Bestätigungslink geschickt. Bitte beachten Sie die Hinweise in dieser E-Mail. Sollte Sie keine E-Mail erhalten haben, vergewissern Sie sich, ob diese evtl. in einem Spam-Ordner abgelegt wurde."), $row['Email']));
+				$username = $row['username'];
+				$vorname  = $row['Vorname'];
+				$nachname = $row['Nachname'];
 				$id = md5($username . $GLOBALS['REQUEST_NEW_PASSWORD_SECRET']);
 
 				$smtp =& new studip_smtp_class();
 				// include language-specific subject and mailbody
-				$user_language = getUserLanguagePath($db->f('user_id'));
-				$Zeit=date("H:i:s, d.m.Y",time());
+				$user_language = getUserLanguagePath($row['user_id']);
 				include("locale/$user_language/LC_MAILS/request_new_password_mail.inc.php");
 				
-				$smtp->SendMessage($smtp->env_from, array($db->f('Email')), array("From: ".$smtp->from, "To: ".$db->f('Email'), "Reply-To: ".$db->f('Email'), "Subject: {$subject}"), $mailbody);
+				$smtp->SendMessage($smtp->env_from, array($row['Email']), array("From: ".$smtp->from, "To: ".$row['Email'], "Reply-To: ".$row['Email'], "Subject: {$subject}"), $mailbody);
 			}
 	    } else {
 			// Mehrere Benutzer für E-Mail
@@ -172,10 +173,12 @@ if ($_GET['id'] != '') {
 	if ($_GET['uname'] != '') {
 		$username = trim($_GET['uname']);
 		$username = mysql_escape_string($username);
-		$db =& new DB_Sql("SELECT user_id FROM auth_user_md5 WHERE username='{$username}'");
-		if ($db->num_rows() == 1 && trim($_GET['id']) == md5($username . $GLOBALS['REQUEST_NEW_PASSWORD_SECRET'])) {
-			$db->next_record();
-			$user_management =& new UserManagementRequestNewPassword($db->f('user_id'));
+		$db = DBManager::get();
+		$stmt = $db->prepare("SELECT user_id FROM auth_user_md5 WHERE username=?");
+		$success = $stmt->execute(array($username));
+		if ($success && $stmt->getCount() === 1 && trim($_GET['id']) == md5($username . $GLOBALS['REQUEST_NEW_PASSWORD_SECRET'])) {
+			$row = $stmt->fetch();
+			$user_management =& new UserManagementRequestNewPassword($row['user_id']);
 			if ($user_management->setPassword()) {
 				$msg[] = array( 'msg', sprintf(_("Ihnen wird in Kürze eine E-Mail an die Adresse %s mit Ihrem neuen Passwort geschickt. Bitte beachten Sie die Hinweise in dieser E-Mail."), $user_management->user_data['auth_user_md5.Email']));
 			} else {
@@ -197,7 +200,7 @@ if (!$_POST['step'] && !isset($step)) {
 }
 
 $request_template =& $GLOBALS['template_factory']->open('request_password');
-$request_template->set_attribute('step', $step);
+$request_template->set_attribute('step', intval($step));
 $request_template->set_attribute('messages', $msg);
 $request_template->set_attribute('link_startpage', sprintf(_("Zurück zur %sStartseite%s."), '<a href="./index.php?cancel_login=1">', '</a>'));
 $request_template->set_attribute('email', $email);
