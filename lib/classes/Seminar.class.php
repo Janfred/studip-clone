@@ -128,10 +128,11 @@ class Seminar {
 	function restoreMembers($status = 'dozent'){
 		$this->members[$status] = array();
 		$this->db->query("SELECT su.user_id,username,Vorname,Nachname,
-						".$GLOBALS['_fullname_sql']['full']." as fullname
-							FROM seminar_user su INNER JOIN auth_user_md5 USING(user_id)
-							LEFT JOIN user_info USING(user_id)
-							WHERE status='$status' AND su.seminar_id='".$this->getId()."' ORDER BY su.position");
+						".$GLOBALS['_fullname_sql']['full']." as fullname,
+						admission_studiengang_id
+						FROM seminar_user su INNER JOIN auth_user_md5 USING(user_id)
+						LEFT JOIN user_info USING(user_id)
+						WHERE status='$status' AND su.seminar_id='".$this->getId()."' ORDER BY su.position, Nachname");
 		while($this->db->next_record()){
 			$this->members[$status][$this->db->f('user_id')] = $this->db->Record;
 		}
@@ -466,18 +467,20 @@ class Seminar {
 			$this->admission_starttime = $this->db->f("admission_starttime");
 			$this->admission_endtime_sem = $this->db->f("admission_endtime_sem");
 			$this->admission_disable_waitlist = $this->db->f("admission_disable_waitlist");
+			$this->admission_enable_quota = $this->db->f("admission_enable_quota");
 			$this->visible = $this->db->f("visible");
 			$this->showscore = $this->db->f("showscore");
 			$this->modules = $this->db->f("modules");
 			$this->is_new = false;
 			$this->members = array();
+			$this->admission_studiengang = null;
 			return TRUE;
 
 		}
 		return FALSE;
 	}
 
-	function store() {
+	function store($trigger_chdate = true) {
 
 		// activate this with StEP 00077
 		// $cache = Cache::instance();
@@ -535,6 +538,7 @@ class Seminar {
 				admission_starttime = '".		$this->admission_starttime."',
 				admission_endtime_sem = '".		$this->admission_endtime_sem."',
 				admission_disable_waitlist = '".$this->admission_disable_waitlist . "',
+				admission_enable_quota = '".$this->admission_enable_quota . "',
 				visible =  				'".		$this->visible."',
 				showscore =				'0',
 				modules = NULL";
@@ -575,6 +579,7 @@ class Seminar {
 				admission_starttime = '".		$this->admission_starttime."',
 				admission_endtime_sem = '".		$this->admission_endtime_sem."',
 				admission_disable_waitlist = '".$this->admission_disable_waitlist . "',
+				admission_enable_quota = '".$this->admission_enable_quota . "',
 				visible = '". 				$this->visible."',
 				showscore ='".				$this->showscore."',
 				modules = ".(($this->modules == NULL) ? 'NULL' : "'".$this->modules."'")."
@@ -582,7 +587,7 @@ class Seminar {
 		}
 		$this->db->query($query);
 
-		if ($this->db->affected_rows()) {
+		if ($this->db->affected_rows() && $trigger_chdate) {
 			$query = sprintf("UPDATE seminare SET chdate='%s' WHERE Seminar_id='%s' ", time(), $this->id);
 			$this->db->query($query);
 			return TRUE;
@@ -1568,6 +1573,79 @@ class Seminar {
 		}
 
 		return $participant_count;
+	}
+	
+	function isAdmissionEnabled(){
+		return in_array($this->admission_type, array(1,2));
+	}
+	
+	function isAdmissionQuotaEnabled(){
+		return $this->admission_selection_take_place == 0  && ($this->admission_type == 2 || ($this->admission_enable_quota && $this->admission_type == 1));
+	}
+	
+	function restoreAdmissionStudiengang() {
+		$this->admission_studiengang = null;
+		if(!$this->isAdmissionEnabled()) return false;
+		$count = 0;
+		$admission_turnout = $this->admission_turnout;
+		$dont_check_quota = !$this->isAdmissionQuotaEnabled();
+		$this->db->query("SELECT quota, name, ass.studiengang_id FROM admission_seminar_studiengang ass LEFT JOIN studiengaenge st USING(studiengang_id) WHERE seminar_id = '".$this->getId()."' ORDER BY (studiengang_id='all'),name");
+		while($this->db->next_record()){
+			$ret[$this->db->f('studiengang_id')]['name'] = $this->db->f("studiengang_id") == 'all' ? _("Alle Studiengänge") : $this->db->f("name");
+			if($this->db->f("studiengang_id") != 'all' && !$dont_check_quota) {
+				$ret[$this->db->f('studiengang_id')]['num_total'] = round($admission_turnout * ($this->db->f("quota") / 100));
+				$count += $ret[$this->db->f('studiengang_id')]['num_total'];
+			} else {
+				$ret[$this->db->f('studiengang_id')]['num_total'] = $admission_turnout;
+			}
+		}
+		if(!$dont_check_quota) {
+			$ret['all']['num_total'] = $admission_turnout - $count;
+			if($ret['all']['num_total'] < 0) $ret['all']['num_total'] = 0;
+		}
+		foreach($ret as $studiengang_id => $data){
+			$ret[$studiengang_id]['num_occupied'] = 0;
+			$this->db->query("SELECT COUNT(user_id) FROM seminar_user WHERE seminar_id = '".$this->getId()."' AND admission_studiengang_id='$studiengang_id'");
+			$this->db->next_record();
+			$ret[$studiengang_id]['num_occupied'] += $this->db->f(0);
+			$this->db->query("SELECT COUNT(IF(status='accepted',user_id,NULL)) as accepted,COUNT(IF(status='claiming',user_id,NULL)) as claiming,COUNT(IF(status='awaiting',user_id,NULL)) as awaiting  FROM admission_seminar_user WHERE seminar_id = '".$this->getId()."' AND studiengang_id='$studiengang_id'");
+			$this->db->next_record();
+			$ret[$studiengang_id]['num_occupied'] += $this->db->f('accepted');
+			$ret[$studiengang_id]['num_claiming'] += $this->db->f('claiming');
+			$ret[$studiengang_id]['num_awaiting'] += $this->db->f('awaiting');
+		}
+		$this->admission_studiengang = $ret;
+		return true;
+	}
+	
+	function getFreeAdmissionSeats($studiengang_id = null){
+		if(is_null($this->admission_studiengang) && !$this->restoreAdmissionStudiengang()){
+			return false;
+		}
+		if($studiengang_id && $this->isAdmissionQuotaEnabled()){
+			$free = $this->admission_studiengang[$studiengang_id]['num_total'] - $this->admission_studiengang[$studiengang_id]['num_occupied'];
+		} else {
+			$occupied = 0;
+			foreach($this->admission_studiengang as $st){
+				$occupied += $st['num_occupied'];
+			}
+			$free = $this->admission_turnout - $occupied;
+		}
+		return $free > 0 ? $free : 0;
+	}
+	
+	function getAdmissionChance($studiengang_id = null){
+		$free = $this->getFreeAdmissionSeats($studiengang_id);
+		if($studiengang_id && $this->isAdmissionQuotaEnabled()){
+			$waiting = $this->admission_studiengang[$studiengang_id]['num_claiming'];
+		} else {
+			foreach($this->admission_studiengang as $st){
+				$waiting += $st['num_claiming'];
+			}
+		}
+		if($free > 0 && !$waiting) return 100;
+		if($free <= 0) return 0;
+		if($waiting > 0 && $free > 0) return round(($free / $waiting) * 100);
 	}
 
 }

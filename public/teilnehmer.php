@@ -890,10 +890,10 @@ if ($db3->next_record() && $db3->f("count_pers")) {
 }
 
 //Veranstaltungsdaten holen
-$db3->query ("SELECT admission_type, admission_selection_take_place, admission_turnout FROM seminare WHERE Seminar_id = '$SessionSeminar'");
-$db3->next_record();
+$sem = Seminar::GetInstance($SessionSeminar);
+$sem->restoreAdmissionStudiengang();
 if ($rechte) {
-	if ($db3->f("admission_type") == 1 || $db3->f("admission_type") == 2)
+	if ($sem->isAdmissionEnabled())
 		$colspan=10;
 	else
 		$colspan=9;
@@ -955,10 +955,10 @@ while (list ($key, $val) = each ($gruppe)) {
 		$tutor_count = 0;
 	// die eigentliche Teil-Tabelle
 	if($key != 'dozent') echo "<form name=\"$key\" action=\"$PHP_SELF?studipticket=$studipticket\" method=\"post\">";
-	if($rechte && $key == 'autor' 	&& (($db3->f("admission_type") == 1 || $db3->f("admission_type") == 2))){
+	if($rechte && $key == 'autor' 	&& $sem->isAdmissionEnabled()){
 		echo '<tr><td class="blank" colspan="'.$colspan.'" align="right"><font size="-1">';
 		printf(_("<b>Teilnahmebeschränkte Veranstaltung</b> -  Teilnehmerkontingent: %s, davon belegt: %s, zusätzlich belegt: %s"),
-			$db3->f('admission_turnout'), $anzahl_teilnehmer_kontingent, $anzahl_teilnehmer - $anzahl_teilnehmer_kontingent);
+			$sem->admission_turnout, $anzahl_teilnehmer_kontingent, $anzahl_teilnehmer - $anzahl_teilnehmer_kontingent);
 		echo '</font></td></tr>';
 	}
 	echo "<tr height=28>";
@@ -1026,7 +1026,7 @@ while (list ($key, $val) = each ($gruppe)) {
 
 	if ($rechte) {
 		$tooltip = tooltip(_("Klicken, um Auswahl umzukehren"),false);
-		if ($db3->f("admission_type"))
+		if ($sem->isAdmissionEnabled())
 			$width=15;
 		else
 			$width=20;
@@ -1034,7 +1034,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		if ($key == "dozent") {
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\"><b>&nbsp;</b></td>", $width);
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\"><b>&nbsp;</b></td>", $width);
-			if ($db3->f("admission_type"))
+			if ($sem->isAdmissionEnabled())
 				echo"<td class=\"steel\" width=\"10%\" align=\"center\" colspan=\"2\"><b>&nbsp;</b></td>";
 		}
 
@@ -1045,7 +1045,7 @@ while (list ($key, $val) = each ($gruppe)) {
 			} else {
 				printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"tutor_to_autor\" onClick=\"return invert_selection('tutor_to_autor','%s');\" %s><b>%s</b></a></font></td>", $width, $key, $tooltip, _("TutorIn entlassen"));
 			}
-			if ($db3->f("admission_type"))
+			if ($sem->isAdmissionEnabled())
 				echo"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
 		}
 
@@ -1056,21 +1056,21 @@ while (list ($key, $val) = each ($gruppe)) {
 				printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"autor_to_tutor\" onClick=\"return invert_selection('autor_to_tutor','%s');\" %s><b>%s</b></a></font></td>",  $width, $key, $tooltip, _("als TutorIn eintragen"));
 			}
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"autor_to_user\" onClick=\"return invert_selection('autor_to_user','%s');\" %s><b>%s</b></a></font></td>",  $width, $key, $tooltip, _("Schreibrecht entziehen"));
-			if ($db3->f("admission_type"))
+			if ($sem->isAdmissionEnabled())
 				printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Kontingent"));
 		}
 
 		if ($key == "user") {
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"user_to_autor\" onClick=\"return invert_selection('user_to_autor','%s');\" %s><b>%s</b></a></font></td>",  $width, $key, $tooltip, _("Schreibrecht erteilen"));
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"user_to_null\" onClick=\"return invert_selection('user_to_null','%s');\" %s><b>%s</b></a></font></td>",  $width, $key, $tooltip, _("BenutzerIn entfernen"));
-			if ($db3->f("admission_type"))
+			if ($sem->isAdmissionEnabled())
 				print"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
 		}
 
 		if ($key == "accepted") {
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"admission_insert\" onClick=\"return invert_selection('admission_insert','%s');\" %s><b>%s</b></a></font></td>",  $width, $key, $tooltip,  _("Akzeptieren"));
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"admission_delete\" onClick=\"return invert_selection('admission_delete','%s');\" %s><b>%s</b></a></font></td>",  $width, $key, $tooltip, _("BenutzerIn entfernen"));
-			if ($db3->f("admission_type"))
+			if ($sem->isAdmissionEnabled())
 				print"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
 
 		}
@@ -1270,7 +1270,7 @@ while (list ($key, $val) = each ($gruppe)) {
 			echo "<td colspan=\"2\" class=\"$class\" >&nbsp;</td>";
 		}
 
-		if ($db3->f("admission_type") == 1 || $db3->f("admission_type") == 2) {
+		if ($sem->isAdmissionEnabled()) {
 			if ($key == "autor" || $key == "user")
 				printf ("<td width=\"80%%\" align=\"center\" class=\"%s\"><font size=-1>%s%s</font></td>", $class, ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"), (!$db->f("name") && !$db->f("studiengang_id") == "all") ?  "&nbsp; ": "");
 			else
@@ -1377,7 +1377,7 @@ if($key != 'dozent' && $rechte && !$info_is_open) {
 	if (isset($multiaction[$key]['insert'][0]) && !($key == 'autor' && !$tutor_count)) echo '<td class="blank" align="center">' . makeButton('eintragen','input', $multiaction[$key]['insert'][1],'do_' . $multiaction[$key]['insert'][0]) . '</td>';
 	else echo '<td class="blank">&nbsp;</td>';
 	echo '<td class="blank" align="center">' . makeButton('entfernen','input', $multiaction[$key]['delete'][1],'do_' . $multiaction[$key]['delete'][0]) . '</td>';
-	if ($db3->f("admission_type")) echo '<td class="blank">&nbsp;</td>';
+	if ($sem->isAdmissionEnabled()) echo '<td class="blank">&nbsp;</td>';
 	echo "</tr></form>";
 }
 echo "<tr><td class=\"blank\" colspan=\"$colspan\">&nbsp;</td></tr>";
@@ -1409,8 +1409,8 @@ if ($rechte) {
 		echo "<tr><td class=\"blank\" colspan=\"2\">";
 		echo "<table width=\"99%\" border=\"0\"  cellpadding=\"2\" cellspacing=\"0\" align=\"center\">";
 		echo "<tr height=\"28\">";
-		printf ("<td class=\"steel\" width=\"%s%%\" align=\"left\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font></td>", ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30",  ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1) ? _("Warteliste") : _("Anmeldeliste"));
-		if ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1)
+		printf ("<td class=\"steel\" width=\"%s%%\" align=\"left\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"20\"><font size=\"-1\"><b>%s</b></font></td>", ($sem->admission_type == 1 && $sem->admission_selection_take_place !=1) ? "40" : "30",  ($sem->admission_type == 2 || $sem->admission_selection_take_place==1) ? _("Warteliste") : _("Anmeldeliste"));
+		if ($sem->admission_type == 2 || $sem->admission_selection_take_place==1)
 			printf("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td>", _("Position"));
 		printf("<td class=\"steel\" width=\"10%%\" align=\"center\">&nbsp; </td>");
 		printf("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td>", _("Nachricht"));
@@ -1421,22 +1421,12 @@ if ($rechte) {
 
 		while ($db->next_record()) {
 			if ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
-				$db2=new DB_Seminar;
-				$admission_studiengang_id = $db->f("studiengang_id");
-				$admission_seminar_id = $db->f("seminar_id");
-				$plaetze = round ($db->f("admission_turnout") * ($db->f("quota") / 100));  // Anzahl der Plaetze in dem Studiengang in den ich will
-				$db2->query("SELECT count(*) AS wartende FROM admission_seminar_user WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
-				if ($db2->next_record())
-					$wartende = ($db2->f("wartende"));   // Anzahl der Personen die auch in diesem Studiengang auf einen Platz lauern
-						 if ($plaetze >= $wartende)
-							$admission_chance = 100;   // ich komm auf jeden Fall rein
-				else
-					$admission_chance = round (($plaetze / $wartende) * 100); // mehr Bewerber als Plaetze
+				$admission_chance = $sem->getAdmissionChance($db->f("studiengang_id")); 
 			}
 
 			$cssSw->switchClass();
-			printf ("<tr><td width=\"%s%%\" class=\"%s\" align=\"left\"><font size=\"-1\"><a name=\"%s\" href=\"about.php?username=%s\">%s</a></font></td>",  ($db3->f("admission_type") == 1 && $db3->f("admission_selection_take_place") !=1) ? "40" : "30", $cssSw->getClass(), $db->f("username"), $db->f("username"), htmlReady($db->f("fullname")));
-			if ($db3->f("admission_type") == 2 || $db3->f("admission_selection_take_place")==1)
+			printf ("<tr><td width=\"%s%%\" class=\"%s\" align=\"left\"><font size=\"-1\"><a name=\"%s\" href=\"about.php?username=%s\">%s</a></font></td>",  ($sem->admission_type == 1 && $sem->admission_selection_take_place !=1) ? "40" : "30", $cssSw->getClass(), $db->f("username"), $db->f("username"), htmlReady($db->f("fullname")));
+			if ($sem->admission_type == 2 || $sem->admission_selection_take_place==1)
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td>", $cssSw->getClass(), $db->f("position"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp; </td>", $cssSw->getClass());
 
@@ -1531,14 +1521,13 @@ if ($rechte) {
 			printf("<option value=\"%s\">%s - %s\n", $db->f("username"), htmlReady(my_substr($db->f("fullname")." (".$db->f("username"),0,35)).")", $db->f("perms"));
 		?>
 		</select>
-		<?if($db3->f("admission_type") == 1 || $db3->f("admission_type") == 2){
+		<?if($sem->isAdmissionEnabled()){
 			echo '<br><br><img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="absmiddle" hspace="3" border="0" '.tooltip(_("Mit dieser Einstellung beeinflussen Sie, ob Teilnehmer die Sie hinzufügen auf die Kontingentplätze angerechnet werden."),1,1).' >';
 			echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
 			echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
 			echo '<option value="">'._("Kein Kontingent").'</option>';
-			$admission_info = get_admission_quota_info($SessSemName[1]);
-			foreach($admission_info as $studiengang => $data){
-				echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$data['num_available'].')').'</option>';
+			foreach($sem->admission_studiengang as $studiengang => $data){
+				echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
 			}
 			echo '</select></label></font>';
 		}
@@ -1609,14 +1598,13 @@ if ($rechte) {
 		echo "<textarea name=\"csv_import\" rows=\"6\" cols=\"50\">";
 		foreach($csv_not_found as $line) echo htmlReady($line) . chr(10);
 		echo "</textarea>";
-		if($db3->f("admission_type") == 1 || $db3->f("admission_type") == 2){
+		if($sem->isAdmissionEnabled()){
 			echo '<br><br><img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="absmiddle" hspace="3" border="0" '.tooltip(_("Mit dieser Einstellung beeinflussen Sie, ob Teilnehmer die Sie hinzufügen auf die Kontingentplätze angerechnet werden."),1,1).' >';
 			echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
 			echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
 			echo '<option value="">'._("Kein Kontingent").'</option>';
-			$admission_info = get_admission_quota_info($SessSemName[1]);
-			foreach($admission_info as $studiengang => $data){
-				echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$data['num_available'].')').'</option>';
+			foreach($sem->admission_studiengang as $studiengang => $data){
+				echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
 			}
 			echo '</select></label></font>';
 		}
@@ -1654,14 +1642,13 @@ if ($rechte) {
 			$cssSw->resetClass();
 			$cssSw->switchClass();
 			echo "<tr><td class=\"steel1\" colspan=\"2\" align=\"right\" nowrap=\"nowrap\">";
-			if($db3->f("admission_type") == 1 || $db3->f("admission_type") == 2){
+			if($sem->isAdmissionEnabled()){
 				echo '<img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="absmiddle" hspace="3" border="0" '.tooltip(_("Mit dieser Einstellung beeinflussen Sie, ob Teilnehmer die Sie hinzufügen auf die Kontingentplätze angerechnet werden."),1,1).' >';
 				echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
 				echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
 				echo '<option value="">'._("Kein Kontingent").'</option>';
-				$admission_info = get_admission_quota_info($SessSemName[1]);
-				foreach($admission_info as $studiengang => $data){
-					echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$data['num_available'].')').'</option>';
+				foreach($sem->admission_studiengang as $studiengang => $data){
+					echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
 				}
 				echo '</select></label></font>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ';
 			}
