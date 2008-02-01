@@ -13,7 +13,8 @@ define("PLUGIN_ADMINISTRATION_POIID","admin");
  * @subpackage engine
  */
 
-class AdministrationPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEnginePersistence {
+class AdministrationPluginIntegratorEnginePersistence
+	extends AbstractPluginIntegratorEnginePersistence {
 
 	/**
 	 * Liefert alle in der Datenbank bekannten Plugins zurück
@@ -22,11 +23,13 @@ class AdministrationPluginIntegratorEnginePersistence extends AbstractPluginInte
 
 		$plugins = array();
 		// nur Administrations-Plugins liefern
-		$plugins = parent::executePluginQuery("where plugintype='Administration' order by navigationpos, pluginname");
+		$plugins = parent::executePluginQuery("where plugintype='Administration' ".
+		                                      "order by navigationpos, pluginname");
 
 		foreach ($plugins as $plugin) {
 			$db = DBManager::get();
-			$stmt = $db->prepare("SELECT * FROM plugins_activated WHERE pluginid=? and poiid=?");
+			$stmt = $db->prepare("SELECT * FROM plugins_activated ".
+			                     "WHERE pluginid=? and poiid=?");
 			$result = $stmt->execute(array($plugin->getPluginid(),
 			                               PLUGIN_ADMINISTRATION_POIID));
 			$plugin->setActivated($result && $result->columnCount() === 1);
@@ -70,7 +73,7 @@ class AdministrationPluginIntegratorEnginePersistence extends AbstractPluginInte
 
 		$plugins = array();
 
-		// TODO: Fehlermeldung ausgeben
+		// TODO (dreil): Fehlermeldung ausgeben
 		// keine aktivierten Plugins
 		if (!$result) {
 			return array();
@@ -104,15 +107,19 @@ class AdministrationPluginIntegratorEnginePersistence extends AbstractPluginInte
 
 		parent::savePlugin($plugin);
 
+		$db = DBManager::get();
+
 		// Plugin speichern
 		if ($plugin->isActivated()) {
-			# TODO (mlunzena) migrate to pdo
-			$this->connection->execute("replace into plugins_activated (pluginid,poiid) values(?,?)", array($plugin->getPluginId(),PLUGIN_ADMINISTRATION_POIID));
+			$stmt = $db->prepare("REPLACE INTO plugins_activated (pluginid, poiid) ".
+			                     "VALUES (?, ?)");
+			$stmt->execute(array($plugin->getPluginId(),
+			                     PLUGIN_ADMINISTRATION_POIID));
 		}
 		// Plugin aus der aktiven Tabelle löschen
 		else {
-			# TODO (mlunzena) migrate to pdo
-			$this->connection->execute("delete from plugins_activated where pluginid=?", array($plugin->getPluginId()));
+			$stmt = $db->prepare("DELETE FROM plugins_activated WHERE pluginid=?");
+			$stmt->execute(array($plugin->getPluginId()));
 		}
 	}
 
@@ -126,9 +133,7 @@ class AdministrationPluginIntegratorEnginePersistence extends AbstractPluginInte
 		  "AND (a.pluginid is null)");
 		$result = $stmt->execute(array(PLUGIN_ADMINISTRATION_POIID, $id));
 
-		// TODO: Fehlermeldung ausgeben
-		# TODO (mlunzena) verlässt sich jemand auf die "null"?
-		#                 ansonsten wäre eine exception angesagt
+		// TODO (dreil): Fehlermeldung ausgeben
 		if (!$result) {
 			return null;
 		}
