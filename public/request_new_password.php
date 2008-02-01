@@ -123,8 +123,7 @@ if( $_POST['email'] != "" ) {
 	} else {
 		// Suche Benutzer über E-Mail-Adresse
 		$email = mysql_escape_string( $email );
-	    $db =& new DB_Seminar();
-	    $db->query( "SELECT user_id, username, Vorname, Nachname, Email, IFNULL(auth_plugin, 'standard') AS auth_plugin FROM auth_user_md5 WHERE Email='{$email}'" );
+	    $db =& new DB_Sql("SELECT user_id, username, Vorname, Nachname, Email, IFNULL(auth_plugin, 'standard') AS auth_plugin FROM auth_user_md5 WHERE Email='{$email}'");
 	    if( $db->num_rows() == 0 ) {
 	    	// kein Benutzer mit eingegebener E-Mail
 	    	$msg[] = array( 'error', _("Es konnte kein Benutzer mit dieser E-Mail-Adresse<br/>gefunden werden!"));
@@ -140,7 +139,7 @@ if( $_POST['email'] != "" ) {
 				$username = $db->f('username');
 				$vorname  = $db->f('Vorname');
 				$nachname = $db->f('Nachname');
-				$id = md5($username . $GLOBALS['REQUEST_NEW_PASSWORD_SECRET');
+				$id = md5($username . $GLOBALS['REQUEST_NEW_PASSWORD_SECRET']);
 
 				$smtp =& new studip_smtp_class();
 				// include language-specific subject and mailbody
@@ -159,7 +158,7 @@ if( $_POST['email'] != "" ) {
 } else {
 	// E-Mail leer
 	if ($_POST['step']) {
-		$msg[] = array( 'error', _("Sie haben keine E-Mail-Adresse eingegeben!" ) );
+		$msg[] = array('error', _("Sie haben keine E-Mail-Adresse eingegeben!"));
 	}
 }
 
@@ -173,8 +172,7 @@ if ($_GET['id'] != '') {
 	if ($_GET['uname'] != '') {
 		$username = trim($_GET['uname']);
 		$username = mysql_escape_string($username);
-		$db =& new DB_Seminar();
-		$db->query( "SELECT user_id FROM auth_user_md5 WHERE username='{$username}'" );
+		$db =& new DB_Sql("SELECT user_id FROM auth_user_md5 WHERE username='{$username}'");
 		if ($db->num_rows() == 1 && trim($_GET['id']) == md5($username . $GLOBALS['REQUEST_NEW_PASSWORD_SECRET'])) {
 			$db->next_record();
 			$user_management =& new UserManagementRequestNewPassword($db->f('user_id'));
