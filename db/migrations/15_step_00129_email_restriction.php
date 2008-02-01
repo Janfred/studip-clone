@@ -1,6 +1,6 @@
  
 <?
-class Step129EmailRestriction extends DBMigration {
+class Step00129EmailRestriction extends DBMigration {
 
 	function description () {
 		return 'Adds the new Value EMAIL_DOMAIN_RESTRICTION to table config.';
