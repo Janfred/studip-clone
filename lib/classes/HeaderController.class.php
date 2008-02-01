@@ -226,7 +226,7 @@ class HeaderController {
 	
 	function getHeaderItemImprint(){
 		$ret['text'] = _("Impressum");
-		$ret['link'] = "impressum.php";
+		$ret['link'] = "impressum.php?cancel_login=1";
 		return $ret;
 	}
 	
@@ -282,7 +282,7 @@ class HeaderController {
 		global $user;
 		if((!is_object($user) || $user->id == 'nobody') && array_search("CAS", $GLOBALS["STUDIP_AUTH_PLUGIN"])){
 			$ret['text'] = _("Login CAS");
-			$ret['link'] = "index.php?again=yes&sso=cas";
+			$ret['link'] = "index.php?again=yes&cancel_login=1&sso=cas";
 		} else {
 			$ret = null;
 		}
@@ -293,7 +293,7 @@ class HeaderController {
 		global $user;
 		if((!is_object($user) || $user->id == 'nobody') && array_search("Shib", $GLOBALS["STUDIP_AUTH_PLUGIN"])){
 			$ret['text'] = _("Login Shibboleth");
-			$ret['link'] = "index.php?again=yes&sso=shib";
+			$ret['link'] = "index.php?again=yes&cancel_login=1&sso=shib";
 		} else {
 			$ret = null;
 		}
