@@ -428,13 +428,8 @@ function head (&$module, $data, $a) {
 
 		if ($module->config->getValue("Main", "showimage")) {
 			echo "<td" . $module->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
-			if (file_exists("{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user/nobody_normal.png")) {
-				echo "<img src=\"{$GLOBALS['DYNAMIC_CONTENT_PATH']}/user/";
-				echo "nobody_normal.png\" alt=\"Foto " . $data["fullname"] . "\"";
-				echo $module->config->getAttributes("PersondetailsHeader", "img") . ">";
-			} else {
-				echo '&nbsp;';
-			}
+			echo "<img src=\"".Avatar::getNobodyAvatarUrl(Avatar::NORMAL)."\" alt=\"Foto " . $data["fullname"] . "\"";
+			echo $module->config->getAttributes("PersondetailsHeader", "img") . ">";
 		}
 
 		if ($module->config->getValue("Main", "showcontact")
