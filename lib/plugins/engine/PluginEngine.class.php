@@ -344,5 +344,22 @@ class PluginEngine {
 	public static function saveEngineValueToSession($key,$value){
 		$_SESSION["PLUGIN_SESSION_SPACE"]["PLUGINENGINE"][$key] = serialize($value);
 	}
+
+	/**
+	 * <MethodDescription>
+	 *
+	 * @param  type       <description>
+	 * @param  type       <description>
+	 * @param  type       <description>
+	 *
+	 * @return type       <description>
+	 */
+	public static function cachedCallback($key, $callback, $arguments = array()) {
+		if ($GLOBALS["PLUGINS_CACHING"]) {
+			return StudipCacheFactory::cachedCallback($key, $callback, $arguments,
+			                                          $GLOBALS['PLUGINS_CACHE_TIME']);
+		}
+
+		return call_user_func_array($callback, $arguments);
+	}
 }
-?>
