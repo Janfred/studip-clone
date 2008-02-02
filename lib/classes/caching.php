@@ -72,7 +72,7 @@ class StudipCacheFactory {
                    'JSON-kodiertes Array von Argumenten für die '.
                    'Instanziierung der StudipCache-Klasse');
 
-    StudipCacheFactory::$cache = NULL;
+    self::$cache = NULL;
   }
 
 
@@ -84,7 +84,7 @@ class StudipCacheFactory {
     $cfg->unsetValue('cache_class');
     $cfg->unsetValue('cache_init_args');
 
-    StudipCacheFactory::$cache = NULL;
+    self::$cache = NULL;
   }
 
 
@@ -95,7 +95,7 @@ class StudipCacheFactory {
    */
   function getCache() {
 
-    if (is_null(StudipCacheFactory::$cache)) {
+    if (is_null(self::$cache)) {
 
       $cfg = self::getConfig();
 
@@ -124,13 +124,38 @@ class StudipCacheFactory {
                    : array();
 
       $reflection_class = new ReflectionClass($cache_class);
-      StudipCacheFactory::$cache =
+      self::$cache =
         sizeof($arguments)
           ? $reflection_class->newInstanceArgs($arguments)
           : $reflection_class->newInstance();
     }
 
-    return StudipCacheFactory::$cache;
+    return self::$cache;
+  }
+
+
+  /**
+   * <MethodDescription>
+   *
+   * @param  type       <description>
+   * @param  type       <description>
+   * @param  type       <description>
+   * @param  type       <description>
+   *
+   * @return type       <description>
+   */
+  function cachedCallback($key, $callback, $arguments = array(),
+                          $expire = 43200) {
+
+    $cache = self::getCache();
+
+    if (($cached_result = $cache->read($key)) !== FALSE) {
+      return unserialize($cached_result);
+    }
+
+    $result = call_user_func_array($callback, $arguments);
+    $cache->write($key, serialize($result), $expire);
+    return $result;
   }
 }
 
