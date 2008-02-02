@@ -33,7 +33,7 @@ class AdministrationPluginIntegratorEnginePersistence
 		foreach ($plugins as $plugin) {
 			$result = $stmt->execute(array($plugin->getPluginid(),
 			                               PLUGIN_ADMINISTRATION_POIID));
-			$plugin->setActivated($result && $result->rowCount() === 1);
+			$plugin->setActivated($result && $stmt->rowCount() === 1);
 			$extplugins[] = $plugin;
 		}
 		return $extplugins;
