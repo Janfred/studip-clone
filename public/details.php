@@ -650,7 +650,8 @@ print_infobox ($infobox,"contract.jpg");
 				}
 				echo "<br/>";
 			} else {
-				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgte in der Reihenfolge der Anmeldung. Die Kontingentierung wurde am %s aufgehoben.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgte in der Reihenfolge der Anmeldung.")."</font>");
+				if($db2->f("admission_enable_quota")) printf("<font size=-1>" .  _("Die Kontingentierung wurde am %s aufgehoben.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 				if (!$db2->f('admission_disable_waitlist') && ($db2->f("admission_endtime_sem") > time() || $db2->f("admission_endtime_sem") == -1)) {
 					echo "<font size=-1>" . _("Weitere Pl&auml;tze k&ouml;nnen noch &uuml;ber Wartelisten vergeben werden.") . "</font>";
 				}
@@ -661,7 +662,7 @@ print_infobox ($infobox,"contract.jpg");
 				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt nach dem Losverfahren am %s Uhr.") . "</font><br/>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 			else {
 				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung."));
-				if ($db2->num_rows()>1) {
+				if ($db2->f("admission_enable_quota")) {
 					if ($db2->f("admission_endtime") < time()) {
 						printf ( _("Die Kontingentierung wurde am %s aufgehoben.") . "<br/>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 					} else {
@@ -697,28 +698,27 @@ print_infobox ($infobox,"contract.jpg");
 			<td class="<? echo $cssSw->getClass() ?>" colspan=2 width="48%" valign="top">
 			<?
 				$all_cont_user = false;
-				$db3->query("SELECT a.studiengang_id, name, quota, count(distinct(b.user_id)) AS sem_user_count, count(distinct(c.user_id)) AS accepted_user_count FROM admission_seminar_studiengang a
-							LEFT JOIN studiengaenge USING (studiengang_id)
-							LEFT JOIN seminar_user b ON (a.seminar_id = b.Seminar_id AND a.studiengang_id = b.admission_studiengang_id)
-							LEFT JOIN admission_seminar_user c ON (a.seminar_id=c.seminar_id AND a.studiengang_id = c.studiengang_id AND c.status='accepted')
-							WHERE a.seminar_id = '$sem_id' GROUP BY a.studiengang_id"); //Alle	moeglichen Studiengaenge anziegen
-				$c = $db3->num_rows();
-				while ($db3->next_record()) {
-					if (($db3->f("studiengang_id") == "all") && ($c == 1)) break;
-					if ($c != 0) {
-						echo "<font size=-1><b>". _("Kontingente:") ."</b></font><br />";
-						$c = 0;
-					}
-					if ($db3->f("studiengang_id") == "all")
-						$tmp_details_quota=get_all_quota($sem_id);
-					else
-						$tmp_details_quota=round ($db2->f("admission_turnout") * ($db3->f("quota") / 100));
-					$user_count = $db3->f("sem_user_count") + $db3->f("accepted_user_count");
-					$all_cont_user += $user_count;
-					printf ("<font size=-1>" . _("Kontingent f&uuml;r %s (%s Pl&auml;tze / %s belegt)") . "</font>",	($db3->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db3->f("name"), $tmp_details_quota, $user_count );
-					print "<br />";
-				}
-			?>
+				$admission_sem = Seminar::GetInstance($sem_id);
+				$free_admission = $admission_sem->getFreeAdmissionSeats();
+				if($free_admission !== false){
+				?>
+				<font size="-1">
+				<div style="margin-top:5px;">
+					<b><?=sprintf(_("Zugelassene Studiengänge (%s freie Plätze):"), $free_admission)?></b>
+					<ul>
+					<?foreach($admission_sem->admission_studiengang as $studiengang){
+						?>
+						<li><?=htmlReady($studiengang['name'])?>
+						&nbsp;
+						(<?=($admission_sem->isAdmissionQuotaEnabled() ? sprintf(_("%s freie Plätze") . ' / ', $studiengang['num_total']-$studiengang['num_occupied']) : '') . sprintf(_("%s belegt"), $studiengang['num_occupied'])?>)
+						</li>
+					<?
+					$all_cont_user += $studiengang['num_occupied'];
+					}?>
+					</ul>
+				</div>
+				</font>
+			<?}?>
 			</td>
 		</tr>
 		<?

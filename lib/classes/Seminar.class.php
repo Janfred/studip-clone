@@ -1580,7 +1580,7 @@ class Seminar {
 	}
 	
 	function isAdmissionQuotaEnabled(){
-		return $this->admission_selection_take_place == 0  && ($this->admission_type == 2 || ($this->admission_enable_quota && $this->admission_type == 1));
+		return ($this->isAdmissionEnabled() && $this->admission_selection_take_place == 0  && $this->admission_enable_quota );
 	}
 	
 	function restoreAdmissionStudiengang() {
@@ -1589,7 +1589,7 @@ class Seminar {
 		$count = 0;
 		$admission_turnout = $this->admission_turnout;
 		$dont_check_quota = !$this->isAdmissionQuotaEnabled();
-		$this->db->query("SELECT quota, name, ass.studiengang_id FROM admission_seminar_studiengang ass LEFT JOIN studiengaenge st USING(studiengang_id) WHERE seminar_id = '".$this->getId()."' ORDER BY (studiengang_id='all'),name");
+		$this->db->query("SELECT quota, name, ass.studiengang_id FROM admission_seminar_studiengang ass LEFT JOIN studiengaenge st USING(studiengang_id) WHERE seminar_id = '".$this->getId()."' ORDER BY (ass.studiengang_id <> 'all'),name");
 		while($this->db->next_record()){
 			$ret[$this->db->f('studiengang_id')]['name'] = $this->db->f("studiengang_id") == 'all' ? _("Alle Studiengänge") : $this->db->f("name");
 			if($this->db->f("studiengang_id") != 'all' && !$dont_check_quota) {
