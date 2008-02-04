@@ -48,7 +48,7 @@ class LatexRender {
 	// to receive more bad tags !
 	var $_latex_tags_blacklist = array(
 	"include","def","command","loop","repeat","open","toks","output",/*"line",*/"input",
-	"catcode","mathcode","name","item","section","%","^^","\$\$","mbox"
+	"catcode","mathcode","name","item","section","%","^^","\$\$","mbox","csname","newhelp","makeatletter"
 	);
 	var $_err_string = '';	
 	// ====================================================================================
