@@ -33,17 +33,6 @@ class HomepagePluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     	return $plugins;
     }
 
-    /**
-     * Returns all deactivated system plugins
-     * @return all deactivated plugins
-     */
-    function getAllDeActivatedPlugins(){
-    	// return all deactivated system plugins
-    	$plugins = parent::executePluginQuery("where plugintype='Homepage' and enabled='no'");
-    	return $plugins;
-    }
-
-
     function getPlugin($id){
     	$user = $this->getUser();
     	$userid = $user->getUserid();

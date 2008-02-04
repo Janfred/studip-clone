@@ -46,34 +46,44 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
    * @param $plugins
    */
   function getActivationsForPlugins($plugins) {
-    if ($this->connection == null) {
-      $this->connection = PluginEngine::getPluginDatabaseConnection();
-    }
+
     // Veranstaltungsid aus poiid bestimmen
-    $id = trim(str_replace($GLOBALS["SessSemName"]["class"],"",$this->poiid));
+    $id = trim(str_replace($GLOBALS["SessSemName"]["class"], "", $this->poiid));
+
+    $stmt = DBManager::get()->prepare(
+      "SELECT pat.* FROM plugins_activated pat ".
+      "WHERE pat.pluginid=? AND pat.poiid=? ".
+      "UNION ".
+      "SELECT p.pluginid, ?, 'on' ".
+      "FROM seminar_inst s ".
+      "JOIN Institute i ON i.Institut_id=s.institut_id ".
+      "JOIN plugins_default_activations pa ".
+      "ON i.fakultaets_id=pa.institutid OR i.Institut_id=pa.institutid ".
+      "JOIN plugins p ON pa.pluginid=p.pluginid ".
+      "WHERE s.seminar_id=? AND p.pluginid=?");
+
     foreach ($plugins as $plugin) {
-      $result =& $this->connection->execute("select pat.* from plugins_activated pat where pat.pluginid=? and pat.poiid=? "
-             . "union "
-             . "select p.pluginid,?,'on' from seminar_inst s join Institute i on i.Institut_id=s.institut_id join plugins_default_activations pa on i.fakultaets_id=pa.institutid or i.Institut_id=pa.institutid join plugins p on pa.pluginid=p.pluginid where s.seminar_id=? and p.pluginid=?",array($plugin->getPluginid(),$this->poiid,$this->poiid,$id,$plugin->getPluginid()));
+      $result = $stmt->execute(array($plugin->getPluginid(),
+                                     $this->poiid,
+                                     $this->poiid,
+                                     $id,
+                                     $plugin->getPluginid()));
+
       if ($result) {
-        if (!$result->EOF) {
-          if ($result->fields("state") == "on") {
-            $plugin->setActivated(true);
-          }
-          else {
-            $plugin->setActivated(false);
-          }
+        if ($row = $stmt->fetch()) {
+          $plugin->setActivated($row['state'] === 'on');
         }
+        // no information for this plugin
         else {
-          // no information for this plugin
           $plugin->setActivated(false);
         }
-        $result->Close();
       }
+
+      // no information for this plugin
       else {
-        // no information for this plugin
         $plugin->setActivated(false);
       }
+
       $extplugins[] = $plugin;
     }
     return $extplugins;
@@ -124,6 +134,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
         WHERE s.seminar_id = ?
         AND (pad.state != 'off' OR pad.state IS NULL)";
 
+    # TODO (mlunzena) PDO-ify
     if ($GLOBALS["PLUGINS_CACHING"]) {
       $result =& $this->connection->CacheExecute($GLOBALS['PLUGINS_CACHE_TIME'],$query,array($userid,$this->poiid,$userid,$this->poiid,$this->poiid,$id));
     }
@@ -158,39 +169,6 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     }
   }
 
-  /**
-   * Returns all registered and deactivated plugins
-   * @return a list of deactivated plugins
-   */
-  function getAllDeActivatedPlugins() {
-    $plugins = array();
-    $user = $this->getUser();
-    $userid = $user->getUserid();
-    // plugins default activations is not useful, just search in plugins_activated
-    $result = &$this->connection->execute("SELECT p.* FROM plugins p left join plugins_activated a on p.pluginid=a.pluginid where p.pluginid in (select rp.pluginid from roles_plugins rp where rp.roleid in (SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?)) and p.plugintype='Standard' and (a.pluginid is null or a.poiid<>?) and a.state='off'", array($userid,$userid,$this->poiid));
-    if (!$result) {
-      // TODO: Fehlermeldung ausgeben
-      return array();
-    }
-    else {
-      while (!$result->EOF) {
-        $pluginclassname = $result->fields("pluginclassname");
-        $pluginpath = $result->fields("pluginpath");
-        // Klasse instanziieren
-        $plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
-        if ($plugin != null) {
-          $plugin->setPluginid($result->fields("pluginid"));
-          $plugin->setPluginname($result->fields("pluginname"));
-          $plugin->setActivated(false);
-          $plugin->setUser($this->getUser());
-          $plugins[] = $plugin;
-        }
-        $result->MoveNext();
-      }
-      $result->Close();
-      return $plugins;
-    }
-  }
 
   /**
    * saves a plugin and its active state
@@ -207,6 +185,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
         $state = "off";
       }
       // save active state
+      # TODO (mlunzena) PDO-ify
       $this->connection->execute("replace into plugins_activated (pluginid,poiid,state) values (?,?,?)", array($plugin->getPluginId(), $this->poiid,$state));
     }
     else {
@@ -222,6 +201,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     $user = $this->getUser();
     $userid = $user->getUserid();
     //TODO: Wieso hier ein Join? Wird das so noch benötigt?
+    # TODO (mlunzena) PDO-ify
     $result = &$this->connection->execute("Select p.* from plugins p left join plugins_activated a on p.pluginid=a.pluginid where p.pluginid in (select rp.pluginid from roles_plugins rp where rp.roleid in (SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?)) and p.pluginid=? and p.plugintype='Standard' and (a.poiid=? or (a.pluginid is null))",array($userid,$userid,$id, $this->poiid));
     if (!$result) {
       // TODO: Fehlermeldung ausgeben
@@ -247,6 +227,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
   function deinstallPlugin($plugin) {
     parent::deinstallPlugin($plugin);
     // kill the activation information
+    # TODO (mlunzena) PDO-ify
     $this->connection->execute("delete from plugins_default_activations where pluginid=?",array($plugin->getPluginid()));
   }
 
@@ -257,11 +238,13 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
    * @return true - successful operation
              false - operation not successful
    */
-  function saveDefaultActivations($plugin,$instituteids) {
+  function saveDefaultActivations($plugin, $instituteids) {
     if (is_a($plugin,"AbstractStudIPStandardPlugin") || !is_array($instituteids)) {
+      # TODO (mlunzena) PDO-ify
       $this->connection->execute("delete from plugins_default_activations where pluginid=?", array($plugin->getPluginid()));
       foreach ($instituteids as $instid) {
         // now save every instituteid
+        # TODO (mlunzena) PDO-ify
         $this->connection->execute("insert into plugins_default_activations (pluginid,institutid) values (?,?)",array($plugin->getPluginid(),$instid));
       }
       return true;
@@ -279,6 +262,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
    */
   function removeDefaultActivations($plugin) {
     if (is_a($plugin,"AbstractStudIPStandardPlugin") || !is_array($instituteids)) {
+      # TODO (mlunzena) PDO-ify
       $this->connection->execute("delete from plugins_default_activations where pluginid=?", array($plugin->getPluginid()));
       return true;
     }
@@ -295,6 +279,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
    */
   function getDefaultActivations($plugin) {
     if (is_a($plugin,"AbstractStudIPStandardPlugin")) {
+      # TODO (mlunzena) PDO-ify
       $result =& $this->connection->execute("select * from plugins_default_activations where pluginid=?", array($plugin->getPluginid()));
       if (!$result) {
         // error or no result
@@ -322,6 +307,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
   function getDefaultActivationsForPOI($poiid) {
     $user = $this->getUser();
     $userid = $user->getUserid();
+    # TODO (mlunzena) PDO-ify
     $result =& $this->connection->execute("select p.* from seminar_inst s inner join Institute i on i.Institut_id=s.institut_id inner join plugins_default_activations pa on i.fakultaets_id=pa.institutid or i.Institut_id=pa.institutid inner join plugins p on pa.pluginid=p.pluginid where p.pluginid in (select rp.pluginid from roles_plugins rp where rp.roleid in (SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?)) and s.seminar_id=?", array($userid,$userid,$poiid));
     if (!$result) {
       // TODO: Fehlermeldung ausgeben

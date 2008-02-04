@@ -34,17 +34,6 @@ class SystemPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
     	return $plugins;
     }
 
-    /**
-     * Returns all deactivated system plugins
-     * @return all deactivated plugins
-     */
-    function getAllDeActivatedPlugins(){
-    	// return all deactivated system plugins
-    	$plugins = parent::executePluginQuery("where plugintype='System' and enabled='no'");
-    	return $plugins;
-    }
-
-
     function getPlugin($id){
     	$result = &$this->connection->execute("Select p.* from plugins p where p.pluginid=? and p.plugintype='System'",array($id));
     	if (!$result){
