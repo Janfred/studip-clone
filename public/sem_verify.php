@@ -539,11 +539,11 @@ $db6=new DB_Seminar;
 						die;
 						}
 					//Ok, es gibt also Studiengaenge und wir stehen noch nicht in der admission_seminar_user
-					$db2->query("SELECT admission_endtime, admission_turnout, admission_type, admission_selection_take_place, admission_disable_waitlist FROM seminare WHERE Seminar_id LIKE '$id'"); //Wir brauchen in diesem Fall mehr Daten
-					$db2->next_record();
+					$current_seminar = Seminar::getInstance($id);
+
 					//Sind noch Plätze frei?
-					if (!get_free_admission($id)) {
-						if($db2->f('admission_disable_waitlist')){
+					if (!$current_seminar->getFreeAdmissionSeats()) {
+						if($current_seminar->admission_disable_waitlist){
 							$meldung = sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s."), '<b>'.$SeminarName.'</b>') .' <br /> ';
 							parse_msg('info§'. $meldung);
 							echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
@@ -554,32 +554,27 @@ $db6=new DB_Seminar;
 							die;
 						}
 					}
-					
-					if (!$sem_verify_suggest_studg) {//Wir wissen noch nicht mit welchem Studiengang der User rein will
-						$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id) LEFT JOIN user_studiengang USING (studiengang_id) WHERE seminar_id LIKE '$id' AND (user_id = '$user->id' OR admission_seminar_studiengang.studiengang_id = 'all')"); //Hat der Studi passende Studiengaenge ausgewaehlt?
-						if ($db->num_rows() == 1) {//Nur einen passenden gefunden? Dann nehmen wir einfach mal diesen...
-							$db->next_record();
-							$sem_verify_suggest_studg=$db->f("studiengang_id");
-						} elseif ($db->num_rows() >1) { //Mehrere gefunden, fragen welcher es denn sein soll
+					$db->query("SELECT admission_seminar_studiengang.studiengang_id FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id) LEFT JOIN user_studiengang USING (studiengang_id) WHERE seminar_id LIKE '$id' AND (user_id = '$user->id' OR admission_seminar_studiengang.studiengang_id = 'all')"); //Hat der Studi passende Studiengaenge ausgewaehlt?
+					$user_studiengang = array();
+					while($db->next_record()){
+						$user_studiengang[$db->f('studiengang_id')] = 1;
+					}
+					if (!$sem_verify_suggest_studg && $current_seminar->getFreeAdmissionSeats()) {//Wir wissen noch nicht mit welchem Studiengang der User rein will
+						if (count($user_studiengang) == 1 || (count($user_studiengang) > 1 && !$current_seminar->isAdmissionQuotaEnabled())) {//Nur einen passenden gefunden? Dann nehmen wir einfach mal diesen...
+							$sem_verify_suggest_studg = key($user_studiengang);
+						} elseif (count($user_studiengang) > 1) { //Mehrere gefunden, fragen welcher es denn sein soll
 							printf ('<tr><td class="blank" colspan=2>&nbsp; &nbsp; ' . _("Die Veranstaltung %s ist teilnahmebeschr&auml;nkt."). '<br><br></td></tr>', '<b>' . $SeminarName . '</b>');
 							print "<tr><td class=\"blank\" colspan=2>&nbsp; &nbsp; "._("Sie k&ouml;nnen sich f&uuml;r <b>eines</b> der m&ouml;glichen Kontingente anmelden.")."<br/><br />&nbsp; &nbsp; "._("Bitte w&auml;hlen Sie das f&uuml;r Sie am besten geeignete Kontingent aus:")." <br><br></td></tr>";
-							$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$id' ORDER BY name"); //Alle theoretisch moeglichen auswaehlen
 							?>
 							<tr><td class="blank" colspan=2>
 							<form action="<? echo $sess->pself_url(); ?>" method="POST" >
 								<input type="HIDDEN" name="sem_verify_selection_send" value="TRUE" />
 							       <?
-								while ($db->next_record()) {
-									$db3->query("SELECT studiengang_id FROM user_studiengang WHERE studiengang_id = '".$db->f("studiengang_id")."' AND user_id = '$user->id' "); // Darf ich diesen auswaehlen?
-									$db3->next_record();
-									if ($db->f("studiengang_id") == "all")
-										$tmp_sem_verify_quota=get_all_quota($id);
+								foreach($current_seminar->admission_studiengang as $studiengang_id => $studiengang) {
+									if (isset($user_studiengang[$studiengang_id]))
+										printf ("&nbsp; &nbsp; <input type=\"RADIO\" name=\"sem_verify_suggest_studg\" value=\"%s\">&nbsp; <font size=-1><b>"._("Kontingent f&uuml;r %s (%s Pl&auml;tze insgesamt / %s belegt)")."</b></font><br />", $studiengang_id, htmlReady($studiengang['name']), $studiengang['num_total'], $studiengang['num_occupied']);
 									else
-										$tmp_sem_verify_quota=round ($db2->f("admission_turnout") * ($db->f("quota") / 100));
-									if (($db3->num_rows()) || ($db->f("studiengang_id") == "all"))
-										printf ("&nbsp; &nbsp; <input type=\"RADIO\" name=\"sem_verify_suggest_studg\" value=\"%s\">&nbsp; <font size=-1><b>"._("Kontingent f&uuml;r %s (%s Pl&auml;tze)")."</b></font><br />", $db->f("studiengang_id"), ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"), $tmp_sem_verify_quota);
-									else
-										printf ("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<font size=-1 color=\"#888888\">"._("Kontingent f&uuml;r %s (%s Pl&auml;tze)")."</font><br />", ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"), $tmp_sem_verify_quota);
+										printf ("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<font size=-1 color=\"#888888\">"._("Kontingent f&uuml;r %s (%s Pl&auml;tze insgesamt / %s belegt)")."</font><br />", htmlReady($studiengang['name']), $studiengang['num_total'], $studiengang['num_occupied']);
 									}
 							       ?>
 							<br />&nbsp; &nbsp; <input type="IMAGE" <?=makeButton("ok", "src")?> border=0 value="abschicken">
@@ -587,13 +582,13 @@ $db6=new DB_Seminar;
 							</td></tr>
 							<?
 							echo "<tr><td class=\"blank\" colspan=\"2\">";
-							if ($db2->f("admission_type") == 1) {
-								if ($db2->f("admission_selection_take_place"))
-									printf ("<font size=-1>&nbsp; &nbsp; "._("Die Teilnehmerauswahl erfolgte nach dem Losverfahren am %s Uhr.")." "._("Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergeben werden.")." <br />&nbsp; &nbsp; "._("In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.")."</font><br />&nbsp; ", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+							if ($current_seminar->admission_type == 1) {
+								if ($current_seminar->admission_selection_take_place)
+									printf ("<font size=-1>&nbsp; &nbsp; "._("Die Teilnehmerauswahl erfolgte nach dem Losverfahren am %s Uhr.")." "._("Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergeben werden.")." <br />&nbsp; &nbsp; "._("In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.")."</font><br />&nbsp; ", date("d.m.Y, G:i", $current_seminar->admission_endtime));
 								else
-									printf ("<font size=-1>&nbsp; &nbsp; "._("Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr.")." <br />&nbsp; &nbsp; "._("In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.")."</font><br />&nbsp; ", date("d.m.Y, G:i", $db2->f("admission_endtime")));
+									printf ("<font size=-1>&nbsp; &nbsp; "._("Die Teilnehmerauswahl erfolgt nach dem Losverfahren am %s Uhr.")." <br />&nbsp; &nbsp; "._("In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.")."</font><br />&nbsp; ", date("d.m.Y, G:i", $current_seminar->admission_endtime));
 							} else {
-								if ($db2->f("admission_selection_take_place"))
+								if ($current_seminar->admission_selection_take_place)
 									printf ("<font size=-1>&nbsp; &nbsp; "._("Die Teilnehmerauswahl erfolgte in der Reihenfolge der Anmeldung.")." "._(" Weitere Pl&auml;tze k&ouml;nnen evtl. &uuml;ber die Warteliste vergeben werden.")."<br />&nbsp; &nbsp;"._("In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.")."</font><br />&nbsp; ");
 								else
 									printf ("<font size=-1>&nbsp; &nbsp; "._("Die Teilnehmerauswahl erfolgt in der Reihenfolge der Anmeldung.")."<br />&nbsp; &nbsp; "._("In Klammern ist die Anzahl der <b>insgesamt</b> verf&uuml;gbaren Pl&auml;tze pro Kontingent angegeben.")."</font><br />&nbsp; ");
@@ -621,9 +616,9 @@ $db6=new DB_Seminar;
 							}
 						}
 					}
-					if ($sem_verify_suggest_studg) { //User hat einen Studiengang angegeben oeder wir haben genau einen passenden gefunden, mit dem er jetzt rein will/kann
-						if ($db2->f("admission_selection_take_place") == 1) { //Variante Eintragen nach Lostermin oder Enddatum der Kontigentierrung. Wenn noch Platz ist fuellen wir einfach auf, ansonsten Warteliste
-							if (get_free_admission($id)) { //Wir koennen einfach eintragen, Platz ist noch
+					if ($sem_verify_suggest_studg && isset($user_studiengang[$sem_verify_suggest_studg])) { //User hat einen Studiengang angegeben oeder wir haben genau einen passenden gefunden, mit dem er jetzt rein will/kann
+						if (!$current_seminar->isAdmissionQuotaChecked()) { //Variante Eintragen nach Lostermin oder Enddatum der Kontigentierrung. Wenn noch Platz ist fuellen wir einfach auf, ansonsten Warteliste
+							if ($current_seminar->getFreeAdmissionSeats()) { //Wir koennen einfach eintragen, Platz ist noch
 								if (!seminar_preliminary($id,$user->id)) {
 								 	$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', admission_studiengang_id = '$sem_verify_suggest_studg', status='autor', gruppe='$group', mkdate='".time()."' ");
 									parse_msg ('msg§' . sprintf(_("Sie wurden mit dem Status <b>Autor</b> in die Veranstaltung %s eingetragen. Damit sind Sie zugelassen."), '<b>' . $SeminarName .'</b>'));
@@ -638,7 +633,7 @@ $db6=new DB_Seminar;
 								page_close();
 								die;
 							} else { //Auf die Warteliste
-								if(!$db2->f('admission_disable_waitlist')){
+								if(!$current_seminar->admission_disable_waitlist){
 								$db5->query("SELECT position FROM admission_seminar_user WHERE seminar_id= '$id' AND status != 'accepted' ORDER BY position DESC");//letzte hoechste Position herausfinden
 								$db5->next_record();
 								$position=$db5->f("position")+1;
@@ -657,13 +652,9 @@ $db6=new DB_Seminar;
 								die;
 							}
 						} else { //noch nicht gelost oder Enddatum, also Kontingentierung noch aktiv
-							$db3->query("SELECT name, quota, admission_seminar_studiengang.studiengang_id FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id LIKE '$id' AND admission_seminar_studiengang.studiengang_id = '$sem_verify_suggest_studg' "); //Nochmal die Daten des quotas fuer diese Veranstaltung
-							$db3->next_record();
-							if ($db2->f("admission_type") == 1) { //Variante Losverfahren
-								$db5->query("SELECT position FROM admission_seminar_user ORDER BY position DESC");//letzte hoechste Position herausfinden
-								$db5->next_record();
-							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='claiming', mkdate='".time()."', position='' ");
-								parse_msg (sprintf("info§"._("Sie wurden auf die Anmeldeliste der Veranstaltung <b>%s</b> gesetzt.")." <br />"._("Teilnehmer der Veranstaltung <b>%s</b> werden Sie, falls Sie im Losverfahren am %s Uhr ausgelost werden.") . (!$db2->f('admission_disable_waitlist') ? _("Sollten Sie nicht ausgelost werden, werden Sie auf die Warteliste gesetzt und werden vom System automatisch als Teilnehmer eingetragen, sobald ein Platz f&uuml;r Sie frei wird.") : ""), $SeminarName, $SeminarName, date("d.m.Y, G:i", $db2->f("admission_endtime"))));
+							if ($current_seminar->admission_type == 1) { //Variante Losverfahren
+								$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='claiming', mkdate='".time()."', position='' ");
+								parse_msg (sprintf("info§"._("Sie wurden auf die Anmeldeliste der Veranstaltung <b>%s</b> gesetzt.")." <br />"._("Teilnehmer der Veranstaltung <b>%s</b> werden Sie, falls Sie im Losverfahren am %s Uhr ausgelost werden.") . (!$current_seminar->admission_disable_waitlist ? _("Sollten Sie nicht ausgelost werden, werden Sie auf die Warteliste gesetzt und werden vom System automatisch als Teilnehmer eingetragen, sobald ein Platz f&uuml;r Sie frei wird.") : ""), $SeminarName, $SeminarName, date("d.m.Y, G:i", $current_seminar->admission_endtime)));
 								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 								if ($send_from_search)
 						    			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
@@ -671,13 +662,7 @@ $db6=new DB_Seminar;
 								page_close();
 								die;
 							} else { //Variante chronologisches Anmelden
-								$db->query("SELECT user_id FROM seminar_user WHERE Seminar_id = '$id' AND admission_studiengang_id = '$sem_verify_suggest_studg'"); //Wieviel user sind schon in diesem Kontingent eingetragen
-								$db4->query("SELECT user_id FROM admission_seminar_user WHERE seminar_id = '$id' AND studiengang_id = '$sem_verify_suggest_studg' AND status = 'accepted'"); //the same for temporarily accepted
-								if ($db3->f("studiengang_id") == "all")
-									$tmp_sem_verify_quota=get_all_quota($id);
-								else
-									$tmp_sem_verify_quota=round ($db2->f("admission_turnout") * ($db3->f("quota") / 100));
-								if (($db->num_rows() + $db4->num_rows()) < $tmp_sem_verify_quota) {//noch Platz in dem Kontingent --> direkt in seminar_user
+								if ($current_seminar->getFreeAdmissionSeats($sem_verify_suggest_studg)) {//noch Platz in dem Kontingent --> direkt in seminar_user
 								 	if (!seminar_preliminary($id,$user->id)) {
 										$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', status='autor', gruppe='$group', admission_studiengang_id = '$sem_verify_suggest_studg', mkdate='".time()."' ");
 										parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Autor</b> in die Veranstaltung <b>%s</b> eingetragen. Damit sind Sie zugelassen."), $SeminarName));
@@ -692,14 +677,14 @@ $db6=new DB_Seminar;
 									page_close();
 									die;
 								} else { //kein Platz mehr im Kontingent --> auf Warteposition in admission_seminar_user
-									if(!$db2->f('admission_disable_waitlist')){
-									$db5->query("SELECT position FROM admission_seminar_user WHERE seminar_id= '$id' AND status != 'accepted' ORDER BY position DESC");//letzte hoechste Position herausfinden
-									$db5->next_record();
-									$position = $db5->f("position")+1;
-								 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='awaiting', mkdate='".time()."', position='".$position."'  ");
+									if(!$current_seminar->admission_disable_waitlist){
+										$db5->query("SELECT max(position) as position FROM admission_seminar_user WHERE seminar_id= '$id' AND status != 'accepted'");//letzte hoechste Position herausfinden
+										$db5->next_record();
+										$position = $db5->f("position")+1;
+										$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='awaiting', mkdate='".time()."', position='".$position."'  ");
 										$meldung = sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s. Sie wurden jedoch auf Platz %s der Warteliste gesetzt."), '<b>'.$SeminarName.'</b>', $position).' <br /> '._("Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
 									} else {
-									$meldung = sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s."), '<b>'.$SeminarName.'</b>') .' <br /> ';
+										$meldung = sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s."), '<b>'.$SeminarName.'</b>') .' <br /> ';
 									}
 									parse_msg('info§'. $meldung);
 									echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";

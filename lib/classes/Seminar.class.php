@@ -1579,8 +1579,12 @@ class Seminar {
 		return in_array($this->admission_type, array(1,2));
 	}
 	
+	function isAdmissionQuotaChecked(){
+		return $this->admission_selection_take_place == 0  && ($this->admission_type == 1 || ($this->admission_enable_quota && $this->admission_type == 2));
+	}
+	
 	function isAdmissionQuotaEnabled(){
-		return ($this->isAdmissionEnabled() && $this->admission_selection_take_place == 0  && $this->admission_enable_quota );
+		return ($this->isAdmissionEnabled() && $this->admission_selection_take_place =! 1  && $this->admission_enable_quota );
 	}
 	
 	function restoreAdmissionStudiengang() {
@@ -1599,7 +1603,7 @@ class Seminar {
 				$ret[$this->db->f('studiengang_id')]['num_total'] = $admission_turnout;
 			}
 		}
-		if(!$dont_check_quota) {
+		if(!$dont_check_quota && isset($ret['all'])) {
 			$ret['all']['num_total'] = $admission_turnout - $count;
 			if($ret['all']['num_total'] < 0) $ret['all']['num_total'] = 0;
 		}

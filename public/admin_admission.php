@@ -48,18 +48,32 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 	<script type="text/javascript" language="javascript">
 	<!--
 	function doCrypt() {
-		document.admission.hashpass.value = MD5(document.admission.password.value);
-		document.admission.hashpass2.value = MD5(document.admission.password2.value);
-		document.admission.password.value = "";
-		document.admission.password2.value = "";
-		return true;
+		if(checkpasswordenabled() && checkpassword() && checkpassword2()){
+			document.Formular.hashpass.value = MD5(document.Formular.password.value);
+			document.Formular.hashpass2.value = MD5(document.Formular.password2.value);
+			document.Formular.password.value = "";
+			document.Formular.password2.value = "";
+			return true;
+		} else {
+			return false;
+		}
 	}
-
+	
+	function checkpasswordenabled(){
+		var checked = true;
+		if (document.Formular.password.value.length == 0 && (document.Formular.read_level[2].checked || document.Formular.write_level[1].checked)){
+			alert("<?= _("Sie haben Lese- oder Schreibzugriff nur mit Passwort gewählt. Bitte geben Sie ein Passwort ein.") ?>");
+			document.Formular.password.focus();
+			checked = false;
+		}
+		return checked;
+	}
+	
 	function checkpassword(){
 		var checked = true;
-		if ((document.admission.password.value.length<4) && (document.admission.password.value.length != 0)) {
+		if ((document.Formular.password.value.length<4) && (document.Formular.password.value.length != 0)) {
 			alert("<?= _("Das Passwort ist zu kurz. Es sollte mindestens 4 Zeichen lang sein.") ?>");
-			document.admission.password.focus();
+			document.Formular.password.focus();
 			checked = false;
 		}
 		return checked;
@@ -67,9 +81,9 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 	function checkpassword2(){
 	var checked = true;
-	if (document.admission.password.value != document.admission.password2.value) {
+	if (document.Formular.password.value != document.Formular.password2.value) {
 		alert("<?=_("Das Passwort stimmt nicht mit dem Wiederholungspasswort überein!") ?>");
-		document.admission.password2.focus();
+		document.Formular.password2.focus();
 		checked = false;
 		}
 		return checked;
@@ -147,7 +161,8 @@ function get_snapshot() {
 		$admin_admission_data["admission_prelim_txt"].
 		$admin_admission_data["sem_admission_start_date"].
 		$admin_admission_data["sem_admission_end_date"].
-		$admin_admission_data["admission_disable_waitlist"]);
+		$admin_admission_data["admission_disable_waitlist"].
+		$admin_admission_data["admission_enable_quota"]);
 }
 
 $errormsg = '';
@@ -248,7 +263,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		$admin_admission_data["admission_endtime"] = veranstaltung_beginn($seminar_id, 'int');
 		if(!$admin_admission_data["admission_endtime"]) $admin_admission_data["admission_endtime"] = -1;
 	}
-	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id' ORDER BY (admission_seminar_studiengang.studiengang_id <> 'all'),name");
+	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id' ORDER BY (studiengang_id='all'),name");
 	while ($db->next_record()) {
 		$name = $db->f("studiengang_id") == 'all' ? _("Alle Studiengänge") : $db->f("name");
 		$admin_admission_data["studg"][$db->f("studiengang_id")] = array("name"=>$name, "ratio"=>$db->f("quota"));
@@ -296,11 +311,11 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			}
 			if ($adm_los_x){
 				$admin_admission_data["admission_type"]=1;
-				$admin_admission_data["studg"]['all']= array('name' => _("Alle Studiengänge"), 'ratio' => 100);
+				if(!is_array($admin_admission_data["studg"]) || !count($admin_admission_data["studg"])) $admin_admission_data["studg"]['all'] = array('name' => _("Alle Studiengänge"), 'ratio' => 100);
 			}
 			if ($adm_chrono_x){
 				$admin_admission_data["admission_type"]=2;
-				$admin_admission_data["studg"]['all']= array('name' => _("Alle Studiengänge"), 'ratio' => 100);
+				if(!is_array($admin_admission_data["studg"]) || !count($admin_admission_data["studg"])) $admin_admission_data["studg"]['all'] = array('name' => _("Alle Studiengänge"), 'ratio' => 100);
 			}
 			if ($adm_gesperrt_x){
                 $admin_admission_data["admission_type"] = 3;
@@ -333,7 +348,14 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	} elseif (!$delete_studg) {
 
 		
-		if(isset($_REQUEST['toggle_admission_quota_x'])) $admin_admission_data["admission_enable_quota"] = (int)($_REQUEST["admission_enable_quota"]);
+		if(isset($_REQUEST['toggle_admission_quota_x'])){
+			$admin_admission_data["admission_enable_quota"] = (int)($_REQUEST["admission_enable_quota"]);
+			if(!$admin_admission_data["admission_enable_quota"]){
+				$admin_admission_data["admission_endtime"] = -1;
+				$admin_admission_data["admission_selection_take_place"] = 0;
+			}
+
+		}
 		
 		//Hat der User an den automatischen Werte rumgefuscht? Dann denkt er sich wohl was :) (und wir benutzen die Automatik spaeter nicht!)
 		if ($all_ratio_old != $all_ratio) {
