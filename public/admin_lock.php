@@ -1,58 +1,26 @@
 <?php
-/**
-* admin_lock.php - Sichtbarkeits-Administration von Stud.IP.
-* Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, data-quest <info@data-quest.de>, (C) 2003 Mark Sievers <mark_sievers2000@yahoo.de>
-* 
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/* vim: noexpandtab */
+/*
+ * admin_lock.php - Sichtbarkeits-Administration von Stud.IP.
+ * Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, data-quest <info@data-quest.de>, (C) 2003 Mark Sievers <mark_sievers2000@yahoo.de>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 
-* 
-* 
-*  Folgende Tabelle muss angelegt werden:
-* 
-CREATE TABLE `lock_rules` (
-  `lock_id` varchar(32) collate latin1_german1_ci NOT NULL default '',
-  `name` varchar(255) collate latin1_german1_ci NOT NULL default '',
-  `description` text collate latin1_german1_ci NOT NULL,
-  `attributes` text collate latin1_german1_ci NOT NULL,
-  PRIMARY KEY  (`lock_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;
-ALTER TABLE `seminare` ADD `lock_rule` VARCHAR( 32 ) NULL ;
-
-CREATE TABLE `aux_lock_rules` (
-  `lock_id` varchar(32) collate latin1_german1_ci NOT NULL default '',
-  `name` varchar(255) collate latin1_german1_ci NOT NULL default '',
-  `description` text collate latin1_german1_ci NOT NULL,
-  `attributes` text collate latin1_german1_ci NOT NULL,
-  `sorting` text collate latin1_german1_ci NOT NULL,
-  PRIMARY KEY  (`lock_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;
-
-
-
-
-* 
-* 
-* 
-* * 
-* 
-* 
-* 
-* 
-* */
-
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
+                "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($auth->auth["uid"] == "nobody");
 $perm->check("admin");
 if ($general_lock_x && $general_lock_y) {
@@ -77,20 +45,20 @@ include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php"); // Output of Stud.IP head
 
 // most of the logic happens in links_admin
-// 
+//
 include ("lib/include/links_admin.inc.php"); //Linkleiste fuer admins
 
 if (isset($SessSemName[1]) && (!$make_lock)) {
-	$db7 = new DB_Seminar;
-	$db7->query("SELECT lock_rule, Name, Veranstaltungsnummer FROM seminare WHERE Seminar_id='".$SessSemName[1]."'");
-	$db7->next_record();
-	$lock_sem[$SessSemName[1]]=$db7->f("lock_rule");
+	$stmt = DBManager::get()->prepare(
+	  "SELECT lock_rule, Name, Veranstaltungsnummer ".
+	  "FROM seminare WHERE Seminar_id=?");
+	$stmt->execute(array($SessSemName[1]));
+	$seminar_row = $stmt->fetch();
+	$lock_sem[$SessSemName[1]] = $seminar_row["lock_rule"];
 	$selected = 1;
-	//echo $db7->f("lock_rule");
 }
 // # Get a database connection
-$db = new DB_Seminar;
-$lock_rules = new LockRules;
+$lock_rules = new LockRules();
 $all_lock_rules = $lock_rules->getAllLockRules();
 
 //echo "<body>";
@@ -115,7 +83,7 @@ if (isset($SessSemName[1]) && isset($selected)) {
 	$form 	.=	"<select name=lock_sem[".$SessSemName[1]."]>";
 	for ($i=0;$i<count($all_lock_rules);$i++) {
 		$form .= "<option value=".$all_lock_rules[$i]["lock_id"]."";
-		if ($all_lock_rules[$i]["lock_id"]==$db7->f("lock_rule")) {
+		if ($all_lock_rules[$i]["lock_id"]==$seminar_row["lock_rule"]) {
 			$form .= " selected ";
 		}
 		$form .= ">".$all_lock_rules[$i]["name"]."</option>";
@@ -124,33 +92,50 @@ if (isset($SessSemName[1]) && isset($selected)) {
 	$form 	.=	"<input type=\"hidden\" name=\"lock_all\" value=\"-1\">";
 	$form	.=	"<input type=\"IMAGE\" ".makeButton("zuweisen", "src")." border=0 align=\"absmiddle\" />";
 	$form 	.=	"</form>";
-	echo $zt->row(array($db7->f("Veranstaltungsnummer"), $db7->f("Name"), $form));
+	echo $zt->row(array($seminar_row["Veranstaltungsnummer"],
+	                    $seminar_row["Name"],
+	                    $form));
 
 }
 
-if (is_array($lock_sem) && (!$selected)) {
-	while (list($key,$val)=each($lock_sem)) {
-		$sql = "SELECT Veranstaltungsnummer, Name, lock_rule FROM seminare WHERE seminar_id='".$key."'";
-		$db->query($sql);
-		if ($db->next_record()) {
-				$rule = $lock_rules->getLockRule($val);
-				echo $zt->row(array($db->f("Veranstaltungsnummer"), $db->f("Name"), $rule["name"]));
-				if ($make_lock) {
-					if ($val != 'none') {
-						$sql = "UPDATE seminare SET lock_rule='".$val."' WHERE Seminar_id='".$key."'";
-						$db->query($sql);
-					} else {
-						$sql = "UPDATE seminare SET lock_rule = NULL WHERE Seminar_id='".$key."'";
-						$db->query($sql);
-					}
+if (is_array($lock_sem) && !$selected) {
+	$db = DBManager::get();
+
+	$stmt = $db->prepare("SELECT Veranstaltungsnummer, Name, lock_rule ".
+	                     "FROM seminare WHERE seminar_id=?");
+
+	$stmt_lock1 = $db->prepare("UPDATE seminare SET lock_rule=? ".
+	                           "WHERE Seminar_id=?");
+
+	$stmt_lock2 = $db->prepare("UPDATE seminare SET lock_rule=NULL ".
+	                           "WHERE Seminar_id=?");
+
+	while (list($key, $val) = each($lock_sem)) {
+
+		$stmt->execute(array($key));
+		if ($row = $stmt->fetch()) {
+
+			$rule = $lock_rules->getLockRule($val);
+			echo $zt->row(array($row["Veranstaltungsnummer"],
+			                    $row["Name"],
+			                    $rule["name"]));
+			if ($make_lock) {
+				if ($val != 'none') {
+					$stmt_lock1->execute(array($val, $key));
+				} else {
+					$stmt_lock2->execute(array($key));
 				}
+			}
 		}
 		else {
-			echo $zt->row(array("&nbsp;", $db->f("Name"), "<font color=red>". _("Änderung fehlgeschlagen") . "</font>"));
-
+			echo $zt->row(array("&nbsp;",
+			                    $row["Name"],
+			                    "<font color=red>".
+			                    _("Änderung fehlgeschlagen").
+			                    "</font>"));
 		}
 	}
-} 
+}
 echo $zt->close();
 echo $contentTable->close();
 

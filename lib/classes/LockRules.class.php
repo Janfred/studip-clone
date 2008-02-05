@@ -1,16 +1,4 @@
-<?
-/**
-* LockRules.class.php
-* 
-* 
-*
-* @author		Mark Sievers <msievers@uos.de> 
-* @version		$Id: LockRules.class.php,v 1.7 2003/11/13 07:56:11 msievers Exp $
-* @access		public
-* @modulegroup
-* @module			
-* @package		
-*/
+<?php
 
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -28,143 +16,151 @@
 // +---------------------------------------------------------------------------+
 
 
-if (version_compare(PHP_VERSION, '5.2', '<'))
-{
+if (version_compare(PHP_VERSION, '5.2', '<')) {
   require_once('vendor/phpxmlrpc/xmlrpc.inc');
   require_once('vendor/phpxmlrpc/jsonrpc.inc');
   require_once('vendor/phpxmlrpc/json_extension_api.inc');
 }
 
+/**
+ * LockRules.class.php
+ *
+ *
+ *
+ * @author     Mark Sievers <msievers@uos.de>
+ * @version    $Id: LockRules.class.php,v 1.7 2003/11/13 07:56:11 msievers Exp $
+ * @access     public
+ * @modulegroup
+ * @module
+ * @package
+ */
+
 class LockRules {
-	var $db;
 
-
-	function LockRules() {
-		$this->db = new DB_Seminar;
-	}
-
-  function getLockText()
-  {
-    /* return "<font color=\"aaaaaa\" size=\"2\">"._("&nbsp;Feld gesperrt&nbsp;")."<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Sie dürfen nicht alle Daten dieser Veranstaltung verändern. Diese Sperrung ist von einem/einer AdministratorIn vorgenommen worden."),TRUE,TRUE)."></font>";
-    */
-    #return '<font size="-1>">&nbsp; ' ."<i>" ._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</i>" . "</font>";
+  function getLockText() {
     return '';
   }
-  
-  function output_locked_fielddata($field_data)
-  {
-    $return =  $field_data ? htmlReady($field_data) 
+
+  function output_locked_fielddata($field_data) {
+    $return =  $field_data ? htmlReady($field_data)
       : "<font size=\"-1\"><i>". ("k.A.")."</i></font>";
-      
+
     $return .= "<br/>" . $this->getLockText();
-    
     return $return;
   }
-  
-	function getAllLockRules() {
-		$i=0;
-		$sql = "SELECT * FROM lock_rules";
-		if  (!$this->db->query($sql)) {
-			echo "Error! query not succeeded";
-			return 0;
-		}
-		if ($this->db->num_rows()==0) {
-			return 0;
-		}
-		while ($this->db->next_record()) {
-			$lockdata[$i] = $this->wrapLockRules();
-			$i++;
-		}		
-		return $lockdata;
-	
-	}
 
-    function getSemLockRule($sem_id) {
-        $sql = "SELECT lock_rule FROM seminare Where Seminar_id = '".$sem_id."'";
-		if  (!$this->db->query($sql)) {
-			echo "Error! query not succeeded";
-			return 0;
-		}
-		if ($this->db->num_rows()==0) {
-			return 0;
-		}
-		$this->db->next_record();
-        return $this->getLockRule($this->db->f("lock_rule"));
+  function getAllLockRules() {
+    $i = 0;
+    $lockdata = array();
+    foreach (DBManager::get()->query("SELECT * FROM lock_rules") as $row) {
+      $lockdata[$i++] = $this->wrapLockRules($row);
     }
 
-	function getLockRule($lock_id) {
-		$sql = "SELECT * FROM lock_rules WHERE lock_id = '".$lock_id."'";
-		if  (!$this->db->query($sql)) {
-			echo "Error! query not succeeded";
-			return 0;
-		}
-		if ($this->db->num_rows()==0) {
-			return 0;
-		}
-		$this->db->next_record();
-		return $this->wrapLockRules();
-	}
-	
-	function wrapLockRules() {
-		$lockdata = array();
-		$lockdata["lock_id"]		= $this->db->f("lock_id");
-		$lockdata["name"] 			= $this->db->f("name");
-		$lockdata["description"]	= $this->db->f("description");
+    if (!sizeof($lockdata)) {
+      return 0;
+    }
 
-    $lockdata['attributes'] = json_decode($this->db->f("attributes"), true);
+    return $lockdata;
+  }
 
-		return $lockdata;
-	}
+  function getSemLockRule($sem_id) {
+    $stmt = DBManager::get()->prepare(
+      "SELECT lock_rule FROM seminare WHERE Seminar_id = ?");
+    $result = $stmt->execute(array($sem_id));
+    if (!$result) {
+      echo "Error! query not succeeded";
+      return 0;
+    }
+    $row = $stmt->fetch();
+    if ($row === FALSE) {
+      return 0;
+    }
 
-	function insertNewLockRule($lockdata) {
-		$lock_id = md5(uniqid("Legolas"));
-		
-		$json_attributes = json_encode($lockdata['attributes']);
+    return $this->getLockRule($row["lock_rule"]);
+  }
 
-		$sql = "INSERT INTO lock_rules (lock_id, name, description, attributes) VALUES ('".$lock_id."', '".$lockdata["name"]."', '".$lockdata["description"]."', '".$json_attributes."')";
-		if (!$this->db->query($sql)) {
-			echo "Error! insert_query not succeeded";
-			return 0;
-		}
-		return $lock_id;
-	}
-// update!!!	
-	function updateExistingLockRule($lockdata) {
-		$json_attributes = json_encode($lockdata['attributes']);
-		
-   		if (!$this->db->query($query = "UPDATE lock_rules SET ".
-    	            "name='".$lockdata["name"]."', ".
-					"description='".$lockdata["description"]."', ".
-					"attributes='".$json_attributes."' ".
-					"WHERE lock_id='".$lockdata["lock_id"]."'")) {
-                        return 0;
-                    }
-    	else return 1;
-	}
+  function getLockRule($lock_id) {
 
-	function getLockRuleByName($name) {
-		$sql = "SELECT lock_id FROM lock_rules WHERE name='".$name."'";
-		if  (!$this->db->query($sql)) {
-			echo "Error! query not succeeded";
-			return 0;
-		}
-		if ($this->db->num_rows()==0) {
-			return 0;
-		}
-		$this->db->next_record();
-		return $this->db->f("lock_id");;
-	}
+    $stmt = DBManager::get()->prepare(
+      "SELECT * FROM lock_rules WHERE lock_id = ?");
+    $result = $stmt->execute(array($lock_id));
+    if (!$result) {
+      echo "Error! query not succeeded";
+      return 0;
+    }
+    $row = $stmt->fetch();
+    if ($row === FALSE) {
+      return 0;
+    }
 
-	function deleteLockRule($lock_id) {
-		$sql = "DELETE FROM lock_rules WHERE lock_id='".$lock_id."'";
-		if (!$this->db->query($sql)) {
-			echo "Error! Query not succeeded";
-			return 0;
-		}
-		return 1;
-	}
+    return $this->wrapLockRules($row);
+  }
+
+  function wrapLockRules($row) {
+    $lockdata = array();
+    $lockdata["lock_id"]     = $row["lock_id"];
+    $lockdata["name"]        = $row["name"];
+    $lockdata["description"] = $row["description"];
+    $lockdata['attributes']  = json_decode($row["attributes"], true);
+    return $lockdata;
+  }
+
+  function insertNewLockRule($lockdata) {
+    $lock_id = md5(uniqid("Legolas"));
+
+    $json_attributes = json_encode($lockdata['attributes']);
+
+    $stmt = DBManager::get()->prepare(
+      "INSERT INTO lock_rules (lock_id, name, description, attributes) ".
+      "VALUES (?, ?, ?, ?)");
+
+    $result = $stmt->execute(array($lock_id,
+                                   $lockdata["name"],
+                                   $lockdata["description"],
+                                   $json_attributes));
+
+    if (!$result) {
+      echo "Error! insert_query not succeeded";
+      return 0;
+    }
+
+    return $lock_id;
+  }
+
+  function updateExistingLockRule($lockdata) {
+
+    $stmt = DBManager::get()->prepare(
+      "UPDATE lock_rules SET ".
+      "name=?, description=?, attributes=? ".
+      "WHERE lock_id=?");
+
+    return $stmt->execute(array($lockdata["name"],
+                                $lockdata["description"],
+                                json_encode($lockdata['attributes']),
+                                $lockdata["lock_id"])) ? 1 : 0;
+  }
+
+  function getLockRuleByName($name) {
+    $stmt = DBManager::get()->prepare("SELECT lock_id FROM lock_rules ".
+                                      "WHERE name=?");
+                                      "WHERE name='".$name."'";
+    if  (!$stmt->execute(array($name))) {
+      echo "Error! query not succeeded";
+      return 0;
+    }
+    $row = $stmt->fetch();
+    if ($row === FALSE) {
+      return 0;
+    }
+    return $row["lock_id"];
+  }
+
+  function deleteLockRule($lock_id) {
+    $stmt = DBManager::get()->prepare(
+      "DELETE FROM lock_rules ".
+      "WHERE lock_id=?");
+
+    return $stmt->execute(array($lock_id)) ? 1 : 0;
+  }
 
 }
-
-
-?>

@@ -3,17 +3,17 @@
 /**
 * admin_lock.php - Sichtbarkeits-Administration von Stud.IP.
 * Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, data-quest <info@data-quest.de>, (C) 2003 Mark Sievers <mark_sievers2000@yahoo.de>
-* 
+*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation; either version 2
 * of the License, or (at your option) any later version.
-* 
+*
 * This program is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
-* 
+*
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -40,10 +40,9 @@ include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php"); // Output of Stud.IP head
 
 // most of the logic happens in links_admin
-// 
+//
 include ("lib/include/links_admin.inc.php"); //Linkleiste fuer admins
 
-$db = new DB_Seminar;
 $containerTable = new ContainerTable();
 echo $containerTable->headerRow("<b>&nbsp;Sperrebenen von Veranstaltungen anpassen</b>");
 echo $containerTable->openRow();
@@ -102,7 +101,7 @@ else if ($action=="confirm_edit") {						// UPDATE!!
 		echo $contentTable->openRow();
 		echo $contentTable->openCell();
 		echo show_content();
-	} 
+	}
 }
 else if ($action=="delete") {
 	if (!delete_lock_rule($lock_id)) {

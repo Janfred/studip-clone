@@ -1,4 +1,13 @@
-<?
+<?php
+/* vim: noexpandtab */
+/*
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ */
+
+
 require_once("lib/classes/DataFieldStructure.class.php");
 require_once("lib/classes/LockRules.class.php");
 require_once("lib/classes/ZebraTable.class.php");
@@ -10,12 +19,14 @@ function show_lock_rules() {
 }
 
 function check_empty_lock_rule($lock_id) {
-	$db = new DB_Seminar;
-	$sql = "SELECT lock_rule FROM seminare WHERE lock_rule='".$lock_id."' ";
-	if (!$db->query($sql)) {
+	$stmt = DBManager::get()->prepare("SELECT COUNT(*) as count FROM seminare ".
+	                                  "WHERE lock_rule=?");
+	$result = $stmt->execute(array($lock_id));
+	if (!$result) {
 		return 0;
 	}
-	return $db->num_rows();
+	$row = $stmt->fetch();
+	return $row['count'];
 }
 
 function delete_lock_rule($lock_id) {
@@ -44,9 +55,9 @@ function show_content() {
 
 function show_lock_rule_form($lockdata="",$edit=0) {
 	if ($edit) {
-		$form =	"<h3>"._($lockdata["name"]."&nbsp;&auml;ndern")."</h3>"; 
+		$form =	"<h3>"._($lockdata["name"]."&nbsp;&auml;ndern")."</h3>";
 	} else {
-		$form =	"<h3>"._("Neue Sperrebene eingeben")."</h3>"; 
+		$form =	"<h3>"._("Neue Sperrebene eingeben")."</h3>";
 	}
 	$zt2 = new ZebraTable(array("width"=>"100%","padding"=>"5"));
 	//$form .= $zt;
@@ -71,54 +82,54 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	$form .= $zt->closeRow();
 	$form .= $zt->openRow();
 	if ($lockdata["attributes"]["VeranstaltungsNummer"]) {
-		$form .= $zt->row(array(_("Veranstaltungsnummer"),"<input type=\"radio\" name=\"lockdata[attributes][VeranstaltungsNummer]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][VeranstaltungsNummer]\" value=0>"));	
+		$form .= $zt->row(array(_("Veranstaltungsnummer"),"<input type=\"radio\" name=\"lockdata[attributes][VeranstaltungsNummer]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][VeranstaltungsNummer]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Veranstaltungsnummer"),"<input type=\"radio\" name=\"lockdata[attributes][VeranstaltungsNummer]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][VeranstaltungsNummer]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Veranstaltungsnummer"),"<input type=\"radio\" name=\"lockdata[attributes][VeranstaltungsNummer]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][VeranstaltungsNummer]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["Institut_id"]) {
-		$form .= $zt->row(array(_("beteiligte Einrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=0>"));	
+		$form .= $zt->row(array(_("beteiligte Einrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("beteiligte Einrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("beteiligte Einrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["Name"]) {
-		$form .= $zt->row(array(_("Name"),"<input type=\"radio\" name=\"lockdata[attributes][Name]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Name]\" value=0>"));	
+		$form .= $zt->row(array(_("Name"),"<input type=\"radio\" name=\"lockdata[attributes][Name]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Name]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Name"),"<input type=\"radio\" name=\"lockdata[attributes][Name]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Name]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Name"),"<input type=\"radio\" name=\"lockdata[attributes][Name]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Name]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["Untertitel"]) {
-		$form .= $zt->row(array(_("Untertitel"),"<input type=\"radio\" name=\"lockdata[attributes][Untertitel]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Untertitel]\" value=0>"));	
+		$form .= $zt->row(array(_("Untertitel"),"<input type=\"radio\" name=\"lockdata[attributes][Untertitel]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Untertitel]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Untertitel"),"<input type=\"radio\" name=\"lockdata[attributes][Untertitel]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Untertitel]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Untertitel"),"<input type=\"radio\" name=\"lockdata[attributes][Untertitel]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Untertitel]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["status"]) {
-		$form .= $zt->row(array(_("Status"),"<input type=\"radio\" name=\"lockdata[attributes][status]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][status]\" value=0>"));	
+		$form .= $zt->row(array(_("Status"),"<input type=\"radio\" name=\"lockdata[attributes][status]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][status]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Status"),"<input type=\"radio\" name=\"lockdata[attributes][status]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][status]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Status"),"<input type=\"radio\" name=\"lockdata[attributes][status]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][status]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["Beschreibung"]) {
-		$form .= $zt->row(array(_("Beschreibung"),"<input type=\"radio\" name=\"lockdata[attributes][Beschreibung]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Beschreibung]\" value=0>"));	
+		$form .= $zt->row(array(_("Beschreibung"),"<input type=\"radio\" name=\"lockdata[attributes][Beschreibung]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Beschreibung]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Beschreibung"),"<input type=\"radio\" name=\"lockdata[attributes][Beschreibung]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Beschreibung]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Beschreibung"),"<input type=\"radio\" name=\"lockdata[attributes][Beschreibung]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Beschreibung]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["Ort"]) {
-		$form .= $zt->row(array(_("Ort"),"<input type=\"radio\" name=\"lockdata[attributes][Ort]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Ort]\" value=0>"));	
+		$form .= $zt->row(array(_("Ort"),"<input type=\"radio\" name=\"lockdata[attributes][Ort]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Ort]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Ort"),"<input type=\"radio\" name=\"lockdata[attributes][Ort]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Ort]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Ort"),"<input type=\"radio\" name=\"lockdata[attributes][Ort]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Ort]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["art"]) {
-		$form .= $zt->row(array(_("Veranstaltungstyp"),"<input type=\"radio\" name=\"lockdata[attributes][art]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][art]\" value=0>"));	
+		$form .= $zt->row(array(_("Veranstaltungstyp"),"<input type=\"radio\" name=\"lockdata[attributes][art]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][art]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Veranstaltungstyp"),"<input type=\"radio\" name=\"lockdata[attributes][art]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][art]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Veranstaltungstyp"),"<input type=\"radio\" name=\"lockdata[attributes][art]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][art]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["ects"]) {
-		$form .= $zt->row(array(_("ECTS-Punkte"),"<input type=\"radio\" name=\"lockdata[attributes][ects]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][ects]\" value=0>"));	
+		$form .= $zt->row(array(_("ECTS-Punkte"),"<input type=\"radio\" name=\"lockdata[attributes][ects]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][ects]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("ECTS-Punkte"),"<input type=\"radio\" name=\"lockdata[attributes][ects]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][ects]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("ECTS-Punkte"),"<input type=\"radio\" name=\"lockdata[attributes][ects]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][ects]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["admission_turnout"]) {
-		$form .= $zt->row(array(_("Teilnehmerzahl"),"<input type=\"radio\" name=\"lockdata[attributes][admission_turnout]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_turnout]\" value=0>"));	
+		$form .= $zt->row(array(_("Teilnehmerzahl"),"<input type=\"radio\" name=\"lockdata[attributes][admission_turnout]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_turnout]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Teilnehmerzahl"),"<input type=\"radio\" name=\"lockdata[attributes][admission_turnout]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_turnout]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Teilnehmerzahl"),"<input type=\"radio\" name=\"lockdata[attributes][admission_turnout]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_turnout]\" value=0 checked>"));
 	}
 	if ($edit) {
 		$form .= "<input type=\"hidden\" name=\"action\" value=\"confirm_edit\">";
@@ -136,24 +147,24 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	$form .= $zt->closeRow();
 	$form .= $zt->openRow();
 	if ($lockdata["attributes"]["dozent"]) {
-		$form .= $zt->row(array(_("DozentInnen"),"<input type=\"radio\" name=\"lockdata[attributes][dozent]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][dozent]\" value=0>"));	
+		$form .= $zt->row(array(_("DozentInnen"),"<input type=\"radio\" name=\"lockdata[attributes][dozent]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][dozent]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("DozentInnen"),"<input type=\"radio\" name=\"lockdata[attributes][dozent]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][dozent]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("DozentInnen"),"<input type=\"radio\" name=\"lockdata[attributes][dozent]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][dozent]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["tutor"]) {
-		$form .= $zt->row(array(_("TutorInnen"),"<input type=\"radio\" name=\"lockdata[attributes][tutor]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][tutor]\" value=0>"));	
+		$form .= $zt->row(array(_("TutorInnen"),"<input type=\"radio\" name=\"lockdata[attributes][tutor]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][tutor]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("TutorInnen"),"<input type=\"radio\" name=\"lockdata[attributes][tutor]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][tutor]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("TutorInnen"),"<input type=\"radio\" name=\"lockdata[attributes][tutor]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][tutor]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["seminar_inst"]) {
-		$form .= $zt->row(array(_("Heimateinrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=0>"));	
+		$form .= $zt->row(array(_("Heimateinrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Heimateinrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Heimateinrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["sem_tree"]) {
-		$form .= $zt->row(array(_("Studienbereiche"),"<input type=\"radio\" name=\"lockdata[attributes][sem_tree]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][sem_tree]\" value=0>"));	
+		$form .= $zt->row(array(_("Studienbereiche"),"<input type=\"radio\" name=\"lockdata[attributes][sem_tree]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][sem_tree]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Studienbereiche"),"<input type=\"radio\" name=\"lockdata[attributes][sem_tree]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][sem_tree]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Studienbereiche"),"<input type=\"radio\" name=\"lockdata[attributes][sem_tree]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][sem_tree]\" value=0 checked>"));
 	}
 	if ($edit) {
 		$form .= "<input type=\"hidden\" name=\"action\" value=\"confirm_edit\">";
@@ -171,32 +182,32 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	$form .= $zt->closeRow();
 	$form .= $zt->openRow();
 	if ($lockdata["attributes"]["Sonstiges"]) {
-		$form .= $zt->row(array(_("Sonstiges"),"<input type=\"radio\" name=\"lockdata[attributes][Sonstiges]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Sonstiges]\" value=0>"));	
+		$form .= $zt->row(array(_("Sonstiges"),"<input type=\"radio\" name=\"lockdata[attributes][Sonstiges]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Sonstiges]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Sonstiges"),"<input type=\"radio\" name=\"lockdata[attributes][Sonstiges]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Sonstiges]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Sonstiges"),"<input type=\"radio\" name=\"lockdata[attributes][Sonstiges]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Sonstiges]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["teilnehmer"]) {
-		$form .= $zt->row(array(_("Beschreibung des Teilnehmerkreises"),"<input type=\"radio\" name=\"lockdata[attributes][teilnehmer]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][teilnehmer]\" value=0>"));	
+		$form .= $zt->row(array(_("Beschreibung des Teilnehmerkreises"),"<input type=\"radio\" name=\"lockdata[attributes][teilnehmer]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][teilnehmer]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Beschreibung des Teilnehmerkreises"),"<input type=\"radio\" name=\"lockdata[attributes][teilnehmer]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][teilnehmer]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Beschreibung des Teilnehmerkreises"),"<input type=\"radio\" name=\"lockdata[attributes][teilnehmer]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][teilnehmer]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["voraussetzungen"]) {
-		$form .= $zt->row(array(_("Teilnahmevoraussetzungen"),"<input type=\"radio\" name=\"lockdata[attributes][voraussetzungen]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][voraussetzungen]\" value=0>"));	
+		$form .= $zt->row(array(_("Teilnahmevoraussetzungen"),"<input type=\"radio\" name=\"lockdata[attributes][voraussetzungen]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][voraussetzungen]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Teilnahmevoraussetzungen"),"<input type=\"radio\" name=\"lockdata[attributes][voraussetzungen]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][voraussetzungen]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Teilnahmevoraussetzungen"),"<input type=\"radio\" name=\"lockdata[attributes][voraussetzungen]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][voraussetzungen]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["lernorga"]) {
-		$form .= $zt->row(array(_("Lernorganisation"),"<input type=\"radio\" name=\"lockdata[attributes][lernorga]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][lernorga]\" value=0>"));	
+		$form .= $zt->row(array(_("Lernorganisation"),"<input type=\"radio\" name=\"lockdata[attributes][lernorga]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][lernorga]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Lernorganisation"),"<input type=\"radio\" name=\"lockdata[attributes][lernorga]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][lernorga]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Lernorganisation"),"<input type=\"radio\" name=\"lockdata[attributes][lernorga]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][lernorga]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["leistungsnachweis"]) {
-		$form .= $zt->row(array(_("Leistungsnachweis"),"<input type=\"radio\" name=\"lockdata[attributes][leistungsnachweis]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][leistungsnachweis]\" value=0>"));	
+		$form .= $zt->row(array(_("Leistungsnachweis"),"<input type=\"radio\" name=\"lockdata[attributes][leistungsnachweis]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][leistungsnachweis]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Leistungsnachweis"),"<input type=\"radio\" name=\"lockdata[attributes][leistungsnachweis]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][leistungsnachweis]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Leistungsnachweis"),"<input type=\"radio\" name=\"lockdata[attributes][leistungsnachweis]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][leistungsnachweis]\" value=0 checked>"));
 	}
 	$datafields = get_all_seminars_generic_datafields();
-	
+
   $datafields_list = DataFieldStructure::getDataFieldStructures("sem");
 
 	foreach ($datafields_list as $key=>$val) {
@@ -222,19 +233,19 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	$form .= $zt->closeRow();
 	$form .= $zt->openRow();
 	if ($lockdata["attributes"]["room_time"]) {
-		$form .= $zt->row(array(_("Zeiten/Räume"),"<input type=\"radio\" name=\"lockdata[attributes][room_time]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][room_time]\" value=0>"));	
+		$form .= $zt->row(array(_("Zeiten/Räume"),"<input type=\"radio\" name=\"lockdata[attributes][room_time]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][room_time]\" value=0>"));
     } else {
-		$form .= $zt->row(array(_("Zeiten/Räume"),"<input type=\"radio\" name=\"lockdata[attributes][room_time]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][room_time]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Zeiten/Räume"),"<input type=\"radio\" name=\"lockdata[attributes][room_time]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][room_time]\" value=0 checked>"));
     }
     /*if ($lockdata["attributes"]["start_time"]) {
-		$form .= $zt->row(array(_("Semester"),"<input type=\"radio\" name=\"lockdata[attributes][start_time]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][start_time]\" value=0>"));	
+		$form .= $zt->row(array(_("Semester"),"<input type=\"radio\" name=\"lockdata[attributes][start_time]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][start_time]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Semester"),"<input type=\"radio\" name=\"lockdata[attributes][start_time]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][start_time]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Semester"),"<input type=\"radio\" name=\"lockdata[attributes][start_time]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][start_time]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["duration_time"]) {
-		$form .= $zt->row(array(_("Dauer (in Semestern)"),"<input type=\"radio\" name=\"lockdata[attributes][duration_time]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][duration_time]\" value=0>"));	
+		$form .= $zt->row(array(_("Dauer (in Semestern)"),"<input type=\"radio\" name=\"lockdata[attributes][duration_time]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][duration_time]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Dauer (in Semestern)"),"<input type=\"radio\" name=\"lockdata[attributes][duration_time]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][duration_time]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Dauer (in Semestern)"),"<input type=\"radio\" name=\"lockdata[attributes][duration_time]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][duration_time]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["metadata_dates"]) {
 		$form .= $zt->row(array(_("Termine"),"<input type=\"radio\" name=\"lockdata[attributes][metadata_dates]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][metadata_dates]\" value=0>"));
@@ -242,9 +253,9 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 		$form .= $zt->row(array(_("Termine"),"<input type=\"radio\" name=\"lockdata[attributes][metadata_dates]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][metadata_dates]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["further_time_dates"]) {
-		$form .= $zt->row(array(_("Veranstaltungsbeginn"),"<input type=\"radio\" name=\"lockdata[attributes][further_time_dates]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][further_time_dates]\" value=0>"));	
+		$form .= $zt->row(array(_("Veranstaltungsbeginn"),"<input type=\"radio\" name=\"lockdata[attributes][further_time_dates]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][further_time_dates]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Veranstaltungsbeginn"),"<input type=\"radio\" name=\"lockdata[attributes][further_time_dates]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][further_time_dates]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Veranstaltungsbeginn"),"<input type=\"radio\" name=\"lockdata[attributes][further_time_dates]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][further_time_dates]\" value=0 checked>"));
 	}*/
 	if ($edit) {
 		$form .= "<input type=\"hidden\" name=\"action\" value=\"confirm_edit\">";
@@ -262,64 +273,64 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	$form .= $zt->closeRow();
 	$form .= $zt->openRow();
 	if ($lockdata["attributes"]["admission_endtime"]) {
-		$form .= $zt->row(array(_("Aufhebung der Kontigentierung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=0>"));	
+		$form .= $zt->row(array(_("Aufhebung der Kontigentierung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Aufhebung der Kontingentierung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Aufhebung der Kontingentierung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["admission_waitlist"]) {
-		$form .= $zt->row(array(_("Aktivieren/Deaktivieren der Warteliste"),"<input type=\"radio\" name=\"lockdata[attributes][admission_waitlist]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_waitlist]\" value=0>"));	
+		$form .= $zt->row(array(_("Aktivieren/Deaktivieren der Warteliste"),"<input type=\"radio\" name=\"lockdata[attributes][admission_waitlist]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_waitlist]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Aktivieren/Deaktivieren der Warteliste"),"<input type=\"radio\" name=\"lockdata[attributes][admission_waitlist]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_waitlist]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Aktivieren/Deaktivieren der Warteliste"),"<input type=\"radio\" name=\"lockdata[attributes][admission_waitlist]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_waitlist]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["admission_binding"]) {
-		$form .= $zt->row(array(_("Verbindlichkeit der Anmeldung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_binding]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_binding]\" value=0>"));	
+		$form .= $zt->row(array(_("Verbindlichkeit der Anmeldung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_binding]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_binding]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Verbindlichkeit der Anmeldung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_binding]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_binding]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Verbindlichkeit der Anmeldung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_binding]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_binding]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["admission_type"]) {
-		$form .= $zt->row(array(_("Typ des Anmeldeverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=0>"));	
+		$form .= $zt->row(array(_("Typ des Anmeldeverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Typ des Anmeldeverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Typ des Anmeldeverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["admission_selection_take_place"]) {
-		$form .= $zt->row(array(_("Zeit/Datum des Losverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_selection_take_place]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_selection_take_place]\" value=0>"));	
+		$form .= $zt->row(array(_("Zeit/Datum des Losverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_selection_take_place]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_selection_take_place]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Zeit/Datum des Losverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_selection_take_place]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_selection_take_place]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Zeit/Datum des Losverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_selection_take_place]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_selection_take_place]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["admission_prelim"]) {
-		$form .= $zt->row(array(_("Vorl&auml;ufigkeit der Anmeldungen"),"<input type=\"radio\" name=\"lockdata[attributes][admission_prelim]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_prelim]\" value=0>"));	
+		$form .= $zt->row(array(_("Vorl&auml;ufigkeit der Anmeldungen"),"<input type=\"radio\" name=\"lockdata[attributes][admission_prelim]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_prelim]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Vorl&auml;ufigkeit der Anmeldungen"),"<input type=\"radio\" name=\"lockdata[attributes][admission_prelim]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_prelim]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Vorl&auml;ufigkeit der Anmeldungen"),"<input type=\"radio\" name=\"lockdata[attributes][admission_prelim]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_prelim]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["admission_prelim_txt"]) {
-		$form .= $zt->row(array(_("Hinweistext bei Anmeldungen"),"<input type=\"radio\" name=\"lockdata[attributes][admission_prelim_txt]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_prelim_txt]\" value=0>"));	
+		$form .= $zt->row(array(_("Hinweistext bei Anmeldungen"),"<input type=\"radio\" name=\"lockdata[attributes][admission_prelim_txt]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_prelim_txt]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Hinweistext bei Anmeldungen"),"<input type=\"radio\" name=\"lockdata[attributes][admission_prelim_txt]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_prelim_txt]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Hinweistext bei Anmeldungen"),"<input type=\"radio\" name=\"lockdata[attributes][admission_prelim_txt]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_prelim_txt]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["admission_starttime"]) {
-		$form .= $zt->row(array(_("Startzeitpunkt der Anmeldem&ouml;glichkeit"),"<input type=\"radio\" name=\"lockdata[attributes][admission_starttime]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_starttime]\" value=0>"));	
+		$form .= $zt->row(array(_("Startzeitpunkt der Anmeldem&ouml;glichkeit"),"<input type=\"radio\" name=\"lockdata[attributes][admission_starttime]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_starttime]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Startzeitpunkt der Anmeldem&ouml;glichkeit"),"<input type=\"radio\" name=\"lockdata[attributes][admission_starttime]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_starttime]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Startzeitpunkt der Anmeldem&ouml;glichkeit"),"<input type=\"radio\" name=\"lockdata[attributes][admission_starttime]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_starttime]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["admission_endtime_sem"]) {
-		$form .= $zt->row(array(_("Endzeitpunkt der Anmeldem&ouml;glichkeit"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime_sem]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime_sem]\" value=0>"));	
+		$form .= $zt->row(array(_("Endzeitpunkt der Anmeldem&ouml;glichkeit"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime_sem]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime_sem]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Endzeitpunkt der Anmeldem&ouml;glichkeit"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime_sem]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime_sem]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Endzeitpunkt der Anmeldem&ouml;glichkeit"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime_sem]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime_sem]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["Lesezugriff"]) {
-		$form .= $zt->row(array(_("Lesezugriff"),"<input type=\"radio\" name=\"lockdata[attributes][Lesezugriff]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Lesezugriff]\" value=0>"));	
+		$form .= $zt->row(array(_("Lesezugriff"),"<input type=\"radio\" name=\"lockdata[attributes][Lesezugriff]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Lesezugriff]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Lesezugriff"),"<input type=\"radio\" name=\"lockdata[attributes][Lesezugriff]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Lesezugriff]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Lesezugriff"),"<input type=\"radio\" name=\"lockdata[attributes][Lesezugriff]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Lesezugriff]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["Schreibzugriff"]) {
-		$form .= $zt->row(array(_("Schreibzugriff"),"<input type=\"radio\" name=\"lockdata[attributes][Schreibzugriff]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Schreibzugriff]\" value=0>"));	
+		$form .= $zt->row(array(_("Schreibzugriff"),"<input type=\"radio\" name=\"lockdata[attributes][Schreibzugriff]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Schreibzugriff]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Schreibzugriff"),"<input type=\"radio\" name=\"lockdata[attributes][Schreibzugriff]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Schreibzugriff]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Schreibzugriff"),"<input type=\"radio\" name=\"lockdata[attributes][Schreibzugriff]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Schreibzugriff]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["Passwort"]) {
-		$form .= $zt->row(array(_("Passwort"),"<input type=\"radio\" name=\"lockdata[attributes][Passwort]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Passwort]\" value=0>"));	
+		$form .= $zt->row(array(_("Passwort"),"<input type=\"radio\" name=\"lockdata[attributes][Passwort]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Passwort]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Passwort"),"<input type=\"radio\" name=\"lockdata[attributes][Passwort]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Passwort]\" value=0 checked>"));	
+		$form .= $zt->row(array(_("Passwort"),"<input type=\"radio\" name=\"lockdata[attributes][Passwort]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Passwort]\" value=0 checked>"));
 	}
 	if ($edit) {
 		$form .= "<input type=\"hidden\" name=\"action\" value=\"confirm_edit\">";
@@ -349,7 +360,7 @@ function parse_lockdata($lockdata) {
 	while (list($key,$val)=each($lockdata["attributes"])) {
 		if ($val==1) {
 			$insertdata["attributes"][$key] = $val;
-		} 
+		}
 	}
 	return $insertdata;
 }
@@ -361,20 +372,21 @@ function insert_lock_rule($insertdata) {
 
 function get_all_seminars_generic_datafields() {
 	$i++;
-	$sql = "SELECT * FROM datafields WHERE object_class=1 ORDER BY priority";
-	$db = new DB_Seminar;
-	if (!$db->query($sql)) {
-		echo "error! DB-Query";
-		return 0;
-	}
-	if ($db->num_rows()==0) {
-		return 0;
-	}
-	while ($db->next_record()) {
-		$datafields[$i]["name"] = $db->f("name");
-		$datafields[$i]["id"]	= $db->f("datafield_id");
+	$db = DBManager::get()->query();
+
+	$datafields = array();
+	foreach ($db->query("SELECT * FROM datafields ".
+	                    "WHERE object_class=1 ".
+	                    "ORDER BY priority") as $row) {
+		$datafields[$i]["name"] = $row["name"];
+		$datafields[$i]["id"]	= $row["datafield_id"];
 		$i++;
 	}
+
+	if (!sizeof($datafields)) {
+		return 0;
+	}
+
 	return $datafields;
 }
 
