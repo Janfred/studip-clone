@@ -113,60 +113,62 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     }
     $user = $this->getUser();
     $userid = $user->getUserid();
-    $query = "select p.* from plugins p inner join plugins_activated pat using (pluginid)
-            join roles_plugins rp on p.pluginid=rp.pluginid
-            join roles_user r on r.roleid=rp.roleid
-            where r.userid=? and pat.poiid=? and pat.state='on'
-            union
-            select p.* from auth_user_md5 au, plugins p inner join plugins_activated pat using (pluginid)
-            join roles_plugins rp on p.pluginid=rp.pluginid
-            join roles_studipperms rps on rps.roleid=rp.roleid
-            where rps.permname = au.perms and au.user_id=? and pat.poiid=? and pat.state='on'
-            "
-      .  "UNION
-        SELECT DISTINCT p.*
-        FROM seminar_inst s
-        INNER JOIN Institute i ON (i.Institut_id = s.institut_id)
-        INNER JOIN plugins_default_activations pa ON (i.fakultaets_id = pa.institutid
-        OR i.Institut_id = pa.institutid)
-        INNER JOIN plugins p ON (p.pluginid = pa.pluginid AND p.enabled='yes')
-        LEFT JOIN plugins_activated pad ON (pad.poiid = ? AND pad.pluginid = p.pluginid )
-        WHERE s.seminar_id = ?
-        AND (pad.state != 'off' OR pad.state IS NULL)";
 
-    # TODO (mlunzena) PDO-ify
-    if ($GLOBALS["PLUGINS_CACHING"]) {
-      $result =& $this->connection->CacheExecute($GLOBALS['PLUGINS_CACHE_TIME'],$query,array($userid,$this->poiid,$userid,$this->poiid,$this->poiid,$id));
-    }
-    else {
-      $result =& $this->connection->execute($query,array($userid,$this->poiid,$userid,$this->poiid,$this->poiid,$id));
-    }
+    $stmt = DBManager::get()->prepare(
+      "SELECT p.* FROM plugins p ".
+      "INNER JOIN plugins_activated pat USING (pluginid) ".
+      "JOIN roles_plugins rp ON p.pluginid=rp.pluginid ".
+      "JOIN roles_user r ON r.roleid=rp.roleid ".
+      "WHERE r.userid=? AND pat.poiid=? AND pat.state='on' ".
 
+      "UNION ".
+
+      "SELECT p.* FROM auth_user_md5 au, plugins p ".
+      "INNER JOIN plugins_activated pat USING (pluginid) ".
+      "JOIN roles_plugins rp ON p.pluginid=rp.pluginid ".
+      "JOIN roles_studipperms rps ON rps.roleid=rp.roleid ".
+      "WHERE rps.permname = au.perms AND au.user_id=? AND ".
+      "pat.poiid=? AND pat.state='on' ".
+
+      "UNION ".
+
+      "SELECT DISTINCT p.* FROM seminar_inst s ".
+      "INNER JOIN Institute i ON (i.Institut_id = s.institut_id) ".
+      "INNER JOIN plugins_default_activations pa ".
+        "ON (i.fakultaets_id = pa.institutid ".
+        "OR i.Institut_id = pa.institutid) ".
+      "INNER JOIN plugins p ON (p.pluginid = pa.pluginid AND p.enabled='yes') ".
+      "LEFT JOIN plugins_activated pad ".
+        "ON (pad.poiid = ? AND pad.pluginid = p.pluginid ) ".
+      "WHERE s.seminar_id = ? AND (pad.state != 'off' OR pad.state IS NULL)");
+
+    $result = $stmt->execute(array($userid, $this->poiid, $userid,
+                                   $this->poiid, $this->poiid, $id));
+
+    // TODO: Fehlermeldung ausgeben
+    // echo ("keine aktivierten Plugins<br>");
     if (!$result) {
-      // TODO: Fehlermeldung ausgeben
-      // echo ("keine aktivierten Plugins<br>");
       return array();
     }
-    else {
-      $plugins = array();
-      while (!$result->EOF) {
-        $pluginclassname = $result->fields("pluginclassname");
-        $pluginpath = $result->fields("pluginpath");
-        // Klasse instanziieren
-        $plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
-        if ($plugin !=null) {
-          $plugin->setId($id);
-          $plugin->setPluginid($result->fields("pluginid"));
-          $plugin->setPluginname($result->fields("pluginname"));
-          $plugin->setUser($this->getUser());
-          $plugin->setActivated(true);
-          $plugins[] = $plugin;
-        }
-        $result->MoveNext();
+
+
+    $plugins = array();
+    while ($row = $stmt->fetch()) {
+      $pluginclassname = $row["pluginclassname"];
+      $pluginpath = $row["pluginpath"];
+
+      // Klasse instanziieren
+      $plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
+      if ($plugin != null) {
+        $plugin->setId($id);
+        $plugin->setPluginid($row["pluginid"]);
+        $plugin->setPluginname($row["pluginname"]);
+        $plugin->setUser($this->getUser());
+        $plugin->setActivated(true);
+        $plugins[] = $plugin;
       }
-      $result->Close();
-      return $plugins;
     }
+    return $plugins;
   }
 
 
@@ -297,7 +299,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
   function getDefaultActivations(AbstractStudIPStandardPlugin $plugin) {
 
     $stmt = DBManager::get()->prepare(
-      "SELECT * FROM plugins_default_activations ".
+      "SELECT institutid FROM plugins_default_activations ".
       "WHERE pluginid=?");
 
     $result = $stmt->execute(array($plugin->getPluginid()));
@@ -307,12 +309,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
       return array();
     }
 
-    // get the ids
-    $institutids = array();
-    while ($row = $stmt->fetch()) {
-      $institutids[] = $row["institutid"];
-    }
-    return $institutids;
+    return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
   }
 
   /**
