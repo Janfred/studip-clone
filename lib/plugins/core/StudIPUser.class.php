@@ -41,23 +41,16 @@ class StudIPUser {
     $this->userid = $id;
     $this->permission = new Permission($id);
 
-    $row = PluginEngine::cachedCallback('plugins/StudIPUser/setUserid/' . $id,
-                                        array(__CLASS__, '_setUserid'),
-                                        array($id));
-    if ($row !== FALSE) {
-      $this->givenname = $row['Vorname'];
-      $this->surname   = $row['Nachname'];
-      $this->username  = $row['username'];
-    }
-  }
-
-  # TODO (mlunzena) see above..
-  static function _setUserid($id) {
     $stmt = DBManager::get()->prepare("SELECT Vorname, Nachname, username ".
                                       "FROM auth_user_md5 ".
                                       "WHERE user_id=?");
     $stmt->execute(array($id));
-    return $stmt->fetch();
+
+    if (($row = $stmt->fetch()) !== FALSE) {
+      $this->givenname = $row['Vorname'];
+      $this->surname   = $row['Nachname'];
+      $this->username  = $row['username'];
+    }
   }
 
   function getUserid() {

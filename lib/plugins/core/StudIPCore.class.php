@@ -15,16 +15,6 @@ class StudIPCore {
 	 * Returns all Institutes, which are registered in the studip database
 	 */
 	static function getInstitutes() {
-		$key = 'plugins/StudIPCore/getInstitutes';
-		$callback = array(__CLASS__, '_getInstitutes');
-		return PluginEngine::cachedCallback($key, $callback);
-	}
-
-
-	/**
-	 * Uncached version of #getInstitutes
-	 */
-	static function _getInstitutes() {
 
 		$db = DBManager::get();
 
@@ -78,17 +68,6 @@ class StudIPCore {
 	 *
 	 */
 	static function getInstituteByFacultyId($facultyid) {
-		$key = 'plugins/StudIPCore/getInstituteByFacultyId/' . $facultyid;
-		$callback = array(__CLASS__, '_getInstituteByFacultyId');
-		$arguments = func_get_args();
-		return PluginEngine::cachedCallback($key, $callback, $arguments);
-	}
-
-
-	/**
-	 * Uncached version of #getInstituteByFacultyId
-	 */
-	static function _getInstituteByFacultyId($facultyid) {
 
 		$db = DBManager::get();
 
@@ -119,17 +98,6 @@ class StudIPCore {
 	 *
 	 */
 	static function getInstitute($instituteid) {
-		$key = 'plugins/StudIPCore/getInstitute/'.$instituteid;
-		$callback = array(__CLASS__, '_getInstitute');
-		$arguments = func_get_args();
-		return PluginEngine::cachedCallback($key, $callback, $arguments);
-	}
-
-
-	/**
-	 * Uncached version of #getInstitute
-	 */
-	function _getInstitute($instituteid) {
 
 		$db = DBManager::get();
 
@@ -167,16 +135,6 @@ class StudIPCore {
 	 * @return unknown
 	 */
 	static function getSemester() {
-		$key = 'plugins/StudIPCore/getSemester';
-		$callback = array(__CLASS__, '_getSemester');
-		return PluginEngine::cachedCallback($key, $callback);
-	}
-
-
-	/**
-	 * Uncached version of #getSemester
-	 */
-	static function _getSemester() {
 
 		$db = DBManager::get();
 
@@ -212,17 +170,6 @@ class StudIPCore {
 	 * @return unknown
 	 */
 	static function getSeminarsForInstitute($instituteid, $semesterid) {
-		$key = 'plugins/StudIPCore/getSeminarsForInstitute/'.
-		       $instituteid.'/'.$semesterid;
-		$callback = array(__CLASS__, '_getSeminarsForInstitute');
-		$arguments = func_get_args();
-		return PluginEngine::cachedCallback($key, $callback, $arguments);
-	}
-
-	/**
-	 * Uncached version of #getSeminarsForInstitute
-	 */
-	static function _getSeminarsForInstitute($instituteid, $semesterid) {
 
 		$db = DBManager::get();
 
