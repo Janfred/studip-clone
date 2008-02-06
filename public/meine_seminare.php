@@ -618,22 +618,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 		while ($db->next_record()) {
 			if ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
-				$db2=new DB_Seminar;
-				$admission_studiengang_id = $db->f("studiengang_id");
-				$admission_seminar_id = $db->f("seminar_id");
-				if ($admission_studiengang_id == 'all'){
-					$plaetze = get_all_quota($db->f("seminar_id"));
-				} else {
-					$plaetze = round ($db->f("admission_turnout") * ($db->f("quota") / 100));  // Anzahl der Plaetze in dem Studiengang in den ich will
-				}
-				$db2->query("SELECT count(*) AS wartende FROM admission_seminar_user WHERE seminar_id = '$admission_seminar_id' AND studiengang_id = '$admission_studiengang_id'");
-				if ($db2->next_record()) {
-					$wartende = ($db2->f("wartende"));   // Anzahl der Personen die auch in diesem Studiengang auf einen Platz lauern
-				}
-				if ($plaetze >= $wartende)
-					$admission_chance = 100;   // ich komm auf jeden Fall rein
-				else
-					$admission_chance = round (($plaetze / $wartende) * 100); // mehr Bewerber als Plaetze
+				$admission_chance = Seminar::GetInstance($db->f("seminar_id"))->getAdmissionChance($db->f("studiengang_id"));
 				$chance_color = dechex(255-(200-($admission_chance*2)));  // Gruen der Farbe nimmt mit Wahrscheinlichkeit ab
 			} else {  // wir sind in einer Warteliste
 				if ($db->f("position") >= 30)

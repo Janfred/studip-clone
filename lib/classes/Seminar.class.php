@@ -1647,9 +1647,9 @@ class Seminar {
 				$waiting += $st['num_claiming'];
 			}
 		}
-		if($free > 0 && !$waiting) return 100;
 		if($free <= 0) return 0;
-		if($waiting > 0 && $free > 0) return round(($free / $waiting) * 100);
+		else if($free >= $waiting) return 100;
+		else return round(($free / $waiting) * 100);
 	}
 
 }
