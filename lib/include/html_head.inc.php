@@ -63,7 +63,6 @@ global  $_html_head_title,
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<base href="<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>">
 		<? if (basename($_SERVER['SCRIPT_NAME']) !== 'logout.php') : ?>
 			<meta http-equiv="REFRESH" CONTENT="<?= $AUTH_LIFETIME * 60 ?>; URL=<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>logout.php">
 		<? endif ?>

@@ -71,6 +71,7 @@ class reiter {
 	}
 
 	function topkat($text,$link,$width,$active=FALSE, $target="", $close=FALSE, $disabled=FALSE) {
+		$link = self::absolutizeLink($link);
 		if ($disabled) {
 			if ($close) {
 				printf("<td class=\"%s\" %s align=\"%s\" nowrap><font class=\"%s\">%s%s%s</font>%s</td>\n",
@@ -116,6 +117,7 @@ class reiter {
 	}
 
 	function bottomkat($text,$link,$active=FALSE, $target="", $disabled=FALSE) {
+		$link = self::absolutizeLink($link);
 		if ($disabled) {
 			printf("<span style=\"white-space:nowrap;\"><img src=\"".$GLOBALS['ASSETS_URL']."images/%s\" border=\"0\"><font class=\"%s\">%s</font><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"15\"></span>\n",
 				$this->inactiveBottomkatPic, $this->classDisabled, $text);
@@ -308,6 +310,13 @@ class reiter {
 		$view=$this->setNoAktiveBottomkat($view);
 		$structure=$this->activateStructure ($structure, $view);
 		$this->printStructure($structure, $tooltip, $addText);
+	}
+
+	function absolutizeLink($link) {
+		if (!(preg_match('#^[a-z]+://#', $link) || $link[0] === '/')) {
+			$link = $GLOBALS['ABSOLUTE_URI_STUDIP'].$link;
+		}
+		return $link;
 	}
 }
 ?>

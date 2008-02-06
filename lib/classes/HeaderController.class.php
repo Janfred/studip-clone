@@ -40,7 +40,7 @@ class HeaderController {
 	var $current_page = '';
 	var $items = array();
 	var $accesskey_enabled = false;
-	
+
 	function HeaderController(){
 		global $user;
 		if (is_object($user) && $user->cfg->getValue(null,"ACCESSKEY_ENABLE")){
@@ -50,7 +50,7 @@ class HeaderController {
 			list( , $item) = explode('getheaderitem', $method);
 			if($item) $this->items[] = $item;
 		}
-		
+
 	}
 
 	function fillTemplate(&$template){
@@ -59,7 +59,7 @@ class HeaderController {
 			$template->set_attribute($item, $this->getHeaderItem($item));
 		}
 	}
-	
+
 	function getListOfItems($list = array()){
 		$ret = array();
 		foreach($list as $list_item){
@@ -71,7 +71,7 @@ class HeaderController {
 		}
 		return $ret;
 	}
-	
+
 	function getHeaderItem($item){
 		$method = "getHeaderItem" . $item;
 		if (method_exists($this, $method)){
@@ -80,7 +80,7 @@ class HeaderController {
 			return null;
 		}
 	}
-	
+
 	function getHeaderItemChat(){
 		global $user;
 		if ($GLOBALS['CHAT_ENABLE'] && is_object($user) && $user->id != 'nobody'){
@@ -119,7 +119,7 @@ class HeaderController {
 				$chatimage = "chat1";
 			}
 			$ret['text'] = _("Chat");
-			$ret['link'] = "chat_online.php";
+			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."chat_online.php";
 			$ret['info'] = $chat_tip;
 			$ret['image'] = $chatimage;
 			return $ret;
@@ -127,7 +127,7 @@ class HeaderController {
 			return null;
 		}
 	}
-	
+
 	function getHeaderItemOnline(){
 		global $my_messaging_settings, $user;
 		if(is_object($user) && $user->id != 'nobody'){
@@ -145,7 +145,7 @@ class HeaderController {
 				}
 			}
 			$ret['text'] = _("Online");
-			$ret['link'] = "online.php";
+			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."online.php";
 			$ret['info'] = $onlinetip;
 			$ret['image'] = $onlineimage;
 			$ret['accesskey'] = $this->accesskey_enabled;
@@ -154,7 +154,7 @@ class HeaderController {
 			return null;
 		}
 	}
-	
+
 	function getHeaderItemHome(){
 		global $user;
 		if(is_object($user) && $user->id != 'nobody'){
@@ -197,13 +197,14 @@ class HeaderController {
 		$homeinfo .= ($global_obj['vote']['neue'] + $global_obj['eval']['neue']) ? " - " . sprintf(_(" %s neue Umfrage(n)"), ($global_obj['vote']['neue'] + $global_obj['eval']['neue'])) : "";
 
 		$ret['text'] = _("Start");
-		$ret['link'] = isset($_REQUEST['again']) ? 'index.php?cancel_login=1' : 'index.php';
+		$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP'].
+		  (isset($_REQUEST['again']) ? 'index.php?cancel_login=1' : 'index.php');
 		$ret['info'] = $homeinfo;
 		$ret['image'] = $homeimage;
 		$ret['accesskey'] = $this->accesskey_enabled;
 		return $ret;
 	}
-	
+
 	function getHeaderItemCourses(){
 		global $user, $perm;
 		if(!is_object($user) || $user->id == 'nobody'){
@@ -217,31 +218,31 @@ class HeaderController {
 			$courselink = $perm->have_perm("root") ? "sem_portal.php" : "meine_seminare.php";
 		}
 		$ret['text'] = $coursetext;
-		$ret['link'] = $courselink;
+		$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP'].$courselink;
 		$ret['info'] = $courseinfo;
 		$ret['image'] = "meinesem";
 		$ret['accesskey'] = $this->accesskey_enabled;
 		return $ret;
 	}
-	
+
 	function getHeaderItemImprint(){
 		$ret['text'] = _("Impressum");
-		$ret['link'] = "impressum.php?cancel_login=1";
+		$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."impressum.php?cancel_login=1";
 		return $ret;
 	}
-	
+
 	function getHeaderItemSearch(){
 		global $user;
 		if(is_object($user) && $user->id != 'nobody'){
 			$ret['text'] = _("Suche");
-			$ret['link'] = "auswahl_suche.php";
+			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."auswahl_suche.php";
 			$ret['accesskey'] = $this->accesskey_enabled;
 			return $ret;
 		} else {
 			return null;
 		}
 	}
-	
+
 	function getHeaderItemHelp(){
 		global $perm;
 		if (get_config("EXTERNAL_HELP")) {
@@ -264,42 +265,44 @@ class HeaderController {
 			return null;
 		}
 	}
-	
+
 	function getHeaderItemLoginLogout(){
 		global $user;
 		if(is_object($user) && $user->id != 'nobody'){
 			$ret['text'] = _("Logout");
-			$ret['link'] = "logout.php";
+			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."logout.php";
 			$ret['accesskey'] = $this->accesskey_enabled;
 		} else {
 			$ret['text'] = _("Login");
-			$ret['link'] = "index.php?again=yes";
+			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."index.php?again=yes";
 		}
 		return $ret;
 	}
-	
+
 	function getHeaderItemCASLogin(){
 		global $user;
 		if((!is_object($user) || $user->id == 'nobody') && array_search("CAS", $GLOBALS["STUDIP_AUTH_PLUGIN"])){
 			$ret['text'] = _("Login CAS");
-			$ret['link'] = "index.php?again=yes&cancel_login=1&sso=cas";
+			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP'].
+			  "index.php?again=yes&cancel_login=1&sso=cas";
 		} else {
 			$ret = null;
 		}
 		return $ret;
 	}
-	
+
 	function getHeaderItemShibLogin(){
 		global $user;
 		if((!is_object($user) || $user->id == 'nobody') && array_search("Shib", $GLOBALS["STUDIP_AUTH_PLUGIN"])){
 			$ret['text'] = _("Login Shibboleth");
-			$ret['link'] = "index.php?again=yes&cancel_login=1&sso=shib";
+			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP'].
+			  "index.php?again=yes&cancel_login=1&sso=shib";
 		} else {
 			$ret = null;
 		}
 		return $ret;
 	}
-	
+
 	function getHeaderItemMessages(){
 		global $user;
 		if(is_object($user) && $user->id != 'nobody'){
@@ -329,7 +332,7 @@ class HeaderController {
 				$tip = _("Sie haben keine alten empfangenen Nachrichten.");
 			}
 			$ret['text'] = _("Post");
-			$ret['link'] = "sms_box.php?sms_inout=in";
+			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."sms_box.php?sms_inout=in";
 			$ret['info'] = $tip;
 			$ret['image'] = $icon;
 			$ret['accesskey'] = $this->accesskey_enabled;
@@ -338,7 +341,7 @@ class HeaderController {
 			return null;
 		}
 	}
-	
+
 	function getHeaderItemHomepage(){
 		global $user, $perm, $homepage_cache_own, $LastLogin;
 		if (is_object($user) && $perm->have_perm("autor")) {
@@ -347,7 +350,7 @@ class HeaderController {
 			else $time = $LastLogin;
 			$picture = "einst";
 			$hp_txt = _("Zu Ihrer Einstellungsseite");
-			$hp_link = "about.php";
+			$hp_link = $GLOBALS['ABSOLUTE_URI_STUDIP']."about.php";
 			$db->query("SELECT COUNT(post_id) AS count
 						FROM guestbook
 						WHERE range_id='".$user->id."'
@@ -372,7 +375,7 @@ class HeaderController {
 			return null;
 		}
 	}
-	
+
 	function getHeaderItemPlanner(){
 		global $perm, $user;
 		if (is_object($user) && $user->id != 'nobody' && !$perm->have_perm("admin")) {
@@ -384,7 +387,7 @@ class HeaderController {
 				$planerinfo = _("Stundenplan und Kontakte");
 			  }
 		  	$ret['text'] = _("Planer");
-			$ret['link'] = $planerlink;
+			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP'].$planerlink;
 			$ret['info'] = $planerinfo;
 			$ret['image'] = 'planer';
 			$ret['accesskey'] = $this->accesskey_enabled;
@@ -393,12 +396,13 @@ class HeaderController {
 			return null;
 		}
 	}
-	
+
 	function getHeaderItemAdmin(){
 		global $perm, $user;
 		if (is_object($user) && $perm->have_perm("tutor")) {
 			$ret['text'] = _("Admin");
-			$ret['link'] = "adminarea_start.php?list=TRUE";
+			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP'].
+			  "adminarea_start.php?list=TRUE";
 			$ret['info'] = _("Zu Ihrer Administrationsseite");
 			$ret['image'] = 'admin';
 			$ret['accesskey'] = $this->accesskey_enabled;
@@ -407,7 +411,7 @@ class HeaderController {
 			return null;
 		}
 	}
-	
+
 	function getHeaderItemPlugins(){
 		global $user;
 		if ($GLOBALS["PLUGINS_ENABLE"] && is_object($user) && $user->id != 'nobody'){
