@@ -230,7 +230,7 @@ function show_rss_news($range_id, $type){
 
 function show_news_item($news_item, $cmd_data, $show_admin) {
 
-  global $auth, $_fullname_sql;
+  global $auth, $_fullname_sql, $PHP_SELF;
 
   $db2 = new DB_Seminar();
 
@@ -242,7 +242,7 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   $titel='';
 
   if ($news_item['open']) {
-  	$link = "?nclose=true";
+  	$link = $PHP_SELF."?nclose=true";
 
   	if ($cmd_data['comopen'] != $id)
   	  $titel = $tmp_titel."<a name=\"anker\"> </a>";
@@ -254,7 +254,7 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
 
   	object_set_visit($id, "news"); //and, set a visittime
   } else {
-  	$link = "?nopen=".$id;
+  	$link = $PHP_SELF."?nopen=".$id;
   	$titel=$tmp_titel;
   }
 
