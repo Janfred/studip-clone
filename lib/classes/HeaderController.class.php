@@ -418,7 +418,8 @@ class HeaderController {
 			$pluginengine = PluginEngine::getPluginPersistence("System");
 			foreach ($pluginengine->getAllActivatedPlugins() as $header_plugin){
 				// does the plugin have a navigation entry?
-				if ($header_plugin->hasNavigation()){
+				if ($header_plugin->hasNavigation() &&
+				    $header_plugin->getDisplayType(SYSTEM_PLUGIN_TOOLBAR)){
 					$navi = $header_plugin->getNavigation();
                                         $pluginicon = $header_plugin->getPluginiconname();
 					$pluginlink['text'] = $navi->getDisplayname();
