@@ -1655,8 +1655,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						else {
 							$content = '';
 							if (strtolower(getFileExtension($db3->f('filename'))) == 'flv') {
-								$flash_player = get_flash_player($db3->f('dokument_id'), $db3->f('filename'), $type);
-								$content = "<div style=\"margin-bottom: 10px; height: {$flash_player['height']}; width: {$flash_player['width']};\">" . $flash_player['player'] . '</div>';
+								$cfg = &Config::GetInstance();
+								$DOCUMENTS_EMBEDD_FLASH_MOVIES = $cfg->getValue('DOCUMENTS_EMBEDD_FLASH_MOVIES');
+								if (trim($DOCUMENTS_EMBEDD_FLASH_MOVIES) != 'deny') {
+									$flash_player = get_flash_player($db3->f('dokument_id'), $db3->f('filename'), $type);
+									$content = "<div style=\"margin-bottom: 10px; height: {$flash_player['height']}; width: {$flash_player['width']};\">" . $flash_player['player'] . '</div>';
+								}
 							}
 							if ($db3->f("description")) {
 								$content .= htmlReady($db3->f("description"), TRUE, TRUE);
@@ -2248,7 +2252,13 @@ function get_flash_player ($document_id, $filename, $type) {
 	} else {
 		$flash_config = $GLOBALS['FLASHPLAYER_DEFAULT_CONFIG_MIN'];
 	}
-	$flash_config .= '&amp;autoplay=1&amp;autoload=1';
+	$cfg = &Config::GetInstance();
+	$DOCUMENTS_EMBEDD_FLASH_MOVIES = $cfg->getValue('DOCUMENTS_EMBEDD_FLASH_MOVIES');
+	if ($DOCUMENTS_EMBEDD_FLASH_MOVIES == 'autoplay') {
+		$flash_config .= '&amp;autoplay=1&amp;autoload=1';
+	} else {
+		$flash_config .= '&amp;autoload=1';
+	}
 	$movie_url = GetDownloadLink($document_id, $filename, $type, 'force');
 	$flash_object  = "\n<object type=\"application/x-shockwave-flash\" id=\"FlashPlayer\" data=\"".Assets::url()."flash/player_flv.swf\" width=\"$width\" height=\"$height\">\n";
 	$flash_object .= "<param name=\"movie\" value=\"".Assets::url()."flash/player_flv.swf\">\n";
