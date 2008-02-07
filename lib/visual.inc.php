@@ -897,9 +897,13 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 						$tbr = "<div align=\"{$params[6]}\">$tbr</div>";
 				}
 			} elseif ($params[5] == 'flash') {
+				$cfg = &Config::GetInstance();
+				$EXTERNAL_FLASH_MOVIE_EMBEDDING = $cfg->getValue('EXTERNAL_FLASH_MOVIE_EMBEDDING');
 				$width = 200;
 				// Don't execute scripts
 				if ((basename($pu['path']) != 'sendfile.php') && $intern && $pu['query']) {
+					return $params[0];
+				} else if ((!$EXTERNAL_FLASH_MOVIE_EMBEDDING || $EXTERNAL_FLASH_MOVIE_EMBEDDING == 'deny') && !$intern) {
 					return $params[0];
 				} else {
 					if ($params[2]) {
@@ -916,11 +920,30 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 					} else {
 						$flash_config = $GLOBALS['FLASHPLAYER_DEFAULT_CONFIG_MIN'];
 					}
+					if(!$intern && substr($EXTERNAL_FLASH_MOVIE_EMBEDDING, 0, 5) == 'proxy' ) {
+						if (!is_object($auth)) {
+							$_GET['cancel_login'] = 1;
+							page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
+						}
+						if ($auth->is_authenticated() && $GLOBALS['user']->id != 'nobody') {
+							$proxyurl = strstr($EXTERNAL_FLASH_MOVIE_EMBEDDING, ':');
+							if ($proxyurl) {
+								$proxyurl = substr($proxyurl,1);
+							} else {
+								$proxyurl = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'flash_proxy.php?url=';
+							}
+							$flash_url = $proxyurl . urlencode(idna_link($params[4]));
+						} else {
+							$flash_url = urlencode(idna_link($params[4]));
+						}
+					} else {
+						$flash_url = urlencode(idna_link($params[4]));
+					}
 					$height = round($width * 0.75);
 					$flash_object  = "<object type=\"application/x-shockwave-flash\" id=\"FlashPlayer\" data=\"".Assets::url()."flash/player_flv.swf\" width=\"$width\" height=\"$height\">"; // height=\"323\" width=\"404\"
 					$flash_object .= "<param name=\"movie\" value=\"".Assets::url()."flash/player_flv.swf\">";
-					$flash_object .= "<param name=\"FlashVars\" value=\"flv={$params[4]}&amp;startimage={$params[7]}{$flash_config}\">";
-					$flash_object .= "<embed src=\"".Assets::url()."flash/player_flv.swf\" movie=\"$params[4]\" type=\"application/x-shockwave-flash\" FlashVars=\"flv={$params[4]}&amp;startimage={$params[7]}{$flash_config}\">";
+					$flash_object .= "<param name=\"FlashVars\" value=\"flv=$flash_url&amp;startimage={$params[7]}{$flash_config}\">";
+					$flash_object .= "<embed src=\"".Assets::url()."flash/player_flv.swf\" movie=\"$flash_url\" type=\"application/x-shockwave-flash\" FlashVars=\"flv=$flash_url&amp;startimage={$params[7]}{$flash_config}\">";
 					$flash_object .= "</object>";
 
 					$tbr = $flash_object;
