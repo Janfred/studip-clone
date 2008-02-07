@@ -1,5 +1,5 @@
 <?
-
+/* vim: noexpandtab */
 /**
  * role id unknown
  */
@@ -14,29 +14,15 @@ define("UNKNOWN_ROLE_ID",-1);
 
 class de_studip_RolePersistence {
 
-	function de_studip_RolePersistence(){
-
-	}
-
-	function getAllRoles(){
-		$conn =& PluginEngine::getPluginDatabaseConnection();
-
-		if ($GLOBALS["PLUGINS_CACHING"]){
-			$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],"select * from roles order by rolename");
-		}
-		else {
-			$result = $conn->execute("select * from roles order by rolename");
-		}
+	function getAllRoles() {
 		$roles = array();
-		if (!$result == null){
-			while (!$result->EOF){
-				$role = new de_studip_Role();
-				$role->setRoleid($result->fields("roleid"));
-				$role->setRolename($result->fields("rolename"));
-				$roles[$result->fields("roleid")] = $role;
-				$result->moveNext();
-			}
-			$result->Close();
+		foreach (DBManager::get()->query("SELECT * FROM roles ORDER BY rolename")
+		  as $row) {
+
+			$role = new de_studip_Role();
+			$role->setRoleid($row["roleid"]);
+			$role->setRolename($row["rolename"]);
+			$roles[$row["roleid"]] = $role;
 		}
 		return $roles;
 	}
@@ -47,20 +33,21 @@ class de_studip_RolePersistence {
 	 * @param de_studip_Role $role
 	 * @return the role id
 	 */
-	function saveRole($role){
-		$conn =& PluginEngine::getPluginDatabaseConnection();
-		if ($role->getRoleid() == UNKNOWN_ROLE_ID){
-			// role is not in database
-			$result = $conn->execute("insert into roles (roleid,rolename) values (0,?)", array($role->getRolename()));
-			$result =& $conn->execute("select last_insert_id() as roleid from roles");
-			$roleid = $result->fields("roleid");
-			if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
+	function saveRole($role) {
+		$db = DBManager::get();
+
+		// role is not in database
+		if ($role->getRoleid() == UNKNOWN_ROLE_ID) {
+			$stmt = $db->prepare("INSERT INTO roles (roleid, rolename) ".
+			                     "values (0, ?)");
+			$stmt->execute(array($role->getRolename()));
+			$roleid = $db->lastInsertId();
 		}
+		// role is already in database
 		else {
-			// role is already in database
-			$result = $conn->execute("update roles set rolename=? where roleid=?",array($role->getRolename(),$role->getRoleid()));
 			$roleid = $role->getRoleid();
-			if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
+			$stmt = $db->prepare("UPDATE roles SET rolename=? WHERE roleid=?");
+			$stmt->execute(array($role->getRolename(), $roleid));
 		}
 		return $roleid;
 	}
@@ -70,15 +57,19 @@ class de_studip_RolePersistence {
 	 *
 	 * @param unknown_type $role
 	 */
-	function deleteRole($role){
-		$conn =& PluginEngine::getPluginDatabaseConnection();
-		$conn->execute("delete from roles where roleid=? and system='n'",array($role->getRoleid()));
-		if ($conn->Affected_Rows() > 0){
-			$conn->execute("delete from roles_user where roleid=?",array($role->getRoleid()));
-			$conn->execute("delete from roles_plugins where roleid=?",array($role->getRoleid()));
-			$conn->execute("delete from roles_studipperms where roleid=?",array($role->getRoleid()));
+	function deleteRole($role) {
+		$id = $role->getRoleid();
+		$db = DBManager::get();
+		$stmt = $db->prepare("DELETE FROM roles WHERE roleid=? AND system='n'");
+		$stmt->execute(array($id));
+		if ($stmt->rowCount()) {
+			$stmt = $db->prepare("DELETE FROM roles_user WHERE roleid=?");
+			$stmt->execute(array($id));
+			$stmt = $db->prepare("DELETE FROM roles_plugins WHERE roleid=?");
+			$stmt->execute(array($id));
+			$stmt = $db->prepare("DELETE FROM roles_studipperms WHERE roleid=?");
+			$stmt->execute(array($id));
 		}
-		if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
 	}
 
 	/**
@@ -87,50 +78,43 @@ class de_studip_RolePersistence {
 	 * @param StudIPUser $user
 	 * @param de_studip_Role $role
 	 */
-	function assignRole($user,$role){
-		$conn =& PluginEngine::getPluginDatabaseConnection();
-		if ($role->getRoleid() <> UNKNOWN_ROLE_ID){
-			// role is not in database
-			// save it to the database first
+	function assignRole($user,$role) {
+		// role is not in database
+		// save it to the database first
+		if ($role->getRoleid() <> UNKNOWN_ROLE_ID) {
 			$roleid = $this->saveRole($role);
 		}
 		else {
 			$roleid = $role->getRoleid();
 		}
-		$conn =& PluginEngine::getPluginDatabaseConnection();
-		$conn->execute("replace into roles_user (roleid,userid) values (?,?)",array($roleid,$user->getUserid()));
-		if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
+		$stmt = DBManager::get()->prepare("REPLACE INTO roles_user ".
+		  "(roleid, userid) VALUES (?, ?)");
+		$stmt->execute(array($roleid, $user->getUserid()));
 	}
 
-	function getAssignedRoles($userid,$implicit=false){
-		$conn =& PluginEngine::getPluginDatabaseConnection();
-		$roles = $this->getAllRoles();
-		if ($implicit){
-			$sqlstr = "SELECT r.roleid FROM roles_user r where r.userid=? union select rp.roleid from roles_studipperms rp,auth_user_md5 a where rp.permname = a.perms and a.user_id=?";
-			if ($GLOBALS["PLUGINS_CACHING"]){
-				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($userid,$userid));
-			}
-			else {
-				$result = $conn->execute($sqlstr,array($userid,$userid));
-			}
-		}
-		else {
-			$sqlstr = "SELECT r.roleid FROM roles_user r where r.userid=?";
-			if ($GLOBALS["PLUGINS_CACHING"]){
-				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($userid));
-			}
-			else {
-				$result = $conn->execute($sqlstr,array($userid));
-			}
-		}
-		$assignedroles=array();
-		if (!$result == null){
-			while (!$result->EOF){
-				$assignedroles[] = $roles[$result->fields("roleid")];
-				$result->moveNext();
-			}
-			$result->Close();
+	function getAssignedRoles($userid, $implicit = false) {
 
+		if ($implicit) {
+			$stmt = DBManager::get()->prepare(
+			  "SELECT r.roleid FROM roles_user r ".
+			  "WHERE r.userid=? ".
+			  "UNION ".
+			  "SELECT rp.roleid FROM roles_studipperms rp, auth_user_md5 a ".
+			  "WHERE rp.permname = a.perms and a.user_id=?");
+			$stmt->execute(array($userid, $userid));
+		}
+
+		else {
+			$stmt = DBManager::get()->prepare(
+			  "SELECT r.roleid FROM roles_user r ".
+			  "WHERE r.userid=?");
+			$stmt->execute(array($userid));
+		}
+
+		$assignedroles = array();
+		$roles = $this->getAllRoles();
+		while ($row = $stmt->fetch()) {
+			$assignedroles[] = $roles[$row["roleid"]];
 		}
 		return $assignedroles;
 	}
@@ -141,10 +125,10 @@ class de_studip_RolePersistence {
 	 * @param StudIPUser[] $users
 	 * @param de_studip_Role $role
 	 */
-	function deleteRoleAssignment($user,$role){
-		$conn =& PluginEngine::getPluginDatabaseConnection();
-		$conn->execute("delete from roles_user where roleid=? and userid=?",array($role->getRoleid(),$user->getUserid()));
-		if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
+	function deleteRoleAssignment($user,$role) {
+		$stmt = DBManager::get()->prepare("DELETE FROM roles_user ".
+		  "WHERE roleid=? AND userid=?");
+		$stmt->execute(array($role->getRoleid(),$user->getUserid()));
 	}
 
 	/**
@@ -154,98 +138,67 @@ class de_studip_RolePersistence {
 	 * @param StudIPUser $user
 	 * @return array with roleids and the assigned userids
 	 */
-	function getAllRoleAssignments($user=null){
-		$conn =& PluginEngine::getPluginDatabaseConnection();
-		if ($user == null){
-			$sqlstr = "select * from roles_user";
-			if ($GLOBALS["PLUGINS_CACHING"]){
-				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr);
-			}
-			else {
-				$result = $conn->execute($sqlstr);
-			}
+	function getAllRoleAssignments($user=null) {
+
+		if ($user == null) {
+			$result = DBManager::get()->query("SELECT * FROM roles_user");
 		}
+
 		else {
-			$sqlstr = "select * from roles_user where userid=?";
-			if ($GLOBALS["PLUGINS_CACHING"]){
-				$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($user->getUserid()));
-			}
-			else {
-				$result = $conn->execute($sqlstr,array($user->getUserid()));
-			}
+			$result = DBManager::get()->prepare("SELECT * FROM roles_user ".
+			  "WHERE userid=?");
+			$result->execute(array($user->getUserid()));
 		}
 
 		$roles_user = array();
-		if (!$result == null){
-			while (!$result->EOF){
-				$roles_user[$result->fields("roleid")] = $result->fields("userid");
-				$result->moveNext();
-			}
-			$result->Close();
+		while (!$result->EOF) {
+			$roles_user[$row["roleid"]] = $row["userid"];
 		}
 		return $roles_user;
 	}
 
-	function assignPluginRoles($pluginid,$roleids){
-		$conn =& PluginEngine::getPluginDatabaseConnection();
-		foreach ($roleids as $roleid){
-			$conn->Execute("replace into roles_plugins (roleid,pluginid) values (?,?)",array($roleid,$pluginid));
+	function assignPluginRoles($pluginid,$roleids) {
+		$stmt = DBManager::get()->prepare("REPLACE INTO roles_plugins ".
+		  "(roleid, pluginid) VALUES (?, ?)");
+		foreach ($roleids as $roleid) {
+			$stmt->execute(array($roleid, $pluginid));
 		}
-		if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
 	}
 
-	function deleteAssignedPluginRoles($pluginid,$roleids){
-		$conn =& PluginEngine::getPluginDatabaseConnection();
-		foreach ($roleids as $roleid){
-			$conn->Execute("delete from roles_plugins where roleid=? and pluginid=?",array($roleid,$pluginid));
+	function deleteAssignedPluginRoles($pluginid,$roleids) {
+		$stmt = DBManager::get()->prepare("DELETE FROM roles_plugins ".
+		  "WHERE roleid=? AND pluginid=?");
+		foreach ($roleids as $roleid) {
+			$stmt->execute(array($roleid, $pluginid));
 		}
-		if ($GLOBALS["PLUGINS_CACHING"]) $conn->CacheFlush(); 
 	}
 
-	function getAssignedPluginRoles($pluginid=-1){
-		$roles = $this->getAllRoles();
-		$conn =& PluginEngine::getPluginDatabaseConnection();
-		$sqlstr = "select * from roles_plugins where pluginid=?";
-		if ($GLOBALS["PLUGINS_CACHING"]){
-			$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr,array($pluginid));
-		}
-		else {
-			$result = $conn->execute($sqlstr,array($pluginid));
-		}
+	function getAssignedPluginRoles($pluginid=-1) {
+		$stmt = DBManager::get()->prepare("SELECT * FROM roles_plugins ".
+		  "WHERE pluginid=?");
+		$stmt->execute(array($pluginid));
+
 		$assignedroles = array();
-		if (!$result == null){
-			while (!$result->EOF){
-				$role = $roles[$result->fields("roleid")];
-				if (!empty($role)){
-					$assignedroles[] = $role;
-				}
-				$result->moveNext();
+		$roles = $this->getAllRoles();
+		while ($row = $stmt->fetch()) {
+			$role = $roles[$row["roleid"]];
+			if (!empty($role)) {
+				$assignedroles[] = $role;
 			}
-			$result->Close();
 		}
 		return $assignedroles;
 	}
 
-	function getAllGroupRoleAssignments(){
+	function getAllGroupRoleAssignments() {
 		$roles = $this->getAllRoles();
 		$studipperms = $GLOBALS["perm"]->permissions;
-		$conn =& PluginEngine::getPluginDatabaseConnection();
-		$sqlstr = "select * from roles_studipperms";
-		if ($GLOBALS["PLUGINS_CACHING"]){
-			$result = $conn->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],$sqlstr);
-		}
-		else {
-			$result = $conn->execute($sqlstr);
-		}
+
 		$assignedrolesperms = array();
-		if (!$result == null){
-			while (!$result->EOF){
-				$assignedrolesperm["role"] = $roles[$result->fields("roleid")];
-				$assignedrolesperm[$result->fields("permname")] = $studipperms[$result->fields("permname")];
-				$assignedrolesperms[] = $assignedrolesperm;
-				$result->moveNext();
-			}
-			$result->Close();
+		foreach (DBManager::get()->query("SELECT * FROM roles_studipperms")
+		  as $row) {
+			$assignedrolesperm["role"] = $roles[$row["roleid"]];
+			$assignedrolesperm[$row["permname"]] = $studipperms[$row["permname"]];
+			$assignedrolesperms[] = $assignedrolesperm;
 		}
 		return $assignedrolesperms;
 	}
