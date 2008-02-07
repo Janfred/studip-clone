@@ -14,105 +14,98 @@ define("UNKNOWN_PLUGIN_ID", -1);
  */
 
 class AbstractPluginIntegratorEnginePersistence {
-	var $connection;
 	var $environment;
 	var $user;
 
-	function AbstractPluginIntegratorEnginePersistence(){
-		$this->connection = null;
+	function AbstractPluginIntegratorEnginePersistence() {
 		$this->user = null;
 	}
 
-	function setEnvironment($dbenvironment){
-		if (is_a($dbenvironment,"DBEnvironment") || is_subclass_of($dbenvironment,"DBEnvironment")){
-			$this->environment = $dbenvironment;
-		}
+	function setEnvironment(DBEnvironment $dbenvironment) {
+		$this->environment = $dbenvironment;
 	}
 
-	function getEnvironment(){
+	function getEnvironment() {
 		return $this->environment;
 	}
 
-	function setUser($newuser){
-		if (is_a($newuser,"StudIPUser") || is_subclass_of($newuser,"StudIPUser")){
-			$this->user = $newuser;
-		}
-		else {
-			// Fehler, ungültiger Parameter
-			$this->user = null;
-		}
+	function setUser(StudIPUser $newuser) {
+		$this->user = $newuser;
 	}
 
-	function getUser(){
+	function getUser() {
 		return $this->user;
 	}
 
-	function setConnection($newconnection){
-		$this->connection = $newconnection;
-	}
-
-	function getConnection(){
-		return $this->connection;
-	}
-
-    /**
-		Registers a new plugin in the database
-		@return the pluginid
-	*/
-	function registerPlugin($plugin, $pluginclassname, $pluginpath,$dependentonplugin=null){
+	/**
+	 * Registers a new plugin in the database
+	 * @return the pluginid
+	 */
+	function registerPlugin($plugin, $pluginclassname, $pluginpath,
+	                        $dependentonplugin = null) {
+		$db = DBManager::get();
 		$type = PluginEngine::getTypeOfPlugin($plugin);
-		if (strlen($type) > 0){
+		if (strlen($type) > 0) {
+
 			// try to find an existing entry to update
-			$result =& $this->connection->execute("select pluginid from plugins where pluginclassname=? and plugintype=?",array($pluginclassname,$type));
-			if ($result && !$result->EOF){
-				$pluginid = $result->fields("pluginid");
+			$stmt = $db->prepare("SELECT pluginid FROM plugins ".
+			  "WHERE pluginclassname=? AND plugintype=?");
+			$stmt->execute(array($pluginclassname, $type));
+			$row = $stmt->fetch();
+
+			if ($row !== FALSE) {
 				// try to update this entry
-				$result =& $this->connection->execute("update plugins set pluginpath=? where plugintype=? and pluginid=?", array($pluginpath,$type,$pluginid));
+				$pluginid = $row["pluginid"];
+				$stmt = $db->prepare("UPDATE plugins SET pluginpath=? ".
+				  "WHERE plugintype=? AND pluginid=?");
+				$stmt->execute(array($pluginpath, $type, $pluginid));
 			}
+
 			else {
-				if (is_null($dependentonplugin)){
-					$result =& $this->connection->execute("insert into plugins (pluginclassname,pluginname,pluginpath,plugintype,enabled,navigationpos) select ?,?,?,?,'no',max(navigationpos)+1 from plugins where plugintype=?", array($pluginclassname,$plugin->getPluginname(), $pluginpath,$type,$type));
+				if (is_null($dependentonplugin)) {
+					$stmt = $db->prepare(
+					  "INSERT INTO plugins (pluginclassname, pluginname, pluginpath, ".
+					  "plugintype, enabled, navigationpos) ".
+					  "SELECT ?, ?, ?, ?, 'no', max(navigationpos) + 1 FROM plugins ".
+					  "WHERE plugintype=?");
+					$stmt->execute(array($pluginclassname, $plugin->getPluginname(),
+					                     $pluginpath, $type, $type));
 				}
 				else {
-					$result =& $this->connection->execute("insert into plugins (pluginclassname,pluginname,pluginpath,plugintype,enabled,navigationpos,dependentonid) select ?,?,?,?,'no',max(navigationpos)+1,? from plugins where plugintype=?", array($pluginclassname,$plugin->getPluginname(), $pluginpath,$type,$dependentonplugin->getPluginid(),$type));
+					$stmt = $db->prepare(
+					  "INSERT into plugins (pluginclassname, pluginname, pluginpath, ".
+					  "plugintype, enabled, navigationpos, dependentonid) ".
+					  "SELECT ?, ?, ?, ?, 'no', max(navigationpos) + 1, ? FROM plugins ".
+					   "WHERE plugintype=?");
+					$stmt->execute(array($pluginclassname, $plugin->getPluginname(),
+					                     $pluginpath, $type,
+					                     $dependentonplugin->getPluginid(), $type));
 				}
-				//$result =& $this->connection->execute("select last_insert_id() as pluginid from plugins");
-				// $pluginid = $result->fields("pluginid");
 
-				//$this->connection->debug=true;
-				$pluginid = $this->connection->Insert_ID();
+				$pluginid = $db->lastInsertId();
+
 				// now register the system roles to this plugin.
-				$this->connection->execute("insert into roles_plugins (roleid,pluginid) select roleid,? from roles where system='y'",array($pluginid));
-				// $this->connection->debug=false;
+				$stmt = $db->prepare("INSERT INTO roles_plugins (roleid, pluginid) ".
+				                     "SELECT roleid, ? FROM roles WHERE system='y'");
+				$stmt->execute(array($pluginid));
 			}
-			if ($GLOBALS["PLUGINS_CACHING"]){
-				$this->connection->CacheFlush();
-			}
+
 			return $pluginid;
 		}
 	}
 
-    /**
-    	updates plugin base data like position in the navigation
-    */
-    function savePlugin($plugin){
-    	// keine Funktion
-    	$enabled = "";
-    	if ($plugin->isEnabled()){
-	    	$enabled = "yes";
-    	}
-    	else{
-	    	$enabled = "no";
-    	}
-    	if ($this->connection == null){
-    		$this->connection = PluginEngine::getPluginDatabaseConnection();
-    	}
-    	$this->connection->execute("Update plugins set pluginname=?, enabled=?, navigationpos=? where pluginid=?", array($plugin->getPluginname(),$enabled,$plugin->getNavigationPosition(),$plugin->getPluginid()));
-    	if ($GLOBALS["PLUGINS_CACHING"]){
-    		$this->connection->CacheFlush();
-    	}
-    	return;
-    }
+	/**
+	 * updates plugin base data like position in the navigation
+	 */
+	function savePlugin($plugin) {
+		// keine Funktion
+		$enabled = $plugin->isEnabled() ? "yes" : "no";
+
+		$stmt = DBManager::get()->prepare(
+		  "UPDATE plugins SET pluginname=?, enabled=?, navigationpos=? ".
+		  "WHERE pluginid=?");
+		$stmt->execute(array($plugin->getPluginname(),$enabled,$plugin->getNavigationPosition(),$plugin->getPluginid()));
+	}
 
 	function executePluginQuery($filter, $params = array(), $attendroles = true) {
 		$user = $this->getUser();
@@ -150,82 +143,63 @@ class AbstractPluginIntegratorEnginePersistence {
 
 		// cache results for cache_time seconds
 		$plugins = array();
-		if ($GLOBALS["PLUGINS_CACHING"]) {
-			$result = $this->connection->CacheExecute($GLOBALS["PLUGINS_CACHE_TIME"],
-			  "SELECT p.* FROM plugins p " . $filter, $params);
-		} else {
-			$result = $this->connection->Execute("SELECT p.* FROM plugins p " .
-			                                     $filter,
-			                                     $params);
-		}
+		$stmt = DBManager::get()->prepare("SELECT p.* FROM plugins p " . $filter);
+		$stmt->execute($params);
 
-		// TODO: Fehlermeldung ausgeben
-		if (!$result) {
-			return array();
-		}
-		else {
-			$rolemgmt = new de_studip_RolePersistence();
-			$userroles = $user->getAssignedRoles(true);
-			while (!$result->EOF) {
-				$pluginclassname = $result->fields("pluginclassname");
-				$pluginpath = $result->fields("pluginpath");
-				$pluginid = $result->fields("pluginid");
-				$rolerestriction = $rolemgmt->getAssignedPluginRoles($pluginid);
-				if (!empty($rolerestriction)) {
+		$rolemgmt = new de_studip_RolePersistence();
+		$userroles = $user->getAssignedRoles(true);
+		while ($row = $stmt->fetch()) {
+			$pluginclassname = $row["pluginclassname"];
+			$pluginpath = $row["pluginpath"];
+			$pluginid = $row["pluginid"];
+			$rolerestriction = $rolemgmt->getAssignedPluginRoles($pluginid);
+			$plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
+			if ($plugin != null) {
+				$plugin->setPluginid($pluginid);
+				$plugin->setPluginname($row["pluginname"]);
+				$plugin->setNavigationPosition($row["navigationpos"]);
+				if ($row["enabled"] == 'yes') {
+					$plugin->setEnabled(true);
 				}
-				$plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
-				if ($plugin != null) {
-					$plugin->setPluginid($pluginid);
-					$plugin->setPluginname($result->fields("pluginname"));
-					$plugin->setNavigationPosition($result->fields("navigationpos"));
-					if ($result->fields("enabled") == 'yes') {
-						$plugin->setEnabled(true);
-					}
-					else {
-						$plugin->setEnabled(false);
-					}
-					if (!is_null($result->fields("dependentonid"))) {
-						$plugin->setDependentOnOtherPlugin(true);
-					}
-					$plugins[] = $plugin;
+				else {
+					$plugin->setEnabled(false);
 				}
-				$result->MoveNext();
+				if (!is_null($row["dependentonid"])) {
+					$plugin->setDependentOnOtherPlugin(true);
+				}
+				$plugins[] = $plugin;
 			}
-			$result->Close();
-			return $plugins;
 		}
+		return $plugins;
 	}
 
 	/**
 	  * Liefert alle in der Datenbank bekannten Plugins zurück
 	  */
-	function getAllInstalledPlugins(){
-		if ($this->connection == null){
-			$this->connection = PluginEngine::getPluginDatabaseConnection();
-		}
-		return $this->executePluginQuery("order by plugintype, navigationpos, pluginname, enabled",array(),false);
+	function getAllInstalledPlugins() {
+		return $this->executePluginQuery("order by plugintype, navigationpos, ".
+		                                 "pluginname, enabled",
+		                                 array(),
+		                                 false);
 	}
 
-	function getPlugins($enabled = false){
-		if ($enabled){
-			$filter = 'yes';
-		}
-		else {
-			$filter = 'no';
-		}
-		return $this->executePluginQuery("where enabled=? order by navigationpos, pluginname, plugintype", array($filter));
+	function getPlugins($enabled = false) {
+		$filter = $enabled ? 'yes' :  'no';
+		return $this->executePluginQuery("where enabled=? order by navigationpos, ".
+		                                 "pluginname, plugintype",
+		                                 array($filter));
 	}
 
 	/**
-	  * Liefert alle in der Datenbank bekannten und aktivierten Plugins zurück
-	  */
+	 * Liefert alle in der Datenbank bekannten und aktivierten Plugins zurück
+	 */
 	function getAllEnabledPlugins() {
 		return $this->getPlugins(true);
 	}
 
 	/**
-	  * Liefert alle in der Datenbank bekannten und aktivierten Plugins zurück
-	  */
+	 * Liefert alle in der Datenbank bekannten und aktivierten Plugins zurück
+	 */
 	function getAllDisabledPlugins() {
 		return $this->getPlugins(false);
 	}
@@ -241,48 +215,38 @@ class AbstractPluginIntegratorEnginePersistence {
 	}
 
 	function getPlugin($id) {
-		if ($this->connection === NULL) {
-			$this->connection = PluginEngine::getPluginDatabaseConnection();
-		}
 		$plugins = $this->executePluginQuery("where p.pluginid=?", array($id));
-
-		if (count($plugins) === 1) {
-			return $plugins[0];
-		}
-
-		return null;
+		return count($plugins) === 1 ? $plugins[0] : null;
 	}
 
 
-	function pluginExists($id){
-		$result = $this->connection->execute("select * from plugins where pluginid=?", array($id));
-		if (!$result) {
-			return FALSE;
-		}
-		$return = !$result->EOF;
-		$result->Close();
-		return $return;
+	function pluginExists($id) {
+		$stmt = DBManager::get()->prepare("SELECT * from plugins WHERE pluginid=?");
+		$stmt->execute(array($id));
+		return $stmt->fetch() !== FALSE;
 	}
 
 
 	function deinstallPlugin($plugin)	{
 		// check, if there are dependent plugins
-		if ($plugin->isDependentOnOtherPlugin()){
-			// this plugin is not the main plugin
-			// don't search for other plugins.
-		} else {
-			// this plugin is a plugin without dependencies
-			$dependentplugins = $this->executePluginQuery("where p.dependentonid=?", array($plugin->getPluginid()), false);
+		// this plugin is a plugin without dependencies
+		if (!$plugin->isDependentOnOtherPlugin()) {
+			$dependentplugins = $this->executePluginQuery("where p.dependentonid=?",
+			                                    array($plugin->getPluginid()), false);
 			if (is_array($dependentplugins)) {
+				// deinstall Plugin first
 				foreach ($dependentplugins as $dependentplugin) {
-					// deinstall Plugin first
 					$this->deinstallPlugin($dependentplugin);
 				}
 			}
 		}
-		$this->connection->execute("Delete from plugins where pluginid=?", array($plugin->getPluginid()));
-		$this->connection->execute("Delete from plugins_activated where pluginid=?", array($plugin->getPluginid()));
-		$this->connection->execute("Delete from roles_plugins where pluginid=?", array($plugin->getPluginid()));
+		$db = DBManager::get();
+		$stmt = $db->prepare("DELETE FROM plugins WHERE pluginid=?");
+		$stmt->execute(array($plugin->getPluginid()));
+		$stmt = $db->prepare("DELETE FROM plugins_activated WHERE pluginid=?");
+		$stmt->execute(array($plugin->getPluginid()));
+		$stmt = $db->prepare("DELETE FROM roles_plugins WHERE pluginid=?");
+		$stmt->execute(array($plugin->getPluginid()));
 	}
 
 	/**
@@ -292,20 +256,16 @@ class AbstractPluginIntegratorEnginePersistence {
 	 *         false - plugin not found
 	 */
 	function isPluginRegistered($pluginclassname) {
-		$result = $this->connection->execute("select * from plugins where pluginclassname=?", array($pluginclassname));
+		$stmt = DBManager::get()->prepare("SELECT * FROM plugins ".
+		  "WHERE pluginclassname=?");
+		$stmt->execute(array($pluginclassname));
 
-		if (!$result) {
-		   return false;
+		$row = $stmt->fetch();
+		if ($row === FALSE) {
+			return FALSE;
 		}
 
-		$id = $result->fields("pluginid");
-
-		if (is_numeric($id)) {
-			$result->Close();
-			return true;
-		}
-
-		return false;
+		return is_numeric($row['pluginid']);
 	}
 
 	/**
@@ -316,12 +276,13 @@ class AbstractPluginIntegratorEnginePersistence {
 	 * @return int     the id of the plugin
 	 */
 	function getPluginId($pluginclassname) {
-		$result = $this->connection->execute("select * from plugins where pluginclassname=?", array($pluginclassname));
-		if (!$result || $result->EOF) {
+		$stmt = DBManager::get()->prepare("SELECT pluginid FROM plugins ".
+		  "WHERE pluginclassname=?");
+		$stmt->execute(array($pluginclassname));
+		$row = $stmt->fetch();
+		if ($row === FALSE) {
 			throw new Studip_PluginNotFoundException();
 		}
-		$id = $result->fields("pluginid");
-		$result->Close();
-		return $id;
+		return $row['pluginid'];
 	}
 }
