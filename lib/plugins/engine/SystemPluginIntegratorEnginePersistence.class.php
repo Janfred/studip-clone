@@ -14,9 +14,9 @@ class SystemPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
      * Liefert alle in der Datenbank bekannten Plugins zurück
      */
     function getAllInstalledPlugins(){
-    	// nur Standard-Plugins liefern
-    	$plugins = parent::executePluginQuery("where plugintype='System'");
-    	return $plugins;
+      // nur Standard-Plugins liefern
+      $plugins = parent::executePluginQuery("where plugintype='System'");
+      return $plugins;
     }
 
     /**
@@ -24,32 +24,27 @@ class SystemPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
      * @return all activated system plugins
      */
     function getAllActivatedPlugins(){
-    	// return all activated system plugins
-    	$plugins = parent::executePluginQuery("where plugintype='System' and enabled='yes'");
-    	return $plugins;
+      // return all activated system plugins
+      $plugins = parent::executePluginQuery("where plugintype='System' and enabled='yes'");
+      return $plugins;
     }
 
-    function getPlugin($id){
-    	$result = &$this->connection->execute("Select p.* from plugins p where p.pluginid=? and p.plugintype='System'",array($id));
-    	if (!$result){
-    		// TODO: Fehlermeldung ausgeben
-    		return null;
-    	}
-    	else {
-    		if (!$result->EOF) {
-    			$pluginclassname = $result->fields("pluginclassname");
-    			$pluginpath = $result->fields("pluginpath");
-            	// Klasse instanziieren
-            	$plugin = PluginEngine::instantiatePlugin($pluginclassname,$pluginpath);
-            	if ($plugin != null){
-	            	$plugin->setPluginid($result->fields("pluginid"));
-	            	$plugin->setPluginname($result->fields("pluginname"));
-	            	$plugin->setUser($this->getUser());
-            	}
-        	}
-        	$result->Close();
-        	return $plugin;
-    	}
+    function getPlugin($id) {
+      $stmt = DBManager::get()->prepare("SELECT p.* FROM plugins p ".
+        "WHERE p.pluginid=? AND p.plugintype='System'");
+      $stmt->execute(array($id));
+      $row = $stmt->fetch();
+      if ($row !== FALSE) {
+        $pluginclassname = $row["pluginclassname"];
+        $pluginpath = $row["pluginpath"];
+        // Klasse instanziieren
+        $plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
+        if ($plugin != null) {
+          $plugin->setPluginid($row["pluginid"]);
+          $plugin->setPluginname($row["pluginname"]);
+          $plugin->setUser($this->getUser());
+        }
+      }
+      return $plugin;
     }
 }
-?>

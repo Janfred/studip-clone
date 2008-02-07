@@ -42,7 +42,7 @@ class HomepagePluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     	  "AND p.plugintype='Homepage'");
     	$stmt->execute(array($id, $userid, $userid));
   		$row = $stmt->fetch();
-  		if ($row === FALSE) {
+  		if ($row !== FALSE) {
   			$pluginclassname = $row["pluginclassname"];
   			$pluginpath = $row["pluginpath"];
   			// Klasse instanziieren
