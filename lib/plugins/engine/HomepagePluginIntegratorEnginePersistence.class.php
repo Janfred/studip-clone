@@ -10,10 +10,6 @@
 
 class HomepagePluginIntegratorEnginePersistence extends AbstractPluginIntegratorEnginePersistence {
 
-    function HomepagePluginIntegratorEnginePersistence(){
-    	parent::AbstractPluginIntegratorEnginePersistence();
-    }
-
     /**
      * Liefert alle in der Datenbank bekannten Plugins zurück
      */

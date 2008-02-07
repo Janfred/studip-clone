@@ -100,9 +100,6 @@ class PluginEngine {
 	public static function getPluginPersistence($plugintype="Abstract") {
 		$classname = $plugintype . "PluginIntegratorEnginePersistence";
 		$persistence = new $classname();
-		$conn = PluginEngine::getPluginDatabaseConnection();
-
-		$persistence->setConnection($conn);
 		$persistence->setEnvironment($GLOBALS["plugindbenv"]);
 
 		// now set the user

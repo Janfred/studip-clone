@@ -10,10 +10,6 @@
 
 class PortalPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEnginePersistence {
 
-    function PortalPluginIntegratorEnginePersistence(){
-    	parent::AbstractPluginIntegratorEnginePersistence();
-    }
-
     /**
      * Liefert alle in der Datenbank bekannten Plugins zurück
      */
