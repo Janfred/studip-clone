@@ -1,4 +1,5 @@
 <?php
+/* vim: noexpandtab */
 /**
  * Basic methods for managing plugins
  * @author Dennis Reil <Dennis.Reil@offis.de>
@@ -21,7 +22,7 @@ define("PLUGIN_ALREADY_REGISTERED_ERROR",9);
 
 class PluginAdministration {
 	var $environment;
-	
+
 	/**
 	 * Creates a new object for plugin administration
 	 *
@@ -30,7 +31,7 @@ class PluginAdministration {
 	function PluginAdministration($environment){
 		$this->environment = $environment;
 	}
-	
+
 	/**
 	 * Deletes a directory
 	 * @param string $dir the directory, which should be deleted
@@ -39,7 +40,7 @@ class PluginAdministration {
 		if (file_exists($dir)){
 			rmdirr($dir);
 		}
-	} 
+	}
 
 	/**
 	 * Does the uninstallation of a plugin.
@@ -52,15 +53,16 @@ class PluginAdministration {
 		$engine = PluginEngine::getPluginPersistence($type);
 		if (is_object($engine)){
 			$engine->deinstallPlugin($plugin);
-		}			
+		}
 		$pluginenv = $plugin->getEnvironment();
                 $pluginpath = $pluginenv->getBasepath() . '/' . $plugin->getPluginpath();
 		$manifest = PluginEngine::getPluginManifest($pluginpath);
 
-                // delete database if needed					 	
-                $this->deleteDBSchema($pluginpath, $manifest);
+		// delete database if needed
+		$this->deleteDBSchema($pluginpath, $manifest);
+
 		// the old plugin directory has to be deleted
-		$this->deletePlugindir($pluginpath);			
+		$this->deletePlugindir($pluginpath);
 	}
 
 	/**
@@ -93,34 +95,34 @@ class PluginAdministration {
 			@unlink($uploadfilename);
 		}
 		unzip_file($newuploadfilename,$tmppackagedir);
-		
+
 		// delete uploaded file
 		@unlink($newuploadfilename);
 		// search for the manifest
 		if (!file_exists($tmppackagedir . "/plugin.manifest")){
 			return PLUGIN_MISSING_MANIFEST_ERROR;
 		}
-		
+
 		// everything ok, so far
 		$plugininfos = PluginEngine::getPluginManifest($tmppackagedir);
-				
+
 		if ((strlen($plugininfos["class"]) > 0) && (strlen($plugininfos["origin"]) > 0) && (strlen($plugininfos["version"]) > 0)){
 			// Plugin-Hauptclasse instanziieren
-			$pluginclassname = trim($plugininfos["class"]);			
-						
+			$pluginclassname = trim($plugininfos["class"]);
+
 			// Klasse instanziieren
-			if (strlen($pluginclassname) > 0){ 
+			if (strlen($pluginclassname) > 0){
 				// Neuen Pfad bestimmen
 				$vendordir = $this->environment->getPackagebasepath() . "/" . $plugininfos["origin"];
 				$newpluginpath = $vendordir . "/" . $pluginclassname; // . "_" . $plugininfos["version"];
 				$pluginrelativepath = $plugininfos["origin"] . "/" . $pluginclassname; //  . "_" . $plugininfos["version"];
 				$persistence = PluginEngine::getPluginPersistence();
 				$pluginregistered = $persistence->isPluginRegistered($pluginclassname);
-			
+
 				if (!file_exists($vendordir)){
 					@mkdir($vendordir);
 				}
-				
+
 				if (!file_exists($newpluginpath)){
 					// ok, plugin in exact this version is not installed
 					@mkdir($newpluginpath);
@@ -130,11 +132,11 @@ class PluginAdministration {
 					// directory exists
 					// is the plugin already installed?
 					if (!$pluginregistered){
-					   // not registered in database
-					   // delete directory
-					   $this->deletePlugindir($newpluginpath);					   
-					   // and create an empty directory
-					   @mkdir($newpluginpath);
+						// not registered in database
+						// delete directory
+						$this->deletePlugindir($newpluginpath);
+						// and create an empty directory
+						@mkdir($newpluginpath);
 					}
 					else {
 						// Plugin is already registered
@@ -145,26 +147,26 @@ class PluginAdministration {
 						}
 						else {
 							// forced update
-                                                        $this->updateDBSchema($newpluginpath, $tmppackagedir, $plugininfos);
+							$this->updateDBSchema($newpluginpath, $tmppackagedir, $plugininfos);
 							// only delete the plugin directory
 							// registration info will be updated automatically
 							$this->deletePlugindir($newpluginpath);
-						}						
-    				}
+						}
+					}
 				}
 				// check to see, if the plugin is already registered
 				if ($pluginregistered && !$forceupdate){
 					return PLUGIN_ALREADY_REGISTERED_ERROR;
-				}				
+				}
 				// everything fine, install it
- 
-   				// copy files
-   				$this->copyr($tmppackagedir,$newpluginpath);
-   				// delete the temporary path
-   				$this->deletePlugindir($tmppackagedir);
 
-                                // create database if needed					 	
-                                $this->createDBSchema($newpluginpath, $plugininfos);
+				// copy files
+				$this->copyr($tmppackagedir,$newpluginpath);
+				// delete the temporary path
+				$this->deletePlugindir($tmppackagedir);
+
+				// create database if needed
+				$this->createDBSchema($newpluginpath, $plugininfos);
 
 				// instantiate plugin
 				require_once($newpluginpath . '/' . $pluginclassname . ".class.php");
@@ -172,68 +174,66 @@ class PluginAdministration {
 				$plugin = new $pluginclassname();
 				if ($plugin == null){
 					// delete Plugin directory
-                                        $this->deletePlugindir($newpluginpath);
-                                        return PLUGIN_INSTANTIATION_EROR;
+					$this->deletePlugindir($newpluginpath);
+					return PLUGIN_INSTANTIATION_EROR;
 				}
 				else {
-					 // check if certain methods exist in the plugin
-					 $methods = array_map('strtolower', get_class_methods($plugin));
-					 if (array_search('show',$methods)){
-					 	// now register the plugin in the database					 	
-					 	$newpluginid = $persistence->registerPlugin($plugin,$pluginclassname,$pluginrelativepath);					 	
-					 	if ($newpluginid > 0){
-					 		$plugin->setPluginid($newpluginid);
-					 	}
-					 	// do we have additional plugin classes in this package?
-					 	$additionalclasses = $plugininfos["additionalclasses"];
-					 	if (is_array($additionalclasses)){					 		
-					 		foreach ($additionalclasses as $additionalclass){					 		
-					 			require_once($newpluginpath . '/' . $additionalclass . ".class.php");
-					 			$additionalplugin = new $additionalclass();					 	
-					 			$persistence->registerPlugin($additionalplugin,$additionalclass,$pluginrelativepath,$plugin);
-					 		}
-					 	}
-					 }
-					 else {
-						$this->deletePlugindir($newpluginpath);	 	
-					 	return PLUGIN_MISSING_METHOD_ERROR;
-					 }
+					// check if certain methods exist in the plugin
+					$methods = array_map('strtolower', get_class_methods($plugin));
+					if (array_search('show',$methods)){
+						// now register the plugin in the database
+						$newpluginid = $persistence->registerPlugin($plugin,$pluginclassname,$pluginrelativepath);
+						if ($newpluginid > 0){
+							$plugin->setPluginid($newpluginid);
+						}
+						// do we have additional plugin classes in this package?
+						$additionalclasses = $plugininfos["additionalclasses"];
+						if (is_array($additionalclasses)){
+							foreach ($additionalclasses as $additionalclass){
+								require_once($newpluginpath . '/' . $additionalclass . ".class.php");
+								$additionalplugin = new $additionalclass();
+								$persistence->registerPlugin($additionalplugin,$additionalclass,$pluginrelativepath,$plugin);
+							}
+						}
+					}
+					else {
+						$this->deletePlugindir($newpluginpath);
+						return PLUGIN_MISSING_METHOD_ERROR;
+					}
 				}
-				return PLUGIN_INSTALLATION_SUCCESSFUL;	
-			} 
+				return PLUGIN_INSTALLATION_SUCCESSFUL;
+			}
 		}
 		else {
 			return PLUGIN_MANIFEST_ERROR;
 		}
 	}
-	
+
 	/**
 	 * Create the initial database schema for the plugin.
 	 *
 	 * @param string $pluginpath absolute path to the plugin
 	 * @param array  $manifest   plugin manifest information
 	 */
-        function createDBSchema ($pluginpath, $manifest) {
-                $pluginname = $manifest['pluginname'] ? $manifest['pluginname']
-                                                      : $manifest['pluginclassname'];
+	function createDBSchema ($pluginpath, $manifest) {
+		$pluginname = $manifest['pluginname'] ? $manifest['pluginname']
+		                                      : $manifest['pluginclassname'];
+		// TODO this probably should not happen during update
+		if (isset($manifest['dbscheme'])) {
+			$schemafile = $pluginpath.'/'.$manifest['dbscheme'];
+			$statements = split(";[[:space:]]*\n", file_get_contents($schemafile));
+			$db = DBManager::get();
+			foreach ($statements as $statement) {
+				$db->exec($statement);
+			}
+		}
 
-                // TODO this probably should not happen during update
-                if (isset($manifest['dbscheme'])) {
-                        $schemafile = $pluginpath.'/'.$manifest['dbscheme'];
-                        $conn = PluginEngine::getPluginDatabaseConnection();		
-                        $statements = split(";[[:space:]]*\n", file_get_contents($schemafile));
-
-                        foreach ($statements as $statement) {
-                                $conn->execute($statement);
-                        }
-                }		
-
-                if (is_dir($pluginpath.'/migrations')) {
-                        $schema_version =& new DBSchemaVersion($pluginname);
-                        $migrator =& new Migrator($pluginpath.'/migrations', $schema_version);
-                        $migrator->migrate_to(null);
-                }
-        }
+		if (is_dir($pluginpath.'/migrations')) {
+			$schema_version = new DBSchemaVersion($pluginname);
+			$migrator = new Migrator($pluginpath.'/migrations', $schema_version);
+			$migrator->migrate_to(null);
+		}
+	}
 
 	/**
 	 * Update the database schema maintained by the plugin.
@@ -241,23 +241,23 @@ class PluginAdministration {
 	 * @param string $pluginpath absolute path to the plugin
 	 * @param array  $manifest   plugin manifest information
 	 */
-        function updateDBSchema ($pluginpath, $new_pluginpath, $manifest) {
-                $pluginname = $manifest['pluginname'] ? $manifest['pluginname']
-                                                      : $manifest['pluginclassname'];
+	function updateDBSchema ($pluginpath, $new_pluginpath, $manifest) {
+		$pluginname = $manifest['pluginname'] ? $manifest['pluginname']
+		                                      : $manifest['pluginclassname'];
 
-                if (is_dir($pluginpath.'/migrations')) {
-                        $schema_version =& new DBSchemaVersion($pluginname);
-                        $new_version = 0;
+		if (is_dir($pluginpath.'/migrations')) {
+			$schema_version = new DBSchemaVersion($pluginname);
+			$new_version = 0;
 
-                        if (is_dir($new_pluginpath.'/migrations')) {
-                                $migrator =& new Migrator($new_pluginpath.'/migrations', $schema_version);
-                                $new_version = $migrator->top_version();
-                        }
+			if (is_dir($new_pluginpath.'/migrations')) {
+				$migrator = new Migrator($new_pluginpath.'/migrations', $schema_version);
+				$new_version = $migrator->top_version();
+			}
 
-                        $migrator =& new Migrator($pluginpath.'/migrations', $schema_version);
-                        $migrator->migrate_to($new_version);
-                }
-        }
+			$migrator = new Migrator($pluginpath.'/migrations', $schema_version);
+			$migrator->migrate_to($new_version);
+		}
+	}
 
 	/**
 	 * Delete the database schema maintained by the plugin.
@@ -266,65 +266,64 @@ class PluginAdministration {
 	 * @param array  $manifest   plugin manifest information
 	 */
 	function deleteDBSchema ($pluginpath, $manifest) {
-                $pluginname = $manifest['pluginname'] ? $manifest['pluginname']
-                                                      : $manifest['pluginclassname'];
+		$pluginname = $manifest['pluginname'] ? $manifest['pluginname']
+		                                      : $manifest['pluginclassname'];
 
-                if (is_dir($pluginpath.'/migrations')) {
-                        $schema_version =& new DBSchemaVersion($pluginname);
-                        $migrator =& new Migrator($pluginpath.'/migrations', $schema_version);
-                        $migrator->migrate_to(0);
-                }
+		if (is_dir($pluginpath.'/migrations')) {
+			$schema_version = new DBSchemaVersion($pluginname);
+			$migrator = new Migrator($pluginpath.'/migrations', $schema_version);
+			$migrator->migrate_to(0);
+		}
 
-                if (isset($manifest['uninstalldbscheme'])) {
-                        $schemafile = $pluginpath.'/'.$manifest['uninstalldbscheme'];
-                        $conn = PluginEngine::getPluginDatabaseConnection();
-                        $statements = split(";[[:space:]]*\n", file_get_contents($schemafile));
-
-                        foreach ($statements as $statement) {
-                                $conn->execute($statement);
-                        }
-                }
+		if (isset($manifest['uninstalldbscheme'])) {
+			$schemafile = $pluginpath.'/'.$manifest['uninstalldbscheme'];
+			$statements = split(";[[:space:]]*\n", file_get_contents($schemafile));
+			$db = DBManager::get();
+			foreach ($statements as $statement) {
+				$db->exec($statement);
+			}
+		}
 	}
 
 	/**
-	 * recursive copy 
+	 * recursive copy
 	 *
 	 * @param string $source the sourcedirectory
 	 * @param string $dest the destination directory
 	 * @return true - success
-	 * 		   false - error
+	 *                false - error
 	 */
-	function copyr($source, $dest) 
-	{ 
-	    // Simple copy for a file 
-	    if (is_file($source)) { 
-	        return copy($source, $dest); 
-	    } 
-	  
-	    // Make destination directory 
-	    if (!is_dir($dest)) { 
-	        mkdir($dest); 
-	    } 
-	  
-	    // Loop through the folder 
-	    $dir = dir($source); 
-	    while (false !== $entry = $dir->read()) { 
-	        // Skip pointers 
-	        if ($entry == '.' || $entry == '..') { 
-	            continue; 
-	        } 
-	  
-	        // Deep copy directories 
-	        if ($dest !== "$source/$entry") { 
-	            $this->copyr("$source/$entry", "$dest/$entry"); 
-	        } 
-	    } 
-	  
-	    // Clean up 
-	    $dir->close(); 
-	    return true; 
-	} 
-	
+	function copyr($source, $dest) {
+
+		// Simple copy for a file
+		if (is_file($source)) {
+			return copy($source, $dest);
+		}
+
+		// Make destination directory
+		if (!is_dir($dest)) {
+			mkdir($dest);
+		}
+
+		// Loop through the folder
+		$dir = dir($source);
+		while (false !== $entry = $dir->read()) {
+			// Skip pointers
+			if ($entry == '.' || $entry == '..') {
+				continue;
+			}
+
+			// Deep copy directories
+			if ($dest !== "$source/$entry") {
+				$this->copyr("$source/$entry", "$dest/$entry");
+			}
+		}
+
+		// Clean up
+		$dir->close();
+		return true;
+	}
+
 	/**
 	 * Zips a plugin packages
 	 *
@@ -334,11 +333,10 @@ class PluginAdministration {
 	function zipPluginPackage($pluginid){
 		// zip the plugin-Directory and send it to the client
 		$persistence = PluginEngine::getPluginPersistence();
-		$plugin = $persistence->getPlugin($pluginid);		
+		$plugin = $persistence->getPlugin($pluginid);
 		$manifest = PluginEngine::getPluginManifest($this->environment->getBasepath() . $plugin->getPluginpath());
 		$file_id = strtolower(get_class($plugin)) . "_" . $manifest["version"] . ".zip";
 		create_zip_from_directory($this->environment->getBasepath() . $plugin->getPluginpath(), $GLOBALS["TMP_PATH"] . "/" . $file_id);
 		return GetDownloadLink($file_id, $file_id, 4, 'force');
 	}
 }
-?>
