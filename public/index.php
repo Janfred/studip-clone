@@ -44,11 +44,11 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	}
 }
 
-include ('lib/seminar_open.php'); // initialise Stud.IP-Session
-require_once ('config.inc.php');
+include 'lib/seminar_open.php'; // initialise Stud.IP-Session
+require_once 'config.inc.php';
 require_once 'lib/functions.php';
-require_once ('lib/visual.inc.php');
-include_once('lib/classes/RSSFeed.class.php');
+require_once 'lib/visual.inc.php';
+include_once 'lib/classes/RSSFeed.class.php';
 // -- hier muessen Seiten-Initialisierungen passieren --
 
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
@@ -57,7 +57,7 @@ closeObject();
 $sess->register('index_data');
 
 //Auf und Zuklappen News
-require_once ('lib/showNews.inc.php');
+require_once 'lib/showNews.inc.php';
 process_news_commands($index_data);
 
 // Auf- und Zuklappen Termine
@@ -79,8 +79,8 @@ $HELP_KEYWORD="Basis.Startseite"; // set keyword for new help
 $CURRENT_PAGE = _("Startseite");
 // Start of Output
 
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');
+include 'lib/include/html_head.inc.php'; // Output of html head
+include 'lib/include/header.php';
 
 // only for authenticated users
 if ($auth->is_authenticated() && $user->id != 'nobody') {
@@ -254,7 +254,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 	// Display banner ad
 	if ($GLOBALS['BANNER_ADS_ENABLE']) {
-		require_once('lib/banner_show.inc.php');
+		require_once 'lib/banner_show.inc.php';
 		banner_show();
 	}
 
@@ -302,7 +302,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 	// display dates
 	if (!$perm->have_perm('admin')) { // only dozent, tutor, autor, user
-		include('lib/show_dates.inc.php');
+		include 'lib/show_dates.inc.php';
 		$start = time();
 		$end = $start + 60 * 60 * 24 * 7;
 		if ($GLOBALS['CALENDAR_ENABLE']) {
@@ -314,7 +314,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 	// display votes
 	if ($GLOBALS['VOTE_ENABLE']) {
-		include ('show_vote.php');
+		include 'show_vote.php';
 		show_votes ('studip', $auth->auth['uid'], $perm);
 	}
 
@@ -441,5 +441,5 @@ if ($GLOBALS["PLUGINS_ENABLE"])
 	}
 }
 
-include ('lib/include/html_end.inc.php');
+include 'lib/include/html_end.inc.php';
 page_close();
