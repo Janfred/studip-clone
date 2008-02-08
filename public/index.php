@@ -222,7 +222,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	?>
 		<div align="center">
 		<table width="70%" border=0 cellpadding=0 cellspacing=0 >
-		<tr><td class="topicwrite" colspan=3><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/nachricht1.gif" border="0" align="texttop"><b>&nbsp;<?=_("Bestätigungsgsmail beachten!")?></b></td></tr>
+		<tr><td class="topicwrite" colspan=3><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/nachricht1.gif" align="texttop"><b>&nbsp;<?=_("Bestätigungsgsmail beachten!")?></b></td></tr>
 		<tr>
 			<td width="5%" class="blank" valign="middle">&nbsp;</td>
 			<td width="90%" class="blank" valign="top">
@@ -264,7 +264,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	<div align="center">
 		<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
 			<tr>
-				<td class="topic" colspan="2" align="left"><img src="<?=$GLOBALS['ASSETS_URL']?>images/home.gif" border="0" align="absmiddle" /> <b><?=$ueberschrift?></b></td>
+				<td class="topic" colspan="2" align="left"><img src="<?=$GLOBALS['ASSETS_URL']?>images/home.gif" align="absmiddle" /> <b><?=$ueberschrift?></b></td>
 			</tr>
 			<tr>
 				<td class="blank" valign="top" style="padding-left:25px; width:80%;">
@@ -340,11 +340,11 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 ?>
 		<table class="index_box" border="0" cellpadding="2" cellspacing="0">
 			<tr>
-				<td class="topic"><img src="<?=$activatedportalplugin->getPluginiconname()?>" border="0" align="absmiddle" /> <b><?=$activatedportalplugin->getDisplaytitle()?></b></td>
+				<td class="topic"><img src="<?=$activatedportalplugin->getPluginiconname()?>" align="absmiddle" /> <b><?=$activatedportalplugin->getDisplaytitle()?></b></td>
 				<td class="topic" align="right">
 					<? if ($activatedportalplugin->hasAdministration())
 					{
-						echo "<a href=\"". PluginEngine::getLink($activatedportalplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" align=\"absmiddle\" /></a>";
+						echo "<a href=\"". PluginEngine::getLink($activatedportalplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" align=\"absmiddle\" /></a>";
 					} ?>
 				</td>
 			</tr>
@@ -424,7 +424,7 @@ if ($GLOBALS["PLUGINS_ENABLE"])
 		<div align="center">
 		<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
 			<tr>
-				<td class="topic"><img src="<?=$activatedplugin->getPluginiconname()?>"" border="0" align="absmiddle" /><b>&nbsp;<?= $activatedplugin->getDisplaytitle() ?></b></td>
+				<td class="topic"><img src="<?=$activatedplugin->getPluginiconname()?>"" align="absmiddle" /><b>&nbsp;<?= $activatedplugin->getDisplaytitle() ?></b></td>
 			</tr>
 			<tr>
 				<td class="index_box_cell">
