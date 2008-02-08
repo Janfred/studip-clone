@@ -2256,7 +2256,7 @@ function get_flash_player ($document_id, $filename, $type) {
 	$DOCUMENTS_EMBEDD_FLASH_MOVIES = $cfg->getValue('DOCUMENTS_EMBEDD_FLASH_MOVIES');
 	if ($DOCUMENTS_EMBEDD_FLASH_MOVIES == 'autoplay') {
 		$flash_config .= '&amp;autoplay=1&amp;autoload=1';
-	} else {
+	} else if ($DOCUMENTS_EMBEDD_FLASH_MOVIES == 'autoload') {
 		$flash_config .= '&amp;autoload=1';
 	}
 	// we need the absolute url if the player is delivered from a different base

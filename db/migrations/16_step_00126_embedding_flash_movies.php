@@ -11,7 +11,7 @@ class Step00126EmbeddingFlashMovies extends DBMigration {
 		
 		$this->db->query("INSERT INTO `config` VALUES (MD5('EXTERNAL_FLASH_MOVIE_EMBEDDING'), '', 'EXTERNAL_FLASH_MOVIE_EMBEDDING', 'deny', 1, 'string', 'global', '', 0, 1157107088, 1157107088, 'Sollen externe Flash-Filme mit Hilfe des [flash]-Tags der Schnellformatierung eingebunden werden? deny=nicht erlaubt, allow=erlaubt, proxy=image proxy benutzen', '', '')");
 		
-		$this->db->query("INSERT INTO `config` VALUES (MD5('DOCUMENTS_EMBEDD_FLASH_MOVIES'), '', 'DOCUMENTS_EMBEDD_FLASH_MOVIES', 'deny', 1, 'string', 'global', '', 0, 1157107088, 1157107088, 'Sollen im Dateibereich Flash-Filme direkt in einem Player angezeigt werden? deny=nicht erlaubt, allow=erlaubt, autoplay=Film wird sofort abgespielt', '', '')");
+		$this->db->query("INSERT INTO `config` VALUES (MD5('DOCUMENTS_EMBEDD_FLASH_MOVIES'), '', 'DOCUMENTS_EMBEDD_FLASH_MOVIES', 'deny', 1, 'string', 'global', '', 0, 1157107088, 1157107088, 'Sollen im Dateibereich Flash-Filme direkt in einem Player angezeigt werden? deny=nicht erlaubt, allow=erlaubt, autoload=Film wird beim aufklappen geladen (incrementiert Downloads), autoplay=Film wird sofort abgespielt', '', '')");
 		
 		$this->announce("done.");
 		
