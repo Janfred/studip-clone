@@ -2259,7 +2259,8 @@ function get_flash_player ($document_id, $filename, $type) {
 	} else {
 		$flash_config .= '&amp;autoload=1';
 	}
-	$movie_url = GetDownloadLink($document_id, $filename, $type, 'force');
+	// we need the absolute url if the player is delivered from a different base
+	$movie_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . str_replace($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'], '', GetDownloadLink($document_id, $filename, $type, 'force'));
 	$flash_object  = "\n<object type=\"application/x-shockwave-flash\" id=\"FlashPlayer\" data=\"".Assets::url()."flash/player_flv.swf\" width=\"$width\" height=\"$height\">\n";
 	$flash_object .= "<param name=\"movie\" value=\"".Assets::url()."flash/player_flv.swf\">\n";
 	$flash_object .= "<param name=\"FlashVars\" value=\"flv=" . urlencode($movie_url) . $flash_config . "\">\n";
