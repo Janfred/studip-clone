@@ -38,6 +38,11 @@ class StudipAuthShib extends StudipAuthSSO
 
             $this->userdata = json_decode($auth, true);
             $this->userdata = array_map('utf8_decode', $this->userdata);
+
+            if (isset($this->local_domain)) {
+                $this->userdata['username'] =
+                    str_replace('@'.$this->local_domain, '', $this->userdata['username']);
+            }
         }
     }
 
@@ -90,7 +95,7 @@ class StudipAuthShib extends StudipAuthSSO
         }
 
         if (empty($remote_user)) {
-            if ($GLOBALS['sso'] == 'shib') {
+            if ($_REQUEST['sso'] == 'shib') {
                 // force Shibboleth authentication (lazy session)
                 $shib_url = $this->session_initiator;
                 $shib_url .= strpos($shib_url, '?') === false ? '?' : '&';

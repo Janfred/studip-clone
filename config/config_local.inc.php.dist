@@ -395,6 +395,8 @@ LdapReader		authentication using an LDAP server, this plugin binds to the server
 			this account must have read access to gather the attributes for the user who tries to authenticate.
 			Using this plugin allows to keep the md5 challenge-response mechanism during the login process, provided a md5
 			hash of the user password is available in LDAP
+CAS			authentication using a central authentication server (CAS)
+Shib			authentication using a Shibboleth identity provider (IdP)
 
 If you write your own plugin put it in studip-htdocs/lib/classes/auth_plugins
 and enable it here. The name of the plugin is the classname excluding "StudipAuth".
@@ -407,20 +409,8 @@ all uppercase each item of the configuration array will become a member of your 
 //$STUDIP_AUTH_PLUGIN[] = "StandardExtern";
 $STUDIP_AUTH_PLUGIN[] = "Standard";
 // $STUDIP_AUTH_PLUGIN[] = "CAS";
+// $STUDIP_AUTH_PLUGIN[] = "Shib";
 /*
-// create a config for your own user data mapping class
-$CASAbstractUserDataMapping_CONFIG = array();
-$STUDIP_AUTH_CONFIG_CAS = array("host" => "cas.studip.de",
-										"port" => 8443,
-										"uri"  => "cas",
-										"user_data_mapping_class" => "CASAbstractUserDataMapping",
-										"user_data_mapping" => // map_args are dependent on your own data mapping class
-												array(  "auth_user_md5.username" => array("callback" => "getUserData", "map_args" => "username"),
-						                                "auth_user_md5.Vorname" => array("callback" => "getUserData", "map_args" => "givenname"),
-						                                "auth_user_md5.Nachname" => array("callback" => "getUserData", "map_args" => "surname"),
-						                                "auth_user_md5.Email" => array("callback" => "getUserData", "map_args" => "email"),
-						                                "auth_user_md5.perms" => array("callback" => "getUserData", "map_args" => "status")));
-
 $STUDIP_AUTH_CONFIG_LDAPREADER = array(	"host" => "localhost",
 										"base_dn" => "dc=studip,dc=de",
 										"protocol_version" => 3,
@@ -492,6 +482,29 @@ $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array(	"db_host" => "localhost",
 												"user_info.publi" => array("callback" => "doExternMap", "map_args" => "publi"),
 												"user_info.schwerp" => array("callback" => "doExternMap", "map_args" => "schwerp"),
 												"user_info.Home" => array("callback" => "doExternMap", "map_args" => "Home")));
+
+// create a config for your own user data mapping class
+$CASAbstractUserDataMapping_CONFIG = array();
+$STUDIP_AUTH_CONFIG_CAS = array("host" => "cas.studip.de",
+										"port" => 8443,
+										"uri"  => "cas",
+										"user_data_mapping_class" => "CASAbstractUserDataMapping",
+										"user_data_mapping" => // map_args are dependent on your own data mapping class
+												array(  "auth_user_md5.username" => array("callback" => "getUserData", "map_args" => "username"),
+						                                "auth_user_md5.Vorname" => array("callback" => "getUserData", "map_args" => "givenname"),
+						                                "auth_user_md5.Nachname" => array("callback" => "getUserData", "map_args" => "surname"),
+						                                "auth_user_md5.Email" => array("callback" => "getUserData", "map_args" => "email"),
+						                                "auth_user_md5.perms" => array("callback" => "getUserData", "map_args" => "status")));
+
+$STUDIP_AUTH_CONFIG_SHIB = array("session_initiator" => "https://sp.studip.de/Shibboleth.sso/WAYF/DEMO",
+										"validate_url" => "https://sp.studip.de/auth/studip-sp.php",
+										"local_domain" => "studip.de",
+										"user_data_mapping" =>
+												array(  "auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
+						                                "auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""),
+						                                "auth_user_md5.Vorname" => array("callback" => "getUserData", "map_args" => "givenname"),
+						                                "auth_user_md5.Nachname" => array("callback" => "getUserData", "map_args" => "surname"),
+						                                "auth_user_md5.Email" => array("callback" => "getUserData", "map_args" => "email")));
 */
 
 //some additional authification-settings
