@@ -25,20 +25,20 @@
 <tr>
 	<td>
 	<div style="margin-left:40px;margin-top:15px;">
-	
+
 	<?=_("Bitte identifizieren Sie sich mit Benutzername und Passwort:")?><br />&nbsp;
 
 	<?if  ($loginerror):?>
 	<!-- failed login code -->
 	<table>
 			<? parse_msg_array(array(array("error" , "<font size=\"-1\">" . _("Bei der Anmeldung trat ein Fehler auf:") . "<br />
-												<b>".$error_msg."</b>" 
+												<b>".$error_msg."</b>"
 												.  sprintf(_("Bitte wenden Sie sich bei Problemen an: <br />%s"),
 												"<a href=\"mailto:".$GLOBALS['UNI_CONTACT']."\">".$GLOBALS['UNI_CONTACT']."</a></font>"))), "", 1, FALSE);
 			?>
 	</table>
-	<?endif;?>
-	
+	<? endif ?>
+
 	<form name="login" method="post" action="<?=$_SERVER['REQUEST_URI']?>" onSubmit="return doChallengeResponse();">
 	<!-- Set up the form with the challenge value and an empty reply value -->
 	<input type="hidden" name="challenge" value="<?=$challenge?>">
@@ -83,7 +83,7 @@
 	<?endif;?>
 	<?=_("Passwort vergessen")?></a>
 	<?if($self_registration_activated){?>
-		&nbsp;/&nbsp; 
+		&nbsp;/&nbsp;
 		<a href="register1.php?cancel_login=1"><?=_("Registrieren")?></a>
 	<?}?>
 	</font>
