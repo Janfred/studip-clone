@@ -1204,30 +1204,37 @@ function remove_magic_quotes($mixed) {
   * @param string  the text to excerpted
   * @param string  the search phrase
   * @param integer the radius around the phrase
+  * @param integer the maximum length of the excerpt string
   * @param string  the excerpt string
   *
   * @return type <description>
 */
-function text_excerpt($text, $phrase, $radius = 100, $excerpt_string = '...') {
-  if ($text != '' && $phrase != '') {
-    $phrase = preg_quote($phrase);
-
-    $found_pos = strpos(strtolower($text), strtolower($phrase));
-    if ($found_pos !== FALSE) {
-      $start_pos = max($found_pos - $radius, 0);
-      $end_pos = min($found_pos + strlen($phrase) + $radius, strlen($text));
-    }
-    else {
-      $start_pos = 0;
-      $end_pos = min(2 * $radius + strlen($phrase), strlen($text));
-    }
-
-    $prefix = $start_pos > 0 ? $excerpt_string : '';
-    $postfix = $end_pos < strlen($text) ? $excerpt_string : '';
-
-    return $prefix.substr($text, $start_pos, $end_pos - $start_pos).$postfix;
+function text_excerpt($text, $phrase, $radius = 100, $length = 200,
+                      $excerpt_string = '...') {
+  if ($text == '' || $phrase == '') {
+    return '';
   }
-  return '';
+
+  $found_pos = strpos(strtolower($text), strtolower($phrase));
+
+  if ($found_pos === FALSE) {
+    $start_pos = 0;
+  }
+  else {
+    $start_pos = max($found_pos - $radius, 0);
+  }
+
+  $end_pos = $start_pos + $length - strlen($excerpt_string);
+  if ($start_pos !== 0) {
+    $end_pos -= strlen($excerpt_string);
+  }
+
+  $end_pos = min($end_pos, strlen($text));
+
+  $prefix = $start_pos > 0 ? $excerpt_string : '';
+  $postfix = $end_pos < strlen($text) ? $excerpt_string : '';
+
+  return $prefix.substr($text, $start_pos, $end_pos - $start_pos).$postfix;
 }
 
 /**
