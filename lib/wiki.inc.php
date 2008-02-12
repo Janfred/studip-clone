@@ -970,7 +970,7 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 		parse_msg("info§" . "<p>&nbsp;</p>". sprintf(_("Die Seite wird eventuell von %s bearbeitet."), $locks) . "<br>" . _("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen.") . "<br>" . _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden.") . "<br>" . _("Klicken Sie auf Abbrechen, um zurückzukehren."), "§", "printcontent");
 	}
 	if ($keyword=='toc') {
-		parse_msg("info§" . "<p>&nbsp;</p>". _("Sie bearbeiten das Inhaltsverzeichnis.") . "<br>" . _("Verwenden Sie Aufzählungszeichen (-, --, ---), um Verweise auf Seiten hinzuzufügen.") , "§", "printcontent");
+		parse_msg("info§" . "<p>&nbsp;</p>". _("Sie bearbeiten die QuickLinks.") . "<br>" . _("Verwenden Sie Aufzählungszeichen (-, --, ---), um Verweise auf Seiten hinzuzufügen.") , "§", "printcontent");
 		if (!$body) { $body=_("- WikiWikiWeb\n- BeispielSeite\n-- UnterSeite1\n-- UnterSeite2"); }
 	}
 
@@ -1215,11 +1215,18 @@ function getShowPageInfobox($keyword, $latest_version) {
 
 	// toc
 	$toccont=get_toc_content();
-	if ($toccont) {
-		$infobox[] = array("kategorie"=> _("Inhaltsverzeichnis")."&nbsp;".get_toc_toggler(),
-			"eintrag" => array(array('icon' => "blank.gif",
-			"text"=>$toccont)));
+	if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
+		$toceditlink.="<span class='wikitoc_editlink'>(";
+		if ($toc) {
+			$toceditlink.="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("bearbeiten")."</a>";
+		} else {
+			$toceditlink.="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("erstellen")."</a>";
+		}
+		$toceditlink.=")</span>";
 	}
+	$infobox[] = array("kategorie"=> _("QuickLinks")."&nbsp;".$toceditlink, # disabled toggling: get_toc_toggler(),
+		"eintrag" => array(array('icon' => "blank.gif",
+		"text"=>$toccont)));
 
 	if (!$latest_version) {
 		$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array('icon' => "ausruf_small.gif", "text"=> sprintf(_("Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die %saktuelle Version%s."), '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">','</a>'))));
@@ -1323,6 +1330,7 @@ function get_toc_content() {
 		$toccont.="</div>";
 		$toccont.="</div>\n";
 	} 
+	/*  additional edit link for QuickLinks. Disabled.
 	if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
 		$toccont.="<div class='wikitoc_editlink'>";
 		if ($toc) {
@@ -1332,6 +1340,7 @@ function get_toc_content() {
 		}
 		$toccont.="</div>";
 	}
+	*/
 	return $toccont;
 }
 

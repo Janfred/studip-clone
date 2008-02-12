@@ -249,6 +249,10 @@ div.wikitoc_editlink {
     margin-bottom: -10px;
 }
 
+span.wikitoc_editlink {
+    font-size: 75%;
+}
+
 span.wikitoc_toggler {
    font-size: 0.8em;
 }
