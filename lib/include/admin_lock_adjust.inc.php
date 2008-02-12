@@ -372,7 +372,7 @@ function insert_lock_rule($insertdata) {
 
 function get_all_seminars_generic_datafields() {
 	$i++;
-	$db = DBManager::get()->query();
+	$db = DBManager::get();
 
 	$datafields = array();
 	foreach ($db->query("SELECT * FROM datafields ".
