@@ -1217,7 +1217,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 	$toccont=get_toc_content();
 	if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
 		$toceditlink.="<span class='wikitoc_editlink'>(";
-		if ($toc) {
+		if ($toccont) {
 			$toceditlink.="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("bearbeiten")."</a>";
 		} else {
 			$toceditlink.="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("erstellen")."</a>";
