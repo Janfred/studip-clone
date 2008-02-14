@@ -176,8 +176,8 @@ class VeranstaltungResourcesAssign {
 		$i=0;
 		if (is_array($term_data["turnus_data"])) {
 			foreach ($term_data["turnus_data"] as $val) {
-				$start_time = mktime ($val["start_stunde"], $val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($corr_week * 7), date("Y", $sem_begin));
-				$end_time = mktime ($val["end_stunde"], $val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
+				$start_time = mktime ((int)$val["start_stunde"], (int)$val["start_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1) + ($corr * 7), date("Y", $sem_begin));
+				$end_time = mktime ((int)$val["end_stunde"], (int)$val["end_minute"], 0, date("n", $sem_begin), date("j", $sem_begin) + ($val["day"] -1), date("Y", $sem_begin));
 
 				//check if we have to correct the timestamps for a whole week (in special cases, sem_beginn is not a Monday but the assign is)
 				if (($sem_begin_uncorrected) && ($start_time < $sem_begin_uncorrected) && ($term_data["turnus"]))  {
