@@ -349,11 +349,13 @@ div.autocomplete ul li {
   cursor:pointer;
   text-align: left;
   font-size: 0.75em;
+  overflow: hidden;
 }
 
 div.autocomplete .informal {
   font-size: 0.75em;
   color: #777;
+  white-space: nowrap;
 }
 
 div.autocomplete .informal .comment {
