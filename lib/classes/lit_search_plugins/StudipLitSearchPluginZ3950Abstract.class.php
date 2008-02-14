@@ -55,6 +55,7 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 		// UNIMARC mapping
 		$this->mapping['UNIMARC'] = array('001' => array('field' => 'accession_number', 'callback' => 'simpleMap', 'cb_args' => ''),
 								'010' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'ISBN: $a'),
+								'010' => array('field' => 'dc_identifier', 'callback' => 'simpleMap', 'cb_args' => 'ISSN: $a'),
 								'101' => array('field' => 'dc_language', 'callback' => 'simpleMap', 'cb_args' => '$a'),
 								'200' => array('field' => 'dc_title', 'callback' => 'simpleMap', 'cb_args' => '$a $e' . chr(10) . '$f'),
 								'210' => array(	array('field' => 'dc_date', 'callback' => 'simpleMap', 'cb_args' => '$d-01-01'),
