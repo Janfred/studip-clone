@@ -301,6 +301,7 @@ class MetaDate {
 														'end_stunde'   => leadingZero($val->getEndStunde()),
 														'end_minute'   => leadingZero($val->getEndMinute()),
 														'desc'  => $val->getDescription(),
+														'room'  => $val->room,
 														'metadate_id'  => $val->getMetaDateID());
 		}
 

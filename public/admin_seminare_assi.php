@@ -1436,24 +1436,23 @@ if (($form == 6) && ($jump_next_x))
 		if (!$sem_create_data["sem_entry"]) {
 			foreach ($sem->getMetaDates() as $key => $val) {
 				$sem->metadate->createSingleDates($key);
-
+				
 				// Raum buchen, wenn eine Angabe gemacht wurde, oder Freitextangabe, falls vorhanden
-				if ($RESOURCES_ENABLE) {
-					if (($val['resource_id'] != '') || ($val['room'] != '')) {
-						$singleDates =& $sem->getSingleDatesForCycle($key);
-						foreach ($singleDates as $sd_key => $sd_val) {
-							if ($val['resource_id'] != '') {
-								$singleDates[$sd_key]->bookRoom($val['resource_id']);
-								if ($msg = $singleDates[$sd_key]->getMessages()) {
-									$errormsg .= $msg;
-								}
-							} else {
-								$singleDates[$sd_key]->setFreeRoomText($val['room']);
+				if (($val['resource_id'] != '') || ($val['room'] != '')) {
+					$singleDates =& $sem->getSingleDatesForCycle($key);
+					foreach ($singleDates as $sd_key => $sd_val) {
+						if ($RESOURCES_ENABLE && $val['resource_id'] != '') {
+							$singleDates[$sd_key]->bookRoom($val['resource_id']);
+							if ($msg = $singleDates[$sd_key]->getMessages()) {
+								$errormsg .= $msg;
 							}
+						} else {
+							$singleDates[$sd_key]->setFreeRoomText($val['room']);
+							$singleDates[$sd_key]->store();
 						}
 					}
 				}
-
+				
 			}
 
 			// Speichern der Veranstaltungsdaten -> anlegen des Seminars
