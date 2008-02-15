@@ -45,7 +45,7 @@ function autocomplete_person_find_by_name($fragment) {
                        "Nachname LIKE ?) ".
                        "AND " . get_vis_query() . " ".
                        "ORDER BY Nachname ".
-                        "LIMIT 10");
+                       "LIMIT 10");
   $stmt->execute(array("%{$fragment}%", "%{$fragment}%", "%{$fragment}%"));
 
   return $stmt->fetchAll();

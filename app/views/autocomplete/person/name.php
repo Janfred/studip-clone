@@ -11,6 +11,7 @@
 
         <?= htmlready($person['title_rear']) ?>
 
+        <span class="username"><?= htmlready($person['username']) ?></span>
         <span class="permission"><?= htmlready($person['perms']) ?></span>
 
       </span></li>

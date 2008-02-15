@@ -357,6 +357,7 @@ div.autocomplete .informal .number,
 div.autocomplete .informal .semester,
 div.autocomplete .informal .lecturer,
 div.autocomplete .informal .comment,
+div.autocomplete .informal .username,
 div.autocomplete .informal .permission {
   font-size: 0.75em;
   color: #777;
