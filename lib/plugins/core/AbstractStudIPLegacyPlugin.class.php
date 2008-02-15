@@ -27,9 +27,23 @@
 abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
 
 
-	function AbstractStudIPLegacyPlugin(){
-		parent::AbstractStudIPPlugin();
-	}
+  function AbstractStudIPLegacyPlugin() {
+    parent::AbstractStudIPPlugin();
+  }
+
+
+  function actionShow($param = null) {
+    return $this->show($param);
+  }
+
+
+  /**
+   * @param $subnavigationparam - set if a subnavigation item was clicked.
+   *                              The value is plugin dependent and specified
+   *                              by the plugins subnavigation link params.
+   */
+  function show($subnavigationparam = null) {}
+
 
   /**
    * This method dispatches and displays all actions. It uses the template
