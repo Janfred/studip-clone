@@ -322,18 +322,17 @@ div.wikitoc ul {
 /* ***** Autocompleter ****************************************************** */
 
 div.autocomplete {
-  position:absolute;
-  width:250px;
-  background-color:white;
-  border:1px solid #888;
-  margin:0px;
-  padding:0px;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #888;
+  margin: 0px;
+  padding: 0px;
 }
 
 div.autocomplete ul {
-  list-style-type:none;
-  margin:0px;
-  padding:0px;
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
 }
 
 div.autocomplete ul li.selected {
@@ -341,21 +340,19 @@ div.autocomplete ul li.selected {
 }
 
 div.autocomplete ul li {
-  list-style-type:none;
-  display:block;
-  margin:0;
-  padding:2px;
-  height:40px;
-  cursor:pointer;
+  list-style-type: none;
+  display: block;
+  margin: 0;
+  padding: 2px;
+  cursor: pointer;
   text-align: left;
   font-size: 0.75em;
-  overflow: hidden;
+  min-height: 2em;
 }
 
 div.autocomplete .informal {
   font-size: 0.75em;
   color: #777;
-  white-space: nowrap;
 }
 
 div.autocomplete .informal .comment {
