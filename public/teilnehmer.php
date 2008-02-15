@@ -1421,7 +1421,7 @@ if ($rechte) {
 
 		while ($db->next_record()) {
 			if ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
-				$admission_chance = $sem->getAdmissionChance($db->f("studiengang_id")); 
+				$admission_chance = $sem->getAdmissionChance($db->f("studiengang_id"));
 			}
 
 			$cssSw->switchClass();
@@ -1564,7 +1564,7 @@ if ($rechte) {
 			Event.observe(window, 'load', function() {
 			  new Ajax.Autocompleter('search_exp',
 			                         'search_exp_choices',
-			                         'dispatch.php/autocomplete/person/family',
+			                         'dispatch.php/autocomplete/person/name',
 			                         {
 			                           minChars: 3,
 			                           paramName: 'value',

@@ -351,6 +351,13 @@ div.autocomplete ul li {
 }
 
 div.autocomplete .informal {
+}
+
+div.autocomplete .informal .number,
+div.autocomplete .informal .semester,
+div.autocomplete .informal .lecturer,
+div.autocomplete .informal .comment,
+div.autocomplete .informal .permission {
   font-size: 0.75em;
   color: #777;
 }
@@ -358,3 +365,4 @@ div.autocomplete .informal {
 div.autocomplete .informal .comment {
   font-style: italic;
 }
+

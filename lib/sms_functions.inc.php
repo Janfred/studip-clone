@@ -670,7 +670,7 @@ function show_addrform() {
 			Event.observe(window, 'load', function() {
 			  new Ajax.Autocompleter('addressee',
 			                         'addressee_choices',
-			                         'dispatch.php/autocomplete/person/family',
+			                         'dispatch.php/autocomplete/person/name',
 			                         {
 			                           minChars: 3,
 			                           paramName: 'value',

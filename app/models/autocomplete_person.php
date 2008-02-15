@@ -36,8 +36,8 @@ function autocomplete_person_find_by_family($fragment) {
 function autocomplete_person_find_by_name($fragment) {
   global $_fullname_sql;
   $db = DBManager::get();
-  $stmt = $db->prepare("SELECT username, ".
-                       $_fullname_sql['full'] . " AS fullname ".
+  $stmt = $db->prepare("SELECT user_id, username, Vorname, Nachname, ".
+                       "title_front, title_rear, perms ".
                        "FROM auth_user_md5 ".
                        "LEFT JOIN user_info USING (user_id) ".
                        "WHERE (username LIKE ? OR ".
