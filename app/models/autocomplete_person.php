@@ -23,14 +23,17 @@ function autocomplete_person_find_by_given($fragment) {
 
 function autocomplete_person_find_by_family($fragment) {
   $db = DBManager::get();
-  $stmt = $db->prepare("SELECT DISTINCT Nachname FROM auth_user_md5 "
-                        ."WHERE Nachname LIKE ? "
-                        ."AND " . get_vis_query() . " "
-                        ."ORDER BY Nachname "
-                        ."LIMIT 10");
+  $stmt = $db->prepare("SELECT user_id, username, Vorname, Nachname, ".
+                       "title_front, title_rear, perms ".
+                       "FROM auth_user_md5 ".
+                       "LEFT JOIN user_info USING (user_id) ".
+                       "WHERE Nachname LIKE ? ".
+                       "AND " . get_vis_query() . " ".
+                       "ORDER BY Nachname ".
+                       "LIMIT 10");
   $stmt->execute(array("%{$fragment}%"));
 
-  return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+  return $stmt->fetchAll();
 }
 
 function autocomplete_person_find_by_name($fragment) {
