@@ -195,7 +195,7 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 		                       { minChars: 3, paramName: 'value', method: 'get' });
 		new Ajax.Autocompleter('Nachname',
 		                       'Nachname_choices',
-		                       'dispatch.php/autocomplete/person/name',
+		                       'dispatch.php/autocomplete/person/family',
 		                       { minChars: 3, paramName: 'value', method: 'get' });
 	});
 </script>
