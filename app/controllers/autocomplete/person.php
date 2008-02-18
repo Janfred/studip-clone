@@ -17,13 +17,11 @@ class Autocomplete_PersonController extends Trails_Controller {
   function given_action() {
     $search_term = strtr(self::get_param('value'), array('%' => '\%'));
     $this->persons = autocomplete_person_find_by_given($search_term);
-    $this->render_template('autocomplete/person/list');
   }
 
   function family_action() {
     $search_term = strtr(self::get_param('value'), array('%' => '\%'));
     $this->persons = autocomplete_person_find_by_family($search_term);
-    $this->render_template('autocomplete/person/list');
   }
 
   function name_action() {
