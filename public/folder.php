@@ -22,16 +22,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-require_once('lib/datei.inc.php');
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
+require_once('lib/datei.inc.php');
 require_once('lib/msg.inc.php');
 require_once('lib/visual.inc.php');
 require_once('config.inc.php');
 require_once 'lib/functions.php';
 require_once('lib/classes/StudipDocumentTree.class.php');
-
+require_once 'lib/raumzeit/Issue.class.php';
 
 $sess->register('folder_system_data');
 $db=new DB_Seminar;
@@ -532,6 +532,12 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 				<?
 				}
 			}
+	} elseif($folder_system_data['mode']){
+		echo "\n" . '<td class="blank" align="center" colspan="3" width="100%" >';
+		echo "\n" . '<span style="margin:25px;font-weight:bold;">';
+		echo "\n" . ($folder_system_data["mode"] == 'move' ? _("Verschiebemodus") : _("Kopiermodus")) . "</span>";
+		echo "\n" .'<a href="'.$PHP_SELF.'?cmd=tree">'. makeButton("abbrechen", "img",_("Verschieben / Kopieren abbrechen")) . '</a>';
+		echo "\n" . '</td></tr>';
 	}
 
 	//when changing, uploading or show all (for download selector), create a form
