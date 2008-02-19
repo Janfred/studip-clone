@@ -1364,6 +1364,7 @@ if (($form == 6) && ($jump_next_x))
 		if ($sem_create_data['metadata_termin']['art'] == 0)  {
 			foreach ($sem_create_data["metadata_termin"]["turnus_data"] as $key=>$val) {
 				$sem_create_data["metadata_termin"]["turnus_data"][$key]["room"] = stripslashes($sem_create_data["metadata_termin"]["turnus_data"][$key]["room"]);
+				$sem_create_data["metadata_termin"]["turnus_data"][$key]["desc"] = stripslashes($sem_create_data["metadata_termin"]["turnus_data"][$key]["desc"]);
 			}
 			$sem->metadate->createMetaDateFromArray($sem_create_data['metadata_termin']);
 		}	else {

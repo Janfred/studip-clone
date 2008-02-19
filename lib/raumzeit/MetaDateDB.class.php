@@ -35,7 +35,7 @@ class MetaDateDB {
 	function storeMetaData($metadate) {
 		$db = new DB_Seminar();
 
-		$db->query("UPDATE seminare SET metadata_dates = '".$metadate->getSerializedMetaData()."' WHERE Seminar_id = '".$metadate->getSeminarID()."'");
+		$db->query("UPDATE seminare SET metadata_dates = '".mysql_escape_string($metadate->getSerializedMetaData())."' WHERE Seminar_id = '".$metadate->getSeminarID()."'");
 		return TRUE;
 	}
 
