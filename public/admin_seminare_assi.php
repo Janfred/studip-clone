@@ -1389,7 +1389,7 @@ if (($form == 6) && ($jump_next_x))
 		$sem->semester_duration_time = $sem_create_data['sem_duration_time'];
 		$sem->seminar_number = $sem_create_data['sem_nummer'];
 		$sem->institut_id =	$sem_create_data['sem_inst_id'];
-		$sem->name = $sem_create_data['sem_name'];
+		$sem->name = stripslashes($sem_create_data['sem_name']);
 		$sem->subtitle = $sem_create_data['sem_untert'];
 		$sem->status = $sem_create_data['sem_status'];
 		$sem->description = $sem_create_data['sem_desc'];
@@ -1436,7 +1436,7 @@ if (($form == 6) && ($jump_next_x))
 		if (!$sem_create_data["sem_entry"]) {
 			foreach ($sem->getMetaDates() as $key => $val) {
 				$sem->metadate->createSingleDates($key);
-				
+
 				// Raum buchen, wenn eine Angabe gemacht wurde, oder Freitextangabe, falls vorhanden
 				if (($val['resource_id'] != '') || ($val['room'] != '')) {
 					$singleDates =& $sem->getSingleDatesForCycle($key);
@@ -1452,7 +1452,7 @@ if (($form == 6) && ($jump_next_x))
 						}
 					}
 				}
-				
+
 			}
 
 			// Speichern der Veranstaltungsdaten -> anlegen des Seminars
