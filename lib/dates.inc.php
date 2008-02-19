@@ -262,7 +262,7 @@ function veranstaltung_beginn_from_metadata($reg_irreg, $sem_begin, $start_woche
 	$start_woche++;
 
 	foreach ($turnus_data as $key => $val) {
-		$start_time = mktime ($val['start_stunde'], $val['start_minute'], 0, date("n", $sem_begin), (date("j", $sem_begin)+$corr) + ($val['day'] -1) + ($start_woche * 7), date("Y", $sem_begin));
+		$start_time = mktime ((int)$val['start_stunde'], (int)$val['start_minute'], 0, date("n", $sem_begin), (date("j", $sem_begin)+$corr) + ($val['day'] -1) + ($start_woche * 7), date("Y", $sem_begin));
 		if (($start_time < $ret_time) || ($ret_time == 0)) {
 			$ret_time = $start_time;
 		}

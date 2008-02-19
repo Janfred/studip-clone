@@ -738,7 +738,7 @@ function check_and_set_date($tag, $monat, $jahr, $stunde, $minute, &$arr, $field
 
 		if ($arr) {
 			if ($check) {
-				$arr[$field] = mktime($stunde,$minute, 0,$monat,$tag,$jahr);
+				$arr[$field] = mktime((int)$stunde,(int)$minute, 0,$monat,$tag,$jahr);
 			} else {
 				$arr[$field] = -1;
 			}
