@@ -159,7 +159,7 @@ foreach ($all_semester as $val) {
 
 $i = 0;
 while ($tmp_first_date < $end_date) {
-	$start_weeks[$i]['text'] = ($i+1) .'. '. _("Startwoche") .' ('. _("ab") .' '. date("d.m.Y",$tmp_first_date).')';
+	$start_weeks[$i]['text'] = ($i+1) .'. '. _("Semesterwoche") .' ('. _("ab") .' '. date("d.m.Y",$tmp_first_date).')';
 	$start_weeks[$i]['selected'] = ($sem->getStartWeek() == $i);
 
 	$i++;
