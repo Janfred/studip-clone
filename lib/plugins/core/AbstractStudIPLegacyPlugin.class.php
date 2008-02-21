@@ -90,7 +90,7 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
   function route($unconsumed_path) {
 
     $tokens = preg_split('@/@', $unconsumed_path, -1, PREG_SPLIT_NO_EMPTY);
-    $action = 'action' . array_shift($tokens);
+    $action = sizeof($tokens) ? 'action' . array_shift($tokens) : 'actionShow';
 
     $class_methods = array_map('strtolower', get_class_methods($this));
     if (!in_array(strtolower($action), $class_methods)) {

@@ -54,12 +54,14 @@ class PluginEngine {
 	 */
 	public static function routeRequest($dispatch_to) {
 		$dispatch_to = ltrim($dispatch_to, '/');
-		$pos = strpos($dispatch_to, '/');
-		if ($pos === FALSE) {
+		if (strlen($dispatch_to) === 0) {
 			throw new Studip_PluginNotFoundException(
 			  _("Es wurde kein Plugin gewählt."));
 		}
-		return array(substr($dispatch_to, 0, $pos), substr($dispatch_to, $pos + 1));
+		$pos = strpos($dispatch_to, '/');
+		return $pos === FALSE
+			? array($dispatch_to, '')
+			: array(substr($dispatch_to, 0, $pos), substr($dispatch_to, $pos + 1));
 	}
 
 	/**
@@ -136,7 +138,7 @@ class PluginEngine {
 	* @param $cmd - command to execute by clicking the link
 	* @return a link to the current plugin with the additional $params
 	*/
-	public static function getLink($plugin, $params=array(), $cmd="show") {
+	public static function getLink($plugin, $params=array(), $cmd="") {
 		if (is_null($plugin)) {
 			return "";
 		}
