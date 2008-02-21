@@ -11,6 +11,10 @@
  */
 
 
+require_once 'lib/functions.php';
+require_once 'lib/visual.inc.php';
+
+
 /**
  * TODO
  *
@@ -154,14 +158,15 @@ class Avatar {
    * Constructs a desired HTML image tag for a Avatar.
    *
    * @param string  one of the constants Avatar::(NORMAL|MEDIUM|SMALL)
-   * @param string  the tooltip for the user's picture
    *
    * @return string returns the HTML image tag
    */
-  function getImageTag($size = Avatar::MEDIUM, $tooltip = '') {
-    return sprintf('<img src="%s" %s align="middle" />',
-                   $this->getURL($size),
-                   tooltip($tooltip));
+  function getImageTag($size = Avatar::MEDIUM) {
+    $fullname = htmlReady(get_fullname($this->user_id));
+    return sprintf('<img src="%s" align="middle" class="avatar_%s" '.
+                   'alt="%s" title="%s" />',
+                   $this->getURL($size), $size,
+                   $fullname, $fullname);
   }
 
 

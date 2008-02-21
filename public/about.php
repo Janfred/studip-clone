@@ -222,7 +222,7 @@ if ($msg)
 &nbsp;
 <?
 // hier wird das Bild ausgegeben
-echo Avatar::getAvatar($user_id)->getImageTag(Avatar::NORMAL, $db->f("fullname"));
+echo Avatar::getAvatar($user_id)->getImageTag(Avatar::NORMAL);
 
 // Hier der Teil fuer die Ausgabe der normalen Daten
 ?>

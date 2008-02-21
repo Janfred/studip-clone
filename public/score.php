@@ -75,7 +75,7 @@ if ($db->num_rows()) {
 				$kill = "&nbsp; &nbsp; <a href=\"score.php?cmd=kill\">" . _("[löschen]") . "</a>";
 			}
 			echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"1%\" nowrap align=\"right\"><font size=\"-1\">".$rang.".</td><td class=\"".$cssSw->getClass()."\" width=\"39%\" nowrap>"
-			."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".Avatar::getAvatar($db->f("user_id"))->getImageTag(Avatar::SMALL, $db->f("fullname"))." <font size=\"-1\">".htmlReady($db->f("fullname"))."</a></td>"
+			."&nbsp; &nbsp; <a href='about.php?username=".$db->f("username")."'>".Avatar::getAvatar($db->f("user_id"))->getImageTag(Avatar::SMALL)." <font size=\"-1\">".htmlReady($db->f("fullname"))."</a></td>"
 			."<td class=\"".$cssSw->getClass()."\" width=\"10%\">".$score->GetScoreContent($db->f("user_id"))."</td>"
 			."<td class=\"".$cssSw->getClass()."\" width=\"20%\"><font size=\"-1\">".$db->f("score")."</td><td class=\"".$cssSw->getClass()."\" width=\"30%\"><font size=\"-1\">".$score->GetTitel($db->f("score"), $db->f("geschlecht"))
 			.$kill
