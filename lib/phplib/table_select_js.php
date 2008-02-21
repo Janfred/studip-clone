@@ -1,8 +1,8 @@
-<SCRIPT Language="JavaScript"> 
+<SCRIPT Language="JavaScript">
 
 
 function ClearList( l )
-{ 
+{
     var i;
     for( i = 0; i < l.options.length; i++ )
     {
@@ -21,12 +21,12 @@ function UpdateMenu( f, sel_t )
 	var field_values = new Array();
 
 	var table_names = new Array();
-	
+
 
 	<?
-	  for( $i = 0; list( #i, $table ) = each( $table_list ); $i++ )
+	  for( $i = 0; list( $i, $table ) = each( $table_list ); $i++ )
 	  {
-	    
+
 	      echo "\ttable_names[$i] = \"$table\";\n";
 	      print "field_names[\"$table\"] = new Array();\n";
 	      print "field_values[\"$table\"] = new Array();\n";
@@ -34,31 +34,31 @@ function UpdateMenu( f, sel_t )
 
 	      for( $j = 0; list( $value, $name) = each( $fields ); $j++ )
 	      {
-	           
+
 	           echo "\t\tfield_names[\"$table\"][$j] = \"$name\";\n";
 		   echo "\t\tfield_values[\"$table\"][$j] = \"$value\";\n";
-	      }   	   
+	      }
 	  }
 	?>
-	
+
 
 
         var opArray = sel_t.options;
 	var index = sel_t.selectedIndex;
 	var selOp = opArray[index];
         var Table = selOp.value;
-	
+
 
 	var re = /table/i;
-	
+
 	var foo = sel_t.name.replace( re, "field" );
 	var sel_f = f.elements[foo];
-	
+
 	if( ! Table )
 	{
 	   Table = selOp.text;
 	}
-	
+
 	if( Table == -1 )
 	{
 	  ClearList( sel_f );
@@ -91,30 +91,28 @@ function PutText( what )
 //	       alert( "return" );
 	       return;
 	}
-	
+
 
 //        alert( what.selectedIndex );
 	var fields = what.options;
 
-	var re = /field_sel2/i;	
+	var re = /field_sel2/i;
 	var foo = what.name.replace( re, "input" );
 	var target = f.elements[foo];
-	
+
 	re = /field/i;
 	foo = what.name.replace( re, "table" );
 	var table = f.elements[foo];
 	var tables = table.options;
 
 	// target is a text box
-	
+
         var theText = tables[table.selectedIndex].value + "." + fields[what.selectedIndex].value;
-	
+
 	target.value = theText;
 }
-	
+
 
 }
 </SCRIPT>
-
-
 
