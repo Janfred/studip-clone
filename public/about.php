@@ -1,4 +1,5 @@
 <?php
+/* vim: noexpandtab */
 /*
 about.php - Anzeige der persoenlichen Userseiten von Stud.IP
 Copyright (C) 2000 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>, Niclas Nohlen <nnohlen@gwdg.de>
@@ -491,8 +492,15 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 		if ($activatedhomepageplugin->getStatusShowOverviewPage()){
 			echo '<table class="blank" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><img src="'. $activatedhomepageplugin->getPluginiconname() .'" border="0" align="texttop" /><b> ' . $activatedhomepageplugin->getDisplaytitle() .' </b></td><td align="right" width="1%" class="topic" nowrap="nowrap">&nbsp;';
 
-			if ($requser->isSameUser($activatedhomepageplugin->getUser())){
-				echo '<a href="'. PluginEngine::getLink($activatedhomepageplugin,array(),'showAdministrationPage') .'"><img src="'. $GLOBALS['ASSETS_URL']. 'images/pfeillink.gif" border="0" alt="'._("Administration").'" title="' . _("Administration") .  '" ></a>';
+			if ($requser->isSameUser($activatedhomepageplugin->getUser())) {
+				$admin_link = $activatedhomepageplugin->getAdminLink();
+				if (NULL !== $admin_link) {
+				?>
+					<a href="<?= $admin_link ?>" title="<?= _("Administration") ?>">
+						<?= Assets::img('pfeillink.gif', array('alt' => _("Administration"))) ?>
+					</a>
+				<?
+				}
 			}
 			echo '&nbsp;</td></tr>'."\n";
 			echo '<tr><td class="steel1" colspan="2">&nbsp;</td></tr><tr><td class="steel1" colspan="2"><blockquote>';

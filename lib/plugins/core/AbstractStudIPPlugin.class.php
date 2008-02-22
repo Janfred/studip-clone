@@ -302,6 +302,18 @@ abstract class AbstractStudIPPlugin {
 		return $this->dependentonplugin;
 	}
 
+	/**
+	 * Returns the URI to the administration page of this plugin. Override this
+	 * method, if you want another URI, or return NULL to signal, that there is
+	 * no such page.
+	 *
+	 * @return mixed  if this plugin has an administration page return its URI,
+	 *                return NULL otherwise
+	 */
+	function getAdminLink() {
+		return PluginEngine::getLink($this, array(), 'showAdministrationPage');
+	}
+
   /**
    * This method dispatches all actions.
    *

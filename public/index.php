@@ -1,4 +1,5 @@
 <?php
+/* vim: noexpandtab */
 /*
 index.php - Startseite von Stud.IP (anhaengig vom Status)
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>
@@ -342,10 +343,12 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			<tr>
 				<td class="topic"><img src="<?=$activatedportalplugin->getPluginiconname()?>" align="absmiddle" /> <b><?=$activatedportalplugin->getDisplaytitle()?></b></td>
 				<td class="topic" align="right">
-					<? if ($activatedportalplugin->hasAdministration())
-					{
-						echo "<a href=\"". PluginEngine::getLink($activatedportalplugin,array(),"showAdministrationPage") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" alt=\"bearbeiten\" title=\"" . _("Administration") .  "\" align=\"absmiddle\" /></a>";
-					} ?>
+					<? if ($activatedportalplugin->hasAdministration()) : ?>
+						<? if ($admin_link = $activatedportalplugin->getAdminLink()) : ?>
+							<a href="<?= $admin_link ?>" title="<?= _("Administration") ?>">
+								<?= Assets::img('pfeillink.gif', array('alt' => _("Administration"))) ?>
+						<? endif ?>
+					<? endif ?>
 				</td>
 			</tr>
 			<tr>
