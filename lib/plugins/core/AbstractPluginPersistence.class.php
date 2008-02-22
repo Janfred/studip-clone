@@ -8,7 +8,7 @@
  * @subpackage core
  */
 
-class AbstractPluginPersistence {
+cl ass AbstractPluginPersistence {
 
 	var $connection;
 
