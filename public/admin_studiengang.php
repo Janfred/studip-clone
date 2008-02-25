@@ -193,7 +193,6 @@ if ($i_view) {
 			<td class="<? echo $cssSw->getClass() ?>">
 				<font size="-1"><?=_("Wenn die dem Studiengang zugeordneten Studierenden beim L&ouml;schen einem anderen Studiengang zugeordnet werden sollen, w&auml;hlen Sie ihn bitte hier aus:") ?></font><br /><br />			<?
 				$db2->query("SELECT * FROM studiengaenge WHERE studiengang_id  != '".$db->f("studiengang_id")."' ORDER BY name");
-				$db2->next_record();
 				print "<select name=\"move_user_stdg_id\">";
 				print "<option value=\"\">"._("&lt;keinem anderen Studiengang zuordnen - direkt l&ouml;schen&gt;")."</option>";
 				while ($db2->next_record()) {
