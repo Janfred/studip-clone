@@ -306,7 +306,7 @@ class Avatar {
 
     imagecopy($i, $image, $xpos, $ypos, 0, 0, $resized_width, $resized_height);
 
-    imagepng($i, $this->getFilename($size));
+    imagepng($i, self::getCustomAvatarPath($this->user_id, $size));
   }
 
 
