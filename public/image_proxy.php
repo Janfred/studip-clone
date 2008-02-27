@@ -26,7 +26,7 @@ $IMAGE_PROXY_MAX_CONTENT_LENGTH = 1000000;
 $IMAGE_PROXY_CACHE_LIFETIME = 86400;
 $IMAGE_PROXY_MAX_FILES_IN_CACHE = 3000;
 $IMAGE_PROXY_GC_PROBABILITY = 1;
-$IMAGE_PROXY_MAX_IMAGE_SIZE = 1500; //x or y
+$IMAGE_PROXY_MAX_IMAGE_SIZE = 3000; //x or y
 
 ini_set('default_socket_timeout', 5);
 
@@ -86,11 +86,12 @@ function garbage_collect_image_cache(){
 		$db->query("DELETE FROM image_proxy_cache WHERE id IN('".join("','",$delete)."')");
 	}
 }
-
+ob_start();
 Config::GetInstance()->getValue('EXTERNAL_IMAGE_EMBEDDING') == 'proxy' OR die();
 
 page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
-
+page_close();
+ob_end_clean();
 ob_start();
 require_once "lib/datei.inc.php";
 if ((mt_rand() % 100) < $IMAGE_PROXY_GC_PROBABILITY ){
@@ -105,7 +106,7 @@ if (!$perm->have_perm('user')){
 	$check = refresh_image_cache($id,'image/gif',$length,'denied');
 } elseif(!($check = check_image_cache($id))){
 	$error = '';
-	$headers = parse_link($url,3);
+	$headers = parse_link($url,2);
 	if (!$headers['response_code']) {
 		$error = 'no response';
 	} elseif ($headers['response_code'] != 200) {
@@ -141,7 +142,7 @@ if (!$perm->have_perm('user')){
 				if(!$size || $size[2] > 3 || $size[2] < 1) {
 					$error = 'bad file';
 				} elseif ($size[0] > $IMAGE_PROXY_MAX_IMAGE_SIZE ||  $size[1] > $IMAGE_PROXY_MAX_IMAGE_SIZE) {
-					$error = 'to big';
+					$error = 'too big';
 				}
 				if ($error) {
 					@unlink($imagefile);
