@@ -698,6 +698,11 @@ if ($s_send) {
     {
     	$update_data['Untertitel'] = $Untertitel;
     }
+	
+	if (!$lockdata[$lock_status]['status'])
+    {
+    	$update_data['status'] = $Status;
+    }
 
     if (!$lockdata[$lock_status]['Beschreibung'])
     {
@@ -727,6 +732,11 @@ if ($s_send) {
     if (!$lockdata[$lock_status]['lernorga'])
     {
     	$update_data['lernorga'] = $lernorga;
+    }
+	
+	if (!$lockdata[$lock_status]['leistungsnachweis'])
+    {
+    	$update_data['leistungsnachweis'] = $leistungsnachweis;
     }
 
     if (!$lockdata[$lock_status]['ects'])
