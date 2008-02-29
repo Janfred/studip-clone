@@ -66,7 +66,7 @@ global  $_html_head_title,
 		<? if (in_array(basename($_SERVER['SCRIPT_NAME']), array('dispatch.php', 'plugins.php'))) : ?>
 		<base href="<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>">
 		<? endif ?>
-		<? if (basename($_SERVER['SCRIPT_NAME']) !== 'logout.php') : ?>
+		<? if (basename($_SERVER['SCRIPT_NAME']) !== 'logout.php' && $AUTH_LIFETIME > 0) : ?>
 			<meta http-equiv="REFRESH" CONTENT="<?= $AUTH_LIFETIME * 60 ?>; URL=<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>logout.php">
 		<? endif ?>
 
