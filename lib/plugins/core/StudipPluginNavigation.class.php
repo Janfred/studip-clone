@@ -60,7 +60,7 @@ class StudipPluginNavigation {
   }
 
 
-  function setLink($newlink){
+  function setLink($link){
     $this->link = $link;
     return $this;
   }
@@ -104,5 +104,11 @@ class StudipPluginNavigation {
   function clearSubmenu(){
     $this->submenu = array();
     return $this;
+  }
+
+  function isActive() {
+    $link = substr($_SERVER['REQUEST_URI'],
+                   strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
+    return $link === $this->getLink();
   }
 }
