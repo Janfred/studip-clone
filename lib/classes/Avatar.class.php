@@ -245,9 +245,11 @@ class Avatar {
    * @return void
    */
   function reset() {
-    @unlink($this->getFilename(Avatar::NORMAL));
-    @unlink($this->getFilename(Avatar::MEDIUM));
-    @unlink($this->getFilename(Avatar::SMALL));
+    if($this->is_customized()){
+	  @unlink(self::getCustomAvatarPath($this->user_id, Avatar::NORMAL));
+	  @unlink(self::getCustomAvatarPath($this->user_id, Avatar::SMALL));
+	  @unlink(self::getCustomAvatarPath($this->user_id, Avatar::MEDIUM));
+    }
   }
 
 

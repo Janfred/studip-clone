@@ -714,7 +714,7 @@ if (check_ticket($studipticket)) {
 	//ein Bild wurde hochgeladen
 	if ($cmd == "copy") {
 		try {
-			Avatar::getAvatar($user->cfg->user_id)->createFromUpload('imgfile');
+			Avatar::getAvatar($my_about->auth_user["user_id"])->createFromUpload('imgfile');
 			$my_about->msg = "msg§" . _("Die Bilddatei wurde erfolgreich hochgeladen. Eventuell sehen Sie das neue Bild erst, nachdem Sie diese Seite neu geladen haben (in den meisten Browsern F5 dr&uuml;cken).") . '§';
 		} catch (Exception $e) {
 			$my_about->msg = 'error§' . $e->getMessage() . '§';
@@ -830,11 +830,8 @@ if (check_ticket($studipticket)) {
 		if ($view == "Bild" &&
 		    $cmd == "bild_loeschen" &&
 		    $_SERVER["REQUEST_METHOD"] == "POST") {
-			if ($user_id==$auth->auth["uid"] ||
-			    $perm->have_perm("admin")) {
-				Avatar::getAvatar($user_id)->reset();
+				Avatar::getAvatar($my_about->auth_user["user_id"])->reset();
 				$my_about->msg .= "info§" . _("Bild gel&ouml;scht.") . "§";
-			}
 		}
 
 		if (($my_about->check != "user") && ($my_about->priv_msg != "")) {
@@ -1092,8 +1089,7 @@ if ($view == 'Bild') {
 	echo '<font size="-1"><b>' . _("Aktuell angezeigtes Bild:") . '<br /><br /></b></font>';
 
 	echo Avatar::getAvatar($my_about->auth_user['user_id'])->getImageTag(Avatar::NORMAL);
-	if ($my_about->auth_user["user_id"] == $auth->auth["uid"] ||
-	    $perm->have_perm("admin")) {
+	if (Avatar::getAvatar($my_about->auth_user['user_id'])->is_customized()) {
 		?>
 		<form name="bild_loeschen" method="POST" action="<?= $GLOBALS['PHP_SELF'] ?>?studipticket=<?= get_ticket() ?>">
 			<input type="hidden" name="user_id" value="<?= $my_about->auth_user["user_id"] ?>">
