@@ -50,11 +50,11 @@
 	</td>
 	</tr>
 </table>
+<?if ($step == 1):?>
 <script type="text/javascript" language="javascript">
 <!--
   // Activate the appropriate input form field.
-  if (document.newpwd.email.value == '') {
     document.newpwd.email.focus();
-  }
 // -->
 </script>
+<?endif;?>
