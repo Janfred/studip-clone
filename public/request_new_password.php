@@ -176,7 +176,7 @@ if ($_GET['id'] != '') {
 		$db = DBManager::get();
 		$stmt = $db->prepare("SELECT user_id FROM auth_user_md5 WHERE username=?");
 		$success = $stmt->execute(array($username));
-		if ($success && $stmt->getCount() === 1 && trim($_GET['id']) == md5($username . $GLOBALS['REQUEST_NEW_PASSWORD_SECRET'])) {
+		if ($success && $stmt->rowCount() === 1 && trim($_GET['id']) == md5($username . $GLOBALS['REQUEST_NEW_PASSWORD_SECRET'])) {
 			$row = $stmt->fetch();
 			$user_management =& new UserManagementRequestNewPassword($row['user_id']);
 			if ($user_management->setPassword()) {
