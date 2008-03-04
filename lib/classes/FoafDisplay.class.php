@@ -129,6 +129,9 @@ class FoafDisplay {
 	*/
 	function show($open="close")
 	{
+		if (!$open) {
+			$open="close";
+
 		// berechnung, werte festlegen etc.
 		if ($this->foaf_list && $open=="open") {
 			$msg="<table align=\"center\" style=\"margin-top:8px;\"><tr>";
