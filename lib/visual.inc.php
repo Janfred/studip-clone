@@ -1162,28 +1162,29 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 	//TODO: überarbeiten -> valides html und/oder template draus machen...
 	if ($open == "close") {
 		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap=\"nowrap\" width=\"1%\"";
-		$print .= "align=left valign=\"top\">";
+		$print .= "align=\"left\" valign=\"top\">";
 	}
 	else {
-		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead3\" nowrap width=\"1%\"";
-		$print .= " align=left valign=\"top\">";
+		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead3\" nowrap=\"nowrap\" width=\"1%\"";
+		$print .= " align=\"left\" valign=\"top\">";
 	}
 
 	if ($link)
 		$print .= "<a href=\"".$link."\">";
 
 	$print .= "&nbsp;<img src=\"";
-	if ($open == "open")
-		$titel = "<b>" . $titel . "</b>";
+	#if ($open == "open")
+	#	$titel = "<b>" . $titel . "</b>";
 
 	if ($link) {
 		$addon = '';
 		if ($index) $addon =  " ($indikator: $index)";
-		if ($open == "close")
+		if ($open == "close") {
 			$print .= $GLOBALS['ASSETS_URL']."images/forumgrau2.gif\"" . tooltip(_("Objekt aufklappen") . $addon);
-
-		if ($open == "open")
+		}
+		else {
 			$print .= $GLOBALS['ASSETS_URL']."images/forumgraurunt2.gif\"" . tooltip(_("Objekt zuklappen") . $addon);
+		}
 	}
 	else {
 		if ($open == "close") {
@@ -1194,12 +1195,12 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 		}
 	}
 
-	$print .= " />";
+	$print .= " >";
 	if ($link) {
 		$print .= "</a>";
 	}
 	$print .= "</td><td class=\"printhead\" nowrap=\"nowrap\" width=\"1%\" valign=\"middle\">$icon</td>";
-	$print .= "<td class=\"printhead\" align=\"left\" width=\"20%\" nowrap valign=\"bottom\">&nbsp;";
+	$print .= "<td class=\"printhead\" align=\"left\" width=\"20%\" nowrap=\"nowrap\"  valign=\"bottom\">&nbsp;";
 	$print .= $titel."</td><td align=\"right\" nowrap=\"nowrap\" class=\"printhead\" width=\"99%\" valign=\"bottom\">";
 	$print .= $zusatz."</td>";
 

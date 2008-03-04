@@ -374,15 +374,12 @@ echo "<br /><font size=\"-1\"><a href=\"contact_export.php?username=$username\">
 echo "<br>&nbsp; ";
 echo "</td>";
 
-echo "</tr></table><br>\n";
+echo "</tr>\n</table>\n<br/>\n";
 
 // News zur person anzeigen!!!
-
 ($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) ? $show_admin=TRUE : $show_admin=FALSE;
 if (show_news($user_id, $show_admin, 0, $about_data["nopen"], "100%", 0, $about_data))
-	echo "<br>";
-
-
+	echo "<br/>";
 
 // alle persoenlichen Termine anzeigen, aber keine privaten
 if ($GLOBALS['CALENDAR_ENABLE']) {
@@ -391,7 +388,7 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 		$start_zeit = time();
 		($perm->have_perm("autor") AND $auth->auth["uid"] == $user_id) ? $show_admin = TRUE : $show_admin = FALSE;
 		if (show_personal_dates($user_id, $start_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
-			echo "<br>";
+			echo "<br/>";
 	}
 }
 
@@ -407,11 +404,10 @@ if ($GLOBALS['FOAF_ENABLE']
 
 // include and show votes and tests
 if ($GLOBALS['VOTE_ENABLE']) {
-	show_votes ($username, $auth->auth["uid"], $perm, YES);
+	show_votes($username, $auth->auth["uid"], $perm, YES);
 }
 
 // show Guestbook
-
 if (!$guestpage)
 	$guestpage = 0;
 $guest = new Guestbook($user_id,$admin_darf,$guestpage);
@@ -421,15 +417,14 @@ if ($_REQUEST['guestbook'] && $perm->have_perm('autor'))
 
 if ($guest->active == TRUE || $guest->rights == TRUE) {
 	$guest->showGuestbook();
-	echo "<br>";
+	echo "<br/>";
 }
 
 // show chat info
 if ($GLOBALS['CHAT_ENABLE']){
 	if (chat_show_info($user_id))
-		echo "<br>";
+		echo "<br/>";
 }
-
 
 //test Ausgabe von Literaturlisten
 if ( ($lit_list = StudipLitList::GetFormattedListsByRange($user_id)) ) {
