@@ -131,6 +131,7 @@ class FoafDisplay {
 	{
 		if (!$open) {
 			$open="close";
+		}
 
 		// berechnung, werte festlegen etc.
 		if ($this->foaf_list && $open=="open") {
