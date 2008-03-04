@@ -31,6 +31,7 @@ require_once('lib/classes/Avatar.class.php');
 * the user at hand (whose homepage is currently viewed).
 *
 * @author		Tobias Thelen <tthelen@uni-osnabrueck.de>
+* @author		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
 * @version		$Id$
 */
 class FoafDisplay {
@@ -126,26 +127,11 @@ class FoafDisplay {
 	* @access 	public
 	* @param	string	open/close indication (passed by about.php)
 	*/
-	function show($open="close") {
-		if (!$open) {
-			$open="close";
-		}
-		if ($open=="open") {
-			echo "<a name=\"foaf\">";
-		}
-
-		echo "\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\"
-	width=\"100%\" align=\"center\">";
-		echo "\n<tr valign=\"baseline\"><td class=\"topic\"><img src=\"".$GLOBALS['ASSETS_URL']."images/guestbook.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;";
-		echo sprintf(_("Verbindung zu %s"),htmlReady(get_fullname($this->target_id)));
-		print("</b></td></tr>");
-
-		echo "\n<tr><td class=\"blank\" colspan=$colspan>";
-		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"
-	width=\"100%\" align=\"center\"><tr><td class=\"blank\">";
-
+	function show($open="close")
+	{
+		// berechnung, werte festlegen etc.
 		if ($this->foaf_list && $open=="open") {
-			$msg="<table align=center style=\"margin-top:8px;\"><tr>";
+			$msg="<table align=\"center\" style=\"margin-top:8px;\"><tr>";
 			$print_arrow=0;
 			foreach ($this->foaf_list as $uid) {
 				if ($print_arrow) {
@@ -154,9 +140,9 @@ class FoafDisplay {
 					$print_arrow=1;
 				}
 				$info=$this->user_info($uid,($uid==$this->user_id||$uid==$this->target_id));
-				$msg.="<td align=center>";
+				$msg.="<td align=\"center\">";
 				$msg.=$info["pic"];
-				$msg.="<br>";
+				$msg.="<br/>";
 				$msg.=$info["link"];
 				$msg.="</td>";
 			}
@@ -174,11 +160,28 @@ class FoafDisplay {
 		}
 		$link="about.php?username=".$this->target_username."&foaf_open=".($open=="open" ? "close":"open")."#foaf";
 		$titel="<a href=\"$link\" class=\"tree\">$titel</a>";
-		printhead("100%","0",$link,$open,0,"<img src='".$GLOBALS['ASSETS_URL']."images/icon-guest.gif'>",$titel,"");
+
+		// AB HIER AUSGABE
+		//TODO: in template umwandeln, was ist mit $GLOBALS['ASSETS_URL'], gibt
+		// es da nicht ein Step, dass anstelle von Globals eine Assets-Klasse benutzt werden soll?
+
+		// kopfzeile
+		echo '<a name="foaf" />';
+		echo "\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
+		echo "\n<tr>\n<td class=\"topic\"><img src=\"".$GLOBALS['ASSETS_URL']."images/guestbook.gif\" border=\"0\" align=\"texttop\"><b>";
+		echo sprintf(_("Verbindung zu %s"),htmlReady(get_fullname($this->target_id)));
+		echo "</b></td>\n</tr>";
+
+		// inhaltbox
+		echo "\n<tr>\n<td class=\"blank\">";
+		echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\">\n<tr>";
+		printhead("100%","0",$link,$open,0,"<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-guest.gif\" />",$titel,"");
 		if ($open=="open") {
-			print $msg;
+			echo "</tr>\n<tr>\n<td colspan=\"4\" align=\"center\">";
+			echo $msg;
+			echo '</td>';
 		}
-		print "</tr></table></td></tr><tr><td>&nbsp;</td></tr></table>";
+		echo "</tr>\n</table>\n</td>\n</tr>\n</table>\n<br/>\n";
 	}
 
 	/**
@@ -203,10 +206,10 @@ class FoafDisplay {
 			$ret["pic"].= "</a>";
 
 
-			$ret["link"]="<font size=-1><a href=\"about.php?username=".$ret['uname']."\">".htmlReady($ret['name'])."</a></font>";
+			$ret["link"]="<font size=\"-1\"><a href=\"about.php?username=".$ret['uname']."\">".htmlReady($ret['name'])."</a></font>";
 		} else {
-			$ret["pic"]="<img border=1 src=\"".Avatar::getNobodyAvatarUrl(Avatar::MEDIUM)."\" " .tooltip(_("anonyme NutzerIn")).">";
-			$ret["link"]=_("<font size=-1>anonyme NutzerIn</font>");
+			$ret["pic"]="<img border=\"1\" src=\"".Avatar::getNobodyAvatarUrl(Avatar::MEDIUM)."\" " .tooltip(_("anonyme NutzerIn")).">";
+			$ret["link"]=_("<font size=\"-1\">anonyme NutzerIn</font>");
 		}
 		return $ret;
 	}
@@ -217,11 +220,11 @@ class FoafDisplay {
 	*/
 	function info_text() {
 		$vis=$this->ucfg->getValue();
-		$msg="<table width=95% align=center><tr><td>";
-		$msg.="<font size=-1><p>";
+		$msg="<table width=\"95%\" align=\"center\">\n<tr>\n<td>";
+		$msg.="<font size=\"-1\">";
 		$msg.=sprintf(_("Die Verbindungskette (Friend-of-a-Friend-Liste) wertet Buddy-Listen-Einträge aus, um festzustellen, über wieviele Stufen (maximal %s) sich zwei BenutzerInnen direkt oder indirekt \"kennen\"."), $this->depth);
 		$msg.=" ".sprintf(_("Die Zwischenglieder werden nur nach Zustimmung mit Namen und Bild ausgegeben. Sie selbst erscheinen derzeit in solchen Ketten %s. Klicken Sie %shier%s, um die Einstellung zu ändern."), "<b>".($vis ? _("nicht anonym") : ($this->dont_show_anonymous ? _("überhaupt nicht") :  _("anonym")))."</b>", "<a href=\"edit_about.php?view=Messaging\">","</a>");
-		$msg.="</p></td></tr></table>";
+		$msg.="</font></td></tr></table>";
 		return $msg;
 	}
 

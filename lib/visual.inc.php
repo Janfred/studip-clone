@@ -1159,13 +1159,14 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 		}
 	}
 
+	//TODO: überarbeiten -> valides html und/oder template draus machen...
 	if ($open == "close") {
-		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap width=\"1%\"";
-		$print .= "align=left valign=\"top\" nowrap>";
+		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap=\"nowrap\" width=\"1%\"";
+		$print .= "align=left valign=\"top\">";
 	}
 	else {
 		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead3\" nowrap width=\"1%\"";
-		$print .= " align=left valign=\"top\" nowrap>";
+		$print .= " align=left valign=\"top\">";
 	}
 
 	if ($link)
@@ -1193,14 +1194,15 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 		}
 	}
 
-	$print .= " border=0>";
+	$print .= " />";
 	if ($link) {
 		$print .= "</a>";
 	}
-	$print .= "</td><td class=\"printhead\" nowrap width=\"1%\" valign=\"middle\">$icon</td>";
+	$print .= "</td><td class=\"printhead\" nowrap=\"nowrap\" width=\"1%\" valign=\"middle\">$icon</td>";
 	$print .= "<td class=\"printhead\" align=\"left\" width=\"20%\" nowrap valign=\"bottom\">&nbsp;";
-	$print .= $titel."</td>"."<td align=\"right\" nowrap class=\"printhead\" width=\"99%\" valign='bottom'>";
-	$print .= $zusatz."&nbsp;</td>";
+	$print .= $titel."</td><td align=\"right\" nowrap=\"nowrap\" class=\"printhead\" width=\"99%\" valign=\"bottom\">";
+	$print .= $zusatz."</td>";
+
 
 	if ($printout)
 		echo $print;
