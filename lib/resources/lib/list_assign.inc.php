@@ -57,7 +57,7 @@ function list_restore_assign(&$assEvtLst, $resource_id, $begin, $end, $user_id='
 	if ($range_id) $query.= sprintf("resources_user_resources.user_id = '%s'  AND ", $range_id);
 	$query .= sprintf("(begin BETWEEN %s AND %s OR (begin <= %s AND (repeat_end > %s OR end > %s)))"
 				 . "%s ORDER BY begin ASC", $begin, $end, $end, $begin, $begin,
-				 ($day_of_week ? " AND (DAYOFWEEK(FROM_UNIXTIME(begin)) = $day_of_week OR (repeat_interval > 0 AND repeat_day_of_week = 0))" : "") );
+				 ($day_of_week ? " AND (DAYOFWEEK(FROM_UNIXTIME(begin)) = $day_of_week OR DAYOFWEEK(FROM_UNIXTIME(repeat_end)) = $day_of_week OR (repeat_interval > 0 AND repeat_day_of_week = 0))" : "") );
 
 	//send the query
 	$db->query($query);
@@ -191,7 +191,6 @@ function create_assigns($assign_object, &$assEvtLst, $begin='', $end='', $filter
 
 		//inc the count
 		$quantity++;
-		
 		//check for holidays (we do this only for repeated assign (means only here) and only for assigns by seminars!))
 		if ($ao_owner_type == "sem") {
 			$holiday_skipping = FALSE;
@@ -218,6 +217,7 @@ function create_assigns($assign_object, &$assEvtLst, $begin='', $end='', $filter
 											$assign_object->getResourceId(), $assign_object->getAssignUserId(), 
 											$assign_object->getUserFreeName());
 					$assEvt->setRepeatMode($ao_repeat_mode);
+
 					if (!isFiltered($filter, $assEvt->getRepeatMode()))
 						$assEvtLst->events[] = $assEvt;										
 				}

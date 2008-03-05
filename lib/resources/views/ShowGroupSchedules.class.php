@@ -188,8 +188,8 @@ class ShowGroupSchedules extends ShowSemSchedules {
 					$a_end_time = ($print_view ? $a_start_time + 86400 * 14 : $end_time);
 					$assign_events = new AssignEventList ($a_start_time, $a_end_time, $room_id, '', '', TRUE, 'semschedulesingle', $this->dow);
 					while ($event = $assign_events->nextEvent()) {
+						if(strftime('%u', $event->getBegin()) != $this->dow) continue;
 						if(in_array($event->repeat_mode, array('d','m','y'))){
-							if(strftime('%u', $event->getBegin()) != $this->dow) continue;
 							$assign =& AssignObject::Factory($event->getAssignId());
 							switch($event->repeat_mode){
 								case 'd':
