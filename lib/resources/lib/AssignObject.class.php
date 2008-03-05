@@ -680,5 +680,16 @@ class AssignObject {
 			return TRUE;
 		return FALSE;
 	}
+	
+	function __sleep(){
+		$ret = array();
+		$ro = new ReflectionObject($this);
+		foreach($ro->getProperties() as $prop) $prop->name == 'db' OR $ret[] = $prop->name;
+		return $ret;
+	}
+	
+	function __wakeup(){
+		$this->db = new DB_Seminar();
+	}
 
 }
