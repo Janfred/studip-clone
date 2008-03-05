@@ -491,6 +491,5 @@ if ($perm->have_perm("admin"))
 </tr>
 </table>
 <?php
-var_Dump($admin_rooms_data);
 include ('lib/include/html_end.inc.php');
 page_close();
