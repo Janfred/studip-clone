@@ -33,6 +33,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+if ($RESOURCES_ENABLE) {
+	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
+	include_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
+}
 
 // temporary link to this help page untill a separate page is available 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenAendernVonZeitenUndTerminen";
@@ -52,20 +57,13 @@ require_once('lib/classes/Seminar.class.php');	//Seminar-class
 
 // -- here you have to put initialisations for the current page
 
-if ($RESOURCES_ENABLE) {
-	include_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
-	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
-	include_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
-}
+
 
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 
 $cssSw = new cssClassSwitcher;
 $sess->register("admin_rooms_data");
-
-if ($admin_rooms_data["resRequest"])
-	$admin_rooms_data["resRequest"] = unserialize($admin_rooms_data["resRequest"]);
 
 /**
 * This function creates a snapshot for all the values the admin_rooms script uses
@@ -79,7 +77,7 @@ if ($admin_rooms_data["resRequest"])
 */
 function get_snapshot() {
 	global $admin_rooms_data;
-	return	serialize($admin_rooms_data["resRequest"]);
+	return	md5(serialize($admin_rooms_data["resRequest"]));
 }
 
 
@@ -487,15 +485,12 @@ if ($perm->have_perm("admin"))
 		</tr>
 		<?php
 
-//de-initialise RommRequest-object
-if (is_object($admin_rooms_data["resRequest"])) {
-	$admin_rooms_data["resRequest"] = serialize ($admin_rooms_data["resRequest"]);
-}
 ?>
 	</table>
 </td>
 </tr>
 </table>
 <?php
+var_Dump($admin_rooms_data);
 include ('lib/include/html_end.inc.php');
 page_close();
