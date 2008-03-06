@@ -1173,8 +1173,8 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 		$print .= "<a href=\"".$link."\">";
 
 	$print .= "&nbsp;<img src=\"";
-	#if ($open == "open")
-	#	$titel = "<b>" . $titel . "</b>";
+	if ($open == "open")
+		$titel = "<b>" . $titel . "</b>";
 
 	if ($link) {
 		$addon = '';
