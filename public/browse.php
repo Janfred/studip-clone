@@ -196,7 +196,11 @@ echo _("W&auml;hlen Sie den gew&uuml;nschen Bereich aus oder suchen Sie nach ein
 		new Ajax.Autocompleter('Nachname',
 		                       'Nachname_choices',
 		                       'dispatch.php/autocomplete/person/family',
-		                       { minChars: 3, paramName: 'value', method: 'get' });
+		                       { minChars: 3, paramName: 'value', method: 'get',
+		                         afterUpdateElement: function (input, item) {
+		                           var username = encodeURI(item.down('span.username').firstChild.nodeValue);
+		                           document.location = "<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>about.php?username=" + username;
+		                         }});
 	});
 </script>
 
