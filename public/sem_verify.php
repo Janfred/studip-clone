@@ -559,7 +559,7 @@ $db6=new DB_Seminar;
 					while($db->next_record()){
 						$user_studiengang[$db->f('studiengang_id')] = 1;
 					}
-					if (!$sem_verify_suggest_studg && $current_seminar->getFreeAdmissionSeats()) {//Wir wissen noch nicht mit welchem Studiengang der User rein will
+					if (!$sem_verify_suggest_studg) {//Wir wissen noch nicht mit welchem Studiengang der User rein will
 						if (count($user_studiengang) == 1 || (count($user_studiengang) > 1 && !$current_seminar->isAdmissionQuotaEnabled())) {//Nur einen passenden gefunden? Dann nehmen wir einfach mal diesen...
 							$sem_verify_suggest_studg = key($user_studiengang);
 						} elseif (count($user_studiengang) > 1) { //Mehrere gefunden, fragen welcher es denn sein soll
@@ -617,6 +617,7 @@ $db6=new DB_Seminar;
 						}
 					}
 					if ($sem_verify_suggest_studg && isset($user_studiengang[$sem_verify_suggest_studg])) { //User hat einen Studiengang angegeben oeder wir haben genau einen passenden gefunden, mit dem er jetzt rein will/kann
+
 						if (!$current_seminar->isAdmissionQuotaChecked()) { //Variante Eintragen nach Lostermin oder Enddatum der Kontigentierrung. Wenn noch Platz ist fuellen wir einfach auf, ansonsten Warteliste
 							if ($current_seminar->getFreeAdmissionSeats()) { //Wir koennen einfach eintragen, Platz ist noch
 								if (!seminar_preliminary($id,$user->id)) {
