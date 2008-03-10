@@ -129,6 +129,18 @@ $cssSw = new cssClassSwitcher();
 							<input type="text" size="2" maxlength="2" name="end_minute" value="<?=$_POST['end_minute']?>" />
 						</td>
 					</tr>
+					<tr>
+						<td class="<?=$cssSw->getClass()?>">
+							&nbsp;&nbsp;<?=_("Art der Termine:")?>
+						</td>
+						<td class="<?=$cssSw->getClass()?>">
+							<select name="art">
+							<? foreach ($TERMIN_TYP as $key => $val) : ?>
+								<option value="<?= $key ?>"<?= ($tpl['type'] == $key) ? ' selected' : '';?>><?= $val['name'] ?></option>
+							<? endforeach; ?>
+							</select>
+						</td>
+					</tr>
 					<?$cssSw->switchClass()?>
 					<tr>
 						<td class="<?=$cssSw->getClass()?>" colspan="2">
