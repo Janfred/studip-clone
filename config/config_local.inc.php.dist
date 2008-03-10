@@ -4,7 +4,7 @@
 you find here the basic system settings. You shouldn't have to touch much of them...
 please note the CONFIG.INC.PHP in the system folder for the indivual settings of your installation!*/
 
-$UNI_NAME_CLEAN = "Stud.IP 1.6-dev";							//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
+$UNI_NAME_CLEAN = "Stud.IP 1.8-dev";							//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
 $STUDIP_INSTALLATION_ID='demo-installation';      //unique identifier for installation
 $AUTH_LIFETIME = 60;									//the length of a session in minutes, zero means unlimited lifetime
 
@@ -21,13 +21,6 @@ $DB_STUDIP_USER = "";
 $DB_STUDIP_PASSWORD = "";
 $DB_STUDIP_DATABASE = "studip";
 
-//additional class for Ilias connection (DB_Ilias)
-$DB_ILIAS_HOST = "localhost";
-$DB_ILIAS_USER = "<username>";
-$DB_ILIAS_PASSWORD = "<password>";
-$DB_ILIAS_DATABASE = "ilias";
-
-
 #####    ##   ##### #    #  ####
 #    #  #  #    #   #    # #
 #    # #    #   #   ######  ####
@@ -41,8 +34,11 @@ $ABSOLUTE_PATH_STUDIP = $STUDIP_BASE_PATH . '/public/';
 
 
 // CANONICAL_RELATIVE_PATH_STUDIP should end with a '/'
-$CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']) . '/';
+$CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']);
 
+if (substr($CANONICAL_RELATIVE_PATH_STUDIP,-1) != "/"){
+	$CANONICAL_RELATIVE_PATH_STUDIP .= "/";
+}
 
 // ABSOLUTE_URI_STUDIP: insert the absolute URL to your Stud.IP installation; it should end with a '/'
 $ABSOLUTE_URI_STUDIP = "";
@@ -50,13 +46,12 @@ $ABSOLUTE_URI_STUDIP = "";
 //   Warning: this can only be enabled AFTER executing the migration scripts for Stud.IP 1.6
 //   customize if required
 //   change this, if MAIL_NOTIFICATION activated
-/* $ABSOLUTE_URI_STUDIP = sprintf('http%s://%s%s%s',
+/*$ABSOLUTE_URI_STUDIP = sprintf('http%s://%s%s%s',
      $_SERVER['SERVER_PORT'] == 443 || $_SERVER['HTTPS'] == 'on' ? 's' : '',
      $_SERVER['SERVER_NAME'],
      in_array($_SERVER['SERVER_PORT'], array(80, 443)) ? '' : ':' . $_SERVER['SERVER_PORT'],
      $CANONICAL_RELATIVE_PATH_STUDIP);
 */
-
 
 // default ASSETS_URL, customize if required
 $ASSETS_URL = $ABSOLUTE_URI_STUDIP . 'assets/';
@@ -128,10 +123,10 @@ $EXPORT_ENABLE = TRUE;									//Stud.IP module: export
 $XSLT_ENABLE = TRUE;
 $FOP_ENABLE = TRUE;
 $FOP_SH_CALL = "/usr/local/fop-0.20.5rc/fop.sh";    					//path to fop
-$JAVA_ENV_CALL = "/etc/profile.d/alljava.sh";     					//used to set environment for JRE
+$JAVA_ENV_CALL = "";     					//used to set environment for JRE
 
 $ILIAS_CONNECT_ENABLE = FALSE;								//Stud.IP module: ilias 2 connect
-$ABSOLUTE_PATH_ILIAS = "http://<your.server.name/ilias/>";
+$ABSOLUTE_PATH_ILIAS = "";
 
 $EXTERN_ENABLE = TRUE;									//Stud.IP module: "external pages" and SRI-System
 $EXTERN_SERVER_NAME = "";								//define name, if you use special setup
@@ -223,9 +218,6 @@ $PLUGINS_ENABLE = TRUE;
 $PLUGINS_UPLOAD_ENABLE = TRUE; 					//Upload of Plugins is enabled
 			     								//if disabled for security reasons, uploads have to go into $NEW_PLUGINS_PATH
 $NEW_PLUGINS_PATH = ""; 							//The place from which new plugins should be loaded
-$PLUGINS_CACHING = TRUE;  						//enable caching
-$PLUGINS_CACHE_TIME = 300; 						//Time in seconds, the cache is valid
-
 
 /*system functions
 ----------------------------------------------------------------
@@ -234,7 +226,7 @@ activate or deactivate some basic system-functions here*/
 $LATEXRENDER_ENABLE = TRUE;								//enable to use the LaTexrenderer (Please note the further LaTeX template-settings below)
 $WIKI_ENABLE = TRUE;									//enable WikiWiki-Webs
 $SCM_ENABLE = TRUE;									//enable Simple-Content functionality
-$LOG_ENABLE = FALSE;									//enable event logging for some admin actions on courses, users and institutes
+$LOG_ENABLE = TRUE;									//enable event logging for some admin actions on courses, users and institutes
 $SMILEYADMIN_ENABLE = TRUE;								//enable Smiley-administration
 $SMILEY_COUNTER = FALSE;								//enable Smiley-counter
 
@@ -383,6 +375,12 @@ $_lit_search_plugins[] = array('name' => "Studip",'display_name' =>'Katalog der 
 
 /* Universitätsbibliothek Trier */
 //$_lit_search_plugins[] = array('name' => 'UB_Trier', 'display_name' =>'Universitätsbibliothek Trier', 'link' => 'https://ub-aleph.uni-trier.de/F/?func=find-c&local_base=tri01&ccl_term={accession_number}');
+
+/* Südwestdeutscher Bibliotheksverbund SWB Online */
+//$_lit_search_plugins[] = array('name' => "Swb", 'display_name' => "SWB Online Katalog", 'link' => 'http://swb.bsz-bw.de/DB=2.1/SET=1/TTL=2/CLK?IKT=12&TRM={accession_number}');
+
+/* IWF Campusmedien */
+//$_lit_search_plugins[] = array('name' => "IWFdigiClips", 'display_name' => "IWF Campusmedien", 'link' => 'http://gso.gbv.de/DB=1.65/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /*authentication plugins
 ----------------------------------------------------------------
