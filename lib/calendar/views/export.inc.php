@@ -325,7 +325,7 @@ elseif ($expmod == 'exp' && empty($err)) {
 elseif ($expmod == 'imp') {
 
 	$import =& new CalendarImportFile(new CalendarParserICalendar(),
-			$HTTP_POST_FILES["importfile"]);
+			$_FILES['importfile']);
 
 	$import_count = $import->getCount();
 
@@ -359,7 +359,7 @@ elseif ($expmod == 'imp') {
 elseif ($expmod == 'sync') {
 
 	$import =& new CalendarImportFile(new CalendarParserICalendar(),
-			$HTTP_POST_FILES["importfile"]);
+			$_FILES['importfile']);
 
 	$export =& new CalendarExportFile(new CalendarWriterICalendar());
 
