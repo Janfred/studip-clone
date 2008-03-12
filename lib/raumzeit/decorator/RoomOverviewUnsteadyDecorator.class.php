@@ -43,65 +43,65 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 
 				$zeit = leadingZero($val['start_hour']).':'.leadingZero($val['start_minute']).'-'.leadingZero($val['end_hour']).':'.leadingZero($val['end_minute']);
 
-				if ($RESOURCES_ENABLE) {
-					if ($this->showRoomList && $raum = $this->sem->getFormattedPredominantRooms($key, $this->link)) {
+				if ($RESOURCES_ENABLE && $this->showRoomList && 
+					$raum = $this->sem->getFormattedPredominantRooms($key, $this->link)) {
+					// all relevant information is already assigned to $raum
 
-					} else if ($zraum = $this->sem->getPredominantRoom($key, TRUE)) {
-						foreach ($zraum as $raum_id) {
-							$resObj =& ResourceObject::Factory($raum_id);
-							if ($this->link) {
-								$raum_list[] = $resObj->getFormattedLink(TRUE, TRUE, TRUE);
-							} else {
-								$raum_list[] = $resObj->getName();
-							}
-						}
-
-						for ($i = 0; $i < min(3,sizeof($raum_list)); $i++) {
-							if ($i) {
-								$raum .= ', ';
-								$xml_raum .= ', ';
-							}
-
-							$raum .= $raum_list[$i];
-							$xml_raum .= $raum_list[$i];
-						}
-
-						if (sizeof($raum_list) > 3) {
-							$info = getWeekDay($val['day']).'.&nbsp;'.$zeit.',&nbsp;'.$repeat.', Räume:\n';
-							$xml_raum = '';
-							foreach ($raum_list as $raum_info) {
-								$info .= $raum_info.'\n';
-								$xml_raum .= $raum_info.', ';
-							}
-							$info = strip_tags($info);
-							$title = str_replace('\n', '  ', $info);
-
-							if ($this->link) {
-								$raum .= ", <A href=\"javascript:alert('$info')\" alt=\"$title\" title=\"$title\">und ".(sizeof($raum_list)-3).' weitere</A>';
-								$raum .= " <img src=\"{$GLOBALS['ASSETS_URL']}/images/info.gif\" border=\"0\" align=\"absMiddle\" onClick=\"alert('";
-								$raum .= $info."')\" alt=\"$title\" title=\"$title\">";
-							} else {
-								$raum .= ', und '.(sizeof($raum_list)-3).' weitere';
-							}
-						}
-
-					} else if ($raum = $this->sem->getFreeTextPredominantRoom($key)) {
-						if (!$this->xml_export) {
-							$raum = '('.htmlReady($raum).')';
+				} else if ($RESOURCES_ENABLE && $zraum = $this->sem->getPredominantRoom($key, TRUE)) {
+					foreach ($zraum as $raum_id) {
+						$resObj =& ResourceObject::Factory($raum_id);
+						if ($this->link) {
+							$raum_list[] = $resObj->getFormattedLink(TRUE, TRUE, TRUE);
 						} else {
-							$xml_raum_freetext = $raum;
+							$raum_list[] = $resObj->getName();
 						}
-					} else {
-						$raum = _("k.A.");
-						$xml_raum_freetext = _("k.A.");
 					}
+
+					for ($i = 0; $i < min(3,sizeof($raum_list)); $i++) {
+						if ($i) {
+							$raum .= ', ';
+							$xml_raum .= ', ';
+						}
+
+						$raum .= $raum_list[$i];
+						$xml_raum .= $raum_list[$i];
+					}
+
+					if (sizeof($raum_list) > 3) {
+						$info = getWeekDay($val['day']).'.&nbsp;'.$zeit.',&nbsp;'.$repeat.', Räume:\n';
+						$xml_raum = '';
+						foreach ($raum_list as $raum_info) {
+							$info .= $raum_info.'\n';
+							$xml_raum .= $raum_info.', ';
+						}
+						$info = strip_tags($info);
+						$title = str_replace('\n', '  ', $info);
+
+						if ($this->link) {
+							$raum .= ", <A href=\"javascript:alert('$info')\" alt=\"$title\" title=\"$title\">und ".(sizeof($raum_list)-3).' weitere</A>';
+							$raum .= " <img src=\"{$GLOBALS['ASSETS_URL']}/images/info.gif\" border=\"0\" align=\"absMiddle\" onClick=\"alert('";
+							$raum .= $info."')\" alt=\"$title\" title=\"$title\">";
+						} else {
+							$raum .= ', und '.(sizeof($raum_list)-3).' weitere';
+						}
+					}
+
+				} else if ($raum = $this->sem->getFreeTextPredominantRoom($key)) {
+					if (!$this->xml_export) {
+						$raum = '('.htmlReady($raum).')';
+					} else {
+						$xml_raum_freetext = $raum;
+					}
+				} else {
+					$raum = _("k.A.");
+					$xml_raum_freetext = _("k.A.");
 				}
 
 				if ($this->link) {
 					$ret .= '<tr><td width="20%" nowrap><font size="-1">'.getWeekDay($val['day']).'.&nbsp;'.$repeat.'&nbsp;</font></td>';
 					$ret .= '<td width="20%" nowrap><font size="-1">'.$zeit.'</font></td>';
 					if (!$this->hideRooms) {
-						$ret .= '<td width="60%"><font size="-1">&nbsp;&nbsp;'.$raum.'</font></td>';
+						$ret .= '<td width="60%"><font size="-1">&nbsp;'.$raum.'</font></td>';
 					}
 					$ret .= '</tr>';
 				} else {
