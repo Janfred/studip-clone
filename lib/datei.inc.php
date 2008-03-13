@@ -1034,14 +1034,7 @@ function JS_for_upload() {
 		 return false;
 		 }
 
-	if (file_name.lastIndexOf("/") > 0)
-		 {
-		 file_only=file_name.substring(file_name.lastIndexOf("/")+1,ende);
-		 }
-	if (file_name.lastIndexOf("\\") > 0)
-		 {
-		 file_only=file_name.substring(file_name.lastIndexOf("\\")+1,ende);
-		 }
+	file_only = file_name.replace(/.*[/\\](.+)/, '$1');
 
 	msg_window=window.open("","messagewindow","height=250,width=200,left=20,top=20,scrollbars=no,resizable=no,toolbar=no");
 	msg_window.document.write("<html><head><title>Datei Upload</title></head>");
