@@ -50,7 +50,9 @@ function autocomplete_course_get_courses_by_id($ids) {
    $db = DBManager::get();
 
    return $db->query(
-     'SELECT seminare.Name, '.
+     'SELECT '.
+     'seminare.seminar_id, '.
+     'seminare.Name, '.
      'seminare.VeranstaltungsNummer, '.
      'seminare.Beschreibung, '.
      'seminare.start_time, '.

@@ -2,19 +2,22 @@
   <? foreach ($courses as $course) : ?>
     <li><span class="informal">
     <? if (strlen($course['VeranstaltungsNummer'])) : ?>
-      <span class="number"><?= htmlready($course['VeranstaltungsNummer']) ?>: </span>
+      <span class="number"><?= htmlReady($course['VeranstaltungsNummer']) ?>: </span>
     <? endif ?>
-    </span><?= htmlready($course['Name']) ?><span class="informal">
+    </span><?= htmlReady($course['Name']) ?><span class="informal">
 
     <? if (isset($semesters[$course['start_time']])) : ?>
-      <span class="semester">(<?= htmlready($semesters[$course['start_time']]) ?>)</span>
+      <span class="semester">(<?= htmlReady($semesters[$course['start_time']]) ?>)</span>
     <? endif ?>
     <br/>
 
-    <span class="lecturer"><?= htmlready(text_excerpt($course['lecturer'], $search_term, 20, 60)) ?></span>
+    <span class="lecturer"><?= htmlReady(text_excerpt($course['lecturer'], $search_term, 20, 60)) ?></span>
     <br/>
 
-    <span class="comment"><?= htmlready(text_excerpt($course['Beschreibung'], $search_term, 20, 60)) ?></span>
+    <span class="comment"><?= htmlReady(text_excerpt($course['Beschreibung'], $search_term, 20, 60)) ?></span>
+
+    <span class="seminar_id"><?= $course['seminar_id'] ?></span>
+
     </span></li>
   <? endforeach ?>
 </ul>

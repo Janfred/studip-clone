@@ -367,3 +367,7 @@ div.autocomplete .informal .comment {
   font-style: italic;
 }
 
+div.autocomplete .informal .seminar_id {
+  display: none;
+}
+

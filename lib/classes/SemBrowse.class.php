@@ -272,9 +272,14 @@ class SemBrowse {
 				      'semester': $F($$('select[name="<?= $this->search_obj->form_name ?>_sem"]')[0]),
 				      'what':     $F($$('select[name="<?= $this->search_obj->form_name ?>_qs_choose"]')[0]),
 				      'category': category.size() === 0 ? 'all' : $F(category.first()),
-					  'scope': scope.size() === 0 ? null : $F(scope.first()),
-					  'range': range.size() === 0 ? null : $F(range.first())
+				      'scope': scope.size() === 0 ? null : $F(scope.first()),
+				      'range': range.size() === 0 ? null : $F(range.first())
 				    });
+				  },
+				  afterUpdateElement: function (input, item) {
+				    var seminar_id = encodeURI(item.down('span.seminar_id').firstChild.nodeValue);
+				    document.location = "<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>details.php?sem_id=" +
+				      seminar_id + "&send_from_search=1&send_from_search_page=<?= urlencode($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) ?>sem_portal.php?keep_result_set=1";
 				  }
 				});
 			});

@@ -1,5 +1,5 @@
 <ul>
   <? foreach ($persons as $person) : ?>
-    <li><?= htmlready($person) ?></li>
+    <li><?= htmlReady($person) ?></li>
   <? endforeach ?>
 </ul>
