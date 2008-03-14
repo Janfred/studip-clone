@@ -1584,7 +1584,7 @@ class Seminar {
 	}
 	
 	function isAdmissionQuotaEnabled(){
-		return ($this->isAdmissionEnabled() && $this->admission_selection_take_place =! 1  && $this->admission_enable_quota );
+		return ($this->isAdmissionEnabled() && $this->admission_selection_take_place != 1  && $this->admission_enable_quota );
 	}
 	
 	function restoreAdmissionStudiengang() {
