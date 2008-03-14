@@ -60,7 +60,7 @@ if (!isset($header_controller))
 if ($GLOBALS['SHOW_TERMS_ON_FIRST_LOGIN'] && $GLOBALS['auth']->is_authenticated() && $GLOBALS['user']->id != 'nobody')
 {
 	require_once('lib/terms.inc.php');
-	check_terms($GLOBALS['user']->id, $GLOBALS['language_path']);
+	check_terms($GLOBALS['user']->id, $GLOBALS['_language_path']);
 }
 
 include 'lib/include/check_sem_entry.inc.php'; //hier wird der Zugang zum Seminar ueberprueft
