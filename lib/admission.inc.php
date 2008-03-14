@@ -486,4 +486,59 @@ function check_admission ($send_message=TRUE) {
 		}
 	}
 }
+
+/**
+* sets a user on a waiting list for a registration procedure
+*
+* if applicable ($status == 'awaiting') returns the position
+*
+* @param		string	user_id
+* @param		string	seminar_id
+* @param		string	status				'claiming','awaiting','accepted'
+* @param		string	studiengang_id
+* @param		string	comment
+* @return		integer position on waiting list
+*
+*/
+function admission_seminar_user_insert($user_id, $seminar_id, $status, $studiengang_id = '', $comment = ''){
+	$db = DBManager::get();
+	if($status == 'claiming' || $status == 'accepted'){
+		$stmt = $db->prepare("INSERT INTO admission_seminar_user 
+							(user_id,seminar_id,status,studiengang_id,mkdate,comment)
+							VALUES (?,?,?,?,UNIX_TIMESTAMP(),?)");
+		$stmt->execute(array($user_id, $seminar_id, $status, $studiengang_id, $comment));
+	} elseif ($status == 'awaiting'){
+		$db->exec(sprintf("INSERT INTO admission_seminar_user 
+						(user_id,seminar_id,studiengang_id,status,mkdate,comment,position)
+						SELECT %s,%s,%s,'awaiting',UNIX_TIMESTAMP(),%s,IFNULL(MAX(position),0)+1 
+						FROM admission_seminar_user WHERE seminar_id=%s AND status <> 'accepted'",
+						$db->quote($user_id),
+						$db->quote($seminar_id),
+						$db->quote($studiengang_id),
+						$db->quote($comment),
+						$db->quote($seminar_id)));
+		
+	}
+	return admission_seminar_user_get_position($user_id, $seminar_id);
+}
+
+/**
+* returns the position for a user on a waiting list
+*
+* if the user is not found false is returned, return true if the user is found but
+* no position is available
+*
+* @param		string	user_id
+* @param		string	seminar_id
+* @return		integer	position in waiting list or false if not found
+*
+*/
+function admission_seminar_user_get_position($user_id, $seminar_id){
+	$db = DBManager::get();
+	$query = "SELECT IFNULL(position,'na') FROM admission_seminar_user
+			WHERE user_id=".$db->quote($user_id)." 
+			AND seminar_id=".$db->quote($seminar_id);
+	$position = $db->query($query)->fetchColumn();
+	return $position == 'na' ? true : $position;
+}
 ?>

@@ -83,11 +83,11 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 
 	} else {
 		if (get_config('ADMISSION_PRELIM_COMMENT_ENABLE')){
-			$comment = mysql_escape_string(get_fullname() . ': ' . stripslashes($_POST['comment']));
+			$comment = get_fullname() . ': ' . stripslashes($_POST['comment']);
 		} else {
 			$comment = '';
 		}
-		$db->query("INSERT INTO admission_seminar_user SET user_id = '$user_id', seminar_id = '$sem_id', studiengang_id = '$studiengang_id', status = 'accepted', mkdate = '".time()."', position = NULL, comment='".$comment."'");
+		admission_seminar_user_insert($user_id, $sem_id, 'accepted', $studiengang_id, $comment);
 		parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>vorl&auml;ufig akzeptiert</b> in die Veranstaltung %s eingetragen. Damit haben Sie einen Platz sicher. F&uuml;r weitere Informationen lesen Sie den Abschnitt 'Anmeldeverfahren' in der &Uuml;bersichtsseite zu dieser Veranstaltung."), '<b>'.$sem_name.'</b>'));
 		echo "<tr><td class=\"blank\" colspan=2>";
 	}
@@ -103,14 +103,11 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 */
 function seminar_preliminary($seminar_id,$user_id=NULL) {
 	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-
 	$db->query("SELECT Name,admission_prelim FROM seminare WHERE Seminar_id='$seminar_id'");
 	$db->next_record();
 	if ($db->f("admission_prelim") == 1) {
 		if ($user_id) {
-			$db2->query("SELECT user_id FROM admission_seminar_user WHERE user_id='$user_id' AND seminar_id='$seminar_id'");
-			if ($db2->next_record()) {
+			if (admission_seminar_user_get_position($user_id, $seminar_id)) {
 				echo "<tr><td class=\"blank\" colspan=2>";
 				parse_msg (sprintf("msg§"._("Sie sind für die Veranstaltung **%s** bereits vorläufig eingetragen!"),htmlReady($db->f("Name"))));
 				echo "</td></tr>";
@@ -528,8 +525,7 @@ $db6=new DB_Seminar;
 						die;
 						}
 					//Wurden wir evtl. schon in die Veranstaltung als Wartender eingetragen?
-					$db->query("SELECT user_id FROM admission_seminar_user WHERE user_id = '$user->id' AND seminar_id = '$id' "); //Bin ich eingetragen?
-					if ($db->num_rows()) { //Es gibt einen Eintrag, da darf ich also nicht mehr rein
+					if (admission_seminar_user_get_position($user->id, $id)) { //Es gibt einen Eintrag, da darf ich also nicht mehr rein
 						parse_msg ('info§' . sprintf(_("Sie stehen schon auf der Anmelde- bzw. Warteliste der Veranstaltung %s. <br />Wenn Sie sich neu oder f&uuml;r ein anderes Kontingent eintragen wollen, dann l&ouml;schen Sie bitte vorher die Zuordnug auf der der &Uuml;bersicht ihrer Veranstaltungen."), '<b>'.$SeminarName.'</b>'));
 						echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 						if ($send_from_search)
@@ -635,12 +631,8 @@ $db6=new DB_Seminar;
 								die;
 							} else { //Auf die Warteliste
 								if(!$current_seminar->admission_disable_waitlist){
-								$db5->query("SELECT position FROM admission_seminar_user WHERE seminar_id= '$id' AND status != 'accepted' ORDER BY position DESC");//letzte hoechste Position herausfinden
-								$db5->next_record();
-								$position=$db5->f("position")+1;
-							 	$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='awaiting', mkdate='".time()."', position='".$position."'  ");
+									$position = admission_seminar_user_insert($user->id, $id, 'awaiting', $sem_verify_suggest_studg);
 									$meldung = sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s. Sie wurden jedoch auf Platz %s der Warteliste gesetzt."), '<b>'.$SeminarName.'</b>', $position).' <br /> '._("Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
-								
 								} else {
 									$meldung = sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s."), '<b>'.$SeminarName.'</b>') .' <br /> ';
 								}
@@ -654,7 +646,7 @@ $db6=new DB_Seminar;
 							}
 						} else { //noch nicht gelost oder Enddatum, also Kontingentierung noch aktiv
 							if ($current_seminar->admission_type == 1) { //Variante Losverfahren
-								$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='claiming', mkdate='".time()."', position='' ");
+								admission_seminar_user_insert($user->id, $id, 'claiming', $sem_verify_suggest_studg);
 								parse_msg (sprintf("info§"._("Sie wurden auf die Anmeldeliste der Veranstaltung <b>%s</b> gesetzt.")." <br />"._("Teilnehmer der Veranstaltung <b>%s</b> werden Sie, falls Sie im Losverfahren am %s Uhr ausgelost werden.") . (!$current_seminar->admission_disable_waitlist ? _("Sollten Sie nicht ausgelost werden, werden Sie auf die Warteliste gesetzt und werden vom System automatisch als Teilnehmer eingetragen, sobald ein Platz f&uuml;r Sie frei wird.") : ""), $SeminarName, $SeminarName, date("d.m.Y, G:i", $current_seminar->admission_endtime)));
 								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 								if ($send_from_search)
@@ -679,10 +671,7 @@ $db6=new DB_Seminar;
 									die;
 								} else { //kein Platz mehr im Kontingent --> auf Warteposition in admission_seminar_user
 									if(!$current_seminar->admission_disable_waitlist){
-										$db5->query("SELECT max(position) as position FROM admission_seminar_user WHERE seminar_id= '$id' AND status != 'accepted'");//letzte hoechste Position herausfinden
-										$db5->next_record();
-										$position = $db5->f("position")+1;
-										$db4->query("INSERT INTO admission_seminar_user SET user_id = '$user->id', seminar_id = '$id', studiengang_id = '$sem_verify_suggest_studg', status='awaiting', mkdate='".time()."', position='".$position."'  ");
+										$position = admission_seminar_user_insert($user->id, $id, 'awaiting', $sem_verify_suggest_studg);
 										$meldung = sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s. Sie wurden jedoch auf Platz %s der Warteliste gesetzt."), '<b>'.$SeminarName.'</b>', $position).' <br /> '._("Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
 									} else {
 										$meldung = sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s."), '<b>'.$SeminarName.'</b>') .' <br /> ';
