@@ -337,6 +337,9 @@ if(isset($_REQUEST['group_sem_x']) && (count($_REQUEST['gruppe']) > 1 || isset($
 		$group_obj->setUniqueMemberValue('write_level', 3);
 		$admission_times = array();
 		$ok = true;
+		if(isset($_REQUEST['admission_change_enable_quota'])){
+			$group_obj->setUniqueMemberValue('admission_enable_quota', $_REQUEST['admission_enable_quota']);
+		}
 		if(isset($_REQUEST['admission_change_endtime'])){
 			$admission_times["admission_endtime"] = '-1';
 			if (!check_and_set_date($_POST['adm_tag'], $_POST['adm_monat'], $_POST['adm_jahr'], $_POST['adm_stunde'], $_POST['adm_minute'], $admission_times, "admission_endtime")) {
@@ -349,15 +352,17 @@ if(isset($_REQUEST['group_sem_x']) && (count($_REQUEST['gruppe']) > 1 || isset($
 						$ok = false;
 					}
 					foreach($group_obj->getMemberIds() as $semid){
-						if( $group_obj->members[$semid]->admission_starttime != -1 && $admission_times["admission_endtime"] < $group_obj->members[$semid]->admission_starttime){
-							$msg[] = array('error', sprintf(_("Das Ende Kontingente / Losdatum kann nicht vor dem Startdatum für Anmeldungen in der Veranstaltung <b>%s</b> liegen."), htmlReady($group_obj->members[$semid]->getName())));
-							$ok = false;
-						}
-						$tmp_first_date = veranstaltung_beginn($semid, 'int');
-						if ($tmp_first_date > 0 && $admission_times["admission_endtime"] > $tmp_first_date){
-							$msg[] = array("error", sprintf(_("Das Ende Kontingente / Losdatum liegt nach dem ersten Veranstaltungstermin am <b>%s</b> der Veranstaltung <b>%s</b>.")
-							, date ("d.m.Y", $tmp_first_date), htmlReady($group_obj->members[$semid]->getName())));
-							$ok = false;
+						if($group_obj->members[$semid]->isAdmissionQuotaChecked()){
+							if( $group_obj->members[$semid]->admission_starttime != -1 && $admission_times["admission_endtime"] < $group_obj->members[$semid]->admission_starttime){
+								$msg[] = array('error', sprintf(_("Das Ende Kontingente / Losdatum kann nicht vor dem Startdatum für Anmeldungen in der Veranstaltung <b>%s</b> liegen."), htmlReady($group_obj->members[$semid]->getName())));
+								$ok = false;
+							}
+							$tmp_first_date = veranstaltung_beginn($semid, 'int');
+							if ($tmp_first_date > 0 && $admission_times["admission_endtime"] > $tmp_first_date){
+								$msg[] = array("error", sprintf(_("Das Ende Kontingente / Losdatum liegt nach dem ersten Veranstaltungstermin am <b>%s</b> der Veranstaltung <b>%s</b>.")
+								, date ("d.m.Y", $tmp_first_date), htmlReady($group_obj->members[$semid]->getName())));
+								$ok = false;
+							}
 						}
 					}
 				}
@@ -403,7 +408,7 @@ if(isset($_REQUEST['group_sem_x']) && (count($_REQUEST['gruppe']) > 1 || isset($
 
 		}
 		foreach($group_obj->getMemberIds() as $semid){
-			if( $group_obj->members[$semid]->admission_endtime < 1 ){
+			if( $group_obj->members[$semid]->isAdmissionQuotaChecked() && $group_obj->members[$semid]->admission_endtime < 1 ){
 				$msg[] = array('error', sprintf(_("Die Veranstaltung <b>%s</b> hat keinen Eintrag für Ende Kontingente / Losdatum. Gruppierung nicht möglich."), htmlReady($group_obj->members[$semid]->getName())));
 				$ok = false;
 			}
@@ -505,11 +510,11 @@ if(is_object($group_obj)){
 		</li>
 		<li style="margin-top:5px;">
 		<span style="display:block;float:left;width:200px;"><?=_("Anmeldeverfahren der Gruppe:")?></span>
-		<input style="vertical-align:top" type="radio" onChange="semadmission_toggle_endtime();" name="admission_group_type" <?=(!$group_obj->getUniqueMemberValue('admission_type') || $group_obj->getUniqueMemberValue('admission_type') == 2 ? 'checked' : '')?> value="2">
+		<input style="vertical-align:top" type="radio" onChange="semadmission_toggle_endtime();" id="admission_group_type_2" name="admission_group_type" <?=(!$group_obj->getUniqueMemberValue('admission_type') || $group_obj->getUniqueMemberValue('admission_type') == 2 ? 'checked' : '')?> value="2">
 		&nbsp;
 		<?=_("chronologische Anmeldung")?>
 		&nbsp;
-		<input style="vertical-align:top" type="radio" onChange="semadmission_toggle_endtime();" name="admission_group_type" <?=($group_obj->getUniqueMemberValue('admission_type') == 1 ? 'checked' : '')?> value="1">
+		<input style="vertical-align:top" type="radio" onChange="semadmission_toggle_endtime();" id="admission_group_type_1" name="admission_group_type" <?=($group_obj->getUniqueMemberValue('admission_type') == 1 ? 'checked' : '')?> value="1">
 		&nbsp;
 		<?=_("Losverfahren")?>
 		</li>
@@ -524,11 +529,11 @@ if(is_object($group_obj)){
 		$group_admission_enable_quota = $group_obj->getUniqueMemberValue('admission_enable_quota');
 		is_null($group_admission_enable_quota) OR settype($group_admission_enable_quota, 'integer');
 		?>
-		<input style="vertical-align:top" onChange="semadmission_toggle_endtime();" type="radio" name="admission_enable_quota" <?=($group_admission_enable_quota === 1 ? 'checked' : '')?> value="1">
+		<input style="vertical-align:top" onChange="semadmission_toggle_endtime();" type="radio" id="admission_enable_quota_1" name="admission_enable_quota" <?=($group_admission_enable_quota === 1 ? 'checked' : '')?> value="1">
 		&nbsp;
 		<?=_("aktiviert")?>
 		&nbsp;
-		<input style="vertical-align:top" onChange="semadmission_toggle_endtime();" type="radio" name="admission_enable_quota" <?=($group_admission_enable_quota === 0 ? 'checked' : '')?> value="0">
+		<input style="vertical-align:top" onChange="semadmission_toggle_endtime();" type="radio" id="admission_enable_quota_0" name="admission_enable_quota" <?=($group_admission_enable_quota === 0 ? 'checked' : '')?> value="0">
 		&nbsp;
 		<?=_("deaktiviert")?>
 		<?
@@ -621,7 +626,8 @@ if(is_object($group_obj)){
 		<script type="text/javascript">
 		// <![CDATA[
 		function semadmission_toggle_endtime(){
-			$('admission_endtime').select('input').collect(function(s){s.disabled = (s.disabled == true ? false : true);});
+			admission_endtime_needed = $F('admission_group_type_1') == 1 || ($F('admission_group_type_2') == 2 && $F('admission_enable_quota_1') == 1);
+			$('admission_endtime').select('input').collect(function(s){s.disabled = !admission_endtime_needed});
 		}
 		// ]]>
 		</script>
