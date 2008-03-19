@@ -90,7 +90,7 @@ if (strlen($element_switch) > 2 && $form_name != '') {
 	$studipform = TRUE;
 }
 else { 
-	$form_name = 'Formular';
+	if(!$form_name) $form_name = 'Formular';
 switch ($element_switch){  // Auswahl der Zielparameter
 	case 1:	// raumzeit.php Einzeltermin bearbeiten, neuer Einzeltermin
 		$txt_day   = 'day';

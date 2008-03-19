@@ -460,15 +460,21 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 							$admin_admission_data["studg"][$key]["ratio"] = round(100 / (sizeof ($admin_admission_data["studg"]) ));
 						}
 					}
+				} else {
+					$cnt = 0;
+					if (is_array($admin_admission_data["studg"]) && count($admin_admission_data["studg"]) > 1){
+						foreach ($admin_admission_data["studg"] as $key => $val){
+							$cnt+=$val["ratio"];
+						}
+						if ($cnt <= 100)
+							$admin_admission_data["studg"][$key]["ratio"] = (100 - $cnt + $val["ratio"]);
+						else
+							$errormsg.= "error§". _("Die Werte der einzelnen Kontigente &uuml;bersteigen 100%. Bitte &auml;ndern Sie die Kontigente!") . "§";
+					} else {
+						reset($admin_admission_data["studg"]);
+						$admin_admission_data["studg"][key($admin_admission_data["studg"])]["ratio"] = 100;
+					}
 				}
-				$cnt = 0;
-				if (is_array($admin_admission_data["studg"]))
-					foreach ($admin_admission_data["studg"] as $key => $val)
-						$cnt+=$val["ratio"];
-				if ($cnt <= 100)
-					$admin_admission_data["studg"][$key]["ratio"] += (100 - $cnt);
-				else
-					$errormsg.= "error§". _("Die Werte der einzelnen Kontigente &uuml;bersteigen 100%. Bitte &auml;ndern Sie die Kontigente!") . "§";
 			}
 		}
 
