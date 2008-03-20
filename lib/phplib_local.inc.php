@@ -628,7 +628,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 	}
 
 	function auth_doregister() {
-		global $username, $password, $challenge, $response, $Vorname, $Nachname, $geschlecht, $Email,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser, $CANONICAL_RELATIVE_PATH_STUDIP, $UNI_NAME_CLEAN, $DEFAULT_LANGUAGE;
+		global $username, $password, $challenge, $response, $Vorname, $Nachname, $geschlecht,$emaildomain,$Email,$title_front,$title_front_chooser,$title_rear,$title_rear_chooser, $CANONICAL_RELATIVE_PATH_STUDIP, $UNI_NAME_CLEAN, $DEFAULT_LANGUAGE;
 
 		global $_language, $_language_path;
 
@@ -653,7 +653,15 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$username = trim($username);
 		$Vorname = trim($Vorname);
 		$Nachname = trim($Nachname);
-		$Email = trim($Email);
+		
+		// accept only registered domains if set
+		$cfg =& Config::GetInstance();
+		$email_restriction = $cfg->getValue('EMAIL_DOMAIN_RESTRICTION');
+		if ($email_restriction) {
+			$Email = trim($Email) . '@' . trim($emaildomain);
+		} else {
+			$Email = trim($Email);
+		}
 
 		if (!$validator->ValidateUsername($username))
 		{
