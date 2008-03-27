@@ -167,6 +167,34 @@ class Seminar {
 		return $this->metadate->getSerializedMetaData();
 	}
 
+	function formatRoom($return_mode = 'string', $termin) {
+		$ret = '';
+
+		switch ($return_mode) {
+			case 'int':
+				break;
+
+			case 'export':
+				if ($termin->getResourceID()) {
+					$ret .= ', '._("Ort:").' ';
+					$resObj =& ResourceObject::Factory($termin->getResourceID());
+					$ret .= $resObj->getName();
+				}
+			break;
+
+			case 'string':
+				if ($termin->getResourceID()) {
+					$resObj =& ResourceObject::Factory($termin->getResourceID());
+					$ret .= $resObj->getFormattedLink(TRUE, TRUE, TRUE);
+				} else if ($termin->getFreeRoomText()) {
+					$ret .= ', ('.htmlReady($termin->getFreeRoomText()).')';
+				}
+			break;
+		}
+
+		return $ret;
+	}
+
 	function formatDate($return_mode = 'string', $termin) {
 		switch ($return_mode) {
 			case 'int':
@@ -175,11 +203,7 @@ class Seminar {
 
 			case 'export':
 				$ret = $termin->toString();
-				if ($termin->getResourceID()) {
-					$ret .= ', '._("Ort:").' ';
-					$resObj =& ResourceObject::Factory($termin->getResourceID());
-					$ret .= $resObj->getName();
-				}
+				$ret .= $this->formatRoom('export', $termin);
 				return $ret;
 			break;
 
@@ -188,16 +212,13 @@ class Seminar {
 				$ret = $termin->toString();
 				if ($termin->getResourceID()) {
 					$ret .= ', '._("Ort:").' ';
-					$resObj =& ResourceObject::Factory($termin->getResourceID());
-					$ret .= $resObj->getFormattedLink(TRUE, TRUE, TRUE);
-				} else if ($termin->getFreeRoomText()) {
-					$ret .= ', ('.htmlReady($termin->getFreeRoomText()).')';
 				}
+				$ret .= $this->formatRoom('string', $termin);
 				return $ret;
 			break;
 
 		}
-		return FALSE;
+		return false;
 	}
 
 	function getNextDate($return_mode = 'string') {
@@ -205,11 +226,20 @@ class Seminar {
 			echo __class__.'::'.__function__.', line '.__line__.', return_mode "int" ist not supported by this function!';die;
 		}
 
-		if (!$termine = SeminarDB::getNextDate($this->id)) return FALSE;
+		if (!$termine = SeminarDB::getNextDate($this->id)) return false;
+
 		if ($termine['termin']) {
-			$termin = new SingleDate($termine['termin']);
-			$next_date = $this->formatDate($return_mode, $termin);
+			// if we have multiple rooms at the same time we display them all
+			foreach ($termine['termin'] as $num => $termin_id) {
+				$date = new SingleDate($termin_id);
+				if ($num == 0) {
+					$next_date = $this->formatDate($return_mode, $date);
+				} else {
+					$next_date .= ', '. $this->formatRoom($return_mode, $date);
+				}
+			}
 		}
+
 		if ($termine['ex_termin']) {
 			$ex_termin = new SingleDate($termine['ex_termin']);
 			$missing_date  = '<div style="{border:1px solid black;background:#FFFFDD}">';
@@ -231,9 +261,18 @@ class Seminar {
 	}
 
 	function getFirstDate($return_mode = 'string') {
-		if (!$termin_id = SeminarDB::getFirstDate($this->id)) return FALSE;
-		$termin = new SingleDate($termin_id);
-		return $this->formatDate($return_mode, $termin);
+		if (!$termine = SeminarDB::getFirstDate($this->id)) return FALSE;
+
+		foreach ($termine as $num => $termin_id) {
+			$date = new SingleDate($termin_id);
+			if ($num == 0) {
+				$first_date = $this->formatDate($return_mode, $date);
+			} else {
+				$first_date .= ', '. $this->formatRoom($return_mode, $date);
+			}
+		}
+
+		return $first_date;
 	}
 
 	function getUndecoratedData() {

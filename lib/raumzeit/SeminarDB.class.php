@@ -132,23 +132,37 @@ class SeminarDB {
 
 	function getFirstDate($seminar_id)
 	{
-		$db = new DB_Seminar("SELECT termin_id FROM termine WHERE range_id = '$seminar_id' AND date_typ IN ".getPresenceTypeClause()." ORDER BY date LIMIT 1");
-		if ($db->next_record()) {
-			return $db->f('termin_id');
+		$termine = array();
+		$db = new DB_Seminar("SELECT termin_id, date, end_time FROM termine WHERE range_id = '$seminar_id' AND date_typ IN ".getPresenceTypeClause()." ORDER BY date");
+		$start = 0;
+		$end = 0;
+		while ($db->next_record()) {
+			if (($start == 0 && $end == 0) || ($start == $db->f('date') && $end == $db->f('end_time'))) {
+				$termine[] = $db->f('termin_id');
+				$start = $db->f('date');
+				$end = $db->f('end_time');
+			}
 		}
-		return FALSE;
+
+		return sizeof($termine) ? $termine : false;
 	}
 
 	function getNextDate($seminar_id)
 	{
-		$termin = $ex_termin = 0;
-		$db = new DB_Seminar("SELECT termin_id FROM termine WHERE range_id = '$seminar_id' AND date > ".(time() - 3600)." ORDER BY date LIMIT 1");
-		if ($db->next_record()) {
-			$termin = $db->f('termin_id');
+		$termin = array();
+		$ex_termin = 0;
+		$db = new DB_Seminar("SELECT termin_id, date, end_time FROM termine WHERE range_id = '$seminar_id' AND date > ".(time() - 3600)." ORDER BY date");
+		$start = 0;
+		$end = 0;
+		while ($db->next_record()) {
+			if (($start == 0 && $end == 0) || ($start == $db->f('date') && $end == $db->f('end_time'))) {
+				$termin[] = $db->f('termin_id');
+				$start = $db->f('date');
+				$end = $db->f('end_time');
+			}
 		}
 
 		$db = new DB_Seminar("SELECT termin_id FROM ex_termine WHERE range_id = '$seminar_id' AND date > ".(time() - 3600)." AND content != '' AND content IS NOT NULL ORDER BY date LIMIT 1");
-		//$db = new DB_Seminar("SELECT termin_id FROM ex_termine WHERE range_id = '$seminar_id' AND date > ".(time() - 3600)." ORDER BY date LIMIT 1");
 		if ($db->next_record()) {
 			$ex_termin = $db->f('termin_id');
 		}
