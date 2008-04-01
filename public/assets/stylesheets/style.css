@@ -220,6 +220,7 @@ div.selectbox {
 
 .minor {
   color: gray;
+  font-size: 0.75em;
 }
 
 dt {
@@ -326,32 +327,32 @@ div.wikitoc ul {
 /* ***** Autocompleter ****************************************************** */
 
 div.autocomplete {
-  position: absolute;
-  background-color: white;
-  border: 1px solid #888;
-  margin: 0px;
-  padding: 0px;
+	position: absolute;
+	background-color: white;
+	border: 1px solid #888;
+	margin: 0px;
+	padding: 0px;
 }
 
 div.autocomplete ul {
-  list-style-type: none;
-  margin: 0px;
-  padding: 0px;
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
 }
 
 div.autocomplete ul li.selected {
-  background-color: #ffb;
+	background-color: #ffb;
 }
 
 div.autocomplete ul li {
-  list-style-type: none;
-  display: block;
-  margin: 0;
-  padding: 2px;
-  cursor: pointer;
-  text-align: left;
-  font-size: 0.75em;
-  min-height: 2em;
+	list-style-type: none;
+	display: block;
+	margin: 0;
+	padding: 2px;
+	cursor: pointer;
+	text-align: left;
+	font-size: 0.75em;
+	min-height: 2em;
 }
 
 div.autocomplete .informal {
@@ -363,15 +364,67 @@ div.autocomplete .informal .lecturer,
 div.autocomplete .informal .comment,
 div.autocomplete .informal .username,
 div.autocomplete .informal .permission {
-  font-size: 0.75em;
-  color: #777;
+	font-size: 0.75em;
+	color: #777;
 }
 
 div.autocomplete .informal .comment {
-  font-style: italic;
+	font-style: italic;
 }
 
 div.autocomplete .informal .seminar_id {
-  display: none;
+	display: none;
+}
+
+
+/* ***** Buddy Container **************************************************** */
+
+
+#buddycontainer {
+	width: 200px;
+}
+
+#buddycontainer ul.buddies {
+	clear: both;
+	list-style: none;
+	margin: 0pt;
+	overflow: hidden;
+	padding: 0pt;
+}
+
+#buddycontainer ul.buddies li {
+	float: left;
+	padding-left: 20px;
+	padding-bottom: 5px;
+}
+
+#buddycontainer ul.buddies li.morebuddies {
+	font-size: 25px;
+	font-weight: bold;
+}
+
+#buddycontainer .header {
+	background-color: #4A5681;
+	background-image: url('../images/fill1.gif');
+	color: white;
+	width: 200px;
+	display: table;
+	margin-top: 1em;
+	margin-bottom: 5px;
+}
+
+#buddycontainer .header .text {
+	float: left;
+	width: 145px;
+	padding: 2px 0px 2px 5px;
+	font-weight: bold;
+}
+
+#buddycontainer .header .toggles {
+	float: right;
+	width: 48px;
+	text-align: right;
+	padding: 2px 2px 2px 0px;
+	margin-top: 2px;
 }
 
