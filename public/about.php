@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-$Id$
+$Id: about.php 8879 2008-01-29 13:09:09Z mlunzena $
 */
 if (isset($_REQUEST['username'])) $username = $_REQUEST['username'];
 
@@ -370,6 +370,17 @@ if ($username==$auth->auth["uname"]) {
 
 // Export dieses Users als Vcard
 echo "<br /><font size=\"-1\"><a href=\"contact_export.php?username=$username\">&nbsp;"._("vCard herunterladen")."&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("als vCard exportieren"))."></a></font>";
+
+// Show buddy list
+if ($user_id ===  $GLOBALS['auth']->auth['uid'] ||
+    MayPublishBuddies($user_id)) {
+	$buddies = GetBuddyIDs($user_id);
+	$show_all = array_key_exists('show_all_buddies', $_GET);
+	echo $GLOBALS['template_factory']->render('buddy/container',
+	                                          compact('buddies',
+	                                                  'show_all',
+	                                                  'username'));
+}
 
 echo "<br>&nbsp; ";
 echo "</td>";

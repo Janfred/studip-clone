@@ -125,6 +125,28 @@ function GetNumberOfBuddies()
 	return $db->f(0);
 }
 
+function GetBuddyIDs($user_id)
+{
+	$stmt = DBManager::get()->prepare('SELECT user_id FROM contact '.
+	                                  'WHERE owner_id = ? AND buddy = 1');
+	$stmt->execute(array($user_id));
+	return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+}
+
+function MayPublishBuddies($user_id)
+{
+	return (boolean) $GLOBALS['user']->cfg->getValue($user_id,
+	                                                 'BUDDY_CONTAINER_PUBLISH');
+}
+
+function TogglePublishBuddies($user_id)
+{
+	$cfg = $GLOBALS['user']->cfg;
+	$published = $cfg->getValue($user_id, 'BUDDY_CONTAINER_PUBLISH');
+	return (boolean) $cfg->setValue(!$published, $user_id,
+	                                'BUDDY_CONTAINER_PUBLISH');
+}
+
 function GetSizeofBook()
 {
 	global $user;
