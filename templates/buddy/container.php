@@ -18,7 +18,10 @@
     </div>
 
     <? if (!sizeof($buddies)) : ?>
-        <div class="minor" style="text-align:center;"><?= _("Du hast keine Freunde.") ?></div>
+        <div class="minor without_buddies">
+            <?= _("Keine Freunde.") ?>
+            <a href="contact.php">Finde einen!</a>
+        </div>
     <? else : ?>
         <?
         require_once 'lib/classes/Avatar.class.php';
