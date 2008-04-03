@@ -137,7 +137,7 @@ if( $_POST['email'] != "" ) {
 			} else {
 				// Bestätigungslink senden
 				$step = 2;
-				$msg[] = array( 'info', sprintf(_("In Kürze wird Ihnen eine E-Mail an die Adresse %s mit einem Bestätigungslink geschickt. Bitte beachten Sie die Hinweise in dieser E-Mail. Sollte Sie keine E-Mail erhalten haben, vergewissern Sie sich, ob diese evtl. in einem Spam-Ordner abgelegt wurde."), $row['Email']));
+				$msg[] = array( 'info', sprintf(_("In Kürze wird Ihnen eine E-Mail an die Adresse %s mit einem Bestätigungslink geschickt. Bitte beachten Sie die Hinweise in dieser E-Mail. Sollten Sie keine E-Mail erhalten haben, vergewissern Sie sich, ob diese evtl. in einem Spam-Ordner abgelegt wurde."), $row['Email']));
 				$username = $row['username'];
 				$vorname  = $row['Vorname'];
 				$nachname = $row['Nachname'];
