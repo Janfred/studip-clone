@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-$Id: about.php 8879 2008-01-29 13:09:09Z mlunzena $
+$Id$
 */
 if (isset($_REQUEST['username'])) $username = $_REQUEST['username'];
 
@@ -115,10 +115,15 @@ $sess->register("about_data");
 $msging = new messaging;
 $msg = "";
 
-//Buddie hinzufuegen
-if ($cmd=="add_user")
-	$msging->add_buddy ($add_uname, 0);
+switch ($cmd) {
+	case 'add_user':
+		$msging->add_buddy($_GET['username']);
+	  break;
 
+	case 'remove_user':
+		$msging->delete_buddy($_GET['username']);
+	  break;
+}
 
 //Auf und Zuklappen Termine
 if ($dopen)
@@ -281,10 +286,19 @@ if ($show_tabs) {
 				if ($auth->auth["jscript"]) {
 					echo "<br>&nbsp;<font size=\"-1\"><a href='javascript:open_im();'>" . _("Stud.IP Messenger starten") . "</a></font>";
 				}
-			} else {
-				if (CheckBuddy($username)==FALSE) {
-					echo "<br /><font size=\"-1\">&nbsp;<a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">" . _("zu Buddies hinzuf&uuml;gen") . "</a></font>";
-				}
+			} else {?>
+				<? if (CheckBuddy($username)) : ?>
+					<br />
+					<font size="-1">
+						&nbsp;<a href="about.php?cmd=remove_user&amp;username=<?= $username ?>"><?= _("aus Buddy-Liste entfernen") ?></a>
+					</font>
+				<?  else : ?>
+					<br />
+					<font size="-1">
+						&nbsp;<a href="about.php?cmd=add_user&amp;username=<?= $username ?>"><?= _("zu Buddies hinzuf&uuml;gen") ?></a>
+					</font>
+				<? endif ?>
+				<?
 				echo "<br /><font size=\"-1\"> <a href=\"sms_send.php?sms_source_page=about.php&rec_uname=", $db->f("username"),"\">&nbsp;" . _("Nachricht an Nutzer") . "&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Nachricht an Nutzer verschicken")) . " border=0 align=texttop></a></font>";
 
 			}
