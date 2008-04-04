@@ -64,7 +64,8 @@ CREATE TABLE `admission_seminar_studiengang` (
   `seminar_id` varchar(32) NOT NULL default '',
   `studiengang_id` varchar(32) NOT NULL default '',
   `quota` int(3) NOT NULL default '0',
-  PRIMARY KEY  (`seminar_id`,`studiengang_id`)
+  PRIMARY KEY  (`seminar_id`,`studiengang_id`),
+  KEY `studiengang_id` (`studiengang_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
@@ -83,7 +84,8 @@ CREATE TABLE `admission_seminar_user` (
   `position` int(5) default NULL,
   `comment` tinytext,
   `visible` enum('yes','no','unknown') NOT NULL default 'unknown',
-  PRIMARY KEY  (`user_id`,`seminar_id`,`studiengang_id`)
+  PRIMARY KEY  (`user_id`,`seminar_id`,`studiengang_id`),
+  KEY `seminar_id` (`seminar_id`,`studiengang_id`,`status`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
@@ -1641,7 +1643,8 @@ CREATE TABLE `seminar_user` (
   `visible` enum('yes','no','unknown') NOT NULL default 'unknown',
   PRIMARY KEY  (`Seminar_id`,`user_id`),
   KEY `status` (`status`,`Seminar_id`),
-  KEY `user_id` (`user_id`,`status`)
+  KEY `user_id` (`user_id`,`status`),
+  KEY `Seminar_id` (`Seminar_id`,`admission_studiengang_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
 -- --------------------------------------------------------
