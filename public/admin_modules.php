@@ -49,6 +49,7 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
 $sess->register("admin_modules_data");
+$sess->register("plugin_toggle");
 $messaging=new messaging;
 $amodules=new AdminModules;
 if ($GLOBALS['PLUGINS_ENABLE']){
@@ -59,7 +60,6 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	if ($default_x) {
 		$admin_modules_data["changed_bin"] = $amodules->getDefaultBinValue($admin_modules_data["range_id"]);
 	}
-
 	//consistency: kill objects
 	foreach ($amodules->registered_modules as $key => $val) {
 		$moduleXxDeactivate = "module".$key."Deactivate";
@@ -72,7 +72,6 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 			$resolve_conflicts = TRUE;
 		}
 	}
-
 	//consistency: cancel kill objects
 	foreach ($amodules->registered_modules as $key => $val) {
 		$cancel_xx = "cancel_".$key;
@@ -104,16 +103,14 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					$amodules->clearBit($admin_modules_data["changed_bin"], $amodules->registered_modules[$key]["id"]);
 				}
 			}
+			// Setzen der Plugins
 			if ($GLOBALS['PLUGINS_ENABLE'] && is_array($admin_modules_plugins)){
 				foreach ($admin_modules_plugins as $plugin){
-					$key = "plugin_".$plugin->getPluginId();
-					if ($$key == "TRUE"){
-						$plugin->setActivated(true);
+					$check = ( $_POST[ "plugin_" . $plugin->getPluginId() ] == "TRUE" );
+					$setting = $plugin->isActivated();
+					if( $check != $setting ){
+						array_push( $plugin_toggle , $plugin->getPluginId() );
 					}
-					else {
-						$plugin->setActivated(false);
-					}
-					$amodules->pluginengine->savePlugin($plugin);
 				}
 				//$plugins = $amodules->pluginengine->getAllEnabledPlugins();
 			}
@@ -151,15 +148,33 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					$amodules->$moduleXxActivate($admin_modules_data["range_id"]);
 				}
 			}
+			
 		}
 
 	}
-
-	if ((!count($admin_modules_data["conflicts"])) && ($admin_modules_data["orig_bin"] != $admin_modules_data["changed_bin"])) {
-		$amodules->writeBin($admin_modules_data["range_id"], $admin_modules_data["changed_bin"]);
-		$admin_modules_data["orig_bin"] = $admin_modules_data["changed_bin"];
-		$admin_modules_data["modules_list"] = $amodules->getLocalModules($admin_modules_data["range_id"]);
-		$msg.= "msg§Die ver&auml;nderte Modulkonfiguration wurde &uuml;bernommen";
+	if( !count( $admin_modules_data["conflicts"] ) )  {
+		$changes = false;
+		// Module speichern
+		if( $admin_modules_data["orig_bin"] != $admin_modules_data["changed_bin"] ){
+			$amodules->writeBin($admin_modules_data["range_id"], $admin_modules_data["changed_bin"]);
+			$admin_modules_data["orig_bin"] = $admin_modules_data["changed_bin"];
+			$admin_modules_data["modules_list"] = $amodules->getLocalModules($admin_modules_data["range_id"]);
+			$changes = true;
+		}
+		// Plugins speichern
+		if( count( $plugin_toggle ) > 0 ){
+			foreach ($admin_modules_plugins as $plugin){
+				if( in_array( $plugin->getPluginId() , $plugin_toggle ) ){
+					$plugin->setActivated( !$plugin->isActivated() );
+					$amodules->pluginengine->savePlugin( $plugin );
+					$changes = true;
+				}
+			}
+			$plugin_toggle = array();
+		}
+		if( $changes ){
+			$msg .= "msg§Die ver&auml;nderte Modulkonfiguration wurde &uuml;bernommen";
+		}
 	}
 }
 
@@ -191,6 +206,7 @@ if (($range_id) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_documents)
 	$admin_modules_data["changed_bin"] = $amodules->getBin($range_id);
 	$admin_modules_data["range_id"] = $range_id;
 	$admin_modules_data["conflicts"] = array();
+	$plugin_toggle = array();
 } else {
 	//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
 	if (!$admin_modules_data["range_id"]) {
