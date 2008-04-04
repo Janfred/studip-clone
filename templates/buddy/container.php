@@ -25,7 +25,7 @@
     <? else : ?>
         <?
         require_once 'lib/classes/Avatar.class.php';
-        $limit = $show_all ? PHP_INT_MAX : 12;
+        $limit = ($show_all || sizeof($buddies) <= 15) ? PHP_INT_MAX : 12;
         $buddies_to_show = array_splice($buddies, 0, $limit);
         ?>
 
