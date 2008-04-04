@@ -24,13 +24,13 @@
 /**
  * The version of the trails library.
  */
-define('TRAILS_VERSION', '0.4.0');
+define('TRAILS_VERSION', '0.5.0');
 
 
 /**
  * The Dispatcher is used to map an incoming HTTP request to a Controller
  * producing a response which is then rendered. To initialize an instance of
- * class Trails_Dispatcher you have to give three condfiguration settings:
+ * class Trails_Dispatcher you have to give three configuration settings:
  *
  *          trails_root - the absolute file path to a directory containing the
  *                        applications controllers, views etc.
@@ -46,7 +46,7 @@ define('TRAILS_VERSION', '0.4.0');
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6504 2007-11-21 11:42:43Z mlunzena $
+ * @version   $Id: trails.php 7001 2008-04-04 11:20:27Z mlunzena $
  */
 
 class Trails_Dispatcher {
@@ -77,7 +77,7 @@ class Trails_Dispatcher {
    * @access public
    * @var    string
    */
-  protected $default_controller;
+  public $default_controller;
 
 
   /**
@@ -140,14 +140,21 @@ class Trails_Dispatcher {
    *
    * @return mixed   a response object
    */
-  protected function map_uri_to_response($uri) {
+  function map_uri_to_response($uri) {
 
     try {
 
-      list($controller_path, $unconsumed) = '' === $uri
-        ? array($this->default_controller, $uri) : $this->parse($uri);
+      if ('' === $uri) {
+        $controller_path = $this->default_controller;
+        $unconsumed = $uri;
+      }
+
+      else {
+        list($controller_path, $unconsumed) = $this->parse($uri);
+      }
 
       $class = $this->load_controller($controller_path);
+
       $controller = new $class($this);
       $response = $controller->perform($unconsumed);
 
@@ -180,66 +187,53 @@ class Trails_Dispatcher {
    *
    * @return string  the cleaned string
    */
-  private function clean_uri($uri) {
-
-    # remove "query" part
+  function clean_uri($uri) {
     if (FALSE !== ($pos = strpos($uri, '?'))) {
       $uri = substr($uri, 0, $pos);
     }
-
     return ltrim($uri, '/');
   }
 
 
   /**
-   * Parses given URI and returns an array of controllers, action and parameters
-   * taken from that URI.
+   * <MethodDescription>
    *
-   * @param string  the URI to be processed
+   * @param  type       <description>
+   * @param  type       <description>
    *
-   * @return array  an array containing the controller path and the
-   *                unconsumed part of the string
+   * @return type       <description>
    */
-  protected function parse($uri) {
+  function parse($unconsumed, $controller = NULL) {
 
-    $accumulated = array();
-    foreach (explode('/', $uri) as $part) {
+    list($head, $tail) = $this->split_on_first_slash($unconsumed);
 
-      # sanity check
-      if (!preg_match('/^[a-z0-9\-_]+$/', $part)) {
-        break;
-      }
-
-      $accumulated[] = $part;
-      $exploded = join('/', $accumulated);
-
-      if (is_readable($this->get_path($exploded))) {
-
-        $unconsumed = substr($uri, strlen($exploded) + 1);
-        if (FALSE === $unconsumed) {
-          $unconsumed = '';
-        }
-
-        return array($exploded, $unconsumed);
-      }
+    if (!preg_match('/^\w+$/', $head)) {
+      throw new Trails_Exception(400);
     }
 
-    throw new Trails_Exception(404, 'Not found: ' . $uri);
+    $controller = (isset($controller) ? $controller . '/' : '') . $head;
+
+    if ($this->file_exists($controller . '.php')) {
+      return array($controller, $tail);
+    }
+    else if ($this->file_exists($controller)) {
+      return $this->parse($tail, $controller);
+    }
+
+    throw new Trails_Exception(404);
   }
 
-
-  /**
-   * Returns the absolute file path to a given relative controller path.
-   *
-   * @param  string  the relative path
-   *
-   * @return string  the absolute path
-   */
-  protected function get_path($controller_path) {
-    return
-      sprintf('%s/controllers/%s.php', $this->trails_root, $controller_path);
+  function split_on_first_slash($str) {
+    $pos = strpos($str, '/');
+    if ($pos !== FALSE) {
+      return array(substr($str, 0, $pos), substr($str, $pos + 1));
+    }
+    return array($str, '');
   }
 
+  function file_exists($path) {
+    return file_exists("{$this->trails_root}/controllers/$path");
+  }
 
   /**
    * Loads the controller file for a given controller path and returns the
@@ -250,14 +244,12 @@ class Trails_Dispatcher {
    *
    * @return mixed   the controller's class name
    */
-  protected function load_controller($controller_path) {
-
-    require_once $this->get_path($controller_path);
-    $class = Trails_Inflector::camelize($controller_path) . 'Controller';
+  function load_controller($controller) {
+    require_once "{$this->trails_root}/controllers/{$controller}.php";
+    $class = Trails_Inflector::camelize($controller) . 'Controller';
     if (!class_exists($class)) {
       throw new Trails_Exception(501, 'Controller missing: ' . $class);
     }
-
     return $class;
   }
 }
@@ -273,7 +265,7 @@ class Trails_Dispatcher {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6504 2007-11-21 11:42:43Z mlunzena $
+ * @version   $Id: trails.php 7001 2008-04-04 11:20:27Z mlunzena $
  */
 
 class Trails_Response {
@@ -282,7 +274,7 @@ class Trails_Response {
   /**
    * @ignore
    */
-  private
+  public
     $body = '',
     $status,
     $reason,
@@ -351,7 +343,7 @@ class Trails_Response {
    *
    * @return string  the reason phrase for this response's status
    */
-  protected function get_reason($status) {
+  function get_reason($status) {
     $reason = array(
       100 => 'Continue', 'Switching Protocols',
       200 => 'OK', 'Created', 'Accepted', 'Non-Authoritative Information',
@@ -424,7 +416,7 @@ class Trails_Response {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6504 2007-11-21 11:42:43Z mlunzena $
+ * @version   $Id: trails.php 7001 2008-04-04 11:20:27Z mlunzena $
  */
 
 class Trails_Controller {
@@ -589,6 +581,7 @@ class Trails_Controller {
     $url = $this->url_for($to);
 
     # redirect
+    # TODO (mlunzena) quoting necessary??
     $this->response
       ->add_header('Location', $url)
       ->set_body(sprintf('<html><head><meta http-equiv="refresh" content="0;'.
@@ -764,7 +757,7 @@ class Trails_Controller {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6504 2007-11-21 11:42:43Z mlunzena $
+ * @version   $Id: trails.php 7001 2008-04-04 11:20:27Z mlunzena $
  */
 
 class Trails_Inflector {
@@ -819,7 +812,7 @@ class Trails_Inflector {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6504 2007-11-21 11:42:43Z mlunzena $
+ * @version   $Id: trails.php 7001 2008-04-04 11:20:27Z mlunzena $
  */
 
 class Trails_Flash {
@@ -1058,7 +1051,7 @@ class Trails_Flash {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id: trails.php 6504 2007-11-21 11:42:43Z mlunzena $
+ * @version   $Id: trails.php 7001 2008-04-04 11:20:27Z mlunzena $
  */
 
 class Trails_Exception extends Exception {
