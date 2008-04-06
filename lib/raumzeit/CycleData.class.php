@@ -174,7 +174,8 @@ class CycleData {
 						}
 					}
 				}
-				$termin->delete();
+				SingleDateDB::deleteSingleDate($termin->termin_id, $termin->ex_termin);
+				//$termin->delete();
 			}
 		}
 		return TRUE;

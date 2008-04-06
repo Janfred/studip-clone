@@ -428,10 +428,9 @@ function get_sem_num_sem_browse () {
 Die Funktion get_semester gibt den oder die Semester einer speziellen Veranstaltung aus.
 */
 
-function get_semester($seminar_id, $start_sem_only=FALSE)
-	{
+function get_semester($seminar_id, $start_sem_only=FALSE) {
 	$db=new DB_Seminar;
-	$db->query("SELECT metadata_dates, start_time, duration_time FROM seminare WHERE seminar_id='$seminar_id'");
+	$db->query("SELECT start_time, duration_time FROM seminare WHERE seminar_id='$seminar_id'");
 	$db->next_record();
 
 	$return_string=get_sem_name($db->f("start_time"));
@@ -440,9 +439,9 @@ function get_semester($seminar_id, $start_sem_only=FALSE)
 			$return_string.=" - ".get_sem_name($db->f("start_time") + $db->f("duration_time"));
 		if ($db->f("duration_time")==-1)
 			$return_string.= " " . _("bis unbegrenzt");
-		}
-	return $return_string;
 	}
+	return $return_string;
+}
 
 
 function getCorrectedSemesterVorlesBegin ($semester_num) {
