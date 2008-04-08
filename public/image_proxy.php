@@ -97,7 +97,7 @@ require_once "lib/datei.inc.php";
 if ((mt_rand() % 100) < $IMAGE_PROXY_GC_PROBABILITY ){
 	garbage_collect_image_cache();
 }
-$url = urldecode($_GET['url']);
+$url = $_GET['url'];
 $id = md5($url);
 
 if (!$perm->have_perm('user')){
