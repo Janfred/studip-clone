@@ -107,7 +107,7 @@ function ajaxified_news_has_permission($news) {
       break;
     }
 
-    else if ('sem' === $object_type || 'inst' === $object_type) {
+    else if (in_array($object_type, _w('sem inst fak'))) {
 
       if ($GLOBALS['SessSemName'][1] === $range) {
         $permitted = TRUE;
