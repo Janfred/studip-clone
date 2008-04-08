@@ -10,7 +10,6 @@ class DbOptimierungKontingentierung extends DBMigration {
 		$this->announce("add keys...");
 		$this->db->query("ALTER TABLE `admission_seminar_studiengang` ADD INDEX `studiengang_id` ( `studiengang_id` )");
 		$this->db->query("ALTER TABLE `admission_seminar_user` ADD INDEX `seminar_id` ( `seminar_id`, `studiengang_id`, `status` )");
-		$this->db->query("ALTER TABLE `seminar_user` ADD INDEX `user_id` ( `user_id`, `status` )");
 		$this->db->query("ALTER TABLE `seminar_user` ADD INDEX `Seminar_id` ( `Seminar_id`, `admission_studiengang_id )");
 
 		$this->announce("done.");
@@ -21,7 +20,6 @@ class DbOptimierungKontingentierung extends DBMigration {
 		$this->announce("delete keys...");
 		$this->db->query("ALTER TABLE `admission_seminar_studiengang` DROP INDEX `studiengang_id`");
 		$this->db->query("ALTER TABLE `admission_seminar_user` DROP INDEX `seminar_id`");
-		$this->db->query("ALTER TABLE `seminar_user` DROP INDEX `user_id`");
 		$this->db->query("ALTER TABLE `seminar_user` DROP INDEX `Seminar_id`");
 		
 		$this->announce("done.");
