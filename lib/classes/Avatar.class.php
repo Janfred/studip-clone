@@ -200,7 +200,7 @@ class Avatar {
     $ext = $pathinfo['extension'];
 
     // passende Endung ?
-    if (!in_array($ext, _w('jpg jpeg gif png'))) {
+    if (!in_array($ext, words('jpg jpeg gif png'))) {
       throw new Exception(sprintf(_("Der Dateityp der Bilddatei ist falsch (%s). Es sind nur die Dateiendungen .gif, .png, .jpeg und .jpg erlaubt!"),
                                   $ext));
     }

@@ -1244,6 +1244,6 @@ function text_excerpt($text, $phrase, $radius = 100, $length = 200,
  *
  * @return array        the words of the string as array
  */
-function _w($string) {
+function words($string) {
   return preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
 }
