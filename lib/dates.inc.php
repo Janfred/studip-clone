@@ -243,13 +243,12 @@ Konkrete Termine werde dabei NICHT mit beruecksichtigt!
 */
 function veranstaltung_beginn_from_metadata($reg_irreg, $sem_begin, $start_woche, $start_termin,$turnus_data, $return_mode='int') {
 	$ret_time = 0;
-    
     if( $return_mode != 'int'){
         echo "<br>Fehler in dates.inc.php: veranstaltung_beginn_from_metadata() unterstuetzt nur den return mode 'int'.";
         die();
     }
-    
-	$dow = date("w", $sem_begin);
+    $semester = SemesterData::GetInstance()->getSemesterDataByDate($sem_begin);
+	$dow = date("w", $semester['vorles_beginn']);
     if ($dow <= 5)
       $corr = ($dow -1) * -1;     
     elseif ($dow == 6)
@@ -259,10 +258,8 @@ function veranstaltung_beginn_from_metadata($reg_irreg, $sem_begin, $start_woche
     else
       $corr = 0;
 
-	$start_woche++;
-
 	foreach ($turnus_data as $key => $val) {
-		$start_time = mktime ((int)$val['start_stunde'], (int)$val['start_minute'], 0, date("n", $sem_begin), (date("j", $sem_begin)+$corr) + ($val['day'] -1) + ($start_woche * 7), date("Y", $sem_begin));
+		$start_time = mktime ((int)$val['start_stunde'], (int)$val['start_minute'], 0, date("n", $semester['vorles_beginn']), (date("j", $semester['vorles_beginn'])+$corr) + ($val['day'] -1) + ($start_woche * 7), date("Y", $semester['vorles_beginn']));
 		if (($start_time < $ret_time) || ($ret_time == 0)) {
 			$ret_time = $start_time;
 		}
