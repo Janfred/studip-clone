@@ -48,20 +48,23 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 	<script type="text/javascript" language="javascript">
 	<!--
 	function doCrypt() {
-		if(checkpasswordenabled() && checkpassword() && checkpassword2()){
-			document.Formular.hashpass.value = MD5(document.Formular.password.value);
-			document.Formular.hashpass2.value = MD5(document.Formular.password2.value);
-			document.Formular.password.value = "";
-			document.Formular.password2.value = "";
-			return true;
-		} else {
-			return false;
+		if (document.Formular.read_level[<?=(Config::getInstance()->getValue('ENABLE_FREE_ACCESS') ? 2 : 1)?>].checked || document.Formular.write_level[1].checked){
+			if(checkpasswordenabled() && checkpassword() && checkpassword2()){
+				document.Formular.hashpass.value = MD5(document.Formular.password.value);
+				document.Formular.hashpass2.value = MD5(document.Formular.password2.value);
+				document.Formular.password.value = "";
+				document.Formular.password2.value = "";
+				return true;
+			} else {
+				return false;
+			}
 		}
+		return true;
 	}
 	
 	function checkpasswordenabled(){
 		var checked = true;
-		if (document.Formular.password.value.length == 0 && (document.Formular.read_level[2].checked || document.Formular.write_level[1].checked)){
+		if (document.Formular.password.value.length == 0){
 			alert("<?= _("Sie haben Lese- oder Schreibzugriff nur mit Passwort gewählt. Bitte geben Sie ein Passwort ein.") ?>");
 			document.Formular.password.focus();
 			checked = false;
@@ -200,7 +203,7 @@ if (isset($seminar_id) && !$perm->have_perm("admin") && $SEMINAR_LOCK_ENABLE) {
   if ($lockdata[$lock_status]["admission_binding"])
     $admin_admission_data["admission_binding"]=$db->f("admission_binding");
 
-  if ($lockdata[$lock_status]["password"])
+  if ($lockdata[$lock_status]["Passwort"])
     $admin_admission_data["passwort"]=$db->f("Passwort");
 
   if ($lockdata[$lock_status]["Lesezugriff"])
@@ -343,7 +346,8 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		$admin_admission_data["read_level"]=$read_level;
     if (isset($write_level))
 		$admin_admission_data["write_level"]=$write_level;
-
+	if($admin_admission_data["write_level"] < 2 && $admin_admission_data["read_level"] < 2) $admin_admission_data["passwort"] = "";
+	
 	//Alles was mit der Anmeldung zu tun hat ab hier
 	} elseif (!$delete_studg) {
 
@@ -409,7 +413,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		if (($admin_admission_data["write_level"]) <($admin_admission_data["read_level"]))
 			$errormsg=$errormsg."error§"._("Es macht keinen Sinn, die Sicherheitsstufe f&uuml;r den Lesezugriff h&ouml;her zu setzen als f&uuml;r den Schreibzugriff!")."§";
 
-		if (($admin_admission_data["read_level"] ==2) ||  ($admin_admission_data["write_level"] ==2)) {
+		if (($admin_admission_data["read_level"] == 2 || $admin_admission_data["write_level"] == 2) && !isset($lockdata[$lock_status]["Passwort"])) {
        			//Password bei Bedarf dann doch noch verschlusseln
 			if (empty($hashpass)) { // javascript disabled
    				if (!$password)
@@ -604,7 +608,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		$data_mapping['admission_prelim'] = 'admission_prelim';
 		$data_mapping['admission_prelim_txt'] = 'admission_prelim_txt';		
 		
-		$data_mapping['Passwort'] = 'password';
+		$data_mapping['Passwort'] = 'passwort';
 		$data_mapping['Lesezugriff'] = 'read_level';
 		$data_mapping['Schreibzugriff'] = 'write_level';
 		$data_mapping['admission_disable_waitlist'] = 'admission_disable_waitlist';
@@ -787,7 +791,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 	<tr>
 	<td class="blank" colspan=2>
 	<form method="POST" name="Formular" action="<? echo $PHP_SELF ?>"
-	<? if (!$admin_admission_data["admission_type"]) echo " onSubmit=\"return doCrypt();\" "; ?>
+	<? if (!$admin_admission_data["admission_type"] && !isset($lockdata[$lock_status]["Passwort"])) echo " onSubmit=\"return doCrypt();\" "; ?>
 	>
 		<table width="99%" border=0 cellpadding=2 cellspacing=0 align="center">
 		<tr <? $cssSw->switchClass() ?>>
