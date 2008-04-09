@@ -5,12 +5,12 @@
         <? if ($GLOBALS['auth']->auth['uname'] === $username) : ?>
             <div class="toggles">
                 <? if (MayPublishBuddies($GLOBALS['auth']->auth['uid'])) : ?>
-                    <a href="dispatch.php/buddies/toggle_publish" title="<?= _("Deine Buddies werden öffentlich angezeigt.") ?>">
-                        <?= Assets::img('vote-icon-visible.gif', array('alt' => _("Deine Buddies werden öffentlich angezeigt."))) ?>
+                    <a href="dispatch.php/buddies/toggle_publish" title="<?= _("Ihre Buddies werden öffentlich angezeigt.") ?>">
+                        <?= Assets::img('vote-icon-visible.gif', array('alt' => _("Ihre Buddies werden öffentlich angezeigt."))) ?>
                     </a>
                 <? else : ?>
-                    <a href="dispatch.php/buddies/toggle_publish" title="<?= _("Deine Buddies werden nicht öffentlich angezeigt.") ?>">
-                        <?= Assets::img('vote-icon-invisible.gif', array('alt' => _("Deine Buddies werden nicht öffentlich angezeigt."))) ?>
+                    <a href="dispatch.php/buddies/toggle_publish" title="<?= _("Ihre Buddies werden nicht öffentlich angezeigt.") ?>">
+                        <?= Assets::img('vote-icon-invisible.gif', array('alt' => _("Ihre Buddies werden nicht öffentlich angezeigt."))) ?>
                     </a>
                 <? endif ?>
             </div>
