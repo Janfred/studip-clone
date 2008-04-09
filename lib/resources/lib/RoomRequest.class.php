@@ -48,6 +48,17 @@ class RoomRequest {
 	var $properties = array();			//the assigned property-requests
 	var $last_search_result_count;			//the number of found rooms from last executed search
 	var $reply_comment;
+	var $category_id;
+	var $chng_flag;
+	var $user_id;
+	var $isNewObject;
+	var $resource_id;
+	var $termin_id;
+	var $comment;
+	var $closed;
+	var $default_seats;
+	var $mkdate;
+	var $chdate;
 
 	//Konstruktor
 	function RoomRequest($id='') {
