@@ -38,6 +38,14 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 $perm->check("tutor");
 
+require_once('lib/msg.inc.php');	//Ausgaben
+require_once('config.inc.php');	//Settings....
+require_once 'lib/functions.php';	//basale Funktionen
+require_once('lib/visual.inc.php');	//Darstellungsfunktionen
+require_once('lib/messaging.inc.php');	//Nachrichtenfunktionen
+require_once('lib/admission.inc.php');	//load functions from admission system
+require_once('lib/classes/StudipAdmissionGroup.class.php'); //htmlReady
+
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
@@ -48,7 +56,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 	<script type="text/javascript" language="javascript">
 	<!--
 	function doCrypt() {
-		if (document.Formular.read_level[<?=(Config::getInstance()->getValue('ENABLE_FREE_ACCESS') ? 2 : 1)?>].checked || document.Formular.write_level[1].checked){
+		if (document.Formular.read_level[<?=(get_config('ENABLE_FREE_ACCESS') ? 2 : 1)?>].checked || document.Formular.write_level[1].checked){
 			if(checkpasswordenabled() && checkpassword() && checkpassword2()){
 				document.Formular.hashpass.value = MD5(document.Formular.password.value);
 				document.Formular.hashpass2.value = MD5(document.Formular.password2.value);
@@ -95,14 +103,6 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 	</script>
 
 <?
-
-require_once('lib/msg.inc.php');	//Ausgaben
-require_once('config.inc.php');	//Settings....
-require_once 'lib/functions.php';	//basale Funktionen
-require_once('lib/visual.inc.php');	//Darstellungsfunktionen
-require_once('lib/messaging.inc.php');	//Nachrichtenfunktionen
-require_once('lib/admission.inc.php');	//load functions from admission system
-require_once('lib/classes/StudipAdmissionGroup.class.php'); //htmlReady
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenZugangsberechtigungen";
 	
