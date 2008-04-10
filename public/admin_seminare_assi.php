@@ -1356,8 +1356,38 @@ if (($form == 6) && ($jump_next_x))
 		if ($sem_create_data['term_art'] == -1) {
 			$sem_create_data['metadata_termin'] = array();
 			$sem_create_data['metadata_termin']['art'] = 1;
-			//set temporary entry (for skip dates field) to the right value
+
+			$sem_create_data["term_monat"]='';
+			$sem_create_data["term_jahr"]='';
+			$sem_create_data["term_start_stunde"]='';
+			$sem_create_data["term_start_minute"]='';
+			$sem_create_data["term_end_stunde"]='';
+			$sem_create_data["term_end_minute"]='';
+			$sem_create_data["term_room"]='';
+			$sem_create_data["term_count"]= 0;
+			$sem_create_data["term_first_date"]='';
+
+			$sem_create_data["term_turnus"] = '';
+			$sem_create_data["term_start_woche"] = '';
+			$sem_create_data["sem_start_termin"] = '';
+			$sem_create_data["turnus_count"] = 0;
+
+			$sem_create_data["term_turnus_start_stunde"] = '';
+			$sem_create_data["term_turnus_start_minute"] = '';
+			$sem_create_data["term_turnus_end_stunde"] = '';
+			$sem_create_data["term_turnus_end_minute"] = '';
+			$sem_create_data["term_turnus_resource_id"] = '';
+			$sem_create_data["term_turnus_room"] = '';
+			$sem_create_data["term_turnus_date"] = '';
+			$sem_create_data["term_turnus_desc"] = '';
+
+			//set temporary entry (for skip dates field) to the right valuem_create_data["term_tag"]='';
 			$sem_create_data['term_art'] = 1;
+		} else if ($sem_create_data['term_art'] == 1) {
+			$sem_create_data["term_turnus"] = '';
+			$sem_create_data["term_start_woche"] = '';
+			$sem_create_data["sem_start_termin"] = '';
+			$sem_create_data["turnus_count"] = 0;
 		}
 		$serialized_metadata = mysql_escape_string(serialize($sem_create_data['metadata_termin']));
 
