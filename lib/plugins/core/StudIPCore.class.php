@@ -1,5 +1,5 @@
 <?php
-/* vim: noexpandtab */
+// vim: noexpandtab
 /**
  *  Base functionality for accessing data in the Stud.IP database,
  *  used by the plugin engine and plugins.

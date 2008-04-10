@@ -1,5 +1,5 @@
 <?php
-/* vim: noexpandtab */
+// vim: noexpandtab
 /**
  * poiid of administrators
  */

@@ -1,5 +1,5 @@
 <?php
-/* vim: noexpandtab */
+// vim: noexpandtab
 /*
  * Plugin for the administration of plugins and a good example for an Administration-Plugin
  * @author Dennis Reil <dennis.reil@offis.de>

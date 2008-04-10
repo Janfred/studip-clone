@@ -1,5 +1,5 @@
 <?
-/* vim: noexpandtab */
+// vim: noexpandtab
 /**
 * helper functions for handling the board
 *

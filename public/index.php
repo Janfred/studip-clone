@@ -1,5 +1,5 @@
 <?php
-/* vim: noexpandtab */
+// vim: noexpandtab
 /*
 index.php - Startseite von Stud.IP (anhaengig vom Status)
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>

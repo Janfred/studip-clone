@@ -1,5 +1,5 @@
 <?php
-/* vim: noexpandtab */
+// vim: noexpandtab
 /*
  * admin_lock.php - Sichtbarkeits-Administration von Stud.IP.
  * Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, data-quest <info@data-quest.de>, (C) 2003 Mark Sievers <mark_sievers2000@yahoo.de>

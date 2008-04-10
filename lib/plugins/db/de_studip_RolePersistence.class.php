@@ -1,5 +1,5 @@
 <?
-/* vim: noexpandtab */
+// vim: noexpandtab
 /**
  * role id unknown
  */

@@ -1,5 +1,5 @@
 <?php
-/* vim: noexpandtab */
+// vim: noexpandtab
 /**
  * Basic methods for managing plugins
  * @author Dennis Reil <Dennis.Reil@offis.de>

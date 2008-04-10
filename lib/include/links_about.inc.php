@@ -1,5 +1,5 @@
 <?
-/* vim: noexpandtab */
+// vim: noexpandtab
 /*
 links_about.inc.php - Navigation fuer die Uebersichtsseiten.
 Copyright (C) 2002	Stefan Suchi <suchi@gmx.de>,

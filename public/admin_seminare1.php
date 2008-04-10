@@ -1,5 +1,5 @@
 <?
-/* vim: noexpandtab */
+// vim: noexpandtab
 /*
 admin_seminare1.php - Seminar-Verwaltung von Stud.IP.
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>

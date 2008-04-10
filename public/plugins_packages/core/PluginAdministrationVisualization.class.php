@@ -1,5 +1,5 @@
 <?php
-/* vim: noexpandtab */
+// vim: noexpandtab
 /**
  * The visualization of the plugin administration plugin
  * @author Dennis Reil <Dennis.Reil@offis.de>

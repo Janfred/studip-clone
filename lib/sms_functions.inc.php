@@ -1,5 +1,5 @@
 <?
-/* vim: noexpandtab */
+// vim: noexpandtab
 /**
 * several functions used for the systeminternal messages
 *

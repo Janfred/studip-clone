@@ -1,5 +1,5 @@
 <?php
-/* vim: noexpandtab */
+// vim: noexpandtab
 /**
  * Abstract class for a plugin in Stud.IP.
  * Don't use this as a base class for creating your own plugin. Look at

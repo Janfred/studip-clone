@@ -1,5 +1,5 @@
 <?php
-/* vim: noexpandtab */
+// vim: noexpandtab
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // edit_about.php
