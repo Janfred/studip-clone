@@ -705,17 +705,18 @@ function export_datafields($range_id, $childgroup_tag, $childobject_tag){
 	$ret = '';
 	$d_fields = false;
 	$localEntries = DataFieldEntry::getDataFieldEntries($range_id);
-	foreach ($localEntries as $entry)
-		if ($entry->getValue()) {
-			if (!$d_fields)
-				$ret .= xml_open_tag( $childgroup_tag );
-			$ret .= xml_open_tag($childobject_tag , $entry->getName());
-			$ret .= htmlspecialchars($entry->getDisplayValue(false));
-			$ret .= xml_close_tag($childobject_tag);
-			$d_fields = true;
+	if(is_array($localEntries )){
+		foreach ($localEntries as $entry){
+			if ($entry->getValue()) {
+				if (!$d_fields)	$ret .= xml_open_tag( $childgroup_tag );
+				$ret .= xml_open_tag($childobject_tag , $entry->getName());
+				$ret .= htmlspecialchars($entry->getDisplayValue(false));
+				$ret .= xml_close_tag($childobject_tag);
+				$d_fields = true;
+			}
 		}
-	if ($d_fields)
-		$ret .= xml_close_tag( $childgroup_tag );
+	}
+	if ($d_fields) $ret .= xml_close_tag( $childgroup_tag );
 	return $ret;
 }
 
@@ -728,123 +729,123 @@ function export_datafields($range_id, $childgroup_tag, $childobject_tag){
 * @param	string	$childgroup_tag	name of outer tag
 * @param	string	$childobject_tag	name of inner tags
  */
-
-function get_additional_data($user_id, $range_id)
-{
-  $collected_data = array();
-
-	$db = new DB_Seminar();
-
-  $global_view_rights = array();
-
-  if(is_array($GLOBALS['TEILNEHMER_VIEW']))
-  {
-    foreach($GLOBALS['TEILNEHMER_VIEW'] as $val) {
-      $global_view_rights[] = $val['field'];
-    }
-
-    $db->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$range_id'");
-
-    while ($db->next_record()) {
-      if (in_array($db->f("datafield_id"), $global_view_rights))
-      {
-        $sem_view_rights[$db->f("datafield_id")] = TRUE;
-      }
-    }
-
-    $collected_data = array();
-
-    foreach($GLOBALS['TEILNEHMER_VIEW'] as $val) {
-
-      if (isset($sem_view_rights[$val["field"]])) {
-
-        $user_data = array();
-
-        switch ($val["table"]) {
-        case "datafields":
-          $query = "SELECT content FROM datafields_entries, datafields WHERE datafields.name = '".$val["field"]."' AND datafields.datafield_id = datafields_entries.datafield_id AND datafields_entries.range_id = '$user_id'";
-          $db->query($query);
-          $db->next_record();
-          if ($db->f("content") != "") {
-            $user_data = array("name" => $val["name"], "content" => $db->f("content"));
-          }
-          break;
-
-        case "special":
-          switch ($val["field"]) {
-          case "groups":
-            $db->query("SELECT name FROM statusgruppen a, statusgruppe_user b WHERE a.range_id = '$range_id' AND a.statusgruppe_id = b.statusgruppe_id AND b.user_id = '$user_id'");
-
-            $zw = array();
-
-            while ($db->next_record()) {
-              $zw []= $db->f("name")." ";
-            }
-
-            $user_data = array("name" => $val["name"], "content" => $zw);
-            break;
-
-          case "user_picture":
-            $user_data = array('name' => 'user_picture', 'content' => true);
-            break;
-          }
-          break;
-
-        default:
-          $query = "SELECT ".$val["field"]." FROM ".$val["table"]." WHERE user_id = '$user_id'";
-          $db->query($query);
-
-          if ($db->next_record()) {
-
-            $user_data = array('name' => $val["field"], $db->f($val["field"]));
-          }
-
-          switch ($val["field"]) {
-          case "geschlecht":
-            if ($content == "0")
-              $content = _("m&#228;nnlich");
-            else
-              $content = _("weiblich");
-
-            $user_data = array("name" => $val["name"], "content" => $content);
-            break;
-
-          case "preferred_language":
-            if (is_null($content) || $content == '')
-              $content = $GLOBALS['DEFAULT_LANGUAGE'];
-
-            if ($content == "de_DE")
-              $content = _("Deutsch");
-            else
-              $content = _("Englisch");
-
-            $user_data = array("name" => $val["name"], "content" => $content);
-            break;
-          }
-          break;
-
-        }
-
-        // display by default, even if display isn't set in config
-        if (!isset($val['export']) || !empty($val["export"]))
-        {
-          $user_data['export'] = 1;
-        }
-
-        // display by default, even if display isn't set in config
-        if (!isset($val['display']) || !empty($val['display']))
-        {
-          $user_data['display'] = 1;
-        }
-
-        $collected_data [$val["field"]]= $user_data;
-      }
-    }
-  }
-
-  return $collected_data;
-
-}
+ function get_additional_data($user_id, $range_id)
+ {
+	 $collected_data = array();
+	 
+	 $db = new DB_Seminar();
+	 
+	 $global_view_rights = array();
+	 
+	 if(is_array($GLOBALS['TEILNEHMER_VIEW']))
+	 {
+		 foreach($GLOBALS['TEILNEHMER_VIEW'] as $val) {
+			 $global_view_rights[] = $val['field'];
+		 }
+		 
+		 $db->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$range_id'");
+		 
+		 while ($db->next_record()) {
+			 if (in_array($db->f("datafield_id"), $global_view_rights))
+			 {
+				 $sem_view_rights[$db->f("datafield_id")] = TRUE;
+			 }
+		 }
+		 
+		 $collected_data = array();
+		 
+		 foreach($GLOBALS['TEILNEHMER_VIEW'] as $val) {
+			 
+			 if (isset($sem_view_rights[$val["field"]])) {
+				 
+				 $user_data = array();
+				 
+				 switch ($val["table"]) {
+				 case "datafields":
+					 $query = "SELECT content FROM datafields_entries, datafields WHERE datafields.name = '".$val["field"]."' AND datafields.datafield_id = datafields_entries.datafield_id AND datafields_entries.range_id = '$user_id'";
+					 $db->query($query);
+					 $db->next_record();
+					 if ($db->f("content") != "") {
+						 $user_data = array("name" => $val["name"], "content" => $db->f("content"));
+					 }
+					 break;
+					 
+				 case "special":
+					 switch ($val["field"]) {
+					 case "groups":
+						 $db->query("SELECT name FROM statusgruppen a, statusgruppe_user b WHERE a.range_id = '$range_id' AND a.statusgruppe_id = b.statusgruppe_id AND b.user_id = '$user_id'");
+						 
+						 $zw = array();
+						 
+						 while ($db->next_record()) {
+							 $zw []= $db->f("name")." ";
+						 }
+						 
+						 $user_data = array("name" => $val["name"], "content" => $zw);
+						 break;
+						 
+					 case "user_picture":
+						 $user_data = array('name' => 'user_picture', 'content' => true);
+						 break;
+					 }
+					 break;
+					 
+				 default:
+					 $query = "SELECT ".$val["field"]." FROM ".$val["table"]." WHERE user_id = '$user_id'";
+					 $db->query($query);
+					 
+					 if ($db->next_record()) {
+						 $content =  $db->f($val["field"]);
+						 $user_data = array('name' => $val["field"], "content" => $content);
+						 
+						 
+						 switch ($val["field"]) {
+						 case "geschlecht":
+							 if ($content == "0")
+								 $content = _("m&#228;nnlich");
+							 else
+								 $content = _("weiblich");
+							 
+							 $user_data = array("name" => $val["name"], "content" => $content);
+							 break;
+							 
+						 case "preferred_language":
+							 if (is_null($content) || $content == '')
+								 $content = $GLOBALS['DEFAULT_LANGUAGE'];
+							 
+							 if ($content == "de_DE")
+								 $content = _("Deutsch");
+							 else
+							 	$content = _("Englisch");
+							 
+							 $user_data = array("name" => $val["name"], "content" => $content);
+							 break;
+						 }
+					 }
+					 break;
+					 
+				 }
+				 
+				 // display by default, even if display isn't set in config
+				 if (!isset($val['export']) || !empty($val["export"]))
+				 {
+					 $user_data['export'] = 1;
+				 }
+				 
+				 // display by default, even if display isn't set in config
+				 if (!isset($val['display']) || !empty($val['display']))
+				 {
+					 $user_data['display'] = 1;
+				 }
+				 
+				 $collected_data [$val["field"]]= $user_data;
+			 }
+		 }
+	 }
+	 
+	 return $collected_data;
+	 
+ }
 
 function export_additional_data($user_id, $range_id, $childgroup_tag)
 {

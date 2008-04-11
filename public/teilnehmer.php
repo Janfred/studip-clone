@@ -1281,39 +1281,38 @@ while (list ($key, $val) = each ($gruppe)) {
 		$show_area = "show_".$key;
 		if ((is_opened($db->f("user_id")) || isset($$show_area)) && $rechte) { // show further userinfosi
 			$info_is_open = true;
-
+			$user_data = array();
+			
 			//get data for user, if dozent or higher
 			if ($perm->have_perm("dozent")) {
 				/* remark: if you change something in the data-acquisition engine
-				 * please do not forget to change it also in "export/export_studipdata_func.inc.php"
-				 * in the function export_teilis(...)
-				 */
-
-        $additional_data = get_additional_data($db->f('user_id'), $id);
-
-				$user_data = array();
-
-        foreach($additional_data as $key => $val)
-        {
-          if ($val['content'] && $val['display'])
-          {
-            if (is_array($val['content']))
-            {
-              $zw = implode(', ', $val['content']);
-
-              $user_data [] = array('name' => $val['name'], 'content' => $zw);
-            } else
-            {
-              if ($val['name'] == 'user_picture')
-              {
-                $show_user_picture = true;
-              } else
-              {
-                $user_data [] = $val;
-              }
-            }
-          }
-        }
+				* please do not forget to change it also in "export/export_studipdata_func.inc.php"
+				* in the function export_teilis(...)
+				*/
+				
+				$additional_data = get_additional_data($db->f('user_id'), $id);
+				
+				foreach($additional_data as $key => $val)
+				{
+					if ($val['content'] && $val['display'])
+					{
+						if (is_array($val['content']))
+						{
+							$zw = implode(', ', $val['content']);
+							
+							$user_data [] = array('name' => $val['name'], 'content' => $zw);
+						} else
+						{
+							if ($val['name'] == 'user_picture')
+							{
+								$show_user_picture = true;
+							} else
+							{
+								$user_data [] = $val;
+							}
+						}
+					}
+				}
 			}
 
 		?>

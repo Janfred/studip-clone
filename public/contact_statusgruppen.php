@@ -262,7 +262,7 @@ function PrintAktualContacts ($range_id)
 ?>
 		<form action="<? echo $PHP_SELF ?>?cmd=edit_existing_statusgruppe" method="POST">
 		<?
-		$db->query ("SELECT name, size FROM statusgruppen WHERE statusgruppe_id = '$edit_id'");
+		$db = new DB_Seminar("SELECT name, size FROM statusgruppen WHERE statusgruppe_id = '$edit_id'");
 		if ($db->next_record()) {
 			$gruppe_name = $db->f("name");
 		}

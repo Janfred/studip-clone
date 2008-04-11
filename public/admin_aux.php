@@ -18,7 +18,7 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $auth->login_if($auth->auth["uid"] == "nobody");
 $perm->check("dozent");
 if ($aux_rule_x && $aux_rule_y) {
@@ -93,12 +93,14 @@ if (isset($SessSemName[1]) && isset($selected)) {
 	$form	.=	"<input type=\"hidden\" name=\"make_aux\" value=1>";
 	$form .=	"<select name=aux_sem[".$SessSemName[1]."]>";
 	$form .= "<option value=\"null\">-- ". _("keine Zusatzangaben"). " --</option>";
-	foreach ($rules as $id => $rule) {
-		$form .= '<option value="'.$id.'"';
-		if ($id == $db7->f("aux_lock_rule")) {
-			$form .= " selected ";
+	if(is_array($rules)){
+		foreach ($rules as $id => $rule) {
+			$form .= '<option value="'.$id.'"';
+			if ($id == $db7->f("aux_lock_rule")) {
+				$form .= " selected ";
+			}
+			$form .= ">".$rule["name"]."</option>";
 		}
-		$form .= ">".$rule["name"]."</option>";
 	}
 	$form	.=	"</select>";
 	$form 	.=	"<input type=\"hidden\" name=\"aux_all\" value=\"-1\">";
@@ -134,7 +136,6 @@ echo $contentTable->close();
 
 echo $containerTable->blankRow();
 echo $containerTable->close();
-echo "</body>";
-echo "</html>";
+include 'lib/include/html_end.inc.php';
 page_close();
-
+?>
