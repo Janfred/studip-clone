@@ -246,7 +246,9 @@ class Seminar {
 			$missing_date .= sprintf(_("Der Termin am %s findet nicht statt."), $this->formatDate($return_mode, $ex_termin));
 			$missing_date .= '<br/>Kommentar: '.$ex_termin->getComment();
 			$missing_date .= '</div>';
+
 			if ($termine['termin']) {
+				$termin = new SingleDate($termine['termin'][0]);
 				if ($ex_termin->getStartTime() < $termin->getStartTime()) {
 					return $next_date.'<br/>'.$missing_date;
 				}
