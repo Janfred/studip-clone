@@ -40,6 +40,10 @@ foreach($_never_globalize_request_params as $one_param){
 	}
 }
 
+// set default exception handler
+set_exception_handler(create_function('$exception',
+	'include "templates/unhandled_exception.php"; exit;'));
+
 // set default pdo connection
 require_once('lib/classes/DBManager.class.php');
 DBManager::getInstance()
@@ -653,7 +657,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$username = trim($username);
 		$Vorname = trim($Vorname);
 		$Nachname = trim($Nachname);
-		
+
 		// accept only registered domains if set
 		$cfg =& Config::GetInstance();
 		$email_restriction = $cfg->getValue('EMAIL_DOMAIN_RESTRICTION');
