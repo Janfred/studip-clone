@@ -305,17 +305,6 @@ if ($show_tabs) {
 
 			// Export dieses Users als Vcard
 			echo "<br /><font size=\"-1\"><a href=\"contact_export.php?username=$username\">&nbsp;"._("vCard herunterladen")."&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("als vCard exportieren"))."></a></font>";
-
-			// Show buddy list
-			if ($user_id ===  $GLOBALS['auth']->auth['uid'] ||
-			    MayPublishBuddies($user_id)) {
-				$buddies = GetBuddyIDs($user_id);
-				$show_all = array_key_exists('show_all_buddies', $_GET);
-				echo $GLOBALS['template_factory']->render('buddy/container',
-				                                          compact('buddies',
-				                                                  'show_all',
-				                                                  'username'));
-			}
 			?>
 
 			<br />
