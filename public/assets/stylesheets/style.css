@@ -187,6 +187,10 @@ td.smiley_redborder {border:1px solid #D00000;}
 
 code  { font-size:10pt; }
 
+input, textarea {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 table.logintable {background-image: url('../images/login.jpg');}
 td.indexpage {background-image: url('../images/indexpage.jpg'); text-align:left;}
 
