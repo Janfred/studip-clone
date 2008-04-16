@@ -42,7 +42,6 @@
 * @package	resources
 **/
 class RoomRequest {
-	var $db;					//db-connection
 	var $id;					//request-id
 	var $seminar_id;				//seminar_id from the assigned seminar
 	var $properties = array();			//the assigned property-requests
@@ -65,7 +64,6 @@ class RoomRequest {
 		global $RELATIVE_PATH_RESOURCES, $user;
 		
 		$this->user_id = $user->id;
-		$this->db=new DB_Seminar;
 
 		if($id) {
 			$this->id =$id;
@@ -140,10 +138,9 @@ class RoomRequest {
 	function getAvailableProperties() {
 		if ($this->category_id) {
 			$query = sprintf("SELECT b.name, b.type, b.system, b.property_id FROM resources_categories_properties a LEFT JOIN resources_properties b USING (property_id) WHERE requestable ='1' AND category_id = '%s' ", $this->category_id);
-			$this->db->query($query);
-			
-			while($this->db->next_record()) {
-				$available_properties[$this->db->f("property_id")] = array("name"=>$this->db->f("name"), "type"=>$this->db->f("type"), "system"=>$this->db->f("system"), );
+			$db = DBManager::get();
+			foreach( $db->query( $query ) as $row ) {
+				$available_properties[$row["property_id"] ] = array("name"=>$row["name"], "type"=>$row["type"], "system"=>$row["system"] );
 			}
 			return $available_properties;
 		} else 
@@ -151,6 +148,7 @@ class RoomRequest {
 	}
 	
 	function getSettedPropertiesCount() {
+		$count = 0;
 		foreach ($this->properties as $val) {
 			if ($val)
 				$count++;
@@ -221,8 +219,6 @@ class RoomRequest {
 	}
 
 	function setPropertyState($property_id, $value) {
-		//if ($value == "on")
-		//	$value = 1;
 		if ($value)
 			$this->properties[$property_id] = array("state" => $value);
 		else
@@ -253,9 +249,6 @@ class RoomRequest {
 			if ($setted_properties) {
 				foreach ($this->properties as $key => $val) {
 					if ($val) {
-						//if ($val["state"] == "on")
-						//	$val["state"] = 1;
-						
 						//let's create some possible wildcards
 						if (ereg("<=", $val["state"])) {
 							$val["state"] = trim(substr($val["state"], strpos($val["state"], "<")+2, strlen($val["state"])));
@@ -290,40 +283,40 @@ class RoomRequest {
 			$query.= sprintf ("ORDER BY b.name %s", ($limit_upper) ? "LIMIT ".(($limit_lower) ? $limit_lower : 0).",".($limit_upper - $limit_lower) : "");
 		}
 
-		$this->db->query($query);
-
-		if ($this->db->affected_rows()) {
-			while ($this->db->next_record()) {
-				if ($this->db->f("name")) {
-					$resources_found [$this->db->f("resource_id")] = $this->db->f("name");
-				}
+		$db = DBManager::get();
+		$result = $db->query( $query );
+		
+		$found = array();
+		
+		foreach( $result as $res ){
+			if ($res["name"]) {
+				$found [$res["resource_id"]] = $res["name"];
 			}
-			$this->last_search_result_count = $this->db->nf();
-			return $resources_found;
-		} else
-			return array();
+		}
+				
+		$this->last_search_result_count = $result->rowCount();
+		return $found;
 	}
 
 	function restore() {
 		$query = sprintf("SELECT * FROM resources_requests WHERE request_id='%s' ",$this->id);
-		$this->db->query($query);
-		
-		if($this->db->next_record()) {
-			$this->seminar_id = $this->db->f("seminar_id");
-			$this->termin_id = $this->db->f("termin_id");
-			$this->mkdate = $this->db->f("mkdate");
-			$this->resource_id = $this->db->f("resource_id");
-			$this->user_id = $this->db->f("user_id");
-			$this->category_id = $this->db->f("category_id");
-			$this->comment = $this->db->f("comment");
-			$this->closed = $this->db->f("closed");
-			$this->chdate = $this->db->f("chdate");
-			$this->reply_comment = $this->db->f('reply_comment');
+		$db = DBManager::get();
+		$result = $db->query( $query );
+		if( $res = $result->fetch() ) {
+			$this->seminar_id = $res[ "seminar_id" ];
+			$this->termin_id = $res["termin_id"];
+			$this->mkdate = $res["mkdate"];
+			$this->resource_id = $res["resource_id"];
+			$this->user_id = $res["user_id"];
+			$this->category_id = $res["category_id"];
+			$this->comment = $res["comment"];
+			$this->closed = $res["closed"];
+			$this->chdate = $res["chdate"];
+			$this->reply_comment = $res['reply_comment'];
 			
 			$query = sprintf("SELECT a.*, b.type, b.name, b.options, b.system FROM resources_requests_properties a LEFT JOIN resources_properties b USING (property_id) WHERE a.request_id='%s' ", $this->id);
-			$this->db->query($query);
-			while ($this->db->next_record()) {
-				$this->properties[$this->db->f("property_id")] = array("state"=>$this->db->f("state"), "type"=>$this->db->f("type"), "name"=>$this->db->f("name"), "options"=>$this->db->f("options"), "system"=>$this->db->f("system"), "mkdate"=>$this->db->f("mkdate"), "chdate"=>$this->db->f("chdate"));
+			foreach ( $db->query( $query ) as $res ) {
+				$this->properties[$res["property_id"]] = array("state"=>$res["state"], "type"=>$res["type"], "name"=>$res["name"], "options"=>$res["options"], "system"=>$res["system"], "mkdate"=>$res["mkdate"], "chdate"=>$res["chdate"]);
 			}
 			return TRUE;
 		}
@@ -332,6 +325,7 @@ class RoomRequest {
 	
 	//private
 	function cleanProperties() {
+		$db = DBManager::get();
 		foreach ($this->properties as $key => $val) {
 			if ($val)
 				$properties[] = $key;
@@ -340,20 +334,17 @@ class RoomRequest {
 			$in="('".join("','",$properties)."')";
 		}
 		$query = sprintf("DELETE FROM resources_requests_properties WHERE %s request_id = '%s' ", (is_array($properties)) ? "property_id  NOT IN ".$in." AND " : "", $this->id);
-		$this->db->query($query);
-		if ($this->db->affected_rows())
-			return TRUE;
-		else
-			return FALSE;
+		$result = $db->exec( $query );
+		return $result > 0 ;
 	}
 	
 	//private
 	function storeProperties() {
+		$db = DBManager::get();
 		foreach ($this->properties as $key=>$val) {
 			$query = sprintf ("REPLACE INTO resources_requests_properties SET request_id = '%s', property_id = '%s', state = '%s', mkdate = '%s', chdate = '%s'", $this->id, $key, $val["state"], (!$val["mkdate"]) ? time() : $val["mkdate"], time());
-			$this->db->query($query);
-
-			if ($this->db->affected_rows())
+			
+			if ($db->exec( $query ))
 				$changed = TRUE;
 		}
 		if ($this->cleanProperties())
@@ -363,12 +354,13 @@ class RoomRequest {
 	}
 	
 	function checkOpen($also_change = FALSE) {
+		$db = DBManager::get();
 		$existing_assign = false;
 		//a request for a date is easy...
 		if ($this->termin_id) {
 			$query = sprintf ("SELECT assign_id FROM resources_assign WHERE assign_user_id = '%s' ", $this->termin_id);
-			$this->db->query($query);
-			if ($this->db->nf())
+			$result = $db->query( $query );
+			if ($result->rowCount())
 				$existing_assign = TRUE;
 		//seminar request
 		} else {
@@ -376,9 +368,9 @@ class RoomRequest {
 
 			$query = sprintf("SELECT count(termin_id)=count(assign_id) FROM termine LEFT JOIN resources_assign ON(termin_id=assign_user_id)
 					WHERE range_id='%s' AND date_typ IN".getPresenceTypeClause(), $this->seminar_id);
-			$this->db->query($query);
-			$this->db->next_record();
-			if ($this->db->f(0)){
+			$result = $db->query( $query );
+			$res = $result->fetch();
+			if ( $res && $res[0] ){
 				$existing_assign = TRUE;
 			}
 		}
@@ -397,6 +389,7 @@ class RoomRequest {
 	}
 
 	function store(){
+		$db = DBManager::get();
 		// save only, if changes were made or the object is new and we have a resource_id or properties
 		if ($this->chng_flag || ($this->isNew() && ($this->resource_id || $this->getSettedPropertiesCount())) ) {
 			$chdate = time();
@@ -417,46 +410,28 @@ class RoomRequest {
 							 , $this->resource_id, $this->user_id, $this->seminar_id, $this->termin_id, $this->category_id, $this->comment
 							 , $this->closed, $this->reply_comment, $this->id);
 			}
-			$this->db->query($query);
+			$result = $db->exec( $query );
 			
 			$changed_prop = $this->storeProperties();
 			
-			if ($this->db->affected_rows()) {
+			if ($result > 0) {
 				$query = sprintf("UPDATE resources_requests SET chdate='%s' WHERE request_id='%s' ", $chdate, $this->id);
-				$this->db->query($query);
-
+				$db->query( $query );
 				$changed = TRUE;
 			}
 		}
-
-		if ($changed || $changed_prop)
-			return TRUE;
-		else
-			return FALSE;
 		
+		return ($changed || $changed_prop);
 	}
 
 	function delete() {
-		
+		$db = DBManager::get();
 		$query = sprintf("DELETE FROM resources_requests_properties WHERE request_id='%s'", $this->id);
 		
-		$this->db->query($query);
+		$db->exec( $query );
 		
 		$query = sprintf("DELETE FROM resources_requests WHERE request_id='%s'", $this->id);
-		$this->db->query($query);
-		return $this->db->affected_rows();
+		return $db->exec( $query );
 	}
-	
-	function __sleep(){
-		$ret = array();
-		$ro = new ReflectionObject($this);
-		foreach($ro->getProperties() as $prop) $prop->name == 'db' OR $ret[] = $prop->name;
-		return $ret;
-	}
-	
-	function __wakeup(){
-		$this->db = new DB_Seminar();
-	}
-
 }
 ?>

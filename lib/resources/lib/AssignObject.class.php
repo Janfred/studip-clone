@@ -42,7 +42,6 @@ require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/resourcesFunc.inc.php";
 AssignObject, zentrale Klasse der Objekte der Belegung
 /*****************************************************************************/
 class AssignObject {
-	var $db;					//Datenbankanbindung;
 	var $id;					//Id des Belegungs-Objects
 	var $resource_id;			//resource_id des verknuepten Objects;
 	var $assign_user_id;		//id des verknuepten Benutzers der Ressource
@@ -56,7 +55,9 @@ class AssignObject {
 	var $repeat_day_of_month;	//Wiederholungen an bestimmten Tag des Monats
 	var $repeat_week_of_month;	//Wiederholungen immer in dieser Woche des Monats
 	var $repeat_day_of_week;	//Wiederholungen immer an diesem Wochentag
-	
+	var $isNewObject;
+	var $chng_flag;
+	var $events;
 	
 	function &Factory(){
 		static $assign_object_pool;
@@ -76,58 +77,18 @@ class AssignObject {
 		return new AssignObject(func_get_args());
 	}
 	
-	/*
-	//Konstruktor
-	function AssignObject($id='', $resource_id='', $assign_user_id='', $user_free_name='', $begin='', $end='', 
-						$repeat_end='', $repeat_quantity='', $repeat_interval='', $repeat_month_of_year='', $repeat_day_of_month='', 
-						$repeat_week_of_month='', $repeat_day_of_week='') {
-		global $RELATIVE_PATH_RESOURCES;
-		
-	 	require_once ($RELATIVE_PATH_RESOURCES."/lib/list_assign.inc.php");
-	 	require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
-
-		global $user;
-		
-		$this->user_id = $user->id;
-		$this->db=new DB_Seminar;
-
-		if(func_num_args() == 1) {
-			$this->id = func_get_arg(0);
-			if (!$this->restore($this->id))
-				$this->isNewObject =TRUE;
-		} elseif(func_num_args() == 13) {
-			$this->id=func_get_arg(0);
-			$this->resource_id = func_get_arg(1);
-			$this->assign_user_id = func_get_arg(2);
-			$this->user_free_name = func_get_arg(3);
-			$this->begin = func_get_arg(4);
-			$this->end = func_get_arg(5);
-			$this->repeat_end = func_get_arg(6);
-			$this->repeat_quantity = func_get_arg(7);
-			$this->repeat_interval = func_get_arg(8);
-			$this->repeat_month_of_year  = func_get_arg(9);
-			$this->repeat_day_of_month = func_get_arg(10);
-			$this->repeat_week_of_month = func_get_arg(11);
-			$this->repeat_day_of_week = func_get_arg(12);
-			if (!$this->id)
-				$this->createId();
-			$this->isNewObject =TRUE;
-		} 	
-	}
-	*/
-	
 	function AssignObject($argv) {
 		global $user;
 		
 		$this->user_id = $user->id;
-		$this->db = new DB_Seminar;
 		
 		if($argv && !is_array($argv)) {
 			$id = $argv;
 			if (!$this->restore($id)){
 				$this->isNewObject = true;
 			}
-		} else {
+		}
+		else {
 			$this->id = $argv[0];
 			$this->resource_id = $argv[1];
 			$this->assign_user_id = $argv[2];
@@ -152,9 +113,10 @@ class AssignObject {
 	}
 	
 	function create() {
+		$db = DBManager::get();
 		$query = sprintf("SELECT assign_id FROM resources_assign WHERE assign_id ='%s' ", $this->id);
-		$this->db->query($query);
-		if ($this->db->nf()) {
+		$result = $db->query($query);
+		if ($result-fetch()) {
 			$this->chng_flag=TRUE;
 			return $this->store();
 		} else
@@ -171,7 +133,7 @@ class AssignObject {
 
 	function GetOwnerName($explain=FALSE, $event_obj = null) {
 		global $TERMIN_TYP;
-		$db = new DB_Seminar();
+		$db = DBManager::get();
 		if (is_null($event_obj)){
 			$id = $this->assign_user_id;
 			$event_obj =& $this;
@@ -189,23 +151,14 @@ class AssignObject {
 			case "inst":
 			case "fak":
 				$query = sprintf("SELECT Name FROM Institute WHERE Institut_id='%s' ",$id);
-				$db->query($query);
-				if ($db->next_record())
+				$result = $db->query($query);
+				if ($res = $result->fetch())
 					if (!$explain)
-						return $db->f("Name");
+						return $res["Name"];
 					else
-						return $db->f("Name")." ("._("Einrichtung").")";
+						return $res["Name"]." ("._("Einrichtung").")";
 			break;
 			case "sem":
-				/*
-				$query = sprintf("SELECT Name FROM seminare WHERE Seminar_id='%s' ",$id);
-				$db->query($query);
-				if ($db->next_record())
-					if (!$explain)
-						return $db->f("Name");
-					else
-						return $db->f("Name"). " ("._("Veranstaltung").")";	
-				*/
 				$sem_obj =& Seminar::GetInstance($id);
 				if (!$sem_obj->is_new){
 					if (!$explain){
@@ -226,12 +179,12 @@ class AssignObject {
 			break;
 			case "date":
 				$query = sprintf("SELECT Name, content, date_typ FROM termine LEFT JOIN seminare ON (seminar_id = range_id) WHERE termin_id='%s' ",$id);
-				$db->query($query);
-				if ($db->next_record())
+				$result = $db->query($query);
+				if ($res = $result->fetch())
 					if (!$explain)
-						return $db->f("Name");
+						return $res["Name"];
 					else
-						return $db->f("Name")." (".$TERMIN_TYP[$db->f("date_typ")]["name"].")";	
+						return $res["Name"]." (".$TERMIN_TYP[$db->f("date_typ")]["name"].")";	
 			break;
 			case "global":
 			default:
@@ -239,7 +192,6 @@ class AssignObject {
 			break;
 		}
 	}
-	
 
 	function getUsername($use_free_name=TRUE, $explain=true) {
 		if ($this->assign_user_id) 
@@ -376,6 +328,7 @@ class AssignObject {
 			}
 		}	
 	}
+	
 	function checkOverlap($check_locks = TRUE) {
 		global $user;
 		$resObject =& ResourceObject::Factory($this->resource_id);
@@ -558,6 +511,7 @@ class AssignObject {
 	}
 
 	function restore($id='') {
+		$db = DBManager::get();
 		if(func_num_args() == 1){
 			if (!$id){
 				return false;
@@ -569,30 +523,31 @@ class AssignObject {
 			$id = $this->id;
 		}
 		$query = sprintf("SELECT * FROM resources_assign WHERE assign_id='%s' ",$id);
-		$this->db->query($query);
+		$result = $db->query($query);
 		
-		if($this->db->next_record()) {
+		if($res = $result->fetch()) {
 			$this->id = $id;
-			$this->resource_id = $this->db->f("resource_id");
-			$this->assign_user_id = $this->db->f("assign_user_id");
-			$this->user_free_name = $this->db->f("user_free_name");
-			$this->begin =$this->db->f("begin");
-			$this->end = $this->db->f("end");
-			$this->repeat_end = $this->db->f("repeat_end");
-			$this->repeat_quantity = $this->db->f("repeat_quantity");
-			$this->repeat_interval = $this->db->f("repeat_interval");
-			$this->repeat_month_of_year  =$this->db->f("repeat_month_of_year");
-			$this->repeat_day_of_month =$this->db->f("repeat_day_of_month");
-			$this->repeat_month = $this->db->f("repeat_month");
-			$this->repeat_week_of_month = $this->db->f("repeat_week_of_month");
-			$this->repeat_day_of_week = $this->db->f("repeat_day_of_week");
-			$this->repeat_week = $this->db->f("repeat_week");
+			$this->resource_id = $res["resource_id"];
+			$this->assign_user_id = $res["assign_user_id"];
+			$this->user_free_name = $res["user_free_name"];
+			$this->begin =$res["begin"];
+			$this->end = $res["end"];
+			$this->repeat_end = $res["repeat_end"];
+			$this->repeat_quantity = $res["repeat_quantity"];
+			$this->repeat_interval = $res["repeat_interval"];
+			$this->repeat_month_of_year  =$res["repeat_month_of_year"];
+			$this->repeat_day_of_month =$res["repeat_day_of_month"];
+			$this->repeat_month = $res["repeat_month"];
+			$this->repeat_week_of_month = $res["repeat_week_of_month"];
+			$this->repeat_day_of_week = $res["repeat_day_of_week"];
+			$this->repeat_week = $res["repeat_week"];
 			return TRUE;
 		}
 		return FALSE;
 	}
 
 	function store($create=''){
+		$db = DBManager::get();
 		// save only, if changes were made or the object is new and a assign_user_id or a user_free_name is given
 		if ((($this->chng_flag) || ($create)) && (($this->assign_user_id) || ($this->user_free_name))) {
 			$chdate = time();
@@ -623,10 +578,10 @@ class AssignObject {
 							 , $this->repeat_month_of_year, $this->repeat_day_of_month, $this->repeat_week_of_month
 							 , $this->repeat_day_of_week, $this->id);
 			}
-			$this->db->query($query);
-			if ($this->db->affected_rows()) {
+			$result = $db->exec($query);
+			if ($result > 0 ) {
 				$query = sprintf("UPDATE resources_assign SET chdate='%s' WHERE assign_id='%s' ", $chdate, $this->id);
-				$this->db->query($query);
+				$db->exec($query);
 				$this->syncronizeMetaDates();
 				return TRUE;
 			} else
@@ -652,6 +607,7 @@ class AssignObject {
 	}
 	
 	function delete() {
+		$db = DBManager::get();
 		/*
 		NOTE: this feature isn't used at the moment. I could be useful, if a functionality to delete assings from
 		Veranstaltungen by an resources admin will be implemented. So - we keep it for the future...
@@ -676,20 +632,8 @@ class AssignObject {
 		*/
 		
 		$query = sprintf("DELETE FROM resources_assign WHERE assign_id='%s'", $this->id);
-		if($this->db->query($query))
+		if($db->exec($query))
 			return TRUE;
 		return FALSE;
 	}
-	
-	function __sleep(){
-		$ret = array();
-		$ro = new ReflectionObject($this);
-		foreach($ro->getProperties() as $prop) $prop->name == 'db' OR $ret[] = $prop->name;
-		return $ret;
-	}
-	
-	function __wakeup(){
-		$this->db = new DB_Seminar();
-	}
-
 }
