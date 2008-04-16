@@ -12,6 +12,5 @@
   </head>
   <body>
     <h1>Fehler: <?= htmlentities($exception->getMessage()) ?></h1>
-    <pre><?= htmlentities($exception->getTraceAsString()) ?></pre>
   </body>
 </html>
