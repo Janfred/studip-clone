@@ -1,100 +1,152 @@
-/* <!-- $Id$ --> */
-
-A:visited {	color:#213499; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-A:link {	color:#213499; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-A:hover {	color: #FF3333; text-decoration : none;	font-family: Arial, Helvetica, sans-serif;}
-A:active {color: #FF3333; text-decoration : none; font-family: Arial, Helvetica, sans-serif;}
-
-A:link.links1 {	color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:10pt;}
-A:visited.links1 {color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:10pt;}
-A:hover.links1 {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
-
-A:link.links1b { color: #000000; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
-A:visited.links1b { color: #000000; text-decoration : none; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
-A:hover.links1b {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
-
-A:link.links1a { color: #000000; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
-A:visited.links1a { color: #000000; text-decoration : none; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
-A:hover.links1a {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
-
-A:link.links1c { color: #000000; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
-A:visited.links1c { color: #000000; text-decoration : none; font-family: Arial, Helvetica, sans-serif; font-weight: bold;font-size:10pt;}
-A:hover.links1c {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-weight: bold;font-size:10pt;}
-
-A:link.index {	color: #444444; text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
-A:visited.index {color: #444444; text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
-A:hover.index {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
-
-A:link.tree {color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:10pt;}
-A:visited.tree {color: #000000; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:10pt;}
-A:hover.tree {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;font-size:10pt;}
-
-A IMG { border: 0; }
-
-.linksdisabled {color: #999999; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size:10pt;}
-
-
-TD.shadowver {background-image: url('../images/shadowver.gif');}
-TD.shadowhor {background-image: url('../images/shadowhor.gif');}
-TD.shadowcor {background-image: url('../images/shadowcor.gif');}
-
-TD.links1b {background-image: url('../images/steelblau4.jpg');}
-TD.links1c {background-image: url('../images/steel1info.jpg');}
-TD.links1 {background-image: url('../images/fill2.gif');}
-TD.linksinfo {background-image: url('../images/steel1info.jpg');}
-TD.links1a {background-image: url('../images/fill3.gif');}
-TD.reiterunten {background-image: url('../images/reiter3.jpg');}
-
-table.header { background-image: url('../images/fill1.gif');}
-TABLE.links1 {	background-color: #FFFFFF;}
-
-table.toolbar {background-image: url('../images/steelblau.jpg');}
-TD.toolbar {background-image: url('../images/steelblau.jpg');}
-
-
-A:link.toolbar {color: #91A2B6; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:9pt;}
-A:visited.toolbar {color: #91A2B6; text-decoration: none;font-family: Arial, Helvetica, sans-serif; font-size:9pt;}
-A:hover.toolbar {color: #EEEEEE;text-decoration: none;font-family: Arial, Helvetica, sans-serif ;font-size:9pt;}
-
-
-TD.topic {border:0px solid #000000; background-image: url('../images/fill1.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
-TD.topicwrite {border:0px solid #000000; background-image: url('../images/fill1write.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
-TD.header {background-image: url('../images/fill1.gif');}
-TD.angemeldet {border-style: solid; border-color: #000000;  border-width: 1px;}
-TD.rahmen_white {border-style: solid; border-color: #000000;  border-width: 1px; background-color: #FFFFFF; background-image: url('../images/blank.gif');}
-TD.rahmen_steel {border-style: solid; border-color: #000000;  border-width: 1px; background-image: url('../images/steel1.jpg');}
-TD.rahmen_steelgraulight {border-style: solid; border-color: #000000;  border-width: 1px; background-image: url('../images/steelgraulight.jpg');}
-TD.quote {border-style: solid; border-color: #000000;  border-width: 1px; font-size:8px;}
-TD.nix {background-color: transparent;}
-TD.aufklapp {background-color : #FFFAEE;}
-TD.suche {background-image: url('../images/suche2.jpg');}
-
-BODY {margin: 0px; background-color: #91A2B6; background : url('../images/bathtile.jpg'); font-family: Arial, Helvetica, sans-serif}
-
-/* the Body-Background color should be similar to A:link.toolbar and A:visited.toolbar for best effect!! */
-
-TABLE.blank {	background-color: white;}
-
-TD.blank {background-color: #FFFFFF;}
-
-TD.onlineinfo {background-color: #FFFFFF; font-size: 10pt;}
-
-TD.blanksmall {background-color: #FFFFFF; font-size: 10pt;}
-
-TD.infobox {background-color: #dee2e8;
-				font-family:		Arial, Helvetica, sans-serif;
-				font-size:			11px;
-				font-weight:		normal;
-				line-height: 		16px;
-				text-align:			left;
+/*******************************************************************************
+    $Id$
+    Standard-Stylesheet für Stud.IP im Safire-Design
+    Infos:
+    - Vererbung beachten und doppelte Eigenschaften vermeiden
+    - Farben nur in hex (#666666)
+    - mehrere Klassen mit gleichen eigenschaften zusammenfassen
+*******************************************************************************/
+/* --- Schrift (Vorgaben: Typ, Größe, Farbe --------------------------------- */
+body, input, textarea, td, th, blockquote, p, form, ul, code {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	color: #000000;
 }
 
-TD.infoboxrahmen {border-style: solid; border-color: #CCCCCC;  border-width: 1px;}
-th   { border:0px solid #000000; background:#B5B5B5 url('../images/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#B5B5B5  }
-p, td, form, ul {font-family: Arial, Helvetica, sans-serif;	color: #000000 }
-h1, h2, h3 { font-family: Arial, Helvetica, sans-serif;	color: #213499;	font-weight: bold; }
-h1.topic { font-family: Arial, Helvetica, sans-serif; color: #FFFFFF; font-weight: bold; font-size: 1.6em; margin-bottom: 0.1em; margin-top: 0.1em; padding: 0.1em; line-height: 1em}
-h2.topic, h3.topic { font-family: Arial, Helvetica, sans-serif; color: #FFFFFF; font-weight: bold; font-size: 1.2em; margin-bottom: 0.1em; margin-top: 0.1em; padding: 0.1em; line-height: 1em}
+/* --- Standardvorgaben ----------------------------------------------------- */
+/* //TODO: the Body-Background color should be similar to A:link.toolbar and A:visited.toolbar for best effect!! */
+body {
+	margin: 0px;
+	background-color: #91A2B6;
+	background : url('../images/bathtile.jpg');
+}
+
+th {
+	border:0px;
+	background: url('../images/steelgraudunkel.gif');
+	background-color:#B5B5B5;
+	color:#FFFFFF;
+}
+
+h1, h2, h3 {
+	color: #213499;
+	font-weight: bold;
+}
+
+/* --- Überschriften -------------------------------------------------------- */
+h1.topic {
+	color: #FFFFFF;
+	font-weight: bold;
+	font-size: 1.6em;
+	margin-bottom: 0.1em;
+	margin-top: 0.1em;
+	padding: 0.1em;
+	line-height: 1em
+}
+
+h2.topic, h3.topic {
+	color: #FFFFFF;
+	font-weight: bold;
+	font-size: 1.2em;
+	margin-bottom: 0.1em;
+	margin-top: 0.1em;
+	padding: 0.1em;
+	line-height: 1em
+}
+
+/* --- Links ---------------------------------------------------------------- */
+/* //TODO: überflüssige klassen entfernen... */
+a, a:link, a:visited {
+	color: #213499;
+    text-decoration: none;
+}
+a:link.links1, a:visited.links1,
+a:link.links1a, a:visited.links1a,
+a:link.links1b, a:visited.links1b,
+a:link.links1c, a:visited.links1c {
+	color: #000000;
+	font-weight: bold;
+}
+a:link.index, a:visited.index {
+	color: #444444;
+}
+a:link.treek, a:visited.tree {
+	color: #000000;
+}
+a:link.toolbar, a:visited.toolbar {
+	color: #91A2B6;
+	font-size: 9px;
+}
+
+a:hover, a:active, a:hover.index, a:active.index, a:hover.tree,
+a.links1:hover, a:hover.links1a, a:hover.links1b, a:hover.links1c {
+	color: #FF3333;
+	text-decoration: none;
+}
+a:hover.toolbar {
+	color: #EEEEEE;
+}
+
+a img { /* Bilder in Links ohne Rand */
+	border:0px;
+}
+
+/* --- Tabellen ------------------------------------------------------------- */
+/* //TODO: optimieren und aufräumen */
+td.shadowver {background-image: url('../images/shadowver.gif');}
+td.shadowhor {background-image: url('../images/shadowhor.gif');}
+td.shadowcor {background-image: url('../images/shadowcor.gif');}
+
+td.links1b {background-image: url('../images/steelblau4.jpg');}
+td.links1c {background-image: url('../images/steel1info.jpg');}
+td.links1 {background-image: url('../images/fill2.gif');}
+td.linksinfo {background-image: url('../images/steel1info.jpg');}
+td.links1a {background-image: url('../images/fill3.gif');}
+td.reiterunten {background-image: url('../images/reiter3.jpg');}
+
+table.header { background-image: url('../images/fill1.gif');}
+table.links1 {	background-color: #FFFFFF;}
+
+table.toolbar {background-image: url('../images/steelblau.jpg');}
+td.toolbar {background-image: url('../images/steelblau.jpg');}
+
+td.topic {
+	border:0px;
+	background-image: url('../images/fill1.gif');
+	background-color:#4A5681;
+	color:#FFFFFF;
+	font-size: 16px;
+}
+td.topicwrite {border:0px solid #000000; background-image: url('../images/fill1write.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
+td.header {background-image: url('../images/fill1.gif');}
+td.angemeldet {border-style: solid; border-color: #000000;  border-width: 1px;}
+td.rahmen_white {border-style: solid; border-color: #000000;  border-width: 1px; background-color: #FFFFFF; background-image: url('../images/blank.gif');}
+td.rahmen_steel {border-style: solid; border-color: #000000;  border-width: 1px; background-image: url('../images/steel1.jpg');}
+td.rahmen_steelgraulight {border-style: solid; border-color: #000000;  border-width: 1px; background-image: url('../images/steelgraulight.jpg');}
+td.quote {border-style: solid; border-color: #000000;  border-width: 1px; font-size:8px;}
+td.nix {background-color: transparent;}
+td.aufklapp {background-color : #FFFAEE;}
+td.suche {background-image: url('../images/suche2.jpg');}
+
+
+table.blank, td.blank, td.onlineinfo, td.blanksmall {
+	background-color: #FFFFFF;
+}
+
+td.infobox {
+	background-color: #dee2e8;
+	font-size: 11px;
+	line-height: 16px;
+	text-align: left;
+}
+
+td.infoboxrahmen {
+	border:1px solid #CCCCCC;
+}
+
+/* --- Sonstige ------------------------------------------------------------- */
+/** //TODO: aufräumen und optmieren... */
+.linksdisabled {color: #999999; text-decoration: none; font-weight: bold; }
 
 .gruppe0 {background: none; background-color: #FFFFFF;}
 .gruppe1 {background: none; background-color: #FF0000;}
@@ -114,88 +166,85 @@ h2.topic, h3.topic { font-family: Arial, Helvetica, sans-serif; color: #FFFFFF; 
 .steelgroup6 {background-image: url('../images/steelgroup6.gif');}
 .steelgroup7 {background-image: url('../images/steelgroup7.gif');}
 
-.white {background: none; background-color: #FFFFFF;	font-family: Arial, Helvetica, sans-serif;}
-.lightgrey {background: none; background-color: #F8F8F8;	font-family: Arial, Helvetica, sans-serif;}
-.grey {background: none; background-color: #BBBBBB;	font-family: Arial, Helvetica, sans-serif;}
-.steel {background-image: url('../images/steelblau.jpg');	font-family: Arial, Helvetica, sans-serif;}
-.steelgraudunkel {background-image: url('../images/steelgraudunkel.gif');	font-family: Arial, Helvetica, sans-serif;}
-.steelgraulight {background-image: url('../images/steelgraulight.jpg');	font-family: Arial, Helvetica, sans-serif;}
-.steelgraulight_shadow {background-image: url('../images/steelgraulight_shadow.jpg');	font-family: Arial, Helvetica, sans-serif;}
-.steel1kante {background-image: url('../images/steel1kante.gif');        font-family: Arial, Helvetica, sans-serif;}
-.steelkante {background-image: url('../images/steelkante.jpg');	font-family: Arial, Helvetica, sans-serif;}
-.steelkante2 {background-image: url('../images/steelkante2.jpg');	font-family: Arial, Helvetica, sans-serif;}
-.steel2 { background-color: #FFFFFF; background-image: url('../images/steel2.jpg');	font-family: Arial, Helvetica, sans-serif;}
-.steel1 { background-color: #FFFFFF; background-image: url('../images/steel1.jpg');	font-family: Arial, Helvetica, sans-serif;}
-.steelblau_schatten { background-color: #FFFFFF; background-image: url('../images/steelblau_schatten.jpg');	font-family: Arial, Helvetica, sans-serif;}
-.blue_gradient { background-color: #FFFFFF; background-image: url('../images/blue_gradient.jpg');	font-family: Arial, Helvetica, sans-serif;}
+.white {background: none; background-color: #FFFFFF;	}
+.lightgrey {background: none; background-color: #F8F8F8;	}
+.grey {background: none; background-color: #BBBBBB;	}
+.steel {background-image: url('../images/steelblau.jpg');	}
+.steelgraudunkel {background-image: url('../images/steelgraudunkel.gif');	}
+.steelgraulight {background-image: url('../images/steelgraulight.jpg');	}
+.steelgraulight_shadow {background-image: url('../images/steelgraulight_shadow.jpg');	}
+.steel1kante {background-image: url('../images/steel1kante.gif');        }
+.steelkante {background-image: url('../images/steelkante.jpg');	}
+.steelkante2 {background-image: url('../images/steelkante2.jpg');	}
+.steel2 { background-color: #FFFFFF; background-image: url('../images/steel2.jpg');	}
+.steel1 { background-color: #FFFFFF; background-image: url('../images/steel1.jpg');	}
+.steelblau_schatten { background-color: #FFFFFF; background-image: url('../images/steelblau_schatten.jpg');	}
+.blue_gradient { background-color: #FFFFFF; background-image: url('../images/blue_gradient.jpg');	}
 .quote {margin-left: 20px; padding:3px; margin-right: 8em; border: 1px solid black; background: none; background-color: #EEEEEE;}
-.steelgelb {background-image: url('../images/plastic_yellow.jpg'); font-family: Arial, Helvetica, sans-serif; font-size:10pt}
-.steelgreen {background-image: url('../images/plastic_green.jpg'); font-family: Arial, Helvetica, sans-serif; font-size:10pt}
-.steelred {background-image: url('../images/plastic_red.jpg'); font-family: Arial, Helvetica, sans-serif; font-size:10pt}
+.steelgelb {background-image: url('../images/plastic_yellow.jpg');  }
+.steelgreen {background-image: url('../images/plastic_green.jpg');  }
+.steelred {background-image: url('../images/plastic_red.jpg');  }
 
 /* Styles fuer printhead und printcontent */
-td.printhead {background-image: url('../images/steelblau.jpg');  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
-td.printhead2 {background-image: url('../images/steelblau2.gif');  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
-td.printhead3 {background-image: url('../images/steelblau3.gif');  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
-td.colorline {background-image: url('../images/colorline.gif');  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
-td.colorline2 {background-image: url('../images/colorline2.gif');  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
-A:link.printhead {color:#333399;  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
-A:visited.printhead {color:#333399;  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
-a.printhead {color:#333399;  font-family: Arial, Helvetica, sans-serif; font-size:10pt}
-td.printcontent {background-image: url('../images/steel1.jpg');  font-family: Arial, Helvetica, sans-serif; font-size:10pt; text-align:left;}
+td.printhead {background-image: url('../images/steelblau.jpg');   }
+td.printhead2 {background-image: url('../images/steelblau2.gif');   }
+td.printhead3 {background-image: url('../images/steelblau3.gif');   }
+td.colorline {background-image: url('../images/colorline.gif');   }
+td.colorline2 {background-image: url('../images/colorline2.gif');   }
+A:link.printhead {color:#333399;   }
+A:visited.printhead {color:#333399;   }
+a.printhead {color:#333399;   }
+td.printcontent {background-image: url('../images/steel1.jpg');    text-align:left;}
 
 /* Styles fuer Terminkalender */
 a.day {color: #3333DD; font-weight: bold;}
 a.sday {color :#DD0000; font-weight: bold;}
 a.hday {color :#DD5555; font-weight: bold;}
-a.daymin {color: #3333DD; font-size: 10pt; font-weight: bold;}
-a.sdaymin {color: #DD0000; font-size: 10pt; font-weight: bold;}
-a.hdaymin {color: #DD5555; font-size: 10pt; font-weight: bold;}
-font.kwmin {color: #000000; font-size: 10pt; font-weight: bold;}
+a.daymin {color: #3333DD;  font-weight: bold;}
+a.sdaymin {color: #DD0000;  font-weight: bold;}
+a.hdaymin {color: #DD5555;  font-weight: bold;}
+font.kwmin {color: #000000;  font-weight: bold;}
 a.lightday {color: #8888DD; font-weight: bold;}
 a.lightsday {color: #DDAAAA; font-weight: bold;}
 a.lighthday {color: #DDAAAA; font-weight: bold;}
-a.lightdaymin {color: #8888DD; font-size: 10pt; font-weight: bold;}
-a.lightsdaymin {color: #DDAAAA; font-size: 10pt; font-weight: bold;}
-a.lighthdaymin {color: #DDAAAA; font-size: 10pt; font-weight: bold;}
+a.lightdaymin {color: #8888DD;  font-weight: bold;}
+a.lightsdaymin {color: #DDAAAA;  font-weight: bold;}
+a.lighthdaymin {color: #DDAAAA;  font-weight: bold;}
 .inday {font-size: 8pt;}
 .precol1w {font-size: 12pt; font-weight: bold; color: #AAAAAA; text-align: center;}
 .precol2w {font-size: 8pt; font-weight: bold; color: #AAAAAA; text-align: center;}
 td.calhead {font-size: 18pt; font-weight: bold; color: #AAAAAA; text-align: center;}
-A:link.calhead {color: #8888DD; text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
-A:visited.calhead {color: #8888DD; text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
-A:hover.calhead {color: #FF3333;text-decoration: none;font-family: Arial, Helvetica, sans-serif;}
+A:link.calhead {color: #8888DD; text-decoration: none;}
+A:visited.calhead {color: #8888DD; text-decoration: none;}
+A:hover.calhead {color: #FF3333;text-decoration: none;}
 .celltoday {background-image: url('../images/celltoday.gif');}
-th.inccal {font-size: 10pt;}
+th.inccal {}
 .precol1 {font-size: 14pt; font-weight: bold; text-align: center;}
-.precol2 {font-size: 10pt; font-weight: bold; text-align: left;}
+.precol2 { font-weight: bold; text-align: left;}
 td.weekend {background-image: url('../images/steelcal.jpg');}
-td.weekday {background-image: url('../images/steel1.jpg');	font-family: Arial, Helvetica, sans-serif;}
+td.weekday {background-image: url('../images/steel1.jpg');	}
 td.current {border-width: 2px; border-style: solid; border-color: #DD0000; background-image: url('../images/steelcal.jpg');}
 td.currenttoday {border-width: 2px; border-style: solid; border-color: #DD0000; background-image: url('../images/celltoday.gif');}
 td.month {background-image: url('../images/steelcal.jpg');}
-td.lightmonth{background-image: url('../images/steel1.jpg');	font-family: Arial, Helvetica, sans-serif;}
+td.lightmonth{background-image: url('../images/steel1.jpg');	}
 
 /* Styles fuer TerminZeile */
 table.tabdaterow {background-color: white; }
-td.tddaterowp {border-style: solid; border-color: #FFFFFF;  border-width: 1px; background-image: url('../images/steelcal.jpg'); font-family: Arial, Helvetica, sans-serif; font-weight: bold; color: #009900;font-size:8pt;}
-td.tddaterowpx {border-style: solid; border-color: #D00000;  border-width: 1px; background-image: url('../images/steelcal.jpg'); font-family: Arial, Helvetica, sans-serif;font-weight: bold; color: #009900;font-size:8pt;}
+td.tddaterowp {border-style: solid; border-color: #FFFFFF;  border-width: 1px; background-image: url('../images/steelcal.jpg');  font-weight: bold; color: #009900;font-size:8pt;}
+td.tddaterowpx {border-style: solid; border-color: #D00000;  border-width: 1px; background-image: url('../images/steelcal.jpg'); font-weight: bold; color: #009900;font-size:8pt;}
 
 
 td.smiley_th   { border:0px solid #000000; background:#B5B5B5 url('../images/steelgraudunkel.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; font-weight: bold; text-align: center; background-color:#B5B5B5  }
 td.smiley_redborder {border:1px solid #D00000;}
 
-code  { font-size:10pt; }
-
-input, textarea {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 10pt;
-}
-
 table.logintable {background-image: url('../images/login.jpg');}
 td.indexpage {background-image: url('../images/indexpage.jpg'); text-align:left;}
 
-.mainmenu {margin-top: 7px; text-align:left;}
+.mainmenu {
+	margin-top: 7px;
+	text-align:left;
+	font-size: 16px;
+}
 
 .button {
  border-style:solid; border-width:1px;
@@ -214,7 +263,6 @@ td.indexpage {background-image: url('../images/indexpage.jpg'); text-align:left;
 
 div.selectbox {
   background-color:#FFFFFF;
-  font-size: 10pt;
   border: 1px solid;
   padding: 5px;
   margin: 5px;
@@ -228,9 +276,6 @@ div.selectbox {
   font-size: 0.75em;
 }
 
-dt {
-}
-
 dd {
   margin-left: 1.5em;
 }
@@ -238,7 +283,6 @@ dd {
 /* index.php anpassungen an den boxen zur vereinheitlichung */
 table.index_box {
 	width:70%;
-
 }
 
 td.index_box_cell {
@@ -246,8 +290,7 @@ td.index_box_cell {
 	background-image: url('../images/steel1.jpg');
 }
 
-/* Inhaltsverzeichnis Wikis */
-
+/* --- Inhaltsverzeichnis Wikis --------------------------------------------- */
 div.wikitoc {
     font-size: 1em;
     margin-bottom: 5px;
@@ -291,7 +334,6 @@ div.wikitoc h1 {
     margin-left:-10px;
     color:black;
 }
-
 div.wikitoc ul ul ul ul {
     list-style: none;
     padding-left:30px;
@@ -311,8 +353,7 @@ div.wikitoc ul {
     margin-bottom:0px;
 }
 
-/* ***** AJAX indicator ***************************************************** */
-
+/* --- AJAX indicator ------------------------------------------------------- */
 #ajax_notification {
 	position: fixed;
 	bottom: 0;
@@ -320,7 +361,7 @@ div.wikitoc ul {
 	height: 20px;
 	margin: 0;
 	width: 100%;
-	background-color: #7387ac;
+	background-color: #7387AC;
 	color: white;
 	display: block;
 	text-align: center;
@@ -329,8 +370,7 @@ div.wikitoc ul {
 	padding-top: 5px;
 }
 
-/* ***** Autocompleter ****************************************************** */
-
+/* --- Autocompleter -------------------------------------------------------- */
 div.autocomplete {
 	position: absolute;
 	background-color: white;
@@ -358,9 +398,6 @@ div.autocomplete ul li {
 	text-align: left;
 	font-size: 0.75em;
 	min-height: 2em;
-}
-
-div.autocomplete .informal {
 }
 
 div.autocomplete .informal .number,

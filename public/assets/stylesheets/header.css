@@ -1,3 +1,8 @@
+/*******************************************************************************
+    Ergänzung-Stylesheet für Stud.IP im Safire-Design
+    Hauptnavigation etc., also der obere Bereich
+    //TODO: mit ins hauptstylesheet nehmen?
+*******************************************************************************/
 div#wrap2 {
 	position: absolute;
 	top: 150px;
@@ -12,26 +17,22 @@ div#barBottomLeft {
 	background-color: #5d74a0;
 	padding-left: 15px;
 	padding-right: 15px;
-	font-size: 0.8em;
 	height: 1.4em;
 	text-align: right;
 	vertical-align: middle;
 	float: left;
 	color: #a1b9c0;
-	font-family: Arial, Helvetica, sans-serif;
 }
 
 div#barBottommiddle {
 	background-color: #7387ac;
 	text-align: left;
 	vertical-align: middle;
-	font-size: 0.8em;
 	height: 1.4em;
 	float: left;
 	margin-right: -3px;
 	padding: 0px;
 	color: #ffffff;
-	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
 }
 
@@ -39,7 +40,6 @@ div#barBottomright {
 	background-color: #7387ac;
 	text-align: right;
 	vertical-align: middle;
-	font-size: 0.8em;
 	height: 1.4em;
 }
 
@@ -50,7 +50,6 @@ div#barBottomright ul {
 div#barBottomright li {
 	display: inline;
 	list-style-type: none;
-	font-family: Arial, Helvetica, sans-serif;
 }
 div#barBottomright a {
 	text-decoration: none;
@@ -70,19 +69,17 @@ div#barTopFont {
 	top: 10px;
 	left: 15px;
 	font-size: 16pt;
-	font-family: Arial, Helvetica, sans-serif;
 	color: #cccccc;
 }
 
 div#barTopTools ul {
-	margin: 0;
-	padding: 0;
+	margin: 0px;
+	padding: 0px;
 }
 div#barTopTools li {
 	display: inline;
 	list-style-type: none;
 	font-size: 9pt;
-	font-family: Arial, Helvetica, sans-serif;
 }
 div#barTopTools a {
 	text-decoration: none;
@@ -115,8 +112,8 @@ div#barTopStudip img {
 
 div#barTopLogo {
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: 0px;
+	left: 0px;
 }
 div#header {
 	height: 100px;
@@ -131,15 +128,14 @@ div#barTopMenu {
 	text-align: right;
 }
 div#barTopMenu ul {
-	margin: 0;
-	padding: 0;
+	margin: 0px;
+	padding: 0px;
 	text-align: center;
 }
 div#barTopMenu li {
 	float: left;
 	list-style-type: none;
 	font-size: 9pt;
-	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
 }
 
@@ -156,5 +152,5 @@ div#barTopMenu a:hover {
 	color: white;
 }
 div#barTopMenu img {
-	border: none;
+	border: 0px;
 }
