@@ -34,6 +34,7 @@ $CURRENT_PAGE = _("Übersicht laufender Anmeldeverfahren / Grupppierung von Veran
 require_once('config.inc.php'); //Grunddaten laden
 require_once('lib/visual.inc.php'); //htmlReady
 require_once('lib/classes/StudipAdmissionGroup.class.php');
+require_once('lib/admission.inc.php');
 
 function semadmission_get_data($seminare_condition){
 	global $perm;
@@ -337,6 +338,7 @@ if(isset($_REQUEST['group_sem_x']) && (count($_REQUEST['gruppe']) > 1 || isset($
 		$group_obj->setUniqueMemberValue('write_level', 3);
 		$admission_times = array();
 		$ok = true;
+		$do_admission_update = false;
 		if(isset($_REQUEST['admission_change_enable_quota'])){
 			$group_obj->setUniqueMemberValue('admission_enable_quota', $_REQUEST['admission_enable_quota']);
 		}
@@ -402,6 +404,7 @@ if(isset($_REQUEST['group_sem_x']) && (count($_REQUEST['gruppe']) > 1 || isset($
 				$msg[] = array('msg', sprintf(_("Das Enddatum für Anmeldungen wurde in allen Veranstaltungen geändert.")));
 			}
 			if(isset($_REQUEST['admission_change_turnout'])){
+				$do_admission_update = (int)$_REQUEST['admission_turnout'] >= $group_obj->getUniqueMemberValue('admission_turnout');
 				$group_obj->setUniqueMemberValue('admission_turnout', (int)$_REQUEST['admission_turnout']);
 				$msg[] = array('msg', sprintf(_("Die Teilnehmeranzahl wurde in allen Veranstaltungen auf %s geändert."),(int)$_REQUEST['admission_turnout']));
 			}
@@ -429,6 +432,12 @@ if(isset($_REQUEST['group_sem_x']) && (count($_REQUEST['gruppe']) > 1 || isset($
 			if(count($contingent)){
 				foreach($contingent as $sem_id) $sem_names[] = $group_obj->members[$sem_id]->getName();
 				$msg[] = array('msg', sprintf(_("In den Veranstaltungen <b>%s</b> wurde ein Kontingent mit 100%% für alle Studiengänge eingerichtet."), htmlready(join(", ", $sem_names))));
+			}
+			if($do_admission_update){
+				foreach($group_obj->getMemberIds() as $semid){
+					update_admission($semid);
+				}
+				$msg[] = array('msg', sprintf(_("Nachrücken in allen Veranstaltungen der Gruppe durchgeführt.")));
 			}
 		}
 	}
