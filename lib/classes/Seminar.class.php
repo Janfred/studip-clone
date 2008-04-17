@@ -929,8 +929,10 @@ class Seminar {
 	function addCycle($data = array()) {
 		$new_id = $this->metadate->addCycle($data);
 		// logging >>>>>>
-		$cycle_info = $this->metadate->cycles[$new_id]->toString();
-		log_event("SEM_ADD_CYCLE", $this->getId(), $cycle_info, '<pre>'.print_r($data,true).'</pre>');
+		if($new_id){
+			$cycle_info = $this->metadate->cycles[$new_id]->toString();
+			log_event("SEM_ADD_CYCLE", $this->getId(), $cycle_info, '<pre>'.print_r($data,true).'</pre>');
+		}
 		// logging <<<<<<
 		return $new_id;
 	}

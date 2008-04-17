@@ -317,16 +317,20 @@ for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_sche
 	}
 }
 //Daten aus der Sessionvariable hinzufuegen
-if ((is_array($my_personal_sems)) && (!$inst_id))
-	foreach ($my_personal_sems as $mps)
+if ((is_array($my_personal_sems)) && (!$inst_id)){
+	foreach ($my_personal_sems as $key => $mps){
+		if(!$mps["ende_time"] || !$mps['start_time']){
+			unset($my_personal_sems[$key]);
+			continue;
+		}
 		if (date("G", $mps["ende_time"]) >= $global_start_time) {
 			//auch hier nochmal der Check
 			if (date("G", $mps["ende_time"]) > $global_end_time) {
 				$tmp_end_time = mktime($global_end_time+1, 00, 00, date ("n", $mps["start_time"]), date ("j", $mps["start_time"]), date ("Y", $mps["start_time"]));
 				$tmp_row_span = (int)(($tmp_end_time - $mps["start_time"]) /15/60);
 			} else
-				$tmp_row_span = (int)(($mps["ende_time"] - $mps["start_time"])/15/60);
-
+			$tmp_row_span = (int)(($mps["ende_time"] - $mps["start_time"])/15/60);
+			
 			//und der andere
 			if (date("G", $mps["start_time"]) < $global_start_time) {
 				$tmp_start_time = mktime($global_start_time, 00, 00, date ("n", $mps["start_time"]), date ("j", $mps["start_time"]), date ("Y", $mps["start_time"]));
@@ -337,13 +341,15 @@ if ((is_array($my_personal_sems)) && (!$inst_id))
 				$idx_corr_h = 0;
 				$idx_corr_m = 0;
 			}
-
+			
 			//aus Sonntag=0 wird Sonntag=7, damit laesst's sich besser arbeiten *g
 			$tmp_day=date("w", $mps["start_time"]);
 			if ($tmp_day==0) $tmp_day=7;
-
+			
 			$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"])+$idx_corr_h.(int)((date("i", $mps["start_time"])+$idx_corr_m) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>$mps["room"], "row_span"=>$tmp_row_span, "dozenten"=>htmlReady($mps["doz"]), "personal_sem"=>TRUE);
 		}
+	}
+}
 
 //Array der Zellenbelegungen erzeugen
 if (is_array($my_sems))

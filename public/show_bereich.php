@@ -29,7 +29,7 @@ require_once 'lib/classes/SemBrowse.class.php';
 
 	$sess->register ("show_bereich_data");
 	$db=new DB_Seminar;
-
+	$intro_text = $head_text = '';
 	if ($id){
 		$show_bereich_data["id"]=$id;
 		$show_bereich_data['level'] = $level;
