@@ -841,6 +841,13 @@ class VoteDB extends StudipObject {
       if ($timespan == NULL) $timespan="NULL";
       if ($co_visibility === NULL) $co_visibility = "NULL";       
       
+      // escape strings for storing in the DB
+      $title = addslashes($title);
+      $question = addslashes($question);
+      for ($index = 0; $index < count($answerarray); ++$index) {
+          $answerarray[$index]['text'] = addslashes($answerarray[$index]['text']);
+      }
+
       /* Doubleclick on save? ---------------------------------------------- */
       $sql = 
 	 "SELECT".

@@ -149,6 +149,19 @@ $anonymous         = $_POST['anonymous'];
 $namesVisibility   = $_POST['namesVisibility'];
 $changeable        = $_POST['changeable'];
 
+// undo damage done by magic quotes
+if (isset($title)) {
+    $title = stripslashes($title);
+}
+if (isset($question)) {
+    $question = stripslashes($question);
+}
+if (is_array($answers)) {
+    for ($index = 0; $index < count($answers); ++$index) {
+        $answers[$index]['text'] = stripslashes($answers[$index]['text']);
+    }
+}
+
 if( !isset($_POST["changeable"]) && isset($_POST["title"]) )
      $changeable = NO;
 if( !isset($_POST["namesVisibility"]) && isset($_POST["title"]) )
@@ -330,8 +343,9 @@ if( isset( $saveButton_x ) ) {
     }
 
     if( ! $vote->isError() ) {
-	if ($pageMode == MODE_RESTRICTED)
-	    $vote->addSlashesToText(); // prevent mysql from crashing...
+	// this is now always done (see above)
+	// if ($pageMode == MODE_RESTRICTED)
+	//    $vote->addSlashesToText(); // prevent mysql from crashing...
 
 	// save vote to database!
 	$vote->executeWrite();
