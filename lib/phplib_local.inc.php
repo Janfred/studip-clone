@@ -42,7 +42,7 @@ foreach($_never_globalize_request_params as $one_param){
 
 // set default exception handler
 set_exception_handler(create_function('$exception',
-	'include "templates/unhandled_exception.php"; exit;'));
+	'error_log($exception->__toString()); include "templates/unhandled_exception.php"; exit;'));
 
 // set default pdo connection
 require_once('lib/classes/DBManager.class.php');
