@@ -116,7 +116,7 @@ class AssignObject {
 		$db = DBManager::get();
 		$query = sprintf("SELECT assign_id FROM resources_assign WHERE assign_id ='%s' ", $this->id);
 		$result = $db->query($query);
-		if ($result-fetch()) {
+		if ($result->fetch()) {
 			$this->chng_flag=TRUE;
 			return $this->store();
 		} else
@@ -184,7 +184,7 @@ class AssignObject {
 					if (!$explain)
 						return $res["Name"];
 					else
-						return $res["Name"]." (".$TERMIN_TYP[$db->f("date_typ")]["name"].")";	
+						return $res["Name"]." (".$TERMIN_TYP[$res["date_typ"]]["name"].")";	
 			break;
 			case "global":
 			default:
