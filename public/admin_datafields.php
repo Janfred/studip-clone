@@ -55,7 +55,7 @@ $sess->register("admin_datafields_data");
 function printDataFieldType ($targetID, $currStruct) {
 	global $PHP_SELF;
 	echo '<font size="-1">';
-	if ($currStruct == 0 || ($targetID == $currStruct->getID() && $currStruct->getCachedNumEntries() == 0)) {
+	if ($currStruct == 0 || $targetID == $currStruct->getID()) {
 		print "<select name=\"datafield_type\">";
 		foreach (DataFieldEntry::getSupportedTypes() as $type) {
 			$sel = ($currStruct != 0 && $currStruct->getType() == $type) ? 'selected' : '';
@@ -82,7 +82,7 @@ function printDataFieldType ($targetID, $currStruct) {
 					 $PHP_SELF, $_POST['datafield_id']);
 		}
 		else
-			if (in_array($currStruct->getType(), array('selectbox', 'radio', 'combo')) && $currStruct->getCachedNumEntries() == 0) {
+			if (in_array($currStruct->getType(), array('selectbox', 'radio', 'combo'))) {
 				printf(" <a href=\"$PHP_SELF?edit_typeparam=%s#a\">", $currStruct->getID());
 				print  '<img src="'.$GLOBALS['ASSETS_URL'].'images/edit_transparent.gif" border="0" align="middle" title="Eintr&auml;ge bearbeiten"></a>';
 			}
@@ -252,7 +252,7 @@ if ($kill_datafield) { // contains a datafield_id
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if (($admin_datafields_data["change_datafield"] == $val->getID()) && (!$val->getCachedNumEntries())) {
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<select name=\"datafield_class\" style=\"{font-size:8 pt;}\">";
 						echo "<option value=\"FALSE\">". _("alle") ."</option>";
 						foreach ($SEM_CLASS as $key2=>$val2)
@@ -325,8 +325,7 @@ if ($kill_datafield) { // contains a datafield_id
 					}
 					else
 						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
-					if (!$val->getCachedNumEntries())
-						printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+					printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -484,7 +483,7 @@ if ($kill_datafield) { // contains a datafield_id
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if (($admin_datafields_data["change_datafield"] == $val->getID()) && (!$val->getCachedNumEntries())) {
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<select name=\"datafield_class\" style=\"{font-size:8 pt}\">";
 						echo "<option value=\"FALSE\">". _("alle") ."</option>";
 						foreach ($INST_TYPE as $key2=>$val2)
@@ -559,8 +558,7 @@ if ($kill_datafield) { // contains a datafield_id
 					}
 					else
 						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
-					if (!$val->getCachedNumEntries())
-						printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+					printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -716,7 +714,7 @@ if ($kill_datafield) { // contains a datafield_id
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if (($admin_datafields_data["change_datafield"] == $val->getID()) && (!$val->getCachedNumEntries())) {
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<select name=\"datafield_class[]\"  multiple size=\"7\" style=\"{font-size:8 pt;}\">";
 						printf ("<option %s value=\"FALSE\">"._("alle")."</option>", (!$val->getObjectClass()) ? "selected" : "");
 						printf ("<option %s value=\"user\">user</option>", ($val->getObjectClass() & DataFieldStructure::permMask("user")) ? "selected" : "");
@@ -795,8 +793,7 @@ if ($kill_datafield) { // contains a datafield_id
 					}
 					else
 						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
-					if (!$val->getCachedNumEntries())
-						printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+					printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -953,7 +950,7 @@ if ($kill_datafield) { // contains a datafield_id
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if (($admin_datafields_data["change_datafield"] == $val->getID()) && (!$val->getCachedNumEntries())) {
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<select name=\"datafield_class[]\"  multiple size=\"7\" style=\"{font-size:8 pt;}\">";
 						printf("<option %s value=\"FALSE\">"._("alle")."</option>", (!$val->getObjectClass()) ? "selected" : "");
 						printf("<option %s value=\"user\">user</option>", ($val->getObjectClass() & DataFieldStructure::permMask("user")) ? "selected" : "");
@@ -1030,8 +1027,7 @@ if ($kill_datafield) { // contains a datafield_id
 					}
 					else
 						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
-					if (!$val->getCachedNumEntries())
-						printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+					printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -1195,7 +1191,7 @@ if ($kill_datafield) { // contains a datafield_id
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if (($admin_datafields_data["change_datafield"] == $val->getID()) && (!$val->getCachedNumEntries())) {
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<select name=\"datafield_class[]\"  multiple size=\"7\" style=\"{font-size:8 pt;}\">";
 						printf("<option %s value=\"FALSE\">"._("alle")."</option>", (!$val->getObjectClass()) ? "selected" : "");
 						printf("<option %s value=\"user\">user</option>", ($val->getObjectClass() & DataFieldStructure::permMask("user")) ? "selected" : "");
@@ -1272,8 +1268,7 @@ if ($kill_datafield) { // contains a datafield_id
 					}
 					else
 						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
-					if (!$val->getCachedNumEntries())
-						printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+					printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -1436,7 +1431,7 @@ if ($kill_datafield) { // contains a datafield_id
 				<td class="<?=$cssSw->getClass()?>" align="center">
 					<font size="-1">
 					<?
-					if (($admin_datafields_data["change_datafield"] == $val->getID()) && (!$val->getCachedNumEntries())) {
+					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print "<select name=\"datafield_class[]\"  multiple size=\"7\" style=\"{font-size:8 pt;}\">";
 						printf("<option %s value=\"FALSE\">"._("alle")."</option>", (!$val->getObjectClass()) ? "selected" : "");
 						printf("<option %s value=\"user\">user</option>", ($val->getObjectClass() & DataFieldStructure::permMask("user")) ? "selected" : "");
@@ -1513,8 +1508,7 @@ if ($kill_datafield) { // contains a datafield_id
 					}
 					else
 						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
-					if (!$val->getCachedNumEntries())
-						printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+					printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s /></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
