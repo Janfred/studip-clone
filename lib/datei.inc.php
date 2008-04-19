@@ -489,7 +489,7 @@ function copy_folder($folder_id, $new_range, $seed = false){
 		$seed = md5(uniqid('blaofuasof',1));
 	}
 	$db->query("SELECT MD5(CONCAT(folder_id,'$seed')), '$new_range', user_id, name,
-				description, mkdate, " .time(). ",permission FROM folder WHERE folder_id='$folder_id'");
+				description, mkdate, " .time(). " as chdate,permission FROM folder WHERE folder_id='$folder_id'");
 	if ($db->next_record()){
 		$record = $db->Record;
 		$record[3] = mysql_escape_string($record[3]);
@@ -506,7 +506,7 @@ function copy_folder($folder_id, $new_range, $seed = false){
 			if (is_array($folder)){
 				foreach($folder as $id){
 					$db->query("SELECT MD5(CONCAT(folder_id,'$seed')), MD5(CONCAT(range_id,'$seed')), user_id, name,
-								description, mkdate, " .time(). ",permission FROM folder WHERE folder_id='$id'");
+								description, mkdate, " .time(). " as chdate,permission FROM folder WHERE folder_id='$id'");
 					if ($db->next_record()){
 						$record = $db->Record;
 						$record[3] = mysql_escape_string($record[3]);
