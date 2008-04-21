@@ -752,7 +752,7 @@ print_infobox ($infobox,"contract.jpg");
 			<?
 			if ($db2->f("admission_turnout")){
 					printf ("<font size=-1><b>" . _("%s Teilnehmerzahl:") . "&nbsp;</b></font><font size=-1>%s </font>", ($db2->f("admission_type")) ? _("max.") : _("erw."), $db2->f("admission_turnout"));
-					if ($all_cont_user !== false){
+					if (isset($all_cont_user) && $all_cont_user !== false){
 						printf ("<br><font size=-1><b>" . _("Freie Kontingentpl&auml;tze:") . "&nbsp;</b></font><font size=-1>%s </font>",$db2->f("admission_turnout") - $all_cont_user );
 						if (!$db2->f('admission_disable_waitlist') && ($db2->f("admission_turnout") - $all_cont_user) == 0){
 							$db3->query("SELECT COUNT(*) AS wartende FROM admission_seminar_user WHERE seminar_id='$sem_id' AND status !='accepted'");
