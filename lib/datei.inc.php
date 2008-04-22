@@ -182,7 +182,7 @@ function parse_link($link, $level=0) {
 
 
 function createSelectedZip ($file_ids, $perm_check = TRUE) {
-	global $TMP_PATH, $UPLOAD_PATH, $ZIP_PATH, $SessSemName;
+	global $TMP_PATH, $ZIP_PATH, $SessSemName;
 	$zip_file_id = false;
 	if ( is_array($file_ids)){
 		if ($perm_check){
@@ -204,7 +204,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 		$db->query($query);
 		while ($db->next_record()) {
 			$docs++;
-			@copy($UPLOAD_PATH . '/' . $db->f('dokument_id'), $tmp_full_path . '/[' . $docs . ']_' . escapeshellcmd(prepareFilename($db->f("filename"), FALSE)));
+			@copy(get_upload_file_path($db->f('dokument_id')), $tmp_full_path . '/[' . $docs . ']_' . escapeshellcmd(prepareFilename($db->f("filename"), FALSE)));
 			TrackAccess($db->f('dokument_id'),'dokument');
 		}
 
@@ -237,7 +237,7 @@ function createFolderZip ($folder_id) {
 }
 
 function createTempFolder($folder_id, $tmp_full_path, $perm_check = TRUE) {
-	global $UPLOAD_PATH, $SessSemName;
+	global $SessSemName;
 	$db = new DB_Seminar();
 	if ($perm_check){
 		$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessSemName[1]));
@@ -252,7 +252,7 @@ function createTempFolder($folder_id, $tmp_full_path, $perm_check = TRUE) {
 			$linkinfo .= "\r\n".$db->f("filename");
 		} else {
 			$docs++;
-			@copy( $UPLOAD_PATH.'/'.$db->f('dokument_id'), $tmp_full_path.'/['.$docs.']_'.escapeshellcmd(prepareFilename($db->f('filename'), FALSE)));
+			@copy(get_upload_file_path($db->f('dokument_id')), $tmp_full_path.'/['.$docs.']_'.escapeshellcmd(prepareFilename($db->f('filename'), FALSE)));
 			TrackAccess($db->f('dokument_id'),'dokument');
 		}
 	}
@@ -457,13 +457,12 @@ function copy_item($item_id, $new_parent, $change_sem_to = false) {
 }
 
 function copy_doc($doc_id, $new_range, $new_sem = false){
-	global $UPLOAD_PATH;
 	$db = new DB_Seminar();
 	$new_id = md5(uniqid('blaofuasof',1));
 	$db->query("SELECT * FROM dokumente WHERE dokument_id = '$doc_id'");
 	if ($db->next_record()){
 		if ( !$db->f('url') ){
-			if (!@copy($UPLOAD_PATH . '/' . $doc_id, $UPLOAD_PATH . '/' . $new_id)){
+			if (!@copy(get_upload_file_path($doc_id), get_upload_file_path($new_id))) {
 				return false;
 			}
 		}
@@ -864,7 +863,7 @@ function validate_upload($the_file) {
 
 //der eigentliche Upload
 function upload($the_file, $refresh = false) {
-	global $UPLOAD_PATH, $dokument_id,$the_file_name, $msg;
+	global $dokument_id,$the_file_name, $msg;
 
 	if (!validate_upload($the_file)) {
 		return FALSE;
@@ -875,7 +874,7 @@ function upload($the_file, $refresh = false) {
 		$dokument_id=md5(uniqid('dokumente',1));
 
 		//Erzeugen des neuen Speicherpfads
-		$newfile = "$UPLOAD_PATH/$dokument_id";
+		$newfile = get_upload_file_path($dokument_id);
 
 		//Kopieren und Fehlermeldung
 		if (!@move_uploaded_file($the_file,$newfile)) {
@@ -883,7 +882,7 @@ function upload($the_file, $refresh = false) {
 			return FALSE;
 		} else {
 			if ($refresh){
-				@copy($newfile, "$UPLOAD_PATH/$refresh");
+				@copy($newfile, get_upload_file_path($refresh));
 				@unlink($newfile);
 				$dokument_id = $refresh;
 			}
@@ -1863,13 +1862,11 @@ dies muss das aufrufende Script sicherstellen.
 */
 
 function delete_document($dokument_id, $delete_only_file = FALSE) {
-	global $UPLOAD_PATH; // brauchen wir fuer den Pfad zu den Dokumenten
-
 	$db = new DB_Seminar;
 	$db->query("SELECT * FROM dokumente WHERE dokument_id='$dokument_id'");
 	if ($db->next_record()) {
 		if ($db->f("url") == "") {   //Bei verlinkten Datein nicht nachsehen ob es Datei gibt!
-			@unlink("$UPLOAD_PATH/$dokument_id");
+			@unlink(get_upload_file_path($dokument_id));
 			if ($delete_only_file){
 				return TRUE;
 			}
@@ -2189,7 +2186,7 @@ function upload_recursively($range_id, $dir) {
  */
 function upload_zip_file($dir_id, $file) {
 
-	global $UPLOAD_PATH, $user, $upload_seminar_id;
+	global $user, $upload_seminar_id;
 
 	$doc =& new StudipDocument();
 
@@ -2198,7 +2195,7 @@ function upload_zip_file($dir_id, $file) {
 	$doc->setId($dokument_id);
 
 	// Erzeugen des neuen Speicherpfads
-	$newfile = "$UPLOAD_PATH/$dokument_id";
+	$newfile = get_upload_file_path($dokument_id);
 
 	if (@copy($file, $newfile)){
 		$pos = strrpos($file, "/");
@@ -2261,5 +2258,30 @@ function get_flash_player ($document_id, $filename, $type) {
 	$flash_object .= "</object>\n";
 
 	return array('player' => $flash_object, 'width' => $width, 'height' => $height);
+}
+
+/**
+ * Return the absolute path of an uploaded file. The uploaded files
+ * are organized in sub-folders of UPLOAD_PATH to avoid performance
+ * problems with large directories.
+ * If the document_id is empty, NULL is returned.
+ *
+ * @param string MD5 id of the uploaded file
+ */
+function get_upload_file_path ($document_id)
+{
+    global $UPLOAD_PATH;
+
+    if ($document_id == '') {
+        return NULL;
+    }
+
+    $directory = $UPLOAD_PATH.'/'.substr($document_id, 0, 2);
+
+    if (!file_exists($directory)) {
+        mkdir($directory);
+    }
+
+    return $directory.'/'.$document_id;
 }
 ?>

@@ -517,7 +517,7 @@ function Export_Topic ($sem_id) {
 //Funktion zum archivieren eines Seminars, sollte in der Regel vor dem Loeschen ausgfuehrt werden.
 function in_archiv ($sem_id) {
 
-	global $SEM_CLASS,$SEM_TYPE,$UPLOAD_PATH, $ARCHIV_PATH, $TMP_PATH, $ZIP_PATH, $ZIP_OPTIONS, $_fullname_sql;
+	global $SEM_CLASS,$SEM_TYPE, $ARCHIV_PATH, $TMP_PATH, $ZIP_PATH, $ZIP_OPTIONS, $_fullname_sql;
 
 	$hash_secret="frauen";
 

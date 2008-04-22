@@ -79,7 +79,7 @@ switch ($type) {
 	break;
 	//we want to download from the regular upload-folder (this mode performs perm checks)
 	default:
-		$path_file=$UPLOAD_PATH."/".$file_id;
+		$path_file = get_upload_file_path($file_id);
 	break;
 }
 
