@@ -181,10 +181,14 @@ function parse_link($link, $level=0) {
 }
 
 
-function createSelectedZip ($file_ids, $perm_check = TRUE) {
+function createSelectedZip ($file_ids, $perm_check = TRUE, $size_check = false) {
 	global $TMP_PATH, $ZIP_PATH, $SessSemName;
 	$zip_file_id = false;
-	if ( is_array($file_ids)){
+	$max_files = Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_FILES');
+	$max_size = Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_SIZE') * 1024 * 1024;
+	if(!$max_files && !$max_size) $size_check = false;
+
+	if ( is_array($file_ids) && !($size_check && count($file_ids) > $max_files)){
 		if ($perm_check){
 			$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessSemName[1]));
 			$allowed_folders = $folder_tree->getReadableFolders($GLOBALS['user']->id);
@@ -192,47 +196,58 @@ function createSelectedZip ($file_ids, $perm_check = TRUE) {
 			else ($folders_cond = " AND 0 ");
 		}
 		$db = new DB_Seminar();
-		$zip_file_id = md5(uniqid("jabba",1));
+		$in = "('".join("','",$file_ids)."')";
+		$query = sprintf ("SELECT SUM(filesize) FROM dokumente WHERE url='' AND dokument_id IN %s %s", $in, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."' $folders_cond" : "");
+		$db->query($query);
+		$db->next_record();
+		if(!($size_check && $db->f(0) > $max_size)){
+			$zip_file_id = md5(uniqid("jabba",1));
+	
+			//create temporary Folder
+			$tmp_full_path = "$TMP_PATH/$zip_file_id";
+			mkdir($tmp_full_path,0700);
+	
+			//create folder content
+			$in = "('".join("','",$file_ids)."')";
+			$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN %s %s ORDER BY chdate, name, filename", $in, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."' $folders_cond" : "");
+			$db->query($query);
+			while ($db->next_record()) {
+				$docs++;
+				@copy(get_upload_file_path($db->f('dokument_id')), $tmp_full_path . '/[' . $docs . ']_' . escapeshellcmd(prepareFilename($db->f("filename"), FALSE)));
+				TrackAccess($db->f('dokument_id'),'dokument');
+			}
+	
+			//zip stuff
+			create_zip_from_directory($tmp_full_path, $tmp_full_path);
+			rmdirr($tmp_full_path);
+			@rename($tmp_full_path .".zip" , $tmp_full_path);
+		}
+	}
+	return $zip_file_id;
+}
 
+function createFolderZip ($folder_id, $perm_check = TRUE, $size_check = false) {
+	global $TMP_PATH, $ZIP_PATH;
+	$zip_file_id = false;
+	$max_files = Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_FILES');
+	$max_size = Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_SIZE') * 1024 * 1024;
+	if(!$max_files && !$max_size) $size_check = false;
+
+	if(!($size_check && (doc_count($folder_id) > $max_files || doc_sum_filesize($folder_id) > $max_size))){
+		$zip_file_id = md5(uniqid("jabba",1));
+	
 		//create temporary Folder
 		$tmp_full_path = "$TMP_PATH/$zip_file_id";
 		mkdir($tmp_full_path,0700);
-
-		//create folder content
-		$in = "('".join("','",$file_ids)."')";
-		$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN %s %s ORDER BY chdate, name, filename", $in, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."' $folders_cond" : "");
-		$db->query($query);
-		while ($db->next_record()) {
-			$docs++;
-			@copy(get_upload_file_path($db->f('dokument_id')), $tmp_full_path . '/[' . $docs . ']_' . escapeshellcmd(prepareFilename($db->f("filename"), FALSE)));
-			TrackAccess($db->f('dokument_id'),'dokument');
-		}
-
+	
+		//create folder comntent
+		createTempFolder($folder_id, $tmp_full_path, $perm_check, $size_check);
+	
 		//zip stuff
 		create_zip_from_directory($tmp_full_path, $tmp_full_path);
 		rmdirr($tmp_full_path);
 		@rename($tmp_full_path .".zip" , $tmp_full_path);
 	}
-	return $zip_file_id;
-}
-
-function createFolderZip ($folder_id) {
-	global $TMP_PATH, $ZIP_PATH;
-	$zip_file_id = false;
-
-	$zip_file_id = md5(uniqid("jabba",1));
-
-	//create temporary Folder
-	$tmp_full_path = "$TMP_PATH/$zip_file_id";
-	mkdir($tmp_full_path,0700);
-
-	//create folder comntent
-	createTempFolder($folder_id, $tmp_full_path);
-
-	//zip stuff
-	create_zip_from_directory($tmp_full_path, $tmp_full_path);
-	rmdirr($tmp_full_path);
-	@rename($tmp_full_path .".zip" , $tmp_full_path);
 	return $zip_file_id;
 }
 
@@ -323,6 +338,18 @@ function doc_count ($parent_id) {
 	return $db->Record[0];
 }
 
+function doc_sum_filesize ($parent_id) {
+	global $SessionSeminar, $user;
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
+	$db=new DB_Seminar;
+	$arr = $folder_tree->getReadableKidsKids($parent_id,$user->id);
+	if($folder_tree->isReadable($parent_id,$user->id) && $folder_tree->isExecutable($parent_id,$user->id)) $arr[] = $parent_id;
+	if (!(is_array($arr) && count($arr))) return 0;
+	$in="('".join("','",$arr)."')";
+	$db->query ("SELECT sum(filesize) FROM dokumente WHERE url='' AND range_id IN $in");
+	$db->next_record();
+	return $db->Record[0];
+}
 
 function doc_newest ($parent_id) {
 	global $SessionSeminar, $user;

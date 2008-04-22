@@ -40,24 +40,36 @@ $db2=new DB_Seminar;
 $folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $SessionSeminar));
 
 if ($folderzip) {
-	$zip_file_id = createFolderZip($folderzip);
-	$query = sprintf ('SELECT name FROM folder WHERE folder_id = "%s" ', $folderzip);
-	$db->query($query);
-	$db->next_record();
-	$zip_name = prepareFilename(_("Dateiordner").'_'.$db->f('name').'.zip');
-	header('Location: ' . getDownloadLink( $zip_file_id, $zip_name, 4));
-	page_close();
-	die;
-}
-
-if ($download_selected_x) {
-	if (is_array($download_ids)) {
-		$zip_file_id = createSelectedZip($download_ids);
-		$zip_name = prepareFilename($SessSemName[0].'-'._("Dokumente").'.zip');
+	$zip_file_id = createFolderZip($folderzip, true, true);
+	if($zip_file_id){
+		$query = sprintf ('SELECT name FROM folder WHERE folder_id = "%s" ', $folderzip);
+		$db->query($query);
+		$db->next_record();
+		$zip_name = prepareFilename(_("Dateiordner").'_'.$db->f('name').'.zip');
 		header('Location: ' . getDownloadLink( $zip_file_id, $zip_name, 4));
 		page_close();
 		die;
 	}
+}
+
+if ($download_selected_x) {
+	if (is_array($download_ids)) {
+		$zip_file_id = createSelectedZip($download_ids, true, true);
+		if($zip_file_id){
+			$zip_name = prepareFilename($SessSemName[0].'-'._("Dokumente").'.zip');
+			header('Location: ' . getDownloadLink( $zip_file_id, $zip_name, 4));
+			page_close();
+			die;
+		}
+	}
+}
+
+if($zip_file_id === false){
+	$msg = 'error§' 
+	. sprintf(_("Der Zip Download ist fehlgeschlagen. Bitte beachten Sie das Limit von maximal %s Dateien und die maximale Größe der zu zippenden Dateien von %s MB."),
+	(int)Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_FILES'),
+	(int)Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_SIZE') )
+	. '§';
 }
 
 //Switch fuer die Ansichten
