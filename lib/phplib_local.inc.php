@@ -40,10 +40,24 @@ foreach($_never_globalize_request_params as $one_param){
 	}
 }
 
-// set default exception handler
-set_exception_handler(create_function('$exception',
-	'error_log($exception->__toString()); include "templates/unhandled_exception.php"; exit;'));
+// set assets url
+require_once('lib/classes/Assets.class.php');
+Assets::set_assets_url($GLOBALS['ASSETS_URL']);
 
+// globale template factory anlegen
+require_once 'vendor/flexi/flexi.php';
+$GLOBALS['template_factory'] =
+	new Flexi_TemplateFactory($STUDIP_BASE_PATH . '/templates');
+
+// set default exception handler
+function studip_default_exception_handler($exception) {
+	error_log($exception->__toString());
+	echo $GLOBALS['template_factory']->render('unhandled_exception',
+	                                          compact('exception'));
+	exit;
+}
+set_exception_handler('studip_default_exception_handler');
+throw new Exception("hallo");
 // set default pdo connection
 require_once('lib/classes/DBManager.class.php');
 DBManager::getInstance()
@@ -53,10 +67,6 @@ DBManager::getInstance()
                   $GLOBALS['DB_STUDIP_USER'],
                   $GLOBALS['DB_STUDIP_PASSWORD']);
 
-// set assets url
-require_once('lib/classes/Assets.class.php');
-Assets::set_assets_url($GLOBALS['ASSETS_URL']);
-
 require_once('lib/language.inc.php');
 require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
 require_once('lib/language.inc.php');
@@ -65,11 +75,6 @@ require_once('lib/classes/Config.class.php');
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/classes/StudipNews.class.php');
 require_once('lib/classes/caching.php');
-
-// globale template factory anlegen
-require_once 'vendor/flexi/flexi.php';
-$GLOBALS['template_factory'] = new Flexi_TemplateFactory($STUDIP_BASE_PATH . '/templates');
-
 
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";

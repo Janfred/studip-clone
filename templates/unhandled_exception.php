@@ -1,16 +1,27 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-  <head>
-    <meta http-equiv="Content-type" content="text/html; charset=iso-8859-1" />
-    <title>Stud.IP Fehler</title>
+<? require_once 'lib/visual.inc.php'; ?>
+<? include 'lib/include/html_head.inc.php'; ?>
 
-    <style type="text/css" media="screen">
-    /* <![CDATA[ */
-    /* ]]> */
-    </style>
+<?
+$current_page = _("Fehler");
+$home = array(
+  'text'  => _("Start"),
+  'link'  => 'index.php',
+  'info'  => _("Zur Startseite"),
+  'image' => "home",
+  'accesskey' => false);
+?>
 
-  </head>
-  <body>
-    <h1>Fehler: <?= htmlentities($exception->getMessage()) ?></h1>
-  </body>
-</html>
+<?= $this->render_partial('header', compact('current_page', 'home')) ?>
+
+<div style="background-color: white; width: 70%; padding: 1em; margin: auto;">
+    <h1>
+      <?= Assets::img('x.gif') ?>
+      <?= _("Fehler:") ?> <?= htmlentities($exception->getMessage()) ?>
+    </h1>
+    <p>
+      <?= _("Zurück zur") ?> <a href="index.php"><?= _("Startseite") ?></a>
+    </p>
+</div>
+
+
+<? include 'lib/include/html_end.inc.php'; ?>
