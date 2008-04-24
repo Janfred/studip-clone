@@ -479,7 +479,7 @@ if (Seminar_Session::check_ticket($studipticket)){
 
 			//Warteliste neu sortieren
 			renumber_admission($id);
-
+			
 			if($admission_user){
 				if ($cmd=="add_user") {
 					$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung mit dem Status <b>%s</b> eingetragen."), htmlReady($fullname), $status) . "§";
@@ -955,6 +955,8 @@ while (list ($key, $val) = each ($gruppe)) {
 		$tutor_count = 0;
 	// die eigentliche Teil-Tabelle
 	if($key != 'dozent') echo "<form name=\"$key\" action=\"$PHP_SELF?studipticket=$studipticket\" method=\"post\">";
+	if ($key == 'accepted') echo '<input type="hidden" name="accepted" value="1">';
+	
 	if($rechte && $key == 'autor' 	&& $sem->isAdmissionEnabled()){
 		echo '<tr><td class="blank" colspan="'.$colspan.'" align="right"><font size="-1">';
 		printf(_("<b>Teilnahmebeschränkte Veranstaltung</b> -  Teilnehmerkontingent: %s, davon belegt: %s, zusätzlich belegt: %s"),
@@ -1071,8 +1073,7 @@ while (list ($key, $val) = each ($gruppe)) {
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"admission_insert\" onClick=\"return invert_selection('admission_insert','%s');\" %s><b>%s</b></a></font></td>",  $width, $key, $tooltip,  _("Akzeptieren"));
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"admission_delete\" onClick=\"return invert_selection('admission_delete','%s');\" %s><b>%s</b></a></font></td>",  $width, $key, $tooltip, _("BenutzerIn entfernen"));
 			if ($sem->isAdmissionEnabled())
-				print"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
-
+				printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Kontingent"));
 		}
 	}
 
@@ -1271,7 +1272,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		}
 
 		if ($sem->isAdmissionEnabled()) {
-			if ($key == "autor" || $key == "user")
+			if ($key == "autor" || $key == "user" || $key == "accepted")
 				printf ("<td width=\"80%%\" align=\"center\" class=\"%s\"><font size=-1>%s%s</font></td>", $class, ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"), (!$db->f("name") && !$db->f("studiengang_id") == "all") ?  "&nbsp; ": "");
 			else
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp;</td>", $class);
