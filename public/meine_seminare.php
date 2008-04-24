@@ -272,7 +272,7 @@ if ($cmd=="kill_admission") {
 }
 
 //bei Bedarf aus seminar_user austragen
-if ($cmd=="inst_kill") {
+if ($cmd=="inst_kill" && $GLOBALS['ALLOW_SELFASSIGN_STUDYCOURSE']) {
 	$db->query("DELETE FROM user_inst WHERE user_id='$user->id' AND Institut_id='$auswahl'");
 	if ($db->affected_rows() == 0)
 		$meldung="error§" . _("Datenbankfehler!");
@@ -652,7 +652,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 if ( !$perm->have_perm("root")) {
 
 	if (!$num_my_inst)
-		if ($perm->have_perm("dozent"))
+		if (!$GLOBALS['ALLOW_SELFASSIGN_STUDYCOURSE'] || $perm->have_perm("dozent"))
 			$meldung = "info§" . sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"impressum.php?view=ansprechpartner\">", "</a>") . "§";
 		else
 			$meldung = "info§" . sprintf(_("Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen zuzuordnen, nutzen Sie bitte die entsprechende %sOption%s unter \"universit&auml;re Daten\" auf Ihrer pers&ouml;nlichen Einstellungsseite."), "<a href=\"edit_about.php?view=Karriere#einrichtungen\">", "</a>") . "§";
@@ -725,10 +725,11 @@ if ( !$perm->have_perm("root")) {
 				}
 
 				// delete Entry from List:
-				if (($values["status"]=="dozent") || ($values["status"]=="tutor") || ($values["status"]=="admin") || ($values["status"]=="autor"))
-				echo "<td class=\"".$cssSw->getClass()."\" align=center><img width=\"19\" height=\"17\" src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" />&nbsp;</td>";
-				else
-				printf("<td class=\"".$cssSw->getClass()."\" align=center align=center><a href=\"$PHP_SELF?auswahl=%s&cmd=inst_kill\"><img src=\"".$GLOBALS['ASSETS_URL']."images/logout_seminare.gif\" ".tooltip(_("aus der Einrichtung austragen"))." border=\"0\">&nbsp;</a></td>", $instid);
+				if ($GLOBALS['ALLOW_SELFASSIGN_STUDYCOURSE'] && ($values['status'] == 'user')) {
+					printf('<td class="'.$cssSw->getClass().'" align=center align=center><a href="' .$_SERVER['PHP_SELF'] .'?auswahl=%s&cmd=inst_kill"><img src="'. $GLOBALS['ASSETS_URL']. 'images/logout_seminare.gif" '. tooltip(_("aus der Einrichtung austragen")). ' border="0">&nbsp;</a></td>', $instid);
+				} else {
+					echo '<td class="'.$cssSw->getClass().'" align=center><img width="19" height="17" src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" />&nbsp;</td>';
+				}
 				echo "</tr>\n";
 			}
 		}
