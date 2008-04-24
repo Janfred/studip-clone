@@ -65,7 +65,7 @@ function banner_show() {
 		print '</td></tr></table>';
 
 		// update view counter
-		$q = 'UPDATE banner_ads SET views=views+1 WHERE ad_id="' . $ad_id . '"';
+		$q = "UPDATE banner_ads SET views=views+1 WHERE ad_id='" . $ad_id . "'";
 		$db->query($q);
 	}
 

@@ -163,14 +163,14 @@ function check_data(&$banner_data) {
 			 if (!eregi('^(https?)|(ftp)://', $banner_data['target'])) $msg .= "error§" . _("Das Verweisziel muss eine gültige URL sein (incl. http://).") . "§";
 			break;
 		case 'inst':
-			$q = 'SELECT * FROM Institute WHERE Institut_id="' . $banner_data["target"] . '"';
+			$q = "SELECT * FROM Institute WHERE Institut_id='" . $banner_data['target'] . "'";
 			$db->query($q);
 			if (!$db->next_record()) {
 				$msg .= "error§" . _("Die angegebene Einrichtung existiert nicht. Bitte geben Sie eine gültige Einrichtungs-ID ein.") .'§';
 			}
 			break;
 		case 'user':
-			$q = 'SELECT * FROM auth_user_md5 WHERE username="' . $banner_data["target"] . '"';
+			$q = "SELECT * FROM auth_user_md5 WHERE username='" . $banner_data['target'] . "'";
 			$db->query($q);
 			if (!$db->next_record()) {
 				$msg .= "error§" . _("Der angegebene Benutzername existiert nicht.") ."§";

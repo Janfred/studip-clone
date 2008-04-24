@@ -234,10 +234,10 @@ class smiley {
 		foreach($smiley_tab as $smiley_name => $smile ) {
 			if(!$smile['id']) { // new smiley
 				if ($sql_smile_insert != '') $sql_smile_insert .= ',';
-				$sql_smile_insert .= '("'.$smiley_name.'", '.$smile['width'].', '. $smile['height'].', "'. $smile['short'].'", '.$smile['count'].', '.$smile['scount'].', '.$smile['fcount'].', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )';
+				$sql_smile_insert .= "('".$smiley_name."', ".$smile['width'].', '. $smile['height'].', "'. $smile['short'].'", '.$smile['count'].', '.$smile['scount'].', '.$smile['fcount'].', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )';
 				$c_insert++;
 			} elseif($smile['update'] == 1) { // new data for smiley
-				$sql_smile = 'UPDATE smiley SET short_name="'.$smile['short'].'", smiley_width='.$smile['width'].', smiley_height='.$smile['height'].', chdate=UNIX_TIMESTAMP() WHERE smiley_id='.$smile['id'];
+				$sql_smile = "UPDATE smiley SET short_name='".$smile['short']."', smiley_width=".$smile['width'].', smiley_height='.$smile['height'].', chdate=UNIX_TIMESTAMP() WHERE smiley_id='.$smile['id'];
 				$dbsmile->query($sql_smile);
 				$c_update++;
 			} elseif($smile['delete'] == 1) { // smiley is erased...
@@ -283,7 +283,7 @@ class smiley {
 		$newfile = $GLOBALS['DYNAMIC_CONTENT_PATH'] . '/smile/' . $img_name;
 
 		$smiley_id = 0;
-		$this->db->query('SELECT smiley_id FROM smiley WHERE smiley_name LIKE "'.$smiley_name.'"');
+		$this->db->query("SELECT smiley_id FROM smiley WHERE smiley_name LIKE '".$smiley_name."'");
 		if ($this->db->next_record()){
 			$smiley_id = $this->db->f('smiley_id');
 			if (!isset($_POST['replace'])){
@@ -298,12 +298,12 @@ class smiley {
 		} elseif($smiley_id) {
 			$this->msg .= 'msg§' .sprintf( _("Die Bilddatei \"%s\" wurde erfolgreich ersetzt."), $img_name). '§';
 			$img = getImageSize($newfile);
-			$sql_smile = 'UPDATE smiley SET smiley_name="'.$smiley_name.'", smiley_width='.$img[0].' , smiley_height='.$img[1].', chdate=UNIX_TIMESTAMP() WHERE smiley_id = '.$smiley_id;
+			$sql_smile = "UPDATE smiley SET smiley_name='".$smiley_name."', smiley_width=".$img[0].' , smiley_height='.$img[1].', chdate=UNIX_TIMESTAMP() WHERE smiley_id = '.$smiley_id;
 		} else {
 			$this->msg .= 'msg§' .sprintf( _("Die Bilddatei \"%s\" wurde erfolgreich hochgeladen."), $img_name). '§';
 			$img = getImageSize($newfile);
 			$sql_smile = 'INSERT INTO smiley (smiley_name, smiley_width, smiley_height, short_name, smiley_counter, short_counter, fav_counter, mkdate, chdate) VALUES ';
-			$sql_smile .= '("'.$smiley_name.'", '.$img[0].', '. $img[1].', "", 0, 0, 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )';
+			$sql_smile .= "('".$smiley_name."', ".$img[0].', '. $img[1].', "", 0, 0, 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )';
 		}
 		chmod($newfile, 0666 & ~umask());       // set permissions for uploaded file
 		$this->db->query($sql_smile);
@@ -337,12 +337,12 @@ class smiley {
 		} elseif ($this->fc == 'used') {
 			$this->where = 'WHERE smiley_counter > 0 OR short_counter > 0 ORDER BY smiley_counter+short_counter DESC, smiley_name ASC';
 		} elseif ($this->fc == 'none') {
-			$this->where = ' WHERE smiley_counter=0 AND short_counter=0 ORDER BY smiley_name';
+			$this->where = 'WHERE smiley_counter=0 AND short_counter=0 ORDER BY smiley_name';
 		} elseif ($this->fc == 'short') {
-			$this->where = ' WHERE short_name != "" ORDER BY smiley_name';
+			$this->where = "WHERE short_name != '' ORDER BY smiley_name";
 		} else {
 			$this->fc = $this->fc{0};
-			$this->where = 'WHERE smiley_name LIKE "'.$this->fc.'%" ORDER BY smiley_name';
+			$this->where = "WHERE smiley_name LIKE '".$this->fc."%' ORDER BY smiley_name";
 		}
 		echo '<table width="80%"><tr><td valign=top>';
 
@@ -447,11 +447,11 @@ class smiley {
 				$this->where = 'WHERE smiley_counter > 0 OR short_counter > 0 ORDER BY smiley_counter+short_counter DESC, smiley_name ASC LIMIT 20';
 				break;
 			case 'short':
-				$this->where = ' WHERE short_name != "" ORDER BY smiley_name';
+				$this->where = "WHERE short_name != '' ORDER BY smiley_name";
 				break;
 			default:
 				$this->fc = $this->fc{0};
-				$this->where = 'WHERE smiley_name LIKE "'.$this->fc.'%" ORDER BY smiley_name';
+				$this->where = "WHERE smiley_name LIKE '".$this->fc."%' ORDER BY smiley_name";
 		}
 
 		echo '<table align="center"><tr><td class="smiley_th">',$txt,'</td>';
@@ -527,13 +527,13 @@ class smiley {
 			preg_match('/(short|rename)_(.*)/', $key, $matches);
 			if ($matches[1] == 'rename') {
 				if ($matches[2] != $val) {
-					$this->db->query('SELECT COUNT(smiley_id) AS c FROM smiley WHERE smiley_name LIKE "'.urldecode($val).'"');
+					$this->db->query("SELECT COUNT(smiley_id) AS c FROM smiley WHERE smiley_name LIKE '".urldecode($val)."'");
 					$this->db->next_record();
 					if ($this->db->f('c') > 0) {
 						$this->msg .= 'error§' . sprintf( _("Es existiert bereits eine Datei mit dem Namen \"%s\"."),  urldecode($val). '.gif'). '§';
 					} else {
 						if ( rename($path.urldecode($matches[2]).'.gif', $path.urldecode($val).'.gif')) {
-							$sql_smile = 'UPDATE smiley SET smiley_name="'.urldecode($val).'", chdate=UNIX_TIMESTAMP() WHERE smiley_name = "'.urldecode($matches[2]).'"';
+							$sql_smile = "UPDATE smiley SET smiley_name='".urldecode($val)."', chdate=UNIX_TIMESTAMP() WHERE smiley_name = '".urldecode($matches[2])."'";
 							$this->db->query($sql_smile);
 							$count++;
 						} else {
@@ -653,7 +653,7 @@ class smiley {
 			$img = (isset($_GET['img']))? intval($_GET['img']):0;
 			foreach($this->my_smiley as $smile=>$value)
 				if ($value['id'] != $img) $sm_list = ($sm_list)? $sm_list.','.$value['id']:$value['id'];
-			$this->db->query('UPDATE user_info SET smiley_favorite="'.$sm_list.'" WHERE user_id = "'.$this->user_id.'"');
+			$this->db->query("UPDATE user_info SET smiley_favorite='".$sm_list."' WHERE user_id = '".$this->user_id."'");
 		} else return false;
 		return true;
 	}
@@ -671,7 +671,7 @@ class smiley {
 				$c--;
 			}
 			if ($add && $c > 0 && $img > 0) $sm_list = ($sm_list)? $sm_list.','.$img:$img;
-			$this->db->query('UPDATE user_info SET smiley_favorite="'.$sm_list.'" WHERE user_id = "'.$this->user_id.'"');
+			$this->db->query("UPDATE user_info SET smiley_favorite='".$sm_list."' WHERE user_id = '".$this->user_id."'");
 		} else return false;
 		return true;
 	}

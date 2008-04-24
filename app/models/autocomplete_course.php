@@ -56,15 +56,15 @@ function autocomplete_course_get_courses_by_id($ids) {
      'seminare.VeranstaltungsNummer, '.
      'seminare.Beschreibung, '.
      'seminare.start_time, '.
-     'GROUP_CONCAT(CONCAT(auth_user_md5.Vorname, " ", auth_user_md5.Nachname) '.
-     'ORDER BY auth_user_md5.Nachname SEPARATOR ", ") AS lecturer '.
+     "GROUP_CONCAT(CONCAT(auth_user_md5.Vorname, ' ', auth_user_md5.Nachname) ".
+     "ORDER BY auth_user_md5.Nachname SEPARATOR ', ') AS lecturer ".
      'FROM seminare '.
      'LEFT JOIN seminar_user '.
      'ON (seminare.seminar_id = seminar_user.seminar_id) '.
      'LEFT JOIN auth_user_md5 '.
      'ON (seminar_user.user_id = auth_user_md5.user_id) '.
-     'WHERE seminare.seminar_id IN ("'.join('","', $ids).'") '.
-     'AND seminar_user.status = "dozent" '.
+     "WHERE seminare.seminar_id IN ('".join("','", $ids)."') ".
+     "AND seminar_user.status = 'dozent' ".
      'GROUP BY seminare.seminar_id')
      ->fetchAll();
 }

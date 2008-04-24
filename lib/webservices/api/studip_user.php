@@ -118,7 +118,7 @@ class Studip_User {
     $result = NULL;
   
     $db = new DB_Seminar;
-    $db->queryf('SELECT * FROM auth_user_md5 WHERE username = "%s"',
+    $db->queryf("SELECT * FROM auth_user_md5 WHERE username = '%s'",
                 $user_name);
      
     if ($db->next_record()) {
@@ -144,7 +144,7 @@ class Studip_User {
     $result = NULL;
   
     $db = new DB_Seminar;
-    $db->queryf('SELECT * FROM auth_user_md5 WHERE user_id = "%s"',
+    $db->queryf("SELECT * FROM auth_user_md5 WHERE user_id = '%s'",
                 $user_id);
      
     if ($db->next_record()) {
@@ -170,7 +170,7 @@ class Studip_User {
     $result = NULL;
   
     $db = new DB_Seminar;
-    $db->queryf('SELECT username FROM auth_user_md5 WHERE perms = "%s"',
+    $db->queryf("SELECT username FROM auth_user_md5 WHERE perms = '%s'",
                 $status);
     $userlist = array();
     while ($db->next_record()) {

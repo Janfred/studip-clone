@@ -42,7 +42,7 @@ $folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id'
 if ($folderzip) {
 	$zip_file_id = createFolderZip($folderzip, true, true);
 	if($zip_file_id){
-		$query = sprintf ('SELECT name FROM folder WHERE folder_id = "%s" ', $folderzip);
+		$query = sprintf ("SELECT name FROM folder WHERE folder_id = '%s'", $folderzip);
 		$db->query($query);
 		$db->next_record();
 		$zip_name = prepareFilename(_("Dateiordner").'_'.$db->f('name').'.zip');

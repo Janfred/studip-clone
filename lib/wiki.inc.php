@@ -1061,7 +1061,7 @@ function printAllWikiPages($range_id, $header) {
 function getAllWikiPages($range_id, $header, $fullhtml=TRUE) {
 	global $SessSemName;
 	$db = new DB_Seminar();
-	$q = 'SELECT DISTINCT keyword FROM wiki WHERE range_id="' . $SessSemName[1] . '"  ORDER BY keyword DESC';
+	$q = "SELECT DISTINCT keyword FROM wiki WHERE range_id='" . $SessSemName[1] . "' ORDER BY keyword DESC";
 	$db->query($q);
 	while($db->next_record()){
 		$allpages[] = htmlReady($db->f('keyword'));

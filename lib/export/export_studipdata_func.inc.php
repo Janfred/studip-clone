@@ -93,7 +93,7 @@ function export_range($range_id)
 	$db2=new DB_Seminar;
 
 //    Ist die Range-ID eine Einrichtungs-ID?
-	$db->query('SELECT * FROM Institute WHERE Institut_id = "' . $range_id . '"');
+	$db->query("SELECT * FROM Institute WHERE Institut_id = '" . $range_id . "'");
 	if (($db->next_record()) And ($db->f("Name") != ""))
 	{
 		$range_name = $db->f("Name");
@@ -104,7 +104,7 @@ function export_range($range_id)
 	}
 
 //	Ist die Range-ID eine Fakultaets-ID? Dann auch untergeordnete Institute exportieren!
-	$db2->query('SELECT * FROM Institute WHERE fakultaets_id = "' . $range_id . '" ');
+	$db2->query("SELECT * FROM Institute WHERE fakultaets_id = '" . $range_id . "' ");
 	while ($db2->next_record())
 		if (($db2->f("Name") != "") And ($db2->f("Institut_id") != $range_id))
 		{
@@ -113,7 +113,7 @@ function export_range($range_id)
 		}
 
 //    Ist die Range-ID eine Seminar-ID?
-	$db->query('SELECT * FROM seminare WHERE Seminar_id = "' . $range_id . '"');
+	$db->query("SELECT * FROM seminare WHERE Seminar_id = '" . $range_id . "'");
 	if (($db->next_record()) And ($db->f("Name") != ""))
 	{
 		$range_name = $db->f("Name");
@@ -186,7 +186,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 
 	$db=new DB_Seminar;
 
-	$db->query('SELECT * FROM Institute WHERE Institut_id = "' . $inst_id . '"');
+	$db->query("SELECT * FROM Institute WHERE Institut_id = '" . $inst_id . "'");
 	$db->next_record();
 	$data_object .= xml_open_tag($xml_groupnames_inst["object"], $db->f("Institut_id"));
 	while ( list($key, $val) = each($xml_names_inst))
@@ -198,7 +198,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 			$data_object .= xml_tag($val, $db->f($key));
 	}
 	reset($xml_names_inst);
-	$db->query('SELECT Name FROM Institute WHERE Institut_id = "' . $db->f("fakultaets_id") . '" AND fakultaets_id = "' . $db->f("fakultaets_id") . '"');
+	$db->query("SELECT Name FROM Institute WHERE Institut_id = '" . $db->f('fakultaets_id') . "' AND fakultaets_id = '" . $db->f('fakultaets_id') . "'");
 	$db->next_record();
 	{
 		if ($db->f("Name") != "")
@@ -287,10 +287,10 @@ function export_sem($inst_id, $ex_sem_id = "all")
 
 	if (!$GLOBALS['perm']->have_perm('root')) $addquery .= " AND visible=1 ";
 
-	$db->query('SELECT * FROM seminar_inst
+	$db->query("SELECT * FROM seminar_inst
 				LEFT JOIN seminare USING (Seminar_id)
-				WHERE seminar_inst.Institut_id = "' . $inst_id . '" ' . $addquery . '
-				ORDER BY ' . $order);
+				WHERE seminar_inst.Institut_id = '" . $inst_id . "' " . $addquery . "
+				ORDER BY " . $order);
 
 	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
 
@@ -363,10 +363,10 @@ function export_sem($inst_id, $ex_sem_id = "all")
 				elseif ($db->f($key) != "")
 					$data_object .= xml_tag($val, $db->f($key));
 			}
-			$db2->query('SELECT seminar_user.position, auth_user_md5.user_id,auth_user_md5.username, auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title_front, user_info.title_rear FROM seminar_user
+			$db2->query("SELECT seminar_user.position, auth_user_md5.user_id,auth_user_md5.username, auth_user_md5.Vorname, auth_user_md5.Nachname, user_info.title_front, user_info.title_rear FROM seminar_user
 						LEFT JOIN user_info USING(user_id)
 						LEFT JOIN auth_user_md5 USING(user_id)
-						WHERE (seminar_user.status = "dozent") AND (seminar_user.Seminar_id = "' . $db->f("seminar_id") . '") ORDER BY seminar_user.position ');
+						WHERE (seminar_user.status = 'dozent') AND (seminar_user.Seminar_id = '" . $db->f('seminar_id') . "') ORDER BY seminar_user.position ");
 			$data_object .= "<" . $xml_groupnames_lecture["childgroup2"] . ">\n";
 			while ($db2->next_record())
 				{
@@ -605,16 +605,16 @@ function export_pers($inst_id)
 
 	$data_object = xml_open_tag( $xml_groupnames_person["group"] );
 
-	$db->query('SELECT statusgruppen.name,aum.user_id,
+	$db->query("SELECT statusgruppen.name,aum.user_id,
 		aum.Nachname, aum.Vorname, ui.inst_perms, ui.raum,
 		ui.sprechzeiten, ui.Telefon, ui.Fax, aum.Email,
 		aum.username, info.Home, info.geschlecht, info.title_front, info.title_rear FROM statusgruppen
 		LEFT JOIN statusgruppe_user sgu USING(statusgruppe_id)
-		LEFT JOIN user_inst ui ON (ui.user_id = sgu.user_id AND ui.Institut_id = range_id AND ui.inst_perms!="user")
+		LEFT JOIN user_inst ui ON (ui.user_id = sgu.user_id AND ui.Institut_id = range_id AND ui.inst_perms!='user')
 		LEFT JOIN auth_user_md5 aum ON (ui.user_id = aum.user_id)
 		LEFT JOIN user_info info ON (ui.user_id = info.user_id)
-		WHERE range_id = "' . $inst_id . ' "
-		ORDER BY ' . $order);
+		WHERE range_id = '" . $inst_id . "'
+		ORDER BY " . $order);
 
 	$data_found = false;
 

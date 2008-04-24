@@ -74,7 +74,7 @@
 
         $q_string  = "SELECT COUNT(news_range.news_id) AS num_news ";
         $q_string .= "FROM news_range LEFT JOIN news USING (news_id) ";
-        $q_string .= "WHERE news_range.range_id=\"studip\" ";
+        $q_string .= "WHERE news_range.range_id='studip' ";
         $q_string .= "AND date < $current_time AND (date + expire) > $current_time ";
 
         $db-> query("$q_string");
@@ -85,7 +85,7 @@
         if ($num_news > 0)
         {
             $q_string  = "SELECT * FROM news_range LEFT JOIN news USING (news_id) ";
-            $q_string .= "WHERE news_range.range_id=\"studip\" ";
+            $q_string .= "WHERE news_range.range_id='studip' ";
             $q_string .= "AND date < $current_time AND (date + expire) > $current_time ";
             $q_string .= "ORDER BY date DESC ";
             $q_string .= "LIMIT $progress_counter, " . NEWS_PER_PAGE;

@@ -110,17 +110,17 @@ if (!$session_expired)
 			$q_string .= "WHERE ";
 	
 			if ($last_name_type == "part")
-				$q_string .= "Nachname LIKE \"%$last_name%\" ";
+				$q_string .= "Nachname LIKE '%$last_name%' ";
 			elseif ($last_name_type == "full")
-				$q_string .= "Nachname = \"$last_name\" ";
+				$q_string .= "Nachname = '$last_name' ";
 	
 			if ($last_name_type && $first_name_type)
 				$q_string .= "AND ";
 	
 			if ($first_name_type == "part")
-				$q_string .= "Vorname LIKE \"%$first_name%\" ";
+				$q_string .= "Vorname LIKE '%$first_name%' ";
 			elseif ($first_name_type == "full")
-				$q_string .= "Vorname = \"$first_name\" ";
+				$q_string .= "Vorname = '$first_name' ";
 	
 			$q_string .= "AND perms NOT IN ('root', 'admin')";
 		}
@@ -131,17 +131,17 @@ if (!$session_expired)
 			$q_string .= "WHERE ";
 	
 			if ($last_name_type == "part")
-				$q_string .= "auth_user_md5.Nachname LIKE \"%$last_name%\" ";
+				$q_string .= "auth_user_md5.Nachname LIKE '%$last_name%' ";
 			elseif ($last_name_type == "full")
-				$q_string .= "auth_user_md5.Nachname = \"$last_name\" ";
+				$q_string .= "auth_user_md5.Nachname = '$last_name' ";
 	
 			if ($last_name_type && $first_name_type)
 				$q_string .= "AND ";
 	
 			if ($first_name_type == "part")
-				$q_string .= "auth_user_md5.Vorname LIKE \"%$first_name%\" ";
+				$q_string .= "auth_user_md5.Vorname LIKE '%$first_name%' ";
 			elseif ($first_name_type == "full")
-				$q_string .= "auth_user_md5.Vorname = \"$first_name\" ";
+				$q_string .= "auth_user_md5.Vorname = '$first_name' ";
 	
 			$q_string .= "AND auth_user_md5.perms NOT IN ('root', 'admin') " ;
 			$q_string .= "AND user_inst.inst_perms IN ('autor', 'tutor', 'dozent')";
@@ -160,17 +160,17 @@ if (!$session_expired)
 					$q_string .= "WHERE ";
 	
 					if ($last_name_type == "part")
-					$q_string .= "Nachname LIKE \"%$last_name%\" ";
+					$q_string .= "Nachname LIKE '%$last_name%' ";
 				elseif ($last_name_type == "full")
-					$q_string .= "Nachname = \"$last_name\" ";
+					$q_string .= "Nachname = '$last_name' ";
 	
 					if ($last_name_type && $first_name_type)
 					$q_string .= "AND ";
 	
 					if ($first_name_type == "part")
-					$q_string .= "Vorname LIKE \"%$first_name%\" ";
+					$q_string .= "Vorname LIKE '%$first_name%' ";
 					elseif ($first_name_type == "full")
-					$q_string .= "Vorname = \"$first_name\" ";
+					$q_string .= "Vorname = '$first_name' ";
 	
 				$q_string .= "AND perms NOT IN ('root', 'admin') ";
 				$q_string .= "ORDER BY Nachname ";
@@ -185,17 +185,17 @@ if (!$session_expired)
 					$q_string .= "WHERE ";
 	
 					if ($last_name_type == "part")
-					$q_string .= "auth_user_md5.Nachname LIKE \"%$last_name%\" ";
+					$q_string .= "auth_user_md5.Nachname LIKE '%$last_name%' ";
 				elseif ($last_name_type == "full")
-					$q_string .= "auth_user_md5.Nachname = \"$last_name\" ";
+					$q_string .= "auth_user_md5.Nachname = '$last_name' ";
 	
 					if ($last_name_type && $first_name_type)
 					$q_string .= "AND ";
 	
 					if ($first_name_type == "part")
-					$q_string .= "auth_user_md5.Vorname LIKE \"%$first_name%\" ";
+					$q_string .= "auth_user_md5.Vorname LIKE '%$first_name%' ";
 					elseif ($first_name_type == "full")
-					$q_string .= "auth_user_md5.Vorname = \"$first_name\" ";
+					$q_string .= "auth_user_md5.Vorname = '$first_name' ";
 	
 				$q_string .= "AND auth_user_md5.perms NOT IN ('root', 'admin') ";
 				$q_string .= "AND user_inst.inst_perms IN ('autor', 'tutor', 'dozent')";
