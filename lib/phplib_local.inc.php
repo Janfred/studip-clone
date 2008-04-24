@@ -57,7 +57,7 @@ function studip_default_exception_handler($exception) {
 	exit;
 }
 set_exception_handler('studip_default_exception_handler');
-throw new Exception("hallo");
+
 // set default pdo connection
 require_once('lib/classes/DBManager.class.php');
 DBManager::getInstance()
