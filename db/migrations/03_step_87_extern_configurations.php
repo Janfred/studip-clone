@@ -14,7 +14,6 @@ class Step87ExternConfigurations extends DBMigration {
 	}
 
 	function up () {
-		set_time_limit(0);
 		$this->db->query("
 			ALTER TABLE `extern_config` ADD `config` MEDIUMTEXT NOT NULL AFTER `is_standard`
 		");

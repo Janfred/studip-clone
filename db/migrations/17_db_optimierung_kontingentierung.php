@@ -6,7 +6,6 @@ class DbOptimierungKontingentierung extends DBMigration {
 	}
 
 	function up () {
-		set_time_limit(0);
 		$this->announce("add keys...");
 		$this->db->query("ALTER TABLE `admission_seminar_studiengang` ADD INDEX `studiengang_id` ( `studiengang_id` )");
 		$this->db->query("ALTER TABLE `admission_seminar_user` ADD INDEX `seminar_id` ( `seminar_id`, `studiengang_id`, `status` )");

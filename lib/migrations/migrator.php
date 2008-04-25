@@ -405,7 +405,7 @@ class Migrator {
    */
   function migration_version_and_name($migration_file) {
     $matches = array();
-    preg_match('/([0-9]+)_([_a-z0-9]*).php/', $migration_file, $matches);
+    preg_match('/\b([0-9]+)_([_a-z0-9]*)\.php$/', $migration_file, $matches);
     return array((int)$matches[1], $matches[2]);
   }
 

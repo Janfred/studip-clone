@@ -6,7 +6,6 @@ class RemoveFieldsFromExtermine extends DBMigration {
 	}
 
 	function up () {
-		set_time_limit(0);
 		$this->announce(" removing fields...");
 		
 		$this->db->query("ALTER TABLE `ex_termine` DROP `expire`, DROP `repeat`, DROP `color`, DROP `priority`");

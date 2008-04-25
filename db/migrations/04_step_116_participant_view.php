@@ -6,7 +6,6 @@ class Step116ParticipantView extends DBMigration {
 	}
 
 	function up () {
-		set_time_limit(0);
 		$this->announce(" creating table...");
 		$this->db->query("
       CREATE TABLE IF NOT EXISTS `teilnehmer_view` (
@@ -22,7 +21,6 @@ class Step116ParticipantView extends DBMigration {
 	}
 	
 	function down () {
-		set_time_limit(0);
 		$this->announce(" removing table...");
 		$this->db->query("
       DROP TABLE `teilnehmer_view` 

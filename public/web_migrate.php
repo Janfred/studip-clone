@@ -33,6 +33,7 @@ $migrator =& new Migrator($path, $version, $verbose);
 
 if (isset($_REQUEST['start']) || isset($_REQUEST['start_x']))
 {
+    set_time_limit(0);
     $migrator->migrate_to($target);
 }
 

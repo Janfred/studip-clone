@@ -6,7 +6,6 @@ class LockRules extends DBMigration {
 	}
 
 	function up () {
-		set_time_limit(0);
 		$this->announce(" creating table...");
 		
 		$this->db->query( "	
@@ -26,7 +25,6 @@ class LockRules extends DBMigration {
 	}
 	
 	function down () {
-		set_time_limit(0);
 		$this->announce(" removing table...");
 		$this->db->query("
       DROP TABLE `lock_rules` 

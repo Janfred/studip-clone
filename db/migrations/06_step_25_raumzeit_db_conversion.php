@@ -45,9 +45,6 @@ class Step25RaumzeitDbConversion extends DBMigration
         
         // data conversion code:
                 
-        // run until really everything is done...
-        set_time_limit(0); 
-        
         // we need enough memory
         ini_set( "memory_limit", "256M");
                

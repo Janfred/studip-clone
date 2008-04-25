@@ -6,7 +6,6 @@ class TableTokenClass extends DBMigration {
 	}
 
 	function up () {
-		set_time_limit(0);
 		$this->announce(" creating table...");
 		
 		$this->db->query( "	CREATE TABLE IF NOT EXISTS `user_token` (
@@ -24,7 +23,6 @@ class TableTokenClass extends DBMigration {
 	}
 	
 	function down () {
-		set_time_limit(0);
 		$this->announce(" removing table...");
 		$this->db->query("
       DROP TABLE `user_token` 
