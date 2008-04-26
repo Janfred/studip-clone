@@ -158,7 +158,7 @@ class PluginEngine {
 	 		$link .= '?' . join('&amp;', $query_string);
 		}
 
-		return $link;
+		return URLHelper::getLink($link);
 	}
 
 	/**

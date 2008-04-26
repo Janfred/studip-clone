@@ -49,7 +49,7 @@ require_once ('lib/user_visible.inc.php');
 * you will get a line like this "Veranstaltung: Name..."
 *
 * @param		string	the id of the Veranstaltung
-* @retunr		string	the header-line
+* @return		string	the header-line
 *
 */
 
@@ -114,6 +114,7 @@ function get_object_name($range_id, $object_type){
 *	$SessSemName["header_line"]		the header-line to use on every page of the Veranstaltung<br />
 *
 * @param		string	the id of the Veranstaltung
+* @return		boolean	true if successful
 *
 */
 function openSem ($sem_id) {
@@ -140,6 +141,8 @@ function openSem ($sem_id) {
 		$SessSemName["header_line"] = getHeaderLine ($sem_id);
 		object_set_visit($sem_id, "sem");
 	}
+
+	return $db->num_rows() != 0;
 }
 
 /**
@@ -159,6 +162,7 @@ function openSem ($sem_id) {
 *	$SessSemName["header_line"]		the header-line to use on every page of the Einrichtung<br />
 *
 * @param		string	the id of the Veranstaltung
+* @return		boolean	true if successful
 *
 */
 function openInst ($inst_id) {
@@ -183,6 +187,8 @@ function openInst ($inst_id) {
 		$nr = $db->f("Institut_id");
 		object_set_visit($inst_id, "inst");
 	}
+
+	return $db->num_rows() != 0;
 }
 
 /**

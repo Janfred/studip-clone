@@ -16,9 +16,11 @@ page_open(array('sess' => 'Seminar_Session',
                 'auth' => 'Seminar_Default_Auth',
                 'perm' => 'Seminar_Perm',
                 'user' => 'Seminar_User'));
-include 'lib/seminar_open.php';
-include 'lib/functions.php';
 
+require_once 'lib/seminar_open.php';
+require_once 'lib/functions.php';
+
+URLHelper::setSeminarId();
 
 try {
 
