@@ -55,6 +55,9 @@ INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, 
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('0d3f84ed4dd6b7147b504ffb5b6fbc2c', '', 'RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW', '0', 1, 'boolean', 'global', '', 0, 12, 12, 'Enables the expert view of the course schedules', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('bc3004618b17b29dc65e10e89be9a7a0', '', 'RESOURCES_ENABLE_BOOKINGSTATUS_COLORING', '1', 1, 'boolean', 'global', '', 0, 0, 0, 'Enable the colored presentation of the room booking status of a date', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('0c81083086adc66714864b1abcff650a', '', 'EXTERNAL_IMAGE_EMBEDDING', 'deny', 1, 'string', 'global', '', 0, 0, 0, 'Sollen externe Bilder über [img] eingebunden werden? deny=nicht erlaubt, allow=erlaubt, proxy=image proxy benutzen', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('cb92d5bb08f346567dbd394d0d553454', '', 'EMAIL_DOMAIN_RESTRICTION', '', 1, 'string', 'global', '', 0, 1157107088, 1157107088, 'Beschränkt die gültigkeit von Email-Adressen bei freier Registrierung auf die angegebenen Domains. Komma-separierte Liste von Domains ohne vorangestelltes @.', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('9b313fe9ae6184b39c2545999ccce8ab', '', 'EXTERNAL_FLASH_MOVIE_EMBEDDING', 'deny', 1, 'string', 'global', '', 0, 1157107088, 1157107088, 'Sollen externe Flash-Filme mit Hilfe des [flash]-Tags der Schnellformatierung eingebunden werden? deny=nicht erlaubt, allow=erlaubt, proxy=image proxy benutzen', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('3acf297f781b0c0aefd551ec304b902d', '', 'DOCUMENTS_EMBEDD_FLASH_MOVIES', 'deny', 1, 'string', 'global', '', 0, 1157107088, 1157107088, 'Sollen im Dateibereich Flash-Filme direkt in einem Player angezeigt werden? deny=nicht erlaubt, allow=erlaubt, autoload=Film wird beim aufklappen geladen (incrementiert Downloads), autoplay=Film wird sofort abgespielt', '', '');
 
 -- 
 -- Daten für Tabelle `evalanswer`
@@ -107,8 +110,7 @@ INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, 
 -- Daten für Tabelle `semester_data`
 -- 
 
-INSERT INTO `semester_data` (`semester_id`, `name`, `description`, `semester_token`, `beginn`, `ende`, `vorles_beginn`, `vorles_ende`) VALUES ('f2b4fdf5ac59a9cb57dd73c4d3bbb651', 'WS 2007/08', '', '', 1191189600, 1207000799, 1192312800, 1203116399);
-
+INSERT INTO `semester_data` (`semester_id`, `name`, `description`, `semester_token`, `beginn`, `ende`, `vorles_beginn`, `vorles_ende`) VALUES ('f2b4fdf5ac59a9cb57dd73c4d3bbb651', 'SS 2008', '', '', 1207000800, 1222811999, 1208124000, 1215813599);
 -- 
 -- Daten für Tabelle `log_actions`
 -- 
@@ -217,4 +219,4 @@ INSERT INTO `roles_user` (`roleid`, `userid`) VALUES (7, 'nobody');
 -- Daten für Tabelle `schema_version`
 -- 
 
-INSERT INTO `schema_version` (`domain`, `version`) VALUES ('studip', 10);
+INSERT INTO `schema_version` (`domain`, `version`) VALUES ('studip', 17);

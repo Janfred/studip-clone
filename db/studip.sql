@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 2.6.4-pl4
+-- version 2.7.0-pl1
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Erstellungszeit: 28. September 2007 um 17:27
--- Server Version: 5.0.26
--- PHP-Version: 5.2.0
+-- Erstellungszeit: 28. April 2008 um 15:58
+-- Server Version: 5.0.51
+-- PHP-Version: 4.4.8-0.dotdeb.0
 -- 
 -- Datenbank: `studip`
 -- 
@@ -625,10 +625,6 @@ CREATE TABLE `ex_termine` (
   `chdate` int(20) NOT NULL default '0',
   `date_typ` tinyint(4) NOT NULL default '0',
   `topic_id` varchar(32) default NULL,
-  `expire` int(20) default NULL,
-  `repeat` varchar(128) default NULL,
-  `color` varchar(20) default NULL,
-  `priority` tinyint(4) default NULL,
   `raum` varchar(255) default NULL,
   `metadate_id` varchar(32) default NULL,
   `resource_id` varchar(32) NOT NULL default '',
@@ -782,6 +778,7 @@ CREATE TABLE `his_stg` (
 ) TYPE=MyISAM COMMENT='Studienfaecher aus der HIS DB';
 
 -- --------------------------------------------------------
+
 -- 
 -- Tabellenstruktur für Tabelle `image_proxy_cache`
 -- 
@@ -796,6 +793,8 @@ CREATE TABLE `image_proxy_cache` (
   PRIMARY KEY  (`id`),
   KEY `chdate` (`chdate`,`id`)
 ) TYPE=MyISAM;
+
+-- --------------------------------------------------------
 
 -- 
 -- Tabellenstruktur für Tabelle `kategorien`
@@ -891,6 +890,21 @@ CREATE TABLE `lit_list_content` (
   KEY `list_id` (`list_id`),
   KEY `catalog_id` (`catalog_id`),
   KEY `priority` (`priority`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `lock_rules`
+-- 
+
+DROP TABLE IF EXISTS `lock_rules`;
+CREATE TABLE `lock_rules` (
+  `lock_id` varchar(32) NOT NULL default '',
+  `name` varchar(255) NOT NULL default '',
+  `description` text NOT NULL,
+  `attributes` text NOT NULL,
+  PRIMARY KEY  (`lock_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
@@ -1702,10 +1716,12 @@ CREATE TABLE `seminare` (
   `admission_starttime` int(20) NOT NULL default '-1',
   `admission_endtime_sem` int(20) NOT NULL default '-1',
   `admission_disable_waitlist` tinyint(3) unsigned NOT NULL default '0',
+  `admission_enable_quota` tinyint(3) unsigned NOT NULL default '0',
   `visible` tinyint(2) unsigned NOT NULL default '1',
   `showscore` tinyint(3) default '0',
   `modules` int(10) unsigned default NULL,
   `aux_lock_rule` varchar(32) default NULL,
+  `lock_rule` varchar(32) default NULL,
   PRIMARY KEY  (`Seminar_id`),
   KEY `Institut_id` (`Institut_id`),
   KEY `visible` (`visible`),
@@ -2323,4 +2339,3 @@ CREATE TABLE `wiki_locks` (
   KEY `user_id` (`user_id`),
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM;
-
