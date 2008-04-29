@@ -30,6 +30,7 @@ require_once('lib/classes/SemesterData.class.php');
  */
 function getSemesters(){
 	global $user;
+	$ret = $sorter = $semester_in_db = array();
 	// creating the list of avaible semester
 	foreach (SemesterData::GetSemesterArray() as $key => $value){
 		$semestersAR[$key]["beginn"] = $value["beginn"];
@@ -41,9 +42,7 @@ function getSemesters(){
 	}
 	unset($semestersAR[0]);
 	unset($sorter[0]);
-	unset($semestersAR[1]);
-	unset($sorter[1]);
-	unset($semester_in_db[1]);
+	unset($semester_in_db[0]);
 	$i = $key + 1;
 	// adding the semester from avaible archiv-items
 	$db = &new DB_Seminar ();

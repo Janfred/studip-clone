@@ -61,14 +61,9 @@ $sess->register("template");
 /* including needed files													  *
 /*																			  *
 /* ************************************************************************* */
-// if you wanna create a pdf no html-header should be send to the browser
-if (!isset($_GET["create_pdf"])){
-	require_once('lib/include/html_head.inc.php');
-	require_once('lib/include/header.php');
-	require_once('lib/include/links_seminare.inc.php');
-	include_once($PATH_EXPORT ."/recordofstudy.lib.php");
-	include_once($PATH_EXPORT ."/recordofstudyDB.php");
-}
+
+include_once($PATH_EXPORT ."/recordofstudy.lib.php");
+include_once($PATH_EXPORT ."/recordofstudyDB.php");
 /* **END*of*initialize*post/get*variables*********************************** */
 
 /* ************************************************************************** *
@@ -109,14 +104,14 @@ elseif ($mode == "edit"){
 		$template = $_POST['template'];
 	};
 
-	$university = htmlReady($_POST['university']);
+	$university = htmlReady(stripslashes($_POST['university']));
 	if (empty($university)) $university = $UNI_NAME;
-	$fieldofstudy = htmlReady($_POST['fieldofstudy']);
+	$fieldofstudy = htmlReady(stripslashes($_POST['fieldofstudy']));
 	if (empty($fieldofstudy)) $fieldofstudy = getFieldOfStudy();
-	$studentname = htmlReady($_POST['studentname']);
+	$studentname = htmlReady(stripslashes($_POST['studentname']));
 	if (empty($studentname)) $studentname = getStudentname();
-	$semesterid = htmlReady($_POST['semesterid']);
-	$semester = htmlReady($_POST['semester']);
+	$semesterid = htmlReady(stripslashes($_POST['semesterid']));
+	$semester = htmlReady(stripslashes($_POST['semester']));
 	if (empty($semester))
 		$semester = $semestersAR[$semesterid]["name"];
 	$semesternumber = htmlReady($_POST['semesternumber']);
@@ -146,10 +141,10 @@ elseif ($mode == "edit"){
 			}
 			else{
 				// adding this one to the current seminas-array
-				$seminarnumber = htmlReady($_POST['seminarnumber'.$i]);
-				$tutor = htmlReady($_POST['tutor'.$i]);
-				$sws = htmlReady($_POST['sws'.$i]);
-				$description = htmlReady($_POST['description'.$i]);
+				$seminarnumber = htmlReady(stripslashes($_POST['seminarnumber'.$i]));
+				$tutor = htmlReady(stripslashes($_POST['tutor'.$i]));
+				$sws = htmlReady(stripslashes($_POST['sws'.$i]));
+				$description = htmlReady(stripslashes($_POST['description'.$i]));
 
 				$seminareAR[$i-$deletenumbers] = array(
 					"id" 			=> $i,
@@ -181,11 +176,11 @@ elseif($mode == "pdf_assortment"){
 	$seminare_max = $_POST['seminare_max'];
 
 	// the basic data
-	$university = $_POST['university'];
-	$fieldofstudy = $_POST['fieldofstudy'];
-	$studentname = $_POST['studentname'];
-	$semester = $_POST['semester'];
-	$semesternumber = $_POST['semesternumber'];
+	$university = stripslashes($_POST['university']);
+	$fieldofstudy = stripslashes($_POST['fieldofstudy']);
+	$studentname = stripslashes($_POST['studentname']);
+	$semester = stripslashes($_POST['semester']);
+	$semesternumber = stripslashes($_POST['semesternumber']);
 	$seminars = array (
 		"university" => $university,
 		"fieldofstudy" => $fieldofstudy,
@@ -204,10 +199,10 @@ elseif($mode == "pdf_assortment"){
 		for($i=0;$i+1<=$runner;$i++){
 				// $y is the running nummber from 0 -> last seminar
 				$y = $i+($j*10);
-				$seminars[$j][$i]["seminarnumber"] = $_POST['seminarnumber'.$y];
-				$seminars[$j][$i]["tutor"] = $_POST['tutor'.$y];
-				$seminars[$j][$i]["sws"] = $_POST['sws'.$y];
-				$seminars[$j][$i]["description"] = $_POST['description'.$y];
+				$seminars[$j][$i]["seminarnumber"] = stripslashes($_POST['seminarnumber'.$y]);
+				$seminars[$j][$i]["tutor"] = stripslashes($_POST['tutor'.$y]);
+				$seminars[$j][$i]["sws"] = stripslashes($_POST['sws'.$y]);
+				$seminars[$j][$i]["description"] = stripslashes($_POST['description'.$y]);
 		}
 	}
 	$exemptions = array (10,20,30,40,50,60,70,80,90,100);
@@ -218,7 +213,6 @@ elseif($mode == "pdf_assortment"){
 }
 elseif($mode == 'create_pdf'){
 	$pdf_file['full_path'] = $ABSOLUTE_URI_STUDIP . sprintf('sendfile.php?type=3&file_id=%1$s&file_name=%1$s', $record_of_study_templates[$template]['template']);
-	$pdf_file['filename'] = $record_of_study_templates[$template]['template'];
 	$fdfAR = createFdfAR($seminars);
 };
 
@@ -229,13 +223,13 @@ elseif($mode == 'create_pdf'){
 /* displays the site	  													  *
 /*																			  *
 /* ************************************************************************* */
-
+$CURRENT_PAGE = _("Veranstaltungsübersicht erstellen");
+ob_start();
 if ($mode == "new"){
-	printSiteTitle();
 	printSelectSemester($infobox,$semestersAR);
 }
 elseif ($mode == "edit"){
-	printSiteTitle($basicdata["semester"]);
+	$CURRENT_PAGE .= ': ' . $basicdata["semester"];
 
 	// display a notice for the user?
 	if (sizeof($seminareAR) > 10)
@@ -246,13 +240,22 @@ elseif ($mode == "edit"){
 	printRecordOfStudies($infobox, $basicdata, $seminareAR, $notice);
 }
 elseif ($mode == "pdf_assortment"){
-	printSiteTitle($seminars["semester"]);
+	$CURRENT_PAGE .= ': ' . $seminars["semester"];
 	printPdfAssortment($infobox, $seminars);
 }
 elseif ($mode == "create_pdf"){
-	printPDF($pdf_file ,$fdfAR);
+	ob_end_clean();
+	$out = printPDF($pdf_file ,$fdfAR);
 }
 
+// if you wanna create a pdf no html-header should be send to the browser
+if (!isset($_GET["create_pdf"])){
+	$out = ob_get_clean();
+	require_once('lib/include/html_head.inc.php');
+	require_once('lib/include/header.php');
+	require_once('lib/include/links_seminare.inc.php');
+}
+echo $out;
 page_close ();
 /* **END*of*displays*the*site*********************************************** */
 
@@ -289,10 +292,10 @@ function createFdfAR($seminars){
 	);
 
 	for($i=0;$i+1<=10;$i++){
-			$fdfAR["seminarnumber.".$i] = $seminars[$page][$i]["seminarnumber"];
-			$fdfAR["tutor.".$i] = $seminars[$page][$i]["tutor"];
-			$fdfAR["sws.".$i] = $seminars[$page][$i]["sws"];
-			$fdfAR["description.".$i] = $seminars[$page][$i]["description"];
+			$fdfAR["seminarnumber.".$i] = (string)$seminars[$page][$i]["seminarnumber"];
+			$fdfAR["tutor.".$i] = (string)$seminars[$page][$i]["tutor"];
+			$fdfAR["sws.".$i] = (string)$seminars[$page][$i]["sws"];
+			$fdfAR["description.".$i] = (string)$seminars[$page][$i]["description"];
 	}
 	return $fdfAR;
 }
@@ -309,30 +312,24 @@ function createFdfAR($seminars){
 	 $fdf = "%FDF-1.2\n%‚„œ”\n";
 	 $fdf .= "1 0 obj \n<< /FDF ";
 	 $fdf .= "<< /Fields [\n";
-	 
-	 foreach ($pdf_data as $key => $val)
-	 	$fdf .= "<< /V ($val)/T ($key) >> \n";
-	 
+	 foreach ($pdf_data as $key => $value){
+		 $key = addcslashes($key, "\n\r\t\\()");
+		 $value = addcslashes($value, "\n\r\t\\()");
+		 $fdf .= "<< /T ($key) /V ($value) >> \n";
+	 }
 	 $fdf .= "]\n/F (".$pdf_file["full_path"].") >>";
 	 $fdf .= ">>\nendobj\ntrailer\n<<\n";
 	 $fdf .= "/Root 1 0 R \n\n>>\n";
 	 $fdf .= "%%EOF";
-	 
 	 // Now we display the FDF data which causes Acrobat to start
 	 header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
 	 header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
-	 if ($_SERVER['HTTPS'] == "on"){
-		 header("Pragma: public");
-		 header("Cache-Control: private");
-	 } else {
-		 header("Pragma: no-cache");
-		 header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
-	 }
-	 header("Cache-Control: post-check=0, pre-check=0", false);
+	 header("Pragma: public");
+	 header("Cache-Control: private");
 	 header("Content-Type: application/vnd.fdf");
-	 header("Content-disposition: attachment; filename=\"".$pdf_file["filename"]."\"");
+	 header("Content-disposition: attachment; filename=\"".md5(uniqid('fdf',1)).".fdf\"");
 	 header("Content-Length: " . strlen($fdf));
-	 echo $fdf;
+	 return $fdf;
  }
 
 /**
