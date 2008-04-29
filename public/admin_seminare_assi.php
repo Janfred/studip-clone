@@ -3171,10 +3171,10 @@ if ($level == 4) {
 					</tr>
 					<?
 					}
-					if (($RESOURCES_ENABLE) && ($resList->roomsExist()) &&
+					if ($RESOURCES_ENABLE && $resList->roomsExist() &&
 						(((is_array($sem_create_data["metadata_termin"]["turnus_data"])) && ($sem_create_data["term_art"] == 0))
-						|| (($sem_create_data["term_first_date"])) && ($sem_create_data["term_art"] == 1))
-						|| ($sem_create_data["sem_vor_termin"] > -1)) {
+						|| (($sem_create_data["term_first_date"])) && ($sem_create_data["term_art"] == 1)
+						|| ($sem_create_data["sem_vor_termin"] > -1))) {
 					?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
