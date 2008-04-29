@@ -2936,7 +2936,7 @@ if ($level == 4) {
 					} elseif ($resList->roomsExist())
 						print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden oder buchen Sie konkrete R&auml;ume.")."<br><br>";
 				} else
-					print _("Bitte geben Sie hier die, welche Angaben zu R&auml;umen gemacht werden.")."<br><br>";
+					print _("Bitte geben Sie hier ein, welche Angaben zu R&auml;umen gemacht werden.")."<br><br>";
 				?>
 			</td>
 			<td class="blank" align="right" valign="top">
