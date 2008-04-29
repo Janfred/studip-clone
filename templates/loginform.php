@@ -60,7 +60,7 @@
 
 		<tr>
 			<td align="center" colspan="2">
-				<?=makeButton("login", "input", _("Login"))?>
+				<?=makeButton("login", "input", _("Login"), "login")?>
 				&nbsp;
 				<a href="index.php?cancel_login=1">
 				<?=makeButton("abbrechen", "img", _("Abbrechen"))?>
