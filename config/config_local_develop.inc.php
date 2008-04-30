@@ -410,6 +410,22 @@ all uppercase each item of the configuration array will become a member of your 
 //$STUDIP_AUTH_PLUGIN[] = "StandardExtern";
 $STUDIP_AUTH_PLUGIN[] = "Standard";
 // $STUDIP_AUTH_PLUGIN[] = "CAS";
+$STUDIP_AUTH_PLUGIN[] = "Shib";
+
+$STUDIP_AUTH_CONFIG_SHIB = array(
+    // SessionInitator URL for remote SP
+    'session_initiator' => 'https://shib.serv.uni-osnabrueck.de/secure/studip-sp.php',
+    // validation URL for remote SP
+    'validate_url'      => 'https://shib.serv.uni-osnabrueck.de/auth/studip-sp.php',
+    // standard user data mapping
+    'user_data_mapping' => array(
+        'auth_user_md5.username' => array('callback' => 'dummy', 'map_args' => ''),
+        'auth_user_md5.password' => array('callback' => 'dummy', 'map_args' => ''),
+        'auth_user_md5.Vorname' => array('callback' => 'getUserData', 'map_args' => 'givenname'),
+        'auth_user_md5.Nachname' => array('callback' => 'getUserData', 'map_args' => 'sn'),
+        'auth_user_md5.Email' => array('callback' => 'getUserData', 'map_args' => 'mail')
+    )
+);
 /*
 // create a config for your own user data mapping class
 $CASAbstractUserDataMapping_CONFIG = array();
