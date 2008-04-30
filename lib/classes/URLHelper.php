@@ -78,6 +78,23 @@ class URLHelper
      * Augment the given URL by appending all registered link parameters.
      * Note that for each bound variable, its current value is used. You
      * can use the second parameter to add futher URL parameters to this
+     * link without adding them globally. This method is identical to
+     * getURL() except that it returns an entity encoded URL.
+     *
+     * @param string $url    relative or absolute URL
+     * @param string $params array of additional link parameters to add
+     *
+     * @return string modified URL (entity encoded)
+     */
+    static function getLink ($url, $params = NULL)
+    {
+        return htmlspecialchars(self::getURL($url, $params));
+    }
+
+    /**
+     * Augment the given URL by appending all registered link parameters.
+     * Note that for each bound variable, its current value is used. You
+     * can use the second parameter to add futher URL parameters to this
      * link without adding them globally.
      *
      * @param string $url    relative or absolute URL
@@ -85,10 +102,10 @@ class URLHelper
      *
      * @return string modified URL
      */
-    static function getLink ($url, $params = NULL)
+    static function getURL ($url, $params = NULL)
     {
         $link_params = self::$params;
-        $separator = strpos($url, '?') === false ? '?' : '&amp;';
+        $separator = strpos($url, '?') === false ? '?' : '&';
 
         if (isset($params)) {
             $link_params = array_merge($link_params, $params);
@@ -97,7 +114,7 @@ class URLHelper
         foreach ($link_params as $key => $value) {
             if (isset($value)) {
                 $url .= $separator.urlencode($key).'='.urlencode($value);
-                $separator = '&amp;';
+                $separator = '&';
             }
         }
 
@@ -105,9 +122,9 @@ class URLHelper
     }
 
     /**
-     * Try to open the course or institute given by the parameter 'sid'
+     * Try to open the course or institute given by the parameter 'cid'
      * in the current request. This also binds the global $SessionSeminar
-     * variable to the URL parameter 'sid' for links created by getLink().
+     * variable to the URL parameter 'cid' for links created by getLink().
      *
      * @return bool true if successful, false otherwise
      */
@@ -115,7 +132,7 @@ class URLHelper
     {
         global $SessionSeminar;
 
-        self::bindLinkParam('sid', $SessionSeminar);
+        self::bindLinkParam('cid', $SessionSeminar);
 
         return openSem($SessionSeminar) || openInst($SessionSeminar);
     }

@@ -132,13 +132,13 @@ class PluginEngine {
 	}
 
 	/**
-	* Generates a Link which can be shown in user interfaces
+	* Generates a URL which can be shown in user interfaces
 	* @param $plugin - the plugin to which should be linked
 	* @param $params - an array with name value pairs
 	* @param $cmd - command to execute by clicking the link
 	* @return a link to the current plugin with the additional $params
 	*/
-	public static function getLink($plugin, $params=array(), $cmd="") {
+	public static function getURL($plugin, $params=array(), $cmd="") {
 		if (is_null($plugin)) {
 			return "";
 		}
@@ -155,10 +155,21 @@ class PluginEngine {
 			$query_string = array();
 	 		foreach ($params as $key => $val)
 	 			$query_string[] = urlencode($key) . '=' . urlencode($val);
-	 		$link .= '?' . join('&amp;', $query_string);
+	 		$link .= '?' . join('&', $query_string);
 		}
 
-		return URLHelper::getLink($link);
+		return URLHelper::getURL($link);
+	}
+
+	/**
+	* Generates a Link (entity encoded URL) which can be shown in user interfaces
+	* @param $plugin - the plugin to which should be linked
+	* @param $params - an array with name value pairs
+	* @param $cmd - command to execute by clicking the link
+	* @return a link to the current plugin with the additional $params
+	*/
+	public static function getLink($plugin, $params=array(), $cmd="") {
+                return htmlspecialchars(PluginEngine::getURL($plugin, $params, $cmd));
 	}
 
 	/**
