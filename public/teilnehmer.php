@@ -513,9 +513,10 @@ if (Seminar_Session::check_ticket($studipticket)){
 					$db->query("SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".
 					"LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$SessSemName[1]')  ".
 					"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
+					"(username='{$csv_nachname}' OR ".
 					"(Nachname LIKE '" . $csv_nachname . "'"
 					. ($csv_vorname ? " AND Vorname LIKE '" . $csv_vorname . "'" : '')
-					. ") ORDER BY Nachname");
+					. ")) ORDER BY Nachname");
 					if ($db->num_rows() > 1) {
 						while ($db->next_record()) {
 							$csv_mult_founds[$csv_line][] = $db->Record;
@@ -1592,7 +1593,9 @@ if ($rechte) {
 		echo '<b>' . _("Teilnehmerliste übernehmen") . '</b><br>';
 		echo _("In das nebenstehende Textfeld können Sie eine Liste mit Namen von NutzerInnen eingeben, die in die Veranstaltung aufgenommen werden sollen.");
 		echo '<br />' . _("Geben Sie in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein.");
-		echo '<br>' . _("Eingabeformat: <b>Nachname, Vorname &crarr;<b>");
+		echo '<br/>'._('Alternativ kann auch der Benutzername eingegeben werden.');		
+		echo '<br/>' . _("Eingabeformat: <b>Nachname[, Vorname] &crarr;</b>");
+		echo '<br/>' . _("oder: <b>Benutzername &crarr;</b>");		
 		echo "</div></td>\n";
 		echo "<td width=\"40%\" class=\"steel1\">";
 		echo "<textarea name=\"csv_import\" rows=\"6\" cols=\"50\">";
