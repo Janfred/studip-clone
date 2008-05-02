@@ -28,7 +28,6 @@ if ($GLOBALS['PLUGINS_ENABLE']){
 	require_once("core/AbstractStudIPSystemPlugin.class.php");
 	require_once("core/AbstractStudIPHomepagePlugin.class.php");
 	require_once("core/AbstractStudIPPortalPlugin.class.php");
-	require_once("core/AbstractPluginPersistence.class.php");
 	require_once("core/StudIPCore.class.php");
 	require_once("engine/AbstractPluginIntegratorEnginePersistence.class.php");
 	require_once("engine/StandardPluginIntegratorEnginePersistence.class.php");
