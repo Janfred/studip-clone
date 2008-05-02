@@ -8,9 +8,6 @@
  */
 
 if ($GLOBALS['PLUGINS_ENABLE']){
-	// AdoDB-Database Interface
-	require_once("vendor/adodb/adodb.inc.php");
-
 	// the plugin interface classes
 	require_once("core/StudIPInstitute.class.php");
 	require_once("core/AbstractStudIPPluginVisualization.class.php");
@@ -63,9 +60,6 @@ if ($GLOBALS['PLUGINS_ENABLE']){
 	}
 	$plugindbenv->setRelativepackagepath("plugins_packages");
 	$plugindbenv->setTmppath($GLOBALS["TMP_PATH"]);
-
-	$GLOBALS["ADODB_CACHE_DIR"] = $GLOBALS["TMP_PATH"];
 }
-
 
 ?>
