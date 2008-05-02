@@ -110,7 +110,7 @@ class Config {
 	 */
 	function getAllDefaults($range = null) {
 		$arr=array();
-		$query_range = ($range ? " AND range='$range' " : "");
+		$query_range = ($range ? " AND `range`='$range' " : "");
 		$sql = "SELECT config_id, field, value, description, type, section FROM config WHERE is_default = '1' $query_range ORDER BY field";
 		$this->db->query($sql);
 		while ($this->db->next_record()) {
@@ -121,7 +121,7 @@ class Config {
 	
 	function getAllFieldNames($range){
 		$ret = array();
-		$query_range = ($range ? " WHERE range='$range' " : "");
+		$query_range = ($range ? " WHERE `range`='$range' " : "");
 		$this->db->query("SELECT DISTINCT(field) FROM config $query_range ORDER BY field");
 		while($this->db->next_record()){
 			$ret[] = $this->db->f(0);
@@ -143,10 +143,10 @@ class Config {
 		if (isset ($this->data[$key])) {
 			$sql = sprintf("UPDATE `config` SET value='%s', chdate='%s', comment='%s' WHERE `field`='%s' AND is_default != '1' ", $value, time(), $comment, $key);
 		} else {
-			$sql = sprintf("SELECT type, description, comment, message_template, range FROM `config` WHERE `field` = '%s' AND is_default = '1' ", $key);
+			$sql = sprintf("SELECT type, description, comment, message_template, `range` FROM `config` WHERE `field` = '%s' AND is_default = '1' ", $key);
 			$this->db->query($sql);
 			$this->db->next_record();
-			$sql = sprintf("INSERT INTO `config` SET config_id='%s', parent_id='', field ='%s', value='%s', mkdate='%s', chdate='%s', is_default = '0', type='%s', description='%s', comment='%s', message_template='%s', range='%s'", 
+			$sql = sprintf("INSERT INTO `config` SET config_id='%s', parent_id='', field ='%s', value='%s', mkdate='%s', chdate='%s', is_default = '0', type='%s', description='%s', comment='%s', message_template='%s', `range`='%s'", 
 				md5(uniqid("config!")), $key, (!$value) ? '' : $value, time(), time(), $this->db->f('type'),$this->db->f('description'), $comment, $this->db->f('message_template'), $this->db->f('range') );
 		}
 		$this->db->query($sql);
