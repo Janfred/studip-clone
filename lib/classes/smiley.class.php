@@ -144,7 +144,7 @@ class smiley {
 		for($i = 0; $i < count($tab); $i++) {
 			$sqltxt = "SELECT " . $tab[$i][1]. " AS txt FROM " . $tab[$i][0];
 			if ($tab[$i][0] == 'wiki') {  // only the actual wiki page ...
-				$sqltxt = 'SELECT MAX(CONCAT( LPAD(version, 5, "0")," ", ' . $tab[$i][1] . ')) AS txt FROM  ' . $tab[$i][0] . ' GROUP BY range_id, keyword';
+				$sqltxt = "SELECT MAX(CONCAT( LPAD(version, 5, '0'),' ', " . $tab[$i][1] . ')) AS txt FROM  ' . $tab[$i][0] . ' GROUP BY range_id, keyword';
 			}
 			$dbsmile->query($sqltxt);
 			// and all entrys

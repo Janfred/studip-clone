@@ -7,6 +7,10 @@ Bitte beachten: Wir liefern fuer aeltere Versionen Konvertierungsscripte mit. Le
 keine Anleitungen fuer Updates von Versionen < 0.8.15 - daher ist das Updaten von diesen Versionen auf eigene Gefahr!
 
 
+Vorgehensweise ab Version 1.6.0
+
+beachten Sie die Hinweise im Verzeichnis db/update/convert_1.5to1.6/
+
 Vorgehensweise ab Version 0.9.0
 
 Im jeweiligen Verzeichnis befindet sich ein Script migration_xxtoxx.sql. Dieses Script enthaelt saemtliche SQL Befehle und
@@ -26,5 +30,4 @@ Stellen die jeweiligen Konvertierungsscripte laufen muessen!
 4. Fragen und Hilfestellung: Einfach Mail an <crew@studip.de>
 
 - The Stud.IP Crew <crew@studip.de>
-
 

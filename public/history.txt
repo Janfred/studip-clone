@@ -1,3 +1,17 @@
+__08.04.2008 v 1.7.0__
+- Stud.IP ist nun Shibboleth-Ready
+- Erweiterung der globalen Einstellungen um Regeln zur Sperrung von Veranstaltungsdaten
+- Zukünftig PDO als Standardmethode des Datenbankzugriffs
+- Möglichkeit des automatischen Anforderns eines neuen Passworts durch den Benutzer
+- Ajax-Erweiterung zum automatischen Vervollständigen bei der Personen- und Veranstaltungssuche 
+- bei Bedarf Verwendung von Nutzerbilder-Thumbnails anstelle der Originalbilder
+- Erweiterung Anmeldesystem II - die Kontingentierung ist jetzt optional
+- Einbindung von Flash-Movies über Schnellformatierung und im Dateibereich möglich
+- Möglichkeit zum Anlegen eines Wiki-Inhaltsverzeichnises
+- Beschränkung der freien Nutzeranmeldung nach Email-Adressen möglich
+- Generierung von "Assets"-Verweise vereinfacht
+- Refactoring der Datei "plugins.php" 
+
 __02.10.2007 v 1.6.0__
 - Abbildung von Studienmodulstrukturen (Hallesche Lösung)
 - Erweiterung der Teilnehmeransicht
