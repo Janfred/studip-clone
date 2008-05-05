@@ -333,10 +333,6 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 				// skip this plugin
 				continue;
 			}
-			// set the gettext-domain
-			$domain = "gtdomain_" . strtolower(get_class($activatedportalplugin));
-			bindtextdomain($domain,$pluginenv->getBasepath() . $activatedportalplugin->getPluginpath() . "/locale");
-			textdomain($domain);
 			// hier nun die PortalPlugins anzeigen
 ?>
 		<table class="index_box" border="0" cellpadding="2" cellspacing="0">
@@ -360,8 +356,6 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		<br/>
 
 <?
-			// restore the domain
-			textdomain("studip");
 		}
 	}
 	page_close(); // end session
