@@ -335,7 +335,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			}
 			// set the gettext-domain
 			$domain = "gtdomain_" . strtolower(get_class($activatedportalplugin));
-			bindtextdomain($domain,$plugindbenv->getBasepath() . $activatedportalplugin->getPluginpath() . "/locale");
+			bindtextdomain($domain,$pluginenv->getBasepath() . $activatedportalplugin->getPluginpath() . "/locale");
 			textdomain($domain);
 			// hier nun die PortalPlugins anzeigen
 ?>
