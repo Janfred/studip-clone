@@ -102,7 +102,7 @@ class PluginEngine {
 	public static function getPluginPersistence($plugintype="Abstract") {
 		$classname = $plugintype . "PluginIntegratorEnginePersistence";
 		$persistence = new $classname();
-		$persistence->setEnvironment($GLOBALS["plugindbenv"]);
+		$persistence->setEnvironment($GLOBALS["pluginenv"]);
 
 		// now set the user
 		$persistence->setUser(new StudIPUser());
@@ -114,21 +114,6 @@ class PluginEngine {
 	*/
 	public static function getPluginPersistenceByPlugin($plugin) {
 		return PluginEngine::getPluginPersistence(PluginEngine::getTypeOfPlugin($plugin));
-	}
-
-	/**
-	* Returns an active connection to the plugin database
-	* @return active connection to the database
-	* @todo Caching of database connections ?
-	*/
-	public static function getPluginDatabaseConnection() {
-		$env = $GLOBALS["plugindbenv"]; // get the environment
-		$connection = NewADOConnection($env->dbtype);
-
-		// connect to the database
-  		$connection->Connect($env->dbhost,$env->dbuser,$env->dbpassword,$env->dbname);
-
-    	return $connection;
 	}
 
 	/**
@@ -150,15 +135,7 @@ class PluginEngine {
 			}
 		}
 
-		// add params
-		if (sizeof($params)) {
-			$query_string = array();
-	 		foreach ($params as $key => $val)
-	 			$query_string[] = urlencode($key) . '=' . urlencode($val);
-	 		$link .= '?' . join('&', $query_string);
-		}
-
-		return URLHelper::getURL($link);
+		return URLHelper::getURL($link, $params);
 	}
 
 	/**
@@ -183,15 +160,7 @@ class PluginEngine {
 	public static function getLinkToAdministrationPlugin($params = array(), $cmd = 'show') {
 		$link = "plugins.php/pluginadministrationplugin/" . $cmd;
 
-		// add params
-		if (sizeof($params)) {
-			$query_string = array();
-			foreach ($params as $key => $val)
-				$query_string[] = urlencode($key) . '=' . urlencode($val);
-			$link .= '?' . join('&amp;', $query_string);
-		}
-
-		return $link;
+		return URLHelper::getLink($link, $params);
 	}
 
 	/**
@@ -224,7 +193,7 @@ class PluginEngine {
     * @return an instance of the desired plugin or null otherwise
     */
    public static function instantiatePlugin($pluginclassname, $pluginpath) {
-   		$env = $GLOBALS["plugindbenv"];
+	    $env = $GLOBALS["pluginenv"];
 	    $absolutepluginfile = $env->getPackagebasepath() . "/" . $pluginpath . "/" . $pluginclassname . ".class.php";
 	    if (!file_exists($absolutepluginfile)) {
 		    return null;

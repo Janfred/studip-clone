@@ -19,7 +19,6 @@ if ($GLOBALS['PLUGINS_ENABLE']){
 	require_once("core/Permission.class.php");
 	require_once("core/StudIPUser.class.php");
 	require_once("core/Environment.class.php");
-	require_once("core/DBEnvironment.class.php");
 	require_once("core/AbstractStudIPPlugin.class.php");
 	require_once("core/AbstractStudIPLegacyPlugin.class.php");
 	require_once("core/AbstractStudIPCorePlugin.class.php");
@@ -42,23 +41,18 @@ if ($GLOBALS['PLUGINS_ENABLE']){
 	require_once("db/de_studip_RolePersistence.class.php");
 
 	// create a plugin environment
-	$plugindbenv = new DBEnvironment();
-	$plugindbenv->setDbtype("mysql");
-	$plugindbenv->setDbhost($GLOBALS["DB_STUDIP_HOST"]);
-	$plugindbenv->setDbuser($GLOBALS["DB_STUDIP_USER"]);
-	$plugindbenv->setDbpassword($GLOBALS["DB_STUDIP_PASSWORD"]);
-	$plugindbenv->setDbname($GLOBALS["DB_STUDIP_DATABASE"]);
-	$plugindbenv->setBasepath($GLOBALS["STUDIP_BASE_PATH"] .'/public/');
+	$pluginenv = new Environment();
+	$pluginenv->setBasepath($GLOBALS["STUDIP_BASE_PATH"] .'/public/');
 	if (isset($GLOBALS["PLUGINS_PATH"]) && !empty($GLOBALS["PLUGINS_PATH"])){
-		$plugindbenv->setPackagebasepath($GLOBALS["PLUGINS_PATH"]);
+		$pluginenv->setPackagebasepath($GLOBALS["PLUGINS_PATH"]);
 	}
 	else {
 		// set the default
-		$plugindbenv->setPackagebasepath($GLOBALS["STUDIP_BASE_PATH"].
+		$pluginenv->setPackagebasepath($GLOBALS["STUDIP_BASE_PATH"].
 		                                 '/public/plugins_packages');
 	}
-	$plugindbenv->setRelativepackagepath("plugins_packages");
-	$plugindbenv->setTmppath($GLOBALS["TMP_PATH"]);
+	$pluginenv->setRelativepackagepath("plugins_packages");
+	$pluginenv->setTmppath($GLOBALS["TMP_PATH"]);
 }
 
 ?>

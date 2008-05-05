@@ -21,8 +21,8 @@ class AbstractPluginIntegratorEnginePersistence {
 		$this->user = null;
 	}
 
-	function setEnvironment(DBEnvironment $dbenvironment) {
-		$this->environment = $dbenvironment;
+	function setEnvironment(Environment $environment) {
+		$this->environment = $environment;
 	}
 
 	function getEnvironment() {
