@@ -600,7 +600,7 @@ function GetAllStatusgruppen($parent, $check_user = null, $exclude = false)
 		$kids = GetAllStatusgruppen($db->f('statusgruppe_id'), $check_user, $exclude);
 
 		$user_in_child = false;
-		if ($check_user) {
+		if ($check_user && is_array($kids)) {
 			foreach ($kids as $kid) {
 				if ($kid['user_there'] || $kid['user_in_child']) {
 					$user_in_child = true;

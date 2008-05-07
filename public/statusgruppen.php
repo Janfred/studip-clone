@@ -102,7 +102,7 @@ function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
 		echo '<td width="90%" class="steel" style="height: 25px"><font size="-1">';
 		
 		printf ("<b>%s&nbsp;%s</b></font>",
-			CheckAssignRights($role_id,$user->id)?"&nbsp;<a href=\"$PHP_SELF?assign=$role_id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"",
+			CheckAssignRights($role_id,$user->id, $SessSemName[1])?"&nbsp;<a href=\"$PHP_SELF?assign=$role_id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"",
 			htmlReady($title)
 		);
 
