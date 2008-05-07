@@ -435,7 +435,7 @@ function my_substr($what, $start, $end) {
 */
 function have_sem_write_perm () {
 
-global $SemSecLevelWrite, $SemUserStatus, $perm, $rechte;
+global $SemSecLevelWrite, $SemUserStatus, $perm, $rechte, $AUTH_LIFETIME;
 
 $error_msg="";
 if (!($perm->have_perm("root"))) {

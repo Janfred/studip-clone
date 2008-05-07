@@ -274,7 +274,7 @@ class ExternModuleTemplateDownload extends ExternModule {
 				
 				// if user is member of a group then link name to details page
 				$link_persondetail = '';
-				if (GetStatusgruppen($this->config->range_id, $db->f('user_id'))) {
+				if (GetRoleNames(GetAllStatusgruppen($this->config->range_id, $db->f('user_id')))) {
 					$content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl('Persondetails', array('link_args' => 'username=' . $db->f('username')));
 					$content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_FULLNAME'] = ExternModule::ExtHtmlReady($db->f('fullname'));
 					$content['FILES']['FILE'][$i]['PERSONDETAIL-LINK']['LINK_FIRSTNAME'] = ExternModule::ExtHtmlReady($db->f('Vorname'));

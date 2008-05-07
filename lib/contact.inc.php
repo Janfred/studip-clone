@@ -245,7 +245,7 @@ function GetinstInfo ($user_id)
 	$db->query($query);
 	while ($db->next_record()) {
 		$userinfo[$i][_("Einrichtung")] = "<a href=\"institut_main.php?auswahl=".$db->f("Institut_id")."\">".htmlReady($db->f("Name"))."</a>";
-		if ($gruppen = GetStatusgruppen($db->f("Institut_id"), $user_id))
+		if ($gruppen = GetRoleNames(GetAllStatusgruppen($db->f("Institut_id"), $user_id)))
 			$userinfo[$i][_("Funktion")] = htmlReady(join(", ", array_values($gruppen)));
 		if ($db->f("raum")!="")
 			$userinfo[$i][_("Raum")] = FormatReady($db->f("raum"));

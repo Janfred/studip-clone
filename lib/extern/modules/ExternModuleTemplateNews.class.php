@@ -192,8 +192,8 @@ class ExternModuleTemplateNews extends ExternModule {
 				$content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['TITLEREAR'] = ExternModule::ExtHtmlReady($db->f('title_rear'));
 				$content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['USERNAME'] = $db->f('username');
 				$content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['PERSONDETAIL-HREF'] = $this->elements['TemplateGeneric']->createUrl('Persondetails', array('link_args' => 'username=' . $db->f('username')));
-				
-				if (GetStatusgruppen($this->config->range_id, $db->f('user_id'))) {
+								
+				if (GetAllStatusgruppen($this->config->range_id, $db->f('user_id'), true)) {
 					$content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['PERSONDETAIL-LINK']['LINK_PERSONDETAIL-HREF'] = $this->elements['TemplateGeneric']->createUrl('Persondetails', array('link_args' => 'username=' . $db->f('username')));
 					$content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['PERSONDETAIL-LINK']['LINK_FULLNAME'] = ExternModule::ExtHtmlReady($db->f('fullname'));
 					$content['NEWS']['ALL-NEWS']['SINGLE-NEWS'][$i]['PERSONDETAIL-LINK']['LINK_FIRSTNAME'] = ExternModule::ExtHtmlReady($db->f('Vorname'));

@@ -115,15 +115,10 @@ $sess->register("about_data");
 $msging = new messaging;
 $msg = "";
 
-switch ($cmd) {
-	case 'add_user':
-		$msging->add_buddy($_GET['username']);
-	  break;
+//Buddie hinzufuegen
+if ($cmd=="add_user")
+	$msging->add_buddy ($add_uname, 0);
 
-	case 'remove_user':
-		$msging->delete_buddy($_GET['username']);
-	  break;
-}
 
 //Auf und Zuklappen Termine
 if ($dopen)
@@ -286,19 +281,10 @@ if ($show_tabs) {
 				if ($auth->auth["jscript"]) {
 					echo "<br>&nbsp;<font size=\"-1\"><a href='javascript:open_im();'>" . _("Stud.IP Messenger starten") . "</a></font>";
 				}
-			} else {?>
-				<? if (CheckBuddy($username)) : ?>
-					<br />
-					<font size="-1">
-						&nbsp;<a href="about.php?cmd=remove_user&amp;username=<?= $username ?>"><?= _("aus Buddy-Liste entfernen") ?></a>
-					</font>
-				<?  else : ?>
-					<br />
-					<font size="-1">
-						&nbsp;<a href="about.php?cmd=add_user&amp;username=<?= $username ?>"><?= _("zu Buddies hinzuf&uuml;gen") ?></a>
-					</font>
-				<? endif ?>
-				<?
+			} else {
+				if (CheckBuddy($username)==FALSE) {
+					echo "<br /><font size=\"-1\">&nbsp;<a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">" . _("zu Buddies hinzuf&uuml;gen") . "</a></font>";
+				}
 				echo "<br /><font size=\"-1\"> <a href=\"sms_send.php?sms_source_page=about.php&rec_uname=", $db->f("username"),"\">&nbsp;" . _("Nachricht an Nutzer") . "&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Nachricht an Nutzer verschicken")) . " border=0 align=texttop></a></font>";
 
 			}
@@ -418,20 +404,18 @@ if ($show_tabs) {
 				while ($db3->next_record()) {
 					$institut=$db3->f("Institut_id");
 					echo "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"institut_main.php?auswahl=".$institut."\">".htmlReady($db3->f("Name"))."</a>";
-					//statusgruppen
-					if ($gruppen = GetStatusgruppen($institut,$user_id)){
-						echo "&nbsp;" . htmlReady(join(", ", array_values($gruppen)));
-					}
+
 					echo "<font size=-1>";
 					IF ($db3->f("raum")!="")
-						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Raum:") . " </b>", htmlReady($db3->f("raum"));
+						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Raum (Stud.IP):") . " </b>", htmlReady($db3->f("raum"));
 					IF ($db3->f("sprechzeiten")!="")
-						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Sprechzeit:") . " </b>", htmlReady($db3->f("sprechzeiten"));
+						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Sprechzeit (Stud.IP):") . " </b>", htmlReady($db3->f("sprechzeiten"));
 					IF ($db3->f("Telefon")!="")
-						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Telefon:") . " </b>", htmlReady($db3->f("Telefon"));
+						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Telefon (Stud.IP):") . " </b>", htmlReady($db3->f("Telefon"));
 					IF ($db3->f("Fax")!="")
-						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Fax:") . " </b>", htmlReady($db3->f("Fax"));
+						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Fax: (Stud.IP)") . " </b>", htmlReady($db3->f("Fax"));
 
+					echo '<table cellspacing="0" cellpadding="0" border="0">'; 
 					$entries = DataFieldEntry::getDataFieldEntries(array($user_id, $institut));
 					if (!isDataFieldArrayEmpty($entries)) {
 						foreach ($entries as $entry) {
@@ -443,31 +427,34 @@ if ($show_tabs) {
 							}
 
 							if (trim($entry->getValue()) && $view) {
-								echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . htmlReady($entry->getName()) . " </b>", $entry->getDisplayValue();
+								echo '<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>' . htmlReady($entry->getName()) . ": " .'&nbsp;&nbsp;</td><td>'. $entry->getDisplayValue(); 
 								if ($show_star) echo ' *';
 							}
 						}
 					}
 
-					if ($groups = GetStatusgruppen($institut,$user_id)) {
-						$options = getOptionsOfStGroups($user_id);
-						foreach ($groups as $groupID=>$group) {
-							if ($options[$groupID]['visible'] && !$options[$groupID]['inherit']) {
-								$entries = DataFieldEntry::getDataFieldEntries(array($user_id, $groupID));
-								if (!isDataFieldArrayEmpty($entries)) {
-									echo '<br/>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <font color="#000000"><b>Funktion:</b> ' . htmlReady($group) . '</font><br>';
-									foreach ($entries as $entry) {
-										$view = DataFieldStructure::permMask($auth->auth['perm']) >= DataFieldStructure::permMask($entry->structure->getViewPerms());
-										if ($view && trim($entry->getValue()))
-											echo "<b>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ". htmlReady($entry->getName()) . "</b> " . $entry->getDisplayValue() . "<br>";
-									}
-								}
-							}
-						}
-					}
+					echo '</table>'; 
+ 
+					if ($groups = GetAllStatusgruppen($institut, $user_id)) {                        
+						$default_entries = DataFieldEntry::getDataFieldEntries(array($user_id, $institut)); 
+						$data = get_role_data_recursive($groups, $user_id, $default_entries); 
+						echo '<table cellpadding="0" cellspacing="0" border="0">'; 
+						echo $data['standard']; 
+						echo '</table>'; 
+					} else { 
+						echo '<br/>'; 
+					} 
 
-					echo "</font><br>";
-				}
+					echo "</font>"; 
+					echo '<br/>'; 
+				} 
+
+				if (($user_id == $user->id) && $has_denoted_fields) { 
+					echo '<br/>'; 
+					echo '<font size="-1">'; 
+					echo ' * Diese Felder sind nur für Sie und AdministratorInnen sichtbar.<br/>'; 
+					echo '</font>'; 
+				} 
 				?>
 
 				<br />

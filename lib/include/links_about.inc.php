@@ -52,10 +52,8 @@ $structure = array();
 $structure["alle"] = array('topKat' => '', 'name' => _("Alle"), 'link' => "about.php?username=$username", 'active' => FALSE);
 $structure["bild"] = array('topKat' => '', 'name' => _("Bild"), 'link' => "edit_about.php?view=Bild&username=$username", 'active' => FALSE);
 $structure["daten"] = array('topKat' => '', 'name' => _("Nutzerdaten"), 'link' => "edit_about.php?view=Daten&username=$username", 'active' => FALSE);
-$structure["karriere"] = array('topKat' => '', 'name' => _("universit&auml;re Daten"), 'link' => "edit_about.php?view=Karriere&username=$username", 'active' => FALSE);
-$structure["lebenslauf"] = array('topKat' => "", 'name' => _("weitere Daten"), 'link' => "edit_about.php?view=Lebenslauf&username=$username", 'active' => FALSE);
-$structure["sonstiges"] = array('topKat' => "", 'name' => _("eigene Kategorien"), 'link' => "edit_about.php?view=Sonstiges&username=$username", 'active' => FALSE);
-$structure['tools'] = array('topKat' => "", 'name' => _("Tools"), 'link' => "admin_news.php?range_id=self&username=$username", 'active' => FALSE);
+$structure["sonstiges"] = array('topKat' => '', 'name' => _("eigene Kategorien"), 'link' => "edit_about.php?view=Sonstiges&username=$username", 'active' => FALSE);
+$structure['tools'] = array('topKat' => '', 'name' => _("Tools"), 'link' => "admin_news.php?range_id=self&username=$username", 'active' => FALSE);
 if ($username == $auth->auth["uname"]) {
 // if (!$perm->have_perm("admin"))
 	$structure['mystudip'] = array('topKat' => "", 'name' => _("My Stud.IP"), 'link' => "edit_about.php?view=allgemein&username=$username", 'active' => FALSE);
@@ -91,17 +89,17 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 //Bottomkats
 $structure["_alle"] = array('topKat' => "alle", 'name' => _("Pers&ouml;nliche Homepage"), 'link' => "about.php?username=$username", 'active' => FALSE);
 $structure["_bild"] = array('topKat' => "bild", 'name' => _("Hochladen des pers&ouml;nlichen Bildes"), 'link' => "edit_about.php?view=Bild&username=$username", 'active' => FALSE);
-$structure["_daten"] = array('topKat' => "daten", 'name' => _("Nutzerdaten bearbeiten"), 'link' => "edit_about.php?view=Daten&username=$username", 'active' => FALSE);
-$structure["_karriere"] = array('topKat' => "karriere", 'name' => _("universit&auml;re Daten"), 'link' => "edit_about.php?view=Karriere&username=$username", 'active' => FALSE);
-if (!$perm->have_perm ("dozent")) {
-	$structure["studiengaenge"] = array('topKat' => "karriere", 'name' => _("Zuordnung zu Studieng&auml;ngen"), 'link' => "edit_about.php?view=Karriere&username=$username#studiengaenge", 'active' => FALSE);
-	$structure["einrichtungen"] = array('topKat' => "karriere", 'name' => _("Zuordnung zu Einrichtungen"), 'link' => "edit_about.php?view=Karriere&username=$username#einrichtungen", 'active' => FALSE);
+$structure["_daten"] = array('topKat' => "daten", 'name' => _("Allgemein"), 'link' => "edit_about.php?view=Daten&username=$username", 'active' => FALSE);
+
+$structure["lebenslauf"] = array('topKat' => 'daten', 'name' => _("Privat"), 'link' => "edit_about.php?view=Lebenslauf&username=$username", 'active' => FALSE);
+if ($my_about->auth_user["perms"] != "dozent" && $my_about->auth_user["perms"] != "admin" && $my_about->auth_user["perms"] != "root") {
+	$structure["studium"] = array('topKat' => 'daten', 'name' => _("Studiendaten"), 'link' => "edit_about.php?view=Studium&username=$username", 'active' => FALSE);
 }
-$structure["_lebenslauf"] = array('topKat' => "lebenslauf", 'name' => _("Lebenslauf"), 'link' => "edit_about.php?view=Lebenslauf&username=$username", 'active' => FALSE);
-if ($auth->auth['perm'] == "dozent") {
-	$structure["schwerpunkte"] = array('topKat' => "lebenslauf", 'name' => _("Schwerpunkte"), 'link' => "edit_about.php?view=Lebenslauf&username=$username#schwerpunkte", 'active' => FALSE);
-	$structure["publikationen"] = array('topKat' => "lebenslauf", 'name' => _("Publikationen"), 'link' => "edit_about.php?view=Lebenslauf&username=$username#publikationen", 'active' => FALSE);
+
+if ($my_about->auth_user['perms'] != 'root') {
+	$structure["karriere"] = array('topKat' => 'daten', 'name' => _("Einrichtungsdaten"), 'link' => "edit_about.php?view=Karriere&username=$username", 'active' => FALSE);
 }
+
 $structure["_sonstiges"] = array('topKat' => "sonstiges", 'name' => _("Eigene Kategorien bearbeiten"), 'link' => "edit_about.php?view=Sonstiges&username=$username", 'active' => FALSE);
 $structure["news"] = array('topKat' => 'tools', 'name' => _("News"), 'link' => "admin_news.php?range_id=self&username=$username", 'active' => FALSE);
 $structure["lit"] = array('topKat' => 'tools', 'name' => _("Literatur"), 'link' => "admin_lit_list.php?_range_id=self&username=$username", 'active' => FALSE);
@@ -187,6 +185,9 @@ switch ($i_page) {
 			break;
 			case "Lebenslauf":
 				$reiter_view="lebenslauf";
+			break;
+			case 'Studium':
+				$reiter_view='studium';
 			break;
 			case "Sonstiges":
 				$reiter_view="sonstiges";

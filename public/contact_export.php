@@ -340,7 +340,7 @@ function getContactGroupData($exportID,$mode = "group"){
 			$j = 0;
 
 			while ($db2->next_record()){
-				$grouppositions = GetStatusgruppen($db2->f("inst_id"),$contacts[$i]["id"]);
+				$grouppositions = GetRoleNames(GetAllStatusgruppen($db2->f("inst_id"),$contacts[$i]["id"]));
 				if (is_array($grouppositions)){
 					$positions_tmp = array_values($grouppositions);
 					$positions = $positions_tmp[0];

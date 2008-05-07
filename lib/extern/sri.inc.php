@@ -185,5 +185,3 @@ for ($i = 0; $i < sizeof($args); $i++) {
 echo $sri_matches[1];
 $module_obj->printout($arguments);
 echo $sri_matches[3];
-
-?>

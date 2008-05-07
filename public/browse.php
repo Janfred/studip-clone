@@ -355,7 +355,7 @@ if (isset($query)) {
 						print("<td class=\"$class\"><font size=-1> &nbsp;Studierender &nbsp;</font></td>");
 					else {
 						//statusgruppen
-						$gruppen = GetStatusgruppen($val["Institut_id"],$val["user_id"]);
+						$gruppen = GetRoleNames(GetAllStatusgruppen($val["Institut_id"],$val["user_id"]));
 						(is_array($gruppen)) ? printf("<td class=\"$class\"><font size=-1> &nbsp;%s &nbsp;</font></td>", htmlReady(join(", ", array_values($gruppen)))) : printf("<td class=\"$class\"><font size=-1> &nbsp;" . _("keiner Funktion zugeordnet") . "&nbsp;</font></td>");
 					}
 					break;

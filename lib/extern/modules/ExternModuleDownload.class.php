@@ -240,7 +240,7 @@ class ExternModuleDownload extends ExternModule {
 															
 				);
 				// if user is member of a group then link name to details page
-				if (GetStatusgruppen($this->config->range_id, $db->f('user_id'))) {
+				if (GetRoleNames(GetAllStatusgruppen($this->config->range_id, $db->f('user_id')))) {
 					$table_row_data['content']['fullname'] = 
 							$this->elements['LinkIntern']->toString(array('content' =>
 							htmlReady($db->f('fullname')), 'module' => 'Persondetails',

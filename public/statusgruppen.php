@@ -82,41 +82,48 @@ function groupmail($range_id, $filter="") {
 }
 
 
-function PrintAktualStatusgruppen () {
+function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
 	global $_fullname_sql,$SessSemName, $PHP_SELF, $rechte, $user;
 
-	$db=new DB_Seminar;
-	$db2=new DB_Seminar;
-	$db->query ("SELECT name, statusgruppe_id, size, selfassign FROM statusgruppen WHERE range_id = '$SessSemName[1]' ORDER BY position ASC");
-	$AnzahlStatusgruppen = $db->num_rows();
-	$i = 0;
-	while ($db->next_record()) {
-		$statusgruppe_id = $db->f("statusgruppe_id");
-		$size = $db->f("size");
-		$groupmails = groupmail($statusgruppe_id);
-		echo "<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" border=\"0\"><tr>";
-		printf ("<td width=\"90%%\" class=\"topic\"><font size=\"-1\"><b>&nbsp;%s &nbsp;%s</b></font>",
-		CheckAssignRights($statusgruppe_id,$user->id,$SessSemName[1])?"<a href=\"$PHP_SELF?assign=$statusgruppe_id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"",
-		htmlReady($db->f("name")));
+	$db2 = new DB_Seminar();
 
-		$limit = GetStatusgruppeLimit($statusgruppe_id);
-		if ($limit!=FALSE && $db->f("selfassign") > 0) {
-			$voll = CountMembersPerStatusgruppe ($statusgruppe_id);
+
+	foreach ($roles as $role_id => $data) {
+		$css_rec = new cssClassSwitcher();
+		if ($level > 0) {
+			$title = $pred.' > '. $data['role']->getName();
+		} else {
+			$title = $data['role']->getName();
+		}
+
+		$size = $data['size'];
+		$groupmails = groupmail($role_id);
+		echo "<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" border=\"0\"><tr>";
+		echo '<td width="90%" class="steel" style="height: 25px"><font size="-1">';
+		
+		printf ("<b>%s&nbsp;%s</b></font>",
+			CheckAssignRights($role_id,$user->id)?"&nbsp;<a href=\"$PHP_SELF?assign=$role_id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"",
+			htmlReady($title)
+		);
+
+		$limit = GetStatusgruppeLimit($role_id);
+		if ($limit!=FALSE && $data['role']->getSelfassign()  == '1') {
+			$voll = CountMembersPerStatusgruppe ($role_id);
 			if ($voll >= $limit)
-				$limitcolor = "#FF5555";
+				$limitcolor = "#CC0000";
 			else
-				$limitcolor = "55FF55";
-			echo "<font size = \"2\" color=$limitcolor>&nbsp;&nbsp;-&nbsp;&nbsp;";
+				$limitcolor = "008800";
+			echo "<font size=\"-1\" color=$limitcolor>&nbsp;&nbsp;-&nbsp;&nbsp;";
 			printf ("%s von %s Plätzen belegt",$voll, $limit);
 			echo "&nbsp;</font>";
 		}
-		printf ("</td><td width=\"10%%\"class=\"topic\" valign=\"middle\" align=\"right\" nowrap>");
+		echo '</font></td><td width="10%" class="steel" valign="bottom" align="right" nowrap>';
 
-		if ((CheckUserStatusgruppe($statusgruppe_id, $user->id) || $rechte) && ($folder_id = CheckStatusgruppeFolder($statusgruppe_id)) ){
+		if ((CheckUserStatusgruppe($role_id, $user->id) || $rechte) && ($folder_id = CheckStatusgruppeFolder($role_id)) ){
 			echo "<a href=\"folder.php?cmd=tree&open=$folder_id#anker\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/icon-disc.gif\" ".tooltip(_("Dateiordner vorhanden"))."></a>&nbsp;";
 		}
 
-		if ($rechte || CheckUserStatusgruppe($statusgruppe_id, $user->id)) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
+		if ($rechte || CheckUserStatusgruppe($role_id, $user->id)) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
 			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&emailrequest=1&subject=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/mailnachricht.gif\" " . tooltip(_("Systemnachricht mit Emailweiterleitung an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0]));
 			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&subject=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0]));
 		} else {
@@ -136,8 +143,9 @@ function PrintAktualStatusgruppen () {
 			}
 		}
 
-		$db2->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] ." AS fullname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$statusgruppe_id' ORDER BY position ASC");
+		$db2->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] ." AS fullname, username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$role_id' ORDER BY position ASC");
 		$k = 1;
+
 		while ($db2->next_record()) {
 			if ($k % 2) {
 				$class="steel1";
@@ -149,26 +157,39 @@ function PrintAktualStatusgruppen () {
 			if ($visio[$db2->f('user_id')] || ($db2->f('user_id') == $user->id) || $rechte) {
 				printf("<font size=\"-1\"><a href = \"about.php?username=%s\">&nbsp;%s</a>", $db2->f("username"), htmlReady($db2->f("fullname")));
 				if  (($db2->f('user_id') == $user->id) && !($visio[$db2->f('user_id')]) && !$rechte) {
-					echo ' ' . _("(unsichtbar)");
+					echo ' (unsichtbar)';
 				}
 				echo '</font>';
 			} else {
-				echo '<font size="-1" color="#666666">'. _("(unsichtbareR NutzerIn)"). '</font>';
+				echo '<font size="-1" color="#666666">&nbsp;'. _("(unsichtbareR NutzerIn)"). '</font>';
 			}
 
 			echo '</td>';
 			printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
-			if (CheckSelfAssign($statusgruppe_id) && $user->id == $db2->f("user_id"))
-				printf ("<a href=\"$PHP_SELF?delete_id=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Aus dieser Gruppe austragen")) . " border=\"0\"></a>&nbsp; ", $statusgruppe_id);
-			if (($visio[$db2->f('user_id')] || $rechte) && ($db2->f('user_id') != $user->id))
+			if (($data['selfassign'] == '1') && $user->id == $db2->f("user_id")) {
+				printf ("<a href=\"$PHP_SELF?delete_id=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Aus dieser Gruppe austragen")) . " border=\"0\"></a>&nbsp; ", $role_id);
+			}
+
+			if (($visio[$db2->f('user_id')] || $rechte) && ($db2->f('user_id') != $user->id)) {
 				printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db2->f("username"));
+			}
 			printf ("&nbsp;</td>");
 			echo "</tr>";
 			$k++;
 		}
-		$i++;
 		echo "</table><br><br>";
+
+		if ($data['child']) {
+			if ($level > 0) {
+				$zw = $pred . ' > '.$data['role']->getName();
+			} else {
+				$pred = $data['role']->getName();
+				$zw = $pred;
+			}
+			PrintAktualStatusgruppen($data['child'], $level+1, $zw); 
+		}
 	}
+
 }
 
 function PrintNonMembers ($range_id)
@@ -180,7 +201,7 @@ function PrintNonMembers ($range_id)
 	$db->query ($query);
 	if ($db->num_rows() >sizeof($bereitszugeordnet)-1) { // there are non-grouped members
 		echo "<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" border=\"0\"><tr>";
-		print ("<td width=\"100%%\" colspan=\"2\" class=\"steel\"><font size=\"-1\"><b>&nbsp;" . _("keiner Funktion oder Gruppe zugeordnet") . "</b></font> <img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"25\"></td>");
+		print ("<td width=\"100%%\" colspan=\"2\" class=\"steel\" style=\"height: 25px\"><font size=\"-1\"><b>&nbsp;" . _("keiner Funktion oder Gruppe zugeordnet") . "</b></font></td>");
 		echo 	"</tr>";
 		$k = 1;
 		while ($db->next_record()) {
@@ -245,8 +266,8 @@ if ($delete_id)
 	?>
 	<tr valign="top">
      <td width="90%" class="blank">
-			<?
-			PrintAktualStatusgruppen();
+			<?			
+			PrintAktualStatusgruppen(GetAllStatusgruppen($SessSemName[1], $user->id));
 			$anzahltext = PrintNonMembers($SessSemName[1]);
 
 			if ($anzahltext == 1) {

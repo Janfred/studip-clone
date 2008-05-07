@@ -103,7 +103,7 @@ else
 	$user_phone	 = $db->f("Telefon");
 	$user_fax	   = $db->f("Fax");
 	$user_cons_time = $db->f("sprechzeiten");
-	$user_groups	= GetStatusgruppen ($inst_id, $db->f("user_id"));
+	$user_groups	= GetRoleNames(GetAllStatusgruppen ($inst_id, $db->f("user_id")));
 }
 
 if ($num_news)

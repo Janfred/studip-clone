@@ -41,620 +41,14 @@ require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/log_events.inc.php');
 require_once('lib/classes/Avatar.class.php');
-
-
+require_once('lib/edit_about.inc.php');
 
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
+$sess->register('edit_about_data');
+
 if (!isset($ALLOW_CHANGE_NAME)) $ALLOW_CHANGE_NAME = TRUE; //wegen Abwärtskompatibilität, erst ab 1.1 bekannt
-
-// Klassendefinition
-
-class about extends messaging {
-
-var $db;     //unsere Datenbankverbindung
-var $auth_user = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle auth_user_md5
-var $user_info = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle user_info
-var $user_inst = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle user_inst
-var $user_studiengang = array(); // assoziatives Array, enthält die Userdaten aus der Tabelle user_studiengang
-var $check = "";    //Hilfsvariable für den Rechtecheck
-var $special_user = FALSE;  // Hilfsvariable für bes. Institutsfunktionen
-var $msg = ""; //enthält evtl Fehlermeldungen
-var $max_file_size = 100; //max Größe der Bilddatei in KB
-var $logout_user = FALSE; //Hilfsvariable, zeigt an, ob der User ausgeloggt werden muß
-var $priv_msg = "";  //Änderungsnachricht bei Adminzugriff
-var $default_url = "http://www"; //default fuer private URL
-
-
-function about($username,$msg) {  // Konstruktor, prüft die Rechte
-	global $user,$perm,$auth;
-
-	$this->db = new DB_Seminar;
-	$this->get_auth_user($username);
-	$this->dataFieldEntries = DataFieldEntry::getDataFieldEntries($this->auth_user["user_id"]);
-	$this->msg = $msg; //Meldungen restaurieren
-
-	// der user selbst natürlich auch
-	if ($auth->auth["uname"] == $username AND $perm->have_perm("autor"))
-		$this->check="user";
-	//bei admins schauen wir mal
-	elseif ($auth->auth["perm"]=="admin") {
-		$this->db->query("SELECT a.user_id FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.inst_perms='admin' AND b.user_id='$user->id') AND (a.user_id='".$this->auth_user["user_id"]."' AND a.inst_perms IN ('dozent','tutor','autor'))");
-		if ($this->db->num_rows())
-			$this->check="admin";
-
-		if ($perm->is_fak_admin()){
-			$this->db->query("SELECT c.user_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.fakultaets_id)  LEFT JOIN user_inst c ON(b.Institut_id=c.Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND c.user_id='".$this->auth_user["user_id"]."'");
-			if ($this->db->next_record())
-				$this->check="admin";
-		}
-	}
-	//root darf mal wieder alles
-	elseif ($auth->auth["perm"]=="root")
-		$this->check="admin";
-	else
-		$this->check="";
-	//hier ist wohl was falschgelaufen...
-	if ($this->auth_user["username"]=="")
-		$this->check="";
-
-	return;
-}
-
-
-function get_auth_user($username) {
-	//ein paar userdaten brauchen wir schon mal
-	$this->db->query("SELECT * FROM auth_user_md5 WHERE username = '$username'");
-	$fields = $this->db->metadata();
-	if ($this->db->next_record()) {
-		for ($i=0; $i<count($fields); $i++) {
-			$field_name = $fields[$i]["name"];
-			$this->auth_user[$field_name] = $this->db->f("$field_name");
-		}
-	}
-	if (!$this->auth_user['auth_plugin']){
-		$this->auth_user['auth_plugin'] = "standard";
-	}
-}
-
-// füllt die arrays  mit Daten
-function get_user_details() {
-	$this->db->query("SELECT * FROM user_info WHERE user_id = '".$this->auth_user["user_id"]."'");
-	$fields = $this->db->metadata();
-	if ($this->db->next_record()) {
-		for ($i=0; $i<count($fields); $i++) {
-			$field_name = $fields[$i]["name"];
-			$this->user_info[$field_name] = $this->db->f("$field_name");
-			if (!$this->user_info["Home"])
-				$this->user_info["Home"]=$this->default_url;
-		}
-	}
-
-	$this->db->query("SELECT user_studiengang.*,studiengaenge.name FROM user_studiengang LEFT JOIN studiengaenge USING (studiengang_id) WHERE user_id = '".$this->auth_user["user_id"]."' ORDER BY name");
-	while ($this->db->next_record()) {
-		$this->user_studiengang[$this->db->f("studiengang_id")] = array("name" => $this->db->f("name"));
-	}
-
-
-	$this->db->query("SELECT user_inst.*,Institute.Name FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_id = '".$this->auth_user["user_id"]."' ORDER BY priority ASC, Institut_id ASC");
-	while ($this->db->next_record()) {
-		$this->user_inst[$this->db->f("Institut_id")] =
-				array("inst_perms" => $this->db->f("inst_perms"),
-				"sprechzeiten" => $this->db->f("sprechzeiten"),
-				"raum" => $this->db->f("raum"),
-				"Telefon" => $this->db->f("Telefon"),
-				"Fax" => $this->db->f("Fax"),
-				"Name" => $this->db->f("Name"),
-				"externdefault" => $this->db->f("externdefault"),
-				"priority" => $this->db->f("priority"),
-				"visible" => $this->db->f("visible"));
-		if ($this->db->f("inst_perms")!="user")
-			$this->special_user=TRUE;
-	}
-
-	return;
-}
-
-function studiengang_edit($studiengang_delete,$new_studiengang) {
-	if (is_array($studiengang_delete)) {
-		for ($i=0; $i < count($studiengang_delete); $i++) {
-			$this->db->query("DELETE FROM user_studiengang WHERE user_id='".$this->auth_user["user_id"]."' AND studiengang_id='$studiengang_delete[$i]'");
-			if (!$this->db->affected_rows())
-				$this->msg = $this->msg."error§" . sprintf(_("Fehler beim L&ouml;schen in user_studiengang bei ID=%s"), $studiengang_delete[$i]) . "§";
-		}
-	}
-
-	if ($new_studiengang) {
-		$this->db->query("INSERT IGNORE INTO user_studiengang (user_id,studiengang_id) VALUES ('".$this->auth_user["user_id"]."','$new_studiengang')");
-		if (!$this->db->affected_rows())
-			$this->msg = $this->msg."error§" . sprintf(_("Fehler beim Einf&uuml;gen in user_studiengang bei ID=%s"), $new_studiengang) . "§";
-	}
-
-	if ( ($studiengang_delete || $new_studiengang) && !$this->msg) {
-		$this->msg = "msg§" . _("Die Zuordnung zu Studiengängen wurde ge&auml;ndert.");
-		setTempLanguage($this->auth_user["user_id"]);
-		$this->priv_msg= _("Die Zuordnung zu Studiengängen wurde geändert!\n");
-		restoreLanguage();
-	}
-
-	return;
-}
-
-
-
-function inst_edit($inst_delete,$new_inst) {
-	if (is_array($inst_delete)) {
-		for ($i=0; $i < count($inst_delete); $i++) {
-			$this->db->query("DELETE FROM user_inst WHERE user_id='".$this->auth_user["user_id"]."' AND Institut_id='$inst_delete[$i]'");
-			if (!$this->db->affected_rows())
-				$this->msg = $this->msg . "error§" . sprintf(_("Fehler beim L&ouml;schen in user_inst bei ID=%s"), $inst_delete[$i]) . "§";
-		}
-	}
-
-	if ($new_inst) {
-		$this->db->query("INSERT IGNORE INTO user_inst (user_id,Institut_id,inst_perms) VALUES ('".$this->auth_user["user_id"]."','$new_inst','user')");
-		if (!$this->db->affected_rows())
-			$this->msg = $this->msg . "error§" . sprintf(_("Fehler beim Einf&uuml;gen in user_inst bei ID=%s"), $new_inst) . "§";
-	}
-
-	if ( ($inst_delete || $new_inst) && !$this->msg) {
-		$this->msg = "msg§" . _("Die Zuordnung zu Einrichtungen wurde ge&auml;ndert.");
-		setTempLanguage($this->auth_user["user_id"]);
-		$this->priv_msg= _("Die Zuordnung zu Einrichtungen wurde geändert!\n");
-		restoreLanguage();
-	}
-
-	return;
-}
-
-function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst, $visible, $datafield_content, $datafield_id, $datafield_type, $datafield_sec_range_id, $group_id) {
-	if (is_array($raum)) {
-		while (list($inst_id, $detail) = each($raum)) {
-			$query = "UPDATE user_inst SET raum='$detail', sprechzeiten='$sprech[$inst_id]', ";
-			$query .= "Telefon='$tel[$inst_id]', Fax='$fax[$inst_id]', externdefault=";
-			$query .= $default_inst == $inst_id ? '1' : '0';
-			$query .= ", visible=" . (isset($visible[$inst_id]) ? '0' : '1');
-			$query .= " WHERE Institut_id='$inst_id' AND user_id='" . $this->auth_user["user_id"] . "'";
-			$this->db->query($query);
-			if ($this->db->affected_rows()) {
-				$this->msg = $this->msg . "msg§" . sprintf(_("Ihre Daten an der Einrichtung %s wurden ge&auml;ndert"), htmlReady($name[$inst_id])) . "§";
-				setTempLanguage($this->auth_user["user_id"]);
-				$this->priv_msg = $this->priv_msg . sprintf(_("Ihre Daten an der Einrichtung %s wurden geändert.\n"), htmlReady($name[$inst_id]));
-				restoreLanguage();
-			}
-		}
-	}
-	// process user role datafields
-	if (is_array($datafield_id)) {
-		$ffCount = 0; // number of processed form fields
-		foreach ($datafield_id as $i=>$id) {
-			$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$datafield_type[$i]));
-			$entry  = DataFieldEntry::createDataFieldEntry($struct, array($this->auth_user['user_id'], $datafield_sec_range_id[$i]));
-			$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
-			if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
-				$entry->setValue('');
-				$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
-			}
-			elseif ($numFields == 1)
-				$entry->setValue($datafield_content[$ffCount]);
-			else
-				$entry->setValue(array_slice($datafield_content, $ffCount, $numFields));
-			$ffCount += $numFields;
-
-			$entry->structure->load();
-			if ($entry->isValid())
-				$entry->store();
-			else
-				$invalidEntries[$struct->getID()] = $entry;
-		}
-		// change visibility of role data
-		foreach ($group_id as $groupID)
-			setOptionsOfStGroup($groupID, $this->auth_user['user_id'], ($visible[$groupID] == '0') ? '0' : '1');
-	}
-	return $invalidEntries;
-}
-
-
-function edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $datafield_id, $datafield_type) {
-	//Update additional data-fields
-	$invalidEntries = array();
-	if (is_array($datafield_id)) {
-		$ffCount = 0; // number of processed form fields
-		foreach ($datafield_id as $i=>$id) {
-			$numFields = $this->dataFieldEntries[$id]->numberOfHTMLFields(); // number of form fields used by this datafield
-			if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
-				$this->dataFieldEntries[$id]->setValue('');
-				$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
-			}
-			elseif ($numFields == 1)
-				$this->dataFieldEntries[$id]->setValue($datafield_content[$ffCount]);
-			else
-				$this->dataFieldEntries[$id]->setValue(array_slice($datafield_content, $ffCount, $numFields));
-			$ffCount += $numFields;
-			if ($this->dataFieldEntries[$id]->isValid())
-				$resultDataFields |= $this->dataFieldEntries[$id]->store();
-			else
-				$invalidEntries[$id] = $this->dataFieldEntries[$id];
-		}
-	}
-
-	//check ob die blobs verändert wurden...
-	$this->db->query("SELECT  lebenslauf, schwerp, publi FROM user_info WHERE user_id='".$this->auth_user["user_id"]."'");
-	$this->db->next_record();
-	if ($lebenslauf!=$this->db->f("lebenslauf") || $schwerp!=$this->db->f("schwerp") || $publi!=$this->db->f("publi") || $resultDataFields) {
-		$this->db->query("UPDATE user_info SET lebenslauf='$lebenslauf', schwerp='$schwerp', publi='$publi', chdate='".time()."' WHERE user_id='".$this->auth_user["user_id"]."'");
-		$this->msg = $this->msg . "msg§" . _("Daten im Lebenslauf u.a. wurden ge&auml;ndert") . "§";
-		setTempLanguage($this->auth_user["user_id"]);
-		$this->priv_msg = _("Daten im Lebenslauf u.a. wurden geändert.\n");
-		restoreLanguage();
-	}
-	return $invalidEntries;
-}
-
-
-function edit_pers($password, $check_pass, $response, $new_username, $vorname, $nachname, $email, $telefon, $cell, $anschrift, $home, $motto, $hobby, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view) {
-	global $UNI_NAME_CLEAN, $_language_path, $auth, $perm;
-	global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, $ALLOW_CHANGE_NAME, $ALLOW_CHANGE_TITLE;
-
-	//erstmal die "unwichtigen" Daten
-	if ($home == $this->default_url)
-	$home='';
-	if($title_front == "")
-	$title_front = $title_front_chooser;
-	if($title_rear == "")
-	$title_rear = $title_rear_chooser;
-	$query = "";
-	if (!StudipAuthAbstract::CheckField("user_info.privatnr", $this->auth_user['auth_plugin'])){
-		$query .= "privatnr='$telefon',";
-	}
-
-	if (!StudipAuthAbstract::CheckField("user_info.privatcell", $this->auth_user['auth_plugin'])){
-		$query .= "privatcell='$cell',";
-	}
-
-	if (!StudipAuthAbstract::CheckField("user_info.privadr", $this->auth_user['auth_plugin'])){
-		$query .= "privadr='$anschrift',";
-	}
-	if (!StudipAuthAbstract::CheckField("user_info.Home", $this->auth_user['auth_plugin'])){
-		$query .= "Home='$home',";
-	}
-	if (!StudipAuthAbstract::CheckField("user_info.motto", $this->auth_user['auth_plugin'])){
-		$query .= "motto='$motto',";
-	}
-	if (!StudipAuthAbstract::CheckField("user_info.hobby", $this->auth_user['auth_plugin'])){
-		$query .= "hobby='$hobby',";
-	}
-	if (!StudipAuthAbstract::CheckField("user_info.geschlecht", $this->auth_user['auth_plugin'])){
-		$query .= "geschlecht='$geschlecht',";
-	}
-	if ($ALLOW_CHANGE_TITLE && !StudipAuthAbstract::CheckField("user_info.title_front", $this->auth_user['auth_plugin'])){
-		$query .= "title_front='$title_front',";
-	}
-	if ($ALLOW_CHANGE_TITLE && !StudipAuthAbstract::CheckField("user_info.title_rear", $this->auth_user['auth_plugin'])){
-		$query .= "title_rear='$title_rear',";
-	}
-	if ($query != "") {
-		$query = "UPDATE user_info SET " . $query . " chdate='".time()."' WHERE user_id='".$this->auth_user["user_id"]."'";
-		$this->db->query($query);
-		if ($this->db->affected_rows()) {
-			$this->msg = $this->msg . "msg§" . _("Ihre pers&ouml;nlichen Daten wurden ge&auml;ndert.") . "§";
-			setTempLanguage($this->auth_user["user_id"]);
-			$this->priv_msg = _("Ihre persönlichen Daten wurden geändert.\n");
-			restoreLanguage();
-		}
-	}
-
-	$new_username = trim($new_username);
-	$vorname = trim($vorname);
-	$nachname = trim($nachname);
-	$email = trim($email);
-
-	//nur nötig wenn der user selbst seine daten ändert
-	if ($this->check == "user") {
-		//erstmal die Syntax checken $validator wird in der local.inc.php benutzt, sollte also funzen
-		$validator=new email_validation_class; ## Klasse zum Ueberpruefen der Eingaben
-		$validator->timeout=10;
-
-		if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin']) && (($response && $response!=md5("*****")) || $password!="*****")) {      //Passwort verändert ?
-			// auf doppelte Vergabe wird weiter unten getestet.
-			if (!isset($response) || $response=="") { // wir haben kein verschluesseltes Passwort
-				if (!$validator->ValidatePassword($password)) {
-					$this->msg=$this->msg . "error§" . _("Das Passwort ist nicht lang genug!") . "§";
-					return false;
-				}
-				if ($check_pass != $password) {
-					$this->msg=$this->msg . "error§" . _("Die Wiederholung des Passwortes ist falsch! Bitte geben sie das exakte Passwort ein!") . "§";
-					return false;
-				}
-				$newpass=md5($password);             // also können wir das unverschluesselte Passwort testen
-			} else
-			$newpass=$response;
-
-			$this->db->query("UPDATE auth_user_md5 SET password='$newpass' WHERE user_id='".$this->auth_user["user_id"]."'");
-			$this->msg=$this->msg . "msg§" . _("Ihr Passwort wurde ge&auml;ndert!") . "§";
-		}
-
-		if (!StudipAuthAbstract::CheckField('auth_user_md5.Vorname', $this->auth_user['auth_plugin']) && $vorname != $this->auth_user['Vorname']) { //Vornamen verändert ?
-			if ($ALLOW_CHANGE_NAME) {
-				if (!$validator->ValidateName($vorname)) {
-					$this->msg=$this->msg . "error§" . _("Der Vorname fehlt oder ist unsinnig!") . "§";
-					return false;
-				}   // Vorname nicht korrekt oder fehlend
-				$this->db->query("UPDATE auth_user_md5 SET Vorname='$vorname' WHERE user_id='".$this->auth_user["user_id"]."'");
-				$this->msg=$this->msg . "msg§" . _("Ihr Vorname wurde ge&auml;ndert!") . "§";
-			} else $vorname = $this->auth_user['Vorname'];
-		}
-
-		if (!StudipAuthAbstract::CheckField('auth_user_md5.Nachname', $this->auth_user['auth_plugin']) && $nachname != $this->auth_user['Nachname']) { //Namen verändert ?
-			if ($ALLOW_CHANGE_NAME) {
-				if (!$validator->ValidateName($nachname)) {
-					$this->msg=$this->msg . "error§" . _("Der Nachname fehlt oder ist unsinnig!") . "§";
-					return false;
-				}   // Nachname nicht korrekt oder fehlend
-				$this->db->query("UPDATE auth_user_md5 SET Nachname='$nachname' WHERE user_id='".$this->auth_user["user_id"]."'");
-				$this->msg=$this->msg . "msg§" . _("Ihr Nachname wurde ge&auml;ndert!") . "§";
-			} else $nachname = $this->auth_user['Nachname'];
-		}
-
-
-		if (!StudipAuthAbstract::CheckField('auth_user_md5.username', $this->auth_user['auth_plugin']) && $this->auth_user['username'] != $new_username) {
-			if ($ALLOW_CHANGE_USERNAME) {
-				if (!$validator->ValidateUsername($new_username)) {
-					$this->msg=$this->msg . "error§" . _("Der gewählte Username ist nicht lang genug!") . "§";
-					return false;
-				}
-				$check_uname = StudipAuthAbstract::CheckUsername($new_username);
-				if ($check_uname['found']) {
-					$this->msg .= "error§" . _("Der Username wird bereits von einem anderen User verwendet. Bitte wählen sie einen anderen Usernamen!") . "§";
-					return false;
-				} else {
-					//$this->msg .= "info§" . $check_uname['error'] ."§";
-				}
-				$this->db->query("UPDATE auth_user_md5 SET username='$new_username' WHERE user_id='".$this->auth_user["user_id"]."'");
-				$this->msg=$this->msg . "msg§" . _("Ihr Username wurde ge&auml;ndert!") . "§";
-				$this->logout_user = TRUE;
-			} else $new_username = $this->auth_user['username'];
-		}
-
-
-		if (!StudipAuthAbstract::CheckField("auth_user_md5.Email", $this->auth_user['auth_plugin']) && $this->auth_user["Email"] != $email) {  //email wurde geändert!
-			if ($ALLOW_CHANGE_EMAIL) {
-				$smtp=new studip_smtp_class;       ## Einstellungen fuer das Verschicken der Mails
-				$REMOTE_ADDR=$_SERVER["REMOTE_ADDR"];
-				$Zeit=date("H:i:s, d.m.Y",time());
-
-				// accept only registered domains if set
-				$email_restriction = trim(get_config('EMAIL_DOMAIN_RESTRICTION'));
-				if (!$validator->ValidateEmailAddress($email, $email_restriction)) {
-					if ($email_restriction) {
-						$email_restriction_msg_part = '';
-						$email_restriction_parts = explode(',', $email_restriction);
-						for ($email_restriction_count = 0; $email_restriction_count < count($email_restriction_parts); $email_restriction_count++) {
-							if ($email_restriction_count == count($email_restriction_parts) - 1) {
-								$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . '<br />';
-							} else if (($email_restriction_count + 1) % 3) {
-								$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ', ';
-							} else {
-								$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ',<br />';
-							}
-						}
-						$this->msg = $this->msg . 'error§'
-								. sprintf(_("Die E-Mail-Adresse fehlt, ist falsch geschrieben oder gehört nicht zu folgenden Domains:%s"), '<br>' . $email_restriction_msg_part);
-					} else {
-					$this->msg=$this->msg . "error§" . _("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!") . "§";
-					}
-					return false;        // E-Mail syntaktisch nicht korrekt oder fehlend
-				}
-
-				if (!$validator->ValidateEmailHost($email)) {     // Mailserver nicht erreichbar, ablehnen
-					$this->msg=$this->msg . "error§" . _("Der Mailserver ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken k&ouml;nnen!") . "§";
-					return false;
-				} else {       // Server ereichbar
-					if (!$validator->ValidateEmailBox($email)) {    // aber user unbekannt. Mail an abuse!
-						$from = $smtp->env_from;
-						$to = $smtp->abuse;
-						$smtp->SendMessage(
-						$from, array($to),
-						array("From: $from", "To: $to", "Subject: edit_about"),
-						"Emailbox unbekannt\n\nUser: ".$this->auth_user["username"]."\nEmail: $email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
-						$this->msg=$this->msg . "error§" . _("Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie Ihre Angaben!") . "§";
-						return false;
-					}
-				}
-
-				$this->db->query("SELECT Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
-				if ($this->db->next_record()) {
-					$this->msg=$this->msg . "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), htmlReady($this->db->f("Vorname")), htmlReady($this->db->f("Nachname"))) . "§";
-					return false;
-				}
-
-				if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])){
-						//email ist ok, user bekommt neues Passwort an diese Addresse, falls Passwort in Stud.IP DB
-						$newpass=$this->generate_password(6);
-						$hashpass=md5($newpass);
-						// Mail abschicken...
-						$to=$email;
-						$url = $smtp->url;
-
-						// include language-specific subject and mailbody
-						include_once("locale/$_language_path/LC_MAILS/change_self_mail.inc.php");
-
-						$smtp->SendMessage(
-						$smtp->env_from, array($to),
-						array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
-						$mailbody);
-						$this->logout_user = TRUE;
-						$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§info§" . _("ACHTUNG!<br>Aus Sicherheitsgr&uuml;nden wurde auch ihr Passwort ge&auml;ndert. Es wurde an die neue E-Mail-Adresse geschickt!") . "§";
-						$this->db->query("UPDATE auth_user_md5 SET Email='$email', password='$hashpass' WHERE user_id='".$this->auth_user["user_id"]."'");
-						log_event("USER_NEWPWD",$this->auth_user["user_id"]); // logging
-					} else {
-						$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§";
-						$this->db->query("UPDATE auth_user_md5 SET Email='$email' WHERE user_id='".$this->auth_user["user_id"]."'");
-					}
-			}
-		}
-	}
-	return;
-}
-
-
-function select_studiengang() {  //Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswählbaren Studiengängen
-
-	echo '<select name="new_studiengang" style="width:30ex;"><option selected></option>'."\n";
-	$this->db->query("SELECT a.studiengang_id,a.name FROM studiengaenge AS a LEFT JOIN user_studiengang AS b ON (b.user_id='".$this->auth_user["user_id"]."' AND a.studiengang_id=b.studiengang_id) WHERE b.studiengang_id IS NULL ORDER BY a.name");
-
-	while ($this->db->next_record()) {
-		echo "<option value=\"".$this->db->f("studiengang_id")."\">".htmlReady(my_substr($this->db->f("name"),0,50))."</option>\n";
-	}
-	echo "</select>\n";
-
-	return;
-}
-
-
-function select_inst() {  //Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswählbaren Instituten
-
-	echo '<select name="new_inst" style="width:30ex;"><option selected></option>'."\n";
-	$this->db->query("SELECT a.Institut_id,a.Name FROM Institute AS a LEFT JOIN user_inst AS b ON (b.user_id='".$this->auth_user["user_id"]."' AND a.Institut_id=b.Institut_id) WHERE b.Institut_id IS NULL ORDER BY a.Name");
-
-	while ($this->db->next_record()) {
-		echo "<option value=\"".$this->db->f("Institut_id")."\">".htmlReady(my_substr($this->db->f("Name"),0,50))."</option>\n";
-	}
-	echo "</select>\n";
-
-	return;
-}
-
-
-function generate_password($length) {      //Hilfsfunktion, erzeugt neues Passwort
-
-	mt_srand((double)microtime()*1000000);
-	for ($i=1;$i<=$length;$i++) {
-		$temp = mt_rand() % 36;
-		if ($temp < 10)
-			$temp += 48;   // 0 = chr(48), 9 = chr(57)
-		else
-			$temp += 87;   // a = chr(97), z = chr(122)
-		$pass .= chr($temp);
-	}
-	return $pass;
-}
-
-
-
-//Displays Errosmessages (kritischer Abbruch, Symbol "X")
-
-function my_error($msg) {
-?>
- <tr>
-	<td class="blank" colspan=2>
-	 <table border="0" align="left" cellspacing="0" cellpadding="2">
-	<tr>
-	 <td class="blank" align="center" width="50"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x.gif"></td>
-	 <td class="blank" align="left" width="*"><font color="#FF2020"><?php print $msg ?></font></td>
-	</tr>
-	 </table>
-	</td>
- </tr>
- <tr>
-	<td class="blank" colspan="2">&nbsp;</td>
- </tr>
-<?
-}
-
-
-//Displays  Successmessages (Information &uuml;ber erfolgreiche Aktion, Symbol Haken)
-
-function my_msg($msg) {
-?>
- <tr>
-	<td class="blank" colspan=2>
-	 <table border="0" align="left" cellspacing="0" cellpadding="2">
-	<tr>
-	 <td class="blank" align="center" width=50><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ok.gif"></td>
-	 <td class="blank" align="left" width="*"><font color="#008000"><?php print $msg ?></font></td>
-	</tr>
-	 </table>
-	</td>
- </tr>
- <tr>
-	<td class="blank" colspan="2">&nbsp;</td>
- </tr>
-<?
-}
-
-//Displays  Informationmessages  (Hinweisnachrichten, Symbol Ausrufungszeichen)
-
-function my_info($msg) {
-?>
- <tr>
-	<td class="blank" colspan="2">
-	 <table border="0" align="left" cellspacing="0" cellpadding="2">
-	<tr>
-	 <td class="blank" align="center" width="50"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ausruf.gif"></td>
-	 <td class="blank" align="left" width="*"><font color="#008000"><?php print $msg ?></font></td>
-	</tr>
-	 </table>
-	</td>
- </tr>
- <tr>
-	<td class="blank" colspan="2">&nbsp;</td>
- </tr>
-<?
-}
-
-function parse_msg($long_msg,$separator="§") {
-
-	$msg = explode ($separator,$long_msg);
-	for ($i=0; $i < count($msg); $i=$i+2) {
-		switch ($msg[$i]) {
-			case "error" : $this->my_error($msg[$i+1]); break;
-			case "info" : $this->my_info($msg[$i+1]); break;
-			case "msg" : $this->my_msg($msg[$i+1]); break;
-		}
-	}
-	return;
-}
-
-function move ($inst_id, $direction) {
-	if ($this->check == 'user' || $this->check == 'admin') {
-		$db = new DB_Seminar();
-		$query = "SELECT * FROM user_inst WHERE user_id = '{$this->auth_user['user_id']}' ";
-		$query .= "AND inst_perms != 'user' ORDER BY priority ASC";
-		$db->query($query);
-		$i = 1;
-		while ($db->next_record()) {
-			$to_order[$i] = $db->f('Institut_id');
-			if ($to_order[$i] == $inst_id)
-				$pos = $i;
-			$i++;
-		}
-		if ($direction == 'up') {
-			$a = $to_order[$pos - 1];
-			$to_order[$pos - 1] = $to_order[$pos];
-			$to_order[$pos] = $a;
-		}
-		else {
-			$a = $to_order[$pos + 1];
-			$to_order[$pos + 1] = $to_order[$pos];
-			$to_order[$pos] = $a;
-		}
-		$i--;
-		for (;$i > 0; $i--) {
-			$query = "UPDATE user_inst SET priority = $i WHERE user_id = '{$this->auth_user['user_id']}' ";
-			$query .= "AND Institut_id = '{$to_order[$i]}'";
-			$db->query($query);
-		}
-	}
-}
-
-
-} // ende Klassendefinition
-
-
-
-
 
 // hier gehts los
 if (!$username) $username = $auth->auth["uname"];
@@ -666,6 +60,9 @@ if($edit_about_msg){
 if($nobodymsg && $logout && $auth->auth["uid"] == "nobody"){
 	$msg = $nobodymsg;
 }
+
+checkExternDefaultForUser(get_userid($username));
+
 $my_about = new about($username,$msg);
 $cssSw = new cssClassSwitcher;
 #$DataFields = new DataFields($my_about->auth_user["user_id"]);
@@ -710,7 +107,69 @@ if (!$my_about->check) {
 	exit;
 }
 
+
+
+
+/* * * * * * * * * * * * * * * *
+ * * * C O N T R O L L E R * * *
+ * * * * * * * * * * * * * * * */
+ 
 if (check_ticket($studipticket)) {
+	
+	$invalidEntries = parse_datafields($my_about->auth_user['user_id']);		
+
+	// Person einer Rolle hinzufügen
+	if ($cmd == 'addToGroup') {
+		$db_group = new DB_Seminar();
+		if (InsertPersonStatusgruppe($my_about->auth_user['user_id'], $role_id)) {
+			$globalperms = get_global_perm($my_about->auth_user['user_id']);
+			if ($perm->get_studip_perm($subview_id, $my_about->auth_user['user_id']) == FALSE) {
+				$db_group->query("INSERT IGNORE INTO user_inst SET Institut_id = '$subview_id', user_id = '{$my_about->auth_user['user_id']}', inst_perms = '$globalperms'");
+			}
+			if ($perm->get_studip_perm($subview_id, $my_about->auth_user['user_id']) == 'user') {
+				$db_group->query("UPDATE user_inst SET inst_perms = '$globalperms' WHERE user_id = '{$my_about->auth_user['user_id']}' AND Institut_id = '$subview_id'");
+			}
+			$my_about->msg .= 'msg§'. _("Die Person wurde in die ausgewählte Gruppe eingetragen!"). '§';
+			checkExternDefaultForUser($my_about->auth_user['user_id']);
+		} else {
+			$my_about->msg .= 'error§'. _("Fehler beim Eintragen in die Gruppe!") . '§';
+		}
+	}
+
+	//Default von Einrichtung Übernehmen
+	if ($cmd == 'set_default') {
+		$dbdef = new DB_Seminar();
+		$dbdef->query("UPDATE datafields_entries SET content='default_value' WHERE datafield_id = '".$_REQUEST['chgdef_entry_id']."' AND range_id = '".$my_about->auth_user['user_id']."' AND sec_range_id = '".$_REQUEST['sec_range_id']."'");
+		if ($dbdef->affected_rows() == 0) {
+			$dbdef->query("INSERT INTO datafields_entries (datafield_id, range_id, sec_range_id, content, chdate, mkdate) VALUES ".
+				"('".$_REQUEST['chgdef_entry_id']."',".
+				"'".$my_about->auth_user['user_id']."', ".
+				"'".$_REQUEST['sec_range_id']."', ".
+				"'default_value', ".time().", ".time().")");
+		}
+	}
+
+	//Default NICHT von Einrichtung Übernehmen
+	if ($cmd == 'unset_default') {
+		$default_entries = DataFieldEntry::getDataFieldEntries($zw = array($my_about->auth_user['user_id'], $_REQUEST['cor_inst_id']));
+		$dbdef = new DB_Seminar();
+		$dbdef->query("UPDATE datafields_entries SET content='".$default_entries[$_REQUEST['chgdef_entry_id']]->getValue()."' WHERE datafield_id = '".$_REQUEST['chgdef_entry_id']."' AND range_id = '".$my_about->auth_user['user_id']."' AND sec_range_id = '".$_REQUEST['sec_range_id']."'");
+	}
+
+	if ($cmd == 'makeAllDefault') {
+		MakeDatafieldsDefault($my_about->auth_user['user_id'], $_REQUEST['role_id']);
+	}
+
+	if ($cmd == 'makeAllSpecial') {
+		MakeDatafieldsDefault($my_about->auth_user['user_id'], $_REQUEST['role_id'], '');
+	}
+	
+	if ($cmd == 'removeFromGroup') {
+		$db_group = new DB_Seminar();
+		$db_group->query("DELETE FROM statusgruppe_user WHERE user_id = '" . $my_about->auth_user['user_id'] . "' AND statusgruppe_id = '$role_id'");		
+		$my_about->msg .= 'msg§' . _("Die Person wurde aus der ausgewählten Gruppe gelöscht!") . '§';
+	}
+	
 	//ein Bild wurde hochgeladen
 	if ($cmd == "copy") {
 		try {
@@ -723,20 +182,66 @@ if (check_ticket($studipticket)) {
 		setTempLanguage($my_about->auth_user["user_id"]);
 		$my_about->priv_msg = _("Ein neues Bild wurde hochgeladen.\n");
 		restoreLanguage();
-		}
+	}
 
 	//Veränderungen an Studiengängen
 	if ($cmd == "studiengang_edit" && (!StudipAuthAbstract::CheckField("studiengang_id", $my_about->auth_user['auth_plugin'])) && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm('admin')))
-	 {
+	{
 		$my_about->studiengang_edit($studiengang_delete,$new_studiengang);
-		}
+	}
 
 	//Veränderungen an Instituten für Studies
 	if ($cmd == "inst_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm('admin')))
-	 {
+	{
 		$my_about->inst_edit($inst_delete,$new_inst);
+	}
+
+	// change order of institutes
+	if ($cmd == 'move') {
+		$my_about->move($move_inst, $direction);		
+	}
+
+	if ($cmd=="special_edit") {		
+		$invalidEntries = $my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst, $visible,
+										$datafield_content, $datafield_id, $datafield_type, $datafield_sec_range_id, $group_id);
+
+		$my_about->msg = "";
+
+		if ($_REQUEST['status']) {
+			$db_s = new DB_Seminar("SELECT inst_perms FROM user_inst WHERE user_id = '{$my_about->auth_user['user_id']}' AND Institut_id = '$inst_id'");
+			$db_s->next_record();
+
+			if ($db_s->f('inst_perms') != $_REQUEST['status']) {								
+				$my_about->msg .= 'msg§'. _("Der Status wurde geändert!") .'§';
+				$db_s->query("UPDATE user_inst SET inst_perms = '{$_REQUEST['status']}' WHERE user_id = '{$my_about->auth_user['user_id']}' AND Institut_id = '$inst_id'");
+			}
 		}
 
+		if (is_array($invalidEntries))
+			foreach ($invalidEntries as $entry)
+				$my_about->msg .= "error§" . sprintf(_("Fehlerhafter Eintrag im Feld <em>%s</em>: %s (Eintrag wurde nicht gespeichert)"), $entry->getName(), $entry->getDisplayValue()) . "§";
+
+		if (count($_REQUEST['role_visible']) > 0) { // change inheritance state of a user role
+			$groupID = array_pop(array_keys($_REQUEST['role_visible'])); // there is only 1 element in the array (and we get its key)
+			if ($_REQUEST['role_visible'][$groupID] == 1) {
+				$visible = 0;
+			} else {
+				$visible = 1;
+			}
+			setOptionsOfStGroup($groupID, $my_about->auth_user['user_id'], $visible, 1);
+			// Due to the changes concerning the statusgroups, inherit ist now always 1
+
+			/*$instID = GetRangeOfStatusgruppe($groupID);
+			$entries = DataFieldEntry::getDataFieldEntriesBySecondRangeID($instID);
+			foreach ($entries as $rangeID=>$entry) {
+				$entry->setSecondRangeID($groupID);  // content of institute fields is default for user role fields
+				$entry->store();
+			}*/
+		}
+	}
+	
+	
+	/*
 	//Veränderungen an Raum, Sprechzeit, etc
 	if ($cmd == "special_edit")
 	 {
@@ -759,14 +264,10 @@ if (check_ticket($studipticket)) {
 			}
 		}
 	}
-
-	// change order of institutes
-	if ($cmd == 'move') {
-		$my_about->move($move_inst, $direction);
-	}
-
+	*/
+	
 	//Veränderungen der pers. Daten
-	if ($cmd == "edit_pers") {
+	if ($cmd == "edit_pers" || $cmd == 'edit_leben') {
 		//email und passwort können nicht sinnvoll gleichzeitig geändert werden, da bei Änderung der email automatisch das passwort neu gesetzt wird
 		if (($email && $my_about->auth_user["Email"] != $email)
 			&& (($response && $response != md5("*****")) || ($password && $password != "*****"))) {
@@ -852,6 +353,10 @@ if (check_ticket($studipticket)) {
 	unset($cmd);
 }
 
+/* * * * * * * * * * * * * * * *
+ * * * * * * V I E W * * * * * *
+ * * * * * * * * * * * * * * * */
+ 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 
@@ -984,10 +489,11 @@ switch($view) {
 		break;
 	case "Karriere":
 		$HELP_KEYWORD="Basis.HomepageUniversitäreDaten";
-		if ($perm->have_perm ("tutor"))
-			$CURRENT_PAGE=_("Studiengang und Einrichtungen bearbeiten");
-		else
-			$CURRENT_PAGE=_("Studiengang bearbeiten");
+		$CURRENT_PAGE=_("Einrichtungsdaten bearbeiten");
+		break;
+	case 'Studium':
+		$HELP_KEYWORD="Basis.HomepageUniversitäreDaten";
+		$CURRENT_PAGE=_("Studiengang bearbeiten");
 		break;
 	case "Lebenslauf":
 		$HELP_KEYWORD="Basis.HomepageLebenslauf";
@@ -1071,8 +577,39 @@ if ($view != 'Forum'
 		echo '</font>';
 	echo "</b></td></tr>\n";
 	}
-
-	echo '<tr><td class="blank" colspan="2">&nbsp;</td></tr>'."\n</table>\n".'<table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">';
+?>
+		</tr>
+			<td class="blank" colspan="2">&nbsp;</td>
+		</tr>
+	</table>
+	<table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">
+		<? if ($view == 'Daten' || $view == 'Lebenslauf' || $view == 'Studium') :
+		$info_text['Studium'] = _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen.");
+		$info_text['Daten'] = _("Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern.");
+		$info_text['Lebenslauf'] = _("Hier können Sie Angaben &uuml;ber ihre privaten Kontaktdaten sowie Lebenslauf und Hobbies machen.");		
+		?>
+		<tr>
+			<td class="blank"></td>
+			<td valign="top" rowspan="10" width="250">
+			<?
+				$template = $GLOBALS['template_factory']->open('infobox/infobox_generic_content');
+				$template->set_attribute('picture', 'groups.jpg');
+				$content[] = array (
+					'kategorie' => _("Informationen:"),
+					'eintrag' => array(
+						array('icon' => 'ausruf_small.gif',
+							'text' => $info_text[$view]
+					)
+					)	
+				);
+				$template->set_attribute('content', $content);
+				echo $template->render();
+			?>
+			</td>
+		</tr>
+	<?
+	endif;
+	
 	$table_open = TRUE;
 }
 
@@ -1128,6 +665,7 @@ if ($view == 'Daten') {
 		echo ' onsubmit="return checkdata()" ';
 	}
 	echo '><table align="center" width="99%" class="blank" border="0" cellpadding="2" cellspacing="0">';
+	echo '<tr><td class="printhead" colspan="3" align="center"><b>' . _("Benutzerdaten") . '</b></td></tr>';
 	if ($my_about->check == 'user') {
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><blockquote><b>" . _("Username:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"75%\" align=\"left\">&nbsp;";
 		if (($ALLOW_CHANGE_USERNAME && !StudipAuthAbstract::CheckField("auth_user_md5.username",$my_about->auth_user['auth_plugin'])) ) {
@@ -1230,264 +768,19 @@ if ($view == 'Daten') {
 	}
 	echo "</font></td></tr>";
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"100%\" colspan=3 align=\"center\"><b>" . _("Freiwillige Angaben") . "</b></td></tr>\n";
-	 $cssSw->switchClass();
-	echo '<tr><td class="'.$cssSw->getClass(). '" width="25%" align="left"><blockquote><b>' . _("Telefon (privat):") . ' </b></blockquote></td><td class="' . $cssSw->getClass(). '"  width="25%" align="left"><font size="-1">&nbsp; '. _("Festnetz"). ":</font><br />\n";
-	if (StudipAuthAbstract::CheckField('user_info.privatnr', $my_about->auth_user['auth_plugin'])) {
-		echo '&nbsp;' . htmlReady($my_about->user_info['privatnr']);
-	} else {
-		echo '&nbsp; <input type="text" size="' .round($max_col*0.25).'" name="telefon" value="'. htmlReady($my_about->user_info["privatnr"]). '">';
-	}
-	echo '<td class="'.$cssSw->getClass(). '"  width="50%" align="left"><font size="-1">&nbsp; '. _("Mobiltelefon"). ":</font><br />\n";
-	if (StudipAuthAbstract::CheckField('user_info.privatcell', $my_about->auth_user['auth_plugin'])) {
-		echo '&nbsp;' . htmlReady($my_about->user_info['privatcell']);
-	} else {
-		echo '&nbsp; <input type="text" size="' .round($max_col*0.25). '" name="cell" value="' .htmlReady($my_about->user_info['privatcell']).'">';
-	}
-	echo "</td></tr>\n";
-	 $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Adresse (privat):") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
-	if (StudipAuthAbstract::CheckField("user_info.privadr", $my_about->auth_user['auth_plugin'])) {
-		echo "&nbsp;" . htmlReady($my_about->user_info["privadr"]);
-	} else {
-		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.6)."\" name=\"anschrift\" value=\"".htmlReady($my_about->user_info["privadr"])."\">";
-	}
-	echo "</td></tr>\n";
-	if (get_config("ENABLE_SKYPE_INFO")) {
-		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Skype:") . " </b></blockquote></td>";
-		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">";
-		echo "<font size=\"-1\">&nbsp; " . _("Skype Name:") . "</font><br>&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"skype_name\" value=\"".htmlReady($user->cfg->getValue($my_about->auth_user['user_id'], 'SKYPE_NAME'))."\"></td>";
-		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">";
-		echo "<font size=\"-1\">&nbsp; "  . _("Skype Online Status anzeigen:") . "</font><br>&nbsp;<input type=\"checkbox\" name=\"skype_online_status\" value=\"1\" ". ($user->cfg->getValue($my_about->auth_user['user_id'], 'SKYPE_ONLINE_STATUS') ? 'checked' : '') . "></td>";
-		echo "</tr>\n";
-	}
-	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Motto:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
-	if (StudipAuthAbstract::CheckField("user_info.motto", $my_about->auth_user['auth_plugin'])) {
-		echo "&nbsp;" . htmlReady($my_about->user_info["motto"]);
-	} else {
-		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.6)."\" name=\"motto\" value=\"".htmlReady($my_about->user_info["motto"])."\">";
 
-	}	echo "</td></tr>\n";
-	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Homepage:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
-	if (StudipAuthAbstract::CheckField("user_info.Home", $my_about->auth_user['auth_plugin'])) {
-		echo "&nbsp;" . htmlReady($my_about->user_info["Home"]);
-	} else {
-		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.6)."\" name=\"home\" value=\"".htmlReady($my_about->user_info["Home"])."\">";
 
-	}
-	echo "</td></tr>\n";
-	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Hobbies:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
-	if (StudipAuthAbstract::CheckField("user_info.hobby", $my_about->auth_user['auth_plugin'])) {
-		echo "&nbsp;" . htmlReady($my_about->user_info["hobby"]);
-	} else {
-		echo "&nbsp; <textarea  name=\"hobby\"  style=\"width: 50%\" cols=".round($max_col*0.5)." rows=4 maxlength=250 wrap=virtual >".htmlReady($my_about->user_info["hobby"])."</textarea>";
-	}
-	echo "</td></tr>\n";
-	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\">&nbsp; </td><td class=\"".$cssSw->getClass()."\" colspan=2>&nbsp; <input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " border=0 value=\"" . _("Änderungen übernehmen") . "\"></td></tr>\n</table></form>\n</td></tr>";
 }
 
 
-if ($view == 'Karriere') {
+//if ($view == 'Studium' && !$perm->have_perm("dozent")) {
+if ($view == 'Studium') {
 
 	if ($perm->have_perm('root') AND $username == $auth->auth["uname"]) {
 		echo '<tr><td align="left" valign="top" class="blank"><blockquote>'."<br /><br />\n" . _("Als Root haben Sie bereits genug Karriere gemacht ;-)") . "<br /><br />\n";
 	} else {
-		echo '<tr><td align="left" valign="top" class="blank"><blockquote><br />'."\n";
-		if (($perm->have_perm("tutor")) && (!$perm->have_perm("dozent"))) {
-			 echo _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere und Daten an Einrichtungen, an denen Sie arbeiten, machen.");
-		} elseif ($perm->have_perm("dozent")) {
-			echo _("Hier können Sie Angaben &uuml;ber Daten an Einrichtungen, in den Sie arbeiten, machen.");
-		} else {
-			echo _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen.");
-		}
-		echo "<br />&nbsp; </blockquote></td></tr>\n";
-
-		//Verändern von Raum, Sprechzeiten etc
-		if ($my_about->special_user) {
-	 		reset ($my_about->user_inst);
-
-	 		echo '<tr><td class="blank"><a name="inst_data"></a>';
-	 		echo '<b>&nbsp; ' . _("Ich arbeite an folgenden Einrichtungen:") . '</b>';
-	 		echo '<form action="'.$PHP_SELF.'?cmd=special_edit&username='. $username.'&view='.$view.'&studipticket=' .get_ticket(). '" method="POST">'."\n";
-	 		echo '<table cellspacing="0" cellpadding="2" border="0" align="center" width="99%">';
-
-			$i = 1;
-	 		while (list($inst_id, $details) = each($my_about->user_inst)) {
-				$cssSw->resetClass();
-				$cssSw->switchClass();
-				if ($details["inst_perms"] != "user") {
-	 				echo '<tr><td class="blank" colspan="3" width="100%">&nbsp; </td></tr>'."\n";
-	 				echo '<tr><td class="' . $cssSw->getClass() . '" align="left">';
-					echo "&nbsp; <b>" . htmlReady($details["Name"]) . "</b></td>";
-					echo '<td class="' . $cssSw->getClass() . '" width="30%" align="left" nowrap="nowrap">&nbsp; ';
-					echo _("Standard-Adresse:") . '&nbsp;<input type="radio" name="default_inst" ';
-					echo "value=\"$inst_id\"";
-					echo ($details['externdefault'] ? ' checked="checked"' : '') . ">&nbsp;";
-					echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/info.gif"';
-					$info = _("Angaben, die im Adressbuch und auf den externen Seiten als Standard benutzt werden.");
-					echo tooltip($info, TRUE, TRUE) . ">&nbsp; &nbsp;";
-					echo _("Diese Einrichtung ausblenden:");
-					echo "<input type=\"checkbox\" name=\"visible[$inst_id]\" value=\"1\" ";
-					echo ($details['visible'] == '1' ? '' : ' checked="checked"') . ">&nbsp;";
-					echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/info.gif"';
-					$info = _("Die Angaben zu dieser Einrichtung werden nicht auf Ihrer Homepage und in Adressbüchern ausgegeben.");
-					echo tooltip($info, TRUE, TRUE) . ">&nbsp; &nbsp;</td>\n";
-					echo "<td class=\"" . $cssSw->getClass() . "\" align=\"left\">";
-					if ($i != 1) {
-						echo "<a href=\"$PHP_SELF?view=Karriere&username=$username&cmd=move";
-						echo "&direction=up&move_inst=$inst_id&studipticket=".get_ticket().'">';
-						echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/move_up.gif" ';
-						echo 'border="0"' . tooltip(_("nach oben")) . '></a>';
-					}
-					if ($i != sizeof($my_about->user_inst)) {
-						echo "<a href=\"$PHP_SELF?view=Karriere&username=$username&cmd=move";
-						echo "&direction=down&move_inst=$inst_id&studipticket=".get_ticket().'">';
-						echo '<img src="' . $GLOBALS['ASSETS_URL'] . 'images/move_down.gif" ';
-						echo 'border="0"' . tooltip(_("nach unten")) . '></a>';
-					}
-					$i++;
-					echo "</td></tr>\n";
-					echo "<input type=\"HIDDEN\" name=\"name[$inst_id]\" value=\"";
-					echo htmlReady($details["Name"]) . "\">\n";
-	 				$cssSw->switchClass();
-	 				echo "<tr><td class=\"" . $cssSw->getClass() . "\" width=\"20%\" align=\"left\">";
-					echo _("Raum:") . " </td><td class=\"" . $cssSw->getClass() . "\" colspan=\"2\" ";
-					echo "width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" ";
-					echo "size=\"" . round($max_col * 0.25 * 0.6) . "\" name=\"raum[$inst_id]\" ";
-					echo "value=\"" . htmlReady($details["raum"]) . "\"></td></tr>\n";
-	 				$cssSw->switchClass();
-	 				echo "<tr><td class=\"" . $cssSw->getClass() . "\" width=\"20%\" align=\"left\">";
-					echo _("Sprechzeit:") . " </td><td class=\"" . $cssSw->getClass() . "\" colspan=\"2\" ";
-					echo "width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" ";
-					echo "size=\"" . round($max_col * 0.25 * 0.6) . "\" name=\"sprech[$inst_id]\" ";
-					echo "value=\"" . htmlReady($details["sprechzeiten"]) . "\"></td></tr>\n";
-	 				$cssSw->switchClass();
-	 				echo "<tr><td class=\"" . $cssSw->getClass() . "\" width=\"20%\" align=\"left\">";
-					echo _("Telefon:") . " </td><td class=\"" . $cssSw->getClass() . "\" colspan=\"2\" ";
-					echo "width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" ";
-					echo "size=\"" . round($max_col * 0.25 * 0.6) . "\" name=\"tel[$inst_id]\" ";
-					echo "value=\"" . htmlReady($details["Telefon"]) . "\"></td></tr>\n";
-	 				$cssSw->switchClass();
-	 				echo "<tr><td class=\"" . $cssSw->getClass() . "\" width=\"20%\" align=\"left\">";
-					echo _("Fax:") . " </td><td class=\"" . $cssSw->getClass() . "\" colspan=\"2\" ";
-					echo "width=\"80%\" align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" ";
-					echo "size=\"" . round($max_col * 0.25 * 0.6) . "\"   name=\"fax[$inst_id]\" ";
-					echo "value=\"" . htmlReady($details["Fax"]) . "\"></td></tr>\n";
-
-					// Datenfelder für Rollen in Einrichtungen ausgeben
-				   echo '<tr><td colspan="3" align="left">';
-//				   echo '<b><font color="#0000ff"> ' . _('Daten der Einrichtung') . '</font></b>';
-				   echo "</td></tr>\n";
-				   $cssSw->resetClass();
-
-					$userID = $my_about->auth_user['user_id'];
-
-					// Default-Daten der Einrichtung
-					$entries = DataFieldEntry::getDataFieldEntries(array($userID, $inst_id));	// Default-Daten der Einrichtung
-				   foreach ($entries as $id=>$entry) {
-				   	$cssSw->switchClass();
-				   	echo '<tr><td class="' . $cssSw->getClass() . '" align="left">' . $entry->getName() . ':</td>';
-				   	echo '<td colspan="2" class="' . $cssSw->getClass() . '">&nbsp; ' . $entry->getHTML('datafield_content[]', $entry->structure->getID());
-						echo '<input type="HIDDEN" name="datafield_id[]" value="'.$entry->structure->getID().'">';
-						echo '<input type="HIDDEN" name="datafield_type[]" value="'.$entry->getType().'">';
-						echo '<input type="HIDDEN" name="datafield_sec_range_id[]" value="'.$inst_id.'">';
-				   	echo '</td></tr>';
-				   }
-					// Rollendaten anzeigen
-					if ($groups = GetStatusgruppen($inst_id, $userID)) {
-						$groupOptions = getOptionsOfStGroups($userID);
-						$perms = $auth->auth['perm'];
-						foreach ($groups as $groupID=>$group) {
-							echo '<tr><td>';
-							if (isset($inherit) && $groupID == key($inherit))
-								echo '<a name="a">';
-							echo '</td>';
-							?>
-
-							<td align="left" colspan="2">
-								<b><?= _('Funktion:') ?> <?= $group ?></b>
-
-								<font size="-1">
-									<label>
-										<?= _("Diese Funktion ausblenden:") ?>
-										<input type="checkbox" name="visible[<?= $groupID ?>]" <?= !$groupOptions[$groupID]['visible'] ? 'checked="checked"' : '' ?> value="0">
-										&nbsp;
-										<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
-											<?= tooltip(_("Die Angaben zu dieser Funktion werden nicht auf Ihrer Homepage ausgegeben."), TRUE, TRUE) ?>>
-									</label>
-								</font>
-								<br><br>
-
-							<? if ($perms == 'root' || $perms == 'admin') { ?>
-
-								<font size="-1">
-								<? if ($groupOptions[$groupID]['inherit']) : ?>
-									<?= _('Daten der Einrichtung') ?>
-									<input type="image" name="inherit[<?= $groupID ?>][1]" value="1" align="center" <?= makeButton('uebernehmen2', 'src') ?>>
-									<?= _('oder') ?>
-									<input type="image" name="inherit[<?= $groupID ?>][0]" value="0" align="center" <?= makeButton('abweichend', 'src') ?>>
-									<?= _('eingeben') ?>.
-								<? else : ?>
-									<?= _('Daten der Einrichtung') ?>
-									<input type="image" name="inherit[<?= $groupID ?>][1]" value="1" align="center" <?= makeButton('uebernehmen', 'src') ?>>
-									<?= _('oder') ?>
-									<input type="image" name="inherit[<?= $groupID ?>][0]" value="0" align="center" <?= makeButton('abweichend2', 'src') ?>>
-									<?= _('eingeben') ?>.
-								<? endif ?>
-								</font>
-
-							<? } else { ?>
-
-								<font size="-1">
-								<? if ($groupOptions[$groupID]['inherit']) : ?>
-									<?= _('Die Daten der Einrichtung werden übernommen.') ?>
-								<? else: ?>
-									<?= _('Die Daten der Einrichtung können abweichend eingegeben werden.') ?>
-								<? endif ?>
-								</font>
-
-							<? }
-
-							echo '<br><br>';
-
-							echo "<input type=\"hidden\" name=\"group_id[]\" value=\"$groupID\">";
-							echo "</td></tr>\n";
-							$cssSw->resetClass();
-							if (!$groupOptions[$groupID]['inherit']) {
-								$entries = DataFieldEntry::getDataFieldEntries(array($userID, $groupID));
-								foreach ($entries as $id=>$entry) {
-									$cssSw->switchClass();
-									$td = '<td class="'.$cssSw->getClass().'" align="left">';
-									echo "<tr>$td</td>$td" . $entry->getName() . ':</td>';
-									echo '<td colspan="1" class="' . $cssSw->getClass() . '">&nbsp; ';
-									global $auth;
-									if ($entry->structure->editAllowed($auth->auth['perm'])) {
-										echo $entry->getHTML('datafield_content[]', $entry->structure->getID());
-										echo '<input type="HIDDEN" name="datafield_id[]" value="'.$entry->structure->getID().'">';
-										echo '<input type="HIDDEN" name="datafield_type[]" value="'.$entry->getType().'">';
-										echo '<input type="HIDDEN" name="datafield_sec_range_id[]" value="'.$groupID.'">';
-									}
-									else
-										echo $entry->getDisplayValue();
-									echo '</td></tr>';
-								}
-							}
-						}
-					}
-
-				}
-			}
-	 		$cssSw->switchClass();
-	 		echo "<tr><td class=\"" . $cssSw->getClass() . "\">&nbsp; </td>";
-			echo "<td class=\"" . $cssSw->getClass() . "\" colspan=\"2\">&nbsp; <input type=\"IMAGE\" ";
-			echo makeButton("uebernehmen", "src") . " value=\"" . _("Änderungen übernehmen") . "\">";
-			echo "</td></table>\n<br />&nbsp; </form>\n</td></tr>\n";
-		}
+		echo '<tr><td align="left" valign="top" class="blank">'."\n";
 	}
 
 	//Studiengänge die ich belegt habe
@@ -1545,6 +838,7 @@ if ($view == 'Karriere') {
 		echo '</blockquote></td></tr></table>'."\n";
 		if ($allow_change_sg) echo "</form>\n";
 	}
+		
 	echo "</td></tr>\n";
 
 
@@ -1600,28 +894,188 @@ if ($view == 'Karriere') {
 		if ($allow_change_in) echo '</form>';
 	}
 	echo '</td></tr>';
+	
+}
+
+
+if ($view == 'Karriere') {
+	if ($_REQUEST['subview'] == 'addPersonToRole') {
+
+		$all_rights = false;
+		if ($my_about->auth['username'] != $username) {
+			$db_r = new DB_Seminar();
+
+			if ($auth->auth['perm'] == "root"){
+				$all_rights = true;
+				$db_r->query("SELECT Institut_id, Name, 1 AS is_fak  FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
+			} elseif ($auth->auth['perm'] == "admin") {
+				$db_r->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN Institute b USING (Institut_id)
+						WHERE a.user_id='$user->id' AND a.inst_perms='admin' ORDER BY is_fak,Name");
+			} else {
+				$db_r->query("SELECT a.Institut_id,Name FROM user_inst a LEFT JOIN Institute b USING (Institut_id) WHERE inst_perms IN('tutor','dozent') AND user_id='$user->id' ORDER BY Name");
+			}
+
+			$inst_rights = array();
+			while ($db_r->next_record()) {
+				if ($auth->auth['perm'] == 'admin' && $db_r->f('is_fak')) {
+					$db_r2 = new DB_Seminar("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db_r->f("Institut_id") . "' AND institut_id!='" .$db_r->f("Institut_id") . "' ORDER BY Name");
+					while ($db_r2->next_record()) {
+						$inst_rights[] = $db_r2->f('Institut_id');
+					}
+				}
+				$inst_rights[] = $db_r->f('Institut_id');
+				$admin_insts[] = $db_r->Record;
+			}
+		} else {
+			$all_rights = true;
+		}
+
+		$template = $GLOBALS['template_factory']->open('statusgruppen/edit_about_add_person_to_role');
+		$template->set_layout('statusgruppen/layout_edit_about');
+		$template->set_attribute('username', $username);
+		$template->set_attribute('subview_id', $subview_id);
+		$template->set_attribute('user_id', $my_about->auth_user['user_id']);
+		$template->set_attribute('admin_insts', $admin_insts);
+
+		echo $template->render();	
+		die;
+	} else {
+			
+		// a group has been chosen to be opened / closed
+		if ($_REQUEST['switch']) {
+			if ($edit_about_data['open'] == $_REQUEST['switch']) {
+				$edit_about_data['open'] = '';
+			} else {
+				$edit_about_data['open'] = $_REQUEST['switch'];
+			}
+		}	
+		
+		if ($_REQUEST['open']) {
+			$edit_about_data['open'] = $_REQUEST['open'];
+		}
+		
+		echo '<tr><td class=blank>';
+	
+		echo '<form action="' . $_SERVER['PHP_SELF'] . '?cmd=edit_leben&username=' . $username . '&view=' . $view . '&studipticket=' . get_ticket() . '" method="POST" name="pers">';
+	
+		// get the roles the user is in
+		$institutes = array();
+		foreach ($my_about->user_inst as $inst_id => $details) {
+			$institutes[$inst_id] = $details;
+			$roles = GetAllStatusgruppen($inst_id, $my_about->auth_user['user_id'], true);
+			$institutes[$inst_id]['roles'] = ($roles) ? $roles : array(); 
+		}
+			
+		// template for tree-view of roles, layout for infobox-location and content-variables
+		$template = $GLOBALS['template_factory']->open('statusgruppen/roles_edit_about');
+		$template->set_layout('statusgruppen/layout_edit_about');
+		$template->set_attribute('open', $edit_about_data['open']);	// the ids of the currently opened statusgroups	
+		$template->set_attribute('messages', $msgs);
+		$template->set_attribute('institutes', $institutes);
+
+		$template->set_attribute('view', $view);
+		$template->set_attribute('username', $username);
+		$template->set_attribute('user_id', $my_about->auth_user['user_id']);
+		echo $template->render();
+	
+		echo '</form>';
+		echo '</td></tr>';
+	}
 }
 
 if ($view == 'Lebenslauf') {
 	$cssSw->switchClass();
-	echo '<tr><td align="left" valign="top" class="blank"><blockquote><br>'."\n";
+
+	echo "<tr><td class=blank>";
+	echo '<form action="' . $_SERVER['PHP_SELF'] . '?cmd=edit_leben&username=' . $username . '&view=' . $view . '&studipticket=' . get_ticket() . '" method="POST" name="pers">';
+	echo '<table align="center" width="99%" align="center" border="0" cellpadding="2" cellspacing="0">' . "\n";
+
+	echo "<tr><td class=\"printhead\" width=\"100%\" colspan=3 align=\"center\"><b>" . _("Freiwillige Angaben") . "</b></td></tr>\n";
+	 $cssSw->switchClass();
+	echo '<tr><td class="'.$cssSw->getClass(). '" width="25%" align="left"><blockquote><b>' . _("Telefon (privat):") . ' </b></blockquote></td>';
+	?>
+		<td class="<?= $cssSw->getClass() ?>"  width="25%" align="left" nowrap>
+			<font size="-1">
+				&nbsp;<?= _("Festnetz") ?>:
+			</font>
+			<br />
+	<?
+	if (StudipAuthAbstract::CheckField('user_info.privatnr', $my_about->auth_user['auth_plugin'])) {
+		echo '&nbsp;' . htmlReady($my_about->user_info['privatnr']);
+	} else {
+		echo '&nbsp; <input type="text" size="' .round($max_col*0.25).'" name="telefon" value="'. htmlReady($my_about->user_info["privatnr"]). '">';
+	}
+	echo '<td class="'.$cssSw->getClass(). '"  width="50%" align="left"><font size="-1">&nbsp; '. _("Mobiltelefon"). ":</font><br />\n";
+	if (StudipAuthAbstract::CheckField('user_info.privatcell', $my_about->auth_user['auth_plugin'])) {
+		echo '&nbsp;' . htmlReady($my_about->user_info['privatcell']);
+	} else {
+		echo '&nbsp; <input type="text" size="' .round($max_col*0.25). '" name="cell" value="' .htmlReady($my_about->user_info['privatcell']).'">';
+	}
+	echo "</td></tr>\n";
+	 $cssSw->switchClass();
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Adresse (privat):") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
+	if (StudipAuthAbstract::CheckField("user_info.privadr", $my_about->auth_user['auth_plugin'])) {
+		echo "&nbsp;" . htmlReady($my_about->user_info["privadr"]);
+	} else {
+		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.6)."\" name=\"anschrift\" value=\"".htmlReady($my_about->user_info["privadr"])."\">";
+	}
+	echo "</td></tr>\n";
+	if (get_config("ENABLE_SKYPE_INFO")) {
+		$cssSw->switchClass();
+		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Skype:") . " </b></blockquote></td>";
+		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">";
+		echo "<font size=\"-1\">&nbsp; " . _("Skype Name:") . "</font><br>&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"skype_name\" value=\"".htmlReady($user->cfg->getValue($my_about->auth_user['user_id'], 'SKYPE_NAME'))."\"></td>";
+		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">";
+		echo "<font size=\"-1\">&nbsp; "  . _("Skype Online Status anzeigen:") . "</font><br>&nbsp;<input type=\"checkbox\" name=\"skype_online_status\" value=\"1\" ". ($user->cfg->getValue($my_about->auth_user['user_id'], 'SKYPE_ONLINE_STATUS') ? 'checked' : '') . "></td>";
+		echo "</tr>\n";
+	}
+	$cssSw->switchClass();
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Motto:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
+	if (StudipAuthAbstract::CheckField("user_info.motto", $my_about->auth_user['auth_plugin'])) {
+		echo "&nbsp;" . htmlReady($my_about->user_info["motto"]);
+	} else {
+		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.6)."\" name=\"motto\" value=\"".htmlReady($my_about->user_info["motto"])."\">";
+
+	}	echo "</td></tr>\n";
+	$cssSw->switchClass();
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Homepage:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
+	if (StudipAuthAbstract::CheckField("user_info.Home", $my_about->auth_user['auth_plugin'])) {
+		echo "&nbsp;" . htmlReady($my_about->user_info["Home"]);
+	} else {
+		echo "&nbsp; <input type=\"text\" size=\"".round($max_col*0.6)."\" name=\"home\" value=\"".htmlReady($my_about->user_info["Home"])."\">";
+
+	}
+	echo "</td></tr>\n";
+	$cssSw->switchClass();
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Hobbies:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
+	if (StudipAuthAbstract::CheckField("user_info.hobby", $my_about->auth_user['auth_plugin'])) {
+		echo "&nbsp;" . htmlReady($my_about->user_info["hobby"]);
+	} else {
+		echo "&nbsp; <textarea  name=\"hobby\"  style=\"width: 50%\" cols=".round($max_col*0.5)." rows=4 maxlength=250 wrap=virtual >".htmlReady($my_about->user_info["hobby"])."</textarea>";
+	}
+	echo "</td></tr>\n";
+	$cssSw->switchClass();
+
+
+	/*echo '<tr><td align="left" valign="top" class="blank"><blockquote><br>'."\n";
 	if ($my_about->auth_user['perms'] == 'dozent') {
 		 echo _("Hier k&ouml;nnen Sie Lebenslauf, Publikationen und Arbeitschwerpunkte bearbeiten.");
 	} else {
 		echo  _("Hier k&ouml;nnen Sie Ihren Lebenslauf bearbeiten.");
 	}
-	echo "<br>&nbsp; </blockquote></td></tr>\n<tr><td class=blank>";
-	echo '<form action="' . $_SERVER['PHP_SELF'] . '?cmd=edit_leben&username=' . $username . '&view=' . $view . '&studipticket=' . get_ticket() . '" method="POST" name="pers">';
-	echo '<table align="center" width="99%" align="center" border="0" cellpadding="2" cellspacing="0">' . "\n";
+	echo "<br>&nbsp; </blockquote></td></tr>\n"; */
 
-	echo '<tr><td class="'.$cssSw->getClass().'" colspan="2" align="left" valign="top"><blockquote><b>' . _("Lebenslauf:") . "</b><br />\n";
+	echo '<tr><td class="'.$cssSw->getClass().'" align="left"><blockquote><b>' . _("Lebenslauf:") . "</b></td>\n";
+	echo '<td class="'. $cssSw->getClass() .'" colspan="2" align="left" valign="top">&nbsp;', "\n";
 	echo '<textarea  name="lebenslauf" style=" width: 80%" cols="'.round($max_col/1.3).'" rows="7" wrap="virtual">' . htmlReady($my_about->user_info['lebenslauf']).'</textarea><a name="lebenslauf"></a></blockquote></td></tr>'."\n";
 	if ($my_about->auth_user["perms"] == "dozent") {
 		$cssSw->switchClass();
-		echo '<tr><td class="'.$cssSw->getClass().'" colspan="2" align="left" valign="top"><blockquote><b>' . _("Schwerpunkte:") . "</b><br />\n";
+		echo '<tr><td class="'.$cssSw->getClass().'" align="left"><blockquote><b>' . _("Schwerpunkte:") . "</b></td>\n";
+		echo '<td class="'. $cssSw->getClass() .'" colspan="2" align="left" valign="top">&nbsp;', "\n";
 		echo '<textarea  name="schwerp" style="width: 80%" cols="'.round($max_col/1.3).'" rows="7" wrap="virtual">'.htmlReady($my_about->user_info["schwerp"]).'</textarea><a name="schwerpunkte"></a></blockquote></td></tr>'."\n";
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass(). '" colspan="2" align="left" valign="top"><blockquote><b>' . _("Publikationen:") . "</b><br />\n";
+		echo "<tr><td class=\"".$cssSw->getClass(). '" align="left" ><blockquote><b>' . _("Publikationen:") . "</b></td>\n";
+		echo '<td class="'. $cssSw->getClass() .'" colspan="2" align="left" valign="top">&nbsp;', "\n";
 		echo '<textarea  name="publi" style=" width: 80%" cols="'.round($max_col/1.3) . '" rows="7" wrap="virtual">'.htmlReady($my_about->user_info['publi']).'</textarea><a name="publikationen"></a></blockquote></td></tr>'."\n";
 	}
 
@@ -1641,12 +1095,13 @@ if ($view == 'Lebenslauf') {
 		$userid = $db->f("user_id");
 		if ($entry->structure->accessAllowed($perm, $userid, $db->f("user_id"))) {
 			$cssSw->switchClass();
-			echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\" valign=\"top\"><b><blockquote>";
-			echo "<font color=\"$color\">" . htmlReady($entry->getName()). ":</font></b><br>";
+			echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\" ><b><blockquote>";
+			echo "<font color=\"$color\">" . htmlReady($entry->getName()). ":</font></b></td>";
+			echo '<td class="'. $cssSw->getClass() .'" colspan="2" align="left" valign="top">&nbsp;', "\n";
 			if ($perm->have_perm($entry->structure->getEditPerms())) {
-				echo $entry->getHTML('datafield_content[]', $entry->structure->getID());
 				echo '<input type="HIDDEN" name="datafield_id[]" value="'.$entry->structure->getID().'">';
 				echo '<input type="HIDDEN" name="datafield_type[]" value="'.$entry->getType().'">';
+				echo $entry->getHTML('datafield_content[]', $entry->structure->getID());
 			}
 			else {
 				$db->query("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
@@ -1663,7 +1118,7 @@ if ($view == 'Lebenslauf') {
 	}
 
 	$cssSw->switchClass();
-	echo '<tr><td class="'.$cssSw->getClass().'" colspan="2"><blockquote><br><input type="IMAGE" ' . makeButton('uebernehmen', 'src') . ' border="0" value="' . _("Änderungen übernehmen") . "\"><br></blockquote></td></tr>\n</table>\n</form>\n</td></tr>";
+	echo '<tr><td class="'.$cssSw->getClass().'" colspan="3" align="center"><blockquote><br><input type="IMAGE" ' . makeButton('uebernehmen', 'src') . ' border="0" value="' . _("Änderungen übernehmen") . "\"><br></blockquote></td></tr>\n</table>\n</form>\n</td></tr>";
 }
 
 if ($view == "Sonstiges") {
@@ -1742,4 +1197,3 @@ if ($view == 'Login') {
 }
 
 page_close();
-?>

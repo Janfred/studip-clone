@@ -59,7 +59,7 @@ class CalendarWriteriCalendar extends CalendarWriter {
 		$header = "BEGIN:VCALENDAR" . $this->newline;
 		$header .= "VERSION:2.0" . $this->newline;
 		$header .= "PRODID:-//Stud.IP//Stud.IP_iCalendar Library, Stud.IP ";
-		$header .= $GLOBAL['SOFTWARE_VERSION'] . " //EN" . $this->newline;
+		$header .= $GLOBALS['SOFTWARE_VERSION'] . " //EN" . $this->newline;
 		$header .= "METHOD:PUBLISH" . $this->newline;
 		
 		return $header;

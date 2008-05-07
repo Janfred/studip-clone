@@ -296,7 +296,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$content['PERSONDETAILS']['FIRSTNAME'] = ExternModule::ExtHtmlReady($db->f('Vorname'));
 		$content['PERSONDETAILS']['TITLEFRONT'] = ExternModule::ExtHtmlReady($db->f('title_front'));
 		$content['PERSONDETAILS']['TITLEREAR'] = ExternModule::ExtHtmlReady($db->f('title_rear'));
-		if ($statusgroups = GetStatusgruppen($instituts_id, $this->user_id)) {
+		if ($statusgroups = GetRoleNames(GetAllStatusgruppen($instituts_id, $this->user_id))) {
 			$content['PERSONDETAILS']['STATUSGROUPS'] = ExternModule::ExtHtmlReady(join(', ', array_values($statusgroups)));
 		}
 		$content['PERSONDETAILS']['USERNAME'] = $db->f('username');
@@ -305,7 +305,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 			$content['PERSONDETAILS']['IMAGE-HREF'] = $avatar->getURL(Avatar::NORMAL);
 		}
 
-		$gruppen = GetStatusgruppen($this->config->range_id, $db->f('user_id'));
+		$gruppen = GetRoleNames(GetAllStatusgruppen($this->config->range_id, $db->f('user_id')));
 		for ($i = 0; $i < sizeof($gruppen); $i++) {
 			$content['PERSONDETAILS']['GROUPS'][$i]['GROUP'] = ExternModule::ExtHtmlReady($gruppen[$i]);
 		}
