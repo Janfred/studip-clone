@@ -166,7 +166,7 @@ function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
 
 			echo '</td>';
 			printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
-			if (($data['selfassign'] == '1') && $user->id == $db2->f("user_id")) {
+			if (($data['role']->getSelfAssign() == '1') && $user->id == $db2->f("user_id")) {
 				printf ("<a href=\"$PHP_SELF?delete_id=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Aus dieser Gruppe austragen")) . " border=\"0\"></a>&nbsp; ", $role_id);
 			}
 
