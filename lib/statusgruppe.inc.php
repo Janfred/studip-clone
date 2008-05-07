@@ -518,10 +518,13 @@ function setOptionsOfStGroup ($groupID, $userID, $visible, $inherit='') {
 * @return int The number of members
 */
 function CountMembersStatusgruppen ($range_id) {
+
 	$db = new DB_Seminar();
-	$db->query("SELECT COUNT(DISTINCT user_id) AS count FROM statusgruppen
-							LEFT JOIN statusgruppe_user USING(statusgruppe_id)
-							WHERE range_id = '$range_id'");
+	$ids = getAllStatusgruppenIDS($range_id);
+	$db->query($query = "SELECT COUNT(DISTINCT user_id) AS count FROM statusgruppen
+			LEFT JOIN statusgruppe_user USING(statusgruppe_id)
+			WHERE statusgruppen.statusgruppe_id IN ('". implode("', '", $ids) ."')");
+
 	$db->next_record();
 	return $db->f("count");
 }

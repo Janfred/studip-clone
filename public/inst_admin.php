@@ -33,10 +33,9 @@ require_once ("lib/classes/DataFieldEntry.class.php");
 
 // Start of Output
 include ("lib/include/html_head.inc.php"); // Output of html head
-$CURRENT_PAGE = _("Verwaltung der MitarbeiterInnen");
 
 // if we ar not in admin_view, we get the proper set variable from institut_members.php
-if (!$admin_view) {
+if (!isset($admin_view)) {
 	$admin_view = true;
 }
 
@@ -46,24 +45,37 @@ echo $css_switcher->GetHoverJSFunction();
 // this page is used for administration (if the user has the proper rights)
 // or for just displaying the workers and their roles
 if ($admin_view) {
+	$CURRENT_PAGE = _("Verwaltung der MitarbeiterInnen");
+
 	$perm->check("admin");
 	//prebuild navi and the object switcher (important to do already here and to use ob!)
 	ob_start();
 	include ("lib/include/links_admin.inc.php");  //Linkleiste fuer admins
 	$links = ob_get_clean();
+
 } else {
-	$perm->check("tutor");
-	checkObject();
-	checkObjectModule("personal");
+	$CURRENT_PAGE = _("Liste der MitarbeiterInnen");
+	$perm->check("autor");
+
 	//prebuild navi and the object switcher (important to do already here and to use ob!)
 	ob_start();
 	require("lib/include/links_openobject.inc.php");  //Linkleiste fuer Normalos
 	$links = ob_get_clean();
+
 }
 
 //get ID from a open Institut. We have to wait until a links_*.inc.php has opened an institute (necessary if we jump directly to this page)
 if ($SessSemName[1])
 	$inst_id=$SessSemName[1];
+
+if ($admin_view && !$perm->have_studip_perm('admin', $inst_id)) {
+	$admin_view = false;
+}
+
+if (!$admin_view) {
+	checkObject();
+	checkObjectModule("personal");
+}
 
 //Change header_line if open object
 $header_line = getHeaderLine($inst_id);
@@ -103,7 +115,7 @@ $institut_members_data["extend"] = $extend;
 
 
 // check the given parameters or initialize them
-if ($perm->have_perm("admin")) {
+if ($perm->have_studip_perm("admin", $inst_id)) {
   $accepted_columns = array("Nachname", "inst_perms");
 } else {
   $accepted_columns = array("Nachname");
@@ -249,7 +261,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 		}
 
 		if ($structure["nachricht"]) {
-			printf("<td%salign=\"left\">\n",$css_switcher->getFullClass());
+			printf("<td%salign=\"left\" width=\"1%%\" nowrap>\n",$css_switcher->getFullClass());
 			printf("<a href=\"sms_send.php?sms_source_page=inst_admin.php&rec_uname=%s\">",
 				$db->f("username"));
 			printf("<img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" alt=\"%s\" ", _("Nachricht an User verschicken"));
@@ -257,7 +269,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 			echo '</td>';			
 			
 			if ($admin_view) {				
-				echo '<td '.$css_switcher->getFullClass().'>';
+				echo '<td '.$css_switcher->getFullClass().' width="1%" nowrap>';
 				if ($db->f('statusgruppe_id')) {	// if we are in a view grouping by statusgroups
 					echo '&nbsp;<a href="'. $GLOBALS['PHP_SELF'] .'?cmd=removeFromGroup&username='.$db->f('username').'&role_id='. $db->f('statusgruppe_id') .'">';
 				} else {
@@ -284,7 +296,13 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 					}
 
 					echo '<td '.$css_switcher->getFullClass().'><font size="-1">';
-					echo '<a href="admin_statusgruppe.php?role_id='.$id.'&cmd=displayRole">'.$group_list[$id].'</a>';
+
+					if ($admin_view) {
+						echo '<a href="admin_statusgruppe.php?role_id='.$id.'&cmd=displayRole">'.$group_list[$id].'</a>';
+					} else {
+						echo $group_list[$id];
+					}
+
 					echo '</font></td>';
 
 					if (sizeof($entries) > 0) {
@@ -305,16 +323,18 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 						}
 					}
 
-					echo '<td '.$css_switcher->getFullClass().'>';
-					echo '<a href="edit_about.php?view=Daten&username='.$db->f('username').'&subview=Rolle&subview_id='.$range_id.'&role_id='.$id.'"><font size="-1">';
-					echo '<img src="'.$GLOBALS['ASSETS_URL'].'/images/edit_transparent.gif" border="0">';
-					echo '</font></a></td>';
+					if ($admin_view) {
+						echo '<td '.$css_switcher->getFullClass().'>';
+						echo '<a href="edit_about.php?view=Karriere&username='.$db->f('username').'&switch='.$id.'"><font size="-1">';
+						echo '<img src="'.$GLOBALS['ASSETS_URL'].'/images/edit_transparent.gif" border="0">';
+						echo '</font></a></td>';
 
-					echo '<td '.$css_switcher->getFullClass().'>';
-					echo '&nbsp;<a href="'. $GLOBALS['PHP_SELF'] .'?cmd=removeFromGroup&username='.$db->f('username').'&role_id='.$id.'">';
-					echo '<img src="'.$GLOBALS['ASSETS_URL'].'/images/trash.gif" border="0"></a>&nbsp;';
-					echo '</td>';
-					echo '</tr>', "\n";
+						echo '<td '.$css_switcher->getFullClass().'>';
+						echo '&nbsp;<a href="'. $GLOBALS['PHP_SELF'] .'?cmd=removeFromGroup&username='.$db->f('username').'&role_id='.$id.'">';
+						echo '<img src="'.$GLOBALS['ASSETS_URL'].'/images/trash.gif" border="0"></a>&nbsp;';
+						echo '</td>';
+						echo '</tr>', "\n";
+					}
 				}
 			}
 		}
@@ -491,7 +511,7 @@ if ($inst_id != "" && $inst_id !="0") {
 	$auswahl = $inst_id;
 
 	// Mitglieder zählen und E-Mail-Adressen zusammentstellen
-	if ($perm->have_perm("admin")) {
+	if ($perm->have_studip_perm("admin", $inst_id)) {
 		$query = "SELECT auth_user_md5.Email FROM user_inst LEFT JOIN auth_user_md5 USING (user_id) WHERE
 							Institut_id = '$auswahl' AND inst_perms != 'user'";						
 
@@ -645,10 +665,10 @@ if ($inst_id != "" && $inst_id !="0") {
 
 // group by function as preset
 switch ($institut_members_data["show"]) {
-	case status :
+	case 'status' :
 		if ($perm->have_perm("admin"))
 			break;
-	case liste :
+	case 'liste' :
 		break;
 	default :
 		$institut_members_data["show"] = "funktion";
@@ -675,7 +695,7 @@ foreach ($datafields_list as $entry) {
 // this array contains the structure of the table for the different views
 if ($institut_members_data["extend"] == "yes") {
 	switch ($institut_members_data["show"]) {
-		case liste :
+		case 'liste' :
 			if ($perm->have_perm("admin")) {
 				$table_structure = array(
 												"name" => array("name" => _("Name"),
@@ -698,7 +718,7 @@ if ($institut_members_data["extend"] == "yes") {
 												);
 			}
 			break;
-		case status :
+		case 'status' :
 			$table_structure = array(
 												"name" => array("name" => _("Name"),
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
@@ -729,7 +749,7 @@ if ($institut_members_data["extend"] == "yes") {
 }
 else {
 	switch ($institut_members_data["show"]) {
-		case liste :
+		case 'liste' :
 			if ($perm->have_perm("admin")) {
 				$table_structure = array(
 												"name" => array("name" => _("Name"),
@@ -752,7 +772,7 @@ else {
 												);
 			}
 			break;
-		case status :
+		case 'status' :
 			$table_structure = array(
 												"name" => array("name" => _("Name"),
 														"link" => $PHP_SELF . "?sortby=Nachname&direction=" . $new_direction,
@@ -782,10 +802,12 @@ else {
 	} // switch
 }
 
-$nachricht['nachricht'] = array(
-	"name" => _("Aktionen") . "&nbsp;",
-	"width" => "5%"
-);
+if ($admin_view) {
+	$nachricht['nachricht'] = array(
+		"name" => _("Aktionen") . "&nbsp;",
+		"width" => "5%"
+	);
+}
 	
 $table_structure = array_merge((array)$table_structure, (array)$struct);
 $table_structure = array_merge((array)$table_structure, (array)$nachricht);
@@ -858,7 +880,7 @@ table_head($table_structure, $css_switcher);
 
 // if you have the right question you will get the right answer ;-)
 if ($institut_members_data["show"] == "funktion") {
-	$all_statusgruppen = GetAllStatusgruppen($auswahl);
+	$all_statusgruppen = $groups;
 	if ($all_statusgruppen) {
 		function display_recursive($roles, $level = 0, $title = '') {
 			global $db_institut_members, $institut_members_data, $auswahl;
@@ -968,8 +990,8 @@ else {
 							FROM statusgruppen LEFT JOIN statusgruppe_user USING(statusgruppe_id)
 							LEFT JOIN user_inst ui USING(user_id) LEFT JOIN auth_user_md5 aum USING(user_id)
 							LEFT JOIN user_info info USING(user_id)
-							WHERE range_id = '%s' AND Institut_id = '%s' GROUP BY user_id
-							ORDER BY %s %s", $auswahl, $auswahl, $institut_members_data["sortby"],
+							WHERE statusgruppen.statusgruppe_id IN ('%s') AND Institut_id = '%s' GROUP BY user_id
+							ORDER BY %s %s",  implode("', '",  getAllStatusgruppenIDS($auswahl)), $auswahl, $institut_members_data["sortby"],
 							$institut_members_data["direction"]);
 	}
 	else {
@@ -987,11 +1009,12 @@ else {
 							FROM statusgruppen LEFT JOIN statusgruppe_user su USING(statusgruppe_id)
 							LEFT JOIN user_inst ui USING(user_id) LEFT JOIN auth_user_md5 aum USING(user_id)
 							LEFT JOIN user_info USING(user_id)
-							WHERE range_id = '%s' AND Institut_id = '%s' GROUP BY user_id
-							ORDER BY %s %s", $auswahl, $auswahl, $institut_members_data["sortby"],
+							WHERE statusgruppen.statusgruppe_id IN ('%s') AND Institut_id = '%s' GROUP BY user_id
+							ORDER BY %s %s", implode("', '",  getAllStatusgruppenIDS($auswahl)), $auswahl, $institut_members_data["sortby"],
 							$institut_members_data["direction"]);
 	}
 	$db_institut_members->query($query);
+
 	if ($db_institut_members->num_rows() != 0)
 		table_body($db_institut_members, $auswahl, $table_structure, $css_switcher);
 }

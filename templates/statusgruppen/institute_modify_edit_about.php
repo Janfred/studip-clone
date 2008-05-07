@@ -12,9 +12,14 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 		<br/>
 		<? if ($GLOBALS['perm']->have_studip_perm('admin', $inst_id)) : ?>
 			<a href="inst_admin.php?admin_inst_id=<?= $inst_id ?>&list=true">
-			 <?= makebutton('zureinrichtung'); ?>
-			 </a>
-			 <br/><br/>			 
+				<?= makebutton('zureinrichtung'); ?>
+			</a>
+			<br/><br/>
+		<? else: ?>
+			<a href="institut_main.php?auswahl=<?= $inst_id ?>">
+				<?= makebutton('zureinrichtung'); ?>
+			</a>
+			<br/><br/>
 		<? endif; ?>		
 		<form action="<?=$PHP_SELF?>#<?= $inst_id ?>" method="POST">
 			<input type="hidden" name="cmd" value="special_edit">

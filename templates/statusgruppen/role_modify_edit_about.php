@@ -10,16 +10,16 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 	<td width="99%" class="printcontent">
 		<center>
 		<br/>
+		<? if ($GLOBALS['perm']->have_studip_perm('admin', $inst_id)) : ?>
 		<a href="<?= $GLOBALS['PHP_SELF'] ?>?view=Karriere&username=<?= $username ?>&cmd=removeFromGroup&role_id=<?= $role_id ?>&studipticket=<?= get_ticket() ?>">
 			<?= makebutton('loeschen') ?>
 		</a>
-		<? if ($GLOBALS['perm']->have_studip_perm('admin', $inst_id)) : ?>
 			&nbsp;&nbsp;&nbsp;
 			<a href="admin_statusgruppe.php?admin_inst_id=<?=$inst_id?>&open=<?=$role_id?>#<?= $role_id ?>">
 			 <?= makebutton('zurfunktion'); ?>
 			</a>			
+			<br/><br/>
 		<? endif; ?>
-		<br/><br/>
 		<table cellspacing="0" cellpadding="0" border="0" class="blank" width="90%">
 		<form action="<?=$PHP_SELF?>#<?= $role_id ?>" method="POST">
 			<input type="hidden" name="cmd" value="special_edit">
