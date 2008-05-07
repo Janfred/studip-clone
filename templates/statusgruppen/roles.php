@@ -21,7 +21,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 	?></td>
 	<? endif; ?>
 
-	<td class="printhead" valign="bottom" colspan="<?= 20-$indent ?>" height="22" nowrap style="padding-left: 3px" width="99%">
+	<td class="printhead" valign="bottom" colspan="<?= 19-$indent ?>" height="22" nowrap style="padding-left: 3px" width="99%">
 		<a name="<?= $id ?>">
 		<a class="tree" href="<?= $PHP_SELF ?>?switch=<?= $id ?>&range_id=<?= $range_id ?>&rand=<?= md5(uniqid(rand())) ?>#<?= $id ?>">
 			<? if ($open == $id) :
@@ -47,6 +47,14 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 		<a class="tree" href="<?= $PHP_SELF ?>?switch=<?= $id ?>&range_id=<?= $range_id ?>&rand=<?= md5(uniqid(rand())) ?>#<?= $id ?>">			
 			<?= $role['role']->getName() ?>
 		</a>
+
+	</td>
+	<td width="1%" class="printhead" align="right" valign="bottom" nowrap>
+		<? if ($role['role']->hasFolder()) :
+			echo Assets::img('icon-disc');
+		endif; ?>
+
+		&nbsp;
 	</td>
 </tr>
 <?

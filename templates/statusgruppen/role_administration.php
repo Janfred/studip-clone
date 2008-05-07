@@ -73,7 +73,7 @@
 						</td>
 					</tr>
 					<!-- Persons assigned to this role -->
-					<? foreach ($persons as $person) :
+					<? if (is_array($persons)) foreach ($persons as $person) :
 								$cssSw->switchClass();
 								$pos ++;
 					?>

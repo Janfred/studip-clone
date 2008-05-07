@@ -1,8 +1,7 @@
 <?
 $pos_inst = 1;
 
-if (is_array($institutes))
-	if (sizeof($institutes) > 0) :
+if (is_array($institutes) && sizeof($institutes) > 0) :
 	foreach ($institutes as $inst_id => $institute) : ?>
 <tr>
 	<td class="printhead" valign="bottom" colspan="2" height="23" nowrap style="padding-left: 3px" width="99%">
@@ -34,6 +33,8 @@ if (is_array($institutes))
 	$pos_role = 1;
 	$max_roles = 0;
 	$flattened_roles = Statusgruppe::getFlattenedRoles($institute['roles']);
+
+	if (is_array($flattened_roles))
 	foreach ($flattened_roles as $role) {
 		if ($role['user_there']) $max_roles++;
 	}	

@@ -65,9 +65,25 @@
 						<input type="hidden" name="vather" value="nochange">
 					</td>
 				</tr>
+
+				<? $cssSw->switchClass() ?>
+				<tr>
+						<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
+						<font size="-1">
+							<?=_("Gruppenordner:") ?>:
+						</font>
+					</td>
+					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
+						<? if ($group_data['folder']) : ?>
+						<input type="checkbox" name="groupfolder" value="1">
+						<? else:
+							echo _("vorhanden");
+						endif; ?>
+					</td>
+				</tr>
 				<? endif; ?>
 								
-				<? if ($range_type != 'sem') foreach ($group_data['datafields'] as $field) : ?>
+				<? if ($range_type != 'sem' && is_array($group_data['datafields'])) foreach ($group_data['datafields'] as $field) : ?>
 				<? $cssSw->switchClass() ?>
 				<tr>
 					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>

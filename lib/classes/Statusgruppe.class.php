@@ -37,6 +37,9 @@ class Statusgruppe {
 	var $mkdate = 0;
 	var $chdate = 0;
 
+	private $has_folder;
+	private $is_sem;
+
 	/*
 	function &GetInstance($id = false, $refresh_cache = false) {
 
@@ -146,22 +149,28 @@ class Statusgruppe {
 
 	function delete() {
 		DeleteStatusgruppe($this->statusgruppe_id);
-		
-		/*$db = DBManager::get('studip');
-		
-		// cascade for statusgruppe_user
-		$db->exec("DELETE FROM statusgruppe_user WHERE statusgruppe_id = '{$this->statusgruppe_id}'");
-		
-		// cascade for datafields_entries
-		$db->exec("DELETE FROM datafields_entries WHERE sec_range_id = '{$this->statusgruppe_id}'"); 
-		
-		// and now delete the statusgroup
-		$db->exec("DELETE FROM statusgruppen WHERE statusgruppe_id = '{$this->statusgruppe_id}'");*/
 	}
 	
 	/* * * * * * * * * * * * * * * * * * * *
 	 * * H E L P E R   F U N C T I O N S * *
 	 * * * * * * * * * * * * * * * * * * * */
+
+	function hasFolder() {
+		// check, if we have a group-folder
+		if ($this->isSeminar()) {
+			if (!isset($this->has_folder)) {
+				$db = DBManager::get('studip');
+		
+				$result = $db->query("SELECT COUNT(*) as c FROM folder WHERE range_id = '$this->statusgruppe_id'");
+				$folder = $result->fetch(PDO::FETCH_ASSOC);
+				$this->has_folder = ($folder['c'] == 1) ? true : false;
+			}
+		
+			return $this->has_folder;
+		}
+
+		return false;
+	}
 
 	function isSeminar() {
 		if (!isset($this->is_sem)) {			
@@ -186,9 +195,11 @@ class Statusgruppe {
 			'id' => $this->statusgruppe_id,
 			'name' => $this->name,
 			'size' => $this->size,
-			'selfassign' => $this->selfassign
+			'selfassign' => $this->selfassign,
+			'folder' => $this->hasFolder()
 		);
 
+		// we fetch the generic datafields for roles if this is an institute
 		if (!$this->isSeminar()) {
 			$datafields = DataFieldEntry::getDataFieldEntries(array($this->range_id, $this->statusgruppe_id), 'roleinstdata');
 	
@@ -222,7 +233,37 @@ class Statusgruppe {
 		// check the standard role data
 		$this->name = $_REQUEST['new_name'];
 		$this->size = $_REQUEST['new_size'];
-		$this->selfassign = ($_REQUEST['new_selfassign']) ? '1' : '0';		
+
+		// check if we have to remove the self_assign_exclusive-flag
+		if ($_REQUEST['new_selfassign']) {
+			if ($this->selfassign != 2) {
+				$this->selfassign = 1;
+			}
+		} else {
+			if ($this->selfassign == 2) {
+				if ($GLOBALS['SessSemName']) {
+					SetSelfAssignExclusive($GLOBALS['SessSemName'][1], false);
+				}
+			}
+			$this->selfassign = 0;
+		}
+
+		if ($_REQUEST['groupfolder']) { 
+			// check if there already exists a folder
+			$db = DBManager::get('studip');
+			$result = $db->query("SELECT COUNT(*) as c FROM folder WHERE range_id = '{$this->statusgruppe_id}'");
+			if ($folder = $result->fetch(PDO::FETCH_ASSOC)) {
+				if ($folder['c'] == 0) {
+					// if no folder exists, we create one
+					$title =  _("Dateiordner der Gruppe:") . ' ' . $this->name;
+					$description = _("Ablage für Ordner und Dokumente dieser Gruppe");
+		      $permission = 15;
+					create_folder(addslashes($title), $description, $this->statusgruppe_id, $permission);
+					$this->messages[] = 'msg§Es wurde ein Gruppenordner angelegt.§';
+				}
+			}
+
+		}
 
 		// check the datafields
 		if (!$this->isSeminar() && is_array($datafield_id)) {

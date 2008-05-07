@@ -47,6 +47,8 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 			$cssSw->resetClass();
 			$default_entries = DataFieldEntry::getDataFieldEntries(array($user_id, $inst_id));
 			$entries = DataFieldEntry::getDataFieldEntries(array($user_id, $role_id));
+
+			if (is_array($entries))
 			foreach ($entries as $id=>$entry) {
 				$cssSw->switchClass();
 				?>

@@ -6,7 +6,7 @@
 		if ($users) : 
 	?>
 	<select name="persons_to_add[]" size="10" multiple style="width: 90%">
-		<? foreach ($users as $user) : ?>
+		<? if (is_array($users)) foreach ($users as $user) : ?>
 		<option value="<?= $user['username']?>">
 			<?= htmlReady(my_substr($user['fullname'],0,35)) ?> (<?= $user['username'] ?>), <?= $user['perms'] ?>
 		</option>

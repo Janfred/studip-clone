@@ -8,7 +8,7 @@
 			<?=_("Einrichtung auswählen")?>:<br/>
 			<select name="subview_id">						
 				<option value="NULL"><?=_("-- bitte Einrichtung ausw&auml;hlen --")?></option>
-				<? foreach ($admin_insts as $data) { ?>
+				<? if (is_array($admin_insts)) foreach ($admin_insts as $data) { ?>
 				<option value="<?=$data['Institut_id']?>" style="<?=($data["is_fak"] ? "font-weight:bold;" : "")?>" <?=($subview_id==$data['Institut_id'])? 'selected="selected"':''?>><?=htmlReady(substr($data["Name"], 0, 70))?></option>
 				<?
 				if ($data["is_fak"]) {

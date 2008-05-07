@@ -663,7 +663,7 @@ function CheckStatusgruppeFolder($group_id){
 function CheckStatusgruppeMultipleAssigns($range_id){
 	$ret = array();
 	$db = new DB_Seminar("
-	SELECT count( statusgruppe_id ) as count , user_id, group_concat( name ) as gruppen
+	SELECT count( statusgruppen.statusgruppe_id ) as count , user_id, group_concat( name ) as gruppen
 	FROM statusgruppen
 	INNER JOIN statusgruppe_user
 	USING ( statusgruppe_id )

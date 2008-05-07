@@ -81,6 +81,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 			// Datenfelder für Rollen in Einrichtungen ausgeben
 			// Default-Daten der Einrichtung
 			$entries = DataFieldEntry::getDataFieldEntries(array($user_id, $inst_id));	// Default-Daten der Einrichtung
+			if (is_array($entries))
 			foreach ($entries as $id=>$entry) {
 				$cssSw->switchClass();
 				echo '<tr><td class="' . $cssSw->getClass() . '" align="left">' . $entry->getName() . ':</td>';

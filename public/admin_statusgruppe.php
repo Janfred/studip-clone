@@ -361,6 +361,13 @@ if ($displayNewRole) {
 	
 	// all statusgroups in a tree-structured array
 	$template->set_attribute('all_roles', $statusgruppen);	
+
+	// set the options for the box
+	if ($_range_type == 'sem') {
+		list($self_assign_all, $self_assign_exclusive) = CheckSelfAssignAll($range_id);
+		$template->set_attribute('self_assign_all', $self_assign_all);
+		$template->set_attribute('self_assign_exclusive', $self_assign_exclusive);
+	}
 	
 	// show the formula for entering a new statusgroup
 	echo $template->render();

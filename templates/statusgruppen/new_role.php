@@ -68,9 +68,22 @@
 					<input type="hidden" name="vather" value="root">
 				</td>
 			</tr>
+
+			<? $cssSw->switchClass() ?>
+			<tr>
+				<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
+					<font size="-1">
+						<?=_("Gruppenordner:") ?>:
+					</font>
+				</td>
+				<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
+					<input type="checkbox" name="groupfolder" value="1">
+				</td>
+			</tr>
+
 			<? endif; ?>
 			
-			<? if ($range_type != 'sem') foreach ($role_data['datafields'] as $field) : ?>
+			<? if ($range_type != 'sem' && is_array($role_data['datafields'])) foreach ($role_data['datafields'] as $field) : ?>
 			<? $cssSw->switchClass() ?>
 			<tr>
 				<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
