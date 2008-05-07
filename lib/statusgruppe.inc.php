@@ -257,6 +257,7 @@ function RemovePersonStatusgruppeComplete ($username, $range_id) {
 	$result = getAllStatusgruppenIDS($range_id);
 	$user_id = get_userid($username);
 
+	if (is_array($result))
 	foreach($result as $range_id)
 	{
 		$db=new DB_Seminar;
@@ -415,6 +416,7 @@ function resortStatusgruppeByRangeId($range_id) {
 		$zw[] = $db->f('statusgruppe_id');
 	}
 
+	if (is_array($zw))
 	foreach ($zw as $pos => $id) {
 		$db->query("UPDATE statusgruppen SET position = $pos WHERE statusgruppe_id = '$id'");
 	}
@@ -701,6 +703,7 @@ function getAllChildIDs($range_id) {
 }
 
 function display_roles_recursive($roles, $level = 0, $pred = '') {
+	if (is_array($roles))
 	foreach ($roles as $role_id => $data) {
 		$css_rec = new cssClassSwitcher();
 		if ($level > 0) {
@@ -711,6 +714,7 @@ function display_roles_recursive($roles, $level = 0, $pred = '') {
 		echo '<tr><td colspan="2" class="steelkante"><b>'.$title.'</b></td></tr>';
 		if ($persons = getPersonsForRole($role_id)) {
 			$z = 1;
+			if (is_array($persons))
 			foreach ($persons as $p) {
 				$css_rec->switchClass();
 				$class = 'class="'.$css_rec->getClass().'"';
@@ -737,6 +741,7 @@ function display_roles_recursive($roles, $level = 0, $pred = '') {
 function GetRoleNames($roles, $level = 0, $pred = '', $all = false) {
 	$out = array();
 
+	if (is_array($roles))
 	foreach ($roles as $role_id => $role) {
 		if ($level == 0) $inst_id = $role_id;
 		if (!$role['name']) $role['name'] = $role['role']->getName();
@@ -765,6 +770,7 @@ function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = 
 	$out = '';
 	$out_table = array();
 
+	if (is_array($roles))
 	foreach ($roles as $role_id => $role) {
 
 		$role['name'] = $role['role']->getName();
@@ -787,6 +793,7 @@ function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = 
 		$has_value = false;
 		$role_differs = false;
 
+		if (is_array($entries))
 		foreach ($entries as $id => $entry) {
 			$default = false;
 			if ($filter == null || in_array($id, $filter) === TRUE) {
