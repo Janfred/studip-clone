@@ -23,57 +23,6 @@
 
 require_once('lib/messaging.inc.php');
 
-/*
-function show_datafields($fields, $user_id, &$css_switcher) {
-	global $perm, $invalidEntries, $my_about;
-	$userEntries = DataFieldEntry::getDataFieldEntries($user_id, 'user');
-	
-	$db = new DB_Seminar();
-
-	foreach ($userEntries as $entry) {
-		$id = $entry->structure->getID();
-		if (in_array($id, $fields) === TRUE) {
-			$color = '#000000';
-			if ($invalidEntries[$id]) {
-				$entry = $invalidEntries[$id];
-				$entry->structure->load();
-				$color = '#ff0000';
-			}
-			$db->query("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
-			$db->next_record();
-			$userid = $db->f("user_id");
-			if ($entry->structure->accessAllowed($perm, $user_id, $db->f("user_id"))) {
-				$css_switcher->switchClass();
-				echo '<tr><td '.$css_switcher->getFullClass().'><blockquote><b>';
-				echo "<font color=\"$color\">" . htmlReady($entry->getName()). ":</font></b></blockquote>";
-				echo '</b></blockquote></td><td colspan="2" '.$css_switcher->getFullClass().'>';
-
-				if ($perm->have_perm($entry->structure->getEditPerms()) &&
-					 !StudipAuthAbstract::CheckField("datafields_entries.". $entry->structure->getID(), $my_about->auth_user['auth_plugin'])) {
-					echo $entry->getHTML('datafield_content[]', $entry->structure->getID());
-					echo '<input type="HIDDEN" name="datafield_id[]" value="'.$entry->structure->getID().'">';
-					echo '<input type="HIDDEN" name="datafield_type[]" value="'.$entry->getType().'">';
-				} else {
-					$db->query("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
-					$db->next_record();
-					$userid = $db->f("user_id");
-					if ($entry->structure->accessAllowed($perm, $userid, $db->f("user_id"))) {
-						echo formatReady($entry->getValue());
-						if (!StudipAuthAbstract::CheckField("datafields_entries.". $entry->structure->getID(), $my_about->auth_user['auth_plugin'])) {
-							echo "<br><br><hr><font size=\"-1\">"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</font>";
-						}
-					}
-					else
-						echo "<font size=\"-1\">"._("Sie dürfen dieses Feld weder einsehen noch bearbeiten.")."</font>";
-				}
-				echo '</td></tr>';
-			}
-		}
-	}
-
-}
-*/
-
 function parse_datafields($user_id) {
 	global $datafield_id, $datafield_type, $datafield_content;
 	global $my_about;
