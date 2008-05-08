@@ -147,7 +147,7 @@ class Config {
 			$this->db->query($sql);
 			$this->db->next_record();
 			$sql = sprintf("INSERT INTO `config` SET config_id='%s', parent_id='', field ='%s', value='%s', mkdate='%s', chdate='%s', is_default = '0', type='%s', description='%s', comment='%s', message_template='%s', `range`='%s'", 
-				md5(uniqid("config!")), $key, (!$value) ? '' : $value, time(), time(), $this->db->f('type'),$this->db->f('description'), $comment, $this->db->f('message_template'), $this->db->f('range') );
+				md5(uniqid("config!")), $key, (!$value) ? '' : $value, time(), time(), $this->db->f('type'),addslashes($this->db->f('description')), $comment, addslashes($this->db->f('message_template')), $this->db->f('range') );
 		}
 		$this->db->query($sql);
 		$this->data[$key] = $value;
