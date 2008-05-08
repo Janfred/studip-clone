@@ -8,11 +8,11 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 <tr>
 
 	<? for($i = 0; $i < $indent - 1; $i++) : ?>
-	<td class="blank" width="1%" align="right" nowrap><?= ($followers[$i+1]) ? Assets::img('forumstrich') : '' ?></td>
+	<td class="blank" width="10" align="right" nowrap><?= ($followers[$i+1]) ? Assets::img('forumstrich') : '' ?></td>
 	<? endfor; ?>
 
 	<? if ($indent > 0) : ?>
-	<td class="blank" width="1%" align="right" nowrap><? 
+	<td class="blank" width="10" align="right" nowrap><? 
 		if (sizeof($roles) == $pos) :
 			echo Assets::img('forumstrich2');
 		elseif ($pos < sizeof($roles)) :

@@ -16,17 +16,16 @@
 ?>
 <tr>
 	<? for($i = 0; $i < $indent; $i++) : ?>
-	<td class="blank" width="1%" align="right" <?= ($followers[$i+1]) ? $style : '' ?> nowrap></td>
+	<td class="blank" width="10" align="right" <?= ($followers[$i+1]) ? $style : '' ?>></td>
 	<? endfor; ?>
 
-	<? /* if (($role_pos < $role_size || $has_child) && ($indent > 0 || $has_child)) : */ ?>
 	<? if ($has_child) : ?>
-	<td class="blank" width="1%" align="right" <?= $style ?> nowrap></td>
-	<? else : ?>
-	<td class="printcontent" width="1%"></td>
-	<? endif; ?>
+	<td class="blank" width="10" align="right" <?= $style ?> nowrap></td>
+	<? else :
+		$indent--;
+	endif; ?>
 
-	<td class="printcontent" colspan="<?= 19 - $indent ?>">
+	<td class="printcontent" colspan="<?= 19 - $indent ?>" width="100%">
 		<center>
 			<? if ($editRole) : // edit the metadata of the role ?>
 				<br/>
@@ -57,7 +56,7 @@
 			<form action="<?= $GLOBALS['PHP_SELF'] ?>" method="post" style="display: inline">
 				<input type="hidden" name="cmd" value="sort_person">
 				<input type="hidden" name="role_id" value="<?= $role_id ?>">
-				<table cellspacing="0" cellpadding="0" border="0" width="90%">
+				<table cellspacing="0" cellpadding="0" border="0" width="95%">
 					<!-- Person assigned to this role - Heading -->
 					<tr>
 						<td class="topic" colspan="6">
@@ -124,7 +123,7 @@
 				</table>
 			</form>
 			<br/>
-			<table cellspacing="0" cellpadding="0" border="0" width="90%">
+			<table cellspacing="0" cellpadding="0" border="0" width="95%">
 				<tr>
 					<? if ($seminar_persons) : ?>
 					<td class="topic">&nbsp;<?= _("VeranstaltungsteilnehmerInnen") ?></td>
@@ -133,7 +132,7 @@
 					
 					<td class="topic">&nbsp;<?= _("Mitarbeiterliste") ?></td>
 					<td>&nbsp;&nbsp;</td>
-					<td class="topic">&nbsp;<?= _("freie Personensuche") ?></td>
+					<td class="topic" nowrap>&nbsp;<?= _("freie Personensuche") ?></td>
 				</tr>
 				<tr>
 					<? if ($seminar_persons) : ?>
