@@ -1,13 +1,17 @@
 <?
-
 /**
+* links_sms.inc.php
+*
 * displays tabs for messaging pages
 *
-* @author				Suchi & Berg GmbH <info@data-quest.de>, Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>, Nils K. Windisch <studip@nkwindisch.de>
-* @access				public
-* @modulegroup	Messaging
-* @module				links_sms.php
-* @package			Stud.IP-Core
+* @author		Suchi & Berg GmbH <info@data-quest.de>
+* @author 		Suchi <suchi@gmx.de>
+* @author 		Stockmann <rstockm@gwdg.de>
+* @author		Cornelis Kater <ckater@gwdg.de>
+* @author 		Nils K. Windisch <studip@nkwindisch.de>
+* @version 		$Id$
+* @access		public
+* @package		Stud.IP-Core
 */
 
 /*
@@ -32,7 +36,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-require_once 'lib/include/reiter.inc.php';
+//Imports
+require_once('lib/include/reiter.inc.php');
 
 $reiter=new reiter;
 
@@ -40,14 +45,20 @@ $reiter=new reiter;
 $reiter=new reiter;
 //Topkats
 $structure = array();
-if (!$perm->have_perm("admin")) {
+if (!$perm->have_perm("admin"))
+{
 	if ($GLOBALS['CALENDAR_ENABLE'])
+	{
 		$structure["calendar"]=array ("topKat"=>"", "name"=>_("Terminkalender"), "link"=>"calendar.php", "active"=>FALSE);
+	}
 	$structure["timetable"]=array ("topKat"=>"", "name"=>_("Stundenplan"), "link"=>"mein_stundenplan.php", "active"=>FALSE);
 }
 $structure["contact"]=array ("topKat"=>"", "name"=>_("Adressbuch"), "link"=>"contact.php", "active"=>FALSE);
 $structure["post"]=array ("topKat"=>"", "name"=>_("Nachrichten"), "link"=>"sms_box.php", "active"=>FALSE);
-$structure["chat"]=array ("topKat"=>"", "name"=>_("Chat"), "link"=>"chat_online.php", "active"=>FALSE);
+if ($GLOBALS['CHAT_ENABLE'])
+{
+	$structure["chat"]=array ("topKat"=>"", "name"=>_("Chat"), "link"=>"chat_online.php", "active"=>FALSE);
+}
 $structure["online"]=array ("topKat"=>"", "name"=>_("Online"), "link"=>"online.php", "active"=>FALSE);
 
 //Bottomkats
@@ -58,7 +69,8 @@ $structure["write"] = array ("topKat"=>"post", "name"=>_("Neue Nachricht schreib
 $structure["adjust"] = array ("topKat"=>"post", "name"=>_("Messaging anpassen"), "link"=>"".$GLOBALS['PHP_SELF']."?change_view=TRUE", "active"=>FALSE);
 $structure["online2"] = array ("topKat"=>"online", "name"=>_("Wer ist online?"), "link"=>"online.php", "active"=>FALSE);
 $structure["adjust_online"] = array ("topKat"=>"online", "name"=>_("Messaging anpassen"), "link"=>"".$GLOBALS['PHP_SELF']."?change_view=TRUE", "active"=>FALSE);
-if ($GLOBALS['CALENDAR_ENABLE']) {
+if ($GLOBALS['CALENDAR_ENABLE'])
+{
 	$structure["calendar_day"] = array ("topKat"=>"calendar", "name"=>_("Tag"), "link"=>"calendar.php?cmd=showday&atime=$atime", "active"=>FALSE);
 	$structure["calendar_week"] = array ("topKat"=>"calendar", "name"=>_("Woche"), "link"=>"calendar.php?cmd=showweek&atime=$atime", "active"=>FALSE);
 	$structure["calendar_month"] = array ("topKat"=>"calendar", "name"=>_("Monat"), "link"=>"calendar.php?cmd=showmonth&atime=$atime", "active"=>FALSE);
