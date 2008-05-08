@@ -2,22 +2,15 @@
 /**
 * week.inc.php
 *
-*
+* Shows the week calender
 *
 * @author		Peter Thienel <pthienel@web.de>
+* @author 		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
 * @version		$Id$
 * @access		public
-* @modulegroup	calendar
-* @module		calendar
-* @package	calendar
+* @package		calendar
 */
-/**
-* workaround for PHPDoc
-*
-* Use this if module contains no elements to document !
-* @const PHPDOC_DUMMY
-*/
-define("PHPDOC_DUMMY",true);
+
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // week.inc.php
@@ -38,19 +31,16 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require('lib/include/html_head.inc.php');
+/**
+* workaround for PHPDoc
+*
+* Use this if module contains no elements to document !
+* @const PHPDOC_DUMMY
+*/
+define("PHPDOC_DUMMY",true);
 
-if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
-	echo "<script language=\"JavaScript\">";
-	echo "var ol_textfont = \"Arial\"";
-	echo "</script>";
-	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"".$GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
-}
-
-require('lib/include/header.php');
-require($RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
-include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarWeek.class.php");
+//Imports
+require_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarWeek.class.php");
 
 $aweek =& new DbCalendarWeek($atime, $calendar_user_control_data['type_week']);
 $aweek->bindSeminarEvents($bind_seminare);
@@ -72,6 +62,21 @@ if ($aweek->getType() == 7)
 	$width = '1%';
 else
 	$width = '3%';
+
+// Begin of output
+//TODO: templates
+include('lib/include/html_head.inc.php');
+
+if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
+	echo "<script language=\"JavaScript\">";
+	echo "var ol_textfont = \"Arial\"";
+	echo "</script>";
+	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
+	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"".$GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
+}
+
+include('lib/include/header.php');
+include($RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\" align=\"center\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\" align=\"center\">\n";
@@ -173,5 +178,4 @@ echo "</td></tr>\n</table>\n";
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\">\n";
 jumpTo($jmp_m, $jmp_d, $jmp_y);
 echo "</table>\n";
-echo "<tr><td class=\"blank\">&nbsp;";
 ?>

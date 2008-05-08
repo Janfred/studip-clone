@@ -1,23 +1,21 @@
 <?
 /**
 * calendar.php
-* 
+*
 * Calendar-mainfile. Calls the submodules.
 *
 * @author		Peter Thienel <pthienel@data.quest.de>
+* @author 		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
 * @version		$Id$
 * @access		public
-* @modulegroup	extern_modules
-* @module		extern
-* @package		Extern
+* @package 		calendar
 */
-
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // calendar.php
 //
-// Copyright (c) 2002 Peter Tienel <pthienel@data-quest.de> 
+// Copyright (c) 2002 Peter Tienel <pthienel@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -53,11 +51,10 @@ $perm->check("user");
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-
 switch ($cmd) {
 	case 'edit':
 		$HELP_KEYWORD="Basis.TerminkalenderBearbeiten";
-		$CURRENT_PAGE=_("Terminkalender"); 
+		$CURRENT_PAGE=_("Terminkalender");
 		break;
 	case 'bind':
 		$HELP_KEYWORD="Basis.TerminkalenderEinbinden";
@@ -71,17 +68,20 @@ switch ($cmd) {
 		$HELP_KEYWORD="Basis.Terminkalender";
 		$CURRENT_PAGE=_("Terminkalender");
 }
-	
+
 if ($CALENDAR_ENABLE)
+{
 	//Kalenderfrontend einbinden
 	include($RELATIVE_PATH_CALENDAR.'/calendar.inc.php');
-else {
+}
+else
+{
 	require_once ('lib/msg.inc.php');
 	// Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   // Output of Stud.IP head
-	$message = _("Der Terminkalender ist nicht eingebunden. Der Terminkalender wurde in den Systemeinstellungen nicht freigeschaltet. Wenden Sie sich bitte an die zust&auml;ndigen Administrierenden.");
+	$message = _("Der Terminkalender ist nicht eingebunden. Der Terminkalender wurde in den Systemeinstellungen nicht freigeschaltet. Wenden Sie sich bitte an die zuständigen Administrator.");
 	parse_window ("error§$message", "§", _("Terminkalender ist nicht eingebunden!"));
-include ('lib/include/html_end.inc.php');
+	include ('lib/include/html_end.inc.php');
 }
 ?>

@@ -1,28 +1,21 @@
 <?
 /**
 * calendar.inc.php
-* 
-* 
+*
+* This shows the calender to the user
 *
 * @author		Peter Thienel <pthienel@web.de>
+* @author 		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
 * @version		$Id$
 * @access		public
-* @modulegroup	calendar
-* @module		calendar
-* @package	calendar
+* @package		calendar
 */
-/**
-* workaround for PHPDoc
-*
-* Use this if module contains no elements to document !
-* @const PHPDOC_DUMMY
-*/
-define("PHPDOC_DUMMY",true);
+
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // calendar.inc.php
 //
-// Copyright (c) 2003 Peter Tienel <pthienel@web.de> 
+// Copyright (c) 2003 Peter Tienel <pthienel@web.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -38,17 +31,24 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+/**
+* workaround for PHPDoc
+*
+* Use this if module contains no elements to document !
+* @const PHPDOC_DUMMY
+*/
+define("PHPDOC_DUMMY",true);
 
+//Imports
 require_once('config.inc.php');
 require_once('lib/visual.inc.php');
-require_once 'lib/functions.php';
-require_once ('lib/calendar_functions.inc.php');
-require($RELATIVE_PATH_CALENDAR . '/calendar_visual.inc.php');
-require($RELATIVE_PATH_CALENDAR . '/lib/calendar_misc_func.inc.php');
-require_once($RELATIVE_PATH_CALENDAR
-		. "/lib/driver/$CALENDAR_DRIVER/CalendarDriver.class.php");
-require_once($RELATIVE_PATH_CALENDAR . '/lib/DbCalendarEvent.class.php');
-require_once($RELATIVE_PATH_CALENDAR . '/lib/SeminarEvent.class.php');
+require_once('lib/functions.php');
+require_once('lib/calendar_functions.inc.php');
+require_once($RELATIVE_PATH_CALENDAR.'/calendar_visual.inc.php');
+require_once($RELATIVE_PATH_CALENDAR.'/lib/calendar_misc_func.inc.php');
+require_once($RELATIVE_PATH_CALENDAR.'/lib/driver/'.$CALENDAR_DRIVER.'/CalendarDriver.class.php');
+require_once($RELATIVE_PATH_CALENDAR.'/lib/DbCalendarEvent.class.php');
+require_once($RELATIVE_PATH_CALENDAR.'/lib/SeminarEvent.class.php');
 
 // -- hier muessen Seiten-Initialisierungen passieren --
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
@@ -57,7 +57,7 @@ closeObject();
 // use current timestamp if no timestamp is given
 if (!$atime && !$termin_id)
 	$atime = time();
-	
+
 if (isset($mod_s_x)) $mod = 'SINGLE';
 if (isset($mod_d_x)) $mod = 'DAILY';
 if (isset($mod_w_x)) $mod = 'WEEKLY';
@@ -76,8 +76,10 @@ if ($del_x && $termin_id)
 if ($back_recur_x)
 	unset($set_recur_x);
 
-if ($cancel_x) {
-	if ($calendar_sess_control_data['source']) {
+if ($cancel_x)
+{
+	if ($calendar_sess_control_data['source'])
+	{
 		$destination = $calendar_sess_control_data['source'];
 		$calendar_sess_control_data['source'] = '';
 		page_close();
@@ -104,7 +106,8 @@ else {
 }
 
 // restore user defined settings
-if ($cmd_cal == 'chng_cal_settings') {
+if ($cmd_cal == 'chng_cal_settings')
+{
 	$calendar_user_control_data = array(
 		'view'             => $cal_view,
 		'start'            => $cal_start,
@@ -123,7 +126,8 @@ if ($cmd_cal == 'chng_cal_settings') {
 
 // delete all expired events and count events
 $db_control = new CalendarDriver();
-if ($cmd == 'add' && $calendar_user_control_data['delete'] > 0) {
+if ($cmd == 'add' && $calendar_user_control_data['delete'] > 0)
+{
 	$expire_delete = mktime(date('G', time()), date('i', time()), 0,
 			date('n', time()) - $calendar_user_control_data['delete'],
 			date('j', time()), date('Y', time()));
@@ -132,7 +136,8 @@ if ($cmd == 'add' && $calendar_user_control_data['delete'] > 0) {
 $db_control->openDatabase('COUNT', 'CALENDAR_EVENTS');
 $count_events = $db_control->getCountEvents();
 
-if (isset($calendar_user_control_data['number_of_events'])) {
+if (isset($calendar_user_control_data['number_of_events']))
+{
 	unset($calendar_user_control_data['number_of_events']);
 	$calendar_user_control_data['delete'] = 6;
 }
@@ -176,12 +181,15 @@ $accepted_vars = array('start_m', 'start_h', 'start_day', 'start_month', 'start_
 											'cat_text', 'mod_prv', 'exc_day', 'exc_month', 'exc_year', 'exceptions',
 											'exc_delete', 'add_exc_x', 'del_exc_x', 'exp_count');
 
-if ($cmd == 'add' || $cmd == 'edit') {
+if ($cmd == 'add' || $cmd == 'edit')
+{
 	if (!isset($calendar_sess_forms_data))
 		$sess->register('calendar_sess_forms_data');
-	if (!empty($_POST)){
+	if (!empty($_POST))
+	{
 		// Formulardaten uebernehmen
-		foreach ($accepted_vars as $key) {
+		foreach ($accepted_vars as $key)
+		{
 			if (isset($_POST[$key]))
 				$calendar_sess_forms_data[$key] = $_POST[$key];
 		}
@@ -191,32 +199,37 @@ if ($cmd == 'add' || $cmd == 'edit') {
 	// checkbox-values
 	$calendar_sess_forms_data['wholeday'] = $_POST['wholeday'];
 }
-elseif ($cmd != 'export') {
+elseif ($cmd != 'export')
+{
 	unset($calendar_sess_forms_data);
 	$sess->unregister('calendar_sess_forms_data');
 }
-	
 
-if ($source_page && ($cmd == 'edit' || $cmd == 'add' || $cmd == 'delete')) {
+
+if ($source_page && ($cmd == 'edit' || $cmd == 'add' || $cmd == 'delete'))
+{
 	$calendar_sess_control_data['source'] = preg_replace('![^0-9a-z+_?&#/=.-]!i', '', rawurldecode($source_page));
 }
 
 // add an event to database *********************************************************
 
-if ($cmd == 'add') {
+if ($cmd == 'add')
+{
 //	$atermin =& new DbCalendarEvent($termin_id);
 	// Ueberpruefung der Formulareingaben
 	$err = check_form_values($calendar_sess_forms_data);
 //	set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
 	// wenn alle Daten OK, dann Termin anlegen, oder bei vorhandener
 	// termin_id updaten
-	if (empty($err) && $count_events < $CALENDAR_MAX_EVENTS) {
+	if (empty($err) && $count_events < $CALENDAR_MAX_EVENTS)
+	{
 		$atermin =& new DbCalendarEvent($termin_id);
 		set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
 		$atermin->save();
 		$atime = $atermin->getStart();
-				
-		if ($calendar_sess_control_data['source']) {
+
+		if ($calendar_sess_control_data['source'])
+		{
 			$destination = $calendar_sess_control_data['source'] . "#a";
 			$calendar_sess_control_data['source'] = '';
 			unset($calendar_sess_forms_data);
@@ -225,17 +238,18 @@ if ($cmd == 'add') {
 			header("Location: $destination");
 			exit;
 		}
-		
+
 		if (!empty($calendar_sess_control_data['view_prv']))
 			$cmd = $calendar_sess_control_data['view_prv'];
 		else
 			$cmd = 'showday';
-			
+
 		unset($calendar_sess_forms_data);
 		$sess->unregister('calendar_sess_forms_data');
 	}
 	// wrong data? -> switch back to edit mode
-	else {
+	else
+	{
 		$cmd = 'edit';
 		$mod = $mod_prv ? $mod_prv : 'SINGLE';
 		if ($back_recur_x) {
@@ -247,13 +261,15 @@ if ($cmd == 'add') {
 
 // Seitensteuerung
 
-switch ($cmd) {
+switch ($cmd)
+{
 	case 'showday':
 		$calendar_sess_control_data['view_prv'] = $cmd;
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Tagesansicht");
 		break;
 	case 'add':
-		switch($calendar_sess_control_data['view_prv']){
+		switch($calendar_sess_control_data['view_prv'])
+		{
 			case 'showday':
 				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Tagesansicht");
 				break;
@@ -271,53 +287,56 @@ switch ($cmd) {
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Tagesansicht");
 		$atermin =& new DbCalendarEvent($termin_id);
 		$atermin->delete();
-		
-		if($calendar_sess_control_data['source']){
+
+		if($calendar_sess_control_data['source'])
+		{
 			$destination = $calendar_sess_control_data['source'];
 			$calendar_sess_control_data['source'] = '';
 			header("Location: $destination");
 			page_close();
 			die;
 		}
-		
+
 		if(!empty($calendar_sess_control_data['view_prv']))
 			$cmd = $calendar_sess_control_data['view_prv'];
 		else
 			$cmd = 'showday';
-		
+
 		unset($calendar_sess_forms_data);
 		$sess->unregister('calendar_sess_forms_data');
 		break;
-		
+
 	case 'showweek':
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Wochenansicht");
 		$calendar_sess_control_data['view_prv'] = $cmd;
 		break;
-		
+
 	case 'showmonth':
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Monatsansicht");
 		$calendar_sess_control_data['view_prv'] = $cmd;
 		break;
-		
+
 	case 'showyear':
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Jahresansicht");
 		$calendar_sess_control_data['view_prv'] = $cmd;
 		break;
-	
+
 	case 'export':
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Termindaten importieren, exportieren und synchronisieren");
 		break;
-		
+
 	case 'bind':
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Veranstaltungstermine einbinden");
 		break;
-		
+
 	case 'edit':
-		if ($termin_id) {
-			
-			if ($evtype == 'sem') {
+		if ($termin_id)
+		{
+			if ($evtype == 'sem')
+			{
 				$atermin =& new SeminarEvent();
-				if (!$atermin->restore($termin_id)) {
+				if (!$atermin->restore($termin_id))
+				{
 					// its something wrong... better to go back to the last view
 					page_close();
 					header("Location: " . $PHP_SELF	. "?cmd="
@@ -326,18 +345,22 @@ switch ($cmd) {
 				}
 				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Veranstaltungstermin");
 			}
-			else {	
+			else
+			{
 				$atermin =& new DbCalendarEvent($termin_id);
 				if (!$mod)
 					$mod = $atermin->getRepeat('rtype');
 				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Termin bearbeiten");
 			}
 		}
-		else {
+		else
+		{
 			$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Termin anlegen/bearbeiten");
 			// call from dayview for new event -> set default values
-			if ($atime && empty($_POST)) {
-				if ($devent) {
+			if ($atime && empty($_POST))
+			{
+				if ($devent)
+				{
 					$properties = array(
 							'DTSTART' => mktime(0, 0, 0, date('n', $atime), date('j', $atime),
 									date('Y', $atime)),
@@ -350,7 +373,8 @@ switch ($cmd) {
 					$atermin =& new CalendarEvent($properties);
 					$atermin->setDayEvent(TRUE);
 				}
-				else {
+				else
+				{
 					$properties = array(
 							'DTSTART' => $atime,
 							'DTEND'   => mktime(date('G', $atime) + 1, date('i', $atime), 0,
@@ -361,23 +385,27 @@ switch ($cmd) {
 							'CLASS' => 'PRIVATE');
 					$atermin =& new CalendarEvent($properties);
 				}
-				
 				$atermin->setRepeat(array('rtype' => 'SINGLE'));
 			}
-			else {
+			else
+			{
 				$properties = array();
 				$atermin =& new CalendarEvent($properties);
 			}
 		}
-		if (empty($_POST)) {
+		if (empty($_POST))
+		{
 			get_event_properties($calendar_sess_forms_data, $atermin);
 		}
-		else {
+		else
+		{
 			$err = check_form_values($calendar_sess_forms_data);
-			if (empty($err)) {
+			if (empty($err))
+			{
 				set_event_properties($calendar_sess_forms_data, $atermin, $mod);
 			}
-			else {
+			else
+			{
 				if ($back_recur_x)
 					$set_recur_x = 1;
 				elseif ($set_recur_x && $err['set_recur'])
@@ -391,9 +419,8 @@ switch ($cmd) {
 }
 
 // Tagesuebersicht anzeigen ***************************************************
-
-if ($cmd == 'showday') {
-	
+if ($cmd == 'showday')
+{
 	$d_start = $calendar_user_control_data['start'];
 	$d_end = $calendar_user_control_data['end'];
 
@@ -410,24 +437,22 @@ if ($cmd == 'showday') {
 		$st = $d_end - 2;
 		$et = 23;
 	}
-	
+
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarDay.class.php");
 	$aday =& new DbCalendarDay($atime);
 	$aday->bindSeminarEvents($bind_seminare);
 	$tab = createDayTable($aday, $st, $et, $calendar_user_control_data['step_day'],
 							TRUE, TRUE, FALSE, 70, 20, 3, 1);
-	
-	include($RELATIVE_PATH_CALENDAR . "/views/day.inc.php");
 
+	include($RELATIVE_PATH_CALENDAR . "/views/day.inc.php");
 }
 
 // Wochenuebersicht anzeigen **************************************************
-
-if ($cmd == 'showweek') {
-
+if ($cmd == 'showweek')
+{
 	$w_start = $calendar_user_control_data['start'];
 	$w_end = $calendar_user_control_data['end'];
-	
+
 	if (isset($wtime))
 		$at = (int) $wtime;
 	if (!($at > 0 && $at < 24))
@@ -444,22 +469,20 @@ if ($cmd == 'showweek') {
 		$st = $w_end - 2;
 		$et = 23;
 	}
-	
-	include($RELATIVE_PATH_CALENDAR . "/views/week.inc.php");
 
+	include($RELATIVE_PATH_CALENDAR . "/views/week.inc.php");
 }
 
 // Monatsuebersicht anzeigen **************************************************
-
-if ($cmd == 'showmonth') {
-
+if ($cmd == 'showmonth')
+{
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarMonth.class.php");
-	
+
 	$amonth =& new DbCalendarMonth($atime);
 	$calendar_sess_forms_data['bind_seminare'] = '';
 	$amonth->bindSeminarEvents($bind_seminare);
 	$amonth->sort();
-	
+
 	if ($mod == 'compact' || $mod == 'nokw') {
 		$hday['name'] = '';
 		$hday['col'] = '';
@@ -470,30 +493,26 @@ if ($cmd == 'showmonth') {
 		$width = '90';
 		$height = '80';
 	}
-	
+
 	include($RELATIVE_PATH_CALENDAR . "/views/month.inc.php");
-	
 }
 
 // Jahresuebersicht ***********************************************************
-
-if ($cmd == 'showyear') {
-
+if ($cmd == 'showyear')
+{
 	include_once($RELATIVE_PATH_CALENDAR . "/lib/DbCalendarYear.class.php");
-	
+
 	$ayear =& new DbCalendarYear($atime);
 	$ayear->bindSeminarEvents($bind_seminare);
-	
-	include($RELATIVE_PATH_CALENDAR . "/views/year.inc.php");
 
+	include($RELATIVE_PATH_CALENDAR . "/views/year.inc.php");
 }
 
 // edit an event *********************************************************
-
 // ist $termin_id an das Skript uebergeben worden, dann bearbeite diesen Termin
 // ist $atime an das Skript uebergeben worden, dann erzeuge neuen Termin (s.o.)
-if ($cmd == 'edit') {
-
+if ($cmd == 'edit')
+{
 	if (strtolower(get_class($atermin)) == 'seminarevent') {
 		$edit_mode_out .= sprintf(_("Termin am %s"), ldate($atermin->getStart()));
 	}
@@ -512,7 +531,7 @@ if ($cmd == 'edit') {
 	}
 	if (!$mod)
 		$mod = 'SINGLE';
-	
+
 	// transfer form->form
 	if ($set_recur_x || $back_recur_x) {
 		$txt = htmlentities(stripslashes($txt), ENT_QUOTES);
@@ -520,60 +539,60 @@ if ($cmd == 'edit') {
 		$loc = htmlentities(stripslashes($loc), ENT_QUOTES);
 		$cat_text = htmlentities(stripslashes($cat_text), ENT_QUOTES);
 	}
-	
-	// start and end time in 5 minute steps	
+
+	// start and end time in 5 minute steps
 	$start_m = $start_m - ($start_m % 5);
 	$end_m = $end_m - ($end_m % 5);
-	
+
 	if ($atermin)
 		$repeat = $atermin->getRepeat();
-	
+
 	include($RELATIVE_PATH_CALENDAR . "/views/edit.inc.php");
 }
 
 // Seminartermine einbinden **************************************************
-
-if ($cmd == 'bind') {
-	
+if ($cmd == 'bind')
+{
 	include($RELATIVE_PATH_CALENDAR . "/views/bind.inc.php");
-	
 }
 
 // Termine importieren/exportieren/synchronisieren ***************************
-if ($cmd == 'export') {
-		
+if ($cmd == 'export')
+{
 	include($RELATIVE_PATH_CALENDAR . "/views/export.inc.php");
-	
 }
-	
+
 // Ansicht anpassen **********************************************************
-
-if ($cmd == 'changeview') {
-
+if ($cmd == 'changeview')
+{
 	include($RELATIVE_PATH_CALENDAR . "/calendar_settings.inc.php");
-	
 }
-	
-echo "</td></tr>\n</table>\n</body>\n</html>";
 
-// Save data back to database.
+// Seite richtig schiessen
+include 'lib/include/html_end.inc.php';
 page_close();
 
-
-function check_form_values (&$post_vars) {
+/**
+ * Enter description here...
+ *
+ * @param Array $post_vars
+ * @return Array
+ */
+function check_form_values (&$post_vars)
+{
 	$err = array();
 	if (!check_date($post_vars['start_month'], $post_vars['start_day'], $post_vars['start_year']))
 		$err['start_time'] = TRUE;
 	if (!check_date($post_vars['end_month'], $post_vars['end_day'], $post_vars['end_year']))
 		$err['end_time'] = TRUE;
-	
+
 	if (!$err['start_time'] && !$err['end_time']){
 		$start = mktime($post_vars['start_h'], $post_vars['start_m'], 0, $post_vars['start_month'], $post_vars['start_day'], $post_vars['start_year']);
 		$end = mktime($post_vars['end_h'], $post_vars['end_m'], 0, $post_vars['end_month'], $post_vars['end_day'], $post_vars['end_year']);
 		if ($start > $end)
 			$err['end_time'] = TRUE;
 	}
-	
+
 	if (!preg_match('/^.*\S+.*$/', $post_vars['txt']))
 		$err['titel'] = TRUE;
 	switch ($post_vars['mod_prv']) {
@@ -615,7 +634,7 @@ function check_form_values (&$post_vars) {
 				$err['set_recur'] = TRUE;
 			}
 	}
-	
+
 	if ($post_vars['mod_prv'] != 'SINGLE' && $post_vars['exp_c'] == 'date') {
 		if (!check_date($post_vars['exp_month'], $post_vars['exp_day'], $post_vars['exp_year'])) {
 			$err['exp_time'] = TRUE;
@@ -635,11 +654,19 @@ function check_form_values (&$post_vars) {
 			$err['set_recur'] = TRUE;
 		}
 	}
-	
+
 	return $err;
 }
 
-function set_event_properties (&$post_vars, &$atermin, $mod) {
+/**
+ * Enter description here...
+ *
+ * @param Array $post_vars
+ * @param unknown_type $atermin
+ * @param unknown_type $mod
+ */
+function set_event_properties (&$post_vars, &$atermin, $mod)
+{
 	if ($post_vars['wholeday']) {
 		$atermin->properties['DTSTART'] = mktime(0, 0, 0, $post_vars['start_month'],
 				$post_vars['start_day'], $post_vars['start_year']);
@@ -660,7 +687,7 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 	$atermin->properties['PRIORITY']        = $post_vars['priority'];
 	$atermin->properties['LOCATION']        = $post_vars['loc'];
 	$atermin->properties['DESCRIPTION']     = $post_vars['content'];
-	
+
 	switch ($post_vars['via']) {
 		case 'PUBLIC':
 			$atermin->setType('PUBLIC');
@@ -671,7 +698,7 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 		default:
 			$atermin->setType('PRIVATE');
 	}
-	
+
 	if ($mod != 'SINGLE' && $post_vars['exp_c'] == 'date') {
 		$expire = mktime(23, 59, 59, $post_vars['exp_month'], $post_vars['exp_day'],
 				$post_vars['exp_year']);
@@ -681,7 +708,7 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 		$expire = 2114377200;
 		$post_vars['exp_count'] = 0;
 	}
-		
+
 	switch ($mod) {
 		case 'DAILY':
 			if ($post_vars['type_d'] == 'daily') {
@@ -693,7 +720,7 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 						'wdays' => '12345', 'expire' => $expire, 'count' => $post_vars['exp_count']));
 			}
 			break;
-			
+
 		case 'WEEKLY':
 			if (empty($post_vars['wdays'])) {
 				$atermin->setRepeat(array('rtype' => 'WEEKLY', 'linterval' => $post_vars['linterval_w'],
@@ -705,7 +732,7 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 						'wdays' => $weekdays, 'expire' => $expire, 'count' => $post_vars['exp_count']));
 			}
 			break;
-			
+
 		case 'MONTHLY':
 			if ($post_vars['type_m'] == 'day') {
 				$atermin->setRepeat(array('rtype' => 'MONTHLY', 'linterval' => $post_vars['linterval_m1'],
@@ -717,7 +744,7 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 						'expire' => $expire, 'count' => $post_vars['exp_count']));
 			}
 			break;
-			
+
 		case 'YEARLY':
 			if ($post_vars['type_y'] == 'day') {
 				$atermin->setRepeat(array('rtype' => 'YEARLY', 'month' => $post_vars['month_y1'],
@@ -729,11 +756,11 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 						'expire' => $expire, 'count' => $post_vars['exp_count']));
 			}
 			break;
-			
+
 		default:
 			$atermin->setRepeat(array('rtype' => 'SINGLE', 'expire' => $expire));
 	}
-	
+
 	// exceptions
 	$atermin->setExceptions($post_vars['exceptions']);
 	// add exception
@@ -751,10 +778,17 @@ function set_event_properties (&$post_vars, &$atermin, $mod) {
 		unset($post_vars['exc_delete']);
 	}
 	$post_vars['exceptions'] = $atermin->getExceptions();
-	
+
 }
 
-function get_event_properties (&$post_vars, &$atermin) {
+/**
+ * Enter description here...
+ *
+ * @param Array $post_vars
+ * @param unknown_type $atermin
+ */
+function get_event_properties (&$post_vars, &$atermin)
+{
 	$post_vars['start_h'] = date('G', $atermin->getStart());
 	$post_vars['start_m'] = date('i', $atermin->getStart());
 	$post_vars['start_day'] = date('j', $atermin->getStart());
@@ -765,22 +799,24 @@ function get_event_properties (&$post_vars, &$atermin) {
 	$post_vars['end_day'] = date('j', $atermin->getEnd());
 	$post_vars['end_month'] = date('n', $atermin->getEnd());
 	$post_vars['end_year'] = date('Y', $atermin->getEnd());
-	
+
 	$post_vars['wholeday'] = $atermin->isDayEvent();
-	
+
 	$post_vars['cat'] = $atermin->properties['STUDIP_CATEGORY'];
 	$post_vars['txt'] = htmlReady($atermin->getTitle());
 	$post_vars['content'] = htmlReady($atermin->properties['DESCRIPTION']);
 	$post_vars['loc'] = htmlReady($atermin->getLocation());
-	
-	if (strtolower(get_class($atermin)) != 'seminarevent') {
-		
+
+	if (strtolower(get_class($atermin)) != 'seminarevent')
+	{
+
 		// exceptions
 		$post_vars['exceptions'] = $atermin->getExceptions();
-		
+
 		$post_vars['cat_text'] = htmlReady($atermin->properties['CATEGORIES']);
-		
-		switch ($atermin->getType()) {
+
+		switch ($atermin->getType())
+		{
 			case 'PUBLIC':
 				$post_vars['via'] = 'PUBLIC';
 				break;
@@ -790,7 +826,7 @@ function get_event_properties (&$post_vars, &$atermin) {
 			default:
 				$post_vars['via'] = 'PRIVATE';
 		}
-				
+
 		$post_vars['priority'] = $atermin->getPriority();
 		$repeat = $atermin->getRepeat();
 		if ($repeat['count']) {
@@ -807,8 +843,9 @@ function get_event_properties (&$post_vars, &$atermin) {
 			$post_vars['exp_month'] = date('n', $expire);
 			$post_vars['exp_year'] = date('Y', $expire);
 		}
-		
-		switch ($repeat['rtype']) {
+
+		switch ($repeat['rtype'])
+		{
 			case 'SINGLE':
 				break;
 			case 'DAILY':

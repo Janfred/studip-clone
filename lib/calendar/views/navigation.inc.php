@@ -38,12 +38,13 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+
+//TODO: löschen, überflüssige Datei...
 require('lib/include/links_sms.inc.php');
 
-if ($cmd != "changeview") {
-	echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
-	echo "<tr><td class=\"blank\" width=\"100%\">&nbsp;</td></tr>\n";
-	echo "</table>\n";
+if ($cmd != "changeview")
+{
+	echo "<br/>\n";
 }
 
 ?>

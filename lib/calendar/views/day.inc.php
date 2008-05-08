@@ -2,22 +2,15 @@
 /**
 * day.inc.php
 *
-*
+* Shows the day calender
 *
 * @author		Peter Thienel <pthienel@web.de>
+* @author 		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
 * @version		$Id$
 * @access		public
-* @modulegroup	calendar
-* @module		calendar
-* @package	calendar
+* @package		calendar
 */
-/**
-* workaround for PHPDoc
-*
-* Use this if module contains no elements to document !
-* @const PHPDOC_DUMMY
-*/
-define("PHPDOC_DUMMY",true);
+
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // day.inc.php
@@ -38,7 +31,17 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require('lib/include/html_head.inc.php');
+/**
+* workaround for PHPDoc
+*
+* Use this if module contains no elements to document !
+* @const PHPDOC_DUMMY
+*/
+define("PHPDOC_DUMMY",true);
+
+// Begin of output
+//TODO: templates
+include('lib/include/html_head.inc.php');
 
 if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
 	echo "<script language=\"JavaScript\">";
@@ -48,12 +51,11 @@ if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // JS an und erwuenscht
 	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"".$GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
 }
 
-require('lib/include/header.php');
-require($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
-
+include('lib/include/header.php');
+include($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
-echo "<tr><td class=\"blank\" width=\"50%\">\n";
+echo "<tr><td class=\"blank\" width=\"60%\">\n";
 echo "<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\">\n";
 echo "<table class=\"steelgroup0\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>\n";
@@ -96,7 +98,7 @@ if ($et < 23) {
 else
 	echo "<tr><td colspan=\"" . $tab["max_columns"] . "\">&nbsp;</td></tr>\n";
 
-echo "</table>\n</td></tr>\n</table>\n<td width=\"50%\" valign=\"top\" class=\"blank\">\n";
+echo "</table>\n</td></tr>\n</table>\n<td width=\"40%\" valign=\"top\" class=\"blank\">\n";
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 echo "<tr><td>\n";
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
@@ -104,7 +106,5 @@ jumpTo($jmp_m, $jmp_d, $jmp_y);
 echo "</table></td></tr>\n";
 $link = "$PHP_SELF?cmd=showday&atime=";
 echo "<tr><td align=\"center\">".includeMonth($atime, $link)."</td></tr>\n";
-echo "<tr><td>&nbsp;</td></tr>\n";
 echo "</table>\n";
-echo "</td></tr><tr><td class=\"blank\" width=\"100%\" colspan=\"2\">&nbsp;";
 ?>

@@ -2,22 +2,15 @@
 /**
 * month.inc.php
 *
-*
+* Shows the month calender
 *
 * @author		Peter Thienel <pthienel@web.de>
+* @author 		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
 * @version		$Id$
 * @access		public
-* @modulegroup	calendar
-* @module		calendar
-* @package	calendar
+* @package		calendar
 */
-/**
-* workaround for PHPDoc
-*
-* Use this if module contains no elements to document !
-* @const PHPDOC_DUMMY
-*/
-define("PHPDOC_DUMMY",true);
+
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // month.inc.php
@@ -38,25 +31,34 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require('lib/include/html_head.inc.php');
+/**
+* workaround for PHPDoc
+*
+* Use this if module contains no elements to document !
+* @const PHPDOC_DUMMY
+*/
+define("PHPDOC_DUMMY",true);
+
+// Begin of output
+//TODO: templates
+include('lib/include/html_head.inc.php');
 
 if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
 	echo "<script language=\"JavaScript\">";
 	echo "var ol_textfont = \"Arial\"";
 	echo "</script>";
-	echo "<DIV ID=\"overDiv\" STYLE=\"position:absolute; visibility:hidden; z-index:1000;\"></DIV>";
-	echo "<SCRIPT LANGUAGE=\"JavaScript\" SRC=\"". $GLOBALS['ASSETS_URL']."javascripts/overlib.js\"></SCRIPT>";
+	echo "<div id=\"overDiv\" style=\"position:absolute; visibility:hidden; z-index:1000;\"></div>";
+	echo "<script language=\"JavaScript\" SRC=\"".Assets::url()."javascripts/overlib.js\"></script>";
 }
 
-require('lib/include/header.php');
-require($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
-
+include('lib/include/header.php');
+include($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\">\n";
-echo "<table width=\"98%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
+echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
 echo "<tr><td>\n";
-echo "<table class=\"steelgroup0\" border=\"0\" cellspacing=\"1\" cellpadding=\"0\" align=\"center\">\n";
+echo "<table width=\"100%\" class=\"steelgroup0\" border=\"0\" cellspacing=\"1\" cellpadding=\"0\" align=\"center\">\n";
 echo "<tr><td>\n";
 
 echo "<table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\">\n";
@@ -65,11 +67,11 @@ printf("&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, mktime(12, 0, 0, $amonth->getMonth(),
 			date('j', $amonth->getStart()), date('Y', $amonth->getStart()) - 1));
 $tooltip = tooltip(_("ein Jahr zurück"));
-echo "<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/calendar_previous_double.gif\"$tooltip></a>";
+echo "<img border=\"0\" src=\"".Assets::url()."images/calendar_previous_double.gif\"$tooltip></a>";
 printf("&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, $amonth->getStart() - 1);
 $tooltip = tooltip(_("einen Monat zurück"));
-echo "<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/calendar_previous.gif\"$tooltip></a>&nbsp;</td>\n";
+echo "<img border=\"0\" src=\"".Assets::url()."images/calendar_previous.gif\"$tooltip></a>&nbsp;</td>\n";
 printf("<td colspan=%s class=\"calhead\">\n", $mod == "nokw" ? "5" : "6");
 echo "<font size=\"+2\">";
 echo htmlentities(strftime("%B ", $amonth->getStart()), ENT_QUOTES) . $amonth->getYear();
@@ -77,12 +79,12 @@ echo "</font></td>\n";
 printf("<td align=\"center\">&nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, $amonth->getEnd() + 1);
 $tooltip = tooltip(_("einen Monat vor"));
-echo "<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/calendar_next.gif\"$tooltip></a>";
+echo "<img border=\"0\" src=\"".Assets::url()."images/calendar_next.gif\"$tooltip></a>";
 printf("&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"%s?cmd=showmonth&atime=%s\">",
 	$PHP_SELF, mktime(12, 0, 0, $amonth->getMonth(),
 			date('j', $amonth->getStart()), date('Y', $amonth->getEnd()) + 1));
 $tooltip = tooltip(_("ein Jahr vor"));
-echo "<img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/calendar_next_double.gif\"$tooltip></a></td>\n";
+echo "<img border=\"0\" src=\"".Assets::url()."images/calendar_next_double.gif\"$tooltip></a></td>\n";
 echo "</tr>\n<tr>\n";
 
 $weekdays_german = array("MO", "DI", "MI", "DO", "FR", "SA", "SO");
@@ -193,13 +195,10 @@ for ($i = $first_day, $j = 0; $i <= $last_day; $i += 86400, $j++) {
 }
 
 echo "</td></tr></table>\n</td></tr>\n";
-echo "<tr><td>&nbsp;</td></tr>\n";
-
-echo "</table></td></table>\n";
-echo "<table width=\"98%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\">\n";
+echo "</table></td></tr></table>\n";
+echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\">\n";
 jumpTo($jmp_m, $jmp_d, $jmp_y);
 echo "</table>\n";
-echo "<tr><td class=\"blank\">&nbsp;";
 
 /**
 * Print a list of events for each day of month
@@ -209,7 +208,8 @@ echo "<tr><td class=\"blank\">&nbsp;";
 * @param int $max_events the number of events to print
 * @param int $day_timestamp unix timestamp of the day
 */
-function print_month_events ($month_obj, $max_events, $day_timestamp) {
+function print_month_events ($month_obj, $max_events, $day_timestamp)
+{
 	global $PHP_SELF, $auth, $forum;
 
 	$count = 0;
@@ -244,14 +244,18 @@ function print_month_events ($month_obj, $max_events, $day_timestamp) {
 * @param int $step the current step
 * @param int $max_events the number of events per step
 */
-function month_up_down (&$month_obj, $day_timestamp, $step, $max_events) {
+function month_up_down (&$month_obj, $day_timestamp, $step, $max_events)
+{
+	//TODO: globals
 	global $PHP_SELF, $atime, $CANONICAL_RELATIVE_PATH_STUDIP;
-	if($atime == $day_timestamp){
+	if($atime == $day_timestamp)
+	{
 		$spacer = TRUE;
 		$up = FALSE;
 		$a = $month_obj->numberOfEvents($day_timestamp) - $step - $max_events;
 		$up = ($month_obj->numberOfEvents($day_timestamp) > $max_events && $step >= $max_events);
-		if($a + $max_events > $max_events){
+		if($a + $max_events > $max_events)
+		{
 			if($up)
 				echo "&nbsp; &nbsp; &nbsp;";
 			else
@@ -260,29 +264,31 @@ function month_up_down (&$month_obj, $day_timestamp, $step, $max_events) {
 			$tooltip = tooltip($tooltip);
 			echo "<a href=\"$PHP_SELF?cmd=showmonth&atime=$day_timestamp&step=";
 			echo ($step + $max_events) . "\">";
-			echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/calendar_down_small.gif\" ";
+			echo "<img src=\"".Assets::url()."images/calendar_down_small.gif\" ";
 			echo $tooltip . " border=\"0\"></a>\n";
 			$spacer = FALSE;
 		}
-		if($up){
+		if($up)
+		{
 			if($spacer)
 				echo "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;";
 			$tooltip = sprintf(_("noch %s Termine davor"), $step);
 			$tooltip = tooltip($tooltip);
 			echo "<a href=\"$PHP_SELF?cmd=showmonth&atime=$day_timestamp&step=";
 			echo ($step - $max_events) . "\">";
-			echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/calendar_up_small.gif\" ";
+			echo "<img src=\"".Assets::url()."images/calendar_up_small.gif\" ";
 			echo $tooltip . " border=\"0\"></a>\n";
 			$month_obj->setPointer($atime, $step);
 		}
 	}
-	else if($month_obj->numberOfEvents($day_timestamp) > $max_events){
+	else if($month_obj->numberOfEvents($day_timestamp) > $max_events)
+	{
 		echo "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;";
 		$tooltip = sprintf(_("noch %s Termine danach"),
 				$month_obj->numberOfEvents($day_timestamp) - $max_events);
 		$tooltip = tooltip($tooltip);
 		echo "<a href=\"$PHP_SELF?cmd=showmonth&atime=$day_timestamp&step=";
-		echo ($max_events) . "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/calendar_down_small.gif\" ";
+		echo ($max_events) . "\"><img src=\"".Assets::url()."images/calendar_down_small.gif\" ";
 		echo $tooltip . " border=\"0\"></a>\n";
 	}
 }
