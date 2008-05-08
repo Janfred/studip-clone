@@ -52,10 +52,10 @@ if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // JS an und erwuenscht
 }
 
 include('lib/include/header.php');
-include($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
+include('lib/include/links_sms.inc.php');
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
-echo "<tr><td class=\"blank\" width=\"60%\">\n";
+echo "<tr><td class=\"blank\" width=\"60%\"><br/>\n";
 echo "<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\">\n";
 echo "<table class=\"steelgroup0\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>\n";
@@ -98,7 +98,7 @@ if ($et < 23) {
 else
 	echo "<tr><td colspan=\"" . $tab["max_columns"] . "\">&nbsp;</td></tr>\n";
 
-echo "</table>\n</td></tr>\n</table>\n<td width=\"40%\" valign=\"top\" class=\"blank\">\n";
+echo "</table>\n</td></tr>\n</table>\n<td width=\"40%\" valign=\"top\" class=\"blank\"><br/>\n";
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 echo "<tr><td>\n";
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";

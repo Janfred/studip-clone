@@ -52,10 +52,10 @@ if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // JS an und erwuenscht
 }
 
 include('lib/include/header.php');
-include($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
+include('lib/include/links_sms.inc.php');
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
-echo "<tr><td class=\"blank\" width=\"100%\">\n";
+echo "<tr><td class=\"blank\" width=\"100%\"><br/>\n";
 echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
 echo "<tr><td>\n";
 echo "<table width=\"100%\" class=\"steelgroup0\" border=\"0\" cellspacing=\"1\" cellpadding=\"0\" align=\"center\">\n";
@@ -96,7 +96,7 @@ if($mod != "nokw")
 echo "</tr></table>\n</td></tr>\n";
 
 echo "<tr><td class=\"blank\">\n";
-echo "<table class=\"steelgroup0\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\">\n";
+echo "<table width=\"100%\" class=\"steelgroup0\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\">\n";
 
 // Im Kalenderblatt ist links oben immer Montag. Das muss natuerlich nicht der
 // Monatserste sein. Es muessen evtl. noch Tage des vorangegangenen Monats
@@ -114,7 +114,8 @@ if ($amonth->getMonth() == 3)
 $last_day = ((42 - ($adow + date("t",$amonth->getStart()))) % 7 + $cor) * 86400
  	        + $amonth->getEnd() - 43199;
 
-for ($i = $first_day, $j = 0; $i <= $last_day; $i += 86400, $j++) {
+for ($i = $first_day, $j = 0; $i <= $last_day; $i += 86400, $j++)
+{
 	$aday = date("j", $i);
 	// Tage des vorangehenden und des nachfolgenden Monats erhalten andere
 	// style-sheets

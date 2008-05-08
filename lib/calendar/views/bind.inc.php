@@ -38,9 +38,11 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require('lib/include/html_head.inc.php');
-require('lib/include/header.php');
-require($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
+// Begin of output
+//TODO: templates
+include('lib/include/html_head.inc.php');
+include('lib/include/header.php');
+include('lib/include/links_sms.inc.php');
 
 // alle vom user abonnierten Seminare
 $db =& new DB_Seminar;
@@ -52,7 +54,7 @@ if($order == 'ASC')
 else
 	$order = 'ASC';
 $query = "SELECT visitdate, seminare.Name, seminare.Seminar_id, seminar_user.status, seminar_user.gruppe, count(termin_id) as count,
-			sd1.name AS startsem,IF(duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem 
+			sd1.name AS startsem,IF(duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem
 			FROM seminar_user LEFT JOIN seminare ON seminare.Seminar_id=seminar_user.seminar_id
 			LEFT JOIN object_user_visits  ouv ON ouv.object_id = seminare.Seminar_id AND ouv.user_id = '{$user->id}' AND ouv.type = 'sem'
 			LEFT JOIN semester_data sd1 ON ( start_time BETWEEN sd1.beginn AND sd1.ende)

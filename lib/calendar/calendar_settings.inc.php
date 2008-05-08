@@ -1,33 +1,48 @@
 <?
-// $Id$
-/*
-calendar_settings.inc 0.8-20020701
-Persoenlicher Terminkalender in Stud.IP.
-Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+/**
+* calendar_settings.inc.php
+*
+* @author		Peter Thienel <pthienel@web.de>
+* @author 		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
+* @version		$Id$
+* @access		public
+* @package		calendar
 */
 
-if ($i_page == "calendar.php") {
-	require('lib/include/html_head.inc.php');
-	require('lib/include/header.php');
-	require($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
-}
+// +---------------------------------------------------------------------------+
+// This file is part of Stud.IP
+// Persoenlicher Terminkalender in Stud.IP.
+// Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
+// +---------------------------------------------------------------------------+
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or any later version.
+// +---------------------------------------------------------------------------+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+// +---------------------------------------------------------------------------+
+
+// Imports
 require_once('lib/visual.inc.php');
 
+
+if ($i_page == "calendar.php")
+{
+	include('lib/include/html_head.inc.php');
+	include('lib/include/header.php');
+	include('lib/include/links_sms.inc.php');
+}
+
+
 // store user-settings
-if($cmd_cal == 'chng_cal_settings'){
+if($cmd_cal == 'chng_cal_settings')
+{
 	$calendar_user_control_data = array(
 		'view'		=> $cal_view,
 		'start'		=> $cal_start,
@@ -49,11 +64,7 @@ $css_switcher->switchClass();
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
 	<tr>
-		<td class="blank" colspan=2>&nbsp;
-		</td>
-	</tr>
-	<tr>
-		<td class="blank" width="100%" colspan="2" align="center">
+		<td class="blank" width="100%" colspan="2" align="center"><br/>
 			<blockquote>
 				<font size="-1"><b><? echo _("Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders anpassen."); ?></b></font>
 			</blockquote>
@@ -281,8 +292,8 @@ $css_switcher->switchClass();
 					</td>
 				</tr>
 			</table>
-			<br><br>
+			<br/>
 		</td>
 	</tr>
 </table>
-		</form>
+</form>

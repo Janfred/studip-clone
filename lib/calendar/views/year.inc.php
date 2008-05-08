@@ -43,10 +43,10 @@ define("PHPDOC_DUMMY",true);
 //TODO: templates
 include('lib/include/html_head.inc.php');
 include('lib/include/header.php');
-include($RELATIVE_PATH_CALENDAR . "/views/navigation.inc.php");
+include('lib/include/links_sms.inc.php');
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
-echo "<tr><td class=\"blank\" width=\"100%\">\n";
+echo "<tr><td class=\"blank\" width=\"100%\"><br/>\n";
 echo "<table class=\"blank\" border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\">\n";
 echo "<table class=\"steelgroup0\" width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";

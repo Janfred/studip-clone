@@ -7,17 +7,9 @@
 * @author		Peter Thienel <pthienel@web.de>
 * @version		$Id$
 * @access		public
-* @modulegroup	calendar
-* @module		calendar
-* @package	calendar
+* @package		calendar
 */
-/**
-* workaround for PHPDoc
-*
-* Use this if module contains no elements to document !
-* @const PHPDOC_DUMMY
-*/
-define("PHPDOC_DUMMY",true);
+
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // edit.inc.php
@@ -38,35 +30,35 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require('lib/include/html_head.inc.php');
-require('lib/include/header.php');
-require($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
+/**
+* workaround for PHPDoc
+*
+* Use this if module contains no elements to document !
+* @const PHPDOC_DUMMY
+*/
+define("PHPDOC_DUMMY",true);
 
-function to_string_popupcalendar ($element, $disabled) {
-	// if javascript enabled display icon for popup calendar
-	if ($GLOBALS['auth']->auth['jscript'] && !$disabled) {
-		return "&nbsp;"
-			. "<img align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" border=\"0\" "
-			. "onClick=\"window.open('termin_eingabe_dispatch.php?element_switch=$element&atime={$GLOBALS['atime']}', 'InsertDate', "
-			. "'dependent=yes, width=210, height=210, left=500, top=150')\">";
-	}
-	return '';
-}
+// Begin of output
+//TODO: templates
+include('lib/include/html_head.inc.php');
+include('lib/include/header.php');
+include('lib/include/links_sms.inc.php');
 
 echo "<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
-echo "<table class=\"blank\" width=\"99%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
+echo "<table class=\"blank\" width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
 
-if (!empty($err)) {
+if (!empty($err))
+{
 	$error_sign = "<font color=\"#FF0000\" size=\"+1\"><b>&nbsp;*&nbsp;</b></font>";
 	$error_message = sprintf(_("Bitte korrigieren Sie die mit %s gekennzeichneten Felder.%s"),
 		$error_sign, $err_message);
 	my_info($error_message, "blank", 2);
 }
 
-echo "<tr><td class=\"blank\" width=\"99%\" valign=\"top\">\n";
+echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 echo "<form name=\"Formular\" action=\"$PHP_SELF?cmd=edit\" method=\"post\">";
-echo "<table class=\"blank\" width=\"99%\" border=\"0\" cellspacing=\"0\" cellpadding=\"10\">\n";
+echo "<table class=\"blank\" width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"10\">\n";
 
 if (isset($atermin) && strtolower(get_class($atermin)) == "seminarevent") {
 	// form is not editable
@@ -706,10 +698,25 @@ echo "</td></tr></table></form>\n</td>\n";
 echo "<td class=\"blank\" align=\"center\" valign=\"top\" width=\"1%\">\n";
 print_infobox($info_box['all'], "dates.jpg");
 echo "</td></tr>\n";
-echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
-
-
 echo "</table></td></tr></table><br />\n";
 echo "</td></tr></table>\n";
 
+/**
+ * Enter description here...
+ *
+ * @param unknown_type $element
+ * @param unknown_type $disabled
+ * @return unknown
+ */
+function to_string_popupcalendar ($element, $disabled)
+{
+	// if javascript enabled display icon for popup calendar
+	if ($GLOBALS['auth']->auth['jscript'] && !$disabled) {
+		return "&nbsp;"
+			. "<img align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" border=\"0\" "
+			. "onClick=\"window.open('termin_eingabe_dispatch.php?element_switch=$element&atime={$GLOBALS['atime']}', 'InsertDate', "
+			. "'dependent=yes, width=210, height=210, left=500, top=150')\">";
+	}
+	return '';
+}
 ?>

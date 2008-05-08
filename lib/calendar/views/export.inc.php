@@ -7,17 +7,9 @@
 * @author		Peter Thienel <pthienel@web.de>
 * @version		$Id$
 * @access		public
-* @modulegroup	calendar
-* @module		calendar
-* @package	sync
+* @package		caldender
 */
-/**
-* workaround for PHPDoc
-*
-* Use this if module contains no elements to document !
-* @const PHPDOC_DUMMY
-*/
-define("PHPDOC_DUMMY",true);
+
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // export.inc.php
@@ -38,7 +30,15 @@ define("PHPDOC_DUMMY",true);
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+/**
+* workaround for PHPDoc
+*
+* Use this if module contains no elements to document !
+* @const PHPDOC_DUMMY
+*/
+define("PHPDOC_DUMMY",true);
 
+//Imports
 require_once($RELATIVE_PATH_CALENDAR.'/lib/sync/CalendarImportFile.class.php');
 require_once($RELATIVE_PATH_CALENDAR.'/lib/sync/CalendarParserICalendar.class.php');
 require_once($RELATIVE_PATH_CALENDAR.'/lib/sync/CalendarExportFile.class.php');
@@ -84,14 +84,16 @@ if ($experiod == 'period') {
 		$err['exend'] = TRUE;
 }
 
-if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == 'exp' && !empty($err))) {
-	require('lib/include/html_head.inc.php');
+if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == 'exp' && !empty($err)))
+{
+	include('lib/include/html_head.inc.php');
 
+	//TODO: 2mal body?, ob das so geht?
 	print_js_import();
 	echo "\n<body onUnLoad=\"upload_end()\">";
 
-	require('lib/include/header.php');
-	require($RELATIVE_PATH_CALENDAR . '/views/navigation.inc.php');
+	include('lib/include/header.php');
+	include('lib/include/links_sms.inc.php');
 }
 
 if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == 'exp' && !empty($err))) {
@@ -393,8 +395,13 @@ elseif ($expmod == 'sync') {
 
 }
 
-function print_cell ($params) {
-
+/**
+ * Enter description here...
+ *
+ * @param Array $params
+ */
+function print_cell ($params)
+{
 	echo "<tr><td width=\"100%\" class=\"steel1\">\n";
 	echo $params['form'];
 	echo "<div><font size=\"-1\">";
@@ -405,7 +412,6 @@ function print_cell ($params) {
 	echo $params['button'];
 	echo "<input type=\"hidden\" name=\"expmod\" value=\"{$params['expmod']}\">\n";
 	echo "</div>\n</form>\n</td></tr>\n";
-
 }
 
 ?>
