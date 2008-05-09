@@ -328,7 +328,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		}
 		if (get_config('ALLOW_DOZENT_VISIBILITY') || $perm->have_perm("admin")){
 			$structure["visibility"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sichtbarkeit"), 'link'=>"admin_visibility.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'newline'=>TRUE);
-			
+
 		}
 	}
 
@@ -378,7 +378,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			$structure["sem_tree"]=array ('topKat'=>"global", 'name'=>_("Veranstaltungshierarchie"), 'link'=>"admin_sem_tree.php", 'active'=>FALSE);
 		}
 		$structure["aux_adjust"]=array (topKat=>"global", name=>("Zusatzangaben definieren"), link=>"admin_aux_adjust.php", active=>FALSE);
-		if ($SEMINAR_LOCK_ENABLE) 
+		if ($SEMINAR_LOCK_ENABLE)
 		$structure["lock_adjust"]=array (topKat=>"global", name=>("Sperrebenen anpassen"), link=>"admin_lock_adjust.php", active=>FALSE);
 	}
 
@@ -427,35 +427,6 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	}
 	//Reitersystem Ende
-
-
-	//Tooltip erzeugen
-	if ($SessSemName["class"] == "sem") {
-		$db->query ("SELECT Name FROM seminare WHERE Seminar_id = '".$SessSemName[1]."' ");
-		$db->next_record();
-	}
-	if ($SessSemName["class"] == "inst") {
-		$db->query ("SELECT Name FROM Institute WHERE Institut_id = '".$SessSemName[1]."' ");
-		$db->next_record();
-	}
-
-	$tooltip=_("Sie befinden sich im Administrationsbereich von Stud.IP.") . " ";
-
-	if (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
-		$tooltip.= _("Ausgewählte Veranstaltung:") . " ".$db->f("Name")." - " . _("Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.");
-	elseif ($SessSemName["class"] == "inst")
-		$tooltip.= _("Ausgewählte Einrichtung:") . " ".$db->f("Name")." - " . _("Um die Auswahl aufzuheben, benutzen Sie bitte das Schlüsselsymbol.");
-	else
-		$tooltip.= _("Keine Veranstaltung oder Einrichtung ausgewählt");
-
-	//create addtional text
-	if (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
-		$addText=" <a href=\"adminarea_start.php?list=TRUE\"><img ".tooltip(sprintf(_("Auswahl der Veranstaltung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/admin.gif\" border=0></a>";
-	elseif ($SessSemName["class"] == "inst")
-		if ($perm->have_perm("admin")) //backlink for admin is admin_institut.php
-			$addText=" <a href=\"admin_institut.php?list=TRUE&quit=TRUE\"><img ".tooltip(sprintf(_("Auswahl der Einrichtung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/admin.gif\" border=0></a>";
-		else //backlink for <=dozent is admin_lit_list.php, because he is not allowed to view admin_institut.php!
-			$addText=" <a href=\"admin_lit_list.php?list=TRUE&quit=TRUE&view=literatur_inst\"><img ".tooltip(sprintf(_("Auswahl der Einrichtung %s aufheben"), $db->f("Name")))." align=\"absmiddle\" src=\"".$GLOBALS['ASSETS_URL']."images/admin.gif\" border=0></a>";
 
 	//View festlegen
 	switch ($i_page) {
@@ -633,7 +604,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		page_close();
 
 		if(!is_object($header_controller)) include ('lib/include/header.php');   // Output of Stud.IP head
-		$reiter->create($structure, $reiter_view, $tooltip, $addText);
+		$reiter->create($structure, $reiter_view);
 
 		?>
 		<table width="100%" cellspacing=0 cellpadding=0 border=0>
@@ -706,7 +677,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		//Save data back to database and start a connection  - so we avoid some problems with large search results and data is writing back to db too late
 		page_close();
 		if(!is_object($header_controller)) include ('lib/include/header.php');   // Output of Stud.IP head
-		$reiter->create($structure, $reiter_view, $tooltip, $addText);
+		$reiter->create($structure, $reiter_view);
 		?>
 		<table width="100%" cellspacing=0 cellpadding=0 border=0>
 		<?
@@ -1074,8 +1045,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				</tr>
 				<?
 			}
-			
-			
+
+
 		}
 
 		while ($db->next_record()) {
@@ -1169,7 +1140,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 				<?
 				}
-				break;					
+				break;
 		case "admin_aux.php":
 				$db5 = new Db_Seminar;
 				$db5->query("SELECT aux_lock_rule from seminare WHERE Seminar_id='$seminar_id'");
@@ -1249,5 +1220,4 @@ if ($SessSemName["class"] == "sem" && $SessSemName[1] && !$perm->have_studip_per
 	page_close();
 	die();
 }
-$reiter->create($structure, $reiter_view, $tooltip, $addText);
-?>
+$reiter->create($structure, $reiter_view);

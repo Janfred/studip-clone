@@ -23,13 +23,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 global
-	$alt,
 	$auth,
 	$CALENDAR_ENABLE,
 	$ELEARNING_INTERFACE_ENABLE,
 	$ILIAS_CONNECT_ENABLE,
 	$i_page,
-	$js,
 	$MAIL_NOTIFICATION_ENABLE,
 	$perm,
 	$username,
@@ -240,5 +238,5 @@ switch ($i_page) {
 	break;
 }
 }
-$reiter->create($structure, $reiter_view, $alt, $js);
+$reiter->create($structure, $reiter_view);
 ?>

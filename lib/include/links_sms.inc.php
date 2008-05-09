@@ -172,4 +172,3 @@ switch ($i_page) {
 }
 
 $reiter->create($structure, $reiter_view);
-?>

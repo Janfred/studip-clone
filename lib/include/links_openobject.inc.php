@@ -55,7 +55,6 @@ global
 	$_show_scm,
 	$supportdb_data,
 	$SUPPORT_ENABLE,
-	$tooltip,
 	$type,
 	$user,
 	$view;
@@ -362,14 +361,6 @@ if (($SUPPORT_ENABLE) && ($modules["support"])){
 		$structure["support_events"]=array ('topKat' => "resources", 'name' => _("Supportleistungen bearbeiten"), 'link' => "support.php?view=edit_events", 'active' => FALSE);
 }
 
-//Infofenstereintraege erzeugen
-if ($SessSemName["class"]=="inst") {
-	$tooltip = sprintf(_("Sie befinden sich in der Einrichtung: %s, letzter Besuch: %s, Ihr Status in dieser Einrichtung: %s"), $SessSemName[0], date("d.m.Y - H:i:s", object_get_visit($SessSemName[1], $SessSemName["class"])), $SemUserStatus);
-} else {
-	$tooltip = sprintf(_("Sie befinden sich in der Veranstaltung: %s, letzter Besuch: %s, Ihr Status in dieser Veranstaltung: %s"), $SessSemName[0], date("d.m.Y - H:i:s", object_get_visit($SessSemName[1], $SessSemName["class"])), $SemUserStatus);
-}
-
-
 
 // check if view is maintained by a plugin
 $found = false;
@@ -606,7 +597,5 @@ if (!$found){
 
 	}
 
-	$reiter->create($structure, $reiter_view, $tooltip);
+	$reiter->create($structure, $reiter_view);
 }
-?>
-

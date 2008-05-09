@@ -89,5 +89,4 @@ switch ($i_page) {
 	break;
 }
 
-$reiter->create($structure, $reiter_view, ((isset($alt))? $alt:false), ((isset($js))? $js:false));
-?>
+$reiter->create($structure, $reiter_view);
