@@ -251,15 +251,17 @@ function scm_change_content($scm_id, $range_id, $name, $preset, $content) {
 	
 	if ($preset)
 		$tab_name = $SCM_PRESET[$preset]["name"];
-	else
+	else if (trim($name) != '')
 		$tab_name = stripslashes($name);
-	
+	else
+		$tab_name = _('[kein Titel]');
+
 	$scm->setValue('tab_name', $tab_name);
 	$scm->setValue('content', stripslashes($content));
 	$scm->setValue('user_id', $user->id);
 	$scm->setValue('range_id', $range_id);
 	
-	if ($scm->store()) {
+	if ($scm->store() !== false) {
 		return $scm->getId();
 	} else {
 		return false;
