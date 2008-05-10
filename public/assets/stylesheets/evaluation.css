@@ -11,14 +11,6 @@
  *
  */
 
-/*
-body,td,div,span,b,i,a,dir,li,p,strong,u,em,input,option {
-  font-size: 0.8em;
-}
-*/
-
-td, th, input, select  { font-size: 0.8em; }
-
 .eval_title {
   font-size: 1.2em;
   font-weight: bold;
