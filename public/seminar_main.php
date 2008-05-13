@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TODO - in progress (not all links use URLHelper yet)
 // vim: noexpandtab
 /*
 seminar_main.php - Die Eingangs- und Uebersichtsseite fuer ein Seminar
@@ -74,7 +75,7 @@ if(isset($redirect_to) && $redirect_to != "") {
 		unset($redirect_to);
 		page_close();
 		$new_query = preg_replace('/[^0-9a-z+_#?&=.-\/]/i', '', $new_query);
-		header('Location: '.$new_query);
+		header('Location: '.URLHelper::getURL($new_query));
 		die;
 }
 

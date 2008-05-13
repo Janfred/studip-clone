@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TODO - in progress (not all links use URLHelper yet)
 /*
 institut_main.php - Die Eingangsseite fuer ein Institut
 Copyright (C) 200 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>
@@ -76,8 +77,8 @@ if (isset($auswahl) && $auswahl!="") {
 		}
 		unset($redirect_to);
 		page_close();
-		$new_query = preg_replace('/[^0-9a-z+_?#&=.-\/]/i', '', $new_query);
-		header("Location: $new_query");
+		$new_query = preg_replace('/[^0-9a-z+_#?&=.-\/]/i', '', $new_query);
+		header('Location: '.URLHelper::getURL($new_query));
 		die;
 	}
 
