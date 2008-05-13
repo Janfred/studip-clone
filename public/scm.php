@@ -1,4 +1,5 @@
 <?php
+# Lifter001: DONE
 
 /*
 scm.php - Simple Content Module von Stud.IP
@@ -144,9 +145,9 @@ function scm_show_content($range_id, $msg, $scm_id) {
 		$printcontent_table=new Table(array("width"=>"100%"));
 		echo $printcontent_table->open();
 		if ($rechte) {
-			$edit = "<a href=\"$PHP_SELF?i_view=edit&show_scm=$scm_id\">".makeButton("bearbeiten")."</a>";
+			$edit = "<a href=\"".URLHelper::getLink($PHP_SELF."?i_view=edit&show_scm=$scm_id")."\">".makeButton("bearbeiten")."</a>";
 			if(StudipScmEntry::GetNumSCMEntriesForRange($range_id) > 1){
-				$edit .= "&nbsp;<a href=\"$PHP_SELF?i_view=kill&show_scm=$scm_id\">".makeButton("loeschen")."</a>";
+				$edit .= "&nbsp;<a href=\"".URLHelper::getLink($PHP_SELF."?i_view=kill&show_scm=$scm_id")."\">".makeButton("loeschen")."</a>";
 			}
 		} else {
 			$edit = "&nbsp;";
@@ -173,13 +174,14 @@ function scm_edit_content($range_id, $scm_id) {
 	if ($scm->is_new){
 		$scm->setValue('user_id', $GLOBALS['user']->id);
 		$scm->setValue('chdate', time());
+		$scm_id = 'new_entry';
 	}
 	
 	$max_col = scm_max_cols();
 
 	$header_table = scm_seminar_header($range_id, $scm->getValue("tab_name"));
 
-	print("<form action=\"$PHP_SELF\" method=\"POST\">");
+	print("<form action=\"".URLHelper::getLink($PHP_SELF)."\" method=\"POST\">");
 
 	$frame_table=new Table();
 	$frame_table->setTableWidth("100%");
@@ -206,14 +208,11 @@ function scm_edit_content($range_id, $scm_id) {
 	scm_change_header($content_table, $titel, $scm->getValue("user_id"), $scm->getValue("chdate"));
 
 	$content = "<textarea name=\"content\" style=\"width: 90%\" cols=$max_col rows=10 wrap=virtual >".htmlReady($scm->getValue("content"))."</textarea>\n";
-	if ($scm->is_new)
-		$content.="<input type=\"HIDDEN\" name=\"show_scm\" value=\"new_entry\"><b>\n";
-	else 
-		$content.= "<input type=\"HIDDEN\" name=\"show_scm\" value=\"$scm_id\">";
+	$content.= "<input type=\"HIDDEN\" name=\"show_scm\" value=\"$scm_id\">";
 	$content.= "<input type=\"HIDDEN\" name=\"i_view\" value=\"change\">";
 
 	$edit="<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"send_scm\" value=\"&auml;nderungen vornehmen\" border=0 " . makeButton("uebernehmen", "src") . ">";
-	$edit.="&nbsp;<a href=\"$PHP_SELF\">". makeButton("abbrechen") . "</a>";
+	$edit.="&nbsp;<a href=\"".URLHelper::getLink($PHP_SELF)."\">". makeButton("abbrechen") . "</a>";
 	$edit .= "<font size=\"-1\">&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\">";
 
 	if (get_config("EXTERNAL_HELP")) {
