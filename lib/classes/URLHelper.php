@@ -10,8 +10,6 @@
  * the License, or (at your option) any later version.
  */
 
-require_once 'lib/functions.php';
-
 /**
  * The URLHelper class provides several utility functions (as class
  * methods) to ease the transition from using session data to URL
@@ -34,7 +32,7 @@ class URLHelper
      * parameters will be included in the link returned by getLink().
      *
      * @param string $name  parameter name
-     * @param string $value parameter value
+     * @param mixed  $value parameter value
      */
     static function addLinkParam ($name, $value)
     {
@@ -53,7 +51,7 @@ class URLHelper
      *   time getLink() is called.
      *
      * @param string $name  parameter name
-     * @param string $var   variable to bind
+     * @param mixed  $var   variable to bind
      */
     static function bindLinkParam ($name, &$var)
     {
@@ -62,6 +60,16 @@ class URLHelper
         }
 
         self::$params[$name] = &$var;
+    }
+
+    /**
+     * Get the list of currently registered link parameters.
+     *
+     * @return array list of registered link parameters
+     */
+    static function getLinkParams ()
+    {
+        return self::$params;
     }
 
     /**
@@ -78,8 +86,10 @@ class URLHelper
      * Augment the given URL by appending all registered link parameters.
      * Note that for each bound variable, its current value is used. You
      * can use the second parameter to add futher URL parameters to this
-     * link without adding them globally. This method is identical to
-     * getURL() except that it returns an entity encoded URL.
+     * link without adding them globally. Any parameters included in the
+     * argument list take precedence over registered link parameters of
+     * the same name. This method is identical to getURL() except that it
+     * returns an entity encoded URL suitable for use in HTML attributes.
      *
      * @param string $url    relative or absolute URL
      * @param string $params array of additional link parameters to add
@@ -95,7 +105,9 @@ class URLHelper
      * Augment the given URL by appending all registered link parameters.
      * Note that for each bound variable, its current value is used. You
      * can use the second parameter to add futher URL parameters to this
-     * link without adding them globally.
+     * link without adding them globally. Any parameters included in the
+     * argument list take precedence over registered link parameters of
+     * the same name.
      *
      * @param string $url    relative or absolute URL
      * @param string $params array of additional link parameters to add
@@ -105,36 +117,28 @@ class URLHelper
     static function getURL ($url, $params = NULL)
     {
         $link_params = self::$params;
-        $separator = strpos($url, '?') === false ? '?' : '&';
+
+        list($url, $fragment) = explode('#', $url);
+        list($url, $query)    = explode('?', $url);
+
+        if (isset($query)) {
+            parse_str($query, $query_params);
+            $link_params = array_merge($link_params, $query_params);
+        }
 
         if (isset($params)) {
             $link_params = array_merge($link_params, $params);
         }
 
-        foreach ($link_params as $key => $value) {
-            if (isset($value)) {
-                $url .= $separator.urlencode($key).'='.urlencode($value);
-                $separator = '&';
-            }
+        if (count($link_params)) {
+            $url .= '?'.http_build_query($link_params);
+        }
+
+        if (isset($fragment)) {
+            $url .= '#'.$fragment;
         }
 
         return $url;
-    }
-
-    /**
-     * Try to open the course or institute given by the parameter 'cid'
-     * in the current request. This also binds the global $SessionSeminar
-     * variable to the URL parameter 'cid' for links created by getLink().
-     *
-     * @return bool true if successful, false otherwise
-     */
-    static function setSeminarId ()
-    {
-        global $SessionSeminar;
-
-        self::bindLinkParam('cid', $SessionSeminar);
-
-        return openSem($SessionSeminar) || openInst($SessionSeminar);
     }
 }
 ?>

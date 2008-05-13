@@ -10,7 +10,7 @@
  */
 
 
-require_once dirname(__FILE__) . '/../../../lib/classes/Assets.class.php';
+require_once 'lib/classes/Assets.class.php';
 
 
 define('STATIC_ASSETS_URL',  'http://www.example.com/public/');

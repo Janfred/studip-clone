@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 $Id$
 */
 require_once 'lib/classes/SemesterData.class.php';
+require_once 'lib/functions.php';
 
 // set default Values for messaging
 function check_messaging_default() {
@@ -224,4 +225,14 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 // init of output via I18N
 
 $_language_path = init_i18n($_language);
+
+// Try to open the course or institute given by the parameter 'cid'
+// in the current request. This also binds the global $SessionSeminar
+// variable to the URL parameter 'cid' for all generated links.
+
+URLHelper::bindLinkParam('cid', $SessionSeminar);
+
+if (isset($SessionSeminar) && $SessionSeminar != '') {
+    openSem($SessionSeminar) || openInst($SessionSeminar);
+}
 ?>

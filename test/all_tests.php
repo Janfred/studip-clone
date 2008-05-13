@@ -22,12 +22,17 @@
 
 
 # set error reporting
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_NOTICE);
+
+# set include path
+$inc_path = ini_get('include_path');
+$inc_path .= PATH_SEPARATOR . dirname(__FILE__) . '/..';
+ini_set('include_path', $inc_path);
 
 # load required files
-require_once dirname(__FILE__) . '/../vendor/simpletest/unit_tester.php';
-require_once dirname(__FILE__) . '/../vendor/simpletest/reporter.php';
-require_once dirname(__FILE__) . '/../vendor/simpletest/collector.php';
+require_once 'vendor/simpletest/unit_tester.php';
+require_once 'vendor/simpletest/reporter.php';
+require_once 'vendor/simpletest/collector.php';
 
 
 # collect all tests
