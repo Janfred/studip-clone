@@ -23,6 +23,8 @@ require_once('lib/classes/Table.class.php');
 require_once('lib/classes/ZebraTable.class.php');
 require_once($RELATIVE_PATH_RESOURCES.'/lib/ResourceObject.class.php');
 
+$CURRENT_PAGE = _("Log");
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -157,7 +159,7 @@ function showlog_format_resource($res_id) {
 function showlog_format_username($uid) {
 	$uname=get_username($uid);
 	if ($uname) {
-		return "<a href=\"about.php?username=$uname\">".htmlReady(get_fullname($uid))."</a>";
+		return "<a href=\"new_user_md5.php?details=$uname\">".htmlReady(get_fullname($uid))."</a>";
 	} else {
 		return $uid;
 	}
@@ -321,12 +323,21 @@ function showlog_entries($from, $mode, $actionfilter, $searchmode, $object) {
 
 function showlog_search_seminar($needle) {
 	$db=new DB_Seminar();
+	// search for active seminars
 	$q="SELECT Seminar_id FROM seminare WHERE VeranstaltungsNummer like '%$needle%' OR Name like '%$needle%'";
 	$db->query($q);
 	$sems=array();
 	while ($db->next_record()) {
 		$sems[]=array($db->f("Seminar_id"),showlog_format_sem($db->f("Seminar_id"),30));
 	}
+	// search deleted seminars
+	// SemName and Number is part of info field, old id (still in DB) is in affected column
+	$q="SELECT * FROM log_events LEFT JOIN log_actions ON (log_actions.action_id=log_events.action_id) WHERE info LIKE '%$needle%' AND (log_actions.name='SEM_ARCHIVE' OR log_actions.name='SEM_DELETE_FROM_ARCHIVE')";
+	$db->query($q);
+	while ($db->next_record()) {
+		$sems[]=array($db->f("affected_range_id"),($db->f("info")." ("._("gelöscht").")"));
+	}
+
 	return $sems;
 }
 
@@ -338,6 +349,15 @@ function showlog_search_inst($needle) {
 	while ($db->next_record()) {
 		$sems[]=array($db->f("Institut_id"),my_substr($db->f('Name'),0,28));
 	}
+
+	// search for deleted seminars
+	// InstName is part of info field, old id (still in DB) is in affected column
+	$q="SELECT * FROM log_events LEFT JOIN log_actions ON (log_actions.action_id=log_events.action_id) WHERE info LIKE '%$needle%' AND (log_actions.name='INST_DEL')";
+	$db->query($q);
+	while ($db->next_record()) {
+		$sems[]=array($db->f("affected_range_id"),($db->f("info")." ("._("gelöscht").")"));
+	}
+
 	return $sems;
 }
 
@@ -350,6 +370,15 @@ function showlog_search_user($needle) {
 	while ($db->next_record()) {
 		$users[]=array($db->f("user_id"),my_substr($db->f('fullname'),0,20)." (".$db->f("username").")");
 	}
+
+	// search for deleted users
+	// InstName is part of info field, old id (still in DB) is in affected column
+	$q="SELECT * FROM log_events LEFT JOIN log_actions ON (log_actions.action_id=log_events.action_id) WHERE info LIKE '%$needle%' AND (log_actions.name='USER_DEL')";
+	$db->query($q);
+	while ($db->next_record()) {
+		$users[]=array($db->f("affected_range_id"),($db->f("info")." ("._("gelöscht").")"));
+	}
+
 	return $users;
 }
 
