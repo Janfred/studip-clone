@@ -52,6 +52,9 @@ $GLOBALS['template_factory'] =
 // set default exception handler
 function studip_default_exception_handler($exception) {
 	error_log($exception->__toString());
+	while (ob_get_level()) {
+		ob_end_clean();
+	}
 	echo $GLOBALS['template_factory']->render('unhandled_exception',
 	                                          compact('exception'));
 	exit;
