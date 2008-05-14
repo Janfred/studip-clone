@@ -233,6 +233,6 @@ $_language_path = init_i18n($_language);
 URLHelper::bindLinkParam('cid', $SessionSeminar);
 
 if (isset($SessionSeminar) && $SessionSeminar != '') {
-    openSem($SessionSeminar) || openInst($SessionSeminar);
+    // openSem($SessionSeminar) || openInst($SessionSeminar);
 }
 ?>
