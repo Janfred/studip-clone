@@ -226,13 +226,13 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 
 $_language_path = init_i18n($_language);
 
-// Try to open the course or institute given by the parameter 'cid'
+// Try to select the course or institute given by the parameter 'cid'
 // in the current request. This also binds the global $SessionSeminar
 // variable to the URL parameter 'cid' for all generated links.
 
 URLHelper::bindLinkParam('cid', $SessionSeminar);
 
 if (isset($SessionSeminar) && $SessionSeminar != '') {
-    // openSem($SessionSeminar) || openInst($SessionSeminar);
+    selectSem($SessionSeminar) || selectInst($SessionSeminar);
 }
 ?>

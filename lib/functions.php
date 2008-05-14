@@ -97,7 +97,7 @@ function get_object_name($range_id, $object_type){
 }
 
 /**
-* This function "opens" a Veranstaltung to work with it
+* This function "selects" a Veranstaltung to work with it
 *
 * The following variables will bet set:
 *	$SessionSeminar					Veranstaltung id<br>
@@ -117,7 +117,7 @@ function get_object_name($range_id, $object_type){
 * @return		boolean	true if successful
 *
 */
-function openSem ($sem_id) {
+function selectSem ($sem_id) {
 	global $SEM_TYPE,$SEM_TYPE_MISC_NAME, $SessionSeminar, $SessSemName;
 
 	$db=new DB_Seminar;
@@ -137,16 +137,14 @@ function openSem ($sem_id) {
 			$SessSemName["art"] = _("Veranstaltung");
 		else
 			$SessSemName["art"] = $SEM_TYPE[$db->f("status")]["name"];
-		$nr = $db->f("Seminar_id");
 		$SessSemName["header_line"] = getHeaderLine ($sem_id);
-		object_set_visit($sem_id, "sem");
 	}
 
 	return $db->num_rows() != 0;
 }
 
 /**
-* This function "opens" an Einrichtung to work with it
+* This function "selects" an Einrichtung to work with it
 *
 * Note: Stud.IP treats Einrichtungen like Veranstaltungen, yu can see this
 * especially if you look at the variable names....
@@ -165,7 +163,7 @@ function openSem ($sem_id) {
 * @return		boolean	true if successful
 *
 */
-function openInst ($inst_id) {
+function selectInst ($inst_id) {
 	global $SessionSeminar, $SessSemName, $INST_TYPE;
 
 	$db=new DB_Seminar;
@@ -184,11 +182,39 @@ function openInst ($inst_id) {
 		$SessSemName["art_num"]=$db->f("type");
 		$SessSemName["fak"] = $db->f("fakultaets_id");
 		$SessSemName["header_line"] = getHeaderLine ($inst_id);
-		$nr = $db->f("Institut_id");
-		object_set_visit($inst_id, "inst");
 	}
 
 	return $db->num_rows() != 0;
+}
+
+/**
+ * This function "opens" a course to work with it. Does the same
+ * as selectSem() but also sets the visit date.
+ *
+ * @param		string	the id of the course
+ * @return		boolean	true if successful
+ */
+function openSem ($sem_id) {
+	if (($result = selectSem($sem_id))) {
+		object_set_visit($sem_id, "sem");
+	}
+
+	return $result;
+}
+
+/**
+ * This function "opens" an institute to work with it. Does the same
+ * as selectInst() but also sets the visit date.
+ *
+ * @param		string	the id of the institute
+ * @return		boolean	true if successful
+ */
+function openInst ($inst_id) {
+	if (($result = selectInst($inst_id))) {
+		object_set_visit($inst_id, "inst");
+	}
+
+	return $result;
 }
 
 /**
