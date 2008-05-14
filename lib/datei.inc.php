@@ -1,4 +1,5 @@
 <?php
+# Lifter001: DONE
 /*
 $Id$
 
@@ -602,7 +603,7 @@ function create_folder ($name, $description, $parent_id, $permission = 7) {
 
 //Ausgabe des Formulars
 function form($refresh = FALSE) {
-	global $PHP_SELF,$UPLOAD_TYPES,$range_id,$SessSemName,$user,$folder_system_data;
+	global $UPLOAD_TYPES,$range_id,$SessSemName,$user,$folder_system_data;
 
 	$sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]);
 
@@ -684,7 +685,7 @@ function form($refresh = FALSE) {
 			. sprintf(_("<b>%d</b> Dateien und <b>%d</b> Ordner"),get_config('ZIP_UPLOAD_MAX_FILES'), get_config('ZIP_UPLOAD_MAX_DIRS'))
 			. "</font></td></tr>";
 	}
-	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"upload_form\" action=\"" . $PHP_SELF . "\" method=\"post\">";
+	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"upload_form\" action=\"" . URLHelper::getLink('') . "\" method=\"post\">";
 	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen.") . " </font></td></tr>";
 	$print.= "\n<tr>";
 	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
@@ -706,7 +707,7 @@ function form($refresh = FALSE) {
 	}
 	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";
 	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . " value=\"Senden\" align=\"absmiddle\" onClick=\"return upload_start();\" name=\"create\" border=\"0\">";
-	$print.="&nbsp;<a href=\"$PHP_SELF?cancel_x=true\">" . makeButton("abbrechen", "img") . "</a></td></tr>";
+	$print.="&nbsp;<a href=\"".URLHelper::getLink("?cancel_x=true")."\">" . makeButton("abbrechen", "img") . "</a></td></tr>";
 	$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"upload\">";
 	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";
 	$print.= "\n</form></table><br /></center>";
@@ -1210,7 +1211,7 @@ function link_form ($range_id, $updating=FALSE) {
 	$print.="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgewählt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 
 	$print.="</font></td></tr>";
-	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"link_form\" action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">";
+	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"link_form\" action=\"" . URLHelper::getLink('') . "\" method=\"post\">";
 	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Geben Sie hier den <b>vollständigen Pfad</b> zu der Datei an die sie verlinken wollen.") . " </font></td></tr>";
 	$print.= "\n<tr>";
 	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
@@ -1236,7 +1237,7 @@ function link_form ($range_id, $updating=FALSE) {
 		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die alte Version zu &uuml;berschreiben.") . "</font></td></tr>";
 	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";
 	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . " value=\"Senden\" align=\"absmiddle\" name=\"create\" border=\"0\">";
-	$print.="&nbsp;<a href=\"{$_SERVER['PHP_SELF']}?cancel_x=true\">" . makeButton("abbrechen", "img") . "</a></td></tr>";
+	$print.="&nbsp;<a href=\"".URLHelper::getLink("?cancel_x=true")."\">" . makeButton("abbrechen", "img") . "</a></td></tr>";
 	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";
 	if ($updating == TRUE) {
 		$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"link_update\">";
@@ -1254,7 +1255,7 @@ function link_form ($range_id, $updating=FALSE) {
 
 //create the folder-system
 function display_folder_system ($folder_id, $level, $open, $lines, $change, $move, $upload, $all, $refresh=FALSE, $filelink="") {
-	global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang, $PHP_SELF,
+	global $_fullname_sql,$SessionSeminar,$SessSemName, $rechte, $anfang,
 		$user, $SemSecLevelWrite, $SemUserStatus, $check_all;
 
 	static $dont_move_to;
@@ -1347,10 +1348,10 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 				if ($move && !in_array($db->f('folder_id'), $dont_move_to) && $folder_tree->isWritable($db->f('folder_id'), $user->id) && (!$folder_tree->isFolder($move) || $folder_tree->checkCreateFolder($db->f('folder_id'), $user->id)) ){
 
-				$icon="&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_md_\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0></a>".$icon;
+				$icon="&nbsp;<a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_md_")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0></a>".$icon;
 			}
 			//Link erstellen
-			$link=$PHP_SELF."?close=".$db->f("folder_id")."#anker";
+			$link=URLHelper::getLink("?close=".$db->f("folder_id")."#anker");
 
 			//Titelbereich erstellen
 			if (!$db->f('name')) {
@@ -1401,7 +1402,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$chdate = (($db->f("chdate")) ? $db->f("chdate") : $db->f("mkdate"));
 
 			//Zusatzangaben erstellen
-			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".htmlReady($db->f("fullname"))."</font></a>&nbsp;".date("d.m.Y - H:i",$chdate)."";
+			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".htmlReady($db->f("fullname"))."</font></a>&nbsp;".date("d.m.Y - H:i",$chdate);
 
 
 			if (object_get_visit($SessSemName[1], "documents") < $chdate)
@@ -1522,23 +1523,23 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			if (($change != $db->f("folder_id")) && ($upload != $db->f("folder_id")) && ($filelink != $db->f("folder_id"))) {
 				if (($rechte) || ($SemUserStatus == "autor") ) {
 					if ($folder_tree->isWritable($db->f("folder_id"), $user->id))
-						$edit= "<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_u_&rand=".rand()."#anker\">" . makeButton("dateihochladen", "img") . "</a>";
+						$edit= "<a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_u_&rand=".rand()."#anker")."\">" . makeButton("dateihochladen", "img") . "</a>";
 					if ($rechte)
-						$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_l_&rand=".rand()."#anker\">" . makeButton("link", "img") . "</a>";
+						$edit.= "&nbsp;<a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_l_&rand=".rand()."#anker")."\">" . makeButton("link", "img") . "</a>";
 					if ($documents_count && $folder_tree->isReadable($db->f("folder_id"), $user->id))
-						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?folderzip=".$db->f("folder_id")."\">" . makeButton("ordneralszip", "img") . "</a>";
+						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?folderzip=".$db->f("folder_id"))."\">" . makeButton("ordneralszip", "img") . "</a>";
 					if ($rechte || ($folder_tree->checkCreateFolder($db->f("folder_id"), $user->id)) ) {
 						if($rechte || $folder_tree->isWritable($db->f("folder_id"), $user->id)) {
-							$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_n_#anker\">" . makeButton("neuerordner", "img") . "</a>";
+							$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_n_#anker")."\">" . makeButton("neuerordner", "img") . "</a>";
 							if($rechte && get_config('ZIP_UPLOAD_ENABLE')) {
-								$edit .= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db->f("folder_id")."_z_&rand="
-									. rand()."#anker\">" . makeButton("ziphochladen", "img") . "</a>";
+								$edit .= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_z_&rand="
+									. rand()."#anker")."\">" . makeButton("ziphochladen", "img") . "</a>";
 								}
 							}
-						if($rechte || (!$documents_count && $level !=0 && $folder_tree->isWritable($db->f("folder_id"), $user->id))) $edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_d_\">" . makeButton("loeschen", "img") . "</a>";
-						if($rechte || $folder_tree->isWritable($db->f("folder_id"), $user->id)) $edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_c_#anker\">" . makeButton("bearbeiten", "img") . "</a>";
-						if(($rechte && $db->f('range_id') != $SessSemName[1]) || ($level !=0 && $folder_tree->isWritable($db->f("folder_id"), $user->id))) $edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_m_#anker\">" . makeButton("verschieben", "img") . "</a>";
-						$edit.= " <a href=\"$PHP_SELF?open=".$db->f("folder_id")."_co_#anker\">" . makeButton("kopieren", "img") . "</a>";
+						if($rechte || (!$documents_count && $level !=0 && $folder_tree->isWritable($db->f("folder_id"), $user->id))) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_d_")."\">" . makeButton("loeschen", "img") . "</a>";
+						if($rechte || $folder_tree->isWritable($db->f("folder_id"), $user->id)) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_c_#anker")."\">" . makeButton("bearbeiten", "img") . "</a>";
+						if(($rechte && $db->f('range_id') != $SessSemName[1]) || ($level !=0 && $folder_tree->isWritable($db->f("folder_id"), $user->id))) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_m_#anker")."\">" . makeButton("verschieben", "img") . "</a>";
+						$edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_co_#anker")."\">" . makeButton("kopieren", "img") . "</a>";
 					}
 				}
 			}
@@ -1590,9 +1591,9 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							. GetFileIcon(getFileExtension($db3->f('filename')), true) . '</a>';
 					//Link erstellen
 					if (isset($open[$db3->f("dokument_id")]))
-						$link=$PHP_SELF."?close=".$db3->f("dokument_id")."#anker";
+						$link=URLHelper::getLink("?close=".$db3->f("dokument_id")."#anker");
 					else
-						$link=$PHP_SELF."?open=".$db3->f("dokument_id")."#anker";
+						$link=URLHelper::getLink("?open=".$db3->f("dokument_id")."#anker");
 
 					//Workaround for older data from previous versions (chdate is 0)
 					$chdate = (($db3->f("chdate")) ? $db3->f("chdate") : $db3->f("mkdate"));
@@ -1710,16 +1711,16 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							}
 							if (($rechte) || ($db3->f("user_id") == $user->id && $folder_tree->isWritable($db3->f("range_id"), $user->id))) {
 								if ($type!=6)
-									$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_c_#anker \">" . makeButton("bearbeiten", "img") . "</a>";
+									$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?open=".$db3->f("dokument_id")."_c_#anker")."\">" . makeButton("bearbeiten", "img") . "</a>";
 								if ($type==6)
-									$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_led_&rnd=".rand()."#anker \">" . makeButton("bearbeiten", "img") . "</a>";
+									$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?open=".$db3->f("dokument_id")."_led_&rnd=".rand()."#anker")."\">" . makeButton("bearbeiten", "img") . "</a>";
 								else
-									$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_rfu_#anker \">" . makeButton("aktualisieren", "img") . "</a>";
+									$edit.= "&nbsp;<a href=\"".URLHelper::getLink("?open=".$db3->f("dokument_id")."_rfu_#anker")."\">" . makeButton("aktualisieren", "img") . "</a>";
 								if (!$all){
-									$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_m_#anker \">" . makeButton("verschieben", "img") . "</a>";
-									$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_co_#anker \">" . makeButton("kopieren", "img") . "</a>";
+									$edit.= "&nbsp;<a href=\"".URLHelper::getLink("?open=".$db3->f("dokument_id")."_m_#anker")."\">" . makeButton("verschieben", "img") . "</a>";
+									$edit.= "&nbsp;<a href=\"".URLHelper::getLink("?open=".$db3->f("dokument_id")."_co_#anker")."\">" . makeButton("kopieren", "img") . "</a>";
 								}
-								$edit.= "&nbsp;<a href=\"$PHP_SELF?open=".$db3->f("dokument_id")."_fd_\">" . makeButton("loeschen", "img") . "</a>";
+								$edit.= "&nbsp;<a href=\"".URLHelper::getLink("?open=".$db3->f("dokument_id")."_fd_")."\">" . makeButton("loeschen", "img") . "</a>";
 							}
 						}
 
@@ -1752,7 +1753,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 		//Ordner nicht aufgeklappt
 		else {
 
-			list($link,$titel) = str_replace('?close=','?open=',array($link, $titel));
+			list($link,$titel) = str_replace('&amp;close=','&amp;open=',array($link, $titel));
 
 			//Objekttitelzeile ausgeben
 			if (!$all) printhead ("90%", 0, $link, "close", $neuer_ordner, $icon, $titel, $zusatz, $newest_document);

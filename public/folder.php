@@ -1,4 +1,5 @@
 <?php
+# Lifter001: DONE
 /*
 folder.php - Anzeige und Verwaltung des Ordnersystems
 Copyright (C) 2001 Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>
@@ -33,7 +34,6 @@ require_once 'lib/functions.php';
 require_once('lib/classes/StudipDocumentTree.class.php');
 require_once 'lib/raumzeit/Issue.class.php';
 
-$sess->register('folder_system_data');
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
 
@@ -71,6 +71,8 @@ if($zip_file_id === false){
 	(int)Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_SIZE') )
 	. '§';
 }
+
+URLHelper::bindLinkParam('data', $folder_system_data);
 
 //Switch fuer die Ansichten
 if ($cmd == 'tree') {
@@ -174,7 +176,7 @@ if ($rechte || $owner || $create_folder_perm) {
 	if ($open_cmd == 'd') {
 		if ( ($count = doc_count($open_id)) ){
 			$msg="info§" . sprintf(_("Der ausgewählte Ordner enthält %s Datei(en). Wollen Sie den Ordner wirklich löschen?"), $count) . "<br>";
-			$msg.="<b><a href=\"$PHP_SELF?open=".$open_id."_rd_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
+			$msg.="<b><a href=\"".URLHelper::getLink("?open=".$open_id."_rd_")."\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"".URLHelper::getLink('')."\">" . makeButton("nein", "img") . "</a>§";
 		} else {
 			delete_folder($open_id, true);
 		}
@@ -191,10 +193,10 @@ if ($rechte || $owner || $create_folder_perm) {
 		$db->next_record();
 		if (getLinkPath($open_id)) {
 			$msg="info§" . sprintf(_("Wollen sie die Verlinkung zu <b>%s</b> von %s wirklich löschen?"), htmlReady($db->f("filename")), "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
-			$msg.="<b><a href=\"$PHP_SELF?open=".$open_id."_rl_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
+			$msg.="<b><a href=\"".URLHelper::getLink("?open=".$open_id."_rl_")."\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"".URLHelper::getLink('')."\">" . makeButton("nein", "img") . "</a>§";
 		} else {
 			$msg="info§" . sprintf(_("Wollen sie die Datei <b>%s</b> von %s wirklich löschen?"), htmlReady($db->f("filename")), "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
-			$msg.="<b><a href=\"$PHP_SELF?open=".$open_id."_rm_\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"$PHP_SELF\">" . makeButton("nein", "img") . "</a>§";
+			$msg.="<b><a href=\"".URLHelper::getLink("?open=".$open_id."_rm_")."\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"".URLHelper::getLink('')."\">" . makeButton("nein", "img") . "</a>§";
 		}
 	}
 
@@ -422,7 +424,7 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 			asort($my_sem, SORT_STRING);
 			asort($my_inst, SORT_STRING);
 			$button_name = ($folder_system_data["mode"] == 'move' ? 'verschieben' : 'kopieren');
-			echo '<form action="'.$PHP_SELF.'" method="post">';
+			echo '<form action="'.URLHelper::getLink('').'" method="post">';
 			echo "\n" . '<tr><td class="blank" colspan="3" width="100%" style="font-size:80%;">';
 			echo "\n" . '<div style="margin-left:25px;">';
 			echo "\n<b>" . ($folder_system_data["mode"] == 'move' ? _("Verschiebemodus") : _("Kopiermodus")) . "</b><br>";
@@ -531,7 +533,7 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 				<td class="blank" colspan="3" width="100%">
 				<blockquote>
 				<p valign="middle">
-				<form action="<? echo $PHP_SELF?>#anker" method="POST">
+				<form action="<? echo URLHelper::getLink('#anker') ?>" method="POST">
 					<select name="open" style="vertical-align:middle">
 						<? echo $select ?>
 					</select>
@@ -548,13 +550,13 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 		echo "\n" . '<td class="blank" align="center" colspan="3" width="100%" >';
 		echo "\n" . '<span style="margin:25px;font-weight:bold;">';
 		echo "\n" . ($folder_system_data["mode"] == 'move' ? _("Verschiebemodus") : _("Kopiermodus")) . "</span>";
-		echo "\n" .'<a href="'.$PHP_SELF.'?cmd=tree">'. makeButton("abbrechen", "img",_("Verschieben / Kopieren abbrechen")) . '</a>';
+		echo "\n" . '<a href="'.URLHelper::getLink('?cmd=tree').'">'. makeButton("abbrechen", "img",_("Verschieben / Kopieren abbrechen")) . '</a>';
 		echo "\n" . '</td></tr>';
 	}
 
 	//when changing, uploading or show all (for download selector), create a form
 	if ((($change) || ($folder_system_data["cmd"]=="all")) && (!$folder_system_data["upload"])) {
-		echo "<form method=\"post\" action=\"$PHP_SELF\">";
+		echo "<form method=\"post\" action=\"".URLHelper::getLink('')."\">";
 		}
 
 	print "<tr><td class=\"blank\" colspan=\"3\" width=\"100%\">";
@@ -567,7 +569,7 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 		</font></blockquote>
 		<?
 		if (!$folder_system_data["upload"] && !$folder_system_data["link"])
-			print ("<div align=\"right\"><a href=\"$PHP_SELF?check_all=TRUE\">".makeButton("alleauswaehlen")."</a>&nbsp;<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>");
+			print ("<div align=\"right\"><a href=\"".URLHelper::getLink("?check_all=TRUE")."\">".makeButton("alleauswaehlen")."</a>&nbsp;<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"download_selected\" border=\"0\" ".makeButton("herunterladen", "src")." />&nbsp;</div>");
 		}
 
 	//Treeview
