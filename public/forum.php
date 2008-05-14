@@ -25,7 +25,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // -- here you have to put initialisations for the current page
 $txt = $message = $count = $verschoben = '';
 $flatviewstartposting = (int)$flatviewstartposting;
-(isset($view) && in_array($view, array('mixed','tree','neue','flat','search','flatfolder'))) or $view = '';
+(isset($view) && preg_match('/[a-z]*/', $view)) or $view = '';
 (isset($open) && preg_match('/[a-z0-9]{1,32}/', $open)) or $open = '';
 
 if ($forumsend && $forumsend!="bla") {
