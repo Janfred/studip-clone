@@ -186,6 +186,8 @@ $Modules = new Modules();
 closeObject();
 $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
+URLHelper::removeLinkParam('cid');
+
 $HELP_KEYWORD="Basis.MeineVeranstaltungen";
 $CURRENT_PAGE=_("Meine Veranstaltungen und Einrichtungen");
 

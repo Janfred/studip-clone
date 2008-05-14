@@ -114,7 +114,7 @@ function scm_change_header($table, $titel, $user_id, $chdate) {
 }
 
 function scm_show_content($range_id, $msg, $scm_id) {
-	global $rechte, $PHP_SELF, $CURRENT_PAGE, $SessSemName;
+	global $rechte, $CURRENT_PAGE, $SessSemName;
 
 	$scm = new StudipScmEntry($scm_id);
 	
@@ -145,9 +145,9 @@ function scm_show_content($range_id, $msg, $scm_id) {
 		$printcontent_table=new Table(array("width"=>"100%"));
 		echo $printcontent_table->open();
 		if ($rechte) {
-			$edit = "<a href=\"".URLHelper::getLink($PHP_SELF."?i_view=edit&show_scm=$scm_id")."\">".makeButton("bearbeiten")."</a>";
+			$edit = "<a href=\"".URLHelper::getLink("?i_view=edit&show_scm=$scm_id")."\">".makeButton("bearbeiten")."</a>";
 			if(StudipScmEntry::GetNumSCMEntriesForRange($range_id) > 1){
-				$edit .= "&nbsp;<a href=\"".URLHelper::getLink($PHP_SELF."?i_view=kill&show_scm=$scm_id")."\">".makeButton("loeschen")."</a>";
+				$edit .= "&nbsp;<a href=\"".URLHelper::getLink("?i_view=kill&show_scm=$scm_id")."\">".makeButton("loeschen")."</a>";
 			}
 		} else {
 			$edit = "&nbsp;";
@@ -165,7 +165,7 @@ function scm_show_content($range_id, $msg, $scm_id) {
 }
 
 function scm_edit_content($range_id, $scm_id) {
-	global $perm, $PHP_SELF, $SCM_PRESET;
+	global $perm, $SCM_PRESET;
 	
 	if ($scm_id == 'new_entry') $scm_id = null;
 	
@@ -181,7 +181,7 @@ function scm_edit_content($range_id, $scm_id) {
 
 	$header_table = scm_seminar_header($range_id, $scm->getValue("tab_name"));
 
-	print("<form action=\"".URLHelper::getLink($PHP_SELF)."\" method=\"POST\">");
+	print("<form action=\"".URLHelper::getLink('')."\" method=\"POST\">");
 
 	$frame_table=new Table();
 	$frame_table->setTableWidth("100%");
@@ -212,7 +212,7 @@ function scm_edit_content($range_id, $scm_id) {
 	$content.= "<input type=\"HIDDEN\" name=\"i_view\" value=\"change\">";
 
 	$edit="<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"send_scm\" value=\"&auml;nderungen vornehmen\" border=0 " . makeButton("uebernehmen", "src") . ">";
-	$edit.="&nbsp;<a href=\"".URLHelper::getLink($PHP_SELF)."\">". makeButton("abbrechen") . "</a>";
+	$edit.="&nbsp;<a href=\"".URLHelper::getLink('')."\">". makeButton("abbrechen") . "</a>";
 	$edit .= "<font size=\"-1\">&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\">";
 
 	if (get_config("EXTERNAL_HELP")) {
