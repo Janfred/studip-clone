@@ -1,4 +1,5 @@
 <?
+# Lifter001: DONE
 /*
 forum.php - Anzeige und Verwaltung des Forensystems
 Copyright (C) 2003 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>
@@ -17,9 +18,9 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-	page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
-	include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
@@ -170,6 +171,8 @@ if (!$forum["view"]) {
 
 $view = $forum["view"];
 
+URLHelper::addLinkParam('view', $view);
+
 ///////////////////////////////////////////////////////////////////////////////////
 // Reiterleiste einbinden
 //////////////////////////////////////////////////////////////////////////////////
@@ -181,19 +184,24 @@ include 'lib/include/links_openobject.inc.php';
 //////////////////////////////////////////////////////////////////////////////////
 
 if ($suchbegriff!="") {
-	if($check_author)
+	if($check_author) {
 		$search_exp="x.author LIKE '%$suchbegriff%'";
+		URLHelper::addLinkParam('check_author', 1);
+	}
 	if ($check_name) {
 		if ($search_exp)
 			$search_exp.=" OR";
 		$search_exp.=" x.name LIKE '%$suchbegriff%'";
+		URLHelper::addLinkParam('check_name', 1);
 	}
 	if ($check_cont) {
 		if ($search_exp)
 			$search_exp.=" OR";
 		$search_exp.=" x.description LIKE '%$suchbegriff%'";
+		URLHelper::addLinkParam('check_cont', 1);
 	}
 	$forum["search"] = $search_exp;
+	URLHelper::addLinkParam('suchbegriff', $suchbegriff);
 }
 
 if ($reset=="1")	// es wurde neue Suche aktiviert, also Suchbegriff löschen
@@ -203,19 +211,25 @@ if ($reset=="1")	// es wurde neue Suche aktiviert, also Suchbegriff löschen
 // verschiedene GUI-Konstanten werden gesetzt
 //////////////////////////////////////////////////////////////////////////////////
 
-if ($indikator)
+if ($indikator) {
 	$forum["indikator"] = $indikator;
+	URLHelper::addLinkParam('indikator', $indikator);
+}
 
-if ($sort)
+if ($sort) {
 	$forum["sort"] = $sort;
+	URLHelper::addLinkParam('sort', $sort);
+}
 if (!$forum["sort"])
 	$forum["sort"] = "age";
 
 if (!$forum["indikator"])
 	$forum["indikator"] = "age";
 
-if ($toolbar=="open")
+if ($toolbar=="open") {
 	$forum["toolbar"] = "open";
+	URLHelper::addLinkParam('toolbar', $toolbar);
+}
 if ($toolbar=="close")
 	$forum["toolbar"] = "close";
 
@@ -306,8 +320,8 @@ if ($delete_id) {
 			$msg="info§" . sprintf(_("Wollen Sie %s %s von %s wirklich löschen?"), $tmp_label, "<b>".htmlReady($db->f("name"))."</b>", "<b>".htmlReady($db->f("author"))."</b>") . "<br>\n";
 			if ($count)
 				$msg.= sprintf(_("Alle %s Antworten auf diesen Beitrag werden ebenfalls gelöscht!"), $count) . "<br />\n<br />\n";
-			$msg.="<a href=\"".$PHP_SELF."?really_kill=$delete_id&view=$view#anker\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
-			$msg.="<a href=\"".$PHP_SELF."?topic_id=$root&open=$topic_id&view=$view&mehr=$mehr#anker\">" . makeButton("nein", "img") . "</a>\n";
+			$msg.="<a href=\"".URLHelper::getLink("?really_kill=$delete_id&view=$view#anker")."\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
+			$msg.="<a href=\"".URLHelper::getLink("?topic_id=$root&open=$topic_id&view=$view&mehr=$mehr#anker")."\">" . makeButton("nein", "img") . "</a>\n";
 			parse_msg($msg, '§', 'blank', '1', FALSE);
 			echo "</table>";
 
@@ -389,7 +403,7 @@ if ($answer_id) {
 			$name = "Re: ".$name; // Re: vor Überschriften bei Antworten
 		$author = get_fullname();
 		$postinginhalt = _("Dieser Beitrag wird gerade bearbeitet.");
-		$edit_id = CreateTopic (addslashes($name), $author, $postinginhalt, $answer_id, $db->f("root_id"),"","",FALSE);
+		$edit_id = CreateNewTopic(addslashes($name), $postinginhalt, $answer_id, $db->f("root_id"));
 		$open = $edit_id;
 		$forum["lostposting"] = $edit_id;
 	}
@@ -400,9 +414,18 @@ if ($answer_id) {
 //////////////////////////////////////////////////////////////////////////////////
 
 if ($update) {
-	if (ForumFreshPosting($update)==FALSE) // editiert von nur dranhängen wenn nicht frisch erstellt
-		$description = forum_append_edit($description);
-	UpdateTopic ($titel, $update, $description);
+	// check whether we should create a new posting or update an existing one
+	if (isset($_REQUEST['parent_id'])) {
+		$author = get_fullname();
+		$parent_id = $_REQUEST['parent_id'];
+		$root_id = $parent_id != "0" ? $_REQUEST['root_id'] : "0";
+		$user_id = $auth->auth['uid'];
+		$update = CreateTopic($titel, $author, $description, $parent_id, $root_id, 0, $user_id);
+	} else {
+		if (!ForumFreshPosting($update)) // editiert von nur dranhängen wenn nicht frisch erstellt
+			$description = forum_append_edit($description);
+		UpdateTopic ($titel, $update, $description);
+	}
 	$open = $update; //gerade bearbeiteten Beitrag aufklappen
 	$forum["lostposting"] = "";
 }
@@ -414,7 +437,7 @@ if ($update) {
 if ($neuesthema==TRUE && ($rechte || $SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"])) {			// es wird ein neues Thema angelegt
 		$name = _("Name des Themas");
 		$author = get_fullname();
-		$edit_id = CreateTopic ($name, $author, "Beschreibung des Themas", "0", "0","","",FALSE);
+		$edit_id = CreateNewTopic($name, "Beschreibung des Themas");
 		$open = $edit_id;
 		$forum["lostposting"] = $edit_id;
 }
@@ -479,7 +502,7 @@ if (!$reset && $user->id != "nobody" && $cmd!="move")   // wenn Suche aufgerufen
 elseif ($user->id == "nobody" || $cmd=="move") {
 	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"blank\"><br></td></tr>";
 	if ($edit_id)
-		echo "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"".$PHP_SELF."#anker\">";
+		echo "<form name=forumwrite onsubmit=\"return pruefe_name()\" method=post action=\"".URLHelper::getLink("#anker")."\">";
 }
 //////////////////////////////////////////////////////////////////////////////////
 // Verzweigung zu den Anzeigemodi

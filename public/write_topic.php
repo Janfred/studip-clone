@@ -1,4 +1,5 @@
 <?php
+# Lifter001: DONE
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
@@ -83,7 +84,7 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 				echo "\n</tr>";
 				echo "	<tr>";
 				echo "		<td colspan=2 class=steel1 align=center>";
-				echo "			<a href=\"$PHP_SELF?write=1&root_id=$root_id&topic_id=$topic_id&quote=TRUE\">" . makeButton("zitieren", "img") . "</a>";
+				echo "			<a href=\"".URLHelper::getLink("?write=1&root_id=$root_id&topic_id=$topic_id&quote=TRUE")."\">" . makeButton("zitieren", "img") . "</a>";
 				echo "		</td>";
 				echo "	</tr>";
 				echo "<tr><td colspan=2 class=steel>&nbsp; </td></tr><tr><td colspan=2 class=steel1><blockquote>";
@@ -97,9 +98,9 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 		}
 
 		if ($user->id == "nobody")
-			echo "<form name=Create method=post action=\"write_topic.php?Create=TRUE\" onsubmit=\"return pruefe_name()\">"; // bei nobody mit namen pruefen
+			echo "<form name=Create method=post action=\"".URLHelper::getLink("?Create=TRUE")."\" onsubmit=\"return pruefe_name()\">"; // bei nobody mit namen pruefen
 		else
-			echo "<form name=Create method=post action=\"write_topic.php?Create=TRUE\">";
+			echo "<form name=Create method=post action=\"".URLHelper::getLink("?Create=TRUE")."\">";
 
 		echo "<input type=hidden name=\"parent_id\" value=\"$topic_id\">";
 		echo "<input type=hidden name=\"root_id\" value=\"$root_id\">";

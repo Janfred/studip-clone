@@ -1,4 +1,5 @@
 <?
+# Lifter001: DONE
 // vim: noexpandtab
 /**
 * helper functions for handling the board
@@ -88,7 +89,7 @@ function forum_parse_edit ($description) {
 *
 **/
 function editarea($forumposting) {
-	global $forum, $view, $user, $PHP_SELF, $auth;
+	global $forum, $view, $user, $auth;
 
 	if ($auth->auth["jscript"]) {
 		$max_col = round($auth->auth["xres"] / 12 );
@@ -100,9 +101,9 @@ function editarea($forumposting) {
 	if ($cols < 28) $cols = 28;
 
 	if ($forumposting["writestatus"] == "new") // Abbrechen Button unterscheidet ob Anlegen abgebrochen oder Bearbeiten abgebrochen
-		$zusatz = "<a href=\"".$PHP_SELF."?really_kill=".$forumposting["id"]."&nurneu=1#anker\">" . makeButton("abbrechen", "img") . "</a>";
+		$zusatz = "<a href=\"".URLHelper::getLink("?really_kill=".$forumposting["id"]."&nurneu=1#anker")."\">" . makeButton("abbrechen", "img") . "</a>";
 	else
-		$zusatz = "<a href=\"".$PHP_SELF."?open=".$forumposting["rootid"]."#anker\">" . makeButton("abbrechen", "img") . "</a>";
+		$zusatz = "<a href=\"".URLHelper::getLink("?open=".$forumposting["rootid"]."#anker")."\">" . makeButton("abbrechen", "img") . "</a>";
 
 
 	if (get_config("EXTERNAL_HELP")) {
@@ -136,6 +137,10 @@ function editarea($forumposting) {
 				.htmlReady($zitat)
 				."</textarea>";
 		}
+	if ($forumposting['new']) {
+		$description .= '<input type="hidden" name="root_id" value="'.$forumposting['rootid'].'">';
+		$description .= '<input type="hidden" name="parent_id" value="'.$forumposting['parent_id'].'">';
+	}
 	$description .= "<br><br><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"160\" height=\"1\"><input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>&nbsp;"
 		.$zusatz
 		."</div>";
@@ -238,16 +243,16 @@ function lonely($topic_id)  //Sucht nach Kindern und den Rechten (für editieren)
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db2->query("SELECT topic_id FROM px_topics WHERE parent_id='$topic_id'");
-		if (!$db2->num_rows()) {
-			$db->query("SELECT user_id, chdate, mkdate FROM px_topics WHERE topic_id='$topic_id'");
-			if ($db->num_rows())
-				while ($db->next_record()) {
-					if ($db->f("user_id")==$user->id OR $rechte)
-						$lonely=FALSE;
-                    elseif ($user->id=="nobody" AND $db->f("chdate") < $db->f("mkdate"))     // nobody schreibt an seinem anderen Beitrag, nachträgliches editieren nicht möglich
-                        $lonely=FALSE;
-                }
+	if (!$db2->num_rows()) {
+		$db->query("SELECT user_id, chdate, mkdate FROM px_topics WHERE topic_id='$topic_id'");
+		if ($db->num_rows())
+			while ($db->next_record()) {
+				if ($db->f("user_id")==$user->id OR $rechte)
+					$lonely=FALSE;
+				elseif ($user->id=="nobody" AND $db->f("chdate") < $db->f("mkdate"))     // nobody schreibt an seinem anderen Beitrag, nachträgliches editieren nicht möglich
+					$lonely=FALSE;
 			}
+	}
 
  	return $lonely;
 }
@@ -454,7 +459,7 @@ function ForumGetRights ($forumposting) {
 *
 **/
 function ForumIcon ($forumposting) {
-	global $cmd, $rechte, $topic_id, $PHP_SELF, $forum, $auth;
+	global $cmd, $rechte, $topic_id, $forum, $auth;
 	if ($forumposting["type"]=="folder") {
 		if ($forumposting["lonely"]==FALSE)
 			$bild = $GLOBALS['ASSETS_URL']."images/cont_folder.gif";
@@ -470,7 +475,7 @@ function ForumIcon ($forumposting) {
 
 	if ($forum["jshover"]==1 AND $auth->auth["jscript"] AND $forumposting["description"]!="" && $forumposting["openclose"]=="close") {
 		if ($forum["view"]=="tree" && $forumposting["type"]=="folder") { // wir kommen aus der Themenansicht
-			$hoverlink = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&openall=TRUE#anker\" ";
+			$hoverlink = "<a href=\"".URLHelper::getLink("?open=".$forumposting["id"]."&openall=TRUE#anker")."\" ";
 			$txt = "<i>" . _("Hier klicken um alle Postings im Thema zu öffnen") . "</i>";
 		} else {
 			$hoverlink = "<a href=\"javascript:void(0);\" ";
@@ -485,12 +490,12 @@ function ForumIcon ($forumposting) {
 			." onMouseOut=\"nd();\"><img src=\"".$bild."\" border=0></a>";
 	} else {
 		if ($forum["view"]=="tree" && $forumposting["type"]=="folder")
-			$forumposting["icon"] = "<a href=\"".$PHP_SELF."?open=".$forumposting["id"]."&folderopen=".$forumposting["id"]."&openall=TRUE#anker\"><img src=\"".$bild."\" border=0 " . tooltip(_("Alle Postings im Thema öffnen")) . "></a>";
+			$forumposting["icon"] = "<a href=\"".URLHelper::getLink("?open=".$forumposting["id"]."&folderopen=".$forumposting["id"]."&openall=TRUE#anker")."\"><img src=\"".$bild."\" border=0 " . tooltip(_("Alle Postings im Thema öffnen")) . "></a>";
 		else
 			$forumposting["icon"] =	"<img src=\"".$bild."\" $addon>";
 	}
 	if ($cmd=="move" && $rechte && $topic_id != $forumposting["id"] )  // ein Beitrag wird verschoben, gelbe Pfeile davor
-		$forumposting["icon"] =	 "<a href=\"".$PHP_SELF."?target=Thema&move_id=".$topic_id."&parent_id=".$forumposting["id"]."\">"
+		$forumposting["icon"] =	 "<a href=\"".URLHelper::getLink("?target=Thema&move_id=".$topic_id."&parent_id=".$forumposting["id"])."\">"
 					."<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Postings in dieses Thema verschieben")) . "></a>"
 					.$forumposting["icon"];
 	return $forumposting;
@@ -543,29 +548,29 @@ function ForumGetName($id)  {
 *
 **/
 function forum_get_buttons ($forumposting) {
-	global $rechte, $forum, $PHP_SELF, $user, $SessionSeminar, $view;
+	global $rechte, $forum, $user, $SessionSeminar, $view;
 
 	{ if (!(have_sem_write_perm())) { // nur mit Rechten...
 		if ($view=="search") $tmp = "&view=tree";
 		if ($view=="mixed") $tmp = "&open=".$forumposting["id"]."&view=flatfolder";
-			$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=0&sort=age".$tmp."#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
-			$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=0&sort=age".$tmp."#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
+			$edit = "<a href=\"".URLHelper::getLink("?answer_id=".$forumposting["id"]."&flatviewstartposting=0&sort=age".$tmp."#anker")."\">&nbsp;" . makeButton("antworten", "img") . "</a>";
+			$edit .= "<a href=\"".URLHelper::getLink("?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=0&sort=age".$tmp."#anker")."\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
 			if ($forumposting["lonely"]==TRUE && ($rechte || $forumposting["perms"]=="write")) // ich darf bearbeiten
-				$edit .= "&nbsp;<a href=\"".$PHP_SELF."?edit_id=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\">"
+				$edit .= "&nbsp;<a href=\"".URLHelper::getLink("?edit_id=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker")."\">"
 				. makeButton("bearbeiten", "img") . "</a>";
 			if ($rechte || ($forumposting["lonely"]==TRUE && $forumposting["perms"]=="write")) // ich darf löschen
-				$edit .= "&nbsp;<a href=\"".$PHP_SELF."?delete_id=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"]."\">"
+				$edit .= "&nbsp;<a href=\"".URLHelper::getLink("?delete_id=".$forumposting["id"]."&view=".$forum["view"]."&flatviewstartposting=".$forum["flatviewstartposting"])."\">"
 				. makeButton("loeschen", "img") . "</a>";
 			if ($rechte){  // ich darf verschieben
-				$edit .= "&nbsp;<a href=\"".$PHP_SELF."?cmd=move&topic_id=".$forumposting["id"]."&view=tree\">"
+				$edit .= "&nbsp;<a href=\"".URLHelper::getLink("?cmd=move&topic_id=".$forumposting["id"]."&view=tree")."\">"
 				. makeButton("verschieben", "img") . "</a>";
 			}
 	} elseif ($user->id == "nobody") { 	// darf Nobody hier schreiben?
 		$db=new DB_Seminar;
 		$db->query("SELECT Seminar_id FROM seminare WHERE Seminar_id='$SessionSeminar' AND Schreibzugriff=0");
 		if ($db->num_rows())  {
-			$edit = "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&flatviewstartposting=0#anker\">&nbsp;" . makeButton("antworten", "img") . "</a>";
-			$edit .= "<a href=\"".$PHP_SELF."?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=0#anker\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
+			$edit = "<a href=\"".URLHelper::getLink("?answer_id=".$forumposting["id"]."&flatviewstartposting=0#anker")."\">&nbsp;" . makeButton("antworten", "img") . "</a>";
+			$edit .= "<a href=\"".URLHelper::getLink("?answer_id=".$forumposting["id"]."&zitat=TRUE&flatviewstartposting=0#anker")."\">&nbsp;" . makeButton("zitieren", "img") . "</a>";
 		} else
 			$edit=""; // war kein nobody Seminar
 	} else 	// nix mit Rechten
@@ -619,11 +624,11 @@ function ForumEmpty () {
 *
 **/
 function ForumNoPostings () {
-	global $forum, $PHP_SELF;
+	global $forum;
 	if ($forum["view"] != "search")
 		$text = _("In dieser Ansicht gibt es derzeit keine Beiträge.");
 	else
-		$text = _("Zu Ihrem Suchbegriff gibt es keine Treffer.") . "<br><a href=\"".$PHP_SELF."?view=search&reset=1\">" . _("Neue Suche") . "</a>";
+		$text = _("Zu Ihrem Suchbegriff gibt es keine Treffer.") . "<br><a href=\"".URLHelper::getLink("?view=search&reset=1")."\">" . _("Neue Suche") . "</a>";
 	$empty .= parse_msg("info§$text");
 	return $empty;
 }
@@ -639,12 +644,11 @@ function ForumNoPostings () {
 *
 **/
 function forum_print_navi ($forum) {
-	global $PHP_SELF;
 	$i = 1;
 	$maxpages = ceil($forum["forumsum"] / $forum["postingsperside"]);
 	$ipage = ($forum["flatviewstartposting"] / $forum["postingsperside"])+1;
 	if ($ipage != 1)
-		$navi .= "<a href=\"$PHP_SELF?flatviewstartposting=".($ipage-2)*$forum["postingsperside"]."\"><font size=-1>" . _("zurück") . "</a> | </font>";
+		$navi .= "<a href=\"".URLHelper::getLink("?flatviewstartposting=".($ipage-2)*$forum["postingsperside"])."\"><font size=-1>" . _("zurück") . "</a> | </font>";
 	else
 		$navi .= "<font size=\"-1\">Seite: </font>";
 	while ($i <= $maxpages) {
@@ -654,7 +658,7 @@ function forum_print_navi ($forum) {
 				$space = 0;
 			}
 			if ($i != $ipage)
-				$navi .= "<a href=\"$PHP_SELF?flatviewstartposting=".($i-1)*$forum["postingsperside"]."\"><font size=-1>".$i."</a></font>";
+				$navi .= "<a href=\"".URLHelper::getLink("?flatviewstartposting=".($i-1)*$forum["postingsperside"])."\"><font size=-1>".$i."</a></font>";
 			else
 				$navi .= "<font size=\"-1\"><b>".$i."</b></font>";
 			if ($maxpages != 1)
@@ -665,7 +669,7 @@ function forum_print_navi ($forum) {
 		$i++;
 	}
 	if ($ipage != $maxpages)
-		$navi .= "<a href=\"$PHP_SELF?flatviewstartposting=".($ipage)*$forum["postingsperside"]."\"><font size=-1> " . _("weiter") . "</a></font>";
+		$navi .= "<a href=\"".URLHelper::getLink("?flatviewstartposting=".($ipage)*$forum["postingsperside"])."\"><font size=-1> " . _("weiter") . "</a></font>";
 	return $navi;
 }
 
@@ -690,7 +694,7 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 {
 	static $count;
 
-	global $SessionSeminar,$auth, $PHP_SELF, $user, $perm;
+	global $SessionSeminar,$auth, $user, $perm;
 	if (!$tmpSessionSeminar)
 		$tmpSessionSeminar=$SessionSeminar;
 	$db=new DB_Seminar;
@@ -742,6 +746,48 @@ function CreateTopic ($name="[no name]", $author="[no author]", $description="",
 	if  ($db->affected_rows() == 0) {
 		print "<p>"._("Fehler beim Anlegen eines Postings.")."</p>\n";
 		}
+	return $topic_id;
+}
+
+/**
+ * Creates a new posting that is not yet stored in the DB
+ *
+ * @param	string name of the posting
+ * @param	string description the content of the posting
+ * @param	string parent_id of the posting (optional)
+ * @param	string root_id of the posting (optional)
+ *
+ * @return	string topic_id of the new posting
+ */
+function CreateNewTopic ($name, $description, $parent_id="0", $root_id="0")
+{
+	global $SessionSeminar, $auth, $new_topic;
+
+	$mkdate = time();
+	$chdate = $mkdate-1;
+	$author = get_fullname();
+	$username = get_username();
+	$user_id = $auth->auth['uid'];
+	$topic_id = MakeUniqueID();
+
+	if ($root_id == "0") {
+		$root_id = $topic_id;
+	}
+
+	$new_topic = array(
+		'id'          => $topic_id,
+		'name'        => $name,
+		'description' => $description,
+		'author'      => $author,
+		'username'    => $username,
+		'userid'      => $user_id,
+		'rootid'      => $root_id,
+		'mkdate'      => $mkdate,
+		'chdate'      => $chdate,
+		'parent_id'   => $parent_id,
+		'new'         => true
+	);
+
 	return $topic_id;
 }
 
@@ -818,11 +864,11 @@ function ForumStriche($forumposting) {
 *
 **/
 function forum_print_toolbar ($id="") {
-		global $user, $PHP_SELF, $forum, $open, $flatviewstartposting, $indexvars;
+		global $user, $forum, $open, $flatviewstartposting, $indexvars;
 		$print = "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">";
 		if ($forum["toolbar"] == "open") {
 			if ($forum["view"] != "tree" && $forum["view"] != "mixed")
-				$print .= "<form name=\"sortierung\" method=\"post\" action=\"".$PHP_SELF."#anker\">";
+				$print .= "<form name=\"sortierung\" method=\"post\" action=\"".URLHelper::getLink("#anker")."\">";
 			$print .= "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">&nbsp;</td></tr><tr>";
 			$print .= "<td class=\"steelkante2\" valign=\"middle\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"22\" width=\"5\"></td>";
 			$print .= "<td class=\"steelkante2\" valign=\"middle\"><font size=\"-1\">"._("Indikator:")."&nbsp;</font>";
@@ -830,19 +876,19 @@ function forum_print_toolbar ($id="") {
 			if ($forum["indikator"] == "age")
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forumrot_indikator.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["age"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["age"]["name"]."</font></a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["age"]["name"]."</font></a> &nbsp;";
 			if ($forum["indikator"] == "viewcount")
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_gruen.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["viewcount"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=viewcount\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["viewcount"]["name"]."</font></a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&open=$open&indikator=viewcount")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["viewcount"]["name"]."</font></a> &nbsp;";
 			if ($forum["indikator"] == "rating")
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_gelb.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["rating"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rating\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["rating"]["name"]."</font></a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rating")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["rating"]["name"]."</font></a> &nbsp;";
 			if ($forum["indikator"] == "score")
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_blau.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["score"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["score"]["name"]."</font></a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["score"]["name"]."</font></a> &nbsp;";
 
 			if ($forum["view"] != "tree" && $forum["view"] != "mixed") { // Anzeige der Sortierung nicht in der Themenansicht
 				$print .= "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;|&nbsp;&nbsp;<font size=\"-1\">Sortierung:&nbsp;&nbsp;</font>";
@@ -865,7 +911,7 @@ function forum_print_toolbar ($id="") {
 				$print .= "<input type=hidden name=view value='".$forum["view"]."'>";
 				$print .= "<input type=image name=create value=\"abschicken\" src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" border=\"0\"".tooltip(_("Sortierung durchführen")).">";
 			}
-			$print .= "&nbsp;&nbsp;</td><td class=\"blank\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open\" ".tooltip(_("Toolbar einfahren"))."><img src=\"".$GLOBALS['ASSETS_URL']."images/griff.jpg\" align=\"middle\" border=\"0\"></a>";
+			$print .= "&nbsp;&nbsp;</td><td class=\"blank\"><a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&toolbar=close&open=$open")."\" ".tooltip(_("Toolbar einfahren"))."><img src=\"".$GLOBALS['ASSETS_URL']."images/griff.jpg\" align=\"middle\" border=\"0\"></a>";
 
 			$print .= "</td><td class=\"blank\" width=\"99%\"></td></tr>";
 			if ($forum["view"] != "tree" && $forum["view"] != "mixed")
@@ -874,13 +920,12 @@ function forum_print_toolbar ($id="") {
 
 		} else {
 			$print .= "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\"><tr><td class=\"blank\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"22\" width=\"1\"></td>";
-			$print .= "<td class=\"blank\"><font size=\"-1\"><a href=\"$PHP_SELF?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open\"><img src=\"".$GLOBALS['ASSETS_URL']."images/griff2.jpg\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
+			$print .= "<td class=\"blank\"><font size=\"-1\"><a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&toolbar=open&open=$open")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/griff2.jpg\" align=\"middle\" border=\"0\"".tooltip(_("Toolbar ausfahren"))."></a>";
 			$print .= '</td></tr></table>';
 		}
 		$print .= "</td></tr></table>\n";
 		if ($id) {  // Schreibmodus, also form einbauen
-			//$print .= "<form name=forumwrite method=post action=\"".$PHP_SELF."?test=s#anker\">";
-			$print .= '<form name="forumwrite" method="post" action="'.$PHP_SELF.'#anker">';
+			$print .= '<form name="forumwrite" method="post" action="'.URLHelper::getLink('#anker').'">';
 		}
 
 		return $print;
@@ -961,7 +1006,7 @@ function forum_draw_topicline() {
 	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 	echo "<tr><td class=\"topic\" width=\"99%\"><b>&nbsp;<img src='".$GLOBALS['ASSETS_URL']."images/icon-posting.gif' align=absmiddle>&nbsp; ". $SessSemName["header_line"] ." - " . _("Forum") . "</b></td><td class=\"topic\" width=\"1%\" align=\"right\" nowrap>";
 	if ($user->id != "nobody")
-		echo "<a href='forum.php?forumsend=anpassen&view=$view'><img src='".$GLOBALS['ASSETS_URL']."images/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a>";
+		echo "<a href='".URLHelper::getLink("?forumsend=anpassen")."'><img src='".$GLOBALS['ASSETS_URL']."images/pfeillink.gif' border=0 " . tooltip(_("Look & Feel anpassen")) . ">&nbsp;</a>";
 	echo "</td></tr>";
 */
 echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
@@ -1008,7 +1053,7 @@ function print_rating($rate, $id, $username) {
     			$txt4 = _("Schulnote");
     			$ol_txt = "'<div align=center>$txt</div>', LEFT, WIDTH, 200";
     			$ol_txt2 = "'<div align=center><font size=-1>$txt3</font><br><font size=-2>($txt4)</font><br>";
-  			$ol_txt2 .= "<form method=post action=./forum.php#anker ><b>&nbsp;<font size=2 color=#009900 >1";
+  			$ol_txt2 .= "<form method=post action=".URLHelper::getLink("#anker")."><b>&nbsp;<font size=2 color=#009900 >1";
   			$ol_txt2 .= "<input type=radio name=rate[$id] value=1><input type=radio name=rate[$id] value=2>";
 	 		$ol_txt2 .= "<input type=radio name=rate[$id] value=3><input type=radio name=rate[$id] value=4>";
   			$ol_txt2 .= "<input type=radio name=rate[$id] value=5><font size=2 color=#990000>5&nbsp;<br><br>";
@@ -1033,7 +1078,7 @@ function print_rating($rate, $id, $username) {
 *
 **/
 function printposting ($forumposting) {
-	global $PHP_SELF,$forum,$view,$davor,$auth,$user, $SessSemName, $sidebar, $indexvars, $open, $openorig, $delete_id,$rechte;
+	global $forum,$view,$davor,$auth,$user, $SessSemName, $sidebar, $indexvars, $open, $openorig, $delete_id,$rechte;
 
   // Status des Postings holen
  	// auf- zugeklappt
@@ -1054,27 +1099,28 @@ function printposting ($forumposting) {
   	// Link zusammenbauen
 
   		if ($forum["view"] == "mixed") {		// etwas umständlich: Weg von der Themenansicht zum Folderflatview
-  			$viewlink = "flatfolder";
+  			$viewlink = "&view=flatfolder";
   			$forum["flatviewstartposting"] = 0;
   		} else {
-  	 		$viewlink = 0;
+  	 		$viewlink = '';
   	 	}
 
  		if ($forumposting["openclose"] == "close" || $forum["view"] == "mixed") {
-  			$link =	$PHP_SELF."?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&view=".$viewlink;
+  			$link =	"?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"].$viewlink;
   			if ($forumposting["shrink"] == TRUE && $forumposting["lonely"]==FALSE)
   				$link .= "&shrinkopen=".$forumposting["id"];
   			if ($forum["view"] != "mixed")
   				$link .= "#anker";
   		} else {
   			if ($forum["view"] == "tree" && $forumposting["type"] == "posting")
-  				$link = $PHP_SELF."?open=".$forumposting["rootid"]."#anker";
+  				$link = "?open=".$forumposting["rootid"]."#anker";
   			else
-  				$link = $PHP_SELF."?&flatviewstartposting=".$forum["flatviewstartposting"]."#anker";
+  				$link = "?flatviewstartposting=".$forum["flatviewstartposting"]."#anker";
 			if ($forum["neuauf"]==1 AND $forumposting["newold"]=="new")
 				$link = ""; // zuklappen nur m&ouml;glich wenn neueimmerauf nicht gesetzt
   		}
 
+		$link = URLHelper::getLink($link);
 
   	// Views hochzählen
 
@@ -1114,10 +1160,10 @@ function printposting ($forumposting) {
   	// Themennamen ausgeben (ausser Flatview)
 
   		if ($forum["view"] != "flatfolder")
-  			$forumhead[] =	"<a href=\"".$PHP_SELF."?open=".$forumposting["id"]
+  			$forumhead[] =	"<a href=\"".URLHelper::getLink("?open=".$forumposting["id"]
 					."&folderopen=".$forumposting["rootid"]
 					."&openall=TRUE&view=tree"
-					."#anker\" class=\"printhead\">".htmlReady(mila($forumposting["rootname"],20))
+					."#anker")."\" class=\"printhead\">".htmlReady(mila($forumposting["rootname"],20))
 					."</a>"
 					."&nbsp; ";
 
@@ -1149,17 +1195,17 @@ function printposting ($forumposting) {
 		}
 		$rand = "&random=".rand();
 		if ($user->id != "nobody" && !$delete_id) // Nobody kriegt keine Favoriten, auch nicht in der Löschen-Ansicht
-			$forumhead[] = "<a href=\"$PHP_SELF?fav=".$forumposting["id"]."&open=$openorig".$rand."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker\"><img src=\"".$favicon."\" border=\"0\" ".tooltip($favtxt).">&nbsp;</a>";
+			$forumhead[] = "<a href=\"".URLHelper::getLink("?fav=".$forumposting["id"]."&open=$openorig".$rand."&flatviewstartposting=".$forum["flatviewstartposting"]."#anker")."\"><img src=\"".$favicon."\" border=\"0\" ".tooltip($favtxt).">&nbsp;</a>";
 
 	// Antwort-Pfeil
 
 		if (!(have_sem_write_perm()) && !$delete_id)
-			$forumhead[] = "<a href=\"write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"]."\" target=\"_new\"><img src=\"".$GLOBALS['ASSETS_URL']."images/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>";
+			$forumhead[] = "<a href=\"".URLHelper::getLink("write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"])."\" target=\"_new\"><img src=\"".$GLOBALS['ASSETS_URL']."images/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>";
 
   		$zusatz = ForumParseZusatz($forumhead);
 
   		if ($forumposting["writestatus"]!="none") {    //wir sind im Schreibmodus
-			echo "<input type=hidden name=topic_id value=$topic_id>";
+			echo '<input type="hidden" name="topic_id" value="'.$forumposting['id'].'">';
 			$name = "<input type=text size=50 style='font-size:8 pt;font-weight:normal;' name=titel value='".htmlReady($forumposting["name"])."'>";
 			$zusatz = ""; // beim editieren brauchen wir den Kram nicht
 		} else {
@@ -1245,7 +1291,7 @@ function printposting ($forumposting) {
 				$addon .= "<font size=\"-1\">&nbsp;&nbsp;Sie können sich&nbsp;<br>&nbsp;&nbsp;nicht selbst bewerten.&nbsp;";
 			} else {
 				if (object_check_user($forumposting["id"], "rate") == FALSE) {  // wenn er noch nicht bewertet hat
-					$addon .= "<div align=\"center\"><font size=\"-1\">Dieser Beitrag war<br><font size=\"-2\">(Schulnote)</font><br><form method=post action=$PHP_SELF#anker>";
+					$addon .= "<div align=\"center\"><font size=\"-1\">Dieser Beitrag war<br><font size=\"-2\">(Schulnote)</font><br><form method=post action=".URLHelper::getLink("#anker").">";
 					$addon .= "<b>&nbsp;<font size=\"2\" color=\"009900\">1";
 					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=1>";
 					$addon .= "<input type=radio name=rate[".$forumposting["id"]."] value=2>";
@@ -1261,7 +1307,7 @@ function printposting ($forumposting) {
 				}
 			}
 		} elseif ($user->id != "nobody" && !$delete_id)  // nur Aufklapppfeil
-			$addon = "open:$PHP_SELF?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&sidebar=".$forumposting["id"]."#anker";
+			$addon = "open:".URLHelper::getLink("?open=".$forumposting["id"]."&flatviewstartposting=".$forum["flatviewstartposting"]."&sidebar=".$forumposting["id"]."#anker");
 
   // Kontentzeile ausgeben
 
@@ -1293,7 +1339,8 @@ function printposting ($forumposting) {
 **/
 function flatview ($open=0, $mehr=1, $show=0, $update="", $name="", $description="",$zitat="")
 
-{	global $SessionSeminar,$SessSemName,$view,$rechte,$forum,$user,$flatviewstartposting,$PHP_SELF;
+{	global $SessionSeminar,$SessSemName,$view,$rechte,$forum,$user,$flatviewstartposting;
+	global $new_topic;
 
 /////////////////////////////// Konstanten setzen bzw. zuweisen die für die ganze Seite gelten
 
@@ -1339,9 +1386,9 @@ if ($forum["view"]=="search") {
 
 $query = "SELECT x.topic_id FROM px_topics x, px_topics y WHERE x.root_id = y.topic_id AND x.Seminar_id = '$SessionSeminar' "
 	."AND (x.chdate>=x.mkdate OR x.user_id='$user->id' OR x.author='unbekannt')"
-	.$addon."";
+	.$addon;
 $db->query($query);
-if ($db->num_rows() > 0) {  // Forum ist nicht leer
+if ($db->num_rows() > 0 || isset($new_topic)) {  // Forum ist nicht leer
 	$forum["forumsum"] = $db->num_rows();
 } else { // das Forum ist leer
 	if ($nomsg!="TRUE") {
@@ -1386,17 +1433,21 @@ if ($forum["search"]!="" && $forum["view"]=="search") {
 	echo "<font size=\"-1\">&nbsp;Postings: ".$forum["forumsum"]."</font>";
 echo "</td><td class=\"steelgraudunkel\" align=\"center\" width=\"10%\">";
 if ($forum["flatallopen"]=="TRUE")
-	echo "<a href=\"".$PHP_SELF
-		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=FALSE\"><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0 height='10' align=middle><img src='".$GLOBALS['ASSETS_URL']."images/close_all.gif' border=0 " . tooltip(_("Alle zuklappen")) . " align=middle><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0></a>";
+	echo "<a href=\"".URLHelper::getLink(
+		"?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=FALSE")."\"><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0 height='10' align=middle><img src='".$GLOBALS['ASSETS_URL']."images/close_all.gif' border=0 " . tooltip(_("Alle zuklappen")) . " align=middle><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0></a>";
 else
-	echo "<a href=\"".$PHP_SELF
-		."?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=TRUE\"><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0 height='10' align=middle><img src='".$GLOBALS['ASSETS_URL']."images/open_all.gif' border=0 " . tooltip(_("Alle aufklappen")) . " align=middle><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0></a>";
+	echo "<a href=\"".URLHelper::getLink(
+		"?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=TRUE")."\"><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0 height='10' align=middle><img src='".$GLOBALS['ASSETS_URL']."images/open_all.gif' border=0 " . tooltip(_("Alle aufklappen")) . " align=middle><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0></a>";
 
 echo "</td><td class=\"steelgraudunkel\" align=\"right\" width=\"45%\">";
 echo forum_print_navi($forum)."&nbsp;&nbsp;&nbsp;".forum_get_index($forumposting)."&nbsp;&nbsp;&nbsp;";
 echo "</td></tr></table>";
 
 /////////////////// Konstanten für das gerade auszugebene Posting und Posting ausgeben
+
+if (isset($new_topic)) {
+	printposting($new_topic);
+}
 
 while($db->next_record()){
 	$forumposting["id"] = $db->f("topic_id");
@@ -1461,7 +1512,8 @@ if ($update)
 *
 **/
 function DisplayFolders ($open=0, $update="", $zitat="") {
-	global $SessionSeminar,$SessSemName,$rechte,$i_page,$view, $write,$all,$forum,$cmd,$move_id,$auth,$user, $PHP_SELF, $shrinkopen, $SEM_CLASS, $SEM_TYPE, $perm;
+	global $SessionSeminar,$SessSemName,$rechte,$i_page,$view, $write,$all,$forum,$cmd,$move_id,$auth,$user, $shrinkopen, $SEM_CLASS, $SEM_TYPE, $perm;
+	global $new_topic;
 
 //Zeigt im Treeview die Themenordner an
 
@@ -1495,7 +1547,7 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 	."WHERE t.topic_id = t.root_id AND t.Seminar_id = '$SessionSeminar' AND (t.chdate>=t.mkdate OR t.user_id='$user->id' OR t.author='unbekannt') GROUP BY t.root_id  ORDER BY $order";
 	$db=new DB_Seminar;
 	$db->query($query);
-	if ($db->num_rows()==0) {  // Das Forum ist leer
+	if ($db->num_rows()==0 && !isset($new_topic)) {  // Das Forum ist leer
 		echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">";
 		echo ForumEmpty();
 		echo "</table>";
@@ -1506,9 +1558,14 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		// Berechnung was geöffnet ist
 
 		$forum["openlist"] = "";
-		$root_id = ForumGetRoot($open);
-		if ($open != $root_id && !$update)
-			$forum["openlist"] = suche_kinder($open);
+		if (isset($new_topic)) {
+			$root_id = $new_topic['rootid'];
+			$forum["openlist"] = $new_topic['parent_id'];
+		} else {
+			$root_id = ForumGetRoot($open);
+			if ($open != $root_id && !$update)
+				$forum["openlist"] = suche_kinder($open);
+		}
 		if ($update && ForumFreshPosting($update)==TRUE)
 			$forum["openlist"] .= ForumGetParent($update);
 		$forum["openlist"] .= ";".$open.";".$root_id;
@@ -1526,9 +1583,9 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 		echo "<td class=\"steelgraudunkel\" width=\"33%\" align=\"center\"><font size=\"-1\">&nbsp;&nbsp;";
 		if ($user->id != "nobody") { // Nobody kriegt nur treeview
 			if ($forum["view"] == "tree")
-				echo "<a href=\"".$PHP_SELF."?view=mixed&themeview=mixed\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumtree.gif\" border=\"0\" align=\"top\"></a>";
+				echo "<a href=\"".URLHelper::getLink("?view=mixed&themeview=mixed")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumtree.gif\" border=\"0\" align=\"top\"></a>";
 			else
-				echo "<a href=\"".$PHP_SELF."?view=tree&themeview=tree\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumflat.gif\" border=\"0\" align=\"top\"></a>";
+				echo "<a href=\"".URLHelper::getLink("?view=tree&themeview=tree")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumflat.gif\" border=\"0\" align=\"top\"></a>";
 		}
 		echo "</font><img src=\"".$GLOBALS['ASSETS_URL']."images/forumleer.gif\" border=0 height=\"20\" align=\"middle\"></td>";
 		echo "<td class=\"steelgraudunkel\" width=\"33%\"align=\"right\"><font size=\"-1\">" . _("<b>Postings</b> / letzter Eintrag") . "&nbsp;&nbsp;".forum_get_index($forumposting)."&nbsp;&nbsp;</font></td></tr></table>\n";
@@ -1556,11 +1613,15 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 				DisplayKids ($forumposting);
 			}
 		}
+
+		if (isset($new_topic) && $new_topic['parent_id'] == "0") {
+			printposting($new_topic);
+		}
 	}
 	echo "<table class=blank border=0 cellpadding=0 cellspacing=0 width=\"100%\"><tr><td class='blank'><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0 height='4'></td></tr><tr>";
 	echo "<td align=center class=steelgraudunkel><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0 height='20' align=middle>";
 	if (($perm->have_perm("autor")) && (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"])))
-		echo "<a href='".$PHP_SELF."?neuesthema=TRUE#anker'><img src='".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif' border=0 align=middle " . tooltip(_("Neues Thema anlegen")) . "><img src='".$GLOBALS['ASSETS_URL']."images/cont_folder2.gif' " . tooltip(_("Neues Thema anlegen")) . " border=0 align=middle></a>";
+		echo "<a href='".URLHelper::getLink("?neuesthema=TRUE#anker")."'><img src='".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif' border=0 align=middle " . tooltip(_("Neues Thema anlegen")) . "><img src='".$GLOBALS['ASSETS_URL']."images/cont_folder2.gif' " . tooltip(_("Neues Thema anlegen")) . " border=0 align=middle></a>";
 	echo "</td></tr><tr><td class=blank>&nbsp; <br>&nbsp; <br></td></tr></table>\n";
 
 
@@ -1576,6 +1637,30 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 
 /////////////////////////////////
 
+/**
+ * Hier eine bezaubernde Routine um die Striche exakt wiederzugeben - keine Bange ich verstehe sie auch nicht mehr
+ */
+function indentPosting (&$forumposting, $level)
+{
+	echo "<table class=\"blank\" border=0 cellpadding=0 cellspacing=0 width=\"100%\" valign=\"top\"><tr valign=\"top\"><td class=\"blank\" nowrap valign=\"top\" ><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'>";
+
+	if ($level){
+		$striche = "";
+		for ($i=0;$i<$level;$i++) {
+			if ($i==($level-1)) {
+				if ($forumposting["lines"][$i+1]>1) $striche.= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich3.gif'>"; 		//Kreuzung
+				else $striche.= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich2.gif' heigth='22'>"; 				//abknickend
+				$forumposting["lines"][$i+1] -= 1;
+			} else {
+				if ($forumposting["lines"][$i+1]==0) $striche .= "<img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'>";		//Leerzelle
+				else $striche .= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich.gif'>";				//Strich
+			}
+		}
+		echo $striche;
+	}
+	echo "</td>";
+}
+
 
 /**
 * Amazing engine to build the treeview incl. shrinking
@@ -1586,10 +1671,12 @@ function DisplayFolders ($open=0, $update="", $zitat="") {
 **/
 function DisplayKids ($forumposting, $level=0) {
 	global $SessionSeminar,$SessSemName,$anfang, $forum,$rechte,$view,$write,$all,$davor,$auth,$user, $age, $openall;
+	global $new_topic;
 
 // stellt im Treeview alle Postings dar, die NICHT Thema sind
 
 	$topic_id = $forumposting["id"];
+	$new_topic_here = isset($new_topic) && $new_topic['parent_id'] == $topic_id;
 	$forumposting["intree"]="TRUE";
 	$query = "select topic_id, parent_id, name, author "
 		.", px_topics.mkdate, px_topics.chdate, description, root_id, username, px_topics.user_id"
@@ -1604,7 +1691,7 @@ function DisplayKids ($forumposting, $level=0) {
 		." GROUP BY topic_id ORDER by px_topics.mkdate";
 	$db=new DB_Seminar;
 	$db->query($query);
-	$forumposting["lines"][$level] = $db->num_rows();
+	$forumposting["lines"][$level] = $db->num_rows() + $new_topic_here;
 	while ($db->next_record()) {
 		$forumposting["id"] = $db->f("topic_id");
 		$forumposting["name"] = $db->f("name");
@@ -1622,24 +1709,7 @@ function DisplayKids ($forumposting, $level=0) {
 		$forumposting["score"] = $db->f("score");
 		$forumposting["fav"] = $db->f("fav");
 
-		echo "<table class=\"blank\" border=0 cellpadding=0 cellspacing=0 width=\"100%\" valign=\"top\"><tr valign=\"top\"><td class=\"blank\" nowrap valign=\"top\" ><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'>";
-
-	//Hier eine bezaubernde Routine um die Striche exakt wiederzugeben - keine Bange ich verstehe sie auch nicht mehr
-		IF ($level){
-			$striche = "";
-			for ($i=0;$i<$level;$i++) {
-				if ($i==($level-1)) {
-					if ($forumposting["lines"][$i+1]>1) $striche.= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich3.gif'>"; 		//Kreuzung
-					else $striche.= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich2.gif' heigth='22'>"; 				//abknickend
-					$forumposting["lines"][$i+1] -= 1;
-				} else {
-					if ($forumposting["lines"][$i+1]==0) $striche .= "<img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif'>";		//Leerzelle
-					else $striche .= "<img src='".$GLOBALS['ASSETS_URL']."images/forumstrich.gif'>";				//Strich
-				}
-			}
-			echo $striche;
-		}
-		echo "</td>";
+		indentPosting($forumposting, $level);
 
 		$age = "";
 		$forumposting["newold"] = "";
@@ -1675,7 +1745,13 @@ function DisplayKids ($forumposting, $level=0) {
 		}
 		$age = "";
 
+	}
 
+	if ($new_topic_here) {
+		$forumposting = array_merge($forumposting, $new_topic);
+
+		indentPosting($forumposting, $level);
+		printposting($forumposting);
 	}
 }
 
@@ -1688,7 +1764,6 @@ function DisplayKids ($forumposting, $level=0) {
 *
 **/
 function forum_search_field () {
-	global $PHP_SELF;
 $searchfield = "
 <table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\"><tr><td class=\"blank\">
 <table border=\"0\" width=\"604\" cellspacing=\"5\" cellpadding=\"0\" align=\"center\">
@@ -1696,7 +1771,7 @@ $searchfield = "
 <td class=\"blank\">&nbsp;</td></tr>
 <td class=\"blank\" width=\"302\" align=\"center\">
    <table cellpadding=\"2\" cellspacing=\"0\" border=\"0\" valign=\"top\">
-	<form  name=\"search\" method=\"post\"  action=".$PHP_SELF."
+	<form name=\"search\" method=\"post\" action=\"".URLHelper::getLink('')."\">
 		<tr>
 			<td class=\"steel1\">
 				<b><font size=\"-1\">"._("Suchbegriff:")."</font></b>
@@ -1757,7 +1832,7 @@ return $searchfield;
 *
 **/
 function forum_move_navi ($topic_id) {
-	global $perm, $user, $forum, $view, $PHP_SELF;
+	global $perm, $user, $forum, $view;
 
 	$mutter = suche_kinder($topic_id);
 	$mutter = explode (";",$mutter);
@@ -1803,7 +1878,7 @@ function forum_move_navi ($topic_id) {
 					<font size="-1"><?=_("in das Forum einer Veranstaltung:")?></font>&nbsp; &nbsp;
 				</td>
 				<td class="steel1" width="80%">
-			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
+			<? 		echo "<form action=\"".URLHelper::getLink('')."\" method=\"POST\">"; ?>
 					<input type="image" name="SUBMIT" value="Verschieben" src="<?= $GLOBALS['ASSETS_URL'] ?>images/move.gif" border="0" <?=tooltip(_("dahin verschieben"))?>>&nbsp;
 					<select Name="sem_id" size="1">
 			<?		while ($db->next_record()) {
@@ -1825,7 +1900,7 @@ function forum_move_navi ($topic_id) {
 			  		<font size="-1"><?=_("in das Forum einer Einrichtung:")?></font>&nbsp; &nbsp;
 			  	</td>
 				<td class="steel1" width="80%">
-			<? 		echo "<form action=\"".$PHP_SELF."\" method=\"POST\">"; ?>
+			<? 		echo "<form action=\"".URLHelper::getLink('')."\" method=\"POST\">"; ?>
 					<input type=image name="SUBMIT" value="Verschieben" src="<?= $GLOBALS['ASSETS_URL'] ?>images/move.gif" border=0 <?=tooltip(_("dahin verschieben"))?>>&nbsp;
 			  	<select Name="inst_id" size="1">
 			<?		while ($db2->next_record()) {
@@ -1848,7 +1923,7 @@ function forum_move_navi ($topic_id) {
 				</td>
 				<td class="steel1" width="80%">
 				<br>
-			  	<? echo "<a href=\"".$PHP_SELF."?view=$view\">".makeButton("abbrechen", "img")."</a>";?>
+			  	<? echo "<a href=\"".URLHelper::getLink('')."\">".makeButton("abbrechen", "img")."</a>";?>
 		  		</td>
   			</tr>
   		</table></td></tr>
