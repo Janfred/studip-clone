@@ -1,4 +1,5 @@
 <?
+# Lifter001: DONE
 // $Id$
 
 // wikiMarkups are used by the wikiDirective function
@@ -77,13 +78,13 @@ if ($_REQUEST['biest_action']=='new_biest') {
 // create biest form
 //
 function wiki_biestform($template_name) {
-	global $PHP_SELF, $keyword;
+	global $keyword;
 	global $biest_templates;
 	$template=$biest_templates[$template_name];
 	if (!is_array($template)) { echo "<h1>Error: unknown template $template_name"; die(); }
 
 	$form=$template['formheading'];
-	$form.="<form action=\"$PHP_SELF\" method=post>\n
+	$form.="<form action=\"".URLHelper::getLink('')."\" method=post>\n
 		<input type=\"hidden\" name=\"biest_action\" value=\"new_biest\">
 		<input type=\"hidden\" name=\"biest_template\" value=\"$template_name\">
 		<input type=\"hidden\" name=\"keyword\" value=\"$keyword\">";
@@ -130,7 +131,7 @@ function wiki_newbiest($template_name) {
 	$userid=$auth->auth['uid'];
 	$query="INSERT INTO wiki SET range_id='$SessSemName[1]', keyword='$pagename', body='".$text."', user_id='$userid', chdate='".time()."', version='1'";
 	$db->query($query);
-	$wiki_plugin_messages[]="msg§".sprintf(_("Ein neuer Eintrag wurde angelegt. Sie können ihn nun weiter bearbeiten oder %szurück zur Ausgangsseite%s gehen."),"<a href=\"$PHP_SELF?keyword=$keyword\">",'</a>');	if ($biest_create_topic){
+	$wiki_plugin_messages[]="msg§".sprintf(_("Ein neuer Eintrag wurde angelegt. Sie können ihn nun weiter bearbeiten oder %szurück zur Ausgangsseite%s gehen."),"<a href=\"".URLHelper::getLink("?keyword=$keyword")."\">",'</a>');	if ($biest_create_topic){
 		if(CreateTopic($pagename . ': ' . $biest_zusammenfassung, get_fullname($userid), $biest_beschreibung, 0, 0, $SessSemName[1],$userid)){
 			$wiki_plugin_messages[]="msg§"._("Ein neues Thema im Forum wurde angelegt.");
 		}
@@ -143,14 +144,14 @@ function wiki_newbiest($template_name) {
 // wiki_biestplist creates a table of biest issues according to various
 // criteria.  
 function wiki_biestlist($template_name,$opt) {
-	global $PHP_SELF, $SessSemName;
+	global $SessSemName;
 	global $keyword, $show_wiki_comments, $biest_templates;
 	$template=$biest_templates[$template_name];
 	$opt = array_merge($opt,(array)$_REQUEST);
 	$biestlist = wiki_get_biestpagelist($template);
 	$out[] = "<table border='1' cellspacing='0' cellpadding='3'></tr>";
 	foreach ($template['listheader'] as $h) {
-		$out[]="<th><a href='$PHP_SELF?keyword=$keyword&order=".urlencode($h['order'])."'>{$h['heading']}</a></th>";
+		$out[]="<th><a href='".URLHelper::getLink("?keyword=$keyword&order=".urlencode($h['order']))."'>{$h['heading']}</a></th>";
 	}
 	$out[]="</tr>\n";
 	$terms = preg_split('/((?<!\\S)[-+]?[\'"].*?[\'"](?!\\S)|\\S+)/',
@@ -185,7 +186,7 @@ function wiki_biestlist($template_name,$opt) {
 	$cmp = CreateOrderFunction(@$opt['order'].",".$template['stdorder']);
 	usort($slist,$cmp);
 	foreach($slist as $s) {
-		$out[] = "<tr><td><font size=-1><a href='$PHP_SELF?keyword=$s[name]'>$s[name]</a></font></td>";
+		$out[] = "<tr><td><font size=-1><a href='".URLHelper::getLink("?keyword=$s[name]")."'>$s[name]</a></font></td>";
 		foreach($template['listview'] as $h) 
 			$out[] = @"<td><font size=-1>".wikiLinks(wikiReady(decodeHTML($s[$h]),TRUE,FALSE,$show_wiki_comments), $keyword)."&nbsp;</font></td>";
 			$out[] = "</tr>";

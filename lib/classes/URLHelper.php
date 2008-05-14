@@ -92,7 +92,7 @@ class URLHelper
      * returns an entity encoded URL suitable for use in HTML attributes.
      *
      * @param string $url    relative or absolute URL
-     * @param string $params array of additional link parameters to add
+     * @param array  $params array of additional link parameters to add
      *
      * @return string modified URL (entity encoded)
      */
@@ -110,7 +110,7 @@ class URLHelper
      * the same name.
      *
      * @param string $url    relative or absolute URL
-     * @param string $params array of additional link parameters to add
+     * @param array  $params array of additional link parameters to add
      *
      * @return string modified URL
      */

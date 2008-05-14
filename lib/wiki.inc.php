@@ -1,4 +1,5 @@
 <?
+# Lifter001: DONE
 
 // $Id$
 
@@ -198,18 +199,17 @@ function keywordExists($str, $sem_id=NULL) {
 *
 **/
 function isKeyword($str, $page, $format="wiki", $sem_id=NULL){
-	global $PHP_SELF;
 	$trans_tbl = array_flip(get_html_translation_table (HTML_ENTITIES));
 	$nonhtmlstr = strtr($str, $trans_tbl);
 	if (keywordExists($str, $sem_id) == NULL) {
 		if ($format=="wiki") {
-			return " <a href=\"".$PHP_SELF."?keyword=" . urlencode($nonhtmlstr) . "&view=editnew&lastpage=".urlencode($page)."\">" . $str . "(?)</a>";
+			return " <a href=\"".URLHelper::getLink("?keyword=" . urlencode($nonhtmlstr) . "&view=editnew&lastpage=".urlencode($page))."\">" . $str . "(?)</a>";
 		} else if ($format=="inline") {
 			return $str;
 		}
 	} else {
 		if ($format=="wiki") {
-			return " <a href=\"".$PHP_SELF."?keyword=".urlencode($nonhtmlstr)."\">".$str."</a>";
+			return " <a href=\"".URLHelper::getLink("?keyword=".urlencode($nonhtmlstr))."\">".$str."</a>";
 		} else if ($format=="inline") {
 			return " <a href=\"#".urlencode($nonhtmlstr)."\">".$str."</a>";
 		}
@@ -451,7 +451,7 @@ function getZusatz($wikiData) {
 *
 **/
 function showDeleteDialog($keyword, $version) {
-	global $perm, $SessSemName, $PHP_SELF;
+	global $perm, $SessSemName;
 	if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
@@ -486,11 +486,11 @@ function showDeleteDialog($keyword, $version) {
 	} else {
 		$msg .= _("Diese Version ist die derzeit einzige. Nach dem L&ouml;schen ist die Seite komplet gelöscht.") . "<br>";
 	}
-	$msg.="<a href=\"".$PHP_SELF."?cmd=really_delete&keyword=".urlencode($keyword)."&version=$version&dellatest=$islatest\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
+	$msg.="<a href=\"".URLHelper::getLink("?cmd=really_delete&keyword=".urlencode($keyword)."&version=$version&dellatest=$islatest")."\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 	$lnk = "?keyword=".urlencode($keyword); // what to do when delete is aborted
 	if (!$islatest) $lnk .= "&version=$version";
-	$msg.="<a href=\"".$PHP_SELF."$lnk\">" . makeButton("nein", "img") . "</a>\n";
-	$msg.='<p>'. sprintf(_("Um alle Versionen einer Seite auf einmal zu löschen, klicken Sie %shier%s."),'<a href="'.$PHP_SELF.'?cmd=delete_all&keyword='.urlencode($keyword).'">','</a>');
+	$msg.="<a href=\"".URLHelper::getLink($lnk)."\">" . makeButton("nein", "img") . "</a>\n";
+	$msg.='<p>'. sprintf(_("Um alle Versionen einer Seite auf einmal zu löschen, klicken Sie %shier%s."),'<a href="'.URLHelper::getLink('?cmd=delete_all&keyword='.urlencode($keyword)).'">','</a>');
 	parse_msg($msg, '§', 'blank', '1', FALSE);
 	end_blank_table();
 	return $version;
@@ -503,7 +503,7 @@ function showDeleteDialog($keyword, $version) {
 *
 **/
 function showDeleteAllDialog($keyword) {
-	global $perm, $SessSemName, $PHP_SELF;
+	global $perm, $SessSemName;
 	if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
 		begin_blank_table();
 		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
@@ -526,10 +526,10 @@ function showDeleteAllDialog($keyword) {
 			$msg .= "<p>" . sprintf(_("Auf diese Seite verweisen %s andere Seiten."), count(getBacklinks($keyword))) . "</p>";
 		}
 	}
-	$msg.="<a href=\"".$PHP_SELF."?cmd=really_delete_all&keyword=".urlencode($keyword)."\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
+	$msg.="<a href=\"".URLHelper::getLink("?cmd=really_delete_all&keyword=".urlencode($keyword))."\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 	$lnk = "?keyword=".urlencode($keyword); // what to do when delete is aborted
 	if (!$islatest) $lnk .= "&version=$version";
-	$msg.="<a href=\"".$PHP_SELF."$lnk\">" . makeButton("nein", "img") . "</a>\n";
+	$msg.="<a href=\"".URLHelper::getLink($lnk)."\">" . makeButton("nein", "img") . "</a>\n";
 	parse_msg($msg, '§', 'blank', '1', FALSE);
 	end_blank_table();
 }
@@ -626,18 +626,18 @@ function deleteAllWikiPage($keyword, $range_id) {
 * @param  sortby  string  Different sortings of entries.
 **/
 function listPages($mode, $sortby=NULL) {
-	global $SessSemName, $user_id, $PHP_SELF;
+	global $SessSemName, $user_id;
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 
 	if ($mode=="all") {
-		$selfurl = $PHP_SELF."?view=listall";
+		$selfurl = "?view=listall";
 		$sort = "ORDER by lastchange DESC"; // default sort order for "all pages"
 		$nopages = _("In dieser Veranstaltung wurden noch keine WikiSeiten angelegt.");
 	} else if ($mode=="new") {
 		$lastlogindate = object_get_visit($SessSemName[1], "wiki");
-		$selfurl = $PHP_SELF."?view=listnew";
+		$selfurl = "?view=listnew";
 		$sort = "ORDER by lastchange"; // default sort order for "new pages"
 		$nopages = _("Seit Ihrem letzten Login gab es keine Änderungen.");
 	} else {
@@ -701,9 +701,9 @@ function listPages($mode, $sortby=NULL) {
 	echo "<tr height=28>";
 	$s = "<td class=\"steel\" width=\"%d%%\" align=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"20\">%s</td>";
 	printf($s, 3, "left", "&nbsp;");
-	printf($s, 39,"left",  "<font size=-1><b><a href=\"$selfurl&sortby=$titlesortlink\">"._("Titel")."</a></b></font>");
-	printf($s, 10,"center",  "<font size=-1><b><a href=\"$selfurl&sortby=$versionsortlink\">"._("Änderungen")."</a></b></font>");
-	printf($s, 15,"left",  "<font size=-1><b><a href=\"$selfurl&sortby=$changesortlink\">"._("Letzte Änderung")."</a></b></font>");
+	printf($s, 39,"left",  "<font size=-1><b><a href=\"".URLHelper::getLink("$selfurl&sortby=$titlesortlink")."\">"._("Titel")."</a></b></font>");
+	printf($s, 10,"center",  "<font size=-1><b><a href=\"".URLHelper::getLink("$selfurl&sortby=$versionsortlink")."\">"._("Änderungen")."</a></b></font>");
+	printf($s, 15,"left",  "<font size=-1><b><a href=\"".URLHelper::getLink("$selfurl&sortby=$changesortlink")."\">"._("Letzte Änderung")."</a></b></font>");
 	printf($s, 25,"left",  "<font size=-1><b>"._("von")."</b></font>");
 	echo "</tr>";
 
@@ -722,13 +722,13 @@ function listPages($mode, $sortby=NULL) {
 		$tdheadcenter="<td class=\"$class\" align=\"center\"><font size=\"-1\">";
 		$tdtail="</font></td>";
 		print("<tr>".$tdheadleft."&nbsp;"."$tdtail");
-		print($tdheadleft."<a href=\"".$PHP_SELF."?keyword=" . urlencode($keyword) . "\">");
+		print($tdheadleft."<a href=\"".URLHelper::getLink("?keyword=" . urlencode($keyword) . "")."\">");
 		print(htmlReady($keyword) ."</a>");
 		print($tdtail);
 		print($tdheadcenter.$db2->f("version").$tdtail);
 		print($tdheadleft.date("d.m.Y, H:i", $lastchange));
 		if ($mode=="new" && $db2->f("version")>1) {
-			print("&nbsp;(<a href=\"".$PHP_SELF."?view=diff&keyword=".urlencode($keyword)."&versionssince=$lastlogindate\">"._("Änderungen")."</a>)");
+			print("&nbsp;(<a href=\"".URLHelper::getLink("?view=diff&keyword=".urlencode($keyword)."&versionssince=$lastlogindate")."\">"._("Änderungen")."</a>)");
 		}
 		print($tdtail);
 		print($tdheadleft.get_fullname($userid,'full',TRUE).$tdtail."</tr>");
@@ -746,7 +746,7 @@ function listPages($mode, $sortby=NULL) {
 * @param keyword bool if localsearch is set, only one page (all versions) is searched
 **/
 function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) {
-	global $SessSemName, $user_id, $PHP_SELF;
+	global $SessSemName, $user_id;
 	$range_id=$SessSemName[1];
 
 	$db=new DB_Seminar;
@@ -839,7 +839,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 				} else {
 					$hitstring=_("Weitere Treffer in %s älteren Versionen. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
 				}
-				print($tdheadleft."<em>".sprintf($hitstring,$last_keyword_count,"<b><a href=\"$PHP_SELF?view=search&searchfor=$searchfor&keyword=".urlencode($last_keyword)."&localsearch=1\">","</a></b>")."</em>".$tdtail);
+				print($tdheadleft."<em>".sprintf($hitstring,$last_keyword_count,"<b><a href=\"".URLHelper::getLink("?view=search&searchfor=$searchfor&keyword=".urlencode($last_keyword)."&localsearch=1")."\">","</a></b>")."</em>".$tdtail);
 				print($tdheadleft."&nbsp;".$tdtail);
 				print("</tr>");
 			}
@@ -855,7 +855,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 		print("<tr>".$tdheadleft."&nbsp;"."$tdtail");
 		// Pagename
 		print($tdheadleft);
-		print("<a href=\"$PHP_SELF?keyword=".$db->f("keyword")."&version=".$db->f("version")."&hilight=".htmlReady($searchfor)."&searchfor=".htmlReady($searchfor)."\">");
+		print("<a href=\"".URLHelper::getLink("?keyword=".$db->f("keyword")."&version=".$db->f("version")."&hilight=".htmlReady($searchfor)."&searchfor=".htmlReady($searchfor))."\">");
 		print($db->f("keyword")."</a>");
 		print($tdtail);
 		// display hit previews
@@ -900,7 +900,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 		} else {
 			$hitstring=_("Weitere Treffer in %s älteren Versionen. Klicken Sie %shier%s, um diese Treffer anzuzeigen.");
 		}
-		print($tdheadleft."<em>".sprintf($hitstring,$last_keyword_count,"<b><a href=\"$PHP_SELF?view=search&searchfor=$searchfor&keyword=".urlencode($last_keyword)."&localsearch=1\">","</a></b>")."</em>".$tdtail);
+		print($tdheadleft."<em>".sprintf($hitstring,$last_keyword_count,"<b><a href=\"".URLHelper::getLink("?view=search&searchfor=$searchfor&keyword=".urlencode($last_keyword)."&localsearch=1")."\">","</a></b>")."</em>".$tdtail);
 		print($tdheadleft."&nbsp;".$tdtail);
 		print("</tr>");
 	}
@@ -949,7 +949,6 @@ function wikiSinglePageHeader($wikiData, $keyword) {
 *
 **/
 function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
-	global $PHP_SELF;
 
 	showPageFrameStart();
 	wikiSinglePageHeader($wikiData, $keyword);
@@ -974,13 +973,13 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 		if (!$body) { $body=_("- WikiWikiWeb\n- BeispielSeite\n-- UnterSeite1\n-- UnterSeite2"); }
 	}
 
-	$cont .= "<p><form method=\"post\" action=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&cmd=edit\">";
+	$cont .= "<p><form method=\"post\" action=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&cmd=edit")."\">";
 	$cont .= "<textarea name=\"body\" cols=\"80\" rows=\"15\">".htmlready($body)."</textarea>\n";
 	$cont .= "<input type=\"hidden\" name=\"wiki\" value=\"".urlencode($keyword)."\">";
 	$cont .= "<input type=\"hidden\" name=\"version\" value=\"$version\">";
 	$cont .= "<input type=\"hidden\" name=\"submit\" value=\"true\">";
 	$cont .= "<input type=\"hidden\" name=\"cmd\" value=\"show\">";
-	$cont .= "<br><br><input type=image name=\"submit\" value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0 >&nbsp;<a href=\"".$PHP_SELF."?cmd=abortedit&keyword=".urlencode($keyword).$lastpage."\"><img " . makeButton("abbrechen", "src") . " align=\"absmiddle\" border=0></a>";
+	$cont .= "<br><br><input type=image name=\"submit\" value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0 >&nbsp;<a href=\"".URLHelper::getLink("?cmd=abortedit&keyword=".urlencode($keyword).$lastpage)."\"><img " . makeButton("abbrechen", "src") . " align=\"absmiddle\" border=0></a>";
 	$cont .= "</form>\n";
 	printcontent(0,0,$cont,"");
 	$infobox = array ();
@@ -1025,14 +1024,13 @@ function printWikiPage($keyword, $version) {
 *
 **/
 function exportWiki() {
-	global $PHP_SELF;
 	showPageFrameStart();
 	begin_blank_table();
 	parse_msg("info§"._("Alle Wiki-Seiten werden als große HTML-Datei zusammengefügt und in einem neuen Fenster angezeigt. Von dort aus können Sie die Datei abspeichern."));
 	$infobox = array ();
 	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array('icon' => "ausruf_small.gif", "text"=>_("Die Wiki-Seiten werden als eine zusammenhängende HTML-Datei ohne Links exportiert."))));
 	print "</tr><tr align=center><td>";
-	print "<a href=\"".$PHP_SELF."?view=wikiprintall\" target=\"_new\"><img ".makebutton("weiter","src"). " border=0></a></td></tr>";
+	print "<a href=\"".URLHelper::getLink("?view=wikiprintall")."\" target=\"_new\"><img ".makebutton("weiter","src"). " border=0></a></td></tr>";
 	end_blank_table();
 	echo "</td>"; // end of content area
 	showPageFrameEnd($infobox);
@@ -1146,9 +1144,8 @@ function showPageFrameEnd($infobox) {
 *
 **/
 function getSearchbox($preselection, $keyword) {
-	global $PHP_SELF;
 	// search
-	$search_text="<form method='get' action='$PHP_SELF'>";
+	$search_text="<form method='post' action='".URLHelper::getLink('')."'>";
 	$search_text.="<input type='hidden' name='view' value='search'>";
 	$search_text.="<input type='hidden' name='keyword' value='".htmlReady($keyword)."'>";
 	$search_text.="<input type='text' size='10' name='searchfor' value='".htmlReady($preselection)."'>";
@@ -1172,24 +1169,24 @@ function getSearchbox($preselection, $keyword) {
 *
 **/
 function getShowPageInfobox($keyword, $latest_version) {
-	global $PHP_SELF, $show_wiki_comments;
+	global $show_wiki_comments;
 
 	$versions=getWikiPageVersions($keyword);
-	$versiontext = '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">' . _("Aktuelle Version"). '</a><br>';
+	$versiontext = '<a href="'.URLHelper::getLink('?keyword='.urlencode($keyword)).'">' . _("Aktuelle Version"). '</a><br>';
 	if ($versions) {
 		foreach ($versions as $v) {
-			$versiontext .= "<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
+			$versiontext .= "<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&version=".$v['version'])."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
 		}
 	}
 	if (!$versiontext) {
 		$versiontext=_("Keine alten Versionen.");
 	}
 
-	$viewtext="<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&view=show\">"._("Standard")."</a><br>";
-	$viewtext .= "<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&view=wikiprint&version=$version\" target=\"_new\">"._("Druckansicht")."</a>";
+	$viewtext="<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&view=show")."\">"._("Standard")."</a><br>";
+	$viewtext .= "<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&view=wikiprint&version=$version")."\" target=\"_new\">"._("Druckansicht")."</a>";
 	if (count($versions)>=1) {
-		$viewtext .= "<br><a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&cmd=showdiff&view=diff\">"._("Textänderungen anzeigen")."</a>";
-		$viewtext .= "<br><a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&cmd=showcombo&view=combodiff\">"._("Text mit AutorInnenzuordnung anzeigen")."</a>";
+		$viewtext .= "<br><a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&cmd=showdiff&view=diff")."\">"._("Textänderungen anzeigen")."</a>";
+		$viewtext .= "<br><a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&cmd=showcombo&view=combodiff")."\">"._("Text mit AutorInnenzuordnung anzeigen")."</a>";
 	}
 	$views=array(array('icon' => "blank.gif", "text" => $viewtext));
 
@@ -1202,7 +1199,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 		} else {
 			$first=0;
 		}
-		$backlinktext .= "<a href=\"".$PHP_SELF."?keyword=".urlencode($b)."\">$b</a>";
+		$backlinktext .= "<a href=\"".URLHelper::getLink("?keyword=".urlencode($b))."\">$b</a>";
 	}
 	if (empty($backlinktext)) {
 		$backlinktext = _("Keine Verweise vorhanden.");
@@ -1218,9 +1215,9 @@ function getShowPageInfobox($keyword, $latest_version) {
 	if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
 		$toceditlink.="<span class='wikitoc_editlink'>(";
 		if ($toccont) {
-			$toceditlink.="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("bearbeiten")."</a>";
+			$toceditlink.="<a href=\"".URLHelper::getLink("?keyword=toc&view=edit")."\">"._("bearbeiten")."</a>";
 		} else {
-			$toceditlink.="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("erstellen")."</a>";
+			$toceditlink.="<a href=\"".URLHelper::getLink("?keyword=toc&view=edit")."\">"._("erstellen")."</a>";
 		}
 		$toceditlink.=")</span>";
 	}
@@ -1229,7 +1226,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 		"text"=>$toccont)));
 
 	if (!$latest_version) {
-		$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array('icon' => "ausruf_small.gif", "text"=> sprintf(_("Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die %saktuelle Version%s."), '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">','</a>'))));
+		$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array('icon' => "ausruf_small.gif", "text"=> sprintf(_("Sie betrachten eine alte Version, die nicht mehr geändert werden kann. Verwenden Sie dazu die %saktuelle Version%s."), '<a href="'.URLHelper::getLink('?keyword='.urlencode($keyword)).'">','</a>'))));
 	}
 	$infobox[] = array("kategorie"  => _("Ansicht:"), "eintrag" => $views);
 
@@ -1244,9 +1241,9 @@ function getShowPageInfobox($keyword, $latest_version) {
 			"eintrag" => array(array('icon' => "blank.gif","text"=>$versiontext)));
 
 	// comments
-	$comment_all="<a href=\"$PHP_SELF?keyword=".urlencode($keyword)."&wiki_comments=all\">"._("einblenden")."</a>";
-	$comment_icon="<a href=\"$PHP_SELF?keyword=".urlencode($keyword)."&wiki_comments=icon\">"._("als Icons einblenden")."</a>";
-	$comment_none="<a href=\"$PHP_SELF?keyword=".urlencode($keyword)."&wiki_comments=none\">"._("ausblenden")."</a>";
+	$comment_all="<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&wiki_comments=all")."\">"._("einblenden")."</a>";
+	$comment_icon="<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&wiki_comments=icon")."\">"._("als Icons einblenden")."</a>";
+	$comment_none="<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&wiki_comments=none")."\">"._("ausblenden")."</a>";
 	if ($show_wiki_comments=="none") {
 			$comment_addon=" ("._("ausgeblendet").") ";
 			$comment_text=$comment_all."<br>".$comment_icon;
@@ -1262,7 +1259,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 
 // export
 //	$infobox[] = array("kategorie"=> _("Export ab dieser Seite:"),
-//			"eintrag" => array(array('icon' => "blank.gif","text"=>"<a href=\"wiki.php?view=exportparts&keyword=".urlencode($keyword)."\">exportieren</a>")));
+//			"eintrag" => array(array('icon' => "blank.gif","text"=>"<a href=\"".URLHelper::getLink("?view=exportparts&keyword=".urlencode($keyword))."\">exportieren</a>")));
 	return $infobox;
 }
 
@@ -1274,20 +1271,19 @@ function getShowPageInfobox($keyword, $latest_version) {
 *
 **/
 function getDiffPageInfobox($keyword) {
-	global $PHP_SELF;
 
 	$versions=getWikiPageVersions($keyword);
-	$versiontext = '<a href="'.$PHP_SELF.'?keyword='.urlencode($keyword).'">'. _("Aktuelle Version").'</a><br>';
+	$versiontext = '<a href="'.URLHelper::getLink('?keyword='.urlencode($keyword)).'">'. _("Aktuelle Version").'</a><br>';
 	if ($versions) {
 		foreach ($versions as $v) {
-			$versiontext .= "<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&version=".$v['version']."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
+			$versiontext .= "<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&version=".$v['version'])."\">"._("Version")." ".$v['version']."</a> - ".date("d.m.Y, H:i",$v['chdate'])."<br>";
 		}
 	}
 	if (!$versiontext) {
 		$versiontext=_("Keine alten Versionen.");
 	}
 
-	$viewtext="<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&view=show\">"._("Aktuelle Version")."</a><br>";
+	$viewtext="<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&view=show")."\">"._("Aktuelle Version")."</a><br>";
 	$views=array(array('icon' => "blank.gif", "text" => $viewtext));
 
 	$infobox = array ();
@@ -1320,7 +1316,7 @@ function get_toc_toggler() {
 	return $cont;
 }
 function get_toc_content() {
-	global $perm, $SessSemName, $PHP_SELF;
+	global $perm, $SessSemName;
 	// Table of Contents / Wiki navigation
 	$toc=getWikiPage("toc",0);
 	if ($toc) {
@@ -1334,9 +1330,9 @@ function get_toc_content() {
 	if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
 		$toccont.="<div class='wikitoc_editlink'>";
 		if ($toc) {
-			$toccont.="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("bearbeiten")."</a>";
+			$toccont.="<a href=\"".URLHelper::getLink("?keyword=toc&view=edit")."\">"._("bearbeiten")."</a>";
 		} else {
-			$toccont.="<a href=\"$PHP_SELF?keyword=toc&view=edit\">"._("erstellen")."</a>";
+			$toccont.="<a href=\"".URLHelper::getLink("?keyword=toc&view=edit")."\">"._("erstellen")."</a>";
 		}
 		$toccont.="</div>";
 	}
@@ -1354,7 +1350,7 @@ function get_toc_content() {
 *
 **/
 function showWikiPage($keyword, $version, $special="", $show_comments="icon", $hilight=NULL) {
-	global $perm, $SessSemName, $PHP_SELF;
+	global $perm, $SessSemName;
 
 	showPageFrameStart();
 
@@ -1392,10 +1388,10 @@ function showWikiPage($keyword, $version, $special="", $show_comments="icon", $h
 		} else {
 			$edit="";
 			if ($perm->have_studip_perm("autor", $SessSemName[1])) {
-				$edit.="<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&view=edit\"><img ".makeButton("bearbeiten","src")." border=\"0\"></a>";
+				$edit.="<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&view=edit")."\"><img ".makeButton("bearbeiten","src")." border=\"0\"></a>";
 			}
 			if ($perm->have_studip_perm("tutor", $SessSemName[1])) {
-				$edit.="&nbsp;<a href=\"".$PHP_SELF."?keyword=".urlencode($keyword)."&cmd=delete&version=latest\"><img ".makeButton("loeschen","src")." border=\"0\"></a>";
+				$edit.="&nbsp;<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&cmd=delete&version=latest")."\"><img ".makeButton("loeschen","src")." border=\"0\"></a>";
 			}
 		}
 		$edit .= "<br>&nbsp;";
