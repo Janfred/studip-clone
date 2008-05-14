@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TODO
 /**
  * Overview of all existing votes ... vote_overview.lib.php
  *
@@ -65,17 +66,15 @@ function printSafeguard($sign,$text,$mode = NULL, $voteID = NULL, $showrangeID =
 			$value1 = "setResultvisibility_confirmed";
 			$value2 = "setResultvisibility_aborted";
 		}
-		$html .="<font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&voteaction=".$value1."&voteID=".$voteID."&showrangeID=".$showrangeID;
-		if ($referer) $html .= "&referer=".$referer;
+		$html .="<font size=\"-1\"><a href=\"".URLHelper::getLink(VOTE_FILE_ADMIN."?page=overview&voteaction=".$value1."&voteID=".$voteID."&showrangeID=".$showrangeID.($referer ? "&referer=".$referer : ""));
 		$html .="\" title=\"".$label["yes"]."\">" . makeButton('ja','img',$label["yes"]) . "</a></font>\n";
-		$html .="<font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&voteaction=".$value2."&voteID=".$voteID."&showrangeID=".$showrangeID;
-		if ($referer) $html .= "&referer=".$referer;
+		$html .="<font size=\"-1\"><a href=\"".URLHelper::getLink(VOTE_FILE_ADMIN."?page=overview&voteaction=".$value2."&voteID=".$voteID."&showrangeID=".$showrangeID.($referer ? "&referer=".$referer : ""));
 		$html .="\" title=\"".$label["no"]."\">" . makeButton('nein','img',$label["no"]) . "</a></font>\n";
 	}
 	$html .="	 </td>\n"
 		  . "	</tr>\n";
 	if ($referer)
-		$html .= "	 <tr><td>&nbsp;</td><td><font size=\"-1\"><a href=\"$referer\">".$label["referer"]."</a></font></td></tr>";
+		$html .= "	 <tr><td>&nbsp;</td><td><font size=\"-1\"><a href=\"".URLHelper::getLink($referer)."\">".$label["referer"]."</a></font></td></tr>";
 	$html .="   </table>\n";
 		/*  . "  </td>\n"
 		  . " </tr>\n"
@@ -144,9 +143,9 @@ $html = "\n" . $cssSw->GetHoverJSFunction() . "\n";
 	  			else							$displayclass = "steelgraulight";
 				$html .="	<tr ".$cssSw->getHover().">"
 					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\">".htmlReady($range["name"])."</td>"
-					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=edit&rangeID=".$range["id"]."&type=vote&showrangeID=".$range["id"]."\" alt=\"Voting erstellen.\">Voting erstellen</a></font></td>"
-					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=edit&rangeID=".$range["id"]."&type=test&showrangeID=".$range["id"]."\" alt=\"Voting erstellen.\">Test erstellen</a></font></td>"
-					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".VOTE_FILE_ADMIN."?page=overview&showrangeID=".$range["id"]."\" alt=\"Diesen Bereich anzeigen.\">Bereich Anzeigen</a></font></td>"
+					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".URLHelper::getLink(VOTE_FILE_ADMIN."?page=edit&rangeID=".$range["id"]."&type=vote&showrangeID=".$range["id"])."\" alt=\"Voting erstellen.\">Voting erstellen</a></font></td>"
+					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".URLHelper::getLink(VOTE_FILE_ADMIN."?page=edit&rangeID=".$range["id"]."&type=test&showrangeID=".$range["id"])."\" alt=\"Voting erstellen.\">Test erstellen</a></font></td>"
+					  . "<td class=\"".$cssSw->getClass()."\"><font size=\"-1\"><a href=\"".URLHelper::getLink(VOTE_FILE_ADMIN."?page=overview&showrangeID=".$range["id"])."\" alt=\"Diesen Bereich anzeigen.\">Bereich Anzeigen</a></font></td>"
 					  . "	</tr>\n";
 			$counter++;
 			$cssSw->switchClass();
@@ -358,10 +357,10 @@ function printVoteTable($mode, $votes = NULL, $openID = NULL){
 	  $html.="	 <td class=$displayclass width=\"\" align=\"left\">\n";
 // displays titel (a closed one)
 	  if($openID == $votes[$counter]["voteID"])
-		$html.="	  <a href=\"".VOTE_FILE_ADMIN."?page=overview&showrangeID=".$showrangeID."\" alt=\"Zuklappen\" title=\"Zuklappen\" name=\"open\">";
+		$html.="	  <a href=\"".URLHelper::getLink(VOTE_FILE_ADMIN."?page=overview&showrangeID=".$showrangeID)."\" alt=\"Zuklappen\" title=\"Zuklappen\" name=\"open\">";
 // displays titel (a opened one)
 	  else
-		$html.="	  <a href=\"".VOTE_FILE_ADMIN."?page=overview&openID=".$votes[$counter]["voteID"]."&showrangeID=".$showrangeID."#openvote\" alt=\"Aufklappen\" title=\"Aufklappen\">";
+		$html.="	  <a href=\"".URLHelper::getLink(VOTE_FILE_ADMIN."?page=overview&openID=".$votes[$counter]["voteID"]."&showrangeID=".$showrangeID."#openvote")."\" alt=\"Aufklappen\" title=\"Aufklappen\">";
 	  $html.="	  ".$fontstart.$votes[$counter]["title"].$fontend."</a>\n"
 		   . "	 </td>\n";
 
@@ -462,11 +461,11 @@ reset($votes);
 	    else						$html .="	 <td class=\"steelkante\" colspan=\"9\">\n";
 	    $html .="	 <center>\n";
 		if (($mode == VOTE_STATE_ACTIVE) && ($openID == ("openallactive")))
-			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID\"><img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\" alt=\"".$label["arrow_close_all"]."\" title=\"".$label["arrow_close_all"]."\" border=0></a> \n";
+			$html .="	  <a href=\"".URLHelper::getLink("?showrangeID=$showrangeID")."\"><img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\" alt=\"".$label["arrow_close_all"]."\" title=\"".$label["arrow_close_all"]."\" border=0></a> \n";
 		elseif (($mode == VOTE_STATE_STOPPED) && ($openID == ("openallstopped")))
-			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID\"><img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\" alt=\"".$label["arrow_close_all"]."\" title=\"".$label["arrow_close_all"]."\" border=0></a> \n";
+			$html .="	  <a href=\"".URLHelper::getLink("?showrangeID=$showrangeID")."\"><img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\" alt=\"".$label["arrow_close_all"]."\" title=\"".$label["arrow_close_all"]."\" border=0></a> \n";
 		else
-			$html .="	  <a href=\"".$GLOBALS["PHP_SELF"]."?showrangeID=$showrangeID&openID=openall".$mode."#openvote\"><img src=\"".VOTE_PATH_PICTURES."forumgraurunt.gif\" alt=\"".$label["arrow_open_all"]."\" title=\"".$label["arrow_open_all"]."\" border=0></a> \n";
+			$html .="	  <a href=\"".URLHelper::getLink("?showrangeID=$showrangeID&openID=openall".$mode."#openvote")."\"><img src=\"".VOTE_PATH_PICTURES."forumgraurunt.gif\" alt=\"".$label["arrow_open_all"]."\" title=\"".$label["arrow_open_all"]."\" border=0></a> \n";
 		$html .="	 </center></td>\n"
 	    	  . "	</tr>\n";
 	}
@@ -553,7 +552,7 @@ function makeTableDataCellLink ($username, $text = "&nbsp;",
 				$width = "5%", $colspan = "1") {
    $link = "{$CANONICAL_RELATIVE_PATH_STUDIP}about.php?username=".$username;
    $html = "	 <td class=\"$class\" align=\"$align\" width=\"$width\" colspan=\"$colspan\">\n"
-      . "	  <font size=\"-1\"><a href=\"$link\" title=\"".$text."\">$text</a></font>\n"
+      . "	  <font size=\"-1\"><a href=\"".URLHelper::getLink($link)."\" title=\"".$text."\">$text</a></font>\n"
       . "	 </td>\n";
    return $html;
 }
@@ -604,7 +603,7 @@ function makeTableDataCellForm( $displayclass = "steel1",
 	}
 
 	$html.="	 <td class=$displayclass width=\"93\" align=\"center\" style=\"vertical-align:middle;\">\n"
-		 . "	  <font size=\"-1\"><a href=\"$link\">$button</a></font>\n"
+		 . "	  <font size=\"-1\"><a href=\"".URLHelper::getLink($link)."\">$button</a></font>\n"
 		 . "	 </td>\n";
 	return $html;
 }
@@ -626,7 +625,7 @@ function makeNewVoteSelectForm($action){
 	global $rangemode, $label,$range, $showrangeID;
 	$arraysize = count($range);
 	$html = "	 <td class=\"steel1\" style=\"vertical-align:middle;\" nowrap>\n"
-		  . "	  <form action=\"$action\" method=post><br>&nbsp;\n"
+		  . "	  <form action=\"".URLHelper::getLink($action)."\" method=post><br>&nbsp;\n"
 
 		  // vote/test selection
 		  . "	  <select name=\"type\" style=\"vertical-align:middle;\">"
@@ -678,7 +677,7 @@ function makeDisplaySelectForm($action){
 	global $rangemode, $label,  $range, $showrangeID;
 	$arraysize = count($range);
 	$html .="	  <td class=\"steelkante\" style=\"vertical-align:middle;\" nowrap>\n"
-		  . "		<form action=\"$action\" method=post><font size=\"-1\"><br>&nbsp;\n"
+		  . "		<form action=\"".URLHelper::getLink($action)."\" method=post><font size=\"-1\"><br>&nbsp;\n"
 		  . "	   ".$label["selections_selectrange_text"]."\n"
 	 // Auswahlliste erstellen
 		  . "	   <select name=\"showrangeID\" style=\"vertical-align:middle;\">\n";
@@ -714,7 +713,7 @@ function makeDisplaySelectForm($action){
 function makeSearchForm(){
 	global $label, $searchRange;
 	$html .="	  <td class=\"steelgraulight\" style=\"vertical-align:middle;\" nowrap>\n"
-		  . "		<form action=\"$action\" method=post><font size=\"-1\" style=\"vertical-align:middle;\"><br>&nbsp;\n"
+		  . "		<form action=\"".URLHelper::getLink($action)."\" method=post><font size=\"-1\" style=\"vertical-align:middle;\"><br>&nbsp;\n"
 		  . "	     ".$label["search_text"]."\n"
 		  . "	     <input type=\"text\" name=\"searchRange\"  value=\"$searchRange\" size=\"30\" style=\"vertical-align:middle;\">"
 		  . "	     <input type=\"hidden\" name=\"voteaction\" value=\"search\">"
@@ -749,12 +748,13 @@ function makeArrow($timestmp,$open,$displayclass,$mode,$voteID = NULL){
 
 	$html = "	 <td class=\"".$displayclass."\" nowrap width=\"10\">\n";
 
-	$html.= "	  <a href=\"".VOTE_FILE_ADMIN."?page=overview&showrangeID=$showrangeID";
+	$html.= "	  <a href=\""
+	$oclink=VOTE_FILE_ADMIN."?page=overview&showrangeID=$showrangeID";
 	if ($open == "closed")
-		$html.= "&openID=".$voteID."#openvote"
+		$html.= URLHelper::getLink($oclink."&openID=".$voteID."#openvote")
 			 .  "\" title=\"".$label["arrow_openthis"]."\">\n";
 	else
-		$html.= "\" title=\"".$label["arrow_closethis"]."\">\n";
+		$html.= URLHelper::getLink($oclink)."\" title=\"".$label["arrow_closethis"]."\">\n";
 
 
 	$html.= "	  <img src=\"".$GLOBALS['ASSETS_URL']."images/forum".$icon.".gif\" border=\"0\" align=\"middle\" alt=\"";//style=\"vertical-align:middle;\"

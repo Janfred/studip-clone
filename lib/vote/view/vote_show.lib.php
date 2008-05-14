@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TODO
 /**
  * All needed HTML-code to visualize a vote or a test
  *
@@ -40,12 +41,13 @@ function createFormHeader (&$vote) {
    $html = "";
 
    $html .=
-      "<form action=\"".$GLOBALS['PHP_SELF'];
+      "<form action=\"";
 
+   $unamelink="";
    if (!empty ($GLOBALS["username"]))
-      $html .= "?username=".$GLOBALS["username"];
+      $unamelink = "?username=".$GLOBALS["username"];
 
-   $html .= "#openvote\" method=post>\n".
+   $html .= URLHelper::getLink($unamelink."#openvote")."\" method=post>\n".
       " <input type=\"hidden\" name=\"voteformID\" ".
       "value=\"".$vote->getObjectID (). "\">\n".
       " <input type=\"hidden\" name=\"voteopenID\" ".
@@ -86,8 +88,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
    $changeAnswer = isset ($_POST["changeAnswerButton_x"]) ||
        ($_POST["answerChanged"] && !isset($_POST["answer"]));
 
-   $link  = $GLOBALS["PHP_SELF"];
-   $link .= "?voteopenID=".$vote->getObjectID();
+   $link = "?voteopenID=".$vote->getObjectID();
 
    $link .= ($_GET["openAllVotes"]) ? "&openAllVotes=".YES : "";
 
@@ -173,7 +174,7 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 
       $html .=
 	 "&nbsp;".
-	 "<a href=\"".$link_sort."\">".
+	 "<a href=\"".URLHelper::getLink($link_sort)."\">".
 	 "<img ".
 	 makeButton ( ($sortAnswers ? "nichtsortieren" : "sortieren"), "src").
 	 tooltip ( ($sortAnswers
@@ -206,13 +207,13 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 
        if( $_GET["revealNames"] &&
 	   $GLOBALS["voteopenID"] == $vote->getObjectID ())
-	   $html .= "&nbsp;<a href=\"".$link_reveal."\">".
+	   $html .= "&nbsp;<a href=\"".URLHelper::getLink($link_reveal)."\">".
 	       "<img ".
 	       makeButton ("normaleansicht", "src").
 	       tooltip(_("Zurück zur normalen Ansicht.")).
 	      " border=\"0\"></a>";
        else
-	   $html .= "&nbsp;<a href=\"".$link_reveal."\">".
+	   $html .= "&nbsp;<a href=\"".URLHelper::getLink($link_reveal)."\">".
 	       "<img ".
 	      makeButton ("namenzeigen", "src").
 	      tooltip(_("Zeigen, wer welche Antwort gewählt hat.")).
@@ -230,9 +231,9 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
       if (!$vote->isStopped())
 	 $html .=
 	    "&nbsp;".
-	    "<a href=\"".VOTE_FILE_ADMIN."?page=edit&type=".
+	    "<a href=\"".URLHelper::getLink(VOTE_FILE_ADMIN."?page=edit&type=".
 	    $vote->x_instanceof().
-	    "&voteID=".$vote->getObjectID ()."\">".
+	    "&voteID=".$vote->getObjectID ())."\">".
 	     "<img ".
 	    makeButton ("bearbeiten", "src").
 	    tooltip( $vote->x_instanceof() == INSTANCEOF_TEST
@@ -242,9 +243,9 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
       if (!$vote->isStopped())
       $html .=
 	 "&nbsp;".
-	 "<a href=\"".VOTE_FILE_ADMIN."?page=overview&voteID=".
+	 "<a href=\"".URLHelper::getLink(VOTE_FILE_ADMIN."?page=overview&voteID=".
 	 $vote->getObjectID ().
-	 "&voteaction=stop&referer=1&showrangeID=".$vote->getRangeID()."\">" .
+	 "&voteaction=stop&referer=1&showrangeID=".$vote->getRangeID())."\">" .
 	 "<img  ".
 	 makeButton ("stop", "src").
 	 tooltip( $vote->x_instanceof() == INSTANCEOF_TEST
@@ -254,9 +255,9 @@ function createFormFooter (&$vote, $userID, $perm, $rangeID) {
 
       $html .=
 	 "&nbsp;".
-	 "<a href=\"".VOTE_FILE_ADMIN."?page=overview&voteID=".
+	 "<a href=\"".URLHelper::getLink(VOTE_FILE_ADMIN."?page=overview&voteID=".
 	 $vote->getObjectID ().
-	 "&voteaction=delete_request&referer=1&showrangeID=".$vote->getRangeID()."\">" .
+	 "&voteaction=delete_request&referer=1&showrangeID=".$vote->getRangeID())."\">" .
 	 "<img  ".
 	 makeButton ("loeschen", "src").
 	 tooltip( $vote->x_instanceof() == INSTANCEOF_TEST
@@ -327,11 +328,12 @@ function createOpeningOrClosingArrow ($eval=FALSE) {
       " width=\"100%\">\n";
    $html .= " <tr>\n";
    $html .= "  <td colspan=\"4\" class=\"steel1\" align=\"center\">\n";
-   $html .= "   <a href=\"".$GLOBALS["PHP_SELF"];
+   $html .= "   <a href=\"";
 
    /* If we are on a homepage ---------------------------------------------- */
+   $arrowlink="";
    if (!empty ($GLOBALS["username"])) {
-      $html .= "?username=".$GLOBALS["username"];
+      $arrowlink = "?username=".$GLOBALS["username"];
       $isHomepage = YES;
    }
    /* ---------------------------------------------------------------------- */
@@ -340,8 +342,9 @@ function createOpeningOrClosingArrow ($eval=FALSE) {
 if($eval) {
 	/* Show openAll-button -------------------------------------------------- */
    if (empty ($GLOBALS["openAllEvals"])) {
-      $html .= ($isHomepage) ? "&" : "?";
-      $html .= "openAllEvals=1&openStoppedEvals=1#votetop\">\n";
+      $arrowlink .= ($isHomepage) ? "&" : "?";
+      $arrowlink .= "openAllEvals=1&openStoppedEvals=1#votetop";
+      $html.=URLHelper::getLink($arrowlink)."\">\n";
 
       $html .= "    <img src=\"".VOTE_PATH_PICTURES."forumgraurunt.gif\"".
 	 tooltip(_("Alle Evaluationen öffnen!"))." border=\"0\">\n";
@@ -350,7 +353,7 @@ if($eval) {
 
    /* Show closeAll-buton -------------------------------------------------- */
    else {
-      $html .= "\">\n";
+      $html .= URLHelper::getLink($arrowlink)."\">\n";
 
       $html .= "    <img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\""
 	 . tooltip(_("Alle Evaluationen schließen!"))." border=\"0\">\n";
@@ -359,8 +362,9 @@ if($eval) {
 } else {
    /* Show openAll-button -------------------------------------------------- */
    if (empty ($GLOBALS["openAllVotes"])) {
-      $html .= ($isHomepage) ? "&" : "?";
-      $html .= "openAllVotes=1&openStoppedVotes=1#votetop\">\n";
+      $arrowlink .= ($isHomepage) ? "&" : "?";
+      $arrowlink .= "openAllVotes=1&openStoppedVotes=1#votetop";
+      $html.=URLHelper::getLink($arrowlink)."\">\n";
 
       $html .= "    <img src=\"".VOTE_PATH_PICTURES."forumgraurunt.gif\"".
 	 tooltip(_("Alle Votings und Tests öffnen!"))." border=\"0\">\n";
@@ -369,7 +373,7 @@ if($eval) {
 
    /* Show closeAll-buton -------------------------------------------------- */
    else {
-      $html .= "\">\n";
+      $html .= URLHelper::getLink($arrowlink)."\">\n";
 
       $html .= "    <img src=\"".VOTE_PATH_PICTURES."forumgraurauf.gif\""
 	 . tooltip(_("Alle Votings und Tests schließen!"))." border=\"0\">\n";
@@ -413,22 +417,23 @@ function createVoteHeadline (&$vote, $open, $openID, $evalDB = "", $isHomepage =
    if ($vote->x_instanceof () == INSTANCEOF_EVAL)
      $icon = EVAL_PIC_ICON;
    $icon = "&nbsp;<img src=\"".$icon."\" border=\"0\">";
-   $voteInfo = $number." / <a href=\"about.php?username=".$authorUsername."\">\n"
+   $voteInfo = $number." / <a href=\"".URLHelper::getLink("about.php?username=".$authorUsername)."\">\n"
       . "  <font size=\"-1\" color=\"#333399\">".htmlReady($authorName)."</font>\n"
       . " </a>\n"
       . " <font size=\"-1\">&nbsp;".date ("d.m.Y", $date)."</font>&nbsp;";
 
    if ($open) {
-      $link = $GLOBALS["PHP_SELF"]."?closeVotes=1";
+      $link = "?closeVotes=1";
       if (!empty ($GLOBALS["username"]))
 	 $link .= "&username=".$GLOBALS["username"];
       $link .= "#votetop";
    } else {
-      $link = $GLOBALS["PHP_SELF"]."?voteopenID=".$vote->getObjectID();
+      $link = "?voteopenID=".$vote->getObjectID();
       if (!empty ($GLOBALS["username"]))
 	 $link .= "&username=".$GLOBALS["username"];
       $link .= "#openvote";
    }
+   $link=URLHelper::getLink($link);
 
    $title = "<a href=\"$link\" class=\"tree\" >".$title."</a>";
    if ($vote->getObjectID() == $openID)
@@ -448,11 +453,12 @@ function createVoteHeadline (&$vote, $open, $openID, $evalDB = "", $isHomepage =
  */
 function createStoppedVotesHeadline ($stoppedVotes, $openStoppedVotes,
 				     $stoppedEvals = NULL) {
-   $link = $GLOBALS["PHP_SELF"]."?openStoppedVotes=" .
+   $link = "?openStoppedVotes=" .
        ($openStoppedVotes ? NO : YES);
    if (!empty ($GLOBALS["username"]))
        $link .= "&username=".$GLOBALS["username"];
    $link .= "#stoppedvotes";
+   $link=URLHelper::getLink($link);
 
    return "<tr>"
        . printhead (0, 0, $link, ($openStoppedVotes) ? "open" : "close",
@@ -490,7 +496,7 @@ function createStoppedVoteHeader (&$vote, $evalDB = NULL) {
     $html .= "</b></font>";
     $html .= "</td>";
     $html .= "<td class=toolbar align=\"right\" valign=\"bottom\">\n";
-    $html .= "<a href=\"about.php?username=".$authorUsername."\">\n";
+    $html .= "<a href=\"".URLHelper::getLink("about.php?username=".$authorUsername)."\">\n";
     $html .= "<font size=\"-1\" color=\"#333333\">".htmlReady($authorName)."</font>";
     $html .= "</a>\n";
     $html .= "<font size=\"-1\">&nbsp;".date ("d.m.Y", $date)."</font>&nbsp;";
@@ -762,8 +768,8 @@ function createVoteResult ($vote, $preview = NO) {
 	 if ( ! empty($associatedUsers)) {
 	     usort( $associatedUsers, "sortBySurname" );
 	     foreach ($associatedUsers as $uid) {
-		 $html .= "<a href=\"about.php?username=".
-		     $vote->voteDB->getAuthorUsername($uid)."\">".
+		 $html .= "<a href=\"".URLHelper::getLink("about.php?username=".
+		     $vote->voteDB->getAuthorUsername($uid))."\">".
 		     $vote->voteDB->getAuthorRealname($uid)."</a>".
 		     ", ";
 	     }

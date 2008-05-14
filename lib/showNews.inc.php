@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TODO
 /*
 showNews.inc.php - Anzeigefunktion fuer News
 Copyright (C) 2001 Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
@@ -121,7 +122,7 @@ function show_news($range_id, $show_admin = FALSE, $limit = "", $open,
 			echo"\n<table  border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\" >";
 			echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"".$GLOBALS['ASSETS_URL']."images/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
 			echo"\n<td align = \"right\" class=\"topic\">";
-			printf ("&nbsp;<a href=\"admin_news.php?%s&cmd=new_entry\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\"" . tooltip(_("News einstellen")) . "></a>&nbsp;", $admin_link);
+			echo "&nbsp;<a href=\"".URLHelper::getLink("admin_news.php?$admin_link&cmd=new_entry")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\"" . tooltip(_("News einstellen")) . "></a>&nbsp;";
 			echo"\n</td></tr>";
 			echo "\n<tr><td class=\"steel1\" colspan=\"3\"><blockquote><br /><font size=\"-1\">" . _("Es sind keine aktuellen News vorhanden. Um neue News zu erstellen, klicken Sie auf die Doppelpfeile.") . "<br />&nbsp; </font></blockquote>";
 			echo "\n</td></tr></table>";
@@ -144,7 +145,7 @@ function show_news($range_id, $show_admin = FALSE, $limit = "", $open,
 		if ($show_admin) {
 			$colspan++;
 			echo"\n<td align = \"right\" width=\"1%\" class=\"topic\" nowrap>";
-			printf ("&nbsp;<a href=\"admin_news.php?%s&modus=admin&cmd=show\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\"" . tooltip(_("News bearbeiten")) . "></a>&nbsp;", $admin_link);
+			echo "&nbsp;<a href=\"".URLHelper::getLink("admin_news.php?$admin_link&modus=admin&cmd=show")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\"" . tooltip(_("News bearbeiten")) . "></a>&nbsp;";
 			echo"\n</td>";
 		}
 		echo "\n</tr>\n<tr><td colspan=$colspan>";
@@ -276,7 +277,8 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
 
   $open_or_close = $news_item['open'] ? 'close' : 'open';
   $ajax = PrototypeHelper::remote_function(
-    array('url' => 'dispatch.php/news/'.$open_or_close.'/'.$id));
+    array('url' => URLHelper::getLink('dispatch.php/news/'.$open_or_close.'/'.$id)));
+  $link=URLHelper::getLink($link);
   $link .= '" onClick="' . $ajax . ';return false;';
 
   if ($link)
@@ -314,9 +316,9 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   	  $content.="<br>";
 
   	if ($auth->auth["uid"] == $news_item['user_id'] || $show_admin) {
-  		$edit="<a href=\"admin_news.php?cmd=edit&edit_news=".$id."&$admin_link\">" . makeButton("bearbeiten") . "</a>";
-  		$edit.="&nbsp;<a href=\"?touch_news=".$id."#anker\">" . makeButton("aktualisieren") . "</a>";
-  		$edit.="&nbsp;<a href=\"admin_news.php?cmd=kill&kill_news=".$id."&$admin_link\">" . makeButton("loeschen") . "</a>";
+  		$edit="<a href=\"".URLHelper::getLink("admin_news.php?cmd=edit&edit_news=".$id."&$admin_link")."\">" . makeButton("bearbeiten") . "</a>";
+  		$edit.="&nbsp;<a href=\"".URLHelper::getLink("?touch_news=".$id."#anker")."\">" . makeButton("aktualisieren") . "</a>";
+  		$edit.="&nbsp;<a href=\"".URLHelper::getLink("admin_news.php?cmd=kill&kill_news=".$id."&$admin_link")."\">" . makeButton("loeschen") . "</a>";
   	}
 
   	//
@@ -347,7 +349,7 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   				foreach ($c as $comment) {
   					$comments.="<tr><td>";
   					if ($show_admin) {
-  						$dellink = "?comdel=".$comment[4]."&comdelnews=".$id."#anker";
+  						$dellink = URLHelper::getLink("?comdel=".$comment[4]."&comdelnews=".$id."#anker");
   					} else {
   						$dellink = NULL;
   					}
@@ -358,7 +360,7 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   			}
   			$comments .= "</table>";
   			$content  .= $comments;
-  			$formular="&nbsp;<br>\n<form action=\"#anker\" method=\"POST\">";
+  			$formular="&nbsp;<br>\n<form action=\"".URLHelper::getLink("#anker")."\" method=\"POST\">";
   			$formular.="<input type=hidden name=\"comsubmit\" value=\"".$id."\">";
   			$formular.="<input type=hidden name=\"username\" value=\"$uname\">";
   			$formular.="<p align=\"center\">"._("Geben Sie hier Ihren Kommentar ein!")."</p>";
@@ -376,7 +378,7 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   			$formular.="</div></form><p>&nbsp;</p>";
   			$content.=$formular;
   		} else {
-  			$cmdline = "<p align=center><font size=-1><a href=\"?comopen=".$id.$unamelink."#anker\">"
+  			$cmdline = "<p align=center><font size=-1><a href=\"".URLHelper::getLink("?comopen=".$id.$unamelink."#anker")."\">"
   						.sprintf(_("Kommentare lesen (%s) / Kommentar schreiben"), $numcomments)."</a></font></p>";
   			$content .= $cmdline;
   		}

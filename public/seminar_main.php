@@ -101,7 +101,8 @@ include 'lib/show_dates.inc.php';
 
 $sem = new Seminar($SessSemName[1]);
 
-$sess->register("smain_data");
+URLHelper::bindLinkParam("data",$smain_data);
+
 //Auf und Zuklappen Termine
 if ($dopen)
 	$smain_data["dopen"]=$dopen;
@@ -138,7 +139,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 			echo $data . '<br/>';
 			if ($perm->have_studip_perm('autor', $SessSemName[1])) {
 				echo '<br />';
-				echo sprintf(_("Details zu allen Terminen im %sAblaufplan%s"), '<a href="seminar_main.php?auswahl='.$SessSemName[1].'&redirect_to=dates.php">', '</a>');
+				echo sprintf(_("Details zu allen Terminen im %sAblaufplan%s"), '<a href="'.URLHelper::getLink('?auswahl='.$SessSemName[1].'&redirect_to=dates.php').'">', '</a>');
 				echo '<br />';
 			}
 		} else {
@@ -216,7 +217,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 								<?= _("Sie haben noch nicht die für diese Veranstaltung benötigten Zusatzinformationen eingetragen.")?><br/>
 								<?= _("Um das nochzuholen gehen Sie unter \"TeilnehmerInnen\" auf \"Zusatzangaben\"")?><br/>
 								<?= _("oder klicken sie auf")?>
-								&nbsp;&nbsp;<a href="teilnehmer_aux.php"><img src="<?=$GLOBALS['ASSETS_URL']?>/images/link_intern.gif" border="0" valign="absmiddle">&nbsp;<?= _("Direkt zu den Zusatzangaben") ?></a>
+								&nbsp;&nbsp;<a href="<?=URLHelper::getLink("teilnehmer_aux.php")?>"><img src="<?=$GLOBALS['ASSETS_URL']?>/images/link_intern.gif" border="0" valign="absmiddle">&nbsp;<?= _("Direkt zu den Zusatzangaben") ?></a>
 								</font>
 							</td>
 						</tr>
@@ -251,7 +252,7 @@ if (show_news($auswahl,$show_admin, 0, $smain_data["nopen"], "100%", object_get_
 $start_zeit=time();
 $end_zeit=$start_zeit+1210000;
 $name = rawurlencode($SessSemName[0]);
-($rechte) ? $show_admin="admin_dates.php?range_id=$SessSemName[1]&ebene=sem&new_sem=TRUE" : $show_admin=FALSE;
+($rechte) ? $show_admin=URLHelper::getLink("admin_dates.php?range_id=$SessSemName[1]&ebene=sem&new_sem=TRUE") : $show_admin=FALSE;
 if (show_dates($start_zeit, $end_zeit, $smain_data["dopen"], $auswahl, 0, TRUE, $show_admin))
 		echo"<br>";
 

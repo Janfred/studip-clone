@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TODO
 
 /**
  * This file is used to insert a vote in Stud.IP.
@@ -61,7 +62,6 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    else
       $haveFullPerm = false;
 
-   $debug = "";
    /* ---------------------------------------------------------------------- */
 
    /* Start waiting votes -------------------------------------------------- */
@@ -108,7 +108,6 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    /* ---------------------------------------------------------------------- */
 
    echo "<a name=\"votetop\"></a>";
-   $debug.="rangeid=$rangeID\nuserid=$userID\n";
 
    /* Show the vote box ---------------------------------------------------- */
    $width = ($isHomepage)? "100%" : "70%";
@@ -131,15 +130,6 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    /* create an anchor ---------------------------------------------------- */
    echo "<a name=\"vote\"></a>";
    /* ---------------------------------------------------------------------- */
-
-   $debug .= "<b>_post_</b>\n";
-   foreach ($_POST as $key=>$item ) {
-      $debug .= "$key: $item\n";
-   }
-   $debug .= "<br><b>_get_</b>\n";
-   foreach ($_GET as $key=>$item ) {
-      $debug .= "$key: $item\n";
-   }
 
    /* Javascript function for show-link */
    echo EvalCommon::createEvalShowJS( NO, NO );
@@ -420,7 +410,6 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    echo createBoxFooter ();
    $voteDB->finalize ();
 
-#   echo "<pre>$debug</pre>";
 
 }
 
