@@ -215,15 +215,15 @@ if ($SessSemName["class"]=="inst") {
 } else {
 //
 	$structure["_seminar_main"]=array ('topKat' => "seminar_main", 'name' => _("Kurzinfo"), 'link' => URLHelper::getLink("seminar_main.php"), 'active' => FALSE);
-	$structure["details"]=array ('topKat' => "seminar_main", 'name' => _("Details"), 'link' => "details.php", 'active' => FALSE);
-	$structure["druckansicht_s"]=array ('topKat' => "seminar_main", 'name' => _("Druckansicht"), 'link' => "print_seminar.php", 'target' => "_new", 'active' => FALSE);
+	$structure["details"]=array ('topKat' => "seminar_main", 'name' => _("Details"), 'link' => URLHelper::getLink("details.php"), 'active' => FALSE);
+	$structure["druckansicht_s"]=array ('topKat' => "seminar_main", 'name' => _("Druckansicht"), 'link' => URLHelper::getLink("print_seminar.php"), 'target' => "_new", 'active' => FALSE);
 	if ($rechte)
-		$structure["administration_v"]=array ('topKat' => "seminar_main", 'name' => _("Administration dieser Veranstaltung"), 'link' => "admin_seminare1.php?new_sem=TRUE", 'active' => FALSE);
+		$structure["administration_v"]=array ('topKat' => "seminar_main", 'name' => _("Administration dieser Veranstaltung"), 'link' => URLHelper::getLink("admin_seminare1.php?new_sem=TRUE"), 'active' => FALSE);
 
 	$db->query("SELECT admission_binding FROM seminare WHERE seminar_id = '$SessSemName[1]'");
 	$db->next_record();
 	if (!$db->f("admission_binding") && !$perm->have_studip_perm("tutor",$SessSemName[1]) && $user->id != "nobody")
-		$structure["delete_abo"]=array ('topKat' => "seminar_main", 'name' => _("Austragen aus der Veranstaltung"), 'link' => "meine_seminare.php?auswahl=$SessSemName[1]&cmd=suppose_to_kill", 'isolator' => TRUE);
+		$structure["delete_abo"]=array ('topKat' => "seminar_main", 'name' => _("Austragen aus der Veranstaltung"), 'link' => URLHelper::getLink("meine_seminare.php?auswahl=$SessSemName[1]&cmd=suppose_to_kill"), 'isolator' => TRUE);
 }
 //
 
