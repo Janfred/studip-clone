@@ -34,6 +34,7 @@ require('lib/phplib/smtp.inc');             /* Required, contains email function
 
 /* Additional require statements go before this line */
 
+require('init_config_arrays.inc.php');     /* Required, initializes your local configuration. */
 require('config_local.inc.php');     /* Required, contains your local configuration. */
 
 require('lib/phplib/page4.inc');      /* Required, contains the page management functions. */

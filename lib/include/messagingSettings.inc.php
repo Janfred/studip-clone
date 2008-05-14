@@ -45,6 +45,7 @@ $user_cfg=new UserConfig();
 check_messaging_default();
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
+$reset_txt = '';
 
 ## ACTION ##
 

@@ -54,6 +54,8 @@ require_once($RELATIVE_PATH_CALENDAR.'/lib/SeminarEvent.class.php');
 // -- wir sind jetzt definitiv in keinem Seminar, also... --
 closeObject();
 
+$atime = (int)$_REQUEST['atime'];
+
 // use current timestamp if no timestamp is given
 if (!$atime && !$termin_id)
 	$atime = time();

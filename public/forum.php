@@ -23,20 +23,27 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
+$txt = $message = $count = $verschoben = '';
+$flatviewstartposting = (int)$flatviewstartposting;
+(isset($view) && in_array($view, array('mixed','tree','neue','flat','search','flatfolder'))) or $view = '';
+(isset($open) && preg_match('/[a-z0-9]{1,32}/', $open)) or $open = '';
 
 if ($forumsend && $forumsend!="bla") {
 	$HELP_KEYWORD="Basis.ForumEinstellungen";
 	$CURRENT_PAGE = _("Einstellungen des Forums anpassen");
+} elseif(isset($neuesthema)) {
+	$HELP_KEYWORD="Basis.ForumBeteiligen";
+	$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Forum");
 } else {
 	switch($view) {
-		case "neu": 
+		case "neue": 
 			$HELP_KEYWORD="Basis.ForumNeu"; 
 			break;
-		case "letzte": 
+		case "flat": 
 			$HELP_KEYWORD="Basis.Forumlast4"; 
 			break;
-		case "neuesthema": 
-			$HELP_KEYWORD="Basis.ForumBeteiligen"; 
+		case "search": 
+			$HELP_KEYWORD="Basis.ForumSuche"; 
 			break;
 		default:
 			$HELP_KEYWORD="Basis.Forum";

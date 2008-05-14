@@ -32,7 +32,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once ('config.inc.php');
 require_once ('lib/visual.inc.php');
-
+$atime = (int)$_REQUEST['atime'];
 $element_switch = (isset($_REQUEST['element_switch']) ? $_REQUEST['element_switch'] : 0); // Wert fr Auswahl der Feldbezeichner
 $element_depending = (isset($_REQUEST['element_depending'])
 		&& preg_match('!^[0-9a-z_-]{2,40}$!i', $_REQUEST['element_depending'])) ? $_REQUEST['element_depending'] : '';

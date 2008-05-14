@@ -204,6 +204,7 @@ function object_check_user ($object_id, $flag) {
 
 function object_add_rate ($object_id, $rate) {
 	global $user;
+	$rate = (int)$rate;
 	if (object_check_user($object_id, "rate") == FALSE) {
 		$now = time();
 		$db=new DB_Seminar;
