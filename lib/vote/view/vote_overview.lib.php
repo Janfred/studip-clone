@@ -748,13 +748,12 @@ function makeArrow($timestmp,$open,$displayclass,$mode,$voteID = NULL){
 
 	$html = "	 <td class=\"".$displayclass."\" nowrap width=\"10\">\n";
 
-	$html.= "	  <a href=\""
-	$oclink=VOTE_FILE_ADMIN."?page=overview&showrangeID=$showrangeID";
+	$oclink = VOTE_FILE_ADMIN."?page=overview&showrangeID=$showrangeID";
 	if ($open == "closed")
-		$html.= URLHelper::getLink($oclink."&openID=".$voteID."#openvote")
+		$html.= "         <a href=\"".URLHelper::getLink($oclink."&openID=".$voteID."#openvote")
 			 .  "\" title=\"".$label["arrow_openthis"]."\">\n";
 	else
-		$html.= URLHelper::getLink($oclink)."\" title=\"".$label["arrow_closethis"]."\">\n";
+		$html.= "         <a href=\"".URLHelper::getLink($oclink)."\" title=\"".$label["arrow_closethis"]."\">\n";
 
 
 	$html.= "	  <img src=\"".$GLOBALS['ASSETS_URL']."images/forum".$icon.".gif\" border=\"0\" align=\"middle\" alt=\"";//style=\"vertical-align:middle;\"
