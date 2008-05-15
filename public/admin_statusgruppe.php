@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TODO
 /*
 admin_statusgruppe.php - Statusgruppen-Verwaltung von Stud.IP.
 Copyright (C) 2008 Till Glöggler <tgloeggl@uos.de>

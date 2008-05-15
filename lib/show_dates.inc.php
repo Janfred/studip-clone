@@ -1,5 +1,5 @@
 <?
-# Lifter001: TODO
+# Lifter001: DONE
 /*
 show_dates.inc.php enthält Funktionen zum Anzeigen von Terminen
 Copyright (C) 2000 André Noack <anoack@mcis.de>, Cornelis Kater <ckater@gwdg.de>,

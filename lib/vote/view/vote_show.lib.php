@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO
+# Lifter001: DONE
 /**
  * All needed HTML-code to visualize a vote or a test
  *

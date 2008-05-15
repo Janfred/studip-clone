@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO - in progress (not all links use URLHelper yet)
+# Lifter001: DONE
 // vim: noexpandtab
 /*
 seminar_main.php - Die Eingangs- und Uebersichtsseite fuer ein Seminar

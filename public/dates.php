@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TODO
 /**
 * dates.php
 *
@@ -40,9 +41,12 @@ include ("lib/seminar_open.php"); // initialise Stud.IP-Session
 $id = $SessSemName[1];
 $issue_open = array();
 
-$sess->register('showDatesFilter');
-$sess->register('raumzeitFilter');
-$sess->register('rzSeminar');
+URLHelper::bindLinkParam('dates_data',$showDatesFilter);
+URLHelper::bindLinkParam('raumzeit_data',$raumzeitFilter);
+URLHelper::bindLinkParam('rzsem_data',$rzSeminar);
+#$sess->register('showDatesFilter');
+#$sess->register('raumzeitFilter');
+#$sess->register('rzSeminar');
 
 require_once ('lib/classes/Seminar.class.php');
 require_once ('lib/datei.inc.php');
@@ -113,7 +117,7 @@ if ($cmd == 'openAll') $openAll = true;
 				<? if (is_array($termine) && sizeof($termine) > 0) : ?>
 				<TR>
 					<TD class="steelgraulight" colspan="10" height="24" align="center">
-						<A href="<?=$PHP_SELF?>?cmd=<?=($openAll) ? 'close' : 'open'?>All">
+						<A href="<?=URLHelper::getLink('?cmd='.(($openAll) ? 'close' : 'open'))?>All">
 							<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/<?=($openAll) ? 'close' : 'open'?>_all.gif" border="0" <?=tooltip(sprintf("Alle Termine %sklappen", ($openAll) ? 'zu' : 'auf'))?>>
 						</A>
 					</TD>
@@ -156,7 +160,7 @@ if ($cmd == 'openAll') $openAll = true;
     					}*/
     					
     					//calendar jump
-    					$tpl['calendar'] = "&nbsp;<a href=\"calendar.php?cmd=showweek&atime=" . $singledate->getStartTime();
+    					$tpl['calendar'] = "&nbsp;<a href=\"".URLHelper::getLink("calendar.php?cmd=showweek&atime=" . $singledate->getStartTime());
     					$tpl['calendar'] .= "\"><img style=\"vertical-align:bottom\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" ";
     					$tpl['calendar'] .= tooltip(sprintf(_("Zum %s in den persönlichen Terminkalender springen"), date("m.d", $singledate->getStartTime()))); 
     					$tpl['calendar'] .= ' border="0"></a>';

@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO
+# Lifter001: DONE
 /*
 showNews.inc.php - Anzeigefunktion fuer News
 Copyright (C) 2001 Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>

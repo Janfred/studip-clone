@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TODO
 /**
 * admin_visibility.php - Sichtbarkeits-Administration von Stud.IP.
 * Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, data-quest <info@data-quest.de>, (C) 2003 Tobias Thelen <tthelen@uni-osnabrueck.de>

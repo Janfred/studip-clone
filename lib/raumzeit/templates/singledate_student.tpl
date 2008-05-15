@@ -2,7 +2,7 @@
 <TR>
 	<TD width="1%" align="left" valign="top" bgcolor="<?=$tpl['aging_color']?>" class="<?=$tpl['class']?><?=($issue_open[$tpl['sd_id']] || $tpl['openall']) ? '3' : '2'?>" nowrap>
 		<A name="<?=$tpl['sd_id']?>" />
-		<A href="<?=$PHP_SELF?>?cmd=<?=($issue_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
+		<A href="<?=URLHelper::getLink("?cmd=".(($issue_open[$tpl['sd_id']]) ? 'close' : 'open')."&open_close_id=".$tpl['sd_id']."#".$tpl['sd_id'])?>">
 			&nbsp;<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($issue_open[$tpl['sd_id']] || $tpl['openall']) ? 'runt' : ''?>2.gif" border="0" align="abstop">
 		</A>
 	</TD>
@@ -12,7 +12,8 @@
 	</TD>
 
 	<td nowrap class="<?=$tpl['class']?>" valign="bottom">
-		<a class="tree" href="<?=$PHP_SELF?>?cmd=<?=($issue_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
+		<A class="tree" href="<?=URLHelper::getLink("?cmd=".(($issue_open[$tpl['sd_id']]) ? 'close' : 'open')."&open_close_id=".$tpl['sd_id']."#".$tpl['sd_id'])?>">
+			&nbsp;<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($issue_open[$tpl['sd_id']] || $tpl['openall']) ? 'runt' : ''?>2.gif" border="0" align="abstop">
 			<font size="-1">
 				<?=$tpl['date']?>&nbsp;&nbsp;&nbsp;&nbsp;
 			</font>
@@ -35,7 +36,7 @@
 	<? if ($tpl['forumCount'] > 0) :
 			if ($tpl['forumCount'] == 1) $txt = _("%s Foreneintrag vorhanden"); else $txt = _("%s Foreinträge vorhanden");
 	?>
-		<a href="forum.php?open=<?=$tpl['issue_id']?>&treeviewstartposting=&view=#anker">
+		<a href="<?=URLHelper::getLink("forum.php?open=".$tpl['issue_id']."&treeviewstartposting=&view=#anker")?>">
 			<img src="<?=$GLOBALS['ASSETS_URL']?>images/icon-posting.gif" border="0" align="absbottom" <?=tooltip(sprintf($txt, $tpl['forumCount']))?>>
 		</a>
 	<? endif; ?>
@@ -43,7 +44,7 @@
 
 	<td width="1%" class="<?=$tpl['class']?>" valign="bottom" nowrap="nowrap">
 	<? if ($tpl['fileCountAll'] > 0) : ?>
-		<a href="folder.php?open=<?=$tpl['folder_id']?>&cmd=tree#anker">
+		<a href="<?=URLHelper::getLink("folder.php?open=".$tpl['folder_id']."&cmd=tree#anker")?>">
 			<img src="<?=$GLOBALS['ASSETS_URL']?>images/icon-disc.gif" align="absmiddle" border="0" <?=tooltip(sprintf(_("%s Dokument(e) vorhanden"), $tpl['fileCountAll']))?>><?if ($tpl['fileCountAll'] > 1) :
 				for ($i = 1; ($i < $tpl['fileCountAll'] && $i < 5); $i++) :
 					?><img src="<?=$GLOBALS['ASSETS_URL']?>/images/file1b.gif" align="absmiddle" border="0" <?=tooltip(sprintf(_("%s Dokument(e) vorhanden"), $tpl['fileCountAll']))?>><?
@@ -97,7 +98,7 @@
 	</td>
 
 	<td nowrap class="steelred" valign="bottom">
-		<a class="tree" href="<?=$PHP_SELF?>?cmd=<?=($issue_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
+		<a class="tree" href="<?=URLHelper::getLink("?cmd=".(($issue_open[$tpl['sd_id']]) ? 'close' : 'open')."&open_close_id=".$tpl['sd_id']."#".$tpl['sd_id'])?>">
 			<font size="-1">
 				<?=$tpl['date']?>&nbsp;&nbsp;&nbsp;&nbsp;
 			</font>

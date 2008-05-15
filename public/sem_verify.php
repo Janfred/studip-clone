@@ -1,4 +1,5 @@
 <?
+# Lifter001: DONE - nothing to do
 /**
 * sem_verify.php
 *

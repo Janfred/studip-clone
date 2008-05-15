@@ -245,11 +245,11 @@ if ($modules["forum"]) {
 }
 //
 if (($SessSemName["class"]=="sem") && ($modules["schedule"])){
-	$structure["_dates"]=array ('topKat' => "dates", 'name' => _("alle Termine"), 'link' => "dates.php?cmd=setType&type=all", 'active' => FALSE);
-	$structure["sitzung"]=array ('topKat' => "dates", 'name' => _("Sitzungstermine"), 'link' => "dates.php?cmd=setType&type=1", 'active' => FALSE);
-	$structure["andere_t"]=array ('topKat' => "dates", 'name' => _("andere Termine"), 'link' => "dates.php?cmd=setType&type=other", 'active' => FALSE);
+	$structure["_dates"]=array ('topKat' => "dates", 'name' => _("alle Termine"), 'link' => URLHelper::getLink("dates.php?cmd=setType&type=all"), 'active' => FALSE);
+	$structure["sitzung"]=array ('topKat' => "dates", 'name' => _("Sitzungstermine"), 'link' => URLHelper::getLink("dates.php?cmd=setType&type=1"), 'active' => FALSE);
+	$structure["andere_t"]=array ('topKat' => "dates", 'name' => _("andere Termine"), 'link' => URLHelper::getLink("dates.php?cmd=setType&type=other"), 'active' => FALSE);
 	if ($rechte)
-		$structure["themen"]=array ('topKat' => "dates", 'name' => _("Ablaufplan bearbeiten"), 'link' => "themen.php?seminar_id=".$SessSemName[1], 'active' => FALSE);
+		$structure["themen"]=array ('topKat' => "dates", 'name' => _("Ablaufplan bearbeiten"), 'link' => URLHelper::getLink("themen.php?seminar_id=".$SessSemName[1]), 'active' => FALSE);
 }
 //
 if ($modules["documents"]) {
