@@ -20,6 +20,8 @@ page_open(array('sess' => 'Seminar_Session',
 require_once 'lib/seminar_open.php';
 require_once 'lib/functions.php';
 
+unregister_globals();
+
 try {
 
   # get plugin class from request

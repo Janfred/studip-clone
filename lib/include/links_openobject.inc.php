@@ -52,7 +52,6 @@ global
 	$SEM_CLASS,
 	$SEM_TYPE,
 	$SemUserStatus,
-	$SessSemName,
 	$_show_scm,
 	$supportdb_data,
 	$SUPPORT_ENABLE,
@@ -60,8 +59,9 @@ global
 	$user,
 	$view;
 
-
 //only if there's an open object
+
+$SessSemName = $_SESSION['SessSemName'];
 
 if (isset($SessSemName) && $SessSemName[0] != "") {
 

@@ -46,15 +46,15 @@ class Permission {
 	}
 
 	function hasTeacherPermissionInPOI(){
-		return $this->perm->have_studip_perm("dozent",$GLOBALS["SessSemName"][1],$this->userid);
+		return $this->perm->have_studip_perm("dozent",$_SESSION["SessSemName"][1],$this->userid);
 	}
 
 	function hasTutorPermissionInPOI(){
-		return $this->perm->have_studip_perm("tutor",$GLOBALS["SessSemName"][1],$this->userid);
+		return $this->perm->have_studip_perm("tutor",$_SESSION["SessSemName"][1],$this->userid);
 	}
 
 	function hasStudentPermissionInPOI(){
-		return $this->perm->have_studip_perm("autor",$GLOBALS["SessSemName"][1],$this->userid);
+		return $this->perm->have_studip_perm("autor",$_SESSION["SessSemName"][1],$this->userid);
 	}
 }
 ?>

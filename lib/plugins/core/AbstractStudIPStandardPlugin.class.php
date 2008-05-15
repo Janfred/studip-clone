@@ -39,9 +39,9 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin{
 
 	function getId() {
 		if ($this->id === UNKNOWN_ID) {
-			$this->id = $GLOBALS['SessSemName'][1];
+			$this->id = $_SESSION['SessSemName'][1];
 		} else {
-			$this->id = trim(str_replace($GLOBALS["SessSemName"]["class"],
+			$this->id = trim(str_replace($_SESSION["SessSemName"]["class"],
 			                             '', $this->id));
 	 	}
 		return $this->id;
@@ -115,7 +115,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin{
 	 */
 	function display_action($action) {
 		$GLOBALS['CURRENT_PAGE'] =
-			$GLOBALS['SessSemName']['header_line'] . ' - ' . $this->getDisplayTitle();
+			$_SESSION['SessSemName']['header_line'] . ' - ' . $this->getDisplayTitle();
 
 		include 'lib/include/html_head.inc.php';
 		include 'lib/include/header.php';
