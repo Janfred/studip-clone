@@ -343,7 +343,7 @@ class HeaderController {
 	}
 
 	function getHeaderItemHomepage(){
-		global $user, $perm, $homepage_cache_own, $LastLogin;
+		global $user, $perm, $homepage_cache_own, $LastLogin, $auth;
 		if (is_object($user) && $perm->have_perm("autor")) {
 			$db = new DB_Seminar();
 			if ($homepage_cache_own) $time = $homepage_cache_own;
@@ -365,6 +365,7 @@ class HeaderController {
 				$picture = "einst2";
 				$hp_link .= "?guestbook=open#guest";
 			}
+			$hp_txt .= sprintf (" (%s, %s)", $auth->auth["uname"], $auth->auth["perm"]); 
 			$ret['text'] = _("Homepage");
 			$ret['link'] = $hp_link;
 			$ret['info'] = $hp_txt;
