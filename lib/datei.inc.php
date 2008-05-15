@@ -1402,7 +1402,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			$chdate = (($db->f("chdate")) ? $db->f("chdate") : $db->f("mkdate"));
 
 			//Zusatzangaben erstellen
-			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".htmlReady($db->f("fullname"))."</font></a>&nbsp;".date("d.m.Y - H:i",$chdate);
+			$zusatz="<a href=\"".URLHelper::getLink("about.php?username=".$db->f("username"))."\"><font color=\"#333399\">".htmlReady($db->f("fullname"))."</font></a>&nbsp;".date("d.m.Y - H:i",$chdate);
 
 
 			if (object_get_visit($SessSemName[1], "documents") < $chdate)
@@ -1623,7 +1623,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						}
 					}
 					//Zusatzangaben erstellen
-					$zusatz="<a href=\"about.php?username=".$db3->f("username")."\"><font color=\"#333399\">".htmlReady($db3->f("fullname"))."</font></a>&nbsp;".date("d.m.Y - H:i", $chdate);
+					$zusatz="<a href=\"".URLHelper::getLink("about.php?username=".$db3->f("username"))."\"><font color=\"#333399\">".htmlReady($db3->f("fullname"))."</font></a>&nbsp;".date("d.m.Y - H:i", $chdate);
 
 					?><td class="blank" width="*">&nbsp;</td></tr></table><table width="100%" cellpadding=0 cellspacing=0 border=0><tr><?
 

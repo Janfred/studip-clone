@@ -192,10 +192,10 @@ if ($rechte || $owner || $create_folder_perm) {
 		$db->query("SELECT filename, ". $_fullname_sql['full'] ." AS fullname, username FROM dokumente LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE dokument_id ='".$open_id."'");
 		$db->next_record();
 		if (getLinkPath($open_id)) {
-			$msg="info§" . sprintf(_("Wollen sie die Verlinkung zu <b>%s</b> von %s wirklich löschen?"), htmlReady($db->f("filename")), "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
+			$msg="info§" . sprintf(_("Wollen sie die Verlinkung zu <b>%s</b> von %s wirklich löschen?"), htmlReady($db->f("filename")), "<a href=\"".URLHelper::getLink("about.php?username=".$db->f("username"))."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
 			$msg.="<b><a href=\"".URLHelper::getLink("?open=".$open_id."_rl_")."\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"".URLHelper::getLink('')."\">" . makeButton("nein", "img") . "</a>§";
 		} else {
-			$msg="info§" . sprintf(_("Wollen sie die Datei <b>%s</b> von %s wirklich löschen?"), htmlReady($db->f("filename")), "<a href=\"about.php?username=".$db->f("username")."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
+			$msg="info§" . sprintf(_("Wollen sie die Datei <b>%s</b> von %s wirklich löschen?"), htmlReady($db->f("filename")), "<a href=\"".URLHelper::getLink("about.php?username=".$db->f("username"))."\">".htmlReady($db->f("fullname"))."</a>") . "<br>";
 			$msg.="<b><a href=\"".URLHelper::getLink("?open=".$open_id."_rm_")."\">" . makeButton("ja2", "img") . "</a>&nbsp;&nbsp; <a href=\"".URLHelper::getLink('')."\">" . makeButton("nein", "img") . "</a>§";
 		}
 	}

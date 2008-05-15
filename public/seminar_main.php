@@ -175,9 +175,8 @@ $quarter_year = 60 * 60 * 24 * 90;
 	$i=0;
 	while ($db->next_record()) {
 		if ($i)
-			print( ", <a href = about.php?username=" . $db->f("username") . ">");
-		else
-			print( "<a href = about.php?username=" . $db->f("username") . ">");
+			print(", ");
+                print("<a href=\"".URLHelper::getLink("about.php?username=".$db->f("username"))."\">");
 		if ($db->affected_rows() > 10)
 			print(htmlReady($db->f("shortname")) ."</a>");
 		else

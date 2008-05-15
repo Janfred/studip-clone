@@ -136,7 +136,7 @@ if (!(have_sem_write_perm()) OR $pass==TRUE) {
 		} else {
 			$help_url="help/index.php?help_page=ix_forum6.htm";
 		}
-		echo "&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"_blank\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"".$help_url."\" target=\"_blank\"><font size=\"-1\">"._("Formatierungshilfen")."</a>";
+		echo "&nbsp;&nbsp;<a href=\"".URLHelper::getLink("show_smiley.php")."\" target=\"_blank\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"".$help_url."\" target=\"_blank\"><font size=\"-1\">"._("Formatierungshilfen")."</a>";
 		echo "</form>";
 		
 	} else {

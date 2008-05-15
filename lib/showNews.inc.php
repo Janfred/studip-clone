@@ -54,7 +54,7 @@ function commentbox($num, $authorname, $authoruname, $date, $dellink, $content) 
 	$out[].="<tr style=\"background:#ffffcc\">";
 	$out[].="<td align=left style=\"border-bottom: 1px black dotted\">";
 	$out[].="<font size=-1>#$num - ";
-	$out[].="<a href=\"about.php?username=$authoruname\">".htmlReady($authorname)."</a> ";
+	$out[].="<a href=\"".URLHelper::getLink("about.php?username=$authoruname")."\">".htmlReady($authorname)."</a> ";
 	$out[].=sprintf(_("hat am %s geschrieben:"),$date);
 	$out[].="</font>";
 	$out[].="</td>";
@@ -264,7 +264,7 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   $db2->next_record();
 
   $link .= "&username=".$db2->f("username") . "#anker";
-  $zusatz="<a href=\"about.php?username=".$db2->f("username")."\"><font size=-1 color=\"#333399\">".htmlReady($db2->f("fullname"))."</font></a><font size=-1>&nbsp;".date("d.m.Y",$news_item['date'])." | <font color=\"#005500\">".object_return_views($id)."<font color=\"black\"> |</font>";
+  $zusatz="<a href=\"".URLHelper::getLink("about.php?username=".$db2->f("username"))."\"><font size=-1 color=\"#333399\">".htmlReady($db2->f("fullname"))."</font></a><font size=-1>&nbsp;".date("d.m.Y",$news_item['date'])." | <font color=\"#005500\">".object_return_views($id)."<font color=\"black\"> |</font>";
 
   $unamelink = '&username='.$db2->f('username');
   $uname = $db2->f('username');
@@ -374,7 +374,7 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   			} else {
   				$help_url="help/index.php?help_page=ix_forum6.htm";
   			}
-  			$formular.="&nbsp;&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"_blank\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;<a href=\"".$help_url."\" target=\"_blank\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br><br>";
+  			$formular.="&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("show_smiley.php")."\" target=\"_blank\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;<a href=\"".$help_url."\" target=\"_blank\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br><br>";
   			$formular.="</div></form><p>&nbsp;</p>";
   			$content.=$formular;
   		} else {

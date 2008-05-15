@@ -101,7 +101,7 @@ function scm_seminar_footer($table) {
 function scm_change_header($table, $titel, $user_id, $chdate) {
 	$titel;
 	$zusatz = "<font size=-1>";
-	$zusatz .= sprintf(_("Zuletzt ge&auml;ndert von %s am %s"), "</font><a href=\"about.php?username=".get_username($user_id)."\"><font size=-1 color=\"#333399\">".get_fullname ($user_id,'full',true)."</font></a><font size=-1>", date("d.m.Y, H:i",$chdate)."<font size=-1>&nbsp;"."</font>");
+	$zusatz .= sprintf(_("Zuletzt ge&auml;ndert von %s am %s"), "</font><a href=\"".URLHelper::getLink("about.php?username=".get_username($user_id))."\"><font size=-1 color=\"#333399\">".get_fullname ($user_id,'full',true)."</font></a><font size=-1>", date("d.m.Y, H:i",$chdate)."<font size=-1>&nbsp;"."</font>");
 	$icon="&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/cont_cont.gif\">";
 
 	echo $table->openRow();
@@ -213,7 +213,7 @@ function scm_edit_content($range_id, $scm_id) {
 
 	$edit="<input style=\"vertical-align: middle;\" type=\"IMAGE\" name=\"send_scm\" value=\"&auml;nderungen vornehmen\" border=0 " . makeButton("uebernehmen", "src") . ">";
 	$edit.="&nbsp;<a href=\"".URLHelper::getLink('')."\">". makeButton("abbrechen") . "</a>";
-	$edit .= "<font size=\"-1\">&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"_blank\">";
+	$edit .= "<font size=\"-1\">&nbsp;&nbsp;<a href=\"".URLHelper::getLink("show_smiley.php")."\" target=\"_blank\">";
 
 	if (get_config("EXTERNAL_HELP")) {
 		$help_url=format_help_url("Basis.VerschiedenesFormat");
