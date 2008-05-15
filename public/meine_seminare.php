@@ -519,7 +519,13 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					print ("</font>");
 				print ("</a>");
 				if ($values["visible"]==0) {
-					echo "<font size=-1>&nbsp;"._("(versteckt)")."<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Versteckte Veranstaltungen können über die Suchfunktionen nicht gefunden werden. Um die Veranstaltung sichtbar zu machen, wenden Sie sich an eineN der zuständigen AdministratorInnen."),TRUE,TRUE)." border=0></font>";
+					$infotext=_("Versteckte Veranstaltungen können über die Suchfunktionen nicht gefunden werden.");
+					if (get_config('ALLOW_DOZENT_VISIBILITY')) {					
+						$infotext.=" "._("Um die Veranstaltung sichtbar zu machen, wählen Sie den Punkt \"Sichtbarkeit\" im Administrationsbereich der Veranstaltung.");
+					} else {
+						$infotext.=" "._("Um die Veranstaltung sichtbar zu machen, wenden Sie sich an eineN der zuständigen AdministratorInnen.");
+					}
+					echo "<font size=-1>&nbsp;"._("(versteckt)")."<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip($infotext,TRUE,TRUE)." border=0></font>";
 				}
 				print "</td>";
 				// Content-field
