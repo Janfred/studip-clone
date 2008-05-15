@@ -147,6 +147,10 @@ class Seminar {
 		return $this->name;
 	}
 
+	function isVisible() {
+		return $this->visible;
+	}
+
 	function getInstitutId() {
 		return $this->institut_id;
 	}

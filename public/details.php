@@ -681,6 +681,7 @@ print_infobox ($infobox,"contract.jpg");
 					<?=_("Veranstaltungsgruppe:")?>&nbsp;<?=htmlReady($group_obj->getValue('name'))?>
 					<ol>
 					<?foreach($group_obj->getMemberIds() as $m_id){
+						if (!$group_obj->members[$m_id]->isVisible()) continue; // hide invisible courses
 						$target = $perm->have_studip_perm("autor", $m_id) ? 'seminar_main.php?auswahl=' : 'details.php?sem_id=';
 						$target .= $m_id;
 						?>
