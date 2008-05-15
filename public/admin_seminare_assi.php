@@ -4078,7 +4078,7 @@ if ($level == 8)
 							} else {
 								$help_url="help/index.php?help_page=ix_forum6.htm";
 							}
-							print "<br /><br /><a target=\"new\" href=\"".$help_url."\">"._("Hilfe zur Formatierung von Texten")."</a>";
+							print "<br /><br /><a target=\"_blank\" href=\"".$help_url."\">"._("Hilfe zur Formatierung von Texten")."</a>";
 							print "<br /><br />"._("Um eine geordnete Literaturliste zu erstellen, benutzen Sie bitte die Literaturverwaltung.")."</a></font>";
 							?>
 							<br />

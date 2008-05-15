@@ -791,7 +791,7 @@ function validate_upload($the_file) {
 						} else {
 							$help_url="help/index.php?referrer_page=datei.inc.php&doc=TRUE";
 						}
-						$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"".$help_url."\">", "</a>") . "§";
+						$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_blank\" href=\"".$help_url."\">", "</a>") . "§";
 					}
 				}
 			} else {
@@ -816,7 +816,7 @@ function validate_upload($the_file) {
 						} else {
 							$help_url="help/index.php?referrer_page=datei.inc.php&doc=TRUE";
 						}
-						$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"".$help_url."\">", "</a>") . "§";
+						$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_blank\" href=\"".$help_url."\">", "</a>") . "§";
 					}
 					}
 				}
@@ -844,7 +844,7 @@ function validate_upload($the_file) {
 						} else {
 							$help_url="help/index.php?referrer_page=datei.inc.php&doc=TRUE";
 						}
-						$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"".$help_url."\">", "</a>") . "§";
+						$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_blank\" href=\"".$help_url."\">", "</a>") . "§";
 					}
 					}
 				}
@@ -870,7 +870,7 @@ function validate_upload($the_file) {
 						} else {
 							$help_url="help/index.php?referrer_page=datei.inc.php&doc=TRUE";
 						}
-						$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_new\" href=\"".$help_url."\">", "</a>") . "§";
+						$emsg.= "info§" . sprintf(_("%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."), "<a target=\"_blank\" href=\"".$help_url."\">", "</a>") . "§";
 					}
 					}
 				}

@@ -111,7 +111,7 @@ function editarea($forumposting) {
 	} else {
 		$help_url="help/index.php?help_page=ix_forum6.htm";
 	}
-	$zusatz .= "&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"".$help_url."\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a>";
+	$zusatz .= "&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"_blank\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"".$help_url."\" target=\"_blank\"><font size=\"-1\">"._("Formatierungshilfen")."</a>";
 	if ($forumposting["writestatus"] == "new") { // es ist ein neuer Beitrag, der Autor sieht dann:
 		$description = _("Ihr Beitrag");
 	} else {
@@ -1200,7 +1200,7 @@ function printposting ($forumposting) {
 	// Antwort-Pfeil
 
 		if (!(have_sem_write_perm()) && !$delete_id)
-			$forumhead[] = "<a href=\"".URLHelper::getLink("write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"])."\" target=\"_new\"><img src=\"".$GLOBALS['ASSETS_URL']."images/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>";
+			$forumhead[] = "<a href=\"".URLHelper::getLink("write_topic.php?write=1&root_id=".$forumposting["rootid"]."&topic_id=".$forumposting["id"])."\" target=\"_blank\"><img src=\"".$GLOBALS['ASSETS_URL']."images/antwortnew.gif\" border=0 " . tooltip(_("Hier klicken um in einem neuen Fenster zu antworten")) . "></a>";
 
   		$zusatz = ForumParseZusatz($forumhead);
 

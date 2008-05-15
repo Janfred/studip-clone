@@ -374,7 +374,7 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   			} else {
   				$help_url="help/index.php?help_page=ix_forum6.htm";
   			}
-  			$formular.="&nbsp;&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;<a href=\"".$help_url."\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br><br>";
+  			$formular.="&nbsp;&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"_blank\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;<a href=\"".$help_url."\" target=\"_blank\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br><br>";
   			$formular.="</div></form><p>&nbsp;</p>";
   			$content.=$formular;
   		} else {

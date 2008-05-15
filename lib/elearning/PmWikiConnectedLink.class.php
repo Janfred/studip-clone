@@ -70,7 +70,7 @@ class PmWikiConnectedLink extends ConnectedLink
 		$token = new Token($GLOBALS['auth']->auth['uid']);
 
 		ob_start(); ?>
-		<form method='post' target='_new' 
+		<form method='post' target='_blank' 
 					action='<?=$connected_cms[$this->cms_type]->content_module[$current_module]->link?>' >
 
 			<input type='hidden' 	name='authid' 			value='<?= $GLOBALS['auth']->auth['uname'] ?>' />

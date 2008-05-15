@@ -144,7 +144,7 @@ printf(_("Weitere Informationen finden sie auf %s, %s und %s."), '<a target="_bl
 ?>
 		</td>
 		<td class="blank" align="left" valign="top">
-			<a target="_new" href="http://www.studip.de"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/studipanim.gif" border="0"></a>
+			<a target="_blank" href="http://www.studip.de"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/studipanim.gif" border="0"></a>
 		</td>
 	</tr>
 	<tr>
@@ -171,7 +171,7 @@ printf(_("Weitere Informationen finden sie auf %s, %s und %s."), '<a target="_bl
 			&nbsp; &nbsp; <?=_("Sie erreichen uns auch &uuml;ber folgende <b>Mailinglisten:")?></b><br>
 			<blockquote>
 			<span style="font-size:smaller;"><b><?=_("Nutzer-Anfragen")?></b>, E-Mail: <a href="mailto:studip-users@lists.sourceforge.net?subject=<?=$mailsub ?>">studip-users@lists.sourceforge.net</a>: <?=_("Fragen, Anregungen und Vorschl&auml;ge an die Entwickler - bitte <u>keine</u> Passwort Anfragen!")?><br />
-			<b><?=_("News-Mailingsliste")?></b>, E-Mail: <a target="new" href="http://lists.sourceforge.net/mailman/listinfo/studip-news">studip-news@lists.sourceforge.net</a>: <?=_("News rund um Stud.IP (Eintragung notwendig)")?></span><br />
+			<b><?=_("News-Mailingsliste")?></b>, E-Mail: <a target="_blank" href="http://lists.sourceforge.net/mailman/listinfo/studip-news">studip-news@lists.sourceforge.net</a>: <?=_("News rund um Stud.IP (Eintragung notwendig)")?></span><br />
 			<br>
 			<? printf(_("Wir laden alle Entwickler, Betreiber und Nutzer von Stud.IP ein, sich auf dem Developer-Server %s an den Diskussionen rund um die Weiterentwicklung und Nutzung der Plattform zu beteiligen."), '<a href="http://develop.studip.de" target="_blank">http://develop.studip.de</a>')?>
 			</blockquote>
@@ -191,19 +191,19 @@ printf(_("Weitere Informationen finden sie auf %s, %s und %s."), '<a target="_bl
 		<td class="blank" width="4%">&nbsp;
 		</td>
 		<td align="left" class="blank" width="15%" align="center">
-			<a target="_new" href="http://zim.uni-goettingen.de/"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/zim.gif" border="0" /></a>
+			<a target="_blank" href="http://zim.uni-goettingen.de/"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/zim.gif" border="0" /></a>
 		</td>
 		<td align="left" class="blank" width="15%" align="center">
-			<a target="_new" href="http://www.data-quest.de/"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/dataquest.gif" border="0" /></a>
+			<a target="_blank" href="http://www.data-quest.de/"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/dataquest.gif" border="0" /></a>
 		</td>
 		<td align="left" class="blank" width="15%" align="center">
 			&nbsp;
 		</td>
 		<td align="left" class="blank" width="15%" align="center">
-			<a target="_new" href="http://www.bmbf.de/"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/bmbf.gif" border="0" /></a>
+			<a target="_blank" href="http://www.bmbf.de/"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/bmbf.gif" border="0" /></a>
 		</td>
 		<td align="left" class="blank" width="15%" align="center">
-			<a target="_new" href="http://www.campussource.de/"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/cslogotransparent.jpg" border="0" /></a>
+			<a target="_blank" href="http://www.campussource.de/"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/cslogotransparent.jpg" border="0" /></a>
 		</td>
 		<td align="center" class="blank" width="25%">
 			&nbsp;
@@ -429,7 +429,7 @@ if ($view=="ansprechpartner") {?>
 		<font size="-1"><a href="mailto:<?=$UNI_CONTACT?>"><?=$UNI_CONTACT?>	</a></font ><br /><br /></blockquote>
 		</td>
 		<td class="blank" align="center" valign="middle">
-			<a target="_new" href="http://www.studip.de"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/studipanim.gif" border="0"></a>
+			<a target="_blank" href="http://www.studip.de"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/studipanim.gif" border="0"></a>
 			<div align="left"><br>&nbsp; &nbsp;<b><?=_("Version:")?> </b><? echo $SOFTWARE_VERSION?></div>
 		</td>
 	</tr>
@@ -501,22 +501,22 @@ printf(_("Das System wird ständig weiterentwickelt und an die Wünsche unserer Nu
 	</blockquote></blockquote><br><br></td></tr>
 	<tr>
 		<td align="center" class="blank" width="15%">
-			<a href="http://www.suse.de" target="_new"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/penguin.gif" border=0></a>
+			<a href="http://www.suse.de" target="_blank"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/penguin.gif" border=0></a>
 		</td>
 		<td align="center" class="blank" width="15%">
-			<a href="http://www.apache.org" target="_new"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/apache.gif" border=0></a>
+			<a href="http://www.apache.org" target="_blank"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/apache.gif" border=0></a>
 		</td>
 		<td align="center" class="blank" width="15%">
-			<a href="http://www.mysql.org" target="_new"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/powered-by-mysql-transparent1.gif" border=0></a>
+			<a href="http://www.mysql.org" target="_blank"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/powered-by-mysql-transparent1.gif" border=0></a>
 		</td>
 		<td align="center" class="blank" width="15%">
-			<a href="http://www.php.net" target="_new"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/php4.gif" border=0></a>
+			<a href="http://www.php.net" target="_blank"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/php4.gif" border=0></a>
 		</td>
 		<td align="center" class="blank" width="15%">
-			<a href="http://sourceforge.net/projects/phplib" target="_new"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/phplib_sm.gif" border=0></a>
+			<a href="http://sourceforge.net/projects/phplib" target="_blank"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/phplib_sm.gif" border=0></a>
 		</td>
 		<td align="center" class="blank" width="15%">
-			<a href="http://sourceforge.net" target="_new"> <img src="http://sourceforge.net/sflogo.php?group_id=16662" width="88" height="31" border="0" alt="SourceForge Logo"></a>
+			<a href="http://sourceforge.net" target="_blank"> <img src="http://sourceforge.net/sflogo.php?group_id=16662" width="88" height="31" border="0" alt="SourceForge Logo"></a>
 		</td>
 	</tr>
 

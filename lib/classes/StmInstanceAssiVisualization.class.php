@@ -141,7 +141,7 @@ class StmInstanceAssiVisualization{
 		"text"=> sprintf(_("Die Textfelder <b>Inhalte</b> und <b>Hinweise</b> m&uuml;ssen nach den Konventionen 
 		des StudIPWiki formatiert werden. Beachten Sie dabei die %sFormatierungsm&ouml;glichkeiten%s. <br> 
 		Der Button <b>Vorschau</b> zeigt das Ergebnis unter dem jeweiligen Textfeld an.")
-		,'<a href="help/index.php?help_page=ix_forum6.htm" target="_new">','</a>'))));
+		,'<a href="help/index.php?help_page=ix_forum6.htm" target="_blank">','</a>'))));
 
 		echo $table->openRow();
 		echo $table->cell('<b>' . $form->getFormFieldCaption('title') .'</b>' . $form->getFormFieldRequired('title') . "<br>" .	$form->form_fields['title']['info'] 

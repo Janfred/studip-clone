@@ -228,7 +228,7 @@ function guest_navi () {
 			."<div align=center><textarea name=post style=\"width:70%\" cols=\"". $cols."\"  rows=8 wrap=virtual>"
 			."</textarea>"
 			."<br><br><input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>&nbsp;"
-			."&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"new\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"".$help_url."\" target=\"new\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br>";
+			."&nbsp;&nbsp;<a href=\"show_smiley.php\" target=\"_blank\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;"."<a href=\"".$help_url."\" target=\"_blank\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br>";
 		return $form;
 	}
 

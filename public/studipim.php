@@ -227,7 +227,7 @@ if ($auth->auth["uid"] != "nobody"){
 			echo "<INPUT TYPE='HIDDEN'  name='msg_subject' value='".HtmlReady($msg_subject)."'>";
 			echo "\n<tr><td class='blank' colspan='2' valign='middle'>";
 			echo "<TEXTAREA  style=\"width: 100%\" name='nu_msg' rows='4' cols='44' wrap='virtual'>".htmlready($msg_text)."</TEXTAREA></font><br>";
-			echo "<font size=-1><a target=\"_new\" href=\"show_smiley.php\">" . _("Smileys</a> k&ouml;nnen verwendet werden") . " </font>\n</td></tr>";
+			echo "<font size=-1><a target=\"_blank\" href=\"show_smiley.php\">" . _("Smileys</a> k&ouml;nnen verwendet werden") . " </font>\n</td></tr>";
 			echo "\n<tr><td class='blank' colspan='2' valign='middle' align='center'><font size=-1>&nbsp;";
 			echo "<INPUT TYPE='IMAGE' name='none' "
 				. makeButton("absenden","src") . tooltip(_("Nachricht versenden")) . " border=0 value='senden'>&nbsp;<a href=\"$PHP_SELF?cmd=cancel\"><img "

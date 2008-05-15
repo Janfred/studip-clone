@@ -100,7 +100,7 @@ if ($num_my_sem) {
 		echo "<tr ".$cssSw->getHover()." >";
 		echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
 		// name-field
-		echo "<td class=\"".$cssSw->getClass()."\" ><a href=\"archiv.php?dump_id=".$db->f('seminar_id')."\" target=\"new\">";
+		echo "<td class=\"".$cssSw->getClass()."\" ><a href=\"archiv.php?dump_id=".$db->f('seminar_id')."\" target=\"_blank\">";
 		echo "<font size=-1>".htmlReady($db->f("name"))."</font>";
 		print ("</a></td>");
 		// content-field

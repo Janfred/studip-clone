@@ -342,7 +342,7 @@ class ResourceObject {
 		
 		if ($this->id) {
 			if ((!$javaScript) || (!$auth->auth["jscript"]))
-				return "<a ".(($target_new) ? "target=\"_new\"" : "")." href=\"".$this->getLink($quick_view, $view, $view_mode, ($timestamp > 0) ? $timestamp : FALSE)."\">".(($link_text) ? $link_text : $this->getName())."</a>";
+				return "<a ".(($target_new) ? "target=\"_blank\"" : "")." href=\"".$this->getLink($quick_view, $view, $view_mode, ($timestamp > 0) ? $timestamp : FALSE)."\">".(($link_text) ? $link_text : $this->getName())."</a>";
 			else
 				return "<a href=\"javascript:void(null)\" onClick=\"window.open('".$this->getLink($quick_view, $view, $view_mode, ($timestamp > 0) ? $timestamp : FALSE)."','','scrollbars=yes,left=10,top=10,width=1000,height=680,resizable=yes')\" >".(($link_text) ? $link_text : $this->getName())."</a>";
 		} else

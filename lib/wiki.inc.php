@@ -988,7 +988,7 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 	} else {
 		$help_url="help/index.php?help_page=ix_forum6.htm";
 	}
-	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array('icon' => "ausruf_small.gif", "text"=> sprintf(_("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern. Beachten Sie dabei die %sFormatierungsm&ouml;glichkeiten%s. Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten."),'<a href="'.$help_url.'" target="_new">','</a>'))));
+	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array('icon' => "ausruf_small.gif", "text"=> sprintf(_("Sie k&ouml;nnen beliebigen Text einf&uuml;gen und vorhandenen Text &auml;ndern. Beachten Sie dabei die %sFormatierungsm&ouml;glichkeiten%s. Links entstehen automatisch aus W&ouml;rtern, die mit Gro&szlig;buchstaben beginnen und einen Gro&szlig;buchstaben in der Wortmitte enthalten."),'<a href="'.$help_url.'" target="_blank">','</a>'))));
 	end_blank_table();
 	echo "</td>"; // end of content area
 	showPageFrameEnd($infobox);
@@ -1030,7 +1030,7 @@ function exportWiki() {
 	$infobox = array ();
 	$infobox[] = array("kategorie" => _("Information"), "eintrag" => array(array('icon' => "ausruf_small.gif", "text"=>_("Die Wiki-Seiten werden als eine zusammenhängende HTML-Datei ohne Links exportiert."))));
 	print "</tr><tr align=center><td>";
-	print "<a href=\"".URLHelper::getLink("?view=wikiprintall")."\" target=\"_new\"><img ".makebutton("weiter","src"). " border=0></a></td></tr>";
+	print "<a href=\"".URLHelper::getLink("?view=wikiprintall")."\" target=\"_blank\"><img ".makebutton("weiter","src"). " border=0></a></td></tr>";
 	end_blank_table();
 	echo "</td>"; // end of content area
 	showPageFrameEnd($infobox);
@@ -1183,7 +1183,7 @@ function getShowPageInfobox($keyword, $latest_version) {
 	}
 
 	$viewtext="<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&view=show")."\">"._("Standard")."</a><br>";
-	$viewtext .= "<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&view=wikiprint&version=$version")."\" target=\"_new\">"._("Druckansicht")."</a>";
+	$viewtext .= "<a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&view=wikiprint&version=$version")."\" target=\"_blank\">"._("Druckansicht")."</a>";
 	if (count($versions)>=1) {
 		$viewtext .= "<br><a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&cmd=showdiff&view=diff")."\">"._("Textänderungen anzeigen")."</a>";
 		$viewtext .= "<br><a href=\"".URLHelper::getLink("?keyword=".urlencode($keyword)."&cmd=showcombo&view=combodiff")."\">"._("Text mit AutorInnenzuordnung anzeigen")."</a>";

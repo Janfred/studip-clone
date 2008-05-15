@@ -459,7 +459,7 @@ if (!$print_view) {
 			<?
 		}
 		if ($view !="user")
-			printf ("<br><font size=-1><a target=\"_new\" href=\"%s?print_view=TRUE%s\">"._("Druckansicht dieser Seite (wird in einem neuen Browserfenster ge&ouml;ffnet).")."</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=$inst_id&instview_sem=$instview_sem" : "");
+			printf ("<br><font size=-1><a target=\"_blank\" href=\"%s?print_view=TRUE%s\">"._("Druckansicht dieser Seite (wird in einem neuen Browserfenster ge&ouml;ffnet).")."</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=$inst_id&instview_sem=$instview_sem" : "");
 		?>
 		<br>
 		</blockquote>

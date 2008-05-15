@@ -45,7 +45,7 @@ function banner_show() {
 		$pic='<img src="'.$GLOBALS['DYNAMIC_CONTENT_URL'].'/banner/'.$db->f('banner_path').'" border="0" ' . tooltip($db->f('alttext')) .'>';
 		switch ($db->f('target_type')) {
 			case 'url':
-				$link='<a href="'.$db->f('target').'" target="_new">'.$pic.'</a>';
+				$link='<a href="'.$db->f('target').'" target="_blank">'.$pic.'</a>';
 				break;
 			case 'seminar':
 				$link='<a href="details.php?sem_id='.$db->f('target').'">'.$pic.'</a>';
