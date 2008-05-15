@@ -410,7 +410,7 @@ if ($answer_id) {
 			$name = "Re: ".$name; // Re: vor Überschriften bei Antworten
 		$author = get_fullname();
 		$postinginhalt = _("Dieser Beitrag wird gerade bearbeitet.");
-		$edit_id = CreateNewTopic(addslashes($name), $postinginhalt, $answer_id, $db->f("root_id"));
+		$edit_id = CreateNewTopic($name, $postinginhalt, $answer_id, $db->f("root_id"));
 		$open = $edit_id;
 		$forum["lostposting"] = $edit_id;
 	}
