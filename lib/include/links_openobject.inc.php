@@ -201,17 +201,17 @@ if ($GLOBALS['PLUGINS_ENABLE']){
 
 //Bottomkats
 if ($SessSemName["class"]=="inst") {
-	$structure["_institut_main"]=array ('topKat' => "institut_main", 'name' => _("Info"), 'link' => "institut_main.php", 'active' => FALSE);
+	$structure["_institut_main"]=array ('topKat' => "institut_main", 'name' => _("Info"), 'link' => URLHelper::getLink("institut_main.php"), 'active' => FALSE);
 	if ($modules["personal"])
 		$structure["institut_members"]=array ( 'topKat' => "personal", 'name' => _("MitarbeiterInnen"), 'link' => "institut_members.php", 'active' => FALSE);
-	$structure["institut_veranstaltungen"]=array ('topKat' => "institut_main", 'name' => _("Veranstaltungen"), 'link' => "show_bereich.php?level=s&id=$SessSemName[1]", 'active' => FALSE);
-	$structure["timetable"]=array ('topKat' => "institut_main", 'name' => _("Veranstaltungs-Timetable"), 'link' => "mein_stundenplan.php?inst_id=$SessSemName[1]", 'active' => FALSE);
-	// $structure["druckansicht_i"]=array ('topKat' => "institut_main", 'name' => "Druckansicht", 'link' => "print_institut.php", 'target' =>"_new", 'active' => FALSE);
+	$structure["institut_veranstaltungen"]=array ('topKat' => "institut_main", 'name' => _("Veranstaltungen"), 'link' => URLHelper::getLink("show_bereich.php?level=s&id=$SessSemName[1]"), 'active' => FALSE);
+	$structure["timetable"]=array ('topKat' => "institut_main", 'name' => _("Veranstaltungs-Timetable"), 'link' => URLHelper::getLink("mein_stundenplan.php?inst_id=$SessSemName[1]"), 'active' => FALSE);
+	// $structure["druckansicht_i"]=array ('topKat' => "institut_main", 'name' => "Druckansicht", 'link' => URLHelper::getLink("print_institut.php"), 'target' =>"_new", 'active' => FALSE);
 	if ($rechte)
 		if ($perm->have_perm("admin"))
-			$structure["administration_e"]=array ('topKat' => "institut_main", 'name' => _("Administration der Einrichtung"), 'link' => "admin_institut.php?new_inst=TRUE", 'active' => FALSE);
+			$structure["administration_e"]=array ('topKat' => "institut_main", 'name' => _("Administration der Einrichtung"), 'link' => URLHelper::getLink("admin_institut.php?new_inst=TRUE"), 'active' => FALSE);
 		else
-			$structure["administration_e"]=array ('topKat' => "institut_main", 'name' => _("Administration der Einrichtung"), 'link' => "admin_lit_list.php?new_inst=TRUE&view=literatur_inst", 'active' => FALSE);
+			$structure["administration_e"]=array ('topKat' => "institut_main", 'name' => _("Administration der Einrichtung"), 'link' => URLHelper::getLink("admin_lit_list.php?new_inst=TRUE&view=literatur_inst"), 'active' => FALSE);
 } else {
 //
 	$structure["_seminar_main"]=array ('topKat' => "seminar_main", 'name' => _("Kurzinfo"), 'link' => URLHelper::getLink("seminar_main.php"), 'active' => FALSE);
