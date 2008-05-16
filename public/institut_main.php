@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO - in progress (not all links use URLHelper yet)
+# Lifter001: DONE
 /*
 institut_main.php - Die Eingangsseite fuer ein Institut
 Copyright (C) 200 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>
@@ -103,7 +103,7 @@ checkObject();
 include 'lib/include/links_openobject.inc.php';
 include 'lib/showNews.inc.php';
 
-$sess->register("institut_main_data");
+URLHelper::bindLinkParam("inst_data", $institut_main_data);
 
 //Auf und Zuklappen News
 process_news_commands($institut_main_data);

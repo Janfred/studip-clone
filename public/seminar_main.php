@@ -101,7 +101,7 @@ include 'lib/show_dates.inc.php';
 
 $sem = new Seminar($SessSemName[1]);
 
-URLHelper::bindLinkParam("data",$smain_data);
+URLHelper::bindLinkParam("sem_data", $smain_data);
 
 //Auf und Zuklappen Termine
 if ($dopen)
