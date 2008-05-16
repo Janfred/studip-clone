@@ -1229,7 +1229,7 @@ function remove_magic_quotes($mixed) {
 
 /**
  * Unset all variables set by register_globals (if enabled).
- * Note: The session variable 'auth' is preserved.
+ * Note: The session variables 'auth' and 'SessSemName' are preserved.
  */
 function unregister_globals ()
 {
@@ -1242,7 +1242,8 @@ function unregister_globals ()
     }
 
     $noUnset = array('GLOBALS', '_GET', '_POST', '_COOKIE',
-                     '_REQUEST', '_SERVER', '_ENV', '_FILES', 'auth');
+                     '_REQUEST', '_SERVER', '_ENV', '_FILES',
+                     'auth', 'SessSemName');
     $vars = array_merge($_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES);
 
     if (isset($_SESSION)) {
