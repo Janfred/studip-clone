@@ -60,7 +60,7 @@ class Modules {
 		
 		// create a new instance of the pluginengine
 		if ($GLOBALS["PLUGINS_ENABLE"]){
-			$id = $GLOBALS["SessSemName"]["class"] . $GLOBALS["SessSemName"][1];
+			$id = $_SESSION["SessSemName"]["class"] . $_SESSION["SessSemName"][1];
 			
 			$this->pluginengine = PluginEngine::getPluginPersistence("Standard");
 			$this->pluginengine->setPoiid($id);
