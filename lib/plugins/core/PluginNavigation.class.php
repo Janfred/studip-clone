@@ -15,6 +15,37 @@ class PluginNavigation extends StudipPluginNavigation {
   var $linkparams = array();
 
 
+  /**
+   * The cmd of this Navigation object.
+   *
+   * @access private
+   * @var string
+   */
+  var $cmd;
+
+
+  /**
+   * Returns the cmd of this Navigation object.
+   *
+   * @return string  the cmd
+   */
+  function getCmd() {
+    return $this->cmd;
+  }
+
+
+  /**
+   * Sets the cmd of this Navigation's object.
+   *
+   * @param  string  the cmd
+   *
+   * @return void
+   */
+  function setCmd($cmd) {
+    $this->cmd = $cmd;
+  }
+
+
   function getLink(){
     return PluginEngine::getLink($this->plugin, $this->getLinkParams());
     }
@@ -41,6 +72,11 @@ class PluginNavigation extends StudipPluginNavigation {
 
 
     function isActive() {
+
+        if (isset($this->cmd) && $this->cmd !== $this->plugin->getCmd()) {
+          return false;
+        }
+
         foreach ($this->linkparams as $key => $val) {
             if (!isset($_REQUEST[$key]) || $_REQUEST[$key] != $val) {
                 return false;

@@ -27,8 +27,28 @@
 abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
 
 
+  /**
+   * The currently selected cmd
+   *
+   * @see $cmd in PluginEngine::getLink
+   * @access private
+   * @var string
+   */
+  var $cmd;
+
+
   function AbstractStudIPLegacyPlugin() {
     parent::AbstractStudIPPlugin();
+  }
+
+
+  /**
+   * Returns the cmd of this Navigation object.
+   *
+   * @return string  the cmd
+   */
+  function getCmd() {
+    return $this->cmd;
   }
 
 
@@ -56,15 +76,16 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
    */
   function perform($unconsumed_path) {
 
-    # get action
-    list($action, $this->unconsumed_path) = $this->route($unconsumed_path);
+    # get cmd
+    list($this->cmd, $this->unconsumed_path) =
+      $this->route($unconsumed_path);
 
     # it's action time
     try {
 
       ob_start();
 
-      $this->display_action($action);
+      $this->display_action($this->cmd);
       ob_end_flush();
 
     } catch (Exception $e) {
