@@ -29,7 +29,7 @@ class PluginNavigation extends StudipPluginNavigation {
    *
    * @return string  the cmd
    */
-  function getCmd() {
+  function getCommand() {
     return $this->cmd;
   }
 
@@ -41,13 +41,21 @@ class PluginNavigation extends StudipPluginNavigation {
    *
    * @return void
    */
-  function setCmd($cmd) {
+  function setCommand($cmd) {
     $this->cmd = $cmd;
   }
 
 
-  function getLink(){
-    return PluginEngine::getLink($this->plugin, $this->getLinkParams());
+    /**
+     * Returns the link used by this Navigation object.
+     */
+    function getLink() {
+        if (isset($this->cmd)) {
+            return PluginEngine::getLink($this->plugin, $this->getLinkParams(),
+                                         $this->cmd);
+        } else {
+            return PluginEngine::getLink($this->plugin, $this->getLinkParams());
+        }
     }
 
     /**
@@ -73,7 +81,7 @@ class PluginNavigation extends StudipPluginNavigation {
 
     function isActive() {
 
-        if (isset($this->cmd) && $this->cmd !== $this->plugin->getCmd()) {
+        if (isset($this->cmd) && $this->cmd !== $this->plugin->getCommand()) {
           return false;
         }
 

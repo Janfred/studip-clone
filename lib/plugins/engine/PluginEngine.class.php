@@ -193,6 +193,12 @@ class PluginEngine {
     * @return an instance of the desired plugin or null otherwise
     */
    public static function instantiatePlugin($pluginclassname, $pluginpath) {
+	    static $plugin_cache = array();
+
+	    if (isset($plugin_cache[$pluginclassname])) {
+		return $plugin_cache[$pluginclassname];
+	    }
+
 	    $env = $GLOBALS["pluginenv"];
 	    $absolutepluginfile = $env->getPackagebasepath() . "/" . $pluginpath . "/" . $pluginclassname . ".class.php";
 	    if (!file_exists($absolutepluginfile)) {
@@ -206,6 +212,7 @@ class PluginEngine {
 		    $plugin->setEnvironment($env);
 		    $plugin->setPluginpath($env->getRelativepackagepath() . "/" . $pluginpath);
 		    $plugin->setBasepluginpath($pluginpath);
+		    $plugin_cache[$pluginclassname] = $plugin;
 		    return $plugin;
 	    }
    }

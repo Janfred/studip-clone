@@ -47,8 +47,8 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
    *
    * @return string  the cmd
    */
-  function getCmd() {
-    return $this->cmd;
+  function getCommand() {
+    return preg_replace('/^action/', '', $this->cmd);
   }
 
 
