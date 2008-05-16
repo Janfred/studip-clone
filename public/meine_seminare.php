@@ -129,6 +129,7 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
   	  if (is_array($my_obj_values["activatedplugins"])){
 		  foreach ($my_obj_values["activatedplugins"] as $plugin){
 
+			$plugin->setId($semid);
 		  	if ($plugin->hasChanged($my_obj_values["visitdate"])){
 		  		// something new
 		  		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to="
