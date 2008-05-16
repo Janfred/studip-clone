@@ -19,9 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-  global $perm, $send_from_search, $rechte;
-
-  $SessSemName = $_SESSION['SessSemName'];
+  global $perm, $SessSemName, $send_from_search, $rechte;
 
 	require_once ('lib/msg.inc.php');
 
