@@ -26,6 +26,14 @@ class PluginEngine {
 
 
 	/**
+	 * List of created plugin instances
+	 *
+	 * @var array
+	 */
+	private static $plugin_list = array();
+
+
+	/**
 	 * TODO
 	 *
 	 * @return int  returns the current plugin's ID
@@ -193,10 +201,8 @@ class PluginEngine {
     * @return an instance of the desired plugin or null otherwise
     */
    public static function instantiatePlugin($pluginclassname, $pluginpath) {
-	    static $plugin_cache = array();
-
-	    if (isset($plugin_cache[$pluginclassname])) {
-		return $plugin_cache[$pluginclassname];
+	    if (isset(self::$plugin_list[$pluginclassname])) {
+		return self::$plugin_list[$pluginclassname];
 	    }
 
 	    $env = $GLOBALS["pluginenv"];
@@ -212,7 +218,7 @@ class PluginEngine {
 		    $plugin->setEnvironment($env);
 		    $plugin->setPluginpath($env->getRelativepackagepath() . "/" . $pluginpath);
 		    $plugin->setBasepluginpath($pluginpath);
-		    $plugin_cache[$pluginclassname] = $plugin;
+		    self::$plugin_list[$pluginclassname] = $plugin;
 		    return $plugin;
 	    }
    }
