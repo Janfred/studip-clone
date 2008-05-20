@@ -578,7 +578,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				// delete Entry from List:
 
 				if (($values["status"]=="dozent") || ($values["status"]=="tutor"))
-					echo "<td class=\"".$cssSw->getClass()."\"  align=center><a href=\"admin_seminare1.php?select_sem_id=$semid\"><img width=\"19\" height=\"17\" src=\"".$GLOBALS['ASSETS_URL']."images/minikey.gif\" ".tooltip(_("Veranstaltung administrieren"))." border=\"0\" /></a>&nbsp;</td>";
+					echo "<td class=\"".$cssSw->getClass()."\"  align=center><a href=\"admin_seminare1.php?select_sem_id=$semid\"><img width=\"15\" height=\"17\" src=\"".$GLOBALS['ASSETS_URL']."images/minikey.gif\" ".tooltip(_("Veranstaltung administrieren"))." border=\"0\" /></a>&nbsp;</td>";
 				elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
 					printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"".$GLOBALS['ASSETS_URL']."images/logout_seminare_no.gif\" ".tooltip(_("Das Abonnement ist bindend. Bitte wenden Sie sich an die Dozentin oder den Dozenten."))." border=\"0\"></a>&nbsp; </td>", $semid);
 				else
