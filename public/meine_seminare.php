@@ -197,6 +197,9 @@ include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
+if ($GLOBALS['CHAT_ENABLE']){
+	chat_get_javascript();
+}
 
 if (!$perm->have_perm("root"))
 	include ('lib/include/links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
