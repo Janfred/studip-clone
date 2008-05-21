@@ -130,7 +130,7 @@ function wiki_newlifters($template_name) {
 	foreach ($list as $l) {
 		$issue=max(@$issue, substr($l,strlen($template['prefix'])));
 	}
-	$pagename = sprintf("%s%05d", $template['prefix'], @$issue+1);
+	$pagename = sprintf("%s%03d", $template['prefix'], @$issue+1);
 	$create_time = date('Y-m-d H:i',time());
 	$author = get_fullname(NULL, 'no_title_short');
 // print "<p>template ist: <pre>"; print_r($template); print "</pre>";
