@@ -28,7 +28,7 @@ define ("INSTANCEOF_OBJECT", "Object");
 define ("INSTANCEOF_VOTEDB", "VoteDB");
 
 define ("VOTE_FILE_ADMIN", "admin_vote.php");
-define ("VOTE_FILE_SHOW", "show_vote.php");
+define ("VOTE_FILE_SHOW", "lib/vote/vote_show.inc.php");
 
 define ("VOTE_PATH_PICTURES", $GLOBALS['ASSETS_URL']."images/");
 

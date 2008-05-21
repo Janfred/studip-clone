@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-// $Id$ 
+// $Id$
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
@@ -41,7 +41,7 @@ if ($GLOBALS['CHAT_ENABLE']){
 
 }
 if ($GLOBALS['VOTE_ENABLE']) {
-	include_once ("show_vote.php");
+	include_once ("lib/vote/vote_show.inc.php");
 }
 
 
@@ -186,7 +186,7 @@ if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])){
 if ($GLOBALS['VOTE_ENABLE']) {
 	show_votes ($auswahl, $auth->auth["uid"], $perm, YES);
 }
-  
+
   include ('lib/include/html_end.inc.php');
   // Save data back to database.
   page_close()

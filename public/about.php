@@ -82,7 +82,7 @@ if ($GLOBALS['CHAT_ENABLE']){
 }
 
 if ($GLOBALS['VOTE_ENABLE']) {
-	include_once ("show_vote.php");
+	include_once ("lib/vote/vote_show.inc.php");
 }
 if (get_config('NEWS_RSS_EXPORT_ENABLE')){
 	$news_author_id = StudipNews::GetRssIdFromUserId(get_userid($_REQUEST['username']));
@@ -415,7 +415,7 @@ if ($show_tabs) {
 					IF ($db3->f("Fax")!="")
 						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Fax: (Stud.IP)") . " </b>", htmlReady($db3->f("Fax"));
 
-					echo '<table cellspacing="0" cellpadding="0" border="0">'; 
+					echo '<table cellspacing="0" cellpadding="0" border="0">';
 					$entries = DataFieldEntry::getDataFieldEntries(array($user_id, $institut));
 					if (!isDataFieldArrayEmpty($entries)) {
 						foreach ($entries as $entry) {
@@ -427,34 +427,34 @@ if ($show_tabs) {
 							}
 
 							if (trim($entry->getValue()) && $view) {
-								echo '<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>' . htmlReady($entry->getName()) . ": " .'&nbsp;&nbsp;</td><td>'. $entry->getDisplayValue(); 
+								echo '<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>' . htmlReady($entry->getName()) . ": " .'&nbsp;&nbsp;</td><td>'. $entry->getDisplayValue();
 								if ($show_star) echo ' *';
 							}
 						}
 					}
 
-					echo '</table>'; 
- 
-					if ($groups = GetAllStatusgruppen($institut, $user_id)) {                        
-						$default_entries = DataFieldEntry::getDataFieldEntries(array($user_id, $institut)); 
-						$data = get_role_data_recursive($groups, $user_id, $default_entries); 
-						echo '<table cellpadding="0" cellspacing="0" border="0">'; 
-						echo $data['standard']; 
-						echo '</table>'; 
-					} else { 
-						echo '<br/>'; 
-					} 
+					echo '</table>';
 
-					echo "</font>"; 
-					echo '<br/>'; 
-				} 
+					if ($groups = GetAllStatusgruppen($institut, $user_id)) {
+						$default_entries = DataFieldEntry::getDataFieldEntries(array($user_id, $institut));
+						$data = get_role_data_recursive($groups, $user_id, $default_entries);
+						echo '<table cellpadding="0" cellspacing="0" border="0">';
+						echo $data['standard'];
+						echo '</table>';
+					} else {
+						echo '<br/>';
+					}
 
-				if (($user_id == $user->id) && $has_denoted_fields) { 
-					echo '<br/>'; 
-					echo '<font size="-1">'; 
-					echo ' * Diese Felder sind nur für Sie und AdministratorInnen sichtbar.<br/>'; 
-					echo '</font>'; 
-				} 
+					echo "</font>";
+					echo '<br/>';
+				}
+
+				if (($user_id == $user->id) && $has_denoted_fields) {
+					echo '<br/>';
+					echo '<font size="-1">';
+					echo ' * Diese Felder sind nur für Sie und AdministratorInnen sichtbar.<br/>';
+					echo '</font>';
+				}
 				?>
 
 				<br />

@@ -39,7 +39,7 @@ if ($GLOBALS['CHAT_ENABLE']){
 	}
 }
 if ($GLOBALS['VOTE_ENABLE']) {
-	include_once ("show_vote.php");
+	include_once ("lib/vote/vote_show.inc.php");
 }
 
 

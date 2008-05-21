@@ -315,7 +315,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 	// display votes
 	if ($GLOBALS['VOTE_ENABLE']) {
-		include 'show_vote.php';
+		include 'lib/vote/vote_show.inc.php';
 		show_votes ('studip', $auth->auth['uid'], $perm);
 	}
 
