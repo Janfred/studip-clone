@@ -1283,24 +1283,47 @@ function print_infobox($content, $picture = '', $dont_display_immediatly = FALSE
 
 
 /**
-* Returns a given text as html tooltip
-*
-* title and alt attribute is default, with_popup means a JS alert box activated on click
-* @access        public
-* @param        string $text
-* @param        boolean        $with_alt        return text with alt attribute
-* @param        boolean $with_popup        return text with JS alert box on click
-* @return        string
-*/
+ * Returns a given text as html tooltip
+ *
+ * title and alt attribute is default, with_popup means a JS alert box
+ * activated on click
+ *
+ * @param        string  $text
+ * @param        boolean $with_alt    return text with alt attribute
+ * @param        boolean $with_popup  return text with JS alert box on click
+ * @return       string
+ */
 function tooltip ($text, $with_alt = TRUE, $with_popup = FALSE) {
-	$ret = "";
-	if ($with_popup)
-		$ret = " onClick=\"alert('".JSReady($text,"alert")."');\"";
+	return ' ' . join(' ', tooltip2($text, $with_alt, $with_popup));
+}
+
+/**
+ * Returns a given text as an array of html attributes used as tooltip
+ *
+ * title and alt attribute is default, with_popup means a JS alert box
+ * activated on click
+ *
+ * @param        string  $text
+ * @param        boolean $with_alt    return text with alt attribute
+ * @param        boolean $with_popup  return text with JS alert box on click
+ * @return       string
+ */
+function tooltip2($text, $with_alt = TRUE, $with_popup = FALSE) {
+
+	$ret = array();
+
+	if ($with_popup) {
+		$ret['onClick'] = "alert('".JSReady($text, "alert")."');";
+	}
+
 	$text = preg_replace("/(\n\r|\r\n|\n|\r)/", " ", $text);
 	$text = htmlReady($text);
-	if ($with_alt)
-		$ret .= " alt=\"$text\"";
-	$ret .= " title=\"$text\" ";
+
+	if ($with_alt) {
+		$ret['alt'] = $text;
+	}
+	$ret['title'] = $text;
+
 	return $ret;
 }
 
