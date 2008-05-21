@@ -9,8 +9,6 @@
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
 * @access		public
-* @module		admin_modules.php
-* @modulegroup		admin
 * @package		studip_core
 */
 
@@ -149,7 +147,7 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					$amodules->$moduleXxActivate($admin_modules_data["range_id"]);
 				}
 			}
-			
+
 		}
 
 	}
@@ -216,17 +214,16 @@ if (($range_id) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_documents)
 	}
 }
 
-if ($admin_modules_data["range_id"]) {
-
+if ($admin_modules_data["range_id"])
+{
 ?>
-	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
  	<tr>
 		<td class="blank" valign="top">
 			<?
 			if (isset($msg)) {
 			?>
 				<table border="0">
-				<tr><td>&nbsp;</td></tr>
 				<?parse_msg($msg);?>
 				</table>
 			<? } ?>
@@ -242,11 +239,11 @@ if ($admin_modules_data["range_id"]) {
 		</td>
 	</tr>
 	<tr>
-	<td class="blank" colspan=2>
+	<td class="blank" colspan="2">
 	<form method="POST" name="modules" action="<? echo $PHP_SELF ?>">
-		<table width="99%" border=0 cellpadding=2 cellspacing=0 align="center">
-		<tr <? $cssSw->switchClass() ?>>
-			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan="4">
+		<table width="100%" border="0" cellpadding="2" cellspacing="0">
+		<tr><? $cssSw->switchClass() ?>
+			<td class="<?= $cssSw->getClass() ?>" align="center" colspan="3">
 				<input type="IMAGE" name="uebernehmen" <?=makeButton("uebernehmen", "src")?> border=0 value="uebernehmen">
 				&nbsp;<input type="IMAGE" name="default" <?=makeButton("zuruecksetzen", "src")?> border=0 value="uebernehmen">
 				<? if ($admin_modules_data["orig_bin"] != $admin_modules_data["changed_bin"]) {
@@ -256,8 +253,10 @@ if ($admin_modules_data["range_id"]) {
 			</td>
 		</tr>
 		<?
-		foreach ($amodules->registered_modules as $key => $val) {
-			if ($amodules->isEnableable($key, $admin_modules_data["range_id"])) {
+		foreach ($amodules->registered_modules as $key => $val)
+		{
+			if ($amodules->isEnableable($key, $admin_modules_data["range_id"]))
+			{
 				$pre_check = null;
 				if (isset($val['preconditions'])){
 					$method = 'module' . $key . 'Preconditions';
@@ -265,20 +264,17 @@ if ($admin_modules_data["range_id"]) {
 				}
 
 				?>
-			<tr <? $cssSw->switchClass() ?> rowspan=2>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
-					&nbsp;
-				</td>
-				<td class="<? echo $cssSw->getClass() ?>"  width="10%" align="left">
+			<tr><? $cssSw->switchClass() ?>
+				<td class="<?= $cssSw->getClass() ?>"  width="15%" align="left">
 					<font size=-1><b><?=$val["name"]?></b><br /></font>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="16%">
+				<td class="<?= $cssSw->getClass() ?>" width="15%">
 					<input type="RADIO" <?=($pre_check ? 'disabled' : '')?> name="<?=$key?>_value" value="TRUE" <?=($amodules->isBit($admin_modules_data["changed_bin"], $val["id"])) ? "checked" : "" ?>>
 					<font size=-1><?=_("an")?></font>
 					<input type="RADIO" <?=($pre_check ? 'disabled' : '')?> name="<?=$key?>_value" value="FALSE" <?=($amodules->isBit($admin_modules_data["changed_bin"], $val["id"])) ? "" : "checked" ?>>
 					<font size=-1><?=_("aus")?><br /></font>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="70%">
+				<td class="<?= $cssSw->getClass() ?>" width="70%">
 					<font size=-1><?
 					$getModuleXxExistingItems = "getModule".$key."ExistingItems";
 
@@ -295,85 +291,81 @@ if ($admin_modules_data["range_id"]) {
 			<? }
 
 		}
-		if ($GLOBALS['PLUGINS_ENABLE']){
-			//$plugins = $amodules->pluginengine->getAllEnabledPlugins();
+	if ($GLOBALS['PLUGINS_ENABLE'])
+	{
+		//$plugins = $amodules->pluginengine->getAllEnabledPlugins();
 
-		 	// $defactplugins = $amodules->pluginengine->getDefaultActivationsForPOI($GLOBALS["SessSemName"][1]);
+	 	// $defactplugins = $amodules->pluginengine->getDefaultActivationsForPOI($GLOBALS["SessSemName"][1]);
 
-			if ($admin_modules_plugins == null){
-				$admin_modules_plugins = array();
-			}
-			foreach ($admin_modules_plugins as $plugin){
-				/*
-				$globalactivated = false;
-				foreach ($defactplugins as $actplugin) {
-					if (strtolower(get_class($actplugin)) == strtolower(get_class($plugin))){
-						$globalactivated = true;
-						break;
-					}
+		if ($admin_modules_plugins == null)
+		{
+			$admin_modules_plugins = array();
+		}
+		foreach ($admin_modules_plugins as $plugin)
+		{
+			/*
+			$globalactivated = false;
+			foreach ($defactplugins as $actplugin) {
+				if (strtolower(get_class($actplugin)) == strtolower(get_class($plugin))){
+					$globalactivated = true;
+					break;
 				}
-				*/
-				?>
-				<tr <? $cssSw->switchClass() ?> rowspan=2>
-				<td class="<? echo $cssSw->getClass() ?>" width="4%" align="right">
-						&nbsp;
-					</td>
-					<td class="<? echo $cssSw->getClass() ?>"  width="10%" align="left">
-						<font size=-1><b><?=$plugin->getPluginname()?></b><br /></font>
-					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="16%">
-						<input type="RADIO" name="plugin_<?=$plugin->getPluginid()?>" value="TRUE" <?= ($plugin->isActivated()==true) ? "checked" : "" ?>>
-						<!-- mark old state -->
-						<font size=-1><?=_("an")?></font>
-						<input type="RADIO" name="plugin_<?=$plugin->getPluginid()?>" value="FALSE" <?= ($plugin->isActivated()==true) ? "" : "checked" ?>>
-						<font size=-1><?=_("aus")?><br /></font>
-					</td>
-					<td class="<? echo $cssSw->getClass() ?>" width="70%">
-						<font size=-1><?
-						$admininfo = $plugin->getPluginAdminInfo();
-						if (!is_null($admininfo)){
-							if ($plugin->isActivated() || $globalactivated){
-								if ($globalactivated) {
-									print ('(per Voreinstellung aktiviert) ');
-								}
-								if (!method_exists($plugin, 'getPluginExistingItems') ||
-								    $plugin->getPluginExistingItems($admin_modules_data['range_id'])) {
-									print ('<font color="red">'.$admininfo->getMsg_pre_warning().'</font>');
-								}
-								else {
-									print ($admininfo->getMsg_deactivate());
-								}
+			}
+			*/
+			?>
+			<tr><? $cssSw->switchClass() ?>
+				<td class="<?= $cssSw->getClass() ?>"  width="15%" align="left">
+					<font size=-1><b><?=$plugin->getPluginname()?></b><br /></font>
+				</td>
+				<td class="<?= $cssSw->getClass() ?>" width="15%">
+					<input type="RADIO" name="plugin_<?=$plugin->getPluginid()?>" value="TRUE" <?= ($plugin->isActivated()==true) ? "checked" : "" ?>>
+					<!-- mark old state -->
+					<font size=-1><?=_("an")?></font>
+					<input type="RADIO" name="plugin_<?=$plugin->getPluginid()?>" value="FALSE" <?= ($plugin->isActivated()==true) ? "" : "checked" ?>>
+					<font size=-1><?=_("aus")?><br /></font>
+				</td>
+				<td class="<?= $cssSw->getClass() ?>" width="70%">
+					<font size=-1><?
+					$admininfo = $plugin->getPluginAdminInfo();
+					if (!is_null($admininfo)){
+						if ($plugin->isActivated() || $globalactivated){
+							if ($globalactivated) {
+								print ('(per Voreinstellung aktiviert) ');
+							}
+							if (!method_exists($plugin, 'getPluginExistingItems') ||
+							    $plugin->getPluginExistingItems($admin_modules_data['range_id'])) {
+								print ('<font color="red">'.$admininfo->getMsg_pre_warning().'</font>');
 							}
 							else {
-								print ($admininfo->getMsg_activate());
+								print ($admininfo->getMsg_deactivate());
 							}
 						}
 						else {
-							// kein AdminInfo vorhanden, also nichts ausgeben
-							print ("Dieses Plugin hat keinen Hilfetext bereitgestellt.");
+							print ($admininfo->getMsg_activate());
 						}
-						?></font>
-					</td>
-				</tr>
-				<?php
-			}
+					}
+					else {
+						// kein AdminInfo vorhanden, also nichts ausgeben
+						print ("Dieses Plugin hat keinen Hilfetext bereitgestellt.");
+					}
+					?></font>
+				</td>
+			</tr>
+			<?php
 		}
-		?>
-		<tr>
-			<td class="blank" colspan=3>&nbsp;
-			</td>
-		</tr>
-		<?
-	}
-else	{
-	die;
-}
-?>
+	}?>
 	</table>
-</td>
+	</td>
 </tr>
 </table>
-<?php
+
+<?
+}
+else
+{
+	die;
+}
+
 include ('lib/include/html_end.inc.php');
 page_close();
 ?>
