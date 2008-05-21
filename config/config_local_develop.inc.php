@@ -544,6 +544,7 @@ $LATEX_FORMATS = array(
 // uncomment/change below to activate
 //
 $WIKI_PLUGINS=array(
+	"wiki_lifters.inc.php",  // Lifters Proposal System
 	"wiki_steps.inc.php",  // Stud.IP Enhancement Proposal System
 	"wiki_biests.inc.php"  // Bug and Inconsistency Detection System
 	);
