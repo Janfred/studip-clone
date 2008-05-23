@@ -233,8 +233,7 @@ function wiki_liftersprogress($lnr){
 		$cache_key = "liftersprogress" . sprintf('%03d', $id);
 		$cache = StudipCacheFactory::getCache();
 		if(!($cached_out = $cache->read($cache_key))){
-			$command = sprintf('cd %s ; find . -name "*.php" | '.
-				'xargs tools/lifter/lifter-status -l%d',
+			$command = sprintf('cd %s ; tools/lifter/lifter-status -l%d',
 				$GLOBALS['STUDIP_BASE_PATH'], $id);
 			exec($command, $output, $return_var);
 			if (!$return_var){
