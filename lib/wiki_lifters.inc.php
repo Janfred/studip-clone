@@ -11,6 +11,7 @@ require_once 'lib/forum.inc.php';
 
 wikiMarkup('/\\(:liftersform:\\)/e',"wiki_liftersform('lifters')", 'dozent');
 wikiMarkup('/\\(:lifterslist\\s*(.*?):\\)/e',"wiki_lifterslist('lifters',array('q'=>'$1'))");
+wikiMarkup('/\\(:liftersprogress\\s*(.*?):\\)/e',"wiki_liftersprogress('$1')");
 
 $lifters_templates['lifters'] = array(
 	// common prefix to alle newly created pages
@@ -224,5 +225,35 @@ function wiki_lifters_CreateOrderFunction($order) {
   return create_function('$x,$y',$code);
 }
 
-
+function wiki_liftersprogress($lnr){
+	$output = array();
+	$out = array();
+	$id = (int)$lnr;
+	if($id){
+		$cache_key = "liftersprogress" . sprintf('%03d', $id);
+		$cache = StudipCacheFactory::getCache();
+		if(!($cached_out = $cache->read($cache_key))){
+			$command = sprintf('cd %s ; find . -name "*.php" | '.
+				'xargs tools/lifter/lifter-status -l%d',
+				$GLOBALS['STUDIP_BASE_PATH'], $id);
+			exec($command, $output, $return_var);
+			if (!$return_var){
+				$out[] = '<h1>' . _("Status von Lifters") . sprintf('%03d', $id) . '</h1>';
+				$out[] = '<p>' . strftime("%x %X", time()) . '</p>';
+				if(count($output)){
+					$out[] =  '<h3>' . htmlReady(array_pop($output)) .'</h3>';
+					$out[] = '<pre>';
+					foreach($output as $line){
+						$out[] = htmlReady($line);
+					}
+					$out[] = '</pre>';
+				}
+			}
+			$cache->write($cache_key, serialize($out), 3600);
+		} else {
+			$out = unserialize($cached_out);
+		}
+    }
+	return implode(chr(10),$out);
+}
 ?>
