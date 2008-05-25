@@ -11,7 +11,7 @@ require_once 'lib/forum.inc.php';
 
 wikiMarkup('/\\(:liftersform:\\)/e',"wiki_liftersform('lifters')", 'dozent');
 wikiMarkup('/\\(:lifterslist\\s*(.*?):\\)/e',"wiki_lifterslist('lifters',array('q'=>'$1'))");
-wikiMarkup('/\\(:liftersprogress\\s*(.*?):\\)/e',"wiki_liftersprogress('$1')");
+wikiMarkup('/\\(:liftersprogress\\s*(.*?):\\)/e',"wiki_liftersprogress('lifters','$1')");
 
 $lifters_templates['lifters'] = array(
 	// common prefix to alle newly created pages
@@ -60,7 +60,10 @@ Erstellt: $create_time
 Status: neu
 Beschreibung:
 
-$lifters_beschreibung',
+$lifters_beschreibung
+
+(:liftersprogress:)
+',
 	// list of fields to parse for list view, matching is case-insensitive
 	// order must be same as indicated by listheader
 	// first field (name) will be added
@@ -225,34 +228,50 @@ function wiki_lifters_CreateOrderFunction($order) {
   return create_function('$x,$y',$code);
 }
 
-function wiki_liftersprogress($lnr){
-	$output = array();
-	$out = array();
-	$id = (int)$lnr;
-	if($id){
-		$cache_key = "liftersprogress" . sprintf('%03d', $id);
-		$cache = StudipCacheFactory::getCache();
-		if(!($cached_out = $cache->read($cache_key))){
-			$command = sprintf('cd %s ; tools/lifter/lifter-status -l%d',
-				$GLOBALS['STUDIP_BASE_PATH'], $id);
-			exec($command, $output, $return_var);
-			if (!$return_var){
-				$out[] = '<h1>' . _("Status von Lifters") . sprintf('%03d', $id) . '</h1>';
-				$out[] = '<p>' . strftime("%x %X", time()) . '</p>';
-				if(count($output)){
-					$out[] =  '<h3>' . htmlReady(array_pop($output)) .'</h3>';
-					$out[] = '<pre>';
-					foreach($output as $line){
-						$out[] = htmlReady($line);
-					}
-					$out[] = '</pre>';
-				}
-			}
-			$cache->write($cache_key, serialize($out), 3600);
-		} else {
-			$out = unserialize($cached_out);
+// This function shows the progress of a lister.
+function wiki_liftersprogress($template_name, $lnr){
+
+	global $lifters_templates;
+
+	# retrieve ID of lifters from keyword of wiki page
+	if ($lnr === '' && isset($_GET['keyword'])) {
+		if (preg_match('/^' . $lifters_templates[$template_name]['prefix'] .
+		               '([0-9])+$/', $_GET['keyword'], $matches)) {
+			$lnr = $matches[1];
 		}
-    }
-	return implode(chr(10),$out);
+	}
+	$id = (int)$lnr;
+
+	if (!$id) {
+		return '';
+	}
+
+	$cache_key = "wiki/liftersprogress/" . $id;
+	$cache = StudipCacheFactory::getCache();
+	$result = $cache->read($cache_key);
+
+	if ($result === FALSE) {
+		$command = sprintf('cd %s ; tools/lifter/lifter-status -l%d',
+			$GLOBALS['STUDIP_BASE_PATH'], $id);
+		exec($command, $output, $return_var);
+
+		$out = array();
+		if (!$return_var) {
+			$out[] = '<h1>'._("Status von Lifters") . sprintf('%03d', $id) . '</h1>';
+			$out[] = '<p>' . strftime("%x %X", time()) . '</p>';
+
+			if (count($output)) {
+				$out[] =  '<h3>' . htmlReady(array_pop($output)) .'</h3>';
+				$out[] = '<pre>';
+				foreach($output as $line) {
+					$out[] = htmlReady($line);
+				}
+				$out[] = '</pre>';
+			}
+		}
+
+		$result = implode("\n", $out);
+		$cache->write($cache_key, $result, 300);
+	}
+	return $result;
 }
-?>
