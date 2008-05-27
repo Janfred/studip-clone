@@ -117,9 +117,12 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 	else if (strlen($range_id))
 		$query = "SELECT t.*, th.title as Titel, th.description as Info FROM termine t LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen as th USING (issue_id) WHERE (range_id='$range_id' $show_query $tmp_query ) ORDER BY date";
 	else {
-		$query = "SELECT t.*, th.title as Titel, th.description as Info, s.Name, su.* FROM termine t LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen as th USING (issue_id) LEFT JOIN seminare s ON (range_id = s.Seminar_id) ";
-		$query .= "LEFT JOIN seminar_user su USING (Seminar_id) ";
-		$query .= "WHERE (user_id = '" . $user->id . "' $show_query $tmp_query ) ORDER BY date";
+		$query = "SELECT t.*, th.title as Titel, th.description as Info, s.Name, su.* FROM termine t ".
+			"LEFT JOIN themen_termine USING (termin_id) ".
+			"LEFT JOIN themen as th USING (issue_id) ".
+			"LEFT JOIN seminare s ON (range_id = s.Seminar_id) ".
+			"LEFT JOIN seminar_user su ON (s.Seminar_id = su.Seminar_id) ".
+			"WHERE (user_id = '" . $user->id . "' $show_query $tmp_query ) ORDER BY date";
 	}
 
 	$db->query($query);
