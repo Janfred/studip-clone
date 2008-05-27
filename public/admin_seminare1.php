@@ -258,12 +258,12 @@ function get_dozent_data($s_id, $_fullname_sql, $locked = false, $lock_text = ''
 			$out[] = "</td>";
 			if (!$locked)
 			{
-			if ($GLOBALS['DENOTATIONS'])
+			if ($GLOBALS['DENOTATIONS']) //was soll das sein?
         {
   				$out[] = "<td>";
   				$out[] = "<select name=\"\" size=1>";
   				foreach ($GLOBALS['DENOTATIONS'] as $denot) {
-  					$out[] = "<option>$denot";
+  					$out[] = "<option>". htmlReady($denot);
   				}
   				$out[] = "</select>";
   				$out[] = "</td>";
@@ -782,7 +782,7 @@ if ($s_send) {
 
    		$db->query($query);
 
-   		$updated_seminar = true;
+   		$updated_seminar = $db->affected_rows();
     }
 
 /*
@@ -905,7 +905,7 @@ if ($s_send) {
 				else
 					$invalidEntries[$id] = $entry;
 			}
-			$msg .= "msg§" . _("Die Grunddaten der Veranstaltung wurden ver&auml;ndert.") . "§";
+			if(!$updated_seminar) $msg .= "msg§" . _("Die Grunddaten der Veranstaltung wurden ver&auml;ndert.") . "§";
 			if (count($invalidEntries) > 0)
 				$msg .= "error§" . _("Fehlerhafte Eingaben (s.u.) wurden nicht gespeichert") . "§";
 		}
