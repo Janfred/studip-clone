@@ -83,6 +83,24 @@ a img { /* Bilder in Links ohne Rand */
 	border:0px;
 }
 
+
+/* --- Layouts -------------------------------------------------------------- */
+#layout_container {
+/*  background-color: white;*/
+  width: 100%;
+  padding: 0 0 1em 0;
+}
+
+#layout_content {
+  margin-right: 270px;
+}
+
+#layout_infobox {
+  float: right;
+  width: 250px;
+}
+
+
 /* --- Tabellen ------------------------------------------------------------- */
 /* //TODO: optimieren und aufräumen */
 td.shadowver {background-image: url('../images/shadowver.gif');}
