@@ -1295,7 +1295,11 @@ function print_infobox($content, $picture = '', $dont_display_immediatly = FALSE
  * @return       string
  */
 function tooltip ($text, $with_alt = TRUE, $with_popup = FALSE) {
-	return ' ' . join(' ', tooltip2($text, $with_alt, $with_popup));
+	$result = '';
+	foreach (tooltip2($text, $with_alt, $with_popup) as $key => $value) {
+		$result .= sprintf(' %s="%s"', $key, $value);
+	}
+	return $result;
 }
 
 /**
