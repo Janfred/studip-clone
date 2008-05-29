@@ -1,5 +1,5 @@
 <?
-# Lifter002: 
+# Lifter002: TODO
 //			___________________________________________
 //
 // 			INITIALISIERUNG, HEADER, GLOBALE VARIABLEN

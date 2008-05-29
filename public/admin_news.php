@@ -1,6 +1,6 @@
 <?php
 # Lifter001: TODO
-# Lifter002: 
+# Lifter002: TODO
 /*
 admin_news.php - Ändern der News von Stud.IP
 Copyright (C) 2001	André Noack <andre.noack@gmx.net>

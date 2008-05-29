@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 /*
 stm_details.php - Detail-Uebersicht eines konkreten Studienmoduls
 Copyright (C) 2006 André Noack <noack@data-quest.de>

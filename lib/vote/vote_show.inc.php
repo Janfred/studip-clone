@@ -1,5 +1,6 @@
 <?php
 # Lifter001: DONE
+# Lifter002: TODO
 
 /**
  * This file is used to insert a vote in Stud.IP.

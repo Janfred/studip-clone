@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /*
  * migrator.php - versioning databases using migrations

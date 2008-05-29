@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 /*
 show_bereich.php - Anzeige von Veranstaltungen eines Bereiches oder Institutes
 Copyright (C) 2000 Cornelis Kater <ckater@gwdg.de>

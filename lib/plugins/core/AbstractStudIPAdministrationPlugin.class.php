@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /**
  * Ausgangspunkt für Administrationsplugins, also Plugins, die speziell im

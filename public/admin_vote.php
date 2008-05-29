@@ -1,6 +1,6 @@
 <?php
 # Lifter001: TODO
-# Lifter002: 
+# Lifter002: TODO
 // +--------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // admin_vote.php

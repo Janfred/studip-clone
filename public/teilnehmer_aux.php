@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 /*
 teilnehmer.php - Anzeige der Teilnehmer eines Seminares
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>

@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 /*
 rss.php - Ausgabe der persšnlcihen News als rss-Feed
 Copyright (C) 2005	Philipp HŸgelmeyer <phuegelm@uni-osnabrueck.de>

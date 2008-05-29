@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 require_once "ConnectedCMS.class.php";
 
 /**

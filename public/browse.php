@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 /*
 browse.php - Personen-Suche in Stud.IP
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>

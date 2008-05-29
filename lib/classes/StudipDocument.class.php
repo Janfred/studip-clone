@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 /**
 * StudipDocument.class.php
 *

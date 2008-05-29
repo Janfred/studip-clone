@@ -1,5 +1,5 @@
 <?
-# Lifter002: 
+# Lifter002: TODO
 /*
 check_sem_entry.inc.php - Script zur Ueberpruefung der Zugangsberechtigung zu einem Seminar,
 wird nur augefuert, wenn ein Seminar gewaehlt wurde.

@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 /*
 auswahl_suche.php - Uebersicht ueber die Suchfunktion von Stud.IP
 Copyright (C) 2001 Cornelis Kater <ckater@gwdg.de>

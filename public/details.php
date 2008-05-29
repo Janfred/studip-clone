@@ -1,6 +1,6 @@
 <?php
 # Lifter001: TODO
-# Lifter002: 
+# Lifter002: TODO
 /*
 details.php - Detail-Uebersicht und Statistik fuer ein Seminar
 Copyright (C) 2000 Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>

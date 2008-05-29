@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 
 require_once('config.inc.php');
 require_once('lib/classes/SemesterData.class.php');

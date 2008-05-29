@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 require_once('lib/visual.inc.php');
 
 $error_message = "";

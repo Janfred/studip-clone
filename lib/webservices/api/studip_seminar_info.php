@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /*
  * studip_seminar_info.php - base class for seminars

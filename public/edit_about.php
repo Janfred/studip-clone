@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 // vim: noexpandtab
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP

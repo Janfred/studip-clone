@@ -1,6 +1,6 @@
 <?
 # Lifter001: TODO
-# Lifter002: 
+# Lifter002: TODO
 /**
 * archiv_Assi.php - Archivierungs-Assistent von Stud.IP.
 * Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, data-quest <info@data-quest.de>

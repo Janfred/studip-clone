@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 require_once("lib/classes/SemesterData.class.php");
 
 global $SEM_TYPE, $SEM_CLASS;

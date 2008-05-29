@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /**
  * abstract class for the visualization of plugins

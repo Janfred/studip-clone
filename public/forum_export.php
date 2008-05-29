@@ -1,5 +1,5 @@
 <?
-# Lifter002: 
+# Lifter002: TODO
 /*
 forum_export.php - Druck-Anzeige des Forensystems
 Copyright (C) 2002 Ralf Stockmann <rstockm@gwdg.de>

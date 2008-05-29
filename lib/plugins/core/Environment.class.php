@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 /**
 	Enthält für die Pluginschnittstelle wichtige Umgebungsinformationen
  * @author Dennis Reil, <dennis.reil@offis.de>

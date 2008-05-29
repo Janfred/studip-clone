@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /*
  * migration.php - abstract base class for migrations

@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /**
  * Starting point for creating "normal" course or institute plugins.

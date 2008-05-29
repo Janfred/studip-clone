@@ -1,5 +1,5 @@
 <?
-# Lifter002: 
+# Lifter002: TODO
 /*
 contact.php - 0.8
 Bindet Adressbuch ein.

@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 /*
 msg.inc.php - Modul zur Ausgabe von Nachrichten auf Administrationsseiten von Stud.IP.
 Copyright (C) 2000 Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>

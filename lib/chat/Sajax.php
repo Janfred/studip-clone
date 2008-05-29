@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 if (!isset($SAJAX_INCLUDED)) {
 
 	/*  

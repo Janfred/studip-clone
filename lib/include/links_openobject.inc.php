@@ -1,6 +1,6 @@
 <?php
 # Lifter001: TODO - in progress (not all links use URLHelper yet)
-# Lifter002: 
+# Lifter002: TODO
 // vim: noexpandtab
 /**
 * links_openobject.inc.php

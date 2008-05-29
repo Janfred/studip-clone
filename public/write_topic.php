@@ -1,6 +1,6 @@
 <?php
 # Lifter001: DONE
-# Lifter002: 
+# Lifter002: TODO
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session

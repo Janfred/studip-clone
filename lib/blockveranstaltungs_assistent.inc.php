@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 /**
 * blockveranstaltungs_assistent.inc.php - Terminverwaltung von Stud.IP
 *

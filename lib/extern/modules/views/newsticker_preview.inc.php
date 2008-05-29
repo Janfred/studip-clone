@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 $topics = array();
 echo "
 <script type=\"text/javascript\">

@@ -1,5 +1,6 @@
 <?php
 # Lifter001: DONE
+# Lifter002: TODO
 /**
  * Overview of all existing votes ... vote_overview.lib.php
  *

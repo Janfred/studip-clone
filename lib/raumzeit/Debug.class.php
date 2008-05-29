@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 class Debug {
 
 	function debug($text, $dl = 0) {

@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 /**
  * Configurationfile for the evaluation module
  *

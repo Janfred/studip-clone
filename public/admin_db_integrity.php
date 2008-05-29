@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 /**
 * Frontend for the db integrity checks
 * 

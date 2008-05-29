@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 class Console_TestListener extends PHPUnit_TestListener {
     function addError(&$test, &$t) {
         $this->_errors += 1;

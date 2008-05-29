@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /*
  * AbstractStudIPLegacyPlugin.class.php - bridge for legacy plugins

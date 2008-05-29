@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 /**
 * Login script for the Chat
 *

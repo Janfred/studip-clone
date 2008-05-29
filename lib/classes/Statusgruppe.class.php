@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 /*
 Statusgruppe.class.php - Statusgruppen-Klasse
 Copyright (C) 2008 Till Glöggler <tgloeggl@uos.de>

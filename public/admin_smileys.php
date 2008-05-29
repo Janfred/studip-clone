@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 /*
 admin_smileys.php - Smiley-Verwaltung von Stud.IP.
 Copyright (C) 2004 Tobias Thelen <tthelen@uos.de>

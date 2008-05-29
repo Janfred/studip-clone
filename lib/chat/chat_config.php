@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 /**
 * Config file for package: Chat
 * 

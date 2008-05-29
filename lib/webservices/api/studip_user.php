@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /*
  * studip_user.php - Basisklasse für Stud.IP User

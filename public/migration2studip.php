@@ -1,5 +1,5 @@
 <?
-# Lifter002: 
+# Lifter002: TODO
 /**
 * Account-Migration from Stud.IP to ILIAS.
 *

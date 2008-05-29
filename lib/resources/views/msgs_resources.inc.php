@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 /**
 * msgs_resources.inc.php
 * 

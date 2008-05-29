@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 
 /*
  * Copyright (C) 2007 - Marcus Lunzenauer <mlunzena@uos.de>

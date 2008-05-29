@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 // vim: noexpandtab
 /**
 * html_head.inc.php

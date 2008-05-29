@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /**
  * The permission of an object, usually a user.

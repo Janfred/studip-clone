@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 /**
 
  * Creates a record of study and exports the data to pdf

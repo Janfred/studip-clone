@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /**
  * Abstract plugin for plugins shown on the homepage of a user

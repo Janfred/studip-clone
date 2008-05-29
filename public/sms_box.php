@@ -1,5 +1,5 @@
 <?
-# Lifter002: 
+# Lifter002: TODO
 
 /**
 * displays messages in in- and outboxfolders

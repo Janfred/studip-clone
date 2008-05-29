@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 // +--------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // SeminarDB.class.php

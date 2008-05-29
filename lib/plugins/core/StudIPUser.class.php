@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /**
  * User-Object which should be used in plugins

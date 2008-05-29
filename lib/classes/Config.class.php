@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /**
  * Access to global config options

@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipLitSearchPluginFH_Schmalkalden.class.php

@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /*
  * studip_session.php - base class for session/authorization infos

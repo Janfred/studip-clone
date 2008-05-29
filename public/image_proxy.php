@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // image_proxy.php

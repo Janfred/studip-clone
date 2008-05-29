@@ -1,6 +1,6 @@
 <?php
 # Lifter001: DONE
-# Lifter002: 
+# Lifter002: TODO
 // vim: noexpandtab
 /*
 seminar_main.php - Die Eingangs- und Uebersichtsseite fuer ein Seminar

@@ -1,5 +1,5 @@
 <?
-# Lifter002: 
+# Lifter002: TODO
 /*
 pers_browse.inc.php - Universeller Personenbrowser zum Includen, Stud.IP
 Copyright (C) 2001 Stefan Suchi <suchi@gmx.de>

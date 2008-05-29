@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 /*
 admin_banner_ads.php - Werbebanner-Verwaltung von Stud.IP.
 Copyright (C) 2003 Tobias Thelen <tthelen@uos.de>

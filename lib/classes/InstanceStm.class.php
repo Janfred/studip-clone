@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 define('LANGUAGE_ID',"09c438e63455e3e1b3deabe65fdbc087");
 
 require_once ("lib/functions.php");

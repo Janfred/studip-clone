@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 /*
  * db_migration.php - database schema migration
  * Copyright (C) 2007  Elmar Ludwig

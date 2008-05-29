@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 /*
 admin_user_kill.php
 Copyright (C) 2005 André Noack <noack@data-quest.de>

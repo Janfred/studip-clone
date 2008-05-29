@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 // $Id$
 
 require_once('lib/visual.inc.php');

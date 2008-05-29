@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 /**
 * Status Window for the Chat
 *

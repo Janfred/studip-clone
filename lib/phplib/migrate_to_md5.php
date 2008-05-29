@@ -1,4 +1,5 @@
 <? 
+# Lifter002: TODO
 # Script to migrate from regular authentication to md5-hashed passwords
 #
 # Jim Zajkowski <jim@jimz.com>

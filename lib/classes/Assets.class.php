@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 
 /*
  * Assets.class.php - assets helper

@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 /**
 * SemGroupScheduleDayOfWeek.class.php
 *

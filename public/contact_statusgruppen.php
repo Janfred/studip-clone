@@ -1,5 +1,5 @@
 <?
-# Lifter002: 
+# Lifter002: TODO
 /*
 admin_statusgruppe.php - Statusgruppen-Verwaltung von Stud.IP.
 Copyright (C) 2002 Ralf Stockmann <rstockm@gwdg.de>

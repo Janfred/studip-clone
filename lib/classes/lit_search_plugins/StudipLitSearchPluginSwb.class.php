@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipLitSearchPluginSwb.class.php

@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 /**
 * ExternElementMainTemplateLecturedetails.class.php
 * 

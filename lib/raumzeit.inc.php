@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 require_once('log_events.inc.php');
 define('DO_NOT_APPEND_MESSAGES', false);
 /*

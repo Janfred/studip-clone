@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 /*
 user_visible.inc.php - Functions for determining a users visibility
 Copyright (C) 2004 Till Glöggler <virtuos@snowysoft.de>

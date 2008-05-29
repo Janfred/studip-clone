@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 /**
 * helper functions for handling statusgruppen
 *

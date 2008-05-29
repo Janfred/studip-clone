@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 /**
  * Interface for the user mapping used by StudIPAuthCAS
  */

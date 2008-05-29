@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 
 function year_restore (&$ttthis) {
 	$db = new DB_Seminar();

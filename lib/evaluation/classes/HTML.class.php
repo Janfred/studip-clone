@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 /**
  * HTML-class for the Stud.IP-project.
  * Based on scripts from "http://tut.php-q.net/".

@@ -1,4 +1,5 @@
 <?php
+# Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipLitSearchPluginUB_Weimar.class.php

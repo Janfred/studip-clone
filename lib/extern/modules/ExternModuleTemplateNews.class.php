@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 /**
 * ExternModuleTemplateNews.class.php
 * 

@@ -1,4 +1,5 @@
 <?
+# Lifter002: TODO
 
 /*
 calendarEvent.class.php - 0.8.20020409a

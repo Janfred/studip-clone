@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 /*
 bb.php - Big Brother Bilder Browser
 Copyright (C) 2001 Cornelis Kater <ckater@gwdg.de>

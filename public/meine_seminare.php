@@ -1,5 +1,5 @@
 <?php
-# Lifter002: 
+# Lifter002: TODO
 // vim: noexpandtab
 /*
 meine_seminare.php - Anzeige der eigenen Seminare (anhaengig vom Status)
