@@ -1,5 +1,6 @@
 <?php
 # Lifter001: DONE
+# Lifter002: 
 
 /*
 wiki.php - (No longer so) Simple WikiWikiWeb in Stud.IP

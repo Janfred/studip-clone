@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 
 /*
  * jsonrpc.php - JSON-RPC Backend for Stud.IP web services

@@ -1,5 +1,6 @@
 <?php
 # Lifter001: TODO
+# Lifter002: 
 
 /*
 copy_assi.php - Dummy zum Einstieg in Veranstaltungskopieren

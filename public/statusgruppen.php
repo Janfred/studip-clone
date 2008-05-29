@@ -1,4 +1,5 @@
 <?
+# Lifter002: 
 /*
 statusgruppen.php - Statusgruppen-Anzeige von Stud.IP.
 Copyright (C) 2002 Ralf Stockmann <rstockm@gwdg.de>

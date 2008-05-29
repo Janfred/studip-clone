@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 /*
 logout.php - Ausloggen aus Stud.IP und aufräumen
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, André Noack <andre.noack@gmx.net>,

@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 // vim: noexpandtab
 /*
 about.php - Anzeige der persoenlichen Userseiten von Stud.IP

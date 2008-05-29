@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 /*
 print_seminar.php - Druckanzeige eines laufenden Seminares
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>

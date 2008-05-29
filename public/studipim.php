@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 /*
 studipim.php - Instant Messenger for Studip
 Copyright (C) 2001 André Noack <andre.noack@gmx.net>

@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 // vim: noexpandtab
 /*
  * admin_lock.php - Sichtbarkeits-Administration von Stud.IP.

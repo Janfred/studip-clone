@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 /*
 themen.php: Redirector page for theme administration view-modes
 

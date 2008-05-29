@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 /*
 stm_details.php - Detail-Uebersicht eines konkreten Studienmoduls
 Copyright (C) 2006 André Noack <noack@data-quest.de>

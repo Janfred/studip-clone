@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 /*
 bb.php - Big Brother Bilder Browser
 Copyright (C) 2001 Cornelis Kater <ckater@gwdg.de>

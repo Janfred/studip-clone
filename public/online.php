@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 /*
 online.php - Anzeigemodul fuer Personen die Online sind
 Copyright (C) 2002 André Noack <andre.noack@gmx.net>, Cornelis Kater <ckater@gwdg.de>

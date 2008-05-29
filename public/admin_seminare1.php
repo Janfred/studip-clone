@@ -1,5 +1,6 @@
 <?
 # Lifter001: TODO
+# Lifter002: 
 // vim: noexpandtab
 /*
 admin_seminare1.php - Seminar-Verwaltung von Stud.IP.

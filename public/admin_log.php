@@ -1,4 +1,5 @@
 <?
+# Lifter002: 
 /**
 * admin_log.php
 *

@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 ob_start();
 $auto_challenge = md5(uniqid('bfuhpdsiufbpiasu',1));
 $auto_id = md5(uniqid('asiqw34fhofw9ffes',1));

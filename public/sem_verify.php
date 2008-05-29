@@ -1,5 +1,6 @@
 <?
 # Lifter001: DONE - nothing to do
+# Lifter002: 
 /**
 * sem_verify.php
 *

@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 
 /*
 adminarea_start.php - Dummy zum Einstieg in Adminbereich

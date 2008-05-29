@@ -1,5 +1,6 @@
 <?php
 # Lifter001: DONE
+# Lifter002: 
 /*
 institut_main.php - Die Eingangsseite fuer ein Institut
 Copyright (C) 200 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>

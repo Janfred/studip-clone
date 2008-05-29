@@ -1,4 +1,5 @@
 <?
+# Lifter002: 
 //			___________________________________________
 //
 // 			INITIALISIERUNG, HEADER, GLOBALE VARIABLEN

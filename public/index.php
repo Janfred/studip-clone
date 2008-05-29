@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 // vim: noexpandtab
 /*
 index.php - Startseite von Stud.IP (anhaengig vom Status)

@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 /*
 new_user_md5.php - die globale Benutzerverwaltung von Stud.IP.
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>

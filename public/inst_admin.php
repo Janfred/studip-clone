@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 // vim: noexpandtab
 /*
 inst_admin.php - Instituts-Mitarbeiter-Verwaltung von Stud.IP

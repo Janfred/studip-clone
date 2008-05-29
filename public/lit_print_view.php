@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 
 /*
 literatur.php - Literaturanzeige von Stud.IP

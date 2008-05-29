@@ -1,5 +1,6 @@
 <?php
 # Lifter001: DONE
+# Lifter002: 
 /*
 folder.php - Anzeige und Verwaltung des Ordnersystems
 Copyright (C) 2001 Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>

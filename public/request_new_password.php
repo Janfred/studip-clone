@@ -1,4 +1,5 @@
 <?
+# Lifter002: 
 /**
 * request_new_password.php
 *

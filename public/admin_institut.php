@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 /*
 admin_institut.php - Einrichtungs-Verwaltung von Stud.IP.
 Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>

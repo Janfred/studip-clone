@@ -1,5 +1,6 @@
 <?php
 # Lifter001: DONE
+# Lifter002: 
 
 /*
 scm.php - Simple Content Module von Stud.IP

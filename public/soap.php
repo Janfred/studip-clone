@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 
 /*
  * soap.php - SOAP Backend for Stud.IP web services

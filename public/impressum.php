@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 /*
 impressum.php - Impressum von Stud.IP.
 Copyright (C) 2000 Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@uni-goettingen.de>
