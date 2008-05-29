@@ -135,7 +135,7 @@ class PluginEngine {
 		if (is_null($plugin)) {
 			return "";
 		}
-		$link = sprintf("plugins.php/%s/%s", urlencode($plugin->getPluginclassname()), urlencode($cmd));
+		$link = sprintf("plugins.php/%s/%s", urlencode($plugin->getPluginclassname()), $cmd);
 		if (PluginEngine::getTypeOfPlugin($plugin) == "Homepage") {
 			$requser = $plugin->getRequestedUser();
 			if (is_object($requser)) {
