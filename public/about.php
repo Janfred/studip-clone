@@ -94,15 +94,6 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE')){
 	}
 }
 
-?>
-<script language="Javascript">
-function open_im()
-{
-	fenster=window.open("studipim.php","im_<?=$user->id;?>","scrollbars=yes,width=400,height=300","resizable=no");
-}
-</script>
-
-<?php
 if ($rssusername) $username = $rssusername;
 //Wenn kein Username uebergeben wurde, wird der eigene genommen:
 if (!isset($username) || $username == "") $username = $auth->auth["uname"];
@@ -153,20 +144,33 @@ if($db->f('user_id') == $user->id && !$db->f('locked')){
 	$CURRENT_PAGE = _("Persönliche Homepage");
 	unset($user_id);
 }
-// Start  of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');
+
+# get the layout template
+$layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
+
+# and start the output buffering
+ob_start();
+
+
+
+?>
+<script language="Javascript">
+function open_im() {
+  fenster = window.open("studipim.php",
+                        "im_<?=$GLOBALS['user']->id;?>",
+                        "scrollbars=yes,width=400,height=300",
+                        "resizable=no");
+}
+</script>
+
+<?php
 
 if (!$user_id){
 	if ($db->f("visible") && !get_visibility_by_state($db->f("visible"))) {
-		parse_window("error§" . _("Diese Homepage ist nicht verf&uuml;gbar.") . " <br /><font size=-1 color=black>" . _("Die angeforderte Homepage ist leider nicht verf&uuml;gbar.")."</font>","§",
-		_("Homepage nicht verf&uuml;gbar"),
-		sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
+		throw new Exception(_("Diese Homepage ist nicht verf&uuml;gbar."));
 	} else {
-		parse_window("error§"._("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!")."<br />"._(" Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;scht wurde.")."§", "§", _("Benutzer nicht gefunden"));
+		throw new Exception(_("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!"));
 	}
-	page_close();
-	die;
 }
 
 // count views of Page
@@ -226,11 +230,8 @@ foreach (DataFieldEntry::getDataFieldEntries($user_id) as $entry) {
 $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
              || $perm->have_perm("root")
              || $admin_darf == TRUE;
-
-if ($show_tabs) {
-	include 'lib/include/links_about.inc.php';
-}
 ?>
+
 
 <table align="center" width="100%" border="0" cellpadding="1" cellspacing="0" valign="top">
 
@@ -479,7 +480,7 @@ if ($show_tabs) {
 				<br />
 			</blockquote>
 		</td>
-	</tr>
+</tr>
 </table>
 
 <br/>
@@ -652,7 +653,14 @@ if ($perm->get_perm($user_id) == 'dozent'){
 		printf($ausgabe_format, _("Veranstaltungen"), '', $output);
 	}
 }
-include ('lib/include/html_end.inc.php');
+
+$layout->set_attribute('content_for_layout', ob_get_clean());
+
+if ($show_tabs) {
+	$layout->set_attribute('tabs', 'links_about');
+}
+
+echo $layout->render();
+
 // Save data back to database.
 page_close();
-?>
