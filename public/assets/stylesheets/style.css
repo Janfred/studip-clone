@@ -60,13 +60,6 @@ a, a:link, a:visited {
 	color: #213499;
     text-decoration: none;
 }
-a:link.links1, a:visited.links1,
-a:link.links1a, a:visited.links1a,
-a:link.links1b, a:visited.links1b,
-a:link.links1c, a:visited.links1c {
-	color: #000000;
-	font-weight: bold;
-}
 a:link.index, a:visited.index {
 	color: #444444;
 }
@@ -78,8 +71,7 @@ a:link.toolbar, a:visited.toolbar {
 	font-size: 9px;
 }
 
-a:hover, a:active, a:hover.index, a:active.index, a:hover.tree,
-a.links1:hover, a:hover.links1a, a:hover.links1b, a:hover.links1c {
+a:hover, a:active, a:hover.index, a:active.index, a:hover.tree {
 	color: #FF3333;
 	text-decoration: none;
 }
@@ -97,11 +89,6 @@ td.shadowver {background-image: url('../images/shadowver.gif');}
 td.shadowhor {background-image: url('../images/shadowhor.gif');}
 td.shadowcor {background-image: url('../images/shadowcor.gif');}
 
-td.links1b {background-image: url('../images/steelblau4.jpg');}
-td.links1c {background-image: url('../images/steel1info.jpg');}
-td.links1 {background-image: url('../images/fill2.gif');}
-td.linksinfo {background-image: url('../images/steel1info.jpg');}
-td.links1a {background-image: url('../images/fill3.gif');}
 td.reiterunten {background-image: url('../images/reiter3.jpg');}
 
 table.header { background-image: url('../images/fill1.gif');}
@@ -146,8 +133,6 @@ td.infoboxrahmen {
 
 /* --- Sonstige ------------------------------------------------------------- */
 /** //TODO: aufräumen und optmieren... */
-.linksdisabled {color: #999999; text-decoration: none; font-weight: bold; }
-
 .gruppe0 {background: none; background-color: #FFFFFF;}
 .gruppe1 {background: none; background-color: #FF0000;}
 .gruppe2 {background: none; background-color: #FF9933;}
@@ -274,6 +259,10 @@ div.selectbox {
 .minor {
   color: gray;
   font-size: 0.75em;
+}
+
+.quiet {
+  color: gray;
 }
 
 dd {
@@ -416,4 +405,82 @@ div.autocomplete .informal .comment {
 
 div.autocomplete .informal .seminar_id {
 	display: none;
+}
+
+/* --- Inhaltsverzeichnis Wikis --------------------------------------------- */
+#tabs, #tabs2 {
+	float: left;
+	line-height: 24px;
+}
+
+#tabs ul, #tabs2 ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#tabs li, #tabs2 li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#tabs a, #tabs2 a {
+	color: black;
+	font-weight: bold;
+}
+
+div.clear {
+	clear: both;
+	visibility: none;
+}
+
+#tabs {
+	margin: 0;
+	padding: 0 2px 0 0;
+}
+
+#tabs li {
+	background: url("../images/normal_right.png") repeat right top;
+}
+
+#tabs a, #tabs span {
+	display: block;
+	padding-left: 1.5em;
+	padding-right: 1.5em;
+}
+
+#tabs li.current {
+	background: url("../images/current_right.png") repeat right top;
+}
+
+#tabs li.current a, #tabs li.current span {
+	background: url("../images/current_left.png") no-repeat left top;
+}
+
+#tabs li.current + li a, #tabs li.current + li span {
+	background: url("../images/reiter2.jpg") no-repeat left top;
+}
+
+#tabs2 {
+	clear: both;
+	width: 100%;
+	background: url("../images/steelblau4.jpg") repeat left top;
+	margin: 0 0 0 0;
+	padding: 4px 0 4px 3em;
+}
+
+#tabs2 li {
+	line-height: 30px;
+}
+
+#tabs2 li {
+	background: url("../images/pfeilweiss2.gif") no-repeat left top;
+	padding-left: 10px;
+	padding-right: 1.5em;
+}
+
+#tabs2 li.current {
+	background: url("../images/forumrot3.gif") no-repeat left top;
 }
