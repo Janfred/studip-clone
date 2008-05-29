@@ -1,4 +1,5 @@
 <?
+# Lifter002: 
 /*
 links_seminare.inc.php - Navigation fuer die Uebersichtsseiten.
 Copyright (C) 2001 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de

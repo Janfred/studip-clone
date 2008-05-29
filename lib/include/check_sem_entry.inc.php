@@ -1,4 +1,5 @@
 <?
+# Lifter002: 
 /*
 check_sem_entry.inc.php - Script zur Ueberpruefung der Zugangsberechtigung zu einem Seminar,
 wird nur augefuert, wenn ein Seminar gewaehlt wurde.

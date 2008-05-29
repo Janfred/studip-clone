@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 // vim: noexpandtab
 /*
  * This program is free software; you can redistribute it and/or

@@ -1,4 +1,5 @@
 <?
+# Lifter002: 
 /*
 reiter.php - 0.8.20020327
 Klasse zum Erstellen des Reitersystems

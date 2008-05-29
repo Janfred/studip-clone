@@ -1,4 +1,5 @@
 <?
+# Lifter002: 
 // vim: noexpandtab
 /*
 links_about.inc.php - Navigation fuer die Uebersichtsseiten.

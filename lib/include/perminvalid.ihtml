@@ -1,4 +1,5 @@
 <?
+# Lifter002: 
 if (CLOSE_ON_LOGIN_SCREEN === true) {
 	echo "<script type=\"text/javascript\">self.close();</script>";
 	die;

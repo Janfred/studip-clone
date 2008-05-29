@@ -1,4 +1,5 @@
 <?php
+# Lifter002: 
 /**
  * Ends an html page.
  *
