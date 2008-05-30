@@ -425,10 +425,10 @@ div.autocomplete .informal .seminar_id {
 	display: none;
 }
 
-/* --- Inhaltsverzeichnis Wikis --------------------------------------------- */
+/* --- Reiternavigation ----------------------------------------------------- */
 #tabs, #tabs2 {
 	float: left;
-	line-height: 24px;
+	line-height: 18pt;
 }
 
 #tabs ul, #tabs2 ul {
@@ -460,7 +460,8 @@ div.clear {
 }
 
 #tabs li {
-	background: url("../images/normal_right.png") repeat right top;
+	background: url("../images/normal_right.png") repeat-x right top;
+	background-color: #9A9A9A;
 }
 
 #tabs a, #tabs span {
@@ -470,7 +471,8 @@ div.clear {
 }
 
 #tabs li.current {
-	background: url("../images/current_right.png") repeat right top;
+	background: url("../images/current_right.png") repeat-x right top;
+	background-color: #F1F5Fe;
 }
 
 #tabs li.current a, #tabs li.current span {
@@ -490,7 +492,7 @@ div.clear {
 }
 
 #tabs2 li {
-	line-height: 30px;
+	line-height: 20pt;
 }
 
 #tabs2 li {
