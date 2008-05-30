@@ -13,7 +13,6 @@
 		<? endif ?>
 	<? endforeach ?>
 </ul>
-<div class="tabs2">
 <ul id="tabs2">
 	<? foreach ($structure as $value) : ?>
 		<? if ($value['topKat'] && $structure[$value['topKat']]['active']) : ?>
@@ -29,5 +28,4 @@
 		<? endif ?>
 	<? endforeach ?>
 </ul>
-</div>
 <div class="clear"></div>
