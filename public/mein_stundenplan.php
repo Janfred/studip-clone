@@ -34,15 +34,24 @@
 // +---------------------------------------------------------------------------+
 
 
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session",
+                "auth" => "Seminar_Auth",
+                "perm" => "Seminar_Perm",
+                "user" => "Seminar_User"));
 
 ob_start(); //Outputbuffering for max performance
 
-include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+include('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-if (isset($print_view))
+$view = 'standard';
+if (($_REQUEST['view'] == 'print') || ($_REQUEST['view'] == 'edit')) {
+	$view = $_REQUEST['view'];	
+}
+
+if ($view == 'print') {
 	$_include_stylesheet = "style_print.css"; // use special stylesheet for printing
+}
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -69,7 +78,7 @@ if (!$inst_id) {
 	$CURRENT_PAGE = $SessSemName["header_line"]." - "._("Veranstaltungs-Timetable");
 }
 
-if (!$print_view) {
+if ($view != 'print') {
 	include 'lib/include/header.php';   //hier wird der "Kopf" nachgeladen
 	if ($inst_id) //Links if we show in the instiute-object-view
 		include 'lib/include/links_openobject.inc.php';
@@ -77,30 +86,26 @@ if (!$print_view) {
 		include ('lib/include/links_sms.inc.php');
 	else
 		include ('lib/include/links_sms.inc.php');
-	}
+}
 
-if ($change_view) {
-	change_schedule_view();
-	echo "</tr></td></table>";
-	die;
-	}
-
-
-$db=new DB_Seminar;
-$db2=new DB_Seminar;
+$db = new DB_Seminar;
+$db2 = new DB_Seminar;
 $semester = new SemesterData;
-$hash_secret="machomania";
+$hash_secret = "machomania";
 
 $all_semester = $semester->getAllSemesterData();
 //Wert fuer colspan Ausrechnen
-$glb_colspan=0;
-if ($my_schedule_settings["glb_days"]["mo"]) $glb_colspan++;
-if ($my_schedule_settings["glb_days"]["di"]) $glb_colspan++;
-if ($my_schedule_settings["glb_days"]["mi"]) $glb_colspan++;
-if ($my_schedule_settings["glb_days"]["do"]) $glb_colspan++;
-if ($my_schedule_settings["glb_days"]["fr"]) $glb_colspan++;
-if ($my_schedule_settings["glb_days"]["sa"]) $glb_colspan++;
-if ($my_schedule_settings["glb_days"]["so"]) $glb_colspan++;
+$glb_colspan = 0;
+
+if($view != 'edit' && !$_REQUEST['inst_id']) {
+	foreach($my_schedule_settings["glb_days"] as $tmp) {
+		if ($tmp){
+			$glb_colspan++;
+		}
+	}
+}else {
+	$glb_colspan = 7;
+}
 
 // Hat man sich inzwischen fest eingetragen, Eintrag aus dem virtuellen Stundenplan löschen
 $db->query("SELECT * FROM seminar_user_schedule a, seminar_user b WHERE a.range_id = b.Seminar_id AND a.user_id = b.user_id AND a.user_id = '".$auth->auth['uid']."'");
@@ -119,16 +124,39 @@ if ($cmd == "delete_entry") {
 }
 
 //persoenlichen Eintrag wegloeschen
-if ($cmd=="delete")
- {
-	unset ($my_personal_sems[$d_sem_id]);
+if ($cmd == "delete") {
+	unset($my_personal_sems[$sem_id]);
 }
 
+// hide entry
+if ($cmd == "hide") {
+	if(!$my_schedule_settings['hidden']) {
+		$my_schedule_settings['hidden'] = array();
+	}
+	
+	$my_schedule_settings['hidden'][$sem_id] = True;
+}
+
+// show previously hidden entry
+if ($cmd == "show") {
+	if(!$my_schedule_settings['hidden']) {
+		$my_schedule_settings['hidden'] = array();
+	}
+	
+	// echo $my_schedule_settings['hidden'][$sem_id];
+	if($my_schedule_settings['hidden'][$sem_id]){
+		unset($my_schedule_settings['hidden'][$sem_id]);
+	}
+}
+// echo _D($my_schedule_settings);
 
 //ein weiterer persoenlicher Eintrag wurde uebermittelt
 if ($cmd=="insert") {
 	switch ($tag) {
-		case 1: {//nicht wundern, wir nehmen hier irgendwelche Tage, von denen wir wissen, was das fuer ein Wochentag war, um den Wochentag zu fixieren (dieser Programmteil entstand 03/2001... *G)
+		// nicht wundern, wir nehmen hier irgendwelche Tage, von denen wir 
+		// wissen, was das fuer ein Wochentag war, um den Wochentag zu fixieren
+		// (dieser Programmteil entstand 03/2001... *G)
+		case 1: {
 			$start_time = mktime($start_stunde,$start_minute,0,3,26,2001);
 			$ende_time = mktime($ende_stunde,$ende_minute,0,3,26,2001);
 			break;
@@ -168,9 +196,9 @@ if ($cmd=="insert") {
 	$id=md5(uniqid($hash_secret));
 	$my_personal_sems[$id]=array("start_time"=>$start_time, "ende_time"=>$ende_time, "beschreibung"=>$beschreibung, "room" =>$room, "doz" =>$dozent, "seminar_id"=>$id);
 	//die;
-	}
+}
 
-//meine Seminare einlesen
+// meine Seminare einlesen
 if ($inst_id) {
 	$db->query("SELECT seminare.Seminar_id, Name, VeranstaltungsNummer, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '$inst_id' AND visible='1'");
 	$view="inst";
@@ -181,21 +209,21 @@ if ($inst_id) {
 		$view="inst_admin";
 	} else {
 		$db->query("SELECT seminare.Seminar_id, Name, VeranstaltungsNummer, start_time, duration_time,  metadata_dates FROM  seminar_user LEFT JOIN seminare USING (seminar_id) WHERE user_id = '$user_id'");
-		$view="user";
 	}
 }
-//richtiges Semester ausw&auml;hlen
-if ($view=="inst") {
+
+// select right semester
+if ($_REQUEST['inst_id']) {
 	$tmp_sem_nr = $_REQUEST['instview_sem'];
 } else {
-	$k=0;
+	$k = 0;
 	foreach ($all_semester as $a) {
 		if ($sem_name) {
 			if (rawurldecode($sem_name) == $my_schedule_settings["glb_sem"])
-				$tmp_sem_nr=$k;
+				$tmp_sem_nr = $k;
 		} else {
 			if ($a["name"] == $my_schedule_settings["glb_sem"])
-				$tmp_sem_nr=$k;
+				$tmp_sem_nr = $k;
 			$k++;
 		}
 	}
@@ -216,8 +244,8 @@ if (!$tmp_sem_nr) {
 	$tmp_sem_ende=$all_semester[$tmp_sem_nr]["ende"];
 }
 
-//Set the view (begin hour and and hour)
-if ($view=="inst") {
+// Set the view (begin hour and and hour)
+if ($_REQUEST['inst_id']) {
 	$global_start_time=8;
 	$global_end_time=20;
 } else {
@@ -253,7 +281,7 @@ for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_sche
 			{
 			if ($i>1)
 				$dozenten.=", ";
-			if (!$print_view)
+			if ($view != 'print')
 				$dozenten.="<a href =\"about.php?username=".$db2->f("username")."\">".htmlReady($db2->f("Nachname"))."</a>";
 			else
 				$dozenten.= htmlReady($db2->f("Nachname"));
@@ -261,7 +289,7 @@ for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_sche
 			}
 
 		$i=0;
-		foreach 	($term_data["turnus_data"] as $data)
+		foreach ($term_data["turnus_data"] as $data)
 			if ($data["end_stunde"] >= $global_start_time) {
 				//generate the room
 
@@ -624,23 +652,14 @@ for ($i; $i<$global_end_time+1; $i++)
 		}
 
 echo "</table></td></tr>";
+
+
+if($view == 'edit') {
 ?>
-<tr>
-	<td colspan=<? echo $glb_colspan+1?> class="blank">
-		&nbsp;
-	</td>
-</tr>
-<?
-if ((!$print_view) && (!$inst_id)) {
-?>
-<tr>
-	<td colspan=<? echo $glb_colspan+1?> class="blank">
-		&nbsp;
-	</td>
-</tr>
-<tr>
-	<td colspan=<? echo $glb_colspan+1?> class="steelgraulight">
-		<b>&nbsp;<?=_("Eigene Veranstaltung eintragen:")?></b><br>
+<div class="steelgraulight" style="margin-top: 30px; padding: 10px;">
+	<b>&nbsp;<?=_("Eigene Veranstaltung eintragen:")?></b><br>
+	<div style="margin-left: 15px; padding: 10px">
+
 		<font size=-1>&nbsp;(<?=_("Hier k&ouml;nnen sie Veranstaltungen, die nicht im Stud.IP System existieren oder andere, eigene Ereignisse eintragen")?>)</font><br>
 		<form method="POST" action="<? echo $PHP_SELF ?>?cmd=insert">
 			&nbsp;<?_("Wochentag:")?>
@@ -695,23 +714,46 @@ if ((!$print_view) && (!$inst_id)) {
 				<?=_("DozentIn:")?>
 				<input name="dozent" type="text" size=20 maxlength=255><br />&nbsp;
 				<input name="send" type="IMAGE" <?=makeButton("eintragen", "src")?> value="<?=("Eintragen")?>">
-		</form>
-	</td>
-</tr>
-<tr>
-	<td colspan=<? echo $glb_colspan+1?> class="blank">
-		&nbsp;
-	</td>
-</tr>
+				</form>
+</div></div>
 
-<?
+<?php
+
+if(count($my_schedule_settings['hidden']) > 0) {
+?>
+	<div class="steelgraulight" style="margin: 0px; padding: 10px;">
+	<b>&nbsp;<?=_("Ausgeblendete Termine:")?></b><br>
+	<div style="margin-left: 15px; padding: 10px">
+
+<?php
+$first = True;
+foreach($my_schedule_settings['hidden'] as $id => $value) {
+	if(!$first){
+		echo ', ';
+	}
+	$first = False;
+
+	echo '<a href="'. $PHP_SELF .'?cmd=show&sem_id='. $id .'" title="'. _("Diesen Termin wieder einblenden") .'">';
+	if($my_sems[$id]['desc']){
+		echo htmlReady($my_sems[$id]['desc']);
+	} else {
+		echo "Seminar";
+	}
+	echo date(" (D H:i)", $my_sems[$id]["start_time"]);
+	echo '</a>';
 }
+} // view == edit
+
+echo '</div></div>';
+}
+
+
+
+echo '</td></tr></table>';
+
 ob_end_flush(); //end outputbuffering
 // Save data back to database.
 
-if (!$print_view) {
-	echo '</table>';
- } 
 include ('lib/include/html_end.inc.php');
 page_close();
 ?>
