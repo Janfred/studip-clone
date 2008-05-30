@@ -41,6 +41,7 @@ page_open(array("sess" => "Seminar_Session",
 
 ob_start(); //Outputbuffering for max performance
 
+
 include('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
@@ -286,7 +287,7 @@ for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_sche
 			if ($i>1)
 				$dozenten.=", ";
 			if ($view != 'print')
-				$dozenten.="<a href =\"about.php?username=".$db2->f("username")."\">".htmlReady($db2->f("Nachname"))."</a>";
+				$dozenten.= '<a href ="'. URLHelper::getLink('about.php?username='.$db2->f("username")). '">'.htmlReady($db2->f("Nachname"))."</a>";
 			else
 				$dozenten.= htmlReady($db2->f("Nachname"));
 			$i++;
@@ -473,7 +474,7 @@ for ($i = 1; $i<7; $i++) {
 
 if ($_REQUEST['inst_id'] && $view != 'print') { ?>
 <?=_("Im Veranstaltungs-Timetable sehen Sie alle Veranstaltungen eines Semesters an der gew&auml;hlten Einrichtung.")?><br />
-<form action="<? echo $PHP_SELF ?>" method="POST">
+<form action="<? echo URLHelper::getLink(''); ?>" method="POST">
 <br /><font size=-1><?=_("Angezeigtes Semester:")?>&nbsp;
 	<select name="instview_sem" style="vertical-align:middle">
 	<?
@@ -485,19 +486,18 @@ if ($_REQUEST['inst_id'] && $view != 'print') { ?>
 	<input type="IMAGE" value="change_instview_sem" <? echo makeButton("uebernehmen", "src") ?> border=0 align="middle" value="<?=_("&uuml;bernehmen")?>" />&nbsp;
 	<input type="HIDDEN" name="inst_id" value="<? echo $inst_id ?>" /></form><br>
 
-<?
-printf ("<br><font size=-1><a target=\"_new\" href=\"%s?view=print%s\">"._("Druckansicht dieser Seite (wird in einem neuen Browserfenster ge&ouml;ffnet).")."</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=$inst_id&instview_sem=$instview_sem" : "");
-}
-?>
-
-</p></div>
-
+ <br><font size=-1><a target="_blank" href="<?= URLHelper::getLink("?view=print&inst_id=$inst_id&instview_sem=$instview_sem") ?>">
+<?= _("Druckansicht dieser Seite (wird in einem neuen Browserfenster ge&ouml;ffnet).") ?></a></font>
 <?php
+}
+
+
+echo '</p></div>';
 
 if($view == 'edit') {
 ?>
 
-<form method="POST" action="<? echo $PHP_SELF ?>?schedule_cmd=change_view_insert">
+<form method="POST" action="<? echo URLHelper::getLink('?schedule_cmd=change_view_insert'); ?>">
 
 <?=_("angezeigtes Semester"); ?>: <select name="sem">
 <?
@@ -765,8 +765,8 @@ for ($i = $global_start_time; $i < $global_end_time+1; $i++) {
 							}
 						}
 						
-						echo '<a style="float: right;" href="'. $PHP_SELF .'?view=edit&cmd='. $link_cmd .'&sem_id='. $my_sems[$cc["seminar_id"]]["seminar_id"] . '">';
-						echo '<img border=0 src="' .$GLOBALS['ASSETS_URL']. 'images/' .$link_img . $link_tp .'></a>';
+						echo '<a style="float: right;" href="'. URLHelper::getLink('?view=edit&cmd='. $link_cmd .'&sem_id='. $my_sems[$cc["seminar_id"]]["seminar_id"]) . '">';
+						echo '<img border=0 src="'. $GLOBALS['ASSETS_URL']. 'images/' .$link_img . $link_tp .'></a>';
 					}
 					
 					if ($_REQUEST['inst_id'] && $view == 'standard' && $my_schedule_settings['hidden'][$cc['seminar_id']]) {
@@ -786,14 +786,16 @@ for ($i = $global_start_time; $i < $global_end_time+1; $i++) {
 					echo '</font></td></tr><tr><td class="blank">';
 					if ((!$my_sems[$cc["seminar_id"]]["personal_sem"]) && ($view == 'print')) {
 						if ($my_sems[$cc['seminar_id']]['virtual']) {
-							echo "<a href=\"details.php?sem_id=".substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32)."\">";
+							echo "<a href=\"". URLHelper::getLink('details.php?sem_id='.substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32)) ."\">";
 							echo "<FONT size=\"-1\" color=\"green\">";
 						} else {
-							if ($_REQUEST['inst_id'])
-								echo  "<a href=\"details.php?sem_id=";
-							else
-								echo  "<a href=\"seminar_main.php?auswahl=";
-							echo substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32), "\"><font size=-1>";
+							$id = substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32);
+							if ($_REQUEST['inst_id']) {
+								echo '<a href="'. URLHelper::getLink('details.php?sem_id='.$id) .'">';
+							} else {
+								echo '<a href="'. URLHelper::getLink('seminar_main.php?auswahl='.$id) .'">';
+							}
+							echo '<font size=-1>';
 						}
 						if ($my_sems[$cc["seminar_id"]]["nummer"]) {
 							echo htmlReady($my_sems[$cc["seminar_id"]]["nummer"]) . "&nbsp;";
@@ -854,7 +856,7 @@ if($view == 'standard') {
 
 	if ($CALENDAR_ENABLE) {
 		$infobox_info[$i] = array ("icon" => "info.gif",
-								   "text"  => sprintf(_("Ihre pers&ouml;nlichen Termine finden Sie im %sTerminkalender%s."), "<a href=\"calendar.php\">", "</a>"));
+								   "text"  => sprintf(_("Ihre pers&ouml;nlichen Termine finden Sie im %sTerminkalender%s."), '<a href="'. URLHelper::getLink('calendar.php') . '">', "</a>"));
 		$i++;
 	}
 } else { // view == edit
@@ -879,7 +881,7 @@ if ($_REQUEST['inst_id']) {
 
 if($something_hidden && $view == 'standard') {
 	$infobox_info[$i] = array("icon" => "ausruf_small.gif",
-							  "text" => sprintf(_('Ein oder mehrere Termine wurden nicht angezigt. Um die Sichtbarkeit von Terminen anzupassen k&ouml;nnen Sie den %sStudenplan anpassen%s.'), '<a href="?view=edit">', '</a>'));
+							  "text" => sprintf(_('Ein oder mehrere Termine wurden nicht angezigt. Um die Sichtbarkeit von Terminen anzupassen k&ouml;nnen Sie den %sStudenplan anpassen%s.'), '<a href="'. URLHelper::getLink('?view=edit') .'">', '</a>'));
 	$i++;
 }
 
@@ -898,18 +900,19 @@ if($view == 'standard')
 	$icon = 'forumrot_indikator.gif';
 
 $infobox_view[$i] = array("icon" => $icon,
-							 "text" => sprintf(_('%sStandard%s'), '<a href="mein_stundenplan.php">', '</a>'));
+							 "text" => sprintf(_('%sStandard%s'), '<a href="'. URLHelper::getLink('mein_stundenplan.php') .'">', '</a>'));
 $i++;
 
 $infobox_view[$i] = array("icon" => "icon-cont.gif",
-							 "text" => sprintf(_('%sDruckansicht%s'), '<a href="mein_stundenplan.php?view=print" target="_new">', '</a>'));
+							 "text" => sprintf(_('%sDruckansicht%s'), '<a href="'. URLHelper::getLink('mein_stundenplan.php?view=print') .'" target="_blank">', '</a>'));
 $i++;
 
 $icon = 'eigene2.gif';
 if($view == 'edit')
 	$icon = 'forumrot_indikator.gif';
 $infobox_view[$i] = array("icon" => $icon,
-							 "text" => sprintf(_('%sStundenplan anpassen%s<br /> Hier k&ouml;nnen Sie unter anderem eigene Termine nachtragen, Termine ausblenden oder den Zeitraum, den der Stundenplan umfasst, &auml;ndern.'), '<a href="?view=edit">', '</a>'));
+							 "text" => sprintf(_('%sStundenplan anpassen%s<br /> Hier k&ouml;nnen Sie unter anderem eigene Termine nachtragen, Termine ausblenden oder den Zeitraum, den der Stundenplan umfasst, &auml;ndern.'),
+													'<a href="'.  URLHelper::getLink('?view=edit') .'">', '</a>'));
 $i++;
 
 
@@ -917,7 +920,8 @@ $i++;
 $infobox_actions = array();
 $i = 0;
 $infobox_actions[$i] = array("icon" => "suche2.gif",
-			"text"  => sprintf(_("Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen m&ouml;chten, nutzen Sie bitte die %sVeranstaltungssuche%s."), "<a href = \"sem_portal.php\">", "</a>"));
+			"text"  => sprintf(_("Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen m&ouml;chten, nutzen Sie bitte die %sVeranstaltungssuche%s."), 
+									'<a href = "'. URLHelper::getLink('sem_portal.php') .'">', "</a>"));
 
 
 $infobox = array(
@@ -943,7 +947,7 @@ if($view == 'edit') {
 	<div style="margin-left: 15px; padding: 10px">
 
 		<font size=-1>&nbsp;(<?=_("Hier k&ouml;nnen sie Veranstaltungen, die nicht im Stud.IP System existieren oder andere, eigene Ereignisse eintragen")?>)</font><br>
-		<form method="POST" action="<? echo $PHP_SELF ?>?cmd=insert">
+		<form method="POST" action="<?=URLHelper::getLink('?cmd=insert') ?>">
 			&nbsp;<?_("Wochentag:")?>
 			<select name="tag">
 				<option value="1"><?=_("Montag")?></option>
@@ -1015,7 +1019,7 @@ foreach($my_schedule_settings['hidden'] as $id => $value) {
 	}
 	$first = False;
 
-	echo '<a href="'. $PHP_SELF .'?cmd=show&sem_id='. $id .'" title="'. _("Diesen Termin wieder einblenden") .'">';
+	echo '<a href="'. URLHelper::getLink('?cmd=show&sem_id='. $id) .'" title="'. _("Diesen Termin wieder einblenden") .'">';
 	if($my_sems[$id]['desc']){
 		echo htmlReady($my_sems[$id]['desc']);
 	} else {
