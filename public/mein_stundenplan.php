@@ -66,6 +66,13 @@ require_once 'lib/raumzeit/CycleDataDB.class.php';
 if ($RESOURCES_ENABLE)
  	require_once ($RELATIVE_PATH_RESOURCES.'/resourcesFunc.inc.php');
 
+$DAY_I2S = array(1 => 'mo',
+				 2 => 'di',
+				 3 => 'mi',
+				 4 => 'do',
+				 5 => 'fr',
+				 6 => 'sa',
+				 7 => 'so');
 
 //eingebundene Daten auf Konsitenz testen (Semesterwechsel? nicht mehr Admin im gespeicherten Institut?)
 check_schedule_settings();
@@ -201,12 +208,10 @@ if ($cmd=="insert") {
 // meine Seminare einlesen
 if ($inst_id) {
 	$db->query("SELECT seminare.Seminar_id, Name, VeranstaltungsNummer, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '$inst_id' AND visible='1'");
-	$view="inst";
 } else {
 	$user_id=$user->id;
 	if ($perm->have_perm("admin")) {
 		$db->query("SELECT seminare.Seminar_id, Name, VeranstaltungsNummer, start_time, duration_time,  metadata_dates FROM seminare WHERE Institut_id = '".$my_schedule_settings ["glb_inst_id"]."' ");
-		$view="inst_admin";
 	} else {
 		$db->query("SELECT seminare.Seminar_id, Name, VeranstaltungsNummer, start_time, duration_time,  metadata_dates FROM  seminar_user LEFT JOIN seminare USING (seminar_id) WHERE user_id = '$user_id'");
 	}
@@ -253,26 +258,25 @@ if ($_REQUEST['inst_id']) {
 	$global_end_time=$my_schedule_settings["glb_end_time"];
 }
 
-//Array der Seminare erzeugen
+$something_hidden = False;
+// Array der Seminare erzeugen
 for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_schedule++) {
 	if ($seminar_user_schedule == 2) {
-		if (!$inst_id) {
+		if (!$_REQUEST['inst_id']) {
 			// Das gleiche nochmal mit den virtuellen Veranstaltungseintragungen
 			$db->query($query = "SELECT b.* FROM seminar_user_schedule a, seminare b WHERE a.range_id = b.Seminar_id AND a.user_id = '".$auth->auth['uid']."'");
 		}
 	}
 
-	while ($db->next_record())
-	{
-	//Bestimmen, ob die Veranstaltung in dem Semester liegt, was angezeigt werden soll
-	$use_this=FALSE;
-	$term_data=unserialize($db->f("metadata_dates"));
+	while ($db->next_record()) {
+	// Bestimmen, ob die Veranstaltung in dem Semester liegt, was angezeigt werden soll
+	$use_this = FALSE;
+	$term_data = unserialize($db->f("metadata_dates"));
 
 	if (($db->f("start_time") <=$tmp_sem_beginn) && ($tmp_sem_beginn <= ($db->f("start_time") + $db->f("duration_time")))) {
-		$use_this=TRUE;
+		$use_this = TRUE;
 	}
-	if (($use_this) && (is_array($term_data["turnus_data"]) && count($term_data["turnus_data"])))
-		{
+	if (($use_this) && (is_array($term_data["turnus_data"]) && count($term_data["turnus_data"]))) {
 		//Zusammenbasteln Dozentenfeld
 		$db2->query("SELECT Nachname, username, position FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) WHERE status='dozent' AND Seminar_id ='".$db->f("Seminar_id")."' ORDER BY position ");
 		$dozenten='';
@@ -339,13 +343,27 @@ for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_sche
 
 				$i++; //<pfusch>$i (fuer alle einzelnen Objekte eines Seminars) wird hier zur Kennzeichnung der einzelen Termine eines Seminars untereinander verwendet. Unten wird die letzte Stelle jeweils weggelassen. </pfusch>
 
-				$my_sems[$db->f("Seminar_id").$i]=array("start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"], "start_time"=>$start_time, "end_time"=>$end_time, "name"=>$db->f("Name"), "nummer"=>$db->f("VeranstaltungsNummer"), "seminar_id"=>$db->f("Seminar_id").$i,  "ort"=>$tmp_room, "row_span"=>$tmp_row_span, "dozenten"=>$dozenten, "personal_sem"=>FALSE, 'desc'=>$data['desc'], "virtual" => ($seminar_user_schedule == 2) ? true : false);
-			}
-
+			if($view == 'edit' || !$my_schedule_settings['hidden'][$db->f("Seminar_id").$i]) {
+				$my_sems[$db->f("Seminar_id").$i] = array(
+					"start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"],
+					"start_time"=>$start_time,
+					"end_time"=>$end_time, "name"=>$db->f("Name"), "nummer"=>$db->f("VeranstaltungsNummer"),
+					"seminar_id"=>$db->f("Seminar_id").$i,
+					"ort"=>$tmp_room,
+					"row_span"=>$tmp_row_span,
+					"dozenten"=>$dozenten,
+					"personal_sem"=>FALSE,
+					'desc' => $data['desc'],
+					"virtual" => ($seminar_user_schedule == 2) ? true : false);
+			} else {
+				if ($my_schedule_settings["glb_days"][$DAY_I2S[$data['day']]])
+					$something_hidden = True;
+			}}
 		}
 	}
 }
-//Daten aus der Sessionvariable hinzufuegen
+
+// Daten aus der Sessionvariable hinzufuegen
 if ((is_array($my_personal_sems)) && (!$inst_id)){
 	foreach ($my_personal_sems as $key => $mps){
 		if(!$mps["ende_time"] || !$mps['start_time']){
@@ -358,9 +376,9 @@ if ((is_array($my_personal_sems)) && (!$inst_id)){
 				$tmp_end_time = mktime($global_end_time+1, 00, 00, date ("n", $mps["start_time"]), date ("j", $mps["start_time"]), date ("Y", $mps["start_time"]));
 				$tmp_row_span = (int)(($tmp_end_time - $mps["start_time"]) /15/60);
 			} else
-			$tmp_row_span = (int)(($mps["ende_time"] - $mps["start_time"])/15/60);
-			
-			//und der andere
+				$tmp_row_span = (int)(($mps["ende_time"] - $mps["start_time"])/15/60);
+
+			// und der andere
 			if (date("G", $mps["start_time"]) < $global_start_time) {
 				$tmp_start_time = mktime($global_start_time, 00, 00, date ("n", $mps["start_time"]), date ("j", $mps["start_time"]), date ("Y", $mps["start_time"]));
 				$tmp_row_span = (int)(($tmp_end_time - $tmp_start_time) /15/60);
@@ -373,68 +391,62 @@ if ((is_array($my_personal_sems)) && (!$inst_id)){
 			
 			//aus Sonntag=0 wird Sonntag=7, damit laesst's sich besser arbeiten *g
 			$tmp_day=date("w", $mps["start_time"]);
-			if ($tmp_day==0) $tmp_day=7;
+			if ($tmp_day==0) $tmp_day = 7;
 			
 			$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"])+$idx_corr_h.(int)((date("i", $mps["start_time"])+$idx_corr_m) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>$mps["room"], "row_span"=>$tmp_row_span, "dozenten"=>htmlReady($mps["doz"]), "personal_sem"=>TRUE);
 		}
 	}
 }
 
-//Array der Zellenbelegungen erzeugen
-if (is_array($my_sems))
-foreach ($my_sems as $ms)
-	{
-	$m=1;
-	$idx_tmp=$ms["start_time_idx"];
-	if ($ms["row_span"]>0)
-		for ($m; $m<=$ms["row_span"]; $m++)
-			{
-			if ($m==1)  $start_cell=TRUE; else $start_cell=FALSE;
-			$cell_sem[$idx_tmp][$ms["seminar_id"]] = $start_cell;
-			if (($idx_tmp % 100) -date("w",$ms["start_time"]) == 30)
-				$idx_tmp=$idx_tmp+70;
-			else
-				$idx_tmp=$idx_tmp+10;
-			}
-	else
-		$cell_sem[$idx_tmp][$ms["seminar_id"]] = TRUE;
-	}
+// Array der Zellenbelegungen erzeugen
+if (is_array($my_sems)) {
+	foreach ($my_sems as $ms) {
+		$m = 1;
+		$idx_tmp = $ms["start_time_idx"];
+		if ($ms["row_span"]>0) {
+			for ($m; $m<=$ms["row_span"]; $m++) {
+				if ($m==1)
+					$start_cell=TRUE;
+				else
+					$start_cell=FALSE;
 
-//Alle Seminare, die sich ueberschneiden, zusammenfassen
-$i=1;
-for ($i; $i<7; $i++)
-	{
-	$n=$global_start_time;
-	for ($n; $n<$global_end_time+1; $n++)
-		{
-		$l=0;
-		for ($l; $l<4; $l++)
-			{
+				$cell_sem[$idx_tmp][$ms["seminar_id"]] = $start_cell; 
+				if (($idx_tmp % 100) - date("w",$ms["start_time"]) == 30) {
+					$idx_tmp=$idx_tmp+70;
+				} else {
+					$idx_tmp=$idx_tmp+10;
+				}
+			}
+		} else {
+			$cell_sem[$idx_tmp][$ms["seminar_id"]] = TRUE;
+		}
+	}
+}
+
+// Alle Seminare, die sich ueberschneiden, zusammenfassen
+for ($i = 1; $i<7; $i++) {
+	for ($n=$global_start_time; $n<$global_end_time+1; $n++) {
+		for ($l=0; $l<4; $l++) {
 			$idx=($n*100)+($l*10)+$i;
-			if ($cell_sem[$idx])
-				if (sizeof($cell_sem[$idx])>0)
-					{
+			if ($cell_sem[$idx]) {
+				if (sizeof($cell_sem[$idx])>0) {
 					$rows=0;
 					$start_idx=$idx;
 					while ($cs = each ($cell_sem [$idx]))
 						if ($cs[1])
 							if ($my_sems[$cs[0]]["row_span"]>$rows) $rows=$my_sems[$cs[0]]["row_span"];
 					reset ($cell_sem[$idx]);
-					if ($rows>1)
-						{
+					if ($rows>1) {
 						$s=2;
-						for ($s; $s<=$rows; $s++)
-							{
+						for ($s; $s<=$rows; $s++) {
 							$l++;
-							if ($l>=4)
-								{
-								$l=0;
+							if ($l>=4) {
+								$l = 0;
 								$n++;
 								}
 							$idx=($n*100)+($l*10)+$i;
 							while ($cs = each ($cell_sem [$idx]))
-								if ($cs[1])
-									{
+								if ($cs[1]) {
 									$cell_sem[$idx][$cs[0]]=FALSE;
 									$cell_sem[$start_idx][$cs[0]]=TRUE;
 									if ($my_sems[$cs[0]]["row_span"] > $rows -$s +1)
@@ -446,167 +458,338 @@ for ($i; $i<7; $i++)
 					$cs = each (array_slice ($cell_sem[$start_idx], 0));
 					reset ($cell_sem[$start_idx]);
 					$my_sems[$cs[0]]["row_span"] = $rows;
-					}
+				}
 			}
 		}
 	}
+}
 
 ?>
-<table width ="100%" cellspacing=0 cellpadding=2 border=0>
-<?
+<table style="background-color: #fff; width: 100%;"><tr><td><? /* hack to get a white background */ ?>
 
-if (!$print_view) {
-?>
-<tr>
-	<td class="blank" colspan=<? echo $glb_colspan+1?>>&nbsp;
-		<form action="<? echo $PHP_SELF ?>" method="POST">
-		<blockquote>
-		<?
-		if ($view=="user")  {
-			echo _("Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen eines Semesters. Um den Stundenplan auszudrucken, nutzen Sie bitte die Druckfunktion ihres Browsers.") . "<br /><br />";
-			echo "<font size=-1>";
-			printf(_("Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen m&ouml;chten, nutzen Sie bitte die %sVeranstaltungssuche%s."), "<a href = \"sem_portal.php\">", "</a>");
-			echo "<br>";
-			if ($CALENDAR_ENABLE)
-				printf(_("Ihre pers&ouml;nlichen Termine finden Sie im %sTerminkalender%s."), "<a href=\"calendar.php\">", "</a>");
-			echo "</font>";
-		} elseif ($view == "inst") { ?>
-		<?=_("Im Veranstaltungs-Timetable sehen Sie alle Veranstaltungen eines Semesters an der gew&auml;hlten Einrichtung.")?><br />
-		<br /><font size=-1><?=_("Angezeigtes Semester:")?>&nbsp;
-			<select name="instview_sem" style="vertical-align:middle">
-			<?
-				foreach ($all_semester as $key=>$val) {
-					printf ("<option %s value=\"%s\">%s</option>\n", ($tmp_sem_nr == $key) ? "selected" : "", $key, $val["name"]);
-				}
-			?>
-			</select>&nbsp;
-			<input type="IMAGE" value="change_instview_sem" <? echo makeButton("uebernehmen", "src") ?> border=0 align="absmiddle" value="<?=_("&uuml;bernehmen")?>" />&nbsp;
-			<input type="HIDDEN" name="inst_id" value="<? echo $inst_id ?>" /><br>
-		<? } else { ?>
-		<?=_("Im Veranstaltungs-Timetable sehen Sie alle Veranstaltungen eines Semesters an der gew&auml;hlten Einrichtung.")." <br /> "._("Sie k&ouml;nnen zus&auml;tzlich eigene Eintr&auml;ge anlegen.")?><br />
-		<br />
-			<?
+<div style="margin: 20px;">
+<p><?php
+
+
+if ($_REQUEST['inst_id'] && $view != 'print') { ?>
+<?=_("Im Veranstaltungs-Timetable sehen Sie alle Veranstaltungen eines Semesters an der gew&auml;hlten Einrichtung.")?><br />
+<form action="<? echo $PHP_SELF ?>" method="POST">
+<br /><font size=-1><?=_("Angezeigtes Semester:")?>&nbsp;
+	<select name="instview_sem" style="vertical-align:middle">
+	<?
+		foreach ($all_semester as $key=>$val) {
+			printf ("<option %s value=\"%s\">%s</option>\n", ($tmp_sem_nr == $key) ? "selected" : "", $key, $val["name"]);
 		}
-		if ($view !="user")
-			printf ("<br><font size=-1><a target=\"_blank\" href=\"%s?print_view=TRUE%s\">"._("Druckansicht dieser Seite (wird in einem neuen Browserfenster ge&ouml;ffnet).")."</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=$inst_id&instview_sem=$instview_sem" : "");
-		?>
-		<br>
-		</blockquote>
-		</form>
+	?>
+	</select>&nbsp;
+	<input type="IMAGE" value="change_instview_sem" <? echo makeButton("uebernehmen", "src") ?> border=0 align="middle" value="<?=_("&uuml;bernehmen")?>" />&nbsp;
+	<input type="HIDDEN" name="inst_id" value="<? echo $inst_id ?>" /></form><br>
 
-	</td>
-</tr>
-<tr>
-<td class="steel1" colspan=<? echo $glb_colspan+1?>>
-<? }
+<?
+printf ("<br><font size=-1><a target=\"_new\" href=\"%s?view=print%s\">"._("Druckansicht dieser Seite (wird in einem neuen Browserfenster ge&ouml;ffnet).")."</a></font>", $PHP_SELF, ($inst_id) ? "&inst_id=$inst_id&instview_sem=$instview_sem" : "");
+}
+?>
 
+</p></div>
+
+<?php
+
+if($view == 'edit') {
+?>
+
+<form method="POST" action="<? echo $PHP_SELF ?>?schedule_cmd=change_view_insert">
+
+<?=_("angezeigtes Semester"); ?>: <select name="sem">
+<?
+if (!$my_schedule_settings ["glb_sem"]) {
+	echo 'w00t?';
+	if (time() > $VORLES_ENDE) {
+		echo '<option selected value="'. $SEM_NAME_NEXT .'">'._("aktuelles Semester")." ($SEM_NAME_NEXT)</option>";
+		$tmp_name = $SEM_NAME_NEXT;
+		} else {
+		echo '<option selected value="'. $SEM_NAME .'">'._("aktuelles Semester")." ($SEM_NAME)</option>";
+		$tmp_name = $SEM_NAME;
+		}
+}
+
+foreach ($all_semester as $a) {
+	if ((time() < $a["vorles_ende"]) && ($a["name"] != $tmp_name)){
+		if ($my_schedule_settings ["glb_sem"] == $a["name"]) {
+			echo '<option value="'. $a["name"] .'" selected>'. $a["name"] ."</option>";
+		} else {
+			echo '<option value="'. $a["name"] .'">'. $a["name"]."</option>";
+		}
+	}
+}
+echo "</select>";
+}
 ob_end_flush(); //Clear buffer for ouput the headers
 ob_start();
 
 ?>
-<table <? if ($print_view) { ?> bgcolor="#eeeeee" <? } ?> width ="99%" align="center" cellspacing=1 cellpadding=0 border=0>
+<table width="100%">
+<tr><td valign="top">
+
+<table class="steel1" width="100%" <? if ($view == 'print') { ?> bgcolor="#eeeeee" <? } ?> align="center" cellspacing=1 cellpadding=0 border=0>
 <tr>
 	<td width="10%" align="center" class="rahmen_steelgraulight" ><?=_("Zeit")?>
 	</td>
-	<? if ($my_schedule_settings["glb_days"]["mo"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight" ><?=_("Montag")?>
+	<? if ($my_schedule_settings["glb_days"]["mo"] || $view == 'edit' || $_REQUEST['inst_id']) {?>
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight" >
+		<?php
+		
+		if($my_schedule_settings["glb_days"]["mo"]) {
+			$checked = 'checked';
+		} else {
+			$checked = '';
+		}	
+		if($view == 'edit') {
+			echo '<input type="checkbox" name="mo" value="true" '. $checked .'>&nbsp;';
+		}
+		echo _("Montag");
+		
+		?>
 	</td><?}
-	if ($my_schedule_settings["glb_days"]["di"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Dienstag")?>
+	if ($my_schedule_settings["glb_days"]["di"] || $view == 'edit' || $_REQUEST['inst_id']) {?>
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">
+		<?php
+		
+		if($my_schedule_settings["glb_days"]["di"]) {
+			$checked = 'checked';
+		} else {
+			$checked = '';
+		}	
+		if($view == 'edit') {
+			echo '<input type="checkbox" name="di" value="true" '. $checked .'>&nbsp;';
+		}
+		
+		echo _("Dienstag");
+		
+		?>
 	</td><?}
-	if ($my_schedule_settings["glb_days"]["mi"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Mittwoch")?>
+	if ($my_schedule_settings["glb_days"]["mi"] || $view == 'edit' || $_REQUEST['inst_id']) {?>
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">
+		<?php
+		
+		if($my_schedule_settings["glb_days"]["mi"]) {
+			$checked = 'checked';
+		} else {
+			$checked = '';
+		}	
+		if($view == 'edit') {
+			echo '<input type="checkbox" name="mi" value="true" '. $checked .'>&nbsp;';
+		}
+		
+		echo _("Mittwoch");
+		
+		?>
 	</td><?}
-	if ($my_schedule_settings["glb_days"]["do"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Donnerstag")?>
+	if ($my_schedule_settings["glb_days"]["do"] || $view == 'edit' || $_REQUEST['inst_id']) {?>
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">
+	<?php
+		
+		if($my_schedule_settings["glb_days"]["do"]) {
+			$checked = 'checked';
+		} else {
+			$checked = '';
+		}	
+		if($view == 'edit') {
+			echo '<input type="checkbox" name="do" value="true" '. $checked .'>&nbsp;';
+		}
+		echo _("Donnerstag");
+		
+	?>
 	</td><?}
-	if ($my_schedule_settings["glb_days"]["fr"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Freitag")?>
+	if ($my_schedule_settings["glb_days"]["fr"] || $view == 'edit' || $_REQUEST['inst_id']) {?>
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">
+	<?php
+		
+		if($my_schedule_settings["glb_days"]["fr"] || $view == 'edit') {
+			$checked = 'checked';
+		} else {
+			$checked = '';
+		}	
+		if($view == 'edit') {
+			echo '<input type="checkbox" name="fr" value="true" '. $checked .'>&nbsp;';
+		}
+		echo _("Freitag");
+		
+		?>
 	</td><?}
-	if ($my_schedule_settings["glb_days"]["sa"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Samstag")?>
+	if ($my_schedule_settings["glb_days"]["sa"] || $view == 'edit' || $_REQUEST['inst_id']) {?>
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">
+	<?php
+		
+		if($my_schedule_settings["glb_days"]["sa"]) {
+			$checked = 'checked';
+		} else {
+			$checked = '';
+		}	
+		if($view == 'edit') {
+			echo '<input type="checkbox" name="sa" value="true" '. $checked .'>&nbsp;';
+		}
+		echo _("Samstag");
+		
+		?>
 	</td><?}
-	if ($my_schedule_settings["glb_days"]["so"]) {?>
-	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight"><?=_("Sonntag")?>
+	
+	if ($my_schedule_settings["glb_days"]["so"] || $view == 'edit' || $_REQUEST['inst_id']) {?>
+	<td width="<?echo round (90/$glb_colspan)."%"?>" align="center" class="rahmen_steelgraulight">
+	<?php
+		
+		if($my_schedule_settings["glb_days"]["so"]) {
+			$checked = 'checked';
+		} else {
+			$checked = '';
+		}	
+		if($view == 'edit') {
+			echo '<input type="checkbox" name="so" value="true" '. $checked .'>&nbsp;';
+		}
+		echo _("Sonntag");
+		
+		?>
 	</td><?}?>
 </tr>
 <?
-
-
-
-//Aufbauen der eigentlichen Tabelle
-$i=$global_start_time;
-
-for ($i; $i<$global_end_time+1; $i++)
-	{
-	$k=0;
-	for ($k; $k<4; $k++)
-		{
-		if ($k==0)
-			{
+// Aufbauen der eigentlichen Tabelle
+for ($i = $global_start_time; $i < $global_end_time+1; $i++) {
+	for ($k = 0; $k<4; $k++) {
+		if ($k==0) {
 			echo "<tr><td align=\"center\" class=\"rahmen_steelgraulight\" rowspan=4>";
-			if ($i<10) echo "0";
-			echo $i, ":00 "._("Uhr")."</td>";
+			if(($i == $global_start_time  || $i == $global_end_time )&& $view == 'edit') {
+				if($i == $global_start_time ) {
+					echo _("Anfangszeit:") . '<br/><select name="beginn_zeit">';
+					$time = $global_start_time;
+				} else {
+					echo _("Endzeit:") . '<br/><select name="ende_zeit">';
+					$time = $global_end_time;
+				}
+		
+				for ($j=0; $j<=23; $j++) {
+					$selected = '';
+			  		if ($j == $time) {
+			  			$selected = 'selected';
+		  			}
+			  		
+			  		echo "<option $selected value=".$j.">";
+					if ($j<10) {
+						echo "0";
+					}
+					echo $j.":00</option>";
+				}
+				echo "</select>";
+			} else {
+
+				if ($i<10) echo "0";
+				echo $i, ":00 "._("Uhr")."</td>";
 			}
+		}
 		else echo "<tr>";
-		$l=1;
-		for ($l; $l<8; $l++)
-			{
+		$l = 1;
+		for ($l; $l<8; $l++) {
 			//ausgeblendete Tage skippen
-			if (($l==1) && (!$my_schedule_settings["glb_days"]["mo"] )) continue;
-			if (($l==2) && (!$my_schedule_settings["glb_days"]["di"] )) continue;
-			if (($l==3) && (!$my_schedule_settings["glb_days"]["mi"] )) continue;
-			if (($l==4) && (!$my_schedule_settings["glb_days"]["do"] )) continue;
-			if (($l==5) && (!$my_schedule_settings["glb_days"]["fr"] )) continue;
-			if (($l==6) && (!$my_schedule_settings["glb_days"]["sa"] )) continue;
-			if (($l==7) && (!$my_schedule_settings["glb_days"]["so"] )) continue;
+			if($view != 'edit' && !$_REQUEST['inst_id']) {
+				if (($l==1) && (!$my_schedule_settings["glb_days"]["mo"] )) continue;
+				if (($l==2) && (!$my_schedule_settings["glb_days"]["di"] )) continue;
+				if (($l==3) && (!$my_schedule_settings["glb_days"]["mi"] )) continue;
+				if (($l==4) && (!$my_schedule_settings["glb_days"]["do"] )) continue;
+				if (($l==5) && (!$my_schedule_settings["glb_days"]["fr"] )) continue;
+				if (($l==6) && (!$my_schedule_settings["glb_days"]["sa"] )) continue;
+				if (($l==7) && (!$my_schedule_settings["glb_days"]["so"] )) continue;
+			}
 			//if ($l <>8)
 			{
-			$idx=($i*100)+($k*10)+$l;
+			$idx = ($i*100)+($k*10)+$l;
 			unset($cell_content);
-			$m=0;
-			if ($cell_sem[$idx])
-				while ($cs = each ($cell_sem [$idx]))
-					$cell_content[]=array("seminar_id"=>$cs[0], "start_cell"=>$cs[1]);
+			$m = 0;
+			if ($cell_sem[$idx]) {
+				while ($cs = each ($cell_sem[$idx])) {
+						$cell_content[] = array("seminar_id"=>$cs[0], "start_cell"=>$cs[1]);
+				}
+			}
+			
 			if ((!$cell_sem[$idx]) || ($cell_content[0]["start_cell"]))	echo "<td ";
-			$u=0;
-			if (($cell_sem[$idx]) && ($cell_content[0]["start_cell"]))
-				{
-				$r=0;
-				foreach ($cell_content as $cc)
-					{
+			$u = 0;
+
+			if (($cell_sem[$idx]) && ($cell_content[0]["start_cell"])) {
+				$r = 0;
+				foreach ($cell_content as $cc) {
+					if($my_schedule_settings['hidden'][$cc['seminar_id']] 
+					  && $view != 'edit'
+					  && !$_REQUEST['inst_id']) {
+						if ($r==0) {
+							echo "><table><tr><td>";
+						}
+						$something_hidden = True;
+						continue;
+					}
+
 					if ($r==0) {
-						echo "class=\"rahmen_white\" valign=\"top\" rowspan=",$my_sems[$cell_content[0]["seminar_id"]]["row_span"],">";
-						echo "<table width=\"100%\" cellspacing=0 cellpadding=2 border=0><tr><td class=\"topic\">";
-					} else
-						echo "</td></tr><tr><td class=\"topic\">";
-					if (($print_view) && ($r!=0))
+						echo 'class="rahmen_white" valign="top" rowspan='.$my_sems[$cell_content[0]["seminar_id"]]["row_span"].">";
+						echo '<table width="100%" cellspacing=0 cellpadding=2 border=0>';
+						if($my_schedule_settings['hidden'][$cc['seminar_id']]) {
+							echo '<tr><td style="background-color: #aaa;">';
+						} else {
+							echo '<tr><td class="topic">';
+						}
+					} else {
+						if($my_schedule_settings['hidden'][$cc['seminar_id']] && $view != 'print') {
+							echo "</td></tr><tr><td style=\"background-color: #aaa;\">";
+						} else {
+							echo "</td></tr><tr><td class=\"topic\">";
+						}
+					}
+
+					if (($view == 'print') && ($r!=0))
 						echo "<hr src=\"".$GLOBALS['ASSETS_URL']."images/border.jpg\" width=\"100%\">";
 					$r++;
 					echo "<font size=-1 ";
-					if (!$print_view)
+					if ($view != 'print')
 						echo "color=\"#FFFFFF\"";
-					echo ">", date ("H:i",  $my_sems[$cc["seminar_id"]]["start_time"]);
+					echo ">";
+					
+					if ($view == 'edit') {
+						if ($my_sems[$cc["seminar_id"]]["personal_sem"]) {
+							$link_img = 'trash.gif" ';
+							$link_cmd = 'delete';
+							$link_tp = tooltip(_("Diesen Termin löschen"));
+						} else {
+							if($my_schedule_settings['hidden'][$cc['seminar_id']]) {
+								$link_img = 'unhide.gif" ';
+								$link_cmd = 'show';
+								$link_tp = tooltip(_("Diesen Termin wieder einblenden"));
+							} else {
+								$link_img = 'hide.gif" ';
+								$link_cmd = 'hide';
+								$link_tp = tooltip(_("Diesen Termin ausblenden"));
+							}
+						}
+						
+						echo '<a style="float: right;" href="'. $PHP_SELF .'?view=edit&cmd='. $link_cmd .'&sem_id='. $my_sems[$cc["seminar_id"]]["seminar_id"] . '">';
+						echo '<img border=0 src="' .$GLOBALS['ASSETS_URL']. 'images/' .$link_img . $link_tp .'></a>';
+					}
+					
+					if ($_REQUEST['inst_id'] && $view == 'standard' && $my_schedule_settings['hidden'][$cc['seminar_id']]) {
+						echo '<img style="float: right;" src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" '. tooltip(_('Dieser Termin ist in Ihrem Studenplan versteckt.')) .' />';
+						
+					}
+
+					
+					echo date ("H:i",  $my_sems[$cc["seminar_id"]]["start_time"]);
 					if  ($my_sems[$cc["seminar_id"]]["start_time"] <> $my_sems[$cc["seminar_id"]]["end_time"])
 						echo " - ",  date ("H:i",  $my_sems[$cc["seminar_id"]]["end_time"]);
 					if (!$my_sems[$cc['seminar_id']]['virtual']) {
 						if ($my_sems[$cc["seminar_id"]]['desc']) echo ' ('.htmlReady($my_sems[$cc["seminar_id"]]['desc']).')';
 					}
-					if ($my_sems[$cc['seminar_id']]['ort']) echo ",  ", htmlReady($my_sems[$cc["seminar_id"]]["ort"]);
-					echo '</font></td>';
-					echo "<td class=\"topic\" align=\"right\">";
-					if ($my_sems[$cc['seminar_id']]['virtual']) {
-						echo "<a href=\"$PHP_SELF?cmd=delete_entry&semid=".substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32)."\">";
-						echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" align=\"absmiddle\" border=\"0\"></a>";
-					}
-
-					echo "</td></tr><tr><td class=\"blank\">";
-					if ((!$my_sems[$cc["seminar_id"]]["personal_sem"]) && (!$print_view)) {
+					
+					if ($my_sems[$cc['seminar_id']]['ort']) echo ", ", htmlReady($my_sems[$cc["seminar_id"]]["ort"]);
+					echo '</font></td></tr><tr><td class="blank">';
+					if ((!$my_sems[$cc["seminar_id"]]["personal_sem"]) && ($view == 'print')) {
 						if ($my_sems[$cc['seminar_id']]['virtual']) {
 							echo "<a href=\"details.php?sem_id=".substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32)."\">";
 							echo "<FONT size=\"-1\" color=\"green\">";
 						} else {
-							if ($view=="inst")
+							if ($_REQUEST['inst_id'])
 								echo  "<a href=\"details.php?sem_id=";
 							else
 								echo  "<a href=\"seminar_main.php?auswahl=";
@@ -633,25 +816,124 @@ for ($i; $i<$global_end_time+1; $i++)
 						}
 					if ($my_sems[$cc["seminar_id"]]["dozenten"])
 						echo "<br><div align=\"right\"><font size=-1>", $my_sems[$cc["seminar_id"]]["dozenten"], "</font></div>";
-					if (($my_sems[$cc["seminar_id"]]["personal_sem"]) && (!$print_view))
-						echo "<div align=\"right\"><a href=\"",$PHP_SELF, "?cmd=delete&d_sem_id=",$my_sems[$cc["seminar_id"]]["seminar_id"], "\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Diesen Termin löschen")).">&nbsp;</a></div>";
+					
 					}
 				echo "</td></tr></table></td>";
 				}
-			if (!$cell_sem[$idx])  echo "class=\"steel1\"></td>";
+			if (!$cell_sem[$idx])  echo "></td>";
 			}
 			}
 			echo "</tr>\n";
 		}
 	}
 
-	if ($print_view) {
+	if ($view == 'print') {
 		printf  ("<tr><td colspan=%s><i><font size=-1>&nbsp; "._("Erstellt am %s um %s  Uhr.")."</font></i></td><td align=\"right\"><font size=-2><img src=\"".$GLOBALS['ASSETS_URL']."images/logo2b.gif\"><br />&copy; %s v.%s&nbsp; &nbsp; </font></td></tr></tr>", $glb_colspan, date("d.m.y", time()), date("G:i", time()), date("Y", time()), $SOFTWARE_VERSION);
 		}
 	else {
 		}
 
-echo "</table></td></tr>";
+echo "</table>";
+
+
+if($view == 'edit') {
+ 	echo '<input style="float: right;" type="IMAGE" '. makeButton("uebernehmen", "src") .' border=0 value="'. _("&Auml;nderungen &uuml;bernehmen") .'"></form><br><br>';
+}
+
+// Info-Box
+if($view != 'print' && !$_REQUEST['inst_id']) {
+echo '</td><td class="blank" width="270" align="right" valign="top">';
+// -- Information --
+$i = 0;
+$infobox_info = array();
+
+if($view == 'standard') {
+	$infobox_info[$i] = array ("icon" => 'info.gif',
+							   "text"  => _("Der Stundenplan zeigt Ihnen alle regelm&auml;&szlig;igen Veranstaltungen eines Semesters."));
+	$i++;
+
+	if ($CALENDAR_ENABLE) {
+		$infobox_info[$i] = array ("icon" => "info.gif",
+								   "text"  => sprintf(_("Ihre pers&ouml;nlichen Termine finden Sie im %sTerminkalender%s."), "<a href=\"calendar.php\">", "</a>"));
+		$i++;
+	}
+} else { // view == edit
+	$infobox_info[$i] = array ("icon" => 'info.gif',
+							   "text"  => _("Hier k&ouml;nnen Sie sie Ansicht ihres pers&ouml;nlichen Stundenplans nach Ihren Vorstellungen anpassen."));
+	$i++;
+}
+
+// viewed semester != current semester
+$current_sem = '';
+if (time() > $VORLES_ENDE) {
+	$current_sem = $SEM_NAME_NEXT;
+} else {
+	$current_sem = $SEM_NAME;
+}
+
+if ($_REQUEST['inst_id']) {
+	$selected_sem = $all_semester[$tmp_sem_nr]['name'];
+} else {
+	$selected_sem = $my_schedule_settings['glb_sem'];
+}
+
+if($something_hidden && $view == 'standard') {
+	$infobox_info[$i] = array("icon" => "ausruf_small.gif",
+							  "text" => sprintf(_('Ein oder mehrere Termine wurden nicht angezigt. Um die Sichtbarkeit von Terminen anzupassen k&ouml;nnen Sie den %sStudenplan anpassen%s.'), '<a href="?view=edit">', '</a>'));
+	$i++;
+}
+
+if($my_schedule_settings['glb_sem'] != '' && $my_schedule_settings['glb_sem'] != $current_sem) {
+	$infobox_info[$i] = array("icon" => "ausruf_small.gif",
+							  "text" => _('Das angezeigte Semester ist nicht das aktuelle.'));
+	$i++;
+}
+
+// -- View --
+$infobox_view = array();
+$i = 0;
+
+$icon = 'cont_res1.gif';
+if($view == 'standard')
+	$icon = 'forumrot_indikator.gif';
+
+$infobox_view[$i] = array("icon" => $icon,
+							 "text" => sprintf(_('%sStandard%s'), '<a href="mein_stundenplan.php">', '</a>'));
+$i++;
+
+$infobox_view[$i] = array("icon" => "icon-cont.gif",
+							 "text" => sprintf(_('%sDruckansicht%s'), '<a href="mein_stundenplan.php?view=print" target="_new">', '</a>'));
+$i++;
+
+$icon = 'eigene2.gif';
+if($view == 'edit')
+	$icon = 'forumrot_indikator.gif';
+$infobox_view[$i] = array("icon" => $icon,
+							 "text" => sprintf(_('%sStundenplan anpassen%s<br /> Hier k&ouml;nnen Sie unter anderem eigene Termine nachtragen, Termine ausblenden oder den Zeitraum, den der Stundenplan umfasst, &auml;ndern.'), '<a href="?view=edit">', '</a>'));
+$i++;
+
+
+// -- Actions --
+$infobox_actions = array();
+$i = 0;
+$infobox_actions[$i] = array("icon" => "suche2.gif",
+			"text"  => sprintf(_("Wenn Sie weitere Veranstaltungen aus Stud.IP in ihren Stundenplan aufnehmen m&ouml;chten, nutzen Sie bitte die %sVeranstaltungssuche%s."), "<a href = \"sem_portal.php\">", "</a>"));
+
+
+$infobox = array(
+				array("kategorie"  => _("Information:"),
+						"eintrag" => $infobox_info),
+				array  ("kategorie" => _("Ansichten:"),
+						"eintrag" => $infobox_view),
+				array  ("kategorie" => _("Aktionen:"),
+						"eintrag" => $infobox_actions)
+			);
+
+
+print_infobox ($infobox,"schedules.jpg");
+}
+
+echo '</td></tr></table>';
 
 
 if($view == 'edit') {
