@@ -481,16 +481,21 @@ div.clear {
 	background: url("../images/reiter2.jpg") no-repeat left top;
 }
 
-#tabs2 {
-	clear: both;
+.tabs2 {
 	width: 100%;
 	background: url("../images/steelblau4.jpg") repeat left top;
+	margin: 0 0 0 0;	
+}
+
+
+#tabs2 {
+	clear: both;
 	margin: 0 0 0 0;
 	padding: 4px 0 4px 3em;
 }
 
 #tabs2 li {
-	line-height: 30px;
+	line-height: 28px;
 }
 
 #tabs2 li {
