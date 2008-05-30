@@ -104,13 +104,13 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	} else {
 		$help_url="help/index.php";
 	}
-	$menue[12] = array( _("Hilfe"), $help_url, '_new');
+	$menue[12] = array( _("Hilfe"), $help_url, '_blank');
 	if (get_config("EXTERNAL_HELP")) {
 		$help_url=format_help_url("Basis.SchnellEinstiegKomplett");
 	} else {
 		$help_url="help/index.php?help_page=schnelleinstieg.htm";
 	}
-	$menue[13] = array( _("Schnelleinstieg"), $help_url, '_new');
+	$menue[13] = array( _("Schnelleinstieg"), $help_url, '_blank');
 	// dozent
 	$menue[20] = array( _("Verwaltung von Veranstaltungen"), 'adminarea_start.php?list=TRUE', false);
 	$menue[21] = array( _("neue Veranstaltung anlegen"), 'admin_seminare_assi.php?new_session=TRUE', false);

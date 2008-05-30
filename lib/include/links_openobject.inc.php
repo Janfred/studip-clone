@@ -207,7 +207,7 @@ if ($SessSemName["class"]=="inst") {
 		$structure["institut_members"]=array ( 'topKat' => "personal", 'name' => _("MitarbeiterInnen"), 'link' => "institut_members.php", 'active' => FALSE);
 	$structure["institut_veranstaltungen"]=array ('topKat' => "institut_main", 'name' => _("Veranstaltungen"), 'link' => URLHelper::getLink("show_bereich.php?level=s&id=$SessSemName[1]"), 'active' => FALSE);
 	$structure["timetable"]=array ('topKat' => "institut_main", 'name' => _("Veranstaltungs-Timetable"), 'link' => URLHelper::getLink("mein_stundenplan.php?inst_id=$SessSemName[1]"), 'active' => FALSE);
-	// $structure["druckansicht_i"]=array ('topKat' => "institut_main", 'name' => "Druckansicht", 'link' => URLHelper::getLink("print_institut.php"), 'target' =>"_new", 'active' => FALSE);
+	// $structure["druckansicht_i"]=array ('topKat' => "institut_main", 'name' => "Druckansicht", 'link' => URLHelper::getLink("print_institut.php"), 'target' =>"_blank", 'active' => FALSE);
 	if ($rechte)
 		if ($perm->have_perm("admin"))
 			$structure["administration_e"]=array ('topKat' => "institut_main", 'name' => _("Administration der Einrichtung"), 'link' => URLHelper::getLink("admin_institut.php?new_inst=TRUE"), 'active' => FALSE);
@@ -217,7 +217,7 @@ if ($SessSemName["class"]=="inst") {
 //
 	$structure["_seminar_main"]=array ('topKat' => "seminar_main", 'name' => _("Kurzinfo"), 'link' => URLHelper::getLink("seminar_main.php"), 'active' => FALSE);
 	$structure["details"]=array ('topKat' => "seminar_main", 'name' => _("Details"), 'link' => URLHelper::getLink("details.php"), 'active' => FALSE);
-	$structure["druckansicht_s"]=array ('topKat' => "seminar_main", 'name' => _("Druckansicht"), 'link' => URLHelper::getLink("print_seminar.php"), 'target' => "_new", 'active' => FALSE);
+	$structure["druckansicht_s"]=array ('topKat' => "seminar_main", 'name' => _("Druckansicht"), 'link' => URLHelper::getLink("print_seminar.php"), 'target' => "_blank", 'active' => FALSE);
 	if ($rechte)
 		$structure["administration_v"]=array ('topKat' => "seminar_main", 'name' => _("Administration dieser Veranstaltung"), 'link' => URLHelper::getLink("admin_seminare1.php?new_sem=TRUE"), 'active' => FALSE);
 
@@ -238,7 +238,7 @@ if ($modules["forum"]) {
 		$structure["flat"]=array ('topKat' => "forum", 'name' => _("letzte Beiträge"), 'link' => URLHelper::getLink("forum.php?view=flat&sort=age"), 'active' => FALSE);
 		$structure["search"]=array ('topKat' => "forum", 'name' => _("Suchen"), 'link' => URLHelper::getLink("forum.php?view=search&reset=1"), 'active' => FALSE);
 	}
-	$structure["forum_export"]=array ('topKat' => "forum", 'name' => _("Druckansicht"), 'link' => "forum_export.php", 'target' => "_new", 'active' => FALSE);
+	$structure["forum_export"]=array ('topKat' => "forum", 'name' => _("Druckansicht"), 'link' => "forum_export.php", 'target' => "_blank", 'active' => FALSE);
 	if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"]))
 		$structure["neues_thema"]=array ('topKat' => "forum", 'name' => _("neues Thema anlegen"), 'link' => URLHelper::getLink("forum.php?view=".$forum["themeview"]."&neuesthema=TRUE#anker"), 'active' => FALSE);
 		$structure["admin"]=array ('topKat' => "forum", 'name' => _("Forum anpassen"), 'link' => URLHelper::getLink("forum.php?forumsend=anpassen&view=$view"), 'active' => FALSE);
