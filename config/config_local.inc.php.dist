@@ -169,6 +169,7 @@ $ELEARNING_INTERFACE_MODULES = array(
 						"htlm" => array("name" => "HTML-Lerneinheit", "icon" => "assets/images/icon-lern.gif"),
 						"sahs" => array("name" => "SCORM/AICC-Lerneinheit", "icon" => "assets/images/icon-lern.gif"),
 						"lm" => array("name" => "ILIAS-Lerneinheit", "icon" => "assets/images/icon-lern.gif"),
+						"glo" => array("name" => "ILIAS-Glossar", "icon" => "assets/images/icon-lern.gif"),
 						"tst" => array("name" => "ILIAS-Test", "icon" => "assets/images/icon-lern.gif")
 						),
 		"global_roles" => array(4,5,14), // put here the ilias role-ids for User, Guest and Anonymous
