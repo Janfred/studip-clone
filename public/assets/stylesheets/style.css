@@ -486,7 +486,7 @@ div.clear {
 	background: url("../images/steelblau4.jpg") repeat left top;
 	clear: both;
 	margin: 0 0 0 0;
-	padding: 4px 0 4px 3em;
+	padding: 4px 0 4px 0;
 }
 
 #tabs2 li {
@@ -496,7 +496,7 @@ div.clear {
 #tabs2 li {
 	background: url("../images/pfeilweiss2.gif") no-repeat left top;
 	padding-left: 10px;
-	padding-right: 1.5em;
+	margin-left: 1.5em;
 }
 
 #tabs2 li.current {
