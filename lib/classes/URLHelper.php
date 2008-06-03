@@ -1,5 +1,4 @@
 <?php
-# Lifter002: TODO
 /*
  * URLHelper.php - utility functions for URL parameter handling
  *
@@ -131,7 +130,7 @@ class URLHelper
             $link_params = array_merge($link_params, $params);
         }
 
-        if (count($link_params)) {
+        if (count($link_params) || $url === '') {
             $url .= '?'.http_build_query($link_params);
         }
 

@@ -21,7 +21,7 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-if [ -z "$lifter" ]; then
+if [ -z "$lifter" ] || [ -z "$delete" -a -z "$status" ]; then
     echo >&2 "usage: $0 [-dh] -l num [-s status] [files ...]"; exit 1
 fi
 
