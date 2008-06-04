@@ -22,13 +22,6 @@
 // +---------------------------------------------------------------------------+
 // $Id: $
 
-$IMAGE_PROXY_PATH = $GLOBALS['STUDIP_BASE_PATH'] . '/data/image_proxy_cache/';
-$IMAGE_PROXY_MAX_CONTENT_LENGTH = 1000000;
-$IMAGE_PROXY_CACHE_LIFETIME = 86400;
-$IMAGE_PROXY_MAX_FILES_IN_CACHE = 3000;
-$IMAGE_PROXY_GC_PROBABILITY = 1;
-$IMAGE_PROXY_MAX_IMAGE_SIZE = 3000; //x or y
-
 ini_set('default_socket_timeout', 5);
 
 function get_error_image($error){
