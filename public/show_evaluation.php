@@ -154,7 +154,7 @@ if( $votedNow ) {
     /* process the user's typed-in answers --------------------------------- */
     if( is_array($_POST["freetexts"]) ) {
 	foreach( $_POST["freetexts"] as $question_id => $text ) {
-	    if( ! empty($text) ) {
+	    if( trim($text) != '' ) {
 		$question = new EvaluationQuestion( $question_id );
 		$answer = new EvaluationAnswer();
 		$answer->setText( $text );
@@ -233,7 +233,7 @@ page_close();
 	       ( is_array($_POST["answers"]) &&
 		 ! in_array($item->getObjectID(), array_keys($_POST["answers"])) )
 	       ) &&
-	     empty($_POST["freetexts"][$item->getObjectID()])
+	     trim($_POST["freetexts"][$item->getObjectID()]) == ''
 	     )
 	     {
 		     $mandatories[] = $item->getObjectID();
