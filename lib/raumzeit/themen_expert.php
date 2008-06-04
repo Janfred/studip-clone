@@ -592,5 +592,6 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
 </FORM>
 <?
 	$sem->store();
+	include 'lib/include/html_end.inc.php';
 	page_close();
 ?>

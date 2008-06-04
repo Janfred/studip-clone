@@ -62,5 +62,6 @@ if ($page == "edit")
 else
 	include ('lib/vote/vote_overview.inc.php');
 
+include 'lib/include/html_end.inc.php';
 page_close ();
 ?>
