@@ -258,7 +258,7 @@ class Statusgruppe {
 			$stmt = DBManager::get()->prepare("SELECT COUNT(*) as c FROM folder WHERE range_id = ?");
 			$stmt->execute(array($this->statusgruppe_id));
 
-			if ($folder = $stmt>fetch(PDO::FETCH_ASSOC)) {
+			if ($folder = $stmt->fetch(PDO::FETCH_ASSOC)) {
 				if ($folder['c'] == 0) {
 					// if no folder exists, we create one
 					$title =  _("Dateiordner der Gruppe:") . ' ' . $this->name;

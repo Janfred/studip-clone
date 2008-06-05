@@ -22,7 +22,6 @@
 				</tr>
 				<? $cssSw->switchClass() ?>
 				
-				<? if ($range_type != 'sem') : ?>
 				<tr>
 					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
 						<font size="-1">
@@ -40,7 +39,6 @@
 					</td>
 				</tr>
 				<? $cssSw->switchClass() ?>
-				<? endif; ?>
 				
 				<tr>
 					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
@@ -53,38 +51,8 @@
 						<input type="text" name="new_size" value="<?=$group_data['size']?>"><br/>
 					</td>
 				</tr>
-				<? if ($range_type == 'sem') : ?>
-				<? $cssSw->switchClass() ?>
-				<tr>
-					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
-						<font size="-1">
-							<?=_("Selbsteintrag") ?>:
-						</font>
-					</td>
-					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
-						<input type="checkbox" name="new_selfassign" value="1" <?=$group_data['selfassign']? 'checked="checked"' : ''?>>
-						<input type="hidden" name="vather" value="nochange">
-					</td>
-				</tr>
-
-				<? $cssSw->switchClass() ?>
-				<tr>
-						<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
-						<font size="-1">
-							<?=_("Gruppenordner:") ?>:
-						</font>
-					</td>
-					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
-						<? if ($group_data['folder']) : ?>
-						<input type="checkbox" name="groupfolder" value="1">
-						<? else:
-							echo _("vorhanden");
-						endif; ?>
-					</td>
-				</tr>
-				<? endif; ?>
 								
-				<? if ($range_type != 'sem' && is_array($group_data['datafields'])) foreach ($group_data['datafields'] as $field) : ?>
+				<? if (is_array($group_data['datafields'])) foreach ($group_data['datafields'] as $field) : ?>
 				<? $cssSw->switchClass() ?>
 				<tr>
 					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>

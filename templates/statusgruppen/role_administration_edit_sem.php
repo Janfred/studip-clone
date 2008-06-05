@@ -54,7 +54,7 @@
 						</font>
 					</td>
 					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
-						<? if ($group_data['folder']) : ?>
+						<? if (!$group_data['folder']) : ?>
 						<input type="checkbox" name="groupfolder" value="1">
 						<? else:
 							echo _("vorhanden");
