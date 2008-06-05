@@ -109,16 +109,16 @@ class Statusgruppe {
 		if (!$this->statusgruppe_id) return;
 
 		try {
-			$db = DBManager::get('studip');	
-
-			$query = "SELECT * FROM statusgruppen WHERE statusgruppe_id = '{$this->statusgruppe_id}'";
-			$result = $db->query($query);
-	
-			$statusgruppe = $result->fetch(PDO::FETCH_ASSOC);
-			foreach ($statusgruppe as $key => $val) {
-				$this->$key = $val;
+			$stmt = DBManager::get()->prepare("SELECT * FROM statusgruppen WHERE statusgruppe_id = ?");
+			if ($stmt->execute(array($this->statusgruppe_id))) {
+				$statusgruppe = $stmt->fetch();
+				foreach ($statusgruppe as $key => $val) {
+					$this->$key = $val;
+				}
+			} else {
+				throw new Exception(__CLASS__ . '::' . __FUNCTION__ .'() , line ' . __LINE__ . ': Error while querying statusgroup!');  
 			}
-		} catch (PDException $e) {
+		} catch (PDOException $e) {
 			echo $e->getMessage();
 			die;
 		}
@@ -126,22 +126,27 @@ class Statusgruppe {
 
 	function store() {
 		try {
-			$db = DBManager::get('studip');	
 
 			if ($this->new) {
 				$query = "INSERT INTO statusgruppen
 					(statusgruppe_id, name, range_id, position, size, selfassign, mkdate, chdate) VALUES
-					('{$this->statusgruppe_id}', '{$this->name}', '{$this->range_id}', {$this->position}, {$this->size},
-						{$this->selfassign}, '". time() ."', '". time() ."')";
+					(?, ?, ?, ?, ?, ?, ?, ?)";
+
+					$data = array($this->statusgruppe_id, $this->name, $this->range_id, $this->position, $this->size,
+						$this->selfassign, time(), time());
 			} else {
 				$query = "UPDATE statusgruppen SET
-					name = '{$this->name}', range_id = '{$this->range_id}', position = {$this->position}, 
-					size = {$this->size}, selfassign = {$this->selfassign}, chdate = '". time() ."'
-					WHERE statusgruppe_id = '{$this->statusgruppe_id}'";
+					name = ?, range_id = ?, position = ?,
+					size = ?, selfassign = ?, chdate = ?
+					WHERE statusgruppe_id = ?";
+
+					$data = array($this->name, $this->range_id, $this->position, $this->size,
+						$this->selfassign, time(), $this->statusgruppe_id);
 			}
 
-			$result = $db->exec($query);
-		} catch (PDException $e) {
+			$stmt = DBManager::get()->prepare($query);
+			$result = $stmt->execute($data);
+		} catch (PDOException $e) {
 			echo $e->getMessage();
 			die;
 		}
@@ -160,10 +165,10 @@ class Statusgruppe {
 		// check, if we have a group-folder
 		if ($this->isSeminar()) {
 			if (!isset($this->has_folder)) {
-				$db = DBManager::get('studip');
-		
-				$result = $db->query("SELECT COUNT(*) as c FROM folder WHERE range_id = '$this->statusgruppe_id'");
-				$folder = $result->fetch(PDO::FETCH_ASSOC);
+				$stmt = DBManager::get()->prepare("SELECT COUNT(*) as c FROM folder WHERE range_id = ?");
+				$stmt->execute(array($this->statusgruppe_id));
+
+				$folder = $stmt->fetch(PDO::FETCH_ASSOC);
 				$this->has_folder = ($folder['c'] == 1) ? true : false;
 			}
 		
@@ -175,11 +180,10 @@ class Statusgruppe {
 
 	function isSeminar() {
 		if (!isset($this->is_sem)) {			
-			$db = DBManager::get('studip');
-			
-			$result = $db->query("SELECT * FROM seminare WHERE Seminar_id = '{$GLOBALS['range_id']}'");
-			
-			if ($seminar = $result->fetch(PDO::FETCH_ASSOC)) {
+			$stmt = DBManager::get()->prepare("SELECT * FROM seminare WHERE Seminar_id = ?");
+			$stmt->execute(array($GLOBALS['range_id']));
+
+			if ($seminar = $stmt->fetch(PDO::FETCH_ASSOC)) {
 				$this->is_sem = true;
 			} else {			
 				$this->is_sem = false;
@@ -251,9 +255,10 @@ class Statusgruppe {
 
 		if ($_REQUEST['groupfolder']) { 
 			// check if there already exists a folder
-			$db = DBManager::get('studip');
-			$result = $db->query("SELECT COUNT(*) as c FROM folder WHERE range_id = '{$this->statusgruppe_id}'");
-			if ($folder = $result->fetch(PDO::FETCH_ASSOC)) {
+			$stmt = DBManager::get()->prepare("SELECT COUNT(*) as c FROM folder WHERE range_id = ?");
+			$stmt->execute(array($this->statusgruppe_id));
+
+			if ($folder = $stmt>fetch(PDO::FETCH_ASSOC)) {
 				if ($folder['c'] == 0) {
 					// if no folder exists, we create one
 					$title =  _("Dateiordner der Gruppe:") . ' ' . $this->name;
@@ -303,7 +308,6 @@ class Statusgruppe {
 		
 		// check if the group shall be moved
 		if ($_REQUEST['vather'] != 'nochange') {
-			//$db = DBManager::get('studip');
 			if ($_REQUEST['vather'] == 'root') {
 				$vather_id = $GLOBALS['range_id'];
 			} else {
@@ -385,11 +389,10 @@ class Statusgruppe {
 	}
 	
 	static function roleExists($id) {
-		$db = DBManager::get('studip');
-		
-		$result = $db->query("SELECT * FROM statusgruppen WHERE statusgruppe_id = '$id'");
+		$stmt = DBManager::get()->prepare("SELECT * FROM statusgruppen WHERE statusgruppe_id = ?");
+		$stmt->execute(array($id));
 				
-		if (!$statusgruppe = $result->fetch(PDO::FETCH_ASSOC)) {
+		if (!$statusgruppe = $stmt->fetch(PDO::FETCH_ASSOC)) {
 			return false;
 		}
 		

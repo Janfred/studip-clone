@@ -22,26 +22,6 @@
 				</tr>
 				<? $cssSw->switchClass() ?>
 				
-				<? if ($range_type != 'sem') : ?>
-				<tr>
-					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
-						<font size="-1">
-							<?= _("Übergeordnete Gruppe") ?>:
-						</font>
-					</td>
-					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
-						<font size="-1">
-							<select name="vather">
-								<option value="nochange"> -- <?= _("Keine Änderung") ?> -- </option>
-								<option value="root"> -- <?= _("Hauptebene") ?> -- </option> 
-						 		<? Statusgruppe::displayOptionsForRoles($all_roles); ?>
-							</select>
-						</font>
-					</td>
-				</tr>
-				<? $cssSw->switchClass() ?>
-				<? endif; ?>
-				
 				<tr>
 					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
 						<font size="-1">
@@ -53,7 +33,6 @@
 						<input type="text" name="new_size" value="<?=$group_data['size']?>"><br/>
 					</td>
 				</tr>
-				<? if ($range_type == 'sem') : ?>
 				<? $cssSw->switchClass() ?>
 				<tr>
 					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
@@ -82,33 +61,10 @@
 						endif; ?>
 					</td>
 				</tr>
-				<? endif; ?>
 								
-				<? if ($range_type != 'sem' && is_array($group_data['datafields'])) foreach ($group_data['datafields'] as $field) : ?>
-				<? $cssSw->switchClass() ?>
-				<tr>
-					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
-						<?=$field['invalid']?'<font color="red" size="-1"><b>':'<font size="-1">'?>
-						<?=$field['name']?>
-						<?=$field['invalid']?'</b></font>':'</font>'?>
-					</td>
-					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
-						<font size="-1">
-							<?=$field['html']?>
-						</font>
-					</td>
-				</tr>
-				<input type="HIDDEN" name="datafield_id[]" value="<?= $field['datafield_id'] ?>">
-				<input type="HIDDEN" name="datafield_type[]" value="<?= $field['datafield_type'] ?>">
-				<input type="HIDDEN" name="datafield_sec_range_id[]" value="<?= $role->getId() ?>">
-				<? endforeach; ?>
 				<tr>
 					<td class="steel1" align="right" colspan="2">
 						<br/>
-						&nbsp;
-						<a href="<?= $GLOBALS['PHP_SELF'] ?>?range_id=<?= $range_id ?>#<?= $role->getId() ?>">
-							<?= makebutton('zurueck') ?>
-						</a>
 						<input type="image" <?= makebutton('speichern', 'src') ?> align="absbottom">
 					</td>
 				</tr>

@@ -89,6 +89,7 @@ function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
 	$db2 = new DB_Seminar();
 
 
+	if (is_array($roles))
 	foreach ($roles as $role_id => $data) {
 		$css_rec = new cssClassSwitcher();
 		if ($level > 0) {
