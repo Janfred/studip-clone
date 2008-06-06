@@ -1,3 +1,4 @@
+// application wide setup
 document.observe('dom:loaded', function() {
 
   // message highlighting
