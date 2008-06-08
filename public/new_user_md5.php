@@ -46,7 +46,8 @@ $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 
 // Check if there was a submission
-if (check_ticket($studipticket)){
+if (check_ticket($_REQUEST['studipticket'])){
+	if ($_REQUEST['disable_mail_host_check']) $GLOBALS['MAIL_VALIDATE_BOX'] = false;
 	while ( is_array($_POST)
 			 && list($key, $val) = each($_POST)) {
 		switch ($key) {
@@ -112,8 +113,8 @@ if (check_ticket($studipticket)){
 			$newuser['auth_user_md5.lock_comment']    = (isset($lock_comment) ? stripslashes(trim($lock_comment)) : "");
 			$newuser['auth_user_md5.locked_by'] = ($locked==1 ? $auth->auth["uid"] : "");
 
-		if (isset($visible))
-			$newuser['auth_user_md5.visible'] = $visible;
+			if (isset($visible))
+				$newuser['auth_user_md5.visible'] = $visible;
 			if (isset($title_front) || isset($title_front_chooser)) {
 				if (!$title_front)
 					$title_front = $title_front_chooser;
@@ -128,6 +129,36 @@ if (check_ticket($studipticket)){
 				$newuser['user_info.geschlecht'] = stripslashes(trim($geschlecht));
 
 			$UserManagement->changeUser($newuser);
+
+			if (is_array($_POST['datafield_id'])) {
+				$ffCount = 0; // number of processed form fields
+				$invalidEntries = null;
+				foreach ($_POST['datafield_id'] as $i => $field_id) {
+					$struct = new DataFieldStructure(array("datafield_id"=>$field_id, 'type'=>$_POST['datafield_type'][$i]));
+					$entry  = DataFieldEntry::createDataFieldEntry($struct, $u_id);
+					$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
+					if ($_POST['datafield_type'][$i] == 'bool' && $_POST['datafield_content'][$ffCount] != $field_id) { // unchecked checkbox?
+						$entry->setValue('');
+						$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
+					}
+					elseif ($numFields == 1)
+						$entry->setValue($_POST['datafield_content'][$ffCount]);
+					else
+						$entry->setValue(array_slice($_POST['datafield_content'], $ffCount, $numFields));
+					$ffCount += $numFields;
+					$entry->structure->load();
+					if ($entry->isValid()) {
+						$entry->store();			
+					} else {
+						$invalidEntries[$struct->getID()] = $entry;
+					}
+				}
+				if (is_array($invalidEntries)) {
+					foreach ($invalidEntries as $field) {
+						$msg .= 'error§'. sprintf(_("Fehlerhafte Eingabe im Datenfeld %s (wurde nicht gespeichert)!"), "<b>".$field->structure->getName()."</b>") .'§';
+					}
+				}
+			}
 
 			break;
 
@@ -158,6 +189,8 @@ if (check_ticket($studipticket)){
 	}
 }
 
+URLHelper::addLinkParam("studipticket", get_ticket());
+
 // einzelnen Benutzer anzeigen
 if (isset($_GET['details'])) {
 	if ($details=="__" && in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])) { // neuen Benutzer anlegen
@@ -167,7 +200,7 @@ if (isset($_GET['details'])) {
 		<tr><td class="blank" colspan=2>
 
 			<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=2>
-			<form name="edit" method="post" action="<?php echo $PHP_SELF ?>">
+			<form name="edit" method="post" action="<?=URLHelper::getLink('')?>">
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("Benutzername:")?></b></td>
 					<td>&nbsp;<input type="text" name="username" size=24 maxlength=63 value=""></td>
@@ -239,6 +272,9 @@ if (isset($_GET['details'])) {
 					}
 				}
 			}
+			if($GLOBALS['MAIL_VALIDATE_BOX']){
+				echo chr(10).'<tr><td colspan="3" align="right"><input type="checkbox" id="disable_mail_host_check" name="disable_mail_host_check" value="1"><label for="disable_mail_host_check" >'._("Mailboxüberprüfung deaktivieren").'</label></td></tr>';
+			}
 			?>
 			</select>
 					&nbsp;</td>
@@ -247,7 +283,6 @@ if (isset($_GET['details'])) {
 				<td colspan=3 align=center>&nbsp;
 				<input type="IMAGE" name="create" <?=makeButton("anlegen", "src")?> value=" <?=_("Benutzer anlegen")?> ">&nbsp;
 				<input type="IMAGE" name="nothing" <?=makeButton("abbrechen", "src")?> value=" <?=_("Abbrechen")?> ">
-				<input type="hidden" name="studipticket" value="<?=get_ticket();?>">
 				&nbsp;</td></tr>
 			</form></table>
 
@@ -273,7 +308,7 @@ if (isset($_GET['details'])) {
 			<tr><td class="blank" colspan=2>
 
 			<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=2>
-			<form name="edit" method="post" action="<?php echo $PHP_SELF ?>">
+			<form name="edit" method="post" action="<?=URLHelper::getLink('')?>">
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Benutzername:")?></b></td>
 					<td class="steel1">&nbsp;
@@ -441,6 +476,33 @@ if (isset($_GET['details'])) {
 					if ($db->f("locked")==1) 
                                         	echo "<TR><TD CLASS=\"steel1\" COLSPAN=\"3\" ALIGN=\"center\"><FONT SIZE=\"-2\">"._("Gesperrt von:")." ".htmlReady(get_fullname($db->f("locked_by")))." (<A HREF=\"about.php?username=".get_username($db->f("locked_by"))."\">".get_username($db->f("locked_by"))."</A>)</FONT></TD></TR>\n";
 				}
+				$userEntries = DataFieldEntry::getDataFieldEntries($db->f('user_id'));
+				foreach ($userEntries as $entry) {
+					$id = $entry->structure->getID();
+					$color = '#000000';
+					if ($invalidEntries[$id]) {
+						$entry = $invalidEntries[$id];
+						$entry->structure->load();
+						$color = '#ff0000';
+					}
+					if ($entry->structure->accessAllowed($perm, $user->id, $db->f("user_id"))) {
+						echo chr(10) . '<tr><td class="steel1" colspan="2">';
+						echo chr(10) . '<span style="font-weight:bold;color:'.$color.'">&nbsp;' . htmlReady($entry->getName()).':</span></td>';
+						echo chr(10) . '<td class="steel1">&nbsp;';
+						if ($perm->have_perm($entry->structure->getEditPerms())) {
+							echo chr(10).'<input type="HIDDEN" name="datafield_id[]" value="'.$entry->structure->getID().'">';
+							echo chr(10).'<input type="HIDDEN" name="datafield_type[]" value="'.$entry->getType().'">';
+							echo chr(10).$entry->getHTML('datafield_content[]', $entry->structure->getID());
+						} else {
+							echo chr(10).htmlReady($entry->getValue());
+						}
+						echo chr(10).'</td></tr>';
+					}
+				}
+				
+				if($GLOBALS['MAIL_VALIDATE_BOX'] && !StudipAuthAbstract::CheckField("auth_user_md5.password", $db->f('auth_plugin'))){
+					echo chr(10).'<tr><td class="steel1" colspan="3" align="right"><input type="checkbox" id="disable_mail_host_check" name="disable_mail_host_check" value="1"><label for="disable_mail_host_check" >'._("Mailboxüberprüfung deaktivieren").'</label></td></tr>';
+				}
 				?>
 
 				<td class="steel1" colspan=3 align=center>&nbsp;
@@ -462,22 +524,21 @@ if (isset($_GET['details'])) {
 				?>
 				<input type="IMAGE" name="nothing" <?=makeButton("abbrechen", "src")?> value=" <?=_("Abbrechen")?> ">
 				&nbsp;</td></tr>
-			<input type="hidden" name="studipticket" value="<?=get_ticket();?>">
 			</form>
 
 			<tr><td colspan=3 class="blank">&nbsp;</td></tr>
 
 			<? // links to everywhere
-			print "<tr><td class=\"steelgraulight\" colspan=3 align=\"center\">";
-				printf("&nbsp;" . _("pers&ouml;nliche Homepage") . " <a href=\"about.php?username=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" border=0 alt=\"Zur pers&ouml;nlichen Homepage des Benutzers\" align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp", $db->f("username"));
-				printf("&nbsp;" . _("Nachricht an BenutzerIn") . " <a href=\"sms_send.php?rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" alt=\"Nachricht an den Benutzer verschicken\" border=0 align=\"texttop\"></a>", $db->f("username"));
-			print "</td></tr>";
+			echo "<tr><td class=\"steelgraulight\" colspan=3 align=\"center\">";
+			echo "&nbsp;" . _("pers&ouml;nliche Homepage") . " <a href=\"".URLHelper::getLink('about.php?username=' . $db->f("username")) . "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" ".tooltip(_("Zur persönlichen Homepage des Benutzers"))." align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp";
+			echo "&nbsp;" . _("Nachricht an BenutzerIn") . " <a href=\"".URLHelper::getLink('sms_send.php?rec_uname=' . $db->f("username")) . "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" ".tooltip(_("Nachricht an den Benutzer verschicken")) . " align=\"texttop\"></a>";
+			echo "</td></tr>";
 			if ($perm->have_perm('root')){
 				echo "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
 				echo "&nbsp;" . _("Datei- und Aktivitätenübersicht") . "&nbsp;";
-				printf('<a href="user_activities.php?username=%s">
-						<img src="'.$GLOBALS['ASSETS_URL'].'images/icon-disc.gif" align="absmiddle" border="0">
-						</a>' , $db->f('username'));
+				echo '<a href="' . URLHelper::getLink('user_activities.php?username=' . $db->f('username')) .'">
+					<img src="'.$GLOBALS['ASSETS_URL'].'images/icon-disc.gif" align="absmiddle" border="0">
+					</a>';
 				echo "</td></tr>\n";
 			}
 			$temp_user_id = $db->f("user_id");
@@ -485,9 +546,9 @@ if (isset($_GET['details'])) {
 				$db2->query("SELECT Institute.Institut_id, Name FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_id ='$temp_user_id' AND inst_perms != 'user'");
 			elseif ($perm->is_fak_admin())
 				$db2->query("SELECT a.Institut_id,b.Name FROM user_inst AS a
-							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id AND b.Institut_id!=b.fakultaets_id)
+							LEFT JOIN Institute b ON (a.Institut_id=b.Institut_id)
 							LEFT JOIN user_inst AS c ON(b.fakultaets_id=c.Institut_id )
-							WHERE a.user_id ='".$db->f("user_id")."' AND a.inst_perms = 'admin' AND c.user_id = '$user->id' AND c.inst_perms='admin'");
+							WHERE a.user_id ='".$db->f("user_id")."' AND a.inst_perms <> 'user' AND c.user_id = '$user->id' AND c.inst_perms='admin'");
 			else
 				$db2->query("SELECT Institute.Institut_id, Name FROM user_inst AS x LEFT JOIN user_inst AS y USING (Institut_id) LEFT JOIN Institute USING (Institut_id) WHERE x.user_id ='$temp_user_id' AND x.inst_perms != 'user' AND y.user_id = '$user->id' AND y.inst_perms = 'admin'");
 			if ($db2->num_rows()) {
@@ -496,9 +557,11 @@ if (isset($_GET['details'])) {
 				print "</td></tr>\n";
 			}
 			while ($db2->next_record()) {
-				print "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
-				printf ("&nbsp;%s <a href=\"inst_admin.php?details=%s&admin_inst_id=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/admin.gif\" border=0 align=\"texttop\" alt=\"&Auml;ndern der Eintr&auml;ge des Benutzers in der jeweiligen Einrichtung\"></a>&nbsp;", htmlReady($db2->f("Name")), $db->f("username"), $db2->f("Institut_id"));
-				print "</td></tr>\n";
+				echo "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
+				echo "&nbsp;" . htmlReady($db2->f("Name"));
+				echo ' <a href="' . URLHelper::getLink(sprintf('inst_admin.php?details=%s&admin_inst_id=%s', $db->f("username"), $db2->f("Institut_id"))) . '">';
+				echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/admin.gif\" align=\"texttop\" ".tooltip(_("Ändern der Einträge des Benutzers in der jeweiligen Einrichtung"))."\"></a>&nbsp;";
+				echo "</td></tr>\n";
 			}
 			?>
 
@@ -528,7 +591,7 @@ if (isset($_GET['details'])) {
 	<tr><td class="blank" colspan=2>
 	<?
 	if (in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])){
-		printf("&nbsp;&nbsp;"._("Neuen Benutzer-Account %s")."<br /><br />", "<a href=" . $PHP_SELF . "?details=__><img ".makeButton("anlegen", "src")." align=\"absmiddle\"></a>");
+		printf("&nbsp;&nbsp;"._("Neuen Benutzer-Account %s")."<br /><br />", "<a href=\"" . URLHelper::getLink("?details=__") . "\"><img ".makeButton("anlegen", "src")." align=\"absmiddle\"></a>");
 	} else {
 		echo "<p>&nbsp;" . _("Die Standard Authentifizierung ist ausgeschaltet. Das Anlegen von neuen Benutzern ist nicht möglich!") . "</p>";
 	}
@@ -563,7 +626,7 @@ if (isset($_GET['details'])) {
 			echo '<table border="0" bgcolor="#eeeeee" align="center" cellspacing="0" class="blank" cellpadding="2" width="100%">';
 
 			if ($perm->have_perm('root')){
-				echo '<tr valign="top"><td colspan="8"><a href="admin_user_kill.php?transfer_search=1">'._("Suchergebnis in Löschformular übernehmen").'</a></td></tr>';
+				echo '<tr valign="top"><td colspan="8"><a href="' . URLHelper::getLink('admin_user_kill.php?transfer_search=1') . '">'._("Suchergebnis in Löschformular übernehmen").'</a></td></tr>';
 			}
 			
 			echo '<tr valign="top" align="middle">';
@@ -573,27 +636,30 @@ if (isset($_GET['details'])) {
 			 		printf('<td colspan="8">' . _("Suchergebnis: Es wurden <b>%s</b> Personen gefunden.") . "</td></tr>\n", $db->num_rows());
 			?>
 			 <tr valign="top" align="middle">
-				<th align="left"><a href="new_user_md5.php?sortby=username"><?=_("Benutzername")?></a>&nbsp;<span style="font-size:smaller;font-weight:normal;color:#f8f8f8;">(<?=_("Sichtbarkeit")?>)</span></th>
-				<th align="left"><a href="new_user_md5.php?sortby=perms"><?=_("Status")?></a></th>
-				<th align="left"><a href="new_user_md5.php?sortby=Vorname"><?=_("Vorname")?></a></th>
-				<th align="left"><a href="new_user_md5.php?sortby=Nachname"><?=_("Nachname")?></a></th>
-				<th align="left"><a href="new_user_md5.php?sortby=Email"><?=_("E-Mail")?></a></th>
-				<th><a href="new_user_md5.php?sortby=changed"><?=_("inaktiv")?></a></th>
-				<th><a href="new_user_md5.php?sortby=mkdate"><?=_("registriert seit")?></a></th>
-				<th><a href="new_user_md5.php?sortby=auth_plugin"><?=_("Authentifizierung")?></a></th>
+				<th align="left"><a href="<?=URLHelper::getLink('?sortby=username')?>"><?=_("Benutzername")?></a>&nbsp;<span style="font-size:smaller;font-weight:normal;color:#f8f8f8;">(<?=_("Sichtbarkeit")?>)</span></th>
+				<th align="left"><a href="<?=URLHelper::getLink('?sortby=perms')?>"><?=_("Status")?></a></th>
+				<th align="left"><a href="<?=URLHelper::getLink('?sortby=Vorname')?>"><?=_("Vorname")?></a></th>
+				<th align="left"><a href="<?=URLHelper::getLink('?sortby=Nachname')?>"><?=_("Nachname")?></a></th>
+				<th align="left"><a href="<?=URLHelper::getLink('?sortby=Email')?>"><?=_("E-Mail")?></a></th>
+				<th><a href="<?=URLHelper::getLink('?sortby=changed')?>"><?=_("inaktiv")?></a></th>
+				<th><a href="<?=URLHelper::getLink('?sortby=mkdate')?>"><?=_("registriert seit")?></a></th>
+				<th><a href="<?=URLHelper::getLink('?sortby=auth_plugin')?>"><?=_("Authentifizierung")?></a></th>
 			 </tr>
 			<?
 
 			while ($db->next_record()):
 				if ($db->f("changed_compat") != "") {
 					$stamp = mktime(substr($db->f("changed_compat"),8,2),substr($db->f("changed_compat"),10,2),substr($db->f("changed_compat"),12,2),substr($db->f("changed_compat"),4,2),substr($db->f("changed_compat"),6,2),substr($db->f("changed_compat"),0,4));
-					$inactive = floor((time() - $stamp) / 3600 / 24);
+					$inactive = floor((time() - $stamp) / 3600 / 24).'d';
+					if($inactive == 0){
+						$inactive = gmdate('H\hi\ms\s', (time() - $stamp));
+					}
 				} else {
 					$inactive = _("nie benutzt");
 				}
 				?>
 				<tr valign=middle align=left>
-					<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?php echo $PHP_SELF . "?details=" . $db->f("username") ?>"><?php $db->p("username") ?></a>&nbsp;<?
+					<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?=URLHelper::getLink('?details=' . $db->f("username"))?>"><?php $db->p("username") ?></a>&nbsp;<?
 					if ($db->f('locked')=='1'){ 
 						echo '<span style="font-size:smaller;color:red;font-weight:bold;">' . _("gesperrt!") .'</span>'; 
 					} else {
