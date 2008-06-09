@@ -53,6 +53,7 @@ function string_to_unicode ($xml_string)
 	{
 		$char = substr($xml_string, $x, 1);
 		$dosc = ord($char);
+		if($dosc < 32 && $dosc != 10) continue;
 		$ret .= ($dosc > 127) ? "&#".$dosc.";" : $char;
 	}
 	return $ret;
@@ -480,7 +481,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 		}
 		else // Gruppierung nach Status in der Veranstaltung / Einrichtung
 		if ($key1 == 'accepted'){
-			$db->query ("SELECT ui.*, aum.*, asu.studiengang_id as admission_studiengang_id,FROM_UNIXTIME(asu.mkdate) as registration_date , GROUP_CONCAT(studiengaenge.name SEPARATOR ', ') as nutzer_studiengaenge
+			$db->query ("SELECT ui.*, aum.*, asu.comment, asu.studiengang_id as admission_studiengang_id,FROM_UNIXTIME(asu.mkdate) as registration_date , GROUP_CONCAT(studiengaenge.name SEPARATOR ', ') as nutzer_studiengaenge
 				FROM admission_seminar_user asu
 				LEFT JOIN user_info ui USING(user_id)
 				LEFT JOIN auth_user_md5 aum USING(user_id)
@@ -488,7 +489,7 @@ function export_teilis($inst_id, $ex_sem_id = "no")
 				LEFT JOIN studiengaenge ON(user_studiengang.studiengang_id=studiengaenge.studiengang_id)
 				WHERE seminar_id = '$ex_sem_id' AND asu.status = 'accepted'  GROUP BY aum.user_id ORDER BY Nachname");
 		} elseif ($key1 == 'awaiting') {
-			$db->query("SELECT ui.*, aum.*, asu.studiengang_id as admission_studiengang_id, asu.position as admission_position, GROUP_CONCAT(studiengaenge.name SEPARATOR ', ') as nutzer_studiengaenge
+			$db->query("SELECT ui.*, aum.*, asu.comment, asu.studiengang_id as admission_studiengang_id, asu.position as admission_position, GROUP_CONCAT(studiengaenge.name SEPARATOR ', ') as nutzer_studiengaenge
 						FROM admission_seminar_user asu
 						LEFT JOIN user_info ui USING(user_id)
 						LEFT JOIN auth_user_md5 aum USING(user_id)
@@ -708,7 +709,7 @@ function export_datafields($range_id, $childgroup_tag, $childobject_tag){
 	$localEntries = DataFieldEntry::getDataFieldEntries($range_id);
 	if(is_array($localEntries )){
 		foreach ($localEntries as $entry){
-			if ($entry->getValue()) {
+			if ($entry->structure->accessAllowed($GLOBALS['perm'], $GLOBALS['user']->id, $range_id) && $entry->getValue()) {
 				if (!$d_fields)	$ret .= xml_open_tag( $childgroup_tag );
 				$ret .= xml_open_tag($childobject_tag , $entry->getName());
 				$ret .= htmlspecialchars($entry->getDisplayValue(false));
