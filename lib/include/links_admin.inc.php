@@ -196,7 +196,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	//here are all the pages/views listed, which require the search form for Einrichtungen
 	if ($i_page == "admin_institut.php"
-			OR ($i_page == "admin_statusgruppe.php" AND $links_admin_data["view"] == "statusgruppe_inst")
+			OR ($i_page == "admin_roles.php" AND $links_admin_data["view"] == "statusgruppe_inst")
 			OR ($i_page == "admin_lit_list.php" AND $links_admin_data["view"] == "literatur_inst")
 			OR $i_page == "inst_admin.php"
 			OR ($i_page == "admin_news.php" AND $links_admin_data["view"] == "news_inst")
@@ -318,7 +318,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	$structure["zugang"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zugangsberechtigungen"), 'link'=>"admin_admission.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["participants"]) || (!$SessSemName[1]))
-		$structure["statusgruppe_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Gruppen&nbsp;/&nbsp;Funktionen"), 'link'=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_sem", active=>FALSE);
+		$structure["statusgruppe_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Gruppen&nbsp;/&nbsp;Funktionen"), 'link'=>"admin_statusgruppe.php?list=TRUE", active=>FALSE);
 	$structure["modules_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Module/Plugins"), 'link'=>"admin_modules.php?list=TRUE&view=modules_sem", 'active'=>FALSE);
 	$sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
 	if ($perm->have_perm($sem_create_perm)) {
@@ -342,7 +342,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	if ($perm->have_perm("admin")) {
 		$structure["grunddaten_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Grunddaten"), 'link'=>"admin_institut.php?list=TRUE", 'active'=>FALSE);
 		$structure["mitarbeiter"]=array ('topKat'=>"einrichtungen", 'name'=>_("Mitarbeiter"), 'link'=>"inst_admin.php?list=TRUE", 'active'=>FALSE);
-		$structure["statusgruppe_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Gruppen&nbsp;/&nbsp;Funktionen"), 'link'=>"admin_statusgruppe.php?list=TRUE&view=statusgruppe_inst", 'active'=>FALSE);
+		$structure["statusgruppe_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Gruppen&nbsp;/&nbsp;Funktionen"), 'link'=>"admin_roles.php?list=TRUE", 'active'=>FALSE);
 	}
 
 	$structure["literatur_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Literatur"), 'link'=>"admin_lit_list.php?list=TRUE&view=literatur_inst", 'active'=>FALSE);
@@ -494,10 +494,10 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			$reiter_view="new_sem";
 		break;
 		case "admin_statusgruppe.php":
-			if ($links_admin_data["topkat"] == "sem")
-				$reiter_view="statusgruppe_sem";
-			else
-				$reiter_view="statusgruppe_inst";
+			$reiter_view="statusgruppe_sem";
+		break;
+		case "admin_roles.php":
+			$reiter_view="statusgruppe_inst";
 		break;
 		case "admin_modules.php":
 			if ($links_admin_data["topkat"] == "sem")
@@ -1104,6 +1104,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					break;
 				case "admin_statusgruppe.php":
 					printf("<font size=-1>" . _("Funktionen / Gruppen") . "<br /><a href=\"admin_statusgruppe.php?range_id=%s&ebene=sem\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+					break;
+				case "admin_roles.php":
+					printf("<font size=-1>" . _("Funktionen / Gruppen") . "<br /><a href=\"admin_roles.php?range_id=%s&ebene=sem\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
 					break;
 				case "admin_seminare1.php":
 					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare1.php?s_id=%s&s_command=edit\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));

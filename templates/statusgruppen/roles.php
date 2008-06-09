@@ -64,21 +64,12 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 	$new_followers[$indent] = (sizeof($roles) > $pos);
 
 	// if we have opened an entry, we show edit fields
-	if ($open == $id && $range_type != 'sem') :
+	if ($open == $id) :
 		echo $this->render_partial('statusgruppen/role_administration.php', 
 			array('indent' => $indent, 'followers' => $new_followers,
 				'persons' => getPersonsForRole($id), 'role_id' => $id, 'editRole' => ($editRole == $id), 'role' => $role['role'],
 				'role_size' => sizeof($roles), 'role_pos' => $pos, 'has_child' => ($role['child']) ? true : false, 'all_roles' => $all_roles)
 		);	
-
-	// we are in a seminar and use a different template to display the role-adminstartion
-	else:
-		echo $this->render_partial('statusgruppen/role_administration_sem.php', 
-			array('indent' => $indent, 'followers' => $new_followers,
-				'persons' => getPersonsForRole($id), 'role_id' => $id, 'editRole' => ($editRole == $id), 'role' => $role['role'],
-				'role_size' => sizeof($roles), 'role_pos' => $pos, 'has_child' => ($role['child']) ? true : false, 'all_roles' => $all_roles)
-		);	
-	
 	endif;
 
 	// if we have childs, we display them with the same template and some indention

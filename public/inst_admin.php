@@ -35,9 +35,13 @@ require_once ("lib/classes/DataFieldEntry.class.php");
 // Start of Output
 include ("lib/include/html_head.inc.php"); // Output of html head
 
-// if we ar not in admin_view, we get the proper set variable from institut_members.php
+// if we are not in admin_view, we get the proper set variable from institut_members.php
 if (!isset($admin_view)) {
 	$admin_view = true;
+}
+
+if ($perm->have_studip_perm('tutor', $SessSemName[1])) {
+	$rechte = true;
 }
 
 $css_switcher = new CssClassSwitcher();

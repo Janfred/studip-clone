@@ -300,9 +300,9 @@ if ($SessSemName["class"]=="sem" && $modules["participants"] && (!is_array($AUTO
 
 if ($rechte)
 	if (($SessSemName["class"]=="sem") && ($modules["participants"]))
-		$structure["Statusgruppen verwalten"]=array ('topKat' => "teilnehmer", 'name' => _("Funktionen / Gruppen verwalten"), 'link' => "admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=".$SessSemName[1], 'active' => FALSE);
+		$structure["Statusgruppen verwalten"]=array ('topKat' => "teilnehmer", 'name' => _("Funktionen / Gruppen verwalten"), 'link' => "admin_statusgruppe.php?new_sem=TRUE&range_id=".$SessSemName[1], 'active' => FALSE);
 	elseif (($perm->have_perm("admin")) && ($modules["personal"]))
-			$structure["Statusgruppen verwalten"]=array ('topKat' => "personal", 'name' => _("Funktionen / Gruppen verwalten"), 'link' => "admin_statusgruppe.php?view=statusgruppe_inst&new_sem=TRUE&range_id=".$SessSemName[1], 'active' => FALSE);
+		$structure["Statusgruppen verwalten"]=array ('topKat' => "personal", 'name' => _("Funktionen / Gruppen verwalten"), 'link' => "admin_roles.php?new_sem=TRUE&range_id=".$SessSemName[1], 'active' => FALSE);
 
 
 if (($rechte) && ($modules["literature"]))

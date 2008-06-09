@@ -128,6 +128,15 @@ class Statusgruppe {
 		try {
 
 			if ($this->new) {
+				$this->position = 0;
+
+				// get the last position to insert the new group after
+				$stmt = DBManager::get()->prepare("SELECT position FROM statusgruppen WHERE range_id = ? ORDER BY position DESC");
+				$stmt->execute(array($this->range_id));
+				if ($data = $stmt->fetch()) {
+					$this->position = $data['position'] + 1;
+				}
+
 				$query = "INSERT INTO statusgruppen
 					(statusgruppe_id, name, range_id, position, size, selfassign, mkdate, chdate) VALUES
 					(?, ?, ?, ?, ?, ?, ?, ?)";
@@ -271,53 +280,55 @@ class Statusgruppe {
 
 		}
 
-		// check the datafields
-		if (!$this->isSeminar() && is_array($datafield_id)) {
-			$ffCount = 0; // number of processed form fields
-			foreach ($datafield_id as $i=>$id) {
-				$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$datafield_type[$i]));
-				$entry  = DataFieldEntry::createDataFieldEntry($struct, array($this->range_id, $datafield_sec_range_id[$i]));
-				$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
-				if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
-					$entry->setValue('');
-					$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
-				}
-				elseif ($numFields == 1)
-					$entry->setValue($datafield_content[$ffCount]);
-				else
-					$entry->setValue(array_slice($datafield_content, $ffCount, $numFields));
-				$ffCount += $numFields;
+		if (!$this->isSeminar()) {
+			// check the datafields
+			if (!$this->isSeminar() && is_array($datafield_id)) {
+				$ffCount = 0; // number of processed form fields
+				foreach ($datafield_id as $i=>$id) {
+					$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$datafield_type[$i]));
+					$entry  = DataFieldEntry::createDataFieldEntry($struct, array($this->range_id, $datafield_sec_range_id[$i]));
+					$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
+					if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
+						$entry->setValue('');
+						$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
+					}
+					elseif ($numFields == 1)
+						$entry->setValue($datafield_content[$ffCount]);
+					else
+						$entry->setValue(array_slice($datafield_content, $ffCount, $numFields));
+					$ffCount += $numFields;
 
-				$entry->structure->load();
-				if ($entry->isValid()) {
-					$entry->store();
+					$entry->structure->load();
+					if ($entry->isValid()) {
+						$entry->store();
+					} else {
+						$invalidEntries[$struct->getID()] = $entry;
+					}
+				}
+				/*// change visibility of role data
+					foreach ($group_id as $groupID)
+					setOptionsOfStGroup($groupID, $u_id, ($visible[$groupID] == '0') ? '0' : '1');*/
+				//$msgs[] = 'error§<b>'. _("Fehlerhafte Eingaben (s.u.)") .'</b>';
+			}
+
+			// a group cannot be its own vather!
+			if ($_REQUEST['vather'] == $this->statusgruppe_id) {
+				$this->messages[] = 'error§' ._("Sie könne diese Gruppe nicht sich selbst unterordnen!");
+			} else
+			
+			// check if the group shall be moved
+			if ($_REQUEST['vather'] != 'nochange') {
+				if ($_REQUEST['vather'] == 'root') {
+					$vather_id = $GLOBALS['range_id'];
 				} else {
-					$invalidEntries[$struct->getID()] = $entry;
+					$vather_id = $_REQUEST['vather'];
 				}
-			}
-			/*// change visibility of role data
-				foreach ($group_id as $groupID)
-				setOptionsOfStGroup($groupID, $u_id, ($visible[$groupID] == '0') ? '0' : '1');*/
-			//$msgs[] = 'error§<b>'. _("Fehlerhafte Eingaben (s.u.)") .'</b>';
-		}
-
-		// a group cannot be its own vather!
-		if ($_REQUEST['vather'] == $this->statusgruppe_id) {
-			$this->messages[] = 'error§' ._("Sie könne diese Gruppe nicht sich selbst unterordnen!");
-		} else
-		
-		// check if the group shall be moved
-		if ($_REQUEST['vather'] != 'nochange') {
-			if ($_REQUEST['vather'] == 'root') {
-				$vather_id = $GLOBALS['range_id'];
-			} else {
-				$vather_id = $_REQUEST['vather'];
-			}
-			if (!isVatherDaughterRelation($this->statusgruppe_id, $vather_id)) {
-				$this->range_id = $vather_id;
-				//$db->query("UPDATE statusgruppen SET range_id = '$vather_id' WHERE statusgruppe_id = '{$this->statusgruppe_id}'");
-			} else {
-				$this->messages[] = 'error§' ._("Sie können diese Gruppe nicht einer ihr untergeordneten Gruppe zuweisen!");
+				if (!isVatherDaughterRelation($this->statusgruppe_id, $vather_id)) {
+					$this->range_id = $vather_id;
+					//$db->query("UPDATE statusgruppen SET range_id = '$vather_id' WHERE statusgruppe_id = '{$this->statusgruppe_id}'");
+				} else {
+					$this->messages[] = 'error§' ._("Sie können diese Gruppe nicht einer ihr untergeordneten Gruppe zuweisen!");
+				}
 			}
 		}
 				

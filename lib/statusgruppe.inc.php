@@ -423,6 +423,20 @@ function resortStatusgruppeByRangeId($range_id) {
 	}
 }
 
+function SwapStatusgruppe ($statusgruppe_id) {
+
+	$db=new DB_Seminar;
+	$db->query("SELECT * FROM statusgruppen WHERE statusgruppe_id = '$statusgruppe_id'");
+	if ($db->next_record()) {
+		$current_position = $db->f("position");
+		$range_id = $db->f("range_id");
+		$next_position = $current_position + 1;
+		$db2=new DB_Seminar;
+		$db2->query("UPDATE statusgruppen SET position =  '$next_position' WHERE statusgruppe_id = '$statusgruppe_id'");
+		$db2->query("UPDATE statusgruppen SET position =  '$current_position' WHERE range_id = '$range_id' AND position = '$next_position' AND statusgruppe_id != '$statusgruppe_id'");
+	}
+}
+
 function CheckStatusgruppe ($range_id, $name) {
 
 	$db=new DB_Seminar;
@@ -943,12 +957,12 @@ function getPersons($range_id, $type = false) {
 	return $all_persons;
 }
 
-function getSearchResults ($search_exp, $range_id) { 
-	global $SessSemName, $_fullname_sql,$_range_type;
+function getSearchResults ($search_exp, $range_id, $type = 'inst') { 
+	global $SessSemName, $_fullname_sql;
 
 	$ret = '';
 	$db=new DB_Seminar;
-	if ($_range_type == "sem") {
+	if ($type == "sem") {
 		$query = "SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".		
 		"LEFT JOIN user_info USING (user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$range_id')  ".
 		"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
@@ -960,6 +974,7 @@ function getSearchResults ($search_exp, $range_id) {
 		"WHERE perms !='root' AND perms !='admin' AND perms !='user' AND (user_inst.inst_perms = 'user' OR user_inst.inst_perms IS NULL) ".
 		"AND (Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%$search_exp%') ORDER BY Nachname ";
 	}
+
 	$db->query($query); // results all users which are not in the seminar
 	if (!$db->num_rows()) {		
 		return false;
