@@ -245,7 +245,11 @@ class Statusgruppe {
 		global $datafield_id, $datafield_content, $datafield_type, $datafield_sec_range_id, $invalidEntries, $_REQUEST;
 
 		// check the standard role data
-		$this->name = $_REQUEST['new_name'];
+		if (!$_REQUEST['new_name'] && $_REQUEST['presetName'] != 'none') {
+			$this->name = $_REQUEST['presetName'];
+		} else {
+			$this->name = $_REQUEST['new_name'];
+		}
 		$this->size = $_REQUEST['new_size'];
 
 		// check if we have to remove the self_assign_exclusive-flag
