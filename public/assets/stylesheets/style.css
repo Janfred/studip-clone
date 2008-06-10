@@ -120,9 +120,16 @@ td.topic {
 	background-image: url('../images/fill1.gif');
 	background-color:#4A5681;
 	color:#FFFFFF;
-	font-size: 16px;
+	font-size: 12pt;
 }
-td.topicwrite {border:0px solid #000000; background-image: url('../images/fill1write.gif'); color:#FFFFFF; font-family:Arial, Helvetica, sans-serif; background-color:#4A5681  }
+td.topicwrite {
+	border:0px solid #000000; 
+	background-image: url('../images/fill1write.gif'); 
+	background-color: #4A5681;
+	color: #FFFFFF; 
+	font-size: 12pt;
+}
+
 td.header {background-image: url('../images/fill1.gif');}
 td.angemeldet {border-style: solid; border-color: #000000;  border-width: 1px;}
 td.rahmen_white {border-style: solid; border-color: #000000;  border-width: 1px; background-color: #FFFFFF; background-image: url('../images/blank.gif');}
