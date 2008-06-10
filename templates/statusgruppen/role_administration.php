@@ -40,20 +40,16 @@
 			<? else :	?>
 			<!-- Buttonbar -->
 			<br/>
-			<a href="<?= $GLOBALS['PHP_SELF'] ?>?view=editRole&role_id=<?= $role_id ?>&range_id=<?= $range_id ?>#<?= $role_id ?>">
+			<a href="<?= URLHelper::getLink('?view=editRole&role_id='. $role_id .'#'. $role_id) ?>">
 				<?= makebutton('bearbeiten') ?>
 			</a>
-			<a href="<?= $GLOBALS['PHP_SELF'] ?>?cmd=deleteRole&role_id=<?= $role_id ?>&range_id=<?= $range_id ?>#<?= $role_id ?>">
+			<a href="<?= URLHelper::getLink('?cmd=deleteRole&role_id='. $role_id .'#'. $role_id) ?>">
 				<?= makebutton('loeschen') ?>
 			</a>
-			<? /*
-			<a href="<?= $GLOBALS['PHP_SELF'] ?>?view=startMove&role_id=<?= $role_id ?>&range_id=<?= $range_id ?>#<?= $role_id ?>">
-				<?= makebutton('verschieben') ?>
-			</a> */ ?>			
 			<br/>
 			<br/>
 	
-			<form action="<?= $GLOBALS['PHP_SELF'] ?>" method="post" style="display: inline">
+			<form action="<?= URLHelper::getLink('') ?>" method="post" style="display: inline">
 				<input type="hidden" name="cmd" value="sort_person">
 				<input type="hidden" name="role_id" value="<?= $role_id ?>">
 				<table cellspacing="0" cellpadding="0" border="0" width="95%">
@@ -68,7 +64,7 @@
 						</td> 
 						<td class="topic" width="1%" nowrap>						
 							<?= ($role->getSelfassign()) ? Assets::img('nutzer', array('title' => _("Personen können sich dieser Gruppe selbst zuordnen"))) : '' ?>
-							<a href="<?= $GLOBALS['PHP_SELF'] ?>?cmd=sortByName&role_id=<?= $role_id ?>&range_id=<?= $range_id ?>"><?= Assets::img('sort') ?></a>
+							<a href="<?= URLHelper::getLink('?cmd=sortByName&role_id='. $role_id ) ?>"><?= Assets::img('sort') ?></a>
 						</td>
 					</tr>
 					<!-- Persons assigned to this role -->
@@ -89,7 +85,7 @@
 
 						<td class="<?= $cssSw->getClass() ?>" width="1%" nowrap style="padding-left: 6px">
 							<? if ($pos < sizeof($persons)) : ?>
-							<a href="<?= $GLOBALS['PHP_SELF']?>?cmd=move_down&role_id=<?= $role_id ?>&username=<?= $person['username'] ?>&range_id=<?= $range_id ?>">
+							<a href="<?= URLHelper::getLink('?cmd=move_down&role_id='. $role_id .'&username='. $person['username']) ?>">
 								<input type="image" src="<?= Assets::image_path('move_down') ?>">
 							</a>
 							<? endif; ?>
@@ -97,7 +93,7 @@
 
 						<td class="<?= $cssSw->getClass() ?>" width="1%" nowrap style="padding-left: 4px">
 							<? if ($pos > 1) : ?>
-							<a href="<?= $GLOBALS['PHP_SELF'] ?>?cmd=move_up&role_id=<?= $role_id ?>&username=<?= $person['username'] ?>&range_id=<?= $range_id ?>">
+							<a href="<?= URLHelper::getLink('?cmd=move_up&role_id='. $role_id .'&username='. $person['username']) ?>">
 								<input type="image" src="<?= Assets::image_path('move_up') ?>">
 							</a>
 							<? endif; ?>
@@ -113,12 +109,12 @@
 							<? else: ?>
 							<a href="edit_about.php?view=Karriere&open=<?= $role_id ?>&username=<?= $person['username'] ?>#<?= $role_id ?>">
 							<? endif; ?>
-							 	<?= $person['fullname'] ?>
+							 	<?= htmlReady($person['fullname']) ?>
 							</a>
 						</td>
 
 						<td class="<?= $cssSw->getClass() ?>" width="1%" colspan="2" align="right">
-							<a href="<?= $GLOBALS['PHP_SELF'] ?>?role_id=<?= $role_id ?>&cmd=removePerson&username=<?= $person['username'] ?>&range_id=<?= $range_id ?>">
+							<a href="<?= URLHelper::getLink('?role_id='. $role_id .'&cmd=removePerson&username='. $person['username']) ?>">
 							<?= Assets::img('trash.gif') ?>
 							</a>
 						</td>

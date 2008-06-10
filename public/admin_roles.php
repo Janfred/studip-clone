@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO
+# Lifter001: DONE
 # Lifter002: TODO
 /*
 admin_statusgruppe.php - Statusgruppen-Verwaltung von Stud.IP.
@@ -49,6 +49,8 @@ $links = ob_get_clean();
 //get ID, if a object is open
 if ($SessSemName[1])
   $range_id = $SessSemName[1];
+
+$_REQUEST = remove_magic_quotes($_REQUEST);
 
 // session-variables for this page
 $sess->register('admin_statusgruppe_data');
@@ -235,7 +237,7 @@ if ($_REQUEST['cmd'] == 'removePerson') {
 // edit the data of a role
 if ($_REQUEST['cmd'] == 'editRole') {
 	$statusgruppe = new Statusgruppe($_REQUEST['role_id']);	
-	$name = $statusgruppe->getName();
+	$name = htmlReady($statusgruppe->getName());
 	if ($statusgruppe->checkData()) {
 		$msgs[] = 'info§' . sprintf(_("Die Daten der Gruppe %s wurden geändert!"), '<b>'. $name .'</b>');
 	}
@@ -247,13 +249,13 @@ if ($_REQUEST['cmd'] == 'editRole') {
 if ($_REQUEST['cmd'] == 'deleteRole') {
 	$statusgruppe = new Statusgruppe($_REQUEST['role_id']);	
 	if ($_REQUEST['really']) {
-		$msgs[] = 'msg§' . sprintf(_("Die Gruppe %s wurde gelöscht!"), $statusgruppe->getName());
+		$msgs[] = 'msg§' . sprintf(_("Die Gruppe %s wurde gelöscht!"), htmlReady($statusgruppe->getName()));
 		$statusgruppe->delete();
 	} else {
-		$msgs[] = 'info§' . sprintf(_("Sind Sie sicher, dass Sie die Gruppe %s löschen möchten?"), '<b>'. $statusgruppe->getName() .'</b>')
-			. '<br/><a href="'. $GLOBALS['PHP_SELF'] .'?cmd=deleteRole&really=true&role_id='. $_REQUEST['role_id'] .'&range_id='. $range_id .'">'. makebutton('ja') .'</a>'
+		$msgs[] = 'info§' . sprintf(_("Sind Sie sicher, dass Sie die Gruppe %s löschen möchten?"), '<b>'. htmlReady($statusgruppe->getName()) .'</b>')
+			. '<br/><a href="'. URLHelper::getLink('?cmd=deleteRole&really=true&role_id='. $_REQUEST['role_id']) .'">'. makebutton('ja') .'</a>'
 			. '&nbsp;&nbsp;&nbsp;&nbsp;'
-			. '<a href="'. $_REQUEST['PHP_SELF'] .'?range_id='. $range_id .'#'. $_REQUEST['role_id'] .'">'. makebutton('nein') .'</a>';
+			. '<a href="'. URLHelper::getLink('#'. $_REQUEST['role_id']) .'">'. makebutton('nein') .'</a>';
 	}
 }
 
@@ -278,7 +280,7 @@ if ($_REQUEST['cmd'] == 'addRole') {
 		if ($new_role->checkData()) {					
 			$new_role->store();
 			$admin_statusgruppe_data['open'] = $new_role->getId();
-			$msgs[] = 'msg§' . sprintf(_("Die Gruppe %s wurde hinzugefügt!"), '<b>'. $new_role->getName() .'</b>');
+			$msgs[] = 'msg§' . sprintf(_("Die Gruppe %s wurde hinzugefügt!"), '<b>'. htmlReady($new_role->getName()) .'</b>');
 		} else {
 			$displayNewRole = true;
 		}

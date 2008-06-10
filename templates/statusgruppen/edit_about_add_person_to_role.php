@@ -1,7 +1,7 @@
 <tr>
 	<td class="blank" valign="top">
 		<div style="border: 1px solid black; padding-left: 10px; background-image: url('<?=$GLOBALS['ASSETS_URL']?>/images/steel1.jpg');">
-		<form action="<?=$PHP_SELF?>?view=Karriere&subview=AddPersonToRole" method="post">
+		<form action="<?= URLHelper::getLink('?view=Karriere&subview=AddPersonToRole') ?>" method="post">
 			<center><b><?=_("Person einer Gruppe zuordnen")?></b></center>
 			<br/>			
 			<? if (!$subview_id || !($groups = GetAllStatusgruppen($subview_id))) { ?>
@@ -30,7 +30,7 @@
 				$db_r->next_record();
 				echo _("Einrichtung") . ':&nbsp;<i>' . $db_r->f('Name') . '</i>';
 			?>
-				<a href="<?=$PHP_SELF?>?view=Daten&subview=AddPersonToRole&username=<?=$username?>">
+				<a href="<?= URLHelper::getLink('?view=Daten&subview=AddPersonToRole&username='. $username) ?>">
 					<img src="<?=$GLOBALS['ASSETS_URL']?>/images/rewind.gif" border="0">
 				</a>
 				<br/><br/>

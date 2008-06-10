@@ -11,17 +11,17 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 		<center>
 		<br/>
 		<? if ($GLOBALS['perm']->have_studip_perm('admin', $inst_id)) : ?>
-		<a href="<?= $GLOBALS['PHP_SELF'] ?>?view=Karriere&username=<?= $username ?>&cmd=removeFromGroup&role_id=<?= $role_id ?>&studipticket=<?= get_ticket() ?>">
+		<a href="<?= URLHelper::getLink('?view=Karriere&username='. $username .'&cmd=removeFromGroup&role_id='. $role_id .'&studipticket='. get_ticket()) ?>">
 			<?= makebutton('loeschen') ?>
 		</a>
 			&nbsp;&nbsp;&nbsp;
-			<a href="admin_statusgruppe.php?admin_inst_id=<?=$inst_id?>&open=<?=$role_id?>#<?= $role_id ?>">
+			<a href="admin_roles.php?admin_inst_id=<?=$inst_id?>&open=<?=$role_id?>#<?= $role_id ?>">
 			 <?= makebutton('zurfunktion'); ?>
 			</a>			
 			<br/><br/>
 		<? endif; ?>
 		<table cellspacing="0" cellpadding="0" border="0" class="blank" width="90%">
-		<form action="<?=$PHP_SELF?>#<?= $role_id ?>" method="POST">
+		<form action="<?= URLHelper::getLink('#'. $role_id) ?>" method="POST">
 			<input type="hidden" name="cmd" value="special_edit">
 			<input type="hidden" name="role_id" value="<?= $role_id ?>">
 			<input type="hidden" name="studipticket" value="<?=get_ticket()?>">
@@ -39,7 +39,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 				</td>
 				<td class="blank">&nbsp;</td>
 				<td class="topic">
-					<b><?=_("Standarddaten")?></b>
+					&nbsp;<b><?=_("Standarddaten")?></b>
 				</td>
 			<?
 			echo "<input type=\"hidden\" name=\"group_id[]\" value=\"$role_id\">";
@@ -69,7 +69,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 
 					// Set-Default Checkbox
 					echo '<td class="'.$cssSw->getClass().'" align="right">';
-					echo '<a href="'.$PHP_SELF.'?cmd=set_default&username='.$username.'&view='.$view.'&subview='.$subview.'&role_id='.$role_id.'&chgdef_entry_id='.$id.'&cor_inst_id='.$inst_id.'&sec_range_id='.$role_id.'&subview_id='.$subview_id.'&studipticket='.get_ticket().'" ';
+					echo '<a href="'. URLHelper::getLink('?cmd=set_default&username='.$username.'&view='.$view.'&subview='.$subview.'&role_id='.$role_id.'&chgdef_entry_id='.$id.'&cor_inst_id='.$inst_id.'&sec_range_id='.$role_id.'&subview_id='.$subview_id.'&studipticket='.get_ticket()).'" ';
 					echo tooltip(_("Diese Daten von den Standarddaten übernehmen")). '>';
 					echo '<img src="'.$GLOBALS['ASSETS_URL'].'/images/off_small_blank_transparent.gif" border="0">';
 					echo '</a>';
@@ -81,7 +81,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 						// UnSet-Default Checkbox
 						echo '<td class="'.$cssSw->getClass().'" align="right">';
 						if ($entry->structure->editAllowed($auth->auth['perm'])) {
-							echo '<a href="'.$PHP_SELF.'?cmd=unset_default&username='.$username.'&view='.$view.'&subview='.$subview.'&role_id='.$role_id.'&chgdef_entry_id='.$id.'&cor_inst_id='.$inst_id.'&sec_range_id='.$role_id.'&subview_id='.$subview_id.'&studipticket='.get_ticket().'" ';
+							echo '<a href="'. URLHelper::getLink('?cmd=unset_default&username='.$username.'&view='.$view.'&subview='.$subview.'&role_id='.$role_id.'&chgdef_entry_id='.$id.'&cor_inst_id='.$inst_id.'&sec_range_id='.$role_id.'&subview_id='.$subview_id.'&studipticket='.get_ticket()) .'" ';
 							echo tooltip(_("Diese Daten NICHT von den Standarddaten übernehmen")). '>';
 							echo '<img src="'.$GLOBALS['ASSETS_URL'].'/images/on_small_transparent.gif" border="0">';
 							echo '</a>';
@@ -103,18 +103,18 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 				<td colspan="4" class="<?= $cssSw->getClass() ?>" align="right">
 					<font size="-1">
 						<?= _("Standarddaten übernehmen:") ?>
-						<a href="<?=$PHP_SELF?>?view=Karriere&username=<?=$username?>&inst_id=<?=$inst_id?>&cmd=makeAllSpecial&role_id=<?=$role_id?>&studipticket=<?=get_ticket()?>">
+						<a href="<?= URLHelper::getLink('?view=Karriere&username='. $username .'&inst_id='. $inst_id .'&cmd=makeAllSpecial&role_id='. $role_id .'&studipticket='. get_ticket()) ?>">
 							<?= _("keine") ?>
 						</a>
 						&nbsp;/&nbsp;
-						<a href="<?=$PHP_SELF?>?view=Karriere&username=<?=$username?>&inst_id=<?=$inst_id?>&cmd=makeAllDefault&role_id=<?=$role_id?>&studipticket=<?=get_ticket()?>">
+						<a href="<?= URLHelper::getLink('?view=Karriere&username='. $username .'&inst_id='. $inst_id .'&cmd=makeAllDefault&role_id='. $role_id .'&studipticket='. get_ticket())?>">
 							<?=_("alle") ?>
 						</a>
 						</font>
 					</td>
 					<td class="blank">&nbsp;</td>
 					<td class="<?= $cssSw->getClass() ?>" align="center">
-						<a href="<?= $PHP_SELF ?>?view=Karriere&open=<?= $inst_id ?>&username=<?= $username ?>#<?= $inst_id ?>">
+						<a href="<?= URLHelper::getLink('?view=Karriere&open='. $inst_id .'&username='. $username .'#'. $inst_id) ?>">
 						<?=_("ändern")?>
 						</a>					
 					</td>

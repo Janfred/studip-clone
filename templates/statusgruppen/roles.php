@@ -23,7 +23,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 
 	<td class="printhead" valign="bottom" colspan="<?= 19-$indent ?>" height="22" nowrap style="padding-left: 3px" width="99%">
 		<a name="<?= $id ?>">
-		<a class="tree" href="<?= $PHP_SELF ?>?switch=<?= $id ?>&range_id=<?= $range_id ?>&rand=<?= md5(uniqid(rand())) ?>#<?= $id ?>">
+		<a class="tree" href="<?= URLHelper::getLink('?switch='. $id .'&rand='. md5(uniqid(rand())) .'#'. $id) ?>">
 			<? if ($open == $id) :
 				echo Assets::img('forumgraurunt');	
 			else :
@@ -37,15 +37,15 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 		
 		<? if ($sort) : 
 			if ($pos > 1) : ?>
-		<a href="<?= $GLOBALS['PHP_SELF'] ?>?cmd=moveUp&view=sort&role_id=<?= $id ?>&range_id=<?= $range_id ?>"><?= Assets::img('move_up'); ?></a>
+		<a href="<?= URLHelper::getLink('?cmd=moveUp&view=sort&role_id='. $id) ?>"><?= Assets::img('move_up'); ?></a>
 		<? endif; if ($pos < sizeof($roles)) : ?>
-		<a href="<?= $GLOBALS['PHP_SELF'] ?>?cmd=moveDown&view=sort&role_id=<?= $id ?>&range_id=<?= $range_id ?>"><?= Assets::img('move_down'); ?></a>
+		<a href="<?= URLHelper::getLink('?cmd=moveDown&view=sort&role_id='. $id) ?>"><?= Assets::img('move_down'); ?></a>
 		<? endif;
 		endif;
 		?>
 		
-		<a class="tree" href="<?= $PHP_SELF ?>?switch=<?= $id ?>&range_id=<?= $range_id ?>&rand=<?= md5(uniqid(rand())) ?>#<?= $id ?>">			
-			<?= $role['role']->getName() ?>
+		<a class="tree" href="<?= URLHelper::getLink('?switch='. $id .'&rand='. md5(uniqid(rand())) .'#'. $id) ?>">			
+			<?= htmlReady($role['role']->getName()) ?>
 		</a>
 
 	</td>

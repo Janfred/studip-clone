@@ -1,5 +1,5 @@
 <? $search_exp = $GLOBALS['search_exp']; ?>
-<form action="<?= $GLOBALS['PHP_SELF'] ?>" method="post" style="display: inline">	
+<form action="<?= URLHelper::getLink('') ?>" method="post" style="display: inline">	
 	<?
 	if ($search_exp) :
 		$users = getSearchResults(trim($GLOBALS['search_exp']), $role_id);

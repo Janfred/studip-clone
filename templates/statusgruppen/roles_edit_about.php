@@ -6,20 +6,20 @@ if (is_array($institutes) && sizeof($institutes) > 0) :
 <tr>
 	<td class="printhead" valign="bottom" colspan="2" height="23" nowrap style="padding-left: 3px" width="99%">
 		<a name="<?= $inst_id ?>">
-		<a class="tree" href="<?= $PHP_SELF ?>?view=<?= $view ?>&username=<?= $username ?>&switch=<?= $inst_id ?>&trash=<?= rand() ?>#<?= $inst_id ?>">
+		<a class="tree" href="<?= URLHelper::getLink('?view='. $view .'&username='. $username .'&switch='. $inst_id .'&trash='. rand() .'#'. $inst_id) ?>">
 			<? if ($open == $inst_id) :
 				echo Assets::img('forumgraurunt');	
 			else :
 				echo '&nbsp;' . Assets::img('forumgrau');	
 			endif; ?>
-			<?= $institute['Name'] ?>
+			<?= htmlReady($institute['Name']) ?>
 		</a>		
 	</td>
 	<td class="printhead" nowrap="nowrap" width="1%" valign="bottom">
 		<? if ($pos_inst > 1) : ?>
-		<a href="<?= $GLOBALS['PHP_SELF'] ?>?view=Karriere&username=<?= $username ?>&cmd=move&direction=up&move_inst=<?= $inst_id ?>&studipticket=<?= get_ticket() ?>"><?= Assets::img('move_up'); ?></a>
+		<a href="<?= URLHelper::getLink('?view=Karriere&username='. $username .'&cmd=move&direction=up&move_inst='. $inst_id .'&studipticket='. get_ticket()) ?>"><?= Assets::img('move_up'); ?></a>
 		<? endif; if ($pos_inst < sizeof($institutes)) : ?>
-		<a href="<?= $GLOBALS['PHP_SELF'] ?>?view=Karriere&username=<?= $username ?>&cmd=move&direction=down&move_inst=<?= $inst_id ?>&studipticket=<?= get_ticket() ?>"><?= Assets::img('move_down'); ?></a>
+		<a href="<?= URLHelper::getLink('?view=Karriere&username='. $username .'&cmd=move&direction=down&move_inst='. $inst_id .'&studipticket='. get_ticket()) ?>"><?= Assets::img('move_down'); ?></a>
 		<? endif; ?>
 		&nbsp;
 	</td>
@@ -54,13 +54,13 @@ if (is_array($institutes) && sizeof($institutes) > 0) :
 	</td>
 	<td class="printhead" valign="bottom" height="23" nowrap style="padding-left: 3px" width="99%">
 		<a name="<?= $role_id ?>">
-		<a class="tree" href="<?= $PHP_SELF ?>?view=<?= $view ?>&username=<?= $username ?>&switch=<?= $role_id ?>&trash=<?= rand() ?>#<?= $role_id ?>">
+		<a class="tree" href="<?= URLHelper::getLink('?view='. $view .'&username='. $username .'&switch='. $role_id .'&trash='. rand() .'#'. $role_id) ?>">
 			<? if ($open == $role_id) :
 				echo Assets::img('forumgraurunt');	
 			else :
 				echo '&nbsp;' . Assets::img('forumgrau');	
 			endif; ?>
-			<?= $role['name_long'] ?>
+			<?= htmlReady($role['name_long']) ?>
 		</a>
 	</td>
 	<td class="printhead"></td>

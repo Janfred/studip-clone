@@ -34,7 +34,7 @@
           </td>
           <td class="infobox" width="99%" align="left">
             <font size="-1">
-				<a href="<?= $GLOBALS['PHP_SELF'] ?>?cmd=newRole&range_id=<?= $range_id ?>"><?= _("neue Gruppe anlegen") ?></a>
+				<a href="<?= URLHelper::getLink('?cmd=newRole&range_id='. $range_id) ?>"><?= _("neue Gruppe anlegen") ?></a>
 			</font>
           </td>
       </tr>
@@ -45,7 +45,7 @@
           </td>
           <td class="infobox" width="99%" align="left">
             <font size="-1">
-				<a href="<?= $GLOBALS['PHP_SELF'] ?>?view=sort&range_id=<?= $range_id ?>"><?= _("Gruppenreihenfolge ändern") ?></a>
+				<a href="<?= URLHelper::getLink('?view=sort&range_id='. $range_id) ?>"><?= _("Gruppenreihenfolge ändern") ?></a>
 			</font>
           </td>
       </tr>

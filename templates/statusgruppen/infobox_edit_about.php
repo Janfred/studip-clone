@@ -49,7 +49,7 @@
 		<td class="infobox" width="99%" align="left">
 			<font size="-1">
 			<?= sprintf(_("Diese Person einer weiteren Gruppe / Funktion %shinzufügen%s"),
-				'<a href="'. $GLOBALS['PHP_SELF'] .'?view=Karriere&username='. $username .'&subview=addPersonToRole">', '</a>'); ?>
+				'<a href="'. URLHelper::getLink('?view=Karriere&username='. $username .'&subview=addPersonToRole') . '">', '</a>'); ?>
 			</font>
 		</td>
 	</tr>

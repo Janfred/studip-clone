@@ -6,7 +6,7 @@
 ?>
 	<tr>
 		<td colspan="5" class="printcontent">
-			<form action="<?= $GLOBALS['PHP_SELF'] ?>#<?= $role->getId() ?>" method="post">
+			<form action="<?= URLHelper::getLink('#'. $role->getId()) ?>" method="post">
 			<table cellspacing="0" cellpadding="1" border="0" width="100%">
 				<tr>
 					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
@@ -74,7 +74,7 @@
 					<td class="steel1" align="right" colspan="2">
 						<br/>
 						&nbsp;
-						<a href="<?= $GLOBALS['PHP_SELF'] ?>?range_id=<?= $range_id ?>#<?= $role->getId() ?>">
+						<a href="<?= URLHelper::getLink('?rand='. md5(uniqid(rand())) . '#'. $role->getId()) ?>">
 							<?= makebutton('zurueck') ?>
 						</a>
 						<input type="image" <?= makebutton('speichern', 'src') ?> align="absbottom">
@@ -84,7 +84,6 @@
 			<input type="hidden" name="view" value="editRole">
 			<input type="hidden" name="cmd" value="editRole">
 			<input type="hidden" name="role_id" value="<?= $role->getId() ?>">
-			<input type="hidden" name="range_id" value="<?= $range_id ?>">
 			</form>
 		</td>
 	</tr>

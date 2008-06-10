@@ -21,7 +21,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 			</a>
 			<br/><br/>
 		<? endif; ?>		
-		<form action="<?=$PHP_SELF?>#<?= $inst_id ?>" method="POST">
+		<form action="<?= URLHelper::getLink('#'. $inst_id) ?>" method="POST">
 			<input type="hidden" name="cmd" value="special_edit">
 			<input type="hidden" name="inst_id" value="<?= $inst_id ?>">
 			<input type="hidden" name="studipticket" value="<?=get_ticket()?>">

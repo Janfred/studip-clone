@@ -4,7 +4,7 @@
 ?>
 <tr>
 	<td colspan="5" class="blank">
-		<form action="<?= $GLOBALS['PHP_SELF'] ?>#<?= $role_data['id'] ?>" method="post">
+		<form action="<?= URLHelper::getLink('#'. $role_data['id']) ?>" method="post">
 		<table cellspacing="0" cellpadding="1" border="0" width="100%">
 			<tr>
 				<td class="printhead" colspan="2">
@@ -114,7 +114,7 @@
 					<br/>					
 					<input type="image" <?= makebutton('speichern', 'src') ?> align="absbottom">
 					&nbsp;
-					<a href="<?= $GLOBALS['PHP_SELF'] ?>?range_id=<?= $range_id ?>">
+					<a href="<?= URLHelper::getLink('?range_id='. $range_id) ?>">
 						<?= makebutton('abbrechen') ?>
 					</a>					
 				</td>

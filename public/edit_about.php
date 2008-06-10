@@ -232,40 +232,9 @@ if (check_ticket($studipticket)) {
 			setOptionsOfStGroup($groupID, $my_about->auth_user['user_id'], $visible, 1);
 			// Due to the changes concerning the statusgroups, inherit ist now always 1
 
-			/*$instID = GetRangeOfStatusgruppe($groupID);
-			$entries = DataFieldEntry::getDataFieldEntriesBySecondRangeID($instID);
-			foreach ($entries as $rangeID=>$entry) {
-				$entry->setSecondRangeID($groupID);  // content of institute fields is default for user role fields
-				$entry->store();
-			}*/
 		}
 	}
 	
-	
-	/*
-	//Veränderungen an Raum, Sprechzeit, etc
-	if ($cmd == "special_edit")
-	 {
-		$invalidEntries = $my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst, $visible,
-																$datafield_content, $datafield_id, $datafield_type, $datafield_sec_range_id, $group_id);
-		$my_about->msg = "";
-		if (is_array($invalidEntries))
-			foreach ($invalidEntries as $entry)
-				$my_about->msg .= "error§" . sprintf(_("Fehlerhafter Eintrag im Feld <em>%s</em>: %s (Eintrag wurde nicht gespeichert)"), $entry->getName(), $entry->getDisplayValue()) . "§";
-
-		if (count($inherit) > 0) { // change inheritance state of a user role
-			$groupID = key($inherit); // there is only 1 element in the array (and we get its key)
-			setOptionsOfStGroup($groupID, $my_about->auth_user['user_id'], '', key($inherit[$groupID]));
-			$instID = GetRangeOfStatusgruppe($groupID);
-			$entries = DataFieldEntry::getDataFieldEntriesBySecondRangeID($instID);
-			foreach ($entries as $rangeID=>$entry) {
-				$entry->setSecondRangeID($groupID);  // content of institute fields is default for user role fields
-				$entry->setValue(addslashes($entry->getValue()));
-				$entry->store();
-			}
-		}
-	}
-	*/
 	
 	//Veränderungen der pers. Daten
 	if ($cmd == "edit_pers" || $cmd == 'edit_leben') {

@@ -16,13 +16,12 @@
 		<input type="image" name="choosePreset" value="choosePreset" src="<?= Assets::image_path('move') ?>" title="<?= _("in Namensfeld übernehmen") ?>">
 	</span>
 	<? endif; ?>
-	<?= (!$no_breaks) ? '<br/>' : '' ?>
 
 	<label for="role_name">
 		<?= ($edit_role) ? _("neuer") :'' ?> <?= _("Gruppenname") ?>: 
 	</label>
 	<input id="role_name" type="text" name="new_name" value="<?= ($role_data['name']) ? htmlReady($role_data['name']) : '' ?>">
-	<?= (!$no_breaks) ? '<br/>' : '' ?>
+	<br/>
 
 	<label for="role_size">
 		<?= ($edit_role) ? _("neue") : '' ?> <?= _("Gruppengröße") ?>: 

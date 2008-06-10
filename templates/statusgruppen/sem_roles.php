@@ -13,7 +13,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 		<input type="image" name="role_id" value="<?= $id ?>" src="<?= Assets::image_path('move') ?>" title="<?= _("Markierte Personen dieser Gruppe zuordnen") ?>">
 	</td>
 	<td class="<?= $topic_class ?>" nowrap style="padding-left: 5px" width="85%">
-		<?= $role['role']->getName() ?>
+		<?= htmlReady($role['role']->getName()) ?>
 	</td>
 	<td width="5%" class="<?= $topic_class ?>" align="right" colspan="3" nowrap>
 		<? if ($role['role']->hasFolder()) :
@@ -51,18 +51,6 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 			$pos ++;
 ?>
 <tr>
-	<!--
-	<td class="<?= $cssSw->getClass() ?>" width="1%" nowrap>
-		<input name="sort_person[]" value="<?= $person['username'] ?>" type="radio">
-	</td>
-
-	<td class="<?= $cssSw->getClass() ?>" width="1%" nowrap>
-		<input 
-			src="<?= Assets::image_path('antwortnew') ?>" 
-			name="do_person_sort[<?= $person['username'] ?>]" type="image">
-	</td>
-	-->
-
 	<td class="blank" width="1%" nowrap>
 		<?= $pos ?>
 	</td>
@@ -73,7 +61,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 		<? else: ?>
 		<a href="<?= URLHelper::getLink('edit_about.php?view=Karriere&open='. $id .'&username='. $person['username'] .'#'. $id) ?>">
 		<? endif; ?>
-			<?= $person['fullname'] ?>
+			<?= htmlReady($person['fullname']) ?>
 		</a>
 	</td>
 
@@ -94,7 +82,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 		<? endif; ?>
 	</td>
 
-	<td class="blank" width="1%" colspan="2" align="right">
+	<td class="blank" width="1%" align="center">
 		<a href="<?= URLHelper::getLink('?role_id='. $id .'&cmd=removePerson&username='. $person['username'])  ?>">
 		<?= Assets::img('trash.gif') ?>
 		</a>

@@ -1,5 +1,5 @@
 <!-- display the old box for special statusgroup-options -->
-<form action="<?=$PHP_SELF?>?range_id=<?=$range_id?>" method="post">
+<form action="<?= URLHelper::getLink('') ?>" method="post">
 	<table cellpadding="2" cellspacing="2" border="0" style="border:1px solid;margin:10px">
 		<tr>
 			<td width="300">

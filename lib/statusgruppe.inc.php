@@ -991,10 +991,11 @@ function getSearchResults ($search_exp, $range_id, $type = 'inst') {
 }
 
 function checkExternDefaultForUser($user_id) {
-	$db = DBManager::get('studip');
-	$zw = $db->query("SELECT COUNT(*) as c FROM user_inst WHERE user_id = '$user_id'");
-	$result = $zw->fetch(PDO::FETCH_ASSOC);
+	$stmt = DBManager::get()->prepare("SELECT COUNT(*) as c FROM user_inst WHERE user_id = ?");
+	$stmt->execute(array($user_id));
+	$result = $stmt->fetch(PDO::FETCH_ASSOC);
 	if ($result['c'] == 1) {
-		$db->exec("UPDATE user_inst SET externdefault = 1 WHERE user_id = '$user_id'");
+		$stmt = DBManager::get()->prepare("UPDATE user_inst SET externdefault = 1 WHERE user_id = ?");
+		$stmt->execute(array($user_id));
 	}
 }
