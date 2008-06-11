@@ -41,27 +41,6 @@ class Statusgruppe {
 	private $has_folder;
 	private $is_sem;
 
-	/*
-	function &GetInstance($id = false, $refresh_cache = false) {
-
-		static $statusgruppe_object_pool;
-
-		if ($id){
-			if ($refresh_cache){
-				$statusgruppe_object_pool[$id] = null;
-			}
-			if (is_object($statusgruppe_object_pool[$id]) && $statusgruppe_object_pool[$id]->getId() == $id){
-				return $statusgruppe_object_pool[$id];
-			} else {
-				$statusgruppe_object_pool[$id] = new Seminar($id);
-				return $statusgruppe_object_pool[$id];
-			}
-		} else {
-			return new Seminar(false);
-		}
-	}
-	*/
-
 	function Statusgruppe($statusgruppe_id = '') {
 		if ($statusgruppe_id == '') {
 			$this->new = true;
@@ -190,7 +169,7 @@ class Statusgruppe {
 	function isSeminar() {
 		if (!isset($this->is_sem)) {			
 			$stmt = DBManager::get()->prepare("SELECT * FROM seminare WHERE Seminar_id = ?");
-			$stmt->execute(array($GLOBALS['range_id']));
+			$stmt->execute(array($this->range_id));
 
 			if ($seminar = $stmt->fetch(PDO::FETCH_ASSOC)) {
 				$this->is_sem = true;

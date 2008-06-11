@@ -49,6 +49,12 @@ $links = ob_get_clean();
 //get ID, if a object is open
 if ($SessSemName[1])
   $range_id = $SessSemName[1];
+elseif ($_REQUEST['range_id'])
+	$range_id = $_REQUEST['range_id'];
+
+URLHelper::bindLinkParam('range_id', $range_id);
+
+$_REQUEST = remove_magic_quotes($_REQUEST);
 
 // session-variables for this page
 $sess->register('admin_statusgruppe_data');
@@ -68,9 +74,6 @@ if ($_range_type != 'sem' || !$perm->have_studip_perm('tutor', $range_id)) {
 	page_close();
 	die;
 }
-
-$_REQUEST = remove_magic_quotes($_REQUEST);
-//unregister_globals();
 
 // get class of seminar
 $stmt = DBManager::get()->prepare("SELECT status FROM seminare WHERE Seminar_id = ?");

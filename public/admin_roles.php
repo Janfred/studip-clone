@@ -49,6 +49,10 @@ $links = ob_get_clean();
 //get ID, if a object is open
 if ($SessSemName[1])
   $range_id = $SessSemName[1];
+elseif ($_REQUEST['range_id'])
+  $range_id = $_REQUEST['range_id'];
+
+URLHelper::bindLinkParam('range_id', $range_id);
 
 $_REQUEST = remove_magic_quotes($_REQUEST);
 
