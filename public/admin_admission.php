@@ -268,7 +268,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		$admin_admission_data["admission_endtime"] = veranstaltung_beginn($seminar_id, 'int');
 		if(!$admin_admission_data["admission_endtime"]) $admin_admission_data["admission_endtime"] = -1;
 	}
-	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id' ORDER BY (studiengang_id='all'),name");
+	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id' ORDER BY (admission_seminar_studiengang.studiengang_id='all'),name");
 	while ($db->next_record()) {
 		$name = $db->f("studiengang_id") == 'all' ? _("Alle Studiengänge") : $db->f("name");
 		$admin_admission_data["studg"][$db->f("studiengang_id")] = array("name"=>$name, "ratio"=>$db->f("quota"));
