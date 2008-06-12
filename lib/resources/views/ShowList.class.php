@@ -305,6 +305,13 @@ class ShowList extends ShowTreeRow{
 
 			if ($search_array["properties"])
 				$query.= sprintf (" GROUP BY a.resource_id  HAVING resource_id_count = '%s' ", $i);
+
+			$query .=" ORDER BY b.name";
+		}
+
+		if ($query == null)
+		{
+			$query = "SELECT resource_id FROM resources_objects WHERE 1 ORDER BY name";
 		}
 
 		$db->query($query);
