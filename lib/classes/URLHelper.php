@@ -96,7 +96,7 @@ class URLHelper
      *
      * @return string modified URL (entity encoded)
      */
-    static function getLink ($url, $params = NULL)
+    static function getLink ($url = '', $params = NULL)
     {
         return htmlspecialchars(self::getURL($url, $params));
     }
@@ -114,7 +114,7 @@ class URLHelper
      *
      * @return string modified URL
      */
-    static function getURL ($url, $params = NULL)
+    static function getURL ($url = '', $params = NULL)
     {
         $link_params = self::$params;
 
