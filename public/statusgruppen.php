@@ -1,4 +1,5 @@
 <?
+# Lifter001: TODO
 # Lifter002: TODO
 /*
 statusgruppen.php - Statusgruppen-Anzeige von Stud.IP.

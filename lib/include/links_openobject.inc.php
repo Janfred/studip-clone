@@ -123,7 +123,7 @@ if ($SessSemName["class"]=="inst") {
 	if ($modules["forum"])
 		$structure["forum"]=array ('topKat' => '', 'name' => _("Forum"), 'link' => URLHelper::getLink("forum.php?view=reset"), 'active' => FALSE);
 	if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) && ($modules["participants"])){
-		$structure["teilnehmer"]=array ('topKat' => '', 'name' => _("TeilnehmerInnen"), 'link' => "teilnehmer.php", 'active' => FALSE);
+		$structure["teilnehmer"]=array ('topKat' => '', 'name' => _("TeilnehmerInnen"), 'link' => URLHelper::getLink("teilnehmer.php"), 'active' => FALSE);
 	}
 	if ($modules["documents"])
 		$structure["folder"]=array ('topKat' => '', 'name' => _("Dateien"), 'link' => URLHelper::getLink("folder.php?cmd=tree"), 'active' => FALSE);
@@ -229,7 +229,7 @@ if ($SessSemName["class"]=="inst") {
 //
 
 if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)  || $rechte) && ($modules["participants"])){
-	$structure["_teilnehmer"]=array ('topKat' => "teilnehmer", 'name' => _("TeilnehmerInnen"), 'link' => "teilnehmer.php", 'active' => FALSE);
+	$structure["_teilnehmer"]=array ('topKat' => "teilnehmer", 'name' => _("TeilnehmerInnen"), 'link' => URLHelper::getLink("teilnehmer.php"), 'active' => FALSE);
 }
 if ($modules["forum"]) {
 	$structure["_forum"]=array ('topKat' => "forum", 'name' => _("Themenansicht"), 'link' => URLHelper::getLink("forum.php?view=".$forum["themeview"]), 'active' => FALSE);
@@ -290,19 +290,19 @@ if (isset($rule)) {
 	}
 
 	if ($show)  {
-		$structure["teilnehmer_aux"] = array(topKat => "teilnehmer", name => _("Zusatzangaben"), link => "teilnehmer_aux.php", active => FALSE);
+		$structure["teilnehmer_aux"] = array(topKat => "teilnehmer", name => _("Zusatzangaben"), link => URLHelper::getLink("teilnehmer_aux.php"), active => FALSE);
 	}
 }
 
 if ($SessSemName["class"]=="sem" && $modules["participants"] && (!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)  || $rechte))
-	$structure["statusgruppen"]=array ('topKat' => "teilnehmer", 'name' => _("Funktionen / Gruppen"), 'link' => "statusgruppen.php?view=statusgruppe_sem", 'active' => FALSE);
+	$structure["statusgruppen"]=array ('topKat' => "teilnehmer", 'name' => _("Funktionen / Gruppen"), 'link' => URLHelper::getLink("statusgruppen.php?view=statusgruppe_sem"), 'active' => FALSE);
 
 
 if ($rechte)
 	if (($SessSemName["class"]=="sem") && ($modules["participants"]))
-		$structure["Statusgruppen verwalten"]=array ('topKat' => "teilnehmer", 'name' => _("Funktionen / Gruppen verwalten"), 'link' => "admin_statusgruppe.php?new_sem=TRUE&range_id=".$SessSemName[1], 'active' => FALSE);
+		$structure["Statusgruppen verwalten"]=array ('topKat' => "teilnehmer", 'name' => _("Funktionen / Gruppen verwalten"), 'link' => URLHelper::getLink("admin_statusgruppe.php?new_sem=TRUE&range_id=".$SessSemName[1]), 'active' => FALSE);
 	elseif (($perm->have_perm("admin")) && ($modules["personal"]))
-		$structure["Statusgruppen verwalten"]=array ('topKat' => "personal", 'name' => _("Funktionen / Gruppen verwalten"), 'link' => "admin_roles.php?new_sem=TRUE&range_id=".$SessSemName[1], 'active' => FALSE);
+		$structure["Statusgruppen verwalten"]=array ('topKat' => "personal", 'name' => _("Funktionen / Gruppen verwalten"), 'link' => URLHelper::getLink("admin_roles.php?new_sem=TRUE&range_id=".$SessSemName[1]), 'active' => FALSE);
 
 
 if (($rechte) && ($modules["literature"]))

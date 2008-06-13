@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TODO
 # Lifter002: TODO
 /*
 teilnehmer.php - Anzeige der Teilnehmer eines Seminares
