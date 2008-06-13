@@ -67,6 +67,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 												'auth_user_md5.Nachname' => stripslashes(trim($Nachname)),
 												'auth_user_md5.Email' => stripslashes(trim($Email)),
 												'auth_user_md5.perms' => implode($perms,","),
+												'auth_user_md5.visible' => $visible,
 												'user_info.title_front' => stripslashes(trim($title_front)),
 												'user_info.title_rear' => stripslashes(trim($title_rear)),
 												'user_info.geschlecht' => stripslashes(trim($geschlecht)),
@@ -88,7 +89,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 					}
 				}
 			}
-			
+
 			break;
 
 
@@ -148,7 +149,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 					$ffCount += $numFields;
 					$entry->structure->load();
 					if ($entry->isValid()) {
-						$entry->store();			
+						$entry->store();
 					} else {
 						$invalidEntries[$struct->getID()] = $entry;
 					}
@@ -259,7 +260,7 @@ if (isset($_GET['details'])) {
 			if ($auth->auth['perm'] == "root"){
 				$db->query("SELECT Institut_id, Name, 1 AS is_fak  FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
 			} elseif ($auth->auth['perm'] == "admin") {
-				$db->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN Institute b USING (Institut_id)  
+				$db->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN Institute b USING (Institut_id)
 				WHERE a.user_id='$user->id' AND a.inst_perms='admin' ORDER BY is_fak,Name");
 			}
 			printf ("<option value=\"0\">%s</option>\n", _("-- bitte Einrichtung ausw&auml;hlen (optional) --"));
@@ -473,7 +474,7 @@ if (isset($_GET['details'])) {
                                 	echo "    <INPUT TYPE=\"text\" NAME=\"lock_comment\" VALUE=\"".htmlReady($db->f("lock_comment"))."\" SIZE=\"24\" MAXLENGTH=\"255\">\n";
                                 	echo "  </td>\n";
                                		echo "</tr>\n";
-					if ($db->f("locked")==1) 
+					if ($db->f("locked")==1)
                                         	echo "<TR><TD CLASS=\"steel1\" COLSPAN=\"3\" ALIGN=\"center\"><FONT SIZE=\"-2\">"._("Gesperrt von:")." ".htmlReady(get_fullname($db->f("locked_by")))." (<A HREF=\"about.php?username=".get_username($db->f("locked_by"))."\">".get_username($db->f("locked_by"))."</A>)</FONT></TD></TR>\n";
 				}
 				$userEntries = DataFieldEntry::getDataFieldEntries($db->f('user_id'));
@@ -499,7 +500,7 @@ if (isset($_GET['details'])) {
 						echo chr(10).'</td></tr>';
 					}
 				}
-				
+
 				if($GLOBALS['MAIL_VALIDATE_BOX'] && !StudipAuthAbstract::CheckField("auth_user_md5.password", $db->f('auth_plugin'))){
 					echo chr(10).'<tr><td class="steel1" colspan="3" align="right"><input type="checkbox" id="disable_mail_host_check" name="disable_mail_host_check" value="1"><label for="disable_mail_host_check" >'._("Mailboxüberprüfung deaktivieren").'</label></td></tr>';
 				}
@@ -628,7 +629,7 @@ if (isset($_GET['details'])) {
 			if ($perm->have_perm('root')){
 				echo '<tr valign="top"><td colspan="8"><a href="' . URLHelper::getLink('admin_user_kill.php?transfer_search=1') . '">'._("Suchergebnis in Löschformular übernehmen").'</a></td></tr>';
 			}
-			
+
 			echo '<tr valign="top" align="middle">';
 				if ($db->num_rows() == 1)
 			 		echo '<td colspan="8">' . _("Suchergebnis: Es wurde <b>1</b> Person gefunden.") . "</td></tr>\n";
@@ -660,8 +661,8 @@ if (isset($_GET['details'])) {
 				?>
 				<tr valign=middle align=left>
 					<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>"><a href="<?=URLHelper::getLink('?details=' . $db->f("username"))?>"><?php $db->p("username") ?></a>&nbsp;<?
-					if ($db->f('locked')=='1'){ 
-						echo '<span style="font-size:smaller;color:red;font-weight:bold;">' . _("gesperrt!") .'</span>'; 
+					if ($db->f('locked')=='1'){
+						echo '<span style="font-size:smaller;color:red;font-weight:bold;">' . _("gesperrt!") .'</span>';
 					} else {
 						echo '<span style="font-size:smaller;color:#888;">('.$db->f('visible').')</span>';
 					}
