@@ -1,5 +1,5 @@
 <?php
-# Lifter002: TODO
+# Lifter002: TEST
 // +--------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipObject.class.php
@@ -24,7 +24,7 @@
 
 
 # Include all required files ================================================ #
-require_once ("lib/classes/Object.class.php");
+require_once ("lib/classes/AuthorObject.class.php");
 # =========================================================================== #
 
 
@@ -49,7 +49,7 @@ define ("INSTANCEOF_STUDIPOBJECT", "StudipObject");
  * @package     studip_core
  * @modulegroup core
  */
-class StudipObject extends Object {
+class StudipObject extends AuthorObject {
 
 # Define all required variables ============================================= #
   /**
@@ -58,7 +58,7 @@ class StudipObject extends Object {
    * @var      integer $id
    */
   var $objectID;
-   
+
   /**
    * The unique ID of the author
    * @access   private
@@ -83,9 +83,9 @@ class StudipObject extends Object {
     * @param    string   $objectID   The ID of an existing object
     */
    function StudipObject ($objectID = "") {
- 
+
      /* For good OOP: Call constructor ------------------------------------- */
-     parent::Object ();
+     parent::AuthorObject ();
      $this->instanceof = INSTANCEOF_STUDIPOBJECT;
      /* -------------------------------------------------------------------- */
 
@@ -104,7 +104,7 @@ class StudipObject extends Object {
     * @access  public
     * @return  string  The new ID
     */
-   function createNewID () {     
+   function createNewID () {
      srand ((double) microtime () * 1000000);
      return md5 (uniqid (rand ()));
    }

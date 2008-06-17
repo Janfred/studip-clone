@@ -1,5 +1,5 @@
 <?php
-# Lifter002: TODO
+# Lifter002: TEST
 
 /**
  * This file contains all public defines used for the votes / tests
@@ -25,7 +25,7 @@ define ("NO", 0);
 
 define ("INSTANCEOF_VOTE", "vote");
 define ("INSTANCEOF_TEST", "test");
-define ("INSTANCEOF_OBJECT", "Object");
+define ("INSTANCEOF_AUTHOR_OBJECT", "AuthorObject");
 define ("INSTANCEOF_VOTEDB", "VoteDB");
 
 define ("VOTE_FILE_ADMIN", "admin_vote.php");

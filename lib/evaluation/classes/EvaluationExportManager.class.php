@@ -1,5 +1,5 @@
 <?php
-# Lifter002: TODO
+# Lifter002: TEST
 // +--------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // Copyright (C) 2001-2004 Stud.IP
@@ -67,7 +67,7 @@ define ("EVALEXPORT_LIFETIME", 1800);
  * @package     evaluation
  *
  */
-class EvaluationExportManager extends Object {
+class EvaluationExportManager extends AuthorObject {
 # Define all required variables ============================================= #
   /**
    * The temporary filename
@@ -130,7 +130,7 @@ class EvaluationExportManager extends Object {
     /* Set default values ------------------------------------------------- */
     register_shutdown_function(array(&$this, "_EvaluationExportManager"));
 
-    parent::Object ();
+    parent::AuthorObject ();
     $this->setAuthorEmail ("mail@AlexanderWillner.de");
     $this->setAuthorName ("Alexander Willner");
     $this->instanceof = INSTANCEOF_EVALEXPORTMANAGER;

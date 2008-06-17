@@ -1,8 +1,8 @@
 <?php
-# Lifter002: TODO
+# Lifter002: TEST
 // +--------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// Object.class.php
+// AuthorObject.class.php
 //
 // Class to provide basic properties of an object in Stud.IP
 //
@@ -30,10 +30,10 @@
 
 # Define all required constants ============================================= #
 /**
- * @const INSTANCEOF_OBJECT Is instance of an object
+ * @const INSTANCEOF_AUTHOR_OBJECT Is instance of an object
  * @access public
  */
-define ("INSTANCEOF_OBJECT", "Object");
+define ("INSTANCEOF_AUTHOR_OBJECT", "AuthorObject");
 
 define ("ERROR_NORMAL", "1");
 define ("ERROR_CRITICAL", "2");
@@ -41,7 +41,7 @@ define ("ERROR_CRITICAL", "2");
 
 
 /**
- * Object.class.php
+ * AuthorObject.class.php
  *
  * Class to provide basic properties of an object in Stud.IP
  *
@@ -52,7 +52,7 @@ define ("ERROR_CRITICAL", "2");
  * @package     studip_core
  * @modulegroup core
  */
-class Object {
+class AuthorObject {
 
 # Define all required variables ============================================= #
   /**
@@ -83,7 +83,7 @@ class Object {
    */
   var $instanceof;
 
-   
+
 # ============================================================ end: variables #
 
 
@@ -92,17 +92,17 @@ class Object {
    * Constructor
    * @access   public
    */
-  function Object () {
- 
+  function AuthorObject () {
+
     /* For good OOP: Set errorhandler and destruktor ----------------------- */
-     
+
     // ((not very usefull in PHP 4))
     // restore_error_handler ();
-    // $this->oldErrorhandler = set_error_handler (array (&$this, 
+    // $this->oldErrorhandler = set_error_handler (array (&$this,
     //							'errorHandler'));
     // register_shutdown_function (array (&$this, 'finalize'));
 
-    $this->instanceof = INSTANCEOF_OBJECT;
+    $this->instanceof = INSTANCEOF_AUTHOR_OBJECT;
     /* --------------------------------------------------- end: errorhandler */
 
     /* Set default values -------------------------------------------------- */
@@ -132,7 +132,7 @@ class Object {
   function setAuthorEmail ($email) {
     $this->authorEmail = $email;
   }
-   
+
   /**
    * Gets the emailaddress of the author
    * @access  public
@@ -150,7 +150,7 @@ class Object {
   function setAuthorName ($name) {
     $this->authorNmae = $name;
   }
-   
+
   /**
    * Gets the name of the author
    * @access  public
@@ -159,14 +159,14 @@ class Object {
   function getAuthorName () {
     return $this->authorName;
   }
-   
+
   /**
    * Gets the type of object
    * @access  public
    * @return  string The type of object. See INSTANCEOF_*
    */
   function x_instanceof () {
-    // Anmerkung: Es existiert bereits die Funktion "is_a" und 
+    // Anmerkung: Es existiert bereits die Funktion "is_a" und
     //            "is_subclass_of" in PHP !
     return $this->instanceof;
   }
@@ -206,12 +206,12 @@ class Object {
    * @param   string  $errfile    The file
    * @param   integer $errtype    Defines wheter the error is critical
    */
-  function throwError ($errcode, $errstring, $errline = 0, $errfile = 0, 
+  function throwError ($errcode, $errstring, $errline = 0, $errfile = 0,
 		       $errtype = ERROR_NORMAL) {
     if (!is_array ($this->errorArray))
       $this->errorArray = array ();
 
-    array_push ($this->errorArray, 
+    array_push ($this->errorArray,
 		array ("code" => $errcode,
 		       "string" => $errstring,
 		       "file" => $errfile,

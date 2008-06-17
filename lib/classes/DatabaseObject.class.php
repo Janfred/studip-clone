@@ -1,5 +1,5 @@
 <?php
-# Lifter002: TODO
+# Lifter002: TEST
 // +--------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // DatabaseObject.class.php
@@ -24,7 +24,7 @@
 
 
 # Include all required files ================================================ #
-require_once ("lib/classes/Object.class.php");
+require_once ("lib/classes/AuthorObject.class.php");
 # ====================================================== end: including files #
 
 
@@ -49,7 +49,7 @@ define ("INSTANCEOF_DATABASEOBJECT", "DatabaseObject");
  * @package     studip_core
  * @modulegroup core
  */
-class DatabaseObject extends Object {
+class DatabaseObject extends AuthorObject {
 
 # Define all required variables ============================================= #
   /**
@@ -67,9 +67,9 @@ class DatabaseObject extends Object {
     * @access   public
     */
    function DatabaseObject () {
- 
+
      /* For good OOP: Call constructor ------------------------------------- */
-     parent::Object ();
+     parent::AuthorObject ();
      $this->instanceof = INSTANCEOF_DATABASEOBJECT;
      /* -------------------------------------------------------------------- */
 
