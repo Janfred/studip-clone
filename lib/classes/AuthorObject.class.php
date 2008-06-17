@@ -226,7 +226,7 @@ class AuthorObject {
 		"in line ".$errline.". \n".
 		"The code is ".$errcode."\n".
 		"Description: ".$errstring.".\n\n\n".
-		"regards, *an Object*\n\n");
+		"regards, *an AuthorObject*\n\n");
     }
   }
 
