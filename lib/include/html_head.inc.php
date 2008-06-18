@@ -64,6 +64,7 @@ global  $_html_head_title,
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<? if (in_array(basename($_SERVER['SCRIPT_NAME']), array('dispatch.php', 'plugins.php'))) : ?>
 		<base href="<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>">
 		<? endif ?>
@@ -72,7 +73,6 @@ global  $_html_head_title,
 		<? endif ?>
 
 <?
-echo "\t\t".'<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">'. "\n";
 
 if (isset($FAVICON))
 		echo "\t\t".'<link rel="SHORTCUT ICON" href="'. $FAVICON.'">'."\n";

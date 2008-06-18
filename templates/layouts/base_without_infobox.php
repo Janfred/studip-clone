@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <? if (in_array(basename($_SERVER['SCRIPT_NAME']), array('dispatch.php', 'plugins.php'))) : ?>
       <base href="<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>">
     <? endif ?>
@@ -8,7 +9,6 @@
            $GLOBALS['AUTH_LIFETIME'] > 0) : ?>
       <meta http-equiv="REFRESH" CONTENT="<?= $GLOBALS['AUTH_LIFETIME'] * 60 ?>; URL=<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>logout.php">
     <? endif ?>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <link rel="SHORTCUT ICON" href="<?= $GLOBALS['FAVICON'] ?>">
     <title><?= isset($GLOBALS['_html_head_title']) ? $GLOBALS['_html_head_title'] : 'Stud.IP' ?></title>
 
