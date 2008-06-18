@@ -109,7 +109,7 @@ function ajaxified_news_has_permission($news) {
 
     else if (in_array($object_type, words('sem inst fak'))) {
 
-      if ($GLOBALS['SessSemName'][1] == $range) {
+      if ($GLOBALS['SessSemName'][1] === (string)$range) {
         $permitted = TRUE;
         $show_admin = ajaxified_news_sem_or_inst_rechte();
         break;
