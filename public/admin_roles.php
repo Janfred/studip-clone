@@ -34,7 +34,7 @@ require_once ('lib/statusgruppe.inc.php');
 require_once ('lib/datei.inc.php');
 require_once ('lib/classes/Statusgruppe.class.php');
 
-//$HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGruppen";
+$HELP_KEYWORD="Basis.EinrichtungenVerwaltenGruppen";
 
 //Output starts here
 
@@ -53,11 +53,6 @@ elseif ($_REQUEST['range_id'])
   $range_id = $_REQUEST['range_id'];
 
 URLHelper::bindLinkParam('range_id', $range_id);
-
-$_REQUEST = remove_magic_quotes($_REQUEST);
-
-// session-variables for this page
-$sess->register('admin_statusgruppe_data');
 
 //Change header_line if open object
 $header_line = getHeaderLine($range_id);
@@ -142,20 +137,12 @@ function MovePersonStatusgruppe ($range_id, $role_id, $type, $persons, $workgrou
 // initialize array for possible messages. Important, array_merge won't work otherwise!
 $msgs = array();
 
-// a group has been chosen to be opened / closed
-if ($_REQUEST['switch']) {
-	if ($admin_statusgruppe_data['open'] == $_REQUEST['switch']) {
-		$admin_statusgruppe_data['open'] = '';
-	} else {
-		$admin_statusgruppe_data['open'] = $_REQUEST['switch'];
-	}
-}
+$open = false;
 
-// if we want to explicitly open one specific role
-if ($_REQUEST['open']) {
-	$admin_statusgruppe_data['open'] = $_REQUEST['open'];
+// a role_id has been submitted, so open that role automatically
+if ($_REQUEST['role_id']) {
+	$open = $_REQUEST['role_id'];
 }
-
 
 // move a role up or down
 if ($_REQUEST['cmd'] == 'moveUp') {
@@ -283,7 +270,7 @@ if ($_REQUEST['cmd'] == 'addRole') {
 
 		if ($new_role->checkData()) {					
 			$new_role->store();
-			$admin_statusgruppe_data['open'] = $new_role->getId();
+			$open = $new_role->getId();
 			$msgs[] = 'msg§' . sprintf(_("Die Gruppe %s wurde hinzugefügt!"), '<b>'. htmlReady($new_role->getName()) .'</b>');
 		} else {
 			$displayNewRole = true;
@@ -337,7 +324,7 @@ else if ($statusgruppen && sizeof($statusgruppen) > 0) {
 	$template->set_layout('statusgruppen/layout.php');
 
 	// the ids of the currently opened statusgroups
-	$template->set_attribute('open', $admin_statusgruppe_data['open']);
+	$template->set_attribute('open', $open);
 	
 	$template->set_attribute('range_id', $range_id);
 	

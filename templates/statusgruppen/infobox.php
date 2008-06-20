@@ -29,6 +29,17 @@
       </tr>
 
       <tr>
+				<td class="infobox" align="center" width="1%" valign="top">
+					<?= Assets::img('link_intern') ?>
+				</td>
+				<td class="infobox" width="99%" align="left">
+					<a href="<?= $help_url=format_help_url("Basis.EinrichtungenVerwaltenGruppen") ?>">
+						<?= _("Bedienungshinweise in der Hilfe") ?>
+					</a>
+				</td>
+      </tr>
+
+      <tr>
           <td class="infobox" align="center" width="1%" valign="top">
           	<?= Assets::img('link_intern') ?>
           </td>

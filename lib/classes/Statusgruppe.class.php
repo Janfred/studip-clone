@@ -225,11 +225,11 @@ class Statusgruppe {
 
 		// check the standard role data
 		if (!$_REQUEST['new_name'] && $_REQUEST['presetName'] != 'none') {
-			$this->name = $_REQUEST['presetName'];
+			$this->name = remove_magic_quotes($_REQUEST['presetName']);
 		} else {
-			$this->name = $_REQUEST['new_name'];
+			$this->name = remove_magic_quotes($_REQUEST['new_name']);
 		}
-		$this->size = $_REQUEST['new_size'];
+		$this->size = (int)$_REQUEST['new_size'];
 
 		// check if we have to remove the self_assign_exclusive-flag
 		if ($_REQUEST['new_selfassign']) {

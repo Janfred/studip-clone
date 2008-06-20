@@ -74,7 +74,7 @@
 					<td class="steel1" align="right" colspan="2">
 						<br/>
 						&nbsp;
-						<a href="<?= URLHelper::getLink('?rand='. md5(uniqid(rand())) . '#'. $role->getId()) ?>">
+						<a href="<?= URLHelper::getLink('?role_id='. $role->getId(). '#'. $role->getId()) ?>">
 							<?= makebutton('zurueck') ?>
 						</a>
 						<input type="image" <?= makebutton('speichern', 'src') ?> align="absbottom">

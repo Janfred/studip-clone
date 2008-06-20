@@ -23,7 +23,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 
 	<td class="printhead" valign="bottom" colspan="<?= 19-$indent ?>" height="22" nowrap style="padding-left: 3px" width="99%">
 		<a name="<?= $id ?>">
-		<a class="tree" href="<?= URLHelper::getLink('?switch='. $id .'&rand='. md5(uniqid(rand())) .'#'. $id) ?>">
+		<a class="tree" href="<?= URLHelper::getLink('?role_id='. $id .'#'. $id) ?>">
 			<? if ($open == $id) :
 				echo Assets::img('forumgraurunt');	
 			else :
@@ -44,7 +44,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 		endif;
 		?>
 		
-		<a class="tree" href="<?= URLHelper::getLink('?switch='. $id .'&rand='. md5(uniqid(rand())) .'#'. $id) ?>">			
+		<a class="tree" href="<?= URLHelper::getLink('?role_id='. $id .'#'. $id) ?>">			
 			<?= htmlReady($role['role']->getName()) ?>
 		</a>
 

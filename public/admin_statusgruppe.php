@@ -54,11 +54,6 @@ elseif ($_REQUEST['range_id'])
 
 URLHelper::bindLinkParam('range_id', $range_id);
 
-$_REQUEST = remove_magic_quotes($_REQUEST);
-
-// session-variables for this page
-$sess->register('admin_statusgruppe_data');
-
 //Change header_line if open object
 $header_line = getHeaderLine($range_id);
 if ($header_line)
@@ -257,7 +252,6 @@ if ($_REQUEST['cmd'] == 'addRole' && !isset($_REQUEST['choosePreset'])) {
 
 		if ($new_role->checkData()) {					
 			$new_role->store();
-			$admin_statusgruppe_data['open'] = $new_role->getId();
 			$msgs[] = 'msg§' . sprintf(_("Die Gruppe %s wurde hinzugefügt!"), '<b>'. htmlReady($new_role->getName()) .'</b>');
 		}
 		
@@ -282,9 +276,6 @@ if ($statusgruppen && sizeof($statusgruppen) > 0) {
 	// the layout defines where the infobox is located
 	$template->set_layout('statusgruppen/sem_layout.php');
 
-	// the ids of the currently opened statusgroups
-	$template->set_attribute('open', $admin_statusgruppe_data['open']);
-	
 	$template->set_attribute('range_id', $range_id);
 	
 	// the persons of the institute who can be added directly
