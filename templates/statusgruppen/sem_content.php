@@ -7,9 +7,6 @@
 <table cellspacing="0" cellpadding="2" border="0" width="100%">
 	<tr>
 		<td width="30%" valign="top">
-			<!-- the optionbox -->
-			<?= $this->render_partial('statusgruppen/sem_optionbox.php') ?>
-
 			<!-- the persons who can be added to a role -->
 			<?= $this->render_partial('statusgruppen/sem_available_users.php') ?>
 		</td>

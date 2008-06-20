@@ -46,6 +46,35 @@
 				</td>
       </tr>
 
+      <tr>
+				<td class="infobox" align="center" width="1%" valign="top">
+					<?= Assets::img('link_intern') ?>
+				</td>
+				<td class="infobox" width="99%" align="left">
+					<? if ($self_assign_all) : ?>
+					<?= sprintf(_("Selbsteintrag in allen Gruppen ist %seingeschaltet%s."), '<b>', '</b>'); ?>
+					<a href="<?= URLHelper::getLink('?cmd=deactivateSelfAssignAll'); ?>"><?= _("Ausschalten") ?></a>
+					<? else : ?>
+					<?= sprintf(_("Selbsteintrag in allen Gruppen ist %sausgeschaltet%s."), '<b>', '</b>'); ?>
+					<a href="<?= URLHelper::getLink('?cmd=activateSelfAssignAll'); ?>"><?= _("Einschalten") ?></a>
+					<? endif; ?>
+				</td>
+      </tr>
+
+      <tr>
+				<td class="infobox" align="center" width="1%" valign="top">
+					<?= Assets::img('link_intern') ?>
+				</td>
+				<td class="infobox" width="99%" align="left">
+					<? if ($self_assign_exclusive) : ?>
+					<?= sprintf(_("Selbsteintrag in nur einer Gruppe erlauben ist %seingeschaltet%s."), '<b>', '</b>'); ?>
+					<a href="<?= URLHelper::getLink('?cmd=deactivateSelfAssignExclusive'); ?>"><?= _("Ausschalten") ?></a>
+					<? else : ?>
+					<?= sprintf(_("Selbsteintrag in nur einer Gruppe erlauben ist %sausgeschaltet%s."), '<b>', '</b>'); ?>
+					<a href="<?= URLHelper::getLink('?cmd=activateSelfAssignExclusive'); ?>"><?= _("Einschalten") ?></a>
+					<? endif; ?>
+				</td>
+      </tr>
 
     </table>
     </td>

@@ -146,10 +146,25 @@ function MovePersonStatusgruppe ($range_id, $role_id, $type, $persons, $workgrou
 // initialize array for possible messages. Important, array_merge won't work otherwise!
 $msgs = array();
 
-// if someone has chosen to change the options
-if ($_REQUEST['cmd'] == 'changeOptions') {
-	SetSelfAssignAll($range_id, (bool)$_REQUEST['toggle_selfassign_all']);
-	SetSelfAssignExclusive($range_id, (bool)$_REQUEST['toggle_selfassign_exclusive']);
+// activation and deactvation of options for the statusgroups
+if ($_REQUEST['cmd'] == 'activateSelfAssignAll') {
+	SetSelfAssignAll($range_id, true);
+	$msgs[] = 'msg§' . _("Selbsteintrag in allen Gruppen wurde eingeschaltet!");
+}
+
+if ($_REQUEST['cmd'] == 'deactivateSelfAssignAll') {
+	SetSelfAssignAll($range_id, false);
+	$msgs[] = 'msg§' . _("Selbsteintrag in allen Gruppen wurde ausgeschaltet!");
+}
+
+if ($_REQUEST['cmd'] == 'deactivateSelfAssignExclusive') {
+	SetSelfAssignExclusive($range_id, false);
+	$msgs[] = 'msg§' . _("Selbsteintrag in nur einer Gruppe erlauben wurde ausgeschaltet!");
+}
+
+if ($_REQUEST['cmd'] == 'activateSelfAssignExclusive') {
+	SetSelfAssignExclusive($range_id, true);
+
 	$check_multiple = CheckStatusgruppeMultipleAssigns($range_id);
 	if (count($check_multiple)) {
 		$multis = '<ul>';
@@ -161,9 +176,12 @@ if ($_REQUEST['cmd'] == 'changeOptions') {
 			_("Achtung, folgende Teilnehmer sind bereits in mehr als einer Gruppe eingetragen. Sie müssen die Eintragungen manuell korrigieren, um den exklusiven Selbsteintrag einzuschalten.")
 			. '<br>'. $multis;
 		SetSelfAssignExclusive($range_id, false);
-	}
+	} else {
+		$msgs[] = 'msg§' . _("Selbsteintrag in nur einer Gruppe erlauben wurde eingeschaltet!");
+	}	
 }
 
+// change the position of two adjacent statusgroups
 if ($_REQUEST['cmd'] == 'swapRoles') {
 	resortStatusgruppeByRangeId($range_id);
 	SwapStatusgruppe($_REQUEST['role_id']);
@@ -259,6 +277,26 @@ if ($_REQUEST['cmd'] == 'addRole' && !isset($_REQUEST['choosePreset'])) {
 	}
 }
 
+
+// get the option-values for the statusgroup-options
+list($self_assign_all, $self_assign_exclusive) = CheckSelfAssignAll($range_id);
+
+// if self_assign_exclusive is activated, check always for inconsistency (this check needs to be after all commands)
+if ($self_assign_exclusive) {
+	// activating exclusive self-assign is not possible with mutlitple assigned users
+	$check_multiple = CheckStatusgruppeMultipleAssigns($range_id);
+	if (count($check_multiple)) {
+		$multis = '<ul>';
+		foreach ($check_multiple as $one) {
+			$multis .= '<li>' . htmlReady(get_fullname($one['user_id']) . ' ('. $one['gruppen'] . ')').'</li>';
+		}
+		$multis .= '</ul>';
+		$msgs[] = 'error§'.
+			_("Achtung, der exklusive Selbsteintrag wurde ausgeschaltet, da folgende Teilnehmer in mehr als einer Gruppe eingetragen sind. Sie müssen die Eintragungen manuell korrigieren, um den exklusiven Selbsteintrag wieder einzuschalten.")
+			. '<br>'. $multis;
+		SetSelfAssignExclusive($range_id, false);
+	}
+}
 
 
 /* * * * * * * * * * * * * * * *
