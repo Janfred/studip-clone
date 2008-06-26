@@ -77,6 +77,12 @@ if ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
 	$seminar_class = $data['status'];
 }
 
+// if we add persons to a statusgroup, we receive a role_id as an array-element
+if (is_array($_REQUEST['role_id'])) {
+	$_REQUEST['role_id'] = key($_REQUEST['role_id']);
+}
+
+
 
 /* * * * * * * * * * * * * * * * * *
  * H E L P E R   F U N C T I O N S *

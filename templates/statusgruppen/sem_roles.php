@@ -10,7 +10,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 <table cellspacing="0" cellpadding="0" border="0">
 <tr>
 	<td class="blank" width="1%" style="padding: 0px 10px 0px 0px">
-		<input type="image" name="role_id" value="<?= $id ?>" src="<?= Assets::image_path('move') ?>" title="<?= _("Markierte Personen dieser Gruppe zuordnen") ?>">
+		<input type="image" name="role_id[<?= $id ?>]" src="<?= Assets::image_path('move') ?>" title="<?= _("Markierte Personen dieser Gruppe zuordnen") ?>">
 	</td>
 	<td class="<?= $topic_class ?>" nowrap style="padding-left: 5px" width="85%">
 		<?= htmlReady($role['role']->getName()) ?>
