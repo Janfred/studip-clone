@@ -1,6 +1,6 @@
 <?
 # Lifter002: TODO
-# Lifter003: TODO
+# Lifter005: TODO
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("autor");
 

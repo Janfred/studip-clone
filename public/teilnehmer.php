@@ -1,7 +1,7 @@
 <?php
 # Lifter001: TODO
 # Lifter002: TODO
-# Lifter003: TODO
+# Lifter005: TODO
 // vim: noexpandtab
 /*
 teilnehmer.php - Anzeige der Teilnehmer eines Seminares

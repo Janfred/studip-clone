@@ -1,6 +1,6 @@
 <?php
 # Lifter002: TODO
-# Lifter003: TODO
+# Lifter005: TODO
 
 /**
  * The page to create/edit votes (HTML generation) ... vote_edit.lib.php

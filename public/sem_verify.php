@@ -1,7 +1,7 @@
 <?
 # Lifter001: DONE - nothing to do
 # Lifter002: TODO
-# Lifter003: TODO - passwortabsicherung
+# Lifter005: TODO - passwortabsicherung
 /**
 * sem_verify.php
 *

@@ -1,6 +1,6 @@
 <?
 # Lifter002: TODO
-# Lifter003: TODO
+# Lifter005: TODO
 $js_only = $this->config->getValue("Main", "jsonly");
 if (!$js_only)
 echo "
