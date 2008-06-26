@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter003: TODO
 /**
 * client script for the chat using AJAX
 *

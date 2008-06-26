@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter003: TODO - JS required to change background color on mouse hover; should  be done with CSS
 
 /*
 ZebraTable.class.php - striped HTML Table for Stud.IP
@@ -45,7 +46,7 @@ class ZebraTable extends Table {
 		} else {
 			$this->header_class = "steel";
 		}
-		if (is_array($hovercolor)) { 
+		if (is_array($hovercolor)) {
 			$this->hovercolor = $hovercolor;
 		} else {
 			$this->hovercolor = array("#B7C2E2","#CED8F2");
@@ -63,11 +64,11 @@ class ZebraTable extends Table {
 		if ($this->JSenabled) $this->hoverenabled = TRUE;
 		echo $this->GetHoverJSFunction();
 	}
-	
+
 	function disableHover(){
 		$this->hoverenabled = FALSE;
 	}
-	
+
 	function getHover(){
 		$ret=array();
 		if($this->hoverenabled && $this->JSenabled){
@@ -76,12 +77,12 @@ class ZebraTable extends Table {
 		}
 		return $ret;
 	}
-	
+
 	function getFullClass(){
 		$ret = ($this->hoverenabled) ?  " style=\"background-color:".$this->nohovercolor[$this->classcnt]."\" " : " class=\"" . $this->switcherClass[$this->classcnt] . "\" ";
 		return $ret;
 	}
-	
+
 	function getClass() {
 		return ($this->hoverenabled) ? "\"  style=\"background-color:".$this->nohovercolor[$this->classcnt]." " : $this->class[$this->classcnt];
 	}
@@ -115,11 +116,11 @@ class ZebraTable extends Table {
 						}
 						return (r.length%2) ? '0' + r : r;
 					}
-					
+
 					function toHexString(x){
 						return convert(x, 4, 15, '0123456789abcdef');
 					}
-					
+
 					function rgbToHex(rgb_str){
 						var ret = '#';
 						var rgb_arr = rgb_str.substring(rgb_str.indexOf('(')+1,rgb_str.lastIndexOf(')')).split(',');
@@ -128,7 +129,7 @@ class ZebraTable extends Table {
 						}
 						return ret;
 					}
-					
+
 					function doHover(theRow, theFromColor, theToColor){
 						if (theFromColor == '' || theToColor == '') {
 							return false;
@@ -161,7 +162,7 @@ class ZebraTable extends Table {
 		return $ret;
 	}
 
-	function openHeaderRow($styles="") 
+	function openHeaderRow($styles="")
 	{
 		$this->in_header_row = 1;
 		$this->safed_cell_class = $this->cell_class;
@@ -194,7 +195,7 @@ class ZebraTable extends Table {
 		return Table::openRow($s);
 	}
 
-	function row($cells, $styles="", $do_switch=1) 
+	function row($cells, $styles="", $do_switch=1)
 	{
 		$code = "";
 		$code .= $this->openRow($styles, $do_switch);

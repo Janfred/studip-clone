@@ -1,6 +1,7 @@
 <?
 # Lifter001: TODO
 # Lifter002: TODO
+# Lifter003: TODO - form validation and password encryption
 /**
 * admin_admission.php
 *
@@ -71,7 +72,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 		}
 		return true;
 	}
-	
+
 	function checkpasswordenabled(){
 		var checked = true;
 		if (document.Formular.password.value.length == 0){
@@ -81,7 +82,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 		}
 		return checked;
 	}
-	
+
 	function checkpassword(){
 		var checked = true;
 		if ((document.Formular.password.value.length<4) && (document.Formular.password.value.length != 0)) {
@@ -107,7 +108,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 <?
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenZugangsberechtigungen";
-	
+
 //Output starts here
 
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -180,8 +181,8 @@ if (is_object($group_obj)) { //if so, do not allow to change admission_type
 } else {
 	$is_grouped = FALSE;
 }
-	
-// new stuff start	
+
+// new stuff start
 
 if (isset($seminar_id) && !$perm->have_perm("admin") && $SEMINAR_LOCK_ENABLE) {
 
@@ -231,8 +232,8 @@ if (isset($seminar_id) && !$perm->have_perm("admin") && $SEMINAR_LOCK_ENABLE) {
 
   if ($lockdata[$lock_status]["admission_waitlist"])
   	$admin_admission_data["admission_disable_waitlist"]= $db->f("admission_disable_waitlist");
-}	
-// end new stuff	
+}
+// end new stuff
 
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
 if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg) && (!$adm_gesperrt_x) && !$toggle_admission_quota_x) {
@@ -343,17 +344,17 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 
 	if(isset($_REQUEST['uebernehmen_x']) && isset($_REQUEST["admission_waitlist"])) $admin_admission_data["admission_disable_waitlist"] = (int)(!$_REQUEST["admission_waitlist"]);
 
-  if (!$admin_admission_data["admission_type"]) { 
+  if (!$admin_admission_data["admission_type"]) {
     if (isset($read_level))
 		$admin_admission_data["read_level"]=$read_level;
     if (isset($write_level))
 		$admin_admission_data["write_level"]=$write_level;
 	if($admin_admission_data["write_level"] < 2 && $admin_admission_data["read_level"] < 2) $admin_admission_data["passwort"] = "";
-	
+
 	//Alles was mit der Anmeldung zu tun hat ab hier
 	} elseif (!$delete_studg) {
 
-		
+
 		if(isset($_REQUEST['toggle_admission_quota_x'])){
 			$admin_admission_data["admission_enable_quota"] = (int)($_REQUEST["admission_enable_quota"]);
 			if(!$admin_admission_data["admission_enable_quota"]){
@@ -362,7 +363,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			}
 
 		}
-		
+
 		//Hat der User an den automatischen Werte rumgefuscht? Dann denkt er sich wohl was :) (und wir benutzen die Automatik spaeter nicht!)
 		if ($all_ratio_old != $all_ratio) {
 			$admin_admission_data["admission_ratios_changed"]=TRUE;
@@ -528,12 +529,12 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		if ($admin_admission_data["admission_type"] > 0)
 			$infomsg.=sprintf ("info§"._("Sie haben ein Anmeldeverfahren vorgesehen. Beachten Sie bitte, dass nach dem &Uuml;bernehmen dieser Einstellung alle bereits eingetragenen Nutzerinnen und Nutzer aus der Veranstaltung entfernt werden und das Anmeldeverfahren anschließend nicht mehr abgeschaltet werden kann!")."§");
 
-	
+
 	//Daten speichern
 	if (($uebernehmen_x) && (!$errormsg)) {
-		
+
 		if (!$lockdata[$lock_status]['admission_waitinglist'] || $perm->have_perm('admin'))
-		{			
+		{
 			//Warteliste aktivieren / deaktivieren
 			if($admin_admission_data["admission_disable_waitlist"] != $admin_admission_data["admission_disable_waitlist_org"]){
 				if($admin_admission_data["admission_disable_waitlist_org"] == 0){ //Warteliste war eingeschaltet
@@ -549,10 +550,10 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 					}
 				}
 			}
-		} 
-		
+		}
+
 		if (!$lockdata[$lock_status]['admission_prelim'] || $perm->have_perm('admin'))
-		{			
+		{
 		//for admission it have to be always 3
 		if ($admission_prelim == 1) {
 			if ($admin_admission_data["admission_prelim"] == 0) { //we have to move the students to status "temporaly accepted", if put on
@@ -608,8 +609,8 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		$data_mapping['admission_starttime'] = 'sem_admission_start_date';
 		$data_mapping['admission_endtime_sem'] = 'sem_admission_end_date';
 		$data_mapping['admission_prelim'] = 'admission_prelim';
-		$data_mapping['admission_prelim_txt'] = 'admission_prelim_txt';		
-		
+		$data_mapping['admission_prelim_txt'] = 'admission_prelim_txt';
+
 		$data_mapping['Passwort'] = 'passwort';
 		$data_mapping['Lesezugriff'] = 'read_level';
 		$data_mapping['Schreibzugriff'] = 'write_level';
@@ -624,33 +625,33 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			if ($perm->have_perm('admin')
 					|| !$lockdata[$lock_status][$db_field])
 			{
-				$update_data[$db_field] = $admin_admission_data[$form_field];			
+				$update_data[$db_field] = $admin_admission_data[$form_field];
 			}
 		}
-		
+
 		if (sizeof($update_data) > 0)
 		{
 			$query = "UPDATE seminare SET ";
 
 			$count = 0;
-			
+
 			foreach($update_data as $db_key => $value)
 			{
 	   			if ($count > 0)
 				{
 					$query .= ", ";
 				}
-				
+
 				$query .= " $db_key ='$value' ";
-				
+
 				$count ++;
 
 			}
-			
+
 			$query .= "WHERE seminar_id = '{$admin_admission_data["sem_id"]}' ";
-			
+
 			$db->query($query);
-			
+
 			//check, if we need to update the admission data after saving new settings
 			if ($do_update_admission)
 					update_admission($admin_admission_data["sem_id"]);
@@ -682,7 +683,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		if ($perm->have_perm('admin')
 				|| !$lockdata[$lock_status]['admission_type'])
 		{
-		
+
 
 		//Variante nachtraeglich Anmeldeverfahren starten, alle alten Teilnehmer muessen raus
 		if (($admin_admission_data["admission_type"] >$admin_admission_data["admission_type_org"]) && ($admin_admission_data["admission_type_org"]==0) && $admin_admission_data["admission_type"]!=3) {
@@ -887,12 +888,12 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
               </font>
 							<?=Termin_Eingabe_javascript(20,0,($admin_admission_data["sem_admission_start_date"] != -1 ? $admin_admission_data["sem_admission_start_date"] : 0));?>
             <? else: ?>
-							<font size=-1>&nbsp; 
+							<font size=-1>&nbsp;
 								<input disabled readonly type="text" name="adm_s_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_start_date"]); else echo _("tt") ?>">.
 								<input disabled readonly type="text" name="adm_s_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_start_date"]); else echo _("mm") ?>">.
 	              <input disabled readonly type="text" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_start_date"]); else echo _("jjjj") ?>"><?="&nbsp;"._("um");?>&nbsp;
 	            </font><br />
-							<font size=-1>&nbsp; 
+							<font size=-1>&nbsp;
 	             	<input disabled readonly type="text" name="adm_s_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_start_date"]); else echo _("hh") ?>">:
 	             	<input disabled readonly type="text" name="adm_s_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_start_date"]); else  echo _("mm") ?>">&nbsp;<?=_("Uhr");?>
 	            </font>
@@ -905,12 +906,12 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" valign="top" width="30%">
             <? if (! $lockdata[$lock_status]["admission_starttime"]) :?>
-              <font size=-1>&nbsp; 
+              <font size=-1>&nbsp;
 	              <input type="text" name="adm_e_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_end_date"]); else echo _("tt") ?>">.
 	              <input type="text" name="adm_e_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_end_date"]); else echo _("mm") ?>">.
 	              <input type="text" name="adm_e_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_end_date"]); else echo _("jjjj") ?>"><?="&nbsp;"._("um");?>&nbsp;
 	            </font><br />
-							<font size=-1>&nbsp; 
+							<font size=-1>&nbsp;
 	             	<input type="text" name="adm_e_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_end_date"]); else echo "23" ?>">:
 	             	<input type="text" name="adm_e_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_end_date"]); else echo "59" ?>">&nbsp;<?=_("Uhr");?>
 	            </font>
@@ -919,12 +920,12 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 					<td class="<? echo $cssSw->getClass() ?>" >
 						<?=makeButton('loeschen', 'input' , _("Start- und Enddatum zurücksetzen"), 'reset_admission_time')?>
             <? else: ?>
-              <font size=-1>&nbsp; 
+              <font size=-1>&nbsp;
 	              <input disabled readonly type="text" name="adm_e_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_end_date"]); else echo _("tt") ?>">.
 	              <input disabled readonly type="text" name="adm_e_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_end_date"]); else echo _("mm") ?>">.
 	              <input disabled readonly type="text" name="adm_e_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_end_date"]); else echo _("jjjj") ?>"><?="&nbsp;"._("um");?>&nbsp;
 	            </font><br />
-							<font size=-1>&nbsp; 
+							<font size=-1>&nbsp;
 	             	<input disabled readonly type="text" name="adm_e_stunde" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("H",$admin_admission_data["sem_admission_end_date"]); else echo "23" ?>">:
 	             	<input disabled readonly type="text" name="adm_e_minute" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("i",$admin_admission_data["sem_admission_end_date"]); else echo "59" ?>">&nbsp;<?=_("Uhr");?>
 	            </font>
@@ -984,7 +985,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
         <? else : ?>
           <p>
           <textarea disabled readonly name="admission_prelim_txt" cols=58 rows=4 ><?php echo htmlReady($admin_admission_data["admission_prelim_txt"]) ?></textarea></td>
-            <br/> <?= $lock_text; ?>            
+            <br/> <?= $lock_text; ?>
           <p>
         <? endif; ?>
 			</tr>
@@ -1026,7 +1027,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
           <font size=-1>
           <b>
             <? if($admin_admission_data["read_level"] == 0) : ?>
-              <?= _("freier Zugriff") ?> &nbsp; <br /> 
+              <?= _("freier Zugriff") ?> &nbsp; <br />
             <? elseif ($admin_admission_data["read_level"] == 1) : ?>
               <?= _("in Stud.IP angemeldet") ?> &nbsp; <br />
             <? elseif ($admin_admission_data["read_level"] == 2) : ?>
@@ -1043,8 +1044,8 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 			<?
 			if (!isset($admin_admission_data["write_level"]) || $admin_admission_data["write_level"]==3)
 				$admin_admission_data["write_level"] = "1";	//Vorgabe: nur angemeldet
-				if (! $lockdata[$lock_status]["Schreibzugriff"]) : 
-				
+				if (! $lockdata[$lock_status]["Schreibzugriff"]) :
+
 				if (get_config('ENABLE_FREE_ACCESS') && $SEM_CLASS[$SEM_TYPE[$admin_admission_data["status"]]["class"]]["write_access_nobody"]) {
 				?>
 				<input type="radio" name="write_level" value="0" <?php print $admin_admission_data["write_level"] == 0 ? "checked" : ""?>> <?=_("freier Zugriff")?> &nbsp;<br />
@@ -1063,7 +1064,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
                 <?=_("freier Zugriff")?> &nbsp;<br />
               <? elseif($admin_admission_data["write_level"] == 1 ) : ?>
                 <?=_("in Stud.IP angemeldet")?> &nbsp; <br />
-              <? elseif ($admin_admission_data["write_level"] == 2 ) : ?> 
+              <? elseif ($admin_admission_data["write_level"] == 2 ) : ?>
                 <?=_("nur mit Passwort")?> &nbsp; <br />
               <? endif; ?>
             </b>
@@ -1151,7 +1152,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 							<?=makeButton('ok','input',_("Kontingentierung aktivieren/deaktivieren"), 'toggle_admission_quota')?>
 							</td>
 						</tr>
-						
+
 							<?
 							if ($admin_admission_data["studg"]) {
 								foreach ($admin_admission_data["studg"] as $key=>$val) {
@@ -1167,7 +1168,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 								<td class="<? echo $cssSw->getClass() ?>" nowrap colspan=2 >
 								<input type="HIDDEN" name="studg_id[]" value="<? echo $key ?>" />
 								<input type="HIDDEN" name="studg_name[]" value="<? echo $val["name"] ?>" />
-								<? 
+								<?
 								if($admin_admission_data["admission_enable_quota"]){
 									if (($admin_admission_data["admission_type_org"]) && (!$perm->have_perm("admin"))) {
 										printf ("&nbsp; &nbsp; <font size=-1>%s %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
@@ -1218,7 +1219,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 								<td class="<? echo $cssSw->getClass() ?>">
 									<?=makeButton("hinzufuegen", "input", _("Ausgewählten Studiengang hinzufügen"), 'add_studg')?>
 								</td>
-								
+
 							</tr>
 								<?
 								}
@@ -1292,7 +1293,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 								<?= sprintf(_("Warteliste deaktiviert."))?>
 							</font><br /><br />
 						<?} ?>
-					<? endif; ?>					
+					<? endif; ?>
 				</td>
 			</tr>
 			<?}?>

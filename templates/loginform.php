@@ -1,3 +1,4 @@
+<? # Lifter003: TODO - challenge response ?>
 <script type="text/javascript" language="javascript" src="<?=$GLOBALS['ASSETS_URL']?>javascripts/md5.js"></script>
 <script type="text/javascript" language="javascript">
   <!--

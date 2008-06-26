@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter003: TODO - form validation
 // vim: noexpandtab
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
@@ -114,10 +115,10 @@ if (!$my_about->check) {
 /* * * * * * * * * * * * * * * *
  * * * C O N T R O L L E R * * *
  * * * * * * * * * * * * * * * */
- 
+
 if (check_ticket($studipticket)) {
-	
-	$invalidEntries = parse_datafields($my_about->auth_user['user_id']);		
+
+	$invalidEntries = parse_datafields($my_about->auth_user['user_id']);
 
 	// Person einer Rolle hinzufügen
 	if ($cmd == 'addToGroup') {
@@ -164,13 +165,13 @@ if (check_ticket($studipticket)) {
 	if ($cmd == 'makeAllSpecial') {
 		MakeDatafieldsDefault($my_about->auth_user['user_id'], $_REQUEST['role_id'], '');
 	}
-	
+
 	if ($cmd == 'removeFromGroup') {
 		$db_group = new DB_Seminar();
-		$db_group->query("DELETE FROM statusgruppe_user WHERE user_id = '" . $my_about->auth_user['user_id'] . "' AND statusgruppe_id = '$role_id'");		
+		$db_group->query("DELETE FROM statusgruppe_user WHERE user_id = '" . $my_about->auth_user['user_id'] . "' AND statusgruppe_id = '$role_id'");
 		$my_about->msg .= 'msg§' . _("Die Person wurde aus der ausgewählten Gruppe gelöscht!") . '§';
 	}
-	
+
 	//ein Bild wurde hochgeladen
 	if ($cmd == "copy") {
 		try {
@@ -199,10 +200,10 @@ if (check_ticket($studipticket)) {
 
 	// change order of institutes
 	if ($cmd == 'move') {
-		$my_about->move($move_inst, $direction);		
+		$my_about->move($move_inst, $direction);
 	}
 
-	if ($cmd=="special_edit") {		
+	if ($cmd=="special_edit") {
 		$invalidEntries = $my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst, $visible,
 										$datafield_content, $datafield_id, $datafield_type, $datafield_sec_range_id, $group_id);
 
@@ -212,7 +213,7 @@ if (check_ticket($studipticket)) {
 			$db_s = new DB_Seminar("SELECT inst_perms FROM user_inst WHERE user_id = '{$my_about->auth_user['user_id']}' AND Institut_id = '$inst_id'");
 			$db_s->next_record();
 
-			if ($db_s->f('inst_perms') != $_REQUEST['status']) {								
+			if ($db_s->f('inst_perms') != $_REQUEST['status']) {
 				$my_about->msg .= 'msg§'. _("Der Status wurde geändert!") .'§';
 				$db_s->query("UPDATE user_inst SET inst_perms = '{$_REQUEST['status']}' WHERE user_id = '{$my_about->auth_user['user_id']}' AND Institut_id = '$inst_id'");
 			}
@@ -234,8 +235,8 @@ if (check_ticket($studipticket)) {
 
 		}
 	}
-	
-	
+
+
 	//Veränderungen der pers. Daten
 	if ($cmd == "edit_pers" || $cmd == 'edit_leben') {
 		//email und passwort können nicht sinnvoll gleichzeitig geändert werden, da bei Änderung der email automatisch das passwort neu gesetzt wird
@@ -326,7 +327,7 @@ if (check_ticket($studipticket)) {
 /* * * * * * * * * * * * * * * *
  * * * * * * V I E W * * * * * *
  * * * * * * * * * * * * * * * */
- 
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 
@@ -556,7 +557,7 @@ if ($view != 'Forum'
 		<? if ($view == 'Daten' || $view == 'Lebenslauf' || $view == 'Studium') :
 		$info_text['Studium'] = _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen.");
 		$info_text['Daten'] = _("Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern.");
-		$info_text['Lebenslauf'] = _("Hier können Sie Angaben &uuml;ber ihre privaten Kontaktdaten sowie Lebenslauf und Hobbies machen.");		
+		$info_text['Lebenslauf'] = _("Hier können Sie Angaben &uuml;ber ihre privaten Kontaktdaten sowie Lebenslauf und Hobbies machen.");
 		?>
 		<tr>
 			<td class="blank"></td>
@@ -570,7 +571,7 @@ if ($view != 'Forum'
 						array('icon' => 'ausruf_small.gif',
 							'text' => $info_text[$view]
 					)
-					)	
+					)
 				);
 				$template->set_attribute('content', $content);
 				echo $template->render();
@@ -579,7 +580,7 @@ if ($view != 'Forum'
 		</tr>
 	<?
 	endif;
-	
+
 	$table_open = TRUE;
 }
 
@@ -808,7 +809,7 @@ if ($view == 'Studium') {
 		echo '</blockquote></td></tr></table>'."\n";
 		if ($allow_change_sg) echo "</form>\n";
 	}
-		
+
 	echo "</td></tr>\n";
 
 
@@ -864,7 +865,7 @@ if ($view == 'Studium') {
 		if ($allow_change_in) echo '</form>';
 	}
 	echo '</td></tr>';
-	
+
 }
 
 
@@ -907,10 +908,10 @@ if ($view == 'Karriere') {
 		$template->set_attribute('user_id', $my_about->auth_user['user_id']);
 		$template->set_attribute('admin_insts', $admin_insts);
 
-		echo $template->render();	
+		echo $template->render();
 		die;
 	} else {
-			
+
 		// a group has been chosen to be opened / closed
 		if ($_REQUEST['switch']) {
 			if ($edit_about_data['open'] == $_REQUEST['switch']) {
@@ -918,28 +919,28 @@ if ($view == 'Karriere') {
 			} else {
 				$edit_about_data['open'] = $_REQUEST['switch'];
 			}
-		}	
-		
+		}
+
 		if ($_REQUEST['open']) {
 			$edit_about_data['open'] = $_REQUEST['open'];
 		}
-		
+
 		echo '<tr><td class=blank>';
-	
+
 		echo '<form action="' . $_SERVER['PHP_SELF'] . '?cmd=edit_leben&username=' . $username . '&view=' . $view . '&studipticket=' . get_ticket() . '" method="POST" name="pers">';
-	
+
 		// get the roles the user is in
 		$institutes = array();
 		foreach ($my_about->user_inst as $inst_id => $details) {
 			$institutes[$inst_id] = $details;
 			$roles = GetAllStatusgruppen($inst_id, $my_about->auth_user['user_id'], true);
-			$institutes[$inst_id]['roles'] = ($roles) ? $roles : array(); 
+			$institutes[$inst_id]['roles'] = ($roles) ? $roles : array();
 		}
-			
+
 		// template for tree-view of roles, layout for infobox-location and content-variables
 		$template = $GLOBALS['template_factory']->open('statusgruppen/roles_edit_about');
 		$template->set_layout('statusgruppen/layout_edit_about');
-		$template->set_attribute('open', $edit_about_data['open']);	// the ids of the currently opened statusgroups	
+		$template->set_attribute('open', $edit_about_data['open']);	// the ids of the currently opened statusgroups
 		$template->set_attribute('messages', $msgs);
 		$template->set_attribute('institutes', $institutes);
 
@@ -947,7 +948,7 @@ if ($view == 'Karriere') {
 		$template->set_attribute('username', $username);
 		$template->set_attribute('user_id', $my_about->auth_user['user_id']);
 		echo $template->render();
-	
+
 		echo '</form>';
 		echo '</td></tr>';
 	}

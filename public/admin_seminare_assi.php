@@ -1,6 +1,7 @@
 <?
 # Lifter001: TODO
 # Lifter002: TODO
+# Lifter003: TODO - md5 hash
 /*
 admin_seminare_assi.php - Seminar-Assisten von Stud.IP.
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>
@@ -579,13 +580,13 @@ if ($form == 4) {
 }
 
 if ($form == 5) {
-	
+
 	if(isset($_REQUEST['toggle_admission_quota_x'])){
 		$sem_create_data["admission_enable_quota"] = (int)($_REQUEST["admission_enable_quota"]);
 		if(!$sem_create_data["admission_enable_quota"]){
 			$sem_create_data["sem_admission_date"] = -1;
 		}
-		
+
 	}
 	// create a timestamp for begin and end of the seminar
         if (!check_and_set_date($adm_s_tag, $adm_s_monat, $adm_s_jahr, $adm_s_stunde, $adm_s_minute, $sem_create_data, "sem_admission_start_date")) {
@@ -1160,7 +1161,7 @@ if(isset($_REQUEST['reset_admission_time_x'])) {
 	$sem_create_data["sem_admission_start_date"] = -1;
 	$level = 5;
 }
-	
+
 //Studiengang zur Begrenzung loeschen
 if ($sem_delete_studg) {
 	unset($sem_create_data["sem_studg"][$sem_delete_studg]);
@@ -1494,7 +1495,7 @@ if (($form == 6) && ($jump_next_x))
 		if (!$sem_create_data["sem_entry"]) {
 			foreach ($sem->getMetaDates() as $key => $val) {
 				$sem->metadate->createSingleDates($key);
-				
+
 				// Raum buchen, wenn eine Angabe gemacht wurde, oder Freitextangabe, falls vorhanden
 				if (($val['resource_id'] != '') || ($val['room'] != '')) {
 					$singleDates =& $sem->getSingleDatesForCycle($key);
@@ -1510,7 +1511,7 @@ if (($form == 6) && ($jump_next_x))
 						}
 					}
 				}
-				
+
 			}
 
 			// Speichern der Veranstaltungsdaten -> anlegen des Seminars
@@ -3552,7 +3553,7 @@ if ($level == 5)
 										<td class="<? echo $cssSw->getClass() ?>" nowrap width="5%">
 										<input type="HIDDEN" name="sem_studg_id[]" value="<? echo $key ?>" />
 										<input type="HIDDEN" name="sem_studg_name[]" value="<? echo $val["name"] ?>" />
-										<? 
+										<?
 										if($sem_create_data["admission_enable_quota"]){
 											printf ("<input type=\"HIDDEN\" name=\"sem_studg_ratio_old[]\" value=\"%s\" />", $val["ratio"]);
 											printf ("<input type=\"TEXT\" name=\"sem_studg_ratio[]\" size=5 maxlength=5 value=\"%s\" /><font size=-1> %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);

@@ -1,6 +1,7 @@
 <?
 # Lifter001: DONE - nothing to do
 # Lifter002: TODO
+# Lifter003: TODO - passwortabsicherung
 /**
 * sem_verify.php
 *
@@ -178,10 +179,10 @@ $db6=new DB_Seminar;
 	    page_close();
 	    die;
 	    }
-	
+
 	$current_seminar = Seminar::getInstance($id);
 
-	if ($current_seminar->admission_type == 3) 
+	if ($current_seminar->admission_type == 3)
 	{
 		parse_msg ("info§"._("Die Veranstaltung ist gesperrt, Sie k&ouml;nnen sich nicht eintragen!"));
 	   	echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
@@ -192,7 +193,7 @@ $db6=new DB_Seminar;
 	   	page_close();
 	   	die;
 	}
-	
+
 	$group = select_group ($current_seminar->semester_start_time, $user->id);
 
 	//check stuff for admission
@@ -239,7 +240,7 @@ $db6=new DB_Seminar;
 		if($admission_type == 2) $admission_type_text = _("Chronologische Anmeldung");
 		if($admission_type == 1) $admission_type_text = _("Losverfahren");
 		if($admission_type == 1 && $current_seminar->admission_selection_take_place) $admission_type_text = _("Losverfahren beendet");
-		
+
 		if ($admission_group) {
 			//get some infos about the current status of the seminar (admission-list, user-list, seminar-name)
 			$current_name = $current_seminar->getName();
@@ -253,7 +254,7 @@ $db6=new DB_Seminar;
 			}
 			if (($admission_type == 2 || ($admission_type == 1 && $current_seminar->admission_selection_take_place)) && get_free_admission($id)) $platz = 1;
 			else $platz = 0;
-			
+
 			/* now we know the following:
 			 *  - Is the user already subscribed to another seminar? ($seminar)
 			 *  - Is the user already awaiting in another seminar?   ($warteliste)
@@ -263,7 +264,7 @@ $db6=new DB_Seminar;
 			 */
 
 			echo "<tr><td class=\"blank\">&nbsp;&nbsp;&nbsp;&nbsp;</td><td class=\"blank\">";
-			
+
 			$meldung = '<div style="margin-top:5px;">
 					'._("Veranstaltungsgruppe:").'&nbsp;'.htmlReady($group_obj->getValue('name')).'
 					&nbsp;('. $admission_type_text .')
@@ -281,9 +282,9 @@ $db6=new DB_Seminar;
 				</div>';
 
 			parse_msg("info§".$meldung, "§", "blank",3);
-			
+
 			$exit = true;
-			
+
 			if (!$seminar && !$warteliste && $platz) {
 				$meldung  = sprintf(_("Sie bekommen einen Platz in der Veranstaltung %s."), "<br/>&nbsp;<b>".htmlReady($current_name)." (". htmlReady($current_seminar->getFormattedTurnus(false)) .")</b>");
 				if($group_obj->getValue('status') == 0 && $admission_type == 2){
@@ -365,7 +366,7 @@ $db6=new DB_Seminar;
 					"<br/>&nbsp;<b>".htmlReady($seminar_name)." (". htmlReady(view_turnus($seminar_id)) .")</b><br/>");
 				}
 			}
-			
+
 			parse_msg("info§" . $meldung, "§", "blank",3);
 
 			if($exit)
@@ -380,7 +381,7 @@ $db6=new DB_Seminar;
 	}
 
 	//nobody darf sogar durch (wird spaeter schon abgefangen)
-	if ($perm->have_perm("user")) 
+	if ($perm->have_perm("user"))
 	{
 
 		//Sonderfall, Passwort fuer Schreiben nicht eingegeben, Lesen aber erlaubt
@@ -411,7 +412,7 @@ $db6=new DB_Seminar;
 		//laden von benoetigten Informationen
 		$db=new DB_Seminar;
 		$db->query("SELECT Lesezugriff, Schreibzugriff, Passwort, Name FROM seminare WHERE Seminar_id LIKE '$id'");
-		while ($db->next_record()) 
+		while ($db->next_record())
 		{
 			$SemSecLevelRead=$db->f("Lesezugriff");
 			$SemSecLevelWrite=$db->f("Schreibzugriff");
@@ -436,7 +437,7 @@ $db6=new DB_Seminar;
 				page_close();
 				die;
 			}
-			elseif ($perm->have_perm("autor")) 
+			elseif ($perm->have_perm("autor"))
 			{
 				if (!seminar_preliminary($id,$user->id)) {
 					$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$user->id', status = 'autor', gruppe = '$group', mkdate = '".time()."'");
