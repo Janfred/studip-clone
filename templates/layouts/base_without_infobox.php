@@ -36,14 +36,14 @@
 
     <? if ($GLOBALS['my_messaging_settings']['start_messenger_at_startup'] &&
            $GLOBALS['auth']->auth['jscript'] &&
-           !$GLOBALS['messenger_started'] &&
+           !$_SESSION['messenger_started'] &&
            !$GLOBALS['seminar_open_redirected']) : ?>
       <script language="Javascript">
         fenster = window.open("studipim.php", "im_<?= $GLOBALS['user']->id ?>",
                               "scrollbars=yes,width=400,height=300",
                               "resizable=no");
       </script>
-      <? $GLOBALS['messenger_started'] = TRUE; ?>
+      <? $_SESSION['messenger_started'] = TRUE; ?>
     <? endif ?>
   </head>
 

@@ -38,7 +38,6 @@ global  $_html_head_title,
         $_include_additional_header,
         $_include_extra_stylesheet,
         $_include_stylesheet,
-        $messenger_started,
         $my_messaging_settings,
         $seminar_open_redirected;
 
@@ -101,14 +100,14 @@ unset ($_html_head_title);
 unset ($_include_additional_header);
 
 //start messenger, if set
-if (($my_messaging_settings['start_messenger_at_startup']) && ($auth->auth['jscript']) && (!$messenger_started) && (!$seminar_open_redirected)) {
+if ($my_messaging_settings['start_messenger_at_startup'] && $auth->auth['jscript'] && !$_SESSION['messenger_started'] && !$seminar_open_redirected) {
 
 	?>
 	<script language="Javascript">
 		{fenster=window.open("studipim.php","im_<?=$user->id?>","scrollbars=yes,width=400,height=300","resizable=no");}
 	</script>
 	<?
-	$messenger_started = TRUE;
+	$_SESSION['messenger_started'] = TRUE;
 }
 ?>
 	<?= Assets::script('prototype', 'scriptaculous', 'application') ?>

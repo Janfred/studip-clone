@@ -147,7 +147,7 @@ function startpage_redirect($page_code) {
 require_once('lib/language.inc.php');
 
 global $i_page, $i_query,
-       $SessionStart, $SessionSeminar, $SessSemName, $messenger_started,
+       $SessionStart, $SessionSeminar, $SessSemName,
        $object_cache, $contact,
        $_language, $DEFAULT_LANGUAGE,
        $sess, $auth, $user, $perm,
@@ -172,7 +172,6 @@ if ($SessionStart == 0) {
 	$sess->register("SessionStart");
 	$sess->register("SessionSeminar");
 	$sess->register("SessSemName");
-	$sess->register("messenger_started");
 	$sess->register("object_cache");
 	$sess->register("contact");
 //??	$object_cache[] = " "; // sollte das Array hier geloescht oder initialisiert werden? js
