@@ -62,7 +62,7 @@ class ShowThread extends ShowTreeRow {
 
 		while ($db->next_record()) {
 			//Untergeordnete Objekte laden
-			$db2->query("SELECT resource_id FROM resources_objects WHERE parent_id = '".$db->f("resource_id")."' ");
+			$db2->query("SELECT resource_id FROM resources_objects WHERE parent_id = '".$db->f("resource_id")."' ORDER BY name ");
 
 			//Struktur merken
 			$weitere=$db2->affected_rows();
