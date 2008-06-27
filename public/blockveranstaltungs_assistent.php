@@ -48,6 +48,7 @@ echo "<SCRIPT> function reload_opener() { opener.location.href='".$CANONICAL_REL
 
 if (isset($_POST['command']) && ($_POST['command'] == 'create')) {
 	$return = create_block_schedule_dates($SessSemName[1],$_POST);
+	?><script>reload_opener();</script><?
 }
 
 $cssSw = new cssClassSwitcher();
