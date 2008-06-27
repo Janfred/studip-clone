@@ -1,6 +1,6 @@
-<table cellspacing="0" cellpadding="0" border="0" width="95%">
+<table class="steel1" cellspacing="0" cellpadding="2" border="0" width="95%">
 	<tr>
-		<td class="steelkante">&nbsp;<?= _("VeranstaltungsteilnehmerInnen") ?></td>
+		<td>&nbsp;<?= _("VeranstaltungsteilnehmerInnen") ?></td>
 	</tr>
 	<tr>
 		<td valign="top" align="center">
@@ -16,7 +16,7 @@
 		</td>
 	</tr>	
 	<tr>
-		<td class="steelkante">&nbsp;<?= _("Mitarbeiterliste") ?></td>
+		<td>&nbsp;<?= _("Mitarbeiterliste") ?></td>
 	</tr>
 	<tr>
 		<td valign="top" align="center">
@@ -33,7 +33,7 @@
 	</tr>
 
 	<tr>
-		<td class="steelkante" nowrap>&nbsp;<?= _("freie Personensuche") ?></td>
+		<td nowrap>&nbsp;<?= _("freie Personensuche") ?></td>
 	</tr>
 	<tr>
 		<td valign="top">
