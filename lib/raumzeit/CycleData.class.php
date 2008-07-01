@@ -81,13 +81,13 @@ class CycleData {
 	}
 
 	function setStart($start_stunde, $start_minute) {
-		$this->start_stunde = $start_stunde;
-		$this->start_minute = $start_minute;
+		$this->start_stunde = (int)$start_stunde;
+		$this->start_minute = (int)$start_minute;
 	}
 
 	function setEnd($end_stunde, $end_minute) {
-		$this->end_stunde = $end_stunde;
-		$this->end_minute = $end_minute;
+		$this->end_stunde = (int)$end_stunde;
+		$this->end_minute = (int)$end_minute;
 	}
 
 	function getStartStunde () {
@@ -125,14 +125,6 @@ class CycleData {
 	function setDay($day) {
 		$this->day = $day;
 	}
-
-	/*function setTurnus($turnus) {
-		$this->turnus = $turnus;
-	}
-
-	function getTurnus() {
-		return $this->turnus;
-	}*/
 
 	function setSemester($semester) {
 		$this->semester = $semester;

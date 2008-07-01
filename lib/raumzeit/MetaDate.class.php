@@ -116,7 +116,7 @@ class MetaDate {
 				return FALSE;
 			}
 
-			if (mktime($data['start_stunde'], $data['start_minute']) < mktime($data['end_stunde'], $data['end_minute'])) {			
+			if (mktime((int)$data['start_stunde'], (int)$data['start_minute']) < mktime((int)$data['end_stunde'], (int)$data['end_minute'])) {			
 				$cycle->setDay($data['day']);
 				$cycle->setStart($data['start_stunde'], $data['start_minute']);
 				$cycle->setEnd($data['end_stunde'], $data['end_minute']);
@@ -148,8 +148,8 @@ class MetaDate {
 
 	function editCycle($data = array()) {
 		$cycle =& $this->cycles[$data['cycle_id']];
-		$new_start = mktime($data['start_stunde'], $data['start_minute']);
-		$new_end = mktime($data['end_stunde'], $data['end_minute']);
+		$new_start = mktime((int)$data['start_stunde'], (int)$data['start_minute']);
+		$new_end = mktime((int)$data['end_stunde'], (int)$data['end_minute']);
 		$old_start = mktime($cycle->getStartStunde(),$cycle->getStartMinute());
 		$old_end = mktime($cycle->getEndStunde(), $cycle->getEndMinute());
 
@@ -161,8 +161,8 @@ class MetaDate {
 					$tos = $val->getStartTime();
 					$toe = $val->getEndTime();
 					if ($toe > time()) {
-						$t_start = mktime($data['start_stunde'], $data['start_minute'], 0, date('m', $tos), date('d', $tos), date('Y', $tos));
-						$t_end = mktime($data['end_stunde'], $data['end_minute'], 0, date('m', $toe), date('d', $toe), date('Y', $toe));
+						$t_start = mktime((int)$data['start_stunde'], (int)$data['start_minute'], 0, date('m', $tos), date('d', $tos), date('Y', $tos));
+						$t_end = mktime((int)$data['end_stunde'], (int)$data['end_minute'], 0, date('m', $toe), date('d', $toe), date('Y', $toe));
 						$termine[$key]->setTime($t_start, $t_end);
 						$termine[$key]->store();
 					} else {

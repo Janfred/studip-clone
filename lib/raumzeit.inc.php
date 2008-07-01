@@ -231,8 +231,8 @@ function raumzeit_doDeleteCycle() {
 function raumzeit_doAddSingleDate() {
 	global $sem;
 	$termin = new SingleDate();
-	$start = mktime($_REQUEST['start_stunde'], $_REQUEST['start_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
-	$ende = mktime($_REQUEST['end_stunde'], $_REQUEST['end_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
+	$start = mktime((int)$_REQUEST['start_stunde'], (int)$_REQUEST['start_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
+	$ende = mktime((int)$_REQUEST['end_stunde'], (int)$_REQUEST['end_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
 	$termin->setTime($start, $ende);
 	$termin->setDateType($_REQUEST['dateType']);
 
@@ -277,8 +277,8 @@ function raumzeit_editSingleDate() {
 	global $sem, $sd_open;
 	unset($sd_open[$_REQUEST['singleDateID']]);	// we close the choosen singleDate, that it does not happen that we have multiple singleDates open -> could lead to confusion, which singleDate is meant to be edited
 	// generate time-stamps to we can compare directly
-	$start = mktime($_REQUEST['start_stunde'], $_REQUEST['start_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
-	$ende = mktime($_REQUEST['end_stunde'], $_REQUEST['end_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
+	$start = mktime((int)$_REQUEST['start_stunde'], (int)$_REQUEST['start_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
+	$ende = mktime((int)$_REQUEST['end_stunde'], (int)$_REQUEST['end_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
 	if ($_REQUEST['cycle_id'] != '') {
 		// the choosen singleDate is connected to a cycleDate
 		$termin =& $sem->getSingleDate($_REQUEST['singleDateID'], $_REQUEST['cycle_id']);
