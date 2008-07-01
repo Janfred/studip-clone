@@ -1,5 +1,5 @@
 <?
-# Lifter001: TODO
+# Lifter001: TEST - make sms_msg URL parameter
 # Lifter002: TODO
 /*
 statusgruppen.php - Statusgruppen-Anzeige von Stud.IP.
@@ -20,9 +20,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-  page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
+page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 
-	include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 
@@ -85,7 +85,7 @@ function groupmail($range_id, $filter="") {
 
 
 function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
-	global $_fullname_sql,$SessSemName, $PHP_SELF, $rechte, $user;
+	global $_fullname_sql,$SessSemName, $rechte, $user;
 
 	$db2 = new DB_Seminar();
 
@@ -105,7 +105,7 @@ function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
 		echo '<td width="90%" class="steel" style="height: 25px"><font size="-1">';
 		
 		printf ("<b>%s&nbsp;%s</b></font>",
-			CheckAssignRights($role_id,$user->id, $SessSemName[1])?"&nbsp;<a href=\"$PHP_SELF?assign=$role_id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"",
+			CheckAssignRights($role_id,$user->id, $SessSemName[1])?"&nbsp;<a href=\"".URLHelper::getLink("?assign=$role_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"",
 			htmlReady($title)
 		);
 
@@ -123,17 +123,17 @@ function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
 		echo '</font></td><td width="10%" class="steel" valign="bottom" align="right" nowrap>';
 
 		if ((CheckUserStatusgruppe($role_id, $user->id) || $rechte) && ($folder_id = CheckStatusgruppeFolder($role_id)) ){
-			echo "<a href=\"folder.php?cmd=tree&open=$folder_id#anker\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/icon-disc.gif\" ".tooltip(_("Dateiordner vorhanden"))."></a>&nbsp;";
+			echo "<a href=\"".URLHelper::getLink("folder.php?cmd=tree&open=$folder_id#anker")."\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/icon-disc.gif\" ".tooltip(_("Dateiordner vorhanden"))."></a>&nbsp;";
 		}
 
 		if ($rechte || CheckUserStatusgruppe($role_id, $user->id)) {  // nicht alle duerfen Gruppenmails/Gruppensms verschicken
-			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&emailrequest=1&subject=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/mailnachricht.gif\" " . tooltip(_("Systemnachricht mit Emailweiterleitung an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0]));
-			printf ("&nbsp;<a href=\"sms_send.php?sms_source_page=statusgruppen.php&group_id=%s&subject=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;", $statusgruppe_id, rawurlencode($SessSemName[0]));
+			echo "&nbsp;<a href=\"".URLHelper::getLink("sms_send.php?sms_source_page=statusgruppen.php&group_id=".$role_id."&emailrequest=1&subject=".rawurlencode($SessSemName[0]))."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/mailnachricht.gif\" " . tooltip(_("Systemnachricht mit Emailweiterleitung an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;";
+			echo "&nbsp;<a href=\"".URLHelper::getLink("sms_send.php?sms_source_page=statusgruppen.php&group_id=".$role_id."&subject=".rawurlencode($SessSemName[0]))."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an alle Gruppenmitglieder verschicken")) . " border=\"0\"></a>&nbsp;";
 		} else {
 			echo "&nbsp;";
 		}
-		printf ("</td>");
-		echo 	"</tr>";
+		echo "</td>";
+		echo "</tr>";
 
 		if (!$rechte) {
 			$db2->query("SELECT user_id, visible FROM seminar_user WHERE Seminar_id = '".$SessSemName[1]."'");
@@ -158,7 +158,7 @@ function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
 			echo '<tr>';
 			echo '<td width="90%" class="'.$class.'">';
 			if ($visio[$db2->f('user_id')] || ($db2->f('user_id') == $user->id) || $rechte) {
-				printf("<font size=\"-1\"><a href = \"about.php?username=%s\">&nbsp;%s</a>", $db2->f("username"), htmlReady($db2->f("fullname")));
+				echo "<font size=\"-1\"><a href=\"".URLHelper::getLink("about.php?username=".$db2->f("username"))."\">&nbsp;".htmlReady($db2->f("fullname"))."</a>";
 				if  (($db2->f('user_id') == $user->id) && !($visio[$db2->f('user_id')]) && !$rechte) {
 					echo ' (unsichtbar)';
 				}
@@ -168,15 +168,15 @@ function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
 			}
 
 			echo '</td>';
-			printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
+			echo "<td width=\"10%\" class=\"$class\" align=\"right\">";
 			if (($data['role']->getSelfAssign() == '1') && $user->id == $db2->f("user_id")) {
-				printf ("<a href=\"$PHP_SELF?delete_id=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Aus dieser Gruppe austragen")) . " border=\"0\"></a>&nbsp; ", $role_id);
+				echo "<a href=\"".URLHelper::getLink("?delete_id=".$role_id)."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Aus dieser Gruppe austragen")) . " border=\"0\"></a>&nbsp; ";
 			}
 
 			if (($visio[$db2->f('user_id')] || $rechte) && ($db2->f('user_id') != $user->id)) {
-				printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db2->f("username"));
+				echo "<a href=\"".URLHelper::getLink("sms_send.php?sms_source_page=teilnehmer.php&rec_uname=".$db2->f("username"))."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>";
 			}
-			printf ("&nbsp;</td>");
+			echo "&nbsp;</td>";
 			echo "</tr>";
 			$k++;
 		}
@@ -197,15 +197,15 @@ function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
 
 function PrintNonMembers ($range_id)
 {
-	global $_fullname_sql, $rechte, $user, $PHP_SELF;
+	global $_fullname_sql, $rechte, $user;
 	$bereitszugeordnet = GetAllSelected($range_id);
 	$db=new DB_Seminar;
 	$query = "SELECT seminar_user.user_id, username, " . $_fullname_sql['full'] ." AS fullname, perms, seminar_user.visible FROM seminar_user  LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE Seminar_id = '$range_id' ORDER BY Nachname ASC";
 	$db->query ($query);
 	if ($db->num_rows() >sizeof($bereitszugeordnet)-1) { // there are non-grouped members
 		echo "<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" border=\"0\"><tr>";
-		print ("<td width=\"100%%\" colspan=\"2\" class=\"steel\" style=\"height: 25px\"><font size=\"-1\"><b>&nbsp;" . _("keiner Funktion oder Gruppe zugeordnet") . "</b></font></td>");
-		echo 	"</tr>";
+		echo "<td width=\"100%\" colspan=\"2\" class=\"steel\" style=\"height: 25px\"><font size=\"-1\"><b>&nbsp;" . _("keiner Funktion oder Gruppe zugeordnet") . "</b></font></td>";
+		echo "</tr>";
 		$k = 1;
 		while ($db->next_record()) {
 			if (!in_array($db->f("user_id"), $bereitszugeordnet)) {
@@ -216,14 +216,14 @@ function PrintNonMembers ($range_id)
 				}
 				printf ("<tr>");
 				if ($rechte || $db->f("visible")=="yes" || $db->f("user_id")==$user->id) {
-					printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\"><a href = about.php?username=%s>&nbsp;%s</a>%s</font></td>",$class, $db->f("username"), htmlReady($db->f("fullname")), ($db->f("user_id")==$user->id && $db->f("visible")!="yes") ? " "._("(unsichtbar)") : '');
-					printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
-					printf ("<a href=\"sms_send.php?sms_source_page=teilnehmer.php&rec_uname=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>", $db->f("username"));
-					printf ("&nbsp;</td>");
+					echo "<td width=\"90%\" class=\"$class\"><font size=\"-1\"><a href=\"".URLHelper::getLink("about.php?username=".$db->f("username"))."\">&nbsp;".htmlReady($db->f("fullname"))."</a>".($db->f("user_id") == $user->id && $db->f("visible") != "yes" ? " "._("(unsichtbar)") : '')."</font></td>";
+					echo "<td width=\"10%\" class=\"$class\" align=\"right\">";
+					echo "<a href=\"".URLHelper::getLink("sms_send.php?sms_source_page=teilnehmer.php&rec_uname=".$db->f("username"))."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Systemnachricht an User verschicken")) . " border=\"0\"></a>";
+					echo "&nbsp;</td>";
 				} else {
-					printf ("<td width=\"90%%\" class=\"%s\"><font size=\"-1\" color=\"#666666\">". _("(unsichtbareR NutzerIn)"). "</font></td>", $class);
-					printf ("<td width=\"10%%\"class=\"$class\" align=\"right\">");
-					printf ("&nbsp;</td>");
+					echo "<td width=\"90%\" class=\"$class\"><font size=\"-1\" color=\"#666666\">". _("(unsichtbareR NutzerIn)"). "</font></td>";
+					echo "<td width=\"10%\" class=\"$class\" align=\"right\">";
+					echo "&nbsp;</td>";
 				}
 				echo "	</tr>";
 				$k++;
@@ -328,14 +328,14 @@ if ($delete_id)
 		$adr_all=groupmail($SessSemName[1], "all");
 		$adr_prelim=groupmail($SessSemName[1], "prelim");
 		$adr_waiting=groupmail($SessSemName[1], "waiting");
-		$link_mail_all = $adr_all ? "<a href=\"sms_send.php?course_id=".$SessSemName[1]."&emailrequest=1&subject=".rawurlencode($SessSemName[0])."&filter=all\">" : NULL;
-		$link_mail_prelim = $adr_prelim ? "<a href=\"sms_send.php?course_id=".$SessSemName[1]."&emailrequest=1&subject=".rawurlencode($SessSemName[0])."&filter=prelim\">" : NULL;
-		$link_mail_waiting = $adr_waiting ? "<a href=\"sms_send.php?course_id=".$SessSemName[1]."&emailrequest=1&subject=".rawurlencode($SessSemName[0])."&filter=waiting\">" : NULL;
-		#$link_mail_all = $adr_all ? "<a href=\"mailto:".$adr_all."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
-		#$link_mail_prelim = $adr_prelim ?  "<a href=\"mailto:".$adr_prelim."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
-		#$link_mail_waiting = $adr_waiting ? "<a href=\"mailto:".$adr_waiting."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
+		$link_mail_all = $adr_all ? "<a href=\"".URLHelper::getLink("sms_send.php?course_id=".$SessSemName[1]."&emailrequest=1&subject=".rawurlencode($SessSemName[0])."&filter=all")."\">" : NULL;
+		$link_mail_prelim = $adr_prelim ? "<a href=\"".URLHelper::getLink("sms_send.php?course_id=".$SessSemName[1]."&emailrequest=1&subject=".rawurlencode($SessSemName[0])."&filter=prelim")."\">" : NULL;
+		$link_mail_waiting = $adr_waiting ? "<a href=\"".URLHelper::getLink("sms_send.php?course_id=".$SessSemName[1]."&emailrequest=1&subject=".rawurlencode($SessSemName[0])."&filter=waiting")."\">" : NULL;
+		#$link_mail_all = $adr_all ? "<a href=\"".URLHelper::getLink("mailto:".$adr_all."?subject=".rawurlencode($SessSemName[0]))."\">" : NULL;
+		#$link_mail_prelim = $adr_prelim ?  "<a href=\"".URLHelper::getLink("mailto:".$adr_prelim."?subject=".rawurlencode($SessSemName[0]))."\">" : NULL;
+		#$link_mail_waiting = $adr_waiting ? "<a href=\"".URLHelper::getLink("mailto:".$adr_waiting."?subject=".rawurlencode($SessSemName[0]))."\">" : NULL;
 		$infobox[1]["eintrag"][] = array (	"icon" => "einst.gif",
-								"text"  => sprintf(_("Um Gruppen anzulegen und ihnen Personen zuzuordnen nutzen Sie %sFunktionen / Gruppen verwalten%s."), "<a href=\"admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=$SessSemName[1]\">", "</a>")
+								"text"  => sprintf(_("Um Gruppen anzulegen und ihnen Personen zuzuordnen nutzen Sie %sFunktionen / Gruppen verwalten%s."), "<a href=\"".URLHelper::getLink("admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=$SessSemName[1]")."\">", "</a>")
 								);
 		if ($anzahltext > 0) {
 			$infobox[1]["eintrag"][] = array (	"icon" => "mailnachricht.gif" ,

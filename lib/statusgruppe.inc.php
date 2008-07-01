@@ -1,4 +1,5 @@
 <?
+# Lifter001: TEST
 # Lifter002: TODO
 /**
 * helper functions for handling statusgruppen
@@ -48,9 +49,9 @@ function MakeUniqueStatusgruppeID () {
 	$tmp_id=md5(uniqid($hash_secret));
 
 	$db->query ("SELECT statusgruppe_id FROM statusgruppen WHERE statusgruppe_id = '$tmp_id'");
-	IF ($db->next_record())
+	if ($db->next_record())
 		$tmp_id = MakeUniqueStatusgruppeID(); //ID gibt es schon, also noch mal
-	RETURN $tmp_id;
+	return $tmp_id;
 }
 
 
@@ -735,7 +736,7 @@ function display_roles_recursive($roles, $level = 0, $pred = '') {
 				$class = 'class="'.$css_rec->getClass().'"';
 				//echo '<tr><td '.$class.' width="20" align="center">'.$p['position'].'</td>';
 				echo '<tr><td '.$class.' width="20" align="center">'.$z.'&nbsp;</td>';
-				echo '<td '.$class.'><a href="about.php?username='.$p['username'].'">'.$p['fullname'].'</a></td>';
+				echo '<td '.$class.'><a href="'.URLHelper::getLink('about.php?username='.$p['username']).'">'.$p['fullname'].'</a></td>';
 				$z++;
 			}
 		}

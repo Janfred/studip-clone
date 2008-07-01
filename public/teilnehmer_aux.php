@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 /*
 teilnehmer.php - Anzeige der Teilnehmer eines Seminares
@@ -217,7 +217,7 @@ function aux_html() {
 	$data = get_aux_data();
 
 	echo $zt->openRow();
-	$cell = '<form action="'.$PHP_SELF.'"><select name="display_type"><option value="rtf">RTF</option><option value="csv">Excel kompatibel</option></select>';
+	$cell = '<form action="'.URLHelper::getLink().'" method="post"><select name="display_type"><option value="rtf">RTF</option><option value="csv">Excel kompatibel</option></select>';
 	$cell .= '&nbsp;&nbsp;&nbsp;<input type="image" '.makebutton('export','src').' style="{vertical-align: middle}"></form>';
 	echo $zt->cell($cell, array('colspan' => '20', 'class' => 'blank'));
 	echo $zt->closeRow();
@@ -232,7 +232,7 @@ function aux_html() {
 	// einzelne Nutzerdaten ausgeben
 	foreach ($data['aux'] as $uid => $cur_user) {
 		echo $zt->openRow();
-		echo $zt->cell('<font size="-2">&nbsp;<a href="about.php?username='.$cur_user['username'].'">'.$cur_user['fullname'].'</a></font>');
+		echo $zt->cell('<font size="-2">&nbsp;<a href="'.URLHelper::getLink('about.php?username='.$cur_user['username']).'">'.$cur_user['fullname'].'</a></font>');
 		foreach ($data['header'] as $showkey => $dontcare) {
 		//foreach ($cur_user['entry'] as $id => $value) {
 			echo $zt->cell('<font size="-2">'. $cur_user['entry'][$showkey] . '</font>', array('align' => 'left'));
@@ -299,7 +299,7 @@ function aux_enter_data() {
 
 	$entries = filterDatafields(DataFieldEntry::getDataFieldEntries(array($user_id, $sem_id), 'usersemdata'));
 
-	echo '<form action="'.$PHP_SELF.'" method="post">';
+	echo '<form action="'.URLHelper::getLink().'" method="post">';
 	foreach ($entries as $id => $entry) {
 		if ($entry->structure->accessAllowed($perm)) {
 			$color = 'black';
