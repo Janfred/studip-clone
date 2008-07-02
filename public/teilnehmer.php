@@ -953,7 +953,7 @@ while (list ($key, $val) = each ($gruppe)) {
 				LEFT JOIN user_info ON (auth_user_md5.user_id=user_info.user_id)
 				LEFT JOIN studiengaenge ON (".$tbl.".".$tbl2."studiengang_id = studiengaenge.studiengang_id)
 				WHERE ".$tbl.".Seminar_id = '$SessionSeminar'
-				AND status = '$key'$visio GROUP by ".$tbl.".user_id $sort");
+				AND status = '$key' GROUP by ".$tbl.".user_id $sort");
 
 	if ($db->num_rows()) { //Only if Users were found...
 		$info_is_open = false;
@@ -1299,7 +1299,7 @@ while (list ($key, $val) = each ($gruppe)) {
 				
 				$additional_data = get_additional_data($db->f('user_id'), $id);
 				
-				foreach($additional_data as $key => $val)
+				foreach ($additional_data as $val)
 				{
 					if ($val['content'] && $val['display'])
 					{
