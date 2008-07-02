@@ -9,8 +9,7 @@
 */
 
 require_once 'StudipAuthSSO.class.php';
-// import phpCAS lib
-require_once 'CAS/CAS.php';
+require_once 'vendor/phpCAS/CAS.php';
 
 class StudipAuthCAS extends StudipAuthSSO {
 	
