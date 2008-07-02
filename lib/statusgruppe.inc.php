@@ -823,10 +823,6 @@ function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = 
 					$value = $entry->getDisplayValue();
 				}
 
-				if ($id == '4aac305a882d62d4e56acadd47f262c7') {
-					$value = my_substr($value, 0, 50);
-				}
-
 				$name = $entry->structure->getName();
 				if ($role['user_there']) {
 					$view = (DataFieldStructure::permMask($auth->auth['perm']) >= DataFieldStructure::permMask($entry->structure->getViewPerms()));

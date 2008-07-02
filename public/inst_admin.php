@@ -256,10 +256,6 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 					}
 				}
 
-				if ($entry->getId() == '4aac305a882d62d4e56acadd47f262c7') {
-					$value = my_substr($value, 0, 50);
-				}
-
 				printf("<td%salign=\"left\"><font size=\"-1\">%s</font></td>\n",
 					$css_switcher->getFullClass(), $value);
 			}
