@@ -32,7 +32,7 @@ class StudipAuthShib extends StudipAuthSSO
      */
     function StudipAuthShib ()
     {
-        parent::StudipAuthAbstract();
+        parent::StudipAuthSSO();
 
         if (isset($this->validate_url) && isset($_REQUEST['token'])) {
             $auth = file_get_contents($this->validate_url.'/'.$_REQUEST['token']);
