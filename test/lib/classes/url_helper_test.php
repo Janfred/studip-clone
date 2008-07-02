@@ -63,6 +63,8 @@ class URLHelperTest extends UnitTestCase
 
     public function testGetURL ()
     {
+        URLHelper::addLinkParam('null', NULL);
+        URLHelper::addLinkParam('empty', array());
         URLHelper::addLinkParam('foo', 'bar');
 
         $url = 'abc?a=b&c=d#top';

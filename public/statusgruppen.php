@@ -1,5 +1,5 @@
 <?
-# Lifter001: TEST - make sms_msg URL parameter
+# Lifter001: TEST
 # Lifter002: TODO
 /*
 statusgruppen.php - Statusgruppen-Anzeige von Stud.IP.
@@ -331,9 +331,9 @@ if ($delete_id)
 		$link_mail_all = $adr_all ? "<a href=\"".URLHelper::getLink("sms_send.php?course_id=".$SessSemName[1]."&emailrequest=1&subject=".rawurlencode($SessSemName[0])."&filter=all")."\">" : NULL;
 		$link_mail_prelim = $adr_prelim ? "<a href=\"".URLHelper::getLink("sms_send.php?course_id=".$SessSemName[1]."&emailrequest=1&subject=".rawurlencode($SessSemName[0])."&filter=prelim")."\">" : NULL;
 		$link_mail_waiting = $adr_waiting ? "<a href=\"".URLHelper::getLink("sms_send.php?course_id=".$SessSemName[1]."&emailrequest=1&subject=".rawurlencode($SessSemName[0])."&filter=waiting")."\">" : NULL;
-		#$link_mail_all = $adr_all ? "<a href=\"".URLHelper::getLink("mailto:".$adr_all."?subject=".rawurlencode($SessSemName[0]))."\">" : NULL;
-		#$link_mail_prelim = $adr_prelim ?  "<a href=\"".URLHelper::getLink("mailto:".$adr_prelim."?subject=".rawurlencode($SessSemName[0]))."\">" : NULL;
-		#$link_mail_waiting = $adr_waiting ? "<a href=\"".URLHelper::getLink("mailto:".$adr_waiting."?subject=".rawurlencode($SessSemName[0]))."\">" : NULL;
+		#$link_mail_all = $adr_all ? "<a href=\"mailto:".$adr_all."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
+		#$link_mail_prelim = $adr_prelim ?  "<a href=\"mailto:".$adr_prelim."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
+		#$link_mail_waiting = $adr_waiting ? "<a href=\"mailto:".$adr_waiting."?subject=".rawurlencode($SessSemName[0])."\">" : NULL;
 		$infobox[1]["eintrag"][] = array (	"icon" => "einst.gif",
 								"text"  => sprintf(_("Um Gruppen anzulegen und ihnen Personen zuzuordnen nutzen Sie %sFunktionen / Gruppen verwalten%s."), "<a href=\"".URLHelper::getLink("admin_statusgruppe.php?view=statusgruppe_sem&new_sem=TRUE&range_id=$SessSemName[1]")."\">", "</a>")
 								);

@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TEST - make sms_msg URL parameter, fix indikator, open_users and $area
+# Lifter001: TEST
 # Lifter002: TODO
 # Lifter005: TODO
 // vim: noexpandtab
@@ -99,7 +99,7 @@ if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 	if ($cmd == "send_sms_to_all" && $who != "accepted") {
 		$sess->register("sms_data");
 		$db->query("SELECT b.username FROM seminar_user a, auth_user_md5 b WHERE a.Seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND a.status = '$who'");
-		$sms_data = "";
+		$sms_data = array();
 		$sms_data['tmpsavesnd'] = 1;
 		while ($db->next_record()) {
 			$data[] = $db->f("username");
@@ -112,7 +112,7 @@ if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 		$sess->register("sms_data");
 		if (!$who) $who = "awaiting";
 		$db->query("SELECT b.username FROM admission_seminar_user a, auth_user_md5 b WHERE a.seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND status = '$who'");
-		$sms_data = "";
+		$sms_data = array();
 		$sms_data['tmpsavesnd'] = 1;
 		while ($db->next_record()) {
 			$data[] = $db->f("username");
@@ -166,39 +166,45 @@ function is_opened($user_id) {
 	}
 }
 
-if (($cmd == "change_view") && (isset($view_order))) {
-	if (!isset($indikator)) {
-		$sess->register("indikator");
-	}
-	$indikator = $view_order;
-}
+/**
+ * Insert value into array if not present, remove otherwise.
+ */
+function insert_or_remove (array &$array, $value) {
+	$index = array_search($value, $array);
 
-// get user_id if somebody wants more infos about an user
-if (($cmd == "allinfos") && ($rechte)) {
-	if (isset($$area)) {
-		unset($$area);
-		$sess->unregister($area);
+	if ($index === false) {
+		$array[] = $value;
 	} else {
-		$sess->register($area);
-		$$area = TRUE;
+		unset($array[$index]);
+		$array = array_values($array);
 	}
 }
 
-if ((($cmd == "moreinfos") || ($cmd == "lessinfos")) && ($rechte)) {
+URLHelper::addLinkParam('view_order', $view_order);
+
+if (!isset($open_areas)) {
+        $open_areas = array();
+}
+
+if ($cmd == "allinfos" && $rechte) {
+        insert_or_remove($open_areas, $area);
+}
+
+URLHelper::addLinkParam('open_areas', $open_areas);
+
+if (!isset($open_users)) {
+        $open_users = array();
+}
+
+if (($cmd == "moreinfos" || $cmd == "lessinfos") && $rechte) {
+	// get user_id if somebody wants more infos about a user
 	$db->query("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
 	$db->next_record();
 	$user_id = $db->f("user_id");
-	if (!isset($open_users)) {
-		$sess->register("open_users");
-		$open_users = array();
-	}
-	if (($z = array_search($user_id, $open_users)) === FALSE) {
-		$open_users[] = $user_id;
-	} else {
-		unset($open_users[$z]);
-	}
-	sort ($open_users);
+	insert_or_remove($open_users, $user_id);
 }
+
+URLHelper::addLinkParam('open_users', $open_users);
 
 // Aktivitaetsanzeige an_aus
 
@@ -778,46 +784,43 @@ $anzahl_teilnehmer_kontingent = $db->f('teilnehmer_kontingent');
 						</td>
       			<td class="steelkante2" valign="middle">
 							<font size="-1"><?=_("Sortierung:")?>&nbsp;</font>
-						<? if (isset($indikator) && ($indikator == "abc")) { ?>
-     				</td>
+						</td>
+						<? if (!isset($view_order) || ($view_order == "abc")) { ?>
 						<td nowrap class="steelgraulight_shadow" valign="middle">
 							&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forumrot_indikator.gif" align="absmiddle">
 							<font size="-1"><?=_("Alphabetisch")?></font>&nbsp;
 						<? } else { ?>
-						</td>
 						<td nowrap class="steelkante2" valign="middle">
 							&nbsp;
-							<a href="<?= URLHelper::getLink('?view_order=abc&cmd=change_view') ?>">
+							<a href="<?= URLHelper::getLink('?view_order=abc') ?>">
 								<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forum_indikator_grau.gif" border="0" align="absmiddle">
 								<font size="-1" color="#555555"><?=_("Alphabetisch")?></font>
 							</a>
 							&nbsp;
 						<? } ?>
-						<? if (isset($indikator) && ($indikator == "date")) { ?>
-     				</td>
+						</td>
+						<? if (isset($view_order) && ($view_order == "date")) { ?>
 						<td nowrap class="steelgraulight_shadow" valign="middle">
 							&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forumrot_indikator.gif" align="absmiddle">
 							<font size="-1"><?=_("Anmeldedatum")?></font>&nbsp;
 						<? } else { ?>
-						</td>
 						<td nowrap class="steelkante2" valign="middle">
 							&nbsp;
-							<a href="<?= URLHelper::getLink('?view_order=date&cmd=change_view') ?>">
+							<a href="<?= URLHelper::getLink('?view_order=date') ?>">
 								<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forum_indikator_grau.gif" border="0" align="absmiddle">
 								<font size="-1" color="#555555"><?=_("Anmeldedatum")?></font>
 							</a>
 							&nbsp;
 						<? } ?>
-						<? if (isset($indikator) && ($indikator == "active")) { ?>
-     				</td>
+						</td>
+						<? if (isset($view_order) && ($view_order == "active")) { ?>
 						<td nowrap class="steelgraulight_shadow" valign="middle">
 							&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forumrot_indikator.gif" align="absmiddle">
 							<font size="-1"><?=_("Aktivität")?></font>&nbsp;
 						<? } else { ?>
-						</td>
 						<td nowrap class="steelkante2" valign="middle">
 							&nbsp;
-							<a href="<?= URLHelper::getLink('?view_order=active&cmd=change_view') ?>">
+							<a href="<?= URLHelper::getLink('?view_order=active') ?>">
 								<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forum_indikator_grau.gif" border="0" align="absmiddle">
 								<font size="-1" color="#555555"><?=_("Aktivität")?></font>
 							</a>
@@ -911,7 +914,7 @@ if (!isset($sortby)  || !in_array($sortby, $accepted_columns))  $sortby = '';
 while (list ($key, $val) = each ($gruppe)) {
 
 	if (!isset($sortby) || $sortby == "") {
-		switch($indikator) {
+		switch ($view_order) {
 			case "date":
 				$sortby .= "mkdate";
 				break;
@@ -937,21 +940,19 @@ while (list ($key, $val) = each ($gruppe)) {
 	if ($key == "accepted") {  // modify query if user is in admission_seminar_user and not in seminar_user
 		$tbl = "admission_seminar_user";
 		$tbl2 = "";
-		$tbl3 = "s";
 	} else {
 		$tbl = "seminar_user";
 		$tbl2 = "admission_";
-		$tbl3 = "S";
 	}
 
 	$db->query ("SELECT $tbl.visible, $tbl.mkdate, comment, $tbl.user_id, ". $_fullname_sql['full'] ." AS fullname,
 				username, status, count(topic_id) AS doll,  studiengaenge.name, ".$tbl.".".$tbl2."studiengang_id
 				AS studiengang_id
-				FROM $tbl LEFT JOIN px_topics USING (user_id,".$tbl3."eminar_id)
+				FROM $tbl LEFT JOIN px_topics USING (user_id, Seminar_id)
 				LEFT JOIN auth_user_md5 ON (".$tbl.".user_id=auth_user_md5.user_id)
 				LEFT JOIN user_info ON (auth_user_md5.user_id=user_info.user_id)
 				LEFT JOIN studiengaenge ON (".$tbl.".".$tbl2."studiengang_id = studiengaenge.studiengang_id)
-				WHERE ".$tbl.".".$tbl3."eminar_id = '$SessionSeminar'
+				WHERE ".$tbl.".Seminar_id = '$SessionSeminar'
 				AND status = '$key'$visio GROUP by ".$tbl.".user_id $sort");
 
 	if ($db->num_rows()) { //Only if Users were found...
@@ -972,15 +973,14 @@ while (list ($key, $val) = each ($gruppe)) {
 		echo "<td class=\"steel\" width=\"1%\">&nbsp; </td>";
 	print "<td class=\"steel\" width=\"1%\" align=\"center\" valign=\"middle\">";
 	if ($rechte) {
-		$show_area = "show_".$key;
-		if (isset($$show_area)) {
+		if (in_array($key, $open_areas)) {
 			$image = "forumgraurunt.gif";
 			$tooltiptxt = _("Informationsfelder wieder hochklappen");
 		} else {
 			$image = "forumgrau.gif";
 			$tooltiptxt = _("Alle Informationsfelder aufklappen");
 		}
-		print "<a href=\"".URLHelper::getLink("?cmd=allinfos&area=show_$key")."\">";
+		print "<a href=\"".URLHelper::getLink("?cmd=allinfos&area=$key")."\">";
 		print "<img src=\"".$GLOBALS['ASSETS_URL']."images/$image\" border=\"0\" ".tooltip($tooltiptxt)."></a>";
 	} else {
 		print "&nbsp; ";
@@ -1286,8 +1286,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		}
 
 		// info-field for users
-		$show_area = "show_".$key;
-		if ((is_opened($db->f("user_id")) || isset($$show_area)) && $rechte) { // show further userinfosi
+		if ((is_opened($db->f("user_id")) || in_array($key, $open_areas)) && $rechte) { // show further userinfosi
 			$info_is_open = true;
 			$user_data = array();
 			
