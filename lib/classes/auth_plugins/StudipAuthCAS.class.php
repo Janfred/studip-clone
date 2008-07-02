@@ -16,6 +16,7 @@ class StudipAuthCAS extends StudipAuthSSO {
 	var $host;
 	var $port;
 	var $uri;
+	var $cacert;
 	
 	var $cas;
 	var $userdata;
@@ -30,8 +31,12 @@ class StudipAuthCAS extends StudipAuthSSO {
 	function StudipAuthCAS() {
 		//calling the baseclass constructor
 		parent::StudipAuthSSO();
-		if ($this->cas == null){
-			$this->cas = new CASClient(CAS_VERSION_2_0,false,$this->host,$this->port,$this->uri,false);
+		$this->cas = new CASClient(CAS_VERSION_2_0,false,$this->host,$this->port,$this->uri,false);
+
+		if (isset($this->cacert)) {
+			$this->cas->setCasServerCACert($this->cacert);
+		} else {
+			$this->cas->setNoCasServerValidation();
 		}
 	}
 	
