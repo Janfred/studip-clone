@@ -1,5 +1,4 @@
 <?php
-# Lifter002: TODO
 
 error_reporting(E_ALL ^ E_NOTICE);
 

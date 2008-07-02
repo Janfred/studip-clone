@@ -1,5 +1,4 @@
 <?php
-# Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipAuthLdap.class.php
@@ -232,18 +231,4 @@ class StudipAuthLdap extends StudipAuthAbstract {
 			return _("<br>LDAP Fehler: ") . ldap_error($this->conn) ." (#" . ldap_errno($this->conn) . ")";
 	}
 }
-
-//test
-/*
-$test = new StudipAuthLdap();
-echo var_dump($test->isUsedUsername("ckhater"));
-$success = $test->doLdapBind("ckater","testing");
-print($success ? "Angemeldet" : "nicht Angemeldet");
-if (!$success) print("<br><b>" . $test->error_msg . "</b>");
-print("<pre>");
-print_r($test->user_data);
-echo "<pre>". var_dump($GLOBALS['STUDIP_AUTH_PLUGIN']);
-$check = StudipAuthAbstract::CheckUsername("ckater");
-echo "<pre>". var_dump($check);
-*/
 ?>

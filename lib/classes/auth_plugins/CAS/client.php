@@ -1,5 +1,4 @@
 <?php
-# Lifter002: TODO
 
 /**
  * @file CAS/client.php

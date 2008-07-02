@@ -1,5 +1,4 @@
 <?php
-# Lifter002: TODO
 /*
  * StudipAuthSSO.class.php - abstract base class for SSO auth plugins
  * Copyright (c) 2007  Elmar Ludwig, Universitaet Osnabrueck
