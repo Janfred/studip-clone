@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
@@ -105,30 +106,23 @@ class TreeView {
 	/**
 	* constructor
 	*
-	* registers two session variables, session feature of PHPLib must be available!
 	* @access public
 	* @param	string	$tree_class_name	name of used tree class
 	* @param	mixed	$args				argument passed to the tree class
 	*/
 	function TreeView($tree_class_name,$args = null){
-		global $sess;
 		$this->tree_class_name = $tree_class_name;
-		$this->class_name = strtolower(get_class($this));
 		$this->tree =& TreeAbstract::GetInstance($tree_class_name,$args);
 		$this->pic_open = ($this->use_aging) ? "forumgraurunt2.gif" : "forumrotrunt.gif";
 		$this->pic_close = ($this->use_aging) ? "forumgrau2.gif" : "forumgrau.gif";
-		if (is_object($sess)){
-			$sess->register("_open_ranges_" . $this->class_name);
-			$sess->register("_open_items_" . $this->class_name);
-			$this->open_ranges =& $GLOBALS["_open_ranges_" . $this->class_name];
-			$this->open_items =& $GLOBALS["_open_items_" . $this->class_name];
-			$this->handleOpenRanges();
-		}
 
+		URLHelper::bindLinkParam("open_ranges", $this->open_ranges);
+		URLHelper::bindLinkParam("open_items", $this->open_items);
+		$this->handleOpenRanges();
 	}
 
 	/**
-	* manages the session variables used for the open/close thing
+	* manages the link parameters used for the open/close thing
 	*
 	* @access	private
 	*/
@@ -415,11 +409,7 @@ class TreeView {
 	* @return	string
 	*/
 	function getSelf($param = ""){
-		if ($param)
-			$url = $GLOBALS['PHP_SELF'] . "?" . $param . "#anchor";
-		else
-			$url = $GLOBALS['PHP_SELF'] . "#anchor";
-		return $url;
+		return URLHelper::getLink("?" . $param . "#anchor");
 	}
 }
 //test

@@ -1,4 +1,5 @@
 <?
+# Lifter001: TEST
 # Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
@@ -384,7 +385,7 @@ class StudipLitList extends TreeAbstract {
 					$ret .= "\n<div align=\"left\"><b><u>" . htmlReady($tree->tree_data[$lists[$i]]['name']) . "</u></b></div>";
 				}
 				if ($copy_link){
-					$ret .= "\n<div align=\"right\" style=\"font-size:10pt\"><a href=\"admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list={$lists[$i]}#anchor\"><img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\">"
+					$ret .= "\n<div align=\"right\" style=\"font-size:10pt\"><a href=\"".URLHelper::getLink("admin_lit_list.php?cmd=CopyUserList&_range_id=self&user_list=".$lists[$i]."#anchor")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\">"
 						. "&nbsp;" . _("Literaturliste kopieren") . "</a></div>";
 				} else {
 					$ret .= "\n<br>\n";

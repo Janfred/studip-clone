@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 /*
 details.php - Detail-Uebersicht und Statistik fuer ein Seminar
@@ -106,7 +106,7 @@ if ($sem_id) {
 		$sem_user = $db->num_rows();
 
 		if (!$sem_user && !$sem_user_schedule) {
-			$plan_msg = "<a href=\"mein_stundenplan.php?cmd=add_entry&semid=$sem_id\">"._("Nur im Stundenplan vormerken")."</a>";
+			$plan_msg = "<a href=\"".URLHelper::getLink("mein_stundenplan.php?cmd=add_entry&semid=$sem_id")."\">"._("Nur im Stundenplan vormerken")."</a>";
 		}
 
 	}
@@ -238,21 +238,21 @@ if ($abo_msg || $back_msg || $delete_msg || $info_msg || $plan_msg || $mein_stat
 	$infobox[2]["kategorie"] = _("Aktionen:");
 	if (($abo_msg) && (!$skip_verify)) {
 		$infobox[2]["eintrag"][] = array (	"icon" => "link_intern.gif" ,
-									"text"	=> "<a href=\"sem_verify.php?id=".$sem_id."&send_from_search=$send_from_search&send_from_search_page=$send_from_search_page\">".$abo_msg. "</a>"
+									"text"	=> "<a href=\"".URLHelper::getLink("sem_verify.php?id=".$sem_id."&send_from_search=$send_from_search&send_from_search_page=$send_from_search_page")."\">".$abo_msg. "</a>"
 								);
 	} elseif ($sem_id != $SessSemName[1] && ($perm->have_studip_perm("admin",$sem_id) || ($mein_status && !$admission_status)) ) {
 		$infobox[2]["eintrag"][] = array (	"icon" => "link_intern.gif" ,
-									"text"	=> "<a href=\"seminar_main.php?auswahl=".$sem_id."\">"._("direkt zur Veranstaltung"). "</a>"
+									"text"	=> "<a href=\"".URLHelper::getLink("seminar_main.php?auswahl=".$sem_id."")."\">"._("direkt zur Veranstaltung"). "</a>"
 								);
 	}
 	if ($delete_msg) {
 		$infobox[2]["eintrag"][] = array (	"icon" => "link_intern.gif" ,
-									"text"	=> "<a href=\"meine_seminare.php?auswahl=".$sem_id."&cmd=suppose_to_kill\">".$delete_msg."</a>"
+									"text"	=> "<a href=\"".URLHelper::getLink("meine_seminare.php?auswahl=".$sem_id."&cmd=suppose_to_kill")."\">".$delete_msg."</a>"
 								);
 	}
 	if ($back_msg) {
 		$infobox[2]["eintrag"][] = array (	"icon" => "link_intern.gif" ,
-									"text"	=> "<a href=\"$send_from_search_page\">".$back_msg. "</a>"
+									"text"	=> "<a href=\"".URLHelper::getLink($send_from_search_page)."\">".$back_msg. "</a>"
 								);
 	}
 	if ($info_msg) {
@@ -293,7 +293,7 @@ print_infobox ($infobox,"contract.jpg");
 				 printf ("<font size=-1><b>" . _("Zeit:") . "</b></font><br /><font size=-1>%s</font>",htmlReady(view_turnus($sem_id, FALSE, FALSE, (time() - $quarter_year))));
 					if (($mein_status || $perm->have_studip_perm("admin",$sem_id)) ) {
 						echo '<br /><font size="-1"><br />';
-						echo sprintf(_("Details zu allen Terminen im %sAblaufplan%s"), '<a href="seminar_main.php?auswahl='.$sem_id.'&redirect_to=dates.php">', '</a>');
+						echo sprintf(_("Details zu allen Terminen im %sAblaufplan%s"), '<a href="'.URLHelper::getLink('seminar_main.php?auswahl='.$sem_id.'&redirect_to=dates.php').'">', '</a>');
 						echo '</font><br />';
 					}
 				?>
@@ -365,7 +365,7 @@ print_infobox ($infobox,"contract.jpg");
 				while ($db->next_record()) {
 					if ($db->num_rows() > 1)
 						print "<li>";
-					printf( "<font size=-1><a href = about.php?username=%s>%s</a></font>",$db->f("username"), htmlReady($db->f("fullname")) );
+					printf( "<font size=\"-1\"><a href=\"%s\">%s</a></font>", URLHelper::getLink("about.php?username=".$db->f("username")), htmlReady($db->f("fullname")) );
 					if ($db->num_rows() > 1)
 						print "</li>";
 				}
@@ -384,7 +384,7 @@ print_infobox ($infobox,"contract.jpg");
 				while ($db->next_record()) {
 					if ($db->num_rows() > 1)
 						print "<li>";
-					printf( "<font size=-1><a href = about.php?username=%s>%s</a></font>",$db->f("username"), htmlReady($db->f("fullname")) );
+					printf( "<font size=\"-1\"><a href=\"%s\">%s</a></font>", URLHelper::getLink("about.php?username=".$db->f("username")), htmlReady($db->f("fullname")) );
 					if ($db->num_rows() > 1)
 						print "</li>";
 				}
@@ -520,7 +520,7 @@ print_infobox ($infobox,"contract.jpg");
 					$stm_out = array();
 					foreach($stms as $stm_id => $stm){
 						if ($stm['complete']){
-							$stm_out[] = '<a href="stm_details.php?stm_instance_id='.$stm_id.'"><img src="'.$GLOBALS['ASSETS_URL'].'images/link_intern.gif" border="0">&nbsp;&nbsp;' . ($stm['id_number'] ? htmlReady($stm['id_number']).': ' : '') . htmlReady($stm['title']) . '</a>';
+							$stm_out[] = '<a href="'.URLHelper::getLink('stm_details.php?stm_instance_id='.$stm_id).'"><img src="'.$GLOBALS['ASSETS_URL'].'images/link_intern.gif" border="0">&nbsp;&nbsp;' . ($stm['id_number'] ? htmlReady($stm['id_number']).': ' : '') . htmlReady($stm['title']) . '</a>';
 						}
 					}
 					?>
@@ -555,7 +555,7 @@ print_infobox ($infobox,"contract.jpg");
 					foreach ($sem_path as $sem_tree_id => $path_name) {
 						if (count($sem_path) >= 2)
 						print "<li>";
-						printf ("<font size=-1><a href=\"show_bereich.php?level=sbb&id=%s\">%s</a></font>",$sem_tree_id,
+						printf ("<font size=\"-1\"><a href=\"%s\">%s</a></font>", URLHelper::getLink("show_bereich.php?level=sbb&id=".$sem_tree_id),
 						htmlReady($path_name));
 						if (count($sem_path) >= 2)
 						print "</li>";
@@ -573,7 +573,7 @@ print_infobox ($infobox,"contract.jpg");
 				$db3->query("SELECT Name, url, Institut_id FROM Institute WHERE Institut_id = '".$db2->f("Institut_id")."' ");
 				$db3->next_record();
 				if ($db3->num_rows()) {
-				printf("<font size=-1><b>" . _("Heimat-Einrichtung:") . "</b></font><br /><font size=-1><a href=\"institut_main.php?auswahl=%s\">%s</a></font>", $db3->f("Institut_id"), htmlReady($db3->f("Name")));
+				printf("<font size=-1><b>" . _("Heimat-Einrichtung:") . "</b></font><br /><font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink("institut_main.php?auswahl=".$db3->f("Institut_id")), htmlReady($db3->f("Name")));
 				}
 				?>
 				</td>
@@ -589,7 +589,7 @@ print_infobox ($infobox,"contract.jpg");
 				while ($db3->next_record()) {
 					if ($db3->num_rows() >= 2)
 						print "<li>";
-					printf("<font size=-1><a href=\"institut_main.php?auswahl=%s\">%s</a></font><br />", $db3->f("Institut_id"), htmlReady($db3->f("Name")));
+					printf("<font size=-1><a href=\"%s\">%s</a></font><br />", URLHelper::getLink("institut_main.php?auswahl=".$db3->f("Institut_id")), htmlReady($db3->f("Name")));
 					if ($db3->num_rows() > 2)
 						print "</li>";
 				}
@@ -686,7 +686,7 @@ print_infobox ($infobox,"contract.jpg");
 						$target = $perm->have_studip_perm("autor", $m_id) ? 'seminar_main.php?auswahl=' : 'details.php?sem_id=';
 						$target .= $m_id;
 						?>
-						<li><a href="<?=$target?>">
+						<li><a href="<?= URLHelper::getLink($target) ?>">
 						<?=htmlReady($group_obj->members[$m_id]->getName())?>
 						</a>
 						&nbsp;

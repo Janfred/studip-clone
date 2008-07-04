@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
@@ -97,7 +98,7 @@ $infobox = array(array("kategorie"  => _("Information:"),
 										)
 						)
 				);
-$such_form = "<form action=\"$PHP_SELF?cmd=suche\" method=\"post\">" . _("Bitte geben Sie hier Ihre Suchkriterien ein:") . "<br>"
+$such_form = "<form action=\"".URLHelper::getLink("?cmd=suche")."\" method=\"post\">" . _("Bitte geben Sie hier Ihre Suchkriterien ein:") . "<br>"
 			. _("Name der Einrichtung:") . "<br>"
 			. "<input type=\"text\" name=\"search_name\" style=\"width:95%;\"><br>"
 			. _("Einrichtung dieses Mitarbeiters:") . "<br>"

@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
@@ -67,9 +68,10 @@ class StudipRangeTreeView extends TreeView{
 					$content .= fixLinks(htmlReady($range_object->item_data[$key])) . "&nbsp; ";
 				}
 			}
-			$content .= "</td></tr><tr><td class=\"blank\" align=\"left\"><a href=\"institut_main.php?auswahl="
-						. $range_object->item_data['studip_object_id'] ."\"". tooltip(_("Seite dieser Einrichtung in Stud.IP aufrufen"))
-						. ">" . htmlReady($range_object->item_data['name']) . "</a>&nbsp;" ._("in Stud.IP") ."</td></tr>";
+			$content .= "</td></tr><tr><td class=\"blank\" align=\"left\">" .
+				    "<a href=\"".URLHelper::getLink("institut_main.php?auswahl=".$range_object->item_data['studip_object_id'])."\"" .
+				    tooltip(_("Seite dieser Einrichtung in Stud.IP aufrufen")) . ">" .
+				    htmlReady($range_object->item_data['name']) . "</a>&nbsp;" ._("in Stud.IP") ."</td></tr>";
 			
 		} elseif (!$range_object->item_data['studip_object']){
 			$content .= "\n<tr><td class=\"blank\" align=\"left\">" .

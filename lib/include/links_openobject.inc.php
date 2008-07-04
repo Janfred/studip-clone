@@ -101,13 +101,13 @@ if ($SessSemName["class"]=="inst") {
 	if ($modules["forum"])
 		$structure["forum"]=array ('topKat' => '', 'name' => _("Forum"), 'link' => URLHelper::getLink("forum.php?view=reset"), 'active' => FALSE);
 	if ($modules["personal"])
-		$structure["personal"]=array ('topKat' => '', 'name' => _("Personal"), 'link' => "institut_members.php", 'active' => FALSE);
+		$structure["personal"]=array ('topKat' => '', 'name' => _("Personal"), 'link' => URLHelper::getLink("institut_members.php"), 'active' => FALSE);
 	if ($modules["documents"])
 		$structure["folder"]=array ('topKat' => '', 'name' => _("Dateien"), 'link' => URLHelper::getLink("folder.php?cmd=tree"), 'active' => FALSE);
 	if ($modules["scm"])
 		$structure["scm"]=array ('topKat' => '', 'name' => ($scms[0]['tab_name'] ? $scms[0]['tab_name'] : _("Informationen")), 'link' => URLHelper::getLink("scm.php"), 'active' => FALSE);
 	if ($modules["literature"])
-		$structure["literatur"]=array ('topKat' => '', 'name' => _("Literatur zur Einrichtung"), 'link' => "literatur.php", 'active' => FALSE);
+		$structure["literatur"]=array ('topKat' => '', 'name' => _("Literatur zur Einrichtung"), 'link' => URLHelper::getLink("literatur.php"), 'active' => FALSE);
 	if ($modules["wiki"]){
 	  	$structure["wiki"]=array ('topKat' => '', 'name' => _("Wiki"), 'link' => URLHelper::getLink("wiki.php"), 'active' => FALSE);
 	}
@@ -128,12 +128,12 @@ if ($SessSemName["class"]=="inst") {
 	if ($modules["documents"])
 		$structure["folder"]=array ('topKat' => '', 'name' => _("Dateien"), 'link' => URLHelper::getLink("folder.php?cmd=tree"), 'active' => FALSE);
 	if ($modules["schedule"])
-		$structure["dates"]=array ('topKat' => '', 'name' => _("Ablaufplan"), 'link' => "dates.php?cmd=setType&type=all", 'active' => FALSE);
+		$structure["dates"]=array ('topKat' => '', 'name' => _("Ablaufplan"), 'link' => URLHelper::getLink("dates.php?cmd=setType&type=all"), 'active' => FALSE);
 	if ($modules["scm"]) {
 		$structure["scm"]=array ('topKat' => '', 'name' => ($scms[0]['tab_name'] ? $scms[0]['tab_name'] : _("Informationen")), 'link' => URLHelper::getLink("scm.php"), 'active' => FALSE);
 	}
 	if ($modules["literature"])
-		$structure["literatur"]=array ('topKat' => '', 'name' => _("Literatur"), 'link' => "literatur.php", 'active' => FALSE);
+		$structure["literatur"]=array ('topKat' => '', 'name' => _("Literatur"), 'link' => URLHelper::getLink("literatur.php"), 'active' => FALSE);
 	if ($modules["wiki"]){
 	  	$structure["wiki"]=array ('topKat' => '', 'name' => _("Wiki"), 'link' => URLHelper::getLink("wiki.php"), 'active' => FALSE);
 	}
@@ -204,7 +204,7 @@ if ($GLOBALS['PLUGINS_ENABLE']){
 if ($SessSemName["class"]=="inst") {
 	$structure["_institut_main"]=array ('topKat' => "institut_main", 'name' => _("Info"), 'link' => URLHelper::getLink("institut_main.php"), 'active' => FALSE);
 	if ($modules["personal"])
-		$structure["institut_members"]=array ( 'topKat' => "personal", 'name' => _("MitarbeiterInnen"), 'link' => "institut_members.php", 'active' => FALSE);
+		$structure["institut_members"]=array ( 'topKat' => "personal", 'name' => _("MitarbeiterInnen"), 'link' => URLHelper::getLink("institut_members.php"), 'active' => FALSE);
 	$structure["institut_veranstaltungen"]=array ('topKat' => "institut_main", 'name' => _("Veranstaltungen"), 'link' => URLHelper::getLink("show_bereich.php?level=s&id=$SessSemName[1]"), 'active' => FALSE);
 	$structure["timetable"]=array ('topKat' => "institut_main", 'name' => _("Veranstaltungs-Timetable"), 'link' => URLHelper::getLink("mein_stundenplan.php?inst_id=$SessSemName[1]"), 'active' => FALSE);
 	// $structure["druckansicht_i"]=array ('topKat' => "institut_main", 'name' => "Druckansicht", 'link' => URLHelper::getLink("print_institut.php"), 'target' =>"_blank", 'active' => FALSE);
@@ -238,7 +238,7 @@ if ($modules["forum"]) {
 		$structure["flat"]=array ('topKat' => "forum", 'name' => _("letzte Beiträge"), 'link' => URLHelper::getLink("forum.php?view=flat&sort=age"), 'active' => FALSE);
 		$structure["search"]=array ('topKat' => "forum", 'name' => _("Suchen"), 'link' => URLHelper::getLink("forum.php?view=search&reset=1"), 'active' => FALSE);
 	}
-	$structure["forum_export"]=array ('topKat' => "forum", 'name' => _("Druckansicht"), 'link' => "forum_export.php", 'target' => "_blank", 'active' => FALSE);
+	$structure["forum_export"]=array ('topKat' => "forum", 'name' => _("Druckansicht"), 'link' => URLHelper::getLink("forum_export.php"), 'target' => "_blank", 'active' => FALSE);
 	if (($rechte) || ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["topic_create_autor"]))
 		$structure["neues_thema"]=array ('topKat' => "forum", 'name' => _("neues Thema anlegen"), 'link' => URLHelper::getLink("forum.php?view=".$forum["themeview"]."&neuesthema=TRUE#anker"), 'active' => FALSE);
 		$structure["admin"]=array ('topKat' => "forum", 'name' => _("Forum anpassen"), 'link' => URLHelper::getLink("forum.php?forumsend=anpassen&view=$view"), 'active' => FALSE);
@@ -269,11 +269,11 @@ if ($modules["scm"]) {
 //
 if ($modules["literature"]) {
 	if ($SessSemName["class"]=="sem"){
-		$structure["_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur"), 'link' => "literatur.php?view=literatur_sem", 'active' => FALSE);
-		$structure["_literatur_print"]=array ('topKat' => "literatur", 'name' => _("Druckansicht"), 'link' => "lit_print_view.php?_range_id=" . $SessSemName[1], 'target' => "_blank", 'active' => FALSE);
+		$structure["_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur"), 'link' => URLHelper::getLink("literatur.php?view=literatur_sem"), 'active' => FALSE);
+		$structure["_literatur_print"]=array ('topKat' => "literatur", 'name' => _("Druckansicht"), 'link' => URLHelper::getLink("lit_print_view.php?_range_id=" . $SessSemName[1]), 'target' => "_blank", 'active' => FALSE);
 	}else{
-		$structure["_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur"), 'link' => "literatur.php?view=literatur_inst", 'active' => FALSE);
-		$structure["_literatur_print"]=array ('topKat' => "literatur", 'name' => _("Druckansicht"), 'link' => "lit_print_view.php?_range_id=" . $SessSemName[1], 'target' => "_blank", 'active' => FALSE);
+		$structure["_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur"), 'link' => URLHelper::getLink("literatur.php?view=literatur_inst"), 'active' => FALSE);
+		$structure["_literatur_print"]=array ('topKat' => "literatur", 'name' => _("Druckansicht"), 'link' => URLHelper::getLink("lit_print_view.php?_range_id=" . $SessSemName[1]), 'target' => "_blank", 'active' => FALSE);
 	}
 }
 
@@ -307,9 +307,9 @@ if ($rechte)
 
 if (($rechte) && ($modules["literature"]))
 	if ($SessSemName["class"]=="sem")
-		$structure["admin_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur bearbeiten"), 'link' => "admin_lit_list.php?view=literatur_sem&new_sem=TRUE&_range_id=".$SessSemName[1], 'active' => FALSE);
+		$structure["admin_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur bearbeiten"), 'link' => URLHelper::getLink("admin_lit_list.php?view=literatur_sem&new_sem=TRUE&_range_id=".$SessSemName[1]), 'active' => FALSE);
 	else
-		$structure["admin_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur bearbeiten"), 'link' => "admin_lit_list.php?view=literatur_inst&new_inst=TRUE&_range_id=".$SessSemName[1], 'active' => FALSE);
+		$structure["admin_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur bearbeiten"), 'link' => URLHelper::getLink("admin_lit_list.php?view=literatur_inst&new_inst=TRUE&_range_id=".$SessSemName[1]), 'active' => FALSE);
 
 if ($modules["wiki"]) {
 	$structure["_wiki"]=array ('topKat' => "wiki", 'name' => _("WikiWikiWeb"), 'link' => URLHelper::getLink("wiki.php"), 'active' => FALSE);

@@ -1,4 +1,5 @@
 <?
+# Lifter001: TEST
 # Lifter002: TODO
 /*
 forum_export.php - Druck-Anzeige des Forensystems
@@ -41,9 +42,9 @@ require_once('lib/visual.inc.php');
 require_once('lib/archiv.inc.php');
 
 if ($htmlversion)
-	echo "<a href=\"$PHP_SELF\">" . _("zur Druck-Ansicht") . "</a>";
+	echo "<a href=\"".URLHelper::getLink()."\">" . _("zur Druck-Ansicht") . "</a>";
 else
-	echo "<a href=\"$PHP_SELF?htmlversion=true\">" . _("zur HTML-Ansicht") . "</a>";
+	echo "<a href=\"".URLHelper::getLink("?htmlversion=true")."\">" . _("zur HTML-Ansicht") . "</a>";
 
 echo "<h1>" . _("Forum:") . "&nbsp; ".$SessSemName[0]."</h1>";
 echo Export_Topic($SessSemName[1]);
