@@ -66,8 +66,8 @@ function semadmission_get_data($seminare_condition){
 		$db2->next_record();
 		$ret[$seminar_id]['count_teilnehmer'] = $db2->f('t1');
 		$ret[$seminar_id]['count_teilnehmer_aux'] = $db2->f('t2');
-				$query2 = "SELECT COUNT(IF(status='claiming' OR status='accepted', 1, NULL)) AS count2,
-					COUNT(IF(status='awaiting', 1, NULL)) AS count3
+				$query2 = "SELECT COUNT(IF(status='accepted', 1, NULL)) AS count2,
+					COUNT(IF(status='claiming' OR status='awaiting', 1, NULL)) AS count3
 					FROM admission_seminar_user WHERE seminar_id='$seminar_id' GROUP BY seminar_id";
 		$db2->query($query2);
 		$db2->next_record();
