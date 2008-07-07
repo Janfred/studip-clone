@@ -131,7 +131,7 @@ if ($cmd == "delete_entry") {
 	$db->query("DELETE FROM seminar_user_schedule WHERE range_id = '$semid' AND user_id = '".$auth->auth['uid']."'");
 }
 
-//persoenlichen Eintrag wegloeschen
+// persoenlichen Eintrag wegloeschen
 if ($cmd == "delete") {
 	unset($my_personal_sems[$sem_id]);
 }
@@ -389,11 +389,12 @@ if ((is_array($my_personal_sems)) && (!$inst_id)){
 				$idx_corr_h = 0;
 				$idx_corr_m = 0;
 			}
-			
-			//aus Sonntag=0 wird Sonntag=7, damit laesst's sich besser arbeiten *g
-			$tmp_day=date("w", $mps["start_time"]);
-			if ($tmp_day==0) $tmp_day = 7;
-			
+
+			// aus Sonntag=0 wird Sonntag=7, damit laesst's sich besser arbeiten *g
+			$tmp_day = date("w", $mps["start_time"]);
+			if ($tmp_day==0)
+				$tmp_day = 7;
+
 			$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"])+$idx_corr_h.(int)((date("i", $mps["start_time"])+$idx_corr_m) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>$mps["room"], "row_span"=>$tmp_row_span, "dozenten"=>htmlReady($mps["doz"]), "personal_sem"=>TRUE);
 		}
 	}
@@ -804,9 +805,7 @@ for ($i = $global_start_time; $i < $global_end_time+1; $i++) {
 						if (strlen($my_sems[$cc["seminar_id"]]["name"])>50)
 							echo "...";
 						echo"</font></a>";
-						}
-					else
-						{
+					} else {
 						echo "<font size=-1>";
 						if ($my_sems[$cc["seminar_id"]]["nummer"]) {
 							echo htmlReady($my_sems[$cc["seminar_id"]]["nummer"]) . "&nbsp;";
