@@ -253,7 +253,7 @@ $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
 
 	<tr>
 
-		<td class="steel1">
+		<td class="steel1" valign="top">
 			<br>
 			<?= Avatar::getAvatar($user_id)->getImageTag(Avatar::NORMAL) ?>
 
