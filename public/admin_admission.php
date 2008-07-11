@@ -215,9 +215,6 @@ if (isset($seminar_id) && !$perm->have_perm("admin") && $SEMINAR_LOCK_ENABLE) {
   if ($lockdata[$lock_status]["Schreibzugriff"])
     $admin_admission_data["write_level"]=$db->f("Schreibzugriff");
 
-  if ($lockdata[$lock_status]["admission_selection_take_place"])
-    $admin_admission_data["admission_selection_take_place"]=$db->f("admission_selection_take_place");
-
   if ($lockdata[$lock_status]["admission_prelim"])
     $admin_admission_data["admission_prelim"]=$db->f("admission_prelim");
 
@@ -230,10 +227,10 @@ if (isset($seminar_id) && !$perm->have_perm("admin") && $SEMINAR_LOCK_ENABLE) {
   if ($lockdata[$lock_status]["admission_endtime_sem"])
     $admin_admission_data["sem_admission_end_date"]= $db->f("admission_endtime_sem");
 
-  if ($lockdata[$lock_status]["admission_waitlist"])
+  if ($lockdata[$lock_status]["admission_disable_waitlist"])
   	$admin_admission_data["admission_disable_waitlist"]= $db->f("admission_disable_waitlist");
 }
-// end new stuff
+// end new stuff	
 
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
 if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg) && (!$adm_gesperrt_x) && !$toggle_admission_quota_x) {
@@ -249,7 +246,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$admin_admission_data["admission_endtime"]=$db->f("admission_endtime");
 	$admin_admission_data["admission_binding"]=$db->f("admission_binding");
 	$admin_admission_data["sem_id"]=$seminar_id;
-	settype($admin_admission_data["admission_binding"], integer);
+	settype($admin_admission_data["admission_binding"], 'integer');
 	$admin_admission_data["heimat_inst_id"]=$db->f("Institut_id");
 	$admin_admission_data["passwort"]=$db->f("Passwort");
 	$admin_admission_data["name"]=$db->f("Name");
@@ -264,12 +261,12 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$admin_admission_data["admission_disable_waitlist"] = $db->f("admission_disable_waitlist");
 	$admin_admission_data["admission_disable_waitlist_org"] = $db->f("admission_disable_waitlist");
 	$admin_admission_data["admission_enable_quota"] = $db->f("admission_enable_quota");
-	$admin_admission_data["admission_enable_quota_org"]= $db->f("admission_enable_quota_org");
+	$admin_admission_data["admission_enable_quota_org"] = $db->f("admission_enable_quota");
 	if ($admin_admission_data["admission_endtime"] <= 0){
 		$admin_admission_data["admission_endtime"] = veranstaltung_beginn($seminar_id, 'int');
 		if(!$admin_admission_data["admission_endtime"]) $admin_admission_data["admission_endtime"] = -1;
 	}
-	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id' ORDER BY (admission_seminar_studiengang.studiengang_id='all'),name");
+	$db->query("SELECT admission_seminar_studiengang.studiengang_id, name, quota FROM admission_seminar_studiengang LEFT JOIN studiengaenge USING (studiengang_id)  WHERE seminar_id = '$seminar_id' ORDER BY (admission_seminar_studiengang.studiengang_id <> 'all'),name");
 	while ($db->next_record()) {
 		$name = $db->f("studiengang_id") == 'all' ? _("Alle Studiengänge") : $db->f("name");
 		$admin_admission_data["studg"][$db->f("studiengang_id")] = array("name"=>$name, "ratio"=>$db->f("quota"));
@@ -333,7 +330,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	$admin_admission_data["admission_binding"]=$admission_binding;
 	if ($admin_admission_data["admission_binding"])
 		$admin_admission_data["admission_binding"]=TRUE;
-	settype($admin_admission_data["admission_binding"], integer);
+	settype($admin_admission_data["admission_binding"], 'integer');
 
 	if(isset($admission_turnout)) $admin_admission_data["admission_turnout"]=$admission_turnout;
 
@@ -362,12 +359,6 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 				$admin_admission_data["admission_selection_take_place"] = 0;
 			}
 
-		}
-
-		//Hat der User an den automatischen Werte rumgefuscht? Dann denkt er sich wohl was :) (und wir benutzen die Automatik spaeter nicht!)
-		if ($all_ratio_old != $all_ratio) {
-			$admin_admission_data["admission_ratios_changed"]=TRUE;
-			$admin_admission_data["all_ratio"]=$all_ratio;
 		}
 
 		//Studienbereiche entgegennehmen
@@ -486,7 +477,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		}
 
 		//Ende der Anmeldung checken
-		if ($uebernehmen_x)
+		if ($uebernehmen_x && (!$admin_admission_data["admission_type_org"] || $perm->have_perm("admin")) )
 			if (($admin_admission_data["admission_type"]) && ($admin_admission_data["admission_endtime"]) && ($admin_admission_data["admission_type"]!=3)) {
 				if ($admin_admission_data["admission_type"] == 1)
 					$end_date_name=_("Losdatum");
@@ -533,9 +524,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	//Daten speichern
 	if (($uebernehmen_x) && (!$errormsg)) {
 
-		if (!$lockdata[$lock_status]['admission_waitinglist'] || $perm->have_perm('admin'))
+	if (!$lockdata[$lock_status]['admission_disable_waitlist'] || $perm->have_perm('admin'))
 		{
-			//Warteliste aktivieren / deaktivieren
+		//Warteliste aktivieren / deaktivieren
 			if($admin_admission_data["admission_disable_waitlist"] != $admin_admission_data["admission_disable_waitlist_org"]){
 				if($admin_admission_data["admission_disable_waitlist_org"] == 0){ //Warteliste war eingeschaltet
 					$db3->query("SELECT admission_seminar_user.user_id ,auth_user_md5.username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '".$admin_admission_data["sem_id"]."' AND status='awaiting'");
@@ -648,7 +639,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 
 			}
 
-			$query .= "WHERE seminar_id = '{$admin_admission_data["sem_id"]}' ";
+			$query .= "WHERE seminar_id = '{$admin_admission_data['sem_id']}' ";
 
 			$db->query($query);
 
@@ -1144,13 +1135,35 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 							</td>
 						</tr>
 						<tr>
-							<td class="<? echo $cssSw->getClass() ?>" colspan="2" >
+						<?if (!$admin_admission_data["admission_type_org"] || $perm->have_perm("admin")){
+							?><td class="<? echo $cssSw->getClass() ?>" colspan="2" >
 							<input style="vertical-align:middle;" type="checkbox" name="admission_enable_quota" <?=($admin_admission_data["admission_enable_quota"] ? 'checked' : '')?> value="1">
 								<font size=-1><?=_("Prozentuale Kontingentierung aktivieren.")."</font>"?>
 							</td>
 							<td>
 							<?=makeButton('ok','input',_("Kontingentierung aktivieren/deaktivieren"), 'toggle_admission_quota')?>
 							</td>
+						<?} else {?>
+							<td class="<? echo $cssSw->getClass() ?>" colspan="3" >
+							<font size="-1">
+							<?=($admin_admission_data["admission_enable_quota"] ? _("Prozentuale Kontingentierung ist aktiviert.") : _("Prozentuale Kontingentierung ist nicht aktiviert."))?>
+							</font>
+							</td>
+						<?}?>
+						</tr>
+						<tr>
+							<td class="<? echo $cssSw->getClass() ?>" colspan="4" >&nbsp;
+							</td>
+						</tr>
+						<tr>
+						<td width="30%"><font size=-1><b><?=_("Studiengang")?>:</b></font></td>
+						<?
+							if ($admin_admission_data["admission_enable_quota"] == 1) {
+							?>
+							<td colspan="2"><font size=-1><b><?=_("Kontingent")?>:</b></font><br /></td>
+							<?
+							}
+							?>
 						</tr>
 
 							<?
@@ -1170,14 +1183,14 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 								<input type="HIDDEN" name="studg_name[]" value="<? echo $val["name"] ?>" />
 								<?
 								if($admin_admission_data["admission_enable_quota"]){
-									if (($admin_admission_data["admission_type_org"]) && (!$perm->have_perm("admin"))) {
+									if ($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin")) {
 										printf ("&nbsp; &nbsp; <font size=-1>%s %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
 									} else {
 										printf ("<input type=\"HIDDEN\" name=\"studg_ratio_old[]\" value=\"%s\" />", $val["ratio"]);
 										printf ("<input type=\"TEXT\" name=\"studg_ratio[]\" size=5 maxlength=5 value=\"%s\" /><font size=-1> %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
 										printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", $PHP_SELF, $key);
 									}
-								} else {
+								} elseif (!($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin"))) {
 									printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", $PHP_SELF, $key);
 								}
 								?>
@@ -1267,7 +1280,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
 					<font size=-1><b><?=_("Warteliste:")?> </b></font><br />
 
-					<? if (!$lockdata[$lock_status]['admission_waitlist'] || $perm->have_perm('admin')) : ?>
+					<? if (!$lockdata[$lock_status]['admission_disable_waitlist'] || $perm->have_perm('admin')) : ?>
 						<font size=-1><?=_("Bitte aktivieren Sie diese Einstellung, wenn eine Warteliste erstellt werden soll falls die Anmeldungen die maximale Teilnehmeranzahl überschreiten:")?></font><br />
 						<? if ($num_waitlist && !$admin_admission_data["admission_disable_waitlist"]){
 							?>
