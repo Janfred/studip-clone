@@ -1120,54 +1120,54 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				case "copy_assi.php":
 					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare_assi.php?cmd=do_copy&cp_id=%s&start_level=TRUE&class=1\">%s</a></font>", $seminar_id, makeButton("kopieren"));
 					break;
-	case "admin_lock.php":
-				$db5 = new Db_Seminar;
-				$db5->query("SELECT lock_rule from seminare WHERE Seminar_id='".$seminar_id."'");
-				$db5->next_record();
-				if ($perm->have_perm("admin")) {
-					?>
-					<input type="hidden" name="make_lock" value=1>
-					<select name=lock_sem[<? echo $seminar_id ?>]>
-					<option value="none">-- <?= _("keine Sperrebene") ?> --</option>
-					<?
-						for ($i=0;$i<count($all_lock_rules);$i++) {
-							echo "<option value=".$all_lock_rules[$i]["lock_id"]."";
-							if (isset($lock_all) && $lock_all==$all_lock_rules[$i]["lock_id"]) {
-								echo " selected ";
-							} elseif (!isset($lock_all) && ($all_lock_rules[$i]["lock_id"]==$db5->f("lock_rule"))) {
-								echo " selected ";
+				case "admin_lock.php":
+					$db5 = new Db_Seminar;
+					$db5->query("SELECT lock_rule from seminare WHERE Seminar_id='".$seminar_id."'");
+					$db5->next_record();
+					if ($perm->have_perm("admin")) {
+						?>
+						<input type="hidden" name="make_lock" value=1>
+						<select name=lock_sem[<? echo $seminar_id ?>]>
+						<option value="none">-- <?= _("keine Sperrebene") ?> --</option>
+						<?
+							for ($i=0;$i<count($all_lock_rules);$i++) {
+								echo "<option value=".$all_lock_rules[$i]["lock_id"]."";
+								if (isset($lock_all) && $lock_all==$all_lock_rules[$i]["lock_id"]) {
+									echo " selected ";
+								} elseif (!isset($lock_all) && ($all_lock_rules[$i]["lock_id"]==$db5->f("lock_rule"))) {
+									echo " selected ";
+								}
+								echo ">".htmlReady($all_lock_rules[$i]["name"])."</option>";
 							}
-							echo ">".$all_lock_rules[$i]["name"]."</option>";
-						}
-					?>
-					</select>
-
-				<?
-				}
+						?>
+						</select>
+	
+					<?
+					}
 				break;
-		case "admin_aux.php":
-				$db5 = new Db_Seminar;
-				$db5->query("SELECT aux_lock_rule from seminare WHERE Seminar_id='$seminar_id'");
-				$db5->next_record();
-				if ($perm->have_perm("admin")) {
-					?>
-					<input type="hidden" name="make_aux" value="1">
-					<select name=aux_sem[<? echo $seminar_id ?>]>
-					<option value="null">-- <?=_("keine Zusatzangaben")?> --</option>
-					<?
-						foreach ((array)$all_aux_rules as $lock_id => $data) {
-							echo '<option value="'.$lock_id.'"';
-							if (isset($aux_all) && $aux_all==$lock_id) {
-								echo ' selected ';
-							} elseif (!isset($aux_all) && ($lock_id == $db5->f("aux_lock_rule"))) {
-								echo ' selected ';
+				case "admin_aux.php":
+					$db5 = new Db_Seminar;
+					$db5->query("SELECT aux_lock_rule from seminare WHERE Seminar_id='$seminar_id'");
+					$db5->next_record();
+					if ($perm->have_perm("admin")) {
+						?>
+						<input type="hidden" name="make_aux" value="1">
+						<select name=aux_sem[<? echo $seminar_id ?>]>
+						<option value="null">-- <?=_("keine Zusatzangaben")?> --</option>
+						<?
+							foreach ((array)$all_aux_rules as $lock_id => $data) {
+								echo '<option value="'.$lock_id.'"';
+								if (isset($aux_all) && $aux_all==$lock_id) {
+									echo ' selected ';
+								} elseif (!isset($aux_all) && ($lock_id == $db5->f("aux_lock_rule"))) {
+									echo ' selected ';
+								}
+								echo '>'.htmlReady($data['name']).'</option>';
 							}
-							echo '>'.$data['name'].'</option>';
-						}
-					?>
-					</select>
-				<?
-				}
+						?>
+						</select>
+					<?
+					}
 				break;
 
 				case "admin_visibility.php":

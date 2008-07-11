@@ -56,7 +56,7 @@ function show_content() {
 
 function show_lock_rule_form($lockdata="",$edit=0) {
 	if ($edit) {
-		$form =	"<h3>"._($lockdata["name"]."&nbsp;&auml;ndern")."</h3>";
+		$form =	"<h3>".sprintf("Sperrebene \"%s\" ändern", htmlready($lockdata["name"]))."</h3>";
 	} else {
 		$form =	"<h3>"._("Neue Sperrebene eingeben")."</h3>";
 	}
@@ -66,9 +66,9 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	$form .= "<input type=\"hidden\" name=\"lockdata[lock_id]\" value=\"".$lockdata["lock_id"]."\">";
 	$form .= $zt2->openRow();
 	$form .= $zt2->cell(_("Name"),array("width"=>"80%"));
-	$form .= $zt2->cell("<input type=\"text\" name=\"lockdata[name]\" value=\"".$lockdata["name"]."\">",array("width"=>"20%","colspan"=>"2"));
+	$form .= $zt2->cell("<input type=\"text\" name=\"lockdata[name]\" value=\"".htmlReady($lockdata["name"])."\">",array("width"=>"20%","colspan"=>"2"));
 	//$form .= $zt2->row(array(_("Name"),"<input type=\"text\" name=\"lockdata[name]\" value=\"".$lockdata["name"]."\">",""));
-	$form .= $zt2->row(array(_("Beschreibung"),"<textarea name=\"lockdata[description]\" rows=5 cols=30>".$lockdata["description"]."</textarea>",""));
+	$form .= $zt2->row(array(_("Beschreibung"),"<textarea name=\"lockdata[description]\" rows=5 cols=30>".htmlReady($lockdata["description"])."</textarea>",""));
 	$form .= $zt2->close();
 	$form .= "<br>";
 	$zt = new ZebraTable(array("width"=>"100%","padding"=>"5"));
@@ -274,14 +274,14 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	$form .= $zt->closeRow();
 	$form .= $zt->openRow();
 	if ($lockdata["attributes"]["admission_endtime"]) {
-		$form .= $zt->row(array(_("Aufhebung der Kontigentierung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=0>"));
+		$form .= $zt->row(array(_("Zeit/Datum des Losverfahrens/Kontingentierung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Aufhebung der Kontingentierung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=0 checked>"));
+		$form .= $zt->row(array(_("Zeit/Datum des Losverfahrens/Kontingentierung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_endtime]\" value=0 checked>"));
 	}
-	if ($lockdata["attributes"]["admission_waitlist"]) {
-		$form .= $zt->row(array(_("Aktivieren/Deaktivieren der Warteliste"),"<input type=\"radio\" name=\"lockdata[attributes][admission_waitlist]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_waitlist]\" value=0>"));
+	if ($lockdata["attributes"]["admission_disable_waitlist"]) {
+		$form .= $zt->row(array(_("Aktivieren/Deaktivieren der Warteliste"),"<input type=\"radio\" name=\"lockdata[attributes][admission_disable_waitlist]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_disable_waitlist]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Aktivieren/Deaktivieren der Warteliste"),"<input type=\"radio\" name=\"lockdata[attributes][admission_waitlist]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_waitlist]\" value=0 checked>"));
+		$form .= $zt->row(array(_("Aktivieren/Deaktivieren der Warteliste"),"<input type=\"radio\" name=\"lockdata[attributes][admission_disable_waitlist]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_disable_waitlist]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["admission_binding"]) {
 		$form .= $zt->row(array(_("Verbindlichkeit der Anmeldung"),"<input type=\"radio\" name=\"lockdata[attributes][admission_binding]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_binding]\" value=0>"));
@@ -292,11 +292,6 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 		$form .= $zt->row(array(_("Typ des Anmeldeverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=0>"));
 	} else {
 		$form .= $zt->row(array(_("Typ des Anmeldeverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=0 checked>"));
-	}
-	if ($lockdata["attributes"]["admission_selection_take_place"]) {
-		$form .= $zt->row(array(_("Zeit/Datum des Losverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_selection_take_place]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_selection_take_place]\" value=0>"));
-	} else {
-		$form .= $zt->row(array(_("Zeit/Datum des Losverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_selection_take_place]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_selection_take_place]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["admission_prelim"]) {
 		$form .= $zt->row(array(_("Vorl&auml;ufigkeit der Anmeldungen"),"<input type=\"radio\" name=\"lockdata[attributes][admission_prelim]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_prelim]\" value=0>"));

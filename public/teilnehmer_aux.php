@@ -341,10 +341,7 @@ switch ($_REQUEST['display_type']) {
 		break;
 
 	default:
-		echo $ct->openRow();
-		echo $ct->cell('&nbsp;<b>'. _("Zusatzangaben") .'</b>', array('class' => 'topic', 'colspan' => '20'));
-		echo $ct->closeRow();
-
+		
 		echo $ct->openRow(array('class' => 'blank'));
 		echo $ct->cell('<br/>', array('colspan' => '20'));
 		echo $ct->closeRow();

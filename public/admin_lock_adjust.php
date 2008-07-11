@@ -36,6 +36,9 @@ require_once("lib/visual.inc.php");
 require_once("lib/classes/Table.class.php");
 require_once("lib/classes/ZebraTable.class.php");
 
+
+$CURRENT_PAGE = _("Sperrebenen von Veranstaltungen anpassen");
+
 // Start of Output
 include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php"); // Output of Stud.IP head
@@ -45,7 +48,6 @@ include ("lib/include/header.php"); // Output of Stud.IP head
 include ("lib/include/links_admin.inc.php"); //Linkleiste fuer admins
 
 $containerTable = new ContainerTable();
-echo $containerTable->headerRow("<b>&nbsp;Sperrebenen von Veranstaltungen anpassen</b>");
 echo $containerTable->openRow();
 echo $containerTable->openCell(array("colspan"=>"2"));
 $contentTable = new ContentTable();
@@ -72,7 +74,7 @@ else if ($action=="insert") {
 		echo show_lock_rule_form($lockdata);
 	} else {
 		$insertdata = parse_lockdata($lockdata);		// delete 0-values
-		if (insert_lock_rule($insertdata)) {
+		if (insert_lock_rule(remove_magic_quotes($insertdata))) {
 			echo $contentTable->closeCell();
 			echo $contentTable->closeRow();
 			parse_msg("msg§"._("Einf&uuml;gen erfolgreich"), "§", "blank", 1, FALSE );
@@ -88,7 +90,7 @@ else if ($action=="edit") {								// Zeige Form?
 }
 else if ($action=="confirm_edit") {						// UPDATE!!
 	$updatedata = parse_lockdata($lockdata);		// delete 0-values
-	if (!update_existing_rule($updatedata)) {
+	if (!update_existing_rule(remove_magic_quotes($updatedata))) {
 		echo $contentTable->closeCell();
 		echo $contentTable->closeRow();
 		parse_msg("error§"._("Die &Auml;nderung ist fehlgeschlagen"), "§", "blank", 1, FALSE );
@@ -131,7 +133,7 @@ else if ($action=="confirm_delete") {
 		echo $contentTable->openCell();
 		echo "<font size=2>"._("Wollen Sie die Sperrebene l&ouml;schen?")."</font>";
 		echo "<br><br>";
-		echo "<a href=\"".$PHP_SELF."?lock_id=".$lock_id."&action=delete\">".makeButton("ja2","img")."</a>&nbsp;&nbsp;<a href=\"".$PHP_SELF."\">".makeButton("nein","img")."</a>";
+		echo "<a href=\"".URLHelper::getLink("lock_id=".$lock_id."&action=delete")."\">".makeButton("ja2","img")."</a>&nbsp;&nbsp;<a href=\"".URLHelper::getLink()."\">".makeButton("nein","img")."</a>";
 		echo show_content();
 	} else {
 		echo $contentTable->closeCell();
@@ -148,10 +150,6 @@ else {
 
 echo $contentTable->close();
 echo $containerTable->close();
-
-
-echo "</body>";
-echo "</html>";
-
+include "lib/include/html_end.inc.php";
 page_close();
-
+?>

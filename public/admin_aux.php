@@ -91,7 +91,7 @@ echo $zt->closeRow();
 
 // a Seminar is selected!
 if (isset($SessSemName[1]) && isset($selected)) {
-	$form	 = 	"<form name=\"\" action=\"".$PHP_SELF."\">";
+	$form	 = 	"<form name=\"\" action=\"".$PHP_SELF."\" method=\"post\">";
 	$form	.=	"<input type=\"hidden\" name=\"make_aux\" value=1>";
 	$form .=	"<select name=aux_sem[".$SessSemName[1]."]>";
 	$form .= "<option value=\"null\">-- ". _("keine Zusatzangaben"). " --</option>";
@@ -101,14 +101,14 @@ if (isset($SessSemName[1]) && isset($selected)) {
 			if ($id == $db7->f("aux_lock_rule")) {
 				$form .= " selected ";
 			}
-			$form .= ">".$rule["name"]."</option>";
+			$form .= ">".htmlReady($rule["name"])."</option>";
 		}
 	}
 	$form	.=	"</select>";
 	$form 	.=	"<input type=\"hidden\" name=\"aux_all\" value=\"-1\">";
-	$form	.=	"<input type=\"IMAGE\" ".makeButton("zuweisen", "src")." border=0 align=\"absmiddle\" />";
+	$form	.=	makeButton("zuweisen",'input');
 	$form 	.=	"</form>";
-	echo $zt->row(array($db7->f("Veranstaltungsnummer"), $db7->f("Name"), $form));
+	echo $zt->row(array(htmlReady($db7->f("Veranstaltungsnummer")), htmlReady($db7->f("Name")), $form));
 
 }
 
@@ -118,7 +118,7 @@ if (is_array($aux_sem) && (!$selected)) {
 		$db->query($sql);
 		if ($db->next_record()) {
 				$rule = AuxLockRules::getLockRuleById($val);
-				echo $zt->row(array($db->f("Veranstaltungsnummer"), $db->f("Name"), $rule["name"]));
+				echo $zt->row(array(htmlReady($db->f("Veranstaltungsnummer")), htmlReady($db->f("Name")), htmlReady($rule["name"])));
 				if ($make_aux) {
 					if ($val == 'null') {
 						$sql = "UPDATE seminare SET aux_lock_rule = NULL WHERE Seminar_id='".$key."'";

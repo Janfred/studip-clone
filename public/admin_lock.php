@@ -40,7 +40,8 @@ require_once("lib/visual.inc.php");
 require_once("lib/classes/Table.class.php");
 require_once("lib/classes/ZebraTable.class.php");
 require_once("lib/classes/LockRules.class.php");
-
+ 
+$CURRENT_PAGE = _("Sperren von Veranstaltungen");
 // Start of Output
 include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php"); // Output of Stud.IP head
@@ -60,11 +61,10 @@ if (isset($SessSemName[1]) && (!$make_lock)) {
 }
 // # Get a database connection
 $lock_rules = new LockRules();
-$all_lock_rules = $lock_rules->getAllLockRules();
+$all_lock_rules = array_merge(array(array('name' => '--' . _("keine Sperrebene") . '--','lock_id' => 'none')), (array)$lock_rules->getAllLockRules());
 
 //echo "<body>";
 $containerTable=new ContainerTable();
-echo $containerTable->headerRow("<b>&nbsp;" . _("Sperren von Veranstaltungen") . "</b>");
 echo $containerTable->openRow();
 echo $containerTable->openCell(array("colspan"=>"2"));
 
@@ -79,22 +79,22 @@ echo $zt->closeRow();
 
 // a Seminar is selected!
 if (isset($SessSemName[1]) && isset($selected)) {
-	$form	 = 	"<form name=\"\" action=\"".$PHP_SELF."\">";
-	$form	.=	"<input type=\"hidden\" name=\"make_lock\" value=1>";
-	$form 	.=	"<select name=lock_sem[".$SessSemName[1]."]>";
+	$form	 = 	"<form name=\"\" action=\"".$PHP_SELF."\" method=\"post\">";
+	$form	.=	"<input type=\"hidden\" name=\"make_lock\" value=\"1\">";
+	$form 	.=	"<select name=\"lock_sem[{$SessSemName[1]}]\">";
 	for ($i=0;$i<count($all_lock_rules);$i++) {
-		$form .= "<option value=".$all_lock_rules[$i]["lock_id"]."";
+		$form .= "<option value=\"".$all_lock_rules[$i]["lock_id"]."\"";
 		if ($all_lock_rules[$i]["lock_id"]==$seminar_row["lock_rule"]) {
 			$form .= " selected ";
 		}
-		$form .= ">".$all_lock_rules[$i]["name"]."</option>";
+		$form .= ">".htmlReady($all_lock_rules[$i]["name"])."</option>";
 	}
 	$form	.=	"</select>";
 	$form 	.=	"<input type=\"hidden\" name=\"lock_all\" value=\"-1\">";
-	$form	.=	"<input type=\"IMAGE\" ".makeButton("zuweisen", "src")." border=0 align=\"absmiddle\" />";
+	$form	.=	makeButton("zuweisen", "input");
 	$form 	.=	"</form>";
-	echo $zt->row(array($seminar_row["Veranstaltungsnummer"],
-	                    $seminar_row["Name"],
+	echo $zt->row(array(htmlReady($seminar_row["Veranstaltungsnummer"]),
+	                    htmlReady($seminar_row["Name"]),
 	                    $form));
 
 }
@@ -117,9 +117,9 @@ if (is_array($lock_sem) && !$selected) {
 		if ($row = $stmt->fetch()) {
 
 			$rule = $lock_rules->getLockRule($val);
-			echo $zt->row(array($row["Veranstaltungsnummer"],
-			                    $row["Name"],
-			                    $rule["name"]));
+			echo $zt->row(array(htmlReady($row["Veranstaltungsnummer"]),
+			                    htmlReady($row["Name"]),
+			                    htmlReady($rule["name"])));
 			if ($make_lock) {
 				if ($val != 'none') {
 					$stmt_lock1->execute(array($val, $key));
@@ -130,7 +130,7 @@ if (is_array($lock_sem) && !$selected) {
 		}
 		else {
 			echo $zt->row(array("&nbsp;",
-			                    $row["Name"],
+			                    htmlReady($row["Name"]),
 			                    "<font color=red>".
 			                    _("Änderung fehlgeschlagen").
 			                    "</font>"));
@@ -142,7 +142,6 @@ echo $contentTable->close();
 
 echo $containerTable->blankRow();
 echo $containerTable->close();
-echo "</body>";
-echo "</html>";
+include "lib/include/html_end.inc.php";
 page_close();
-
+?>

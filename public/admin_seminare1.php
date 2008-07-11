@@ -1458,7 +1458,7 @@ if (($s_id) && (auth_check())) {
           <? endif; ?>
 				</td>
         <td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp;
-          <? if (! $lockdata[$lock_status]["vorraussetzungen"]) : ?>
+          <? if (! $lockdata[$lock_status]["voraussetzungen"]) : ?>
             <textarea name="vorrausetzungen" cols=58 rows=3><?= htmlReady($db->f("vorrausetzungen")) ?></textarea>
           <? else : ?>
             <textarea disabled readonly name="vorrausetzungen" cols=58 rows=3><?= htmlReady($db->f("vorrausetzungen")) ?></textarea>
