@@ -61,10 +61,10 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 	function doCrypt() {
 		if (document.Formular.read_level[<?=(get_config('ENABLE_FREE_ACCESS') ? 2 : 1)?>].checked || document.Formular.write_level[1].checked){
 			if(checkpasswordenabled() && checkpassword() && checkpassword2()){
-				document.Formular.hashpass.value = MD5(document.Formular.password.value);
-				document.Formular.hashpass2.value = MD5(document.Formular.password2.value);
-				document.Formular.password.value = "";
-				document.Formular.password2.value = "";
+				document.Formular.hashpass.value = MD5(document.Formular.sem_passwd.value);
+				document.Formular.hashpass2.value = MD5(document.Formular.sem_passwd2.value);
+				document.Formular.sem_passwd.value = "";
+				document.Formular.sem_passwd2.value = "";
 				return true;
 			} else {
 				return false;
@@ -75,9 +75,9 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 	function checkpasswordenabled(){
 		var checked = true;
-		if (document.Formular.password.value.length == 0){
+		if (document.Formular.sem_passwd.value.length == 0){
 			alert("<?= _("Sie haben Lese- oder Schreibzugriff nur mit Passwort gewählt. Bitte geben Sie ein Passwort ein.") ?>");
-			document.Formular.password.focus();
+			document.Formular.sem_passwd.focus();
 			checked = false;
 		}
 		return checked;
@@ -85,9 +85,9 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 	function checkpassword(){
 		var checked = true;
-		if ((document.Formular.password.value.length<4) && (document.Formular.password.value.length != 0)) {
+		if ((document.Formular.sem_passwd.value.length<4) && (document.Formular.sem_passwd.value.length != 0)) {
 			alert("<?= _("Das Passwort ist zu kurz. Es sollte mindestens 4 Zeichen lang sein.") ?>");
-			document.Formular.password.focus();
+			document.Formular.sem_passwd.focus();
 			checked = false;
 		}
 		return checked;
@@ -95,9 +95,9 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 	function checkpassword2(){
 	var checked = true;
-	if (document.Formular.password.value != document.Formular.password2.value) {
+	if (document.Formular.sem_passwd.value != document.Formular.sem_passwd2.value) {
 		alert("<?=_("Das Passwort stimmt nicht mit dem Wiederholungspasswort überein!") ?>");
-		document.Formular.password2.focus();
+		document.Formular.sem_passwd2.focus();
 		checked = false;
 		}
 		return checked;
@@ -410,12 +410,12 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		if (($admin_admission_data["read_level"] == 2 || $admin_admission_data["write_level"] == 2) && !isset($lockdata[$lock_status]["Passwort"])) {
        			//Password bei Bedarf dann doch noch verschlusseln
 			if (empty($hashpass)) { // javascript disabled
-   				if (!$password)
+   				if (!$sem_passwd)
        					$admin_admission_data["passwort"] = "";
-				elseif($password != "*******") {
-					$admin_admission_data["passwort"] = md5($password);
-	     					if($password2 != "*******")
-    							$check_pw = md5($password2);
+				elseif($sem_passwd != "*******") {
+					$admin_admission_data["passwort"] = md5($sem_passwd);
+	     					if($sem_passwd2 != "*******")
+    							$check_pw = md5($sem_passwd2);
 	    			}
     			} elseif ($hashpass != md5("*******")) { // javascript enabled
 				$admin_admission_data["passwort"]= $hashpass;
@@ -1077,12 +1077,12 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 					<?
 					if ($admin_admission_data["passwort"]!="") {
 						echo "<font size=-1><input type=\"password\" ";
-						echo "name=\"password\"  onchange=\"checkpassword()\" size=12 maxlength=31 value=\"*******\">&nbsp; "._("Passwort-Wiederholung:")."&nbsp; <input type=\"password\" ";
-						echo "name=\"password2\" onchange=\"checkpassword2()\" size=12 maxlength=31 value=\"*******\"></font>";
+						echo "name=\"sem_passwd\"  onchange=\"checkpassword()\" size=12 maxlength=31 value=\"*******\">&nbsp; "._("Passwort-Wiederholung:")."&nbsp; <input type=\"password\" ";
+						echo "name=\"sem_passwd2\" onchange=\"checkpassword2()\" size=12 maxlength=31 value=\"*******\"></font>";
 					}
 					else {
-						echo "<font size=-1><input type=\"password\" name=\"password\" ";
-						echo "onchange=\"checkpassword()\" size=12 maxlength=31> &nbsp; "._("Passwort-Wiederholung:")."&nbsp; <input type=\"password\" name=\"password2\" ";
+						echo "<font size=-1><input type=\"password\" name=\"sem_passwd\" ";
+						echo "onchange=\"checkpassword()\" size=12 maxlength=31> &nbsp; "._("Passwort-Wiederholung:")."&nbsp; <input type=\"password\" name=\"sem_passwd2\" ";
 						echo "onchange=\"checkpassword2()\" size=12 maxlength=31></font>";
             } ?>
 

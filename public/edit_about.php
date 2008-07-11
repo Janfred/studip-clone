@@ -241,11 +241,11 @@ if (check_ticket($studipticket)) {
 	if ($cmd == "edit_pers" || $cmd == 'edit_leben') {
 		//email und passwort können nicht sinnvoll gleichzeitig geändert werden, da bei Änderung der email automatisch das passwort neu gesetzt wird
 		if (($email && $my_about->auth_user["Email"] != $email)
-			&& (($response && $response != md5("*****")) || ($password && $password != "*****"))) {
+			&& (($response && $response != md5("*****")) || ($passwd && $passwd != "*****"))) {
 			$my_about->msg = $my_about->msg . "error§" . _("Bitte ändern Sie erst ihre E-Mail-Adresse und dann ihr Passwort!") . "§";
 
 		} else {
-		$my_about->edit_pers($password, $check_pass, $response, $new_username, $vorname, $nachname, $email, $telefon, $cell, $anschrift, $home,$motto, $hobby, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view);
+		$my_about->edit_pers($passwd, $check_pass, $response, $new_username, $vorname, $nachname, $email, $telefon, $cell, $anschrift, $home,$motto, $hobby, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view);
 			if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde geändert!
 			else $my_about->get_auth_user($username);
 			$username = $my_about->auth_user["username"];
@@ -358,12 +358,12 @@ function checkusername(){
 
 function checkpassword(){
  var checked = true;
- if (document.pers.password.value.length<4) {
+ if (document.pers.passwd.value.length<4) {
 	alert("<?=_("Das Passwort ist zu kurz - es sollte mindestens 4 Zeichen lang sein.")?>");
-	 document.pers.password.focus();
+	 document.pers.passwd.focus();
 	checked = false;
 	}
- if (document.pers.password.value != document.pers.check_pass.value)
+ if (document.pers.passwd.value != document.pers.check_pass.value)
 	{
 	alert("<?=_("Bei der Wiederholung des Paßwortes ist ein Fehler aufgetreten! Bitte geben sie das exakte Paßwort ein!")?>");
 	document.pers.check_pass.focus();
@@ -412,7 +412,7 @@ function checkdata(){
  var checked = true;
  if (document.pers.new_username && !checkusername())
 	checked = false;
- if (document.pers.password && !checkpassword())
+ if (document.pers.passwd && !checkpassword())
 	checked = false;
  if (document.pers.vorname && !checkvorname())
 	checked = false;
@@ -423,8 +423,8 @@ function checkdata(){
  if (checked) {
 	 document.pers.method = "post";
 	 document.pers.action = "<?php print ("$PHP_SELF?cmd=edit_pers&username=$username&view=$view&studipticket=".get_ticket()) ?>";
-	 document.pers.response.value = MD5(document.pers.password.value);
-	 document.pers.password.value = "*****";
+	 document.pers.response.value = MD5(document.pers.passwd.value);
+	 document.pers.passwd.value = "*****";
 	 document.pers.check_pass.value = "*****";
  }
  return checked;
@@ -650,7 +650,7 @@ if ($view == 'Daten') {
 	if (StudipAuthAbstract::CheckField("auth_user_md5.password", $my_about->auth_user['auth_plugin'])) {
 		echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp; <font size=\"-1\">*****</font>";
 	} else {
-		echo "<td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("neues Passwort:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"password\" value=\"*****\"><input type=\"HIDDEN\" name=\"response\" value=\"\">&nbsp; <font color=\"red\" size=+2>*</font>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"55%\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Passwort-Wiederholung:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"check_pass\" value=\"*****\">&nbsp; <font color=\"red\" size=+2>*</font>";
+		echo "<td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("neues Passwort:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"passwd\" value=\"*****\"><input type=\"HIDDEN\" name=\"response\" value=\"\">&nbsp; <font color=\"red\" size=+2>*</font>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"55%\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Passwort-Wiederholung:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"check_pass\" value=\"*****\">&nbsp; <font color=\"red\" size=+2>*</font>";
 	}
 	echo "</td></tr>\n";
 
