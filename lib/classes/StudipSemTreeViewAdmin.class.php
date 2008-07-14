@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 # Lifter005: TODO
 // +---------------------------------------------------------------------------+
@@ -22,10 +23,10 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once("lib/classes/StudipSemTree.class.php");
-require_once("lib/classes/TreeView.class.php");
-require_once 'lib/functions.php';
-require_once("config.inc.php");
+require_once "lib/classes/StudipSemTree.class.php";
+require_once "lib/classes/TreeView.class.php";
+require_once "lib/functions.php";
+require_once "config.inc.php";
 
 
 /**
@@ -48,20 +49,12 @@ class StudipSemTreeViewAdmin extends TreeView {
 	* @access public
 	*/
 	function StudipSemTreeViewAdmin($start_item_id = "root"){
-		global $sess,$_marked_item,$_marked_sem;
 		$this->start_item_id = ($start_item_id) ? $start_item_id : "root";
 		$this->root_content = $GLOBALS['UNI_INFO'];
 		parent::TreeView("StudipSemTree"); //calling the baseclass constructor
-		if (is_object($sess)){
-			if (!$sess->is_registered("_marked_item"))
-			$sess->register("_marked_item");
-			if (!$sess->is_registered("_marked_sem"))
-			$sess->register("_marked_sem");
-			$this->marked_item =& $_marked_item;
-			$this->marked_sem =& $_marked_sem;
-		}
+		URLHelper::bindLinkParam("_marked_item", $this->marked_item);
+		$this->marked_sem =& $_SESSION['_marked_sem'];
 		$this->parseCommand();
-		
 	}
 	
 	/**
@@ -82,8 +75,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 			}
 		}
 		
-		if ($_REQUEST['item_id'])
-		$this->anchor = $_REQUEST['item_id'];
+		if ($_REQUEST['item_id']) $this->anchor = $_REQUEST['item_id'];
 		
 	}
 	
@@ -726,14 +718,11 @@ class StudipSemTreeViewAdmin extends TreeView {
 	}
 	
 	function getSelf($param = "", $with_start_item = true){
-		$url = $GLOBALS['PHP_SELF'] . "?" . "foo=" . DbView::get_uniqid();
-		if ($this->mode)
-		$url .= "&mode=" . $this->mode;
-		if ($param)
-		$url .= (($with_start_item) ? "&start_item_id=" . $this->start_item_id . "&" : "&") . $param . "#anchor";
-		else
-		$url .= (($with_start_item) ? "&start_item_id=" . $this->start_item_id : "") . "#anchor";
-		return $url;
+		$url = "foo=" . DbView::get_uniqid();
+		if ($this->mode) $url .= "&mode=" . $this->mode;
+		if ($with_start_item) $url .= "&start_item_id=" . $this->start_item_id;
+		if ($param) $url .= '&' . $param;
+		return parent::getSelf($url);
 	}
 }
 //test

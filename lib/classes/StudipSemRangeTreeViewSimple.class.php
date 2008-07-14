@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
@@ -21,9 +22,9 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once("lib/classes/StudipRangeTree.class.php");
-require_once ("lib/classes/RangeTreeObject.class.php");
-require_once("config.inc.php");
+require_once "lib/classes/StudipRangeTree.class.php";
+require_once "lib/classes/RangeTreeObject.class.php";
+require_once "config.inc.php";
 
 /**
 * class to print out the range tree
@@ -180,11 +181,8 @@ class StudipSemRangeTreeViewSimple {
 
 
 	function getSelf($param = "", $with_start_item = true){
-		if ($param)
-			$url = $GLOBALS['PHP_SELF'] . (($with_start_item) ? "?start_item_id=" . $this->start_item_id . "&" : "?") . $param ;
-		else
-			$url = $GLOBALS['PHP_SELF'] . (($with_start_item) ? "?start_item_id=" . $this->start_item_id : "") ;
-		return $url;
+		$url = (($with_start_item) ? "start_item_id=" . $this->start_item_id . "&" : "") . $param ;
+		return URLHelper::getLink('?' . $url);
 	}
 }
 ?>

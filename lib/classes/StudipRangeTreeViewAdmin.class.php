@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
@@ -720,15 +721,13 @@ class StudipRangeTreeViewAdmin extends TreeView{
 	}
 
 	function getSelf($param){
-		$url = $GLOBALS['PHP_SELF'] . "?" . "foo=" . DbView::get_uniqid();
-		if ($this->mode)
-			$url .= "&mode=" . $this->mode;
-		if ($param)
-			$url .= "&" . $param;
-		$url .= "#anchor";
-	return $url;
+		$url = "foo=" . DbView::get_uniqid();
+		if ($this->mode) $url .= "&mode=" . $this->mode;
+		if ($param) $url .= '&' . $param;
+		return parent::getSelf($url);
 	}
 }
+
 //test
 //page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 //include 'lib/include/html_head.inc.php';

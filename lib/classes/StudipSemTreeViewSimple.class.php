@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
@@ -170,14 +171,9 @@ class StudipSemTreeViewSimple {
 		return $ret;
 	}
 
-
-
 	function getSelf($param = "", $with_start_item = true){
-		if ($param)
-			$url = $GLOBALS['PHP_SELF'] . (($with_start_item) ? "?start_item_id=" . $this->start_item_id . "&" : "?") . $param ;
-		else
-			$url = $GLOBALS['PHP_SELF'] . (($with_start_item) ? "?start_item_id=" . $this->start_item_id : "") ;
-		return $url;
+		$url = (($with_start_item) ? "start_item_id=" . $this->start_item_id . "&" : "") . $param ;
+		return URLHelper::getLink('?' . $url);
 	}
 }
 ?>
