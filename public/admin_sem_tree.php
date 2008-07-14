@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
@@ -54,10 +55,10 @@ if ($search_obj->search_done){
 		$_msg = "error§" . _("Es wurden mehr als 50 Veranstaltungen gefunden! Bitte schr&auml;nken Sie Ihre Suche weiter ein.");
 	} elseif ($search_obj->search_result->numRows > 0){
 		$_msg = "msg§" .sprintf(_("Es wurden %s Veranstaltungen gefunden, und in Ihre Merkliste eingef&uuml;gt"),$search_obj->search_result->numRows);
-		if (is_array($_marked_sem) && count($_marked_sem)){
-			$_marked_sem = array_merge((array)$_marked_sem, (array)$search_obj->search_result->getDistinctRows("seminar_id"));
+		if (is_array($_SESSION['_marked_sem']) && count($_SESSION['_marked_sem'])){
+			$_SESSION['_marked_sem'] = array_merge((array)$_SESSION['_marked_sem'], (array)$search_obj->search_result->getDistinctRows("seminar_id"));
 		} else {
-			$_marked_sem = $search_obj->search_result->getDistinctRows("seminar_id");
+			$_SESSION['_marked_sem'] = $search_obj->search_result->getDistinctRows("seminar_id");
 		}
 	} else {
 		$_msg = "info§" . _("Es wurden keine Veranstaltungen gefunden, auf die Ihre Suchkriterien zutreffen.");
@@ -69,9 +70,9 @@ if ($_REQUEST['cmd'] == "MarkList"){
 		if ($_REQUEST['mark_list_aktion'] == "del"){
 			$count_del = 0;
 			for ($i = 0; $i < count($_REQUEST['sem_mark_list']); ++$i){
-				if (isset($_marked_sem[$_REQUEST['sem_mark_list'][$i]])){
+				if (isset($_SESSION['_marked_sem'][$_REQUEST['sem_mark_list'][$i]])){
 					++$count_del;
-					unset($_marked_sem[$_REQUEST['sem_mark_list'][$i]]);
+					unset($_SESSION['_marked_sem'][$_REQUEST['sem_mark_list'][$i]]);
 				}
 			}
 			$_msg .= "msg§" . sprintf(_("%s Veranstaltung(en) wurde(n) aus Ihrer Merkliste entfernt."),$count_del);
@@ -183,8 +184,8 @@ $the_tree->showSemTree();
 	<select multiple size="20" name="sem_mark_list[]" style="font-size:8pt;width:100%">
 	<?
 	$cols = 50;
-	if (is_array($_marked_sem) && count($_marked_sem)){
-		$view->params[0] = array_keys($_marked_sem);
+	if (is_array($_SESSION['_marked_sem']) && count($_SESSION['_marked_sem'])){
+		$view->params[0] = array_keys($_SESSION['_marked_sem']);
 		$entries = new DbSnapshot($view->get_query("view:SEMINAR_GET_SEMDATA"));
 		$sem_data = $entries->getGroupedResult("seminar_id");
 		$sem_number = -1;
