@@ -531,17 +531,17 @@ class AssignObject {
 			$this->resource_id = $res["resource_id"];
 			$this->assign_user_id = $res["assign_user_id"];
 			$this->user_free_name = $res["user_free_name"];
-			$this->begin =$res["begin"];
-			$this->end = $res["end"];
-			$this->repeat_end = $res["repeat_end"];
-			$this->repeat_quantity = $res["repeat_quantity"];
-			$this->repeat_interval = $res["repeat_interval"];
-			$this->repeat_month_of_year  =$res["repeat_month_of_year"];
-			$this->repeat_day_of_month =$res["repeat_day_of_month"];
-			$this->repeat_month = $res["repeat_month"];
-			$this->repeat_week_of_month = $res["repeat_week_of_month"];
-			$this->repeat_day_of_week = $res["repeat_day_of_week"];
-			$this->repeat_week = $res["repeat_week"];
+			$this->begin = (int)$res["begin"];
+			$this->end =  (int)$res["end"];
+			$this->repeat_end =  (int)$res["repeat_end"];
+			$this->repeat_quantity =  (int)$res["repeat_quantity"];
+			$this->repeat_interval =  (int)$res["repeat_interval"];
+			$this->repeat_month_of_year  = (int)$res["repeat_month_of_year"];
+			$this->repeat_day_of_month = (int)$res["repeat_day_of_month"];
+			$this->repeat_month = (int)$res["repeat_month"];
+			$this->repeat_week_of_month = (int)$res["repeat_week_of_month"];
+			$this->repeat_day_of_week = (int)$res["repeat_day_of_week"];
+			$this->repeat_week = (int)$res["repeat_week"];
 			return TRUE;
 		}
 		return FALSE;

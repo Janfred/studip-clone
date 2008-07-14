@@ -70,7 +70,7 @@ function list_restore_assign(&$assEvtLst, $resource_id, $begin, $end, $user_id='
 	}
 }
 
-function create_assigns($assign_object, &$assEvtLst, $begin='', $end='', $filter = FALSE) {
+function create_assigns($assign_object, &$assEvtLst, $begin=0, $end=0, $filter = FALSE) {
 	$year_offset=0;
 	$week_offset=0;
 	$month_offset=0;
