@@ -718,11 +718,11 @@ class StudipSemTreeViewAdmin extends TreeView {
 	}
 	
 	function getSelf($param = "", $with_start_item = true){
-		$url = "foo=" . DbView::get_uniqid();
-		if ($this->mode) $url .= "&mode=" . $this->mode;
-		if ($with_start_item) $url .= "&start_item_id=" . $this->start_item_id;
-		if ($param) $url .= '&' . $param;
-		return parent::getSelf($url);
+		$url_params = "foo=" . DbView::get_uniqid();
+		if ($this->mode) $url_params .= "&mode=" . $this->mode;
+		if ($with_start_item) $url_params .= "&start_item_id=" . $this->start_item_id;
+		if ($param) $url_params .= '&' . $param;
+		return parent::getSelf($url_params);
 	}
 }
 //test

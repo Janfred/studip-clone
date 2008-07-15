@@ -721,10 +721,10 @@ class StudipRangeTreeViewAdmin extends TreeView{
 	}
 
 	function getSelf($param){
-		$url = "foo=" . DbView::get_uniqid();
-		if ($this->mode) $url .= "&mode=" . $this->mode;
-		if ($param) $url .= '&' . $param;
-		return parent::getSelf($url);
+		$url_params = "foo=" . DbView::get_uniqid();
+		if ($this->mode) $url_params .= "&mode=" . $this->mode;
+		if ($param) $url_params .= '&' . $param;
+		return parent::getSelf($url_params);
 	}
 }
 
