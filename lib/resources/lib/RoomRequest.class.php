@@ -209,6 +209,17 @@ class RoomRequest {
 		$this->chng_flag=TRUE;
 	}
 
+	/**
+	 * this function changes the state of the room-request
+	 *
+	 * possible states are:
+	 *  0 - room-request is open
+	 *  1 - room-request has been edited, but no confirmation has been sent
+	 *  2 - room-request has been edited and a confirmation has been sent
+	 *  3 - room-request has been declined
+	 *
+	 * @param integer $value one of the states 
+	 */
 	function setClosed($value) {
 		$this->closed=$value;
 		$this->chng_flag=TRUE;

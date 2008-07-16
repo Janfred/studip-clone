@@ -1380,7 +1380,7 @@ if ($save_state_x) {
 						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_blank\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
 					} else {
 						$req_added_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_blank\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
-						$copyReqObj = $reqObj;
+						$copyReqObj = clone $reqObj;
 						$copyReqObj->copy();
 						$copyReqObj->setTerminId($val["termin_id"]);
 						$copyReqObj->store();
@@ -1767,46 +1767,47 @@ if ($_sendMessage) {
 		//$request_ids[] = $val["request_id"];
 		$request_data[$val["request_id"]] = $val;
 	}
-	/*
-	$in="('".join("','",$request_ids)."')";
 
-	$query = sprintf ("SELECT request_id, seminar_id FROM resources_requests WHERE closed = 1 AND request_id IN %s", $in);
-	$db->query($query);
+	$reqObj = new RoomRequest($_sendMessage['request_id']);
+	$semObj = new Seminar($_sendMessage['seminar_id']);
 
-	while ($db->next_record()) {*/
-		$reqObj = new RoomRequest($_sendMessage['request_id']);
-		$semObj = new Seminar($_sendMessage['seminar_id']);
+	// first we have to get all users to which the message will be sent
+	// -> creator of request
 
-// first we have to get all users to which the message will be sent
-// -> creator of request
+	$users = Array($reqObj->getUserId());
 
-$users = Array($reqObj->getUserId());
+	// the room-request has been declined
+	if ($_sendMessage['type'] == 'declined') {
+
+		if ($semObj->seminar_number)
+			$message = sprintf(_("Ihre Raumanfrage zur Veranstaltung %s (%s) wurde abgelehnt.")." \n\nNachricht des Raumadministrators:\n".$decline_message, $semObj->getName(), $semObj->seminar_number);
+		else
+			$message = sprintf(_("Ihre Raumanfrage zur Veranstaltung %s wurde abgelehnt.")." \n\nNachricht des Raumadministrators:\n".$decline_message, $semObj->getName());
+
+		if ($reqObj->getTerminId()) {
+			$termin = new SingleDate($reqObj->getTerminId());
+			$message .= "\n\nBetroffener Termin:\n".$termin->toString();
+		}
+
+		$reqObj->setReplyComment($decline_message);
+		$reqObj->store();
+		foreach ($users as $userid) {
+			setTempLanguage($userid);
+			$messaging->insert_message(addslashes($message), get_username($userid), $user->id, FALSE, FALSE, FALSE, FALSE, _("Raumanfrage abgelehnt"), TRUE);
+			restoreLanguage();
+		}
+	} 
 	
-		if ($_sendMessage['type'] == 'declined') {
+	// the room-request has been resolved
+	else {
+		
+		// create appropriate message
+		if ($semObj->seminar_number)
+			$message = sprintf (_("Ihre Raumanfrage zur Veranstaltung %s (%s) wurde bearbeitet.")." \n"._("Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:")."\n\n", $semObj->getName(), $semObj->seminar_number);
+		else
+			$message = sprintf (_("Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet.")." \n"._("Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:")."\n\n", $semObj->getName());
 
-			if ($semObj->seminar_number)
-				$message = sprintf(_("Ihre Raumanfrage zur Veranstaltung %s (%s) wurde abgelehnt.")." \n\nNachricht des Raumadministrators:\n".$decline_message, $semObj->getName(), $semObj->seminar_number);
-			else
-				$message = sprintf(_("Ihre Raumanfrage zur Veranstaltung %s wurde abgelehnt.")." \n\nNachricht des Raumadministrators:\n".$decline_message, $semObj->getName());
-
-			if ($reqObj->getTerminId()) {
-				$termin = new SingleDate($reqObj->getTerminId());
-				$message .= "\n\nBetroffener Termin:\n".$termin->toString();
-			}
-
-			$reqObj->setReplyComment($decline_message);
-			$reqObj->store();
-			foreach ($users as $userid) {
-				setTempLanguage($userid);
-				$messaging->insert_message(addslashes($message), get_username($userid), $user->id, FALSE, FALSE, FALSE, FALSE, _("Raumanfrage abgelehnt"), TRUE);
-				restoreLanguage();
-			}
-		} else {
-			if ($semObj->seminar_number)
-				$message = sprintf (_("Ihre Raumanfrage zur Veranstaltung %s (%s) wurde bearbeitet.")." \n"._("Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:")."\n\n", $semObj->getName(), $semObj->seminar_number);
-			else
-				$message = sprintf (_("Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet.")." \n"._("Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:")."\n\n", $semObj->getName());
-
+		// the request was for a whole seminar
 		if (!$reqObj->getTerminId()) {
 			$query2 = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) WHERE range_id = '%s' ORDER BY date, content", $reqObj->getSeminarId());
 			$db2->query($query2);
@@ -1823,11 +1824,14 @@ $users = Array($reqObj->getUserId());
 					}
 				}
 			}
-		} else {
+		} 
+		
+		// the request was for a single date
+		else {
 			$query2 = sprintf("SELECT *, resource_id FROM termine 
-													LEFT JOIN resources_assign ra 
-													ON (ra.assign_user_id = termine.termin_id) 
-													WHERE range_id = '%s' AND termin_id = '%s' ORDER BY date, content", $reqObj->getSeminarId(), $reqObj->getTerminId());
+					LEFT JOIN resources_assign ra 
+					ON (ra.assign_user_id = termine.termin_id) 
+					WHERE range_id = '%s' AND termin_id = '%s' ORDER BY date, content", $reqObj->getSeminarId(), $reqObj->getTerminId());
 
 			$db2->query($query2);
 
