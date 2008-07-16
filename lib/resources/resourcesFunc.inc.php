@@ -384,16 +384,17 @@ function getMyRoomRequests($user_id = '') {
 		$user_id = $user->id;
 
 	if ((getGlobalPerms($user_id) == "admin") || ($perm->have_perm("root"))) {
-		$query = sprintf("SELECT request_id, closed, t.termin_id, rr.termin_id as rr_termin_id,
-							COUNT(IF(date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
+		$query = sprintf("SELECT request_id, closed, tt.termin_id as tt_termin_id, rr.termin_id as rr_termin_id,
+							COUNT(IF(t.date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
 							FROM resources_requests rr
 							LEFT JOIN seminare s USING(seminar_id)
+							LEFT JOIN termine tt ON (tt.termin_id = rr.termin_id)
 							LEFT JOIN termine t ON(s.Seminar_id = t.range_id) GROUP BY request_id");
 							
 		$db->cache_query($query);
 		while ($db->next_record()) {
 			$requests [$db->f("request_id")] = array("my_sem"=>TRUE, "my_res"=>TRUE, "closed"=>$db->f("closed"));
-			$requests [$db->f("request_id")]["have_times"] = $db->f('termin_id') ? ($db->f("termin_id") == $db->f('rr_termin_id')) : $db->f("anzahl_termine");
+			$requests [$db->f("request_id")]["have_times"] = $db->f('rr_termin_id') ? ($db->f("tt_termin_id") == $db->f('rr_termin_id')) : $db->f("anzahl_termine");
 		}
 	} else {
 		//load all my resources
@@ -413,31 +414,33 @@ function getMyRoomRequests($user_id = '') {
 		}
 		if (sizeof($my_res)) {
 			$in_resource_id =  "('".join("','",array_keys($my_res))."')";
-			$query_res = sprintf("SELECT request_id, closed, t.termin_id, rr.termin_id as rr_termin_id, 
-								COUNT(IF(date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
+			$query_res = sprintf("SELECT request_id, closed, tt.termin_id as tt_termin_id, rr.termin_id as rr_termin_id, 
+								COUNT(IF(t.date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
 								FROM resources_requests rr
 								INNER JOIN seminare s USING(seminar_id)
+								LEFT JOIN termine tt ON (tt.termin_id = rr.termin_id)
 								LEFT JOIN termine t ON(s.Seminar_id = t.range_id)  WHERE rr.resource_id IN %s GROUP BY request_id", $in_resource_id);
 
 			$db2->cache_query($query_res);
 			while ($db2->next_record()) {
 				$requests [$db2->f("request_id")]["my_res"] = TRUE;
 				$requests [$db2->f("request_id")]["closed"] = $db2->f("closed");
-				$requests [$db2->f("request_id")]["have_times"] = $db->f('termin_id') ? ($db->f("termin_id") == $db->f('rr_termin_id')) : $db->f("anzahl_termine");
+				$requests [$db2->f("request_id")]["have_times"] = $db->f('rr_termin_id') ? ($db->f("tt_termin_id") == $db->f('rr_termin_id')) : $db->f("anzahl_termine");
 			}
 		}
 		if (sizeof($my_sems)) {
 			$in_seminar_id =  "('".join("','",array_keys($my_sems))."')";
-			$query_sem = sprintf("SELECT request_id, closed, t.termin_id, 
+			$query_sem = sprintf("SELECT request_id, closed, tt.termin_id as tt_termin_id, rr.termin_id as rr_termin_id, 
 								COUNT(IF(date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
 								FROM resources_requests rr
 								INNER JOIN seminare s USING(seminar_id)
+								LEFT JOIN termine tt ON (tt.termin_id = rr.termin_id)
 								LEFT JOIN termine t ON(s.Seminar_id = t.range_id)  WHERE rr.seminar_id IN %s GROUP BY request_id", $in_seminar_id);
 			$db->cache_query($query_sem);
 			while ($db->next_record()) {
 				$requests [$db->f("request_id")]["my_sem"] = TRUE;
 				$requests [$db->f("request_id")]["closed"] = $db->f("closed");
-				$requests [$db->f("request_id")]["have_times"] =  $db->f('termin_id') ? ($db->f("termin_id") == $db->f('rr_termin_id')) : ($db->f("anzahl_termine") && $db->f("irregular"));
+				$requests [$db->f("request_id")]["have_times"] =  $db->f('rr_termin_id') ? ($db->f("tt_termin_id") == $db->f('rr_termin_id')) : ($db->f("anzahl_termine") && $db->f("irregular"));
 			}
 		}
 	}
