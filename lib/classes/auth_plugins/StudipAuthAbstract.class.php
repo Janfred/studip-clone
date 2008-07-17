@@ -23,8 +23,8 @@
 
 require_once ("lib/classes/DbView.class.php");
 require_once ("lib/classes/DbSnapshot.class.php");
+require_once ("lib/classes/UserDomain.php");
 
-			
 
 /**
 * abstract base class for authentication plugins
@@ -84,6 +84,14 @@ class StudipAuthAbstract {
 	*/
 	var $is_new_user = false;
 	
+	/**
+	 * array of user domains to assign to each user, can be set in local.inc
+	 *
+	 * @access	public
+	 * @var		array $user_domains
+	 */
+	var $user_domains;
+
 	/**
 	* associative array with mapping for database fields
 	*
@@ -297,6 +305,7 @@ class StudipAuthAbstract {
 		if ($this->isAuthenticated($username, $password, $jscript)){
 			if ($uid = $this->getStudipUserid($username)){
 				$this->doDataMapping($uid);
+				$this->setUserDomains($uid);
 				if ($this->is_new_user){
 					$this->doNewUserInit($uid);
 				}
@@ -364,6 +373,47 @@ class StudipAuthAbstract {
 		return false;
 	}
 	
+	/**
+	 * This method sets the user domains for the current user.
+	 *
+	 * @access	private
+	 * @param	string	the user id
+	 */
+	function setUserDomains ($uid) {
+		$user_domains = $this->getUserDomains();
+
+		if (isset($user_domains)) {
+			$old_domains = UserDomain::getUserDomainsForUser($uid);
+
+			foreach ($old_domains as $domain) {
+				if (!in_array($domain->getID(), $user_domains)) {
+					$domain->removeUser($uid);
+				}
+			}
+
+			foreach ($user_domains as $user_domain) {
+				$domain = new UserDomain($user_domain);
+				$name = $domain->getName();
+
+				if (!isset($name)) {
+					$domain->setName($user_domain);
+					$domain->store();
+				}
+
+				if (!in_array($domain, $old_domains)) {
+					$domain->addUser($uid);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Get the user domains to assign to the current user.
+	 */
+	function getUserDomains () {
+		return $this->user_domains;
+	}
+
 	/**
 	* this method handles the data mapping
 	*

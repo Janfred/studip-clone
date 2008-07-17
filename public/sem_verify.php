@@ -149,6 +149,7 @@ require_once 'lib/msg.inc.php';
 require_once 'lib/functions.php';
 require_once 'lib/admission.inc.php';
 require_once 'lib/classes/StudipAdmissionGroup.class.php';
+require_once 'lib/classes/UserDomain.php';
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -178,7 +179,27 @@ $db6=new DB_Seminar;
 	    include ('lib/include/html_end.inc.php');
 	    page_close();
 	    die;
-	    }
+	}
+
+	$same_domain = true;
+	$user_domains = UserDomain::getUserDomainsForUser($user->id);
+
+	if (count($user_domains) > 0) {
+		$seminar_domains = UserDomain::getUserDomainsForSeminar($id);
+		$same_domain = count(array_intersect($seminar_domains, $user_domains)) > 0;
+	}
+
+	if (!$same_domain)
+	{
+		parse_msg ("info§"._("Sie sind nicht in einer zugelassenenen Nutzerdomäne, Sie k&ouml;nnen sich nicht eintragen!"));
+		echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
+		if ($send_from_search)
+			echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
+		echo "<br><br></td></tr></table>";
+		include ('lib/include/html_end.inc.php');
+		page_close();
+		die;
+	}
 
 	$current_seminar = Seminar::getInstance($id);
 

@@ -94,7 +94,7 @@ class StudipAuthShib extends StudipAuthSSO
             $remote_user = $_SERVER['REMOTE_USER'];
         }
 
-        if (empty($remote_user)) {
+        if (empty($remote_user) || isset($this->validate_url)) {
             if ($_REQUEST['sso'] == 'shib') {
                 // force Shibboleth authentication (lazy session)
                 $shib_url = $this->session_initiator;
@@ -139,6 +139,7 @@ class StudipAuthShib extends StudipAuthSSO
         if ($this->isAuthenticated($username, $password, $jscript)) {
             if ($uid = $this->getStudipUserid($username)) {
                 $this->doDataMapping($uid);
+                $this->setUserDomains($uid);
                 if ($this->is_new_user) {
                     $this->doNewUserInit($uid);
                 }
@@ -147,6 +148,20 @@ class StudipAuthShib extends StudipAuthSSO
         } else {
             return false;
         }
+    }
+
+    /**
+     * Get the user domains to assign to the current user.
+     */
+    function getUserDomains () {
+        $user = $this->getUser();
+        $pos = strpos($user, '@');
+
+        if ($pos !== false) {
+            return array(substr($user, $pos + 1));
+        }
+
+        return NULL;
     }
 
     /**

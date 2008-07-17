@@ -44,7 +44,7 @@ require_once('lib/classes/UserConfig.class.php');
 require_once('lib/log_events.inc.php');
 require_once('lib/classes/Avatar.class.php');
 require_once('lib/edit_about.inc.php');
-
+require_once('lib/classes/UserDomain.php');
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
@@ -192,6 +192,12 @@ if (check_ticket($studipticket)) {
 		$my_about->studiengang_edit($studiengang_delete,$new_studiengang);
 	}
 
+	//Veränderungen an Nutzer-Domains
+	if ($cmd == "userdomain_edit" && !StudipAuthAbstract::CheckField("userdomain_id", $my_about->auth_user['auth_plugin']) && $perm->have_perm('admin'))
+	{
+		$my_about->userdomain_edit($userdomain_delete,$new_userdomain);
+	}
+
 	//Veränderungen an Instituten für Studies
 	if ($cmd == "inst_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm('admin')))
 	{
@@ -278,7 +284,7 @@ if (check_ticket($studipticket)) {
 		$my_about->db->query($q);
 		$my_about->db->next_record();
 		$visi=$my_about->db->f("visible");
-		if (($visi=='yes' ||$visi=='no' ||$visi=='unknown') && ($change_visibility=='yes' || $change_visibility=='no')) {
+		if ($visi != 'always' && $visi != 'never' && ($change_visibility=='global' || $change_visibility=='yes' || $change_visibility=='no')) {
 			if ($visi!=$change_visibility) {
 				$my_about->db->query("UPDATE auth_user_md5 SET visible='$change_visibility' WHERE user_id='$user->id'");
 				$my_about->msg .= "ok§" . _("Ihre Sichtbarkeit wurde geändert.") . "§";
@@ -808,6 +814,65 @@ if ($view == 'Studium') {
 		}
 		echo '</blockquote></td></tr></table>'."\n";
 		if ($allow_change_sg) echo "</form>\n";
+	}
+
+	echo "</td></tr>\n";
+
+
+	// Nutzerdomänen, die mir zugeordnet sind
+	if (count(UserDomain::getUserDomains()) &&
+	    ($my_about->auth_user['perms'] == 'autor' || $my_about->auth_user['perms'] == 'tutor')) { // nur für Autoren und Tutoren
+		$allow_change_ud = !StudipAuthAbstract::CheckField("userdomain_id", $my_about->auth_user['auth_plugin']) && $perm->have_perm('admin');
+
+		$cssSw->resetClass();
+		$cssSw->switchClass();
+		echo '<tr><td class="blank">';
+		echo '<br><b>&nbsp; ' . _("Ich bin folgenden Nutzerdomänen zugeordnet:") . '</b>';
+		if ($allow_change_ud){
+			echo '<form action="'.URLHelper::getLink('?cmd=userdomain_edit&username='.$username.'&view='.$view.'&studipticket='.get_ticket().'#userdomains').'" method="POST">';
+		}
+		echo '<table width="99%" align="center" border="0" cellpadding="2" cellspacing="0">'."\n";
+		echo '<tr><td width="30%" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="2">';
+		$flag = FALSE;
+
+		$i = 0;
+		foreach ($my_about->user_userdomains as $domain) {
+			if (!$i) {
+				echo '<tr><td class="steelgraudunkel" width="80%">' . _("Nutzerdomäne") . '</td><td class="steelgraudunkel" width="30%">' ;
+				echo (($allow_change_ud)?  _("austragen") : '&nbsp;');
+				echo '</td></tr>';
+			}
+			$cssSw->switchClass();
+			echo '<tr><td class="'.$cssSw->getClass().'" width="80%">' . htmlReady($domain->getName()) . '</td><td class="' . $cssSw->getClass().'" width="20%" align="center">';
+			if ($allow_change_ud){
+				echo '<input type="CHECKBOX" name="userdomain_delete[]" value="'.$domain->getID().'">';
+			} else {
+				echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/haken_transparent.gif" border="0">';
+			}
+			echo "</td><tr>\n";
+			$i++;
+			$flag = TRUE;
+		}
+
+		if (!$flag && $allow_change_ud) {
+			echo '<tr><td class="'.$cssSw->getClass().'" colspan="2"><br /><font size=-1><b>' . _("Sie sind noch keiner Nutzerdomäne zugeordnet.") . "</b><br /><br />\n" . "</font></td><tr>\n";
+		}
+		$cssSw->resetClass();
+		$cssSw->switchClass();
+		echo '</table></td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top"><blockquote><br />';
+		if($allow_change_ud){
+			echo _("Wählen Sie eine Nutzerdomäne aus der folgenden Liste aus:") . "<br>\n";
+			echo '<br><div align="center"><a name="userdomains">&nbsp;</a>';
+			$my_about->select_userdomain();
+			echo '</div><br /></b>' . _("Wenn Sie Nutzerdomänen wieder entfernen möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.") . "<br />\n";
+			echo _("Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.") . "<br /><br />\n";
+			echo '<input type="IMAGE" ' . makeButton('uebernehmen', 'src') . ' value="' . _("Änderungen übernehmen") . '">';
+			echo "</form>\n";
+		} else {
+			echo _("Die Informationen zu Ihren Nutzerdomänen werden vom System verwaltet und k&ouml;nnen daher von Ihnen nicht ge&auml;ndert werden.");
+		}
+		echo '</blockquote></td></tr></table>'."\n";
+		if ($allow_change_ud) echo "</form>\n";
 	}
 
 	echo "</td></tr>\n";

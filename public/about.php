@@ -138,7 +138,7 @@ $HELP_KEYWORD = "Basis.Homepage";
 if($db->f('user_id') == $user->id && !$db->f('locked')){
 	$CURRENT_PAGE = _("Meine persönliche Homepage");
 	$user_id = $db->f("user_id");
-} elseif ($db->f('user_id') && ($perm->have_perm("root") || (!$db->f('locked') && get_visibility_by_state($db->f("visible"))))) {
+} elseif ($db->f('user_id') && ($perm->have_perm("root") || (!$db->f('locked') && get_visibility_by_id($db->f("user_id"))))) {
 	$CURRENT_PAGE = _("Persönliche Homepage")  . ' - ' . get_fullname($db->f('user_id'));
 	$user_id = $db->f("user_id");
 } else {
@@ -167,8 +167,8 @@ function open_im() {
 <?php
 
 if (!$user_id){
-	if ($db->f("visible") && !get_visibility_by_state($db->f("visible"))) {
-		throw new Exception(_("Diese Homepage ist nicht verf&uuml;gbar."));
+	if ($db->f("user_id")) {
+		throw new Exception(_("Diese Homepage ist nicht verfügbar."));
 	} else {
 		throw new Exception(_("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!"));
 	}
@@ -318,8 +318,8 @@ $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
 					<br>
 				<? endif ?>
 
-				<? if (!get_visibility_by_state($db->f("visible"))) : ?>
-					<? if ($perm->have_perm('root') && $user_id != $user->id) : ?>
+				<? if (!get_visibility_by_id($user_id)) : ?>
+					<? if ($user_id != $user->id) : ?>
 						<p>
 							<font color="red"><?= _("(Dieser Nutzer ist unsichtbar.)") ?></font>
 						</p>

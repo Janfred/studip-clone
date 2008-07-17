@@ -48,6 +48,7 @@ require_once('lib/visual.inc.php');	//Darstellungsfunktionen
 require_once('lib/messaging.inc.php');	//Nachrichtenfunktionen
 require_once('lib/admission.inc.php');	//load functions from admission system
 require_once('lib/classes/StudipAdmissionGroup.class.php'); //htmlReady
+require_once('lib/classes/UserDomain.php'); // Nutzerdomänen
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
@@ -180,6 +181,18 @@ if (is_object($group_obj)) { //if so, do not allow to change admission_type
 	$is_grouped = TRUE;
 } else {
 	$is_grouped = FALSE;
+}
+// user domain handling
+if (isset($seminar_id) && $_REQUEST['add_domain'])
+{
+	$domain = new UserDomain($_REQUEST['add_domain']);
+	$domain->addSeminar($seminar_id);
+}
+
+if (isset($seminar_id) && $_REQUEST['delete_domain'])
+{	
+	$domain = new UserDomain($_REQUEST['delete_domain']);
+	$domain->removeSeminar($seminar_id);
 }
 
 // new stuff start
@@ -1191,7 +1204,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 										printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", $PHP_SELF, $key);
 									}
 								} elseif (!($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin"))) {
-									printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", $PHP_SELF, $key);
+									printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." /></a>", $PHP_SELF, $key);
 								}
 								?>
 								</td>
@@ -1330,6 +1343,70 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 		<?
 		}
 		?>
+		<!-- Hier Änderungen zur Nutzerdomäne -->
+		<? if (count(($all_domains = UserDomain::getUserDomains()))): ?>
+		<tr <? $cssSw->switchClass() ?>>
+			<td class="<? echo $cssSw->getClass() ?>" width="4%">
+				&nbsp;
+			</td>
+			<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
+				<font size=-1><b><?=_("zugelassenene Nutzerdomänen:")?> </b></font><br />
+				<table border=0 cellpadding=2 cellspacing=0>
+					<tr>
+						<td class="<? echo $cssSw->getClass() ?>" colspan=3 >
+							<font size=-1><?=_("Bitte geben Sie hier ein, welche Nutzerdomänen zugelassen sind.")."</font>"?>
+						</td>
+					</tr>
+						<?
+						$seminar_domains = UserDomain::getUserDomainsForSeminar($seminar_id);
+
+						foreach ($seminar_domains as $domain) { ?>
+							
+								<tr>
+									<td class="<? echo $cssSw->getClass() ?>" >
+									<font size=-1>
+									<?= htmlReady($domain->getName()) ?>
+									</font>
+									</td>
+									<td class="<?= $cssSw->getClass() ?>" nowrap colspan=2 >
+									<a href="<?= URLHelper::getLink('?delete_domain='.$domain->getID()) ?>"><img src="<?= $GLOBALS['ASSETS_URL'].'images/trash.gif'.'" '.tooltip(_('Nutzerdomäne aus der Liste löschen')) ?> /></a>
+									</td>
+								</tr>
+						<?	
+						}
+						
+						// get all user domains that can be added
+						$domains = array_diff($all_domains, $seminar_domains);
+						if (count($domains)) {
+							?>
+						<tr>
+							<td class="<? echo $cssSw->getClass() ?>" >
+							<font size=-1>
+							<select name="add_domain">
+							<option value="">-- <?=_("bitte auswählen")?> --</option>
+							<?
+							
+							foreach ($domains as $domain) {
+								printf ("<option value=\"%s\">%s</option>", $domain->getID(), htmlReady(my_substr($domain->getName(), 0, 40)));
+							}
+							?>
+							</select>
+							</font>
+							</td>
+
+							<td class="<? echo $cssSw->getClass() ?>">
+								<?=makeButton("hinzufuegen", "input", _("Ausgewählte Nutzerdomäne hinzufügen"), 'add_domain')?>
+							</td>
+
+						</tr>
+							<?
+							}
+						?>
+				</table>
+			</td>
+		</tr>
+		<? endif ?>
+		<!-- Hier gehts normal weiter -->
 		<tr <? $cssSw->switchClass() ?>>
 			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
 				<input type="IMAGE" name="uebernehmen" <?=makeButton("uebernehmen", "src")?> border=0 value="uebernehmen">

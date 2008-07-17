@@ -64,9 +64,11 @@ class StudipAuthCAS extends StudipAuthSSO {
 	* @return	string	if authentication succeeds the Stud.IP user id, else false
 	*/
 	function authenticateUser($username, $password, $jscript = false){
+		$username = $this->verifyUsername($username);
 		if ($this->isAuthenticated($username, $password, $jscript)){			
 			if ($uid = $this->getStudipUserid($this->getUser())){						
 				$this->doDataMapping($uid);
+				$this->setUserDomains($uid);
 				if ($this->is_new_user){
 					$this->doNewUserInit($uid);
 				}

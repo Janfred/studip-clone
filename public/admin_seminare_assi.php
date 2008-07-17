@@ -37,6 +37,7 @@ require_once ('lib/log_events.inc.php');
 require_once ('lib/classes/StudipSemTreeSearch.class.php');
 require_once ('lib/classes/Modules.class.php');
 require_once ('lib/classes/DataFieldEntry.class.php');
+require_once ('lib/classes/UserDomain.php'); // Nutzerdomänen
 
 $sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
 
@@ -133,6 +134,9 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 	$sem_create_data["sem_start_termin"] = $data["start_termin"];
 	$sem_create_data["turnus_count"] = count($term_turnus);
 	$sem_create_data["term_art"] = $data["art"];
+	
+	// Nutzerdomänen
+	$sem_create_data["sem_domain"] = UserDomain::getUserDomainsForSeminar($cp_id);
 
 	if ($data['art'] == 1) { //unregelmaessige Veranstaltung oder Block -> Termine kopieren
 		// Sitzungen
@@ -303,6 +307,7 @@ if ($form == 1)
 	$sem_create_data["sem_inst_id"]=$sem_inst_id;
 	$sem_create_data["term_art"]=$term_art;
 	$sem_create_data["sem_start_time"]=$sem_start_time;
+	$sem_create_data["sem_domain"] = array();
 	if (isset($_default_sem)){
 		$one_sem = $semester->getSemesterDataByDate($sem_create_data["sem_start_time"]);
 		$_default_sem = $one_sem['semester_id'];
@@ -855,7 +860,13 @@ if (($send_tut_x) && (!$reset_search_x)) {
 	$level=2;
 }
 
-if (($search_doz_x) || ($search_tut_x) || ($reset_search_x) || $sem_bereich_do_search_x) {
+// delete user domain
+if (isset($_REQUEST['delete_domain'])) {
+	$index = array_search($_REQUEST['delete_domain'], $sem_create_data["sem_domain"]);
+	unset($sem_create_data["sem_domain"][$index]);
+}
+
+if ($search_doz_x || $search_tut_x || $reset_search_x || $sem_bereich_do_search_x || isset($_REQUEST['add_domain_x']) || isset($_REQUEST['delete_domain'])) {
 	$level=2;
 
 } elseif (($form == 2) && ($jump_next_x)) //wenn alles stimmt, Checks und Sprung auf Schritt 3
@@ -1516,7 +1527,15 @@ if (($form == 6) && ($jump_next_x))
 
 			// Speichern der Veranstaltungsdaten -> anlegen des Seminars
 			$sem->store();
-
+			
+			// speichere die Nutzerdomänen für das neue Seminar
+			$count_doms = 0;
+			foreach ($sem_create_data["sem_domain"] as $domain_id){
+				$domain = new UserDomain($domain_id);
+				$domain->addSeminar($sem->id);	
+				$count_doms ++;
+			}
+			
 			//completing the internal settings....
 			$successful_entry=1;
 			$sem_create_data["sem_entry"]=TRUE;
@@ -2620,6 +2639,77 @@ if ($level == 2)
 							?>
 						</td>
 					</tr>
+					<? if (count(($all_domains = UserDomain::getUserDomains()))) {?>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="4%">
+							&nbsp;
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
+							<font size=-1><b><?=_("zugelassenene Nutzerdomänen:")?> </b></font><br />
+							<table border=0 cellpadding=2 cellspacing=0>
+								<tr>
+									<td class="<? echo $cssSw->getClass() ?>" colspan=3 >
+										<font size=-1><?=_("Bitte geben Sie hier ein, welche Nutzerdomänen zugelassen sind.")."</font>"?>
+									</td>
+								</tr>
+									<?
+									if (isset($_REQUEST['add_domain_x']) && $_REQUEST['sem_domain'] !== '' &&
+									    !in_array($_REQUEST['sem_domain'], $sem_create_data["sem_domain"])) {
+										$sem_create_data["sem_domain"][]= $_REQUEST['sem_domain']; 
+									}
+
+									foreach ($sem_create_data["sem_domain"] as $domain_id) { 
+										$domain = new UserDomain($domain_id);
+										?> 
+											<tr>
+												<td class="<? echo $cssSw->getClass() ?>" >
+												<font size=-1>
+												<?= htmlReady($domain->getName()) ?>
+												</font>
+												</td>
+												<td class="<?= $cssSw->getClass() ?>" nowrap colspan=2 >
+												<a href="<?= URLHelper::getLink('?delete_domain='.$domain_id) ?>">
+												<img src="<?= $GLOBALS['ASSETS_URL'].'images/trash.gif'.'" '.tooltip(_('Nutzerdomäne aus der Liste löschen')) ?> />
+												</a>
+												</td>
+											</tr>
+										<?
+									 }
+									// get all user domains that can be added
+									$domains = array_diff($all_domains, $sem_create_data["sem_domain"]);
+									if (count($domains)) {
+										?>
+									<tr>
+										<td class="<? echo $cssSw->getClass() ?>" >
+										<font size=-1>
+										<select name="sem_domain">
+										<option value="">-- <?=_("bitte auswählen")?> --</option>
+										<?
+
+										foreach ($domains as $domain) {
+											printf ("<option value=\"%s\">%s</option>", $domain->getID(), htmlReady(my_substr($domain->getName(), 0, 40)));
+										}
+										?>
+										</select>
+										</font>
+										</td>
+
+										<td class="<? echo $cssSw->getClass() ?>">
+											<?=makeButton("hinzufuegen", "input", _("Ausgewählte Nutzerdomäne hinzufügen"), 'add_domain')?>
+											<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
+												<? // TODO: Find appropriate Infotext
+												echo tooltip(_("Bitte markieren Sie hier alle Nutzerdomänen, für die die Veranstaltung angeboten wird."), TRUE, TRUE) ?>
+											>
+										</td>
+
+									</tr>
+										<?
+										}
+									?>
+							</table>
+						</td>
+					</tr>
+					<?} ?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%">
 							&nbsp;
@@ -3930,6 +4020,10 @@ if ($level == 7)
 								print "<li>"._("<b>1</b> TutorIn f&uuml;r die Veranstaltung eingetragen.")."<br><br>";
 							elseif ($count_tut>1)
 								printf ("<li>"._("<b>%s</b> TutorInnen f&uuml;r die Veranstaltung eingetragen.")."<br><br>", $count_tut);
+							if ($count_doms==1)
+								print "<li>"._("<b>1</b> Nutzerdom&auml;ne f&uuml;r die Veranstaltung eingetragen.")."<br><br>";
+							elseif ($count_doms>1)
+								printf ("<li>"._("<b>%s</b> Nutzerdom&auml;nen f&uuml;r die Veranstaltung eingetragen.")."<br><br>", $count_doms);
 							if ($count_bereich==1)
 								print "<li>"._("<b>1</b> Bereich f&uuml;r die Veranstaltung eingetragen.")."<br><br>";
 							elseif ($count_bereich)

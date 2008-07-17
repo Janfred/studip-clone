@@ -75,6 +75,7 @@ class about extends messaging {
 	var $user_info = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle user_info
 	var $user_inst = array();        // assoziatives Array, enthält die Userdaten aus der Tabelle user_inst
 	var $user_studiengang = array(); // assoziatives Array, enthält die Userdaten aus der Tabelle user_studiengang
+	var $user_userdomains = array(); // assoziatives Array, enthält die Userdaten aus der Tabelle user_userdomains
 	var $check = "";    //Hilfsvariable für den Rechtecheck
 	var $special_user = FALSE;  // Hilfsvariable für bes. Institutsfunktionen
 	var $msg = ""; //enthält evtl Fehlermeldungen
@@ -154,6 +155,8 @@ class about extends messaging {
 		}
 
 
+		$this->user_userdomains = UserDomain::getUserDomainsForUser($this->auth_user['user_id']);
+
 		$this->db->query("SELECT user_inst.*,Institute.Name FROM user_inst LEFT JOIN Institute USING (Institut_id) WHERE user_id = '".$this->auth_user["user_id"]."' ORDER BY priority ASC, Institut_id ASC");
 		while ($this->db->next_record()) {
 			$this->user_inst[$this->db->f("Institut_id")] =
@@ -196,6 +199,29 @@ class about extends messaging {
 		}
 
 		return;
+	}
+
+
+
+	function userdomain_edit ($userdomain_delete, $new_userdomain) {
+		if (is_array($userdomain_delete)) {
+			for ($i=0; $i < count($userdomain_delete); $i++) {
+				$domain = new UserDomain($userdomain_delete[$i]);
+				$domain->removeUser($this->auth_user['user_id']);
+			}
+		}
+
+		if ($new_userdomain) {
+			$domain = new UserDomain($new_userdomain);
+			$domain->addUser($this->auth_user['user_id']);
+		}
+
+		if (($userdomain_delete || $new_userdomain) && !$this->msg) {
+			$this->msg = "msg§" . _("Die Zuordnung zu Nutzerdomänen wurde ge&auml;ndert.");
+			setTempLanguage($this->auth_user["user_id"]);
+			$this->priv_msg= _("Die Zuordnung zu Nutzerdomänen wurde geändert!\n");
+			restoreLanguage();
+		}
 	}
 
 
@@ -533,6 +559,19 @@ class about extends messaging {
 		echo "</select>\n";
 
 		return;
+	}
+
+
+	function select_userdomain() {  //Hilfsfunktion, erzeugt eine Auswahlbox mit noch auswählbaren Nutzerdomänen
+
+		echo '<select name="new_userdomain" style="width:30ex;"><option selected></option>'."\n";
+		$user_domains = UserDomain::getUserDomainsForUser($this->auth_user['user_id']);
+		$domains = UserDomain::getUserDomains();
+
+		foreach (array_diff($domains, $user_domains) as $domain) {
+			echo "<option value=\"".$domain->getID()."\">".htmlReady(my_substr($domain->getName(),0,50))."</option>\n";
+		}
+		echo "</select>\n";
 	}
 
 

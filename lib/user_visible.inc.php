@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 require_once 'functions.php';
+require_once 'lib/classes/UserDomain.php';
 
 /*
  * A function to determine a users visibility
@@ -33,7 +34,7 @@ function get_visibility_by_id ($user_id) {
 
 	$db = new DB_Seminar("SELECT visible FROM auth_user_md5 WHERE user_id = '$user_id'");
 	$db->next_record();
-	return get_visibility_by_state($db->f("visible"));
+	return get_visibility_by_state($db->f("visible"), $user_id);
 }
 
 /*
@@ -46,25 +47,39 @@ function get_visibility_by_username ($username) {
 	global $perm;
 	if ($perm->have_perm("root")) return true;
 
-	$db = new DB_Seminar("SELECT visible FROM auth_user_md5 WHERE username = '$username'");
+	$db = new DB_Seminar("SELECT visible, user_id FROM auth_user_md5 WHERE username = '$username'");
 	$db->next_record();
-	return get_visibility_by_state($db->f("visible"));
+	return get_visibility_by_state($db->f("visible"), $db->f("user_id"));
 }
 
 /*
- * A function to determine, whether a given state means 'visible' or 'unvisible'
+ * A function to determine, whether a given state means 'visible' or 'invisible'
  *
- * @param	$stat	['always', 'yes', 'unknown', 'no', 'never']
- * @returns boolean	true: state means 'visible', false: state means 'unvisible'
+ * @param	$stat	['global', 'always', 'yes', 'unknown', 'no', 'never']
+ * @param	$user_id        id of user that should be checked
+ * @returns boolean	true: state means 'visible', false: state means 'invisible'
  */
-function get_visibility_by_state ($state) {
+function get_visibility_by_state ($state, $user_id) {
+	global $auth;
+
+	$same_domain = true;
+	$my_domains = UserDomain::getUserDomainsForUser($auth->auth['uid']);
+	$user_domains = UserDomain::getUserDomainsForUser($user_id);
+
+	if (count($my_domains) > 0 || count($user_domains) > 0) {
+		$same_domain = count(array_intersect($user_domains, $my_domains)) > 0;
+	}
+
 	switch ($state) {
-		case "yes":
-		case "always":
+		case "global":
 			return true;
 			break;
+		case "yes":
+		case "always":
+			return $same_domain;
+			break;
 		case "unknown":
-			return (bool)get_config('USER_VISIBILITY_UNKNOWN');
+			return $same_domain && get_config('USER_VISIBILITY_UNKNOWN');
 			break;
 		case "no":
 		case "never":
@@ -83,13 +98,43 @@ function get_visibility_by_state ($state) {
  * @returns	string	returns a query string
  */
 function get_vis_query($table_alias = 'auth_user_md5') {
-	global $perm;
+	global $auth, $perm;
+
 	if ($perm->have_perm("root")) return "1";
-	return "($table_alias.visible = 'yes' OR $table_alias.visible = 'always' OR ($table_alias.visible = 'unknown' AND ".(int)get_config('USER_VISIBILITY_UNKNOWN')."))";
+
+	$my_domains = UserDomain::getUserDomainsForUser($auth->auth['uid']);
+	$query = "$table_alias.visible = 'global'";
+
+	foreach ($my_domains as $domain) {
+		$my_domain_ids[] = $domain->getID();
+	}
+
+	if (count($my_domains) == 0) {
+		$query .= " OR (SELECT COUNT(*) FROM user_userdomains WHERE user_id = $table_alias.user_id) = 0";
+	} else {
+		$query .= " OR (SELECT COUNT(*) FROM user_userdomains WHERE user_id = $table_alias.user_id 
+				    AND userdomain_id IN ('".implode("','", $my_domain_ids)."')) > 0";
+	}
+
+	$query .= " AND ($table_alias.visible = 'always' OR $table_alias.visible = 'yes'";
+
+	if (get_config('USER_VISIBILITY_UNKNOWN')) {
+		$query .= " OR $table_alias.visible = 'unknown'";
+	}
+
+	$query .= ")";
+
+	return "($query)";
 }
 
 function get_ext_vis_query($table_alias = 'aum') {
-	return "($table_alias.visible = 'yes' OR $table_alias.visible = 'always' OR ($table_alias.visible = 'unknown' AND ".(int)get_config('USER_VISIBILITY_UNKNOWN')."))";
+	$query = "$table_alias.visible = 'global' OR $table_alias.visible = 'always' OR $table_alias.visible = 'yes'";
+
+	if (get_config('USER_VISIBILITY_UNKNOWN')) {
+		$query .= " OR $table_alias.visible = 'unknown'";
+	}
+
+	return "($query)";
 }
 
 /*
@@ -115,7 +160,7 @@ function vis_chooser($vis, $new = false) {
 function first_decision($userid) {
 	global $PHP_SELF, $vis_cmd, $vis_state, $auth;
 
-	if ($vis_cmd == "apply" && ($vis_state == "yes" || $vis_state == "no")) {
+	if ($vis_cmd == "apply" && ($vis_state == "global" || $vis_state == "yes" || $vis_state == "no")) {
 		$db = new DB_Seminar("UPDATE auth_user_md5 SET visible = '$vis_state' WHERE user_id = '$userid'");
 		return;
 	}

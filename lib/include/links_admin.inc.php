@@ -392,6 +392,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			$structure["elearning_interface"]=array ('topKat'=>"modules", 'name'=>_("Lernmodul-Schnittstelle"), 'link'=>"admin_elearning_interface.php", 'active'=>FALSE);
 		}
 		$structure["studiengang"]=array ('topKat'=>"global", 'name'=>_("Studieng&auml;nge"), 'link'=>"admin_studiengang.php", 'active'=>FALSE);
+		$structure["userdomains"]=array ('topKat'=>"global", 'name'=>_("Nutzerdomänen"), 'link'=>URLHelper::getLink("dispatch.php/domain_admin/show"), 'active'=>FALSE);
 		$structure["datafields"]=array ('topKat'=>"global", 'name'=>_("Datenfelder"), 'link'=>"admin_datafields.php", 'active'=>FALSE);
 		$structure["config"]=array ('topKat'=>"global", 'name'=>_("Konfiguration"), 'link'=>"admin_config.php", 'active'=>FALSE);
 		if('active_sessions' == PHPLIB_SESSIONDATA_TABLE){
@@ -406,7 +407,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		}
 
 		$structure["semester"]=array ('topKat'=>"global", 'name'=>_("Semester"), 'link'=>"admin_semester.php", 'active'=>FALSE);
-    	$structure["admin_teilnehmer_view"]=array (topKat=>"global", name=>_("Teilnehmeransicht"), link=>"admin_teilnehmer_view.php", active=>FALSE);
+		$structure["admin_teilnehmer_view"]=array ('topKat'=>"global", 'name'=>_("Teilnehmeransicht"), 'link'=>"admin_teilnehmer_view.php", 'active'=>FALSE);
 
 		if ($LOG_ENABLE) {
 			$structure["show_log"]=array ('topKat'=>"log", 'name'=>_("Log"), 'link'=>"show_log.php", 'active'=>FALSE);
@@ -430,172 +431,173 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	//Reitersystem Ende
 
 	//View festlegen
-	switch ($i_page) {
-		case "admin_room_requests.php" :
-			$reiter_view="zeiten";
-		break;
-		case "admin_admission.php" :
-			$reiter_view="zugang";
-		break;
-		case "admin_bereich.php" :
-			$reiter_view="bereich";
-		break;
-		case "themen.php" :
-			$reiter_view="ablaufplan";
-		break;
-		case "admin_db_integrity.php" :
-			$reiter_view = "integrity";
-		break;
-		case "admin_fach.php" :
-			$reiter_view="fach";
-		break;
-		case "admin_semester.php":
-			$reiter_view ="semester";
-		break;
-    	case "admin_teilnehmer_view.php";
-    		$reiter_view = "admin_teilnehmer_view";
-    	break;
-		case "admin_institut.php" :
-			$reiter_view="grunddaten_inst";
-		break;
-		case "admin_lit_list.php":
-		case "lit_search.php":
-		case "admin_lit_element.php":
-			if ($links_admin_data["topkat"] == "sem")
-				$reiter_view="literatur_sem";
-			else
-				$reiter_view="literatur_inst";
-		break;
-		case "raumzeit.php" :
-			$reiter_view="zeiten";
-		break;
-		case "admin_news.php":
-			if ($links_admin_data["topkat"] == "sem")
-				$reiter_view="news_sem";
-			elseif ($links_admin_data["topkat"] == "inst")
-				$reiter_view="news_inst";
-		break;
-		case "admin_vote.php":
-			if ($links_admin_data["topkat"] == "sem")
-				$reiter_view="vote_sem";
-			elseif ($links_admin_data["topkat"] == "inst")
-				$reiter_view="vote_inst";
-		break;
-		case "admin_evaluation.php":
-			if ($links_admin_data["topkat"] == "sem")
-				$reiter_view="eval_sem";
-			elseif ($links_admin_data["topkat"] == "inst")
-				$reiter_view="eval_inst";
-		break;
-		case "admin_seminare1.php":
-			$reiter_view="grunddaten_sem";
-		break;
-		case "admin_seminare_assi.php":
-			$reiter_view="new_sem";
-		break;
-		case "admin_statusgruppe.php":
-			$reiter_view="statusgruppe_sem";
-		break;
-		case "admin_roles.php":
-			$reiter_view="statusgruppe_inst";
-		break;
-		case "admin_modules.php":
-			if ($links_admin_data["topkat"] == "sem")
-				$reiter_view="modules_sem";
-			else
-				$reiter_view="modules_inst";
-		break;
-		case "admin_aux_adjust.php":
-			$reiter_view="aux_adjust";
-                break;
-	        case "admin_lock_adjust.php":
-		        $reiter_view="lock_adjust";
-		break;
-		case "admin_studiengang.php":
-			$reiter_view="studiengang";
-		break;
-		case "adminarea_start.php" :
-			$reiter_view="(veranstaltungen)";
-		break;
-		case "archiv_assi.php":
-			$reiter_view="archiv";
-		break;
-		case "admin_visibility.php":
-			$reiter_view="visibility";
-		break;
-		case "admin_aux.php":
-			$reiter_view="aux";
-		break;
-		case "admin_lock.php":
-			$reiter_view="lock";
-		break;
-		case "copy_assi.php":
-			$reiter_view="copysem";
-		break;
-		case "new_user_md5.php":
-			$reiter_view="new_user";
-		break;
-		case "view_sessions.php":
-			$reiter_view="sessions";
-		break;
-		case "inst_admin.php":
-			$reiter_view="mitarbeiter";
-		break;
-		case "show_admission.php":
-			$reiter_view="show_admission";
-		break;
-		case "admin_literatur_overview.php":
-			$reiter_view="lit_overview";
-		break;
-		case "export.php":
-			$reiter_view="export";
-		break;
-		case "admin_elearning_interface.php":
-			$reiter_view="elearning_interface";
-		break;
-		case "admin_lernmodule.php":
-			$reiter_view="lernmodule";
-		break;
-		case "admin_range_tree.php":
-			$reiter_view="range_tree";
-		break;
-		case "admin_sem_tree.php":
-			$reiter_view="sem_tree";
-		break;
-		case "admin_datafields.php":
-			$reiter_view="datafields";
-		break;
-		case "admin_extern.php":
-			$reiter_view = "extern_inst";
-		break;
-		case "admin_banner_ads.php":
-			$reiter_view = "bannerads";
-		break;
-		case "admin_smileys.php":
-			$reiter_view = "smileyadmin";
-		break;
-		case "admin_config.php":
-			$reiter_view = "config";
+	if (!isset($reiter_view)) {
+		switch ($i_page) {
+			case "admin_room_requests.php" :
+				$reiter_view="zeiten";
 			break;
-		case "show_log.php":
-			$reiter_view = "show_log";
+			case "admin_admission.php" :
+				$reiter_view="zugang";
 			break;
-		case "admin_log.php":
-			$reiter_view = "admin_log";
+			case "admin_bereich.php" :
+				$reiter_view="bereich";
 			break;
-		case "plugins.php":
-			// check if view is delegated to a bottomkat
-			$pid = PluginEngine::getCurrentPluginId();
-			$reiter_view = "plugins_" . $pid;
-			$ppersist = PluginEngine::getPluginPersistence();
-			$viewplugin = $ppersist->getPlugin($pid);
-			if (PluginEngine::getTypeOfPlugin($viewplugin) <> "Administration"){
-				$reiter_view = "plugins";
-			}
-		break;
-		default:
-		$reiter_view = substr($i_page,0, strpos($i_page,'.php'));
-
+			case "themen.php" :
+				$reiter_view="ablaufplan";
+			break;
+			case "admin_db_integrity.php" :
+				$reiter_view = "integrity";
+			break;
+			case "admin_fach.php" :
+				$reiter_view="fach";
+			break;
+			case "admin_semester.php":
+				$reiter_view ="semester";
+			break;
+			case "admin_teilnehmer_view.php";
+				$reiter_view = "admin_teilnehmer_view";
+			break;
+			case "admin_institut.php" :
+				$reiter_view="grunddaten_inst";
+			break;
+			case "admin_lit_list.php":
+			case "lit_search.php":
+			case "admin_lit_element.php":
+				if ($links_admin_data["topkat"] == "sem")
+					$reiter_view="literatur_sem";
+				else
+					$reiter_view="literatur_inst";
+			break;
+			case "raumzeit.php" :
+				$reiter_view="zeiten";
+			break;
+			case "admin_news.php":
+				if ($links_admin_data["topkat"] == "sem")
+					$reiter_view="news_sem";
+				elseif ($links_admin_data["topkat"] == "inst")
+					$reiter_view="news_inst";
+			break;
+			case "admin_vote.php":
+				if ($links_admin_data["topkat"] == "sem")
+					$reiter_view="vote_sem";
+				elseif ($links_admin_data["topkat"] == "inst")
+					$reiter_view="vote_inst";
+			break;
+			case "admin_evaluation.php":
+				if ($links_admin_data["topkat"] == "sem")
+					$reiter_view="eval_sem";
+				elseif ($links_admin_data["topkat"] == "inst")
+					$reiter_view="eval_inst";
+			break;
+			case "admin_seminare1.php":
+				$reiter_view="grunddaten_sem";
+			break;
+			case "admin_seminare_assi.php":
+				$reiter_view="new_sem";
+			break;
+			case "admin_statusgruppe.php":
+				$reiter_view="statusgruppe_sem";
+			break;
+			case "admin_roles.php":
+				$reiter_view="statusgruppe_inst";
+			break;
+			case "admin_modules.php":
+				if ($links_admin_data["topkat"] == "sem")
+					$reiter_view="modules_sem";
+				else
+					$reiter_view="modules_inst";
+			break;
+			case "admin_aux_adjust.php":
+				$reiter_view="aux_adjust";
+			break;
+			case "admin_lock_adjust.php":
+				$reiter_view="lock_adjust";
+			break;
+			case "admin_studiengang.php":
+				$reiter_view="studiengang";
+			break;
+			case "adminarea_start.php" :
+				$reiter_view="(veranstaltungen)";
+			break;
+			case "archiv_assi.php":
+				$reiter_view="archiv";
+			break;
+			case "admin_visibility.php":
+				$reiter_view="visibility";
+			break;
+			case "admin_aux.php":
+				$reiter_view="aux";
+			break;
+			case "admin_lock.php":
+				$reiter_view="lock";
+			break;
+			case "copy_assi.php":
+				$reiter_view="copysem";
+			break;
+			case "new_user_md5.php":
+				$reiter_view="new_user";
+			break;
+			case "view_sessions.php":
+				$reiter_view="sessions";
+			break;
+			case "inst_admin.php":
+				$reiter_view="mitarbeiter";
+			break;
+			case "show_admission.php":
+				$reiter_view="show_admission";
+			break;
+			case "admin_literatur_overview.php":
+				$reiter_view="lit_overview";
+			break;
+			case "export.php":
+				$reiter_view="export";
+			break;
+			case "admin_elearning_interface.php":
+				$reiter_view="elearning_interface";
+			break;
+			case "admin_lernmodule.php":
+				$reiter_view="lernmodule";
+			break;
+			case "admin_range_tree.php":
+				$reiter_view="range_tree";
+			break;
+			case "admin_sem_tree.php":
+				$reiter_view="sem_tree";
+			break;
+			case "admin_datafields.php":
+				$reiter_view="datafields";
+			break;
+			case "admin_extern.php":
+				$reiter_view = "extern_inst";
+			break;
+			case "admin_banner_ads.php":
+				$reiter_view = "bannerads";
+			break;
+			case "admin_smileys.php":
+				$reiter_view = "smileyadmin";
+			break;
+			case "admin_config.php":
+				$reiter_view = "config";
+				break;
+			case "show_log.php":
+				$reiter_view = "show_log";
+				break;
+			case "admin_log.php":
+				$reiter_view = "admin_log";
+				break;
+			case "plugins.php":
+				// check if view is delegated to a bottomkat
+				$pid = PluginEngine::getCurrentPluginId();
+				$reiter_view = "plugins_" . $pid;
+				$ppersist = PluginEngine::getPluginPersistence();
+				$viewplugin = $ppersist->getPlugin($pid);
+				if (PluginEngine::getTypeOfPlugin($viewplugin) <> "Administration"){
+					$reiter_view = "plugins";
+				}
+			break;
+			default:
+			$reiter_view = substr($i_page,0, strpos($i_page,'.php'));
+		}
 	}
 
 

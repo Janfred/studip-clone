@@ -145,7 +145,7 @@ function PrintSearchResults ($search_exp, $range_id)
 		$c = 0;
 		$tmp = "&nbsp; <select name=\"Freesearch[]\" size=\"4\" >";
 		while ($db->next_record()) {
-			if (get_visibility_by_username($db->f("username"))) {
+			if (get_visibility_by_id($db->f("user_id"))) {
 				$c++;
 				$tmp .= sprintf ("<option value=\"%s\">%s - %s\n", $db->f("username"), htmlReady(my_substr($db->f("fullname"),0,35)." (".$db->f("username").")"), $db->f("perms"));
 			}

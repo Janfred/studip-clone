@@ -45,7 +45,8 @@ require_once 'lib/functions.php';
 require_once ('lib/classes/StudipSemTree.class.php');
 require_once ('lib/classes/DataFieldEntry.class.php');                            
 require_once ('lib/classes/StudipStmInstance.class.php');
-require_once('lib/classes/StudipAdmissionGroup.class.php'); 
+require_once ('lib/classes/StudipAdmissionGroup.class.php'); 
+require_once ('lib/classes/UserDomain.php');
 
 //Inits
 $cssSw=new cssClassSwitcher;
@@ -75,11 +76,19 @@ $sem = new Seminar($sem_id);
 $db2->query("SELECT * FROM seminare WHERE Seminar_id = '$sem_id'");
 $db2->next_record();
 
+$same_domain = true;
+$user_domains = UserDomain::getUserDomainsForUser($auth->auth['uid']);
+
+if (count($user_domains) > 0) {
+	$seminar_domains = UserDomain::getUserDomainsForSeminar($sem_id);
+	$same_domain = count(array_intersect($seminar_domains, $user_domains)) > 0;
+}
+
 // nachfragen, ob das Seminar abonniert werden soll
 if ($sem_id) {
 	if ($perm->have_studip_perm("admin",$sem_id)) {
 		$skip_verify=TRUE;
-	} elseif ($perm->have_perm("user") && !$perm->have_perm("admin")) { //Add lecture only if logged in
+	} elseif ($perm->have_perm("user") && !$perm->have_perm("admin") && $same_domain) { //Add lecture only if logged in
 		$db->query("SELECT status FROM seminar_user WHERE user_id ='$user->id' AND Seminar_id = '$sem_id'");
 		$db->next_record();
 		if (($db2->f("admission_starttime") > time()) && (($db2->f("admission_endtime_sem") == "-1"))) {
@@ -201,10 +210,12 @@ else
 						$tmp_text .= $num_text;
 					}
 				}
-			} elseif (!$perm->have_perm("admin")) {
-				$tmp_text=_("Sie sind nicht als TeilnehmerIn der Veranstaltung eingetragen.");
-			} else {
+			} elseif ($perm->have_perm("admin")) {
 				$tmp_text=_("Sie sind AdministratorIn und k&ouml;nnen deshalb die Veranstaltung nicht abonnieren.");
+			} elseif (!$same_domain) {
+				$tmp_text=_("Sie sind nicht in einer für die Veranstaltung zugelassenenen Nutzerdomäne.");
+			} else {
+				$tmp_text=_("Sie sind nicht als TeilnehmerIn der Veranstaltung eingetragen.");
 			}
 			if ((!$mein_status) && (!$admission_status)) {
 				$tmp_text = "<font color = red>".$tmp_text."<font>";
