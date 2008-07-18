@@ -78,9 +78,9 @@ $db2->next_record();
 
 $same_domain = true;
 $user_domains = UserDomain::getUserDomainsForUser($auth->auth['uid']);
+$seminar_domains = UserDomain::getUserDomainsForSeminar($sem_id);
 
 if (count($user_domains) > 0) {
-	$seminar_domains = UserDomain::getUserDomainsForSeminar($sem_id);
 	$same_domain = count(array_intersect($seminar_domains, $user_domains)) > 0;
 }
 
@@ -740,6 +740,18 @@ print_infobox ($infobox,"contract.jpg");
 			echo "<td class=\"".$cssSw->getClass()."\" colspan=2 width=\"48%\" valign=\"top\"><td>";
 		}
 		?>
+		<? if (count($seminar_domains)): ?>
+			<tr>
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>">&nbsp;
+				</td>
+				<td class="<?= $cssSw->getClass() ?>" colspan="4" valign="top">
+				<font size="-1"><b><?= _("zugelassenene Nutzerdomänen:") ?></b></font><br />
+				<? foreach ($seminar_domains as $domain): ?>
+					<font size="-1"><?= htmlReady($domain->getName()) ?></font><br />
+				<? endforeach ?>
+				</td>
+			</tr>
+		<? endif ?>
 		<tr>
 			<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp;
 			</td>

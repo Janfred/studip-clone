@@ -44,6 +44,7 @@
       <? if (!isset($edit_id)): ?>
         <tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
           <td>
+            <input type="hidden" name="new_domain" value="1">
             <input type="text" style="width: 80%;" name="name" value="">
           </td>
           <td>

@@ -10,6 +10,7 @@
  * the License, or (at your option) any later version.
  */
 
+require_once 'lib/functions.php';
 require_once 'lib/visual.inc.php';
 require_once 'lib/classes/UserDomain.php';
 
@@ -83,9 +84,18 @@ class DomainAdminController extends Trails_Controller
      */
     function save_action ()
     {
+        $id = remove_magic_quotes($_REQUEST['id']);
+        $name = remove_magic_quotes($_REQUEST['name']);
+
         try {
-            $domain = new UserDomain($_REQUEST['id']);
-            $domain->setName($_REQUEST['name']);
+            $domain = new UserDomain($id);
+            $old_name = $domain->getName();
+
+            if (isset($_REQUEST['new_domain']) && isset($old_name)) {
+                throw new Exception(_('Diese ID wird bereits verwendet'));
+            }
+
+            $domain->setName($name);
             $domain->store();
         } catch (Exception $ex) {
             $this->error_msg = $ex->getMessage();
