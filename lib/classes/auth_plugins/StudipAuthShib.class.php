@@ -131,29 +131,10 @@ class StudipAuthShib extends StudipAuthSSO
     }
 
     /**
-     * Authentication method (needed for Stud.IP < 1.5)
-     */
-    function authenticateUser ($username, $password, $jscript = false)
-    {
-        $username = $this->verifyUsername($username);
-        if ($this->isAuthenticated($username, $password, $jscript)) {
-            if ($uid = $this->getStudipUserid($username)) {
-                $this->doDataMapping($uid);
-                $this->setUserDomains($uid);
-                if ($this->is_new_user) {
-                    $this->doNewUserInit($uid);
-                }
-            }
-            return $uid;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Get the user domains to assign to the current user.
      */
-    function getUserDomains () {
+    function getUserDomains ()
+    {
         $user = $this->getUser();
         $pos = strpos($user, '@');
 
