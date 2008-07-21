@@ -350,7 +350,7 @@ class Statusgruppe {
 			
 			// generate a name with all parent-roles in the name
 			if ($parent_name) {
-				$role['name_long'] = $parent_name . ' &gt; ' . $role['role']->getName();
+				$role['name_long'] = $parent_name . ' > ' . $role['role']->getName();
 			} else {
 				$role['name_long'] = $role['role']->getName();
 			} 
