@@ -472,6 +472,10 @@ switch($view) {
 		$HELP_KEYWORD="Basis.HomepageUniversitäreDaten";
 		$CURRENT_PAGE=_("Studiengang bearbeiten");
 		break;
+	case 'userdomains':
+		$HELP_KEYWORD="Basis.HomepageNutzerdomänen";
+		$CURRENT_PAGE=_("Nutzerdomänen bearbeiten");
+		break;
 	case "Lebenslauf":
 		$HELP_KEYWORD="Basis.HomepageLebenslauf";
 		if ($auth->auth['perm'] == "dozent")
@@ -560,8 +564,9 @@ if ($view != 'Forum'
 		</tr>
 	</table>
 	<table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">
-		<? if ($view == 'Daten' || $view == 'Lebenslauf' || $view == 'Studium') :
+		<? if ($view == 'Daten' || $view == 'Lebenslauf' || $view == 'Studium' || $view == 'userdomains') :
 		$info_text['Studium'] = _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen.");
+		$info_text['userdomains'] = _("Hier können Sie die Liste Ihrer Nutzerdomänen einsehen.");
 		$info_text['Daten'] = _("Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern.");
 		$info_text['Lebenslauf'] = _("Hier können Sie Angaben &uuml;ber ihre privaten Kontaktdaten sowie Lebenslauf und Hobbies machen.");
 		?>
@@ -819,65 +824,6 @@ if ($view == 'Studium') {
 	echo "</td></tr>\n";
 
 
-	// Nutzerdomänen, die mir zugeordnet sind
-	if (count(UserDomain::getUserDomains()) &&
-	    ($my_about->auth_user['perms'] == 'autor' || $my_about->auth_user['perms'] == 'tutor')) { // nur für Autoren und Tutoren
-		$allow_change_ud = !StudipAuthAbstract::CheckField("userdomain_id", $my_about->auth_user['auth_plugin']) && $perm->have_perm('admin');
-
-		$cssSw->resetClass();
-		$cssSw->switchClass();
-		echo '<tr><td class="blank">';
-		echo '<br><b>&nbsp; ' . _("Ich bin folgenden Nutzerdomänen zugeordnet:") . '</b>';
-		if ($allow_change_ud){
-			echo '<form action="'.URLHelper::getLink('?cmd=userdomain_edit&username='.$username.'&view='.$view.'&studipticket='.get_ticket().'#userdomains').'" method="POST">';
-		}
-		echo '<table width="99%" align="center" border="0" cellpadding="2" cellspacing="0">'."\n";
-		echo '<tr><td width="30%" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="2">';
-		$flag = FALSE;
-
-		$i = 0;
-		foreach ($my_about->user_userdomains as $domain) {
-			if (!$i) {
-				echo '<tr><td class="steelgraudunkel" width="80%">' . _("Nutzerdomäne") . '</td><td class="steelgraudunkel" width="30%">' ;
-				echo (($allow_change_ud)?  _("austragen") : '&nbsp;');
-				echo '</td></tr>';
-			}
-			$cssSw->switchClass();
-			echo '<tr><td class="'.$cssSw->getClass().'" width="80%">' . htmlReady($domain->getName()) . '</td><td class="' . $cssSw->getClass().'" width="20%" align="center">';
-			if ($allow_change_ud){
-				echo '<input type="CHECKBOX" name="userdomain_delete[]" value="'.$domain->getID().'">';
-			} else {
-				echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/haken_transparent.gif" border="0">';
-			}
-			echo "</td><tr>\n";
-			$i++;
-			$flag = TRUE;
-		}
-
-		if (!$flag && $allow_change_ud) {
-			echo '<tr><td class="'.$cssSw->getClass().'" colspan="2"><br /><font size=-1><b>' . _("Sie sind noch keiner Nutzerdomäne zugeordnet.") . "</b><br /><br />\n" . "</font></td><tr>\n";
-		}
-		$cssSw->resetClass();
-		$cssSw->switchClass();
-		echo '</table></td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top"><blockquote><br />';
-		if($allow_change_ud){
-			echo _("Wählen Sie eine Nutzerdomäne aus der folgenden Liste aus:") . "<br>\n";
-			echo '<br><div align="center"><a name="userdomains">&nbsp;</a>';
-			$my_about->select_userdomain();
-			echo '</div><br /></b>' . _("Wenn Sie Nutzerdomänen wieder entfernen möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.") . "<br />\n";
-			echo _("Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.") . "<br /><br />\n";
-			echo '<input type="IMAGE" ' . makeButton('uebernehmen', 'src') . ' value="' . _("Änderungen übernehmen") . '">';
-			echo "</form>\n";
-		} else {
-			echo _("Die Informationen zu Ihren Nutzerdomänen werden vom System verwaltet und k&ouml;nnen daher von Ihnen nicht ge&auml;ndert werden.");
-		}
-		echo '</blockquote></td></tr></table>'."\n";
-		if ($allow_change_ud) echo "</form>\n";
-	}
-
-	echo "</td></tr>\n";
-
-
 	//Institute, an denen studiert wird
 	if (($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor")) {
 		$allow_change_in = ($GLOBALS['ALLOW_SELFASSIGN_STUDYCOURSE'] || $perm->have_perm('admin'))? TRUE:FALSE;
@@ -931,6 +877,69 @@ if ($view == 'Studium') {
 	}
 	echo '</td></tr>';
 
+}
+
+
+if ($view == 'userdomains') {
+	if ($perm->have_perm('root') && $username == $auth->auth["uname"]) {
+		echo '<tr><td align="left" valign="top" class="blank"><blockquote>'."<br /><br />\n" . _("Als Root haben Sie keine Nutzerdomänen.") . "<br /><br />\n";
+	} else {
+		echo '<tr><td align="left" valign="top" class="blank">'."\n";
+	}
+
+	// Nutzerdomänen, die mir zugeordnet sind
+	$allow_change_ud = !StudipAuthAbstract::CheckField("userdomain_id", $my_about->auth_user['auth_plugin']) && $perm->have_perm('admin');
+
+	$cssSw->resetClass();
+	$cssSw->switchClass();
+	echo '<tr><td class="blank" valign="top">';
+	echo '<b>&nbsp; ' . _("Ich bin folgenden Nutzerdomänen zugeordnet:") . '</b>';
+	if ($allow_change_ud){
+		echo '<form action="'.URLHelper::getLink('?cmd=userdomain_edit&username='.$username.'&view='.$view.'&studipticket='.get_ticket().'#userdomains').'" method="POST">';
+	}
+	echo '<table width="99%" align="center" border="0" cellpadding="2" cellspacing="0">'."\n";
+	echo '<tr><td width="30%" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="2">';
+
+	$flag = FALSE;
+	$i = 0;
+	foreach ($my_about->user_userdomains as $domain) {
+		if (!$i) {
+			echo '<tr><td class="steelgraudunkel" width="80%">' . _("Nutzerdomäne") . '</td><td class="steelgraudunkel" width="30%">' ;
+			echo (($allow_change_ud)?  _("austragen") : '&nbsp;');
+			echo '</td></tr>';
+		}
+		$cssSw->switchClass();
+		echo '<tr><td class="'.$cssSw->getClass().'" width="80%">' . htmlReady($domain->getName()) . '</td><td class="' . $cssSw->getClass().'" width="20%" align="center">';
+		if ($allow_change_ud){
+			echo '<input type="CHECKBOX" name="userdomain_delete[]" value="'.$domain->getID().'">';
+		} else {
+			echo '<img src="'. $GLOBALS['ASSETS_URL'] . 'images/haken_transparent.gif" border="0">';
+		}
+		echo "</td><tr>\n";
+		$i++;
+		$flag = TRUE;
+	}
+
+	if (!$flag && $allow_change_ud) {
+		echo '<tr><td class="'.$cssSw->getClass().'" colspan="2"><br /><font size=-1><b>' . _("Sie sind noch keiner Nutzerdomäne zugeordnet.") . "</b><br /><br />\n" . "</font></td><tr>\n";
+	}
+	$cssSw->resetClass();
+	$cssSw->switchClass();
+	echo '</table></td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top"><blockquote><br />';
+	if($allow_change_ud){
+		echo _("Wählen Sie eine Nutzerdomäne aus der folgenden Liste aus:") . "<br>\n";
+		echo '<br><div align="center"><a name="userdomains">&nbsp;</a>';
+		$my_about->select_userdomain();
+		echo '</div><br /></b>' . _("Wenn Sie Nutzerdomänen wieder entfernen möchten, markieren Sie die entsprechenden Felder in der linken Tabelle.") . "<br />\n";
+		echo _("Mit einem Klick auf <b>&Uuml;bernehmen</b> werden die gewählten Änderungen durchgeführt.") . "<br /><br />\n";
+		echo '<input type="IMAGE" ' . makeButton('uebernehmen', 'src') . ' value="' . _("Änderungen übernehmen") . '">';
+		echo "</form>\n";
+	} else {
+		echo _("Die Informationen zu Ihren Nutzerdomänen werden vom System verwaltet und k&ouml;nnen daher von Ihnen nicht ge&auml;ndert werden.");
+	}
+	echo '</blockquote></td></tr></table>'."\n";
+	if ($allow_change_ud) echo "</form>\n";
+	echo "</td></tr>\n";
 }
 
 

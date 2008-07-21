@@ -33,10 +33,10 @@
           </td>
           <td>
             <a href="<?= $controller->url_for('domain_admin/edit/'.$domain->getID()) ?>">
-              <?= Assets::img('edit_transparent.gif') ?>
+              <?= Assets::img('edit_transparent.gif', array('alt' => _('bearbeiten'))) ?>
             </a>
             <a href="<?= $controller->url_for('domain_admin/delete/'.$domain->getID()) ?>">
-              <?= Assets::img('trash.gif') ?>
+              <?= Assets::img('trash.gif', array('alt' => _('löschen'))) ?>
             </a>
           </td>
         </tr>

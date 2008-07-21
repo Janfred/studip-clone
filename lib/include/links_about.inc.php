@@ -1,4 +1,5 @@
 <?
+# Lifter001: TODO
 # Lifter002: TODO
 // vim: noexpandtab
 /*
@@ -96,6 +97,9 @@ if ($my_about->auth_user["perms"] != "dozent" && $my_about->auth_user["perms"] !
 }
 
 if ($my_about->auth_user['perms'] != 'root') {
+	if (count(UserDomain::getUserDomains())) {
+		$structure["userdomains"] = array('topKat' => 'daten', 'name' => _("Nutzerdomänen"), 'link' => URLHelper::getLink("edit_about.php?view=userdomains&username=$username"), 'active' => FALSE);
+	}
 	$structure["karriere"] = array('topKat' => 'daten', 'name' => _("Einrichtungsdaten"), 'link' => "edit_about.php?view=Karriere&username=$username", 'active' => FALSE);
 }
 
@@ -187,6 +191,9 @@ switch ($i_page) {
 			break;
 			case 'Studium':
 				$reiter_view='studium';
+			break;
+			case "userdomains":
+				$reiter_view="userdomains";
 			break;
 			case "Sonstiges":
 				$reiter_view="sonstiges";
