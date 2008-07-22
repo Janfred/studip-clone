@@ -1,5 +1,4 @@
 <?php
-# Lifter002: TODO
 
 /*
  * Copyright (C) 2007 - André Klaßen (aklassen@uos.de)
@@ -246,10 +245,10 @@ class Avatar {
    * @return void
    */
   function reset() {
-    if($this->is_customized()){
-	  @unlink(self::getCustomAvatarPath($this->user_id, Avatar::NORMAL));
-	  @unlink(self::getCustomAvatarPath($this->user_id, Avatar::SMALL));
-	  @unlink(self::getCustomAvatarPath($this->user_id, Avatar::MEDIUM));
+    if  ($this->is_customized()) {
+      @unlink(self::getCustomAvatarPath($this->user_id, Avatar::NORMAL));
+      @unlink(self::getCustomAvatarPath($this->user_id, Avatar::SMALL));
+      @unlink(self::getCustomAvatarPath($this->user_id, Avatar::MEDIUM));
     }
   }
 
