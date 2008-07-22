@@ -206,7 +206,7 @@ class Avatar {
     }
 
     // na dann kopieren wir mal...
-    $filename = sprintf('%s/user/$s.%s',
+    $filename = sprintf('%s/user/%s.%s',
                         $GLOBALS['DYNAMIC_CONTENT_PATH'], $this->user_id, $ext);
 
     if (!@move_uploaded_file($_FILES[$userfile]['tmp_name'], $filename)) {
