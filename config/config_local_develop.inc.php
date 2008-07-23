@@ -61,7 +61,7 @@ $ASSETS_URL = "http://develop.studip.de:8080/studip/assets/";
 if ($ASSETS_URL[0] === '/') {
 	$host = preg_replace('%^([a-z]+:/*[^/]*).*%', '$1', $ABSOLUTE_URI_STUDIP);
 	$ASSETS_URL = $host . $ASSETS_URL;
-} else if (!preg_match('/^[a-z]+:/', $url)) {
+} else if (!preg_match('/^[a-z]+:/', $ASSETS_URL)) {
 	$ASSETS_URL = $ABSOLUTE_URI_STUDIP . $ASSETS_URL;
 }
  
