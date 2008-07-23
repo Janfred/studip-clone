@@ -73,7 +73,7 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && ($auth->is_authenticated() && $user-
 	$rss_id = StudipNews::GetRssIdFromRangeId('studip');
 	if($rss_id){
 		$_include_additional_header = '<link rel="alternate" type="application/rss+xml" '
-									.'title="RSS" href="' . $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'rss.php?id='.$rss_id.'"/>';
+									.'title="RSS" href="rss.php?id='.$rss_id.'"/>';
 	}
 }
 

@@ -8,7 +8,7 @@
     <? endif ?>
     <? if (basename($_SERVER['SCRIPT_NAME']) !== 'logout.php' &&
            $GLOBALS['AUTH_LIFETIME'] > 0) : ?>
-      <meta http-equiv="REFRESH" CONTENT="<?= $GLOBALS['AUTH_LIFETIME'] * 60 ?>; URL=<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>logout.php">
+      <meta http-equiv="REFRESH" CONTENT="<?= $GLOBALS['AUTH_LIFETIME'] * 60 ?>; URL=<?= $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] ?>logout.php">
     <? endif ?>
     <link rel="SHORTCUT ICON" href="<?= $GLOBALS['FAVICON'] ?>">
     <title><?= isset($GLOBALS['_html_head_title']) ? $GLOBALS['_html_head_title'] : 'Stud.IP' ?></title>

@@ -120,7 +120,7 @@ class HeaderController {
 				$chatimage = "chat1";
 			}
 			$ret['text'] = _("Chat");
-			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."chat_online.php";
+			$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']."chat_online.php";
 			$ret['info'] = $chat_tip;
 			$ret['image'] = $chatimage;
 			return $ret;
@@ -146,7 +146,7 @@ class HeaderController {
 				}
 			}
 			$ret['text'] = _("Online");
-			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."online.php";
+			$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']."online.php";
 			$ret['info'] = $onlinetip;
 			$ret['image'] = $onlineimage;
 			$ret['accesskey'] = $this->accesskey_enabled;
@@ -198,7 +198,7 @@ class HeaderController {
 		$homeinfo .= ($global_obj['vote']['neue'] + $global_obj['eval']['neue']) ? " - " . sprintf(_(" %s neue Umfrage(n)"), ($global_obj['vote']['neue'] + $global_obj['eval']['neue'])) : "";
 
 		$ret['text'] = _("Start");
-		$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP'].
+		$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'].
 		  (isset($_REQUEST['again']) ? 'index.php?cancel_login=1' : 'index.php');
 		$ret['info'] = $homeinfo;
 		$ret['image'] = $homeimage;
@@ -219,7 +219,7 @@ class HeaderController {
 			$courselink = $perm->have_perm("root") ? "sem_portal.php" : "meine_seminare.php";
 		}
 		$ret['text'] = $coursetext;
-		$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP'].$courselink;
+		$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'].$courselink;
 		$ret['info'] = $courseinfo;
 		$ret['image'] = "meinesem";
 		$ret['accesskey'] = $this->accesskey_enabled;
@@ -228,7 +228,7 @@ class HeaderController {
 
 	function getHeaderItemImprint(){
 		$ret['text'] = _("Impressum");
-		$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."impressum.php?cancel_login=1";
+		$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']."impressum.php?cancel_login=1";
 		return $ret;
 	}
 
@@ -236,7 +236,7 @@ class HeaderController {
 		global $user;
 		if(is_object($user) && $user->id != 'nobody'){
 			$ret['text'] = _("Suche");
-			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."auswahl_suche.php";
+			$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']."auswahl_suche.php";
 			$ret['accesskey'] = $this->accesskey_enabled;
 			return $ret;
 		} else {
@@ -271,11 +271,11 @@ class HeaderController {
 		global $user;
 		if(is_object($user) && $user->id != 'nobody'){
 			$ret['text'] = _("Logout");
-			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."logout.php";
+			$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']."logout.php";
 			$ret['accesskey'] = $this->accesskey_enabled;
 		} else {
 			$ret['text'] = _("Login");
-			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."index.php?again=yes";
+			$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']."index.php?again=yes";
 		}
 		return $ret;
 	}
@@ -284,7 +284,7 @@ class HeaderController {
 		global $user;
 		if((!is_object($user) || $user->id == 'nobody') && array_search("CAS", $GLOBALS["STUDIP_AUTH_PLUGIN"])){
 			$ret['text'] = _("Login CAS");
-			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP'].
+			$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'].
 			  "index.php?again=yes&cancel_login=1&sso=cas";
 		} else {
 			$ret = null;
@@ -296,7 +296,7 @@ class HeaderController {
 		global $user;
 		if((!is_object($user) || $user->id == 'nobody') && array_search("Shib", $GLOBALS["STUDIP_AUTH_PLUGIN"])){
 			$ret['text'] = _("Login Shibboleth");
-			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP'].
+			$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'].
 			  "index.php?again=yes&cancel_login=1&sso=shib";
 		} else {
 			$ret = null;
@@ -333,7 +333,7 @@ class HeaderController {
 				$tip = _("Sie haben keine alten empfangenen Nachrichten.");
 			}
 			$ret['text'] = _("Post");
-			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP']."sms_box.php?sms_inout=in";
+			$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']."sms_box.php?sms_inout=in";
 			$ret['info'] = $tip;
 			$ret['image'] = $icon;
 			$ret['accesskey'] = $this->accesskey_enabled;
@@ -351,7 +351,7 @@ class HeaderController {
 			else $time = $LastLogin;
 			$picture = "einst";
 			$hp_txt = _("Zu Ihrer Einstellungsseite");
-			$hp_link = $GLOBALS['ABSOLUTE_URI_STUDIP']."about.php";
+			$hp_link = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']."about.php";
 			$db->query("SELECT COUNT(post_id) AS count
 						FROM guestbook
 						WHERE range_id='".$user->id."'
@@ -389,7 +389,7 @@ class HeaderController {
 				$planerinfo = _("Stundenplan und Kontakte");
 			  }
 		  	$ret['text'] = _("Planer");
-			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP'].$planerlink;
+			$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'].$planerlink;
 			$ret['info'] = $planerinfo;
 			$ret['image'] = 'planer';
 			$ret['accesskey'] = $this->accesskey_enabled;
@@ -403,7 +403,7 @@ class HeaderController {
 		global $perm, $user;
 		if (is_object($user) && $perm->have_perm("tutor")) {
 			$ret['text'] = _("Admin");
-			$ret['link'] = $GLOBALS['ABSOLUTE_URI_STUDIP'].
+			$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'].
 			  "adminarea_start.php?list=TRUE";
 			$ret['info'] = _("Zu Ihrer Administrationsseite");
 			$ret['image'] = 'admin';

@@ -521,7 +521,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 				} 
 				if (!$links_admin_data["sem_id"]) {
 					echo '&nbsp;<a href="' .
-					 (($SessSemName[1]) ?  $GLOBALS['ABSOLUTE_URI_STUDIP'].'admin_seminare1.php?list=TRUE' : $_SERVER['PHP_SELF'].'?list=TRUE&new_session=TRUE'). '">' . makeButton('abbrechen', 'img') . '</a>';
+					 (($SessSemName[1]) ? 'admin_seminare1.php?list=TRUE' : $_SERVER['PHP_SELF'].'?list=TRUE&new_session=TRUE'). '">' . makeButton('abbrechen', 'img') . '</a>';
 				} 
 				print("&nbsp;<a href=\"$PHP_SELF?archive_kill=TRUE\">" . makeButton("archivieren", "img") . "</a>"); 
 				// can we inc?

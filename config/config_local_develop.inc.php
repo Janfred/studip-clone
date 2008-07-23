@@ -43,15 +43,21 @@ $ABSOLUTE_PATH_STUDIP = $STUDIP_BASE_PATH . '/public/';
 $CANONICAL_RELATIVE_PATH_STUDIP = dirname($_SERVER['PHP_SELF']) . '/';
 
 
-// automagically computing ABSOLUTE_URI_STUDIP
-// customize if required
-// change this, if MAIL_NOTIFICATION activated
-# $ABSOLUTE_URI_STUDIP = sprintf('http%s://%s%s%s',
-#   $_SERVER['SERVER_PORT'] == 443 || $_SERVER['HTTPS'] == 'on' ? 's' : '',
-#   $_SERVER['SERVER_NAME'],
-#   in_array($_SERVER['SERVER_PORT'], array(80, 443)) ? '' : ':' . $_SERVER['SERVER_PORT'],
-#   $CANONICAL_RELATIVE_PATH_STUDIP);
+// ABSOLUTE_URI_STUDIP: insert the absolute URL to your Stud.IP installation; it should end with a '/'
 $ABSOLUTE_URI_STUDIP = "http://develop.studip.de/studip/";
+
+// automagically compute ABSOLUTE_URI_STUDIP if $_SERVER['SERVER_NAME'] is set
+if (isset($_SERVER['SERVER_NAME'])) {
+	$ABSOLUTE_URI_STUDIP = $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
+	$ABSOLUTE_URI_STUDIP .= '://'.$_SERVER['SERVER_NAME'];
+
+	if ($_SERVER['HTTPS'] == 'on' && $_SERVER['SERVER_PORT'] != 443 ||
+	    $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 80) {
+		$ABSOLUTE_URI_STUDIP .= ':'.$_SERVER['SERVER_PORT'];
+	}
+
+	$ABSOLUTE_URI_STUDIP .= $CANONICAL_RELATIVE_PATH_STUDIP;
+}
 
 // default ASSETS_URL, customize if required
 # $ASSETS_URL = $ABSOLUTE_URI_STUDIP . 'assets/';
