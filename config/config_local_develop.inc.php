@@ -57,6 +57,14 @@ $ABSOLUTE_URI_STUDIP = "http://develop.studip.de/studip/";
 # $ASSETS_URL = $ABSOLUTE_URI_STUDIP . 'assets/';
 $ASSETS_URL = "http://develop.studip.de:8080/studip/assets/";
 
+// construct absolute URL for ASSETS_URL
+if ($ASSETS_URL[0] === '/') {
+	$host = preg_replace('%^([a-z]+:/*[^/]*).*%', '$1', $ABSOLUTE_URI_STUDIP);
+	$ASSETS_URL = $host . $ASSETS_URL;
+} else if (!preg_match('/^[a-z]+:/', $url)) {
+	$ASSETS_URL = $ABSOLUTE_URI_STUDIP . $ASSETS_URL;
+}
+ 
 // absolute filesystem path to the plugin packages
 $PLUGINS_PATH = $ABSOLUTE_PATH_STUDIP . 'plugins_packages';
 
