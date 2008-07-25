@@ -68,7 +68,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 	}
 
 	function showPluginList($plugins){
-		$relativepath = $this->pluginref->getPluginpath();
+		$relativepath = $this->pluginref->getPluginURL();
 		?>
 			<tr>
 				<th align="left"><?= _("Name")?></th>
@@ -100,7 +100,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		$nav = $this->pluginref->getTopNavigation();
 		$this->showMessage($msg);
 
-		$relativepath = $this->pluginref->getPluginpath();
+		$relativepath = $this->pluginref->getPluginURL();
 		?>
 		  	<form action="<?= PluginEngine::getLink($this->pluginref) ?>" method="post">
 		  	<input type="hidden" name="action" value="config" />

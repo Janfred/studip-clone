@@ -86,7 +86,7 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin{
 	 * Getter- und Setter für die Attribute
    */
 	function getChangeindicatoriconname() {
-		return $this->getPluginpath() . "/" . $this->changeindicatoriconname;
+		return $this->getPluginURL() . '/' . $this->changeindicatoriconname;
 	}
 
 	function setChangeindicatoriconname($newicon) {

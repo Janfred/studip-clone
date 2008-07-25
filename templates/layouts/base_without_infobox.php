@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <? if (in_array(basename($_SERVER['SCRIPT_NAME']), array('dispatch.php', 'plugins.php'))) : ?>
+    <? if (in_array(basename($_SERVER['SCRIPT_NAME']), array('plugins.php'))) : ?>
       <base href="<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>">
     <? endif ?>
     <? if (basename($_SERVER['SCRIPT_NAME']) !== 'logout.php' &&
