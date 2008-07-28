@@ -92,9 +92,10 @@ if ($SEMINAR_LOCK_ENABLE) {
 	require_once ('lib/classes/LockRules.class.php');
 	$lockRule = new LockRules();
 	$data = $lockRule->getSemLockRule($id);
-	if ($data['attributes']['room_time'] && !$perm->have_perm('admin')) {
+	if (LockRules::Check($id, 'room_time')) {
 		$_LOCKED = TRUE;
-		$sem->createInfo(_("Diese Seite ist für die Bearbeitung gesperrt. Sie können die Daten einsehen, jedoch nicht verändern."));
+		$sem->createInfo(_("Diese Seite ist für die Bearbeitung gesperrt. Sie können die Daten einsehen, jedoch nicht verändern.")
+			. ($data['description'] ? '<br>'.fixLinks($data['description']) : ''));
 	}
 }
 

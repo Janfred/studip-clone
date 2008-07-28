@@ -34,6 +34,7 @@ require_once('lib/classes/StudipLitList.class.php');
 require_once('lib/classes/StudipNews.class.php');
 require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ObjectConnections.class.php");
 require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ELearningUtils.class.php");
+require_once ('lib/classes/LockRules.class.php');
 
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
@@ -107,6 +108,27 @@ if ($dec)
 			$archiv_assi_data["pos"] = $archiv_assi_data["pos"] + $d;
 	} 
 	
+	
+if(LockRules::Check($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"], 'seminar_archive')) {
+		$lockRule = new LockRules();
+		$lockdata = $lockRule->getSemLockRule($archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"]);
+		$msg = 'error§' . _("Die Veranstaltung kann nicht archiviert werden.").'§';
+		if ($lockdata['description']){
+			$msg .= "info§" . fixlinks($lockdata['description']).'§';
+		}
+		?>
+		<table border=0 align="center" cellspacing=0 cellpadding=0 width="100%">
+		<tr><td class="blank" colspan=2><br>
+		<?
+		parse_msg($msg);
+		?>
+		</td></tr>
+		</table>
+		<?
+		page_close();
+		die();
+}
+
 // Delete (and archive) the lecture
 if ($archive_kill) {
 	$run = TRUE;

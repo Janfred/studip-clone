@@ -109,6 +109,7 @@ $SEM_CLASS[1]=array("name"=>_("Lehre"), 					//the name of the class
 					"write_access_nobody"=>FALSE, 		//indicates, if write access level 0 is possible. If this is not possibly, don't set default_write_level to 0
 					"topic_create_autor"=>FALSE,		//indicates, if global autor is allowed to create topic in the forums
 					"visible"=>TRUE,			//indicates, if the seminar is visible throughout the systems, if FALSE, it is hidden!
+					"course_creation_forbidden" => FALSE, //indicates if it is allowed to create courses of this class
 					//modules, select the active modules for this class
 					"forum"=>TRUE,				//forum, this module is stud_ip core; always available
 					"documents"=>TRUE,			//documents, this module is stud_ip core; always available

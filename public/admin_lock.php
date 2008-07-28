@@ -61,7 +61,7 @@ if (isset($SessSemName[1]) && (!$make_lock)) {
 }
 // # Get a database connection
 $lock_rules = new LockRules();
-$all_lock_rules = array_merge(array(array('name' => '--' . _("keine Sperrebene") . '--','lock_id' => 'none')), (array)$lock_rules->getAllLockRules());
+$all_lock_rules = array_merge(array(array('name' => '--' . _("keine Sperrebene") . '--','lock_id' => 'none')), (array)$lock_rules->getAllLockRules($perm->have_perm('root')));
 
 //echo "<body>";
 $containerTable=new ContainerTable();
@@ -79,20 +79,25 @@ echo $zt->closeRow();
 
 // a Seminar is selected!
 if (isset($SessSemName[1]) && isset($selected)) {
-	$form	 = 	"<form name=\"\" action=\"".$PHP_SELF."\" method=\"post\">";
-	$form	.=	"<input type=\"hidden\" name=\"make_lock\" value=\"1\">";
-	$form 	.=	"<select name=\"lock_sem[{$SessSemName[1]}]\">";
-	for ($i=0;$i<count($all_lock_rules);$i++) {
-		$form .= "<option value=\"".$all_lock_rules[$i]["lock_id"]."\"";
-		if ($all_lock_rules[$i]["lock_id"]==$seminar_row["lock_rule"]) {
-			$form .= " selected ";
+	$rule = $lock_rules->getLockRule($seminar_row["lock_rule"]);
+	if(LockRules::Check($SessSemName[1], 'seminar_locking')){
+		$form = htmlReady($rule['name']);
+	} else {
+		$form	 = 	"<form name=\"\" action=\"".$PHP_SELF."\" method=\"post\">";
+		$form	.=	"<input type=\"hidden\" name=\"make_lock\" value=\"1\">";
+		$form 	.=	"<select name=\"lock_sem[{$SessSemName[1]}]\">";
+		for ($i=0;$i<count($all_lock_rules);$i++) {
+			$form .= "<option value=\"".$all_lock_rules[$i]["lock_id"]."\"";
+			if ($all_lock_rules[$i]["lock_id"]==$seminar_row["lock_rule"]) {
+				$form .= " selected ";
+			}
+			$form .= ">".htmlReady($all_lock_rules[$i]["name"])."</option>";
 		}
-		$form .= ">".htmlReady($all_lock_rules[$i]["name"])."</option>";
+		$form	.=	"</select>";
+		$form 	.=	"<input type=\"hidden\" name=\"lock_all\" value=\"-1\">";
+		$form	.=	makeButton("zuweisen", "input");
+		$form 	.=	"</form>";
 	}
-	$form	.=	"</select>";
-	$form 	.=	"<input type=\"hidden\" name=\"lock_all\" value=\"-1\">";
-	$form	.=	makeButton("zuweisen", "input");
-	$form 	.=	"</form>";
 	echo $zt->row(array(htmlReady($seminar_row["Veranstaltungsnummer"]),
 	                    htmlReady($seminar_row["Name"]),
 	                    $form));

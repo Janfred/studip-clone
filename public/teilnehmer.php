@@ -39,6 +39,7 @@ require_once ('config.inc.php');	//We need the config for some parameters of the
 require_once ('lib/user_visible.inc.php');
 require_once ('lib/export/export_studipdata_func.inc.php');
 require_once ('lib/classes/Avatar.class.php');
+require_once ('lib/classes/LockRules.class.php');
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
@@ -224,7 +225,7 @@ if ($cmd=="hidescore") {
 	}
 }
 
-if (Seminar_Session::check_ticket($studipticket)){
+if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'participants')){
 	// edit special seminar_info of an user
 	if ($cmd == "change_userinfo") {
 		//first we have to check if he is really "Dozent" of this seminar
@@ -647,6 +648,13 @@ if (Seminar_Session::check_ticket($studipticket)){
 //Alle fuer das Losen anstehenden Veranstaltungen bearbeiten (wenn keine anstehen wird hier nahezu keine Performance verbraten!)
 check_admission();
 
+if($SEMINAR_LOCK_ENABLE){
+	$lock_ruler = new LockRules();
+	$lockdata = $lock_ruler->getSemLockRule($SessSemName[1]);
+	if ($lockdata['description'] && LockRules::CheckLockRulePermission($SessSemName[1], $lockdata['permission'])){
+		$msg .= "info§" . fixlinks($lockdata['description']);
+	}
+}
 
 $db5->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$id'");
 
@@ -1030,7 +1038,7 @@ while (list ($key, $val) = each ($gruppe)) {
 	printf("<td class=\"steel\" width=\"9%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Nachricht"));
 
 
-	if ($rechte) {
+	if ($rechte && !LockRules::Check($id, 'participants')) {
 		$tooltip = tooltip(_("Klicken, um Auswahl umzukehren"),false);
 		if ($sem->isAdmissionEnabled())
 			$width=15;
@@ -1214,7 +1222,7 @@ while (list ($key, $val) = each ($gruppe)) {
 
 	// Befoerderungen und Degradierungen
 	$username=$db->f("username");
-	if ($rechte) {
+	if ($rechte && !LockRules::Check($id, 'participants')) {
 
 		// Tutor entlassen
 		if ($key == "tutor" AND $SemUserStatus!="tutor") {
@@ -1284,8 +1292,9 @@ while (list ($key, $val) = each ($gruppe)) {
 			else
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp;</td>", $class);
 		}
-
-		// info-field for users
+	} // Ende der Dozenten/Tutorenspalten
+	print("</tr>\n");
+			// info-field for users
 		if ((is_opened($db->f("user_id")) || in_array($key, $open_areas)) && $rechte) { // show further userinfosi
 			$info_is_open = true;
 			$user_data = array();
@@ -1371,14 +1380,10 @@ while (list ($key, $val) = each ($gruppe)) {
 			</tr>
 		<?
 		}
-	} // Ende der Dozenten/Tutorenspalten
-
-
-	print("</tr>\n");
 	$c++;
 } // eine Zeile zuende
 
-if($key != 'dozent' && $rechte && !$info_is_open) {
+if($key != 'dozent' && $rechte && !$info_is_open && !LockRules::Check($id, 'participants')) {
 	echo '<tr><td class="blank" colspan="'.($showscore ? 8 : 7).'">&nbsp;</td>';
 	if (isset($multiaction[$key]['insert'][0]) && !($key == 'autor' && !$tutor_count)) echo '<td class="blank" align="center">' . makeButton('eintragen','input', $multiaction[$key]['insert'][1],'do_' . $multiaction[$key]['insert'][0]) . '</td>';
 	else echo '<td class="blank">&nbsp;</td>';
@@ -1420,8 +1425,10 @@ if ($rechte) {
 			printf("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td>", _("Position"));
 		printf("<td class=\"steel\" width=\"10%%\" align=\"center\">&nbsp; </td>");
 		printf("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td>", _("Nachricht"));
-		printf("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=\"-1\"><a name=\"blubb\" onClick=\"return invert_selection('admission_insert','waitlist');\" %s><b>%s</b></a></font></td>", tooltip(_("Klicken, um Auswahl umzukehren"),false), _("eintragen"));
-		printf("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=\"-1\"><a name=\"bla\" onClick=\"return invert_selection('admission_delete','waitlist');\" %s><b>%s</b></a></font></td>", tooltip(_("Klicken, um Auswahl umzukehren"),false), _("entfernen"));
+		if(!LockRules::Check($id, 'participants')){
+			printf("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=\"-1\"><a name=\"blubb\" onClick=\"return invert_selection('admission_insert','waitlist');\" %s><b>%s</b></a></font></td>", tooltip(_("Klicken, um Auswahl umzukehren"),false), _("eintragen"));
+			printf("<td class=\"steel\" width=\"15%%\" align=\"center\"><font size=\"-1\"><a name=\"bla\" onClick=\"return invert_selection('admission_delete','waitlist');\" %s><b>%s</b></a></font></td>", tooltip(_("Klicken, um Auswahl umzukehren"),false), _("entfernen"));
+		}
 		printf("<td class=\"steel\" width=\"10%%\" align=\"center\"><font size=\"-1\"><b>%s</b></font></td></tr>\n", _("Kontingent"));
 
 
@@ -1437,21 +1444,24 @@ if ($rechte) {
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp; </td>", $cssSw->getClass());
 
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" %s border=\"0\"></a></td>", $cssSw->getClass(), URLHelper::getLink('sms_send.php?sms_source_page=teilnehmer.php&rec_uname='.$db->f("username")), tooltip(_("Nachricht an User verschicken")));
-
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><input type=\"image\" name=\"admission_rein\" value=\"%s\" border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\">
-					<input type=\"checkbox\" name=\"admission_insert[%s]\" value=\"1\"></td>", $cssSw->getClass(), $db->f("username"), $db->f("username"));
-			printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"%s\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/down.gif\" width=\"21\" height=\"16\"></a>
-					<input type=\"checkbox\" name=\"admission_delete[%s]\" value=\"1\"></td>", $cssSw->getClass(), URLHelper::getLink("?cmd=admission_raus&username=".$db->f("username")."&studipticket=$studipticket"), $db->f("username"));
+			if(!LockRules::Check($id, 'participants')){
+				printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><input type=\"image\" name=\"admission_rein\" value=\"%s\" border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\">
+						<input type=\"checkbox\" name=\"admission_insert[%s]\" value=\"1\"></td>", $cssSw->getClass(), $db->f("username"), $db->f("username"));
+				printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><a href=\"%s\"><img border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/down.gif\" width=\"21\" height=\"16\"></a>
+						<input type=\"checkbox\" name=\"admission_delete[%s]\" value=\"1\"></td>", $cssSw->getClass(), URLHelper::getLink("?cmd=admission_raus&username=".$db->f("username")."&studipticket=$studipticket"), $db->f("username"));
+			}
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td></tr>\n", $cssSw->getClass(), ($db->f("studiengang_id") == "all") ? _("alle Studieng&auml;nge") : $db->f("name"));
 		}
-		echo '<tr><td class="blank" colspan="4" align="right"><font size="-1">';
-		echo '<img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="absmiddle" hspace="3" border="0" '.tooltip(_("Mit dieser Einstellung beeinflussen Sie, ob Teilnehmer die Sie hinzufügen auf die Kontingentplätze angerechnet werden."),1,1).' >';
-		echo '<label for="kontingent">'._("Kontingent berücksichtigen:");
-		echo '<input id="kontingent" type="checkbox" checked name="consider_contingent" value="1" style="vertical-align:middle"></label>';
-		echo '&nbsp;</font></td>';
-		echo '<td class="blank" align="center">' . makeButton('eintragen','input',_("Ausgewählte Nutzer aus der Warteliste in die Veranstaltung eintragen"),'do_admission_insert') . '</td>';
-		echo '<td class="blank" align="center">' . makeButton('entfernen','input',_("Ausgewählte Nutzer aus der Warteliste entfernen"),'do_admission_delete') . '</td>';
-		echo '<td class="blank">&nbsp;</td></tr>';
+		if(!LockRules::Check($id, 'participants')){
+			echo '<tr><td class="blank" colspan="4" align="right"><font size="-1">';
+			echo '<img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="absmiddle" hspace="3" border="0" '.tooltip(_("Mit dieser Einstellung beeinflussen Sie, ob Teilnehmer die Sie hinzufügen auf die Kontingentplätze angerechnet werden."),1,1).' >';
+			echo '<label for="kontingent">'._("Kontingent berücksichtigen:");
+			echo '<input id="kontingent" type="checkbox" checked name="consider_contingent" value="1" style="vertical-align:middle"></label>';
+			echo '&nbsp;</font></td>';
+			echo '<td class="blank" align="center">' . makeButton('eintragen','input',_("Ausgewählte Nutzer aus der Warteliste in die Veranstaltung eintragen"),'do_admission_insert') . '</td>';
+			echo '<td class="blank" align="center">' . makeButton('entfernen','input',_("Ausgewählte Nutzer aus der Warteliste entfernen"),'do_admission_delete') . '</td>';
+			echo '<td class="blank">&nbsp;</td></tr>';
+		}
 		echo '</table>';
 		echo '</td></tr></form>';
 	}
@@ -1459,7 +1469,7 @@ if ($rechte) {
 
 // Der Dozent braucht mehr Unterstuetzung, also Tutor aus der(n) Einrichtung(en) berufen...
 //Note the option "only_inst_user" from the config.inc. If it is NOT setted, this Option is disabled (the functionality will do in this case do seachform below)
-if ($rechte
+if (!LockRules::Check($id, 'participants') && $rechte
 		&& $SemUserStatus!="tutor"
 		&& $SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]
 		&& $_REQUEST['cmd'] != 'csv') {
@@ -1497,7 +1507,7 @@ if ($rechte
 } // Ende der Berufung
 
 //insert autors via free search form
-if ($rechte) {
+if (!LockRules::Check($id, 'participants') && $rechte) {
 	if ($_REQUEST['cmd'] != 'csv') {
 	if ($search_exp) {
 		$search_exp = trim($search_exp);
@@ -1681,32 +1691,31 @@ if ($rechte) {
 	}
 
 	echo "</table>\n</form>";
+} // end insert autor
 
-	if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1]))) {
-		include_once($PATH_EXPORT . "/export_linking_func.inc.php");
-		echo chr(10) . '<table width="90%" border="0">';
+if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1]))) {
+	include_once($PATH_EXPORT . "/export_linking_func.inc.php");
+	echo chr(10) . '<tr>';
+	echo chr(10) . "<td class=\"blank\"><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("TeilnehmerInnen") . ' '. $SessSemName[0], "rtf", "rtf-teiln", "", _("TeilnehmerInnen exportieren als rtf Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/rtf-icon.gif" border="0">', 'passthrough'). "</font></b></td>";
+	echo chr(10) . "<td class=\"blank\"><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("TeilnehmerInnen") . ' '. $SessSemName[0], "csv", "csv-teiln", "", _("TeilnehmerInnen exportieren als csv Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0">', 'passthrough') . "</font></b></td>";
+	echo chr(10) . '</tr>';
+	
+	if ($awaiting){
 		echo chr(10) . '<tr>';
-		echo chr(10) . "<td><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("TeilnehmerInnen") . ' '. $SessSemName[0], "rtf", "rtf-teiln", "", _("TeilnehmerInnen exportieren als rtf Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/rtf-icon.gif" border="0">', 'passthrough'). "</font></b></td>";
-		echo chr(10) . "<td><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("TeilnehmerInnen") . ' '. $SessSemName[0], "csv", "csv-teiln", "", _("TeilnehmerInnen exportieren als csv Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0">', 'passthrough') . "</font></b></td>";
+		echo chr(10) . "<td class=\"blank\"><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("Warteliste") .' ' . $SessSemName[0], "rtf", "rtf-warteliste","awaiting",_("Warteliste exportieren als rtf Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/rtf-icon.gif" border="0">', 'passthrough') . "</font></b></td>";
+		echo chr(10) . "<td class=\"blank\"><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("Warteliste") .' ' . $SessSemName[0], "csv", "csv-warteliste","awaiting",_("Warteliste exportieren csv Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0">', 'passthrough') . "</font></b></td>";
 		echo chr(10) . '</tr>';
-
-		if ($awaiting){
-			echo chr(10) . '<tr>';
-			echo chr(10) . "<td><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("Warteliste") .' ' . $SessSemName[0], "rtf", "rtf-warteliste","awaiting",_("Warteliste exportieren als rtf Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/rtf-icon.gif" border="0">', 'passthrough') . "</font></b></td>";
-			echo chr(10) . "<td><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("Warteliste") .' ' . $SessSemName[0], "csv", "csv-warteliste","awaiting",_("Warteliste exportieren csv Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0">', 'passthrough') . "</font></b></td>";
-			echo chr(10) . '</tr>';
-		}
-		echo chr(10) . '</table>';
+	}
 	}
 
 
-	?>
-	<tr>
-		<td class="blank" colspan="2">&nbsp;
-		</td>
-	</tr>
-	<?
-} // end insert autor
+?>
+<tr>
+<td class="blank" colspan="2">&nbsp;
+</td>
+</tr>
+<?
+
 
 
 echo '</td></tr></table>';

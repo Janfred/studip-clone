@@ -345,7 +345,7 @@ if ($statusgruppen && sizeof($statusgruppen) > 0) {
 	} else if (isset($_REQUEST['choosePreset'])) {
 		$template->set_attribute('role_data', array('name' => $_REQUEST['presetName']));
 	}
-
+	$template->set_attribute('show_search_and_members_form', !LockRules::Check($range_id, 'participants'));
 	// show the tree-view of the statusgroups
 	echo $template->render();
 	

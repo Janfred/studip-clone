@@ -375,8 +375,10 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	}
 	if ($perm->have_perm("admin")) {
 		$structure["new_user"]=array ('topKat'=>"global", 'name'=>_("Benutzer"), 'link'=>"new_user_md5.php", 'active'=>FALSE);
-		$structure["range_tree"]=array ('topKat'=>"global", 'name'=>_("Einrichtungshierarchie"), 'link'=>"admin_range_tree.php", 'active'=>FALSE);
-		if ($perm->is_fak_admin()) {
+		if($perm->have_perm($RANGE_TREE_ADMIN_PERM == 'root' ? 'root' : 'admin')){
+			$structure["range_tree"]=array ('topKat'=>"global", 'name'=>_("Einrichtungshierarchie"), 'link'=>"admin_range_tree.php", 'active'=>FALSE);
+		}
+		if ($perm->have_perm($SEM_TREE_ADMIN_PERM == 'root' ? 'root' : 'admin') && $perm->is_fak_admin()) {
 			$structure["sem_tree"]=array ('topKat'=>"global", 'name'=>_("Veranstaltungshierarchie"), 'link'=>"admin_sem_tree.php", 'active'=>FALSE);
 		}
 		$structure["aux_adjust"]=array (topKat=>"global", name=>("Zusatzangaben definieren"), link=>"admin_aux_adjust.php", active=>FALSE);
@@ -1124,10 +1126,11 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare_assi.php?cmd=do_copy&cp_id=%s&start_level=TRUE&class=1\">%s</a></font>", $seminar_id, makeButton("kopieren"));
 					break;
 				case "admin_lock.php":
-					$db5 = new Db_Seminar;
-					$db5->query("SELECT lock_rule from seminare WHERE Seminar_id='".$seminar_id."'");
-					$db5->next_record();
-					if ($perm->have_perm("admin")) {
+					$lock_rules = new LockRules();
+					$rule = $lock_rules->getSemLockRule($seminar_id);
+					if(LockRules::Check($seminar_id, 'seminar_locking')){
+						echo htmlReady($rule['name']);
+					} else {
 						?>
 						<input type="hidden" name="make_lock" value=1>
 						<select name=lock_sem[<? echo $seminar_id ?>]>
@@ -1137,7 +1140,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 								echo "<option value=".$all_lock_rules[$i]["lock_id"]."";
 								if (isset($lock_all) && $lock_all==$all_lock_rules[$i]["lock_id"]) {
 									echo " selected ";
-								} elseif (!isset($lock_all) && ($all_lock_rules[$i]["lock_id"]==$db5->f("lock_rule"))) {
+								} elseif (!isset($lock_all) && ($all_lock_rules[$i]["lock_id"]==$rule["lock_id"])) {
 									echo " selected ";
 								}
 								echo ">".htmlReady($all_lock_rules[$i]["name"])."</option>";

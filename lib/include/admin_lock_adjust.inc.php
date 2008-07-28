@@ -15,7 +15,7 @@ require_once("lib/classes/ZebraTable.class.php");
 
 function show_lock_rules() {
 	$lock_rules = new LockRules;
-	$all_lock_data = $lock_rules->getAllLockRules();
+	$all_lock_data = $lock_rules->getAllLockRules($GLOBALS['perm']->have_perm('root'));
 	return $all_lock_data;
 }
 
@@ -36,7 +36,7 @@ function delete_lock_rule($lock_id) {
 }
 
 function show_content() {
-	$data = "<br><a href=\"".$GLOBALS['PHP_SELF']."?action=new\">"._("<b>Neue Sperrebene anlegen</b>")."</a>";
+	$data = "<br><a href=\"".URLHelper::getLink("?action=new")."\">"._("<b>Neue Sperrebene anlegen</b>")."</a>";
 	$zt = new ZebraTable(array("width"=>"100%", "padding"=>"5"));
 	$data .= $zt->openHeaderRow();
 	$data .= $zt->cell("<b>"._("Name")."</b>",array("width"=>"25%"));
@@ -47,7 +47,12 @@ function show_content() {
 	$all_lock_data = show_lock_rules();
 	if (is_array($all_lock_data)) {
 		for ($i=0;$i<count($all_lock_data);$i++) {
-			$data .= $zt->row(array($all_lock_data[$i]["name"], $all_lock_data[$i]["description"], "<a href=".$GLOBALS['PHP_SELF']."?action=edit&lock_id=".$all_lock_data[$i]["lock_id"]."><img ".makeButton("bearbeiten","src")." border=0></a>", "<a href=".$GLOBALS['PHP_SELF']."?action=confirm_delete&lock_id=".$all_lock_data[$i]["lock_id"]."><img ".makeButton("loeschen","src")." border=0></a>"));
+			$data .= $zt->row(array($all_lock_data[$i]["name"],
+							$all_lock_data[$i]["description"],
+							"<a href=\"".URLHelper::getLink("?action=edit&lock_id=".$all_lock_data[$i]["lock_id"])."\">
+							<img ".makeButton("bearbeiten","src")." border=0></a>",
+							"<a href=\"".URLHelper::getLink("?action=confirm_delete&lock_id=".$all_lock_data[$i]["lock_id"])."\">
+							<img ".makeButton("loeschen","src")." border=0></a>"));
 		}
 	}
 	$data .= $zt->close();
@@ -55,20 +60,29 @@ function show_content() {
 }
 
 function show_lock_rule_form($lockdata="",$edit=0) {
+	global $perm;
+	if(!$lockdata['permission']){
+		$lockdata['permission'] = 'dozent'; 
+	}
 	if ($edit) {
 		$form =	"<h3>".sprintf("Sperrebene \"%s\" ändern", htmlready($lockdata["name"]))."</h3>";
 	} else {
 		$form =	"<h3>"._("Neue Sperrebene eingeben")."</h3>";
 	}
 	$zt2 = new ZebraTable(array("width"=>"100%","padding"=>"5"));
-	//$form .= $zt;
-	$form .= "<form action=\"admin_lock_adjust.php\" METHOD=\"POST\">";
+	$form .= "<form action=\"".URLHelper::getLink()."\" METHOD=\"POST\">";
 	$form .= "<input type=\"hidden\" name=\"lockdata[lock_id]\" value=\"".$lockdata["lock_id"]."\">";
 	$form .= $zt2->openRow();
-	$form .= $zt2->cell(_("Name"),array("width"=>"80%"));
-	$form .= $zt2->cell("<input type=\"text\" name=\"lockdata[name]\" value=\"".htmlReady($lockdata["name"])."\">",array("width"=>"20%","colspan"=>"2"));
-	//$form .= $zt2->row(array(_("Name"),"<input type=\"text\" name=\"lockdata[name]\" value=\"".$lockdata["name"]."\">",""));
-	$form .= $zt2->row(array(_("Beschreibung"),"<textarea name=\"lockdata[description]\" rows=5 cols=30>".htmlReady($lockdata["description"])."</textarea>",""));
+	$form .= $zt2->cell(_("Name"),array("width"=>"30%"));
+	$form .= $zt2->cell("<input type=\"text\" style=\"width:90%\" name=\"lockdata[name]\" value=\"".htmlReady($lockdata["name"])."\">",array("width"=>"70%","colspan"=>"2"));
+	$form .= $zt2->row(array(_("Beschreibung") .'<br><span style="font-size:80%">'._("(dieser Text wird auf allen Seiten mit gesperrtem Inhalt angezeigt)").'</span>',"<textarea name=\"lockdata[description]\" rows=5 style=\"width:90%\">".htmlReady($lockdata["description"])."</textarea>",""));
+	$form .= $zt2->cell(_("Nutzerstatus").'<br><span style="font-size:80%">'._("(die Einstellungen dieser Sperrebene gelten für Nutzer bis zu dieser Berechtigung)").'</span>', array("width"=>"30%"));
+	$select = "\n" . '<select name="lockdata[permission]">';
+	foreach(($perm->have_perm('root') ? array('tutor','dozent','admin') : array('tutor','dozent')) as $p){
+		$select .= "\n" . '<option ' . ($lockdata['permission'] == $p ? 'selected' : '') . '>'.$p.'</option>';
+	}
+	$select .= "\n" . '</select>';
+	$form .= $zt2->cell($select , array("width"=>"70%","colspan"=>"2"));
 	$form .= $zt2->close();
 	$form .= "<br>";
 	$zt = new ZebraTable(array("width"=>"100%","padding"=>"5"));
@@ -76,8 +90,6 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	$form .= $zt->cell("<font size=4><b>"._("Attribute")."</b></font>",array("width"=>"73%"));
 	$form .= $zt->cell("<b>".""."</b>",array("width"=>"14%","align"=>"left"));
 	$form .= $zt->cell("<b>".""."</b>",array("width"=>"13%","align"=>"left"));
-	//$form .= $zt->closeRow();
-	//$form .= $zt->row(array("<font size=4><b>"._("Attribut")."</b></font>","",""));
 	$form .= $zt->closeRow();
 	$form .= $zt->headerRow(array("&nbsp;<B>"._("Grunddaten")."</B>", "<B>"._("gesperrt")."</B>", "<B>"._("nicht gesperrt")."</B>"));
 	$form .= $zt->closeRow();
@@ -167,6 +179,11 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	} else {
 		$form .= $zt->row(array(_("Studienbereiche"),"<input type=\"radio\" name=\"lockdata[attributes][sem_tree]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][sem_tree]\" value=0 checked>"));
 	}
+	if ($lockdata["attributes"]["participants"]) {
+		$form .= $zt->row(array(_("Teilnehmer hinzufügen/löschen"),"<input type=\"radio\" name=\"lockdata[attributes][participants]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][participants]\" value=0>"));
+	} else {
+		$form .= $zt->row(array(_("Teilnehmer hinzufügen/löschen"),"<input type=\"radio\" name=\"lockdata[attributes][participants]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][participants]\" value=0 checked>"));
+	}
 	if ($edit) {
 		$form .= "<input type=\"hidden\" name=\"action\" value=\"confirm_edit\">";
 		$form .= $zt->openRow();
@@ -230,6 +247,7 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 		$form .= $zt->cell("<input type=\"IMAGE\" ".makeButton("anlegen", "src").">",array("colspan"=>"3","align"=>"center"));
 	}
 	$form .= $zt->closeRow();
+	
 	$form .= $zt->headerRow(array("&nbsp;<B>"._("Zeiten/Räume")."</B>", "<B>"._("gesperrt")."</B>", "<B>"._("nicht gesperrt")."</B>"));
 	$form .= $zt->closeRow();
 	$form .= $zt->openRow();
@@ -238,27 +256,7 @@ function show_lock_rule_form($lockdata="",$edit=0) {
     } else {
 		$form .= $zt->row(array(_("Zeiten/Räume"),"<input type=\"radio\" name=\"lockdata[attributes][room_time]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][room_time]\" value=0 checked>"));
     }
-    /*if ($lockdata["attributes"]["start_time"]) {
-		$form .= $zt->row(array(_("Semester"),"<input type=\"radio\" name=\"lockdata[attributes][start_time]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][start_time]\" value=0>"));
-	} else {
-		$form .= $zt->row(array(_("Semester"),"<input type=\"radio\" name=\"lockdata[attributes][start_time]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][start_time]\" value=0 checked>"));
-	}
-	if ($lockdata["attributes"]["duration_time"]) {
-		$form .= $zt->row(array(_("Dauer (in Semestern)"),"<input type=\"radio\" name=\"lockdata[attributes][duration_time]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][duration_time]\" value=0>"));
-	} else {
-		$form .= $zt->row(array(_("Dauer (in Semestern)"),"<input type=\"radio\" name=\"lockdata[attributes][duration_time]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][duration_time]\" value=0 checked>"));
-	}
-	if ($lockdata["attributes"]["metadata_dates"]) {
-		$form .= $zt->row(array(_("Termine"),"<input type=\"radio\" name=\"lockdata[attributes][metadata_dates]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][metadata_dates]\" value=0>"));
-	} else {
-		$form .= $zt->row(array(_("Termine"),"<input type=\"radio\" name=\"lockdata[attributes][metadata_dates]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][metadata_dates]\" value=0 checked>"));
-	}
-	if ($lockdata["attributes"]["further_time_dates"]) {
-		$form .= $zt->row(array(_("Veranstaltungsbeginn"),"<input type=\"radio\" name=\"lockdata[attributes][further_time_dates]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][further_time_dates]\" value=0>"));
-	} else {
-		$form .= $zt->row(array(_("Veranstaltungsbeginn"),"<input type=\"radio\" name=\"lockdata[attributes][further_time_dates]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][further_time_dates]\" value=0 checked>"));
-	}*/
-	if ($edit) {
+    if ($edit) {
 		$form .= "<input type=\"hidden\" name=\"action\" value=\"confirm_edit\">";
 		$form .= $zt->openRow();
 		$form .= $zt->cell("&nbsp;",array("colspan" => "1"));
@@ -292,6 +290,11 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 		$form .= $zt->row(array(_("Typ des Anmeldeverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=0>"));
 	} else {
 		$form .= $zt->row(array(_("Typ des Anmeldeverfahrens"),"<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_type]\" value=0 checked>"));
+	}
+	if ($lockdata["attributes"]["admission_studiengang"]) {
+		$form .= $zt->row(array(_("zugelassenene Studiengänge"),"<input type=\"radio\" name=\"lockdata[attributes][admission_studiengang]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_studiengang]\" value=0>"));
+	} else {
+		$form .= $zt->row(array(_("zugelassenene Studiengänge"),"<input type=\"radio\" name=\"lockdata[attributes][admission_studiengang]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][admission_studiengang]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["admission_prelim"]) {
 		$form .= $zt->row(array(_("Vorl&auml;ufigkeit der Anmeldungen"),"<input type=\"radio\" name=\"lockdata[attributes][admission_prelim]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][admission_prelim]\" value=0>"));
@@ -331,11 +334,45 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	if ($edit) {
 		$form .= "<input type=\"hidden\" name=\"action\" value=\"confirm_edit\">";
 		$form .= $zt->openRow();
-		$form .= $zt->cell("<input type=\"IMAGE\" ".makeButton("uebernehmen", "src").">&nbsp;<a href=\"{$GLOBALS['PHP_SELF']}\"><img ".makeButton("abbrechen","src")." border=0></a>",array("colspan"=>"3","align"=>"center"));
+		$form .= $zt->cell("&nbsp;",array("colspan" => "1"));
+		$form .= $zt->cell("<input type=\"IMAGE\" ".makeButton("uebernehmen", "src").">",array("colspan"=>"3","align"=>"center"));
 	} else {
 		$form .= "<input type=\"hidden\" name=\"action\" value=\"insert\">";
 		$form .= $zt->openRow();
-		$form .= $zt->cell("<input type=\"IMAGE\" ".makeButton("anlegen", "src").">&nbsp;<a href=\"{$GLOBALS['PHP_SELF']}\"><img ".makeButton("abbrechen","src")." border=0></a>",array("colspan"=>"3","align"=>"center"));
+		$form .= $zt->cell("&nbsp;",array("colspan" => "1"));
+		$form .= $zt->cell("<input type=\"IMAGE\" ".makeButton("anlegen", "src").">",array("colspan"=>"3","align"=>"center"));
+	}
+	$form .= $zt->closeRow();
+	$form .= $zt->headerRow(array("&nbsp;<B>"._("Spezielle Aktionen")."</B>", "<B>"._("gesperrt")."</B>", "<B>"._("nicht gesperrt")."</B>"));
+	$form .= $zt->closeRow();
+	$form .= $zt->openRow();
+	if ($lockdata["attributes"]["seminar_copy"]) {
+		$form .= $zt->row(array(_("Veranstaltung kopieren"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_copy]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][seminar_copy]\" value=0>"));
+    } else {
+		$form .= $zt->row(array(_("Veranstaltung kopieren"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_copy]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][seminar_copy]\" value=0 checked>"));
+    }
+	if ($lockdata["attributes"]["seminar_archive"]) {
+		$form .= $zt->row(array(_("Veranstaltung archivieren"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_archive]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][seminar_archive]\" value=0>"));
+    } else {
+		$form .= $zt->row(array(_("Veranstaltung archivieren"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_archive]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][seminar_archive]\" value=0 checked>"));
+    }
+	if($perm->have_perm('root')){
+		if ($lockdata["attributes"]["seminar_locking"]) {
+			$form .= $zt->row(array(_("Sperregel zuweisen/entfernen"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_locking]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][seminar_locking]\" value=0>"));
+		} else {
+			$form .= $zt->row(array(_("Sperregel zuweisen/entfernen"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_locking]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][seminar_locking]\" value=0 checked>"));
+		}
+	}
+   
+	$form .= $zt->closeRow();
+	if ($edit) {
+		$form .= "<input type=\"hidden\" name=\"action\" value=\"confirm_edit\">";
+		$form .= $zt->openRow();
+		$form .= $zt->cell("<input type=\"IMAGE\" ".makeButton("uebernehmen", "src").">&nbsp;<a href=\"".URLHelper::getLink()."\"><img ".makeButton("abbrechen","src")." border=0></a>",array("colspan"=>"3","align"=>"center"));
+	} else {
+		$form .= "<input type=\"hidden\" name=\"action\" value=\"insert\">";
+		$form .= $zt->openRow();
+		$form .= $zt->cell("<input type=\"IMAGE\" ".makeButton("anlegen", "src").">&nbsp;<a href=\"".URLHelper::getLink()."\"><img ".makeButton("abbrechen","src")." border=0></a>",array("colspan"=>"3","align"=>"center"));
 	}
 	$form .= "</form>";
 	$form .= $zt->close();
@@ -351,6 +388,7 @@ function update_existing_rule($updatedata) {
 function parse_lockdata($lockdata) {
 	$insertdata = array();
 	$insertdata["name"] = $lockdata["name"];
+	$insertdata["permission"] = $lockdata["permission"];
 	$insertdata["lock_id"] = $lockdata["lock_id"];
 	$insertdata["description"] = $lockdata["description"];
 	while (list($key,$val)=each($lockdata["attributes"])) {

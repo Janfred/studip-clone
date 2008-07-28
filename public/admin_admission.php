@@ -197,50 +197,49 @@ if (isset($seminar_id) && $_REQUEST['delete_domain'])
 
 // new stuff start
 
-if (isset($seminar_id) && !$perm->have_perm("admin") && $SEMINAR_LOCK_ENABLE) {
+if (isset($seminar_id) && $SEMINAR_LOCK_ENABLE) {
 
-	$lock_status = "attributes";
-  $lockdata = $lock_rules->getSemLockRule($seminar_id);
+	$lock_rules = new LockRules();
+	$lockdata = $lock_rules->getSemLockRule($seminar_id);
 
-  $lock_text = $lock_rules->getLockText();
 
-	$db->query("SELECT * FROM seminare WHERE Seminar_id = '$seminar_id' ");
+  $db->query("SELECT * FROM seminare WHERE Seminar_id = '$seminar_id' ");
   $db->next_record();
 
-  if ($lockdata[$lock_status]["admission_turnout"])
+  if (LockRules::Check($seminar_id, 'admission_turnout'))
     $admin_admission_data["admission_turnout"]=$db->f("admission_turnout");
 
-  if ($lockdata[$lock_status]["admission_type"])
+  if (LockRules::Check($seminar_id, 'admission_type'))
     $admin_admission_data["admission_type"]=$db->f("admission_type");
 
-  if ($lockdata[$lock_status]["admission_endtime"])
+  if (LockRules::Check($seminar_id, 'admission_endtime'))
     $admin_admission_data["admission_endtime"]= (int)$db->f("admission_endtime");
 
-  if ($lockdata[$lock_status]["admission_binding"])
+  if (LockRules::Check($seminar_id, 'admission_binding'))
     $admin_admission_data["admission_binding"]=$db->f("admission_binding");
 
-  if ($lockdata[$lock_status]["Passwort"])
+  if (LockRules::Check($seminar_id, 'Passwort'))
     $admin_admission_data["passwort"]=$db->f("Passwort");
 
-  if ($lockdata[$lock_status]["Lesezugriff"])
+  if (LockRules::Check($seminar_id, 'Lesezugriff'))
     $admin_admission_data["read_level"]=$db->f("Lesezugriff");
 
-  if ($lockdata[$lock_status]["Schreibzugriff"])
+  if (LockRules::Check($seminar_id, 'Schreibzugriff'))
     $admin_admission_data["write_level"]=$db->f("Schreibzugriff");
 
-  if ($lockdata[$lock_status]["admission_prelim"])
+  if (LockRules::Check($seminar_id, 'admission_prelim'))
     $admin_admission_data["admission_prelim"]=$db->f("admission_prelim");
 
-  if ($lockdata[$lock_status]["admission_prelim_txt"])
+  if (LockRules::Check($seminar_id, 'admission_prelim_txt'))
     $admin_admission_data["admission_prelim_txt"]=$db->f("admission_prelim_txt");
 
-  if ($lockdata[$lock_status]["admission_starttime"])
+  if (LockRules::Check($seminar_id, 'admission_starttime'))
     $admin_admission_data["sem_admission_start_date"]=$db->f("admission_starttime");
 
-  if ($lockdata[$lock_status]["admission_endtime_sem"])
+  if (LockRules::Check($seminar_id, 'admission_endtime_sem'))
     $admin_admission_data["sem_admission_end_date"]= $db->f("admission_endtime_sem");
 
-  if ($lockdata[$lock_status]["admission_disable_waitlist"])
+  if (LockRules::Check($seminar_id, 'admission_disable_waitlist'))
   	$admin_admission_data["admission_disable_waitlist"]= $db->f("admission_disable_waitlist");
 }
 // end new stuff	
@@ -420,7 +419,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		if (($admin_admission_data["write_level"]) <($admin_admission_data["read_level"]))
 			$errormsg=$errormsg."error§"._("Es macht keinen Sinn, die Sicherheitsstufe f&uuml;r den Lesezugriff h&ouml;her zu setzen als f&uuml;r den Schreibzugriff!")."§";
 
-		if (($admin_admission_data["read_level"] == 2 || $admin_admission_data["write_level"] == 2) && !isset($lockdata[$lock_status]["Passwort"])) {
+		if (($admin_admission_data["read_level"] == 2 || $admin_admission_data["write_level"] == 2) && !(LockRules::Check($seminar_id, 'Passwort')) ) {
        			//Password bei Bedarf dann doch noch verschlusseln
 			if (empty($hashpass)) { // javascript disabled
    				if (!$sem_passwd)
@@ -537,7 +536,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 	//Daten speichern
 	if (($uebernehmen_x) && (!$errormsg)) {
 
-	if (!$lockdata[$lock_status]['admission_disable_waitlist'] || $perm->have_perm('admin'))
+	if (!LockRules::Check($seminar_id, 'admission_disable_waitlist') || $perm->have_perm('admin'))
 		{
 		//Warteliste aktivieren / deaktivieren
 			if($admin_admission_data["admission_disable_waitlist"] != $admin_admission_data["admission_disable_waitlist_org"]){
@@ -556,7 +555,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			}
 		}
 
-		if (!$lockdata[$lock_status]['admission_prelim'] || $perm->have_perm('admin'))
+		if (!LockRules::Check($seminar_id, 'admission_prelim'))
 		{
 		//for admission it have to be always 3
 		if ($admission_prelim == 1) {
@@ -603,8 +602,6 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			$admin_admission_data["write_level"]=3;
 		}
 
-		$lock_rule = $lockdata[$lock_status];
-		$admin_permission = $perm->have_perm('admin');
 
 		$data_mapping['admission_turnout'] = 'admission_turnout';
 		$data_mapping['admission_type'] = 'admission_type';
@@ -626,8 +623,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 
 		foreach($data_mapping as $db_field => $form_field)
 		{
-			if ($perm->have_perm('admin')
-					|| !$lockdata[$lock_status][$db_field])
+			if ( !LockRules::Check($seminar_id,$db_field))
 			{
 				$update_data[$db_field] = $admin_admission_data[$form_field];
 			}
@@ -667,25 +663,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 
 		}
 
-/*
-		$db->query ("UPDATE seminare SET
-				admission_turnout = '".$admin_admission_data["admission_turnout"]."' ,
-				admission_type = '".$admin_admission_data["admission_type"]."',
-				admission_endtime= '".$admin_admission_data["admission_endtime"]."',
-				admission_binding = '".$admin_admission_data["admission_binding"]."',
-				admission_starttime = '".$admin_admission_data["sem_admission_start_date"]."',
-				admission_endtime_sem = '".$admin_admission_data["sem_admission_end_date"]."',
-				admission_prelim_txt = '".$admin_admission_data["admission_prelim_txt"]."',
-				Passwort = '".$admin_admission_data["passwort"]."',
-				Lesezugriff = '".$admin_admission_data["read_level"]."',
-				Schreibzugriff  = '".$admin_admission_data["write_level"]."',
-				admission_disable_waitlist = '".$admin_admission_data['admission_disable_waitlist']."',
-				admission_selection_take_place = '".$admin_admission_data["admission_selection_take_place"]."'
-				WHERE seminar_id = '".$admin_admission_data["sem_id"]."' ");
-*/
-
-		if ($perm->have_perm('admin')
-				|| !$lockdata[$lock_status]['admission_type'])
+		if (!LockRules::Check($seminar_id, 'admission_type'))
 		{
 
 
@@ -750,6 +728,9 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 }
 }
 
+if ($lockdata['description'] && LockRules::CheckLockRulePermission($s_id, $lockdata['permission'])){
+	$infomsg .= "info§" . fixlinks($lockdata['description']);
+}
 //Beim Umschalten keine Fehlermeldung
  if (($errormsg) && ((!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$adm_gesperrt_x) && (!$add_studg_x) && (!$delete_studg)))
  	$errormsg='';
@@ -798,7 +779,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 	<tr>
 	<td class="blank" colspan=2>
 	<form method="POST" name="Formular" action="<? echo $PHP_SELF ?>"
-	<? if (!$admin_admission_data["admission_type"] && !isset($lockdata[$lock_status]["Passwort"])) echo " onSubmit=\"return doCrypt();\" "; ?>
+	<? if (!$admin_admission_data["admission_type"] && !(LockRules::Check($seminar_id, 'Passwort'))) echo " onSubmit=\"return doCrypt();\" "; ?>
 	>
 		<table width="99%" border=0 cellpadding=2 cellspacing=0 align="center">
 		<tr <? $cssSw->switchClass() ?>>
@@ -829,7 +810,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 						printf ("<li><font size=-1><a href=\"about.php?username=%s\">%s</a></font></li>", $db->f("username"), htmlReady($db->f("fullname")));
 					}
 				} else { ?>
-          <? if ($lockdata[$lock_status]["admission_type"]) : ?>
+          <? if (LockRules::Check($seminar_id, 'admission_type')) : ?>
       			<br /><? if  ($admin_admission_data["admission_type"] == 0) print makeButton ("keins2", "img");  else print makeButton ("keins", "img") ?> &nbsp;
 						<? if  ($admin_admission_data["admission_type"] == 1) print makeButton ("los2", "img");  else print makeButton ("los", "img") ?> &nbsp;
 						<? if  ($admin_admission_data["admission_type"] == 2) print makeButton ("chronolog2", "img");  else print makeButton ("chronolog", "img") ?> &nbsp;
@@ -883,7 +864,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 						<font size=-1><? echo _("Startdatum f&uuml;r Anmeldungen");?>:</font>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" valign="top" width="30%">
-            <? if (! $lockdata[$lock_status]["admission_starttime"]) :?>
+            <? if (! LockRules::Check($seminar_id, 'admission_starttime')) :?>
 							<font size=-1>&nbsp; <input type="text" name="adm_s_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_start_date"]); else echo _("tt") ?>">.
 								<input type="text" name="adm_s_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_start_date"]); else echo _("mm") ?>">.
               	<input type="text" name="adm_s_jahr" size=4 maxlength=4 value="<? if ($admin_admission_data["sem_admission_start_date"]<>-1) echo date("Y",$admin_admission_data["sem_admission_start_date"]); else echo _("jjjj") ?>"><?="&nbsp;"._("um");?>&nbsp;</font><br />
@@ -909,7 +890,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 						<font size=-1><? echo _("Enddatum f&uuml;r Anmeldungen");?>:</font>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" valign="top" width="30%">
-            <? if (! $lockdata[$lock_status]["admission_starttime"]) :?>
+            <? if (! LockRules::Check($seminar_id, 'admission_starttime')) :?>
               <font size=-1>&nbsp;
 	              <input type="text" name="adm_e_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("d",$admin_admission_data["sem_admission_end_date"]); else echo _("tt") ?>">.
 	              <input type="text" name="adm_e_monat" size=2 maxlength=2 value="<? if ($admin_admission_data["sem_admission_end_date"]<>-1) echo date("m",$admin_admission_data["sem_admission_end_date"]); else echo _("mm") ?>">.
@@ -964,13 +945,13 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 						}
 					} else { ?>
 						<b><?=_("Anmeldemodus:")?></b><br />
-            <? if (!$lockdata[$lock_status]["admission_prelim"]) : ?>
+            <? if (!LockRules::Check($seminar_id, 'admission_prelim')) : ?>
 						<? echo _("Bitte wählen Sie sie hier einen Anmeldemodus aus:"); ?><br/>
-              <input type="RADIO"  name="admission_prelim" <?if ($lockdata[$lock_status]["admission_prelim"]) {echo " disabled ";} ?>value="0" <? if ($admin_admission_data["admission_prelim"] == 0) echo "checked"; ?> /><?=_("Direkter Eintrag")?>&nbsp;
-              <input type="RADIO"  name="admission_prelim" <?if ($lockdata[$lock_status]["admission_prelim"]) {echo " disabled ";} ?>value="1" <? if ($admin_admission_data["admission_prelim"] == 1) echo "checked"; ?> /><?=_("Vorl&auml;ufiger Eintrag")?>
+              <input type="RADIO"  name="admission_prelim" <?if (LockRules::Check($seminar_id, 'admission_prelim')) {echo " disabled ";} ?>value="0" <? if ($admin_admission_data["admission_prelim"] == 0) echo "checked"; ?> /><?=_("Direkter Eintrag")?>&nbsp;
+              <input type="RADIO"  name="admission_prelim" <?if (LockRules::Check($seminar_id, 'admission_prelim')) {echo " disabled ";} ?>value="1" <? if ($admin_admission_data["admission_prelim"] == 1) echo "checked"; ?> /><?=_("Vorl&auml;ufiger Eintrag")?>
             <? else: ?>
-              <input disabled readonly type="RADIO"  name="admission_prelim" <?if ($lockdata[$lock_status]["admission_prelim"]) {echo " disabled ";} ?>value="0" <? if ($admin_admission_data["admission_prelim"] == 0) echo "checked"; ?> /><?=_("Direkter Eintrag")?>&nbsp;
-              <input disabled readonly type="RADIO"  name="admission_prelim" <?if ($lockdata[$lock_status]["admission_prelim"]) {echo " disabled ";} ?>value="1" <? if ($admin_admission_data["admission_prelim"] == 1) echo "checked"; ?> /><?=_("Vorl&auml;ufiger Eintrag")?>
+              <input disabled readonly type="RADIO"  name="admission_prelim" <?if (LockRules::Check($seminar_id, 'admission_prelim')) {echo " disabled ";} ?>value="0" <? if ($admin_admission_data["admission_prelim"] == 0) echo "checked"; ?> /><?=_("Direkter Eintrag")?>&nbsp;
+              <input disabled readonly type="RADIO"  name="admission_prelim" <?if (LockRules::Check($seminar_id, 'admission_prelim')) {echo " disabled ";} ?>value="1" <? if ($admin_admission_data["admission_prelim"] == 1) echo "checked"; ?> /><?=_("Vorl&auml;ufiger Eintrag")?>
             <? endif; ?>
 					<? } ?>
 				</font>
@@ -984,7 +965,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
         <font size=-1>
           <? echo _("Hinweistext bei vorl&auml;ufigen Eintragungen:"); ?>
         </font><br>
-        <? if (! $lockdata[$lock_status]['admission_prelim_txt']) : ?>
+        <? if (! LockRules::Check($seminar_id, 'admission_prelim_txt')) : ?>
           <textarea name="admission_prelim_txt" cols=58 rows=4 ><?php echo htmlReady($admin_admission_data["admission_prelim_txt"]) ?></textarea></td>
         <? else : ?>
           <p>
@@ -1017,7 +998,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 				$admin_admission_data["read_level"]= "1";	//Vorgabe: nur angemeldet oder es war Teilnahmebegrenzung gesetzt
 				?>
 				<font size=-1><u><?=("Lesezugriff:")?></u> </font><br />
-        <?if (! $lockdata[$lock_status]["Lesezugriff"]) : ?>
+        <?if (! LockRules::Check($seminar_id, 'Lesezugriff')) : ?>
 				<font size=-1>
 				<?if (get_config('ENABLE_FREE_ACCESS')) {?>
 					<input type="radio" name="read_level" value="0" <?php print $admin_admission_data["read_level"] == 0 ? "checked" : ""?>> <?=_("freier Zugriff")?> &nbsp;<br />
@@ -1048,7 +1029,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 			<?
 			if (!isset($admin_admission_data["write_level"]) || $admin_admission_data["write_level"]==3)
 				$admin_admission_data["write_level"] = "1";	//Vorgabe: nur angemeldet
-				if (! $lockdata[$lock_status]["Schreibzugriff"]) :
+				if (! LockRules::Check($seminar_id, 'Schreibzugriff')) :
 
 				if (get_config('ENABLE_FREE_ACCESS') && $SEM_CLASS[$SEM_TYPE[$admin_admission_data["status"]]["class"]]["write_access_nobody"]) {
 				?>
@@ -1085,7 +1066,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
 					<font size=-1><b><?=_("Passwort:")?> </b></font><br />
-          <? if (! $lockdata[$lock_status]["Passwort"]) : ?>
+          <? if (! LockRules::Check($seminar_id, 'Passwort')) : ?>
 					<font size=-1><?=_("Bitte geben Sie hier ein Passwort ein, wenn sie <b>Zugriff nur mit Passwort</b> gew&auml;hlt haben.")?></font><br /><br />
 					<?
 					if ($admin_admission_data["passwort"]!="") {
@@ -1128,7 +1109,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
 					<font size=-1><b><?=_("maximale Teilnehmeranzahl:")?> </b></font><br />
 					<font size=-1><?=_("Diese Teilnehmeranzahl dient als Grundlage zur Berechnung der Pl&auml;tze pro Kontingent.")?></font><br /><br />
-					<? if(! $lockdata[$lock_status]['admission_binding']) : ?>
+					<? if(! LockRules::Check($seminar_id, 'admission_binding')) : ?>
 						<font size=-1><input type="TEXT" name="admission_turnout" size=2 maxlength=5 value="<? echo $admin_admission_data["admission_turnout"]; ?>" /> <?=_("Teilnehmende")?></font>
 					<? else : ?>
 						<font size=-1><input disabled readonly type="TEXT" name="admission_turnout" size=2 maxlength=5 value="<? echo $admin_admission_data["admission_turnout"]; ?>" /> <?=_("Teilnehmende")?></font>
@@ -1148,7 +1129,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 							</td>
 						</tr>
 						<tr>
-						<?if (!$admin_admission_data["admission_type_org"] || $perm->have_perm("admin")){
+						<?if (!LockRules::Check($seminar_id, 'admission_studiengang') && (!$admin_admission_data["admission_type_org"] || $perm->have_perm("admin"))){
 							?><td class="<? echo $cssSw->getClass() ?>" colspan="2" >
 							<input style="vertical-align:middle;" type="checkbox" name="admission_enable_quota" <?=($admin_admission_data["admission_enable_quota"] ? 'checked' : '')?> value="1">
 								<font size=-1><?=_("Prozentuale Kontingentierung aktivieren.")."</font>"?>
@@ -1196,14 +1177,14 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 								<input type="HIDDEN" name="studg_name[]" value="<? echo $val["name"] ?>" />
 								<?
 								if($admin_admission_data["admission_enable_quota"]){
-									if ($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin")) {
+									if (LockRules::Check($seminar_id, 'admission_studiengang') || ($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin"))) {
 										printf ("&nbsp; &nbsp; <font size=-1>%s %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
 									} else {
 										printf ("<input type=\"HIDDEN\" name=\"studg_ratio_old[]\" value=\"%s\" />", $val["ratio"]);
 										printf ("<input type=\"TEXT\" name=\"studg_ratio[]\" size=5 maxlength=5 value=\"%s\" /><font size=-1> %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
 										printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", $PHP_SELF, $key);
 									}
-								} elseif (!($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin"))) {
+								} elseif (!LockRules::Check($seminar_id, 'admission_studiengang') && (!($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin")))) {
 									printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." /></a>", $PHP_SELF, $key);
 								}
 								?>
@@ -1220,7 +1201,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 							while($db->next_record()){
 								$stg[] = $db->Record;
 							}
-							if (count($stg) && (!$admin_admission_data["admission_type_org"] || $perm->have_perm("admin"))) {
+							if (count($stg) && !LockRules::Check($seminar_id, 'admission_studiengang') && (!$admin_admission_data["admission_type_org"] || $perm->have_perm("admin"))) {
 								?>
 							<tr>
 								<td class="<? echo $cssSw->getClass() ?>" >
@@ -1262,7 +1243,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 					<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
 						<font size=-1><b><? if ($admin_admission_data["admission_type"] == 1) echo _("Losdatum"); else echo _("Enddatum der Kontingentierung");?>:</b></font><br />
 						<?
-						if ($admin_admission_data["admission_type"] == 1 && !$lockdata[$lock_status]['admission_endtime']) {
+						if ($admin_admission_data["admission_type"] == 1 && !LockRules::Check($seminar_id, 'admission_endtime')) {
 							?>
 							<font size=-1><?=_("Bitte geben Sie hier ein, wann die Wartenden auf der Anmeldeliste in die Veranstaltung gelost werden sollen.")?></font><br /><br />
 							<?
@@ -1272,7 +1253,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 							<?
 						}
 						?>
-						<? if ($lockdata[$lock_status]['admission_endtime'] || ($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin"))) {
+						<? if (LockRules::Check($seminar_id, 'admission_endtime') || ($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin"))) {
 							printf ("<font size=-1>%s um %s Uhr </font>", date("d.m.Y",$admin_admission_data["admission_endtime"]), date("H:i",$admin_admission_data["admission_endtime"]));
 						} else { ?>
 							<font size=-1><input type="text" name="adm_tag" size=2 maxlength=2 value="<? if ($admin_admission_data["admission_endtime"]<>-1) echo date("d",$admin_admission_data["admission_endtime"]); else echo _("tt") ?>">.
@@ -1293,7 +1274,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
 					<font size=-1><b><?=_("Warteliste:")?> </b></font><br />
 
-					<? if (!$lockdata[$lock_status]['admission_disable_waitlist'] || $perm->have_perm('admin')) : ?>
+					<? if (!LockRules::Check($seminar_id, 'admission_disable_waitlist')) : ?>
 						<font size=-1><?=_("Bitte aktivieren Sie diese Einstellung, wenn eine Warteliste erstellt werden soll falls die Anmeldungen die maximale Teilnehmeranzahl überschreiten:")?></font><br />
 						<? if ($num_waitlist && !$admin_admission_data["admission_disable_waitlist"]){
 							?>
@@ -1329,7 +1310,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
 					<font size=-1><b><?=_("verbindliche Anmeldung:")?> </b></font><br />
-          <? if(! $lockdata[$lock_status]['admission_binding']) : ?>
+          <? if(! LockRules::Check($seminar_id, 'admission_binding')) : ?>
 					<font size=-1><?=_("Bitte aktivieren Sie diese Einstellung, wenn die Anmeldung f&uuml;r Veranstaltungen verbindlich erfolgen soll:")?></font><br />
 					<font size=-1 color="red"><b><?=_("Achtung:")?></b></font>&nbsp;<font size=-1><?=_("Verwenden Sie diese Option nur bei entsprechenden Bedarf, etwa nach erfolgter Teilnehmerauswahl durch Losen!")?></font><br /><br />
 					<font size=-1><input type="CHECKBOX" name="admission_binding" <? if ($admin_admission_data["admission_binding"]) echo "checked"; ?> /><?=_("Anmeldung ist <u>verbindlich</u>. (Teilnehmer k&ouml;nnen sich nicht austragen.)")?></font>

@@ -37,7 +37,8 @@ require_once ('lib/log_events.inc.php');
 require_once ('lib/classes/StudipSemTreeSearch.class.php');
 require_once ('lib/classes/Modules.class.php');
 require_once ('lib/classes/DataFieldEntry.class.php');
-require_once ('lib/classes/UserDomain.php'); // Nutzerdomänen
+require_once ('lib/classes/SeminarCategories.class.php');
+require_once ('lib/classes/LockRules.class.php');
 
 $sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
 
@@ -99,137 +100,156 @@ if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS && $form <7) {
 $sess->register("sem_create_data");
 $sess->register("links_admin_data");
 
+//verbotene Kategorien checken
+if (($cmd == 'do_copy' && SeminarCategories::GetBySeminarId($cp_id)->course_creation_forbidden)
+	|| ( $form && (SeminarCategories::Get($sem_create_data['sem_class']) === false || SeminarCategories::Get($sem_create_data['sem_class'])->course_creation_forbidden))){
+	unset($cmd);
+	unset($start_level);
+	unset($form);
+	$sem_create_data = '';
+	$errormsg = "error§" . sprintf(_("Veranstaltungen dieser Kategorie dürfen in dieser Installation nicht angelegt werden!"));
+}
+
 // Kopieren einer vorhandenen Veranstaltung
 //
 if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id)) {
-
-	// Einträge in generischen Datenfelder auslesen und zuweisen
-	$sql = "SELECT datafields_entries.datafield_id, datafields_entries.content, datafields.name, datafields.type FROM datafields_entries LEFT JOIN datafields USING (datafield_id) WHERE range_id = '$cp_id'";
-	$db->query($sql);
-	while ($db->next_record()) {
-		$s_d_fields[$db->f("datafield_id")] = array("type"=>$db->f("type"), "name"=>$db->f("name"), "value"=>$db->f("content"));
-	}
-
-	// Beteiligte Einrichtungen finden und zuweisen
-	$sql = "SELECT institut_id FROM seminar_inst WHERE seminar_id = '$cp_id'";
-	$db->query($sql);
-	while ($db->next_record()) {
-		$sem_bet_inst[] = $db->f("institut_id");
-	}
-
-	// Veranstaltungsgrunddaten finden
-	$sql = "SELECT * FROM seminare WHERE Seminar_id = '$cp_id'";
-	$db->query($sql);
-	$db->next_record();
-	$sem_create_data = '';
-	$sem_create_data["sem_datafields"] = $s_d_fields;
-	$sem_create_data["sem_bet_inst"] = $sem_bet_inst;
-
-	// Termine
-	$serialized_metadata = $db->f("metadata_dates");
-	$data = unserialize($serialized_metadata);
-	$term_turnus = $data["turnus_data"];
-	$sem_create_data["term_turnus"]	= $data["turnus"];
-	$sem_create_data["term_start_woche"] = $data["start_woche"];
-	$sem_create_data["sem_start_termin"] = $data["start_termin"];
-	$sem_create_data["turnus_count"] = count($term_turnus);
-	$sem_create_data["term_art"] = $data["art"];
-	
-	// Nutzerdomänen
-	$sem_create_data["sem_domain"] = UserDomain::getUserDomainsForSeminar($cp_id);
-
-	if ($data['art'] == 1) { //unregelmaessige Veranstaltung oder Block -> Termine kopieren
-		// Sitzungen
-		$db2->query('SELECT * FROM termine WHERE range_id=\''. $cp_id . '\' AND date_typ=\'1\' ORDER by date');
-		$db2_term_count = 0;
-		while ($db2->next_record()) {
-			$db2_start_date = $db2->f('date');
-			$db2_end_date = $db2->f('end_time');
-			$db2_raum = $db2->f('raum');
-			$sem_create_data['term_tag'][$db2_term_count] = intval(date('j', $db2_start_date));
-			$sem_create_data['term_monat'][$db2_term_count] = intval(date('n', $db2_start_date));
-			$sem_create_data['term_jahr'][$db2_term_count] = intval(date('Y', $db2_start_date));
-			$sem_create_data['term_start_stunde'][$db2_term_count] = intval(date('G', $db2_start_date));
-			$sem_create_data['term_start_minute'][$db2_term_count] = intval(date('i', $db2_start_date));
-			$sem_create_data['term_end_stunde'][$db2_term_count] = intval(date('G', $db2_end_date));
-			$sem_create_data['term_end_minute'][$db2_term_count] = intval(date('i', $db2_end_date));
-			$sem_create_data['term_room'][$db2_term_count] = ($db2_raum)? $db2_raum : '';
-			$db2_term_count++;
+	if(LockRules::Check($cp_id, 'seminar_copy')) {
+		$lockRule = new LockRules();
+		$lockdata = $lockRule->getSemLockRule($cp_id);
+		$errormsg = 'error§' . _("Die Veranstaltung kann nicht kopiert werden.").'§';
+		if ($lockdata['description']){
+			$errormsg .= "info§" . fixlinks($lockdata['description']).'§';
 		}
-		$sem_create_data['term_count'] = $db2_term_count;
-		// Vorbesprechung
-//		$db2->query('SELECT * FROM termine WHERE range_id=\'' . $cp_id. '\' AND date_typ=\'2\' ORDER by date');
-//		if ($db2->next_record()) {
-//			$sem_create_data['sem_vor_termin'] = $db2->f('date');
-//			$sem_create_data['sem_vor_end_termin']  = $db2->f('end_time');
-//			if ($db2->f('raum'))
-//				$sem_create_data['sem_vor_raum'] = $db2->f('raum');
-//		} else {
+		unset($cmd);
+		unset($start_level);
+		unset($form);
+		$sem_create_data = '';
+	} else {
+		// Einträge in generischen Datenfelder auslesen und zuweisen
+		$sql = "SELECT datafields_entries.datafield_id, datafields_entries.content, datafields.name, datafields.type FROM datafields_entries LEFT JOIN datafields USING (datafield_id) WHERE range_id = '$cp_id'";
+		$db->query($sql);
+		while ($db->next_record()) {
+			$s_d_fields[$db->f("datafield_id")] = array("type"=>$db->f("type"), "name"=>$db->f("name"), "value"=>$db->f("content"));
+		}
+		
+		// Beteiligte Einrichtungen finden und zuweisen
+		$sql = "SELECT institut_id FROM seminar_inst WHERE seminar_id = '$cp_id'";
+		$db->query($sql);
+		while ($db->next_record()) {
+			$sem_bet_inst[] = $db->f("institut_id");
+		}
+		
+		// Veranstaltungsgrunddaten finden
+		$sql = "SELECT * FROM seminare WHERE Seminar_id = '$cp_id'";
+		$db->query($sql);
+		$db->next_record();
+		$sem_create_data = '';
+		$sem_create_data["sem_datafields"] = $s_d_fields;
+		$sem_create_data["sem_bet_inst"] = $sem_bet_inst;
+		
+		// Termine
+		$serialized_metadata = $db->f("metadata_dates");
+		$data = unserialize($serialized_metadata);
+		$term_turnus = $data["turnus_data"];
+		$sem_create_data["term_turnus"]	= $data["turnus"];
+		$sem_create_data["term_start_woche"] = $data["start_woche"];
+		$sem_create_data["sem_start_termin"] = $data["start_termin"];
+		$sem_create_data["turnus_count"] = count($term_turnus);
+		$sem_create_data["term_art"] = $data["art"];
+		
+		if ($data['art'] == 1) { //unregelmaessige Veranstaltung oder Block -> Termine kopieren
+			// Sitzungen
+			$db2->query('SELECT * FROM termine WHERE range_id=\''. $cp_id . '\' AND date_typ=\'1\' ORDER by date');
+			$db2_term_count = 0;
+			while ($db2->next_record()) {
+				$db2_start_date = $db2->f('date');
+				$db2_end_date = $db2->f('end_time');
+				$db2_raum = $db2->f('raum');
+				$sem_create_data['term_tag'][$db2_term_count] = intval(date('j', $db2_start_date));
+				$sem_create_data['term_monat'][$db2_term_count] = intval(date('n', $db2_start_date));
+				$sem_create_data['term_jahr'][$db2_term_count] = intval(date('Y', $db2_start_date));
+				$sem_create_data['term_start_stunde'][$db2_term_count] = intval(date('G', $db2_start_date));
+				$sem_create_data['term_start_minute'][$db2_term_count] = intval(date('i', $db2_start_date));
+				$sem_create_data['term_end_stunde'][$db2_term_count] = intval(date('G', $db2_end_date));
+				$sem_create_data['term_end_minute'][$db2_term_count] = intval(date('i', $db2_end_date));
+				$sem_create_data['term_room'][$db2_term_count] = ($db2_raum)? $db2_raum : '';
+				$db2_term_count++;
+			}
+			$sem_create_data['term_count'] = $db2_term_count;
+			// Vorbesprechung
+			//		$db2->query('SELECT * FROM termine WHERE range_id=\'' . $cp_id. '\' AND date_typ=\'2\' ORDER by date');
+			//		if ($db2->next_record()) {
+			//			$sem_create_data['sem_vor_termin'] = $db2->f('date');
+			//			$sem_create_data['sem_vor_end_termin']  = $db2->f('end_time');
+			//			if ($db2->f('raum'))
+			//				$sem_create_data['sem_vor_raum'] = $db2->f('raum');
+			//		} else {
 			$sem_create_data['sem_vor_end_termin'] = -1;
 			$sem_create_data['sem_vor_termin'] = -1;
-//		}
-	} else {
-		// Keine Vorbesprechungstermine kopieren
-		$sem_create_data['sem_vor_end_termin'] = -1;
-		$sem_create_data['sem_vor_termin'] = -1;
-	}
-
-	for ($i=0;$i<$sem_create_data["turnus_count"];$i++) {
-		$sem_create_data["term_turnus_start_stunde"][$i] = $term_turnus[$i]["start_stunde"];
-		$sem_create_data["term_turnus_start_minute"][$i] = $term_turnus[$i]["start_minute"];
-		$sem_create_data["term_turnus_end_stunde"][$i] = $term_turnus[$i]["end_stunde"];
-		$sem_create_data["term_turnus_end_minute"][$i] = $term_turnus[$i]["end_minute"];
-		$sem_create_data["term_turnus_resource_id"][$i] = $term_turnus[$i]["resource_id"];
-		$sem_create_data["term_turnus_room"][$i] = $term_turnus[$i]["room"];
-		$sem_create_data["term_turnus_date"][$i] = $term_turnus[$i]["day"];
-		$sem_create_data["term_turnus_desc"][$i] = $term_turnus[$i]["desc"];
-	}
-
-	// Sonstiges
-	$sem_create_data["sem_id"] = $db->f("Seminar_id");
-	$sem_create_data["sem_nummer"] = $db->f("VeranstaltungsNummer");
-	$sem_create_data["sem_inst_id"] = $db->f("Institut_id");
-	$sem_create_data["sem_name"] = $db->f("Name");
-	$sem_create_data["sem_untert"] = $db->f("Untertitel");
-	$sem_create_data["sem_status"] = $db->f("status");
-	$class = $SEM_TYPE[$sem_create_data["sem_status"]]["class"];
-	$sem_create_data["sem_class"] = $class;
-	$sem_create_data["sem_desc"] = $db->f("Beschreibung");
-	$sem_create_data["sem_room"] = $db->f("Ort");
-	$sem_create_data["sem_sonst"] = $db->f("Sonstiges");
-	$sem_create_data["sem_pw"] = $db->f("Passwort");
-	$sem_create_data["sem_sec_lese"] = $db->f("Lesezugriff");
-	$sem_create_data["sem_sec_schreib"] = $db->f("Schreibzugriff");
-	$sem_create_data["sem_start_time"] = $db->f("start_time");
-	$sem_create_data["sem_duration_time"] = $db->f("duration_time");
-	$sem_create_data["sem_art"] = $db->f("art");
-	$sem_create_data["sem_teiln"] = $db->f("teilnehmer");
-	$sem_create_data["sem_voraus"] = $db->f("vorrausetzungen");
-	$sem_create_data["sem_orga"] = $db->f("lernorga");
-	$sem_create_data["sem_leistnw"] = $db->f("leistungsnachweis");
-	$sem_create_data["sem_ects"] = $db->f("ects");
-	//$sem_create_data["sem_admission_date"] = $db->f("admission_endtime");
-	$sem_create_data["sem_admission_date"] = -1;
-	$sem_create_data["sem_turnout"] = $db->f("admission_turnout");
-	//$sem_create_data["sem_admission"] = $db->f("admission_type");
-	$sem_create_data["sem_payment"] = $db->f("admission_prelim");
-	$sem_create_data["sem_paytxt"] = $db->f("admission_prelim_txt");
-	//$sem_create_data["sem_admission_start_date"] = $db->f("admission_starttime");
-	//$sem_create_data["sem_admission_end_date"] = $db->f("admission_endtime_sem");
-	$sem_create_data["sem_admission_start_date"] = -1;
-	$sem_create_data["sem_admission_end_date"] = -1;
-	$sem_create_data["timestamp"] = time(); // wichtig, da sonst beim ersten Aufruf sofort sem_create_data resetted wird!
-	// eintragen der sem_tree_ids
-	$sem_create_data["sem_bereich"] = get_seminar_sem_tree_entries($cp_id);
-
-	// Modulkonfiguration übernehmen
-	$sem_create_data['modules_list'] = $Modules->getLocalModules($cp_id,'sem');
-	$sem_create_data['sem_modules'] = $db->f('modules');
-
-	// Dozenten und Tutoren eintragen
-	$sem_create_data["sem_doz"] = get_seminar_dozent($cp_id);
-	if (!$sem_create_data["sem_tut"] = get_seminar_tutor($cp_id)) {
-		unset($sem_create_data["sem_tut"]);
+			//		}
+		} else {
+			// Keine Vorbesprechungstermine kopieren
+			$sem_create_data['sem_vor_end_termin'] = -1;
+			$sem_create_data['sem_vor_termin'] = -1;
+		}
+		
+		for ($i=0;$i<$sem_create_data["turnus_count"];$i++) {
+			$sem_create_data["term_turnus_start_stunde"][$i] = $term_turnus[$i]["start_stunde"];
+			$sem_create_data["term_turnus_start_minute"][$i] = $term_turnus[$i]["start_minute"];
+			$sem_create_data["term_turnus_end_stunde"][$i] = $term_turnus[$i]["end_stunde"];
+			$sem_create_data["term_turnus_end_minute"][$i] = $term_turnus[$i]["end_minute"];
+			$sem_create_data["term_turnus_resource_id"][$i] = $term_turnus[$i]["resource_id"];
+			$sem_create_data["term_turnus_room"][$i] = $term_turnus[$i]["room"];
+			$sem_create_data["term_turnus_date"][$i] = $term_turnus[$i]["day"];
+			$sem_create_data["term_turnus_desc"][$i] = $term_turnus[$i]["desc"];
+		}
+		
+		// Sonstiges
+		$sem_create_data["sem_id"] = $db->f("Seminar_id");
+		$sem_create_data["sem_nummer"] = $db->f("VeranstaltungsNummer");
+		$sem_create_data["sem_inst_id"] = $db->f("Institut_id");
+		$sem_create_data["sem_name"] = $db->f("Name");
+		$sem_create_data["sem_untert"] = $db->f("Untertitel");
+		$sem_create_data["sem_status"] = $db->f("status");
+		$class = $SEM_TYPE[$sem_create_data["sem_status"]]["class"];
+		$sem_create_data["sem_class"] = $class;
+		$sem_create_data["sem_desc"] = $db->f("Beschreibung");
+		$sem_create_data["sem_room"] = $db->f("Ort");
+		$sem_create_data["sem_sonst"] = $db->f("Sonstiges");
+		$sem_create_data["sem_pw"] = $db->f("Passwort");
+		$sem_create_data["sem_sec_lese"] = $db->f("Lesezugriff");
+		$sem_create_data["sem_sec_schreib"] = $db->f("Schreibzugriff");
+		$sem_create_data["sem_start_time"] = $db->f("start_time");
+		$sem_create_data["sem_duration_time"] = $db->f("duration_time");
+		$sem_create_data["sem_art"] = $db->f("art");
+		$sem_create_data["sem_teiln"] = $db->f("teilnehmer");
+		$sem_create_data["sem_voraus"] = $db->f("vorrausetzungen");
+		$sem_create_data["sem_orga"] = $db->f("lernorga");
+		$sem_create_data["sem_leistnw"] = $db->f("leistungsnachweis");
+		$sem_create_data["sem_ects"] = $db->f("ects");
+		//$sem_create_data["sem_admission_date"] = $db->f("admission_endtime");
+		$sem_create_data["sem_admission_date"] = -1;
+		$sem_create_data["sem_turnout"] = $db->f("admission_turnout");
+		//$sem_create_data["sem_admission"] = $db->f("admission_type");
+		$sem_create_data["sem_payment"] = $db->f("admission_prelim");
+		$sem_create_data["sem_paytxt"] = $db->f("admission_prelim_txt");
+		//$sem_create_data["sem_admission_start_date"] = $db->f("admission_starttime");
+		//$sem_create_data["sem_admission_end_date"] = $db->f("admission_endtime_sem");
+		$sem_create_data["sem_admission_start_date"] = -1;
+		$sem_create_data["sem_admission_end_date"] = -1;
+		$sem_create_data["timestamp"] = time(); // wichtig, da sonst beim ersten Aufruf sofort sem_create_data resetted wird!
+		// eintragen der sem_tree_ids
+		$sem_create_data["sem_bereich"] = get_seminar_sem_tree_entries($cp_id);
+		
+		// Modulkonfiguration übernehmen
+		$sem_create_data['modules_list'] = $Modules->getLocalModules($cp_id,'sem');
+		$sem_create_data['sem_modules'] = $db->f('modules');
+		
+		// Dozenten und Tutoren eintragen
+		$sem_create_data["sem_doz"] = get_seminar_dozent($cp_id);
+		if (!$sem_create_data["sem_tut"] = get_seminar_tutor($cp_id)) {
+			unset($sem_create_data["sem_tut"]);
+		}
 	}
 }
 
@@ -307,7 +327,6 @@ if ($form == 1)
 	$sem_create_data["sem_inst_id"]=$sem_inst_id;
 	$sem_create_data["term_art"]=$term_art;
 	$sem_create_data["sem_start_time"]=$sem_start_time;
-	$sem_create_data["sem_domain"] = array();
 	if (isset($_default_sem)){
 		$one_sem = $semester->getSemesterDataByDate($sem_create_data["sem_start_time"]);
 		$_default_sem = $one_sem['semester_id'];
@@ -860,13 +879,7 @@ if (($send_tut_x) && (!$reset_search_x)) {
 	$level=2;
 }
 
-// delete user domain
-if (isset($_REQUEST['delete_domain'])) {
-	$index = array_search($_REQUEST['delete_domain'], $sem_create_data["sem_domain"]);
-	unset($sem_create_data["sem_domain"][$index]);
-}
-
-if ($search_doz_x || $search_tut_x || $reset_search_x || $sem_bereich_do_search_x || isset($_REQUEST['add_domain_x']) || isset($_REQUEST['delete_domain'])) {
+if (($search_doz_x) || ($search_tut_x) || ($reset_search_x) || $sem_bereich_do_search_x) {
 	$level=2;
 
 } elseif (($form == 2) && ($jump_next_x)) //wenn alles stimmt, Checks und Sprung auf Schritt 3
@@ -1216,13 +1229,13 @@ if (($form == 5) && ($jump_next_x))
           	//Password bei Bedarf dann doch noch verschlusseln
 		if (empty($hashpass)) // javascript disabled
 			{
-     	   		if (!$password)
+     	   		if (!$sem_passwd)
           			$sem_create_data["sem_pw"] = "";
-     			elseif($password != "*******")
+     			elseif($sem_passwd != "*******")
      				{
-    				$sem_create_data["sem_pw"] = md5($password);
-	     			if($password2 != "*******")
-    					$check_pw = md5($password2);
+    				$sem_create_data["sem_pw"] = md5($sem_passwd);
+	     			if($sem_passwd2 != "*******")
+    					$check_pw = md5($sem_passwd2);
     				}
      			}
 		elseif ($hashpass != md5("*******")) // javascript enabled
@@ -1527,15 +1540,7 @@ if (($form == 6) && ($jump_next_x))
 
 			// Speichern der Veranstaltungsdaten -> anlegen des Seminars
 			$sem->store();
-			
-			// speichere die Nutzerdomänen für das neue Seminar
-			$count_doms = 0;
-			foreach ($sem_create_data["sem_domain"] as $domain_id){
-				$domain = new UserDomain($domain_id);
-				$domain->addSeminar($sem->id);	
-				$count_doms ++;
-			}
-			
+
 			//completing the internal settings....
 			$successful_entry=1;
 			$sem_create_data["sem_entry"]=TRUE;
@@ -1865,10 +1870,10 @@ if (!$sem_create_data["sem_class"])
 	<script type="text/javascript" language="javascript">
 	<!--
    		function doCrypt() {
-			document.form_5.hashpass.value = MD5(document.form_5.password.value);
-			document.form_5.hashpass2.value = MD5(document.form_5.password2.value);
-			document.form_5.password.value = "";
-			document.form_5.password2.value = "";
+			document.form_5.hashpass.value = MD5(document.form_5.sem_passwd.value);
+			document.form_5.hashpass2.value = MD5(document.form_5.sem_passwd2.value);
+			document.form_5.sem_passwd.value = "";
+			document.form_5.sem_passwd2.value = "";
 			return true;
 			}
 
@@ -1898,11 +1903,13 @@ if ((!$sem_create_data["sem_class"]) && (!$level)){
 				<blockquote>
 					<table cellpadding=0 cellspacing=2 width="90%" border="0">
 					<?
-					foreach ($SEM_CLASS as $key=>$val) {
-						echo "<tr><td width=\"3%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumrot.gif\" border=0 /></a><td>";
-						echo "<td width=\"97%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$key\">".$val["name"]."</a><td></tr>";
-						echo "<tr><td width=\"3%\" class=\"blank\">&nbsp; <td>";
-						echo "<td width=\"97%\" class=\"blank\"><font size=-1>".$val["create_description"]."</font><td></tr>";
+					foreach (SeminarCategories::GetAll() as $category) {
+						if(!$category->course_creation_forbidden){
+							echo "<tr><td width=\"3%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$category->id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumrot.gif\" border=0 /></a><td>";
+							echo "<td width=\"97%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$category->id\">".$category->name."</a><td></tr>";
+							echo "<tr><td width=\"3%\" class=\"blank\">&nbsp; <td>";
+							echo "<td width=\"97%\" class=\"blank\"><font size=-1>".$category->create_description."</font><td></tr>";
+						}
 					}
 					?>
 					</table>
@@ -2639,77 +2646,6 @@ if ($level == 2)
 							?>
 						</td>
 					</tr>
-					<? if (count(($all_domains = UserDomain::getUserDomains()))) {?>
-					<tr <? $cssSw->switchClass() ?>>
-						<td class="<? echo $cssSw->getClass() ?>" width="4%">
-							&nbsp;
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan=2>
-							<font size=-1><b><?=_("zugelassenene Nutzerdomänen:")?> </b></font><br />
-							<table border=0 cellpadding=2 cellspacing=0>
-								<tr>
-									<td class="<? echo $cssSw->getClass() ?>" colspan=3 >
-										<font size=-1><?=_("Bitte geben Sie hier ein, welche Nutzerdomänen zugelassen sind.")."</font>"?>
-									</td>
-								</tr>
-									<?
-									if (isset($_REQUEST['add_domain_x']) && $_REQUEST['sem_domain'] !== '' &&
-									    !in_array($_REQUEST['sem_domain'], $sem_create_data["sem_domain"])) {
-										$sem_create_data["sem_domain"][]= $_REQUEST['sem_domain']; 
-									}
-
-									foreach ($sem_create_data["sem_domain"] as $domain_id) { 
-										$domain = new UserDomain($domain_id);
-										?> 
-											<tr>
-												<td class="<? echo $cssSw->getClass() ?>" >
-												<font size=-1>
-												<?= htmlReady($domain->getName()) ?>
-												</font>
-												</td>
-												<td class="<?= $cssSw->getClass() ?>" nowrap colspan=2 >
-												<a href="<?= URLHelper::getLink('?delete_domain='.$domain_id) ?>">
-												<img src="<?= $GLOBALS['ASSETS_URL'].'images/trash.gif'.'" '.tooltip(_('Nutzerdomäne aus der Liste löschen')) ?> />
-												</a>
-												</td>
-											</tr>
-										<?
-									 }
-									// get all user domains that can be added
-									$domains = array_diff($all_domains, $sem_create_data["sem_domain"]);
-									if (count($domains)) {
-										?>
-									<tr>
-										<td class="<? echo $cssSw->getClass() ?>" >
-										<font size=-1>
-										<select name="sem_domain">
-										<option value="">-- <?=_("bitte auswählen")?> --</option>
-										<?
-
-										foreach ($domains as $domain) {
-											printf ("<option value=\"%s\">%s</option>", $domain->getID(), htmlReady(my_substr($domain->getName(), 0, 40)));
-										}
-										?>
-										</select>
-										</font>
-										</td>
-
-										<td class="<? echo $cssSw->getClass() ?>">
-											<?=makeButton("hinzufuegen", "input", _("Ausgewählte Nutzerdomäne hinzufügen"), 'add_domain')?>
-											<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
-												<? // TODO: Find appropriate Infotext
-												echo tooltip(_("Bitte markieren Sie hier alle Nutzerdomänen, für die die Veranstaltung angeboten wird."), TRUE, TRUE) ?>
-											>
-										</td>
-
-									</tr>
-										<?
-										}
-									?>
-							</table>
-						</td>
-					</tr>
-					<?} ?>
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%">
 							&nbsp;
@@ -3539,9 +3475,9 @@ if ($level == 5)
 							<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>&nbsp;
 								<?
 									if (($sem_create_data["sem_pw"]=="") || ($sem_create_data["sem_pw"] == md5("")))
-										echo "<input type=\"password\" name=\"password\" size=12 maxlength=31> &nbsp; "._("Passwort-Wiederholung:")."&nbsp; <input type=\"password\" name=\"password2\" size=12 maxlength=31>";
+										echo "<input type=\"password\" name=\"sem_passwd\" size=12 maxlength=31> &nbsp; "._("Passwort-Wiederholung:")."&nbsp; <input type=\"password\" name=\"sem_passwd2\" size=12 maxlength=31>";
 									else
-										echo "<input type=\"password\" name=\"password\" size=12 maxlength=31 value=\"*******\">&nbsp; "._("Passwort-Wiederholung:")."&nbsp; <input type=\"password\" name=\"password2\" size=12 maxlength=31 value=\"*******\">";
+										echo "<input type=\"password\" name=\"sem_passwd\" size=12 maxlength=31 value=\"*******\">&nbsp; "._("Passwort-Wiederholung:")."&nbsp; <input type=\"password\" name=\"sem_passwd2\" size=12 maxlength=31 value=\"*******\">";
 								?>
 								<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
 									<? echo tooltip(_("Bitte geben Sie hier ein Passwort für die Veranstaltung sowie dasselbe Passwort nochmal zur Bestätigung ein. Dieses wird später von den Teilnehmenden benötigt, um die Veranstaltung abonnieren zu können."), TRUE, TRUE) ?>
@@ -4020,10 +3956,6 @@ if ($level == 7)
 								print "<li>"._("<b>1</b> TutorIn f&uuml;r die Veranstaltung eingetragen.")."<br><br>";
 							elseif ($count_tut>1)
 								printf ("<li>"._("<b>%s</b> TutorInnen f&uuml;r die Veranstaltung eingetragen.")."<br><br>", $count_tut);
-							if ($count_doms==1)
-								print "<li>"._("<b>1</b> Nutzerdom&auml;ne f&uuml;r die Veranstaltung eingetragen.")."<br><br>";
-							elseif ($count_doms>1)
-								printf ("<li>"._("<b>%s</b> Nutzerdom&auml;nen f&uuml;r die Veranstaltung eingetragen.")."<br><br>", $count_doms);
 							if ($count_bereich==1)
 								print "<li>"._("<b>1</b> Bereich f&uuml;r die Veranstaltung eingetragen.")."<br><br>";
 							elseif ($count_bereich)
