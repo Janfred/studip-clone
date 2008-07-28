@@ -50,7 +50,8 @@ class StudipLitSearchPluginIWFdigiClips extends StudipLitSearchPluginGvk {
 								'1004' => _("Person, Author [PER]"),
 								'1007' => _("alle Nummern [NUM]"),
 								'1018' => _("Ort,Verlag (Stichwort) [PUB]"),
-								'1031' => _("Materialart [MAT]")
+								'1031' => _("Materialart [MAT]"),
+								'8621' => _("Flash Video (bei Suchbegriff 'flash' eingeben)")
 								);
 		$this->mapping['USMARC'][500] = array('field' => 'dc_relation', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10));
 		$this->mapping['USMARC'][520] = array('field' => 'dc_description', 'callback' => 'simpleMap', 'cb_args' => '$a' . chr(10));
