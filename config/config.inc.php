@@ -112,6 +112,13 @@ $SEM_TYPE[21]=array("name"=>_("Übung"), "en"=>"Exercise Course", "class"=>1);
 $SEM_TYPE[22]=array("name"=>_("Proseminar"), "en"=>"Proseminar", "class"=>1);
 $SEM_TYPE[23]=array("name"=>_("Oberseminar"), "en"=>"Oberseminar", "class"=>1);
 $SEM_TYPE[24]=array("name"=>_("Arbeitsgemeinschaft"), "en"=>"Workgroup", "class"=>1);
+$SEM_TYPE[25]=array("name"=>_("Vorlesung"), "class"=>6);
+$SEM_TYPE[26]=array("name"=>_("Grundstudium"), "class"=>6);
+$SEM_TYPE[27]=array("name"=>_("Hauptstudium"), "class"=>6);
+$SEM_TYPE[28]=array("name"=>_("Seminar"), "class"=>6);
+$SEM_TYPE[29]=array("name"=>_("Praxisveranstaltung"), "class"=>6);
+$SEM_TYPE[30]=array("name"=>_("Kolloquium"), "class"=>6);
+$SEM_TYPE[31]=array("name"=>_("Forschungsgruppe"), "class"=>6);
 //weitere Typen koennen hier angefuegt werden
 
 
@@ -223,6 +230,28 @@ $SEM_CLASS[5]=array("name"=>_("Arbeitsgruppen"),
 					"chat"=>TRUE,
 					"description"=>sprintf(_("Hier finden Sie verschiedene Arbeitsgruppen an der %s"), $GLOBALS['UNI_NAME']),
 					"create_description"=>_("Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen."));
+
+$SEM_CLASS[6]=array("name"=>_("importierte Kurse"),
+					"compact_mode"=>FALSE,
+					"workgroup_mode"=>FALSE,
+					"only_inst_user"=>TRUE,
+					"turnus_default"=>1,
+					"default_read_level"=>1,
+					"default_write_level" =>1,
+					"bereiche"=>TRUE,
+					"show_browse"=>FALSE,
+					"topic_create_autor"=>TRUE,
+					"write_access_nobody"=>FALSE,
+					"visible"=>TRUE,
+					"course_creation_forbidden" => TRUE, 
+					"forum"=>TRUE,
+					"documents"=>TRUE,
+					"schedule"=>TRUE,
+					"participants"=>TRUE,
+					"literature"=>TRUE,
+					"chat"=>TRUE,
+					"description"=> "Hier finden sie importierte Kurse",
+					"create_description"=> "Sie sollten diesen Text garnicht sehen.");
 //weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
 
