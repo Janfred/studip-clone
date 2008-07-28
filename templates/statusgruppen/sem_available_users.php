@@ -14,7 +14,8 @@
 			</select><br/>
 			<br/>
 		</td>
-	</tr>	
+	</tr>
+	<?if($show_search_and_members_form) : ?>
 	<tr>
 		<td>&nbsp;<?= _("Mitarbeiterliste") ?></td>
 	</tr>
@@ -65,5 +66,6 @@
 
 		</td>
 	</tr>
+	<? endif;?>
 </table>
 
