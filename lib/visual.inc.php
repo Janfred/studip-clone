@@ -884,7 +884,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 					} else {
 						$image_url = idna_link($params[4]);
 					}
-					$tbr = '<img src="'.$image_url."\" $width border=\"0\" alt=\"{$params[1]}\" title=\"{$params[1]}\">";
+					$tbr = '<div style="width:expression(this.parentNode.offsetWidth*0.99 + \'px\');overflow:hidden;"><img src="'.$image_url."\" $width border=\"0\" alt=\"{$params[1]}\" title=\"{$params[1]}\"></div>";
 					if (preg_match('#(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s\]<])*)#i', $params[7])) {
 						$pum = @parse_url($params[7]);
 						if (($pum['scheme'] == 'http' || $pum['scheme'] == 'https')

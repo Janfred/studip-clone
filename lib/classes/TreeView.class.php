@@ -127,7 +127,6 @@ class TreeView {
 	* @access	private
 	*/
 	function handleOpenRanges(){
-		global $_REQUEST;
 		if ($_REQUEST['close_range']){
 			if ($_REQUEST['close_range'] == 'root'){
 				$this->open_ranges = null;
