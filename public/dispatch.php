@@ -22,9 +22,9 @@ $trails_uri = rtrim($CANONICAL_RELATIVE_PATH_STUDIP, '/') . '/dispatch.php';
 require_once 'vendor/trails/trails.php';
 
 # dispatch
-# $request_uri = substr($_SERVER['REQUEST_URI'],
-#                       strlen(dirname($_SERVER['PHP_SELF'])));
-$request_uri = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
+$request_uri = $_SERVER['REQUEST_URI'] === $_SERVER['PHP_SELF']
+               ? '/'
+               : substr($_SERVER['REQUEST_URI'], strlen($_SERVER['PHP_SELF']));
 
 $default_controller = 'default';
 
