@@ -371,14 +371,7 @@ function show_lock_rule_form($lockdata="",$edit=0) {
     } else {
 		$form .= $zt->row(array(_("Veranstaltung sichtbar/unsichtbar schalten"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_visibility]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][seminar_visibility]\" value=0 checked>"));
     }
-	if($perm->have_perm('root')){
-		if ($lockdata["attributes"]["seminar_locking"]) {
-			$form .= $zt->row(array(_("Sperregel zuweisen/entfernen"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_locking]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][seminar_locking]\" value=0>"));
-		} else {
-			$form .= $zt->row(array(_("Sperregel zuweisen/entfernen"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_locking]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][seminar_locking]\" value=0 checked>"));
-		}
-	}
-   
+	
 	$form .= $zt->closeRow();
 	if ($edit) {
 		$form .= "<input type=\"hidden\" name=\"action\" value=\"confirm_edit\">";

@@ -80,7 +80,7 @@ echo $zt->closeRow();
 // a Seminar is selected!
 if (isset($SessSemName[1]) && isset($selected)) {
 	$rule = $lock_rules->getLockRule($seminar_row["lock_rule"]);
-	if(LockRules::Check($SessSemName[1], 'seminar_locking')){
+	if(!$perm->have_perm('root') && ($rule['permission'] == 'admin' || $rule['permission'] == 'root')){
 		$form = htmlReady($rule['name']);
 	} else {
 		$form	 = 	"<form name=\"\" action=\"".$PHP_SELF."\" method=\"post\">";

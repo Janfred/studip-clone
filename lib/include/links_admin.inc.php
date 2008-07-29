@@ -1128,10 +1128,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				case "admin_lock.php":
 					$lock_rules = new LockRules();
 					$rule = $lock_rules->getSemLockRule($seminar_id);
-					if(LockRules::Check($seminar_id, 'seminar_locking') || (!$perm->have_perm('root') && $rule['permission'] == 'admin')){
+					if(!$perm->have_perm('root') && ($rule['permission'] == 'admin' || $rule['permission'] == 'root')){
 						echo '<div style="margin-bottom:3px;font-weight:bold;text-align:left">'._("zugewiesen") . ': ' . htmlReady($rule['name']).'</div>';
-					}
-					if(!LockRules::Check($seminar_id, 'seminar_locking')){
+					} else {
 						?>
 						<input type="hidden" name="make_lock" value=1>
 						<select name=lock_sem[<? echo $seminar_id ?>]>
