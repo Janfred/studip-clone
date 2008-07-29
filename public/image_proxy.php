@@ -20,7 +20,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-// $Id: $
+// $Id$
 
 ini_set('default_socket_timeout', 5);
 
@@ -80,11 +80,9 @@ function garbage_collect_image_cache(){
 		$db->query("DELETE FROM image_proxy_cache WHERE id IN('".join("','",$delete)."')");
 	}
 }
-ob_start();
+
 Config::GetInstance()->getValue('EXTERNAL_IMAGE_EMBEDDING') == 'proxy' OR die();
 
-page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
-page_close();
 ob_end_clean();
 ob_start();
 require_once "lib/datei.inc.php";
@@ -94,7 +92,7 @@ if ((mt_rand() % 100) < $IMAGE_PROXY_GC_PROBABILITY ){
 $url = $_GET['url'];
 $id = md5($url);
 
-if (!$perm->have_perm('user')){
+if (!Seminar_Session::is_current_session_authenticated()){
 	$id = md5('denied');
 	list(, $length) = get_error_image('denied');
 	$check = refresh_image_cache($id,'image/gif',$length,'denied');

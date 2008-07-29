@@ -80,6 +80,7 @@ require_once('lib/classes/UserConfig.class.php');
 require_once('lib/classes/StudipNews.class.php');
 require_once('lib/classes/caching.php');
 require_once 'lib/classes/URLHelper.php';
+require_once 'lib/classes/SessionDecoder.class.php';
 
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";
@@ -181,6 +182,80 @@ class Seminar_Session extends Session {
 	var $allowcache = "nocache";
 
 
+	/**
+	 * Returns true, if the current session is valid and belongs to an
+	 * authenticated user. Does not start a session.
+	 *
+	 * @static
+	 * @return bool
+	 */
+	function is_current_session_authenticated(){
+		return Seminar_Session::get_current_session_state() == 'authenticated';
+	}
+	
+	/**
+	 * Returns the state of the current session. Does not start a session.
+	 * possible return values:
+	 * 'authenticated' - session is valid and user is authenticated
+	 * 'nobody' - session is valid, but user is not authenticated
+	 * false - no valid session
+	 * 
+	 * @static
+	 * @return string|false 
+	 */
+	function get_current_session_state(){
+		static $current_session_state = null;
+		if(!is_null($current_session_state)){
+			return $current_session_state;
+		}
+		$state = false;
+		if(is_object($GLOBALS['user'])) {
+			$state = in_array($GLOBALS['user']->id, array('nobody','form')) ? 'nobody' : 'authenticated';
+		} else {
+			$sess = $GLOBALS['sess'];
+			if(!is_object($sess)){
+				$sess = new Seminar_Session();
+			}
+			$sid = $_COOKIE[$sess->cookiename];
+			if($sid){
+				$session_vars = Seminar_Session::get_session_vars($sid);
+				$session_auth = $session_vars['auth']->auth;
+				if($session_auth['perm'] && $session_auth['exp'] > time()){
+					$state = 'authenticated';
+				} else {
+					$state = in_array($session_auth['uid'], array('nobody','form')) ? 'nobody' : false;
+				}
+			}
+		}
+		return ($current_session_state = $state);
+	}
+	
+	/**
+	 * returns a SessionDecoder object containing the session variables
+	 * for the given session id
+	 *
+	 * @static
+	 * @param string $sid a session id
+	 * @return SessionDecoder 
+	 */
+	function get_session_vars($sid){
+		$sess = $GLOBALS['sess'];
+		if(!is_object($sess)){
+			$sess = new Seminar_Session();
+		}
+		$storage_class = $sess->that_class;
+		$storage = new $storage_class();
+		$storage->ac_start();
+		return new SessionDecoder($storage->ac_get_value($sid));
+	}
+	
+	/**
+	 * returns a random string token for XSRF prevention
+	 * the string is stored in the session
+	 *
+	 * @static
+	 * @return string
+	 */
 	function get_ticket(){
 		global $sess, $last_ticket;
 		static $studipticket;
@@ -193,7 +268,15 @@ class Seminar_Session extends Session {
 
 		return $studipticket;
 	}
-
+	
+	/**
+	 * checks the given string token against the one stored
+	 * in the session 
+	 *
+	 * @static
+	 * @param string $studipticket
+	 * @return bool
+	 */
 	function check_ticket($studipticket){
 		global $sess, $last_ticket;
 		if (!$sess->is_registered('last_ticket')){

@@ -869,11 +869,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 						}
 					}
 					if(!$intern && substr($EXTERNAL_IMAGE_EMBEDDING,0,5) == 'proxy' ) {
-						if (!is_object($auth)){
-							$_GET['cancel_login'] = 1;
-							page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
-						}
-						if ($auth->is_authenticated() && $GLOBALS['user']->id != 'nobody') {
+						if (Seminar_Session::is_current_session_authenticated()) {
 							$proxyurl = strstr($EXTERNAL_IMAGE_EMBEDDING,':');
 							if($proxyurl) $proxyurl = substr($proxyurl,1);
 							else $proxyurl = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . 'image_proxy.php?url=';
@@ -884,7 +880,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 					} else {
 						$image_url = idna_link($params[4]);
 					}
-					$tbr = '<div style="width:expression(this.parentNode.offsetWidth*0.99 + \'px\');overflow:hidden;"><img src="'.$image_url."\" $width border=\"0\" alt=\"{$params[1]}\" title=\"{$params[1]}\"></div>";
+					$tbr = '<img src="'.$image_url."\" $width border=\"0\" alt=\"{$params[1]}\" title=\"{$params[1]}\">";
 					if (preg_match('#(((https?://|ftp://)(['.$chars.':]+@)?)['.$chars.']+(\.['.$chars.':]+)*/?([^<\s]*[^\.\s\]<])*)#i', $params[7])) {
 						$pum = @parse_url($params[7]);
 						if (($pum['scheme'] == 'http' || $pum['scheme'] == 'https')
@@ -922,11 +918,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 						$flash_config = $GLOBALS['FLASHPLAYER_DEFAULT_CONFIG_MIN'];
 					}
 					if(!$intern && substr($EXTERNAL_FLASH_MOVIE_EMBEDDING, 0, 5) == 'proxy' ) {
-						if (!is_object($auth)) {
-							$_GET['cancel_login'] = 1;
-							page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
-						}
-						if ($auth->is_authenticated() && $GLOBALS['user']->id != 'nobody') {
+						if (Seminar_Session::is_current_session_authenticated()) {
 							$proxyurl = strstr($EXTERNAL_FLASH_MOVIE_EMBEDDING, ':');
 							if ($proxyurl) {
 								$proxyurl = substr($proxyurl,1);
