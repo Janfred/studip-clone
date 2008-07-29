@@ -623,8 +623,7 @@ if ($s_send) {
 
 	if ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["bereiche"]) {
 
-	if (!LockRules::Check($s_id, 'sem_tree')
-			|| $perm->have_perm('admin'))
+	if (!LockRules::Check($s_id, 'sem_tree'))
 	{
     if (empty($_REQUEST['details_chooser'])) {
       $msg .= "error§" . _("Bitte geben Sie wenigstens einen <b>Studienbereich</b> an!") . "§";

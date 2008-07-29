@@ -183,13 +183,13 @@ if (is_object($group_obj)) { //if so, do not allow to change admission_type
 	$is_grouped = FALSE;
 }
 // user domain handling
-if (isset($seminar_id) && $_REQUEST['add_domain'])
+if (isset($seminar_id) && !LockRules::check($seminar_id, 'user_domain') && $_REQUEST['add_domain'])
 {
 	$domain = new UserDomain($_REQUEST['add_domain']);
 	$domain->addSeminar($seminar_id);
 }
 
-if (isset($seminar_id) && $_REQUEST['delete_domain'])
+if (isset($seminar_id) && !LockRules::check($seminar_id, 'user_domain') && $_REQUEST['delete_domain'])
 {	
 	$domain = new UserDomain($_REQUEST['delete_domain']);
 	$domain->removeSeminar($seminar_id);
@@ -1335,7 +1335,11 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 				<table border=0 cellpadding=2 cellspacing=0>
 					<tr>
 						<td class="<? echo $cssSw->getClass() ?>" colspan=3 >
-							<font size=-1><?=_("Bitte geben Sie hier ein, welche Nutzerdomänen zugelassen sind.")."</font>"?>
+							<font size=-1>
+							<?
+							if (!LockRules::check($seminar_id, 'user_domain')) echo _("Bitte geben Sie hier ein, welche Nutzerdomänen zugelassen sind.");
+							?>
+							</font>
 						</td>
 					</tr>
 						<?
@@ -1350,7 +1354,9 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 									</font>
 									</td>
 									<td class="<?= $cssSw->getClass() ?>" nowrap colspan=2 >
+									<?if (!LockRules::check($seminar_id, 'user_domain')){?>
 									<a href="<?= URLHelper::getLink('?delete_domain='.$domain->getID()) ?>"><img src="<?= $GLOBALS['ASSETS_URL'].'images/trash.gif'.'" '.tooltip(_('Nutzerdomäne aus der Liste löschen')) ?> /></a>
+									<?}?>
 									</td>
 								</tr>
 						<?	
@@ -1358,7 +1364,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 						
 						// get all user domains that can be added
 						$domains = array_diff($all_domains, $seminar_domains);
-						if (count($domains)) {
+						if (!LockRules::check($seminar_id, 'user_domain') && count($domains)) {
 							?>
 						<tr>
 							<td class="<? echo $cssSw->getClass() ?>" >

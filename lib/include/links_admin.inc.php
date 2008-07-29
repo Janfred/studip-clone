@@ -1009,7 +1009,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 						if (isset($lock_all) && $lock_all==$all_lock_rules[$i]["lock_id"]) {
 							printf(" selected=selected ");
 						}
-						printf(">".$all_lock_rules[$i]["name"]."</option>");
+						printf(">".htmlReady($all_lock_rules[$i]["name"])."</option>");
 					}
 					// ab hier die verschiedenen Sperrlevel für alle Veranstaltungen
 					printf("</select>");
@@ -1040,7 +1040,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 							if (isset($aux_all) && $aux_all==$lock_id) {
 								echo ' selected=selected ';
 							}
-							echo '>'.$data['name'].'</option>';
+							echo '>'.htmlReady($data['name']).'</option>';
 						}
 						// ab hier die verschiedenen Sperrlevel für alle Veranstaltungen
 						echo '</select>';
@@ -1179,18 +1179,26 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 				case "admin_visibility.php":
 					if ($perm->have_perm("admin") || (get_config('ALLOW_DOZENT_VISIBILITY') && $perm->have_perm('dozent'))) {
-					?>
-					<input type="HIDDEN" name="all_sem[]" value="<? echo $seminar_id ?>" />
-					<input type="CHECKBOX" name="visibility_sem[<? echo $seminar_id ?>]" <? if (!$select_none && ($select_all || $db->f("visible"))) echo ' checked'; ?> />
-					<?
+						if(!LockRules::check($seminar_id, 'seminar_visibility')){
+							?>
+							<input type="HIDDEN" name="all_sem[]" value="<? echo $seminar_id ?>" />
+							<input type="CHECKBOX" name="visibility_sem[<? echo $seminar_id ?>]" <? if (!$select_none && ($select_all || $db->f("visible"))) echo ' checked'; ?> />
+							<?
+						} else {
+							echo $db->f('visible') ? _("sichtbar") : _("versteckt");
+						}
 					}
 					break;
 				case "archiv_assi.php":
 					if ($perm->have_perm("admin") || (get_config('ALLOW_DOZENT_ARCHIV') && $perm->have_perm('dozent'))) {
-					?>
-					<input type="HIDDEN" name="archiv_sem[]" value="_id_<? echo $seminar_id ?>" />
-					<input type="CHECKBOX" name="archiv_sem[]" <? if ($select_all) echo ' checked'; ?> />
-					<?
+						if(!LockRules::check($seminar_id, 'seminar_visibility')){
+							?>
+							<input type="HIDDEN" name="archiv_sem[]" value="_id_<? echo $seminar_id ?>" />
+							<input type="CHECKBOX" name="archiv_sem[]" <? if ($select_all) echo ' checked'; ?> />
+							<?
+						} else {
+							echo "&nbsp;";
+						}
 					}
 					break;
 			}

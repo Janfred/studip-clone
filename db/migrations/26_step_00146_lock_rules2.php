@@ -9,7 +9,7 @@ class Step00146LockRules2 extends Migration
         $db = DBManager::get();
 
         $db->exec("ALTER TABLE `lock_rules` ADD `permission`
-        		 ENUM( 'tutor', 'dozent', 'admin' )
+        		 ENUM( 'tutor', 'dozent', 'admin', 'root' )
         		  NOT NULL DEFAULT 'dozent' AFTER `lock_id` ;");
         $db->exec(" INSERT IGNORE INTO `config` 
         		( `config_id` , `parent_id` , `field` , `value` ,

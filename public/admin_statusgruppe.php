@@ -33,6 +33,7 @@ require_once ('lib/admission.inc.php');
 require_once ('lib/statusgruppe.inc.php');
 require_once ('lib/datei.inc.php');
 require_once ('lib/classes/Statusgruppe.class.php');
+require_once ('lib/classes/LockRules.class.php');
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGruppen";
 
@@ -70,6 +71,25 @@ if ($_range_type != 'sem' || !$perm->have_studip_perm('tutor', $range_id)) {
 	die;
 }
 
+if(LockRules::Check($range_id, 'groups')) {
+		$lockRule = new LockRules();
+		$lockdata = $lockRule->getSemLockRule($range_id);
+		$msg = 'error§' . _("Die Gruppenfunktionen der Veranstaltung können nicht verändert werden.").'§';
+		if ($lockdata['description']){
+			$msg .= "info§" . fixlinks($lockdata['description']).'§';
+		}
+		?>
+		<table border=0 align="center" cellspacing=0 cellpadding=0 width="100%">
+		<tr><td class="blank" colspan=2><br>
+		<?
+		parse_msg($msg);
+		?>
+		</td></tr>
+		</table>
+		<?
+		page_close();
+		die();
+}
 // get class of seminar
 $stmt = DBManager::get()->prepare("SELECT status FROM seminare WHERE Seminar_id = ?");
 $stmt->execute(array($range_id));

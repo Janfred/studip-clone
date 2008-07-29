@@ -53,13 +53,13 @@ class LockRules {
 		if($permission == 'admin') $check_perm = 'root';
 		elseif($permission == 'dozent') $check_perm = 'admin';
 		else $check_perm = 'dozent';
-		return !$GLOBALS['perm']->have_studip_perm($check_perm, $seminar_id);
+		return ($permission == 'root' || !$GLOBALS['perm']->have_studip_perm($check_perm, $seminar_id));
 	}
 	
 	function getAllLockRules($return_rules_for_root = false) {
 		$i = 0;
 		$lockdata = array();
-		if(!$return_rules_for_root) $where = " WHERE permission <> 'admin' ";
+		if(!$return_rules_for_root) $where = " WHERE permission IN('tutor','dozent') ";
 		foreach (DBManager::get()->query("SELECT * FROM lock_rules " . $where . " ORDER BY name") as $row) {
 			$lockdata[$i++] = $this->wrapLockRules($row);
 		}

@@ -78,7 +78,7 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	$form .= $zt2->row(array(_("Beschreibung") .'<br><span style="font-size:80%">'._("(dieser Text wird auf allen Seiten mit gesperrtem Inhalt angezeigt)").'</span>',"<textarea name=\"lockdata[description]\" rows=5 style=\"width:90%\">".htmlReady($lockdata["description"])."</textarea>",""));
 	$form .= $zt2->cell(_("Nutzerstatus").'<br><span style="font-size:80%">'._("(die Einstellungen dieser Sperrebene gelten für Nutzer bis zu dieser Berechtigung)").'</span>', array("width"=>"30%"));
 	$select = "\n" . '<select name="lockdata[permission]">';
-	foreach(($perm->have_perm('root') ? array('tutor','dozent','admin') : array('tutor','dozent')) as $p){
+	foreach(($perm->have_perm('root') ? array('tutor','dozent','admin','root') : array('tutor','dozent')) as $p){
 		$select .= "\n" . '<option ' . ($lockdata['permission'] == $p ? 'selected' : '') . '>'.$p.'</option>';
 	}
 	$select .= "\n" . '</select>';
@@ -183,6 +183,11 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 		$form .= $zt->row(array(_("Teilnehmer hinzufügen/löschen"),"<input type=\"radio\" name=\"lockdata[attributes][participants]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][participants]\" value=0>"));
 	} else {
 		$form .= $zt->row(array(_("Teilnehmer hinzufügen/löschen"),"<input type=\"radio\" name=\"lockdata[attributes][participants]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][participants]\" value=0 checked>"));
+	}
+	if ($lockdata["attributes"]["groups"]) {
+		$form .= $zt->row(array(_("Gruppen hinzufügen/löschen"),"<input type=\"radio\" name=\"lockdata[attributes][groups]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][groups]\" value=0>"));
+	} else {
+		$form .= $zt->row(array(_("Gruppen hinzufügen/löschen"),"<input type=\"radio\" name=\"lockdata[attributes][groups]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][groups]\" value=0 checked>"));
 	}
 	if ($edit) {
 		$form .= "<input type=\"hidden\" name=\"action\" value=\"confirm_edit\">";
@@ -331,6 +336,11 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	} else {
 		$form .= $zt->row(array(_("Passwort"),"<input type=\"radio\" name=\"lockdata[attributes][Passwort]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Passwort]\" value=0 checked>"));
 	}
+	if ($lockdata["attributes"]["user_domain"]) {
+		$form .= $zt->row(array(_("zugelassenene Nutzerdomänen"),"<input type=\"radio\" name=\"lockdata[attributes][user_domain]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][user_domain]\" value=0>"));
+	} else {
+		$form .= $zt->row(array(_("zugelassenene Nutzerdomänen"),"<input type=\"radio\" name=\"lockdata[attributes][user_domain]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][user_domain]\" value=0 checked>"));
+	}
 	if ($edit) {
 		$form .= "<input type=\"hidden\" name=\"action\" value=\"confirm_edit\">";
 		$form .= $zt->openRow();
@@ -355,6 +365,11 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 		$form .= $zt->row(array(_("Veranstaltung archivieren"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_archive]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][seminar_archive]\" value=0>"));
     } else {
 		$form .= $zt->row(array(_("Veranstaltung archivieren"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_archive]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][seminar_archive]\" value=0 checked>"));
+    }
+	if ($lockdata["attributes"]["seminar_visibility"]) {
+		$form .= $zt->row(array(_("Veranstaltung sichtbar/unsichtbar schalten"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_visibility]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][seminar_visibility]\" value=0>"));
+    } else {
+		$form .= $zt->row(array(_("Veranstaltung sichtbar/unsichtbar schalten"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_visibility]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][seminar_visibility]\" value=0 checked>"));
     }
 	if($perm->have_perm('root')){
 		if ($lockdata["attributes"]["seminar_locking"]) {
