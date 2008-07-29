@@ -119,7 +119,7 @@ class LockRules {
 		$json_attributes = json_encode($lockdata['attributes']);
 		
 		$stmt = DBManager::get()->prepare(
-			"INSERT INTO lock_rules (lock_id, permisison, name, description, attributes) ".
+			"INSERT INTO lock_rules (lock_id, permission, name, description, attributes) ".
 			"VALUES (?, ?, ?, ?, ?)");
 		
 		$result = $stmt->execute(array($lock_id,
