@@ -47,8 +47,8 @@ function show_content() {
 	$all_lock_data = show_lock_rules();
 	if (is_array($all_lock_data)) {
 		for ($i=0;$i<count($all_lock_data);$i++) {
-			$data .= $zt->row(array($all_lock_data[$i]["name"],
-							$all_lock_data[$i]["description"],
+			$data .= $zt->row(array(htmlReady($all_lock_data[$i]["name"]),
+							htmlReady($all_lock_data[$i]["description"]),
 							"<a href=\"".URLHelper::getLink("?action=edit&lock_id=".$all_lock_data[$i]["lock_id"])."\">
 							<img ".makeButton("bearbeiten","src")." border=0></a>",
 							"<a href=\"".URLHelper::getLink("?action=confirm_delete&lock_id=".$all_lock_data[$i]["lock_id"])."\">
