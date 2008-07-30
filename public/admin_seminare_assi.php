@@ -89,13 +89,11 @@ $errormsg='';
 
 //initialisations for room-requests
 if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS && $form <7) {
+	$sem_create_data["resRequest"] = @unserialize($sem_create_data["resRequest"]);
 	if (!$sem_create_data["resRequest"]) {
 		$sem_create_data["resRequest"] = new RoomRequest();
-	} else {
-		$sem_create_data["resRequest"] = unserialize($sem_create_data["resRequest"]);
 	}
 }
-
 
 //Registrieren der Sessionvariablen
 $sess->register("sem_create_data");
