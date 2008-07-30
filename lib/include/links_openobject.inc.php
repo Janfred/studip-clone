@@ -302,7 +302,7 @@ if ($SessSemName["class"]=="sem" && $modules["participants"] && (!is_array($AUTO
 if ($rechte)
 	if ($SessSemName["class"]=="sem" && $modules["participants"] && !LockRules::check($SessSemName[1], 'groups'))
 		$structure["Statusgruppen verwalten"]=array ('topKat' => "teilnehmer", 'name' => _("Funktionen / Gruppen verwalten"), 'link' => URLHelper::getLink("admin_statusgruppe.php?new_sem=TRUE&range_id=".$SessSemName[1]), 'active' => FALSE);
-	if ($SessSemName["class"] =! "sem" && $perm->have_perm("admin") && $modules["personal"])
+	if ($SessSemName["class"] != "sem" && $perm->have_perm("admin") && $modules["personal"])
 		$structure["Statusgruppen verwalten"]=array ('topKat' => "personal", 'name' => _("Funktionen / Gruppen verwalten"), 'link' => URLHelper::getLink("admin_roles.php?new_sem=TRUE&range_id=".$SessSemName[1]), 'active' => FALSE);
 
 
