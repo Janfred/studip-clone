@@ -24,7 +24,7 @@
 // +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-$perm->check($SEM_TREE_ADMIN_PERM == 'root' ? 'root' : 'admin');
+$perm->check($SEM_TREE_ADMIN_PERM ? $SEM_TREE_ADMIN_PERM : 'admin');
 if (!$perm->is_fak_admin()){
 	$perm->perm_invalid(0,0);
 	page_close();

@@ -25,6 +25,10 @@ class Step00146LockRules2 extends Migration
 				MD5( 'SEM_TREE_ADMIN_PERM' ) , '', 'SEM_TREE_ADMIN_PERM',
 				 'admin', '1', 'string', 'global', '', '0', UNIX_TIMESTAMP( ) ,
 				  UNIX_TIMESTAMP( ) , 'mit welchem Status darf die Veranstaltungshierarchie bearbeitet werden (admin oder root)', '', ''
+				), (
+				MD5( 'SEMESTER_ADMINISTRATION_ENABLE' ) , '', 'SEMESTER_ADMINISTRATION_ENABLE',
+				 '1', '1', 'boolean', 'global', '', '0', UNIX_TIMESTAMP( ) ,
+				  UNIX_TIMESTAMP( ) , 'schaltet die Semesterverwaltung ein oder aus', '', ''
 				) ");
       
     }

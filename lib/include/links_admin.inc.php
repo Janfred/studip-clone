@@ -375,15 +375,15 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	}
 	if ($perm->have_perm("admin")) {
 		$structure["new_user"]=array ('topKat'=>"global", 'name'=>_("Benutzer"), 'link'=>"new_user_md5.php", 'active'=>FALSE);
-		if($perm->have_perm($RANGE_TREE_ADMIN_PERM == 'root' ? 'root' : 'admin')){
+		if($perm->have_perm($RANGE_TREE_ADMIN_PERM ? $RANGE_TREE_ADMIN_PERM : 'admin')){
 			$structure["range_tree"]=array ('topKat'=>"global", 'name'=>_("Einrichtungshierarchie"), 'link'=>"admin_range_tree.php", 'active'=>FALSE);
 		}
-		if ($perm->have_perm($SEM_TREE_ADMIN_PERM == 'root' ? 'root' : 'admin') && $perm->is_fak_admin()) {
+		if ($perm->have_perm($SEM_TREE_ADMIN_PERM ? $SEM_TREE_ADMIN_PERM : 'admin') && $perm->is_fak_admin()) {
 			$structure["sem_tree"]=array ('topKat'=>"global", 'name'=>_("Veranstaltungshierarchie"), 'link'=>"admin_sem_tree.php", 'active'=>FALSE);
 		}
 		$structure["aux_adjust"]=array (topKat=>"global", name=>("Zusatzangaben definieren"), link=>"admin_aux_adjust.php", active=>FALSE);
 		if ($SEMINAR_LOCK_ENABLE)
-		$structure["lock_adjust"]=array (topKat=>"global", name=>("Sperrebenen anpassen"), link=>"admin_lock_adjust.php", active=>FALSE);
+			$structure["lock_adjust"]=array (topKat=>"global", name=>("Sperrebenen anpassen"), link=>"admin_lock_adjust.php", active=>FALSE);
 	}
 
 	if($perm->have_perm('dozent') && $GLOBALS['STM_ENABLE']){
@@ -409,7 +409,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			$structure["smileyadmin"]=array ('topKat'=>"global", 'name'=>_("Smileys"), 'link'=>"admin_smileys.php", 'active'=>FALSE);
 		}
 
-		$structure["semester"]=array ('topKat'=>"global", 'name'=>_("Semester"), 'link'=>"admin_semester.php", 'active'=>FALSE);
+		if($SEMESTER_ADMINISTRATION_ENABLE){
+			$structure["semester"]=array ('topKat'=>"global", 'name'=>_("Semester"), 'link'=>"admin_semester.php", 'active'=>FALSE);
+		}
 		$structure["admin_teilnehmer_view"]=array ('topKat'=>"global", 'name'=>_("Teilnehmeransicht"), 'link'=>"admin_teilnehmer_view.php", 'active'=>FALSE);
 
 		if ($LOG_ENABLE) {
