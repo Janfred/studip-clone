@@ -6,6 +6,9 @@
 copy_assi.php - Dummy zum Einstieg in Veranstaltungskopieren
 Copyright (C) 2004 Tobias Thelen <tthelen@uni-osnabrueck.de>
 
+Modified/Extended Version to support an alternative copy mechanism (ACM)
+by Dirk Oelkers <d.oelkers@fh-wolfenbuettel.de>
+
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -73,19 +76,25 @@ if ($SessSemName[1]) {
 		</table>
 		<?
 	} else {
-	?>
-		<table cellspacing="0" cellpadding="0" border="0" width="100%">
-		<tr><td class="blank" colspan=2>&nbsp;</td></tr>
-		<tr><td class="blank" colspan=2>
-		<blockquote>
-		<? 
-		printf(_("Die Veranstaltung wurde zum Kopieren ausgewählt."). " ");
-		printf(_("Um die vorgewählte Veranstaltung zu kopieren klicken sie %shier%s."),'<a href="admin_seminare_assi.php?cmd=do_copy&cp_id='.$SessSemName[1].'&start_level=TRUE&class=1">','</a>'); ?>
-		</blockquote>
-		<br />
-		</td></tr>
-		</table>
-	<?php
+
+		$cmd = $_GET["cmd"];
+		
+		if ( !$cmd )
+		{
+			require_once( "lib/semcopy/entry_visual.inc.php" );
+		}
+		
+		if ( $cmd=="show_copy_form" )
+		{
+			require_once( "lib/semcopy/copy_form_visual.inc.php" );
+		}
+		
+		$cmd = $_POST["cmd"];
+		
+		if ( $cmd=="do_copy" )
+		{
+			require_once( "lib/semcopy/copy_action_visual.inc.php" );
+		}
 	}
 }
 include ('lib/include/html_end.inc.php');
