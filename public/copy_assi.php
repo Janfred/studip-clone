@@ -89,7 +89,7 @@ if ($SessSemName[1]) {
 			require_once( "lib/semcopy/copy_form_visual.inc.php" );
 		}
 		
-		$cmd = $_POST["cmd"];
+		//$cmd = $_POST["cmd"];
 		
 		if ( $cmd=="do_copy" )
 		{
