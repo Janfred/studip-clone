@@ -169,6 +169,8 @@ require_once ('lib/classes/ModulesNotification.class.php');
 require_once ('lib/statusgruppe.inc.php');		// Funktionen für Statusgruppen
 require_once ('lib/object.inc.php');
 require_once ('lib/meine_seminare_func.inc.php');
+require_once ('lib/classes/LockRules.class.php');
+
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
@@ -216,7 +218,12 @@ if ($cmd == "no_kill") {
 if ($cmd == "suppose_to_kill") {
 	$db->query("SELECT * FROM seminare WHERE Seminar_id = '$auswahl'");
 	$db->next_record();
-	if ($db->f("admission_type") || ($db->f("admission_prelim") == 1)) {
+	if(LockRules::Check($auswahl, 'participants')){
+		$lockRule = new LockRules();
+		$lockdata = $lockRule->getSemLockRule($auswahl);
+		$meldung = "error§" . sprintf(_("Sie können das Abonnement der Veranstaltung <b>%s</b> nicht aufheben."), htmlReady($db->f("Name")));
+		if($lockdata['description']) $meldung .= '§info§' . fixLinks($lockdata['description']);
+	} elseif ($db->f("admission_type") || ($db->f("admission_prelim") == 1)) {
 		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die Berechtigung f&uuml;r die Veranstaltung und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($db->f("Name"))) . "<br />";
 		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
 		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
@@ -241,7 +248,7 @@ if ($cmd=="suppose_to_kill_admission") {
 }
 
 //bei Bedarf aus seminar_user austragen
-if ($cmd=="kill") {
+if ($cmd=="kill" && !LockRules::Check($auswahl, 'participants')) {
 	$db->query("SELECT Name, admission_binding, a.status FROM seminar_user a LEFT JOIN seminare USING(Seminar_id) WHERE a.Seminar_id = '$auswahl' AND a.user_id='$user->id' AND a.status IN('user','autor')");
 	$db->next_record();
 	if ($db->f("admission_binding")) {

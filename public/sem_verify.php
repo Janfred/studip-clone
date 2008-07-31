@@ -150,6 +150,8 @@ require_once 'lib/functions.php';
 require_once 'lib/admission.inc.php';
 require_once 'lib/classes/StudipAdmissionGroup.class.php';
 require_once 'lib/classes/UserDomain.php';
+require_once 'lib/classes/LockRules.class.php';
+
 
 $db=new DB_Seminar;
 $db2=new DB_Seminar;
@@ -206,6 +208,20 @@ $db6=new DB_Seminar;
 	if ($current_seminar->admission_type == 3)
 	{
 		parse_msg ("info§"._("Die Veranstaltung ist gesperrt, Sie k&ouml;nnen sich nicht eintragen!"));
+	   	echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
+	   	if ($send_from_search)
+	   		echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
+		echo "<br><br></td></tr></table>";
+		include ('lib/include/html_end.inc.php');
+	   	page_close();
+	   	die;
+	}
+	
+	if (LockRules::Check($id, 'participants'))
+	{
+		$lockRule = new LockRules();
+		$lockdata = $lockRule->getSemLockRule($id);
+		parse_msg ("error§"._("In diese Veranstaltung k&ouml;nnen sich nicht eintragen!") . ($lockdata['description'] ? '§info§' . fixLinks($lockdata['description']) : ''));
 	   	echo"<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 	   	if ($send_from_search)
 	   		echo "&nbsp; |&nbsp;<a href=\"$send_from_search_page\">"._("Zur&uuml;ck zur letzten Auswahl")."</a>";
