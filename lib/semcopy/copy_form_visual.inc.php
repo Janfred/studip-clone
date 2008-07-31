@@ -111,7 +111,7 @@
   <table border="0">
     <tbody>
       <tr colspan="2">
-        <td> <input value="<? echo _("Kopiervorgang starten")?>" type="submit"> <input value="<? echo _("Zur&uuml;cksetzen")?> type="reset"></td>
+        <td> <input value='<? echo _("Kopiervorgang starten")?>' type='submit'> <input value='<? echo _("Zurücksetzen")?>' type='reset'></td>
       </tr>
     </tbody>
   </table>
