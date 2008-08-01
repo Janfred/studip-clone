@@ -23,8 +23,9 @@
 // $Id: edit_about.php 9361 2008-03-19 11:00:35Z tgloeggl $
 
 require_once('lib/messaging.inc.php');
+require_once('lib/log_events.inc.php');
 
-function edit_email($uid, $email, $need_activation=True) {
+function edit_email($uid, $email, $force=False) {
 	$msg = '';
 
 	$db = new DB_Seminar(sprintf("SELECT email, username, auth_plugin FROM auth_user_md5 WHERE user_id='%s'", $uid));
@@ -33,7 +34,7 @@ function edit_email($uid, $email, $need_activation=True) {
 	$username = $db->f('username');
 	$auth_plugin = $db->f('auth_plugin');
 
-	if($email_cur == $email) {
+	if($email_cur == $email && !$force) {
 		return array(True, $msg);
 	}
 
@@ -99,7 +100,7 @@ function edit_email($uid, $email, $need_activation=True) {
 
 	$db->query("UPDATE auth_user_md5 SET Email='$email' WHERE user_id='".$uid."'");
 
-	if (!$need_activation || StudipAuthAbstract::CheckField("auth_user_md5.validation_key", $auth_plugin)) {
+	if (StudipAuthAbstract::CheckField("auth_user_md5.validation_key", $auth_plugin)) {
 		$msg.= "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§";
 		return array(True, $msg);
 	} else {
@@ -591,8 +592,8 @@ class about extends messaging {
 		return;
 	}
 
-	function edit_email($email, $need_activation=True) {
-		$return = edit_email($this->auth_user["user_id"], $email, $need_activation);
+	function edit_email($email) {
+		$return = edit_email($this->auth_user["user_id"], $email);
 		$this->msg.= $return[1];
 		return $return[0];
 	}

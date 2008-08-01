@@ -82,7 +82,7 @@ if($_REQUEST['key']) {
 		// change mail
 		require_once('lib/edit_about.inc.php');
 
-		edit_email($uid, $_REQUEST['email1']);
+		edit_email($uid, $_REQUEST['email1'], True);
 		$_SESSION['semi_logged_in'] = False;
 		
 		head($current_page);
