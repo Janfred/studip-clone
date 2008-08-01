@@ -1431,8 +1431,9 @@ if ($forum["view"]=="flatfolder")
 if ($forum["search"]!="" && $forum["view"]=="search") {
 	echo "<font size=\"-1\">&nbsp;". _('Suchbegriff:') ." '".$forum['searchstring']."' ";
 	if(count($forum['searchauthor']) > 0) {
-		array_walk($forum['searchauthor'], create_function($x, 'return "\'$x\'";'));
-		printf("%s '%s' ", _('von'), implode(' oder ', $forum['searchauthor']));
+		function _quote($x) { return "'$x'"; }
+		$authors = array_map(_quote, $forum['searchauthor']);
+		printf("%s %s ", _('von'), implode(' oder ', $authors));
 	}
  	echo "/ ". _('Treffer: ').$forum["forumsum"]."</font>";
 } else
