@@ -122,8 +122,12 @@ function edit_email($uid, $email, $need_activation=True) {
 							.'activate_email.php?uid='. $uid
 							.'&key='. $key;
 
-		// include language-specific subject and mailbody
-		include_once("locale/{$GLOBALS['_language_path']}/LC_MAILS/change_self_mail.inc.php");
+		// include language-specific subject and mailbody with fallback to german
+		$lang = $GLOBALS['_language_path']; // workaround
+		if($lang == '') {
+			$lang = 'de';
+		}
+		include_once("locale/$lang/LC_MAILS/change_self_mail.inc.php");
 
 		$mail = $smtp->SendMessage(
 			$smtp->env_from, array($email),

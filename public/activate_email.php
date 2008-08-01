@@ -86,11 +86,11 @@ if($_REQUEST['key']) {
 		$_SESSION['semi_logged_in'] = False;
 		
 		head($current_page);
-		echo _('An %s wurde ein Aktivierungslink geschickt.');
+		printf(_('An %s wurde ein Aktivierungslink geschickt.'), $_REQUEST['email1']);
 		footer();
 	} else {
 		head();
-		echo sprintf('<b>%s</b>', _('Die eingegebenen E-Mail Adressen stimmen nicht überein. Bitte überprüfen Sie Ihre Eingabe.'));
+		printf('<b>%s</b>', _('Die eingegebenen E-Mail Adressen stimmen nicht überein. Bitte überprüfen Sie Ihre Eingabe.'));
 		reenter_mail();
 	}
 } else if ($_SESSION['semi_logged_in']) {
