@@ -26,15 +26,16 @@ function footer() {
 function reenter_mail() {
 	echo _('Sollten Sie keine E-Mail erhalten haben, können Sie sich einen neuen Aktivierungsschlüssel zuschicken lassen. Geben Sie dazu Ihre gewünschte E-Mail Adresse unten an:');
 	echo '<form action="activate_email.php" method="post">'
-		.'<input type="hidden" name="uid" value="'. $_REQUEST['uid'] .'" />'
+		.'<input type="hidden" name="uid" value="'. htmlReady($_REQUEST['uid']) .'" />'
 		.'<table><tr><td>'. _('E-Mail:') .'</td><td><input name="email1" /></td></tr>'
 		.'<tr><td>'. _('Wiederholung:') . '</td><td><input name="email2" /></td></tr></table>'
-		.'<input type="image" '.makeButton("abschicken","src"). ' border="0"></form>';
+		.makeButton("abschicken", "input"). '</form>';
 }
 
 function mail_explain() {
 	echo _('Sie haben Ihre E-Mail Adresse geändert. Um diese frei zu schalten müssen Sie den Ihnen an Ihre neue Adresse zugeschickten Aktivierungs Schlüssel im unten stehenden Eingabefeld eintragen.');
-	echo '<br><form action="activate_email.php" method="post"><input name="key" /><input name="uid" type="hidden" value="'.$_REQUEST['uid'].'" /><br><input type="image" '.makeButton("abschicken","src"). ' border="0"></form><br><br>';
+	echo '<br><form action="activate_email.php" method="post"><input name="key" /><input name="uid" type="hidden" value="'.$_REQUEST['uid'].'" /><br>'
+		.makeButton("abschicken","input"). '</form><br><br>';
 
 }
 
@@ -46,9 +47,8 @@ $plugins = array();
 $current_page = _('E-Mail Aktivierung');
 
 require_once 'lib/functions.php';
-include('lib/include/html_head.inc.php');
-include('templates/header.php');
-
+include 'lib/include/html_head.inc.php'; // Output of html head
+include 'lib/include/header.php';
 
 $uid = mysql_escape_string($_REQUEST['uid']);
 if($_REQUEST['key']) {
@@ -105,5 +105,6 @@ if($_REQUEST['key']) {
 }
 
 echo '</body></html>';
+page_close();
 die();
 ?>
