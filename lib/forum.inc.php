@@ -1427,9 +1427,14 @@ $db->query($query);
 
 if ($forum["view"]=="flatfolder")
 	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/cont_folder.gif\" align=\"baseline\"><font size=\"-1\"><b> Thema:</b> ".mila(ForumGetName($forum["flatfolder"]),40)." / ";
+
 if ($forum["search"]!="" && $forum["view"]=="search") {
-	$searchname = explode("%",$forum["search"]);
-	echo "<font size=\"-1\">&nbsp;Suchbegriff: '".$searchname["1"]."' / Treffer: ".$forum["forumsum"]."</font>";
+	echo "<font size=\"-1\">&nbsp;". _('Suchbegriff:') ." '".$forum['searchstring']."' ";
+	if(count($forum['searchauthor']) > 0) {
+		array_walk($forum['searchauthor'], create_function($x, 'return "\'$x\'";'));
+		printf("%s '%s' ", _('von'), implode(' oder ', $forum['searchauthor']));
+	}
+ 	echo "/ ". _('Treffer: ').$forum["forumsum"]."</font>";
 } else
 	echo "<font size=\"-1\">&nbsp;Postings: ".$forum["forumsum"]."</font>";
 echo "</td><td class=\"steelgraudunkel\" align=\"center\" width=\"10%\">";
@@ -1773,41 +1778,21 @@ $searchfield = "
 <td class=\"blank\" width=\"302\" align=\"center\">
    <table cellpadding=\"2\" cellspacing=\"0\" border=\"0\" valign=\"top\">
 	<form name=\"search\" method=\"post\" action=\"".URLHelper::getLink('')."\">
-		<tr>
-			<td class=\"steel1\">
+		<tr class=\"steel1\">
+			<td style=\"vertical-align: top;\">
 				<b><font size=\"-1\">"._("Suchbegriff:")."</font></b>
 			</td>
-			<td class=\"steel1\">
+			<td class=\"steel1\" style=\"text-align: right;\">
 				<input  type=\"TEXT\" name=\"suchbegriff\">
 			</td>
 		</tr>
-	   	<tr>
-	   		<td class=\"steelgraulight\">
-	   			<b><font size=\"-1\">"._("Suchen in den Feldern:")."</font></b>
-	   		</td>
-	   		<td class=\"steelgraulight\">&nbsp;
-	   		</td>
-	   	</tr>
-		<tr>
-			<td class=\"steel1\">&nbsp;
+		<tr class=\"steel1\">
+		<td>
+			<b><font size=\"-1\">"._("Von:")."</font></b>
+		</td>
+			<td>
+				<input  type=\"TEXT\" name=\"author\">
 			</td>
-			<td class=\"steel1\">
-				<input name=\"check_author\" type=\"CHECKBOX\" value=\"on\" checked><font size=\"-1\"> "._("Autor")."
-			</td>
-		</tr>
-	     	<tr>
-	     		<td class=\"steelgraulight\">&nbsp;
-	     		</td>
-	     		<td class=\"steelgraulight\">
-	     			<input type=\"CHECKBOX\" name=\"check_name\" value=\"on\" checked><font size=\"-1\"> "._("Überschrift")."
-	     		</td>
-	     	</tr>
-	     	<tr>
-	     		<td class=\"steel1\">&nbsp;
-		     	</td>
-		     	<td class=\"steel1\">
-		     		<input type=\"CHECKBOX\" name=\"check_cont\" value=\"on\" checked><font size=\"-1\"> "._("Inhalt")."
-		     	</td>
 		</tr>
 		<tr>
 			<td class=\"steelgraulight\" colspan=\"2\" align=\"center\">
@@ -1818,7 +1803,7 @@ $searchfield = "
 	</form>
    </table>
 </td>
-<td class=\"suche\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"10\" width=\"285\">
+<td class=\"suche\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"207\" width=\"285\">
 <tr>
 </tr></table><br></td></tr></table>";
 return $searchfield;

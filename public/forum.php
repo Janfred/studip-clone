@@ -192,25 +192,66 @@ include 'lib/include/links_openobject.inc.php';
 // Behandlung der Suche
 //////////////////////////////////////////////////////////////////////////////////
 
-if ($suchbegriff!="") {
-	if($check_author) {
-		$search_exp="x.author LIKE '%$suchbegriff%'";
-		URLHelper::addLinkParam('check_author', 1);
+if ($_REQUEST['suchbegriff'] != "") {
+	$forum['searchstring'] = $_REQUEST['suchbegriff'];
+
+	$search_words = array();
+	$search_title = array();
+	$search_author = array();
+
+	foreach(explode(' ', str_replace('.', ' ', $_REQUEST['suchbegriff'])) as $item) {
+		$item = str_replace('*', '%', $item);
+		$item = str_replace('.', ',', $item);
+		$item = str_replace('-', ',', $item);
+		// ignore ',' in queries like "thema, neu"
+		if(substr($item, -1) == ',') {
+			$item = substr($item, 0, strlen($item) -1);
+		}
+
+		// ignore searches for single letters and multiple double spaces
+		if(strlen($item) < 2) {
+			continue;
+		}
+
+		if(substr($item, 0, 8) == 'intitle:') {
+			foreach(explode(',', substr($item, 8)) as $i) {
+				array_push($search_title, "x.name LIKE '%$i%'");
+			}
+		} else {
+			foreach(explode(',', $item) as $i) {
+				// handle "thema,neu"
+				array_push($search_words, "(x.name LIKE '%$i%' OR x.description LIKE '%$i%')");
+			}
+		}
 	}
-	if ($check_name) {
-		if ($search_exp)
-			$search_exp.=" OR";
-		$search_exp.=" x.name LIKE '%$suchbegriff%'";
-		URLHelper::addLinkParam('check_name', 1);
+
+	$forum['searchauthor'] = array();
+	if(trim($_REQUEST['author']) != "") {
+		$forum['searchauthor'] = explode(',', $_REQUEST['author']);
 	}
-	if ($check_cont) {
-		if ($search_exp)
-			$search_exp.=" OR";
-		$search_exp.=" x.description LIKE '%$suchbegriff%'";
-		URLHelper::addLinkParam('check_cont', 1);
+
+	foreach($forum['searchauthor'] as $item) {
+		$author = array();
+		foreach(explode(' ', str_replace('.', ' ', $item)) as $a) {
+			array_push($author, "x.author LIKE '%".trim($a)."%'");
+		}
+		array_push($search_author, implode(' AND ', $author));
 	}
+
+	if(count($search_words) > 0)
+		$search_exp = '(' . implode(' AND ', $search_words) . ')';
+	else
+		$search_exp = '1';
+
+	if(count($search_author) > 0)
+		$search_exp.= ' AND '. implode(' OR ', $search_author);
+
+	if(count($search_title) > 0)
+		$search_exp.= ' AND '. implode(' AND ', $search_title);
+
 	$forum["search"] = $search_exp;
-	URLHelper::addLinkParam('suchbegriff', $suchbegriff);
+	URLHelper::addLinkParam('suchbegriff', $_REQUEST['suchbegriff']);
+	URLHelper::addLinkParam('author', $_REQUEST['author']);
 }
 
 if ($reset=="1")	// es wurde neue Suche aktiviert, also Suchbegriff löschen
