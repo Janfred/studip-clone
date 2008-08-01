@@ -24,6 +24,125 @@
 
 require_once('lib/messaging.inc.php');
 
+function edit_email($uid, $email, $need_activation=True) {
+	$msg = '';
+
+	$db = new DB_Seminar(sprintf("SELECT email, username, auth_plugin FROM auth_user_md5 WHERE user_id='%s'", $uid));
+	$db->next_record();
+	$email_cur = $db->f('email');
+	$username = $db->f('username');
+	$auth_plugin = $db->f('auth_plugin');
+
+	if($email_cur == $email) {
+		return array(True, $msg);
+	}
+
+	if(StudipAuthAbstract::CheckField("auth_user_md5.Email", $auth_plugin)) {
+		return array(False, $msg);
+	}
+
+	if(!$GLOBALS['ALLOW_CHANGE_EMAIL']) {
+		return array(False, $msg);
+	}
+
+	$validator = new email_validation_class; ## Klasse zum Ueberpruefen der Eingaben
+	$validator->timeout = 10;
+	$smtp = new studip_smtp_class;       ## Einstellungen fuer das Verschicken der Mails
+	$REMOTE_ADDR = $_SERVER["REMOTE_ADDR"];
+	$Zeit = date("H:i:s, d.m.Y",time());
+
+	// accept only registered domains if set
+	$email_restriction = trim(get_config('EMAIL_DOMAIN_RESTRICTION'));
+	if (!$validator->ValidateEmailAddress($email, $email_restriction)) {
+		if ($email_restriction) {
+			$email_restriction_msg_part = '';
+			$email_restriction_parts = explode(',', $email_restriction);
+			for ($email_restriction_count = 0; $email_restriction_count < count($email_restriction_parts); $email_restriction_count++) {
+				if ($email_restriction_count == count($email_restriction_parts) - 1) {
+					$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . '<br />';
+				} else if (($email_restriction_count + 1) % 3) {
+					$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ', ';
+				} else {
+					$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ',<br />';
+				}
+			}
+			$msg.= 'error§'
+				.sprintf(_("Die E-Mail-Adresse fehlt, ist falsch geschrieben oder gehört nicht zu folgenden Domains:%s"), 
+							'<br>' . $email_restriction_msg_part);
+		} else {
+			$msg.= "error§" . _("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!") . "§";
+		}
+		return array(False, $msg);        // E-Mail syntaktisch nicht korrekt oder fehlend
+	}
+
+	if (!$validator->ValidateEmailHost($email)) {     // Mailserver nicht erreichbar, ablehnen
+		$msg.=  "error§" . _("Der Mailserver ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken k&ouml;nnen!") . "§";
+		return array(False, $msg);
+	} else {       // Server ereichbar
+		if (!$validator->ValidateEmailBox($email)) {    // aber user unbekannt. Mail an abuse!
+			$from = $smtp->env_from;
+			$to = $smtp->abuse;
+			$smtp->SendMessage(
+				$from, array($to),
+				array("From: $from", "To: $to", "Subject: edit_about"),
+				"Emailbox unbekannt\n\nUser: ". $username ."\nEmail: $email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
+			$msg.=  "error§" . _("Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie Ihre Angaben!") . "§";
+			return array(False, $msg);
+		}
+	}
+
+	$db->query("SELECT Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
+	if ($db->next_record()) {
+		$msg.=  "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), htmlReady($db->f("Vorname")), htmlReady($db->f("Nachname"))) . "§";
+		return array(False, $msg);
+	}
+
+	$db->query("UPDATE auth_user_md5 SET Email='$email' WHERE user_id='".$uid."'");
+
+	if (!$need_activation || StudipAuthAbstract::CheckField("auth_user_md5.validation_key", $auth_plugin)) {
+		$msg.= "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§";
+		return array(True, $msg);
+	} else {
+		// auth_plugin does not map validation_key (what if...?)
+		$url = $smtp->url;
+
+		// generate 10 char activation key
+		$key = '';
+		mt_srand((double)microtime()*1000000);
+		for ($i=1;$i<= 10;$i++) {
+			$temp = mt_rand() % 36;
+			if ($temp < 10)
+				$temp += 48;   // 0 = chr(48), 9 = chr(57)
+			else
+				$temp += 87;   // a = chr(97), z = chr(122)
+			$key .= chr($temp);
+		}
+
+		$activatation_url = $GLOBALS['ABSOLUTE_URI_STUDIP']
+							.'activate_email.php?uid='. $uid
+							.'&key='. $key;
+
+		// include language-specific subject and mailbody
+		include_once("locale/{$GLOBALS['_language_path']}/LC_MAILS/change_self_mail.inc.php");
+
+		$mail = $smtp->SendMessage(
+			$smtp->env_from, array($email),
+			array('From: '.$smtp->from, 'Reply-To: '. $smtp->abuse, 'To: '.$email, 'Subject:'. $subject),
+			$mailbody);
+
+		if(!$mail) {
+			$msg.= "error§". $smtp->error ."§";
+			return array(True, $msg);
+		}
+
+		$msg.= "info§<b>" . sprintf(_('An Ihre neue E-Mail Adresse <b>%s</b> wurde ein Aktivierungslink geschickt, dem Sie folgen müssen bevor Sie sich das nächste mal einloggen können.'), $_REQEUST['email1']). '</b>§';
+		$db->query("UPDATE auth_user_md5 SET validation_key='$key' WHERE user_id='".$uid."'");
+		log_event("USER_NEWPWD",$uid); // logging
+	}
+	return array(True, $msg);
+}
+
+
 function parse_datafields($user_id) {
 	global $datafield_id, $datafield_type, $datafield_content;
 	global $my_about;
@@ -263,8 +382,8 @@ class about extends messaging {
 				$query .= $default_inst == $inst_id ? '1' : '0';
 				$query .= ", visible=" . (isset($visible[$inst_id]) ? '0' : '1');
 				$query .= " WHERE Institut_id='$inst_id' AND user_id='" . $this->auth_user["user_id"] . "'";
-				$this->db->query($query);				
-				
+				$this->db->query($query);
+
 				if ($this->db->affected_rows()) {
 					$this->msg = $this->msg . "msg§" . sprintf(_("Ihre Daten an der Einrichtung %s wurden ge&auml;ndert"), htmlReady($name[$inst_id])) . "§";
 					setTempLanguage($this->auth_user["user_id"]);
@@ -403,22 +522,20 @@ class about extends messaging {
 		if ($this->check == "user") {
 			//erstmal die Syntax checken $validator wird in der local.inc.php benutzt, sollte also funzen
 			$validator=new email_validation_class; ## Klasse zum Ueberpruefen der Eingaben
-				$validator->timeout=10;
+			$validator->timeout=10;
 
-			if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin']) && (($response && $response!=md5("*****")) || $password!="*****")) {      //Passwort verändert ?
+			if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])
+			  && (($response && $response!=md5("*****")) || $password!="*****")) {      //Passwort verändert ?
+				
 				// auf doppelte Vergabe wird weiter unten getestet.
 				if (!isset($response) || $response=="") { // wir haben kein verschluesseltes Passwort
 					if (!$validator->ValidatePassword($password)) {
 						$this->msg=$this->msg . "error§" . _("Das Passwort ist nicht lang genug!") . "§";
 						return false;
 					}
-					if ($check_pass != $password) {
-						$this->msg=$this->msg . "error§" . _("Die Wiederholung des Passwortes ist falsch! Bitte geben sie das exakte Passwort ein!") . "§";
-						return false;
-					}
-					$newpass=md5($password);             // also können wir das unverschluesselte Passwort testen
+					$newpass = md5($password);             // also können wir das unverschluesselte Passwort testen
 				} else
-					$newpass=$response;
+				$newpass = $response;
 
 				$this->db->query("UPDATE auth_user_md5 SET password='$newpass' WHERE user_id='".$this->auth_user["user_id"]."'");
 				$this->msg=$this->msg . "msg§" . _("Ihr Passwort wurde ge&auml;ndert!") . "§";
@@ -466,85 +583,14 @@ class about extends messaging {
 				} else $new_username = $this->auth_user['username'];
 			}
 
-
-			if (!StudipAuthAbstract::CheckField("auth_user_md5.Email", $this->auth_user['auth_plugin']) && $this->auth_user["Email"] != $email) {  //email wurde geändert!
-				if ($ALLOW_CHANGE_EMAIL) {
-					$smtp=new studip_smtp_class;       ## Einstellungen fuer das Verschicken der Mails
-						$REMOTE_ADDR=$_SERVER["REMOTE_ADDR"];
-					$Zeit=date("H:i:s, d.m.Y",time());
-
-					// accept only registered domains if set
-					$email_restriction = trim(get_config('EMAIL_DOMAIN_RESTRICTION'));
-					if (!$validator->ValidateEmailAddress($email, $email_restriction)) {
-						if ($email_restriction) {
-							$email_restriction_msg_part = '';
-							$email_restriction_parts = explode(',', $email_restriction);
-							for ($email_restriction_count = 0; $email_restriction_count < count($email_restriction_parts); $email_restriction_count++) {
-								if ($email_restriction_count == count($email_restriction_parts) - 1) {
-									$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . '<br />';
-								} else if (($email_restriction_count + 1) % 3) {
-									$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ', ';
-								} else {
-									$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ',<br />';
-								}
-							}
-							$this->msg = $this->msg . 'error§'
-								. sprintf(_("Die E-Mail-Adresse fehlt, ist falsch geschrieben oder gehört nicht zu folgenden Domains:%s"), '<br>' . $email_restriction_msg_part);
-						} else {
-							$this->msg=$this->msg . "error§" . _("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!") . "§";
-						}
-						return false;        // E-Mail syntaktisch nicht korrekt oder fehlend
-					}
-
-					if (!$validator->ValidateEmailHost($email)) {     // Mailserver nicht erreichbar, ablehnen
-						$this->msg=$this->msg . "error§" . _("Der Mailserver ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie, ob Sie E-Mails mit der angegebenen Adresse verschicken k&ouml;nnen!") . "§";
-						return false;
-					} else {       // Server ereichbar
-						if (!$validator->ValidateEmailBox($email)) {    // aber user unbekannt. Mail an abuse!
-							$from = $smtp->env_from;
-							$to = $smtp->abuse;
-							$smtp->SendMessage(
-									$from, array($to),
-									array("From: $from", "To: $to", "Subject: edit_about"),
-									"Emailbox unbekannt\n\nUser: ".$this->auth_user["username"]."\nEmail: $email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
-							$this->msg=$this->msg . "error§" . _("Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie Ihre Angaben!") . "§";
-							return false;
-						}
-					}
-
-					$this->db->query("SELECT Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
-					if ($this->db->next_record()) {
-						$this->msg=$this->msg . "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), htmlReady($this->db->f("Vorname")), htmlReady($this->db->f("Nachname"))) . "§";
-						return false;
-					}
-
-					if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])){
-						//email ist ok, user bekommt neues Passwort an diese Addresse, falls Passwort in Stud.IP DB
-						$newpass=$this->generate_password(6);
-						$hashpass=md5($newpass);
-						// Mail abschicken...
-						$to=$email;
-						$url = $smtp->url;
-
-						// include language-specific subject and mailbody
-						include_once("locale/$_language_path/LC_MAILS/change_self_mail.inc.php");
-
-						$smtp->SendMessage(
-								$smtp->env_from, array($to),
-								array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
-								$mailbody);
-						$this->logout_user = TRUE;
-						$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§info§" . _("ACHTUNG!<br>Aus Sicherheitsgr&uuml;nden wurde auch ihr Passwort ge&auml;ndert. Es wurde an die neue E-Mail-Adresse geschickt!") . "§";
-						$this->db->query("UPDATE auth_user_md5 SET Email='$email', password='$hashpass' WHERE user_id='".$this->auth_user["user_id"]."'");
-						log_event("USER_NEWPWD",$this->auth_user["user_id"]); // logging
-					} else {
-						$this->msg = $this->msg . "msg§" . _("Ihre E-Mail-Adresse wurde ge&auml;ndert!") . "§";
-						$this->db->query("UPDATE auth_user_md5 SET Email='$email' WHERE user_id='".$this->auth_user["user_id"]."'");
-					}
-				}
-			}
 		}
 		return;
+	}
+
+	function edit_email($email, $need_activation=True) {
+		$return = edit_email($this->auth_user["user_id"], $email, $need_activation);
+		$this->msg.= $return[1];
+		return $return[0];
 	}
 
 
@@ -588,20 +634,6 @@ class about extends messaging {
 		return;
 	}
 
-
-	function generate_password($length) {      //Hilfsfunktion, erzeugt neues Passwort
-
-		mt_srand((double)microtime()*1000000);
-		for ($i=1;$i<=$length;$i++) {
-			$temp = mt_rand() % 36;
-			if ($temp < 10)
-				$temp += 48;   // 0 = chr(48), 9 = chr(57)
-			else
-				$temp += 87;   // a = chr(97), z = chr(122)
-			$pass .= chr($temp);
-		}
-		return $pass;
-	}
 
 
 
@@ -713,3 +745,4 @@ class about extends messaging {
 
 
 } // end class definition
+?>

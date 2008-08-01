@@ -47,7 +47,6 @@ global
   $FLASHPLAYER_DEFAULT_CONFIG_MAX,
   $ilias_status,
   $ilias_systemgroup,
-  $INST_ADMIN_DATAFIELDS_VIEW,
   $INST_MODULES,
   $INST_STATUS_GROUPS,
   $INST_TYPE,
@@ -112,13 +111,6 @@ $SEM_TYPE[21]=array("name"=>_("Übung"), "en"=>"Exercise Course", "class"=>1);
 $SEM_TYPE[22]=array("name"=>_("Proseminar"), "en"=>"Proseminar", "class"=>1);
 $SEM_TYPE[23]=array("name"=>_("Oberseminar"), "en"=>"Oberseminar", "class"=>1);
 $SEM_TYPE[24]=array("name"=>_("Arbeitsgemeinschaft"), "en"=>"Workgroup", "class"=>1);
-$SEM_TYPE[25]=array("name"=>_("Vorlesung"), "class"=>6);
-$SEM_TYPE[26]=array("name"=>_("Grundstudium"), "class"=>6);
-$SEM_TYPE[27]=array("name"=>_("Hauptstudium"), "class"=>6);
-$SEM_TYPE[28]=array("name"=>_("Seminar"), "class"=>6);
-$SEM_TYPE[29]=array("name"=>_("Praxisveranstaltung"), "class"=>6);
-$SEM_TYPE[30]=array("name"=>_("Kolloquium"), "class"=>6);
-$SEM_TYPE[31]=array("name"=>_("Forschungsgruppe"), "class"=>6);
 //weitere Typen koennen hier angefuegt werden
 
 
@@ -230,28 +222,6 @@ $SEM_CLASS[5]=array("name"=>_("Arbeitsgruppen"),
 					"chat"=>TRUE,
 					"description"=>sprintf(_("Hier finden Sie verschiedene Arbeitsgruppen an der %s"), $GLOBALS['UNI_NAME']),
 					"create_description"=>_("Verwenden Sie diese Kategorie, um unterschiedliche Arbeitsgruppen anzulegen."));
-
-$SEM_CLASS[6]=array("name"=>_("importierte Kurse"),
-					"compact_mode"=>FALSE,
-					"workgroup_mode"=>FALSE,
-					"only_inst_user"=>TRUE,
-					"turnus_default"=>1,
-					"default_read_level"=>1,
-					"default_write_level" =>1,
-					"bereiche"=>TRUE,
-					"show_browse"=>FALSE,
-					"topic_create_autor"=>TRUE,
-					"write_access_nobody"=>FALSE,
-					"visible"=>TRUE,
-					"course_creation_forbidden" => TRUE, 
-					"forum"=>TRUE,
-					"documents"=>TRUE,
-					"schedule"=>TRUE,
-					"participants"=>TRUE,
-					"literature"=>TRUE,
-					"chat"=>TRUE,
-					"description"=> "Hier finden sie importierte Kurse",
-					"create_description"=> "Sie sollten diesen Text garnicht sehen.");
 //weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
 
@@ -259,13 +229,17 @@ $SEM_CLASS[6]=array("name"=>_("importierte Kurse"),
 $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen SEM_TYPE, name "1" waere entsprechend die Definition der Dateiendungen fuer SEM_TYPE[1]; default wird verwendet, wenn es keine spezielle Definition fuer einen SEM_TYPE gibt
 						array(	"type"=>"allow", 									//Type bezeichnet den grundsetzlichen Typ der Deklaration: deny verbietet alles ausser den angegebenen file_types, allow erlaubt alle ausser den angegebenen file_types
 								"file_types" => array ("exe"),	//verbotene bzw. erlaubte Dateitypen
-								"file_sizes" => array (	"root" => 14 * 1048576,			//Erlaubte Groesse je nach Rechtestufe
-													"admin" => 14 * 1048576,
-													"dozent" => 14 * 1048576,
-													"tutor" => 14 * 1048576,
-													"autor" => 7 * 1048576,
-													"nobody" => 1.38 * 1048576
-												)
+								"file_sizes" => array (	"root" => 24 * 1048576,			//Erlaubte Groesse je nach Rechtestufe
+													"admin" => 24 * 1048576,
+													"dozent" => 24 * 1048576,
+													"tutor" => 24 * 1048576,
+													"autor" => 20 * 1048576,
+													"nobody" => 1.38 * 1048576,
+													// FL:START
+													// in Hausaufgaben ordnern duerfen 50MB grosse Dateien hochgeladen werden 
+													"exercise_folder" => 50 * 1048576
+													// FL:END
+												),
 							),
 						"7" =>
 						array(	"type"=>"allow",
@@ -616,13 +590,7 @@ $ilias_systemgroup = array(
 );
 
 // cofiguration for flash player
-$FLASHPLAYER_DEFAULT_CONFIG_MIN = "&amp;showstop=1&amp;showvolume=1&amp;bgcolor=A6B6C6&amp;bgcolor1=A6B6C6&amp;bgcolor2=7387AC&amp;playercolor=7387AC&amp;buttoncolor=254580&amp;buttonovercolor=E9EFFD&amp;slidercolor1=CAD7E1&amp;slidercolor2=A6B6C6&amp;sliderovercolor=E9EFFD&amp;loadingcolor=E9B21A&amp;buffer=5&amp;buffercolor=white&amp;buffershowbg=0&amp;playeralpha=90&amp;playertimeout=500&amp;shortcut=1&amp;phpstream=0&amp;onclick=playpause&amp;showloading=always";
-$FLASHPLAYER_DEFAULT_CONFIG_MAX = "&amp;showstop=1&amp;showvolume=1&amp;bgcolor=A6B6C6&amp;bgcolor1=A6B6C6&amp;bgcolor2=7387AC&amp;playercolor=7387AC&amp;buttoncolor=254580&amp;buttonovercolor=E9EFFD&amp;slidercolor1=CAD7E1&amp;slidercolor2=A6B6C6&amp;sliderovercolor=E9EFFD&amp;loadingcolor=E9B21A&amp;buffer=5&amp;buffercolor=white&amp;buffershowbg=0&amp;playeralpha=90&amp;playertimeout=500&amp;shortcut=1&amp;showtime=1&amp;showfullscreen=1&amp;showplayer=always&amp;phpstream=0&amp;onclick=playpause&amp;showloading=always";
+$FLASHPLAYER_DEFAULT_CONFIG_MIN = "&amp;startimage=assets/images/flash_play.jpg&amp;showstop=1&amp;showvolume=1&amp;bgcolor=A6B6C6&amp;bgcolor1=A6B6C6&amp;bgcolor2=7387AC&amp;playercolor=7387AC&amp;buttoncolor=254580&amp;buttonovercolor=E9EFFD&amp;slidercolor1=CAD7E1&amp;slidercolor2=A6B6C6&amp;sliderovercolor=E9EFFD&amp;loadingcolor=E9B21A&amp;buffer=5&amp;buffercolor=white&amp;buffershowbg=0&amp;playeralpha=80&amp;playertimeout=500&amp;shortcut=1&amp;phpstream=0&amp;onclick=playpause&amp;showloading=always";
+$FLASHPLAYER_DEFAULT_CONFIG_MAX = "&amp;startimage=assets/images/flash_play.jpg&amp;showstop=1&amp;showvolume=1&amp;bgcolor=A6B6C6&amp;bgcolor1=A6B6C6&amp;bgcolor2=7387AC&amp;playercolor=7387AC&amp;buttoncolor=254580&amp;buttonovercolor=E9EFFD&amp;slidercolor1=CAD7E1&amp;slidercolor2=A6B6C6&amp;sliderovercolor=E9EFFD&amp;loadingcolor=E9B21A&amp;buffer=5&amp;buffercolor=white&amp;buffershowbg=0&amp;playeralpha=80&amp;playertimeout=500&amp;shortcut=1&amp;showtime=1&amp;showfullscreen=1&amp;phpstream=0&amp;onclick=playpause&amp;showloading=always";
 
-//Here you have to add the datafield_ids as elements. They will be shown in the standard / extended view on inst_admin.php
-$INST_ADMIN_DATAFIELDS_VIEW = array(			
-	'extended' => array(
-	),
-	'default' => array(
-	)
-);
+?>

@@ -117,8 +117,16 @@ if (!$my_about->check) {
  * * * * * * * * * * * * * * * */
 
 if (check_ticket($studipticket)) {
-
 	$invalidEntries = parse_datafields($my_about->auth_user['user_id']);
+
+	if ($cmd == "edit_pers" && $my_about->auth_user["Email"] != $_REQUEST['email1']) {
+		if($_REQUEST['email1'] == $_REQUEST['email2']) {
+			$my_about->edit_email($_REQUEST['email1']);
+		} else {
+			$my_about->msg.= "info§" . _('Die Wiederholung der E-Mail Adresse stimmt nicht mit Ihrer Eingabe überein. Bitte überprüfen Sie Ihre Eingabe.'). '§';
+		}
+	}
+
 
 	// Person einer Rolle hinzufügen
 	if ($cmd == 'addToGroup') {
@@ -245,17 +253,37 @@ if (check_ticket($studipticket)) {
 
 	//Veränderungen der pers. Daten
 	if ($cmd == "edit_pers" || $cmd == 'edit_leben') {
-		//email und passwort können nicht sinnvoll gleichzeitig geändert werden, da bei Änderung der email automatisch das passwort neu gesetzt wird
-		if (($email && $my_about->auth_user["Email"] != $email)
-			&& (($response && $response != md5("*****")) || ($passwd && $passwd != "*****"))) {
-			$my_about->msg = $my_about->msg . "error§" . _("Bitte ändern Sie erst ihre E-Mail-Adresse und dann ihr Passwort!") . "§";
-
-		} else {
-		$my_about->edit_pers($passwd, $check_pass, $response, $new_username, $vorname, $nachname, $email, $telefon, $cell, $anschrift, $home,$motto, $hobby, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view);
-			if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) $my_about->get_auth_user($new_username);   //username wurde geändert!
-			else $my_about->get_auth_user($username);
-			$username = $my_about->auth_user["username"];
+		$new_password = '*****'; // ***** as in "don't change password"
+		if($_REQUEST['update_pw'] == 'on') {
+			if($_REQUEST['new_passwd_1'] != $_REQUEST['new_passwd_2']) {
+				$my_about->msg.= 'info§'. _('Die Wiederholung Ihres Passwords stimmt nicht mit Ihrer Eingabe überrein. Bitte überprüfen Sie Ihre Eingabe.') . '§';
+			} else {
+				$new_password = $_REQUEST['new_passwd_1'];
+			}
+		} else if($_REQUEST['new_passwd_2'] != '' && $_REQUEST['new_passwd_2'] != '*****') {
+			$my_about->msg.= 'info§'. _('Sie müssen den Harken bei "ändern" setzen, wenn Sie Ihr Passwort ändern wollen.') .'§';
 		}
+
+		if($_REQUEST['password'] != $my_about->auth_user["username"])
+			$my_about->edit_pers($new_password, $_REQUEST['new_passwd_2'],
+						 $_REQUEST['response'], $_REQUEST['new_username'],
+						 $_REQUEST['vorname'], $_REQUEST['nachname'],
+						 $_REQUEST['email'], $_REQUEST['telefon'],
+						 $_REQUEST['cell'], $_REQUEST['anschrift'],
+						 $_REQUEST['home'], $_REQUEST['motto'],
+						 $_REQUEST['hobby'], $_REQUEST['geschlecht'],
+						 $_REQUEST['title_front'],
+						 $_REQUEST['title_front_chooser'],
+						 $_REQUEST['title_rear'], $_REQUEST['title_rear_chooser'],
+						 $_REQUEST['view']);
+
+			if (($my_about->auth_user["username"] != $new_username) && $my_about->logout_user == TRUE) {
+				$my_about->get_auth_user($new_username);   //username wurde geändert!
+			} else {
+				$my_about->get_auth_user($username);
+			}
+			$username = $my_about->auth_user["username"];
+
 		if (get_config("ENABLE_SKYPE_INFO")) {
 			$user->cfg->setValue(preg_replace('/[^a-zA-Z0-9.,_-]/', '', $_REQUEST['skype_name']), $my_about->auth_user['user_id'], 'SKYPE_NAME');
 			$user->cfg->setValue((int)$_REQUEST['skype_online_status'], $my_about->auth_user['user_id'], 'SKYPE_ONLINE_STATUS');
@@ -364,18 +392,19 @@ function checkusername(){
 
 function checkpassword(){
  var checked = true;
- if (document.pers.passwd.value.length<4) {
-	alert("<?=_("Das Passwort ist zu kurz - es sollte mindestens 4 Zeichen lang sein.")?>");
-	 document.pers.passwd.focus();
-	checked = false;
-	}
- if (document.pers.passwd.value != document.pers.check_pass.value)
-	{
-	alert("<?=_("Bei der Wiederholung des Paßwortes ist ein Fehler aufgetreten! Bitte geben sie das exakte Paßwort ein!")?>");
-	document.pers.check_pass.focus();
-	checked = false;
-	}
 
+ if (document.pers.update_pw.value == 'on' && document.pers.new_passwd_1.value != document.pers.new_passwd_2.value) {
+	alert("<?=_("Bei der Wiederholung des Paßwortes ist ein Fehler aufgetreten! Bitte geben sie das  exakte Paßwort ein!")?>");
+	document.pers.new_passwd_2.focus();
+	checked = false;
+ }
+
+ if (document.pers.update_pw.value == 'on' && document.pers.new_passwd_1.value.length<4 && document.pers.new_passwd_2.value.length<4) {
+	alert("<?=_("Das Passwort ist zu kurz - es sollte mindestens 4 Zeichen lang sein.")?>");
+	 document.pers.new_passwd_1.focus();
+	checked = false;
+ }
+	
  return checked;
 }
 
@@ -418,7 +447,7 @@ function checkdata(){
  var checked = true;
  if (document.pers.new_username && !checkusername())
 	checked = false;
- if (document.pers.passwd && !checkpassword())
+ if (document.pers.new_passwd_1 && !checkpassword())
 	checked = false;
  if (document.pers.vorname && !checkvorname())
 	checked = false;
@@ -429,11 +458,34 @@ function checkdata(){
  if (checked) {
 	 document.pers.method = "post";
 	 document.pers.action = "<?php print ("$PHP_SELF?cmd=edit_pers&username=$username&view=$view&studipticket=".get_ticket()) ?>";
-	 document.pers.response.value = MD5(document.pers.passwd.value);
-	 document.pers.passwd.value = "*****";
-	 document.pers.check_pass.value = "*****";
+	 document.pers.response.value = MD5(document.pers.new_passwd_1.value);
+	 document.pers.new_passwd_1.value = "*****";
+	 document.pers.new_passwd_2.value = "*****";
  }
  return checked;
+}
+
+function update_pw_fields() {
+	document.getElementById('new_passwd_1').disabled = !document.getElementById('update_pw').checked;
+	document.getElementById('new_passwd_2').disabled = !document.getElementById('update_pw').checked;
+
+	if(document.getElementById('update_pw').checked) {
+		if(document.getElementById('new_passwd_1').value == '*****') {
+			document.getElementById('new_passwd_1').value = '';
+		}
+
+		if(document.getElementById('new_passwd_2').value == '*****') {
+			document.getElementById('new_passwd_2').value = '';
+		}
+	} else {
+		if(document.getElementById('new_passwd_1').value == '') {
+			document.getElementById('new_passwd_1').value = '*****';
+		}
+
+		if(document.getElementById('new_passwd_2').value == '') {
+			document.getElementById('new_passwd_2').value = '*****';
+		}
+	}
 }
 // -->
 </SCRIPT>
@@ -657,11 +709,24 @@ if ($view == 'Daten') {
 		}
 	echo "</td></tr>\n";
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </b></blockquote></td>";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </b></blockquote>"
+		.'<div style="text-align: right;"> ändern? <input type="checkbox" name="update_pw" id="update_pw" onclick="javascript: update_pw_fields();" /></div></td>';
 	if (StudipAuthAbstract::CheckField("auth_user_md5.password", $my_about->auth_user['auth_plugin'])) {
 		echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp; <font size=\"-1\">*****</font>";
 	} else {
-		echo "<td class=\"".$cssSw->getClass()."\" nowrap width=\"20%\" align=\"left\"><font size=-1>&nbsp; " . _("neues Passwort:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"passwd\" value=\"*****\"><input type=\"HIDDEN\" name=\"response\" value=\"\">&nbsp; <font color=\"red\" size=+2>*</font>&nbsp; </td><td class=\"".$cssSw->getClass()."\" width=\"55%\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Passwort-Wiederholung:") . "</font><br />&nbsp; <input type=\"password\" size=\"".round($max_col*0.25)."\" name=\"check_pass\" value=\"*****\">&nbsp; <font color=\"red\" size=+2>*</font>";
+		echo '<td class="'.$cssSw->getClass().'" nowrap width="20%" align="left">';
+		$pw_input = "<font size=-1>&nbsp; %s</font><br />&nbsp;"
+					."<input type=\"password\" size=\"".round($max_col*0.25)."\" id=\"new_passwd_%s\" name=\"new_passwd_%s\"  %s value=\"*****\">"
+					."<input type=\"HIDDEN\" name=\"response\" value=\"\">";
+
+		echo '<script>document.write(\''.sprintf($pw_input, _("neues Passwort:"), '1', '1', 'disabled').'\');</script>';
+		// if javascript is disabled dont disable the input fields
+		printf('<noscript>'.$pw_input.'</noscript>', _("neues Passwort:"), '1', '1','');
+		echo "</td><td class=\"".$cssSw->getClass()."\" width=\"55%\" nowrap align=\"left\">";
+		
+		echo '<script>document.write(\''.sprintf($pw_input, _("Passwort Wiederholung:"), '2', '2','disabled').'\');</script>';
+		// if javascript is disabled dont disable the input fields
+		printf('<noscript>'.$pw_input.'</noscript>', _("Passwort Wiederholung:"), '2', '2','');
 	}
 	echo "</td></tr>\n";
 
@@ -682,9 +747,13 @@ if ($view == 'Daten') {
 	echo "</td></tr>\n";
 
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("E-Mail:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">&nbsp;";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("E-Mail:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp;";
 	if (($ALLOW_CHANGE_EMAIL && !(StudipAuthAbstract::CheckField("auth_user_md5.Email", $my_about->auth_user['auth_plugin'])))) {
-		echo " <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"email\" value=\"".$my_about->auth_user["Email"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
+		echo '<font size=-1>&nbsp; '. _("E-Mail:") .'</font><br />'.
+			 ' &nbsp; <input type="text" size="'. round($max_col*0.25). '" name="email1" value="'.$my_about->auth_user["Email"].'">&nbsp; <font color="red" size=+2>*</font>'.
+			 ' </td><td class="'. $cssSw->getClass() .'" align="left">'.
+			 '<font size=-1>&nbsp; '. _("E-Mail Wiederholung:") .'</font><br />'.
+			 '&nbsp; <input type="text" size="'. round($max_col*0.25).'" name="email2" value="'.$my_about->auth_user["Email"]. '">&nbsp; <font color="red" size=+2>*</font>';
 	} else {
 		echo "&nbsp; <font size=\"-1\">".$my_about->auth_user["Email"]."</font>";
 	}
@@ -693,7 +762,8 @@ if ($view == 'Daten') {
 		$cssSw->switchClass();
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><blockquote><b>" . _("Username:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\">&nbsp; ".$my_about->auth_user["username"]."</td><td width=\"50%\" rowspan=4 align=\"center\"><b><font color=\"red\">" . _("Adminzugriff hier nicht möglich!") . "</font></b></td></tr>\n";
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; *****</td></tr>\n";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </b></blockquote>";
+		echo "</td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; *****</td></tr>\n";
 		$cssSw->switchClass();
 		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Name:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; ".htmlReady($my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"])."</td></tr>\n";
 		$cssSw->switchClass();
@@ -1242,3 +1312,4 @@ if ($view == 'Login') {
 }
 
 page_close();
+?>
