@@ -265,7 +265,7 @@ if (check_ticket($studipticket)) {
 		}
 
 		if($_REQUEST['password'] != $my_about->auth_user["username"])
-			$my_about->edit_pers($new_password, $_REQUEST['new_passwd_2'],
+			$my_about->edit_pers($new_password,
 						 $_REQUEST['response'], $_REQUEST['new_username'],
 						 $_REQUEST['vorname'], $_REQUEST['nachname'],
 						 $_REQUEST['email'], $_REQUEST['telefon'],
@@ -716,8 +716,7 @@ if ($view == 'Daten') {
 	} else {
 		echo '<td class="'.$cssSw->getClass().'" nowrap width="20%" align="left">';
 		$pw_input = "<font size=-1>&nbsp; %s</font><br />&nbsp;"
-					."<input type=\"password\" size=\"".round($max_col*0.25)."\" id=\"new_passwd_%s\" name=\"new_passwd_%s\"  %s value=\"*****\">"
-					."<input type=\"HIDDEN\" name=\"response\" value=\"\">";
+					."<input type=\"password\" size=\"".round($max_col*0.25)."\" id=\"new_passwd_%s\" name=\"new_passwd_%s\"  %s value=\"*****\">";
 
 		echo '<script>document.write(\''.sprintf($pw_input, _("neues Passwort:"), '1', '1', 'disabled').'\');</script>';
 		// if javascript is disabled dont disable the input fields
@@ -728,7 +727,7 @@ if ($view == 'Daten') {
 		// if javascript is disabled dont disable the input fields
 		printf('<noscript>'.$pw_input.'</noscript>', _("Passwort Wiederholung:"), '2', '2','');
 	}
-	echo "</td></tr>\n";
+	echo "<input type=\"HIDDEN\" name=\"response\" value=\"\"></td></tr>\n";
 
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Name:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Vorname:") . "</font><br />";

@@ -466,7 +466,7 @@ class about extends messaging {
 	}
 
 
-	function edit_pers($password, $check_pass, $response, $new_username, $vorname, $nachname, $email, $telefon, $cell, $anschrift, $home, $motto, $hobby, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view) {
+	function edit_pers($password, $response, $new_username, $vorname, $nachname, $email, $telefon, $cell, $anschrift, $home, $motto, $hobby, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view) {
 		global $UNI_NAME_CLEAN, $_language_path, $auth, $perm;
 		global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, $ALLOW_CHANGE_NAME, $ALLOW_CHANGE_TITLE;
 
@@ -539,8 +539,9 @@ class about extends messaging {
 						return false;
 					}
 					$newpass = md5($password);             // also können wir das unverschluesselte Passwort testen
-				} else
-				$newpass = $response;
+				} else {
+					$newpass = $response;
+				}
 
 				$this->db->query("UPDATE auth_user_md5 SET password='$newpass' WHERE user_id='".$this->auth_user["user_id"]."'");
 				$this->msg=$this->msg . "msg§" . _("Ihr Passwort wurde ge&auml;ndert!") . "§";
