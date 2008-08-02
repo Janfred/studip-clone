@@ -191,13 +191,13 @@ class StudipAuthAbstract {
 	function CheckAuthentication($username,$password,$jscript = false){
 
 		$db = new DB_Seminar();
-        $db->query(sprintf("SELECT * FROM auth_user_md5 WHERE username='%s'",mysql_escape_string($username)));
-        if ($db->next_record()) {
-                if ($db->f("locked")=="1") {
-                        $error .= _("Dieser Benutzer ist gesperrt! Wenden Sie sich bitte an die Administration.")."<BR>";
-                        return array('uid' => $uid,'error' => $error);
-                }
-        }
+		$db->query(sprintf("SELECT * FROM auth_user_md5 WHERE username='%s'",mysql_escape_string($username)));
+		if ($db->next_record()) {
+				if ($db->f("locked")=="1") {
+						$error .= _("Dieser Benutzer ist gesperrt! Wenden Sie sich bitte an die Administration.")."<BR>";
+						return array('uid' => $uid,'error' => $error);
+				}
+		}
 
 		$plugins =& StudipAuthAbstract::GetInstance();
 		$error = false;
@@ -208,15 +208,6 @@ class StudipAuthAbstract {
 				continue;
 			}
 			if ($uid = $object->authenticateUser($username,$password,$jscript)){
-				$this->db->query(sprintf("SELECT validation_key FROM auth_user_md5 WHERE username='%s'", $username));
-				$this->db->next_record();
-				$key = $this->db->f('validation_key');
-				if($key != '') {
-					$_REQUEST['uid'] = $uid;
-					$_SESSION['semi_logged_in'] = True;
-					include('public/activate_email.php');
-					die();
-				}
 				return array('uid' => $uid,'error' => $error, 'is_new_user' => $object->is_new_user);
 			} else {
 				$error .= (($object->error_head) ? ("<b>" . $object->error_head . ":</b> ") : "") . $object->error_msg . "<br>";
@@ -224,7 +215,7 @@ class StudipAuthAbstract {
 		}
 		return array('uid' => $uid,'error' => $error);
 	}
-	
+
 	/**
 	* static method to check if passed username is used in external data sources
 	*

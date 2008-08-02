@@ -585,9 +585,14 @@ class Seminar_Auth extends Auth {
 		if (StudipAuthAbstract::CheckMD5()){
 			$_SESSION['challenge'] = md5(uniqid($this->magic));
 		}
+
 		if ($_REQUEST['username'] && !$_COOKIE[$GLOBALS['sess']->name]){
 			$login_template =& $GLOBALS['template_factory']->open('nocookies');
+		} else if (isset($this->need_email_activation)) {
+			$login_template =& $GLOBALS['template_factory']->open('login_emailvalidation');
+			$login_template->set_attribute('uid', $this->need_email_activation);
 		} else {
+			unset($_SESSION['semi_logged_in']); // used by email activation
 			$login_template =& $GLOBALS['template_factory']->open('loginform');
 			$login_template->set_attribute('loginerror', (isset($this->auth["uname"]) && $this->error_msg));
 			$login_template->set_attribute('error_msg', $this->error_msg);
@@ -634,8 +639,17 @@ class Seminar_Auth extends Auth {
 
 		$GLOBALS['sess']->unregister('challenge');
 
-		if ($check_auth['uid']){
+		if ($check_auth['uid']) {
 			$uid = $check_auth['uid'];
+			$this->db->query(sprintf("SELECT validation_key FROM auth_user_md5 WHERE username='%s'", $username));
+			$this->db->next_record();
+			$key = $this->db->f('validation_key');
+			if($key != '') {
+				$this->need_email_activation = $uid;
+				$_SESSION['semi_logged_in'] = $uid;
+				return False;
+			}
+
 			$this->db->query(sprintf("select username,perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
 			$this->db->next_record();
 			$this->auth["perm"]  = $this->db->f("perms");
@@ -699,7 +713,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 			$_language = get_accepted_languages();
 		}
 		$_language_path = init_i18n($_language);
-		if (!$_COOKIE[$GLOBALS['sess']->name]){
+		if (!$_COOKIE[$GLOBALS['sess']->name]) {
 			$register_template =& $GLOBALS['template_factory']->open('nocookies');
 		} else {
 			$register_template =& $GLOBALS['template_factory']->open('registerform');

@@ -50,17 +50,19 @@ require_once 'lib/functions.php';
 include 'lib/include/html_head.inc.php'; // Output of html head
 include 'lib/include/header.php';
 
-$uid = mysql_escape_string($_REQUEST['uid']);
+echo $_SESSION['semi_logged_in']; // XXX
+
+$uid = $_REQUEST['uid'];
 if($_REQUEST['key']) {
 	$db = new DB_Seminar(sprintf("SELECT validation_key FROM auth_user_md5 WHERE user_id='%s'", $uid));
 	$db->next_record();
 	$key = $db->f('validation_key');
 	if($_REQUEST['key'] == $key) {
-		head($topic);
 		$db->query(sprintf('UPDATE auth_user_md5 SET validation_key="" WHERE user_id="%s";', $uid));
+		unset($_SESSION['half_logged_in']);
+		head($topic);
 		echo _('Ihre E-Mail Adresse wurde erfolgreich geändert.');
 		printf(' <a href="index.php">%s</a>', _('Zum Login'));
-		unset($_SESSION['half_logged_in']);
 		footer();
 	} else if ($key == '') {
 		head($current_page);
@@ -71,33 +73,44 @@ if($_REQUEST['key']) {
 		head(_('Warnung'), True);
 		echo _("Falcher Bestätigungscode.");
 		footer();
+
 		head($current_page);
-		mail_explain();
-		reenter_mail();
+		if($_SESSION['semi_logged_in'] == $_REQUEST['uid']) {
+			reenter_mail();
+		} else {
+			printf(_('Sie können sich %seinloggen%s und sich den Bestätigungscode neu oder an eine andere E-Mail Adresse schicken lassen.'), 
+					'<a href="index.php">', '</a>');
+		}
 		footer();
 	}
 
-} else if($_REQUEST['email1'] && $_REQUEST['email2'] && $_SESSION['semi_logged_in']) {
+// checking semi_logged_in is important to avoid abuse
+} else if($_REQUEST['email1'] && $_REQUEST['email2'] && $_SESSION['semi_logged_in'] == $_REQUEST['uid']) {
 	if($_REQUEST['email1'] == $_REQUEST['email2']) {
 		// change mail
 		require_once('lib/edit_about.inc.php');
 
-		edit_email($uid, $_REQUEST['email1'], True);
-		$_SESSION['semi_logged_in'] = False;
-		
-		head($current_page);
-		printf(_('An %s wurde ein Aktivierungslink geschickt.'), $_REQUEST['email1']);
-		footer();
+		$send = edit_email($uid, $_REQUEST['email1'], True);
+
+		if($send[0]) {
+			$_SESSION['semi_logged_in'] = False;
+			head($current_page);
+			printf(_('An %s wurde ein Aktivierungslink geschickt.'), $_REQUEST['email1']);
+			footer();
+		} else {
+			head(_('Fehler'), True);
+			echo parse_msg($send[1]);
+			footer();
+			
+			head($current_page);
+			reenter_mail();
+			footer();
+		}
 	} else {
 		head();
 		printf('<b>%s</b>', _('Die eingegebenen E-Mail Adressen stimmen nicht überein. Bitte überprüfen Sie Ihre Eingabe.'));
 		reenter_mail();
 	}
-} else if ($_SESSION['semi_logged_in']) {
-	head($current_page);
-	mail_explain();
-	reenter_mail();
-	footer();
 } else {
 	// this never happens unless someone manipulates urls
 	// maybe handle more "beautiful" - but normal user dont see it...
