@@ -589,7 +589,7 @@ class Seminar_Auth extends Auth {
 		if ($_REQUEST['username'] && !$_COOKIE[$GLOBALS['sess']->name]){
 			$login_template =& $GLOBALS['template_factory']->open('nocookies');
 		} else if (isset($this->need_email_activation)) {
-			$login_template =& $GLOBALS['template_factory']->open('login_emailvalidation');
+			$login_template =& $GLOBALS['template_factory']->open('login_emailactivation');
 			$login_template->set_attribute('uid', $this->need_email_activation);
 		} else {
 			unset($_SESSION['semi_logged_in']); // used by email activation

@@ -50,8 +50,6 @@ require_once 'lib/functions.php';
 include 'lib/include/html_head.inc.php'; // Output of html head
 include 'lib/include/header.php';
 
-echo $_SESSION['semi_logged_in']; // XXX
-
 $uid = $_REQUEST['uid'];
 if($_REQUEST['key']) {
 	$db = new DB_Seminar(sprintf("SELECT validation_key FROM auth_user_md5 WHERE user_id='%s'", $uid));
