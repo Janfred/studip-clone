@@ -92,8 +92,8 @@ function edit_email($uid, $email, $force=False) {
 		}
 	}
 
-	$db->query("SELECT Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
-	if ($db->next_record()) {
+	$db->query("SELECT user_id, Email,Vorname,Nachname FROM auth_user_md5 WHERE Email='$email'") ;
+	if ($db->next_record() and $db->f('user_id') != $uid) {
 		$msg.=  "error§" . sprintf(_("Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) verwendet. Bitte geben Sie eine andere E-Mail-Adresse an."), htmlReady($db->f("Vorname")), htmlReady($db->f("Nachname"))) . "§";
 		return array(False, $msg);
 	}

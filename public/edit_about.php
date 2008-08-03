@@ -111,7 +111,6 @@ if (!$my_about->check) {
 
 
 
-
 /* * * * * * * * * * * * * * * *
  * * * C O N T R O L L E R * * *
  * * * * * * * * * * * * * * * */
@@ -393,13 +392,13 @@ function checkusername(){
 function checkpassword(){
  var checked = true;
 
- if (document.pers.update_pw.value == 'on' && document.pers.new_passwd_1.value != document.pers.new_passwd_2.value) {
+ if (document.pers.update_pw.checked && document.pers.new_passwd_1.value != document.pers.new_passwd_2.value) {
 	alert("<?=_("Bei der Wiederholung des Paßwortes ist ein Fehler aufgetreten! Bitte geben sie das  exakte Paßwort ein!")?>");
 	document.pers.new_passwd_2.focus();
 	checked = false;
  }
 
- if (document.pers.update_pw.value == 'on' && document.pers.new_passwd_1.value.length<4 && document.pers.new_passwd_2.value.length<4) {
+ if (document.pers.update_pw.checked && document.pers.new_passwd_1.value.length<4 && document.pers.new_passwd_2.value.length<4) {
 	alert("<?=_("Das Passwort ist zu kurz - es sollte mindestens 4 Zeichen lang sein.")?>");
 	 document.pers.new_passwd_1.focus();
 	checked = false;
