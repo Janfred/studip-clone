@@ -298,16 +298,17 @@ function createVoteForm (&$vote, $userID) {
    $i = 0;
    $html .= "<table border=\"0\" cellspacing=\"0\" cellpadding=\"3\">\n";
    foreach ($answers as $key => $value) {
+       $id = "vote_" . $vote->getVoteID() . "_answer_" . $key;
        $html .= " <tr valign=\"middle\">\n";
        $html .= "  <td>\n";
        $html .= "   <input ".
 	  "type=\"".$type."\" ".
 	  "name=\"answer[".$i."]\" ".
-	  "id=\"answer[".$i."]\" ".
+	  "id=\"{$id}\" ".
 	  "value=\"".$key."\" />\n";
        $html .= "  </td>\n";
        $html .= "  <td>\n";
-       $html .= "   <label for=\"answer[".$i."]\">\n";
+       $html .= "   <label for=\"{$id}\">\n";
        $html .= "    <font size=-1>".formatReady($value["text"])."</font>\n";
        $html .= "   </label>\n";
        $html .= "  </td>\n";
