@@ -282,34 +282,65 @@ class DataFieldEmailEntry extends DataFieldEntry {
 class DataFieldSelectboxEntry extends DataFieldEntry {
   function DataFieldSelectboxEntry ($struct) {
     parent::DataFieldEntry($struct);
-    $values = explode("\n", $this->structure->getTypeParam());
-    $this->value = trim($values[0]);  // first selectbox entry is default
+		list($values, $is_assoc) = $this->getParams();
+		$this->is_assoc_param = $is_assoc;
+		$this->type_param = $values;
+		reset($values);
+		if(!$is_assoc){
+			$this->value = current($values);  // first selectbox entry is default
+		} else {
+			$this->value = key($values);
+		}
+		
   }
 
   function getHTML ($name) {
-    $values = explode("\n", $this->structure->getTypeParam());
     $ret = "<select name=\"$name\">";
-    foreach ($values as $val) {
-      $val = trim(htmlentities($val, ENT_QUOTES));
-      $sel = $val == $this->getDisplayValue() ? 'selected' : '';
-      $ret .= "<option value=\"$val\" $sel>$val</option>";
+		foreach ($this->type_param as $pkey => $pval) {
+			$value = $this->is_assoc_param ? $pkey : $pval;
+			$sel = $value == $this->getDisplayValue(false) ? 'selected' : '';
+			$ret .= sprintf('<option value="%s" %s>%s</option>',
+				htmlReady($value),
+				$sel,
+				htmlReady($pval));
     }
     return $ret . "</select>";
   }
+
+	function getParams(){
+		$ret = array();
+		$i = 0;
+		$is_assoc = false;
+		foreach(array_map('trim',explode("\n", $this->structure->getTypeParam())) as $p){
+			if(strpos($p,'=>') !== false){
+				$is_assoc = true;
+				list($key, $value) = array_map('trim',explode('=>', $p));
+				$ret[$key] = $value;
+			} else {
+				$ret[$i] = $p;
+			}
+			++$i;
+		}
+		return array($ret, $is_assoc);
+	}
 }
 
 
 class DataFieldRadioEntry extends DataFieldSelectboxEntry {
+	
+	function DataFieldRadioEntry($struct){
+		parent::DataFieldSelectboxEntry($struct);
+	}
+	
   function getHTML ($name) {
-    $values = explode("\n", $this->structure->getTypeParam());
     $ret = '';
-    foreach ($values as $val) {
-      $val = trim(htmlentities($val, ENT_QUOTES));
+		foreach ($this->type_param as $pkey => $pval) {
+			$value = $this->is_assoc_param ? $pkey : $pval;
       $ret .= sprintf('<input type="radio" value="%s" name="%s"%s> %s',
-                      $val, $name,
-                      $val == $this->getDisplayValue()
+				htmlReady($value), $name,
+				$value == $this->getDisplayValue(false)
                         ? ' checked="checked"' : '',
-                      $val);
+				htmlReady($pval));
     }
     return $ret;
   }
