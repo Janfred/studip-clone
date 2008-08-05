@@ -552,10 +552,16 @@ class Seminar_Auth extends Auth {
 		$check_auth = StudipAuthAbstract::CheckAuthentication($auto_user,$expected_response,$this->auth['jscript']);
 		if ($check_auth['uid']){
 			$uid = $check_auth['uid'];
-			$this->db->query(sprintf("select username,perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
+			$this->db->query(sprintf("select * from %s where user_id = '%s'",$this->database_table,$uid));
 			$this->db->next_record();
 			if ($this->db->f("perms") == "root" || $this->db->f("perms") == "admin"){
 				$this->error_msg= sprintf(_("Autologin ist mit dem Status: %s nicht möglich!"), $this->auth["perm"]);
+				return false;
+			}
+			$key = $this->db->f('validation_key');
+			if($key != '') {
+				$this->need_email_activation = $uid;
+				$_SESSION['semi_logged_in'] = $uid;
 				return false;
 			}
 			$this->auth["perm"]  = $this->db->f("perms");
@@ -641,17 +647,14 @@ class Seminar_Auth extends Auth {
 
 		if ($check_auth['uid']) {
 			$uid = $check_auth['uid'];
-			$this->db->query(sprintf("SELECT validation_key FROM auth_user_md5 WHERE username='%s'", $username));
+			$this->db->query(sprintf("select * from %s where user_id = '%s'",$this->database_table,$uid));
 			$this->db->next_record();
 			$key = $this->db->f('validation_key');
 			if($key != '') {
 				$this->need_email_activation = $uid;
 				$_SESSION['semi_logged_in'] = $uid;
-				return False;
+				return false;
 			}
-
-			$this->db->query(sprintf("select username,perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
-			$this->db->next_record();
 			$this->auth["perm"]  = $this->db->f("perms");
 			$this->auth["uname"] = $this->db->f("username");
 			$this->auth["auth_plugin"]  = $this->db->f("auth_plugin");
