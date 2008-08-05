@@ -187,7 +187,7 @@ class Avatar {
     if ($_FILES[$userfile]['size'] > self::MAX_FILE_SIZE) {
       throw new Exception(sprintf(_("Die hochgeladene Bilddatei ist %s KB groß. Die maximale Dateigröße beträgt %s KB!"),
                                   round($_FILES[$userfile]['size'] / 1024),
-                                  self::MAX_FILE_SIZE));
+                                  self::MAX_FILE_SIZE / 1024));
     }
 
     // keine Datei ausgewählt!
@@ -286,6 +286,8 @@ class Avatar {
     }
     $image = $lookup[$type]($filename);
 
+    imagealphablending($image, FALSE);
+    imagesavealpha($image, TRUE);
 
     # resize image if needed
     if ($height > $thumb_height || $width > $thumb_width) {
@@ -299,55 +301,35 @@ class Avatar {
       $resized_height = $height;
     }
 
-    $image = self::imageresize($image, $type, $width, $height,
-      $resized_width, $resized_height);
+    $image = self::imageresize($image, $width, $height,
+                               $resized_width, $resized_height);
 
-    $i = imagecreatetruecolor($thumb_width, $thumb_height);
-    $color = imagecolorallocatealpha($i, 0, 0, 0, 127);
-    imagefill($i, 0, 0, $color);
-    imagesavealpha($i, true);
+    $dst = imagecreatetruecolor($thumb_width, $thumb_height);
+    imagealphablending($dst, FALSE);
+    imagesavealpha($dst, TRUE);
+
+    $trans_colour = imagecolorallocatealpha($dst, 0, 0, 0, 127);
+    imagefill($dst, 0, 0, $trans_colour);
 
     // center the new image
     $ypos = intval($thumb_height - $resized_height) >> 1;
     $xpos = intval($thumb_width - $resized_width) >> 1;
 
-    imagecopy($i, $image, $xpos, $ypos, 0, 0, $resized_width, $resized_height);
+    imagecopy($dst, $image, $xpos, $ypos, 0, 0,
+              $resized_width, $resized_height);
 
-    imagepng($i, self::getCustomAvatarPath($this->user_id, $size));
+    imagepng($dst, self::getCustomAvatarPath($this->user_id, $size));
   }
 
 
-  private function imageresize($image, $type,
+  private function imageresize($image,
                                $current_width, $current_height,
                                $width, $height) {
 
     $image_resized = imagecreatetruecolor($width, $height);
 
-    if ($type == IMAGETYPE_GIF ||
-        $type == IMAGETYPE_PNG) {
-
-      // If we have a specific transparent color, allocate the same in the new
-      // image resource and completely fill it with that one
-      $index = imagecolortransparent($image);
-      if ($index >= 0) {
-        $color = @imagecolorsforindex($image, $index);
-        $index = imagecolorallocate($image_resized,
-          $color['red'], $color['green'], $color['blue']);
-        imagefill($image_resized, 0, 0, $index);
-        imagecolortransparent($image_resized, $index);
-      }
-
-      // Always make a transparent background color for PNGs that don't have
-      // one allocated already, turn off transparency blending (temporarily)
-      // create a new transparent color for image, completely fill the new
-      // image with it and restore transparency blending
-      else if ($type == IMAGETYPE_PNG) {
-        imagealphablending($image_resized, FALSE);
-        $color = imagecolorallocatealpha($image_resized, 0, 0, 0, 127);
-        imagefill($image_resized, 0, 0, $color);
-        imagesavealpha($image_resized, true);
-      }
-    }
+    imagealphablending($image_resized, FALSE);
+    imagesavealpha($image_resized, TRUE);
     imagecopyresampled($image_resized, $image, 0, 0, 0, 0,
                        $width, $height, $current_width, $current_height);
 
