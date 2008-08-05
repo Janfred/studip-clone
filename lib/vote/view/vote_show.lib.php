@@ -303,10 +303,13 @@ function createVoteForm (&$vote, $userID) {
        $html .= "   <input ".
 	  "type=\"".$type."\" ".
 	  "name=\"answer[".$i."]\" ".
+	  "id=\"answer[".$i."]\" ".
 	  "value=\"".$key."\" />\n";
        $html .= "  </td>\n";
        $html .= "  <td>\n";
-       $html .= "   <font size=-1>".formatReady($value["text"])."</font>\n";
+       $html .= "   <label for=\"answer[".$i."]\">\n";
+       $html .= "    <font size=-1>".formatReady($value["text"])."</font>\n";
+       $html .= "   </label>\n";
        $html .= "  </td>\n";
        $html .= " </tr>\n";
 
