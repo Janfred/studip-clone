@@ -234,9 +234,14 @@ class Avatar {
       throw new Exception(_("Es ist ein Fehler beim Bearbeiten des Bildes aufgetreten."));
     }
 
+
+    set_error_handler(array(__CLASS__, 'error_handler'));
+
     $this->resize(Avatar::NORMAL, $filename);
     $this->resize(Avatar::MEDIUM, $filename);
     $this->resize(Avatar::SMALL,  $filename);
+
+    restore_error_handler();
   }
 
   /**
@@ -245,7 +250,7 @@ class Avatar {
    * @return void
    */
   function reset() {
-    if  ($this->is_customized()) {
+    if ($this->is_customized()) {
       @unlink(self::getCustomAvatarPath($this->user_id, Avatar::NORMAL));
       @unlink(self::getCustomAvatarPath($this->user_id, Avatar::SMALL));
       @unlink(self::getCustomAvatarPath($this->user_id, Avatar::MEDIUM));
@@ -347,6 +352,19 @@ class Avatar {
                        $width, $height, $current_width, $current_height);
 
     return $image_resized;
+  }
+
+
+  public static function error_handler($errno, $errstr, $errfile, $errline) {
+
+    if ($errno == E_RECOVERABLE_ERROR) {
+      $message = sprintf('Recoverable error "%s" occured in file %s line %s.',
+                         $errstr, $errfile, $errline);
+      throw new Exception($message);
+    }
+
+    # execute PHP internal error handler
+    return false;
   }
 }
 
