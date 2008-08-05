@@ -339,7 +339,8 @@ class Avatar {
 
   public static function error_handler($errno, $errstr, $errfile, $errline) {
 
-    if ($errno == E_RECOVERABLE_ERROR) {
+    if (defined("E_RECOVERABLE_ERROR") &&
+        $errno == constant("E_RECOVERABLE_ERROR")) {
       $message = sprintf('Recoverable error "%s" occured in file %s line %s.',
                          $errstr, $errfile, $errline);
       throw new Exception($message);
