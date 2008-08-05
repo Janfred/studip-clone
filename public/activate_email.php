@@ -1,8 +1,6 @@
 <?php
-
-if (!isset($_SESSION)) {
-	page_open(array('sess' => 'Seminar_Session', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
-}
+$_GET['cancel_login'] = 1;
+page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
 
 function head($headline, $red=False) {
 $class = '';
@@ -27,14 +25,14 @@ function reenter_mail() {
 	echo _('Sollten Sie keine E-Mail erhalten haben, können Sie sich einen neuen Aktivierungsschlüssel zuschicken lassen. Geben Sie dazu Ihre gewünschte E-Mail Adresse unten an:');
 	echo '<form action="activate_email.php" method="post">'
 		.'<input type="hidden" name="uid" value="'. htmlReady($_REQUEST['uid']) .'" />'
-		.'<table><tr><td>'. _('E-Mail:') .'</td><td><input name="email1" /></td></tr>'
-		.'<tr><td>'. _('Wiederholung:') . '</td><td><input name="email2" /></td></tr></table>'
+		.'<table><tr><td>'. _('E-Mail:') .'</td><td><input type="text" name="email1" /></td></tr>'
+		.'<tr><td>'. _('Wiederholung:') . '</td><td><input type="text" name="email2" /></td></tr></table>'
 		.makeButton("abschicken", "input"). '</form>';
 }
 
 function mail_explain() {
 	echo _('Sie haben Ihre E-Mail Adresse geändert. Um diese frei zu schalten müssen Sie den Ihnen an Ihre neue Adresse zugeschickten Aktivierungs Schlüssel im unten stehenden Eingabefeld eintragen.');
-	echo '<br><form action="activate_email.php" method="post"><input name="key" /><input name="uid" type="hidden" value="'.$_REQUEST['uid'].'" /><br>'
+	echo '<br><form action="activate_email.php" method="post"><input type="text" name="key" /><input name="uid" type="hidden" value="'.htmlReady($_REQUEST['uid']).'" /><br>'
 		.makeButton("abschicken","input"). '</form><br><br>';
 
 }
@@ -42,28 +40,33 @@ function mail_explain() {
 if(!$_REQUEST['uid'])
 	header("Location: index.php");
 
-// display header
-$plugins = array();
-$current_page = _('E-Mail Aktivierung');
-
+require_once 'lib/language.inc.php';
 require_once 'lib/functions.php';
+
+if (!isset($_SESSION['_language'])) {
+	$_language = get_accepted_languages();
+}
+$_language_path = init_i18n($_language);
+
+// display header
+$CURRENT_PAGE = _('E-Mail Aktivierung');
 include 'lib/include/html_head.inc.php'; // Output of html head
 include 'lib/include/header.php';
 
 $uid = $_REQUEST['uid'];
-if($_REQUEST['key']) {
+if(isset($_REQUEST['key'])) {
 	$db = new DB_Seminar(sprintf("SELECT validation_key FROM auth_user_md5 WHERE user_id='%s'", $uid));
 	$db->next_record();
 	$key = $db->f('validation_key');
 	if($_REQUEST['key'] == $key) {
-		$db->query(sprintf('UPDATE auth_user_md5 SET validation_key="" WHERE user_id="%s";', $uid));
+		$db->query(sprintf("UPDATE auth_user_md5 SET validation_key='' WHERE user_id='%s'", $uid));
 		unset($_SESSION['half_logged_in']);
-		head($topic);
+		head($CURRENT_PAGE);
 		echo _('Ihre E-Mail Adresse wurde erfolgreich geändert.');
 		printf(' <a href="index.php">%s</a>', _('Zum Login'));
 		footer();
 	} else if ($key == '') {
-		head($current_page);
+		head($CURRENT_PAGE);
 		echo _('Ihre E-Mail Adresse ist bereits geändert.');
 		printf(' <a href="index.php">%s</a>', _('Zum Login'));
 		footer();
@@ -72,18 +75,19 @@ if($_REQUEST['key']) {
 		echo _("Falcher Bestätigungscode.");
 		footer();
 
-		head($current_page);
+		head($CURRENT_PAGE);
+		mail_explain();
 		if($_SESSION['semi_logged_in'] == $_REQUEST['uid']) {
 			reenter_mail();
 		} else {
 			printf(_('Sie können sich %seinloggen%s und sich den Bestätigungscode neu oder an eine andere E-Mail Adresse schicken lassen.'), 
-					'<a href="index.php">', '</a>');
+					'<a href="index.php?again=yes">', '</a>');
 		}
 		footer();
 	}
 
 // checking semi_logged_in is important to avoid abuse
-} else if($_REQUEST['email1'] && $_REQUEST['email2'] && $_SESSION['semi_logged_in'] == $_REQUEST['uid']) {
+} else if(isset($_REQUEST['email1']) && isset($_REQUEST['email2']) && $_SESSION['semi_logged_in'] == $_REQUEST['uid']) {
 	if($_REQUEST['email1'] == $_REQUEST['email2']) {
 		// change mail
 		require_once('lib/edit_about.inc.php');
@@ -92,7 +96,7 @@ if($_REQUEST['key']) {
 
 		if($send[0]) {
 			$_SESSION['semi_logged_in'] = False;
-			head($current_page);
+			head($CURRENT_PAGE);
 			printf(_('An %s wurde ein Aktivierungslink geschickt.'), $_REQUEST['email1']);
 			footer();
 		} else {
@@ -100,12 +104,12 @@ if($_REQUEST['key']) {
 			echo parse_msg($send[1]);
 			footer();
 			
-			head($current_page);
+			head($CURRENT_PAGE);
 			reenter_mail();
 			footer();
 		}
 	} else {
-		head();
+		head($CURRENT_PAGE);
 		printf('<b>%s</b>', _('Die eingegebenen E-Mail Adressen stimmen nicht überein. Bitte überprüfen Sie Ihre Eingabe.'));
 		reenter_mail();
 	}
@@ -114,8 +118,6 @@ if($_REQUEST['key']) {
 	// maybe handle more "beautiful" - but normal user dont see it...
 	echo 'permission denied.';
 }
-
-echo '</body></html>';
+include 'lib/include/html_end.inc.php';
 page_close();
-die();
 ?>
