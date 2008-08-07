@@ -284,7 +284,7 @@ class ExternModuleTemplateDownload extends ExternModule {
 				
 				// generic data fields
 				if (is_array($generic_datafields)) {
-					$localEntries = DataFieldEntry::getDataFieldEntries($db_out->f('user_id'), 'user');
+					$localEntries = DataFieldEntry::getDataFieldEntries($db->f('user_id'), 'user');
 					$k = 1;
 					foreach ($generic_datafields as $datafield) {
 						if (isset($localEntries[$datafield]) && is_object($localEntries[$datafield])) {
