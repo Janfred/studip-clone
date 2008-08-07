@@ -715,15 +715,17 @@ if ($form == 8)
 //jump-logic
 if ($jump_back_x) {
 	if ($form > 1) {
-		//jump from form 4 (rooms and room-requests) back
-		if ($form == 4) {
+		// if we have chosen to not enter dates, skip room-requests
+		if ($form == 5) {
 			if ($sem_create_data["term_art"] == -1) {
 				$level = 2;
 			} else {
-				$level = 3;
+				$level = 4;
 			}
+		}
+
 		//jump normal a form back
-		} else {
+		else {
 			$level = $form - 1;
 		}
 	}
@@ -937,13 +939,13 @@ if ($search_doz_x || $search_tut_x || $reset_search_x || $sem_bereich_do_search_
 		$errormsg=$errormsg."error§"._("Es macht keinen Sinn, die Sicherheitsstufe f&uuml;r den Lesezugriff h&ouml;her zu setzen als f&uuml;r den Schreibzugriff!")."§";
 		}
 	if (!$errormsg) {
-		if ($sem_create_data["term_art"]== -1)
-			if (($RESOURCES_ENABLE) && ((get_config("RESOURCES_ALLOW_ROOM_REQUESTS")) || (get_config("RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS"))))
-				$level=4;
-			else
-				$level=5;
-		else
+		if ($sem_create_data["term_art"]== -1) {
+			$sem_create_data['skip_room_request'] = true;
+			$level=5;
+		} else {
+			unset($sem_create_data['skip_room_request']);
 			$level=3;
+		}
 	} else
 		$level=2;
 	}
