@@ -422,6 +422,7 @@ class about extends messaging {
 					$invalidEntries[$struct->getID()] = $entry;
 			}
 			// change visibility of role data
+			if (is_array($group_id))
 			foreach ($group_id as $groupID)
 				setOptionsOfStGroup($groupID, $this->auth_user['user_id'], ($visible[$groupID] == '0') ? '0' : '1');
 		}
