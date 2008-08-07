@@ -44,7 +44,7 @@ include ('lib/include/html_head.inc.php');
 include ('lib/include/header.php');
 
 //Content
-echo "<SCRIPT> function reload_opener() { opener.location.href='".$CANONICAL_RELATIVE_PATH_STUDIP."raumzeit.php#irregular_dates'; return true;} </SCRIPT>";
+echo "<SCRIPT> function reload_opener() { opener.location.href='".$CANONICAL_RELATIVE_PATH_STUDIP."raumzeit.php?newFilter=all&x=4&y=4&cmd=applyFilter#irregular_dates'; return true;} </SCRIPT>";
 
 if (isset($_POST['command']) && ($_POST['command'] == 'create')) {
 	$return = create_block_schedule_dates($SessSemName[1],$_POST);
