@@ -478,6 +478,7 @@ if (isset($_GET['details'])) {
                                         	echo "<TR><TD CLASS=\"steel1\" COLSPAN=\"3\" ALIGN=\"center\"><FONT SIZE=\"-2\">"._("Gesperrt von:")." ".htmlReady(get_fullname($db->f("locked_by")))." (<A HREF=\"about.php?username=".get_username($db->f("locked_by"))."\">".get_username($db->f("locked_by"))."</A>)</FONT></TD></TR>\n";
 				}
 				$userEntries = DataFieldEntry::getDataFieldEntries($db->f('user_id'));
+				$entry_nr = 0;
 				foreach ($userEntries as $entry) {
 					$id = $entry->structure->getID();
 					$color = '#000000';
@@ -491,11 +492,12 @@ if (isset($_GET['details'])) {
 						echo chr(10) . '<span style="font-weight:bold;color:'.$color.'">&nbsp;' . htmlReady($entry->getName()).':</span></td>';
 						echo chr(10) . '<td class="steel1">&nbsp;';
 						if ($perm->have_perm($entry->structure->getEditPerms())) {
-							echo chr(10).'<input type="HIDDEN" name="datafield_id[]" value="'.$entry->structure->getID().'">';
-							echo chr(10).'<input type="HIDDEN" name="datafield_type[]" value="'.$entry->getType().'">';
-							echo chr(10).$entry->getHTML('datafield_content[]', $entry->structure->getID());
+							echo chr(10).'<input type="HIDDEN" name="datafield_id['.$entry_nr.']" value="'.$entry->structure->getID().'">';
+							echo chr(10).'<input type="HIDDEN" name="datafield_type['.$entry_nr.']" value="'.$entry->getType().'">';
+							echo chr(10).$entry->getHTML("datafield_content[$entry_nr]", $entry->structure->getID());
+							++$entry_nr;
 						} else {
-							echo chr(10).htmlReady($entry->getValue());
+							echo chr(10).$entry->getDisplayValue();
 						}
 						echo chr(10).'</td></tr>';
 					}

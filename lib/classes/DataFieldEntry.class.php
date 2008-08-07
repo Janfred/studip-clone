@@ -298,7 +298,7 @@ class DataFieldSelectboxEntry extends DataFieldEntry {
     $ret = "<select name=\"$name\">";
 		foreach ($this->type_param as $pkey => $pval) {
 			$value = $this->is_assoc_param ? $pkey : $pval;
-			$sel = $value == $this->getDisplayValue(false) ? 'selected' : '';
+			$sel = $value == $this->getValue() ? 'selected' : '';
 			$ret .= sprintf('<option value="%s" %s>%s</option>',
 				htmlReady($value),
 				$sel,
@@ -323,6 +323,11 @@ class DataFieldSelectboxEntry extends DataFieldEntry {
 		}
 		return array($ret, $is_assoc);
 	}
+	
+	function getDisplayValue($entities = true){
+		$value = $this->is_assoc_param ? $this->type_param[$this->getValue()] : $this->getValue();
+		return $entities ? htmlReady($value) : $value;
+	}
 }
 
 
@@ -338,7 +343,7 @@ class DataFieldRadioEntry extends DataFieldSelectboxEntry {
 			$value = $this->is_assoc_param ? $pkey : $pval;
       $ret .= sprintf('<input type="radio" value="%s" name="%s"%s> %s',
 				htmlReady($value), $name,
-				$value == $this->getDisplayValue(false)
+				$value == $this->getValue(false)
                         ? ' checked="checked"' : '',
 				htmlReady($pval));
     }
@@ -360,12 +365,13 @@ class DataFieldComboEntry extends DataFieldEntry {
 
   function setValue ($value) {
     if ($_REQUEST['combo_' . $this->structure->getID()] == 'select')
-      $this->value = $value[0];
+      $this->value = $value[0][0];
     else
-      $this->value = $value[1];
+      $this->value = $value[0][1];
   }
 
   function getHTML ($name) {
+	$name .= '[]';
     $values = array_map('trim', explode("\n", $this->structure->getTypeParam()));
 
     $id = $this->structure->getID();

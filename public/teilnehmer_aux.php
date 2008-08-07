@@ -300,6 +300,7 @@ function aux_enter_data() {
 	$entries = filterDatafields(DataFieldEntry::getDataFieldEntries(array($user_id, $sem_id), 'usersemdata'));
 
 	echo '<form action="'.URLHelper::getLink().'" method="post">';
+	$entry_nr = 0;
 	foreach ($entries as $id => $entry) {
 		if ($entry->structure->accessAllowed($perm)) {
 			$color = 'black';
@@ -311,10 +312,11 @@ function aux_enter_data() {
 			$data = "<font color='$color'>&nbsp;" . $entry->getName() . "</font></b>";
 			echo $zt->cell($data);
 
-			$data = $entry->getHTML('datafield_content[]', $entry->structure->getID());
-			$data .= '<input type="HIDDEN" name="datafield_id[]" value="'.$entry->structure->getID().'">';
-			$data .= '<input type="HIDDEN" name="datafield_type[]" value="'.$entry->getType().'">';
-			$data .= '<input type="HIDDEN" name="datafield_sec_range_id[]" value="'.$sem_id.'">';
+			$data = $entry->getHTML("datafield_content[$entry_nr]", $entry->structure->getID());
+			$data .= '<input type="HIDDEN" name="datafield_id['.$entry_nr.']" value="'.$entry->structure->getID().'">';
+			$data .= '<input type="HIDDEN" name="datafield_type['.$entry_nr.']" value="'.$entry->getType().'">';
+			$data .= '<input type="HIDDEN" name="datafield_sec_range_id['.$entry_nr.']" value="'.$sem_id.'">';
+			++$entry_nr;
 			echo $zt->cell($data);
 
 			echo $zt->closeRow();

@@ -1194,6 +1194,7 @@ if ($view == 'Lebenslauf') {
 
 	//add the free administrable datafields
 	$userEntries = DataFieldEntry::getDataFieldEntries($my_about->auth_user['user_id']);
+	$entry_nr = 0;
 	foreach ($userEntries as $entry) {
 		$id = $entry->structure->getID();
 		$color = '#000000';
@@ -1202,30 +1203,20 @@ if ($view == 'Lebenslauf') {
 			$entry->structure->load();
 			$color = '#ff0000';
 		}
-		$db = new DB_Seminar();
-		$db->query("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
-		$db->next_record();
-		$userid = $db->f("user_id");
-		if ($entry->structure->accessAllowed($perm, $userid, $db->f("user_id"))) {
+		if ($entry->structure->accessAllowed($perm, $user->id, $my_about->auth_user['user_id'])) {
 			$cssSw->switchClass();
 			echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\" ><b><blockquote>";
 			echo "<font color=\"$color\">" . htmlReady($entry->getName()). ":</font></b></td>";
 			echo '<td class="'. $cssSw->getClass() .'" colspan="2" align="left" valign="top">&nbsp;', "\n";
 			if ($perm->have_perm($entry->structure->getEditPerms())) {
-				echo '<input type="HIDDEN" name="datafield_id[]" value="'.$entry->structure->getID().'">';
-				echo '<input type="HIDDEN" name="datafield_type[]" value="'.$entry->getType().'">';
-				echo $entry->getHTML('datafield_content[]', $entry->structure->getID());
+				echo '<input type="HIDDEN" name="datafield_id['.$entry_nr.']" value="'.$entry->structure->getID().'">';
+				echo '<input type="HIDDEN" name="datafield_type['.$entry_nr.']" value="'.$entry->getType().'">';
+				echo $entry->getHTML("datafield_content[$entry_nr]", $entry->structure->getID());
+				++$entry_nr;
 			}
 			else {
-				$db->query("SELECT user_id FROM auth_user_md5 WHERE username = '$username'");
-				$db->next_record();
-				$userid = $db->f("user_id");
-				if ($entry->structure->accessAllowed($perm, $userid, $db->f("user_id"))) {
-					echo formatReady($entry->getValue());
-					echo "<br><br><hr><font size=\"-1\">"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</font>";
-				}
-				else
-					echo "<font size=\"-1\">"._("Sie dürfen dieses Feld weder einsehen noch bearbeiten.")."</font>";
+				echo formatReady($entry->getDisplayValue(false));
+				echo "<br><br><hr><font size=\"-1\">"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</font>";
 			}
 		}
 	}

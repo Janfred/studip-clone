@@ -1494,8 +1494,8 @@ if (($s_id) && (auth_check())) {
 			</tr>
 			<?
 			//add the free adminstrable datafields
-#			$localFields = $DataFields->getLocalFields($s_id);
-			$localEntries = DataFieldEntry::getDataFieldEntries($s_id);
+			$localEntries = DataFieldEntry::getDataFieldEntries($s_id, 'sem', $db->f("status"));
+			$entry_nr = 0;
 			foreach ($localEntries as $entry) {
 				$id = $entry->structure->getID();  // datafield id
 				$color = '#000000';
@@ -1504,40 +1504,39 @@ if (($s_id) && (auth_check())) {
 					$entry->structure->load();      // get all structure information from the database (view permissions etc.)
 					$color = 'ff0000';              // the corresponding name is highlighted
 				}
-
-			?>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right width="30%">
-					<font color="<?=$color?>"><?=htmlReady($entry->getName())?></font>
-
-					<? if (LockRules::Check($s_id, $entry->structure->getID())) : ?>
-            <?= $label_lock_text ?>
-          <? endif; ?>
-    		</td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
-					<?
-					if ($perm->have_perm($entry->structure->getEditPerms())
-						&& !LockRules::Check($s_id, $entry->structure->getID()))
-					{
-						print '&nbsp;&nbsp;' . $entry->getHTML('datafield_content[]', $entry->structure->getID());
+				if ($entry->structure->accessAllowed($perm)) {
 					?>
-					   <input type="hidden" name="datafield_id[]" value="<?=$entry->structure->getID()?>">
-					   <input type="hidden" name="datafield_type[]" value="<?=$entry->getType() ?>">
+					<tr>
+						<td class="<? echo $cssSw->getClass() ?>" align=right width="30%">
+							<font color="<?=$color?>"><?=htmlReady($entry->getName())?></font>
+		
+							<? if (LockRules::Check($s_id, $entry->structure->getID())) : ?>
+							<?= $label_lock_text ?>
+							<? endif; ?>
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
+							<?
+							if ($perm->have_perm($entry->structure->getEditPerms())
+								&& !LockRules::Check($s_id, $entry->structure->getID()))
+							{
+								print '&nbsp;&nbsp;' . $entry->getHTML("datafield_content[$entry_nr]", $entry->structure->getID());
+							?>
+							   <input type="hidden" name="datafield_id[<?=$entry_nr?>]" value="<?=$entry->structure->getID()?>">
+							   <input type="hidden" name="datafield_type[<?=$entry_nr?>]" value="<?=$entry->getType() ?>">
+							<?
+								++$entry_nr;
+							}
+							else {
+								?>
+								<?=$entry->getDisplayValue()?><br />
+								<font size="-1>">&nbsp; <?="<i>"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</i>"?></font>
+								<?
+							}
+							?>
+						</td>
+					</tr>
 					<?
-					}
-					else {
-							$input_field = $entry->getHTML('datafield_content[]', $entry->structure->getID());
-							$input_field_locked = preg_replace('/<input /', '<input disabled readonly ', $input_field);
-   					?>
-
-	   				<?= $input_field_locked ?><br />
-		   			<font size="-1>">&nbsp; <?="<i>"._("(Das Feld ist f&uuml;r die Bearbeitung gesperrt und kann nur durch einen Administrator ver&auml;ndert werden.)")."</i>"?></font>
-			      <?
-					}
-					?>
-				</td>
-			</tr>
-			<?
+				}
 			}
 			?>
 			<tr>

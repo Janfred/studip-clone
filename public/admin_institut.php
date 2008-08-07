@@ -437,6 +437,7 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 	//add the free administrable datafields
 	$localEntries = DataFieldEntry::getDataFieldEntries($i_id, "inst");
 	if ($localEntries) {
+	$entry_nr = 0;
 	  foreach ($localEntries as $entry) {
 	  	$value = $entry->getValue();
 	  	$color = '#000000';
@@ -446,26 +447,29 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 	  		$entry->structure->load();  // get complete structure information from database
 	  		$color = '#ff0000';
 	  	}
-	  	?>
-	  	<tr>
-	  		<td class="<? $cssSw->switchClass(); echo $cssSw->getClass(); ?>" >
-	  		   <font color="<?=$color?>"><?=htmlReady($entry->getName())?>:</font>
-	  	   </td>
-	  		<td class="<? echo $cssSw->getClass() ?>" >
-	  			<?
-	  			if ($perm->have_perm($entry->structure->getEditPerms())) {
-	  				print $entry->getHTML('datafield_content[]', $entry->structure->getID());  // submitted value of checkboxes is datafield_id
-	  				?>
-	  				<input type="HIDDEN" name="datafield_id[]" value="<?= $entry->structure->getID() ?>">
-	  				<input type="HIDDEN" name="datafield_type[]" value="<?= $entry->getType() ?>">
-	  				<?
-	  			}
-	  			else
-	  				print $entry->getValue();
-	  	?>
-	  	</td>
-	  </tr>
-	  <?
+		if ($entry->structure->accessAllowed($perm)) {
+			?>
+			<tr>
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass(); ?>" >
+				   <font color="<?=$color?>"><?=htmlReady($entry->getName())?>:</font>
+			   </td>
+				<td class="<? echo $cssSw->getClass() ?>" >
+					<?
+					if ($perm->have_perm($entry->structure->getEditPerms())) {
+						print $entry->getHTML("datafield_content[$entry_nr]", $entry->structure->getID());  // submitted value of checkboxes is datafield_id
+						?>
+						<input type="HIDDEN" name="datafield_id[<?=$entry_nr?>]" value="<?= $entry->structure->getID() ?>">
+						<input type="HIDDEN" name="datafield_type[<?=$entry_nr?>]" value="<?= $entry->getType() ?>">
+						<?
+						++$entry_nr;
+					}
+					else
+						print $entry->getDisplayValue();
+					?>
+				</td>
+			</tr>
+			<?
+		}
 	  }
 	}
 	?>

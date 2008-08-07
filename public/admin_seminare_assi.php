@@ -3808,39 +3808,40 @@ if ($level == 5)
 					<?
 					}
 					//add the free adminstrable datafields
-					//$localFields = $DataFields->getLocalFields('', "sem", $sem_create_data["sem_class"]);
 					$dataFieldStructures = DataFieldStructure::getDataFieldStructures('sem', $sem_create_data['sem_class'], true);
-
+					$entry_nr = 0;
 					foreach ($dataFieldStructures as $id=>$struct) {
-					?>
-					</tr>
-					<tr <? $cssSw->switchClass() ?>>
-						<td class="<?= $cssSw->getClass() ?>" width="10%" align="right">
-							<?=htmlReady($struct->getName()) ?>
-						</td>
-						<td class="<?= $cssSw->getClass() ?>" width="90%" colspan=3>
-							<?
-							if ($perm->have_perm($struct->getEditPerms())) {
-								$entry = DataFieldEntry::createDataFieldEntry($struct, '', $sem_create_data['sem_datafields'][$id]);
-								$entry->setValue(stripslashes($sem_create_data["sem_datafields"][$id]['value']));
-								print "&nbsp;&nbsp;".$entry->getHTML('sem_datafield_content[]', $id);
+						if ($struct->accessAllowed($perm)) {
 							?>
-							<input type="HIDDEN" name="sem_datafield_id[]" value="<?= $id ?>">
-							<input type="HIDDEN" name="sem_datafield_type[]" value="<?= $struct->getType() ?>">
-							<input type="HIDDEN" name="sem_datafield_name[]" value="<?= $struct->getName() ?>">
+							<tr <? $cssSw->switchClass() ?>>
+								<td class="<?= $cssSw->getClass() ?>" width="10%" align="right">
+									<?=htmlReady($struct->getName()) ?>
+								</td>
+								<td class="<?= $cssSw->getClass() ?>" width="90%" colspan=3>
+									<?
+									if ($perm->have_perm($struct->getEditPerms())) {
+										$entry = DataFieldEntry::createDataFieldEntry($struct, '', $sem_create_data['sem_datafields'][$id]);
+										$entry->setValue(stripslashes($sem_create_data["sem_datafields"][$id]['value']));
+										print "&nbsp;&nbsp;".$entry->getHTML("sem_datafield_content[$entry_nr]", $id);
+									?>
+									<input type="HIDDEN" name="sem_datafield_id[<?=$entry_nr?>]" value="<?= $id ?>">
+									<input type="HIDDEN" name="sem_datafield_type[<?=$entry_nr?>]" value="<?= $struct->getType() ?>">
+									<input type="HIDDEN" name="sem_datafield_name[<?=$entry_nr?>]" value="<?= $struct->getName() ?>">
+									<?
+									++$entry_nr;
+									} else {
+									?>
+									&nbsp;<font size="-1"><?=_("Diese Daten werden von ihrem zust&auml;ndigen Administrator erfasst.")?></font>
+									<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
+										<? echo tooltip(_("Diese Felder werden zentral durch die zuständigen Administratoren erfasst."), TRUE, TRUE) ?>
+									>
+									<?
+									}
+									?>
+								</td>
+							</tr>
 							<?
-							} else {
-							?>
-							&nbsp;<font size="-1"><?=_("Diese Daten werden von ihrem zust&auml;ndigen Administrator erfasst.")?></font>
-							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
-								<? echo tooltip(_("Diese Felder werden zentral durch die zuständigen Administratoren erfasst."), TRUE, TRUE) ?>
-							>
-							<?
-							}
-							?>
-						</td>
-					</tr>
-					<?
+						}
 					}
 					?>
 					<tr <? $cssSw->switchClass() ?>>
