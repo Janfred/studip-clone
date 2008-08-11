@@ -205,10 +205,10 @@ class Statusgruppe {
 				}
 	
 				$df[] = array (
-					'name' =>$field->structure->getName(),
+					'name' =>$field->getName(),
 					'value' => $field->getValue(),
-					'html' => $field->getHTML('datafield_content[]', $field->structure->getID()),
-					'datafield_id' => $field->structure->getID(),
+					'html' => $field->getHTML('datafields'),
+					'datafield_id' => $field->getID(),
 					'datafield_type' => $field->getType(),
 					'invalid' => $invalid
 				);
@@ -221,7 +221,7 @@ class Statusgruppe {
 	}
 	
 	function checkData() {
-		global $datafield_id, $datafield_content, $datafield_type, $datafield_sec_range_id, $invalidEntries, $_REQUEST;
+		global $datafields, $invalidEntries;
 
 		// check the standard role data
 		if (!$_REQUEST['new_name'] && $_REQUEST['presetName'] != 'none') {
@@ -265,23 +265,12 @@ class Statusgruppe {
 
 		if (!$this->isSeminar()) {
 			// check the datafields
-			if (!$this->isSeminar() && is_array($datafield_id)) {
-				$ffCount = 0; // number of processed form fields
-				foreach ($datafield_id as $i=>$id) {
-					$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$datafield_type[$i]));
-					$entry  = DataFieldEntry::createDataFieldEntry($struct, array($this->range_id, $datafield_sec_range_id[$i]));
-					$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
-					if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
-						$entry->setValue('');
-						$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
-					}
-					elseif ($numFields == 1)
-						$entry->setValue($datafield_content[$ffCount]);
-					else
-						$entry->setValue(array_slice($datafield_content, $ffCount, $numFields));
-					$ffCount += $numFields;
-
-					$entry->structure->load();
+			if (!$this->isSeminar() && is_array($datafields)) {
+				foreach ($datafields as $id=>$data) {
+					$struct = new DataFieldStructure(array("datafield_id"=>$id));
+					$struct->load();
+					$entry  = DataFieldEntry::createDataFieldEntry($struct, array($this->range_id, $this->statusgruppe_id));
+					$entry->setValueFromSubmit($data);
 					if ($entry->isValid()) {
 						$entry->store();
 					} else {

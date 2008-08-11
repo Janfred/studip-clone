@@ -131,29 +131,18 @@ if (check_ticket($_REQUEST['studipticket'])){
 
 			$UserManagement->changeUser($newuser);
 
-			if (is_array($_POST['datafield_id'])) {
-				$ffCount = 0; // number of processed form fields
-				$invalidEntries = null;
-				foreach ($_POST['datafield_id'] as $i => $field_id) {
-					$struct = new DataFieldStructure(array("datafield_id"=>$field_id, 'type'=>$_POST['datafield_type'][$i]));
-					$entry  = DataFieldEntry::createDataFieldEntry($struct, $u_id);
-					$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
-					if ($_POST['datafield_type'][$i] == 'bool' && $_POST['datafield_content'][$ffCount] != $field_id) { // unchecked checkbox?
-						$entry->setValue('');
-						$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
-					}
-					elseif ($numFields == 1)
-						$entry->setValue($_POST['datafield_content'][$ffCount]);
-					else
-						$entry->setValue(array_slice($_POST['datafield_content'], $ffCount, $numFields));
-					$ffCount += $numFields;
-					$entry->structure->load();
-					if ($entry->isValid()) {
-						$entry->store();
-					} else {
-						$invalidEntries[$struct->getID()] = $entry;
+			if (is_array($_POST['datafields'])) {
+				$invalidEntries = array();
+				foreach (DataFieldEntry::getDataFieldEntries($u_id, 'user') as $entry) {
+					if(isset($_REQUEST['datafields'][$entry->getId()])){
+						$entry->setValueFromSubmit($_REQUEST['datafields'][$entry->getId()]);
+						if ($entry->isValid())
+							$entry->store();
+						else
+							$invalidEntries[$entry->getId()] = $entry;
 					}
 				}
+
 				if (is_array($invalidEntries)) {
 					foreach ($invalidEntries as $field) {
 						$msg .= 'error§'. sprintf(_("Fehlerhafte Eingabe im Datenfeld %s (wurde nicht gespeichert)!"), "<b>".$field->structure->getName()."</b>") .'§';
@@ -478,13 +467,11 @@ if (isset($_GET['details'])) {
                                         	echo "<TR><TD CLASS=\"steel1\" COLSPAN=\"3\" ALIGN=\"center\"><FONT SIZE=\"-2\">"._("Gesperrt von:")." ".htmlReady(get_fullname($db->f("locked_by")))." (<A HREF=\"about.php?username=".get_username($db->f("locked_by"))."\">".get_username($db->f("locked_by"))."</A>)</FONT></TD></TR>\n";
 				}
 				$userEntries = DataFieldEntry::getDataFieldEntries($db->f('user_id'));
-				$entry_nr = 0;
 				foreach ($userEntries as $entry) {
 					$id = $entry->structure->getID();
 					$color = '#000000';
 					if ($invalidEntries[$id]) {
 						$entry = $invalidEntries[$id];
-						$entry->structure->load();
 						$color = '#ff0000';
 					}
 					if ($entry->structure->accessAllowed($perm, $user->id, $db->f("user_id"))) {
@@ -492,10 +479,7 @@ if (isset($_GET['details'])) {
 						echo chr(10) . '<span style="font-weight:bold;color:'.$color.'">&nbsp;' . htmlReady($entry->getName()).':</span></td>';
 						echo chr(10) . '<td class="steel1">&nbsp;';
 						if ($perm->have_perm($entry->structure->getEditPerms())) {
-							echo chr(10).'<input type="HIDDEN" name="datafield_id['.$entry_nr.']" value="'.$entry->structure->getID().'">';
-							echo chr(10).'<input type="HIDDEN" name="datafield_type['.$entry_nr.']" value="'.$entry->getType().'">';
-							echo chr(10).$entry->getHTML("datafield_content[$entry_nr]", $entry->structure->getID());
-							++$entry_nr;
+							echo chr(10).$entry->getHTML("datafields");
 						} else {
 							echo chr(10).$entry->getDisplayValue();
 						}

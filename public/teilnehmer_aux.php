@@ -249,27 +249,16 @@ function aux_enter_data() {
 
 	unset($msgs);
 
-	if (is_array($datafield_id)) {
-		$ffCount = 0; // number of processed form fields
-		foreach ($datafield_id as $i=>$id) {
-			$struct = new DataFieldStructure($zw = array("datafield_id"=>$id, 'type'=>$datafield_type[$i]));
-			$entry  = DataFieldEntry::createDataFieldEntry($struct, array($user_id, $datafield_sec_range_id[$i]));
-			$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
-			if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
-				$entry->setValue('');
-				$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
-			}
-			elseif ($numFields == 1)
-				$entry->setValue($datafield_content[$ffCount]);
-			else
-				$entry->setValue(array_slice($datafield_content, $ffCount, $numFields));
-			$ffCount += $numFields;
-
-			$entry->structure->load();
-			if ($entry->isValid()) {
-				$entry->store();
-			}	else {
-				$invalidEntries[$struct->getID()] = $entry;
+	if (is_array($_REQUEST['datafields'])) {
+		$invalidEntries = array();
+		foreach (filterDatafields(DataFieldEntry::getDataFieldEntries(array($user_id, $sem_id), 'usersemdata')) as $id => $entry){
+			if(isset($_REQUEST['datafields'][$entry->getId()])){
+				$entry->setValueFromSubmit($_REQUEST['datafields'][$entry->getId()]);
+				if ($entry->isValid()) {
+					$entry->store();
+				} else {
+					$invalidEntries[$struct->getID()] = $entry;
+				}
 			}
 		}
 		/*// change visibility of role data
@@ -300,7 +289,6 @@ function aux_enter_data() {
 	$entries = filterDatafields(DataFieldEntry::getDataFieldEntries(array($user_id, $sem_id), 'usersemdata'));
 
 	echo '<form action="'.URLHelper::getLink().'" method="post">';
-	$entry_nr = 0;
 	foreach ($entries as $id => $entry) {
 		if ($entry->structure->accessAllowed($perm)) {
 			$color = 'black';
@@ -312,13 +300,8 @@ function aux_enter_data() {
 			$data = "<font color='$color'>&nbsp;" . $entry->getName() . "</font></b>";
 			echo $zt->cell($data);
 
-			$data = $entry->getHTML("datafield_content[$entry_nr]", $entry->structure->getID());
-			$data .= '<input type="HIDDEN" name="datafield_id['.$entry_nr.']" value="'.$entry->structure->getID().'">';
-			$data .= '<input type="HIDDEN" name="datafield_type['.$entry_nr.']" value="'.$entry->getType().'">';
-			$data .= '<input type="HIDDEN" name="datafield_sec_range_id['.$entry_nr.']" value="'.$sem_id.'">';
-			++$entry_nr;
+			$data = $entry->getHTML("datafields");
 			echo $zt->cell($data);
-
 			echo $zt->closeRow();
 		}
 	}

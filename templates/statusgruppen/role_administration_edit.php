@@ -66,9 +66,6 @@
 						</font>
 					</td>
 				</tr>
-				<input type="HIDDEN" name="datafield_id[]" value="<?= $field['datafield_id'] ?>">
-				<input type="HIDDEN" name="datafield_type[]" value="<?= $field['datafield_type'] ?>">
-				<input type="HIDDEN" name="datafield_sec_range_id[]" value="<?= $role->getId() ?>">
 				<? endforeach; ?>
 				<tr>
 					<td class="steel1" align="right" colspan="2">

@@ -116,7 +116,8 @@ if (!$my_about->check) {
  * * * * * * * * * * * * * * * */
 
 if (check_ticket($studipticket)) {
-	$invalidEntries = parse_datafields($my_about->auth_user['user_id']);
+	//wozu ??? siehe about::edit_leben()
+	//$invalidEntries = parse_datafields($my_about->auth_user['user_id']);
 
 	if ($cmd == "edit_pers" && $my_about->auth_user["Email"] != $_REQUEST['email1']) {
 		if($_REQUEST['email1'] == $_REQUEST['email2']) {
@@ -218,7 +219,7 @@ if (check_ticket($studipticket)) {
 
 	if ($cmd=="special_edit") {
 		$invalidEntries = $my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst, $visible,
-										$datafield_content, $datafield_id, $datafield_type, $datafield_sec_range_id, $group_id);
+										$datafields, $group_id, $role_id);
 
 		$my_about->msg = "";
 
@@ -290,7 +291,7 @@ if (check_ticket($studipticket)) {
 	}
 
 	if ($cmd=="edit_leben")  {
-		$invalidEntries = $my_about->edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $datafield_id, $datafield_type);
+		$invalidEntries = $my_about->edit_leben($lebenslauf,$schwerp,$publi,$view, $_REQUEST['datafields']);
 		$my_about->msg = "";
 		foreach ($invalidEntries as $entry)
 			$my_about->msg .= "error§" . sprintf(_("Fehlerhafter Eintrag im Feld <em>%s</em>: %s (Eintrag wurde nicht gespeichert)"), $entry->getName(), $entry->getDisplayValue()) . "§";
@@ -1194,13 +1195,10 @@ if ($view == 'Lebenslauf') {
 
 	//add the free administrable datafields
 	$userEntries = DataFieldEntry::getDataFieldEntries($my_about->auth_user['user_id']);
-	$entry_nr = 0;
-	foreach ($userEntries as $entry) {
-		$id = $entry->structure->getID();
+	foreach ($userEntries as $id => $entry) {
 		$color = '#000000';
 		if ($invalidEntries[$id]) {
 			$entry = $invalidEntries[$id];
-			$entry->structure->load();
 			$color = '#ff0000';
 		}
 		if ($entry->structure->accessAllowed($perm, $user->id, $my_about->auth_user['user_id'])) {
@@ -1209,10 +1207,7 @@ if ($view == 'Lebenslauf') {
 			echo "<font color=\"$color\">" . htmlReady($entry->getName()). ":</font></b></td>";
 			echo '<td class="'. $cssSw->getClass() .'" colspan="2" align="left" valign="top">&nbsp;', "\n";
 			if ($perm->have_perm($entry->structure->getEditPerms())) {
-				echo '<input type="HIDDEN" name="datafield_id['.$entry_nr.']" value="'.$entry->structure->getID().'">';
-				echo '<input type="HIDDEN" name="datafield_type['.$entry_nr.']" value="'.$entry->getType().'">';
-				echo $entry->getHTML("datafield_content[$entry_nr]", $entry->structure->getID());
-				++$entry_nr;
+				echo $entry->getHTML("datafields");
 			}
 			else {
 				echo formatReady($entry->getDisplayValue(false));

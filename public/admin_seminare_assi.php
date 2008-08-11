@@ -640,21 +640,13 @@ if ($form == 5) {
 	$sem_create_data["sem_paytxt"]=$sem_paytxt;
   	$sem_create_data["sem_datafields"]='';
 
-	if (is_array($sem_datafield_id)) {
-		$ffCount = 0; // number of processed form fields
-		foreach ($sem_datafield_id as $i=>$id) {
-			$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$sem_datafield_type[$i]));
+	if (is_array($_REQUEST['sem_datafields'])) {
+		foreach ($_REQUEST['sem_datafields']as $id => $df_values) {
+			$struct = new DataFieldStructure(array("datafield_id"=>$id));
+			$struct->load();
 			$entry  = DataFieldEntry::createDataFieldEntry($struct);
-			$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
-			if ($sem_datafield_type[$i] == 'bool' && $sem_datafield_content[$ffCount] != $id) { // unchecked checkbox?
-				$sem_create_data['sem_datafields'][$id] = array('type'=>'bool', 'value'=>'');
-				$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
-			}
-			elseif ($numFields == 1)
-				$sem_create_data['sem_datafields'][$id] = array('name'=>$sem_datafield_name[$i], 'type'=>$sem_datafield_type[$i], 'value'=>$sem_datafield_content[$ffCount]);
-			else
-				$sem_create_data['sem_datafields'][$id] = array('name'=>$sem_datafield_name[$i], 'type'=>$sem_datafield_type[$i], 'value'=>array_slice($sem_datafield_content, $ffCount, $numFields));
-			$ffCount += $numFields;
+			$entry->setValueFromSubmit($df_values);
+			$sem_create_data['sem_datafields'][$id] = array('name'=>$entry->getName(), 'type'=>$entry->getType(), 'value'=> $entry->getValue());
 		}
 	}
 
@@ -1751,8 +1743,7 @@ if (($form == 6) && ($jump_next_x))
 			if (is_array($sem_create_data["sem_datafields"])) {
 				foreach ($sem_create_data['sem_datafields'] as $id=>$val) {
 					$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$val['type'], 'name'=>$val['name']));
-					$entry  = DataFieldEntry::createDataFieldEntry($struct, $sem_create_data['sem_id']);
-					$entry->setValue($val['value']); //stripslashes() ?!
+					$entry  = DataFieldEntry::createDataFieldEntry($struct, $sem_create_data['sem_id'], $val['value']);
 					if ($entry->isValid())
 						$entry->store();
 					else
@@ -3809,7 +3800,6 @@ if ($level == 5)
 					}
 					//add the free adminstrable datafields
 					$dataFieldStructures = DataFieldStructure::getDataFieldStructures('sem', $sem_create_data['sem_class'], true);
-					$entry_nr = 0;
 					foreach ($dataFieldStructures as $id=>$struct) {
 						if ($struct->accessAllowed($perm)) {
 							?>
@@ -3820,15 +3810,8 @@ if ($level == 5)
 								<td class="<?= $cssSw->getClass() ?>" width="90%" colspan=3>
 									<?
 									if ($perm->have_perm($struct->getEditPerms())) {
-										$entry = DataFieldEntry::createDataFieldEntry($struct, '', $sem_create_data['sem_datafields'][$id]);
-										$entry->setValue(stripslashes($sem_create_data["sem_datafields"][$id]['value']));
-										print "&nbsp;&nbsp;".$entry->getHTML("sem_datafield_content[$entry_nr]", $id);
-									?>
-									<input type="HIDDEN" name="sem_datafield_id[<?=$entry_nr?>]" value="<?= $id ?>">
-									<input type="HIDDEN" name="sem_datafield_type[<?=$entry_nr?>]" value="<?= $struct->getType() ?>">
-									<input type="HIDDEN" name="sem_datafield_name[<?=$entry_nr?>]" value="<?= $struct->getName() ?>">
-									<?
-									++$entry_nr;
+										$entry = DataFieldEntry::createDataFieldEntry($struct, '', stripslashes($sem_create_data["sem_datafields"][$id]['value']));
+										print "&nbsp;&nbsp;".$entry->getHTML("sem_datafields");
 									} else {
 									?>
 									&nbsp;<font size="-1"><?=_("Diese Daten werden von ihrem zust&auml;ndigen Administrator erfasst.")?></font>

@@ -147,7 +147,7 @@ function edit_email($uid, $email, $force=False) {
 	return array(True, $msg);
 }
 
-
+/*
 function parse_datafields($user_id) {
 	global $datafield_id, $datafield_type, $datafield_content;
 	global $my_about;
@@ -175,9 +175,9 @@ function parse_datafields($user_id) {
 				$invalidEntries[$struct->getID()] = $entry;
 			}
 		}
-		/*// change visibility of role data
+		// change visibility of role data
 			foreach ($group_id as $groupID)
-			setOptionsOfStGroup($groupID, $u_id, ($visible[$groupID] == '0') ? '0' : '1');*/
+			setOptionsOfStGroup($groupID, $u_id, ($visible[$groupID] == '0') ? '0' : '1');
 		$my_about->msg .= 'msg§'. _("Die Daten wurden gespeichert!").'§';
 		if (is_array($invalidEntries)) {
 			foreach ($invalidEntries as $field) {
@@ -189,7 +189,7 @@ function parse_datafields($user_id) {
 
 	return $invalidEntries;
 }
-
+*/
 
 // class definition
 class about extends messaging {
@@ -375,9 +375,9 @@ class about extends messaging {
 		return;
 	}
 
-	function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst, $visible, $datafield_content, $datafield_id, $datafield_type, $datafield_sec_range_id, $group_id) {
+	function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst, $visible, $datafields, $group_id, $role_id) {
 		if (is_array($raum)) {
-			while (list($inst_id, $detail) = each($raum)) {
+			list($inst_id, $detail) = each($raum); 
 				if ($default_inst == $inst_id) {
 					$this->db->query("UPDATE user_inst SET externdefault = 0 WHERE user_id = '".$this->auth_user['user_id']."'");
 				}
@@ -395,27 +395,16 @@ class about extends messaging {
 					$this->priv_msg = $this->priv_msg . sprintf(_("Ihre Daten an der Einrichtung %s wurden geändert.\n"), htmlReady($name[$inst_id]));
 					restoreLanguage();
 				}
-			}
+			
 		}
-		
 		// process user role datafields
-		if (is_array($datafield_id)) {
-			$ffCount = 0; // number of processed form fields
-			foreach ($datafield_id as $i=>$id) {
-				$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$datafield_type[$i]));
-				$entry  = DataFieldEntry::createDataFieldEntry($struct, array($this->auth_user['user_id'], $datafield_sec_range_id[$i]));
-				$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
-				if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
-					$entry->setValue('');
-					$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
-				}
-				elseif ($numFields == 1)
-					$entry->setValue($datafield_content[$ffCount]);
-				else
-					$entry->setValue(array_slice($datafield_content, $ffCount, $numFields));
-				$ffCount += $numFields;
-
-				$entry->structure->load();
+		$sec_range_id = $inst_id ? $inst_id : $role_id;
+		if (is_array($datafields)) {
+			foreach ($datafields as $id => $data) {
+				$struct = new DataFieldStructure(array("datafield_id"=>$id));
+				$struct->load();
+				$entry  = DataFieldEntry::createDataFieldEntry($struct, array($this->auth_user['user_id'], $sec_range_id ));
+				$entry->setValueFromSubmit($data);
 				if ($entry->isValid())
 					$entry->store();
 				else
@@ -423,33 +412,25 @@ class about extends messaging {
 			}
 			// change visibility of role data
 			if (is_array($group_id))
-			foreach ($group_id as $groupID)
-				setOptionsOfStGroup($groupID, $this->auth_user['user_id'], ($visible[$groupID] == '0') ? '0' : '1');
+				foreach ($group_id as $groupID)
+					setOptionsOfStGroup($groupID, $this->auth_user['user_id'], ($visible[$groupID] == '0') ? '0' : '1');
 		}
 		return $invalidEntries;
 	}
 
 
-	function edit_leben($lebenslauf,$schwerp,$publi,$view, $datafield_content, $datafield_id, $datafield_type) {
+	function edit_leben($lebenslauf,$schwerp,$publi,$view, $datafields) {
 		//Update additional data-fields
 		$invalidEntries = array();
-		if (is_array($datafield_id)) {
-			$ffCount = 0; // number of processed form fields
-			foreach ($datafield_id as $i=>$id) {
-				$numFields = $this->dataFieldEntries[$id]->numberOfHTMLFields(); // number of form fields used by this datafield
-				if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
-					$this->dataFieldEntries[$id]->setValue('');
-					$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
+		if (is_array($datafields)) {
+			foreach ($this->dataFieldEntries as $id => $entry) {
+				if(isset($datafields[$id])){
+				$entry->setValueFromSubmit($datafields[$id]);
+				if ($entry->isValid())
+					$resultDataFields |= $entry->store();
+				else
+					$invalidEntries[$id] = $entry;
 				}
-				elseif ($numFields == 1)
-					$this->dataFieldEntries[$id]->setValue($datafield_content[$ffCount]);
-				else
-					$this->dataFieldEntries[$id]->setValue(array_slice($datafield_content, $ffCount, $numFields));
-				$ffCount += $numFields;
-				if ($this->dataFieldEntries[$id]->isValid())
-					$resultDataFields |= $this->dataFieldEntries[$id]->store();
-				else
-					$invalidEntries[$id] = $this->dataFieldEntries[$id];
 			}
 		}
 

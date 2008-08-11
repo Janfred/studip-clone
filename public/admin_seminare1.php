@@ -872,25 +872,16 @@ if ($s_send) {
 		}
 
 		//Update the additional data-fields
-		if (is_array($datafield_id)) {
-			$ffCount = 0; // number of processed form fields
-			foreach ($datafield_id as $i=>$id) {
-				$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$datafield_type[$i]));
-				$entry  = DataFieldEntry::createDataFieldEntry($struct, $s_id);
-				$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
-				if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
-					$entry->setValue('');
-					$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
-				}
-				elseif ($numFields == 1)
-					$entry->setValue($datafield_content[$ffCount]);
-				else
-					$entry->setValue(array_slice($datafield_content, $ffCount, $numFields));
-				$ffCount += $numFields;
-				if ($entry->isValid() && !LockRules::Check($s_id, $id))
+		if (is_array($_REQUEST['datafields'])) {
+			$invalidEntries = array();
+			foreach (DataFieldEntry::getDataFieldEntries($s_id, 'sem') as $entry) {
+				if(isset($_REQUEST['datafields'][$entry->getId()])){
+					$entry->setValueFromSubmit($_REQUEST['datafields'][$entry->getId()]);
+				if ($entry->isValid() && !LockRules::Check($s_id, $entry->getId()))
 					$entry->store();
 				else
-					$invalidEntries[$id] = $entry;
+					$invalidEntries[$entry->getId()] = $entry;
+				}
 			}
 			if(!$updated_seminar) $msg .= "msg§" . _("Die Grunddaten der Veranstaltung wurden ver&auml;ndert.") . "§";
 			if (count($invalidEntries) > 0)
@@ -1495,20 +1486,18 @@ if (($s_id) && (auth_check())) {
 			<?
 			//add the free adminstrable datafields
 			$localEntries = DataFieldEntry::getDataFieldEntries($s_id, 'sem', $db->f("status"));
-			$entry_nr = 0;
 			foreach ($localEntries as $entry) {
-				$id = $entry->structure->getID();  // datafield id
+				$id = $entry->getID();  // datafield id
 				$color = '#000000';
 				if ($invalidEntries[$id]) {        // if entered value is invalid...
 					$entry = $invalidEntries[$id];  // ... we keep it and show it in the corresponding form fields
-					$entry->structure->load();      // get all structure information from the database (view permissions etc.)
-					$color = 'ff0000';              // the corresponding name is highlighted
+					$color = '#ff0000';              // the corresponding name is highlighted
 				}
 				if ($entry->structure->accessAllowed($perm)) {
 					?>
 					<tr>
 						<td class="<? echo $cssSw->getClass() ?>" align=right width="30%">
-							<font color="<?=$color?>"><?=htmlReady($entry->getName())?></font>
+							<span style="color:<?=$color?>"><?=htmlReady($entry->getName())?></span>
 		
 							<? if (LockRules::Check($s_id, $entry->structure->getID())) : ?>
 							<?= $label_lock_text ?>
@@ -1519,12 +1508,7 @@ if (($s_id) && (auth_check())) {
 							if ($perm->have_perm($entry->structure->getEditPerms())
 								&& !LockRules::Check($s_id, $entry->structure->getID()))
 							{
-								print '&nbsp;&nbsp;' . $entry->getHTML("datafield_content[$entry_nr]", $entry->structure->getID());
-							?>
-							   <input type="hidden" name="datafield_id[<?=$entry_nr?>]" value="<?=$entry->structure->getID()?>">
-							   <input type="hidden" name="datafield_type[<?=$entry_nr?>]" value="<?=$entry->getType() ?>">
-							<?
-								++$entry_nr;
+								print '&nbsp;&nbsp;' . $entry->getHTML("datafields");
 							}
 							else {
 								?>

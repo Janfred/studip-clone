@@ -147,33 +147,22 @@ while ( is_array($_POST)
 		}
 
 		// update additional datafields
-		if (is_array($datafield_id)) {
-			$ffCount = 0; // number of processed form fields
-			foreach ($datafield_id as $i=>$id) {
-				$struct = new DataFieldStructure(array("datafield_id"=>$id, 'type'=>$datafield_type[$i]));
-				$entry  = DataFieldEntry::createDataFieldEntry($struct, $SessSemName[1]);
-				$numFields = $entry->numberOfHTMLFields(); // number of form fields used by this datafield
-				if ($datafield_type[$i] == 'bool' && $datafield_content[$ffCount] != $id) { // unchecked checkbox?
-					$entry->setValue('');
-					$ffCount -= $numFields;  // unchecked checkboxes are not submitted by GET/POST
-				}
-				elseif ($numFields == 1)
-					$entry->setValue($datafield_content[$ffCount]);
-				else
-					$entry->setValue(array_slice($datafield_content, $ffCount, $numFields));
-				$ffCount += $numFields;
-
-				if ($entry->isValid())
-					$entry->store();
-				else {
-					$invalidEntries[$struct->getID()] = $entry;
+  		if (is_array($_REQUEST['datafields'])) {
+			$invalidEntries = array();
+			foreach (DataFieldEntry::getDataFieldEntries($i_id, 'inst') as $entry) {
+				if(isset($_REQUEST['datafields'][$entry->getId()])){
+					$entry->setValueFromSubmit($_REQUEST['datafields'][$entry->getId()]);
+					if ($entry->isValid())
+						$entry->store();
+					else
+						$invalidEntries[$entry->getId()] = $entry;
 				}
 			}
-		}
-		if (count($invalidEntries)	> 0)
-			$msg='error§<b>' . _('ung&uuml;ltige Eingaben (s.u.) wurden nicht gespeichert') .'</b>';
-		else
-		$msg="msg§<b>" . sprintf(_("Die Daten der Einrichtung \"%s\" wurden ver&auml;ndert."), htmlReady(stripslashes($Name))) . "</b>";
+			if (count($invalidEntries)	> 0)
+				$msg='error§<b>' . _('ung&uuml;ltige Eingaben (s.u.) wurden nicht gespeichert') .'</b>';
+			else
+				$msg="msg§<b>" . sprintf(_("Die Daten der Einrichtung \"%s\" wurden ver&auml;ndert."), htmlReady(stripslashes($Name))) . "</b>";
+  		}
 		break;
 
 	// Delete the Institut
@@ -305,7 +294,7 @@ while ( is_array($_POST)
 		break;
 
 	default:
-	break;
+	
 	}
 }
 
@@ -437,14 +426,12 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 	//add the free administrable datafields
 	$localEntries = DataFieldEntry::getDataFieldEntries($i_id, "inst");
 	if ($localEntries) {
-	$entry_nr = 0;
 	  foreach ($localEntries as $entry) {
 	  	$value = $entry->getValue();
 	  	$color = '#000000';
 	  	$id = $entry->structure->getID();
 	  	if ($invalidEntries[$id]) {
 	  		$entry = $invalidEntries[$id];
-	  		$entry->structure->load();  // get complete structure information from database
 	  		$color = '#ff0000';
 	  	}
 		if ($entry->structure->accessAllowed($perm)) {
@@ -456,12 +443,7 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 				<td class="<? echo $cssSw->getClass() ?>" >
 					<?
 					if ($perm->have_perm($entry->structure->getEditPerms())) {
-						print $entry->getHTML("datafield_content[$entry_nr]", $entry->structure->getID());  // submitted value of checkboxes is datafield_id
-						?>
-						<input type="HIDDEN" name="datafield_id[<?=$entry_nr?>]" value="<?= $entry->structure->getID() ?>">
-						<input type="HIDDEN" name="datafield_type[<?=$entry_nr?>]" value="<?= $entry->getType() ?>">
-						<?
-						++$entry_nr;
+						print $entry->getHTML("datafields");  
 					}
 					else
 						print $entry->getDisplayValue();

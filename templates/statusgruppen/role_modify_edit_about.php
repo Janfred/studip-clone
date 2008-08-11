@@ -47,7 +47,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 			$cssSw->resetClass();
 			$default_entries = DataFieldEntry::getDataFieldEntries(array($user_id, $inst_id));
 			$entries = DataFieldEntry::getDataFieldEntries(array($user_id, $role_id));
-
+			
 			if (is_array($entries))
 			foreach ($entries as $id=>$entry) {
 				$cssSw->switchClass();
@@ -61,10 +61,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 				<?
 				global $auth;
 				if ($entry->structure->editAllowed($auth->auth['perm']) && ($entry->getValue() != 'default_value')) {
-					echo $entry->getHTML('datafield_content[]', $entry->structure->getID());
-					echo '<input type="HIDDEN" name="datafield_id[]" value="'.$entry->structure->getID().'">';
-					echo '<input type="HIDDEN" name="datafield_type[]" value="'.$entry->getType().'">';
-					echo '<input type="HIDDEN" name="datafield_sec_range_id[]" value="'.$role_id.'">';
+					echo $entry->getHTML('datafields');
 					echo '</td>';
 
 					// Set-Default Checkbox
