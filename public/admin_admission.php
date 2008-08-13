@@ -529,7 +529,7 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 
 	//Meldung beim Wechseln des Modis
 	if (($adm_type_old != $admin_admission_data["admission_type"]) && (!$commit_no_admission_data))
-		if ($admin_admission_data["admission_type"] > 0)
+		if ($admin_admission_data["admission_type"] > 0 && $admin_admission_data["admission_type"] != 3 )
 			$infomsg.=sprintf ("info§"._("Sie haben ein Anmeldeverfahren vorgesehen. Beachten Sie bitte, dass nach dem &Uuml;bernehmen dieser Einstellung alle bereits eingetragenen Nutzerinnen und Nutzer aus der Veranstaltung entfernt werden und das Anmeldeverfahren anschließend nicht mehr abgeschaltet werden kann!")."§");
 
 
