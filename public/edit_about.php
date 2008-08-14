@@ -349,10 +349,9 @@ if (check_ticket($studipticket)) {
 		}
 		$sess->register('edit_about_msg');
 		$edit_about_msg = $my_about->msg;
-		/*header("Location: $PHP_SELF?username=$username&view=$view");  //Seite neu aufrufen, um Parameter loszuwerden
+		header("Location: $PHP_SELF?username=$username&view=$view");  //Seite neu aufrufen, um Parameter loszuwerden
 		page_close();
-		die;*/
-		$cmd='';
+		die;
 	}
 
 } else {
