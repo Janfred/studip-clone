@@ -1493,20 +1493,18 @@ if (($s_id) && (auth_check())) {
 					$entry = $invalidEntries[$id];  // ... we keep it and show it in the corresponding form fields
 					$color = '#ff0000';              // the corresponding name is highlighted
 				}
-				if ($entry->structure->accessAllowed($perm)) {
+				if ($entry->isVisible()) {
 					?>
 					<tr>
 						<td class="<? echo $cssSw->getClass() ?>" align=right width="30%">
 							<span style="color:<?=$color?>"><?=htmlReady($entry->getName())?></span>
-		
-							<? if (LockRules::Check($s_id, $entry->structure->getID())) : ?>
+							<? if (LockRules::Check($s_id, $entry->getID())) : ?>
 							<?= $label_lock_text ?>
 							<? endif; ?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
 							<?
-							if ($perm->have_perm($entry->structure->getEditPerms())
-								&& !LockRules::Check($s_id, $entry->structure->getID()))
+							if ($entry->isEditable() && !LockRules::Check($s_id, $entry->getID()))
 							{
 								print '&nbsp;&nbsp;' . $entry->getHTML("datafields");
 							}

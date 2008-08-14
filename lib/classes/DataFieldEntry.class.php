@@ -33,16 +33,18 @@ abstract class DataFieldEntry {
 	
 	
 	// @static
-	public static function getDataFieldEntries ($rangeID, $object_type = '', $object_class_hint = '') {
-		if (!$rangeID) return false; // we necessarily need a range ID
+	public static function getDataFieldEntries ($range_id, $object_type = '', $object_class_hint = '') {
+		if (!$range_id) return false; // we necessarily need a range ID
 		
-		if (is_array($rangeID)) {    // rangeID may be an array ("classic" rangeID and second rangeID used for user roles)
-			$secRangeID = $rangeID[1];
-			$rangeID = $rangeID[0];    // to keep compatible with following code
+		if (is_array($range_id)) {    // rangeID may be an array ("classic" rangeID and second rangeID used for user roles)
+			$secRangeID = $range_id[1];
+			$rangeID = $range_id[0];    // to keep compatible with following code
 			if ('usersemdata' !== $object_type && 'roleinstdata' !== $object_type) {
 				$object_type = 'userinstrole';
 			}
 			$clause1 = "AND sec_range_id='$secRangeID'";
+		} else {
+			$rangeID = $range_id;
 		}
 		
 		if (!$object_type) $object_type = get_object_type($rangeID);
@@ -90,7 +92,7 @@ abstract class DataFieldEntry {
 			$entries = array();
 			while ($data = $rs->fetch(PDO::FETCH_ASSOC)) {
 				$struct = new DataFieldStructure($data);
-				$entries[$data['datafield_id']]= DataFieldEntry::createDataFieldEntry($struct, $rangeID, $data['content']);
+				$entries[$data['datafield_id']]= DataFieldEntry::createDataFieldEntry($struct, $range_id, $data['content']);
 			}
 		}
 		return $entries;
@@ -120,26 +122,38 @@ abstract class DataFieldEntry {
 	
 	
 	function store () {
-		if (is_array($this->rangeID)) {
-			list($rangeID, $secRangeID) = $this->rangeID;
-		} else {
-			$rangeID = $this->rangeID;
-			$secRangeID = "";
-		}
 		$query = "INSERT INTO datafields_entries (content, datafield_id, range_id, sec_range_id, mkdate, chdate)
 					 VALUES (?,?,?,?,UNIX_TIMESTAMP(), UNIX_TIMESTAMP()) 
 					 ON DUPLICATE KEY UPDATE content=?, chdate=UNIX_TIMESTAMP()";
 		$st = DBManager::get()->prepare($query);
-		$ret = $st->execute(array($this->getValue(),$this->structure->getID(),$rangeID,$secRangeID,$this->getValue()));
+		$ret = $st->execute(array($this->getValue(),$this->structure->getID(), $this->getRangeID(),$this->getSecondRangeID(),$this->getValue()));
 		return $ret;
 	}
 	
 	
 	// @static
-	public static function removeAll ($rangeID) {
-		if ($rangeID) {
-			$query = "DELETE FROM datafields_entries WHERE range_id = '$rangeID'";
-			$ret = DBManager::get()->exec($query);
+	public static function removeAll($range_id) {
+		if(is_array($range_id)) {
+			list($rangeID, $secRangeID) = $range_id;
+		} else {
+			$rangeID = $range_id;
+			$secRangeID = "";
+		}
+		if($rangeID && !$secRangeID) {
+			$where = "range_id = ?";
+			$param = array($rangeID);
+		}
+		if($rangeID && $secRangeID) {
+			$where = "range_id = ? AND sec_range_id = ?";
+			$param = array($rangeID, $secRangeID);
+		}
+		if(!$rangeID && $secRangeID) {
+			$where = "sec_range_id = ?";
+			$param = array($secRangeID);
+		}
+		if($where){
+			$st = DBManager::get()->prepare("DELETE FROM datafields_entries WHERE $where");
+			$ret = $st->execute($param);
 			return $ret;
 		}
 	}
@@ -182,7 +196,33 @@ abstract class DataFieldEntry {
 	function setSecondRangeID ($v) {$this->rangeID = array(is_array($this->rangeID) ? $this->rangeID[0] : $this->rangeID, $v);}
 	function isValid ()            {return true;}
 	function numberOfHTMLFields () {return 1;}
-
+	
+	function getRangeID(){
+		if (is_array($this->rangeID)) {
+			list($rangeID, ) = $this->rangeID;
+		} else {
+			$rangeID = $this->rangeID;
+		}
+		return $rangeID;
+	}
+	
+	function getSecondRangeID(){
+		if (is_array($this->rangeID)) {
+			list(, $secRangeID) = $this->rangeID;
+		} else {
+			$secRangeID = "";
+		}
+		return $secRangeID;
+	}
+	
+	function isVisible() {
+		$users_own_range = ($this->getRangeID() == $GLOBALS['user']->id ? $GLOBALS['user']->id : '');
+		return $this->structure->accessAllowed($GLOBALS['perm'], $GLOBALS['user']->id, $users_own_range);
+	}
+	
+	function isEditable() {
+		return $this->structure->editAllowed($GLOBALS['perm']->get_perm());
+	}
 }
 
 

@@ -257,7 +257,7 @@ function aux_enter_data() {
 				if ($entry->isValid()) {
 					$entry->store();
 				} else {
-					$invalidEntries[$struct->getID()] = $entry;
+					$invalidEntries[$entry->getID()] = $entry;
 				}
 			}
 		}

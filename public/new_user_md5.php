@@ -468,17 +468,17 @@ if (isset($_GET['details'])) {
 				}
 				$userEntries = DataFieldEntry::getDataFieldEntries($db->f('user_id'));
 				foreach ($userEntries as $entry) {
-					$id = $entry->structure->getID();
+					$id = $entry->getID();
 					$color = '#000000';
 					if ($invalidEntries[$id]) {
 						$entry = $invalidEntries[$id];
 						$color = '#ff0000';
 					}
-					if ($entry->structure->accessAllowed($perm, $user->id, $db->f("user_id"))) {
+					if ($entry->isVisible()) {
 						echo chr(10) . '<tr><td class="steel1" colspan="2">';
 						echo chr(10) . '<span style="font-weight:bold;color:'.$color.'">&nbsp;' . htmlReady($entry->getName()).':</span></td>';
 						echo chr(10) . '<td class="steel1">&nbsp;';
-						if ($perm->have_perm($entry->structure->getEditPerms())) {
+						if ($entry->isEditable()) {
 							echo chr(10).$entry->getHTML("datafields");
 						} else {
 							echo chr(10).$entry->getDisplayValue();
