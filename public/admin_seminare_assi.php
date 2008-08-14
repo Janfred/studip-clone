@@ -2184,25 +2184,22 @@ elseif ((!$level) || ($level == 1))
 								$db->query("SELECT Name,a.Institut_id,IF(a.Institut_id=fakultaets_id,1,0) AS is_fak,inst_perms FROM user_inst  a LEFT JOIN Institute USING (institut_id) WHERE (user_id = '$user_id' AND inst_perms = 'admin') ORDER BY is_fak,Name");
 							else
 								$db->query("SELECT Name,Institut_id,1 AS is_fak,'admin' AS inst_perms FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
-							if ($db->affected_rows())
-									{
-									echo "<select name=\"sem_inst_id\">";
-									while ($db->next_record()) {
-										printf ("<option %s style=\"%s\" value=%s>%s</option>", $db->f("Institut_id") == $sem_create_data["sem_inst_id"] ? "selected" : "",
-											($db->f("is_fak")) ? "font-weight:bold;" : "",$db->f("Institut_id"), my_substr($db->f("Name"),0,60));
-										if ($db->f("is_fak") && $db->f("inst_perms") == "admin"){
-											$db2->query("SELECT a.Institut_id, a.Name FROM Institute a
-											 WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' ORDER BY Name");
-											while($db2->next_record()){
-												printf ("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s</option>", $db2->f("Institut_id") == $sem_create_data["sem_inst_id"] ? "selected" : "",
-													$db2->f("Institut_id"), htmlReady(my_substr($db2->f("Name"),0,60)));
-											}
+							if ($db->affected_rows()){
+								echo "<select name=\"sem_inst_id\">";
+								while ($db->next_record()) {
+									printf ("<option %s style=\"%s\" value=%s>%s</option>", $db->f("Institut_id") == $sem_create_data["sem_inst_id"] ? "selected" : "",
+										($db->f("is_fak")) ? "font-weight:bold;" : "",$db->f("Institut_id"), my_substr($db->f("Name"),0,60));
+									if ($db->f("is_fak") && $db->f("inst_perms") == "admin"){
+										$db2->query("SELECT a.Institut_id, a.Name FROM Institute a
+											WHERE fakultaets_id='" . $db->f("Institut_id") . "' AND a.Institut_id!='" .$db->f("Institut_id") . "' ORDER BY Name");
+										while($db2->next_record()){
+											printf ("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s</option>", $db2->f("Institut_id") == $sem_create_data["sem_inst_id"] ? "selected" : "",
+												$db2->f("Institut_id"), htmlReady(my_substr($db2->f("Name"),0,60)));
 										}
 									}
-									echo "</select>";
-									}
-								else
-									sprintf ("error§"._("Ihr Account wurde noch keiner Einrichtung zugeordnet. Bitte wenden Sie sich an den/die zust&auml;ndigeN AdministratorIn der Einrichtung oder einen der %sAdministratoren%s des Systems!")."§", "<a href=\"ansprechpartner.php\">", "</a>");
+								}
+								echo "</select>";
+							}
 							?>
 							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
 								<? echo tooltip(_("Die Heimat-Einrichtung ist die Einrichtung, die offiziell für die Veranstaltung zuständig ist."), TRUE, TRUE) ?>
