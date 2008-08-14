@@ -349,9 +349,10 @@ if (check_ticket($studipticket)) {
 		}
 		$sess->register('edit_about_msg');
 		$edit_about_msg = $my_about->msg;
-		header("Location: $PHP_SELF?username=$username&view=$view");  //Seite neu aufrufen, um Parameter loszuwerden
+		/*header("Location: $PHP_SELF?username=$username&view=$view");  //Seite neu aufrufen, um Parameter loszuwerden
 		page_close();
-		die;
+		die;*/
+		$cmd='';
 	}
 
 } else {
@@ -655,7 +656,7 @@ if ($my_about->msg) {
 if ($view == 'Bild') {
 	// hier wird das Bild ausgegeben
 	$cssSw->switchClass();
-	echo '<tr><td colspan=2 class="blank"><blockquote><br />' . _("Auf dieser Seite k&ouml;nnen Sie ein pers&ouml;nliches Bild f&uuml;r Ihre Homepage hochladen.") . "<br /><br /><br /></td></tr>\n";
+	echo '<tr><td colspan=2 class="blank" style="padding-left:20px;">' . _("Auf dieser Seite k&ouml;nnen Sie ein pers&ouml;nliches Bild f&uuml;r Ihre Homepage hochladen.") . "<br /><br /><br /></td></tr>\n";
 	echo '<tr><td width="30%" class="'.$cssSw->getClass().'" align="center">';
 	echo '<font size="-1"><b>' . _("Aktuell angezeigtes Bild:") . '<br /><br /></b></font>';
 
@@ -672,7 +673,7 @@ if ($view == 'Bild') {
 	<?
 	}
 
-	echo '</td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top"><blockquote>';
+	echo '</td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top">';
 	echo '<form enctype="multipart/form-data" action="' . $_SERVER['PHP_SELF'] . '?cmd=copy&username=' . $username . '&view=Bild&studipticket='.get_ticket().'" method="POST">';
 	echo "<br />\n" . _("Hochladen eines Bildes:") . "<br /><br />\n" . _("1. Wählen sie mit <b>Durchsuchen</b> eine Bilddatei von ihrer Festplatte aus.") . "<br /><br />\n";
 	echo '&nbsp;&nbsp;<input name="imgfile" type="file" style="width: 80%" cols="'.round($max_col*0.7*0.8)."\"><br /><br />\n";
@@ -680,18 +681,18 @@ if ($view == 'Bild') {
 	echo '&nbsp;&nbsp;<input type="IMAGE" ' . makeButton('absenden', 'src') . ' border="0" value="' . _("absenden") . "\"><br /><br />\n";
 	echo '<b>'. _("ACHTUNG!"). '</b><br>';
 	printf (_("Die Bilddatei darf max. %s KB groß sein, es sind nur Dateien mit den Endungen %s, %s oder %s erlaubt!"), $my_about->max_file_size, '<b>.jpg</b>', '<b>.png</b>', '<b>.gif</b>');
-	echo '</form></blockquote></td></tr>'."\n";
+	echo '</form></td></tr>'."\n";
 }
 
 if ($view == 'Daten') {
 	$cssSw->switchClass();
 	//persönliche Daten...
-	echo '<tr><td align="left" valign="top" class="blank"><blockquote><br />' . _("Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern.");
+	echo '<tr><td align="left" valign="top" class="blank" style="padding-left:20px;">' . _("Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern.");
 	echo '<br /><font size="-1">' . sprintf(_("Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt werden."), '</font><font color="red" size="+1"><b>*</b></font><font size="-1">') . "</font><br /><br />\n";
 	if ($my_about->auth_user['auth_plugin'] != "standard"){
 		echo '<font size="-1">' . sprintf(_("Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, daher k&ouml;nnen sie einige Felder nicht ver&auml;ndern!"),$my_about->auth_user['auth_plugin']) . "</font>";
 	}
-	echo "<br /><br /></blockquote></td></tr>\n".'<tr><td class=blank>';
+	echo "<br /><br /></td></tr>\n".'<tr><td class=blank>';
 
 	echo '<form action="'. $PHP_SELF. '?cmd=edit_pers&username='. $username. '&view='. $view. '&studipticket=' . get_ticket(). '" method="POST" name="pers"';
 	//Keine JavaScript überprüfung bei adminzugriff
@@ -701,7 +702,7 @@ if ($view == 'Daten') {
 	echo '><table align="center" width="99%" class="blank" border="0" cellpadding="2" cellspacing="0">';
 	echo '<tr><td class="printhead" colspan="3" align="center"><b>' . _("Benutzerdaten") . '</b></td></tr>';
 	if ($my_about->check == 'user') {
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><blockquote><b>" . _("Username:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"75%\" align=\"left\">&nbsp;";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><b>" . _("Username:") . " </b></td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"75%\" align=\"left\">&nbsp;";
 		if (($ALLOW_CHANGE_USERNAME && !StudipAuthAbstract::CheckField("auth_user_md5.username",$my_about->auth_user['auth_plugin'])) ) {
 			echo "&nbsp;<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"new_username\" value=\"".$my_about->auth_user["username"]."\">&nbsp; <font color=\"red\" size=+2>*</font>";
 		} else {
@@ -709,8 +710,8 @@ if ($view == 'Daten') {
 		}
 	echo "</td></tr>\n";
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </b></blockquote>"
-		.'<div style="text-align: right;"> ändern? <input type="checkbox" name="update_pw" id="update_pw" onclick="javascript: update_pw_fields();" /></div></td>';
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><div style=\"display:inline;float:left;\"><b>" . _("Passwort:") . " </b></div>"
+	.'<div style="display:inline;float:right;"> '._("ändern").'? <input type="checkbox" name="update_pw" id="update_pw" onclick="javascript: update_pw_fields();" /></div></td>';
 	if (StudipAuthAbstract::CheckField("auth_user_md5.password", $my_about->auth_user['auth_plugin'])) {
 		echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp; <font size=\"-1\">*****</font>";
 	} else {
@@ -730,7 +731,7 @@ if ($view == 'Daten') {
 	echo "<input type=\"HIDDEN\" name=\"response\" value=\"\"></td></tr>\n";
 
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Name:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Vorname:") . "</font><br />";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Name:") . " </b></td><td class=\"".$cssSw->getClass()."\" nowrap align=\"left\"><font size=-1>&nbsp; " . _("Vorname:") . "</font><br />";
 	if ((!$ALLOW_CHANGE_NAME) || StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $my_about->auth_user['auth_plugin'])) {
         	echo "&nbsp; <font size=\"-1\">" . htmlReady($my_about->auth_user["Vorname"])."</font>";
 	} else {
@@ -746,7 +747,7 @@ if ($view == 'Daten') {
 	echo "</td></tr>\n";
 
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("E-Mail:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp;";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("E-Mail:") . " </b></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp;";
 	if (($ALLOW_CHANGE_EMAIL && !(StudipAuthAbstract::CheckField("auth_user_md5.Email", $my_about->auth_user['auth_plugin'])))) {
 		echo '<font size=-1>&nbsp; '. _("E-Mail:") .'</font><br />'.
 			 ' &nbsp; <input type="text" size="'. round($max_col*0.25). '" name="email1" value="'.$my_about->auth_user["Email"].'">&nbsp; <font color="red" size=+2>*</font>'.
@@ -759,17 +760,17 @@ if ($view == 'Daten') {
 	echo "</td></tr>\n";
 	} else {
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><blockquote><b>" . _("Username:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\">&nbsp; ".$my_about->auth_user["username"]."</td><td width=\"50%\" rowspan=4 align=\"center\"><b><font color=\"red\">" . _("Adminzugriff hier nicht möglich!") . "</font></b></td></tr>\n";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><b>" . _("Username:") . " </b></td><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\">&nbsp; ".$my_about->auth_user["username"]."</td><td width=\"50%\" rowspan=4 align=\"center\"><b><font color=\"red\">" . _("Adminzugriff hier nicht möglich!") . "</font></b></td></tr>\n";
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Passwort:") . " </b></blockquote>";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Passwort:") . " </b>";
 		echo "</td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; *****</td></tr>\n";
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Name:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; ".htmlReady($my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"])."</td></tr>\n";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Name:") . " </b></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; ".htmlReady($my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"])."</td></tr>\n";
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("E-Mail:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; ".$my_about->auth_user["Email"]."</td></tr>\n";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("E-Mail:") . " </b></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; ".$my_about->auth_user["Email"]."</td></tr>\n";
 	}
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Titel:") . " </b></blockquote></td>";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Titel:") . " </b></td>";
 	if (!$ALLOW_CHANGE_TITLE || StudipAuthAbstract::CheckField("user_info.title_front", $my_about->auth_user['auth_plugin'])) {
 		echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp;" .  htmlReady($my_about->user_info['title_front']) . "</td></tr>";
 	} else {
@@ -786,7 +787,7 @@ if ($view == 'Daten') {
 		echo "<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"title_front\" value=\"".htmlReady($my_about->user_info['title_front'])."\"></td></tr>\n";
 	}
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap><blockquote><b>" . _("Titel nachgest.:") . " </b></blockquote></td>";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap><b>" . _("Titel nachgest.:") . " </b></td>";
 	if (!$ALLOW_CHANGE_TITLE || StudipAuthAbstract::CheckField("user_info.title_rear", $my_about->auth_user['auth_plugin'])) {
 		echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp;" .  htmlReady($my_about->user_info['title_rear']) . "</td></tr>";
 	} else {
@@ -803,7 +804,7 @@ if ($view == 'Daten') {
 		echo "<input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"title_rear\" value=\"".htmlReady($my_about->user_info['title_rear'])."\"></td></tr>\n";
 	}
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Geschlecht:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 nowrap align=\"left\"><font size=-1>";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Geschlecht:") . " </b></td><td class=\"".$cssSw->getClass()."\" colspan=2 nowrap align=\"left\"><font size=-1>";
 	if (StudipAuthAbstract::CheckField("user_info.geschlecht", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . (!$my_about->user_info["geschlecht"] ? _("m&auml;nnlich") : _("weiblich"));
 	} else {
@@ -821,7 +822,7 @@ if ($view == 'Daten') {
 	$cssSw->switchClass();
 
 
-	echo "<tr><td class=\"".$cssSw->getClass()."\">&nbsp; </td><td class=\"".$cssSw->getClass()."\" colspan=2>&nbsp; <input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " border=0 value=\"" . _("Änderungen übernehmen") . "\"></td></tr>\n</table></form>\n</td></tr>";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" colspan=\"3\" align=\"center\">&nbsp; <input type=\"IMAGE\" " . makeButton("uebernehmen", "src") . " border=0 value=\"" . _("Änderungen übernehmen") . "\"></td></tr>\n</table></form>\n</td></tr>";
 }
 
 
@@ -829,7 +830,7 @@ if ($view == 'Daten') {
 if ($view == 'Studium') {
 
 	if ($perm->have_perm('root') AND $username == $auth->auth["uname"]) {
-		echo '<tr><td align="left" valign="top" class="blank"><blockquote>'."<br /><br />\n" . _("Als Root haben Sie bereits genug Karriere gemacht ;-)") . "<br /><br />\n";
+		echo '<tr><td align="left" valign="top" class="blank">'."<br /><br />\n" . _("Als Root haben Sie bereits genug Karriere gemacht ;-)") . "<br /><br />\n";
 	} else {
 		echo '<tr><td align="left" valign="top" class="blank">'."\n";
 	}
@@ -874,7 +875,7 @@ if ($view == 'Studium') {
 		}
 		$cssSw->resetClass();
 		$cssSw->switchClass();
-		echo '</table></td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top"><blockquote><br />';
+		echo '</table></td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top"><br />';
 		if($allow_change_sg){
 			echo _("Wählen Sie die Studiengänge in Ihrem Studierendenausweis aus der folgenden Liste aus:") . "<br>\n";
 			echo '<br><div align="center"><a name="studiengaenge">&nbsp;</a>';
@@ -886,7 +887,7 @@ if ($view == 'Studium') {
 		} else {
 			echo _("Die Informationen zu Ihrem Studiengang werden vom System verwaltet, und k&ouml;nnen daher von Ihnen nicht ge&auml;ndert werden.");
 		}
-		echo '</blockquote></td></tr></table>'."\n";
+		echo '</td></tr></table>'."\n";
 		if ($allow_change_sg) echo "</form>\n";
 	}
 
@@ -930,7 +931,7 @@ if ($view == 'Studium') {
 		}
 		$cssSw->resetClass();
 		$cssSw->switchClass();
-		echo '</table></td><td class="' . $cssSw->getClass() . '" width="70%" align="left" valign="top"><blockquote><br />'."\n" ;
+		echo '</table></td><td class="' . $cssSw->getClass() . '" width="70%" align="left" valign="top"><br />'."\n" ;
 		if ($allow_change_in){
 			echo _("Um sich als Student einer Einrichtung zuzuordnen, wählen Sie die entsprechende Einrichtung aus der folgenden Liste aus:") . "<br />\n";
 			echo "<br />\n".'<div align="center"><a name="einrichtungen"></a>';
@@ -941,7 +942,7 @@ if ($view == 'Studium') {
 		} else {
 			echo _("Die Informationen zu Ihrer Einrichtung werden vom System verwaltet, und k&ouml;nnen daher von Ihnen nicht ge&auml;ndert werden.");
 		}
-		echo '</blockquote></td></tr></table>';
+		echo '</td></tr></table>';
 		if ($allow_change_in) echo '</form>';
 	}
 	echo '</td></tr>';
@@ -951,7 +952,7 @@ if ($view == 'Studium') {
 
 if ($view == 'userdomains') {
 	if ($perm->have_perm('root') && $username == $auth->auth["uname"]) {
-		echo '<tr><td align="left" valign="top" class="blank"><blockquote>'."<br /><br />\n" . _("Als Root haben Sie keine Nutzerdomänen.") . "<br /><br />\n";
+		echo '<tr><td align="left" valign="top" class="blank">'."<br /><br />\n" . _("Als Root haben Sie keine Nutzerdomänen.") . "<br /><br />\n";
 	} else {
 		echo '<tr><td align="left" valign="top" class="blank">'."\n";
 	}
@@ -994,7 +995,7 @@ if ($view == 'userdomains') {
 	}
 	$cssSw->resetClass();
 	$cssSw->switchClass();
-	echo '</table></td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top"><blockquote><br />';
+	echo '</table></td><td class="'.$cssSw->getClass().'" width="70%" align="left" valign="top"><br />';
 	if($allow_change_ud){
 		echo _("Wählen Sie eine Nutzerdomäne aus der folgenden Liste aus:") . "<br>\n";
 		echo '<br><div align="center"><a name="userdomains">&nbsp;</a>';
@@ -1006,7 +1007,7 @@ if ($view == 'userdomains') {
 	} else {
 		echo _("Die Informationen zu Ihren Nutzerdomänen werden vom System verwaltet und k&ouml;nnen daher von Ihnen nicht ge&auml;ndert werden.");
 	}
-	echo '</blockquote></td></tr></table>'."\n";
+	echo '</td></tr></table>'."\n";
 	if ($allow_change_ud) echo "</form>\n";
 	echo "</td></tr>\n";
 }
@@ -1106,11 +1107,11 @@ if ($view == 'Lebenslauf') {
 
 	echo "<tr><td class=\"printhead\" width=\"100%\" colspan=3 align=\"center\"><b>" . _("Freiwillige Angaben") . "</b></td></tr>\n";
 	 $cssSw->switchClass();
-	echo '<tr><td class="'.$cssSw->getClass(). '" width="25%" align="left"><blockquote><b>' . _("Telefon (privat):") . ' </b></blockquote></td>';
+	echo '<tr><td class="'.$cssSw->getClass(). '" width="25%" align="left"><b>' . _("Telefon (privat):") . ' </b></td>';
 	?>
 		<td class="<?= $cssSw->getClass() ?>"  width="25%" align="left" nowrap>
 			<font size="-1">
-				&nbsp;<?= _("Festnetz") ?>:
+				&nbsp; <?= _("Festnetz") ?>:
 			</font>
 			<br />
 	<?
@@ -1127,7 +1128,7 @@ if ($view == 'Lebenslauf') {
 	}
 	echo "</td></tr>\n";
 	 $cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Adresse (privat):") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Adresse (privat):") . " </b></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.privadr", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["privadr"]);
 	} else {
@@ -1136,7 +1137,7 @@ if ($view == 'Lebenslauf') {
 	echo "</td></tr>\n";
 	if (get_config("ENABLE_SKYPE_INFO")) {
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Skype:") . " </b></blockquote></td>";
+		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Skype:") . " </b></td>";
 		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">";
 		echo "<font size=\"-1\">&nbsp; " . _("Skype Name:") . "</font><br>&nbsp; <input type=\"text\" size=\"".round($max_col*0.25)."\" name=\"skype_name\" value=\"".htmlReady($user->cfg->getValue($my_about->auth_user['user_id'], 'SKYPE_NAME'))."\"></td>";
 		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\">";
@@ -1144,7 +1145,7 @@ if ($view == 'Lebenslauf') {
 		echo "</tr>\n";
 	}
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Motto:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Motto:") . " </b></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.motto", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["motto"]);
 	} else {
@@ -1152,7 +1153,7 @@ if ($view == 'Lebenslauf') {
 
 	}	echo "</td></tr>\n";
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Homepage:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Homepage:") . " </b></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.Home", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["Home"]);
 	} else {
@@ -1161,7 +1162,7 @@ if ($view == 'Lebenslauf') {
 	}
 	echo "</td></tr>\n";
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><blockquote><b>" . _("Hobbies:") . " </b></blockquote></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Hobbies:") . " </b></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.hobby", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["hobby"]);
 	} else {
@@ -1171,26 +1172,26 @@ if ($view == 'Lebenslauf') {
 	$cssSw->switchClass();
 
 
-	/*echo '<tr><td align="left" valign="top" class="blank"><blockquote><br>'."\n";
+	/*echo '<tr><td align="left" valign="top" class="blank"><br>'."\n";
 	if ($my_about->auth_user['perms'] == 'dozent') {
 		 echo _("Hier k&ouml;nnen Sie Lebenslauf, Publikationen und Arbeitschwerpunkte bearbeiten.");
 	} else {
 		echo  _("Hier k&ouml;nnen Sie Ihren Lebenslauf bearbeiten.");
 	}
-	echo "<br>&nbsp; </blockquote></td></tr>\n"; */
+	echo "<br>&nbsp; </td></tr>\n"; */
 
-	echo '<tr><td class="'.$cssSw->getClass().'" align="left"><blockquote><b>' . _("Lebenslauf:") . "</b></td>\n";
+	echo '<tr><td class="'.$cssSw->getClass().'" align="left"><b>' . _("Lebenslauf:") . "</b></td>\n";
 	echo '<td class="'. $cssSw->getClass() .'" colspan="2" align="left" valign="top">&nbsp;', "\n";
-	echo '<textarea  name="lebenslauf" style=" width: 80%" cols="'.round($max_col/1.3).'" rows="7" wrap="virtual">' . htmlReady($my_about->user_info['lebenslauf']).'</textarea><a name="lebenslauf"></a></blockquote></td></tr>'."\n";
+	echo '<textarea  name="lebenslauf" style=" width: 80%" cols="'.round($max_col/1.3).'" rows="7" wrap="virtual">' . htmlReady($my_about->user_info['lebenslauf']).'</textarea><a name="lebenslauf"></a></td></tr>'."\n";
 	if ($my_about->auth_user["perms"] == "dozent") {
 		$cssSw->switchClass();
-		echo '<tr><td class="'.$cssSw->getClass().'" align="left"><blockquote><b>' . _("Schwerpunkte:") . "</b></td>\n";
+		echo '<tr><td class="'.$cssSw->getClass().'" align="left"><b>' . _("Schwerpunkte:") . "</b></td>\n";
 		echo '<td class="'. $cssSw->getClass() .'" colspan="2" align="left" valign="top">&nbsp;', "\n";
-		echo '<textarea  name="schwerp" style="width: 80%" cols="'.round($max_col/1.3).'" rows="7" wrap="virtual">'.htmlReady($my_about->user_info["schwerp"]).'</textarea><a name="schwerpunkte"></a></blockquote></td></tr>'."\n";
+		echo '<textarea  name="schwerp" style="width: 80%" cols="'.round($max_col/1.3).'" rows="7" wrap="virtual">'.htmlReady($my_about->user_info["schwerp"]).'</textarea><a name="schwerpunkte"></a></td></tr>'."\n";
 		$cssSw->switchClass();
-		echo "<tr><td class=\"".$cssSw->getClass(). '" align="left" ><blockquote><b>' . _("Publikationen:") . "</b></td>\n";
+		echo "<tr><td class=\"".$cssSw->getClass(). '" align="left" ><b>' . _("Publikationen:") . "</b></td>\n";
 		echo '<td class="'. $cssSw->getClass() .'" colspan="2" align="left" valign="top">&nbsp;', "\n";
-		echo '<textarea  name="publi" style=" width: 80%" cols="'.round($max_col/1.3) . '" rows="7" wrap="virtual">'.htmlReady($my_about->user_info['publi']).'</textarea><a name="publikationen"></a></blockquote></td></tr>'."\n";
+		echo '<textarea  name="publi" style=" width: 80%" cols="'.round($max_col/1.3) . '" rows="7" wrap="virtual">'.htmlReady($my_about->user_info['publi']).'</textarea><a name="publikationen"></a></td></tr>'."\n";
 	}
 
 	//add the free administrable datafields
@@ -1201,12 +1202,12 @@ if ($view == 'Lebenslauf') {
 			$entry = $invalidEntries[$id];
 			$color = '#ff0000';
 		}
-		if ($entry->structure->accessAllowed($perm, $user->id, $my_about->auth_user['user_id'])) {
+		if ($entry->isVisible()) {
 			$cssSw->switchClass();
-			echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\" ><b><blockquote>";
+			echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\" ><b>";
 			echo "<font color=\"$color\">" . htmlReady($entry->getName()). ":</font></b></td>";
 			echo '<td class="'. $cssSw->getClass() .'" colspan="2" align="left" valign="top">&nbsp;', "\n";
-			if ($perm->have_perm($entry->structure->getEditPerms())) {
+			if ($entry->isEditable()) {
 				echo $entry->getHTML("datafields");
 			}
 			else {
@@ -1217,7 +1218,7 @@ if ($view == 'Lebenslauf') {
 	}
 
 	$cssSw->switchClass();
-	echo '<tr><td class="'.$cssSw->getClass().'" colspan="3" align="center"><blockquote><br><input type="IMAGE" ' . makeButton('uebernehmen', 'src') . ' border="0" value="' . _("Änderungen übernehmen") . "\"><br></blockquote></td></tr>\n</table>\n</form>\n</td></tr>";
+	echo '<tr><td class="'.$cssSw->getClass().'" colspan="3" align="center"><br><input type="IMAGE" ' . makeButton('uebernehmen', 'src') . ' border="0" value="' . _("Änderungen übernehmen") . "\"><br></td></tr>\n</table>\n</form>\n</td></tr>";
 }
 
 if ($view == "Sonstiges") {
@@ -1272,7 +1273,7 @@ if ($view == 'notification') {
 }
 
 if ($view == 'Login') {
-	echo '<tr><td colspan="2" class="blank"><blockquote>'."<br /><br />\n" ;
+	echo '<tr><td colspan="2" class="blank">'."<br /><br />\n" ;
 	if ($my_about->check == 'user' && !$perm->have_perm('admin')) {
 		echo _("Um die automatische Anmeldung zu nutzen, m&uuml;ssen Sie ihre pers&ouml;nliche Login-Datei auf ihren Rechner kopieren. Mit dem folgenden Link &ouml;ffnet sich ein Fenster, indem Sie ihr Passwort eingeben m&uuml;ssen.") . " ";
 		echo _("Dann wird die Datei erstellt und zu Ihrem Rechner geschickt.") . "<br /><br />\n";
@@ -1287,7 +1288,7 @@ if ($view == 'Login') {
 		echo _("Als Administrator d&uuml;rfen Sie dieses Feature nicht nutzen - Sie tragen Verantwortung!");
 
 	}
-	echo "</blockquote><br />\n</td></tr>\n";
+	echo "<br />\n</td></tr>\n";
 }
 
 	if ($table_open) echo "\n</table>\n";
