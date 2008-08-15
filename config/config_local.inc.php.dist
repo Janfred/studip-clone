@@ -48,8 +48,10 @@ if (isset($_SERVER['SERVER_NAME'])) {
 	$ABSOLUTE_URI_STUDIP = $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
 	$ABSOLUTE_URI_STUDIP .= '://'.$_SERVER['SERVER_NAME'];
 
-	if ($_SERVER['HTTPS'] == 'on' && $_SERVER['SERVER_PORT'] != 443 ||
-	    $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 80) {
+	if (strpos($_SERVER['SERVER_NAME'], ':') === false &&
+		(($_SERVER['HTTPS'] == 'on' && $_SERVER['SERVER_PORT'] != 443) ||
+	    ($_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 80))
+		) {
 		$ABSOLUTE_URI_STUDIP .= ':'.$_SERVER['SERVER_PORT'];
 	}
 
@@ -466,7 +468,14 @@ $STUDIP_AUTH_CONFIG_LDAPREADANDBIND = array("host" => "localhost",
 										"error_head" =>	"LDAP read-and-bind plugin",
 										"user_data_mapping" =>
 										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
-												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => "")));
+												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""),
+												"auth_user_md5.Email" => array("callback" => "doLdapMap", "map_args" => "email"),
+												"auth_user_md5.Nachname" => array("callback" => "doLdapMap", "map_args" => "sn"),
+												"auth_user_md5.Vorname" => array("callback" => "doLdapMap", "map_args" => "givenname"),
+												"datafields.6ec00967d9ccbfdeac1ee038178f1543" => array("no_generic_update" => true, "callback" => "doLdapMapDatafield", "map_args" => "studinfo-matrikelnummer"),
+												"studiengang_id" => array("no_generic_update" => true, "callback" => "doLdapMapStudyCourse", "map_args" => "studinfo-studiengang")
+												)
+										);
 
 $STUDIP_AUTH_CONFIG_LDAP = array(		"host" => "localhost",
 										"base_dn" => "dc=data-quest,dc=de",

@@ -63,7 +63,35 @@ class StudipAuthLdapReadAndBind extends StudipAuthLdap {
 		parent::StudipAuthLdap();
 	}
 	
-				
+	function getUserData($username){
+		$this->user_data = array();
+		if (!$this->doLdapConnect()){
+			return false;
+		}
+		if (!($user_dn = $this->getUserDn($username))){
+			return false;
+		}
+		if (!($r = @ldap_bind($this->conn, $this->reader_dn, $this->reader_password))){
+			$this->error_msg = sprintf(_("Anmeldung von %s fehlgeschlagen."),$this->reader_dn) . $this->getLdapError();
+			return false;
+		}
+		if (!($result = @ldap_search($this->conn, $user_dn, "objectclass=*"))){
+			$this->error_msg = _("Abholen der User Attribute fehlgeschlagen.") .$this->getLdapError();
+			return false;
+		}
+		if (@ldap_count_entries($this->conn, $result)){
+			if (!($info = @ldap_get_entries($this->conn, $result))){
+				$this->error_msg = $this->getLdapError();
+				return false;
+			}
+		} else {
+			$this->error_msg = _("Der Username wurde im Verzeichnis nicht gefunden.");
+			return false;
+		}
+		$this->user_data = $info[0];
+		return true;
+	}
+	
 	function getUserDn($username){
 		if ($this->send_utf8_credentials){
 			$username = utf8_encode($username);

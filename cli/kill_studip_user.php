@@ -38,7 +38,7 @@ require_once 'lib/language.inc.php';
 require_once 'lib/functions.php';
 require_once 'lib/classes/UserManagement.class.php';
 
-if (!($MAIL_LOCALHOST && $MAIL_HOST_NAME && $ABSOLUTE_URI_STUDIP)){
+if (SEND_MAIL_ON_DELETE && !($MAIL_LOCALHOST && $MAIL_HOST_NAME && $ABSOLUTE_URI_STUDIP)){
 	trigger_error('To use this script you MUST set correct values for $MAIL_LOCALHOST, $MAIL_HOST_NAME and $ABSOLUTE_URI_STUDIP in local.inc!', E_USER_ERROR);
 }
 
@@ -94,4 +94,5 @@ foreach($kill_user as $uname => $udetail){
 		}
 	}
 }
+exit(1);
 ?>
