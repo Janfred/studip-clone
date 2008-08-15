@@ -219,19 +219,7 @@ if (check_ticket($studipticket)) {
 
 	if ($cmd=="special_edit") {
 		$invalidEntries = $my_about->special_edit($raum, $sprech, $tel, $fax, $name, $default_inst, $visible,
-										$datafields, $group_id, $role_id);
-
-		$my_about->msg = "";
-
-		if ($_REQUEST['status']) {
-			$db_s = new DB_Seminar("SELECT inst_perms FROM user_inst WHERE user_id = '{$my_about->auth_user['user_id']}' AND Institut_id = '$inst_id'");
-			$db_s->next_record();
-
-			if ($db_s->f('inst_perms') != $_REQUEST['status']) {
-				$my_about->msg .= 'msg§'. _("Der Status wurde geändert!") .'§';
-				$db_s->query("UPDATE user_inst SET inst_perms = '{$_REQUEST['status']}' WHERE user_id = '{$my_about->auth_user['user_id']}' AND Institut_id = '$inst_id'");
-			}
-		}
+										$datafields, $group_id, $role_id, array('status' => $_REQUEST['status'], 'inst_id' => $_REQUEST['inst_id']));
 
 		if (is_array($invalidEntries))
 			foreach ($invalidEntries as $entry)
@@ -1080,6 +1068,7 @@ if ($view == 'Karriere') {
 			$institutes[$inst_id]['roles'] = ($roles) ? $roles : array();
 		}
 
+
 		// template for tree-view of roles, layout for infobox-location and content-variables
 		$template = $GLOBALS['template_factory']->open('statusgruppen/roles_edit_about');
 		$template->set_layout('statusgruppen/layout_edit_about');
@@ -1090,6 +1079,7 @@ if ($view == 'Karriere') {
 		$template->set_attribute('view', $view);
 		$template->set_attribute('username', $username);
 		$template->set_attribute('user_id', $my_about->auth_user['user_id']);
+		$template->set_attribute('allowed_status', $my_about->allowedInstitutePerms());
 		echo $template->render();
 
 		echo '</form>';

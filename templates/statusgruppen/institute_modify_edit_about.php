@@ -38,17 +38,18 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 			echo '<tr><td class="'. $cssSw->getClass() .'">';
 			echo _("Status").':';
 			echo '</td><td class="'. $cssSw->getClass() .'" colspan="3">';
-			if ($GLOBALS['perm']->have_perm('root') || $GLOBALS['perm']->have_studip_perm('admin', $inst_id)) {
+
+			if ($GLOBALS['perm']->have_perm('root') || $GLOBALS['perm']->have_studip_perm('admin', $inst_id)) :
 				echo '&nbsp;&nbsp;<select name="status">';
-				echo '<option value="autor"'.(($status=='autor')?' selected="selected"':'').'>'._("Autor").'</option>';
-				echo '<option value="tutor"'.(($status=='tutor')?' selected="selected"':'').'>'._("Tutor").'</option>';
-				echo '<option value="dozent"'.(($status=='dozent')?' selected="selected"':'').'>'._("Dozent").'</option>';
-				echo '<option value="admin"'.(($status=='admin')?' selected="selected"':'').'>'._("Admin").'</option>';
+				foreach ($allowed_status as $cur_status) :
+					echo '<option value="'. $cur_status .'"' . (($cur_status == $status)?' selected="selected"':'') .'>'. $cur_status .'</option>';
+				endforeach;
 				echo '</select>';
-			} else {
+			else :
 				$status[0] = strtoupper($status[0]);
 				echo '&nbsp;'.$status;
-			}
+			endif;
+
 			echo '</td></tr>';
 		
 			echo "<input type=\"HIDDEN\" name=\"name[$inst_id]\" value=\"";

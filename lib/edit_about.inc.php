@@ -375,7 +375,32 @@ class about extends messaging {
 		return;
 	}
 
-	function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst, $visible, $datafields, $group_id, $role_id) {
+	/**
+	 * This function returns the perms allowed for an institute for the current user
+	 *
+	 * @return array list of perms
+	 */
+	function allowedInstitutePerms() {
+
+		// find out the allowed perms
+		$possible_perms=array("user","autor","tutor","dozent");
+		$counter=0;
+		if ($global_perm == "admin")
+			$allowed_status = array ('admin'); // einmal admin, immer admin...
+		else {
+			$allowed_status = array();
+			while ($counter <= 4 ) {
+				$allowed_status[] = $possible_perms[$counter];
+				if ($possible_perms[$counter] == $this->auth_user['perms'])
+					break;
+				$counter++;
+			}    
+		} 
+
+		return $allowed_status;
+	}
+
+	function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst, $visible, $datafields, $group_id, $role_id, $status) {
 		if (is_array($raum)) {
 			list($inst_id, $detail) = each($raum); 
 				if ($default_inst == $inst_id) {
@@ -397,6 +422,20 @@ class about extends messaging {
 				}
 			
 		}
+
+		$stmt = DBManager::get()->prepare("SELECT inst_perms FROM user_inst WHERE user_id = ? AND Institut_id = ?");
+		if ($stmt->execute(array($this->auth_user['user_id'], $status['inst_id']))) {
+			$data = $stmt->fetch();
+			if ($data['inst_perms'] != $status['status'] && in_array($status['status'], $this->allowedInstitutePerms())) {
+				$this->msg .= 'msg§'. _("Der Status wurde geändert!") .'§';
+
+				log_event("INST_USER_STATUS", $status['inst_id'], $this->auth_user['user_id'], $GLOBALS['user']->id .' -> '. $status['status']);
+
+				$stmt = DBManager::get()->prepare("UPDATE user_inst SET inst_perms = ? WHERE user_id = ? AND Institut_id = ?");
+				$stmt->execute(array($status['status'], $this->auth_user['user_id'], $status['inst_id']));
+			}
+		}
+
 		// process user role datafields
 		$sec_range_id = $inst_id ? $inst_id : $role_id;
 		if (is_array($datafields)) {

@@ -26,7 +26,7 @@ if (is_array($institutes) && sizeof($institutes) > 0) :
 </tr>
 	<? if ($open == $inst_id) :				
 		echo $this->render_partial('statusgruppen/institute_modify_edit_about', 
-			array('followers' => sizeof($institute['roles']), 'inst_id' => $inst_id, 'data' => $institute, 'user_id' => $user_id)
+			array('followers' => sizeof($institute['roles']), 'inst_id' => $inst_id, 'data' => $institute, 'user_id' => $user_id, 'user_perm' => $user_perm)
 		);
 	endif;
 
