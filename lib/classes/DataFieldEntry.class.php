@@ -80,7 +80,7 @@ abstract class DataFieldEntry {
 				case 'user':
 				case 'userinstrole':
 				case 'usersemdata':
-					$object_class = DataFieldStructure::permMask($GLOBALS['perm']->get_perm($rangeID));
+					$object_class = is_object($GLOBALS['perm']) ? DataFieldStructure::permMask($GLOBALS['perm']->get_perm($rangeID)) : 0;
 					$clause2 = "((object_class & ". (int)$object_class .") OR object_class IS NULL)";
 				break;
 			}
