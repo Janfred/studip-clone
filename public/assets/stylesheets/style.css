@@ -29,11 +29,15 @@ th {
 }
 
 h1, h2, h3 {
-	color: #213499;
 	font-weight: bold;
 }
 
 /* --- Überschriften -------------------------------------------------------- */
+
+h1.content, h2.content, h3.content {
+	color: #213499;
+}
+
 h1.topic {
 	color: #FFFFFF;
 	font-weight: bold;
@@ -123,10 +127,10 @@ td.topic {
 	font-size: 12pt;
 }
 td.topicwrite {
-	border:0px solid #000000; 
-	background-image: url('../images/fill1write.gif'); 
+	border:0px solid #000000;
+	background-image: url('../images/fill1write.gif');
 	background-color: #4A5681;
-	color: #FFFFFF; 
+	color: #FFFFFF;
 	font-size: 12pt;
 }
 
