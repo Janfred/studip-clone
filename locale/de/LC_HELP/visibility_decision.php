@@ -1,4 +1,4 @@
-
+<h1><font color="red">DIES IST NUR EIN BEISPIELTEXT. NICHT OHNE LOKALE ANPASSUNGEN VERWENDEN!</font></h1>
 <table width="100%" border="0" cellspacing="10" cellpadding="10">
 <tr>
 <td colspan=2><h1>Änderungen zur Sichtbarkeit in Stud.IP</h1>

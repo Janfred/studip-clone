@@ -1,4 +1,4 @@
-
+<h1><font color"red">THIS IS JUST AN EXAMPLE TEXT. DON'T USE UNMODIFIED.</font></h1>
 <table width="100%" border="0" cellspacing="10" cellpadding="10">
 <tr>
 <td colspan=2><h1>Changes of visibility in Stud.IP</h1>

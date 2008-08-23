@@ -157,9 +157,18 @@ function vis_chooser($vis, $new = false) {
 	return implode("\n", $txt);
 }
 
+// Ask user with unknown visibility state directly after login
+// whether they want to be visible or invisible
+//
+// ATTENTION: NOT USED IN STANDARD DISTRIBUTION.
+// see header.php for further info on enabling this feature.
+//       
+// DON'T USE UNMODIFIED TEXTS!
+//
 function first_decision($userid) {
 	global $PHP_SELF, $vis_cmd, $vis_state, $auth;
 
+	$user_language=getUserLanguagePath($userid);
 	if ($vis_cmd == "apply" && ($vis_state == "global" || $vis_state == "yes" || $vis_state == "no")) {
 		$db = new DB_Seminar("UPDATE auth_user_md5 SET visible = '$vis_state' WHERE user_id = '$userid'");
 		return;
@@ -168,13 +177,11 @@ function first_decision($userid) {
 	$db = new DB_Seminar("SELECT auth_user_md5.visible, user_info.preferred_language as pl FROM auth_user_md5, user_info WHERE auth_user_md5.user_id = '$userid' AND auth_user_md5.user_id = user_info.user_id");
 	$db->next_record();
 	if ($db->f("visible") != "unknown") return;
-	if ($db->f("pl") == "en_EN") $slang = true; else $slang = false;
-
 	?>
 	<table width="80%" align="center" border=0 cellpadding=0 cellspacing=0>
 	<tr>
 		<td class="topic" colspan="3" valign="top">
-			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/login.gif" border="0"><b>&nbsp;<?=($slang) ? "Please choose your visibility!" : "Bitte wählen Sie ihren Sichtbarkeitsstatus aus!"?></b>
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/login.gif" border="0"><b>&nbsp;<?=_("Bitte wählen Sie ihren Sichtbarkeitsstatus aus!")?></b>
 		</td>
 	</tr>
 	<tr>
@@ -185,26 +192,8 @@ function first_decision($userid) {
 		<td class="blank">
 			<center>
 			<?
-			$db->query("SELECT preferred_language FROM user_info WHERE user_id = '".$auth->auth['uid']."'");
-	    $db->next_record();
-			$lang = $db->f("preferred_language");
-			if ($lang[0] == "e" || $lang[1] == "n") {
-				include("visibility_decision_en.php");
-			} else {
-				include("visibility_decision_de.php");
-			}
-			/*
+		include("locale/$user_language/LC_HELP/visibility_decision.php");
 			?>
-				<form action="<?=$PHP_SELF?>" method="post">
-					<select name="vis_state">
-						<option value="nothing">- <?=($slang) ? "Please choose" : "Bitte ausw&auml;hlen"?> -</option>s
-						<option value="yes">Sichtbar</option>
-						<option value="no">Unsichtbar</option>
-					</select><br/>
-					<input type="submit" value="<?=($slang) ? "Apply change" : "Änderung übernehmen"?>">
-					<input type="hidden" name="vis_cmd" value="apply">
-				</form>
-			<? */ ?>
 			</center>
 		</td>
 	</tr>

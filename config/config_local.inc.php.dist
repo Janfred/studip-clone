@@ -158,7 +158,9 @@ $SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the mai
 
 $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 
-$USER_VISIBILITY_CHECK = FALSE;				// enables the presentation of visibility_decision_* for users after login
+$USER_VISIBILITY_CHECK = FALSE;	
+// enable presentation of visibility decision texts for users after first login
+// see lib/include/header.php and lib/user_visible.inc.php for further info
 
 $ELEARNING_INTERFACE_ENABLE = TRUE;						//Stud.IP module: elearning interface
 $SOAP_ENABLE = TRUE;

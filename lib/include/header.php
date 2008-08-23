@@ -35,10 +35,18 @@
 // +---------------------------------------------------------------------------+
 require_once ('lib/classes/HeaderController.class.php');
 
+/* --- 
+ * Mögliche Datenschutz-/Sichtbarkeitsentscheidung: Beim ersten Login wird ein
+ * informierender Text mit Entscheidungsmöglichkeit: "Ich will sichtbar sein" oder
+ * "Ich will unsichtbar sein" angezeigt.
+ *
+ * Bei Nutzung dieser Funktion unbedingt die Texte unter locale/de/LC_HELP/visibility_decision.php bzw.
+ * locale/en/LC_HELP/visibility_decision.php an die lokalen Verhältnisse anpassen!
+ */
 if ($GLOBALS['USER_VISIBILITY_CHECK']) 
 {
-	require_once('lib/user_visible.inc.php');
-	first_decision($GLOBALS['user']->id);
+   require_once('lib/user_visible.inc.php');
+   first_decision($GLOBALS['user']->id);
 }
 
 if (!isset($header_controller))
