@@ -511,10 +511,6 @@ if ($db->next_record()) {
 	
 	$str = $FOP_SH_CALL." $tmp_path_export/evalsum".$db->f("eval_id").$auth->auth["uid"].".fo $pdffile";
 	
-	if ($JAVA_ENV_CALL){
-		$str = ". $JAVA_ENV_CALL && " . $str;
-	}
-	
 	$err = exec($str);
 	
 	if (file_exists($pdffile) && filesize($pdffile)) {

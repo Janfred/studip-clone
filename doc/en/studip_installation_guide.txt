@@ -155,8 +155,8 @@ use to turn it on or off. Normally you can leave most of the settings like
 they are.
 
 Only following options are important:
-- If you want to use the export module, the values $FOP_SH_CALL and
-  $JAVA_ENV_CALL must be set
+- If you want to use the export module, the value $FOP_SH_CALL 
+  must be set
 - If you want to use the Ilias connect module, $ABSOLUTE_PATH_ILIAS must 
   contain the absolute path (URL) to you Ilias installation
 - If you want to use the module SRI-interface (external pages), you must 
@@ -397,9 +397,7 @@ For the export as PDF the Objects Formatting processor (FOP) of the Apache
 XML Projekt is necessary. (http://xml.apache.org/fop/download.html)
 FOP is programmed in Java and an executable JRE is needed therefore.
 $FOP_SH_CALL must contain the complete path to the FOP starting-script. 
-It might be necessary to include the path to a script which sets the Java 
-environment variables in $JAVA_ENV_CALL (/etc/profile.d/alljava.sh for SuSE
-Distributions).
+
 
 Chat-module:
 The Chat module requires the PHP modules sysvshm and sysvsem to be installed. 
