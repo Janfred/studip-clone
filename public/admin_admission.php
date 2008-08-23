@@ -1312,7 +1312,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 					<font size=-1><b><?=_("verbindliche Anmeldung:")?> </b></font><br />
           <? if(! LockRules::Check($seminar_id, 'admission_binding')) : ?>
 					<font size=-1><?=_("Bitte aktivieren Sie diese Einstellung, wenn die Anmeldung f&uuml;r Veranstaltungen verbindlich erfolgen soll:")?></font><br />
-					<font size=-1 color="red"><b><?=_("Achtung:")?></b></font>&nbsp;<font size=-1><?=_("Verwenden Sie diese Option nur bei entsprechenden Bedarf, etwa nach erfolgter Teilnehmerauswahl durch Losen!")?></font><br /><br />
+					<font size=-1 color="red"><b><?=_("Achtung:")?></b></font>&nbsp;<font size=-1><?=_("Verwenden Sie diese Option nur bei entsprechendem Bedarf, etwa nach erfolgter Teilnehmerauswahl durch Losen!")?></font><br /><br />
 					<font size=-1><input type="CHECKBOX" name="admission_binding" <? if ($admin_admission_data["admission_binding"]) echo "checked"; ?> /><?=_("Anmeldung ist <u>verbindlich</u>. (Teilnehmer k&ouml;nnen sich nicht austragen.)")?></font>
           <? else :?>
             <font size=-1>
