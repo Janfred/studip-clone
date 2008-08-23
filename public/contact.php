@@ -235,7 +235,7 @@ if (($contact["view"])=="gruppen") {
 			$color = "";
 			$maillink ="";
 		}
-		echo "<td nowrap ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
+		echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
 		."<a href=\"$PHP_SELF?view=$view&filter=".$db->f("statusgruppe_id")."\"><font size=\"2\" $color>".htmlready($db->f("name"))."</font></a>$maillink"
 		."&nbsp; </td>";
 		if ($filter==$db->f("statusgruppe_id")) {
