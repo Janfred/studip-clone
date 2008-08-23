@@ -54,16 +54,21 @@ class SessionDecoder implements ArrayAccess, Countable, Iterator {
 		$this->decode($encoded_session_string);
 	}
 
-	/**
-	 * pass an encoded session string to fill the object
+ 	/**
+ 	 * pass an encoded session string to fill the object
 	 *
 	 * @param string $encoded_session_string
 	 * @return int number of identified variables
 	 */
 	public function decode($encoded_session_string){
 		$this->encoded_session = $this->sessionRealDecode($encoded_session_string);
-		$this->var_names = array_keys($this->encoded_session);
+		if(is_array($this->encoded_session)) {
+			$this->var_names = array_keys($this->encoded_session);
+		} else {
+			$this->encoded_session = array(); 
+		}
 		$this->decoded_session = array();
+		
 		return count($this->encoded_session);
 	}
 
