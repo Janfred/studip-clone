@@ -923,7 +923,7 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 							if ($proxyurl) {
 								$proxyurl = substr($proxyurl,1);
 							} else {
-								$proxyurl = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . 'flash_proxy.php?url=';
+								$proxyurl = $GLOBALS['ABSOLUTE_URI_STUDIP'] . 'flash_proxy.php?url=';
 							}
 							$flash_url = $proxyurl . urlencode(idna_link($params[4]));
 						} else {
