@@ -53,14 +53,13 @@ require_once('lib/classes/UserDomain.php'); // Nutzerdomänen
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-
 ?>
 	<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 
 	<script type="text/javascript" language="javascript">
 	<!--
 	function doCrypt() {
-		if (document.Formular.read_level[<?=(get_config('ENABLE_FREE_ACCESS') ? 2 : 1)?>].checked || document.Formular.write_level[1].checked){
+		if ($(document.Formular).getInputs('radio', 'read_level').find(function(radio){return radio.checked;}).value == 2 || $(document.Formular).getInputs('radio', 'write_level').find(function(radio){return radio.checked;}).value == 2){
 			if(checkpasswordenabled() && checkpassword() && checkpassword2()){
 				document.Formular.hashpass.value = MD5(document.Formular.sem_passwd.value);
 				document.Formular.hashpass2.value = MD5(document.Formular.sem_passwd2.value);
@@ -105,7 +104,6 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 	}
 	// -->
 	</script>
-
 <?
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenZugangsberechtigungen";
