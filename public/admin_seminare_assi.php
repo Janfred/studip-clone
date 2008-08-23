@@ -3562,6 +3562,7 @@ if ($level == 5)
 								<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
 									<? echo tooltip(_("Bitte geben Sie hier ein Passwort für die Veranstaltung sowie dasselbe Passwort nochmal zur Bestätigung ein. Dieses wird später von den Teilnehmenden benötigt, um die Veranstaltung abonnieren zu können."), TRUE, TRUE) ?>
 								>
+                                <font size="+2" color="red">*</font>
 							</td>
 						</tr>
 						<?
