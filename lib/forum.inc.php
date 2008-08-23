@@ -1429,7 +1429,13 @@ if ($forum["view"]=="flatfolder")
 	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/cont_folder.gif\" align=\"baseline\"><font size=\"-1\"><b> Thema:</b> ".mila(ForumGetName($forum["flatfolder"]),40)." / ";
 
 if ($forum["search"]!="" && $forum["view"]=="search") {
-	echo "<font size=\"-1\">&nbsp;". _('Suchbegriff:') ." '".$forum['searchstring']."' ";
+	echo "<font size=\"-1\">&nbsp;". _('Suchbegriff:');
+	if($forum['searchstring']){
+		echo " '".$forum['searchstring']."' ";
+	}else{
+		echo ' '. _('alles'). ' ';
+	}
+	
 	if(count($forum['searchauthor']) > 0) {
 		function _quote($x) { return "'$x'"; }
 		$authors = array_map(_quote, $forum['searchauthor']);

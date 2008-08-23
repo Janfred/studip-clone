@@ -192,7 +192,7 @@ include 'lib/include/links_openobject.inc.php';
 // Behandlung der Suche
 //////////////////////////////////////////////////////////////////////////////////
 
-if ($_REQUEST['suchbegriff'] != "") {
+if ($_REQUEST['suchbegriff'] != "" || $_REQUEST['author'] != "") {
 	$forum['searchstring'] = $_REQUEST['suchbegriff'];
 
 	$search_words = array();
