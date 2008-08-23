@@ -462,7 +462,7 @@ div.autocomplete .informal .seminar_id {
 
 div.clear {
 	clear: both;
-	visibility: none;
+	visibility: hidden;
 }
 
 #tabs {
