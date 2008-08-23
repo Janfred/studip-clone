@@ -106,6 +106,9 @@ if ($perm->have_studip_perm("admin", $inst_id)) {
 
 if (!in_array($sortby, $accepted_columns)) {
   $sortby = "Nachname";
+  $statusgruppe_user_sortby = "position";
+} else {
+  $statusgruppe_user_sortby = $sortby;
 }
 
 if ($direction == "ASC") {
@@ -157,14 +160,11 @@ function table_head ($structure, $css_switcher) {
 	$begin = TRUE;
 	foreach ($structure as $key => $field) {
 		if ($begin) {
-			printf ("<td class=\"%s\" width=\"%s\" valign=\"baseline\">",
-					$css_switcher->getHeaderClass(), $field["width"]);
-			echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"25\" align=\"bottom\">&nbsp;";
+			printf ("<th width=\"%s\">", $field["width"]);
 			$begin = FALSE;
 		}
 		else
-			printf ("<td class=\"%s\" width=\"%s\" align=\"left\" valign=\"bottom\" ".($key == 'nachricht' ? 'colspan="2"':'').">",
-				$css_switcher->getHeaderClass(), $field["width"]);
+			printf ("<th width=\"%s\" align=\"left\" valign=\"bottom\" ".($key == 'nachricht' ? 'colspan="3"':'').">", $field["width"]);
 
 		if ($field["link"]) {
 			printf("<a href=\"%s\">", URLHelper::getLink($field["link"]));
@@ -172,7 +172,7 @@ function table_head ($structure, $css_switcher) {
 			echo "</a>\n";
 		}
 		else
-			printf("<font size=\"-1\"><b>%s&nbsp;</b></font>\n", $field["name"]);
+			printf("<font size=\"-1\" color=\"black\"><b>%s&nbsp;</b></font>\n", $field["name"]);
 		echo "</td>\n";
 	}
 	echo "</tr>\n";
@@ -330,11 +330,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 }
 
 ?>
-<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-	<tr>
-		<td class="blank" colspan=2>&nbsp;
-		</td>
-	</tr>
+<table class="blank" border="0" align="center" cellspacing="0" cellpadding="0" width="100%">
 
 <?
 if (isset($nothing)) {  // abbrechen im Detailansicht angeklickt? => zu Namenübersicht wechseln
@@ -487,7 +483,7 @@ if (!isset($details) || isset($set)) {
 
 ?>
 	<tr>
-		<td class="blank" colspan=2>
+		<td class="blank" colspan="2">
 <?
 
 
@@ -515,6 +511,7 @@ if ($inst_id != "" && $inst_id !="0") {
 	else
 		$count = CountMembersStatusgruppen($auswahl);
 
+	/*
 	if ($admin_view) {
 		printf("<blockquote>" . _("Auf dieser Seite k&ouml;nnen Sie Personen der Einrichtung %s zuordnen."), "<b>" . htmlReady($inst_name) . "</b>");
 		echo "<br />" . _("Um weitere Personen als Mitarbeiter hinzuzuf&uuml;gen, benutzen Sie die Suche.");
@@ -533,6 +530,9 @@ if ($inst_id != "" && $inst_id !="0") {
 			die;
 		}
 	}
+	*/
+
+	echo '</td></tr>';
 
 	if ($admin_view) {
 		if (isset($search_exp) && strlen($search_exp) > 2) {
@@ -644,9 +644,16 @@ if ($inst_id != "" && $inst_id !="0") {
 
 				</table>
 			</td>
+			<td>
+				<!-- Infobox -->
+				<?
+					$template = $GLOBALS['template_factory']->open('infobox/infobox_inst_admin');
+
+					$template->set_attribute('inst_name', $inst_name);
+					echo $template->render();
+				?>
+			</td>
 		</tr>
-	</table>
-	<br>
 	<?
 	}
 
@@ -790,6 +797,7 @@ $table_structure = array_merge((array)$table_structure, (array)$nachricht);
 
 $colspan = sizeof($table_structure)+1;
 
+echo '<table border="0" width="100%" cellpadding="4" cellspacing="0" align="center">', "\n";
 if ($sms_msg) {
 	echo "<tr><td class=\"blank\">";
 	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"5\"></td></tr>\n";
@@ -859,7 +867,7 @@ if ($show == "funktion") {
 	$all_statusgruppen = $groups;
 	if ($all_statusgruppen) {
 		function display_recursive($roles, $level = 0, $title = '') {
-			global $db_institut_members, $sortby, $direction, $extend, $auswahl;
+			global $db_institut_members, $statusgruppe_user_sortby, $direction, $extend, $auswahl;
 			global $_fullname_sql, $css_switcher, $table_structure, $colspan;
 			foreach ($roles as $role_id => $role) {
 				if ($title == '') {
@@ -875,7 +883,7 @@ if ($show == "funktion") {
 							user_info info USING(user_id) LEFT JOIN user_inst ui USING(user_id)
 							WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
 							AND statusgruppe_id = '%s' ORDER BY %s %s", $auswahl, $role_id,
-							$sortby, $direction);
+							$statusgruppe_user_sortby, $direction);
 				else
 					$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, user_inst.raum, user_inst.sprechzeiten, user_inst.Telefon, inst_perms,
 							Email, auth_user_md5.user_id, username, statusgruppe_id
@@ -883,7 +891,7 @@ if ($show == "funktion") {
 							LEFT JOIN user_info USING(user_id) LEFT JOIN user_inst USING(user_id)
 							WHERE Institut_id = '%s' AND statusgruppe_id = '%s'
 							AND inst_perms != 'user' ORDER BY %s %s", $auswahl, $role_id,
-							$sortby, $direction);
+							$statusgruppe_user_sortby, $direction);
 
 				$db_institut_members->query($query);
 				if ($db_institut_members->num_rows() > 0) {
