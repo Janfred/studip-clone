@@ -72,7 +72,7 @@ global
   $UPLOAD_TYPES,
   $username_prefix,
   $xml_filename,
-  $xslt_filename;
+  $xslt_filename_default;
 
 /*basic settings for Stud.IP
 ----------------------------------------------------------------
