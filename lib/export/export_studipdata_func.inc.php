@@ -587,23 +587,9 @@ function export_pers($inst_id)
 
 	$db=new DB_Seminar;
 
-	switch ($filter)
-	{
-		case "no":
-			$order = "statusgruppen.position";
-		break;
-		case "status":
-			$order = "statusgruppen.position";
-			$group = "FIRSTGROUP";
-			$group_tab_zelle = "name";
-			$do_group = true;
-		break;
-		default:
-			$order = "statusgruppen.position";
-			$group = "FIRSTGROUP";
-			$group_tab_zelle = "name";
-			$do_group = true;
-	}
+	$group = "FIRSTGROUP";
+	$group_tab_zelle = "name";
+	$do_group = true;
 
 	$data_object = xml_open_tag( $xml_groupnames_person["group"] );
 
@@ -616,7 +602,7 @@ function export_pers($inst_id)
 		LEFT JOIN auth_user_md5 aum ON (ui.user_id = aum.user_id)
 		LEFT JOIN user_info info ON (ui.user_id = info.user_id)
 		WHERE range_id = '" . $inst_id . "'
-		ORDER BY " . $order);
+		ORDER BY statusgruppen.position, sgu.position ");
 
 	$data_found = false;
 
