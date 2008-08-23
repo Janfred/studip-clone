@@ -49,8 +49,14 @@ require_once('lib/export/export_tmp_gc.inc.php');
 
 // Start of Output
 
+$no_permission = YES;
 $eval = new Evaluation($eval_id);
 $no_permissons = EvaluationObjectDB::getEvalUserRangesWithNoPermission ($eval);
+if ($no_permissons == YES) {
+  // Evaluation existiert nicht...
+  echo "&nbsp;"._("Evaluation NICHT vorhanden oder keine Rechte vorhanden!");
+  die();
+}
 
 // Gehoert die benutzende Person zum Seminar-Stab (Dozenten, Tutoren) oder ist es ein ROOT?
 $staff_member = $perm->have_studip_perm("tutor",$SessSemName[1]);

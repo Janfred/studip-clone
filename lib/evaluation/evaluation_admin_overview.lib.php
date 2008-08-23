@@ -319,7 +319,14 @@ class EvalOverview {
       : EvalCommon::createSubmitButton ("zuruecksetzen", _("Evaluation zurücksetzen"), "restart_confirmed_button");
      $content[4] = EvalCommon::createSubmitButton ("export", _("Evaluation exportieren"), "export_request_button");
      $content[5] = EvalCommon::createSubmitButton ("loeschen", _("Evaluation löschen"), "delete_request_button");
-     $content[6] = EvalCommon::createSubmitButton ("auswertung", _("Auswertung"), "export_gfx_request_button");
+     //$content[6] = EvalCommon::createSubmitButton ("auswertung", _("Auswertung"), "export_gfx_request_button");
+     $content[6] = new HTML( "a" );
+     $content[6]->addAttr( "href", "eval_summary.php?eval_id=".$evalID );
+       $img = new HTMLEmpty( "img" );
+       $img->addString( makeButton( "auswertung", "src" ).tooltip(_("Auswertung")) );
+       $img->addAttr( "border", "0" );
+       $img->addAttr( "align", "middle" );
+     $content[6]->addContent( $img );
     }
      break;
 
@@ -335,7 +342,14 @@ class EvalOverview {
       : EvalCommon::createSubmitButton ("zuruecksetzen", _("Evaluation zurücksetzen"), "restart_confirmed_button");
      $content[4] = EvalCommon::createSubmitButton ("export", _("Evaluation exportieren"), "export_request_button");
      $content[5] = EvalCommon::createSubmitButton ("loeschen", _("Evaluation löschen"), "delete_request_button");
-     $content[6] = EvalCommon::createSubmitButton ("auswertung", _("Auswertung"), "export_gfx_request_button");
+     //$content[6] = EvalCommon::createSubmitButton ("auswertung", _("Auswertung"), "export_gfx_request_button");
+     $content[6] = new HTML( "a" );
+     $content[6]->addAttr( "href", "eval_summary.php?eval_id=".$evalID );
+       $img = new HTMLEmpty( "img" );
+       $img->addString( makeButton( "auswertung", "src" ).tooltip(_("Auswertung")) );
+       $img->addAttr( "border", "0" );
+       $img->addAttr( "align", "middle" );
+     $content[6]->addContent( $img );
     }
      break;
       }
@@ -958,7 +972,7 @@ class EvalOverview {
          return $safeguard;
 
 
-	case "export_gfx_request":
+/*	case "export_gfx_request":
             $haveNoPerm = YES;
             $eval       = new Evaluation ($evalID, NULL, EVAL_LOAD_NO_CHILDREN);
             $haveNoPerm = EvaluationObjectDB::getEvalUserRangesWithNoPermission ($eval);
@@ -972,6 +986,7 @@ class EvalOverview {
             echo "</script>";
 
             return "";
+*/  // obsolet, ersetzt durch direkten Link
 
          case "export_request":
             /* Check permissions ------------------------------------------- */
