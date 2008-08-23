@@ -377,17 +377,17 @@ function createInfoxboxArray($mode){
 			array  ("kategorie"  => "Information:",
 					"eintrag" =>	array (
 							array (	"icon" => "ausruf_small.gif",
-									"text"  => _("Erstellen sie ihre Veranstaltungsübersicht und bearbeiten sie fehlende oder falsche Einträge.")
+									"text"  => _("Erstellen Sie ihre Veranstaltungsübersicht und bearbeiten Sie fehlende oder falsche Einträge.")
 									),
 									)
 			),
 			array  ("kategorie" => "Aktionen:",
 					"eintrag" => array(
 						array (	"icon" => "trash.gif",
-								"text"  => _("Löschen sie nicht benötigte Veranstallungen mit Hilfe der Markierungsboxen und/oder fügen sie  beliebig viele neue Veranstallungen hinzu.")
+								"text"  => _("Entfernen Sie nicht benötigte Veranstaltungen mit Hilfe der Markierungsboxen und/oder fügen Sie  beliebig viele neue Veranstallungen hinzu.")
 								),
 						array (	"icon" => "icon-disc.gif",
-								"text"  => _("Nachdem alle Informationen korrekt angezeigt werden, erstellen sie ihre Veranstaltungsübersicht mit Hilfe des Buttons 'speichern'.")
+								"text"  => _("Nachdem alle Informationen korrekt angezeigt werden, erstellen Sie Ihre Veranstaltungsübersicht mit Hilfe des Buttons 'speichern'.")
 								),
 								)
 			),
@@ -398,7 +398,7 @@ function createInfoxboxArray($mode){
 			array  ("kategorie"  => "Information:",
 					"eintrag" =>	array (
 							array (	"icon" => "icon-posting.gif",
-									"text"  => _("Über den/die Link(s) können sie sich ihre Veranstaltungsübersicht anzeigen lassen.")
+									"text"  => _("Über den/die Link(s) können Sie sich Ihre Veranstaltungsübersicht anzeigen lassen.")
 									),
 									)
 			)
