@@ -96,6 +96,22 @@ if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 	checkObject();
 	checkObjectModule("participants");
 
+	// participants shall not see participant list in AUTO_INSERT_SEM seminars
+	if (is_array($GLOBALS['AUTO_INSERT_SEM']) && in_array($SessSemName[1], $GLOBALS['AUTO_INSERT_SEM']) && !$rechte) {
+		$msg="error§"._("Sie haben keine Berechtigung, die Teilnehmerliste abzurufen."); ?>
+		<table class="blank" width="100%"><tr>
+		<td class="blank" width="100%" colspan="2">&nbsp;
+			<?
+			if ($msg) parse_msg($msg);
+			?>
+		</td>
+		</tr></table>
+		<?
+		include ('lib/include/html_end.inc.php');
+		page_close();
+		die();
+	}
+
 } else {
 	if ($cmd == "send_sms_to_all" && $who != "accepted") {
 		$sess->register("sms_data");
