@@ -612,6 +612,7 @@ if ($form == 5) {
 		$sem_create_data["admission_enable_quota"] = (int)($_REQUEST["admission_enable_quota"]);
 		if(!$sem_create_data["admission_enable_quota"]){
 			$sem_create_data["sem_admission_date"] = -1;
+			$sem_create_data["sem_admission_ratios_changed"] = false;
 		}
 
 	}
@@ -724,10 +725,10 @@ if ($jump_back_x) {
 }
 
 //not pressed any button? Send user to next page and checks...
-if ((!$jump_back_x) && (!$jump_next_x) && (!$add_doz) && (!$add_tut) && (!$delete_doz) && (!$delete_tut) && (!$add_turnus_field_x)
+if ( (!$jump_back_x) && (!$jump_next_x) && (!$add_doz) && (!$add_tut) && (!$delete_doz) && (!$delete_tut) && (!$add_turnus_field_x)
 	&& (!$delete_turnus_field_x) && (!$send_doz_x) && (!$reset_search_x) && (!$add_term_field_x) && (!$delete_term_field_x)
 	&& (!$add_studg_x) && (!$delete_studg_x) && (!$search_doz) && (!$search_tut) && (!$search_room_x) && (!$reset_room_search_x)
-	&& (!$send_room_x) && (!$search_properties_x) && (!$send_room_type_x) && (!$reset_room_type_x) 	&& (!$reset_resource_id_x) && (!$reset_admission_time_x))
+	&& (!$send_room_x) && (!$search_properties_x) && (!$send_room_type_x) && (!$reset_room_type_x) 	&& (!$reset_resource_id_x) && (!$reset_admission_time_x) && !$toggle_admission_quota_x)
 	$jump_next_x=TRUE;
 
 
@@ -1189,6 +1190,9 @@ if(isset($_REQUEST['reset_admission_time_x'])) {
 	$level = 5;
 }
 
+if(isset($_REQUEST['toggle_admission_quota_x'])) {
+	$level = 5;
+}
 //Studiengang zur Begrenzung loeschen
 if ($sem_delete_studg) {
 	unset($sem_create_data["sem_studg"][$sem_delete_studg]);
@@ -1196,30 +1200,44 @@ if ($sem_delete_studg) {
 }
 
 //Prozentangabe checken/berechnen wenn neuer Studiengang, einer geloescht oder Seite abgeschickt
-if ((($form == 5) && ($jump_next_x)) || ($add_studg_x) || ($sem_delete_studg)) {
+if ((($form == 5) && ($jump_next_x)) || ($add_studg_x) || ($sem_delete_studg) || $toggle_admission_quota_x) {
 	if ($sem_create_data["sem_admission"] && $sem_create_data["admission_enable_quota"]) {
-		if ((!$sem_create_data["sem_admission_ratios_changed"]) && (!$sem_add_ratio) && (!$jump_next) && (!$jump_back)) {//User hat nichts veraendert oder neuen Studiengang mit Wert geschickt, wir koennen automatisch rechnen
+		if (!$sem_create_data["sem_admission_ratios_changed"] && (($add_studg_x && !$sem_add_ratio && $sem_add_studg) || $sem_delete_studg || $toggle_admission_quota_x)) {//User hat nichts veraendert und neuen Studiengang ohne Wert geschickt oder studiengang gelöscht, wir versuchen automatisch zu rechnen
 			if (is_array($sem_create_data["sem_studg"])){
+				$ratio = round(100 / (sizeof ($sem_create_data["sem_studg"]) ));
 				foreach ($sem_create_data["sem_studg"] as $key=>$val){
-					$sem_create_data["sem_studg"][$key]["ratio"]=round(100 / (sizeof ($sem_create_data["sem_studg"]) ));
+					$sem_create_data["sem_studg"][$key]["ratio"] = $ratio;
+					$cnt += $ratio;
+				}
+				if($cnt < 100){ //letzten Studiengang auffüllen, wg. evtl. Rundungsfehler
+					$sem_create_data["sem_studg"][$key]["ratio"] = (100 - $cnt + $ratio);
 				}
 			}
-		} else {
-			$cnt = 0;
-			if (is_array($sem_create_data["sem_studg"]) && count($sem_create_data["sem_studg"]) > 1){
+		}
+
+		$cnt = 0;
+		if (is_array($sem_create_data["sem_studg"])){
+			if(count($sem_create_data["sem_studg"]) > 1){
 				foreach ($sem_create_data["sem_studg"] as $key => $val){
 					$cnt += $val["ratio"];
 				}
-				if ($cnt <= 100){
+				if ($cnt <= 100 && $sem_create_data["sem_admission_ratios_changed"] && $add_studg_x && $sem_add_studg && !$sem_add_ratio){
 					$sem_create_data["sem_studg"][$key]["ratio"] = (100 - $cnt + $val["ratio"]);
-				} else {
-					$errormsg.= "error§". _("Die Werte der einzelnen Kontigente &uuml;bersteigen 100%. Bitte &auml;ndern Sie die Kontigente!") . "§";
-					$level=5;
+					$cnt = 100;
 				}
-			} else {
+			} elseif ($sem_create_data["sem_admission_ratios_changed"]) {
 				reset($sem_create_data["sem_studg"]);
 				$sem_create_data["sem_studg"][key($sem_create_data["sem_studg"])]["ratio"] = 100;
+				$cnt = 100;
 			}
+		}
+		if($cnt > 100){
+			$errormsg.= "error§". _("Die Summe der Kontigente übersteigt 100%. Bitte ändern Sie die Kontigente!") . "§";
+			$level=5;
+		} 
+		if($cnt < 100){
+			$errormsg.= "error§". _("Die Summe der Kontigente liegt unter 100%. Bitte ändern Sie die Kontigente!") . "§";
+			$level=5;
 		}
 	}
 }
