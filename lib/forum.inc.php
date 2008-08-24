@@ -1442,9 +1442,12 @@ if ($forum["search"]!="" && $forum["view"]=="search") {
 		printf("%s %s ", _('von'), implode(' oder ', $authors));
 	}
  	echo "/ ". _('Treffer: ').$forum["forumsum"]."</font>";
-} else
+} else {
 	echo "<font size=\"-1\">&nbsp;Postings: ".$forum["forumsum"]."</font>";
-echo "</td><td class=\"steelgraudunkel\" align=\"center\" width=\"10%\">";
+}
+echo "</td>";
+
+echo "<td class=\"steelgraudunkel\" align=\"center\" width=\"10%\">";
 if ($forum["flatallopen"]=="TRUE")
 	echo "<a href=\"".URLHelper::getLink(
 		"?flatviewstartposting=".$forum["flatviewstartposting"]."&flatallopen=FALSE")."\"><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0 height='10' align=middle><img src='".$GLOBALS['ASSETS_URL']."images/close_all.gif' border=0 " . tooltip(_("Alle zuklappen")) . " align=middle><img src='".$GLOBALS['ASSETS_URL']."images/forumleer.gif' border=0></a>";
@@ -1455,6 +1458,18 @@ else
 echo "</td><td class=\"steelgraudunkel\" align=\"right\" width=\"45%\">";
 echo forum_print_navi($forum)."&nbsp;&nbsp;&nbsp;".forum_get_index($forumposting)."&nbsp;&nbsp;&nbsp;";
 echo "</td></tr></table>";
+
+// Antworten-Knopf ganz oben in der Flatview-Ansicht
+if ($forum['view']=='flatfolder') {
+	echo '<table cellpadding="0" cellspacing="0" border="0" width="100%">';
+	echo '<tr>';
+	echo '<td class="blank" align="center" style="padding-top:12px; padding-bottom:5px;">';
+	echo "Zu diesem Thema <a href=\"".URLHelper::getLink("?answer_id=".$folder_id."&flatviewstartposting=0&sort=age#anker")."\">&nbsp;" . makeButton("antworten", "img") . "</a>";
+	echo '</td>';
+	echo '</tr>';
+	echo '</table>';
+}
+
 
 /////////////////// Konstanten für das gerade auszugebene Posting und Posting ausgeben
 
