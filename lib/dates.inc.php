@@ -251,21 +251,23 @@ function veranstaltung_beginn_from_metadata($reg_irreg, $sem_begin, $start_woche
     $semester = SemesterData::GetInstance()->getSemesterDataByDate($sem_begin);
 	$dow = date("w", $semester['vorles_beginn']);
     if ($dow <= 5)
-      $corr = ($dow -1) * -1;     
+		$corr = ($dow -1) * -1;     
     elseif ($dow == 6)
-      $corr = 2;
+		$corr = 2;
     elseif ($dow == 0)
-      $corr = 1;
+		$corr = 1;
     else
-      $corr = 0;
-
-	foreach ($turnus_data as $key => $val) {
-		$start_time = mktime ((int)$val['start_stunde'], (int)$val['start_minute'], 0, date("n", $semester['vorles_beginn']), (date("j", $semester['vorles_beginn'])+$corr) + ($val['day'] -1) + ($start_woche * 7), date("Y", $semester['vorles_beginn']));
-		if (($start_time < $ret_time) || ($ret_time == 0)) {
-			$ret_time = $start_time;
+	$corr = 0;
+	
+	if(is_array($turnus_data)){
+		foreach ($turnus_data as $key => $val) {
+			$start_time = mktime ((int)$val['start_stunde'], (int)$val['start_minute'], 0, date("n", $semester['vorles_beginn']), (date("j", $semester['vorles_beginn'])+$corr) + ($val['day'] -1) + ($start_woche * 7), date("Y", $semester['vorles_beginn']));
+			if (($start_time < $ret_time) || ($ret_time == 0)) {
+				$ret_time = $start_time;
+			}
 		}
 	}
-
+	
 	return $ret_time;
 }
 
