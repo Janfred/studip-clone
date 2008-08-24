@@ -659,7 +659,7 @@ if ($form == 5) {
 		if ($sem_create_data["sem_admission_ratios_changed"]) {
 			$sem_create_data["sem_studg"]='';
 			foreach ($sem_studg_id as $key=>$val)
-				$sem_create_data["sem_studg"][$val]=array("name"=>$sem_studg_name[$key], "ratio"=>$sem_studg_ratio[$key]);
+				$sem_create_data["sem_studg"][$val]=array("name"=>$sem_studg_name[$key], "ratio"=>(int)$sem_studg_ratio[$key]);
 		}
 	}
 
@@ -1177,9 +1177,9 @@ if ($add_studg_x) {
 	if ($sem_add_studg && $sem_add_studg != 'all') {
 		$db->query("SELECT name FROM studiengaenge WHERE studiengang_id='".$sem_add_studg."' ");
 		$db->next_record();
-		$sem_create_data["sem_studg"][$sem_add_studg]=array("name"=>$db->f("name"), "ratio"=>$sem_add_ratio);
+		$sem_create_data["sem_studg"][$sem_add_studg]=array("name"=>$db->f("name"), "ratio"=>(int)$sem_add_ratio);
 	} else if ($sem_add_studg == 'all'){
-		$sem_create_data["sem_studg"][$sem_add_studg]=array("name"=>_("Alle Studiengänge"), "ratio"=>$sem_add_ratio);
+		$sem_create_data["sem_studg"][$sem_add_studg]=array("name"=>_("Alle Studiengänge"), "ratio"=>(int)$sem_add_ratio);
 	}
 	$level=5;
 }
@@ -1197,6 +1197,9 @@ if(isset($_REQUEST['toggle_admission_quota_x'])) {
 if ($sem_delete_studg) {
 	unset($sem_create_data["sem_studg"][$sem_delete_studg]);
 	$level=5;
+	if(!count($sem_create_data["sem_studg"])){
+		 $sem_create_data["sem_studg"]['all'] = array('name' => _("Alle Studiengänge"), 'ratio' => 100);
+	}
 }
 
 //Prozentangabe checken/berechnen wenn neuer Studiengang, einer geloescht oder Seite abgeschickt
@@ -1214,9 +1217,8 @@ if ((($form == 5) && ($jump_next_x)) || ($add_studg_x) || ($sem_delete_studg) ||
 				}
 			}
 		}
-
-		$cnt = 0;
 		if (is_array($sem_create_data["sem_studg"])){
+			$cnt = 0;
 			if(count($sem_create_data["sem_studg"]) > 1){
 				foreach ($sem_create_data["sem_studg"] as $key => $val){
 					$cnt += $val["ratio"];
@@ -1225,10 +1227,9 @@ if ((($form == 5) && ($jump_next_x)) || ($add_studg_x) || ($sem_delete_studg) ||
 					$sem_create_data["sem_studg"][$key]["ratio"] = (100 - $cnt + $val["ratio"]);
 					$cnt = 100;
 				}
-			} elseif ($sem_create_data["sem_admission_ratios_changed"]) {
+			} else {
 				reset($sem_create_data["sem_studg"]);
-				$sem_create_data["sem_studg"][key($sem_create_data["sem_studg"])]["ratio"] = 100;
-				$cnt = 100;
+				$cnt = $sem_create_data["sem_studg"][key($sem_create_data["sem_studg"])]["ratio"];
 			}
 		}
 		if($cnt > 100){
