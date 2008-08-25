@@ -153,6 +153,9 @@ $the_tree->showSemTree();
 	<td><span style="font-size:10pt"><?=_("Untertitel:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("sub_title")?></td>
 	</tr>
 	<tr>
+	<td><span style="font-size:10pt"><?=_("Nummer:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("number")?></td>
+	</tr>
+	<tr>
 	<td><span style="font-size:10pt"><?=_("Kommentar:")?></span></td><td style="font-size:10pt"><?=$search_obj->getSearchField("comment")?></td>
 	</tr>
 	<tr>
