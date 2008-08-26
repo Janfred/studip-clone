@@ -607,8 +607,10 @@ if ($view != 'Forum'
 		<? if ($view == 'Daten' || $view == 'Lebenslauf' || $view == 'Studium' || $view == 'userdomains') :
 		$info_text['Studium'] = _("Hier können Sie Angaben &uuml;ber ihre Studienkarriere machen.");
 		$info_text['userdomains'] = _("Hier können Sie die Liste Ihrer Nutzerdomänen einsehen.");
-		$info_text['Daten'] = _("Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern.");
-		$info_text['Lebenslauf'] = _("Hier können Sie Angaben &uuml;ber ihre privaten Kontaktdaten sowie Lebenslauf und Hobbies machen.");
+		$info_text['Daten'] = _("Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern.") . '<br/>' .
+			sprintf(_("Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt werden."), '</font><font color="red" size="+1"><b>*</b></font><font size="-1">');
+		$info_text['Lebenslauf'] = _("Hier können Sie Angaben &uuml;ber ihre privaten Kontaktdaten sowie Lebenslauf und Hobbies machen.") . '<br/>' .
+			sprintf(_("Alle Angaben die Sie hier machen sind freiwillig!"));
 		?>
 		<tr>
 			<td class="blank"></td>
@@ -674,12 +676,12 @@ if ($view == 'Bild') {
 if ($view == 'Daten') {
 	$cssSw->switchClass();
 	//persönliche Daten...
-	echo '<tr><td align="left" valign="top" class="blank" style="padding-left:20px;">' . _("Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern.");
-	echo '<br /><font size="-1">' . sprintf(_("Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt werden."), '</font><font color="red" size="+1"><b>*</b></font><font size="-1">') . "</font><br /><br />\n";
 	if ($my_about->auth_user['auth_plugin'] != "standard"){
+		echo '<tr><td align="left" valign="top" class="blank" style="padding-left:20px;">';
 		echo '<font size="-1">' . sprintf(_("Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, daher k&ouml;nnen sie einige Felder nicht ver&auml;ndern!"),$my_about->auth_user['auth_plugin']) . "</font>";
+		echo "<br /><br /></td></tr>\n";
 	}
-	echo "<br /><br /></td></tr>\n".'<tr><td class=blank>';
+	echo '<tr><td class=blank>';
 
 	echo '<form action="'. $PHP_SELF. '?cmd=edit_pers&username='. $username. '&view='. $view. '&studipticket=' . get_ticket(). '" method="POST" name="pers"';
 	//Keine JavaScript überprüfung bei adminzugriff
@@ -687,7 +689,6 @@ if ($view == 'Daten') {
 		echo ' onsubmit="return checkdata()" ';
 	}
 	echo '><table align="center" width="99%" class="blank" border="0" cellpadding="2" cellspacing="0">';
-	echo '<tr><td class="printhead" colspan="3" align="center"><b>' . _("Benutzerdaten") . '</b></td></tr>';
 	if ($my_about->check == 'user') {
 		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><b>" . _("Username:") . " </b></td><td class=\"".$cssSw->getClass()."\" colspan=2 width=\"75%\" align=\"left\">&nbsp;";
 		if (($ALLOW_CHANGE_USERNAME && !StudipAuthAbstract::CheckField("auth_user_md5.username",$my_about->auth_user['auth_plugin'])) ) {
@@ -1001,90 +1002,91 @@ if ($view == 'userdomains') {
 
 
 if ($view == 'Karriere') {
-	if ($_REQUEST['subview'] == 'addPersonToRole') {
 
-		$all_rights = false;
-		if ($my_about->auth['username'] != $username) {
-			$db_r = new DB_Seminar();
+	$all_rights = false;
+	if ($my_about->auth['username'] != $username) {
+		$db_r = new DB_Seminar();
 
-			if ($auth->auth['perm'] == "root"){
-				$all_rights = true;
-				$db_r->query("SELECT Institut_id, Name, 1 AS is_fak  FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
-			} elseif ($auth->auth['perm'] == "admin") {
-				$db_r->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN Institute b USING (Institut_id)
-						WHERE a.user_id='$user->id' AND a.inst_perms='admin' ORDER BY is_fak,Name");
-			} else {
-				$db_r->query("SELECT a.Institut_id,Name FROM user_inst a LEFT JOIN Institute b USING (Institut_id) WHERE inst_perms IN('tutor','dozent') AND user_id='$user->id' ORDER BY Name");
-			}
-
-			$inst_rights = array();
-			while ($db_r->next_record()) {
-				if ($auth->auth['perm'] == 'admin' && $db_r->f('is_fak')) {
-					$db_r2 = new DB_Seminar("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db_r->f("Institut_id") . "' AND institut_id!='" .$db_r->f("Institut_id") . "' ORDER BY Name");
-					while ($db_r2->next_record()) {
-						$inst_rights[] = $db_r2->f('Institut_id');
-					}
-				}
-				$inst_rights[] = $db_r->f('Institut_id');
-				$admin_insts[] = $db_r->Record;
-			}
-		} else {
+		if ($auth->auth['perm'] == "root"){
 			$all_rights = true;
+			$db_r->query("SELECT Institut_id, Name, 1 AS is_fak  FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
+		} elseif ($auth->auth['perm'] == "admin") {
+			$db_r->query("SELECT a.Institut_id,Name, IF(b.Institut_id=b.fakultaets_id,1,0) AS is_fak FROM user_inst a LEFT JOIN Institute b USING (Institut_id)
+					WHERE a.user_id='$user->id' AND a.inst_perms='admin' ORDER BY is_fak,Name");
+		} else {
+			$db_r->query("SELECT a.Institut_id,Name FROM user_inst a LEFT JOIN Institute b USING (Institut_id) WHERE inst_perms IN('tutor','dozent') AND user_id='$user->id' ORDER BY Name");
 		}
 
-		$template = $GLOBALS['template_factory']->open('statusgruppen/edit_about_add_person_to_role');
-		$template->set_layout('statusgruppen/layout_edit_about');
-		$template->set_attribute('username', $username);
-		$template->set_attribute('subview_id', $subview_id);
-		$template->set_attribute('user_id', $my_about->auth_user['user_id']);
-		$template->set_attribute('admin_insts', $admin_insts);
-
-		echo $template->render();
-		die;
+		$inst_rights = array();
+		while ($db_r->next_record()) {
+			if ($auth->auth['perm'] == 'admin' && $db_r->f('is_fak')) {
+				$db_r2 = new DB_Seminar("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db_r->f("Institut_id") . "' AND institut_id!='" .$db_r->f("Institut_id") . "' ORDER BY Name");
+				while ($db_r2->next_record()) {
+					$inst_rights[] = $db_r2->f('Institut_id');
+				}
+			}
+			$inst_rights[] = $db_r->f('Institut_id');
+			$admin_insts[] = $db_r->Record;
+		}
 	} else {
+		$all_rights = true;
+	}
 
-		// a group has been chosen to be opened / closed
-		if ($_REQUEST['switch']) {
-			if ($edit_about_data['open'] == $_REQUEST['switch']) {
-				$edit_about_data['open'] = '';
-			} else {
-				$edit_about_data['open'] = $_REQUEST['switch'];
+	foreach ($admin_insts as $data) {
+		if ($data["is_fak"]) {
+			$stmt = DBManager::get()->prepare("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id = ? AND Institut_id != ? ORDER BY Name");
+			if ($stmt->execute(array($data['Institut_id'], $data['Institut_id']))) {
+				foreach ($stmt->fetch(PDO::FETCH_ASSOC) as $name => $sub_data) {
+					$sub_admin_insts[$data['Institut_id']][$name] = $sub_data;
+				}
 			}
 		}
-
-		if ($_REQUEST['open']) {
-			$edit_about_data['open'] = $_REQUEST['open'];
-		}
-
-		echo '<tr><td class=blank>';
-
-		echo '<form action="' . $_SERVER['PHP_SELF'] . '?cmd=edit_leben&username=' . $username . '&view=' . $view . '&studipticket=' . get_ticket() . '" method="POST" name="pers">';
-
-		// get the roles the user is in
-		$institutes = array();
-		foreach ($my_about->user_inst as $inst_id => $details) {
-			$institutes[$inst_id] = $details;
-			$roles = GetAllStatusgruppen($inst_id, $my_about->auth_user['user_id'], true);
-			$institutes[$inst_id]['roles'] = ($roles) ? $roles : array();
-		}
-
-
-		// template for tree-view of roles, layout for infobox-location and content-variables
-		$template = $GLOBALS['template_factory']->open('statusgruppen/roles_edit_about');
-		$template->set_layout('statusgruppen/layout_edit_about');
-		$template->set_attribute('open', $edit_about_data['open']);	// the ids of the currently opened statusgroups
-		$template->set_attribute('messages', $msgs);
-		$template->set_attribute('institutes', $institutes);
-
-		$template->set_attribute('view', $view);
-		$template->set_attribute('username', $username);
-		$template->set_attribute('user_id', $my_about->auth_user['user_id']);
-		$template->set_attribute('allowed_status', $my_about->allowedInstitutePerms());
-		echo $template->render();
-
-		echo '</form>';
-		echo '</td></tr>';
 	}
+
+	// a group has been chosen to be opened / closed
+	if ($_REQUEST['switch']) {
+		if ($edit_about_data['open'] == $_REQUEST['switch']) {
+			$edit_about_data['open'] = '';
+		} else {
+			$edit_about_data['open'] = $_REQUEST['switch'];
+		}
+	}
+
+	if ($_REQUEST['open']) {
+		$edit_about_data['open'] = $_REQUEST['open'];
+	}
+
+	echo '<tr><td class=blank>';
+
+	// get the roles the user is in
+	$institutes = array();
+	foreach ($my_about->user_inst as $inst_id => $details) {
+		$institutes[$inst_id] = $details;
+		$roles = GetAllStatusgruppen($inst_id, $my_about->auth_user['user_id'], true);
+		$institutes[$inst_id]['roles'] = ($roles) ? $roles : array();
+	}
+
+
+	// template for tree-view of roles, layout for infobox-location and content-variables
+	$template = $GLOBALS['template_factory']->open('statusgruppen/roles_edit_about');
+	$template->set_layout('statusgruppen/layout_edit_about');
+	$template->set_attribute('open', $edit_about_data['open']);	// the ids of the currently opened statusgroups
+	$template->set_attribute('messages', $msgs);
+	$template->set_attribute('institutes', $institutes);
+
+	$template->set_attribute('view', $view);
+	$template->set_attribute('username', $username);
+	$template->set_attribute('user_id', $my_about->auth_user['user_id']);
+	$template->set_attribute('allowed_status', $my_about->allowedInstitutePerms());
+
+	// data for edit_about_add_person_to_role
+	$template->set_attribute('subview_id', $subview_id);
+	$template->set_attribute('admin_insts', $admin_insts);
+	$template->set_attribute('sub_admin_insts', $sub_admin_insts);
+
+	echo $template->render();
+
+	echo '</td></tr>';
 }
 
 if ($view == 'Lebenslauf') {
@@ -1094,7 +1096,6 @@ if ($view == 'Lebenslauf') {
 	echo '<form action="' . $_SERVER['PHP_SELF'] . '?cmd=edit_leben&username=' . $username . '&view=' . $view . '&studipticket=' . get_ticket() . '" method="POST" name="pers">';
 	echo '<table align="center" width="99%" align="center" border="0" cellpadding="2" cellspacing="0">' . "\n";
 
-	echo "<tr><td class=\"printhead\" width=\"100%\" colspan=3 align=\"center\"><b>" . _("Freiwillige Angaben") . "</b></td></tr>\n";
 	 $cssSw->switchClass();
 	echo '<tr><td class="'.$cssSw->getClass(). '" width="25%" align="left"><b>' . _("Telefon (privat):") . ' </b></td>';
 	?>

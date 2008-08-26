@@ -1,34 +1,30 @@
 <tr>
+	<td class="steelkante">&nbsp;<b><?=_("Person einer Gruppe zuordnen")?></b></td>
+</tr>
+<tr>
 	<td class="blank" valign="top">
-		<div style="border: 1px solid black; padding-left: 10px; background-image: url('<?=$GLOBALS['ASSETS_URL']?>/images/steel1.jpg');">
-		<form action="<?= URLHelper::getLink('?view=Karriere&subview=AddPersonToRole') ?>" method="post">
-			<center><b><?=_("Person einer Gruppe zuordnen")?></b></center>
+		<div style="padding-left: 10px; background-image: url('<?=$GLOBALS['ASSETS_URL']?>/images/steel1.jpg');">
+		<form action="<?= URLHelper::getLink('?view=Karriere') ?>" method="post">
 			<br/>			
 			<? if (!$subview_id || !($groups = GetAllStatusgruppen($subview_id))) { ?>
 			<?=_("Einrichtung auswählen")?>:<br/>
 			<select name="subview_id">						
 				<option value="NULL"><?=_("-- bitte Einrichtung ausw&auml;hlen --")?></option>
-				<? if (is_array($admin_insts)) foreach ($admin_insts as $data) { ?>
+				<? if (is_array($admin_insts)) foreach ($admin_insts as $data) : ?>
 				<option value="<?=$data['Institut_id']?>" style="<?=($data["is_fak"] ? "font-weight:bold;" : "")?>" <?=($subview_id==$data['Institut_id'])? 'selected="selected"':''?>><?=htmlReady(substr($data["Name"], 0, 70))?></option>
 				<?
-				if ($data["is_fak"]) {
-					$db_r = new DB_Seminar();
-					$db_r->query("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" . $data['Institut_id'] . "' AND institut_id!='" . $data['Institut_id'] . "' ORDER BY Name");
-					while ($db_r->next_record()) {
-						printf("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s </option>\n", ($subview_id == $db_r->f('Institut_id')) ? 'selected="selected"' : '', $db_r->f("Institut_id"), htmlReady(substr($db_r->f("Name"), 0, 70)));
-							}
-						}
-					}
-				?>
+					if ($data["is_fak"]) foreach ($sub_admin_insts as $sub_data) : ?>
+						<option <?= ($subview_id == $sub_data['Institut_id']) ? 'selected="selected"' : '' ?> value="<?= $sub_data['Institut_id'] ?>">&nbsp;&nbsp;&nbsp;&nbsp;<?= htmlReady(substr($sub_data['Name'], 0, 70)) ?></option>
+					<? endforeach;
+				endforeach;
+			?>
 			</select>
 			<br/>
 			<input type="image" <?=makeButton('anzeigen','src')?>>
 			<?
 			} else {
-				$db_r = new DB_Seminar();
-				$db_r->query("SELECT Institut_id, Name FROM Institute WHERE Institut_id='$subview_id'");
-				$db_r->next_record();
-				echo _("Einrichtung") . ':&nbsp;<i>' . $db_r->f('Name') . '</i>';
+				$data = $admin_insts[$subview_id];
+				echo _("Einrichtung") . ':&nbsp;<i>' . $data['Name'] . '</i>';
 			?>
 				<a href="<?= URLHelper::getLink('?view=Daten&subview=AddPersonToRole&username='. $username) ?>">
 					<img src="<?=$GLOBALS['ASSETS_URL']?>/images/rewind.gif" border="0">
@@ -48,9 +44,9 @@
 				<input type="image" <?=makeButton('zuordnen','src')?>>
 			<?
 			}
-			if ($subview_id && !$groups) {
+			if ($subview_id && !$groups) :
 				echo '<br/><font color="red">' . _("In dieser Einrichtung gibt es keine Gruppen!") . '</font>';
-			}
+			endif;
 			?>
 			<input type="hidden" name="view" value="Karriere">
 			<input type="hidden" name="subview" value="addPersonToRole">

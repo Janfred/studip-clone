@@ -31,30 +31,6 @@
           </td>
       </tr>                             
 
-      <tr>
-        <td class="infobox" width="100%" colspan="2">
-          <font size="-1"><b><?=_("Aktionen")?>:</b></font>
-          <br>
-        </td>
-      </tr>
-                	
-	<? if ($GLOBALS['perm']->have_perm('admin')) : ?>
-	<!-- only admins my add persons to roles -->
-	<!-- Aktionen -->
-
-	<tr>
-		<td class="infobox" align="center" width="1%" valign="top">
-			<?= Assets::img('link_intern') ?>
-		</td>
-		<td class="infobox" width="99%" align="left">
-			<font size="-1">
-			<?= sprintf(_("Diese Person einer weiteren Gruppe / Funktion %shinzufügen%s"),
-				'<a href="'. URLHelper::getLink('?view=Karriere&username='. $username .'&subview=addPersonToRole') . '">', '</a>'); ?>
-			</font>
-		</td>
-	</tr>
-	<? endif; ?>
-
     </table>
     </td>
   </tr>

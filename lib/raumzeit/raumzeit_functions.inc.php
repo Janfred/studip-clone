@@ -301,44 +301,6 @@ function raumzeit_parse_messages($msgs) {
 	return $meldungen;
 }
 
-function raumzeit_get_semester_chooser(&$sem, &$semester, $filter) {
-	$all_semester = $semester->getAllSemesterData();
-	$passed = false;
-	$semester_chooser['all'] = _("Alle Semester");
-	foreach ($all_semester as $val) {
-		if ($sem->getStartSemester() <= $val['vorles_beginn']) $passed = true;
-		if ($passed && ($sem->getEndSemesterVorlesEnde() >= $val['vorles_ende'])) {
-			$semester_chooser[$val['beginn']] = $val['name'];
-			if ($GLOBALS['raumzeitFilter'] != ($val['beginn'])) {
-			} else {
-				$selected = $val['beginn']; //hä? 
-			}
-		}
-	}
-
-	$selected = $filter;
-	
-	$info_zw = array();
-	$info_zw['kategorie'] = _("Semesterauswahl:");
-
-	foreach ($semester_chooser as $key => $val) {
-		if ($selected == $key) {
-			$info_zw['eintrag'][] = array(
-					'icon' => 'forumrot.gif',
-					'text' => '<a href="'.$GLOBALS['PHP_SELF'].'?cmd=applyFilter&newFilter='.$key.'">'.$val.'</a>'
-					);
-		} else {
-			$info_zw['eintrag'][] = array(
-					'icon' => 'forumgrau.gif',
-					'text' => '<a href="'.$GLOBALS['PHP_SELF'].'?cmd=applyFilter&newFilter='.$key.'">'.$val.'</a>'
-					);
-		}
-	}
-
-	return $info_zw;
-}
-
-
 function raumzeit_get_semesters(&$sem, &$semester, $filter) {
 	// this function works like raumzeit_get_semester_chooser() but it
 	// returns a data structure fpr a selectionlist template instead of html code

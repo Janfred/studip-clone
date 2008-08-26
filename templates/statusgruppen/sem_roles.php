@@ -3,8 +3,8 @@
 $roles_pos = 1;
 if (!isset($all_roles)) $all_roles = $roles;
 if (is_array($roles)) foreach ($roles as $id => $role) :
-	$topic_class = 'topic';
-	if ($edit_role == $id) $topic_class = 'topicwrite';
+	$topic_class = 'blue_gradient';
+	if ($edit_role == $id) $topic_class = 'red_gradient';
 ?>
 <a name="<?= $id ?>" ></a>
 <table cellspacing="0" cellpadding="0" border="0">
@@ -20,15 +20,14 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 			echo Assets::img('icon-disc', array('title' => _("Dateiordner vorhanden")));
 		endif; ?>
 		<? if ($role['role']->getSelfAssign()) :
-			echo Assets::img('nutzer', array('title' => _("Personen können sich dieser Gruppe selbst zuordnen")));
+			echo Assets::img('icon-guest', array('title' => _("Personen können sich dieser Gruppe selbst zuordnen")));
 		endif; ?>
+		<a href="<?= URLHelper::getLink('?cmd=editRole&role_id='.  $id) ?>">
+			<?= Assets::img('edit_transparent') ?>
+		</a>
 		<a href="<?= URLHelper::getLink('?cmd=sortByName&role_id='.  $id) ?>">
 			<?= Assets::img('sort') ?>
 		</a>
-		<a href="<?= URLHelper::getLink('?cmd=editRole&role_id='.  $id) ?>">
-			<?= Assets::img('einst') ?>
-		</a>
-	&nbsp;
 	</td>
 	<td width="1%" class="blank" nowrap style="padding-left: 5px">
 		<a href="<?= URLHelper::getLink('?cmd=deleteRole&role_id='. $id) ?>">

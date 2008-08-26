@@ -1,6 +1,7 @@
+<? $pos_inst = 1; ?>
+<form action="<?= URLHelper::getLink('?cmd=edit_leben&username=' . $username . '&view=' . $view . '&studipticket=' . get_ticket()) ?>" method="POST" name="pers">
+<table cellspacing="0" cellpadding="0" border="0">
 <?
-$pos_inst = 1;
-
 if (is_array($institutes) && sizeof($institutes) > 0) :
 	foreach ($institutes as $inst_id => $institute) : ?>
 <tr>
@@ -78,9 +79,10 @@ if (is_array($institutes) && sizeof($institutes) > 0) :
 	endforeach; // roles
 	
 	$pos_inst++; 
-endforeach; // institutes 
-else :
-?>
+endforeach; // institutes ?>
+</table>
+</form>
+<? else : ?>
 <tr>
 	<td class="blank" align="center">
 		<b><?= _("Sie sind keinem Institut / keiner Einrichtung zugeordnet!") ?></b><br/>
@@ -88,3 +90,14 @@ else :
 </tr>
 <?
 endif;
+?>
+</table>
+</form>
+<br/>
+<table class="blank" width="100%">
+<?
+if ($GLOBALS['perm']->have_perm('admin'))
+	echo $this->render_partial('statusgruppen/edit_about_add_person_to_role', 
+		array('subview_id' => $subview_id, 'admin_insts' => $admin_insts, 'sub_admin_insts' => $sub_admin_insts));
+?>
+</table>

@@ -56,51 +56,14 @@ function print_lit_import_dlg() {
 				break;
 			}
 		}
-			
 
-	echo "<blockquote>\n";
-        echo "<form enctype=\"multipart/form-data\" action=\"$PHP_SELF?_range_id=$_range_id&username=$username\" method=\"POST\">\n";
-	echo "  <INPUT TYPE=\"hidden\" NAME=\"cmd\" VALUE=\"import_lit_list\">\n";
-	echo "  <TABLE BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\">\n";
-	echo "    <TR>\n";
-	echo "      <TD COLSPAN=\"2\"><FONT SIZE=\"\"><B>"._("Literaturlisten importieren:")."</B></FONT></TD>\n";
-	echo "    </TR>\n";
-	echo "    <TR><TD COLSPAN=\"2\">&nbsp;</TD></TR>\n";
+	$template = $GLOBALS['template_factory']->open('literatur/import_lit_list');
 
-	echo "    <TR>\n";
-	echo "      <TD COLSPAN=\"2\"><FONT SIZE=\"\">"._("Bitte w&auml;hlen Sie eine Literaturverwaltung aus:");
-	echo "        <SELECT NAME=\"plugin_name\" SIZE=\"1\" onChange=\"this.form.cmd='';this.form.submit();\">\n";
-	foreach ($LIT_IMPORT_PLUGINS as $p) {
-		echo "          <OPTION VALUE=\"".$p["name"]."\" ".($p["name"]==$plugin_name ? "SELECTED" : "").">".$p["visual_name"]."\n";
-	}
-	echo "        </SELECT>\n";
-	echo "      </FONT></TD>\n";
-	echo "    </TR>\n";
+	$template->set_attribute('plugin_name', $plugin_name);
+	$template->set_attribute('plugin', $plugin);
+	$template->set_attribute('_range_id', $_range_id);
+	$template->set_attribute('username', $username);
 
-	if ($plugin_name) {
-		echo "    <TR><TD COLSPAN=\"2\">&nbsp;</TD></TR>\n";
-		echo "    <TR>\n";
-		echo "      <TD COLSPAN=\"2\"><FONT SIZE=\"\">".(strlen($plugin["description"])>0 ? "<IMG SRC=\"".$GLOBALS['ASSETS_URL']."images/ausruf_small3.gif\">" : "").formatReady($plugin["description"])."</FONT></TD>\n";
-		echo "    </TR>\n";
-		echo "    <TR><TD COLSPAN=\"2\">&nbsp;</TD></TR>\n";
-		echo "    <TR>\n";
-		echo "      <TD COLSPAN=\"2\"><FONT SIZE=\"\">"._("1. W&auml;hlen Sie mit <B>Duchsuchen</B> eine Datei von Ihrer Festplatte aus.")."</FONT></TD>\n";
-		echo "    </TR>\n";
-		echo "    <TR><TD COLSPAN=\"2\">&nbsp;</TD></TR>\n";
-		echo "    <TR>\n";
-        	echo "      <TD COLSPAN=\"2\"><input name=\"xmlfile\" type=\"file\" style=\"width:250px\" accept=\"text/xml\" maxlength=\"8000000\"></TD>\n";
-		echo "    </TR>\n";
-		echo "    <TR><TD COLSPAN=\"2\">&nbsp;</TD></TR>\n";
-		echo "    <TR>\n";
-		echo "      <TD COLSPAN=\"2\"><FONT SIZE=\"\">"._("2. Klicken Sie auf <B>absenden</B>, um die Datei hochzuladen.")."</FONT></TD>\n";
-		echo "    </TR>\n";
-		echo "    <TR><TD COLSPAN=\"2\">&nbsp;</TD></TR>\n";
-		echo "    <TR>\n";
-        	echo "      <TD COLSPAN=\"2\"><input type=\"IMAGE\" " . makeButton("absenden", "src") . " border=0 value=\"" . _("absenden") . "\"></TD>\n";
-		echo "    </TR>\n";
-	}
-	echo "  </TABLE>\n";
-	echo "</FORM>\n";
-        echo "</blockquote>\n";
+	echo $template->render();
+
 }
-?>

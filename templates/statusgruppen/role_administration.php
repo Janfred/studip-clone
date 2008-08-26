@@ -31,7 +31,7 @@
 				<br/>
 				<table cellspacing="0" cellpadding="0" border="0" width="90%">
 					<tr>
-						<td class="topic" colspan="6">
+						<td class="steelkante" colspan="6">
 							&nbsp;<b><?= $range_type == 'sem' ? _("Gruppe bearbeiten") : _("Rollendaten bearbeiten") ?></b>
 						</td>
 					</tr>					
@@ -55,14 +55,14 @@
 				<table cellspacing="0" cellpadding="0" border="0" width="95%">
 					<!-- Person assigned to this role - Heading -->
 					<tr>
-						<td class="topic" colspan="6">
+						<td class="steelkante" colspan="6">
 							&nbsp;<b><?= $range_type == 'sem' ? _("Personen in dieser Gruppe") : _("Personen in dieser Rolle") ?></b>
 						</td>
-						<td class="topic" width="5%" nowrap>
+						<td class="steelkante" width="5%" nowrap>
 							<?= ($role->getSize()) ? sizeof($persons) .' '._("von").' '. $role->getSize() : '' ?>
 							&nbsp;
 						</td> 
-						<td class="topic" width="1%" nowrap>						
+						<td class="steelkante" width="1%" nowrap>						
 							<?= ($role->getSelfassign()) ? Assets::img('nutzer', array('title' => _("Personen können sich dieser Gruppe selbst zuordnen"))) : '' ?>
 							<a href="<?= URLHelper::getLink('?cmd=sortByName&role_id='. $role_id ) ?>"><?= Assets::img('sort') ?></a>
 						</td>
@@ -126,13 +126,13 @@
 			<table cellspacing="0" cellpadding="0" border="0" width="95%">
 				<tr>
 					<? if ($seminar_persons) : ?>
-					<td class="topic">&nbsp;<?= _("VeranstaltungsteilnehmerInnen") ?></td>
+					<td class="steelkante">&nbsp;<?= _("VeranstaltungsteilnehmerInnen") ?></td>
 					<td>&nbsp;&nbsp;</td>
 					<? endif; ?>
 					
-					<td class="topic">&nbsp;<?= _("Mitarbeiterliste") ?></td>
+					<td class="steelkante">&nbsp;<?= _("Mitarbeiterliste") ?></td>
 					<td>&nbsp;&nbsp;</td>
-					<td class="topic" nowrap>&nbsp;<?= _("freie Personensuche") ?></td>
+					<td class="steelkante" nowrap>&nbsp;<?= _("freie Personensuche") ?></td>
 				</tr>
 				<tr>
 					<? if ($seminar_persons) : ?>
