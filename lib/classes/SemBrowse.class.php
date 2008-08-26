@@ -454,7 +454,10 @@ function print_result(){
 						echo "<font style=\"margin-left:5px;\" size=\"-2\">" . htmlReady($seminar_number) . "</font><br>";
 						echo "<font style=\"margin-left:5px;\" size=\"-2\">" . $temp_turnus_string . "</font></td>";
 						echo "<td class=\"steel1\" align=\"right\"><font size=-1>(";
-						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
+						$doz_name = array();
+						foreach($sem_data[$seminar_id]['fullname'] as $d_name => $anzahl){
+							$doz_name = array_merge($doz_name, array_fill(0, $anzahl, $d_name));
+						}
 						$doz_uname = array_keys($sem_data[$seminar_id]['username']);
 						$doz_position = array_keys($sem_data[$seminar_id]['position']);
 						if (is_array($doz_name)){
@@ -619,7 +622,10 @@ function print_result(){
 						$worksheet1->write_string($row, 1, $seminar_number, $data_format);
 						$worksheet1->write_string($row, 2, $temp_turnus_string, $data_format);
 
-						$doz_name = array_keys($sem_data[$seminar_id]['fullname']);
+						$doz_name = array();
+						foreach($sem_data[$seminar_id]['fullname'] as $d_name => $anzahl){
+							$doz_name = array_merge($doz_name, array_fill(0, $anzahl, $d_name));
+						}
 						$doz_position = array_keys($sem_data[$seminar_id]['position']);
 						if (is_array($doz_name)){
 							if(count($doz_position) != count($doz_name)) $doz_position = range(1, count($doz_name));
