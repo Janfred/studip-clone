@@ -1031,13 +1031,12 @@ if ($view == 'Karriere') {
 	} else {
 		$all_rights = true;
 	}
-
 	foreach ($admin_insts as $data) {
 		if ($data["is_fak"]) {
 			$stmt = DBManager::get()->prepare("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id = ? AND Institut_id != ? ORDER BY Name");
 			if ($stmt->execute(array($data['Institut_id'], $data['Institut_id']))) {
-				foreach ($stmt->fetch(PDO::FETCH_ASSOC) as $name => $sub_data) {
-					$sub_admin_insts[$data['Institut_id']][$name] = $sub_data;
+				while($sub_data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+					$sub_admin_insts[$data['Institut_id']] = $sub_data;
 				}
 			}
 		}
