@@ -141,7 +141,9 @@ if ($cmd == 'removeFromInstitute' && $perm->have_studip_perm('admin', $inst_id))
 	$db = new DB_Seminar();
 
 	$del_user_id = get_userid($username);
-	$db->query("DELETE FROM statusgruppe_user WHERE statusgruppe_id IN ('".join("','",array_keys($group_list))."') AND user_id = '$del_user_id'");
+	if (is_array($group_list)) {
+		$db->query("DELETE FROM statusgruppe_user WHERE statusgruppe_id IN ('".join("','",array_keys($group_list))."') AND user_id = '$del_user_id'");
+	}
 	$db->query("DELETE FROM user_inst WHERE user_id = '$del_user_id' AND Institut_id = '$inst_id'");
 }
 
@@ -271,7 +273,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 
 		// Statusgruppen kommen in neue Zeilen
 		if ($structure["statusgruppe"]) {
-			$statusgruppen = GetStatusgruppenForUser($db->f('user_id'), array_keys($group_list));
+			$statusgruppen = GetStatusgruppenForUser($db->f('user_id'), array_keys((array)$group_list));
 			if (is_array($statusgruppen)) {
 				foreach ($statusgruppen as $id) {
 					$entries = DataFieldEntry::getDataFieldEntries(array($db->f('user_id'), $id));
