@@ -23,7 +23,6 @@
 
 require_once ("lib/classes/auth_plugins/StudipAuthAbstract.class.php");
 require_once ("lib/dbviews/core.view.php");
-require_once ('lib/classes/DataFieldEntry.class.php');
 
 /**
 * Stud.IP authentication against LDAP Server
@@ -200,19 +199,6 @@ class StudipAuthLdap extends StudipAuthAbstract {
 			}
 		}
 		return $ret;
-	}
-	
-	function doLdapMapDatafield($params){
-		$datafield_id = $params[1];
-		$uid = $params[2];
-		$ldap_field = trim($this->user_data[$params[3]][0]);
-		if ($this->decode_utf8_values) {
-			$ldap_field = utf8_decode($ldap_field);
-		}
-		$df_struct = new DataFieldStructure(array('datafield_id' => $datafield_id));
-		$df_struct->load();
-		$df_entry = DataFieldEntry::createDataFieldEntry($df_struct, $uid, $ldap_field);
-		return (is_object($df_entry) && $df_entry->store());
 	}
 	
 	function isUsedUsername($username){

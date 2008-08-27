@@ -430,38 +430,22 @@ and enable it here. The name of the plugin is the classname excluding "StudipAut
 You could also place your configuration here, name it $STUDIP_AUTH_CONFIG_<plugin name>,
 all uppercase each item of the configuration array will become a member of your plugin class.*/
 
-//$STUDIP_AUTH_PLUGIN[] = "LdapReader";
+//$STUDIP_AUTH_PLUGIN[] = "LdapReadAndBind";
 //$STUDIP_AUTH_PLUGIN[] = "Ldap";
 //$STUDIP_AUTH_PLUGIN[] = "StandardExtern";
 $STUDIP_AUTH_PLUGIN[] = "Standard";
 // $STUDIP_AUTH_PLUGIN[] = "CAS";
 // $STUDIP_AUTH_PLUGIN[] = "Shib";
 /*
-$STUDIP_AUTH_CONFIG_LDAPREADER = array(	"host" => "localhost",
-										"base_dn" => "dc=studip,dc=de",
-										"protocol_version" => 3,
-										"start_tls" => false,
-										"send_utf8_credentials" => false,
-										"decode_utf8_values" => false,
-										"bad_char_regex" => '/[^0-9_a-zA-Z]/',
-										"username_case_insensitiv" => false,
-										"username_attribute" => "uid",
-										"user_password_attribute" => "userpassword",
-										"reader_dn" => "uid=reader,dc=studip,dc=de",
-										"reader_password" => "<password>",
-										"error_head" =>	"LDAP reader plugin",
-										"user_data_mapping" =>
-										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
-												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => "")));
 
 $STUDIP_AUTH_CONFIG_LDAPREADANDBIND = array("host" => "localhost",
 										"base_dn" => "dc=studip,dc=de",
 										"protocol_version" => 3,
 										"start_tls" => false,
-										"send_utf8_credentials" => false,
-										"decode_utf8_values" => false,
-										"bad_char_regex" => '/[^0-9_a-zA-Z]/',
-										"username_case_insensitiv" => false,
+										"send_utf8_credentials" => true,
+										"decode_utf8_values" => true,
+										"bad_char_regex" => '/[^0-9_a-zA-Z-]/',
+										"username_case_insensitiv" => true,
 										"username_attribute" => "uid",
 										"user_password_attribute" => "userpassword",
 										"reader_dn" => "uid=reader,dc=studip,dc=de",
@@ -472,9 +456,7 @@ $STUDIP_AUTH_CONFIG_LDAPREADANDBIND = array("host" => "localhost",
 												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""),
 												"auth_user_md5.Email" => array("callback" => "doLdapMap", "map_args" => "email"),
 												"auth_user_md5.Nachname" => array("callback" => "doLdapMap", "map_args" => "sn"),
-												"auth_user_md5.Vorname" => array("callback" => "doLdapMap", "map_args" => "givenname"),
-												"datafields.6ec00967d9ccbfdeac1ee038178f1543" => array("no_generic_update" => true, "callback" => "doLdapMapDatafield", "map_args" => "studinfo-matrikelnummer"),
-												"studiengang_id" => array("no_generic_update" => true, "callback" => "doLdapMapStudyCourse", "map_args" => "studinfo-studiengang")
+												"auth_user_md5.Vorname" => array("callback" => "doLdapMap", "map_args" => "givenname")
 												)
 										);
 
@@ -482,17 +464,21 @@ $STUDIP_AUTH_CONFIG_LDAP = array(		"host" => "localhost",
 										"base_dn" => "dc=data-quest,dc=de",
 										"protocol_version" => 3,
 										"start_tls" => false,
-										"send_utf8_credentials" => false,
-										"decode_utf8_values" => false,
-										"bad_char_regex" => '/[^0-9_a-zA-Z]/',
-										"username_case_insensitiv" => false,
+										"send_utf8_credentials" => true,
+										"decode_utf8_values" => true,
+										"bad_char_regex" => '/[^0-9_a-zA-Z-]/',
+										"username_case_insensitiv" => true,
 										"username_attribute" => "uid",
 										"anonymous_bind" => true,
 										"error_head" =>	"LDAP plugin",
 										"user_data_mapping" =>
 										array(	"auth_user_md5.username" => array("callback" => "dummy", "map_args" => ""),
-												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => "")));
-
+												"auth_user_md5.password" => array("callback" => "dummy", "map_args" => ""),
+												"auth_user_md5.Email" => array("callback" => "doLdapMap", "map_args" => "email"),
+												"auth_user_md5.Nachname" => array("callback" => "doLdapMap", "map_args" => "sn"),
+												"auth_user_md5.Vorname" => array("callback" => "doLdapMap", "map_args" => "givenname")
+												)
+										);
 $STUDIP_AUTH_CONFIG_STANDARDEXTERN = array(	"db_host" => "localhost",
 										"db_username" => "extern",
 										"db_name" => "extern_studip",

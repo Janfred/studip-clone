@@ -316,34 +316,6 @@ class StudipAuthAbstract {
 	}
 	
 	/**
-	* lookup a username and update the mapped data
-	*
-	* this method mimics StudipAuthAbstract::authenticateUser(), but it doesnt
-	* do the authentication, only the data mapping and initialization of new users.
-	* It depends on StudipAuthAbstract::getUserData()
-	* 
-	* @access public
-	* @param	string	the username to update/insert
-	* @return	string	if update succeeds the Stud.IP user id, else false
-	*/
-	function updateUser($username){
-		$this->is_new_user = false;
-		$username = $this->verifyUsername($username);
-		if ($this->getUserData($username)){
-			if ($uid = $this->getStudipUserid($username)){
-				$this->doDataMapping($uid);
-				$this->setUserDomains($uid);
-				if ($this->is_new_user){
-					$this->doNewUserInit($uid);
-				}
-			}
-			return $uid;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
 	* method to retrieve the Stud.IP user id to a given username
 	*
 	* 
@@ -446,7 +418,7 @@ class StudipAuthAbstract {
 	*
 	* for each entry in $this->user_data_mapping the according callback will be invoked
 	* the return value of the callback method is then written to the db field, which is specified
-	* in the key of the array. If 'no_generic_update' => true is found only the callback will be invoked
+	* in the key of the array
 	*
 	* @access	private
 	* @param	string	the user_id
@@ -459,13 +431,9 @@ class StudipAuthAbstract {
 					$split = explode(".",$key);
 					$table = $split[0];
 					$field = $split[1];
-					if($value['no_generic_update']){
-						call_user_func(array($this, $value['callback']),array($table,$field,$uid,$value['map_args']));
-					} else {
-						$mapped_value = call_user_func(array($this, $value['callback']),$value['map_args']);
-						$this->dbv->params = array($table,$field,mysql_escape_string($mapped_value),$uid);
-						$db = $this->dbv->get_query("view:GENERIC_UPDATE");
-					}
+					$mapped_value = call_user_method($value['callback'],$this,$value['map_args']);
+					$this->dbv->params = array($table,$field,mysql_escape_string($mapped_value),$uid);
+					$db = $this->dbv->get_query("view:GENERIC_UPDATE");
 				}
 			}
 			return true;
@@ -528,22 +496,7 @@ class StudipAuthAbstract {
 	* @return	bool	true if authentication succeeds
 	*/
 	function isAuthenticated($username, $password, $jscript){
-		$this->error_msg = sprintf(_("Methode %s nicht implementiert!"),get_class($this) . "::isAuthenticated()");
-		return false;
-	}
-	
-	/**
-	* method to get data from external authentication source for a user without
-	* the need to authenticate this user
-	*
-	* abstract, realize it to use StudipAuthAbstract::updateUser() in your Plugin
-	* 
-	* @access private
-	* @param	string	the username
-	* @return	bool	true if data retrieval succeeds
-	*/
-	function getUserData($username){
-		$this->error_msg = sprintf(_("Methode %s nicht implementiert!"),get_class($this) . "::getUserData()");
+		$this->error = sprintf(_("Methode %s nicht implementiert!"),get_class($this) . "::isAuthenticated()");
 		return false;
 	}
 }
