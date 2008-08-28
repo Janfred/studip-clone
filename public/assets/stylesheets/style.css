@@ -253,7 +253,7 @@ td.smiley_th   { border:0px solid #000000; background:#B5B5B5 url('../images/ste
 td.smiley_redborder {border:1px solid #D00000;}
 
 table.logintable {background-image: url('../images/login.jpg');}
-td.indexpage {background-image: url('../images/indexpage.jpg'); text-align:left;}
+td.indexpage {background: white url('../images/indexpage.jpg') no-repeat; text-align:left;}
 
 .mainmenu {
 	margin-top: 7px;
