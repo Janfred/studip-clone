@@ -30,12 +30,12 @@ $query_user_data = "SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*,
 						. "uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home "
 						. "FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) "
 	          . "LEFT JOIN auth_user_md5 aum USING(user_id) "
-	          . "LEFT JOIN user_info uin USING (user_id) WHERE";
+	          . "LEFT JOIN user_info uin USING (user_id) WHERE ui.inst_perms IN ('autor','tutor','dozent') AND ";
 
 // Mitarbeiter/in am Institut
 $db_inst->query("SELECT i.Institut_id FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) "
 	          ."LEFT JOIN auth_user_md5 aum USING(user_id) "
-	          ."WHERE i.Institut_id = '$instituts_id' AND aum.username = '$username'");
+	          ."WHERE i.Institut_id = '$instituts_id' AND aum.username = '$username' AND ui.inst_perms IN ('autor','tutor','dozent')");
 
 // Mitarbeiter/in am Heimatinstitut des Seminars
 if (!$db_inst->num_rows() && $sem_id) {
@@ -60,17 +60,17 @@ if (!$db_inst->num_rows() && $sem_id) {
 if (!$db_inst->num_rows() && $sem_id) {
 	$query = "SELECT aum.*, ";
 	$query .= $GLOBALS['_fullname_sql'][$nameformat] . " AS fullname ";
-	$query .= "FROM auth_user_md5 aum LEFT JOIN user_info USING(user_id) ";
-	$query .= "WHERE username = '$username' AND perms = 'dozent'";
+	$query .= "FROM auth_user_md5 aum LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user su USING(user_id) ";
+	$query .= "WHERE username = '$username' AND perms = 'dozent' AND su.seminar_id = '$sem_id' AND su.status = 'dozent'";
 	$db->query($query);
 }
 elseif ($this->config->getValue('Contact', 'defaultadr')) {
 	$db->query($query_user_data . " aum.username = '$username' AND ui.externdefault = 1");
 	if (!$db->num_rows())
-		$db->query($query_user_data . " aum.username = '$username' AND i.Institut_id = '$instituts_id'");
+		$db->query($query_user_data . " aum.username = '$username' AND i.Institut_id = '$instituts_id' AND ui.inst_perms IN ('autor','tutor','dozent')");
 }
 else
-	$db->query($query_user_data . " aum.username = '$username' AND i.Institut_id = '$instituts_id'");
+	$db->query($query_user_data . " aum.username = '$username' AND i.Institut_id = '$instituts_id' AND ui.inst_perms IN ('autor','tutor','dozent')");
 
 if (!$db->next_record())
 	die;

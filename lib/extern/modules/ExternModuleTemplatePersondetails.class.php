@@ -250,10 +250,10 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 			$nameformat = 'full';
 		}
 
-		$query_user_data = "SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, {$GLOBALS['_fullname_sql'][$nameformat]} AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home, uin.title_front, uin.title_rear FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info uin USING (user_id) WHERE";
+		$query_user_data = "SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, {$GLOBALS['_fullname_sql'][$nameformat]} AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home, uin.title_front, uin.title_rear FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info uin USING (user_id) WHERE ui.inst_perms IN ('autor','tutor','dozent') AND ";
 
 		// Mitarbeiter/in am Institut
-		$db_inst->query("SELECT i.Institut_id FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) WHERE i.Institut_id = '$instituts_id' AND aum.username = '$username'");
+		$db_inst->query("SELECT i.Institut_id FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) WHERE i.Institut_id = '$instituts_id' AND aum.username = '$username' AND ui.inst_perms IN ('autor','tutor','dozent')");
 
 		// Mitarbeiter/in am Heimatinstitut des Seminars
 		if (!$db_inst->num_rows() && $sem_id) {
@@ -273,7 +273,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 
 		// ist zwar global Dozent, aber an keinem Institut eingetragen
 		if (!$db_inst->num_rows() && $sem_id) {
-			$query = "SELECT aum.*, {$GLOBALS['_fullname_sql'][$nameformat]} AS fullname,  FROM auth_user_md5 aum LEFT JOIN user_info USING(user_id) WHERE username = '$username' AND perms = 'dozent'";
+			$query = "SELECT aum.*, {$GLOBALS['_fullname_sql'][$nameformat]} AS fullname,  FROM auth_user_md5 aum LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user su WHERE username = '$username' AND perms = 'dozent' AND su.seminar_id = '$sem_id' AND su.status = 'dozent'";
 			$db->query($query);
 		} elseif ($this->config->getValue('Main', 'defaultaddr')) {
 			$db->query("$query_user_data aum.username = '$username' AND ui.externdefault = 1");
