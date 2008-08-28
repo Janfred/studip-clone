@@ -58,6 +58,11 @@ INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, 
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('cb92d5bb08f346567dbd394d0d553454', '', 'EMAIL_DOMAIN_RESTRICTION', '', 1, 'string', 'global', '', 0, 1157107088, 1157107088, 'Beschränkt die gültigkeit von Email-Adressen bei freier Registrierung auf die angegebenen Domains. Komma-separierte Liste von Domains ohne vorangestelltes @.', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('9b313fe9ae6184b39c2545999ccce8ab', '', 'EXTERNAL_FLASH_MOVIE_EMBEDDING', 'deny', 1, 'string', 'global', '', 0, 1157107088, 1157107088, 'Sollen externe Flash-Filme mit Hilfe des [flash]-Tags der Schnellformatierung eingebunden werden? deny=nicht erlaubt, allow=erlaubt, proxy=image proxy benutzen', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('3acf297f781b0c0aefd551ec304b902d', '', 'DOCUMENTS_EMBEDD_FLASH_MOVIES', 'deny', 1, 'string', 'global', '', 0, 1157107088, 1157107088, 'Sollen im Dateibereich Flash-Filme direkt in einem Player angezeigt werden? deny=nicht erlaubt, allow=erlaubt, autoload=Film wird beim aufklappen geladen (incrementiert Downloads), autoplay=Film wird sofort abgespielt', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('e2d53231d99575a728cb84b0defc3569', '', 'ZIP_DOWNLOAD_MAX_FILES', '100', 1, 'integer', 'global', '', 0, 1219328498, 1219328498, 'Die maximale Anzahl an Dateien, die gezippt heruntergeladen werden kann', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('be1cd744e51e87d8c0c1cb9a6c171887', '', 'ZIP_DOWNLOAD_MAX_SIZE', '100', 1, 'integer', 'global', '', 0, 1219328498, 1219328498, 'Die maximale Größe aller Dateien, die zusammen in einem Zip heruntergeladen werden kann (in Megabytes).', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('b8faa6e4bdb8ec8d095f5ea1d04950c0', '', 'RANGE_TREE_ADMIN_PERM', 'admin', 1, 'string', 'global', '', 0, 1219328498, 1219328498, 'mit welchem Status darf die Einrichtungshierarchie bearbeitet werden (admin oder root)', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('e0b4d32bd6da9a430c2644bd5ea3ab3b', '', 'SEM_TREE_ADMIN_PERM', 'admin', 1, 'string', 'global', '', 0, 1219328498, 1219328498, 'mit welchem Status darf die Veranstaltungshierarchie bearbeitet werden (admin oder root)', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES ('fb5d5b3f1a0b70ded3c5770f30ec2ac1', '', 'SEMESTER_ADMINISTRATION_ENABLE', '1', 1, 'boolean', 'global', '', 0, 1219328498, 1219328498, 'schaltet die Semesterverwaltung ein oder aus', '', '');
 
 -- 
 -- Daten für Tabelle `evalanswer`
@@ -111,6 +116,8 @@ INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, 
 -- 
 
 INSERT INTO `semester_data` (`semester_id`, `name`, `description`, `semester_token`, `beginn`, `ende`, `vorles_beginn`, `vorles_ende`) VALUES ('f2b4fdf5ac59a9cb57dd73c4d3bbb651', 'SS 2008', '', '', 1207000800, 1222811999, 1208124000, 1215813599);
+INSERT INTO `semester_data` (`semester_id`, `name`, `description`, `semester_token`, `beginn`, `ende`, `vorles_beginn`, `vorles_ende`) VALUES ('eb828ebb81bb946fac4108521a3b4697', 'WS 2008/09', '', '', 1222812000, 1238536799, 1223848800, 1233356399);
+
 -- 
 -- Daten für Tabelle `log_actions`
 -- 
@@ -219,4 +226,4 @@ INSERT INTO `roles_user` (`roleid`, `userid`) VALUES (7, 'nobody');
 -- Daten für Tabelle `schema_version`
 -- 
 
-INSERT INTO `schema_version` (`domain`, `version`) VALUES ('studip', 17);
+INSERT INTO `schema_version` (`domain`, `version`) VALUES ('studip', 27);

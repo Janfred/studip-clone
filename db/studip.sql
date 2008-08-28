@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 2.7.0-pl1
+-- version 2.6.4-pl4
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Erstellungszeit: 28. April 2008 um 15:58
--- Server Version: 5.0.51
--- PHP-Version: 4.4.8-0.dotdeb.0
+-- Erstellungszeit: 28. August 2008 um 11:06
+-- Server Version: 5.0.26
+-- PHP-Version: 5.2.6
 -- 
 -- Datenbank: `studip`
 -- 
@@ -165,11 +165,12 @@ CREATE TABLE `auth_user_md5` (
   `Vorname` varchar(64) default NULL,
   `Nachname` varchar(64) default NULL,
   `Email` varchar(64) default NULL,
+  `validation_key` varchar(10) NOT NULL,
   `auth_plugin` varchar(64) default NULL,
   `locked` tinyint(1) unsigned NOT NULL default '0',
   `lock_comment` varchar(255) default NULL,
   `locked_by` varchar(32) default NULL,
-  `visible` enum('always','yes','unknown','no','never') NOT NULL default 'unknown',
+  `visible` enum('global','always','yes','unknown','no','never') NOT NULL default 'unknown',
   PRIMARY KEY  (`user_id`),
   UNIQUE KEY `k_username` (`username`)
 ) TYPE=MyISAM PACK_KEYS=1;
@@ -230,7 +231,7 @@ CREATE TABLE `calendar_events` (
   `end` int(10) unsigned NOT NULL default '0',
   `summary` varchar(255) NOT NULL default '',
   `description` text,
-  `class` enum('PUBLIC','PRIVATE','CONFIDENTIAL') NOT NULL default 'PUBLIC',
+  `class` enum('PUBLIC','PRIVATE','CONFIDENTIAL') NOT NULL default 'PRIVATE',
   `categories` tinytext,
   `category_intern` tinyint(3) unsigned NOT NULL default '0',
   `priority` tinyint(3) unsigned NOT NULL default '0',
@@ -326,7 +327,8 @@ CREATE TABLE `contact` (
   `user_id` varchar(32) NOT NULL default '',
   `buddy` tinyint(4) NOT NULL default '1',
   PRIMARY KEY  (`contact_id`),
-  KEY `owner_id` (`owner_id`,`buddy`,`user_id`)
+  KEY `owner_id` (`owner_id`,`buddy`,`user_id`),
+  KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
@@ -386,7 +388,8 @@ CREATE TABLE `datafields_entries` (
   `sec_range_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`datafield_id`,`range_id`,`sec_range_id`),
   KEY `range_id` (`range_id`,`datafield_id`),
-  KEY `datafield_id_2` (`datafield_id`,`sec_range_id`)
+  KEY `datafield_id_2` (`datafield_id`,`sec_range_id`),
+  KEY `datafields_contents` (`datafield_id`,`content`(32))
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
@@ -630,7 +633,8 @@ CREATE TABLE `ex_termine` (
   `resource_id` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`termin_id`),
   KEY `range_id` (`range_id`,`date`),
-  KEY `metadate_id` (`metadate_id`,`date`)
+  KEY `metadate_id` (`metadate_id`,`date`),
+  KEY `autor_id` (`autor_id`)
 ) TYPE=MyISAM PACK_KEYS=1;
 
 -- --------------------------------------------------------
@@ -884,7 +888,7 @@ CREATE TABLE `lit_list_content` (
   `user_id` varchar(32) NOT NULL default '',
   `mkdate` int(11) NOT NULL default '0',
   `chdate` int(11) NOT NULL default '0',
-  `note` varchar(255) default NULL,
+  `note` text,
   `priority` smallint(6) NOT NULL default '0',
   PRIMARY KEY  (`list_element_id`),
   KEY `list_id` (`list_id`),
@@ -901,6 +905,7 @@ CREATE TABLE `lit_list_content` (
 DROP TABLE IF EXISTS `lock_rules`;
 CREATE TABLE `lock_rules` (
   `lock_id` varchar(32) NOT NULL default '',
+  `permission` enum('tutor','dozent','admin','root') NOT NULL default 'dozent',
   `name` varchar(255) NOT NULL default '',
   `description` text NOT NULL,
   `attributes` text NOT NULL,
@@ -1048,7 +1053,7 @@ CREATE TABLE `news_rss_range` (
 DROP TABLE IF EXISTS `object_contentmodules`;
 CREATE TABLE `object_contentmodules` (
   `object_id` varchar(32) NOT NULL default '',
-  `module_id` varchar(32) NOT NULL default '',
+  `module_id` varchar(255) NOT NULL default '',
   `system_type` varchar(32) NOT NULL default '',
   `module_type` varchar(32) NOT NULL default '',
   `mkdate` int(20) NOT NULL default '0',
@@ -1677,6 +1682,19 @@ CREATE TABLE `seminar_user_schedule` (
 -- --------------------------------------------------------
 
 -- 
+-- Tabellenstruktur für Tabelle `seminar_userdomains`
+-- 
+
+DROP TABLE IF EXISTS `seminar_userdomains`;
+CREATE TABLE `seminar_userdomains` (
+  `seminar_id` varchar(32) NOT NULL default '',
+  `userdomain_id` varchar(32) NOT NULL default '',
+  PRIMARY KEY  (`seminar_id`,`userdomain_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
 -- Tabellenstruktur für Tabelle `seminare`
 -- 
 
@@ -2189,6 +2207,32 @@ CREATE TABLE `user_token` (
   KEY `index_expiration` (`expiration`),
   KEY `index_token` (`token`),
   KEY `index_user_id` (`user_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `user_userdomains`
+-- 
+
+DROP TABLE IF EXISTS `user_userdomains`;
+CREATE TABLE `user_userdomains` (
+  `user_id` varchar(32) NOT NULL default '',
+  `userdomain_id` varchar(32) NOT NULL default '',
+  PRIMARY KEY  (`user_id`,`userdomain_id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Tabellenstruktur für Tabelle `userdomains`
+-- 
+
+DROP TABLE IF EXISTS `userdomains`;
+CREATE TABLE `userdomains` (
+  `userdomain_id` varchar(32) NOT NULL default '',
+  `name` varchar(255) NOT NULL default '',
+  PRIMARY KEY  (`userdomain_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
