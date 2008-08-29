@@ -4,7 +4,7 @@
 you find here the basic system settings. You shouldn't have to touch much of them...
 please note the CONFIG.INC.PHP in the system folder for the indivual settings of your installation!*/
 
-$UNI_NAME_CLEAN = 'Stud.IP 1.8 - dev';							//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
+$UNI_NAME_CLEAN = 'Stud.IP 1.8';							//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
 $STUDIP_INSTALLATION_ID='demo-installation';      //unique identifier for installation
 $AUTH_LIFETIME = 60;									//the length of a session in minutes, zero means unlimited lifetime
 
@@ -122,7 +122,6 @@ $RELATIVE_PATH_EXTERN = "lib/extern"; 							//Stud.IP module: SRI-System for in
 $RELATIVE_PATH_LEARNINGMODULES = "lib/lernmodule";						//Stud.IP module: Ilias 2 lerningmodules-connection (deprecated)
 $RELATIVE_PATH_ELEARNING_INTERFACE = "lib/elearning";					//Stud.IP module: Ilias 3 lerningmodules-connection / general E-Learning-interface
 $RELATIVE_PATH_SOAP = "lib/soap";
-$RELATIVE_PATH_SUPPORT = "lib/support";
 
 $PATH_EXPORT = "lib/export";								//Stud.IP module: export
 
@@ -154,16 +153,10 @@ $EXTERN_SRI_ENABLE = TRUE;								//allow the usage of SRI-interface (Stud.IP Re
 $EXTERN_SRI_ENABLE_BY_ROOT = FALSE;							//only root allows the usage of SRI-interface for specific institutes
 $EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG = FALSE;						//free access to external pages (without the need of a configuration), independent of SRI settings above
 
-$SUPPORT_ENABLE = FALSE;								//Stud.IP module: SupportDB (not part of the main distribution)
-
 $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 
-$USER_VISIBILITY_CHECK = FALSE;	
-// enable presentation of visibility decision texts for users after first login
-// see lib/include/header.php and lib/user_visible.inc.php for further info
-
-$ELEARNING_INTERFACE_ENABLE = TRUE;						//Stud.IP module: elearning interface
-$SOAP_ENABLE = TRUE;
+$ELEARNING_INTERFACE_ENABLE = FALSE;						//Stud.IP module: elearning interface
+$SOAP_ENABLE = FALSE;
 
 $WEBSERVICES_ENABLE = FALSE;							//Stud.IP module: webservices
 
@@ -243,9 +236,6 @@ $PLUGINS_ENABLE = TRUE;
 $PLUGINS_UPLOAD_ENABLE = TRUE; 		//Upload of Plugins is enabled
 			     		//if disabled for security reasons, uploads have to go into $NEW_PLUGINS_PATH
 $NEW_PLUGINS_PATH = ""; 		//The place from which new plugins should be loaded
-$PLUGINS_CACHING = TRUE;  		//enable caching
-$PLUGINS_CACHE_TIME = 300; 		//Time in seconds, the cache is valid
-
 
 /*system functions
 ----------------------------------------------------------------
@@ -303,20 +293,23 @@ this are some settings to activate some special features, special
 behaviour of some features and other advanced options. Change on your
 own risk :) */
 
-$ALLOW_GROUPING_SEMINARS = TRUE;							//if true, administrators can group seminars - students
+$ALLOW_GROUPING_SEMINARS = TRUE;			//if true, administrators can group seminars - students
 											//will only be able to register for one of the grouped seminars
 
-$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 							//if true, students are allowed to set or change
+$ALLOW_SELFASSIGN_STUDYCOURSE = TRUE; 		//if true, students are allowed to set or change
 											//their studycourse (studiengang)
 
-$SHOW_TERMS_ON_FIRST_LOGIN = FALSE;							//if true, the user has to accept the terms on his first login
+$SHOW_TERMS_ON_FIRST_LOGIN = FALSE;			//if true, the user has to accept the terms on his first login
 											//(this feature makes only sense, if you use disable $ENABLE_SELF_REGISTRATION).
 
-$BANNER_ADS_ENABLE = FALSE; 								//enable the Banner ads functions (config as root in "global settings")
+$USER_VISIBILITY_CHECK = FALSE;				// enable presentation of visibility decision texts for users after first login
+											// see lib/include/header.php and lib/user_visible.inc.php for further info
+
+$BANNER_ADS_ENABLE = FALSE; 				//enable the Banner ads functions (config as root in "global settings")
 											//you'll need an additional folder in the pictures folder named banner. The Webserver
 											//needs write accees for this folder.
 
-$CONVERT_IDNA_URL = TRUE;								//if true, urls with german "umlauts" are converted
+$CONVERT_IDNA_URL = TRUE;					//if true, urls with german "umlauts" are converted
 
 /*language settings
 ----------------------------------------------------------------*/
