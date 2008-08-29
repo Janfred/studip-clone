@@ -226,4 +226,4 @@ INSERT INTO `roles_user` (`roleid`, `userid`) VALUES (7, 'nobody');
 -- Daten für Tabelle `schema_version`
 -- 
 
-INSERT INTO `schema_version` (`domain`, `version`) VALUES ('studip', 27);
+INSERT INTO `schema_version` (`domain`, `version`) VALUES ('studip', 28);
