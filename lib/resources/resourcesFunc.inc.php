@@ -431,7 +431,7 @@ function getMyRoomRequests($user_id = '') {
 		if (sizeof($my_sems)) {
 			$in_seminar_id =  "('".join("','",array_keys($my_sems))."')";
 			$query_sem = sprintf("SELECT request_id, closed, tt.termin_id as tt_termin_id, rr.termin_id as rr_termin_id, 
-								COUNT(IF(date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
+								COUNT(IF(t.date_typ IN ".getPresenceTypeClause(). ",t.termin_id,NULL)) as anzahl_termine
 								FROM resources_requests rr
 								INNER JOIN seminare s USING(seminar_id)
 								LEFT JOIN termine tt ON (tt.termin_id = rr.termin_id)
