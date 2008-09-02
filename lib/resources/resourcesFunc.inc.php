@@ -425,7 +425,7 @@ function getMyRoomRequests($user_id = '') {
 			while ($db2->next_record()) {
 				$requests [$db2->f("request_id")]["my_res"] = TRUE;
 				$requests [$db2->f("request_id")]["closed"] = $db2->f("closed");
-				$requests [$db2->f("request_id")]["have_times"] = $db->f('rr_termin_id') ? ($db->f("tt_termin_id") == $db->f('rr_termin_id')) : $db->f("anzahl_termine");
+				$requests [$db2->f("request_id")]["have_times"] = $db2->f('rr_termin_id') ? ($db2->f("tt_termin_id") == $db2->f('rr_termin_id')) : $db2->f("anzahl_termine");
 			}
 		}
 		if (sizeof($my_sems)) {
