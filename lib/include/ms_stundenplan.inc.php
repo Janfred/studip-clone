@@ -44,6 +44,10 @@ require_once ('lib/language.inc.php');
 
 //vorgenommene Anpassungen der Ansicht in Uservariablen schreiben
 if ($schedule_cmd=="change_view_insert") {
+	if($ende_zeit <= $beginn_zeit) {
+		$ende_zeit = $beginn_zeit + 1;
+	}
+	$hidden = $my_schedule_settings['hidden'];
 	$my_schedule_settings=array(
 		"glb_start_time"=>$beginn_zeit,
 		"glb_end_time"=>$ende_zeit,
@@ -58,7 +62,8 @@ if ($schedule_cmd=="change_view_insert") {
 			),
 		"glb_sem"=>$sem,
 		"glb_inst_id"=>$institut_id,
-		"changed"=>"TRUE"
+		"changed"=>"TRUE",
+		'hidden'=> $hidden
 		);
 }
 
