@@ -302,7 +302,7 @@ print_infobox ($infobox,"contract.jpg");
 				<td class="<? echo $cssSw->getClass() ?>" valign="top" width="45%">
 				<?
 				 printf ("<font size=-1><b>" . _("Zeit:") . "</b></font><br /><font size=-1>%s</font>",htmlReady(view_turnus($sem_id, FALSE, FALSE, (time() - $quarter_year))));
-					if (($mein_status || $perm->have_studip_perm("admin",$sem_id)) ) {
+					if (($mein_status || $perm->have_studip_perm("admin",$sem_id)) && $modules['schedule']) {
 						echo '<br /><font size="-1"><br />';
 						echo sprintf(_("Details zu allen Terminen im %sAblaufplan%s"), '<a href="'.URLHelper::getLink('seminar_main.php?auswahl='.$sem_id.'&redirect_to=dates.php').'">', '</a>');
 						echo '</font><br />';

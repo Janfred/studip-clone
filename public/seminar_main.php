@@ -138,7 +138,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 		$data = getRegularOverview($SessSemName[1], true);		// second parameter set option to "shrink" dates
 		if ($data) {
 			echo $data . '<br/>';
-			if ($perm->have_studip_perm('autor', $SessSemName[1])) {
+			if ($perm->have_studip_perm('autor', $SessSemName[1]) && $modules['schedule']) {
 				echo '<br />';
 				echo sprintf(_("Details zu allen Terminen im %sAblaufplan%s"), '<a href="'.URLHelper::getLink('?auswahl='.$SessSemName[1].'&redirect_to=dates.php').'">', '</a>');
 				echo '<br />';
