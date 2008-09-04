@@ -100,7 +100,9 @@ if ($my_about->auth_user['perms'] != 'root') {
 	if (count(UserDomain::getUserDomains())) {
 		$structure["userdomains"] = array('topKat' => 'daten', 'name' => _("Nutzerdomänen"), 'link' => URLHelper::getLink("edit_about.php?view=userdomains&username=$username"), 'active' => FALSE);
 	}
-	$structure["karriere"] = array('topKat' => 'daten', 'name' => _("Einrichtungsdaten"), 'link' => "edit_about.php?view=Karriere&username=$username", 'active' => FALSE);
+	if ($my_about->special_user) {
+		$structure["karriere"] = array('topKat' => 'daten', 'name' => _("Einrichtungsdaten"), 'link' => "edit_about.php?view=Karriere&username=$username", 'active' => FALSE);
+	}
 }
 
 $structure["_sonstiges"] = array('topKat' => "sonstiges", 'name' => _("Eigene Kategorien bearbeiten"), 'link' => "edit_about.php?view=Sonstiges&username=$username", 'active' => FALSE);

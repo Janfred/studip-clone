@@ -1060,9 +1060,11 @@ if ($view == 'Karriere') {
 	// get the roles the user is in
 	$institutes = array();
 	foreach ($my_about->user_inst as $inst_id => $details) {
-		$institutes[$inst_id] = $details;
-		$roles = GetAllStatusgruppen($inst_id, $my_about->auth_user['user_id'], true);
-		$institutes[$inst_id]['roles'] = ($roles) ? $roles : array();
+		if ($details['inst_perms'] != 'user') {
+			$institutes[$inst_id] = $details;
+			$roles = GetAllStatusgruppen($inst_id, $my_about->auth_user['user_id'], true);
+			$institutes[$inst_id]['roles'] = ($roles) ? $roles : array();
+		}
 	}
 
 
