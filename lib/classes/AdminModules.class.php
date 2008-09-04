@@ -65,8 +65,6 @@ class AdminModules extends ModulesNotification {
 		$this->registered_modules["documents"]["msg_activate"] = _("Der Dateiordner kann jederzeit aktiviert werden.");
 		$this->registered_modules["documents"]["msg_deactivate"] = _("Der Dateiordner kann jederzeit deaktiviert werden.");
 
-		$this->registered_modules["schedule"]["msg_warning"] = _("Wollen Sie wirklich den Ablaufplan deaktivieren und damit alle Termine l&ouml;schen?");
-		$this->registered_modules["schedule"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Ablaufplans werden <b>%s</b> Termine ebenfalls gel&ouml;scht!");
 		$this->registered_modules["schedule"]["msg_activate"] = _("Die Ablaufplanverwaltung kann jederzeit aktiviert werden.");
 		$this->registered_modules["schedule"]["msg_deactivate"] = _("Die Ablaufplanverwaltung kann jederzeit deaktiviert werden.");
 
@@ -176,19 +174,6 @@ class AdminModules extends ModulesNotification {
 		//create a default folder
 		$db->query("INSERT INTO folder SET folder_id='".md5(uniqid("sommervogel"))."', range_id='".$range_id."', user_id='".$user->id."', name='"._("Allgemeiner Dateiordner")."', description='"._("Ablage für allgemeine Ordner und Dokumente der Veranstaltung")."', mkdate='".time()."', chdate='".time()."'");
 	}	
-
-	function getModuleScheduleExistingItems($range_id) {
-		$query = sprintf ("SELECT COUNT(termin_id) as items FROM termine WHERE range_id = '%s' ", $range_id);
-
-		$this->db->query($query);
-		$this->db->next_record();
-		
-		return $this->db->f("items");
-	}
-
-	function moduleScheduleDeactivate($range_id) {
-		delete_range_of_dates($range_id, TRUE);
-	}
 
 	function getModuleLiteratureExistingItems($range_id) {
 		$list_count = StudipLitList::GetListCountByRange($range_id);
