@@ -113,7 +113,6 @@ $reiter->create($structure, $view);
      if ($view=="main") {
 	$developer[] = array('Marco Bohnsack', 'bohnsack@data-quest.de', _("(Projektmanagement, Hilfe)"));
 	$developer[] = array('Thomas Hackl', 'thomas.hackl@uni-passau.de', _("(Typo3-Anbindung)"));
-	$developer[] = array('Torsten Heinrich', 'to.heinrich@fh-osnabrueck.de', _("(...)"));
 	$developer[] = array('Cornelis Kater', 'info@ckater.de', _("(Ressourcenverwaltung, Terminverwaltung, Adminbereich, Design)"));
 	$developer[] = array('Hartje Kriete', 'kriete@math.uni-goettingen.de', _("(&Uuml;bersetzung, Internationalisierung)"));
 	$developer[] = array('Jan Kulmann', 'jankul@tzi.de', _("(Evaluationen)"));
@@ -124,7 +123,6 @@ $reiter->create($structure, $view);
 	$developer[] = array('Frank Ollermann', 'follerma@uni-osnabrueck.de', _("(Usability)"));
 	$developer[] = array('J&ouml;rg R&ouml;pke', 'roepke@uni-trier.de', _("(Ilias-Anbindung, Evaluationen)"));
 	$developer[] = array('Jens Schmelzer', 'jens.schmelzer@fh-jena.de', _("(Security, Distribution)"));
-	$developer[] = array('Ralf Stockmann', 'rstockm@gwdg.de', _("(Forensystem, Adressbuch, Design)"));
 	$developer[] = array('Stefan Suchi', 'suchi@data-quest.de', _("(Projektmanagement, Datenbankstruktur, Rechtesystem, Internationalisierung)"));
 	$developer[] = array('Tobias Thelen', 'tthelen@uni-osnabrueck.de', _("(WikiWeb, Hilfe)"));
 	$developer[] = array('Peter Thienel', 'thienel@data-quest.de', _("(Externe Seiten, Terminkalender)"));
@@ -160,7 +158,7 @@ printf(_("Weitere Informationen finden sie auf %s, %s und %s."), '<a target="_bl
 	<tr>
 		<td class="steel1" colspan="2">
 			<br>&nbsp; &nbsp; <?=_("<b>Die folgenden Entwickler</b> sind mit der st&auml;ndigen Pflege und Weiterentwicklung des Systems befasst:")?><br>
-			<blockquote><span style="font-size:smaller;">
+			<blockquote>
 <?php
 			foreach($developer as $dev){
 				echo '<b>'.$dev[0].'</b>, ';
@@ -168,11 +166,11 @@ printf(_("Weitere Informationen finden sie auf %s, %s und %s."), '<a target="_bl
 				echo $dev[2].'<br />'."\n";
 			}
 ?>
-			</span></blockquote><br>
+			</blockquote><br>
 			&nbsp; &nbsp; <?=_("Sie erreichen uns auch &uuml;ber folgende <b>Mailinglisten:")?></b><br>
 			<blockquote>
-			<span style="font-size:smaller;"><b><?=_("Nutzer-Anfragen")?></b>, E-Mail: <a href="mailto:studip-users@lists.sourceforge.net?subject=<?=$mailsub ?>">studip-users@lists.sourceforge.net</a>: <?=_("Fragen, Anregungen und Vorschl&auml;ge an die Entwickler - bitte <u>keine</u> Passwort Anfragen!")?><br />
-			<b><?=_("News-Mailingsliste")?></b>, E-Mail: <a target="_blank" href="http://lists.sourceforge.net/mailman/listinfo/studip-news">studip-news@lists.sourceforge.net</a>: <?=_("News rund um Stud.IP (Eintragung notwendig)")?></span><br />
+			<b><?=_("Nutzer-Anfragen")?></b>, E-Mail: <a href="mailto:studip-users@lists.sourceforge.net?subject=<?=$mailsub ?>">studip-users@lists.sourceforge.net</a>: <?=_("Fragen, Anregungen und Vorschl&auml;ge an die Entwickler - bitte <u>keine</u> Passwort Anfragen!")?><br />
+			<b><?=_("News-Mailingsliste")?></b>, E-Mail: <a target="_blank" href="http://lists.sourceforge.net/mailman/listinfo/studip-news">studip-news@lists.sourceforge.net</a>: <?=_("News rund um Stud.IP (Eintragung notwendig)")?><br />
 			<br>
 			<? printf(_("Wir laden alle Entwickler, Betreiber und Nutzer von Stud.IP ein, sich auf dem Developer-Server %s an den Diskussionen rund um die Weiterentwicklung und Nutzung der Plattform zu beteiligen."), '<a href="http://develop.studip.de" target="_blank">http://develop.studip.de</a>')?>
 			</blockquote>
