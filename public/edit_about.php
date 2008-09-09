@@ -392,7 +392,7 @@ function checkpassword(){
 	 document.pers.new_passwd_1.focus();
 	checked = false;
  }
-	
+
  return checked;
 }
 
@@ -669,7 +669,7 @@ if ($view == 'Bild') {
 	echo _("2. Klicken sie auf <b>absenden</b>, um das Bild hochzuladen.") . "<br /><br />\n";
 	echo '&nbsp;&nbsp;<input type="IMAGE" ' . makeButton('absenden', 'src') . ' border="0" value="' . _("absenden") . "\"><br /><br />\n";
 	echo '<b>'. _("ACHTUNG!"). '</b><br>';
-	printf (_("Die Bilddatei darf max. %s KB groﬂ sein, es sind nur Dateien mit den Endungen %s, %s oder %s erlaubt!"), $my_about->max_file_size, '<b>.jpg</b>', '<b>.png</b>', '<b>.gif</b>');
+	printf (_("Die Bilddatei darf max. %d KB groﬂ sein, es sind nur Dateien mit den Endungen %s, %s oder %s erlaubt!"), Avatar::MAX_FILE_SIZE / 1024, '<b>.jpg</b>', '<b>.png</b>', '<b>.gif</b>');
 	echo '</form></td></tr>'."\n";
 }
 
@@ -711,7 +711,7 @@ if ($view == 'Daten') {
 		// if javascript is disabled dont disable the input fields
 		printf('<noscript>'.$pw_input.'</noscript>', _("neues Passwort:"), '1', '1','');
 		echo "</td><td class=\"".$cssSw->getClass()."\" width=\"55%\" nowrap align=\"left\">";
-		
+
 		echo '<script>document.write(\''.sprintf($pw_input, _("Passwort Wiederholung:"), '2', '2','disabled').'\');</script>';
 		// if javascript is disabled dont disable the input fields
 		printf('<noscript>'.$pw_input.'</noscript>', _("Passwort Wiederholung:"), '2', '2','');

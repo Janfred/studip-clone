@@ -68,7 +68,7 @@ function edit_email($uid, $email, $force=False) {
 				}
 			}
 			$msg.= 'error§'
-				.sprintf(_("Die E-Mail-Adresse fehlt, ist falsch geschrieben oder gehört nicht zu folgenden Domains:%s"), 
+				.sprintf(_("Die E-Mail-Adresse fehlt, ist falsch geschrieben oder gehört nicht zu folgenden Domains:%s"),
 							'<br>' . $email_restriction_msg_part);
 		} else {
 			$msg.= "error§" . _("Die E-Mail-Adresse fehlt oder ist falsch geschrieben!") . "§";
@@ -170,7 +170,7 @@ function parse_datafields($user_id) {
 
 			$entry->structure->load();
 			if ($entry->isValid()) {
-				$entry->store();			
+				$entry->store();
 			}	else {
 				$invalidEntries[$struct->getID()] = $entry;
 			}
@@ -203,7 +203,6 @@ class about extends messaging {
 	var $check = "";    //Hilfsvariable für den Rechtecheck
 	var $special_user = FALSE;  // Hilfsvariable für bes. Institutsfunktionen
 	var $msg = ""; //enthält evtl Fehlermeldungen
-	var $max_file_size = 100; //max Größe der Bilddatei in KB
 	var $logout_user = FALSE; //Hilfsvariable, zeigt an, ob der User ausgeloggt werden muß
 	var $priv_msg = "";  //Änderungsnachricht bei Adminzugriff
 	var $default_url = "http://www"; //default fuer private URL
@@ -394,19 +393,19 @@ class about extends messaging {
 				if ($possible_perms[$counter] == $this->auth_user['perms'])
 					break;
 				$counter++;
-			}    
-		} 
+			}
+		}
 
 		return $allowed_status;
 	}
 
 	function special_edit ($raum, $sprech, $tel, $fax, $name, $default_inst, $visible, $datafields, $group_id, $role_id, $status) {
 		if (is_array($raum)) {
-			list($inst_id, $detail) = each($raum); 
+			list($inst_id, $detail) = each($raum);
 				if ($default_inst == $inst_id) {
 					$this->db->query("UPDATE user_inst SET externdefault = 0 WHERE user_id = '".$this->auth_user['user_id']."'");
 				}
-								
+
 				$query = "UPDATE user_inst SET raum='$detail', sprechzeiten='$sprech[$inst_id]', ";
 				$query .= "Telefon='$tel[$inst_id]', Fax='$fax[$inst_id]', externdefault=";
 				$query .= $default_inst == $inst_id ? '1' : '0';
@@ -420,7 +419,7 @@ class about extends messaging {
 					$this->priv_msg = $this->priv_msg . sprintf(_("Ihre Daten an der Einrichtung %s wurden geändert.\n"), htmlReady($name[$inst_id]));
 					restoreLanguage();
 				}
-			
+
 		}
 
 		$stmt = DBManager::get()->prepare("SELECT inst_perms FROM user_inst WHERE user_id = ? AND Institut_id = ?");
@@ -552,7 +551,7 @@ class about extends messaging {
 
 			if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])
 			  && (($response && $response!=md5("*****")) || $password!="*****")) {      //Passwort verändert ?
-				
+
 				// auf doppelte Vergabe wird weiter unten getestet.
 				if (!isset($response) || $response=="") { // wir haben kein verschluesseltes Passwort
 					if (!$validator->ValidatePassword($password)) {
