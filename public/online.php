@@ -32,6 +32,7 @@ require_once ('lib/include/messagingSettings.inc.php');
 require_once ('lib/messaging.inc.php');
 require_once ('lib/contact.inc.php');
 require_once ('lib/user_visible.inc.php');
+require_once ('lib/classes/Avatar.class.php');
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT.'/chat_func_inc.php';
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
@@ -157,28 +158,58 @@ if (is_array($n_buddies))
 
 	//Buddiespalte
 
-	if (!GetNumberOfBuddies()) { // Nutzer hat gar keine buddies
-		echo "\n<td width=\"50%\" valign=\"top\">";
-		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0><tr>\n";
-		echo "\n<td class=\"steel1\" width=\"50%\" align=\"center\" colspan=5><font size=-1>";
-		echo _("Sie haben keine Buddies ausgew&auml;hlt.") . "<br />";
-		printf(_("Zum Adressbuch (%d Eintr&auml;ge) klicken Sie %shier%s"), GetSizeofBook(), "<a href=\"contact.php\">", "</a>");
-		echo "</font></td>";
-		echo "\n</tr></table></td>";
+	// Nutzer hat gar keine buddies
+	if (!GetNumberOfBuddies()) { ?>
+		<td width="50%" valign="top">
+			<table width="100%" cellspacing="0" cellpadding="1" border="0">
+				<tr>
+					<td class="steel1" width="50%" align="center" colspan="5">
+						<font size="-1">
+							<?= _("Sie haben keine Buddies ausgew&auml;hlt.") ?>
+							<br />
+							<? printf(_("Zum Adressbuch (%d Eintr&auml;ge) klicken Sie %shier%s"),
+							          GetSizeofBook(),
+							          "<a href=\"contact.php\">", "</a>") ?>
+						</font>
+					</td>
+				</tr>
+			</table>
+		</td>
 
-	} else { // nutzer hat prinzipiell buddies
+	<? } else { // nutzer hat prinzipiell buddies ?>
 
-		echo "\n<td width=\"50%\" valign=\"top\">";
-		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0>\n";
-		if (($group_buddies) || ($non_group_buddies)) {
-			echo "\n<tr><td class=\"steelgraudunkel\" colspan=2 width=\"65%\"><font size=-1 color=\"white\">&nbsp;<b>" . _("Name") . "</b></font></td><td class=\"steelgraudunkel\"  width=\"20%\" colspan=4><font size=-1 color=\"white\"><b>" . _("letztes Lebenszeichen") . "</b></font></td></tr>";
-		} else { // gar keine Buddies online
-			echo "\n<tr><td class=\"steelgraudunkel\" width=\"50%\" align=\"center\" colspan=6><font size=-1 color=\"white\"><b>" . _("Es sind keine Ihrer Buddies online.") ."</b></font></td></tr>";
-		}
-		if (sizeof($group_buddies)) {
+		<td width="50%" valign="top">
+			<table width="100%" cellspacing="0" cellpadding="1" border="0">
+			  <? if ($group_buddies || $non_group_buddies) { ?>
+			  	<tr>
+			  		<td class="steelgraudunkel" colspan="2" width="65%">
+			  			<font size="-1" color="white">
+			  				&nbsp;
+			  				<b><?= _("Name") ?></b>
+			  			</font>
+			  		</td>
+			  		<td class="steelgraudunkel" width="20%" colspan="4">
+			  			<font size="-1" color="white">
+			  				<b><?= _("letztes Lebenszeichen") ?></b>
+			  			</font>
+			  		</td>
+			  	</tr>
+		<? } else { // gar keine Buddies online ?>
+			<tr>
+				<td class="steelgraudunkel" width="50%" align="center" colspan="6">
+					<font size="-1" color="white">
+						<b><?= _("Es sind keine Ihrer Buddies online.") ?></b>
+					</font>
+				</td>
+			</tr>
+		<? } ?>
+
+
+		<? if (sizeof($group_buddies)) {
 			reset ($group_buddies);
 			$lastgroup = "";
 			$groupcount = 0;
+			$template = $GLOBALS['template_factory']->open('online/user');
 			while (list($index)=each($group_buddies)) {
 				list($position,$gruppe,$fullname,$zeit,$tmp_online_uname,$statusgruppe_id,$tmp_user_id)=$group_buddies[$index];
 				if ($gruppe != $lastgroup) {// Ueberschrift fuer andere Gruppe
@@ -188,14 +219,11 @@ if (is_array($n_buddies))
 						$groupcount = 1;
 				}
 				$lastgroup = $gruppe;
-				printf("\n<tr><td  width=\"1%%\" class=\"gruppe%s\">&nbsp; </td><td class=\"steel1\" width=\"64%%\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"steel1\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $groupcount, $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
-				echo "\n<td class=\"steel1\" width=\"5%\" align=center>";
-				if ($CHAT_ENABLE) {
-					echo chat_get_online_icon($tmp_user_id,$tmp_online_uname);
-				} else {
-					echo "&nbsp;";
-				}
-				echo "\n</td><td class=\"steel1\" width=\"5%\" align=center><a href=\"sms_send.php?sms_source_page=online.php&rec_uname=$tmp_online_uname\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td><td class=\"steel1\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("aus der Buddy-Liste entfernen"))." border=\"0\"></a></td></tr>";
+				$args = compact('fullname', 'zeit', 'tmp_online_uname', 'tmp_user_id');
+				$args['gruppe'] = "gruppe$groupcount";
+				$args['is_buddy'] = TRUE;
+				$template->clear_attributes();
+				echo $template->render($args);
 				$cssSw->switchClass();
 			}
 		}
@@ -203,21 +231,31 @@ if (is_array($n_buddies))
 		if (sizeof($non_group_buddies)) {
 			echo "\n<tr><td colspan=6 class=\"steelkante\" align=\"center\"><font size=-1 color=\"#555555\"><a href=\"contact.php?view=gruppen&filter=all\"><font size=-1 color=\"#555555\">"._("Buddies ohne Gruppenzuordnung").":</font></a></font></td></tr>";
 			reset ($non_group_buddies);
+			$template = $GLOBALS['template_factory']->open('online/user');
 			while (list($index)=each($non_group_buddies)) {
 				list($fullname,$zeit,$tmp_online_uname,$tmp_user_id)=$non_group_buddies[$index];
-				printf("\n<tr><td  width=\"1%%\" class=\"steel1\">&nbsp; </td><td class=\"steel1\" width=\"64%%\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"steel1\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
-				echo "\n<td class=\"steel1\" width=\"5%\" align=center>";
-				if ($CHAT_ENABLE) {
-					echo chat_get_online_icon($tmp_user_id,$tmp_online_uname);
-				} else {
-					echo "&nbsp;";
-				}
-				echo "\n</td><td class=\"steel1\" width=\"5%\" align=center><a href=\"sms_send.php?sms_source_page=online.php&rec_uname=$tmp_online_uname\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" ".tooltip(_("Nachricht an User verschicken"))." border=\"0\"></a></td><td class=\"steel1\" width=\"5%\" align=\"center\"><a href=\"$PHP_SELF?cmd=delete_user&delete_uname=$tmp_online_uname\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("aus der Buddy-Liste entfernen"))." border=\"0\"></a></td></tr>";
+				$args = compact('fullname', 'zeit', 'tmp_online_uname', 'tmp_user_id');
+				$args['is_buddy'] = TRUE;
+				$template->clear_attributes();
+				echo $template->render($args);
 			}
 		}
-		echo "\n<tr><td class=\"blank\" width=\"50%\" align=\"center\" colspan=6><font size=-1><br>Zum Adressbuch (".GetSizeofBook()." Eintr&auml;ge) klicken Sie <a href=\"contact.php\">hier</a></font></td>";
-		echo "\n</tr></table></td>";
-	}
+		?>
+		<tr>
+			<td class="blank" width="50%" align="center" colspan="6">
+				<font size="-1">
+					<br />
+					Zum Adressbuch (<?= GetSizeofBook() ?> Einträge) klicken Sie
+					<a href="<?= URLHelper::getLink("contact.php") ?>">
+						hier
+					</a>
+				</font>
+			</td>
+		</tr>
+	</table>
+</td>
+
+<? }
 
 ob_end_flush();
 ob_start();
@@ -230,37 +268,27 @@ ob_start();
 		if (is_array($n_buddies)) {
 			echo "\n<td class=\"steelgraudunkel\"  colspan=2><font size=-1 color=\"white\"><b>&nbsp;" . _("Name") . "</b></font></td><td class=\"steelgraudunkel\" colspan=3 ><font size=-1 color=\"white\"><b>" . _("letztes Lebenszeichen") . "</b></font></td></tr>\n";
 			reset($n_buddies);
+			$template = $GLOBALS['template_factory']->open('online/user');
 			while (list($index)=each($n_buddies)) {
-				list($fullname,$zeit,$tmp_online_uname,$tmp_user_id)=$n_buddies[$index];
-				printf("\n<tr><td class=\"".$cssSw->getClass()."\" width=\"1%%\"><a href=\"$PHP_SELF?cmd=add_user&add_uname=$tmp_online_uname\"><img src=\"".$GLOBALS['ASSETS_URL']."images/add_buddy.gif\" ".tooltip(_("zu den Buddies hinzufügen"))." border=\"0\"></a></td><td class=\"".$cssSw->getClass()."\" width=\"67%%\" align=\"left\"><a href=\"about.php?username=%s\"><font size=-1>&nbsp; %s </font></a></td><td class=\"".$cssSw->getClass()."\" width=\"20%%\"><font size=-1> %s:%s</font></td>", $tmp_online_uname, htmlReady($fullname), date("i",$zeit), date("s",$zeit));
-				echo "\n<td class=\"".$cssSw->getClass()."\" width=\"6%\"align=center>";
-				if ($CHAT_ENABLE) {
-					echo chat_get_online_icon($tmp_user_id,$tmp_online_uname);
-				} else {
-					echo "&nbsp;";
-				}
-			?>
-			</td>
-			<td class="<?=$cssSw->getClass()?>" align=center width="6%">
-				<a href="sms_send.php?sms_source_page=online.php&rec_uname=<?=$tmp_online_uname?>">
-					<img src="<?=$GLOBALS['ASSETS_URL']?>images/nachricht1.gif" <?=tooltip(_("Nachricht an User verschicken"))?> border="0">
-				</a>
-			</td>
-		</tr>
-			<?
+				list($fullname, $zeit, $tmp_online_uname, $tmp_user_id) = $n_buddies[$index];
+				$args = compact('fullname', 'zeit', 'tmp_online_uname', 'tmp_user_id');
+				$args['background'] = $cssSw->getClass();
+				$args['is_buddy'] = FALSE;
+				$template->clear_attributes();
+				echo $template->render($args);
 				$cssSw->switchClass();
 			}
-			if ($weitere > 0) {
-		?>
-			<tr>
-				<td colspan="5" align="center">
-					<br/>
-					<font size="-1"><?=sprintf(_("+ %s unsichtbare NutzerInnen"), $weitere)?></font>
-				</td>
-			</tr>
-		<?
-			}
-		} else {
+
+			if ($weitere > 0) { ?>
+				<tr>
+					<td colspan="5" align="center">
+						<br/>
+						<font size="-1"><?=sprintf(_("+ %s unsichtbare NutzerInnen"), $weitere)?></font>
+					</td>
+				</tr>
+			<? } ?>
+
+		<? } else {
 			// if we previously found unvisible users who are online
 			if ($weitere > 0) {
 			?>

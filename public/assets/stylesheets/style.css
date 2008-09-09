@@ -162,14 +162,14 @@ td.infoboxrahmen {
 
 /* --- Sonstige ------------------------------------------------------------- */
 /** //TODO: aufräumen und optmieren... */
-.gruppe0 {background: none; background-color: #FFFFFF;}
-.gruppe1 {background: none; background-color: #FF0000;}
-.gruppe2 {background: none; background-color: #FF9933;}
-.gruppe3 {background: none; background-color: #FFCC66;}
-.gruppe4 {background: none; background-color: #99FF99;}
-.gruppe5 {background: none; background-color: #66CC66;}
-.gruppe6 {background: none; background-color: #6699CC;}
-.gruppe7 {background: none; background-color: #666699;}
+.gruppe0 {background: none; background-color: #FFFFFF; background-image: url();}
+.gruppe1 {background: none; background-color: #FF0000; background-image: url();}
+.gruppe2 {background: none; background-color: #FF9933; background-image: url();}
+.gruppe3 {background: none; background-color: #FFCC66; background-image: url();}
+.gruppe4 {background: none; background-color: #99FF99; background-image: url();}
+.gruppe5 {background: none; background-color: #66CC66; background-image: url();}
+.gruppe6 {background: none; background-color: #6699CC; background-image: url();}
+.gruppe7 {background: none; background-color: #666699; background-image: url();}
 
 .steelgroup0 {background-image: url('../images/steelgroup0.gif');}
 .steelgroup1 {background-image: url('../images/steelgroup1.gif');}
