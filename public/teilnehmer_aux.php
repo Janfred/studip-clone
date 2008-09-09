@@ -264,7 +264,7 @@ function aux_enter_data() {
 		/*// change visibility of role data
 			foreach ($group_id as $groupID)
 			setOptionsOfStGroup($groupID, $u_id, ($visible[$groupID] == '0') ? '0' : '1');*/
-		if (is_array($invalidEntries))
+		if (count($invalidEntries))
 			$msgs[] = 'error§<b>'. _("Sie haben fehlerhafte Eingaben gemacht (siehe unten). Ihre anderen Angaben wurden jedoch gespeichert.") .'</b>';
 		else
 			$msgs[] = 'msg§'. _("Die Daten wurden gespeichert!");
