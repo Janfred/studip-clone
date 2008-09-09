@@ -503,7 +503,6 @@ if($view == 'edit') {
 <?=_("angezeigtes Semester"); ?>: <select name="sem">
 <?
 if (!$my_schedule_settings ["glb_sem"]) {
-	echo 'w00t?';
 	if (time() > $VORLES_ENDE) {
 		echo '<option selected value="'. $SEM_NAME_NEXT .'">'._("aktuelles Semester")." ($SEM_NAME_NEXT)</option>";
 		$tmp_name = $SEM_NAME_NEXT;
@@ -785,7 +784,7 @@ for ($i = $global_start_time; $i < $global_end_time+1; $i++) {
 					
 					if ($my_sems[$cc['seminar_id']]['ort']) echo ", ", htmlReady($my_sems[$cc["seminar_id"]]["ort"]);
 					echo '</font></td></tr><tr><td class="blank">';
-					if ((!$my_sems[$cc["seminar_id"]]["personal_sem"]) && ($view == 'print')) {
+					if ((!$my_sems[$cc["seminar_id"]]["personal_sem"]) && $view != 'print') {
 						if ($my_sems[$cc['seminar_id']]['virtual']) {
 							echo "<a href=\"". URLHelper::getLink('details.php?sem_id='.substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32)) ."\">";
 							echo "<FONT size=\"-1\" color=\"green\">";
