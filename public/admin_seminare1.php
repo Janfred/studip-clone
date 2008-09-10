@@ -697,7 +697,7 @@ if ($s_send) {
     {
     	$update_data['Untertitel'] = $Untertitel;
     }
-	
+
 	if (!LockRules::Check($s_id, 'status'))
     {
     	$update_data['status'] = $Status;
@@ -732,7 +732,7 @@ if ($s_send) {
     {
     	$update_data['lernorga'] = $lernorga;
     }
-	
+
 	if (!LockRules::Check($s_id, 'leistungsnachweis'))
     {
     	$update_data['leistungsnachweis'] = $leistungsnachweis;
@@ -924,7 +924,7 @@ if (($s_id) && (auth_check())) {
 		$tmp_typ = _("Veranstaltung");
 	else
 	$tmp_typ = $SEM_TYPE[$db->f("status")]["name"];
-	
+
 	if ($lockdata['description'] && LockRules::CheckLockRulePermission($s_id, $lockdata['permission'])){
 		$msg .= "info§" . fixlinks($lockdata['description']);
 	}
@@ -935,12 +935,12 @@ if (($s_id) && (auth_check())) {
 	parse_msg($msg);
 	?>
 	</td></tr><tr><td class="blank" colspan=2>
-	<table border=0 align="center" cellspacing=0 cellpadding=2 width="99%">
 	<?
 
 	// ab hier Anzeigeroutinen ///////////////////////////////////////////////
 	echo "<form name=\"details\" method=\"post\" action=\"$PHP_SELF#anker\">";
 	?>
+	<table border=0 align="center" cellspacing=0 cellpadding=2 width="99%">
 		<input type="hidden" name="s_id"   value="<?php $db->p("Seminar_id") ?>">
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align="center" colspan=3>
@@ -1557,8 +1557,8 @@ if (($s_id) && (auth_check())) {
 				<input type="hidden" name="s_send" value="TRUE">
 				</td>
 			</tr>
-		</form>
-	</table>
+		</table>
+	</form>
 	</td></tr>
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 	<?
