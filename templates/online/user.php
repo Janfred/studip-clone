@@ -12,13 +12,16 @@
 		<? endif ?>
 	</td>
 
-	<td width="64%">
+	<td width="4%">
 		<a href="<?= URLHelper::getLink('about.php', array('username' => $tmp_online_uname)) ?>">
 			<?= Avatar::getAvatar($tmp_user_id)->getImageTag(Avatar::SMALL) ?>
 		</a>
+	</td>
+
+	<td width="60%">
 		<a href="<?= URLHelper::getLink('about.php', array('username' => $tmp_online_uname)) ?>">
 			<font size="-1">
-				&nbsp; <?= htmlReady($fullname) ?>
+				<?= htmlReady($fullname) ?>
 			</font>
 		</a>
 	</td>
