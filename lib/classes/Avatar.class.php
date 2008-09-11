@@ -47,7 +47,7 @@ class Avatar {
   /**
    * This constant represents the maximal size of a user picture in bytes.
    */
-  const MAX_FILE_SIZE = 102400;
+  const MAX_FILE_SIZE = 716800;
 
 
   /**
