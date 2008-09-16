@@ -183,41 +183,48 @@ class Avatar {
    */
   public function createFromUpload($userfile) {
 
-    // Bilddatei ist zu groß
-    if ($_FILES[$userfile]['size'] > self::MAX_FILE_SIZE) {
-      throw new Exception(sprintf(_("Die hochgeladene Bilddatei ist %s KB groß. Die maximale Dateigröße beträgt %s KB!"),
-                                  round($_FILES[$userfile]['size'] / 1024),
-                                  self::MAX_FILE_SIZE / 1024));
+    try {
+
+      // Bilddatei ist zu groß
+      if ($_FILES[$userfile]['size'] > self::MAX_FILE_SIZE) {
+        throw new Exception(sprintf(_("Die hochgeladene Bilddatei ist %s KB groß. Die maximale Dateigröße beträgt %s KB!"),
+                                    round($_FILES[$userfile]['size'] / 1024),
+                                    self::MAX_FILE_SIZE / 1024));
+      }
+
+      // keine Datei ausgewählt!
+      if (!$_FILES[$userfile]['name']) {
+        throw new Exception(_("Sie haben keine Datei zum Hochladen ausgewählt!"));
+      }
+
+      // get extension
+      $pathinfo = pathinfo($_FILES[$userfile]['name']);
+      $ext = $pathinfo['extension'];
+
+      // passende Endung ?
+      if (!in_array($ext, words('jpg jpeg gif png'))) {
+        throw new Exception(sprintf(_("Der Dateityp der Bilddatei ist falsch (%s). Es sind nur die Dateiendungen .gif, .png, .jpeg und .jpg erlaubt!"),
+                                    $ext));
+      }
+
+      // na dann kopieren wir mal...
+      $filename = sprintf('%s/user/%s.%s',
+                          $GLOBALS['DYNAMIC_CONTENT_PATH'], $this->user_id, $ext);
+
+      if (!@move_uploaded_file($_FILES[$userfile]['tmp_name'], $filename)) {
+        throw new Exception(_("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!"));
+      }
+
+      // set permissions for uploaded file
+      chmod($filename, 0666 & ~umask());
+
+      $this->createFrom($filename);
+
+    // eigentlich braucht man hier "finally"
+    } catch (Exception $e) {
+      unlink($filename);
+      throw $e;
     }
-
-    // keine Datei ausgewählt!
-    if (!$_FILES[$userfile]['name']) {
-      throw new Exception(_("Sie haben keine Datei zum Hochladen ausgewählt!"));
-    }
-
-    // get extension
-    $pathinfo = pathinfo($_FILES[$userfile]['name']);
-    $ext = $pathinfo['extension'];
-
-    // passende Endung ?
-    if (!in_array($ext, words('jpg jpeg gif png'))) {
-      throw new Exception(sprintf(_("Der Dateityp der Bilddatei ist falsch (%s). Es sind nur die Dateiendungen .gif, .png, .jpeg und .jpg erlaubt!"),
-                                  $ext));
-    }
-
-    // na dann kopieren wir mal...
-    $filename = sprintf('%s/user/%s.%s',
-                        $GLOBALS['DYNAMIC_CONTENT_PATH'], $this->user_id, $ext);
-
-    if (!@move_uploaded_file($_FILES[$userfile]['tmp_name'], $filename)) {
-      throw new Exception(_("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!"));
-    }
-
-    // set permissions for uploaded file
-    chmod($filename, 0666 & ~umask());
-
-    $this->createFrom($filename);
-    unlink($filename);
   }
 
 
