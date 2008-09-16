@@ -40,6 +40,8 @@ require_once ('lib/classes/DataFieldEntry.class.php');
 require_once ('lib/classes/UserDomain.php'); // Nutzerdomänen
 require_once ('lib/classes/SeminarCategories.class.php');
 require_once ('lib/classes/LockRules.class.php');
+require_once 'lib/classes/Seminar.class.php';
+require_once 'lib/classes/StudipStudyAreaSelection.class.php';
 
 $sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
 
@@ -68,22 +70,35 @@ $db2 = new DB_Seminar;
 $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
-$st_search = new StudipSemTreeSearch("dummy","sem_bereich",false);
-#$DataFields = new DataFields();
 $Modules = new Modules;
 $semester = new SemesterData;
 
-//initialisations for sem_tree
-if (is_array($sem_create_data["sem_bereich"])){
-		for ($i = 0; $i < count($sem_create_data["sem_bereich"]); $i++){
-			$st_search->selected[$sem_create_data["sem_bereich"][$i]] = true;
-			$st_search->sem_tree_ranges[$st_search->tree->tree_data[$sem_create_data["sem_bereich"][$i]]['parent_id']][] = $sem_create_data["sem_bereich"][$i];
-			$st_search->sem_tree_ids[] = $sem_create_data["sem_bereich"][$i];
-		}
+
+//Registrieren der Sessionvariablen
+$sess->register("sem_create_data");
+$sess->register("links_admin_data");
+
+# init of study area selection
+$study_areas = isset($_REQUEST['study_area_selection'])
+   ? remove_magic_quotes($_REQUEST['study_area_selection'])
+   : array();
+
+$area_selection = new StudipStudyAreaSelection();
+
+if (isset($study_areas['last_selected'])) {
+	$area_selection->setSelected((string) $study_areas['last_selected']);
 }
 
-$st_search->institut_id = array_merge((array)$sem_create_data["sem_inst_id"],(array)$sem_create_data["sem_bet_inst"]);
-$st_search->doSearch();
+if (isset($study_areas['showall'])) {
+	$area_selection->setShowAll((boolean) $study_areas['showall']);
+}
+
+if (isset($study_areas['areas'])) {
+	$area_selection->setAreas((array) $study_areas['areas']);
+} else if (isset($sem_create_data["sem_bereich"])) {
+	$area_selection->setAreas((array) $sem_create_data["sem_bereich"]);
+}
+
 $user_id = $auth->auth["uid"];
 $errormsg='';
 
@@ -95,9 +110,7 @@ if ($RESOURCES_ENABLE && $RESOURCES_ALLOW_ROOM_REQUESTS && $form <7) {
 	}
 }
 
-//Registrieren der Sessionvariablen
-$sess->register("sem_create_data");
-$sess->register("links_admin_data");
+
 
 //verbotene Kategorien checken
 if (($cmd == 'do_copy' && SeminarCategories::GetBySeminarId($cp_id)->course_creation_forbidden)
@@ -274,6 +287,11 @@ if (($auth->lifetime != 0 && ((time() - $sem_create_data["timestamp"]) >$auth->l
 	$sem_create_data["sem_admission_start_date"]=-1;
 	$sem_create_data["sem_admission_end_date"]=-1;
 	$sem_create_data["sem_payment"]=0;
+
+	# reset study area selection
+	$area_selection = new StudipStudyAreaSelection();
+	$sem_create_data["sem_bereich"] = array();
+
 	if ($_default_sem){
 		$one_sem = $semester->getSemesterData($_default_sem);
 		if ($one_sem["vorles_ende"] > time()) $sem_create_data['sem_start_time'] = $one_sem['beginn'];
@@ -330,6 +348,28 @@ if ($form == 1)
 	$sem_create_data["term_art"]=$term_art;
 	$sem_create_data["sem_start_time"]=$sem_start_time;
 	$sem_create_data["sem_domain"] = array();
+
+	# pre-select Heimatinstitut
+	if (!isset($study_areas['last_selected']) &&
+	    !isset($study_areas['selected'])) {
+
+		#   1.) get the ID of the faculty of the chosen institute
+		$stmt = DBManager::get()->prepare('SELECT fakultaets_id FROM Institute '.
+		                                  'WHERE Institut_id = ?');
+		$stmt->execute(array($sem_create_data["sem_inst_id"]));
+		$row = $stmt->fetch();
+
+		#   2.) get the sem_tree ID of that faculty
+		$stmt = DBManager::get()->prepare('SELECT sem_tree_id FROM sem_tree '.
+		                                  'WHERE studip_object_id = ?');
+		$stmt->execute(array($row['fakultaets_id']));
+		$row = $stmt->fetch();
+		#   3.) pre-select that ID
+		if ($row !== FALSE) {
+			$area_selection->setSelected($row['sem_tree_id']);
+		}
+	}
+
 	if (isset($_default_sem)){
 		$one_sem = $semester->getSemesterDataByDate($sem_create_data["sem_start_time"]);
 		$_default_sem = $one_sem['semester_id'];
@@ -362,33 +402,44 @@ if ($form == 1)
 		$sem_create_data["sem_bet_inst"]=$tmp_create_data_bet_inst;
 		}
 	$i=0;
-	$st_search->institut_id = array_merge((array)$sem_create_data["sem_inst_id"],(array)$sem_create_data["sem_bet_inst"]);
-
 	}
 
-if ($form == 2)
-	{
-		if(isset($sem_bereich_chooser)){
-			if (!$st_search->search_done){
-				$st_search->sem_tree_ranges = array();
-				$st_search->sem_tree_ids = array();
-			}
-			$st_search->selected = array();
-			for ($i = 0; $i < count($sem_bereich_chooser); $i++){
-				if($sem_bereich_chooser[$i] != '0'){
-					$selected[$sem_bereich_chooser[$i]] = true;
-					$sem_tree_ranges[$st_search->tree->tree_data[$sem_bereich_chooser[$i]]['parent_id']][] = $sem_bereich_chooser[$i];
-					$sem_tree_ids[] = $sem_bereich_chooser[$i];
-				} else {
-					$false_mark = true;
-				}
-			}
-			$st_search->selected = array_merge((array)$st_search->selected,(array)$selected);
-			$st_search->sem_tree_ranges = array_merge_recursive($st_search->sem_tree_ranges, $sem_tree_ranges);
-			array_walk($st_search->sem_tree_ranges, create_function('&$value,$key', '$value = array_values(array_unique($value));'));
-			$st_search->sem_tree_ids = array_unique(array_merge((array)$st_search->sem_tree_ids, (array)$sem_tree_ids));
-			$sem_create_data["sem_bereich"] = $sem_tree_ids;
+if ($form == 2) {
+
+	# evaluate study area selection
+
+	# action: add
+	if (isset($study_areas['add'])) {
+		foreach ($study_areas['add'] as $key => $value) {
+			$area_selection->add($key);
+	  }
 	}
+
+	# action: remove
+	else if (isset($study_areas['remove'])) {
+		foreach ($study_areas['remove'] as $key => $value) {
+			$area_selection->remove($key);
+		}
+	}
+
+	# action: switch show all
+	else if (isset($study_areas['showall_button'])) {
+		$area_selection->toggleShowAll();
+	}
+
+	# action: search
+	else if (isset($study_areas['search_key']) &&
+	         $study_areas['search_key'] != '') {
+		$area_selection->setSearchKey($study_areas['search_key']);
+	}
+
+	# action: expand
+	else if (isset($study_areas['selected'])) {
+		$area_selection->setSelected($study_areas['selected']);
+	}
+
+	$sem_create_data["sem_bereich"] = $area_selection->getAreaIDs();
+
 
 	if (!$sem_create_data["sem_admission"]) {
 		$sem_create_data["sem_sec_lese"]=$sem_sec_lese;
@@ -725,11 +776,33 @@ if ($jump_back_x) {
 }
 
 //not pressed any button? Send user to next page and checks...
-if ( (!$jump_back_x) && (!$jump_next_x) && (!$add_doz) && (!$add_tut) && (!$delete_doz) && (!$delete_tut) && (!$add_turnus_field_x)
-	&& (!$delete_turnus_field_x) && (!$send_doz_x) && (!$reset_search_x) && (!$add_term_field_x) && (!$delete_term_field_x)
-	&& (!$add_studg_x) && (!$delete_studg_x) && (!$search_doz) && (!$search_tut) && (!$search_room_x) && (!$reset_room_search_x)
-	&& (!$send_room_x) && (!$search_properties_x) && (!$send_room_type_x) && (!$reset_room_type_x) 	&& (!$reset_resource_id_x) && (!$reset_admission_time_x) && !$toggle_admission_quota_x)
+if (!$jump_back_x
+    && !$jump_next_x
+    && !$add_doz
+    && !$add_tut
+    && !$delete_doz
+    && !$delete_tut
+    && !$add_turnus_field_x
+    && !$delete_turnus_field_x
+    && !$send_doz_x
+    && !$reset_search_x
+    && !$add_term_field_x
+    && !$delete_term_field_x
+    && !$add_studg_x
+    && !$delete_studg_x
+    && !$search_doz
+    && !$search_tut
+    && !$search_room_x
+    && !$reset_room_search_x
+    && !$send_room_x
+    && !$search_properties_x
+    && !$send_room_type_x
+    && !$reset_room_type_x
+    && !$reset_resource_id_x
+    && !$reset_admission_time_x
+    && !$toggle_admission_quota_x) {
 	$jump_next_x=TRUE;
+}
 
 
 //Check auf korrekte Eingabe und Sprung in naechste Level, hier auf Schritt 2
@@ -883,10 +956,19 @@ if (isset($_REQUEST['delete_domain'])) {
 	unset($sem_create_data["sem_domain"][$index]);
 }
 
-if ($search_doz_x || $search_tut_x || $reset_search_x || $sem_bereich_do_search_x || isset($_REQUEST['add_domain_x']) || isset($_REQUEST['delete_domain'])) {
+if ($search_doz_x || $search_tut_x || $reset_search_x || 
+    $sem_bereich_do_search_x || 
+        isset($_REQUEST['add_domain_x']) || isset($_REQUEST['delete_domain']) ||
+    $study_areas['add'] || $study_areas['remove'] ||
+    $study_areas['showall_button'] || $study_areas['search_button'] ||
+    $study_areas['search_key'] || $study_areas['selected'] ||
+    $study_areas['rewind_button']) {
+
 	$level=2;
 
-} elseif (($form == 2) && ($jump_next_x)) //wenn alles stimmt, Checks und Sprung auf Schritt 3
+} 
+
+elseif (($form == 2) && ($jump_next_x)) //wenn alles stimmt, Checks und Sprung auf Schritt 3
 	{
 	if (is_array($sem_create_data['sem_tut']))
 		foreach ($sem_create_data['sem_tut'] as $key=>$val){
@@ -912,20 +994,17 @@ if ($search_doz_x || $search_tut_x || $reset_search_x || $sem_bereich_do_search_
 			}
 		}
 	if ($SEM_CLASS[$sem_create_data["sem_class"]]["bereiche"]) {
-		if (sizeof($sem_create_data["sem_bereich"])==0)
-			{
+		if (sizeof($sem_create_data["sem_bereich"]) == 0) {
 			$level=2;
-			$errormsg=$errormsg."error§"._("Bitte geben Sie mindestens einen Studienbereich f&uuml;r die Veranstaltung an!")."§";
-			}
-		else
-			{
-			if ($false_mark)
-				{
-				$level=2;
-				$errormsg=$errormsg."error§"._("Sie haben eine oder mehrere Fach&uuml;berschriften (unterstrichen) ausgew&auml;hlt. Diese dienen nur der Orientierung und k&ouml;nnen nicht ausgew&auml;hlt werden!")."§";
-				}
+			$errormsg = $errormsg . "error§" . 
+            _("Bitte geben Sie mindestens einen Studienbereich f&uuml;r die Veranstaltung an!")."§";
+		} else if ($false_mark) {
+			$level=2;
+			$errormsg = $errormsg . "error§" .
+              _("Sie haben eine oder mehrere Fach&uuml;berschriften (unterstrichen) ausgew&auml;hlt. Diese dienen nur der Orientierung und k&ouml;nnen nicht ausgew&auml;hlt werden!")."§";
 			}
 		}
+
 	if (($sem_create_data["sem_sec_schreib"]) <($sem_create_data["sem_sec_lese"]))
 		{
 		$level=2; //wir bleiben auf der zweiten Seite
@@ -1655,10 +1734,9 @@ if (($form == 6) && ($jump_next_x))
 
 			//Eintrag der Studienbereiche
 			if (is_array($sem_create_data["sem_bereich"])) {
-				$st_search->seminar_id = $sem_create_data["sem_id"];
-				$st_search->selected = array();
-				$st_search->insertSelectedRanges($sem_create_data["sem_bereich"]);
-				$count_bereich = $st_search->num_inserted;
+				$seminar = Seminar::getInstance($sem_create_data["sem_id"]);
+				$seminar->setStudyAreas($sem_create_data["sem_bereich"]);
+				$count_bereich = sizeof($sem_create_data["sem_bereich"]);
 				}
 
 			//Eintrag der zugelassen Studiengänge
@@ -1886,11 +1964,14 @@ switch ($level) {
 		break;
 }
 
+# change <body>'s id attribute
+$GLOBALS['body_id'] = 'admin_seminare_assi';
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 include ('lib/include/links_admin.inc.php');  		//Linkleiste fuer admins
+
 
 if (!$sem_create_data["sem_class"])
 	include ('lib/include/startup_checks.inc.php');
@@ -2307,6 +2388,7 @@ if ($level == 2)
 			<td class="blank" colspan=2>
 			<form method="POST" action="<? echo $PHP_SELF ?>#anker">
 			<input type="HIDDEN" name="form" value=2>
+			<input type="HIDDEN" name="level" value=2>				
 				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%">
@@ -2580,39 +2662,23 @@ if ($level == 2)
 						</td>
 					</tr>
 
-					<?
-					if ($SEM_CLASS[$sem_create_data["sem_class"]]["bereiche"])
-					{
-					?>
-					<tr <? $cssSw->switchClass() ?>>
-						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							<?=_("Studienbereiche:"); ?><br>
-							<font color="red" size=-1>
-								<?=_("(&Uuml;berschriften k&ouml;nnen nicht ausgew&auml;hlt werden!)"); ?>
-							</font>
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
-							<?
-							echo "\n<div align=\"left\" >&nbsp;";
-							echo "&nbsp;<span style=\"font-size:10pt;\">" . _("Geben Sie zur Suche den Namen des Studienbereiches ein.")."<br>";
-							echo "&nbsp;".$st_search->getSearchField(array('size' => 30 ,'style' => 'vertical-align:middle;'));
-							echo "&nbsp;";
-							echo $st_search->getSearchButton(array('style' => 'vertical-align:middle;'));
-							if ($st_search->num_search_result !== false){
-								echo "<br><a name=\"anker\">&nbsp;&nbsp;</a><b>" . sprintf(_("Ihre Suche ergab %s Treffer."),$st_search->num_search_result) . (($st_search->num_search_result) ? _(" (Suchergebnisse werden blau angezeigt)") : "") . "</b>";
-							}
-							echo "</span><br>&nbsp;";
-							echo $st_search->getChooserField(array('style' => 'width:70%','size' => 10),70);
-							?>
-							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
-								<? echo tooltip(_("Hier können Sie die Studienbereiche, in denen die Veranstaltung angeboten wird, markieren. Sie können mehrere Studienbereiche auswählen."), TRUE, TRUE) ?>
-							>
-							<font color="red" size=+2>*</font></div>
-						</td>
-					</tr>
-					<?
-					}
-					?>
+					<? if ($SEM_CLASS[$sem_create_data["sem_class"]]["bereiche"]) : ?>
+						<tr <? $cssSw->switchClass() ?>>
+							<td colspan="4" class="<? echo $cssSw->getClass() ?>">
+
+								<?= _("Studienbereiche:") ?>
+
+								<?
+								$trails_views = $GLOBALS['STUDIP_BASE_PATH'] . '/app/views';
+								$factory = new Flexi_TemplateFactory($trails_views);
+								echo $factory->render('course/study_areas/form',
+								                      array('selection' => $area_selection));
+								?>
+
+							</td>
+						</tr>
+					<? endif ?>
+
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							<?=_("Lesezugriff:"); ?>

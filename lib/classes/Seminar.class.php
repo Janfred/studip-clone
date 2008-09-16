@@ -1081,6 +1081,10 @@ class Seminar {
 		*/
 	}
 
+	function getStatus() {
+		return $this->status;
+	}
+
 	function getBookedRoomsTooltip($cycle_id) {
 		$stat = $this->getStatOfNotBookedRooms($cycle_id);
 
@@ -1700,4 +1704,51 @@ class Seminar {
 		else return round(($free / $waiting) * 100);
 	}
 
+	/**
+	 * Returns the IDs of this course's study areas.
+	 *
+	 * @return array     an array of IDs
+	 */
+	function getStudyAreas() {
+
+		$stmt = DBManager::get()->prepare("SELECT DISTINCT sem_tree_id ".
+		                                  "FROM seminar_sem_tree ".
+		                                 "WHERE seminar_id=?");
+
+		$stmt->execute(array($this->id));
+		return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+	}
+
+	/**
+	 * Sets the study areas of this course.
+	 *
+	 * @param  array      an array of IDs
+	 *
+	 * @return type       <description>
+	 */
+	function setStudyAreas($selected) {
+
+		$old = $this->getStudyAreas();
+
+		$count_intersect = sizeof(array_intersect($selected, $old));
+
+		if (sizeof($old) != $count_intersect ||
+		    sizeof($selected) != $count_intersect) {
+
+			$db = DBManager::get();
+
+			# delete old
+			$stmt = $db->prepare('DELETE FROM seminar_sem_tree '.
+			                     'WHERE seminar_id = ?');
+			$stmt->execute(array($this->id));
+
+			# insert new
+			$db = DBManager::get();
+			$stmt = $db->prepare('INSERT IGNORE INTO seminar_sem_tree '.
+			                     '(seminar_id, sem_tree_id) VALUES (?, ?)');
+			foreach ($selected as $id) {
+				$stmt->execute(array($this->id, $id));
+			}
+		}
+	}
 }

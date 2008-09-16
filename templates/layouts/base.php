@@ -34,6 +34,12 @@
 
     <?= Assets::script('prototype', 'scriptaculous', 'application') ?>
 
+    <script type="text/javascript" language="javascript">
+    // <![CDATA[
+      STUDIP.ABSOLUTE_URI_STUDIP = "<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>";
+    // ]]>
+    </script>
+
     <? if ($GLOBALS['my_messaging_settings']['start_messenger_at_startup'] &&
            $GLOBALS['auth']->auth['jscript'] &&
            !$_SESSION['messenger_started'] &&
@@ -61,6 +67,12 @@
 
     <div id="layout_container">
       <div id="layout_infobox">
+        <? $infobox = isset($infobox)
+                      ? $infobox
+                      : array('picture' => 'warning.jpg',
+                              'content' => array(
+                                             array('kategorie' => _("Infobox fehlt."))
+                                           )) ?>
         <?= $this->render_partial('infobox/infobox_generic_content', $infobox) ?>
       </div>
       <div id="layout_content">

@@ -126,8 +126,6 @@ $msg = "";
 if ($SessSemName[1])
 	$s_id=$SessSemName[1];
 
-$st_search = new StudipSemTreeSearch($s_id,"details");
-
 
 $label_lock_text = '<img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="middle"';
 $label_lock_text .= tooltip(_("Sie dürfen nicht alle Daten dieser Veranstaltung verändern. Diese Sperrung ist von einem/einer AdministratorIn vorgenommen worden."),TRUE,TRUE).">";
@@ -141,47 +139,6 @@ function auth_check() {
 
 if (isset($s_id) && $SEMINAR_LOCK_ENABLE) {
 	$lockdata = $lock_rules->getSemLockRule($s_id);
-}
-
-function get_Institutes($id) {
-	$stmt = DBManager::get()->prepare(
-	  "SELECT sem_tree_id FROM seminar_sem_tree s ".
-	  "WHERE s.seminar_id=?");
-	$stmt->execute(array($id));
-
-	$inst_tree = array();
-	while ($row = $stmt->fetch()) {
-		$inst_tree[] = array("tree" => get_sem_tree($row["sem_tree_id"]),
-		                     "id"   => $row["sem_tree_id"]);
-	}
-	return $inst_tree;
-}
-
-
-function get_sem_tree($id, $path=array()) {
-	$db = DBManager::get();
-	$stmt = $db->prepare("SELECT parent_id, name, studip_object_id ".
-	                     "FROM sem_tree WHERE sem_tree_id = ?");
-	$stmt->execute(array($id));
-	$row = $stmt->fetch();
-
-	if ($row["parent_id"] == "root" && $row["name"] == "") {
-		$stmt2 = $db->prepare("SELECT Name FROM Institute WHERE Institut_id=?");
-		$stmt2->execute(array("studip_object_id"));
-		$row2 = $stmt2->fetch();
-		$path[] = $row2["Name"];
-	}
-
-	if ($row["name"] != "") {
-		$path[] = $row["name"];
-	}
-
-	if ($row["parent_id"] != "root" && $row["parent_id"] != '') {
-		return get_sem_tree($row["parent_id"], $path);
-	}
-
-	krsort($path);
-	return $path;
 }
 
 function format_sem_tree($array) {
@@ -621,27 +578,6 @@ if ($s_send) {
 		$run = FALSE;
 	}
 
-	if ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["bereiche"]) {
-
-	if (!LockRules::Check($s_id, 'sem_tree'))
-	{
-    if (empty($_REQUEST['details_chooser'])) {
-      $msg .= "error§" . _("Bitte geben Sie wenigstens einen <b>Studienbereich</b> an!") . "§";
-      $run = FALSE;
-		} else {
-			for ($i = 0; $i < count($_REQUEST['details_chooser']);++$i) {
-				if ($_REQUEST['details_chooser'][$i] != '0') $dochnoch = "ja";
-			}
-			if ($dochnoch != "ja") {
-				$msg .= "error§" . _("Sie haben nur einen ung&uuml;ltigen Studienbereich ausgew&auml;hlt. Bitte geben Sie wenigstens einen <b>Studienbereich</b> an!") . "§";
-				$run = FALSE;
-			}
-		}
-	}
-
-	}
-
-
 	//we have to select at least one Dozent!
 	if (($perm->have_perm("admin")) && (!$add_doz)) {
 		$db2->query ("SELECT user_id FROM seminar_user WHERE Seminar_id = '$s_id' AND status = 'dozent' ");
@@ -888,27 +824,6 @@ if ($s_send) {
 				$msg .= "error§" . _("Fehlerhafte Eingaben (s.u.) wurden nicht gespeichert") . "§";
 		}
 	}  // end if ($run)
-
-	//Bereiche aendern
-	if ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["bereiche"]) {
-		if (isset($_REQUEST['details_chooser'])) {
-			$st_search->insertSelectedRanges();
-			if ($st_search->num_inserted) {
-				$msg .= "msg§" . sprintf(_("%s Studienbereiche hinzugefügt."),$st_search->num_inserted) ."§";
-			}
-			if ($st_search->num_deleted) {
-				$msg .= "msg§" . sprintf(_("%s Studienbereiche gel&ouml;scht."),$st_search->num_deleted) ."§";
-			}
-			if ($st_search->num_deleted || $st_search->num_inserted) {
-				$st_search->init();
-			}
-		}
-	} else {
-		// nur alte Eintraege rauswerfen, falls voher Kategorie mit Bereichen gewaehlt war
-		$query = "DELETE from seminar_sem_tree where seminar_id='$s_id'";
-		$db3->query($query);
-	}
-
 }  // end if ($s_send)
 
 
@@ -1366,46 +1281,12 @@ if (($s_id) && (auth_check())) {
 				}
 				?>
 			</tr>
+
 			<?
 			//Bereichsauswahl
 			if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) {
 			?>
-			<tr>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><b><?=_("Studienbereich(e)")?></b>
-                <? if (LockRules::Check($s_id, 'sem_tree')) { echo $label_lock_text;}?>
-                </td>
-				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>
-					<?
-                        if (LockRules::Check($s_id, 'sem_tree')) {
-                            $institutes = get_Institutes($s_id);
-                            $SET_SEM_PATHS = Array();
-                            $sess->register("SET_SEM_PATHS");
-                            foreach($institutes as $sem_path)
-                            {
-                                $SET_SEM_PATHS[implode("|",get_sem_tree($sem_path["id"]))] = true;
-                            }
-                            for ($i=0;$i<count($institutes);$i++) {
-                                echo "<font size=-1>".format_sem_tree($institutes[$i]["tree"])."</font>";
-                                echo "<br>";
-                            }
-                            echo $lock_text;
-                        } else {
-					echo "\n<div align=\"left\">&nbsp;";
-					echo $st_search->getSearchField(array('style' => 'vertical-align:middle;','size'=>30));
-					echo "&nbsp;";
-					echo $st_search->getSearchButton(array('style' => 'vertical-align:middle;'));
-					echo "<br>&nbsp;&nbsp;<span style=\"font-size:10pt;\">" . _("Geben Sie zur Suche den Namen des Studienbereiches ein.");
-					if ($st_search->num_search_result !== false){
-						echo "<br><a name=\"anker\">&nbsp;&nbsp;</a><b>" . sprintf(_("Ihre Suche ergab %s Treffer."),$st_search->num_search_result) . (($st_search->num_search_result) ? _(" (Suchergebnisse werden blau angezeigt)") : "") . "</b>";
-					}
-					echo "</span><br>&nbsp;";
-					echo $st_search->getChooserField(array('size' => 12, 'onChange' => 'checkbereich()'),70);
-					echo "</div>";
-				?>
-				</td>
-			<?
-			}
-			?>
+
 			<tr>
 				<td class="<? $cssSw->switchClass();  echo $cssSw->getClass() ?>" align="center" colspan=3>
 					<input <? if ($SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["bereiche"]) echo "onClick=\"checkdata('edit'); return false;\" "; ?> type="image" <? echo makeButton ("uebernehmen", "src") ?> border=0 name="s_edit" value=" Ver&auml;ndern ">

@@ -111,6 +111,15 @@ if ($my_messaging_settings['start_messenger_at_startup'] && $auth->auth['jscript
 }
 ?>
 	<?= Assets::script('prototype', 'scriptaculous', 'application') ?>
+	<script type="text/javascript" language="javascript">
+	// <![CDATA[
+		STUDIP.ABSOLUTE_URI_STUDIP = "<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>";
+	// ]]>
+	</script>
 	</head>
+	<? if (isset($GLOBALS['body_id'])) : ?>
+		<body id="<?= $GLOBALS['body_id'] ?>">
+	<? else : ?>
 	<body>
+	<? endif ?>
       <div id="ajax_notification" style="display: none;"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ajax_indicator.gif" alt="AJAX indicator" align="absmiddle">&nbsp;Working...</div>

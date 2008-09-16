@@ -90,7 +90,7 @@ a img { /* Bilder in Links ohne Rand */
 
 /* --- Layouts -------------------------------------------------------------- */
 #layout_container {
-/*  background-color: white;*/
+  background-color: white;
   width: 100%;
   padding: 0 0 1em 0;
 }
@@ -516,3 +516,58 @@ div.clear {
 #tabs2 li.current {
 	background: url("../images/forumrot3.gif") no-repeat left top;
 }
+
+
+/* --- Studienbereichsauswahl ----------------------------------------------- */
+#study_area_selection {
+  padding: 1em;
+}
+
+#study_area_selection h3 {
+}
+
+#study_area_selection_chosen {
+  width: 55%;
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+#study_area_selection_none,
+#study_area_selection_at_least_one {
+  font-style: italic;
+}
+
+#study_area_selection_selectables {
+  margin: 0 0 0 57%;
+  padding: 0;
+}
+
+#study_area_selection .odd {
+  background-image: url("../images/steel1.jpg");
+}
+
+#study_area_selection .even {
+  background-image: url("../images/steelgraulight.jpg");
+}
+
+#study_area_selection_chosen ul,
+#study_area_selection_selectables ul {
+  list-style: none;
+  padding: 0 0 0 0;
+}
+
+#study_area_selection_chosen li,
+#study_area_selection_selectables li {
+  list-style: none;
+  padding: 0 0 0 1em;
+}
+
+#admin_seminare_assi #study_area_selection {
+   font-size: 0.8em;
+}
+
+#admin_seminare_assi #study_area_selection h3 {
+   font-weight: normal;
+}
+
