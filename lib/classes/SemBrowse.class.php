@@ -444,7 +444,8 @@ function print_result(){
 						echo"<td class=\"steel1\" width=\"66%\"><font size=-1><a href=\"{$this->target_url}?{$this->target_id}={$seminar_id}&send_from_search=1&send_from_search_page="
 						. $PHP_SELF. "?keep_result_set=1\">", htmlReady($sem_name), "</a><br>";
 						//create Turnus field
-						$temp_turnus_string = view_turnus($seminar_id, true, key($sem_data[$seminar_id]["metadata_dates"]),(!$this->sem_browse_data["group_by"]) ? $this->search_obj->sem_dates[$group_field]['beginn'] : false);
+						$seminar_obj = new Seminar($seminar_id);
+						$temp_turnus_string = $seminar_obj->getFormattedTurnus(true);
 						//Shorten, if string too long (add link for details.php)
 						if (strlen($temp_turnus_string) >70) {
 							$temp_turnus_string = htmlReady(substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") +71));
@@ -455,12 +456,19 @@ function print_result(){
 						echo "<font style=\"margin-left:5px;\" size=\"-2\">" . $temp_turnus_string . "</font></td>";
 						echo "<td class=\"steel1\" align=\"right\"><font size=-1>(";
 						$doz_name = array();
-						foreach($sem_data[$seminar_id]['fullname'] as $d_name => $anzahl){
-							$doz_name = array_merge($doz_name, array_fill(0, $anzahl, $d_name));
+						$c = 0;
+						reset($sem_data[$seminar_id]['fullname']);
+						foreach($sem_data[$seminar_id]['username'] as $anzahl1){
+							if($c == 0){
+								list($d_name, $anzahl2) = each($sem_data[$seminar_id]['fullname']);
+								$c = $anzahl2/$anzahl1;
+								$doz_name = array_merge($doz_name, array_fill(0, $c, $d_name));
+							}
+							--$c;
 						}
 						$doz_uname = array_keys($sem_data[$seminar_id]['username']);
 						$doz_position = array_keys($sem_data[$seminar_id]['position']);
-						if (is_array($doz_name)){
+						if (count($doz_name)){
 							if(count($doz_position) != count($doz_uname)) $doz_position = range(1, count($doz_uname));
 							array_multisort($doz_position, $doz_name, $doz_uname);
 							$i = 0;
@@ -613,7 +621,8 @@ function print_result(){
 						}
 						$worksheet1->write_string($row, 0, $sem_name, $data_format);
 						//create Turnus field
-						$temp_turnus_string = view_turnus($seminar_id, true, key($sem_data[$seminar_id]["metadata_dates"]),(!$this->sem_browse_data["group_by"]) ? $this->search_obj->sem_dates[$group_field]['beginn'] : false);
+						$seminar_obj = new Seminar($seminar_id);
+						$temp_turnus_string = $seminar_obj->getFormattedTurnus(true);
 						//Shorten, if string too long (add link for details.php)
 						if (strlen($temp_turnus_string) > 245) {
 							$temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 245, strlen($temp_turnus_string)), ",") + 246);
@@ -623,8 +632,15 @@ function print_result(){
 						$worksheet1->write_string($row, 2, $temp_turnus_string, $data_format);
 
 						$doz_name = array();
-						foreach($sem_data[$seminar_id]['fullname'] as $d_name => $anzahl){
-							$doz_name = array_merge($doz_name, array_fill(0, $anzahl, $d_name));
+						$c = 0;
+						reset($sem_data[$seminar_id]['fullname']);
+						foreach($sem_data[$seminar_id]['username'] as $anzahl1){
+							if($c == 0){
+								list($d_name, $anzahl2) = each($sem_data[$seminar_id]['fullname']);
+								$c = $anzahl2/$anzahl1;
+								$doz_name = array_merge($doz_name, array_fill(0, $c, $d_name));
+							}
+							--$c;
 						}
 						$doz_position = array_keys($sem_data[$seminar_id]['position']);
 						if (is_array($doz_name)){
