@@ -554,13 +554,15 @@ div.clear {
 #study_area_selection_chosen ul,
 #study_area_selection_selectables ul {
   list-style: none;
-  padding: 0 0 0 0;
+  padding: 0;
+  margin: 0;
 }
 
 #study_area_selection_chosen li,
 #study_area_selection_selectables li {
   list-style: none;
   padding: 0 0 0 1em;
+  margin: 0;
 }
 
 #admin_seminare_assi #study_area_selection {
