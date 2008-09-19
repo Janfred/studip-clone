@@ -38,7 +38,7 @@
 
 page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
 
-if (!$GLOBALS['ENABLE_SELF_REGISTRATION'] || !$GLOBALS['ENABLE_REQUEST_NEW_PASSWORD_BY_USER']) {
+if (!($GLOBALS['ENABLE_REQUEST_NEW_PASSWORD_BY_USER'] && in_array('Standard', $GLOBALS['STUDIP_AUTH_PLUGIN']))) {
 	require_once ('lib/msg.inc.php');
 	// Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
