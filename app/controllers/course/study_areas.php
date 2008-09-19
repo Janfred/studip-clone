@@ -80,7 +80,7 @@ class Course_StudyAreasController extends Trails_Controller {
 
     # is locked?
     # TODO (mlunzena) shouldn't this be done in the before filter?
-    $this->locked = $this->is_course_locked();
+    $this->locked = LockRules::Check($course_id , 'sem_tree');
 
     # does the course's class permit "bereiche"?
     # TODO (mlunzena) shouldn't this be done in the before filter?
@@ -111,18 +111,6 @@ class Course_StudyAreasController extends Trails_Controller {
     }
 
     $this->url = $this->url_for('course/study_areas/show/'.$course_id);
-  }
-
-
-  function is_course_locked() {
-    $locked = FALSE;
-    if (!$GLOBALS['perm']->have_perm("admin") &&
-        $GLOBALS['SEMINAR_LOCK_ENABLE']) {
-      $lock_rules = new LockRules();
-      $lockdata = $lock_rules->getSemLockRule($course_id);
-      $locked = $lockdata["attributes"]["sem_tree"];
-    }
-    return $locked;
   }
 
 
