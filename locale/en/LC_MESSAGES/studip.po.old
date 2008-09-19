@@ -1,26 +1,22 @@
-# translation of studip-2008-04-04.po to
-# translation of studip.po to
+# translation of studip.po to english
 # This file is distributed under the same license as the Stud.IP package.
 # Copyright (C) 2007 Hartje Kriete.
 #
 # Jens Schmelzer <jens.schmelzer@fh-jena.de>, 2005.
 # Stefan Suchi <suchi@data-quest.de>, 2006, 2007, 2008.
-# Hartje Kriete <kriete@math.uni-goettingen.de>, 2006, 2007.
-#: ../public/stm_abstract_assi.php:217 ../public/stm_abstract_assi.php:230
-#: ../public/stm_instance_assi.php:129
-#: ../lib/plugins/core/AdminInfo.class.php:22
+# Hartje Kriete <kriete@math.uni-goettingen.de>, 2006, 2007, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: studip-2008-04-04\n"
+"Project-Id-Version: studip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-03 17:07+0200\n"
-"PO-Revision-Date: 2008-04-04 09:37+0000\n"
-"Last-Translator: \n"
-"Language-Team:  <en@li.org>\n"
+"POT-Creation-Date: 2008-04-04 16:22+0200\n"
+"PO-Revision-Date: 2008-04-04 16:28+GMT\n"
+"Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
+"Language-Team: english <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.1\n"
+"X-Generator: KBabel 1.11.2\n"
 
 #: ../public/wap/directory_search.php:265 ../public/wap/dates_search.php:160
 #, c-format
@@ -98,7 +94,7 @@ msgstr "News"
 
 #: ../public/wap/login_index.php:89 ../public/wap/events.php:54
 #: ../public/browse.php:133 ../public/admin_test_fak.php:349
-#: ../public/about.php:661 ../public/admin_studiengang.php:261
+#: ../public/about.php:675 ../public/admin_studiengang.php:261
 #: ../lib/include/links_openobject.inc.php:207
 #: ../lib/include/links_admin.inc.php:278
 #: ../lib/include/links_admin.inc.php:280
@@ -275,7 +271,7 @@ msgstr "Please restrict time period."
 
 #: ../public/wap/show_institute.php:135 ../public/wap/show_institute.php:147
 #: ../public/edit_about.php:1377 ../public/inst_admin.php:472
-#: ../public/institut_main.php:135 ../public/about.php:430
+#: ../public/institut_main.php:135 ../public/about.php:444
 #: ../lib/extern/elements/ExternElementContact.class.php:66
 #: ../lib/extern/elements/ExternElementRangeTreeLevelContent.class.php:65
 msgid "Fax:"
@@ -283,7 +279,7 @@ msgstr "Fax:"
 
 #: ../public/wap/show_institute.php:165 ../public/edit_about.php:1359
 #: ../public/inst_admin.php:460 ../public/mein_stundenplan.php:686
-#: ../public/about.php:424
+#: ../public/about.php:438
 #: ../lib/extern/elements/ExternElementContact.class.php:66
 #: ../lib/calendar/views/edit.inc.php:236 ../lib/show_dates.inc.php:378
 #: ../lib/show_dates.inc.php:622
@@ -531,13 +527,13 @@ msgid "(Default-Aktivierung)"
 msgstr "(default activation)"
 
 #: ../public/plugins_packages/core/PluginAdministrationVisualization.class.php:166
-#: ../public/admin_modules.php:260 ../public/admin_modules.php:310
+#: ../public/admin_modules.php:276 ../public/admin_modules.php:326
 #: ../lib/extern/views/ExternEditHtml.class.php:628
 msgid "an"
 msgstr "on"
 
 #: ../public/plugins_packages/core/PluginAdministrationVisualization.class.php:167
-#: ../public/admin_modules.php:262 ../public/admin_modules.php:312
+#: ../public/admin_modules.php:278 ../public/admin_modules.php:328
 #: ../lib/extern/views/ExternEditHtml.class.php:611
 #: ../lib/extern/views/ExternEditHtml.class.php:628
 msgid "aus"
@@ -1522,7 +1518,7 @@ msgstr ""
 "to work with this entry, you can provide yourselves apersonal copy."
 
 #: ../public/admin_lit_element.php:288 ../public/lit_search.php:302
-#: ../public/about.php:553
+#: ../public/about.php:567
 msgid "Literaturlisten bearbeiten"
 msgstr "Edit literature lists"
 
@@ -2509,7 +2505,7 @@ msgstr ""
 "in order to use Stud.IP functions such as subscribing to courses.<br>In case "
 "of problems please contact: %s"
 
-#: ../public/index.php:349 ../public/about.php:610
+#: ../public/index.php:349 ../public/about.php:624
 msgid "Administration"
 msgstr "Administration"
 
@@ -3295,7 +3291,7 @@ msgstr "Duration"
 #: ../public/raumzeit.php:224 ../public/raumzeit.php:252
 #: ../public/admin_sem_tree.php:201 ../public/admin_banner_ads.php:120
 #: ../public/admin_seminare_assi.php:2064
-#: ../public/admin_seminare_assi.php:2066 ../public/about.php:654
+#: ../public/admin_seminare_assi.php:2066 ../public/about.php:668
 #: ../lib/classes/StudipSemTreeView.class.php:187
 #: ../lib/classes/SemBrowse.class.php:438
 #: ../lib/classes/SemBrowse.class.php:605
@@ -3831,7 +3827,7 @@ msgstr "female"
 msgid "Freiwillige Angaben"
 msgstr "Optional information"
 
-#: ../public/edit_about.php:1235 ../public/about.php:348
+#: ../public/edit_about.php:1235 ../public/about.php:362
 msgid "Telefon (privat):"
 msgstr "Home telephone number: "
 
@@ -3843,11 +3839,11 @@ msgstr "Fixed line network"
 msgid "Mobiltelefon"
 msgstr "Mobile phone"
 
-#: ../public/edit_about.php:1249 ../public/about.php:374
+#: ../public/edit_about.php:1249 ../public/about.php:388
 msgid "Adresse (privat):"
 msgstr "Home address:"
 
-#: ../public/edit_about.php:1258 ../public/about.php:361
+#: ../public/edit_about.php:1258 ../public/about.php:375
 msgid "Skype:"
 msgstr "Skype:"
 
@@ -3864,7 +3860,7 @@ msgid "Motto:"
 msgstr "Motto:"
 
 #: ../public/edit_about.php:1274 ../public/admin_institut.php:420
-#: ../public/institut_main.php:139 ../public/about.php:380
+#: ../public/institut_main.php:139 ../public/about.php:394
 #: ../lib/extern/elements/ExternElementContact.class.php:67
 #: ../lib/extern/elements/ExternElementRangeTreeLevelContent.class.php:65
 msgid "Homepage:"
@@ -3943,12 +3939,12 @@ msgstr "to the top"
 msgid "nach unten"
 msgstr "to the bottom"
 
-#: ../public/edit_about.php:1365 ../public/about.php:426
+#: ../public/edit_about.php:1365 ../public/about.php:440
 msgid "Sprechzeit:"
 msgstr "Office hours:"
 
 #: ../public/edit_about.php:1371 ../public/inst_admin.php:468
-#: ../public/about.php:428
+#: ../public/about.php:442
 #: ../lib/extern/elements/ExternElementContact.class.php:66
 #: ../lib/extern/elements/ExternElementRangeTreeLevelContent.class.php:64
 msgid "Telefon:"
@@ -4877,7 +4873,7 @@ msgstr "My categories"
 msgid "Kontakt löschen"
 msgstr "Delete contact"
 
-#: ../public/contact.php:273 ../public/about.php:293
+#: ../public/contact.php:273 ../public/about.php:307
 msgid "als vCard exportieren"
 msgstr "Export as vCard"
 
@@ -6954,7 +6950,7 @@ msgid ""
 "Anmeldeverfahren f&uuml;r die Veranstaltung festzulegen."
 msgstr "On this page you can set up a registration procedure for the course."
 
-#: ../public/admin_admission.php:799 ../public/admin_modules.php:236
+#: ../public/admin_admission.php:799 ../public/admin_modules.php:252
 #: ../public/admin_room_requests.php:237 ../public/admin_lock.php:29
 msgid "Diese Daten sind noch nicht gespeichert."
 msgstr "These data are not saved yet."
@@ -9036,21 +9032,21 @@ msgstr ""
 msgid "SupportDB nicht eingebunden"
 msgstr "SupportDB is not connected"
 
-#: ../public/admin_modules.php:169
+#: ../public/admin_modules.php:184
 msgid "Verwaltung verwendeter Module und Plugins"
 msgstr "Administration of used modules and plugins"
 
-#: ../public/admin_modules.php:218
+#: ../public/admin_modules.php:234
 msgid "Module konfigurieren"
 msgstr "Configure module"
 
-#: ../public/admin_modules.php:219
+#: ../public/admin_modules.php:235
 msgid ""
 "Sie k&ouml;nnen hier einzelne Module nachtr&auml;glich aktivieren oder "
 "deaktivieren."
 msgstr "Here you can activate or deactivate the various modules at a later date."
 
-#: ../public/admin_modules.php:220
+#: ../public/admin_modules.php:236
 msgid ""
 "Mit &raquo;zur&uuml;cksetzten&laquo; k&ouml;nnen Sie die Ausgangs-"
 "Modulkonfiguration wieder herstellen."
@@ -13934,11 +13930,11 @@ msgid ""
 "markiert."
 msgstr "You have left %s obligatory questions unanswered. These have been marked."
 
-#: ../public/about.php:146
+#: ../public/about.php:151
 msgid "Meine persönliche Homepage"
 msgstr "My personal homepage"
 
-#: ../public/about.php:149 ../public/about.php:152
+#: ../public/about.php:154 ../public/about.php:157
 #: ../lib/evaluation/classes/db/EvaluationObjectDB.class.php:114
 #: ../lib/evaluation/classes/db/EvaluationObjectDB.class.php:200
 #: ../lib/evaluation/evaluation_admin_overview.lib.php:1958
@@ -13946,29 +13942,29 @@ msgstr "My personal homepage"
 msgid "Persönliche Homepage"
 msgstr "Personal homepage"
 
-#: ../public/about.php:161
+#: ../public/about.php:166
 msgid "Diese Homepage ist nicht verf&uuml;gbar."
 msgstr "This home page is not available."
 
-#: ../public/about.php:161
+#: ../public/about.php:166
 msgid "Die angeforderte Homepage ist leider nicht verf&uuml;gbar."
 msgstr "Unfortunately, the requested home page isn't available."
 
-#: ../public/about.php:162
+#: ../public/about.php:167
 msgid "Homepage nicht verf&uuml;gbar"
 msgstr "Home page not available."
 
-#: ../public/about.php:163 ../lib/functions.php:205 ../lib/functions.php:226
+#: ../public/about.php:168 ../lib/functions.php:205 ../lib/functions.php:226
 #, c-format
 msgid "%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."
 msgstr "%sThis%s takes you back to the registration and start page."
 
-#: ../public/about.php:165
+#: ../public/about.php:170
 #: ../lib/plugins/core/AbstractStudIPHomepagePlugin.class.php:76
 msgid "Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!"
 msgstr "No user was found with the entered username!"
 
-#: ../public/about.php:165
+#: ../public/about.php:170
 msgid ""
 " Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der "
 "Username des gesuchten Nutzers ge&auml;ndert hat, oder der Nutzer gel&ouml;"
@@ -13977,117 +13973,121 @@ msgstr ""
 "If you have clicked on a link, it could be that the username of the user you "
 "have searched for has changed, or that the user has been deleted."
 
-#: ../public/about.php:165
+#: ../public/about.php:170
 msgid "Benutzer nicht gefunden"
 msgstr "User not found"
 
-#: ../public/about.php:260
+#: ../public/about.php:265
 msgid "Besucher dieser Homepage:"
 msgstr "Visitors to this homepage:"
 
-#: ../public/about.php:268
+#: ../public/about.php:273
 msgid "Zur Highscoreliste"
 msgstr "To high score list"
 
-#: ../public/about.php:269
+#: ../public/about.php:274
 msgid "Ihr Stud.IP-Score:"
 msgstr "Your Stud.IP score:"
 
-#: ../public/about.php:270
+#: ../public/about.php:275
 msgid "Ihr Rang:"
 msgstr "Your rank:"
 
-#: ../public/about.php:276
+#: ../public/about.php:281
 msgid "Stud.IP-Score:"
 msgstr "Stud.IP-Score:"
 
-#: ../public/about.php:277
+#: ../public/about.php:282
 msgid "Rang:"
 msgstr "Rank:"
 
-#: ../public/about.php:282
+#: ../public/about.php:287
 msgid "Stud.IP Messenger starten"
 msgstr "Start Stud.IP Messenger"
 
-#: ../public/about.php:286
+#: ../public/about.php:293
+msgid "aus Buddy-Liste entfernen"
+msgstr "Remove from buddy list "
+
+#: ../public/about.php:298
 msgid "zu Buddies hinzuf&uuml;gen"
 msgstr "Add to Buddies "
 
-#: ../public/about.php:288
+#: ../public/about.php:302
 msgid "Nachricht an Nutzer"
 msgstr "Message to user"
 
-#: ../public/about.php:288
+#: ../public/about.php:302
 msgid "Nachricht an Nutzer verschicken"
 msgstr "Send message to user"
 
-#: ../public/about.php:293
+#: ../public/about.php:307
 msgid "vCard herunterladen"
 msgstr "Download vCard"
 
-#: ../public/about.php:332
+#: ../public/about.php:346
 msgid "(Dieser Nutzer ist unsichtbar.)"
 msgstr "(This user is invisible.)"
 
-#: ../public/about.php:336
+#: ../public/about.php:350
 msgid "(Sie sind unsichtbar. Deshalb können nur Sie diese Seite sehen.)"
 msgstr "(You are invisible. Thus only you can see this page.)"
 
-#: ../public/about.php:343
+#: ../public/about.php:357
 msgid "E-mail:"
 msgstr "E-mail:"
 
-#: ../public/about.php:354
+#: ../public/about.php:368
 msgid "Mobiltelefon:"
 msgstr "Mobil phone:"
 
-#: ../public/about.php:388
+#: ../public/about.php:402
 msgid "BENUTZER IST GESPERRT!"
 msgstr "USER IS BLOCKED!"
 
-#: ../public/about.php:398
+#: ../public/about.php:412
 msgid "Wo ich studiere:"
 msgstr "Where I study:"
 
-#: ../public/about.php:410
+#: ../public/about.php:424
 msgid "Wo ich arbeite:"
 msgstr "Where I work:"
 
-#: ../public/about.php:477 ../public/about.php:578
+#: ../public/about.php:491 ../public/about.php:592
 msgid "sichtbar für alle"
 msgstr "for all visible"
 
-#: ../public/about.php:478 ../public/about.php:579
+#: ../public/about.php:492 ../public/about.php:593
 #, c-format
 msgid "sichtbar für Sie und alle %s"
 msgstr "visible for you an all %s"
 
-#: ../public/about.php:550 ../lib/archiv.inc.php:311
+#: ../public/about.php:564 ../lib/archiv.inc.php:311
 msgid "Literaturlisten"
 msgstr "Literature lists"
 
-#: ../public/about.php:561 ../lib/include/links_about.inc.php:100
+#: ../public/about.php:575 ../lib/include/links_about.inc.php:100
 #: ../lib/extern/modules/ExternModulePersondetails.class.php:79
 #: ../lib/extern/modules/ExternModuleTemplatePersondetails.class.php:158
 #: ../lib/extern/elements/main/ExternElementMainPersondetails.class.php:73
 msgid "Lebenslauf"
 msgstr "Curriculum vitae"
 
-#: ../public/about.php:562
+#: ../public/about.php:576
 msgid "Hobbies"
 msgstr "Hobbies"
 
-#: ../public/about.php:563 ../lib/include/links_about.inc.php:103
+#: ../public/about.php:577 ../lib/include/links_about.inc.php:103
 #: ../lib/extern/modules/ExternModulePersondetails.class.php:84
 #: ../lib/extern/elements/main/ExternElementMainPersondetails.class.php:74
 msgid "Publikationen"
 msgstr "Publications"
 
-#: ../public/about.php:564
+#: ../public/about.php:578
 msgid "Arbeitsschwerpunkte"
 msgstr "Research interests"
 
-#: ../public/about.php:630 ../lib/kategorien.inc.php:61
+#: ../public/about.php:644 ../lib/kategorien.inc.php:61
 msgid "f&uuml;r andere unsichtbar"
 msgstr "hidden for others"
 
@@ -14820,7 +14820,7 @@ msgstr ""
 #, c-format
 msgid ""
 "In Kürze wird Ihnen eine E-Mail an die Adresse %s mit einem Bestätigungslink "
-"geschickt. Bitte beachten Sie die Hinweise in dieser E-Mail. Sollte Sie "
+"geschickt. Bitte beachten Sie die Hinweise in dieser E-Mail. Sollten Sie "
 "keine E-Mail erhalten haben, vergewissern Sie sich, ob diese evtl. in einem "
 "Spam-Ordner abgelegt wurde."
 msgstr ""
@@ -25103,7 +25103,7 @@ msgid "Sie können beliebig viele Studienbereiche auswählen."
 msgstr "Here you can select arbitrarily many subject areas."
 
 #: ../lib/extern/views/ExternEditModule.class.php:463
-#, c-format
+
 msgid "Geben Sie '%%%' ein, um alle Studienbereiche zu finden."
 msgstr "Enter '%%%' to find all subject areas."
 
@@ -31301,7 +31301,7 @@ msgstr "You can select more than one answer."
 #: ../lib/vote/view/vote_show.lib.php:811
 
 msgid " Die Summe kann daher über 100% liegen."
-msgstr "The total can therefore be greater than 100%."
+msgstr " The total can therefore be greater than 100%."
 
 #: ../lib/vote/view/vote_show.lib.php:831
 msgid "Es hat bisher insgesamt <b>eine</b> Person teilgenommen"
