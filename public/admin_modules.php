@@ -53,6 +53,10 @@ $sess->register("plugin_toggle");
 $messaging=new messaging;
 $amodules=new AdminModules;
 if ($GLOBALS['PLUGINS_ENABLE']){
+	if ($SessSemName[1] == '') {
+		$poiid = 'sem'.($range_id ? $range_id : $admin_modules_data['range_id']);
+		$amodules->pluginengine->setPoiid($poiid);
+	}
 	$admin_modules_plugins = $amodules->pluginengine->getAllEnabledPlugins(); // get all installed and enabled plugins
 }
 if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {

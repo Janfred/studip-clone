@@ -49,7 +49,11 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
   function getActivationsForPlugins($plugins) {
 
     // Veranstaltungsid aus poiid bestimmen
-    $id = trim(str_replace($_SESSION["SessSemName"]["class"], "", $this->poiid));
+    if ($_SESSION['SessSemName']['class'] != '') {
+      $id = str_replace($_SESSION['SessSemName']['class'], '', $this->poiid);
+    } else {
+      $id = preg_replace('/^(sem|inst)/', '', $this->poiid);
+    }
 
     $stmt = DBManager::get()->prepare(
       "SELECT pat.* FROM plugins_activated pat ".
