@@ -163,7 +163,7 @@ if (is_array($n_buddies))
 		<td width="50%" valign="top">
 			<table width="100%" cellspacing="0" cellpadding="1" border="0">
 				<tr>
-					<td class="steel1" width="50%" align="center" colspan="5">
+					<td class="steel1" width="50%" align="center">
 						<font size="-1">
 							<?= _("Sie haben keine Buddies ausgew&auml;hlt.") ?>
 							<br />
@@ -180,85 +180,85 @@ if (is_array($n_buddies))
 
 		<td width="50%" valign="top">
 			<table width="100%" cellspacing="0" cellpadding="1" border="0">
-			  <? if ($group_buddies || $non_group_buddies) { ?>
-			  	<tr>
-			  		<td class="steelgraudunkel" colspan="2" width="65%">
-			  			<font size="-1" color="white">
-			  				&nbsp;
-			  				<b><?= _("Name") ?></b>
-			  			</font>
-			  		</td>
-			  		<td class="steelgraudunkel" width="20%" colspan="4">
-			  			<font size="-1" color="white">
-			  				<b><?= _("letztes Lebenszeichen") ?></b>
-			  			</font>
-			  		</td>
-			  	</tr>
-		<? } else { // gar keine Buddies online ?>
-			<tr>
-				<td class="steelgraudunkel" width="50%" align="center" colspan="6">
-					<font size="-1" color="white">
-						<b><?= _("Es sind keine Ihrer Buddies online.") ?></b>
-					</font>
-				</td>
-			</tr>
-		<? } ?>
+				<? if ($group_buddies || $non_group_buddies) { ?>
+					<tr>
+						<td class="steelgraudunkel" colspan="3" width="65%">
+							<font size="-1" color="white">
+								&nbsp;
+								<b><?= _("Name") ?></b>
+							</font>
+						</td>
+						<td class="steelgraudunkel" width="20%" colspan="4">
+							<font size="-1" color="white">
+								<b><?= _("letztes Lebenszeichen") ?></b>
+							</font>
+						</td>
+					</tr>
+				<? } else { // gar keine Buddies online ?>
+					<tr>
+						<td class="steelgraudunkel" width="50%" align="center" colspan="7">
+							<font size="-1" color="white">
+								<b><?= _("Es sind keine Ihrer Buddies online.") ?></b>
+							</font>
+						</td>
+					</tr>
+				<? } ?>
 
 
-		<? if (sizeof($group_buddies)) {
-			reset ($group_buddies);
-			$lastgroup = "";
-			$groupcount = 0;
-			$template = $GLOBALS['template_factory']->open('online/user');
-			while (list($index)=each($group_buddies)) {
-				list($position,$gruppe,$fullname,$zeit,$tmp_online_uname,$statusgruppe_id,$tmp_user_id)=$group_buddies[$index];
-				if ($gruppe != $lastgroup) {// Ueberschrift fuer andere Gruppe
-					printf("\n<tr><td colspan=\"6\" align=\"middle\" class=\"steelkante\"><a href=\"contact.php?view=gruppen&filter=%s\"><font size=\"2\" color=\"#555555\">%s</font></a></td></tr>",$statusgruppe_id, htmlready($gruppe));
-					$groupcount++;
-					if ($groupcount > 10) //irgendwann gehen uns die Farben aus
-						$groupcount = 1;
+				<? if (sizeof($group_buddies)) {
+					reset ($group_buddies);
+					$lastgroup = "";
+					$groupcount = 0;
+					$template = $GLOBALS['template_factory']->open('online/user');
+					while (list($index)=each($group_buddies)) {
+						list($position,$gruppe,$fullname,$zeit,$tmp_online_uname,$statusgruppe_id,$tmp_user_id)=$group_buddies[$index];
+						if ($gruppe != $lastgroup) {// Ueberschrift fuer andere Gruppe
+							printf("\n<tr><td colspan=\"7\" align=\"middle\" class=\"steelkante\"><a href=\"contact.php?view=gruppen&filter=%s\"><font size=\"2\" color=\"#555555\">%s</font></a></td></tr>",$statusgruppe_id, htmlready($gruppe));
+							$groupcount++;
+							if ($groupcount > 10) //irgendwann gehen uns die Farben aus
+								$groupcount = 1;
+						}
+						$lastgroup = $gruppe;
+						$args = compact('fullname', 'zeit', 'tmp_online_uname', 'tmp_user_id');
+						$args['gruppe'] = "gruppe$groupcount";
+						$args['is_buddy'] = TRUE;
+						$template->clear_attributes();
+						echo $template->render($args);
+						$cssSw->switchClass();
+					}
 				}
-				$lastgroup = $gruppe;
-				$args = compact('fullname', 'zeit', 'tmp_online_uname', 'tmp_user_id');
-				$args['gruppe'] = "gruppe$groupcount";
-				$args['is_buddy'] = TRUE;
-				$template->clear_attributes();
-				echo $template->render($args);
-				$cssSw->switchClass();
-			}
-		}
 
-		if (sizeof($non_group_buddies)) {
-			echo "\n<tr><td colspan=6 class=\"steelkante\" align=\"center\"><font size=-1 color=\"#555555\"><a href=\"contact.php?view=gruppen&filter=all\"><font size=-1 color=\"#555555\">"._("Buddies ohne Gruppenzuordnung").":</font></a></font></td></tr>";
-			reset ($non_group_buddies);
-			$template = $GLOBALS['template_factory']->open('online/user');
-			while (list($index)=each($non_group_buddies)) {
-				list($fullname,$zeit,$tmp_online_uname,$tmp_user_id)=$non_group_buddies[$index];
-				$args = compact('fullname', 'zeit', 'tmp_online_uname', 'tmp_user_id');
-				$args['is_buddy'] = TRUE;
-				$template->clear_attributes();
-				echo $template->render($args);
-			}
-		}
-		?>
-		<tr>
-			<td class="blank" width="50%" align="center" colspan="6">
-				<font size="-1">
-					<br />
-					Zum Adressbuch (<?= GetSizeofBook() ?> Einträge) klicken Sie
-					<a href="<?= URLHelper::getLink("contact.php") ?>">
-						hier
-					</a>
-				</font>
-			</td>
-		</tr>
-	</table>
-</td>
+				if (sizeof($non_group_buddies)) {
+					echo "\n<tr><td colspan=7 class=\"steelkante\" align=\"center\"><font size=-1 color=\"#555555\"><a href=\"contact.php?view=gruppen&filter=all\"><font size=-1 color=\"#555555\">"._("Buddies ohne Gruppenzuordnung").":</font></a></font></td></tr>";
+					reset ($non_group_buddies);
+					$template = $GLOBALS['template_factory']->open('online/user');
+					while (list($index)=each($non_group_buddies)) {
+						list($fullname,$zeit,$tmp_online_uname,$tmp_user_id)=$non_group_buddies[$index];
+						$args = compact('fullname', 'zeit', 'tmp_online_uname', 'tmp_user_id');
+						$args['is_buddy'] = TRUE;
+						$template->clear_attributes();
+						echo $template->render($args);
+					}
+				} ?>
 
-<? }
+				<tr>
+					<td class="blank" width="50%" align="center" colspan="7">
+						<font size="-1">
+							<br />
+							Zum Adressbuch (<?= GetSizeofBook() ?> Einträge) klicken Sie
+							<a href="<?= URLHelper::getLink("contact.php") ?>">
+								hier
+							</a>
+						</font>
+					</td>
+				</tr>
+			</table>
+		</td>
 
-ob_end_flush();
-ob_start();
+	<? }
+
+	ob_end_flush();
+	ob_start();
 
 	//Spalte anderer Benutzer
 	if (!$my_messaging_settings["show_only_buddys"]) {
@@ -266,7 +266,7 @@ ob_start();
 		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0><tr>\n";
 
 		if (is_array($n_buddies)) {
-			echo "\n<td class=\"steelgraudunkel\"  colspan=2><font size=-1 color=\"white\"><b>&nbsp;" . _("Name") . "</b></font></td><td class=\"steelgraudunkel\" colspan=3 ><font size=-1 color=\"white\"><b>" . _("letztes Lebenszeichen") . "</b></font></td></tr>\n";
+			echo "\n<td class=\"steelgraudunkel\"  colspan=3><font size=-1 color=\"white\"><b>&nbsp;" . _("Name") . "</b></font></td><td class=\"steelgraudunkel\" colspan=4><font size=-1 color=\"white\"><b>" . _("letztes Lebenszeichen") . "</b></font></td></tr>\n";
 			reset($n_buddies);
 			$template = $GLOBALS['template_factory']->open('online/user');
 			while (list($index)=each($n_buddies)) {
@@ -281,7 +281,7 @@ ob_start();
 
 			if ($weitere > 0) { ?>
 				<tr>
-					<td colspan="5" align="center">
+					<td colspan="7" align="center">
 						<br/>
 						<font size="-1"><?=sprintf(_("+ %s unsichtbare NutzerInnen"), $weitere)?></font>
 					</td>
@@ -292,7 +292,7 @@ ob_start();
 			// if we previously found unvisible users who are online
 			if ($weitere > 0) {
 			?>
-				<td class="steelgraudunkel" colspan="5" align="center">
+				<td class="steelgraudunkel" align="center">
 					<font size="-1" color="white">
 						<b>&nbsp;<?=_("Keine sichtbaren Nutzer online.")?></b>
 					</font>
@@ -307,7 +307,7 @@ ob_start();
 			<?
 			} else {
 			?>
-			<td class="steelgraudunkel" width="50%" align="center" colspan="4">
+			<td class="steelgraudunkel" width="50%" align="center">
 				<font size="-1" color="white">
 					<b><?=_("Kein anderer Nutzer ist online.")?></b>
 				</font>
