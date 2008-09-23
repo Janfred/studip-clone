@@ -200,20 +200,21 @@ function keywordExists($str, $sem_id=NULL) {
 * @param	string	out format: "wiki"=link to wiki.php, "inline"=link on same page
 *
 **/
-function isKeyword($str, $page, $format="wiki", $sem_id=NULL){
+function isKeyword($str, $page, $format="wiki", $sem_id=NULL, $alt_str=NULL){
+	if (!$alt_str) $alt_str=$str;
 	$trans_tbl = array_flip(get_html_translation_table (HTML_ENTITIES));
 	$nonhtmlstr = strtr($str, $trans_tbl);
 	if (keywordExists($str, $sem_id) == NULL) {
 		if ($format=="wiki") {
-			return " <a href=\"".URLHelper::getLink("?keyword=" . urlencode($nonhtmlstr) . "&view=editnew&lastpage=".urlencode($page))."\">" . $str . "(?)</a>";
+			return " <a href=\"".URLHelper::getLink("?keyword=" . urlencode($nonhtmlstr) . "&view=editnew&lastpage=".urlencode($page))."\">" . $alt_str . "(?)</a>";
 		} else if ($format=="inline") {
 			return $str;
 		}
 	} else {
 		if ($format=="wiki") {
-			return " <a href=\"".URLHelper::getLink("?keyword=".urlencode($nonhtmlstr))."\">".$str."</a>";
+			return " <a href=\"".URLHelper::getLink("?keyword=".urlencode($nonhtmlstr))."\">".$alt_str."</a>";
 		} else if ($format=="inline") {
-			return " <a href=\"#".urlencode($nonhtmlstr)."\">".$str."</a>";
+			return " <a href=\"#".urlencode($nonhtmlstr)."\">".$alt_str."</a>";
 		}
 	}
 }
@@ -300,6 +301,8 @@ function releasePageLocks($keyword) {
 // Make sure to change routines below if this changes
 //
 $wiki_keyword_regex="(^|\s|\A|\>)(([A-Z]|&[AOU]uml;)([a-z0-9]|&[aou]uml;|&szlig;)+([A-Z]|&[AOU]uml;)([a-zA-Z0-9]|&[aouAOU]uml;|&szlig;)+)";
+$wiki_link_regex="\[\[(([\w\.\-\:\(\)_§\/@# ]|&[AOUaou]uml;|&szlig;)+)\]\]";
+$wiki_extended_link_regex="\[\[(([\w\.\-\:\(\)_§\/@# ]|&[AOUaou]uml;|&szlig;)+)\|([^\]]+)\]\]";
 
 /**
 * Register Wiki directive markup
@@ -344,7 +347,7 @@ function wikiDirectives($str) {
 *
 **/
 function wikiLinks($str, $page, $format="wiki", $sem_id=NULL) {
-	global $wiki_keyword_regex;
+	global $wiki_keyword_regex, $wiki_link_regex, $wiki_extended_link_regex;
 	// regex adapted from RoboWiki
 	// added > as possible start of WikiWord
 	// because htmlFormat converts newlines to <br>
@@ -353,13 +356,19 @@ function wikiLinks($str, $page, $format="wiki", $sem_id=NULL) {
 	if (preg_match_all("'\<nowikilink\>(.+)\</nowikilink\>'isU", $str, $matches)) {
 		$str = preg_replace("'\<nowikilink\>.+\</nowikilink\>'isU", 'ö', $str);
 		$str = preg_replace("/$wiki_keyword_regex/e", "'\\1'.isKeyword('\\2', '$page', '$format','$sem_id')", $str);
+		$str = preg_replace("/$wiki_link_regex/e", "isKeyword('\\1', '$page', '$format','$sem_id')", $str);
+		$str = preg_replace("/$wiki_extended_link_regex/e", "isKeyword('\\1', '$page', '$format','$sem_id','\\3')", $str);
 		$str=wikiDirectives($str);
 		$str = explode('ö', $str);
 		$i = 0; $all = '';
 		foreach ($str as $w) $all .= $w .  $matches[1][$i++];
 		return $all;
 	}
-	return wikiDirectives(preg_replace("/$wiki_keyword_regex/e", "'\\1'.isKeyword('\\2', '$page', '$format','$sem_id')", $str));
+
+	$str = preg_replace("/$wiki_keyword_regex/e", "'\\1'.isKeyword('\\2', '$page', '$format','$sem_id')", $str);
+	$str = preg_replace("/$wiki_link_regex/e", "isKeyword('\\1', '$page', '$format','$sem_id')", $str);
+	$str = preg_replace("/$wiki_extended_link_regex/e", "isKeyword('\\1', '$page', '$format','$sem_id','\\3')", $str);
+	return wikiDirectives($str);
 }
 
 /**
@@ -369,12 +378,14 @@ function wikiLinks($str, $page, $format="wiki", $sem_id=NULL) {
 *
 **/
 function getWikiLinks($str) {
-	global $wiki_keyword_regex;
+	global $wiki_keyword_regex, $wiki_link_regex, $wiki_extended_link_regex;
 	$str = wikiReady($str,TRUE,FALSE,"none"); // ohne Kommentare
 	// [nop] und [code] Bereiche ausblenden ...
 	$str = preg_replace("'\<nowikilink\>.+\</nowikilink\>'isU", ' ', $str);
-	preg_match_all("/$wiki_keyword_regex/", $str, $out, PREG_PATTERN_ORDER);
-	return array_unique($out[2]);
+	preg_match_all("/$wiki_keyword_regex/", $str, $out_wikiwords, PREG_PATTERN_ORDER);
+	preg_match_all("/$wiki_link_regex/", $str, $out_wikilinks, PREG_PATTERN_ORDER);
+	preg_match_all("/$wiki_extended_link_regex/", $str, $out_wikiextlinks, PREG_PATTERN_ORDER);
+	return array_unique(array_merge($out_wikiwords[2], $out_wikilinks[1], $out_wikiextlinks[1]));
 }
 
 /**
@@ -394,7 +405,6 @@ function getBacklinks($keyword) {
 			$backlinks[]=$db->f("from_keyword");
 		}
 	}
-
 	return $backlinks;
 }
 
