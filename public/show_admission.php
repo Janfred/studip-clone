@@ -196,7 +196,7 @@ function semadmission_create_result_xls($data){
 			}
 			$worksheet1->write_string($row, 0, $groupname, $data_format);
 			$worksheet1->write_string($row, 1, $semdata['Name'], $data_format);
-			$worksheet1->write_string($row, 2, join('/', $status), $data_format);
+			$worksheet1->write_string($row, 2, $status, $data_format);
 			$worksheet1->write_number($row, 3, (int)$teilnehmer, $data_format);
 			$worksheet1->write_number($row, 4, (int)$teilnehmer_aux, $data_format);
 			$worksheet1->write_number($row, 5, (int)$quota, $data_format);
