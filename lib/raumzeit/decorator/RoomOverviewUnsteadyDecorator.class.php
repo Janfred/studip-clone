@@ -259,7 +259,12 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 			$ret .= '</table>';
 		}
 
-		return ($this->xml_export) ? $xml : $ret;
+		if ((is_array($data['regular']['turnus_data']) && sizeof($data['regular']['turnus_data']))
+			|| (is_array($data['irregular']) && sizeof($data['irregular']))) {
+			return ($this->xml_export) ? $xml : $ret;
+		} else {
+			return false;
+		}
 	}
 }
 ?>

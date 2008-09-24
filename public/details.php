@@ -348,7 +348,14 @@ print_infobox ($infobox,"contract.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="45%" valign="top">
 				<?
-				 printf ("<font size=-1><b>" . _("Veranstaltungsort:") . "</b></font><br /><font size=-1>%s</font>", (getRoom ($sem_id, TRUE, (time() - $quarter_year))) ? getRoom ($sem_id, TRUE, (time() - $quarter_year)) : "nicht angegeben.");
+					$room = getRoom($sem_id, true, (time() - $quarter_year));
+					if (!$room) {
+						if (!($room = $db2->f('Ort'))) {
+							$room = _("nicht angegeben");
+						}
+					}
+
+					echo '<font size="-1"><b>' . _("Veranstaltungsort:") . '</b><br/>' . $room . '</font>';
 				?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="25%"	valign="top">
