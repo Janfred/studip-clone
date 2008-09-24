@@ -1,6 +1,6 @@
 <? $pos_inst = 1; ?>
 <form action="<?= URLHelper::getLink('?cmd=edit_leben&username=' . $username . '&view=' . $view . '&studipticket=' . get_ticket()) ?>" method="POST" name="pers">
-<table cellspacing="0" cellpadding="0" border="0">
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
 <?
 if (is_array($institutes) && sizeof($institutes) > 0) :
 	foreach ($institutes as $inst_id => $institute) : ?>
