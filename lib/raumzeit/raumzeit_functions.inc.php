@@ -109,7 +109,11 @@ function getTemplateDataForSingleDate($val, $cycle_id = '') {
 			$tpl['room'] .= $resObj->getFormattedLink(TRUE, TRUE, TRUE);
 			$tpl['class'] = 'steelgreen';
 		} else {
-			$tpl['room'] = '('._("kein gebuchter Raum").')';
+			if ($GLOBALS['RESOURCES_SHOW_ROOM_NOT_BOOKED_HINT']) {
+				$tpl['room'] = '('._("kein gebuchter Raum").')';
+			} else {
+				$tpl['room'] = _("keine Raumangabe");
+			}
 			if ($val->isExTermin()) {
 				if ($name = $val->isHoliday()) {
 					$tpl['room'] = '('._($name).')';
