@@ -39,7 +39,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 			echo _("Status").':';
 			echo '</td><td class="'. $cssSw->getClass() .'" colspan="3">';
 
-			if ($GLOBALS['perm']->have_perm('root') || $GLOBALS['perm']->have_studip_perm('admin', $inst_id)) :
+			if ($GLOBALS['perm']->have_studip_perm('admin', $inst_id) && $status != 'admin') :
 				echo '&nbsp;&nbsp;<select name="status">';
 				foreach ($allowed_status as $cur_status) :
 					echo '<option value="'. $cur_status .'"' . (($cur_status == $status)?' selected="selected"':'') .'>'. $cur_status .'</option>';

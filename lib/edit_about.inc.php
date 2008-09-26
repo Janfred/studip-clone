@@ -382,13 +382,13 @@ class about extends messaging {
 	function allowedInstitutePerms() {
 
 		// find out the allowed perms
-		$possible_perms=array("user","autor","tutor","dozent");
+		$possible_perms=array("autor","tutor","dozent");
 		$counter=0;
-		if ($global_perm == "admin")
+		if ($this->auth_user["perms"] == "admin")
 			$allowed_status = array ('admin'); // einmal admin, immer admin...
 		else {
 			$allowed_status = array();
-			while ($counter <= 4 ) {
+			while ($counter <= 3 ) {
 				$allowed_status[] = $possible_perms[$counter];
 				if ($possible_perms[$counter] == $this->auth_user['perms'])
 					break;
