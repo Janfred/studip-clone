@@ -237,12 +237,13 @@ class StudipStudyAreaSelection {
 
 
 	/**
-	 * @param  string     the MD5ish ID of a study area
+	 * @param  mixed      the MD5ish ID of a study area or the area object itself
 	 *
 	 * @return bool       returns TRUE if this area is selected, FALSE otherwise
 	 */
 	function includes($area) {
-		return isset($this->areas[$area]);
+		$id = is_object($area) ? $area->getID() : $area;
+		return isset($this->areas[$id]);
 	}
 
 

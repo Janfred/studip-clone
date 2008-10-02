@@ -24,7 +24,7 @@ class Course_StudyAreasController extends Trails_Controller {
   # see Trails_Controller#before_filter
   function before_filter(&$action, &$args) {
 
-    global $perm, $CURRENT_PAGE, $_language_path, $_language;
+    global $perm, $_language_path, $_language;
 
     # open session
     page_open(array('sess' => 'Seminar_Session',
@@ -41,8 +41,6 @@ class Course_StudyAreasController extends Trails_Controller {
     # user must be logged in
     $GLOBALS['auth']->login_if($_REQUEST['again']
                                && ($GLOBALS['auth']->auth['uid'] == 'nobody'));
-
-    $CURRENT_PAGE = _('Studienbereichsauswahl');
   }
 
 
@@ -77,6 +75,10 @@ class Course_StudyAreasController extends Trails_Controller {
     $this->course_id = $course_id;
     $this->course = Seminar::getInstance($course_id);
     $this->selection = self::get_selection($course_id);
+
+    $GLOBALS['CURRENT_PAGE'] = sprintf('%s - %s',
+                                       (getHeaderLine($course_id)),
+                                       _('Studienbereichsauswahl'));
 
     # is locked?
     # TODO (mlunzena) shouldn't this be done in the before filter?

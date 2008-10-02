@@ -11,7 +11,7 @@ $name = isset($show_path)
         src="<?= Assets::image_path('move_left.gif') ?>"
         title="<?= _("Diesen Studienbereich zuordnen") ?>"
         alt="<?= _("Diesen Studienbereich zuordnen") ?>"
-        <?= $area->getID() === StudipStudyArea::ROOT || $selection->includes($area->getID())
+        <?= !$area->isAssignable() || $selection->includes($area)
             ? 'style="visibility:hidden;"' : '' ?> />
 <? if (isset($show_link) && $show_link) : ?>
   <a onClick="STUDIP.study_area_selection.expandSelection('<?= $id ?>','<?= htmlReady($course_id) ?>');return false;"
@@ -22,4 +22,3 @@ $name = isset($show_path)
 <? else : ?>
   <?= $name ?>
 <? endif ?>
-

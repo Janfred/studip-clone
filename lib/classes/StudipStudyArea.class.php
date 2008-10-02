@@ -92,6 +92,16 @@ class StudipStudyArea {
 
 
   /**
+   * Kinder dieses Studienbereichs; wird zur Memoization verwendet
+   * Standardwert ist NULL. Nach Aufruf von #getChildren wird es zu einem Array.
+   *
+   * @access private
+   * @var mixed
+   */
+  private $children;
+
+
+  /**
    * Constructor.
    *
    * @return void
@@ -304,15 +314,47 @@ class StudipStudyArea {
    */
   function getChildren() {
 
-    $stmt = DBManager::get()->prepare('SELECT sem_tree_id FROM sem_tree '.
-                                      'WHERE parent_id = ? ORDER BY priority');
-    $stmt->execute(array($this->getID()));
-
-    $result = array();
-    foreach ($stmt->fetchAll(PDO::FETCH_COLUMN, 0) as $id) {
-      $result[$id] = StudipStudyArea::find($id);
+    if ($this->children === NULL) {
+      $stmt = DBManager::get()->prepare('SELECT sem_tree_id FROM sem_tree '.
+                                        'WHERE parent_id = ? ORDER BY priority');
+      $stmt->execute(array($this->getID()));
+      $children = array();
+      foreach ($stmt->fetchAll(PDO::FETCH_COLUMN, 0) as $id) {
+        $children[$id] = StudipStudyArea::find($id);
+      }
+      $this->children = $children;
     }
-    return $result;
+
+    return $this->children;
+  }
+
+  /**
+   * Returns TRUE if the area has children.
+   */
+  function hasChildren() {
+    return sizeof($this->getChildren()) > 0;
+  }
+
+
+  /**
+   * Returns TRUE if this area is the root.
+   */
+  function isRoot() {
+    return $this->getId() === self::ROOT;
+  }
+
+
+  /**
+   * Returns TRUE if this area can be select.
+   */
+  function isAssignable() {
+    $cfg = Config::GetInstance();
+    $leaves_too = $cfg->getValue('SEM_TREE_ALLOW_BRANCH_ASSIGN');
+    if ($leaves_too) {
+      return !$this->isRoot();
+    } else {
+      return !$this->isRoot() && !$this->hasChildren();
+    }
   }
 
 

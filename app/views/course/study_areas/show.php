@@ -11,8 +11,6 @@
     </div>
   <? endif ?>
 
-  <h1>Studienbereiche</h1>
-
   <? if ($locked) : ?>
 
     <?= $this->render_partial('course/study_areas/locked_form') ?>

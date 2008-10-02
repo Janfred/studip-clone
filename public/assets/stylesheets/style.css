@@ -807,10 +807,11 @@ div.clear {
 }
 
 #study_area_selection h3 {
+	margin-top: 1em;
 }
 
 #study_area_selection_chosen {
-	width: 55%;
+	width: 49%;
 	float: left;
 	margin: 0;
 	padding: 0;
@@ -822,7 +823,7 @@ div.clear {
 }
 
 #study_area_selection_selectables {
-	margin: 0 0 0 57%;
+	margin: 0 0 0 50%;
 	padding: 0;
 }
 
