@@ -406,7 +406,7 @@ $_lit_search_plugins[] = array('name' => 'Rkgoe', 'display_name' =>'Regionalkata
 //$_lit_search_plugins[] = array('name' => "Leopoldina", 'link' => 'http://haweb1.bibliothek.uni-halle.de:8080/DB=4/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=12&SRT=YOP&TRM={accession_number}');
 
 /* Universitätsbibliothek Trier */
-$_lit_search_plugins[] = array('name' => 'UB_Trier', 'display_name' =>'Universitätsbibliothek Trier', 'link' => 'https://ub-aleph.uni-trier.de/F/?func=find-c&local_base=tri01&ccl_term={accession_number}');
+$_lit_search_plugins[] = array('name' => 'UB_Trier', 'display_name' =>'BIB-KAT Universität Trier', 'link' => 'https://ub-a18.uni-trier.de/F/?func=find-c&local_base=tri01&ccl_term={accession_number}');
 
 /*authentication plugins
 ----------------------------------------------------------------
