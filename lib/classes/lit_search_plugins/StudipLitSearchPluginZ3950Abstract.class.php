@@ -373,6 +373,12 @@ class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{
 			$cat_element->setValues($this->search_result[$num_hit]);
 			$cat_element->setValue("catalog_id", $this->sess_var_name . "__" . $num_hit);
 		}
+		
+		if($this->z_id != NULL){
+			yaz_close($this->z_id);
+			$this->z_id = NULL;
+		}
+		
 		return $cat_element;
 	}
 	
