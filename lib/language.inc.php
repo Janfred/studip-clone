@@ -46,8 +46,9 @@
 *
 */
 function get_accepted_languages() {
-	global $INSTALLED_LANGUAGES;
-
+	global $INSTALLED_LANGUAGES, $DEFAULT_LANGUAGE;
+	
+	$_language = $DEFAULT_LANGUAGE;
 	$accepted_languages = explode(",", getenv("HTTP_ACCEPT_LANGUAGE"));
 	if (is_array($accepted_languages) && count($accepted_languages)) {
 		foreach ($accepted_languages as $temp_accepted_language) {
