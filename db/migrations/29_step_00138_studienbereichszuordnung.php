@@ -21,7 +21,7 @@ class Step00138Studienbereichszuordnung extends DBMigration {
     $this->announce("add new value SEM_TREE_ALLOW_BRANCH_ASSIGN to table config");
 
     $db = DBManager::get();
-    $db->exec("INSERT INTO `config` ".
+    $db->exec("INSERT IGNORE INTO `config` ".
               "VALUES ('34f348c06bbd5d9fc7bb36a8d829e12e', '', ".
               "'SEM_TREE_ALLOW_BRANCH_ASSIGN', '1', 1, 'boolean', 'global', ".
               "'', 0, 1222947575, 1222947575, ".
