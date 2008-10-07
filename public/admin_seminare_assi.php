@@ -143,14 +143,14 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 		while ($db->next_record()) {
 			$s_d_fields[$db->f("datafield_id")] = array("type"=>$db->f("type"), "name"=>$db->f("name"), "value"=>$db->f("content"));
 		}
-		
+
 		// Beteiligte Einrichtungen finden und zuweisen
 		$sql = "SELECT institut_id FROM seminar_inst WHERE seminar_id = '$cp_id'";
 		$db->query($sql);
 		while ($db->next_record()) {
 			$sem_bet_inst[] = $db->f("institut_id");
 		}
-		
+
 		// Veranstaltungsgrunddaten finden
 		$sql = "SELECT * FROM seminare WHERE Seminar_id = '$cp_id'";
 		$db->query($sql);
@@ -158,7 +158,7 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 		$sem_create_data = '';
 		$sem_create_data["sem_datafields"] = $s_d_fields;
 		$sem_create_data["sem_bet_inst"] = $sem_bet_inst;
-		
+
 		// Termine
 		$serialized_metadata = $db->f("metadata_dates");
 		$data = unserialize($serialized_metadata);
@@ -168,10 +168,10 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 		$sem_create_data["sem_start_termin"] = $data["start_termin"];
 		$sem_create_data["turnus_count"] = count($term_turnus);
 		$sem_create_data["term_art"] = $data["art"];
-		
+
 		// Nutzerdomänen
 		$sem_create_data["sem_domain"] = UserDomain::getUserDomainsForSeminar($cp_id);
-		
+
 		if ($data['art'] == 1) { //unregelmaessige Veranstaltung oder Block -> Termine kopieren
 			// Sitzungen
 			$db2->query('SELECT * FROM termine WHERE range_id=\''. $cp_id . '\' AND date_typ=\'1\' ORDER by date');
@@ -207,7 +207,7 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 			$sem_create_data['sem_vor_end_termin'] = -1;
 			$sem_create_data['sem_vor_termin'] = -1;
 		}
-		
+
 		for ($i=0;$i<$sem_create_data["turnus_count"];$i++) {
 			$sem_create_data["term_turnus_start_stunde"][$i] = $term_turnus[$i]["start_stunde"];
 			$sem_create_data["term_turnus_start_minute"][$i] = $term_turnus[$i]["start_minute"];
@@ -218,7 +218,7 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 			$sem_create_data["term_turnus_date"][$i] = $term_turnus[$i]["day"];
 			$sem_create_data["term_turnus_desc"][$i] = $term_turnus[$i]["desc"];
 		}
-		
+
 		// Sonstiges
 		$sem_create_data["sem_id"] = $db->f("Seminar_id");
 		$sem_create_data["sem_nummer"] = $db->f("VeranstaltungsNummer");
@@ -255,11 +255,11 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 		$sem_create_data["timestamp"] = time(); // wichtig, da sonst beim ersten Aufruf sofort sem_create_data resetted wird!
 		// eintragen der sem_tree_ids
 		$sem_create_data["sem_bereich"] = get_seminar_sem_tree_entries($cp_id);
-		
+
 		// Modulkonfiguration übernehmen
 		$sem_create_data['modules_list'] = $Modules->getLocalModules($cp_id,'sem');
 		$sem_create_data['sem_modules'] = $db->f('modules');
-		
+
 		// Dozenten und Tutoren eintragen
 		$sem_create_data["sem_doz"] = get_seminar_dozent($cp_id);
 		if (!$sem_create_data["sem_tut"] = get_seminar_tutor($cp_id)) {
@@ -901,41 +901,31 @@ if ($movedown_tut)
 	$level=2;
 }
 
-function re_sort_dozenten_array(&$sem_doz, $position)
-{
-   foreach($sem_doz["sem_doz"] as $key=>$val)
-   {
-      if ($val > $position)
-      {
-         $sem_doz["sem_doz"][$key] -= 1;
-      }
-   }
-
-}
-function re_sort_tutoren_array(&$sem_tut, $position)
-{
-   foreach($sem_tut["sem_tut"] as $key=>$val)
-   {
-      if ($val > $position)
-      {
-         $sem_tut["sem_tut"][$key] -= 1;
-      }
-   }
-
-}
 //delete Tutoren/Dozenten
 if ($delete_doz) {
-   $position = $sem_create_data["sem_doz"][get_userid($delete_doz)];
-	unset($sem_create_data["sem_doz"][get_userid($delete_doz)]);
-   re_sort_dozenten_array($sem_create_data, $position);
-	$level=2;
+  $position = $sem_create_data["sem_doz"][get_userid($delete_doz)];
+  unset($sem_create_data["sem_doz"][get_userid($delete_doz)]);
+
+  foreach($sem_create_data["sem_doz"] as $key => $val) {
+    if ($val > $position) {
+      $sem_create_data["sem_doz"][$key] -= 1;
+    }
+  }
+
+  $level=2;
 }
 
 if ($delete_tut) {
-   $position = $sem_create_data["sem_tut"][get_userid($delete_tut)];
-	unset($sem_create_data["sem_tut"][get_userid($delete_tut)]);
-   re_sort_tutoren_array($sem_create_data, $position);
-	$level=2;
+  $position = $sem_create_data["sem_tut"][get_userid($delete_tut)];
+  unset($sem_create_data["sem_tut"][get_userid($delete_tut)]);
+
+  foreach($sem_create_data["sem_tut"] as $key => $val) {
+    if ($val > $position) {
+      $sem_create_data["sem_tut"][$key] -= 1;
+    }
+  }
+
+  $level=2;
 }
 
 if (($send_doz_x) && (!$reset_search_x)) {
@@ -956,8 +946,8 @@ if (isset($_REQUEST['delete_domain'])) {
 	unset($sem_create_data["sem_domain"][$index]);
 }
 
-if ($search_doz_x || $search_tut_x || $reset_search_x || 
-    $sem_bereich_do_search_x || 
+if ($search_doz_x || $search_tut_x || $reset_search_x ||
+    $sem_bereich_do_search_x ||
         isset($_REQUEST['add_domain_x']) || isset($_REQUEST['delete_domain']) ||
     $study_areas['add'] || $study_areas['remove'] ||
     $study_areas['showall_button'] || $study_areas['search_button'] ||
@@ -966,7 +956,7 @@ if ($search_doz_x || $search_tut_x || $reset_search_x ||
 
 	$level=2;
 
-} 
+}
 
 elseif (($form == 2) && ($jump_next_x)) //wenn alles stimmt, Checks und Sprung auf Schritt 3
 	{
@@ -996,7 +986,7 @@ elseif (($form == 2) && ($jump_next_x)) //wenn alles stimmt, Checks und Sprung a
 	if ($SEM_CLASS[$sem_create_data["sem_class"]]["bereiche"]) {
 		if (sizeof($sem_create_data["sem_bereich"]) == 0) {
 			$level=2;
-			$errormsg = $errormsg . "error§" . 
+			$errormsg = $errormsg . "error§" .
             _("Bitte geben Sie mindestens einen Studienbereich f&uuml;r die Veranstaltung an!")."§";
 		} else if ($false_mark) {
 			$level=2;
@@ -1314,7 +1304,7 @@ if ((($form == 5) && ($jump_next_x)) || ($add_studg_x) || ($sem_delete_studg) ||
 		if($cnt > 100){
 			$errormsg.= "error§". _("Die Summe der Kontigente übersteigt 100%. Bitte ändern Sie die Kontigente!") . "§";
 			$level=5;
-		} 
+		}
 		if($cnt < 100){
 			$errormsg.= "error§". _("Die Summe der Kontigente liegt unter 100%. Bitte ändern Sie die Kontigente!") . "§";
 			$level=5;
@@ -1643,15 +1633,15 @@ if (($form == 6) && ($jump_next_x))
 
 			// Speichern der Veranstaltungsdaten -> anlegen des Seminars
 			$sem->store();
-			
+
 			// speichere die Nutzerdomänen für das neue Seminar
 			$count_doms = 0;
 			foreach ($sem_create_data["sem_domain"] as $domain_id){
 				$domain = new UserDomain($domain_id);
-				$domain->addSeminar($sem->id);	
+				$domain->addSeminar($sem->id);
 				$count_doms ++;
 			}
-			
+
 			//completing the internal settings....
 			$successful_entry=1;
 			$sem_create_data["sem_entry"]=TRUE;
@@ -2388,7 +2378,7 @@ if ($level == 2)
 			<td class="blank" colspan=2>
 			<form method="POST" action="<? echo $PHP_SELF ?>#anker">
 			<input type="HIDDEN" name="form" value=2>
-			<input type="HIDDEN" name="level" value=2>				
+			<input type="HIDDEN" name="level" value=2>
 				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%">
@@ -2756,12 +2746,12 @@ if ($level == 2)
 									<?
 									if (isset($_REQUEST['add_domain_x']) && $_REQUEST['sem_domain'] !== '' &&
 									    !in_array($_REQUEST['sem_domain'], $sem_create_data["sem_domain"])) {
-										$sem_create_data["sem_domain"][]= $_REQUEST['sem_domain']; 
+										$sem_create_data["sem_domain"][]= $_REQUEST['sem_domain'];
 									}
 
-									foreach ($sem_create_data["sem_domain"] as $domain_id) { 
+									foreach ($sem_create_data["sem_domain"] as $domain_id) {
 										$domain = new UserDomain($domain_id);
-										?> 
+										?>
 											<tr>
 												<td class="<? echo $cssSw->getClass() ?>" >
 												<font size=-1>
