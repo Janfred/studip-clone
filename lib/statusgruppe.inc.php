@@ -807,7 +807,6 @@ function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = 
 
 		$zw2 = '';
 		$has_value = false;
-		$role_differs = false;
 
 		if (is_array($entries))
 		foreach ($entries as $id => $entry) {
@@ -817,9 +816,6 @@ function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = 
 					$value = $default_entries[$id]->getDisplayValue();
 					$default = true;
 				} else {
-					if (trim($entry->getValue()) != '') {
-						$role_differs = true;
-					}
 					$value = $entry->getDisplayValue();
 				}
 
@@ -853,7 +849,7 @@ function get_role_data_recursive($roles, $user_id, &$default_entries, $filter = 
 
 		}
 
-		if ($role['user_there'] && $role_differs && $role['visible']) {
+		if ($role['user_there'] && $role['visible']) {
 			$out_table[] = $zw.$zw2;
 			$out .= $out_zw;
 		}
