@@ -21,20 +21,41 @@ function raumzeit_delete_singledate() {
 
 	$termin = $sem->getSingleDate($_REQUEST['sd_id'], $_REQUEST['cycle_id']);
 
-	if (!$_REQUEST['approveDelete'] && $termin->getIssueIDs()) {
+	// We check we have warnings and need an approval before deleting the date
+	$warning = array();
+
+	// does the have issues?
+	if ($termin->getIssueIds()) {
 		if($GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
-			$sem->createQuestion( _("Achtung: Diesem Termin ist im Ablaufplan ein Thema zugeordnet. Titel und Beschreibung des Themas bleiben erhalten und können in der Expertenansicht des Ablaufplans einem anderen Termin wieder zugeordnet werden."). '<br/>'. _("Wollen Sie diesen Termin wirklich löschen?"), $GLOBALS['PHP_SELF']."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
-		}else{
-			$sem->createQuestion( _("Diesem Termin ist ein Thema zugeordnet. Wollen Sie diesen Termin wirklich löschen?"), $GLOBALS['PHP_SELF']."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
+			$warning[] = _("Diesem Termin ist im Ablaufplan ein Thema zugeordnet. Titel und Beschreibung des Themas bleiben erhalten und können in der Expertenansicht des Ablaufplans einem anderen Termin wieder zugeordnet werden.");
+		} else {
+			$warning[] = _("Diesem Termin ist ein Thema zugeordnet."); 
 		}
-	} else {
+	}
+
+	// does the date have a booked room?
+	if ($GLOBALS['RESOURCES_ENABLE'] && $termin->hasRoom()) {
+		$warning[] = _("Dieser Termin hat eine Raumbuchung, welche mit dem Termin gelöscht wird.");
+	}
+
+	// do we have warnings we need approval for?
+	if (!$_REQUEST['approveDelete'] && sizeof($warning) > 0) {
+			$sem->createQuestion( implode('<br/>', $warning) . '<br/>'. _("Wollen Sie diesen Termin wirklich löschen?"), $GLOBALS['PHP_SELF']."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
+	} 
+	
+	// no approval needed or already approved
+	else {
+		// deletion approved, delete show approval-message
 		if ($_REQUEST['approveDelete']) {
 			if($GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
 				$sem->createMessage(sprintf(_("Sie haben den Termin %s gelöscht, dem ein Thema zugeorndet war. Sie können das Thema in der %sExpertenansicht des Ablaufplans%s einem anderen Termin (z.B. einem Ausweichtermin) zuordnen."), $termin->toString(), '<a href="themen.php?cmd=changeViewMode&newFilter=expert">', '</a>'));
-			}else{
+			} else {
 				$sem->createMessage(sprintf(_("Der Termin %s wurde gelöscht!"), $termin->toString()));
 			}
-		} else {
+		} 
+		
+		// no approval needed, delete unquestioned
+		else {
 			$sem->createMessage(sprintf(_("Der Termin %s wurde gelöscht!"), $termin->toString()));
 		}
 		$sem->deleteSingleDate($_REQUEST['sd_id'], $_REQUEST['cycle_id']);

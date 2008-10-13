@@ -1233,9 +1233,9 @@ class Seminar {
 	}
 
 	function createQuestion($question, $approvalCmd) {
-		$msg  = '<div id="approvalMessageShadow" style="position:absolute; opacity: 0.5; text-align:center; top:51%; left: 26%; width: 50%; height: 21%;background-color: #000000;">HIER! HIER!</div>';
+		$msg  = '<div id="approvalMessageShadow" style="position:absolute; opacity: 0.5; text-align:center; top:51%; left: 26%; width: 50%; height: 21%;background-color: #000000;">&nbsp; &nbsp;</div>';
 		$msg .= '<div id="approvalMessage" style="position:absolute; text-align:center; top:50%; left: 25%; width: 50%; height: 20%;border: 2px solid red; background-color: #FFFFCC;">';
-		$msg .= '<table cellspacing="0" cellpadding="0" border="0" height="100%" widht="100%"><tr><td valign="middle" align="center">'.$question;
+		$msg .= '<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%"><tr><td valign="middle" align="center">'.$question;
 		$msg .= "<br/><br/><a href=\"$approvalCmd\">";
 		$msg .= '<img '.makebutton('ja2', 'src').' border="0"></a>&nbsp;&nbsp;';
 		$msg .= "<a href=\"{$GLOBALS['PHP_SELF']}\">";
