@@ -202,7 +202,7 @@ class SingleDate {
 	}
 
 	function killIssue() {
-		// We delete the issue, cause there is now chance, anybody can get to it without expert view
+		// We delete the issue, cause there is no chance anybody can get to it without the expert view
 		if(!$GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
 			if ($issue_ids = $this->getIssueIDs()) {
 				foreach ($issue_ids as $issue_id) {
@@ -235,7 +235,7 @@ class SingleDate {
 			}
 		}
 
-		// if date_typ is 0, it defaults to the TERMIN_TYP[1], so we have to set it to 1 for matching real world to date_typ
+		// date_typ = 0 defaults to TERMIN_TYP[1] because there never exists one with zero 
 		if (!$this->date_typ) $this->date_typ = 1;
 
 		if ($this->orig_ex != $this->ex_termin) {
@@ -267,9 +267,13 @@ class SingleDate {
 		return $this->ex_termin;
 	}
 
-    function isUpdate() {
-        return $this->update;
-    }
+	function isPresence() {
+		return $GLOBALS['TERMIN_TYP'][$this->date_typ]['sitzung'] ? true : false;
+	}
+
+	function isUpdate() {
+		return $this->update;
+	}
 
 	function isHoliday() {
 		foreach (HolidayData::GetAllHolidaysArray() as $val) {
@@ -293,8 +297,11 @@ class SingleDate {
 	function fillValuesFromArray($daten) {
 		$this->metadate_id = $daten['metadate_id'];
 		$this->termin_id = $daten['termin_id'];
-		if ($daten['date_typ'] != 0) {  // TODO: should it be allowed, that there can be unspecified singledates?
+		if ($daten['date_typ'] != 0) {
 			$this->date_typ = $daten['date_typ'];
+		} else {
+			// if no date_typ is specified it defaults to 1
+			$this->date_typ = 1;
 		}
 		$this->date = $daten['date'];
 		$this->end_time = $daten['end_time'];

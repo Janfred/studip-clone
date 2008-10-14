@@ -1401,7 +1401,7 @@ class Seminar {
 					$metadate_has_termine = 0;
 					$single = true;
 					foreach ($group as $termin) {
-						if (!$termin->isExTermin() && $termin->getStartTime() >= $semester['beginn'] && $termin->getStartTime() <= $semester['ende'] && (!$GLOBALS['RESOURCES_HIDE_PAST_SINGLE_DATES'] || $termin->getStartTime() >= time())) {
+						if (!$termin->isExTermin() && $termin->getStartTime() >= $semester['beginn'] && $termin->getStartTime() <= $semester['ende'] && (!$GLOBALS['RESOURCES_HIDE_PAST_SINGLE_DATES'] || $termin->getStartTime() >= time()) && $termin->isPresence()) {
 							if (empty($first_event)) {
 								$first_event = $termin->getStartTime();
 							}
@@ -1445,42 +1445,46 @@ class Seminar {
 				$single = true;
 				$first = true;
 				foreach ($irreg as $termin_id => $termin) {
-					if (!$GLOBALS['RESOURCES_HIDE_PAST_SINGLE_DATES'] ||  $termin->getStartTime() > (time() - 3600)) {
-						if (empty($first_event)) {
-							$first_event = $termin->getStartTime();
-						}
-						$groups[$i]["termin_ids"][$termin->getSingleDateId()] = TRUE;
-						if (!$first) $info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;';
-						$info[$i]['name'] .= $termin->toString();
-						$resObj =& ResourceObject::Factory($termin->resource_id);
-
-						if ($link = $resObj->getFormattedLink($termin->getStartTime())) {
-							$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
-							if (empty($info[$i]['raum'])) {
-								$info[$i]['raum'] = $termin->resource_id;
-							} else if ($info[$i]['raum'] != $termin->resource_id) {
-								$single = false;
+					if ($termin->isPresence()) {
+						if (!$GLOBALS['RESOURCES_HIDE_PAST_SINGLE_DATES'] ||  $termin->getStartTime() > (time() - 3600)) {
+							if (empty($first_event)) {
+								$first_event = $termin->getStartTime();
 							}
+							$groups[$i]["termin_ids"][$termin->getSingleDateId()] = TRUE;
+							if (!$first) $info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;';
+							$info[$i]['name'] .= $termin->toString();
+							$resObj =& ResourceObject::Factory($termin->resource_id);
+
+							if ($link = $resObj->getFormattedLink($termin->getStartTime())) {
+								$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
+								if (empty($info[$i]['raum'])) {
+									$info[$i]['raum'] = $termin->resource_id;
+								} else if ($info[$i]['raum'] != $termin->resource_id) {
+									$single = false;
+								}
+							}
+							$first = false;
 						}
-						$first = false;
 					}
 				}
 				if (!$single) unset($info[$i]['raum']);
 			} else {
 				foreach ($irreg as $termin_id => $termin) {
-					if (!$GLOBALS['RESOURCES_HIDE_PAST_SINGLE_DATES'] ||  $termin->getStartTime() > (time() - 3600)) {
-						if (empty($first_event)) {
-							$first_event = $termin->getStartTime();
-						}
-						$groups[$i]["termin_ids"][$termin->getSingleDateId()] = TRUE;
-						$info[$i]['name'] = $termin->toString();
-						$resObj =& ResourceObject::Factory($termin->resource_id);
+					if ($termin->isPresence()) {
+						if (!$GLOBALS['RESOURCES_HIDE_PAST_SINGLE_DATES'] ||  $termin->getStartTime() > (time() - 3600)) {
+							if (empty($first_event)) {
+								$first_event = $termin->getStartTime();
+							}
+							$groups[$i]["termin_ids"][$termin->getSingleDateId()] = TRUE;
+							$info[$i]['name'] = $termin->toString();
+							$resObj =& ResourceObject::Factory($termin->resource_id);
 
-						if ($link = $resObj->getFormattedLink($termin->getStartTime())) {
-							$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
-							$info[$i]['raum'] = $termin->resource_id;
+							if ($link = $resObj->getFormattedLink($termin->getStartTime())) {
+								$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
+								$info[$i]['raum'] = $termin->resource_id;
+							}
+							$i++;
 						}
-						$i++;
 					}
 				}
 			}

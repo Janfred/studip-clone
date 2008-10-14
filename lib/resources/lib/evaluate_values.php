@@ -1211,7 +1211,7 @@ if (($start_multiple_mode_x) || ($single_request)) {
 					$sid = $db->f('Seminar_id');
 					$metadates = unserialize($db->f('metadata_dates'));
 
-					$db->query("SELECT date FROM termine WHERE range_id = '$sid' ORDER BY date ASC");
+					$db->query("SELECT date FROM termine WHERE range_id = '$sid' AND date_typ IN ". getPresenceTypeClause() ." ORDER BY date ASC");
 					if ($db->num_rows() > 0) {
 						$db->next_record();
 						$db_requests_neu[$val['request_id']] = $db->f('date');
