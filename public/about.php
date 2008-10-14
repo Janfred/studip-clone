@@ -410,13 +410,13 @@ $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
 
 					echo "<font size=-1>";
 					IF ($db3->f("raum")!="")
-						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Raum (Stud.IP):") . " </b>", htmlReady($db3->f("raum"));
+						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Raum:") . " </b>", htmlReady($db3->f("raum"));
 					IF ($db3->f("sprechzeiten")!="")
-						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Sprechzeit (Stud.IP):") . " </b>", htmlReady($db3->f("sprechzeiten"));
+						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Sprechzeit:") . " </b>", htmlReady($db3->f("sprechzeiten"));
 					IF ($db3->f("Telefon")!="")
-						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Telefon (Stud.IP):") . " </b>", htmlReady($db3->f("Telefon"));
+						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Telefon:") . " </b>", htmlReady($db3->f("Telefon"));
 					IF ($db3->f("Fax")!="")
-						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Fax: (Stud.IP)") . " </b>", htmlReady($db3->f("Fax"));
+						echo "<b><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " . _("Fax:") . " </b>", htmlReady($db3->f("Fax"));
 
 					echo '<table cellspacing="0" cellpadding="0" border="0">';
 					$entries = DataFieldEntry::getDataFieldEntries(array($user_id, $institut));
