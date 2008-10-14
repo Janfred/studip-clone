@@ -202,7 +202,7 @@ class ModulesNotification extends Modules {
 		}
 		if ($text) {
 			$text = _("Diese Email wurde automatisch vom Stud.IP-System verschickt. Sie können auf diese Nachricht nicht antworten.")
-						. "\n" . _("Sie erhalten hiermit in regelmäßigen Abständen Informationen über Neuigkeiten und Änderungen in Ihren abonierten Veranstaltungen.")
+						. "\n" . _("Sie erhalten hiermit in regelmäßigen Abständen Informationen über Neuigkeiten und Änderungen in Ihren abonnierten Veranstaltungen.")
 						. "\n\n" . _("Über welche Inhalte Sie informiert werden wollen, können Sie hier einstellen:")
 						. "\n{$this->smtp->url}sem_notification.php"
 						. "\n" . $text
