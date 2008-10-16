@@ -168,13 +168,15 @@ td.rahmen_steel {
 	border-style: solid;
 	border-color: #000000;
 	border-width: 1px;
-	background-image: url('../images/steel1.jpg');
+	/*background-image: url('../images/steel1.jpg');*/
+	background-color: #F2F2F2;
 }
 td.rahmen_steelgraulight {
 	border-style: solid;
 	border-color: #000000;
 	border-width: 1px;
-	background-image: url('../images/steelgraulight.jpg');
+	/*background-image: url('../images/steelgraulight.jpg');*/
+	background-color: #E2E2E2;
 }
 td.quote {
 	border-style: solid;
@@ -291,7 +293,8 @@ td.infoboxrahmen {
 	background-image: url('../images/steelgraudunkel.gif');
 }
 .steelgraulight {
-	background-image: url('../images/steelgraulight.jpg');
+	background-color: #E2E2E2; 
+	/*background-image: url('../images/steelgraulight.jpg');*/
 }
 .steelgraulight_shadow {
 	background-image: url('../images/steelgraulight_shadow.jpg');
@@ -309,7 +312,8 @@ td.infoboxrahmen {
 	background-color: #FFFFFF; background-image: url('../images/steel2.jpg');
 }
 .steel1 {
-	background-color: #FFFFFF; background-image: url('../images/steel1.jpg');
+	background-color: #F2F2F2; 
+	/*background-image: url('../images/steel1.jpg'); */
 }
 .steelblau_schatten {
 	background-color: #FFFFFF;
@@ -366,7 +370,8 @@ a.printhead {
 	color:#333399;
 }
 td.printcontent {
-	background-image: url('../images/steel1.jpg');
+	background-color: #F2F2F2; 
+	/*background-image: url('../images/steel1.jpg');*/
 	text-align:left;
 }
 
@@ -474,7 +479,8 @@ td.weekend {
 	background-image: url('../images/steelcal.jpg');
 }
 td.weekday {
-	background-image: url('../images/steel1.jpg');
+	background-color: #F2F2F2; 
+	/*background-image: url('../images/steel1.jpg');*/
 }
 td.current {
 	border-width: 2px;
@@ -492,7 +498,8 @@ td.month {
 	background-image: url('../images/steelcal.jpg');
 }
 td.lightmonth {
-	background-image: url('../images/steel1.jpg');
+	background-color: #F2F2F2; 
+	/*background-image: url('../images/steel1.jpg');*/
 }
 
 /* Styles fuer TerminZeile */
@@ -589,7 +596,8 @@ table.index_box {
 
 td.index_box_cell {
 	padding:4px;
-	background-image: url('../images/steel1.jpg');
+	background-color: #F2F2F2; 
+	/*background-image: url('../images/steel1.jpg');*/
 }
 
 /* --- Inhaltsverzeichnis Wikis --------------------------------------------- */
@@ -828,11 +836,13 @@ div.clear {
 }
 
 #study_area_selection .odd {
-	background-image: url("../images/steel1.jpg");
+	background-color: #F2F2F2; 
+	/*background-image: url("../images/steel1.jpg");*/
 }
 
 #study_area_selection .even {
-	background-image: url("../images/steelgraulight.jpg");
+	background-color: #E2E2E2;
+	/*background-image: url("../images/steelgraulight.jpg");*/
 }
 
 #study_area_selection_chosen ul,
