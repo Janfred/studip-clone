@@ -1417,6 +1417,7 @@ class Seminar {
 					}
 					if ($metadate_has_termine) {
 						$info[$i]['name'] = $cycle->toString().' ('.$semester['name'].')';
+						$info[$i]['day'] = $cycle->getDay();
 						$this->applyTimeFilter($semester['beginn'], $semester['ende']);
 						$raum = $this->getFormattedPredominantRooms($metadate_id);
 						if ($raum) {
