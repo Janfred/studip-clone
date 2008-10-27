@@ -1,7 +1,6 @@
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>
 		<td class="blank" style="padding-left: 8px;" valign="top">
-			<?= $range_type == 'sem' ? $this->render_partial('statusgruppen/optionbox.php') : '' ?>
 			<table cellspacing="0" cellpadding="0" border="0" width="100%">
 			<?= $content_for_layout ?>
 			</table>
