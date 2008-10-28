@@ -30,7 +30,7 @@
       <?= $GLOBALS['_include_additional_header'] ?>
     <? endif ?>
 
-    <?= Assets::stylesheet('header') ?>
+    <?= Assets::stylesheet('header', array('media' => 'screen, print')) ?>
 
     <?= Assets::script('prototype', 'scriptaculous', 'application') ?>
 

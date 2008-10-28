@@ -19,7 +19,7 @@
       }
     ?>
     <? if ($GLOBALS['_include_stylesheet'] != '') : ?>
-      <?= Assets::stylesheet($GLOBALS['_include_stylesheet']) ?>
+      <?= Assets::stylesheet($GLOBALS['_include_stylesheet'], array('media' => 'screen, print')) ?>
     <? endif ?>
 
     <? if (isset($GLOBALS['_include_extra_stylesheet'])) : ?>
@@ -30,7 +30,7 @@
       <?= $GLOBALS['_include_additional_header'] ?>
     <? endif ?>
 
-    <?= Assets::stylesheet('header') ?>
+    <?= Assets::stylesheet('header', array('media' => 'screen, print')) ?>
 
     <?= Assets::script('prototype', 'scriptaculous', 'application') ?>
 
