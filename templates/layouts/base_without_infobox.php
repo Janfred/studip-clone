@@ -19,7 +19,7 @@
       }
     ?>
     <? if ($GLOBALS['_include_stylesheet'] != '') : ?>
-      <?= Assets::stylesheet($GLOBALS['_include_stylesheet']) ?>
+      <?= Assets::stylesheet($GLOBALS['_include_stylesheet'], array('media' => 'screen, print')) ?>
     <? endif ?>
 
     <? if (isset($GLOBALS['_include_extra_stylesheet'])) : ?>
