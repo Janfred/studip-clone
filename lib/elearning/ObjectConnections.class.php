@@ -82,32 +82,25 @@ class ObjectConnections
 	*
 	* returns true, if object has connections
 	* @access public
-	* @param string $object_id object-id
+	* @param string $object_id object-id (optional)
 	* @return boolean connection-status
 	*/
-	function isConnected($object_id = 0)
+	function isConnected($object_id = NULL)
 	{
-		// functioncall as part of the object
-		//if (isset($this->object_connections))
-		if (is_object($this))
+		// function call as part of the object
+		if ($this instanceof ObjectConnections)
 		{
-			if ($this->object_connections == false)
-				return false;
-			else
-				return true;
+			return (boolean) $this->object_connections;
 		}
 		// direct functioncall without existing instance
-		if (! $object_id == 0)
+		if (isset($object_id))
 		{
 			$db = New DB_Seminar;
 			$db->query("SELECT * FROM object_contentmodules WHERE object_id = '" . $object_id . "'");
 			if ($db->next_record())
 				return true;
-			else
-				return false;
 		}
-		else
-			return false;
+		return false;
 	}
 	
 	/**
@@ -158,7 +151,7 @@ class ObjectConnections
 				."VALUES ('" . $connection_object_id . "', '" . $connection_module_id . "', '" . $connection_cms . "', '" . $connection_module_type . "', '" . time() . "', '" . time() . "')");
 		}
 		//uargl, warum immer ich
-		if(strtolower(get_class($this)) == 'objectconnections')	$this->readData();
+		if ($this instanceof ObjectConnections)	$this->readData();
 		return true;
 	}
 
@@ -181,7 +174,7 @@ class ObjectConnections
 		{
 			$db->query("DELETE FROM object_contentmodules WHERE object_id = '" . $connection_object_id . "' AND module_id = '" . $connection_module_id . "' AND system_type = '" . $connection_cms . "' AND module_type = '" . $connection_module_type . "'");
 			//uargl, warum immer ich
-			if(strtolower(get_class($this)) == 'objectconnections')	$this->readData();
+			if ($this instanceof ObjectConnections)	$this->readData();
 			return true;
 		}
 		else
