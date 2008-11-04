@@ -124,7 +124,7 @@ function create_assigns($assign_object, &$assEvtLst, $begin=0, $end=0, $filter =
 				$assEvtLst->events[] = $assEvt;
 		}
 		//in between days
-		for ($d=date("j",$ao_begin)+1; $d<=date("j",$ao_r_end)-1; $d++) {
+		for ($d=date("j",$ao_begin)+1; $d < date("j",$ao_begin) + date("z",$ao_r_end) - date("z",$ao_begin); $d++) {
 			$temp_ts=mktime(0, 0, 0,
 					date("n",$ao_begin), 
 					$d,
@@ -147,7 +147,7 @@ function create_assigns($assign_object, &$assEvtLst, $begin=0, $end=0, $filter =
 				
 		//last_day
 		$temp_ts=mktime(0, 0, 0,
-					date("n",$ao_r_end), 
+					date("n",$ao_r_end),
 					date("j",$ao_r_end),
 					date("Y",$ao_r_end));
 
