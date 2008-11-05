@@ -1415,6 +1415,7 @@ class Seminar {
 							}
 						}
 					}
+
 					if ($metadate_has_termine) {
 						$info[$i]['name'] = $cycle->toString().' ('.$semester['name'].')';
 						$info[$i]['weekend'] = ($cycle->getDay() == 6 || $cycle->getDay() == 0);
@@ -1422,6 +1423,8 @@ class Seminar {
 						$raum = $this->getFormattedPredominantRooms($metadate_id);
 						if ($raum) {
 							$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$raum;
+							$room_stat = $this->getStatOfNotBookedRooms($cycle->getMetadateId());
+							$info[$i]['name'] .= sprintf(_(" (%s von %s belegt)"), $room_stat['all'] - $room_stat['open'] , $room_stat['all']); 
 						}
 						if (!$single) unset($info[$i]['raum']);
 						$i++;
