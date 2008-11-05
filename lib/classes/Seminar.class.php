@@ -1417,7 +1417,7 @@ class Seminar {
 					}
 					if ($metadate_has_termine) {
 						$info[$i]['name'] = $cycle->toString().' ('.$semester['name'].')';
-						$info[$i]['day'] = $cycle->getDay();
+						$info[$i]['weekend'] = ($cycle->getDay() == 6 || $cycle->getDay() == 0);
 						$this->applyTimeFilter($semester['beginn'], $semester['ende']);
 						$raum = $this->getFormattedPredominantRooms($metadate_id);
 						if ($raum) {
@@ -1464,6 +1464,10 @@ class Seminar {
 									$single = false;
 								}
 							}
+
+							if (date('w', $termin->getStartTime()) == 6 || date('w', $termin->getStartTime()) == 0) {
+								$info[$i]['weekend'] = true;
+							}
 							$first = false;
 						}
 					}
@@ -1484,6 +1488,8 @@ class Seminar {
 								$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
 								$info[$i]['raum'] = $termin->resource_id;
 							}
+
+							$info[$i]['weekend'] = (date('w', $termin->getStartTime()) == 6 || date('w', $termin->getStartTime()) == 0);
 							$i++;
 						}
 					}
@@ -1494,6 +1500,7 @@ class Seminar {
 			$groups[0]['termin_ids'][$termin->getSingleDateID()] = TRUE;
 			$info[0]['name'] = $termin->toString();
 			$info[0]['raum'] = $termin->resource_id;
+			$info[0]['weekend'] = (date('w', $termin->getStartTime()) == 6 || date('w', $termin->getStartTime()) == 0);
 			$first_event = $termin->getStartTime();
 		}
 

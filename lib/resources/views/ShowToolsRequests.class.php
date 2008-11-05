@@ -380,7 +380,7 @@ class ShowToolsRequests {
 							$i = 1;
 							foreach ($dates['info'] as $info) {
 								$name = $info['name'];
-								if ($info['day'] == 6 || $info['day'] == 0) $name = '<span style="color:red">'. $info['name'] . '</span>';
+								if ($info['weekend']) $name = '<span style="color:red">'. $info['name'] . '</span>';
 								printf ("<font color=\"blue\"><i><b>%s</b></i></font>. %s<br />", $i, $name);
 								$i++;
 							}
