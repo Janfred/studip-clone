@@ -527,26 +527,6 @@ class about extends messaging {
 		if($title_rear == "")
 			$title_rear = $title_rear_chooser;
 		$query = "";
-		if (!StudipAuthAbstract::CheckField("user_info.privatnr", $this->auth_user['auth_plugin'])){
-			$query .= "privatnr='$telefon',";
-		}
-
-		if (!StudipAuthAbstract::CheckField("user_info.privatcell", $this->auth_user['auth_plugin'])){
-			$query .= "privatcell='$cell',";
-		}
-
-		if (!StudipAuthAbstract::CheckField("user_info.privadr", $this->auth_user['auth_plugin'])){
-			$query .= "privadr='$anschrift',";
-		}
-		if (!StudipAuthAbstract::CheckField("user_info.Home", $this->auth_user['auth_plugin'])){
-			$query .= "Home='$home',";
-		}
-		if (!StudipAuthAbstract::CheckField("user_info.motto", $this->auth_user['auth_plugin'])){
-			$query .= "motto='$motto',";
-		}
-		if (!StudipAuthAbstract::CheckField("user_info.hobby", $this->auth_user['auth_plugin'])){
-			$query .= "hobby='$hobby',";
-		}
 		if (!StudipAuthAbstract::CheckField("user_info.geschlecht", $this->auth_user['auth_plugin'])){
 			$query .= "geschlecht='$geschlecht',";
 		}
