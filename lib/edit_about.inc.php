@@ -457,6 +457,35 @@ class about extends messaging {
 	}
 
 
+	function edit_private($telefon, $cell, $anschrift, $home, $motto, $hobby) {
+		$query = "";
+
+		if (!StudipAuthAbstract::CheckField("user_info.privatnr", $this->auth_user['auth_plugin'])){
+			$query .= "privatnr='$telefon',";
+		}
+
+		if (!StudipAuthAbstract::CheckField("user_info.privatcell", $this->auth_user['auth_plugin'])){
+			$query .= "privatcell='$cell',";
+		}
+
+		if (!StudipAuthAbstract::CheckField("user_info.privadr", $this->auth_user['auth_plugin'])){
+			$query .= "privadr='$anschrift',";
+		}
+		if (!StudipAuthAbstract::CheckField("user_info.Home", $this->auth_user['auth_plugin'])){
+			$query .= "Home='$home',";
+		}
+		if (!StudipAuthAbstract::CheckField("user_info.motto", $this->auth_user['auth_plugin'])){
+			$query .= "motto='$motto',";
+		}
+		if (!StudipAuthAbstract::CheckField("user_info.hobby", $this->auth_user['auth_plugin'])){
+			$query .= "hobby='$hobby',";
+		}
+
+		$query = "UPDATE user_info SET " . $query . " chdate='".time()."' WHERE user_id='".$this->auth_user["user_id"]."'";
+		DBManager::get()->query($query);
+	}
+
+
 	function edit_leben($lebenslauf,$schwerp,$publi,$view, $datafields) {
 		//Update additional data-fields
 		$invalidEntries = array();
@@ -486,7 +515,7 @@ class about extends messaging {
 	}
 
 
-	function edit_pers($password, $response, $new_username, $vorname, $nachname, $email, $telefon, $cell, $anschrift, $home, $motto, $hobby, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view) {
+	function edit_pers($password, $response, $new_username, $vorname, $nachname, $email, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view) {
 		global $UNI_NAME_CLEAN, $_language_path, $auth, $perm;
 		global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, $ALLOW_CHANGE_NAME, $ALLOW_CHANGE_TITLE;
 

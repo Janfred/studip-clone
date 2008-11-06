@@ -240,7 +240,7 @@ if (check_ticket($studipticket)) {
 
 
 	//Veränderungen der pers. Daten
-	if ($cmd == "edit_pers" || $cmd == 'edit_leben') {
+	if ($cmd == "edit_pers") {
 		$new_password = '*****'; // ***** as in "don't change password"
 		if($_REQUEST['update_pw'] == 'on') {
 			if($_REQUEST['new_passwd_1'] != $_REQUEST['new_passwd_2']) {
@@ -256,10 +256,7 @@ if (check_ticket($studipticket)) {
 			$my_about->edit_pers($new_password,
 						 $_REQUEST['response'], $_REQUEST['new_username'],
 						 $_REQUEST['vorname'], $_REQUEST['nachname'],
-						 $_REQUEST['email'], $_REQUEST['telefon'],
-						 $_REQUEST['cell'], $_REQUEST['anschrift'],
-						 $_REQUEST['home'], $_REQUEST['motto'],
-						 $_REQUEST['hobby'], $_REQUEST['geschlecht'],
+						 $_REQUEST['email'], $_REQUEST['geschlecht'],
 						 $_REQUEST['title_front'],
 						 $_REQUEST['title_front_chooser'],
 						 $_REQUEST['title_rear'], $_REQUEST['title_rear_chooser'],
@@ -271,14 +268,19 @@ if (check_ticket($studipticket)) {
 				$my_about->get_auth_user($username);
 			}
 			$username = $my_about->auth_user["username"];
+	}
 
+	if ($cmd=="edit_leben")  {
 		if (get_config("ENABLE_SKYPE_INFO")) {
 			$user->cfg->setValue(preg_replace('/[^a-zA-Z0-9.,_-]/', '', $_REQUEST['skype_name']), $my_about->auth_user['user_id'], 'SKYPE_NAME');
 			$user->cfg->setValue((int)$_REQUEST['skype_online_status'], $my_about->auth_user['user_id'], 'SKYPE_ONLINE_STATUS');
 		}
-	}
 
-	if ($cmd=="edit_leben")  {
+		$my_about->edit_private(
+			 $_REQUEST['telefon'], $_REQUEST['cell'], $_REQUEST['anschrift'],
+			 $_REQUEST['home'], $_REQUEST['motto'], $_REQUEST['hobby']
+		);
+
 		$invalidEntries = $my_about->edit_leben($lebenslauf,$schwerp,$publi,$view, $_REQUEST['datafields']);
 		$my_about->msg = "";
 		foreach ($invalidEntries as $entry)
