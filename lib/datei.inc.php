@@ -1347,7 +1347,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 			if ($folder_tree->isExerciseFolder($db->f("folder_id"))) $icon .= "<img ".tooltip(_("Dieser Ordner ist ein Hausaufgabenordner. Es können nur Dateien eingestellt werden."))." src=\"".$GLOBALS['ASSETS_URL']."images/eigene2.gif\" WIDTH=\"18\" HEIGTH=\"18\">";
 
 
-				if ($move && !in_array($db->f('folder_id'), $dont_move_to) && $folder_tree->isWritable($db->f('folder_id'), $user->id) && (!$folder_tree->isFolder($move) || $folder_tree->checkCreateFolder($db->f('folder_id'), $user->id)) ){
+				if ($move && !in_array($db->f('folder_id'), $dont_move_to) && $folder_tree->isWritable($db->f('folder_id'), $user->id) && (!$folder_tree->isFolder($move) || ($folder_tree->checkCreateFolder($db->f('folder_id'), $user->id) && !$folder_tree->isExerciseFolder($db->f('folder_id'), $user->id)))){
 
 				$icon="&nbsp;<a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_md_")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0></a>".$icon;
 			}
@@ -1530,17 +1530,31 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					if ($documents_count && $folder_tree->isReadable($db->f("folder_id"), $user->id))
 						$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?folderzip=".$db->f("folder_id"))."\">" . makeButton("ordneralszip", "img") . "</a>";
 					if ($rechte || ($folder_tree->checkCreateFolder($db->f("folder_id"), $user->id)) ) {
-						if($rechte || $folder_tree->isWritable($db->f("folder_id"), $user->id)) {
+						if($rechte || ($folder_tree->isWritable($db->f("folder_id"), $user->id) && !$folder_tree->isExerciseFolder($db->f("folder_id"), $user->id))) {
 							$edit.= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_n_#anker")."\">" . makeButton("neuerordner", "img") . "</a>";
 							if($rechte && get_config('ZIP_UPLOAD_ENABLE')) {
 								$edit .= "&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_z_&rand="
 									. rand()."#anker")."\">" . makeButton("ziphochladen", "img") . "</a>";
 								}
 							}
-						if($rechte || (!$documents_count && $level !=0 && $folder_tree->isWritable($db->f("folder_id"), $user->id))) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_d_")."\">" . makeButton("loeschen", "img") . "</a>";
-						if($rechte || $folder_tree->isWritable($db->f("folder_id"), $user->id)) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_c_#anker")."\">" . makeButton("bearbeiten", "img") . "</a>";
-						if(($rechte && $db->f('range_id') != $SessSemName[1]) || ($level !=0 && $folder_tree->isWritable($db->f("folder_id"), $user->id))) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_m_#anker")."\">" . makeButton("verschieben", "img") . "</a>";
-						$edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_co_#anker")."\">" . makeButton("kopieren", "img") . "</a>";
+						if($rechte || 
+							(!$documents_count && $level !=0 && 
+								($folder_tree->isWritable($db->f("folder_id"), $user->id) &&
+								$folder_tree->isWritable($folder_tree->getValue($db->f("folder_id"), 'parent_id'), $user->id) &&
+								!$folder_tree->isExerciseFolder($db->f("folder_id"), $user->id))
+							)
+							) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_d_")."\">" . makeButton("loeschen", "img") . "</a>";
+						if($rechte || ($folder_tree->isWritable($db->f("folder_id"), $user->id) && !$folder_tree->isExerciseFolder($db->f("folder_id"), $user->id))) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_c_#anker")."\">" . makeButton("bearbeiten", "img") . "</a>";
+						if(($rechte && $db->f('range_id') != $SessSemName[1]) ||
+							($level !=0 && 
+								($folder_tree->isWritable($db->f("folder_id"), $user->id) &&
+								$folder_tree->isWritable($folder_tree->getValue($db->f("folder_id"), 'parent_id'), $user->id) &&
+								!$folder_tree->isExerciseFolder($db->f("folder_id"), $user->id))
+							)
+							) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_m_#anker")."\">" . makeButton("verschieben", "img") . "</a>";
+						if($rechte || ($level !=0 && !$folder_tree->isExerciseFolder($db->f("folder_id"), $user->id))) {
+							$edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_co_#anker")."\">" . makeButton("kopieren", "img") . "</a>";
+						}
 					}
 				}
 			}
