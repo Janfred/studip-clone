@@ -70,7 +70,6 @@ class StudipDocumentTree extends TreeAbstract {
 		if ($args['get_root_name']) list($name,) = array_values(get_object_name($this->range_id, $this->entity_type));
 		$this->root_name = $name;
 		$this->must_have_perm = $this->entity_type == 'sem' ? 'tutor' : 'autor';
-		$this->default_perm = array_sum($this->perms);
 		$modules = new Modules();
 		$this->permissions_activated = $modules->getStatus('documents_folder_permissions', $this->range_id, $this->entity_type);
 		parent::TreeAbstract(); //calling the baseclass constructor 
@@ -185,15 +184,7 @@ class StudipDocumentTree extends TreeAbstract {
 	}
 	
 	function setDefaultPermission($folder_id){
-		$this->tree_data[$folder_id]['permission'] = $this->default_perm;
-		$this->view->params[0] = $this->tree_data[$folder_id]['permission'];
-		$this->view->params[1] = $folder_id;
-		$db = $this->view->get_query("view:FOLDER_UPDATE_PERMISSION");
-		if ($ar = $db->affected_rows()){
-			$this->view->params[0] = $folder_id;
-			$this->view->get_query("view:FOLDER_UPDATE_CHDATE");
-		}
-		return $ar;
+		return $this->setPermission($folder_id, $this->default_perm);
 	}
 	
 	function isWritable($folder_id, $user_id = null){
