@@ -166,7 +166,7 @@ class PluginAdministration {
 				$this->deletePlugindir($tmppackagedir);
 
 				// create database if needed
-				$this->createDBSchema($newpluginpath, $plugininfos);
+				$this->createDBSchema($newpluginpath, $plugininfos, $pluginregistered && $forceupdate);
 
 				// instantiate plugin
 				require_once($newpluginpath . '/' . $pluginclassname . ".class.php");
@@ -212,14 +212,15 @@ class PluginAdministration {
 	/**
 	 * Create the initial database schema for the plugin.
 	 *
-	 * @param string $pluginpath absolute path to the plugin
-	 * @param array  $manifest   plugin manifest information
+	 * @param string  $pluginpath absolute path to the plugin
+	 * @param array   $manifest   plugin manifest information
+	 * @param boolean $update     update installed plugin
 	 */
-	function createDBSchema ($pluginpath, $manifest) {
+	function createDBSchema ($pluginpath, $manifest, $update) {
 		$pluginname = $manifest['pluginname'] ? $manifest['pluginname']
 		                                      : $manifest['pluginclassname'];
-		// TODO this probably should not happen during update
-		if (isset($manifest['dbscheme'])) {
+
+		if (isset($manifest['dbscheme']) && !$update) {
 			$schemafile = $pluginpath.'/'.$manifest['dbscheme'];
 			$statements = split(";[[:space:]]*\n", file_get_contents($schemafile));
 			$db = DBManager::get();
@@ -238,8 +239,9 @@ class PluginAdministration {
 	/**
 	 * Update the database schema maintained by the plugin.
 	 *
-	 * @param string $pluginpath absolute path to the plugin
-	 * @param array  $manifest   plugin manifest information
+	 * @param string $pluginpath     absolute path to the plugin
+	 * @param string $new_pluginpath absolute path to updated plugin
+	 * @param array  $manifest       plugin manifest information
 	 */
 	function updateDBSchema ($pluginpath, $new_pluginpath, $manifest) {
 		$pluginname = $manifest['pluginname'] ? $manifest['pluginname']
