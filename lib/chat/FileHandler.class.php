@@ -88,9 +88,13 @@ class FileHandler {
 	function store(&$what,$key) {
 		$file_name = $this->file_path . "/" . $this->file_name . $key;
 		$contents = serialize($what);
-		$handle = fopen ($file_name, "wb");
+		$handle = fopen ($file_name, "rb+");
+		if ($handle === false) {
+			$handle = fopen($file_name, 'xb');
+		}
 		if (flock($handle, LOCK_EX)){
-			fwrite ($handle, $contents,strlen($contents));
+			ftruncate($handle, 0);
+			fwrite ($handle, $contents);
 			flock($handle, LOCK_UN);
 			fclose ($handle);
 		} else {
@@ -109,8 +113,8 @@ class FileHandler {
 	*/
 	function restore(&$what,$key) {
 		$file_name = $this->file_path . "/" . $this->file_name . $key;
-		if (file_exists($file_name)){
-			$handle = fopen ($file_name, "rb");
+		$handle = fopen ($file_name, "rb");
+		if ($handle){
 			if (flock($handle, LOCK_SH)){
 				while (!feof($handle)) {
 					$contents .= fread($handle, 8192);

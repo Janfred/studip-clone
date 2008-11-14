@@ -23,6 +23,7 @@ require_once $GLOBALS['RELATIVE_PATH_CHAT']."/chat_config.php";
 require_once $GLOBALS['RELATIVE_PATH_CHAT']."/ChatFileServer.class.php";
 require_once $GLOBALS['RELATIVE_PATH_CHAT']."/ChatShmServer.class.php";
 require_once $GLOBALS['RELATIVE_PATH_CHAT']."/ChatMysqlServer.class.php";
+require_once $GLOBALS['RELATIVE_PATH_CHAT']."/ChatPDOServer.class.php";
 require_once 'lib/visual.inc.php';
 /**
 *  Chat Server Klasse
