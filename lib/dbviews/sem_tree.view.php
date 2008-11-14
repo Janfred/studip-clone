@@ -84,8 +84,9 @@ $GLOBALS['_views']["SEMINAR_SEM_TREE_GET_EXP_IDS"] = array("query" => "SELECT DI
 $GLOBALS['_views']["SEMINAR_GET_SEMDATA"] = array("query" => "SELECT a.seminar_id,IF(a.visible=0,CONCAT(Name, ' "._("(versteckt)")."'), Name) AS Name,username AS doz_uname, Nachname AS doz_name, " . $GLOBALS['_views']['sem_number_sql'] . " AS sem_number , " . $GLOBALS['_views']['sem_number_end_sql'] . " AS sem_number_end
 										FROM seminare a LEFT JOIN seminar_user b ON (a.seminar_id=b.seminar_id AND b.status='dozent' )
 										LEFT JOIN auth_user_md5 USING(user_id) WHERE a.seminar_id IN (&) ORDER BY sem_number DESC,Name ASC");
-$GLOBALS['_views']["SEM_SEARCH_LECTURER"] = array("query" => "SELECT b.seminar_id, " . $GLOBALS['_views']['sem_number_sql'] . " AS sem_number, " . $GLOBALS['_views']['sem_number_end_sql'] . " AS sem_number_end FROM auth_user_md5 a LEFT JOIN seminar_user b ON(a.user_id=b.user_id AND b.status='dozent')
-													LEFT JOIN seminare c USING (seminar_id) WHERE § AND NOT ISNULL(b.seminar_id) AND (a.username LIKE ? OR a.Vorname LIKE ? OR a.Nachname LIKE ?) §");
+$GLOBALS['_views']["SEM_SEARCH_LECTURER"] = array("query" => "SELECT user_id FROM auth_user_md5 WHERE perms = 'dozent' AND (username LIKE ? OR Vorname LIKE ? OR Nachname LIKE ?)");
+$GLOBALS['_views']["SEM_SEARCH_LECTURER_ID"] = array("query" => "SELECT b.seminar_id, " . $GLOBALS['_views']['sem_number_sql'] . " AS sem_number, " . $GLOBALS['_views']['sem_number_end_sql'] . " AS sem_number_end FROM auth_user_md5 a LEFT JOIN seminar_user b ON(a.user_id=b.user_id AND b.status='dozent')
+													LEFT JOIN seminare c USING (seminar_id) WHERE § AND b.seminar_id IS NOT NULL AND a.user_id IN (&) §");
 $GLOBALS['_views']["SEM_SEARCH_SEM"] = array("query" =>"SELECT c.seminar_id, " . $GLOBALS['_views']['sem_number_sql'] . " AS sem_number , " . $GLOBALS['_views']['sem_number_end_sql'] . " AS sem_number_end FROM seminare c WHERE § §");
 $GLOBALS['_views']["SEM_GET_FAKS"] = array("query" => "SELECT DISTINCT b.fakultaets_id,d.sem_tree_id FROM seminar_inst a LEFT JOIN  Institute b USING(Institut_id) LEFT JOIN sem_tree d ON (b.fakultaets_id=d.studip_object_id) WHERE a.seminar_id=?");
 $GLOBALS['_views']["SEM_GET_INST"] = array("query" => "SELECT institut_id FROM seminar_inst WHERE seminar_id=?");

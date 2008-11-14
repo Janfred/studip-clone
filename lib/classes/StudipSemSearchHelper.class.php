@@ -128,14 +128,24 @@ class StudipSemSearchHelper {
 		
 		
 		if (isset($this->params['lecturer']) && strlen($this->params['lecturer']) > 2){
-			$view->params[0] = $this->visible_only ? "c.visible=1" : "1";
+			$view->params[0] = "%".trim($this->params['lecturer'])."%";
 			$view->params[1] = "%".trim($this->params['lecturer'])."%";
 			$view->params[2] = "%".trim($this->params['lecturer'])."%";
-			$view->params[3] = "%".trim($this->params['lecturer'])."%";
-			$view->params[4] = $clause;
-			$snap = new DbSnapshot($view->get_query("view:SEM_SEARCH_LECTURER"));
-			$this->search_result = $snap;
-			$this->found_rows = $this->search_result->numRows;
+			$result = $view->get_query("view:SEM_SEARCH_LECTURER");
+
+			$lecturers = array();
+			while ($result->next_record()) {
+				$lecturers[] = $result->f('user_id');
+			}
+
+			if (count($lecturers)) {
+				$view->params[0] = $this->visible_only ? "c.visible=1" : "1";
+				$view->params[1] = $lecturers;
+				$view->params[2] = $clause;
+				$snap = new DbSnapshot($view->get_query("view:SEM_SEARCH_LECTURER_ID"));
+				$this->search_result = $snap;
+				$this->found_rows = $this->search_result->numRows;
+			}
 		}
 
 		
