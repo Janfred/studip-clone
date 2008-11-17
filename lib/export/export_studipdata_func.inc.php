@@ -287,7 +287,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 		$addquery .= " AND seminare.Seminar_id IN('" . join("','", $ex_sem_id) . "') AND seminare.Institut_id='$inst_id' ";
 	}
 
-	if (!$GLOBALS['perm']->have_perm('root')) $addquery .= " AND visible=1 ";
+	if (!$GLOBALS['perm']->have_perm('root') && !$GLOBALS['perm']->have_studip_perm('admin', $inst_id)) $addquery .= " AND visible=1 ";
 
 	$db->query("SELECT * FROM seminar_inst
 				LEFT JOIN seminare USING (Seminar_id)
