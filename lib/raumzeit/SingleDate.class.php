@@ -123,6 +123,7 @@ class SingleDate {
 	}
 
 	function getComment() {
+		if (!$this->isExTermin()) return false;
 		return $this->content;
 	}
 

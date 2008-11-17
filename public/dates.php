@@ -171,7 +171,7 @@ if ($cmd == 'openAll') $openAll = true;
     							case 'all':
     								break;
     
-    							case 'others':
+    							case 'other':
     								if ($tpl['type'] == 1) {
     									$tpl['deleted'] = true;
     								}
