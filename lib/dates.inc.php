@@ -39,14 +39,12 @@ require_once "lib/raumzeit/raumzeit_functions.inc.php";	// Helper-Funktionen
 */
 
 function getRoom ($range_id, $link=TRUE, $start_time = 0, $range_typ = false, $showRoomList = false) {
-	$semester = new SemesterData();
-	$data = $semester->getCurrentSemesterData();
+	$data = SemesterData::GetInstance()->getCurrentSemesterData();
 	return getRoomOverviewUnsteady ($range_id, $data['semester_id'], $link, $start_time, $range_typ, $showRoomList);
 }
 
 function getRegularOverview($range_id, $shrink_dates = false) {
-	$semester = new SemesterData();
-	$data = $semester->getCurrentSemesterData();
+	$data = SemesterData::GetInstance()->getCurrentSemesterData();
 	
 	$params = array();
 	$params[] = 'hideRooms';
@@ -111,7 +109,7 @@ function getRoomOverviewUnsteady ($range_id, $semester_id, $link=TRUE, $start_ti
 			// only filter if lecture's duration is longer than 1 term
 			if ($sem->metadate->seminarDurationTime != 0)
 			{
-				$semester_data_handler = new SemesterData();
+				$semester_data_handler = SemesterData::GetInstance();
 
 				$semester_data = $semester_data_handler->getSemesterData($semester_id);
 
@@ -281,15 +279,8 @@ Bei regelmaessigen Veranstaltungen werden die einzelen Zeiten ausgegeben, bei zw
 Turnus mit dem enstprechenden Zusatz. Short verkuerzt die Ansicht nochmals.
 */
 function view_turnus ($seminar_id, $short = FALSE, $meta_data = false, $start_time = false) {
-	global $TERMIN_TYP;
 
-	if (!$start_time){
-		$start_time = 0;
-	}
-
-  $sem = Seminar::GetInstance($seminar_id);
-
-  return $sem->getFormattedTurnus($short);
+  return Seminar::GetInstance($seminar_id)->getFormattedTurnus($short);
 }
 
 /*
@@ -386,12 +377,8 @@ Die Funktion get_sem_name gibt den Namen eines Semester, in dem ein uebergebener
 */
 
 function get_sem_name ($time) {
-	$semester = new SemesterData;
-	$all_semester = $semester->getAllSemesterData();
-	foreach ($all_semester as $key=>$val)
-		if (($time >= $val["beginn"]) AND ($time <= $val["ende"]))
-			return $val["name"];
-
+	$semester = SemesterData::GetInstance()->getSemesterDataByDate($time);
+	return $semester["name"];
 }
 
 /*
@@ -399,8 +386,7 @@ Die Funktion get_sem_num gibt die Nummer eines Semester, in dem ein uebergebener
 */
 
 function get_sem_num ($time) {
-	$semester = new SemesterData;
-	$all_semester = $semester->getAllSemesterData();
+	$all_semester = SemesterData::GetInstance()->getAllSemesterData();
 	foreach ($all_semester as $key=>$val)
 		if (($time >= $val["beginn"]) AND ($time <= $val["ende"]))
 			return $key;
@@ -408,8 +394,7 @@ function get_sem_num ($time) {
 }
 
 function get_sem_num_sem_browse () {
-	$semester = new SemesterData;
-	$all_semester = $semester->getAllSemesterData();
+	$all_semester = SemesterData::GetInstance()->getAllSemesterData();
 	$time = time();
 	$ret = false;
 	foreach ($all_semester as $key=>$val){
@@ -445,8 +430,7 @@ function get_semester($seminar_id, $start_sem_only=FALSE) {
 
 
 function getCorrectedSemesterVorlesBegin ($semester_num) {
-	$semester = new SemesterData;
-	$all_semester = $semester->getAllSemesterData();
+	$all_semester = SemesterData::GetInstance()->getAllSemesterData();
 
 	$vorles_beginn=$all_semester[$semester_num]["vorles_beginn"];
 
