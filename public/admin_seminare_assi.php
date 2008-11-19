@@ -167,12 +167,12 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 		$sem_create_data["term_start_woche"] = $data["start_woche"];
 		$sem_create_data["sem_start_termin"] = $data["start_termin"];
 		$sem_create_data["turnus_count"] = count($term_turnus);
-		$sem_create_data["term_art"] = $data["art"];
+		$sem_create_data["term_art"] = count($term_turnus) > 0 ? 0 : 1;
 
 		// Nutzerdomänen
 		$sem_create_data["sem_domain"] = UserDomain::getUserDomainsForSeminar($cp_id);
 
-		if ($data['art'] == 1) { //unregelmaessige Veranstaltung oder Block -> Termine kopieren
+		if ($sem_create_data["term_art"] == 1) { //unregelmaessige Veranstaltung oder Block -> Termine kopieren
 			// Sitzungen
 			$db2->query('SELECT * FROM termine WHERE range_id=\''. $cp_id . '\' AND date_typ=\'1\' ORDER by date');
 			$db2_term_count = 0;
@@ -2885,12 +2885,9 @@ if ($level == 3) {
 									</select>&nbsp;  <font size=-1><?=_("erster Termin in der"); ?></font>
 									<select name="term_start_woche">
 									<?
-									$tmp_first_date = getCorrectedSemesterVorlesBegin(get_sem_num($sem_create_data["sem_start_time"]));
-									foreach ($all_semester as $val) {
-										if ( ($val['beginn'] <= $tmp_first_date) && ($val['ende'] > $tmp_first_date) ) {
-											$end_date = $val['vorles_ende'];
-										}
-									}
+									$semester_index = get_sem_num($sem_create_data["sem_start_time"]);
+									$tmp_first_date = getCorrectedSemesterVorlesBegin($semester_index);
+									$end_date = $all_semester[$semester_index]['vorles_ende'];
 
 									$i = 0;
 									while ($tmp_first_date < $end_date) {

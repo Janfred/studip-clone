@@ -151,14 +151,10 @@ while ($msg = $sem->getNextMessage()) {
 // get possible start-weeks
 $start_weeks = array();
 
-$tmp_first_date = getCorrectedSemesterVorlesBegin(get_sem_num($sem->getStartSemester()));
+$semester_index = get_sem_num($sem->getStartSemester());
+$tmp_first_date = getCorrectedSemesterVorlesBegin($semester_index);
 $all_semester = $semester->getAllSemesterData();
-
-foreach ($all_semester as $val) {
-	if ( ($val['beginn'] <= $tmp_first_date) && ($val['ende'] > $tmp_first_date) ) {
-		$end_date = $val['vorles_ende'];
-	}
-}
+$end_date = $all_semester[$semester_index]['vorles_ende'];
 
 $i = 0;
 while ($tmp_first_date < $end_date) {
