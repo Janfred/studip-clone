@@ -47,7 +47,7 @@ class Autocomplete_CourseController extends Trails_Controller {
 
     $this->courses = autocomplete_course_get_courses($this->search_term,
                                                      $this->options);
-    $this->semesters = autocomplete_course_get_semesters();
+    if(!$this->options['semester']) $this->semesters = autocomplete_course_get_semesters();
   }
 
   private static function get_param($key) {
