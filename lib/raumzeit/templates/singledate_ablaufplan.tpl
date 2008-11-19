@@ -39,7 +39,7 @@
 		<? if (!$openAll) { ?><FORM action="<?=$PHP_SELF?>" method="post"><? } ?>
 		<TABLE border="0" cellspacing="0" cellpadding="1" width="99%">
 			<TR>
-				<TD class="steel1">
+				<TD width="70%" class="steel1">
 					<FONT size="-1">
 						<B><?=("Thema:")?></B><BR/>
 						<INPUT type="text" name="theme_title<?=$openAll ? '§'.$tpl['sd_id']: ''?>" maxlength="255" size="50" value="<?=$tpl['theme_title']?>" style="width: 98%"><BR/>
