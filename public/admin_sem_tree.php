@@ -31,7 +31,7 @@ if (!$perm->is_fak_admin()){
 	die;
 }
 
-$CURRENT_PAGE = $UNI_NAME . " - " . _("Veranstaltungshierachie bearbeiten");
+$CURRENT_PAGE = $UNI_NAME_CLEAN . " - " . _("Veranstaltungshierachie bearbeiten");
 
 require_once ('lib/visual.inc.php');
 require_once ('lib/classes/StudipSemTreeViewAdmin.class.php');
