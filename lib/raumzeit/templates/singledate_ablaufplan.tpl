@@ -12,6 +12,7 @@
 	<TD nowrap="nowrap" class="<?=$tpl['class']?>" valign="bottom">
 		<A class="tree" href="<?=$PHP_SELF?>?cmd=<?=($issue_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
 			<FONT size="-1">
+				<i><?=$tpl['art']?>:&nbsp;</i>
 				<?=$tpl['date']?>&nbsp;&nbsp;&nbsp;&nbsp;
 			</FONT>
 		</A>

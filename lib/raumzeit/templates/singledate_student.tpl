@@ -14,6 +14,7 @@
 	<td nowrap class="<?=$tpl['class']?>" valign="bottom">
 		<a class="tree" href="<?=URLHelper::getLink("?cmd=".($issue_open[$tpl['sd_id']] ? 'close' : 'open')."&open_close_id=".$tpl['sd_id']."#".$tpl['sd_id'])?>">
 			<font size="-1">
+				<i><?=$tpl['art']?>:&nbsp;</i>
 				<?=$tpl['date']?>&nbsp;&nbsp;&nbsp;&nbsp;
 			</font>
 		</a>
