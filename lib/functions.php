@@ -141,6 +141,8 @@ function selectSem ($sem_id) {
 		$SessSemName["header_line"] = getHeaderLine ($sem_id);
 	}
 
+	$GLOBALS['sess']->unregister('raumzeitFilter');
+
 	return $db->num_rows() != 0;
 }
 
@@ -184,6 +186,8 @@ function selectInst ($inst_id) {
 		$SessSemName["fak"] = $db->f("fakultaets_id");
 		$SessSemName["header_line"] = getHeaderLine ($inst_id);
 	}
+
+	$GLOBALS['sess']->unregister('raumzeitFilter');
 
 	return $db->num_rows() != 0;
 }
