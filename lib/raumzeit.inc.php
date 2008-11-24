@@ -7,6 +7,10 @@ define('DO_NOT_APPEND_MESSAGES', false);
  */
 function raumzeit_open() {
 	global $sd_open;
+	$termin = new SingleDate($_REQUEST['open_close_id']);
+	if( ($metadate_id = $termin->getMetaDateID()) ){
+		$sd_open[$metadate_id] = true;
+	}
 	$sd_open[$_REQUEST['open_close_id']] = true;
 }
 
