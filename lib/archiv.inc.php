@@ -253,9 +253,9 @@ function dump_sem($sem_id, $print_view = false) {
 				$dump.= "<td width=\"75%\" align=\"left\"> ";
 				$dump.= $TERMIN_TYP[$db->f("date_typ")]["name"].": ".htmlReady($db->f("th_title"),1,1);
 				$dump.= "&nbsp;</td></tr>\n";
-				if ($db->f("description")) {
+				if ($db->f("th_desc")) {
 					$dump.="<tr><td width=\"25%\">&nbsp;</td>";
-					$dump.= "<td width=\"75%\">".formatReady($db->f("th_description"),1,1)."</td></tr>\n";
+					$dump.= "<td width=\"75%\">".formatReady($db->f("th_desc"),1,1)."</td></tr>\n";
 				}
 			}
 		$dump .= "</table>\n";
@@ -279,7 +279,7 @@ function dump_sem($sem_id, $print_view = false) {
 				$dump.= "<td width=\"75%\" align=\"left\"> ";
 				$dump.= $TERMIN_TYP[$db->f("date_typ")]["name"].": ".htmlReady($db->f("th_title"),1,1);
 				$dump.= "&nbsp;</td></tr>\n";
-				if ($db->f("description")) {
+				if ($db->f("th_desc")) {
 					$dump.="<tr><td width=\"25%\">&nbsp;</td>";
 					$dump.= "<td width=\"75%\">".formatReady($db->f("th_desc"),1,1)."</td></tr>\n";
 				}
