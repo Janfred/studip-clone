@@ -66,11 +66,11 @@ function dump_sem($sem_id, $print_view = false) {
 	if (get_semester($sem_id))
 		$dump.="<tr><td width=\"15%\"><b>" . _("Semester:") . " </b></td><td>".get_semester($sem_id)."</td></tr>\n";
 
-	if (veranstaltung_beginn($sem_id))
-		$dump.="<tr><td width=\"15%\"><b>" . _("Erster Termin:") . " </b></td><td>".veranstaltung_beginn($sem_id)."</td></tr>\n";
+	if (veranstaltung_beginn($sem_id, 'export'))
+		$dump.="<tr><td width=\"15%\"><b>" . _("Erster Termin:") . " </b></td><td>".veranstaltung_beginn($sem_id, 'export')."</td></tr>\n";
 
-	if (vorbesprechung($sem_id))
-		$dump.="<tr><td width=\"15%\"><b>" . _("Vorbesprechung:") . " </b></td><td>".htmlReady(vorbesprechung($sem_id))."</td></tr>\n";
+	if (vorbesprechung($sem_id, 'export'))
+		$dump.="<tr><td width=\"15%\"><b>" . _("Vorbesprechung:") . " </b></td><td>".htmlReady(vorbesprechung($sem_id, 'export'))."</td></tr>\n";
 
 	if (getRoom($sem_id, FALSE))
 		$dump.="<tr><td width=\"15%\"><b>" . _("Ort:") . " </b></td><td>".getRoom($sem_id, FALSE)."</td></tr>\n";
