@@ -30,7 +30,24 @@
 *
 */
 
-/* ILIAS Version 3.9.x stable */
+/* ILIAS Version 3.10.x stable */
+
+if (isset($_GET['sess_id']))
+{	
+	setcookie('PHPSESSID',$_GET['sess_id']);
+	$_COOKIE['PHPSESSID'] = $_GET['sess_id'];
+} else {
+	unset($jump_to);
+}
+
+if (isset($_GET['client_id']))
+{	
+	setcookie('ilClientId',$_GET['client_id']);
+	$_COOKIE['ilClientId'] = $_GET['client_id'];
+} else {
+	unset($jump_to);
+}
+require_once "./include/inc.header.php";
 
 $jump_to = 'index.php';
 
@@ -51,8 +68,8 @@ switch($_GET['target'])
 				$jump_to = 'ilias.php';
 			break;
 			case 'sahs':
-				$_GET['baseClass'] = 'ilSAHSPresentationGUI'; 
-				$jump_to = 'ilias.php';
+				$jump_to = 'ilias.php?baseClass=ilSAHSPresentationGUI&ref_id='.$_GET['ref_id'];
+				$redirect = true;
 			break;
 			case 'htlm':
 				$_GET['baseClass'] = 'ilHTLMPresentationGUI'; 
@@ -70,6 +87,7 @@ switch($_GET['target'])
 		$_POST['new_type'] = $_GET['type'];
 		$_POST['cmd']['create'] = 'add';
 		$_GET['cmd'] = 'post';
+		$_GET[ilCtrl::IL_RTOKEN_NAME] = $ilCtrl->getRequestToken();
 		$jump_to = 'repository.php';
 	break;
 	case 'edit':
@@ -105,23 +123,6 @@ switch($_GET['target'])
 	default:
 	unset($jump_to);
 }
-
-if (isset($_GET['sess_id']))
-{	
-	setcookie('PHPSESSID',$_GET['sess_id']);
-	$_COOKIE['PHPSESSID'] = $_GET['sess_id'];
-} else {
-	unset($jump_to);
-}
-
-if (isset($_GET['client_id']))
-{	
-	setcookie('ilClientId',$_GET['client_id']);
-	$_COOKIE['ilClientId'] = $_GET['client_id'];
-} else {
-	unset($jump_to);
-}
-
 if ($redirect)
 {
 	header("Location: ".$jump_to);
