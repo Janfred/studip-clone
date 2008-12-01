@@ -533,7 +533,7 @@ class Seminar {
 		// $cache->expire("formatted_turnus".$this->id);
 
     //check for security consistency
-		if ($this->read_level < $this->write_level) // hier wusste ein Dozent nicht, was er tat
+		if ($this->write_level < $this->read_level) // hier wusste ein Dozent nicht, was er tat
 			$this->write_level = $this->read_level;
 
 		if ($this->irregularSingleDates) {
