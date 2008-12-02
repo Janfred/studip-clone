@@ -1020,6 +1020,7 @@ if ($view == 'Karriere') {
 		}
 
 		$inst_rights = array();
+		$admin_insts = array();
 		while ($db_r->next_record()) {
 			if ($auth->auth['perm'] == 'admin' && $db_r->f('is_fak')) {
 				$db_r2 = new DB_Seminar("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db_r->f("Institut_id") . "' AND institut_id!='" .$db_r->f("Institut_id") . "' ORDER BY Name");

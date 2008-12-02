@@ -675,7 +675,7 @@ if ( !$perm->have_perm("root")) {
 		if (!$GLOBALS['ALLOW_SELFASSIGN_STUDYCOURSE'] || $perm->have_perm("dozent"))
 			$meldung = "info§" . sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"impressum.php?view=ansprechpartner\">", "</a>") . "§";
 		else
-			$meldung = "info§" . sprintf(_("Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen zuzuordnen, nutzen Sie bitte die entsprechende %sOption%s unter \"universit&auml;re Daten\" auf Ihrer pers&ouml;nlichen Einstellungsseite."), "<a href=\"edit_about.php?view=Karriere#einrichtungen\">", "</a>") . "§";
+			$meldung = "info§" . sprintf(_("Sie haben sich noch keinen Einrichtungen zugeordnet. Um sich Einrichtungen zuzuordnen, nutzen Sie bitte die entsprechende %sOption%s unter \"Nutzerdaten - Studiendaten\" auf Ihrer pers&ouml;nlichen Einstellungsseite."), "<a href=\"edit_about.php?view=Studium#einrichtungen\">", "</a>") . "§";
 
 	if ($num_my_inst) {
 	 ?>
@@ -839,7 +839,7 @@ if ( !$perm->have_perm("root")) {
 										"text"  => sprintf(_("Um Einrichtungen zu suchen und sich Informationen anzeigen zu lassen, nutzen Sie die %sEinrichtungssuche%s."), "<a href=\"institut_browse.php\">", "</a>")
 					),
 					array	 (	"icon" => "meinesem.gif",
-										"text"  => sprintf(_("Wenn Sie weitere Einrichtungen in ihre pers&ouml;nliche Auswahl aufnehmen m&ouml;chten, k&ouml;nnen sie sich hier %szuordnen%s."), "<a href=\"edit_about.php?view=Karriere#einrichtungen\">", "</a>")
+										"text"  => sprintf(_("Wenn Sie weitere Einrichtungen in ihre pers&ouml;nliche Auswahl aufnehmen m&ouml;chten, k&ouml;nnen sie sich hier %szuordnen%s."), "<a href=\"edit_about.php?view=Studium#einrichtungen\">", "</a>")
 					)
 				)
 			)
