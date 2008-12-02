@@ -147,7 +147,7 @@
 					</td>
 					<td>&nbsp;&nbsp;</td>
 					<td width="<?= $width ?>" style="padding-left: 10px; padding-right: 10px" valign="top" align="center">
-  	 				<?= $this->render_partial('statusgruppen/role_administration_search') ?>
+  	 				<?= $this->render_partial('statusgruppen/role_administration_search', array('anker'=>$role_id)) ?>
   	 			</td>
   	 		</tr>
    		</table>
