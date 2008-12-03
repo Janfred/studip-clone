@@ -214,9 +214,16 @@ $the_tree->showSemTree();
 	?>
 	</select><br>&nbsp;<br><select name="mark_list_aktion" style="font-size:8pt;width:100%;">
 	<?
-	if (is_array($_open_items) && count($_open_items) && !(count($_open_items) == 1 && $_open_items['root'])){
+	if(!Config::GetInstance()->getValue('SEM_TREE_ALLOW_BRANCH_ASSIGN')){
+		foreach($_open_items as $item_id => $value){
+			if(!$the_tree->tree->getNumKids($item_id)) $possible_open_items[$item_id] = $value;
+		}
+	} else {
+		$possible_open_items = $_open_items;
+	}
+	if (is_array($possible_open_items) && count($possible_open_items) && !(count($possible_open_items) == 1 && $possible_open_items['root'])){
 		echo "\n<option  value=\"insert_all\">" . _("In alle ge&ouml;ffneten Bereiche eintragen") . "</option>";
-		foreach ($_open_items as $item_id => $value){
+		foreach ($possible_open_items as $item_id => $value){
 			echo "\n<option value=\"insert_{$item_id}\">"
 				. sprintf(_("In \"%s\" eintragen"),htmlReady(my_substr($the_tree->tree->tree_data[$item_id]['name'],0,floor($cols * .8)))) . "</option>";
 		}
