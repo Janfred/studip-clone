@@ -68,9 +68,6 @@ class ResourceObjectPerms {
 	function ResourceObjectPerms ($resource_id, $user_id='') {
 		global $user, $perm;
 		
-		$this->db = new DB_Seminar;
-		$this->db2 = new DB_Seminar;
-		
 		if ($user_id)
 			$this->user_id=$user_id;
 		else
@@ -105,8 +102,8 @@ class ResourceObjectPerms {
 		
 		//check if the user is owner of the object
 		if ($this->perm != "admin") {			
-			$this->db->query("SELECT owner_id FROM resources_objects WHERE owner_id='$this->user_id' AND resource_id = '$this->resource_id' ");
-			if ($this->db->next_record()) {
+			$result = DBManager::get()->query("SELECT owner_id FROM resources_objects WHERE owner_id='$this->user_id' AND resource_id = '$this->resource_id' ");
+			if ($result->fetch()) {
 				$this->owner=TRUE;
 				$this->changePerm("admin");
 			} else {
@@ -129,14 +126,17 @@ class ResourceObjectPerms {
 				$top=FALSE;
 
 				while ((!$top) && ($k<10000) && ($superordinated_id)) {
-					$this->db2->query("SELECT owner_id, resource_id FROM resources_objects WHERE owner_id IN $objects_sql AND resource_id = '$superordinated_id' ");
-					while ($this->db2->next_record()) {
-						if ($my_objects[$this->db2->f('owner_id')]["perms"] == "admin"){
+					$result = DBManager::get()->query("SELECT owner_id, resource_id 
+						FROM resources_objects 
+						WHERE owner_id IN $objects_sql AND resource_id = '$superordinated_id' ");
+
+					while ($data = $result->fetch(PDO::FETCH_ASSOC)) {
+						if ($my_objects[$data['owner_id']]["perms"] == "admin"){
 							$this->changePerm("admin");
 						} else {
 							switch ($inheritance) {
 								case "1":
-									$this->changePerm($my_objects[$this->db2->f('owner_id')]["perms"]);
+									$this->changePerm($my_objects[$data['owner_id']]["perms"]);
 								break;
 								default:
 								case "2":
@@ -150,21 +150,25 @@ class ResourceObjectPerms {
 					++$k;
 					if ($this->perm == "admin")
 						break;
+
 					//also check the additional perms...
-					$this->db2->query("SELECT user_id,perms FROM resources_user_resources  WHERE user_id IN $objects_sql AND resource_id = '$superordinated_id' ");
-					while ($this->db2->next_record()){
-						$this->changePerm($this->db2->f("perms"));
+					$result = DBManager::get()->prepare("SELECT user_id,perms 
+						FROM resources_user_resources
+						WHERE user_id IN $objects_sql AND resource_id = '$superordinated_id' ");
+
+					while ($data = $result->fetch(PDO::FETCH_ASSOC)){
+						$this->changePerm($data['perms']);
 						if ($this->perm == "admin")
 							break;
 					}
 					if ($this->perm == "admin")
 						break;
+
 					//select the next superordinated object
-					$query = sprintf ("SELECT parent_id FROM resources_objects WHERE resource_id = '%s' ", $superordinated_id);
-					$this->db->query($query);						
-					$this->db->next_record();
-					$superordinated_id = $this->db->f("parent_id");
-					if ($this->db->f("parent_id") == "0")
+					$result = DBManager::get()->query("SELECT parent_id FROM resources_objects WHERE resource_id = '$superordinated_id'");
+					$data = $result->fetch(PDO::FETCH_ASSOC);
+					$superordinated_id = $data['parent_id'];
+					if ($data['parent_id'] == "0")
 						$top = TRUE;
 				}
 
