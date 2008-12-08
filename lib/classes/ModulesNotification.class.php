@@ -168,11 +168,11 @@ class ModulesNotification extends Modules {
 		$my_sem = array();
 		while ($this->db->next_record()){
 			$seminar_id = $this->db->f('Seminar_id');
-			$modulesInt = $modules = $this->db->f('modules');
-			if( $modules === null ){
-				$modules = $this->getDefaultBinValue( $seminar_id , "sem" );
+			$modulesInt = $this->db->f('modules');
+			if( $modulesInt === null ){
+				$modulesInt = $this->getDefaultBinValue( $seminar_id , "sem" );
 			}
-			$modules = $this->generateModulesArrayFromModulesInteger( $modules );
+			$modules = $this->generateModulesArrayFromModulesInteger( $modulesInt );
 			$my_sem[$seminar_id] = array(
 				//	'visitdate' => $this->db->f('visitdate'),
 					'name' => $this->db->f('Name'),
@@ -215,7 +215,7 @@ class ModulesNotification extends Modules {
 		}
 		if ($text) {
 			$text = _("Diese Email wurde automatisch vom Stud.IP-System verschickt. Sie können auf diese Nachricht nicht antworten.")
-						. "\n" . _("Sie erhalten hiermit in regelmäßigen Abständen Informationen über Neuigkeiten und Änderungen in Ihren abonierten Veranstaltungen.")
+						. "\n" . _("Sie erhalten hiermit in regelmäßigen Abständen Informationen über Neuigkeiten und Änderungen in Ihren abonnierten Veranstaltungen.")
 						. "\n\n" . _("Über welche Inhalte Sie informiert werden wollen, können Sie hier einstellen:")
 						. "\n{$this->smtp->url}sem_notification.php"
 						. "\n" . $text
@@ -331,6 +331,15 @@ class ModulesNotification extends Modules {
 		} 
 		return $text;
 	}
+	
+	function generateModulesArrayFromModulesInteger( $bitmaskint ){
+		$array = array();
+		$bitmask = str_split( strrev( decbin( $bitmaskint ) ) );
+		foreach( $this->registered_modules as $name => $module ){
+			$array[ $name ] = ( $bitmask[ $module[ "id" ] ] == "1" );
+		}					
+		return $array;
+	}	
 	
 }
 ?>
