@@ -152,7 +152,7 @@ class ResourceObjectPerms {
 						break;
 
 					//also check the additional perms...
-					$result = DBManager::get()->prepare("SELECT user_id,perms 
+					$result = DBManager::get()->query("SELECT user_id,perms 
 						FROM resources_user_resources
 						WHERE user_id IN $objects_sql AND resource_id = '$superordinated_id' ");
 
