@@ -536,14 +536,14 @@ function _real_format($text) {
 					"'(^|\n)\!{4}([^!].*)'m",           // Ueberschrift 1. Ordnung
 					"'(\n|\A)(([-=]+ .+(\n|\Z))+)'e",    // Listen
                                         "'(\n|\A)((\\|.+(\n|\Z))+)'e",    // Tabellen
-					"'%%(\S|\S.*?\S)%%'s",               // ML-kursiv
-					"'\*\*(\S|\S.*?\S)\*\*'s",           // ML-fett
-					"'__(\S|\S.*?\S)__'s",                     // ML-unterstrichen
-					"'##(\S|\S.*?\S)##'s",                     // ML-diktengleich
-					"'((--)+|(\+\+)+)(\S|\S.*?\S)\\1'se",        // ML-kleiner / ML-groesser
-					"'&gt;&gt;(\S|\S.*?\S)&gt;&gt;'is",     // ML-hochgestellt
-					"'&lt;&lt;(\S|\S.*?\S)&lt;&lt;'is",     // ML-tiefgestellt
-					"'{-(\S|\S.*?\S)-}'s",                  // ML-strike-through
+					"'%%(.+?)%%'s",               // ML-kursiv
+					"'\*\*(.+?)\*\*'s",           // ML-fett
+					"'__(.+?)__'s",                     // ML-unterstrichen
+					"'##(.+?)##'s",                     // ML-diktengleich
+					"'((--)+|(\+\+)+)(.+?)\\1'se",        // ML-kleiner / ML-groesser
+					"'&gt;&gt;(.+?)&gt;&gt;'is",     // ML-hochgestellt
+					"'&lt;&lt;(.+?)&lt;&lt;'is",     // ML-tiefgestellt
+					"'{-(.+?)-}'s",                  // ML-strike-through
 					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se",   // Absatz eingerueckt
 					"'\n?(</?h[1-4r]>)\n?'"                        // removes newline delimiters
 					);
