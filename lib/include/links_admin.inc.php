@@ -306,7 +306,11 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	//Bottomkats
 	$structure["grunddaten_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Grunddaten"), 'link'=>"admin_seminare1.php?list=TRUE", 'active'=>FALSE);
-	$structure["study_areas_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Studienbereiche"), 'link'=>URLHelper::getLink("dispatch.php/course/study_areas/show/".$GLOBALS['SessionSeminar']), 'active'=>FALSE);
+
+	$chosen_course_id = $GLOBALS['SessionSeminar']
+		? $GLOBALS['SessionSeminar'] : ($GLOBALS['s_id'] ? $GLOBALS['s_id'] : '');
+
+	$structure["study_areas_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Studienbereiche"), 'link'=>URLHelper::getLink("dispatch.php/course/study_areas/show/".$chosen_course_id), 'active'=>FALSE);
 	$structure["zeiten"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zeiten / Räume"), 'link'=>"raumzeit.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["schedule"]) || (!$SessSemName[1]))
 		$structure["ablaufplan"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Ablaufplan"), 'link'=>"themen.php?list=TRUE", 'active'=>FALSE);
@@ -1150,7 +1154,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 							}
 						?>
 						</select>
-	
+
 					<?
 					}
 				break;
