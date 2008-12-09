@@ -384,4 +384,22 @@ class Statusgruppe {
 		
 		return false;
 	}
+
+	/**
+	 * returns the number of statusgroups with the given name and range_id
+	 * 
+	 * @param string $name the name to search for
+	 * @param string $range_id the Seminar_id, Institut_id, ...
+	 * @return integer the number of statusgroups found
+	 */
+	static function countByName($name, $range_id) {
+		$stmt = DBManager::get()->prepare("SELECT COUNT(*) as c FROM statusgruppen WHERE name LIKE ? AND range_id = ?");
+		$stmt->execute(array($name, $range_id));
+
+		if (!$data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			return 0;
+		}
+
+		return $data['c'];
+	}
 }

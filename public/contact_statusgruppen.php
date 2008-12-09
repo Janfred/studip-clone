@@ -195,6 +195,12 @@ function PrintAktualContacts ($range_id)
 	// neue Statusgruppe hinzufuegen
 
 	if (($cmd=="add_new_statusgruppe") && ($new_statusgruppe_name != "")) {
+		if (Statusgruppe::countByName($new_statusgruppe_name, $range_id) > 0) {
+			$msgs[] = 'info§' . sprintf(_("Die Gruppe %s wurde hinzugefügt, es gibt jedoch bereits ein Gruppe mit demselben Namen!"), '<b>'. htmlReady($new_statusgruppe_name) .'</b>');
+		} else {
+			$msgs[] = 'msg§' . sprintf(_("Die Gruppe %s wurde hinzugefügt!"), '<b>'. htmlReady($new_statusgruppe_name) .'</b>');
+		}
+
 		AddNewStatusgruppe ($new_statusgruppe_name, $range_id, $new_statusgruppe_size);
 	}
 
@@ -232,14 +238,18 @@ function PrintAktualContacts ($range_id)
 
 
 
-
 // Beginn Darstellungsteil
 
 // Anfang Edit-Bereich
-
 ?>
-
 <table class="blank" width="100%" border="0" cellspacing="0">
+<?
+if (is_array($msgs)) {
+	foreach ($msgs as $msg) {
+		parse_msg($msg);
+	}
+}
+?>
   <tr>
     <td align="right" width="50%" class="blank">&nbsp;</td>
     <td align="right" width="50%" NOWRAP class="blank">
