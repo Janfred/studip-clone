@@ -310,13 +310,20 @@ class MetaDate {
 
 		return serialize($data);
 	}
-
+	
+	function sortCycleData($a, $b) {
+		if($a->day==$b->day){
+			return 0;
+		} 
+		return ($a->day < $b->day) ? -1 : 1;
+	}
+		
 	function getCycleData() {
 		$ret = array();
-
 		foreach ($this->cycles as $val) {
 			$ret[$val->getMetaDateID()] = array('metadate_id' => $val->metadate_id, 'idx' => $val->idx, 'day' => $val->day, 'start_hour' => $val->start_stunde, 'start_minute' => $val->start_minute, 'end_hour' => $val->end_stunde, 'end_minute' => $val->end_minute, 'desc' => $val->description, 'room' => $val->room, 'resource_id' => $val->resource_id);
 		}
+		uasort($ret,array('MetaDate','sortCycleData'));
 
 		return $ret;
 	}
