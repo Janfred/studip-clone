@@ -20,6 +20,8 @@ class URLHelperTest extends UnitTestCase
         foreach (URLHelper::getLinkParams() as $param => $value) {
             URLHelper::removeLinkParam($param);
         }
+
+        URLHelper::setBaseURL(NULL);
     }
 
     public function testNoLinkParam ()
@@ -104,5 +106,27 @@ class URLHelperTest extends UnitTestCase
         $url = 'abc?a=%26&c=d#1';
         $expected = 'abc?foo=%26+%3B&amp;bar=%22%27&amp;a=%26&amp;c=d#1';
         $this->assertEqual(URLHelper::getLink($url), $expected);
+    }
+
+    public function testSetBaseURL ()
+    {
+        $this->assertEqual(URLHelper::getLink('foo/bar'), 'foo/bar');
+        $this->assertEqual(URLHelper::getLink('/foo/bar'), '/foo/bar');
+        $this->assertEqual(URLHelper::getLink('http://www.studip.de/foo/bar'),
+                           'http://www.studip.de/foo/bar');
+
+        URLHelper::setBaseURL('/dir/');
+
+        $this->assertEqual(URLHelper::getLink('foo/bar'), '/dir/foo/bar');
+        $this->assertEqual(URLHelper::getLink('/foo/bar'), '/foo/bar');
+        $this->assertEqual(URLHelper::getLink('http://www.studip.de/foo/bar'),
+                           'http://www.studip.de/foo/bar');
+
+        URLHelper::setBaseURL('http://cnn.com/test/');
+
+        $this->assertEqual(URLHelper::getLink('foo/bar'), 'http://cnn.com/test/foo/bar');
+        $this->assertEqual(URLHelper::getLink('/foo/bar'), 'http://cnn.com/foo/bar');
+        $this->assertEqual(URLHelper::getLink('http://www.studip.de/foo/bar'),
+                           'http://www.studip.de/foo/bar');
     }
 }

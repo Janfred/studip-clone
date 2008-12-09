@@ -25,6 +25,9 @@ unregister_globals();
 
 try {
 
+  # set base url for URLHelper class
+  URLHelper::setBaseUrl($CANONICAL_RELATIVE_PATH_STUDIP);
+
   # get plugin class from request
   $dispatch_to = isset($_SERVER['PATH_INFO']) ?$_SERVER['PATH_INFO'] : '';
   list($plugin_class, $unconsumed) = PluginEngine::routeRequest($dispatch_to);
@@ -64,7 +67,6 @@ try {
   include 'lib/include/html_end.inc.php';
   exit;
 
-
 } catch (Exception $e) {
 
   include 'lib/include/html_head.inc.php';
@@ -75,4 +77,3 @@ try {
   exit;
 
 }
-

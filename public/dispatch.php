@@ -21,6 +21,9 @@ $trails_uri = rtrim($CANONICAL_RELATIVE_PATH_STUDIP, '/') . '/dispatch.php';
 # load trails
 require_once 'vendor/trails/trails.php';
 
+# set base url for URLHelper class
+URLHelper::setBaseUrl($CANONICAL_RELATIVE_PATH_STUDIP);
+
 # dispatch
 $request_uri = $_SERVER['REQUEST_URI'] === $_SERVER['PHP_SELF']
                ? '/'

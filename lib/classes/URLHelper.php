@@ -24,7 +24,49 @@ class URLHelper
     /**
      * array of registered parameter values (initially empty)
      */
-    static private $params = array();
+    private static $params = array();
+
+    /**
+     * base URL for all links generated from relative URLs
+     */
+    private static $base_url;
+
+    /**
+     * Set a base URL to be used when resolving relative URLs passed
+     * to URLHelper::getLink() and URLHelper::getURL(). Set this to
+     * NULL to use no base URL and skip the URL resolving step.
+     *
+     * @param string $url  relative or absolute URL (or NULL)
+     */
+    static function setBaseURL ($url)
+    {
+        self::$base_url = $url;
+    }
+
+    /**
+     * Resolve the given relative or absolute URL relative to the
+     * currently defined base URL (if set). This is a private method.
+     *
+     * @param string $url    relative or absolute URL
+     *
+     * @return string modified URL
+     */
+    private static function resolveURL ($url)
+    {
+        $base_url = self::$base_url;
+
+        if (!isset($base_url) ||
+            preg_match('%^[a-z]+:%', $url)) {
+            return $url;
+        }
+
+        if ($url[0] === '/') {
+            preg_match('%^[a-z]+://[\w.]+%', $base_url, $host);
+            $base_url = isset($host) ? $host[0] : '';
+        }
+
+        return $base_url.$url;
+    }
 
     /**
      * Add a new link parameter. If a parameter with this name already
@@ -117,6 +159,7 @@ class URLHelper
     static function getURL ($url = '', $params = NULL)
     {
         $link_params = self::$params;
+        $url = self::resolveURL($url);
 
         list($url, $fragment) = explode('#', $url);
         list($url, $query)    = explode('?', $url);
