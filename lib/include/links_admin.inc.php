@@ -1,5 +1,5 @@
 <?
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 /*
 links_admin.inc.php - Navigation fuer die Verwaltungsseiten von Stud.IP.
@@ -116,7 +116,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		global $links_admin_data, $sem_create_data, $admin_dates_data, $admin_admission_data, $archiv_assi_data,
 			$term_metadata, $news_range_id, $news_range_name;
 
-		$links_admin_data='';
+		//$links_admin_data='';
 		$sem_create_data='';
 		$admin_dates_data='';
 		$admin_admission_data='';
@@ -276,15 +276,12 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	//Topkats
 	if ($perm->have_perm("tutor")) {
-		if (($SessSemName["class"] == "sem") && (!$archive_kill))
-			$structure["veranstaltungen"]=array ('topKat'=>"", 'name'=>_("Veranstaltungen"), 'link'=>"admin_seminare1.php", 'active'=>FALSE);
-		else
-			$structure["veranstaltungen"]=array ('topKat'=>"", 'name'=>_("Veranstaltungen"), 'link'=>"adminarea_start.php?list=TRUE", 'active'=>FALSE);
+		$structure["veranstaltungen"]=array ('topKat'=>"", 'name'=>_("Veranstaltungen"), 'link'=>"adminarea_start.php?list=TRUE", 'active'=>FALSE);
 		$structure["einrichtungen"]=array ('topKat'=>"", 'name'=>_("Einrichtungen"), 'link'=>"admin_lit_list.php?list=TRUE&view=literatur_inst", 'active'=>FALSE);
 	}
 
 	if ($perm->have_perm("admin")) {
-		$structure["einrichtungen"]=array ('topKat'=>"", 'name'=>_("Einrichtungen"), 'link'=>"admin_institut.php?list=TRUE", 'active'=>FALSE);
+		$structure["einrichtungen"]=array ('topKat'=>"", 'name'=>_("Einrichtungen"), 'link'=>"admin_institut.php?list=TRUE&quit=1", 'active'=>FALSE);
 		$structure["global"]=array ('topKat'=>"", 'name'=>_("globale Einstellungen"), 'link'=>"new_user_md5.php", 'active'=>FALSE);
 	}
 
@@ -306,11 +303,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	//Bottomkats
 	$structure["grunddaten_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Grunddaten"), 'link'=>"admin_seminare1.php?list=TRUE", 'active'=>FALSE);
-
-	$chosen_course_id = $GLOBALS['SessionSeminar']
-		? $GLOBALS['SessionSeminar'] : ($GLOBALS['s_id'] ? $GLOBALS['s_id'] : '');
-
-	$structure["study_areas_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Studienbereiche"), 'link'=>URLHelper::getLink("dispatch.php/course/study_areas/show/".$chosen_course_id), 'active'=>FALSE);
+	$structure["study_areas_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Studienbereiche"), 'link'=>URLHelper::getLink("dispatch.php/course/study_areas/show/" . $GLOBALS['SessionSeminar'], array('list' => 'TRUE')), 'active'=>FALSE);
 	$structure["zeiten"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zeiten / Räume"), 'link'=>"raumzeit.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["schedule"]) || (!$SessSemName[1]))
 		$structure["ablaufplan"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Ablaufplan"), 'link'=>"themen.php?list=TRUE", 'active'=>FALSE);
@@ -339,7 +332,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		}
 	}
 
-	if ($SEMINAR_LOCK_ENABLE && $perm->have_perm("admin"))
+	if ($GLOBALS['SEMINAR_LOCK_ENABLE'] && $perm->have_perm("admin"))
 		$structure["lock"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sperren"), 'link'=>"admin_lock.php?list=TRUE&new_session=TRUE", 'active'=>FALSE);
 
 	$structure["aux"]=array (topKat=>"veranstaltungen", name=>_("Zusatzangaben"), link=>"admin_aux.php?list=TRUE&new_session=TRUE", active=>FALSE);
@@ -630,7 +623,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		?>
 		<tr>
 			<td class="blank" colspan=2>&nbsp;
-				<form name="links_admin_search" action="<? echo $GLOBALS['PHP_SELF'],"?", "view=$view"?>" method="POST">
+				<form name="links_admin_search" action="<?=URLHelper::getLink()?>" method="POST">
 				<table cellpadding="0" cellspacing="0" border="0" width="99%" align="center">
 					<tr>
 						<td class="steel1">
@@ -703,7 +696,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		//Umfangreiches Auswahlmenu nur ab Admin, alles darunter sollte eine uberschaubare Anzahl von Seminaren haben
 		if ($perm->have_perm("admin")) {
 		?>
-			<form name="links_admin_search" action="<? echo $GLOBALS['PHP_SELF'] ?>" method="POST">
+			<form name="links_admin_search" action="<?=URLHelper::getLink()?>" method="POST">
 				<table cellpadding="0" cellspacing="0" border="0" width="99%" align="center">
 					<tr>
 						<td class="steel1" colspan=5>
@@ -919,7 +912,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			$db->query($query);
 
 		?>
-		<form name="links_admin_action" action="<? echo $GLOBALS['PHP_SELF'] ?>" method="POST">
+		<form name="links_admin_action" action="<?=URLHelper::getLink()?>" method="POST">
 		<table border=0  cellspacing=0 cellpadding=2 align=center width="99%">
 		<?
 
@@ -929,21 +922,21 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			<tr height=28>
 				<td width="%10" class="steel" valign=bottom>
 					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>
-					&nbsp;<a href="<? echo $GLOBALS['PHP_SELF'] ?>?adminarea_sortby=start_time"><b><?=_("Semester")?></b></a>
+					&nbsp;<a href="<?=URLHelper::getLink('?adminarea_sortby=start_time')?>"><b><?=_("Semester")?></b></a>
 				</td>
 				<td width="5%" class="steel" valign=bottom>
 					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>
-					&nbsp; <a href="<? echo $GLOBALS['PHP_SELF'] ?>?adminarea_sortby=VeranstaltungsNummer"><b><?=_("Nr.")?></b></a>
+					&nbsp; <a href="<?=URLHelper::getLink('?adminarea_sortby=VeranstaltungsNummer')?>"><b><?=_("Nr.")?></b></a>
 				</td>
 				<td width="45%" class="steel" valign=bottom>
 					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>
-					&nbsp; <a href="<? echo $GLOBALS['PHP_SELF'] ?>?adminarea_sortby=Name"><b><?=_("Name")?></b></a>
+					&nbsp; <a href="<?=URLHelper::getLink('?adminarea_sortby=Name')?>"><b><?=_("Name")?></b></a>
 				</td>
 				<td width="15%" align="center" class="steel" valign=bottom>
 					<b><?=_("DozentIn")?></b>
 				</td>
 				<td width="25%"align="center" class="steel" valign=bottom>
-					<a href="<? echo $GLOBALS['PHP_SELF'] ?>?adminarea_sortby=status"><b><?=_("Status")?></b></a>
+					<a href="<?=URLHelper::getLink('?adminarea_sortby=status')?>"><b><?=_("Status")?></b></a>
 				</td>
 				<td width="10%" align="center" class="steel" valign=bottom>
 					<b><?
@@ -971,7 +964,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					<td class="<? echo $cssSw->getClass() ?>" colspan=3 align="right">
 					<?
 					if ($auth->auth["jscript"]) {
-						printf("<font size=-1><a href=\"%s?select_all=TRUE&list=TRUE\">%s</a></font>", $GLOBALS['PHP_SELF'], makeButton("alleauswaehlen"));
+						printf("<font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_all=TRUE&list=TRUE'), makeButton("alleauswaehlen"));
 					}
 					?>&nbsp;
 					</td>
@@ -989,7 +982,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					<input type="HIDDEN" name="change_visible" value="1">
 					<?
 					if ($auth->auth["jscript"]) {
-						printf("<font size=-1><a href=\"%s?select_all=TRUE&list=TRUE\">%s</a></font>", $GLOBALS['PHP_SELF'], makeButton("alleauswaehlen"));
+						printf("<font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_all=TRUE&list=TRUE') , makeButton("alleauswaehlen"));
 						// echo "&nbsp;<br>";
 						// printf("<font size=-1><a href=\"%s?select_none=TRUE&list=TRUE\">%s</a></font>", $GLOBALS['PHP_SELF'], makeButton("alleauswaehlen"));
 					}
@@ -1087,7 +1080,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			while ($db4->next_record()) {
 				if ($k)
 					echo ", ";
-				echo "<a href=\"about.php?username=".$db4->f("username")."\">".htmlReady($db4->f("fullname"))."</a>";
+				echo "<a href=\"".UrlHelper::GetLink("about.php?username=".$db4->f("username"))."\">".htmlReady($db4->f("fullname"))."</a>";
 				$k++;
 			}
 			echo "</font></td>";
@@ -1097,40 +1090,40 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			//Kommandos fuer die jeweilgen Seiten
 			switch ($i_page) {
 				case "adminarea_start.php":
-					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"adminarea_start.php?select_sem_id=%s\">%s</a></font>", $seminar_id, makeButton("auswaehlen"));
+					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_sem_id=' . $seminar_id), makeButton("auswaehlen"));
 					break;
 				case "themen.php":
-					printf("<font size=-1>" . _("Ablaufplan") . "<br /><a href=\"themen.php?seminar_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+					printf("<font size=-1>" . _("Ablaufplan") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?seminar_id=' . $seminar_id), makeButton("bearbeiten"));
 					break;
 				case "raumzeit.php":
-					printf("<font size=-1>" . _("Zeiten / Räume") . "<br /><a href=\"raumzeit.php?seminar_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+					printf("<font size=-1>" . _("Zeiten / Räume") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?seminar_id=' . $seminar_id), makeButton("bearbeiten"));
 					break;
 				case "admin_admission.php":
-					printf("<font size=-1>" . _("Zugangsberechtigungen") . "<br /><a href=\"admin_admission.php?seminar_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+					printf("<font size=-1>" . _("Zugangsberechtigungen") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?seminar_id=' . $seminar_id), makeButton("bearbeiten"));
 					break;
 				case "admin_room_requests.php":
-					printf("<font size=-1>" . _("Raumw&uuml;nsche") . "<br /><a href=\"admin_room_requests.php?seminar_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+					printf("<font size=-1>" . _("Raumw&uuml;nsche") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?seminar_id=' . $seminar_id), makeButton("bearbeiten"));
 					break;
 				case "admin_lit_list.php":
-					printf("<font size=-1>" . _("Literatur") . "<br /><a href=\"admin_lit_list.php?_range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+					printf("<font size=-1>" . _("Literatur") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?_range_id=' . $seminar_id), makeButton("bearbeiten"));
 					break;
 				case "admin_statusgruppe.php":
-					printf("<font size=-1>" . _("Funktionen / Gruppen") . "<br /><a href=\"admin_statusgruppe.php?range_id=%s&ebene=sem\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+					printf("<font size=-1>" . _("Funktionen / Gruppen") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?ebene=sem&range_id=' . $seminar_id), makeButton("bearbeiten"));
 					break;
 				case "admin_roles.php":
-					printf("<font size=-1>" . _("Funktionen / Gruppen") . "<br /><a href=\"admin_roles.php?range_id=%s&ebene=sem\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+					printf("<font size=-1>" . _("Funktionen / Gruppen") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?ebene=sem&range_id=' . $seminar_id), makeButton("bearbeiten"));
 					break;
 				case "admin_seminare1.php":
-					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare1.php?s_id=%s&s_command=edit\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?s_command=edit&s_id=' . $seminar_id), makeButton("bearbeiten"));
 					break;
 				case "admin_modules.php":
-					printf("<font size=-1>" . _("Module") . "<br /><a href=\"admin_modules.php?range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+					printf("<font size=-1>" . _("Module") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?range_id=' . $seminar_id), makeButton("bearbeiten"));
 					break;
 				case "admin_news.php":
-					printf("<font size=-1>" . _("News") . "<br /><a href=\"admin_news.php?range_id=%s\">%s</a></font>", $seminar_id, makeButton("bearbeiten"));
+					printf("<font size=-1>" . _("News") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?range_id=' . $seminar_id), makeButton("bearbeiten"));
 					break;
 				case "copy_assi.php":
-					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"admin_seminare_assi.php?cmd=do_copy&cp_id=%s&start_level=TRUE&class=1\">%s</a></font>", $seminar_id, makeButton("kopieren"));
+					printf("<font size=-1>" . _("Veranstaltung") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('admin_seminare_assi.php?cmd=do_copy&start_level=TRUE&class=1&cp_id=' . $seminar_id), makeButton("kopieren"));
 					break;
 				case "admin_lock.php":
 					$lock_rules = new LockRules();
@@ -1205,6 +1198,13 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 						} else {
 							echo "&nbsp;";
 						}
+					}
+					break;
+				case "dispatch.php":
+					if($controller instanceof Course_StudyAreasController){
+						printf(_("Studienbereiche") . '<br><a href="%s">%s</a>',
+							$controller->url_for('course/study_areas/show/' . $seminar_id),
+							makeButton("bearbeiten"));
 					}
 					break;
 			}
