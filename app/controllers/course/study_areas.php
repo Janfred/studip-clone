@@ -33,8 +33,9 @@ class Course_StudyAreasController extends Trails_Controller {
                     'user' => 'Seminar_User'));
 
     # set up language prefs
-    $_language_path = init_i18n($_language);
-
+    #$_language_path = init_i18n($_language);
+	include 'lib/seminar_open.php';
+	
     # user must have tutor permission
     $perm->check('tutor');
 
