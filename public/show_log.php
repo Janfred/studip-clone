@@ -69,6 +69,13 @@ include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 // main logic
 
+if ($_REQUEST['username']) {
+	// display log action for single user
+	$searchmode="found";
+	$objecttype="user";
+	$searchobject=$username;
+}
+
 $showentries=0;
 if ($rewind_x) { // found, aber reset gedrückt
 	$searchmode="search";

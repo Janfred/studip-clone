@@ -527,6 +527,12 @@ if (isset($_GET['details'])) {
 					<img src="'.$GLOBALS['ASSETS_URL'].'images/icon-disc.gif" align="absmiddle" border="0">
 					</a>';
 				echo "</td></tr>\n";
+				echo "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
+				echo "&nbsp;" . _("Log") . "&nbsp;";
+				echo '<a href="' . URLHelper::getLink('show_log?username=' . $db->f('username')) .'">
+					<img src="'.$GLOBALS['ASSETS_URL'].'images/suchen.gif" align="absmiddle" border="0">
+					</a>';
+				echo "</td></tr>\n";
 			}
 			$temp_user_id = $db->f("user_id");
 			if ($perm->have_perm("root"))
