@@ -107,9 +107,14 @@ function change_action() {
 	} else {
 		$active="0";
 	}
+	if ($_REQUEST['expires']) {
+		$expire=((int)$_REQUEST['expires'])*24*3600;
+	} else {
+		$expire=0;
+	}
 	if ($msg) return $msg;
 	$db=new DB_Seminar();
-	$sql="UPDATE log_actions SET description='".addslashes($_REQUEST['description'])."', info_template='".addslashes($_REQUEST['info_template'])."', active='".$active."' WHERE action_id='".$_REQUEST['action_id']."'";
+	$sql="UPDATE log_actions SET description='".addslashes($_REQUEST['description'])."', info_template='".addslashes($_REQUEST['info_template'])."', active='".$active."', expires='".$expire."' WHERE action_id='".$_REQUEST['action_id']."'";
 	$db->query($sql);
 	$msg="msg§"._("Eintrag geändert")."§";
 	return $msg;
@@ -138,8 +143,7 @@ function show_list() {
 	print $listtable->cell("<font size=-1><b>"._("Template")."</b></font>");
 	print $listtable->cell("<font size=-1><b>"._("Anzahl")."</b></font>");
 	print $listtable->cell("<font size=-1><b>"._("Aktiv?")."</b></font>");
-	// Ablaufzeit noch nicht implementiert
-	// print $listtable->cell("<font size=-1><b>"._("Ablaufzeit")."</b></font>");
+	print $listtable->cell("<font size=-1><b>"._("Ablaufzeit")."</b></font>");
 	print $listtable->cell("<font size=-1><b>"."&nbsp;"."</b></font>");
 	print $listtable->closeRow();
 	foreach ($actions as $a) {
@@ -150,8 +154,8 @@ function show_list() {
 			print $listtable->cell("<font size=-1><textarea rows=2 cols=30 name=\"info_template\">$a->info_template</textarea></font>");
 			print $listtable->cell("<font size=-1>".$a->count()."</font>");
 			print $listtable->cell("<input type=\"checkbox\" name=\"active\" ".($a->active ? "checked" : "").">");
-			// Ablaufzeit noch nicht implementiert
-			//print $listtable->cell("<input name=\"expires\" size=2 value=\"$a->expires\"><select name=\"expires_unit\"><option value=m>"._("Minuten")."</option><option value=h>"._("Stunden")."</option><option value=d>"._("Tage")."</option></select>");
+			// Ablaufzeit 
+			print $listtable->cell("<input name=\"expires\" size=2 value=\"".(floor($a->expires/(24*3600)))."\"> "._("Tage")."<br/>"._("(0=keine Ablaufzeit)"));
 			print $listtable->cell("<input type=image src=\"".$GLOBALS['ASSETS_URL']."images/haken_transparent.gif\" alt="._("Ändern").">");
 			print $listtable->closeRow();
 		} else {
@@ -165,14 +169,14 @@ function show_list() {
 			} else {
 				print $listtable->cell("<img src=\"".$GLOBALS['ASSETS_URL']."images/x_transparent.gif\">");
 			}
-			/*
-			// Ablaufzeit noch nicht implementiert
+			
+			// Ablaufzeit 
 			if ($a->expires) {
-				print $listtable->cell("<font size=-1>".$a->expires." s"."</font>");
+				print $listtable->cell("<font size=-1>".($a->expires/(24*3600))." Tage"."</font>");
 			} else {
 				print $listtable->cell("<img src=\"".$GLOBALS['ASSETS_URL']."images/x_transparent.gif\">");
 			}
-			*/
+			
 			print $listtable->cell("<a href=\"$PHP_SELF?action=edit&action_id=".$a->action_id."#edit\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=0></a>");
 			print $listtable->closeRow();
 		}
