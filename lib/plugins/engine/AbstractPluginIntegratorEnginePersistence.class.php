@@ -288,18 +288,21 @@ class AbstractPluginIntegratorEnginePersistence {
 	}
 
 	/**
-	 * Sends a message to all activated plugins.
+	 * Sends a message to all activated plugins and returns an array of the return
+	 * values.
 	 *
 	 * @param  string     the method name that should be send to all plugins
 	 * @param  mixed      a variable number of arguments
 	 *
-	 * @return type       <description>
+	 * @return array      an array containing the return values
 	 */
 	function sendMessage($method, $args/* ... */) {
 		$args = func_get_args();
 		$args = array_slice($args, 1);
+		$results = array();
 		foreach ($this->getAllActivatedPlugins() as $plugin) {
-			call_user_func_array(array($plugin, $method), $args);
+			$results = call_user_func_array(array($plugin, $method), $args);
 		}
+		return $results;
 	}
 }
