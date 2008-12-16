@@ -286,4 +286,20 @@ class AbstractPluginIntegratorEnginePersistence {
 		}
 		return $row['pluginid'];
 	}
+
+	/**
+	 * Sends a message to all activated plugins.
+	 *
+	 * @param  string     the method name that should be send to all plugins
+	 * @param  mixed      a variable number of arguments
+	 *
+	 * @return type       <description>
+	 */
+	function sendMessage($method, $args/* ... */) {
+		$args = func_get_args();
+		$args = array_slice($args, 1);
+		foreach ($this->getAllActivatedPlugins() as $plugin) {
+			call_user_func_array(array($plugin, $method), $args);
+		}
+	}
 }
