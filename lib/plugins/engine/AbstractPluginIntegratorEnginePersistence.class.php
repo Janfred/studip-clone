@@ -301,7 +301,7 @@ class AbstractPluginIntegratorEnginePersistence {
 		$args = array_slice($args, 1);
 		$results = array();
 		foreach ($this->getAllActivatedPlugins() as $plugin) {
-			$results = call_user_func_array(array($plugin, $method), $args);
+			$results[] = call_user_func_array(array($plugin, $method), $args);
 		}
 		return $results;
 	}
