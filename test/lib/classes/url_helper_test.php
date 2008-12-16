@@ -29,6 +29,12 @@ class URLHelperTest extends UnitTestCase
         $this->assertEqual(URLHelper::getURL(''), '?');
         $this->assertEqual(URLHelper::getURL('x'), 'x');
         $this->assertEqual(URLHelper::getURL('#x'), '?#x');
+
+        URLHelper::setBaseURL('/dir/');
+
+        $this->assertEqual(URLHelper::getURL(''), '?');
+        $this->assertEqual(URLHelper::getURL('#x'), '?#x');
+        $this->assertEqual(URLHelper::getURL('?a=b'), '?a=b');
     }
 
     public function testAddLinkParam ()

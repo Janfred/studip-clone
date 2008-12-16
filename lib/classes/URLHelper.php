@@ -159,15 +159,15 @@ class URLHelper
     static function getURL ($url = '', $params = NULL)
     {
         $link_params = self::$params;
-        
-		list($url, $fragment) = explode('#', $url);
+
+        list($url, $fragment) = explode('#', $url);
         list($url, $query)    = explode('?', $url);
-		
-		if ($url) {
-			$url = self::resolveURL($url);
+
+        if ($url !== '') {
+            $url = self::resolveURL($url);
         }
-		
-		if (isset($query)) {
+
+        if (isset($query)) {
             parse_str($query, $query_params);
             $link_params = array_merge($link_params, $query_params);
         }
