@@ -193,6 +193,13 @@ class AssetsHelpersTestCase extends UnitTestCase {
     $this->assertEqual(Assets::script('prototype', 'scriptaculous'), $expected);
   }
 
+  function test_script_should_respect_url_parameters() {
+    $expected  = '<script type="text/javascript" '.
+                 'src="'.STATIC_ASSETS_URL.'javascripts/scriptaculous.js?load=effects,dragdrop">'.
+                 '</script>' . "\n";
+    $this->assertEqual(Assets::script('scriptaculous.js?load=effects,dragdrop'), $expected);
+  }
+
 
   function test_stylesheet_should_return_link_tag() {
     $expected = '<link href="'.STATIC_ASSETS_URL.'stylesheets/blue.css" media="screen" rel="stylesheet" type="text/css" />' . "\n";

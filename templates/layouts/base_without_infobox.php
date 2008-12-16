@@ -32,7 +32,7 @@
 
     <?= Assets::stylesheet('header', array('media' => 'screen, print')) ?>
 
-    <?= Assets::script('prototype', 'scriptaculous', 'application') ?>
+    <?= Assets::script('prototype', 'scriptaculous.js?load=effects,dragdrop,controls', 'application') ?>
 
     <script type="text/javascript" language="javascript">
     // <![CDATA[
