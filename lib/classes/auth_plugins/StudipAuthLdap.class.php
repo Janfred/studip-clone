@@ -50,7 +50,8 @@ class StudipAuthLdap extends StudipAuthAbstract {
 	var $host;
 	var $base_dn;
 	var $protocol_version;
-	var $username_attribute;
+	var $username_attribute = 'uid';
+	var $ldap_filter;
 	var $bad_char_regex =  '/[^0-9_a-zA-Z]/';
 	var $decode_utf8_values = false;
 	var $send_utf8_credentials = false;
@@ -71,6 +72,18 @@ class StudipAuthLdap extends StudipAuthAbstract {
 	}
 	
 	
+	function getLdapFilter($username) {
+		if (isset($this->ldap_filter)) {
+			list($user, $domain) = explode('@', $username);
+			$search = array('%u', '%U', '%d', '%%');
+			$replace = array($username, $user, $domain, '%');
+
+			return str_replace($search, $replace, $this->ldap_filter);
+		}
+
+		return $this->username_attribute . '=' . $username;
+	}
+
 	function doLdapConnect(){
 		if (!($this->conn = ldap_connect($this->host))) {
 			$this->error_msg = _("Keine Verbindung zum LDAP Server möglich.");
@@ -102,12 +115,12 @@ class StudipAuthLdap extends StudipAuthAbstract {
 				$this->error_msg =_("Anonymer Bind fehlgeschlagen.") . $this->getLdapError();
 				return false;
 			}
-			if (!($result = @ldap_search($this->conn, $this->base_dn, $this->username_attribute . "=" . $username, array($this->username_attribute)))){
+			if (!($result = @ldap_search($this->conn, $this->base_dn, $this->getLdapFilter($username), array('dn')))){
 				$this->error_msg = _("Anonymes Durchsuchen des LDAP Baumes fehlgeschlagen.") .$this->getLdapError();
 				return false;
 			}
 			if (!ldap_count_entries($this->conn, $result)){
-				$this->error_msg = sprintf(_("%s wurde nicht unterhalb von %s gefunden."),$this->username_attribute . "=" . $username,$this->base_dn);
+				$this->error_msg = sprintf(_("%s wurde nicht unterhalb von %s gefunden."), $username, $this->base_dn);
 				return false;
 			}
 			if (!($entry = @ldap_first_entry($this->conn, $result))){
@@ -216,7 +229,7 @@ class StudipAuthLdap extends StudipAuthAbstract {
 			$this->error = _("Anonymer Bind fehlgeschlagen.") . $this->getLdapError();
 			return false;
 		}
-		if (!($result = @ldap_search($this->conn, $this->base_dn, $this->username_attribute . "=" . $username, array($this->username_attribute)))){
+		if (!($result = @ldap_search($this->conn, $this->base_dn, $this->getLdapFilter($username), array('dn')))){
 			$this->error =  _("Anonymes Durchsuchen des LDAP Baumes fehlgeschlagen.") .$this->getLdapError();
 			return false;
 		}

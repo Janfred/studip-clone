@@ -78,7 +78,7 @@ class StudipAuthLdapReader extends StudipAuthLdap {
 			$this->error_msg = sprintf(_("Anmeldung von %s fehlgeschlagen."),$this->reader_dn) . $this->getLdapError();
 			return false;
 		}
-		if (!($result = @ldap_search($this->conn, $this->base_dn, $this->username_attribute . "=" . $username))){
+		if (!($result = @ldap_search($this->conn, $this->base_dn, $this->getLdapFilter($username)))){
 			$this->error_msg = _("Abholen der User Attribute fehlgeschlagen.") .$this->getLdapError();
 			return false;
 		}
