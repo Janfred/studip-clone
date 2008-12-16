@@ -296,7 +296,7 @@ class AbstractPluginIntegratorEnginePersistence {
 	 *
 	 * @return array      an array containing the return values
 	 */
-	function sendMessage($method, /* ... */) {
+	function sendMessage($method /* ... */) {
 		$args = func_get_args();
 		$args = array_slice($args, 1);
 		$results = array();
