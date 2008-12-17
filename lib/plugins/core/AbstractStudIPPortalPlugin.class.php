@@ -10,8 +10,7 @@
  * @subpackage core
  */
 
-class AbstractStudIPPortalPlugin extends AbstractStudIPLegacyPlugin
-	implements StudIPPortalPlugin {
+class AbstractStudIPPortalPlugin extends AbstractStudIPLegacyPlugin {
 
 	function AbstractStudIPPortalPlugin(){
 		parent::AbstractStudIPLegacyPlugin();

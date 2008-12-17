@@ -9,8 +9,7 @@
  * @subpackage core
  */
 
-class AbstractStudIPCorePlugin extends AbstractStudIPLegacyPlugin
-  implements StudIPCorePlugin {
+class AbstractStudIPCorePlugin extends AbstractStudIPLegacyPlugin {
 
 
   /**

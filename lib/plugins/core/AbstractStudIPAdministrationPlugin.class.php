@@ -9,8 +9,7 @@
  * @subpackage core
  */
 
-class AbstractStudIPAdministrationPlugin extends AbstractStudIPLegacyPlugin
-  implements StudIPAdministrationPlugin {
+class AbstractStudIPAdministrationPlugin extends AbstractStudIPLegacyPlugin{
 
 	var $topnavigation;
 
