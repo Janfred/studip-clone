@@ -10,7 +10,8 @@
  * @subpackage core
  */
 
-class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin {
+class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
+  implements StudIPHomepagePlugin {
 
 	var $requesteduser; // StudIPUser for which user the homepage should be shown
 	var $status_showOverview; // Uebersichtsseite unterdruecken
