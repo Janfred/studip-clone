@@ -325,8 +325,8 @@ if (isset($query)) {
 				echo "<td class=\"steel\" nowrap valign=bottom width=\"22%\"><b>" . _("Funktion an der Einrichtung") . "</b></td>";
 			break;
 			case "Search":
-				echo "<td class=\"steel\" valign=bottom nowrap width=\"50%\"><a href=\"browse.php?sortby=Nachname\"><b>" . _("Name") . "</b></a></td>";
-				echo "<td class=\"steel\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=perms\"><b>" . _("globaler Status") . "</b></a></td>";
+				echo "<td class=\"steel\" align=\"left\" valign=bottom nowrap width=\"50%\"><a href=\"browse.php?sortby=Nachname\"><b>" . _("Name") . "</b></a></td>";
+				echo "<td class=\"steel\" align=\"left\" valign=bottom nowrap width=\"25%\"><a href=\"browse.php?sortby=perms\"><b>" . _("globaler Status") . "</b></a></td>";
 			break;
 			default:
 				echo "<td class=\"steel\" valign=bottom nowrap width=\"50%\"><a href=\"browse.php?sortby=Nachname\"><b>" . _("Name") . "</b></a></td>";
