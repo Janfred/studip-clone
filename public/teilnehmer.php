@@ -473,7 +473,12 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				$db->next_record();
 				$userchange = $db->f("user_id");
 				$fullname = $db->f("fullname");
-				$status = 'autor';
+
+				if ($cmd == "add_user" && !$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))){
+					$status = 'tutor';
+				} else {
+					$status = 'autor';
+				}
 
 				$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted || $_REQUEST['consider_contingent'] ? TRUE : FALSE), $_REQUEST['consider_contingent']);
 				//Only if user was on the waiting list
@@ -1351,7 +1356,7 @@ while (list ($key, $val) = each ($gruppe)) {
 					<td colspan="2">&nbsp;</td>
 				<? else : ?>
 					<td>&nbsp;</td>
-				<? endif; ?>
+				<? endif ?>
 
 				<td valign="top">
 					<font size="-1">
@@ -1366,7 +1371,7 @@ while (list ($key, $val) = each ($gruppe)) {
 								</font>
 								<br/>
 								-->
-							<? endforeach; ?>
+							<? endforeach ?>
 						</dl>
 					</font>
 				</td>
@@ -1375,7 +1380,7 @@ while (list ($key, $val) = each ($gruppe)) {
 					<td>
 						<?= Avatar::getAvatar($db->f('user_id'))->getImageTag(Avatar::MEDIUM) ?>
 					</td>
-				<? endif; ?>
+				<? endif ?>
 
 				<td colspan="<?= $colspan - 2 - ($show_user_picture ? 1 : 0) - ($showscore ? 1 : 0)?>">
 					<form action="<?= URLHelper::getLink('#'.$db->f("username")) ?>" method="POST">
@@ -1565,7 +1570,7 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 		<td class="steel1" width="20%" align="center"><font size=-1>
 		<?
 		if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && $perm->have_studip_perm("dozent",$SessSemName[1])){
-			 echo (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] ? _("als AutorIn") : _("als Mitglied"));
+			 echo (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] ? _("als TutorIn") . " / " . _("als AutorIn") : _("als Mitglied"));
 		} else {
 			echo _("als AutorIn");
 		}
