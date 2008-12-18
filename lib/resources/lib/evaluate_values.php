@@ -1779,26 +1779,35 @@ if ($_sendMessage) {
 	// the room-request has been declined
 	if ($_sendMessage['type'] == 'declined') {
 
-		if ($semObj->seminar_number)
-			$message = sprintf(_("ABGELEHNTE RAUMANFRAGE: Ihre Raumanfrage zur Veranstaltung %s (%s) wurde abgelehnt.")." \n\nNachricht des Raumadministrators:\n".$decline_message, $semObj->getName(), $semObj->seminar_number);
-		else
-			$message = sprintf(_("ABGELEHNTE RAUMANFRAGE: Ihre Raumanfrage zur Veranstaltung %s wurde abgelehnt.")." \n\nNachricht des Raumadministrators:\n".$decline_message, $semObj->getName());
+		if ($semObj->seminar_number) {
+			$message = sprintf(_("ABGELEHNTE RAUMANFRAGE: Ihre Raumanfrage zur Veranstaltung %s (%s) wurde abgelehnt.") . "\n\n" . 
+				_("Nachricht des Raumadministrators:") . "\n" . $decline_message, $semObj->getName(), $semObj->seminar_number);
+		} else {
+			$message = sprintf(_("ABGELEHNTE RAUMANFRAGE: Ihre Raumanfrage zur Veranstaltung %s wurde abgelehnt.") . "\n\n" . 
+				_("Nachricht des Raumadministrators:") . "\n" . $decline_message, $semObj->getName());
+		}
 
 		if ($reqObj->getTerminId()) {
 			$termin = new SingleDate($reqObj->getTerminId());
-			$message .= "\n\nBetroffener Termin:\n".$termin->toString();
+			$message .= "\n\n". _("Betroffener Termin:") . "\n" . $termin->toString();
 		}
-		$sql = sprintf("SELECT u.Nachname FROM seminar_user s LEFT JOIN auth_user_md5 u ON (u.user_id = s.user_id) WHERE s.Seminar_id = '%s'AND u.perms = 'dozent'", $reqObj->getSeminarId());
-		$db->query($sql);
-		while ($db->next_record())
-			$dozent = $db->f("Nachname").", ";
-		$title = $dozent.$semObj->seminar_number.", ".mila($semObj->getName(),30);
+
+		// fetch the names of the lecutrers to display them in the message
+		$stmt = DBManager::get()->prepare("SELECT u.Nachname FROM seminar_user s 
+			LEFT JOIN auth_user_md5 u ON (u.user_id = s.user_id) 
+			WHERE s.Seminar_id = ? AND u.perms = 'dozent'");
+		$stmt->execute(array($reqObj->getSeminarId()));
+		while ($nachname = $stmt->fetchColumn()) {
+			$dozent[] = $nachname;
+		}
+		$title = implode(', ', $dozent) . ', '. $semObj->seminar_number.", ".mila($semObj->getName(),30);
 
 		$reqObj->setReplyComment($decline_message);
 		$reqObj->store();
 		foreach ($users as $userid) {
 			setTempLanguage($userid);
-			$messaging->insert_message(addslashes($message), get_username($userid), $user->id, FALSE, FALSE, FALSE, FALSE, _("Raumanfrage abgelehnt: ".$title,"","high"), TRUE);
+			$messaging->insert_message(addslashes($message), get_username($userid), $user->id, FALSE, FALSE, FALSE, FALSE, 
+				_("Raumanfrage abgelehnt:") .' '. $title, TRUE, 'high');
 			restoreLanguage();
 		}
 	} 

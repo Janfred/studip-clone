@@ -1097,11 +1097,11 @@ function mila ($titel, $size = 60) {
 
 //Ausgabe der Aufklapp-Kopfzeile
 function printhead ($breite, $left, $link, $open, $new, $icon,
-		$titel, $zusatz, $timestmp = 0, $printout = TRUE, $index = "", $indikator = "age",$priority="") {
+		$titel, $zusatz, $timestmp = 0, $printout = TRUE, $index = "", $indikator = "age", $css_class = NULL) {
 		global $user;
 		
 		// Verzweigung was der Pfeil anzeigen soll
-    	if ($indikator == "viewcount") {
+	if ($indikator == "viewcount") {
 		if ($index == "0") {
 			$timecolor = "#BBBBBB";
 		} else {
@@ -1155,11 +1155,11 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 
 	//TODO: überarbeiten -> valides html und/oder template draus machen...
 	$class = "printhead";
-    $class2 = "printhead2";
-    $class3 = "printhead3";
+	$class2 = "printhead2";
+	$class3 = "printhead3";
     
-	if ($priority=="high" && (is_object($user) && $user->cfg->getValue("", "MESSAGE_PRIORITY"))) {
-	    $class = $class2 = $class3 =  "steelred";
+	if ($css_class) { 
+		$class = $class2 = $class3 = $css_class;
 	}
 	
 	if ($open == "close") {

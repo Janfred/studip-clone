@@ -13,9 +13,9 @@ class HighPriorityMessages extends Migration
         $db->exec("INSERT INTO `config` (".
             "`config_id`,`parent_id`,`field`,`value`,`is_default`,`type`,`range`,`section`,".
             " `position`,`mkdate`,`chdate`,`description`,`comment`,`message_template`)".
-            "VALUES (MD5( 'MESSAGE_PRIORITY' ) , '', 'MESSAGE_PRIORITY', '0', '0', 'boolean',".
-            " 'global', '', '0', '0', '0', 'If enabled, messages of high priority are displayed reddish','', '')");
-        $db->exec("ALTER TABLE `message` ADD `priority` VARCHAR( 32 ) NULL DEFAULT NULL");
+            "VALUES (MD5( 'MESSAGE_PRIORITY' ) , '', 'MESSAGE_PRIORITY', '0', '1', 'boolean',".
+            " 'global', '', '0', UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 'If enabled, messages of high priority are displayed reddish','', '')");
+        $db->exec("ALTER TABLE `message` ADD `priority` ENUM( 'normal', 'high' ) NOT NULL DEFAULT 'normal'");
         $this->announce("done.");
     }
 

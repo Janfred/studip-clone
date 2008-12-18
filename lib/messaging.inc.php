@@ -259,7 +259,7 @@ class messaging {
 		return $forward_copy;
 	}
 
-	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='', $force_email='', $priority='') {
+	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='', $force_email='', $priority='normal') {
 
 		global $_fullname_sql, $user, $my_messaging_settings;
 

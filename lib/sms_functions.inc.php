@@ -402,7 +402,13 @@ function print_rec_message($prm) {
 	}
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\" class=\"steel1\"><tr>";
 	echo "<td class=\"blank\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".$tmp_line1."\"></td>";
-	printhead(0, 0, $link, $open, $red, $icon, $titel, $zusatz, $prm['mkdate'],TRUE,'','',$prm['priority']);
+
+	// if messages with priority are enabled, we pass a steelred css-class
+	if ($GLOBALS['MESSAGE_PRIORITY'] && ($prm['priority'] == 'high')) {
+		printhead(0, 0, $link, $open, $red, $icon, $titel, $zusatz, $prm['mkdate'],TRUE,'','age', 'steelred');
+	} else {
+		printhead(0, 0, $link, $open, $red, $icon, $titel, $zusatz, $prm['mkdate']);
+	}
 	echo "</tr></table>	";
 	// print message content
 	if (($open == "open") || ($sms_data["open"] == $prm['message_id'])) {
