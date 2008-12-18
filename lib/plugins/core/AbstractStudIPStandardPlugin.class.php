@@ -11,7 +11,8 @@
 
 require_once("lib/classes/TreeAbstract.class.php");
 
-class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin{
+class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
+  implements StudIPStandardPlugin {
 
 	// relativer Name des Icons für Änderungen an diesem Plugin
 	var $changeindicatoriconname;
