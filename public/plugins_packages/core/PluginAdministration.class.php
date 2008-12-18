@@ -83,23 +83,16 @@ class PluginAdministration {
 		if (!file_exists($tmppackagedir)){
 			@mkdir($tmppackagedir);
 		}
-		// create new filename
-		$newuploadfilename = $tmppackagedir . basename($uploadfilename);
-		// move package
-		$copy_func = is_uploaded_file($uploadfilename) ? 'move_uploaded_file' : 'copy';
-		if (!@$copy_func($uploadfilename,$newuploadfilename)){
-			return PLUGIN_UPLOAD_ERROR;
-		}
-		else {
-			// delete uploaded file
-			@unlink($uploadfilename);
-		}
-		unzip_file($newuploadfilename,$tmppackagedir);
-
+		// extract plugin files
+		unzip_file($uploadfilename, $tmppackagedir);
 		// delete uploaded file
-		@unlink($newuploadfilename);
+		if (is_uploaded_file($uploadfilename)) {
+			unlink($uploadfilename);
+		}
+
 		// search for the manifest
 		if (!file_exists($tmppackagedir . "/plugin.manifest")){
+			$this->deletePlugindir($tmppackagedir);
 			return PLUGIN_MISSING_MANIFEST_ERROR;
 		}
 
