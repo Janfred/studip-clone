@@ -259,7 +259,7 @@ class messaging {
 		return $forward_copy;
 	}
 
-	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='', $force_email='') {
+	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='', $force_email='', $priority='') {
 
 		global $_fullname_sql, $user, $my_messaging_settings;
 
@@ -330,7 +330,7 @@ class messaging {
 
 
 			// insert message
-			$db3->query("INSERT INTO message SET message_id = '".$tmp_message_id."', mkdate = '".$time."', message = '".$message."', autor_id = '".$snd_user_id."', subject = '".$subject."', reading_confirmation = '".$reading_confirmation."'");
+			$db3->query("INSERT INTO message SET message_id = '".$tmp_message_id."', mkdate = '".$time."', message = '".$message."', autor_id = '".$snd_user_id."', subject = '".$subject."', reading_confirmation = '".$reading_confirmation."', priority ='".$priority."'");
 
 			// insert snd
 			if (!$set_deleted) { // safe message

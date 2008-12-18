@@ -402,7 +402,7 @@ function print_rec_message($prm) {
 	}
 	echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"99%\" align=\"center\" class=\"steel1\"><tr>";
 	echo "<td class=\"blank\"><img src=\"".$GLOBALS['ASSETS_URL']."images/".$tmp_line1."\"></td>";
-	printhead(0, 0, $link, $open, $red, $icon, $titel, $zusatz, $prm['mkdate']);
+	printhead(0, 0, $link, $open, $red, $icon, $titel, $zusatz, $prm['mkdate'],TRUE,'','',$prm['priority']);
 	echo "</tr></table>	";
 	// print message content
 	if (($open == "open") || ($sms_data["open"] == $prm['message_id'])) {
@@ -445,6 +445,7 @@ function print_messages() {
 			$prm['readed'] = $db->f("readed");
 			$prm['dont_delete'] = $db->f("dont_delete");
 			$prm['uname_snd'] = $db->f("username");
+			$prm['priority'] = $db->f("priority");
 			ob_start();
 			print_rec_message($prm);
 			ob_end_flush();

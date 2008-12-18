@@ -1097,10 +1097,11 @@ function mila ($titel, $size = 60) {
 
 //Ausgabe der Aufklapp-Kopfzeile
 function printhead ($breite, $left, $link, $open, $new, $icon,
-		$titel, $zusatz, $timestmp = 0, $printout = TRUE, $index = "", $indikator = "age") {
-		// Verzweigung was der PFeil anzeigen soll
-
-	if ($indikator == "viewcount") {
+		$titel, $zusatz, $timestmp = 0, $printout = TRUE, $index = "", $indikator = "age",$priority="") {
+		global $user;
+		
+		// Verzweigung was der Pfeil anzeigen soll
+    	if ($indikator == "viewcount") {
 		if ($index == "0") {
 			$timecolor = "#BBBBBB";
 		} else {
@@ -1153,12 +1154,20 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 	}
 
 	//TODO: überarbeiten -> valides html und/oder template draus machen...
+	$class = "printhead";
+    $class2 = "printhead2";
+    $class3 = "printhead3";
+    
+	if ($priority=="high" && (is_object($user) && $user->cfg->getValue("", "MESSAGE_PRIORITY"))) {
+	    $class = $class2 = $class3 =  "steelred";
+	}
+	
 	if ($open == "close") {
-		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead2\" nowrap=\"nowrap\" width=\"1%\"";
+		$print = "<td bgcolor=\"".$timecolor."\" class=\"".$class2."\" nowrap=\"nowrap\" width=\"1%\"";
 		$print .= "align=\"left\" valign=\"top\">";
 	}
 	else {
-		$print = "<td bgcolor=\"".$timecolor."\" class=\"printhead3\" nowrap=\"nowrap\" width=\"1%\"";
+		$print = "<td bgcolor=\"".$timecolor."\" class=\"".$class3."\" nowrap=\"nowrap\" width=\"1%\"";
 		$print .= " align=\"left\" valign=\"top\">";
 	}
 
@@ -1192,9 +1201,9 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 	if ($link) {
 		$print .= "</a>";
 	}
-	$print .= "</td><td class=\"printhead\" nowrap=\"nowrap\" width=\"1%\" valign=\"middle\">$icon</td>";
-	$print .= "<td class=\"printhead\" align=\"left\" width=\"20%\" nowrap=\"nowrap\"  valign=\"bottom\">&nbsp;";
-	$print .= $titel."</td><td align=\"right\" nowrap=\"nowrap\" class=\"printhead\" width=\"99%\" valign=\"bottom\">";
+	$print .= "</td><td class=\"".$class."\" nowrap=\"nowrap\" width=\"1%\" valign=\"middle\">$icon</td>";
+	$print .= "<td class=\"".$class."\" align=\"left\" width=\"20%\" nowrap=\"nowrap\"  valign=\"bottom\">&nbsp;";
+	$print .= $titel."</td><td align=\"right\" nowrap=\"nowrap\" class=\"".$class."\" width=\"99%\" valign=\"bottom\">";
 	$print .= $zusatz."</td>";
 
 
