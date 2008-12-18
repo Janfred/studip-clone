@@ -366,7 +366,7 @@ class HeaderController {
 				$picture = "einst2";
 				$hp_link .= "?guestbook=open#guest";
 			}
-			$hp_txt .= sprintf (" (%s, %s)", $auth->auth["uname"], $auth->auth["perm"]); 
+			$hp_txt .= sprintf (" (%s, %s)", $auth->auth["uname"], $auth->auth["perm"]);
 			$ret['text'] = _("Homepage");
 			$ret['link'] = $hp_link;
 			$ret['info'] = $hp_txt;
@@ -425,7 +425,7 @@ class HeaderController {
 					$navi = $header_plugin->getNavigation();
                                         $pluginicon = $header_plugin->getPluginiconname();
 					$pluginlink['text'] = $navi->getDisplayname();
-					$pluginlink['link'] = PluginEngine::getLink($header_plugin, $navi->getLinkParams());
+					$pluginlink['link'] = $navi->getLink();
 					$pluginlink['image'] = $pluginicon;
 					$pluginlink['info'] = $navi->getDisplayname();
 					$pluginlink['is_plugin'] = true;
