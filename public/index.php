@@ -403,37 +403,34 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	$index_nobody_template->set_attribute('num_online_users', get_users_online_count(10));
 	echo $index_nobody_template->render();
 
-}
-?>
-
-<?
-if ($GLOBALS["PLUGINS_ENABLE"])
-{
-	$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");
-	$activatedportalplugins = $portalpluginpersistence->getAllActivatedPlugins();
-	// we already should have the activatedportalplugins here
-	if (!empty($activatedportalplugins))
+	if ($GLOBALS["PLUGINS_ENABLE"])
 	{
-		foreach ($activatedportalplugins as $activatedplugin)
+		$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");
+		$activatedportalplugins = $portalpluginpersistence->getAllActivatedPlugins();
+		// we already should have the activatedportalplugins here
+		if (!empty($activatedportalplugins))
 		{
-			if ($activatedplugin->hasUnauthorizedView())
+			foreach ($activatedportalplugins as $activatedplugin)
 			{
-?>
-		<div align="center">
-		<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
-			<tr>
-				<td class="topic"><img src="<?=$activatedplugin->getPluginiconname()?>"" align="absmiddle" /><b>&nbsp;<?= $activatedplugin->getDisplaytitle() ?></b></td>
-			</tr>
-			<tr>
-				<td class="index_box_cell">
-					<?= $activatedplugin->showOverview(false) ?>
-				</td>
-			</tr>
-		</table>
-		</div>
-		<br/>
-
-<?php
+				if ($activatedplugin->hasUnauthorizedView())
+				{
+	?>
+			<div align="center">
+			<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
+				<tr>
+					<td class="topic"><img src="<?=$activatedplugin->getPluginiconname()?>"" align="absmiddle" /><b>&nbsp;<?= $activatedplugin->getDisplaytitle() ?></b></td>
+				</tr>
+				<tr>
+					<td class="index_box_cell">
+						<?= $activatedplugin->showOverview(false) ?>
+					</td>
+				</tr>
+			</table>
+			</div>
+			<br/>
+	
+	<?php
+				}
 			}
 		}
 	}
