@@ -170,14 +170,14 @@ function show_rss_news($range_id, $type){
 	$last_changed = 0;
 	switch ($type){
 		case 'user':
-			$studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "about.php?again=yes&#38;rssusername=" . get_username($range_id);
+			$studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "about.php?again=yes&rssusername=" . get_username($range_id);
 			$title = get_fullname($range_id) . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
 			$RssChannelDesc = _("Persönliche Neuigkeiten") . ' ' . $title;
 		break;
 		case 'sem':
 			$studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "seminar_main.php?auswahl=" . $range_id;
 			$sem_obj =& Seminar::GetInstance($range_id);
-			if ($sem_obj->read_level > 0) $studip_url .= "&#38;again=yes";
+			if ($sem_obj->read_level > 0) $studip_url .= "&again=yes";
 			$title = $sem_obj->getName() . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
 			$RssChannelDesc = _("Neuigkeiten der Veranstaltung") . ' ' . $title;
 
@@ -195,16 +195,14 @@ function show_rss_news($range_id, $type){
 		break;
 
 	}
-	$title = htmlspecialchars($title);
-	$RssChannelDesc = htmlspecialchars($RssChannelDesc);
-
+	
 	foreach(StudipNews::GetNewsByRange($range_id, true) as  $news_id => $details) {
 		list ($body,$admin_msg) = explode("<admin_msg>",$details["body"]);
 		$items .= "<item>
-		<title>".utf8_encode(htmlspecialchars($details["topic"]))."</title>
-		<link>".utf8_encode($studip_url . "&#38;nopen=$news_id&#35;anker")."</link>";
-		$items .= "<description>"."<![CDATA[".utf8_encode(formatready($body,1,1))."]]>"."</description>
-		<dc:contributor>"."<![CDATA[".utf8_encode(htmlready($details['author']))."]]>"."</dc:contributor>
+		<title>".htmlspecialchars(studip_utf8encode($details["topic"]))."</title>
+		<link>".htmlspecialchars(studip_utf8encode($studip_url . "&nopen=$news_id#anker"))."</link>";
+		$items .= "<description>"."<![CDATA[".studip_utf8encode(formatready($body,1,1))."]]>"."</description>
+		<dc:contributor>"."<![CDATA[".studip_utf8encode($details['author'])."]]>"."</dc:contributor>
 		<dc:date>".gmstrftime($RssTimeFmt,($details['date'] > $details['chdate'] ? $details['date'] : $details['chdate']))."</dc:date>
 		<pubDate>".date("r",($details['date'] > $details['chdate'] ? $details['date'] : $details['chdate']))."</pubDate>
 		</item>\n";
@@ -214,16 +212,16 @@ function show_rss_news($range_id, $type){
 	echo "<?xml version=\"1.0\"?>
 	<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">
 	<channel>
-	<title>".utf8_encode($title)."</title>
-	<link>$studip_url</link>
+	<title>".htmlspecialchars(studip_utf8encode($title))."</title>
+	<link>".htmlspecialchars(studip_utf8encode($studip_url))."</link>
 	<image>
 	<url>http://www.studip.de/images/studip_logo.gif</url>
-	<title>".utf8_encode($title)."</title>
-	<link>$studip_url</link>
+	<title>".htmlspecialchars(studip_utf8encode($title))."</title>
+	<link>".htmlspecialchars(studip_utf8encode($studip_url))."</link>
 	</image>
-	<description>".utf8_encode($RssChannelDesc)."</description>
+	<description>".htmlspecialchars(studip_utf8encode($RssChannelDesc))."</description>
 	<lastBuildDate>".date("r",$last_changed)."</lastBuildDate>
-	<generator>". utf8_encode('Stud.IP - ' . htmlspecialchars($GLOBALS['SOFTWARE_VERSION'])) . "</generator>";
+	<generator>". htmlspecialchars(studip_utf8encode('Stud.IP - ' . $GLOBALS['SOFTWARE_VERSION'])) . "</generator>";
 	echo chr(10).$items;
     echo "</channel>\n</rss>";
 	return true;
