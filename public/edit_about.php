@@ -611,7 +611,7 @@ if ($view != 'Forum'
 		$info_text['userdomains'] = _("Hier können Sie die Liste Ihrer Nutzerdomänen einsehen.");
 		$info_text['Daten'] = _("Hier k&ouml;nnen sie Ihre Benutzerdaten ver&auml;ndern.") . '<br/>' .
 			sprintf(_("Alle mit einem Sternchen %s markierten Felder m&uuml;ssen ausgef&uuml;llt werden."), '</font><font color="red" size="+1"><b>*</b></font><font size="-1">');
-		$info_text['Lebenslauf'] = _("Hier können Sie Angaben &uuml;ber ihre privaten Kontaktdaten sowie Lebenslauf und Hobbies machen.") . '<br/>' .
+		$info_text['Lebenslauf'] = _("Hier können Sie Angaben &uuml;ber ihre privaten Kontaktdaten sowie Lebenslauf und Hobbys machen.") . '<br/>' .
 			sprintf(_("Alle Angaben die Sie hier machen sind freiwillig!"));
 		?>
 		<tr>
@@ -1156,7 +1156,7 @@ if ($view == 'Lebenslauf') {
 	}
 	echo "</td></tr>\n";
 	$cssSw->switchClass();
-	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Hobbies:") . " </b></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
+	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Hobbys:") . " </b></td><td class=\"".$cssSw->getClass()."\" colspan=2 align=\"left\">";
 	if (StudipAuthAbstract::CheckField("user_info.hobby", $my_about->auth_user['auth_plugin'])) {
 		echo "&nbsp;" . htmlReady($my_about->user_info["hobby"]);
 	} else {

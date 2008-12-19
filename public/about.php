@@ -549,10 +549,10 @@ if ( ($lit_list = StudipLitList::GetFormattedListsByRange($user_id)) ) {
 	printf ("</tr><tr><td colspan=\"$cs\" class=\"steel1\">&nbsp;</td></tr><tr><td colspan=\"$cs\" class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td colspan=\"$cs\" class=\"steel1\">&nbsp;</td></tr></table><br>\n",$lit_list);
 	unset($cs);
 }
-// Hier werden Lebenslauf, Hobbies, Publikationen und Arbeitsschwerpunkte ausgegeben:
+// Hier werden Lebenslauf, Hobbys, Publikationen und Arbeitsschwerpunkte ausgegeben:
 $ausgabe_format = '<table class="blank" width="100%%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><b>&nbsp;%s </b>%s</td></tr><tr><td class="steel1">&nbsp;</td></tr><tr><td class="steel1"><blockquote>%s</blockquote></td></tr><tr><td class="steel1">&nbsp;</td></tr></table><br />'."\n";
 $ausgabe_felder = array('lebenslauf' => _("Lebenslauf"),
-			'hobby' => _("Hobbies"),
+			'hobby' => _("Hobbys"),
 			'publi' => _("Publikationen"),
 			'schwerp' => _("Arbeitsschwerpunkte")
 			);
