@@ -222,7 +222,7 @@ function insert_message($chatid, $msg){
 		global $user, $chatServer, $do_page_close;
 		if (!$chatServer->isActiveUser($user->id,$chatid)) return ;
 		if ($chatid){
-			$chatServer->addMsg($user->id,$chatid,utf8_decode(stripslashes($msg)));
+			$chatServer->addMsg($user->id,$chatid, studip_utf8decode(stripslashes($msg)));
 			$user->set_last_action();
 		}
 		return;

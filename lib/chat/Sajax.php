@@ -112,12 +112,13 @@ if (!isset($SAJAX_INCLUDED)) {
 			else
 				$args = array();
 		}
-		
+		header("Content-type: text/javascript;charset=utf-8",true);
 		if (! in_array($func_name, $sajax_export_list))
 			echo "-:$func_name not callable";
 		else {
 			echo "+:";
 			$result = call_user_func_array($func_name, $args);
+			$result = studip_utf8encode($result);
 			echo "var res = " . trim(sajax_get_js_repr($result)) . "; res;";
 		}
 		exit;
