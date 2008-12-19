@@ -27,7 +27,7 @@ function autocomplete_course_get_courses($search_term, $options) {
   $search_helper = new StudipSemSearchHelper();
   $search_helper->setParams(
     array(
-      'quick_search' => utf8_decode($search_term),
+      'quick_search' => $search_term,
       'qs_choose' => $options['what'] ? $options['what'] : 'all',
       'sem' => isset($options['semester']) ? $options['semester'] : 'all',
       'category' => $options['category'],
