@@ -282,7 +282,19 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	if ($perm->have_perm("admin")) {
 		$structure["einrichtungen"]=array ('topKat'=>"", 'name'=>_("Einrichtungen"), 'link'=>"admin_institut.php?list=TRUE&quit=1", 'active'=>FALSE);
-		$structure["global"]=array ('topKat'=>"", 'name'=>_("globale Einstellungen"), 'link'=>"new_user_md5.php", 'active'=>FALSE);
+	}
+	
+	if ($perm->have_perm("admin")) {
+		if (!$GLOBALS['RESTRICTED_USER_MANAGEMENT'] || $perm->have_perm("root")) {
+			$link = 'new_user_md5.php';
+		} else if ($perm->have_perm($RANGE_TREE_ADMIN_PERM ? $RANGE_TREE_ADMIN_PERM : 'admin')) {
+			$link = 'admin_range_tree.php';
+		} else if ($perm->have_perm($SEM_TREE_ADMIN_PERM ? $SEM_TREE_ADMIN_PERM : 'admin') && $perm->is_fak_admin()) {
+			$link = 'admin_sem_tree.php';
+		} else {
+			$link = 'admin_aux_adjust.php';
+		}
+		$structure['global'] = array('topKat' => '', 'name' => _('globale Einstellungen'), 'link' => URLHelper::getLink($link), 'active' => FALSE);
 	}
 
 	// "Log" tab for log view and administration (Root only)
@@ -372,8 +384,10 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$structure["lit_overview"]=array ('topKat'=>"modules", 'name'=>_("Literatur&uuml;bersicht"), 'link'=>"admin_literatur_overview.php", 'active'=>FALSE);
 	}
 	if ($perm->have_perm("admin")) {
-		$structure["new_user"]=array ('topKat'=>"global", 'name'=>_("Benutzer"), 'link'=>"new_user_md5.php", 'active'=>FALSE);
-		if($perm->have_perm($RANGE_TREE_ADMIN_PERM ? $RANGE_TREE_ADMIN_PERM : 'admin')){
+		if (!$GLOBALS['RESTRICTED_USER_MANAGEMENT'] || $perm->have_perm("root")) {
+			$structure["new_user"]=array ('topKat'=>"global", 'name'=>_("Benutzer"), 'link'=>"new_user_md5.php", 'active'=>FALSE);
+		}
+		if ($perm->have_perm($RANGE_TREE_ADMIN_PERM ? $RANGE_TREE_ADMIN_PERM : 'admin')) {
 			$structure["range_tree"]=array ('topKat'=>"global", 'name'=>_("Einrichtungshierarchie"), 'link'=>"admin_range_tree.php", 'active'=>FALSE);
 		}
 		if ($perm->have_perm($SEM_TREE_ADMIN_PERM ? $SEM_TREE_ADMIN_PERM : 'admin') && $perm->is_fak_admin()) {

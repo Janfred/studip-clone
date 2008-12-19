@@ -27,4 +27,4 @@ class DeleteWikiLinks extends DBMigration {
         ');
     }
 }
-?> 
+?>

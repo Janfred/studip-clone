@@ -195,7 +195,8 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$menue_auswahl[] = array(32, array());
 		if($GLOBALS['STM_ENABLE']) $menue_auswahl[] = array(34, array());
 		$menue_auswahl[] = array( 9, array(10, 11));
-		$menue_auswahl[] = array(33, array());
+		if (!$GLOBALS['RESTRICTED_USER_MANAGEMENT'])
+			$menue_auswahl[] = array(33, array());
 	} elseif ($perm->have_perm('dozent')) { // dozent
 		$ueberschrift = _("Startseite f&uuml;r DozentInnen bei Stud.IP");
 		$menue_auswahl[] = array( 1, array());

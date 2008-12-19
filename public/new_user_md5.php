@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 */
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
-$perm->check("admin");
+$perm->check($GLOBALS['RESTRICTED_USER_MANAGEMENT'] ? 'root' : 'admin');
 
 include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
 require_once('lib/msg.inc.php'); 		// Funktionen fuer Nachrichtenmeldungen
