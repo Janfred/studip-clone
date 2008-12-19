@@ -663,9 +663,13 @@ $datafields_list = DataFieldStructure::getDataFieldStructures("userinstrole");
 //$default_entries = DataFieldEntry::getDataFieldEntries(array($userID, $inst_id));
 
 if ($extend == 'yes') {
-	$dview = $GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['extended'];
+	if (is_array($GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['extended'])) {
+	    $dview = $GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['extended'];
+	}
 } else {
-	$dview = $GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['default'];	
+    if(is_array($GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['default'])) {
+        $dview = $GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['default'];	
+    }
 }
 
 foreach ($datafields_list as $entry) {
