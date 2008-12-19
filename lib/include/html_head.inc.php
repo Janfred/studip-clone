@@ -30,7 +30,7 @@
 define('PHPDOC_DUMMY',true);
 
 # necessary if you want to include html_head.inc.php in function/method scope
-global  $AUTH_LIFETIME, $FAVICON, $HTML_HEAD_TITLE;
+global  $AUTH_LIFETIME, $FAVICON, $HTML_HEAD_TITLE, $CURRENT_PAGE;
 
 global  $auth, $user;
 
@@ -77,9 +77,13 @@ global  $_html_head_title,
 if (isset($FAVICON))
 		echo "\t\t".'<link rel="SHORTCUT ICON" href="'. $FAVICON.'">'."\n";
 
-if (!isset($_html_head_title))  // if not set, use default title
-	$_html_head_title = ($HTML_HEAD_TITLE) ? $HTML_HEAD_TITLE : 'Stud.IP';
-echo "\t\t".'<title>'.$_html_head_title.'</title>'."\n";
+if (isset($_html_head_title))
+	$title = $_html_head_title;
+else if (isset($CURRENT_PAGE))
+	$title = $HTML_HEAD_TITLE.' - '.$CURRENT_PAGE;
+else
+	$title = $HTML_HEAD_TITLE;
+echo "\t\t".'<title>'.$title.'</title>'."\n";
 
 if (!isset($_include_stylesheet))  // if not set, use default stylesheet
 	$_include_stylesheet = 'style.css';

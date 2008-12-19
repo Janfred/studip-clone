@@ -11,7 +11,15 @@
       <meta http-equiv="REFRESH" CONTENT="<?= $GLOBALS['AUTH_LIFETIME'] * 60 ?>; URL=<?= $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] ?>logout.php">
     <? endif ?>
     <link rel="SHORTCUT ICON" href="<?= $GLOBALS['FAVICON'] ?>">
-    <title><?= isset($GLOBALS['_html_head_title']) ? $GLOBALS['_html_head_title'] : 'Stud.IP' ?></title>
+    <title>
+      <? if (isset($GLOBALS['_html_head_title'])): ?>
+	<?= $GLOBALS['_html_head_title'] ?>
+      <? elseif (isset($GLOBALS['CURRENT_PAGE'])): ?>
+	<?= $GLOBALS['HTML_HEAD_TITLE'] ?> - <?= $GLOBALS['CURRENT_PAGE'] ?>
+      <? else: ?>
+	<?= $GLOBALS['HTML_HEAD_TITLE'] ?>
+      <? endif ?>
+    </title>
 
     <?
       if (!isset($GLOBALS['_include_stylesheet'])) {
