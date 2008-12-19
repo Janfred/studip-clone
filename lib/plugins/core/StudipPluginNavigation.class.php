@@ -108,8 +108,6 @@ class StudipPluginNavigation {
   }
 
   function isActive() {
-    $link = substr($_SERVER['REQUEST_URI'],
-                   strlen($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']));
-    return $link === $this->getLink();
+    return $_SERVER['REQUEST_URI'] === $this->getLink();
   }
 }
