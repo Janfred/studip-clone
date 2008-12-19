@@ -1314,3 +1314,74 @@ function text_excerpt($text, $phrase, $radius = 100, $length = 200,
 function words($string) {
   return preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
 }
+
+/**
+ * Encodes a string from Stud.IP encoding (WINDOWS-1252/ISO-8859-1 with numeric HTML-ENTITIES) to UTF-8
+ '
+ * (all named entities are also decoded, use htmlspecialchars() etc. only afterwards!)
+ *
+ * @param  string		a string to encode in WINDOWS-1252/HTML-ENTITIES
+ *
+ * @return string		the string in UTF-8
+ */
+function studip_utf8encode($string){
+	if(!preg_match('/[\200-\377]/', $string) && !preg_match("'&#[0-9]+;'", $string)){
+		return $string;
+	} else {
+		return html_entity_decode(mb_convert_encoding($string,'UTF-8', 'WINDOWS-1252'), ENT_QUOTES, 'UTF-8');
+	}
+}
+
+/**
+ * Encodes a string from UTF-8 to Stud.IP encoding (WINDOWS-1252/ISO-8859-1 with numeric HTML-ENTITIES)
+ *
+ * @param  string		a string in UTF-8
+ *
+ * @return string		the string in WINDOWS-1252/HTML-ENTITIES
+ */
+function studip_utf8decode($string){
+	if(!preg_match('/[\200-\377]/', $string)){
+		return $string;
+	} else {
+		$windows1252 = array(
+			"\x80" => '&#8364;',
+			"\x81" => '&#65533;',
+			"\x82" => '&#8218;',
+			"\x83" => '&#402;',
+			"\x84" => '&#8222;',
+			"\x85" => '&#8230;',
+			"\x86" => '&#8224;',
+			"\x87" => '&#8225;',
+			"\x88" => '&#710;',
+			"\x89" => '&#8240;',
+			"\x8A" => '&#352;',
+			"\x8B" => '&#8249;',
+			"\x8C" => '&#338;',
+			"\x8D" => '&#65533;',
+			"\x8E" => '&#381;',
+			"\x8F" => '&#65533;',
+			"\x90" => '&#65533;',
+			"\x91" => '&#8216;',
+			"\x92" => '&#8217;',
+			"\x93" => '&#8220;',
+			"\x94" => '&#8221;',
+			"\x95" => '&#8226;',
+			"\x96" => '&#8211;',
+			"\x97" => '&#8212;',
+			"\x98" => '&#732;',
+			"\x99" => '&#8482;',
+			"\x9A" => '&#353;',
+			"\x9B" => '&#8250;',
+			"\x9C" => '&#339;',
+			"\x9D" => '&#65533;',
+			"\x9E" => '&#382;',
+			"\x9F" => '&#376;');
+		return str_replace(	array_values($windows1252),
+							array_keys($windows1252),
+							utf8_decode(mb_encode_numericentity($string,
+																array(0x100, 0xffff, 0, 0xffff),
+																'UTF-8')
+										)
+							);
+	}
+}

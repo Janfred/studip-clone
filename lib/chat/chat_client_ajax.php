@@ -41,7 +41,7 @@ include 'sajax_chat_functions.php';
 	<title>Chat(<?=$auth->auth["uname"]?>) -
 	<?=htmlReady($chatServer->chatDetail[$chatid]["name"])?></title>
 	<link rel="stylesheet" href="<?=$GLOBALS['ASSETS_URL']?>stylesheets/style.css" type="text/css">
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=WINDOWS-1252">
 	<script type="text/javascript" language="javascript" src="<?= $GLOBALS['ASSETS_URL'] ?>javascripts/md5.js"></script>
 <script type="text/javascript">
 	//
