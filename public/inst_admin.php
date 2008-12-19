@@ -666,10 +666,12 @@ if ($extend == 'yes') {
 	if (is_array($GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['extended'])) {
 	    $dview = $GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['extended'];
 	}
+	else $dview = array();
 } else {
     if(is_array($GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['default'])) {
         $dview = $GLOBALS['INST_ADMIN_DATAFIELDS_VIEW']['default'];	
     }
+    else $dview = array();
 }
 
 foreach ($datafields_list as $entry) {
