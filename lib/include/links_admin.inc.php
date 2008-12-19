@@ -814,6 +814,15 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 							<input type="HIDDEN" name="view" value="<? echo $links_admin_data["view"]?>" />
 						</td>
 					</tr>
+				<tr>
+					<td class="steel1" colspan=6>
+						<br />&nbsp;<font size=-1>
+							<label>
+								<input type="checkbox" name="show_rooms_check" <?  if ($show_rooms_check) { echo " checked "; } ?> >&nbsp; <?=_("Raumdaten einblenden")?>
+							</label>
+						</font><br />
+					</td>
+				</tr>
 					<?
 					//more Options for archiving
 					if ($i_page == "archiv_assi.php") {
@@ -929,28 +938,34 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		<form name="links_admin_action" action="<?=URLHelper::getLink()?>" method="POST">
 		<table border=0  cellspacing=0 cellpadding=2 align=center width="99%">
 		<?
-
+		$show_rooms_check_url= ($show_rooms_check=="on") ? "&show_rooms_check=on" : null;
 		// only show table header in case of hits
 		if ($db->num_rows()) {
 			?>
 			<tr height=28>
 				<td width="%10" class="steel" valign=bottom>
 					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>
-					&nbsp;<a href="<?=URLHelper::getLink('?adminarea_sortby=start_time')?>"><b><?=_("Semester")?></b></a>
+					&nbsp;<a href="<?=URLHelper::getLink('?adminarea_sortby=start_time'. $show_rooms_check_url)?>"><b><?=_("Semester")?></b></a>
 				</td>
 				<td width="5%" class="steel" valign=bottom>
 					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>
-					&nbsp; <a href="<?=URLHelper::getLink('?adminarea_sortby=VeranstaltungsNummer')?>"><b><?=_("Nr.")?></b></a>
+					&nbsp; <a href="<?=URLHelper::getLink('?adminarea_sortby=VeranstaltungsNummer'. $show_rooms_check_url)?>"><b><?=_("Nr.")?></b></a>
 				</td>
 				<td width="45%" class="steel" valign=bottom>
 					<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width=1 height=20>
-					&nbsp; <a href="<?=URLHelper::getLink('?adminarea_sortby=Name')?>"><b><?=_("Name")?></b></a>
+					&nbsp; <a href="<?=URLHelper::getLink('?adminarea_sortby=Name'. $show_rooms_check_url)?>"><b><?=_("Name")?></b></a>
 				</td>
+				<? if ($show_rooms_check_url) : ?>
+				<td width="45%" class="steel" valign=bottom>
+					<img src="<?=$GLOBALS['ASSETS_URL']?>images/blank.gif" width=1 height=20>
+					<b><?=_("Raum")?></b></a>
+				</td>
+				<? endif; ?>
 				<td width="15%" align="center" class="steel" valign=bottom>
 					<b><?=_("DozentIn")?></b>
 				</td>
 				<td width="25%"align="center" class="steel" valign=bottom>
-					<a href="<?=URLHelper::getLink('?adminarea_sortby=status')?>"><b><?=_("Status")?></b></a>
+					<a href="<?=URLHelper::getLink('?adminarea_sortby=status'. $show_rooms_check_url)?>"><b><?=_("Status")?></b></a>
 				</td>
 				<td width="10%" align="center" class="steel" valign=bottom>
 					<b><?
@@ -1071,6 +1086,23 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 		while ($db->next_record()) {
 			$seminar_id = $db->f("Seminar_id");
+			$sem=new SemesterData;
+
+			if (!$semdata=$sem->getSemesterData($links_admin_data['srch_sem'])) {
+				$semdata = $sem->getSemesterDataByDate($db->f('start_time'));
+			}
+
+			// if "show room-data" is enabled
+			if (!$show_rooms_check) {
+				$_room = "&nbsp;";
+			} else {
+				$_room = getRoomOverviewUnsteady($seminar_id,$semdata["semester_id"],TRUE);
+				if (!$_room) {
+					$semdata = $sem->getSemesterDataByDate($db->f('start_time'));
+					$_room = getRoomOverviewUnsteady($seminar_id, $semdata['semester_id'], TRUE);
+				}
+				$_room = $_room ? $_room : "nicht angegeben";
+			}
 			$user_id = $auth->auth["uid"];
 
 			$cssSw->switchClass();
@@ -1086,6 +1118,12 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				echo "&nbsp;". _("(versteckt)");
 			}
 			echo "</font></td>";
+			
+			// if "show room-data" is enabled, show cell
+			if ($show_rooms_check) {
+				echo "<td valign=\"top\" class=\"".$cssSw->getClass()."\"><font size=-1>".$_room."</font></td>";
+			}
+
 			echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>";
 			$db4->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, position FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) where Seminar_id = '$seminar_id' and status = 'dozent' ORDER BY position ");
 			$k=0;
