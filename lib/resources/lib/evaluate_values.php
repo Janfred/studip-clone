@@ -1097,8 +1097,43 @@ if ($view == "search") {
 		}
 
 		//handle dates for searching resources that are free for this times
-		check_and_set_date ($search_day, $search_month, $search_year, $search_begin_hour, $search_begin_minute, $resources_data["search_array"], "search_assign_begin");
-		check_and_set_date ($search_day, $search_month, $search_year, $search_end_hour, $search_end_minute, $resources_data["search_array"], "search_assign_end");
+		/// >> changed for advanced room searches
+		if ($search_day_of_week!=-1) // a day is selected. this indicates the user searches a room for the whole term
+		{
+			/// search whole term
+			$semesterData = new SemesterData();
+			$sel_semester = $semesterData->getSemesterData($search_semester);
+			$date =  (int)$sel_semester["vorles_beginn"];
+
+			$days = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+
+			$beginn_day = date('w', $date);
+
+			$target_day = array_search($search_day_of_week, $days);
+
+			$diff = $target_day - $beginn_day;
+
+			// wrap around
+			if ($diff < 0)
+			{
+				$diff = 7 + $diff;
+			}
+
+			//$date = strtotime($str = "this $search_day_of_week 12:00:00", $date);
+			$date= strtotime($str = "+ $diff days", $date);
+
+			check_and_set_date (date("d",$date), date("m",$date), date("Y",$date), $search_begin_hour_2, $search_begin_minute_2, $resources_data["search_array"], "search_assign_begin");
+			check_and_set_date (date("d",$date), date("m",$date), date("Y",$date), $search_end_hour_2, $search_end_minute_2, $resources_data["search_array"], "search_assign_end");
+			$resources_data["search_array"]["search_repeating"] = '1';
+		} else
+		{
+			check_and_set_date ($search_day, $search_month, $search_year, $search_begin_hour, $search_begin_minute, $resources_data["search_array"], "search_assign_begin");
+			check_and_set_date ($search_day, $search_month, $search_year, $search_end_hour, $search_end_minute, $resources_data["search_array"], "search_assign_end");
+			$resources_data["search_array"]["search_repeating"] = $search_repeating;
+		}
+				$resources_data["search_array"]["search_day_of_week"] = $search_day_of_week;
+				$resources_data["search_array"]["search_semester"] = $search_semester;
+		/// << changed for advanced room searches
 		if (($resources_data["search_array"]["search_assign_begin"] == -1) || ($resources_data["search_array"]["search_assign_end"] == -1)) {
 			$resources_data["search_array"]["search_assign_begin"] = 0;
 			$resources_data["search_array"]["search_assign_end"] = 0;

@@ -164,27 +164,110 @@ class ResourcesBrowse {
 		$colspan = $this->mode == 'browse' ? ' colspan="2" ' : '';
 		?>
 		<tr>
-			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> <?=$colspan?> >
+			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
 				<font size="-1"><?=_("gefundene Ressourcen sollen zu folgender Zeit <u>nicht</u> belegt sein:")?></font>
 			<br />
 			</td>
 		</tr>
-		<tr>
-			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> <?=$colspan?> >
-			<font size="-1">
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<?=_("Datum")?>:
-					<input type="TEXT" style="{font-size:8pt;}" name="search_day" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("d", $this->searchArray["search_assign_begin"]) : _("tt")?>" />
-					.<input type="TEXT" style="{font-size:8pt;}" name="search_month" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("m", $this->searchArray["search_assign_begin"]) : _("mm")?>" />
-					.<input type="TEXT" style="{font-size:8pt;}" name="search_year" size="4" maxlength="4" value="<?=($this->searchArray["search_assign_begin"]) ? date("Y", $this->searchArray["search_assign_begin"]) : _("jjjj")?>" />
-				&nbsp;&nbsp;<?=_("Beginn")?>:
-					&nbsp;<input type="TEXT" style="{font-size:8pt;}" name="search_begin_hour" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("H", $this->searchArray["search_assign_begin"]) : _("ss")?>" />
-					<input type="TEXT" style="{font-size:8pt;}" name="search_begin_minute" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("i", $this->searchArray["search_assign_begin"]) : _("mm")?>" />&nbsp;<?=_("Uhr")?>
+		<tr>	
+			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
+			&nbsp;<br>
+				<table cellspacing="0" cellpadding="0" border="0" width="100%">
+					<tr>
+						<td width="120">
+							<font size="-1">
+								<b>Einzeltermin:</b>
+							</font>
+						</td>
+						<td>
+							<font size="-1">
+							<?=_("Beginn")?>:
+							&nbsp;<input type="TEXT" style="{font-size:8pt;}" name="search_begin_hour" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("H", $this->searchArray["search_assign_begin"]) : _("ss")?>" />
+							<input type="TEXT" style="{font-size:8pt;}" name="search_begin_minute" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("i", $this->searchArray["search_assign_begin"]) : _("mm")?>" />&nbsp;<?=_("Uhr")?>
+							&nbsp;&nbsp;<?=_("Ende")?>:
+							&nbsp;<input type="TEXT" style="{font-size:8pt;}" name="search_end_hour" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("H", $this->searchArray["search_assign_end"]) : _("ss")?>" />
+							<input type="TEXT" style="{font-size:8pt;}" name="search_end_minute" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("i", $this->searchArray["search_assign_end"]) : _("mm")?>" />&nbsp;<?=_("Uhr")?>
+				<br>
+							<?=_("Datum")?>: &nbsp;
+							<input type="TEXT" style="{font-size:8pt;}" name="search_day" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("d", $this->searchArray["search_assign_begin"]) : _("tt")?>" />
+							.<input type="TEXT" style="{font-size:8pt;}" name="search_month" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("m", $this->searchArray["search_assign_begin"]) : _("mm")?>" />
+							.<input type="TEXT" style="{font-size:8pt;}" name="search_year" size="4" maxlength="4" value="<?=($this->searchArray["search_assign_begin"]) ? date("Y", $this->searchArray["search_assign_begin"]) : _("jjjj")?>" />
+							&nbsp;&nbsp;&nbsp;&nbsp;	<input type="checkbox" style="{font-size:8pt;}" name="search_repeating" value="1" <?=($this->searchArray["search_repeating"]==1) ? "checked=checked" : ""?> /> für restliches Semester prüfen &nbsp; <br>
+							<br/>
+							</font>
+						</td>
+					</tr>
+				</table>
+				</td>
+				</tr>
+				<tr>
+				<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >	
+					<table cellspacing="0" cellpadding="0" border="0" width="100%">
+						<tr>
+							<td width="120">
+								<font size="-1">
+									<b>Semestertermin:</b>
+								</font>
+							</td>
+							<td>
+				<font size="-1">
+					<br/>
+				<?=_("Beginn")?>:
+					&nbsp;<input type="TEXT" style="{font-size:8pt;}" name="search_begin_hour_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("H", $this->searchArray["search_assign_begin"]) : _("ss")?>" />
+					<input type="TEXT" style="{font-size:8pt;}" name="search_begin_minute_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("i", $this->searchArray["search_assign_begin"]) : _("mm")?>" />&nbsp;<?=_("Uhr")?>
 				&nbsp;&nbsp;<?=_("Ende")?>:
-					&nbsp;<input type="TEXT" style="{font-size:8pt;}" name="search_end_hour" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("H", $this->searchArray["search_assign_end"]) : _("ss")?>" />
-					<input type="TEXT" style="{font-size:8pt;}" name="search_end_minute" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("i", $this->searchArray["search_assign_end"]) : _("mm")?>" />&nbsp;<?=_("Uhr")?>
+					&nbsp;<input type="TEXT" style="{font-size:8pt;}" name="search_end_hour_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("H", $this->searchArray["search_assign_end"]) : _("ss")?>" />
+					<input type="TEXT" style="{font-size:8pt;}" name="search_end_minute_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_end"]) ? date("i", $this->searchArray["search_assign_end"]) : _("mm")?>" />&nbsp;<?=_("Uhr")?>
+				<br>
+				<?=_("Tag der Woche")?>:
+				<select name = 'search_day_of_week'>
+				<option value=-1 <?=$this->searchArray["search_day_of_week"]==-1? "selected=selected":""?>><?=_("--")?> </option>
+				<option value='Monday' <?=$this->searchArray["search_day_of_week"]=='Monday'? "selected=selected":""?>><?=_("Montag")?> </option>
+				<option value='Tuesday' <?=$this->searchArray["search_day_of_week"]=='Tuesday'? "selected=selected":""?>><?=_("Dienstag")?> </option>
+				<option value='Wednesday' <?=$this->searchArray["search_day_of_week"]=='Wednesday'?  "selected=selected":""?>><?=_("Mittwoch")?> </option>
+				<option value='Thursday' <?=$this->searchArray["search_day_of_week"]=='Thursday'?  "selected=selected":""?>><?=_("Donnerstag")?> </option>
+				<option value='Friday' <?=$this->searchArray["search_day_of_week"]=='Friday'?  "selected=selected":""?>><?=_("Freitag")?> </option>
+				<option value='Saturday' <?=$this->searchArray["search_day_of_week"]=='Saturday'?  "selected=selected":""?>><?=_("Samstag")?> </option>
+				<option value='Sunday' <?=$this->searchArray["search_day_of_week"]=='Sunday'?  "selected=selected":""?>><?=_("Sonntag")?> </option>
+				</select> &nbsp;
+				<?=_("Semester")?>:
+				<select name = 'search_semester'>
+				<?
+					$semesterData = new SemesterData();
+					$all_semester = $semesterData->getAllSemesterData();
+				if (!$this->searchArray["search_semester"])
+				{
+					$current_semester = $semesterData->getCurrentSemesterData();
+					$selected_semester = $semesterData->getSemesterDataByDate(strtotime("+1 Day",$current_semester["ende"]));
+				} else
+				{
+					$selected_semester["semester_id"] = $this->searchArray["search_semester"];
+				}
+					$this_sem = false;
+					foreach($all_semester as $semester)
+					{
+						if ($selected_semester["semester_id"]==$semester["semester_id"])
+						{
+							$this_sem = true;
+						} else
+						{
+							$this_sem = false;
+						}
+
+						echo "<option value='".$semester["semester_id"]."' ".($this_sem?" selected=selected ":"").">".$semester["name"]."</option>";
+
+					}
+				?>
+				</select> &nbsp;
 			</font>
+					</td>
+				</tr>
+			</table>
+				<br/>
+			</td>
 		</tr>
+		
+		
 		<?
 	}
 
@@ -394,8 +477,8 @@ class ResourcesBrowse {
 	function showSearch() {
 		global $view_mode, $resources_data;
 		?>
+		<form method="POST" action="<?echo $PHP_SELF ?>?search_send=yes&quick_view=search&quick_view_mode=<?=$view_mode?>">
 			<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
-				<form method="POST" action="<?echo $PHP_SELF ?>?search_send=yes&quick_view=search&quick_view_mode=<?=$view_mode?>">
 				<?
 				$this->searchForm();
 				if (!$this->searchArray) {
@@ -413,8 +496,8 @@ class ResourcesBrowse {
 					$this->showSearchList(($resources_data["check_assigns"]) ? TRUE : FALSE);
 				}
 				?>
-				</form>
 			</table>
+		</form>
 			<br />
 		<?
 	}

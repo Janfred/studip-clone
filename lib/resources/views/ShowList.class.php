@@ -328,9 +328,44 @@ class ShowList extends ShowTreeRow{
 		//do further checks to determine free resources inthe given time range
 		if ($search_array["search_assign_begin"] && $check_assigns) {
 			$multiOverlaps = new CheckMultipleOverlaps;
-			$multiOverlaps->setTimeRange($search_array["search_assign_begin"], $search_array["search_assign_end"]);
-			$assEvt = new AssignEvent('', $search_array["search_assign_begin"], $search_array["search_assign_end"], '', '');
-			$event[$assEvt->getId()] = $assEvt;
+
+			// >> changed for advanced search for room administrators
+			if ($search_array["search_repeating"])
+			{
+				// is this slot empty for the rest of the term?
+				require_once ("lib/classes/SemesterData.class.php");
+				$semester_data = new SemesterData();
+				$semester = $semester_data->getSemesterDataByDate($search_array["search_assign_begin"]);
+				// create the dummy assign object
+				$assObj = new AssignObject('');
+				$assObj->setBegin($search_array["search_assign_begin"]);
+				$assObj->setEnd($search_array["search_assign_end"]);
+				$assObj->setRepeatEnd($semester["vorles_ende"]);
+				$assObj->setRepeatInterval(1);
+				$assObj->setRepeatQuantity(-1);
+
+                                // calculate stud.IP-day-of-week
+                                $day_of_week = date("w", $search_array["search_assign_begin"]);
+                                $day_of_week = $day_of_week == 0 ? 7 : $day_of_week-1;
+
+				$assObj->setRepeatDayOfWeek($day_of_week);
+				// set time range for checks
+				$multiOverlaps->setAutoTimeRange(Array($assObj));
+				// generate and get the events represented by assign object
+				$events = $assObj->getEvents();
+
+				foreach($events as $ev)
+				{
+					$event[$ev->getId()] = $ev;
+				}
+			} else
+			{
+				// the code for one specific slot
+				$assEvt = new AssignEvent('', $search_array["search_assign_begin"], $search_array["search_assign_end"], '', '');
+				$multiOverlaps->setTimeRange($search_array["search_assign_begin"], $search_array["search_assign_end"]);
+				$event[$assEvt->getId()] = $assEvt;
+			}
+			// << changed for advanced search for room administrators
 
 			//add the found resources to the check-set
 			foreach ($found_resources as $key=>$val) {
@@ -338,7 +373,6 @@ class ShowList extends ShowTreeRow{
 			}
 
 			$multiOverlaps->checkOverlap($event, $result);
-
 			//output
 			foreach ($found_resources as $key=>$val) {
 				if (!$result[$key]) {
