@@ -598,7 +598,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 							}
 							if ($i == 3){
 								$content .= "... <a href=\"details.php?sem_id=". $seminar_id
-								."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">"._("(mehr)")."</a>";
+								."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">("._("mehr").")</a>";
 								break;
 							}
 							++$i;

@@ -449,7 +449,7 @@ function print_result(){
 						//Shorten, if string too long (add link for details.php)
 						if (strlen($temp_turnus_string) > 70) {
 							$temp_turnus_string = htmlReady(substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") + 71));
-							$temp_turnus_string .= " ... <a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">"._("(mehr)")."</a>";
+							$temp_turnus_string .= " ... <a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">("._("mehr").")</a>";
 						}
 						echo "</font>";
 						echo "<font style=\"margin-left:5px;\" size=\"-2\">" . htmlReady($seminar_number) . "</font><br>";
@@ -478,7 +478,7 @@ function print_result(){
 									echo ", ";
 								}
 								if ($i == 3){
-									echo "... <a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">"._("(mehr)")."</a>";
+									echo "... <a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">("._("mehr").")</a>";
 									break;
 								}
 								++$i;
@@ -626,7 +626,7 @@ function print_result(){
 						//Shorten, if string too long (add link for details.php)
 						if (strlen($temp_turnus_string) > 245) {
 							$temp_turnus_string = substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 245, strlen($temp_turnus_string)), ",") + 246);
-							$temp_turnus_string .= " ... "._("(mehr)");
+							$temp_turnus_string .= " ... ("._("mehr").")";
 						}
 						$worksheet1->write_string($row, 1, $seminar_number, $data_format);
 						$worksheet1->write_string($row, 2, $temp_turnus_string, $data_format);
