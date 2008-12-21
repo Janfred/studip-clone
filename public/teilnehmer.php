@@ -1025,7 +1025,9 @@ while (list ($key, $val) = each ($gruppe)) {
 		// hier kann ne flag setzen um mail extern zu nutzen
 		if ($ENABLE_EMAIL_TO_STATUSGROUP) {
 			$db_mail = new DB_Seminar();
-			$db_mail->query("SELECT Email FROM seminar_user su ".
+			$seminar_user_table =
+				$key == 'accepted' ? 'admission_seminar_user' : 'seminar_user';
+			$db_mail->query("SELECT Email FROM $seminar_user_table su ".
 			                "LEFT JOIN auth_user_md5 au ON (su.user_id = au.user_id) ".
 			                "WHERE su.seminar_id = '".$SessSemName[1]."' ".
 			                "AND status = '$key'");
@@ -1035,10 +1037,14 @@ while (list ($key, $val) = each ($gruppe)) {
 			}
 			$all_user = implode(',', $users);
 
-			echo '<a href="mailto:'.$all_user.'"><img src="'.$GLOBALS['ASSETS_URL'].'images/mailnachricht.gif" title="'._("E-Mail an alle Gruppenmitglieder verschicken").'" alt="'.("E-Mail an alle Gruppenmitglieder verschicken").'" border="0" align="absmiddle"/></a>';
+			echo '<a href="mailto:'.$all_user.'">';
+			echo Assets::img('mailnachricht.gif', array('title' => sprintf(_('E-Mail an alle %s schicken'), $val), 'align' => 'absmiddle'));
+			echo '</a>';
 		}
 
-		echo '<a href="'.URLHelper::getLink('teilnehmer.php?cmd=send_sms_to_all&who='.$key).'"><img src="'.$GLOBALS['ASSETS_URL'].'images/nachricht1.gif" title="'.sprintf(_("Nachricht an alle %s schicken"), $val).'" alt="'.sprintf(_("Nachricht an alle %s schicken"), $val).'" border="0" align="absmiddle"></a>';
+		echo '<a href="'.URLHelper::getLink('teilnehmer.php?cmd=send_sms_to_all&who='.$key).'">';
+		echo Assets::img('nachricht1.gif', array('title' => sprintf(_('Nachricht an alle %s schicken'), $val), 'align' => 'absmiddle'));
+		echo '</a>';
 		echo '</td>';
 	} else {
 		echo '<td class="steel">&nbsp;</td>';
