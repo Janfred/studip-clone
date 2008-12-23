@@ -60,7 +60,7 @@ require_once('lib/classes/ZebraTable.class.php');
 require_once($RELATIVE_PATH_RESOURCES.'/lib/ResourceObject.class.php');
 require_once ('lib/show_log.inc.php');
 
-$CURRENT_PAGE = _("Log");
+$CURRENT_PAGE = _("Anzeige der Log-Events");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -110,7 +110,7 @@ $clensed=cleanup_log_events(); // returns # of deleted events
 //
 $container=new ContainerTable();
 start_form();
-echo $container->headerRow("<b>&nbsp;"._("Anzeige der Log-Events")."</b>");
+echo $container->openRow();
 echo $container->openCell();
 
 $content=new ContentTable();
