@@ -88,6 +88,9 @@ if (check_ticket($_REQUEST['studipticket'])){
 						}
 					}
 				}
+				$_GET['details'] = $details = $UserManagement->user_data['auth_user_md5.username'];
+			} else {
+				$_GET['details'] = $details = '__';
 			}
 
 			break;
@@ -172,11 +175,66 @@ if (check_ticket($_REQUEST['studipticket'])){
 
 			break;
 
-
+			
+		case 'pers_browse_search_x':
+			$_SESSION['pers_browse_old']['username'] = remove_magic_quotes($_POST['pers_browse_username']);
+			$_SESSION['pers_browse_old']['Vorname'] = remove_magic_quotes($_POST['pers_browse_Vorname']);
+			$_SESSION['pers_browse_old']['Email'] = remove_magic_quotes($_POST['pers_browse_Email']);
+			$_SESSION['pers_browse_old']['Nachname'] = remove_magic_quotes($_POST['pers_browse_Nachname']);
+			$_SESSION['pers_browse_old']['perms'] = remove_magic_quotes($_POST['pers_browse_perms']);
+			$_SESSION['pers_browse_old']['crit'] = remove_magic_quotes($_POST['pers_browse_crit']);
+			$_SESSION['pers_browse_old']['changed'] = strlen($_POST['pers_browse_changed']) ? abs($_POST['pers_browse_changed']) : null;
+			$_SESSION['pers_browse_old']['locked'] = (int)$_POST['pers_browse_locked'];
+		
+			$_SESSION['pers_browse_search_string'] = "";
+			foreach(array('username', 'Vorname', 'Email', 'Nachname') as $field){
+				if($_SESSION['pers_browse_old'][$field]){
+					$_SESSION['pers_browse_search_string'] .= "$field LIKE '%" . mysql_escape_string($_SESSION['pers_browse_old'][$field]) . "%' AND ";
+				}
+			}
+			if ($_SESSION['pers_browse_old']['locked'])
+				$_SESSION['pers_browse_search_string'] .= "locked = 1 AND ";
+			if ($_SESSION['pers_browse_old']['perms'] && $_SESSION['pers_browse_old']['perms'] != _("alle"))
+				$_SESSION['pers_browse_search_string'] .= "perms = '".mysql_escape_string($_SESSION['pers_browse_old']['perms'])."' AND ";
+			if (isset($_SESSION['pers_browse_old']['changed'])) {
+				$searchdate = date("YmdHis",  time()-$_SESSION['pers_browse_old']['changed']*3600*24);
+				$searchdate2 = date("YmdHis",  time()-($_SESSION['pers_browse_old']['changed']+1)*3600*24);
+					if ($_SESSION['pers_browse_old']['crit'] == "<") {
+						$searchcrit = ">";
+						$_SESSION['pers_browse_search_string'] .= "changed $searchcrit '$searchdate' AND ";
+					}
+					if ($_SESSION['pers_browse_old']['crit'] == ">=") {
+						$searchcrit = "<";
+						$_SESSION['pers_browse_search_string'] .= "changed $searchcrit '$searchdate' AND ";
+					}
+					if ($_SESSION['pers_browse_old']['crit'] == "=") {
+						$_SESSION['pers_browse_search_string'] .= "changed < '$searchdate' AND changed > '$searchdate2' AND ";
+					}
+				}
+			if ($_SESSION['pers_browse_old']['crit'] == _("nie")){
+				$_SESSION['pers_browse_old']['changed'] = null;
+				$_SESSION['pers_browse_search_string'] .= "changed IS NULL AND ";
+			}
+			
+			if ($_SESSION['pers_browse_search_string'] != "") {
+				$_SESSION['pers_browse_search_string'] = " WHERE " . $_SESSION['pers_browse_search_string'];	
+				$_SESSION['pers_browse_search_string'] = substr($_SESSION['pers_browse_search_string'],0,-4);
+				if ($_SESSION['pers_browse_old']['crit'] == _("nie") || isset($_SESSION['pers_browse_old']['changed']))
+					$_SESSION['pers_browse_search_string'] .= $GLOBALS['user']->that->get_where_clause($GLOBALS['user']->name);
+			} else {
+				unset($_SESSION['pers_browse_search_string']);
+				$msg = "error§" . _("Bitte geben Sie einen Suchbegriff ein.") . "§";
+			}
+			break;
 		default:
 			break;
 		}
 	}
+}
+// Formular zuruecksetzen
+if (isset($_GET['pers_browse_clear'])) {
+	unset($_SESSION['pers_browse_old']);
+	unset($_SESSION['pers_browse_search_string']);
 }
 
 URLHelper::addLinkParam("studipticket", get_ticket());
@@ -187,29 +245,30 @@ if (isset($_GET['details'])) {
 		?>
 		<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 		<tr><td class="blank" colspan=2>&nbsp;</td></tr>
+		<?parse_msg($UserManagement->msg);?>
 		<tr><td class="blank" colspan=2>
 
 			<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=2>
 			<form name="edit" method="post" action="<?=URLHelper::getLink('')?>">
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("Benutzername:")?></b></td>
-					<td>&nbsp;<input type="text" name="username" size=24 maxlength=63 value=""></td>
+					<td>&nbsp;<input type="text" name="username" size=24 maxlength=63 value="<?=htmlReady(remove_magic_quotes($_POST['username']))?>"></td>
 				</tr>
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("globaler Status:")?>&nbsp;</b></td>
-					<td>&nbsp;<? print $perm->perm_sel("perms", 'autor') ?></td>
+					<td>&nbsp;<? print $perm->perm_sel("perms", $_POST['perms'] ? $_POST['perms'][0] : 'autor') ?></td>
 				</tr>
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("Sichtbarkeit")?>&nbsp;</b></td>
-					<td>&nbsp;<?=vis_chooser('', TRUE) ?></td>
+					<td>&nbsp;<?=vis_chooser($_POST['visible'], !isset($_POST['visible'])) ?></td>
 				</tr>
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("Vorname:")?></b></td>
-					<td>&nbsp;<input type="text" name="Vorname" size=24 maxlength=63 value=""></td>
+					<td>&nbsp;<input type="text" name="Vorname" size=24 maxlength=63 value="<?=htmlReady(remove_magic_quotes($_POST['Vorname']))?>"></td>
 				</tr>
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("Nachname:")?></b></td>
-					<td>&nbsp;<input type="text" name="Nachname" size=24 maxlength=63 value=""></td>
+					<td>&nbsp;<input type="text" name="Nachname" size=24 maxlength=63 value="<?=htmlReady(remove_magic_quotes($_POST['Nachname']))?>"></td>
 				</tr>
 				<tr>
 				<td><b>&nbsp;<?=_("Titel:")?></b>
@@ -220,7 +279,7 @@ if (isset($_GET['details'])) {
 				}
 				?>
 				</select></td>
-				<td>&nbsp;<input type="text" name="title_front" value="" size=24 maxlength=63></td>
+				<td>&nbsp;<input type="text" name="title_front" value="<?=htmlReady(remove_magic_quotes($_POST['title_front']))?>" size=24 maxlength=63></td>
 				</tr>
 				<tr>
 				<td><b>&nbsp;<?=_("Titel nachgest.:")?></b>
@@ -231,16 +290,16 @@ if (isset($_GET['details'])) {
 				}
 				?>
 				</select></td>
-				<td>&nbsp;<input type="text" name="title_rear" value="" size=24 maxlength=63></td>
+				<td>&nbsp;<input type="text" name="title_rear" value="<?=htmlReady(remove_magic_quotes($_POST['title_rear']))?>" size=24 maxlength=63></td>
 				</tr>
 				<tr>
 				<td colspan="2"><b>&nbsp;<?=_("Geschlecht:")?></b></td>
 				<td>&nbsp;<input type="RADIO" checked name="geschlecht" value="0"><?=_("m&auml;nnlich")?>&nbsp;
-				<input type="RADIO" name="geschlecht" value="1"><?=_("weiblich")?></td>
+				<input type="RADIO" name="geschlecht" value="1" <?=($_POST['geschlecht'] == 1 ? 'checked' : '')?>><?=_("weiblich")?></td>
 				</tr>
 				<tr>
 					<td colspan="2"><b>&nbsp;<?=_("E-Mail:")?></b></td>
-					<td>&nbsp;<input type="text" name="Email" size=48 maxlength=63 value="">&nbsp;</td>
+					<td>&nbsp;<input type="text" name="Email" size=48 maxlength=63 value="<?=htmlReady(remove_magic_quotes($_POST['Email']))?>">&nbsp;</td>
 				</tr>
 				<tr>
 				<td colspan="2"><b>&nbsp;<?=_("Einrichtung:")?></b></td>
@@ -254,16 +313,16 @@ if (isset($_GET['details'])) {
 			}
 			printf ("<option value=\"0\">%s</option>\n", _("-- bitte Einrichtung ausw&auml;hlen (optional) --"));
 			while ($db->next_record()){
-				printf ("<option value=\"%s\" style=\"%s\">%s </option>\n", $db->f("Institut_id"),($db->f("is_fak") ? "font-weight:bold;" : ""), htmlReady(substr($db->f("Name"), 0, 70)));
+				printf ("<option value=\"%s\" style=\"%s\" %s>%s </option>\n", $db->f("Institut_id"),($db->f("is_fak") ? "font-weight:bold;" : ""), ($_POST['select_inst_id'] == $db->f("Institut_id") ? 'selected' : ''), htmlReady(substr($db->f("Name"), 0, 70)));
 				if ($db->f("is_fak")){
 					$db2->query("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id='" .$db->f("Institut_id") . "' AND institut_id!='" .$db->f("Institut_id") . "' ORDER BY Name");
 					while ($db2->next_record()){
-						printf("<option value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s </option>\n", $db2->f("Institut_id"), htmlReady(substr($db2->f("Name"), 0, 70)));
+						printf("<option %s value=\"%s\">&nbsp;&nbsp;&nbsp;&nbsp;%s </option>\n", ($_POST['select_inst_id'] == $db2->f("Institut_id") ? 'selected' : ''), $db2->f("Institut_id"), htmlReady(substr($db2->f("Name"), 0, 70)));
 					}
 				}
 			}
-			if($GLOBALS['MAIL_VALIDATE_BOX']){
-				echo chr(10).'<tr><td colspan="3" align="right"><input type="checkbox" id="disable_mail_host_check" name="disable_mail_host_check" value="1"><label for="disable_mail_host_check" >'._("Mailboxüberprüfung deaktivieren").'</label></td></tr>';
+			if($GLOBALS['MAIL_VALIDATE_BOX'] || $_POST['disable_mail_host_check']){
+				echo chr(10).'<tr><td colspan="3" align="right"><input type="checkbox" id="disable_mail_host_check" name="disable_mail_host_check" value="1" '.($_POST['disable_mail_host_check'] ? 'checked' : '').'><label for="disable_mail_host_check" >'._("Mailboxüberprüfung deaktivieren").'</label></td></tr>';
 			}
 			?>
 			</select>
@@ -295,6 +354,7 @@ if (isset($_GET['details'])) {
 
 			<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 			<tr><td class="blank" colspan=2>&nbsp;</td></tr>
+			<?parse_msg($UserManagement->msg);?>
 			<tr><td class="blank" colspan=2>
 
 			<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=2>
@@ -527,12 +587,14 @@ if (isset($_GET['details'])) {
 					<img src="'.$GLOBALS['ASSETS_URL'].'images/icon-disc.gif" align="absmiddle" border="0">
 					</a>';
 				echo "</td></tr>\n";
-				echo "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
-				echo "&nbsp;" . _("Log") . "&nbsp;";
-				echo '<a href="' . URLHelper::getLink('show_log?username=' . $db->f('username')) .'">
+				if($GLOBALS['LOG_ENABLE']){
+					echo "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
+					echo "&nbsp;" . _("Log") . "&nbsp;";
+					echo '<a href="' . URLHelper::getLink('show_log.php?username=' . $db->f('username')) .'">
 					<img src="'.$GLOBALS['ASSETS_URL'].'images/suchen.gif" align="absmiddle" border="0">
 					</a>';
-				echo "</td></tr>\n";
+					echo "</td></tr>\n";
+				}
 			}
 			$temp_user_id = $db->f("user_id");
 			if ($perm->have_perm("root"))
@@ -578,7 +640,7 @@ if (isset($_GET['details'])) {
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 
 	<?
-	parse_msg($UserManagement->msg);
+	parse_msg($UserManagement->msg . $msg);
 	?>
 
 	<tr><td class="blank" colspan=2>
@@ -589,25 +651,59 @@ if (isset($_GET['details'])) {
 		echo "<p>&nbsp;" . _("Die Standard Authentifizierung ist ausgeschaltet. Das Anlegen von neuen Benutzern ist nicht möglich!") . "</p>";
 	}
 
-	include ('lib/include/pers_browse.inc.php');
-	print "<br>\n";
-	parse_msg($msg);
+	// Suchformular
+	print "<form action=\"".URLHelper::getLink()."\" method=\"post\">\n";
+	print "<table border=0 align=\"center\" cellspacing=0 cellpadding=2 width = \"80%\">\n";
+	print "<tr><th colspan=5>" . _("Suchformular") . "</th></tr>";
+	print "\n<tr><td class=steel1 align=\"right\" width=\"15%\">" . _("Benutzername:") . " </td>";
+	print "\n<td class=steel1 align=\"left\" width=\"35%\"><input name=\"pers_browse_username\" type=\"text\" value=\"".htmlReady($_SESSION['pers_browse_old']['username'])."\" size=30 maxlength=255></td>\n";
+	print "\n<td class=steel1 align=\"right\" width=\"15%\">" . _("Vorname:") . " </td>";
+	print "\n<td class=steel1 colspan=2 align=\"left\" width=\"35%\"><input name=\"pers_browse_Vorname\" type=\"text\" value=\"".htmlReady($_SESSION['pers_browse_old']['Vorname'])."\" size=30 maxlength=255></td></tr>\n";
+	print "\n<tr><td class=steel1 align=\"right\" width=\"15%\">" . _("E-Mail:") . " </td>";
+	print "\n<td class=steel1 align=\"left\" width=\"35%\"><input name=\"pers_browse_Email\" type=\"text\" value=\"".htmlReady($_SESSION['pers_browse_old']['Email'])."\" size=30 maxlength=255></td>\n";
+	print "\n<td class=steel1 align=\"right\" width=\"15%\">" . _("Nachname:") . " </td>";
+	print "\n<td class=steel1 colspan=2 align=\"left\" width=\"35%\"><input name=\"pers_browse_Nachname\" type=\"text\" value=\"".htmlReady($_SESSION['pers_browse_old']['Nachname'])."\" size=30 maxlength=255></td></tr>\n";
+	print "\n<tr><td class=steel1 align=\"right\" width=\"15%\">" . _("Status:") . " </td>";
+	print "\n<td class=steel1 align=\"left\" width=\"35%\">";
+	echo '<select name="pers_browse_perms">';
+	foreach(array(_("alle"),"user","autor","tutor","dozent","admin","root") as $one) {
+		echo "\n<option";
+		if ($_SESSION['pers_browse_old']['perms'] == $one)
+			echo ' selected';
+		echo '>'.$one.'</option>';
+	}
+	echo "</select>";
+	echo "&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" name=\"pers_browse_locked\" value=\"1\" " . ($_SESSION['pers_browse_old']['locked'] ? "checked" : "" ) . ">&nbsp;"._("gesperrt");
+	print "</td>\n";
+	print "\n<td class=steel1 align=\"right\" width=\"15%\">" . _("inaktiv:") . " </td>";
+	print "\n<td class=steel1 align=\"left\" width=\"10%\">";
+	echo '<select name="pers_browse_crit">';
+	foreach(array(">=","=","<",_("nie")) as $one) {
+		echo "\n<option";
+		if ($_SESSION['pers_browse_old']['crit'] == $one)
+			echo ' selected';
+		echo '>'.$one.'</option>';
+	}
+	echo "</select>";
+	print "</td>";
+	print "\n<td class=steel1 align=\"left\" width=\"25%\"><input name=\"pers_browse_changed\" type=\"text\" value=\"".htmlReady($_SESSION['pers_browse_old']['changed'])."\" size=10 maxlength=50> Tage</td></tr>\n";
+	print "\n<tr><td class=steel1>&nbsp</td><td class=steel1 align=\"left\">";
+	echo makeButton("suchestarten", "input", _("Suche starten"),'pers_browse_search');
+	echo "</td>\n";
+	print "\n<td class=steel1>&nbsp</td><td class=steel1 colspan=2 align=\"left\"><a href=\"".URLHelper::getLink('', array('pers_browse_clear' => 1))."\"" . tooltip(_("Formular zurücksetzen")) . ">" . makeButton("zuruecksetzen", "img") . "</a></td></tr>\n";
+	print "\n</table></form>\n";
 
-
-	if (isset($pers_browse_search_string)) { // Es wurde eine Suche initiert
+	if (isset($_SESSION['pers_browse_search_string'])) { // Es wurde eine Suche initiert
 
 		// nachsehen, ob wir ein Sortierkriterium haben, sonst nach username
-		if (!isset($sortby) || $sortby=="") {
-			if (!isset($new_user_md5_sortby) || $new_user_md5_sortby == "") {
-				$new_user_md5_sortby = "username";
-			}
+		if (isset($_GET['sortby']) && in_array($_GET['sortby'], words('username perms Vorname Nachname Email changed mkdate auth_plugin'))) {
+			$_SESSION['new_user_md5_sortby'] = $_GET['sortby'];
 		} else {
-			$new_user_md5_sortby = $sortby;
-			$sess->register("new_user_md5_sortby");
+			$_SESSION['new_user_md5_sortby'] = 'username';
 		}
 
 		// Traverse the result set
-		$db->query("SELECT auth_user_md5.*, (changed + 0) as changed_compat, mkdate FROM auth_user_md5 LEFT JOIN ".$GLOBALS['user']->that->database_table." ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) $pers_browse_search_string ORDER BY $new_user_md5_sortby");
+		$db->query("SELECT auth_user_md5.*, (changed + 0) as changed_compat, mkdate FROM auth_user_md5 LEFT JOIN ".$GLOBALS['user']->that->database_table." ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) {$_SESSION['pers_browse_search_string']} ORDER BY " . $_SESSION['new_user_md5_sortby']);
 
 		if ($db->num_rows() == 0) { // kein Suchergebnis
 			print "<table border=0 bgcolor=\"#eeeeee\" align=\"center\" cellspacing=0 cellpadding=2 width=\"80%\">";
