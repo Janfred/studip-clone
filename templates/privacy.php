@@ -1,7 +1,7 @@
 <div class="white" style="padding: 2ex;">
   <table width="100%">
     <tr><td>
-      <h2>Stud.IP - Erläuterungen zum Datenschutz im Überblick</h2>
+      <h2><?= _('Stud.IP - Erläuterungen zum Datenschutz im Überblick') ?></h2>
 
       <p><?= _('Die wichtigsten Informationen auf einen Blick: Wer kann was über mich sehen bzw. herausfinden?') ?></p>
 
