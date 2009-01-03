@@ -83,35 +83,7 @@ class CheckMultipleOverlaps {
 		global $RESOURCES_ASSIGN_LOCKING_ACTIVE, $user;
 		
 		$this->resource_ids[] = $resource_id;
-		$query = sprintf ("DELETE FROM resources_temporary_events WHERE resource_id = '%s'", $resource_id);
-		$this->db->query($query);
-		$resObject =& ResourceObject::Factory($resource_id);
-		
-		//when multiple assigns are allowed, we need no check for other assigns...
-		if (!$resObject->getMultipleAssign()) {		
-			$assEvt = new AssignEventList($this->begin, $this->end, $resource_id, FALSE, FALSE, FALSE);
-			$now = time();
-			if ($assEvt->existEvent()){
-				while ($event = $assEvt->nextEvent()) {
-					$sql[] = "('" . md5(uniqid("tempo",1)) ."','$resource_id', '".$event->getAssignId()."', ".$event->getBegin().", ".$event->getEnd().", 'assign', $now)";
-				}
-			}
-		}
-		
-		//...but we always need the check for the locks, so insert them
-		if (($RESOURCES_ASSIGN_LOCKING_ACTIVE) && ($resObject->isLockable()) && ($resObject->isRoom()) && (getGlobalPerms($user->id) != "admin")) {
-			$query = "SELECT lock_id, lock_begin, lock_end FROM resources_locks WHERE type = 'assign'";
-			$this->db->query($query);
-			while ($this->db->next_record()) {
-				$sql[] = "('" . md5(uniqid("tempo",1)) ."','$resource_id', '".$this->db->f("lock_id")."', ".$this->db->f("lock_begin").", ".$this->db->f("lock_end").", 'lock', $now)";
-			}
-		}
-		
-		//insert data
-		if ($sql) {
-			$query = "INSERT INTO resources_temporary_events (event_id ,resource_id, assign_id,begin,end,type,mkdate) VALUES " . join(",",$sql);
-			$this->db->query($query);
-		}
+		return ;	// Perf-OS
 	}
 	
 	function checkOverlap ($events, &$result, $index_mode = "assign_id") {

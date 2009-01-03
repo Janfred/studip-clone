@@ -362,6 +362,22 @@ class AssignObject {
 		
 		//check for regular overlaps
 		if (!$resObject->getMultipleAssign()) { //when multiple assigns are allowed, we need no check...
+      $multiChecker = new CheckMultipleOverlaps();
+      $multiChecker->setAutoTimeRange(Array($this));
+      $multiChecker->addResource($this->resource_id);
+      $events = Array();
+      foreach ($this->getEvents() as $evtObj) {
+        $events[$evtObj->getId()] = $evtObj;
+      }
+
+      $multiChecker->checkOverlap($events, $result);
+      $overlaps = Array();
+      foreach($result[$this->resource_id][$this->id] as $overlapping_event)
+      {
+        $overlaps[$overlapping_event["assign_id"]]["begin"] = $overlapping_event["begin"];
+        $overlaps[$overlapping_event["assign_id"]]["end"] = $overlapping_event["end"];
+      }
+      /*
 			if (is_array($this->events))
 				$keys=array_keys($this->events);
 			$my_id = $this->getId();
@@ -390,6 +406,7 @@ class AssignObject {
 					}
 				}
 			}
+       */
 			return $overlaps;
 		} else
 			return FALSE;
@@ -584,6 +601,26 @@ class AssignObject {
 				$query = sprintf("UPDATE resources_assign SET chdate='%s' WHERE assign_id='%s' ", $chdate, $this->id);
 				$db->exec($query);
 				$this->syncronizeMetaDates();
+				
+				// Perf-OS update der Tabelle resources_temporary_events
+
+				$resObject =& ResourceObject::Factory($this->resource_id);
+
+				$query = sprintf ("DELETE FROM resources_temporary_events WHERE assign_id = '%s'", $this->id); // alte Daten l�chen
+				$this->db->query($query);
+				if (!$resObject->getMultipleAssign()) {		
+					$events = $this->getEvents();
+					$sql = Array();;
+					$now = time();
+					foreach($events as $event)
+					{	
+						$sql[] = "('" . md5(uniqid("tempo",1)) ."','$this->resource_id', '".$this->id."', ".$event->getBegin().", ".$event->getEnd().", 'assign', $now)";
+					}
+					if (sizeof($sql)>0) {
+						$query = "INSERT INTO resources_temporary_events (event_id ,resource_id, assign_id,begin,end,type,mkdate) VALUES " . join(",",$sql);
+						$this->db->query($query);
+					}
+				}
 				return TRUE;
 			} else
 				return FALSE;
@@ -632,6 +669,10 @@ class AssignObject {
 		}
 		*/
 		
+		//Perf-OS loeschen der Daten aus resources_temporary_events
+		$query = sprintf("DELETE FROM resources_temporary_events WHERE assign_id='%s'", $this->id);
+		$this->db->query($query);
+
 		$query = sprintf("DELETE FROM resources_assign WHERE assign_id='%s'", $this->id);
 		if($db->exec($query))
 			return TRUE;
