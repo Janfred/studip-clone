@@ -185,7 +185,7 @@ class SemesterData {
 	}
 
 	function insertNewSemester($semesterdata) {
-		// Diese Funktion fÃgt ein neues Semester ein!
+		// Diese Funktion fügt ein neues Semester ein!
 		//echo "<pre>".print_r($semesterdata)."</pre>";
 		$semester_id = md5(uniqid("Aragorn"));
 		$sql = 	"INSERT INTO semester_data (semester_id,name,description,semester_token,beginn,ende,vorles_beginn,vorles_ende) ".

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (C) 2008 - AndrÃ© KlaÃŸen <aklassen@uos.de>
+ * Copyright (C) 2008 - André Klaßen <aklassen@uos.de>
  * Copyright (C) 2008 - Marcus Lunzenauer <mlunzena@uos.de>
  *
  * This program is free software; you can redistribute it and/or

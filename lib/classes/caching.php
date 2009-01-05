@@ -64,13 +64,13 @@ class StudipCacheFactory {
     $cfg->setValue($file,
                    'cache_class_file',
                    'Absoluter Pfad der Datei, die die StudipCache-Klasse '.
-                   'enthÃ¤lt');
+                   'enthält');
     $cfg->setValue($class,
                    'cache_class',
                    'Klassenname des zu verwendenden StudipCaches');
     $cfg->setValue($arguments,
                    'cache_init_args',
-                   'JSON-kodiertes Array von Argumenten fÃ¼r die '.
+                   'JSON-kodiertes Array von Argumenten für die '.
                    'Instanziierung der StudipCache-Klasse');
 
     self::$cache = NULL;

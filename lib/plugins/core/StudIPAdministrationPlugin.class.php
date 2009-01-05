@@ -12,25 +12,25 @@
 interface StudIPAdministrationPlugin {
 
   /**
-   * VerfÃ¼gt dieses Plugin Ã¼ber einen Eintrag auf der Startseite des
+   * Verfügt dieses Plugin über einen Eintrag auf der Startseite des
    * Administrators?
    *
-   * @return boolean    true, falls HauptmenÃ¼ vorhanden, sonst false
+   * @return boolean    true, falls Hauptmenü vorhanden, sonst false
    */
   function hasTopNavigation();
 
   /**
-   * Liefert den MenÃ¼eintrag zurÃ¼ck.
+   * Liefert den Menüeintrag zurück.
    *
-   * @return StudipPluginNavigation  das MenÃ¼, oder null, wenn kein MenÃ¼
+   * @return StudipPluginNavigation  das Menü, oder null, wenn kein Menü
    *                                 vorhanden ist
    */
   function getTopNavigation();
 
   /**
-   * Setzt das HauptmenÃ¼ des Plugins.
+   * Setzt das Hauptmenü des Plugins.
    *
-   * @param  StudipPluginNavigation  das neue HauptmenÃ¼
+   * @param  StudipPluginNavigation  das neue Hauptmenü
    *
    * @return void
    */

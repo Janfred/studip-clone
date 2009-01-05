@@ -28,7 +28,7 @@ interface StudIPStandardPlugin {
   function getId();
 
   /**
-   * Hat sich seit dem letzten Login etwas geÃ¤ndert?
+   * Hat sich seit dem letzten Login etwas geändert?
    *
    * @param  type       letzter Loginzeitpunkt des Benutzers
    *
@@ -37,7 +37,7 @@ interface StudIPStandardPlugin {
   function hasChanged($lastlogin);
 
   /**
-   * Nachricht fÃ¼r tooltip in der Ãœbersicht
+   * Nachricht für tooltip in der Übersicht
    *
    * @param  type       letzter Loginzeitpunkt des Benutzers; optional,
    *                    default: false
@@ -47,20 +47,20 @@ interface StudIPStandardPlugin {
   function getOverviewMessage($has_changed = FALSE);
 
   /**
-   * Wird dieses Plugin in der Ãœbersicht angezeigt?
+   * Wird dieses Plugin in der Übersicht angezeigt?
    *
    * @return boolean    <description>
    */
   function isShownInOverview();
 
   /**
-   * Liefert die Ã„nderungsmeldungen fÃ¼r die Ã¼bergebenen ids zurÃ¼ck
+   * Liefert die Änderungsmeldungen für die übergebenen ids zurück
    *
    * @param  type       letzter Loginzeitpunkt des Benutzers
    * @param  type       ein Array von Veranstaltungs- bzw. Institutionsids, zu
-   *                    denen die Ã„nderungsnachricht bestimmt werden soll.
+   *                    denen die Änderungsnachricht bestimmt werden soll.
    *
-   * @return array      Ã„nderungsmeldungen
+   * @return array      Änderungsmeldungen
    */
   function getChangeMessages($lastlogin, $ids);
 

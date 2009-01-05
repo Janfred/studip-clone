@@ -4,7 +4,7 @@
 		<? if (!$is_buddy) : ?>
 			<a href="<?= URLHelper::getLink('online.php', array('cmd' => 'add_user',
 			                                                    'add_uname' => $tmp_online_uname)) ?>">
-				<?= Assets::img('add_buddy.gif', array('alt' => _("zu den Buddies hinzuf√ºgen"),
+				<?= Assets::img('add_buddy.gif', array('alt' => _("zu den Buddies hinzuf¸gen"),
 				                                       'style' => 'padding-right: 0.33em;')) ?>
 			</a>
 		<? else : ?>

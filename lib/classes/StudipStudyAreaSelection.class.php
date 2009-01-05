@@ -70,8 +70,8 @@ class StudipStudyAreaSelection {
 	 */
 	private function populateAreasForCourse($id) {
 		$areas = StudipStudyArea::getStudyAreasForCourse($id);
-		$lambda = create_function('$a, $b', 'return strcmp($a->getPath(" Â· "), '.
-		                                                  '$b->getPath(" Â· "));');
+		$lambda = create_function('$a, $b', 'return strcmp($a->getPath(" · "), '.
+		                                                  '$b->getPath(" · "));');
 		uasort($areas, $lambda);
 
 		$this->setAreas($areas);

@@ -24006,7 +24006,7 @@ msgstr ""
 #: ../lib/extern/elements/main/ExternElementMainTemplateNews.class.php:121
 msgid ""
 "Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine News "
-"verfÃ¼gbar sind."
+"verfügbar sind."
 msgstr "This text will be displayed in place of a table, when no news are available."
 
 #: ../lib/extern/elements/ExternElementTableParagraphHeadline.class.php:57
@@ -36071,7 +36071,7 @@ msgstr ""
 
 #: ../templates/statusgruppen/no_statusgroups.php:21
 msgid ""
-"Um fÃ¼r diesen Bereich Gruppen oder Funktionen anzulegen, nutzen Sie bitte "
+"Um für diesen Bereich Gruppen oder Funktionen anzulegen, nutzen Sie bitte "
 "die obere Zeile!"
 msgstr "Use upper line in order to create groups or functions for this area! "
 

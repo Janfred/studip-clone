@@ -138,7 +138,7 @@ class ExternModuleTemplateNews extends ExternModule {
 		$db =& new DB_Seminar();
 		$error_message = "";
 
-		// stimmt die Ã¼bergebene range_id?
+		// stimmt die übergebene range_id?
 		$query = "SELECT Name FROM Institute WHERE Institut_id='" . $this->config->range_id . "'";
 		$db->query($query);
 		if(!$db->next_record()) {

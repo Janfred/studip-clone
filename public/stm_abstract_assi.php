@@ -377,7 +377,7 @@ class AbstractStmControl{
 		$this->setSummaryFormObject();
 			
 
-		// die Elemente hinzufÃ¼gen
+		// die Elemente hinzufügen
 		foreach($this->abs_elements as $index => $val_list)
 			foreach ($val_list as $val)	
 				$this->abs_stm->addElement($val, $index);
@@ -627,7 +627,7 @@ class AbstractStmControl{
 							unset($this->assigns[$index]);
 					}
 				}
-				if (!$shift_others) {// Select hat sich geÃ¤ndert 
+				if (!$shift_others) {// Select hat sich geändert 
 					if ($stm_data['cur_abschl'] != $this->assign_form->form_values['abschl_list']) {
 						$stm_data['cur_abschl'] = $this->assign_form->form_values['abschl_list'];
 						$stm_data['cur_stg'] = false;
@@ -635,7 +635,7 @@ class AbstractStmControl{
 						$stm_data['cur_stg'] = $this->assign_form->form_values['stg_list'];
 
 				}
-				else // assigns haben sich geÃ¤ndert => Session aktualisieren
+				else // assigns haben sich geändert => Session aktualisieren
 					$stm_data['assigns'] = $this->assigns;	
 				$this->setAssignFormObject($stm_data['cur_abschl'], $stm_data['cur_stg']);
 				$stmvis->showAssignForm($this->assign_form, $this->assigns);

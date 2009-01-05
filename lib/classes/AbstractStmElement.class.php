@@ -2,7 +2,7 @@
 # Lifter002: TODO
 
 // Jetzt ist ein Element nur noch eine kleine Werteklasse :( 
-// naja etwas Ã¼berzogen fÃ¼r ein paar Werte und eine Check-Methode, aber was solls _Maik
+// naja etwas überzogen für ein paar Werte und eine Check-Methode, aber was solls _Maik
 define('LANGUAGE_ID',"09c438e63455e3e1b3deabe65fdbc087");
 
 require_once ("lib/functions.php");

@@ -118,7 +118,7 @@ class ExternElementMainTemplateNews extends ExternElementMain {
 		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
 		$title = _("Keine News:");
-		$info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine News verfÃ¼gbar sind.");
+		$info = _("Dieser Text wird an Stelle der Tabelle ausgegeben, wenn keine News verfügbar sind.");
 		$table .= $edit_form->editTextareaGeneric("nodatatext", $title, $info, 3, 50);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);

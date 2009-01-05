@@ -298,7 +298,7 @@ class  AbstractStm {
 	}
 
 	function store($replace = false) {
-		// leider kein Rollback bei MY_ISAM mÃ¶glich, also erstmal ohne Sicherheiten ... :(
+		// leider kein Rollback bei MY_ISAM möglich, also erstmal ohne Sicherheiten ... :(
 		$db = new DB_Seminar;
 		$de_id = LANGUAGE_ID;
 		if ($replace)
@@ -361,7 +361,7 @@ class  AbstractStm {
 	}
 	
 	function delete() {
-		// leider kein Rollback bei MY_ISAM mÃ¶glich, also erstmal ohne Sicherheiten ... :(
+		// leider kein Rollback bei MY_ISAM möglich, also erstmal ohne Sicherheiten ... :(
 		$db = new DB_Seminar;
 			$db->query("DELETE FROM stm_abstract_elements WHERE stm_abstr_id = '$this->id'");
 			if (!$db->affected_rows()) {

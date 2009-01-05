@@ -537,7 +537,7 @@ class InstanceStmControl {
 			elseif ($this->sel_elementgroup_form->IsClicked("back")) {
 				$vis->showAddInfoForm($this->add_info_form);		
 			}
-			else { // pruefen, ob Element gew√§hlt wurde
+			else { // pruefen, ob Element gew‰hlt wurde
 				for ($i=0; $i<count($this->abs_stm->elements); $i++) {
 					if ($this->sel_elementgroup_form->IsClicked("sel_$i")) {
 						$stm_inst_data['sel_group'] = $i;
