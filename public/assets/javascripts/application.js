@@ -145,6 +145,170 @@ STUDIP.study_area_selection = {
   }
 };
 
+STUDIP.OverDiv = Object.extend(Class.create(),
+	{
+		overdivs: {},
+		BindInline: function(options, event) {
+			event = Event.extend(event);
+			if(!this.overdivs[options.id]){
+				options.event_type = event.type;
+				this.overdivs[options.id] = new STUDIP.OverDiv(options);
+			}
+			this.overdivs[options.id].show(event);
+			return false;
+		},
+		
+		BindToEvent: function(options, event_type) {
+			event_type = event_type || 'mouseover';
+			if(!this.overdivs[options.id]){
+				options.event_type = event.type;
+				this.overdivs[options.id] = new STUDIP.OverDiv(options);
+				Event.observe($(options.initiator), event_type, this.overdivs[options.id].show.bindAsEventListener(this.overdivs[options.id]));
+			}
+			return this.overdivs[options.id];
+		}
+	}
+);
+
+STUDIP.OverDiv.prototype = {
+	options: {
+				id:'',
+				title:'',
+				content:'',
+				content_url:'',
+				content_element_type:'',
+				position: 'bottom right',
+				width: 400,
+				is_moveable: true,
+				inititator: null,
+				event_type: 'mouseover'
+	},
+	is_drawn: false,
+	is_hidden: true,
+	id: '',
+	container: null,
+	title: null,
+	content: null,
+	
+	initialize: function(options) {
+		Object.extend(this.options, options || {});
+		this.id = this.options.id;
+		this.initiator = $(this.options.initiator);
+		if(options.content_element_type){
+			this.options.content_url = STUDIP.ABSOLUTE_URI_STUDIP + 'dispatch.php/content_element/get_formatted/' + options.content_element_type + '/' + this.id;
+		}
+	},
+	
+	draw: function() {
+		if(!this.is_drawn){
+			var outer = new Element('div', {className: 'overdiv', id: 'overdiv_' + this.id});
+			var inner = new Element('div', {className: 'title'});
+			var title = new Element('h4', {className: 'title'});
+			var closer = new Element('a', {className: 'title', href:'#'});
+			var content = new Element('div', {className: 'content'});
+			if(this.options.is_moveable){
+				closer.appendChild(new Element('img', {src: 'assets/images/hide.gif'}));
+				Event.observe(closer, 'click', this.hide.bindAsEventListener(this));
+				Event.observe(inner, 'dblclick', this.scale.bindAsEventListener(this));
+				new Draggable(outer, {scroll:window, handle:inner});
+			}
+			title.innerHTML = this.options.title;
+			content.innerHTML = this.options.content;
+			this.title = title;
+			this.content = content;
+			inner.appendChild(title);
+			inner.appendChild(closer);
+			outer.appendChild(inner);
+			outer.appendChild(content);
+			this.container = outer;
+			this.container.absolutize();
+			this.container.setStyle({width: this.options.width});
+			this.container.hide();
+			$('overdiv_container').appendChild(this.container);
+			this.is_drawn = true;
+			if(this.options.content_url){
+				var self = this;
+				new Ajax.Request(this.options.content_url, {
+						method: 'get',
+						onSuccess: function(transport){self.update(transport)}
+				});
+			}
+		}
+	},
+	
+	update: function(transport){
+		this.title.innerHTML = transport.responseJSON.title;
+		this.content.innerHTML = transport.responseJSON.content;
+	},
+	
+	getPosition: function(){
+		var x = this.initiator.cumulativeOffset().left;
+		var y = this.initiator.cumulativeOffset().top;
+		var ho = this.initiator.getWidth() / 2;
+		var vo = this.initiator.getHeight() / 2;
+		var positions = $w(this.options.position);
+		for(i = 0; i < positions.length; ++i) {
+			switch(positions[i].toLowerCase()) {
+			case 'left':
+				ho = this.container.getWidth() * -1;
+				break;
+			case 'right':
+				ho = this.initiator.getWidth();
+				break;
+			case 'center':
+				ho = this.initiator.getWidth() / 2;
+				break;
+			case 'top':
+				vo = this.container.getHeight() * -1;
+				break;
+			case 'middle':
+				vo = this.initiator.getHeight() / 2;
+				break;
+			case 'bottom':
+				vo = this.initiator.getHeight();
+				break;
+			default:
+			}
+		}
+		return {left: Math.floor(x + ho), top: Math.floor(y + vo) };
+	},
+	
+	show: function(event){
+		this.draw();
+		this.container.setStyle(this.getPosition());
+		this.container.show();
+		this.is_hidden = false;
+		if(this.options.event_type == 'mouseover'){
+			Event.observe(this.initiator, 'mouseout', this.hide.bindAsEventListener(this));
+		}
+		event.stop();
+	},
+	
+	hide: function(event){
+		if(!(this.options.is_moveable && this.isChildOfContainer($(event.relatedTarget)))){
+			this.container.hide();
+			this.is_hidden = true;
+		}
+		if(this.options.event_type == 'mouseover'){
+			Event.stopObserving(this.initiator, 'mouseout', this.hide.bindAsEventListener(this));
+		}
+		event.stop();
+	},
+	
+	scale: function(event){
+		new Effect.Scale(this.container, this.container.getWidth() <= this.options.width ? Math.floor(this.options.width/2) : Math.floor(this.options.width/8), {scaleContent:false,scaleY:false});
+	},
+	
+	isChildOfContainer: function(obj){
+		var i = 3;
+		do {
+			if(obj == this.container)
+				return true;
+			if(obj) obj = obj.parentNode;
+		} while(obj && i--);
+		return false;
+	}
+};
 
 
 /* ------------------------------------------------------------------------

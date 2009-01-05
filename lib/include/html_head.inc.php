@@ -123,4 +123,5 @@ if ($my_messaging_settings['start_messenger_at_startup'] && $auth->auth['jscript
 	<? else : ?>
 	<body>
 	<? endif ?>
+	  <div id="overdiv_container"></div>
       <div id="ajax_notification" style="display: none;"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ajax_indicator.gif" alt="AJAX indicator" align="absmiddle">&nbsp;Working...</div>

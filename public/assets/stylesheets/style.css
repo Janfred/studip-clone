@@ -856,3 +856,35 @@ div.clear {
 #admin_seminare_assi #study_area_selection h3 {
 	 font-weight: normal;
 }
+
+div.overdiv {
+	position:absolute;
+	margin:0px;
+	padding:0px;
+	width:400px;
+	background-image: url('../images/steel1.jpg');
+}
+div.overdiv div.title {
+	margin:0px;
+	padding:0px;
+	height:1.4em;
+	background-image: url('../images/fill1.gif');
+	background-color:#4A5681;
+}
+div.overdiv h4.title {
+	font-size: 1em;
+	margin:0px;
+	padding:2px;
+	color:#FFFFFF;
+	float:left;
+}
+div.overdiv a.title {
+	margin:0px;
+	padding:2px;
+	float:right;
+}
+div.overdiv div.content {
+	margin:0px;
+	padding:2px;
+	background-image: url('../images/steel1.jpg');
+}
