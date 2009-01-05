@@ -4,15 +4,15 @@
     <li><span class="informal">
 
         <?= Avatar::getAvatar($person['user_id'])->getImageTag(Avatar::SMALL) ?>
-        <?= htmlReady($person['title_front']) ?>
-        <?= htmlReady($person['Vorname']) ?>
+        <?= htmlspecialchars(studip_utf8encode(($person['title_front']))) ?>
+        <?= htmlspecialchars(studip_utf8encode(($person['Vorname']))) ?>
 
-      </span><?= htmlReady($person['Nachname']) ?><span class="informal">
+      </span><?= htmlspecialchars(studip_utf8encode(($person['Nachname']))) ?><span class="informal">
 
-        <?= htmlReady($person['title_rear']) ?>
+        <?= htmlspecialchars(studip_utf8encode(($person['title_rear']))) ?>
 
-        <span class="username"><?= htmlReady($person['username']) ?></span>
-        <span class="permission"><?= htmlReady($person['perms']) ?></span>
+        <span class="username"><?= htmlspecialchars(studip_utf8encode(($person['username']))) ?></span>
+        <span class="permission"><?= htmlspecialchars(studip_utf8encode(($person['perms']))) ?></span>
 
       </span></li>
   <? endforeach ?>
