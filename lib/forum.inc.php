@@ -483,12 +483,9 @@ function ForumIcon ($forumposting) {
 			$txt = "";
 		}
 		$forumposting["icon"] =	$hoverlink
-			."onMouseOver=\"return overlib('"
-			.JSReady(forum_parse_edit($forumposting["description"]),"forum").$txt
-			."', CAPTION, '&nbsp;"
-			.JSReady($forumposting["name"])
-			."', NOCLOSE, CSSOFF)\" "
-			." onMouseOut=\"nd();\"><img src=\"".$bild."\" border=0></a>";
+		."onmouseover=\"return STUDIP.OverDiv.BindInline(
+		{position:'middle right', id: '".$forumposting["id"]."',
+		content_element_type: 'forum', initiator: this}, event);\"><img src=\"".$bild."\" border=0></a>";
 	} else {
 		if ($forum["view"]=="tree" && $forumposting["type"]=="folder")
 			$forumposting["icon"] = "<a href=\"".URLHelper::getLink("?open=".$forumposting["id"]."&folderopen=".$forumposting["id"]."&openall=TRUE#anker")."\"><img src=\"".$bild."\" border=0 " . tooltip(_("Alle Postings im Thema öffnen")) . "></a>";
