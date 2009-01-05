@@ -94,6 +94,8 @@ class EvaluationDB extends EvaluationObjectDB {
    * @throws error
    */
   function load (&$evalObject) {
+    $db = DBManager::get();
+
     /* load evaluation basics ---------------------------------------------- */
     $sql =
       "SELECT".
@@ -103,29 +105,23 @@ class EvaluationDB extends EvaluationObjectDB {
       "WHERE".
       " eval_id = '".$evalObject->getObjectID ()."'";
 
-    if ($this->db->Debug)
-       $sql .= " #eval->load ()";
-    $this->db->query ($sql);
+    $result = $db->query($sql);
 
-    if ($this->db->next_record () == 0)
+    if (($row = $result->fetch()) === FALSE)
       return $this->throwError (1,
             _("Keine Evaluation mit dieser ID gefunden."));
-    if ($this->db->Errno)
-      return $this->throwError (2,
-            _("Fehler beim Laden. Fehlermeldung: ").
-            $this->db->Error);
 
-    $evalObject->setAuthorID     ($this->db->f ("author_id"));
-    $evalObject->setTitle        ($this->db->f ("title"));
-    $evalObject->setText         ($this->db->f ("text"));
-    $evalObject->setStartdate    ($this->db->f ("startdate"));
-    $evalObject->setStopdate     ($this->db->f ("stopdate"));
-    $evalObject->setTimespan     ($this->db->f ("timespan"));
-    $evalObject->setCreationdate ($this->db->f ("mkdate"));
-    $evalObject->setChangedate   ($this->db->f ("chdate"));
-    $evalObject->setAnonymous    ($this->db->f ("anonymous"));
-    $evalObject->setVisible      ($this->db->f ("visible"));
-    $evalObject->setShared       ($this->db->f ("shared"));
+    $evalObject->setAuthorID     ($row['author_id']);
+    $evalObject->setTitle        ($row['title']);
+    $evalObject->setText         ($row['text']);
+    $evalObject->setStartdate    ($row['startdate']);
+    $evalObject->setStopdate     ($row['stopdate']);
+    $evalObject->setTimespan     ($row['timespan']);
+    $evalObject->setCreationdate ($row['mkdate']);
+    $evalObject->setChangedate   ($row['chdate']);
+    $evalObject->setAnonymous    ($row['anonymous']);
+    $evalObject->setVisible      ($row['visible']);
+    $evalObject->setShared       ($row['shared']);
     /* --------------------------------------------------------- end: values */
 
 
@@ -138,12 +134,10 @@ class EvaluationDB extends EvaluationObjectDB {
       "WHERE".
       " eval_id = '".$evalObject->getObjectID ()."'";
 
-    if ($this->db->Debug)
-       $sql .= " #eval->load ()";
-    $this->db->query ($sql);
+    $result = $db->query($sql);
 
-    while ($this->db->next_record ()) {
-      $evalObject->addRangeID ($this->db->f ("range_id"));
+    foreach ($result as $row) {
+      $evalObject->addRangeID ($row['range_id']);
     }
     /* --------------------------------------------------------- end: ranges */
 
@@ -163,7 +157,9 @@ class EvaluationDB extends EvaluationObjectDB {
    * @param  object   Evaluation  &$evalObject  The evaluation to save
    * @throws  error
    */
-  function save (&$evalObject) {     
+  function save (&$evalObject) {
+    $db = DBManager::get();
+
     if (EVAL_DEBUGLEVEL >= 1)
       echo "DB: Speichere Evaluationsobjekt<br>\n";
 
@@ -216,10 +212,7 @@ class EvaluationDB extends EvaluationObjectDB {
    " shared    = '".$evalObject->isShared ()."'";
     }
 
-    $this->db->query ($sql);
-    if ($this->db->Errno)
-      return $this->throwError (1, _("Fehler beim Speichern. Fehlermeldung: ").
-            $this->db->Error);
+    $db->exec($sql);
     /* ------------------------------------------------------- end: evalsave */
 
     /* connect to ranges --------------------------------------------------- */
@@ -228,9 +221,7 @@ class EvaluationDB extends EvaluationObjectDB {
          " eval_range ".
          "WHERE".
          " eval_id  = '".$evalObject->getObjectID ()."'";
-      $this->db->query ($sql);
-      if ($this->db->Errno)
-         return $this->throwError (1, _("Fehler beim Löschen von Bereichen. Fehlermeldung: ".$this->db->Error));
+      $db->exec($sql);
 
       while ($rangeID = $evalObject->getNextRangeID ()) {
          $sql =
@@ -239,9 +230,7 @@ class EvaluationDB extends EvaluationObjectDB {
             "SET".
             " eval_id  = '".$evalObject->getObjectID ()."',".
             " range_id = '".$rangeID."'";
-         $this->db->query ($sql);
-         if ($this->db->Errno)
-            return $this->throwError (1, _("Fehler beim Verknüpfen mit Bereichen. Fehlermeldung: ".$this->db->Error));
+         $db->exec($sql);
       }
     /* ----------------------------------------------------- end: connecting */
   } //...saved
@@ -254,14 +243,12 @@ class EvaluationDB extends EvaluationObjectDB {
    * @throws  error
    */
   function delete (&$evalObject) {
+    $db = DBManager::get();
+
     /* delete evaluation --------------------------------------------------- */
     $sql =
       "DELETE FROM eval WHERE eval_id = '".$evalObject->getObjectID ()."'";
-    $this->db->query ($sql);
-
-    if ($this->db->Errno)
-      $this->throwError (1, _("Fehler beim Löschen. Fehlermeldung: ").
-          $this->db->Error);
+    $db->exec($sql);
     /* ------------------------------------------------------- end: deleting */
 
     /* delete rangeconnects ------------------------------------------------ */
@@ -270,10 +257,7 @@ class EvaluationDB extends EvaluationObjectDB {
       " eval_range ".
       "WHERE".
       " eval_id = '".$evalObject->getObjectID ()."'";
-    $this->db->query ($sql);
-
-    if ($this->db->Errno)
-      return $this->throwError (2, _("Fehler beim entfernen der Verknüfungen. Fehlermeldung: ").$this->db->Error);
+    $db->exec($sql);
     /* ------------------------------------------------------- end: deleting */
 
     /* delete userconnects ------------------------------------------------- */
@@ -282,10 +266,7 @@ class EvaluationDB extends EvaluationObjectDB {
       " eval_user ".
       "WHERE".
       " eval_id = '".$evalObject->getObjectID ()."'";
-    $this->db->query ($sql);
-
-    if ($this->db->Errno)
-      return $this->throwError (2, _("Fehler beim entfernen der Verknüfungen. Fehlermeldung: ").$this->db->Error);
+    $db->exec($sql);
     /* ------------------------------------------------------- end: deleting */
 
   } // deleted
@@ -300,6 +281,8 @@ class EvaluationDB extends EvaluationObjectDB {
    * @return  bool     YES if exists
    */
   function exists ($evalID) {
+    $db = DBManager::get();
+
     $sql =
       "SELECT".
       " 1 ".
@@ -307,9 +290,9 @@ class EvaluationDB extends EvaluationObjectDB {
       " eval ".
       "WHERE".
       " eval_id = '".$evalID."'";
-    $this->db->query ($sql);
+    $result = $db->query($sql);
 
-    return $this->db->next_record () ? YES : NO;
+    return $result->rowCount() > 0;
   }
 
   /**
@@ -320,6 +303,8 @@ class EvaluationDB extends EvaluationObjectDB {
    * @return  bool     YES if evaluation was used
    */
   function hasVoted ($evalID, $userID = "") {
+    $db = DBManager::get();
+
     /* ask database ------------------------------------------------------- */
     $sql =
       "SELECT".
@@ -331,12 +316,10 @@ class EvaluationDB extends EvaluationObjectDB {
     if (!empty ($userID))
       $sql .= " AND user_id = '".$userID."'";
 
-    if ($this->db->Debug)
-       $sql .= " #eval->hasVoted ()";
-    $this->db->query ($sql);
+    $result = $db->query($sql);
     /* --------------------------------------------------------- end: asking */
 
-    return $this->db->next_record () ? YES : NO;
+    return $result->rowCount() > 0;
   }
 
   /**
@@ -369,8 +352,7 @@ class EvaluationDB extends EvaluationObjectDB {
    * @param    string   $userID   The user id
    */
   function connectWithUser ($evalID, $userID) {
-    if (!is_object ($this->db))
-      $this->db = DatabaseObject::getDBObject ();
+    $db = DBManager::get();
 
     if (empty ($userID))
       die ("EvaluationDB::connectWithUser: UserID leer!!");
@@ -381,10 +363,7 @@ class EvaluationDB extends EvaluationObjectDB {
       "SET".
       " eval_id  = '".$evalID."',".
       " user_id = '".$userID."'";
-    $this->db->query ($sql);
-    if ($this->db->Errno)
-      return $this->throwError (1, _("Fehler beim Verknüpfen mit Benutzer. Fehlermeldung: ".$this->db->Error));
-
+    $db->exec($sql);
   }
 
    /**
@@ -394,7 +373,7 @@ class EvaluationDB extends EvaluationObjectDB {
     * @param    string   $userID   The user id
     */
    function removeUser ($evalID, $userID = "") {
-      $db = DatabaseObject::getDBObject ();
+    $db = DBManager::get();
 
       $sql =
         "DELETE FROM".
@@ -406,10 +385,7 @@ class EvaluationDB extends EvaluationObjectDB {
          $sql .= " AND user_id = '".$userID."'";
       }
 
-      $db->query ($sql);
-      if ($db->Errno)
-         return $this->throwError (1, _("Fehler beim Löschen von Usern. Fehlermeldung: ".$db->Error));
-
+      $db->exec($sql);
   }
 
   /**
@@ -419,7 +395,7 @@ class EvaluationDB extends EvaluationObjectDB {
    * @return integer  The number of users
    */
    function getNumberOfVotes ($evalID) {
-       $db = DatabaseObject::getDBObject ();
+    $db = DBManager::get();
 
     $sql =
       "SELECT".
@@ -431,9 +407,9 @@ class EvaluationDB extends EvaluationObjectDB {
       "WHERE".
       " eval_id = '".$evalID."'";
     /* ------------------------------------------------------------------- */
-    $db->query ($sql);
-    $db->next_record ();
-    return $db->f ("number");
+    $result = $db->query($sql);
+    $row = $result->fetch();
+    return $row['number'];
   }
 
    /**
@@ -444,10 +420,9 @@ class EvaluationDB extends EvaluationObjectDB {
    * @return integer  The number of users
    */
    function getUserVoted ($evalID, $answerIDs = array (), $questionIDs = array ()) {
-      if (!is_object ($this->db))
-         $this->db = DatabaseObject::getDBObject ();
+    $db = DBManager::get();
 
-      $result = array ();
+      $user_ids = array ();
 
       /* ask database ------------------------------------------------------- */
       if (empty ($answerIDs) && empty ($questionIDs)) {
@@ -476,18 +451,16 @@ class EvaluationDB extends EvaluationObjectDB {
             " parent_id IN ('".join("','", $questionIDs)."')";
 	   }
 	   
-      $this->db->query ($sql);
-       if ($this->db->Errno)
-         return $this->throwError (1, _("EvalDB::getUserVoted - Fehlermeldung: ").$this->db->Error);
+      $result = $db->query($sql);
        /* ------------------------------------------------ end: asking database */
 
        /* Fill up the array with IDs ----------------------------------------- */
-       while ($this->db->next_record ()) {
-         array_push ($result, $this->db->f ("user_id"));
+       foreach ($result as $row) {
+         array_push ($user_ids, $row['user_id']);
        }
        /* ------------------------------------------------------- end: filling */
 
-    return $result;
+    return $user_ids;
   }
 
 

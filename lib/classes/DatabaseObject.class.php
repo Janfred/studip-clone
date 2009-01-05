@@ -51,16 +51,6 @@ define ("INSTANCEOF_DATABASEOBJECT", "DatabaseObject");
  */
 class DatabaseObject extends AuthorObject {
 
-# Define all required variables ============================================= #
-  /**
-   * Databaseobject
-   * @access   private
-   * @var      object $db
-   */
-  var $db;
-# =========================================================================== #
-
-
 # Define constructor and destructor ========================================= #
    /**
     * Constructor
@@ -72,23 +62,11 @@ class DatabaseObject extends AuthorObject {
      parent::AuthorObject ();
      $this->instanceof = INSTANCEOF_DATABASEOBJECT;
      /* -------------------------------------------------------------------- */
-
-     /* Set default values ------------------------------------------------- */
-     $this->db = DatabaseObject::getDBObject ();
-     /* -------------------------------------------------------------------- */
    }
 # =========================================================================== #
 
 
 # Define public functions =================================================== #
-    /**
-     * Get a DB-Object. Helpfull for static methods
-     * @return  object  A DB-Object
-     * @access public
-     */
-    function getDBObject () {
-        return new DB_Seminar ();
-    }
    /**
     * Gets the objectID
     * @access  public

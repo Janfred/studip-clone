@@ -74,6 +74,8 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
    * @param   EvaluationQuestion   &$questionObject   The question object
    */
   function load (&$questionObject) {
+    $db = DBManager::get();
+
     /* load question ------------------------------------------------------- */
     $query =
       "SELECT".
@@ -84,21 +86,17 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
       " evalquestion_id = '".$questionObject->getObjectID ()."'".
       "ORDER BY".
       " position ";
-    $this->db->query ($query);
+    $result = $db->query($query);
 
-    if ($this->db->next_record () == 0)
+    if (($row = $result->fetch()) === FALSE)
       return $this->throwError (1,
             _("Keine Frage mit dieser ID gefunden."));
-    if ($this->db->Errno)
-      return $this->throwError (2,
-            _("Fehler beim Laden. Fehlermeldung: ").
-            $this->db->Error);
 
-    $questionObject->setParentID       ($this->db->f("parent_id"));
-    $questionObject->setType           ($this->db->f("type"));
-    $questionObject->setPosition       ($this->db->f("position"));
-    $questionObject->setText           ($this->db->f("text"));
-    $questionObject->setMultiplechoice ($this->db->f("multiplechoice"));
+    $questionObject->setParentID       ($row['parent_id']);
+    $questionObject->setType           ($row['type']);
+    $questionObject->setPosition       ($row['position']);
+    $questionObject->setText           ($row['text']);
+    $questionObject->setMultiplechoice ($row['multiplechoice']);
     /* --------------------------------------------------------------------- */
 
 
@@ -116,6 +114,8 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
    * @param   EvaluationQuestion   &$questionObject   The question object
    */
   function save (&$questionObject) {
+    $db = DBManager::get();
+
     if (EVAL_DEBUGLEVEL >= 1)
       echo "DB: Speichere Fragenobjekt<br>\n";
     if ($this->exists ($questionObject->getObjectID ())) {
@@ -142,10 +142,7 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
    " text            = '".$questionObject->getText(YES)."',".
    " multiplechoice  = '".$questionObject->isMultiplechoice()."'";
     }
-    $this->db->query ($sql);
-    if ($this->db->Errno)
-      return $this->throwError (1, _("Fehler beim Speichern. Fehlermeldung: ").
-            $this->db->Error);
+    $db->exec($sql);
   } // saved
 
 
@@ -156,16 +153,15 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
    * @throws  error
    */
   function delete (&$questionObject) {
+    $db = DBManager::get();
+
     /* delete question ----------------------------------------------------- */
     $sql =
       "DELETE FROM".
       " evalquestion ".
       "WHERE".
       " evalquestion_id = '".$questionObject->getObjectID ()."'";
-    $this->db->query ($sql);
-    if ($this->db->Errno)
-      return $this->throwError (1, _("Fehler beim Löschen. Fehlermeldung: ").
-            $this->db->Error);
+    $db->exec($sql);
     /* ------------------------------------------------------- end: deleting */
   } // deleted
 
@@ -177,6 +173,8 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
    * @return  bool     YES if exists
    */
   function exists ($questionID) {
+    $db = DBManager::get();
+
     $sql =
       "SELECT".
       " 1 ".
@@ -184,9 +182,9 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
       " evalquestion ".
       "WHERE".
       " evalquestion_id = '".$questionID."'";
-    $this->db->query ($sql);
+    $result = $db->query($sql);
 
-    return $this->db->next_record () ? YES : NO;
+    return $result->rowCount() > 0;
   }
 
 /**
@@ -197,6 +195,8 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
    * @return  bool     YES if exists
    */
   function titleExists ($questionTitle, $userID) {
+    $db = DBManager::get();
+
     $sql =
        "SELECT".
        " 1 ".
@@ -207,9 +207,9 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
        " AND ".
        " parent_id = '".$userID."'";
 
-    $this->db->query ($sql);
+    $result = $db->query($sql);
 
-    return $this->db->next_record () ? YES : NO;
+    return $result->rowCount() > 0;
   }
 
 
@@ -219,6 +219,8 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
    * @param   EvaluationObject  &$parentObject  The parent object
    */
   function addChildren (&$parentObject) {
+    $db = DBManager::get();
+
     $sql =
       "SELECT".
       " evalquestion_id ".
@@ -228,23 +230,17 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
       " parent_id = '".$parentObject->getObjectID ()."' ".
       "ORDER BY".
       " position";
-    $this->db->query ($sql);
-    if ($this->db->Errno)
-      return $this->throwError (1,
-            _("Fehler beim Laden. Fehlermeldung: ").
-            $this->db->Error);
+    $result = $db->query($sql);
 
     $loadChildren = $parentObject->loadChildren == EVAL_LOAD_ALL_CHILDREN
          ? EVAL_LOAD_ALL_CHILDREN
          : EVAL_LOAD_NO_CHILDREN;
 
-    while ($this->db->next_record ()) {
+    foreach ($result as $row) {
       $parentObject->addChild (new EvaluationQuestion
-                ($this->db->f ("evalquestion_id"),
+                ($row['evalquestion_id'],
                 $parentObject, $loadChildren));
     }
-
-    return;
   }
 
   /**
@@ -269,8 +265,7 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
    * @return string  The id from the parent object
    */
   function getParentID ($objectID) {
-    if (empty ($this->db))
-      parent::EvaluationObjectDB ();
+    $db = DBManager::get();
 
     $sql =
       "SELECT".
@@ -279,10 +274,10 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
       " evalquestion ".
       "WHERE".
       " evalquestion_id = '".$objectID."'";
-    $this->db->query ($sql);
-    $this->db->next_record ();
+    $result = $db->query($sql);
+    $row = $result->fetch();
 
-    return $this->db->f ("parent_id");
+    return $row['parent_id'];
   }
 
   /**
@@ -292,9 +287,11 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
    * @return array  The ids of the answertemplates
    */
   function getTemplateID ($userID) {
+    $db = DBManager::get();
+
      $array = array();
 
-     if(EvaluationObjectDB::getGlobalPerm()=="root")
+     if (EvaluationObjectDB::getGlobalPerm()=="root")
          $sql =
             "SELECT".
             " evalquestion_id ".
@@ -315,9 +312,10 @@ class EvaluationQuestionDB extends EvaluationObjectDB {
 
       $sql .= " ORDER BY text";
 
-      $this->db->query ($sql);
-      while($this->db->next_record ())
-         array_push($array, $this->db->f ("evalquestion_id"));
+      $result = $db->query($sql);
+      foreach ($result as $row) {
+         array_push($array, $row['evalquestion_id']);
+      }
 
       return $array;
   }

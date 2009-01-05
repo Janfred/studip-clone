@@ -35,7 +35,6 @@
 require_once ("lib/evaluation/evaluation.config.php");
 require_once ("lib/evaluation/classes/db/EvaluationQuestionDB.class.php");
 require_once ("lib/evaluation/classes/EvaluationQuestion.class.php");
-require_once("lib/classes/DatabaseObject.class.php");
 require_once (EVAL_LIB_COMMON);
 require_once (EVAL_LIB_OVERVIEW);
 require_once (EVAL_LIB_TEMPLATE);

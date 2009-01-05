@@ -73,6 +73,8 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
    * @param   EvaluationAnswer   &&$answerObject   The answer object
    */
   function load (&$answerObject) {
+    $db = DBManager::get();
+
     /* load answer --------------------------------------------------------- */
     $query =
       "SELECT".
@@ -83,23 +85,19 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
       " evalanswer_id = '".$answerObject->getObjectID ()."'".
       "ORDER BY".
       " position ";
-    $this->db->query ($query);
+    $result = $db->query($query);
 
-    if ($this->db->next_record () == 0)
+    if (($row = $result->fetch()) === FALSE)
       return $this->throwError (2,
             _("Keine Antwort mit dieser ID gefunden."));
-    if ($this->db->Errno)
-      return $this->throwError (3,
-            _("Fehler beim Laden.") .' '. _("Fehlermeldung:"). ' '.
-            $this->db->Error);
 
-    $answerObject->setObjectID ($this->db->f("evalanswer_id"));
-    $answerObject->setParentID ($this->db->f("parent_id"));
-    $answerObject->setPosition ($this->db->f("position"));
-    $answerObject->setText     ($this->db->f("text"));
-    $answerObject->setValue    ($this->db->f("value"));
-    $answerObject->setRows     ($this->db->f("rows"));
-    $answerObject->setResidual ($this->db->f("residual"));
+    $answerObject->setObjectID ($row['evalanswer_id']);
+    $answerObject->setParentID ($row['parent_id']);
+    $answerObject->setPosition ($row['position']);
+    $answerObject->setText     ($row['text']);
+    $answerObject->setValue    ($row['value']);
+    $answerObject->setRows     ($row['rows']);
+    $answerObject->setResidual ($row['residual']);
     /* --------------------------------------------------------------------- */
 
   } //loaded
@@ -111,6 +109,8 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
    * @param    EvaluationAnswer   &$answerObject   The answer object
    */
    function loadVotes (&$answerObject) {
+    $db = DBManager::get();
+
       /* load users -------------------------------------------------------- */
       $sql =
          "SELECT".
@@ -119,10 +119,10 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
          " evalanswer_user ".
          "WHERE".
          " evalanswer_id = '".$answerObject->getObjectID ()."'";
-      $this->db->query ($sql);
+      $result = $db->query($sql);
 
-      while ($this->db->next_record ()) {
-         $answerObject->addUserID ($this->db->f ("user_id"), NO);
+      foreach ($result as $row) {
+         $answerObject->addUserID ($row['user_id'], NO);
       }
    }
    /* ----------------------------------------------------------- end: users */
@@ -134,6 +134,8 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
    * @throws    error
    */
   function save (&$answerObject) {
+    $db = DBManager::get();
+
     if (EVAL_DEBUGLEVEL >= 1)
       echo "DB: Speichere Antwortobjekt<br>\n";
     /* save answers -------------------------------------------------------- */
@@ -164,10 +166,7 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
    " residual        = '".$answerObject->isResidual()."' ";
 #   " counter         = '".$answerObject->getCounter()."'";
     }
-    $this->db->query ($sql);
-    if ($this->db->Errno)
-      return $this->throwError (1, _("Fehler beim Speichern.") .' '. _("Fehlermeldung:"). ' '.
-            $this->db->Error);
+    $db->exec($sql);
     /* ----------------------------------------------------- end: answersave */
 
     /* connect answer to users --------------------------------------------- */
@@ -178,11 +177,7 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
           "SET".
           " evalanswer_id  = '".$answerObject->getObjectID ()."',".
           " user_id = '".$userID."'";
-       $this->db->query ($sql);
-       if ($this->db->Errno)
-          return $this->throwError (1,
-          _("Fehler beim Verknüpfen mit Benutzern.") . ' '. _("Fehlermeldung:"). ' '.
-          $this->db->Error);
+       $db->exec($sql);
     }
     /* ----------------------------------------------------- end: connecting */
 
@@ -205,18 +200,15 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
    * @param    EvaluationAnswer   &$answerObject   The answer object
    */
   function resetVotes (&$answerObject) {
+    $db = DBManager::get();
+
    /* delete userconnects ------------------------------------------------- */
     $sql =
       "DELETE FROM".
       " evalanswer_user ".
       "WHERE".
       " evalanswer_id = '".$answerObject->getObjectID ()."'";
-    $this->db->query ($sql);
-
-    if ($this->db->Errno)
-      return $this->throwError (2,
-       _("Fehler beim entfernen der Verknüfungen.") .' '. _("Fehlermeldung:"). ' ' .
-       $this->db->Error);
+    $db->exec($sql);
     /* ------------------------------------------------------- end: deleting */
   }
 
@@ -227,16 +219,15 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
    * @throws  error
    */
   function delete (&$answerObject) {
+    $db = DBManager::get();
+
     /* delete answer ----------------------------------------------------- */
     $sql =
       "DELETE FROM".
       " evalanswer ".
       "WHERE".
       " evalanswer_id = '".$answerObject->getObjectID ()."'";
-    $this->db->query ($sql);
-    if ($this->db->Errno)
-      return $this->throwError (1, _("Fehler beim Löschen.") . ' ' . _("Fehlermeldung:"). ' '.
-            $this->db->Error);
+    $db->exec($sql);
     /* ------------------------------------------------------- end: deleting */
 
     $this->resetVotes ($answerObject);
@@ -250,6 +241,8 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
    * @return  bool     YES if exists
    */
   function exists ($answerID) {
+    $db = DBManager::get();
+
     $sql =
       "SELECT".
       " 1 ".
@@ -257,9 +250,9 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
       " evalanswer ".
       "WHERE".
       " evalanswer_id = '".$answerID."'";
-    $this->db->query ($sql);
+    $result = $db->query($sql);
 
-    return $this->db->next_record () ? YES : NO;
+    return $result->rowCount() > 0;
   }
 
 
@@ -269,6 +262,8 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
    * @param   EvaluationObject  &$parentObject  The parent object
    */
   function addChildren (&$parentObject) {
+    $db = DBManager::get();
+
     $sql =
       "SELECT".
       " evalanswer_id ".
@@ -278,23 +273,17 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
       " parent_id = '".$parentObject->getObjectID ()."' ".
       "ORDER BY".
       " position";
-    $this->db->query ($sql);
-    if ($this->db->Errno)
-      return $this->throwError (1,
-            _("Fehler beim Laden.") .' ' . _("Fehlermeldung:").' '.
-            $this->db->Error);
+    $result = $db->query($sql);
 
     $loadChildren = $parentObject->loadChildren == EVAL_LOAD_ALL_CHILDREN
          ? EVAL_LOAD_ALL_CHILDREN
          : EVAL_LOAD_NO_CHILDREN;
 
-    while ($this->db->next_record ()) {
+    foreach ($result as $row) {
       $parentObject->addChild (new EvaluationAnswer
-                ($this->db->f ("evalanswer_id"),
+                ($row['evalanswer_id'],
                 $parentObject, $loadChildren));
     }
-
-    return;
   }
 
   /**
@@ -318,8 +307,7 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
    * @return string  The id from the parent object
    */
   function getParentID ($objectID) {
-    if (empty ($this->db))
-      EvaluationObjectDB::EvaluationObjectDB ();
+    $db = DBManager::get();
 
     $sql =
       "SELECT".
@@ -328,10 +316,10 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
       " evalanswer ".
       "WHERE".
       " evalanswer_id = '".$objectID."'";
-    $this->db->query ($sql);
-    $this->db->next_record ();
+    $result = $db->query($sql);
+    $row = $result->fetch();
 
-    return $this->db->f ("parent_id");
+    return $row['parent_id'];
   }
 
    /**
@@ -341,7 +329,9 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
     * @param   string   $userID       The user id
     */
    function getUserAnwerIDs ($questionID, $userID) {
-      $result = array ();
+    $db = DBManager::get();
+
+      $answer_ids = array ();
 
       /* ask database ------------------------------------------------------- */
       $sql =
@@ -360,20 +350,16 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
 
       }
 
-      $this->db->query ($sql);
-      if ($this->db->Errno)
-         return $this->throwError (1,
-         "AnswerDB::getUserAnswer - ". _("Fehlermeldung:"). ' '.
-         $this->db->Error);
+      $result = $db->query($sql);
       /* -------------------------------------------------------- end: asking */
 
       /* Fill up the array with the result ---------------------------------- */
-       while ($this->db->next_record ()) {
-         array_push ($result, $this->db->f ("ttt"));
+       foreach ($result as $row) {
+         array_push ($answer_ids, $row['ttt']);
        }
       /* ------------------------------------------------------- end: filling */
 
-       return $result;
+       return $answer_ids;
   }
 
   /**
@@ -384,6 +370,8 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
    * @return   boolean  YES if user has voted for the answer
    */
   function hasVoted ($answerID, $userID) {
+    $db = DBManager::get();
+
    $sql =
       "SELECT".
       " 1 ".
@@ -393,12 +381,14 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
       " evalanswer_id = '".$answerID."'".
       " AND".
       " user_id = '".$userID."'";
-    $this->db->query ($sql);
+    $result = $db->query($sql);
 
-    return $this->db->next_record () ? YES : NO;
+    return $result->rowCount() > 0;
   }
   
-   function getAllAnswers ($question_id, $userID, $only_user_answered = false) {
+  function getAllAnswers ($question_id, $userID, $only_user_answered = false) {
+    $db = DBManager::get();
+
    $sql =
       "SELECT".
       " evalanswer.*, COUNT(IF(user_id='$userID',1,NULL)) AS has_voted ".
@@ -409,10 +399,8 @@ class EvaluationAnswerDB extends EvaluationObjectDB {
       " parent_id = '".$question_id."'".
       ($only_user_answered ?  " AND user_id = '".$userID."' " : "") .
 	  " GROUP BY evalanswer.evalanswer_id ORDER BY position";
-    $this->db->query ($sql);
-	$ret = array();
-	while($this->db->next_record ()) $ret[] = $this->db->Record;
-    return $ret;
+    $result = $db->query($sql);
+    return $result->fetchAll();
   }
 }
 ?>

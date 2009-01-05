@@ -62,8 +62,6 @@ class EvaluationObjectDB extends DatabaseObject {
     /* Set default values -------------------------------------------------- */
     parent::DatabaseObject ();
     $this->instanceof = INSTANCEOF_EVALDBOBJECT;
-    $this->db->Halt_On_Error = YES; // To disable visible SQL-errors: NO
-    $this->db->Debug         = NO; // To disable visible debugging: NO
     /* --------------------------------------------------------------------- */
   }
 # =========================================== end: constructor and destructor #
@@ -78,7 +76,10 @@ class EvaluationObjectDB extends DatabaseObject {
    * @return  string                    The name of the range
    */
   function getRangename ($rangeID, $html_decode = true) {
-  global $user;
+    global $user;
+
+    $db = DBManager::get();
+
     $sql =
       "SELECT".
       " username, user_id ".
@@ -88,9 +89,9 @@ class EvaluationObjectDB extends DatabaseObject {
       " user_id = '".$rangeID."'".
       " OR".
       " username = '".$rangeID."'";
-    $this->db->query ($sql);
+    $result = $db->query($sql);
 
-    if ($this->db->nf() == 0) {
+    if (($row = $result->fetch()) === FALSE) {
          if ($rangeID == "studip")
             $rangename = _("Systemweite Evaluationen");
          else {
@@ -104,12 +105,10 @@ class EvaluationObjectDB extends DatabaseObject {
             $rangename = _("Kein Titel gefunden.");
       }
     } else {
-         $this->db->next_record ();
-
-       if ($this->db->f ("user_id") != $user->id){
+       if ($row['user_id'] != $user->id){
           $rangename = _("Homepage: ")
-            . get_fullname($this->db->f ("user_id"),'full',1)
-             . " (".$this->db->f ("username").")";
+            . get_fullname($row['user_id'],'full',1)
+             . " (".$row['username'].")";
 
        } else
            $rangename = _("Persönliche Homepage");
@@ -158,7 +157,7 @@ class EvaluationObjectDB extends DatabaseObject {
    if ( !$rangeID ){
       print "no rangeID!<br>";
       return NULL;
-}
+   }
    $userID = ($userID) ? $userID : $user->id;
    $range_perm = $perm->get_studip_perm ($rangeID, $userID);
 
@@ -194,18 +193,18 @@ class EvaluationObjectDB extends DatabaseObject {
    * @param  string  $rangeID   RangeID of actual page
    */
   function getValidRangeIDs (&$permObj, &$userObj, $rangeID) {
-    $result = array ();
+    $range_ids = array ();
     $username = get_username ($userObj->id);
 
-    $result += array ($username => array ("name" =>
+    $range_ids += array ($username => array ("name" =>
                  _("Persönliche Homepage")));
 
     /* is root ------------------------------------------------------------ */
     if ($permObj->have_perm ("root")) {
-      $result += array ("studip" => array ("name" => _("Stud.IP-System")));
+      $range_ids += array ("studip" => array ("name" => _("Stud.IP-System")));
       if (($adminRange = $this->getRangename ($rangeID)) &&
           $rangeID != $userObj->id)
-   $result += array ($rangeID => array ("name" =>
+   $range_ids += array ($rangeID => array ("name" =>
                     $adminRange));
     }
     /* ---------------------------------------------------------- end: root */
@@ -214,7 +213,7 @@ class EvaluationObjectDB extends DatabaseObject {
     else if ($permObj->have_perm ("admin")) {
    if (($adminRange = $this->getRangename ($rangeID)) &&
        $rangeID != $userObj->id) {
-       $result += array ($rangeID => array ("name" =>
+       $range_ids += array ($rangeID => array ("name" =>
                    $adminRange));
    }
     }
@@ -223,7 +222,7 @@ class EvaluationObjectDB extends DatabaseObject {
     /* is tutor or dozent ------------------------------------------------- */
     else if ($permObj->have_perm ("dozent") || $permObj->have_perm ("tutor")) {
       if ($ranges = search_range ("")) {
-         $result += $ranges;
+         $range_ids += $ranges;
       }
     }
     /* -------------------------------------------------------- end: dozent */
@@ -233,7 +232,7 @@ class EvaluationObjectDB extends DatabaseObject {
     }
     /* --------------------------------------------------------- end: autor */
 
-    return $result;
+    return $range_ids;
   }
 
    /**
@@ -273,8 +272,11 @@ class EvaluationObjectDB extends DatabaseObject {
    * @return   array    The public template ids
    */
   function getPublicTemplateIDs ($searchString) {
-    $user = $GLOBALS['user'];
-    $result = array ();
+    global $user;
+
+    $db = DBManager::get();
+
+    $template_ids = array ();
 
     /* ask database ------------------------------------------------------- */
     $sql =
@@ -301,19 +303,17 @@ class EvaluationObjectDB extends DatabaseObject {
       "ORDER BY".
       " title";
 
-    $this->db->query ($sql);
-    if ($this->db->Errno)
-      return $this->throwError (1, _("EvalObjectDB::getPublicTemplateIDs - Fehlermeldung: ").$this->db->Error);
+    $result = $db->query($sql);
     /* ------------------------------------------------ end: asking database */
 
     /* Fill up the array with IDs ----------------------------------------- */
-    while ($this->db->next_record ()) {
-      if ($this->db->f ("author_id") != $user->id)
-         array_push ($result, $this->db->f ("eval_id"));
+    foreach ($result as $row) {
+      if ($row['author_id'] != $user->id)
+         array_push ($template_ids, $row['eval_id']);
     }
     /* ------------------------------------------------------- end: filling */
 
-    return $result;
+    return $template_ids;
   } // returned templateIDs
 
 
@@ -326,10 +326,11 @@ class EvaluationObjectDB extends DatabaseObject {
    * @return  array   All evaluations in this range and this state
    */
   function getEvaluationIDs ($rangeID = "", $state = "") {
-    $db = DatabaseObject::getDBObject ();
     global $user;
 
-    $result = array ();
+    $db = DBManager::get();
+
+    $eval_ids = array ();
 
     /* check input -------------------------------------------------------- */
     if (!empty ($rangeID) && !is_scalar ($rangeID))
@@ -399,22 +400,17 @@ class EvaluationObjectDB extends DatabaseObject {
 
     $sql .= " ORDER BY chdate DESC";
 
-    if ($db->Debug)
-       $sql .= " #eval->getEvaluationIDs ()";
-    $db->query ($sql);
-
-    if ($this->db->Errno)
-      return $this->throwError (1, _("Fehler beim Suchen. Fehlermeldung: ").$this->db->Error);
+    $result = $db->query($sql);
     /* -------------------------------------------------------- end: asking */
 
     /* Fill up the array with IDs ----------------------------------------- */
-    while ($db->next_record ()) {
-      array_push ($result, $db->f ("eval_id"));
+    foreach ($result as $row) {
+      array_push ($eval_ids, $row['eval_id']);
     }
     /* ------------------------------------------------------- end: filling */
 
 
-    return $result;
+    return $eval_ids;
   } // returned evalIDs
 
 
@@ -427,11 +423,7 @@ class EvaluationObjectDB extends DatabaseObject {
   function getEvalID ($objectID) {
     if (empty ($objectID)) {
       die ("FATAL ERROR in getEvalID ;)");
-      return;
     }
-
-
-    flush ();
 
     $type = EvaluationObjectDB::getType ($objectID);
 #    echo "Bekomme: $objectID - $type<br>\n";

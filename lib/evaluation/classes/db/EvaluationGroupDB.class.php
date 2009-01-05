@@ -76,6 +76,8 @@ class EvaluationGroupDB extends EvaluationObjectDB {
    * @throws error
    */
   function load (&$groupObject) {
+    $db = DBManager::get();
+
     /* load group ---------------------------------------------------------- */
     $query =
       "SELECT".
@@ -86,23 +88,19 @@ class EvaluationGroupDB extends EvaluationObjectDB {
       " evalgroup_id = '".$groupObject->getObjectID ()."'".
       "ORDER BY".
       " position ";
-    $this->db->query ($query);
+    $result = $db->query($query);
 
-    if ($this->db->next_record () == 0)
+    if (($row = $result->fetch()) === FALSE)
       return $this->throwError (1,
             _("Keine Gruppe mit dieser ID gefunden."));
-    if ($this->db->Errno)
-      return $this->throwError (2,
-            _("Fehler beim Laden. Fehlermeldung: ").
-            $this->db->Error);
 
-    $groupObject->setParentID   ($this->db->f ("parent_id"));
-    $groupObject->setTitle      ($this->db->f ("title"));
-    $groupObject->setText       ($this->db->f ("text"));
-    $groupObject->setPosition   ($this->db->f ("position"));
-    $groupObject->setChildType  ($this->db->f ("child_type"));
-    $groupObject->setMandatory  ($this->db->f ("mandatory"));
-    $groupObject->setTemplateID ($this->db->f ("template_id"));
+    $groupObject->setParentID   ($row['parent_id']);
+    $groupObject->setTitle      ($row['title']);
+    $groupObject->setText       ($row['text']);
+    $groupObject->setPosition   ($row['position']);
+    $groupObject->setChildType  ($row['child_type']);
+    $groupObject->setMandatory  ($row['mandatory']);
+    $groupObject->setTemplateID ($row['template_id']);
 
     /* ----------------------------------------------------------- end: load */
 
@@ -117,8 +115,6 @@ class EvaluationGroupDB extends EvaluationObjectDB {
        }
     }
     /* ------------------------------------------------------ end: questions */
-
-    return;
   }
 
 
@@ -129,6 +125,8 @@ class EvaluationGroupDB extends EvaluationObjectDB {
    * @throws  error
    */
   function save (&$groupObject) {
+    $db = DBManager::get();
+
     if (EVAL_DEBUGLEVEL >= 1)
       echo "DB: Speichere Gruppenobjekt<br>\n";
     /* save group ---------------------------------------------------------- */
@@ -159,10 +157,7 @@ class EvaluationGroupDB extends EvaluationObjectDB {
    " template_id  = '".$groupObject->getTemplateID()."',".
    " position      = '".$groupObject->getPosition ()."'";
     }
-    $this->db->query ($sql);
-    if ($this->db->Errno)
-      return $this->throwError (1, _("Fehler beim Speichern. Fehlermeldung: ").
-            $this->db->Error);
+    $db->exec($sql);
     /* ------------------------------------------------------ end: groupsave */
   } // saved
 
@@ -174,16 +169,15 @@ class EvaluationGroupDB extends EvaluationObjectDB {
    * @throws  error
    */
   function delete (&$groupObject) {
+    $db = DBManager::get();
+
     /* delete group -------------------------------------------------------- */
     $sql =
       "DELETE FROM".
       " evalgroup ".
       "WHERE".
       " evalgroup_id = '".$groupObject->getObjectID ()."'";
-    $this->db->query ($sql);
-    if ($this->db->Errno)
-      return $this->throwError (1, _("Fehler beim Löschen. Fehlermeldung: ").
-            $this->db->Error);
+    $db->exec($sql);
     /* ------------------------------------------------------- end: deleting */
   } // deleted
 
@@ -194,6 +188,8 @@ class EvaluationGroupDB extends EvaluationObjectDB {
    * @return  bool     YES if exists
    */
   function exists ($groupID) {
+    $db = DBManager::get();
+
     $sql =
       "SELECT".
       " 1 ".
@@ -201,9 +197,9 @@ class EvaluationGroupDB extends EvaluationObjectDB {
       " evalgroup ".
       "WHERE".
       " evalgroup_id = '".$groupID."'";
-    $this->db->query ($sql);
+    $result = $db->query($sql);
 
-    return $this->db->next_record () ? YES : NO;
+    return $result->rowCount() > 0;
   }
 
   /**
@@ -212,6 +208,8 @@ class EvaluationGroupDB extends EvaluationObjectDB {
    * @param   EvaluationObject  &$parentObject  The parent object
    */
    function addChildren (&$parentObject) {
+    $db = DBManager::get();
+
       $sql =
          "SELECT".
          " evalgroup_id ".
@@ -221,23 +219,17 @@ class EvaluationGroupDB extends EvaluationObjectDB {
          " parent_id = '".$parentObject->getObjectID ()."' ".
          "ORDER BY".
          " position";
-      $this->db->query ($sql);
-      if ($this->db->Errno)
-         return $this->throwError (1,
-            _("Fehler beim Laden. Fehlermeldung: ").
-            $this->db->Error);
+      $result = $db->query($sql);
 
       if (($loadChildren = $parentObject->loadChildren) == EVAL_LOAD_NO_CHILDREN)
          $loadChildren = EVAL_LOAD_NO_CHILDREN;
 
-      while ($this->db->next_record ()) {
-         $groupID = $this->db->f ("evalgroup_id");
+      foreach ($result as $row) {
+         $groupID = $row['evalgroup_id'];
          $parentObject->addChild (
             new EvaluationGroup ($groupID, $parentObject, $loadChildren)
                                  );
       }
-
-       return;
    }
 
   /**
@@ -262,11 +254,7 @@ class EvaluationGroupDB extends EvaluationObjectDB {
     * @param    string   $objectID   The object id
     */
     function getChildType ($objectID) {
-        /* Make this function static ---------------------------------------- */
-        if (empty ($this->db)) {
-            $this->db = parent::getDBObject ();
-        }
-        /* ----------------------------------------------------- end : static */
+    $db = DBManager::get();
 
         $sql =
             "SELECT".
@@ -275,9 +263,9 @@ class EvaluationGroupDB extends EvaluationObjectDB {
             " evalgroup ".
             "WHERE".
             " evalgroup_id = '".$objectID."' ";
-        $this->db->query ($sql);
-        if ($this->db->next_record ()) {
-                return $this->db->f ("child_type");
+        $result = $db->query($sql);
+        if (($row = $result->fetch())) {
+                return $row['child_type'];
         }
 
         return NULL;
@@ -290,8 +278,8 @@ class EvaluationGroupDB extends EvaluationObjectDB {
 #            " evalquestion ".
 #            "WHERE".
 #            " evalgroup_id = '".$objectID."' ";
-#        $this->db->query ($sql);
-#        if ($this->db->next_record ()) {
+#        $result = $db->query($sql);
+#        if (($row = $result->fetch())) {
 #                return INSTANCEOF_EVALQUESTION;
 #        }
 #        /* --------------------------------------------------- end: children */
@@ -304,8 +292,8 @@ class EvaluationGroupDB extends EvaluationObjectDB {
 #            " evalgroup ".
 #            "WHERE".
 #            " parent_id = '".$objectID."' ";
-#        $this->db->query ($sql);
-#        if ($this->db->next_record ()) {
+#        $result = $db->query($sql);
+#        if (($row = $result->fetch())) {
 #                return INSTANCEOF_EVALGROUP;
 #        }
 #        /* --------------------------------------------------- end: children */
@@ -320,8 +308,7 @@ class EvaluationGroupDB extends EvaluationObjectDB {
    * @return string  The id from the parent object
    */
   function getParentID ($objectID) {
-    if (empty ($this->db))
-      parent::EvaluationObjectDB ();
+    $db = DBManager::get();
 
     $sql =
       "SELECT".
@@ -330,10 +317,10 @@ class EvaluationGroupDB extends EvaluationObjectDB {
       " evalgroup ".
       "WHERE".
       " evalgroup_id = '".$objectID."'";
-    $this->db->query ($sql);
-    $this->db->next_record ();
+    $result = $db->query($sql);
+    $row = $result->fetch();
 
-    return $this->db->f ("parent_id");
+    return $row['parent_id'];
   }
 # ===================================================== end: public functions #
 
