@@ -1318,7 +1318,6 @@ function words($string) {
 /**
  * Encodes a string from Stud.IP encoding (WINDOWS-1252/ISO-8859-1 with numeric HTML-ENTITIES) to UTF-8
  '
- * (all named entities are also decoded, use htmlspecialchars() etc. only afterwards!)
  *
  * @param  string		a string to encode in WINDOWS-1252/HTML-ENTITIES
  *
@@ -1328,7 +1327,7 @@ function studip_utf8encode($string){
 	if(!preg_match('/[\200-\377]/', $string) && !preg_match("'&#[0-9]+;'", $string)){
 		return $string;
 	} else {
-		return html_entity_decode(mb_convert_encoding($string,'UTF-8', 'WINDOWS-1252'), ENT_QUOTES, 'UTF-8');
+		return mb_decode_numericentity(mb_convert_encoding($string,'UTF-8', 'WINDOWS-1252'), array(0x100, 0xffff, 0, 0xffff), 'UTF-8');
 	}
 }
 
