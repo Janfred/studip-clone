@@ -260,6 +260,18 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 		$sem_create_data['modules_list'] = $Modules->getLocalModules($cp_id,'sem');
 		$sem_create_data['sem_modules'] = $db->f('modules');
 
+		// Pluginkonfiguration übernehmen
+		if ($GLOBALS['PLUGINS_ENABLE']) {
+			$Modules->pluginengine->setPoiid('sem'.$cp_id);
+			$enabled_plugins = $Modules->pluginengine->getAllEnabledPlugins();
+
+			foreach ($enabled_plugins as $plugin) {
+				if ($plugin->isActivated()) {
+					$sem_create_data["enabled_plugins"][] = $plugin->getPluginId();
+				}
+			}
+		}
+
 		// Dozenten und Tutoren eintragen
 		$sem_create_data["sem_doz"] = get_seminar_dozent($cp_id);
 		if (!$sem_create_data["sem_tut"] = get_seminar_tutor($cp_id)) {
@@ -1848,6 +1860,20 @@ if (($form == 6) && ($jump_next_x))
 				$db->query("INSERT INTO scm SET scm_id='".$sem_create_data["sem_scm_id"]."', tab_name='".$sem_create_data["sem_scm_name"]."', range_id='".$sem_create_data["sem_id"]."', user_id='$user_id', content='".$sem_create_data["sem_scm_content"]."', mkdate='".time()."', chdate='".time()."' ");
 			}
 
+			// save activation of plugins
+			if (count($sem_create_data["enabled_plugins"]) > 0) {
+				$Modules = new Modules();
+				$Modules->pluginengine->setPoiid('sem'.$sem->getId());
+				$enabled_plugins = $Modules->pluginengine->getAllEnabledPlugins();
+
+				foreach ($enabled_plugins as $plugin) {	
+					$plugin_status = in_array($plugin->getPluginId(), $sem_create_data['enabled_plugins']);
+					if ($plugin->isActivated() != $plugin_status) {
+						$plugin->setActivated($plugin_status);
+						$Modules->pluginengine->savePlugin($plugin);
+					}
+				}
+			}
 			//end of the seminar-creation process
 		} else {
 			$errormsg .= "error§"._("<b>Fehler:</b> Die Veranstaltung wurde schon eingetragen!")."§";
