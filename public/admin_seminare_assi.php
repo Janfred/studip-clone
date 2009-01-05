@@ -620,7 +620,7 @@ if ($form == 4) {
 		if ($reset_room_type_x)
 			$sem_create_data["resRequest"]->setCategoryId(FALSE);
 
-		$sem_create_data["resRequest"]->setComment($sem_room_comment);
+		$sem_create_data["resRequest"]->setComment(remove_magic_quotes($sem_room_comment));
 
 		//Property Requests
 		if ($sem_create_data["resRequest"]->getCategoryId()) {
@@ -631,7 +631,7 @@ if ($form == 4) {
 						if ($seats_are_admission_turnout)
 							$sem_create_data["resRequest"]->setPropertyState($key, $sem_create_data["sem_turnout"]);
 						elseif (!$send_room_type_x)
-							$sem_create_data["resRequest"]->setPropertyState($key, $request_property_val[$key]);
+							$sem_create_data["resRequest"]->setPropertyState($key, abs($request_property_val[$key]));
 					} else {
 						$sem_create_data["resRequest"]->setPropertyState($key, $request_property_val[$key]);
 					}
@@ -3317,7 +3317,7 @@ if ($level == 4) {
 										<?
 										print "<b>"._("Raum suchen:")."</b><br />";
 										if ((($search_exp_room) && ($search_room_x)) || ($search_properties_x)) {
-											$result = $sem_create_data["resRequest"]->searchRooms($search_exp_room, ($search_properties_x) ? TRUE : FALSE);
+											$result = $sem_create_data["resRequest"]->searchRooms(remove_magic_quotes($search_exp_room), ($search_properties_x) ? TRUE : FALSE);
 											if ($result) {
 												printf ("<br /><font size=-1><b>%s</b> ".((!$search_properties_x) ? _("R&auml;ume gefunden:") : _("passende R&auml;ume gefunden"))."<br /><br />", sizeof($result));
 												print "<select name=\"select_room\">";
@@ -3372,7 +3372,7 @@ if ($level == 4) {
 						<td class="<? echo $cssSw->getClass() ?>" width="96%">
 							<font size="-1"><b><?=("Nachricht an den Raumadministrator:")?></b><br /><br />
 								<?=_("Sie k&ouml;nnen hier eine Nachricht an den Raumadministrator verfassen, um weitere W&uuml;nsche oder Bermerkungen zur gew&uuml;nschten Raumbelegung anzugeben.")?> <br /><br />
-								<textarea name="sem_room_comment" cols=58 rows=4><?=htmlReady(stripslashes($sem_create_data["resRequest"]->getComment())); ?></textarea>
+								<textarea name="sem_room_comment" cols=58 rows=4><?=htmlReady($sem_create_data["resRequest"]->getComment()); ?></textarea>
 							</font>
 						</td>
 					</tr>

@@ -150,7 +150,7 @@ if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) &&
 	if ($reset_room_type_x)
 		$admin_rooms_data["resRequest"]->setCategoryId(FALSE);
 
-	$admin_rooms_data["resRequest"]->setComment($comment);
+	$admin_rooms_data["resRequest"]->setComment(remove_magic_quotes($comment));
 
 	//Property Requests
 	if ($admin_rooms_data["resRequest"]->getCategoryId()) {
@@ -161,7 +161,7 @@ if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) &&
 					if ($seats_are_admission_turnout)
 						$admin_rooms_data["resRequest"]->setPropertyState($key, $admin_rooms_data["admission_turnout"]);
 					elseif (!$send_room_type_x)
-						$admin_rooms_data["resRequest"]->setPropertyState($key, $request_property_val[$key]);
+						$admin_rooms_data["resRequest"]->setPropertyState($key, abs($request_property_val[$key]));
 				} else {
 					$admin_rooms_data["resRequest"]->setPropertyState($key, $request_property_val[$key]);
 				}
@@ -471,7 +471,7 @@ if ($perm->have_perm("admin"))
 			<td class="<? echo $cssSw->getClass() ?>" width="96%" colspan="2">
 				<font size="-1"><b><?=("Nachricht an den Raumadministrator:")?></b><br /><br />
 					<?=_("Sie k&ouml;nnen hier eine Nachricht an den Raumadministrator verfassen, um weitere W&uuml;nsche oder Bemerkungen zur gew&uuml;nschten Raumbelegung anzugeben.")?> <br /><br />
-					<textarea name="comment" cols=58 rows=4><?=$admin_rooms_data["resRequest"]->getComment(); ?></textarea>
+					<textarea name="comment" cols=58 rows=4><?=htmlReady($admin_rooms_data["resRequest"]->getComment()); ?></textarea>
 				</font>
 			</td>
 		</tr>

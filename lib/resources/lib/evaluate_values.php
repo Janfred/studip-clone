@@ -1813,7 +1813,7 @@ if ($_sendMessage) {
 
 	// the room-request has been declined
 	if ($_sendMessage['type'] == 'declined') {
-
+		$decline_message = remove_magic_quotes($_REQUEST['decline_message']);
 		if ($semObj->seminar_number) {
 			$message = sprintf(_("ABGELEHNTE RAUMANFRAGE: Ihre Raumanfrage zur Veranstaltung %s (%s) wurde abgelehnt.") . "\n\n" . 
 				_("Nachricht des Raumadministrators:") . "\n" . $decline_message, $semObj->getName(), $semObj->seminar_number);
@@ -1828,21 +1828,18 @@ if ($_sendMessage) {
 		}
 
 		// fetch the names of the lecutrers to display them in the message
-		$stmt = DBManager::get()->prepare("SELECT u.Nachname FROM seminar_user s 
-			LEFT JOIN auth_user_md5 u ON (u.user_id = s.user_id) 
-			WHERE s.Seminar_id = ? AND u.perms = 'dozent'");
-		$stmt->execute(array($reqObj->getSeminarId()));
-		while ($nachname = $stmt->fetchColumn()) {
-			$dozent[] = $nachname;
+		foreach($semObj->getMembers('dozent') as $dozenten){
+			$title[] = $dozenten['Nachname'];
 		}
-		$title = implode(', ', $dozent) . ', '. $semObj->seminar_number.", ".mila($semObj->getName(),30);
+		if($semObj->seminar_number) $title[] = $semObj->seminar_number;
+		$title[] = mila($semObj->getName(),30);
 
 		$reqObj->setReplyComment($decline_message);
 		$reqObj->store();
 		foreach ($users as $userid) {
 			setTempLanguage($userid);
 			$messaging->insert_message(addslashes($message), get_username($userid), $user->id, FALSE, FALSE, FALSE, FALSE, 
-				_("Raumanfrage abgelehnt:") .' '. $title, TRUE, 'high');
+				addslashes(_("Raumanfrage abgelehnt:") .' '. implode(', ', $title)), TRUE, 'high');
 			restoreLanguage();
 		}
 	} 

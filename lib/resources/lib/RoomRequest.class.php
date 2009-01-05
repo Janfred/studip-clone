@@ -242,6 +242,7 @@ class RoomRequest {
 	}
 
 	function searchRooms($search_exp, $properties = FALSE, $limit_lower = 0, $limit_upper = 0, $only_rooms = TRUE, $permitted_resources = FALSE) {
+		$search_exp = mysql_escape_string($search_exp);
 		//create permitted resource clause
 		if (is_array($permitted_resources)) {
 			$permitted_resources_clause="AND a.resource_id IN ('".join("','",$permitted_resources)."')";
@@ -305,7 +306,7 @@ class RoomRequest {
 				$found [$res["resource_id"]] = $res["name"];
 			}
 		}
-				
+
 		$this->last_search_result_count = $result->rowCount();
 		return $found;
 	}
@@ -376,8 +377,6 @@ class RoomRequest {
 				$existing_assign = TRUE;
 		//seminar request
 		} else {
-			$semObj =& Seminar::GetInstance($this->seminar_id);
-
 			$query = sprintf("SELECT count(termin_id)=count(assign_id) FROM termine LEFT JOIN resources_assign ON(termin_id=assign_user_id)
 					WHERE range_id='%s' AND date_typ IN".getPresenceTypeClause(), $this->seminar_id);
 			$result = $db->query( $query );
@@ -412,15 +411,15 @@ class RoomRequest {
 					."user_id='%s', seminar_id= '%s', termin_id = '%s', category_id = '%s', closed='%s', comment='%s', "
 					."mkdate='%s' "
 							 , $this->id, $this->resource_id, $this->user_id, $this->seminar_id, $this->termin_id, $this->category_id
-							 , $this->closed, $this->comment, $mkdate);
+							 , $this->closed, mysql_escape_string($this->comment), $mkdate);
 				$this->isNewObject = FALSE;
 				$changed = TRUE;
 			} else {
 				$query = sprintf("UPDATE resources_requests SET resource_id='%s', " 
 					."user_id='%s', seminar_id='%s', termin_id = '%s', category_id = '%s', comment='%s', "	
 					."closed='%s', reply_comment = '%s' WHERE request_id='%s' "
-							 , $this->resource_id, $this->user_id, $this->seminar_id, $this->termin_id, $this->category_id, $this->comment
-							 , $this->closed, $this->reply_comment, $this->id);
+							 , $this->resource_id, $this->user_id, $this->seminar_id, $this->termin_id, $this->category_id,  mysql_escape_string($this->comment)
+							 , $this->closed,  mysql_escape_string($this->reply_comment), $this->id);
 			}
 			$result = $db->exec( $query );
 			
