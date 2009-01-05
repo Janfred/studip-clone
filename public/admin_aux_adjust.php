@@ -22,7 +22,7 @@ define ('CHECKED', ' checked="checked"');
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $auth->login_if($auth->auth["uid"] == "nobody");
-$perm->check("admin");
+$perm->check($AUX_RULE_ADMIN_PERM ? $AUX_RULE_ADMIN_PERM : 'admin');
 include ("lib/seminar_open.php"); // initialise Stud.IP-Session
 
 require_once('lib/classes/Table.class.php');

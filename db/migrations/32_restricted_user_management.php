@@ -18,7 +18,7 @@ class RestrictedUserManagement extends Migration
             INSERT INTO config
                 (config_id, field, value, is_default, type, mkdate, chdate, description)
             VALUES
-                (MD5('$name'), '$name', 0, 1, 'boolean', $time, $time, '$description')
+                (MD5('$name'), '$name', '0', 1, 'boolean', $time, $time, '$description')
         ");
     }
 

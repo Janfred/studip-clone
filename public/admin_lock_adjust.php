@@ -22,7 +22,7 @@
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", user => "Seminar_User"));
 $auth->login_if($auth->auth["uid"] == "nobody");
-$perm->check("admin");
+$perm->check($LOCK_RULE_ADMIN_PERM ? $LOCK_RULE_ADMIN_PERM : 'admin');
 
 
 include ("lib/seminar_open.php"); // initialise Stud.IP-Session

@@ -291,10 +291,16 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			$link = 'admin_range_tree.php';
 		} else if ($perm->have_perm($SEM_TREE_ADMIN_PERM ? $SEM_TREE_ADMIN_PERM : 'admin') && $perm->is_fak_admin()) {
 			$link = 'admin_sem_tree.php';
-		} else {
+		} else if ($perm->have_perm($AUX_RULE_ADMIN_PERM ? $AUX_RULE_ADMIN_PERM : 'admin')) {
 			$link = 'admin_aux_adjust.php';
+		} else if ($perm->have_perm($LOCK_RULE_ADMIN_PERM ? $LOCK_RULE_ADMIN_PERM : 'admin') && $GLOBALS['SEMINAR_LOCK_ENABLE']) {
+			$link = 'admin_lock_adjust.php';
+		} else {
+			$link = NULL;
 		}
-		$structure['global'] = array('topKat' => '', 'name' => _('globale Einstellungen'), 'link' => URLHelper::getLink($link), 'active' => FALSE);
+		if ($link) {
+			$structure['global'] = array('topKat' => '', 'name' => _('globale Einstellungen'), 'link' => URLHelper::getLink($link), 'active' => FALSE);
+		}
 	}
 
 	// "Log" tab for log view and administration (Root only)
@@ -393,9 +399,12 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		if ($perm->have_perm($SEM_TREE_ADMIN_PERM ? $SEM_TREE_ADMIN_PERM : 'admin') && $perm->is_fak_admin()) {
 			$structure["sem_tree"]=array ('topKat'=>"global", 'name'=>_("Veranstaltungshierarchie"), 'link'=>"admin_sem_tree.php", 'active'=>FALSE);
 		}
-		$structure["aux_adjust"]=array (topKat=>"global", name=>("Zusatzangaben definieren"), link=>"admin_aux_adjust.php", active=>FALSE);
-		if ($SEMINAR_LOCK_ENABLE)
-			$structure["lock_adjust"]=array (topKat=>"global", name=>("Sperrebenen anpassen"), link=>"admin_lock_adjust.php", active=>FALSE);
+		if ($perm->have_perm($AUX_RULE_ADMIN_PERM ? $AUX_RULE_ADMIN_PERM : 'admin')) {
+			$structure["aux_adjust"]=array ('topKat'=>"global", 'name'=>("Zusatzangaben definieren"), 'link'=>"admin_aux_adjust.php", 'active'=>FALSE);
+		}
+		if ($perm->have_perm($LOCK_RULE_ADMIN_PERM ? $LOCK_RULE_ADMIN_PERM : 'admin') && $GLOBALS['SEMINAR_LOCK_ENABLE']) {
+			$structure["lock_adjust"]=array ('topKat'=>"global", 'name'=>("Sperrebenen anpassen"), 'link'=>"admin_lock_adjust.php", 'active'=>FALSE);
+		}
 	}
 
 	if($perm->have_perm('dozent') && $GLOBALS['STM_ENABLE']){
