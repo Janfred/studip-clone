@@ -90,7 +90,7 @@ $active = array();
 while ($db->next_record()) {
 	$active[$db->f("seminar_id")][$db->f("datafield_id")] = TRUE;
 }
-echo "<FORM action=\"$PHP_SELF\" mehotd=\"post\">";
+echo "<FORM action=\"$PHP_SELF\" method=\"post\">";
 foreach ($SEM_CLASS as $key => $val) {
 	echo $tbl2->headerRow(array("&nbsp;<B>". $val["name"]."</B>", "<B>Status</B>", "<B>Anzeige</B>"));
 	echo $tbl2->closeRow();

@@ -154,7 +154,7 @@ $xslt_files["csv-teiln"]["file"] = "csv-t-1.xsl";
 $xslt_files["csv-teiln"]["csv"] = true;
 
 $xslt_files["csv-warteliste"]["name"] = _("Warteliste");
-$xslt_files["csv-warteliste"]["desc"] = _("Modul zur Ausgabe von Personendaten alsCSV-Datei. Es werden die Grunddaten der Personen auf der Warteliste einer einzelnen Veranstaltung in eine Tabelle geschrieben. Es werden auch die Kontingente und Studieng&auml;nge ausgegeben. Die Ausgabe-Datei kann in Excel  bearbeitet werden.");
+$xslt_files["csv-warteliste"]["desc"] = _("Modul zur Ausgabe von Personendaten als CSV-Datei. Es werden die Grunddaten der Personen auf der Warteliste einer einzelnen Veranstaltung in eine Tabelle geschrieben. Es werden auch die Kontingente und Studieng&auml;nge ausgegeben. Die Ausgabe-Datei kann in Excel bearbeitet werden.");
 $xslt_files["csv-warteliste"]["file"] = "csv-t-2.xsl";
 $xslt_files["csv-warteliste"]["csv"] = true;
 

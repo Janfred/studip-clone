@@ -723,19 +723,15 @@ function export_datafields($range_id, $childgroup_tag, $childobject_tag){
 	 
 	 $db = new DB_Seminar();
 	 
-	 $global_view_rights = array();
-	 
 	 if(is_array($GLOBALS['TEILNEHMER_VIEW']))
 	 {
-		 foreach($GLOBALS['TEILNEHMER_VIEW'] as $val) {
-			 $global_view_rights[] = $val['field'];
-		 }
-		 
-		 $db->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$range_id'");
-		 
-		 while ($db->next_record()) {
-			 if (in_array($db->f("datafield_id"), $global_view_rights))
-			 {
+		 $db->query("SELECT status FROM seminare WHERE seminar_id = '$range_id'");
+
+		 if ($db->next_record()) {
+			 $sem_class = $GLOBALS['SEM_TYPE'][$db->f('status')]['class'];
+			 $db->query("SELECT datafield_id FROM teilnehmer_view WHERE seminar_id = $sem_class");
+
+			 while ($db->next_record()) {
 				 $sem_view_rights[$db->f("datafield_id")] = TRUE;
 			 }
 		 }
@@ -790,7 +786,7 @@ function export_datafields($range_id, $childgroup_tag, $childobject_tag){
 						 switch ($val["field"]) {
 						 case "geschlecht":
 							 if ($content == "0")
-								 $content = _("m&#228;nnlich");
+								 $content = _("männlich");
 							 else
 								 $content = _("weiblich");
 							 

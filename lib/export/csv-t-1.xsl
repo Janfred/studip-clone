@@ -22,8 +22,12 @@
 	<xsl:variable name="collect-zusatzangaben">
 		<xsl:for-each select="//zusatzangabe[generate-id(.) = generate-id(key('zusatzangaben-by-key', @key)[1])]">
 			<xsl:sort select="@key"/>
-			<entry><xsl:value-of select="@key"/></entry>
-			<!--xsl:message>Datenfeld: <xsl:value-of select="@key"/></xsl:message-->
+			<!-- filter out identical entries in datafields and zusatzangaben -->
+			<xsl:variable name="key" select="@key"/>
+			<xsl:if test="not(//datenfeld[@key=$key])">
+				<entry><xsl:value-of select="@key"/></entry>
+				<!--xsl:message>Datenfeld: <xsl:value-of select="@key"/></xsl:message-->
+			</xsl:if>
 		</xsl:for-each>
 	</xsl:variable>
 

@@ -159,7 +159,6 @@ $db=new DB_Seminar;
 $db2=new DB_Seminar;
 $db3=new DB_Seminar;
 $db4=new DB_Seminar;
-$db5=new DB_Seminar;
 
 $csv_not_found = array();
 
@@ -674,19 +673,7 @@ if($SEMINAR_LOCK_ENABLE && $perm->have_studip_perm('tutor', $SessSemName[1])){
 	}
 }
 
-$db5->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$id'");
-
 if ($perm->have_perm("dozent")) {
-	$sem_type = $SessSemName["art_num"];
-
-	$sem_view_rights = array();
-
-	$db5->query("SELECT * FROM teilnehmer_view WHERE seminar_id = '$sem_type'");
-
-	while ($db5->next_record()) {
-	    $sem_view_rights[$db5->f("datafield_id")] = TRUE;
-	}
-
 	if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
 		$gruppe = array ("dozent" => _("DozentInnen"),
 					  "tutor" => _("TutorInnen"),
