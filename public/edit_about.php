@@ -595,13 +595,13 @@ if ($view != 'Forum'
 
 
 	if ($username != $auth->auth['uname']) {
-		echo '<tr><td class="topicwrite" colspan="2"> &nbsp; &nbsp; <font size="-1">';
+		echo '<tr><td class="topicwrite" colspan="2"> &nbsp; &nbsp; <b><font size="-1">';
 		printf(_("Daten von: %s %s (%s), Status: %s"), htmlReady($my_about->auth_user['Vorname']), htmlReady($my_about->auth_user['Nachname']), $username, $my_about->auth_user['perms']);
 		echo '</font>';
 	echo "</b></td></tr>\n";
 	}
 ?>
-		</tr>
+		<tr>
 			<td class="blank" colspan="2">&nbsp;</td>
 		</tr>
 	</table>

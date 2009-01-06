@@ -6,7 +6,7 @@ if (is_array($institutes) && sizeof($institutes) > 0) :
 	foreach ($institutes as $inst_id => $institute) : ?>
 <tr>
 	<td class="printhead" valign="bottom" colspan="2" height="23" nowrap style="padding-left: 3px" width="99%">
-		<a name="<?= $inst_id ?>">
+		<a name="<?= $inst_id ?>"></a>
 		<a class="tree" href="<?= URLHelper::getLink('?view='. $view .'&username='. $username .'&switch='. $inst_id .'&trash='. rand() .'#'. $inst_id) ?>">
 			<? if ($open == $inst_id) :
 				echo Assets::img('forumgraurunt');	

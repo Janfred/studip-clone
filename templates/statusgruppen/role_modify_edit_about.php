@@ -20,8 +20,6 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 			</a>			
 			<br/><br/>
 		<? endif; ?>
-		<table cellspacing="0" cellpadding="0" border="0" class="blank" width="90%">
-		<form action="<?= URLHelper::getLink('#'. $role_id) ?>" method="POST">
 			<input type="hidden" name="cmd" value="special_edit">
 			<input type="hidden" name="role_id" value="<?= $role_id ?>">
 			<input type="hidden" name="studipticket" value="<?=get_ticket()?>">
@@ -33,6 +31,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 		//if ($sgroup = GetSingleStatusgruppe($role_id, $userID)) {			
 			//$groupOptions = getOptionsOfStGroups($userID);
 			?>
+		<table cellspacing="0" cellpadding="0" border="0" class="blank" width="90%">
 			<tr>
 				<td align="left" colspan="4" class="topic">
 					&nbsp;<b><?= _("Daten für diese Funktion") ?></b>
@@ -117,7 +116,6 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 					</td>
 				</tr>
 			</table>
-		</form>
 		<br/>
 		<input type="image" <?=makeButton('speichern', 'src')?> value="<?=_("Änderungen speichern")?>" align="absbottom">
 		<br/>

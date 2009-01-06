@@ -11,4 +11,4 @@
 	<tr>
 		<td class="blank" colspan="3">&nbsp;</td>
 	</tr>
-<table>
+</table>
