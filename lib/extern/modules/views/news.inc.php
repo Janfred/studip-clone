@@ -81,12 +81,18 @@ else {
 			$admin_msg = preg_replace('# \(.*?\)#', '', $admin_msg);
 			$content .= "\n--%%{$admin_msg}%%--";
 		}
-		
+
+		// Mitarbeiter/in am Institut
+		$db->query("SELECT i.Institut_id FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) ".
+			   "LEFT JOIN auth_user_md5 aum USING(user_id) ".
+			   "WHERE i.Institut_id = '".$this->config->range_id."' AND aum.user_id = '".$news_detail['user_id']."' AND ui.inst_perms IN ('autor','tutor','dozent')");
+		$institute_user = $db->num_rows();
+
 		// !!! LinkInternSimple is not the type of this element,
 		// the type of this element is LinkIntern !!!
 		// this is for compatibiliy reasons only
 		if ($show_date_author != 'date') {
-			if ($not_author_link)
+			if ($not_author_link || !$institute_user)
 				$author_name = htmlReady(get_fullname($news_detail["user_id"], $nameformat));
 			else
 				$author_name = $this->elements["LinkInternSimple"]->toString(array(
