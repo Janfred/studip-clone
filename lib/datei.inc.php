@@ -2069,6 +2069,9 @@ function create_zip_from_file($file_name, $zip_file_name){
 		exec($GLOBALS['ZIP_PATH'] . ' -q ' . $GLOBALS['ZIP_OPTIONS'] . " -j {$zip_file_name} $file_name", $output, $ret);
 		return $ret;
 	}
+	
+	// return false, if nothing worked
+	return false;
 }
 
 function create_zip_from_directory($fullpath, $zip_file_name){

@@ -53,6 +53,78 @@ $db2=new DB_Seminar;
 if (isset($file_id))
 	$file_id = escapeshellcmd(basename($file_id));
 	
+//determine the type of the object we want to download a file from (only in type=0 mode!)
+$db->query("SELECT seminar_id AS object_id, filesize, range_id FROM dokumente WHERE dokument_id = '".$file_id."' ");
+$db->next_record();
+$object_id = $db->f('object_id');
+
+$skip_check=FALSE;
+if ($type == 0 || $type == 6) {
+	$object_type = get_object_type($object_id);
+	if ($object_type == "inst" || $object_type == "fak"){
+		$skip_check = TRUE;
+	}
+	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $object_id));
+	if (!$folder_tree->isDownloadFolder($db->f('range_id'), $GLOBALS['user']->id)) {
+		$no_access = true;
+		$skip_check = TRUE;
+	}
+}
+
+// Rechtecheck
+//////////////
+
+if ($type == 5){
+	$skip_check = true;
+	if (!($range_id == $user->id) && !$perm->have_studip_perm('tutor', $range_id)){
+		$no_access = true;
+	} else {
+		$the_data = StudipLitList::GetTabbedList($range_id, $list_id);
+	}
+}
+//permcheck
+if (($type != 2) && ($type != 3) && ($type != 4) && (!$skip_check)) { //if type 2, 3 or 4 we download from some tmp directory and skip permchecks
+	if (!$perm->have_perm("user")) {
+		if ($type == 0 || $type == 6) {
+			$db->query("SELECT Lesezugriff FROM seminare LEFT JOIN dokumente USING (seminar_id) WHERE dokument_id = '".$file_id."' ");
+			$db->next_record();
+			if ($db->f("Lesezugriff") != 0)
+				$no_access=TRUE;
+		} else {
+			$no_access=TRUE; //nobody darf nie an das Archiv
+		}
+	} elseif (!$perm->have_perm("root")) {
+		if ($type == 1) {
+			$db->query ("SELECT archiv.seminar_id FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE archiv_file_id = '".$file_id."' ");
+			if (!$db->next_record()){
+				$no_access = TRUE;
+			} else {
+				$no_access = (archiv_check_perm($db->f("seminar_id")) ? FALSE : TRUE);
+			}
+		} else {
+			$no_access = ($perm->have_studip_perm('user', $object_id) ? FALSE : TRUE);
+		}
+	}
+}
+
+//Nachricht bei verbotenem Download
+if ($no_access) {
+	if ($type)
+		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Archiv"), '<a href="archiv.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br />&nbsp;' ;
+	else
+		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Downloadbereich"), '<a href="folder.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br />&nbsp;' ;
+
+	// Start of Output
+	include ('lib/include/html_head.inc.php'); // Output of html head
+	include ('lib/include/header.php');   // Output of Stud.IP head
+
+	parse_window('error§' . _("Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!"), '§', _("Download nicht m&ouml;glich"), $add_msg);
+	include ('lib/include/html_end.inc.php');
+	page_close();
+	die;
+}
+
+
 switch ($type) {
 	//We want to download from the archive (this mode performs perm checks)
 	case 1: 
@@ -92,10 +164,18 @@ if ($zip && is_file($path_file)) {
 	$zip_path_file = "$TMP_PATH/$tmp_id";
 	$tmp_file_name = escapeshellcmd("$TMP_PATH/$file_name");
 	@copy($path_file, $tmp_file_name);
-	create_zip_from_file( $tmp_file_name, "$zip_path_file.zip");
-	$file_name = $file_name . ".zip";
-	$path_file = $zip_path_file . ".zip";
-	@unlink($tmp_file_name);
+	if (create_zip_from_file( $tmp_file_name, "$zip_path_file.zip") === false) {
+		@unlink($zip_path_file . '.zip');
+		@unlink($tmp_file_name);
+		parse_window('error§' . _("Fehler beim Erstellen des Zip-Archivs!"), '§', _("Download nicht m&ouml;glich"), $add_msg);
+		include ('lib/include/html_end.inc.php');
+		page_close();
+		die;
+	} else {
+		$file_name = $file_name . ".zip";
+		$path_file = $zip_path_file . ".zip";
+		@unlink($tmp_file_name);
+	}
 }
 
 
@@ -225,79 +305,8 @@ if ($force_download) {
 if ($disposition)
 	$content_disposition=$disposition;
 
-//determine the type of the object we want to download a file from (only in type=0 mode!)
-$db->query("SELECT seminar_id AS object_id, filesize, range_id FROM dokumente WHERE dokument_id = '".$file_id."' ");
-$db->next_record();
-$object_id = $db->f('object_id');
-
-$skip_check=FALSE;
-if ($type == 0 || $type == 6) {
-	$object_type = get_object_type($object_id);
-	if ($object_type == "inst" || $object_type == "fak"){
-		$skip_check = TRUE;
-	}
-	$folder_tree =& TreeAbstract::GetInstance('StudipDocumentTree', array('range_id' => $object_id));
-	if (!$folder_tree->isDownloadFolder($db->f('range_id'), $GLOBALS['user']->id)) {
-		$no_access = true;
-		$skip_check = TRUE;
-	}
-}
-
-// Rechtecheck
-//////////////
-
-if ($type == 5){
-	$skip_check = true;
-	if (!($range_id == $user->id) && !$perm->have_studip_perm('tutor', $range_id)){
-		$no_access = true;
-	} else {
-		$the_data = StudipLitList::GetTabbedList($range_id, $list_id);
-	}
-}
-//permcheck
-if (($type != 2) && ($type != 3) && ($type != 4) && (!$skip_check)) { //if type 2, 3 or 4 we download from some tmp directory and skip permchecks
-	if (!$perm->have_perm("user")) {
-		if ($type == 0 || $type == 6) {
-			$db->query("SELECT Lesezugriff FROM seminare LEFT JOIN dokumente USING (seminar_id) WHERE dokument_id = '".$file_id."' ");
-			$db->next_record();
-			if ($db->f("Lesezugriff") != 0)
-				$no_access=TRUE;
-		} else {
-			$no_access=TRUE; //nobody darf nie an das Archiv
-		}
-	} elseif (!$perm->have_perm("root")) {
-		if ($type == 1) {
-			$db->query ("SELECT archiv.seminar_id FROM archiv LEFT JOIN archiv_user USING (seminar_id) WHERE archiv_file_id = '".$file_id."' ");
-			if (!$db->next_record()){
-				$no_access = TRUE;
-			} else {
-				$no_access = (archiv_check_perm($db->f("seminar_id")) ? FALSE : TRUE);
-			}
-		} else {
-			$no_access = ($perm->have_studip_perm('user', $object_id) ? FALSE : TRUE);
-		}
-	}
-}
-
-//Nachricht bei verbotenem Download
-if ($no_access) {
-	if ($type)
-		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Archiv"), '<a href="archiv.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br />&nbsp;' ;
-	else
-		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Downloadbereich"), '<a href="folder.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br />&nbsp;' ;
-
-	// Start of Output
-	include ('lib/include/html_head.inc.php'); // Output of html head
-	include ('lib/include/header.php');   // Output of Stud.IP head
-
-	parse_window('error§' . _("Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!"), '§', _("Download nicht m&ouml;glich"), $add_msg);
-	include ('lib/include/html_end.inc.php');
-	page_close();
-	die;
-}
 
 // Check bei verlinkten Dateien ob sie erreichbar sind
-
 if ($type == 6) {
 	$link_data = parse_link($path_file);
 	if (!($link_data['HTTP/1.0 200 OK'] || $link_data['HTTP/1.1 200 OK'])) {
@@ -310,6 +319,7 @@ if ($type == 6) {
 		die;
 	}
 }
+
 
 //Datei verschicken
 if ($type == 6) {
