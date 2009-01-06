@@ -687,17 +687,6 @@ function search_administrable_objects($search_string='', $user_id='', $sem=TRUE)
 			}
 			if (is_array($my_inst_ids)){
 				$inst_in = "('" . join("','" , array_keys($my_inst_ids)) ."')";
-				$inst_perms_in = "('" . join("','" , $allowed_inst_perms) ."')";
-				$db2->query("SELECT a.user_id, ". $_fullname_sql['full_rev'] ." AS fullname, username , a.Institut_id, inst_perms
-							FROM user_inst a
-							LEFT JOIN auth_user_md5 USING (user_id)
-							LEFT JOIN user_info USING (user_id)
-							WHERE (({$search_sql['user']}))
-							AND a.inst_perms  IN $inst_perms_in AND  a.Institut_id IN $inst_in  ORDER BY Nachname");
-				while ($db2->next_record()) {
-					if (!$perm->is_fak_admin($user_id) || !($my_inst_ids[$db2->f('Institut_id')] == 'admin' && $db2->f('inst_perms') == 'admin'))
-						$my_objects[$db2->f("user_id")]=array("name"=>$db2->f("fullname")." (".$db2->f("username").")", "art"=>_("Personen"), "perms" => "admin");
-				}
 				if ($sem) {
 					$db2->query("SELECT a.seminar_id, Name FROM  seminar_inst a
 								LEFT JOIN seminare USING (seminar_id)
