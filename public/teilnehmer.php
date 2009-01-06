@@ -673,7 +673,7 @@ if($SEMINAR_LOCK_ENABLE && $perm->have_studip_perm('tutor', $SessSemName[1])){
 	}
 }
 
-if ($perm->have_perm("dozent")) {
+if ($perm->have_perm("tutor")) {
 	if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
 		$gruppe = array ("dozent" => _("DozentInnen"),
 					  "tutor" => _("TutorInnen"),
