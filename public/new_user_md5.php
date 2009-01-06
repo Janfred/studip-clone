@@ -67,6 +67,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 												'auth_user_md5.Nachname' => stripslashes(trim($Nachname)),
 												'auth_user_md5.Email' => stripslashes(trim($Email)),
 												'auth_user_md5.perms' => implode($perms,","),
+												'auth_user_md5.auth_plugin' => $auth_plugin,
 												'auth_user_md5.visible' => $visible,
 												'user_info.title_front' => stripslashes(trim($title_front)),
 												'user_info.title_rear' => stripslashes(trim($title_rear)),
@@ -117,6 +118,8 @@ if (check_ticket($_REQUEST['studipticket'])){
 			$newuser['auth_user_md5.lock_comment']    = (isset($lock_comment) ? stripslashes(trim($lock_comment)) : "");
 			$newuser['auth_user_md5.locked_by'] = ($locked==1 ? $auth->auth["uid"] : "");
 
+			if (isset($auth_plugin))
+				$newuser['auth_user_md5.auth_plugin'] = $auth_plugin;
 			if (isset($visible))
 				$newuser['auth_user_md5.visible'] = $visible;
 			if (isset($title_front) || isset($title_front_chooser)) {
@@ -350,6 +353,7 @@ if (isset($_GET['details'])) {
 			} else {
 				$inactive = _("nie benutzt");
 			}
+			$auth_plugin = $db->f('auth_plugin') ? $db->f('auth_plugin') : 'Standard';
 			?>
 
 			<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
@@ -363,7 +367,7 @@ if (isset($_GET['details'])) {
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Benutzername:")?></b></td>
 					<td class="steel1">&nbsp;
 					<?
-					if (StudipAuthAbstract::CheckField("auth_user_md5.username", $db->f('auth_plugin'))) {
+					if (StudipAuthAbstract::CheckField("auth_user_md5.username", $auth_plugin)) {
 						echo htmlReady($db->f("username"));
 					} else {
 					?><input type="text" name="username" size=24 maxlength=63 value="<?=htmlReady($db->f("username"))?>"><?
@@ -375,7 +379,7 @@ if (isset($_GET['details'])) {
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("globaler Status:")?>&nbsp;</b></td>
 					<td class="steel1">&nbsp;
 					<?
-					if (StudipAuthAbstract::CheckField("auth_user_md5.perms", $db->f('auth_plugin'))) {
+					if (StudipAuthAbstract::CheckField("auth_user_md5.perms", $auth_plugin)) {
 						echo $db->f("perms");
 					} else {
 						print $perm->perm_sel("perms", $db->f("perms"));
@@ -391,7 +395,7 @@ if (isset($_GET['details'])) {
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Vorname:")?></b></td>
 					<td class="steel1">&nbsp;
 					<?
-					if (StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $db->f('auth_plugin'))) {
+					if (StudipAuthAbstract::CheckField("auth_user_md5.Vorname", $auth_plugin)) {
 						echo htmlReady($db->f("Vorname"));
 					} else {
 						?><input type="text" name="Vorname" size=24 maxlength=63 value="<?=htmlReady($db->f("Vorname"))?>"><?
@@ -403,7 +407,7 @@ if (isset($_GET['details'])) {
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Nachname:")?></b></td>
 					<td class="steel1">&nbsp;
 					<?
-					if (StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $db->f('auth_plugin'))) {
+					if (StudipAuthAbstract::CheckField("auth_user_md5.Nachname", $auth_plugin)) {
 						echo htmlReady($db->f("Nachname"));
 					} else {
 						?><input type="text" name="Nachname" size=24 maxlength=63 value="<?=htmlReady($db->f("Nachname"))?>"><?
@@ -415,7 +419,7 @@ if (isset($_GET['details'])) {
 				<td class="steel1"><b>&nbsp;<?=_("Titel:")?></b>
 				</td><td class="steel1" align="right">
 				<?
-				if (StudipAuthAbstract::CheckField("user_info.title_front", $db->f('auth_plugin'))) {
+				if (StudipAuthAbstract::CheckField("user_info.title_front", $auth_plugin)) {
 						echo "&nbsp;</td><td class=\"steel1\">&nbsp;" . htmlReady($db->f("title_front"));
 				} else {
 				?>
@@ -439,7 +443,7 @@ if (isset($_GET['details'])) {
 				<td class="steel1"><b>&nbsp;<?=_("Titel nachgest.:")?></b>
 				</td><td class="steel1" align="right">
 				<?
-				if (StudipAuthAbstract::CheckField("user_info.title_rear", $db->f('auth_plugin'))) {
+				if (StudipAuthAbstract::CheckField("user_info.title_rear", $auth_plugin)) {
 						echo "&nbsp;</td><td class=\"steel1\">&nbsp;" . htmlReady($db->f("title_rear"));
 				} else {
 				?>
@@ -463,7 +467,7 @@ if (isset($_GET['details'])) {
 				<td colspan="2" class="steel1"><b>&nbsp;<?=_("Geschlecht:")?></b></td>
 				<td class="steel1">&nbsp;
 				<?
-				if (StudipAuthAbstract::CheckField("user_info.geschlecht", $db->f('auth_plugin'))) {
+				if (StudipAuthAbstract::CheckField("user_info.geschlecht", $auth_plugin)) {
 					echo "&nbsp;" . (!$db->f("geschlecht") ? _("m&auml;nnlich") : _("weiblich"));
 				} else {
 				?>
@@ -478,7 +482,7 @@ if (isset($_GET['details'])) {
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("E-Mail:")?></b></td>
 					<td class="steel1">&nbsp;
 					<?
-					if (StudipAuthAbstract::CheckField("auth_user_md5.Email", $db->f('auth_plugin'))) {
+					if (StudipAuthAbstract::CheckField("auth_user_md5.Email", $auth_plugin)) {
 						echo htmlReady($db->f("Email"));
 					} else {
 					?><input type="text" name="Email" size=48 maxlength=63 value="<?=htmlReady($db->f("Email"))?>">&nbsp;
@@ -497,7 +501,13 @@ if (isset($_GET['details'])) {
 				</tr>
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Authentifizierung:")?></b></td>
-					<td class="steel1">&nbsp;<?=($db->f("auth_plugin") ? $db->f("auth_plugin") : "Standard")?></td>
+					<td class="steel1">&nbsp;
+						<select name="auth_plugin">
+						<? foreach ($GLOBALS['STUDIP_AUTH_PLUGIN'] as $val): ?>
+							<option value="<?= strtolower($val) ?>" <?= strcasecmp($val, $auth_plugin) == 0 ? 'selected' : '' ?>><?= $val ?></option>
+						<? endforeach ?>
+						</select>
+					</td>
 				</tr>
 
 				<?
@@ -547,7 +557,7 @@ if (isset($_GET['details'])) {
 					}
 				}
 
-				if($GLOBALS['MAIL_VALIDATE_BOX'] && !StudipAuthAbstract::CheckField("auth_user_md5.password", $db->f('auth_plugin'))){
+				if($GLOBALS['MAIL_VALIDATE_BOX'] && !StudipAuthAbstract::CheckField("auth_user_md5.password", $auth_plugin)){
 					echo chr(10).'<tr><td class="steel1" colspan="3" align="right"><input type="checkbox" id="disable_mail_host_check" name="disable_mail_host_check" value="1"><label for="disable_mail_host_check" >'._("Mailboxüberprüfung deaktivieren").'</label></td></tr>';
 				}
 				?>
@@ -559,7 +569,7 @@ if (isset($_GET['details'])) {
 					?>
 					<input type="IMAGE" name="u_edit" <?=makeButton("uebernehmen", "src")?> value=" <?=_("Ver&auml;ndern")?> ">&nbsp;
 					<?
-					if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $db->f('auth_plugin'))) {
+					if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $auth_plugin)) {
 						?>
 						<input type="IMAGE" name="u_pass" <?=makeButton("neuespasswort", "src")?> value=" <?=_("Passwort neu setzen")?> ">&nbsp;
 						<?
