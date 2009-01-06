@@ -243,6 +243,20 @@ function aux_html() {
 	echo $zt->close();
 }
 
+function aux_sort_entries($entries, $rule) { 
+	$order = $rule['order']; 
+	asort($order, SORT_NUMERIC); 
+
+	$new_entries = array(); 
+	foreach ($order as $key => $pos) { 
+		if ($entries[$key]) { 
+			$new_entries[$key] = $entries[$key]; 
+		} 
+	} 
+
+	return $new_entries; 
+} 
+	 
 function aux_enter_data() {
 	global $user_id, $sem_id, $user, $sem_type, $rule, $zt, $perm, $ct;
 	global $datafield_id, $datafield_type, $datafield_sec_range_id, $datafield_content;
@@ -287,6 +301,8 @@ function aux_enter_data() {
 	echo $ct->openCell();
 
 	$entries = filterDatafields(DataFieldEntry::getDataFieldEntries(array($user_id, $sem_id), 'usersemdata'));
+
+	$entries = aux_sort_entries($entries, $rule);
 
 	echo '<form action="'.URLHelper::getLink().'" method="post">';
 	foreach ($entries as $id => $entry) {
