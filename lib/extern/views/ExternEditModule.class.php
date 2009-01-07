@@ -47,7 +47,7 @@ class ExternEditModule extends ExternEditHtml {
 
 	function editMainSettings ($field_names, $hide_fields = "", $hide = "") {
 		// these two values are always necessary, even there is an error in the users inputs, so
-		// there arent transfered via HTTP_POST_VARS
+		// there arent transfered via $_POST
 		$this->form_values[$this->element_name . "_order"]
 				= $this->config->getValue($this->element_name, "order");
 		$this->form_values[$this->element_name . "_visible"]
@@ -258,7 +258,7 @@ class ExternEditModule extends ExternEditHtml {
 		$groups_config = $this->getValue("groups");
 
 		// this value is always necessary, even there is an error in the users inputs, so
-		// it isn't transfered via HTTP_POST_VARS
+		// it isn't transfered via $_POST
 		$this->form_values[$this->element_name . "_groupsvisible"]
 				= $this->config->getValue($this->element_name, "groupsvisible");
 
@@ -327,7 +327,7 @@ class ExternEditModule extends ExternEditHtml {
 	function editSemTypes () {
 		global $SEM_TYPE, $SEM_CLASS;
 		// these two values are always necessary, even there is an error in the users inputs, so
-		// there aren't transfered via HTTP_POST_VARS
+		// there aren't transfered via $_POST
 		$this->form_values[$this->element_name . "_order"]
 				= $this->config->getValue($this->element_name, "order");
 		$order = $this->getValue("order");

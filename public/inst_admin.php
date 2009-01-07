@@ -343,7 +343,7 @@ if (isset($nothing)) {  // abbrechen im Detailansicht angeklickt? => zu Namenübe
 if (!isset($details) || isset($set)) {
 	// haben wir was uebergeben bekommen?
 
-	if (is_array($HTTP_POST_VARS) && list($key, $val) = each($HTTP_POST_VARS)) {
+	if (is_array($_POST) && list($key, $val) = each($_POST)) {
     if ($perms!="") { //hoffentlich auch was Sinnvolles?
 			$db->query("SELECT " . $_fullname_sql['full'] . " AS fullname, perms FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE auth_user_md5.user_id = '$u_id'");
 			while ($db->next_record()) {
