@@ -473,8 +473,25 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				$userchange = $db->f("user_id");
 				$fullname = $db->f("fullname");
 
-				if ($cmd == "add_user" && !$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && (($db->f("perms") == "tutor" || $db->f("perms") == "dozent")) && ($perm->have_studip_perm("dozent", $id))){
-					$status = 'tutor';
+				if ($cmd == "add_user" && $SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] 
+					&& $perm->have_studip_perm('dozent', $id)
+					&& ($db->f('perms') == 'tutor' || $db->f('perms') == 'dozent')) {
+
+					if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) {
+						$status = 'tutor';
+					} else {
+						// query - VA und Person teilen sich die selbe Einrichtung und Person ist weder autor noch tutor in der Einrichtung 
+						$stmt = DBManager::get()->query("SELECT DISTINCT user_id FROM seminar_inst 
+							LEFT JOIN user_inst USING(Institut_id) 
+							WHERE user_id = '$userchange' AND seminar_id ='$SessSemName[1]' 
+								AND inst_perms!='user' AND inst_perms!='autor'");
+
+						if ($stmt->rowCount()) {
+							$status = 'tutor';
+						} else {
+							$status = 'autor';
+						}
+					}
 				} else {
 					$status = 'autor';
 				}
@@ -619,7 +636,7 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 						// der Dozent hat Tomaten auf den Augen, der Mitarbeiter sitzt schon im Seminar. Na, auch egal...
 						if ($db2->f("status") == "autor" || $db2->f("status") == "user") {
 							// gehen wir ihn halt hier hochstufen
-                     $next_pos = get_next_position("tutor",$id);
+							$next_pos = get_next_position("tutor",$id);
 							$db2->query("UPDATE seminar_user SET status='tutor', position='$next_pos' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
 							if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 								$msg = "msg§" . sprintf (_("%s wurde zum Mitglied bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
