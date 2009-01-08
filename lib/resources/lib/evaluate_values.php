@@ -65,7 +65,7 @@ function closeStructure ($resource_id) {
 /*****************************************************************************
 Initialization
 /*****************************************************************************/
-$GLOBALS['assigned_dates'] = Array();
+$GLOBALS['messageForUsers'] = '';
 
 //a small helper function to update some data of the tree-structure (after move something)
 function updateStructure ($resource_id, $root_id, $level) {
@@ -1453,8 +1453,10 @@ if ($save_state_x) {
 			$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["reload"] = TRUE;
 
 			//create msg's
-			if ($good_msg)
+			if ($good_msg) {
+				$GLOBALS['messageForUsers'] = $good_msg;
 				$msg->addMsg(33, array($good_msg));
+			}
 			if ($bad_msg)
 				$msg->addMsg(34, array($bad_msg));
 			if ($req_added_msg)
@@ -1740,7 +1742,6 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 	 			foreach ($assignObjects as $assObj) {
 					if ($group['termin_ids'][$assObj->getAssignUserId()]) {
 						foreach ($assObj->getEvents() as $evtObj) {
-							$GLOBALS['assigned_dates'][] = $assObj->getAssignUserId();
 
 							$events[$evtObj->getId()] = $evtObj;
 							if (($evtObj->getBegin() < $first_event) || (!$first_event))
@@ -1853,50 +1854,13 @@ if ($_sendMessage) {
 		else
 			$message = sprintf (_("Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet.")." \n"._("Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:")."\n\n", $semObj->getName());
 
-		// the request was for a whole seminar
-		if (!$reqObj->getTerminId()) {
-			$query2 = sprintf("SELECT *, resource_id FROM termine LEFT JOIN resources_assign ra ON (ra.assign_user_id = termine.termin_id) WHERE range_id = '%s' ORDER BY date, content", $reqObj->getSeminarId());
-			$db2->query($query2);
-
-			if ($db2->nf()) {
-				while ($db2->next_record()) {
-					if (in_array($db2->f('termin_id'),$GLOBALS['assigned_dates'])) 
-					{
-						if ($db2->f("resource_id")) {
-							$message.= date("d.m.Y, H:i", $db2->f("date")).", ".(($db2->f("date") != $db2->f("end_time")) ? " - ".date("H:i", $db2->f("end_time")) : "")." ";
-							$resObj =& ResourceObject::Factory($db2->f("resource_id"));
-							$message.= $resObj->getName()."\n";
-						}
-					}
-				}
-			}
-		} 
-		
-		// the request was for a single date
-		else {
-			$query2 = sprintf("SELECT *, resource_id FROM termine 
-					LEFT JOIN resources_assign ra 
-					ON (ra.assign_user_id = termine.termin_id) 
-					WHERE range_id = '%s' AND termin_id = '%s' ORDER BY date, content", $reqObj->getSeminarId(), $reqObj->getTerminId());
-
-			$db2->query($query2);
-
-			if ($db2->nf()) {
-				while ($db2->next_record()) {
-					$resObj =& ResourceObject::Factory($db2->f("resource_id"));
-					$message.= date("d.m.Y, H:i", $db2->f("date")).(($db2->f("date") != $db2->f("end_time")) ? " - ".date("H:i", $db2->f("end_time")) : "")." ".$resObj->getName()."\n";
-				}
-			}
-		}
-
 		//send the message into stud.ip message system
-
 		// only if there are assigned dates
-		if (sizeof($GLOBALS['assigned_dates']) > 0)
+		if ($GLOBALS['messageForUsers'])
 		{
 			foreach ($users as $userid) {
 				setTempLanguage($userid);
-				$messaging->insert_message(addslashes($message), get_username($userid), $user->id, FALSE, FALSE, FALSE, FALSE, _("Raumanfrage bearbeitet"), TRUE);
+				$messaging->insert_message(addslashes($message) . strip_tags(str_ireplace('<br>', "\n", $GLOBALS['messageForUsers'])), get_username($userid), $user->id, FALSE, FALSE, FALSE, FALSE, _("Raumanfrage bearbeitet"), TRUE);
 				restoreLanguage();
 			}
 		} 
