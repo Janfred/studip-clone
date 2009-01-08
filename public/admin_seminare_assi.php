@@ -1601,7 +1601,7 @@ if (($form == 6) && ($jump_next_x))
 		$sem->admission_enable_quota = $sem_create_data['admission_enable_quota'];
 		$sem->visible = (($visible) ? '1' : '0');
 		$sem->showscore = '0';
-		$sem->modules = ((array_key_exists('sem_modules', $sem_create_data))? $sem_create_data['sem_modules']:'NULL');
+		$sem->modules = $sem_create_data['sem_modules'];
 
 		$sem->user_number = ($sem_create_data['user_number']) ? '1' : '0';
 

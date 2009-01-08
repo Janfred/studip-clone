@@ -587,11 +587,7 @@ class Seminar {
 				admission_enable_quota = '".$this->admission_enable_quota . "',
 				visible =  				'".		$this->visible."',
 				showscore =				'0',
-				modules = NULL";
-
-			//write the default module-config
-			$Modules = new Modules;
-			$Modules->writeDefaultStatus($this->id);
+				modules = ".(($this->modules == NULL) ? 'NULL' : "'".$this->modules."'");
 		} else {
 			$query = "UPDATE seminare SET
 				VeranstaltungsNummer = '".		mysql_escape_string($this->seminar_number)."',
