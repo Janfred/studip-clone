@@ -977,9 +977,9 @@ if (($s_id) && (auth_check())) {
         </td>
         <td class="<? echo $cssSw->getClass() ?>"  align=left colspan=2>&nbsp;
           <? if (! LockRules::Check($s_id, 'admission_turnout')) : ?>
-            <input type="int" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>">
+            <input type="text" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>">
           <? else : ?>
-            <input readonly disabled type="int" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>">
+            <input readonly disabled type="text" name="turnout" size=6 maxlength=4 value="<?php echo $db->f("admission_turnout") ?>">
           <? endif; ?>
         </td>
 			</tr>

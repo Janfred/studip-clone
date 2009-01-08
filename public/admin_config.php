@@ -106,7 +106,7 @@ if ($_REQUEST["change_config"]) {
 			<b><?=_("Systemkonfiguration") ?></b><br /><br />
 			<?=_("Sie k&ouml;nnen hier einen Teil der Systemkonfiguration direkt ver&auml;ndern. Sie k&ouml;nnen sowohl auf System- als auch Nutzervariablen zugreifen.")?> <br />
 			<?=_("Beachten Sie: Bisher ist nur ein kleiner Teil der Werte hier verf&uuml;gbar. Zuk&uuml;nftige Stud.IP-Versionen werden einen umfangreichen Zugriff auf s&auml;mtliche Systemeinstellungen zulassen. ")?> <br /><br />
-			</blockqoute>
+			</blockquote>
 		</td>
 		<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br />
 			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/modules.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" />

@@ -211,7 +211,7 @@ if ($_REQUEST['action']=="change") {
 			<blockquote>
 			<b><?=_("Logging") ?></b><br /><br />
 			<?=_("Sie k&ouml;nnen hier einen Teil der Logging-Funktionen direkt ver&auml;ndern.")?> <br />
-			</blockqoute>
+			</blockquote>
 		</td>
 		<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br />
 			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/modules.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" />

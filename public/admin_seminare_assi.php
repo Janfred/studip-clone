@@ -2071,7 +2071,7 @@ elseif ((!$level) || ($level == 1))
 				?><br><br>
 				<b><?=_("Schritt 1: Grunddaten der Veranstaltung angeben"); ?></b><br><br />
 				<font size=-1><? printf (_("Alle mit einem Sternchen%smarkierten Felder <b>m&uuml;ssen</b> ausgef&uuml;llt werden, um eine Veranstaltung anlegen zu k&ouml;nnen.")."</font><br><br>", "&nbsp;</font><font color=\"red\" size=+1><b>*</b></font><font size=-1>&nbsp;");?>
-				</blockqoute>
+				</blockquote>
 			</td>
 			<td class="blank" align="right" valign="top">
 				<img src="<?= localePictureUrl('hands01.jpg') ?>" border="0">
@@ -2159,7 +2159,7 @@ elseif ((!$level) || ($level == 1))
 							<?=_("maximale Teilnehmeranzahl:"); ?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="50%">
-							&nbsp; <input type="int" name="sem_turnout" size=6 maxlength=5 value="<? echo (int)$sem_create_data["sem_turnout"] ?>">
+							&nbsp; <input type="text" name="sem_turnout" size=6 maxlength=5 value="<? echo (int)$sem_create_data["sem_turnout"] ?>">
 							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
 								<? echo tooltip(_("Geben Sie hier die erwartete Teilnehmerzahl an. Stud.IP kann auf Wunsch für Sie ein Anmeldeverfahren starten, wenn Sie »Teilnahmebeschränkung: per Losverfahren / nach Anmeldereihenfolge« benutzen."), TRUE, TRUE) ?>
 							>
@@ -2394,7 +2394,7 @@ if ($level == 2)
 					echo "<b>"._("Schritt 2: Personendaten und weitere Angaben zur Veranstaltung")." </b><br><br>";
 				?>
 				<font size=-1><? printf (_("Alle mit einem Sternchen%smarkierten Felder <b>m&uuml;ssen</b> ausgef&uuml;llt werden, um eine Veranstaltung anlegen zu k&ouml;nnen.")."</font><br><br>", "&nbsp;</font><font color=\"red\" size=+1><b>*</b></font><font size=-1>&nbsp;");?>
-				</blockqoute>
+				</blockquote>
 			</td>
 			<td class="blank" align="right" valign="top">
 				<img src="<?= localePictureUrl('hands02.jpg') ?>" border="0">
@@ -2866,7 +2866,7 @@ if ($level == 3) {
 					print _("Bitte geben Sie hier die einzelnen Termine an, an denen die Veranstaltung stattfindet.<br> Sie haben sp&auml;ter noch die M&ouml;glichkeit, weitere Einzelheiten zu diesen Terminen anzugeben.")."<br><br>";
 				?>
 				<font size=-1><? printf (_("Alle mit einem Sternchen%smarkierten Felder <b>m&uuml;ssen</b> ausgef&uuml;llt werden, um eine Veranstaltung anlegen zu k&ouml;nnen.")."</font><br><br>", "&nbsp;</font><font color=\"red\" size=+1><b>*</b></font><font size=-1>&nbsp;");?>
-				</blockqoute>
+				</blockquote>
 			</td>
 			<td class="blank" align="right" valign="top">
 				<img src="<?= localePictureUrl('hands03.jpg') ?>" border="0">
@@ -3569,7 +3569,7 @@ if ($level == 5)
 				<blockquote>
 				<b><?=_("Schritt 5: Sonstige Daten zu der Veranstaltung"); ?></b><br><br>
 				<font size=-1><? printf (_("Alle mit einem Sternchen%smarkierten Felder <b>m&uuml;ssen</b> ausgef&uuml;llt werden, um eine Veranstaltung anlegen zu k&ouml;nnen.")."</font><br><br>", "&nbsp;</font><font color=\"red\" size=+1><b>*</b></font><font size=-1>&nbsp;");?>
-				</blockqoute>
+				</blockquote>
 			</td>
 			<td class="blank" align="right" valign="top">
 				<img src="<?= localePictureUrl('hands05.jpg') ?>" border="0">
@@ -3593,10 +3593,10 @@ if ($level == 5)
 						</td>
 					</tr>
 					<tr <? $cssSw->switchClass() ?>>
-						<td class="<? echo $cssSw->getClass() ?>" witdh="10%" align="right">
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 							<?= _("Anmeldezeitraum:"); ?>
 						</td>
-						<td class="<? echo $cssSw->getClass() ?>" witdh="90%" colspan=3>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
 							<font size=-1>&nbsp;
 								<? print _("Bitte geben Sie hier ein Datum an, ab wann und bis wann sich Teilnehmer für die Veranstaltung eintragen d&uuml;rfen."); ?>
 								<br />&nbsp;
@@ -3992,7 +3992,7 @@ if ($level == 6)
 					<input type="HIDDEN" name="form" value=6>
 					<input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?> >>" name="jump_back">&nbsp;<input type="IMAGE" <?=makeButton("anlegen", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 				</form>
-				</blockqoute>
+				</blockquote>
 			</td>
 			<td class="blank" align="right" valign="top">
 				<img src="<?= localePictureUrl('hands06.jpg') ?>" border="0">
@@ -4026,7 +4026,7 @@ if ($level == 7)
 						<input type="HIDDEN" name="form" value=7>
 						<input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">
 					</form>
-					</blockqoute>
+					</blockquote>
 				</td>
 				<td class="blank" align="right">
 					<img src="<?= localePictureUrl('hands06.jpg') ?>" border="0">
@@ -4062,7 +4062,7 @@ if ($level == 7)
 						}
 						?>
 					</form>
-					</blockqoute>
+					</blockquote>
 				</td>
 				<td class="blank" align="right">
 					<img src="<?= localePictureUrl('hands06.jpg') ?>" border="0">
@@ -4100,7 +4100,7 @@ if ($level == 7)
 						}
 						?>
 					</form>
-					</blockqoute>
+					</blockquote>
 				</td>
 				<td class="blank" align="right" valign="top">
 					<img src="<?= localePictureUrl('hands06.jpg') ?>" border="0">
@@ -4219,7 +4219,7 @@ if ($level == 8)
 					print "<br /> "._("Wenn Sie auf &raquo;weiter&laquo; klicken, haben Sie die M&ouml;glichkeit, mit dem Termin-Assistenten einen Ablaufplan f&uuml;r die Veranstaltung anzulegen.")
 				?>
 				<br><br>
-				</blockqoute>
+				</blockquote>
 			</td>
 			<td class="blank" align="right" valign="top">
 				<img src="<?= localePictureUrl('hands07.jpg') ?>" border="0">

@@ -221,7 +221,7 @@ if ($perm->have_perm("admin"))
       <br /><br />
       <A href="raumzeit.php?seminar_id=<?=$seminar_id?>"><img src="<?=$GLOBALS['ASSETS_URL']?>images/link_intern.gif" border="0" />&nbsp;<?=_("Zurück zur Seite Zeiten / Räume");?></A><br />
 			<br />
-			</blockqoute>
+			</blockquote>
 		</td>
 		<td class="blank" align="right">
 			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/board2.jpg" border="0">

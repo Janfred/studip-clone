@@ -353,7 +353,7 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
 			<TABLE width="90%" cellspacing="0" cellpadding="2" border="0">
 				<TR>
 					<TD colspan="3" align="right" height="28">
-						<TABLE widht="100%" cellspacing="0" cellpadding="0" border="0">
+						<TABLE width="100%" cellspacing="0" cellpadding="0" border="0">
 						<? if ($chronoGroupedFilter == 'grouped') { ?>
 							<TD background="<?= $GLOBALS['ASSETS_URL'] ?>images/steel1info.jpg">
 								<IMG src="<?= $GLOBALS['ASSETS_URL'] ?>images/reiter1.jpg" align="middle">

@@ -768,7 +768,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 			<b><?=_("Zugangsberechtigungen der Veranstaltung bearbeiten") ?></b><br /><br />
 			<?=_("Sie k&ouml;nnen hier die Zugangsberechtigungen bearbeiten.")?> <br />
 			<?=_("Sie haben auf dieser Seite ebenfalls die M&ouml;glichkeit, ein Anmeldeverfahren f&uuml;r die Veranstaltung festzulegen.")?><br />
-			</blockqoute>
+			</blockquote>
 		</td>
 		<td class="blank" align="right">
 			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/board2.jpg" border="0">

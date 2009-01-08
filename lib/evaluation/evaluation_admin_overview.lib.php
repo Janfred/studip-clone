@@ -2086,7 +2086,7 @@ class EvalOverview {
    } else {
       $td_r = new HTML ("td");
       $td_r->addAttr ("class","steel1kante");
-      $td_r->addAttr ("widht","40");
+      $td_r->addAttr ("width","40");
       $td_r->addAttr ("align","center");
       $td_r->addAttr ("style","vertical-align:bottom;");
       $td_r->addAttr ("colspan","2");
