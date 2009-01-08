@@ -45,13 +45,17 @@ $ABSOLUTE_URI_STUDIP = "";
 
 // automagically compute ABSOLUTE_URI_STUDIP if $_SERVER['SERVER_NAME'] is set
 if (isset($_SERVER['SERVER_NAME'])) {
+	// work around possible bug in lighttpd
+	if (strpos($_SERVER['SERVER_NAME'], ':') !== false) {
+		list($_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT']) =
+			explode(':', $_SERVER['SERVER_NAME']);
+	}
+
 	$ABSOLUTE_URI_STUDIP = $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
 	$ABSOLUTE_URI_STUDIP .= '://'.$_SERVER['SERVER_NAME'];
 
-	if (strpos($_SERVER['SERVER_NAME'], ':') === false &&
-		(($_SERVER['HTTPS'] == 'on' && $_SERVER['SERVER_PORT'] != 443) ||
-	    ($_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 80))
-		) {
+	if ($_SERVER['HTTPS'] == 'on' && $_SERVER['SERVER_PORT'] != 443 ||
+	    $_SERVER['HTTPS'] != 'on' && $_SERVER['SERVER_PORT'] != 80) {
 		$ABSOLUTE_URI_STUDIP .= ':'.$_SERVER['SERVER_PORT'];
 	}
 
