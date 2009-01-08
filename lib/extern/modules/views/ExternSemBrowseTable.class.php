@@ -347,18 +347,18 @@ class ExternSemBrowseTable extends SemBrowse {
 							$data["content"]["dozent"] = "";
 							$i = 0;
 							foreach ($doz_name as $index => $value) {
+								if ($i == 4) {
+									$data["content"]["dozent"] .= $this->module->elements["LecturerLink"]->toString(
+										array("module" => "Lecturedetails", "link_args" => "seminar_id=$seminar_id",
+										"content" => "..."));
+									break;
+								}
 								$data["content"]["dozent"] .= $this->module->elements["LecturerLink"]->toString(
 										array("module" => "Persondetails", "link_args" => "username="
 										. $doz_uname[$index] . "&seminar_id=$seminar_id",
 										"content" =>  htmlReady($value)));
 								if ($i != count($doz_name) - 1) {
 									$data["content"]["dozent"] .= ", ";
-								}
-								if ($i == 3) {
-									$data["content"]["dozent"] .= $this->module->elements["LecturerLink"]->toString(
-										array("module" => "Lecturedetails", "link_args" => "seminar_id=$seminar_id",
-										"content" => "..."));
-									break;
 								}
 								++$i;
 							}

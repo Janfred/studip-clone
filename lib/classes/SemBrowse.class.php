@@ -473,13 +473,13 @@ function print_result(){
 							array_multisort($doz_position, $doz_name, $doz_uname);
 							$i = 0;
 							foreach ($doz_name as $index => $value){
+								if ($i == 4){
+									echo "... <a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">("._("mehr").")</a>";
+									break;
+								}
 								echo "<a href=\"about.php?username=" . $doz_uname[$index] ."\">" . htmlReady($value) . "</a>";
 								if($i != count($doz_name)-1){
 									echo ", ";
-								}
-								if ($i == 3){
-									echo "... <a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">("._("mehr").")</a>";
-									break;
 								}
 								++$i;
 							}

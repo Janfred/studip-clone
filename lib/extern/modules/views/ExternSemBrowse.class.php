@@ -412,15 +412,15 @@ class ExternSemBrowse extends SemBrowse {
                               array_multisort($doz_position, $doz_name, $doz_uname); 
 										$i = 0;
 										foreach ($doz_name as $index => $value) {
+											if ($i == 4) { 
+												echo '...';
+												break;
+											}
 											$lecturer_link['link_args'] = "username={$doz_uname[$index]}&seminar_id=$seminar_id";
 											$lecturer_link['content'] = htmlReady($value);
 											$this->module->elements['LecturerLink']->printout($lecturer_link);
 											if ($i != count($doz_name) - 1) {
 												echo ', ';
-											}
-											if ($i == 3) {
-												echo '...';
-												break;
 											}
 											++$i;
 										}

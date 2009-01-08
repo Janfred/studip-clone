@@ -592,14 +592,14 @@ class StudipSemTreeViewAdmin extends TreeView {
 						uasort($doz_name, 'strnatcasecmp');
 						$i = 0;
 						foreach ($doz_name as $index => $value){
-							$content .= "<a href=\"about.php?username=" . $doz_uname[$index] ."\">" . htmlReady($value) . "</a>";
-							if($i != count($doz_name)-1){
-								$content .= ", ";
-							}
-							if ($i == 3){
+							if ($i == 4){
 								$content .= "... <a href=\"details.php?sem_id=". $seminar_id
 								."&send_from_search=true&send_from_search_page=" . rawurlencode($this->getSelf()) . "\">("._("mehr").")</a>";
 								break;
+							}
+							$content .= "<a href=\"about.php?username=" . $doz_uname[$index] ."\">" . htmlReady($value) . "</a>";
+							if($i != count($doz_name)-1){
+								$content .= ", ";
 							}
 							++$i;
 						}
