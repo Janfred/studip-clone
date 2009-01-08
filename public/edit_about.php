@@ -207,7 +207,7 @@ if (check_ticket($studipticket)) {
 	}
 
 	//Veränderungen an Instituten für Studies
-	if ($cmd == "inst_edit" && ($ALLOW_SELFASSIGN_STUDYCOURSE || $perm->have_perm('admin')))
+	if ($cmd == "inst_edit" && ($ALLOW_SELFASSIGN_INSTITUTE || $perm->have_perm('admin')))
 	{
 		$my_about->inst_edit($inst_delete,$new_inst);
 	}
@@ -886,7 +886,7 @@ if ($view == 'Studium') {
 
 	//Institute, an denen studiert wird
 	if (($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor")) {
-		$allow_change_in = ($GLOBALS['ALLOW_SELFASSIGN_STUDYCOURSE'] || $perm->have_perm('admin'))? TRUE:FALSE;
+		$allow_change_in = ($GLOBALS['ALLOW_SELFASSIGN_INSTITUTE'] || $perm->have_perm('admin'))? TRUE:FALSE;
 		$cssSw->resetClass();
 		$cssSw->switchClass();
 		echo '<tr><td class="blank">';
