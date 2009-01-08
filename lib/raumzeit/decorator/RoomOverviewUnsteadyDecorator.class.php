@@ -102,7 +102,9 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 					$ret .= '<tr><td width="20%" nowrap><font size="-1">'.getWeekDay($val['day']).'.&nbsp;'.$repeat.'&nbsp;</font></td>';
 					$ret .= '<td width="20%" nowrap><font size="-1">'.$zeit.'</font></td>';
 					if (!$this->hideRooms) {
-						$ret .= '<td width="60%"><font size="-1">&nbsp;'.$raum.'</font></td>';
+						$ret .= '<td width="60%"><font size="-1">&nbsp;'.$raum.'&nbsp;&nbsp;<i>'. $val['desc'] .'</i></font></td>';
+					} else {
+						$ret .= '<td><font size="-1">&nbsp;&nbsp;<i>'. $val['desc'] .'</font></td>'; 
 					}
 					$ret .= '</tr>';
 				} else {
@@ -112,6 +114,7 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 					if (!$this->hideRooms) {
 						$ret .= '&nbsp;Ort: '.$raum;
 					}
+					$ret .=  '&nbsp;&nbsp;<i>'. $val['desc'] .'</i>';
 					$commas++;
 				}
 
