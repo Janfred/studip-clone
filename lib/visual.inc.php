@@ -861,10 +861,10 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 						else {
 							// width of image in pixels
 							if (is_object($auth) && $auth->auth['xres'])
-								// 50% of x-resolution maximal
-								$max_width = floor($auth->auth['xres'] / 2);
+								// 80% of x-resolution maximal
+								$max_width = floor($auth->auth['xres'] * 0.8);
 							else
-								$max_width = 400;
+								$max_width = 800;
 							$width = ($params[2] < $max_width) ? " width=\"{$params[2]}\"" : " width=\"$max_width\"";
 						}
 					}
@@ -906,10 +906,10 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 					if ($params[2]) {
 						// width of image in pixels
 						if (is_object($auth) && $auth->auth['xres'])
-							// 50% of x-resolution maximal
-							$max_width = floor($auth->auth['xres'] / 2);
+							// 80% of x-resolution maximal
+							$max_width = floor($auth->auth['xres'] * 0.8);
 						else
-							$max_width = 400;
+							$max_width = 800;
 						$width = ($params[2] < $max_width) ? $params[2] : $max_width;
 					}
 					if ($width > 200) {
