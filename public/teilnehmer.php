@@ -938,32 +938,21 @@ if ($rechte) {
 	$colspan=7;
 if ($showscore==TRUE) $colspan++;
 
-$accepted_columns = array('Nachname', 'mkdate', 'doll DESC');
-if (!isset($sortby)  || !in_array($sortby, $accepted_columns))  $sortby = '';
+switch ($view_order) {
+	case "date":
+		$sortby = "mkdate";
+		break;
+
+	case "active":
+		$sortby = "doll DESC";
+		break;
+
+	default:
+		$sortby = "Nachname, Vorname";
+		break;
+}
 
 while (list ($key, $val) = each ($gruppe)) {
-
-	if (!isset($sortby) || $sortby == "") {
-		switch ($view_order) {
-			case "date":
-				$sortby .= "mkdate";
-				break;
-
-			case "active":
-				$sortby = "doll DESC";
-				break;
-
-			default:
-				$sortby .= "Nachname";
-				break;
-		}
-	}
-
-	if (isset($sortby)) {
-		$sort = "ORDER BY $sortby";
-	} else {
-		$sort = "";
-	}
 
 	$counter=1;
 
@@ -983,7 +972,7 @@ while (list ($key, $val) = each ($gruppe)) {
 				LEFT JOIN user_info ON (auth_user_md5.user_id=user_info.user_id)
 				LEFT JOIN studiengaenge ON (".$tbl.".".$tbl2."studiengang_id = studiengaenge.studiengang_id)
 				WHERE ".$tbl.".Seminar_id = '$SessionSeminar'
-				AND status = '$key' GROUP by ".$tbl.".user_id $sort");
+				AND status = '$key' GROUP by ".$tbl.".user_id ORDER BY $sortby");
 
 	if ($db->num_rows()) { //Only if Users were found...
 		$info_is_open = false;
