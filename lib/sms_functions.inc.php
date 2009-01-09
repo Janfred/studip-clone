@@ -542,14 +542,8 @@ function show_precform() {
 
 	global $PHP_SELF, $sms_data, $user, $my_messaging_settings;
 
-	if ($my_messaging_settings["send_view"] == "1") {
-		$tmp_01 = sizeof($sms_data["p_rec"]);
-		if (sizeof($sms_data["p_rec"]) >= "12") { $tmp_01 = "12"; }
-	} else {
-		$tmp_01 = "5";
-	}
-
-	$tmp =  "";
+	$tmp_01 = min(sizeof($sms_data["p_rec"]), 12);
+	$tmp = "";
 
 	if (sizeof($sms_data["p_rec"]) == "0") {
 		$tmp .= "<font size=\"-1\">"._("Bitte w&auml;hlen Sie mindestens einen Empf&auml;nger aus.")."</font>";
@@ -562,9 +556,9 @@ function show_precform() {
 		}
 		$tmp .= "</select><br>";
 		$tmp .= "<input type=\"image\" name=\"del_receiver_button\" src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("löscht alle ausgewählten EmpfängerInnen"))." border=\"0\">";
-		$tmp .= " <font size=\"-1\">"._("ausgew&auml;hlte l&ouml;schen")."</font><br>";
-		$tmp .= "<input type=\"image\" name=\"del_allreceiver_button\" src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Empf&auml;ngerliste leeren"))." border=\"0\">";
-		$tmp .= " <font size=\"-1\">"._("Empf&auml;ngerliste leeren")."</font>";
+		$tmp .= " <font size=\"-1\">"._("ausgewählte löschen")."</font><br>";
+		$tmp .= "<input type=\"image\" name=\"del_allreceiver_button\" src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Empfängerliste leeren"))." border=\"0\">";
+		$tmp .= " <font size=\"-1\">"._("Empfängerliste leeren")."</font>";
 	}
 
 	return $tmp;
@@ -576,11 +570,7 @@ function show_addrform() {
 
 	global $PHP_SELF, $sms_data, $user, $db, $_fullname_sql, $adresses_array, $search_exp, $my_messaging_settings;
 
-	if ($my_messaging_settings["send_view"] == "1") {
-		$picture = "move_up.gif";
-	} else {
-		$picture = "move_left.gif";
-	}
+	$picture = 'move_up.gif';
 
 	// list of adresses
 	$query_for_adresses = "SELECT contact.user_id, username, ".$_fullname_sql['full_rev']." AS fullname FROM contact LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE owner_id = '".$user->id."' ORDER BY Nachname ASC";
@@ -614,12 +604,7 @@ function show_addrform() {
 				}
 			}
 
-			if ($my_messaging_settings["send_view"] == "1") {
-				$tmp_01 = $tmp_count;
-				if ($tmp_count >= "12") { $tmp_01 = "12"; }
-			} else {
-				$tmp_01 = "3";
-			}
+			$tmp_01 = min($tmp_count, 12);
 			$tmp .= "<select size=\"".$tmp_01."\" name=\"add_receiver[]\" multiple style=\"width: 250\">";
 			$tmp .= $tmp_02;
 			$tmp .= "</select><br>";

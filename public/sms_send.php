@@ -376,17 +376,6 @@ $txt['006'] = _("Nachricht speichern");
 $txt['007'] = _("als Email senden");
 $txt['008'] = _("Lesebestätigung");
 
-
-if ($send_view) {
-
-	if ($send_view == "2") {
-		unset($my_messaging_settings["send_view"]);
-	} else if ($send_view == "1") {
-		$my_messaging_settings["send_view"] = $send_view;
-	}
-
-}
-
 ?>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -431,8 +420,7 @@ if ($send_view) {
 		}
 	}
 
-	if ($my_messaging_settings["send_view"] == "1") { ?>
-
+	?>
 		<table cellpadding="0" cellspacing="0" border="0" height="10" width="99%">
 			<tr>
 				<td colspan="2" valign="top" width="30%" height="10" class="blank" style="border-right: dotted 1px">
@@ -531,80 +519,8 @@ if ($send_view) {
 
 				</td>
 			</tr>
-		</table> <?
-
-	} else { ?>
-
-		<table cellpadding="5" cellspacing="0" border="0" height="10" width="99%">
-			<tr>
-				<td colspan="2" valign="top" width="30%" height="10" class="steelgraudunkel">
-					<font size="-1" color="#FFFFFF"><b><?=$txt['001']?></b></font>
-				</td>
-				<td colspan="2" valign="top" width="70%" class="steelgraudunkel">
-					<font size="-1" color="#FFFFFF"><b><?=$txt['002']?></b></font>
-				</td>
-			</tr>
 		</table>
-		<table cellpadding="5" cellspacing="0" border="0" width="99%">
-			<tr>
-				<td colspan="2" valign="top" width="30%" class="steelgraulight">
-					<?=show_precform()?>
-					</td>
-					<td class="printcontent" align="left" valign="top" width="70%">
-					<?=show_addrform()?><br><br>
-				</td>
-			</tr>
-		</table>
-		<table cellpadding="5" cellspacing="0" border="0" width="99%">
-			<tr>
-				<td colspan="2" valign="top" width="80%" class="steelgraudunkel">
-					<font size="-1" color="#FFFFFF"><b><?=$txt['005']?></b></font>
-				</td>
-			</tr>
-		</table>
-		<table border="0" cellpadding="5" cellspacing="0" width="99%" align="center">
-			<?=show_chatselector()?>
-			<tr>
-				<td class="steelgraulight" width="80%" valign="middle">
-					<?=show_msgform()?>
-				</td>
-			</tr>
-		</table>
-		<table border="0" cellpadding="5" cellspacing="0" width="99%" align="center">
-			<tr>
-				<td class="steelgraudunkel"  width="30%" valign="top">
-					<font size="-1" color="#FFFFFF"><b><?=$txt['003']?></b></font>
-				</td>
-				<td class="steelgraudunkel"  width="70%" valign="top">
-					<font size="-1" color="#FFFFFF"><b><?=$txt['004']?></b></font>
-				</td>
-			</tr>
-			<tr>
-				<td class="steelgraulight"  width="20%" valign="top">
-					<?=show_sigform()?>
-				</td>
-				<td class="printcontent" width="20%" valign="top">
-					<?=show_previewform()?>
-				</td>
-			</tr>
-		</table>
-	<?
-	}
-
-
-	if (!$my_messaging_settings["send_view"]) {
-		$tmp_link_01 = "1";
-		$tmp_link_02 = _("Experten-Ansicht");
-	} else if ($my_messaging_settings["send_view"] == "1") {
-		$tmp_link_01 = "2";
-		$tmp_link_02 = _("Standard-Ansicht");
-	}
-
-
-	$switch_sendview = sprintf(_("Wählen Sie hier zwischen Experten- und Standard-Ansicht."))."<br><img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" width=\"15\" height=\"15\" border=0 alt=\"\">&nbsp;<a href=\"".$PHP_SELF."?send_view=".$tmp_link_01."\">".$tmp_link_02."</a>";
-	if($my_messaging_settings["send_view"] == FALSE) {
-		$switch_sendview .= "<br>"._("In der Experten-Ansicht sind weitere Optionen wie z. B. Emailweiterleitung und Lesebestätigung wählbar.");
-	}
+        <?
 
 
 	if($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"] == TRUE) {
@@ -613,7 +529,6 @@ if ($send_view) {
 		} else {
 			$emailforwardinfo = _("Ihre Nachricht wird nicht gleichzeitig als E-Mail weitergeleitet.");
 		}
-		if($tmp_link_01 == 1) $emailforwardinfo .= "<br>".sprintf(_("Nutzen Sie die <a href=\"%s?send_view=1\">Experten-Ansicht</a> um die Einstellung zu ändern."), $PHP_SELF);
 		$emailforwardinfo = array("kategorie" => _("Emailweiterleitung:"),"eintrag" => array(array("icon" => "nachricht1.gif", "text" => sprintf($emailforwardinfo))));
 	}
 
@@ -666,9 +581,6 @@ if ($send_view) {
 		$help_url_format="help/index.php?help_page=ix_forum6.htm";
 	}
 	$infobox = array(
-		array("kategorie" => _("Ansicht:"),"eintrag" => array(
-			array("icon" => "admin.gif", "text" => $switch_sendview)
-		)),
 		$smsinfos,
 		$emailforwardinfo,
 		array("kategorie" => _("Smilies & Textformatierung:"),"eintrag" => array(
