@@ -75,7 +75,7 @@ class CalendarDriver extends MysqlDriver {
 		switch ($this->mod) {
 			case 'EVENTS':
 				$select_cal = '*';
-				$select_sem = 't.*, s.Name';
+				$select_sem = 't.*, s.Name, th.title, th.description as details';
 				break;
 			
 			case 'COUNT':
@@ -100,17 +100,19 @@ class CalendarDriver extends MysqlDriver {
 			
 			if ($sem_ids == '')
 				$query = "SELECT $select_sem "
-							 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
-							 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
-		      		 . "user_id = '{$user->id}' AND date BETWEEN $start AND $end";
+							 . "FROM termine t LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen as th USING (issue_id)"
+							 . "LEFT JOIN seminar_user su ON su.Seminar_id = t.range_id "
+							 . "LEFT JOIN seminare s ON su.Seminar_id = s.Seminar_id WHERE "
+							 . "user_id = '{$user->id}' AND date BETWEEN $start AND $end ORDER by th.priority DESC";
 			else if ($sem_ids != "") {
 				if (is_array($sem_ids))
 					$sem_ids = implode("','", $sem_ids);
 				$query = "SELECT $select_sem "
-							 . "FROM termine t LEFT JOIN seminar_user su ON su.Seminar_id=t.range_id "
-							 . "LEFT JOIN seminare s USING(Seminar_id) WHERE "
-		       		 . "user_id = '{$user->id}' AND range_id IN ('$sem_ids') AND "
-							 . "date BETWEEN $start AND $end";
+							 . "FROM termine t LEFT JOIN themen_termine USING (termin_id) LEFT JOIN themen as th USING (issue_id)"
+							 . "LEFT JOIN seminar_user su ON su.Seminar_id = t.range_id "
+							 . "LEFT JOIN seminare s ON su.Seminar_id = s.Seminar_id WHERE "
+							 . "user_id = '{$user->id}' AND range_id IN ('$sem_ids') AND "
+							 . "date BETWEEN $start AND $end ORDER BY th.priority DESC";
 			}
 			$this->db['sem']->query($query);
 		}
@@ -156,9 +158,9 @@ class CalendarDriver extends MysqlDriver {
 			$properties = array(
 					'DTSTART'         => $this->db['sem']->f('date'),
 					'DTEND'           => $this->db['sem']->f('end_time'),
-					'SUMMARY'         => $this->db['sem']->f('content'),
-					'DESCRIPTION'     => $this->db['sem']->f('description'),
-					'LOCATION'        => $this->db['sem']->f('raum'),
+					'SUMMARY'         => $this->db['sem']->f('title') ? $this->db['sem']->f('title') : $this->db['sem']->f('Name'),
+					'DESCRIPTION'     => $this->db['sem']->f('details'),
+					'LOCATION'        => $this->db['sem']->f('raum') ? $this->db['sem']->f('raum') : $this->getRoom($this->db['sem']->f('termin_id')),
 					'STUDIP_CATEGORY' => $this->db['sem']->f('date_typ'),
 					'CREATED'         => $this->db['sem']->f('mkdate'),
 					'LAST-MODIFIED'   => $this->db['sem']->f('chdate'),
@@ -171,6 +173,17 @@ class CalendarDriver extends MysqlDriver {
 			$this->_create_sem_object = FALSE;
 			
 		return FALSE;
+	}
+
+	function getRoom ($termin_id) {
+		$db = new DB_Seminar();
+		$db->query("SELECT ro.name FROM resources_assign as ra LEFT JOIN resources_objects as ro USING (resource_id) WHERE ra.assign_user_id = '$termin_id'");
+
+		if ($db->next_record()) {
+			return $db->f('name');
+		} else {
+			return _("Keine Raumangabe");
+		}
 	}
 	
 	function &nextObject () {
