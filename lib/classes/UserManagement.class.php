@@ -423,8 +423,22 @@ class UserManagement {
 		$this->db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '" . $this->user_data['auth_user_md5.user_id'] . "' AND status = 'dozent' GROUP BY user_id");
 		$this->db->next_record();
 		if ($this->db->f("count") &&  isset($newuser['auth_user_md5.perms']) && $newuser['auth_user_md5.perms'] != "dozent") {
-			$this->msg .= sprintf("error§" . "Der Benutzer <b>%s</b> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht in einen anderen Status versetzt werden." . "§", $this->user_data['auth_user_md5.username'], $this->db->f("count"));
+			$this->msg .= sprintf("error§" . _("Der Benutzer <b>%s</b> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht in einen anderen Status versetzt werden!") . "§", $this->user_data['auth_user_md5.username'], $this->db->f("count"));
 			return FALSE;
+		}
+
+		// active admin?
+		if ($this->user_data['auth_user_md5.perms'] == 'admin' && $newuser['auth_user_md5.perms'] != 'admin') {
+			// count number of institutes where the user is admin
+			$stmt = DBManager::get()->query("SELECT COUNT(*) AS count FROM user_inst 
+				WHERE user_id = '". $this->user_data['auth_user_md5.user_id'] ."' AND inst_perms = 'admin'
+				GROUP BY Institut_id");
+
+			// if there are institutes with admin-perms, add error-message and deny change	
+			if ($count = $stmt->fetchColumn()) {
+				$this->msg .= sprintf('error§'. _("Der Benutzer <b>%s</b> ist Admin in %s Einrichtungen und kann daher nicht in einen anderen Status versetzt werden!") .'§', $this->user_data['auth_user_md5.username'], $count);
+				return false;
+			}
 		}
 
 		// Is the username correct?
