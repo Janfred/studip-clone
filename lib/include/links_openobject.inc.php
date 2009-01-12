@@ -110,7 +110,7 @@ if ($SessSemName["class"]=="inst") {
 	if ($modules["literature"])
 		$structure["literatur"]=array ('topKat' => '', 'name' => _("Literatur zur Einrichtung"), 'link' => URLHelper::getLink("literatur.php"), 'active' => FALSE);
 	if ($modules["wiki"]){
-	  	$structure["wiki"]=array ('topKat' => '', 'name' => _("Wiki"), 'link' => URLHelper::getLink("wiki.php"), 'active' => FALSE);
+	  	$structure["wiki"]=array ('topKat' => '', 'name' => _("Wiki"), 'link' => URLHelper::getLink("wiki.php?view=show"), 'active' => FALSE);
 	}
 
 	//topkats for resources management, if module is activated
@@ -136,7 +136,7 @@ if ($SessSemName["class"]=="inst") {
 	if ($modules["literature"])
 		$structure["literatur"]=array ('topKat' => '', 'name' => _("Literatur"), 'link' => URLHelper::getLink("literatur.php"), 'active' => FALSE);
 	if ($modules["wiki"]){
-	  	$structure["wiki"]=array ('topKat' => '', 'name' => _("Wiki"), 'link' => URLHelper::getLink("wiki.php"), 'active' => FALSE);
+	  	$structure["wiki"]=array ('topKat' => '', 'name' => _("Wiki"), 'link' => URLHelper::getLink("wiki.php?view=show"), 'active' => FALSE);
 	}
 
 	//topkats for resources management, if module is activated
@@ -313,7 +313,7 @@ if (($rechte) && ($modules["literature"]))
 		$structure["admin_literatur"]=array ('topKat' => "literatur", 'name' => _("Literatur bearbeiten"), 'link' => URLHelper::getLink("admin_lit_list.php?view=literatur_inst&new_inst=TRUE&_range_id=".$SessSemName[1]), 'active' => FALSE);
 
 if ($modules["wiki"]) {
-	$structure["_wiki"]=array ('topKat' => "wiki", 'name' => _("WikiWikiWeb"), 'link' => URLHelper::getLink("wiki.php"), 'active' => FALSE);
+	$structure["_wiki"]=array ('topKat' => "wiki", 'name' => _("WikiWikiWeb"), 'link' => URLHelper::getLink("wiki.php?view=show"), 'active' => FALSE);
 	$structure["wiki_listnew"]=array ('topKat' => "wiki", 'name' => _("Neue Seiten"), 'link' => URLHelper::getLink("wiki.php?view=listnew"), 'active' => FALSE);
 	$structure["wiki_listall"]=array ('topKat' => "wiki", 'name' => _("Alle Seiten"), 'link' => URLHelper::getLink("wiki.php?view=listall"), 'active' => FALSE);
 	$structure["wiki_export"]=array ('topKat' => "wiki", 'name' => _("Export"), 'link' => URLHelper::getLink("wiki.php?view=export"), 'active' => FALSE);
