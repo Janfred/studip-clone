@@ -363,4 +363,49 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 			StudIPTemplateEngine::endInfoBoxTableCell();
 		}
 	}
+
+	/**
+	 * Display all available plugin updates.
+	 */
+	function actionShowUpdates ()
+	{
+		$permission = $this->user->getPermission();
+		if (!$permission->hasRootPermission()) {
+			throw new Studip_AccessDeniedException();
+		}
+
+		$pluginengine = PluginEngine::getPluginPersistence();
+		$plugins = $pluginengine->getAllInstalledPlugins();
+		$update_info = $this->pluginmgmt->getUpdateInfo($plugins);
+		$this->pluginvis->showPluginUpdateList($plugins, $update_info);
+	}
+
+	/**
+	 * Install updates for all selected plugins.
+	 */
+	function actionInstallUpdates ()
+	{
+		$permission = $this->user->getPermission();
+		if (!$permission->hasRootPermission()) {
+			throw new Studip_AccessDeniedException();
+		}
+
+		$pluginengine = PluginEngine::getPluginPersistence();
+		$plugins = $pluginengine->getAllInstalledPlugins();
+		$update_info = $this->pluginmgmt->getUpdateInfo($plugins);
+
+		$update = isset($_POST['update']) ? $_POST['update'] : array();
+		$update_status = array();
+
+		foreach ($update as $id) {
+			if (isset($update_info[$id]['update'])) {
+				$update_url = $update_info[$id]['update']['url'];
+				$update_status[$id] =
+					$this->pluginmgmt->installPluginFromURL($update_url);
+			}
+		}
+
+		$update_info = $this->pluginmgmt->getUpdateInfo($plugins);
+		$this->pluginvis->showPluginUpdateList($plugins, $update_info, $update_status);
+	}
 }

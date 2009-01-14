@@ -6,10 +6,11 @@
  * @version $Revision$
  * $Id$
  */
-require_once('lib/datei.inc.php');
+require_once 'lib/datei.inc.php';
 require_once 'lib/migrations/db_migration.php';
 require_once 'lib/migrations/db_schema_version.php';
 require_once 'lib/migrations/migrator.php';
+require_once 'PluginRepository.class.php';
 
 define("PLUGIN_UPLOAD_ERROR",1);
 define("PLUGIN_MANIFEST_ERROR",2);
@@ -30,6 +31,28 @@ class PluginAdministration {
 	 */
 	function PluginAdministration($environment){
 		$this->environment = $environment;
+	}
+
+	/**
+	 * Returns the error message for the given error/status code.
+	 */
+	function getErrorMessage ($error_code) {
+		switch ($error_code) {
+			case PLUGIN_INSTALLATION_SUCCESSFUL:
+				return _("Die Installation des Plugins war erfolgreich");
+			case PLUGIN_UPLOAD_ERROR:
+				return _("Der Upload des Plugins ist fehlgeschlagen");
+			case PLUGIN_MANIFEST_ERROR:
+				return _("Das Manifest des Plugins ist nicht korrekt");
+			case PLUGIN_MISSING_MANIFEST_ERROR:
+				return _("Das Manifest des Plugins fehlt");
+			case PLUGIN_ALLREADY_INSTALLED_ERROR:
+				return _("Das Plugin ist bereits installiert");
+			case PLUGIN_ALREADY_REGISTERED_ERROR:
+				return _("Das Plugin ist bereits in der Datenbank registriert");
+			default:
+				return _("Bei der Installation des Plugins ist ein Fehler aufgetreten");
+		}
 	}
 
 	/**
@@ -203,6 +226,25 @@ class PluginAdministration {
 	}
 
 	/**
+	 * Downloads and installs a new plugin from the given URL.
+	 *
+	 * @param string $plugin_url the URL of the plugin package
+	 * @return ERROR_CODE/SUCCESS_CODE
+	 */
+	function installPluginFromURL ($plugin_url)
+	{
+		$temp_name = tempnam($GLOBALS['TMP_PATH'], 'plugin');
+
+		if (!@copy($plugin_url, $temp_name)) {
+			return PLUGIN_UPLOAD_ERROR;
+		}
+
+		$status = $this->installPlugin($temp_name, true);
+		unlink($temp_name);
+		return $status;
+	}
+
+	/**
 	 * Create the initial database schema for the plugin.
 	 *
 	 * @param string  $pluginpath absolute path to the plugin
@@ -333,5 +375,45 @@ class PluginAdministration {
 		$file_id = strtolower(get_class($plugin)) . "_" . $manifest["version"] . ".zip";
 		create_zip_from_directory($this->environment->getBasepath() . $plugin->getPluginpath(), $GLOBALS["TMP_PATH"] . "/" . $file_id);
 		return GetDownloadLink($file_id, $file_id, 4, 'force');
+	}
+
+	/**
+	 * Fetch update information for a list of plugins. This method
+	 * returns for each plugin: plugin name, current version and
+	 * meta data of the plugin update, if available.
+	 */ 
+	function getUpdateInfo ($plugins)
+	{
+		$default_repository = new PluginRepository();
+
+		foreach ($GLOBALS['PLUGIN_REPOSITORIES'] as $url) {
+			$default_repository->readMetadata($url);
+		}
+
+		foreach ($plugins as $plugin) {
+			$repository = $default_repository;
+			$pluginenv = $plugin->getEnvironment();
+			$pluginpath = $pluginenv->getBasepath() . '/' . $plugin->getPluginpath();
+			$manifest = PluginEngine::getPluginManifest($pluginpath);
+
+			if (isset($manifest['update_url'])) {
+				$repository = new PluginRepository($manifest['update_url']);
+			}
+
+			$plugin_info = array(
+				'name' => $manifest['pluginname'],
+				'version' => $manifest['version']
+			);
+
+			$meta_data = $repository->getPlugin($plugin_info['name']);
+
+			if (isset($meta_data)) {
+				$plugin_info['update'] = $meta_data;
+			}
+
+			$update_info[$plugin->getPluginid()] = $plugin_info;
+		}
+
+		return $update_info;
 	}
 }

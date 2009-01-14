@@ -265,6 +265,9 @@ class PluginEngine {
 				else if ($result[0] == "uninstalldbscheme") {
 					$plugininfos["uninstalldbscheme"] = trim($result[1]);
 				}
+				else if ($result[0] == "update_url") {
+					$plugininfos["update_url"] = trim($result[1]);
+				}
 			}
 		}
 		fclose($manifest);

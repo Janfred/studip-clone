@@ -36,30 +36,14 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 	}
 
 	function showMessage($errorcode) {
-		switch ($errorcode) {
-			case 0:
-				break;
-			case PLUGIN_INSTALLATION_SUCCESSFUL:
-				StudIPTemplateEngine::showSuccessMessage(_("Die Installation des Plugins war erfolgreich"));
-				break;
-			case PLUGIN_UPLOAD_ERROR:
-				StudIPTemplateEngine::showErrorMessage(sprintf(_("Der Upload des Plugins ist fehlgeschlagen.")));
-				break;
-			case PLUGIN_MANIFEST_ERROR:
-				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Manifest des Plugins ist nicht korrekt.")));
-				break;
-			case PLUGIN_MISSING_MANIFEST_ERROR:
-				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Manifest des Plugins fehlt.")));
-				break;
-			case PLUGIN_ALLREADY_INSTALLED_ERROR:
-				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Plugin ist bereits installiert.")));
-				break;
-			case PLUGIN_ALREADY_REGISTERED_ERROR:
-				StudIPTemplateEngine::showErrorMessage(sprintf(_("Das Plugin ist bereits in der Datenbank registriert.")));
-				break;
-			default:
-				StudIPTemplateEngine::showErrorMessage(sprintf(_("Bei der Installation des Plugins ist ein Fehler aufgetreten.")));
-				break;
+		if ($errorcode) {
+			$message = PluginAdministration::getErrorMessage($errorcode);
+
+			if ($errorcode == PLUGIN_INSTALLATION_SUCCESSFUL) {
+				StudIPTemplateEngine::showSuccessMessage($message);
+			} else {
+				StudIPTemplateEngine::showErrorMessage($message);
+			}
 		}
 	}
 
@@ -105,25 +89,26 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		  	<form action="<?= PluginEngine::getLink($this->pluginref) ?>" method="post">
 		  	<input type="hidden" name="action" value="config" />
 
-                        <table style="width: 100%;" cellspacing="0">
+			<table style="width: 100%;" cellspacing="0">
 			<tr>
 				<th align="left" width="2%"></th>
 				<th align="left"><?= _("Name")?></th>
 				<th align="left"><?= _("Typ") ?></th>
 				<th align="center"><?= _("Verfügbarkeit") ?></th>
 				<th align="right"><?= _("Position&nbsp;") ?></th>
-				<th alogn="center"><?= _("&nbsp;Zugriffsrechte") ?></th>
+				<th align="center"><?= _("&nbsp;Zugriffsrechte") ?></th>
 				<th align="right"><?= _("Package") ?></th>
 			</tr>
 
 		<?php
 
+		$update_link = PluginEngine::getLink($this->pluginref, array(), 'showUpdates');
 		$absenden = makeButton("speichern","input",_("Einstellungen speichern"));
 		$lasttype = "";
 
 		foreach($plugins as $plugin){
 			$cssSw->switchClass();
-			if (is_a($plugin,"PluginAdministrationPlugin") || is_subclass_of($plugin,"PluginAdministrationPlugin")){
+			if ($plugin instanceof PluginAdministrationPlugin) {
 				continue;
 			}
 			$type = PluginEngine::getTypeOfPlugin($plugin);
@@ -138,7 +123,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 			$lasttype = $type;
 			$pluginid = $plugin->getPluginid();
 		?>
-			<tr <?=$cssSw->getHover()?>>
+			<tr style="height: 25px;" <?=$cssSw->getHover()?>>
 				<td align="left" class="<?=$cssSw->getClass()?>">
 				<?
 				 if (!$plugin->isDependentOnOtherPlugin()){
@@ -148,7 +133,7 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 				 }
 				?>
 				</td>
-				<td width="35%" align="left"class="<?=$cssSw->getClass()?>">
+				<td width="35%" align="left" class="<?=$cssSw->getClass()?>">
 					<a href="<?= PluginEngine::getLinkToAdministrationPlugin(array(), 'manifest/'.$plugin->getPluginclassname()) ?>">
 						<?= $plugin->getPluginname() ?>
 					</a>
@@ -182,37 +167,44 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		<?php
 		}
 		?>
-		  	 <tr>
-		  	 	 <td colspan="8" height="5"></td>
-		  	 </tr>
-		  	 <tr>
-		  	 	 <td colspan="8" align="center"><?= $absenden ?></td>
-		  	 </tr>
-		  	 <tr>
-		  	 	 <td colspan="8" height="10"></td>
-		  	 </tr>
-                         </table>
-			 </form>
-                         <?= $this->showInstallationForm($installableplugins);?>
+			<tr>
+				<td colspan="7" height="5"></td>
+			</tr>
+			<tr>
+				<td colspan="7" align="center"><?= $absenden ?></td>
+			</tr>
+			<tr>
+				<td colspan="7" height="10"></td>
+			</tr>
+			</table>
+			</form>
+			<?= $this->showInstallationForm($installableplugins) ?>
 		<?php
 
 		StudIPTemplateEngine::createInfoBoxTableCell();
 
-		$infobox = array	(
-						array  ("kategorie"  => _("Hinweise:"),
-								"eintrag" => array	(
-									array (	"icon" => "ausruf_small.gif",
-													"text"  => _("Verfügbarkeit bedeutet bei Standard-Plugins, dass sie vom Dozenten in Veranstaltungen und Einrichtungen aktiviert werden können. Bei System- und Administrationsplugins wird zwischen Aktivierung und Verfügbarkeit nicht unterschieden.")
-									),
-									array (	"icon" => "ausruf_small.gif",
-													"text"  => _("Per Default-Aktivierung lassen sich Standard-Plugins automatisch in allen Veranstaltungen einer Einrichtung aktivieren.")
-									),
-									array (	"icon" => "ausruf_small.gif",
-													"text"  => _("Position gibt die Reihenfolge des Plugins in der Navigation an. <b>Erlaubt sind nur Werte größer 0.</b>")
-									)
-								)
-						)
-				);
+		$infobox = array(
+			array(  'kategorie' => _('Hinweise:'),
+				'eintrag'   => array(
+					array(	'icon' => 'ausruf_small.gif',
+						'text'  => _('Verfügbarkeit bedeutet bei Standard-Plugins, dass sie vom Dozenten in Veranstaltungen und Einrichtungen aktiviert werden können. Bei System- und Administrationsplugins wird zwischen Aktivierung und Verfügbarkeit nicht unterschieden.')
+					),
+					array(	'icon' => 'ausruf_small.gif',
+						'text'  => _('Per Default-Aktivierung lassen sich Standard-Plugins automatisch in allen Veranstaltungen einer Einrichtung aktivieren.')
+					),
+					array(	'icon' => 'ausruf_small.gif',
+						'text'  => _('Position gibt die Reihenfolge des Plugins in der Navigation an. Erlaubt sind nur Werte größer 0.')
+					)
+				)
+			),
+			array(  'kategorie' => _('Aktionen:'),
+				'eintrag'   => array(
+					array(	'icon' => 'link_intern.gif',
+						'text'  => '<a href="'.$update_link.'">'._('Installierte Plugins aktualisieren').'</a>'
+					)
+				)
+			)
+		);
 		print_infobox ($infobox,"modules.jpg");
 		StudIPTemplateEngine::endInfoBoxTableCell();
 	}
@@ -268,6 +260,126 @@ class PluginAdministrationVisualization extends AbstractStudIPPluginVisualizatio
 		</form>
 		<?php
 		}
+	}
+
+	function showPluginUpdateList ($plugins, $update_info, $update_status = array()) {
+		$cssSw = new cssClassSwitcher();									// Klasse für Zebra-Design
+		$cssSw->enableHover();
+		echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
+		$cssSw->resetClass();
+
+		$relativepath = $this->pluginref->getPluginURL();
+		?>
+		  	<form action="<?= PluginEngine::getLink($this->pluginref, array(), 'installUpdates') ?>" method="post">
+
+			<table style="width: 100%;" cellspacing="0">
+			<tr>
+				<th align="left" width="2%"></th>
+				<th align="left"><?= _("Name")?></th>
+				<th align="left"><?= _("Typ") ?></th>
+				<th align="left"><?= _("installierte Version") ?></th>
+				<th align="left"><?= _("verfügbare Version") ?></th>
+				<th align="left"><?= _("aktualisieren") ?></th>
+			</tr>
+
+		<?php
+
+		$absenden = makeButton("starten", "input", _("Aktualisierung starten"));
+		$abbrechen = '<a href="'.PluginEngine::getLink($this->pluginref).'">'.makeButton("abbrechen").'</a>';
+		$lasttype = "";
+
+		foreach ($plugins as $plugin) {
+			$cssSw->switchClass();
+			if ($plugin instanceof PluginAdministrationPlugin) {
+				continue;
+			}
+			$type = PluginEngine::getTypeOfPlugin($plugin);
+			if ($type != $lasttype){
+			   ?>
+			<tr>
+				<td colspan="6" height="10"></td>
+			</tr>
+
+			   <?php
+			}
+			$lasttype = $type;
+			$pluginid = $plugin->getPluginid();
+		?>
+			<tr style="height: 25px;" <?=$cssSw->getHover()?>>
+				<td align="left" class="<?=$cssSw->getClass()?>">
+				</td>
+				<td width="25%" align="left" class="<?=$cssSw->getClass()?>">
+					<a href="<?= PluginEngine::getLinkToAdministrationPlugin(array(), 'manifest/'.$plugin->getPluginclassname()) ?>">
+						<?= $plugin->getPluginname() ?>
+					</a>
+				<td width="10%" align="left" class="<?=$cssSw->getClass()?>"><?= $type ?></td>
+				<td width="15%" align="left" class="<?=$cssSw->getClass()?>">
+					<?= htmlentities($update_info[$pluginid]['version']) ?>
+				</td>
+				<td width="15%" align="left" class="<?=$cssSw->getClass()?>">
+					<? if (isset($update_info[$pluginid]['update'])): ?>
+						<?= htmlentities($update_info[$pluginid]['update']['version']) ?>
+					<? endif ?>
+				</td>
+				<td width="33%" align="left" class="<?=$cssSw->getClass()?>">
+					<? if (isset($update_status[$pluginid])): ?>
+						<? if ($update_status[$pluginid] == PLUGIN_INSTALLATION_SUCCESSFUL): ?>
+							<span style="color: green;">
+								<?= _('Update erfolgreich installiert') ?>
+							</span>
+						<? else: ?>
+							<span style="color: red;">
+								<?= PluginAdministration::getErrorMessage($update_status[$pluginid]) ?>
+							</span>
+						<? endif ?>
+					<? elseif (!$plugin->isDependentOnOtherPlugin() && isset($update_info[$pluginid]['update'])): ?>
+						<label>
+							<input type="checkbox" name="update[]" value="<?= $pluginid ?>" checked>
+							<?= _('Update installieren') ?>
+						</label>
+					<? endif ?>
+				</td>
+			</tr>
+		<?php
+		}
+		?>
+			<tr>
+				<td colspan="6" height="5"></td>
+			</tr>
+			<tr>
+				<td colspan="6" align="center"><?= $absenden ?>&nbsp;<?= $abbrechen ?></td>
+			</tr>
+			<tr>
+				<td colspan="6" height="10"></td>
+			</tr>
+			</table>
+			</form>
+			<?= $this->showInstallationForm(PluginEngine::getInstallablePlugins()) ?>
+		<?php
+
+		StudIPTemplateEngine::createInfoBoxTableCell();
+
+		$infobox = array(
+			array(  'kategorie' => _('Hinweise:'),
+				'eintrag'   => array(
+					array(  'icon' => 'ausruf_small.gif',
+						'text'  => _('Wählen Sie in der Liste aus, welche Plugins aktualisiert werden sollen und klicken Sie auf "starten".')
+					),
+					array(	'icon' => 'ausruf_small.gif',
+						'text'  => _('Die automatische Aktualisierung wird nicht von allen Plugins unterstützt.')
+					)
+				)
+			),
+			array(  'kategorie' => _('Aktionen:'),
+				'eintrag'   => array(
+					array(	'icon' => 'link_intern.gif',
+						'text'  => '<a href="'.PluginEngine::getLink($this->pluginref).'">'._('Verwaltung von Plugins').'</a>'
+					)
+				)
+			)
+		);
+		print_infobox ($infobox,"modules.jpg");
+		StudIPTemplateEngine::endInfoBoxTableCell();
 	}
 }
 ?>

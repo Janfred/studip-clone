@@ -249,6 +249,10 @@ $NEW_PLUGINS_PATH = ""; 							//The place from which new plugins should be load
 $PLUGINS_CACHING = TRUE;  						//enable caching
 $PLUGINS_CACHE_TIME = 300; 						//Time in seconds, the cache is valid
 
+$PLUGIN_REPOSITORIES = array(
+	'http://plugins.studip.de/svn/plugins/tools/plugins.xml'
+);
+
 /*system functions
 ----------------------------------------------------------------
 activate or deactivate some basic system-functions here*/
