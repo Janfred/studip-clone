@@ -393,7 +393,7 @@ class PluginAdministration {
 		foreach ($plugins as $plugin) {
 			$repository = $default_repository;
 			$pluginenv = $plugin->getEnvironment();
-			$pluginpath = $pluginenv->getBasepath() . '/' . $plugin->getPluginpath();
+			$pluginpath = $pluginenv->getBasepath().'/'.$plugin->getPluginpath();
 			$manifest = PluginEngine::getPluginManifest($pluginpath);
 
 			if (isset($manifest['update_url'])) {
@@ -405,9 +405,10 @@ class PluginAdministration {
 				'version' => $manifest['version']
 			);
 
-			$meta_data = $repository->getPlugin($plugin_info['name']);
+			$meta_data = $repository->getPlugin($manifest['pluginname']);
 
-			if (isset($meta_data)) {
+			if (isset($meta_data) &&
+			    version_compare($meta_data['version'], $manifest['version']) > 0) {
 				$plugin_info['update'] = $meta_data;
 			}
 
