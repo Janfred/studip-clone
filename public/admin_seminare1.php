@@ -600,130 +600,143 @@ if ($s_send) {
 	}
 
 	if ($run) { // alle Angaben ok
-    ## Create timestamps
-    $start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
-    $duration = mktime($end_stunde,$end_minute,0,$monat,$tag,$jahr)-$start_time;
+		// Create timestamps
+		$start_time = mktime($stunde,$minute,0,$monat,$tag,$jahr);
+		$duration = mktime($end_stunde,$end_minute,0,$monat,$tag,$jahr)-$start_time;
 
-    if ($Schreibzugriff < $Lesezugriff)
+		if ($Schreibzugriff < $Lesezugriff)
 			$Schreibzugriff = $Lesezugriff;			// hier wusste ein Dozent nicht, was er tat
 
-    ## Update Seminar information.
+		// Update Seminar information.
 
-    $update_data = array();
+		$update_data = array();
 
-    if (!LockRules::Check($s_id, 'VeranstaltungsNummer'))
-    {
-    	$update_data['Veranstaltungsnummer'] = $VeranstaltungsNummer;
-    }
+		if (!LockRules::Check($s_id, 'VeranstaltungsNummer'))
+		{
+			$update_data['Veranstaltungsnummer'] = $VeranstaltungsNummer;
+		}
 
-    if (!LockRules::Check($s_id, 'Institut_id'))
-    {
-    	if ($perm->have_studip_perm("dozent",$s_id))
-    	{
-    		$update_data['Institut_id'] = $Institut;
-    	}
-    }
+		if (!LockRules::Check($s_id, 'Institut_id'))
+		{
+			if ($perm->have_studip_perm("dozent",$s_id))
+			{
+				$update_data['Institut_id'] = $Institut;
+			}
+		}
 
-    if (!LockRules::Check($s_id, 'Name'))
-    {
-    	$update_data['Name'] = $Name;
-    }
+		if (!LockRules::Check($s_id, 'Name'))
+		{
+			$update_data['Name'] = $Name;
+		}
 
-    if (!LockRules::Check($s_id, 'Untertitel'))
-    {
-    	$update_data['Untertitel'] = $Untertitel;
-    }
+		if (!LockRules::Check($s_id, 'Untertitel'))
+		{
+			$update_data['Untertitel'] = $Untertitel;
+		}
 
-	if (!LockRules::Check($s_id, 'status'))
-    {
-    	$update_data['status'] = $Status;
-    }
+		if (!LockRules::Check($s_id, 'status'))
+		{
+			$update_data['status'] = $Status;
+		}
 
-    if (!LockRules::Check($s_id, 'Beschreibung'))
-    {
-    	$update_data['Beschreibung'] = $Beschreibung;
-    }
+		if (!LockRules::Check($s_id, 'Beschreibung'))
+		{
+			$update_data['Beschreibung'] = $Beschreibung;
+		}
 
-    if (!LockRules::Check($s_id, 'Sonstiges'))
-    {
-    	$update_data['Sonstiges'] = $Sonstiges;
-    }
+		if (!LockRules::Check($s_id, 'Sonstiges'))
+		{
+			$update_data['Sonstiges'] = $Sonstiges;
+		}
 
-    if (!LockRules::Check($s_id, 'art'))
-    {
-    	$update_data['art'] = $art;
-    }
+		if (!LockRules::Check($s_id, 'art'))
+		{
+			$update_data['art'] = $art;
+		}
 
-    if (!LockRules::Check($s_id, 'teilnehmer'))
-    {
-    	$update_data['teilnehmer'] = $teilnehmer;
-    }
+		if (!LockRules::Check($s_id, 'teilnehmer'))
+		{
+			$update_data['teilnehmer'] = $teilnehmer;
+		}
 
-    if (!LockRules::Check($s_id, 'voraussetzungen'))
-    {
-    	$update_data['vorrausetzungen'] = $vorrausetzungen;
-    }
+		if (!LockRules::Check($s_id, 'voraussetzungen'))
+		{
+			$update_data['vorrausetzungen'] = $vorrausetzungen;
+		}
 
-    if (!LockRules::Check($s_id, 'lernorga'))
-    {
-    	$update_data['lernorga'] = $lernorga;
-    }
+		if (!LockRules::Check($s_id, 'lernorga'))
+		{
+			$update_data['lernorga'] = $lernorga;
+		}
 
-	if (!LockRules::Check($s_id, 'leistungsnachweis'))
-    {
-    	$update_data['leistungsnachweis'] = $leistungsnachweis;
-    }
+		if (!LockRules::Check($s_id, 'leistungsnachweis'))
+		{
+			$update_data['leistungsnachweis'] = $leistungsnachweis;
+		}
 
-    if (!LockRules::Check($s_id, 'ects'))
-    {
-    	$update_data['ects'] = $ects;
-    }
+		if (!LockRules::Check($s_id, 'ects'))
+		{
+			$update_data['ects'] = $ects;
+		}
 
-    if (!LockRules::Check($s_id, 'admission_turnout'))
-    {
-    	$update_data['admission_turnout'] = $turnout;
-    }
+		if (!LockRules::Check($s_id, 'admission_turnout'))
+		{
+			$update_data['admission_turnout'] = $turnout;
+		}
 
-     if (!LockRules::Check($s_id, 'Ort'))
-    {
-    	$update_data['Ort'] = $room;
-    }
+		if (!LockRules::Check($s_id, 'Ort'))
+		{
+			$update_data['Ort'] = $room;
+		}
 
-    $query = null;
+		$query = null;
 
-    $updated_seminar = false;
+		$updated_seminar = false;
+		$result = DBManager::get()->query("SELECT * FROM seminare WHERE Seminar_id = '$s_id' ");
+		$old_basic_data=$result->fetch();
+		if (sizeof($update_data) > 0)
+		{
+			$count = 0;
 
-    if (sizeof($update_data) > 0)
-    {
-   		$count = 0;
+			$query = "UPDATE seminare SET ";
+			$to_log_basic="";
+			foreach($update_data as $key => $value)
+			{
+				if ($count > 0)
+				{
+					$query .= ", ";
+				}
 
-   		$query = "UPDATE seminare SET ";
+				$query .= " $key='$value' ";
 
-   		foreach($update_data as $key => $value)
-   		{
-   			if ($count > 0)
-   			{
-   				$query .= ", ";
-   			}
+				if ($old_basic_data[$key] != $value) {
+					$to_log_basic .= "von $key='{$old_basic_data[$key]}' nach $key='$value' \n";
+				}
 
-   			$query .= " $key='$value' ";
+				$count ++;
+			}
 
+			$query .= "WHERE Seminar_id='$s_id'";
 
-   			$count ++;
-   		}
+			$basicdatachanged=$db->query($query);
+			$heimateinrichtung=$old_basic_data['Institut_id'];
 
-		$query .= "WHERE Seminar_id='$s_id'";
+			// >>>>>> LOGGING 
 
-   		$db->query($query);
+			if($basicdatachanged){log_event('CHANGE_BASIC_DATA',$s_id," " ,$to_log_basic ,$user->id);}
 
-   		$updated_seminar = $db->affected_rows();
-    }
+			// <<<<<< LOGGING 
 
-    if ($do_update_admission)
-    	update_admission($s_id);
+			$cache = StudipCacheFactory::getCache();
+			$cache->expire('studipsemtree');
+			$updated_seminar = $db->affected_rows();
+		}
 
-    if ($updated_seminar
-    		&& $db->affected_rows()) {
+		if ($do_update_admission)
+			update_admission($s_id);
+
+		if ($updated_seminar
+				&& $db->affected_rows()) {
 			$msg .= "msg§" . _("Die Grund-Daten der Veranstaltung wurden ver&auml;ndert.") . "§";
 			$db->query("UPDATE seminare SET chdate='".time()."' WHERE Seminar_id='$s_id'");
 		}
@@ -741,7 +754,7 @@ if ($s_send) {
 				&& !LockRules::Check($s_id, 'dozent')) {
 			$add_doz_id=get_userid($add_doz);
 			$group=select_group($temp_admin_seminare_start_time);
-            $next_pos = get_next_position("dozent",$s_id);
+			$next_pos = get_next_position("dozent",$s_id);
 			$query = "SELECT user_id, status FROM seminar_user WHERE Seminar_id = '$s_id' AND user_id = '$add_doz_id'";
 			$db2->query($query);
 			if ($db2->next_record()){ //User schon da
@@ -788,22 +801,67 @@ if ($s_send) {
 
 		if (!LockRules::Check($s_id, 'seminar_inst'))
 		{
-		// delete all old participating institutions, then write new list
-		if (($b_institute) || ($Institut)) {
-			$query = "DELETE from seminar_inst where Seminar_id='$s_id'";
-			$db3->query($query);
-		}
+			$result = DBManager::get()->query("SELECT Institute.Name, Institute.Institut_id FROM seminar_inst " .
+					" LEFT JOIN Institute ON (Institute.Institut_id = seminar_inst.institut_id) WHERE seminar_id = '$s_id' ");
+			// $institutsnamen=DBManager::get()->query("SELECT Institut_id,Name FROM Institute")->fetch(PDO::FETCH_ASSOC);
 
-		if ($b_institute) {
-			while (list($key,$val) = each($b_institute)) {       // alle ausgewählten beteiligten Institute durchlaufen
-				$query = "INSERT INTO seminar_inst values('$s_id','$val')";
-				$db3->query($query);			     // Institut eintragen
+			$to_log_institutes=" von ";
+			$counter=0;
+			while($old_institutes_data = $result->fetch(PDO::FETCH_ASSOC)) {
+				if($counter > 0){
+					$to_log_institutes .=" , ";
+				}
+
+				if($old_institutes_data['Institut_id'] != $heimateinrichtung){
+					$old_institutes[$old_institutes_data['Institut_id']] = $old_institutes_data['Name'];
+				}
+				$counter++;
 			}
-		}
 
-		// Heimat-Institut ebenfalls eintragen, wenn noch nicht da
-		$query = "INSERT IGNORE INTO seminar_inst values('$s_id','$Institut')";
-		$db3->query($query);
+			// delete all old participating institutions, then write new list
+			if (($b_institute) || ($Institut)) {
+				$query = "DELETE from seminar_inst where Seminar_id='$s_id'";
+				$db3->query($query);
+			}
+			$to_log_institutes .=" nach ";
+			$counter=0;
+			if ($b_institute) {
+				while (list($key,$val) = each($b_institute)) {       // alle ausgewählten beteiligten Institute durchlaufen
+					if($counter>0){
+						$to_log_institutes .=" , ";
+					}				
+					$old_inst_name = DBManager::get()->query("SELECT Name FROM Institute WHERE Institut_id ='$val'")->fetchColumn(0)." ";
+					if (!$old_institutes[$val]) {
+						log_event('CHANGE_INSTITUTE_DATA', $s_id, $val, "Beteiligte Einrichtung $old_inst_name wurde hinzugefügt" ,$user->id);
+					}
+
+					unset($old_institutes[$val]);				
+					$query = "INSERT INTO seminar_inst values('$s_id','$val')";
+					$db3->query($query);			     // Institut eintragen
+					$counter++;
+				}
+			}
+			$counter=0;
+
+			foreach ($old_institutes as $key => $val) {
+				log_event('CHANGE_INSTITUTE_DATA', $s_id, $key, "Beteiligte Einrichtung $val wurde gelöscht" ,$user->id);
+			}
+
+			if ($heimateinrichtung != $Institut) {
+				$to_log_institutes = " Heimatinstitut von: " .
+					DBManager::get()->query("SELECT Name FROM Institute WHERE Institut_id ='$heimateinrichtung'")->fetchColumn(0) . 
+					" nach: " . DBManager::get()->query("SELECT Name FROM Institute WHERE Institut_id ='$Institut'")->fetchColumn(0). " geändert";
+
+				// >>>>>> LOGGING 
+				log_event('CHANGE_INSTITUTE_DATA', $s_id, " ", $to_log_institutes, $user->id);
+				// <<<<<< LOGGING 
+
+			}
+
+
+			// Heimat-Institut ebenfalls eintragen, wenn noch nicht da
+			$query = "INSERT IGNORE INTO seminar_inst values('$s_id','$Institut')";
+			$db3->query($query);
 
 		}
 
@@ -813,10 +871,10 @@ if ($s_send) {
 			foreach (DataFieldEntry::getDataFieldEntries($s_id, 'sem') as $entry) {
 				if(isset($_REQUEST['datafields'][$entry->getId()])){
 					$entry->setValueFromSubmit($_REQUEST['datafields'][$entry->getId()]);
-				if ($entry->isValid() && !LockRules::Check($s_id, $entry->getId()))
-					$entry->store();
-				else
-					$invalidEntries[$entry->getId()] = $entry;
+					if ($entry->isValid() && !LockRules::Check($s_id, $entry->getId()))
+						$entry->store();
+					else
+						$invalidEntries[$entry->getId()] = $entry;
 				}
 			}
 			if(!$updated_seminar) $msg .= "msg§" . _("Die Grunddaten der Veranstaltung wurden ver&auml;ndert.") . "§";

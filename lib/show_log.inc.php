@@ -228,6 +228,13 @@ function showlog_format_singledate($sd_id) {
 	return '<em>'.$termin->toString().'</em>';
 }
 
+function showlog_format_plugin($plugin_id) {
+	$pe = PluginEngine::getPluginPersistence();
+	$plugin = $pe->getplugin($plugin_id);
+	
+	return '<em>'.$plugin->pluginname.'</em>';
+}
+
 function showlog_format_semester($sem_start_time) {
 	require_once('lib/classes/SemesterData.class.php');
 	$semester = new SemesterData();
@@ -261,6 +268,7 @@ function showlog_format_infotemplate($action, $user_id, $affected, $coaffected, 
 	$text=preg_replace('/%coaffected/',$coaffected,$text);
 	$text=preg_replace('/%info/',$info,$text);
 	$text=preg_replace('/%dbg_info/',$dbg_info,$text);
+	$text=preg_replace("/%plugin\($coaffected\)/",showlog_format_plugin($coaffected),$text);
 	return $text;
 }
 

@@ -89,7 +89,6 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 
 	if (($uebernehmen_x) || ($retry)) {
 		$msg='';
-
 		if ($uebernehmen_x){
 			foreach ($amodules->registered_modules as $key => $val) {
 				//after sending, set all "conflicts" to TRUE (we check them later)
@@ -115,6 +114,7 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					if( $check != $setting ){
 						array_push( $plugin_toggle , $plugin->getPluginId() );
 					}
+				
 				}
 				//$plugins = $amodules->pluginengine->getAllEnabledPlugins();
 			}
@@ -172,6 +172,14 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					$plugin->setActivated( !$plugin->isActivated() );
 					$amodules->pluginengine->savePlugin( $plugin );
 					$changes = true;
+					// >>>>>> LOGGING
+					if ($plugin->isActivated()) {
+						log_event('PLUGIN_ENABLE',$admin_modules_data["range_id"],$plugin->getPluginId() ,$user->id); 
+					}
+					else {
+						log_event('PLUGIN_DISABLE',$admin_modules_data["range_id"],$plugin->getPluginId() ,$user->id); 
+					}
+					// <<<<<< LOGGING
 				}
 			}
 			$plugin_toggle = array();
