@@ -117,7 +117,7 @@ function getToplist($rubrik, $query, $type="count") {
 <body>
 <?
 
-
+$_sem_status=array();
 if ($sem_portal["bereich"] != "all" && $sem_portal["bereich"] != "mod") {
 
 	foreach ($SEM_CLASS as $key => $value){
