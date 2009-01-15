@@ -207,6 +207,22 @@ td.infoboxrahmen {
 	border:1px solid #CCCCCC;
 }
 
+tr.cycle_odd {
+	background-color: #F2F2F2;
+}
+
+tr.cycle_even {
+	background-color: #E2E2E2;
+}
+
+tr.cycle_odd:hover {
+	background-color: #CED8F2;
+}
+
+tr.cycle_even:hover {
+	background-color: #B7C2E2;
+}
+
 /* --- Sonstige ------------------------------------------------------------- */
 /** //TODO: aufräumen und optmieren... */
 .gruppe0 {

@@ -6,15 +6,13 @@
  * @version $Revision$
  * $Id$
  */
-require_once('lib/visual.inc.php');
-require_once("PluginAdministrationVisualization.class.php");
-require_once("PluginAdministration.class.php");
+require_once 'PluginAdministration.class.php';
 
 class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 	// management
 	var $pluginmgmt;
-	// Visualization
-	var $pluginvis;
+	// template factory
+	var $template_factory;
 
 	/**
 	 *
@@ -26,6 +24,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$this->setNavigation($tab);
 		$this->setTopNavigation($tab);
 		$this->setPluginiconname("img/einst.gif");
+		$this->template_factory = new Flexi_TemplateFactory(dirname(__FILE__).'/templates');
 	}
 
 	/**
@@ -36,18 +35,6 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		if ($this->pluginmgmt == null){
 			$this->pluginmgmt = new PluginAdministration($this->environment);
 		}
-		if ($this->pluginvis == null){
-			$this->pluginvis = new PluginAdministrationVisualization($this);
-		}
-	}
-
-	function showDefaultView($pluginengine,$msg=""){
-		// $this->init();
-		$plugins = $pluginengine->getAllInstalledPlugins();
-		$installableplugins = PluginEngine::getInstallablePlugins();
-
-		$roleplugin = $pluginengine->getPlugin($pluginengine->getPluginid("de_studip_core_RoleManagementPlugin"));
-		$this->pluginvis->showPluginAdministrationList($plugins,$msg,$installableplugins,$roleplugin);
 	}
 
 	function actionInstallPlugin(){
@@ -55,32 +42,37 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$pluginfilename = $_POST["pluginfilename"];
 		$user = $this->getUser();
 		$permission = $user->getPermission();
+		$pluginengine = PluginEngine::getPluginPersistence();
+		$roleplugin = $pluginengine->getPluginid('de_studip_core_RoleManagementPlugin');
+
+		$template = $this->template_factory->open('plugin_administration');
+
 		// check if user has the permission to check in / update plugins
-		if (!$permission->hasRootPermission() && $permission->hasAdminPermission()){
-		   // show nothing
-		   return;
+		if (!$permission->hasRootPermission()) {
+			// show nothing
+			return;
 		}
 
 		if ($GLOBALS['PLUGINS_UPLOAD_ENABLE']){
 			$upload_file = $_FILES["upload_file"]["tmp_name"];
-	    	// process the upload
-	    	// and register plugin in the database;
-	    	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);
-	    	$pluginengine = PluginEngine::getPluginPersistence();
-	    	$this->showDefaultView($pluginengine,$result);
+			// process the upload and register plugin in the database
+			$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);
+		} else if (isset($pluginfilename) && isset($GLOBALS['NEW_PLUGINS_PATH'])){
+			$newpluginfilename = $GLOBALS['NEW_PLUGINS_PATH'] . "/" . $pluginfilename;
+			$result = $this->pluginmgmt->installPlugin($newpluginfilename,$forceupdate);
+		} else {
+			// nothing to do
 		}
-		else {
-			// no plugin upload enabled
-			if (isset($pluginfilename) && isset($GLOBALS['NEW_PLUGINS_PATH'])){
-				$newpluginfilename = $GLOBALS['NEW_PLUGINS_PATH'] . "/" . $pluginfilename;
-				$result = $this->pluginmgmt->installPlugin($newpluginfilename,$forceupdate);
-			}
-			else {
-				// nothing to do
-			}
-			$pluginengine = PluginEngine::getPluginPersistence();
-	    	$this->showDefaultView($pluginengine,$result);
-		}
+
+		$template->set_attributes(array(
+			'admin_plugin'  => $this,
+			'errorcode'     => $result,
+			'plugins'       => $pluginengine->getAllInstalledPlugins(),
+			'roleplugin'    => $pluginengine->getPlugin($roleplugin),
+			'installable'   => PluginEngine::getInstallablePlugins()
+		));
+
+		echo $template->render();
 	}
 
 	/**
@@ -91,95 +83,93 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$user = $this->getUser();
 		$permission = $user->getPermission();
 		$pluginengine = PluginEngine::getPluginPersistence();
-		$adminpluginengine = PluginEngine::getPluginPersistence("Administration");
-		$systempluginengine = PluginEngine::getPluginPersistence("System");
-		$standardpluginengine = PluginEngine::getPluginPersistence("Standard");
+		$adminpluginengine = PluginEngine::getPluginPersistence('Administration');
+		$roleplugin = $pluginengine->getPluginid('de_studip_core_RoleManagementPlugin');
+
+		$template = $this->template_factory->open('plugin_administration');
 
 		// check if user has the permission to check in / update plugins
 		if (!$permission->hasRootPermission() && $permission->hasAdminPermission()){
-		   // show nothing
-		   // $this->pluginvis->showPluginList($pluginengine->getAllEnabledPlugins());
-		   return;
+			$template = $this->template_factory->open('plugin_list');
+
+			$template->set_attributes(array(
+				'admin_plugin'  => $this,
+				'plugins'       => $pluginengine->getAllEnabledPlugins()
+			));
+
+			// show nothing
+			// echo $template->render();
+			return;
 		}
 
-		$zip = $_GET["zip"];
-		$deinstall = $_GET["deinstall"];
-		$action = $_POST["action"];
-		$forceupdate = $_POST["update"];
-		$forcedeinstall = $_REQUEST["forcedeinstall"];
+		$zip = $_GET['zip'];
+		$deinstall = $_GET['deinstall'];
+		$forceupdate = $_POST['update'];
+		$forcedeinstall = $_REQUEST['forcedeinstall'];
 
-		if (isset($action)){
-		  if ($action == "config"){
-		  	 // user changed the configuration of plugins
-		  	 $plugins = $pluginengine->getAllInstalledPlugins();
-		  	 foreach ($plugins as $plugin){
-		  	 	$id = $plugin->getPluginid();
-		  	 	if (!isset($_POST["available_" . $id]) && !isset($_POST["navposition_" . $id])){
-		  	 	   continue;
-		  	 	}
-
-		  	 	if ($_POST["available_" . $id] == "1"){
-		  	 	   $plugin->setEnabled(true);
-		  	 	}
-		  	 	else {
-		  	 	   $plugin->setEnabled(false);
-		  	 	}
-		  	 	$navpos = $_POST["navposition_" . $id];
-		  	 	if ($navpos <= 0){
-		  	 	   // minimaler Wert
-		  	 	   $navpos = 1;
-		  	 	}
-		  	 	$plugin->setNavigationPosition($navpos);
-		  	 	$type = PluginEngine::getTypeOfPlugin($plugin);
-		  	 	if ($type == "Administration"){
-		  	 	   if ($_POST["available_" . $id] == "1"){
-    		  	 	   $plugin->setActivated(true);
-    		  	 	}
-    		  	 	else {
-    		  	 	   $plugin->setActivated(false);
-    		  	 	}
-    		   	   $adminpluginengine->savePlugin($plugin);
-    		    }
-    			else {
-    			  // keine spezielle Behandlung nötig
-    			  $pluginengine->savePlugin($plugin);
-    			}
-    		}
-
-    	  } else if ($action == "install"){
-    	  	// if ($update == "force")
-    	  	$upload_file = $_FILES["upload_file"]["tmp_name"];
-    	  	// process the upload
-    	  	// and register plugin in the database;
-    	  	$result = $this->pluginmgmt->installPlugin($upload_file,$forceupdate);
-		  }
-		}
-
-		if (isset($deinstall)){
+		if (isset($deinstall)) {
 			$plugin = $pluginengine->getPlugin($deinstall);
+
 			if (is_object($plugin)){
-			       if (isset($forcedeinstall)){
-			   		// Plugin notwendige Änderungen vor der deinstallation durchführen lassen
+				if (isset($forcedeinstall)){
+					// Plugin notwendige Änderungen vor der deinstallation durchführen lassen
 					$this->pluginmgmt->deinstallPlugin($plugin);
 				}
 				else {
 					// ask, if it should really be deleted
-					$this->pluginvis->showDeinstallQuestion($plugin);
+					$template->set_attribute('delete_plugin', $plugin);
 				}
 			}
-			// show the default view
-			$this->showDefaultView($pluginengine);
+		} else if (isset($zip)) {
+			$link = $this->pluginmgmt->zipPluginPackage($zip);
+			$template->set_attribute('packagelink', $link);
+		} else {
+			// user changed the configuration of plugins
+			$plugins = $pluginengine->getAllInstalledPlugins();
+
+			foreach ($plugins as $plugin){
+				$id = $plugin->getPluginid();
+				if (!isset($_POST["available_" . $id]) &&
+				    !isset($_POST["navposition_" . $id])) {
+					continue;
+				}
+
+				if ($_POST["available_" . $id] == "1") {
+					$plugin->setEnabled(true);
+				} else {
+					$plugin->setEnabled(false);
+				}
+
+				$navpos = $_POST["navposition_" . $id];
+				if ($navpos <= 0){
+					// minimaler Wert
+					$navpos = 1;
+				}
+
+				$plugin->setNavigationPosition($navpos);
+
+				if ($plugin instanceof AbstractStudIPAdministrationPlugin) {
+					if ($_POST["available_" . $id] == "1"){
+						$plugin->setActivated(true);
+					} else {
+						$plugin->setActivated(false);
+					}
+					$adminpluginengine->savePlugin($plugin);
+				} else {
+					// keine spezielle Behandlung nötig
+					$pluginengine->savePlugin($plugin);
+				}
+			}
 		}
-		else if (isset($zip)){
-			 $link = $this->pluginmgmt->zipPluginPackage($zip);
-			 $this->pluginvis->showPluginPackageDownloadView($link);
-			 $this->showDefaultView($pluginengine);
-		}
-		else {
-			 // the plugin was called without any parameters
-			 // show the default view
-			$this->showDefaultView($pluginengine,$result);
-		}
+
+		$template->set_attributes(array(
+			'admin_plugin'  => $this,
+			'plugins'       => $pluginengine->getAllInstalledPlugins(),
+			'roleplugin'    => $pluginengine->getPlugin($roleplugin),
+			'installable'   => PluginEngine::getInstallablePlugins()
+		));
+
+		echo $template->render();
 	}
 
 	/**
@@ -359,7 +349,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 				                         "text" => _("Wählen Sie die Institute, in deren Veranstaltungen das Plugin standardmäßig eingeschaltet werden soll.")),
 				                   array("icon" => "ausruf_small.gif",
 				                         "text" => _("Eine Mehrfachauswahl ist durch Drücken der Strg-Taste möglich.")))));
-			print_infobox($infobox);
+			print_infobox($infobox, 'modules.jpg');
 			StudIPTemplateEngine::endInfoBoxTableCell();
 		}
 	}
@@ -374,10 +364,20 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 			throw new Studip_AccessDeniedException();
 		}
 
+		$template = $this->template_factory->open('plugin_update');
+
 		$pluginengine = PluginEngine::getPluginPersistence();
 		$plugins = $pluginengine->getAllInstalledPlugins();
 		$update_info = $this->pluginmgmt->getUpdateInfo($plugins);
-		$this->pluginvis->showPluginUpdateList($plugins, $update_info);
+
+		$template->set_attributes(array(
+			'admin_plugin'  => $this,
+			'plugins'       => $plugins,
+			'update_info'   => $update_info,
+			'installable'   => PluginEngine::getInstallablePlugins()
+		));
+
+		echo $template->render();
 	}
 
 	/**
@@ -389,6 +389,8 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		if (!$permission->hasRootPermission()) {
 			throw new Studip_AccessDeniedException();
 		}
+
+		$template = $this->template_factory->open('plugin_update');
 
 		$pluginengine = PluginEngine::getPluginPersistence();
 		$plugins = $pluginengine->getAllInstalledPlugins();
@@ -406,6 +408,15 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		}
 
 		$update_info = $this->pluginmgmt->getUpdateInfo($plugins);
-		$this->pluginvis->showPluginUpdateList($plugins, $update_info, $update_status);
+
+		$template->set_attributes(array(
+			'admin_plugin'  => $this,
+			'plugins'       => $plugins,
+			'update_info'   => $update_info,
+			'update_status' => $update_status,
+			'installable'   => PluginEngine::getInstallablePlugins()
+		));
+
+		echo $template->render();
 	}
 }
