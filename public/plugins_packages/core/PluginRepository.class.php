@@ -56,8 +56,8 @@ class PluginRepository
 
         if (isset($xml->plugin)) {
             foreach ($xml->plugin as $xml_plugin) {
-                $min_version = utf8_decode($xml_plugin['studipMinVersion']);
-                $max_version = utf8_decode($xml_plugin['studipMaxVersion']);
+                $min_version = $xml_plugin['studipMinVersion'];
+                $max_version = $xml_plugin['studipMaxVersion'];
 
                 if (isset($min_version) &&
                       version_compare($min_version, $SOFTWARE_VERSION) > 0 ||

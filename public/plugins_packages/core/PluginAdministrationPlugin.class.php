@@ -178,12 +178,12 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 	 */
 	function actionManifest() {
 
-		if (is_object($this->user)) {
-			$permission = $this->user->getPermission();
-			if (!$permission->hasAdminPermission()) {
-				throw new Studip_AccessDeniedException();
-			}
+		$permission = $this->user->getPermission();
+		if (!$permission->hasAdminPermission()) {
+			throw new Studip_AccessDeniedException();
 		}
+
+		$template = $this->template_factory->open('plugin_manifest');
 
 		# unconsumed_path contains the plugin's class name
 		$plugin_class = current(explode('/', $this->unconsumed_path));
@@ -199,37 +199,16 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$plugin = $plugin_persistence->getPlugin($plugin_id);
 
 		# retrieve manifest
-		$plugininfos =
-			PluginEngine::getPluginManifest($plugin->environment->getBasepath() .
-			                                $plugin->pluginpath . '/');
-		StudIPTemplateEngine::makeContentHeadline(_("Plugin-Details"), 2);
-		?>
-			<table>
-				<tr>
-					<td>Name:</td>
-					<td align="left">&nbsp;<?= $plugin->pluginname ?></td>
-				</tr>
-				<tr>
-					<td>Name (original):</td>
-					<td align="left">&nbsp;<?= $plugininfos["pluginname"] ?></td>
-				</tr>
-				<tr>
-					<td>Klasse:</td>
-					<td align="left">&nbsp;<?= $plugin->getPluginclassname() ?></td>
-				</tr>
-				<tr>
-					<td>Origin:</td>
-					<td align="left">&nbsp;<?= $plugininfos["origin"] ?></td>
-				</tr>
-				<tr>
-					<td>Version:</td>
-					<td align="left">&nbsp;<?= $plugininfos["version"] ?></td>
-				</tr>
-				<tr>
-					<td colspan="2" align="center"><a href="<?= PluginEngine::getLinkToAdministrationPlugin() ?>"><?= makeButton("zurueck","img",_("zurück zur Plugin-Verwaltung")) ?></a></td>
-				</tr>
-			</table>
-		<?
+		$pluginpath = $plugin->environment->getBasepath().$plugin->getPluginpath();
+		$plugininfos = PluginEngine::getPluginManifest($pluginpath);
+
+		$template->set_attributes(array(
+			'admin_plugin'  => $this,
+			'plugin'        => $plugin,
+			'plugininfos'   => $plugininfos
+		));
+
+		echo $template->render();
 	}
 
 	/**
@@ -237,12 +216,12 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 	 */
 	function actionDefaultActivation() {
 
-		if (is_object($this->user)) {
-			$permission = $this->user->getPermission();
-			if (!$permission->hasAdminPermission()) {
-				throw new Studip_AccessDeniedException();
-			}
+		$permission = $this->user->getPermission();
+		if (!$permission->hasAdminPermission()) {
+			throw new Studip_AccessDeniedException();
 		}
+
+		$template = $this->template_factory->open('plugin_default_activation');
 
 		# unconsumed_path contains the plugin's class name
 		$plugin_class = current(explode('/', $this->unconsumed_path));
@@ -257,101 +236,39 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		# create an instance of the queried plugin
 		$plugin = $plugin_persistence->getPlugin($plugin_id);
 
-		$user = $plugin->getUser();
-		$permission = $user->getPermission();
-		if (!$permission->hasAdminPermission()) {
-			throw new Studip_AccessDeniedException(_("Sie besitzen keine Berechtigung, um dieses Plugin zu konfigurieren."));
-		}
-		else {
-			StudIPTemplateEngine::makeContentHeadline(_("Default-Aktivierung"));
-			$sel_institutes = $_POST["sel_institutes"];
-			if ($_GET["selected"]){
-				if ($_POST["nodefault"] == true) {
-					if ($plugin->pluginengine->removeDefaultActivations($plugin)) {
-						StudIPTemplateEngine::showSuccessMessage(_("Die Voreinstellungen wurden erfolgreich gelöscht."));
-						$sel_institutes = array();
-					}
-					else {
-						StudIPTemplateEngine::showErrorMessage(_("Die Voreinstellungen konnten nicht gelöscht werden"));
-					}
+		if (isset($_POST['selected'])) {
+			$selected_inst = $_POST['selected_inst'];
+
+			if (isset($_POST['nodefault'])) {
+				if ($plugin->pluginengine->removeDefaultActivations($plugin)) {
+					$message = array('msg' => _('Die Voreinstellungen wurden erfolgreich gelöscht.'));
+					$selected_inst = array();
+				} else {
+					$message = array('err' => _('Die Voreinstellungen konnten nicht gelöscht werden.'));
 				}
-				else {
-					// save selected institutes
-					if ($plugin->pluginengine->saveDefaultActivations($plugin, $sel_institutes)) {
-						// show info
-						if (count($sel_institutes) > 1) {
-							StudIPTemplateEngine::showSuccessMessage(_("Für die ausgewählten Institute wurde das Plugin standardmäßig aktiviert!"));
-						}
-						else {
-							StudIPTemplateEngine::showSuccessMessage(_("Für das ausgewählte Institut wurde das Plugin standardmäßig aktiviert!"));
-						}
-					}
-					else {
-						StudIPTemplateEngine::showErrorMessage(_("Das Abspeichern der Default-Einstellungen ist fehlgeschlagen"));
-					}
+			} else {
+				// save selected institutes
+				if ($plugin->pluginengine->saveDefaultActivations($plugin, $selected_inst)) {
+					$message = array('msg' => ngettext('Für das ausgewählte Institut wurde das Plugin standardmäßig aktiviert.',
+									   'Für die ausgewählten Institute wurde das Plugin standardmäßig aktiviert.',
+									   count($selected_inst)));
+				} else {
+					$message = array('err' => _('Das Abspeichern der Default-Einstellungen ist fehlgeschlagen.'));
 				}
 			}
-			else {
-				// load old config
-				$sel_institutes = $plugin->pluginengine->getDefaultActivations($plugin);
-			}
-
-			?>
-			<tr>
-				<td>
-					<?
-					echo _("Wählen Sie die Einrichtungen, in deren Veranstaltungen das Plugin automatisch aktiviert sein soll.<p>");
-					$institutes = StudIPCore::getInstitutes();
-					?>
-					<form action="<?= PluginEngine::getLinkToAdministrationPlugin(array("selected" => true), "DefaultActivation/".$plugin->getPluginclassname()) ?>" method="POST">
-					<select name="sel_institutes[]" multiple size="20">
-					<?
-
-					foreach ($institutes as $institute) {
-						// if id is in selected institutes, the mark it as selected
-
-						if (array_search($institute->getId(),  $sel_institutes) !== false){
-							$selected = "selected";
-						}
-						else {
-							$selected = "";
-						}
-						echo(sprintf("<option value=\"%s\" %s> %s </option>", $institute->getId(), $selected, $institute->getName()));
-						$childs = $institute->getAllChildInstitutes();
-						foreach ($childs as $child) {
-							if (array_search($child->getId(), $sel_institutes) !== false) {
-								$selected = "selected";
-							}
-							else {
-								$selected = "";
-							}
-							echo(sprintf("<option value=\"%s\" %s>&nbsp;&nbsp;&nbsp;&nbsp; %s </option>",$child->getId(),$selected, $child->getName()));
-						}
-					}
-
-					?>
-					</select><br>
-					<input type="checkbox" name="nodefault"><?= _("keine Voreinstellung wählen") ?>
-					<p>
-
-					<?= makeButton("uebernehmen", "input", _("Einstellungen speichern")) ?>
-					<a href="<?= PluginEngine::getLinkToAdministrationPlugin() ?>"><?= makeButton("zurueck", "img",  _("Zurück zur Plugin-Verwaltung")) ?></a>
-					</form>
-				</td>
-			</tr>
-
-			<?php
-
-			StudIPTemplateEngine::createInfoBoxTableCell();
-			$infobox = array(array(
-				"kategorie" => _("Hinweise:"),
-				"eintrag" => array(array("icon" => "ausruf_small.gif",
-				                         "text" => _("Wählen Sie die Institute, in deren Veranstaltungen das Plugin standardmäßig eingeschaltet werden soll.")),
-				                   array("icon" => "ausruf_small.gif",
-				                         "text" => _("Eine Mehrfachauswahl ist durch Drücken der Strg-Taste möglich.")))));
-			print_infobox($infobox, 'modules.jpg');
-			StudIPTemplateEngine::endInfoBoxTableCell();
+		} else {
+			// load old config
+			$selected_inst = $plugin->pluginengine->getDefaultActivations($plugin);
 		}
+
+		$template->set_attributes(array(
+			'admin_plugin'  => $this,
+			'message'       => $message,
+			'selected_inst' => $selected_inst,
+			'institutes'    => StudIPCore::getInstitutes()
+		));
+
+		echo $template->render();
 	}
 
 	/**
