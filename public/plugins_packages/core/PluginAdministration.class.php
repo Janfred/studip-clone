@@ -14,9 +14,10 @@ require_once 'PluginRepository.class.php';
 
 define("PLUGIN_UPLOAD_ERROR",1);
 define("PLUGIN_MANIFEST_ERROR",2);
-define("PLUGIN_ALLREADY_INSTALLED_ERROR",3);
+define("PLUGIN_ALREADY_INSTALLED_ERROR",3);
+define("PLUGIN_NOT_COMPATIBLE_ERROR",4);
 define("PLUGIN_INSTANTIATION_EROR",5);
-define("PLUGIN_MISSING_METHOD_ERROR",6);
+define("PLUGIN_IS_NO_PLUGIN_ERROR",6);
 define("PLUGIN_INSTALLATION_SUCCESSFUL",7);
 define("PLUGIN_MISSING_MANIFEST_ERROR",8);
 define("PLUGIN_ALREADY_REGISTERED_ERROR",9);
@@ -44,10 +45,16 @@ class PluginAdministration {
 				return _("Der Upload des Plugins ist fehlgeschlagen");
 			case PLUGIN_MANIFEST_ERROR:
 				return _("Das Manifest des Plugins ist nicht korrekt");
+			case PLUGIN_NOT_COMPATIBLE_ERROR:
+				return _("Das Plugin ist mit dieser Stud.IP-Version nicht kompatibel");
+			case PLUGIN_INSTANTIATION_EROR:
+				return _("Das Plugin-Objekt konnte nicht erzeugt werden");
+			case PLUGIN_IS_NO_PLUGIN_ERROR:
+				return _("Das Plugin enthält keine gültige Plugin-Klasse");
+			case PLUGIN_ALREADY_INSTALLED_ERROR:
+				return _("Das Plugin ist bereits installiert");
 			case PLUGIN_MISSING_MANIFEST_ERROR:
 				return _("Das Manifest des Plugins fehlt");
-			case PLUGIN_ALLREADY_INSTALLED_ERROR:
-				return _("Das Plugin ist bereits installiert");
 			case PLUGIN_ALREADY_REGISTERED_ERROR:
 				return _("Das Plugin ist bereits in der Datenbank registriert");
 			default:
@@ -96,9 +103,12 @@ class PluginAdministration {
 	 * @return ERROR_CODE/SUCCESS_CODE
 	 */
 	function installPlugin($uploadfilename,$forceupdate=false){
+		global $SOFTWARE_VERSION;
+
 		$currdate = mktime();
 		$pluginstmpdir = $GLOBALS["TMP_PATH"] . "/plugins_tmp/";
 		$tmppackagedir = $pluginstmpdir . $currdate . "/";
+
 		// check if directory exists
 		if (!file_exists($pluginstmpdir)){
 			@mkdir($pluginstmpdir);
@@ -106,8 +116,10 @@ class PluginAdministration {
 		if (!file_exists($tmppackagedir)){
 			@mkdir($tmppackagedir);
 		}
+
 		// extract plugin files
 		unzip_file($uploadfilename, $tmppackagedir);
+
 		// delete uploaded file
 		if (is_uploaded_file($uploadfilename)) {
 			unlink($uploadfilename);
@@ -122,107 +134,113 @@ class PluginAdministration {
 		// everything ok, so far
 		$plugininfos = PluginEngine::getPluginManifest($tmppackagedir);
 
-		if ((strlen($plugininfos["class"]) > 0) && (strlen($plugininfos["origin"]) > 0) && (strlen($plugininfos["version"]) > 0)){
-			// Plugin-Hauptclasse instanziieren
-			$pluginclassname = trim($plugininfos["class"]);
-
-			// Klasse instanziieren
-			if (strlen($pluginclassname) > 0){
-				// Neuen Pfad bestimmen
-				$vendordir = $this->environment->getPackagebasepath() . "/" . $plugininfos["origin"];
-				$newpluginpath = $vendordir . "/" . $pluginclassname; // . "_" . $plugininfos["version"];
-				$pluginrelativepath = $plugininfos["origin"] . "/" . $pluginclassname; //  . "_" . $plugininfos["version"];
-				$persistence = PluginEngine::getPluginPersistence();
-				$pluginregistered = $persistence->isPluginRegistered($pluginclassname);
-
-				if (!file_exists($vendordir)){
-					@mkdir($vendordir);
-				}
-
-				if (!file_exists($newpluginpath)){
-					// ok, plugin in exact this version is not installed
-					@mkdir($newpluginpath);
-					// do we have to delete the old plugin directory?
-				}
-				else {
-					// directory exists
-					// is the plugin already installed?
-					if (!$pluginregistered){
-						// not registered in database
-						// delete directory
-						$this->deletePlugindir($newpluginpath);
-						// and create an empty directory
-						@mkdir($newpluginpath);
-					}
-					else {
-						// Plugin is already registered
-						if (!$forceupdate){
-							// plugin is registered and installed
-							// and we didn't request to do an forced update
-					 		return PLUGIN_ALLREADY_INSTALLED_ERROR;
-						}
-						else {
-							// forced update
-							$this->updateDBSchema($newpluginpath, $tmppackagedir, $plugininfos);
-							// only delete the plugin directory
-							// registration info will be updated automatically
-							$this->deletePlugindir($newpluginpath);
-						}
-					}
-				}
-				// check to see, if the plugin is already registered
-				if ($pluginregistered && !$forceupdate){
-					return PLUGIN_ALREADY_REGISTERED_ERROR;
-				}
-				// everything fine, install it
-
-				// copy files
-				$this->copyr($tmppackagedir,$newpluginpath);
-				// delete the temporary path
-				$this->deletePlugindir($tmppackagedir);
-
-				// create database if needed
-				$this->createDBSchema($newpluginpath, $plugininfos, $pluginregistered && $forceupdate);
-
-				// instantiate plugin
-				require_once($newpluginpath . '/' . $pluginclassname . ".class.php");
-
-				$plugin = new $pluginclassname();
-				if ($plugin == null){
-					// delete Plugin directory
-					$this->deletePlugindir($newpluginpath);
-					return PLUGIN_INSTANTIATION_EROR;
-				}
-				else {
-					// check if certain methods exist in the plugin
-					$methods = array_map('strtolower', get_class_methods($plugin));
-					if (array_search('show',$methods)){
-						// now register the plugin in the database
-						$newpluginid = $persistence->registerPlugin($plugin,$pluginclassname,$pluginrelativepath);
-						if ($newpluginid > 0){
-							$plugin->setPluginid($newpluginid);
-						}
-						// do we have additional plugin classes in this package?
-						$additionalclasses = $plugininfos["additionalclasses"];
-						if (is_array($additionalclasses)){
-							foreach ($additionalclasses as $additionalclass){
-								require_once($newpluginpath . '/' . $additionalclass . ".class.php");
-								$additionalplugin = new $additionalclass();
-								$persistence->registerPlugin($additionalplugin,$additionalclass,$pluginrelativepath,$plugin);
-							}
-						}
-					}
-					else {
-						$this->deletePlugindir($newpluginpath);
-						return PLUGIN_MISSING_METHOD_ERROR;
-					}
-				}
-				return PLUGIN_INSTALLATION_SUCCESSFUL;
-			}
-		}
-		else {
+		if (strlen($plugininfos['pluginclassname']) == 0 ||
+		    strlen($plugininfos['version']) == 0 ||
+		    strlen($plugininfos['origin']) == 0) {
+			$this->deletePlugindir($tmppackagedir);
 			return PLUGIN_MANIFEST_ERROR;
 		}
+
+		// check for compatible version
+		if (isset($plugininfos['studipMinVersion']) &&
+		      version_compare($plugininfos['studipMinVersion'], $SOFTWARE_VERSION) > 0 ||
+		    isset($plugininfos['studipMinVersion']) &&
+		      version_compare($plugininfos['studipMinVersion'], $SOFTWARE_VERSION) < 0) {
+			$this->deletePlugindir($tmppackagedir);
+			return PLUGIN_NOT_COMPATIBLE_ERROR;
+		}
+
+		// Plugin-Hauptclasse instanziieren
+		$pluginclassname = $plugininfos['pluginclassname'];
+
+		// Neuen Pfad bestimmen
+		$vendordir = $this->environment->getPackagebasepath() . "/" . $plugininfos["origin"];
+		$newpluginpath = $vendordir . "/" . $pluginclassname; // . "_" . $plugininfos["version"];
+		$pluginrelativepath = $plugininfos["origin"] . "/" . $pluginclassname; //  . "_" . $plugininfos["version"];
+		$persistence = PluginEngine::getPluginPersistence();
+		$pluginregistered = $persistence->isPluginRegistered($pluginclassname);
+
+		if (!file_exists($vendordir)){
+			@mkdir($vendordir);
+		}
+
+		if (!file_exists($newpluginpath)){
+			// ok, plugin in exact this version is not installed
+			@mkdir($newpluginpath);
+			// do we have to delete the old plugin directory?
+		} else {
+			// directory exists
+			// is the plugin already installed?
+			if (!$pluginregistered){
+				// not registered in database
+				// delete directory
+				$this->deletePlugindir($newpluginpath);
+				// and create an empty directory
+				@mkdir($newpluginpath);
+			} else {
+				// Plugin is already registered
+				if (!$forceupdate){
+					// plugin is registered and installed
+					// and we didn't request to do an forced update
+					$this->deletePlugindir($tmppackagedir);
+					return PLUGIN_ALREADY_INSTALLED_ERROR;
+				} else {
+					// forced update
+					$this->updateDBSchema($newpluginpath, $tmppackagedir, $plugininfos);
+					// only delete the plugin directory
+					// registration info will be updated automatically
+					$this->deletePlugindir($newpluginpath);
+				}
+			}
+		}
+		// check to see, if the plugin is already registered
+		if ($pluginregistered && !$forceupdate){
+			$this->deletePlugindir($tmppackagedir);
+			return PLUGIN_ALREADY_REGISTERED_ERROR;
+		}
+		// everything fine, install it
+
+		// copy files
+		$this->copyr($tmppackagedir,$newpluginpath);
+		// delete the temporary path
+		$this->deletePlugindir($tmppackagedir);
+
+		// create database if needed
+		$this->createDBSchema($newpluginpath, $plugininfos, $pluginregistered && $forceupdate);
+
+		try {
+			// instantiate plugin
+			require_once($newpluginpath . '/' . $pluginclassname . ".class.php");
+
+			$plugin = new $pluginclassname();
+		} catch (Exception $ex) {
+			// delete Plugin directory
+			$this->deletePlugindir($newpluginpath);
+			return PLUGIN_INSTANTIATION_EROR;
+		}
+
+		// check if certain methods exist in the plugin
+		if ($plugin instanceof AbstractStudIPPlugin) {
+			// now register the plugin in the database
+			$newpluginid = $persistence->registerPlugin($plugin,$pluginclassname,$pluginrelativepath);
+			if ($newpluginid > 0){
+				$plugin->setPluginid($newpluginid);
+			}
+			// do we have additional plugin classes in this package?
+			$additionalclasses = $plugininfos["additionalclasses"];
+			if (is_array($additionalclasses)){
+				foreach ($additionalclasses as $additionalclass){
+					require_once($newpluginpath . '/' . $additionalclass . ".class.php");
+					$additionalplugin = new $additionalclass();
+					$persistence->registerPlugin($additionalplugin,$additionalclass,$pluginrelativepath,$plugin);
+				}
+			}
+		} else {
+			$this->deletePlugindir($newpluginpath);
+			return PLUGIN_IS_NO_PLUGIN_ERROR;
+		}
+
+		return PLUGIN_INSTALLATION_SUCCESSFUL;
 	}
 
 	/**
@@ -252,8 +270,7 @@ class PluginAdministration {
 	 * @param boolean $update     update installed plugin
 	 */
 	function createDBSchema ($pluginpath, $manifest, $update) {
-		$pluginname = $manifest['pluginname'] ? $manifest['pluginname']
-		                                      : $manifest['pluginclassname'];
+		$pluginname = $manifest['pluginname'];
 
 		if (isset($manifest['dbscheme']) && !$update) {
 			$schemafile = $pluginpath.'/'.$manifest['dbscheme'];
@@ -279,8 +296,7 @@ class PluginAdministration {
 	 * @param array  $manifest       plugin manifest information
 	 */
 	function updateDBSchema ($pluginpath, $new_pluginpath, $manifest) {
-		$pluginname = $manifest['pluginname'] ? $manifest['pluginname']
-		                                      : $manifest['pluginclassname'];
+		$pluginname = $manifest['pluginname'];
 
 		if (is_dir($pluginpath.'/migrations')) {
 			$schema_version = new DBSchemaVersion($pluginname);
@@ -303,8 +319,7 @@ class PluginAdministration {
 	 * @param array  $manifest   plugin manifest information
 	 */
 	function deleteDBSchema ($pluginpath, $manifest) {
-		$pluginname = $manifest['pluginname'] ? $manifest['pluginname']
-		                                      : $manifest['pluginclassname'];
+		$pluginname = $manifest['pluginname'];
 
 		if (is_dir($pluginpath.'/migrations')) {
 			$schema_version = new DBSchemaVersion($pluginname);

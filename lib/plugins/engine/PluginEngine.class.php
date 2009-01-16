@@ -225,53 +225,34 @@ class PluginEngine {
 	    }
    }
 
-   /**
-	* Reads the manifest of the plugin in the given path
-	* @return array containing the manifest information
-	* @todo Klasse für die Rückgabe realisieren
-	*/
+	/**
+	 * Reads the manifest of the plugin in the given path
+	 * @return array containing the manifest information
+	 * @todo Klasse für die Rückgabe realisieren
+	 */
 	public static function getPluginManifest($pluginpath) {
-	   $pluginpath = trim($pluginpath);
-	   if (!(strrpos($pluginpath,"/") == strlen($pluginpath)-1)) $pluginpath .= "/";
-	   if (!file_exists($pluginpath . "plugin.manifest")) {
-	   	  return array();
-	   }
-	   $manifest = fopen($pluginpath . "plugin.manifest","r");
-	   $plugininfos = array();
-		while (!feof($manifest)) {
-			// Suche nach STRING1=STRING2
-			$result = fscanf($manifest,"%[^=]=%[^\n]");
-			if ($result) {
-				if ($result[0] == "pluginclassname") {
-					if ($plugininfos["class"] != "") {
-						$plugininfos["additionalclasses"][] = trim($result[1]);
-					}
-					else {
-						$plugininfos["class"] = trim($result[1]);
-					}
+		$manifest = file($pluginpath . '/plugin.manifest');
+		$result = array();
+
+		if ($manifest !== false) {
+			foreach ($manifest as $line) {
+				list($key, $value) = explode('=', $line);
+				$key = trim($key);
+				$value = trim($value);
+
+				if ($key === '' || $key[0] === '#') {
+					continue;
 				}
-				else if ($result[0] == "origin") {
-					$plugininfos["origin"] = trim($result[1]);
-				}
-				else if ($result[0] == "version") {
-					$plugininfos["version"] = trim($result[1]);
-				}
-				else if ($result[0] == "pluginname") {
-					$plugininfos["pluginname"] = trim($result[1]);
-				}
-				else if ($result[0] == "dbscheme") {
-					$plugininfos["dbscheme"] = trim($result[1]);
-				}
-				else if ($result[0] == "uninstalldbscheme") {
-					$plugininfos["uninstalldbscheme"] = trim($result[1]);
-				}
-				else if ($result[0] == "update_url") {
-					$plugininfos["update_url"] = trim($result[1]);
+
+				if ($key === 'pluginclassname' && isset($result[$key])) {
+					$result['additionalclasses'][] = $value;
+				} else {
+					$result[$key] = $value;
 				}
 			}
 		}
-		fclose($manifest);
-		return $plugininfos;
+
+		return $result;
 	}
 
 	/**
