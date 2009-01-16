@@ -144,8 +144,8 @@ class PluginAdministration {
 		// check for compatible version
 		if (isset($plugininfos['studipMinVersion']) &&
 		      version_compare($plugininfos['studipMinVersion'], $SOFTWARE_VERSION) > 0 ||
-		    isset($plugininfos['studipMinVersion']) &&
-		      version_compare($plugininfos['studipMinVersion'], $SOFTWARE_VERSION) < 0) {
+		    isset($plugininfos['studipMaxVersion']) &&
+		      version_compare($plugininfos['studipMaxVersion'], $SOFTWARE_VERSION) < 0) {
 			$this->deletePlugindir($tmppackagedir);
 			return PLUGIN_NOT_COMPATIBLE_ERROR;
 		}
