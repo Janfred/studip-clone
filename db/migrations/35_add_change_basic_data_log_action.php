@@ -5,8 +5,8 @@ class AddChangeBasicDataLogAction extends DBMigration {
 	}
 
 	function up () {
-		DBManager::get()->query("INSERT IGNORE INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES( MD5('CHANGE_BASIC_DATA'), 'CHANGE_BASIC_DATA', 'Basisdaten geändert', '%user hat in Veranstaltung %sem(%affected) die Daten %info geändert. ', 1, NULL)");
-		DBManager::get()->query("INSERT IGNORE INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES( MD('CHANGE_INSTITUTE_DATA'), 'CHANGE_INSTITUTE_DATA', 'Institutdaten geändert', '%user hat in Veranstaltung %sem(%affected) die Daten %info. ', 1, NULL)");
+		DBManager::get()->query("INSERT IGNORE INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES( MD5('CHANGE_BASIC_DATA'), 'CHANGE_BASIC_DATA', 'Basisdaten geändert', '%user hat in Veranstaltung %sem(%affected) die Daten %info geändert. ', 0, NULL)");
+		DBManager::get()->query("INSERT IGNORE INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES( MD5('CHANGE_INSTITUTE_DATA'), 'CHANGE_INSTITUTE_DATA', 'Institutdaten geändert', '%user hat in Veranstaltung %sem(%affected) die Daten %info. ', 0, NULL)");
 
 
 	}
