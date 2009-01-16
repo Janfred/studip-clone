@@ -1559,8 +1559,10 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 			echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
 			echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
 			echo '<option value="">'._("Kein Kontingent").'</option>';
-			foreach($sem->admission_studiengang as $studiengang => $data){
-				echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
+			if(is_array($sem->admission_studiengang)){			
+				foreach($sem->admission_studiengang as $studiengang => $data){
+					echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
+				}
 			}
 			echo '</select></label></font>';
 		}
@@ -1638,8 +1640,10 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 			echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
 			echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
 			echo '<option value="">'._("Kein Kontingent").'</option>';
-			foreach($sem->admission_studiengang as $studiengang => $data){
-				echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
+			if(is_array($sem->admission_studiengang)) {			
+				foreach($sem->admission_studiengang as $studiengang => $data){
+					echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
+				}
 			}
 			echo '</select></label></font>';
 		}
@@ -1682,8 +1686,10 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 				echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
 				echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
 				echo '<option value="">'._("Kein Kontingent").'</option>';
-				foreach($sem->admission_studiengang as $studiengang => $data){
-					echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
+				if(is_array($sem->admission_studiengang)){
+					foreach($sem->admission_studiengang as $studiengang => $data){
+						echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
+					}
 				}
 				echo '</select></label></font>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ';
 			}
