@@ -30,8 +30,8 @@ $step_templates['step'] = array(
 <td><input size=60 name="step_zustaendig"></td></tr>
 <tr><td>Release in Version:</td>
 <td><select size=0 name="step_version">
-<option value="1.8">1.8 (Sep. 2008)</option>
-<option value="1.9">1.9 (März 2009)</option>
+<option value="1.10">1.10 (Sep. 2009)</option>
+<option value="1.11">1.11 (März 2010)</option>
 <option>langfristig</option></td></tr>
 <tr><td>Komplexität:</td>
 <td><select name="step_komplexitaet">
