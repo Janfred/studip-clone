@@ -16,7 +16,7 @@ class SystemPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
      */
     function getAllInstalledPlugins(){
       // nur Standard-Plugins liefern
-      $plugins = parent::executePluginQuery("where plugintype='System'");
+      $plugins = parent::executePluginQuery("plugintype='System'");
       return $plugins;
     }
 
@@ -26,7 +26,7 @@ class SystemPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
      */
     function getAllActivatedPlugins(){
       // return all activated system plugins
-      $plugins = parent::executePluginQuery("where plugintype='System' and enabled='yes'");
+      $plugins = parent::executePluginQuery("plugintype='System' and enabled='yes'");
       return $plugins;
     }
 

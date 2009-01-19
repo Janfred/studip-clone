@@ -16,7 +16,7 @@ class PortalPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
      */
     function getAllInstalledPlugins(){
       // nur Standard-Plugins liefern
-      $plugins = parent::executePluginQuery("where plugintype='Portal'");
+      $plugins = parent::executePluginQuery("plugintype='Portal'");
       return $plugins;
     }
 
@@ -26,7 +26,7 @@ class PortalPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
      */
     function getAllActivatedPlugins(){
       // return all activated system plugins
-      $plugins = parent::executePluginQuery("where plugintype='Portal' and enabled='yes'");
+      $plugins = parent::executePluginQuery("plugintype='Portal' and enabled='yes'");
       return $plugins;
     }
 

@@ -38,7 +38,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
    */
   function getAllInstalledPlugins() {
     // only return standard plugins
-    $plugins = parent::executePluginQuery("where plugintype='Standard'");
+    $plugins = parent::executePluginQuery("plugintype='Standard'");
     return $this->getActivationsForPlugins($plugins);
   }
 
@@ -99,7 +99,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
    * @return a list of enabled plugins
    */
   function getAllEnabledPlugins() {
-    $plugins = parent::executePluginQuery("where plugintype='Standard' and enabled='yes'");
+    $plugins = parent::executePluginQuery("plugintype='Standard' and enabled='yes'");
     return $this->getActivationsForPlugins($plugins);
   }
 
@@ -120,24 +120,24 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
     $userid = $user->getUserid();
 
     $stmt = DBManager::get()->prepare(
-      "SELECT p.* FROM plugins p ".
+      "(SELECT p.* FROM plugins p ".
       "INNER JOIN plugins_activated pat USING (pluginid) ".
       "JOIN roles_plugins rp ON p.pluginid=rp.pluginid ".
       "JOIN roles_user r ON r.roleid=rp.roleid ".
-      "WHERE r.userid=? AND pat.poiid=? AND pat.state='on' ".
+      "WHERE r.userid=? AND pat.poiid=? AND pat.state='on') ".
 
       "UNION ".
 
-      "SELECT p.* FROM auth_user_md5 au, plugins p ".
+      "(SELECT p.* FROM auth_user_md5 au, plugins p ".
       "INNER JOIN plugins_activated pat USING (pluginid) ".
       "JOIN roles_plugins rp ON p.pluginid=rp.pluginid ".
       "JOIN roles_studipperms rps ON rps.roleid=rp.roleid ".
       "WHERE rps.permname = au.perms AND au.user_id=? AND ".
-      "pat.poiid=? AND pat.state='on' ".
+      "pat.poiid=? AND pat.state='on') ".
 
       "UNION ".
 
-      "SELECT DISTINCT p.* FROM seminar_inst s ".
+      "(SELECT DISTINCT p.* FROM seminar_inst s ".
       "INNER JOIN Institute i ON (i.Institut_id = s.institut_id) ".
       "INNER JOIN plugins_default_activations pa ".
         "ON (i.fakultaets_id = pa.institutid ".
@@ -145,17 +145,11 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
       "INNER JOIN plugins p ON (p.pluginid = pa.pluginid AND p.enabled='yes') ".
       "LEFT JOIN plugins_activated pad ".
         "ON (pad.poiid = ? AND pad.pluginid = p.pluginid ) ".
-      "WHERE s.seminar_id = ? AND (pad.state != 'off' OR pad.state IS NULL)");
+      "WHERE s.seminar_id = ? AND (pad.state != 'off' OR pad.state IS NULL)) ".
+      "ORDER BY navigationpos, pluginname");
 
     $result = $stmt->execute(array($userid, $this->poiid, $userid,
                                    $this->poiid, $this->poiid, $id));
-
-    // TODO: Fehlermeldung ausgeben
-    // echo ("keine aktivierten Plugins<br>");
-    if (!$result) {
-      return array();
-    }
-
 
     $plugins = array();
     while ($row = $stmt->fetch()) {

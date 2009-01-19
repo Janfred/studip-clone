@@ -16,7 +16,7 @@ class HomepagePluginIntegratorEnginePersistence extends AbstractPluginIntegrator
      */
     function getAllInstalledPlugins(){
     	// nur Standard-Plugins liefern
-    	$plugins = parent::executePluginQuery("where plugintype='Homepage'");
+    	$plugins = parent::executePluginQuery("plugintype='Homepage'");
     	return $plugins;
     }
 
@@ -26,7 +26,7 @@ class HomepagePluginIntegratorEnginePersistence extends AbstractPluginIntegrator
      */
     function getAllActivatedPlugins(){
     	// return all activated system plugins
-    	$plugins = parent::executePluginQuery("where plugintype='Homepage' and enabled='yes'");
+    	$plugins = parent::executePluginQuery("plugintype='Homepage' and enabled='yes'");
     	return $plugins;
     }
 

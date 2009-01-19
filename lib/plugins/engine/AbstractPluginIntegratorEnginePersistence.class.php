@@ -108,53 +108,43 @@ class AbstractPluginIntegratorEnginePersistence {
 		$stmt->execute(array($plugin->getPluginname(),$enabled,$plugin->getNavigationPosition(),$plugin->getPluginid()));
 	}
 
-	function executePluginQuery($filter, $params = array(), $attendroles = true) {
+	function executePluginQuery($filter, $params = array(), $attendroles = true, $order = 'navigationpos, pluginname') {
 		$user = $this->getUser();
 		$userid = $user->getUserid();
 
-		if (!empty($filter) && $attendroles) {
-			// look for where in filter
-			if (!(($pos = strpos($filter,"where")) === false)) {
-				if (($pos == 0) || ($pos == 1)) {
-					// where at the beginning
-					$filter = str_replace("where", "", $filter);
-				}
-			}
-			$pos = strpos($filter, "order");
-			if ($pos === false || $pos > 1) {
-				$filter = "and " . $filter;
-			} else {
-				$filter = " " . $filter;
-			}
+		// filter should start without where clause
+		if (trim($filter) == '') {
+			$filter = '1';
 		}
 
 		if ($attendroles) {
-			// ok, filter should start with no where clause
 			$params = array_merge(array($userid), (array)$params,
 			                      array($userid), (array)$params);
-			$filter = "JOIN roles_plugins rp ON p.pluginid=rp.pluginid ".
-			          "JOIN roles_user r ON rp.roleid=r.roleid ".
-			          "WHERE r.userid=? {$filter} ".
-			          "UNION SELECT p.* FROM plugins p ".
-			          "JOIN roles_plugins rp ON p.pluginid=rp.pluginid ".
-			          "JOIN roles_studipperms rps ON rp.roleid=rps.roleid ".
-			          "JOIN auth_user_md5 au ON rps.permname=au.perms ".
-			          "WHERE au.user_id=? " . $filter;
+			$query = "(SELECT p.* FROM plugins p ".
+			         "JOIN roles_plugins rp ON p.pluginid=rp.pluginid ".
+			         "JOIN roles_user r ON rp.roleid=r.roleid ".
+			         "WHERE r.userid=? AND $filter) ".
+			         "UNION ".
+				 "(SELECT p.* FROM plugins p ".
+			         "JOIN roles_plugins rp ON p.pluginid=rp.pluginid ".
+			         "JOIN roles_studipperms rps ON rp.roleid=rps.roleid ".
+			         "JOIN auth_user_md5 au ON rps.permname=au.perms ".
+			         "WHERE au.user_id=? AND $filter) ".
+				 "ORDER BY $order";
+		} else {
+			$query = "SELECT * FROM plugins p WHERE $filter ORDER BY $order";
 		}
 
-		// cache results for cache_time seconds
 		$plugins = array();
-		$stmt = DBManager::get()->prepare("SELECT p.* FROM plugins p " . $filter);
+		$stmt = DBManager::get()->prepare($query);
 		$stmt->execute($params);
 
-		$rolemgmt = new de_studip_RolePersistence();
-		$userroles = $user->getAssignedRoles(true);
 		while ($row = $stmt->fetch()) {
 			$pluginclassname = $row["pluginclassname"];
 			$pluginpath = $row["pluginpath"];
 			$pluginid = $row["pluginid"];
-			$rolerestriction = $rolemgmt->getAssignedPluginRoles($pluginid);
 			$plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
+
 			if ($plugin != null) {
 				$plugin->setPluginid($pluginid);
 				$plugin->setPluginname($row["pluginname"]);
@@ -178,17 +168,12 @@ class AbstractPluginIntegratorEnginePersistence {
 	  * Liefert alle in der Datenbank bekannten Plugins zurück
 	  */
 	function getAllInstalledPlugins() {
-		return $this->executePluginQuery("order by plugintype, navigationpos, ".
-		                                 "pluginname, enabled",
-		                                 array(),
-		                                 false);
+		return $this->executePluginQuery('', array(), false, "plugintype, navigationpos, pluginname");
 	}
 
 	function getPlugins($enabled = false) {
 		$filter = $enabled ? 'yes' :  'no';
-		return $this->executePluginQuery("where enabled=? order by navigationpos, ".
-		                                 "pluginname, plugintype",
-		                                 array($filter));
+		return $this->executePluginQuery("enabled=?", array($filter));
 	}
 
 	/**
@@ -216,7 +201,7 @@ class AbstractPluginIntegratorEnginePersistence {
 	}
 
 	function getPlugin($id) {
-		$plugins = $this->executePluginQuery("where p.pluginid=?", array($id));
+		$plugins = $this->executePluginQuery("p.pluginid=?", array($id));
 		return count($plugins) === 1 ? $plugins[0] : null;
 	}
 
@@ -232,7 +217,7 @@ class AbstractPluginIntegratorEnginePersistence {
 		// check, if there are dependent plugins
 		// this plugin is a plugin without dependencies
 		if (!$plugin->isDependentOnOtherPlugin()) {
-			$dependentplugins = $this->executePluginQuery("where p.dependentonid=?",
+			$dependentplugins = $this->executePluginQuery("p.dependentonid=?",
 			                                    array($plugin->getPluginid()), false);
 			if (is_array($dependentplugins)) {
 				// deinstall Plugin first

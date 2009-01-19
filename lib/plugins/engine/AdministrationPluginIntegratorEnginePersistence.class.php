@@ -24,12 +24,11 @@ class AdministrationPluginIntegratorEnginePersistence
 
 		$plugins = array();
 		// nur Administrations-Plugins liefern
-		$plugins = parent::executePluginQuery("where plugintype='Administration' ".
-		                                      "order by navigationpos, pluginname");
+		$plugins = parent::executePluginQuery("plugintype='Administration'");
 
-			$db = DBManager::get();
-			$stmt = $db->prepare("SELECT * FROM plugins_activated ".
-			                     "WHERE pluginid=? and poiid=?");
+		$db = DBManager::get();
+		$stmt = $db->prepare("SELECT * FROM plugins_activated ".
+		                     "WHERE pluginid=? and poiid=?");
 
 		foreach ($plugins as $plugin) {
 			$result = $stmt->execute(array($plugin->getPluginid(),
@@ -51,20 +50,20 @@ class AdministrationPluginIntegratorEnginePersistence
 		$userid = $user->getUserid();
 
 		$stmt = $db->prepare(
-			"SELECT p.* FROM plugins p ".
+			"(SELECT p.* FROM plugins p ".
 			"JOIN plugins_activated a ON p.pluginid=a.pluginid ".
 			"JOIN roles_plugins rp ON p.pluginid=rp.pluginid ".
 			"JOIN roles_user r ON rp.roleid=r.roleid ".
-			"WHERE a.poiid=? AND p.plugintype='Administration' AND r.userid=? ".
+			"WHERE a.poiid=? AND p.plugintype='Administration' AND r.userid=?) ".
 
 			"UNION ".
 
-			"SELECT distinct p.* FROM plugins p ".
+			"(SELECT distinct p.* FROM plugins p ".
 			"JOIN plugins_activated a ON p.pluginid=a.pluginid ".
 			"JOIN roles_plugins rp ON p.pluginid=rp.pluginid ".
 			"JOIN roles_studipperms rps ON rps.roleid=rp.roleid ".
 			"JOIN auth_user_md5 au ON rps.permname = au.perms ".
-			"WHERE au.user_id=? AND a.poiid=? AND p.plugintype='Administration' ".
+			"WHERE au.user_id=? AND a.poiid=? AND p.plugintype='Administration') ".
 			"ORDER BY navigationpos, pluginname");
 
 
@@ -75,31 +74,23 @@ class AdministrationPluginIntegratorEnginePersistence
 
 		$plugins = array();
 
-		// TODO (dreil): Fehlermeldung ausgeben
-		// keine aktivierten Plugins
-		if (!$result) {
-			return array();
-		}
+		while ($row = $stmt->fetch()) {
+			$pluginclassname = $row["pluginclassname"];
+			$pluginpath = $row["pluginpath"];
 
-		else {
-			while ($row = $stmt->fetch()) {
-				$pluginclassname = $row["pluginclassname"];
-				$pluginpath = $row["pluginpath"];
+			// Klasse instanziieren
+			$plugin = PluginEngine::instantiatePlugin($pluginclassname,
+			                                          $pluginpath);
 
-				// Klasse instanziieren
-				$plugin = PluginEngine::instantiatePlugin($pluginclassname,
-				                                          $pluginpath);
-
-				if ($plugin !== null) {
-					$plugin->setPluginid($row["pluginid"]);
-					$plugin->setPluginname($row["pluginname"]);
-					$plugin->setActivated(true);
-					$plugin->setUser($this->getUser());
-					$plugins[] = $plugin;
-				}
+			if ($plugin !== null) {
+				$plugin->setPluginid($row["pluginid"]);
+				$plugin->setPluginname($row["pluginname"]);
+				$plugin->setActivated(true);
+				$plugin->setUser($this->getUser());
+				$plugins[] = $plugin;
 			}
-			return $plugins;
 		}
+		return $plugins;
 	}
 
 	/**
