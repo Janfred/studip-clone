@@ -250,7 +250,7 @@ $PLUGINS_CACHING = TRUE;  						//enable caching
 $PLUGINS_CACHE_TIME = 300; 						//Time in seconds, the cache is valid
 
 $PLUGIN_REPOSITORIES = array(
-	'http://plugins.studip.de/svn/plugins/tools/plugins.xml'
+	'http://plugins.studip.de/svn/plugins/plugins.xml'
 );
 
 /*system functions

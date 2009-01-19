@@ -37,10 +37,12 @@ class PluginRepository
      *
      * <plugins>
      *   <plugin name="DummyPlugin"
+     *     <release
      *           version="2.0"
-     *           url="http://plugins.example.com/DummyPlugin-2.0.zip"
+     *           url="http://plugins.example.com/dummy-2.0.zip"
      *           studipMinVersion="1.4"
      *           studipMaxVersion="1.9" />
+     *   </plugin>
      *   [...]
      * </plugins>
      */
@@ -54,10 +56,14 @@ class PluginRepository
 
         $xml = new SimpleXMLElement($metadata);
 
-        if (isset($xml->plugin)) {
-            foreach ($xml->plugin as $xml_plugin) {
-                $min_version = $xml_plugin['studipMinVersion'];
-                $max_version = $xml_plugin['studipMaxVersion'];
+        if (!isset($xml->plugin)) {
+            throw new Exception("No plugin meta data found");
+        }
+
+        foreach ($xml->plugin as $plugin) {
+            foreach ($plugin->release as $release) {
+                $min_version = $release['studipMinVersion'];
+                $max_version = $release['studipMaxVersion'];
 
                 if (isset($min_version) &&
                       version_compare($min_version, $SOFTWARE_VERSION) > 0 ||
@@ -67,9 +73,9 @@ class PluginRepository
                     continue;
                 }
 
-                $this->registerPlugin(utf8_decode($xml_plugin['name']),
-                                      utf8_decode($xml_plugin['version']),
-                                      utf8_decode($xml_plugin['url']));
+                $this->registerPlugin(utf8_decode($plugin['name']),
+                                      utf8_decode($release['version']),
+                                      utf8_decode($release['url']));
             }
         }
     }
@@ -98,6 +104,27 @@ class PluginRepository
     public function getPlugin ($name)
     {
         return $this->plugins[$name];
+    }
+
+    /**
+     * Get meta data for all plugins whose names contain the given
+     * string. You may omit the search string to get a list of all
+     * available plugins. Returns the newest compatible version of
+     * each plugin.
+     *
+     * @return array array of meta data for matching plugins
+     */
+    public function getPlugins ($search = NULL)
+    {
+        $result = array();
+
+        foreach ($this->plugins as $name => $data) {
+            if (is_null($search) || is_int(stripos($name, $search))) {
+                $result[$name] = $data;
+            }
+        }
+
+        return $result;
     }
 }
 ?>

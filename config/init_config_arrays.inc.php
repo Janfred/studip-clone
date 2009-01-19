@@ -1,6 +1,7 @@
 <?php
 $xslt_files =
 $ELEARNING_INTERFACE_MODULES =
+$PLUGIN_REPOSITORIES =
 $STUDIP_DOMAINS =
 $INSTALLED_LANGUAGES =
 $_lit_search_plugins =

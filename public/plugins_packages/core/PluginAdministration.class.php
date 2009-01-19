@@ -411,8 +411,8 @@ class PluginAdministration {
 			$pluginpath = $pluginenv->getBasepath().'/'.$plugin->getPluginpath();
 			$manifest = PluginEngine::getPluginManifest($pluginpath);
 
-			if (isset($manifest['update_url'])) {
-				$repository = new PluginRepository($manifest['update_url']);
+			if (isset($manifest['updateURL'])) {
+				$repository = new PluginRepository($manifest['updateURL']);
 			}
 
 			$plugin_info = array(

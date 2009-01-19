@@ -83,7 +83,7 @@
                     <td style="text-align: center;">
                         <? if (!$plugin->isDependentOnOtherPlugin()): ?>
                             <a href="<?= PluginEngine::getLink($admin_plugin, array('zip' => $pluginid)) ?>">
-                                <img src="<?= $admin_plugin->getPluginURL() ?>/img/icon-disc.gif" title="<?= _("Plugin zippen") ?>">
+                                <img src="<?= $admin_plugin->getPluginURL() ?>/img/icon-disc.gif" title="<?= _('Herunterladen') ?>">
                             </a>
                         <? endif ?>
                         &nbsp;
