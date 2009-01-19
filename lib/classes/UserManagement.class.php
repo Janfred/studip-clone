@@ -178,7 +178,12 @@ class UserManagement {
 							break;
 						case 'title_rear':
 							log_event("USER_CHANGE_TITLE",$this->user_data['auth_user_md5.user_id'],NULL,"title_rear: ".$this->original_user_data['user_info.title_front']." -> ".$value);
+						case 'password':
+							log_event("USER_CHANGE_PASSWORD",$this->user_data['auth_user_md5.user_id'],NULL,"password: ".$this->original_user_data['user_info.password']." -> ".$value);
 							break;
+						case 'password':
+							log_event("USER_CHANGE_PASSWORD",$this->user_data['auth_user_md5.user_id'],NULL,"password: ".$this->original_user_data['user_info.password']." -> ".$value);
+						
 					}
 				}
 				// <<<<<<< logging
@@ -905,6 +910,39 @@ class UserManagement {
           }
 		}
    }
+
+	/**
+	* Change an existing user password
+	*
+	* @access	public
+	* @return	bool change successful?
+	*/
+	function changePassword($password) {
+		global $perm, $auth;
+		
+		$this->user_data['auth_user_md5.password'] = md5($password);
+		$this->storeToDatabase();
+
+		$this->msg .= "msg§" . sprintf(_("Passwort von User \"%s\" neu gesetzt."), $this->user_data['auth_user_md5.username']) . "§";
+
+		// include language-specific subject and mailbody
+		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']);
+		$Zeit=date("H:i:s, d.m.Y",time());
+		include("locale/$user_language/LC_MAILS/password_mail.inc.php");
+
+		// send mail
+		$this->smtp->SendMessage(
+				$this->smtp->env_from,
+				array($this->user_data['auth_user_md5.Email']),
+				array("From: " . $this->smtp->from,
+						"Reply-To:" . $this->smtp->abuse,
+						"To: " . $this->user_data['auth_user_md5.Email'],
+						"Subject: " . $subject),
+				$mailbody);
+
+		return TRUE;
+
+	}
 
 }
 ?>

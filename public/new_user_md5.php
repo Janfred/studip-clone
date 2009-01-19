@@ -99,9 +99,9 @@ if (check_ticket($_REQUEST['studipticket'])){
 
 		// Change user parameters
 		case "u_edit_x":
-
+		
 			$UserManagement = new UserManagement($u_id);
-
+	
 			$newuser = array();
 			if (isset($username))
 				$newuser['auth_user_md5.username'] = stripslashes(trim($username));
@@ -155,7 +155,27 @@ if (check_ticket($_REQUEST['studipticket'])){
 					}
 				}
 			}
+			
+			// Change Password...
+			
+			if(($perm->have_perm('root')  && $ALLOW_ADMIN_USERACCESS) && ( $_REQUEST['pass_1'] != ''  || $_REQUEST['pass_2'] != '' ))
+			{
+				if($_REQUEST['pass_1'] == $_REQUEST['pass_2']){
+					if(strlen($_REQUEST['pass_1'])<4){
+						$pass_msg .= "error§" . _("Das Passwort ist zu kurz - es sollte mindestens 4 Zeichen lang sein.") . "§";
+						$showform = true;
+					}
+					$UserManagement->changePassword($pass_1);
+					
+				}
+				else{
+					$pass_msg .= "error§" . _("Bei der Wiederholung des Passwortes ist ein Fehler aufgetreten! Bitte geben sie das exakte Passwort ein!") . "§";
+					$showform = true;
+				}
 
+			}
+			
+			
 			break;
 
 
@@ -243,7 +263,7 @@ if (isset($_GET['pers_browse_clear'])) {
 URLHelper::addLinkParam("studipticket", get_ticket());
 
 // einzelnen Benutzer anzeigen
-if (isset($_GET['details'])) {
+if (isset($_GET['details']) || $showform ) {
 	if ($details=="__" && in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])) { // neuen Benutzer anlegen
 		?>
 		<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
@@ -344,6 +364,17 @@ if (isset($_GET['details'])) {
 		<?
 
 	} else { // alten Benutzer bearbeiten
+	?>
+	
+	<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
+
+	
+	<?
+
+	if(empty($_REQUEST['details'])) {
+		parse_msg($pass_msg);
+		$details = $_REQUEST['username'];
+	}
 
 		$db->query("SELECT auth_user_md5.*, (changed + 0) as changed_compat, mkdate, title_rear, title_front, geschlecht FROM auth_user_md5 LEFT JOIN ".$GLOBALS['user']->that->database_table." ON auth_user_md5.user_id = sid LEFT JOIN user_info ON (auth_user_md5.user_id = user_info.user_id) WHERE username ='$details'");
 		while ($db->next_record()) {
@@ -355,12 +386,9 @@ if (isset($_GET['details'])) {
 			}
 			$auth_plugin = $db->f('auth_plugin') ? $db->f('auth_plugin') : 'Standard';
 			?>
-
-			<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 			<tr><td class="blank" colspan=2>&nbsp;</td></tr>
 			<?parse_msg($UserManagement->msg);?>
 			<tr><td class="blank" colspan=2>
-
 			<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=2>
 			<form name="edit" method="post" action="<?=URLHelper::getLink('')?>">
 				<tr>
@@ -415,6 +443,24 @@ if (isset($_GET['details'])) {
 					?>
 					</td>
 				</tr>
+				<?if($perm->have_perm('root')  && $ALLOW_ADMIN_USERACCESS) {
+				?>
+				<tr>
+					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Neues Passwort:")?></b></td>
+					<td class="steel1">&nbsp;
+					<input name="pass_1" type="password" id="pass_1"><br>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Passwortwiederholung:")?></b></td>
+					<td class="steel1">&nbsp;
+					<input name="pass_2" type="password" id="pass_2"><br>
+					</td>
+				</tr>
+				
+				
+				
+				<?}?>
 				<tr>
 				<td class="steel1"><b>&nbsp;<?=_("Titel:")?></b>
 				</td><td class="steel1" align="right">
