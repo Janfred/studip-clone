@@ -21,7 +21,7 @@
                     <?= $type ?>
                 </td>
                 <td>
-                    <img src="<?= $admin_plugin->getPluginURL() ?>/img/haken.gif"><?= _('Aktiviert') ?>
+                    <?= Assets::img('haken_transparent.gif') ?><?= _('aktiviert') ?>
                 </td>
                 <td>
                     <?= $plugin->getNavigationPosition() ?>

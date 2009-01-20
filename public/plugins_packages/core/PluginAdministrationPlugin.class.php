@@ -97,8 +97,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 				'plugins'       => $pluginengine->getAllEnabledPlugins()
 			));
 
-			// show nothing
-			// echo $template->render();
+			echo $template->render();
 			return;
 		}
 

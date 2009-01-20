@@ -315,7 +315,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	elseif (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
 		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link'=>"seminar_main.php?auswahl=".$SessSemName[1], 'active'=>FALSE);
 
-	if ($perm->have_perm("root") && $GLOBALS["PLUGINS_ENABLE"]) {
+	if ($perm->have_perm("admin") && $GLOBALS["PLUGINS_ENABLE"]) {
 		$structure["plugins"]=array ('topKat'=>"", 'name'=>_("Administrations-Plugins"), 'link'=>PluginEngine::getLinkToAdministrationPlugin(), 'active'=>FALSE);
 	}
 
@@ -441,7 +441,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		}
 	}
 	// create sublinks for administration plugins
-	if ($GLOBALS["PLUGINS_ENABLE"] && $perm->have_perm("root")){
+	if ($GLOBALS["PLUGINS_ENABLE"] && $perm->have_perm("admin")){
 		$persist = PluginEngine::getPluginPersistence("Administration");
 		$plugins = $persist->getAllActivatedPlugins();
 		if (is_array($plugins)){
