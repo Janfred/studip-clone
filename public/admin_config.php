@@ -56,7 +56,7 @@ include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
-if ($_REQUEST["select_username"]) {
+if ($_REQUEST["select_username"] && !isset($_REQUEST['reset_search_x'])) {
 	$admin_config_data["range_id"] = get_userid ($_REQUEST["select_username"]);
 }
 
@@ -123,7 +123,7 @@ if ($_REQUEST["change_config"]) {
 				$out[] = '&nbsp;<b>'._("Systemkonfiguration und -defaults").'</b>';
 			} else {
 				$out[] = '&nbsp;<b>'.htmlReady(get_fullname($admin_config_data["range_id"])).'</b>';
-				$out[] = '&nbsp;<a href="'.$PHP_SELF.'?reset_range=1"><img src="'.$GLOBALS['ASSETS_URL'].'images/rewind.gif" '.tooltip(_("Gew&auml;hlten Bereich l&ouml;schen und zur&uuml;ck zu Systemkonfiguration")).' border="0"></a>';
+				$out[] = '&nbsp;<a href="'.$PHP_SELF.'?reset_range=1"><img src="'.$GLOBALS['ASSETS_URL'].'images/rewind.gif" '.tooltip(_("Gewählten Bereich löschen und zurück zu Systemkonfiguration")).' border="0"></a>';
 			}
 			$out[] = '</font></td>';
 			$out[] = '<td width="50%"style="border: dotted 1px black; background: url(\''.$GLOBALS['ASSETS_URL'].'images/steel1.jpg\')">';
