@@ -613,7 +613,7 @@ if ($s_send) {
 
 		if (!LockRules::Check($s_id, 'VeranstaltungsNummer'))
 		{
-			$update_data['Veranstaltungsnummer'] = $VeranstaltungsNummer;
+			$update_data['VeranstaltungsNummer'] = $VeranstaltungsNummer;
 		}
 
 		if (!LockRules::Check($s_id, 'Institut_id'))
@@ -799,19 +799,11 @@ if ($s_send) {
 		{
 			$result = DBManager::get()->query("SELECT Institute.Name, Institute.Institut_id FROM seminar_inst " .
 					" LEFT JOIN Institute ON (Institute.Institut_id = seminar_inst.institut_id) WHERE seminar_id = '$s_id' ");
-			// $institutsnamen=DBManager::get()->query("SELECT Institut_id,Name FROM Institute")->fetch(PDO::FETCH_ASSOC);
 
-			$to_log_institutes=" von ";
-			$counter=0;
-			while($old_institutes_data = $result->fetch(PDO::FETCH_ASSOC)) {
-				if($counter > 0){
-					$to_log_institutes .= ", ";
-				}
-
-				if($old_institutes_data['Institut_id'] != $heimateinrichtung){
+			while ($old_institutes_data = $result->fetch(PDO::FETCH_ASSOC)) {
+				if ($old_institutes_data['Institut_id'] != $heimateinrichtung){
 					$old_institutes[$old_institutes_data['Institut_id']] = $old_institutes_data['Name'];
 				}
-				$counter++;
 			}
 
 			// delete all old participating institutions, then write new list
@@ -819,36 +811,32 @@ if ($s_send) {
 				$query = "DELETE from seminar_inst where Seminar_id='$s_id'";
 				$db3->query($query);
 			}
-			$to_log_institutes .=" nach ";
-			$counter=0;
+
 			if ($b_institute) {
 				while (list($key,$val) = each($b_institute)) {       // alle ausgewählten beteiligten Institute durchlaufen
-					if($counter>0){
-						$to_log_institutes .=" , ";
-					}				
-					$old_inst_name = get_object_name($val, 'inst');
 					if (!$old_institutes[$val]) {
-						log_event('CHANGE_INSTITUTE_DATA', $s_id, $val, "Beteiligte Einrichtung $old_inst_name wurde hinzugefügt" ,$user->id);
+						$old_inst_name = get_object_name($val, 'inst');
+						log_event('CHANGE_INSTITUTE_DATA', $s_id, $val, "Beteiligte Einrichtung {$old_inst_name['name']} wurde hinzugefügt" ,$user->id);
 					}
 
 					unset($old_institutes[$val]);				
 					$query = "INSERT INTO seminar_inst values('$s_id','$val')";
 					$db3->query($query);			     // Institut eintragen
-					$counter++;
 				}
 			}
-			$counter=0;
 
-			foreach ($old_institutes as $key => $val) {
-				log_event('CHANGE_INSTITUTE_DATA', $s_id, $key, "Beteiligte Einrichtung $val wurde gelöscht" ,$user->id);
+			if (count($old_institutes)) {
+				foreach ($old_institutes as $key => $val) {
+					log_event('CHANGE_INSTITUTE_DATA', $s_id, $key, "Beteiligte Einrichtung $val wurde gelöscht" ,$user->id);
+				}
 			}
 
 			if ($heimateinrichtung != $Institut) {
-				$to_log_institutes = " Heimatinstitut von: ". get_object_name($heimateinrichtung, 'inst').  
-					" nach: ". get_object_name($Institut, 'inst'). " geändert";
+				$old_inst_name = get_object_name($heimateinrichtung, 'inst');
+				$new_inst_name = get_object_name($Institut, 'inst');
+				$changed_institute = " Heimatinstitut von {$old_inst_name['name']} in {$new_inst_name['name']} geändert";
  
-				log_event('CHANGE_INSTITUTE_DATA', $s_id, " ", $to_log_institutes, $user->id); 
-
+				log_event('CHANGE_INSTITUTE_DATA', $s_id, " ", $changed_institute, $user->id); 
 			}
 
 
