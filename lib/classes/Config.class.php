@@ -93,13 +93,14 @@ class Config {
 		//first, get all default values from config
 		$arr = $this->getAllDefaults();
 
-		$sql = "SELECT config_id, field, value, comment FROM `config` ORDER BY is_default DESC, field, position";
+		$sql = "SELECT config_id, field, value, comment FROM `config` WHERE is_default = 0 ORDER BY field";
 		$this->db->query($sql);
 		while ($this->db->next_record()) {
 			$arr[$this->db->f("field")]["value"] = $this->db->f("value");
 			$arr[$this->db->f("field")]["id"] = $this->db->f("config_id");
 			$arr[$this->db->f("field")]["comment"] = $this->db->f("comment");
 		}
+		uksort($arr, 'strcasecmp');
 		return $arr;
 	}
 	
