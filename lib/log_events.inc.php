@@ -46,20 +46,10 @@ function log_event($action, $affected=NULL, $coaffected=NULL, $info=NULL, $dbg_i
 }
 
 function cleanup_log_events() {
-	global $auth, $LOG_ENABLE;
+	global $LOG_ENABLE;
 	if (!$LOG_ENABLE) return; // do nothing if logging is disabled
 	$db=new DB_Seminar;
-	$q2="DELETE log_events.* FROM log_events LEFT JOIN log_actions ON (log_events.action_id=log_actions.action_id) WHERE expires IS NOT NULL AND (log_events.mkdate + log_actions.expires < UNIX_TIMESTAMP())";
-	/*
-	// Debug: Zu löschende Events / Query ausgeben
-	echo "<p>$q2";
-	$db->query($q);
-	$q="SELECT log_actions.name as action, mkdate, event_id, UNIX_TIMESTAMP() as now FROM log_events LEFT JOIN log_actions ON (log_events.action_id=log_actions.action_id) WHERE expires IS NOT NULL AND ((log_events.mkdate + log_actions.expires) < UNIX_TIMESTAMP())";
-	echo "<p>".$db->nf()." eintraege werden gelöscht.";
-	while ($db->next_record()) {
-		echo "<p>now=".$db->f("now")." - ".$db->f("mkdate")." - ".$db->f("action")." - ".date("H:i:s d.m.Y",$db->f("mkdate"));
-	}
-	*/
+	$q2="DELETE log_events.* FROM log_events LEFT JOIN log_actions ON (log_events.action_id=log_actions.action_id) WHERE expires > 0 AND (log_events.mkdate + log_actions.expires < UNIX_TIMESTAMP())";
 	$db->query($q2);
 	return $db->nf();
 }
