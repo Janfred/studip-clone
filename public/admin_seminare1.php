@@ -721,14 +721,10 @@ if ($s_send) {
 			$basicdatachanged=$db->query($query);
 			$heimateinrichtung=$old_basic_data['Institut_id'];
 
-			// >>>>>> LOGGING 
+			if($basicdatachanged){
+				log_event('CHANGE_BASIC_DATA',$s_id," " ,$to_log_basic ,$user->id);
+			}
 
-			if($basicdatachanged){log_event('CHANGE_BASIC_DATA',$s_id," " ,$to_log_basic ,$user->id);}
-
-			// <<<<<< LOGGING 
-
-			$cache = StudipCacheFactory::getCache();
-			$cache->expire('studipsemtree');
 			$updated_seminar = $db->affected_rows();
 		}
 
@@ -809,7 +805,7 @@ if ($s_send) {
 			$counter=0;
 			while($old_institutes_data = $result->fetch(PDO::FETCH_ASSOC)) {
 				if($counter > 0){
-					$to_log_institutes .=" , ";
+					$to_log_institutes .= ", ";
 				}
 
 				if($old_institutes_data['Institut_id'] != $heimateinrichtung){
@@ -830,7 +826,7 @@ if ($s_send) {
 					if($counter>0){
 						$to_log_institutes .=" , ";
 					}				
-					$old_inst_name = DBManager::get()->query("SELECT Name FROM Institute WHERE Institut_id ='$val'")->fetchColumn(0)." ";
+					$old_inst_name = get_object_name($val, 'inst');
 					if (!$old_institutes[$val]) {
 						log_event('CHANGE_INSTITUTE_DATA', $s_id, $val, "Beteiligte Einrichtung $old_inst_name wurde hinzugefügt" ,$user->id);
 					}
@@ -848,13 +844,10 @@ if ($s_send) {
 			}
 
 			if ($heimateinrichtung != $Institut) {
-				$to_log_institutes = " Heimatinstitut von: " .
-					DBManager::get()->query("SELECT Name FROM Institute WHERE Institut_id ='$heimateinrichtung'")->fetchColumn(0) . 
-					" nach: " . DBManager::get()->query("SELECT Name FROM Institute WHERE Institut_id ='$Institut'")->fetchColumn(0). " geändert";
-
-				// >>>>>> LOGGING 
-				log_event('CHANGE_INSTITUTE_DATA', $s_id, " ", $to_log_institutes, $user->id);
-				// <<<<<< LOGGING 
+				$to_log_institutes = " Heimatinstitut von: ". get_object_name($heimateinrichtung, 'inst').  
+					" nach: ". get_object_name($Institut, 'inst'). " geändert";
+ 
+				log_event('CHANGE_INSTITUTE_DATA', $s_id, " ", $to_log_institutes, $user->id); 
 
 			}
 
