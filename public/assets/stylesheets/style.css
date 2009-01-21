@@ -92,8 +92,7 @@ a img { /* Bilder in Links ohne Rand */
 /* --- Layouts -------------------------------------------------------------- */
 #layout_container {
 	background-color: white;
-	width: 100%;
-	padding: 0 0 1em 0;
+	padding: 1em;
 }
 
 #layout_content {
@@ -205,6 +204,7 @@ td.infobox {
 
 td.infoboxrahmen {
 	border:1px solid #CCCCCC;
+	background-color: #dee2e8;
 }
 
 tr.cycle_odd {
