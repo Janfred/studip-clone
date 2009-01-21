@@ -162,10 +162,11 @@ class Avatar {
    * @return string returns the HTML image tag
    */
   function getImageTag($size = Avatar::MEDIUM) {
+    $username = htmlReady(get_username($this->user_id));
     $fullname = htmlReady(get_fullname($this->user_id));
-    return sprintf('<img src="%s" align="middle" class="avatar_%s" '.
+    return sprintf('<img src="%s" align="middle" class="avatar-%s user-%s" '.
                    'alt="%s" title="%s" />',
-                   $this->getURL($size), $size,
+                   $this->getURL($size), $size, $username,
                    $fullname, $fullname);
   }
 
