@@ -94,7 +94,6 @@ a img {
 /* --- Layouts -------------------------------------------------------------- */
 #layout_container {
 	background-color: white;
-	width: 100%;
 	padding: 10px;
 }
 
@@ -224,6 +223,7 @@ td.infobox {
 }
 
 td.infoboxrahmen {
+	background-color: #dee2e8;
 	border: 1px solid #CCCCCC;
 }
 
