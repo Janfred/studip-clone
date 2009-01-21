@@ -60,6 +60,7 @@
 
   <body>
     <div id="overdiv_container"></div>
+
     <div id="ajax_notification" style="display: none;">
       <?= Assets::img('ajax_indicator.gif', array('align' => 'absmiddle')) ?>&nbsp;Working...
     </div>
@@ -83,7 +84,6 @@
       <div id="layout_content">
         <?= $content_for_layout ?>
       </div>
-      <div id="layout_clear"></div>
     </div>
   </body>
 </html>
