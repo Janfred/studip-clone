@@ -73,6 +73,7 @@
 
     <div id="layout_container">
         <?= $content_for_layout ?>
+        <div class="clear"></div>
     </div>
   </body>
 </html>
