@@ -594,7 +594,7 @@ class AssignObject {
 						$semid=$this->assign_user_id;
 					} else {
 						$semid = null;
-						error_log("unknown type of assign_user_id");
+						error_log("unknown type of assign_user_id $assign_user_id");
 					}
 					log_event("RES_ASSIGN_SEM",$this->resource_id,$semid,$this->getFormattedShortInfo(). $create ? " Neue Buchung" : " Buchungsupdate",$query);
 				} else {
@@ -662,7 +662,7 @@ class AssignObject {
 				$semid=$this->assign_user_id;
 			} else {
 				$semid = null;
-				error_log("unknown type of assign_user_id");
+				error_log("unknown type of assign_user_id $assign_user_id");
 			}
 			log_event("RES_ASSIGN_DEL_SEM",$this->resource_id,$semid,$this->getFormattedShortInfo(),"",$_GLOBALS['user']->id);
 		} else {
