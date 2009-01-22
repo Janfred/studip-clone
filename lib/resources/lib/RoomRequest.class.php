@@ -34,6 +34,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once('lib/log_events.inc.php');
+
 /**
 * RoomRequest, class for room-requests and room-property-requests
 *
@@ -414,12 +416,39 @@ class RoomRequest {
 							 , $this->closed, mysql_escape_string($this->comment), $mkdate);
 				$this->isNewObject = FALSE;
 				$changed = TRUE;
+				// LOGGING
+				$props="";
+				foreach ($this->properties as $key => $val) {
+					$q="SELECT name FROM resources_properties WHERE property_id='$key'";
+					$this->db->query($q);
+					$this->db->next_record();
+					$props.=$this->db->f('name')."=".$val['state']." ";	
+				}
+				log_event("RES_REQUEST_NEW",$this->seminar_id,$this->resource_id,"Termin: $this->termin_id, Properties: $props",$query);
 			} else {
 				$query = sprintf("UPDATE resources_requests SET resource_id='%s', " 
 					."user_id='%s', seminar_id='%s', termin_id = '%s', category_id = '%s', comment='%s', "	
 					."closed='%s', reply_comment = '%s' WHERE request_id='%s' "
 							 , $this->resource_id, $this->user_id, $this->seminar_id, $this->termin_id, $this->category_id,  mysql_escape_string($this->comment)
 							 , $this->closed,  mysql_escape_string($this->reply_comment), $this->id);
+				// LOGGING
+				$props="";
+				foreach ($this->properties as $key => $val) {
+					$q="SELECT name FROM resources_properties WHERE property_id='$key'";
+					$this->db->query($q);
+					$this->db->next_record();
+					$props.=$this->db->f('name')."=".$val['state']." ";	
+				}
+				if (!$props) {
+					$props="--";
+				}
+				if ($this->closed==1 || $this->closed==2) {
+					log_event("RES_REQUEST_RESOLVE",$this->seminar_id,$this->resource_id,"Termin: {$this->termin_id}, Properties: $props, Status: ".$this->closed,$query);
+				} else if ($this->closed==3) {
+					log_event("RES_REQUEST_DENY",$this->seminar_id,$this->resource_id,"Termin: {$this->termin_id}, Properties: $props, Status: ".$this->closed,$query);
+				} else {
+					log_event("RES_REQUEST_UPDATE",$this->seminar_id,$this->resource_id,"Termin: {$this->termin_id}, Properties: $props, Status: ".$this->closed,$query);
+				}
 			}
 			$result = $db->exec( $query );
 			
@@ -440,7 +469,8 @@ class RoomRequest {
 		$query = sprintf("DELETE FROM resources_requests_properties WHERE request_id='%s'", $this->id);
 		
 		$db->exec( $query );
-		
+		// LOGGING
+		log_event("RES_REQUEST_DEL",$this->seminar_id,$this->resource_id,"Termin: $this->termin_id","");
 		$query = sprintf("DELETE FROM resources_requests WHERE request_id='%s'", $this->id);
 		return $db->exec( $query );
 	}

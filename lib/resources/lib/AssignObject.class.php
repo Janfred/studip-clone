@@ -37,6 +37,7 @@
 require_once ("lib/classes/SemesterData.class.php");
 require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/list_assign.inc.php";
 require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/resourcesFunc.inc.php";
+require_once('lib/log_events.inc.php');
 
 
 /*****************************************************************************
@@ -581,6 +582,23 @@ class AssignObject {
 			}
 			$result = $db->exec($query);
 			if ($result > 0 ) {
+				// LOGGING
+				$type=get_object_type($this->assign_user_id);
+				if ($type) {
+					if ($type=='date') {
+						$q="SELECT range_id FROM termine WHERE termin_id='{$this->assign_user_id}'";
+						$this->db->query($q);
+						$this->db->next_record();
+						$semid=$this->db->f('range_id');
+					} else if ($type=='sem') {
+						$semid=$this->assign_user_id;
+					} else {
+						$semid = null;
+					}
+					log_event("RES_ASSIGN_SEM",$this->resource_id,$semid,$this->getFormattedShortInfo(). $create ? " Neue Buchung" : " Buchungsupdate",$query);
+				} else {
+					log_event("RES_ASSIGN_SINGLE",$this->resource_id,NULL,$this->getFormattedShortInfo(). $create ? " Neue Buchung" : " Buchungsupdate",$query);
+				}
 				$query = sprintf("UPDATE resources_assign SET chdate='%s' WHERE assign_id='%s' ", $chdate, $this->id);
 				$db->exec($query);
 				$this->syncronizeMetaDates();
@@ -631,6 +649,23 @@ class AssignObject {
 			$this->db->query($query);
 		}
 		*/
+		// LOGGING
+		$type=get_object_type($this->assign_user_id);
+		if ($type) {
+			if ($type=='date') {
+				$q="SELECT range_id FROM termine WHERE termin_id='{$this->assign_user_id}'";
+				$this->db->query($q);
+				$this->db->next_record();
+				$semid=$this->db->f('range_id');
+			} else if ($type=='sem') {
+				$semid=$this->assign_user_id;
+			} else {
+				print "<h1>ERROR: unknown type of assign_user_id $assign_user_id</h1>";
+			}
+			log_event("RES_ASSIGN_DEL_SEM",$this->resource_id,$semid,$this->getFormattedShortInfo(),"",$_GLOBALS['user']->id);
+		} else {
+			log_event("RES_ASSIGN_DEL_SINGLE",$this->resource_id,NULL,$this->getFormattedShortInfo,NULL,$_GLOBALS['user']->id);
+		}
 		
 		$query = sprintf("DELETE FROM resources_assign WHERE assign_id='%s'", $this->id);
 		if($db->exec($query))

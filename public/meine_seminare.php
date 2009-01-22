@@ -254,6 +254,10 @@ if ($cmd=="kill" && !LockRules::Check($auswahl, 'participants')) {
 	if ($db->f("admission_binding")) {
 		$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an die Dozentin oder den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br />";
 	} elseif ($db->f("status")) {
+	
+		// LOGGING
+		log_event('SEM_USER_DEL', $auswahl, $user->id, 'Hat sich selbst ausgetragen'); 
+
 		$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
 		if ($db->affected_rows() == 0)
 			$meldung="error§" . _("Datenbankfehler!");
@@ -273,6 +277,10 @@ if ($cmd=="kill" && !LockRules::Check($auswahl, 'participants')) {
 
 //bei Bedarf aus admission_seminar_user austragen
 if ($cmd=="kill_admission") {
+	
+	// LOGGING
+	log_event('SEM_USER_DEL', $auswahl, $user->id, 'Hat sich selbst aus der Wartliste ausgetragen'); 
+	
 	$db->query("DELETE FROM admission_seminar_user WHERE user_id='$user->id' AND seminar_id='$auswahl'");
 	if ($db->affected_rows() == 0)  $meldung="error§" . _("Datenbankfehler!");
 	else {

@@ -97,6 +97,10 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 		admission_seminar_user_insert($user_id, $sem_id, 'accepted', $studiengang_id, $comment);
 		parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>vorl&auml;ufig akzeptiert</b> in die Veranstaltung %s eingetragen. F&uuml;r weitere Informationen lesen Sie den Abschnitt 'Anmeldeverfahren' in der &Uuml;bersichtsseite zu dieser Veranstaltung."), '<b>'.$sem_name.'</b>'));
 		echo "<tr><td class=\"blank\" colspan=2>";
+		
+		// LOGGING
+		log_event('SEM_USER_ADD', $sem_id, $user_id, 'accepted', 'Vorläufig akzeptiert'.($log_user_number?', Teilnehmernummer: '.$log_user_number:'')); 
+		
 	}
 }
 
@@ -427,6 +431,8 @@ $db6=new DB_Seminar;
 			$db->next_record();
 			if ($db->f("Lesezugriff") <= 1 && $perm->have_perm("autor")) {
 				if (!seminar_preliminary($id,$user->id)) {  // we have to change behaviour, depending on preliminary
+					// LOGGING
+					log_event('SEM_USER_ADD', $id, $user->id, 'user', 'Mit Leserechten - ohne Schreibrechte - eingetragen'); 
 					$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$user->id', status = 'user', gruppe = '$group', mkdate = '".time()."'");
 					parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Leser</b> in die Veranstaltung %s eingetragen."), '<b>'.htmlReady($db->f("Name")).'</b>'));
 					echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
@@ -464,6 +470,8 @@ $db6=new DB_Seminar;
 		if ((isset($pass) && $pass!="" && (md5($pass)==$SemSecPass))  ||  (isset($hashpass) && $hashpass!="" && $hashpass==$SemSecPass)) {
 			if (($SemUserStatus=="user") && ($perm->have_perm("autor")))
 			{
+				// LOGGING
+				log_event('SEM_USER_ADD', $id, $user->id, 'autor', 'Schreibrechte erworben'); 
 				$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$user->id'");
 				parse_msg (sprintf("msg§"._("Sie wurden in der Veranstaltung %s auf den Status <b> Autor </b> hochgestuft."), '<b>'.$SeminarName.'</b>'));
 				echo "<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
@@ -477,6 +485,8 @@ $db6=new DB_Seminar;
 			elseif ($perm->have_perm("autor"))
 			{
 				if (!seminar_preliminary($id,$user->id)) {
+					// LOGGING
+					log_event('SEM_USER_ADD', $id, $user->id, 'autor', 'Mit Schreibrechten eingetragen');
 					$db->query("INSERT INTO seminar_user SET Seminar_id = '$id', user_id = '$user->id', status = 'autor', gruppe = '$group', mkdate = '".time()."'");
 					parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Autor</b> in die Veranstaltung %s eingetragen."), '<b>'.$SeminarName.'</b>'));
 					echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
@@ -534,6 +544,9 @@ $db6=new DB_Seminar;
 				}
 			  	elseif ($SemSecLevelWrite==1){//Hat sich der globale Status in der Zwischenzeit geaendert? Dann hochstufen
 					if ($perm->have_perm("autor")) {
+						// LOGGING
+						log_event('SEM_USER_ADD', $id, $user->id, 'autor', 'Hochgestuft auf autor'); 
+						
 						$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$user->id'");
 						parse_msg(sprintf("info§"._("Sie wurden in der Veranstaltung %s hochgestuft auf den Status <b>Autor</b>."), '<b>'.$SeminarName.'</b>'));
 						echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
@@ -686,6 +699,8 @@ $db6=new DB_Seminar;
 						if (!$current_seminar->isAdmissionQuotaChecked()) { //Variante Eintragen nach Lostermin oder Enddatum der Kontigentierrung. Wenn noch Platz ist fuellen wir einfach auf, ansonsten Warteliste
 							if ($current_seminar->getFreeAdmissionSeats()) { //Wir koennen einfach eintragen, Platz ist noch
 								if (!seminar_preliminary($id,$user->id)) {
+									// LOGGING
+									log_event('SEM_USER_ADD', $id, $user->id, 'autor', 'Mit Kontingent und Schreibrechten eingetragen, Studiengane: '.$sem_verify_suggest_studg); 
 								 	$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', admission_studiengang_id = '$sem_verify_suggest_studg', status='autor', gruppe='$group', mkdate='".time()."' ");
 									parse_msg ('msg§' . sprintf(_("Sie wurden mit dem Status <b>Autor</b> in die Veranstaltung %s eingetragen. Damit sind Sie zugelassen."), '<b>' . $SeminarName .'</b>'));
 									echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
@@ -702,6 +717,8 @@ $db6=new DB_Seminar;
 							} else { //Auf die Warteliste
 								if(!$current_seminar->admission_disable_waitlist){
 									$position = admission_seminar_user_insert($user->id, $id, 'awaiting', $sem_verify_suggest_studg);
+									// logging
+									log_event('SEM_USER_ADD', $id, $user->id, 'awaiting', 'Auf die Warteliste gesetzt, mit Kontingent, Position: '.$position.', Kontingent: '.$sem_verify_suggest_studg); 								
 									$meldung = sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s. Sie wurden jedoch auf Platz %s der Warteliste gesetzt."), '<b>'.$SeminarName.'</b>', $position).' <br /> '._("Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
 								} else {
 									$meldung = sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s."), '<b>'.$SeminarName.'</b>') .' <br /> ';
@@ -718,6 +735,8 @@ $db6=new DB_Seminar;
 						} else { //noch nicht gelost oder Enddatum, also Kontingentierung noch aktiv
 							if ($current_seminar->admission_type == 1) { //Variante Losverfahren
 								admission_seminar_user_insert($user->id, $id, 'claiming', $sem_verify_suggest_studg);
+								// LOGGING
+								log_event('SEM_USER_ADD', $id, $user->id, 'claiming', 'Auf Warteliste für Losverfahren gesetzt'); 
 								parse_msg (sprintf("info§"._("Sie wurden auf die Anmeldeliste der Veranstaltung <b>%s</b> gesetzt.")." <br />"._("Teilnehmer der Veranstaltung <b>%s</b> werden Sie, falls Sie im Losverfahren am %s Uhr ausgelost werden.") . (!$current_seminar->admission_disable_waitlist ? _("Sollten Sie nicht ausgelost werden, werden Sie auf die Warteliste gesetzt und werden vom System automatisch als Teilnehmer eingetragen, sobald ein Platz f&uuml;r Sie frei wird.") : ""), $SeminarName, $SeminarName, date("d.m.Y, G:i", $current_seminar->admission_endtime)));
 								echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 								if ($send_from_search)
@@ -729,6 +748,8 @@ $db6=new DB_Seminar;
 							} else { //Variante chronologisches Anmelden
 								if ($current_seminar->getFreeAdmissionSeats($sem_verify_suggest_studg)) {//noch Platz in dem Kontingent --> direkt in seminar_user
 								 	if (!seminar_preliminary($id,$user->id)) {
+										// LOGGING
+										log_event('SEM_USER_ADD', $id, $user->id, 'autor', 'Mit Schreibrechten und Kontingent eingetragen, Kontingent: '.$sem_verify_suggest_studg); 
 										$db4->query("INSERT INTO seminar_user SET user_id = '$user->id', Seminar_id = '$id', status='autor', gruppe='$group', admission_studiengang_id = '$sem_verify_suggest_studg', mkdate='".time()."' ");
 										parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>Autor</b> in die Veranstaltung <b>%s</b> eingetragen. Damit sind Sie zugelassen."), $SeminarName));
 										echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";
@@ -744,6 +765,9 @@ $db6=new DB_Seminar;
 								} else { //kein Platz mehr im Kontingent --> auf Warteposition in admission_seminar_user
 									if(!$current_seminar->admission_disable_waitlist){
 										$position = admission_seminar_user_insert($user->id, $id, 'awaiting', $sem_verify_suggest_studg);
+										// LOGGING
+										log_event('SEM_USER_ADD', $id, $user->id, 'awaiting', 'Auf Warteliste, mit Kontingent: '.$sem_verify_suggest_studg.', Position: '.$position); 
+			
 										$meldung = sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s. Sie wurden jedoch auf Platz %s der Warteliste gesetzt."), '<b>'.$SeminarName.'</b>', $position).' <br /> '._("Sie werden automatisch eingetragen, sobald ein Platz f&uuml;r Sie frei wird.");
 									} else {
 										$meldung = sprintf(_("Es gibt zur Zeit keinen freien Platz in der teilnahmebeschr&auml;nkten Veranstaltung %s."), '<b>'.$SeminarName.'</b>') .' <br /> ';
@@ -855,6 +879,8 @@ $db6=new DB_Seminar;
 
 		if (isset($InsertStatus)) {//Status reinschreiben
 			if (!seminar_preliminary($id,$user->id)) {
+				// LOGGING
+				log_event('SEM_USER_ADD', $id, $user->id, $InsertStatus, 'Eingetragen'); 
 				$db->query("INSERT INTO seminar_user SET seminar_id = '$id', user_id = '$user->id', status = '$InsertStatus', gruppe = '$group', mkdate = '".time()."'");
 				parse_msg (sprintf("msg§"._("Sie wurden mit dem Status <b>%s</b> in die Veranstaltung <b>%s</b> eingetragen."), $InsertStatus, $SeminarName));
 				echo"<tr><td class=\"blank\" colspan=2><a href=\"seminar_main.php?auswahl=$id\">&nbsp; &nbsp; "._("Hier kommen Sie zu der Veranstaltung")."</a>";

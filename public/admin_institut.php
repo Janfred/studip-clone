@@ -46,7 +46,6 @@ require_once('lib/classes/StudipLitSearch.class.php');
 require_once('lib/classes/StudipNews.class.php');
 require_once('lib/log_events.inc.php');
 
-
 if ($RESOURCES_ENABLE) {
 	include_once($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
 }
@@ -100,13 +99,17 @@ while ( is_array($_POST)
 			}
 		}
 
-	  $query = "insert into Institute (Institut_id,Name,fakultaets_id,Strasse,Plz,url,telefon,email,fax,type,lit_plugin_name,mkdate,chdate) values('$i_id','$Name','$Fakultaet','$strasse','$plz', '$home', '$telefon', '$email', '$fax', '$type','$lit_plugin_name', '".time()."', '".time()."')";
-	  $db->query($query);
-	  if ($db->affected_rows() == 0) {
-	  	$msg="error§<b>" . _("Datenbankoperation gescheitert:") . " " . $query . "</b>";
+	  	$query = "insert into Institute (Institut_id,Name,fakultaets_id,Strasse,Plz,url,telefon,email,fax,type,lit_plugin_name,mkdate,chdate) values('$i_id','$Name','$Fakultaet','$strasse','$plz', '$home', '$telefon', '$email', '$fax', '$type','$lit_plugin_name', '".time()."', '".time()."')";
+		  
+		$db->query($query);
+	  	
+	  	if ($db->affected_rows() == 0) {
+	  		$msg="error§<b>" . _("Datenbankoperation gescheitert:") . " " . $query . "</b>";
 			break;
 		}
-	log_event("INST_CREATE",$i_id); // logging
+
+		
+		log_event("INST_CREATE",$i_id,NULL,NULL,$query); // logging
 
 		// Set the default list of modules
 		$Modules->writeDefaultStatus($i_id);
@@ -284,6 +287,7 @@ while ( is_array($_POST)
 			$msg="error§<b>" . _("Datenbankoperation gescheitert:") . "</b> " . $query;
 			break;
 		} else {
+
 			$msg.="msg§" . sprintf(_("Die Einrichtung \"%s\" wurde gel&ouml;scht!"), htmlReady(stripslashes($Name))) . "§";
 			$i_view="delete";
 			log_event("INST_DEL",$i_id,NULL,$Name); // logging - put institute's name in info - it's no longer derivable from id afterwards

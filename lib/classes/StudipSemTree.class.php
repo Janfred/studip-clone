@@ -242,14 +242,28 @@ class StudipSemTree extends TreeAbstract {
 		if ($item_ids && $sem_entries){
 			$view->params[0] = (is_array($item_ids)) ? $item_ids : array($item_ids);
 			$view->params[1] = (is_array($sem_entries)) ? $sem_entries : array($sem_entries);
+			// Logging
+			foreach ($view->params[0] as $range) {
+				foreach ($view->params[1] as $sem) {
+					log_event("SEM_DELETE_STUDYAREA",$sem,$range);
+				}
+			}
 			$rs = $view->get_query("view:SEMINAR_SEM_TREE_DEL_SEM_RANGE");
 			$ret = $rs->affected_rows();
 		} elseif ($item_ids){
 			$view->params[0] = (is_array($item_ids)) ? $item_ids : array($item_ids);
+			// Logging
+			foreach ($view->params[0] as $range) {
+				log_event("SEM_DELETE_STUDYAREA","all",$range);
+			}
 			$rs = $view->get_query("view:SEMINAR_SEM_TREE_DEL_RANGE");
 			$ret = $rs->affected_rows();
 		} elseif ($sem_entries){
 			$view->params[0] = (is_array($sem_entries)) ? $sem_entries : array($sem_entries);
+			// Logging
+			foreach ($view->params[0] as $sem) {
+				log_event("SEM_DELETE_STUDYAREA",$sem,"all");
+			}
 			$rs = $view->get_query("view:SEMINAR_SEM_TREE_DEL_SEMID_RANGE");
 			$ret = $rs->affected_rows();
 		} else {
@@ -263,6 +277,8 @@ class StudipSemTree extends TreeAbstract {
 		$view->params[0] = $seminar_id;
 		$view->params[1] = $sem_tree_id;
 		$rs = $view->get_query("view:SEMINAR_SEM_TREE_INS_ITEM");
+		// Logging
+		log_event("SEM_ADD_STUDYAREA",$seminar_id,$sem_tree_id);
 		return $rs->affected_rows();
 	}
 }

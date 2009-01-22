@@ -599,7 +599,10 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			$admin_admission_data["read_level"]=3;
 			$admin_admission_data["write_level"]=3;
 		}
-
+		
+		// LOGGING
+		log_event('SEM_CHANGED_ACCESS', $admin_admission_data['sem_id'], NULL, serialize($admin_admission_data)); 
+		
 
 		$data_mapping['admission_turnout'] = 'admission_turnout';
 		$data_mapping['admission_type'] = 'admission_type';

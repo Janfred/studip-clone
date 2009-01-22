@@ -269,6 +269,8 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 					$userchange = $db->f("user_id");
 					$fullname = $db->f("fullname");
 					$next_pos = get_next_position("tutor",$id);
+					// LOGGING
+					log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'tutor', 'Hochgestuft zum Tutor'); 
 					$db->query("UPDATE seminar_user SET status='tutor', position='$next_pos', visible='yes' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
 					if($db->affected_rows()) $msgs[] = $fullname;
 				}
@@ -298,7 +300,8 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
         		$db->query("SELECT position FROM seminar_user WHERE user_id = '$userchange'");
          		$db->next_record();
          		$pos = $db->f("position");
-
+				// LOGGING
+				log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'autor', 'Runtergestuft zum Autor'); 
 				$db->query("UPDATE seminar_user SET status='autor', position=0 WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='tutor'");
 
          		re_sort_tutoren($id, $pos);
@@ -330,6 +333,8 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				if ($db->next_record()) {
 					$userchange = $db->f("user_id");
 					$fullname = $db->f("fullname");
+					// LOGGING
+					log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'autor', 'Hochgestuft zum Autor'); 
 					$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
 					if($db->affected_rows()) $msgs[] = $fullname;
 				}
@@ -355,6 +360,8 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				$db->next_record();
 				$userchange = $db->f("user_id");
 				$fullname = $db->f("fullname");
+				// LOGGING
+				log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'user', 'Runtergestuft zum User, keine Schreibberechtigung mehr'); 
 				$db->query("UPDATE seminar_user SET status='user' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
 				if($db->affected_rows()) $msgs[] = $fullname;
 			}
@@ -381,6 +388,8 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				$db->next_record();
 				$userchange = $db->f("user_id");
 				$fullname = $db->f("fullname");
+				// LOGGING
+				log_event('SEM_USER_DEL', $id, $userchange, 'Wurde aus der Veranstaltung rausgeworfen'); 
 				$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
 				if($db->affected_rows()){
 					setTempLanguage($userchange);
@@ -421,6 +430,10 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				$db->next_record();
 				$userchange=$db->f("user_id");
 				$fullname = $db->f("fullname");
+
+				// LOGGING
+				log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'Wurde aus der Warteliste der Veranstaltung rausgeworfen'); 
+
 				$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
 				if($db->affected_rows()){
 					setTempLanguage($userchange);
@@ -637,6 +650,8 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 						if ($db2->f("status") == "autor" || $db2->f("status") == "user") {
 							// gehen wir ihn halt hier hochstufen
 							$next_pos = get_next_position("tutor",$id);
+							// LOGGING
+							log_event('SEM_USER_ADD', $id, $userchange, 'tutor', 'Wurde zum Tutor ernannt (add_tutor_x)'); 
 							$db2->query("UPDATE seminar_user SET status='tutor', position='$next_pos' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
 							if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 								$msg = "msg§" . sprintf (_("%s wurde zum Mitglied bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
