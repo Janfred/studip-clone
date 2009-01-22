@@ -121,8 +121,6 @@ while ($db2->next_record())
 }
 
 /* --- Results -------------------------------------------------------------- */
-$template2 = $GLOBALS['template_factory']->open('browse_results');
-$template2->set_attribute('browse_data', $browse_data);
 
 // nur global admin darf alle Benutzer sehen
 if ($perm->have_perm("admin"))
