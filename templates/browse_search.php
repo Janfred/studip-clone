@@ -1,3 +1,4 @@
+<!-- SEARCHBOX ------------------------------------------------------------- -->
 <script type="text/javascript">
 	Event.observe(window, 'load', function() {
 		new Ajax.Autocompleter('Vorname',
@@ -67,7 +68,7 @@
 		<div id="Nachname_choices" class="autocomplete"></div>
 	</td>
 </tr>
-<tr class="steelgroup4">
+<tr class="steel2">
 	<td colspan="4" align="center">
 		<?=makeButton("suchen", "input", "Suchen", "Suchen")?>
 		<?=makeButton("zuruecksetzen", "input", "zuruecksetzen", "zuruecksetzen")?>
@@ -76,3 +77,75 @@
 </table>
 </form>
 <br/>
+
+<!-- RESULTS --------------------------------------------------------------- -->
+<? if($results):?>
+<table width="100%" border="0" cellpadding="2" cellspacing="0">
+<tr>
+	<td class="topic"><b><?=_("Ergebnisse:")?></b></td>
+</tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="0">
+<? if(count($results) > 0):?>
+<tr>
+<? if($browse_data['group'] == 'Seminar'): ?>
+	<th align="left"><a href="browse.php?sortby=Nachname"><?=_("Name")?></a></th>
+	<th align="left"><a href="browse.php?sortby=status"><?=_("Status in der Veranstaltung")?></a></th>
+<? elseif($browse_data['group'] == 'Institut'): ?>
+	<th align="left"><a href="browse.php?sortby=Nachname"><b><?=_("Name")?></a></th>
+	<th align="left"><?=_("Funktion an der Einrichtung")?></td>
+<? else: ?>
+	<th align="left"><a href="browse.php?sortby=Nachname"><b><?=_("Name")?></a></th>
+	<th align="left"><a href="browse.php?sortby=perms"><?=_("globaler Status")?></a></th>
+<? endif; ?>
+	<th align="right"><?=_("Nachricht verschicken")?></td>
+</tr>
+<? foreach ($results as $user): ?>
+<tr class="<?=TextHelper::cycle('cycle_odd', 'cycle_even')?>">
+	<td><a href="about.php?username=<?=$user['username']?>"><?=$user['fullname']?></a></td>
+	<td><?=$user['status']?> <?=$user['perms']?></td>
+	<td align="right">
+		<?=$user['chat']?>
+		<a href="sms_send.php?sms_source_page=browse.php&rec_uname=<?=$user['username']?>"><img src="<?=Assets::url()?>images/nachricht1.gif" title="<?=_("Nachricht an User verschicken")?>" border="0"></a>
+	</td>
+</tr>
+<? endforeach; ?>
+<? else: ?>
+<tr class="steel1">
+	<td colspan="3"><p><b><?=_("Es wurde niemand gefunden!")?></b></p></td>
+</tr>
+<? endif; ?>
+</table>
+<? endif; ?>
+
+<?php
+$infobox = array(
+	'picture' => 'board2.jpg',
+	'content' => array(
+		array("kategorie" => _("Information:"),
+			"eintrag" => array(
+				array(
+					"icon" => 'ausruf_small.gif',
+					"text" => _("Hier können Sie die Homepages aller NutzerInnen abrufen, die im System registriert sind.")
+				),
+				array(
+					"icon" => 'ausruf_small.gif',
+					"text" => _("Sie erhalten auf den Homepages von MitarbeiternInnen an Einrichtungen auch weiterf&uuml;hrende Informationen, wie Sprechstunden und Raumangaben.")
+				),
+				array(
+					"icon" => 'ausruf_small.gif',
+					"text" => _("Wählen Sie den gewünschten Bereich aus oder suchen Sie nach einem Namen!")
+				)
+			)
+		),
+		array("kategorie" => _("Ansichten:"),
+			"eintrag" => array(
+				array(
+					"icon" => 'suche2.gif',
+					"text" => '<a href="score.php">'._("Zur Stud.IP-Rangliste").'</a>'
+				)
+			)
+		)
+	)
+);
+?>

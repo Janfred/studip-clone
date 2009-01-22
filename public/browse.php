@@ -71,8 +71,8 @@ $sortby = array('Nachname', 'perms', 'status');
 $browse_data['sortby'] = (in_array($_REQUEST['sortby'], $sortby))? trim($_REQUEST['sortby']):'Nachname';
 
 
-/* --- Search-Template-View ------------------------------------------------- */
-$template = $GLOBALS['template_factory']->open('browse_search');
+/* --- Search --------------------------------------------------------------- */
+$template = $GLOBALS['template_factory']->open('browse');
 
 //TODO: (mriehe) welche aufgabe hat dieser teil?
 if ($sms_msg)
@@ -120,13 +120,7 @@ while ($db2->next_record())
 	$courses[] = array('id' => $db2->f("Seminar_id"), 'name' => htmlReady(my_substr($db2->f("Name"), 0, 40)));
 }
 
-$template->set_attribute('browse_data', $browse_data);
-$template->set_attribute('institutes', $institutes);
-$template->set_attribute('courses', $courses);
-
-$content_for_layout = $template->render();
-
-/* --- Result-Template-View ------------------------------------------------- */
+/* --- Results -------------------------------------------------------------- */
 $template2 = $GLOBALS['template_factory']->open('browse_results');
 $template2->set_attribute('browse_data', $browse_data);
 
@@ -262,47 +256,16 @@ if ($browse_data["group"])
 				}
 				$resultset[] = $result;
 			}
-			$template2->set_attribute('results', $resultset);
+			$template->set_attribute('results', $resultset);
 		}
 	}
-	$content_for_layout .= $template2->render();
 }
 
-//Infobox
-$infobox = array(
-	'picture' => 'board2.jpg',
-	'content' => array(
-		array("kategorie" => _("Information:"),
-			"eintrag" => array(
-				array(
-					"icon" => 'ausruf_small.gif',
-					"text" => _("Hier können Sie die Homepages aller NutzerInnen abrufen, die im System registriert sind.")
-				),
-				array(
-					"icon" => 'ausruf_small.gif',
-					"text" => _("Sie erhalten auf den Homepages von MitarbeiternInnen an Einrichtungen auch weiterf&uuml;hrende Informationen, wie Sprechstunden und Raumangaben.")
-				),
-				array(
-					"icon" => 'ausruf_small.gif',
-					"text" => _("Wählen Sie den gewünschten Bereich aus oder suchen Sie nach einem Namen!")
-				)
-			)
-		),
-		array("kategorie" => _("Ansichten:"),
-			"eintrag" => array(
-				array(
-					"icon" => 'suche2.gif',
-					"text" => '<a href="score.php">'._("Zur Stud.IP-Rangliste").'</a>'
-				)
-			)
-		)
-	)
-);
-
-/* --- Complete View -------------------------------------------------------- */
-$layout = $GLOBALS['template_factory']->open('layouts/base');
-$layout->set_attribute('infobox', $infobox);
-$layout->set_attribute('content_for_layout', $content_for_layout);
-echo $layout->render();
+/* --- View ----------------------------------------------------------------- */
+$template->set_attribute('browse_data', $browse_data);
+$template->set_attribute('institutes', $institutes);
+$template->set_attribute('courses', $courses);
+$template->set_layout("layouts/base");
+echo $template->render();
 page_close();
 ?>
