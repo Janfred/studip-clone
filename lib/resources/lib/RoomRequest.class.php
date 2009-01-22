@@ -419,10 +419,10 @@ class RoomRequest {
 				// LOGGING
 				$props="";
 				foreach ($this->properties as $key => $val) {
-					$q="SELECT name FROM resources_properties WHERE property_id='$key'";
-					$this->db->query($q);
-					$this->db->next_record();
-					$props.=$this->db->f('name')."=".$val['state']." ";	
+					$props.=$val['name']."=".$val['state']." ";	
+				}
+				if (!$props) {
+					$props="--";
 				}
 				log_event("RES_REQUEST_NEW",$this->seminar_id,$this->resource_id,"Termin: $this->termin_id, Properties: $props",$query);
 			} else {
@@ -434,10 +434,7 @@ class RoomRequest {
 				// LOGGING
 				$props="";
 				foreach ($this->properties as $key => $val) {
-					$q="SELECT name FROM resources_properties WHERE property_id='$key'";
-					$this->db->query($q);
-					$this->db->next_record();
-					$props.=$this->db->f('name')."=".$val['state']." ";	
+					$props.=$val['name']."=".$val['state']." ";	
 				}
 				if (!$props) {
 					$props="--";
