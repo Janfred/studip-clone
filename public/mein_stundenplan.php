@@ -128,7 +128,7 @@ if ($cmd == "add_entry") {
 
 // Virtuellen Stundenplaneintrag löschen
 if ($cmd == "delete_entry") {
-	$db->query("DELETE FROM seminar_user_schedule WHERE range_id = '$semid' AND user_id = '".$auth->auth['uid']."'");
+	$db->query("DELETE FROM seminar_user_schedule WHERE range_id = '$sem_id' AND user_id = '".$auth->auth['uid']."'");
 }
 
 // persoenlichen Eintrag wegloeschen
@@ -764,6 +764,11 @@ for ($i = $global_start_time; $i < $global_end_time+1; $i++) {
 							$link_img = 'trash.gif" ';
 							$link_cmd = 'delete';
 							$link_tp = tooltip(_("Diesen Termin löschen"));
+							
+						} else if($my_sems[$cc['seminar_id']]['virtual']){
+							$link_img = 'trash.gif" ';
+							$link_cmd = 'delete_entry';
+							$link_tp = tooltip(_("Diesen Termin löschen"));
 						} else {
 							if($my_schedule_settings['hidden'][$cc['seminar_id']]) {
 								$link_img = 'unhide.gif" ';
@@ -775,8 +780,8 @@ for ($i = $global_start_time; $i < $global_end_time+1; $i++) {
 								$link_tp = tooltip(_("Diesen Termin ausblenden"));
 							}
 						}
-						
-						echo '<a style="float: right;" href="'. URLHelper::getLink('?view=edit&cmd='. $link_cmd .'&sem_id='. $my_sems[$cc["seminar_id"]]["seminar_id"]) . '">';
+						//semid muss auf 32 zeichen gekürzt werden, da sie bei virtuellen terminen mehr als 32 zeichen hat. (warum auch immer ?)
+						echo '<a style="float: right;" href="'. URLHelper::getLink('?view=edit&cmd='. $link_cmd .'&sem_id='.((!$my_sems[$cc['seminar_id']]['virtual'])?$my_sems[$cc["seminar_id"]]["seminar_id"]:substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32))).'">';
 						echo '<img border=0 src="'. $GLOBALS['ASSETS_URL']. 'images/' .$link_img . $link_tp .'></a>';
 					}
 					
