@@ -220,7 +220,7 @@ class ExternEditGeneric extends ExternEdit {
 		$out .= "<tr><td><table width=\"100%\" border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\n";
 
 		if ($size > 1) {
-			$form_name .= "[]";
+		//	$form_name .= "[]";
 			if (is_array($title)) {
 				for ($i = 0; $i < $size; $i++) {
 					if ($this->faulty_values[$form_name][$i])
@@ -231,7 +231,7 @@ class ExternEditGeneric extends ExternEdit {
 					$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 					$out .= "$title[$i]</font></td>\n";
 					$out .= "<td$width_2 nowrap=\"nowrap\">";
-					$out .= "<input type=\"checkbox\" name=\"$form_name\" value=\"{$check_values[$i]}\"";
+					$out .= "<input type=\"checkbox\" name=\"{$form_name}[]\" value=\"{$check_values[$i]}\"";
 					if (is_array($value) && in_array($check_values[$i], $value))
 						$out .= " checked";
 					if ($size == 1)
@@ -253,7 +253,7 @@ class ExternEditGeneric extends ExternEdit {
 				$out .= "$title</font></td>\n";
 				$out .= "<td$width_2 nowrap=\"nowrap\">";
 				for ($i = 0; $i < $size; $i++) {
-					$out .= "<input type=\"checkbox\" name=\"$form_name\" value=\"{$check_values[$i]}\"";
+					$out .= "<input type=\"checkbox\" name=\"{$form_name}[]\" value=\"{$check_values[$i]}\"";
 					if (is_array($value) && in_array($check_values[$i], $value))
 						$out .= " checked";
 					if ($size == 1)
@@ -274,7 +274,7 @@ class ExternEditGeneric extends ExternEdit {
 			$out .= "<tr" . $this->css->getFullClass() . "><td$width_1 nowrap=\"nowrap\"><font size=\"2\">";
 			$out .= "$title</font></td>\n";
 			$out .= "<td$width_2 nowrap=\"nowrap\">";
-			$out .= "<input type=\"checkbox\" name=\"$form_name\" value=\"$check_values\"";
+			$out .= "<input type=\"checkbox\" name=\"{$form_name}\" value=\"$check_values\"";
 			if ($value == $check_values)
 				$out .= " checked";
 			$out .= "> &nbsp;\n";
