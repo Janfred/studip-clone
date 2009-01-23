@@ -319,10 +319,6 @@ $BANNER_ADS_ENABLE = FALSE; 				//enable the Banner ads functions (config as roo
 
 $CONVERT_IDNA_URL = TRUE;					//if true, urls with german "umlauts" are converted
 
-
-$ALLOW_ADMIN_USERACCESS = FALSE;                                                // if true, administrators can edit sensible user data like password  
-
-
 /*language settings
 ----------------------------------------------------------------*/
 
