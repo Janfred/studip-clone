@@ -434,11 +434,15 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$all_semester = $semester->getAllSemesterData();
 		// old hard coded $SEMESTER-array starts with index 1
 		array_unshift($all_semester, 0);
-
-		// sem-types in class 1 (Lehre)
+		
+		$types = array();
 		foreach ($GLOBALS["SEM_TYPE"] as $key => $type) {
-			if ($type["class"] == 1)
+			if (in_array($type["class"], (array) $this->config->getValue('PersondetailsLectures', 'semclass'))) {
 				$types[] = $key;
+			}
+		}
+		if (!sizeof($types)) {
+			$types[] = '1';
 		}
 		$types = implode("','", $types);
 

@@ -42,7 +42,7 @@ require_once($RELATIVE_PATH_EXTERN.'/elements/ExternElementPersondetailsLectures
 class ExternElementPersondetailsLecturesTemplate extends ExternElementPersondetailsLectures {
 
 	var $attributes = array('semstart', 'semrange', 'semswitch', 'aliaswise',
-			'aliassose');
+			'aliassose', 'semclass');
 	
 	/**
 	* Constructor
@@ -68,7 +68,8 @@ class ExternElementPersondetailsLecturesTemplate extends ExternElementPersondeta
 			'semrange' => '',
 			'semswitch' => '',
 			'aliaswise' => _("Wintersemester"),
-			'aliassose' => _("Sommersemester")
+			'aliassose' => _("Sommersemester"),
+			'semclass' => '|1'
 		);
 		
 		return $config;
@@ -143,6 +144,14 @@ class ExternElementPersondetailsLecturesTemplate extends ExternElementPersondeta
 		$info = _("Alternative Bezeichnung für den Begriff \"Wintersemester\".");
 		$table .= $edit_form->editTextfieldGeneric("aliaswise", $title, $info, 40, 80);
 		
+		$title = _("Veranstaltungsklassen:");
+		$info = _("Wählen Sie aus, welche Veranstaltungsklassen angezeigt werden sollen.");
+		foreach ($GLOBALS['SEM_CLASS'] as $key => $lecture_class) {
+			$class_names[] = $lecture_class['name'];
+			$class_values[] = $key;
+		}
+		$table .= $edit_form->editCheckboxGeneric("semclass", $title, $info, $class_values, $class_names);
+		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
 		
@@ -152,6 +161,16 @@ class ExternElementPersondetailsLecturesTemplate extends ExternElementPersondeta
 		$out .= $edit_form->editBlank();
 		
 		return $element_headline . $out;
+	}
+	
+	function checkValue ($attribute, $value) {
+		if ($attribute == 'semclass') {
+			if (!sizeof($_POST[$this->getName() . '_semclass'])) {
+				return true;
+			}
+		}
+		
+		return FALSE;
 	}
 	
 }
