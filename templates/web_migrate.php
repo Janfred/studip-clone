@@ -3,7 +3,7 @@
   <table style="width: 80%;">
     <tr>
       <td class="topic">
-        <img style="float: left; margin-right: 1ex;" src="<?= $assets ?>images/icon-posting.gif">
+        <?= Assets::img('news-icon.gif') ?>
         <b>
           <?= _('Stud.IP Web-Migrator') ?>
         </b>
@@ -56,6 +56,9 @@
           </table>
           <p></p>
           <form method="POST">
+            <? if (isset($target)): ?>
+              <input type="hidden" name="target" value="<?= $target ?>">
+            <? endif ?>
             <div align="center">
               <?= makeButton('starten', 'input', false, 'start') ?>
             </div>

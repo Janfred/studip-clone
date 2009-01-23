@@ -21,6 +21,10 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth",
 $auth->login_if(!$perm->have_perm("root"));
 $perm->check("root");
 
+if (!isset($_language)) {
+    $_language = get_accepted_languages();
+}
+
 $_language_path = init_i18n($_language);
 
 include 'lib/include/html_head.inc.php';
@@ -29,11 +33,14 @@ $path = $STUDIP_BASE_PATH.'/db/migrations';
 $verbose = false;
 $target = NULL;
 
-$version =& new DBSchemaVersion('studip');
-$migrator =& new Migrator($path, $version, $verbose);
+if (isset($_REQUEST['target'])) {
+    $target = (int) $_REQUEST['target'];
+}
 
-if (isset($_REQUEST['start']) || isset($_REQUEST['start_x']))
-{
+$version = new DBSchemaVersion('studip');
+$migrator = new Migrator($path, $version, $verbose);
+
+if (isset($_REQUEST['start']) || isset($_REQUEST['start_x'])) {
     set_time_limit(0);
     $migrator->migrate_to($target);
 }
@@ -41,10 +48,10 @@ if (isset($_REQUEST['start']) || isset($_REQUEST['start_x']))
 $current = $version->get();
 $migrations = $migrator->relevant_migrations($target);
 
-$template =& $template_factory->open('web_migrate');
-$template->set_attribute('current_page', _("Datenbank-Migration"));
-$template->set_attribute('assets', $GLOBALS['ASSETS_URL']);
+$template = $template_factory->open('web_migrate');
+$template->set_attribute('current_page', _('Datenbank-Migration'));
 $template->set_attribute('current', $current);
+$template->set_attribute('target', $target);
 $template->set_attribute('migrations', $migrations);
 
 echo $template->render();
