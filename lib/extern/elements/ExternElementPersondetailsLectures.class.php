@@ -71,7 +71,9 @@ class ExternElementPersondetailsLectures extends ExternElement {
 			"semswitch" => "",
 			"aliaswise" => _("Wintersemester"),
 			"aliassose" => _("Sommersemester"),
-			"aslist" => "1"
+			"aslist" => "1",
+			'semclass' => '|1';
+			
 		);
 		
 		return $config;
@@ -152,6 +154,14 @@ class ExternElementPersondetailsLectures extends ExternElement {
 		$values = array("1", "0");
 		$table .= $edit_form->editRadioGeneric("aslist", $title, $info, $values, $names);
 		
+		$title = _("Veranstaltungsklassen:");
+		$info = _("Wählen Sie aus, welche Veranstaltungsklassen angezeigt werden sollen.");
+		foreach ($GLOBALS['SEM_CLASS'] as $key => $lecture_class) {
+			$class_names[] = $lecture_class['name'];
+			$class_values[] = $key;
+		}
+		$table .= $edit_form->editCheckboxGeneric("semclass", $title, $info, $class_values, $class_names);
+		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
 		
@@ -161,6 +171,16 @@ class ExternElementPersondetailsLectures extends ExternElement {
 		$out .= $edit_form->editBlank();
 		
 		return $element_headline . $out;
+	}
+	
+	function checkValue ($attribute, $value) {
+		if ($attribute == 'semclass') {
+			if (!sizeof($_POST[$this->getName() . '_semclass'])) {
+				return true;
+			}
+		}
+		
+		return FALSE;
 	}
 	
 }

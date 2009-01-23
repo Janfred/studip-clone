@@ -305,10 +305,14 @@ function lehre (&$module, $db, $alias_content, $text_div, $text_div_end) {
 		$list_div_end = "";
 	}
 
-	// sem-types in class 1 (Lehre)
+	$types = array();
 	foreach ($GLOBALS["SEM_TYPE"] as $key => $type) {
-		if ($type["class"] == 1)
+		if (in_array($type["class"], (array) $this->config->getValue('PersondetailsLectures', 'semclass'))) {
 			$types[] = $key;
+		}
+	}
+	if (!sizeof($types)) {
+		$types[] = '1';
 	}
 	$types = implode("','", $types);
 
