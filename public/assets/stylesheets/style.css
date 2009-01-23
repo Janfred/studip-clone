@@ -92,7 +92,7 @@ a img { /* Bilder in Links ohne Rand */
 /* --- Layouts -------------------------------------------------------------- */
 #layout_container {
 	background-color: white;
-	padding: 1em;
+	padding: 0 0 1em 0;
 }
 
 #layout_content {
