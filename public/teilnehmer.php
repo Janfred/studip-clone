@@ -1406,7 +1406,9 @@ if ($db->f('visible') == 'yes' || $i_see_everybody || $db->f('user_id') == $user
 	$c++;
 } // eine Zeile zuende
 
-else $invisible=+1;
+else { 
+	$invisible++;
+}
 }
 if($key != 'dozent' && $rechte && !$info_is_open && !LockRules::Check($id, 'participants')) {
 	echo '<tr><td class="blank" colspan="'.($showscore ? 8 : 7).'">&nbsp;</td>';
@@ -1419,7 +1421,7 @@ if($key != 'dozent' && $rechte && !$info_is_open && !LockRules::Check($id, 'part
 echo "<tr><td class=\"blank\" colspan=\"$colspan\">&nbsp;</td></tr>";
 } // eine Gruppe zuende
 if ($invisible >= 1) {
-	echo "<tr><td colspan=\"$colspan\">+ $invisible unsichtbare $val</td></tr>";
+	echo "<tr><td colspan=\"$colspan\">".sprintf(_("+%d unsichtbare %s"), $invisible,$val)."</td></tr>";
 	$invisible = 0;
 }
 }
