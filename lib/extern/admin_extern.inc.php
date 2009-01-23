@@ -305,11 +305,10 @@ if (!$have_config) {
 			echo "<tr>\n<td class=\"" . $css_switcher_2->getHeaderClass() . "\">";
 			echo "<font size=\"2\"><b>&nbsp; ";
 
-			if ($configurations[$module_type["module"]][$config_id])
-				echo "<a name=\"anker\">\n";
+			if ($configurations[$module_type["module"]][$config_id]) {
+				echo "<a name=\"anker\"></a>\n";
+			}
 			echo $module_type["name"];
-			if ($configurations[$module_type["module"]][$config_id])
-				echo "</a>\n";;
 
 			echo "</b></font>\n</td></tr>\n";
 			echo "<tr><td width=\"100%\" style=\"border-style:solid; border-width:1px; border-color:#000000;\">\n";
