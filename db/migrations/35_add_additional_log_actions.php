@@ -106,7 +106,7 @@ class AddAdditionalLogActions extends Migration {
 	}
 
 	function up () {
-		
+
 		$insert = "INSERT IGNORE INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES( MD5('%s'), '%s', '%s', '%s', %s, NULL)";
 
 		foreach ($this->logactions as $a)
@@ -116,12 +116,12 @@ class AddAdditionalLogActions extends Migration {
 	}
 
 	function down () {
-		
+
 		$delete = "DELETE FROM log_actions WHERE action_id = MD5('%s')";
 
 		foreach ($this->logactions as $a)
 		{
-			DBManager::get()->query(sprintf($delete,$a['name'],$a['name'],$a['description'],$a['info_template'],$a['active']));
+			DBManager::get()->query(sprintf($delete,$a['name']));
 		}
 	}
 }
