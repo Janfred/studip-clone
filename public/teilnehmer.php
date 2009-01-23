@@ -1123,6 +1123,7 @@ while (list ($key, $val) = each ($gruppe)) {
 
 	echo "</tr>";
 	$c=1;
+	$invisible=0;
 	$i_see_everybody = $perm->have_studip_perm('tutor', $SessSemName[1]);
 
 	while ($db->next_record()) {
@@ -1181,9 +1182,8 @@ while (list ($key, $val) = each ($gruppe)) {
 		}
 	}
 
-
 // Anzeige der eigentlichen Namenzeilen
-
+if ($db->f('visible') == 'yes' || $i_see_everybody || $db->f('user_id') == $user->id) {
 	echo "<tr>";
 	if ($showscore == TRUE) {
 		printf("<td bgcolor=\"#%s%s%s\" class=\"%s\">", $red, $green,$blue, $class2);
@@ -1211,11 +1211,7 @@ while (list ($key, $val) = each ($gruppe)) {
 		echo tooltip(sprintf(_("Weitere Informationen über %s"), $db->f("username")));
 		echo ">&nbsp;</a>";
 	}
-
-	if ($db->f('visible') == 'yes'
-	    || $i_see_everybody
-	    || $db->f('user_id') == $user->id) {
-		?>
+	?>
 		<font size="-1">
 			<a href="<?= URLHelper::getLink('about.php?username='.$db->f("username")) ?>">
 				<?= Avatar::getAvatar($db->f("user_id"))->getImageTag(Avatar::SMALL) ?>
@@ -1223,12 +1219,7 @@ while (list ($key, $val) = each ($gruppe)) {
 			</a>
 		</font>
 		</td>
-	<? } else { ?>
-		<font size="-1" color="#666666">
-			<?= _("(unsichtbareR NutzerIn)") ?>
-		</font>
-	<? }
-
+	<?
 	if ($key != "dozent" && $rechte) {
 		if ($db->f("mkdate")) {
 			echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".date("d.m.y,",$db->f("mkdate"))."&nbsp;".date("H:i:s",$db->f("mkdate"))."</font></td>";
@@ -1415,6 +1406,8 @@ while (list ($key, $val) = each ($gruppe)) {
 	$c++;
 } // eine Zeile zuende
 
+else $invisible=+1;
+}
 if($key != 'dozent' && $rechte && !$info_is_open && !LockRules::Check($id, 'participants')) {
 	echo '<tr><td class="blank" colspan="'.($showscore ? 8 : 7).'">&nbsp;</td>';
 	if (isset($multiaction[$key]['insert'][0]) && !($key == 'autor' && !$tutor_count)) echo '<td class="blank" align="center">' . makeButton('eintragen','input', $multiaction[$key]['insert'][1],'do_' . $multiaction[$key]['insert'][0]) . '</td>';
@@ -1425,7 +1418,12 @@ if($key != 'dozent' && $rechte && !$info_is_open && !LockRules::Check($id, 'part
 }
 echo "<tr><td class=\"blank\" colspan=\"$colspan\">&nbsp;</td></tr>";
 } // eine Gruppe zuende
+if ($invisible >= 1) {
+	echo "<tr><td colspan=\"$colspan\">+ $invisible unsichtbare $val</td></tr>";
+	$invisible = 0;
 }
+}
+
 echo "</table>\n";
 
 echo "</td></tr>\n";  // Auflistung zuende
