@@ -804,7 +804,7 @@ for ($i = $global_start_time; $i < $global_end_time+1; $i++) {
 					echo '</font></td></tr><tr><td class="blank">';
 					if ((!$my_sems[$cc["seminar_id"]]["personal_sem"]) && $view != 'print') {
 						if ($my_sems[$cc['seminar_id']]['virtual']) {
-							echo "<a href=\"". URLHelper::getLink('details.php?sem_id='.substr($my_sems[$cc["seminar_id"]]["seminar_id"], 0, 32)) ."\">";
+							echo "<a href=\"". URLHelper::getLink('details.php?sem_id='.$id)."\">";
 							echo "<FONT size=\"-1\" color=\"green\">";
 						} else {
 							if ($_REQUEST['inst_id']) {
