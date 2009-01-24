@@ -155,7 +155,8 @@ class UserManagement {
 			if ($this->original_user_data["$table.$field"]!=$value) {
 				$value_escaped = mysql_escape_string($value);
 				$this->db->query("UPDATE $table SET $field = '$value_escaped' WHERE user_id = '".$this->user_data['auth_user_md5.user_id']."'");
-				// logging >>>>>>
+
+				// logging
 				if ($this->db->affected_rows() != 0) {
 					switch ($field) {
 						case 'username':
@@ -181,12 +182,8 @@ class UserManagement {
 						case 'password':
 							log_event("USER_CHANGE_PASSWORD",$this->user_data['auth_user_md5.user_id'],NULL,"password: ".$this->original_user_data['user_info.password']." -> ".$value);
 							break;
-						case 'password':
-							log_event("USER_CHANGE_PASSWORD",$this->user_data['auth_user_md5.user_id'],NULL,"password: ".$this->original_user_data['user_info.password']." -> ".$value);
-						
 					}
 				}
-				// <<<<<<< logging
 			}
 
 		}
