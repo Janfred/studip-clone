@@ -72,7 +72,7 @@ class ExternElementPersondetailsLectures extends ExternElement {
 			"aliaswise" => _("Wintersemester"),
 			"aliassose" => _("Sommersemester"),
 			"aslist" => "1",
-			'semclass' => '|1';
+			'semclass' => '|1'
 			
 		);
 		
