@@ -45,6 +45,15 @@ require_once($RELATIVE_PATH_EXTERN . '/lib/ExternModule.class.php');
 
 // -- here you have to put initialisations for the current page
 
+// when downloading a config, do it here and stop afterwards
+if ($com == "download_config") {
+	if ($SessSemName[1]) {
+		download_config($SessSemName[1], $_REQUEST['config_id'], $_REQUEST['module']);
+		page_close();
+		exit;
+	}
+}
+ 
 //Output starts here
 
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -71,6 +80,19 @@ if ($header_line) {
 	}
 }
 
+// upload of configuration
+if ($com == "do_upload_config") {
+	$file_content = file_get_contents($the_file);
+	$file_content_wo_tabs = preg_replace("/\t/", "  ", $file_content);
+
+	$jsonconfig = json_decode($file_content_wo_tabs, true);
+	
+	if (check_config($jsonconfig, $_REQUEST['check_module']) && store_config($range_id, $_REQUEST['config_id'], $jsonconfig)) {
+	 	$msg = "info§". _("Die Datei wurde erfolgreich &uuml;bertragen!"). "§";
+	} else {
+		$msg ="error§". _("Die Konfigurationsdatei hat den falschen Modultyp!"). "§";
+	}
+}
 
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 echo $links;
@@ -176,9 +198,12 @@ if ($EXTERN_SRI_ENABLE_BY_ROOT && $_REQUEST['com'] == 'enable_sri'
 
 echo "<table class=\"blank\" border=\"0\" width=\"95%\" ";
 echo "align=\"left\" cellspacing=\"0\" cellpadding=\"0\">\n";
-//echo "<tr><td class=\"blank\" colspan=\"0\">\n<blockquote><b>";
-//echo _("Übersicht über alle angelegten Konfigurationen.");
-//echo "</b></blockquote>\n</td></tr>\n";
+
+// messages
+echo "<tr><td class=\"blank\" colspan=\"0\">";
+echo parse_msg($msg);
+echo "</td></tr>";
+
 if ($EXTERN_SRI_ENABLE_BY_ROOT && $perm->have_perm('root')) {
 	echo "<tr><td class=\"blank\">\n";
 	echo "<form method=\"post\" action=\"$PHP_SELF?com=enable_sri\">\n";
@@ -320,6 +345,21 @@ if (!$have_config) {
 				$css_switcher_2->switchClass();
 				echo "<tr><td" . $css_switcher_2->getFullClass() . " width=\"65%\"><font size=\"2\">";
 				echo "&nbsp;" . $configuration["name"] . "</font></td>\n";
+				
+				?>
+				<td <?= $css_switcher_2->getFullClass() ?> width="5%">
+					<a href="<?= URLHelper::getLink('?com=download_config&config_id='. $configuration['id'] .'&module='. $module_type["module"]) ?>">
+						<?= Assets::img('download', array('alt' => _("Konfigurationsdatei herunterladen"), 'title' => _("Konfigurationsdatei herunterladen"))) ?>
+					</a>
+				</td>
+
+				<td <?= $css_switcher_2->getFullClass() ?> width="5%">
+					<a href="<?= URLHelper::getLink('?com=upload_config&config_id='. $configuration['id']) ?>">
+						<?= Assets::img('upload', array('alt' => _("Konfigurationsdatei hochladen"), 'title' => _("Konfigurationsdatei hochladen"))) ?>
+					</a>
+				</td>
+				<?
+
 				echo "<td" . $css_switcher_2->getFullClass() . " width=\"5%\">";
 				$tooltip = _("weitere Informationen anzeigen");
 				echo "<a href=\"$PHP_SELF?com=info&config_id=" . $configuration["id"];
@@ -344,17 +384,27 @@ if (!$have_config) {
 
 				echo "</a>\n</td>\n";
 				echo "<td" . $css_switcher_2->getFullClass() . " align=\"center\" width=\"5%\">\n";
-				echo "<a href=\"$PHP_SELF?com=delete_sec&config_id=" . $configuration["id"];
-				echo '#anker"><img src="';
+				echo "<a href=\"$PHP_SELF?com=delete_sec&config_id=" . $configuration["id"] . '#anker">';
+				echo '<img src="' . $GLOBALS['ASSETS_URL'];
 				$tooltip = _("Konfiguration löschen");
-				echo $GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
-				echo '<td' . $css_switcher_2->getFullClass() . " align=\"right\" width=\"20%\" ";
+				echo "images/trash.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
+				echo "<td" . $css_switcher_2->getFullClass() . " align=\"right\" width=\"20%\" ";
 				echo ">\n";
 				echo "<a href=\"$PHP_SELF?com=edit&mod=" . $module_type["module"];
 				echo "&config_id=" . $configuration["id"] . "\"><img ";
 				echo makeButton("bearbeiten", "src") . " border=\"0\"";
 				$tooltip = _("Konfiguration bearbeiten");
 				echo tooltip($tooltip) . "></a>&nbsp;\n</td></tr>\n";
+
+				if ($com == 'upload_config' && $_REQUEST['config_id'] == $configuration['id']) {
+					$template = $GLOBALS['template_factory']->open('extern/upload_form');
+					$template->set_attribute('class', $css_switcher_2->getFullClass());
+					$template->set_attribute('module', $module_type['module']);
+					$template->set_attribute('config_id', $configuration['id']);
+					$template->set_attribute('max_filesize', 1024 * 100); // currently 100kb
+
+					echo $template->render();
+				}
 			}
 
 			$css_switcher_2->resetClass();
@@ -405,8 +455,7 @@ if ($configurations) {
 																"text" => $info_set_default
 													))
 									));
-}
-else {
+} else {
 	$info_content = array(
 									array("kategorie" => "Information:",
 												"eintrag" => array(
@@ -418,5 +467,3 @@ else {
 
 print_infobox($info_content, "einrichtungen.jpg");
 print_footer();
-
-?>

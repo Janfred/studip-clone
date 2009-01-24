@@ -36,8 +36,17 @@
 // +---------------------------------------------------------------------------+
 
 
+if (version_compare(PHP_VERSION, '5.2', '<'))
+{
+  require_once('vendor/phpxmlrpc/xmlrpc.inc');
+  require_once('vendor/phpxmlrpc/jsonrpc.inc');
+  require_once('vendor/phpxmlrpc/json_extension_api.inc');
+}
+
+
 require_once($GLOBALS["RELATIVE_PATH_EXTERN"]."/extern_config.inc.php");
 require_once("lib/classes/DataFieldEntry.class.php");
+require_once("lib/extern/lib/ExternConfigDb.class.php");
 
 /**
 * Returns all statusgruppen for the given range.
@@ -289,4 +298,101 @@ function sri_is_enabled ($i_id) {
 	return 0;
 }
 
-?>
+/*
+ * Download an external configuration.
+ *
+ * @param string $range_id the range_id
+ * @param string $config_id the id of the config to download
+ * @param string $module the config-type
+ */
+function download_config($range_id, $config_id, $module) {
+	$extern = new ExternConfigDB($range_id, '',$config_id);
+	
+	// check, if we have an external configuration with the given ids
+	$stmt = DBManager::get()->prepare("SELECT COUNT(*) as c FROM extern_config 
+		WHERE config_id = ? AND range_id = ?");
+	$stmt->execute(array($config_id, $range_id));
+	$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	// show download-content
+	if ($result['c'] == 1) {
+		$file_name = $GLOBALS["EXTERN_CONFIG_FILE_PATH"] . $config_id . ".cfg";
+		header("Content-Type: text/plain");
+		header("Content-Disposition: attachment; filename=$config_id.cfg");
+		$extern->parse();
+		$extern->config['config_type'] = $module;
+		$extern_attributes = json_encode($extern->config);
+
+		echo indentJson($extern_attributes);
+
+	}
+
+	return TRUE;
+}
+
+/*
+ * Store an (uploaded) external configuration.
+ *
+ * @param string $range_id the range_id
+ * @param string $config_id the id of the config to overwrite
+ * @param string $jsonconfig the json-ified configuration
+ *
+ * @return boolean returns true on success, false otherwise
+ */
+function store_config($range_id, $config_id, $jsonconfig)
+{
+	$extern = new ExternConfigDB($range_id, '', $config_id);
+	$extern->config = $jsonconfig;
+	return ($extern->store()) ? true : false;
+}
+
+/*
+ * Some checks trying to validate someone is uploadin the correct type of config.
+ *
+ * @param string $data the content of the new (uploaded) config
+ * @param string $type the type it should have
+ *
+ * @return boolean true if the types match
+ */
+function check_config($data, $type) {
+	if ($data['config_type'] == $type) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/*
+ * Create correct indention for json-string.
+ *
+ * @param string $str the json to indent
+ *
+ * @return string teh indented json
+ */
+function indentJson($str) {
+	$strOut = '';
+	$identPos = 0;
+	for($loop = 0;$loop<= strlen($str) ;$loop++){
+		$_char = substr($str,$loop,1);
+		//part 1
+		if($_char == '}' || $_char == ']'){
+			$strOut .= chr(13);
+			$identPos --;
+			for($ident = 0;$ident < $identPos;$ident++){
+				$strOut .= chr(9);
+			}
+		}
+		//part 2
+		$strOut .= $_char;
+		//part 3
+		if($_char == ',' || $_char == '{' || $_char == '['){
+			$strOut .= chr(13);
+			if($_char == '{' || $_char == '[')
+				$identPos ++;
+			for($ident = 0;$ident < $identPos;$ident++){
+				$strOut .= chr(9);
+			}
+		}
+	}
+	return $strOut;
+}
