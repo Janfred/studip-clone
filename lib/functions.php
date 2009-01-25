@@ -1317,7 +1317,6 @@ function words($string) {
 
 /**
  * Encodes a string from Stud.IP encoding (WINDOWS-1252/ISO-8859-1 with numeric HTML-ENTITIES) to UTF-8
- '
  *
  * @param  string		a string to encode in WINDOWS-1252/HTML-ENTITIES
  *
@@ -1383,4 +1382,43 @@ function studip_utf8decode($string){
 										)
 							);
 	}
+}
+
+/*
+ * Get the title used for the given status ('dozent', 'tutor' etc.) for the
+ * specified SEM_TYPE. Alternative titles can be defined in the config.inc.php.
+ *
+ * @param string        status ('dozent', 'tutor', 'autor', 'user' or 'accepted')
+ * @param int           count, this determines singular or plural forms
+ * @param int           sem_type of course (defaults to current course)
+ *
+ * @return string       translated title for status
+ */
+function get_title_for_status($type, $count, $sem_type = NULL) {
+	global $SEM_TYPE, $SessSemName;
+
+	if (is_null($sem_type)) {
+		$sem_type = $SessSemName['art_num'];
+	}
+
+	$default_title = array(
+		'dozent'   => array(_('DozentIn'), _('DozentInnen')),
+		'tutor'    => array(_('TutorIn'), _('TutorInnen')),
+		'autor'    => array(_('AutorIn'), _('AutorInnen')),
+		'user'     => array(_('LeserIn'), _('LeserInnen')),
+		'accepted' => array(_('Vorläufig akzeptierte TeilnehmerIn'),
+		                    _('Vorläufig akzeptierte TeilnehmerInnen'))
+	);
+
+	$atype = 'title_'.$type;
+
+	if (isset($SEM_TYPE[$sem_type][$atype])) {
+		$title = $SEM_TYPE[$sem_type][$atype];
+	} else if (isset($default_title[$type])) {
+		$title = $default_title[$type];
+	} else {
+		throw new Exception('unkown status in get_title_for_status()');
+	}
+
+	return ngettext($title[0], $title[1], $count);
 }
