@@ -551,9 +551,34 @@ print_infobox ($infobox,"contract.jpg");
 			<?
 				}
 			}
-
+			$show_study_courses = true;
+			if ($GLOBALS['PLUGINS_ENABLE'] &&
+				$studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginByNameIfAvailable('studienmodulmanagement')){
+				$show_study_courses = $studienmodulmanagement->show_study_courses;
+				$stms = $studienmodulmanagement->getModulesForSeminar($sem_id);
+				if (count($stms)){
+					$stm_out = array();
+					list(,$semester_id) = array_values(SemesterData::GetInstance()->getSemesterDataByDate($db2->f("start_time")));
+					foreach($stms as $module_id){
+							$stm_out[] = '<a href="'.$studienmodulmanagement->getModuleDescriptionLink($module_id, $semester_id).'">'
+										. htmlReady($studienmodulmanagement->getModuleTitle($module_id, $semester_id)) . '</a>';
+						}
+					?>
+			<tr>
+				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp;
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
+				<?
+				printf ("<font size=-1><b>" . _("Studienmodule:") . "</b></font><br /><font size=-1><ul><li>%s</li></ul></font>",
+						join("</li>\n<li>", $stm_out));
+				?>
+				</td>
+			</tr>
+			<?
+				}
+			}
 			// Anzeige der Bereiche
-			if ($SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["bereiche"]) {
+			if ($show_study_courses && $SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["bereiche"]) {
 				$sem_path = get_sem_tree_path($sem_id);
 			?>
 			<tr>

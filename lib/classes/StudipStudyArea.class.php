@@ -90,6 +90,13 @@ class StudipStudyArea {
    */
   private $studip_object_id;
 
+  /**
+   * DB: sem_tree::type
+   *
+   * @access private
+   * @var integer
+   */
+  private $type;
 
   /**
    * Kinder dieses Studienbereichs; wird zur Memoization verwendet
@@ -232,6 +239,30 @@ class StudipStudyArea {
     return $this;
   }
 
+  function getType(){
+  	return $this->type;
+  }
+  
+  function setType($type){
+  	$this->type = (int) $type;
+  	return $this;
+  }
+  
+  function getTypeString($type){
+  	if(isset($GLOBALS['SEM_TREE_TYPES'][$this->getType()]['name'])){
+  		return $GLOBALS['SEM_TREE_TYPES'][$this->getType()]['name'];
+  	} else {
+  		return '';
+  	}
+  }
+  
+  function isEditable(){
+  	if(isset($GLOBALS['SEM_TREE_TYPES'][$this->getType()]['editable'])){
+  		return (bool)$GLOBALS['SEM_TREE_TYPES'][$this->getType()]['editable'];
+  	} else {
+  		return false;
+  	}
+  }
 
   /**
    * Get the path along the sem_tree to this study area.
@@ -405,8 +436,39 @@ class StudipStudyArea {
     $this->setParentId($fields['parent_id']);
     $this->setPriority($fields['priority']);
     $this->setStudipObjectId($fields['studip_object_id']);
+    $this->setType($fields['type']);
 
     return $this;
+  }
+  
+  function isModule(){
+  	if ($GLOBALS['PLUGINS_ENABLE']){
+  		$studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginByNameIfAvailable('studienmodulmanagement');
+  		if($studienmodulmanagement){
+  			return $studienmodulmanagement->isModule($this->getID());
+  		}
+  	}
+  	return false;
+  }
+
+  function getModuleDescription($semester_id = ''){
+  	if($this->isModule()){
+  		return 	PluginEngine::getPluginPersistence('Core')
+  				->getPluginByNameIfAvailable('studienmodulmanagement')
+  				->getModuleDescription($this->getID(), $semester_id);
+  	} else {
+  		return '';
+  	}
+  }
+
+  function getModuleInfoIcon($semester_id = ''){
+  	if($this->isModule()){
+  		return 	PluginEngine::getPluginPersistence('Core')
+  				->getPluginByNameIfAvailable('studienmodulmanagement')
+  				->getModuleInfoIcon($this->getID(), $semester_id);
+  	} else {
+  		return '';
+  	}
   }
 
 

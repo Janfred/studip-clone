@@ -35,5 +35,6 @@ $record_of_study_templates =
 $ilias_status =
 $ilias_systemgroup =
 $_fullname_sql =
+$SEM_TREE_TYPES =
 array();
 ?>

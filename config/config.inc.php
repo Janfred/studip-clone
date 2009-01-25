@@ -254,6 +254,12 @@ $SEM_CLASS[6]=array("name"=>_("importierte Kurse"),
 					"create_description"=> "Sie sollten diesen Text garnicht sehen.");
 //weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
+$SEM_TREE_TYPES[0] = array("name" => "", "editable" => true);
+$SEM_TREE_TYPES[1] = array("name" => _("") , "editable" => true);
+$SEM_TREE_TYPES[2] = array("name" => _(""), "editable" => true);
+$SEM_TREE_TYPES[3] = array("name" => _(""), "editable" => true);
+$SEM_TREE_TYPES[4] = array("name" => _(""), "editable" => true);
+$SEM_TREE_TYPES[5] = array("name" => _(""), "editable" => true);
 
 //Festlegen der erlaubten oder verbotenen Dateitypen
 $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen SEM_TYPE, name "1" waere entsprechend die Definition der Dateiendungen fuer SEM_TYPE[1]; default wird verwendet, wenn es keine spezielle Definition fuer einen SEM_TYPE gibt
@@ -626,3 +632,6 @@ $INST_ADMIN_DATAFIELDS_VIEW = array(
 	'default' => array(
 	)
 );
+
+include 'plugins_packages/data-quest/QisLsfConnectPlugin/qislsfconfig.inc.php';
+

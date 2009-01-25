@@ -34,6 +34,7 @@ if ($GLOBALS['PLUGINS_ENABLE']){
 	require_once("core/AbstractStudIPSystemPlugin.class.php");
 	require_once("core/AbstractStudIPHomepagePlugin.class.php");
 	require_once("core/AbstractStudIPPortalPlugin.class.php");
+	require_once("core/AbstractStudienmodulManagementPlugin.class.php");
 	require_once("core/StudIPCore.class.php");
 	require_once("engine/AbstractPluginIntegratorEnginePersistence.class.php");
 	require_once("engine/StandardPluginIntegratorEnginePersistence.class.php");
@@ -41,6 +42,7 @@ if ($GLOBALS['PLUGINS_ENABLE']){
 	require_once("engine/SystemPluginIntegratorEnginePersistence.class.php");
 	require_once("engine/HomepagePluginIntegratorEnginePersistence.class.php");
 	require_once("engine/PortalPluginIntegratorEnginePersistence.class.php");
+	require_once("engine/CorePluginIntegratorEnginePersistence.class.php");
 	require_once("engine/StudIPTemplateEngine.class.php");
 	require_once("engine/PluginEngine.class.php");
 	require_once("engine/PluginNotFound.class.php");

@@ -355,6 +355,7 @@ class SemBrowse {
 		global $PHP_SELF, $_language_path;
 		echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=0 width = \"99%\">\n";
 		if ($this->sem_browse_data['level'] == "f"){
+			
 			echo "\n<tr><td align=\"center\" class=\"steelgraulight\" height=\"40\" valign=\"middle\"><div style=\"margin-top:10px;margin-bottom:10px;\"><font size=\"-1\">";
 			if (($this->show_result && count($this->sem_browse_data['search_result'])) || $this->sem_browse_data['cmd'] == "xts") {
 				printf(_("Suche im %sEinrichtungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=ev&cmd=qs&sset=0\">","</a>");
@@ -365,6 +366,15 @@ class SemBrowse {
 				printf ("<table align=\"center\" cellspacing=\"10\"><tr><td nowrap align=\"center\"><a href=\"%s?level=ev&cmd=qs&sset=0\"><b>%s</b><br><br><img src=\"".$GLOBALS['ASSETS_URL']."images/institute.jpg\" %s border=\"0\" /></a></td>", $PHP_SELF, _("Suche in Einrichtungen"), $_language_path, tooltip(_("Suche im Einrichtungsverzeichnis")));
 				if ($this->show_class()){
 					printf ("<td nowrap align=\"center\"><a href=\"%s?level=vv&cmd=qs&sset=0\"><b>%s</b><br><br><img src=\"".$GLOBALS['ASSETS_URL']."images/kommentar.jpg\" %s border=\"0\" /></a></td>", $PHP_SELF, _("Suche im Vorlesungsverzeichnis"), $_language_path,tooltip(_("Suche im Vorlesungsverzeichnis")));
+				}
+				if ($GLOBALS['PLUGINS_ENABLE'] &&
+				$studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginByNameIfAvailable('studienmodulmanagement')){
+					if($studienmodulmanagement->getModuleSearchLink()){
+						printf('<td nowrap align="center"><a href="%s"><b>%s</b><br><br><img src="%s"></a></td>',
+						$studienmodulmanagement->getModuleSearchLink(),
+						htmlReady($studienmodulmanagement->getModuleSearchText()),
+						$studienmodulmanagement->getModuleSearchIcon());
+					}
 				}
 				printf ("</tr></table>");
 			}
@@ -390,10 +400,12 @@ function print_result(){
 
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
 			if (!is_object($this->sem_tree)){
-				$the_tree =& TreeAbstract::GetInstance("StudipSemTree");
-			} else {
-				$the_tree =& $this->sem_tree->tree;
+				$this->sem_tree = new StudipSemTreeViewSimple($this->sem_browse_data["start_item_id"],
+															 $this->sem_number,
+															  (is_array($this->sem_browse_data['sem_status'])) ? $this->sem_browse_data['sem_status'] : false,
+															  !(is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM'))));
 			}
+			$the_tree = $this->sem_tree->tree;
 			list($group_by_data, $sem_data) = $this->get_result();
 			echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
 			echo "\n<tr><td class=\"steelgraulight\" colspan=\"2\"><div style=\"margin-top:10px;margin-bottom:10px;\"><font size=\"-1\"><b>&nbsp;"
@@ -412,6 +424,9 @@ function print_result(){
 					case 1:
 					if ($the_tree->tree_data[$group_field]) {
 						echo htmlReady($the_tree->getShortPath($group_field));
+						if (is_object($this->sem_tree)){
+							echo $this->sem_tree->getInfoIcon($group_field);
+						}
 					} else {
 						echo _("keine Studienbereiche eingetragen");
 					}

@@ -42,6 +42,7 @@ require_once "config.inc.php";
 class StudipSemTreeViewAdmin extends TreeView {
 	
 	var $admin_ranges = array();
+	var $studienmodulmanagement = null;
 	
 	/**
 	* constructor
@@ -52,6 +53,9 @@ class StudipSemTreeViewAdmin extends TreeView {
 		$this->start_item_id = ($start_item_id) ? $start_item_id : "root";
 		$this->root_content = $GLOBALS['UNI_INFO'];
 		parent::TreeView("StudipSemTree"); //calling the baseclass constructor
+		if ($GLOBALS['PLUGINS_ENABLE']){
+			$this->studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginByNameIfAvailable('studienmodulmanagement');
+		}		
 		URLHelper::bindLinkParam("_marked_item", $this->marked_item);
 		$this->marked_sem =& $_SESSION['_marked_sem'];
 		$this->parseCommand();
@@ -173,10 +177,11 @@ class StudipSemTreeViewAdmin extends TreeView {
 		$parent_id = $_REQUEST['parent_id'];
 		$item_name = $_REQUEST['edit_name'];
 		$item_info = $_REQUEST['edit_info'];
+		$item_type = (int)$_REQUEST['edit_type'];
 		if ($this->mode == "NewItem" && $item_id){
 			if ($this->isItemAdmin($parent_id)){
 				$priority = count($this->tree->getKids($parent_id));
-				if ($this->tree->InsertItem($item_id,$parent_id,$item_name,$item_info,$priority,null)){
+				if ($this->tree->InsertItem($item_id,$parent_id,$item_name,$item_info,$priority,null,$item_type)){
 					$this->mode = "";
 					$this->tree->init();
 					$this->openItem($item_id);
@@ -186,7 +191,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		}
 		if ($this->mode == "EditItem"){
 			if ($this->isParentAdmin($item_id)){
-				if ($this->tree->UpdateItem($item_id, $item_name, $item_info)){
+				if ($this->tree->UpdateItem($item_id, $item_name, $item_info, $item_type)){
 					$this->msg[$item_id] = "msg§" . _("Bereich wurde ge&auml;ndert.");
 				} else {
 					$this->msg[$item_id] = "info§" . _("Keine Ver&auml;nderungen vorgenommen.");
@@ -286,19 +291,21 @@ class StudipSemTreeViewAdmin extends TreeView {
 			$new_item_id = md5($item_to_copy . $seed);
 			$parent_id = $item_id;
 			$num_copy = $this->tree->InsertItem($new_item_id,$parent_id,
-			mysql_escape_string($this->tree->tree_data[$item_to_copy]['name']),
+			mysql_escape_string($this->tree->tree_data[$item_to_copy]['_name']),
 			mysql_escape_string($this->tree->tree_data[$item_to_copy]['info']),
 			$this->tree->getMaxPriority($parent_id)+1,
-			($this->tree->tree_data[$item_to_copy]['studip_object_id'] ? $this->tree->tree_data[$item_to_copy]['studip_object_id'] : null));
+			($this->tree->tree_data[$item_to_copy]['studip_object_id'] ? $this->tree->tree_data[$item_to_copy]['studip_object_id'] : null),
+			$this->tree->tree_data[$item_to_copy]['type']);
 			if($num_copy){
 				if ($items_to_copy){
 					for ($i = 0; $i < count($items_to_copy); ++$i){
 						$num_copy += $this->tree->InsertItem(md5($items_to_copy[$i] . $seed),
 						md5($this->tree->tree_data[$items_to_copy[$i]]['parent_id'] . $seed),
-						mysql_escape_string($this->tree->tree_data[$items_to_copy[$i]]['name']),
+						mysql_escape_string($this->tree->tree_data[$items_to_copy[$i]]['_name']),
 						mysql_escape_string($this->tree->tree_data[$items_to_copy[$i]]['info']),
 						$this->tree->tree_data[$items_to_copy[$i]]['priority'],
-						($this->tree->tree_data[$items_to_copy[$i]]['studip_object_id'] ? $this->tree->tree_data[$items_to_copy[$i]]['studip_object_id'] : null));
+						($this->tree->tree_data[$items_to_copy[$i]]['studip_object_id'] ? $this->tree->tree_data[$items_to_copy[$i]]['studip_object_id'] : null),
+						$this->tree->tree_data[$item_to_copy]['type']);
 					}
 				}
 				$items_to_copy[] = $item_to_copy;
@@ -329,7 +336,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		if($this->isItemAdmin("root") && $_REQUEST['insert_fak']){
 			$view = new DbView();
 			$item_id = $view->get_uniqid();
-			$view->params = array($item_id,'root','',$this->tree->getNumKids('root')+1,'',$_REQUEST['insert_fak']);
+			$view->params = array($item_id,'root','',$this->tree->getNumKids('root')+1,'',$_REQUEST['insert_fak'],0);
 			$rs = $view->get_query("view:SEM_TREE_INS_ITEM");
 			if ($rs->affected_rows()){
 				$this->tree->init();
@@ -449,14 +456,18 @@ class StudipSemTreeViewAdmin extends TreeView {
 	}
 	
 	function getItemContent($item_id){
-		if ($item_id == $this->edit_item_id )
-		return $this->getEditItemContent();
+		if ($item_id == $this->edit_item_id ) return $this->getEditItemContent();
+		if(!$GLOBALS['SEM_TREE_TYPES'][$this->tree->getValue($item_id, 'type')]['editable']){
+			$is_not_editable = true;
+			$this->msg[$item_id] = "info§" . sprintf(_("Der Typ dieses Elementes verbietet eine Bearbeitung."));
+		}
 		if ($item_id == $this->move_item_id){
 			$this->msg[$item_id] = "info§" . sprintf(_("Dieses Element wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen sie ein Einfügesymbol %s aus, um das Element zu verschieben / kopieren."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\" " .tooltip(_("Einfügesymbol")) . ">");
 		}
 		$content = "\n<table width=\"90%\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\" style=\"font-size:10pt;\">";
 		$content .= $this->getItemMessage($item_id);
 		$content .= "\n<tr><td style=\"font-size:10pt;\" align=\"center\">";
+		if(!$is_not_editable){
 		if ($this->isItemAdmin($item_id) ){
 			$content .= "<a href=\"" . $this->getSelf("cmd=NewItem&item_id=$item_id") . "\">"
 			. "<img " .makeButton("neuesobjekt","src") . tooltip(_("Innerhalb dieser Ebene ein neues Element einfügen"))
@@ -483,6 +494,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 				. " border=\"0\"></a>";
 			}
 		}
+		}
 		if ($item_id == 'root' && $this->isItemAdmin($item_id)){
 			$view = new DbView();
 			$rs = $view->get_query("view:SEM_TREE_GET_LONELY_FAK");
@@ -505,6 +517,13 @@ class StudipSemTreeViewAdmin extends TreeView {
 		if ($this->tree->tree_data[$item_id]['info']){
 			$content .= "\n<tr><td style=\"font-size:10pt;\" class=\"steel1\" align=\"left\" colspan=\"3\">";
 			$content .= formatReady($this->tree->tree_data[$item_id]['info']) . "</td></tr>";
+		}
+		if(is_object($this->studienmodulmanagement) && $this->studienmodulmanagement->isModule($item_id)){
+			$content .= "\n<tr><td class=\"blank\" align=\"left\" colspan=\"3\">";
+			$content .=  _("Modulbeschreibung:") . '</td></tr>';
+			$content .= "\n<tr><td class=\"blank\" align=\"left\" colspan=\"3\">";
+			$content .= htmlReady($this->studienmodulmanagement->getModuleDescription($item_id));
+			$content .= "</td></tr>";
 		}
 		$content .= "<tr><td style=\"font-size:10pt;\"colspan=\"3\">&nbsp;</td></tr>";
 		if ($this->tree->getNumEntries($item_id) - $this->tree->tree_data[$item_id]['lonely_sem']){
@@ -632,9 +651,21 @@ class StudipSemTreeViewAdmin extends TreeView {
 		if($this->tree->tree_data[$this->edit_item_id]['studip_object_id']){
 			$content .= htmlReady($this->tree->tree_data[$this->edit_item_id]['name']);
 		} else {
-			$content .= "<input type=\"TEXT\" name=\"edit_name\" size=\"50\" style=\"width:100%\" value=\"" . htmlReady($this->tree->tree_data[$this->edit_item_id]['name']) . "\">";
+			$content .= "<input type=\"TEXT\" name=\"edit_name\" size=\"50\" style=\"width:100%\" value=\"" . htmlReady($this->tree->tree_data[$this->edit_item_id]['_name']) . "\">";
 		}
-		$content .= "</td></tr><tr><td class=\"steel1\"  width=\"1%\">" . _("Infotext:") . "</td><td class=\"steel1\">"
+		$content .= "</td></tr>";
+		$content .= "<tr><td class=\"steel1\"  width=\"1%\">" . _("Typ des Elements:") . "</td><td class=\"steel1\">"
+		. "<select name=\"edit_type\">";
+		foreach($GLOBALS['SEM_TREE_TYPES'] as $sem_tree_type_key => $sem_tree_type){
+			if($sem_tree_type['editable']){
+				$selected = $sem_tree_type_key == $this->tree->getValue($this->edit_item_id, 'type') ? 'selected' : '';
+				$content .= '<option value="'.htmlReady($sem_tree_type_key).'"'.$selected.'>';
+				$content .= htmlReady($sem_tree_type['name'] ? $sem_tree_type['name'] : $sem_tree_type_key);
+				$content .= '</option>';
+			}
+		}
+		$content .= "</select></td></tr>";
+		$content .= "<tr><td class=\"steel1\"  width=\"1%\">" . _("Infotext:") . "</td><td class=\"steel1\">"
 		. "<textarea style=\"width:100%\" rows=\"5\" name=\"edit_info\" wrap=\"virtual\">" .htmlReady($this->tree->tree_data[$this->edit_item_id]['info']) . "</textarea>"
 		. "</td></tr><tr><td class=\"steel1\" align=\"right\" valign=\"top\" colspan=\"2\"><input type=\"image\" "
 		. makeButton("absenden","src") . tooltip("Einstellungen übernehmen") . " border=\"0\">"

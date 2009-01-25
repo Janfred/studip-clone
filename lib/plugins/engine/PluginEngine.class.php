@@ -33,6 +33,12 @@ class PluginEngine {
 	 */
 	private static $plugin_list = array();
 
+	/**
+	 * List of created plugin_integrator_engines
+	 *
+	 * @var array
+	 */
+	private static $plugin_integrator_engines = array();
 
 	/**
 	 * TODO
@@ -110,12 +116,15 @@ class PluginEngine {
 	*/
 	public static function getPluginPersistence($plugintype="Abstract") {
 		$classname = $plugintype . "PluginIntegratorEnginePersistence";
+		if (isset(self::$plugin_integrator_engines[$classname])) {
+			return self::$plugin_integrator_engines[$classname];
+	    }
 		$persistence = new $classname();
 		$persistence->setEnvironment($GLOBALS["pluginenv"]);
 
 		// now set the user
 		$persistence->setUser(new StudIPUser());
-		return $persistence;
+		return self::$plugin_integrator_engines[$classname] = $persistence;
 	}
 
 	/**

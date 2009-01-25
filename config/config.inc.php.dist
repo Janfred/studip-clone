@@ -72,7 +72,8 @@ global
   $UPLOAD_TYPES,
   $username_prefix,
   $xml_filename,
-  $xslt_filename_default;
+  $xslt_filename_default,
+  $SEM_TREE_TYPES;
 
 /*basic settings for Stud.IP
 ----------------------------------------------------------------
@@ -185,6 +186,14 @@ $SEM_TYPE[11]=array("name"=>_("Kulturforum"), "class"=>3);
 $SEM_TYPE[12]=array("name"=>_("Veranstaltungsboard"), "class"=>3);
 $SEM_TYPE[13]=array("name"=>_("sonstige"), "class"=>3);
 //more types can be added below
+
+
+$SEM_TREE_TYPES[0] = array("name" => "", "editable" => true); //default type, must be present
+$SEM_TREE_TYPES[1] = array("name" => _("") , "editable" => true);
+$SEM_TREE_TYPES[2] = array("name" => _(""), "editable" => true);
+$SEM_TREE_TYPES[3] = array("name" => _(""), "editable" => true);
+$SEM_TREE_TYPES[4] = array("name" => _(""), "editable" => true);
+$SEM_TREE_TYPES[5] = array("name" => _(""), "editable" => true);
 
 /* Set the allowed and prohibited file types for the types given above.
 *  If nothing is configured for a specific type, the values of the "default" setting are taken.

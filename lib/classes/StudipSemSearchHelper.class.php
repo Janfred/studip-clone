@@ -32,7 +32,8 @@ class StudipSemSearchHelper {
 						'title' => _("Titel"),
 						'lecturer' => _("DozentIn"),
 						'number' => _("Nummer"),
-						'comment' => _("Kommentar"));
+						'comment' => _("Kommentar"),
+						'scope' => _("Bereich"));
 	}
 	
 	private $search_result;

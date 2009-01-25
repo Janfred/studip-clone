@@ -96,12 +96,15 @@ class StudipSemTree extends TreeAbstract {
 		$db = $this->view->get_query("view:SEM_TREE_GET_DATA_NO_ENTRIES");
 		
 		while ($db->next_record()){
-			$this->tree_data[$db->f("sem_tree_id")] = array("info" => $db->f("info"),"studip_object_id" => $db->f("studip_object_id"),
+			$this->tree_data[$db->f("sem_tree_id")] = array('type' => $db->f('type'), '_name' => $db->f('name'), "info" => $db->f("info"),"studip_object_id" => $db->f("studip_object_id"),
 															"entries" => 0);
 			if ($db->f("studip_object_id")){
 				$name = $db->f("studip_object_name");
 			} else {
 				$name = $db->f("name");
+			}
+			if($GLOBALS['SEM_TREE_TYPES'][$db->f('type')]['name']) {
+				$name = $GLOBALS['SEM_TREE_TYPES'][$db->f('type')]['name'] . ': ' . $name;
 			}
 			$this->storeItem($db->f("sem_tree_id"), $db->f("parent_id"), $name, $db->f("priority"));
 		}
@@ -212,16 +215,16 @@ class StudipSemTree extends TreeAbstract {
 		return $ret_id;
 	}
 	
-	function InsertItem($item_id, $parent_id, $item_name, $item_info, $priority, $studip_object_id){
+	function InsertItem($item_id, $parent_id, $item_name, $item_info, $priority, $studip_object_id, $type){
 		$view = new DbView();
-		$view->params = array($item_id,$parent_id,$item_name,$priority,$item_info,$studip_object_id);
+		$view->params = array($item_id,$parent_id,$item_name,$priority,$item_info,$studip_object_id, $type);
 		$rs = $view->get_query("view:SEM_TREE_INS_ITEM");
 		return $rs->affected_rows();
 	}
 	
-	function UpdateItem($item_id, $item_name, $item_info){
+	function UpdateItem($item_id, $item_name, $item_info, $type){
 		$view = new DbView();
-		$view->params = array($item_name,$item_info,$item_id);
+		$view->params = array($item_name,$item_info,$type,$item_id);
 		$rs = $view->get_query("view:SEM_TREE_UPD_ITEM");
 		return $rs->affected_rows();
 	}	

@@ -215,8 +215,10 @@ $the_tree->showSemTree();
 	</select><br>&nbsp;<br><select name="mark_list_aktion" style="font-size:8pt;width:100%;">
 	<?
 	if(!Config::GetInstance()->getValue('SEM_TREE_ALLOW_BRANCH_ASSIGN')){
+		if(is_array($_open_items)){
 		foreach($_open_items as $item_id => $value){
 			if(!$the_tree->tree->getNumKids($item_id)) $possible_open_items[$item_id] = $value;
+			}
 		}
 	} else {
 		$possible_open_items = $_open_items;

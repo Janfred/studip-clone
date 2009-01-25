@@ -75,6 +75,11 @@ class SemesterData {
 		return $index;
 	}
 	
+	function GetSemesterIdByIndex($semester_index){
+		$old_style_semester = SemesterData::GetSemesterArray();
+		return isset($old_style_semester[$semester_index]['semester_id']) ? $old_style_semester[$semester_index]['semester_id'] : null;
+	}
+	
 	function GetSemesterSelector($select_attributes = null, $default = 0, $option_value = 'semester_id', $include_all = true){
 		$semester = SemesterData::GetSemesterArray();
 		unset($semester[0]);

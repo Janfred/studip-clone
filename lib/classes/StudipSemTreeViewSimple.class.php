@@ -63,6 +63,9 @@ class StudipSemTreeViewSimple {
 		if (!$this->tree->tree_data[$this->start_item_id]){
 			$this->start_item_id = "root";
 		}
+		if ($GLOBALS['PLUGINS_ENABLE']){
+			$this->studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginByNameIfAvailable('studienmodulmanagement');
+		}
 	}
 
 	function showSemTree(){
@@ -87,7 +90,16 @@ class StudipSemTreeViewSimple {
 
 	function showKids($item_id){
 		$num_kids = $this->tree->getNumKids($item_id);
-		$kids = $this->tree->getKids($item_id);
+		$all_kids = $this->tree->getKids($item_id);
+		$kids = array();
+		if(!$GLOBALS['perm']->have_perm(Config::GetInstance()->getValue('SEM_TREE_SHOW_EMPTY_AREAS_PERM')) && $num_kids){
+			foreach($all_kids as $kid){
+				if($this->tree->getNumKids($kid) || $this->tree->getNumEntries($kid,true)) $kids[] = $kid;
+			}
+			$num_kids = count($kids);
+		} else {
+			$kids = $all_kids;
+		}
 		echo "\n<table width=\"95%\" border=\"0\" cellpadding=\"0\" cellspacing=\"10\"><tr>\n<td class=\"steel1\" width=\"50%\" align=\"left\" valign=\"top\">";
 		for ($i = 0; $i < $num_kids; ++$i){
 			$num_entries = $this->tree->getNumEntries($kids[$i],true);
@@ -110,11 +122,16 @@ class StudipSemTreeViewSimple {
 		echo "</td></tr></table>";
 	}
 
-	function getTooltip($item_id){
-		if ($item_id == "root"){
-			$ret = ($this->root_content) ? $this->root_content : _("Keine weitere Info vorhanden");
+	function getInfoIcon($item_id){
+		if(is_object($this->studienmodulmanagement) && $this->studienmodulmanagement->isModule($item_id)){
+			$ret = $this->studienmodulmanagement->getModuleInfoIcon($item_id, SemesterData::GetSemesterIdByIndex($this->tree->sem_number[0]));
 		} else {
-			$ret = ($this->tree->tree_data[$item_id]['info']) ? $this->tree->tree_data[$item_id]['info'] :  _("Keine weitere Info vorhanden");
+		if ($item_id == "root"){
+				$info = ($this->root_content) ? $this->root_content : _("Keine weitere Info vorhanden");
+		} else {
+				$info = ($this->tree->tree_data[$item_id]['info']) ? $this->tree->tree_data[$item_id]['info'] :  _("Keine weitere Info vorhanden");
+			}
+			$ret = "<a href=\"#\" " . tooltip(kill_format($info), false, true) . "><img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" border=\"0\" align=\"absmiddle\"></a>";
 		}
 		return $ret;
 	}
@@ -167,7 +184,8 @@ class StudipSemTreeViewSimple {
 			$ret .= "&nbsp;&gt;&nbsp;<a href=\"" . $this->getSelf("start_item_id={$this->start_item_id}",false) . "\">" . htmlReady($this->tree->tree_data[$this->start_item_id]["name"]) . "</a>";
 
 		}
-		$ret .= "&nbsp;<a href=\"#\" " . tooltip(kill_format($this->getTooltip($this->start_item_id)),false,true) . "><img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" border=\"0\" align=\"absmiddle\"></a>";
+		$ret .= "&nbsp;";
+		$ret .= $this->getInfoIcon($this->start_item_id);
 		return $ret;
 	}
 
