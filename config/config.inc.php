@@ -76,7 +76,8 @@ global
   $UPLOAD_TYPES,
   $username_prefix,
   $xml_filename,
-  $xslt_filename;
+  $xslt_filename,
+  $SEM_TREE_TYPES;
 
 //Daten ueber die Uni
     // der Name wird in der local.inc festgelegt
@@ -632,6 +633,3 @@ $INST_ADMIN_DATAFIELDS_VIEW = array(
 	'default' => array(
 	)
 );
-
-include 'plugins_packages/data-quest/QisLsfConnectPlugin/qislsfconfig.inc.php';
-
