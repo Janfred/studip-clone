@@ -42,16 +42,16 @@ function print_rss($username) {
 
 	$db->query(sprintf("SELECT * FROM auth_user_md5 a, rss_feeds r WHERE a.username='%s' AND a.user_id=r.user_id ORDER BY r.priority",$username));
 	echo "<tr><td align=\"left\" valign=\"top\" class=\"blank\"><blockquote><br>";
-	echo _("Hier können Sie beliebige eigene RSS Feeds einbinden. Diese RSS Feeds erscheinen auf Ihrer pers&ouml;nlichen Startseite. Mit den Pfeilsymbolen k&ouml;nnen sie die Reihenfolge, in der die RSS Feeds angezeigt werden, ver&auml;ndern.");
+	echo _("Hier können Sie beliebige eigene RSS-Feeds einbinden. Diese RSS-Feeds erscheinen auf Ihrer pers&ouml;nlichen Startseite. Mit den Pfeilsymbolen k&ouml;nnen sie die Reihenfolge, in der die RSS-Feeds angezeigt werden, ver&auml;ndern.");
 	echo "<br>\n";
-	echo _("<B>Achtung:</B> Je mehr RSS Feeds Sie definieren, desto l&auml;nger ist die Ladezeit der Startseite f&uuml;r Sie!");
+	echo _("<B>Achtung:</B> Je mehr RSS-Feeds Sie definieren, desto l&auml;nger ist die Ladezeit der Startseite f&uuml;r Sie!");
 	echo "<br>\n";
 
 	echo "\n<br></blockquote></td></tr>\n<tr><td class=blank><table width=100% class=blank border=0 cellpadding=0 cellspacing=0>";
 	echo "<form action=\"$PHP_SELF?rss=update_rss&username=$username&view=$view&show_rss_bsp=$show_rss_bsp\" method=\"POST\" name=\"edit_rss\">";
 	if (!$db->num_rows())
-		echo "<tr><td class=\"".$cssSw->getClass()."\"><font size=-1><b><blockquote>" . _("Es existieren zur Zeit keine eigenen RSS Feeds.") . "</blockquote></b></font></blockquote></td></tr>\n";
-	echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote>" . _("RSS Feed") . "&nbsp; <a href='$PHP_SELF?rss=create_rss&view=$view&username=$username&show_rss_bsp=$show_rss_bsp'>" . makeButton("neuanlegen") . "</a></blockquote></td></tr>";
+		echo "<tr><td class=\"".$cssSw->getClass()."\"><font size=-1><b><blockquote>" . _("Es existieren zur Zeit keine eigenen RSS-Feeds.") . "</blockquote></b></font></blockquote></td></tr>\n";
+	echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote>" . _("RSS-Feed") . "&nbsp; <a href='$PHP_SELF?rss=create_rss&view=$view&username=$username&show_rss_bsp=$show_rss_bsp'>" . makeButton("neuanlegen") . "</a></blockquote></td></tr>";
 	$count = 0;
 	while ($db->next_record() ){
 
@@ -68,12 +68,12 @@ function print_rss($username) {
 			if ($count){
 				echo "\n<a href=\"$PHP_SELF?rss=order_rss&direction=up&username=$username&view=$view&cat_id=" . $db->f("feed_id")
 				. "&show_rss_bsp=$show_rss_bsp\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_up.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" "
-				. tooltip(_("RSS Feed nach oben verschieben")) ."></a>";
+				. tooltip(_("RSS-Feed nach oben verschieben")) ."></a>";
 			}
 			if ($count != ($db->num_rows()-1) ){
 				echo "\n<a href=\"$PHP_SELF?rss=order_rss&direction=down&username=$username&view=$view&cat_id=" . $db->f("feed_id")
 				. "&show_rss_bsp=$show_rss_bsp\"><img src=\"". $GLOBALS['ASSETS_URL'] . "images/move_down.gif\" hspace=\"4\" width=\"13\" height=\"11\" border=\"0\" "
-				. tooltip(_("RSS Feed nach unten verschieben")) ."></a>";
+				. tooltip(_("RSS-Feed nach unten verschieben")) ."></a>";
 			}
 			echo "<br>&nbsp;</td></tr>";
 			echo "<tr><td class=\"".$cssSw->getClass()."\"><blockquote>URL:<BR><input type='text' name='rss_url[]' style=\"width: 50%\" value='".htmlReady($db->f("url"))."' size=40>";
@@ -116,7 +116,7 @@ function delete_rss($rss_id) {
 	} else {
 		$db->query("DELETE FROM rss_feeds WHERE feed_id='$rss_id'");
 		if ($db->affected_rows() == 1) {
-			parse_msg ("msg§" . _("RSS Feed gel&ouml;scht!"));
+			parse_msg ("msg§" . _("RSS-Feed gel&ouml;scht!"));
 		}
 	}
 }
@@ -137,7 +137,7 @@ function update_rss() {
 			$db->query("UPDATE rss_feeds SET name='$name', url='$url', hidden='$secret',fetch_title='$fetch_title', chdate='$now' WHERE feed_id='$id'");
 		}
 	}
-	$msg[] = array('msg', _("RSS Feeds ge&auml;ndert!"));
+	$msg[] = array('msg', _("RSS-Feeds ge&auml;ndert!"));
 	parse_msg_array ($msg,'blank',2,0,1);
 }
 
@@ -182,7 +182,7 @@ function order_rss($cat_id,$direction,$username){
 	for ($i = 0; $i < count($items_to_order); ++$i) {
 		$db->query("UPDATE rss_feeds SET priority=$i WHERE feed_id='$items_to_order[$i]'");
 	}
-	$msg[] = array('msg', _("RSS Feeds wurden neu geordnet"));
+	$msg[] = array('msg', _("RSS-Feeds wurden neu geordnet"));
 	parse_msg_array ($msg,'blank',2,0,1);
 }
 
