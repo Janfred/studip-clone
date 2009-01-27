@@ -956,12 +956,12 @@ class Seminar_Perm extends Perm {
 		}
 
 		if (!isset($this->studip_perms[$range_id][$user_id])) {
-			$this->studip_perms[$range_id][$user_id] = $this->_get_studip_perm($range_id, $user_id);
+			$this->studip_perms[$range_id][$user_id] = $this->get_uncached_studip_perm($range_id, $user_id);
 		}
 		return $this->studip_perms[$range_id][$user_id];
 	}
 
-	function _get_studip_perm($range_id, $user_id) {
+	function get_uncached_studip_perm($range_id, $user_id) {
 		global $auth, $user;
 		$db = new DB_Seminar;
 		$status = false;
