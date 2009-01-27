@@ -34,14 +34,20 @@ class Course_StudyAreasController extends Trails_Controller {
 
     # set up language prefs
     #$_language_path = init_i18n($_language);
-	include 'lib/seminar_open.php';
-	
+    include 'lib/seminar_open.php';
+
     # user must have tutor permission
     $perm->check('tutor');
 
     # user must be logged in
     $GLOBALS['auth']->login_if($_REQUEST['again']
                                && ($GLOBALS['auth']->auth['uid'] == 'nobody'));
+
+    $course_id = current($args);
+    if ($course_id && !$perm->have_studip_perm("tutor", $course_id)) {
+      $this->set_status(403);
+      return FALSE;
+    }
   }
 
 
