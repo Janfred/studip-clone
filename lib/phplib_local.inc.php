@@ -192,16 +192,16 @@ class Seminar_Session extends Session {
 	function is_current_session_authenticated(){
 		return Seminar_Session::get_current_session_state() == 'authenticated';
 	}
-	
+
 	/**
 	 * Returns the state of the current session. Does not start a session.
 	 * possible return values:
 	 * 'authenticated' - session is valid and user is authenticated
 	 * 'nobody' - session is valid, but user is not authenticated
 	 * false - no valid session
-	 * 
+	 *
 	 * @static
-	 * @return string|false 
+	 * @return string|false
 	 */
 	function get_current_session_state(){
 		static $current_session_state = null;
@@ -229,14 +229,14 @@ class Seminar_Session extends Session {
 		}
 		return ($current_session_state = $state);
 	}
-	
+
 	/**
 	 * returns a SessionDecoder object containing the session variables
 	 * for the given session id
 	 *
 	 * @static
 	 * @param string $sid a session id
-	 * @return SessionDecoder 
+	 * @return SessionDecoder
 	 */
 	function get_session_vars($sid){
 		$sess = $GLOBALS['sess'];
@@ -248,7 +248,7 @@ class Seminar_Session extends Session {
 		$storage->ac_start();
 		return new SessionDecoder($storage->ac_get_value($sid));
 	}
-	
+
 	/**
 	 * returns a random string token for XSRF prevention
 	 * the string is stored in the session
@@ -268,10 +268,10 @@ class Seminar_Session extends Session {
 
 		return $studipticket;
 	}
-	
+
 	/**
 	 * checks the given string token against the one stored
-	 * in the session 
+	 * in the session
 	 *
 	 * @static
 	 * @param string $studipticket
@@ -948,9 +948,21 @@ class Seminar_Perm extends Perm {
 		}
 	}
 
+
 	function get_studip_perm($range_id, $user_id = false) {
+
+		if (!$user_id) {
+			$user_id = $GLOBALS['user']->id;
+		}
+
+		if (!isset($this->studip_perms[$range_id][$user_id])) {
+			$this->studip_perms[$range_id][$user_id] = $this->_get_studip_perm($range_id, $user_id);
+		}
+		return $this->studip_perms[$range_id][$user_id];
+	}
+
+	function _get_studip_perm($range_id, $user_id) {
 		global $auth, $user;
-		if (!$user_id) $user_id = $user->id;
 		$db = new DB_Seminar;
 		$status = false;
 		if ($user_id && $user_id == $auth->auth['uid']){
@@ -963,8 +975,6 @@ class Seminar_Perm extends Perm {
 		}
 		if ($user_perm == "root") {
 			return "root";
-		} elseif (isset($this->studip_perms[$range_id][$user_id])) {
-			return $this->studip_perms[$range_id][$user_id];
 		} elseif ($user_perm == "admin") {
 			$db->query("SELECT seminare.Seminar_id FROM user_inst
 						LEFT JOIN seminare USING (Institut_id)
@@ -987,7 +997,6 @@ class Seminar_Perm extends Perm {
 		}
 
 		if ($status) {
-			$this->studip_perms[$range_id][$user_id] = $status;
 			return $status;
 		}
 
@@ -1000,7 +1009,6 @@ class Seminar_Perm extends Perm {
 				$status=$db->f("inst_perms");
 			}
 		}
-		$this->studip_perms[$range_id][$user_id] = $status;
 		return $status;
 	}
 
