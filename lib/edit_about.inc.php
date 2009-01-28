@@ -460,6 +460,10 @@ class about extends messaging {
 	function edit_private($telefon, $cell, $anschrift, $home, $motto, $hobby) {
 		$query = "";
 
+		if ($home == $this->default_url) {
+			$home = '';
+		}
+
 		if (!StudipAuthAbstract::CheckField("user_info.privatnr", $this->auth_user['auth_plugin'])){
 			$query .= "privatnr='$telefon',";
 		}
@@ -520,8 +524,6 @@ class about extends messaging {
 		global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, $ALLOW_CHANGE_NAME, $ALLOW_CHANGE_TITLE,$ALLOW_ADMIN_USERACCESS;
 		
 		//erstmal die "unwichtigen" Daten
-		if ($home == $this->default_url)
-			$home='';
 		if($title_front == "")
 			$title_front = $title_front_chooser;
 		if($title_rear == "")
