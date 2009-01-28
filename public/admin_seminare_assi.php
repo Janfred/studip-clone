@@ -2671,8 +2671,11 @@ if ($level == 2)
 								<?
 								$trails_views = $GLOBALS['STUDIP_BASE_PATH'] . '/app/views';
 								$factory = new Flexi_TemplateFactory($trails_views);
+								list(,$smm_semester_id) = array_values(SemesterData::GetInstance()->getSemesterDataByDate($sem_create_data["sem_start_time"]));
+
 								echo $factory->render('course/study_areas/form',
-								                      array('selection' => $area_selection));
+								                      array('selection' => $area_selection,
+								                      		'semester_id' => $smm_semester_id));
 								?>
 
 							</td>

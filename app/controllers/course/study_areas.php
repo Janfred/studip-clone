@@ -34,8 +34,8 @@ class Course_StudyAreasController extends Trails_Controller {
 
     # set up language prefs
     #$_language_path = init_i18n($_language);
-    include 'lib/seminar_open.php';
-
+	include 'lib/seminar_open.php';
+	
     # user must have tutor permission
     $perm->check('tutor');
 
@@ -49,7 +49,7 @@ class Course_StudyAreasController extends Trails_Controller {
       return FALSE;
     }
   }
-
+  
 
   # see Trails_Controller#after_filter  # see Trails_Controller#after_filter
   function after_filter($action, $args) {
@@ -78,11 +78,9 @@ class Course_StudyAreasController extends Trails_Controller {
       $this->set_status(400);
       return $this->render_template('course/study_areas/no_course', $layout);
     }
-
-    $this->course_id = $course_id;
-    $this->course = Seminar::getInstance($course_id);
-    $this->selection = self::get_selection($course_id);
-
+    
+  	$this->set_course($course_id);
+  	
     $GLOBALS['CURRENT_PAGE'] = sprintf('%s - %s',
                                        (getHeaderLine($course_id)),
                                        _('Studienbereichsauswahl'));
@@ -173,7 +171,7 @@ class Course_StudyAreasController extends Trails_Controller {
    */
   function add_action($course_id = NULL)  {
 
-    $this->course_id = $course_id;
+    $this->set_course($course_id);
 
     # retrieve the study area from the POST body
     # w/o a study area ID, render a BAD REQUEST
@@ -185,10 +183,9 @@ class Course_StudyAreasController extends Trails_Controller {
 
     $this->area = StudipStudyArea::find($id);
 
-    $selection = self::get_selection($course_id);
-    $selection->add($this->area);
+    $this->selection->add($this->area);
 
-    $this->store_selection($course_id, $selection);
+    $this->store_selection($course_id, $this->selection);
 
     $this->render_template('course/study_areas/selected_entry');
   }
@@ -238,14 +235,13 @@ class Course_StudyAreasController extends Trails_Controller {
    */
   function expand_action($course_id = NULL, $id = NULL) {
 
-    $this->course_id = $course_id;
+    $this->set_course($course_id);
 
     if ($id === NULL) {
       $this->set_status(400);
       return $this->render_nothing();
     }
 
-    $this->selection = self::get_selection($course_id);
     $this->selection->setSelected($id);
 
     $this->render_template('course/study_areas/tree');
@@ -297,6 +293,24 @@ class Course_StudyAreasController extends Trails_Controller {
     # admin_seminare_assi.php
     else {
       $GLOBALS['sem_create_data']['sem_bereich'] = $selection->getAreaIDs();
+    }
+  }
+  
+  function set_course($course_id){
+    $this->selection = self::get_selection($course_id);
+    if ($course_id){
+  	  $this->course_id = $course_id;
+  	  $this->course = Seminar::getInstance($course_id);
+      list(, $this->semester_id) = array_values(
+                               	   SemesterData::GetInstance()->
+                                   getSemesterDataByDate($this->course->
+                                   getSemesterStartTime())
+                                   );
+    } else {
+      list(, $this->semester_id) = array_values(
+                                   SemesterData::GetInstance()->
+                                   getSemesterDataByDate($GLOBALS['sem_create_data']['sem_start_time'])
+                                   );
     }
   }
 }

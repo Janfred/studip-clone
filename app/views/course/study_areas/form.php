@@ -31,7 +31,7 @@
 
     <?= $this->render_partial('course/study_areas/tree', compact('trail', 'subtree')) ?>
 
-    <h3>Suche:</h3>
+    <h3><?=_("Suche:")?></h3>
 
     <input type="text" name="study_area_selection[search_key]" value="" />
     <input type="image" name="study_area_selection[search_button]" src="<?= Assets::image_path('suche2.gif') ?>" />

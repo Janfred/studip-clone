@@ -3,13 +3,6 @@ $id = htmlReady($area->getID());
 $name = isset($show_path)
         ? htmlReady($area->getPath(' · '))
         : htmlReady($area->getName());
-if($course_id){
-	$course_start_time = Seminar::GetInstance($course_id)->getSemesterStartTime();
-} else {
-	$course_start_time = $_SESSION['sem_create_data']['sem_start_time'];
-}
-list(,$semester_id) = array_values(SemesterData::GetInstance()->getSemesterDataByDate($course_start_time));
-
 ?>
 <input class="study_area_selection_add_<?= $id ?>"
         onclick="STUDIP.study_area_selection.add('<?= $id ?>','<?= htmlReady($course_id) ?>');return false;"
