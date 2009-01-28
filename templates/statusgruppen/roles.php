@@ -8,11 +8,11 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 <tr>
 
 	<? for($i = 0; $i < $indent - 1; $i++) : ?>
-	<td class="blank" width="10" align="right" nowrap><?= ($followers[$i+1]) ? Assets::img('forumstrich') : '' ?></td>
+	<td class="blank" width="1%" align="right" nowrap><?= ($followers[$i+1]) ? Assets::img('forumstrich') : '' ?></td>
 	<? endfor; ?>
 
 	<? if ($indent > 0) : ?>
-	<td class="blank" width="10" align="right" nowrap><? 
+	<td class="blank" width="1%" align="right" nowrap><? 
 		if (sizeof($roles) == $pos) :
 			echo Assets::img('forumstrich2');
 		elseif ($pos < sizeof($roles)) :
@@ -21,7 +21,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 	?></td>
 	<? endif; ?>
 
-	<td class="printhead" valign="bottom" colspan="<?= 19-$indent ?>" height="22" nowrap style="padding-left: 3px" width="99%">
+	<td class="printhead" valign="bottom" colspan="<?= 19-$indent ?>" height="22" nowrap style="padding-left: 3px" width="<?= 99-$indent ?>%">
 		<a name="<?= $id ?>">
 		<a class="tree" href="<?= URLHelper::getLink('?role_id='. $id .'#'. $id) ?>">
 			<? if ($open == $id) :
