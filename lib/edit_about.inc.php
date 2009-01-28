@@ -564,7 +564,7 @@ class about extends messaging {
 				// auf doppelte Vergabe wird weiter unten getestet.
 				if (!isset($response) || $response=="") { // wir haben kein verschluesseltes Passwort
 					if (!$validator->ValidatePassword($password)) {
-						$this->msg=$this->msg . "error§" . _("Das Passwort ist nicht lang genug!") . "§";
+						$this->msg=$this->msg . "error§" . _("Das Passwort ist zu kurz - es sollte mindestens 4 Zeichen lang sein.Passwort ist nicht lang genug!") . "§";
 						return false;
 					}
 					$newpass = md5($password);             // also können wir das unverschluesselte Passwort testen
