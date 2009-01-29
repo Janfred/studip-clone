@@ -180,7 +180,8 @@ class Seminar_Session extends Session {
 	var $that_class     = "Seminar_CT_Sql"; // name of data storage container
 	var $gc_probability = 2;
 	var $allowcache = "nocache";
-
+	var $cookie_secure = false;
+	var $cookie_httponly = true;
 
 	/**
 	 * Returns true, if the current session is valid and belongs to an

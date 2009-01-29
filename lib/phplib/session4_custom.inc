@@ -332,7 +332,7 @@ class Session {
   function put_id() {
     if (ini_get('session.use_cookies')){
       $cookie_params = session_get_cookie_params();
-      setCookie($this->name, '', 0, $cookie_params['path'], $cookie_params['domain']);
+      setCookie($this->name, '', 0, $cookie_params['path'], $cookie_params['domain'], $cookie_params['secure'], $cookie_params['httponly']);
       $_COOKIE[$this->name] = "";
     }
     
@@ -378,7 +378,7 @@ class Session {
         $lifetime = 0;
       }
       
-      session_set_cookie_params($lifetime, $this->cookie_path, $this->cookie_domain);
+      session_set_cookie_params($lifetime, $this->cookie_path, $this->cookie_domain, $this->cookie_secure, $this->cookie_httponly);
   } // end func set_tokenname
   
   

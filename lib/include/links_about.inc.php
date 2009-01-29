@@ -43,7 +43,7 @@ $reiter=new reiter;
 if (!$username){
 	$username = $auth->auth['uname'];
 }
-
+preg_match('/^[a-zA-Z0-9_@.-]*$/', $username) or $username = '';
 
 //Create Reitersystem
 
