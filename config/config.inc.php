@@ -89,7 +89,7 @@ $UNI_INFO = "Kontakt:\nStud.IP Crew c/o data-quest Suchi & Berg GmbH\nFriedlände
 
 //Festlegen der zulaessigen Typen fuer Veranstaltungen
 $SEM_TYPE_MISC_NAME="sonstige"; //dieser Name wird durch die allgemeine Bezechnung (=Veranstaltung ersetzt)
-$SEM_TYPE[1]=array("name"=>_("Vorlesung"), "en"=>"Lecture", "class"=>1);
+$SEM_TYPE[1]=array("name"=>_("Vorlesung"), "class"=>1);
 $SEM_TYPE[2]=array("name"=>_("Grundstudium"), "en"=>"Basic classes", "class"=>1);
 $SEM_TYPE[3]=array("name"=>_("Hauptstudium"), "en"=>"Advanced classes", "class"=>1);
 $SEM_TYPE[4]=array("name"=>_("Seminar"), "en"=>"Seminar", "class"=>1);
@@ -98,7 +98,7 @@ $SEM_TYPE[6]=array("name"=>_("Kolloquium"), "en"=>"Colloqia", "class"=>1);
 $SEM_TYPE[7]=array("name"=>_("Forschungsgruppe"), "en"=>"Research group", "class"=>1);
 $SEM_TYPE[8]=array("name"=>_("Arbeitsgruppe"), "en"=>"Workgroup", "class"=>5);
 $SEM_TYPE[9]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>1);
-$SEM_TYPE[10]=array("name"=>_("Forschungsgruppe"), "en"=>"Research group", "class"=>2);
+$SEM_TYPE[10]=array("name"=>_("Forschungsgruppe"), "en"=>"Research group", "class"=>2, 'title_dozent' => array(_("Papst"),_("Päpste")), 'title_tutor' => array(_("Kardinal"),_("Kardinäle")), 'title_autor' => array(_("Scherge"),_("Schergen")) );
 $SEM_TYPE[11]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>2);
 $SEM_TYPE[12]=array("name"=>_("Gremiumsveranstaltung"), "en"=>"Board meeting", "class"=>3);
 $SEM_TYPE[13]=array("name"=>_("sonstige"), "en"=>"Miscellaneous", "class"=>3);
@@ -256,11 +256,13 @@ $SEM_CLASS[6]=array("name"=>_("importierte Kurse"),
 //weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
 $SEM_TREE_TYPES[0] = array("name" => "", "editable" => true);
-$SEM_TREE_TYPES[1] = array("name" => _("") , "editable" => true);
+$SEM_TREE_TYPES[1] = array("name" => _("Modul") , "editable" => true);
+/*
 $SEM_TREE_TYPES[2] = array("name" => _(""), "editable" => true);
 $SEM_TREE_TYPES[3] = array("name" => _(""), "editable" => true);
 $SEM_TREE_TYPES[4] = array("name" => _(""), "editable" => true);
 $SEM_TREE_TYPES[5] = array("name" => _(""), "editable" => true);
+*/
 
 //Festlegen der erlaubten oder verbotenen Dateitypen
 $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen SEM_TYPE, name "1" waere entsprechend die Definition der Dateiendungen fuer SEM_TYPE[1]; default wird verwendet, wenn es keine spezielle Definition fuer einen SEM_TYPE gibt
