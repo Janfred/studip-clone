@@ -22,10 +22,26 @@
         <td><?= $plugininfos['version'] ?></td>
     </tr>
     <tr>
-        <td colspan="2" style="text-align: center;">
+        <td>
             <a href="<?= PluginEngine::getLink($admin_plugin) ?>">
                 <?= makeButton('zurueck', 'img', _('zurück zur Plugin-Verwaltung')) ?>
             </a>
         </td>
     </tr>
 </table>
+
+<?
+$infobox_content = array(
+    array(
+        'kategorie' => _('Hinweise:'),
+        'eintrag'   => array(
+            array(
+                'icon' => 'ausruf_small.gif',
+                'text' => _('Hier finden Sie Informationen zum Plugin.')
+            )
+        )
+    )
+);
+
+$infobox = array('picture' => 'modules.jpg', 'content' => $infobox_content);
+?>

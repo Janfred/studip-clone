@@ -13,6 +13,8 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 	var $pluginmgmt;
 	// template factory
 	var $template_factory;
+	// layout template
+	var $layout;
 
 	/**
 	 *
@@ -24,7 +26,6 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$this->setNavigation($tab);
 		$this->setTopNavigation($tab);
 		$this->setPluginiconname("img/einst.gif");
-		$this->template_factory = new Flexi_TemplateFactory(dirname(__FILE__).'/templates');
 	}
 
 	/**
@@ -37,6 +38,20 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		}
 	}
 
+	/**
+	 * Common code for all actions: set up template factory and layout template.
+	 */
+	function display_action($action) {
+		$this->template_factory = new Flexi_TemplateFactory(dirname(__FILE__).'/templates');
+
+		$this->layout = $GLOBALS['template_factory']->open('layouts/base');
+		$this->layout->set_attribute('tabs', 'links_admin');
+		$GLOBALS['CURRENT_PAGE'] = $this->getDisplayTitle();
+
+		$this->$action();
+		page_close();
+	}
+
 	function actionInstallPlugin(){
 		$forceupdate = $_POST["update"];
 		$pluginfilename = $_POST["pluginfilename"];
@@ -46,6 +61,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$roleplugin = $pluginengine->getPluginid('de_studip_core_RoleManagementPlugin');
 
 		$template = $this->template_factory->open('plugin_administration');
+		$template->set_layout($this->layout);
 
 		// check if user has the permission to check in / update plugins
 		if (!$permission->hasRootPermission()) {
@@ -87,10 +103,12 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$roleplugin = $pluginengine->getPluginid('de_studip_core_RoleManagementPlugin');
 
 		$template = $this->template_factory->open('plugin_administration');
+		$template->set_layout($this->layout);
 
 		// check if user has the permission to check in / update plugins
 		if (!$permission->hasRootPermission() && $permission->hasAdminPermission()){
 			$template = $this->template_factory->open('plugin_list');
+			$template->set_layout($this->layout);
 
 			$template->set_attributes(array(
 				'admin_plugin'  => $this,
@@ -183,6 +201,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		}
 
 		$template = $this->template_factory->open('plugin_manifest');
+		$template->set_layout($this->layout);
 
 		# unconsumed_path contains the plugin's class name
 		$plugin_class = current(explode('/', $this->unconsumed_path));
@@ -221,6 +240,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		}
 
 		$template = $this->template_factory->open('plugin_default_activation');
+		$template->set_layout($this->layout);
 
 		# unconsumed_path contains the plugin's class name
 		$plugin_class = current(explode('/', $this->unconsumed_path));
@@ -281,6 +301,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		}
 
 		$template = $this->template_factory->open('plugin_update');
+		$template->set_layout($this->layout);
 
 		$pluginengine = PluginEngine::getPluginPersistence();
 		$plugins = $pluginengine->getAllInstalledPlugins();
@@ -307,6 +328,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		}
 
 		$template = $this->template_factory->open('plugin_update');
+		$template->set_layout($this->layout);
 
 		$pluginengine = PluginEngine::getPluginPersistence();
 		$plugins = $pluginengine->getAllInstalledPlugins();

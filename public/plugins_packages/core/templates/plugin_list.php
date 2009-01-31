@@ -32,7 +32,7 @@
 </table>
 
 <?
-$infobox = array(
+$infobox_content = array(
     array(
         'kategorie' => _('Hinweise:'),
         'eintrag'   => array(
@@ -47,7 +47,5 @@ $infobox = array(
     )
 );
 
-StudIPTemplateEngine::createInfoBoxTableCell();
-print_infobox($infobox, 'modules.jpg');
-StudIPTemplateEngine::endInfoBoxTableCell();
+$infobox = array('picture' => 'modules.jpg', 'content' => $infobox_content);
 ?>
