@@ -222,9 +222,9 @@ function aux_html() {
 	echo $zt->closeRow();
 
 	echo $zt->openHeaderRow();
-	echo $zt->cell('<font size="-2">Name</font>', array('align' => 'center', 'valign' => 'top'));
+	echo $zt->cell('<font size="-2">Name</font>', array('align' => 'left', 'valign' => 'top'));
 	foreach ($data['header'] as $id => $name) {
-		echo $zt->cell('<font size="-2">'.$name.'</font>', array('align' => 'left', 'valign' => 'top'));
+		echo $zt->cell('<font size="-2">'.htmlReady($name).'</font>', array('align' => 'left', 'valign' => 'top'));
 	}
 	echo $zt->closeRow();
 
@@ -311,7 +311,7 @@ function aux_enter_data() {
 				$entry = $invalidEntries[$id];  // keep wrong entry to show it in corresponding form field
 			}
 			echo $zt->openRow();
-			$data = "<font color='$color'>&nbsp;" . $entry->getName() . "</font></b>";
+			$data = "<font color='$color'>&nbsp;" . htmlReady($entry->getName()) . "</font></b>";
 			echo $zt->cell($data);
 
 			$data = $entry->getHTML("datafields");
