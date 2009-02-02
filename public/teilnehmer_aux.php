@@ -102,7 +102,7 @@ function get_aux_data() {
 					}
 					$data[$db->f('user_id')]['entry'][$id] = $text;
 				} else {
-					$data[$db->f('user_id')]['entry'][$id] = htmlready($entry->getValue());
+					$data[$db->f('user_id')]['entry'][$id] = $entry->getValue();
 				}
 			}
 		}
@@ -166,7 +166,6 @@ function aux_csv() {
 	foreach ($aux_data['aux'] as $uid => $cur_user) {
 		$data .= '"'.$cur_user['fullname'].'"'.$sepp;
 		foreach ($aux_data['header'] as $showkey => $dontcare) {
-		//foreach ($cur_user['entry'] as $id => $value) {
 			$data .= '"'.$cur_user['entry'][$showkey].'"'.$sepp;
 		}
 
@@ -232,10 +231,9 @@ function aux_html() {
 	// einzelne Nutzerdaten ausgeben
 	foreach ($data['aux'] as $uid => $cur_user) {
 		echo $zt->openRow();
-		echo $zt->cell('<font size="-2">&nbsp;<a href="'.URLHelper::getLink('about.php?username='.$cur_user['username']).'">'.$cur_user['fullname'].'</a></font>');
+		echo $zt->cell('<font size="-2">&nbsp;<a href="'.URLHelper::getLink('about.php?username='.$cur_user['username']).'">'.htmlReady($cur_user['fullname']).'</a></font>');
 		foreach ($data['header'] as $showkey => $dontcare) {
-		//foreach ($cur_user['entry'] as $id => $value) {
-			echo $zt->cell('<font size="-2">'. $cur_user['entry'][$showkey] . '</font>', array('align' => 'left'));
+			echo $zt->cell('<font size="-2">'. htmlReady($cur_user['entry'][$showkey]) . '</font>', array('align' => 'left'));
 		}
 		echo $zt->closeRow();
 	}
