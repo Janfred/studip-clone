@@ -229,7 +229,7 @@ if ($i_view) {
 	</form></table>
 	<?
 	if ($i_view<>"new") {
-		$db->query("SELECT Name, seminare.seminar_id FROM admission_seminar_studiengang INNER JOIN seminare USING (seminar_id) WHERE studiengang_id = '$i_id' AND seminare.visible='1'"); // OK_VISIBLE
+		$db->query("SELECT Name, seminare.seminar_id FROM admission_seminar_studiengang INNER JOIN seminare USING (seminar_id) WHERE studiengang_id = '$i_id'");
  		?>
  		<table border=0 align="center" width="75%" cellspacing=0 cellpadding=2>
 		<?
