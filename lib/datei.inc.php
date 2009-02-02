@@ -68,6 +68,7 @@ function parse_header($header){
 	}
 	for($i = 0; $i < count($header); ++$i){
 		$parts = null;
+		if(trim($header[$i]) == "") break;
 		$matches = preg_match('/^\S+:/', $header[$i], $parts);
 		if ($matches){
 			$key = trim(substr($parts[0],0,-1));
@@ -157,7 +158,7 @@ function parse_link($link, $level=0) {
 		if (!$socket) {
 			//echo "$errstr ($errno)<br />\n";
 		} else {
-			$urlString = "HEAD ".$documentpath." HTTP/1.0\r\nHost: $host\r\n";
+			$urlString = "GET ".$documentpath." HTTP/1.0\r\nHost: $host\r\n";
 			if ($url_parts["user"] && $url_parts["pass"]) {
 				$pass = $url_parts["pass"];
 				$user = $url_parts["user"];
@@ -166,7 +167,8 @@ function parse_link($link, $level=0) {
                $urlString .= "Connection: close\r\n\r\n";
 		       fputs($socket, $urlString);
 		       socket_set_timeout($socket,2);
-		       while (!feof($socket)) {
+			   $response = '';
+		       while (!feof($socket) && strlen($response) < 512) {
 			       $response .= fgets($socket,128);
 			}
 			fclose($socket);
