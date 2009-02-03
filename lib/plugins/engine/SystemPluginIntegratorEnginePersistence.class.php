@@ -29,23 +29,4 @@ class SystemPluginIntegratorEnginePersistence extends AbstractPluginIntegratorEn
       $plugins = parent::executePluginQuery("plugintype='System' and enabled='yes'");
       return $plugins;
     }
-
-    function getPlugin($id) {
-      $stmt = DBManager::get()->prepare("SELECT p.* FROM plugins p ".
-        "WHERE p.pluginid=? AND p.plugintype='System'");
-      $stmt->execute(array($id));
-      $row = $stmt->fetch();
-      if ($row !== FALSE) {
-        $pluginclassname = $row["pluginclassname"];
-        $pluginpath = $row["pluginpath"];
-        // Klasse instanziieren
-        $plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
-        if ($plugin != null) {
-          $plugin->setPluginid($row["pluginid"]);
-          $plugin->setPluginname($row["pluginname"]);
-          $plugin->setUser($this->getUser());
-        }
-      }
-      return $plugin;
-    }
 }

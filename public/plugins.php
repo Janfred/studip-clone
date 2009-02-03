@@ -33,7 +33,8 @@ try {
   list($plugin_class, $unconsumed) = PluginEngine::routeRequest($dispatch_to);
 
   # retrieve corresponding plugin id
-  $plugin_persistence = PluginEngine::getPluginPersistence();
+  $plugin_type = AbstractPluginIntegratorEnginePersistence::getPluginType($plugin_class);
+  $plugin_persistence = PluginEngine::getPluginPersistence($plugin_type);
   $plugin_id = $plugin_persistence->getPluginId($plugin_class);
 
   PluginEngine::setCurrentPluginId($plugin_id);

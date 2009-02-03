@@ -108,16 +108,11 @@ class AbstractPluginIntegratorEnginePersistence {
 		$stmt->execute(array($plugin->getPluginname(),$enabled,$plugin->getNavigationPosition(),$plugin->getPluginid()));
 	}
 
-	function executePluginQuery($filter, $params = array(), $attendroles = true, $order = 'navigationpos, pluginname') {
+	function executePluginQuery($filter, $params = array(), $args = array()) {
 		$user = $this->getUser();
 		$userid = $user->getUserid();
 
-		// filter should start without where clause
-		if (trim($filter) == '') {
-			$filter = '1';
-		}
-
-		if ($attendroles) {
+		if (isset($filter)) {
 			$params = array_merge(array($userid), (array)$params,
 			                      array($userid), (array)$params);
 			$query = "(SELECT p.* FROM plugins p ".
@@ -130,9 +125,9 @@ class AbstractPluginIntegratorEnginePersistence {
 			         "JOIN roles_studipperms rps ON rp.roleid=rps.roleid ".
 			         "JOIN auth_user_md5 au ON rps.permname=au.perms ".
 			         "WHERE au.user_id=? AND $filter) ".
-				 "ORDER BY $order";
+				 "ORDER BY plugintype, navigationpos, pluginname";
 		} else {
-			$query = "SELECT * FROM plugins p WHERE $filter ORDER BY $order";
+			$query = "SELECT * FROM plugins p ORDER BY plugintype, navigationpos, pluginname";
 		}
 
 		$plugins = array();
@@ -143,7 +138,7 @@ class AbstractPluginIntegratorEnginePersistence {
 			$pluginclassname = $row["pluginclassname"];
 			$pluginpath = $row["pluginpath"];
 			$pluginid = $row["pluginid"];
-			$plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
+			$plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath, $args);
 
 			if ($plugin != null) {
 				$plugin->setPluginid($pluginid);
@@ -168,7 +163,7 @@ class AbstractPluginIntegratorEnginePersistence {
 	  * Liefert alle in der Datenbank bekannten Plugins zurück
 	  */
 	function getAllInstalledPlugins() {
-		return $this->executePluginQuery('', array(), false, "plugintype, navigationpos, pluginname");
+		return $this->executePluginQuery(NULL, array());
 	}
 
 	function getPlugins($enabled = false) {
@@ -218,7 +213,7 @@ class AbstractPluginIntegratorEnginePersistence {
 		// this plugin is a plugin without dependencies
 		if (!$plugin->isDependentOnOtherPlugin()) {
 			$dependentplugins = $this->executePluginQuery("p.dependentonid=?",
-			                                    array($plugin->getPluginid()), false);
+			                                    array($plugin->getPluginid()));
 			if (is_array($dependentplugins)) {
 				// deinstall Plugin first
 				foreach ($dependentplugins as $dependentplugin) {
@@ -270,6 +265,24 @@ class AbstractPluginIntegratorEnginePersistence {
 			throw new Studip_PluginNotFoundException();
 		}
 		return $row['pluginid'];
+	}
+
+	/**
+	 * Searches for $pluginname in the plugins database
+	 *
+	 * @param  string  class name
+	 *
+	 * @return string  the type of the plugin
+	 */
+	function getPluginType($pluginclassname) {
+		$stmt = DBManager::get()->prepare("SELECT plugintype FROM plugins ".
+		  "WHERE pluginclassname=?");
+		$stmt->execute(array($pluginclassname));
+		$row = $stmt->fetch();
+		if ($row === FALSE) {
+			throw new Studip_PluginNotFoundException();
+		}
+		return $row['plugintype'];
 	}
 
 	/**

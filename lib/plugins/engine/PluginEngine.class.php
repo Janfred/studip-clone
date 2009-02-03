@@ -202,37 +202,41 @@ class PluginEngine {
 			return "Core";
 		}
 		return UNKNOWN_PLUGINTYPE;
-  }
+	}
 
+	/**
+	 * Creates an instance of the desired plugin class
+	 * @param pluginclassname - the desired class name
+	 * @param pluginpath - the path to the plugin
+	 * @param args - arguments passed to the plugin
+	 * @return an instance of the desired plugin or null otherwise
+	 */
+	public static function instantiatePlugin($pluginclassname, $pluginpath, $args = array()) {
+		if (isset(self::$plugin_list[$pluginclassname])) {
+			foreach (self::$plugin_list[$pluginclassname] as $plugin) {
+				if ($plugin['args'] == $args) {
+					return $plugin['object'];
+				}
+			}
+		}
 
-   /**
-    * Creates an instance of the desired plugin class
-    * @param pluginclassname - the desired class name
-    * @param pluginpath - the path to the plugin
-    * @return an instance of the desired plugin or null otherwise
-    */
-   public static function instantiatePlugin($pluginclassname, $pluginpath) {
-	    if (isset(self::$plugin_list[$pluginclassname])) {
-		return self::$plugin_list[$pluginclassname];
-	    }
+		$env = $GLOBALS['pluginenv'];
+		$absolutepluginfile = $env->getPackagebasepath() . "/" . $pluginpath . "/" . $pluginclassname . ".class.php";
 
-	    $env = $GLOBALS["pluginenv"];
-	    $absolutepluginfile = $env->getPackagebasepath() . "/" . $pluginpath . "/" . $pluginclassname . ".class.php";
-	    if (!file_exists($absolutepluginfile)) {
-		    return null;
-	    }
-	    else {
-			//anoack: unschöner workaround, aber auf die Schnelle kaum anders zu lösen, solange Plugins auch vorhandenen Stud.IP code nutzen wollen :)
-			global $RELATIVE_PATH_RESOURCES, $RELATIVE_PATH_CALENDAR,$RELATIVE_PATH_LEARNINGMODULES,$RELATIVE_PATH_CHAT;
-			require_once($absolutepluginfile);
-		    $plugin = new $pluginclassname();
-		    $plugin->setEnvironment($env);
-		    $plugin->setPluginpath($env->getRelativepackagepath() . "/" . $pluginpath);
-		    $plugin->setBasepluginpath($pluginpath);
-		    self::$plugin_list[$pluginclassname] = $plugin;
-		    return $plugin;
-	    }
-   }
+		if (!file_exists($absolutepluginfile)) {
+			return NULL;
+		}
+
+		require_once $absolutepluginfile;
+		$plugin_class = new ReflectionClass($pluginclassname);
+		$plugin = $plugin_class->newInstanceArgs($args);
+		$plugin->setEnvironment($env);
+		$plugin->setPluginpath($env->getRelativepackagepath() . "/" . $pluginpath);
+		$plugin->setBasepluginpath($pluginpath);
+
+		self::$plugin_list[$pluginclassname][] = array('args' => $args, 'object' => $plugin);
+		return $plugin;
+	}
 
 	/**
 	 * Reads the manifest of the plugin in the given path

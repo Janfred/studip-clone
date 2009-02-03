@@ -31,9 +31,4 @@ class CorePluginIntegratorEnginePersistence extends AbstractPluginIntegratorEngi
 			return null;
 		}
 	}
-	
-	function getPlugin($id) {
-		$plugins = $this->executePluginQuery("p.pluginid=?", array($id), false);
-		return count($plugins) === 1 ? $plugins[0] : null;
-	}
 }

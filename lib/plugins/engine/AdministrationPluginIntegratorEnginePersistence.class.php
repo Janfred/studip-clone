@@ -115,37 +115,4 @@ class AdministrationPluginIntegratorEnginePersistence
 			$stmt->execute(array($plugin->getPluginId()));
 		}
 	}
-
-	function getPlugin($id) {
-
-		$db = DBManager::get();
-		$stmt = $db->prepare(
-		  "SELECT p.* FROM plugins p ".
-		  "LEFT JOIN plugins_activated a ON p.pluginid=a.pluginid ".
-		  "WHERE a.poiid=? AND p.pluginid=? AND p.plugintype='Administration' ".
-		  "AND (a.pluginid is null)");
-		$result = $stmt->execute(array(PLUGIN_ADMINISTRATION_POIID, $id));
-
-		// TODO (dreil): Fehlermeldung ausgeben
-		if (!$result) {
-			return null;
-		}
-
-		$plugin = NULL;
-
-		if ($row = $stmt->fetch()) {
-			$pluginclassname = $row["pluginclassname"];
-			$pluginpath = $row["pluginpath"];
-
-			// Klasse instanziieren
-			$plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
-			if ($plugin !== null){
-				$plugin->setPluginid($row["pluginid"]);
-				$plugin->setPluginname($row["pluginname"]);
-				$plugin->setUser($this->getUser());
-			}
-		}
-
-		return $plugin;
-	}
 }

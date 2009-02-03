@@ -99,7 +99,14 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
    * @return a list of enabled plugins
    */
   function getAllEnabledPlugins() {
-    $plugins = parent::executePluginQuery("plugintype='Standard' and enabled='yes'");
+    // Veranstaltungsid aus poiid bestimmen
+    if ($_SESSION['SessSemName']['class'] != '') {
+      $id = str_replace($_SESSION['SessSemName']['class'], '', $this->poiid);
+    } else {
+      $id = preg_replace('/^(sem|inst)/', '', $this->poiid);
+    }
+
+    $plugins = parent::executePluginQuery("plugintype='Standard' and enabled='yes'", array(), array($id));
     return $this->getActivationsForPlugins($plugins);
   }
 
@@ -109,13 +116,12 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
    */
   function getAllActivatedPlugins() {
     // Veranstaltungsid aus poiid bestimmen
-    if (isset($_SESSION["SessSemName"]["class"]) && strlen(trim($_SESSION["SessSemName"]["class"])) >0) {
-      $id = trim(str_replace($_SESSION["SessSemName"]["class"],"",$this->poiid));
+    if ($_SESSION['SessSemName']['class'] != '') {
+      $id = str_replace($_SESSION['SessSemName']['class'], '', $this->poiid);
+    } else {
+      $id = preg_replace('/^(sem|inst)/', '', $this->poiid);
     }
-    else {
-      $id = trim(str_replace("sem","",$this->poiid));
-      $id = trim(str_replace("inst","",$id));
-    }
+
     $user = $this->getUser();
     $userid = $user->getUserid();
 
@@ -157,7 +163,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
       $pluginpath = $row["pluginpath"];
 
       // Klasse instanziieren
-      $plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
+      $plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath, array($id));
       if ($plugin != null) {
         $plugin->setId($id);
         $plugin->setPluginid($row["pluginid"]);
@@ -191,47 +197,15 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
 
 
   function getPlugin($id) {
-    $user = $this->getUser();
-    $userid = $user->getUserid();
-
-    //TODO: Wieso hier ein Join? Wird das so noch benˆtigt?
-
-    $stmt = DBManager::get()->prepare(
-      "SELECT p.* FROM plugins p ".
-      "LEFT JOIN plugins_activated a ON p.pluginid=a.pluginid ".
-      "WHERE p.pluginid IN (".
-        "SELECT rp.pluginid FROM roles_plugins rp ".
-        "WHERE rp.roleid IN (".
-          "SELECT r.roleid FROM roles_user r ".
-          "WHERE r.userid=? ".
-          "UNION ".
-          "SELECT rp.roleid FROM roles_studipperms rp, auth_user_md5 a ".
-          "WHERE rp.permname = a.perms AND a.user_id=?".
-        ")".
-      ") AND p.pluginid=? AND p.plugintype='Standard' AND ".
-      "(a.poiid=? OR (a.pluginid is null))");
-
-    $result = $stmt->execute(array($userid, $userid, $id, $this->poiid));
-
-    // TODO: Fehlermeldung ausgeben
-    if (!$result) {
-      return null;
+    // Veranstaltungsid bestimmen
+    if (is_array($_SESSION['SessSemName'])) {
+      $args = array($_SESSION['SessSemName'][1]);
+    } else {
+      $args = array();
     }
 
-    if (($row = $stmt->fetch()) !== FALSE) {
-
-      $pluginclassname = $row["pluginclassname"];
-      $pluginpath = $row["pluginpath"];
-
-      // Klasse instanziieren
-      $plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
-      if ($plugin != null) {
-        $plugin->setPluginid($row["pluginid"]);
-        $plugin->setPluginname($row["pluginname"]);
-        $plugin->setUser($this->getUser());
-      }
-    }
-    return $plugin;
+    $plugins = $this->executePluginQuery("p.pluginid=?", array($id), $args);
+    return count($plugins) === 1 ? $plugins[0] : null;
   }
 
   function deinstallPlugin($plugin) {
@@ -340,8 +314,6 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
 
     $result = $stmt->execute(array($userid, $userid, $poiid));
 
-    // TODO: Fehlermeldung ausgeben
-    // echo ("keine standardm‰ﬂig aktivierten Plugins<br>");
     if (!$result) {
       return array();
     }
@@ -353,7 +325,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
       $pluginpath = $row["pluginpath"];
 
       // Klasse instanziieren
-      $plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath);
+      $plugin = PluginEngine::instantiatePlugin($pluginclassname, $pluginpath, array($poiid));
 
       if ($plugin != null) {
         $plugin->setPluginid($row["pluginid"]);
