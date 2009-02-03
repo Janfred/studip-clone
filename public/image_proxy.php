@@ -117,7 +117,7 @@ if (!Seminar_Session::is_current_session_authenticated()){
 		$c = 0;
 		$f = fopen($url, 'rb');
 		if($f){
-			stream_set_timeout($f, 3);
+			stream_set_timeout($f, 5);
 			while (!feof($f)) {
 				$image .= fread($f, 8192);
 				++$c;

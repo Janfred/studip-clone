@@ -91,20 +91,20 @@ function parse_link($link, $level=0) {
 		// Parsing an FTF-Adress
 		$url_parts = @parse_url( $link );
 		$documentpath = $url_parts["path"];
-
+		
 		if (strpos($url_parts["host"],"@")) {
 			$url_parts["pass"] .= "@".substr($url_parts["host"],0,strpos($url_parts["host"],"@"));
 			$url_parts["host"] = substr(strrchr($url_parts["host"],"@"),1);
 		}
-
+		
 		if (preg_match('/[^a-z0-9_.-]/i',$url_parts['host'])){ // exists umlauts ?
 			$IDN = new idna_convert();
 			$out = $IDN->encode(utf8_encode($url_parts['host'])); // false by error
 			$url_parts['host'] = ($out)? $out : $url_parts['host'];
 		}
-
+		
 		$ftp = ftp_connect($url_parts["host"]);
-
+		
 		if (!$url_parts["user"]) $url_parts["user"] = "anonymous";
 		if (!$url_parts["pass"]) {
 			$mailclass = new studip_smtp_class;
@@ -113,19 +113,19 @@ function parse_link($link, $level=0) {
 			$url_parts["pass"] = "wwwrun%40".$mailtmp;
 		}
 		if (!@ftp_login($ftp,$url_parts["user"],$url_parts["pass"])) {
-      			ftp_quit($ftp);
-      			return FALSE;
+			ftp_quit($ftp);
+			return FALSE;
    		}
    		$parsed_link["Content-Length"] = ftp_size($ftp, $documentpath);
    		ftp_quit($ftp);
 		if ($parsed_link["Content-Length"] != "-1")
 			$parsed_link["HTTP/1.0 200 OK"] = "HTTP/1.0 200 OK";
 		else
-			$parsed_link = FALSE;
+		$parsed_link = FALSE;
 		$url_parts["pass"] = preg_replace("!@!","%40",$url_parts["pass"]);
 		$the_link = "ftp://".$url_parts["user"].":".$url_parts["pass"]."@".$url_parts["host"].$documentpath;
 		return $parsed_link;
-
+		
 	} else {
 		$url_parts = @parse_url( $link );
 		if (!empty( $url_parts["path"])){
@@ -138,15 +138,15 @@ function parse_link($link, $level=0) {
 		}
 		$host = $url_parts["host"];
 		$port = $url_parts["port"];
-
+		
 		if (substr($link,0,8) == "https://") {
-                        $ssl = TRUE;
-                        if (empty($port)) $port = 443;
-                } else {
-		       $ssl = FALSE;
+			$ssl = TRUE;
+			if (empty($port)) $port = 443;
+		} else {
+			$ssl = FALSE;
 		}
 		if (empty( $port ) ) $port = "80";
-
+		
 		if (preg_match('/[^a-z0-9_.-]/i',$host)){ // exists umlauts ?
 			$IDN = new idna_convert();
 			$out = $IDN->encode(utf8_encode($host)); // false by error
@@ -164,15 +164,14 @@ function parse_link($link, $level=0) {
 				$user = $url_parts["user"];
 				$urlString .= "Authorization: Basic ".base64_encode("$user:$pass")."\r\n";
 			}
-               $urlString .= "Connection: close\r\n\r\n";
-		       fputs($socket, $urlString);
-		       stream_set_timeout($socket,2);
-			   $response = '';
-			   $info = stream_get_meta_data($socket); 
-		       while (!feof($socket) && !$info['timed_out'] && strlen($response) < 512) {
-			       $response .= fgets($socket,128);
-				   $info = stream_get_meta_data($socket);
-			}
+			$urlString .= "Connection: close\r\n\r\n";
+			fputs($socket, $urlString);
+			stream_set_timeout($socket, 5);
+			$response = '';
+			do {
+				$response .= fgets($socket, 128);
+				$info = stream_get_meta_data($socket);
+			} while (!feof($socket) && !$info['timed_out'] && strlen($response) < 512);
 			fclose($socket);
 		}
 		$parsed_link = parse_header($response);

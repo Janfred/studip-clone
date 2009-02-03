@@ -31,11 +31,11 @@ ob_start();
 $ok = Seminar_Session::is_current_session_authenticated();
 $url = $_GET['url'];
 if($ok){
-	$headers = parse_link($url, 2);
+	$headers = parse_link($url);
 	if($headers['response_code'] == 200){
 		$f = fopen($url, 'rb');
 		if($f){
-			stream_set_timeout($f, 3);
+			stream_set_timeout($f, 5);
 			$flv = fread($f, 16);
 			fclose($f);
 		}
