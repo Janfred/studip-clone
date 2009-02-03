@@ -94,15 +94,7 @@ function get_aux_data() {
 
 		for ($i = 0; $i <= 1; $i++) {
 			foreach ($entries[$i] as $id => $entry) {
-				if ($entry->getType() == 'bool') {
-					if ($entry->getValue()) {
-						$text = _("ja");
-					} else {
-						$text = _("nein");
-					}
-					$data[$db->f('user_id')]['entry'][$id] = $text;
-				} else {
-					$data[$db->f('user_id')]['entry'][$id] = $entry->getValue();
+					$data[$db->f('user_id')]['entry'][$id] = $entry->getDisplayValue(false);
 				}
 			}
 		}
