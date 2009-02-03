@@ -166,10 +166,12 @@ function parse_link($link, $level=0) {
 			}
                $urlString .= "Connection: close\r\n\r\n";
 		       fputs($socket, $urlString);
-		       socket_set_timeout($socket,2);
+		       stream_set_timeout($socket,2);
 			   $response = '';
-		       while (!feof($socket) && strlen($response) < 512) {
+			   $info = stream_get_meta_data($socket); 
+		       while (!feof($socket) && !$info['timed_out'] && strlen($response) < 512) {
 			       $response .= fgets($socket,128);
+				   $info = stream_get_meta_data($socket);
 			}
 			fclose($socket);
 		}

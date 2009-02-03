@@ -58,10 +58,10 @@ function check_image_cache($id) {
 function refresh_image_cache($id,$type,$length,$error){
 	$db = new DB_Seminar();
 	$db->queryf("REPLACE INTO image_proxy_cache (id,type,length,error) VALUES ('%s','%s','%s','%s')",
-	$id,
-	mysql_escape_string($type),
-	mysql_escape_string($length),
-	mysql_escape_string($error));
+		$id,
+		mysql_escape_string($type),
+		mysql_escape_string($length),
+		mysql_escape_string($error));
 	return check_image_cache($id);
 }
 
@@ -98,7 +98,7 @@ if (!Seminar_Session::is_current_session_authenticated()){
 	$check = refresh_image_cache($id,'image/gif',$length,'denied');
 } elseif(!($check = check_image_cache($id))){
 	$error = '';
-	$headers = parse_link($url,2);
+	$headers = parse_link($url);
 	if (!$headers['response_code']) {
 		$error = 'no response';
 	} elseif ($headers['response_code'] != 200) {
@@ -121,10 +121,14 @@ if (!Seminar_Session::is_current_session_authenticated()){
 			while (!feof($f)) {
 				$image .= fread($f, 8192);
 				++$c;
-				if($c * 8192 > $IMAGE_PROXY_MAX_CONTENT_LENGTH)	break;		
+				$info = stream_get_meta_data($f);
+				if($c * 8192 > $IMAGE_PROXY_MAX_CONTENT_LENGTH || $info['timed_out'])	break;		
 			}
 			fclose($f);
-			if($c * 8192 < $IMAGE_PROXY_MAX_CONTENT_LENGTH){
+			if($info['timed_out']){
+				list(, $length) = get_error_image('timed out');
+				$check = refresh_image_cache($id,'image/gif',$length,'timed out');
+			} elseif($c * 8192 < $IMAGE_PROXY_MAX_CONTENT_LENGTH){
 				$f = fopen($imagefile, 'wb');
 				fwrite($f, $image);
 				fclose($f);
