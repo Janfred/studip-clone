@@ -35,6 +35,16 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 		$this->setPluginAdminInfo($admininfo);
 	}
 
+	/**
+	 * set the current user
+	 *
+	 * @param StudIPUser $user
+	 */
+	function setUser(StudIPUser $user) {
+		parent::setUser($user);
+		$this->user->permission->setPoiid($this->getId());
+	}
+
 	function setId($newid) {
 		$this->id = $newid;
 	}

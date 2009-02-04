@@ -63,7 +63,7 @@ abstract class AbstractStudIPPlugin {
 		$this->helpinfo = null;
 		$this->navigation = null;
 		$this->activated = false;
-		$this->user = new StudIPUser();
+		$this->setUser(new StudIPUser());
 		$this->environment=null;
 		$this->pluginpath = "";
 		$this->basepluginpath = "";
