@@ -192,66 +192,39 @@ include 'lib/include/links_openobject.inc.php';
 // Behandlung der Suche
 //////////////////////////////////////////////////////////////////////////////////
 
-if ($_REQUEST['suchbegriff'] != "" || $_REQUEST['author'] != "") {
-	$forum['searchstring'] = $_REQUEST['suchbegriff'];
+if ($_REQUEST['suchbegriff'] != '' || $_REQUEST['author'] != '') {
+	$forum['searchstring'] = remove_magic_quotes($_REQUEST['suchbegriff']);
+	$forum['searchauthor'] = remove_magic_quotes($_REQUEST['author']);
 
-	$search_words = array();
-	$search_title = array();
-	$search_author = array();
+	$meta_search = array('_', '%', '*');
+	$meta_replace = array('\_', '\%', '%');
 
-	foreach(explode(' ', str_replace('.', ' ', $_REQUEST['suchbegriff'])) as $item) {
-		$item = str_replace('*', '%', $item);
-		$item = str_replace('.', ',', $item);
-		$item = str_replace('-', ',', $item);
-		// ignore ',' in queries like "thema, neu"
-		if(substr($item, -1) == ',') {
-			$item = substr($item, 0, strlen($item) -1);
-		}
+	$searchstring = str_replace($meta_search, $meta_replace, $forum['searchstring']);
+	$searchauthor = str_replace($meta_search, $meta_replace, $forum['searchauthor']);
 
-		// ignore searches for single letters and multiple double spaces
-		if(strlen($item) < 2) {
-			continue;
-		}
+	$search_words = preg_split('/[\s,]+/', $searchstring, -1, PREG_SPLIT_NO_EMPTY);
+	$search_author = preg_split('/[\s,]+/', $searchauthor, -1, PREG_SPLIT_NO_EMPTY);
+	$search_items = array();
 
-		if(substr($item, 0, 8) == 'intitle:') {
-			foreach(explode(',', substr($item, 8)) as $i) {
-				array_push($search_title, "x.name LIKE '%$i%'");
-			}
+	foreach ($search_words as $item) {
+		if (substr($item, 0, 8) == 'intitle:') {
+			$search_items[] = "x.name LIKE '%".addslashes(substr($item, 8))."%'";
 		} else {
-			foreach(explode(',', $item) as $i) {
-				// handle "thema,neu"
-				array_push($search_words, "(x.name LIKE '%$i%' OR x.description LIKE '%$i%')");
-			}
+			$search_items[] = "(x.name LIKE '%".addslashes($item)."%' OR x.description LIKE '%".addslashes($item)."%')";
 		}
 	}
 
-	$forum['searchauthor'] = array();
-	if(trim($_REQUEST['author']) != "") {
-		$forum['searchauthor'] = explode(',', $_REQUEST['author']);
-	}
-
-	foreach($forum['searchauthor'] as $item) {
-		$author = array();
-		foreach(explode(' ', str_replace('.', ' ', $item)) as $a) {
-			array_push($author, "x.author LIKE '%".trim($a)."%'");
+	if (count($search_author) > 0) {
+		foreach ($search_author as $key => $value) {
+			$search_author[$key] = "x.author LIKE '%".addslashes($value)."%'";
 		}
-		array_push($search_author, implode(' AND ', $author));
+		$search_items[] = '('.join(' OR ', $search_author).')';
 	}
 
-	if(count($search_words) > 0)
-		$search_exp = '(' . implode(' AND ', $search_words) . ')';
-	else
-		$search_exp = '1';
+	$forum['search'] = join(' AND ', $search_items);
 
-	if(count($search_author) > 0)
-		$search_exp.= ' AND '. implode(' OR ', $search_author);
-
-	if(count($search_title) > 0)
-		$search_exp.= ' AND '. implode(' AND ', $search_title);
-
-	$forum["search"] = $search_exp;
-	URLHelper::addLinkParam('suchbegriff', $_REQUEST['suchbegriff']);
-	URLHelper::addLinkParam('author', $_REQUEST['author']);
+	URLHelper::addLinkParam('suchbegriff', $forum['searchstring']);
+	URLHelper::addLinkParam('author', $forum['searchauthor']);
 }
 
 if ($reset=="1")	// es wurde neue Suche aktiviert, also Suchbegriff löschen

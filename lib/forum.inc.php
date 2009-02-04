@@ -626,7 +626,8 @@ function ForumNoPostings () {
 	if ($forum["view"] != "search")
 		$text = _("In dieser Ansicht gibt es derzeit keine Beiträge.");
 	else
-		$text = _("Zu Ihrem Suchbegriff gibt es keine Treffer.") . "<br><a href=\"".URLHelper::getLink("?view=search&reset=1")."\">" . _("Neue Suche") . "</a>";
+		$text = sprintf(_("Zu Ihrem Suchbegriff '%s' gibt es keine Treffer."), htmlReady($forum['searchstring'])) .
+			"<br><a href=\"".URLHelper::getLink("?view=search&reset=1")."\">" . _("Neue Suche") . "</a>";
 	$empty .= parse_msg("info§$text");
 	return $empty;
 }
@@ -1427,16 +1428,14 @@ if ($forum["view"]=="flatfolder")
 
 if ($forum["search"]!="" && $forum["view"]=="search") {
 	echo "<font size=\"-1\">&nbsp;". _('Suchbegriff:');
-	if($forum['searchstring']){
-		echo " '".$forum['searchstring']."' ";
-	}else{
+	if ($forum['searchstring'] != '') {
+		echo " '".htmlReady($forum['searchstring'])."' ";
+	} else {
 		echo ' '. _('alles'). ' ';
 	}
-	
-	if(count($forum['searchauthor']) > 0) {
-		function _quote($x) { return "'$x'"; }
-		$authors = array_map(_quote, $forum['searchauthor']);
-		printf("%s %s ", _('von'), implode(' oder ', $authors));
+
+	if ($forum['searchauthor'] != '') {
+		echo _('von')." '".htmlReady($forum['searchauthor'])."' ";
 	}
  	echo "/ ". _('Treffer: ').$forum["forumsum"]."</font>";
 } else {
