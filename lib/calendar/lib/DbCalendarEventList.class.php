@@ -109,7 +109,7 @@ class DbCalendarEventList {
 			return FALSE;
 			
         if ($sem_ids == "") {
-			$query = "SELECT su.status, su.gruppe, s.Name, t.*, th.title as content FROM seminar_user su "
+			$query = "SELECT su.status, su.gruppe, s.Name, t.*, th.title, th.description as details FROM seminar_user su "
 						 . "LEFT JOIN seminare s USING(Seminar_id) LEFT JOIN termine t ON "
 						 . "s.Seminar_id=range_id LEFT JOIN themen_termine tt ON (t.termin_id=tt.termin_id) "
 						 . "LEFT JOIN themen th ON (tt.issue_id = th.issue_id) WHERE user_id = '" . $this->user_id
@@ -119,7 +119,7 @@ class DbCalendarEventList {
 		} else {
 			if (is_array($sem_ids))
 				$sem_ids = implode("','", $sem_ids);
-			$query = "SELECT su.status, su.gruppe, s.Name, t.*, th.title as content FROM seminar_user su "
+			$query = "SELECT su.status, su.gruppe, s.Name, t.*, th.title, th.description as details FROM seminar_user su "
 						 . "LEFT JOIN seminare s USING(Seminar_id) LEFT JOIN termine t ON "
 						 . "s.Seminar_id=range_id LEFT JOIN themen_termine tt ON (t.termin_id=tt.termin_id) "
 						 . "LEFT JOIN themen th ON (tt.issue_id = th.issue_id) WHERE user_id = '" . $this->user_id
@@ -136,10 +136,10 @@ class DbCalendarEventList {
 				$event =& new SeminarEvent($db->f('termin_id'), array(
 						'DTSTART'         => $db->f('date'),
 						'DTEND'           => $db->f('end_time'),
-						'SUMMARY'         => $db->f('content'),
+						'SUMMARY'         => $db->f('title') ? $db->f('title') : $db->f('Name'),
 						'STUDIP_CATEGORY' => $db->f('date_typ'),
 						'LOCATION'        => $db->f('raum'),
-						'DESCRIPTION'     => $db->f('description'),
+						'DESCRIPTION'     => $db->f('details'),
 						'CLASS'           => 'PRIVATE',
 						'SEMNAME'         => $db->f('Name'),
 						'CREATED'         => $db->f('mkdate'),
