@@ -43,6 +43,7 @@ require_once ('lib/classes/HolidayData.class.php');
 require_once ('lib/visual.inc.php');
 require_once ('lib/object.inc.php');
 require_once ('lib/user_visible.inc.php');
+require_once ('lib/exceptions/access_denied.php');
 
 /**
 * This function creates the header line for studip-objects
@@ -54,8 +55,10 @@ require_once ('lib/user_visible.inc.php');
 *
 */
 
-function getHeaderLine($id) {
-	$object_name = get_object_name($id, get_object_type($id));
+function getHeaderLine($id, $object_name = null) {
+	if(!$object_name){
+		$object_name = get_object_name($id, get_object_type($id));
+	}
 	$header_line = $object_name['type'];
 	if ($object_name['name'])
 		$header_line.=": ";
@@ -119,31 +122,43 @@ function get_object_name($range_id, $object_type){
 *
 */
 function selectSem ($sem_id) {
-	global $SEM_TYPE,$SEM_TYPE_MISC_NAME, $SessionSeminar, $SessSemName;
+	global $perm, $SEM_TYPE, $SEM_TYPE_MISC_NAME, $SessionSeminar, $SessSemName, $SemSecLevelRead, $SemSecLevelWrite, $SemUserStatus, $rechte;
 
-	$db=new DB_Seminar;
+	$db = DBManager::get();
 
-	$SessionSeminar="$sem_id";
-	$db->query ("SELECT Institut_id, Name, Seminar_id, Untertitel, start_time, status FROM seminare WHERE Seminar_id='$sem_id'");
-	while ($db->next_record()) {
-		$SessSemName[0] = $db->f("Name");
-		$SessSemName[1] = $db->f("Seminar_id");
-		$SessSemName[3] = $db->f("Untertitel");
-		$SessSemName[4] = $db->f("start_time");
-		$SessSemName[5] = $db->f("Institut_id");
-		$SessSemName["art_generic"]= _("Veranstaltung");
-		$SessSemName["class"]="sem";
-		$SessSemName["art_num"]=$db->f("status");
-		if ($SEM_TYPE[$db->f("status")]["name"] == $SEM_TYPE_MISC_NAME)
+	closeObject();
+
+	$st = $db->prepare("SELECT Institut_id, Name, Seminar_id, Untertitel, start_time, status, Lesezugriff, Schreibzugriff, Passwort FROM seminare WHERE Seminar_id = ?");
+	$st->execute(array($sem_id));
+	if ($row = $st->fetch()) {
+		$SemSecLevelRead = $row["Lesezugriff"];
+		$SemSecLevelWrite = $row["Schreibzugriff"];
+		$rechte = $perm->have_studip_perm("tutor", $row["Seminar_id"]);
+		if( !($SemUserStatus = $perm->get_studip_perm($row["Seminar_id"])) ){
+			$SemUserStatus = "nobody";
+			if ($SemSecLevelRead > 0){
+				throw new Studip_AccessDeniedException(_("Keine Berechtigung."));
+			}
+		}
+		$SessionSeminar = $row["Seminar_id"];
+		$SessSemName[0] = $row["Name"];
+		$SessSemName[1] = $row["Seminar_id"];
+		$SessSemName[3] = $row["Untertitel"];
+		$SessSemName[4] = $row["start_time"];
+		$SessSemName[5] = $row["Institut_id"];
+		$SessSemName["art_generic"] = _("Veranstaltung");
+		$SessSemName["class"] = "sem";
+		$SessSemName["art_num"] = $row["status"];
+		if ($SEM_TYPE[$row["status"]]["name"] == $SEM_TYPE_MISC_NAME) {
 			$SessSemName["art"] = _("Veranstaltung");
-		else
-			$SessSemName["art"] = $SEM_TYPE[$db->f("status")]["name"];
-		$SessSemName["header_line"] = getHeaderLine ($sem_id);
+		} else {
+			$SessSemName["art"] = $SEM_TYPE[$row["status"]]["name"];
+		}
+		$SessSemName["header_line"] = getHeaderLine ($sem_id, array('name' => $row["Name"], 'type' => $SessSemName["art"]));
+		return true;
+	} else {
+		return false;
 	}
-
-	$GLOBALS['sess']->unregister('raumzeitFilter');
-
-	return $db->num_rows() != 0;
 }
 
 /**
@@ -167,29 +182,36 @@ function selectSem ($sem_id) {
 *
 */
 function selectInst ($inst_id) {
-	global $SessionSeminar, $SessSemName, $INST_TYPE;
+	global $SessionSeminar, $SessSemName, $INST_TYPE, $SemUserStatus, $rechte, $perm;
 
-	$db=new DB_Seminar;
+	$db = DBManager::get();
 
-	$SessionSeminar="$inst_id";
-	$db->query ("SELECT Name, Institut_id, type,fakultaets_id, IF(Institut_id=fakultaets_id,1,0) AS is_fak FROM Institute WHERE Institut_id='$inst_id'");
-	while ($db->next_record()) {
-		$SessSemName[0] = $db->f("Name");
-		$SessSemName[1] = $db->f("Institut_id");
-		$SessSemName["art_generic"]= _("Einrichtung");
-		$SessSemName["art"]=$INST_TYPE[$db->f("type")]["name"];
-		if (!$SessSemName["art"])
-			$SessSemName["art"]=$SessSemName["art_generic"];
+	closeObject();
+
+	$st = $db->prepare("SELECT Name, Institut_id, type,fakultaets_id, IF(Institut_id=fakultaets_id,1,0) AS is_fak FROM Institute WHERE Institut_id = ?");
+	$st->execute(array($inst_id));
+	if ($row = $st->fetch()) {
+		if ( !($SemUserStatus = $perm->get_studip_perm($row["Institut_id"])) ) {
+			$SemUserStatus = 'nobody';
+		}
+		$rechte = $perm->have_studip_perm("tutor", $row["Institut_id"]);
+		$SessionSeminar = $row["Institut_id"];
+		$SessSemName[0] = $row["Name"];
+		$SessSemName[1] = $row["Institut_id"];
+		$SessSemName["art_generic"] = _("Einrichtung");
+		$SessSemName["art"] = $INST_TYPE[$row["type"]]["name"];
+		if (!$SessSemName["art"]) {
+			$SessSemName["art"] = $SessSemName["art_generic"];
+		}
 		$SessSemName["class"] = "inst";
-		$SessSemName["is_fak"] = $db->f("is_fak");
-		$SessSemName["art_num"]=$db->f("type");
-		$SessSemName["fak"] = $db->f("fakultaets_id");
-		$SessSemName["header_line"] = getHeaderLine ($inst_id);
+		$SessSemName["is_fak"] = $row["is_fak"];
+		$SessSemName["art_num"] = $row["type"];
+		$SessSemName["fak"] = $row["fakultaets_id"];
+		$SessSemName["header_line"] = getHeaderLine ($inst_id, array('name' => $row["Name"], 'type' => $SessSemName["art"]));
+		return true;
+	} else {
+		return false;
 	}
-
-	$GLOBALS['sess']->unregister('raumzeitFilter');
-
-	return $db->num_rows() != 0;
 }
 
 /**
@@ -270,10 +292,16 @@ function checkObjectModule($modul) {
 * This function closes a opened Veranstaltung or Einrichtung
 */
 function closeObject() {
-	global $SessionSeminar, $SessSemName;
+	global $SessionSeminar, $SessSemName, $SemSecLevelRead, $SemSecLevelWrite, $SemUserStatus, $rechte, $sess;
 
-	$SessionSeminar='';
-	$SessSemName='';
+	$SessionSeminar = '';
+	$SessSemName = array();
+	$SemSecLevelRead = null;
+	$SemSecLevelWrite = null;
+	$SemUserStatus = null;
+	$rechte = false;
+
+	$sess->unregister('raumzeitFilter');
 }
 
 /**

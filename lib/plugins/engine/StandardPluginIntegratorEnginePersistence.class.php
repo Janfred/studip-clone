@@ -198,7 +198,7 @@ class StandardPluginIntegratorEnginePersistence extends AbstractPluginIntegrator
 
   function getPlugin($id) {
     // Veranstaltungsid bestimmen
-    if (is_array($_SESSION['SessSemName'])) {
+    if (isset($_SESSION['SessSemName'][1])) {
       $args = array($_SESSION['SessSemName'][1]);
     } else {
       $args = array();

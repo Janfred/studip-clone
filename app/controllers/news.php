@@ -111,7 +111,7 @@ function ajaxified_news_has_permission($news) {
 
       if ($GLOBALS['SessSemName'][1] === (string)$range) {
         $permitted = TRUE;
-        $show_admin = ajaxified_news_sem_or_inst_rechte();
+        $show_admin = $GLOBALS['perm']->have_studip_perm('tutor', $range);
         break;
       }
     }
@@ -128,20 +128,5 @@ function ajaxified_news_has_permission($news) {
   }
 
   return array($permitted, $show_admin);
-}
-
-
-/**
- * Checks for admin permission in the current institute or course.
- *
- * @return boolean  TRUE if the user has admin
- */
-function ajaxified_news_sem_or_inst_rechte() {
-
-  ob_start();
-  include 'lib/include/check_sem_entry.inc.php';
-  ob_end_clean();
-
-  return $rechte;
 }
 

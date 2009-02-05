@@ -41,8 +41,6 @@ function pruefe_name(){
 
 	checkObject();
 
-	include 'lib/include/check_sem_entry.inc.php'; //hier wird der Zugang zum Seminar ueberprueft	
-
 ?>
 
 

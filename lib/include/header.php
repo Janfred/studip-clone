@@ -72,6 +72,4 @@ if ($GLOBALS['SHOW_TERMS_ON_FIRST_LOGIN'] && $GLOBALS['auth']->is_authenticated(
 	check_terms($GLOBALS['user']->id, $GLOBALS['_language_path']);
 }
 
-include 'lib/include/check_sem_entry.inc.php'; //hier wird der Zugang zum Seminar ueberprueft
-
 ?>
