@@ -228,7 +228,7 @@ class HeaderController {
 
 	function getHeaderItemImprint(){
 		$ret['text'] = _("Impressum");
-		$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']."dispatch.php/siteinfo/show";
+		$ret['link'] = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']."dispatch.php/siteinfo/show?cancel_login=1";
 		return $ret;
 	}
 

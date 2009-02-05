@@ -13,153 +13,167 @@
 require_once('lib/visual.inc.php');
 require_once('lib/user_visible.inc.php');
 
-function get_detail_content($id){
-    global $perm, $rubrics_empty;
-    if($id==0){
-        if($perm->have_perm('root')){
-            if ($rubrics_empty){
-                return "Benutzen Sie den Link Â»neue Rubrik anlegenÂ« in der Infobox, um eine Rubrik anzulegen.";
-            }else{
-    	        return "Benutzen Sie den Link Â»neue Seite anlegenÂ« in der Infobox, um eine Seite in dieser Rubrik anzulegen.";
-            }
-    	}else{
-	        return "Der fÃ¼r diese Stud.IP-Installation verantwortliche Administrator (".rootlist().") muss hier noch Inhalte einfÃ¼gen.";
-    	}
-    }else{
+class Siteinfo {
+    function get_detail_content($id){
+        global $perm, $rubrics_empty;
+        if($id==0){
+            if($perm->have_perm('root')){
+                if ($rubrics_empty){
+                    return _("Benutzen Sie den Link »neue Rubrik anlegen« in der Infobox, um eine Rubrik anzulegen.");
+                }else{
+        	        return _("Benutzen Sie den Link »neue Seite anlegen« in der Infobox, um eine Seite in dieser Rubrik anzulegen.");
+                }
+        	}else{
+    	        return _("Der für diese Stud.IP-Installation verantwortliche Administrator muss hier noch Inhalte einfügen.")."<br />".rootlist();
+        	}
+        }else{
+            $db = DBManager::get();
+            $sql = "SELECT content
+                    FROM siteinfo_details
+                    WHERE detail_id = ".$db->quote($id,PDO::PARAM_INT);
+            $result = $db->query($sql);
+            $rows = $result->fetchAll();
+            return $rows[0][0];
+        }
+    }
+
+    function get_detail_name($id){
         $db = DBManager::get();
-        $sql = "SELECT content
+        $sql = "SELECT name
                 FROM siteinfo_details
                 WHERE detail_id = ".$db->quote($id,PDO::PARAM_INT);
         $result = $db->query($sql);
         $rows = $result->fetchAll();
+        return $rows[0][0];    
+    }
+
+    function get_detail_content_processed($id){
+        $content = $this->get_detail_content($id);
+        $output = siteinfoDirectives(formatReady(languageReady($content)));
+        return $output;
+    }
+
+    function save($type, $input){
+        $db = DBManager::get();
+        switch ($type){
+            case "update_detail":
+                $db->exec("UPDATE siteinfo_details
+                           SET rubric_id = ".$db->quote($input['rubric_id'],PDO::PARAM_INT).",
+                               name = ".$db->quote($input['detail_name']?$input['detail_name']:"unbenannt").",
+                               content = ".$db->quote($input['content'])."
+                           WHERE detail_id=".$db->quote($input['detail_id'],PDO::PARAM_INT));
+                $rubric = $input['rubric_id'];
+                $detail = $input['detail_id'];
+                break;
+            case "insert_detail":
+                $db->exec("INSERT 
+                           INTO siteinfo_details 
+                           (rubric_id,
+                            name,
+                            content)
+                           VALUES (".$db->quote($input['rubric_id'],PDO::PARAM_INT).", 
+                                   ".$db->quote($input['detail_name']?$input['detail_name']:"unbenannt").", 
+                                   ".$db->quote($input['content']).");");
+                $rubric = $input['rubric_id'];
+                $detail = $db->lastInsertId();
+                break;
+            case "update_rubric":
+                $db->exec("UPDATE siteinfo_rubrics
+                           SET name = ".$db->quote($input['rubric_name']?$input['rubric_name']:"unbenannt")."
+                           WHERE rubric_id = ".$db->quote($input['rubric_id'],PDO::PARAM_INT).";");
+                $rubric = $input['rubric_id'];
+                $detail = $this->first_detail_id($rubric);
+                break;
+            case "insert_rubric":
+                $db->exec("INSERT 
+                           INTO siteinfo_rubrics
+                           (name)
+                           VALUES (".$db->quote($input['rubric_name']?$input['rubric_name']:"unbenannt").");");
+                $rubric = $db->lastInsertId();
+                $detail = 0;
+        }
+        return array($rubric, $detail);
+    }
+
+    function delete($type,$id){
+        $db = DBManager::get();
+        if($type=="rubric"){
+            $db->exec("DELETE FROM siteinfo_details WHERE rubric_id = ".$db->quote($id).";");
+            $db->exec("DELETE FROM siteinfo_rubrics WHERE rubric_id = ".$db->quote($id).";");
+        }else{
+            $db->exec("DELETE FROM siteinfo_details WHERE detail_id = ".$db->quote($id).";");
+        }
+    }
+
+    function first_detail_id($rubric=NULL){
+        $db = DBManager::get();
+        $rubric_id = $rubric ? $rubric : $this->first_rubric_id();
+        $sql = "SELECT detail_id
+                FROM siteinfo_details ";
+        if($rubric_id){
+            $sql .= "WHERE rubric_id = ".$db->quote($rubric_id,PDO::PARAM_INT);
+        }
+        $sql .= " ORDER BY position ASC
+                 LIMIT 1";
+        $result = $db->query($sql);
+        $rows = $result->fetchAll();
+        if (count($rows)>0){
+            return $rows[0][0];
+        }else{
+            return 0;
+        }
+    }
+
+    function first_rubric_id(){
+        global $rubrics_empty;
+        $sql = "SELECT rubric_id
+                FROM siteinfo_rubrics
+                ORDER BY position ASC
+                LIMIT 1";
+        $result = DBManager::get()->query($sql);
+        $rows = $result->fetchAll();
+        if (count($rows)>0){
+            return $rows[0][0];
+        }else{
+            $rubrics_empty = TRUE;
+            return NULL;
+        }
+    }
+
+    function rubric_for_detail($id){
+        $db = DBManager::get();
+        $sql = "SELECT rubric_id
+                FROM siteinfo_details
+                WHERE detail_id = ".$db->quote($id,PDO::PARAM_INT);
+        $result = $db->query($sql);
+        $rows = $result->fetchAll();
+        if ($type=="id"){
+            return $rows[0][0];
+        }else{
+            return $rows[0][1];
+        }
+    }
+
+    function rubric_name($id){
+        $db = DBManager::get();
+        $sql = "SELECT name
+                FROM siteinfo_rubrics
+                WHERE rubric_id = ".$db->quote($id,PDO::PARAM_INT);
+        $result = $db->query($sql);
+        $rows = $result->fetchAll();
         return $rows[0][0];
     }
-}
 
-function get_detail_name($id){
-    $db = DBManager::get();
-    $sql = "SELECT name
-            FROM siteinfo_details
-            WHERE detail_id = ".$db->quote($id,PDO::PARAM_INT);
-    $result = $db->query($sql);
-    $rows = $result->fetchAll();
-    return $rows[0][0];    
-}
-
-function get_detail_content_processed($id){
-    $content = get_detail_content($id);
-    $output = siteinfoDirectives(formatReady($content));
-    return $output;
-}
-
-function save($type, $input){
-    $db = DBManager::get();
-    switch ($type){
-        case "update_detail":
-            $db->exec("UPDATE siteinfo_details
-                       SET rubric_id = ".$db->quote($input['rubric_id'],PDO::PARAM_INT).",
-                           name = ".$db->quote($input['detail_name']).",
-                           content = ".$db->quote($input['content'])."
-                       WHERE detail_id=".$db->quote($input['detail_id'],PDO::PARAM_INT));
-            $rubric = $input['rubric_id'];
-            $detail = $input['detail_id'];
-            break;
-        case "insert_detail":
-            $db->exec("INSERT 
-                       INTO siteinfo_details 
-                       (rubric_id,
-                        name,
-                        content)
-                       VALUES (".$db->quote($input['rubric_id'],PDO::PARAM_INT).", 
-                               ".$db->quote($input['detail_name']).", 
-                               ".$db->quote($input['content']).");");
-            $rubric = $input['rubric_id'];
-            $detail = $db->lastInsertId();
-            break;
-        case "update_rubric":
-            $db->exec("UPDATE siteinfo_rubrics
-                       SET name = ".$db->quote($input['rubric_name'])."
-                       WHERE rubric_id = ".$db->quote($input['rubric_id'],PDO::PARAM_INT).";");
-            $rubric = $input['rubric_id'];
-            $detail = first_detail_id($rubric);
-            break;
-        case "insert_rubric":
-            $db->exec("INSERT 
-                       INTO siteinfo_rubrics
-                       (name)
-                       VALUES (".$db->quote($input['rubric_name']).");");
-            $rubric = $db->lastInsertId();
-            $detail = 0;
-    }
-    return array($rubric, $detail);
-}
-
-function first_detail_id($rubric=NULL){
-    $db = DBManager::get();
-    $rubric_id = $rubric ? $rubric : first_rubric_id();
-    $sql = "SELECT detail_id
-            FROM siteinfo_details ";
-    if($rubric_id){
-        $sql .= "WHERE rubric_id = ".$db->quote($rubric_id,PDO::PARAM_INT);
-    }
-    $sql .= " ORDER BY position ASC
-             LIMIT 1";
-    $result = $db->query($sql);
-    $rows = $result->fetchAll();
-    if (count($rows)>0){
-        return $rows[0][0];
-    }else{
-        return 0;
+    function get_all_rubrics(){
+        $sql = "SELECT rubric_id, name
+                FROM siteinfo_rubrics";
+        $result = DBManager::get()->query($sql);
+        $rows = $result->fetchAll();
+        return $rows;
     }
 }
 
-function first_rubric_id(){
-    global $rubrics_empty;
-    $sql = "SELECT rubric_id
-            FROM siteinfo_rubrics
-            ORDER BY position ASC
-            LIMIT 1";
-    $result = DBManager::get()->query($sql);
-    $rows = $result->fetchAll();
-    if (count($rows)>0){
-        return $rows[0][0];
-    }else{
-        $rubrics_empty = TRUE;
-        return NULL;
-    }
-}
 
-function rubric_for_detail($id){
-    $db = DBManager::get();
-    $sql = "SELECT rubric_id
-            FROM siteinfo_details
-            WHERE detail_id = ".$db->quote($id,PDO::PARAM_INT);
-    $result = $db->query($sql);
-    $rows = $result->fetchAll();
-    if ($type=="id"){
-        return $rows[0][0];
-    }else{
-        return $rows[0][1];
-    }
-}
-
-function rubric_name($id){
-    $db = DBManager::get();
-    $sql = "SELECT name
-            FROM siteinfo_rubrics
-            WHERE rubric_id = ".$db->quote($id,PDO::PARAM_INT);
-    $result = $db->query($sql);
-    $rows = $result->fetchAll();
-    return $rows[0][0];
-}
-
-function get_all_rubrics(){
-    $sql = "SELECT rubric_id, name
-            FROM siteinfo_rubrics";
-    $result = DBManager::get()->query($sql);
-    $rows = $result->fetchAll();
-    return $rows;
-}
 //to preserve (parts?) of the old impressum.php-functionality
 //here a modified copy of wiki-engine supports specialized markup
 function siteinfoMarkup($pattern, $replace) {
@@ -175,6 +189,7 @@ function siteinfoDirectives($str) {
        }
        return $str;
 }
+
 
 //*******************************
 //** Starting to define Markup **
@@ -227,11 +242,9 @@ function userinfo($input){
         $out .= $user[0]['fullname'];
         $out .= '</a>';
         $out .= ', E-Mail:';
-        $out .= '<a href="mailto:'.$user[0]['Email'].'">';
-        $out .= $user[0]['Email'];
-        $out .= '</a>';
+        $out .= formatReady($user[0]['Email']);
     }else{
-        $out = "Nutzer nicht gefunden.";
+        $out = _("Nutzer nicht gefunden.");
     }
     return $out;
 }
@@ -255,14 +268,12 @@ function rootlist(){
             $out .= $listentry['fullname'];
             $out .= '</a>';
             $out .= ', E-Mail:';
-            $out .= '<a href="mailto:'.$listentry['Email'].'">';
-            $out .= $listentry['Email'];
-            $out .= '</a>';
+            $out .= formatReady($listentry['Email']);
             $out .= '</li>';
         }
         $out .= "</ul>"."\n";
     }else{
-        $out = "keine. Na sowas. Das kann ja eigentlich gar nicht sein...";
+        $out = _("keine. Na sowas. Das kann ja eigentlich gar nicht sein...");
     }
     return $out;
 }
@@ -280,7 +291,7 @@ function adminList(){
     $i_result = $db->query($sql);
     $institutes = $i_result->fetchAll();
     if ($i_result->rowCount()==0){
-        return "keine. Na sowas. Das kann ja eigentlich gar nicht sein...";
+        return _("keine. Na sowas. Das kann ja eigentlich gar nicht sein...");
     }
     $out = "";
     foreach($institutes as $institute){
@@ -297,8 +308,9 @@ function adminList(){
 
 
         $out .= '<h4 style="clear: both;margin-bottom: 0px;">';
-        $out .= '<a href="'.URLHelper::getLink('institut_main.php', array('auswahl' => $institute['Institut_id'])).'">';
-        $out .= $institute['Name'];
+        $out .= '<a href="'.URLHelper::getLink('institut_main.php', 
+                                               array('auswahl' => $institute['Institut_id'])).'">';
+        $out .= formatReady($institute['Name']);
         $out .= '</a>';
         $out .= '</h4>'."\n";
         $out .= '<div style="width: 49%; float:left;">'."\n".'<ul>';
@@ -309,12 +321,10 @@ function adminList(){
         foreach($user as $suser){
             $out .= '<li>';
             $out .= '<a href="'.URLHelper::getLink('about.php', array('username' => $suser['username'])).'">';
-            $out .= $suser['fullname'];
+            $out .= formatReady($suser['fullname']);
             $out .= '</a>';
             $out .= ', E-Mail:';
-            $out .= '<a href="mailto:'.$suser['Email'].'">';
-            $out .= $suser['Email'];
-            $out .= '</a>';
+            $out .= formatReady($suser['Email']);
             $out .= '</li>';
             $admincount++;
             if ($admincount >= $switch_to_next_column){
@@ -337,6 +347,7 @@ function coregroup(){
     $out = implode($remotefile,'');
     $out = substr($out, stripos($out, "<table"), strrpos($out, "</table>"));
     $out = str_replace(array('class="normal"','align="left"'), array("",""), $out);
+    $out = $out;
     return $out;
 }
 
@@ -410,7 +421,7 @@ function toplist($item){
             $type = "user";
             break;
         default:
-            $heading = _("die gew&auml;hlte Option ist nicht verf&uuml;gbar");
+            $heading = _("die gewählte Option ist nicht verfügbar");
     }
     if($sql){
         $result = DBManager::get()->query($sql);
@@ -446,94 +457,92 @@ function toplist($item){
     return $out;
 }
 
-siteinfoMarkup("/\(:indicators ([a-z, _\-]*):\)/ei","indicators('$1')");
-function indicators($keys){
+siteinfoMarkup("/\(:indicator ([a-z_\-]*):\)/ei","indicator('$1')");
+function indicator($key){
     $db = DBManager::get();
-    $keys = explode(",", $keys);
+    $key = trim($key);
     $indicator['seminar_all'] = array("query" => "SELECT count(*) from seminare",
-                                      "title" => "Aktive Veranstaltungen",
-                                      "detail" => "Alle Veranstaltungen, die nicht archiviert wurden.");
+                                      "title" => _("Aktive Veranstaltungen"),
+                                      "detail" => _("Alle Veranstaltungen, die nicht archiviert wurden."));
     $indicator['seminar_archived'] = array("query" => "SELECT count(*) from archiv",
-                                           "title" => "Archivierte Veranstaltungen",
-                                           "detail" => "Alle Veranstaltungen, die archiviert wurden.");
+                                           "title" => _("Archivierte Veranstaltungen"),
+                                           "detail" => _("Alle Veranstaltungen, die archiviert wurden."));
     $indicator['institute_secondlevel_all'] = array("query" => "SELECT count(*) FROM Institute WHERE Institut_id != fakultaets_id",
-                                                    "title" => "beteiligte Einrichtungen",
-                                                    "detail" => "alle Einrichtungen au&szlig;er den Fakult&auml;ten");
+                                                    "title" => _("beteiligte Einrichtungen"),
+                                                    "detail" => _("alle Einrichtungen außer den Fakultäten"));
     $indicator['institute_firstlevel_all'] = array("query" => "SELECT count(*) FROM Institute WHERE Institut_id = fakultaets_id",
-                                                   "title" => "beteiligte Fakult&auml;ten",
-                                                   "detail" => "alle Fakult&auml;ten");
+                                                   "title" => _("beteiligte Fakultäten"),
+                                                   "detail" => _("alle Fakultäten"));
     $indicator['user_admin'] = array("query" => "SELECT count(*) from auth_user_md5 WHERE perms='admin'",
-                            "title" => "registrierte Administratoren",
+                            "title" => _("registrierte Administratoren"),
                             "detail" => "");
     $indicator['user_dozent'] = array("query" => "SELECT count(*) from auth_user_md5 WHERE perms='dozent'",
-                            "title" => "registrierte Dozenten",
+                            "title" => _("registrierte Dozenten"),
                             "detail" => "");
     $indicator['user_tutor'] = array("query" => "SELECT count(*) from auth_user_md5 WHERE perms='tutor'",
-                            "title" => "registrierte Tutoren",
+                            "title" => _("registrierte Tutoren"),
                             "detail" => "");
     $indicator['user_autor'] = array("query" => "SELECT count(*) from auth_user_md5 WHERE perms='autor'",
-                            "title" => "registrierte Autoren",
+                            "title" => _("registrierte Autoren"),
                             "detail" => "");
     $indicator['posting'] = array("query" => "SELECT count(*) from px_topics",
-                            "title" => "Postings",
+                            "title" => _("Postings"),
                             "detail" => "");
     $indicator['document'] = array("query" => "SELECT count(*) from dokumente WHERE url = ''",
-                            "title" => "Dokumente",
+                            "title" => _("Dokumente"),
                             "detail" => "");
     $indicator['link'] = array("query" => "SELECT count(*) from dokumente WHERE url != ''",
-                            "title" => "verlinkte Dateien",
+                            "title" => _("verlinkte Dateien"),
                             "detail" => "");
     $indicator['litlist'] = array("query" => "SELECT count(*) from lit_list",
-                            "title" => "Literaturlisten",
+                            "title" => _("Literaturlisten"),
                             "detail" => "");
     $indicator['termin'] = array("query" => "SELECT count(*) from termine",
-                            "title" => "Termine",
+                            "title" => _("Termine"),
                             "detail" => "");
     $indicator['news'] = array("query" => "SELECT count(*) from news",
-                            "title" => "News",
+                            "title" => _("News"),
                             "detail" => "");
     $indicator['guestbook'] = array("query" => "SELECT count(*) from user_info WHERE guestbook='1'",
-                            "title" => "G&auml;steb&uuml;cher",
+                            "title" => _("Gästebücher"),
                             "detail" => "");
     $indicator['vote'] = array("query" => "SELECT count(*) from vote WHERE type='vote'",
-                            "title" => "Umfragen",
+                            "title" => _("Umfragen"),
                             "detail" => "",
                             "constraint" => $GLOBALS['VOTE_ENABLE']);
     $indicator['test'] = array("query" => "SELECT count(*) from vote WHERE type='test'",
-                            "title" => "Tests",
+                            "title" => _("Tests"),
                             "detail" => "",
                             "constraint" => $GLOBALS['VOTE_ENABLE']);
     $indicator['evaluation'] = array("query" => "SELECT count(*) from eval",
-                            "title" => "Evaluationen",
+                            "title" => _("Evaluationen"),
                             "detail" => "",
                             "constraint" => $GLOBALS['VOTE_ENABLE']);
     $indicator['wiki_pages'] = array("query" => "SELECT COUNT(DISTINCT keyword) as count from wiki",
-                            "title" => "Wiki-Seiten",
+                            "title" => _("Wiki-Seiten"),
                             "detail" => "",
                             "constraint" => $GLOBALS['WIKI_ENABLE']);
     $indicator['lernmodul'] = array("query" => "SELECT COUNT(DISTINCT co_id) as count from seminar_lernmodul",
-                            "title" => "ILIAS-Lernmodule",
+                            "title" => _("ILIAS-Lernmodule"),
                             "detail" => "",
                             "constraint" => $GLOBALS['ILIAS_CONNECT_ENABLE']);
     $indicator['resource'] = array("query" => "SELECT COUNT(*) from resources_objects",
-                            "title" => "Ressourcen-Objekte",
-                            "detail" => "von Stud.IP verwaltete Ressourcen wie R&auml;ume oder Ger&auml;te",
+                            "title" => _("Ressourcen-Objekte"),
+                            "detail" => "von Stud.IP verwaltete Ressourcen wie Räume oder Geräte",
                             "constraint" => $RESOURCES_ENABLE);
     $out = "<ul>";
-    foreach($keys as $key){
-        if(in_array(trim($key),array_keys($indicator))){
-            if(!isset($indicator[trim($key)]['constraint'])||$indicator[trim($key)]['constraint']){
-                $result = $db->query($indicator[trim($key)]['query']);
-                $rows = $result->fetchAll(PDO::FETCH_NUM);
-                $out.="<li>".$indicator[trim($key)]['title'];
-                if($indicator[trim($key)]['detail']){
-                    $out.=" (".$indicator[trim($key)]['detail'].")";
-                }
-                $out.=": ".$rows[0][0]."</li>";
+    if(in_array($key,array_keys($indicator))){
+        if(!isset($indicator[$key]['constraint'])||$indicator[$key]['constraint']){
+            $result = $db->query($indicator[$key]['query']);
+            $rows = $result->fetchAll(PDO::FETCH_NUM);
+            $out.="<li>".$indicator[$key]['title'];
+            if($indicator[$key]['detail']){
+                $out.=" (".$indicator[$key]['detail'].")";
             }
-        }else{
-            $out.="<li>Option &raquo;".trim($key)."&laquo; nicht verf&uuml;gbar</li>";
+            $out.=": ".$rows[0][0]."(".$indicator[$key]['constraint'].")</li>";
         }
+    }else{
+        $out.="<li>".sprintf(_("Option %s nicht verfügbar"),"&raquo;".$key."&laquo;")."</li>";
     }
     $out .= "</ul>";
     return $out;
@@ -546,8 +555,21 @@ function history(){
 	return $out;
 }
 
-//******************************
-//** End of Markup-Definition **
-//******************************
+function languageReady($input){
+    $pattern = "'\[lang=(\w*)\]\s*(.+)\s*\[/lang\]'eisU";
+    $output = preg_replace($pattern,'stripforeignlanguage("$1", "$2")',$input);
+    return $output;
+}
+
+function stripforeignlanguage($language, $text){
+    global $_language;
+    list($primary, $sub) = explode('_',$_language);
+    if(($language==$primary)||($language==$_language)){
+        return $text;
+    }else{
+        return '';
+    }
+}
+
 
 ?>

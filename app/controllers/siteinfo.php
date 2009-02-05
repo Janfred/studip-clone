@@ -14,6 +14,8 @@ require_once 'app/models/siteinfo.php';
 
 class SiteinfoController extends Trails_Controller
 {
+    private $si;
+    
     /**
      * common tasks for all actions
      */
@@ -21,26 +23,30 @@ class SiteinfoController extends Trails_Controller
     {
         global $perm, $template_factory, $CURRENT_PAGE;
         global $_language_path, $_language;
+        
+        $this->si = new Siteinfo();
 
         $this->populate_ids($args);
 
         # open session
         page_open(array('sess' => 'Seminar_Session',
-                        'auth' => 'Seminar_Auth',
+                        'auth' => 'Seminar_Default_Auth',
                         'perm' => 'Seminar_Perm',
                         'user' => 'Seminar_User'));
 
+        if (!isset($_language)) {
+            $_language = get_accepted_languages();
+        }
+
         $_language_path = init_i18n($_language);
 
-
-	if($perm->have_perm('root')){
-	        $this->layout = $template_factory->open('layouts/base');
+        if($perm->have_perm('root')){
+            $this->layout = $template_factory->open('layouts/base');
             $this->layout->set_attribute('infobox', $this->infobox_content());
-	}else{
+    	}else{
             $action = "show";
 	        $this->layout = $template_factory->open('layouts/base_without_infobox');
-
-	}
+        }
         $this->layout->set_attribute('tabs', 'links_siteinfo');
         $this->layout->set_attribute('reiter_view', 'siteinfo');
         $this->set_layout($this->layout);
@@ -57,12 +63,12 @@ class SiteinfoController extends Trails_Controller
                 $this->currentdetail = $args[1];
                 $view = $this->currentrubric.'_'.$this->currentdetail;
             }else{
-                $this->currentdetail = first_detail_id($args[0]);
+                $this->currentdetail = $this->si->first_detail_id($args[0]);
                 $view = $this->currentrubric;
             }
         }else{
-            $this->currentrubric = first_rubric_id();
-            $this->currentdetail = first_detail_id();
+            $this->currentrubric = $this->si->first_rubric_id();
+            $this->currentdetail = $this->si->first_detail_id();
         }
         if($this->currentdetail==0){
             $dynstradd['r'.$this->currentrubric.'_d0'] = array('topKat' => 'r'.$this->currentrubric, 
@@ -109,7 +115,7 @@ class SiteinfoController extends Trails_Controller
      */
     function show_action ()
     {
-        $this->output = get_detail_content_processed($this->currentdetail);
+        $this->output = $this->si->get_detail_content_processed($this->currentdetail);
     }
 
     function new_action ($givenrubric=NULL)
@@ -131,7 +137,7 @@ class SiteinfoController extends Trails_Controller
                                              'name' => 'neue Seite', 
                                              'link' => '#',
                                              'active' => FALSE);
-            $this->rubrics = get_all_rubrics();
+            $this->rubrics = $this->si->get_all_rubrics();
             $view = "detail_new";
         }
     }
@@ -139,37 +145,37 @@ class SiteinfoController extends Trails_Controller
     function edit_action ($givenrubric=NULL, $givendetail=NULL)
     {
         if(is_numeric($givendetail)){
-            $this->rubrics = get_all_rubrics();
-            $this->rubric_id = rubric_for_detail($this->currentdetail);
-            $this->detail_name = get_detail_name($this->currentdetail);
-            $this->content = get_detail_content($this->currentdetail);
+            $this->rubrics = $this->si->get_all_rubrics();
+            $this->rubric_id = $this->si->rubric_for_detail($this->currentdetail);
+            $this->detail_name = $this->si->get_detail_name($this->currentdetail);
+            $this->content = $this->si->get_detail_content($this->currentdetail);
         }else{
             $this->edit_rubric = TRUE;
             $this->rubric_id = $this->currentrubric;
        }
-        $this->rubric_name = rubric_name($this->currentrubric);
+        $this->rubric_name = $this->si->rubric_name($this->currentrubric);
     }
 
     function save_action ()
     {
         if (isset($_POST['rubric_id'])){
             if(isset($_POST['detail_id'])){
-                list($rubric, $detail) = save("update_detail", array("rubric_id" => $_POST['rubric_id'],
+                list($rubric, $detail) = $this->si->save("update_detail", array("rubric_id" => $_POST['rubric_id'],
                                                                      "detail_name" => $_POST['detail_name'],
                                                                      "content" => $_POST['content'],
                                                                      "detail_id" => $_POST['detail_id']));
             }else{
                 if(isset($_POST['content'])){
-                list($rubric, $detail) = save("insert_detail", array("rubric_id" => $_POST['rubric_id'],
+                list($rubric, $detail) = $this->si->save("insert_detail", array("rubric_id" => $_POST['rubric_id'],
                                                                      "detail_name" => $_POST['detail_name'],
                                                                      "content" => $_POST['content']));
                 }else{
-                    list($rubric, $detail) = save("update_rubric", array("rubric_id" => $_POST['rubric_id'],
+                    list($rubric, $detail) = $this->si->save("update_rubric", array("rubric_id" => $_POST['rubric_id'],
                                                                          "rubric_name" => $_POST['rubric_name']));
                 }
             }
         }else{
-            list($rubric, $detail) = save("insert_rubric", array("rubric_name" => $_POST['rubric_name']));
+            list($rubric, $detail) = $this->si->save("insert_rubric", array("rubric_name" => $_POST['rubric_name']));
         }
         $this->redirect('siteinfo/show/'.$rubric.'/'.$detail);
     }
@@ -179,18 +185,17 @@ class SiteinfoController extends Trails_Controller
         $db = DBManager::get();
         if($execute){
             if($givendetail=="all"){
-                $db->exec("DELETE FROM siteinfo_details WHERE rubric_id = ".$db->quote($this->currentrubric).";");
-                $db->exec("DELETE FROM siteinfo_rubrics WHERE rubric_id = ".$db->quote($this->currentrubric).";");
-                $this->redirect('siteinfo/show');
+                $this->si->delete("rubric", $this->currentrubric);
+                $this->redirect('siteinfo/show/'.$this->currentrubric);
             }else{
-                $db->exec("DELETE FROM siteinfo_details WHERE detail_id = ".$db->quote($this->currentdetail).";");
-                $this->redirect('siteinfo/show/'.$rubric);
+                $this->si->delete("detail", $this->currentdetail);
+                $this->redirect('siteinfo/show/'.$this->currentrubric);
             }
         }else{
             if(is_numeric($givendetail)){
                 $this->detail = TRUE;
             }
-            $this->output = get_detail_content_processed($this->currentdetail);
+            $this->output = $this->si->get_detail_content_processed($this->currentdetail);
         }
     }
 }

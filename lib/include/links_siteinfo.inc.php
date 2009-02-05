@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 global $view,$dynstradd;
 
 require_once 'lib/include/reiter.inc.php';
+include_once 'app/models/siteinfo.php';
 
 $structure = array();
 
@@ -34,8 +35,8 @@ $result = $db->query($sql);
 $rubrics = $result->fetchAll();
 foreach($rubrics AS $rubric){
 	$structure['r'.$rubric[0]] = array('topKat' => '', 
-                                   'name' => $rubric[1], 
-                                   'link' => 'dispatch.php/siteinfo/show/'.$rubric[0],
+                                   'name' => languageReady($rubric[1]), 
+                                   'link' => URLHelper::getLink('dispatch.php/siteinfo/show/'.$rubric[0]),
                                    'active' => FALSE);
 }
 
@@ -47,8 +48,8 @@ $result = $db->query($sql);
 $details = $result->fetchAll();
 foreach($details AS $detail){
 	$structure['r'.$detail[1].'_d'.$detail[0]] = array('topKat' => 'r'.$detail[1], 
-                                                  'name' => $detail[2], 
-                                                  'link' => 'dispatch.php/siteinfo/show/'.$detail[1].'/'.$detail[0],
+                                                  'name' => languageReady($detail[2]), 
+                                                  'link' => URLHelper::getLink('dispatch.php/siteinfo/show/'.$detail[1].'/'.$detail[0]),
                                                   'active' => FALSE);
 }
 
