@@ -71,7 +71,7 @@ require_once 'lib/classes/SemBrowse.class.php';
 			$db->query("SELECT Name FROM Institute WHERE Institut_id='".$show_bereich_data["id"]."'");
 			$db->next_record();
 			$head_text = _("Übersicht aller Veranstaltungen einer Einrichtung");
-			$intro_text = sprintf(_("Alle Veranstaltungen der Einrichtung <b>%s</b>"),$db->f("Name"));
+			$intro_text = sprintf(_("Alle Veranstaltungen der Einrichtung <b>%s</b>"), htmlReady($db->f("Name")));
 			$db->query("SELECT seminar_inst.seminar_id FROM seminar_inst
 			LEFT JOIN seminare ON (seminar_inst.seminar_id=seminare.Seminar_id)
 			WHERE seminar_inst.Institut_id='".$show_bereich_data["id"]."'" . (!$GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM')) ? " AND seminare.visible='1'" : ""));
