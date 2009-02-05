@@ -192,6 +192,8 @@ include 'lib/include/links_openobject.inc.php';
 // Behandlung der Suche
 //////////////////////////////////////////////////////////////////////////////////
 
+$forum['search'] = '';
+
 if ($_REQUEST['suchbegriff'] != '' || $_REQUEST['author'] != '') {
 	$forum['searchstring'] = remove_magic_quotes($_REQUEST['suchbegriff']);
 	$forum['searchauthor'] = remove_magic_quotes($_REQUEST['author']);
@@ -227,8 +229,9 @@ if ($_REQUEST['suchbegriff'] != '' || $_REQUEST['author'] != '') {
 	URLHelper::addLinkParam('author', $forum['searchauthor']);
 }
 
-if ($reset=="1")	// es wurde neue Suche aktiviert, also Suchbegriff löschen
-	$forum["search"] = "";
+if ($_REQUEST['reset']) {
+	$forum['search'] = '';
+}
 
 //////////////////////////////////////////////////////////////////////////////////
 // verschiedene GUI-Konstanten werden gesetzt
@@ -514,13 +517,10 @@ if ($forumsend!="anpassen") {
 	if ($cmd == "move" && $topic_id !="" && $rechte)
 		forum_move_navi ($topic_id);
 
-	if (!$cmd && !$reset) {
-	}
-
 	echo "\n</table>\n";
 }
 
-if (!$reset && $user->id != "nobody" && $cmd!="move")   // wenn Suche aufgerufen wird keine toolbar
+if (($forum["view"] != "search" || $forum["search"] != "") && $user->id != "nobody" && $cmd != "move")   // wenn Suchformular aufgerufen wird keine toolbar
 	echo forum_print_toolbar($edit_id);
 elseif ($user->id == "nobody" || $cmd=="move") {
 	echo "\n<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"blank\"><br></td></tr>";
