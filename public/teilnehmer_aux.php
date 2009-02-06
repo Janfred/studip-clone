@@ -94,8 +94,7 @@ function get_aux_data() {
 
 		for ($i = 0; $i <= 1; $i++) {
 			foreach ($entries[$i] as $id => $entry) {
-					$data[$db->f('user_id')]['entry'][$id] = $entry->getDisplayValue(false);
-				}
+				$data[$db->f('user_id')]['entry'][$id] = $entry->getDisplayValue(false);
 			}
 		}
 
