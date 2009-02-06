@@ -48,20 +48,20 @@ class PmWikiConnectedLink extends ConnectedLink
 	
 	function getUserModuleLinks()
 	{
-		$range_id = $GLOBALS['_SESSION']['SessSemName'][1];
+		$range_id = $_SESSION['SessSemName'][1];
 		$username = get_username($GLOBALS['auth']->auth['uid']);
 
 		global $connected_cms, $view, $search_key, $cms_select, $current_module;
 
 		// hier muss die Authentifizierung mit übergeben werden...
 		//
-		if ($GLOBALS['_SESSION']['SessSemName']['class'] == 'sem')
+		if ($_SESSION['SessSemName']['class'] == 'sem')
 		{
 			$context = 'seminar';
 
 			$status = StudipSeminarHelper::get_user_status($username, $range_id);
 
-		} else if ($GLOBALS['_SESSION']['SessSemName']['class'] == 'inst')
+		} else if ($_SESSION['SessSemName']['class'] == 'inst')
 		{
 			$context = 'institute';
 
