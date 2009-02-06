@@ -135,7 +135,7 @@ function get_actions($order="name") {
 }
 
 function show_list() {
-	print "<form action=\"$PHP_SELF\" method=\"post\">";
+	print "<form action=\"".URLHelper::getLink()."\" method=\"post\">";
 	print "<input type=\"hidden\" name=\"action\" value=\"change\">";
 	$actions=get_actions();
 	$listtable=new ZebraTable(array("width"=>"99%","padding"=>"4", "align"=>"center"));
@@ -179,7 +179,7 @@ function show_list() {
 				print $listtable->cell("<img src=\"".$GLOBALS['ASSETS_URL']."images/x_transparent.gif\">");
 			}
 			
-			print $listtable->cell("<a href=\"$PHP_SELF?action=edit&action_id=".$a->action_id."#edit\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=0></a>");
+			print $listtable->cell('<a href="'.URLHelper::getLink('#edit', array('action' => 'edit', 'action_id' => $a->action_id)).'">'.Assets::img('edit_transparent.gif').'</a>');
 			print $listtable->closeRow();
 		}
 	}
