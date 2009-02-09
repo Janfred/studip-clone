@@ -1021,8 +1021,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					<?
 					if ($auth->auth["jscript"]) {
 						printf("<font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_all=TRUE&list=TRUE') , makeButton("alleauswaehlen"));
-						// echo "&nbsp;<br>";
-						// printf("<font size=-1><a href=\"%s?select_none=TRUE&list=TRUE\">%s</a></font>", $GLOBALS['PHP_SELF'], makeButton("alleauswaehlen"));
+						echo "&nbsp;";
+						printf("<font size=-1><a href=\"%s?select_none=FALSE&list=TRUE\">%s</a></font>", $GLOBALS['PHP_SELF'], makeButton("auswahlumkehr"));
 					}
 					?>&nbsp;
 					</td>
