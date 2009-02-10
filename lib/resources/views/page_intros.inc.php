@@ -110,7 +110,7 @@ switch ($view) {
 	case "objects":
 	case "edit_object_assign":
 		$page_intro=_("Sie sehen hier die Einzelheiten der Belegung. Falls Sie über entsprechende Rechte verfügen, können Sie sie bearbeiten oder eine neue Belegung erstellen.");
-		$title=_("Belegungen anzeigen/bearbeiten").$currentObjectTitelAdd;
+		$CURRENT_PAGE=_("Belegungen anzeigen/bearbeiten").$currentObjectTitelAdd;
 		if (($view_mode == "no_nav") || ($view_mode == "search")) {
 			$infobox = array(
 						array  ("kategorie" => _("Aktionen:"),
@@ -277,9 +277,9 @@ switch ($view) {
 		if ($resources_data["actual_object"])
 			$page_intro= sprintf(_("Hier sehen Sie detaillierte Informationen der Ressource %s"), "<b>".$currentObject->getName()."</b> (".(($currentObject->getCategoryName()) ? $currentObject->getCategoryName() : _("Hierachieebene")).").");
 		if ($view_mode == "oobj")
-			$title=$SessSemName["header_line"]." - "._("Ressourcendetails");
+			$CURRENT_PAGE=$SessSemName["header_line"]." - "._("Ressourcendetails").$currentObjectTitelAdd;
 		else
-			$title=_("Anzeige der Ressourceneigenschaften");
+			$CURRENT_PAGE=_("Anzeige der Ressourceneigenschaften").$currentObjectTitelAdd;
 
 		if (($view_mode == "no_nav") || ($view_mode == "search")) {
 			$infobox[0]["kategorie"] = _("Aktionen:");
