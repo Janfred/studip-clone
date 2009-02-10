@@ -241,8 +241,12 @@ if ($group_id) {
 }
 
 // if send message at course
-if ($course_id && $perm->have_studip_perm('tutor', $course_id)) {
+if(isset($_REQUEST['course_id']) && isset($_REQUEST['filter'])){
+	$filter = in_array($_REQUEST['filter'], words('all prelim waiting')) ? $_REQUEST['filter'] : null;
+	$course_id = preg_match('/^[a-z0-9]{1,32}$/', $_REQUEST['course_id']) ? $_REQUEST['course_id'] : null;
 
+	if ($filter && $course_id && $perm->have_studip_perm('tutor', $course_id)) {
+		
 	// be sure to send it as email
 	if($emailrequest == 1) $sms_data['tmpemailsnd'] = 1;
 
@@ -265,7 +269,7 @@ if ($course_id && $perm->have_studip_perm('tutor', $course_id)) {
 
 	// append signature
 	$sms_data["sig"] = $my_messaging_settings["addsignature"];
-
+	}
 }
 
 // if send message at inst, only for admins
