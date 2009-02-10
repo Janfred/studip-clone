@@ -583,18 +583,15 @@ class AssignObject {
 			$result = $db->exec($query);
 			if ($result > 0 ) {
 				// LOGGING
-				$type=get_object_type($this->assign_user_id);
-				if ($type) {
-					if ($type=='date') {
-						$q="SELECT range_id FROM termine WHERE termin_id='{$this->assign_user_id}'";
-						$this->db->query($q);
-						$this->db->next_record();
-						$semid=$this->db->f('range_id');
-					} else if ($type=='sem') {
-						$semid=$this->assign_user_id;
+				if ($this->assign_user_id) {
+					$type = $this->getOwnerType();
+					if ($type == 'date') {
+						$semid = Seminar::GetSemIdByDateId($this->assign_user_id);
+					} else if ($type == 'sem') {
+						$semid = $this->assign_user_id;
 					} else {
 						$semid = null;
-						error_log("unknown type of assign_user_id $assign_user_id");
+						error_log("unknown type of assign_user_id {$this->assign_user_id}");
 					}
 					log_event("RES_ASSIGN_SEM",$this->resource_id,$semid,$this->getFormattedShortInfo(). $create ? " Neue Buchung" : " Buchungsupdate",$query);
 				} else {
@@ -604,8 +601,9 @@ class AssignObject {
 				$db->exec($query);
 				$this->syncronizeMetaDates();
 				return TRUE;
-			} else
+			} else {
 				return FALSE;
+			}
 		}
 		return FALSE;
 	}
@@ -651,22 +649,19 @@ class AssignObject {
 		}
 		*/
 		// LOGGING
-		$type=get_object_type($this->assign_user_id);
-		if ($type) {
-			if ($type=='date') {
-				$q="SELECT range_id FROM termine WHERE termin_id='{$this->assign_user_id}'";
-				$this->db->query($q);
-				$this->db->next_record();
-				$semid=$this->db->f('range_id');
-			} else if ($type=='sem') {
-				$semid=$this->assign_user_id;
+		if ($this->assign_user_id) {
+			$type = $this->getOwnerType();
+			if ($type == 'date') {
+				$semid = Seminar::GetSemIdByDateId($this->assign_user_id);
+			} else if ($type == 'sem') {
+				$semid = $this->assign_user_id;
 			} else {
 				$semid = null;
-				error_log("unknown type of assign_user_id $assign_user_id");
+				error_log("unknown type of assign_user_id {$this->assign_user_id}");
 			}
 			log_event("RES_ASSIGN_DEL_SEM",$this->resource_id,$semid,$this->getFormattedShortInfo(),"",$_GLOBALS['user']->id);
 		} else {
-			log_event("RES_ASSIGN_DEL_SINGLE",$this->resource_id,NULL,$this->getFormattedShortInfo,NULL,$_GLOBALS['user']->id);
+			log_event("RES_ASSIGN_DEL_SINGLE",$this->resource_id,NULL,$this->getFormattedShortInfo(),NULL,$_GLOBALS['user']->id);
 		}
 		
 		$query = sprintf("DELETE FROM resources_assign WHERE assign_id='%s'", $this->id);
