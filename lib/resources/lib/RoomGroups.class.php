@@ -89,7 +89,7 @@ class RoomGroups {
 			$snap =& new DbSnapshot(new DB_Seminar("SELECT resource_id, parent_id 
 													FROM resources_objects 
 													WHERE resource_id IN('"
-													. join("','", array_keys($room_list->getRooms()))."')"));
+													. join("','", array_keys($room_list->getRooms()))."') ORDER BY name"));
 			foreach($snap->getGroupedResult('parent_id') as $parent_id => $rooms){
 				if (is_array($rooms['resource_id'])){
 					$res_obj->restore($parent_id);

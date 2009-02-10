@@ -207,7 +207,7 @@ class ShowList extends ShowTreeRow{
 		$db2=new DB_Seminar;
 
 		//Let's start and load all the threads
-		$query = sprintf ("SELECT resource_id FROM resources_objects ro LEFT JOIN resources_categories USING (category_id) WHERE parent_id = '%s' %s %s",
+		$query = sprintf ("SELECT resource_id FROM resources_objects ro LEFT JOIN resources_categories USING (category_id) WHERE parent_id = '%s' %s %s ORDER BY ro.name",
 						$start_id,
 						($this->supress_hierachy_levels) ? "AND ro.category_id != ''" : "",
 						$this->show_only_rooms ? " AND is_room = 1" : "");
@@ -222,7 +222,7 @@ class ShowList extends ShowTreeRow{
 			//in weitere Ebene abtauchen
 			if (($this->recurse_levels == -1) || ($level + 1 < $this->recurse_levels)) {
 				//Untergeordnete Objekte laden
-				$db2->query("SELECT resource_id FROM resources_objects WHERE parent_id = '".$db->f("resource_id")."' ");
+				$db2->query("SELECT resource_id FROM resources_objects WHERE parent_id = '".$db->f("resource_id")."' ORDER BY name");
 
 				while ($db2->next_record())
 					$this->showListObjects($db2->f("resource_id"), $level+1, $result_count);
@@ -236,7 +236,7 @@ class ShowList extends ShowTreeRow{
 		$db=new DB_Seminar;
 
 		//create the query for all objects owned by the range
-		$query = sprintf ("SELECT resource_id FROM resources_objects WHERE owner_id = '%s' ", $range_id);
+		$query = sprintf ("SELECT resource_id FROM resources_objects WHERE owner_id = '%s' ORDER BY name", $range_id);
 		$db->query($query);
 
 		while ($db->next_record()) {
@@ -245,7 +245,7 @@ class ShowList extends ShowTreeRow{
 		}
 
 		//create the query for all additionale perms by the range to an object
-		$query = sprintf ("SELECT resource_id FROM  resources_user_resources WHERE user_id = '%s' ", $range_id);
+		$query = sprintf ("SELECT resource_id FROM  resources_user_resources WHERE user_id = '%s' ORDER BY name", $range_id);
 		$db->query($query);
 
 		while ($db->next_record()) {
@@ -394,7 +394,7 @@ class ShowList extends ShowTreeRow{
 	function getResourcesSearchRange($resource_id){
 		static $children = array();
 		$to_add = array();
-		$this->db->query("SELECT resource_id FROM resources_objects WHERE parent_id='$resource_id'");
+		$this->db->query("SELECT resource_id FROM resources_objects WHERE parent_id='$resource_id' ORDER BY name");
 		while($this->db->next_record()){
 			$to_add[] = $this->db->f(0);
 		}

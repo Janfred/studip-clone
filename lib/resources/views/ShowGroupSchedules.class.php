@@ -98,7 +98,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
 					foreach(array_keys($room_group->room_groups) as $gid){
 						echo '<option value="'.$gid.'" '
 							. ($this->group_id == $gid ? 'selected' : '') . '>'
-							.htmlReady(my_substr($room_group->getGroupName($gid),0,45))
+							.htmlReady(my_substr($room_group->getGroupName($gid),0,85))
 							.' ('.$room_group->getGroupCount($gid).')</option>';
 					}
 					?>
