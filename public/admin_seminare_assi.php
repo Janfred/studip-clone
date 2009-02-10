@@ -1661,7 +1661,6 @@ if (($form == 6) && ($jump_next_x))
 			// Logging
 			log_event("SEM_CREATE",$sem_create_data['sem_id'],NULL,NULL,$query);
 			log_event(($visible ? "SEM_VISIBLE" : "SEM_INVISIBLE"), $sem_create_data['sem_id'],NULL,NULL,'admin_seminare_assi',"SYSTEM");
-			openSem($sem_create_data["sem_id"]); //open Veranstaltung to administrate in the admin-area
 			$links_admin_data["referred_from"]="assi";
 			$links_admin_data["assi"]=FALSE; //protected Assi-mode off
 
@@ -1875,6 +1874,7 @@ if (($form == 6) && ($jump_next_x))
 				}
 			}
 			//end of the seminar-creation process
+			openSem($sem_create_data["sem_id"]); //open Veranstaltung to administrate in the admin-area
 		} else {
 			$errormsg .= "error§"._("<b>Fehler:</b> Die Veranstaltung wurde schon eingetragen!")."§";
     			$successful_entry=2;
