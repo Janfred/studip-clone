@@ -1357,6 +1357,9 @@ if ($save_state_x) {
 		if ($no_perm)
 			$msg->addMsg(25);
 		else {
+			// avoid warnings due to undefined result
+			$result = array();
+
 			//single date mode
 			if ($reqObj->getTerminId()) {
 				reset($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"]);
