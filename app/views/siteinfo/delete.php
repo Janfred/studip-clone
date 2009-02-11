@@ -7,7 +7,12 @@
   <? else: ?>
    <? if (!$execute): ?>     
     <div class="effect_highlight" style="text-align: center;padding: 10px;">
-      <p><?= sprintf(_("Wollen Sie die %s wirklich l&ouml;schen?"), ($detail ? "Seite" : "Rubrik mit allen Seiten"))?></p>
+        <? if ($detail){
+                $question = _("Wollen Sie die Seite wirklich löschen?");
+            }else{
+                $question = _("Wollen Sie die Rubrik mit allen Seiten wirklich löschen?")
+            } ?>
+      <p><?= $question ?></p>
         <? $delete_url = 'siteinfo/delete/'.$currentrubric.'/';
            $delete_url .= $detail ? $currentdetail : "all";
            $delete_url .= "/execute";

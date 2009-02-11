@@ -25,4 +25,7 @@
             <?= makeButton("abbrechen", "img") ?>
         </a>
     </form>
+  <? if(!$edit_rubric): ?>
+    <?= include('_help.inc') ?>
+  <? endif ?>
 </div>

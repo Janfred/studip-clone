@@ -1,0 +1,9 @@
+<? if ($error) : ?>
+    <em><?= $error ?></em>
+<? else : ?>
+<?= $title ?>
+<? if($detail) : ?>
+    (<?= $detail ?>)
+<? endif ?>
+: <?= $count ?>
+<? endif ?>
