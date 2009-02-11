@@ -134,7 +134,7 @@ if (is_array($_the_treeview->msg)){
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
-	<td class="blank" width="99%" align="left" valign="top">
+	<td class="blank" valign="top">
 	<?
 if ($_msg)	{
 	echo "\n<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">";
@@ -145,25 +145,24 @@ if ($_msg)	{
 }
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
-<tr><td align="center">
+<tr>
+	<td>
 <?
 $_the_treeview->showTree();
 ?>
-</td></tr>
+	<br/>
+	</td>
+</tr>
+<tr>
+	<td>
 <?
 // Literaturlisten-Import
-echo "<TR><TD>&nbsp;</TD></TR>\n";
-echo "<TR>\n";
-echo "  <TD>\n";
-print_lit_import_dlg();
-echo "  </TD>\n";
-echo "</TR>\n";
+print_lit_import_dlg(); 
 ?>
+	</td>
+</tr>
 </table>
 </td>
-<td class="blank" align="center" valign="top">
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr>
 <td class="blank" width="270" align="right" valign="top">
 <?
 $infobox[0] = array ("kategorie" => _("Information:"),
@@ -201,8 +200,7 @@ $infobox[1]["eintrag"][] = array('icon' => "link_intern.gif","text"  => "<a href
 
 print_infobox ($infobox, "literaturelist.jpg");
 ?>
-</td>
-</tr>
+<table width="250" align="center">
 <?=$_the_clip_form->getFormStart($_the_treeview->getSelf());?>
 <tr>
 	<td class="blank" align="center" valign="top">
@@ -222,7 +220,6 @@ echo $_the_clip_form->getFormEnd();
 ?>
 </td>
 </tr>
-<tr><td class="blank" colspan="2">&nbsp;</td></tr>
 </table>
 <?
 include ('lib/include/html_end.inc.php');

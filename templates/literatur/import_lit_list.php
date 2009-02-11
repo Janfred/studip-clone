@@ -3,7 +3,7 @@
 		<input type="hidden" name="cmd" value="import_lit_list">
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr>
-				<td class="steelkante" height="20">&nbsp;<b><?= _("Literaturlisten importieren:") ?></b></font></td>
+				<td class="steelkante" height="20"><b><?= _("Literaturlisten importieren:") ?></b></td>
 			</tr>
 	    <tr><td class="steel1">&nbsp;</TD></TR>
 			<tr>
@@ -11,9 +11,9 @@
 					<?= _("Bitte w&auml;hlen Sie eine Literaturverwaltung aus:"); ?>
 	        <select name="plugin_name" size="1" onChange="this.form.cmd='';this.form.submit();">
 					<? foreach ($GLOBALS['LIT_IMPORT_PLUGINS'] as $p) : ?>
-		          <option value="<?= $p["name"] ?>" "<?= ($p["name"]==$plugin_name ? "selected" : "") ?>">
+		          <option value="<?= $p["name"] ?>" <?= ($p["name"]==$plugin_name ? "selected" : "") ?>>
 								<?= $p["visual_name"] ?>
-							</option>
+				</option>
 					<? endforeach; ?>
 	        </select>
 
