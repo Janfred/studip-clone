@@ -86,9 +86,16 @@ function create_block_schedule_dates($seminar_id, $form_data)
 	{
 		// check if form was filled
 		if(in_array($key, array_keys($messages)))	{
-			if ($value == null) {
-				$errors[] = $messages[$key];
+			if($key=='seminar_id' || $key=='end_minute' || $key=='start_minute'){
+				if ($value == null) {
+					$errors[] = $messages[$key];
+				}
+			} else {
+				if (!$value||!is_numeric($value) ){
+					$errors[] = $messages[$key];
+				}	
 			}
+			
 			$k++;
 		}
 	}
