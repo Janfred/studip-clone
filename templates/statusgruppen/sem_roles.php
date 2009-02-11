@@ -68,7 +68,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 	<td class="<?= $cssSw->getClass() ?>" width="1%" nowrap>
 		<? if ($pos < sizeof($persons)) : ?>
 		<a href="<?= URLHelper::getLink('?cmd=move_down&role_id='. $id .'&username='. $person['username']) ?>">
-			<input type="image" src="<?= Assets::image_path('move_down') ?>">
+			<?= Assets::img('move_down') ?>
 		</a>
 		<? endif; ?>
 	</td>
@@ -76,7 +76,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 	<td class="<?= $cssSw->getClass() ?>" width="1%" nowrap style="padding-left: 4px">
 		<? if ($pos > 1) : ?>
 		<a href="<?= URLHelper::getLink('?cmd=move_up&role_id='. $id .'&username='. $person['username']) ?>">
-			<input type="image" src="<?= Assets::image_path('move_up') ?>">
+			<?= Assets::img('move_up') ?>
 		</a>
 		<? endif; ?>
 	</td>
