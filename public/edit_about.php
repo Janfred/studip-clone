@@ -680,7 +680,7 @@ if ($view == 'Daten') {
 	//persönliche Daten...
 	if ($my_about->auth_user['auth_plugin'] != "standard"){
 		echo '<tr><td align="left" valign="top" class="blank" style="padding-left:20px;">';
-		echo '<font size="-1">' . sprintf(_("Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, daher k&ouml;nnen sie einige Felder nicht ver&auml;ndern!"),$my_about->auth_user['auth_plugin']) . "</font>";
+		echo '<font size="-1">' . sprintf(_("Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, daher k&ouml;nnen Sie einige Felder nicht ver&auml;ndern!"),$my_about->auth_user['auth_plugin']) . "</font>";
 		echo "<br /><br /></td></tr>\n";
 	}
 	echo '<tr><td class=blank>';

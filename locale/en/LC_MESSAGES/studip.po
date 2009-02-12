@@ -3691,7 +3691,7 @@ msgstr "All star %s marked fields must be filled out."
 #, c-format
 msgid ""
 "Ihre Authentifizierung (%s) benutzt nicht die Stud.IP Datenbank, daher "
-"k&ouml;nnen sie einige Felder nicht ver&auml;ndern!"
+"k&ouml;nnen Sie einige Felder nicht ver&auml;ndern!"
 msgstr ""
 "Your authentication (%s) does not use the Stud.IP database and so you can "
 "not change some fields! "
