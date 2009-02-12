@@ -36,12 +36,23 @@ $perm->check("tutor");
 require_once("lib/seminar_open.php"); // initialise Stud.IP-Session
 require_once("lib/blockveranstaltungs_assistent.inc.php");
 require_once("lib/functions.php");
+require_once("lib/exceptions/access_denied.php");
 
 $_NOHEADER = true; //keinen Header anzeigen
 /* Ausgabe erzeugen---------------------------------------------------------- */
 //Header
 include ('lib/include/html_head.inc.php');
 include ('lib/include/header.php');
+
+if (isset($_REQUEST['seminar_id'])) {
+	$seminar_id = $_REQUEST['seminar_id'];
+} else {
+	$seminar_id = $SessSemName[1];
+}
+
+if (!$perm->have_studip_perm('tutor', $seminar_id)) {
+	throw new Studip_AccessDeniedException();
+}
 
 //Content
 $destination=$ABSOLUTE_URI_STUDIP."raumzeit.php?newFilter=all&x=4&y=4&cmd=applyFilter#irregular_dates"; 
@@ -54,7 +65,7 @@ echo "<SCRIPT> function reload_opener() {
  		        }  </SCRIPT>"; 
 
 if (isset($_POST['command']) && ($_POST['command'] == 'create')) {
-	$return = create_block_schedule_dates($SessSemName[1],$_POST);
+	$return = create_block_schedule_dates($seminar_id,$_POST);
 	?><script>reload_opener();</script><?
 }
 
@@ -87,6 +98,7 @@ $cssSw = new cssClassSwitcher();
 		endif; ?>
 	<tr>
 		<td class="blank" colspan="2">
+				<input type="hidden" name="seminar_id" value="<?=htmlReady($seminar_id)?>" />
 				<input type="hidden" name="command" value="create" />
 				<table border="0" cellspacing="0" cellpadding="3" width="100%">
 					<tr>

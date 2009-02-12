@@ -491,7 +491,7 @@ while ($tmp_first_date < $end_date) {
 					<TD>
 					<SCRIPT type ="text/javascript">
 					function block_fenster () {
-						f1 = window.open("blockveranstaltungs_assistent.php", "Zweitfenster", "width=550,height=600,toolbar=no, menubar=no, scrollbars=yes");
+						f1 = window.open("blockveranstaltungs_assistent.php?seminar_id=<?=$id?>", "Zweitfenster", "width=550,height=600,toolbar=no, menubar=no, scrollbars=yes");
 						f1.focus();
 					}
 					</SCRIPT>
