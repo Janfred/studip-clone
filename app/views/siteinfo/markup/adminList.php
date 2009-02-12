@@ -6,13 +6,13 @@
     <? $i = 0 ?>
     <table width="100%">
         <tr>
-            <td>
+            <td style="vertical-align: top">
         <? foreach($admins as $admin) : ?>
             <? if ($current_head != $admin['institute']) :?>
                 <? $current_head = $admin['institute'] ?>
                 <? if ($i>$switch_column) : ?>
                     </td>
-                    <td>
+                    <td style="vertical-align: top">
                     <? $i = 0 ?>
                 <? endif ?>
                 <h4><?= htmlReady($current_head) ?></h4>

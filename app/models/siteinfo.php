@@ -193,7 +193,7 @@ class SiteinfoMarkupEngine {
         $this->siteinfoMarkup("/\(:toplist ([a-z]*):\)/ei",'$this->toplist("$1")');
         $this->siteinfoMarkup("/\(:indicator ([a-z_\-]*):\)/ei",'$this->indicator("$1")');
         $this->siteinfoMarkup("/\(:history:\)/e",'$this->history()');
-        $this->siteinfoMarkup("'\[style=([^\]]*)\]\s*(.+?)\s*\[/style\]'s",'<div style="$1">$2</div>');
+        $this->siteinfoMarkup("'\[style=([^\]]*)\]\s*(.*?)\s*\[/style\]'s",'<div style="$1">$2</div>');
     }
 
     function siteinfoMarkup($pattern, $replace) {
@@ -483,7 +483,7 @@ class SiteinfoMarkupEngine {
 }
 
 function language_filter($input) {
-    $pattern = "'\[lang=(\w*)\]\s*(.+?)\s*\[/lang\]'es";
+    $pattern = "'\[lang=(\w*)\]\s*(.*?)\s*\[/lang\]'es";
     $output = preg_replace($pattern,'stripforeignlanguage(\'$1\', \'$2\')',$input);
     return $output;
 }

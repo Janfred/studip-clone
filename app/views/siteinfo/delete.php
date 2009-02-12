@@ -7,12 +7,11 @@
   <? else: ?>
    <? if (!$execute): ?>     
     <div class="effect_highlight" style="text-align: center;padding: 10px;">
-        <? if ($detail){
-                $question = _("Wollen Sie die Seite wirklich löschen?");
-            }else{
-                $question = _("Wollen Sie die Rubrik mit allen Seiten wirklich löschen?")
-            } ?>
-      <p><?= $question ?></p>
+        <? if ($detail) :?> 
+            <p><?= _("Wollen Sie die Seite wirklich löschen?") ?></p>
+        <? else : ?>
+            <p><?= _("Wollen Sie die Rubrik mit allen Seiten wirklich löschen?") ?></p>
+        <? endif  ?>
         <? $delete_url = 'siteinfo/delete/'.$currentrubric.'/';
            $delete_url .= $detail ? $currentdetail : "all";
            $delete_url .= "/execute";

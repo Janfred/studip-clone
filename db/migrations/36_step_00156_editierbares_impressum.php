@@ -80,7 +80,7 @@ class Step00156EditierbaresImpressum extends Migration {
                      '[lang=de]Stud IP ist ein Open-Source Projekt und steht unter der GNU General Public License. Sämtliche zum Betrieb notwendigen Dateien können unter http://sourceforge.net/projects/studip/ heruntergeladen werden.[/lang]".'\n'.
                      "[lang=en]Stud.IP is an Open Source Project and is covered by the Gnu General Public License (GPL). All files necessary for operation can be downloaded from http://sourceforge.net/projects/studip/ .[/lang]".'\n'.
                      "[lang=de]Die technische Grundlage bietet ein LINUX-System mit Apache Webserver sowie eine MySQL Datenbank, die über PHP gesteuert wird.[/lang]".'\n'.
-                     "[lang=enThe technical basis can be provided by a LINUX system with Apache Webserver and a MySQL database, which is then controlled by PHP.[/lang]".'\n'.
+                     "[lang=en]The technical basis can be provided by a LINUX system with Apache Webserver and a MySQL database, which is then controlled by PHP.[/lang]".'\n'.
                      "[lang=de]Im System findet ein 6-stufiges Rechtesystem Verwendung, das individuell auf verschiedenen Ebenen wirkt - etwa in Veranstaltungen, Einrichtungen, Fakultäten oder systemweit.[/lang]".'\n'.
                      "[lang=en]The system features a authorisation system with six ranks, that affects individually different levels - in courses, institutes,faculties or system wide.[/lang]".'\n'.
                      "[lang=de]Seminare oder Arbeitsgruppen können mit Passwörtern geschützt werden - die Verschlüsselung erfolgt mit einem MD5 one-way-hash.[/lang]".'\n'.
@@ -91,7 +91,9 @@ class Step00156EditierbaresImpressum extends Migration {
                      "[lang=en]The system is continually being developed and customised to the wishes of our users - [Tell us your opinion!]studip-users@lists.sourceforge.net[/lang]'),
                     (2,
                      '[lang=de]Statistik[/lang][lang=en]Statistics[/lang]', 
-                     '[lang=de]!!!Top-Listen aller Veranstaltungen[/lang][lang=en][/lang]".'\n'.
+                     '[lang=de]!!!Top-Listen aller Veranstaltungen[/lang]".'\n'.
+                     "[lang=en]Top list of all courses[/lang]".'\n'.
+                     "[style=float: right]".'\n'.
                      "(:indicator seminar_all:)".'\n'.
                      "(:indicator seminar_archived:)".'\n'.
                      "(:indicator institute_firstlevel_all:)".'\n'.
@@ -113,6 +115,7 @@ class Step00156EditierbaresImpressum extends Migration {
                      "(:indicator wiki_pages:)".'\n'.
                      "(:indicator lernmodul:)".'\n'.
                      "(:indicator resource:)".'\n'.
+                     "[/style]".'\n'.
                      "(:toplist mostparticipants:)".'\n'.
                      "(:toplist recentlycreated:)".'\n'.
                      "(:toplist mostdocuments:)".'\n'.
