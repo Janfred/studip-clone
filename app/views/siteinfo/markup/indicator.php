@@ -1,9 +1,8 @@
-<? if ($error) : ?>
-    <em><?= $error ?></em>
-<? else : ?>
-<?= $title ?>
 <? if($detail) : ?>
-    (<?= $detail ?>)
+    <span title="<?= $detail ?>">
+<? else : ?>
+    <span>
 <? endif ?>
+<?= $title ?>
+</span>
 : <?= $count ?>
-<? endif ?>

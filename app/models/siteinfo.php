@@ -377,10 +377,10 @@ class SiteinfoMarkupEngine {
     	    if  ($result->rowCount() > 0) {
                 $template->lines = $result->fetchAll(PDO::FETCH_ASSOC);
             } else {
-                $template->error = _("für die gewählte Option stehen keine Daten zur Verfügung");
+                return "";
             }
         } else {
-            $template->error = _("die gewählte Option ist nicht verfügbar");
+            return "";
         }
         return $template->render();
     }
@@ -390,10 +390,10 @@ class SiteinfoMarkupEngine {
         $db = DBManager::get();
         $indicator['seminar_all'] = array("query" => "SELECT count(*) from seminare",
                                           "title" => _("Aktive Veranstaltungen"),
-                                          "detail" => _("Alle Veranstaltungen, die nicht archiviert wurden."));
+                                          "detail" => _("alle Veranstaltungen, die nicht archiviert wurden"));
         $indicator['seminar_archived'] = array("query" => "SELECT count(*) from archiv",
                                                "title" => _("Archivierte Veranstaltungen"),
-                                               "detail" => _("Alle Veranstaltungen, die archiviert wurden."));
+                                               "detail" => _("alle Veranstaltungen, die archiviert wurden"));
         $indicator['institute_secondlevel_all'] = array("query" => "SELECT count(*) FROM Institute WHERE Institut_id != fakultaets_id",
                                                         "title" => _("beteiligte Einrichtungen"),
                                                         "detail" => _("alle Einrichtungen außer den Fakultäten"));
@@ -467,10 +467,10 @@ class SiteinfoMarkupEngine {
                 }
                 $template->count = $rows[0];
             } else {
-                $template->error = sprintf(_("Voraussetzungen für Option %s nicht vorhanden"),"&raquo;".$key."&laquo;");
+                return "";
             }
         } else {
-            $template->error = sprintf(_("Option %s nicht verfügbar"),"&raquo;".$key."&laquo;");
+            return "";
         }
         return $template->render();
     }

@@ -73,7 +73,7 @@ class Step00156EditierbaresImpressum extends Migration {
                      "Weitere Informationen finden sie auf [**www.studip.de**]http://www.studip.de , [**develop.studip.de**]http://develop.studip.de und [**blog.studip.de**]http://blog.studip.de.[/lang]".'\n\n'.
                      "[lang=en]Stud.IP is an opensource project for supporting attendance courses offered by universities, institutions of higher education and other educational institutions. The system was established at the Zentrum für interdisziplinäre Medienwissenschaft (ZiM) in the Georg-August-Universität Göttingen in cooperation with Suchi & Berg GmbH (data-quest) , Göttingen. At the present further developing takes place at various locations (among others Göttingen, Osnabrück, Oldenburg, Bremen, Hannover, Jena) under coordination through the Stud.IP-CoreGroup.".'\n\n'.
                      "Stud.IP is covered by the GNU General Public Licence, version 2.".'\n\n'.
-                     "Further information can be found under [**www.studip.de**]http://www.studip.de , [**develop.studip.de**]http://develop.studip.de and [**blog.studip.de**]http://blog.studip.de.[\lang]".'\n\n'.
+                     "Further information can be found under [**www.studip.de**]http://www.studip.de , [**develop.studip.de**]http://develop.studip.de and [**blog.studip.de**]http://blog.studip.de.[/lang]".'\n\n'.
                      "(:coregroup:)'),
                     (2,
                      '[lang=de]Technik[/lang][lang=en]Technology[/lang]',
