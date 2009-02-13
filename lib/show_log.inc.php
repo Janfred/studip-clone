@@ -63,11 +63,18 @@ function end_form($from) {
 
 function showlog_search_form($actionfilter, $searchmode, $objecttype, $objs, $searchobject, $object) {
 //print "<p>showlog_search_from($actionfilter, $searchmode, $objecttype, $objs, $searchobjects)";
+	$db = DBManager::get();
+	$result = $db->query('SELECT action_id, COUNT(*) AS count FROM log_events GROUP BY action_id');
+	foreach ($result as $row) {
+		$log_count[$row['action_id']] = $row['count'];
+	}
 	$db=new DB_Seminar;
 	$db->query("SELECT action_id, description, SUBSTRING_INDEX(name, '_', 1) AS log_group FROM log_actions ORDER BY log_group, description");
 	$options=array(array("val"=>"all","text"=>_("Alle Aktionen"),"group"=>NULL));
 	while($db->next_record()) {
-		$options[]=array("val"=>$db->f('action_id'), "text"=>$db->f('description'), "group"=>$db->f('log_group'));
+		if ($log_count[$db->f('action_id')] > 0) {
+			$options[]=array("val"=>$db->f('action_id'), "text"=>$db->f('description'), "group"=>$db->f('log_group'));
+		}
 	}
 	$table=new Table(array("padding"=>3, "valign"=>"top"));
 	echo $table->openRow();
@@ -95,7 +102,7 @@ function showlog_search_form($actionfilter, $searchmode, $objecttype, $objs, $se
 		echo "<option value=\"sem\">"._("Veranstaltung");
 		echo "<option value=\"inst\">"._("Einrichtung");
 		echo "<option value=\"user\">"._("BenutzerIn");
-		//echo "<option value=\"res\">"._("Ressource");
+		echo "<option value=\"res\">"._("Ressource");
 		echo "</select>\n";
 		echo "&nbsp;";
 		echo "<input type=hidden name=\"searchmode\" value=\"search\">\n";
