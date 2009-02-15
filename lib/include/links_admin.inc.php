@@ -305,7 +305,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	// "Log" tab for log view and administration (Root only)
 	if ($perm->have_perm("root") && $LOG_ENABLE) {
-		$structure["log"]=array ('topKat'=>"", 'name'=>_("Log"), 'link'=>"show_log.php", 'active'=>FALSE);
+		$structure["log"]=array ('topKat'=>"", 'name'=>_("Log"), 'link'=>URLHelper::getLink('dispatch.php/event_log/show'), 'active'=>FALSE);
 	}
 
 	$structure["modules"]=array ('topKat'=>"", 'name'=>_("Tools"), 'link'=>"export.php", 'active'=>FALSE);
@@ -436,8 +436,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$structure["admin_teilnehmer_view"]=array ('topKat'=>"global", 'name'=>_("Teilnehmeransicht"), 'link'=>"admin_teilnehmer_view.php", 'active'=>FALSE);
 
 		if ($LOG_ENABLE) {
-			$structure["show_log"]=array ('topKat'=>"log", 'name'=>_("Log"), 'link'=>"show_log.php", 'active'=>FALSE);
-			$structure["admin_log"]=array ('topKat'=>"log", 'name'=>_("Einstellungen"), 'link'=>"admin_log.php", 'active'=>FALSE);
+			$structure["show_log"]=array ('topKat'=>"log", 'name'=>_("Log"), 'link'=>URLHelper::getLink('dispatch.php/event_log/show'), 'active'=>FALSE);
+			$structure["admin_log"]=array ('topKat'=>"log", 'name'=>_("Einstellungen"), 'link'=>URLHelper::getLink('dispatch.php/event_log/admin'), 'active'=>FALSE);
 		}
 	}
 	// create sublinks for administration plugins
@@ -604,12 +604,6 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			break;
 			case "admin_config.php":
 				$reiter_view = "config";
-				break;
-			case "show_log.php":
-				$reiter_view = "show_log";
-				break;
-			case "admin_log.php":
-				$reiter_view = "admin_log";
 				break;
 			case "plugins.php":
 				// check if view is delegated to a bottomkat
