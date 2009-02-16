@@ -182,7 +182,7 @@ class SemesterData {
 		if (!$timestamp){
 			$timestamp = time();
 		}
-		$this->db->query("SELECT * FROM semester_data WHERE beginn > $timestamp LIMIT 1");
+		$this->db->query("SELECT * FROM semester_data WHERE beginn > $timestamp ORDER BY beginn LIMIT 1");
 		if ($this->db->next_record()){
 			return $this->wrapSemesterData();
 		}
