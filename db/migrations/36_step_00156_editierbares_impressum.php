@@ -103,10 +103,10 @@ class Step00156EditierbaresImpressum extends Migration {
                      "The system is continually being developed and customised to the wishes of our users - [Tell us your opinion!]studip-users@lists.sourceforge.net[/lang]'),
                     (2,
                      '[lang=de]Statistik[/lang][lang=en]Statistics[/lang]', 
-                     '[lang=de]!!!!Top-Listen aller Veranstaltungen[/lang]".'\n'.
-                     "[lang=en]!!!!Top list of all courses[/lang]".'\n'.
+                     '[lang=de]!Top-Listen aller Veranstaltungen[/lang]".
+                     "[lang=en]!Top list of all courses[/lang]".'\n'.
                      "[style=float: right]".'\n'.
-                     "[lang=de]!!!!Statistik[/lang][lang=en]!!!!statistics[/lang]".'\n'.
+                     "[lang=de]!Statistik[/lang][lang=en]!statistics[/lang]".'\n'.
                      "(:indicator seminar_all:)".'\n'.
                      "(:indicator seminar_archived:)".'\n'.
                      "(:indicator institute_firstlevel_all:)".'\n'.
