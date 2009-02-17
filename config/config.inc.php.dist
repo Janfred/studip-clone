@@ -167,9 +167,6 @@ $SEM_CLASS[3]=array("name"=>_("Community"),
 
 /*
 name the allowed course-types and assign them to one of the above classes
-alternative titles for DozentIn, TutorIn, ... can be specified within each type:
-  "title_dozent" => array(_("singular form"), _("plural form"))
-("title_tutor", "title_autor", "title_user", "title_accepted" also exist)
 */
 $SEM_TYPE_MISC_NAME=_("sonstige"); //this name is replaced by the common name (=course)
 $SEM_TYPE[1]=array("name"=>_("Vorlesung"), "class"=>1);

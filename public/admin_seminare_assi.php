@@ -414,8 +414,6 @@ if ($form == 1)
 		$sem_create_data["sem_bet_inst"]=$tmp_create_data_bet_inst;
 		}
 	$i=0;
-	$sem_create_data["sem_status"]=$sem_status;
-	$sem_create_data["sem_art"]=$sem_art;
 	}
 
 if ($form == 2) {
@@ -462,6 +460,8 @@ if ($form == 2) {
 		$sem_create_data["sem_sec_lese"]=3;
 		$sem_create_data["sem_sec_schreib"]=3;
 	}
+	$sem_create_data["sem_status"]=$sem_status;
+	$sem_create_data["sem_art"]=$sem_art;
 	}
 
 if ($form == 3)
@@ -979,19 +979,19 @@ elseif (($form == 2) && ($jump_next_x)) //wenn alles stimmt, Checks und Sprung a
 		}
 	if ($badly_dozent_is_tutor) {
 		$level=2; //wir bleiben auf der zweiten Seite
-		$errormsg=$errormsg."error§". sprintf(_("Sie d&uuml;rfen einen/eine %s nicht gleichzeitig als %s eintragen!"), get_title_for_status('dozent', 1, $sem_create_data["sem_status"]), get_title_for_status('tutor', 1, $sem_create_data["sem_status"]))."§";
+		$errormsg=$errormsg."error§"._("Sie d&uuml;rfen dieselben DozentInnen nicht gleichzeitig als TutorInnen eintragen!")."§";
 	}
 
  	if (sizeof($sem_create_data["sem_doz"])==0)
 		{
 		$level=2; //wir bleiben auf der zweiten Seite
-		$errormsg=$errormsg."error§". sprintf(_("Bitte geben Sie mindestens einen/eine %s f&uuml;r die Veranstaltung an!"), get_title_for_status('dozent', 1, $sem_create_data["sem_status"]))."§";
+		$errormsg=$errormsg."error§"._("Bitte geben Sie mindestens einen Dozent oder eine Dozentin f&uuml;r die Veranstaltung an!")."§";
 		}
 	elseif ((!$perm->have_perm("root")) && (!$perm->have_perm("admin")))
 		{
 		if (!array_key_exists($user_id, $sem_create_data['sem_doz'])) {
 			$level=2;
-			$errormsg=$errormsg."error§". sprintf(_("Sie m&uuml;ssen wenigstens sich selbst als %s f&uuml;r diese Veranstaltung angeben! Der Eintrag wird automatisch gesetzt."), get_title_for_status('dozent', 1, $sem_create_data["sem_status"]))."§";
+			$errormsg=$errormsg."error§"._("Sie m&uuml;ssen wenigstens sich selbst als DozentIn f&uuml;r diese Veranstaltung angeben! Der Eintrag wird automatisch gesetzt.")."§";
 			$sem_create_data['sem_doz'][$user_id]= count($sem_create_data['sem_doz']) + 1;
 			}
 		}
@@ -2116,43 +2116,6 @@ elseif ((!$level) || ($level == 1))
 							>
 						</td>
 					</tr>
-					<tr <? $cssSw->switchClass() ?>>
-						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							<?=_("Typ der Veranstaltung:"); ?>
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
-							&nbsp; <select name="sem_status">
-							<?
-								foreach ($SEM_TYPE as $sem_type_id => $sem_type) {
-									if ($sem_type["class"] == $sem_create_data["sem_class"])
-										printf("<option %s value=%s>%s</option>",
-										       $sem_create_data["sem_status"] == $sem_type_id
-										         ? "selected"
-										         : "",
-										       $sem_type_id,
-										       $sem_type["name"]);
-								}
-							?>
-							</select> <br />
-							&nbsp; <font size="-1"> <?=_("in der Kategorie"); ?> <b><? echo $SEM_CLASS[$sem_create_data["sem_class"]]["name"] ?></b></font>
-							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
-								<? echo tooltip(_("Über den Typ der Veranstaltung werden die Veranstaltungen innerhalb von Listen gruppiert."), TRUE, TRUE) ?>
-							>
-							<font color="red" size=+2>*</font>
-						</td>
-					</tr>
-					<tr <? $cssSw->switchClass() ?>>
-						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
-							<?=_("Art der Veranstaltung:"); ?>
-						</td>
-						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
-							&nbsp; <input type="text" name="sem_art" size=30 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_art"])) ?>">
-							<font size=-1><?=_("(eigene Beschreibung)"); ?></font>
-							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
-								<? echo tooltip(_("Hier können Sie eine frei wählbare Bezeichnung für die Art der Veranstaltung wählen."), TRUE, TRUE) ?>
-							>
-						</td>
-					</tr>
 					<?
 					if (!$SEM_CLASS[$sem_create_data["sem_class"]]["compact_mode"]) {
 					?>
@@ -2392,7 +2355,7 @@ elseif ((!$level) || ($level == 1))
 							?>
 							</select>
 							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
-								<? echo tooltip(sprintf(_("Bitte markieren Sie hier alle Einrichtungen, an denen die Veranstaltung ebenfalls angeboten wird. Bitte beachten Sie: Sie können später nur %s aus den Einrichtungen auswählen, die entweder als Heimat- oder als beteiligte Einrichtung markiert worden sind. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten und dann auf die Einträge klicken."), get_title_for_status('dozent', 2, $sem_create_data["sem_status"])), TRUE, TRUE) ?>
+								<? echo tooltip(_("Bitte markieren Sie hier alle Einrichtungen, an denen die Veranstaltung ebenfalls angeboten wird. Bitte beachten Sie: Sie können später nur DozentInnen aus den Einrichtungen auswählen, die entweder als Heimat- oder als beteiligte Einrichtung markiert worden sind. Sie können mehrere Einträge markieren, indem sie die STRG bzw. APPLE Taste gedrückt halten und dann auf die Einträge klicken."), TRUE, TRUE) ?>
 							>
 						</td>
 					</tr>
@@ -2457,7 +2420,10 @@ if ($level == 2)
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 						<?
-						echo get_title_for_status('dozent', count($sem_create_data["sem_doz"]), $sem_create_data["sem_status"]);
+						if (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
+							echo _("DozentInnen:");
+						else
+							echo _("LeiterInnen:");
 						?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="40%">
@@ -2511,12 +2477,18 @@ if ($level == 2)
                            echo "</table>";
                      //     printf ("&nbsp; <a href=\"%s?delete_doz=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\"></a> &nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), get_fullname($key,"full_rev",true), get_username($key));
 						 } else {
-								printf ("<font size=\"-1\">&nbsp;  ". sprintf(_("Keine %s gew&auml;hlt."), get_title_for_status('dozent', 2, $sem_create_data["sem_status"]))."</font><br >");
+								if ($SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
+									printf ("<font size=\"-1\">&nbsp;  "._("Keine LeiterIn gew&auml;hlt.")."</font><br >");
+								else
+									printf ("<font size=\"-1\">&nbsp;  "._("Keine DozentIn gew&auml;hlt.")."</font><br >");
 							}
 							?>
 							&nbsp; <img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
 								<?
-								echo tooltip(sprintf(_("Die Namen der %s, die die Veranstaltung leiten. Nutzen Sie die Suchfunktion, um weitere Eintragungen vorzunehmen, oder das Mülltonnensymbol, um Einträge zu löschen."), get_title_for_status('dozent', 2, $sem_create_data["sem_status"])), TRUE, TRUE);
+								if (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
+									echo tooltip(_("Die Namen der DozentInnen, die die Veranstaltung leiten. Nutzen Sie die Suchfunktion, um weitere Eintragungen vorzunehmen oder das Mülltonnensymbol, um Einträge zu löschen."), TRUE, TRUE);
+								else
+									echo tooltip(_("Die Namen der LeiterInnen der Veranstaltung. Nutzen Sie die Suchfunktion, um weitere Eintragungen vorzunehmen oder das Mülltonnensymbol, um Einträge zu löschen."), TRUE, TRUE);
 								?>
 							>
 							<font color="red" size=+2>*</font>
@@ -2548,8 +2520,7 @@ if ($level == 2)
 							if ((!$search_exp_doz) || (($search_exp_doz) && (!$db->num_rows()))) {
 								?>
 								<font size=-1>
-								<a name="anker"></a>
-								<?= $search_exp_doz ? _("KeineN NutzerIn gefunden.") : sprintf(_("%s hinzuf&uuml;gen"), get_title_for_status('dozent', 1, $sem_create_data["sem_status"])) ?>
+								<? printf ("%s %s", (($search_exp_doz) && (!$db->num_rows())) ? _("KeineN NutzerIn gefunden.")."<a name=\"anker\"></a>" : "",   (!$search_exp_doz) ? (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"]) ? _("DozentIn hinzuf&uuml;gen") : _("LeiterIn hinzuf&uuml;gen")  : "");?>
 								</font><br />
 								<input type="TEXT" size="30" maxlength="255" name="search_exp_doz" />&nbsp;
 								<input type="IMAGE" src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" <? echo tooltip(_("Suche starten")) ?> border="0" name="search_doz" />
@@ -2561,7 +2532,10 @@ if ($level == 2)
 					<tr <? $cssSw->switchClass() ?>>
 						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
 						<?
-						echo get_title_for_status('tutor', count($sem_create_data["sem_tut"]), $sem_create_data["sem_status"]);
+						if (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
+							echo _("TutorInnen:");
+						else
+							echo _("Mitglieder:") . " <br />";
 						?>
 						</td>
 						<td class="<? echo $cssSw->getClass() ?>" width="40%">
@@ -2617,12 +2591,18 @@ if ($level == 2)
                         }
                         echo "</table>";
 							} else {
-								printf ("<font size=\"-1\">&nbsp;  ". sprintf(_("Keine %s gew&auml;hlt."), get_title_for_status('tutor', 2, $sem_create_data["sem_status"]))."</font><br >");
+								if ($SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
+									printf ("<font size=\"-1\">&nbsp;  "._("Kein Mitglied gew&auml;hlt.")."</font><br >");
+								else
+									printf ("<font size=\"-1\">&nbsp;  "._("Keine TutorIn gew&auml;hlt.")."</font><br >");
 							}
 							?>
 							&nbsp; <img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
 								<?
-								echo tooltip(sprintf(_("Die Namen der %s, die in der Veranstaltung weitergehende Rechte erhalten (meist studentische Hilfskräfte). Nutzen Sie die Suchfunktion (Lupensymbol), um weitere Eintragungen vorzunehmen, oder das Mülltonnensymbol, um Einträge zu löschen."), get_title_for_status('tutor', 2, $sem_create_data["sem_status"])), TRUE, TRUE);
+								if (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
+									echo tooltip(_("Die Namen der TutorInnen, die in der Veranstaltung weitergehende Rechte erhalten (meist studentische Hilfskräfte). Nutzen Sie die Suchfunktion (Lupensymbol), um weitere Eintragungen vorzunehmen, oder das Mülltonnensymbol, um Einträge zu löschen."), TRUE, TRUE);
+								else
+									echo tooltip(_("Die Namen der Mitglieder der Veranstaltung. Nutzen Sie die Suchfunktion (Lupensymbol), um weitere Eintragungen vorzunehmen oder das Mülltonnensymbol, um Einträge zu löschen."), TRUE, TRUE);
 								?>
 							>
 						</td>
@@ -2653,8 +2633,7 @@ if ($level == 2)
 							if ((!$search_exp_tut) || (($search_exp_tut) && (!$db->num_rows()))) {
 								?>
 								<font size=-1>
-								<a name="anker"></a>
-								<?= $search_exp_tut ? _("KeineN NutzerIn gefunden.") : sprintf(_("%s hinzuf&uuml;gen"), get_title_for_status('tutor', 1, $sem_create_data["sem_status"])) ?>
+								<? printf ("%s %s", (($search_exp_tut) && (!$db->num_rows())) ? _("KeineN NutzerIn gefunden.")."<a name=\"anker\"></a>" : "",   (!$search_exp_tut) ? (!$SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"]) ? _("TutorIn hinzuf&uuml;gen") : _("Mitglied hinzuf&uuml;gen")  : "");?>
 								</font><br />
 								<input type="TEXT" size="30" maxlength="255" name="search_exp_tut" />&nbsp;
 								<input type="IMAGE" src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" <? echo tooltip(_("Suche starten")) ?> border="0" name="search_tut" /><br />
@@ -2662,6 +2641,43 @@ if ($level == 2)
 								<?
 							}
 							?>
+						</td>
+					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							<?=_("Typ der Veranstaltung:"); ?>
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
+							&nbsp; <select name="sem_status">
+							<?
+								foreach ($SEM_TYPE as $sem_type_id => $sem_type) {
+									if ($sem_type["class"] == $sem_create_data["sem_class"])
+										printf("<option %s value=%s>%s</option>",
+										       $sem_create_data["sem_status"] == $sem_type_id
+										         ? "selected"
+										         : "",
+										       $sem_type_id,
+										       $sem_type["name"]);
+								}
+							?>
+							</select> <br />
+							&nbsp; <font size="-1"> <?=_("in der Kategorie"); ?> <b><? echo $SEM_CLASS[$sem_create_data["sem_class"]]["name"] ?></b></font>
+							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
+								<? echo tooltip(_("Über den Typ der Veranstaltung werden die Veranstaltungen innerhalb von Listen gruppiert."), TRUE, TRUE) ?>
+							>
+							<font color="red" size=+2>*</font>
+						</td>
+					</tr>
+					<tr <? $cssSw->switchClass() ?>>
+						<td class="<? echo $cssSw->getClass() ?>" width="10%" align="right">
+							<?=_("Art der Veranstaltung:"); ?>
+						</td>
+						<td class="<? echo $cssSw->getClass() ?>" width="90%" colspan=3>
+							&nbsp; <input type="text" name="sem_art" size=30 maxlength=254 value="<? echo htmlReady(stripslashes($sem_create_data["sem_art"])) ?>">
+							<font size=-1><?=_("(eigene Beschreibung)"); ?></font>
+							<img  src="<?= $GLOBALS['ASSETS_URL'] ?>images/info.gif"
+								<? echo tooltip(_("Hier können Sie eine frei wählbare Bezeichnung für die Art der Veranstaltung wählen."), TRUE, TRUE) ?>
+							>
 						</td>
 					</tr>
 
@@ -4110,8 +4126,14 @@ if ($level == 7)
 								print "<li>"._("Veranstaltung f&uuml;r <b>1</b> beteiligte Einrichtung angelegt.")."<br><br>";
 							elseif ($count_bet_inst>1)
 								printf ("<li>"._("Veranstaltung f&uuml;r <b>%s</b> beteiligte Einrichtungen angelegt.")."<br><br>", $count_bet_inst);
-							printf("<li>"._("<b>%d</b> %s f&uuml;r die Veranstaltung eingetragen.")."<br><br>", $count_doz, get_title_for_status('dozent', $count_doz, $sem_create_data["sem_status"]));
-							printf("<li>"._("<b>%d</b> %s f&uuml;r die Veranstaltung eingetragen.")."<br><br>", $count_tut, get_title_for_status('tutor', $count_tut, $sem_create_data["sem_status"]));
+							if ($count_doz==1)
+								print "<li>"._("<b>1</b> DozentIn f&uuml;r die Veranstaltung eingetragen.")."<br><br>";
+							else
+								printf ("<li>"._("<b>%s</b> DozentInnen f&uuml;r die Veranstaltung eingetragen.")."<br><br>", $count_doz);
+							if ($count_tut==1)
+								print "<li>"._("<b>1</b> TutorIn f&uuml;r die Veranstaltung eingetragen.")."<br><br>";
+							elseif ($count_tut>1)
+								printf ("<li>"._("<b>%s</b> TutorInnen f&uuml;r die Veranstaltung eingetragen.")."<br><br>", $count_tut);
 							if ($count_doms==1)
 								print "<li>"._("<b>1</b> Nutzerdom&auml;ne f&uuml;r die Veranstaltung eingetragen.")."<br><br>";
 							elseif ($count_doms>1)

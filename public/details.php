@@ -122,7 +122,7 @@ if ($sem_id) {
 
 	if ($perm->have_studip_perm("user",$sem_id) && !$perm->have_studip_perm("tutor",$sem_id)) {
 		if ($db2->f("admission_binding"))
-			$info_msg = sprintf(_("Das Austragen aus der Veranstaltung ist nicht mehr m&ouml;glich, da das Abonnement bindend ist.<br />Bitte wenden Sie sich an den/die %s der Veranstaltung!"), get_title_for_status('dozent', 1), $db2->f('status'));
+			$info_msg = _("Das Austragen aus der Veranstaltung ist nicht mehr m&ouml;glich, da das Abonnement bindend ist.<br />Bitte wenden Sie sich an die DozentIn der Veranstaltung!");
 		else
 			$delete_msg = _("Tragen Sie sich hier aus der Veranstaltung aus");
 	}
@@ -372,10 +372,12 @@ print_infobox ($infobox,"contract.jpg");
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="45%" valign="top">
 				<?
-				//wer macht den Dozenten?
+			//wer macht den Dozenten?
 				$db->query ("SELECT " . $_fullname_sql['full'] . " AS fullname, seminar_user.user_id, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY position, Nachname");
-				if ($db->num_rows() > 0)
-					printf("<font size=-1><b>%s:</b></font><br />", get_title_for_status('dozent', $db->num_rows(), $db2->f('status')));
+				if ($db->num_rows() > 1)
+					printf ("<font size=-1><b>%s:</b></font><br />", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("LeiterInnen") : _("DozentInnen"));
+				elseif ($db->num_rows() == 1)
+					printf ("<font size=-1><b>%s:</b></font><br />", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("LeiterIn") : _("DozentIn"));
 				else
 					print "&nbsp; ";
 				while ($db->next_record()) {
@@ -391,8 +393,10 @@ print_infobox ($infobox,"contract.jpg");
 				<?
 				//und wer ist Tutor?
 				$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY position, Nachname");
-				if ($db->num_rows() > 0)
-					printf ("<font size=-1><b>%s:</b></font><br />", get_title_for_status('tutor', $db->num_rows(), $db2->f('status')));
+				if ($db->num_rows() > 1)
+					printf ("<font size=-1><b>%s:</b></font><br />", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("Mitglieder") : _("TutorInnen"));
+				elseif ($db->num_rows() == 1)
+					printf ("<font size=-1><b>%s:</b></font><br />", ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) ? _("Mitglied") : _("TutorIn"));
 				else
 					print "&nbsp; ";
 				while ($db->next_record()) {
@@ -797,8 +801,8 @@ print_infobox ($infobox,"contract.jpg");
 				if ($db3->f("anzahl")) $count += $db3->f("anzahl");
 				if ($db4->f("anzahl")) $count += $db4->f("anzahl");
 				printf("<font size=-1><b>" . _("Anzahl der Teilnehmenden:") . "&nbsp;</b></font><font size=-1>%s </font>", ($count!=0) ? $count : _("keine"));
-				printf("<br><font size=-1><b>%s:&nbsp;</b></font><font size=-1>%s </font>", get_title_for_status('dozent', $db3->f("anz_dozent"), $db2->f('status')), $db3->f("anz_dozent") ? $db3->f("anz_dozent") : _("keine"));
-				printf("<br><font size=-1><b>%s:&nbsp;</b></font><font size=-1>%s </font>", get_title_for_status('tutor', $db3->f("anz_tutor"), $db2->f('status')), $db3->f("anz_tutor") ? $db3->f("anz_tutor") : _("keine"));
+				printf("<br><font size=-1><b>" . ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] ? _("LeiterInnen") : _("DozentInnen")) . ":&nbsp;</b></font><font size=-1>%s </font>", ($db3->f("anz_dozent") ? $db3->f("anz_dozent") : _("keine")));
+				printf("<br><font size=-1><b>" . ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] ? _("Mitglieder") : _("TutorInnen")) . ":&nbsp;</b></font><font size=-1>%s </font>", ($db3->f("anz_tutor") ? $db3->f("anz_tutor") : _("keine")));
 				printf("<br><font size=-1><b>" . _("Sonstige") . ":&nbsp;</b></font><font size=-1>%s </font>", (($db3->f("anz_autor")+ $db3->f("anz_user") + $db4->f("anzahl")) ? $db3->f("anz_autor")+$db3->f("anz_user") +$db4->f("anzahl") : _("keine")));
 			?>
 			</td>

@@ -495,13 +495,6 @@ function move_tutor ($username, $s_id, $direction)
 	}
 }
 
-// load necessary data from the saved lecture
-$db->query("SELECT * FROM seminare WHERE Seminar_id = '$s_id'");
-$db->next_record();
-
-// fetch SEM_TYPE for get_title_for_status() calls
-$seminar_type = $db->f('status');
-
 //delete Tutoren/Dozenten
 if ($delete_doz) {
 	if ($perm->have_studip_perm("dozent",$s_id)) {
@@ -509,7 +502,7 @@ if ($delete_doz) {
 		if (($auth->auth["perm"] == "dozent") && ($delete_doz == get_username($user_id)))
 			$msg .= "error§" . _("Sie d&uuml;rfen sich nicht selbst aus der Veranstaltung austragen.") . "§";
 		elseif ($db2->nf() <2)
-			$msg .= sprintf ("error§" . _("Die Veranstaltung muss wenigstens <b>einen/eine</b> %s eingetragen haben! Tragen Sie zun&auml;chst einen anderen ein, um diesen zu l&ouml;schen.") . "§", get_title_for_status('dozent', 1, $seminar_type));
+			$msg .= sprintf ("error§" . _("Die Veranstaltung muss wenigstens <b>einen</b> %s eingetragen haben! Tragen Sie zun&auml;chst einen anderen ein, um diesen zu l&ouml;schen.") . "§", ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["workgroup_mode"]) ? _("Leiter") : _("Dozenten"));
 		else {
 
          $db2->query ( "SELECT position " .
@@ -570,6 +563,10 @@ if ($s_send) {
 		$run = FALSE;
 	}
 
+	//Load necessary data from the saved lecture
+	$db->query("SELECT * FROM seminare WHERE Seminar_id = '$s_id' ");
+	$db->next_record();
+
 	// Do we have all necessary data?
 	if (empty($Name) && !LockRules::Check($s_id, 'Name')) {
 		$msg .= "error§" . _("Bitte geben Sie den <b>Namen der Veranstaltung</b> ein!") . "§";
@@ -585,7 +582,7 @@ if ($s_send) {
 	if (($perm->have_perm("admin")) && (!$add_doz)) {
 		$db2->query ("SELECT user_id FROM seminar_user WHERE Seminar_id = '$s_id' AND status = 'dozent' ");
 		if ($db2->nf() == 0) {
-			$msg .= sprintf ("error§" . _("Bitte geben Sie wenigstens <b>einen/eine</b> %s an.") . "§", get_title_for_status('dozent', 1, $seminar_type));
+			$msg .= sprintf ("error§" . _("Bitte geben Sie wenigstens <b>einen</b> %s an.") . "§", ($SEM_CLASS[$SEM_TYPE[$Status]["class"]]["workgroup_mode"]) ? "Leiter" : "Dozenten");
 			$run = FALSE;
 		}
 	}
@@ -1148,15 +1145,15 @@ if (($s_id) && (auth_check())) {
 			<?
 			//Fuer Tutoren eine Sonderregelung, da sie nicht alle Daten aendern duerfen
 			if ($my_perms == "tutor") {
-				$db3->query("SELECT ". $_fullname_sql['full'] ." FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE status = 'dozent' AND Seminar_id='$s_id' ORDER BY Nachname");
 				?>
-				<td class="<? echo $cssSw->getClass() ?>" align="right"><?= get_title_for_status('dozent', $db3->num_rows(), $seminar_type) ?>
+				<td class="<? echo $cssSw->getClass() ?>" align="right"><? if (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) echo  _("DozentInnen"); else echo _("LeiterInnen");?>
 				<? if (LockRules::Check($s_id, 'dozent')) : ?>
-				  <?= $label_lock_text ?>
+				  <?= $label_lock_text; ?>
         <? endif; ?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align="left" colspan="2">&nbsp;
 				<?
+				$db3->query("SELECT ". $_fullname_sql['full'] ." FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE status = 'dozent' AND Seminar_id='$s_id' ORDER BY Nachname");
 				$i=0;
 				while ($db3->next_record()) {
 					if ($i)
@@ -1167,13 +1164,11 @@ if (($s_id) && (auth_check())) {
 				?>
 			</tr>
 			<tr>
-				<?
-				$db3->query("SELECT ". $_fullname_sql['full'] ." FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE status = 'tutor' AND Seminar_id='$s_id' ORDER BY position, Nachname");
-				?>
-				<td class="<? echo $cssSw->getClass() ?>" align=right><?= get_title_for_status('tutor', $db3->num_rows(), $seminar_type) ?>
+				<td class="<? echo $cssSw->getClass() ?>" align=right><? if (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) echo _("TutorInnen"); else echo _("Mitglieder");?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" align=left colspan=2>&nbsp;
 				<?
+				$db3->query("SELECT ". $_fullname_sql['full'] ." FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING(user_id) WHERE status = 'tutor' AND Seminar_id='$s_id' ORDER BY position, Nachname");
 				$i=0;
 				while ($db3->next_record()) {
 					if ($i)
@@ -1190,9 +1185,9 @@ if (($s_id) && (auth_check())) {
 			} else {
 
 				if ($perm->have_perm("admin"))
-					printf ("<td %s align=right><b>%s</b></td>", $cssSw->getFullClass(), get_title_for_status('dozent', 2, $seminar_type));
+					printf ("<td %s align=right><b>%s</b></td>", $cssSw->getFullClass(), (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("DozentInnen") : _("LeiterInnen"));
 				else
-					printf ("<td %s align=right>%s %s</td>", $cssSw->getFullClass(), get_title_for_status('dozent', 2, $seminar_type), LockRules::Check($s_id, 'dozent') ? $label_lock_text : '');
+					printf ("<td %s align=right>%s %s</td>", $cssSw->getFullClass(), (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("DozentInnen") : _("LeiterInnen"), LockRules::Check($s_id, 'dozent') ? $label_lock_text : '');
 
 				?>
 				<td class="<? echo $cssSw->getClass() ?>" align="left" colspan=1>
@@ -1236,7 +1231,7 @@ if (($s_id) && (auth_check())) {
 						?>
 						<?if (!LockRules::Check($s_id, 'dozent')) { ?>
 						<font size=-1>
-						<?= $search_exp_doz ? _("Keinen Nutzenden gefunden.") : sprintf(_("%s hinzuf&uuml;gen"), get_title_for_status('dozent', 1, $seminar_type)) ?>
+						<? printf ("%s %s", (($search_exp_doz) && ($no_doz_found)) ? _("Keinen Nutzenden gefunden.") . " <a name=\"anker\"></a>" : "",   (!$search_exp_doz) ? (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("DozentIn hinzuf&uuml;gen") : _("LeiterIn hinzuf&uuml;gen")  : "");?>
 						</font><br />
 						<input type="TEXT" size="30" maxlength="255" name="search_exp_doz" />&nbsp;
 						<input type="IMAGE" src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" <? echo tooltip(_("Suche starten")) ?> border="0" name="search_doz" /><br />
@@ -1255,7 +1250,8 @@ if (($s_id) && (auth_check())) {
 			</tr>
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" align="right">
-				<?= get_title_for_status('tutor', 2, $seminar_type) ?>
+				  <? if (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"])
+				    echo _("TutorInnen"); else echo _("Mitglieder");?>
 					  <? if (LockRules::Check($s_id, 'tutor')) : ?>
 						  <?= $label_lock_text ?>
 						<? endif; ?>
@@ -1302,7 +1298,7 @@ if (($s_id) && (auth_check())) {
 					if ($no_tut_found) {
 						?>
 						<font size=-1>
-						<?= $search_exp_tut ? _("Keinen Nutzenden gefunden.") : sprintf(_("%s hinzuf&uuml;gen"), get_title_for_status('tutor', 1, $seminar_type)) ?>
+						<? printf ("%s %s", (($search_exp_tut) && ($no_tut_found)) ? _("Keinen Nutzenden gefunden.") . "<a name=\"anker\"></a>" : "",   (!$search_exp_tut) ? (!$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["workgroup_mode"]) ? _("TutorIn hinzuf&uuml;gen") : _("Mitglied hinzuf&uuml;gen")  : "");?>
 						</font><br />
 						<input type="TEXT" size="30" maxlength="255" name="search_exp_tut" />&nbsp;
 						<input type="IMAGE" src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" <? echo tooltip(_("Suche starten")) ?> border="0" name="search_tut" /><br />
