@@ -3,10 +3,10 @@
 		<? if (!$value['topKat']) : ?>
 			<li<?= $value['active'] ? ' class="current"' : '' ?>>
 				<? if ($value['disabled']) : ?>
-					<span class="quiet"><?= $value['name'] ?></span>
+					<span class="quiet"><?= htmlReady($value['name']) ?></span>
 				<? else: ?>
 					<a target="<?= $value['target'] ?>" href="<?= $value['link'] ?>">
-						<?= $value['name'] ?>
+						<?= htmlReady($value['name']) ?>
 					</a>
 				<? endif ?>
 			</li>
@@ -18,10 +18,10 @@
 		<? if ($value['topKat'] && $structure[$value['topKat']]['active']) : ?>
 			<li<?= $value['active'] && !$noAktiveBottomkat ? ' class="current"' : '' ?>>
 				<? if ($value['disabled']) : ?>
-					<span class="quiet"><?= $value['name'] ?></span>
+					<span class="quiet"><?= htmlReady($value['name']) ?></span>
 				<? else: ?>
 					<a target="<?= $value['target'] ?>" href="<?= $value['link'] ?>">
-						<?= $value['name'] ?>
+						<?= htmlReady($value['name']) ?>
 					</a>
 				<? endif ?>
 			</li>

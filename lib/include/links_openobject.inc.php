@@ -98,7 +98,7 @@ if ($ELEARNING_INTERFACE_ENABLE) {
 //Topkats
 $structure = array();
 if ($SessSemName["class"]=="inst") {
-	$structure["institut_main"]=array ('topKat' => '', 'name'=>_("&Uuml;bersicht"), 'link' => URLHelper::getLink("institut_main.php"), 'active' => FALSE);
+	$structure["institut_main"]=array ('topKat' => '', 'name'=>_("Übersicht"), 'link' => URLHelper::getLink("institut_main.php"), 'active' => FALSE);
 	if ($modules["forum"])
 		$structure["forum"]=array ('topKat' => '', 'name' => _("Forum"), 'link' => URLHelper::getLink("forum.php?view=reset"), 'active' => FALSE);
 	if ($modules["personal"])
@@ -120,7 +120,7 @@ if ($SessSemName["class"]=="inst") {
 			$structure["resources"]=array ('topKat' => '', 'name' => _("Ressourcen"), 'link' => "resources.php?view=openobject_main&view_mode=oobj", 'active' => FALSE);
 	}
 } else {
-	$structure["seminar_main"]=array ('topKat' => '', 'name' => _("&Uuml;bersicht"), 'link' => URLHelper::getLink("seminar_main.php"), 'active' => FALSE);
+	$structure["seminar_main"]=array ('topKat' => '', 'name' => _("Übersicht"), 'link' => URLHelper::getLink("seminar_main.php"), 'active' => FALSE);
 	if ($modules["forum"])
 		$structure["forum"]=array ('topKat' => '', 'name' => _("Forum"), 'link' => URLHelper::getLink("forum.php?view=reset"), 'active' => FALSE);
 	if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) && ($modules["participants"])){
@@ -321,7 +321,7 @@ if ($modules["wiki"]) {
 
 //bottomkats for resources-management, if modul is activated
 if ($RESOURCES_ENABLE) {
-	$structure["resources_overview"]=array ('topKat' => "resources", 'name' => _("&Uuml;bersicht"), 'link' => "resources.php?view=openobject_main", 'active' => FALSE);
+	$structure["resources_overview"]=array ('topKat' => "resources", 'name' => _("Übersicht"), 'link' => "resources.php?view=openobject_main", 'active' => FALSE);
 	$structure["resources_details"]=array ('topKat' => "resources", 'name' => _("Details"), 'link' => "resources.php?view=openobject_details", 'active' => FALSE);
 	$structure["resources_schedule"]=array ('topKat' => "resources", 'name' => _("Belegung"), 'link' => "resources.php?view=openobject_schedule", 'active' => FALSE);
 	$structure["resources_assign"]=array ('topKat' => "resources", 'name' => _("Belegungen bearbeiten"), 'link' => "resources.php?view=openobject_assign", 'active' => FALSE);
@@ -340,7 +340,7 @@ if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])){
 	}
 
 	if  ($perm->have_studip_perm("tutor",$SessSemName[1]))
-		$structure["lernmodule_edit"]=array ('topKat' => "lernmodule", 'name' => _("Lernmodule hinzuf&uuml;gen / entfernen"), 'link' => "seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], 'active' => FALSE);
+		$structure["lernmodule_edit"]=array ('topKat' => "lernmodule", 'name' => _("Lernmodule hinzufügen / entfernen"), 'link' => "seminar_lernmodule.php?view=edit&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 }
 
 //bottomkats for Ilias-connect, if modul is activated
@@ -353,12 +353,12 @@ if (($ELEARNING_INTERFACE_ENABLE) && ($modules["elearning_interface"])){
 			$structure["elearning_interface_show"]=array ('topKat' => "elearning_interface", 'name' => _("Lernmodule dieser Veranstaltung"), 'link' => "elearning_interface.php?view=show&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 	}
 	if  ($perm->have_studip_perm("tutor",$SessSemName[1]))
-		$structure["elearning_interface_edit"]=array ('topKat' => "elearning_interface", 'name' => _("Lernmodule hinzuf&uuml;gen / entfernen"), 'link' => "elearning_interface.php?view=edit&seminar_id=" . $SessSemName[1], 'active' => FALSE);
+		$structure["elearning_interface_edit"]=array ('topKat' => "elearning_interface", 'name' => _("Lernmodule hinzufügen / entfernen"), 'link' => "elearning_interface.php?view=edit&seminar_id=" . $SessSemName[1], 'active' => FALSE);
 }
 
 //bottomkats for SupportDB, if modul is activated
 if (($SUPPORT_ENABLE) && ($modules["support"])){
-	$structure["support_overview"]=array ('topKat' => "support", 'name' => _("&Uuml;bersicht"), 'link' => "support.php?view=overview", 'active' => FALSE);
+	$structure["support_overview"]=array ('topKat' => "support", 'name' => _("Übersicht"), 'link' => "support.php?view=overview", 'active' => FALSE);
 	$structure["support_requests"]=array ('topKat' => "support", 'name'=>_("Anfragen"), 'link' => "support.php?view=requests", 'active' => FALSE);
 	if ($rechte)
 		$structure["support_events"]=array ('topKat' => "resources", 'name' => _("Supportleistungen bearbeiten"), 'link' => "support.php?view=edit_events", 'active' => FALSE);

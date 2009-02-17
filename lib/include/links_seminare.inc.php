@@ -28,12 +28,12 @@ $reiter = new reiter;
 //Topkats
 $structure = array();
 if (!$GLOBALS['perm']->have_perm('root')){
-	$structure['meine_veranstaltungen'] = array ('topKat' => '', 'name' => _("Meine&nbsp;Veranstaltungen"), 'link' => 'meine_seminare.php', 'active' => FALSE);
+	$structure['meine_veranstaltungen'] = array ('topKat' => '', 'name' => _("Meine Veranstaltungen"), 'link' => 'meine_seminare.php', 'active' => FALSE);
 }
 if (!$GLOBALS['perm']->have_perm('admin')){
-	$structure['veranstaltungen_suche'] = array ('topKat' => '', 'name' => _("Veranstaltungen&nbsp;suchen / hinzuf&uuml;gen"), 'link' => 'sem_portal.php', 'active' => FALSE);
+	$structure['veranstaltungen_suche'] = array ('topKat' => '', 'name' => _("Veranstaltungen suchen / hinzufügen"), 'link' => 'sem_portal.php', 'active' => FALSE);
 } else {
-	$structure['veranstaltungen_suche'] = array ('topKat' => '', 'name' => _("Veranstaltungen&nbsp;suchen"), 'link' => 'sem_portal.php', 'active' => FALSE);
+	$structure['veranstaltungen_suche'] = array ('topKat' => '', 'name' => _("Veranstaltungen suchen"), 'link' => 'sem_portal.php', 'active' => FALSE);
 }
 if ($GLOBALS['PLUGINS_ENABLE'] &&
 $studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginByNameIfAvailable('studienmodulmanagement')){
@@ -41,16 +41,16 @@ $studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginB
 }
 
 //Bottomkats
-$structure["_meine_veranstaltungen"] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("&Uuml;bersicht"), 'link' => 'meine_seminare.php', 'active' => FALSE);
+$structure["_meine_veranstaltungen"] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("Übersicht"), 'link' => 'meine_seminare.php', 'active' => FALSE);
 if (!$GLOBALS['perm']->have_perm('admin')) {
-	$structure['meine_veranstaltungen_extendet'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("erweiterte&nbsp;&Uuml;bersicht"), 'link' => 'meine_seminare.php?view=ext', 'active' => FALSE);
+	$structure['meine_veranstaltungen_extendet'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("erweiterte Übersicht"), 'link' => 'meine_seminare.php?view=ext', 'active' => FALSE);
 	if ($GLOBALS['STM_ENABLE'] && $GLOBALS['perm']->have_perm('dozent')){
-		$structure["my_stm"]=array ('topKat'=>"meine_veranstaltungen", 'name'=>_("meine&nbsp;Studienmodule"), 'link'=>"my_stm.php", 'active'=>FALSE);
+		$structure["my_stm"]=array ('topKat'=>"meine_veranstaltungen", 'name'=>_("meine Studienmodule"), 'link'=>"my_stm.php", 'active'=>FALSE);
 	}
 	if (is_object($studienmodulmanagement) && is_object($studienmodulmanagement->getMyModulesNavigation())){
 		$structure["my_modules"]=array ("topKat"=>"meine_veranstaltungen", "name"=>$studienmodulmanagement->getMyModulesNavigation()->getDisplayName(), "link"=>$studienmodulmanagement->getMyModulesNavigation()->getLink(), "active"=>FALSE);
 	}
-	$structure['my_archiv'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("meine&nbsp;archivierten&nbsp;Veranstaltungen"), 'link' => 'my_archiv.php', 'active' => FALSE);
+	$structure['my_archiv'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("meine archivierten Veranstaltungen"), 'link' => 'my_archiv.php', 'active' => FALSE);
 	if ($GLOBALS['EXPORT_ENABLE'])
 		$structure['record_of_study'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("Druckansicht"), 'link' => 'recordofstudy.php', 'active' => FALSE);
 }

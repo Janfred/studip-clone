@@ -87,8 +87,8 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 	$structure = array_merge((array)$structure, (array)$pluginsubmenu);
 }
 //Bottomkats
-$structure["_alle"] = array('topKat' => "alle", 'name' => _("Pers&ouml;nliche Homepage"), 'link' => "about.php?username=$username", 'active' => FALSE);
-$structure["_bild"] = array('topKat' => "bild", 'name' => _("Hochladen des pers&ouml;nlichen Bildes"), 'link' => "edit_about.php?view=Bild&username=$username", 'active' => FALSE);
+$structure["_alle"] = array('topKat' => "alle", 'name' => _("Persönliche Homepage"), 'link' => "about.php?username=$username", 'active' => FALSE);
+$structure["_bild"] = array('topKat' => "bild", 'name' => _("Hochladen des persönlichen Bildes"), 'link' => "edit_about.php?view=Bild&username=$username", 'active' => FALSE);
 $structure["_daten"] = array('topKat' => "daten", 'name' => _("Allgemein"), 'link' => "edit_about.php?view=Daten&username=$username", 'active' => FALSE);
 
 $structure["lebenslauf"] = array('topKat' => 'daten', 'name' => _("Privat"), 'link' => "edit_about.php?view=Lebenslauf&username=$username", 'active' => FALSE);

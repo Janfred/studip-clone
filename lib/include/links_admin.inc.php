@@ -261,17 +261,17 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	//Ruecksprung-Reiter vorbereiten
 	if ($SessSemName["class"] == "inst") {
 		if ($links_admin_data["referred_from"] == "inst")
-			$back_jump= _("zur&uuml;ck zur ausgew&auml;hlten Einrichtung");
+			$back_jump= _("zurück zur ausgewählten Einrichtung");
 		else
-			$back_jump= _("zur ausgew&auml;hlten Einrichtung");
+			$back_jump= _("zur ausgewählten Einrichtung");
 	}
 	if ($SessSemName["class"] == "sem") {
 		if (($links_admin_data["referred_from"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
-			$back_jump= _("zur&uuml;ck zur ausgew&auml;hlten Veranstaltung");
+			$back_jump= _("zurück zur ausgewählten Veranstaltung");
 		elseif (($links_admin_data["referred_from"] == "assi") && (!$archive_kill))
 			$back_jump= _("zur neu angelegten Veranstaltung");
 		elseif (!$links_admin_data["assi"])
-			$back_jump= _("zur ausgew&auml;hlten Veranstaltung");
+			$back_jump= _("zur ausgewählten Veranstaltung");
 	}
 
 	//Topkats
@@ -335,12 +335,12 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	$structure["zugang"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zugangsberechtigungen"), 'link'=>"admin_admission.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["participants"]) || (!$SessSemName[1]))
-		$structure["statusgruppe_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Gruppen&nbsp;/&nbsp;Funktionen"), 'link'=>"admin_statusgruppe.php?list=TRUE", active=>FALSE);
+		$structure["statusgruppe_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Gruppen / Funktionen"), 'link'=>"admin_statusgruppe.php?list=TRUE", active=>FALSE);
 	$structure["modules_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Module/Plugins"), 'link'=>"admin_modules.php?list=TRUE&view=modules_sem", 'active'=>FALSE);
 	$sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
 	if ($perm->have_perm($sem_create_perm)) {
-		$structure["copysem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Veranstaltung&nbsp;kopieren"), 'link'=>"copy_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
-		$structure["new_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("neue&nbsp;Veranstaltung&nbsp;anlegen"), 'link'=>"admin_seminare_assi.php?new_session=TRUE", 'active'=>FALSE);
+		$structure["copysem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Veranstaltung kopieren"), 'link'=>"copy_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
+		$structure["new_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("neue Veranstaltung anlegen"), 'link'=>"admin_seminare_assi.php?new_session=TRUE", 'active'=>FALSE);
 		if (get_config('ALLOW_DOZENT_ARCHIV') || $perm->have_perm("admin")){
 			$structure["archiv"]=array ('topKat'=>"veranstaltungen", 'name'=>_("archivieren"), 'link'=>"archiv_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE);
 		}
@@ -359,7 +359,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	if ($perm->have_perm("admin")) {
 		$structure["grunddaten_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Grunddaten"), 'link'=>"admin_institut.php?list=TRUE", 'active'=>FALSE);
 		$structure["mitarbeiter"]=array ('topKat'=>"einrichtungen", 'name'=>_("Mitarbeiter"), 'link'=>"inst_admin.php?list=TRUE", 'active'=>FALSE);
-		$structure["statusgruppe_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Gruppen&nbsp;/&nbsp;Funktionen"), 'link'=>"admin_roles.php?list=TRUE", 'active'=>FALSE);
+		$structure["statusgruppe_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Gruppen / Funktionen"), 'link'=>"admin_roles.php?list=TRUE", 'active'=>FALSE);
 	}
 
 	$structure["literatur_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Literatur"), 'link'=>"admin_lit_list.php?list=TRUE&view=literatur_inst", 'active'=>FALSE);
@@ -375,9 +375,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$structure["modules_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Module"), 'link'=>"admin_modules.php?list=TRUE&view=modules_inst", 'active'=>FALSE);
 
 	if ($EXTERN_ENABLE && $perm->have_perm("admin"))
-		$structure["extern_inst"] = array("topKat" => "einrichtungen", "name" => _("externe&nbsp;Seiten"), "link" => "admin_extern.php?list=TRUE&view=extern_inst", "active" => FALSE);
+		$structure["extern_inst"] = array("topKat" => "einrichtungen", "name" => _("externe Seiten"), "link" => "admin_extern.php?list=TRUE&view=extern_inst", "active" => FALSE);
 	if ($perm->is_fak_admin())
-		$structure["new_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("neue&nbsp;Einrichtung"), 'link'=>"admin_institut.php?i_view=new", 'active'=>FALSE);
+		$structure["new_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("neue Einrichtung"), 'link'=>"admin_institut.php?i_view=new", 'active'=>FALSE);
 	//
 	if ($EXPORT_ENABLE)
 		$structure["export"]=array ('topKat'=>"modules", 'name'=>_("Export"), 'link'=>"export.php", 'active'=>FALSE);
@@ -386,8 +386,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	if ($RESOURCES_ENABLE)
 		$structure["resources"]=array ('topKat'=>"modules", 'name'=>_("Ressourcenverwaltung"), 'link'=>"resources.php", 'active'=>FALSE);
 	if ($perm->have_perm("admin")){
-		$structure["show_admission"]=array ('topKat'=>"modules", 'name'=>_("laufende&nbsp;Anmeldeverfahren"), 'link'=>"show_admission.php", 'active'=>FALSE);
-		$structure["lit_overview"]=array ('topKat'=>"modules", 'name'=>_("Literatur&uuml;bersicht"), 'link'=>"admin_literatur_overview.php", 'active'=>FALSE);
+		$structure["show_admission"]=array ('topKat'=>"modules", 'name'=>_("laufende Anmeldeverfahren"), 'link'=>"show_admission.php", 'active'=>FALSE);
+		$structure["lit_overview"]=array ('topKat'=>"modules", 'name'=>_("Literaturübersicht"), 'link'=>"admin_literatur_overview.php", 'active'=>FALSE);
 	}
 	if ($perm->have_perm("admin")) {
 		if (!$GLOBALS['RESTRICTED_USER_MANAGEMENT'] || $perm->have_perm("root")) {
@@ -415,14 +415,14 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		if ($ELEARNING_INTERFACE_ENABLE){
 			$structure["elearning_interface"]=array ('topKat'=>"modules", 'name'=>_("Lernmodul-Schnittstelle"), 'link'=>"admin_elearning_interface.php", 'active'=>FALSE);
 		}
-		$structure["studiengang"]=array ('topKat'=>"global", 'name'=>_("Studieng&auml;nge"), 'link'=>"admin_studiengang.php", 'active'=>FALSE);
+		$structure["studiengang"]=array ('topKat'=>"global", 'name'=>_("Studiengänge"), 'link'=>"admin_studiengang.php", 'active'=>FALSE);
 		$structure["userdomains"]=array ('topKat'=>"global", 'name'=>_("Nutzerdomänen"), 'link'=>URLHelper::getLink("dispatch.php/domain_admin/show"), 'active'=>FALSE);
 		$structure["datafields"]=array ('topKat'=>"global", 'name'=>_("Datenfelder"), 'link'=>"admin_datafields.php", 'active'=>FALSE);
 		$structure["config"]=array ('topKat'=>"global", 'name'=>_("Konfiguration"), 'link'=>"admin_config.php", 'active'=>FALSE);
 		if('active_sessions' == PHPLIB_SESSIONDATA_TABLE){
 			$structure["sessions"]=array ('topKat'=>"modules", 'name'=>_("Sessions"), 'link'=>"view_sessions.php", 'active'=>FALSE);
 		}
-		$structure["integrity"]=array ('topKat'=>"modules", 'name'=>_("DB&nbsp;Integrit&auml;t"), 'link'=>"admin_db_integrity.php", 'active'=>FALSE);
+		$structure["integrity"]=array ('topKat'=>"modules", 'name'=>_("DB Integrität"), 'link'=>"admin_db_integrity.php", 'active'=>FALSE);
 		if ($BANNER_ADS_ENABLE)  {
 			$structure["bannerads"]=array ('topKat'=>"global", 'name'=>_("Werbebanner"), 'link'=>"admin_banner_ads.php", 'active'=>FALSE);
 		}
@@ -644,7 +644,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				<table cellpadding="0" cellspacing="0" border="0" width="99%" align="center">
 					<tr>
 						<td class="steel1">
-							<font size=-1><br /><b><?=_("Bitte w&auml;hlen Sie die Einrichtung aus, die Sie bearbeiten wollen:")?></b><br/>&nbsp; </font>
+							<font size=-1><br /><b><?=_("Bitte wählen Sie die Einrichtung aus, die Sie bearbeiten wollen:")?></b><br/>&nbsp; </font>
 						</td>
 					</tr>
 					<tr>
@@ -660,7 +660,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 							$db->query("SELECT a.Institut_id,Name FROM user_inst a LEFT JOIN Institute b USING (Institut_id) WHERE inst_perms IN('tutor','dozent') AND user_id='$user->id' ORDER BY Name");
 						}
 
-						printf ("<option value=\"NULL\">%s</option>\n", _("-- bitte Einrichtung ausw&auml;hlen --"));
+						printf ("<option value=\"NULL\">%s</option>\n", _("-- bitte Einrichtung auswählen --"));
 						while ($db->next_record()){
 							printf ("<option value=\"%s\" style=\"%s\">%s </option>\n", $db->f("Institut_id"),($db->f("is_fak") ? "font-weight:bold;" : ""), htmlReady(substr($db->f("Name"), 0, 70)));
 							if ($db->f("is_fak")){
@@ -717,7 +717,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				<table cellpadding="0" cellspacing="0" border="0" width="99%" align="center">
 					<tr>
 						<td class="steel1" colspan=5>
-								<font size=-1><br /><b><?=_("Sie k&ouml;nnen die Auswahl der Veranstaltungen eingrenzen:")?></b><br/>&nbsp; </font>
+								<font size=-1><br /><b><?=_("Sie können die Auswahl der Veranstaltungen eingrenzen:")?></b><br/>&nbsp; </font>
 						</td>
 					</tr>
 					<tr>
@@ -791,7 +791,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 						if ($perm->have_perm("root")) {
 							$db->query("SELECT Institut_id,Name FROM Institute WHERE Institut_id=fakultaets_id ORDER BY Name");
 							?>
-							<font size=-1><?=_("Fakult&auml;t:")?></font><br />
+							<font size=-1><?=_("Fakultät:")?></font><br />
 							<select name="srch_fak">
 								<option value=0><?=_("alle")?></option>
 								<?
@@ -832,8 +832,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 						?>
 						<tr>
 							<td class="steel1" colspan=6>
-								<br />&nbsp;<font size=-1><input type="CHECKBOX" name="select_old" <? if ($links_admin_data["select_old"]) echo ' checked' ?> />&nbsp;<?=_("keine zuk&uuml;nftigen Veranstaltungen anzeigen - Beginn des (letzten) Veranstaltungssemesters ist verstrichen")?> </font><br />
-								<!-- &nbsp;<font size=-1><input type="CHECKBOX" name="select_inactive" <? if ($links_admin_data["select_inactive"]) echo ' checked' ?> />&nbsp;<?=_("nur inaktive Veranstaltungen ausw&auml;hlen (letzte Aktion vor mehr als sechs Monaten)")?> </font> -->
+								<br />&nbsp;<font size=-1><input type="CHECKBOX" name="select_old" <? if ($links_admin_data["select_old"]) echo ' checked' ?> />&nbsp;<?=_("keine zukünftigen Veranstaltungen anzeigen - Beginn des (letzten) Veranstaltungssemesters ist verstrichen")?> </font><br />
+								<!-- &nbsp;<font size=-1><input type="CHECKBOX" name="select_inactive" <? if ($links_admin_data["select_inactive"]) echo ' checked' ?> />&nbsp;<?=_("nur inaktive Veranstaltungen auswählen (letzte Aktion vor mehr als sechs Monaten)")?> </font> -->
 							</td>
 						</tr>
 						<?
@@ -990,8 +990,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				?>
 				<tr <? $cssSw->switchClass() ?>>
 					<td class="<? echo $cssSw->getClass() ?>" colspan=3>
-						&nbsp; <font size=-1><?=_("Alle ausgew&auml;hlten Veranstaltungen")?>&nbsp;<input type="IMAGE" <?=makeButton("archivieren", "src")?> border=0 align="absmiddle" /></font><br />
-						&nbsp; <font size=-1 color="red"><?=_("Achtung: Das Archivieren ist ein Schritt, der <b>nicht</b> r&uuml;ckg&auml;ngig gemacht werden kann!")?></font>
+						&nbsp; <font size=-1><?=_("Alle ausgewählten Veranstaltungen")?>&nbsp;<input type="IMAGE" <?=makeButton("archivieren", "src")?> border=0 align="absmiddle" /></font><br />
+						&nbsp; <font size=-1 color="red"><?=_("Achtung: Das Archivieren ist ein Schritt, der <b>nicht</b> rückgängig gemacht werden kann!")?></font>
 					</td>
 					<td class="<? echo $cssSw->getClass() ?>" colspan=3 align="right">
 					<?
@@ -1034,7 +1034,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				<?
 				if ($auth->auth["jscript"]) {
 					printf("<select name=\"lock_all\" size=1>");
-					printf("<option value='-1'>"._("Bitte w&auml;hlen")."</option>");
+					printf("<option value='-1'>"._("Bitte wählen")."</option>");
 					printf("<option value='none' %s>--"._("keine Sperrebene")."--</option>", $lock_all == 'none' ? 'selected=selected' : '' );
 					for ($i=0;$i<count($all_lock_rules);$i++) {
 						printf("<option value=\"".$all_lock_rules[$i]["lock_id"]."\" ");
@@ -1065,7 +1065,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					<?
 					if ($auth->auth["jscript"]) {
 						echo '<select name="aux_all" size="1">';
-						echo '<option value="-1">'. _("Bitte ausw&auml;hlen"). '</option>';
+						echo '<option value="-1">'. _("Bitte auswählen"). '</option>';
 						echo '<option value="null" ' . ($aux_all == 'null' ? 'selected=selected' : '') . '>-- '. _("keine Zusatzangaben") .' --</option>';
 						foreach ((array)$all_aux_rules as $lock_id => $data) {
 							echo '<option value="'.$lock_id.'"';
@@ -1157,7 +1157,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					printf("<font size=-1>" . _("Zugangsberechtigungen") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?seminar_id=' . $seminar_id), makeButton("bearbeiten"));
 					break;
 				case "admin_room_requests.php":
-					printf("<font size=-1>" . _("Raumw&uuml;nsche") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?seminar_id=' . $seminar_id), makeButton("bearbeiten"));
+					printf("<font size=-1>" . _("Raumwünsche") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?seminar_id=' . $seminar_id), makeButton("bearbeiten"));
 					break;
 				case "admin_lit_list.php":
 					printf("<font size=-1>" . _("Literatur") . "<br /><a href=\"%s\">%s</a></font>", URLHelper::getLink('?_range_id=' . $seminar_id), makeButton("bearbeiten"));
