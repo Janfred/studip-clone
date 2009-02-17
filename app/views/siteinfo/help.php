@@ -23,7 +23,7 @@
         <dt>(:coregroup:)</dt>
         <dd><?= _('Ausgabe des Inhaltes von http://www.studip.de/crew.php.')?></dd>
         <dt>(:toplist <em>subject</em>:)</dt>
-        <dd><?= sprintf(_('Ausgabe von Ranglisten für die mit %s angegebenen Kriterien die die Ausprägungen'),
+        <dd><?= sprintf(_('Ausgabe von Ranglisten für die mit %s angegebenen Kriterien, die die Ausprägungen:'),
                         '<em>subject</em>')?>
             <ul>
                 <li>mostparticipants</li>
@@ -35,7 +35,7 @@
             haben können.
         </dd>
         <dt>(:indicator <em>subject</em>:)</dt>
-        <dd><?= sprintf(_('Ausgabe von mit %s spezifizierten Kennzahlen aus den folgenden Möglichkeiten'),
+        <dd><?= sprintf(_('Ausgabe von mit %s spezifizierten Kennzahlen aus den folgenden Möglichkeiten:'),
                         '<em>subject</em>')?>
             <ul>
                 <li>seminar_all</li>

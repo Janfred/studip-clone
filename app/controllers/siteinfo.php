@@ -43,9 +43,9 @@ class SiteinfoController extends Trails_Controller
         if ($perm->have_perm('root')) {
             $this->layout = $template_factory->open('layouts/base');
             $this->layout->set_attribute('infobox', $this->infobox_content());
-    	} else {
+        } else {
             $action = "show";
-	        $this->layout = $template_factory->open('layouts/base_without_infobox');
+            $this->layout = $template_factory->open('layouts/base_without_infobox');
         }
         $this->layout->set_attribute('tabs', 'links_siteinfo');
         $this->layout->set_attribute('reiter_view', 'siteinfo');
@@ -82,22 +82,22 @@ class SiteinfoController extends Trails_Controller
         if (!$rubrics_empty) {
             if ($this->currentrubric > 0) {
                 $infobox_actions[] = array('icon' => 'add_sheet.gif',
-                                           'text' => '<a href="'.$this->url_for('siteinfo/new/'.$this->currentrubric).'">neue Seite anlegen');
+                                           'text' => '<a href="'.$this->url_for('siteinfo/new/'.$this->currentrubric).'">'._('neue Seite anlegen').'</a>');
             }
             if ($this->currentdetail > 0) {
                 $infobox_actions[] = array('icon' => 'edit_transparent.gif',
-                                           'text' => '<a href="'.$this->url_for('siteinfo/edit/'.$this->currentrubric.'/'.$this->currentdetail).'">Seite bearbeiten');
+                                           'text' => '<a href="'.$this->url_for('siteinfo/edit/'.$this->currentrubric.'/'.$this->currentdetail).'">'._('Seite bearbeiten').'</a>');
                 $infobox_actions[] = array('icon' => 'trash.gif',
-                                           'text' => '<a href="'.$this->url_for('siteinfo/delete/'.$this->currentrubric.'/'.$this->currentdetail).'">Seite l&ouml;schen');
+                                           'text' => '<a href="'.$this->url_for('siteinfo/delete/'.$this->currentrubric.'/'.$this->currentdetail).'">'._('Seite löschen').'</a>');
             }
         }
         $infobox_actions[] = array('icon' => 'cont_folder_add.gif',
-                                   'text' => '<a href="'.$this->url_for('siteinfo/new').'">neue Rubrik anlegen');
+                                   'text' => '<a href="'.$this->url_for('siteinfo/new').'">'._('neue Rubrik anlegen').'</a>');
         if ($this->currentrubric > 0) {
             $infobox_actions[] = array('icon' => 'cont_folder4.gif',
-                                       'text' => '<a href="'.$this->url_for('siteinfo/edit/'.$this->currentrubric).'">Rubrik bearbeiten');
+                                       'text' => '<a href="'.$this->url_for('siteinfo/edit/'.$this->currentrubric).'">'._('Rubrik bearbeiten').'</a>');
             $infobox_actions[] = array('icon' => 'trash.gif',
-                                       'text' => '<a href="'.$this->url_for('siteinfo/delete/'.$this->currentrubric).'">Rubrik l&ouml;schen');
+                                       'text' => '<a href="'.$this->url_for('siteinfo/delete/'.$this->currentrubric).'">'._('Rubrik löschen').'</a>');
         }
         return array('picture' => 'impressum.jpg',
                      'content' => array(array('kategorie' => _("Administration des Impressums"),
@@ -126,15 +126,15 @@ class SiteinfoController extends Trails_Controller
         global $view, $dynstradd;
         if($givenrubric===NULL){
             $dynstradd['rubric_new'] = array('topKat' => '', 
-                                             'name' => 'neue Rubrik', 
-                                             'link' => '#',
+                                             'name'   => _('neue Rubrik'), 
+                                             'link'   => '#',
                                              'active' => FALSE);
             $view = "rubric_new";
             $this->edit_rubric = TRUE;
         } else {        
             $dynstradd['detail_new'] = array('topKat' => 'r'.$this->currentrubric, 
-                                             'name' => 'neue Seite', 
-                                             'link' => '#',
+                                             'name'   => _('neue Seite'), 
+                                             'link'   => '#',
                                              'active' => FALSE);
             $this->rubrics = $this->si->get_all_rubrics();
             $view = "detail_new";

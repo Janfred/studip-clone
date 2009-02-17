@@ -50,7 +50,7 @@ class Siteinfo {
                 WHERE detail_id = ".$this->db->quote($id,PDO::PARAM_INT);
         $result = $this->db->query($sql);
         $rows = $result->fetch();
-        return $rows[0];    
+        return $rows[0];
     }
 
     function get_detail_content_processed($id) {
@@ -285,7 +285,7 @@ class SiteinfoMarkupEngine {
     function coregroup() {
         $cache = StudipCacheFactory::getCache();
         if (!($remotefile = $cache->read('coregroup'))) {
-            $remotefile = file_get_contents ('http://www.studip.de/crew.php');
+            $remotefile = file_get_contents('http://www.studip.de/crew.php');
             $cache->write('coregroup', $remotefile);
         }
         $out = substr($remotefile, stripos($remotefile, "<table"), strrpos($remotefile, "</table>"));
@@ -444,7 +444,7 @@ class SiteinfoMarkupEngine {
                                         "constraint" => $GLOBALS['ILIAS_CONNECT_ENABLE']);
         $indicator['resource'] = array("query" => "SELECT COUNT(*) FROM resources_objects",
                                        "title" => _("Ressourcen-Objekte"),
-                                       "detail" => "von Stud.IP verwaltete Ressourcen wie Räume oder Geräte",
+                                       "detail" => _("von Stud.IP verwaltete Ressourcen wie Räume oder Geräte"),
                                        "constraint" => $RESOURCES_ENABLE);
         if (in_array($key,array_keys($indicator))) {
             if (!isset($indicator[$key]['constraint']) || $indicator[$key]['constraint']) {
@@ -484,7 +484,7 @@ function stripforeignlanguage($language, $text) {
     global $_language;
     list($primary, $sub) = explode('_',$_language);
     if (($language==$primary) || ($language==$_language)) {
-        return $text;
+        return str_replace('\"', '"', $text);
     } else {
         return '';
     }
