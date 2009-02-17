@@ -702,9 +702,9 @@ if ($view == 'Daten') {
 	$cssSw->switchClass();
 	echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><div style=\"display:inline;float:left;\"><b>" . _("Passwort:") . " </b></div>";
 	if (StudipAuthAbstract::CheckField("auth_user_md5.password", $my_about->auth_user['auth_plugin'])) {
-		echo '<div style="display:inline;float:right;"> '._("ändern").'? <input type="checkbox" name="update_pw" id="update_pw" onclick="javascript: update_pw_fields();" /></div></td>';		
 		echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp; <font size=\"-1\">*****</font>";
 	} else {
+		echo '<div style="display:inline;float:right;"> '._("ändern").'? <input type="checkbox" name="update_pw" id="update_pw" onclick="javascript: update_pw_fields();" /></div></td>';		
 		echo '<td class="'.$cssSw->getClass().'" nowrap width="20%" align="left">';
 		$pw_input = "<font size=-1>&nbsp; %s</font><br />&nbsp;"
 					."<input type=\"password\" size=\"".round($max_col*0.25)."\" id=\"new_passwd_%s\" name=\"new_passwd_%s\"  %s value=\"*****\">";
@@ -756,11 +756,12 @@ if ($view == 'Daten') {
 
 		$cssSw->switchClass();
 
+		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Passwort:") . " </b>";
+
 		if($perm->have_perm('root') && $ALLOW_ADMIN_USERACCESS)
 		{
-			echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Passwort:") . " </b>"
-				.'<div style="text-align: right;"> ändern? <input type="checkbox" name="update_pw" id="update_pw" onclick="javascript: update_pw_fields();" /></div></td>';
-		
+			echo '<div style="display:inline;float:right;"> '._("ändern").'? <input type="checkbox" name="update_pw" id="update_pw" onclick="javascript: update_pw_fields();" /></div></td>';		
+
 			echo '<td class="'.$cssSw->getClass().'" nowrap width="20%" align="left">';
 			$pw_input = "<font size=-1>&nbsp; %s</font><br />&nbsp;"
 						."<input type=\"password\" size=\"".round($max_col*0.25)."\" id=\"new_passwd_%s\" name=\"new_passwd_%s\"  %s value=\"*****\">";
@@ -784,7 +785,6 @@ if ($view == 'Daten') {
 		}
 		else
 		{
-			echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Passwort:") . " </b>";
 			echo "</td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; *****</td></tr>\n";
 		}
 		$cssSw->switchClass();
