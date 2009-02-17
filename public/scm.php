@@ -108,7 +108,7 @@ function scm_change_header($table, $titel, $user_id, $chdate) {
 	echo $table->openCell(array("colspan"=>"2"));
 	$head_table=new Table(array("width"=>"100%"));
 	echo $head_table->openRow();
-	printhead(0, 0, false, "open", FALSE, $icon, htmlReady($titel), $zusatz);
+	printhead(0, 0, false, "open", FALSE, $icon, $titel, $zusatz);
 	echo $head_table->close();
 	echo $table->closeRow();
 }
@@ -139,7 +139,7 @@ function scm_show_content($range_id, $msg, $scm_id) {
 	}
 
 	if (!$scm->is_new) {
-		scm_change_header($content_table, $scm->getValue("tab_name"), $scm->getValue("user_id"), $scm->getValue("chdate"));
+		scm_change_header($content_table, htmlReady($scm->getValue("tab_name")), $scm->getValue("user_id"), $scm->getValue("chdate"));
 		echo $content_table->openRow();
 		echo $content_table->openCell();
 		$printcontent_table=new Table(array("width"=>"100%"));
