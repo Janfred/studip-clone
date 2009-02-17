@@ -70,32 +70,35 @@ class SiteinfoController extends Trails_Controller
             $this->currentrubric = $this->si->first_rubric_id();
             $this->currentdetail = $this->si->first_detail_id();
         }
-        if ($this->currentdetail == 0){
-            $dynstradd['r'.$this->currentrubric.'_d0'] = array('topKat' => 'r'.$this->currentrubric, 
-                                                               'name' => 'leere Kategorie', 
-                                                               'link' => $this->url_for('siteinfo/show/'.$this->currentrubric),
-                                                               'active' => FALSE);
+        $view = 'r'.$this->currentrubric;
+        if ($this->currentdetail > 0){
+            $view .= '_d'.$this->currentdetail;
         }
-        $view = 'r'.$this->currentrubric.'_d'.$this->currentdetail;
     }
     
     function infobox_content()
     {
         global $rubrics_empty;
         if (!$rubrics_empty) {
-            $infobox_actions[] = array('icon' => 'add_sheet.gif',
-                                       'text' => '<a href="'.$this->url_for('siteinfo/new/'.$this->currentrubric).'">neue Seite anlegen');
-            $infobox_actions[] = array('icon' => 'edit_transparent.gif',
-                                       'text' => '<a href="'.$this->url_for('siteinfo/edit/'.$this->currentrubric.'/'.$this->currentdetail).'">Seite bearbeiten');
-            $infobox_actions[] = array('icon' => 'trash.gif',
-                                       'text' => '<a href="'.$this->url_for('siteinfo/delete/'.$this->currentrubric.'/'.$this->currentdetail).'">Seite l&ouml;schen');
+            if ($this->currentrubric > 0) {
+                $infobox_actions[] = array('icon' => 'add_sheet.gif',
+                                           'text' => '<a href="'.$this->url_for('siteinfo/new/'.$this->currentrubric).'">neue Seite anlegen');
+            }
+            if ($this->currentdetail > 0) {
+                $infobox_actions[] = array('icon' => 'edit_transparent.gif',
+                                           'text' => '<a href="'.$this->url_for('siteinfo/edit/'.$this->currentrubric.'/'.$this->currentdetail).'">Seite bearbeiten');
+                $infobox_actions[] = array('icon' => 'trash.gif',
+                                           'text' => '<a href="'.$this->url_for('siteinfo/delete/'.$this->currentrubric.'/'.$this->currentdetail).'">Seite l&ouml;schen');
+            }
         }
         $infobox_actions[] = array('icon' => 'cont_folder_add.gif',
                                    'text' => '<a href="'.$this->url_for('siteinfo/new').'">neue Rubrik anlegen');
-        $infobox_actions[] = array('icon' => 'cont_folder4.gif',
-                                   'text' => '<a href="'.$this->url_for('siteinfo/edit/'.$this->currentrubric).'">Rubrik bearbeiten');
-        $infobox_actions[] = array('icon' => 'trash.gif',
-                                   'text' => '<a href="'.$this->url_for('siteinfo/delete/'.$this->currentrubric).'">Rubrik l&ouml;schen');
+        if ($this->currentrubric > 0) {
+            $infobox_actions[] = array('icon' => 'cont_folder4.gif',
+                                       'text' => '<a href="'.$this->url_for('siteinfo/edit/'.$this->currentrubric).'">Rubrik bearbeiten');
+            $infobox_actions[] = array('icon' => 'trash.gif',
+                                       'text' => '<a href="'.$this->url_for('siteinfo/delete/'.$this->currentrubric).'">Rubrik l&ouml;schen');
+        }
         return array('picture' => 'impressum.jpg',
                      'content' => array(array('kategorie' => _("Administration des Impressums"),
                                               'eintrag' => $infobox_actions))
@@ -126,11 +129,7 @@ class SiteinfoController extends Trails_Controller
                                              'name' => 'neue Rubrik', 
                                              'link' => '#',
                                              'active' => FALSE);
-            $dynstradd['detail_new'] = array('topKat' => 'rubric_new', 
-                                             'name' => 'neue Seite in neuer Rubrik', 
-                                             'link' => '#',
-                                             'active' => FALSE);
-            $view = "detail_new";
+            $view = "rubric_new";
             $this->edit_rubric = TRUE;
         } else {        
             $dynstradd['detail_new'] = array('topKat' => 'r'.$this->currentrubric, 
@@ -191,7 +190,7 @@ class SiteinfoController extends Trails_Controller
         if ($execute) {
             if ($givendetail == "all") {
                 $this->si->delete("rubric", $this->currentrubric);
-                $this->redirect('siteinfo/show/'.$this->currentrubric);
+                $this->redirect('siteinfo/show/');
             } else {
                 $this->si->delete("detail", $this->currentdetail);
                 $this->redirect('siteinfo/show/'.$this->currentrubric);

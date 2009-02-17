@@ -1,12 +1,6 @@
 <div class="white" style="padding: 1ex;">
-
-  <? if (isset($error_msg)): ?>
-    <table style="width: 100%;">
-      <? my_error($error_msg, '', 1, false, true) ?>
-    </table>
-  <? else: ?>
-   <? if (!$execute): ?>     
-    <div class="effect_highlight" style="text-align: center;padding: 10px;">
+    <? if (!$execute): ?>     
+        <div class="effect_highlight" style="text-align: center;padding: 10px;">
         <? if ($detail) :?> 
             <p><?= _("Wollen Sie die Seite wirklich löschen?") ?></p>
         <? else : ?>
@@ -25,7 +19,9 @@
                  <?= makeButton("abbrechen", "img") ?>
         </a>
     </div>
-   <? endif ?>
-  <?= $output ?>
-  <? endif ?>
+    <div>
+        <hr />
+    </div>
+    <? endif ?>
+    <?= $output ?>
 </div>

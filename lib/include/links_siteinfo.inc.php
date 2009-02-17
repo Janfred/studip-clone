@@ -36,8 +36,11 @@ $result = $db->query($sql);
 $rubrics = $result->fetchAll();
 
 foreach ($rubrics AS $rubric) {
+    if (language_filter($rubric[1])=="") {
+        $rubric[1] = _("unbenannt");
+    }
 	$structure['r'.$rubric[0]] = array('topKat' => '', 
-                                       'name' => language_filter($rubric[1]), 
+                                       'name' => language_filter($rubric[1]),
                                        'link' => URLHelper::getLink('dispatch.php/siteinfo/show/'.$rubric[0]),
                                        'active' => FALSE);
 }
@@ -51,8 +54,11 @@ $result = $db->query($sql);
 $details = $result->fetchAll();
 
 foreach ($details AS $detail) {
+    if (language_filter($detail[2])=="") {
+        $detail[2] = _("unbenannt");
+    }
 	$structure['r'.$detail[1].'_d'.$detail[0]] = array('topKat' => 'r'.$detail[1], 
-                                                       'name' => language_filter($detail[2]), 
+                                                       'name' => language_filter($detail[2]),
                                                        'link' => URLHelper::getLink('dispatch.php/siteinfo/show/'.$detail[1].'/'.$detail[0]),
                                                        'active' => FALSE);
 }

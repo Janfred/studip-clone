@@ -5,14 +5,14 @@
     </table>
   <? endif ?>
     <form action="<?= $controller->url_for('siteinfo/save') ?>" method="POST">
-        <label for="rubric_name"><?= _('Rubrik-Zuordnung')?></label><br>
   <? if($edit_rubric): ?>
+        <label for="rubric_name"><?= _('Titel der Rubrik')?></label><br>
         <input type="text" name="rubric_name" id="rubric_name"><br>
-
   <? else: ?>
+        <label for="rubric_name"><?= _('Rubrik-Zuordnung')?></label><br>
         <select name="rubric_id">
       <? foreach ($rubrics as $option) : ?>
-            <option value="<?= $option['rubric_id'] ?>"<? if($currentrubric==$option['rubric_id']){echo " selected";} ?>><?= language_filter($option['name']) ?></option>
+            <option value="<?= $option['rubric_id'] ?>"<? if($currentrubric==$option['rubric_id']){echo " selected";} ?>><?= htmlReady(language_filter($option['name'])) ?></option>
       <? endforeach ?>
         </select><br>
         <label for="detail_name"><?= _('Seitentitel')?></label><br>
@@ -26,6 +26,6 @@
         </a>
     </form>
   <? if(!$edit_rubric): ?>
-    <?= include('_help.inc') ?>
+    <?= $this->render_partial('siteinfo/help') ?>
   <? endif ?>
 </div>

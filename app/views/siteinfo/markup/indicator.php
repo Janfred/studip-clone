@@ -1,4 +1,4 @@
-<? if($detail) : ?>
+<? if($detail != '') : ?>
     <span title="<?= $detail ?>">
 <? else : ?>
     <span>

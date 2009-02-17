@@ -16,9 +16,11 @@ require_once('lib/user_visible.inc.php');
 class Siteinfo {
     private $sme;
     private $rubrics_empty;
+    private $db;
 
     function __construct() {
         $this->sme = new SiteinfoMarkupEngine();
+        $this->db = DBManager::get();
     }
     function get_detail_content($id) {
         global $perm;
@@ -33,22 +35,20 @@ class Siteinfo {
     	        return _("Der für diese Stud.IP-Installation verantwortliche Administrator muss hier noch Inhalte einfügen.")."<br />".rootlist();
         	}
         } else {
-            $db = DBManager::get();
             $sql = "SELECT content
                     FROM siteinfo_details
-                    WHERE detail_id = ".$db->quote($id,PDO::PARAM_INT);
-            $result = $db->query($sql);
+                    WHERE detail_id = ".$this->db->quote($id,PDO::PARAM_INT);
+            $result = $this->db->query($sql);
             $rows = $result->fetch();
             return $rows[0];
         }
     }
 
     function get_detail_name($id) {
-        $db = DBManager::get();
         $sql = "SELECT name
                 FROM siteinfo_details
-                WHERE detail_id = ".$db->quote($id,PDO::PARAM_INT);
-        $result = $db->query($sql);
+                WHERE detail_id = ".$this->db->quote($id,PDO::PARAM_INT);
+        $result = $this->db->query($sql);
         $rows = $result->fetch();
         return $rows[0];    
     }
@@ -59,71 +59,16 @@ class Siteinfo {
         return $output;
     }
 
-    function save($type, $input) {
-        $db = DBManager::get();
-        $rubric_name = $input['rubric_name'] ? $input['rubric_name'] : "unbenannt";
-        $detail_name = $input['detail_name'] ? $input['detail_name'] : "unbenannt";
-        switch ($type) {
-            case "update_detail":
-                $db->exec("UPDATE siteinfo_details
-                           SET rubric_id = ".$db->quote($input['rubric_id'],PDO::PARAM_INT).",
-                               name = ".$db->quote($detail_name).",
-                               content = ".$db->quote($input['content'])."
-                           WHERE detail_id=".$db->quote($input['detail_id'],PDO::PARAM_INT));
-                $rubric = $input['rubric_id'];
-                $detail = $input['detail_id'];
-                break;
-            case "insert_detail":
-                $db->exec("INSERT 
-                           INTO siteinfo_details 
-                           (rubric_id,
-                            name,
-                            content)
-                           VALUES (".$db->quote($input['rubric_id'],PDO::PARAM_INT).", 
-                                   ".$db->quote($detail_name).", 
-                                   ".$db->quote($input['content']).");");
-                $rubric = $input['rubric_id'];
-                $detail = $db->lastInsertId();
-                break;
-            case "update_rubric":
-                $db->exec("UPDATE siteinfo_rubrics
-                           SET name = ".$db->quote($rubric_name)."
-                           WHERE rubric_id = ".$db->quote($input['rubric_id'],PDO::PARAM_INT).";");
-                $rubric = $input['rubric_id'];
-                $detail = $this->first_detail_id($rubric);
-                break;
-            case "insert_rubric":
-                $db->exec("INSERT 
-                           INTO siteinfo_rubrics
-                           (name)
-                           VALUES (".$db->quote($rubric_name).");");
-                $rubric = $db->lastInsertId();
-                $detail = 0;
-        }
-        return array($rubric, $detail);
-    }
-
-    function delete($type,$id) {
-        $db = DBManager::get();
-        if($type=="rubric") {
-            $db->exec("DELETE FROM siteinfo_details WHERE rubric_id = ".$db->quote($id).";");
-            $db->exec("DELETE FROM siteinfo_rubrics WHERE rubric_id = ".$db->quote($id).";");
-        } else {
-            $db->exec("DELETE FROM siteinfo_details WHERE detail_id = ".$db->quote($id).";");
-        }
-    }
-
     function first_detail_id($rubric = NULL) {
-        $db = DBManager::get();
         $rubric_id = $rubric ? $rubric : $this->first_rubric_id();
         $sql = "SELECT detail_id
                 FROM siteinfo_details ";
         if($rubric_id) {
-            $sql .= "WHERE rubric_id = ".$db->quote($rubric_id,PDO::PARAM_INT);
+            $sql .= "WHERE rubric_id = ".$this->db->quote($rubric_id,PDO::PARAM_INT);
         }
-        $sql .= " ORDER BY position ASC
+        $sql .= " ORDER BY position, detail_id ASC
                  LIMIT 1";
-        $result = $db->query($sql);
+        $result = $this->db->query($sql);
         $rows = $result->fetch();
         if (count($rows) > 0) {
             return $rows[0];
@@ -135,11 +80,11 @@ class Siteinfo {
     function first_rubric_id() {
         $sql = "SELECT rubric_id
                 FROM siteinfo_rubrics
-                ORDER BY position ASC
+                ORDER BY position, rubric_id ASC
                 LIMIT 1";
-        $result = DBManager::get()->query($sql);
+        $result = $this->db->query($sql);
         $rows = $result->fetch();
-        if (count($rows) > 0) {
+        if ($result->rowCount() > 0) {
             return $rows[0];
         } else {
             $this->rubrics_empty = TRUE;
@@ -148,21 +93,19 @@ class Siteinfo {
     }
 
     function rubric_for_detail($id) {
-        $db = DBManager::get();
         $sql = "SELECT rubric_id
                 FROM siteinfo_details
-                WHERE detail_id = ".$db->quote($id,PDO::PARAM_INT);
-        $result = $db->query($sql);
+                WHERE detail_id = ".$this->db->quote($id,PDO::PARAM_INT);
+        $result = $this->db->query($sql);
         $rows = $result->fetch();
         return $rows[0];
     }
 
     function rubric_name($id) {
-        $db = DBManager::get();
         $sql = "SELECT name
                 FROM siteinfo_rubrics
-                WHERE rubric_id = ".$db->quote($id,PDO::PARAM_INT);
-        $result = $db->query($sql);
+                WHERE rubric_id = ".$this->db->quote($id,PDO::PARAM_INT);
+        $result = $this->db->query($sql);
         $rows = $result->fetch();
         return $rows[0];
     }
@@ -170,40 +113,91 @@ class Siteinfo {
     function get_all_rubrics() {
         $sql = "SELECT rubric_id, name
                 FROM siteinfo_rubrics";
-        $result = DBManager::get()->query($sql);
+        $result = $this->db->query($sql);
         $rows = $result->fetchAll();
         return $rows;
+    }
+
+    function save($type, $input) {
+        switch ($type) {
+            case "update_detail":
+                $this->db->exec("UPDATE siteinfo_details
+                           SET rubric_id = ".$this->db->quote($input['rubric_id'],PDO::PARAM_INT).",
+                               name = ".$this->db->quote($input['detail_name']).",
+                               content = ".$this->db->quote($input['content'])."
+                           WHERE detail_id=".$this->db->quote($input['detail_id'],PDO::PARAM_INT));
+                $rubric = $input['rubric_id'];
+                $detail = $input['detail_id'];
+                break;
+            case "insert_detail":
+                $this->db->exec("INSERT 
+                           INTO siteinfo_details 
+                           (rubric_id,
+                            name,
+                            content)
+                           VALUES (".$this->db->quote($input['rubric_id'],PDO::PARAM_INT).", 
+                                   ".$this->db->quote($input['detail_name']).", 
+                                   ".$this->db->quote($input['content']).");");
+                $rubric = $input['rubric_id'];
+                $detail = $this->db->lastInsertId();
+                break;
+            case "update_rubric":
+                $this->db->exec("UPDATE siteinfo_rubrics
+                           SET name = ".$this->db->quote($input['rubric_name'])."
+                           WHERE rubric_id = ".$this->db->quote($input['rubric_id'],PDO::PARAM_INT).";");
+                $rubric = $input['rubric_id'];
+                $detail = $this->first_detail_id($rubric);
+                break;
+            case "insert_rubric":
+                $this->db->exec("INSERT 
+                           INTO siteinfo_rubrics
+                           (name)
+                           VALUES (".$this->db->quote($input['rubric_name']).");");
+                $rubric = $this->db->lastInsertId();
+                $detail = 0;
+        }
+        return array($rubric, $detail);
+    }
+
+    function delete($type,$id) {
+        if($type=="rubric") {
+            $this->db->exec("DELETE FROM siteinfo_details WHERE rubric_id = ".$this->db->quote($id).";");
+            $this->db->exec("DELETE FROM siteinfo_rubrics WHERE rubric_id = ".$this->db->quote($id).";");
+        } else {
+            $this->db->exec("DELETE FROM siteinfo_details WHERE detail_id = ".$this->db->quote($id).";");
+        }
     }
 }
 
 class SiteinfoMarkupEngine {
-    private $tf;
+    private $db;
+    private $template_factory;
+    private $siteinfo_directives;
     //to preserve (parts?) of the old impressum.php-functionality
     //here a modified copy of wiki-engine supports specialized markup
 
     function __construct() {
-        $this->tf = new Flexi_TemplateFactory($GLOBALS['STUDIP_BASE_PATH'].'/app/views/siteinfo/markup/');
+        $this->db = DBManager::get();
+        $this->template_factory = new Flexi_TemplateFactory($GLOBALS['STUDIP_BASE_PATH'].'/app/views/siteinfo/markup/');
         $this->siteinfoMarkup("/\(:version:\)/e",'$this->version()');
         $this->siteinfoMarkup("/\(:uniname:\)/e",'$this->uniName()');
         $this->siteinfoMarkup("/\(:unicontact:\)/e",'$this->uniContact()');
-        $this->siteinfoMarkup("/\(:userinfo ([a-z_@\-]*):\)/e",'$this->userinfo("$1")');
+        $this->siteinfoMarkup("/\(:userinfo ([a-z_@\-]*):\)/e",'$this->userinfo(\'$1\')');
         $this->siteinfoMarkup("/\(:rootlist:\)/e",'$this->rootlist()');
         $this->siteinfoMarkup("/\(:adminlist:\)/e",'$this->adminlist()');
         $this->siteinfoMarkup("/\(:coregroup:\)/e",'$this->coregroup()');
-        $this->siteinfoMarkup("/\(:toplist ([a-z]*):\)/ei",'$this->toplist("$1")');
-        $this->siteinfoMarkup("/\(:indicator ([a-z_\-]*):\)/ei",'$this->indicator("$1")');
+        $this->siteinfoMarkup("/\(:toplist ([a-z]*):\)/ei",'$this->toplist(\'$1\')');
+        $this->siteinfoMarkup("/\(:indicator ([a-z_\-]*):\)/ei",'$this->indicator(\'$1\')');
         $this->siteinfoMarkup("/\(:history:\)/e",'$this->history()');
-        $this->siteinfoMarkup("'\[style=([^\]]*)\]\s*(.*?)\s*\[/style\]'s",'<div style="$1">$2</div>');
+        $this->siteinfoMarkup("'\[style=(&quot;)?(.*?)(&quot;)?\]\s*(.*?)\s*\[/style\]'es",'$this->style(\'$2\', \'$4\')');
     }
 
     function siteinfoMarkup($pattern, $replace) {
-           global $siteinfo_directives;
-           $siteinfo_directives[] = array($pattern, $replace);
+           $this->siteinfo_directives[] = array($pattern, $replace);
     }
     function siteinfoDirectives($str) {
-           global $siteinfo_directives; // array of pattern-replace-arrays
-           if (is_array($siteinfo_directives)) {
-                   foreach ($siteinfo_directives as $direct) {
+           if (is_array($this->siteinfo_directives)) {
+                   foreach ($this->siteinfo_directives as $direct) {
                         $str = preg_replace($direct[0],$direct[1],$str);
                    }
            }
@@ -212,25 +206,22 @@ class SiteinfoMarkupEngine {
 
 
     function version() {
-        global $SOFTWARE_VERSION;
-        return $SOFTWARE_VERSION;
+        return $GLOBALS['SOFTWARE_VERSION'];
     }
 
     function uniName() {
-        global $UNI_NAME;
-        return $UNI_NAME;
+        return $GLOBALS['UNI_NAME'];
     }
 
     function uniContact() {
-        global $UNI_CONTACT;
-        $template = $this->tf->open('uniContact');
-        $template->contact = $UNI_CONTACT;
+        $template = $this->template_factory->open('uniContact');
+        $template->contact = $GLOBALS['$UNI_CONTACT'];
+        return FixLinks(htmlReady($GLOBALS['$UNI_CONTACT']));
         return $template->render();
     }
 
     function userinfo($input) {
-        $template = $this->tf->open('userinfo');
-        $db = DBManager::get();
+        $template = $this->template_factory->open('userinfo');
         $sql = "SELECT ".$GLOBALS['_fullname_sql']['full'] ." AS fullname,
                        Email, 
                        username 
@@ -238,20 +229,20 @@ class SiteinfoMarkupEngine {
                 LEFT JOIN user_info USING (user_id) 
                 WHERE username=".$db->quote($input)."
                 AND ".get_vis_query(); 
-        $result = $db->query($sql);
+        $result = $this->db->query($sql);
         if ($result->rowCount() == 1) {
             $user = $result->fetch(PDO::FETCH_ASSOC);
             $template->user = $user['username'];
-            $template->fullname = htmlReady($user['fullname']);
-            $template->email = FixLinks(htmlReady($user['Email']));
+            $template->fullname = $user['fullname'];
+            $template->email = $user['Email'];
         } else {
-            $template->error = _("Nutzer nicht gefunden.");
+            $template->error = TRUE;
         }
         return $template->render();
     }
 
     function rootlist() {
-        $template = $this->tf->open('rootlist');
+        $template = $this->template_factory->open('rootlist');
         $sql = "SELECT ".$GLOBALS['_fullname_sql']['full'] ." AS fullname,
                        Email, 
                        username 
@@ -260,17 +251,17 @@ class SiteinfoMarkupEngine {
                 WHERE perms='root' 
                 AND ".get_vis_query()." 
                 ORDER BY Nachname";
-        $result = DBManager::get()->query($sql);
+        $result = $this->db->query($sql);
         if ($result->rowCount() > 0) {
             $template->users = $result->fetchAll(PDO::FETCH_ASSOC);
         } else {
-            $template->error = _("keine. Na sowas. Das kann ja eigentlich gar nicht sein...");
+            $template->error = TRUE;
         }
         return $template->render();
     }
 
     function adminList() {
-        $template = $this->tf->open('adminList');
+        $template = $this->template_factory->open('adminList');
         $sql = "SELECT Institute.Name AS institute,
                 ".$GLOBALS['_fullname_sql']['full'] ." AS fullname,
                 auth_user_md5.Email,
@@ -282,11 +273,11 @@ class SiteinfoMarkupEngine {
                 WHERE inst_perms='admin'
                 AND ".get_vis_query()." 
                 ORDER BY Institute.Name, auth_user_md5.Nachname, auth_user_md5.Vorname";
-        $result = DBManager::get()->query($sql);
+        $result = $this->db->query($sql);
         if ($result->rowCount() > 0) {
             $template->admins = $result->fetchAll(PDO::FETCH_ASSOC);
         } else {
-            $template->error = _("keine. Na sowas. Das kann ja eigentlich gar nicht sein...");
+            $template->error = TRUE;
         }
         return $template->render();
     }
@@ -294,23 +285,22 @@ class SiteinfoMarkupEngine {
     function coregroup() {
         $cache = StudipCacheFactory::getCache();
         if (!($remotefile = $cache->read('coregroup'))) {
-            $remotefile = file ('http://www.studip.de/crew.php');
+            $remotefile = file_get_contents ('http://www.studip.de/crew.php');
             $cache->write('coregroup', $remotefile);
         }
-        $out = implode($remotefile,'');
-        $out = substr($out, stripos($out, "<table"), strrpos($out, "</table>"));
+        $out = substr($remotefile, stripos($remotefile, "<table"), strrpos($remotefile, "</table>"));
         $out = str_replace(array('class="normal"','align="left"'), array("",""), $out);
         return $out;
     }
 
     function toplist($item) {
-        $template = $this->tf->open('toplist');
+        $template = $this->template_factory->open('toplist');
         switch ($item) {
             case "mostparticipants":
                 $template->heading = _("die meisten Teilnehmer");
                 $sql = "SELECT seminar_user.seminar_id,
                                seminare.name AS display,
-                               count(seminar_user.seminar_id) as count 
+                               count(seminar_user.seminar_id) AS count 
                         FROM seminar_user 
                         INNER JOIN seminare USING(seminar_id) 
                         WHERE seminare.visible = 1 
@@ -334,7 +324,7 @@ class SiteinfoMarkupEngine {
                 $template->heading = _("die meisten Materialien (Dokumente)");
                 $sql = "SELECT a.seminar_id, 
                                b.name AS display, 
-                               count(a.seminar_id) as count 
+                               count(a.seminar_id) AS count 
                         FROM seminare b  
                         INNER JOIN dokumente a USING(seminar_id) 
                         WHERE b.visible=1 
@@ -361,7 +351,7 @@ class SiteinfoMarkupEngine {
                 $template->heading = _("die beliebtesten Homepages (Besucher)");
                 $sql = "SELECT auth_user_md5.user_id, 
                                username, 
-                               views as count, 
+                               views AS count, 
                              ".$GLOBALS['_fullname_sql']['full'] . " AS display
                         FROM object_views 
                         LEFT JOIN auth_user_md5 ON(object_id=auth_user_md5.user_id) 
@@ -373,7 +363,7 @@ class SiteinfoMarkupEngine {
                 break;
         }
         if($sql) {
-            $result = DBManager::get()->query($sql);
+            $result = $this->db->query($sql);
     	    if  ($result->rowCount() > 0) {
                 $template->lines = $result->fetchAll(PDO::FETCH_ASSOC);
             } else {
@@ -386,12 +376,11 @@ class SiteinfoMarkupEngine {
     }
 
     function indicator($key) {
-        $template = $this->tf->open('indicator');
-        $db = DBManager::get();
-        $indicator['seminar_all'] = array("query" => "SELECT count(*) from seminare",
+        $template = $this->template_factory->open('indicator');
+        $indicator['seminar_all'] = array("query" => "SELECT count(*) FROM seminare",
                                           "title" => _("Aktive Veranstaltungen"),
                                           "detail" => _("alle Veranstaltungen, die nicht archiviert wurden"));
-        $indicator['seminar_archived'] = array("query" => "SELECT count(*) from archiv",
+        $indicator['seminar_archived'] = array("query" => "SELECT count(*) FROM archiv",
                                                "title" => _("Archivierte Veranstaltungen"),
                                                "detail" => _("alle Veranstaltungen, die archiviert wurden"));
         $indicator['institute_secondlevel_all'] = array("query" => "SELECT count(*) FROM Institute WHERE Institut_id != fakultaets_id",
@@ -400,66 +389,66 @@ class SiteinfoMarkupEngine {
         $indicator['institute_firstlevel_all'] = array("query" => "SELECT count(*) FROM Institute WHERE Institut_id = fakultaets_id",
                                                        "title" => _("beteiligte Fakultäten"),
                                                        "detail" => _("alle Fakultäten"));
-        $indicator['user_admin'] = array("query" => "SELECT count(*) from auth_user_md5 WHERE perms='admin'",
-                                "title" => _("registrierte Administratoren"),
-                                "detail" => "");
-        $indicator['user_dozent'] = array("query" => "SELECT count(*) from auth_user_md5 WHERE perms='dozent'",
-                                "title" => _("registrierte Dozenten"),
-                                "detail" => "");
-        $indicator['user_tutor'] = array("query" => "SELECT count(*) from auth_user_md5 WHERE perms='tutor'",
-                                "title" => _("registrierte Tutoren"),
-                                "detail" => "");
-        $indicator['user_autor'] = array("query" => "SELECT count(*) from auth_user_md5 WHERE perms='autor'",
-                                "title" => _("registrierte Autoren"),
-                                "detail" => "");
-        $indicator['posting'] = array("query" => "SELECT count(*) from px_topics",
-                                "title" => _("Postings"),
-                                "detail" => "");
-        $indicator['document'] = array("query" => "SELECT count(*) from dokumente WHERE url = ''",
-                                "title" => _("Dokumente"),
-                                "detail" => "");
-        $indicator['link'] = array("query" => "SELECT count(*) from dokumente WHERE url != ''",
-                                "title" => _("verlinkte Dateien"),
-                                "detail" => "");
-        $indicator['litlist'] = array("query" => "SELECT count(*) from lit_list",
-                                "title" => _("Literaturlisten"),
-                                "detail" => "");
-        $indicator['termin'] = array("query" => "SELECT count(*) from termine",
-                                "title" => _("Termine"),
-                                "detail" => "");
-        $indicator['news'] = array("query" => "SELECT count(*) from news",
-                                "title" => _("News"),
-                                "detail" => "");
-        $indicator['guestbook'] = array("query" => "SELECT count(*) from user_info WHERE guestbook='1'",
-                                "title" => _("Gästebücher"),
-                                "detail" => "");
-        $indicator['vote'] = array("query" => "SELECT count(*) from vote WHERE type='vote'",
-                                "title" => _("Umfragen"),
-                                "detail" => "",
-                                "constraint" => $GLOBALS['VOTE_ENABLE']);
-        $indicator['test'] = array("query" => "SELECT count(*) from vote WHERE type='test'",
-                                "title" => _("Tests"),
-                                "detail" => "",
-                                "constraint" => $GLOBALS['VOTE_ENABLE']);
-        $indicator['evaluation'] = array("query" => "SELECT count(*) from eval",
-                                "title" => _("Evaluationen"),
-                                "detail" => "",
-                                "constraint" => $GLOBALS['VOTE_ENABLE']);
-        $indicator['wiki_pages'] = array("query" => "SELECT COUNT(DISTINCT keyword) as count from wiki",
-                                "title" => _("Wiki-Seiten"),
-                                "detail" => "",
-                                "constraint" => $GLOBALS['WIKI_ENABLE']);
-        $indicator['lernmodul'] = array("query" => "SELECT COUNT(DISTINCT co_id) as count from seminar_lernmodul",
-                                "title" => _("ILIAS-Lernmodule"),
-                                "detail" => "",
-                                "constraint" => $GLOBALS['ILIAS_CONNECT_ENABLE']);
-        $indicator['resource'] = array("query" => "SELECT COUNT(*) from resources_objects",
-                                "title" => _("Ressourcen-Objekte"),
-                                "detail" => "von Stud.IP verwaltete Ressourcen wie Räume oder Geräte",
-                                "constraint" => $RESOURCES_ENABLE);
+        $indicator['user_admin'] = array("query" => "SELECT count(*) FROM auth_user_md5 WHERE perms='admin'",
+                                         "title" => _("registrierte Administratoren"),
+                                         "detail" => "");
+        $indicator['user_dozent'] = array("query" => "SELECT count(*) FROM auth_user_md5 WHERE perms='dozent'",
+                                          "title" => _("registrierte Dozenten"),
+                                          "detail" => "");
+        $indicator['user_tutor'] = array("query" => "SELECT count(*) FROM auth_user_md5 WHERE perms='tutor'",
+                                         "title" => _("registrierte Tutoren"),
+                                         "detail" => "");
+        $indicator['user_autor'] = array("query" => "SELECT count(*) FROM auth_user_md5 WHERE perms='autor'",
+                                         "title" => _("registrierte Autoren"),
+                                         "detail" => "");
+        $indicator['posting'] = array("query" => "SELECT count(*) FROM px_topics",
+                                      "title" => _("Postings"),
+                                      "detail" => "");
+        $indicator['document'] = array("query" => "SELECT count(*) FROM dokumente WHERE url = ''",
+                                       "title" => _("Dokumente"),
+                                       "detail" => "");
+        $indicator['link'] = array("query" => "SELECT count(*) FROM dokumente WHERE url != ''",
+                                   "title" => _("verlinkte Dateien"),
+                                   "detail" => "");
+        $indicator['litlist'] = array("query" => "SELECT count(*) FROM lit_list",
+                                      "title" => _("Literaturlisten"),
+                                      "detail" => "");
+        $indicator['termin'] = array("query" => "SELECT count(*) FROM termine",
+                                     "title" => _("Termine"),
+                                     "detail" => "");
+        $indicator['news'] = array("query" => "SELECT count(*) FROM news",
+                                   "title" => _("News"),
+                                   "detail" => "");
+        $indicator['guestbook'] = array("query" => "SELECT count(*) FROM user_info WHERE guestbook='1'",
+                                        "title" => _("Gästebücher"),
+                                        "detail" => "");
+        $indicator['vote'] = array("query" => "SELECT count(*) FROM vote WHERE type='vote'",
+                                   "title" => _("Umfragen"),
+                                   "detail" => "",
+                                   "constraint" => $GLOBALS['VOTE_ENABLE']);
+        $indicator['test'] = array("query" => "SELECT count(*) FROM vote WHERE type='test'",
+                                   "title" => _("Tests"),
+                                   "detail" => "",
+                                   "constraint" => $GLOBALS['VOTE_ENABLE']);
+        $indicator['evaluation'] = array("query" => "SELECT count(*) FROM eval",
+                                         "title" => _("Evaluationen"),
+                                         "detail" => "",
+                                         "constraint" => $GLOBALS['VOTE_ENABLE']);
+        $indicator['wiki_pages'] = array("query" => "SELECT COUNT(DISTINCT keyword) AS count FROM wiki",
+                                         "title" => _("Wiki-Seiten"),
+                                         "detail" => "",
+                                         "constraint" => $GLOBALS['WIKI_ENABLE']);
+        $indicator['lernmodul'] = array("query" => "SELECT COUNT(DISTINCT co_id) AS count FROM seminar_lernmodul",
+                                        "title" => _("ILIAS-Lernmodule"),
+                                        "detail" => "",
+                                        "constraint" => $GLOBALS['ILIAS_CONNECT_ENABLE']);
+        $indicator['resource'] = array("query" => "SELECT COUNT(*) FROM resources_objects",
+                                       "title" => _("Ressourcen-Objekte"),
+                                       "detail" => "von Stud.IP verwaltete Ressourcen wie Räume oder Geräte",
+                                       "constraint" => $RESOURCES_ENABLE);
         if (in_array($key,array_keys($indicator))) {
             if (!isset($indicator[$key]['constraint']) || $indicator[$key]['constraint']) {
-                $result = $db->query($indicator[$key]['query']);
+                $result = $this->db->query($indicator[$key]['query']);
                 $rows = $result->fetch(PDO::FETCH_NUM);
                 $template->title = $indicator[$key]['title'];
                 if ($indicator[$key]['detail']) {
@@ -476,16 +465,19 @@ class SiteinfoMarkupEngine {
     }
 
     function history() {
-        $history = file($ABSOLUTE_PATH_STUDIP.'history.txt');
-        $out =  formatReady(implode('',$history));
-    	return $out;
+        return formatReady(file_get_contents($ABSOLUTE_PATH_STUDIP.'history.txt'));
+    }
+    function style($style, $styled) {
+        $style = str_replace('\"', '"', $style);
+        $styled = str_replace('\"', '"', $styled);
+        return '<div style="'.$style.'">'.$styled.'</div>';
     }
 }
 
 function language_filter($input) {
-    $pattern = "'\[lang=(\w*)\]\s*(.*?)\s*\[/lang\]'es";
-    $output = preg_replace($pattern,'stripforeignlanguage(\'$1\', \'$2\')',$input);
-    return $output;
+    return preg_replace("'\[lang=(\w*)\]\s*(.*?)\s*\[/lang\]'es",
+                        'stripforeignlanguage(\'$1\', \'$2\')',
+                        $input);
 }
 
 function stripforeignlanguage($language, $text) {

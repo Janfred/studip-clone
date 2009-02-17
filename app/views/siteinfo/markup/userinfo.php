@@ -1,8 +1,7 @@
 <? if ($error) : ?>
-    <em><?= $error ?></em>
+    <em><?= _("Nutzer nicht gefunden.") ?></em>
 <? else : ?>
-    <a href="<?= URLHelper::getLink('about.php', array('username' => $username)) ?>">
-        <?= $fullname?>
-    </a>
-    , E-Mail: <?= $email?>
+    <a href="<?= URLHelper::getLink('about.php', 
+                                     array('username' => $username)) 
+              ?>"><?= htmlReady($fullname)?></a>, E-Mail: <?= FixLinks(htmlReady($email))?>
 <? endif ?>
