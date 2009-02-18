@@ -202,7 +202,7 @@ switch ($view) {
 	case "view_group_schedule":
 		$room_groups =& RoomGroups::GetInstance();
 		$page_intro=_("Hier können Sie sich die Belegungszeiten einer Raumgruppe anzeigen lassen.");
-		$CURRENT_PAGE=_("Belegungszeiten einer Raumgruppe pro Semester ausgeben:") . ' ' . htmlReady($room_groups->getGroupName($resources_data['actual_room_group']));
+		$CURRENT_PAGE=_("Belegungszeiten einer Raumgruppe pro Semester ausgeben:") . ' ' . $room_groups->getGroupName($resources_data['actual_room_group']);
 
 		$infobox[0]["kategorie"] = _("Aktionen:");
 		$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
