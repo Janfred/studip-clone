@@ -352,7 +352,7 @@ class ContentModule
 				$this->setDescription(sprintf(_("Das Lernmodul, dass dieser Veranstaltung / Einrichtung an dieser Stelle zugeordnet war, existiert nicht mehr. Dieser Fehler tritt auf, wenn das angebundene LCMS \"%s\" nicht erreichbar ist oder wenn das Lernmodul innerhalb des angebundenen Systems gel&ouml;scht wurde."), $this->getCMSName()));
 				break;
 			case "deleted":
-				$this->setTitle(_("--- Dieses Content-Modul wurde im angebundenen System ge&oumll&ouml;scht! ---"));
+				$this->setTitle(_("--- Dieses Content-Modul wurde im angebundenen System gel&ouml;scht! ---"));
 				$this->setDescription(sprintf(_("Das Lernmodul, dass dieser Veranstaltung / Einrichtung an dieser Stelle zugeordnet war, wurde gel&ouml;scht."), $this->getCMSName()));
 				break;
 			default:
