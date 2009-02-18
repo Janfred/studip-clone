@@ -78,9 +78,9 @@ class Course_StudyAreasController extends Trails_Controller {
       $this->set_status(400);
       return $this->render_template('course/study_areas/no_course', $layout);
     }
-    
-  	$this->set_course($course_id);
-  	
+
+    $this->set_course($course_id);
+
     $GLOBALS['CURRENT_PAGE'] = sprintf('%s - %s',
                                        (getHeaderLine($course_id)),
                                        _('Studienbereichsauswahl'));
@@ -300,17 +300,10 @@ class Course_StudyAreasController extends Trails_Controller {
     $this->selection = self::get_selection($course_id);
     if ($course_id){
   	  $this->course_id = $course_id;
-  	  $this->course = Seminar::getInstance($course_id);
-      list(, $this->semester_id) = array_values(
-                               	   SemesterData::GetInstance()->
-                                   getSemesterDataByDate($this->course->
-                                   getSemesterStartTime())
-                                   );
+      $this->course = Seminar::getInstance($course_id);
+      $this->semester_id = SemesterData::GetSemesterIdByDate($this->course->getSemesterStartTime());
     } else {
-      list(, $this->semester_id) = array_values(
-                                   SemesterData::GetInstance()->
-                                   getSemesterDataByDate($GLOBALS['sem_create_data']['sem_start_time'])
-                                   );
+      $this->semester_id = SemesterData::GetSemesterIdByDate($GLOBALS['sem_create_data']['sem_start_time']);
     }
   }
 }
