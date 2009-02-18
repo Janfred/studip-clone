@@ -135,9 +135,14 @@ class StudipStudyAreaSelection {
 		# not memoized yet, do so now
 		if (is_null($this->searchResult)) {
 			$this->searchResult = StudipStudyArea::search($this->searchKey);
+			usort($this->searchResult, array(__CLASS__, 'sortSearchResult'));
 		}
 
 		return $this->searchResult;
+	}
+
+	static function sortSearchResult($a, $b) {
+		return strcmp($a->getPath('·'), $b->getPath('·'));
 	}
 
 
