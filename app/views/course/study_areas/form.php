@@ -48,10 +48,10 @@
         <em><?= sprintf(_("Der Suchbegriff '%s' lieferte kein Ergebnis."), htmlReady($selection->getSearchKey())) ?></em>
       <? else : ?>
         <h3><?= _("Suchergebnisse:") ?></h3>
-        <? TextHelper::reset_cycle(); $show_path = TRUE; ?>
+        <? TextHelper::reset_cycle(); $show_path = TRUE; $show_link = TRUE; ?>
         <? foreach ($selection->getSearchResult() as $area) : ?>
           <div class="<?= TextHelper::cycle('odd', 'even') ?>">
-            <?= $this->render_partial('course/study_areas/entry', compact('area', 'show_path')); ?>
+            <?= $this->render_partial('course/study_areas/entry', compact('area', 'show_path', 'show_link')); ?>
           </div>
         <? endforeach ?>
       <? endif ?>
