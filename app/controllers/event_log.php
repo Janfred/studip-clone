@@ -64,9 +64,6 @@ class EventLogController extends Trails_Controller
      */
     function show_action ()
     {
-        // clean up expired log events
-        $this->event_log->cleanup_log_events();
-
         $this->action_id = $_REQUEST['action_id'];
         $this->object_id = $_REQUEST['object_id'];
         $this->log_actions = $this->event_log->get_used_log_actions();

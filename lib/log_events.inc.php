@@ -45,13 +45,4 @@ function log_event($action, $affected=NULL, $coaffected=NULL, $info=NULL, $dbg_i
 	return;
 }
 
-function cleanup_log_events() {
-	global $LOG_ENABLE;
-	if (!$LOG_ENABLE) return; // do nothing if logging is disabled
-	$db=new DB_Seminar;
-	$q2="DELETE log_events.* FROM log_events LEFT JOIN log_actions ON (log_events.action_id=log_actions.action_id) WHERE expires > 0 AND (log_events.mkdate + log_actions.expires < UNIX_TIMESTAMP())";
-	$db->query($q2);
-	return $db->nf();
-}
-
 ?>

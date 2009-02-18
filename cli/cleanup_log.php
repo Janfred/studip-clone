@@ -29,11 +29,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once dirname(__FILE__) . '/studip_cli_env.inc.php';
-require_once 'lib/language.inc.php';
-require_once 'lib/functions.php';
-require_once 'lib/log_events.inc.php';
+require_once 'studip_cli_env.inc.php';
+require_once 'app/models/event_log.php';
 
-cleanup_log_events();
-
-
+$event_log = new EventLog();
+$event_log->cleanup_log_events();
