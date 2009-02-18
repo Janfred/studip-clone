@@ -58,7 +58,7 @@ function showlog_format_resource($res_id) {
 	if ($resObj->getName())
 		$ret .= $resObj->getFormattedLink();
 	else
-		$ret .= $resid;
+		$ret .= $res_id;
 	return $ret;
 }
 
