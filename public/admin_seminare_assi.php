@@ -1554,13 +1554,12 @@ if (($form == 6) && ($jump_next_x))
 			if ($sem_create_data['term_count'] > 0)
 			for ($i = 0; $i < $sem_create_data['term_count']; $i++) {
 				$termin = new SingleDate(array('seminar_id' => $sem->getId()));
-				$new_date = array('start' => 0, 'end' => '0');
-				if(check_and_set_date($sem_create_data['term_tag'][$i], $sem_create_data['term_monat'][$i], $sem_create_data['term_jahr'][$i], 
-					$sem_create_data['term_start_stunde'][$i] , $sem_create_data['term_start_minute'][$i], $new_date, 'start') && 
+				$new_date = array('start' => 0, 'end' => 0);
+				if (check_and_set_date($sem_create_data['term_tag'][$i], $sem_create_data['term_monat'][$i], $sem_create_data['term_jahr'][$i], 
+					$sem_create_data['term_start_stunde'][$i], $sem_create_data['term_start_minute'][$i], $new_date, 'start') && 
 					check_and_set_date($sem_create_data['term_tag'][$i], $sem_create_data['term_monat'][$i], $sem_create_data['term_jahr'][$i], 
-					$sem_create_data['term_end_stunde'][$i] , $sem_create_data['term_end_minute'][$i], $new_date, 'end')) 
+					$sem_create_data['term_end_stunde'][$i], $sem_create_data['term_end_minute'][$i], $new_date, 'end')) 
 				{
-					
 					$termin->setTime($new_date['start'], $new_date['end']);
 
 					if ($sem_create_data['term_resource_id'][$i]) {
