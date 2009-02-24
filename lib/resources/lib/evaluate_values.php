@@ -347,39 +347,24 @@ if ($change_object_schedules) {
 	}
 
 	if (($ObjectPerms->havePerm("tutor")) && ($change_meta_to_single_assigns_x)) {
-		echo 'Fehler in '. __file__ .', Zeile '. __line__ . ': Tried to execute deprecated Code!<br/>Report this to your administrator!<br/>';
-		die;
-		/* Nicht mehr kompatibel zur RaumZeit-Seite, unklar ob der Code überhaupt noch gebraucht wird.
 		$assObj =& AssignObject::Factory($change_object_schedules);	
-		if ($assObj->getOwnerType() == 'sem'){
-			$semResAssign = new VeranstaltungResourcesAssign($assObj->getAssignUserId());
-			$semResAssign->deleteAssignedRooms();
-
-			$resultAssi = dateAssi ($assObj->getAssignUserId(), "insert", FALSE, FALSE, FALSE, FALSE);
-			if ($resultAssi["changed"]) {
-				$return_schedule = TRUE;
-				header (sprintf("Location:resources.php?quick_view=%s&quick_view_mode=%s&show_msg=37", ($view_mode == "oobj") ? "openobject_schedule" : "view_schedule", $view_mode));
+		$events = $assObj->getEvents();
+		if (is_array($events)){
+			$create_assign = new AssignObject(false);
+			$create_assign->setResourceId($assObj->getResourceId());
+			$create_assign->setAssignUserId($assObj->getAssignUserId());
+			$create_assign->setUserFreeName($assObj->getUserFreeName());
+			$assObj->delete();
+			foreach($events as $one_event){
+				$create_assign->setBegin($one_event->begin);
+				$create_assign->setEnd($one_event->end);
+				$create_assign->id = $one_event->id;
+				$create_assign->store(true);
 			}
-		} else {
-			$events = $assObj->getEvents();
-			if (is_array($events)){
-				$create_assign = new AssignObject(false);
-				$create_assign->setResourceId($assObj->getResourceId());
-				$create_assign->setAssignUserId($assObj->getAssignUserId());
-				$create_assign->setUserFreeName($assObj->getUserFreeName());
-				$assObj->delete();
-				foreach($events as $one_event){
-					$create_assign->setBegin($one_event->begin);
-					$create_assign->setEnd($one_event->end);
-					$create_assign->id = $one_event->id;
-					$create_assign->store(true);
-				}
-				$return_schedule = TRUE;
-				$change_object_schedules = $events[0]->id;
-				header (sprintf("Location:resources.php?quick_view=%s&quick_view_mode=%s&show_msg=37", ($view_mode == "oobj") ? "openobject_sem_schedule" : "view_sem_schedule", $view_mode));
-			}
+			$return_schedule = TRUE;
+			$change_object_schedules = $events[0]->id;
+			header (sprintf("Location:resources.php?quick_view=%s&quick_view_mode=%s&show_msg=37", ($view_mode == "oobj") ? "openobject_sem_schedule" : "view_sem_schedule", $view_mode));
 		}
-		*/
 	}
 
 	if (($ObjectPerms->havePerm("admin")) && ($send_change_resource_x)) {

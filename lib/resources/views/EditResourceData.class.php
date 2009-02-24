@@ -529,15 +529,7 @@ class EditResourceData {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" valign="top">
 				<?
-				if ($owner_type == "sem") {
-				?>
-					<font size=-1>
-					<b><?=_("Regelm&auml;&szlig;ige Belegung in Einzeltermine umwandeln:")?></b><br /><br />
-					<?=_("Nutzen Sie diese Funktion, um eine Terminserie in Einzeltermine umzuwandeln. Diese Einzeltermine k&ouml;nnen dann getrennt bearbeitet werden. Ein Ablaufplan wird dabei angelegt.");?>
-					<br /><br /><input type="IMAGE" align="absmiddle" <?=makeButton("umwandeln", "src") ?> border=0 name="change_meta_to_single_assigns" value="<?=_("umwandeln")?>">
-					</font>
-				<?
-				} elseif (!in_array($resAssign->getRepeatMode(), array('na','sd'))) {
+				if (!in_array($resAssign->getRepeatMode(), array('na','sd'))) {
 					?>
 					<font size=-1>
 					<b><?=_("Regelm&auml;&szlig;ige Belegung in Einzeltermine umwandeln:")?></b><br /><br />
