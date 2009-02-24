@@ -133,7 +133,7 @@ else if ($action=="confirm_delete") {
 		echo $contentTable->openCell();
 		echo "<font size=2>"._("Wollen Sie die Sperrebene l&ouml;schen?")."</font>";
 		echo "<br><br>";
-		echo "<a href=\"".URLHelper::getLink("lock_id=".$lock_id."&action=delete")."\">".makeButton("ja2","img")."</a>&nbsp;&nbsp;<a href=\"".URLHelper::getLink()."\">".makeButton("nein","img")."</a>";
+		echo "<a href=\"".URLHelper::getLink("?lock_id=".$lock_id."&action=delete")."\">".makeButton("ja2","img")."</a>&nbsp;&nbsp;<a href=\"".URLHelper::getLink()."\">".makeButton("nein","img")."</a>";
 		echo show_content();
 	} else {
 		echo $contentTable->closeCell();
