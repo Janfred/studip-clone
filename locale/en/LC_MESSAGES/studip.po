@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: studip\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 16:22+0100\n"
-"PO-Revision-Date: 2009-02-25 13:29+GMT\n"
+"PO-Revision-Date: 2009-02-25 18:23+GMT\n"
 "Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
 "Language-Team: english <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17480,7 +17480,7 @@ msgstr "Access authorisations"
 #: ../lib/include/links_admin.inc.php:338
 #: ../lib/include/links_admin.inc.php:362
 msgid "Gruppen / Funktionen"
-msgstr "Groups&nbsp;/&nbsp;functions"
+msgstr "Groups / functions"
 
 #: ../lib/include/links_admin.inc.php:339
 msgid "Module/Plugins"
@@ -25003,7 +25003,6 @@ msgid "Sie können beliebig viele Studienbereiche auswählen."
 msgstr "Here you can select arbitrarily many subject areas."
 
 #: ../lib/extern/views/ExternEditModule.class.php:464
-
 msgid "Geben Sie '%%%' ein, um alle Studienbereiche zu finden."
 msgstr "For finding all study areas enter '%%%'."
 
@@ -31169,7 +31168,6 @@ msgid "Sie k&ouml;nnen mehrere Antworten ausw&auml;hlen."
 msgstr "You can select more than one answer."
 
 #: ../lib/vote/view/vote_show.lib.php:822
-
 msgid " Die Summe kann daher über 100% liegen."
 msgstr " Therefore the total can be greater than 100%."
 
