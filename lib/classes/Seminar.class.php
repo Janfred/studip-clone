@@ -363,7 +363,7 @@ class Seminar {
 				}
 				$return_string .= _("Termine am"). " ";
 			}
-			
+
 			$return_string .= join('', shrink_dates($dates));
 		}
 		// activate this with StEP 00077
@@ -678,7 +678,7 @@ class Seminar {
 		$previousEndSemester = $this->getEndSemester();		// save the end-semester before it is changed, so we can choose lateron in which semesters we need to be rebuilt the SingleDates
 
 		if ($end != $this->getEndSemester()) {	// only change Duration if it differs from the current one
-        
+
 			if ($end == 0) {					// the seminar takes place just in the selected start-semester
 				$this->semester_duration_time = 0;
 				$this->metadate->setSeminarDurationTime(0);
@@ -1423,7 +1423,7 @@ class Seminar {
 						if ($raum) {
 							$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$raum;
 							$room_stat = $this->getStatOfNotBookedRooms($cycle->getMetadateId());
-							$info[$i]['name'] .= sprintf(_(" (%s von %s belegt)"), $room_stat['all'] - $room_stat['open'] , $room_stat['all']); 
+							$info[$i]['name'] .= sprintf(_(" (%s von %s belegt)"), $room_stat['all'] - $room_stat['open'] , $room_stat['all']);
 						}
 						if (!$single) unset($info[$i]['raum']);
 						$i++;
@@ -1640,19 +1640,19 @@ class Seminar {
 
 		return $participant_count;
 	}
-	
+
 	function isAdmissionEnabled(){
 		return in_array($this->admission_type, array(1,2));
 	}
-	
+
 	function isAdmissionQuotaChecked(){
 		return $this->admission_selection_take_place == 0  && ($this->admission_type == 1 || ($this->admission_enable_quota && $this->admission_type == 2));
 	}
-	
+
 	function isAdmissionQuotaEnabled(){
 		return ($this->isAdmissionEnabled() && $this->admission_selection_take_place != 1  && $this->admission_enable_quota );
 	}
-	
+
 	function restoreAdmissionStudiengang() {
 		$this->admission_studiengang = null;
 		if(!$this->isAdmissionEnabled()) return false;
@@ -1687,7 +1687,7 @@ class Seminar {
 		$this->admission_studiengang = $ret;
 		return true;
 	}
-	
+
 	function getFreeAdmissionSeats($studiengang_id = null){
 		if(is_null($this->admission_studiengang) && !$this->restoreAdmissionStudiengang()){
 			return false;
@@ -1703,7 +1703,7 @@ class Seminar {
 		}
 		return $free > 0 ? $free : 0;
 	}
-	
+
 	function getAdmissionChance($studiengang_id = null){
 		$free = $this->getFreeAdmissionSeats($studiengang_id);
 		if($studiengang_id && $this->isAdmissionQuotaEnabled()){
@@ -1727,7 +1727,7 @@ class Seminar {
 
 		$stmt = DBManager::get()->prepare("SELECT DISTINCT sem_tree_id ".
 		                                  "FROM seminar_sem_tree ".
-		                                 "WHERE seminar_id=?");
+		                                  "WHERE seminar_id=?");
 
 		$stmt->execute(array($this->id));
 		return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
@@ -1738,7 +1738,7 @@ class Seminar {
 	 *
 	 * @param  array      an array of IDs
 	 *
-	 * @return type       <description>
+	 * @return void
 	 */
 	function setStudyAreas($selected) {
 
@@ -1756,12 +1756,24 @@ class Seminar {
 			                     'WHERE seminar_id = ?');
 			$stmt->execute(array($this->id));
 
+			# log deleted
+			foreach ($old as $id) {
+				if (!in_array($id, $selected)) {
+					log_event("SEM_DELETE_STUDYAREA", $this->id, $id);
+				}
+			}
+
 			# insert new
 			$db = DBManager::get();
 			$stmt = $db->prepare('INSERT IGNORE INTO seminar_sem_tree '.
 			                     '(seminar_id, sem_tree_id) VALUES (?, ?)');
 			foreach ($selected as $id) {
 				$stmt->execute(array($this->id, $id));
+
+				# log added
+				if (!in_array($id, $old)) {
+					log_event("SEM_ADD_STUDYAREA", $this->id, $id);
+				}
 			}
 		}
 	}
