@@ -267,7 +267,8 @@ $cols[] = array(10,_("Anz. zusätzlich"),'count_teilnehmer_aux');
 $cols[] = array(10,_("Max."),'admission_turnout');
 $cols[] = array(10,_("Anmeldeliste") ,'count_anmeldung');
 $cols[] = array(10, _("Warteliste"),'count_wartende');
-$cols[] = array(10, _("Losdatum"),'admission_endtime');
+$cols[] = array(10, _("Losdatum").Assets::img('info', array('title' => 'bei chronologischen Verfahren: Ende der Kontingentierung',
+							    'style' => 'vertical-align: bottom;')),'admission_endtime');
 $cols[] = array(10, _("Startzeit"),'admission_starttime');
 $cols[] = array(10, _("Endzeit"),'admission_endtime_sem');
 
@@ -746,7 +747,8 @@ if(is_object($group_obj)){
 			$count3 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Warteliste") . ' '. $semdata['Name']).'&format=csv&choose=csv-warteliste&filter=awaiting&o_mode=passthrough">';
 			$count3 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Warteliste downloaden")).' ></a>';
 		}
-		$datum = $semdata['admission_endtime'];
+		// show end date only if it is actually relevant
+		$datum = $semdata['admission_type'] == 1 || $semdata['admission_type'] == 2 && $semdata['admission_enable_quota'] ? $semdata['admission_endtime'] : -1;
 		$status = $semdata['admission_status_text'];
 		echo "<tr>";
 		if ($ALLOW_GROUPING_SEMINARS) {
