@@ -65,7 +65,7 @@ function showlog_format_resource($res_id) {
 function showlog_format_username($uid) {
 	$uname=get_username($uid);
 	if ($uname) {
-		return "<a href=\"new_user_md5.php?details=$uname\">".htmlReady(get_fullname($uid))."</a>";
+		return '<a href="'.URLHelper::getLink('new_user_md5.php', array('details' => $uname)).'">'.htmlReady(get_fullname($uid)).'</a>';
 	} else {
 		return $uid;
 	}
@@ -77,7 +77,7 @@ function showlog_format_sem($sem_id, $maxlen=100) {
 	$db->query($q);
 	if ($db->next_record()) {
 		$title=htmlReady(my_substr($db->f('title'),0,$maxlen));
-		return "<a href=\"adminarea_start.php?select_sem_id=$sem_id\">".$db->f('number')." ".$title." (".$db->f('semester').")</a>";
+		return '<a href="'.URLHelper::getLink('adminarea_start.php', array('select_sem_id' => $sem_id)).'">'.htmlReady($db->f('number')).' '.$title.' ('.htmlReady($db->f('semester')).')</a>';
 	} else {
 		return $sem_id;
 	}
@@ -89,7 +89,7 @@ function showlog_format_institute($inst_id, $maxlen=100) {
 	$db->query($q);
 	if ($db->next_record()) {
 		$title=htmlReady(my_substr($db->f('title'),0,$maxlen));
-		return "<a href=\"institut_main.php?auswahl=$inst_id\">".$title."</a>";
+		return '<a href="'.URLHelper::getLink('institut_main.php', array('auswahl' => $inst_id)).'">'.$title.'</a>';
 	} else {
 		return $inst_id;
 	}
