@@ -133,32 +133,37 @@ function SetSelfAssignExclusive ($seminar_id, $flag = false) {
 }
 
 function GetAllSelected ($range_id, $level = 0) {
-	$zugeordnet = array();
-
 	$db3=new DB_Seminar;
 	$db3->query ("SELECT user_id, sg.statusgruppe_id FROM statusgruppen as sg LEFT JOIN statusgruppe_user USING(statusgruppe_id) WHERE range_id = '$range_id'");
 
+	// WTF???
 	if ($level == 0) {
 		if ($db3->num_rows() == 0) return array("");
 	} else {
 		if ($db3->num_rows() == 0) return FALSE;
 	}
 
-	$role_ids[] = array();
+	$selected = array();
+	$role_ids = array();
 
 	while ($db3->next_record()) {
-		if (!in_array($db3->f("user_id"), $zugeordnet)) {
-			$zugeordnet[] = $db3->f("user_id");
-			if (!$role_ids[$db3->f('statusgruppe_id')]) {
-				$zw = GetAllSelected($db3->f('statusgruppe_id'), $level+1);
-				if ($zw) {
-					$zugeordnet = array_merge((array)$zw, (array)$zugeordnet);
-				}
-				$role_ids[$db3->f('statusgruppe_id')] = TRUE;
+		$user_id = $db3->f('user_id');
+		$statusgruppe = $db3->f('statusgruppe_id');
+
+		if ($user_id != NULL) {
+			$selected[$user_id] = true;
+		}
+
+		if (!$role_ids[$statusgruppe]) {
+			$zw = GetAllSelected($statusgruppe, $level+1);
+			if ($zw) {
+				$selected += array_fill_keys($zw, true);
 			}
+			$role_ids[$statusgruppe] = true;
 		}
 	}
-	return $zugeordnet;
+
+	return array_keys($selected);
 }
 
 function EditStatusgruppe ($new_statusgruppe_name, $new_statusgruppe_size, $edit_id, $new_selfassign="0", $new_doc_folder = false) {
