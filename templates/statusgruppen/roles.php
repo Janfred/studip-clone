@@ -23,11 +23,11 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 
 	<td class="printhead" valign="bottom" colspan="<?= 19-$indent ?>" height="22" nowrap style="padding-left: 3px" width="<?= 99-$indent ?>%">
 		<a name="<?= $id ?>">
-		<a class="tree" href="<?= URLHelper::getLink('?role_id='. $id .'#'. $id) ?>">
-			<? if ($open == $id) :
+		<? if ($open == $id) : 
 				echo Assets::img('forumgraurunt');	
-			else :
-				echo '&nbsp;' . Assets::img('forumgrau');	
+			else : ?>
+		<a class="tree" href="<?= URLHelper::getLink('?role_id='. $id .'#'. $id) ?>">
+		<?	echo '&nbsp;' . Assets::img('forumgrau');	
 			endif; ?>
 		</a>
 			
