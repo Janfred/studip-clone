@@ -23,13 +23,11 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 
 	<td class="printhead" valign="bottom" colspan="<?= 19-$indent ?>" height="22" nowrap style="padding-left: 3px" width="<?= 99-$indent ?>%">
 		<a name="<?= $id ?>">
-		<? if ($open == $id) : 
-				echo Assets::img('forumgraurunt');	
-			else : ?>
-		<a class="tree" href="<?= URLHelper::getLink('?role_id='. $id .'#'. $id) ?>">
-		<?	echo '&nbsp;' . Assets::img('forumgrau');	
-			endif; ?>
-		</a>
+		<? if ($open == $id) : ?>
+		<a class="tree" href="<?= URLHelper::getLink('?list=true#'. $id) ?>">&nbsp;<?= Assets::img('forumgraurunt') ?></a>	
+		<? else : ?>
+		<a class="tree" href="<?= URLHelper::getLink('?role_id='. $id .'#'. $id) ?>"><?= Assets::img('forumgrau'); ?></a>
+		<? endif; ?>
 			
 		<? if ($move) : ?>
 		<a href="#"><?= Assets::img('move') ?></a>
@@ -43,8 +41,11 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 		<? endif;
 		endif;
 		?>
-		
-		<a class="tree" href="<?= URLHelper::getLink('?role_id='. $id .'#'. $id) ?>">			
+			<? if ($open == $id) : ?>
+		<a class="tree" href="<?= URLHelper::getLink('?list=true#'. $id) ?>">	
+		<? else : ?>
+		<a class="tree" href="<?= URLHelper::getLink('?role_id='. $id .'#'. $id) ?>">
+		<? endif; ?>
 			<?= htmlReady($role['role']->getName()) ?>
 		</a>
 
