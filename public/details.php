@@ -45,7 +45,8 @@ require_once 'lib/functions.php';
 require_once ('lib/classes/StudipSemTree.class.php');
 require_once ('lib/classes/DataFieldEntry.class.php');                            
 require_once ('lib/classes/StudipStmInstance.class.php');
-require_once ('lib/classes/StudipAdmissionGroup.class.php'); 
+require_once ('lib/classes/StudipAdmissionGroup.class.php');
+require_once ('lib/classes/StudipStudyArea.class.php'); 
 require_once ('lib/classes/UserDomain.php');
 
 //Inits
@@ -555,18 +556,20 @@ print_infobox ($infobox,"contract.jpg");
 			<?
 				}
 			}
-			$show_study_courses = true;
+			$studienmodule = null;
 			if ($GLOBALS['PLUGINS_ENABLE'] &&
-				$studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginByNameIfAvailable('studienmodulmanagement')){
-				$show_study_courses = $studienmodulmanagement->show_study_courses;
-				$stms = $studienmodulmanagement->getModulesForSeminar($sem_id);
-				if (count($stms)){
-					$stm_out = array();
-					list(,$semester_id) = array_values(SemesterData::GetInstance()->getSemesterDataByDate($db2->f("start_time")));
-					foreach($stms as $module_id){
-							$stm_out[] = '<a href="'.$studienmodulmanagement->getModuleDescriptionLink($module_id, $semester_id).'">'
-										. htmlReady($studienmodulmanagement->getModuleTitle($module_id, $semester_id)) . '</a>';
-						}
+			$studienmodulmanagement = PluginEngine::getPlugin('studienmodulmanagement')){
+				$studienmodule = array_filter(StudipStudyArea::getStudyAreasForCourse($sem_id), create_function('$a', 'return $a->isModule();'));
+				if (count($studienmodule)){
+					$semester_id = SemesterData::GetSemesterIdByDate($db2->f("start_time"));
+					foreach($studienmodule as $module){
+						$stm_out[$module->getId()] = '<a href="' 
+													. htmlspecialchars($studienmodulmanagement->getModuleDescriptionUrl($module->getId(), $semester_id)) 
+													. '">' 
+													. htmlReady($studienmodulmanagement->getModuleTitle($module->getId(), $semester_id))
+													. '</a> '.
+													$studienmodulmanagement->getModuleInfoHTML($module->getId(), $semester_id);
+					}
 					?>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp;
@@ -582,15 +585,18 @@ print_infobox ($infobox,"contract.jpg");
 				}
 			}
 			// Anzeige der Bereiche
-			if ($show_study_courses && $SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["bereiche"]) {
-				$sem_path = get_sem_tree_path($sem_id);
+			if ($SEM_CLASS[$SEM_TYPE[$db2->f("status")]["class"]]["bereiche"]) {
+				$sem_path = (array)get_sem_tree_path($sem_id);
+				if(is_array($studienmodule)){
+					$sem_path = array_diff_key($sem_path, $studienmodule);
+				}
 			?>
 			<tr>
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp;
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
-				if (is_array($sem_path)){
+				if (is_array($sem_path) && count($sem_path)){
 					if (count($sem_path) ==1)
 					printf ("<font size=-1><b>" . _("Studienbereich:") . "</b></font><br />");
 					else

@@ -28,13 +28,13 @@ if ($GLOBALS['PLUGINS_ENABLE']){
 	require_once("core/StudIPSystemPlugin.class.php");
 	require_once("core/StudIPHomepagePlugin.class.php");
 	require_once("core/StudIPPortalPlugin.class.php");
+	require_once("core/StudienmodulManagementPlugin.class.php");
 	require_once("core/AbstractStudIPCorePlugin.class.php");
 	require_once("core/AbstractStudIPAdministrationPlugin.class.php");
 	require_once("core/AbstractStudIPStandardPlugin.class.php");
 	require_once("core/AbstractStudIPSystemPlugin.class.php");
 	require_once("core/AbstractStudIPHomepagePlugin.class.php");
 	require_once("core/AbstractStudIPPortalPlugin.class.php");
-	require_once("core/AbstractStudienmodulManagementPlugin.class.php");
 	require_once("core/StudIPCore.class.php");
 	require_once("engine/AbstractPluginIntegratorEnginePersistence.class.php");
 	require_once("engine/StandardPluginIntegratorEnginePersistence.class.php");

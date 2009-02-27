@@ -89,7 +89,7 @@ class StudipStudyArea {
    * @var string
    */
   private $studip_object_id;
-
+  
   /**
    * DB: sem_tree::type
    *
@@ -97,7 +97,7 @@ class StudipStudyArea {
    * @var integer
    */
   private $type;
-
+  
   /**
    * Kinder dieses Studienbereichs; wird zur Memoization verwendet
    * Standardwert ist NULL. Nach Aufruf von #getChildren wird es zu einem Array.
@@ -238,17 +238,28 @@ class StudipStudyArea {
     $this->parent_id = (string) $parent_id;
     return $this;
   }
-
+  
+  /**
+   * get the type of this study area.
+   */
   function getType(){
   	return $this->type;
   }
   
+  /**
+   * set the type of this study area.
+   */
   function setType($type){
   	$this->type = (int) $type;
   	return $this;
   }
   
-  function getTypeString($type){
+  /**
+   * get the name of the type of this study area, see $SEM_TREE_TYPES in config.inc.php
+   *
+   * @return string
+   */
+  function getTypeName(){
   	if(isset($GLOBALS['SEM_TREE_TYPES'][$this->getType()]['name'])){
   		return $GLOBALS['SEM_TREE_TYPES'][$this->getType()]['name'];
   	} else {
@@ -256,6 +267,11 @@ class StudipStudyArea {
   	}
   }
   
+  /**
+   * is this study area editable, see $SEM_TREE_TYPES in config.inc.php
+   *
+   * @return bool
+   */
   function isEditable(){
   	if(isset($GLOBALS['SEM_TREE_TYPES'][$this->getType()]['editable'])){
   		return (bool)$GLOBALS['SEM_TREE_TYPES'][$this->getType()]['editable'];
@@ -263,7 +279,7 @@ class StudipStudyArea {
   		return false;
   	}
   }
-
+  
   /**
    * Get the path along the sem_tree to this study area.
    *
@@ -396,12 +412,12 @@ class StudipStudyArea {
     $db = DBManager::get();
 
     $args = array($this->info, $this->name, $this->parent_id, $this->priority,
-                  $this->studip_object_id, $this->id);
+                  $this->studip_object_id, $this->type, $this->id);
 
     if ($this->id !== NULL) {
       $stmt = $db->prepare(
         "UPDATE sem_tree SET info = ?, name = ?, parent_id = ?, ".
-                            "priority = ?, studip_object_id = ? ".
+                            "priority = ?, studip_object_id = ?, type = ? ".
         "WHERE sem_tree_id = ?");
       $result = $stmt->execute($args);
     }
@@ -409,8 +425,8 @@ class StudipStudyArea {
     else {
       $stmt = $db->prepare(
         "INSERT INTO sem_tree ".
-        "(info, name, parent_id, priority, studip_object_id, sem_tree_id) ".
-        "VALUES (?, ?, ?, ?, ?, ?)");
+        "(info, name, parent_id, priority, studip_object_id, type, sem_tree_id) ".
+        "VALUES (?, ?, ?, ?, ?, ?, ?)");
       $result = $stmt->execute($args);
     }
 
@@ -441,36 +457,47 @@ class StudipStudyArea {
     return $this;
   }
   
+  /**
+   * is this study area considered a study modul?, see $SEM_TREE_TYPES in config.inc.php
+   *
+   * @return bool
+   */
   function isModule(){
-  	if ($GLOBALS['PLUGINS_ENABLE']){
-  		$studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginByNameIfAvailable('studienmodulmanagement');
-  		if($studienmodulmanagement){
-  			return $studienmodulmanagement->isModule($this->getID());
-  		}
-  	}
-  	return false;
+    return isset($GLOBALS['SEM_TREE_TYPES'][$this->getType()]['is_module']);
   }
-
+  
+  /**
+   * returns the modul description if this study area is a module 
+   * and if there is a compatible plugin available
+   *
+   * @param string $semester_id
+   * @return string
+   */
   function getModuleDescription($semester_id = ''){
-  	if($this->isModule()){
-  		return 	PluginEngine::getPluginPersistence('Core')
-  				->getPluginByNameIfAvailable('studienmodulmanagement')
-  				->getModuleDescription($this->getID(), $semester_id);
-  	} else {
-  		return '';
-  	}
+    if($GLOBALS['PLUGINS_ENABLE'] && $this->isModule()){
+      return PluginEngine::getPlugin('studienmodulmanagement')
+             ->getModuleDescription($this->getID(), $semester_id);
+    } else {
+      return '';
+    }
   }
-
-  function getModuleInfoIcon($semester_id = ''){
-  	if($this->isModule()){
-  		return 	PluginEngine::getPluginPersistence('Core')
-  				->getPluginByNameIfAvailable('studienmodulmanagement')
-  				->getModuleInfoIcon($this->getID(), $semester_id);
-  	} else {
-  		return '';
-  	}
+  
+  /**
+   * returns a HTML snippet for the info icon if this study area is a module 
+   * and if there is a compatible plugin available
+   *
+   * @param string $semester_id
+   * @return string
+   */
+  function getModuleInfoHTML($semester_id = ''){
+    if($GLOBALS['PLUGINS_ENABLE'] && $this->isModule()){
+      return PluginEngine::getPlugin('studienmodulmanagement')
+             ->getModuleInfoHTML($this->getID(), $semester_id);
+    } else {
+      return '';
+    }
   }
-
+  
 
   /**
    * Get an associative array of all study areas of a course. The array
@@ -538,4 +565,3 @@ class StudipStudyArea {
     return $results;
   }
 }
-

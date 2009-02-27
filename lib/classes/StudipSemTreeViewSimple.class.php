@@ -41,6 +41,7 @@ class StudipSemTreeViewSimple {
 
 	var $tree;
 	var $show_entries;
+	var $studienmodulmanagement;
 
 	/**
 	* constructor
@@ -64,7 +65,7 @@ class StudipSemTreeViewSimple {
 			$this->start_item_id = "root";
 		}
 		if ($GLOBALS['PLUGINS_ENABLE']){
-			$this->studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginByNameIfAvailable('studienmodulmanagement');
+			$this->studienmodulmanagement = PluginEngine::getPlugin('studienmodulmanagement');
 		}
 	}
 
@@ -123,8 +124,8 @@ class StudipSemTreeViewSimple {
 	}
 
 	function getInfoIcon($item_id){
-		if(is_object($this->studienmodulmanagement) && $this->studienmodulmanagement->isModule($item_id)){
-			$ret = $this->studienmodulmanagement->getModuleInfoIcon($item_id, SemesterData::GetSemesterIdByIndex($this->tree->sem_number[0]));
+		if(is_object($this->studienmodulmanagement) && $this->tree->isModuleItem($item_id)){
+			$ret = $this->studienmodulmanagement->getModuleInfoHTML($item_id, SemesterData::GetSemesterIdByIndex($this->tree->sem_number[0]));
 		} else {
 		if ($item_id == "root"){
 				$info = ($this->root_content) ? $this->root_content : _("Keine weitere Info vorhanden");

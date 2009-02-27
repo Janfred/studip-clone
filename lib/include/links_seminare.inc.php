@@ -36,8 +36,11 @@ if (!$GLOBALS['perm']->have_perm('admin')){
 	$structure['veranstaltungen_suche'] = array ('topKat' => '', 'name' => _("Veranstaltungen suchen"), 'link' => 'sem_portal.php', 'active' => FALSE);
 }
 if ($GLOBALS['PLUGINS_ENABLE'] &&
-$studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginByNameIfAvailable('studienmodulmanagement')){
-	$structure = array_merge($structure, (array)$studienmodulmanagement->getModuleCatalogNavigation());
+$studienmodulmanagement = PluginEngine::getPlugin('studienmodulmanagement')){
+	if($plugin_struct = $reiter->getStructureForPlugin($studienmodulmanagement, '', 'getModuleCatalogNavigation')){
+		$structure = array_merge($structure, $plugin_struct['structure']);
+		if($plugin_struct['reiter_view']) $reiter_view = $plugin_struct['reiter_view'];
+	}
 }
 
 //Bottomkats
@@ -47,16 +50,22 @@ if (!$GLOBALS['perm']->have_perm('admin')) {
 	if ($GLOBALS['STM_ENABLE'] && $GLOBALS['perm']->have_perm('dozent')){
 		$structure["my_stm"]=array ('topKat'=>"meine_veranstaltungen", 'name'=>_("meine Studienmodule"), 'link'=>"my_stm.php", 'active'=>FALSE);
 	}
-	if (is_object($studienmodulmanagement) && is_object($studienmodulmanagement->getMyModulesNavigation())){
-		$structure["my_modules"]=array ("topKat"=>"meine_veranstaltungen", "name"=>$studienmodulmanagement->getMyModulesNavigation()->getDisplayName(), "link"=>$studienmodulmanagement->getMyModulesNavigation()->getLink(), "active"=>FALSE);
-	}
 	$structure['my_archiv'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("meine archivierten Veranstaltungen"), 'link' => 'my_archiv.php', 'active' => FALSE);
 	if ($GLOBALS['EXPORT_ENABLE'])
 		$structure['record_of_study'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("Druckansicht"), 'link' => 'recordofstudy.php', 'active' => FALSE);
 }
-if ($GLOBALS['perm']->have_perm('admin'))
+if ($GLOBALS['perm']->have_perm('admin')){
 	$structure['veranstaltungs_timetable'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("Veranstaltungs-Timetable"), 'link' => 'mein_stundenplan.php', 'active' => FALSE);
-//
+}
+if (!$GLOBALS['perm']->have_perm('root')){
+	if (is_object($studienmodulmanagement)){
+		if ($plugin_struct = $reiter->getStructureForPlugin($studienmodulmanagement, 'meine_veranstaltungen','getMyModulesNavigation')){
+		 	$structure = array_merge($structure, $plugin_struct['structure']);
+		 	if($plugin_struct['reiter_view']) $reiter_view = $plugin_struct['reiter_view'];
+		}
+	}
+}
+
 $structure['all'] = array ('topKat' => 'veranstaltungen_suche', 'name' => _("Alle"), 'link' => 'sem_portal.php?view=all&reset_all=TRUE', 'active' => FALSE);
 foreach ($GLOBALS['SEM_CLASS'] as $key => $val)  {
 	$structure['class_'.$key] = array ('topKat' => 'veranstaltungen_suche', 'name' => $val['name'], 'link' => 'sem_portal.php?view='.$key.'&reset_all=TRUE&cmd=qs', 'active' => FALSE);
@@ -64,44 +73,39 @@ foreach ($GLOBALS['SEM_CLASS'] as $key => $val)  {
 if ($GLOBALS['STM_ENABLE']){
 	$structure["mod"]=array ("topKat"=>"veranstaltungen_suche", "name"=>_("Studienmodule"), "link"=>"sem_portal.php?view=mod&reset_all=TRUE", "active"=>FALSE);
 }
-//
+
 
 //View festlegen
-switch ($GLOBALS['i_page']) {
-	case 'meine_seminare.php' :
-		if (isset($GLOBALS['view']) && ($GLOBALS['view'] == 'ext'))
-			$reiter_view = 'meine_veranstaltungen_extendet';
-		else
-			$reiter_view = 'meine_veranstaltungen';
-	break;
-	case 'my_archiv.php':
-		$reiter_view = 'my_archiv';
-	break;
-	case "sem_portal.php" :
-		if ($GLOBALS['view']=="all") $reiter_view="all";
-		elseif ($GLOBALS['view'] == 'mod')  $reiter_view="mod";
-		else
-			$reiter_view="class_".$GLOBALS['view'];
-	break;
-	case 'mein_stundenplan.php' :
-		$reiter_view = 'veranstaltungs_timetable';
-	break;
-	case 'recordofstudy.php' :
-		$reiter_view = 'record_of_study';
-	break;
-	case "my_stm.php":
-		$reiter_view="my_stm";
-	break;
-	case "plugins.php":
-		if(is_object($studienmodulmanagement)){
-			$reiter_view = $studienmodulmanagement->getCurrentView();
-		} else {
-			$reiter_view = '';
-		}
-	break;
-	default :
-		$reiter_view = 'meine_seminare';
-	break;
+if(!$reiter_view){
+	switch ($GLOBALS['i_page']) {
+		case 'meine_seminare.php' :
+			if (isset($GLOBALS['view']) && ($GLOBALS['view'] == 'ext'))
+				$reiter_view = 'meine_veranstaltungen_extendet';
+			else
+				$reiter_view = 'meine_veranstaltungen';
+		break;
+		case 'my_archiv.php':
+			$reiter_view = 'my_archiv';
+		break;
+		case "sem_portal.php" :
+			if ($GLOBALS['view']=="all") $reiter_view="all";
+			elseif ($GLOBALS['view'] == 'mod')  $reiter_view="mod";
+			else
+				$reiter_view="class_".$GLOBALS['view'];
+		break;
+		case 'mein_stundenplan.php' :
+			$reiter_view = 'veranstaltungs_timetable';
+		break;
+		case 'recordofstudy.php' :
+			$reiter_view = 'record_of_study';
+		break;
+		case "my_stm.php":
+			$reiter_view="my_stm";
+		break;
+		default :
+			$reiter_view = 'meine_seminare';
+		break;
+	}
 }
 
 $reiter->create($structure, $reiter_view);

@@ -256,7 +256,7 @@ $SEM_CLASS[6]=array("name"=>_("importierte Kurse"),
 //weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
 $SEM_TREE_TYPES[0] = array("name" => "", "editable" => true);
-$SEM_TREE_TYPES[1] = array("name" => _("Modul") , "editable" => true);
+$SEM_TREE_TYPES[1] = array("name" => _("Studienmodul") , "editable" => true, "is_module" => true);
 /*
 $SEM_TREE_TYPES[2] = array("name" => _(""), "editable" => true);
 $SEM_TREE_TYPES[3] = array("name" => _(""), "editable" => true);

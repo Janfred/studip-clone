@@ -13,7 +13,7 @@ $_id = htmlReady($area->getID());
                                   array('study_area_selection[selected]' => $area->getParentId())) ?>">
     <?= htmlReady($area->getPath(' · ')) ?>
   </a>
-  <? if($area->isModule()) echo $area->getModuleInfoIcon($semester_id); ?>
+  <? if($area->isModule()) echo $area->getModuleInfoHTML($semester_id); ?>
   <input type="hidden" name="study_area_selection[areas][]" class="study_area_selection_area" value="<?= $_id ?>" />
 </li>
 

@@ -367,15 +367,6 @@ class SemBrowse {
 				if ($this->show_class()){
 					printf ("<td nowrap align=\"center\"><a href=\"%s?level=vv&cmd=qs&sset=0\"><b>%s</b><br><br><img src=\"".$GLOBALS['ASSETS_URL']."images/kommentar.jpg\" %s border=\"0\" /></a></td>", $PHP_SELF, _("Suche im Vorlesungsverzeichnis"), $_language_path,tooltip(_("Suche im Vorlesungsverzeichnis")));
 				}
-				if ($GLOBALS['PLUGINS_ENABLE'] &&
-				$studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginByNameIfAvailable('studienmodulmanagement')){
-					if($studienmodulmanagement->getModuleSearchLink()){
-						printf('<td nowrap align="center"><a href="%s"><b>%s</b><br><br><img src="%s"></a></td>',
-						$studienmodulmanagement->getModuleSearchLink(),
-						htmlReady($studienmodulmanagement->getModuleSearchText()),
-						$studienmodulmanagement->getModuleSearchIcon());
-					}
-				}
 				printf ("</tr></table>");
 			}
 			echo "</font></div>";

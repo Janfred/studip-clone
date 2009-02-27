@@ -446,13 +446,12 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$plugins = $persist->getAllActivatedPlugins();
 		if (is_array($plugins)){
 			foreach ($plugins as $adminplugin) {
-				if ($adminplugin->hasNavigation()){
-					$nav = $adminplugin->getNavigation();
-					$structure["plugins_" . $adminplugin->getPluginid()]=array ('topKat'=>"plugins", 'name'=>$nav->getDisplayname(), 'link'=> $nav->getLink(), 'active'=>FALSE);
+				if($plugin_struct = $reiter->getStructureForPlugin($adminplugin, 'plugins')){
+					$structure = array_merge($structure, $plugin_struct['structure']);
+					if($plugin_struct['reiter_view']) $reiter_view = $plugin_struct['reiter_view'];
 				}
 			}
 		}
-
 	}
 	//Reitersystem Ende
 
@@ -605,16 +604,6 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			case "admin_config.php":
 				$reiter_view = "config";
 				break;
-			case "plugins.php":
-				// check if view is delegated to a bottomkat
-				$pid = PluginEngine::getCurrentPluginId();
-				$reiter_view = "plugins_" . $pid;
-				$ppersist = PluginEngine::getPluginPersistence();
-				$viewplugin = $ppersist->getPlugin($pid);
-				if (PluginEngine::getTypeOfPlugin($viewplugin) <> "Administration"){
-					$reiter_view = "plugins";
-				}
-			break;
 			default:
 			$reiter_view = substr($i_page,0, strpos($i_page,'.php'));
 		}

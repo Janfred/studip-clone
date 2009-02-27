@@ -50,7 +50,16 @@ $search_obj = new StudipSemSearch();
 
 $_open_items =& $the_tree->open_items;
 $_open_ranges =& $the_tree->open_ranges;
-
+if(!Config::GetInstance()->getValue('SEM_TREE_ALLOW_BRANCH_ASSIGN')){
+	if(is_array($_open_items)){
+		foreach($_open_items as $item_id => $value){
+			if(!$the_tree->tree->getNumKids($item_id)) $_possible_open_items[$item_id] = $value;
+		}
+	}
+} else {
+	$_possible_open_items = $_open_items;
+}
+	
 if ($search_obj->search_done){
 	if ($search_obj->search_result->numRows > 50){
 		$_msg = "error§" . _("Es wurden mehr als 50 Veranstaltungen gefunden! Bitte schr&auml;nken Sie Ihre Suche weiter ein.");
@@ -82,7 +91,7 @@ if ($_REQUEST['cmd'] == "MarkList"){
 			$item_ids[0] = $tmp[1];
 			if ($item_ids[0] == "all"){
 				$item_ids = array();
-				foreach ($_open_items as $key => $value){
+				foreach ($_possible_open_items as $key => $value){
 					if($key != 'root')
 						$item_ids[] = $key;
 				}
@@ -121,7 +130,7 @@ if ($the_tree->mode == "MoveItem" || $the_tree->mode == "CopyItem"){
 
 
 ?>
-<body>
+
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
 	<td class="blank" width="75%" align="left" valign="top">
@@ -214,18 +223,9 @@ $the_tree->showSemTree();
 	?>
 	</select><br>&nbsp;<br><select name="mark_list_aktion" style="font-size:8pt;width:100%;">
 	<?
-	if(!Config::GetInstance()->getValue('SEM_TREE_ALLOW_BRANCH_ASSIGN')){
-		if(is_array($_open_items)){
-		foreach($_open_items as $item_id => $value){
-			if(!$the_tree->tree->getNumKids($item_id)) $possible_open_items[$item_id] = $value;
-			}
-		}
-	} else {
-		$possible_open_items = $_open_items;
-	}
-	if (is_array($possible_open_items) && count($possible_open_items) && !(count($possible_open_items) == 1 && $possible_open_items['root'])){
+	if (is_array($_possible_open_items) && count($_possible_open_items) && !(count($_possible_open_items) == 1 && $_possible_open_items['root'])){
 		echo "\n<option  value=\"insert_all\">" . _("In alle ge&ouml;ffneten Bereiche eintragen") . "</option>";
-		foreach ($possible_open_items as $item_id => $value){
+		foreach ($_possible_open_items as $item_id => $value){
 			echo "\n<option value=\"insert_{$item_id}\">"
 				. sprintf(_("In \"%s\" eintragen"),htmlReady(my_substr($the_tree->tree->tree_data[$item_id]['name'],0,floor($cols * .8)))) . "</option>";
 		}
@@ -238,9 +238,8 @@ $the_tree->showSemTree();
 	</div>
 	</form>
 </td></tr>
-</td></tr>
 </table>
 <?php
 include ('lib/include/html_end.inc.php');
-page_close()
+page_close();
 ?>

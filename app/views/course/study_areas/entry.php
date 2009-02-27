@@ -23,4 +23,4 @@ $expand_id = $area->hasChildren() ? $id : $area->getParentId();
 <? else : ?>
   <?= $name ?>
 <? endif ?>
-<? if($area->isModule()) echo $area->getModuleInfoIcon($semester_id); ?>
+<? if($area->isModule()) echo $area->getModuleInfoHTML($semester_id); ?>

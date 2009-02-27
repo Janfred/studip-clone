@@ -1743,38 +1743,14 @@ class Seminar {
 	function setStudyAreas($selected) {
 
 		$old = $this->getStudyAreas();
-
-		$count_intersect = sizeof(array_intersect($selected, $old));
-
-		if (sizeof($old) != $count_intersect ||
-		    sizeof($selected) != $count_intersect) {
-
-			$db = DBManager::get();
-
-			# delete old
-			$stmt = $db->prepare('DELETE FROM seminar_sem_tree '.
-			                     'WHERE seminar_id = ?');
-			$stmt->execute(array($this->id));
-
-			# log deleted
-			foreach ($old as $id) {
-				if (!in_array($id, $selected)) {
-					log_event("SEM_DELETE_STUDYAREA", $this->id, $id);
-				}
-			}
-
-			# insert new
-			$db = DBManager::get();
-			$stmt = $db->prepare('INSERT IGNORE INTO seminar_sem_tree '.
-			                     '(seminar_id, sem_tree_id) VALUES (?, ?)');
-			foreach ($selected as $id) {
-				$stmt->execute(array($this->id, $id));
-
-				# log added
-				if (!in_array($id, $old)) {
-					log_event("SEM_ADD_STUDYAREA", $this->id, $id);
-				}
-			}
+		$removed = array_diff($old, $selected);
+		$added = array_diff($selected, $old);
+		foreach($removed as $one){
+			$count_removed += StudipSemTree::DeleteSemEntries($one, $this->getId());
 		}
+		foreach($added as $one){
+			$count_added += StudipSemTree::InsertSemEntry($one, $this->getId());
+		}
+		return count($old) + $count_added - $count_removed;
 	}
 }

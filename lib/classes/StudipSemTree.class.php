@@ -25,6 +25,7 @@ require_once("lib/classes/DbSnapshot.class.php");
 require_once("lib/dbviews/sem_tree.view.php");
 require_once("lib/classes/TreeAbstract.class.php");
 require_once("lib/classes/SemesterData.class.php");
+require_once("lib/classes/StudipStudyArea.class.php");
 require_once("config.inc.php");
 
 /**
@@ -82,6 +83,7 @@ class StudipSemTree extends TreeAbstract {
 		}
 		
 		$this->sem_dates = SemesterData::GetSemesterArray();
+		
 	}
 
 	/**
@@ -96,15 +98,11 @@ class StudipSemTree extends TreeAbstract {
 		$db = $this->view->get_query("view:SEM_TREE_GET_DATA_NO_ENTRIES");
 		
 		while ($db->next_record()){
-			$this->tree_data[$db->f("sem_tree_id")] = array('type' => $db->f('type'), '_name' => $db->f('name'), "info" => $db->f("info"),"studip_object_id" => $db->f("studip_object_id"),
-															"entries" => 0);
+			$this->tree_data[$db->f("sem_tree_id")] = array('type' => $db->f('type'), "info" => $db->f("info"),"studip_object_id" => $db->f("studip_object_id"), "entries" => 0);
 			if ($db->f("studip_object_id")){
 				$name = $db->f("studip_object_name");
 			} else {
 				$name = $db->f("name");
-			}
-			if($GLOBALS['SEM_TREE_TYPES'][$db->f('type')]['name']) {
-				$name = $GLOBALS['SEM_TREE_TYPES'][$db->f('type')]['name'] . ': ' . $name;
 			}
 			$this->storeItem($db->f("sem_tree_id"), $db->f("parent_id"), $name, $db->f("priority"));
 		}
@@ -125,6 +123,10 @@ class StudipSemTree extends TreeAbstract {
 			$this->tree_data[$db->f("sem_tree_id")]['entries'] = $db->f('entries');
 		}
 		$this->entries_init_done = true;
+	}
+	
+	function isModuleItem($item_id){
+		return isset($GLOBALS['SEM_TREE_TYPES'][$this->getValue($item_id, 'type')]['is_module']);
 	}
 	
 	function getSemIds($item_id,$ids_from_kids = false){
@@ -243,16 +245,25 @@ class StudipSemTree extends TreeAbstract {
 	function DeleteSemEntries($item_ids = null, $sem_entries = null){
 		$view = new DbView();
 		if ($item_ids && $sem_entries){
-			$view->params[0] = (is_array($item_ids)) ? $item_ids : array($item_ids);
-			$view->params[1] = (is_array($sem_entries)) ? $sem_entries : array($sem_entries);
+			$sem_tree_ids = $view->params[0] = (is_array($item_ids)) ? $item_ids : array($item_ids);
+			$seminar_ids = $view->params[1] = (is_array($sem_entries)) ? $sem_entries : array($sem_entries);
+			$rs = $view->get_query("view:SEMINAR_SEM_TREE_DEL_SEM_RANGE");
+			$ret = $rs->affected_rows();
 			// Logging
-			foreach ($view->params[0] as $range) {
-				foreach ($view->params[1] as $sem) {
+			foreach ($sem_tree_ids as $range) {
+				foreach ($seminar_ids as $sem) {
 					log_event("SEM_DELETE_STUDYAREA",$sem,$range);
 				}
 			}
-			$rs = $view->get_query("view:SEMINAR_SEM_TREE_DEL_SEM_RANGE");
-			$ret = $rs->affected_rows();
+			if($ret && $studienmodulmanagement = PluginEngine::getPlugin('studienmodulmanagement')){
+				foreach($sem_tree_ids as $sem_tree_id){
+					if(StudipStudyArea::find($sem_tree_id)->isModule()){
+						foreach($seminar_ids as $seminar_id){
+							$studienmodulmanagement->triggerCourseRemovedFromModule($sem_tree_id, $seminar_id);
+						}
+					}
+				}
+			}
 		} elseif ($item_ids){
 			$view->params[0] = (is_array($item_ids)) ? $item_ids : array($item_ids);
 			// Logging
@@ -272,9 +283,10 @@ class StudipSemTree extends TreeAbstract {
 		} else {
 			$ret = false;
 		}
+
 		return $ret;
 	}
-	
+
 	function InsertSemEntry($sem_tree_id, $seminar_id){
 		$view = new DbView();
 		$view->params[0] = $seminar_id;
@@ -282,7 +294,12 @@ class StudipSemTree extends TreeAbstract {
 		$rs = $view->get_query("view:SEMINAR_SEM_TREE_INS_ITEM");
 		// Logging
 		log_event("SEM_ADD_STUDYAREA",$seminar_id,$sem_tree_id);
-		return $rs->affected_rows();
+		if($ret = $rs->affected_rows() && $studienmodulmanagement = PluginEngine::getPlugin('studienmodulmanagement')){
+			if(StudipStudyArea::find($sem_tree_id)->isModule()){
+				$studienmodulmanagement->triggerCourseAddedToModule($sem_tree_id, $seminar_id);
+			}
+		}
+		return $ret;
 	}
 }
 //$test =& TreeAbstract::GetInstance("StudipSemTree");

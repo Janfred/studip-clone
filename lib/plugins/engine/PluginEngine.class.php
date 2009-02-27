@@ -108,7 +108,26 @@ class PluginEngine {
 
 		return $plugin_id;
 	}
-
+	
+	public static function getPlugin($pluginclassname){
+		if (isset(self::$plugin_list[$pluginclassname])) {
+			$plugin = self::$plugin_list[$pluginclassname]['object'];
+		} else {
+			try {
+				$plugin_persistence = PluginEngine::getPluginPersistence();
+				$plugin_id = $plugin_persistence->getPluginId($pluginclassname);
+				$plugin = $plugin_persistence->getPlugin($plugin_id);
+			} catch (Studip_PluginNotFoundException $e) {
+				return null;
+			}
+		}
+		if(is_object($plugin) && $plugin->isEnabled()){
+			return $plugin;
+		} else {
+			return null;
+		}
+	}
+	
 	/**
 	* Returns the plugin persistence object for the required plugin type.
 	* @param $plugintype - Standard, Administration, System

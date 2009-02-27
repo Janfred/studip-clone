@@ -54,8 +54,8 @@ class StudipSemTreeViewAdmin extends TreeView {
 		$this->root_content = $GLOBALS['UNI_INFO'];
 		parent::TreeView("StudipSemTree"); //calling the baseclass constructor
 		if ($GLOBALS['PLUGINS_ENABLE']){
-			$this->studienmodulmanagement = PluginEngine::getPluginPersistence('Core')->getPluginByNameIfAvailable('studienmodulmanagement');
-		}		
+			$this->studienmodulmanagement = PluginEngine::getPlugin('studienmodulmanagement');
+		}	
 		URLHelper::bindLinkParam("_marked_item", $this->marked_item);
 		$this->marked_sem =& $_SESSION['_marked_sem'];
 		$this->parseCommand();
@@ -291,7 +291,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 			$new_item_id = md5($item_to_copy . $seed);
 			$parent_id = $item_id;
 			$num_copy = $this->tree->InsertItem($new_item_id,$parent_id,
-			mysql_escape_string($this->tree->tree_data[$item_to_copy]['_name']),
+			mysql_escape_string($this->tree->tree_data[$item_to_copy]['name']),
 			mysql_escape_string($this->tree->tree_data[$item_to_copy]['info']),
 			$this->tree->getMaxPriority($parent_id)+1,
 			($this->tree->tree_data[$item_to_copy]['studip_object_id'] ? $this->tree->tree_data[$item_to_copy]['studip_object_id'] : null),
@@ -301,7 +301,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 					for ($i = 0; $i < count($items_to_copy); ++$i){
 						$num_copy += $this->tree->InsertItem(md5($items_to_copy[$i] . $seed),
 						md5($this->tree->tree_data[$items_to_copy[$i]]['parent_id'] . $seed),
-						mysql_escape_string($this->tree->tree_data[$items_to_copy[$i]]['_name']),
+						mysql_escape_string($this->tree->tree_data[$items_to_copy[$i]]['name']),
 						mysql_escape_string($this->tree->tree_data[$items_to_copy[$i]]['info']),
 						$this->tree->tree_data[$items_to_copy[$i]]['priority'],
 						($this->tree->tree_data[$items_to_copy[$i]]['studip_object_id'] ? $this->tree->tree_data[$items_to_copy[$i]]['studip_object_id'] : null),
@@ -518,7 +518,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 			$content .= "\n<tr><td style=\"font-size:10pt;\" class=\"steel1\" align=\"left\" colspan=\"3\">";
 			$content .= formatReady($this->tree->tree_data[$item_id]['info']) . "</td></tr>";
 		}
-		if(is_object($this->studienmodulmanagement) && $this->studienmodulmanagement->isModule($item_id)){
+		if(is_object($this->studienmodulmanagement) && $this->tree->isModuleItem($item_id)){
 			$content .= "\n<tr><td class=\"blank\" align=\"left\" colspan=\"3\">";
 			$content .=  _("Modulbeschreibung:") . '</td></tr>';
 			$content .= "\n<tr><td class=\"blank\" align=\"left\" colspan=\"3\">";
@@ -651,7 +651,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		if($this->tree->tree_data[$this->edit_item_id]['studip_object_id']){
 			$content .= htmlReady($this->tree->tree_data[$this->edit_item_id]['name']);
 		} else {
-			$content .= "<input type=\"TEXT\" name=\"edit_name\" size=\"50\" style=\"width:100%\" value=\"" . htmlReady($this->tree->tree_data[$this->edit_item_id]['_name']) . "\">";
+			$content .= "<input type=\"TEXT\" name=\"edit_name\" size=\"50\" style=\"width:100%\" value=\"" . htmlReady($this->tree->tree_data[$this->edit_item_id]['name']) . "\">";
 		}
 		$content .= "</td></tr>";
 		$content .= "<tr><td class=\"steel1\"  width=\"1%\">" . _("Typ des Elements:") . "</td><td class=\"steel1\">"

@@ -64,27 +64,15 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 	$requser = new StudIPUser();
 	$requser->setUserid(get_userid($username));
 	$homepagepluginpersistence = PluginEngine::getPluginPersistence("Homepage");
-	$activatedhomepageplugins = $homepagepluginpersistence->getAllActivatedPlugins();
-	if (!is_array($activatedhomepageplugins)){
-		$activatedhomepageplugins = array();
-	}
+	$activatedhomepageplugins = (array)$homepagepluginpersistence->getAllActivatedPlugins();
 	foreach ($activatedhomepageplugins as $activatedhomepageplugin){
 		$activatedhomepageplugin->setRequestedUser($requser);
 		// hier nun die HomepagePlugins anzeigen
-		if ($activatedhomepageplugin->hasNavigation()){
-			$hppluginnav = $activatedhomepageplugin->getNavigation();
-			$structure["hpplugin_" . $activatedhomepageplugin->getPluginid()] = array('topKat' => '', 'name' => $hppluginnav->getDisplayname(), 'link' => $hppluginnav->getLink(), 'active' => FALSE);
-			$pluginsubmenu["_hpplugin_" . $activatedhomepageplugin->getPluginId()] = array('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$hppluginnav->getDisplayname(), 'link'=>$hppluginnav->getLink(), 'active'=>false);
-			$submenu = $hppluginnav->getSubMenu();
-			// create bottomkats for activated plugins
-			foreach ($submenu as $submenuitem){
-				// create entries in a temporary structure and add it to structure later
-				$pluginsubmenu["hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname()] = array ('topKat'=>"hpplugin_" . $activatedhomepageplugin->getPluginId(), 'name'=>$submenuitem->getDisplayname(), 'link'=> $submenuitem->getLink(), 'active'=>false);
-			}
+		if ($plugin_struct = $reiter->getStructureForPlugin($activatedhomepageplugin)){
+			$structure = array_merge($structure, $plugin_struct['structure']);
+			if($plugin_struct['reiter_view']) $reiter_view = $plugin_struct['reiter_view'];
 		}
 	}
-	// now insert the bottomkats
-	$structure = array_merge((array)$structure, (array)$pluginsubmenu);
 }
 //Bottomkats
 $structure["_alle"] = array('topKat' => "alle", 'name' => _("Persönliche Homepage"), 'link' => "about.php?username=$username", 'active' => FALSE);
@@ -132,40 +120,8 @@ if ($perm->have_perm("autor") AND $ELEARNING_INTERFACE_ENABLE) {
 if (!$perm->have_perm("admin")) {
 	$structure["login"] = array('topKat' => 'mystudip', 'name' => _("Login"), 'link' => "edit_about.php?view=Login&username=$username", 'active' => FALSE);
 }
-// check if view is maintained by a plugin
-$found = false;
-if ($GLOBALS['PLUGINS_ENABLE']){
-	if (is_array($activatedhomepageplugins)){
-		$pluginid = PluginEngine::getCurrentPluginId();
-		// Namen der aufgerufenen Datei aus der URL herausschneiden
-		if (strlen($i_page) <= 0){
-			$i_page = basename($GLOBALS['PHP_SELF']);
-		}
-		if ($i_page == "plugins.php"){
-			foreach ($activatedhomepageplugins as $activatedhomepageplugin){
-				$activatedhomepageplugin->setRequestedUser($requser);
-				if ($activatedhomepageplugin->hasNavigation() && ($activatedhomepageplugin->getPluginId() == $pluginid)){
-					// Hauptmenü gefunden
-					$reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId();
-					$navi = $activatedhomepageplugin->getNavigation();
-					$submenu = $navi->getSubMenu();
 
-					if ($submenu != null) {
-						foreach ($submenu as $submenuitem) {
-							if ($submenuitem->isActive()) {
-								$reiter_view="hpplugin_" . $activatedhomepageplugin->getPluginId() . "_" . $submenuitem->getDisplayname();
-							}
-						}
-					}
-					$found = true;
-					break;
-				}
-			}
-		}
-	}
-}
-
-if (!$found){
+if (!$reiter_view){
 //View festlegen
 switch ($i_page) {
 	case "about.php" :

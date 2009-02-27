@@ -222,7 +222,7 @@ STUDIP.OverDiv.prototype = {
 			outer.appendChild(content);
 			this.container = outer;
 			this.container.absolutize();
-			this.container.setStyle({width: this.options.width});
+			this.container.setStyle({width: this.options.width + 'px'});
 			this.container.hide();
 			$('overdiv_container').appendChild(this.container);
 			this.is_drawn = true;

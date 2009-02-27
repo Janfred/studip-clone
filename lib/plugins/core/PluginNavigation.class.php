@@ -22,7 +22,7 @@ class PluginNavigation extends StudipPluginNavigation {
    * @access private
    * @var string
    */
-  var $cmd;
+  var $cmd = 'show';
 
 
   /**
@@ -81,18 +81,15 @@ class PluginNavigation extends StudipPluginNavigation {
 
 
     function isActive() {
-
-        if (isset($this->cmd) && $this->cmd !== $this->plugin->getCommand()) {
-          return false;
-        }
-
-        foreach ($this->linkparams as $key => $val) {
-            if (!isset($_REQUEST[$key]) || $_REQUEST[$key] != $val) {
-                return false;
-            }
-        }
-
-        return true;
+    	if (strtolower($this->cmd) == strtolower($this->plugin->getCommand())) {
+    		foreach ($this->linkparams as $key => $val) {
+    			if (!isset($_REQUEST[$key]) || $_REQUEST[$key] != $val) {
+    				return false;
+    			}
+    		}
+    		return true;
+    	}
+    	return false;
     }
 
 

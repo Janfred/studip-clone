@@ -111,7 +111,9 @@ class AbstractPluginIntegratorEnginePersistence {
 	function executePluginQuery($filter, $params = array(), $args = array()) {
 		$user = $this->getUser();
 		$userid = $user->getUserid();
-
+		if(!$userid) {
+			$userid = 'nobody';
+		}
 		if (isset($filter)) {
 			$params = array_merge(array($userid), (array)$params,
 			                      array($userid), (array)$params);
