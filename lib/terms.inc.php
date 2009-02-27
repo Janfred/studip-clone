@@ -40,7 +40,7 @@ function check_terms($userid, $_language_path) {
 	global $i_accept_the_terms;
 
 	if ($i_accept_the_terms == "yes") return;
-	// if ($GLOBALS['auth']->auth['uid'] != 'nobody' && !$GLOBALS['user']->get_last_action())
+
 	if ($GLOBALS['auth']->auth['uid'] != 'nobody' && !empty($GLOBALS['user']) && !$GLOBALS['user']->get_last_action())
 	{
 ?>
@@ -67,16 +67,14 @@ function check_terms($userid, $_language_path) {
 		<? include("locale/$_language_path/LC_HELP/pages/nutzung.html"); ?>
 		<p align="center">
 		<a href="index.php?i_accept_the_terms=yes"><b><?=_("Ich erkenne die Nutzungsbedingungen an")?></b></a>
-		<br/>
-		<a href="index.php?i_accept_the_terms=no"><b><?=_("Ich erkenne die Datenschutzerkl&auml;rung nicht an")?></b></a>
 		</p>
+		<br/>
 		</td>
 	</tr>
 </table>
 
 <?php
 	include ('lib/include/html_end.inc.php');
-	page_close();
 	die;
 	}
 }
