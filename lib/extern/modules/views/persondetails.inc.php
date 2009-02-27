@@ -306,13 +306,14 @@ function lehre (&$module, $db, $alias_content, $text_div, $text_div_end) {
 	}
 
 	$types = array();
+	$semclass = $module->config->getValue('PersondetailsLectures', 'semclass');
+	if (is_null($semclass)) {
+		$semclass = array(1);
+	}
 	foreach ($GLOBALS["SEM_TYPE"] as $key => $type) {
-		if (in_array($type["class"], (array) $this->config->getValue('PersondetailsLectures', 'semclass'))) {
+		if (in_array($type["class"], $semclass)) {
 			$types[] = $key;
 		}
-	}
-	if (!sizeof($types)) {
-		$types[] = '1';
 	}
 	$types = implode("','", $types);
 
