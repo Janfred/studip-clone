@@ -252,6 +252,11 @@ if ($error_msgs){
 
 # ======================================== end: Print Error MSG and end Site #
 
+/* Do first all actions for templates -------------------------------------- */
+$templateSite = include(EVAL_FILE_TEMPLATE);
+/* --------------------------------- end: do first all actions for templates */
+
+
 # Creating the Tree ======================================================== #
 $EditTree = new EvaluationTreeEditView($itemID, $evalID);
 
@@ -263,11 +268,6 @@ if ( $_REQUEST["newButton_x"] ) {
 }
 
 # ============================================ end: Send messages to the tree #
-
-/* Do first all actions for templates -------------------------------------- */
-$templateSite = include(EVAL_FILE_TEMPLATE);
-/* --------------------------------- end: do first all actions for templates */
-
 
 /* Next do all actions for evaluations ------------------------------------- */
 $editSite = $EditTree->showEvalTree($itemID,1);

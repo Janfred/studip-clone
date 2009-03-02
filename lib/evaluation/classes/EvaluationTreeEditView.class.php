@@ -185,7 +185,7 @@ function EvaluationTreeEditView ( $itemID = ROOT_BLOCK, $evalID = NULL ){
 	$this->changed = false;
 
 	$this->tree = &TreeAbstract::GetInstance ( "EvaluationTree", array('evalID' => $this->evalID,
-																		'load_mode' => EVAL_LOAD_FIRST_CHILDREN));
+																		'load_mode' => EVAL_LOAD_ALL_CHILDREN));
 
 	# filter out an old session itemID ======================================= #
 	if (is_array($this->tree->tree_data) && !is_null($itemID) ){
@@ -1029,7 +1029,7 @@ function getItemHead($itemID){
 		}
 		
 		$moveItem = "   </td>\n"
-			. "   <td align=\"rigth\" valign=\"middle\" class=\"printhead\" nowrap=\"nowrap\">\n"
+			. "   <td align=\"right\" valign=\"middle\" class=\"printhead\" nowrap=\"nowrap\">\n"
 			. $this->createLinkImage(EVAL_PIC_MOVE_GROUP,
 				_("Den ausgwählten Block in diesen Block verschieben"),
 				"&itemID=$itemID&cmd=MoveGroup",
@@ -1066,7 +1066,7 @@ function getItemHead($itemID){
 		($itemID != $this->startItemID) &&
 		($this->tree->tree_data[$itemID]['parent_id'] == $this->startItemID)){ 
 		$head .= "   </td>\n"
-			. "   <td align=\"rigth\" valign=\"bottom\" class=\"printhead\" nowrap=\"nowrap\">\n"
+			. "   <td align=\"right\" valign=\"bottom\" class=\"printhead\" nowrap=\"nowrap\">\n"
 			. $this->createLinkImage(EVAL_PIC_MOVE_UP,
 				_("Block nach oben verschieben"),
 				"cmd=Move&direction=up&groupID=$itemID ",
