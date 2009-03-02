@@ -45,13 +45,33 @@ require_once('lib/visual.inc.php');	//Darstellungsfunktionen
 require_once('lib/messaging.inc.php');	//Nachrichtenfunktionen
 require_once('lib/classes/AdminModules.class.php');	//Nachrichtenfunktionen
 
-$db=new DB_Seminar;
-$db2=new DB_Seminar;
 $cssSw=new cssClassSwitcher;
 $sess->register("admin_modules_data");
 $sess->register("plugin_toggle");
-$messaging=new messaging;
+
+//Output starts here
+
+include ('lib/include/html_head.inc.php'); // Output of html head
+$CURRENT_PAGE = _("Verwaltung verwendeter Module und Plugins");
+
+//prebuild navi and the object switcher (important to do already here and to use ob!)
+ob_start();
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+$links = ob_get_clean();
+//get ID
+if ($SessSemName[1])
+	$range_id=$SessSemName[1];
+
+//Change header_line if open object
+$header_line = getHeaderLine($range_id);
+if ($header_line)
+	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
+
+include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
+echo $links;
+
 $amodules=new AdminModules;
+
 if ($GLOBALS['PLUGINS_ENABLE']){
 	if ($SessSemName[1] == '') {
 		$poiid = 'sem'.($range_id ? $range_id : $admin_modules_data['range_id']);
@@ -172,14 +192,13 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					$plugin->setActivated( !$plugin->isActivated() );
 					$amodules->pluginengine->savePlugin( $plugin );
 					$changes = true;
-					// >>>>>> LOGGING
+					// logging
 					if ($plugin->isActivated()) {
 						log_event('PLUGIN_ENABLE',$admin_modules_data["range_id"],$plugin->getPluginId() ,$user->id); 
 					}
 					else {
 						log_event('PLUGIN_DISABLE',$admin_modules_data["range_id"],$plugin->getPluginId() ,$user->id); 
 					}
-					// <<<<<< LOGGING
 				}
 			}
 			$plugin_toggle = array();
@@ -189,27 +208,6 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 		}
 	}
 }
-
-//Output starts here
-
-include ('lib/include/html_head.inc.php'); // Output of html head
-$CURRENT_PAGE = _("Verwaltung verwendeter Module und Plugins");
-
-//prebuild navi and the object switcher (important to do already here and to use ob!)
-ob_start();
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
-$links = ob_get_clean();
-//get ID
-if ($SessSemName[1])
-	$range_id=$SessSemName[1];
-
-//Change header_line if open object
-$header_line = getHeaderLine($range_id);
-if ($header_line)
-	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
-
-include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
-echo $links;
 
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
 if (($range_id) && (!$uebernehmen_x) && (!$delete_forum) && (!$delete_documents) && (!$resolve_conflicts)) {
