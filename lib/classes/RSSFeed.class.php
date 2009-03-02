@@ -29,6 +29,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 define('MAGPIE_CACHE_DIR', $TMP_PATH.'/magpie_cache');
+define('MAGPIE_OUTPUT_ENCODING', 'UTF-8');
 
 require_once('vendor/magpierss/rss_fetch.inc');
 require_once('lib/visual.inc.php');
@@ -67,7 +68,7 @@ class RSSFeed {
 		echo "<TABLE WIDTH=\"100%\" BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"0\">\n";
 		foreach ($this->ausgabe->items as $v) {
 			if (strlen(trim($v["title"]))>0) {
-				$desc = decodeHTML(preg_replace ("'<[\/\!]*?[^<>]*?>'si", "", ($v["description"] ? $v["description"] : $v['summary'])));
+				$desc = strip_tags(studip_utf8decode($v["description"] ? $v["description"] : $v['summary']));
 				if (strlen($desc) > 150) $desc = substr($desc, 0, 150) . "...";
 				if ($i > $this->max_items && $more != $this->class_id) {
 					echo "<TR><TD ALIGN=\"left\" VALIGN=\"TOP\" COLSPAN=\"2\"><A HREF=\"$PHP_SELF?more=".$this->class_id."#news_anchor\"><FONT SIZE=\"-1\"><I>mehr...</I></FONT></A></TD></TR>\n";
@@ -79,7 +80,7 @@ class RSSFeed {
 				</TD>
 				<TD ALIGN=\"left\" VALIGN=\"TOP\">
 				<A HREF=\"".TransformInternalLinks($v["link"])."\" ".(!$this->internal_feed  ? "TARGET=\"_blank\"" : "") . " TITLE=\"".htmlReady($desc)."\">
-				<FONT SIZE=\"-1\">".htmlReady($v["title"])."</FONT>
+				<FONT SIZE=\"-1\">".htmlReady(studip_utf8decode($v["title"]))."</FONT>
 				</A></TD></TR>\n";
 				if ($v['enclosure_url']) {
 					echo "<TR><TD WIDTH=\"1\" ALIGN=\"left\" VALIGN=\"TOP\">&nbsp;</TD>
