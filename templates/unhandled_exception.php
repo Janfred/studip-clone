@@ -5,7 +5,7 @@
 $current_page = _("Fehler");
 $home = array(
   'text'  => _("Start"),
-  'link'  => 'index.php',
+  'link'  => URLHelper::getLink('index.php'),
   'info'  => _("Zur Startseite"),
   'image' => "home",
   'accesskey' => false);
@@ -19,7 +19,7 @@ $home = array(
       <?= _("Fehler:") ?> <?= htmlentities($exception->getMessage()) ?>
     </h1>
     <p>
-      <?= _("Zurück zur") ?> <a href="index.php"><?= _("Startseite") ?></a>
+      <?= _("Zurück zur") ?> <a href="<?= URLHelper::getLink('index.php') ?>"><?= _("Startseite") ?></a>
     </p>
 </div>
 

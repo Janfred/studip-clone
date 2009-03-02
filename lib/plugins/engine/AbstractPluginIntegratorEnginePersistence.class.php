@@ -264,7 +264,7 @@ class AbstractPluginIntegratorEnginePersistence {
 		$stmt->execute(array($pluginclassname));
 		$row = $stmt->fetch();
 		if ($row === FALSE) {
-			throw new Studip_PluginNotFoundException();
+			throw new Studip_PluginNotFoundException(_("Das angeforderte Plugin ist nicht vorhanden."));
 		}
 		return $row['pluginid'];
 	}
@@ -282,7 +282,7 @@ class AbstractPluginIntegratorEnginePersistence {
 		$stmt->execute(array($pluginclassname));
 		$row = $stmt->fetch();
 		if ($row === FALSE) {
-			throw new Studip_PluginNotFoundException();
+			throw new Studip_PluginNotFoundException(_("Das angeforderte Plugin ist nicht vorhanden."));
 		}
 		return $row['plugintype'];
 	}

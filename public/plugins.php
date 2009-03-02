@@ -10,7 +10,11 @@
  * the License, or (at your option) any later version.
  */
 
+require_once 'lib/functions.php';
 require_once 'lib/exceptions/access_denied.php';
+
+# set base url for URLHelper class
+URLHelper::setBaseUrl($CANONICAL_RELATIVE_PATH_STUDIP);
 
 # initialize Stud.IP-Session
 page_open(array('sess' => 'Seminar_Session',
@@ -18,15 +22,11 @@ page_open(array('sess' => 'Seminar_Session',
                 'perm' => 'Seminar_Perm',
                 'user' => 'Seminar_User'));
 
-require_once 'lib/seminar_open.php';
-require_once 'lib/functions.php';
-
-unregister_globals();
-
 try {
 
-  # set base url for URLHelper class
-  URLHelper::setBaseUrl($CANONICAL_RELATIVE_PATH_STUDIP);
+  require_once 'lib/seminar_open.php';
+
+  unregister_globals();
 
   # get plugin class from request
   $dispatch_to = isset($_SERVER['PATH_INFO']) ?$_SERVER['PATH_INFO'] : '';
@@ -57,24 +57,9 @@ try {
 
 } catch (Studip_AccessDeniedException $ade) {
 
-    $GLOBALS['auth']->login_if(TRUE);
+  global $auth;
 
-} catch (Studip_PluginNotFoundException $pnfe) {
-
-  include 'lib/include/html_head.inc.php';
-  include 'lib/include/header.php';
-  StudIPTemplateEngine::makeHeadline(_("Das angeforderte Plugin ist nicht vorhanden."));
-  StudIPTemplateEngine::showErrorMessage($pnfe->getMessage());
-  include 'lib/include/html_end.inc.php';
-  exit;
-
-} catch (Exception $e) {
-
-  include 'lib/include/html_head.inc.php';
-  include 'lib/include/header.php';
-  StudIPTemplateEngine::makeHeadline(_("Fehler"));
-  StudIPTemplateEngine::showErrorMessage($e->getMessage());
-  include 'lib/include/html_end.inc.php';
-  exit;
+  $auth->login_if($auth->auth["uid"] == "nobody");
+  throw $ade;
 
 }
