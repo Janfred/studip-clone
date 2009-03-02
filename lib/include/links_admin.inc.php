@@ -419,9 +419,6 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$structure["userdomains"]=array ('topKat'=>"global", 'name'=>_("Nutzerdomänen"), 'link'=>URLHelper::getLink("dispatch.php/domain_admin/show"), 'active'=>FALSE);
 		$structure["datafields"]=array ('topKat'=>"global", 'name'=>_("Datenfelder"), 'link'=>"admin_datafields.php", 'active'=>FALSE);
 		$structure["config"]=array ('topKat'=>"global", 'name'=>_("Konfiguration"), 'link'=>"admin_config.php", 'active'=>FALSE);
-		if('active_sessions' == PHPLIB_SESSIONDATA_TABLE){
-			$structure["sessions"]=array ('topKat'=>"modules", 'name'=>_("Sessions"), 'link'=>"view_sessions.php", 'active'=>FALSE);
-		}
 		$structure["integrity"]=array ('topKat'=>"modules", 'name'=>_("DB Integrität"), 'link'=>"admin_db_integrity.php", 'active'=>FALSE);
 		if ($BANNER_ADS_ENABLE)  {
 			$structure["bannerads"]=array ('topKat'=>"global", 'name'=>_("Werbebanner"), 'link'=>"admin_banner_ads.php", 'active'=>FALSE);

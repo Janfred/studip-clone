@@ -24,13 +24,6 @@
 //$Id$
 
 
-
-//compatibility section
-if (!defined('PHPLIB_SESSIONDATA_TABLE')){
-	define('PHPLIB_SESSIONDATA_TABLE', 'active_sessions');
-	define('PHPLIB_USERDATA_TABLE', 'active_sessions');
-}
-
 //
 $_never_globalize_request_params = array('msg','_msg','errormsg','meldung','sms_msg','_html_head_title','_include_stylesheet',
 									'_include_extra_stylesheet','_include_additional_header'
@@ -164,7 +157,6 @@ class studip_smtp_class extends smtp_class {
 
 
 class Seminar_CT_Sql extends CT_Sql {
-	var $database_class = "DB_Seminar";	  // Which database to connect...
 	var $database_table = PHPLIB_SESSIONDATA_TABLE; // and find our session data in this table.
 }
 
@@ -352,34 +344,7 @@ class Seminar_Session extends Session {
 }
 
 class Seminar_User_CT_Sql extends CT_Sql {
-	var $database_class = "DB_Seminar";	  // Which database to connect...
 	var $database_table = PHPLIB_USERDATA_TABLE;
-
-	function ac_get_changed($id, $name = null){
-		$this->db->query(sprintf("SELECT UNIX_TIMESTAMP(changed) FROM %s WHERE  sid='%s'  %s",
-		$this->database_table,
-		$id,
-		$this->get_where_clause($name)));
-		$this->db->next_record();
-		return $this->db->f(0);
-	}
-
-	function ac_set_changed($id, $name = null, $timestamp){
-		$this->db->query(sprintf("UPDATE %s SET changed = '%s' WHERE  sid='%s'  %s",
-		$this->database_table,
-		date("YmdHis", $timestamp),
-		$id,
-		$this->get_where_clause($name)));
-		return $this->db->affected_rows();
-	}
-
-	function get_where_clause($name = null){
-		$ret = "";
-		if (PHPLIB_USERDATA_TABLE === PHPLIB_SESSIONDATA_TABLE){
-			$ret .= " AND name='$name' ";
-		}
-		return $ret;
-	}
 }
 
 class Seminar_User extends User {

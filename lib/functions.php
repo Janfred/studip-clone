@@ -1055,39 +1055,28 @@ function archiv_check_perm($seminar_id){
 function get_users_online($active_time = 5, $name_format = 'full_rev'){
 	global $user, $_fullname_sql;
 	$online = null;
-	$db = new DB_Seminar();
-	$user_table = $user->that->database_table;
 	if (!isset($_fullname_sql[$name_format])) {
 		reset($_fullname_sql);
 		$name_format = key($_fullname_sql);
 	}
 	$now = time(); // nach eingestellter Zeit (default = 5 Minuten ohne Aktion) zaehlt man als offline
-	$query = "SELECT " . $_fullname_sql[$name_format] . " AS full_name,UNIX_TIMESTAMP()-UNIX_TIMESTAMP(changed) AS lastaction,
-		a.username,a.user_id,contact_id, " . get_vis_query('a') . " AS is_visible
-		FROM $user_table LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id)
+	$query = "SELECT a.username," . $_fullname_sql[$name_format] . " AS name,UNIX_TIMESTAMP()-UNIX_TIMESTAMP(changed) AS last_action, a.user_id as userid, contact_id as is_buddy, " . get_vis_query('a') . " AS is_visible
+		FROM " . PHPLIB_USERDATA_TABLE . " LEFT JOIN auth_user_md5 a ON (a.user_id=sid) LEFT JOIN user_info USING(user_id)
 		LEFT JOIN contact ON (owner_id='".$user->id."' AND contact.user_id=a.user_id AND buddy=1)
 		WHERE changed > '" . date("YmdHis", ($now - ($active_time * 60)))."'
 		AND sid != '".$user->id."' AND sid !='nobody'
-		" . $GLOBALS['user']->that->get_where_clause($GLOBALS['user']->name) . "
 		ORDER BY changed DESC";
-	$db->query($query);
-	while ($db->next_record()){
-		$online[$db->f("username")] = array("name"=>$db->f("full_name"),
-												"last_action"=>$db->f("lastaction"),
-												"userid"=>$db->f("user_id"),
-												"is_buddy" => $db->f("contact_id"),
-												"is_visible" => $db->f("is_visible"));
-	}
-	return $online;
+	$rs = DBManager::get()->query($query);
+	$online = $rs->fetchAll(PDO::FETCH_ASSOC|PDO::FETCH_GROUP);
+	return array_map('array_shift', $online);
 }
 
 function get_users_online_count($active_time = 5){
-	$db = new DB_Seminar();
-	$db->query("SELECT COUNT(*) FROM " . $GLOBALS['user']->that->database_table . " WHERE
-				changed > '".date("YmdHis", (time() - ($active_time * 60))) . "' AND sid !='nobody'
- 				 AND sid != '".$GLOBALS['user']->id."' " . $GLOBALS['user']->that->get_where_clause($GLOBALS['user']->name));
-	$db->next_record();
-	return $db->f(0);
+	return 	DBManager::get()
+			->query("SELECT COUNT(*) FROM " . PHPLIB_USERDATA_TABLE . " WHERE
+					changed > '".date("YmdHis", (time() - ($active_time * 60))) . "' AND sid NOT IN
+					('nobody', '".$GLOBALS['user']->id."')")
+			->fetchColumn();
 }
 
 function get_ticket(){
