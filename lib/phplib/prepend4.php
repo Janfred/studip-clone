@@ -12,9 +12,10 @@
 (!isset($_REQUEST['GLOBALS'])) OR die('Setting the $GLOBALS array is not tolerated!');
 $PHP_SELF = $_SERVER['PHP_SELF'] = $_SERVER['SCRIPT_NAME'];
 $STUDIP_BASE_PATH = realpath( dirname(__FILE__) . '/../..');
-$include_path = get_include_path();
+
+$include_path = $STUDIP_BASE_PATH;
 $include_path .= PATH_SEPARATOR . $STUDIP_BASE_PATH . DIRECTORY_SEPARATOR . 'config';
-$include_path .= PATH_SEPARATOR . $STUDIP_BASE_PATH;
+$include_path .= PATH_SEPARATOR . get_include_path();
 set_include_path($include_path);
 
 define('PHPLIB_SESSIONDATA_TABLE', 'session_data');
