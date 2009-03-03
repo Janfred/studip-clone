@@ -47,7 +47,7 @@ class reiter {
 														'name' => $top_displayname,
 														'link' => $navigation->getLink(),
 			 											'active' => false);
-			if($navigation->isActive()){
+			if($navigation->isActive() || PluginEngine::getCurrentPluginId() == $plugin_id){
 				$view = $topKat . "plugin_" . $plugin_id;
 			}
 			$submenu = (array)$navigation->getSubMenu();
