@@ -215,8 +215,7 @@ class SiteinfoMarkupEngine {
 
     function uniContact() {
         $template = $this->template_factory->open('uniContact');
-        $template->contact = $GLOBALS['$UNI_CONTACT'];
-        return FixLinks(htmlReady($GLOBALS['$UNI_CONTACT']));
+        $template->contact = $GLOBALS['UNI_CONTACT'];
         return $template->render();
     }
 
@@ -227,7 +226,7 @@ class SiteinfoMarkupEngine {
                        username 
                 FROM auth_user_md5 
                 LEFT JOIN user_info USING (user_id) 
-                WHERE username=".$db->quote($input)."
+                WHERE username=".$this->db->quote($input)."
                 AND ".get_vis_query(); 
         $result = $this->db->query($sql);
         if ($result->rowCount() == 1) {
