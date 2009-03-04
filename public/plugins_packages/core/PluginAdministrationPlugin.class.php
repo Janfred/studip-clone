@@ -65,8 +65,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 
 		// check if user has the permission to check in / update plugins
 		if (!$permission->hasRootPermission()) {
-			// show nothing
-			return;
+			throw new Studip_AccessDeniedException();
 		}
 
 		if ($GLOBALS['PLUGINS_UPLOAD_ENABLE']){
@@ -105,8 +104,10 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$template = $this->template_factory->open('plugin_administration');
 		$template->set_layout($this->layout);
 
-		// check if user has the permission to check in / update plugins
-		if (!$permission->hasRootPermission() && $permission->hasAdminPermission()){
+		// check if user has the permission to view / edit plugins
+		if (!$permission->hasAdminPermission()) {
+			throw new Studip_AccessDeniedException();
+		} else if (!$permission->hasRootPermission()) {
 			$template = $this->template_factory->open('plugin_list');
 			$template->set_layout($this->layout);
 
