@@ -255,7 +255,7 @@ class StudipSemTree extends TreeAbstract {
 					log_event("SEM_DELETE_STUDYAREA",$sem,$range);
 				}
 			}
-			if($ret && $studienmodulmanagement = PluginEngine::getPlugin('studienmodulmanagement')){
+			if($ret && $studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement')){
 				foreach($sem_tree_ids as $sem_tree_id){
 					if(StudipStudyArea::find($sem_tree_id)->isModule()){
 						foreach($seminar_ids as $seminar_id){
@@ -294,7 +294,7 @@ class StudipSemTree extends TreeAbstract {
 		$rs = $view->get_query("view:SEMINAR_SEM_TREE_INS_ITEM");
 		// Logging
 		log_event("SEM_ADD_STUDYAREA",$seminar_id,$sem_tree_id);
-		if($ret = $rs->affected_rows() && $studienmodulmanagement = PluginEngine::getPlugin('studienmodulmanagement')){
+		if($ret = $rs->affected_rows() && $studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement')){
 			if(StudipStudyArea::find($sem_tree_id)->isModule()){
 				$studienmodulmanagement->triggerCourseAddedToModule($sem_tree_id, $seminar_id);
 			}

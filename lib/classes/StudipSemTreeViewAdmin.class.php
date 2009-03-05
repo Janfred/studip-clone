@@ -54,7 +54,7 @@ class StudipSemTreeViewAdmin extends TreeView {
 		$this->root_content = $GLOBALS['UNI_INFO'];
 		parent::TreeView("StudipSemTree"); //calling the baseclass constructor
 		if ($GLOBALS['PLUGINS_ENABLE']){
-			$this->studienmodulmanagement = PluginEngine::getPlugin('studienmodulmanagement');
+			$this->studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement');
 		}	
 		URLHelper::bindLinkParam("_marked_item", $this->marked_item);
 		$this->marked_sem =& $_SESSION['_marked_sem'];

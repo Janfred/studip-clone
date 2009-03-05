@@ -36,7 +36,7 @@ if (!$GLOBALS['perm']->have_perm('admin')){
 	$structure['veranstaltungen_suche'] = array ('topKat' => '', 'name' => _("Veranstaltungen suchen"), 'link' => 'sem_portal.php', 'active' => FALSE);
 }
 if ($GLOBALS['PLUGINS_ENABLE'] &&
-$studienmodulmanagement = PluginEngine::getPlugin('studienmodulmanagement')){
+$studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement')){
 	if($plugin_struct = $reiter->getStructureForPlugin($studienmodulmanagement, '', 'getModuleCatalogNavigation')){
 		$structure = array_merge($structure, $plugin_struct['structure']);
 		if($plugin_struct['reiter_view']) $reiter_view = $plugin_struct['reiter_view'];

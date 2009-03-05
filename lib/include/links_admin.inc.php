@@ -806,7 +806,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 						</td>
 						<td class="steel1" valign="bottom" width="20%" nowrap="nowrap">
 							<?
-								echo makeButton('anzeigen', 'input', _("Anzeigen"), 'anzeigen');
+							echo makeButton('anzeigen', 'input', _("Anzeigen"), 'anzeigen');
 							if ($links_admin_data["srch_on"]){
 								echo '&nbsp;' . makeButton('zuruecksetzen','input', _("zurücksetzen"),'reset_search');
 							}

@@ -475,7 +475,7 @@ class StudipStudyArea {
    */
   function getModuleDescription($semester_id = ''){
     if($GLOBALS['PLUGINS_ENABLE'] && $this->isModule()){
-      return PluginEngine::getPlugin('studienmodulmanagement')
+      return PluginEngine::getPlugin('StudienmodulManagement')
              ->getModuleDescription($this->getID(), $semester_id);
     } else {
       return '';
@@ -491,7 +491,7 @@ class StudipStudyArea {
    */
   function getModuleInfoHTML($semester_id = ''){
     if($GLOBALS['PLUGINS_ENABLE'] && $this->isModule()){
-      return PluginEngine::getPlugin('studienmodulmanagement')
+      return PluginEngine::getPlugin('StudienmodulManagement')
              ->getModuleInfoHTML($this->getID(), $semester_id);
     } else {
       return '';

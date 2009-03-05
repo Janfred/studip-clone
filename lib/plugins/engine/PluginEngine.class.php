@@ -111,7 +111,7 @@ class PluginEngine {
 	
 	public static function getPlugin($pluginclassname){
 		if (isset(self::$plugin_list[$pluginclassname])) {
-			$plugin = self::$plugin_list[$pluginclassname]['object'];
+			$plugin = self::$plugin_list[$pluginclassname][0]['object'];
 		} else {
 			try {
 				$plugin_persistence = PluginEngine::getPluginPersistence();
