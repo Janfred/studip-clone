@@ -135,12 +135,14 @@ td.toolbar {
 	background-image: url('../images/steelblau.jpg');
 }
 
-td.topic {
-	border:0px;
+/* (mriehe) warum nur für td? -> entfernt */
+.topic {
+	border: 0px;
 	background-image: url('../images/fill1.gif');
 	background-color:#4A5681;
 	color:#FFFFFF;
 	font-size: 12pt;
+	padding: 2px;
 }
 td.topicwrite {
 	border:0px solid #000000;

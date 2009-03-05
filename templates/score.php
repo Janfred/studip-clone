@@ -1,9 +1,6 @@
-<table width="100%" border="0" cellpadding="2" cellspacing="0">
-<tr>
-	<td class="topic"><b><?=_("Stud.IP-Rangliste")?></b></td>
-</tr>
-</table>
+<div class="topic"><b><?=_("Stud.IP-Rangliste")?></b></div>
 <? if(count($persons)>0): ?>
+<div style="width: 100%;">
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 <tr>
 	<th width="3%" align="left"><?=_("Platz")?></th>
@@ -24,6 +21,7 @@
 </tr>
 <? endforeach;?>
 </table>
+</div>
 <? endif; ?>
 
 <?php

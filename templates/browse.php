@@ -17,24 +17,21 @@
 </script>
 <form action="browse.php" method="post">
 <input type="hidden" name="send" value="TRUE">
-<table width="100%" border="0" cellpadding="2" cellspacing="0">
-<tr>
-	<td class="topic"><b><?=_("Suche nach Personen")?></b></td>
-</tr>
+<div class="topic"><b><?=_("Suche nach Personen")?></b></div>
+
 <? if($sms_msg):?>
-<tr>
-	<td class="blank"><? parse_msg($sms_msg); ?></td>
-</tr>
+<? parse_msg($sms_msg); ?>
 <? endif; ?>
-</table>
+
 <!-- form zur wahl der institute -->
+<div style="width: 100%;">
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 <tr class="steel1">
 	<td width="10%">
 		<b><?=_("in Einrichtungen:")?></b>
 	</td>
-	<td colspan="3">
-	<select name="inst_id" size="1" style="min-width: 400px;">
+	<td width="90%">
+	<select name="inst_id" size="1" style="min-width: 200px;">
 		<option value="0">- - -</option>
 	<? foreach ($institutes as $institut): ?>
 		<option value="<?=$institut['id']?>"<? if($institut['id']==$browse_data['inst_id']):?> selected="selected"<? endif; ?>><?=$institut['name']?></option>
@@ -45,8 +42,8 @@
 <tr class="steelgraulight">
 	<td><b><?=_("in Veranstaltungen:")?></b>
 	</td>
-  	<td colspan="3">
-  	<select name="sem_id" size="1" style="min-width: 400px;">
+  	<td>
+  	<select name="sem_id" size="1" style="min-width: 200px;">
 		<option value="0">- - -</option>
 	<? foreach ($courses as $course): ?>
 		<option value="<?=$course['id']?>"<? if($course['id']==$browse_data['sem_id']):?> selected="selected"<? endif; ?>><?=$course['name']?></option>
@@ -59,32 +56,27 @@
   	<td>
 		<input id="Vorname" type="text" style="width: 200px" size="10" length="255" name="Vorname" value="<? echo htmlReady(stripslashes($browse_data["Vorname"])) ?>">
 		<div id="Vorname_choices" class="autocomplete"></div>
-	</td>
-	<td>
-		<b><?=_("Nachname:")?></b>
-	</td>
-	<td>
+		<b style="padding-left: 50px;"><?=_("Nachname:")?></b>
 		<input id="Nachname" type="text" style="width: 200px" size="10" maxlength="255" name="Nachname" value="<? echo htmlReady(stripslashes($browse_data["Nachname"])) ?>">
 		<div id="Nachname_choices" class="autocomplete"></div>
 	</td>
 </tr>
 <tr class="steel2">
-	<td colspan="4" align="center">
+	<td colspan="2" align="center">
 		<?=makeButton("suchen", "input", "Suchen", "Suchen")?>
 		<?=makeButton("zuruecksetzen", "input", "zuruecksetzen", "zuruecksetzen")?>
 	</td>
 </tr>
 </table>
+</div>
 </form>
 <br/>
 
 <!-- RESULTS --------------------------------------------------------------- -->
 <? if($results):?>
-<table width="100%" border="0" cellpadding="2" cellspacing="0">
-<tr>
-	<td class="topic"><b><?=_("Ergebnisse:")?></b></td>
-</tr>
-</table>
+
+<div class="topic"><b><?=_("Ergebnisse:")?></b></div>
+<div style="width: 100%;">
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 <? if(count($results) > 0):?>
 <tr>
@@ -116,6 +108,7 @@
 </tr>
 <? endif; ?>
 </table>
+</div>
 <? endif; ?>
 
 <?php
