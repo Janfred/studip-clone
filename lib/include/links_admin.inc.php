@@ -112,11 +112,11 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	* There are much pages with an own temporary set of data. Please use
 	* only this function to add defaults or clear data.
 	*/
-	function reset_all_data() {
+	function reset_all_data($reset_search_fields = false) {
 		global $links_admin_data, $sem_create_data, $admin_dates_data, $admin_admission_data, $archiv_assi_data,
 			$term_metadata, $news_range_id, $news_range_name;
 
-		//$links_admin_data='';
+		if($reset_search_fields) $links_admin_data='';
 		$sem_create_data='';
 		$admin_dates_data='';
 		$admin_admission_data='';
@@ -184,6 +184,13 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$links_admin_data["srch_on"]=TRUE;
 		$list=TRUE;
 	}
+	
+	if(isset($_REQUEST['reset_search_x'])){
+		reset_all_data(true);
+		$view_mode = 'sem';
+		$list = true;
+	}
+	
 	if ($SessSemName[1])
 		$modules = $Modules->getLocalModules($SessSemName[1]);
 
@@ -797,14 +804,18 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 							<font size=-1><?=_("freie Suche:")?></font><br /><input type="TEXT" name="srch_exp" maxlength=255 size=20 value="<? echo $links_admin_data["srch_exp"] ?>" />
 							<input type="HIDDEN" name="srch_send" value="TRUE" />
 						</td>
-						<td class="steel1" valign="bottom">
-							&nbsp; <br/>
-							<input type="IMAGE" <?=makeButton("anzeigen", "src")?> border=0 name="anzeigen" value="<?=_("Anzeigen")?>" />
+						<td class="steel1" valign="bottom" width="20%" nowrap="nowrap">
+							<?
+								echo makeButton('anzeigen', 'input', _("Anzeigen"), 'anzeigen');
+							if ($links_admin_data["srch_on"]){
+								echo '&nbsp;' . makeButton('zuruecksetzen','input', _("zurücksetzen"),'reset_search');
+							}
+							?>
 							<input type="HIDDEN" name="view" value="<? echo $links_admin_data["view"]?>" />
 						</td>
 					</tr>
 				<tr>
-					<td class="steel1" colspan=6>
+					<td class="steel1" colspan="5">
 						<br />&nbsp;<font size=-1>
 							<label>
 								<input type="checkbox" name="show_rooms_check" <?  if ($show_rooms_check) { echo " checked "; } ?> >&nbsp; <?=_("Raumdaten einblenden")?>
