@@ -1102,7 +1102,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 	if ($search_str && $perm->have_perm("root")) {
 
 		if ($search_user){
-			$query = "SELECT a.user_id,". $_fullname_sql['full'] . " AS full_name,username FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE CONCAT(Vorname,' ',Nachname,' ',username) LIKE '%$search_str%'";
+			$query = "SELECT a.user_id,". $_fullname_sql['full'] . " AS full_name,username FROM auth_user_md5 a LEFT JOIN user_info USING(user_id) WHERE CONCAT(Vorname,' ',Nachname,' ',username) LIKE '%$search_str%' ORDER BY Nachname, Vorname";
 			$db->query($query);
 			while($db->next_record()) {
 				$search_result[$db->f("user_id")]=array("type"=>"user","name"=>$db->f("full_name")."(".$db->f("username").")");
@@ -1113,7 +1113,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				. ($show_sem ? $show_sem_sql1 : "")
 				." FROM seminare s "
 				. ($show_sem ? $show_sem_sql2 : "")
-				." WHERE s.Name LIKE '%$search_str%'";
+				." WHERE s.Name LIKE '%$search_str%' ORDER BY start_time DESC, Name";
 		$db->query($query);
 		while($db->next_record()) {
 			$name = $db->f("Name")
@@ -1121,9 +1121,10 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				. ($db->f('startsem') != $db->f('endsem') ? " - ".$db->f('endsem') : "")
 				. ")" : "");
 			$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
+														"startsem"=>$db->f('startsem'),
 														"name"=>$name);
 		}
-		$query="SELECT Institut_id,Name, IF(Institut_id=fakultaets_id,'fak','inst') AS inst_type FROM Institute WHERE Name LIKE '%$search_str%'";
+		$query="SELECT Institut_id,Name, IF(Institut_id=fakultaets_id,'fak','inst') AS inst_type FROM Institute WHERE Name LIKE '%$search_str%' ORDER BY Name";
 		$db->query($query);
 		while($db->next_record()) {
 			$search_result[$db->f("Institut_id")]=array("type"=>$db->f("inst_type"),"name"=>$db->f("Name"));
@@ -1133,7 +1134,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				. ($show_sem ? $show_sem_sql1 : "")
 				. " FROM user_inst AS a LEFT JOIN  seminare AS s USING (Institut_id) "
 				. ($show_sem ? $show_sem_sql2 : "")
-				. " WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND s.Name LIKE '%$search_str%'";
+				. " WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND s.Name LIKE '%$search_str%' ORDER BY start_time DESC, Name";
 		$db->query($query);
 		while($db->next_record()) {
 			$name = $db->f("Name")
@@ -1141,9 +1142,10 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				. ($db->f('startsem') != $db->f('endsem') ? " - ".$db->f('endsem') : "")
 				. ")" : "");
 			$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
+														"startsem"=>$db->f('startsem'),
 														"name"=>$name);
 		}
-		$query="SELECT b.Institut_id,b.Name from user_inst AS a LEFT JOIN	Institute AS b USING (Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND a.institut_id!=b.fakultaets_id AND  b.Name LIKE '%$search_str%'";
+		$query="SELECT b.Institut_id,b.Name from user_inst AS a LEFT JOIN	Institute AS b USING (Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND a.institut_id!=b.fakultaets_id AND  b.Name LIKE '%$search_str%' ORDER BY Name";
 		$db->query($query);
 		while($db->next_record()) {
 			$search_result[$db->f("Institut_id")]=array("type"=>"inst","name"=>$db->f("Name"));
@@ -1155,7 +1157,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id)
 				LEFT JOIN seminare s ON(s.institut_id = c.institut_id) "
 				. ($show_sem ? $show_sem_sql2 : "")
-				. "	WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND s.Name LIKE '%$search_str%'";
+				. "	WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND s.Name LIKE '%$search_str%' ORDER BY start_time DESC, Name";
 			$db->query($query);
 			while($db->next_record()){
 				$name = $db->f("Name")
@@ -1163,17 +1165,18 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 					. ($db->f('startsem') != $db->f('endsem') ? " - ".$db->f('endsem') : "")
 					. ")" : "");
 				$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
+														"startsem"=>$db->f('startsem'),
 														"name"=>$name);
 			}
 			$query = "SELECT c.Institut_id,c.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
 			LEFT JOIN Institute c ON(c.fakultaets_id = b.institut_id AND c.fakultaets_id!=c.institut_id)
-			WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND c.Name LIKE '%$search_str%'";
+			WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND c.Name LIKE '%$search_str%' ORDER BY Name";
 			$db->query($query);
 			while($db->next_record()){
 				$search_result[$db->f("Institut_id")]=array("type"=>"inst","name"=>$db->f("Name"));
 			}
 			$query = "SELECT b.Institut_id,b.Name FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.Institut_id AND b.Institut_id=b.fakultaets_id)
-			WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND b.Name LIKE '%$search_str%'";
+			WHERE a.user_id='$user->id' AND a.inst_perms='admin' AND NOT ISNULL(b.Institut_id) AND b.Name LIKE '%$search_str%' ORDER BY Name";
 			$db->query($query);
 			while($db->next_record()){
 				$search_result[$db->f("Institut_id")]=array("type"=>"fak","name"=>$db->f("Name"));
@@ -1185,7 +1188,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				. ($show_sem ? $show_sem_sql1 : "")
 				. "	FROM seminar_user AS a LEFT JOIN seminare AS s USING (Seminar_id)"
 				. ($show_sem ? $show_sem_sql2 : "")
-				. "	WHERE a.user_id='$user->id' AND a.status IN ('dozent','tutor') ";
+				. "	WHERE a.user_id='$user->id' AND a.status IN ('dozent','tutor') ORDER BY start_time DESC, Name";
 		$db->query($query);
 		while($db->next_record()) {
 			$name = $db->f("Name")
@@ -1193,12 +1196,13 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				. ($db->f('startsem') != $db->f('endsem') ? " - ".$db->f('endsem') : "")
 				. ")" : "");
 			$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
+														"startsem"=>$db->f('startsem'),
 														"name"=>$name);
 		}
-		$query="SELECT b.Institut_id,b.Name from user_inst AS a LEFT JOIN  Institute AS b USING (Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms IN ('dozent','tutor') ";
+		$query="SELECT b.Institut_id,b.Name,IF(Institut_id=fakultaets_id,'fak','inst') AS inst_type from user_inst AS a LEFT JOIN  Institute AS b USING (Institut_id) WHERE a.user_id='$user->id' AND a.inst_perms IN ('dozent','tutor') ORDER BY Name";
 		$db->query($query);
 		while($db->next_record()) {
-			$search_result[$db->f("Institut_id")]=array("type"=>"inst","name"=>$db->f("Name"));
+			$search_result[$db->f("Institut_id")]=array("type"=>$db->f("inst_type"),"name"=>$db->f("Name"));
 		}
 	}
 	return $search_result;

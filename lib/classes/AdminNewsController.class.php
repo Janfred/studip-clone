@@ -288,6 +288,7 @@ class AdminNewsController {
 		echo "\n<tr><td class=\"blank\"><table class=\"blank\" width=\"99%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\">";
 		$cssSw=new cssClassSwitcher;
 		$cssSw->enableHover();
+		$cssSw->switchClass();
 		if ($perm->have_perm("root")) {
 			echo "\n<tr><th width=\"90%\" align=\"left\">" . _("System-Bereich:") . "</th><th align=\"center\" width=\"10%\">" . _("Anzeigen ?") . "</th></tr>";
 			echo "\n<tr ".$cssSw->getHover()."><td	".$cssSw->getFullClass()." width=\"90%\">" . _("Systemweite News") . "</td>";
@@ -474,71 +475,59 @@ class AdminNewsController {
 		
 	//Hilfsfunktionen
 	function list_range_details($type) {
-		global $auth,$perm;
+		global $perm;
+		$ranges = array();
+
+		switch ($type) {
+			case "inst" :
+				$group = _("Einrichtungen");
+				$query = "SELECT Institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN Institute ON(user_inst.Institut_id=Institute.Institut_id AND Institute.Institut_id!=fakultaets_id) WHERE NOT ISNULL(Institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor' ORDER BY Name";
+				break;
+
+			case "fak" :
+				$group = _("Fakultäten");
+				$query = "SELECT Institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN Institute ON(user_inst.Institut_id=Institute.Institut_id AND Institute.Institut_id=fakultaets_id) WHERE NOT ISNULL(Institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor' ORDER BY Name";
+				break;
+		}
+
+		if ($perm->have_perm('tutor')) {
+			foreach ($this->search_result as $range => $details) {
+				if ($details['type'] == $type) {
+					$ranges[$range] = array(
+						'name' => $details['name'],
+						'group' => isset($details['startsem']) ? _("Veranstaltungen")." ({$details['startsem']})" : $group
+					);
+				}
+			}
+		} else if (isset($query)) {
+			$this->db->query($query);
+			while ($this->db->next_record()) {
+				$ranges[$this->db->f('id')] = array(
+					'name' => $this->db->f('name'),
+					'group' => $group
+				);
+			}
+		}
+		$this->list_range_groups($ranges);
+	}
+
+	function list_range_groups($ranges) {
 		$cssSw=new cssClassSwitcher();
 		$cssSw->enableHover();
-		$output="";
-		$output[0]="\n<tr><th width=\"90%\" align=\"left\">";
-		switch ($type) {
-			case "sem" : $output[0].= _("Veranstaltungen");break;
-			case "inst" : $output[0].= _("Einrichtungen"); $query="SELECT Institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN Institute ON(user_inst.Institut_id=Institute.Institut_id AND Institute.Institut_id!=fakultaets_id) WHERE NOT ISNULL(Institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor'";$add=" AND user_inst.Institut_id ";break;
-			
-			case "fak" : $output[0].= _("Fakult&auml;ten"); $query="SELECT Institute.Institut_id AS id,Name AS name FROM user_inst LEFT JOIN Institute ON(user_inst.Institut_id=Institute.Institut_id AND Institute.Institut_id=fakultaets_id) WHERE NOT ISNULL(Institute.Institut_id) AND user_inst.user_id='".$this->user_id."' AND user_inst.inst_perms='autor'";$add=" AND user_inst.Institut_id ";break;
-		}
-		$output[0] .= '</th><th align="center" width="10%">' . _("Anzeigen ?") . '</th></tr>';
-		$not_in = "";
 
-		reset($this->range_detail);
-		
-		while (list ($range,$details) = each ($this->range_detail)) {
-			if ($details["type"]==$type) {
-				$cssSw->switchClass();
-				$output[1].= "\n<tr ".$cssSw->getHover()."><td class=\"".$cssSw->getClass()."\" width=\"90%\">".htmlReady($details["name"])."</td>\n<td class=\"".$cssSw->getClass()."\"  width=\"10%\" align=\"center\">";
-				//$output[1].= "\n<td width=\"10%\" align=\"center\"><input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$range."\" checked></td></tr>";
-				if ($this->news_perm[$range]["perm"] OR $auth->auth["perm"]=="root") {
-					$output[1].="<input type=\"CHECKBOX\" name=\"add_range[]\" value=\"".$range."\" checked></td></tr>";
-				} else {
-					$output[1].=_("Ja") . "<input type=\"HIDDEN\" name=\"add_range[]\" value=\"$range\"></td></tr>";
-				}
-				if ($not_in)
-					$not_in=$not_in.",";
-				$not_in=$not_in."'$range'";
-				if ($perm->have_perm("tutor") && is_array($this->search_result)) {
-					$this->search_result[$range]="used";
-				}
+		foreach ($ranges as $range => $details) {
+			if ($details['group'] != $lastgroup) {
+				echo "<tr><th width=\"90%\" align=\"left\">".$details['group'].'</th><th align="center" width="10%">' . _("Anzeigen ?") . '</th></tr>';
+				$lastgroup = $details['group'];
+				$cssSw->resetClass();
 			}
+			$cssSw->switchClass();
+			echo "\n<tr ".$cssSw->getHover().'><td	'.$cssSw->getFullClass(). '  width="90%">' .htmlReady($details['name']).'</td>';
+			echo "\n<td  ".$cssSw->getFullClass(). ' width="10%" align="center"><input type="CHECKBOX" name="add_range[]" value="' . $range. '"';
+			if ($range == $this->news_range && $this->news_query['news_id'] == 'new_entry' || isset($this->range_detail[$range]))
+				echo ' checked ';
+			echo '></td></tr>';
 		}
-		if ($not_in)
-			$add .= "NOT IN ($not_in)";
-		else
-			$add = '';
-		if ($perm->have_perm('tutor') && is_array($this->search_result)) {
-			reset($this->search_result);
-			while (list ($range,$details) = each($this->search_result)) {
-				if ($details["type"]==$type) {
-					$cssSw->switchClass();
-					$output[1].= "\n<tr ".$cssSw->getHover().'><td	'.$cssSw->getFullClass(). '  width="90%">' .htmlReady($details['name']).'</td>';
-					$output[1].= "\n<td  ".$cssSw->getFullClass(). ' width="10%" align="center"><input type="CHECKBOX" name="add_range[]" value="' . $range. '"';
-					if ($range == $this->news_range AND $this->news_query['news_id'] == 'new_entry')
-						$output[1] .= ' checked ';
-					$output[1] .= '></td></tr>';
-				}
-			}
-		} else {
-			if ($query){
-				$this->db->query($query.$add.' ORDER BY name');
-				while($this->db->next_record()) {
-					$cssSw->switchClass();
-					$output[1].= "\n<tr ".$cssSw->getHover().'><td	'.$cssSw->getFullClass(). ' width="90%">'.$this->db->f('name').'</td>';
-					$output[1].= "\n<td ".$cssSw->getFullClass().' width="10%" align="center"><input type="CHECKBOX" name="add_range[]" value="' . $this->db->f('id').'"';
-					if ($this->db->f('id') == $this->news_range AND $this->news_query['news_id'] == 'new_entry')
-						$output[1].= ' checked ';
-					$output[1] .= '></td></tr>';
-				}
-			}
-		}
-		if ($output[1])
-			echo $output[0].$output[1];
 	}
 
 	function p_self($par="") {
