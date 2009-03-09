@@ -1,4 +1,4 @@
-<!-- SEARCHBOX ------------------------------------------------------------- -->
+<!-- SEARCHBOX -->
 <script type="text/javascript">
 	Event.observe(window, 'load', function() {
 		new Ajax.Autocompleter('Vorname',
@@ -26,8 +26,9 @@
 <!-- form zur wahl der institute -->
 <div style="width: 100%;">
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
-<tr class="steel1">
-	<td width="10%">
+<? if (count($institutes)): ?>
+<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
+	<td style="white-space: nowrap;">
 		<b><?=_("in Einrichtungen:")?></b>
 	</td>
 	<td width="90%">
@@ -38,11 +39,14 @@
 	<? endforeach;?>
 	</select></td>
 </tr>
+<? endif ?>
 <!-- form zur wahl der seminare -->
-<tr class="steelgraulight">
-	<td><b><?=_("in Veranstaltungen:")?></b>
+<? if (count($courses)): ?>
+<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
+	<td style="white-space: nowrap;">
+		<b><?=_("in Veranstaltungen:")?></b>
 	</td>
-  	<td>
+	<td width="90%">
   	<select name="sem_id" size="1" style="min-width: 200px;">
 		<option value="0">- - -</option>
 	<? foreach ($courses as $course): ?>
@@ -50,13 +54,18 @@
 	<? endforeach;?>
 	</select></td>
 </tr>
+<? endif ?>
 <!-- form zur freien Suche -->
-<tr class="steel1">
+<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
 	<td><b><?=_("Vorname:")?></b></td>
-  	<td>
+	<td width="90%">
 		<input id="Vorname" type="text" style="width: 200px" size="10" length="255" name="Vorname" value="<? echo htmlReady(stripslashes($browse_data["Vorname"])) ?>">
 		<div id="Vorname_choices" class="autocomplete"></div>
-		<b style="padding-left: 50px;"><?=_("Nachname:")?></b>
+	</td>
+</tr>
+<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
+	<td><b><?=_("Nachname:")?></b></td>
+	<td width="90%">
 		<input id="Nachname" type="text" style="width: 200px" size="10" maxlength="255" name="Nachname" value="<? echo htmlReady(stripslashes($browse_data["Nachname"])) ?>">
 		<div id="Nachname_choices" class="autocomplete"></div>
 	</td>
@@ -72,7 +81,7 @@
 </form>
 <br/>
 
-<!-- RESULTS --------------------------------------------------------------- -->
+<!-- RESULTS -->
 <? if($results):?>
 
 <div class="topic"><b><?=_("Ergebnisse:")?></b></div>

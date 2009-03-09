@@ -86,11 +86,11 @@ if ($sms_msg)
 $db2=new DB_Seminar;
 if ($perm->have_perm("admin"))
 {
-	$db2->query("SELECT * FROM Institute WHERE name != '- - -' AND (Institute.modules & 16) ORDER BY name");
+	$db2->query("SELECT * FROM Institute WHERE (Institute.modules & 16) ORDER BY name");
 }
 else
 {
-	$db2->query("SELECT * FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE name != '- - -' AND user_id = '$user->id'  AND (Institute.modules & 16) ORDER BY name");
+	$db2->query("SELECT * FROM user_inst LEFT JOIN Institute USING (institut_id) WHERE user_id = '$user->id' AND (Institute.modules & 16) ORDER BY name");
 }
 while ($db2->next_record())
 {
@@ -99,11 +99,7 @@ while ($db2->next_record())
 
 //List of Seminars
 $db2=new DB_Seminar;
-if ($perm->have_perm("admin"))
-{
-	$db2->cache_query("SELECT * FROM seminare ORDER BY Name");
-}
-else
+if (!$perm->have_perm("admin"))
 {
 	if ($AUTO_INSERT_SEM)
 	{
@@ -114,10 +110,10 @@ else
 	{
 		$db2->query("SELECT * FROM seminar_user LEFT JOIN seminare USING (Seminar_id) WHERE user_id = '$user->id' AND (seminare.modules & 8) ORDER BY Name");
 	}
-}
-while ($db2->next_record())
-{
-	$courses[] = array('id' => $db2->f("Seminar_id"), 'name' => htmlReady(my_substr($db2->f("Name"), 0, 40)));
+	while ($db2->next_record())
+	{
+		$courses[] = array('id' => $db2->f("Seminar_id"), 'name' => htmlReady(my_substr($db2->f("Name"), 0, 40)));
+	}
 }
 
 /* --- Results -------------------------------------------------------------- */
