@@ -495,7 +495,7 @@ class AdminNewsController {
 				if ($details['type'] == $type) {
 					$ranges[$range] = array(
 						'name' => $details['name'],
-						'group' => isset($details['startsem']) ? _("Veranstaltungen")." ({$details['startsem']})" : $group
+						'group' => isset($details['startsem']) ? _("Veranstaltungen").": ".$details['startsem'] : $group
 					);
 				}
 			}
