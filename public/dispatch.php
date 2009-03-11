@@ -12,6 +12,7 @@
  * the License, or (at your option) any later version.
  */
 
+require_once 'lib/functions.php';
 
 # define root
 $trails_root = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'app';
@@ -23,6 +24,9 @@ require_once 'vendor/trails/trails.php';
 
 # set base url for URLHelper class
 URLHelper::setBaseUrl($CANONICAL_RELATIVE_PATH_STUDIP);
+
+# disable register_globals if set
+unregister_globals();
 
 # dispatch
 $request_uri = $_SERVER['REQUEST_URI'] === $_SERVER['PHP_SELF']
