@@ -128,6 +128,7 @@ if ($cmd == "add_entry") {
 
 // Virtuellen Stundenplaneintrag löschen
 if ($cmd == "delete_entry") {
+    $sem_id = substr(mysql_real_escape_string($_REQUEST['sem_id']), 0, 32); // make sure
 	$db->query("DELETE FROM seminar_user_schedule WHERE range_id = '$sem_id' AND user_id = '".$auth->auth['uid']."'");
 }
 
@@ -147,16 +148,10 @@ if ($cmd == "hide") {
 
 // show previously hidden entry
 if ($cmd == "show") {
-	if(!$my_schedule_settings['hidden']) {
-		$my_schedule_settings['hidden'] = array();
-	}
-	
-	// echo $my_schedule_settings['hidden'][$sem_id];
 	if($my_schedule_settings['hidden'][$sem_id]){
 		unset($my_schedule_settings['hidden'][$sem_id]);
 	}
 }
-// echo _D($my_schedule_settings);
 
 //ein weiterer persoenlicher Eintrag wurde uebermittelt
 if ($cmd=="insert") {
@@ -355,7 +350,13 @@ for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_sche
 
 				$i++; //<pfusch>$i (fuer alle einzelnen Objekte eines Seminars) wird hier zur Kennzeichnung der einzelen Termine eines Seminars untereinander verwendet. Unten wird die letzte Stelle jeweils weggelassen. </pfusch>
 
-			if($view == 'edit' || !$my_schedule_settings['hidden'][$db->f("Seminar_id").$i]) {
+            # virtual dates cant be hidden
+			if($my_schedule_settings['hidden'][$db->f("Seminar_id").$i]
+			   and $seminar_user_schedule == 2) {
+			    unset($my_schedule_settings['hidden'][$db->f("Seminar_id").$i]);
+			}
+			
+			if($view == 'edit' or !$my_schedule_settings['hidden'][$db->f("Seminar_id").$i]) {
 				$my_sems[$db->f("Seminar_id").$i] = array(
 					"start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"],
 					"start_time"=>$start_time,
@@ -767,7 +768,6 @@ for ($i = $global_start_time; $i < $global_end_time+1; $i++) {
 							$link_img = 'trash.gif" ';
 							$link_cmd = 'delete';
 							$link_tp = tooltip(_("Diesen Termin löschen"));
-							
 						} else if($my_sems[$cc['seminar_id']]['virtual']){
 							$link_img = 'trash.gif" ';
 							$link_cmd = 'delete_entry';
@@ -783,7 +783,7 @@ for ($i = $global_start_time; $i < $global_end_time+1; $i++) {
 								$link_tp = tooltip(_("Diesen Termin ausblenden"));
 							}
 						}
-						echo '<a style="float: right;" href="'. URLHelper::getLink('?view=edit&cmd='. $link_cmd .'&sem_id='.$id).'">';
+						echo '<a style="float: right;" href="'. URLHelper::getLink('?view=edit&cmd='. $link_cmd .'&sem_id='.$cc["seminar_id"]).'">';
 						echo '<img border=0 src="'. $GLOBALS['ASSETS_URL']. 'images/' .$link_img . $link_tp .'></a>';
 					}
 					
