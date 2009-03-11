@@ -58,7 +58,8 @@
     <? endif ?>
   </head>
 
-  <body>
+ <body<?= (isset($GLOBALS['body_id']) ? ' id="'.htmlReady($GLOBALS['body_id']).'"' : '') .
+          (isset($GLOBALS['body_class']) ? ' class="'.htmlReady($GLOBALS['body_class']).'"' : '' ) ?>>
     <div id="overdiv_container"></div>
 
     <div id="ajax_notification" style="display: none;">

@@ -154,3 +154,11 @@ div#barTopMenu a:hover {
 div#barTopMenu img {
 	border: 0px;
 }
+/*****************************************************************************/
+/* DIFFERENT LOOK FOR PUBLIC COURSES                                         */
+/*****************************************************************************/
+
+body.public_course div#barBottommiddle {
+	background-image: url('../images/red_gradient.jpg');
+}
+

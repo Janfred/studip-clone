@@ -128,7 +128,7 @@ function selectSem ($sem_id) {
 
 	closeObject();
 
-	$st = $db->prepare("SELECT Institut_id, Name, Seminar_id, Untertitel, start_time, status, Lesezugriff, Schreibzugriff, Passwort FROM seminare WHERE Seminar_id = ?");
+	$st = $db->prepare("SELECT Institut_id, Name, Seminar_id, Untertitel, start_time, status, Lesezugriff, Schreibzugriff, Passwort, visible FROM seminare WHERE Seminar_id = ?");
 	$st->execute(array($sem_id));
 	if ($row = $st->fetch()) {
 		$SemSecLevelRead = $row["Lesezugriff"];
@@ -155,6 +155,15 @@ function selectSem ($sem_id) {
 			$SessSemName["art"] = $SEM_TYPE[$row["status"]]["name"];
 		}
 		$SessSemName["header_line"] = getHeaderLine ($sem_id, array('name' => $row["Name"], 'type' => $SessSemName["art"]));
+
+		// change class attribute of the body tag and headline if this course is
+		// publicly visible
+		if ($SemSecLevelRead == 0 && $row["visible"] == 1) {
+			$GLOBALS["body_class"] = isset($GLOBALS["body_class"])
+			                         ? $GLOBALS["body_class"] . " public_course"
+			                         : "public_course";
+			$SessSemName["header_line"] .= " (" . _("öffentliche Veranstaltung") . ")";
+		}
 		return true;
 	} else {
 		return false;

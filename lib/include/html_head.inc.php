@@ -118,10 +118,7 @@ if ($my_messaging_settings['start_messenger_at_startup'] && $auth->auth['jscript
 	// ]]>
 	</script>
 	</head>
-	<? if (isset($GLOBALS['body_id'])) : ?>
-		<body id="<?= $GLOBALS['body_id'] ?>">
-	<? else : ?>
-	<body>
-	<? endif ?>
+	<body<?= (isset($GLOBALS['body_id']) ? ' id="'.htmlReady($GLOBALS['body_id']).'"' : '') .
+	         (isset($GLOBALS['body_class']) ? ' class="'.htmlReady($GLOBALS['body_class']).'"' : '' ) ?>>
 	  <div id="overdiv_container"></div>
       <div id="ajax_notification" style="display: none;"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ajax_indicator.gif" alt="AJAX indicator" align="absmiddle">&nbsp;Working...</div>
