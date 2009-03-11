@@ -145,12 +145,77 @@ function showlog_format_semester($sem_start_time) {
 	return $sem_start_time;
 }
 
+function showlog_format_access($dbg) {
+	$data = unserialize($dbg);
+	$show_pw = false;
+
+	switch($data['admission_type']) {
+		case '0':
+			$info = 'Keines';
+			$show_pw = true;
+			break;
+
+		case '1':
+			$info = 'Losverfahren mit max. '.$data['admission_turnout'].' Teilnehmern';
+			break;
+
+		case '2':
+			$info = 'Chronologisch mit max. '.$data['admission_turnout'].' Teilnehmern';
+			break;
+
+		case '3':
+			$info = 'Gesperrt';
+			break;
+	}
+
+	$ret = '';
+	$ret .= '- Anmeldeverfahren: '.$info;
+
+	if ($data['admission_endtime'] > 1) {
+		$ret .= ', Ende Kontigentierung: '.date('H:i, d.m. Y', $data['admission_endtime']);
+	}
+
+	if ($data['admission_binding']) {
+		$ret .= ', Anmeldung ist verbindlich';
+	} else {
+		$ret .= ', Anmeldung ist nicht verbindlich';
+	}
+
+	if ($data['sem_admission_start_date'] > 1) {
+		$ret .= ', Startzeit: '.date('H:i, d.m. Y', $data['sem_admission_start_date']);
+	}
+
+	if ($data['sem_admission_end_date'] > 1) {
+		$ret .= ', Endzeit: '.date('H:i, d.m. Y', $data['sem_admission_end_date']);
+	}
+
+	if ($data['admission_prelim']) {
+		$ret .= ', Vorläufige Anmeldung';
+	}
+
+	if ($data['admission_prelim_text']) {
+		$ret .= ', Infotext Vorläufige Anmeldung: '.$data['admission_prelim_text'];
+	}
+
+	if ($data['passwort']) {
+		$ret .= ', Passwort: '.$data['passwort'];
+	}
+
+	if ($show_pw) {
+		$ret .= ', Lesezugriff: '.showlog_format_access_helper($data['read_level']);
+		$ret .= ', Schreibzugriff: '.showlog_format_access_helper($data['write_level']);
+	}
+
+	return $ret;
+}
+
 function showlog_format_infotemplate($action, $user_id, $affected, $coaffected, $info, $dbg_info) {
 	$info = htmlReady($info);
 	$dbg_info = htmlReady($dbg_info);
 	$text=$action['info_template'];
 	$text=preg_replace('/%sem\(%affected\)/e','showlog_format_sem($affected)',$text);
 	$text=preg_replace('/%sem\(%coaffected\)/e','showlog_format_sem($coaffected)',$text);
+	$text=preg_replace('/%access\(%info\)/e','showlog_format_access($info)',$text);
 	$text=preg_replace('/%studyarea\(%affected\)/e','showlog_format_studyarea($affected)',$text);
 	$text=preg_replace('/%studyarea\(%coaffected\)/e','showlog_format_studyarea($coaffected)',$text);
 	$text=preg_replace('/%res\(%affected\)/e','showlog_format_resource($affected)',$text);
@@ -160,6 +225,7 @@ function showlog_format_infotemplate($action, $user_id, $affected, $coaffected, 
 	$text=preg_replace('/%user\(%affected\)/e','showlog_format_username($affected)',$text);
 	$text=preg_replace('/%user\(%coaffected\)/e','showlog_format_username($coaffected)',$text);
 	$text=preg_replace('/%user/e','showlog_format_username($user_id)',$text);
+	$text=preg_replace('/%couser\(%coaffected\)/e','showlog_format_username($coaffected)',$text);
 	$text=preg_replace('/%singledate\(%affected\)/e','showlog_format_singledate($affected)',$text);
 	$text=preg_replace('/%semester\(%coaffected\)/e','showlog_format_semester($coaffected)',$text);
 	$text=preg_replace('/%plugin\(%coaffected\)/e','showlog_format_plugin($coaffected)',$text);
