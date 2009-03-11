@@ -176,7 +176,7 @@ if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) &&
 	*/
 	//Save changes
 	if (($uebernehmen_x) && (!$errormsg)) {
-		if ((!$admin_rooms_data["resRequest"]->getSettedPropertiesCount()) && (!$admin_rooms_data["resRequest"]->getResourceId()) && (!$perm->have_perm("admin"))) {
+		if ((!$admin_rooms_data["resRequest"]->getSettedPropertiesCount()) && (!$admin_rooms_data["resRequest"]->getResourceId())) {
 			$errormsg.="error§"._("Die Anfrage konnte nicht gespeichert werden, da Sie mindestens einen Raum oder mindestens eine Eigenschaft (z.B. Anzahl der Sitzpl&auml;tze) angeben m&uuml;ssen!");
 		} else {
 			$admin_rooms_data["resRequest"]->setClosed(0);
