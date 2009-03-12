@@ -185,7 +185,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$list=TRUE;
 	}
 	
-	if(isset($_REQUEST['reset_search_x'])){
+	if(isset($_REQUEST['links_admin_reset_search_x'])){
 		reset_all_data(true);
 		$view_mode = 'sem';
 		$list = true;
@@ -808,7 +808,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 							<?
 							echo makeButton('anzeigen', 'input', _("Anzeigen"), 'anzeigen');
 							if ($links_admin_data["srch_on"]){
-								echo '&nbsp;' . makeButton('zuruecksetzen','input', _("zurücksetzen"),'reset_search');
+								echo '&nbsp;' . makeButton('zuruecksetzen','input', _("zurücksetzen"),'links_admin_reset_search');
 							}
 							?>
 							<input type="HIDDEN" name="view" value="<? echo $links_admin_data["view"]?>" />
