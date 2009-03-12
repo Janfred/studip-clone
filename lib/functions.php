@@ -1404,3 +1404,24 @@ function studip_utf8decode($string){
 							);
 	}
 }
+
+function mark_public_course($course = NULL) {
+
+	if ($course === NULL) {
+		require_once "lib/classes/Seminar.class.php";
+		$course = Seminar::getInstance($GLOBALS['SessSemName'][1]);
+	}
+
+	// change class attribute of the body tag and headline if this course is
+	// publicly visible
+	if ($course->isPublic()) {
+		$GLOBALS["body_class"] = isset($GLOBALS["body_class"])
+		                         ? $GLOBALS["body_class"] . " public_course"
+		                         : "public_course";
+		$name = $course->getName();
+		$type = $GLOBALS["SessSemName"]["art"];
+		$GLOBALS["SessSemName"]["header_line"] =
+			getHeaderLine($course->getId(), compact('name', 'type')) .
+			" (" . _("öffentliche Veranstaltung") . ")";
+	}
+}
