@@ -29,6 +29,8 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once ('config.inc.php');
 require_once ('lib/visual.inc.php');
 
+mark_public_course();
+
 $HELP_KEYWORD="Basis.Ilias";
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Lernmodule");
 

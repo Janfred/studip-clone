@@ -30,6 +30,8 @@ $flatviewstartposting = (int)$flatviewstartposting;
 (isset($view) && preg_match('/^[a-z]*$/', $view)) or $view = '';
 (isset($open) && preg_match('/^[a-z0-9]{1,32}$/', $open)) or $open = '';
 
+mark_public_course();
+
 if ($forumsend && $forumsend!="bla") {
 	$HELP_KEYWORD="Basis.ForumEinstellungen";
 	$CURRENT_PAGE = _("Einstellungen des Forums anpassen");
@@ -38,14 +40,14 @@ if ($forumsend && $forumsend!="bla") {
 	$CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Forum");
 } else {
 	switch($view) {
-		case "neue": 
-			$HELP_KEYWORD="Basis.ForumNeu"; 
+		case "neue":
+			$HELP_KEYWORD="Basis.ForumNeu";
 			break;
-		case "flat": 
-			$HELP_KEYWORD="Basis.Forumlast4"; 
+		case "flat":
+			$HELP_KEYWORD="Basis.Forumlast4";
 			break;
-		case "search": 
-			$HELP_KEYWORD="Basis.ForumSuche"; 
+		case "search":
+			$HELP_KEYWORD="Basis.ForumSuche";
 			break;
 		default:
 			$HELP_KEYWORD="Basis.Forum";

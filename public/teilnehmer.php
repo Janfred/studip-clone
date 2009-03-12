@@ -82,6 +82,8 @@ if ($cmd == "make_me_invisible" && !$perm->have_studip_perm('tutor',$SessSemName
 	}
 }
 
+mark_public_course();
+
 if ($rechte) {
 	$HELP_KEYWORD="Basis.VeranstaltungenVerwaltenTeilnehmer";
 } else {
@@ -270,7 +272,7 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 					$fullname = $db->f("fullname");
 					$next_pos = get_next_position("tutor",$id);
 					// LOGGING
-					log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'tutor', 'Hochgestuft zum Tutor'); 
+					log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'tutor', 'Hochgestuft zum Tutor');
 					$db->query("UPDATE seminar_user SET status='tutor', position='$next_pos', visible='yes' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
 					if($db->affected_rows()) $msgs[] = $fullname;
 				}
@@ -301,7 +303,7 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
          		$db->next_record();
          		$pos = $db->f("position");
 				// LOGGING
-				log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'autor', 'Runtergestuft zum Autor'); 
+				log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'autor', 'Runtergestuft zum Autor');
 				$db->query("UPDATE seminar_user SET status='autor', position=0 WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='tutor'");
 
          		re_sort_tutoren($id, $pos);
@@ -334,7 +336,7 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 					$userchange = $db->f("user_id");
 					$fullname = $db->f("fullname");
 					// LOGGING
-					log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'autor', 'Hochgestuft zum Autor'); 
+					log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'autor', 'Hochgestuft zum Autor');
 					$db->query("UPDATE seminar_user SET status='autor' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
 					if($db->affected_rows()) $msgs[] = $fullname;
 				}
@@ -361,7 +363,7 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				$userchange = $db->f("user_id");
 				$fullname = $db->f("fullname");
 				// LOGGING
-				log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'user', 'Runtergestuft zum User, keine Schreibberechtigung mehr'); 
+				log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'user', 'Runtergestuft zum User, keine Schreibberechtigung mehr');
 				$db->query("UPDATE seminar_user SET status='user' WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='autor'");
 				if($db->affected_rows()) $msgs[] = $fullname;
 			}
@@ -389,7 +391,7 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				$userchange = $db->f("user_id");
 				$fullname = $db->f("fullname");
 				// LOGGING
-				log_event('SEM_USER_DEL', $id, $userchange, 'Wurde aus der Veranstaltung rausgeworfen'); 
+				log_event('SEM_USER_DEL', $id, $userchange, 'Wurde aus der Veranstaltung rausgeworfen');
 				$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
 				if($db->affected_rows()){
 					setTempLanguage($userchange);
@@ -432,7 +434,7 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				$fullname = $db->f("fullname");
 
 				// LOGGING
-				log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'Wurde aus der Warteliste der Veranstaltung rausgeworfen'); 
+				log_event('SEM_CHANGED_RIGHTS', $id, $userchange, 'Wurde aus der Warteliste der Veranstaltung rausgeworfen');
 
 				$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
 				if($db->affected_rows()){
@@ -486,17 +488,17 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				$userchange = $db->f("user_id");
 				$fullname = $db->f("fullname");
 
-				if ($cmd == "add_user" && $SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] 
+				if ($cmd == "add_user" && $SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]
 					&& $perm->have_studip_perm('dozent', $id)
 					&& ($db->f('perms') == 'tutor' || $db->f('perms') == 'dozent')) {
 
 					if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"]) {
 						$status = 'tutor';
 					} else {
-						// query - VA und Person teilen sich die selbe Einrichtung und Person ist weder autor noch tutor in der Einrichtung 
-						$stmt = DBManager::get()->query("SELECT DISTINCT user_id FROM seminar_inst 
-							LEFT JOIN user_inst USING(Institut_id) 
-							WHERE user_id = '$userchange' AND seminar_id ='$SessSemName[1]' 
+						// query - VA und Person teilen sich die selbe Einrichtung und Person ist weder autor noch tutor in der Einrichtung
+						$stmt = DBManager::get()->query("SELECT DISTINCT user_id FROM seminar_inst
+							LEFT JOIN user_inst USING(Institut_id)
+							WHERE user_id = '$userchange' AND seminar_id ='$SessSemName[1]'
 								AND inst_perms!='user' AND inst_perms!='autor'");
 
 						if ($stmt->rowCount()) {
@@ -534,7 +536,7 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 
 			//Warteliste neu sortieren
 			renumber_admission($id);
-			
+
 			if($admission_user){
 				if ($cmd=="add_user") {
 					$msg = "msg§" . sprintf(_("NutzerIn %s wurde in die Veranstaltung mit dem Status <b>%s</b> eingetragen."), htmlReady($fullname), $status) . "§";
@@ -651,7 +653,7 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 							// gehen wir ihn halt hier hochstufen
 							$next_pos = get_next_position("tutor",$id);
 							// LOGGING
-							log_event('SEM_USER_ADD', $id, $userchange, 'tutor', 'Wurde zum Tutor ernannt (add_tutor_x)'); 
+							log_event('SEM_USER_ADD', $id, $userchange, 'tutor', 'Wurde zum Tutor ernannt (add_tutor_x)');
 							$db2->query("UPDATE seminar_user SET status='tutor', position='$next_pos' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
 							if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
 								$msg = "msg§" . sprintf (_("%s wurde zum Mitglied bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
@@ -698,10 +700,10 @@ check_admission();
 if($SEMINAR_LOCK_ENABLE && $perm->have_studip_perm('tutor', $SessSemName[1])){
 	$lock_ruler = new LockRules();
 	$lockdata = $lock_ruler->getSemLockRule($SessSemName[1]);
-	
+
 	if ($lockdata['description'] && LockRules::CheckLockRulePermission($SessSemName[1], $lockdata['permission'])){
 		$msg .= "info§" . fixlinks($lockdata['description']);
-		
+
 	}
 }
 
@@ -995,7 +997,7 @@ while (list ($key, $val) = each ($gruppe)) {
 	// die eigentliche Teil-Tabelle
 	if ($key != 'dozent') echo "<form name=\"$key\" action=\"".URLHelper::getLink("?studipticket=$studipticket")."\" method=\"post\">";
 	if ($key == 'accepted') echo '<input type="hidden" name="accepted" value="1">';
-	
+
 	if($rechte && $key == 'autor' 	&& $sem->isAdmissionEnabled()){
 		echo '<tr><td class="blank" colspan="'.$colspan.'" align="right"><font size="-1">';
 		printf(_("<b>Teilnahmebeschränkte Veranstaltung</b> -  Teilnehmerkontingent: %s, davon belegt: %s, zusätzlich belegt: %s"),
@@ -1321,16 +1323,16 @@ if ($db->f('visible') == 'yes' || $i_see_everybody || $db->f('user_id') == $user
 		if ((is_opened($db->f("user_id")) || in_array($key, $open_areas)) && $rechte) { // show further userinfosi
 			$info_is_open = true;
 			$user_data = array();
-			
+
 			//get data for user, if dozent or higher
 			if ($perm->have_perm("dozent")) {
 				/* remark: if you change something in the data-acquisition engine
 				* please do not forget to change it also in "export/export_studipdata_func.inc.php"
 				* in the function export_teilis(...)
 				*/
-				
+
 				$additional_data = get_additional_data($db->f('user_id'), $id);
-				
+
 				foreach ($additional_data as $val)
 				{
 					if ($val['content'] && $val['display'])
@@ -1338,7 +1340,7 @@ if ($db->f('visible') == 'yes' || $i_see_everybody || $db->f('user_id') == $user
 						if (is_array($val['content']))
 						{
 							$zw = implode(', ', $val['content']);
-							
+
 							$user_data [] = array('name' => $val['name'], 'content' => $zw);
 						} else
 						{
@@ -1406,7 +1408,7 @@ if ($db->f('visible') == 'yes' || $i_see_everybody || $db->f('user_id') == $user
 	$c++;
 } // eine Zeile zuende
 
-else { 
+else {
 	$invisible++;
 }
 }
@@ -1574,7 +1576,7 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 			echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
 			echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
 			echo '<option value="">'._("Kein Kontingent").'</option>';
-			if(is_array($sem->admission_studiengang)){			
+			if(is_array($sem->admission_studiengang)){
 				foreach($sem->admission_studiengang as $studiengang => $data){
 					echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
 				}
@@ -1642,9 +1644,9 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 		echo '<b>' . _("Teilnehmerliste übernehmen") . '</b><br>';
 		echo _("In das nebenstehende Textfeld können Sie eine Liste mit Namen von NutzerInnen eingeben, die in die Veranstaltung aufgenommen werden sollen.");
 		echo '<br />' . _("Geben Sie in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein.");
-		echo '<br/>'._('Alternativ kann auch der Benutzername eingegeben werden.');		
+		echo '<br/>'._('Alternativ kann auch der Benutzername eingegeben werden.');
 		echo '<br/>' . _("Eingabeformat: <b>Nachname[, Vorname] &crarr;</b>");
-		echo '<br/>' . _("oder: <b>Benutzername &crarr;</b>");		
+		echo '<br/>' . _("oder: <b>Benutzername &crarr;</b>");
 		echo "</div></td>\n";
 		echo "<td width=\"40%\" class=\"steel1\">";
 		echo "<textarea name=\"csv_import\" rows=\"6\" cols=\"50\">";
@@ -1655,7 +1657,7 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 			echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
 			echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
 			echo '<option value="">'._("Kein Kontingent").'</option>';
-			if(is_array($sem->admission_studiengang)) {			
+			if(is_array($sem->admission_studiengang)) {
 				foreach($sem->admission_studiengang as $studiengang => $data){
 					echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
 				}
@@ -1737,7 +1739,7 @@ if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1]))) {
 	echo chr(10) . "<td class=\"blank\"><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("TeilnehmerInnen") . ' '. $SessSemName[0], "rtf", "rtf-teiln", "", _("TeilnehmerInnen exportieren als rtf Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/rtf-icon.gif" border="0">', 'passthrough'). "</font></b></td>";
 	echo chr(10) . "<td class=\"blank\"><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("TeilnehmerInnen") . ' '. $SessSemName[0], "csv", "csv-teiln", "", _("TeilnehmerInnen exportieren als csv Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0">', 'passthrough') . "</font></b></td>";
 	echo chr(10) . '</tr>';
-	
+
 	if ($awaiting){
 		echo chr(10) . '<tr>';
 		echo chr(10) . "<td class=\"blank\"><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("Warteliste") .' ' . $SessSemName[0], "rtf", "rtf-warteliste","awaiting",_("Warteliste exportieren als rtf Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/rtf-icon.gif" border="0">', 'passthrough') . "</font></b></td>";

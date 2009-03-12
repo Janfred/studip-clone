@@ -30,6 +30,8 @@ require_once ('lib/visual.inc.php');
 require_once ('lib/statusgruppe.inc.php');
 require_once 'lib/functions.php';
 
+mark_public_course();
+
 $HELP_KEYWORD="Basis.InVeranstaltungGruppen";
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Funktionen / Gruppen");
 
@@ -103,7 +105,7 @@ function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
 		$groupmails = groupmail($role_id);
 		echo "<table width=\"99%\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\" border=\"0\"><tr>";
 		echo '<td width="90%" class="steel" style="height: 25px"><font size="-1">';
-		
+
 		printf ("<b>%s&nbsp;%s</b></font>",
 			CheckAssignRights($role_id,$user->id, $SessSemName[1])?"&nbsp;<a href=\"".URLHelper::getLink("?assign=$role_id")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\"". tooltip(_("In diese Gruppe eintragen"))."></a>":"",
 			htmlReady($title)
@@ -189,7 +191,7 @@ function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
 				$pred = $data['role']->getName();
 				$zw = $pred;
 			}
-			PrintAktualStatusgruppen($data['child'], $level+1, $zw); 
+			PrintAktualStatusgruppen($data['child'], $level+1, $zw);
 		}
 	}
 
@@ -269,7 +271,7 @@ if ($delete_id)
 	?>
 	<tr valign="top">
      <td width="90%" class="blank">
-			<?			
+			<?
 			PrintAktualStatusgruppen(GetAllStatusgruppen($SessSemName[1], $user->id));
 			$anzahltext = PrintNonMembers($SessSemName[1]);
 

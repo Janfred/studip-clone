@@ -1753,4 +1753,12 @@ class Seminar {
 		}
 		return count($old) + $count_added - $count_removed;
 	}
+
+	/**
+	 * @return void       returns TRUE if this course is publicly visible,
+	 *                    FALSE otherwise
+	 */
+	function isPublic() {
+		return $this->read_level == 0 && $this->visible == 1;
+	}
 }

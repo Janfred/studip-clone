@@ -26,7 +26,7 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 $HELP_KEYWORD="Basis.Informationsseite";
 
-include ('lib/include/html_head.inc.php'); // Output of html head
+
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once ('lib/classes/StudipScmEntry.class.php');
 require_once 'lib/functions.php';
@@ -34,11 +34,16 @@ require_once('lib/msg.inc.php');
 require_once('lib/visual.inc.php');
 require_once('lib/classes/Table.class.php');
 
+mark_public_course();
+
+include ('lib/include/html_head.inc.php'); // Output of html head
+
 checkObject(); // do we have an open object?
 checkObjectModule("scm");
 object_set_visit_module("scm");
 
 $scms = array_values(StudipScmEntry::GetSCMEntriesForRange($SessSemName[1]));
+
 
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " .($scms[0]['tab_name'] ? $scms[0]['tab_name'] : _("Informationen"));
 
@@ -117,11 +122,11 @@ function scm_show_content($range_id, $msg, $scm_id) {
 	global $rechte, $CURRENT_PAGE, $SessSemName;
 
 	$scm = new StudipScmEntry($scm_id);
-	
+
 	$CURRENT_PAGE = ".".$SessSemName["header_line"]. " - " . $scm->getValue("tab_name");
-	
+
 	if ($scm_id == 'new_entry') $scm_id = null;
-	
+
 	$header_table = scm_seminar_header($range_id, $scm->getValue("tab_name"));
 
 	$frame_table=new Table();
@@ -166,17 +171,17 @@ function scm_show_content($range_id, $msg, $scm_id) {
 
 function scm_edit_content($range_id, $scm_id) {
 	global $perm, $SCM_PRESET;
-	
+
 	if ($scm_id == 'new_entry') $scm_id = null;
-	
+
 	$scm = new StudipScmEntry($scm_id);
-	
+
 	if ($scm->is_new){
 		$scm->setValue('user_id', $GLOBALS['user']->id);
 		$scm->setValue('chdate', time());
 		$scm_id = 'new_entry';
 	}
-	
+
 	$max_col = scm_max_cols();
 
 	$header_table = scm_seminar_header($range_id, $scm->getValue("tab_name"));
@@ -245,9 +250,9 @@ function scm_change_content($scm_id, $range_id, $name, $preset, $content) {
 		return;
 	}
 	if ($scm_id == 'new_entry') $scm_id = null;
-	
+
 	$scm = new StudipScmEntry($scm_id);
-	
+
 	if ($preset)
 		$tab_name = $SCM_PRESET[$preset]["name"];
 	else if (trim($name) != '')
@@ -259,7 +264,7 @@ function scm_change_content($scm_id, $range_id, $name, $preset, $content) {
 	$scm->setValue('content', stripslashes($content));
 	$scm->setValue('user_id', $user->id);
 	$scm->setValue('range_id', $range_id);
-	
+
 	if ($scm->store() !== false) {
 		return $scm->getId();
 	} else {
@@ -272,6 +277,6 @@ echo "</td></tr></table>";
 include ('lib/include/html_end.inc.php');
   // Save data back to database.
   page_close();
-  
+
 // <!-- $Id$ -->
 ?>

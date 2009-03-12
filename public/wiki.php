@@ -59,6 +59,8 @@ if ($view=="wikiprint") {
 	die();
 }
 
+mark_public_course();
+
 $HELP_KEYWORD="Basis.Wiki"; // Hilfeseite im Hilfewiki
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Wiki");
 
@@ -124,13 +126,13 @@ if ($view=="listall") {
 	showComboDiff($keyword);
 
 } else if ($view=="diffselect") {
-	// 
+	//
 	// show only last changes in a diff
 	//
 	showDiffs($keyword, $diffmode);
 
 } else if ($view=="export") {
-	// 
+	//
 	// show export dialog
 	//
 	exportWiki();
@@ -183,24 +185,24 @@ if ($view=="listall") {
 	setWikiLock($db, $user->id, $SessSemName[1], $keyword);
 	wikiEdit($keyword, NULL, $user->id, $lastpage);
 
-} else { 
+} else {
 	// Default action: Display WikiPage (+ logic for submission)
 	//
-	if (empty($keyword)) { 
-		$keyword='WikiWikiWeb'; // display Start page as default 
+	if (empty($keyword)) {
+		$keyword='WikiWikiWeb'; // display Start page as default
 	}
-	releaseLocks($keyword); // kill old locks 
+	releaseLocks($keyword); // kill old locks
 	$special="";
-	
-	if ($submit) { 
+
+	if ($submit) {
 		//
 		// Page was edited and submitted
 		//
 		$special=submitWikiPage($keyword, $version, $body, $user->id, $SessSemName[1]);
-		$version=""; // $version="" means: get latest 
+		$version=""; // $version="" means: get latest
 
 	} else if ($cmd == "abortedit") { // Editieren abgebrochen
-		// 
+		//
 		// Editing page was aborted
 		//
 		releasePageLocks($keyword); // kill lock (set when starting to edit)
@@ -209,13 +211,13 @@ if ($view=="listall") {
 		}
 
 	} else if ($cmd == "delete") {
-		// 
+		//
 		// Delete request sent -> confirmdialog and current page
 		//
 		$special="delete";
 
 	} else if ($cmd == "really_delete") {
-		// 
+		//
 		// Delete was confirmed -> really delete
 		//
 
@@ -235,7 +237,7 @@ if ($view=="listall") {
 		$keyword=deleteAllWikiPage($keyword, $SessSemName[1]);
 		$version=""; // show latest version
 	}
-  
+
 	//
 	// Show Page
 	//

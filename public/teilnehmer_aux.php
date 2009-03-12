@@ -29,6 +29,8 @@ require_once('lib/classes/ZebraTable.class.php');
 require_once('lib/classes/AuxLockRules.class.php');
 require_once('lib/dates.inc.php');
 
+mark_public_course();
+
 $GLOBALS['CURRENT_PAGE'] = $SessSemName["header_line"]. " - " . _("Zusatzangaben");
 
 if (!$_REQUEST['display_type']) {
@@ -232,20 +234,20 @@ function aux_html() {
 	echo $zt->close();
 }
 
-function aux_sort_entries($entries, $rule) { 
-	$order = $rule['order']; 
-	asort($order, SORT_NUMERIC); 
+function aux_sort_entries($entries, $rule) {
+	$order = $rule['order'];
+	asort($order, SORT_NUMERIC);
 
-	$new_entries = array(); 
-	foreach ($order as $key => $pos) { 
-		if ($entries[$key]) { 
-			$new_entries[$key] = $entries[$key]; 
-		} 
-	} 
+	$new_entries = array();
+	foreach ($order as $key => $pos) {
+		if ($entries[$key]) {
+			$new_entries[$key] = $entries[$key];
+		}
+	}
 
-	return $new_entries; 
-} 
-	 
+	return $new_entries;
+}
+
 function aux_enter_data() {
 	global $user_id, $sem_id, $user, $sem_type, $rule, $zt, $perm, $ct;
 	global $datafield_id, $datafield_type, $datafield_sec_range_id, $datafield_content;
@@ -331,7 +333,7 @@ switch ($_REQUEST['display_type']) {
 		break;
 
 	default:
-		
+
 		echo $ct->openRow(array('class' => 'blank'));
 		echo $ct->cell('<br/>', array('colspan' => '20'));
 		echo $ct->closeRow();

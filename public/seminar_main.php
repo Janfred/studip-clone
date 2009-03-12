@@ -88,6 +88,8 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && $SessSemName[1]){
 	}
 }
 
+mark_public_course($sem);
+
 $HELP_KEYWORD="Basis.InVeranstaltungKurzinfo";
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Kurzinfo");
 // Start of Output

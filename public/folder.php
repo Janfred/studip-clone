@@ -66,7 +66,7 @@ if ($download_selected_x) {
 }
 
 if($zip_file_id === false){
-	$msg = 'error§' 
+	$msg = 'error§'
 	. sprintf(_("Der Zip Download ist fehlgeschlagen. Bitte beachten Sie das Limit von maximal %s Dateien und die maximale Größe der zu zippenden Dateien von %s MB."),
 	(int)Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_FILES'),
 	(int)Config::GetInstance()->getValue('ZIP_DOWNLOAD_MAX_SIZE') )
@@ -84,6 +84,8 @@ if ($cmd == 'all') {
 	$folder_system_data = '';
 	$folder_system_data['cmd'] = 'all';
 	}
+
+mark_public_course();
 
 // Start of Output
 
@@ -238,7 +240,7 @@ if ($rechte || $owner || $create_folder_perm) {
 		$folder_system_data["move"]=$open_id;
 		$folder_system_data["mode"]='copy';
 		}
-		
+
 	//wurde Code fuer Aktualisieren-Hochladen uebermittelt (=id+"_rfu_"), wird entsprechende Variable gesetzt
 	if ($open_cmd == 'rfu' && (!$cancel_x)) {
 		$folder_system_data["upload"]=$open_id;
@@ -404,7 +406,7 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 <?
 		if ($msg) {
 		 echo "<tr><td class='blank' colspan=3>&nbsp;";
-		 parse_msg($msg); 
+		 parse_msg($msg);
 		 echo "</td></tr>";
 		}
 
@@ -506,7 +508,7 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 						if ($db2->f('issue_id')) {
 							if (!$issues[$db2->f('issue_id')]) {
 								$issues[$db2->f('issue_id')] = new Issue(array('issue_id' => $db2->f('issue_id')));
-							}					
+							}
 							$issue_name = $issues[$db2->f('issue_id')]->toString();
 							$issue_name = htmlReady(my_substr($issue_name, 0, 20));
 							$option_id = $db2->f('issue_id');
@@ -516,10 +518,10 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 
 						$select .= "\n".sprintf('<option value="%s_a_">%s</option>',
 							$option_id,
-							sprintf(_("Ordner für %s [%s]%s"),	
+							sprintf(_("Ordner für %s [%s]%s"),
 								date("d.m.Y", $db2->f("date")),
 								$TERMIN_TYP[$db2->f("date_typ")]["name"],
-								($issue_name ? ', '.$issue_name : '') 
+								($issue_name ? ', '.$issue_name : '')
 							)
 						);
 
@@ -581,7 +583,7 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 		display_folder_system(md5($SessionSeminar . 'top_folder'), 0,$folder_system_data["open"], '', $change, $folder_system_data["move"], $folder_system_data["upload"], FALSE, $folder_system_data["refresh"], $folder_system_data["link"]);
 
 		if($SessSemName['class'] == 'sem'){
-		// get all issues for the seminar and order them by assigned dates, if any 
+		// get all issues for the seminar and order them by assigned dates, if any
 		$db->query("SELECT DISTINCT th.issue_id FROM themen as th LEFT JOIN themen_termine as tt ON(th.issue_id = tt.issue_id) LEFT JOIN termine as t ON (t.termin_id = tt.termin_id) INNER JOIN folder ON (th.issue_id=folder.range_id) WHERE th.seminar_id='$range_id' ORDER BY t.date, th.priority");
 		while ($db->next_record()) {
 			// display the issue-connected folders

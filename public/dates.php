@@ -61,7 +61,11 @@ if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObjectPerms.class.php");
 }
 
-$CURRENT_PAGE = getHeaderLine($id).' - '._("Ablaufplan");
+$sem = new Seminar($id);
+
+mark_public_course($sem);
+
+$CURRENT_PAGE = $SessSemName["header_line"].' - '._("Ablaufplan");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -73,7 +77,6 @@ object_set_visit_module("schedule");
 
 include ("lib/include/links_openobject.inc.php");
 
-$sem = new Seminar($id);
 $semester = new SemesterData();
 $data = $semester->getCurrentSemesterData();
 if (!$raumzeitFilter || ($rzSeminar != $SessSemName[1])) {
@@ -134,9 +137,9 @@ if ($cmd == 'openAll') $openAll = true;
 				$all_semester = $semester->getAllSemesterData();
 
 				if (is_array($termine) && sizeof($termine) > 0) {
-                    
+
     				foreach ($termine as $singledate_id => $singledate) {
-    
+
     					if ( ($grenze == 0) || ($grenze < $singledate->getStartTime()) ) {
     						foreach ($all_semester as $zwsem) {
     							if ( ($zwsem['beginn'] < $singledate->getStartTime()) && ($zwsem['ende'] > $singledate->getStartTime()) ) {
@@ -151,7 +154,7 @@ if ($cmd == 'openAll') $openAll = true;
     							}
     						}
     					}
-    
+
     					// Template fuer einzelnes Datum
     					$showSpecialDays = FALSE;
     					$tpl = getTemplateDataForSingleDate($singledate, $metadate_id);
@@ -159,24 +162,24 @@ if ($cmd == 'openAll') $openAll = true;
     					/*if ($tpl['type'] == 1 || $tpl['type'] == 7) {
     						unset($tpl['art']);
     					}*/
-    					
+
     					//calendar jump
     					$tpl['calendar'] = "&nbsp;<a href=\"".URLHelper::getLink("calendar.php?cmd=showweek&atime=" . $singledate->getStartTime());
     					$tpl['calendar'] .= "\"><img style=\"vertical-align:bottom\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" ";
-    					$tpl['calendar'] .= tooltip(sprintf(_("Zum %s in den persönlichen Terminkalender springen"), date("m.d", $singledate->getStartTime()))); 
+    					$tpl['calendar'] .= tooltip(sprintf(_("Zum %s in den persönlichen Terminkalender springen"), date("m.d", $singledate->getStartTime())));
     					$tpl['calendar'] .= ' border="0"></a>';
-    
+
     					if ($showDatesFilter) {
     						switch ($showDatesFilter) {
     							case 'all':
     								break;
-    
+
     							case 'other':
     								if ($tpl['type'] == 1) {
     									$tpl['deleted'] = true;
     								}
     								break;
-    
+
     							default:
     								if ($tpl['type'] != $type) {
     									$tpl['deleted'] = true;
@@ -184,13 +187,13 @@ if ($cmd == 'openAll') $openAll = true;
     								break;
     						}
     					}
-    
+
 							if ($openAll) $tpl['openall'] = true;
 
     					if (!$tpl['deleted'] || $tpl['comment'])  {
     						$tpl['class'] = 'printhead';
     						$tpl['cycle_id'] = $metadate_id;
-    
+
     						$issue_id = '';
     						if (is_array($tmp_ids = $singledate->getIssueIDs())) {
     							foreach ($tmp_ids as $val) {
@@ -212,7 +215,7 @@ if ($cmd == 'openAll') $openAll = true;
     							$tpl['theme_description'] = formatReady($thema->getDescription());
     							$tpl['folder_id'] = $thema->getFolderID();
     							$tpl['forumEntry'] = $thema->hasForum();
-    							$tpl['fileEntry'] = $thema->hasFile();								
+    							$tpl['fileEntry'] = $thema->hasFile();
     							if($tpl['forumEntry']) {
 									$tpl['forumCount'] = forum_count($thema->getIssueId(), $id);
 								} else {
@@ -224,7 +227,7 @@ if ($cmd == 'openAll') $openAll = true;
 									$tpl['fileCountAll'] = 0;
 								}
     						}
-    
+
     						include('lib/raumzeit/templates/singledate_student.tpl');
     					}
            }
@@ -232,11 +235,11 @@ if ($cmd == 'openAll') $openAll = true;
                 ?>
                     <TR>
                         <TD align="center">
-                            <br> 
+                            <br>
                             <?= _("Im ausgewählten Zeitraum sind keine Termine vorhanden."); ?>
                         </TD>
                     </TR>
-                <?                    
+                <?
                 }
 				?>
 			</TABLE>

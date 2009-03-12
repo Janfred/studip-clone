@@ -28,6 +28,8 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once('lib/classes/StudipLitList.class.php');
 // -- here you have to put initialisations for the current page
 
+mark_public_course();
+
 $HELP_KEYWORD="Basis.Literatur";
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Literatur");
 
