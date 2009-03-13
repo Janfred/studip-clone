@@ -334,11 +334,11 @@ if ($sms_data["time"] == "all") {
 	$no_message_text = sprintf(_("Es liegen keine systeminternen Nachrichten%s %s vor."), $infotext_folder, $no_message_text_box);
 } else if ($sms_data["time"] == "new") {
 	if ($sms_data["view"] == "in") {
-		$query_time = " AND message_user.mkdate > ".$LastLogin." ORDER BY message_user.mkdate DESC";
-		$query_time_sort = " AND message_user.mkdate > ".$LastLogin;
+		$query_time = " AND message_user.mkdate > ".(int)$LastLogin." ORDER BY message_user.mkdate DESC";
+		$query_time_sort = " AND message_user.mkdate > ".(int)$LastLogin;
 	} else {
-		$query_time = " AND message_user.mkdate > ".$CurrentLogin." ORDER BY message_user.mkdate DESC";
-		$query_time_sort = " AND message_user.mkdate > ".$CurrentLogin;
+		$query_time = " AND message_user.mkdate > ".(int)$CurrentLogin." ORDER BY message_user.mkdate DESC";
+		$query_time_sort = " AND message_user.mkdate > ".(int)$CurrentLogin;
 	}
 	$no_message_text = sprintf(_("Es liegen keine neuen systeminternen Nachrichten%s %s vor."), $infotext_folder, $no_message_text_box);
 } else if ($sms_data["time"] == "24h") {
