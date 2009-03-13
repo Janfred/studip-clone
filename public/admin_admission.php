@@ -410,7 +410,11 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 
 	//Studiengang loeschen
 	if ($delete_studg)
-		unset($admin_admission_data["studg"][$delete_studg]);
+        if (count($admin_admission_data["studg"])>1) {
+    		unset($admin_admission_data["studg"][$delete_studg]);
+        } else {
+            $errormsg=$errormsg."error§"._("Es muss mindestens ein Studiengang eingetragen bleiben.")."§";
+        }
 
 	//Checks performen
 	if (!$admin_admission_data["admission_type"]) {
