@@ -2,11 +2,6 @@
 # Lifter002: TODO
 
 /**
- * id unknown
- */
-define("UNKNOWN_ID", -1);
-
-/**
 * @author Dennis Reil, <Dennis.Reil@offis.de>
 * @package pluginengine
 * @subpackage core
@@ -20,7 +15,6 @@ class StudIPInstitute {
 
 	function StudIPInstitute(){
 		$this->childinstitutes = array();
-		$this->id = UNKNOWN_ID;
 		$this->name = "";
 	}
 
