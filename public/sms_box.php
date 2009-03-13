@@ -547,6 +547,8 @@ if ($sms_data["time"] == "all") {
 			$tmp_array_1 = array("kategorie" => _("Zur&uuml;ck:"),"eintrag" => array(array('icon' => "ausruf_small.gif", "text" => "<a href=\"seminar_main.php\">"._("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung")."</a>")));
 		}
 		// how many items do we have?
+		$neum = count_messages_from_user('in', " AND message_user.readed = 0 ");
+		$altm = count_messages_from_user('in', " AND message_user.readed = 1 ");
 		$show_message_count = sprintf(_("Sie haben %s empfangene und %s gesendete Nachrichten."), ($altm+$neum), count_messages_from_user("snd"));
 		if ($neum == "1") {
 			$show_message_count .= "<br>"._("Eine Nachricht ist ungelesen.");
