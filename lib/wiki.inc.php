@@ -890,7 +890,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 			$fragment=substr($db->f("body"),max(0, $pos-40), 80);
 			#$fragment=formatReady($fragment);
 			$found_in_fragment=0; // number of hits in fragment
-			$fragment=preg_replace("/(".preg_quote($searchfor,"/").")/ie","'<span style=\"background-color:#FFFF88\">'.htmlspecialchars('\\1').'</span>'",$fragment,-1,$found_in_fragment);
+			$fragment=preg_replace("/(.*)(".preg_quote($searchfor,"/").")(.*)/ie","htmlspecialchars('\\1').'<span style=\"background-color:#FFFF88\">'.htmlspecialchars('\\2').'</span>'.htmlspecialchars('\\3')",$fragment,-1,$found_in_fragment);
 			$ignore_next_hits= ($found_in_fragment>1) ? $found_in_fragment-1 : 0;
 			print("...".$fragment."...");
 			print "<br/>";

@@ -118,7 +118,7 @@
 				// method name decoding: is user seeking info about a single method?
 				if (isset($_GET['methodName']))
 				{
-					$_GET['methodName'] = preg_replace('/[^a-zA-Z0-9_.]/', '', $_GET['methodName']);
+					$_GET['methodName'] = preg_replace('/[^a-zA-Z0-9_.:\/]/', '', $_GET['methodName']);
 					$opts = array('lang' => $lang, 'title' => 'Method '.$_GET['methodName']);
 					if ($editorpath != '')
 					{
