@@ -867,7 +867,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 		print("<tr>".$tdheadleft."&nbsp;"."$tdtail");
 		// Pagename
 		print($tdheadleft);
-		print("<a href=\"".URLHelper::getLink("?keyword=".$db->f("keyword")."&version=".$db->f("version")."&hilight=".htmlReady($searchfor)."&searchfor=".htmlReady($searchfor))."\">");
+		print("<a href=\"".URLHelper::getLink("?keyword=".$db->f("keyword")."&version=".$db->f("version")."&hilight=$searchfor&searchfor=$searchfor")."\">");
 		print($db->f("keyword")."</a>");
 		print($tdtail);
 		// display hit previews
@@ -887,11 +887,18 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 				continue; 
 			}
 			// show max 80 chars
-			$fragment=substr($db->f("body"),max(0, $pos-40), 80);
-			#$fragment=formatReady($fragment);
+			$fragment = '';
 			$found_in_fragment=0; // number of hits in fragment
-			$fragment=preg_replace("/(.*)(".preg_quote($searchfor,"/").")(.*)/ie","htmlspecialchars('\\1').'<span style=\"background-color:#FFFF88\">'.htmlspecialchars('\\2').'</span>'.htmlspecialchars('\\3')",$fragment,-1,$found_in_fragment);
-			$ignore_next_hits= ($found_in_fragment>1) ? $found_in_fragment-1 : 0;
+			$splitted_fragment = preg_split('/('.preg_quote($searchfor,'/').')/i', substr($db->f("body"),max(0, $pos-40), 80), -1, PREG_SPLIT_DELIM_CAPTURE);
+			for($i = 0; $i < count($splitted_fragment); $i += 3) {
+				$fragment .= htmlready($splitted_fragment[$i]) 
+							. '<span style="background-color:#FFFF88">'
+							. htmlready($splitted_fragment[$i + 1])
+							.'</span>'
+							. htmlready($splitted_fragment[$i + 2]);
+				++$found_in_fragment;
+			}
+			$ignore_next_hits = ($found_in_fragment > 1) ? $found_in_fragment - 1 : 0;
 			print("...".$fragment."...");
 			print "<br/>";
 		}
