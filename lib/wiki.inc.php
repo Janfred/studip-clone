@@ -890,12 +890,12 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 			$fragment = '';
 			$found_in_fragment=0; // number of hits in fragment
 			$splitted_fragment = preg_split('/('.preg_quote($searchfor,'/').')/i', substr($db->f("body"),max(0, $pos-40), 80), -1, PREG_SPLIT_DELIM_CAPTURE);
-			for($i = 0; $i < count($splitted_fragment); $i += 3) {
-				$fragment .= htmlready($splitted_fragment[$i]) 
+			for($i = 1; $i < count($splitted_fragment); $i += 2) {
+				$fragment 	.= htmlready($splitted_fragment[$i - 1]) 
 							. '<span style="background-color:#FFFF88">'
-							. htmlready($splitted_fragment[$i + 1])
+							. htmlready($splitted_fragment[$i])
 							.'</span>'
-							. htmlready($splitted_fragment[$i + 2]);
+							. htmlready($splitted_fragment[$i + 1]);
 				++$found_in_fragment;
 			}
 			$ignore_next_hits = ($found_in_fragment > 1) ? $found_in_fragment - 1 : 0;
