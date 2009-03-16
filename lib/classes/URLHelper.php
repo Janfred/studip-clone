@@ -69,6 +69,30 @@ class URLHelper
     }
 
     /**
+     * Strip magic quotes from a given string or array. If the PHP setting
+     * "magic_quotes_gpc" is enabled, stripslashes() is used on the value.
+     * If the parameter is an array, magic quoting is stripped recursively.
+     *
+     * @param mixed $value    string or array value to be unquoted
+     *
+     * @return mixed unquoted string or array
+     */
+    private static function removeMagicQuotes ($value)
+    {
+        if (get_magic_quotes_gpc()) {
+            if (is_array($value)) {
+                foreach ($value as $key => $val) {
+                    $value[$key] = self::removeMagicQuotes($val);
+                }
+            } else {
+                $value = stripslashes($value);
+            }
+        }
+
+        return $value;
+    }
+
+    /**
      * Add a new link parameter. If a parameter with this name already
      * exists, its value will be replaced with the new one. All link
      * parameters will be included in the link returned by getLink().
@@ -169,6 +193,7 @@ class URLHelper
 
         if (isset($query)) {
             parse_str($query, $query_params);
+            $query_params = self::removeMagicQuotes($query_params);
             $link_params = array_merge($link_params, $query_params);
         }
 

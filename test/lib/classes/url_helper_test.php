@@ -109,8 +109,8 @@ class URLHelperTest extends UnitTestCase
         URLHelper::addLinkParam('foo', '& ;');
         URLHelper::addLinkParam('bar', '"\'');
 
-        $url = 'abc?a=%26&c=d#1';
-        $expected = 'abc?foo=%26+%3B&amp;bar=%22%27&amp;a=%26&amp;c=d#1';
+        $url = 'abc?a=%26&c="d#1';
+        $expected = 'abc?foo=%26+%3B&amp;bar=%22%27&amp;a=%26&amp;c=%22d#1';
         $this->assertEqual(URLHelper::getLink($url), $expected);
     }
 
