@@ -69,10 +69,8 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
    * @return void
    */
   function display_action($action) {
-    global $username;
-
-    $username = isset($_GET['requesteduser']) ?
-                      $_GET['requesteduser'] : $GLOBALS["auth"]->auth["uname"];
+    $username = isset($_GET['username']) ?
+                      $_GET['username'] : $GLOBALS["auth"]->auth["uname"];
 
     $user_id = get_userid($username);
     if ($user_id == '') {
@@ -111,7 +109,6 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
     }
 
     // show the admin tabs if user may edit
-    // global $username is passed to links_about.inc.php
     if ($admin_darf == true) {
       include 'lib/include/links_about.inc.php';
     }

@@ -1,5 +1,4 @@
 <?
-# Lifter001: TODO
 # Lifter002: TODO
 // vim: noexpandtab
 /*
@@ -31,32 +30,38 @@ global
 	$ILIAS_CONNECT_ENABLE,
 	$i_page,
 	$MAIL_NOTIFICATION_ENABLE,
-	$perm,
-	$username,
-	$view;
+	$perm;
 
 
 require_once 'lib/include/reiter.inc.php';
 
 $reiter=new reiter;
 
-if (!$username){
+if (isset($_REQUEST['usr_name'])) {
+	$username = $_REQUEST['usr_name'];
+} else if (isset($_REQUEST['username'])) {
+	$username = $_REQUEST['username'];
+} else {
 	$username = $auth->auth['uname'];
 }
-preg_match('/^[a-zA-Z0-9_@.-]*$/', $username) or $username = '';
+
+// this really should not be here
+$username = preg_replace('/[^\w@.-]/', '', $username);
+
+URLHelper::addLinkParam('username', $username);
 
 //Create Reitersystem
 
 //Topkats
 $structure = array();
-$structure["alle"] = array('topKat' => '', 'name' => _("Alle"), 'link' => "about.php?username=$username", 'active' => FALSE);
-$structure["bild"] = array('topKat' => '', 'name' => _("Bild"), 'link' => "edit_about.php?view=Bild&username=$username", 'active' => FALSE);
-$structure["daten"] = array('topKat' => '', 'name' => _("Nutzerdaten"), 'link' => "edit_about.php?view=Daten&username=$username", 'active' => FALSE);
-$structure["sonstiges"] = array('topKat' => '', 'name' => _("eigene Kategorien"), 'link' => "edit_about.php?view=Sonstiges&username=$username", 'active' => FALSE);
-$structure['tools'] = array('topKat' => '', 'name' => _("Tools"), 'link' => "admin_news.php?range_id=self&username=$username", 'active' => FALSE);
+$structure["alle"] = array('topKat' => '', 'name' => _("Alle"), 'link' => URLHelper::getLink('about.php'), 'active' => FALSE);
+$structure["bild"] = array('topKat' => '', 'name' => _("Bild"), 'link' => URLHelper::getLink('edit_about.php?view=Bild'), 'active' => FALSE);
+$structure["daten"] = array('topKat' => '', 'name' => _("Nutzerdaten"), 'link' => URLHelper::getLink('edit_about.php?view=Daten'), 'active' => FALSE);
+$structure["sonstiges"] = array('topKat' => '', 'name' => _("eigene Kategorien"), 'link' => URLHelper::getLink('edit_about.php?view=Sonstiges'), 'active' => FALSE);
+$structure['tools'] = array('topKat' => '', 'name' => _("Tools"), 'link' => URLHelper::getLink('admin_news.php?range_id=self'), 'active' => FALSE);
 if ($username == $auth->auth["uname"]) {
 // if (!$perm->have_perm("admin"))
-	$structure['mystudip'] = array('topKat' => "", 'name' => _("My Stud.IP"), 'link' => "edit_about.php?view=allgemein&username=$username", 'active' => FALSE);
+	$structure['mystudip'] = array('topKat' => "", 'name' => _("My Stud.IP"), 'link' => URLHelper::getLink('edit_about.php?view=allgemein'), 'active' => FALSE);
 }
 if ($GLOBALS["PLUGINS_ENABLE"]){
 	// PluginEngine aktiviert.
@@ -75,50 +80,50 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 	}
 }
 //Bottomkats
-$structure["_alle"] = array('topKat' => "alle", 'name' => _("Persönliche Homepage"), 'link' => "about.php?username=$username", 'active' => FALSE);
-$structure["_bild"] = array('topKat' => "bild", 'name' => _("Hochladen des persönlichen Bildes"), 'link' => "edit_about.php?view=Bild&username=$username", 'active' => FALSE);
-$structure["_daten"] = array('topKat' => "daten", 'name' => _("Allgemein"), 'link' => "edit_about.php?view=Daten&username=$username", 'active' => FALSE);
+$structure["_alle"] = array('topKat' => "alle", 'name' => _("Persönliche Homepage"), 'link' => URLHelper::getLink('about.php'), 'active' => FALSE);
+$structure["_bild"] = array('topKat' => "bild", 'name' => _("Hochladen des persönlichen Bildes"), 'link' => URLHelper::getLink('edit_about.php?view=Bild'), 'active' => FALSE);
+$structure["_daten"] = array('topKat' => "daten", 'name' => _("Allgemein"), 'link' => URLHelper::getLink('edit_about.php?view=Daten'), 'active' => FALSE);
 
-$structure["lebenslauf"] = array('topKat' => 'daten', 'name' => _("Privat"), 'link' => "edit_about.php?view=Lebenslauf&username=$username", 'active' => FALSE);
+$structure["lebenslauf"] = array('topKat' => 'daten', 'name' => _("Privat"), 'link' => URLHelper::getLink('edit_about.php?view=Lebenslauf'), 'active' => FALSE);
 if ($my_about->auth_user["perms"] != "dozent" && $my_about->auth_user["perms"] != "admin" && $my_about->auth_user["perms"] != "root") {
-	$structure["studium"] = array('topKat' => 'daten', 'name' => _("Studiendaten"), 'link' => "edit_about.php?view=Studium&username=$username", 'active' => FALSE);
+	$structure["studium"] = array('topKat' => 'daten', 'name' => _("Studiendaten"), 'link' => URLHelper::getLink('edit_about.php?view=Studium'), 'active' => FALSE);
 }
 
 if ($my_about->auth_user['perms'] != 'root') {
 	if (count(UserDomain::getUserDomains())) {
-		$structure["userdomains"] = array('topKat' => 'daten', 'name' => _("Nutzerdomänen"), 'link' => URLHelper::getLink("edit_about.php?view=userdomains&username=$username"), 'active' => FALSE);
+		$structure["userdomains"] = array('topKat' => 'daten', 'name' => _("Nutzerdomänen"), 'link' => URLHelper::getLink("edit_about.php?view=userdomains"), 'active' => FALSE);
 	}
 	if ($my_about->special_user) {
-		$structure["karriere"] = array('topKat' => 'daten', 'name' => _("Einrichtungsdaten"), 'link' => "edit_about.php?view=Karriere&username=$username", 'active' => FALSE);
+		$structure["karriere"] = array('topKat' => 'daten', 'name' => _("Einrichtungsdaten"), 'link' => URLHelper::getLink('edit_about.php?view=Karriere'), 'active' => FALSE);
 	}
 }
 
-$structure["_sonstiges"] = array('topKat' => "sonstiges", 'name' => _("Eigene Kategorien bearbeiten"), 'link' => "edit_about.php?view=Sonstiges&username=$username", 'active' => FALSE);
-$structure["news"] = array('topKat' => 'tools', 'name' => _("News"), 'link' => "admin_news.php?range_id=self&username=$username", 'active' => FALSE);
-$structure["lit"] = array('topKat' => 'tools', 'name' => _("Literatur"), 'link' => "admin_lit_list.php?_range_id=self&username=$username", 'active' => FALSE);
-$structure["vote"] = array('topKat' => 'tools', 'name' => _("Votings und Tests"), 'link' => "admin_vote.php?page=overview&showrangeID=$username&username=$username", 'active' => FALSE);
-$structure["eval"] = array('topKat' => 'tools', 'name' => _("Evaluationen"), 'link' => "admin_evaluation.php?rangeID=$username", 'active' => FALSE);
+$structure["_sonstiges"] = array('topKat' => "sonstiges", 'name' => _("Eigene Kategorien bearbeiten"), 'link' => URLHelper::getLink('edit_about.php?view=Sonstiges'), 'active' => FALSE);
+$structure["news"] = array('topKat' => 'tools', 'name' => _("News"), 'link' => URLHelper::getLink('admin_news.php?range_id=self'), 'active' => FALSE);
+$structure["lit"] = array('topKat' => 'tools', 'name' => _("Literatur"), 'link' => URLHelper::getLink('admin_lit_list.php?_range_id=self'), 'active' => FALSE);
+$structure["vote"] = array('topKat' => 'tools', 'name' => _("Votings und Tests"), 'link' => URLHelper::getLink("admin_vote.php?page=overview&showrangeID=$username"), 'active' => FALSE);
+$structure["eval"] = array('topKat' => 'tools', 'name' => _("Evaluationen"), 'link' => URLHelper::getLink("admin_evaluation.php?rangeID=$username"), 'active' => FALSE);
 
-$structure["allgemein"] = array('topKat' => 'mystudip', 'name' => _("Allgemeines"), 'link' => "edit_about.php?view=allgemein&username=$username", 'active' => FALSE);
-$structure["forum"] = array('topKat' => 'mystudip', 'name' => _("Forum"), 'link' => "edit_about.php?view=Forum&username=$username", 'active' => FALSE);
+$structure["allgemein"] = array('topKat' => 'mystudip', 'name' => _("Allgemeines"), 'link' => URLHelper::getLink('edit_about.php?view=allgemein'), 'active' => FALSE);
+$structure["forum"] = array('topKat' => 'mystudip', 'name' => _("Forum"), 'link' => URLHelper::getLink('edit_about.php?view=Forum'), 'active' => FALSE);
 if (!$perm->have_perm("admin")) {
 	if ($CALENDAR_ENABLE)
-		$structure["calendar"] = array('topKat' => 'mystudip', 'name' => _("Terminkalender"), 'link' => "edit_about.php?view=calendar&username=$username", 'active' => FALSE);
-	$structure["stundenplan"] = array('topKat' => 'mystudip', 'name' => _("Stundenplan"), 'link' => "edit_about.php?view=Stundenplan&username=$username", 'active' => FALSE);
+		$structure["calendar"] = array('topKat' => 'mystudip', 'name' => _("Terminkalender"), 'link' => URLHelper::getLink('edit_about.php?view=calendar'), 'active' => FALSE);
+	$structure["stundenplan"] = array('topKat' => 'mystudip', 'name' => _("Stundenplan"), 'link' => URLHelper::getLink('edit_about.php?view=Stundenplan'), 'active' => FALSE);
 }
-$structure["messaging"] = array('topKat' => 'mystudip', 'name' => _("Messaging"), 'link' => "edit_about.php?view=Messaging&username=$username", 'active' => FALSE);
-$structure["rss"]=array ('topKat'=>"mystudip", 'name'=>_("RSS-Feeds"), 'link'=>"edit_about.php?view=rss&username=$username", 'active'=>FALSE);
+$structure["messaging"] = array('topKat' => 'mystudip', 'name' => _("Messaging"), 'link' => URLHelper::getLink('edit_about.php?view=Messaging'), 'active' => FALSE);
+$structure["rss"]=array ('topKat'=>"mystudip", 'name'=>_("RSS-Feeds"), 'link' => URLHelper::getLink('edit_about.php?view=rss'), 'active'=>FALSE);
 if ($MAIL_NOTIFICATION_ENABLE && !$perm->have_perm('admin')) {
-	$structure['notification'] = array('topKat' => 'mystudip', 'name' => _("Benachrichtigung"), 'link' => 'edit_about.php?view=notification', 'active' => FALSE);
+	$structure['notification'] = array('topKat' => 'mystudip', 'name' => _("Benachrichtigung"), 'link' => URLHelper::getLink('edit_about.php?view=notification'), 'active' => FALSE);
 }
 if ($perm->have_perm("autor") AND $ILIAS_CONNECT_ENABLE) {
-	$structure["ilias"] = array('topKat' => 'mystudip', 'name' => _("Mein ILIAS-Account"), 'link' => "migration2studip.php", 'active' => FALSE);
+	$structure["ilias"] = array('topKat' => 'mystudip', 'name' => _("Mein ILIAS-Account"), 'link' => URLHelper::getLink('migration2studip.php'), 'active' => FALSE);
 }
 if ($perm->have_perm("autor") AND $ELEARNING_INTERFACE_ENABLE) {
-	$structure["elearning"]=array ('topKat'=>"tools", 'name'=>_("Meine Lernmodule"), 'link'=>"my_elearning.php", 'active'=>FALSE);
+	$structure["elearning"]=array ('topKat'=>"tools", 'name'=>_("Meine Lernmodule"), 'link' => URLHelper::getLink('my_elearning.php'), 'active'=>FALSE);
 }
 if (!$perm->have_perm("admin")) {
-	$structure["login"] = array('topKat' => 'mystudip', 'name' => _("Login"), 'link' => "edit_about.php?view=Login&username=$username", 'active' => FALSE);
+	$structure["login"] = array('topKat' => 'mystudip', 'name' => _("Login"), 'link' => URLHelper::getLink('edit_about.php?view=Login'), 'active' => FALSE);
 }
 
 if (!$reiter_view){
@@ -134,7 +139,7 @@ switch ($i_page) {
 		$reiter_view="elearning";
 	break;
 	case "edit_about.php" :
-		switch ($view) {
+		switch ($_REQUEST['view']) {
 			case "Bild":
 				$reiter_view="bild";
 			break;

@@ -155,7 +155,7 @@ global $i_page, $i_query,
        $CALENDAR_ENABLE, $seminar_open_redirected, $_language_path;
 
 //get the name of the current page in $i_page
-$i_page = basename($GLOBALS['PHP_SELF']);
+$i_page = basename($_SERVER['PHP_SELF']);
 
 // function to get the parameters of the current page in array $i_query
 

@@ -162,16 +162,9 @@ class PluginEngine {
 	*/
 	public static function getURL($plugin, $params=array(), $cmd="") {
 		if (is_null($plugin)) {
-			return "";
+			throw new InvalidArgumentException(_("Es wurde kein Plugin gewählt."));
 		}
 		$link = sprintf("plugins.php/%s/%s", urlencode($plugin->getPluginclassname()), $cmd);
-		if (PluginEngine::getTypeOfPlugin($plugin) == "Homepage"
-		    && !array_key_exists('requesteduser', $params)) {
-			$requser = $plugin->getRequestedUser();
-			if (is_object($requser)) {
-				$params["requesteduser"] = $requser->getUsername();
-			}
-		}
 
 		return URLHelper::getURL($link, $params);
 	}

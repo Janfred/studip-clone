@@ -50,42 +50,42 @@ if (!$perm->have_perm("admin"))
 {
 	if ($GLOBALS['CALENDAR_ENABLE'])
 	{
-		$structure["calendar"]=array ("topKat"=>"", "name"=>_("Terminkalender"), "link"=>"calendar.php", "active"=>FALSE);
+		$structure["calendar"]=array ("topKat"=>"", "name"=>_("Terminkalender"), 'link' => URLHelper::getLink('calendar.php'), "active"=>FALSE);
 	}
-	$structure["timetable"]=array ("topKat"=>"", "name"=>_("Stundenplan"), "link"=>"mein_stundenplan.php", "active"=>FALSE);
+	$structure["timetable"]=array ("topKat"=>"", "name"=>_("Stundenplan"), 'link' => URLHelper::getLink('mein_stundenplan.php'), "active"=>FALSE);
 }
-$structure["contact"]=array ("topKat"=>"", "name"=>_("Adressbuch"), "link"=>"contact.php", "active"=>FALSE);
-$structure["post"]=array ("topKat"=>"", "name"=>_("Nachrichten"), "link"=>"sms_box.php", "active"=>FALSE);
+$structure["contact"]=array ("topKat"=>"", "name"=>_("Adressbuch"), 'link' => URLHelper::getLink('contact.php'), "active"=>FALSE);
+$structure["post"]=array ("topKat"=>"", "name"=>_("Nachrichten"), 'link' => URLHelper::getLink('sms_box.php'), "active"=>FALSE);
 if ($GLOBALS['CHAT_ENABLE'])
 {
-	$structure["chat"]=array ("topKat"=>"", "name"=>_("Chat"), "link"=>"chat_online.php", "active"=>FALSE);
+	$structure["chat"]=array ("topKat"=>"", "name"=>_("Chat"), 'link' => URLHelper::getLink('chat_online.php'), "active"=>FALSE);
 }
-$structure["online"]=array ("topKat"=>"", "name"=>_("Online"), "link"=>"online.php", "active"=>FALSE);
+$structure["online"]=array ("topKat"=>"", "name"=>_("Online"), 'link' => URLHelper::getLink('online.php'), "active"=>FALSE);
 
 //Bottomkats
 
-$structure["in"] = array ("topKat"=>"post", "name"=>_("empfangene"), "link"=>"sms_box.php?sms_inout=in", "active"=>FALSE);
-$structure["out"] = array ("topKat"=>"post", "name"=>_("gesendete"), "link"=>"sms_box.php?sms_inout=out", "active"=>FALSE);
-$structure["write"] = array ("topKat"=>"post", "name"=>_("Neue Nachricht schreiben"), "link"=>"sms_send.php", "active"=>FALSE);
-$structure["adjust"] = array ("topKat"=>"post", "name"=>_("Messaging anpassen"), "link"=>"".$GLOBALS['PHP_SELF']."?change_view=TRUE", "active"=>FALSE);
-$structure["online2"] = array ("topKat"=>"online", "name"=>_("Wer ist online?"), "link"=>"online.php", "active"=>FALSE);
-$structure["adjust_online"] = array ("topKat"=>"online", "name"=>_("Messaging anpassen"), "link"=>"".$GLOBALS['PHP_SELF']."?change_view=TRUE", "active"=>FALSE);
+$structure["in"] = array ("topKat"=>"post", "name"=>_("empfangene"), 'link' => URLHelper::getLink('sms_box.php?sms_inout=in'), "active"=>FALSE);
+$structure["out"] = array ("topKat"=>"post", "name"=>_("gesendete"), 'link' => URLHelper::getLink('sms_box.php?sms_inout=out'), "active"=>FALSE);
+$structure["write"] = array ("topKat"=>"post", "name"=>_("Neue Nachricht schreiben"), 'link' => URLHelper::getLink('sms_send.php'), "active"=>FALSE);
+$structure["adjust"] = array ("topKat"=>"post", "name"=>_("Messaging anpassen"), 'link' => URLHelper::getLink('?change_view=TRUE'), "active"=>FALSE);
+$structure["online2"] = array ("topKat"=>"online", "name"=>_("Wer ist online?"), 'link' => URLHelper::getLink('online.php'), "active"=>FALSE);
+$structure["adjust_online"] = array ("topKat"=>"online", "name"=>_("Messaging anpassen"), 'link' => URLHelper::getLink('?change_view=TRUE'), "active"=>FALSE);
 if ($GLOBALS['CALENDAR_ENABLE'])
 {
-	$structure["calendar_day"] = array ("topKat"=>"calendar", "name"=>_("Tag"), "link"=>"calendar.php?cmd=showday&atime=$atime", "active"=>FALSE);
-	$structure["calendar_week"] = array ("topKat"=>"calendar", "name"=>_("Woche"), "link"=>"calendar.php?cmd=showweek&atime=$atime", "active"=>FALSE);
-	$structure["calendar_month"] = array ("topKat"=>"calendar", "name"=>_("Monat"), "link"=>"calendar.php?cmd=showmonth&atime=$atime", "active"=>FALSE);
-	$structure["calendar_year"] = array ("topKat"=>"calendar", "name"=>_("Jahr"), "link"=>"calendar.php?cmd=showyear&atime=$atime", "active"=>FALSE);
-	$structure["calendar_edit"] = array ("topKat"=>"calendar", "name"=>_("Termin anlegen/bearbeiten"), "link"=>"calendar.php?cmd=edit&atime=$atime", "active"=>FALSE);
-	$structure["calendar_bind"] = array ("topKat"=>"calendar", "name"=>_("Veranstaltungstermine"), "link"=>"calendar.php?cmd=bind&atime=$atime", "active"=>FALSE);
-	$structure["calendar_export"] = array ("topKat"=>"calendar", "name"=>_("Export/Sync"), "link"=>"calendar.php?cmd=export&atime=$atime", "active"=>FALSE);
-	$structure["calendar_changeview"] = array ("topKat"=>"calendar", "name"=>_("Ansicht anpassen"), "link"=>"calendar.php?cmd=changeview&atime=$atime", "active"=>FALSE);
+	$structure["calendar_day"] = array ("topKat"=>"calendar", "name"=>_("Tag"), 'link' => URLHelper::getLink("calendar.php?cmd=showday&atime=$atime"), "active"=>FALSE);
+	$structure["calendar_week"] = array ("topKat"=>"calendar", "name"=>_("Woche"), 'link' => URLHelper::getLink("calendar.php?cmd=showweek&atime=$atime"), "active"=>FALSE);
+	$structure["calendar_month"] = array ("topKat"=>"calendar", "name"=>_("Monat"), 'link' => URLHelper::getLink("calendar.php?cmd=showmonth&atime=$atime"), "active"=>FALSE);
+	$structure["calendar_year"] = array ("topKat"=>"calendar", "name"=>_("Jahr"), 'link' => URLHelper::getLink("calendar.php?cmd=showyear&atime=$atime"), "active"=>FALSE);
+	$structure["calendar_edit"] = array ("topKat"=>"calendar", "name"=>_("Termin anlegen/bearbeiten"), 'link' => URLHelper::getLink("calendar.php?cmd=edit&atime=$atime"), "active"=>FALSE);
+	$structure["calendar_bind"] = array ("topKat"=>"calendar", "name"=>_("Veranstaltungstermine"), 'link' => URLHelper::getLink("calendar.php?cmd=bind&atime=$atime"), "active"=>FALSE);
+	$structure["calendar_export"] = array ("topKat"=>"calendar", "name"=>_("Export/Sync"), 'link' => URLHelper::getLink("calendar.php?cmd=export&atime=$atime"), "active"=>FALSE);
+	$structure["calendar_changeview"] = array ("topKat"=>"calendar", "name"=>_("Ansicht anpassen"), 'link' => URLHelper::getLink("calendar.php?cmd=changeview&atime=$atime"), "active"=>FALSE);
 }
 
-$structure["contact_viewalpha"] = array ("topKat"=>"contact", "name"=>_("Alphabetisch"), "link"=>"contact.php?view=alpha", "active"=>FALSE);
-$structure["contact_viewgruppen"] = array ("topKat"=>"contact", "name"=>_("Gruppenansicht"), "link"=>"contact.php?view=gruppen", "active"=>FALSE);
-$structure["contact_statusgruppen"] = array ("topKat"=>"contact", "name"=>_("Gruppenverwaltung"), "link"=>"contact_statusgruppen.php", "active"=>FALSE);
-$structure["contact_export"] = array ("topKat"=>"contact", "name"=>_("VCF-Export"), "link"=>"contact_export.php", "active"=>FALSE);
+$structure["contact_viewalpha"] = array ("topKat"=>"contact", "name"=>_("Alphabetisch"), 'link' => URLHelper::getLink('contact.php?view=alpha'), "active"=>FALSE);
+$structure["contact_viewgruppen"] = array ("topKat"=>"contact", "name"=>_("Gruppenansicht"), 'link' => URLHelper::getLink('contact.php?view=gruppen'), "active"=>FALSE);
+$structure["contact_statusgruppen"] = array ("topKat"=>"contact", "name"=>_("Gruppenverwaltung"), 'link' => URLHelper::getLink('contact_statusgruppen.php'), "active"=>FALSE);
+$structure["contact_export"] = array ("topKat"=>"contact", "name"=>_("VCF-Export"), 'link' => URLHelper::getLink('contact_export.php'), "active"=>FALSE);
 
 //View festlegen
 switch ($i_page) {

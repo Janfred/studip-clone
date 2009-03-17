@@ -1,5 +1,5 @@
 <?
-# Lifter001: TEST
+# Lifter001: TODO - in progress (session variables)
 # Lifter002: TODO
 /*
 links_admin.inc.php - Navigation fuer die Verwaltungsseiten von Stud.IP.
@@ -38,42 +38,20 @@ global  $BANNER_ADS_ENABLE,
 global  $auth, $perm, $sess, $user;
 
 global  $admin_admission_data,
-        $adminarea_sortby,
         $admin_dates_data,
-        $admin_inst_id,
         $archiv_assi_data,
         $archive_kill,
-        $back_jump,
-        $conditions,
         $_fullname_sql,
         $i_page,
         $i_view,
         $links_admin_data,
-        $list,
         $msg,
-        $my_inst,
         $new_inst,
         $new_sem,
         $news_range_id,
         $news_range_name,
-        $quit,
-        $select_all,
-        $select_inactive,
-        $select_none,
-        $select_old,
-        $select_sem_id,
         $sem_create_data,
         $SessSemName,
-        $srch_doz,
-        $srch_exp,
-        $srch_fak,
-        $srch_inst,
-        $srch_result,
-        $srch_sem,
-        $srch_send,
-        $structure,
-        $term_metadata,
-        $view,
         $view_mode;
 
 
@@ -129,10 +107,10 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 
 	//a Veranstaltung was selected in the admin-search kann viellecht weg
-	if (isset($select_sem_id)) {
+	if (isset($_REQUEST['select_sem_id'])) {
 		reset_all_data();
 		closeObject();
-		openSem($select_sem_id);
+		openSem($_REQUEST['select_sem_id']);
 	//a Veranstaltung which was already open should be administrated
 	} elseif (($SessSemName[1]) && ($new_sem)) {
 		reset_all_data();
@@ -140,10 +118,10 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	}
 
 	//a Einrichtung was selected in the admin-search
-	if (($admin_inst_id) && ($admin_inst_id != "NULL")) {
+	if ($_REQUEST['admin_inst_id'] && $_REQUEST['admin_inst_id'] != "NULL") {
 		reset_all_data();
 		closeObject();
-		openInst($admin_inst_id);
+		openInst($_REQUEST['admin_inst_id']);
 	//a Einrichtung which was already open should be administrated
 	} elseif (($SessSemName[1]) && ($new_inst)) {
 		reset_all_data();
@@ -156,31 +134,33 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		closeObject();
 	}
 
+	$list = $_REQUEST['list'];
+
 	//a new session in the adminarea...
-	if ((($i_page == "adminarea_start.php") && ($list)) || ($quit)) {
+	if (($i_page == "adminarea_start.php" && $list) || $_REQUEST['quit']) {
 		reset_all_data();
 		closeObject();
 	} elseif ($i_page== "adminarea_start.php")
 		$list=TRUE;
 
 
-	if ($adminarea_sortby) {
-		$links_admin_data["sortby"]=$adminarea_sortby;
+	if ($_REQUEST['adminarea_sortby']) {
+		$links_admin_data["sortby"]=$_REQUEST['adminarea_sortby'];
 		$list=TRUE;
 	} else
 		$links_admin_data["sortby"]="Name";
 
-	if ($view)
-		$links_admin_data["view"]=$view;
+	if ($_REQUEST['view'])
+		$links_admin_data["view"]=$_REQUEST['view'];
 
-	if ($srch_send) {
-		$links_admin_data["srch_sem"]= trim($srch_sem);
-		$links_admin_data["srch_doz"]= trim($srch_doz);
-		$links_admin_data["srch_inst"]= trim($srch_inst);
-		$links_admin_data["srch_fak"]= trim($srch_fak);
-		$links_admin_data["srch_exp"]= trim($srch_exp);
-		$links_admin_data["select_old"]=$select_old;
-		$links_admin_data["select_inactive"]=$select_inactive;
+	if ($_REQUEST['srch_send']) {
+		$links_admin_data["srch_sem"]= trim($_REQUEST['srch_sem']);
+		$links_admin_data["srch_doz"]= trim($_REQUEST['srch_doz']);
+		$links_admin_data["srch_inst"]= trim($_REQUEST['srch_inst']);
+		$links_admin_data["srch_fak"]= trim($_REQUEST['srch_fak']);
+		$links_admin_data["srch_exp"]= trim($_REQUEST['srch_exp']);
+		$links_admin_data["select_old"]=$_REQUEST['select_old'];
+		$links_admin_data["select_inactive"]=$_REQUEST['select_inactive'];
 		$links_admin_data["srch_on"]=TRUE;
 		$list=TRUE;
 	}
@@ -195,7 +175,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$modules = $Modules->getLocalModules($SessSemName[1]);
 
 	//if the user selected the information field at Einrichtung-selection....
-	if ($admin_inst_id == "NULL")
+	if ($_REQUEST['admin_inst_id'] == "NULL")
 		$list=TRUE;
 
 	//user wants to create a new Einrichtung
@@ -283,12 +263,12 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	//Topkats
 	if ($perm->have_perm("tutor")) {
-		$structure["veranstaltungen"]=array ('topKat'=>"", 'name'=>_("Veranstaltungen"), 'link'=>"adminarea_start.php?list=TRUE", 'active'=>FALSE);
-		$structure["einrichtungen"]=array ('topKat'=>"", 'name'=>_("Einrichtungen"), 'link'=>"admin_lit_list.php?list=TRUE&view=literatur_inst", 'active'=>FALSE);
+		$structure["veranstaltungen"]=array ('topKat'=>"", 'name'=>_("Veranstaltungen"), 'link' => URLHelper::getLink("adminarea_start.php?list=TRUE"), 'active'=>FALSE);
+		$structure["einrichtungen"]=array ('topKat'=>"", 'name'=>_("Einrichtungen"), 'link' => URLHelper::getLink("admin_lit_list.php?list=TRUE&view=literatur_inst"), 'active'=>FALSE);
 	}
 
 	if ($perm->have_perm("admin")) {
-		$structure["einrichtungen"]=array ('topKat'=>"", 'name'=>_("Einrichtungen"), 'link'=>"admin_institut.php?list=TRUE&quit=1", 'active'=>FALSE);
+		$structure["einrichtungen"]=array ('topKat'=>"", 'name'=>_("Einrichtungen"), 'link' => URLHelper::getLink("admin_institut.php?list=TRUE&quit=1"), 'active'=>FALSE);
 	}
 	
 	if ($perm->have_perm("admin")) {
@@ -312,136 +292,136 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 	// "Log" tab for log view and administration (Root only)
 	if ($perm->have_perm("root") && $LOG_ENABLE) {
-		$structure["log"]=array ('topKat'=>"", 'name'=>_("Log"), 'link'=>URLHelper::getLink('dispatch.php/event_log/show'), 'active'=>FALSE);
+		$structure["log"]=array ('topKat'=>"", 'name'=>_("Log"), 'link' => URLHelper::getLink('dispatch.php/event_log/show'), 'active'=>FALSE);
 	}
 
-	$structure["modules"]=array ('topKat'=>"", 'name'=>_("Tools"), 'link'=>"export.php", 'active'=>FALSE);
+	$structure["modules"]=array ('topKat'=>"", 'name'=>_("Tools"), 'link' => URLHelper::getLink("export.php"), 'active'=>FALSE);
 
 	if ($SessSemName["class"] == "inst")
-		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link'=>"institut_main.php?auswahl=".$SessSemName[1], 'active'=>FALSE);
+		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link' => URLHelper::getLink("institut_main.php?auswahl=".$SessSemName[1]), 'active'=>FALSE);
 	elseif (($SessSemName["class"] == "sem") && (!$archive_kill) && (!$links_admin_data["assi"]))
-		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link'=>"seminar_main.php?auswahl=".$SessSemName[1], 'active'=>FALSE);
+		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link' => URLHelper::getLink("seminar_main.php?auswahl=".$SessSemName[1]), 'active'=>FALSE);
 
 	if ($perm->have_perm("admin") && $GLOBALS["PLUGINS_ENABLE"]) {
-		$structure["plugins"]=array ('topKat'=>"", 'name'=>_("Administrations-Plugins"), 'link'=>PluginEngine::getLinkToAdministrationPlugin(), 'active'=>FALSE);
+		$structure["plugins"]=array ('topKat'=>"", 'name'=>_("Administrations-Plugins"), 'link' => PluginEngine::getLinkToAdministrationPlugin(), 'active'=>FALSE);
 	}
 
 	//Bottomkats
-	$structure["grunddaten_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Grunddaten"), 'link'=>"admin_seminare1.php?list=TRUE", 'active'=>FALSE);
-	$structure["study_areas_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Studienbereiche"), 'link'=>URLHelper::getLink("dispatch.php/course/study_areas/show/" . $GLOBALS['SessionSeminar'], array('list' => 'TRUE')), 'active'=>FALSE);
-	$structure["zeiten"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zeiten / Räume"), 'link'=>"raumzeit.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
+	$structure["grunddaten_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Grunddaten"), 'link' => URLHelper::getLink("admin_seminare1.php?list=TRUE"), 'active'=>FALSE);
+	$structure["study_areas_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Studienbereiche"), 'link' => URLHelper::getLink("dispatch.php/course/study_areas/show/" . $GLOBALS['SessionSeminar'], array('list' => 'TRUE')), 'active'=>FALSE);
+	$structure["zeiten"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zeiten / Räume"), 'link' => URLHelper::getLink("raumzeit.php?list=TRUE"), 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["schedule"]) || (!$SessSemName[1]))
-		$structure["ablaufplan"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Ablaufplan"), 'link'=>"themen.php?list=TRUE", 'active'=>FALSE);
-	$structure["news_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("News"), 'link'=>"admin_news.php?list=TRUE&view=news_sem", 'active'=>FALSE, 'isolator'=>TRUE);
+		$structure["ablaufplan"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Ablaufplan"), 'link' => URLHelper::getLink("themen.php?list=TRUE"), 'active'=>FALSE);
+	$structure["news_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("News"), 'link' => URLHelper::getLink("admin_news.php?list=TRUE&view=news_sem"), 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["literature"]) || (!$SessSemName[1]))
-		$structure["literatur_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Literatur"), 'link'=>"admin_lit_list.php?list=TRUE&view=literatur_sem", 'active'=>FALSE);
+		$structure["literatur_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Literatur"), 'link' => URLHelper::getLink("admin_lit_list.php?list=TRUE&view=literatur_sem"), 'active'=>FALSE);
 	if ($VOTE_ENABLE)
-		$structure["vote_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Votings und Tests"), 'link'=>"admin_vote.php?view=vote_sem", 'active'=>FALSE);
+		$structure["vote_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Votings und Tests"), 'link' => URLHelper::getLink("admin_vote.php?view=vote_sem"), 'active'=>FALSE);
 	if ($VOTE_ENABLE)
-		$structure["eval_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Evaluationen"), 'link'=>"admin_evaluation.php?view=eval_sem", 'active'=>FALSE);
+		$structure["eval_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Evaluationen"), 'link' => URLHelper::getLink("admin_evaluation.php?view=eval_sem"), 'active'=>FALSE);
 
-	$structure["zugang"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zugangsberechtigungen"), 'link'=>"admin_admission.php?list=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
+	$structure["zugang"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zugangsberechtigungen"), 'link' => URLHelper::getLink("admin_admission.php?list=TRUE"), 'active'=>FALSE, 'isolator'=>TRUE);
 	if (($modules["participants"]) || (!$SessSemName[1]))
-		$structure["statusgruppe_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Gruppen / Funktionen"), 'link'=>"admin_statusgruppe.php?list=TRUE", active=>FALSE);
-	$structure["modules_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Module/Plugins"), 'link'=>"admin_modules.php?list=TRUE&view=modules_sem", 'active'=>FALSE);
+		$structure["statusgruppe_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Gruppen / Funktionen"), 'link' => URLHelper::getLink("admin_statusgruppe.php?list=TRUE"), active=>FALSE);
+	$structure["modules_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Module/Plugins"), 'link' => URLHelper::getLink("admin_modules.php?list=TRUE&view=modules_sem"), 'active'=>FALSE);
 	$sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
 	if ($perm->have_perm($sem_create_perm)) {
-		$structure["copysem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Veranstaltung kopieren"), 'link'=>"copy_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'isolator'=>TRUE);
-		$structure["new_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("neue Veranstaltung anlegen"), 'link'=>"admin_seminare_assi.php?new_session=TRUE", 'active'=>FALSE);
+		$structure["copysem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Veranstaltung kopieren"), 'link' => URLHelper::getLink("copy_assi.php?list=TRUE&new_session=TRUE"), 'active'=>FALSE, 'isolator'=>TRUE);
+		$structure["new_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("neue Veranstaltung anlegen"), 'link' => URLHelper::getLink("admin_seminare_assi.php?new_session=TRUE"), 'active'=>FALSE);
 		if (get_config('ALLOW_DOZENT_ARCHIV') || $perm->have_perm("admin")){
-			$structure["archiv"]=array ('topKat'=>"veranstaltungen", 'name'=>_("archivieren"), 'link'=>"archiv_assi.php?list=TRUE&new_session=TRUE", 'active'=>FALSE);
+			$structure["archiv"]=array ('topKat'=>"veranstaltungen", 'name'=>_("archivieren"), 'link' => URLHelper::getLink("archiv_assi.php?list=TRUE&new_session=TRUE"), 'active'=>FALSE);
 		}
 		if (get_config('ALLOW_DOZENT_VISIBILITY') || $perm->have_perm("admin")){
-			$structure["visibility"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sichtbarkeit"), 'link'=>"admin_visibility.php?list=TRUE&new_session=TRUE", 'active'=>FALSE, 'newline'=>TRUE);
+			$structure["visibility"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sichtbarkeit"), 'link' => URLHelper::getLink("admin_visibility.php?list=TRUE&new_session=TRUE"), 'active'=>FALSE, 'newline'=>TRUE);
 
 		}
 	}
 
 	if ($GLOBALS['SEMINAR_LOCK_ENABLE'] && $perm->have_perm("admin"))
-		$structure["lock"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sperren"), 'link'=>"admin_lock.php?list=TRUE&new_session=TRUE", 'active'=>FALSE);
+		$structure["lock"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Sperren"), 'link' => URLHelper::getLink("admin_lock.php?list=TRUE&new_session=TRUE"), 'active'=>FALSE);
 
-	$structure["aux"]=array (topKat=>"veranstaltungen", name=>_("Zusatzangaben"), link=>"admin_aux.php?list=TRUE&new_session=TRUE", active=>FALSE);
+	$structure["aux"]=array ('topKat'=>"veranstaltungen", 'name'=>_("Zusatzangaben"), 'link' => URLHelper::getLink("admin_aux.php?list=TRUE&new_session=TRUE"), active=>FALSE);
 
 	//
 	if ($perm->have_perm("admin")) {
-		$structure["grunddaten_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Grunddaten"), 'link'=>"admin_institut.php?list=TRUE", 'active'=>FALSE);
-		$structure["mitarbeiter"]=array ('topKat'=>"einrichtungen", 'name'=>_("Mitarbeiter"), 'link'=>"inst_admin.php?list=TRUE", 'active'=>FALSE);
-		$structure["statusgruppe_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Gruppen / Funktionen"), 'link'=>"admin_roles.php?list=TRUE", 'active'=>FALSE);
+		$structure["grunddaten_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Grunddaten"), 'link' => URLHelper::getLink("admin_institut.php?list=TRUE"), 'active'=>FALSE);
+		$structure["mitarbeiter"]=array ('topKat'=>"einrichtungen", 'name'=>_("Mitarbeiter"), 'link' => URLHelper::getLink("inst_admin.php?list=TRUE"), 'active'=>FALSE);
+		$structure["statusgruppe_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Gruppen / Funktionen"), 'link' => URLHelper::getLink("admin_roles.php?list=TRUE"), 'active'=>FALSE);
 	}
 
-	$structure["literatur_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Literatur"), 'link'=>"admin_lit_list.php?list=TRUE&view=literatur_inst", 'active'=>FALSE);
-	$structure["news_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("News"), 'link'=>"admin_news.php?list=TRUE&view=news_inst", 'active'=>FALSE);
+	$structure["literatur_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Literatur"), 'link' => URLHelper::getLink("admin_lit_list.php?list=TRUE&view=literatur_inst"), 'active'=>FALSE);
+	$structure["news_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("News"), 'link' => URLHelper::getLink("admin_news.php?list=TRUE&view=news_inst"), 'active'=>FALSE);
 
 	if ($VOTE_ENABLE)
-		$structure["vote_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Votes"), 'link'=>"admin_vote.php?view=vote_inst", 'active'=>FALSE);
+		$structure["vote_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Votes"), 'link' => URLHelper::getLink("admin_vote.php?view=vote_inst"), 'active'=>FALSE);
 
 	if ($VOTE_ENABLE)
-		$structure["eval_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Evaluationen"), 'link'=>"admin_evaluation.php?view=eval_inst", 'active'=>FALSE);
+		$structure["eval_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Evaluationen"), 'link' => URLHelper::getLink("admin_evaluation.php?view=eval_inst"), 'active'=>FALSE);
 
 	if ($perm->have_perm("admin"))
-		$structure["modules_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Module"), 'link'=>"admin_modules.php?list=TRUE&view=modules_inst", 'active'=>FALSE);
+		$structure["modules_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("Module"), 'link' => URLHelper::getLink("admin_modules.php?list=TRUE&view=modules_inst"), 'active'=>FALSE);
 
 	if ($EXTERN_ENABLE && $perm->have_perm("admin"))
-		$structure["extern_inst"] = array("topKat" => "einrichtungen", "name" => _("externe Seiten"), "link" => "admin_extern.php?list=TRUE&view=extern_inst", "active" => FALSE);
+		$structure["extern_inst"] = array("topKat" => "einrichtungen", "name" => _("externe Seiten"), 'link' => URLHelper::getLink("admin_extern.php?list=TRUE&view=extern_inst"), "active" => FALSE);
 	if ($perm->is_fak_admin())
-		$structure["new_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("neue Einrichtung"), 'link'=>"admin_institut.php?i_view=new", 'active'=>FALSE);
+		$structure["new_inst"]=array ('topKat'=>"einrichtungen", 'name'=>_("neue Einrichtung"), 'link' => URLHelper::getLink("admin_institut.php?i_view=new"), 'active'=>FALSE);
 	//
 	if ($EXPORT_ENABLE)
-		$structure["export"]=array ('topKat'=>"modules", 'name'=>_("Export"), 'link'=>"export.php", 'active'=>FALSE);
+		$structure["export"]=array ('topKat'=>"modules", 'name'=>_("Export"), 'link' => URLHelper::getLink("export.php"), 'active'=>FALSE);
 	if ($ILIAS_CONNECT_ENABLE)
-		$structure["lernmodule"]=array ('topKat'=>"modules", 'name'=>_("Lernmodule"), 'link'=>"admin_lernmodule.php", 'active'=>FALSE);
+		$structure["lernmodule"]=array ('topKat'=>"modules", 'name'=>_("Lernmodule"), 'link' => URLHelper::getLink("admin_lernmodule.php"), 'active'=>FALSE);
 	if ($RESOURCES_ENABLE)
-		$structure["resources"]=array ('topKat'=>"modules", 'name'=>_("Ressourcenverwaltung"), 'link'=>"resources.php", 'active'=>FALSE);
+		$structure["resources"]=array ('topKat'=>"modules", 'name'=>_("Ressourcenverwaltung"), 'link' => URLHelper::getLink("resources.php"), 'active'=>FALSE);
 	if ($perm->have_perm("admin")){
-		$structure["show_admission"]=array ('topKat'=>"modules", 'name'=>_("laufende Anmeldeverfahren"), 'link'=>"show_admission.php", 'active'=>FALSE);
-		$structure["lit_overview"]=array ('topKat'=>"modules", 'name'=>_("Literaturübersicht"), 'link'=>"admin_literatur_overview.php", 'active'=>FALSE);
+		$structure["show_admission"]=array ('topKat'=>"modules", 'name'=>_("laufende Anmeldeverfahren"), 'link' => URLHelper::getLink("show_admission.php"), 'active'=>FALSE);
+		$structure["lit_overview"]=array ('topKat'=>"modules", 'name'=>_("Literaturübersicht"), 'link' => URLHelper::getLink("admin_literatur_overview.php"), 'active'=>FALSE);
 	}
 	if ($perm->have_perm("admin")) {
 		if (!$GLOBALS['RESTRICTED_USER_MANAGEMENT'] || $perm->have_perm("root")) {
-			$structure["new_user"]=array ('topKat'=>"global", 'name'=>_("Benutzer"), 'link'=>"new_user_md5.php", 'active'=>FALSE);
+			$structure["new_user"]=array ('topKat'=>"global", 'name'=>_("Benutzer"), 'link' => URLHelper::getLink("new_user_md5.php"), 'active'=>FALSE);
 		}
 		if ($perm->have_perm($RANGE_TREE_ADMIN_PERM ? $RANGE_TREE_ADMIN_PERM : 'admin')) {
-			$structure["range_tree"]=array ('topKat'=>"global", 'name'=>_("Einrichtungshierarchie"), 'link'=>"admin_range_tree.php", 'active'=>FALSE);
+			$structure["range_tree"]=array ('topKat'=>"global", 'name'=>_("Einrichtungshierarchie"), 'link' => URLHelper::getLink("admin_range_tree.php"), 'active'=>FALSE);
 		}
 		if ($perm->have_perm($SEM_TREE_ADMIN_PERM ? $SEM_TREE_ADMIN_PERM : 'admin') && $perm->is_fak_admin()) {
-			$structure["sem_tree"]=array ('topKat'=>"global", 'name'=>_("Veranstaltungshierarchie"), 'link'=>"admin_sem_tree.php", 'active'=>FALSE);
+			$structure["sem_tree"]=array ('topKat'=>"global", 'name'=>_("Veranstaltungshierarchie"), 'link' => URLHelper::getLink("admin_sem_tree.php"), 'active'=>FALSE);
 		}
 		if ($perm->have_perm($AUX_RULE_ADMIN_PERM ? $AUX_RULE_ADMIN_PERM : 'admin')) {
-			$structure["aux_adjust"]=array ('topKat'=>"global", 'name'=>("Zusatzangaben definieren"), 'link'=>"admin_aux_adjust.php", 'active'=>FALSE);
+			$structure["aux_adjust"]=array ('topKat'=>"global", 'name'=>("Zusatzangaben definieren"), 'link' => URLHelper::getLink("admin_aux_adjust.php"), 'active'=>FALSE);
 		}
 		if ($perm->have_perm($LOCK_RULE_ADMIN_PERM ? $LOCK_RULE_ADMIN_PERM : 'admin') && $GLOBALS['SEMINAR_LOCK_ENABLE']) {
-			$structure["lock_adjust"]=array ('topKat'=>"global", 'name'=>("Sperrebenen anpassen"), 'link'=>"admin_lock_adjust.php", 'active'=>FALSE);
+			$structure["lock_adjust"]=array ('topKat'=>"global", 'name'=>("Sperrebenen anpassen"), 'link' => URLHelper::getLink("admin_lock_adjust.php"), 'active'=>FALSE);
 		}
 	}
 
 	if($perm->have_perm('dozent') && $GLOBALS['STM_ENABLE']){
-		$structure["stm_instance_assi"]=array ('topKat'=>"modules", 'name'=>_("Konkrete Studienmodule"), 'link'=>"stm_instance_assi.php", 'active'=>FALSE);
+		$structure["stm_instance_assi"]=array ('topKat'=>"modules", 'name'=>_("Konkrete Studienmodule"), 'link' => URLHelper::getLink("stm_instance_assi.php"), 'active'=>FALSE);
 	}
 	if ($perm->have_perm("root")) {
-		if($GLOBALS['STM_ENABLE']) $structure["stm_abstract_assi"]=array ('topKat'=>"modules", 'name'=>_("Allgemeine Studienmodule"), 'link'=>"stm_abstract_assi.php", 'active'=>FALSE);
+		if($GLOBALS['STM_ENABLE']) $structure["stm_abstract_assi"]=array ('topKat'=>"modules", 'name'=>_("Allgemeine Studienmodule"), 'link' => URLHelper::getLink("stm_abstract_assi.php"), 'active'=>FALSE);
 		if ($ELEARNING_INTERFACE_ENABLE){
-			$structure["elearning_interface"]=array ('topKat'=>"modules", 'name'=>_("Lernmodul-Schnittstelle"), 'link'=>"admin_elearning_interface.php", 'active'=>FALSE);
+			$structure["elearning_interface"]=array ('topKat'=>"modules", 'name'=>_("Lernmodul-Schnittstelle"), 'link' => URLHelper::getLink("admin_elearning_interface.php"), 'active'=>FALSE);
 		}
-		$structure["studiengang"]=array ('topKat'=>"global", 'name'=>_("Studiengänge"), 'link'=>"admin_studiengang.php", 'active'=>FALSE);
-		$structure["userdomains"]=array ('topKat'=>"global", 'name'=>_("Nutzerdomänen"), 'link'=>URLHelper::getLink("dispatch.php/domain_admin/show"), 'active'=>FALSE);
-		$structure["datafields"]=array ('topKat'=>"global", 'name'=>_("Datenfelder"), 'link'=>"admin_datafields.php", 'active'=>FALSE);
-		$structure["config"]=array ('topKat'=>"global", 'name'=>_("Konfiguration"), 'link'=>"admin_config.php", 'active'=>FALSE);
-		$structure["integrity"]=array ('topKat'=>"modules", 'name'=>_("DB Integrität"), 'link'=>"admin_db_integrity.php", 'active'=>FALSE);
+		$structure["studiengang"]=array ('topKat'=>"global", 'name'=>_("Studiengänge"), 'link' => URLHelper::getLink("admin_studiengang.php"), 'active'=>FALSE);
+		$structure["userdomains"]=array ('topKat'=>"global", 'name'=>_("Nutzerdomänen"), 'link' => URLHelper::getLink("dispatch.php/domain_admin/show"), 'active'=>FALSE);
+		$structure["datafields"]=array ('topKat'=>"global", 'name'=>_("Datenfelder"), 'link' => URLHelper::getLink("admin_datafields.php"), 'active'=>FALSE);
+		$structure["config"]=array ('topKat'=>"global", 'name'=>_("Konfiguration"), 'link' => URLHelper::getLink("admin_config.php"), 'active'=>FALSE);
+		$structure["integrity"]=array ('topKat'=>"modules", 'name'=>_("DB Integrität"), 'link' => URLHelper::getLink("admin_db_integrity.php"), 'active'=>FALSE);
 		if ($BANNER_ADS_ENABLE)  {
-			$structure["bannerads"]=array ('topKat'=>"global", 'name'=>_("Werbebanner"), 'link'=>"admin_banner_ads.php", 'active'=>FALSE);
+			$structure["bannerads"]=array ('topKat'=>"global", 'name'=>_("Werbebanner"), 'link' => URLHelper::getLink("admin_banner_ads.php"), 'active'=>FALSE);
 		}
 		if ($SMILEYADMIN_ENABLE) {
-			$structure["smileyadmin"]=array ('topKat'=>"global", 'name'=>_("Smileys"), 'link'=>"admin_smileys.php", 'active'=>FALSE);
+			$structure["smileyadmin"]=array ('topKat'=>"global", 'name'=>_("Smileys"), 'link' => URLHelper::getLink("admin_smileys.php"), 'active'=>FALSE);
 		}
 
 		if($SEMESTER_ADMINISTRATION_ENABLE){
-			$structure["semester"]=array ('topKat'=>"global", 'name'=>_("Semester"), 'link'=>"admin_semester.php", 'active'=>FALSE);
+			$structure["semester"]=array ('topKat'=>"global", 'name'=>_("Semester"), 'link' => URLHelper::getLink("admin_semester.php"), 'active'=>FALSE);
 		}
-		$structure["admin_teilnehmer_view"]=array ('topKat'=>"global", 'name'=>_("Teilnehmeransicht"), 'link'=>"admin_teilnehmer_view.php", 'active'=>FALSE);
+		$structure["admin_teilnehmer_view"]=array ('topKat'=>"global", 'name'=>_("Teilnehmeransicht"), 'link' => URLHelper::getLink("admin_teilnehmer_view.php"), 'active'=>FALSE);
 
 		if ($LOG_ENABLE) {
-			$structure["show_log"]=array ('topKat'=>"log", 'name'=>_("Log"), 'link'=>URLHelper::getLink('dispatch.php/event_log/show'), 'active'=>FALSE);
-			$structure["admin_log"]=array ('topKat'=>"log", 'name'=>_("Einstellungen"), 'link'=>URLHelper::getLink('dispatch.php/event_log/admin'), 'active'=>FALSE);
+			$structure["show_log"]=array ('topKat'=>"log", 'name'=>_("Log"), 'link' => URLHelper::getLink('dispatch.php/event_log/show'), 'active'=>FALSE);
+			$structure["admin_log"]=array ('topKat'=>"log", 'name'=>_("Einstellungen"), 'link' => URLHelper::getLink('dispatch.php/event_log/admin'), 'active'=>FALSE);
 		}
 	}
 	// create sublinks for administration plugins
@@ -818,7 +798,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					<td class="steel1" colspan="5">
 						<br />&nbsp;<font size=-1>
 							<label>
-								<input type="checkbox" name="show_rooms_check" <?  if ($show_rooms_check) { echo " checked "; } ?> >&nbsp; <?=_("Raumdaten einblenden")?>
+								<input type="checkbox" name="show_rooms_check" <?  if ($_REQUEST['show_rooms_check']) { echo " checked "; } ?> >&nbsp; <?=_("Raumdaten einblenden")?>
 							</label>
 						</font><br />
 					</td>
@@ -938,7 +918,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		<form name="links_admin_action" action="<?=URLHelper::getLink()?>" method="POST">
 		<table border=0  cellspacing=0 cellpadding=2 align=center width="99%">
 		<?
-		$show_rooms_check_url= ($show_rooms_check=="on") ? "&show_rooms_check=on" : null;
+		$show_rooms_check_url= ($_REQUEST['show_rooms_check']=="on") ? "&show_rooms_check=on" : null;
 		// only show table header in case of hits
 		if ($db->num_rows()) {
 			?>
@@ -1011,9 +991,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 					<input type="HIDDEN" name="change_visible" value="1">
 					<?
 					if ($auth->auth["jscript"]) {
-						printf("<font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_all=TRUE&list=TRUE') , makeButton("alleauswaehlen"));
+						printf("<font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_all=TRUE&list=TRUE'), makeButton("alleauswaehlen"));
 						// echo "&nbsp;<br>";
-						// printf("<font size=-1><a href=\"%s?select_none=TRUE&list=TRUE\">%s</a></font>", $GLOBALS['PHP_SELF'], makeButton("alleauswaehlen"));
+						// printf("<font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_none=TRUE&list=TRUE'), makeButton("alleauswaehlen"));
 					}
 					?>&nbsp;
 					</td>
@@ -1093,7 +1073,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			}
 
 			// if "show room-data" is enabled
-			if (!$show_rooms_check) {
+			if (!$_REQUEST['show_rooms_check']) {
 				$_room = "&nbsp;";
 			} else {
 				$_room = getRoomOverviewUnsteady($seminar_id,$semdata["semester_id"],TRUE);
@@ -1120,7 +1100,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			echo "</font></td>";
 			
 			// if "show room-data" is enabled, show cell
-			if ($show_rooms_check) {
+			if ($_REQUEST['show_rooms_check']) {
 				echo "<td valign=\"top\" class=\"".$cssSw->getClass()."\"><font size=-1>".$_room."</font></td>";
 			}
 
@@ -1233,7 +1213,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 						if(!LockRules::check($seminar_id, 'seminar_visibility')){
 							?>
 							<input type="HIDDEN" name="all_sem[]" value="<? echo $seminar_id ?>" />
-							<input type="CHECKBOX" name="visibility_sem[<? echo $seminar_id ?>]" <? if (!$select_none && ($select_all || $db->f("visible"))) echo ' checked'; ?> />
+							<input type="CHECKBOX" name="visibility_sem[<? echo $seminar_id ?>]" <? if (!$_REQUEST['select_none'] && ($_REQUEST['select_all'] || $db->f("visible"))) echo ' checked'; ?> />
 							<?
 						} else {
 							echo $db->f('visible') ? _("sichtbar") : _("versteckt");
@@ -1245,7 +1225,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 						if(!LockRules::check($seminar_id, 'seminar_visibility')){
 							?>
 							<input type="HIDDEN" name="archiv_sem[]" value="_id_<? echo $seminar_id ?>" />
-							<input type="CHECKBOX" name="archiv_sem[]" <? if ($select_all) echo ' checked'; ?> />
+							<input type="CHECKBOX" name="archiv_sem[]" <? if ($_REQUEST['select_all']) echo ' checked'; ?> />
 							<?
 						} else {
 							echo "&nbsp;";
