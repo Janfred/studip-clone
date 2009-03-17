@@ -521,8 +521,8 @@ class about extends messaging {
 
 	function edit_pers($password, $response, $new_username, $vorname, $nachname, $email, $geschlecht, $title_front, $title_front_chooser, $title_rear, $title_rear_chooser, $view) {
 		global $UNI_NAME_CLEAN, $_language_path, $auth, $perm;
-		global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, $ALLOW_CHANGE_NAME, $ALLOW_CHANGE_TITLE,$ALLOW_ADMIN_USERACCESS;
-		
+		global $ALLOW_CHANGE_USERNAME, $ALLOW_CHANGE_EMAIL, $ALLOW_CHANGE_NAME, $ALLOW_CHANGE_TITLE;
+
 		//erstmal die "unwichtigen" Daten
 		if($title_front == "")
 			$title_front = $title_front_chooser;
@@ -553,15 +553,15 @@ class about extends messaging {
 		$vorname = trim($vorname);
 		$nachname = trim($nachname);
 		$email = trim($email);
-		
+
 		//nur nötig wenn der user selbst seine daten ändert
-		if ($this->check == "user" || ( $perm->have_perm('root')  && $ALLOW_ADMIN_USERACCESS)) {
+		if ($this->check == "user") {
 			//erstmal die Syntax checken $validator wird in der local.inc.php benutzt, sollte also funzen
 			$validator=new email_validation_class; ## Klasse zum Ueberpruefen der Eingaben
 			$validator->timeout=10;
-			
-			if ((!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])
-			  && (($response && $response!=md5("*****")) || $password!="*****"))) {      //Passwort verändert ?
+
+			if (!StudipAuthAbstract::CheckField("auth_user_md5.password", $this->auth_user['auth_plugin'])
+			  && (($response && $response!=md5("*****")) || $password!="*****")) {      //Passwort verändert ?
 
 				// auf doppelte Vergabe wird weiter unten getestet.
 				if (!isset($response) || $response=="") { // wir haben kein verschluesseltes Passwort
@@ -573,7 +573,7 @@ class about extends messaging {
 				} else {
 					$newpass = $response;
 				}
-				
+
 				$this->db->query("UPDATE auth_user_md5 SET password='$newpass' WHERE user_id='".$this->auth_user["user_id"]."'");
 				$this->msg=$this->msg . "msg§" . _("Ihr Passwort wurde ge&auml;ndert!") . "§";
 			}

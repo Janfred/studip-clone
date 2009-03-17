@@ -704,7 +704,7 @@ if ($view == 'Daten') {
 	if (StudipAuthAbstract::CheckField("auth_user_md5.password", $my_about->auth_user['auth_plugin'])) {
 		echo "<td class=\"".$cssSw->getClass()."\" colspan=\"2\" align=\"left\">&nbsp; <font size=\"-1\">*****</font>";
 	} else {
-		echo '<div style="display:inline;float:right;"> '._("ändern").'? <input type="checkbox" name="update_pw" id="update_pw" onclick="javascript: update_pw_fields();" /></div></td>';		
+		echo '<div style="display:inline;float:right;"> '._("ändern").'? <input type="checkbox" name="update_pw" id="update_pw" onclick="javascript: update_pw_fields();" /></div></td>';
 		echo '<td class="'.$cssSw->getClass().'" nowrap width="20%" align="left">';
 		$pw_input = "<font size=-1>&nbsp; %s</font><br />&nbsp;"
 					."<input type=\"password\" size=\"".round($max_col*0.25)."\" id=\"new_passwd_%s\" name=\"new_passwd_%s\"  %s value=\"*****\">";
@@ -749,44 +749,11 @@ if ($view == 'Daten') {
 	}
 	echo "</td></tr>\n";
 	} else {
-		$msg = $ALLOW_ADMIN_USERACCESS ? _("Adminzugriff nur eingeschränkt möglich!") : _("Adminzugriff hier nicht möglich!");
 		$cssSw->switchClass();
-
-		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><b>" . _("Username:") . " </b></td><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\">&nbsp; ".$my_about->auth_user["username"]."</td><td width=\"50%\" rowspan=4 align=\"center\"><b><font color=\"red\">" . $msg . "</font></b></td></tr>\n";
-
+		echo "<tr><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\"><b>" . _("Username:") . " </b></td><td class=\"".$cssSw->getClass()."\" width=\"25%\" align=\"left\">&nbsp; ".$my_about->auth_user["username"]."</td><td width=\"50%\" rowspan=4 align=\"center\"><b><font color=\"red\">" . _("Adminzugriff hier nicht möglich!") . "</font></b></td></tr>\n";
 		$cssSw->switchClass();
-
 		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Passwort:") . " </b>";
-
-		if($perm->have_perm('root') && $ALLOW_ADMIN_USERACCESS)
-		{
-			echo '<div style="display:inline;float:right;"> '._("ändern").'? <input type="checkbox" name="update_pw" id="update_pw" onclick="javascript: update_pw_fields();" /></div></td>';		
-
-			echo '<td class="'.$cssSw->getClass().'" nowrap width="20%" align="left">';
-			$pw_input = "<font size=-1>&nbsp; %s</font><br />&nbsp;"
-						."<input type=\"password\" size=\"".round($max_col*0.25)."\" id=\"new_passwd_%s\" name=\"new_passwd_%s\"  %s value=\"*****\">";
-
-			echo '<script>document.write(\''.sprintf($pw_input, _("neues Passwort:"), '1', '1', 'disabled').'\');</script>';
-			// if javascript is disabled dont disable the input fields
-			printf('<noscript>'.$pw_input.'</noscript>', _("neues Passwort:"), '1', '1','');
-			echo "</td></tr>
-			<tr><td></td><td class=\"".$cssSw->getClass()."\" width=\"55%\" nowrap align=\"left\">";
-
-			echo '<script>document.write(\''.sprintf($pw_input, _("Passwort Wiederholung:"), '2', '2','disabled').'\');</script>';
-			// if javascript is disabled dont disable the input fields
-			printf('<noscript>'.$pw_input.'</noscript>', _("Passwort Wiederholung:"), '2', '2','');
-			echo "<input type=\"HIDDEN\" name=\"response\" value=\"\"></td></tr>\n";
-			echo '<input type="hidden"  name="email1" value="'.$my_about->auth_user["Email"].'">';
-			echo '<input type="hidden"  name="email2" value="'.$my_about->auth_user["Email"].'">';
-			echo '<input type="hidden"  name="vorname" value="'.htmlReady($my_about->auth_user["Vorname"]).'">';
-			echo '<input type="hidden"  name="nachname" value="'.htmlReady($my_about->auth_user["Nachname"]).'">';
-			echo '<input type="hidden"  name="new_username" value="'.$my_about->auth_user["username"].'">';
-			
-		}
-		else
-		{
-			echo "</td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; *****</td></tr>\n";
-		}
+		echo "</td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; *****</td></tr>\n";
 		$cssSw->switchClass();
 		echo "<tr><td class=\"".$cssSw->getClass()."\" align=\"left\"><b>" . _("Name:") . " </b></td><td class=\"".$cssSw->getClass()."\" align=\"left\">&nbsp; ".htmlReady($my_about->auth_user["Vorname"]." ".$my_about->auth_user["Nachname"])."</td></tr>\n";
 		$cssSw->switchClass();
