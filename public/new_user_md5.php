@@ -443,8 +443,7 @@ if (isset($_GET['details']) || $showform ) {
 					?>
 					</td>
 				</tr>
-				<?if($perm->have_perm('root')  && $ALLOW_ADMIN_USERACCESS) {
-				?>
+				<? if ($perm->have_perm('root') && $ALLOW_ADMIN_USERACCESS && !StudipAuthAbstract::CheckField("auth_user_md5.password", $auth_plugin)) { ?>
 				<tr>
 					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Neues Passwort:")?></b></td>
 					<td class="steel1">&nbsp;
@@ -457,10 +456,8 @@ if (isset($_GET['details']) || $showform ) {
 					<input name="pass_2" type="password" id="pass_2"><br>
 					</td>
 				</tr>
-				
-				
-				
 				<?}?>
+
 				<tr>
 				<td class="steel1"><b>&nbsp;<?=_("Titel:")?></b>
 				</td><td class="steel1" align="right">
