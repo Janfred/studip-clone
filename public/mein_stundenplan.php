@@ -128,7 +128,8 @@ if ($cmd == "add_entry") {
 
 // Virtuellen Stundenplaneintrag löschen
 if ($cmd == "delete_entry") {
-    $sem_id = substr(mysql_real_escape_string($_REQUEST['sem_id']), 0, 32); // make sure
+	// seminar id auf 32 zeichen kürzen
+	$sem_id = substr($_REQUEST['sem_id'], 0, 32);
 	$db->query("DELETE FROM seminar_user_schedule WHERE range_id = '$sem_id' AND user_id = '".$auth->auth['uid']."'");
 }
 
@@ -350,13 +351,12 @@ for ($seminar_user_schedule = 1; $seminar_user_schedule <= 2; $seminar_user_sche
 
 				$i++; //<pfusch>$i (fuer alle einzelnen Objekte eines Seminars) wird hier zur Kennzeichnung der einzelen Termine eines Seminars untereinander verwendet. Unten wird die letzte Stelle jeweils weggelassen. </pfusch>
 
-            # virtual dates cant be hidden
-			if($my_schedule_settings['hidden'][$db->f("Seminar_id").$i]
-			   and $seminar_user_schedule == 2) {
-			    unset($my_schedule_settings['hidden'][$db->f("Seminar_id").$i]);
+			// virtual dates can't be hidden
+			if ($my_schedule_settings['hidden'][$db->f("Seminar_id").$i] && $seminar_user_schedule == 2) {
+				unset($my_schedule_settings['hidden'][$db->f("Seminar_id").$i]);
 			}
 			
-			if($view == 'edit' or !$my_schedule_settings['hidden'][$db->f("Seminar_id").$i]) {
+			if ($view == 'edit' || !$my_schedule_settings['hidden'][$db->f("Seminar_id").$i]) {
 				$my_sems[$db->f("Seminar_id").$i] = array(
 					"start_time_idx"=>$data["start_stunde"]+$idx_corr_h.(int)(($data["start_minute"]+$idx_corr_m) / 15).$data["day"],
 					"start_time"=>$start_time,
