@@ -888,16 +888,17 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 			}
 			// show max 80 chars
 			$fragment = '';
-			$found_in_fragment=0; // number of hits in fragment
-			$splitted_fragment = preg_split('/('.preg_quote($searchfor,'/').')/i', substr($db->f("body"),max(0, $pos-40), 80), -1, PREG_SPLIT_DELIM_CAPTURE);
-			for($i = 1; $i < count($splitted_fragment); $i += 2) {
-				$fragment 	.= htmlready($splitted_fragment[$i - 1]) 
-							. '<span style="background-color:#FFFF88">'
-							. htmlready($splitted_fragment[$i])
-							.'</span>'
-							. htmlready($splitted_fragment[$i + 1]);
-				++$found_in_fragment;
+			$split_fragment = preg_split('/('.preg_quote($searchfor,'/').')/i', substr($db->f("body"),max(0, $pos-40), 80), -1, PREG_SPLIT_DELIM_CAPTURE);
+			for ($i = 0; $i < count($split_fragment); ++$i) {
+				if ($i % 2) {
+					$fragment .= '<span style="background-color:#FFFF88">';
+					$fragment .= htmlready($split_fragment[$i], false);
+					$fragment .= '</span>';
+				} else {
+					$fragment .= htmlready($split_fragment[$i], false);
+				}
 			}
+			$found_in_fragment = (count($split_fragment) - 1) / 2; // number of hits in fragment
 			$ignore_next_hits = ($found_in_fragment > 1) ? $found_in_fragment - 1 : 0;
 			print("...".$fragment."...");
 			print "<br/>";
