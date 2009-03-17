@@ -101,7 +101,7 @@ if ($SessSemName["class"]=="inst") {
 	$structure["institut_main"]=array ('topKat' => '', 'name'=>_("Übersicht"), 'link' => URLHelper::getLink("institut_main.php"), 'active' => FALSE);
 	if ($modules["forum"])
 		$structure["forum"]=array ('topKat' => '', 'name' => _("Forum"), 'link' => URLHelper::getLink("forum.php?view=reset"), 'active' => FALSE);
-	if ($modules["personal"])
+	if ($modules["personal"] && $user->id != "nobody")
 		$structure["personal"]=array ('topKat' => '', 'name' => _("Personal"), 'link' => URLHelper::getLink("institut_members.php"), 'active' => FALSE);
 	if ($modules["documents"])
 		$structure["folder"]=array ('topKat' => '', 'name' => _("Dateien"), 'link' => URLHelper::getLink("folder.php?cmd=tree"), 'active' => FALSE);
@@ -123,12 +123,12 @@ if ($SessSemName["class"]=="inst") {
 	$structure["seminar_main"]=array ('topKat' => '', 'name' => _("Übersicht"), 'link' => URLHelper::getLink("seminar_main.php"), 'active' => FALSE);
 	if ($modules["forum"])
 		$structure["forum"]=array ('topKat' => '', 'name' => _("Forum"), 'link' => URLHelper::getLink("forum.php?view=reset"), 'active' => FALSE);
-	if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) && ($modules["participants"])){
+	if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) && $modules["participants"] && $user->id != "nobody") {
 		$structure["teilnehmer"]=array ('topKat' => '', 'name' => _("TeilnehmerInnen"), 'link' => URLHelper::getLink("teilnehmer.php"), 'active' => FALSE);
 	}
 	if ($modules["documents"])
 		$structure["folder"]=array ('topKat' => '', 'name' => _("Dateien"), 'link' => URLHelper::getLink("folder.php?cmd=tree"), 'active' => FALSE);
-	if ($modules["schedule"])
+	if ($modules["schedule"] && $user->id != "nobody")
 		$structure["dates"]=array ('topKat' => '', 'name' => _("Ablaufplan"), 'link' => URLHelper::getLink("dates.php?cmd=setType&type=all"), 'active' => FALSE);
 	if ($modules["scm"]) {
 		$structure["scm"]=array ('topKat' => '', 'name' => ($scms[0]['tab_name'] ? $scms[0]['tab_name'] : _("Informationen")), 'link' => URLHelper::getLink("scm.php"), 'active' => FALSE);
@@ -148,7 +148,7 @@ if ($SessSemName["class"]=="inst") {
 }
 
 //topkats for Ilias-learningmodules, if module is activated
-if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])) {
+if ($ILIAS_CONNECT_ENABLE && $modules["ilias_connect"] && $user->id != "nobody") {
 	if (get_seminar_modules($SessSemName[1]) != false)
 		$structure["lernmodule"]=array ('topKat' => '', 'name' => _("Lernmodule"), 'link' => URLHelper::getLink("seminar_lernmodule.php?seminar_id=".$SessSemName[1]), 'active' => FALSE);
 	elseif  ($perm->have_studip_perm("tutor",$SessSemName[1]))
@@ -159,7 +159,7 @@ if (($ILIAS_CONNECT_ENABLE) && ($modules["ilias_connect"])) {
 }
 
 //topkats for contentmodules, if elearning-interface is activated
-if (($ELEARNING_INTERFACE_ENABLE) && ($modules["elearning_interface"])) {
+if ($ELEARNING_INTERFACE_ENABLE && $modules["elearning_interface"] && $user->id != "nobody") {
 	if (ObjectConnections::isConnected($SessSemName[1]))
 		$structure["elearning_interface"]=array ('topKat' => '', 'name' => _("Lernmodule"), 'link' => URLHelper::getLink("elearning_interface.php?view=show&seminar_id=".$SessSemName[1]), 'active' => FALSE);
 	elseif  ($perm->have_studip_perm("tutor",$SessSemName[1]))
