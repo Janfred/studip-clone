@@ -191,13 +191,11 @@ if (check_ticket($_REQUEST['studipticket'])){
 
 		// Delete the user
 		case "u_kill_x":
-
-			$UserManagement = new UserManagement($u_id);
-
-			$UserManagement->deleteUser();
-
+			
+			$message = sprintf(_('Möchten Sie wirklich den User <b>%s</b> löschen ?'), $username);
+			Seminar::createQuestion($message,URLHelper::getLink('',array("studipticket" => get_ticket(),'u_kill_id' => $u_id)));
+            	        
 			break;
-
 			
 		case 'pers_browse_search_x':
 			$_SESSION['pers_browse_old']['username'] = remove_magic_quotes($_POST['pers_browse_username']);
@@ -253,6 +251,13 @@ if (check_ticket($_REQUEST['studipticket'])){
 			break;
 		}
 	}
+
+	if ($_REQUEST['u_kill_id']) {
+
+        $UserManagement = new UserManagement($_REQUEST['u_kill_id']);
+        $UserManagement->deleteUser();
+    }
+
 }
 // Formular zuruecksetzen
 if (isset($_GET['pers_browse_clear'])) {
