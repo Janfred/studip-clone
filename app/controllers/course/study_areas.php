@@ -75,6 +75,8 @@ class Course_StudyAreasController extends Trails_Controller {
 
     # w/o a course ID respond with a "Bad Request"
     if ($course_id === '') {
+      $GLOBALS['CURRENT_PAGE'] = _('Studienbereichsauswahl');
+
       $this->set_status(400);
       return $this->render_template('course/study_areas/no_course', $layout);
     }
