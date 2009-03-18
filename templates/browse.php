@@ -1,22 +1,21 @@
 <!-- SEARCHBOX -->
 <script type="text/javascript">
 	Event.observe(window, 'load', function() {
-		new Ajax.Autocompleter('Vorname',
-		                       'Vorname_choices',
+		new Ajax.Autocompleter('vorname',
+		                       'vorname_choices',
 		                       'dispatch.php/autocomplete/person/given',
 		                       { minChars: 3, paramName: 'value', method: 'get' });
-		new Ajax.Autocompleter('Nachname',
-		                       'Nachname_choices',
+		new Ajax.Autocompleter('nachname',
+		                       'nachname_choices',
 		                       'dispatch.php/autocomplete/person/family',
 		                       { minChars: 3, paramName: 'value', method: 'get',
 		                         afterUpdateElement: function (input, item) {
 		                           var username = encodeURI(item.down('span.username').firstChild.nodeValue);
-		                           document.location = "<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>about.php?username=" + username;
+		                           document.location = STUDIP.ABSOLUTE_URI_STUDIP + "about.php?username=" + username;
 		                         }});
 	});
 </script>
-<form action="browse.php" method="post">
-<input type="hidden" name="send" value="TRUE">
+<form action="<?= URLHelper::getLink() ?>" method="post">
 <div class="topic"><b><?=_("Suche nach Personen")?></b></div>
 
 <? if($sms_msg):?>
@@ -26,98 +25,112 @@
 <!-- form zur wahl der institute -->
 <div style="width: 100%;">
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
-<? if (count($institutes)): ?>
-<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
-	<td style="white-space: nowrap;">
-		<b><?=_("in Einrichtungen:")?></b>
-	</td>
-	<td width="90%">
-	<select name="inst_id" size="1" style="min-width: 200px;">
-		<option value="0">- - -</option>
-	<? foreach ($institutes as $institut): ?>
-		<option value="<?=$institut['id']?>"<? if($institut['id']==$browse_data['inst_id']):?> selected="selected"<? endif; ?>><?=$institut['name']?></option>
-	<? endforeach;?>
-	</select></td>
-</tr>
-<? endif ?>
-<!-- form zur wahl der seminare -->
-<? if (count($courses)): ?>
-<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
-	<td style="white-space: nowrap;">
-		<b><?=_("in Veranstaltungen:")?></b>
-	</td>
-	<td width="90%">
-  	<select name="sem_id" size="1" style="min-width: 200px;">
-		<option value="0">- - -</option>
-	<? foreach ($courses as $course): ?>
-		<option value="<?=$course['id']?>"<? if($course['id']==$browse_data['sem_id']):?> selected="selected"<? endif; ?>><?=$course['name']?></option>
-	<? endforeach;?>
-	</select></td>
-</tr>
-<? endif ?>
-<!-- form zur freien Suche -->
-<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
-	<td><b><?=_("Vorname:")?></b></td>
-	<td width="90%">
-		<input id="Vorname" type="text" style="width: 200px" size="10" length="255" name="Vorname" value="<? echo htmlReady(stripslashes($browse_data["Vorname"])) ?>">
-		<div id="Vorname_choices" class="autocomplete"></div>
-	</td>
-</tr>
-<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
-	<td><b><?=_("Nachname:")?></b></td>
-	<td width="90%">
-		<input id="Nachname" type="text" style="width: 200px" size="10" maxlength="255" name="Nachname" value="<? echo htmlReady(stripslashes($browse_data["Nachname"])) ?>">
-		<div id="Nachname_choices" class="autocomplete"></div>
-	</td>
-</tr>
-<tr class="steel2">
-	<td colspan="2" align="center">
-		<?=makeButton("suchen", "input", "Suchen", "Suchen")?>
-		<?=makeButton("zuruecksetzen", "input", "zuruecksetzen", "zuruecksetzen")?>
-	</td>
-</tr>
+	<? if (count($institutes)): ?>
+	<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
+		<td style="white-space: nowrap;">
+			<b><?=_("in Einrichtungen:")?></b>
+		</td>
+		<td width="90%">
+		<select name="inst_id" style="min-width: 200px;">
+			<option value="0">- - -</option>
+			<? foreach ($institutes as $institute): ?>
+			<option value="<?=$institute['id']?>" <?= $institute['id'] == $inst_id ? 'selected="selected"' : '' ?>><?= htmlReady($institute['name']) ?></option>
+			<? endforeach;?>
+		</select>
+		</td>
+	</tr>
+	<? endif ?>
+	<!-- form zur wahl der seminare -->
+	<? if (count($courses)): ?>
+	<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
+		<td style="white-space: nowrap;">
+			<b><?=_("in Veranstaltungen:")?></b>
+		</td>
+		<td width="90%">
+		<select name="sem_id" style="min-width: 200px;">
+			<option value="0">- - -</option>
+			<? foreach ($courses as $course): ?>
+			<option value="<?=$course['id']?>" <?= $course['id'] == $sem_id ? 'selected="selected"' : '' ?>><?= htmlReady($course['name']) ?></option>
+			<? endforeach;?>
+		</select>
+		</td>
+	</tr>
+	<? endif ?>
+	<!-- form zur freien Suche -->
+	<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
+		<td>
+			<b><?=_("Vorname:")?></b>
+		</td>
+		<td width="90%">
+			<input id="vorname" type="text" style="width: 200px" size="20" name="vorname" value="<?= htmlReady($vorname) ?>">
+			<div id="vorname_choices" class="autocomplete"></div>
+		</td>
+	</tr>
+	<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
+		<td>
+			<b><?=_("Nachname:")?></b>
+		</td>
+		<td width="90%">
+			<input id="nachname" type="text" style="width: 200px" size="20" name="nachname" value="<?= htmlReady($nachname) ?>">
+			<div id="nachname_choices" class="autocomplete"></div>
+		</td>
+	</tr>
+	<tr class="steel2">
+		<td colspan="2" align="center">
+			<?=makeButton('suchen', 'input', 'Suchen', 'send')?>
+			<?=makeButton('zuruecksetzen', 'input', 'zuruecksetzen', 'reset')?>
+		</td>
+	</tr>
 </table>
 </div>
 </form>
 <br/>
 
 <!-- RESULTS -->
-<? if($results):?>
-
+<? if (isset($users)):?>
 <div class="topic"><b><?=_("Ergebnisse:")?></b></div>
+
 <div style="width: 100%;">
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
-<? if(count($results) > 0):?>
-<tr>
-<? if($browse_data['group'] == 'Seminar'): ?>
-	<th align="left"><a href="browse.php?sortby=Nachname"><?=_("Name")?></a></th>
-	<th align="left"><a href="browse.php?sortby=status"><?=_("Status in der Veranstaltung")?></a></th>
-<? elseif($browse_data['group'] == 'Institut'): ?>
-	<th align="left"><a href="browse.php?sortby=Nachname"><b><?=_("Name")?></a></th>
-	<th align="left"><?=_("Funktion an der Einrichtung")?></td>
-<? else: ?>
-	<th align="left"><a href="browse.php?sortby=Nachname"><b><?=_("Name")?></a></th>
-	<th align="left"><a href="browse.php?sortby=perms"><?=_("globaler Status")?></a></th>
-<? endif; ?>
-	<th align="right"><?=_("Nachricht verschicken")?></td>
-</tr>
-<? foreach ($results as $user): ?>
-<tr class="<?=TextHelper::cycle('cycle_odd', 'cycle_even')?>">
-	<td><a href="about.php?username=<?=$user['username']?>"><?=$user['fullname']?></a></td>
-	<td><?=$user['status']?> <?=$user['perms']?></td>
-	<td align="right">
-		<?=$user['chat']?>
-		<a href="sms_send.php?sms_source_page=browse.php&rec_uname=<?=$user['username']?>"><img src="<?=Assets::url()?>images/nachricht1.gif" title="<?=_("Nachricht an User verschicken")?>" border="0"></a>
-	</td>
-</tr>
-<? endforeach; ?>
-<? else: ?>
-<tr class="steel1">
-	<td colspan="3"><p><b><?=_("Es wurde niemand gefunden!")?></b></p></td>
-</tr>
-<? endif; ?>
+	<tr>
+		<th align="left">
+			<a href="<?= URLHelper::getLink('') ?>"><?=_("Name")?></a>
+		</th>
+		<th align="left">
+			<? if ($inst_id): ?>
+			<?= _("Funktion an der Einrichtung") ?>
+			<? elseif ($sem_id): ?>
+			<a href="<?= URLHelper::getLink('', array('sortby' => 'status')) ?>"><?= _("Status in der Veranstaltung") ?></a>
+			<? else: ?>
+			<a href="<?= URLHelper::getLink('', array('sortby' => 'perms')) ?>"><?= _("globaler Status") ?></a>
+			<? endif; ?>
+		</th>
+		<th align="right">
+			<?=_("Nachricht verschicken")?>
+		</th>
+	</tr>
+	<? foreach ($users as $user): ?>
+	<tr class="<?=TextHelper::cycle('cycle_odd', 'cycle_even')?>">
+		<td>
+			<a href="<?= URLHelper::getLink('about.php', array('username' => $user['username'])) ?>"><?= htmlReady($user['fullname']) ?></a>
+		</td>
+		<td>
+			<?= htmlReady($user['status']) ?>
+		</td>
+		<td align="right">
+			<?= $user['chat'] ?>
+			<a href="<?= URLHelper::getLink('sms_send.php', array('sms_source_page' => 'browse.php', 'rec_uname' => $user['username'])) ?>">
+				<img src="<?=Assets::url()?>images/nachricht1.gif" title="<?=_("Nachricht an User verschicken")?>" border="0">
+			</a>
+		</td>
+	</tr>
+	<? endforeach; ?>
 </table>
 </div>
+<? elseif (isset($vorname) || isset($nachname)): ?>
+<p>
+	<b><?=_("Es wurde niemand gefunden!")?></b>
+</p>
 <? endif; ?>
 
 <?php
@@ -144,7 +157,7 @@ $infobox = array(
 			"eintrag" => array(
 				array(
 					"icon" => 'suche2.gif',
-					"text" => '<a href="score.php">'._("Zur Stud.IP-Rangliste").'</a>'
+					"text" => '<a href="'.URLHelper::getLink('score.php').'">'._("Zur Stud.IP-Rangliste").'</a>'
 				)
 			)
 		)
