@@ -160,7 +160,7 @@ if (count($filter))
 				if ($row['inst_perms'] == 'user') {
 					$userinfo['status'] = _('Studierender');
 				} else {
-					$gruppen = GetRoleNames(GetAllStatusgruppen($row['Institut_id'], $row['user_id']));
+					$gruppen = GetRoleNames(GetAllStatusgruppen($inst_id, $row['user_id']));
 					$userinfo['status'] = is_array($gruppen) ? join(', ', array_values($gruppen)) : _('keiner Funktion zugeordnet');
 				}
 			}
