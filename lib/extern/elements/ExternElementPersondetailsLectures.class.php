@@ -44,7 +44,7 @@ require_once('lib/classes/SemesterData.class.php');
 class ExternElementPersondetailsLectures extends ExternElement {
 
 	var $attributes = array("semstart", "semrange", "semswitch", "aliaswise",
-			"aliassose", "aslist");
+			"aliassose", "aslist", "semclass");
 	
 	/**
 	* Constructor
