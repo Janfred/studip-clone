@@ -1,4 +1,4 @@
-pluginclassname=de_studip_core_RoleManagementPlugin.class.php
+pluginclassname=RoleManagementPlugin
 pluginname=RollenManagement
-version=1.0
+version=1.0.1
 origin=core

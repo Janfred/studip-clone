@@ -58,7 +58,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$user = $this->getUser();
 		$permission = $user->getPermission();
 		$pluginengine = PluginEngine::getPluginPersistence();
-		$roleplugin = $pluginengine->getPluginid('de_studip_core_RoleManagementPlugin');
+		$roleplugin = $pluginengine->getPluginid('RoleManagementPlugin');
 
 		$template = $this->template_factory->open('plugin_administration');
 		$template->set_layout($this->layout);
@@ -99,7 +99,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$permission = $user->getPermission();
 		$pluginengine = PluginEngine::getPluginPersistence();
 		$adminpluginengine = PluginEngine::getPluginPersistence('Administration');
-		$roleplugin = $pluginengine->getPluginid('de_studip_core_RoleManagementPlugin');
+		$roleplugin = $pluginengine->getPluginid('RoleManagementPlugin');
 
 		$template = $this->template_factory->open('plugin_administration');
 		$template->set_layout($this->layout);

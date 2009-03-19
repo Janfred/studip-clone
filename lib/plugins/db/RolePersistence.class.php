@@ -1,6 +1,19 @@
 <?
-# Lifter002: TODO
 // vim: noexpandtab
+/**
+ * RolePersistence.class.php
+ *
+ * PHP version 5
+ *
+ * @author  	Dennis Reil <dennis.reil@offis.de>
+ * @author  	Michael Riehemann <michael.riehemann@uni-oldenburg.de>
+ * @package 	pluginengine
+ * @subpackage 	db
+ * @copyright 	2009 Stud.IP
+ * @license 	http://www.gnu.org/licenses/gpl.html GPL Licence 3
+ * @version 	$Revision$
+ */
+
 /**
  * role id unknown
  */
@@ -8,21 +21,33 @@ define("UNKNOWN_ROLE_ID",-1);
 
 /**
  * Funktionen für das Rollenmanagement
- * @author Dennis Reil <dennis.reil@offis.de>
- * @package pluginengine
- * @subpackage db
+ * TODO: (mriehe) this is a static class, change the public function in static public functions
+ *
  */
+class RolePersistence
+{
 
-class de_studip_RolePersistence {
-
-	function getAllRoles() {
+	/**
+	 * Enter description here...
+	 *
+	 * @return array Roles
+	 */
+	public function getAllRoles()
+	{
 		$roles = array();
-		foreach (DBManager::get()->query("SELECT * FROM roles ORDER BY rolename")
-		  as $row) {
-
-			$role = new de_studip_Role();
+		foreach (DBManager::get()->query("SELECT * FROM roles ORDER BY rolename") as $row)
+		{
+			$role = new Role();
 			$role->setRoleid($row["roleid"]);
 			$role->setRolename($row["rolename"]);
+			if($row["system"] == 'y')
+			{
+				$role->setSystemtype(true);
+			}
+			else
+			{
+				$role->setSystemtype(false);
+			}
 			$roles[$row["roleid"]] = $role;
 		}
 		return $roles;
@@ -31,10 +56,11 @@ class de_studip_RolePersistence {
 	/**
 	 * Inserts the role into the database or does an update, if it's already there
 	 *
-	 * @param de_studip_Role $role
+	 * @param Role $role
 	 * @return the role id
 	 */
-	function saveRole($role) {
+	public function saveRole($role)
+	{
 		$db = DBManager::get();
 
 		// role is not in database
@@ -58,12 +84,14 @@ class de_studip_RolePersistence {
 	 *
 	 * @param unknown_type $role
 	 */
-	function deleteRole($role) {
+	public function deleteRole($role)
+	{
 		$id = $role->getRoleid();
 		$db = DBManager::get();
 		$stmt = $db->prepare("DELETE FROM roles WHERE roleid=? AND system='n'");
 		$stmt->execute(array($id));
-		if ($stmt->rowCount()) {
+		if ($stmt->rowCount())
+		{
 			$stmt = $db->prepare("DELETE FROM roles_user WHERE roleid=?");
 			$stmt->execute(array($id));
 			$stmt = $db->prepare("DELETE FROM roles_plugins WHERE roleid=?");
@@ -77,13 +105,14 @@ class de_studip_RolePersistence {
 	 * Saves a role assignment to the database
 	 *
 	 * @param StudIPUser $user
-	 * @param de_studip_Role $role
+	 * @param Role $role
 	 */
-	function assignRole($user,$role) {
+	public function assignRole($user,$role)
+	{
 		// role is not in database
 		// save it to the database first
 		if ($role->getRoleid() <> UNKNOWN_ROLE_ID) {
-			$roleid = $this->saveRole($role);
+			$roleid = self::saveRole($role);
 		}
 		else {
 			$roleid = $role->getRoleid();
@@ -93,9 +122,17 @@ class de_studip_RolePersistence {
 		$stmt->execute(array($roleid, $user->getUserid()));
 	}
 
-	function getAssignedRoles($userid, $implicit = false) {
-
-		if ($implicit) {
+	/**
+	 * Gets all assigned roles from the database for a user
+	 *
+	 * @param int $userid
+	 * @param boolean $implicit
+	 * @return array
+	 */
+	public function getAssignedRoles($userid, $implicit = false)
+	{
+		if ($implicit)
+		{
 			$stmt = DBManager::get()->prepare(
 			  "SELECT r.roleid FROM roles_user r ".
 			  "WHERE r.userid=? ".
@@ -104,31 +141,50 @@ class de_studip_RolePersistence {
 			  "WHERE rp.permname = a.perms and a.user_id=?");
 			$stmt->execute(array($userid, $userid));
 		}
-
-		else {
-			$stmt = DBManager::get()->prepare(
-			  "SELECT r.roleid FROM roles_user r ".
-			  "WHERE r.userid=?");
+		else
+		{
+			$stmt = DBManager::get()->prepare("SELECT r.roleid FROM roles_user r WHERE r.userid=?");
 			$stmt->execute(array($userid));
 		}
 
 		$assignedroles = array();
-		$roles = $this->getAllRoles();
-		while ($row = $stmt->fetch()) {
+		$roles = self::getAllRoles();
+		while ($row = $stmt->fetch())
+		{
 			$assignedroles[] = $roles[$row["roleid"]];
 		}
 		return $assignedroles;
 	}
 
 	/**
+	 * Checks a role assignment for an user
+	 *
+	 * @param string $userid
+	 * @param string $assignedrole
+	 * @return boolean
+	 */
+	public static function isAssignedRole($userid, $assignedrole)
+	{
+		$stmt = DBManager::get()->query("SELECT r.roleid FROM roles_user AS u LEFT JOIN roles AS r ON r.roleid=u.roleid WHERE u.userid='{$userid}' AND r.rolename='{$assignedrole}'")->fetchColumn();
+		if(!empty($stmt))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
 	 * Deletes a role assignment from the database
 	 *
 	 * @param StudIPUser[] $users
-	 * @param de_studip_Role $role
+	 * @param Role $role
 	 */
-	function deleteRoleAssignment($user,$role) {
-		$stmt = DBManager::get()->prepare("DELETE FROM roles_user ".
-		  "WHERE roleid=? AND userid=?");
+	public function deleteRoleAssignment($user,$role)
+	{
+		$stmt = DBManager::get()->prepare("DELETE FROM roles_user WHERE roleid=? AND userid=?");
 		$stmt->execute(array($role->getRoleid(),$user->getUserid()));
 	}
 
@@ -139,64 +195,92 @@ class de_studip_RolePersistence {
 	 * @param StudIPUser $user
 	 * @return array with roleids and the assigned userids
 	 */
-	function getAllRoleAssignments($user=null) {
-
-		if ($user == null) {
+	public function getAllRoleAssignments($user=null)
+	{
+		if ($user == null)
+		{
 			$result = DBManager::get()->query("SELECT * FROM roles_user");
 		}
-
-		else {
-			$result = DBManager::get()->prepare("SELECT * FROM roles_user ".
-			  "WHERE userid=?");
+		else
+		{
+			$result = DBManager::get()->prepare("SELECT * FROM roles_user WHERE userid=?");
 			$result->execute(array($user->getUserid()));
 		}
 
 		$roles_user = array();
-		while (!$result->EOF) {
+		while (!$result->EOF)
+		{
 			$roles_user[$row["roleid"]] = $row["userid"];
 		}
 		return $roles_user;
 	}
 
-	function assignPluginRoles($pluginid,$roleids) {
-		$stmt = DBManager::get()->prepare("REPLACE INTO roles_plugins ".
-		  "(roleid, pluginid) VALUES (?, ?)");
+	/**
+	 * Enter description here...
+	 *
+	 * @param int $pluginid
+	 * @param array $roleids
+	 */
+	public function assignPluginRoles($pluginid,$roleids)
+	{
+		$stmt = DBManager::get()->prepare("REPLACE INTO roles_plugins (roleid, pluginid) VALUES (?, ?)");
+		foreach ($roleids as $roleid)
+		{
+			$stmt->execute(array($roleid, $pluginid));
+		}
+	}
+
+	/**
+	 * Enter description here...
+	 *
+	 * @param int $pluginid
+	 * @param array $roleids
+	 */
+	public function deleteAssignedPluginRoles($pluginid,$roleids)
+	{
+		$stmt = DBManager::get()->prepare("DELETE FROM roles_plugins WHERE roleid=? AND pluginid=?");
 		foreach ($roleids as $roleid) {
 			$stmt->execute(array($roleid, $pluginid));
 		}
 	}
 
-	function deleteAssignedPluginRoles($pluginid,$roleids) {
-		$stmt = DBManager::get()->prepare("DELETE FROM roles_plugins ".
-		  "WHERE roleid=? AND pluginid=?");
-		foreach ($roleids as $roleid) {
-			$stmt->execute(array($roleid, $pluginid));
-		}
-	}
-
-	function getAssignedPluginRoles($pluginid=-1) {
-		$stmt = DBManager::get()->prepare("SELECT * FROM roles_plugins ".
-		  "WHERE pluginid=?");
+	/**
+	 * Enter description here...
+	 *
+	 * @param int $pluginid
+	 * @return array
+	 */
+	public function getAssignedPluginRoles($pluginid=-1)
+	{
+		$stmt = DBManager::get()->prepare("SELECT * FROM roles_plugins WHERE pluginid=?");
 		$stmt->execute(array($pluginid));
 
 		$assignedroles = array();
-		$roles = $this->getAllRoles();
-		while ($row = $stmt->fetch()) {
+		$roles = self::getAllRoles();
+		while ($row = $stmt->fetch())
+		{
 			$role = $roles[$row["roleid"]];
-			if (!empty($role)) {
+			if (!empty($role))
+			{
 				$assignedroles[] = $role;
 			}
 		}
 		return $assignedroles;
 	}
 
-	function getAllGroupRoleAssignments() {
-		$roles = $this->getAllRoles();
+	/**
+	 * Enter description here...
+	 *
+	 * @return array
+	 */
+	public function getAllGroupRoleAssignments()
+	{
+		$roles = self::getAllRoles();
 		$studipperms = $GLOBALS["perm"]->permissions;
 
 		$assignedrolesperms = array();
-		foreach (DBManager::get()->query("SELECT * FROM roles_studipperms")
-		  as $row) {
+		foreach (DBManager::get()->query("SELECT * FROM roles_studipperms") as $row)
+		{
 			$assignedrolesperm["role"] = $roles[$row["roleid"]];
 			$assignedrolesperm[$row["permname"]] = $studipperms[$row["permname"]];
 			$assignedrolesperms[] = $assignedrolesperm;
