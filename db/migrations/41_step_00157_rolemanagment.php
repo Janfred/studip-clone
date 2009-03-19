@@ -9,8 +9,7 @@ class Step00157RoleManagment extends Migration
     function up ()
     {
         DBManager::get()->exec("DELETE FROM `plugins` WHERE `pluginclassname`='de_studip_core_UserManagementPlugin'");
-    	DBManager::get()->exec("UPDATE `plugins` SET `pluginid` = '2', `pluginclassname` = 'RoleManagementPlugin', `navigationpos` = '1' WHERE
-Pluginclassname='de_studip_core_RoleManagementPlugin';");
+    	DBManager::get()->exec("UPDATE `plugins` SET `pluginid` = '2', `pluginclassname` = 'RoleManagementPlugin', `navigationpos` = '1' WHERE `pluginclassname`='de_studip_core_RoleManagementPlugins';");
     	DBManager::get()->exec("UPDATE `plugins_activated` SET `pluginid`='2' WHERE `pluginid`='3'");
         DBManager::get()->exec("DELETE FROM `roles_plugins` WHERE `pluginid`='3'");
 	}
