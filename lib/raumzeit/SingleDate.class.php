@@ -103,9 +103,13 @@ class SingleDate {
 				}
 
 				$after = $this->toString();
-				// logging >>>>>>
-				log_event("SINGLEDATE_CHANGE_TIME", $this->range_id, $before, $before.' -> '.$after);
-				// logging <<<<<<
+                // logging 
+				if ($before) {
+				    log_event("SINGLEDATE_CHANGE_TIME", $this->range_id, $before, $before.' -> '.$after);
+				}
+				else {
+				    log_event("SEM_ADD_SINGLEDATE", $this->range_id, $after);
+				}
 				return TRUE;
 			}
 			return FALSE;
@@ -320,7 +324,11 @@ class SingleDate {
 	}
 
 	function toString() {
-		return getWeekDay(date('w', $this->date)).'., '.date('d.m.Y, H:i', $this->date).' - '.date('H:i', $this->end_time);
+		if (!$this->date) {
+		    return null;
+		} else {
+		    return getWeekDay(date('w', $this->date)).'., '.date('d.m.Y, H:i', $this->date).' - '.date('H:i', $this->end_time);
+		}
 	}
 
 	function bookRoom($roomID) {
