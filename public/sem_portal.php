@@ -66,13 +66,13 @@ $sess->register("sem_portal");
 //Standard herstellen
 
 
-if ($view)
-	$sem_portal["bereich"] = $view;
+if ($_REQUEST['view'])
+	$sem_portal["bereich"] = $_REQUEST['view'];
 
 if (!$sem_portal["bereich"])
 	$sem_portal["bereich"] = "all";
 
-$view = $sem_portal['bereich'];
+$_REQUEST['view'] = $sem_portal['bereich'];
 
 if ($choose_toplist)
 	$sem_portal["toplist"] = $choose_toplist;
@@ -290,7 +290,7 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 		)
 	);
 
-	$infobox[] = ($view !="all") ?
+	$infobox[] = ($sem_portal['bereich'] !="all") ?
 		 		array  ("kategorie"  => _("Information:"),
 						"eintrag" => array	(
 									array (	'icon' => "ausruf_small.gif",
@@ -326,7 +326,7 @@ if ($sem_browse_obj->show_result && count($sem_browse_data['search_result'])){
 		)
 	);
 
-	$infobox[] = ($view !="all") ? 
+	$infobox[] = ($sem_portal['bereich'] !="all") ? 
 		 		array  ("kategorie"  => _("Information:"),
 						"eintrag" => array	(	
 									array (	"icon" => "ausruf_small.gif",
