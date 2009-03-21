@@ -22,11 +22,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 $Id$
 */
-if (isset($_REQUEST['username'])) $username = $_REQUEST['username'];
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Default_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-$auth->login_if($again && ($auth->auth["uid"] == "nobody"));
+$auth->login_if($_REQUEST['again'] && ($auth->auth["uid"] == "nobody"));
 $perm->check("user");
+
+
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
@@ -52,7 +53,6 @@ require_once('lib/user_visible.inc.php');
 require_once('lib/classes/StudipLitList.class.php');
 require_once('lib/classes/Avatar.class.php');
 
-
 function prettyViewPermString ($viewPerms) {
 	switch ($viewPerms) {
 		case 'all'   : return 'alle';
@@ -76,6 +76,20 @@ function isDataFieldArrayEmpty ($array) {
 }
 
 
+unregister_globals();
+
+$username = $auth->auth["uname"];
+
+if (isset($_REQUEST['username']) && $_REQUEST['username'] !== '') {
+	$username = $_REQUEST['username'];
+}
+
+// link param from lib/showNews.inc.php
+if ($_GET['rssusername'] && $_GET['rssusername'] !== '') {
+	$username = $_GET['rssusername'];
+}
+
+
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
 	if ($_REQUEST['kill_chat']){
@@ -86,6 +100,7 @@ if ($GLOBALS['CHAT_ENABLE']){
 if ($GLOBALS['VOTE_ENABLE']) {
 	include_once ("lib/vote/vote_show.inc.php");
 }
+
 if (get_config('NEWS_RSS_EXPORT_ENABLE')){
 	$news_author_id = StudipNews::GetRssIdFromUserId(get_userid($_REQUEST['username']));
 	if($news_author_id){
@@ -95,9 +110,6 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE')){
 	}
 }
 
-if ($rssusername) $username = $rssusername;
-//Wenn kein Username uebergeben wurde, wird der eigene genommen:
-if (!isset($username) || $username == "") $username = $auth->auth["uname"];
 
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
@@ -106,14 +118,15 @@ $semester = new SemesterData;
 
 $sess->register("about_data");
 $msging = new messaging;
-$msg = "";
 
 //Buddie hinzufuegen
-if ($cmd=="add_user")
-	$msging->add_buddy ($add_uname, 0);
+if ($_GET['cmd'] == "add_user") {
+	$msging->add_buddy ($_GET['add_uname'], 0);
+}
 
 
 //Auf und Zuklappen Termine
+# TODO (mlunzena) Woher stammen $dopen und $dclose?
 if ($dopen)
 	$about_data["dopen"]=$dopen;
 
@@ -123,13 +136,16 @@ if ($dclose)
 //Auf und Zuklappen News
 process_news_commands($about_data);
 
+# TODO (mlunzena) Woher stammt $sms_msg?
+$msg = "";
 if ($sms_msg) {
 	$msg = $sms_msg;
 	$sms_msg = '';
 	$sess->unregister('sms_msg');
 }
 
-//3 zeilen wegen username statt id zum aufruf... in $user_id steht jetzt die user_id (sic)
+// 3 zeilen wegen username statt id zum aufruf...
+// in $user_id steht jetzt die user_id (sic)
 $db->query("SELECT * FROM auth_user_md5  WHERE username ='$username'");
 $db->next_record();
 
@@ -180,7 +196,7 @@ if ($auth->auth["uid"]!=$user_id) {
 }
 
 if ($auth->auth["uid"]==$user_id)
-	$homepage_cache_own = time();
+	$GLOBALS['homepage_cache_own'] = time();
 
 //Wenn er noch nicht in user_info eingetragen ist, kommt er ohne Werte rein
 $db->query("SELECT user_id FROM user_info WHERE user_id ='$user_id'");
@@ -190,7 +206,12 @@ if ($db->num_rows()==0) {
 
 //Bin ich ein Inst_admin, und ist der user in meinem Inst Tutor oder Dozent?
 $admin_darf = FALSE;
-$db->query("SELECT b.inst_perms FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.user_id = '$user_id') AND (b.inst_perms = 'autor' OR b.inst_perms = 'tutor' OR b.inst_perms = 'dozent') AND (a.user_id = '$user->id') AND (a.inst_perms = 'admin')");
+$db->query("SELECT b.inst_perms FROM user_inst AS a ".
+           "LEFT JOIN user_inst AS b USING (Institut_id) ".
+           "WHERE (b.user_id = '$user_id') AND ".
+           "(b.inst_perms = 'autor' OR b.inst_perms = 'tutor' OR ".
+           "b.inst_perms = 'dozent') AND (a.user_id = '$user->id') AND ".
+           "(a.inst_perms = 'admin')");
 if ($db->num_rows())
 	$admin_darf = TRUE;
 if ($perm->is_fak_admin()){
@@ -230,7 +251,7 @@ foreach (DataFieldEntry::getDataFieldEntries($user_id) as $entry) {
 
 $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
              || $perm->have_perm("root")
-             || $admin_darf == TRUE;
+             || $admin_darf;
 ?>
 
 
@@ -452,7 +473,7 @@ $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
 					echo '<br/>';
 				}
 
-				if (($user_id == $user->id) && $has_denoted_fields) {
+				if (($user_id == $user->id) && $GLOBALS['has_denoted_fields']) {
 					echo '<br/>';
 					echo '<font size="-1">';
 					echo ' * Diese Felder sind nur für Sie und AdministratorInnen sichtbar.<br/>';
@@ -489,7 +510,7 @@ $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
 <?
 
 // News zur person anzeigen!!!
-($perm->have_perm("autor") AND $auth->auth["uid"]==$user_id) ? $show_admin=TRUE : $show_admin=FALSE;
+$show_admin = $perm->have_perm("autor") && $auth->auth["uid"] == $user_id;
 if (show_news($user_id, $show_admin, 0, $about_data["nopen"], "100%", 0, $about_data))
 	echo "<br/>";
 
@@ -498,7 +519,7 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 	$temp_user_perm = get_global_perm($user_id);
 	if ($temp_user_perm != "root" && $temp_user_perm != "admin") {
 		$start_zeit = time();
-		($perm->have_perm("autor") AND $auth->auth["uid"] == $user_id) ? $show_admin = TRUE : $show_admin = FALSE;
+		$show_admin = $perm->have_perm("autor") && $auth->auth["uid"] == $user_id;
 		if (show_personal_dates($user_id, $start_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
 			echo "<br/>";
 	}
@@ -520,8 +541,7 @@ if ($GLOBALS['VOTE_ENABLE']) {
 }
 
 // show Guestbook
-if (!$guestpage)
-	$guestpage = 0;
+$guestpage = isset($_REQUEST['guestpage']) ? $_REQUEST['guestpage'] : 0;
 $guest = new Guestbook($user_id,$admin_darf,$guestpage);
 
 if ($_REQUEST['guestbook'] && $perm->have_perm('autor'))

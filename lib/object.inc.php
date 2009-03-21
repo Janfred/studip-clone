@@ -2,9 +2,9 @@
 # Lifter002: TODO
 /**
 * object.inc.php
-* 
+*
 * functions for object operations (Stud.IP-ojects/modules) as get/set viewdate, rates, favourites and more
-* 
+*
 *
 * @author		Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <kater@data-quest.de>, data-quest GmbH <info@data-quest.de>
 * @version		$Id$
@@ -56,18 +56,18 @@ function object_set_visit($object_id, $type, $user_id = '') {
 	$now = time();
 	if (!$user_id)
 		$user_id = $user->id;
-	
+
 	$last_visit = object_get_visit($object_id, $type, FALSE, false , $user_id);
-	
+
 	if ($last_visit === false){
 		$last_visit = 0;
 	}
-	
+
 	$db=new DB_Seminar;
 	$query = sprintf ("REPLACE INTO object_user_visits SET object_id = '%s', user_id ='%s', type='%s', visitdate='%s', last_visitdate = '%s'",
 						$object_id, $user_id, $type, $now, $last_visit);
 	$db->query($query);
-	
+
 	return object_get_visit($object_id, $type, FALSE, false, $user_id, true);
 }
 
@@ -85,7 +85,7 @@ function object_set_visit($object_id, $type, $user_id = '') {
 function object_get_visit($object_id, $type, $mode = "last", $open_object_id = '', $user_id = '', $refresh_cache = false) {
 	global $user;
 	static $cache;
-	
+
 	if (!$user_id){
 		$user_id = $user->id;
 	}
@@ -95,14 +95,14 @@ function object_get_visit($object_id, $type, $mode = "last", $open_object_id = '
 	if ($refresh_cache){
 		$cache[$object_id][$type][$user_id] = null;
 	}
-	
+
 	if ($cache[$object_id][$type][$user_id]) {
 		if ($mode == "last")
 			return $cache[$object_id][$type][$user_id]["last_visitdate"];
 		else
 			return $cache[$object_id][$type][$user_id]["visitdate"];
 	}
-	
+
 	$db=new DB_Seminar;
 	$query = sprintf ("SELECT visitdate, last_visitdate FROM object_user_visits WHERE object_id = '%s' AND user_id = '%s' AND type = '%s'",
 			$object_id, $user_id, $type);
@@ -126,7 +126,7 @@ function object_get_visit($object_id, $type, $mode = "last", $open_object_id = '
 				return $db->f("visitdate");
 		} else
 			return FALSE;
-		
+
 	} else
 		return FALSE;
 }
@@ -152,20 +152,19 @@ function object_kill_visits($user_id, $object_ids = false){
 }
 
 function object_add_view ($object_id) {
-	global $object_cache;
 	$now = time();
 	$db=new DB_Seminar;
 	$db->query("SELECT * FROM object_views WHERE object_id = '$object_id'");
 	if ($db->next_record()) { // wurde schon mal angeschaut, also hochzählen
-		if (!in_array($object_id, $object_cache)) {
+		if (!in_array($object_id, $_SESSION['object_cache'])) {
 			$views = $db->f("views")+1;
-			$query = "UPDATE object_views SET chdate='$now', views='$views' WHERE object_id='$object_id'";		
-			$object_cache[] = $object_id;
+			$query = "UPDATE object_views SET chdate='$now', views='$views' WHERE object_id='$object_id'";
+			$_SESSION['object_cache'][] = $object_id;
 		}
 	} else { // wird zum ersten mal angesehen, also counter anlegen
 		$views = 1;
 		$query = "INSERT INTO object_views (object_id,views,chdate) values ('$object_id', '$views', '$now')";
-		$object_cache[] = $object_id;
+		$_SESSION['object_cache'][] = $object_id;
 	}
 	$db->query($query);
 	return $views;
@@ -209,8 +208,8 @@ function object_add_rate ($object_id, $rate) {
 	if (object_check_user($object_id, "rate") == FALSE) {
 		$now = time();
 		$db=new DB_Seminar;
-		$db->query("INSERT INTO object_user (object_id, user_id, flag, mkdate) values ('$object_id', '$user->id', 'rate', '$now')");	
-		$db->query("INSERT INTO object_rate (object_id, rate, mkdate) values ('$object_id', '$rate', '$now')");	
+		$db->query("INSERT INTO object_user (object_id, user_id, flag, mkdate) values ('$object_id', '$user->id', 'rate', '$now')");
+		$db->query("INSERT INTO object_rate (object_id, rate, mkdate) values ('$object_id', '$rate', '$now')");
 		$txt = _("Sie haben das Objekt mit \"$rate\"  bewertet.");
 	} else {
 		$txt = _("Sie haben dieses Objekt bereits bewertet.");
