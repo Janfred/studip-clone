@@ -1034,13 +1034,9 @@ foreach($my_schedule_settings['hidden'] as $id => $value) {
 	}
 	$first = False;
 
-	echo '<a href="'. URLHelper::getLink('?cmd=show&sem_id='. $id) .'" title="'. _("Diesen Termin wieder einblenden") .'">';
-	if($my_sems[$id]['desc']){
-		echo htmlReady($my_sems[$id]['desc']);
-	} else {
-		echo "Seminar";
-	}
-	echo date(" (D H:i)", $my_sems[$id]["start_time"]);
+	echo '<a href="'. URLHelper::getLink('?view=edit&cmd=show&sem_id='. $id) .'" title="'. _("Diesen Termin wieder einblenden") .'">';
+	echo htmlReady($my_sems[$id]['name']);
+	echo strftime(' (%A %H:%M)', $my_sems[$id]["start_time"]);
 	echo '</a>';
 }
 } // view == edit
