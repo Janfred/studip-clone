@@ -1401,4 +1401,29 @@ function TransformInternalLinks($str){
 		return $str;
 	}
 }
+
+/**
+* creates an modal dialog in order to ensure that the user is really aware about the action to perform
+*
+*@param     string $question        question of the modal dialog
+*@param     string $approvalCmd     a action that hast to be performed e.g. a link
+*@return    string $dialog          text which contains the dialog
+*/
+
+function createQuestion($question, $approvalCmd) {
+	$dialog  = '<div id="approvalMessageShadow" style="position:absolute; opacity: 0.5; text-align:center; top:51%; left: 26%; width: 50%; height: 21%;background-color: #000000;">&nbsp; &nbsp;</div>';
+	$dialog .= '<div id="approvalMessage" style="position:absolute; text-align:center; top:50%; left: 25%; width: 50%; height: 20%;border: 2px solid red; background-color: #FFFFCC;">';
+	$dialog .= '<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%"><tr><td valign="middle" align="center">'.$question ;
+	$dialog .= "<br/><br/><a href=\"$approvalCmd\">";
+	$dialog .= '<img '.makebutton('ja2', 'src').' border="0"></a>&nbsp;&nbsp;';
+	$dialog .= "<a href=\"".URLHelper::getLink()."\">";
+	$dialog .= '<img '.makebutton('nein', 'src').' border="0"></a>';
+	$dialog .= '</td></tr></table>';
+	$dialog .= '</div>';
+
+	echo $dialog;
+}
+
+
+
 ?>

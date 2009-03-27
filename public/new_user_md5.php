@@ -28,6 +28,7 @@ require_once('config.inc.php'); 		// Wir brauchen den Namen der Uni
 require_once('lib/visual.inc.php');
 require_once('lib/user_visible.inc.php');
 require_once('lib/classes/UserManagement.class.php');
+require_once('lib/visual.inc.php');
 
 $cssSw = new cssClassSwitcher;
 
@@ -193,7 +194,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 		case "u_kill_x":
 			
 			$message = sprintf(_('Möchten Sie wirklich den User <b>%s</b> löschen ?'), $username);
-			Seminar::createQuestion($message,URLHelper::getLink('',array("studipticket" => get_ticket(),'u_kill_id' => $u_id)));
+			createQuestion($message,URLHelper::getLink('',array("studipticket" => get_ticket(),'u_kill_id' => $u_id)));
             	        
 			break;
 			

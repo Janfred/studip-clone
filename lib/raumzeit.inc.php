@@ -1,6 +1,8 @@
 <?
 # Lifter002: TODO
 require_once('log_events.inc.php');
+require_once('visual.inc.php');
+
 define('DO_NOT_APPEND_MESSAGES', false);
 /*
  * Command handlers
@@ -44,7 +46,7 @@ function raumzeit_delete_singledate() {
 
 	// do we have warnings we need approval for?
 	if (!$_REQUEST['approveDelete'] && sizeof($warning) > 0) {
-			$sem->createQuestion( implode('<br/>', $warning) . '<br/>'. _("Wollen Sie diesen Termin wirklich löschen?"), $GLOBALS['PHP_SELF']."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
+			createQuestion( implode('<br/>', $warning) . '<br/>'. _("Wollen Sie diesen Termin wirklich löschen?"), $GLOBALS['PHP_SELF']."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
 	} 
 	
 	// no approval needed or already approved
@@ -118,7 +120,7 @@ function raumzeit_checkboxAction() {
 		case 'deleteAll':
 			if ($_REQUEST['cycle_id']) {
 				if ($_REQUEST['approveDeleteAll'] != TRUE) {	// security-question
-					$sem->createQuestion(_("Sie haben ausgewählt, alle Termine eines regelmäßigen Eintrages zu löschen. Dies hat zur Folge, dass der regelmäßige Termin ebenfalls gelöscht wird.").'<br/>'.sprintf(_("Sind Sie sicher, dass Sie den regelmäßigen Eintrag \"%s\" löschen möchten?"), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'</b>'), $GLOBALS['PHP_SELF']."?cmd=checkboxAction&checkboxAction=deleteAll&cycle_id={$_REQUEST['cycle_id']}&approveDeleteAll=TRUE");
+					createQuestion(_("Sie haben ausgewählt, alle Termine eines regelmäßigen Eintrages zu löschen. Dies hat zur Folge, dass der regelmäßige Termin ebenfalls gelöscht wird.").'<br/>'.sprintf(_("Sind Sie sicher, dass Sie den regelmäßigen Eintrag \"%s\" löschen möchten?"), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'</b>'), $GLOBALS['PHP_SELF']."?cmd=checkboxAction&checkboxAction=deleteAll&cycle_id={$_REQUEST['cycle_id']}&approveDeleteAll=TRUE");
 				} else {											// deletion approved, so we do the job
 					$msg = sprintf(_("Der regelmäßige Termin \"%s\" wurde gelöscht."), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'<b/>');
 					$sem->createMessage($msg);	// create a message

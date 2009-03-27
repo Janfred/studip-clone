@@ -45,6 +45,7 @@ require_once ('lib/raumzeit/SingleDate.class.php');
 require_once ('lib/classes/SemesterData.class.php');
 require_once ('lib/log_events.inc.php');
 require_once ($GLOBALS['RELATIVE_PATH_RESOURCES'].'/lib/ResourceObject.class.php');
+require_once ('lib/visual.inc.php');
 
 class Seminar {
 
@@ -949,7 +950,7 @@ class Seminar {
 		if (($new_start < $old_start) || ($new_end > $old_end) || ($data['day'] != $this->metadate->cycles[$data['cycle_id']]->day) ) {
 			if (!$data['really_change']) {
 				$link = 'raumzeit.php?editCycle_x=1&editCycle_y=1&cycle_id='.$data['cycle_id'].'&start_stunde='.$data['start_stunde'].'&start_minute='.$data['start_minute'].'&end_stunde='.$data['end_stunde'].'&end_minute='.$data['end_minute'].'&day='.$data['day'].'&really_change=true';
-				$this->createQuestion(sprintf(_('Wenn Sie die regelmäßige Zeit auf %s ändern, verlieren Sie die Raumbuchungen für alle in der Zukunft liegenden Termine!<BR/>Sind Sie sicher, dass die regelmäßige Zeit ändern möchten?'), '<B>'.getWeekday($data['day'], FALSE).', '.$data['start_stunde'].':'.$data['start_minute'].' - '.$data['end_stunde'].':'.$data['end_minute'].'</B>'),$link);
+				createQuestion(sprintf(_('Wenn Sie die regelmäßige Zeit auf %s ändern, verlieren Sie die Raumbuchungen für alle in der Zukunft liegenden Termine!<BR/>Sind Sie sicher, dass die regelmäßige Zeit ändern möchten?'), '<B>'.getWeekday($data['day'], FALSE).', '.$data['start_stunde'].':'.$data['start_minute'].' - '.$data['end_stunde'].':'.$data['end_minute'].'</B>'),$link);
 			} else {
 				$do_changes = true;
 			}
@@ -1226,20 +1227,6 @@ class Seminar {
 	    $raumzeitFilter = $filterSemester['beginn'];
 			$this->applyTimeFilter($filterSemester['beginn'], $filterSemester['ende']);
 		}
-	}
-
-	function createQuestion($question, $approvalCmd) {
-		$msg  = '<div id="approvalMessageShadow" style="position:absolute; opacity: 0.5; text-align:center; top:51%; left: 26%; width: 50%; height: 21%;background-color: #000000;">&nbsp; &nbsp;</div>';
-		$msg .= '<div id="approvalMessage" style="position:absolute; text-align:center; top:50%; left: 25%; width: 50%; height: 20%;border: 2px solid red; background-color: #FFFFCC;">';
-		$msg .= '<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%"><tr><td valign="middle" align="center">'.$question;
-		$msg .= "<br/><br/><a href=\"$approvalCmd\">";
-		$msg .= '<img '.makebutton('ja2', 'src').' border="0"></a>&nbsp;&nbsp;';
-		$msg .= "<a href=\"{$GLOBALS['PHP_SELF']}\">";
-		$msg .= '<img '.makebutton('nein', 'src').' border="0"></a>';
-		$msg .= '</td></tr></table>';
-		$msg .= '</div>';
-
-		echo $msg;
 	}
 
 	function registerCommand($command, $function) {
