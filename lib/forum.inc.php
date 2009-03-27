@@ -1162,7 +1162,7 @@ function printposting ($forumposting) {
   		if ($forum["view"] != "flatfolder")
   			$forumhead[] =	"<a href=\"".URLHelper::getLink("?open=".$forumposting["id"]
 					."&folderopen=".$forumposting["rootid"]
-					."&openall=TRUE&view=tree"
+					."&view=tree"
 					."#anker")."\" class=\"printhead\">".htmlReady(mila($forumposting["rootname"],20))
 					."</a>"
 					."&nbsp; ";
