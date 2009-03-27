@@ -53,6 +53,7 @@ function studip_default_exception_handler($exception) {
 	                                          compact('exception'));
 	exit;
 }
+require_once 'lib/classes/URLHelper.php';
 set_exception_handler('studip_default_exception_handler');
 
 // set default pdo connection
@@ -72,7 +73,6 @@ require_once('lib/classes/Config.class.php');
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/classes/StudipNews.class.php');
 require_once('lib/classes/caching.php');
-require_once 'lib/classes/URLHelper.php';
 require_once 'lib/classes/SessionDecoder.class.php';
 
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
