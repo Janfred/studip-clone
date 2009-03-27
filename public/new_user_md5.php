@@ -63,18 +63,6 @@ if (check_ticket($_REQUEST['studipticket'])){
 			if (!$title_rear)
 				$title_rear = $title_rear_chooser;
 
-			
-			//PS: Start, expirationdate erstellen...
-			if($expiration_date != ''){
-				$a = explode(".",stripslashes(trim($expiration_date)));
-				if(!($timestamp = @mktime(0,0,0,$a[1],$a[0],$a[2]))){
-					$UserManagement->msg .= "error§Das Ablaufdatum wurde in einem falschen Format angegeben§";
-					break;
-				}
-			}else
-				$timestamp = 0;
-			//PS: End
-			
 			$newuser = array(	'auth_user_md5.username' => stripslashes(trim($username)),
 												'auth_user_md5.Vorname' => stripslashes(trim($Vorname)),
 												'auth_user_md5.Nachname' => stripslashes(trim($Nachname)),
@@ -85,7 +73,6 @@ if (check_ticket($_REQUEST['studipticket'])){
 												'user_info.title_front' => stripslashes(trim($title_front)),
 												'user_info.title_rear' => stripslashes(trim($title_rear)),
 												'user_info.geschlecht' => stripslashes(trim($geschlecht)),
-												'auth_user_md5.expiration' => $timestamp
 											);
 
 			if($UserManagement->createNewUser($newuser)){
@@ -127,21 +114,6 @@ if (check_ticket($_REQUEST['studipticket'])){
 				$newuser['auth_user_md5.Email'] = stripslashes(trim($Email));
 			if (isset($perms))
 				$newuser['auth_user_md5.perms'] = implode($perms,",");
-			if (isset($validation_key))
-				$newuser['auth_user_md5.validation_key'] = stripslashes(trim($validation_key));
-			//PS: Start, expirationdate erstellen
-			if (isset($expiration_date) && $expiration_date != ''){
-				$a = explode(".",stripslashes(trim($expiration_date)));
-				if($timestamp = @mktime(0,0,0,$a[1],$a[0],$a[2]))
-					$newuser['auth_user_md5.expiration'] = $timestamp;
-				else{
-					$UserManagement->msg .= "error§Das Ablaufdatum wurde in einem falschen Format angegeben§";
-					break;
-				}
-			}
-			if($expiration_del == "1")
-				$newuser['auth_user_md5.expiration'] = 0;
-			//PS: End
 
 			$newuser['auth_user_md5.locked']     = (isset($locked) ? $locked : 0);
 			$newuser['auth_user_md5.lock_comment']    = (isset($lock_comment) ? stripslashes(trim($lock_comment)) : "");
@@ -358,12 +330,6 @@ if (isset($_GET['details']) || $showform ) {
 					<td colspan="2"><b>&nbsp;<?=_("E-Mail:")?></b></td>
 					<td>&nbsp;<input type="text" name="Email" size=48 maxlength=63 value="<?=htmlReady(remove_magic_quotes($_POST['Email']))?>">&nbsp;</td>
 				</tr>
-				<!-- PS: Start	-->
-				<tr>
-					<td colspan="2"><b>&nbsp;<?=_("Ablaufdatum:")?></b></td>
-					<td>&nbsp;<input type="text" name="expiration_date" size=20 maxlength=63 value=""> (TT.MM.JJJJ z.B. 31.01.2009)</td>
-				</tr>
-				<!-- PS: End -->
 				<tr>
 				<td colspan="2"><b>&nbsp;<?=_("Einrichtung:")?></b></td>
 					<td>&nbsp;<select name="select_inst_id">
@@ -592,36 +558,7 @@ if (isset($_GET['details']) || $showform ) {
 						</select>
 					</td>
 				</tr>
-				<? //PS: Start  ?>
-				<tr>
-					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Validation_key:")?></b></td>
-					<td class="steel1">
-					<?
-					if (StudipAuthAbstract::CheckField("auth_user_md5.validation_key", $db->f('auth_plugin'))) {
-						echo htmlReady($db->f("validation_key"));
-					} else {
-					?><input type="text" name="validation_key" size=48 maxlength=63 value="<?=htmlReady($db->f("validation_key"))?>">
-					<?
-					}
-					?>
-					</td>
-				</tr>
-				<tr>
-					<td class="steel1"><b>&nbsp;<?=_("Ablaufdatum:")?></b></td>
-					<td class="steel1"><input type="checkbox" name="expiration_del" value="1" />löschen</td>
-					<td class="steel1">
-					<?
-					$expiration = ($db->f("expiration") > 0)?date("d.m.Y",$db->f("expiration")):'';
-					if (StudipAuthAbstract::CheckField("auth_user_md5.validation_key", $db->f('auth_plugin'))) {
-						echo $expiration;
-					} else {
-					?><input type="text" name="expiration_date" size=20 maxlength=63 value="<?=$expiration?>"> (TT.MM.JJJJ z.B. 31.01.2009)
-					<?
-					}
-					?>
-					</td>
-				</tr>
-				<? //PS: End  ?>
+
 				<?
 				$admin_ok = false;
 				if ($perm->is_fak_admin() && $db->f('perms') == 'admin'){

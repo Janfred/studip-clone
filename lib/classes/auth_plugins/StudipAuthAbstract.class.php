@@ -191,15 +191,13 @@ class StudipAuthAbstract {
 	function CheckAuthentication($username,$password,$jscript = false){
 
 		$db = new DB_Seminar();
-		/* PS: Dieser Check wird weiter nach hinten versetzt (Datenschutzt). s. Z. 221
-        $db->query(sprintf("SELECT * FROM auth_user_md5 WHERE username='%s'",mysql_escape_string($username)));
-        if ($db->next_record()) {
-                if ($db->f("locked")=="1") {
-                        $error .= _("Dieser Benutzer ist gesperrt! Wenden Sie sich bitte an die Administration.")."<BR>";
-                        return array('uid' => $uid,'error' => $error);
-                }
-        }
-		*/
+		$db->query(sprintf("SELECT * FROM auth_user_md5 WHERE username='%s'",mysql_escape_string($username)));
+		if ($db->next_record()) {
+				if ($db->f("locked")=="1") {
+						$error .= _("Dieser Benutzer ist gesperrt! Wenden Sie sich bitte an die Administration.")."<BR>";
+						return array('uid' => $uid,'error' => $error);
+				}
+		}
 
 		$plugins =& StudipAuthAbstract::GetInstance();
 		$error = false;
@@ -210,25 +208,6 @@ class StudipAuthAbstract {
 				continue;
 			}
 			if ($uid = $object->authenticateUser($username,$password,$jscript)){
-				$db->query(sprintf("SELECT validation_key,expiration,locked FROM auth_user_md5 WHERE username='%s'", $username));
-				$db->next_record();
-				$key = $db->f('validation_key');
-				$exp_d = $db->f('expiration');
-				$locked = $db->f('locked');
-				if($key != '') {
-					$_REQUEST['uid'] = $uid;
-					$_SESSION['semi_logged_in'] = True;
-					include('public/activate_email.php');
-					die();
-				//PS: Start - Check expirationdate, locked
-				}else if($exp_d > 0 && $exp_d < time()){
-					$error .= _("Dieses Benutzerkonto ist abgelaufen.<br> Wenden Sie sich bitte an die Administration.")."<BR>";
-					return array('uid' => false,'error' => $error);
-				}else if($locked != "0"){
-					$error .= _("Dieser Benutzer ist gesperrt!<br> Wenden Sie sich bitte an die Administration.")."<BR>";
-                    return array('uid' => false,'error' => $error);
-				}
-				//PS: End
 				return array('uid' => $uid,'error' => $error, 'is_new_user' => $object->is_new_user);
 			} else {
 				$error .= (($object->error_head) ? ("<b>" . $object->error_head . ":</b> ") : "") . $object->error_msg . "<br>";
