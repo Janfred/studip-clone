@@ -34,6 +34,7 @@
 // +---------------------------------------------------------------------------+
 
 require_once 'lib/classes/Avatar.class.php';
+require_once 'lib/classes/Modules.class.php';
 
 /**
  * deletes the edit-string from content
@@ -1841,6 +1842,7 @@ function forum_move_navi ($topic_id) {
 	$mutter = suche_kinder($topic_id);
 	$mutter = explode (";",$mutter);
 	$count = sizeof($mutter)-2;
+	$check_modules = new Modules;
 
 	// wohin darf ich schieben? Abfragen je nach Rechten
 
@@ -1886,9 +1888,11 @@ function forum_move_navi ($topic_id) {
 					<input type="image" name="SUBMIT" value="Verschieben" src="<?= $GLOBALS['ASSETS_URL'] ?>images/move.gif" border="0" <?=tooltip(_("dahin verschieben"))?>>&nbsp;
 					<select Name="sem_id" size="1">
 			<?		while ($db->next_record()) {
-						$sem_name=htmlReady(substr($db->f("Name"), 0, 50));
-						printf ("<option %s value=\"%s\">%s\n", $db->f("Seminar_id") == $SessSemName[1] ? "selected" : "", $db->f("Seminar_id"), $sem_name);
-					}
+							if ($check_modules->checkLocal('forum',$db->f("Seminar_id"),'sem')) {
+								$sem_name=htmlReady(substr($db->f("Name"), 0, 50));
+								printf ("<option %s value=\"%s\">%s\n", $db->f("Seminar_id") == $SessSemName[1] ? "selected" : "", $db->f("Seminar_id"), $sem_name);
+							}
+						}
 			?>	</select>
 					<input type="HIDDEN" name="target" value="Seminar">
 					<input type="HIDDEN" name="topic_id" value="<?echo $topic_id;?>">
@@ -1908,9 +1912,11 @@ function forum_move_navi ($topic_id) {
 					<input type=image name="SUBMIT" value="Verschieben" src="<?= $GLOBALS['ASSETS_URL'] ?>images/move.gif" border=0 <?=tooltip(_("dahin verschieben"))?>>&nbsp;
 			  	<select Name="inst_id" size="1">
 			<?		while ($db2->next_record()) {
-						$inst_name=htmlReady(substr($db2->f("Name"), 0, 50));
-						printf ("<option value=\"%s\">%s\n", $db2->f("Institut_id"), $inst_name);
-					}
+							if ($check_modules->checkLocal('forum',$db2->f("Institut_id"),'inst')) {
+								$inst_name=htmlReady(substr($db2->f("Name"), 0, 50));
+								printf ("<option value=\"%s\">%s\n", $db2->f("Institut_id"), $inst_name);
+							}
+						}
 			?>	</select>
 					<input type="HIDDEN" name="target" value="Institut">
 					<input type="HIDDEN" name="topic_id" value="<?echo $topic_id;?>">
