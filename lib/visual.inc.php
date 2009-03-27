@@ -964,10 +964,11 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 		}
 
 	} elseif ($mod == 'MAIL') {
+		$mailtolink=preg_replace("/&quot;/","",idna_link($params[1],true));
 		if ($params[0] != '')
-			$tbr = '<a href="mailto:'.idna_link($params[1], true). "\">$link_pic{$params[0]}</a>";
+			$tbr = '<a href="mailto:'.$mailtolink. "\">$link_pic{$params[0]}</a>";
 		else
-			$tbr = '<a href="mailto:'.idna_link($params[1], true)."\">$link_pic{$params[1]}</a>";
+			$tbr = '<a href="mailto:'.$mailtolink."\">$link_pic{$params[1]}</a>";
 	}
 	if ($wiki) $tbr = '<nowikilink>'.$tbr.'</nowikilink>';
 	return $tbr;
