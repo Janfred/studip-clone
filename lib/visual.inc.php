@@ -288,6 +288,8 @@ function quotes_decode ($description) {
 			else ++$curr_pos;
 			}
 		}
+	$description=preg_replace("/\[quote\007/","[quote",$description);
+	$description=preg_replace("/\[\/quote\007\]/","[/quote]",$description);
 	return $description;
 }
 
@@ -364,22 +366,31 @@ function format_help($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_
 function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show_comments="icon") {
 
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
-		$what = preg_replace("'\[nop\].+\[/nop\]'isU", '{_*~*%}', $what);
+		// replace protected text by very improbable character (ASCII 007 = BEL = ^G)
+		$what = preg_replace("'\[nop\].+\[/nop\]'isU", "\007", $what);
 		$what = str_replace("\n", '<br />', format_help($what, $trim, $extern, $wiki, $show_comments));
-		$what = explode('{_*~*%}', $what);
+		// explode nonprotected text on very improbable character 
+		$what = explode("\007", $what);
 		$i = 0; $all = '';
+		// treat all nop'd areas
 		foreach ($what as $w) {
 			if ($matches[1][$i] == '') {
 				$all .= $w;
 			} else {
+				// do nearly nothing within nop-areas
+				// but:
+				// - fix newlines
+				// - replace [quote] by [quote\007 and [/quote] by [/nopquote\007]
 				$a = preg_replace("/\n?\r\n?/", '<br />', htmlReady($matches[1][$i], $trim, FALSE));
+				$a = preg_replace("/\[quote/","[quote\007",$a);
+				$a = preg_replace("/\[\/quote\]/","[/quote\007]",$a);
 				$all .= $w . (($wiki == TRUE)? "<nowikilink>$a</nowikilink>" : $a);
 			}
 			$i++;
 		}
-		return $all;
+		return quotes_decode($all);
 	}
-	return str_replace("\n", '<br />', format_help($what, $trim, $extern, $wiki, $show_comments));
+	return quotes_decode(str_replace("\n", '<br />', format_help($what, $trim, $extern, $wiki, $show_comments)));
 }
 
 

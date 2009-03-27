@@ -191,10 +191,10 @@ if ($auth->auth["uid"] != "nobody"){
 	if ($cmd=="read" AND $msg_text){
 		if ($msg_autor_id == "____%system%____"){
 			echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1><b>"
-			. _("automatisch erzeugte Systemnachricht:") . " </b><hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
+			. _("automatisch erzeugte Systemnachricht:") . " </b><hr>".formatReady($msg_text)."</font></td></tr>";
 		} else {
 			echo"\n<tr><td class='blank' colspan='2' valign='middle'><font size=-1>"
-			. sprintf(_("Nachricht von: <b>%s</b>"),get_fullname_from_uname($msg_snd,'full',true)) ."<hr>".quotes_decode(formatReady($msg_text))."</font></td></tr>";
+			. sprintf(_("Nachricht von: <b>%s</b>"),get_fullname_from_uname($msg_snd,'full',true)) ."<hr>".formatReady($msg_text)."</font></td></tr>";
 			echo"\n<tr><td class='blank' colspan='2' valign='middle' align='center'><font size=-1>"
 			. "<a href='$PHP_SELF?cmd=write&msg_id=$msg_id'><img " . makeButton("antworten","src") . tooltip(_("Diese Nachricht direkt beantworten")) . " border=0></a>"
 			. "&nbsp;<a href='$PHP_SELF?cmd=write&msg_id=$msg_id&quote=1'><img " . makeButton("zitieren","src") . tooltip(_("Diese Nachricht direkt beantworten")) . " border=0></a>"

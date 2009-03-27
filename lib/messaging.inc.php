@@ -384,7 +384,7 @@ class messaging {
 					setTempLanguage($rec_id[$x]);
 					$chatMsg = sprintf(_("Sie haben eine Nachricht von <b>%s</b> erhalten!"), htmlReady($snd_name));
 					restoreLanguage();
-					$chatMsg .= "<br></i>".quotes_decode(formatReady(stripslashes($message)))."<i>";
+					$chatMsg .= "<br></i>".formatReady(stripslashes($message))."<i>";
 					foreach($chatServer->chatDetail as $chatid => $wert) {
 						if ($wert['users'][$rec_id[$x]]) {
 							$chatServer->addMsg("system:".$rec_id[$x], $chatid, $chatMsg);

@@ -67,7 +67,7 @@ function commentbox($num, $authorname, $authoruname, $date, $dellink, $content) 
 	}
 	$out[].="</td></tr>";
 	$out[].="<tr style=\"background:#ffffcc;\">";
-	$out[].="<td colspan=2><font size=-1>".quotes_decode(formatReady($content))."<br>&nbsp;</font></td></tr>";
+	$out[].="<td colspan=2><font size=-1>".formatReady($content)."<br>&nbsp;</font></td></tr>";
 	$out[].="</table>";
 	return implode("\n",$out);
 }

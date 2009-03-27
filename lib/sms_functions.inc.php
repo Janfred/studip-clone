@@ -218,7 +218,7 @@ function print_snd_message($psm) {
 	$zusatz .= "</font>";
 
 	if ($open == "open") {
-		$content = quotes_decode(formatReady($psm['message']));
+		$content = formatReady($psm['message']);
 		if ($x >= 2) { // if more than one receiver add appendix
 			$content .= "<br><br>--<br>"._("gesendet an:")."<br>";
 			$query = "
@@ -341,7 +341,7 @@ function print_rec_message($prm) {
 	$titel = "<a name=".$prm['message_id']."><a href=\"$link\" class=\"tree\" >".htmlready($prm['message_subject'])."</a></a>";
 
 	if ($open == 'open'){
-		$content = quotes_decode(formatReady($prm['message']));
+		$content = formatReady($prm['message']);
 		if ($my_messaging_settings["confirm_reading"] != 1 && $prm['message_reading_confirmation'] == 1) { // yeah i'm interested in readingconfirmations and the message has a readingrequested
 			if ($my_messaging_settings["confirm_reading"] == 3 && $prm['confirmed_read'] != 1) { // let me decided what to do
 				$content .= "<br>--<br>"._("Der Absender / Die Absenderin hat eine Lesebestätigung angefordert.");
@@ -707,13 +707,13 @@ function show_previewform() {
 	$tmp = "<input type=\"image\" name=\"refresh_message\" src=\"".$GLOBALS['ASSETS_URL']."images/rewind3.gif\" border=\"0\" ".tooltip(_("aktualisiert die Vorschau der aktuellen Nachricht.")).">&nbsp;"._("Vorschau erneuern.")."<br><br>";
 	$tmp .= "<b>"._("Betreff:")."</b><br>".htmlready(stripslashes($messagesubject));
 	$tmp .= "<br><br><b>"._("Nachricht:")."</b><br>";
-	$tmp .= quotes_decode(formatReady(stripslashes($message)));
+	$tmp .= formatReady(stripslashes($message));
 	if ($sms_data["sig"] == "1") {
-		$tmp .= "<br><br>--<br>";
+		$tmp .= "<br><br>-- <br>";
 		if ($signature) {
-			$tmp .= quotes_decode(formatReady(stripslashes($signature)));
+			$tmp .= formatReady(stripslashes($signature));
 		} else {
-			$tmp .= quotes_decode(formatReady(stripslashes($my_messaging_settings["sms_sig"])));
+			$tmp .= formatReady(stripslashes($my_messaging_settings["sms_sig"]));
 		}
 	}
 

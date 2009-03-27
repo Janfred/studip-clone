@@ -33,7 +33,7 @@ function show_posts_guestbook($user_id,$range_id) {
 		$output .= "<tr><td class=\"steel2\"><b><font size=\"-1\"><a href=\"$PHP_SELF?username=".get_username($db->f("user_id"))."\">";
 		$output .= sprintf(_("%s hat am %s geschrieben:"), htmlReady(get_fullname($db->f("user_id")),'full',true)."</a>", date("d.m.Y - H:i", $db->f("mkdate")));
 		$output .= "</font></b></td></tr>"
-		. "<tr><td class=\"steelgraulight\"><font size=\"-1\">".quotes_decode(formatready($db->f("content")))."</font><p align=\"right\">";
+		. "<tr><td class=\"steelgraulight\"><font size=\"-1\">".formatready($db->f("content"))."</font><p align=\"right\">";
 		$output .= "<a href=\"".$PHP_SELF."?deletepost=".$db->f("post_id")."&ticket=".get_ticket()."\">" . makeButton("loeschen", "img") . "</a>";
 		$output .= "</p></td></tr>"
 		. "<tr><td class=\"steel1\">&nbsp;</td></tr>";
