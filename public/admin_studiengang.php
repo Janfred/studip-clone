@@ -144,18 +144,20 @@ while ( is_array($_POST)
 	    $query = "DELETE FROM user_studiengang WHERE studiengang_id='$i_id'";
 	    $db->query($query);
 	    if ($db->affected_rows() == 0) {
-		my_msg("<b>" . _("Keine Nutzenden betroffen") . "</b>");
+				my_msg("<b>" . _("Keine Nutzenden betroffen") . "</b>");
 	    } else {
-		my_msg(sprintf("<b>" . _("%s Zuordnungen von Nutzenden zu Studieng&auml;ngen gel&ouml;scht.") . "</b>", $db->affected_rows()));
+				my_msg(sprintf("<b>" . _("%s Zuordnungen von Nutzenden zu Studieng&auml;ngen gel&ouml;scht.") . "</b>", $db->affected_rows()));
 	    }
     } else {
-	    $query = "UPDATE user_studiengang SET studiengang_id = '$move_user_stdg_id' WHERE studiengang_id='$i_id'";
+	    $query = "UPDATE IGNORE user_studiengang SET studiengang_id = '$move_user_stdg_id' WHERE studiengang_id='$i_id'";
 	    $db->query($query);
 	    if ($db->affected_rows() == 0) {
-		my_msg("<b>" . _("Keine Nutzenden betroffen") . "</b>");
+				my_msg("<b>" . _("Keine Nutzenden betroffen") . "</b>");
 	    } else {
-		my_msg(sprintf("<b>" . _("%s Zuordnungen von Nutzenden zu Studieng&auml;ngen ge&auml;ndert.") . "</b>", $db->affected_rows()));
+				my_msg(sprintf("<b>" . _("%s Zuordnungen von Nutzenden zu Studieng&auml;ngen ge&auml;ndert.") . "</b>", $db->affected_rows()));
 	    }
+			$query = "DELETE FROM user_studiengang WHERE studiengang_id='$i_id'"; 
+	    $db->query($query);
     }
 	    
     unset($i_view);  // gibt keine Detailansicht
