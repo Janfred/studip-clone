@@ -701,7 +701,11 @@ print_infobox ($infobox,"contract.jpg");
 				}
 				echo "<br/>";
 			} else {
-				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgte in der Reihenfolge der Anmeldung.")."</font>");
+				if ($db2->f("admission_prelim") == 1) {
+					printf ("<font size=-1>" . _("Die vorläufige Auswahl der Teilnehmenden erfolgte in der Reihenfolge der Anmeldung.")."</font>");
+				} else {
+					printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgte in der Reihenfolge der Anmeldung.")."</font>");
+				}
 				if($db2->f("admission_enable_quota")) printf("<font size=-1>" .  _("Die Kontingentierung wurde am %s aufgehoben.") . "</font>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 				if (!$db2->f('admission_disable_waitlist') && ($db2->f("admission_endtime_sem") > time() || $db2->f("admission_endtime_sem") == -1)) {
 					echo "<font size=-1>" . _("Weitere Pl&auml;tze k&ouml;nnen noch &uuml;ber Wartelisten vergeben werden.") . "</font>";
@@ -712,7 +716,11 @@ print_infobox ($infobox,"contract.jpg");
 			if ($db2->f("admission_type") == 1)
 				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt nach dem Losverfahren am %s Uhr.") . "</font><br/>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
 			else {
-				printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung."));
+				if ($db2->f("admission_prelim") == 1) {
+					printf ("<font size=-1>" . _("Die vorläufige Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung."));
+				} else {
+					printf ("<font size=-1>" . _("Die Auswahl der Teilnehmenden erfolgt in der Reihenfolge der Anmeldung."));
+				}
 				if ($db2->f("admission_enable_quota")) {
 					if ($db2->f("admission_endtime") < time()) {
 						printf ( _("Die Kontingentierung wurde am %s aufgehoben.") . "<br/>", date("d.m.Y, G:i", $db2->f("admission_endtime")));
