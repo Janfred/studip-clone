@@ -184,7 +184,7 @@ function table_head ($structure, $css_switcher) {
 function table_body ($db, $range_id, $structure, $css_switcher) {
 	global $datafields_list, $group_list, $admin_view;
 
-	$cells = sizeof($GLOBALS['dview']);
+	$cells = sizeof($structure);
 	
 	$css_switcher->enableHover();
 
@@ -248,6 +248,14 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 				printf("<td%salign=\"left\"><font size=\"-1\">%s</font></td>\n",
 					$css_switcher->getFullClass(), $value);
 			}
+		}
+
+		if (sizeof($GLOBALS['dview']) == 0) {
+			if ($structure['raum']) echo '<td>'. $db->f('raum') .'</td>';
+			if ($structure['sprechzeiten']) echo '<td>'. $db->f('sprechzeiten') .'</td>';
+			if ($structure['telefon']) echo '<td>'. $db->f('telefon') .'</td>';
+			if ($structure['email']) echo '<td>'. $db->f('Email') .'</td>';
+			if ($structure['homepage']) echo '<td>'. $db->f('Homepage') .'</td>';
 		}
 
 		if ($structure["nachricht"]) {
@@ -674,12 +682,25 @@ if ($extend == 'yes') {
     else $dview = array();
 }
 
-foreach ($datafields_list as $entry) {
-	if (in_array($entry->getId(), $dview) === TRUE) {
-		$struct[$entry->getId()] = array (
-			'name' => $entry->getName(),
-			'width' => '10%'
-		);
+if (sizeof($dview) == 0) {
+	$struct = array (
+		"raum" => array("name" => _("Raum"), "width" => "10%"),
+		"sprechzeiten" => array("name" => _("Sprechzeiten"), "width" => "10%"),
+		"telefon" => array("name" => _("Telefon"), "width" => "10%"),
+		"email" => array("name" => _("E-Mail"), "width" => "10%")
+	);
+
+	if ($extend == 'yes') {
+		$struct["homepage"] = array("name" => _("Homepage"), "width" => "10%");
+	}
+} else {
+	foreach ($datafields_list as $entry) {
+		if (in_array($entry->getId(), $dview) === TRUE) {
+			$struct[$entry->getId()] = array (
+				'name' => $entry->getName(),
+				'width' => '10%'
+			);
+		}
 	}
 }
 
