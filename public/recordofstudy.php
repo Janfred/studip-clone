@@ -225,6 +225,8 @@ elseif($mode == 'create_pdf'){
 /*																			  *
 /* ************************************************************************* */
 $CURRENT_PAGE = _("Veranstaltungsübersicht erstellen");
+$HELP_KEYWORD="Basis.Allgemeines";
+
 ob_start();
 if ($mode == "new"){
 	printSelectSemester($infobox,$semestersAR);
@@ -368,7 +370,9 @@ function createInfoxboxArray($mode){
 						array	 (	"icon" => "ausruf_small.gif",
 								"text"  => _("Um eine Druckansicht Ihrer Veranstaltungen zu erstellen, wählen Sie bitte zunächst das entsprechende Semester aus und engen gegebenenfalls ihre Suchabfrage ein.")
 								),
-						)
+						array	 (	"icon" => "ausruf_small.gif",
+								"text" => _("Die Ausgabe wird in einem speziellen Format erzeugt, für das Sie den <a href='http://get.adobe.com/reader/' target='_new'>Acrobat Reader</a> mit Browser- und Formularunterstützung benötigen.")
+						))
 			),
 		);
 	}
@@ -379,6 +383,9 @@ function createInfoxboxArray($mode){
 							array (	"icon" => "ausruf_small.gif",
 									"text"  => _("Erstellen Sie ihre Veranstaltungsübersicht und bearbeiten Sie fehlende oder falsche Einträge.")
 									),
+						array	 (	"icon" => "ausruf_small.gif",
+								"text" => _("Die Ausgabe wird in einem speziellen Format erzeugt, für das Sie den <a href='http://get.adobe.com/reader/' target='_new'>Acrobat Reader</a> mit Browser- und Formularunterstützung benötigen.")
+						)
 									)
 			),
 			array  ("kategorie" => "Aktionen:",
@@ -400,7 +407,10 @@ function createInfoxboxArray($mode){
 							array (	"icon" => "icon-posting.gif",
 									"text"  => _("Über den/die Link(s) können Sie sich Ihre Veranstaltungsübersicht anzeigen lassen.")
 									),
-									)
+						array	 (	"icon" => "ausruf_small.gif",
+								"text" => _("Die Ausgabe wird in einem speziellen Format erzeugt, für das Sie den <a href='http://get.adobe.com/reader/' target='_new'>Acrobat Reader</a> mit Browser- und Formularunterstützung benötigen.")
+						)
+						)
 			)
 		);
 	};
