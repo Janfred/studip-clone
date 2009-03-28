@@ -282,19 +282,9 @@ class Modules {
 	}
 	
 	function isEnableable ($modul, $range_id, $range_type='') {
-		global $SEM_TYPE, $SEM_CLASS, $INST_MODULES;
 
 		if (!$range_type)
 			$range_type = get_object_type($range_id);
-		
-		if ($range_type == "sem") {
-			$query = sprintf ("SELECT status AS type FROM seminare WHERE Seminar_id ='%s'", $range_id);
-		} else {
-			$query = sprintf ("SELECT type FROM Institute WHERE Institut_id ='%s'", $range_id);
-		}
-		
-		$this->db->query($query);
-		$this->db->next_record();
 		
 		if ($range_type == "sem") {
 			if (($this->checkGlobal($modul)) && ($this->registered_modules[$modul]["sem"] == TRUE))

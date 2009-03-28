@@ -121,10 +121,10 @@ function show_news($range_id, $show_admin = FALSE, $limit = "", $open,
 	if (!count($news)) {
 		if ($show_admin) {
 			echo"\n<table  border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\" >";
-			echo"\n<tr><td class=\"topic\" colspan=\"2\" width=\"99%\"><img src=\"".$GLOBALS['ASSETS_URL']."images/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
+			echo"\n<tr><td class=\"topic\" colspan=\"2\"><img src=\"".$GLOBALS['ASSETS_URL']."images/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
 			echo"\n<td align = \"right\" class=\"topic\">";
 			echo "&nbsp;<a href=\"".URLHelper::getLink("admin_news.php?$admin_link&cmd=new_entry")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\"" . tooltip(_("News einstellen")) . "></a>&nbsp;";
-			echo"\n</td></tr>";
+			echo"</td></tr>";
 			echo "\n<tr><td class=\"steel1\" colspan=\"3\"><blockquote><br /><font size=\"-1\">" . _("Es sind keine aktuellen News vorhanden. Um neue News zu erstellen, klicken Sie auf die Doppelpfeile.") . "<br />&nbsp; </font></blockquote>";
 			echo "\n</td></tr></table>";
 			return TRUE;

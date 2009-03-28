@@ -3,14 +3,11 @@
 	<tr>
 		<td colspan="3" class="topic">
 			&nbsp;<b><?=$GLOBALS['UNI_NAME']?></b>
-			<img src="<?=$GLOBALS['ASSETS_URL']?>images/blank.gif" height="16" width="5" border="0">
 		</td>
 	</tr>
 	<tr>
 		<td class="blank" height="270" valign="top" colspan="3" style="background:url(<?=$GLOBALS['ASSETS_URL']?>images/startseite.jpg) no-repeat left top; background-color:#FFFFFF;">
-			<img src="<?=$GLOBALS['ASSETS_URL']?>images/blank.gif" height="30" width="5" border="0">
-			<br>
-			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
+			<table style="margin-left:70px; margin-top:40px;" cellspacing="2" cellpadding="0" border="0">
 				<tr>
 					<td width="270">
 					<a class="index" href="index.php?again=yes">
@@ -100,10 +97,7 @@
 	</tr>
 	<?}?>
 	<tr>
-		<td class="blank" align="left" valign="middle">
-		<img src="<?=$GLOBALS['ASSETS_URL']?>images/blank.gif" height="45" width="48" border="0">
-		</td>
-		<td class="blank" valign="middle" align="left">
+		<td class="blank" valign="middle" align="left" style="padding-left:76px">
 			<a href="http://www.studip.de">
 			<img src="<?=$GLOBALS['ASSETS_URL']?>images/logoklein.gif" border="0"  <?=tooltip(_("Zur Portalseite"))?> >
 			</a>
@@ -138,7 +132,7 @@
 					<td class="blank">&nbsp; &nbsp; </td>
 				</tr>
 				<tr>
-					<td height="30" class="blank" valign="middle">
+					<td height="30" class="blank" valign="middle" align="left">
 					<?foreach ($GLOBALS['INSTALLED_LANGUAGES'] as $temp_language_key => $temp_language) {?>
 						&nbsp;
 						<a href="index.php?set_language=<?=$temp_language_key?>">
