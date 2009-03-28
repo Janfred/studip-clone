@@ -204,7 +204,7 @@ class ExternModuleLecturedetails extends ExternModule {
 			}
 			
 			if ($visible[++$j] && $this->db->f("Beschreibung"))
-				$data["description"] = formatReady($this->db->f("Beschreibung"), TRUE, TRUE);
+				$data["description"] = htmlReady($this->db->f("Beschreibung"), TRUE, TRUE);
 			
 			if ($visible[++$j])
 				$data["location"] = getRoom($this->seminar_id, FALSE);
@@ -246,7 +246,7 @@ class ExternModuleLecturedetails extends ExternModule {
 			}
 			
 			if ($visible[++$j] && $this->db->f("Sonstiges"))
-				$data["misc"] = formatReady($this->db->f("Sonstiges"), TRUE, TRUE);
+				$data["misc"] = FixLinks(htmlReady($this->db->f("Sonstiges"), TRUE, TRUE));
 			
 			if ($visible[++$j] && $this->db->f("ects"))
 				$data["ects"] = htmlReady($this->db->f("ects"));
