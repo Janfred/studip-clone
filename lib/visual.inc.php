@@ -550,6 +550,7 @@ function _real_format($text) {
 					"'(\n|\A)(([-=]+ .+(\n|\Z))+)'e",    // Listen
                                         "'(\n|\A)((\\|.+(\n|\Z))+)'e",    // Tabellen
 					"'%%(.+?)%%'s",               // ML-kursiv
+					"'\[admin_msg\](.+?)\[/admin_msg\]'s",               // ML-kursiv (für Forum-Edits)
 					"'\*\*(.+?)\*\*'s",           // ML-fett
 					"'__(.+?)__'s",                     // ML-unterstrichen
 					"'##(.+?)##'s",                     // ML-diktengleich
@@ -577,6 +578,7 @@ function _real_format($text) {
 					"\n<h1 class=\"content\">\\2</h1>",
 					"preg_call_format_list('\\2')",
 					"preg_call_format_table('\\2')",
+					"<i>\\1</i>",
 					"<i>\\1</i>",
 					"<b>\\1</b>",
 					"<u>\\1</u>",
