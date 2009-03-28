@@ -10,7 +10,7 @@
 
   <form action="<?= $controller->url_for('domain_admin/new') ?>" method="POST">
 
-    <table style="border-collapse: collapse; margin-bottom: 1em; width: 80%;">
+    <table style="border-collapse: collapse; margin-bottom: 1em; width: 99%;">
       <tr>
         <th style="text-align: left; width: 40%;">
           <?= _('Name') ?>
@@ -19,7 +19,7 @@
           <?= _('ID') ?>
         </th>
         <th style="text-align: left; width: 15%;">
-          <?= _('Anzahl NutzerInnen') ?>
+          <?= _('NutzerInnen') ?>
         </th>
         <th style="text-align: left; width: 10%;">
           <?= _('Aktionen') ?>

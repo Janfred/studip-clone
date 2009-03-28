@@ -21,7 +21,7 @@ class DomainAdminController extends Trails_Controller
      */
     function before_filter (&$action, &$args)
     {
-        global $perm, $template_factory, $CURRENT_PAGE;
+        global $perm, $template_factory, $CURRENT_PAGE, $HELP_KEYWORD;
         global $_language_path, $_language;
 
         # open session
@@ -37,12 +37,14 @@ class DomainAdminController extends Trails_Controller
         $perm->check('root');
 
         # set page title and navigation
-        $layout = $template_factory->open('layouts/base_without_infobox');
+        $layout = $template_factory->open('layouts/base');
         $layout->set_attribute('tabs', 'links_admin');
         $layout->set_attribute('reiter_view', 'userdomains');
+        $layout->set_attribute('infobox', $this->infobox_content());
         $this->set_layout($layout);
 
         $CURRENT_PAGE = _('Nutzerdomänen');
+        $HELP_KEYWORD = "Admins.Nutzerdomaenen";
 
         # fetch user domain
         $this->domains = UserDomain::getUserDomains();
@@ -121,5 +123,24 @@ class DomainAdminController extends Trails_Controller
         $this->domains = UserDomain::getUserDomains();
         $this->render_action('show');
     }
+
+    function infobox_content()
+    {
+        $infobox_actions=array();
+        $infobox_infos=array();
+
+        $infobox_actions[] = array('icon' => 'add_sheet.gif',
+            'text' => '<a href="'.$this->url_for('domain_admin/new/').'">'._('Neue Nutzerdomäne anlegen').'</a>');
+
+        $infobox_infos[] = array('icon' => 'info.gif',
+            'text' => sprintf(_("In der Stud.IP-Hilfe finden Sie %sHinweise zur Verwendung von Nutzerdomänen%s."),"<a href='http://hilfe.studip.de/index.php/Admins/Nutzerdomaenen'>","</a>"));
+        
+        return array('picture' => 'browse.jpg',
+                     'content' => array(array('kategorie' => _("Nutzerdomänen verwalten"),
+                                              'eintrag' => $infobox_actions),
+                                        array('kategorie' => _("Informationen"),
+                                              'eintrag' => $infobox_infos)));
+    } 
+
 }
 ?>
