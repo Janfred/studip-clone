@@ -248,7 +248,6 @@ class EvalTemplateGUI {
 
      /* Freitext ----------------------------------------------------- */
 
-     if($myuserid == "0") {
     $td = new HTML ("td");
     $td->addAttr("class","steel1kante");
     $tr = new HTML ("tr");
@@ -305,7 +304,6 @@ class EvalTemplateGUI {
         $tr->addContent($td);
         $table->addContent($tr);
     }
-     }
      /* end: Freitext -------------------------------------- */
 
      $form->cont($table);
