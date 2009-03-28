@@ -1,6 +1,4 @@
 <?
-# Lifter002: TODO
-# Lifter005: TODO
 /**
 * Chat Functions
 *
@@ -135,26 +133,26 @@ function chat_get_name($chatid){
 
 function chat_show_info($chatid){
 	global $auth;
-	if ($GLOBALS['CHAT_ENABLE']){
-		$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
-		$sms = new messaging();
-		$chatter = $chatServer->isActiveChat($chatid);
-		$chatinv = $sms->check_chatinv($chatid);
-		$is_active = $chatServer->isActiveUser($auth->auth['uid'],$chatid);
-		$chatname = ($chatter) ? $chatServer->chatDetail[$chatid]['name'] : chat_get_name($chatid);
-		if (chat_get_entry_level($chatid) || $is_active || $chatinv){
-			chat_get_javascript();
-			//Ausgabe der Kopfzeile
-			echo "\n<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" >";
-			echo "\n<tr><td class=\"topic\" colspan=\"2\" width=\"100%\">";
-			echo "\n" . chat_get_chat_icon($chatter,$chatinv,$is_active);
-			echo "\n<b>&nbsp;" . _("Chatraum:") . "&nbsp;" . htmlReady($chatname) . "</b></td></tr>";
-			echo chat_get_content($chatid,$chatter,$chatinv,$chatServer->chatDetail[$chatid]['password'],$is_active,$chatServer->getUsers($chatid));
-			echo "\n</table>";
-			return true;
+		if ($GLOBALS['CHAT_ENABLE']){
+			$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+			$sms = new messaging();
+			$chatter = $chatServer->isActiveChat($chatid);
+			$chatinv = $sms->check_chatinv($chatid);
+			$is_active = $chatServer->isActiveUser($auth->auth['uid'],$chatid);
+			$chatname = ($chatter) ? $chatServer->chatDetail[$chatid]['name'] : chat_get_name($chatid);
+			if (chat_get_entry_level($chatid) || $is_active || $chatinv){
+				//Ausgabe der Kopfzeile
+				chat_get_javascript();
+				echo "\n<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" >";
+				echo "\n<tr><td class=\"topic\" colspan=\"2\" width=\"100%\">";
+				echo "\n" . chat_get_chat_icon($chatter,$chatinv,$is_active);
+				echo "\n<b>&nbsp;" . _("Chatraum:") . "&nbsp;" . htmlReady($chatname) . "</b></td></tr>";
+				echo chat_get_content($chatid,$chatter,$chatinv,$chatServer->chatDetail[$chatid]['password'],$is_active,$chatServer->getUsers($chatid));
+				echo "\n</table>";
+				return true;
+			}
 		}
-	}
-	return false;
+		return false;
 }
 
 function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_user){
@@ -181,6 +179,19 @@ function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_u
 			$ret .= "<br><a href=\"" . $GLOBALS['PHP_SELF'] . "?kill_chat=$chatid\">";
 			$ret .= "<img border=\"0\" align=\"absmiddle\" src=\"$pic_path/trash.gif\" " . tooltip(_("Diesen Chatraum leeren")) ." ></a>&nbsp;&nbsp;";
 			$ret .= sprintf(_("Diesen Chatraum %sleeren%s"),"<a href=\"" . $GLOBALS['PHP_SELF'] . "?kill_chat=$chatid\">","</a>");
+		}
+		if ($entry_level == "admin" && count($_SESSION['chat_logs'][$chatid])){
+			$ret .= '<br>'._("Ihre gespeicherten Aufzeichnungen:");
+			$ret .= '<ol style="margin:3px;padding:3px;">';
+			foreach($_SESSION['chat_logs'][$chatid] as $log_id => $chat_log){
+				$ret .= '<li style="list-style-image:url('.$pic_path.'file.gif);list-style-position:inside">';
+				$ret .= '<a href="#" onclick="window.open(\'chat_dispatcher.php?target=chat_dummy.php&log_id='.$log_id.'&chatid='.$chatid.'\', \'chat_dummy\', \'scrollbars=no,width=100,height=100,resizable=no\');return false;">';
+				$ret .= _("Start") . ': ' . strftime('%X', $chat_log['start']) . ', ' . (int)count($chat_log['msg']) . ' ' . _("Zeilen");
+				$ret .= '</li>';
+				$ret .= '</a>';
+			}
+			$ret .= '</ol>';
+			
 		}
 	} else {
 		$ret .= "<img border=\"0\" align=\"absmiddle\" src=\"$pic_path/nochat.gif\" >&nbsp;&nbsp;";
@@ -252,4 +263,5 @@ function chat_get_javascript(){
 	echo "\t\t}\nreturn false;\n}\n";
 	echo "\t\t</script>\n";
 }
+
 ?>

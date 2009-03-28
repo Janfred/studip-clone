@@ -1,5 +1,4 @@
 <?
-# Lifter002: TODO
 /**
 * chat_dummy
 * 
@@ -48,13 +47,19 @@ if (!$CHAT_ENABLE) {
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once $RELATIVE_PATH_CHAT.'/ChatServer.class.php';
 require_once 'lib/visual.inc.php';
+require_once 'lib/chat/chat_func_inc.php';
 
 $chatServer =& ChatServer::GetInstance($CHAT_SERVER_NAME);
 $chatServer->caching = true;
 if ($user->cfg->getValue($user->id, "CHAT_USE_AJAX_CLIENT") ){
-	$chat_log = $chat_logs[$chatid];
+	$log_id = isset($_GET['log_id']) ? (int)$_GET['log_id'] : count($chat_logs[$chatid])-1;
+	$chat_log = $chat_logs[$chatid][$log_id]['msg'];
+	$end_time = $chat_logs[$chatid][$log_id]['stop'];
+	$start_time = $chat_logs[$chatid][$log_id]['start'];
 } else {
 	$chat_log = $chatServer->chatDetail[$chatid]['users'][$user->id]['log'];
+	$end_time = array_pop($chat_log);
+	$start_time = array_pop($chat_log);
 }
 if (!is_array($chat_log)){
 	echo "chat-dummy";
@@ -62,18 +67,16 @@ if (!is_array($chat_log)){
 	die;
 }
 $log_count = count($chat_log);
-$end_time = $chat_log[$log_count-1];
-$start_time = $chat_log[$log_count-2];
-$output = _("Chat: ") . $chatServer->chatDetail[$chatid]['name'] . "\r\n";
-$output .= _("Beginn der Aufzeichnung: ") . strftime("%A, %c",$start_time) . "\r\n";
-$output .= _("Ende der Aufzeichnung: ") . strftime("%A, %c",$end_time) . "\r\n";
-$output .= _("Aufgezeichnet von: ") . $chatServer->chatDetail[$chatid]['users'][$user->id]['fullname'] . "\r\n";
+$output = _("Chat: ") . chat_get_name($chatid) . "\r\n";
+$output .= _("Beginn der Aufzeichnung: ") . strftime("%x %X",$start_time) . "\r\n";
+if($end_time) $output .= _("Ende der Aufzeichnung: ") . strftime("%%x %X",$end_time) . "\r\n";
+$output .= _("Aufgezeichnet von: ") . get_fullname() . "\r\n";
 $output .= str_repeat("-",80) . "\r\n";
-for ($i = 0; $i < $log_count-2; ++$i){
+for ($i = 0; $i < $log_count; ++$i){
 	$output .= decodeHTML(preg_replace ("'<[\/\!]*?[^<>]*?>'si", "", $chat_log[$i])) . "\r\n";
 }
 header("Content-type: text/plain");
-header("Content-Disposition: attachment; filename=\"studip_chatlog_".date("d-m-Y_H-i").".log\"");
+header("Content-Disposition: attachment; filename=\"studip_chatlog_".date("d-m-Y_H-i",$start_time).".log\"");
 header("Content-length: ".strlen($output));
 header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
 header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");

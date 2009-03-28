@@ -95,7 +95,7 @@ define("CHAT_DETAIL_KEY",2);     //dito
 * max Number of entries in one chat room
 * @const CHAT_MAX_MSG
 */
-define("CHAT_MAX_MSG",50);
+define("CHAT_MAX_MSG",100);
 /**
 * Time in seconds before chat user gets kicked
 * @const CHAT_IDLE_TIMEOUT

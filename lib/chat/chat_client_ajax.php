@@ -1,6 +1,4 @@
 <?php
-# Lifter002: TODO
-# Lifter005: TODO
 /**
 * client script for the chat using AJAX
 *
@@ -160,10 +158,6 @@ include 'sajax_chat_functions.php';
 		}
 		if (messages_html.match(/<colorchange>/)){
 			x_get_chat_color_chooser(chat_id, set_chat_color_chooser_cb);
-		}
-		if (messages_html.match(/<sendlog>/)){
-			download = window.open('chat_dispatcher.php?target=chat_dummy.php&chatid=' + chat_id, 'chat_dummy', 'scrollbars=no,width=100,height=100,resizable=no');
-			download.setTimeout('window.close()', 5000);
 		}
 		if (messages_html.match(/<close>/)){
 			setTimeout('window.close()', 3000);
