@@ -18,11 +18,12 @@
 				 }
 				 ?>
 				<li>
+				<div style="font-size:12px; z-index:2; line-height:90%; padding-bottom:3px">
 				<a href="<?=$item['link']?>" <?=($item['accesskey'] ? 'accesskey="' . $accesskey . '"' : '')?>>
 				<img <?=tooltip($item['info'] . ($item['accesskey'] ? "  [ALT] + $accesskey" : "") )?> src="<?=$GLOBALS['ASSETS_URL'] . 'images/header_' . $item['image'] . '.gif'?>" border="0">
 				<br>
-				<div style="position:relative; font-size:12px; margin-top:-5px; z-index:2;"><?=htmlReady($item['text'])?></div>
-				</a>
+				<?=htmlReady($item['text'])?>
+				</a></div>
 				</li>
 				<?
 			}
@@ -31,10 +32,11 @@
 			foreach ($plugins as $plugin_item) {
 				?>
 				<li>
+				<div style="font-size:12px; z-index:2; line-height:90%; padding-bottom:3px">
 				<a href="<?=$plugin_item['link']?>">
 				<img <?=tooltip($plugin_item['info'])?> src="<?=$plugin_item['image']?>" border="0">
 				<br>
-				<div style="position:relative; font-size:12px; margin-top:-5px; z-index:2;"><?=htmlReady($plugin_item['text'])?></div>
+				<?=htmlReady($plugin_item['text'])?></div>
 				</a>
 				</li>
 				<?
@@ -57,11 +59,11 @@
 <!-- Stud.IP Logo -->
 <div id="barTopStudip">
 	<a href="http://www.studip.de/" title="Studip Homepage">
-		<img src="<?=$GLOBALS['ASSETS_URL']?>images/studipmirror.jpg" alt="Studip Homepage">
+		<img src="<?=$GLOBALS['ASSETS_URL']?>images/studipmirror.jpg" alt="Stud.IP Homepage">
 	</a>
 </div>
 <div style="position: relative; margin-top: -34px; margin-right: 42px; float: right; z-index: 99;" align="right">
-  <img src="<?=$GLOBALS['ASSETS_URL']?>images/studipdot.gif">
+  <img src="<?=$GLOBALS['ASSETS_URL']?>images/studipdot.gif" alt="Stud.IP Homepage">
 </div>
 <!-- Leiste unten -->
 <div id="barBottomLeft">

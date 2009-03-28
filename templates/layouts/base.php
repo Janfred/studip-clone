@@ -1,5 +1,5 @@
 <? # Lifter005: TODO - studipim ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=WINDOWS-1252">
@@ -64,7 +64,7 @@
     <div id="overdiv_container"></div>
 
     <div id="ajax_notification" style="display: none;">
-      <?= Assets::img('ajax_indicator.gif', array('align' => 'absmiddle')) ?>&nbsp;Working...
+      <?= Assets::img('ajax_indicator.gif', array('align' => 'middle')) ?>&nbsp;Working...
     </div>
 
     <? include 'lib/include/header.php'; ?>

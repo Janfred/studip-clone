@@ -1224,7 +1224,7 @@ function format_help_url($keyword) {
 	// encode locationid for help wiki if set
 	$locationid=get_config("EXTERNAL_HELP_LOCATIONID");
 	if ($locationid) {
-		$helppage.="&setstudiplocationid=".$locationid;
+		$helppage.="&amp;setstudiplocationid=".$locationid;
 	}
 	// insert into URL-Template from config
 	$help_query=sprintf(get_config("EXTERNAL_HELP_URL"),$helppage);

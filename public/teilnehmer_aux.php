@@ -210,7 +210,7 @@ function aux_html() {
 
 	echo $zt->openRow();
 	$cell = '<form action="'.URLHelper::getLink().'" method="post"><select name="display_type"><option value="rtf">RTF</option><option value="csv">Excel kompatibel</option></select>';
-	$cell .= '&nbsp;&nbsp;&nbsp;<input type="image" '.makebutton('export','src').' style="{vertical-align: middle}"></form>';
+	$cell .= '&nbsp;&nbsp;&nbsp;<input type="image" '.makebutton('export','src').' style="vertical-align: middle"></form>';
 	echo $zt->cell($cell, array('colspan' => '20', 'class' => 'blank'));
 	echo $zt->closeRow();
 

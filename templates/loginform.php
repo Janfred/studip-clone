@@ -19,7 +19,7 @@
 <table class="logintable" width="800" align="center" border="0" cellpadding="0" cellspacing="0">
 <tr>
 	<td class="topic">
-	<img src="<?=$GLOBALS['ASSETS_URL']?>images/login.gif" border="0">
+	<img src="<?=$GLOBALS['ASSETS_URL']?>images/login.gif" border="0" alt="Login-Icon">
 	<b>&nbsp;<?=_("Stud.IP - Login")?></b>
 	</td>
 </tr>
