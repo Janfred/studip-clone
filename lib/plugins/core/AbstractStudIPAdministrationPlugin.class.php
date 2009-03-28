@@ -18,7 +18,6 @@ class AbstractStudIPAdministrationPlugin extends AbstractStudIPLegacyPlugin
 		// Konstruktor der Basisklasse aufrufen
     	parent::AbstractStudIPLegacyPlugin();
     	$this->topnavigation = null;
-    	$this->pluginengine = PluginEngine::getPluginPersistence("Administration");
 	}
 
     /**

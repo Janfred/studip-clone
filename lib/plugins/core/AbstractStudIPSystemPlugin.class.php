@@ -36,8 +36,7 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin
 
 	function AbstractStudIPSystemPlugin(){
 		parent::AbstractStudIPLegacyPlugin();
-		$this->pluginengine = PluginEngine::getPluginPersistence("System");
-                $this->display_type = SYSTEM_PLUGIN_TOOLBAR;
+		$this->display_type = SYSTEM_PLUGIN_TOOLBAR;
 	}
 
 

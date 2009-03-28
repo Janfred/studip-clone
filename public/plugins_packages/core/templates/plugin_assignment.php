@@ -8,7 +8,7 @@
 				<td>
 				<select name="pluginid" style="min-width: 300px;">
 				<? foreach ($plugins as $plugin): ?>
-					<option value="<?=$plugin->getPluginid()?>" <? if($plugin->getPluginid()==$pluginid): ?>selected="selected"<? endif; ?>><?=$plugin->getPluginname()?></option>
+					<option value="<?=$plugin['id']?>" <? if($plugin['id']==$pluginid): ?>selected="selected"<? endif; ?>><?=$plugin['name']?></option>
 				<? endforeach; ?>
 				</select>
 					<?= makeButton("auswaehlen","input",_("Plugin auswahlen"),"searchuserbtn") ?>

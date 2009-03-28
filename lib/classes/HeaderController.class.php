@@ -417,8 +417,7 @@ class HeaderController {
 	function getHeaderItemPlugins(){
 		global $user;
 		if ($GLOBALS["PLUGINS_ENABLE"] && is_object($user) && $user->id != 'nobody'){
-			$pluginengine = PluginEngine::getPluginPersistence("System");
-			foreach ($pluginengine->getAllActivatedPlugins() as $header_plugin){
+			foreach (PluginEngine::getPlugins('System') as $header_plugin){
 				// does the plugin have a navigation entry?
 				if ($header_plugin->hasNavigation() &&
 				    $header_plugin->getDisplayType(SYSTEM_PLUGIN_TOOLBAR)){

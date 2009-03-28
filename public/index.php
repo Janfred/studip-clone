@@ -123,35 +123,31 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	$menue[40] = array( _("Veranstaltungs&uuml;bersicht"), 'sem_portal.php', false);
 	$menue[41] = array( _("Verwaltung globaler Einstellungen"), 'new_user_md5.php', false);
 
-	if ($GLOBALS["PLUGINS_ENABLE"]) {
+        if ($GLOBALS["PLUGINS_ENABLE"]) {
             $plugin_entries = array();
             // plugins activated
-            $pluginengine = PluginEngine::getPluginPersistence("System");
-            $activatedplugins = $pluginengine->getAllActivatedPlugins();
-            if (!empty($activatedplugins)) {
-                foreach ($activatedplugins as $activatedplugin) {
-                    if ($activatedplugin->hasNavigation() &&
-                        $activatedplugin->getDisplayType(SYSTEM_PLUGIN_STARTPAGE)) {
-                        $plugin_entries[] = array(
-                            'plugin' => $activatedplugin,
-                            'navigation' => $activatedplugin->getNavigation()
-                        );
-                    }
+            $activatedplugins = PluginEngine::getPlugins('System');
+
+            foreach ($activatedplugins as $activatedplugin) {
+                if ($activatedplugin->hasNavigation() &&
+                    $activatedplugin->getDisplayType(SYSTEM_PLUGIN_STARTPAGE)) {
+                    $plugin_entries[] = array(
+                        'plugin' => $activatedplugin,
+                        'navigation' => $activatedplugin->getNavigation()
+                    );
                 }
             }
 
             if ($perm->have_perm('admin')) {
-		// plugins activated
-		$pluginengine = PluginEngine::getPluginPersistence("Administration");
-		$activatedplugins = $pluginengine->getAllActivatedPlugins();
-                if (!empty($activatedplugins)) {
-                    foreach ($activatedplugins as $activatedplugin) {
-			if ($activatedplugin->hasTopNavigation()) {
-                            $plugin_entries[] = array(
-                                'plugin' => $activatedplugin,
-                                'navigation' => $activatedplugin->getTopNavigation()
-                            );
-                        }
+                // plugins activated
+                $activatedplugins = PluginEngine::getPlugins('Administration');
+
+                foreach ($activatedplugins as $activatedplugin) {
+                    if ($activatedplugin->hasTopNavigation()) {
+                        $plugin_entries[] = array(
+                            'plugin' => $activatedplugin,
+                            'navigation' => $activatedplugin->getTopNavigation()
+                        );
                     }
                 }
             }
@@ -323,11 +319,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	if ($GLOBALS["PLUGINS_ENABLE"]){
 		// PluginEngine aktiviert.
 		// Prüfen, ob PortalPlugins vorhanden sind.
-		$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");
-		$activatedportalplugins = $portalpluginpersistence->getAllActivatedPlugins();
-		if (!is_array($activatedportalplugins)){
-			$activatedportalplugins = array();
-		}
+		$activatedportalplugins = PluginEngine::getPlugins('Portal');
 
 		foreach ($activatedportalplugins as $activatedportalplugin){
 			if (!$activatedportalplugin->hasAuthorizedView()){
@@ -405,32 +397,28 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 	if ($GLOBALS["PLUGINS_ENABLE"])
 	{
-		$portalpluginpersistence = PluginEngine::getPluginPersistence("Portal");
-		$activatedportalplugins = $portalpluginpersistence->getAllActivatedPlugins();
-		// we already should have the activatedportalplugins here
-		if (!empty($activatedportalplugins))
+		$activatedportalplugins = PluginEngine::getPlugins('Portal');
+
+		foreach ($activatedportalplugins as $activatedplugin)
 		{
-			foreach ($activatedportalplugins as $activatedplugin)
+			if ($activatedplugin->hasUnauthorizedView())
 			{
-				if ($activatedplugin->hasUnauthorizedView())
-				{
-	?>
-			<div align="center">
-			<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
-				<tr>
-					<td class="topic"><img src="<?=$activatedplugin->getPluginiconname()?>"" align="absmiddle" /><b>&nbsp;<?= $activatedplugin->getDisplaytitle() ?></b></td>
-				</tr>
-				<tr>
-					<td class="index_box_cell">
-						<?= $activatedplugin->showOverview(false) ?>
-					</td>
-				</tr>
-			</table>
-			</div>
-			<br/>
-	
-	<?php
-				}
+?>
+		<br/>
+		<div align="center">
+		<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
+			<tr>
+				<td class="topic"><img src="<?=$activatedplugin->getPluginiconname()?>"" align="absmiddle" /><b>&nbsp;<?= $activatedplugin->getDisplaytitle() ?></b></td>
+			</tr>
+			<tr>
+				<td class="index_box_cell">
+					<?= $activatedplugin->showOverview(false) ?>
+				</td>
+			</tr>
+		</table>
+		</div>
+
+<?php
 			}
 		}
 	}

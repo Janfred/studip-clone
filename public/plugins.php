@@ -32,15 +32,14 @@ try {
   $dispatch_to = isset($_SERVER['PATH_INFO']) ?$_SERVER['PATH_INFO'] : '';
   list($plugin_class, $unconsumed) = PluginEngine::routeRequest($dispatch_to);
 
-  # retrieve corresponding plugin id
-  $plugin_type = AbstractPluginIntegratorEnginePersistence::getPluginType($plugin_class);
-  $plugin_persistence = PluginEngine::getPluginPersistence($plugin_type);
-  $plugin_id = $plugin_persistence->getPluginId($plugin_class);
+  # retrieve corresponding plugin info
+  $plugin_manager = PluginManager::getInstance();
+  $plugin_info = $plugin_manager->getPluginInfo($plugin_class);
 
-  PluginEngine::setCurrentPluginId($plugin_id);
+  PluginEngine::setCurrentPluginId($plugin_info['id']);
 
   # create an instance of the queried plugin
-  $plugin = $plugin_persistence->getPlugin($plugin_id);
+  $plugin = PluginEngine::getPlugin($plugin_class);
 
   # user is not permitted, show login screen
   if (is_null($plugin)) {

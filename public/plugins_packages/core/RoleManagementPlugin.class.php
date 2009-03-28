@@ -145,7 +145,7 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 
 		//view
 		$template = $this->template_factory->open('plugin_assignment');
-		$template->set_attribute('plugins', PluginEngine::getPluginPersistence()->getAllInstalledPlugins());
+		$template->set_attribute('plugins', PluginManager::getInstance()->getPluginInfos());
 		$template->set_attribute('assigned', RolePersistence::getAssignedPluginRoles($pluginid));
 		$template->set_attribute('roles', RolePersistence::getAllRoles());
 		$template->set_attribute('pluginid', $pluginid);

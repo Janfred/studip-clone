@@ -19,9 +19,9 @@
             <td style="width: 40px;">
                 <?= Assets::img('ausruf.gif') ?>
             <td>
-                <?= sprintf(_('Wollen Sie wirklich <b>%s</b> deinstallieren?'), htmlspecialchars($delete_plugin->getPluginname())) ?>
+                <?= sprintf(_('Wollen Sie wirklich <b>%s</b> deinstallieren?'), htmlspecialchars($delete_plugin['name'])) ?>
                 <br>
-                <a href="<?= PluginEngine::getLink($admin_plugin, array('deinstall' => $delete_plugin->getPluginid(), 'forcedeinstall' => true)) ?>">
+                <a href="<?= PluginEngine::getLink($admin_plugin, array('deinstall' => $delete_plugin['id'], 'forcedeinstall' => true)) ?>">
                     <?= makeButton('ja2') ?>
                 </a>
                 &nbsp;
@@ -45,9 +45,9 @@
         </tr>
 
         <? foreach ($plugins as $plugin): ?>
-            <? $pluginid = $plugin->getPluginid() ?>
-            <? if (!$plugin instanceof PluginAdministrationPlugin): ?>
-                <? if (($type = PluginEngine::getTypeOfPlugin($plugin)) != $lasttype): ?>
+            <? $pluginid = $plugin['id'] ?>
+            <? if ($plugin['class'] != 'PluginAdministrationPlugin'): ?>
+                <? if (($type = $plugin['type']) != $lasttype): ?>
                     <? $lasttype = $type ?>
                     <tr style="height: 10px;">
                         <td colspan="6"></td>
@@ -55,11 +55,11 @@
                 <? endif ?>
                 <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>" style="height: 25px;">
                     <td style="padding-left: 1ex;">
-                        <a href="<?= PluginEngine::getLink($admin_plugin, array(), 'manifest/'.$plugin->getPluginclassname()) ?>">
-                            <?= htmlspecialchars($plugin->getPluginname()) ?>
+                        <a href="<?= PluginEngine::getLink($admin_plugin, array(), 'manifest/'.$plugin['class']) ?>">
+                            <?= htmlspecialchars($plugin['name']) ?>
                         </a>
-                        <? if ($plugin instanceof AbstractStudIPStandardPlugin): ?>
-                            <a href="<?= PluginEngine::getLink($admin_plugin, array(), 'defaultActivation/'.$plugin->getPluginclassname()) ?>">
+                        <? if ($plugin['type'] == 'Standard'): ?>
+                            <a href="<?= PluginEngine::getLink($admin_plugin, array(), 'defaultActivation/'.$plugin['class']) ?>">
                                 <?= _('(Default-Aktivierung)') ?>
                             </a>
                         <? endif ?>
@@ -68,26 +68,28 @@
                     </td>
                     <td>
                         <select name="available_<?= $pluginid ?>">
-                            <option value="0" <?= $plugin->isEnabled() ? '' : 'selected' ?>><?= _('aus') ?></option>
-                            <option value="1" <?= $plugin->isEnabled() ? 'selected' : '' ?>><?= _('an') ?></option>
+                            <option value="0" <?= $plugin['enabled'] ? '' : 'selected' ?>><?= _('aus') ?></option>
+                            <option value="1" <?= $plugin['enabled'] ? 'selected' : '' ?>><?= _('an') ?></option>
                         </select>
                     </td>
                     <td>
-                        <input name="navposition_<?= $pluginid ?>" type="text" size="2" value="<?= $plugin->getNavigationPosition() ?>">
+                        <input name="navposition_<?= $pluginid ?>" type="text" size="2" value="<?= $plugin['position'] ?>">
                     </td>
                     <td>
-                        <a href="<?= PluginEngine::getLink($roleplugin, array('pluginid' => $pluginid), 'doPluginRoleAssignment') ?>">
-                            <?= makeButton('bearbeiten', 'img' , _('Rollenberechtigungen bearbeiten')) ?>
-                        </a>
+                        <? if ($roleplugin): ?>
+                            <a href="<?= PluginEngine::getLink($roleplugin, array('pluginid' => $pluginid), 'doPluginRoleAssignment') ?>">
+                                <?= makeButton('bearbeiten', 'img' , _('Rollenberechtigungen bearbeiten')) ?>
+                            </a>
+                        <? endif ?>
                     </td>
                     <td style="text-align: center;">
-                        <? if (!$plugin->isDependentOnOtherPlugin()): ?>
+                        <? if (!$plugin['depends']): ?>
                             <a href="<?= PluginEngine::getLink($admin_plugin, array('zip' => $pluginid)) ?>">
                                 <img src="<?= $admin_plugin->getPluginURL() ?>/img/icon-disc.gif" title="<?= _('Herunterladen') ?>">
                             </a>
                         <? endif ?>
                         &nbsp;
-                        <? if (!$plugin->isDependentOnOtherPlugin()): ?>
+                        <? if (!$plugin['depends']): ?>
                             <a href="<?= PluginEngine::getLink($admin_plugin, array('deinstall' => $pluginid)) ?>">
                                 <img src="<?= $admin_plugin->getPluginURL() ?>/img/trash.gif" title="<?= _('Deinstallieren') ?>">
                             </a>
@@ -102,7 +104,7 @@
         </tr>
         <tr>
             <td style="text-align: center;" colspan="6">
-                <?= makeButton('speichern', 'input', _('Einstellungen speichern')) ?>
+                <?= makeButton('speichern', 'input', _('Einstellungen speichern'), 'save') ?>
             </td>
         </tr>
         <tr style="height: 10px;">

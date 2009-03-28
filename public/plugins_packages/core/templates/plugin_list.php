@@ -7,8 +7,8 @@
     </tr>
 
     <? foreach ($plugins as $plugin): ?>
-        <? if (!$plugin instanceof PluginAdministrationPlugin): ?>
-            <? if (($type = PluginEngine::getTypeOfPlugin($plugin)) != $lasttype): ?>
+        <? if ($plugin['class'] != 'PluginAdministrationPlugin'): ?>
+            <? if (($type = $plugin['type']) != $lasttype): ?>
                 <? $lasttype = $type ?>
                 <tr style="height: 10px;">
                     <td colspan="4"></td>
@@ -16,15 +16,19 @@
             <? endif ?>
             <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>" style="height: 25px;">
                 <td style="padding-left: 1ex;">
-                    <?= htmlspecialchars($plugin->getPluginname()) ?>
+                    <?= htmlspecialchars($plugin['name']) ?>
                 <td>
                     <?= $type ?>
                 </td>
                 <td>
-                    <?= Assets::img('haken_transparent.gif') ?><?= _('aktiviert') ?>
+                    <? if ($plugin['enabled']): ?>
+                      <?= Assets::img('haken_transparent.gif') ?><?= _('aktiviert') ?>
+                    <? else: ?>
+                      <?= Assets::img('x_transparent.gif') ?><?= _('deaktiviert') ?>
+                    <? endif ?>
                 </td>
                 <td>
-                    <?= $plugin->getNavigationPosition() ?>
+                    <?= $plugin['position'] ?>
                 </td>
             </tr>
         <? endif ?>

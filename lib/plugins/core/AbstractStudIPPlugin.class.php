@@ -76,14 +76,6 @@ abstract class AbstractStudIPPlugin {
 		return strtolower(get_class($this));
 	}
 
-	/**
-	 * This function is called by the plugin engine directly before
-	 * uninstallation. The default implementation in AbstractStudIPPlugin is
-	 * empty.
-	 */
-	function prepareUninstallation() {
-	}
-
 	function showAdministrationPage() {
 		echo _("Eine Administrationsseite ist für dieses Plugin nicht vorhanden");
 	}

@@ -127,10 +127,10 @@ function showlog_format_singledate($sd_id) {
 }
 
 function showlog_format_plugin($plugin_id) {
-	$pe = PluginEngine::getPluginPersistence();
-	$plugin = $pe->getplugin($plugin_id);
-	
-	return '<em>'.$plugin->pluginname.'</em>';
+	$plugin_manager = PluginManager::getInstance();
+	$plugin_info = $plugin_manager->getPluginInfoById($plugin_id);
+
+	return $plugin_info ? '<em>'.$plugin_info['name'].'</em>' : $plugin_id;
 }
 
 function showlog_format_semester($sem_start_time) {

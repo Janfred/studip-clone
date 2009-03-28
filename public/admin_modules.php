@@ -73,11 +73,12 @@ echo $links;
 $amodules=new AdminModules;
 
 if ($GLOBALS['PLUGINS_ENABLE']){
+	$admin_modules_plugins = PluginEngine::getPlugins('Standard'); // get all installed and enabled plugins
 	if ($SessSemName[1] == '') {
-		$poiid = 'sem'.($range_id ? $range_id : $admin_modules_data['range_id']);
-		$amodules->pluginengine->setPoiid($poiid);
+		foreach ($admin_modules_plugins as $plugin) {
+			$plugin->setId($range_id ? $range_id : $admin_modules_data['range_id']);
+		}
 	}
-	$admin_modules_plugins = $amodules->pluginengine->getAllEnabledPlugins(); // get all installed and enabled plugins
 }
 if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
@@ -136,7 +137,6 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					}
 				
 				}
-				//$plugins = $amodules->pluginengine->getAllEnabledPlugins();
 			}
 		}
 
@@ -189,11 +189,11 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 		if( count( $plugin_toggle ) > 0 ){
 			foreach ($admin_modules_plugins as $plugin){
 				if( in_array( $plugin->getPluginId() , $plugin_toggle ) ){
-					$plugin->setActivated( !$plugin->isActivated() );
-					$amodules->pluginengine->savePlugin( $plugin );
+					$activated = !$plugin->isActivated();
+					$plugin->setActivated($activated);
 					$changes = true;
 					// logging
-					if ($plugin->isActivated()) {
+					if ($activated) {
 						log_event('PLUGIN_ENABLE',$admin_modules_data["range_id"],$plugin->getPluginId() ,$user->id); 
 					}
 					else {
@@ -304,45 +304,25 @@ if ($admin_modules_data["range_id"])
 		}
 	if ($GLOBALS['PLUGINS_ENABLE'])
 	{
-		//$plugins = $amodules->pluginengine->getAllEnabledPlugins();
-
-	 	// $defactplugins = $amodules->pluginengine->getDefaultActivationsForPOI($GLOBALS["SessSemName"][1]);
-
-		if ($admin_modules_plugins == null)
-		{
-			$admin_modules_plugins = array();
-		}
 		foreach ($admin_modules_plugins as $plugin)
 		{
-			/*
-			$globalactivated = false;
-			foreach ($defactplugins as $actplugin) {
-				if (strtolower(get_class($actplugin)) == strtolower(get_class($plugin))){
-					$globalactivated = true;
-					break;
-				}
-			}
-			*/
 			?>
 			<tr><? $cssSw->switchClass() ?>
 				<td class="<?= $cssSw->getClass() ?>"  width="15%" align="left">
 					<font size=-1><b><?=$plugin->getPluginname()?></b><br /></font>
 				</td>
 				<td class="<?= $cssSw->getClass() ?>" width="15%">
-					<input type="RADIO" name="plugin_<?=$plugin->getPluginid()?>" value="TRUE" <?= ($plugin->isActivated()==true) ? "checked" : "" ?>>
+					<input type="RADIO" name="plugin_<?=$plugin->getPluginid()?>" value="TRUE" <?= $plugin->isActivated() ? "checked" : "" ?>>
 					<!-- mark old state -->
 					<font size=-1><?=_("an")?></font>
-					<input type="RADIO" name="plugin_<?=$plugin->getPluginid()?>" value="FALSE" <?= ($plugin->isActivated()==true) ? "" : "checked" ?>>
+					<input type="RADIO" name="plugin_<?=$plugin->getPluginid()?>" value="FALSE" <?= $plugin->isActivated() ? "" : "checked" ?>>
 					<font size=-1><?=_("aus")?><br /></font>
 				</td>
 				<td class="<?= $cssSw->getClass() ?>" width="70%">
 					<font size=-1><?
 					$admininfo = $plugin->getPluginAdminInfo();
 					if (!is_null($admininfo)){
-						if ($plugin->isActivated() || $globalactivated){
-							if ($globalactivated) {
-								print ('(per Voreinstellung aktiviert) ');
-							}
+						if ($plugin->isActivated()) {
 							if (!method_exists($plugin, 'getPluginExistingItems') ||
 							    $plugin->getPluginExistingItems($admin_modules_data['range_id'])) {
 								print ('<font color="red">'.$admininfo->getMsg_pre_warning().'</font>');

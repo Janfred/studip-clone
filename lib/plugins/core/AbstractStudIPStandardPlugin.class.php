@@ -9,8 +9,6 @@
  * the License, or (at your option) any later version.
  */
 
-require_once("lib/classes/TreeAbstract.class.php");
-
 class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
   implements StudIPStandardPlugin {
 
@@ -28,7 +26,6 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 		$this->pluginiconname = "";
 		$this->changeindicatoriconname = "";
 		$this->overview = false;
-		$this->pluginengine = PluginEngine::getPluginPersistence("Standard");
 		// create the standard AdminInfo
 		$admininfo = new AdminInfo();
 		$this->setPluginAdminInfo($admininfo);
@@ -145,5 +142,27 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 		// close the page
 		include 'lib/include/html_end.inc.php';
 		page_close();
+	}
+
+	/**
+	 * Returns the state of the plugin.
+	 */
+	function isActivated() {
+		$plugin_manager = PluginManager::getInstance();
+
+		return $plugin_manager->isPluginActivated($this->getPluginid(), $this->getId());
+	}
+
+	/**
+	 * Sets the state of the plugin.
+	 *
+	 * @param boolean $value
+	 * @param boolean $requestedbyuser - true if the user requested to change the
+	 *                status
+	 */
+	function setActivated($value = false, $requestedbyuser = false) {
+		$plugin_manager = PluginManager::getInstance();
+
+		$plugin_manager->setPluginActivated($this->getPluginid(), $this->getId(), $value);
 	}
 }

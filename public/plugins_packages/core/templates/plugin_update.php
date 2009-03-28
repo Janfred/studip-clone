@@ -9,9 +9,9 @@
         </tr>
 
         <? foreach ($plugins as $plugin): ?>
-            <? $pluginid = $plugin->getPluginid() ?>
-            <? if (!$plugin instanceof PluginAdministrationPlugin): ?>
-                <? if (($type = PluginEngine::getTypeOfPlugin($plugin)) != $lasttype): ?>
+            <? $pluginid = $plugin['id'] ?>
+            <? if ($plugin['class'] != 'PluginAdministrationPlugin'): ?>
+                <? if (($type = $plugin['type']) != $lasttype): ?>
                     <? $lasttype = $type ?>
                     <tr style="height: 10px;">
                         <td colspan="5"></td>
@@ -19,8 +19,8 @@
                 <? endif ?>
                 <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>" style="height: 25px;">
                     <td style="padding-left: 1ex;">
-                        <a href="<?= PluginEngine::getLink($admin_plugin, array(), 'manifest/'.$plugin->getPluginclassname()) ?>">
-                            <?= htmlspecialchars($plugin->getPluginname()) ?>
+                        <a href="<?= PluginEngine::getLink($admin_plugin, array(), 'manifest/'.$plugin['class']) ?>">
+                            <?= htmlspecialchars($plugin['name']) ?>
                         </a>
                     <td>
                         <?= $type ?>
@@ -44,7 +44,7 @@
                                     <?= PluginAdministration::getErrorMessage($update_status[$pluginid]) ?>
                                 </span>
                             <? endif ?>
-                        <? elseif (isset($update_info[$pluginid]['update']) && !$plugin->isDependentOnOtherPlugin()): ?>
+                        <? elseif (isset($update_info[$pluginid]['update']) && !$plugin['depends']): ?>
                             <label>
                                 <input type="checkbox" name="update[]" value="<?= $pluginid ?>" checked>
                                 <?= _('Update installieren') ?>

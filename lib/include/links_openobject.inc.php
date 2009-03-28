@@ -175,15 +175,12 @@ if (($SUPPORT_ENABLE) && ($modules["support"])) {
 // create the structure array for activated plugins
 if ($GLOBALS['PLUGINS_ENABLE']){
 	// list all activated plugins
+	$plugins = PluginEngine::getPlugins('Standard', $SessSemName[1]);
 
-	$plugins = $Modules->pluginengine->getAllActivatedPlugins();
-
-	if (is_array($plugins)){
-		foreach ($plugins as $plugin){
-			if ($plugin_struct = $reiter->getStructureForPlugin($plugin)){
-				$structure = array_merge($structure, $plugin_struct['structure']);
-				if($plugin_struct['reiter_view']) $reiter_view = $plugin_struct['reiter_view'];
-			}
+	foreach ($plugins as $plugin){
+		if ($plugin_struct = $reiter->getStructureForPlugin($plugin)){
+			$structure = array_merge($structure, $plugin_struct['structure']);
+			if($plugin_struct['reiter_view']) $reiter_view = $plugin_struct['reiter_view'];
 		}
 	}
 }

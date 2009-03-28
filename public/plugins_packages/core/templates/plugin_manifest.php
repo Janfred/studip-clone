@@ -3,7 +3,7 @@
 <table>
     <tr>
         <td>Name:</td>
-        <td><?= $plugin->getPluginname() ?></td>
+        <td><?= $plugin['name'] ?></td>
     </tr>
     <tr>
         <td>Name (original):</td>
@@ -11,7 +11,7 @@
     </tr>
     <tr>
         <td>Klasse:</td>
-        <td><?= $plugin->getPluginclassname() ?></td>
+        <td><?= $plugin['class'] ?></td>
     </tr>
     <tr>
         <td>Origin:</td>

@@ -78,14 +78,9 @@ class PluginAdministration {
 	 * @param unknown_type $plugin
 	 */
 	function deinstallPlugin($plugin){
-		$type = PluginEngine::getTypeOfPlugin($plugin);
-		$plugin->prepareUninstallation();
-		$engine = PluginEngine::getPluginPersistence($type);
-		if (is_object($engine)){
-			$engine->deinstallPlugin($plugin);
-		}
-		$pluginenv = $plugin->getEnvironment();
-                $pluginpath = $pluginenv->getBasepath() . '/' . $plugin->getPluginpath();
+		$plugin_manager = PluginManager::getInstance();
+		$plugin_manager->unregisterPlugin($plugin['id']);
+		$pluginpath = $this->environment->getPackagebasepath().'/'.$plugin['path'];
 		$manifest = PluginEngine::getPluginManifest($pluginpath);
 
 		// delete database if needed
@@ -157,8 +152,8 @@ class PluginAdministration {
 		$vendordir = $this->environment->getPackagebasepath() . "/" . $plugininfos["origin"];
 		$newpluginpath = $vendordir . "/" . $pluginclassname; // . "_" . $plugininfos["version"];
 		$pluginrelativepath = $plugininfos["origin"] . "/" . $pluginclassname; //  . "_" . $plugininfos["version"];
-		$persistence = PluginEngine::getPluginPersistence();
-		$pluginregistered = $persistence->isPluginRegistered($pluginclassname);
+		$plugin_manager = PluginManager::getInstance();
+		$pluginregistered = $plugin_manager->getPluginInfo($pluginclassname);
 
 		if (!file_exists($vendordir)){
 			@mkdir($vendordir);
@@ -208,36 +203,22 @@ class PluginAdministration {
 		// create database if needed
 		$this->createDBSchema($newpluginpath, $plugininfos, $pluginregistered && $forceupdate);
 
-		try {
-			// instantiate plugin
-			require_once($newpluginpath . '/' . $pluginclassname . ".class.php");
+		// now register the plugin in the database
+		$pluginid = $plugin_manager->registerPlugin($plugininfos['pluginname'], $pluginclassname, $pluginrelativepath);
 
-			$plugin = new $pluginclassname();
-		} catch (Exception $ex) {
+		if ($pluginid === NULL) {
 			// delete Plugin directory
 			$this->deletePlugindir($newpluginpath);
-			return PLUGIN_INSTANTIATION_EROR;
+			return PLUGIN_IS_NO_PLUGIN_ERROR;
 		}
 
-		// check if certain methods exist in the plugin
-		if ($plugin instanceof AbstractStudIPPlugin) {
-			// now register the plugin in the database
-			$newpluginid = $persistence->registerPlugin($plugin,$pluginclassname,$pluginrelativepath);
-			if ($newpluginid > 0){
-				$plugin->setPluginid($newpluginid);
+		// do we have additional plugin classes in this package?
+		$additionalclasses = $plugininfos["additionalclasses"];
+
+		if (is_array($additionalclasses)){
+			foreach ($additionalclasses as $class){
+				$plugin_manager->registerPlugin($class, $class, $pluginrelativepath, $plugin);
 			}
-			// do we have additional plugin classes in this package?
-			$additionalclasses = $plugininfos["additionalclasses"];
-			if (is_array($additionalclasses)){
-				foreach ($additionalclasses as $additionalclass){
-					require_once($newpluginpath . '/' . $additionalclass . ".class.php");
-					$additionalplugin = new $additionalclass();
-					$persistence->registerPlugin($additionalplugin,$additionalclass,$pluginrelativepath,$plugin);
-				}
-			}
-		} else {
-			$this->deletePlugindir($newpluginpath);
-			return PLUGIN_IS_NO_PLUGIN_ERROR;
 		}
 
 		return PLUGIN_INSTALLATION_SUCCESSFUL;
@@ -383,12 +364,13 @@ class PluginAdministration {
 	 * @return string a link to the file
 	 */
 	function zipPluginPackage($pluginid){
-		// zip the plugin-Directory and send it to the client
-		$persistence = PluginEngine::getPluginPersistence();
-		$plugin = $persistence->getPlugin($pluginid);
-		$manifest = PluginEngine::getPluginManifest($this->environment->getBasepath() . $plugin->getPluginpath());
-		$file_id = strtolower(get_class($plugin)) . "_" . $manifest["version"] . ".zip";
-		create_zip_from_directory($this->environment->getBasepath() . $plugin->getPluginpath(), $GLOBALS["TMP_PATH"] . "/" . $file_id);
+		$plugin_manager = PluginManager::getInstance();
+		$plugin = $plugin_manager->getPluginInfoById($pluginid);
+		$pluginpath = $this->environment->getPackagebasepath().'/'.$plugin['path'];
+		$manifest = PluginEngine::getPluginManifest($pluginpath);
+		$file_id = $plugin['class'].'-'.$manifest['version'].'.zip';
+
+		create_zip_from_directory($pluginpath, $GLOBALS["TMP_PATH"].'/'.$file_id);
 		return GetDownloadLink($file_id, $file_id, 4, 'force');
 	}
 
@@ -407,8 +389,7 @@ class PluginAdministration {
 
 		foreach ($plugins as $plugin) {
 			$repository = $default_repository;
-			$pluginenv = $plugin->getEnvironment();
-			$pluginpath = $pluginenv->getBasepath().'/'.$plugin->getPluginpath();
+			$pluginpath = $this->environment->getPackagebasepath().'/'.$plugin['path'];
 			$manifest = PluginEngine::getPluginManifest($pluginpath);
 
 			if (isset($manifest['updateURL'])) {
@@ -427,7 +408,7 @@ class PluginAdministration {
 				$plugin_info['update'] = $meta_data;
 			}
 
-			$update_info[$plugin->getPluginid()] = $plugin_info;
+			$update_info[$plugin['id']] = $plugin_info;
 		}
 
 		return $update_info;

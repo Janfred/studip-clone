@@ -357,14 +357,12 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 	}
 	// Check plugins, which are enabled in current seminar
 	if ($GLOBALS["PLUGINS_ENABLE"]){
-		$persistence = PluginEngine::getPluginPersistence("Standard"); // we only need plugins integrated into seminars or institutes
 		// inserts every activated plugin as new entry
 		foreach ($my_obj as $poiid => $my_obj_item) {		
-			
-			$persistence->setPoiid($my_obj_item["obj_type"] . $poiid);
-			$activated_plugins = $persistence->getAllActivatedPlugins();	
-										
+			$activated_plugins = PluginEngine::getPlugins('Standard', $poiid);	
+
 			foreach ($activated_plugins as $plugin){				
+				$plugin->setId($poiid);
 				if ($plugin->isShownInOverview()) {
 					$my_obj[$poiid]['activatedplugins'][] = $plugin;
 				}

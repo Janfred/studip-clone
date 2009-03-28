@@ -54,18 +54,9 @@ class Modules {
 				"documents_folder_permissions" => array("id" => 14, "const" => "", "sem" => TRUE, "inst" => TRUE)
 				);
 	var $db;
-	var $pluginengine; // the pluginengine for integrating plugins into courses / institutions
 	
 	function Modules() {
 		$this->db = new DB_Seminar;
-		
-		// create a new instance of the pluginengine
-		if ($GLOBALS["PLUGINS_ENABLE"]){
-			$id = $_SESSION["SessSemName"]["class"] . $_SESSION["SessSemName"][1];
-			
-			$this->pluginengine = PluginEngine::getPluginPersistence("Standard");
-			$this->pluginengine->setPoiid($id);
-		}
 	}
 
 	function getStatus($modul, $range_id, $range_type='') {

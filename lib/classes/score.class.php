@@ -333,13 +333,7 @@ function GetMyScore() {
 	$visits = object_return_views($user_id);
 
 	if ($GLOBALS['PLUGINS_ENABLE'])	{
-		$sysengine = PluginEngine::getPluginPersistence("System");
-		$scoreplugins = array();
-		$scoreplugins = array_merge((array)$scoreplugins, (array)$sysengine->getAllActivatedPlugins());
-		unset($sysengine);
-		$standardengine = PluginEngine::getPluginPersistence("Standard");
-		$scoreplugins = array_merge((array)$scoreplugins, (array)$standardengine->getAllActivatedPlugins());
-		unset($standardengine);
+		$scoreplugins = PluginEngine::getPlugins('System') + PluginEngine::getPlugins('Standard');
 		$pluginscore = 0;
 		$pluginscount = 0;
 		if (is_array($scoreplugins) && (count($scoreplugins) > 0 )){

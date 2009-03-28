@@ -262,13 +262,11 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 
 		// Pluginkonfiguration übernehmen
 		if ($GLOBALS['PLUGINS_ENABLE']) {
-			$Modules->pluginengine->setPoiid('sem'.$cp_id);
-			$enabled_plugins = $Modules->pluginengine->getAllEnabledPlugins();
+			$enabled_plugins = PluginEngine::getPlugins('Standard', $cp_id);
 
 			foreach ($enabled_plugins as $plugin) {
-				if ($plugin->isActivated()) {
-					$sem_create_data["enabled_plugins"][] = $plugin->getPluginId();
-				}
+				$plugin->setId($cp_id);
+				$sem_create_data["enabled_plugins"][] = $plugin->getPluginId();
 			}
 		}
 
@@ -1867,15 +1865,13 @@ if (($form == 6) && ($jump_next_x))
 
 			// save activation of plugins
 			if (count($sem_create_data["enabled_plugins"]) > 0) {
-				$Modules = new Modules();
-				$Modules->pluginengine->setPoiid('sem'.$sem->getId());
-				$enabled_plugins = $Modules->pluginengine->getAllEnabledPlugins();
+				$enabled_plugins = PluginEngine::getPlugins('Standard');
 
 				foreach ($enabled_plugins as $plugin) {	
+					$plugin->setId($sem->getId());
 					$plugin_status = in_array($plugin->getPluginId(), $sem_create_data['enabled_plugins']);
 					if ($plugin->isActivated() != $plugin_status) {
 						$plugin->setActivated($plugin_status);
-						$Modules->pluginengine->savePlugin($plugin);
 					}
 				}
 			}

@@ -2,11 +2,6 @@
 # Lifter002: TODO
 // vim: noexpandtab
 /**
- * plugin type unknown
- */
-define("UNKNOWN_PLUGINTYPE", "undefined");
-
-/**
  * Factory Class for the plugin engine
  * @author Dennis Reil, <dennis.reil@offis.de>
  * @version $Revision$
@@ -14,6 +9,8 @@ define("UNKNOWN_PLUGINTYPE", "undefined");
  * @package pluginengine
  * @subpackage engine
  */
+
+require_once 'PluginManager.class.php';
 
 class PluginEngine {
 
@@ -25,20 +22,6 @@ class PluginEngine {
 	 */
 	private static $currentPluginId;
 
-
-	/**
-	 * List of created plugin instances
-	 *
-	 * @var array
-	 */
-	private static $plugin_list = array();
-
-	/**
-	 * List of created plugin_integrator_engines
-	 *
-	 * @var array
-	 */
-	private static $plugin_integrator_engines = array();
 
 	/**
 	 * TODO
@@ -80,77 +63,45 @@ class PluginEngine {
 	}
 
 	/**
-	 * TODO
+	 * Get instance of the plugin specified by plugin class name.
 	 *
-	 * @param  string  TODO
-	 *
-	 * @return int     the plugin ID of the requested plugin
+	 * @param $class   class name of plugin
 	 */
-	public static function getPluginIdFromRequest(&$unconsumed) {
-
-		$dispatch_to = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/';
-
-		# retrieve plugin class
-		list(, $plugin_class) = explode('/', $dispatch_to);
-
-		if (empty($plugin_class)) {
-			throw new Studip_PluginNotFoundException(
-			  _("Es wurde kein Plugin gewählt."));
-		}
-
-		# retrieve corresponding plugin id
-		$plugin_engine = PluginEngine::getPluginPersistence();
-		$plugin_id = $plugin_engine->getPluginId($plugin_class);
-		PluginEngine::setCurrentPluginId($plugin_id);
-
-		# fill reference to unconsumed path
-		$unconsumed = substr($dispatch_to, strlen($plugin_class) + 1);
-
-		return $plugin_id;
-	}
-	
-	public static function getPlugin($pluginclassname){
-		if (isset(self::$plugin_list[$pluginclassname])) {
-			$plugin = self::$plugin_list[$pluginclassname][0]['object'];
-		} else {
-			try {
-				$plugin_persistence = PluginEngine::getPluginPersistence();
-				$plugin_id = $plugin_persistence->getPluginId($pluginclassname);
-				$plugin = $plugin_persistence->getPlugin($plugin_id);
-			} catch (Studip_PluginNotFoundException $e) {
-				return null;
-			}
-		}
-		if(is_object($plugin) && $plugin->isEnabled()){
-			return $plugin;
-		} else {
-			return null;
-		}
-	}
-	
-	/**
-	* Returns the plugin persistence object for the required plugin type.
-	* @param $plugintype - Standard, Administration, System
-	* @return a persistence object
-	*/
-	public static function getPluginPersistence($plugintype="Abstract") {
-		$classname = $plugintype . "PluginIntegratorEnginePersistence";
-		if (isset(self::$plugin_integrator_engines[$classname])) {
-			return self::$plugin_integrator_engines[$classname];
-	    }
-		$persistence = new $classname();
-		$persistence->setEnvironment($GLOBALS["pluginenv"]);
-
-		// now set the user
-		$persistence->setUser(new StudIPUser());
-		return self::$plugin_integrator_engines[$classname] = $persistence;
+	public static function getPlugin ($class) {
+		return PluginManager::getInstance()->getPlugin($class);
 	}
 
 	/**
-	* @param the plugin for which a persistence object should be instantiated
-	*/
-	public static function getPluginPersistenceByPlugin($plugin) {
-		return PluginEngine::getPluginPersistence(PluginEngine::getTypeOfPlugin($plugin));
+	 * Get instances of all plugins of the specified type. A type of NULL
+	 * returns all enabled plugins. The optional context parameter can be
+	 * used to get only plugins that are activated in the given context.
+	 *
+	 * @param $type      plugin type or NULL (all types)
+	 * @param $context   context range id (optional)
+	 */
+	public static function getPlugins ($type, $context = NULL) {
+		return PluginManager::getInstance()->getPlugins($type, $context);
+	}
+
+	/**
+	 * Sends a message to all activated plugins and returns an array of the return
+	 * values.
+	 *
+	 * @param  type       plugin type or NULL (all types)
+	 * @param  context    context range id (optional)
+	 * @param  string     the method name that should be send to all plugins
+	 * @param  mixed      a variable number of arguments
+	 *
+	 * @return array      an array containing the return values
+	 */
+	function sendMessage($type, $context, $method /* ... */) {
+		$args = func_get_args();
+		$args = array_slice($args, 3);
+		$results = array();
+		foreach (self::getPlugins($type, $context) as $plugin) {
+			$results[] = call_user_func_array(array($plugin, $method), $args);
+		}
+		return $results;
 	}
 
 	/**
@@ -177,7 +128,7 @@ class PluginEngine {
 	* @return a link to the current plugin with the additional $params
 	*/
 	public static function getLink($plugin, $params=array(), $cmd="") {
-                return htmlspecialchars(PluginEngine::getURL($plugin, $params, $cmd));
+		return htmlspecialchars(PluginEngine::getURL($plugin, $params, $cmd));
 	}
 
 	/**
@@ -195,58 +146,30 @@ class PluginEngine {
 	}
 
 	/**
-	* Returns the plugin type
-	* @return returns the type of the plugin if known by the engine
-			  otherwise returns undefined
-	*/
-	public static function getTypeOfPlugin($plugin) {
-	  if ($plugin instanceof AbstractStudIPStandardPlugin) {
-			return "Standard";
-		} else if ($plugin instanceof AbstractStudIPAdministrationPlugin) {
-			return "Administration";
-		} else if ($plugin instanceof AbstractStudIPSystemPlugin) {
-			return "System";
-		} else if ($plugin instanceof AbstractStudIPHomepagePlugin) {
-			return "Homepage";
-		} else if ($plugin instanceof AbstractStudIPPortalPlugin) {
-			return "Portal";
-		} else if ($plugin instanceof AbstractStudIPCorePlugin) {
-			return "Core";
-		}
-		return UNKNOWN_PLUGINTYPE;
-	}
-
-	/**
 	 * Creates an instance of the desired plugin class
 	 * @param pluginclassname - the desired class name
 	 * @param pluginpath - the path to the plugin
 	 * @param args - arguments passed to the plugin
 	 * @return an instance of the desired plugin or null otherwise
 	 */
-	public static function instantiatePlugin($pluginclassname, $pluginpath, $args = array()) {
-		if (isset(self::$plugin_list[$pluginclassname])) {
-			foreach (self::$plugin_list[$pluginclassname] as $plugin) {
-				if ($plugin['args'] == $args) {
-					return $plugin['object'];
-				}
-			}
-		}
+	public static function instantiatePlugin($pluginclassname, $pluginpath) {
+		global $pluginenv;
 
-		$env = $GLOBALS['pluginenv'];
-		$absolutepluginfile = $env->getPackagebasepath() . "/" . $pluginpath . "/" . $pluginclassname . ".class.php";
+		$basepath = $pluginenv->getPackagebasepath();
+		$pluginfile = $basepath.'/'.$pluginpath.'/'.$pluginclassname.'.class.php';
 
-		if (!file_exists($absolutepluginfile)) {
+		if (!file_exists($pluginfile)) {
 			return NULL;
 		}
 
-		require_once $absolutepluginfile;
+		require_once $pluginfile;
+
 		$plugin_class = new ReflectionClass($pluginclassname);
-		$plugin = $plugin_class->newInstanceArgs($args);
-		$plugin->setEnvironment($env);
-		$plugin->setPluginpath($env->getRelativepackagepath() . "/" . $pluginpath);
+		$plugin = $plugin_class->newInstance();
+		$plugin->setEnvironment($pluginenv);
+		$plugin->setPluginpath($pluginenv->getRelativepackagepath().'/'.$pluginpath);
 		$plugin->setBasepluginpath($pluginpath);
 
-		self::$plugin_list[$pluginclassname][] = array('args' => $args, 'object' => $plugin);
 		return $plugin;
 	}
 
@@ -326,25 +249,5 @@ class PluginEngine {
 	 */
 	public static function getValueFromSession($plugin,$key) {
 		return unserialize($_SESSION["PLUGIN_SESSION_SPACE"][strtolower(get_class($plugin))][$key]);
-	}
-
-	/**
-	 * for internal use only
-	 *
-	 * @param unknown_type $key
-	 * @return unknown
-	 */
-	public static function getEngineValueFromSession($key) {
-		return unserialize($_SESSION["PLUGIN_SESSION_SPACE"]["PLUGINENGINE"][$key]);
-	}
-
-	/**
-	 * for internal use only
-	 *
-	 * @param unknown_type $key
-	 * @param unknown_type $value
-	 */
-	public static function saveEngineValueToSession($key,$value) {
-		$_SESSION["PLUGIN_SESSION_SPACE"]["PLUGINENGINE"][$key] = serialize($value);
 	}
 }

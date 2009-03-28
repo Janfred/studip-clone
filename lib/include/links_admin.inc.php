@@ -426,14 +426,12 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	}
 	// create sublinks for administration plugins
 	if ($GLOBALS["PLUGINS_ENABLE"] && $perm->have_perm("admin")){
-		$persist = PluginEngine::getPluginPersistence("Administration");
-		$plugins = $persist->getAllActivatedPlugins();
-		if (is_array($plugins)){
-			foreach ($plugins as $adminplugin) {
-				if($plugin_struct = $reiter->getStructureForPlugin($adminplugin, 'plugins')){
-					$structure = array_merge($structure, $plugin_struct['structure']);
-					if($plugin_struct['reiter_view']) $reiter_view = $plugin_struct['reiter_view'];
-				}
+		$plugins = PluginEngine::getPlugins('Administration');
+
+		foreach ($plugins as $adminplugin) {
+			if($plugin_struct = $reiter->getStructureForPlugin($adminplugin, 'plugins')){
+				$structure = array_merge($structure, $plugin_struct['structure']);
+				if($plugin_struct['reiter_view']) $reiter_view = $plugin_struct['reiter_view'];
 			}
 		}
 	}

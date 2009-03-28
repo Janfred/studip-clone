@@ -15,6 +15,8 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 	var $template_factory;
 	// layout template
 	var $layout;
+	// environment
+	var $environment;
 
 	/**
 	 *
@@ -57,8 +59,6 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$pluginfilename = $_POST["pluginfilename"];
 		$user = $this->getUser();
 		$permission = $user->getPermission();
-		$pluginengine = PluginEngine::getPluginPersistence();
-		$roleplugin = $pluginengine->getPluginid('RoleManagementPlugin');
 
 		$template = $this->template_factory->open('plugin_administration');
 		$template->set_layout($this->layout);
@@ -82,8 +82,8 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$template->set_attributes(array(
 			'admin_plugin'  => $this,
 			'errorcode'     => $result,
-			'plugins'       => $pluginengine->getAllInstalledPlugins(),
-			'roleplugin'    => $pluginengine->getPlugin($roleplugin),
+			'plugins'       => PluginManager::getInstance()->getPluginInfos(),
+			'roleplugin'    => PluginEngine::getPlugin('RoleManagementPlugin'),
 			'installable'   => PluginEngine::getInstallablePlugins()
 		));
 
@@ -97,9 +97,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 	function actionShow(){
 		$user = $this->getUser();
 		$permission = $user->getPermission();
-		$pluginengine = PluginEngine::getPluginPersistence();
-		$adminpluginengine = PluginEngine::getPluginPersistence('Administration');
-		$roleplugin = $pluginengine->getPluginid('RoleManagementPlugin');
+		$plugin_manager = PluginManager::getInstance();
 
 		$template = $this->template_factory->open('plugin_administration');
 		$template->set_layout($this->layout);
@@ -113,7 +111,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 
 			$template->set_attributes(array(
 				'admin_plugin'  => $this,
-				'plugins'       => $pluginengine->getAllEnabledPlugins()
+				'plugins'       => $plugin_manager->getPluginInfos()
 			));
 
 			echo $template->render();
@@ -126,9 +124,9 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$forcedeinstall = $_REQUEST['forcedeinstall'];
 
 		if (isset($deinstall)) {
-			$plugin = $pluginengine->getPlugin($deinstall);
+			$plugin = $plugin_manager->getPluginInfoById($deinstall);
 
-			if (is_object($plugin)){
+			if (isset($plugin)) {
 				if (isset($forcedeinstall)){
 					// Plugin notwendige Änderungen vor der deinstallation durchführen lassen
 					$this->pluginmgmt->deinstallPlugin($plugin);
@@ -141,49 +139,30 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		} else if (isset($zip)) {
 			$link = $this->pluginmgmt->zipPluginPackage($zip);
 			$template->set_attribute('packagelink', $link);
-		} else {
+		} else if (isset($_REQUEST['save_x'])) {
 			// user changed the configuration of plugins
-			$plugins = $pluginengine->getAllInstalledPlugins();
+			$plugins = $plugin_manager->getPluginInfos();
 
 			foreach ($plugins as $plugin){
-				$id = $plugin->getPluginid();
+				$id = $plugin['id'];
 				if (!isset($_POST["available_" . $id]) &&
 				    !isset($_POST["navposition_" . $id])) {
 					continue;
 				}
 
-				if ($_POST["available_" . $id] == "1") {
-					$plugin->setEnabled(true);
-				} else {
-					$plugin->setEnabled(false);
-				}
+				$enabled = $_POST["available_" . $id] == "1";
+				$plugin_manager->setPluginEnabled($id, $enabled);
 
-				$navpos = $_POST["navposition_" . $id];
-				if ($navpos <= 0){
-					// minimaler Wert
-					$navpos = 1;
-				}
-
-				$plugin->setNavigationPosition($navpos);
-
-				if ($plugin instanceof AbstractStudIPAdministrationPlugin) {
-					if ($_POST["available_" . $id] == "1"){
-						$plugin->setActivated(true);
-					} else {
-						$plugin->setActivated(false);
-					}
-					$adminpluginengine->savePlugin($plugin);
-				} else {
-					// keine spezielle Behandlung nötig
-					$pluginengine->savePlugin($plugin);
-				}
+				// minimaler Wert
+				$navpos = max($_POST["navposition_" . $id], 1);
+				$plugin_manager->setPluginPosition($id, $navpos);
 			}
 		}
 
 		$template->set_attributes(array(
 			'admin_plugin'  => $this,
-			'plugins'       => $pluginengine->getAllInstalledPlugins(),
-			'roleplugin'    => $pluginengine->getPlugin($roleplugin),
+			'plugins'       => $plugin_manager->getPluginInfos(),
+			'roleplugin'    => PluginEngine::getPlugin('RoleManagementPlugin'),
 			'installable'   => PluginEngine::getInstallablePlugins()
 		));
 
@@ -210,15 +189,11 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 			throw new Studip_PluginNotFoundException(_("Kein Plugin angegeben."));
 		}
 
-		# retrieve corresponding plugin id
-		$plugin_persistence = PluginEngine::getPluginPersistence();
-		$plugin_id = $plugin_persistence->getPluginId($plugin_class);
-
-		# create an instance of the queried plugin
-		$plugin = $plugin_persistence->getPlugin($plugin_id);
+		# get information about the queried plugin
+		$plugin = PluginManager::getInstance()->getPluginInfo($plugin_class);
 
 		# retrieve manifest
-		$pluginpath = $plugin->environment->getBasepath().$plugin->getPluginpath();
+		$pluginpath = $this->environment->getPackagebasepath().'/'.$plugin['path'];
 		$plugininfos = PluginEngine::getPluginManifest($pluginpath);
 
 		$template->set_attributes(array(
@@ -249,36 +224,27 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 			throw new Studip_PluginNotFoundException(_("Kein Plugin angegeben."));
 		}
 
-		# retrieve corresponding plugin id
-		$plugin_persistence = PluginEngine::getPluginPersistence();
-		$plugin_id = $plugin_persistence->getPluginId($plugin_class);
-
-		# create an instance of the queried plugin
-		$plugin = $plugin_persistence->getPlugin($plugin_id);
+		$plugin_manager = PluginManager::getInstance();
+		$plugin_info = $plugin_manager->getPluginInfo($plugin_class);
 
 		if (isset($_POST['selected'])) {
-			$selected_inst = $_POST['selected_inst'];
+			$selected_inst = isset($_POST['selected_inst']) ? $_POST['selected_inst'] : array();
 
 			if (isset($_POST['nodefault'])) {
-				if ($plugin->pluginengine->removeDefaultActivations($plugin)) {
-					$message = array('msg' => _('Die Voreinstellungen wurden erfolgreich gelöscht.'));
-					$selected_inst = array();
-				} else {
-					$message = array('err' => _('Die Voreinstellungen konnten nicht gelöscht werden.'));
-				}
+				$plugin_manager->setDefaultActivations($plugin_info['id'], array());
+				$message = array('msg' => _('Die Voreinstellungen wurden erfolgreich gelöscht.'));
+				$selected_inst = array();
 			} else {
 				// save selected institutes
-				if ($plugin->pluginengine->saveDefaultActivations($plugin, $selected_inst)) {
-					$message = array('msg' => ngettext('Für das ausgewählte Institut wurde das Plugin standardmäßig aktiviert.',
-									   'Für die ausgewählten Institute wurde das Plugin standardmäßig aktiviert.',
-									   count($selected_inst)));
-				} else {
-					$message = array('err' => _('Das Abspeichern der Default-Einstellungen ist fehlgeschlagen.'));
-				}
+				$plugin_manager->setDefaultActivations($plugin_info['id'], $selected_inst);
+				$message = array('msg' => ngettext(
+					'Für das ausgewählte Institut wurde das Plugin standardmäßig aktiviert.',
+					'Für die ausgewählten Institute wurde das Plugin standardmäßig aktiviert.',
+					count($selected_inst)));
 			}
 		} else {
 			// load old config
-			$selected_inst = $plugin->pluginengine->getDefaultActivations($plugin);
+			$selected_inst = $plugin_manager->getDefaultActivations($plugin_info['id']);
 		}
 
 		$template->set_attributes(array(
@@ -304,8 +270,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$template = $this->template_factory->open('plugin_update');
 		$template->set_layout($this->layout);
 
-		$pluginengine = PluginEngine::getPluginPersistence();
-		$plugins = $pluginengine->getAllInstalledPlugins();
+		$plugins = PluginManager::getInstance()->getPluginInfos();
 		$update_info = $this->pluginmgmt->getUpdateInfo($plugins);
 
 		$template->set_attributes(array(
@@ -331,8 +296,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$template = $this->template_factory->open('plugin_update');
 		$template->set_layout($this->layout);
 
-		$pluginengine = PluginEngine::getPluginPersistence();
-		$plugins = $pluginengine->getAllInstalledPlugins();
+		$plugins = PluginManager::getInstance()->getPluginInfos();
 		$update_info = $this->pluginmgmt->getUpdateInfo($plugins);
 
 		$update = isset($_POST['update']) ? $_POST['update'] : array();
