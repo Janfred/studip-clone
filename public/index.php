@@ -264,8 +264,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 // display menue
 ?>
 
-	<div align="center">
-		<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
+		<table class="index_box" border="0" cellpadding="2" cellspacing="0" style="margin:auto">
 			<tr>
 				<td class="topic" colspan="2" align="left"><img src="<?=$GLOBALS['ASSETS_URL']?>images/home.gif" align="absmiddle" /> <b><?=$ueberschrift?></b></td>
 			</tr>
@@ -369,7 +368,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			if($db->f('fetch_title') && $feed->ausgabe->channel['title']) $feedtitle = $feed->ausgabe->channel['title'];
 			else $feedtitle = $db->f("name");
 ?>
-		<table class="index_box" border="0" cellpadding="2" cellspacing="0">
+		<table class="index_box" border="0" cellpadding="2" cellspacing="0" style="margin:auto">
 			<tr>
 				<td class="topic"><b><?=htmlReady($feedtitle)?></b></td>
 			</tr>
