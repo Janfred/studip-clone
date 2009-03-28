@@ -34,7 +34,11 @@ require_once ('lib/statusgruppe.inc.php');
 require_once ('lib/datei.inc.php');
 require_once ('lib/classes/Statusgruppe.class.php');
 
-$HELP_KEYWORD="Basis.EinrichtungenVerwaltenGruppen";
+/* 
+ * no admin help yet (cf. http://develop.studip.de/trac/ticket/475 )
+ * $HELP_KEYWORD="Basis.EinrichtungenVerwaltenGruppen"; 
+ */
+$HELP_KEYWORD="Basis.Allgemeines"; 
 
 //Output starts here
 
