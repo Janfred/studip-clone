@@ -304,6 +304,7 @@ function quotes_encode ($description,$author) {
 		$postmp = strpos($description,"%%[editiert von");
 		$description = substr_replace($description," ",$postmp);
 		}
+	/* quote reduction deactivated (cf. http://develop.studip.de/trac/ticket/208 ) 
 	while (ereg("\[quote",$description) AND ereg("\[/quote\]",$description)){ // da wurde schon mal zitiert...
 		$pos1 =         strpos($description, "[quote");
 		$pos2 =         strpos($description, "[/quote]");
@@ -311,6 +312,7 @@ function quotes_encode ($description,$author) {
 			$description = substr($description,0,$pos1)."[...]".substr($description,$pos2+8);
 		else break; // hier hat einer von Hand rumgepfuscht...
 		}
+	*/
 	$description = "[quote=".$author."]\n".$description."\n[/quote]";
 	return $description;
 }
