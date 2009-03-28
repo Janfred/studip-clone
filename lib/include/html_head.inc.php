@@ -65,7 +65,7 @@ global  $_html_head_title,
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=WINDOWS-1252">
-		<? if (basename($_SERVER['SCRIPT_NAME']) !== 'logout.php' && $AUTH_LIFETIME > 0) : ?>
+		<? if (basename($_SERVER['SCRIPT_NAME']) !== 'logout.php' && $AUTH_LIFETIME > 0 && $auth->auth["uid"]!="" && $auth->auth["uid"] != "nobody" && $auth->auth["uid"] != "form") : ?>
 			<meta http-equiv="REFRESH" CONTENT="<?= $AUTH_LIFETIME * 60 ?>; URL=<?= $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] ?>logout.php">
 		<? endif ?>
 
