@@ -111,7 +111,12 @@ class DomainAdminController extends Trails_Controller
     function delete_action ($id)
     {
         $domain = new UserDomain($id);
-        $domain->delete();
+
+        if (count($domain->getUsers()) == 0) {
+             $domain->delete();
+        } else {
+             $this->error_msg = _("Domänen, denen noch Nutzer zugewiesen sind, können nicht gelöscht werden.");
+        }
 
         $this->domains = UserDomain::getUserDomains();
         $this->render_action('show');
