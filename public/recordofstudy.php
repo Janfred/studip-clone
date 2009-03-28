@@ -63,6 +63,9 @@ $sess->register("template");
 /*																			  *
 /* ************************************************************************* */
 
+
+$FDF_USAGE_HINT=sprintf(_("Die Ausgabe wird in einem speziellen Format erzeugt, für das Sie den %sAcrobat Reader%s mit Browser- und Formularunterstützung benötigen."),"<a href='http://get.adobe.com/reader/' target='_blank'>","</a>");
+
 include_once($PATH_EXPORT ."/recordofstudy.lib.php");
 include_once($PATH_EXPORT ."/recordofstudyDB.php");
 /* **END*of*initialize*post/get*variables*********************************** */
@@ -371,7 +374,7 @@ function createInfoxboxArray($mode){
 								"text"  => _("Um eine Druckansicht Ihrer Veranstaltungen zu erstellen, wählen Sie bitte zunächst das entsprechende Semester aus und engen gegebenenfalls ihre Suchabfrage ein.")
 								),
 						array	 (	"icon" => "ausruf_small.gif",
-								"text" => _("Die Ausgabe wird in einem speziellen Format erzeugt, für das Sie den <a href='http://get.adobe.com/reader/' target='_new'>Acrobat Reader</a> mit Browser- und Formularunterstützung benötigen.")
+								"text" => $GLOBALS['FDF_USAGE_HINT']
 						))
 			),
 		);
@@ -384,7 +387,7 @@ function createInfoxboxArray($mode){
 									"text"  => _("Erstellen Sie ihre Veranstaltungsübersicht und bearbeiten Sie fehlende oder falsche Einträge.")
 									),
 						array	 (	"icon" => "ausruf_small.gif",
-								"text" => _("Die Ausgabe wird in einem speziellen Format erzeugt, für das Sie den <a href='http://get.adobe.com/reader/' target='_new'>Acrobat Reader</a> mit Browser- und Formularunterstützung benötigen.")
+								"text" => $GLOBALS['FDF_USAGE_HINT']
 						)
 									)
 			),
@@ -408,7 +411,7 @@ function createInfoxboxArray($mode){
 									"text"  => _("Über den/die Link(s) können Sie sich Ihre Veranstaltungsübersicht anzeigen lassen.")
 									),
 						array	 (	"icon" => "ausruf_small.gif",
-								"text" => _("Die Ausgabe wird in einem speziellen Format erzeugt, für das Sie den <a href='http://get.adobe.com/reader/' target='_new'>Acrobat Reader</a> mit Browser- und Formularunterstützung benötigen.")
+								"text" => $GLOBALS['FDF_USAGE_HINT']
 						)
 						)
 			)

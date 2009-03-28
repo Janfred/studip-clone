@@ -55,7 +55,7 @@ function printSelectSemester($infobox,$semestersAR){
 		  . "   <table align=\"center\" width=\"99%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n"
 		  . "	 <tr>"
 		  . "	  <td align=\"left\" valign=\"top\"><font size=\"-1\">\n"
-		  . "<table>".parse_msg_to_string("info§"._("Die Ausgabe wird in einem speziellen Format erzeugt, für das Sie den <a href='http://get.adobe.com/reader/' target='_new'>Acrobat Reader</a> mit Browser- und Formularunterstützung benötigen."))."</table>\n"
+		  . "<table>".parse_msg_to_string("info§".$GLOBALS['FDF_USAGE_HINT'])."</table>\n"
 		  . _("Bitte wählen sie ein Semster aus:")."\n"
 		  . "	   <form action=\"".$_SERVER['PHP_SELF']."\" method=post>\n"
 		  . "       &nbsp;<select name=\"semesterid\" style=\"vertical-align:middle;\">\n";
@@ -225,7 +225,7 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
  * displays the site in which the user can download the pdf
  *
  * @access  private
- * @param   array  $INfobox		the infobox for this site
+ * @param   array  $infobox		the infobox for this site
  * @param   array  $seminars	the seminars to export
  *
  */
