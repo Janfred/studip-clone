@@ -826,10 +826,10 @@ $anzahl_teilnehmer_kontingent = $db->f('teilnehmer_kontingent');
 						<td class="blank">&nbsp;</td>
 					</tr>
 					<tr>
-      			<td class="steelkante2" valign="middle">
+      			<td class="steelkante" valign="middle">
 							<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="22" width="5">
 						</td>
-      			<td class="steelkante2" valign="middle">
+      			<td class="steelkante" valign="middle">
 							<font size="-1"><?=_("Sortierung:")?>&nbsp;</font>
 						</td>
 						<? if (!isset($view_order) || ($view_order == "abc")) { ?>
@@ -837,7 +837,7 @@ $anzahl_teilnehmer_kontingent = $db->f('teilnehmer_kontingent');
 							&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forumrot_indikator.gif" align="absmiddle">
 							<font size="-1"><?=_("Alphabetisch")?></font>&nbsp;
 						<? } else { ?>
-						<td nowrap class="steelkante2" valign="middle">
+						<td nowrap class="steelkante" valign="middle">
 							&nbsp;
 							<a href="<?= URLHelper::getLink('?view_order=abc') ?>">
 								<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forum_indikator_grau.gif" border="0" align="absmiddle">
@@ -851,7 +851,7 @@ $anzahl_teilnehmer_kontingent = $db->f('teilnehmer_kontingent');
 							&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forumrot_indikator.gif" align="absmiddle">
 							<font size="-1"><?=_("Anmeldedatum")?></font>&nbsp;
 						<? } else { ?>
-						<td nowrap class="steelkante2" valign="middle">
+						<td nowrap class="steelkante" valign="middle">
 							&nbsp;
 							<a href="<?= URLHelper::getLink('?view_order=date') ?>">
 								<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forum_indikator_grau.gif" border="0" align="absmiddle">
@@ -865,7 +865,7 @@ $anzahl_teilnehmer_kontingent = $db->f('teilnehmer_kontingent');
 							&nbsp;<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forumrot_indikator.gif" align="absmiddle">
 							<font size="-1"><?=_("Aktivität")?></font>&nbsp;
 						<? } else { ?>
-						<td nowrap class="steelkante2" valign="middle">
+						<td nowrap class="steelkante" valign="middle">
 							&nbsp;
 							<a href="<?= URLHelper::getLink('?view_order=active') ?>">
 								<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/forum_indikator_grau.gif" border="0" align="absmiddle">
@@ -875,7 +875,7 @@ $anzahl_teilnehmer_kontingent = $db->f('teilnehmer_kontingent');
 						<? } ?>
 						</td>
 
-							<td nowrap align="right" class="steelkante2" valign="middle"> <?
+							<td nowrap align="right" class="steelkante" valign="middle"> <?
 
 			$db3->query ("SELECT showscore  FROM seminare WHERE Seminar_id = '$SessionSeminar'");
 			while ($db3->next_record()) {

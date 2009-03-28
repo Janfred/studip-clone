@@ -870,29 +870,29 @@ function forum_print_toolbar ($id="") {
 			if ($forum["view"] != "tree" && $forum["view"] != "mixed")
 				$print .= "<form name=\"sortierung\" method=\"post\" action=\"".URLHelper::getLink("#anker")."\">";
 			$print .= "<table class=\"blank\" width=\"100%\" border=0 cellpadding=0 cellspacing=0><tr><td class=\"blank\">&nbsp;</td></tr><tr>";
-			$print .= "<td class=\"steelkante2\" valign=\"middle\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"22\" width=\"5\"></td>";
-			$print .= "<td class=\"steelkante2\" valign=\"middle\"><font size=\"-1\">"._("Indikator:")."&nbsp;</font>";
+			$print .= "<td class=\"steelkante\" valign=\"middle\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"22\" width=\"5\"></td>";
+			$print .= "<td class=\"steelkante\" valign=\"middle\"><font size=\"-1\">"._("Indikator:")."&nbsp;</font>";
 
 			if ($forum["indikator"] == "age")
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forumrot_indikator.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["age"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["age"]["name"]."</font></a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&open=$open&indikator=age")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["age"]["name"]."</font></a> &nbsp;";
 			if ($forum["indikator"] == "viewcount")
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_gruen.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["viewcount"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&open=$open&indikator=viewcount")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["viewcount"]["name"]."</font></a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&open=$open&indikator=viewcount")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["viewcount"]["name"]."</font></a> &nbsp;";
 			if ($forum["indikator"] == "rating")
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_gelb.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["rating"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rating")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["rating"]["name"]."</font></a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&open=$open&indikator=rating")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["rating"]["name"]."</font></a> &nbsp;";
 			if ($forum["indikator"] == "score")
 				$print .=  "</td><td nowrap class=\"steelgraulight_shadow\" valign=\"middle\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_blau.gif\" align=\"absmiddle\"><font size=\"-1\">".$indexvars["score"]["name"]." </font>&nbsp;";
 			else
-				$print .=  "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;<a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["score"]["name"]."</font></a> &nbsp;";
+				$print .=  "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;<a href=\"".URLHelper::getLink("?flatviewstartposting=$flatviewstartposting&open=$open&indikator=score")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forum_indikator_grau.gif\" border=\"0\" align=\"absmiddle\"><font size=\"-1\" color=\"#555555\">".$indexvars["score"]["name"]."</font></a> &nbsp;";
 
 			if ($forum["view"] != "tree" && $forum["view"] != "mixed") { // Anzeige der Sortierung nicht in der Themenansicht
-				$print .= "</td><td nowrap class=\"steelkante2\" valign=\"middle\">&nbsp;|&nbsp;&nbsp;<font size=\"-1\">Sortierung:&nbsp;&nbsp;</font>";
-				$print .= "</td><td nowrap class=\"steelkante2\" valign=\"middle\"><select name=\"sort\" size=\"1\">";
+				$print .= "</td><td nowrap class=\"steelkante\" valign=\"middle\">&nbsp;|&nbsp;&nbsp;<font size=\"-1\">Sortierung:&nbsp;&nbsp;</font>";
+				$print .= "</td><td nowrap class=\"steelkante\" valign=\"middle\"><select name=\"sort\" size=\"1\">";
 				$tmp["age"] = "Alter";
 				$tmp["viewcount"] = $indexvars["viewcount"]["name"];
 				$tmp["rating"] = $indexvars["rating"]["name"];
