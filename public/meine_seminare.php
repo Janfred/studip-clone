@@ -500,7 +500,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					$group_name = $group_names[$group_id];
 				}
 
-				echo '</td><td class="blue_gradient" valign="middle" colspan="' . ($view == 'ext' ? 3 : 1) . '">';
+				echo '</td><td class="blue_gradient" align="left" valign="middle" colspan="' . ($view == 'ext' ? 3 : 1) . '">';
 				echo '<a class="tree" '.(($_my_sem_open[$group_id]) ? 'style="font-weight:bold"' : '' ).' name="' . $group_id . '" href="' . $PHP_SELF . '?view=' . $view . '&'.(($_my_sem_open[$group_id]) ? 'close' : 'open' ).'_my_sem=' . $group_id . '#' .$group_id . '" ' . tooltip(_("Gruppierung öffnen"), true) . '>';
 				echo htmlReady(($group_field == "sem_tree_id") ? $group_names[$group_id][0] : $group_names[$group_id]);
 				echo '</a>';

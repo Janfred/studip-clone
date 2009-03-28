@@ -169,7 +169,7 @@ while ($tmp_first_date < $end_date) {
 ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="blank" width="100%" align="center" valign="top">
+		<td class="blank" width="100%" valign="top">
 			<table width="99%" border="0" cellpadding="2" cellspacing="0">
 			<tr>
 				<td colspan="9" class="blue_gradient">
