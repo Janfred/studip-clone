@@ -61,7 +61,7 @@ class StudipLitSearch {
 									'search_operator'=> array('type' => 'radio', 'options' => array(array('name' =>_("UND"),'value' => 'AND'),
 																									array('name' =>_("ODER"),'value' => 'OR'),
 																									array('name' =>_("NICHT"),'value' => 'NOT')), 
-															'caption' => _("Verknüpfung") ,'separator' => "&nbsp;", 'default_value' => "AND")
+															'caption' => _("Verknüpfung") ,'info'=>_("Wählen Sie eine Verknüpfungsart"), 'separator' => "&nbsp;", 'default_value' => "AND")
 									);
 		$search_plugins = $this->getAvailablePlugins();
 		$preferred_plugin = $this->getPreferredPlugin();
