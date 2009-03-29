@@ -73,7 +73,7 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && ($auth->is_authenticated() && $user-
 	$rss_id = StudipNews::GetRssIdFromRangeId('studip');
 	if($rss_id){
 		$_include_additional_header = '<link rel="alternate" type="application/rss+xml" '
-									.'title="RSS" href="rss.php?id='.$rss_id.'"/>';
+									.'title="RSS" href="rss.php?id='.$rss_id.'">';
 	}
 }
 
@@ -262,7 +262,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 		<table class="index_box" border="0" cellpadding="2" cellspacing="0" style="margin:auto">
 			<tr>
-				<td class="topic" colspan="2" align="left"><img src="<?=$GLOBALS['ASSETS_URL']?>images/home.gif" align="absmiddle" /> <b><?=$ueberschrift?></b></td>
+				<td class="topic" colspan="2" align="left"><img src="<?=$GLOBALS['ASSETS_URL']?>images/home.gif" style="vertical-align:middle" alt="Home-Icon"> <b><?=$ueberschrift?></b></td>
 			</tr>
 			<tr>
 				<td class="blank" valign="top" style="padding-left:25px; width:80%;">
@@ -288,7 +288,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 ?>
 				</table>
 				</td>
-				<td class="indexpage" align="right" valign="top"><img src="<?=$GLOBALS['ASSETS_URL']?>images/blank.gif" width="390" height="100"></td>
+				<td class="indexpage" align="right" valign="top"><img src="<?=$GLOBALS['ASSETS_URL']?>images/blank.gif" width="390" height="100" alt=""></td>
 			</tr>
 		</table>
 		<br/>
