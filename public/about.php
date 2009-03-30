@@ -291,14 +291,14 @@ $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
 			if ($score->IsMyScore()) {
 				echo "&nbsp;<a href=\"score.php\" " . tooltip(_("Zur Highscoreliste")) . "><font size=\"-1\">"
 				     . _("Ihr Stud.IP-Score:") . " ".$score->ReturnMyScore()."<br>&nbsp;"
-				     . _("Ihr Rang:") . " ".$score->ReturnMyTitle()."</a></font><br />";
+				     . _("Ihr Rang:") . " ".$score->ReturnMyTitle()."</a></font><br>";
 			}
 			elseif ($score->ReturnPublik()) {
 				$scoretmp = $score->GetScore(get_userid($username));
 				$title = $score->gettitel($scoretmp, $score->GetGender(get_userid($username)));
 				echo "&nbsp;<a href=\"score.php\"><font size=\"-1\">"
 				     . _("Stud.IP-Score:") . " ".$scoretmp."<br>&nbsp;"
-				     . _("Rang:") . " ".$title."</a></font><br />";
+				     . _("Rang:") . " ".$title."</a></font><br>";
 			}
 
 			if ($username==$auth->auth["uname"]) {
@@ -307,18 +307,18 @@ $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
 				}
 			} else {
 				if (CheckBuddy($username)==FALSE) {
-					echo "<br /><font size=\"-1\">&nbsp;<a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">" . _("zu Buddies hinzuf&uuml;gen") . "</a></font>";
+					echo "<br><font size=\"-1\">&nbsp;<a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">" . _("zu Buddies hinzuf&uuml;gen") . "</a></font>";
 				}
-				echo "<br /><font size=\"-1\"> <a href=\"sms_send.php?sms_source_page=about.php&rec_uname=", $db->f("username"),"\">&nbsp;" . _("Nachricht an Nutzer") . "&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Nachricht an Nutzer verschicken")) . " border=0 align=texttop></a></font>";
+				echo "<br><font size=\"-1\"> <a href=\"sms_send.php?sms_source_page=about.php&rec_uname=", $db->f("username"),"\">&nbsp;" . _("Nachricht an Nutzer") . "&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Nachricht an Nutzer verschicken")) . " border=0 align=texttop></a></font>";
 
 			}
 
 			// Export dieses Users als Vcard
-			echo "<br /><font size=\"-1\"><a href=\"contact_export.php?username=$username\">&nbsp;"._("vCard herunterladen")."&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("als vCard exportieren"))."></a></font>";
+			echo "<br><font size=\"-1\"><a href=\"contact_export.php?username=$username\">&nbsp;"._("vCard herunterladen")."&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("als vCard exportieren"))."></a></font>";
 			?>
 
-			<br />
-			<br />
+			<br>
+			<br>
 		</td>
 
 		<td class="steel1" width="99%" valign="top">
@@ -466,22 +466,22 @@ $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
 						echo $data['standard'];
 						echo '</table>';
 					} else {
-						echo '<br/>';
+						echo '<br>';
 					}
 
 					echo "</font>";
-					echo '<br/>';
+					echo '<br>';
 				}
 
 				if (($user_id == $user->id) && $GLOBALS['has_denoted_fields']) {
-					echo '<br/>';
+					echo '<br>';
 					echo '<font size="-1">';
-					echo ' * Diese Felder sind nur für Sie und AdministratorInnen sichtbar.<br/>';
+					echo ' * Diese Felder sind nur für Sie und AdministratorInnen sichtbar.<br>';
 					echo '</font>';
 				}
 				?>
 
-				<br />
+				<br>
 
 				<? foreach ($short_datafields as $entry) : ?>
 
@@ -496,23 +496,23 @@ $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
 					&nbsp;<strong><?= htmlReady($entry->getName()) ?>:</strong>
 					<?= $entry->getDisplayValue() ?>
 					<span class="minor">(<?= $visible ?>)</span>
-					<br />
+					<br>
 				<? endforeach ?>
 
-				<br />
+				<br>
 			</blockquote>
 		</td>
 </tr>
 </table>
 
-<br/>
+<br>
 
 <?
 
 // News zur person anzeigen!!!
 $show_admin = $perm->have_perm("autor") && $auth->auth["uid"] == $user_id;
 if (show_news($user_id, $show_admin, 0, $about_data["nopen"], "100%", 0, $about_data))
-	echo "<br/>";
+	echo "<br>";
 
 // alle persoenlichen Termine anzeigen, aber keine privaten
 if ($GLOBALS['CALENDAR_ENABLE']) {
@@ -521,7 +521,7 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 		$start_zeit = time();
 		$show_admin = $perm->have_perm("autor") && $auth->auth["uid"] == $user_id;
 		if (show_personal_dates($user_id, $start_zeit, -1, FALSE, $show_admin, $about_data["dopen"]))
-			echo "<br/>";
+			echo "<br>";
 	}
 }
 
@@ -549,13 +549,13 @@ if ($_REQUEST['guestbook'] && $perm->have_perm('autor'))
 
 if ($guest->active == TRUE || $guest->rights == TRUE) {
 	$guest->showGuestbook();
-	echo "<br/>";
+	echo "<br>";
 }
 
 // show chat info
 if ($GLOBALS['CHAT_ENABLE']){
 	if (chat_show_info($user_id))
-		echo "<br/>";
+		echo "<br>";
 }
 
 //test Ausgabe von Literaturlisten
@@ -570,7 +570,7 @@ if ( ($lit_list = StudipLitList::GetFormattedListsByRange($user_id)) ) {
 	unset($cs);
 }
 // Hier werden Lebenslauf, Hobbys, Publikationen und Arbeitsschwerpunkte ausgegeben:
-$ausgabe_format = '<table class="blank" width="100%%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><b>&nbsp;%s </b>%s</td></tr><tr><td class="steel1">&nbsp;</td></tr><tr><td class="steel1"><blockquote>%s</blockquote></td></tr><tr><td class="steel1">&nbsp;</td></tr></table><br />'."\n";
+$ausgabe_format = '<table class="blank" width="100%%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><b>&nbsp;%s </b>%s</td></tr><tr><td class="steel1">&nbsp;</td></tr><tr><td class="steel1"><blockquote>%s</blockquote></td></tr><tr><td class="steel1">&nbsp;</td></tr></table><br>'."\n";
 $ausgabe_felder = array('lebenslauf' => _("Lebenslauf"),
 			'hobby' => _("Hobbys"),
 			'publi' => _("Publikationen"),
@@ -651,7 +651,7 @@ if ($perm->get_perm($user_id) == 'dozent'){
 		$snap = new DbSnapshot($view->get_query("view:SEM_USER_GET_SEM"));
 		if ($snap->numRows){
 			$sem_name = $all_semester[$i]['name'];
-			if ($output) $output .= '<br />';
+			if ($output) $output .= '<br>';
 			$output .= "<font size=\"+1\"><b>$sem_name</b></font><br><br>";
 			$snap->sortRows("Name");
 			while ($snap->nextRow()) {
@@ -662,7 +662,7 @@ if ($perm->get_perm($user_id) == 'dozent'){
 					$ver_name .= " (" . $all_semester[$sem_number_start]['name'] . " - ";
 					$ver_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $all_semester[$sem_number_end]['name']) . ")";
 				}
-				$output .= '<b><a href="details.php?sem_id=' . $snap->getField('Seminar_id') . '">' . htmlReady($ver_name) . '</a></b><br />';
+				$output .= '<b><a href="details.php?sem_id=' . $snap->getField('Seminar_id') . '">' . htmlReady($ver_name) . '</a></b><br>';
 			}
 		}
 	}

@@ -61,7 +61,7 @@ function mainView() {
 
 	echo $zt->openRow();
 	echo $zt->cell('&nbsp;', array('class' => 'blank'));
-	echo $zt->cell('<a href="'.$link.'?cmd=new_rule">'. _("Neue Regel anlegen") .'</a><br/><br/>', array('colspan' => '20', 'class' => 'blank'));
+	echo $zt->cell('<a href="'.$link.'?cmd=new_rule">'. _("Neue Regel anlegen") .'</a><br><br>', array('colspan' => '20', 'class' => 'blank'));
 	echo $zt->closeRow();
 
 	echo $zt->openHeaderRow();
@@ -86,7 +86,7 @@ function mainView() {
 	}
 
 	echo $zt->openRow();
-	echo $zt->cell('<br/>', array('colspan' => '20', 'class' => 'blank'));
+	echo $zt->cell('<br>', array('colspan' => '20', 'class' => 'blank'));
 	echo $zt->close();
 }
 
@@ -196,7 +196,7 @@ function ruleView($state = 'change', $id = '') {
 	}
 
 	echo $zt->openRow();
-	echo $zt->cell('<br/>', array('colspan' => '20', 'align' => 'center', 'class' => 'blank'));
+	echo $zt->cell('<br>', array('colspan' => '20', 'align' => 'center', 'class' => 'blank'));
 	echo $zt->closeRow();
 
 	echo $zt->openRow();
@@ -204,7 +204,7 @@ function ruleView($state = 'change', $id = '') {
 	echo $zt->closeRow();
 
 	echo $zt->openRow();
-	echo $zt->cell('<br/>', array('colspan' => '20', 'class' => 'blank'));
+	echo $zt->cell('<br>', array('colspan' => '20', 'class' => 'blank'));
 	echo $zt->close();
 
 	if ($state == 'edit') {
@@ -282,6 +282,7 @@ switch ($view) {
 }
 
 echo $containerTable->close();
-include 'lib/include/html_end.inc.php';
-page_close();
+
+	include 'lib/include/html_end.inc.php';
+	page_close();
 ?>

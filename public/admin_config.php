@@ -101,14 +101,14 @@ if ($_REQUEST["change_config"]) {
 				<?parse_msg($msg);?>
 				</table>
 			<? } ?>
-			<br />
+			<br>
 			<blockquote>
-			<b><?=_("Systemkonfiguration") ?></b><br /><br />
-			<?=_("Sie k&ouml;nnen hier einen Teil der Systemkonfiguration direkt ver&auml;ndern. Sie k&ouml;nnen sowohl auf System- als auch Nutzervariablen zugreifen.")?> <br />
-			<?=_("Beachten Sie: Bisher ist nur ein kleiner Teil der Werte hier verf&uuml;gbar. Zuk&uuml;nftige Stud.IP-Versionen werden einen umfangreichen Zugriff auf s&auml;mtliche Systemeinstellungen zulassen. ")?> <br /><br />
+			<b><?=_("Systemkonfiguration") ?></b><br><br>
+			<?=_("Sie k&ouml;nnen hier einen Teil der Systemkonfiguration direkt ver&auml;ndern. Sie k&ouml;nnen sowohl auf System- als auch Nutzervariablen zugreifen.")?> <br>
+			<?=_("Beachten Sie: Bisher ist nur ein kleiner Teil der Werte hier verf&uuml;gbar. Zuk&uuml;nftige Stud.IP-Versionen werden einen umfangreichen Zugriff auf s&auml;mtliche Systemeinstellungen zulassen. ")?> <br><br>
 			</blockquote>
 		</td>
-		<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br />
+		<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br>
 			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/modules.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" />
 		</td>
 	</tr>
@@ -132,7 +132,7 @@ if ($_REQUEST["change_config"]) {
 				$db->query ("SELECT username, ". $_fullname_sql['full_rev'] ." AS fullname FROM auth_user_md5 LEFT JOIN user_info USING(user_id) WHERE (username LIKE '%".$_REQUEST["search_exp"]."%' OR Vorname LIKE '%".$_REQUEST["search_exp"]."%' OR Nachname LIKE '%".$_REQUEST["search_exp"]."%') ORDER BY Nachname");
 				if ($db->num_rows()) {
 					$out[] = '<a name="a"></a>';
-					$out[] = sprintf ('<br>&nbsp;<font size=-1><b>%s</b> '._("NutzerInnen gefunden:").'<br />', $db->num_rows());
+					$out[] = sprintf ('<br>&nbsp;<font size=-1><b>%s</b> '._("NutzerInnen gefunden:").'<br>', $db->num_rows());
 					$out[] = '&nbsp;<select style="font-size: 8pt" name="select_username">';
 					while ($db->next_record()) {
 						$out[].= sprintf ('<option value="%s">%s </option>', $db->f("username"), htmlReady(my_substr($db->f("fullname").' ('.$db->f("username").')', 0, 30)));
@@ -146,9 +146,9 @@ if ($_REQUEST["change_config"]) {
 				$out[] = '<font size=-1>';
 				if (($_REQUEST["search_exp"]) && (!$db->num_rows()))
 					$out[] = _("KeineN NutzerIn gefunden.").'<a name="a"></a>';
-				$out[] = '</font><br />';
+				$out[] = '</font><br>';
 				$out[] = '&nbsp;<input type="TEXT" size="30" maxlength="255" name="search_exp" />&nbsp;';
-				$out[] = '<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/suchen.gif"'.tooltip(_("Suche starten")).' border="0" name="search_user" /><br />';
+				$out[] = '<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/suchen.gif"'.tooltip(_("Suche starten")).' border="0" name="search_user" /><br>';
 				$out[] = '&nbsp;<font size=-1>'._("Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein.").'</font>';
 			}
 			$out[] = '</td></tr></table>';
@@ -220,13 +220,8 @@ if ($_REQUEST["change_config"]) {
 			</table>
 		</td>
 	</tr>
-	<tr>
-		<td class="blank" colspan=2>
-		&nbsp;
-		</td>
-	</tr>
 </table>
 <?php
-include ('lib/include/html_end.inc.php');
-page_close();
+	include ('lib/include/html_end.inc.php');
+	page_close();
 ?>

@@ -63,18 +63,18 @@ include('lib/classes/UserManagement.class.php');
 
 
 class UserManagementRequestNewPassword extends UserManagement {
-	
+
 	function UserManagementRequestNewPassword ($user_id) {
 		parent::UserManagement($user_id);
 	}
-	
+
 	function setPassword () {
 
 		// Can we reach the email?
 		if (!$this->checkMail($this->user_data['auth_user_md5.Email'])) {
 			return FALSE;
 		}
-		
+
 		$password = $this->generate_password(6);
 		$this->user_data['auth_user_md5.password'] = md5($password);
 
@@ -82,7 +82,7 @@ class UserManagementRequestNewPassword extends UserManagement {
 			$this->msg .= "error§" . _("Die &Auml;nderung konnte nicht in die Datenbank geschrieben werden.") . "§";
 			return FALSE;
 		}
-		
+
 		$this->msg .= "msg§" . sprintf(_("Passwort von User \"%s\" neu gesetzt."), $this->user_data['auth_user_md5.username']) . "§";
 
 		// include language-specific subject and mailbody
@@ -98,7 +98,7 @@ class UserManagementRequestNewPassword extends UserManagement {
 						"To: " . $this->user_data['auth_user_md5.Email'],
 						"Subject: " . $subject),
 				$mailbody);
-		
+
 		log_event("USER_NEWPWD",$this->user_data['auth_user_md5.user_id']);
 		return TRUE;
 
@@ -120,7 +120,7 @@ if( $_POST['email'] != "" ) {
 	$validator =& new email_validation_class();
 	if( !$validator->ValidateEmailAddress( $email ) ) {
 		// E-Mail ungültig
-		$msg[] = array( 'error', _("Die E-Mail-Adresse ist ungültig!") . '</br>' );
+		$msg[] = array( 'error', _("Die E-Mail-Adresse ist ungültig!") . '<br>' );
 	} else {
 		// Suche Benutzer über E-Mail-Adresse
 		$email = mysql_escape_string( $email );
@@ -129,7 +129,7 @@ if( $_POST['email'] != "" ) {
 		$success = $stmt->execute(array($email));
 		if(!$success || $stmt->rowCount() === 0) {
 			// kein Benutzer mit eingegebener E-Mail
-			$msg[] = array('error', _("Es konnte kein Benutzer mit dieser E-Mail-Adresse<br/>gefunden werden!"));
+			$msg[] = array('error', _("Es konnte kein Benutzer mit dieser E-Mail-Adresse<br>gefunden werden!"));
 			$msg[] = array('info', $admin_link);
 		} elseif ($stmt->rowCount() === 1) {
 			$row = $stmt->fetch();
@@ -148,7 +148,7 @@ if( $_POST['email'] != "" ) {
 				// include language-specific subject and mailbody
 				$user_language = getUserLanguagePath($row['user_id']);
 				include("locale/$user_language/LC_MAILS/request_new_password_mail.inc.php");
-				
+
 				$smtp->SendMessage($smtp->env_from, array($row['Email']), array("From: ".$smtp->from, "To: ".$row['Email'], "Reply-To: ".$row['Email'], "Subject: {$subject}"), $mailbody);
 			}
 	    } else {

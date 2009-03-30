@@ -18,7 +18,7 @@ if($red)
 }
 
 function footer() {
-	echo '</td></tr></table></div> <br />';
+	echo '</td></tr></table></div> <br>';
 }
 
 function reenter_mail() {
@@ -80,7 +80,7 @@ if(isset($_REQUEST['key'])) {
 		if($_SESSION['semi_logged_in'] == $_REQUEST['uid']) {
 			reenter_mail();
 		} else {
-			printf(_('Sie können sich %seinloggen%s und sich den Bestätigungscode neu oder an eine andere E-Mail Adresse schicken lassen.'), 
+			printf(_('Sie können sich %seinloggen%s und sich den Bestätigungscode neu oder an eine andere E-Mail Adresse schicken lassen.'),
 					'<a href="index.php?again=yes">', '</a>');
 		}
 		footer();
@@ -103,7 +103,7 @@ if(isset($_REQUEST['key'])) {
 			head(_('Fehler'), True);
 			echo parse_msg($send[1]);
 			footer();
-			
+
 			head($CURRENT_PAGE);
 			reenter_mail();
 			footer();
