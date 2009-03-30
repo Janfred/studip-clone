@@ -1,4 +1,6 @@
 <?php
+# Lifter002: TEST
+# Lifter003: TEST
 /**
  * RoleManagementPlugin.class.php
  *
@@ -47,9 +49,9 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 			$this->setNavigation($nav); //Eintrag in die Reiter
 			$this->setPluginiconname("img/einst.gif"); // ?!?
 		}
-		
+
 		$this->template_factory = new Flexi_TemplateFactory(dirname(__FILE__).'/templates');
-		
+
 		$this->links = array(
 			'createRole' => PluginEngine::getLink($this, array(), 'createRole'),
 			'removeRole' => PluginEngine::getLink($this, array(), 'removeRole'),
@@ -66,7 +68,7 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 	 */
 	private function deletePluginRoleAssignment()
 	{
-		print_r($_REQUEST);
+		print_r($_REQUEST); //?!?
 	}
 
 	/**
@@ -97,9 +99,9 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 		  "SELECT user_id FROM auth_user_md5 ".
 		  "WHERE username LIKE ? OR Vorname LIKE ? OR Nachname LIKE ? ".
 		  "ORDER BY Vorname, Nachname, username");
-		$stmt->execute(array($searchtxt, $searchtxt, $searchtxt));
+		$result = $stmt->execute(array($searchtxt, $searchtxt, $searchtxt))->fetchAll(PDO::FETCH_ASSOC);
 		$users = array();
-		while ($row = $stmt->fetch())
+		foreach ($result as $row)
 		{
 			$user = new StudIPUser();
 			$user->setUserid($row["user_id"]);
@@ -124,19 +126,17 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 	public function actionDoPluginRoleAssignment()
 	{
 		$pluginid = $_REQUEST["pluginid"];
-		$assignbtn = $_REQUEST["assignrolebtn_x"];
-		$delassignbtn = $_REQUEST["deleteroleassignmentbtn_x"];
 		$selroles = $_REQUEST["rolesel"];
 		$delassignedrols = $_REQUEST["assignedroles"];
 
 		//action
-		if (!empty($assignbtn))
+		if (isset($_REQUEST["assignrolebtn_x"]) || isset($_REQUEST["assignrolebtn"]))
 		{
 			// assign roles
 			RolePersistence::assignPluginRoles($pluginid,$selroles);
 			StudIPTemplateEngine::showSuccessMessage(_("Die Rechteeinstellungen wurden erfolgreich gespeichert."));
 		}
-		if (!empty($delassignbtn))
+		if (isset($_REQUEST["deleteroleassignmentbtn_x"]) || isset($_REQUEST["deleteroleassignmentbtn"]))
 		{
 			// delete role assignment
 			RolePersistence::deleteAssignedPluginRoles($pluginid,$delassignedrols);
@@ -159,11 +159,12 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 	 */
 	public function actionCreateRole()
 	{
-		$createrolebtn = $_POST["createrolebtn_x"];
+		print_r($_REQUEST);
 
 		//action
-		if (!empty($createrolebtn))
+		if (isset($_POST["createrolebtn_x"]) || isset($_POST["createrolebtn"]))
 		{
+			echo "neue rolle...";
 			if(!empty($_POST["newrole"]))
 			{
 				$role = new Role();
@@ -194,8 +195,6 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 	 */
 	public function actionRemoveRole()
 	{
-		$removerolebtn = $_POST["removerolebtn_x"];
-
 		$roles = PluginEngine::getValueFromSession($this,"roles");
 		if (empty($roles))
 		{
@@ -204,7 +203,7 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 		}
 
 		//action
-		if (!empty($removerolebtn))
+		if (isset($_POST["removerolebtn_x"]) || isset($_POST["removerolebtn"]))
 		{
 			if(!empty($_POST["rolesel"]))
 			{
@@ -216,7 +215,7 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 				PluginEngine::saveToSession($this,"roles",null);
 				StudIPTemplateEngine::showSuccessMessage(_("Die Rolle(n) und alle dazugehörigen Zuweisungen wurden erfolgreich gelöscht."));
 			}
-			else 
+			else
 			{
 				StudIPTemplateEngine::showErrorMessage(_("Fehler. bitte wählen sie eine Rolle zum Löschen aus."));
 			}
@@ -239,14 +238,14 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 		$usersearchtxt = $_POST["usersearchtxt"];
 		$userselid = $_POST["usersel"];
 		$rolselids = $_POST["rolesel"];
+		$delassignedroles = $_POST["assignedroles"];
+
 		$searchuserbtn = $_POST["searchuserbtn_x"];
 		$assignrolebtn = $_POST["assignrolebtn_x"];
 		$deleteassignedrolebtn = $_POST["deleteroleassignmentbtn_x"];
-		$delassignedroles = $_POST["assignedroles"];
-		$seluserbtn = $_POST["seluserbtn_x"];
-		$resetseluser = $_POST['resetseluser_x'];
 
-		if(!empty($resetseluser))
+
+		if(isset($_POST['resetseluser_x']) || isset($_POST['resetseluser']))
 		{
 			PluginEngine::saveToSession($this,"searcheduser",null);
 			PluginEngine::saveToSession($this,"selecteduser",null);
@@ -261,7 +260,7 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 
 		$founduser = PluginEngine::getValueFromSession($this,"searcheduser");
 		$selecteduser = PluginEngine::getValueFromSession($this,"selecteduser");
-		if(!empty($seluserbtn))
+		if(isset($_POST["seluserbtn_x"]) || isset($_POST["seluserbtn"]))
 		{
 			$founduser = PluginEngine::getValueFromSession($this,"searcheduser");
 			$selecteduser = $founduser[$userselid];
@@ -312,7 +311,6 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 		//action delete
 		if (!empty($deleteassignedrolebtn))
 		{
-			//ini_set("display_errors","on");
 			foreach ($delassignedroles as $roleid)
 			{
 				$role = $roles[$roleid];
@@ -351,33 +349,11 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 					break;
 				}
 			}
-			$users = array();
-			$db = new DB_Seminar;
 			//users
-		    $sql =  "SELECT a.user_id, a.username, a.Vorname, a.Nachname FROM roles_user  AS u LEFT JOIN auth_user_md5 AS a ON u.userid=a.user_id WHERE u.roleid = '".$roleid."' ORDER BY a.Nachname;";
-		    $db->query($sql);
-		    while($db->next_record())
-		    {
-		    	$user = array(
-		    		'userid' => $db->f('user_id'),
-		    		'username' => $db->f('username'),
-		    		'nachname' => $db->f('Nachname'),
-		    		'vorname' => $db->f('Vorname')
-		    	);
-		    	$users[] = $user;
-		    }
-			//plugins
-			$sql =  "SELECT a.pluginname, a.plugintype FROM roles_plugins AS u LEFT JOIN plugins AS a ON u.pluginid=a.pluginid WHERE u.roleid = '".$roleid."' ORDER BY a.pluginname;";
-		    $db->query($sql);
-		    while($db->next_record())
-		    {
-		    	$plugin = array(
-		    		'plugintype' => $db->f('plugintype'),
-		    		'pluginname' => $db->f('pluginname'),
-		    	);
-		    	$plugins[] = $plugin;
-		    }
+		    $users = DBManager::get()->query("SELECT a.user_id AS userid, a.username, a.Vorname, a.Nachname FROM roles_user  AS u LEFT JOIN auth_user_md5 AS a ON u.userid=a.user_id WHERE u.roleid = '".$roleid."' ORDER BY a.Nachname;")->fetchAll(PDO::FETCH_ASSOC);
 
+			//plugins
+			$plugins = DBManager::get()->query("SELECT a.pluginname, a.plugintype FROM roles_plugins AS u LEFT JOIN plugins AS a ON u.pluginid=a.pluginid WHERE u.roleid = '".$roleid."' ORDER BY a.pluginname;")->fetchAll(PDO::FETCH_ASSOC);
 		}
 
 		//view
