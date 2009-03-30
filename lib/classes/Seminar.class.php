@@ -949,8 +949,24 @@ class Seminar {
 
 		if (($new_start < $old_start) || ($new_end > $old_end) || ($data['day'] != $this->metadate->cycles[$data['cycle_id']]->day) ) {
 			if (!$data['really_change']) {
-				$link = 'raumzeit.php?editCycle_x=1&editCycle_y=1&cycle_id='.$data['cycle_id'].'&start_stunde='.$data['start_stunde'].'&start_minute='.$data['start_minute'].'&end_stunde='.$data['end_stunde'].'&end_minute='.$data['end_minute'].'&day='.$data['day'].'&really_change=true';
-				createQuestion(sprintf(_('Wenn Sie die regelmäßige Zeit auf %s ändern, verlieren Sie die Raumbuchungen für alle in der Zukunft liegenden Termine!<BR/>Sind Sie sicher, dass die regelmäßige Zeit ändern möchten?'), '<B>'.getWeekday($data['day'], FALSE).', '.$data['start_stunde'].':'.$data['start_minute'].' - '.$data['end_stunde'].':'.$data['end_minute'].'</B>'),$link);
+				$link = array(
+					'raumzeit.php?editCycle_x' => '1',
+					'editCycle_y' => '1',
+					'cycle_id' => $data['cycle_id'],
+					'start_stunde' => $data['start_stunde'],
+					'start_minute' => $data['start_minute'],
+					'end_stunde' => $data['end_stunde'],
+					'end_minute' => $data['end_minute'],
+					'day' => $data['day'],
+					'really_change' => 'true'
+				);
+				$question = _("Wenn Sie die regelmäßige Zeit auf %s ändern, verlieren Sie die Raumbuchungen für alle in der Zukunft liegenden Termine!")
+					."\n". _("Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?");
+				$question_time = '**'. getWeekday($data['day'], FALSE) .', '. $data['start_stunde'] .':'. $data['start_minute'] 
+					.' - '. $data['end_stunde'] .':'. $data['end_minute'] .'**';
+
+				echo createQuestion(sprintf($question, $question_time), $link);
+
 			} else {
 				$do_changes = true;
 			}

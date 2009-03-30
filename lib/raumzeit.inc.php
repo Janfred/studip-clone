@@ -46,7 +46,13 @@ function raumzeit_delete_singledate() {
 
 	// do we have warnings we need approval for?
 	if (!$_REQUEST['approveDelete'] && sizeof($warning) > 0) {
-			createQuestion( implode('<br/>', $warning) . '<br/>'. _("Wollen Sie diesen Termin wirklich löschen?"), $GLOBALS['PHP_SELF']."?cmd=delete_singledate&cycle_id={$_REQUEST['cycle_id']}&sd_id={$_REQUEST['sd_id']}&approveDelete=TRUE");
+			$params = array(
+				'cmd' => 'delete_singledate',
+				'cycle_id' => $_REQUEST['cycle_id'],
+				'sd_id' => $_REQUEST['sd_id'],
+				'approveDelete' => 'TRUE'
+			);
+			echo createQuestion( implode("\n", $warning) . "\n". _("Wollen Sie diesen Termin wirklich löschen?"), $params); 
 	} 
 	
 	// no approval needed or already approved
@@ -119,16 +125,39 @@ function raumzeit_checkboxAction() {
 
 		case 'deleteAll':
 			if ($_REQUEST['cycle_id']) {
+				// we are about to delete a regular timeslot
 				if ($_REQUEST['approveDeleteAll'] != TRUE) {	// security-question
-					createQuestion(_("Sie haben ausgewählt, alle Termine eines regelmäßigen Eintrages zu löschen. Dies hat zur Folge, dass der regelmäßige Termin ebenfalls gelöscht wird.").'<br/>'.sprintf(_("Sind Sie sicher, dass Sie den regelmäßigen Eintrag \"%s\" löschen möchten?"), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'</b>'), $GLOBALS['PHP_SELF']."?cmd=checkboxAction&checkboxAction=deleteAll&cycle_id={$_REQUEST['cycle_id']}&approveDeleteAll=TRUE");
+					$question = _("Sie haben ausgewählt, alle Termine eines regelmäßigen Eintrages zu löschen. Dies hat zur Folge, dass der regelmäßige Termin ebenfalls gelöscht wird.")
+						. "\n". _("Sind Sie sicher, dass Sie den regelmäßigen Eintrag **\"%s\"** löschen möchten?");
+					$question_time = $sem->metadate->cycles[$_REQUEST['cycle_id']]->toString();
+					$link = array (
+						'cmd'              => 'checkboxAction',
+						'checkboxAction'   => 'deleteAll',
+						'cycle_id'         => $_REQUEST['cycle_id'],
+						'approveDeleteAll' => 'TRUE'
+					);
+
+					echo createQuestion( sprintf( $question, $question_time ), $link );
+
 				} else {											// deletion approved, so we do the job
 					$msg = sprintf(_("Der regelmäßige Termin \"%s\" wurde gelöscht."), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'<b/>');
 					$sem->createMessage($msg);	// create a message
 					$sem->deleteCycle($_REQUEST['cycle_id']);
 				}
 			} else {
+				// we are about to delete all irregular dates
 				if ($_REQUEST['approveDeleteAll'] != TRUE) {	// security question
-					$sem->createQuestion( _("Sie haben ausgewählt, alle unregelmäßigen Termine dieser Veranstaltung zu löschen.").'<br/>'._("Sind Sie sicher, dass Sie alle unregelmäßigen Termine dieser Veranstaltung löschen möchten?"), $GLOBALS['PHP_SELF']."?cmd=checkboxAction&checkboxAction=deleteAll&cycle_id={$_REQUEST['cycle_id']}&approveDeleteAll=TRUE");
+					$question = _("Sie haben ausgewählt, alle unregelmäßigen Termine dieser Veranstaltung zu löschen.")
+						."\n". _("Sind Sie sicher, dass Sie alle unregelmäßigen Termine dieser Veranstaltung löschen möchten?");
+					$link = array(
+						'cmd' => 'checkboxAction',
+						'checkboxAction' => 'deleteAll',
+						'cycle_id' => $_REQUEST['cycle_id'],
+						'approveDeleteAll' => 'TRUE'
+					);
+
+					echo createQuestion( $question, $link );
+
 				} else {									// deletion approved, so we do the job
 					$msg = _("Folgende Termine wurden gelöscht:").'<br/>';
 					$singleDates =& $sem->getSingleDates();	// get all irrgeular singleDates of the seminar
@@ -246,7 +275,14 @@ function raumzeit_editCycle() {
 
 function raumzeit_deleteCycle() {
 	global $sem;
-	$sem->createQuestion(sprintf(_("Sind Sie sicher, dass Sie den regelm&auml;&szlig;igen Eintrag \"%s\" l&ouml;schen m&ouml;chten?"), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'</b>'), $GLOBALS['PHP_SELF']."?cmd=doDeleteCycle&cycle_id=".$_REQUEST['cycle_id']);
+	$question = _("Sind Sie sicher, dass Sie den regelmäßigen Eintrag **\"%s\"** löschen möchten?");
+	$question_time = $sem->metadate->cycles[$_REQUEST['cycle_id']]->toString();
+	$link = array(
+		'cmd' => 'doDeleteCycle',
+		'cycle_id' => $_REQUEST['cycle_id']
+	);
+
+	echo createQuestion( sprintf( $question, $question_time ), $link );
 }
 
 function raumzeit_doDeleteCycle() {
