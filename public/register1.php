@@ -55,7 +55,7 @@ if ($auth->is_authenticated() && $user->id != "nobody") {
 <blockquote><br><br>
 <?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der st&auml;ndigen Weiterentwicklung.")?>
 
-<? printf(_("F&uuml;r Vorschl&auml;ge und Kritik findet sich immer ein Ohr. Wenden Sie sich hierzu entweder an die %sStud.IP Crew%s oder direkt an die %sEntwickler%s."),"<a href=\"mailto:studip-users@lists.sourceforge.net\">", "</a>", "<a href=\"impressum.php\">", "</a>")?>
+<? printf(_("F&uuml;r Vorschl&auml;ge und Kritik findet sich immer ein Ohr. Wenden Sie sich hierzu entweder an die %sStud.IP Crew%s oder direkt an die %sEntwickler%s."),"<a href=\"mailto:studip-users@lists.sourceforge.net\">", "</a>", "<a href=\"dispatch.php/siteinfo/show\">", "</a>")?>
 <br><br>
 <?=_("Um den vollen Funktionsumfang von Stud.IP nutzen zu k&ouml;nnen, m&uuml;ssen Sie sich am System anmelden.")?><br>
 <?=_("Das hat viele Vorz&uuml;ge:")?><br>

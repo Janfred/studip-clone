@@ -141,7 +141,7 @@
 					<?}?>
 					</td>
 					<td align="right" valign="top" class="blank">
-					<a href="impressum.php?view=statistik">
+					<a href="dispatch.php/siteinfo/show">
 					<font size="2" color="#888888"><?=_("mehr")?>...</font>
 					</a>
 					</td>

@@ -303,7 +303,7 @@ $seminare_condition = "AND (" . join(" AND ", $admission_condition) . ") " .  $s
 $_my_inst = semadmission_get_institute($seminare_condition);
 
 if (!is_array($_my_inst)){
-	$_msg[] = array("info", sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"impressum.php?view=ansprechpartner\">", "</a>"));
+	$_msg[] = array("info", sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"dispatch.php/siteinfo/show\">", "</a>"));
 } else {
 	$_my_inst_arr = array_keys($_my_inst);
 	if(!$_SESSION['show_admission']['institut_id']){

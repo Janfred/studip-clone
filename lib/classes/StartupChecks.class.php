@@ -63,16 +63,16 @@ class StartupChecks {
 		$this->registered_checks["institutesRange"]["msg_fak_admin"] = _("Es existieren keine Studienbereiche in der Veranstaltungshierarchie. Jede Fakult&auml;t sollte &uuml;ber mindestens einen Studienbereich verf&uuml;gen, damit Veranstaltungen angelegt werden k&ouml;nnen. Nutzen sie daf&uuml;r die Veranstaltunghierarchie, um Studienbereiche zu verwalten.");
 		$this->registered_checks["institutesRange"]["msg"] = _("Es existieren keine Studienbereiche in der Veranstaltungshierarchie. Jede Fakult&auml;t sollte &uuml;ber mindestens einen Studienbereich verf&uuml;gen, damit Veranstaltungen angelegt werden k&ouml;nnen. Bitte wenden Sie sich an einen der Administratoren des Systems.");
 		$this->registered_checks["institutesRange"]["link_fak_admin"] = "admin_sem_tree.php";
-		$this->registered_checks["institutesRange"]["link"] = "impressum.php?view=ansprechpartner";
+		$this->registered_checks["institutesRange"]["link"] = "dispatch.php/siteinfo/show";
 		$this->registered_checks["institutesRange"]["link_name_fak_admin"] = _("Studienbereiche verwalten");
 		$this->registered_checks["institutesRange"]["link_name"] = _("Kontakt zu den Administratoren");
 
 		$this->registered_checks["myInstituteRange"]["msg"] = _("Das Anlegen einer Veranstaltung ist nicht m&ouml;glich, da keine Studienbereiche an ihrer Fakult&auml;t existieren. Bitte wenden Sie sich an einen der Administratoren des Systems.");
-		$this->registered_checks["myInstituteRange"]["link"] = "impressum.php?view=ansprechpartner";
+		$this->registered_checks["myInstituteRange"]["link"] = "dispatch.php/siteinfo/show";
 		$this->registered_checks["myInstituteRange"]["link_name"] = _("Kontakt zu den Administratoren");
 
 		$this->registered_checks["myAdminInstitute"]["msg"] = _("Um eine Veranstaltung anlegen zu k&ouml;nnen, muss Ihr Account mit einer Einrichtung verkn&uuml;pft werden.");
-		$this->registered_checks["myAdminInstitute"]["link"] = "impressum.php?view=ansprechpartner";
+		$this->registered_checks["myAdminInstitute"]["link"] = "dispatch.php/siteinfo/show";
 		$this->registered_checks["myAdminInstitute"]["link_name"] = _("Kontakt zu den Administratoren");
 
 		$this->registered_checks["dozent"]["msg"] = _("Sie ben&ouml;tigen mindestens einen Dozentenaccount, um Veranstaltungen anlegen zu k&ouml;nnen. Nutzen sie die globale Nutzerverwaltung, um einen neuen Nutzer mit dem Status Dozent anzulegen oder den Status eines bestehenden Nutzers auf &raquo;dozent&laquo; zu setzen.");
@@ -88,7 +88,7 @@ class StartupChecks {
 		$this->registered_checks["myInstitutesDozent"]["link_name"] = _("Dozent der Einrichtung zuordnen");
 	
 		$this->registered_checks["myInstitutes"]["msg"] = _("Um Veranstaltungen anlegen zu k&ouml;nnen, muss ihr Account der Einrichtung, f&uuml;r die Sie eine Veranstaltung anlegen m&ouml;chten, zugeordnet werden. Bitte wenden Sie sich an einen der Administratoren des Systems.");
-		$this->registered_checks["myInstitutes"]["link"] = "impressum.php?view=ansprechpartner";
+		$this->registered_checks["myInstitutes"]["link"] = "dispatch.php/siteinfo/show";
 		$this->registered_checks["myInstitutes"]["link_name"] = _("Kontakt zu den Administratoren");
 
 		$this->registered_checks["semester"]["msg"] = _("Um Veranstaltungen anlegen zu können muss mindestens ein Semester existieren, welches den jetzigen Zeitpunkt beinhaltet. Bitte legen Sie ein passendes Semester an.");
@@ -96,11 +96,11 @@ class StartupChecks {
 		$this->registered_checks["semester"]["link_name"] = _("Neues Semester anlegen");
 
 		$this->registered_checks["semesterAdmin"]["msg"] = _("Um Veranstaltungen anlegen zu können muss mindestens ein Semester existieren, welches den jetzigen Zeitpunkt beinhaltet. Um ein neues Semester anzulegen werden root-Rechte benötigt. Bitte wenden Sie sich an jemanden mit den nötigen Rechten.");
-		$this->registered_checks["semesterAdmin"]["link"] = "impressum.php?view=ansprechpartner";
+		$this->registered_checks["semesterAdmin"]["link"] = "dispatch.php/siteinfo/show";
 		$this->registered_checks["semesterAdmin"]["link_name"] = _("Kontakt zu den Administratoren");
 
 		$this->registered_checks["semesterDozent"]["msg"] = _("Um Veranstaltungen anlegen zu können muss mindestens ein Semester existieren, welches den jetzigen Zeitpunkt beinhaltet. Bitte wenden Sie sich an einen der Administratoren des Systems.");
-		$this->registered_checks["semesterDozent"]["link"] = "impressum.php?view=ansprechpartner";
+		$this->registered_checks["semesterDozent"]["link"] = "dispatch.php/siteinfo/show";
 		$this->registered_checks["semesterDozent"]["link_name"] = _("Kontakt zu den Administratoren");
 
 		$this->db = new DB_Seminar;

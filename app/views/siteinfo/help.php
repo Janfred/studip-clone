@@ -6,7 +6,7 @@
         <dd><?= sprintf(_('Nur wenn %s der Nutzersprache entspricht, wird der Text (%s) zwischen den Tags angezeigt'),
                             '<em>language</em>', '<em>...</em>')?></dd>
         <dt>[style=<em>definition</em>]<em>...</em>[/style]</dt>
-        <dd><?= sprintf(_('Die durch %s angegebenen Gestaltungsangaben werden dem umschlossenen Bereich (%s) zugewiesen.'),
+        <dd><?= sprintf(_('Die durch %s angegebenen CSS-Gestaltungsangaben werden dem umschlossenen Bereich (%s) zugewiesen.'),
                             '<em>definition</em>', '<em>...</em>')?></dd>
         <dt>(:version:)</dt>
         <dd><?= _('Die Angabe der verwendeten Stud.IP-Version.')?></dd>
