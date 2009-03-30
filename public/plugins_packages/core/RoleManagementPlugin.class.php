@@ -63,15 +63,6 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 	}
 
 	/**
-	 * Enter description here...
-	 *
-	 */
-	private function deletePluginRoleAssignment()
-	{
-		print_r($_REQUEST); //?!?
-	}
-
-	/**
 	 * Überprüft, ob der Benutzer ROOT ist.
 	 *
 	 */
@@ -148,7 +139,7 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 		$template->set_attribute('plugins', PluginManager::getInstance()->getPluginInfos());
 		$template->set_attribute('assigned', RolePersistence::getAssignedPluginRoles($pluginid));
 		$template->set_attribute('roles', RolePersistence::getAllRoles());
-		$template->set_attribute('pluginid', $pluginid);
+		$template->set_attribute('pluginid', $this->pluginid);
 		$template->set_attribute('links', $this->links);
 		echo $template->render();
 	}
@@ -159,8 +150,6 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 	 */
 	public function actionCreateRole()
 	{
-		print_r($_REQUEST);
-
 		//action
 		if (isset($_POST["createrolebtn_x"]) || isset($_POST["createrolebtn"]))
 		{
@@ -182,7 +171,7 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 
 		//view
 		$template = $this->template_factory->open('role_create');
-		$template->set_attribute('assigned', RolePersistence::getAssignedPluginRoles($pluginid));
+		$template->set_attribute('assigned', RolePersistence::getAssignedPluginRoles($this->pluginid));
 		$template->set_attribute('roles', RolePersistence::getAllRoles());
 		$template->set_attribute('links', $this->links);
 		echo $template->render();
@@ -223,7 +212,7 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 
 		//view
 		$template = $this->template_factory->open('role_create');
-		$template->set_attribute('assigned', RolePersistence::getAssignedPluginRoles($pluginid));
+		$template->set_attribute('assigned', RolePersistence::getAssignedPluginRoles($this->pluginid));
 		$template->set_attribute('roles', RolePersistence::getAllRoles());
 		$template->set_attribute('links', $this->links);
 		echo $template->render();
