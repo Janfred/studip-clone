@@ -928,8 +928,5 @@ div.modaldialog {
 }
 
 .borders {
-	-moz-border-radius-bottomleft:10px;
-	-moz-border-radius-bottomright:10px;
-	-moz-border-radius-topleft:10px;
-	-moz-border-radius-topright:10px;
+	-moz-border-radius: 10px;
 }
