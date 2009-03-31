@@ -88,7 +88,7 @@ $u_id = $user->id;
 if ($delete_id) {
    	$db->query("SELECT name FROM archiv WHERE seminar_id= '$delete_id'");
 	$db->next_record();
-	$msg="info§" . sprintf(_("Wollen Sie die Veranstaltung <b>%s</b> wirklich l&ouml;schen? S&auml;mtliche Daten und die mit der Veranstaltung archivierte Dateisammlung werden unwiderruflich gel&ouml;scht!"), htmlReady($db->f("name"))) . " <br />";
+	$msg="info§" . sprintf(_("Wollen Sie die Veranstaltung <b>%s</b> wirklich l&ouml;schen? S&auml;mtliche Daten und die mit der Veranstaltung archivierte Dateisammlung werden unwiderruflich gel&ouml;scht!"), htmlReady($db->f("name"))) . " <br>";
 	$msg.="<a href=\"".$PHP_SELF."?delete_really=TRUE&delete_id=$delete_id\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 	$msg.="<a href=\"".$PHP_SELF."?back=TRUE\">" . makeButton("nein", "img") . "</a>\n";
 
@@ -207,28 +207,26 @@ $HELP_KEYWORD="Basis.SuchenArchiv";
 
 include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 ?>
-<table width="100%" border=0 cellpadding=0 cellspacing=0 border=0>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" border="0">
 	<tr>
-		<td class="topic" colspan=2>&nbsp;</td>
+		<td class="topic" colspan="2">Archiv</td>
 	</tr>
 	<?
 	if ($msg) { ?>
 	<tr>
-		<td class="blank" colspan=2>&nbsp;
-		<? parse_msg($msg); ?>
-		</td>
+		<td class="blank" colspan="2"><? parse_msg($msg); ?></td>
 	</tr>
 	<? } ?>
 	<tr>
 		<td class="blank" width="60%" align="left">
 			<blockquote>
-			<br />
+			<br>
 				<p>
 				<form  name="search" method="post" action="<?echo $PHP_SELF?>" >
 					<table border=0 cellspacing=0 cellpadding=2>
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>" colspan=2>
-							<b><font size=-1><?=_("Bitte geben Sie hier Ihre Suchkriterien ein:")?></font></b><br />
+							<b><font size=-1><?=_("Bitte geben Sie hier Ihre Suchkriterien ein:")?></font></b><br>
 							</td>
 						</tr>
 						<tr <? $cssSw->switchClass() ?>>
@@ -352,12 +350,12 @@ include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 					   		</td>
 						</tr>
 					</table>
-					<br />
-					<input type="HIDDEN" name="suche" value="yes">
+					<br>
+					<input type="hidden" name="suche" value="yes">
 				</form>
 			</blockquote>
 		</td>
-		<td class="blank" align = right valign=top><br><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/archiv.jpg" border="0">
+		<td class="blank" align="right" valign="top"><br><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/archiv.jpg" border="0">
 		</td>
 	</tr>
 
@@ -427,7 +425,7 @@ if ($archiv_data["perform_search"]) {
 
 	?>
 	<tr>
-		<td class="blank" colspan=2>
+		<td class="blank" colspan="2">
 		<?
 
 		echo "<blockquote><b><font size=-1>";
@@ -435,7 +433,7 @@ if ($archiv_data["perform_search"]) {
 		echo "</font></b></blockquote>";
 
 
-	 	echo "<br /><br /><TABLE class=\"blank\"  WIDTH=99% align=center cellspacing=0 border=0>\n";
+	 	echo "<br><br><TABLE class=\"blank\"  WIDTH=99% align=center cellspacing=0 border=0>\n";
    	echo "<tr height=28><td  width=\"1%\" class=\"steel\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20>&nbsp; </td>\n";
 		echo "<td  width=\"29%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=Name\">" . _("Name") . "</a></b></td>\n";
 		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=dozenten\">" . _("DozentIn") . "</a></b></td>\n";
@@ -523,26 +521,26 @@ if ($archiv_data["perform_search"]) {
 					echo "<br><br><li><font size=\"-1\">" . _("Die Veranstaltungsinhalte, Beitr&auml;ge im Forum und das Dateiarchiv sind nicht zug&auml;ngig, da Sie an dieser Veranstaltung nicht teilgenommen haben.") . "</font></li>";
 
 				if ($archiv_data["edit_grants"]) {
-					echo "<br /><br /><hr><b><font size=\"-1\">" . _("Folgende Personen haben Zugriff auf die Daten der Veranstaltung (&Uuml;bersicht, Beitr&auml;ge und Dateiarchiv):") . "</font></b><br /><br />";
+					echo "<br><br><hr><b><font size=\"-1\">" . _("Folgende Personen haben Zugriff auf die Daten der Veranstaltung (&Uuml;bersicht, Beitr&auml;ge und Dateiarchiv):") . "</font></b><br><br>";
 					$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname , archiv_user.status, username, archiv_user.user_id FROM archiv_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_id = '".$db->f("seminar_id")."' ORDER BY Nachname");
 					while ($db2->next_record()) {
 						echo "<font size=\"-1\">".htmlReady($db2->f("fullname")). " (" . _("Status:") . " ". $db2->f("status"). ")</font>";
 						if ($db2->f("status") != "dozent")
 							echo "<a href=\"$PHP_SELF?delete_user=".$db2->f("user_id")."&d_sem_id=".$db->f("seminar_id"),"#anker\"><font size=\"-1\">&nbsp;" . _("Zugriffsberechtigung entfernen") . "</font> <img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Dieser Person die Zugriffsberechtigung entziehen")) . "></a>";
-						echo "<br />";
+						echo "<br>";
 					}
 					if (($add_user) && (!$new_search)) {
 						$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname, username, auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%".trim($search_exp)."%' ORDER BY Nachname");
 						if ($db2->affected_rows()) {
 							echo "<form action=\"$PHP_SELF#anker\">";
-							echo "<hr><b><font size=\"-1\">" . _("Person Berechtigung erteilen:") . " </font></b><br /><br />";
-							echo "<b><font size=\"-1\">" . sprintf(_("Es wurden %s Personen gefunden"), $db2->affected_rows()) . " </font></b><br />";
-							echo "<font size=\"-1\">" . _("Bitte w&auml;hlen Sie die Person aus der Liste aus:") . "</font>&nbsp;<br /><font size=\"-1\"><select name=\"add_user\">";
+							echo "<hr><b><font size=\"-1\">" . _("Person Berechtigung erteilen:") . " </font></b><br><br>";
+							echo "<b><font size=\"-1\">" . sprintf(_("Es wurden %s Personen gefunden"), $db2->affected_rows()) . " </font></b><br>";
+							echo "<font size=\"-1\">" . _("Bitte w&auml;hlen Sie die Person aus der Liste aus:") . "</font>&nbsp;<br><font size=\"-1\"><select name=\"add_user\">";
 							while ($db2->next_record()) {
 								echo "<option value=\"".$db2->f("user_id")."\">".htmlReady($db2->f("fullname")). " (".$db2->f("username").") </option>";
 							}
 							echo "</select></font>";
-							echo "<br /><font size=\"-1\"><input type=\"SUBMIT\"  name=\"do_add_user\" value=\"" . _("Diese Person hinzuf&uuml;gen") . "\" /></font>";
+							echo "<br><font size=\"-1\"><input type=\"SUBMIT\"  name=\"do_add_user\" value=\"" . _("Diese Person hinzuf&uuml;gen") . "\" /></font>";
 							echo "&nbsp;<font size=\"-1\"><input type=\"SUBMIT\"  name=\"new_search\" value=\"" . _("Neue Suche") . "\" /></font>";
 							echo "<input type=\"HIDDEN\"  name=\"a_sem_id\" value=\"",$db->f("seminar_id"), "\" />";
 							echo "</form>";
@@ -550,12 +548,12 @@ if ($archiv_data["perform_search"]) {
 					}
 					if ((($add_user) && (!$db2->affected_rows())) || (!$add_user) || ($new_search)) {
 						echo "<form action=\"$PHP_SELF#anker\">";
-						echo "<hr><b><font size=\"-1\">" . _("Person Berechtigung erteilen:") . " </font></b><br />";
+						echo "<hr><b><font size=\"-1\">" . _("Person Berechtigung erteilen:") . " </font></b><br>";
 						if (($add_user) && (!$db2->affected_rows())  && (!$new_search))
-							echo "<br /><b><font size=\"-1\">" . _("Es wurde keine Person zu dem eingegebenem Suchbegriff gefunden!") . "</font></b><br />";
+							echo "<br><b><font size=\"-1\">" . _("Es wurde keine Person zu dem eingegebenem Suchbegriff gefunden!") . "</font></b><br>";
 						echo "<font size=\"-1\">" . _("Bitte Namen, Vornamen oder Usernamen eingeben:") . "</font>&nbsp; ";
-						echo "<br /><input type=\"TEXT\" size=20 maxlength=255 name=\"search_exp\" />";
-						echo "&nbsp;<font size=\"-1\"><br /><input type=\"SUBMIT\"  name=\"add_user\" value=\"" . _("Suche starten") . "\" /></font>";
+						echo "<br><input type=\"TEXT\" size=20 maxlength=255 name=\"search_exp\" />";
+						echo "&nbsp;<font size=\"-1\"><br><input type=\"SUBMIT\"  name=\"add_user\" value=\"" . _("Suche starten") . "\" /></font>";
 						echo "</form>";
 					}
 				}
@@ -570,11 +568,11 @@ if ($archiv_data["perform_search"]) {
 }
 
 ?>
-</td></tr>
+		</td>
+	</tr>
 </table>
 <?
 }
-include ('lib/include/html_end.inc.php');
-  // Save data back to database.
-  page_close();
+	include ('lib/include/html_end.inc.php');
+	page_close();
  ?>

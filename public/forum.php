@@ -287,8 +287,8 @@ if ($sql_topic_id) {
 	$db=new DB_Seminar;
 	$db->query('SELECT * FROM px_topics WHERE topic_id=\''.$sql_topic_id. '\' AND Seminar_id =\''.$SessSemName[1].'\'');
 	if (!$db->num_rows()) { // wir sind NICHT im richtigen Seminar!
-		echo '<br /><br />';
-		parse_window ('error§' . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . '<br /><font size="-1" color="black">' . _("Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu verwenden.") . '</font>', '§',
+		echo '<br><br>';
+		parse_window ('error§' . _("Sie versuchen, mit zwei Browserfenstern innerhalb verschiedener Foren zu navigieren.") . '<br><font size="-1" color="black">' . _("Um unerw&uuml;nschte Effekte - wie falsch einsortierten Postings - zu vermeiden,<br>empfehlen wir, Stud.IP nur in einem Browserfenster zu verwenden.") . '</font>', '§',
 				_("zuviele Browserfenster im Forenbereich!"),
 				'');
 		die;
@@ -347,7 +347,7 @@ if ($delete_id) {
 			echo "<tr><td class=\"blank\"></td></tr>";
 			$msg="info§" . sprintf(_("Wollen Sie %s %s von %s wirklich löschen?"), $tmp_label, "<b>".htmlReady($db->f("name"))."</b>", "<b>".htmlReady($db->f("author"))."</b>") . "<br>\n";
 			if ($count)
-				$msg.= sprintf(_("Alle %s Antworten auf diesen Beitrag werden ebenfalls gelöscht!"), $count) . "<br />\n<br />\n";
+				$msg.= sprintf(_("Alle %s Antworten auf diesen Beitrag werden ebenfalls gelöscht!"), $count) . "<br>\n<br>\n";
 			$msg.="<a href=\"".URLHelper::getLink("?really_kill=$delete_id&view=$view#anker")."\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 			$msg.="<a href=\"".URLHelper::getLink("?topic_id=$root&open=$topic_id&view=$view&mehr=$mehr#anker")."\">" . makeButton("nein", "img") . "</a>\n";
 			parse_msg($msg, '§', 'blank', '1', FALSE);
@@ -355,14 +355,14 @@ if ($delete_id) {
 
 		// Darstellung des zu loeschenden Postings
 
-			echo '<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="0" align="center"><tr><td class="blank"><br /><br />';
+			echo '<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="0" align="center"><tr><td class="blank"><br><br>';
 			echo '<table width="80%" class="blank" border="0" cellpadding="0" cellspacing="0" align="center"><tr>';
 
 
 
 			printposting($forumposting);
 
-			echo "<br /></td></tr></table>\n<br /></td></tr></table>";
+			echo "<br></td></tr></table>\n<br></td></tr></table>";
 			page_close();
 			die;
 		}
@@ -544,7 +544,6 @@ else
 
 
 // echo "Zeit:".(getMsTime()-$stoppuhr);
-include ('lib/include/html_end.inc.php');
-  // Save data back to database.
-  page_close();
- ?>
+	include ('lib/include/html_end.inc.php');
+	page_close();
+?>

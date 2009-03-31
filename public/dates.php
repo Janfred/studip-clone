@@ -114,8 +114,9 @@ $termine = getAllSortedSingleDates($sem);
 
 if ($cmd == 'openAll') $openAll = true;
 ?>
-<TABLE width="100%" border="0" cellpadding="2" cellspacing="0">
-  <TR>
+
+<table width="100%" border="0" cellpadding="2" cellspacing="0">
+  <tr>
 		<TD align="center" class="blank" width="80%" valign="top">
 			<TABLE width="99%" cellspacing="0" cellpadding="0" border="0">
 				<? if (is_array($termine) && sizeof($termine) > 0) : ?>
@@ -244,7 +245,7 @@ if ($cmd == 'openAll') $openAll = true;
 				?>
 			</TABLE>
 		</TD>
-		<TD class="blank" align="right" valign="top">
+		<td class="blank" align="right" valign="top" width="270">
 		<?
 			//Build an infobox
 			$infobox_template =& $GLOBALS['template_factory']->open('infobox/infobox_dates');
@@ -264,15 +265,10 @@ if ($cmd == 'openAll') $openAll = true;
 			// render template
 			echo $infobox_template->render();
 		?>
-		</TD>
-	</TR>
-	<TR>
-		<TD class="blank" colspan="5">
-			&nbsp;
-		</TD>
-	</TR>
-</TABLE>
-</FORM>
-<?
-include ('lib/include/html_end.inc.php');
-page_close();
+		</td>
+	</tr>
+</table>
+<?php
+	include ('lib/include/html_end.inc.php');
+	page_close();
+?>

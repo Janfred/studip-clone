@@ -126,12 +126,11 @@ if ($existingowninfolabel) {
 $size_of_book = GetSizeofBook()
 
 ?>
+<form action="<? echo $PHP_SELF ?>?cmd=search#anker" method="post">
 <table width = "100%" cellspacing="0" border="0" cellpadding="0">
-
-<tr><td class="blank" align="left" valign="absmiddle">
-
-	<form action="<? echo $PHP_SELF ?>?cmd=search#anker" method="POST"><?
-
+	<tr>
+		<td class="blank" align="left">
+<?
 if ($open != "all" && $size_of_book>0) {
 	echo "&nbsp; <a href=\"$PHP_SELF?view=$view&open=all&filter=$filter\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle aufklappen (").((($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book)).")</font></a></td>";
 } elseif ($size_of_book>0) {
@@ -160,7 +159,7 @@ if ($search_exp) {
 	echo "<font size=\"2\" color=\"#555555\">". _("Person zum Eintrag in das Adressbuch suchen:")."</font>&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
 	printf ("<input type=\"IMAGE\" name=\"search\" src= \"".$GLOBALS['ASSETS_URL']."images/suchen.gif\" border=\"0\" value=\"" . _("Personen suchen") . "\" %s>&nbsp;  ", tooltip(_("Person suchen")));
 }
-echo "</form></td></tr>";
+echo "</td></tr>";
 
 if ($sms_msg)	{
 	parse_msg ($sms_msg);
@@ -169,6 +168,7 @@ if ($sms_msg)	{
 	}
 ?>
 </table>
+</form>
 <?
 
 
@@ -276,9 +276,8 @@ if (!$edit_id) {
 	}
 	echo 	"<br><font size=\"2\" color=\"#555555\">"._("Bedienung:").$hints;
 }
-echo "<br>&nbsp; </td></tr></table>";
+echo "<br></td></tr></table>";
 
-include ('lib/include/html_end.inc.php');
-page_close();
-
+	include ('lib/include/html_end.inc.php');
+	page_close();
 ?>

@@ -533,18 +533,15 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 			if ($select) {
 				?>
 				<tr>
-				<td class="blank" colspan="3" width="100%">
+				<td class="blank" colspan="3" width="100%" align="center">
 				<blockquote>
-				<p valign="middle">
 				<form action="<? echo URLHelper::getLink('#anker') ?>" method="POST">
 					<select name="open" style="vertical-align:middle">
 						<? echo $select ?>
 					</select>
 					<input type="text" name="top_folder_name" size="50">
-					&nbsp;&nbsp;
-					<input type="image" name="anlegen" value="<?=_("Neuer Ordner")?>" align="absmiddle" <?=makeButton("neuerordner", "src")?> border=0 />
+					<input type="image" name="anlegen" value="<?=_("Neuer Ordner")?>" <?=makeButton("neuerordner", "src")?> border="0">
 				</form>
-				</p>
 				</blockquote>
 				<?
 				}
@@ -612,12 +609,11 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 
 	$folder_system_data["linkerror"]="";
 ?>
-<br>
-</td>
-</tr>
+		<br>
+		</td>
+	</tr>
 </table>
-<br>
 <?php
-include ('lib/include/html_end.inc.php');
-// Save data back to database.
-page_close();
+	include ('lib/include/html_end.inc.php');
+	page_close();
+?>

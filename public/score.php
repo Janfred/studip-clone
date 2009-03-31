@@ -1,5 +1,7 @@
 <?php
+# Lifter001: TODO
 # Lifter002: TEST (mriehe)
+# Lifter005: TODO
 /**
  * score.php - Stud.IP Highscore List
  *

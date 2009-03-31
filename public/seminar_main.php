@@ -127,41 +127,41 @@ $quarter_year = 60 * 60 * 24 * 90;
 	<?
 	echo "<br><font size=\"+1\"><b>".htmlReady($SessSemName["header_line"]). "</b>";
 	if ($SessSemName[3]) {
-		echo "<br /><font size=\"-1\"><b>" . _("Untertitel:") . " </b>";
+		echo "<br><font size=\"-1\"><b>" . _("Untertitel:") . " </b>";
 		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
 	}
 
 ?>
 	<font size="-1">
 	<?
-		echo '<br/>';
-		echo '<b>'. _("Zeit") .':</b><br />';
+		echo '<br>';
+		echo '<b>'. _("Zeit") .':</b><br>';
 
 		$data = getRegularOverview($SessSemName[1], true);		// second parameter set option to "shrink" dates
 		if ($data) {
-			echo $data . '<br/>';
+			echo $data . '<br>';
 			if ($perm->have_studip_perm('autor', $SessSemName[1]) && $modules['schedule']) {
-				echo '<br />';
+				echo '<br>';
 				echo sprintf(_("Details zu allen Terminen im %sAblaufplan%s"), '<a href="'.URLHelper::getLink('?auswahl='.$SessSemName[1].'&redirect_to=dates.php').'">', '</a>');
-				echo '<br />';
+				echo '<br>';
 			}
 		} else {
-			echo _("Die Zeiten der Veranstaltung stehen nicht fest."). '<br/>';
+			echo _("Die Zeiten der Veranstaltung stehen nicht fest."). '<br>';
 		}
 
 		$next_date = $sem->getNextDate();
 		if ($next_date) {
-			echo '<br/>';
-			echo '<b>'._("Nächster Termin").':</b><br />';
-			echo $next_date . '<br/>';
+			echo '<br>';
+			echo '<b>'._("Nächster Termin").':</b><br>';
+			echo $next_date . '<br>';
 		} else if ($first_date = $sem->getFirstDate()) {
-			echo '<br/>';
-			echo '<b>'._("Erster Termin").':</b><br />';
-			echo $first_date . '<br/>';
+			echo '<br>';
+			echo '<b>'._("Erster Termin").':</b><br>';
+			echo $first_date . '<br>';
 		} else {
-			echo '<br/>';
-			echo '<b>'._("Erster Termin").':</b><br />';
-			echo _("Die Zeiten der Veranstaltung stehen nicht fest."). '<br/>';
+			echo '<br>';
+			echo '<b>'._("Erster Termin").':</b><br>';
+			echo _("Die Zeiten der Veranstaltung stehen nicht fest."). '<br>';
 		}
 		?>
 	</font>
@@ -186,10 +186,9 @@ $quarter_year = 60 * 60 * 24 * 90;
 			print(htmlReady($db->f("fullname")) ."</a>");
 		$i++;
 	}
-
 	?>
-		<br/>
-		<br/>
+		<br>
+		<br>
 	<?
 		// Ticket #68
 		if (!$perm->have_perm('dozent')) {
@@ -216,8 +215,8 @@ $quarter_year = 60 * 60 * 24 * 90;
 							</td>
 							<td>
 								<font size="-1">
-								<?= _("Sie haben noch nicht die für diese Veranstaltung benötigten Zusatzinformationen eingetragen.")?><br/>
-								<?= _("Um das nochzuholen gehen Sie unter \"TeilnehmerInnen\" auf \"Zusatzangaben\"")?><br/>
+								<?= _("Sie haben noch nicht die für diese Veranstaltung benötigten Zusatzinformationen eingetragen.")?><br>
+								<?= _("Um das nochzuholen gehen Sie unter \"TeilnehmerInnen\" auf \"Zusatzangaben\"")?><br>
 								<?= _("oder klicken sie auf")?>
 								&nbsp;&nbsp;<a href="<?=URLHelper::getLink("teilnehmer_aux.php")?>"><img src="<?=$GLOBALS['ASSETS_URL']?>/images/link_intern.gif" border="0" valign="absmiddle">&nbsp;<?= _("Direkt zu den Zusatzangaben") ?></a>
 								</font>
@@ -229,13 +228,11 @@ $quarter_year = 60 * 60 * 24 * 90;
 			}
 		}
 		?>
-
-		</font>
-		</blockquote><br />
+		</blockquote><br>
 		</td>
 		<td class="blank" align="right" valign="top">
-			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br />
-			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/hoersaal.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" /><br />
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br>
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/hoersaal.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" /><br>
 			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" />
 		</td>
 	</tr>
@@ -259,17 +256,18 @@ if (show_dates($start_zeit, $end_zeit, $smain_data["dopen"], $auswahl, 0, TRUE, 
 		echo"<br>";
 
 // show chat info
-if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"])) {
-		if (chat_show_info($auswahl))
-				echo "<br>";
+if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"]))
+{
+	if (chat_show_info($auswahl))
+	echo "<br>";
 }
 
 // include and show votes and tests
-if ($GLOBALS['VOTE_ENABLE']) {
+if ($GLOBALS['VOTE_ENABLE'])
+{
 	show_votes ($auswahl, $auth->auth["uid"], $perm, YES);
 }
 
-include ('lib/include/html_end.inc.php');
-// Save data back to database.
-page_close();
+	include ('lib/include/html_end.inc.php');
+	page_close();
 ?>

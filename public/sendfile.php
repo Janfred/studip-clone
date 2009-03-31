@@ -2,7 +2,7 @@
 # Lifter002: TODO
 /**
 * sendfile.php
-* 
+*
 * Send files to the browser an does permchecks
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>, André Noack André Noack <andre.noack@gmx.net>
@@ -52,7 +52,7 @@ $db2=new DB_Seminar;
 
 if (isset($file_id))
 	$file_id = escapeshellcmd(basename($file_id));
-	
+
 //determine the type of the object we want to download a file from (only in type=0 mode!)
 $db->query("SELECT seminar_id AS object_id, filesize, range_id FROM dokumente WHERE dokument_id = '".$file_id."' ");
 $db->next_record();
@@ -110,9 +110,9 @@ if (($type != 2) && ($type != 3) && ($type != 4) && (!$skip_check)) { //if type 
 //Nachricht bei verbotenem Download
 if ($no_access) {
 	if ($type)
-		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Archiv"), '<a href="archiv.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br />&nbsp;' ;
+		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Archiv"), '<a href="archiv.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br>&nbsp;' ;
 	else
-		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Downloadbereich"), '<a href="folder.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br />&nbsp;' ;
+		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Downloadbereich"), '<a href="folder.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br>&nbsp;' ;
 
 	// Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
@@ -127,7 +127,7 @@ if ($no_access) {
 
 switch ($type) {
 	//We want to download from the archive (this mode performs perm checks)
-	case 1: 
+	case 1:
 		$path_file=$ARCHIV_PATH."/".$file_id;
 	break;
 	//We want to download from the tmp/export-folder
@@ -185,118 +185,118 @@ if ($force_download) {
 	$content_disposition="attachment";
 } else {
 	switch (strtolower(getFileExtension ($file_name))) {
-		case "txt": 
+		case "txt":
 			$content_type="text/plain";
 			$content_disposition="inline";
 		break;
-		case "css": 
+		case "css":
 			$content_type="text/css";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "gif": 
+		case "gif":
 			$content_type="image/gif";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "jpeg": 
+		case "jpeg":
 			$content_type="image/jpeg";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "jpg": 
+		case "jpg":
 			$content_type="image/jpeg";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "jpe": 
+		case "jpe":
 			$content_type="image/jpeg";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "bmp": 
+		case "bmp":
 			$content_type="image/x-ms-bmp";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "png": 
+		case "png":
 			$content_type="image/png";
-			$content_disposition="inline";	
+			$content_disposition="inline";
 		break;
-		case "wav": 
+		case "wav":
 			$content_type="audio/x-wav";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "ra": 
+		case "ra":
 			$content_type="application/x-pn-realaudio";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "ram": 
+		case "ram":
 			$content_type="application/x-pn-realaudio";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "mpeg": 
+		case "mpeg":
 			$content_type="video/mpeg";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "mpg": 
+		case "mpg":
 			$content_type="video/mpeg";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "mpe": 
+		case "mpe":
 			$content_type="video/mpeg";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "qt": 
+		case "qt":
 			$content_type="video/quicktime";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "mov": 
+		case "mov":
 			$content_type="video/quicktime";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "avi": 
+		case "avi":
 			$content_type="video/x-msvideo";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "rtf": 
+		case "rtf":
 			$content_type="application/rtf";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "pdf": 
+		case "pdf":
 			$content_type="application/pdf";
 			$content_disposition="inline";
 		break;
-		case "doc": 
+		case "doc":
 			$content_type="application/msword";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "xls": 
+		case "xls":
 			$content_type="application/ms-excel";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "ppt": 
+		case "ppt":
 			$content_type="application/ms-powerpoint";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "tgz": 
-		case "gz": 	
+		case "tgz":
+		case "gz":
 			$content_type="application/x-gzip";
 			$content_disposition="inline";
 		break;
-		case "bz2": 
+		case "bz2":
 			$content_type="application/x-bzip2";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "zip": 
+		case "zip":
 			$content_type="application/zip";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "swf": 
+		case "swf":
 			$content_type="application/x-shockwave-flash";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
-		case "csv": 
+		case "csv":
 			$content_type="text/csv";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
 		default:
 			$content_type="application/octet-stream";
-			$content_disposition="inline";		
+			$content_disposition="inline";
 		break;
 		}
 	}
@@ -312,7 +312,7 @@ if ($type == 6) {
 	if (!($link_data['HTTP/1.0 200 OK'] || $link_data['HTTP/1.1 200 OK'])) {
 		include ('lib/include/html_head.inc.php'); // Output of html head
 		include ('lib/include/header.php');   // Output of Stud.IP head
-		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Downloadbereich"), '<a href="folder.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br />&nbsp;' ;
+		$add_msg= sprintf(_("%sZur&uuml;ck%s zum Downloadbereich"), '<a href="folder.php?back=TRUE"><b>&nbsp;', '</b></a>') . '<br>&nbsp;' ;
 		parse_window('error§' . _("Diese Datei wird von einem externen Server geladen und ist dort momentan nicht erreichbar!"), '§', _("Download nicht m&ouml;glich"), $add_msg);
 		include ('lib/include/html_end.inc.php');
 		page_close();

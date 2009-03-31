@@ -2,7 +2,7 @@
 # Lifter002: TODO
 /**
 * support.php
-* 
+*
 * The startscript for the SupportDB module
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
@@ -17,7 +17,7 @@
 // This file is part of Stud.IP
 // support.php
 // Startscript fuer SupportDB-Modul von Stud.IP
-// Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>, 
+// Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>,
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -34,19 +34,24 @@
 // +---------------------------------------------------------------------------+
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
-$perm->check("user"); 
+$perm->check("user");
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
-if ($SUPPORT_ENABLE){
+if ($SUPPORT_ENABLE)
+{
 	//Steuerung der SupportDB einbinden
 	include ($RELATIVE_PATH_SUPPORT.'/support.inc.php');
-} else {
+}
+else
+{
 	// Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   // Output of Stud.IP head
 	require_once ('lib/msg.inc.php');
 	parse_window ("error§" . _("Das SupportDB-Modul ist nicht eingebunden. Bitte aktivieren Sie es in den Systemeinstellungen oder wenden Sie sich an eine Person mit administrativen Rechten im System."), "§",
 				_("SupportDB nicht eingebunden"));
+	include ('lib/include/html_end.inc.php');
+	page_close();
 }
 ?>

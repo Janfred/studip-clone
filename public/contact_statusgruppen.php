@@ -26,11 +26,6 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $hash_secret = "dslkjjhetbjs";
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
-
-$CURRENT_PAGE = _("Kontaktgruppen");
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-
 require_once ('lib/contact.inc.php');
 require_once ('config.inc.php');
 require_once ('lib/visual.inc.php');
@@ -38,7 +33,13 @@ require_once 'lib/functions.php';
 require_once ('lib/statusgruppe.inc.php');
 require_once ('lib/user_visible.inc.php');
 #include ("calendar/calendar_links.inc.php");
+
+$CURRENT_PAGE = _("Kontaktgruppen");
+
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 include('lib/include/links_sms.inc.php');
+
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
 
@@ -79,7 +80,8 @@ function MovePersonStatusgruppe ($range_id, $AktualMembers="", $InstitutMembers=
 
 
 function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
-{	global $PHP_SELF, $_fullname_sql;
+{
+	global $PHP_SELF, $_fullname_sql;
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
@@ -132,7 +134,8 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 }
 
 function PrintSearchResults ($search_exp, $range_id)
-{ global $SessSemName, $_fullname_sql;
+{
+	global $SessSemName, $_fullname_sql;
 	$db=new DB_Seminar;
 	$query = "SELECT DISTINCT auth_user_md5.user_id, " . $_fullname_sql['full_rev'] ." AS fullname, username, perms ".
 	"FROM auth_user_md5 LEFT JOIN user_info USING (user_id) LEFT JOIN user_inst ON user_inst.user_id=auth_user_md5.user_id AND Institut_id = '$inst_id' ".
@@ -251,12 +254,12 @@ if (is_array($msgs)) {
 }
 ?>
   <tr>
-    <td align="right" width="50%" class="blank">&nbsp;</td>
-    <td align="right" width="50%" NOWRAP class="blank">
+    <td align="right" width="50%" class="blank"></td>
+    <td align="right" width="50%" class="blank" nowrap="nowrap">
 <?
 	if ($cmd!="edit_statusgruppe") { // normale Anzeige
 ?>
-		<form action="<? echo $PHP_SELF ?>?cmd=add_new_statusgruppe" method="POST">
+		<form action="<? echo $PHP_SELF ?>?cmd=add_new_statusgruppe" method="post">
 		<?
 	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
   	      	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
@@ -301,19 +304,21 @@ if (is_array($msgs)) {
 $db = new DB_Seminar();
 $db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
 if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
-	?><table width="100%" border="0" cellspacing="0">
-<tr>
-	<?
-	printf ("<td class=\"steel1\" valign=\"top\" width=\"50%%\"><br>\n");
-?>	<form action="<? echo $PHP_SELF ?>?cmd=move_person" method="POST">
-<? echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">\n";
-	    	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">\n";
-	if ($db->num_rows() > 0) {
+	?>
+<form action="<? echo $PHP_SELF ?>?cmd=move_person" method="post">
+<table width="100%" border="0" cellspacing="0">
+	<tr>
+		<td class="steel1" valign="top" width="50%">
+		<br>
+<? 		echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">\n";
+	  	echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">\n";
+	if ($db->num_rows() > 0)
+	{
 		$nogroups = 1;
 		PrintAktualContacts ($range_id);
 
 		?>
-       	   <br><br>
+       	<br><br>
 		<?
 		if ($search_exp) {
 
@@ -333,22 +338,20 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 			echo "&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
 			printf ("<input type=\"IMAGE\" name=\"search\" src= \"".$GLOBALS['ASSETS_URL']."images/suchen.gif\" border=\"0\" value=\" %s \" %s>&nbsp;  ", _("Person suchen"), tooltip(_("Person suchen")));
 		}
-	}
-		?>
-	<br><br>
-    </td>
+	} ?>
+		<br><br>
+    	</td>
+    	<td class="blank" width="50%" align="center" valign="top">
 <? // Ende Personen-Bereich
-?>
-<? // Anfang Gruppenuebersicht
 
-    	printf ("<td class=\"blank\" width=\"50%%\" align=\"center\" valign=\"top\">");
+	// Anfang Gruppenuebersicht
 	PrintAktualStatusgruppen ($range_id, $view, $edit_id);
-	?>
-	<br>&nbsp;
-   </form>
-  </td>
- </tr>
+?>
+		<br>
+		</td>
+	</tr>
 </table>
+</form>
 <?
 } else { // es sind noch keine Gruppen angelegt, daher Infotext
 ?>
@@ -369,12 +372,11 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 		. sprintf(_("Lesen Sie weitere Bedienungshinweise in der %sHilfe%s nach!"),"<a href=\"".$help_url."\">", "</a>")
   	. "§");
     ?>
-  </table>
+</table>
 <?php
 }
 // Ende Gruppenuebersicht
 
-// Ende Darstellungsteil
-include ('lib/include/html_end.inc.php');
-page_close();
+	include ('lib/include/html_end.inc.php');
+	page_close();
 ?>

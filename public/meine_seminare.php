@@ -211,7 +211,7 @@ if (!$perm->have_perm("root"))
 if ($cmd == "no_kill") {
 	$db->query("SELECT Name, admission_type FROM seminare WHERE Seminar_id = '$auswahl'");
 	$db->next_record();
-	$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an die Dozentin oder den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br />";
+	$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an die Dozentin oder den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br>";
 }
 
 //Sicherheitsabfrage fuer abonnierte Veranstaltungen
@@ -224,15 +224,15 @@ if ($cmd == "suppose_to_kill") {
 		$meldung = "error§" . sprintf(_("Sie können das Abonnement der Veranstaltung <b>%s</b> nicht aufheben."), htmlReady($db->f("Name")));
 		if($lockdata['description']) $meldung .= '§info§' . fixLinks($lockdata['description']);
 	} elseif ($db->f("admission_type") || ($db->f("admission_prelim") == 1)) {
-		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die Berechtigung f&uuml;r die Veranstaltung und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($db->f("Name"))) . "<br />";
+		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die Berechtigung f&uuml;r die Veranstaltung und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($db->f("Name"))) . "<br>";
 		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
 		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
 	} else if ($db->f("admission_endtime_sem")!="-1" && $db->f("admission_endtime_sem") < time()) {
-		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der Veranstaltung <b>%s</b> wirklich aufheben? Der Anmeldzeitraum ist abgelaufen und Sie k&ouml;nnen sich nicht wieder anmelden!"), htmlReady($db->f("Name"))) . "<br />";
+		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der Veranstaltung <b>%s</b> wirklich aufheben? Der Anmeldzeitraum ist abgelaufen und Sie k&ouml;nnen sich nicht wieder anmelden!"), htmlReady($db->f("Name"))) . "<br>";
 		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
 		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
 	} else {
-		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der Veranstaltung <b>%s</b> wirklich aufheben?"), htmlReady($db->f("Name"))) . "<br />";
+		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der Veranstaltung <b>%s</b> wirklich aufheben?"), htmlReady($db->f("Name"))) . "<br>";
 		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
 		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
 	}
@@ -242,7 +242,7 @@ if ($cmd == "suppose_to_kill") {
 if ($cmd=="suppose_to_kill_admission") {
 	$db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
 	$db->next_record();
-	$meldung = "info§" . sprintf(_("Wollen Sie den Eintrag auf der Warteliste der Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die bereits erreichte Position und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($db->f("Name"))) . "<br />";
+	$meldung = "info§" . sprintf(_("Wollen Sie den Eintrag auf der Warteliste der Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die bereits erreichte Position und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($db->f("Name"))) . "<br>";
 	$meldung.="<a href=\"$PHP_SELF?cmd=kill_admission&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
 	$meldung.="<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
 }
@@ -252,11 +252,11 @@ if ($cmd=="kill" && !LockRules::Check($auswahl, 'participants')) {
 	$db->query("SELECT Name, admission_binding, a.status FROM seminar_user a LEFT JOIN seminare USING(Seminar_id) WHERE a.Seminar_id = '$auswahl' AND a.user_id='$user->id' AND a.status IN('user','autor')");
 	$db->next_record();
 	if ($db->f("admission_binding")) {
-		$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an die Dozentin oder den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br />";
+		$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an die Dozentin oder den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br>";
 	} elseif ($db->f("status")) {
-	
+
 		// LOGGING
-		log_event('SEM_USER_DEL', $auswahl, $user->id, 'Hat sich selbst ausgetragen'); 
+		log_event('SEM_USER_DEL', $auswahl, $user->id, 'Hat sich selbst ausgetragen');
 
 		$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
 		if ($db->affected_rows() == 0)
@@ -277,10 +277,10 @@ if ($cmd=="kill" && !LockRules::Check($auswahl, 'participants')) {
 
 //bei Bedarf aus admission_seminar_user austragen
 if ($cmd=="kill_admission") {
-	
+
 	// LOGGING
-	log_event('SEM_USER_DEL', $auswahl, $user->id, 'Hat sich selbst aus der Wartliste ausgetragen'); 
-	
+	log_event('SEM_USER_DEL', $auswahl, $user->id, 'Hat sich selbst aus der Wartliste ausgetragen');
+
 	$db->query("DELETE FROM admission_seminar_user WHERE user_id='$user->id' AND seminar_id='$auswahl'");
 	if ($db->affected_rows() == 0)  $meldung="error§" . _("Datenbankfehler!");
 	else {
@@ -443,24 +443,25 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	if ($num_my_sem) {
 	?>
 		<tr valign="top">
-			<td valign="top" class="blank" align="center"><br>
+			<td valign="top" class="blank" align="center">
+			<br>
 				<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" valign="top" class="blank">
-						<? if ($meldung) {
-							parse_msg($meldung, "§", "blank",3);
-							}?>
-							<tr align="center" valign="top">
-									<th width="2%" colspan=2 nowrap align="center">&nbsp;<a href="gruppe.php"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/gruppe.gif" <? echo tooltip(_("Gruppe ändern")) ?> border="0">&nbsp;</a></th>
-									<th width="85%" align="left"><? echo(_("Name")) ?></th>
-									<th width="10%"><b><? echo(_("Inhalt")) ?></b></th>
-									<?
-									if ($view=="ext") { ?>
-										<th width="10%"><b>&nbsp;<? echo(_("besucht")) ?>&nbsp;</b></th>
+					<? if ($meldung) {
+						parse_msg($meldung, "§", "blank",3);
+						}?>
+					<tr align="center" valign="top">
+							<th width="2%" colspan=2 nowrap="nowrap" align="center"><a href="gruppe.php"><img src="<?=$GLOBALS['ASSETS_URL'] ?>images/gruppe.gif" <? echo tooltip(_("Gruppe ändern")) ?> border="0"></a></th>
+							<th width="85%" align="left"><? echo(_("Name")) ?></th>
+							<th width="10%"><b><? echo(_("Inhalt")) ?></b></th>
+							<?
+							if ($view=="ext") { ?>
+								<th width="10%"><b><? echo(_("besucht")) ?></b></th>
 
-										<th width="10%">&nbsp;<? echo(_("Status")) ?>&nbsp;</a></th>
-										<th width="10%"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/nutzer.gif" <? echo tooltip(_("TeilnehmerInnen der Veranstaltung")) ?>></th>
-									<?	}?>
-									<th width="3%"><b>&nbsp; </b></th>
-							</tr>
+								<th width="10%"><? echo(_("Status")) ?></th>
+								<th width="10%"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/nutzer.gif" <? echo tooltip(_("TeilnehmerInnen der Veranstaltung")) ?>></th>
+							<?	}?>
+							<th width="3%"></th>
+					</tr>
 		<?
 		ob_end_flush(); //Buffer leeren, damit der Header zu sehen ist
 
@@ -540,7 +541,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				print ("</a>");
 				if ($values["visible"]==0) {
 					$infotext=_("Versteckte Veranstaltungen können über die Suchfunktionen nicht gefunden werden.");
-					if (get_config('ALLOW_DOZENT_VISIBILITY')) {					
+					if (get_config('ALLOW_DOZENT_VISIBILITY')) {
 						$infotext.=" "._("Um die Veranstaltung sichtbar zu machen, wählen Sie den Punkt \"Sichtbarkeit\" im Administrationsbereich der Veranstaltung.");
 					} else {
 						$infotext.=" "._("Um die Veranstaltung sichtbar zu machen, wenden Sie sich an eineN der zuständigen AdministratorInnen.");
@@ -614,23 +615,23 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 	 ?>
 	 <tr>
-	 	<td class="blank" colspan="2">&nbsp;
-	 	</td>
+	 	<td class="blank" colspan="2"> </td>
 	 </tr>
+	 <tr>
 		 <td valign="top" class="blank">
 			<table border="0" cellpadding="0" cellspacing="0" width="100%" align="center" class="blank">
-		<?
-		if ($meldung)	{
-			parse_msg($meldung);
-		}?>
+			<?
+			if ($meldung)	{
+				parse_msg($meldung);
+			}?>
 			</table>
-
 <?
 	}
 
 // Anzeige der Wartelisten
   $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime, seminare.admission_turnout, quota FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) LEFT JOIN admission_seminar_studiengang ON (admission_seminar_user.studiengang_id = admission_seminar_studiengang.studiengang_id AND seminare.seminar_id = admission_seminar_studiengang.seminar_id) WHERE user_id = '$user->id' ORDER BY admission_type, name");
-  if ($db->num_rows()) {
+  if ($db->num_rows())
+  {
 
 		// echo "<b><div align=\"left\">&nbsp;" . _("Anmelde- und Wartelisteneintr&auml;ge:") . "</div>&nbsp;";
 
@@ -640,11 +641,12 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		echo "<th width=\"10%\"><b>" . _("Datum") . "</b></th>";
 		echo "<th width=\"10%\" nowrap><b>" . _("Position/Chance") . "</b></th>";
 		echo "<th width=\"10%\"><b>" . _("Art") . "</b></th>";
-		echo "<th width=\"3%\">&nbsp; </tr></th>";
+		echo "<th width=\"3%\"> </th></tr>";
 
 		$cssSw->resetClass();
 
-		while ($db->next_record()) {
+		while ($db->next_record())
+		{
 			if ($db->f("status") == "claiming") { // wir sind in einer Anmeldeliste und brauchen Prozentangaben
 				$admission_chance = Seminar::GetInstance($db->f("seminar_id"))->getAdmissionChance($db->f("studiengang_id"));
 				$chance_color = dechex(255-(200-($admission_chance*2)));  // Gruen der Farbe nimmt mit Wahrscheinlichkeit ab
@@ -668,9 +670,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		}
 		print "</table>";
 		?>
-
 		<br><br>
-
 		<?
 	}	 // Ende Wartelisten
 
@@ -779,7 +779,6 @@ if ( !$perm->have_perm("root")) {
 
 //Info-field on the right side
 	?>
-
 	</td>
 	<td class="blank" width="270" align="right" valign="top">
 	<?
@@ -875,11 +874,11 @@ if ( !$perm->have_perm("root")) {
 
      	</td>
     </tr>
-    <tr>
-    	<td class="blank" colspan="2">&nbsp;
-    	</td>
-    </tr>
-
+	<tr>
+		<td class="blank" colspan=2>
+			&nbsp;
+		</td>
+	</tr>
 <?
 }
 
@@ -956,7 +955,7 @@ elseif ($auth->auth["perm"]=="admin") {
 		</tr>
 
 	<tr>
-		<td class="blank" width="100%" >&nbsp;
+		<td class="blank" width="100%">
 			<?
 			if ($meldung) parse_msg($meldung);
 			?>
@@ -966,8 +965,8 @@ elseif ($auth->auth["perm"]=="admin") {
 	if (is_array($_my_inst)) {
 	?>
 		<tr>
-			<form action="<?=$PHP_SELF?>" method="post">
 			<td class="blank" width="100%" >
+			<form action="<?=$PHP_SELF?>" method="post">
 				<div style="font-weight:bold;font-size:10pt;margin-left:10px;">
 				<?=_("Bitte w&auml;hlen Sie eine Einrichtung aus:")?>
 				</div>
@@ -995,8 +994,8 @@ elseif ($auth->auth["perm"]=="admin") {
 					<input <?=makeButton("auswaehlen","src")?> <?=tooltip(_("Einrichtung auswählen"))?> type="image" border="0" style="vertical-align:middle;">
 					<br>&nbsp;
 				</div>
-			</td>
 			</form>
+			</td>
 		</tr>
 
 
@@ -1005,8 +1004,8 @@ elseif ($auth->auth["perm"]=="admin") {
 		 ?>
 		<tr>
 			<td class="blank" >
-				<table border="0" cellpadding="0" cellspacing="0" width="99%" align="center" class=blank>
-					<tr valign"top" align="center">
+				<table border="0" cellpadding="0" cellspacing="0" width="99%" align="center" class="blank">
+					<tr align="center">
 						<th width="50%" colspan=2><a href="<? echo $PHP_SELF ?>?sortby=Name"><?=_("Name")?></a></th>
 						<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status"><?=_("Status")?></a></th>
 						<th width="15%"><b><?=_("DozentIn")?></b></th>
@@ -1090,24 +1089,25 @@ elseif ($auth->auth["perm"]=="admin") {
 	}
 
 ?>
-	<tr>
-		<td class="blank">&nbsp;
-		</td>
-	</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+
+
 <?
 }
-
-ELSEIF ($perm->have_perm("root")){
-
-
 //Anzeigemodul fuer alle Seminare für root
+elseif($perm->have_perm("root"))
+{
 	?>
+	<div class="topic">
+		<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinesem.gif" border="0" >
+		<b><?=_("&Uuml;bersicht &uuml;ber Veranstaltungen")?></b>
+	</div>
 	<table width="100%" border=0 cellpadding=0 cellspacing=0>
 		<tr>
-			<td class="topic" colspan=2><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/meinesem.gif" border="0" align="texttop"><b><?=_("&Uuml;bersicht &uuml;ber Veranstaltungen")?></></td>
-		</tr>
-		<tr>
-			<td class="blank" align = left colspan=2><br /><blockquote>
+			<td class="blank" align = left colspan=2><br><blockquote>
 				<?=_("Um eine Veranstaltung zu bearbeiten, w&auml;hlen Sie sie &uuml;ber die Suchfunktion aus.")?>
 			</blockquote>
 			</td>
@@ -1118,7 +1118,7 @@ ELSEIF ($perm->have_perm("root")){
 		</tr>
 		<tr>
 			<td class="blank" align="center" colspan=2>
-			<b>Sie sind 'root', sie sollten eigentlich nicht hier sein!<b>
+			<b>Sie sind 'root', sie sollten eigentlich nicht hier sein!</b>
 			</td>
 		</tr>
 		<tr>
@@ -1129,11 +1129,7 @@ ELSEIF ($perm->have_perm("root")){
 	</table>
 <?php
 }
-
-echo '</table>';
-
-include ('lib/include/html_end.inc.php');
-  // Save data back to database.
-ob_end_flush(); //Outputbuffering beenden
-page_close();
+	include ('lib/include/html_end.inc.php');
+	ob_end_flush(); //Outputbuffering beenden
+	page_close();
 ?>
