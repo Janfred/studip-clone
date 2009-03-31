@@ -17,6 +17,7 @@
             <input type="text" style="width: 80%;" name="id" value="">
           </td>
           <td></td>
+          <td></td>
         </tr>
       <? endif ?>
     </table>
