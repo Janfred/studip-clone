@@ -44,7 +44,7 @@ class DomainAdminController extends Trails_Controller
         $this->set_layout($layout);
 
         $CURRENT_PAGE = _('Nutzerdomänen');
-        $HELP_KEYWORD = "Admins.Nutzerdomaenen";
+        $HELP_KEYWORD = 'Admins.Nutzerdomaenen';
 
         # fetch user domain
         $this->domains = UserDomain::getUserDomains();
@@ -124,23 +124,29 @@ class DomainAdminController extends Trails_Controller
         $this->render_action('show');
     }
 
-    function infobox_content()
+    /**
+     * Get contents of the info box for this action.
+     */
+    function infobox_content ()
     {
-        $infobox_actions=array();
-        $infobox_infos=array();
+        $infobox_content = array(
+            array(
+                'kategorie' => _('Nutzerdomänen verwalten'),
+                'eintrag'   => array(array(
+                    'icon' => 'add_sheet.gif',
+                    'text' => '<a href="'.$this->url_for('domain_admin/new').'">'._('Neue Nutzerdomäne anlegen').'</a>'
+                ))
+            ), array(
+                'kategorie' => _('Informationen'),
+                'eintrag'   => array(array(
+                    'icon' => 'info.gif',
+                    'text' => sprintf(_('In der Stud.IP-Hilfe finden Sie %sHinweise zur Verwendung von Nutzerdomänen%s.'),
+                                        '<a href="'.format_help_url('Admins.Nutzerdomaenen').'">', '</a>')
+                ))
+            )
+        );
 
-        $infobox_actions[] = array('icon' => 'add_sheet.gif',
-            'text' => '<a href="'.$this->url_for('domain_admin/new/').'">'._('Neue Nutzerdomäne anlegen').'</a>');
-
-        $infobox_infos[] = array('icon' => 'info.gif',
-            'text' => sprintf(_("In der Stud.IP-Hilfe finden Sie %sHinweise zur Verwendung von Nutzerdomänen%s."),"<a href='http://hilfe.studip.de/index.php/Admins/Nutzerdomaenen'>","</a>"));
-        
-        return array('picture' => 'browse.jpg',
-                     'content' => array(array('kategorie' => _("Nutzerdomänen verwalten"),
-                                              'eintrag' => $infobox_actions),
-                                        array('kategorie' => _("Informationen"),
-                                              'eintrag' => $infobox_infos)));
-    } 
-
+        return array('picture' => 'browse.jpg', 'content' => $infobox_content);
+    }
 }
 ?>
