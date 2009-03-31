@@ -41,11 +41,11 @@
             <a href="<?= $controller->url_for('domain_admin/edit/'.$domain->getID()) ?>">
               <?= Assets::img('edit_transparent.gif', array('alt' => _('bearbeiten'))) ?>
             </a>
-            <? if (count($domain->getUsers())==0): ?>
-            <a href="<?= $controller->url_for('domain_admin/delete/'.$domain->getID()) ?>">
-              <?= Assets::img('trash.gif', array('alt' => _('löschen'))) ?>
-            </a>
-            <? endif; ?>
+            <? if (count($domain->getUsers()) == 0): ?>
+              <a href="<?= $controller->url_for('domain_admin/delete/'.$domain->getID()) ?>">
+                <?= Assets::img('trash.gif', array('alt' => _('löschen'))) ?>
+              </a>
+            <? endif ?>
           </td>
         </tr>
       <? endforeach ?>
