@@ -409,11 +409,12 @@ class ExternModule {
 		$this->is_raw_output = $raw;
 	}
 	
-	function extHtmlReady ($text) {
+	function extHtmlReady ($text, $allow_links = FALSE) {
 		if ($this->is_raw_output) {
 			return $text;
 		}
-		return htmlReady($text);
+		$text = htmlReady($text);
+		return $allow_links ? FixLinks($text) : $text;
 	}
 	
 	function extFormatReady ($text) {
