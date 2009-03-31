@@ -1,4 +1,4 @@
-__01.04.2008 v 1.9__
+__01.04.2009 v 1.9__
 - Editierbares Impressum
 - Abbildung von Modulstrukturen über Veranstaltungshierarchie und Plugins
 - Hoch- und Runterladen von Konfigurationen für externe Seiten

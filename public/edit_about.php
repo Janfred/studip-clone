@@ -119,7 +119,7 @@ if (check_ticket($studipticket)) {
 	//wozu ??? siehe about::edit_leben()
 	//$invalidEntries = parse_datafields($my_about->auth_user['user_id']);
 
-	if ($cmd == "edit_pers" && $my_about->auth_user["Email"] != $_REQUEST['email1']) {
+	if ($cmd == "edit_pers" && $_REQUEST['email1'] != '' && $my_about->auth_user["Email"] != $_REQUEST['email1']) {
 		if($_REQUEST['email1'] == $_REQUEST['email2']) {
 			$my_about->edit_email($_REQUEST['email1']);
 		} else {
