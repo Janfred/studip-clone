@@ -70,49 +70,46 @@ function createReportMessage ($text, $imgURL, $color) {
 function createBoxHeader ($title, $width, $extraTitle = "",
 			  $imgURL = "", $imgTitle = "",
 			  $adminURL = "", $adminImgURL = "", $adminTitle = "",
-			  $cssClass = "steel1") {
-   $html = "";
+			  $cssClass = "steel1")
+{
+   $html =
+      "<table border=\"0\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"".$width."\">\n";
 
-   $html .=
-      "<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" ".
-      "       cellpadding=\"2\" align=\"center\" width=\"".$width."\">\n";
-   
    if ($title) {
-      
+
       $html .=   " <tr>\n".
-      "  <td class=\"topic\" colspan=\"2\"align=\"left\" nowrap>";
+      "  <td class=\"topic\" colspan=\"2\">";
 
       if ($imgURL) {
 	      $html .=
 	      "<img src=\"".$imgURL."\" border=\"0\" alt=\"".$imgTitle."\" ".
-	      " title=\"".$imgTitle."\" align=\"texttop\">";
+	      " title=\"".$imgTitle."\">";
 	   }
-	
+
 	   $html .=
-	      "<b>&nbsp;".$title."</b>";
-	
+	      " <b>".$title."</b>";
+
 	   if ($extraTitle) {
 	       $html .= "<font size=\"-1\">".$extraTitle."</font>";
 	   }
-	
+
 	   $html .=
 	      "</td>".
-	      "<td align=\"right\" class=\"topic\">".
-	      "&nbsp;";
-	
+	      "<td align=\"right\" class=\"topic\">";
+
 	   if ($adminURL) {
 	      $html .=
 		  "<a href=\"".$adminURL."\"><img src=\"".$adminImgURL."\" border=\"0\" ".
-		  " alt=\"".$adminTitle."\" title=\"".$adminTitle."\"></a>&nbsp;";
+		  " alt=\"".$adminTitle."\" title=\"".$adminTitle."\"></a>";
 	   }
-	
+
 	   $html .=
 	      "  </td>\n".
 	      " </tr>\n";
    }
    $html .= " <tr>\n".
       "  <td class=\"".$cssClass."\" colspan=\"3\">\n";
-  
+
    return $html;
 }
 

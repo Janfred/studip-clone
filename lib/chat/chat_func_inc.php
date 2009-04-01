@@ -143,10 +143,10 @@ function chat_show_info($chatid){
 			if (chat_get_entry_level($chatid) || $is_active || $chatinv){
 				//Ausgabe der Kopfzeile
 				chat_get_javascript();
-				echo "\n<table border=\"0\" bgcolor=\"#FFFFFF\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\" width=\"100%\" >";
-				echo "\n<tr><td class=\"topic\" colspan=\"2\" width=\"100%\">";
+				echo "\n<table border=\"0\" cellspacing=\"0\" cellpadding=\"2\" width=\"100%\" >";
+				echo "\n<tr><td class=\"topic\" colspan=\"2\">";
 				echo "\n" . chat_get_chat_icon($chatter,$chatinv,$is_active);
-				echo "\n<b>&nbsp;" . _("Chatraum:") . "&nbsp;" . htmlReady($chatname) . "</b></td></tr>";
+				echo "\n <b>" . _("Chatraum:") . " " . htmlReady($chatname) . "</b></td></tr>";
 				echo chat_get_content($chatid,$chatter,$chatinv,$chatServer->chatDetail[$chatid]['password'],$is_active,$chatServer->getUsers($chatid));
 				echo "\n</table>";
 				return true;
@@ -157,8 +157,7 @@ function chat_show_info($chatid){
 
 function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_user){
 	$pic_path = $GLOBALS['ASSETS_URL']."images/";
-	$ret = "\n<tr><td class=\"steel1\" colspan=\"2\" width=\"100%\">&nbsp;</td></tr>";
-	$ret .= "\n<tr><td class=\"steel1\" width=\"50%\" valign=\"center\"><blockquote><font size=\"-1\">";
+	$ret = "\n<tr><td class=\"steel1\" width=\"50%\" valign=\"center\"><blockquote><font size=\"-1\">";
 	if (($entry_level = chat_get_entry_level($chatid)) || $chatinv){
 		if (!$is_active){
 			$ret .= "<a href=\"#\" onClick=\"javascript:return open_chat('$chatid');\">";
@@ -191,7 +190,7 @@ function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_u
 				$ret .= '</a>';
 			}
 			$ret .= '</ol>';
-			
+
 		}
 	} else {
 		$ret .= "<img border=\"0\" align=\"absmiddle\" src=\"$pic_path/nochat.gif\" >&nbsp;&nbsp;";
@@ -214,7 +213,6 @@ function chat_get_content($chatid,$chatter,$chatinv,$password,$is_active,$chat_u
 		$ret .= ")";
 	}
 	$ret .= "</font></blockquote></td></tr>";
-	$ret .= "\n<tr><td class=\"steel1\" colspan=\"2\" width=\"100%\">&nbsp;</td></tr>";
 	return $ret;
 }
 
