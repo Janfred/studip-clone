@@ -708,7 +708,7 @@ function preg_call_format_table($content) {
 * @param unix timestamp
 */
 function preg_call_format_signature($username, $timestamp) {
-	return "<span style='font-size:75%'>-- <a href='about.php?username=$username'>".htmlReady(get_fullname_from_uname($username))."</a> ".date("d.m.Y, h:i:s",$timestamp)."</span>";
+	return "<span style='font-size:75%'>-- <a href='about.php?username=$username'>".htmlReady(get_fullname_from_uname($username))."</a> ".date("d.m.Y, H:i:s",$timestamp)."</span>";
 }
 
 
