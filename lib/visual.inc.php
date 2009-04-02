@@ -558,6 +558,7 @@ function _real_format($text) {
 					"'&gt;&gt;(.+?)&gt;&gt;'is",     // ML-hochgestellt
 					"'&lt;&lt;(.+?)&lt;&lt;'is",     // ML-tiefgestellt
 					"'{-(.+?)-}'s",                  // ML-strike-through
+					"'\[sig ([\w@]+) ([0-9]+)\]'e",	// Signatur (~~~~ in Wiki, expanded to [sig uname time])
 					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se",   // Absatz eingerueckt
 					"'\n?(</?h[1-4r]>)\n?'"                        // removes newline delimiters
 					);
@@ -587,6 +588,7 @@ function _real_format($text) {
 					"<sup>\\1</sup>",
 					"<sub>\\1</sub>",
 					"<strike>\\1</strike>",
+					"preg_call_format_signature('\\1','\\2')",
 					"'<blockquote>'.format(stripslashes('\\1')).'</blockquote>'",
 					"\\1"
 					);
@@ -698,6 +700,15 @@ function preg_call_format_table($content) {
 	}
 	$tcode[]="</table>";
 	return implode("",$tcode)."\n";
+}
+
+/**
+* formats a ~~~~ wiki signature with username and timestamp
+* @param string
+* @param unix timestamp
+*/
+function preg_call_format_signature($username, $timestamp) {
+	return "<span style='font-size:75%'>-- <a href='about.php?username=$username'>".htmlReady(get_fullname_from_uname($username))."</a> ".date("d.m.Y, h:i:s",$timestamp)."</span>";
 }
 
 

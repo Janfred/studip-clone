@@ -55,6 +55,18 @@ function completeWikiComments($body) {
 	return preg_replace("/\[comment\]/","\[comment=".addslashes(get_fullname($auth->auth['uid'],'full',false))."\]",$body);
 }
 
+/*
+ * Fill in signature markup in signatures
+ *
+ * @param      string  body    WikiPage text
+ *
+ **/
+function completeWikiSignatures($body) {
+	global $auth;
+	return preg_replace("/ ~~~~/"," [sig ".$auth->auth['uname']." ".time()."]", $body);
+}
+
+
 /**
 * Write a new/edited wiki page to database
 *
@@ -79,6 +91,9 @@ function submitWikiPage($keyword, $version, $body, $user_id, $range_id) {
 
 	// complete username in comments
 	$body=completeWikiComments($body);
+
+	// complete signature from ~~~~
+	$body=completeWikiSignatures($body);
 
 	if ($latestVersion && ($latestVersion['body'] == $body)) {
 		$message="info§" . _("Keine Änderung vorgenommen.");
