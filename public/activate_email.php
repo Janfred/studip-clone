@@ -114,9 +114,11 @@ if(isset($_REQUEST['key'])) {
 		reenter_mail();
 	}
 } else {
-	// this never happens unless someone manipulates urls
-	// maybe handle more "beautiful" - but normal user dont see it...
-	echo 'permission denied.';
+	// this never happens unless someone manipulates urls (or the presented link within the mail is broken)
+	head($CURRENT_PAGE);
+	echo _('Der Aktivierungsschlüssel der übergeben wurde ist nicht korrekt.');
+	mail_explain();
+	footer();
 }
 include 'lib/include/html_end.inc.php';
 page_close();
