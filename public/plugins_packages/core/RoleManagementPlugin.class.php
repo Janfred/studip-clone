@@ -59,7 +59,6 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 			'doPluginRoleAssignment' => PluginEngine::getLink($this, array(), 'doPluginRoleAssignment'),
 			'showRoleAssignments' => PluginEngine::getLink($this, array(), 'showRoleAssignments')
 		);
-		PluginEngine::saveToSession($this,"roles",RolePersistence::getAllRoles());
 	}
 
 	/**
@@ -90,7 +89,8 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 		  "SELECT user_id FROM auth_user_md5 ".
 		  "WHERE username LIKE ? OR Vorname LIKE ? OR Nachname LIKE ? ".
 		  "ORDER BY Vorname, Nachname, username");
-		$result = $stmt->execute(array($searchtxt, $searchtxt, $searchtxt))->fetchAll(PDO::FETCH_ASSOC);
+		$stmt->execute(array($searchtxt, $searchtxt, $searchtxt));
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		$users = array();
 		foreach ($result as $row)
 		{
@@ -116,6 +116,8 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 	 */
 	public function actionDoPluginRoleAssignment()
 	{
+		print_r($_REQUEST);
+
 		$pluginid = $_REQUEST["pluginid"];
 		$selroles = $_REQUEST["rolesel"];
 		$delassignedrols = $_REQUEST["assignedroles"];
@@ -139,7 +141,7 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 		$template->set_attribute('plugins', PluginManager::getInstance()->getPluginInfos());
 		$template->set_attribute('assigned', RolePersistence::getAssignedPluginRoles($pluginid));
 		$template->set_attribute('roles', RolePersistence::getAllRoles());
-		$template->set_attribute('pluginid', $this->pluginid);
+		$template->set_attribute('pluginid', $pluginid);
 		$template->set_attribute('links', $this->links);
 		echo $template->render();
 	}
@@ -153,14 +155,12 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 		//action
 		if (isset($_POST["createrolebtn_x"]) || isset($_POST["createrolebtn"]))
 		{
-			echo "neue rolle...";
 			if(!empty($_POST["newrole"]))
 			{
 				$role = new Role();
 				$role->setRolename($_POST["newrole"]);
 				RolePersistence::saveRole($role);
 				// create a new role
-				PluginEngine::saveToSession($this,"roles",null);
 				StudIPTemplateEngine::showSuccessMessage("Die Rolle <b>".$_POST["newrole"]."</b> wurde erfolgreich engelegt.");
 			}
 			else
@@ -171,7 +171,6 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 
 		//view
 		$template = $this->template_factory->open('role_create');
-		$template->set_attribute('assigned', RolePersistence::getAssignedPluginRoles($this->pluginid));
 		$template->set_attribute('roles', RolePersistence::getAllRoles());
 		$template->set_attribute('links', $this->links);
 		echo $template->render();
@@ -184,35 +183,27 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 	 */
 	public function actionRemoveRole()
 	{
-		$roles = PluginEngine::getValueFromSession($this,"roles");
-		if (empty($roles))
-		{
-			$roles = RolePersistence::getAllRoles();
-			PluginEngine::saveToSession($this,"roles",RolePersistence::getAllRoles());
-		}
-
 		//action
 		if (isset($_POST["removerolebtn_x"]) || isset($_POST["removerolebtn"]))
 		{
 			if(!empty($_POST["rolesel"]))
 			{
+				$roles = RolePersistence::getAllRoles();
 				$rolesel = $_POST["rolesel"];
 				foreach ($rolesel as $roleid)
 				{
 					RolePersistence::deleteRole($roles[$roleid]);
 				}
-				PluginEngine::saveToSession($this,"roles",null);
 				StudIPTemplateEngine::showSuccessMessage(_("Die Rolle(n) und alle dazugehörigen Zuweisungen wurden erfolgreich gelöscht."));
 			}
 			else
 			{
-				StudIPTemplateEngine::showErrorMessage(_("Fehler. bitte wählen sie eine Rolle zum Löschen aus."));
+				StudIPTemplateEngine::showErrorMessage(_("Fehler. Bitte wählen sie eine Rolle zum Löschen aus."));
 			}
 		}
 
 		//view
 		$template = $this->template_factory->open('role_create');
-		$template->set_attribute('assigned', RolePersistence::getAssignedPluginRoles($this->pluginid));
 		$template->set_attribute('roles', RolePersistence::getAllRoles());
 		$template->set_attribute('links', $this->links);
 		echo $template->render();
@@ -224,50 +215,67 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 	 */
 	public function actionDoRoleAssignment()
 	{
-		$usersearchtxt = $_POST["usersearchtxt"];
-		$userselid = $_POST["usersel"];
-		$rolselids = $_POST["rolesel"];
-		$delassignedroles = $_POST["assignedroles"];
+		$roles = RolePersistence::getAllRoles();
+		$selecteduser = PluginEngine::getValueFromSession($this,"selecteduser");
+		$founduser = PluginEngine::getValueFromSession($this,"searcheduser");
 
-		$searchuserbtn = $_POST["searchuserbtn_x"];
-		$assignrolebtn = $_POST["assignrolebtn_x"];
-		$deleteassignedrolebtn = $_POST["deleteroleassignmentbtn_x"];
-
-
+		// zurücksetzen
 		if(isset($_POST['resetseluser_x']) || isset($_POST['resetseluser']))
 		{
 			PluginEngine::saveToSession($this,"searcheduser",null);
 			PluginEngine::saveToSession($this,"selecteduser",null);
 		}
 
-		$roles = PluginEngine::getValueFromSession($this,"roles");
-		if (empty($roles))
-		{
-			$roles = RolePersistence::getAllRoles();
-			PluginEngine::saveToSession($this,"roles",$roles);
-		}
-
-		$founduser = PluginEngine::getValueFromSession($this,"searcheduser");
-		$selecteduser = PluginEngine::getValueFromSession($this,"selecteduser");
+		// benutzer ausgewählt
 		if(isset($_POST["seluserbtn_x"]) || isset($_POST["seluserbtn"]))
 		{
 			$founduser = PluginEngine::getValueFromSession($this,"searcheduser");
-			$selecteduser = $founduser[$userselid];
+			$selecteduser = $founduser[$_POST["usersel"]];
 			PluginEngine::saveToSession($this,"selecteduser",$selecteduser);
 		}
-		elseif(!empty($searchuserbtn) && !empty($usersearchtxt))
+
+		// benutzer gesucht
+		if((isset($_POST["searchuserbtn_x"]) || isset($_POST["searchuserbtn"])) && !empty($_POST["usersearchtxt"]))
 		{
-			// Suche wurde angefordert
-			$founduser = $this->searchUser($usersearchtxt);
+			$founduser = $this->searchUser(trim($_POST["usersearchtxt"]));
 			PluginEngine::saveToSession($this,"searcheduser",$founduser);
 			PluginEngine::saveToSession($this,"selecteduser",null);
+			if(empty($founduser))
+			{
+				StudIPTemplateEngine::showErrorMessage(_("Es wurde kein Benutzer gefunden."));
+			}
+		}
+		elseif((isset($_POST["searchuserbtn_x"]) || isset($_POST["searchuserbtn"])) && empty($_POST["usersearchtxt"]))
+		{
+			StudIPTemplateEngine::showErrorMessage(_("Fehler. Es wurde kein Suchwort eingegeben."));
+		}
+
+		// Rollen zuweisen
+		if (!empty($_POST["assignrolebtn_x"]))
+		{
+			foreach ($_POST["rolesel"] as $selroleid)
+			{
+				$role = $roles[$selroleid];
+				RolePersistence::assignRole($selecteduser,$role);
+			}
+			StudIPTemplateEngine::showSuccessMessage(_("Zuweisungen erfolgreich durchgeführt."));
+		}
+
+		// Rollen löschen
+		if (!empty($_POST["deleteroleassignmentbtn_x"]))
+		{
+			foreach ($_POST["assignedroles"] as $roleid)
+			{
+				$role = $roles[$roleid];
+				RolePersistence::deleteRoleAssignment($selecteduser,$role);
+			}
+			StudIPTemplateEngine::showSuccessMessage(_("Rollenzuweisung erfolgreich gelöscht."));
 		}
 
 		if(!empty($selecteduser))
 		{
 			$implicidroles = array();
-			$assigned = $selecteduser->getAssignedRoles(true);
-			foreach ($assigned as $assignedrole)
+			foreach ($selecteduser->getAssignedRoles(true) as $assignedrole)
 			{
 				$found = false;
 				foreach ($selecteduser->getAssignedRoles() as $explassignedrole)
@@ -284,36 +292,12 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 			}
 		}
 
-
-		//action add
-		if (!empty($assignrolebtn))
-		{
-			foreach ($rolselids as $selroleid)
-			{
-				// for all selected roles
-				$role = $roles[$selroleid];
-				RolePersistence::assignRole($selecteduser,$role);
-			}
-			StudIPTemplateEngine::showSuccessMessage(_("Zuweisungen erfolgreich durchgeführt."));
-		}
-
-		//action delete
-		if (!empty($deleteassignedrolebtn))
-		{
-			foreach ($delassignedroles as $roleid)
-			{
-				$role = $roles[$roleid];
-				RolePersistence::deleteRoleAssignment($selecteduser,$role);
-			}
-			StudIPTemplateEngine::showSuccessMessage(_("Rollenzuweisung erfolgreich gelöscht."));
-		}
-
 		//view
 		$template = $this->template_factory->open('user_assignment');
 		$template->set_attribute('users', $founduser);
 		$template->set_attribute('currentuser', $selecteduser);
 		$template->set_attribute('implicidroles', $implicidroles);
-		$template->set_attribute('usersearchtxt', $usersearchtxt);
+		$template->set_attribute('usersearchtxt', $_POST["usersearchtxt"]);
 		$template->set_attribute('roles', $roles);
 		$template->set_attribute('links', $this->links);
 		echo $template->render();

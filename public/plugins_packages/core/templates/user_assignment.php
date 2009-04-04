@@ -54,7 +54,7 @@
 		<td valign="top">
 			<select size="10" name="rolesel[]" multiple style="width: 300px;">
 			<? foreach ($roles as $role): ?>
-				<option value="<?= $role->getRoleid()?>"><?= $role->getRolename() ?> <? if($role->getSystemtype()):?>[Systemrolle]<? endif; ?></option>
+				<option value="<?= $role->getRoleid()?>"><?=$role->getRolename() ?> <? if($role->getSystemtype()):?>[Systemrolle]<? endif; ?></option>
 			<? endforeach; ?>
 			</select>
 		</td>
@@ -63,7 +63,7 @@
 <br/>
 <table border="0" width="100%" cellpadding="2" cellspacing="0">
 	<tr>
-		<th align="left"><?= _("Implizit zugewiesene Systemrollen")?></th>
+		<td class="topic"><b><?= _("Implizit zugewiesene Systemrollen")?></b></td>
 	</tr>
 	<? foreach ($implicidroles as $key=>$role):?>
 	<tr class="<?=($key%2==0)?'steel1':'steelgraulight' ?>">

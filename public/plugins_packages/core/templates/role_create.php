@@ -15,7 +15,7 @@
 </table>
 </form>
 <br/>
-<form action="<?=$links['removeRole']?>" method="POST">
+<form action="<?=$links['removeRole']?>" method="post">
 <table cellpadding="2" cellspacing="0" width="100%">
 	<tr>
 		<th align="left"><?=_("Vorhandene Rollen")?></th>
