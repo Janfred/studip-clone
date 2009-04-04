@@ -116,8 +116,6 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 	 */
 	public function actionDoPluginRoleAssignment()
 	{
-		print_r($_REQUEST);
-
 		$pluginid = $_REQUEST["pluginid"];
 		$selroles = $_REQUEST["rolesel"];
 		$delassignedrols = $_REQUEST["assignedroles"];
