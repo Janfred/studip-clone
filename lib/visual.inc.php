@@ -558,7 +558,7 @@ function _real_format($text) {
 					"'&gt;&gt;(.+?)&gt;&gt;'is",     // ML-hochgestellt
 					"'&lt;&lt;(.+?)&lt;&lt;'is",     // ML-tiefgestellt
 					"'{-(.+?)-}'s",                  // ML-strike-through
-					"'\[sig ([\w@]+) ([0-9]+)\]'e",	// Signatur (~~~~ in Wiki, expanded to [sig uname time])
+					"'\[sig ([\w@.-]+) ([0-9]+)\]'e",	// Signatur (~~~~ in Wiki, expanded to [sig uname time])
 					"'\n\n  (((\n\n)  )*(.+?))(\Z|\n\n(?! ))'se",   // Absatz eingerueckt
 					"'\n?(</?h[1-4r]>)\n?'"                        // removes newline delimiters
 					);
@@ -708,7 +708,9 @@ function preg_call_format_table($content) {
 * @param unix timestamp
 */
 function preg_call_format_signature($username, $timestamp) {
-	return "<span style='font-size:75%'>-- <a href='about.php?username=$username'>".htmlReady(get_fullname_from_uname($username))."</a> ".date("d.m.Y, H:i:s",$timestamp)."</span>";
+	$fullname = get_fullname_from_uname($username);
+	$date = strftime('%x %X', $timestamp);
+	return '<span style="font-size: 75%">-- <a href="'.URLHelper::getLink('about.php', array('username' => $username)).'">'.htmlReady($fullname).'</a> '.htmlReady($date).'</span>';
 }
 
 
@@ -1430,19 +1432,19 @@ function TransformInternalLinks($str){
 }
 
 /**
-* creates an modal dialog in order to ensure that the user is really aware about the action to perform
+* creates a modal dialog ensuring that the user is really aware about the action to perform
 *
 *@param   string $question          question of the modal dialog
 *@param   string $approveParams     an array of params for a link to be used on approval
-*@param   string $disapproveParams  an array of params for a link to be used on denial
+*@param   string $disapproveParams  an array of params for a link to be used on disapproval
 *@return  string $dialog            text which contains the dialog
 */
 
 function createQuestion($question, $approveParams, $disapproveParams = array()) {
-	$template = $GLOBALS['template_factory']->open('messages/question');
+	$template = $GLOBALS['template_factory']->open('shared/question');
 
 	$template->set_attribute('approvalLink', URLHelper::getLink('', $approveParams ));
-	$template->set_attribute('denialLink', URLHelper::getLink('', $disapproveParams ));
+	$template->set_attribute('disapprovalLink', URLHelper::getLink('', $disapproveParams ));
 	$template->set_attribute('question', $question);
 
 	return $template->render();
