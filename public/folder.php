@@ -533,7 +533,7 @@ echo "\n<body onUnLoad=\"upload_end()\">";
 			if ($select) {
 				?>
 				<tr>
-				<td class="blank" colspan="3" width="100%" align="center">
+				<td class="blank" colspan="3" width="100%">
 				<blockquote>
 				<form action="<? echo URLHelper::getLink('#anker') ?>" method="POST">
 					<select name="open" style="vertical-align:middle">
