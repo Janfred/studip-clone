@@ -312,6 +312,7 @@ $db6=new DB_Seminar;
 					<ol>';
 			foreach($group_obj->getMemberIds() as $m_id)
 			{
+				if (!$group_obj->members[$m_id]->isVisible()) continue; // hide invisible courses
 					$target = "details.php?sem_id=$m_id&send_from_search=1&send_from_search_page=sem_verify.php?id=$id";
 					$meldung .=	'<li><a href="'.$target.'">'
 							. htmlReady($group_obj->members[$m_id]->getName())
