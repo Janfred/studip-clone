@@ -112,11 +112,12 @@ if(isset($_REQUEST['key'])) {
 		head($CURRENT_PAGE);
 		printf('<b>%s</b>', _('Die eingegebenen E-Mail Adressen stimmen nicht überein. Bitte überprüfen Sie Ihre Eingabe.'));
 		reenter_mail();
+		footer();
 	}
 } else {
 	// this never happens unless someone manipulates urls (or the presented link within the mail is broken)
 	head($CURRENT_PAGE);
-	echo _('Der AktivierungsschlÃ¼ssel der Ã¼bergeben wurde ist nicht korrekt.');
+	echo _('Der Aktivierungsschlüssel, der übergeben wurde, ist nicht korrekt.');
 	mail_explain();
 	footer();
 }
