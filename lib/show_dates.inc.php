@@ -354,7 +354,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 		echo "\n<table border=\"0\" cellpadding=\"2\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 		if ($show_admin) {
 			$colspan++;
-			echo "\n<tr><td class=\"topic\" width=\"99%\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/meinetermine.gif\" border=\"0\" " . tooltip(_("Termine. Klicken Sie auf die Pfeile (rechts), um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.")) . " align='absmiddle'><b>&nbsp;&nbsp;";
+			echo "\n<tr><td class=\"topic\">&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/meinetermine.gif\" border=\"0\" " . tooltip(_("Termine. Klicken Sie auf die Pfeile (rechts), um Termine in diesen Bereich zu bearbeiten. Klicken Sie auf den einfachen Pfeil, um die Terminbeschreibung zu lesen.")) . " align='absmiddle'><b>&nbsp;&nbsp;";
 			printf(_("Termine für die Zeit vom %s bis zum %s"), strftime("%d. %B %Y", $list->getStart()), strftime("%d. %B %Y", $list->getEnd()));
 			echo "</b></td>";
 			echo "\n<td align=\"right\" class=\"topic\">&nbsp;$admin_link<img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" " . tooltip(_("Neuen Termin anlegen")) . "></a>&nbsp;</td></tr>";
@@ -469,7 +469,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 	// keine Termine da, aber die Moeglichkeit welche einzustellen
 	else if ($show_admin) {
 		echo "\n<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
-		echo "\n<tr><td class=\"topic\" width=\"99%\"><img src=\"".$GLOBALS['ASSETS_URL']."images/meinetermine.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;" . _("Termine") . "</b></td>";
+		echo "\n<tr><td class=\"topic\"><img src=\"".$GLOBALS['ASSETS_URL']."images/meinetermine.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;" . _("Termine") . "</b></td>";
 		echo "\n<td align =\"right\" class=\"topic\">&nbsp;$admin_link<img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" " . tooltip(_("Termine einstellen")) . "></a>&nbsp;</td></tr>";
 		echo "\n<tr><td class=\"steel1\" colspan=\"2\"><blockquote><br /><font size=-1>" . _("Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie auf die Doppelpfeile.") . "<br />&nbsp; </blockquote>";
 		echo "\n</td></tr></table>";
@@ -670,7 +670,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 		echo "<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\" style=\"margin:auto\">";
 		echo "\n<tr><td>\n";
 		echo "\n<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
-		echo "\n<tr><td class=\"topic\" width=\"99%\"><img src=\"".$GLOBALS['ASSETS_URL']."images/meinetermine.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;" . _("Termine") . "</b></td>";
+		echo "\n<tr><td class=\"topic\"><img src=\"".$GLOBALS['ASSETS_URL']."images/meinetermine.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;" . _("Termine") . "</b></td>";
 		echo "\n<td align=\"right\" class=\"topic\">&nbsp;$admin_link<img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" " . tooltip(_("Termine einstellen")) . "></a>&nbsp;</td></tr>";
 		echo "\n<tr><td class=\"steel1\" colspan=\"2\"><blockquote><br /><font size=-1>";
 		echo _("Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie auf die Doppelpfeile.");
