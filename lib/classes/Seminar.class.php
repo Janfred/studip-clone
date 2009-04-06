@@ -949,8 +949,8 @@ class Seminar {
 
 		if (($new_start < $old_start) || ($new_end > $old_end) || ($data['day'] != $this->metadate->cycles[$data['cycle_id']]->day) ) {
 			if (!$data['really_change']) {
-				$link = array(
-					'raumzeit.php?editCycle_x' => '1',
+				$link_params = array(
+					'editCycle_x' => '1',
 					'editCycle_y' => '1',
 					'cycle_id' => $data['cycle_id'],
 					'start_stunde' => $data['start_stunde'],
@@ -965,7 +965,7 @@ class Seminar {
 				$question_time = '**'. getWeekday($data['day'], FALSE) .', '. $data['start_stunde'] .':'. $data['start_minute'] 
 					.' - '. $data['end_stunde'] .':'. $data['end_minute'] .'**';
 
-				echo createQuestion(sprintf($question, $question_time), $link);
+				echo createQuestion(sprintf($question, $question_time), $link_params);
 
 			} else {
 				$do_changes = true;

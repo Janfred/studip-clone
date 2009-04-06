@@ -130,14 +130,14 @@ function raumzeit_checkboxAction() {
 					$question = _("Sie haben ausgewählt, alle Termine eines regelmäßigen Eintrages zu löschen. Dies hat zur Folge, dass der regelmäßige Termin ebenfalls gelöscht wird.")
 						. "\n". _("Sind Sie sicher, dass Sie den regelmäßigen Eintrag **\"%s\"** löschen möchten?");
 					$question_time = $sem->metadate->cycles[$_REQUEST['cycle_id']]->toString();
-					$link = array (
+					$link_params = array (
 						'cmd'              => 'checkboxAction',
 						'checkboxAction'   => 'deleteAll',
 						'cycle_id'         => $_REQUEST['cycle_id'],
 						'approveDeleteAll' => 'TRUE'
 					);
 
-					echo createQuestion( sprintf( $question, $question_time ), $link );
+					echo createQuestion( sprintf( $question, $question_time ), $link_params );
 
 				} else {											// deletion approved, so we do the job
 					$msg = sprintf(_("Der regelmäßige Termin \"%s\" wurde gelöscht."), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'<b/>');
@@ -149,14 +149,14 @@ function raumzeit_checkboxAction() {
 				if ($_REQUEST['approveDeleteAll'] != TRUE) {	// security question
 					$question = _("Sie haben ausgewählt, alle unregelmäßigen Termine dieser Veranstaltung zu löschen.")
 						."\n". _("Sind Sie sicher, dass Sie alle unregelmäßigen Termine dieser Veranstaltung löschen möchten?");
-					$link = array(
+					$link_params = array(
 						'cmd' => 'checkboxAction',
 						'checkboxAction' => 'deleteAll',
 						'cycle_id' => $_REQUEST['cycle_id'],
 						'approveDeleteAll' => 'TRUE'
 					);
 
-					echo createQuestion( $question, $link );
+					echo createQuestion( $question, $link_params );
 
 				} else {									// deletion approved, so we do the job
 					$msg = _("Folgende Termine wurden gelöscht:").'<br/>';
@@ -277,12 +277,12 @@ function raumzeit_deleteCycle() {
 	global $sem;
 	$question = _("Sind Sie sicher, dass Sie den regelmäßigen Eintrag **\"%s\"** löschen möchten?");
 	$question_time = $sem->metadate->cycles[$_REQUEST['cycle_id']]->toString();
-	$link = array(
+	$link_params = array(
 		'cmd' => 'doDeleteCycle',
 		'cycle_id' => $_REQUEST['cycle_id']
 	);
 
-	echo createQuestion( sprintf( $question, $question_time ), $link );
+	echo createQuestion( sprintf( $question, $question_time ), $link_params );
 }
 
 function raumzeit_doDeleteCycle() {
