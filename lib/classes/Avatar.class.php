@@ -221,6 +221,8 @@ class Avatar {
 
       $this->createFrom($filename);
 
+      unlink($filename);
+
     // eigentlich braucht man hier "finally"
     } catch (Exception $e) {
       unlink($filename);
