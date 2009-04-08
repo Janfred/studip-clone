@@ -1,49 +1,54 @@
 <?php
 # Lifter002: TODO
-/*
-online.php - Anzeigemodul fuer Personen die Online sind
-Copyright (C) 2002 André Noack <andre.noack@gmx.net>, Cornelis Kater <ckater@gwdg.de>
+/**
+ * online.php
+ *
+ * Anzeigemodul fuer Personen die Online sind
+ *
+ * PHP Version 5
+ *
+ * @author		André Noack <andre.noack@gmx.net>
+ * @author 		Cornelis Kater <ckater@gwdg.de>
+ * @author		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
+ * @copyright 	2002-2009 Stud.IP
+ * @license 	http://www.gnu.org/licenses/gpl.html GPL Licence 3
+ * @package 	studip_core
+ * @access 		public
+ */
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
+page_open(array(
+	"sess" => "Seminar_Session",
+	"auth" => "Seminar_Auth",
+	"perm" => "Seminar_Perm",
+	"user" => "Seminar_User"
+));
 $perm->check("user");
+
+// Imports
+require_once 'lib/functions.php';
+require_once 'lib/msg.inc.php';
+require_once 'lib/visual.inc.php';
+require_once 'lib/include/messagingSettings.inc.php';
+require_once 'lib/messaging.inc.php';
+require_once 'lib/contact.inc.php';
+require_once 'lib/user_visible.inc.php';
+require_once 'lib/classes/Avatar.class.php';
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
-// -- here you have to put initialisations for the current page
-
-require_once 'lib/functions.php';
-require_once ('lib/msg.inc.php');
-require_once ('lib/visual.inc.php');
-require_once ('lib/include/messagingSettings.inc.php');
-require_once ('lib/messaging.inc.php');
-require_once ('lib/contact.inc.php');
-require_once ('lib/user_visible.inc.php');
-require_once ('lib/classes/Avatar.class.php');
-if ($GLOBALS['CHAT_ENABLE']){
+if ($GLOBALS['CHAT_ENABLE'])
+{
 	include_once $RELATIVE_PATH_CHAT.'/chat_func_inc.php';
 	$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
 	$chatServer->caching = true;
 }
+
 $msging=new messaging;
 $cssSw=new cssClassSwitcher;
 
 $HELP_KEYWORD="Basis.InteraktionWhosOnline";
-
 $CURRENT_PAGE = _("Wer ist online?");
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -76,7 +81,7 @@ if ($cmd=="delete_user"){
 	$online[$delete_uname]['is_buddy'] = false;
 }
 ?>
-<table width="100%" border=0 cellpadding=0 cellspacing=0>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
 <?
 if ($msg)
 	{
@@ -87,21 +92,21 @@ if ($msg)
 
 	?>
 	<tr>
-		<td class="onlineinfo"><blockquote>
+		<td class="onlineinfo">
 		<?
 		print(_("Hier k&ouml;nnen Sie sehen, wer au&szlig;er Ihnen im Moment online ist.") . "<p>");
 		printf(_("Sie k&ouml;nnen diesen Usern eine Nachricht schicken %s oder sie zum Chatten %s einladen."), sprintf("<img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" width=\"24\" height=\"21\" %s border=\"0\"><br>", tooltip(_("Nachricht an User verschicken"))), sprintf("<img src=\"".$GLOBALS['ASSETS_URL']."images/chat1.gif\" width=\"24\" height=\"21\" %s border=\"0\">", tooltip(_("zum Chatten einladen"))));
 		print("\n<br>" . _("Wenn Sie auf den Namen klicken, kommen Sie zur Homepage des Users."));
 
 		if ($SessSemName[0] && $SessSemName["class"] == "inst")
-			echo "<br /><br /><a href=\"institut_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung") . "</a>";
+			echo "<br><br><a href=\"institut_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Einrichtung") . "</a>";
 		elseif ($SessSemName[0])
-			echo "<br /><br /><a href=\"seminar_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung") . "</a>";
+			echo "<br><br><a href=\"seminar_main.php\">" . _("Zur&uuml;ck zur ausgew&auml;hlten Veranstaltung") . "</a>";
 		?>
-		<td class="blank" align = right><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/online.jpg" border="0"></td>
+		<td class="blank" align="right"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/online.jpg" border="0"></td>
 	</tr>
 	<tr>
-		<td class="blank" colspan=2 width="100%">
+		<td class="blank" colspan="2">
 	<?
 ob_end_flush();
 ob_start();
@@ -147,13 +152,15 @@ if (is_array($n_buddies))
 
 	$cssSw->switchClass();
 	//Anzeige
-	echo "<table width=\"100%\" align=\"center\"cellspacing=0 border=0 cellpadding=2>\n";
+?>
+	<table width="100%" cellspacing="0" border="0" cellpadding="2">
+		<tr>
 
-	//Kopfzeile
+<?	//Kopfzeile
 	if ($my_messaging_settings["show_only_buddys"])
-		echo "\n<tr><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20><font size=-1><b>" . _("Buddies") . "</b></font></td></tr>\n";
+		echo "\n<td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20><font size=-1><b>" . _("Buddies") . "</b></font></td></tr>\n";
 	else
-		echo "\n<tr><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20><font size=-1><b>" . _("Buddies") . "</b></font></td><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20><font size=-1><b>" . _("andere Nutzer") . "</b></font></td></tr>\n";
+		echo "\n<td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20><font size=-1><b>" . _("Buddies") . "</b></font></td><td class=\"".$cssSw->getHeaderClass()."\" width=\"50%\" align=\"center\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20><font size=-1><b>" . _("andere Nutzer") . "</b></font></td></tr>\n";
 	echo "<tr>";
 
 	//Buddiespalte
@@ -166,7 +173,7 @@ if (is_array($n_buddies))
 					<td class="steel1" width="50%" align="center">
 						<font size="-1">
 							<?= _("Sie haben keine Buddies ausgew&auml;hlt.") ?>
-							<br />
+							<br>
 							<? printf(_("Zum Adressbuch (%d Eintr&auml;ge) klicken Sie %shier%s"),
 							          GetSizeofBook(),
 							          "<a href=\"contact.php\">", "</a>") ?>
@@ -244,7 +251,7 @@ if (is_array($n_buddies))
 				<tr>
 					<td class="blank" width="50%" align="center" colspan="7">
 						<font size="-1">
-							<br />
+							<br>
 							Zum Adressbuch (<?= GetSizeofBook() ?> Einträge) klicken Sie
 							<a href="<?= URLHelper::getLink("contact.php") ?>">
 								hier
@@ -261,7 +268,8 @@ if (is_array($n_buddies))
 	ob_start();
 
 	//Spalte anderer Benutzer
-	if (!$my_messaging_settings["show_only_buddys"]) {
+	if (!$my_messaging_settings["show_only_buddys"])
+	{
 		echo "\n<td width=\"50%\" valign=\"top\">";
 		echo "\n<table width=\"100%\" cellspacing=0 cellpadding=1 border=0><tr>\n";
 
@@ -282,7 +290,7 @@ if (is_array($n_buddies))
 			if ($weitere > 0) { ?>
 				<tr>
 					<td colspan="7" align="center">
-						<br/>
+						<br>
 						<font size="-1"><?=sprintf(_("+ %s unsichtbare NutzerInnen"), $weitere)?></font>
 					</td>
 				</tr>
@@ -292,6 +300,7 @@ if (is_array($n_buddies))
 			// if we previously found unvisible users who are online
 			if ($weitere > 0) {
 			?>
+			<tr>
 				<td class="steelgraudunkel" align="center">
 					<font size="-1" color="white">
 						<b>&nbsp;<?=_("Keine sichtbaren Nutzer online.")?></b>
@@ -300,7 +309,7 @@ if (is_array($n_buddies))
 			</tr>
 			<tr>
 				<td colspan="5" align="center">
-					<br/>
+					<br>
 					<font size="-1"><?=sprintf(_("+ %s unsichtbare NutzerInnen"), $weitere)?></font>
 				</td>
 			</tr>
@@ -319,12 +328,14 @@ if (is_array($n_buddies))
 			}
 		}
 	}
-	echo "\n</tr></table>";
 ?>
-</tr></table></td></tr></table>
-<?
-include ('lib/include/html_end.inc.php');
-ob_end_flush();
-  // Save data back to database.
-page_close();
+			</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<?php
+	ob_end_flush();
+	include ('lib/include/html_end.inc.php');
+	page_close();
 ?>

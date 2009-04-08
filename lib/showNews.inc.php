@@ -1,25 +1,22 @@
 <?php
 # Lifter001: DONE
 # Lifter002: TODO
-/*
-showNews.inc.php - Anzeigefunktion fuer News
-Copyright (C) 2001 Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
-//$Id$
+/**
+ * showNews.inc.php
+ *
+ * Anzeigefunktion fuer News
+ *
+ * PHP Version 5
+ *
+ * @author		Ralf Stockmann <rstockm@gwdg.de>
+ * @author 		Cornelis Kater <ckater@gwdg.de>
+ * @author 		Stefan Suchi <suchi@gmx.de>
+ * @author		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
+ * @copyright 	2001-2009 Stud.IP
+ * @license 	http://www.gnu.org/licenses/gpl.html GPL Licence 3
+ * @package 	studip_core
+ */
 
 require_once 'lib/functions.php';
 require_once ('lib/visual.inc.php');
@@ -63,11 +60,11 @@ function commentbox($num, $authorname, $authoruname, $date, $dellink, $content) 
 	if ($dellink) {
 		$out[].="<a href=\"$dellink\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=0></a>";
 	} else {
-		$out[]="&nbsp;";
+		$out[]=" ";
 	}
 	$out[].="</td></tr>";
 	$out[].="<tr style=\"background:#ffffcc;\">";
-	$out[].="<td colspan=2><font size=-1>".formatReady($content)."<br>&nbsp;</font></td></tr>";
+	$out[].="<td colspan=2><font size=-1>".formatReady($content)."<br> </font></td></tr>";
 	$out[].="</table>";
 	return implode("\n",$out);
 }
@@ -121,11 +118,11 @@ function show_news($range_id, $show_admin = FALSE, $limit = "", $open, $width = 
 	if (!count($news)) {
 		if ($show_admin) {
 			echo"\n<table  border=\"0\" cellspacing=\"0\" cellpadding=\"2\" align=\"center\" width=\"$width\" >";
-			echo"\n<tr><td class=\"topic\" colspan=\"2\"><img src=\"".$GLOBALS['ASSETS_URL']."images/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b>&nbsp;" . _("News") . "</b></td>";
+			echo"\n<tr><td class=\"topic\" colspan=\"2\"><img src=\"".$GLOBALS['ASSETS_URL']."images/news2.gif\" border=\"0\"". tooltip(_("Newsticker. Klicken Sie auf die Pfeile (rechts), um neue News in diesen Bereich einzustellen. Klicken Sie auf die Pfeile am linken Rand, um den ganzen Nachrichtentext zu lesen.")) . "align=\"texttop\"><b> " . _("News") . "</b></td>";
 			echo"\n<td align = \"right\" class=\"topic\">";
-			echo "&nbsp;<a href=\"".URLHelper::getLink("admin_news.php?$admin_link&cmd=new_entry")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\"" . tooltip(_("News einstellen")) . "></a>&nbsp;";
+			echo " <a href=\"".URLHelper::getLink("admin_news.php?$admin_link&cmd=new_entry")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\"" . tooltip(_("News einstellen")) . "></a> ";
 			echo"</td></tr>";
-			echo "\n<tr><td class=\"steel1\" colspan=\"3\"><blockquote><br /><font size=\"-1\">" . _("Es sind keine aktuellen News vorhanden. Um neue News zu erstellen, klicken Sie auf die Doppelpfeile.") . "<br />&nbsp; </font></blockquote>";
+			echo "\n<tr><td class=\"steel1\" colspan=\"3\"><blockquote><br><font size=\"-1\">" . _("Es sind keine aktuellen News vorhanden. Um neue News zu erstellen, klicken Sie auf die Doppelpfeile.") . "<br>  </font></blockquote>";
 			echo "\n</td></tr></table>";
 			return TRUE;
 		} else {
@@ -145,8 +142,8 @@ function show_news($range_id, $show_admin = FALSE, $limit = "", $open, $width = 
 		}
 		if ($show_admin) {
 			$colspan++;
-			echo "\n<td align=\"right\" class=\"topic\">";
-			echo "&nbsp;<a href=\"".URLHelper::getLink("admin_news.php?$admin_link&modus=admin&cmd=show")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\"" . tooltip(_("News bearbeiten")) . "></a>&nbsp;";
+			echo "\n<td align=\"right\" class=\"topic\" width=\"1%\">";
+			echo " <a href=\"".URLHelper::getLink("admin_news.php?$admin_link&modus=admin&cmd=show")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\"" . tooltip(_("News bearbeiten")) . "></a> ";
 			echo "\n</td>";
 		}
 		echo "\n</tr>\n<tr><td colspan=$colspan>";
@@ -263,7 +260,7 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   $db2->next_record();
 
   $link .= "&username=".$db2->f("username") . "#anker";
-  $zusatz="<a href=\"".URLHelper::getLink("about.php?username=".$db2->f("username"))."\"><font size=-1 color=\"#333399\">".htmlReady($db2->f("fullname"))."</font></a><font size=-1>&nbsp;".date("d.m.Y",$news_item['date'])." | <font color=\"#005500\">".object_return_views($id)."<font color=\"black\"> |</font>";
+  $zusatz="<a href=\"".URLHelper::getLink("about.php?username=".$db2->f("username"))."\"><font size=-1 color=\"#333399\">".htmlReady($db2->f("fullname"))."</font></a><font size=-1> ".date("d.m.Y",$news_item['date'])." | <font color=\"#005500\">".object_return_views($id)."<font color=\"black\"> |</font>";
 
   $unamelink = '&username='.$db2->f('username');
   $uname = $db2->f('username');
@@ -287,7 +284,7 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
              && ($news_item['user_id'] != $auth->auth["uid"]));
   echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" align=\"center\"><tr>";
 
-  $icon="&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/news-icon.gif\" border=0>";
+  $icon=" <img src=\"".$GLOBALS['ASSETS_URL']."images/news-icon.gif\" border=0>";
 
   if ($news_item['open'])
     printhead(0, 0, $link, "open", $tempnew, $icon, $titel, $zusatz, $news_item['date']);
@@ -316,8 +313,8 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
 
   	if ($auth->auth["uid"] == $news_item['user_id'] || $show_admin) {
   		$edit="<a href=\"".URLHelper::getLink("admin_news.php?cmd=edit&edit_news=".$id."&$admin_link")."\">" . makeButton("bearbeiten") . "</a>";
-  		$edit.="&nbsp;<a href=\"".URLHelper::getLink("?touch_news=".$id."#anker")."\">" . makeButton("aktualisieren") . "</a>";
-  		$edit.="&nbsp;<a href=\"".URLHelper::getLink("admin_news.php?cmd=kill&kill_news=".$id."&$admin_link")."\">" . makeButton("loeschen") . "</a>";
+  		$edit.=" <a href=\"".URLHelper::getLink("?touch_news=".$id."#anker")."\">" . makeButton("aktualisieren") . "</a>";
+  		$edit.=" <a href=\"".URLHelper::getLink("admin_news.php?cmd=kill&kill_news=".$id."&$admin_link")."\">" . makeButton("loeschen") . "</a>";
   	}
 
   	//
@@ -359,7 +356,7 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   			}
   			$comments .= "</table>";
   			$content  .= $comments;
-  			$formular="&nbsp;<br>\n<form action=\"".URLHelper::getLink("#anker")."\" method=\"POST\">";
+  			$formular=" <br>\n<form action=\"".URLHelper::getLink("#anker")."\" method=\"POST\">";
   			$formular.="<input type=hidden name=\"comsubmit\" value=\"".$id."\">";
   			$formular.="<input type=hidden name=\"username\" value=\"$uname\">";
   			$formular.="<p align=\"center\">"._("Geben Sie hier Ihren Kommentar ein!")."</p>";
@@ -373,8 +370,8 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   			} else {
   				$help_url="help/index.php?help_page=ix_forum6.htm";
   			}
-  			$formular.="&nbsp;&nbsp;&nbsp;<a href=\"".URLHelper::getLink("show_smiley.php")."\" target=\"_blank\"><font size=\"-1\">"._("Smileys")."</a>&nbsp;&nbsp;<a href=\"".$help_url."\" target=\"_blank\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br><br>";
-  			$formular.="</div></form><p>&nbsp;</p>";
+  			$formular.="   <a href=\"".URLHelper::getLink("show_smiley.php")."\" target=\"_blank\"><font size=\"-1\">"._("Smileys")."</a>  <a href=\"".$help_url."\" target=\"_blank\"><font size=\"-1\">"._("Formatierungshilfen")."</a><br><br>";
+  			$formular.="</div></form><p> </p>";
   			$content.=$formular;
   		} else {
   			$cmdline = "<p align=center><font size=-1><a href=\"".URLHelper::getLink("?comopen=".$id.$unamelink."#anker")."\">"

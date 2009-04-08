@@ -2,19 +2,26 @@
 # Lifter001: TEST
 # Lifter002: TEST (mriehe)
 /**
- * browse.php - Personen-Suche in Stud.IP
+ * browse.php
+ *
+ * Personen-Suche in Stud.IP
  *
  * PHP Version 5
  *
  * @author		Stefan Suchi <suchi@gmx.de>
  * @author		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
- * @version		$Revision$
- * @access		public
  * @copyright 	2000-2009 Stud.IP
  * @license 	http://www.gnu.org/licenses/gpl.html GPL Licence 3
-*/
+ * @package 	studip_core
+ * @access 		public
+ */
 
-page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
+page_open(array(
+	'sess' => 'Seminar_Session',
+	'auth' => 'Seminar_Default_Auth',
+	'perm' => 'Seminar_Perm',
+	'user' => 'Seminar_User'
+));
 $perm->check('user');
 
 require_once 'lib/seminar_open.php';

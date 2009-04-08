@@ -1,26 +1,34 @@
 <?php
-/*
- * datenschutz.php - privacy guidelines for Stud.IP
- * Copyright (C) 2009  Elmar Ludwig
+# Lifter002: TEST
+
+/**
+ * datenschutz.php
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
+ * privacy guidelines for Stud.IP
+ *
+ * PHP version 5
+ *
+ * @author 		Elmar Ludwig
+ * @author  	Michael Riehemann <michael.riehemann@uni-oldenburg.de>
+ * @copyright 	2009 Stud.IP
+ * @license 	http://www.gnu.org/licenses/gpl.html GPL Licence 3
+ * @package 	studip_core
+ * @access 		public
  */
 
-page_open(array('sess' => 'Seminar_Session',
-                'auth' => 'Seminar_Default_Auth',
-                'perm' => 'Seminar_Perm',
-                'user' => 'Seminar_User'));
+page_open(array(
+	'sess' => 'Seminar_Session',
+	'auth' => 'Seminar_Default_Auth',
+	'perm' => 'Seminar_Perm',
+	'user' => 'Seminar_User'
+));
 
 $_language_path = init_i18n($_language);
 
 $CURRENT_PAGE = _('Erläuterungen zum Datenschutz');
 
 $template = $template_factory->open('privacy');
-$layout   = $template_factory->open('layouts/base_without_infobox');
-$template->set_layout($layout);
+$template->set_layout('layouts/base_without_infobox');
 
 echo $template->render();
 ?>
