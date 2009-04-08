@@ -668,7 +668,12 @@ function show_addrform() {
 			                         {
 			                           minChars: 3,
 			                           paramName: 'value',
-			                           method: 'get'
+			                           method: 'get',
+			                           afterUpdateElement: function (input, item) {
+			                             var username = encodeURI(item.down('span.username').firstChild.nodeValue);
+			                             document.location = STUDIP.ABSOLUTE_URI_STUDIP +
+			                               "sms_send.php?add_freesearch_x=1&freesearch[]=" + username;
+			                           }
 			                         });
 			});
 		</script>
