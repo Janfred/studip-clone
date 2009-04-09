@@ -254,11 +254,11 @@ if(isset($_REQUEST['course_id']) && isset($_REQUEST['filter'])){
 	if($subject) $messagesubject = $subject;
 	$db = new DB_Seminar;
 	if ($filter=="all") {
-		$db->query ("SELECT username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '".$course_id."'");
+		$db->query ("SELECT username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '".$course_id."' ORDER BY Nachname, Vorname");
 	} else if ($filter=="prelim") {
-		$db->query ("SELECT username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '".$course_id."' AND status='accepted'");
+		$db->query ("SELECT username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '".$course_id."' AND status='accepted' ORDER BY Nachname, Vorname");
 	} else if ($filter=="waiting") {
-		$db->query ("SELECT username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '".$course_id."' AND (status='awaiting' OR status='claiming')");
+		$db->query ("SELECT username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '".$course_id."' AND (status='awaiting' OR status='claiming') ORDER BY Nachname, Vorname");
 	}
 	while ($db->next_record()) {
 		$add_course_members[] = $db->f("username");

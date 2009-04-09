@@ -117,7 +117,7 @@ if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 } else {
 	if ($cmd == "send_sms_to_all" && $who != "accepted") {
 		$sess->register("sms_data");
-		$db->query("SELECT b.username FROM seminar_user a, auth_user_md5 b WHERE a.Seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND a.status = '$who'");
+		$db->query("SELECT b.username FROM seminar_user a, auth_user_md5 b WHERE a.Seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND a.status = '$who' ORDER BY Nachname, Vorname");
 		$sms_data = array();
 		$sms_data['tmpsavesnd'] = 1;
 		while ($db->next_record()) {
@@ -130,7 +130,7 @@ if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 	} else if ($cmd == "send_sms_to_waiting" || $who == "accepted") {
 		$sess->register("sms_data");
 		if (!$who) $who = "awaiting";
-		$db->query("SELECT b.username FROM admission_seminar_user a, auth_user_md5 b WHERE a.seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND status = '$who'");
+		$db->query("SELECT b.username FROM admission_seminar_user a, auth_user_md5 b WHERE a.seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND status = '$who' ORDER BY Nachname, Vorname");
 		$sms_data = array();
 		$sms_data['tmpsavesnd'] = 1;
 		while ($db->next_record()) {
@@ -1040,7 +1040,7 @@ while (list ($key, $val) = each ($gruppe)) {
 			$db_mail->query("SELECT Email FROM $seminar_user_table su ".
 			                "LEFT JOIN auth_user_md5 au ON (su.user_id = au.user_id) ".
 			                "WHERE su.seminar_id = '".$SessSemName[1]."' ".
-			                "AND status = '$key'");
+			                "AND status = '$key' ORDER BY Email");
 			$users = array();
 			while ($db_mail->next_record()) {
 				$users[] = $db_mail->f("Email");
