@@ -10,6 +10,8 @@
  * the License, or (at your option) any later version.
  */
 
+require_once 'lib/classes/Request.class.php';
+
 /**
  * The URLHelper class provides several utility functions (as class
  * methods) to ease the transition from using session data to URL
@@ -66,30 +68,6 @@ class URLHelper
         }
 
         return $base_url.$url;
-    }
-
-    /**
-     * Strip magic quotes from a given string or array. If the PHP setting
-     * "magic_quotes_gpc" is enabled, stripslashes() is used on the value.
-     * If the parameter is an array, magic quoting is stripped recursively.
-     *
-     * @param mixed $value    string or array value to be unquoted
-     *
-     * @return mixed unquoted string or array
-     */
-    private static function removeMagicQuotes ($value)
-    {
-        if (get_magic_quotes_gpc()) {
-            if (is_array($value)) {
-                foreach ($value as $key => $val) {
-                    $value[$key] = self::removeMagicQuotes($val);
-                }
-            } else {
-                $value = stripslashes($value);
-            }
-        }
-
-        return $value;
     }
 
     /**
@@ -193,7 +171,7 @@ class URLHelper
 
         if (isset($query)) {
             parse_str($query, $query_params);
-            $query_params = self::removeMagicQuotes($query_params);
+            $query_params = Request::removeMagicQuotes($query_params);
             $link_params = array_merge($link_params, $query_params);
         }
 
