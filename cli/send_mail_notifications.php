@@ -48,19 +48,16 @@ $smtp =& $notification->smtp;
 $db->query("SELECT aum.user_id,aum.username,{$GLOBALS['_fullname_sql']['full']} as fullname,Email FROM seminar_user su INNER JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info ui USING(user_id) WHERE notification != 0 GROUP BY su.user_id");
 while($db->next_record()){
 	$user->start($db->f("user_id"));
-	setTempLanguage($db->f("user_id"));	
-	$to = $db->f("Email");				
+	setTempLanguage($db->f("user_id"));
+	$to = $db->f("Email");
 	$title = "[" . $GLOBALS['UNI_NAME_CLEAN'] . "] " . _("Tägliche Benachrichtigung");
-	$reply_to = $smtp->abuse;				
+	$reply_to = $smtp->abuse;
 	$mailmessage = $notification->getAllNotifications($db->f('user_id'));
 	if ($mailmessage){
-		$ok = $smtp->SendMessage($smtp->env_from,
-								array($to),
-								array(	"From: ".$smtp->QuotedPrintableEncode($smtp->from,1),
-										"To: \"".$smtp->QuotedPrintableEncode($db->f('fullname'),1)."\" <$to>",
-										"Reply-To: $reply_to",
-										"Subject: " . $smtp->QuotedPrintableEncode($title,1)),
-								$mailmessage);
+		$ok = $smtp->SendMessage(
+				$to, "",
+				$reply_to, "",
+				$title, $mailmessage);
 		fwrite(STDOUT, date('r') . " " . $db->f('username') . ": " . (int)$ok . "\n");
 	}
 }
