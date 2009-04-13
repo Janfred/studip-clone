@@ -53,6 +53,8 @@ function check_messaging_default() {
 		$my_messaging_settings['save_snd'] = 1;
 	if (!$my_messaging_settings['sms_sig'])
 		$my_messaging_settings['sms_sig'] = FALSE;
+	if (!$my_messaging_settings['send_view'])
+		$my_messaging_settings['send_view'] = FALSE;
 	if (!$my_messaging_settings['last_box_visit'])
 		$my_messaging_settings['last_box_visit'] = 1;
 	if (!$my_messaging_settings['folder']['in'])

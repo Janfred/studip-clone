@@ -34,6 +34,8 @@ require_once ('lib/language.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/user_visible.inc.php');
 require_once ('lib/contact.inc.php');
+// StEP 155: Mail Attachments
+require_once ('lib/datei.inc.php');
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $GLOBALS['RELATIVE_PATH_CHAT']."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
 }
@@ -114,6 +116,10 @@ class messaging {
 			if (!$db2->num_rows()) {
 				$db2->query("DELETE FROM message WHERE message_id = '".$message_id."'");
 				$db2->query("DELETE FROM message_user WHERE message_id = '".$message_id."'");
+				// StEP 155: Mail Attachments
+				$db2->query("SELECT dokument_id FROM dokumente WHERE range_id = '".$message_id."'");
+				while ($db2->next_record())
+					delete_document($db2->f("dokument_id"));
 			}
 			return TRUE;
 		} else {
@@ -190,8 +196,10 @@ class messaging {
 
 	function sendingEmail($rec_uname, $snd_user_id, $message, $subject) {
 
-		global $user;
+		global $user, $attachments;
 
+		if (!is_array($attachments))
+			$attachments = false;
 		$db4 = new DB_Seminar("SELECT user_id, Email FROM auth_user_md5 WHERE username = '$rec_uname' OR user_id = '$rec_uname';");
 		$db4->next_record();
 		$to = $db4->f("Email");
@@ -207,13 +215,13 @@ class messaging {
 			$snd_fullname = get_fullname($snd_user_id);
 			$db4->query("SELECT Email FROM auth_user_md5 WHERE user_id = '$user->id'");
 			$db4->next_record();
-			$reply_to = "\"".$smtp->QuotedPrintableEncode($snd_fullname,1)."\" <".$db4->f("Email").">";
+			$reply_to = $db4->f("Email");
 		} else {
 			$snd_fullname = 'Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'];
 			$reply_to = $GLOBALS["UNI_CONTACT"];
 		}
 
-		$title = $smtp->QuotedPrintableEncode($title, 1);
+//		$title = $smtp->QuotedPrintableEncode($title, 1);
 		// Generate "Header" of the message
 		$mailmessage = _("Von: ")."$snd_fullname\n";
 		$mailmessage .= _("An: ")."$rec_fullname\n";
@@ -231,7 +239,7 @@ class messaging {
 		restoreLanguage();
 
 		// Now, let us send the message
-		$smtp->SendMessage($smtp->env_from, array($to), array("From: ".$smtp->from, "To: \"".$smtp->QuotedPrintableEncode($rec_fullname,1)."\" <$to>", "Reply-To: $reply_to", "Subject: $title"), $mailmessage);
+		$smtp->SendMessage($to, $rec_fullname, $reply_to, $snd_fullname, $title, $mailmessage, $attachments);
 
 	}
 
@@ -261,7 +269,7 @@ class messaging {
 
 	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='', $force_email='', $priority='normal') {
 
-		global $_fullname_sql, $user, $my_messaging_settings;
+		global $_fullname_sql, $user, $my_messaging_settings, $attachments;
 
 		$db = new DB_Seminar;
 		$db2 = new DB_Seminar;
@@ -328,6 +336,12 @@ class messaging {
 
 			}
 
+			// StEP 155: Mail Attachments
+			// Setzen der Message-ID als Range_ID für angehängte Dateien
+			if (is_array($attachments) AND ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true))
+				foreach ($attachments as $key => $attachment) {
+					$db3->query("UPDATE dokumente SET range_id = '$tmp_message_id' WHERE dokument_id = '".$attachment["id"]."'");
+				}
 
 			// insert message
 			$db3->query("INSERT INTO message SET message_id = '".$tmp_message_id."', mkdate = '".$time."', message = '".$message."', autor_id = '".$snd_user_id."', subject = '".$subject."', reading_confirmation = '".$reading_confirmation."', priority ='".$priority."'");

@@ -129,7 +129,12 @@ umask(022);
 /*mail settings
 ----------------------------------------------------------------*/
 
-class studip_smtp_class extends smtp_class {
+// Step 155: Mail Attachments
+require_once('lib/phplib/email_message.inc');
+require_once('lib/phplib/smtp.inc');
+require_once('lib/phplib/smtp_message.inc');
+
+class studip_smtp_class extends smtp_message_class {
 
 	var $from = "";
 	var $env_from = "";
@@ -139,19 +144,48 @@ class studip_smtp_class extends smtp_class {
 
 	function studip_smtp_class() {
 		$this->localhost = ($GLOBALS['MAIL_LOCALHOST'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_LOCALHOST']; // name of the mail sending machine (the web server)
+		$this->smtp_host = ($GLOBALS['MAIL_HOST_NAME'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_HOST_NAME']; // which mailserver should we use? (must allow mail-relaying from this->localhost)
 		$this->host_name = ($GLOBALS['MAIL_HOST_NAME'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_HOST_NAME']; // which mailserver should we use? (must allow mail-relaying from this->localhost)
 		$this->charset = ($GLOBALS['MAIL_CHARSET'] == "") ? "ISO-8859-1" : $GLOBALS['MAIL_CHARSET']; //charset used in mail body
 		$this->env_from = ($GLOBALS['MAIL_ENV_FROM'] == "") ? "wwwrun@".$this->localhost : $GLOBALS['MAIL_ENV_FROM']; // Envelope-From:
 		$this->from = ($GLOBALS['MAIL_FROM'] == "") ? "\"Stud.IP\" <" . $this->env_from . ">" : $this->QuotedPrintableEncode('"' . $GLOBALS['MAIL_FROM'] . '"',1) . ' <' . $this->env_from . '>'; // From: Mailheader
 		$this->abuse = ($GLOBALS['MAIL_ABUSE'] == "") ? "abuse@" . $this->localhost : $GLOBALS['MAIL_ABUSE']; // Reply-To: Mailheader
 		$this->url = $GLOBALS['ABSOLUTE_URI_STUDIP'];
-		$this->additional_headers = array("MIME-Version: 1.0",
-										"Content-Type: text/plain; charset=\"{$this->charset}\"",
-										"Content-Transfer-Encoding: 8bit");
 	}
-	function SendMessage($sender, $recipients, $headers, $body){
-		$headers = array_merge(array_values($headers),array_values($this->additional_headers));
-		return parent::SendMessage($sender, $recipients, $headers, $body);
+
+	function SendMessage($to_address, $to_name, $from_address, $from_name, $subject, $message, $attachments = false){
+		$reply_name=$from_name;
+		$reply_address=$from_address;
+		$from_address = $this->env_from;
+		$from_name = ($GLOBALS['MAIL_FROM'] == "") ? "Stud.IP" : $GLOBALS['MAIL_FROM'];
+		$error_delivery_name=$from_name;
+		$error_delivery_address=$from_address;
+
+		$this->SetEncodedEmailHeader("To",$to_address,$to_name);
+		$this->SetEncodedEmailHeader("From",$from_address,$from_name);
+		$this->SetEncodedEmailHeader("Reply-To",$reply_address,$reply_name);
+		$this->SetHeader("Sender",$from_address);
+		$this->SetEncodedHeader("Subject",$subject);
+		$this->AddQuotedPrintableTextPart($message);
+
+		if (is_array($attachments) AND ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true)) {
+			require_once('lib/datei.inc.php');
+			foreach ($attachments as $key => $attachment) {
+				$email_attachment=array(
+					"FileName"=> get_upload_file_path($attachment["id"]),
+					"Name"=> $attachment["name"],
+					"Content-Type"=>"automatic/name",
+					"Disposition"=>"attachment");
+				$this->AddFilePart($email_attachment);
+			}
+		}
+
+		$error=$this->Send();
+
+		if (strlen($error) > 0)
+			return false;
+
+		return true;
 	}
 }
 
@@ -323,7 +357,15 @@ class Seminar_Session extends Session {
 				$ids =  join("','", $result[$i]);
 				$db->query("DELETE FROM message_user WHERE message_id IN('$ids')");
 				$db->query("DELETE FROM message WHERE message_id IN('$ids')");
+				$db->query("SELECT dokument_id FROM dokumente WHERE range_id IN('$ids')");
+				while ($db->next_record())
+					delete_document($db->f("dokument_id"));
 			}
+			//Attachments von nicht versendeten Messages aufräumen
+			$db->query("SELECT dokument_id FROM dokumente WHERE range_id = 'provisional' AND chdate < UNIX_TIMESTAMP(DATE_ADD(NOW(),INTERVAL -2 HOUR))");
+				while($db->next_record()) {
+					delete_document($db->f("dokument_id"));
+				}
 
 			unset($result);
 

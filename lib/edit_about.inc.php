@@ -84,9 +84,9 @@ function edit_email($uid, $email, $force=False) {
 			$from = $smtp->env_from;
 			$to = $smtp->abuse;
 			$smtp->SendMessage(
-				$from, array($to),
-				array("From: $from", "To: $to", "Subject: edit_about"),
-				"Emailbox unbekannt\n\nUser: ". $username ."\nEmail: $email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
+				$to, "",
+				$smtp->abuse, "",
+				"edit_about", "Emailbox unbekannt\n\nUser: ". $username ."\nEmail: $email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
 			$msg.=  "error§" . _("Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie Ihre Angaben!") . "§";
 			return array(False, $msg);
 		}
@@ -131,9 +131,9 @@ function edit_email($uid, $email, $force=False) {
 		include_once("locale/$lang/LC_MAILS/change_self_mail.inc.php");
 
 		$mail = $smtp->SendMessage(
-			$smtp->env_from, array($email),
-			array('From: '.$smtp->from, 'Reply-To: '. $smtp->abuse, 'To: '.$email, 'Subject:'. $subject),
-			$mailbody);
+			$email, "",
+			$smtp->abuse, "",
+			$subject, $mailbody);
 
 		if(!$mail) {
 			$msg.= "error§". $smtp->error ."§";

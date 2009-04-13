@@ -91,7 +91,7 @@ function parse_link($link, $level=0) {
 		// Parsing an FTF-Adress
 		$url_parts = @parse_url( $link );
 		$documentpath = $url_parts["path"];
-		
+
 		if (strpos($url_parts["host"],"@")) {
 			$url_parts["pass"] .= "@".substr($url_parts["host"],0,strpos($url_parts["host"],"@"));
 			$url_parts["host"] = substr(strrchr($url_parts["host"],"@"),1);
@@ -121,11 +121,11 @@ function parse_link($link, $level=0) {
 		if ($parsed_link["Content-Length"] != "-1")
 			$parsed_link["HTTP/1.0 200 OK"] = "HTTP/1.0 200 OK";
 		else
-		$parsed_link = FALSE;
+			$parsed_link = FALSE;
 		$url_parts["pass"] = preg_replace("!@!","%40",$url_parts["pass"]);
 		$the_link = "ftp://".$url_parts["user"].":".$url_parts["pass"]."@".$url_parts["host"].$documentpath;
 		return $parsed_link;
-		
+
 	} else {
 		$url_parts = @parse_url( $link );
 		if (!empty( $url_parts["path"])){
@@ -207,11 +207,11 @@ function createSelectedZip ($file_ids, $perm_check = TRUE, $size_check = false) 
 		$db->next_record();
 		if(!($size_check && $db->f(0) > $max_size)){
 			$zip_file_id = md5(uniqid("jabba",1));
-	
+
 			//create temporary Folder
 			$tmp_full_path = "$TMP_PATH/$zip_file_id";
 			mkdir($tmp_full_path,0700);
-	
+
 			//create folder content
 			$in = "('".join("','",$file_ids)."')";
 			$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN %s %s ORDER BY chdate, name, filename", $in, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."' $folders_cond" : "");
@@ -749,13 +749,22 @@ function getFileExtension($str) {
 
 //Check auf korrekten Upload
 function validate_upload($the_file) {
-	global $UPLOAD_TYPES,$the_file_size, $msg, $the_file_name, $SessSemName, $user, $auth;
+	global $UPLOAD_TYPES,$the_file_size, $msg, $the_file_name, $SessSemName, $user, $auth, $i_page;
 
-	$sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]);
+	if ($i_page == "sms_send.php") {
+		if (!$GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true)
+			$emsg.= "error§" . _("Dateianhänge für Nachrichten sind in dieser Installation nicht erlaubt!") . "§";
+		$active_upload_type = "attachments";
+		$sem_status = $GLOBALS['perm']->get_perm();
+		}
+	else {
+		$sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]);
+		$active_upload_type = $SessSemName["art_num"];
+		}
 
 	//erlaubte Dateigroesse aus Regelliste der Config.inc.php auslesen
-	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
-		$max_filesize=$UPLOAD_TYPES[$SessSemName["art_num"]]["file_sizes"][$sem_status];
+	if ($UPLOAD_TYPES[$active_upload_type]) {
+		$max_filesize=$UPLOAD_TYPES[$active_upload_type]["file_sizes"][$sem_status];
 		}
 	else {
 		$max_filesize=$UPLOAD_TYPES["default"]["file_sizes"][$sem_status];
@@ -772,11 +781,11 @@ function validate_upload($the_file) {
 			$doc=TRUE;
 
 		//Erweiterung mit Regelliste in config.inc.php vergleichen
-		if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
-			if ($UPLOAD_TYPES[$SessSemName["art_num"]]["type"] == "allow") {
+		if ($UPLOAD_TYPES[$active_upload_type]) {
+			if ($UPLOAD_TYPES[$active_upload_type]["type"] == "allow") {
 				$t=TRUE;
 				$i=1;
-				foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
+				foreach ($UPLOAD_TYPES[$active_upload_type]["file_types"] as $ft) {
 					if ($pext == $ft)
 						$t=FALSE;
 					if ($i !=1)
@@ -801,7 +810,7 @@ function validate_upload($the_file) {
 			} else {
 				$t=FALSE;
 				$i=1;
-				foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
+				foreach ($UPLOAD_TYPES[$active_upload_type]["file_types"] as $ft) {
 					if ($pext == $ft)
 						$t=TRUE;
 					if ($i !=1)
@@ -967,7 +976,11 @@ function insert_entry_db($range_id, $sem_id=0, $refresh = FALSE) {
 
 function JS_for_upload() {
 
-	global $UPLOAD_TYPES, $SessSemName, $folder_system_data;
+	global $UPLOAD_TYPES, $SessSemName, $folder_system_data, $i_page;
+	if ($i_page == "sms_send.php")
+		$active_upload_type = "attachments";
+	else
+		$active_upload_type = $SessSemName["art_num"];
 
 	?>
 	 <SCRIPT LANGUAGE="JavaScript">
@@ -1005,10 +1018,10 @@ function JS_for_upload() {
 	if (<?
 	if (!$folder_system_data["zipupload"]){
 
-	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
-		if ($UPLOAD_TYPES[$SessSemName["art_num"]]["type"] == "allow") {
+	if ($UPLOAD_TYPES[$active_upload_type]) {
+		if ($UPLOAD_TYPES[$active_upload_type]["type"] == "allow") {
 			$i=1;
-			foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
+			foreach ($UPLOAD_TYPES[$active_upload_type]["file_types"] as $ft) {
 				if ($i !=1)
 					echo " && ";
 				echo "ext == \"$ft\"";
@@ -1020,7 +1033,7 @@ function JS_for_upload() {
 		else {
 			$i=1;
 			$deny_doc=TRUE;
-			foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
+			foreach ($UPLOAD_TYPES[$active_upload_type]["file_types"] as $ft) {
 				if ($i !=1)
 					echo " && ";
 				echo "ext != \"$ft\"";
