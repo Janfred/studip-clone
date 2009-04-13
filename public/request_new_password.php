@@ -91,13 +91,9 @@ class UserManagementRequestNewPassword extends UserManagement {
 
 		// send mail
 		$this->smtp->SendMessage(
-				$this->smtp->env_from,
-				array($this->user_data['auth_user_md5.Email']),
-				array("From: " . $this->smtp->from,
-						"Reply-To:" . $this->smtp->abuse,
-						"To: " . $this->user_data['auth_user_md5.Email'],
-						"Subject: " . $subject),
-				$mailbody);
+				$this->user_data['auth_user_md5.Email'], "",
+				$this->user_data['auth_user_md5.Email'], "",
+				$subject, $mailbody);
 
 		log_event("USER_NEWPWD",$this->user_data['auth_user_md5.user_id']);
 		return TRUE;
@@ -149,7 +145,10 @@ if( $_POST['email'] != "" ) {
 				$user_language = getUserLanguagePath($row['user_id']);
 				include("locale/$user_language/LC_MAILS/request_new_password_mail.inc.php");
 
-				$smtp->SendMessage($smtp->env_from, array($row['Email']), array("From: ".$smtp->from, "To: ".$row['Email'], "Reply-To: ".$row['Email'], "Subject: {$subject}"), $mailbody);
+				$smtp->SendMessage(
+						$row['Email'], "",
+						$row['Email'], "",
+						$subject, $mailbody);
 			}
 	    } else {
 			// Mehrere Benutzer für E-Mail

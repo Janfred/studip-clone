@@ -70,6 +70,9 @@ if ($type == 0 || $type == 6) {
 		$skip_check = TRUE;
 	}
 }
+elseif ($type == 7) {
+	$object_type = get_object_type($object_id);
+}
 
 // Rechtecheck
 //////////////
@@ -100,6 +103,12 @@ if (($type != 2) && ($type != 3) && ($type != 4) && (!$skip_check)) { //if type 
 				$no_access = TRUE;
 			} else {
 				$no_access = (archiv_check_perm($db->f("seminar_id")) ? FALSE : TRUE);
+			}
+		// File is attached to a Stud.IP-Message. Check if message belongs to current user.
+		} elseif ($type == 7) {
+			$db->query ("SELECT dokument_id FROM message_user LEFT JOIN message USING (message_id) LEFT JOIN dokumente ON (message_id=range_id) WHERE dokument_id = '".$file_id."' ");
+			if (!$db->next_record()){
+				$no_access = TRUE;
 			}
 		} else {
 			$no_access = ($perm->have_studip_perm('user', $object_id) ? FALSE : TRUE);
@@ -149,6 +158,10 @@ switch ($type) {
 	//download linked file
 	case 6:
 		$path_file = getLinkPath($file_id);
+	break;
+	//we want to download a file attached to a system message (this mode performs perm checks)
+	case 7:
+		$path_file = get_upload_file_path($file_id);
 	break;
 	//we want to download from the regular upload-folder (this mode performs perm checks)
 	default:

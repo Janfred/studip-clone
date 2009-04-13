@@ -40,6 +40,8 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once 'lib/functions.php';
 require_once ('lib/msg.inc.php');
 require_once ('lib/visual.inc.php');
+if ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true)
+	require_once ('lib/datei.inc.php');
 require_once ('lib/include/messagingSettings.inc.php');
 require_once ('lib/messaging.inc.php');
 require_once ('lib/statusgruppe.inc.php');
@@ -71,6 +73,22 @@ if($answer_to) {
 */
 // write a chat-invitation, so predefine the messagesubject
 if ($cmd == "write_chatinv" && !isset($messagesubject)) $messagesubject = _("Chateinladung");
+
+// StEP 155: Mail Attachments
+//wurde eine Datei hochgeladen?
+if (isset($attachments))
+	$attachments = unserialize(urldecode($attachments));
+else
+	$attachments = array();
+foreach ($attachments as $key => $attachment)
+	if (isset($_POST["remove_attachment_" . $key . "_x"]))
+		unset($attachments[$key]);
+if (isset($upload_x) AND ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true)) {
+	if (upload ($the_file)) {
+		insert_entry_db("provisional", 0, false);
+		$attachments[] = array("name" => $the_file_name, "id" => $dokument_id, "size" => $the_file_size);
+	}
+}
 
 // where do we save the message?
 if($tmp_save_snd_folder) {
@@ -158,6 +176,7 @@ if ($cmd_insert_x) {
 	unset($sms_data["tmpreadsnd"]);
 	unset($sms_data["tmpemailsnd"]);
 	unset($messagesubject);
+	$attachments = array();
 
 	if($my_messaging_settings["save_snd"] == "1") $sms_data["tmpsavesnd"]  = "1";
 
@@ -246,7 +265,7 @@ if(isset($_REQUEST['course_id']) && isset($_REQUEST['filter'])){
 	$course_id = preg_match('/^[a-z0-9]{1,32}$/', $_REQUEST['course_id']) ? $_REQUEST['course_id'] : null;
 
 	if ($filter && $course_id && $perm->have_studip_perm('tutor', $course_id)) {
-		
+
 	// be sure to send it as email
 	if($emailrequest == 1) $sms_data['tmpemailsnd'] = 1;
 
@@ -355,6 +374,14 @@ if ($change_view) {
 $CURRENT_PAGE = _("Systeminterne Nachrichten");
 // includes
 include ('lib/include/html_head.inc.php'); // Output of html head
+
+//StEP 155: Mail Attachments
+//JS Routinen einbinden, wenn benoetigt. Wird in der Funktion gecheckt, ob noetig...
+if ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true) {
+	JS_for_upload();
+	echo "\n<body onUnLoad=\"upload_end()\">";
+}
+
 include ('lib/include/header.php');   // Output of Stud.IP head
 include ('lib/include/links_sms.inc.php'); // include reitersystem
 check_messaging_default();
@@ -365,7 +392,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	echo "</td></tr></table>\n<br/>";
 	// Save data back to database.
 	include ('lib/include/html_end.inc.php');
-	page_close();	
+	page_close();
 	die;
 
 }
@@ -373,6 +400,7 @@ if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 
 $txt['001'] = _("aktuelle Empf&auml;ngerInnen");
 $txt['002'] = _("m&ouml;gliche Empf&auml;ngerInnen");
+$txt['attachment'] = _("Dateianhang");
 $txt['003'] = _("Signatur");
 $txt['004'] = _("Vorschau");
 $txt['005'] = (($cmd=="write_chatinv") ? _("Chateinladung") : _("Nachricht"));
@@ -391,7 +419,7 @@ $txt['008'] = _("Lesebestätigung");
 		print ("</td></tr></table>");
 	}
 
-	echo '<form action="'.$PHP_SELF.'" method="post">';
+	echo '<form enctype="multipart/form-data" NAME="upload_form" action="'.$PHP_SELF.'" method="post">';
 	if($_REQUEST['answer_to']) {
 		 echo '<input type="hidden" name="answer_to" value="'. htmlReady($_REQUEST['answer_to']). '">';
 	}
@@ -499,6 +527,22 @@ $txt['008'] = _("Lesebestätigung");
 								<?=show_msgform()?>
 							</td>
 						</tr>
+						<? // StEP 155: Mail Attachments
+						if ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true) {
+							?>
+							<tr>
+								<td valign="top" class="steelgraudunkel">
+									<font size="-1" color="#FFFFFF"><b><?=$txt['attachment']?></b></font>
+								</td>
+							</tr>
+							<tr>
+								<td valign="top" class="printcontent">
+									<?=show_attachmentform()?>
+								</td>
+							</tr>
+							<?
+						}
+						?>
 						<tr>
 							<td valign="top" class="steelgraudunkel">
 								<font size="-1" color="#FFFFFF"><b><?=$txt['003']?></b></font>

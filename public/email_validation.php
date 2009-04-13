@@ -87,9 +87,9 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 		$to="abuse@".$smtp->localhost;
 		$username = $auth->auth["uname"];
 		$smtp->SendMessage(
-		$from, array($to),
-		array("From: $from", "To: $to", "Subject: Validation"),
-		"Secret falsch\n\nUser: $username\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
+				$to, "",
+				$smtp->abuse, "",
+				"Validation", "Secret falsch\n\nUser: $username\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
 		page_close();
 		die;
 	}
