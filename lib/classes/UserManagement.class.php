@@ -156,7 +156,7 @@ class UserManagement {
 				$value_escaped = mysql_escape_string($value);
 				$this->db->query("UPDATE $table SET $field = '$value_escaped' WHERE user_id = '".$this->user_data['auth_user_md5.user_id']."'");
 
-				// remove all 'user' entries to institutes if global status becomes 'dozent' 
+				// remove all 'user' entries to institutes if global status becomes 'dozent'
 				// (cf. http://develop.studip.de/trac/ticket/484 )
 				if ($field=='perms' && $this->user_data['auth_user_md5.perms']=='dozent' && in_array($this->original_user_data['auth_user_md5.perms'],array('user','autor','tutor'))) {
 					$sql="DELETE FROM user_inst WHERE user_id='".$this->user_data['auth_user_md5.user_id']."' AND inst_perms='user'";
@@ -371,13 +371,9 @@ class UserManagement {
 
 		// send mail
 		$this->smtp->SendMessage(
-				$this->smtp->env_from,
-				array($this->user_data['auth_user_md5.Email']),
-				array("From: " . $this->smtp->from,
-						"Reply-To:" . $this->smtp->abuse,
-						"To: " . $this->user_data['auth_user_md5.Email'],
-						"Subject: " . $subject),
-				$mailbody);
+				$this->user_data['auth_user_md5.Email'], "",
+				$this->smtp->abuse, "",
+				$subject, $mailbody);
 
 		return TRUE;
 	}
@@ -443,7 +439,7 @@ class UserManagement {
 				WHERE user_id = '". $this->user_data['auth_user_md5.user_id'] ."' AND inst_perms = 'admin'
 				GROUP BY Institut_id");
 
-			// if there are institutes with admin-perms, add error-message and deny change	
+			// if there are institutes with admin-perms, add error-message and deny change
 			if ($count = $stmt->fetchColumn()) {
 				$this->msg .= sprintf('error§'. _("Der Benutzer <b>%s</b> ist Admin in %s Einrichtungen und kann daher nicht in einen anderen Status versetzt werden!") .'§', $this->user_data['auth_user_md5.username'], $count);
 				return false;
@@ -507,13 +503,9 @@ class UserManagement {
 
 		// send mail
 		$this->smtp->SendMessage(
-				$this->smtp->env_from,
-				array($this->user_data['auth_user_md5.Email']),
-				array("From: " . $this->smtp->from,
-						"Reply-To:" . $this->smtp->abuse,
-						"To: " . $this->user_data['auth_user_md5.Email'],
-						"Subject: " . $subject),
-				$mailbody);
+				$this->user_data['auth_user_md5.Email'], "",
+				$this->smtp->abuse, "",
+				$subject, $mailbody);
 
 		// Upgrade to admin or root?
 		if ($newuser['auth_user_md5.perms'] == "admin" || $newuser['auth_user_md5.perms'] == "root") {
@@ -628,13 +620,9 @@ class UserManagement {
 
 		// send mail
 		$this->smtp->SendMessage(
-				$this->smtp->env_from,
-				array($this->user_data['auth_user_md5.Email']),
-				array("From: " . $this->smtp->from,
-						"Reply-To:" . $this->smtp->abuse,
-						"To: " . $this->user_data['auth_user_md5.Email'],
-						"Subject: " . $subject),
-				$mailbody);
+				$this->user_data['auth_user_md5.Email'], "",
+				$this->smtp->abuse, "",
+				$subject, $mailbody);
 
 		log_event("USER_NEWPWD",$this->user_data['auth_user_md5.user_id']);
 		return TRUE;
@@ -883,13 +871,9 @@ class UserManagement {
 
 			// send mail
 			$this->smtp->SendMessage(
-					$this->smtp->env_from,
-					array($this->user_data['auth_user_md5.Email']),
-					array("From: " . $this->smtp->from,
-							"Reply-To:" . $this->smtp->abuse,
-							"To: " . $this->user_data['auth_user_md5.Email'],
-							"Subject: " . $subject),
-					$mailbody);
+					$this->user_data['auth_user_md5.Email'], "",
+					$this->smtp->abuse, "",
+					$subject, $mailbody);
 
 		}
 
@@ -923,7 +907,7 @@ class UserManagement {
 	*/
 	function changePassword($password) {
 		global $perm, $auth;
-		
+
 		$this->user_data['auth_user_md5.password'] = md5($password);
 		$this->storeToDatabase();
 
@@ -936,13 +920,9 @@ class UserManagement {
 
 		// send mail
 		$this->smtp->SendMessage(
-				$this->smtp->env_from,
-				array($this->user_data['auth_user_md5.Email']),
-				array("From: " . $this->smtp->from,
-						"Reply-To:" . $this->smtp->abuse,
-						"To: " . $this->user_data['auth_user_md5.Email'],
-						"Subject: " . $subject),
-				$mailbody);
+				$this->user_data['auth_user_md5.Email'], "",
+				$this->smtp->abuse, "",
+				$subject, $mailbody);
 
 		return TRUE;
 
