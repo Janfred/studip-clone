@@ -94,7 +94,7 @@ echo $links;
 
 $db = new DB_Seminar();
 $db2 = new DB_Seminar();
-$db3 = new DB_Seminar();	
+$db3 = new DB_Seminar();
 $db_institut_members = new DB_Seminar();
 	
 // check the given parameters or initialize them
@@ -158,7 +158,7 @@ function table_head ($structure, $css_switcher) {
 	echo "\n</colgroup>\n";
 		
 	echo "<tr>\n";
-	
+
 	$begin = TRUE;
 	foreach ($structure as $key => $field) {
 		if ($begin) {
@@ -229,7 +229,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 			printf("<td%salign=\"left\"><font size=\"-1\">&nbsp;</font></td>\n",
 				$css_switcher->getFullClass());
 		}
-		
+
 		foreach ($datafields_list as $entry) {
 			if ($structure[$entry->getId()]) {
 				$value = '';
@@ -259,13 +259,13 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 		}
 
 		if ($structure["nachricht"]) {
-			printf("<td%salign=\"left\" width=\"1%%\" nowrap>\n",$css_switcher->getFullClass());
+			printf("<td%salign=\"left\" width=\"1%%\"".(($admin_view) ? "" : " colspan=\"2\""). " nowrap>\n",$css_switcher->getFullClass());
 			printf("<a href=\"%s\">", URLHelper::getLink("sms_send.php?sms_source_page=inst_admin.php&rec_uname=".$db->f("username")));
 			printf("<img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" alt=\"%s\" ", _("Nachricht an User verschicken"));
 			printf("title=\"%s\" border=\"0\" valign=\"baseline\"></a>", _("Nachricht an User verschicken"));
-			echo '</td>';			
-			
-			if ($admin_view) {				
+			echo '</td>';
+
+			if ($admin_view) {
 				echo '<td '.$css_switcher->getFullClass().' width="1%" nowrap>';
 				if ($db->f('statusgruppe_id')) {	// if we are in a view grouping by statusgroups
 					echo '&nbsp;<a href="'.URLHelper::getLink('?cmd=removeFromGroup&username='.$db->f('username').'&role_id='. $db->f('statusgruppe_id')).'">';
@@ -330,6 +330,10 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 						echo '&nbsp;<a href="'.URLHelper::getLink('?cmd=removeFromGroup&username='.$db->f('username').'&role_id='.$id).'">';
 						echo '<img src="'.$GLOBALS['ASSETS_URL'].'/images/trash.gif" border="0"></a>&nbsp;';
 						echo '</td>';
+						echo '</tr>', "\n";
+					}
+					elseif ($structure["nachricht"]) {
+						echo '<td '.$css_switcher->getFullClass().' colspan=\"2\">&nbsp;</td>';
 						echo '</tr>', "\n";
 					}
 				}
@@ -814,13 +818,14 @@ else {
 	} // switch
 }
 
-if ($admin_view) {
+// StEP 154: Nachricht an alle Mitglieder der Gruppe; auch auf der inst_members.php
+if ($admin_view OR $perm->have_studip_perm('autor', $SessSemName[1])) {
 	$nachricht['nachricht'] = array(
 		"name" => _("Aktionen") . "&nbsp;",
 		"width" => "5%"
 	);
 }
-	
+
 $table_structure = array_merge((array)$table_structure, (array)$struct);
 $table_structure = array_merge((array)$table_structure, (array)$nachricht);
 
@@ -832,7 +837,7 @@ if ($sms_msg) {
 	echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"5\"></td></tr>\n";
 	parse_msg($sms_msg, "§", "blank", 1, FALSE);
 }
-	
+
 echo "<tr><td class=\"blank\">";
 echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"1\" height=\"5\"></td></tr>\n";
 echo "<tr><td class=\"blank\">\n";
@@ -898,6 +903,7 @@ if ($show == "funktion") {
 		function display_recursive($roles, $level = 0, $title = '') {
 			global $db_institut_members, $statusgruppe_user_sortby, $direction, $extend, $auswahl;
 			global $_fullname_sql, $css_switcher, $table_structure, $colspan;
+			global $admin_view, $rechte, $perm, $SessSemName;
 			foreach ($roles as $role_id => $role) {
 				if ($title == '') {
 					$zw_title = $role['role']->getName();
@@ -924,10 +930,22 @@ if ($show == "funktion") {
 
 				$db_institut_members->query($query);
 				if ($db_institut_members->num_rows() > 0) {
-					echo "<tr><td class=\"steelkante\" colspan=\"$colspan\" height=\"20\">";
-					echo "<font size=\"-1\"><b>&nbsp;";
-					echo htmlReady($zw_title);
-					echo "<b></font></td></tr>\n";
+					// StEP 154: Nachricht an alle Mitglieder der Gruppe
+					if ($perm->have_studip_perm('autor', $SessSemName[1]) AND $GLOBALS["ENABLE_EMAIL_TO_STATUSGROUP"] == true) {
+						$group_colspan = $colspan - 2;
+						echo "<tr><td class=\"steelkante\" colspan=\"$group_colspan\" height=\"20\">";
+						echo "<font size=\"-1\"><b>&nbsp;";
+						echo htmlReady($zw_title);
+						echo "<b></font>"."</td><td class=\"steelkante\" colspan=\"2\" height=\"20\">";
+						echo "<a href=\"".URLHelper::getLink("sms_send.php?sms_source_page=" . ($admin_view == true ? "inst_admin.php" : "inst_members.php") . "&group_id=".$role_id."&subject=".rawurlencode($SessSemName[0]))."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(sprintf(_("Nachricht an alle Mitglieder der Gruppe %s verschicken"), $zw_title)) . " border=\"0\"></a>&nbsp;";
+						echo "</td></tr>\n";
+					}
+					else {
+						echo "<tr><td class=\"steelkante\" colspan=\"$colspan\" height=\"20\">";
+						echo "<font size=\"-1\"><b>&nbsp;";
+						echo htmlReady($zw_title);
+						echo "<b></font></td></tr>\n";
+					}
 					table_body($db_institut_members, $auswahl, $table_structure, $css_switcher);
 				}
 				if ($role['child']) {
@@ -944,14 +962,14 @@ if ($show == "funktion") {
 			$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, ui.inst_perms, ui.raum,
 								ui.sprechzeiten, ui.Telefon, aum.Email, aum.user_id,
 								aum.username
-								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN user_info USING(user_id) 
+								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN user_info USING(user_id)
 								WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
 								AND ui.user_id NOT IN('%s') ORDER BY %s %s",
 								$auswahl, $assigned, $sortby, $direction);
 		else
 			$query = sprintf("SELECT ". $_fullname_sql['full_rev'] ." AS fullname, ui.inst_perms, ui.raum,
 								ui.Telefon, aum.user_id, aum.username
-								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN user_info USING(user_id) 
+								FROM user_inst ui LEFT JOIN	auth_user_md5 aum USING(user_id) LEFT JOIN user_info USING(user_id)
 								WHERE ui.Institut_id = '%s' AND ui.inst_perms != 'user'
 								AND ui.user_id NOT IN('%s')ORDER BY %s %s", $auswahl,
 								$assigned, $sortby, $direction);
