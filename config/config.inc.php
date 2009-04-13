@@ -244,7 +244,7 @@ $SEM_CLASS[6]=array("name"=>_("importierte Kurse"),
 					"topic_create_autor"=>TRUE,
 					"write_access_nobody"=>FALSE,
 					"visible"=>TRUE,
-					"course_creation_forbidden" => TRUE, 
+					"course_creation_forbidden" => TRUE,
 					"forum"=>TRUE,
 					"documents"=>TRUE,
 					"schedule"=>TRUE,
@@ -379,17 +379,37 @@ $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen
 					);
 //weitere Definitionen fuer spezielle Veranstaltungstypen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
+/* Set the allowed and prohibited file types for mail attachments (if activated by ENABLE_MAIL_ATTACHMENTS).
+*
+*  "type"=>"deny" means: only the listed "file_types" are allowed
+*  "type"=>"allow" means: all, but the listed "file_types" are allowed
+*
+*  "file_sizes" determines how much each user class can upload per file (multiple of 1 MB = 1048576 Bytes)
+*/
+
+$UPLOAD_TYPES["attachments"] =
+				array(	"type" => "allow",
+					    "file_types" => array ("exe"),
+					    "file_sizes" => array (	"root" => 7 * 1048576,
+									"admin" => 7 * 1048576,
+									"dozent" => 7 * 1048576,
+									"tutor" => 7 * 1048576,
+									"autor" => 7 * 1048576,
+									"nobody" => 1.38 * 1048576
+								    )
+				);
+
 /*
- * define additional fields that can be shown in participant list view. 
+ * define additional fields that can be shown in participant list view.
  */
 
-$TEILNEHMER_VIEW[0] = array("field" => "user_picture", 
+$TEILNEHMER_VIEW[0] = array("field" => "user_picture",
   "name" => _("Nutzerbilder"), "table" => "special", "export" => 0, "display"=> 1);
-$TEILNEHMER_VIEW[1] = array("field" => "geschlecht", 
+$TEILNEHMER_VIEW[1] = array("field" => "geschlecht",
   "name" => _("Geschlecht"), "table" => "datafields", "export" => 1, "display"=> 1);
-$TEILNEHMER_VIEW[2] = array("field" => "preferred_language", 
+$TEILNEHMER_VIEW[2] = array("field" => "preferred_language",
   "name" => _("Sprache"), "table" => "user_info", "export" => 1, "display"=> 1);
- 
+
 
 //Festlegen von zulaessigen Bezeichnungen fuer Einrichtungen (=Institute)
 $INST_TYPE[1]=array("name"=>_("Einrichtung"));
@@ -629,7 +649,7 @@ $FLASHPLAYER_DEFAULT_CONFIG_MIN = "&amp;showstop=1&amp;showvolume=1&amp;bgcolor=
 $FLASHPLAYER_DEFAULT_CONFIG_MAX = "&amp;showstop=1&amp;showvolume=1&amp;bgcolor=A6B6C6&amp;bgcolor1=A6B6C6&amp;bgcolor2=7387AC&amp;playercolor=7387AC&amp;buttoncolor=254580&amp;buttonovercolor=E9EFFD&amp;slidercolor1=CAD7E1&amp;slidercolor2=A6B6C6&amp;sliderovercolor=E9EFFD&amp;loadingcolor=E9B21A&amp;buffer=5&amp;buffercolor=white&amp;buffershowbg=0&amp;playeralpha=90&amp;playertimeout=500&amp;shortcut=1&amp;showtime=1&amp;showfullscreen=1&amp;showplayer=always&amp;phpstream=0&amp;onclick=playpause&amp;showloading=always";
 
 //Here you have to add the datafield_ids as elements. They will be shown in the standard / extended view on inst_admin.php
-$INST_ADMIN_DATAFIELDS_VIEW = array(			
+$INST_ADMIN_DATAFIELDS_VIEW = array(
 	'extended' => array(
 	),
 	'default' => array(

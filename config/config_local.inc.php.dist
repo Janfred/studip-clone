@@ -295,6 +295,8 @@ $MESSAGING_FORWARD_DEFAULT = 1;								//the default setting: if 1, the user has
 
 $ENABLE_EMAIL_TO_STATUSGROUP = TRUE;								// enable to send messages to whole status groups
 
+$ENABLE_EMAIL_ATTACHMENTS = TRUE;								// enable attachment functions for internal and external messages
+
 /*advanced system settings
 ----------------------------------------------------------------
 this are some settings to activate some special features, special

@@ -3,7 +3,7 @@
 * config.inc.php
 *
 * Configuration file for studip. In this file you can change the options of many
-* Stud.IP Settings. 
+* Stud.IP Settings.
 * Please note: To setup the system, you have to set the basic settings in the
 * config_local.inc.php in the same directory first.
 *
@@ -91,7 +91,7 @@ $UNI_INFO = "Stud.IP 1.5 - Studienbegleitender Internetsupport von Präsenzlehre"
 
 
 /*
-* "courses" in Stud.IP generally classified using two attributes: 
+* "courses" in Stud.IP generally classified using two attributes:
 * class (roughly 'the category') and type
 * both can be configured below
 */
@@ -194,15 +194,15 @@ $SEM_TREE_TYPES[5] = array("name" => _(""), "editable" => true);
 
 /* Set the allowed and prohibited file types for the types given above.
 *  If nothing is configured for a specific type, the values of the "default" setting are taken.
-*  
+*
 *  "type"=>"deny" means: only the listed "file_types" are allowed
 *  "type"=>"allow" means: all, but the listed "file_types" are allowed
-*  
+*
 *  "file_sizes" determines how much each user class can upload per file (multiple of 1 MB = 1048576 Bytes)
 */
 
 $UPLOAD_TYPES=array( 	"default" =>
-				array(	"type"=>"deny", 
+				array(	"type"=>"deny",
 					    "file_types" => array ("rtf", "xls", "ppt", "zip", "pdf", "txt", "tgz", "gz", "bz2"),
 					    "file_sizes" => array (	"root" => 7 * 1048576,
 									"admin" => 7 * 1048576,
@@ -247,6 +247,26 @@ $UPLOAD_TYPES=array( 	"default" =>
 				)
 // rules for futher course-types can be added below (please adhere exactly to the structure given above)
 	    );
+
+/* Set the allowed and prohibited file types for mail attachments (if activated by ENABLE_MAIL_ATTACHMENTS).
+*
+*  "type"=>"deny" means: only the listed "file_types" are allowed
+*  "type"=>"allow" means: all, but the listed "file_types" are allowed
+*
+*  "file_sizes" determines how much each user class can upload per file (multiple of 1 MB = 1048576 Bytes)
+*/
+
+$UPLOAD_TYPES["attachments"] =
+				array(	"type" => "allow",
+					    "file_types" => array ("exe"),
+					    "file_sizes" => array (	"root" => 7 * 1048576,
+									"admin" => 7 * 1048576,
+									"dozent" => 7 * 1048576,
+									"tutor" => 7 * 1048576,
+									"autor" => 7 * 1048576,
+									"nobody" => 1.38 * 1048576
+								    )
+				);
 
 
 /*

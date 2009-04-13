@@ -70,7 +70,7 @@ if ($ASSETS_URL[0] === '/') {
 } else if (!preg_match('/^[a-z]+:/', $ASSETS_URL)) {
 	$ASSETS_URL = $ABSOLUTE_URI_STUDIP . $ASSETS_URL;
 }
- 
+
 // absolute filesystem path to the plugin packages
 $PLUGINS_PATH = $ABSOLUTE_PATH_STUDIP . 'plugins_packages';
 
@@ -304,6 +304,8 @@ $MESSAGING_FORWARD_AS_EMAIL = TRUE;							//enable to forward every internal mes
 $MESSAGING_FORWARD_DEFAULT = 3;								//the default setting: if 1, the user has to switch it on; if 2, every message will be forwarded; if 3 every message will be forwarded on request of the sender
 
 $ENABLE_EMAIL_TO_STATUSGROUP = TRUE;								// enable to send messages to whole status groups
+
+$ENABLE_EMAIL_ATTACHMENTS = TRUE;								// enable attachment functions for internal and external messages
 
 /*advanced system settings
 ----------------------------------------------------------------
