@@ -11,7 +11,8 @@
 		<ul>
 		<?
 		$accesskey = 0;
-		foreach (array($home,$courses,$messages,$chat,$online,$homepage,$planner,$admin) as $item) {
+		foreach (array($home,$courses,$messages,$chat,$online,$homepage,$planner,$admin) as $item) 
+		{
 			 if(!is_null($item)){
 				 if($item['accesskey']){
 					 $accesskey = ++$accesskey % 10;
@@ -28,16 +29,18 @@
 				<?
 			}
 		}
-		if(is_array($plugins)){
-			foreach ($plugins as $plugin_item) {
+		if(is_array($plugins))
+		{
+			foreach ($plugins as $plugin_item) 
+			{
 				?>
 				<li>
 				<div style="font-size:12px; z-index:2; line-height:90%; padding-bottom:3px">
 				<a href="<?=$plugin_item['link']?>">
 				<img <?=tooltip($plugin_item['info'])?> src="<?=$plugin_item['image']?>" border="0">
 				<br>
-				<?=htmlReady($plugin_item['text'])?></div>
-				</a>
+				<?=htmlReady($plugin_item['text'])?>
+				</a></div>				
 				</li>
 				<?
 			}
