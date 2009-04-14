@@ -588,7 +588,7 @@ if ($s_send) {
 	}
 
 	//Checks for admission turnout (only important if an admission is set)
-	if ($db->f("admission_type") && !LockRules::Check($s_id, 'admission_turnout')) {
+	if ($db->f("admission_type") != 0 && $db->f("admission_type") != 3 && !LockRules::Check($s_id, 'admission_turnout')) {
 		if ($turnout < 1) {
 			$msg .= "error§" . _("Diese Veranstaltung ist teilnahmebeschr&auml;nkt. Daher m&uuml;ssen Sie wenigstens einen Teilnehmenden zulassen!") . "§";
 			$run=FALSE;
