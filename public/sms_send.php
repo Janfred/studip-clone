@@ -183,7 +183,7 @@ if ($cmd_insert_x) {
 }
 
 // do we answer someone and did we came from somewhere != sms-page
-if ($_REQUEST['answer_to']) {
+if ($_GET['answer_to']) {
 	$query = "SELECT auth_user_md5.username as rec_uname, message.autor_id FROM message LEFT JOIN auth_user_md5 ON(message.autor_id = auth_user_md5.user_id) WHERE message.message_id = '".$_REQUEST['answer_to']."'";
 	$db->query ($query);
 	while ($db->next_record()) {
