@@ -513,7 +513,7 @@ if ($form == 3)
 																"end_stunde" => $sem_create_data["term_turnus_end_stunde"][$i],
 																"end_minute" => $sem_create_data["term_turnus_end_minute"][$i],
 																// they are not needed anymore, but who knows...
-																//"room"=>$sem_create_data["term_turnus_room"][$i],
+																"room"=>$sem_create_data["term_turnus_room"][$i],
 																//"resource_id"=>$sem_create_data["term_turnus_resource_id"][$i],
 																"desc"=>$sem_create_data["term_turnus_desc"][$i]
 																);
