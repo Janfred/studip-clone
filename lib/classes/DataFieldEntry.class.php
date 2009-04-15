@@ -481,19 +481,12 @@ class DataFieldLinkEntry extends DataFieldEntry
 	public function getHTML($name)
 	{
 		$field_name = $name . '[' . $this->structure->getID() . ']';
-		return sprintf('<input name="%s" value="%s" size="30">', $field_name, $this->getValue()==''?'http://':$this->getValue());
+		return sprintf('<input name="%s" value="%s" size="30">', $field_name, $this->getValue()==''?'http://':htmlready($this->getValue()));
 	}
-
-	public function getDisplayValue($entities = true)
+	
+	public function getDisplayValue()
 	{
-		if($entities)
-		{
-			return '<img border="0" src="' . $GLOBALS['ASSETS_URL'] . 'images/link_extern.gif" alt="link"> <a href="' . $this->getValue() . '" target="_blank">' . $this->getValue() . '</a>';
-		}
-		else
-		{
-			return $this->getValue();
-		}
+		return formatReady($this->getValue());
 	}
 
 	public function isValid()

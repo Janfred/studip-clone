@@ -8,8 +8,8 @@ class Step00159DataFieldEntry extends Migration
 
     function up()
     {
-        DBManager::get()->exec("ALTER TABLE `datafields` MODIFY COLUMN `type` ENUM('bool','textline','textarea','selectbox','date','time','email','url','phone','radio','combo','link') NOT NULL DEFAULT 'textline';");
-	}
+        DBManager::get()->exec(	"ALTER TABLE `datafields` MODIFY COLUMN `type` ENUM('bool','textline','textarea','selectbox','date','time','email','phone','radio','combo','link') NOT NULL DEFAULT 'textline';");
+    }
 
     function down()
     {
