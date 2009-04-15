@@ -36,9 +36,14 @@ function autocomplete_person_find_by_family($fragment) {
   return $stmt->fetchAll();
 }
 
-function autocomplete_person_find_by_name($fragment) {
+function autocomplete_person_find_by_name($fragment, $exclude_from_search = null) {
   global $_fullname_sql;
   $db = DBManager::get();
+  if(is_array($exclude_from_search)){
+    $exclude_sql = " AND username NOT IN('" . join("','", array_map('addslashes', $exclude_from_search)) . "') ";
+  } else {
+    $exclude_sql = '';
+  }
   $stmt = $db->prepare("SELECT user_id, username, Vorname, Nachname, ".
                        "title_front, title_rear, perms ".
                        "FROM auth_user_md5 ".
@@ -47,6 +52,7 @@ function autocomplete_person_find_by_name($fragment) {
                        "Vorname LIKE ? OR ".
                        "Nachname LIKE ?) ".
                        "AND " . get_vis_query() . " ".
+                       $exclude_sql .
                        "ORDER BY Nachname ".
                        "LIMIT 10");
   $stmt->execute(array("%{$fragment}%", "%{$fragment}%", "%{$fragment}%"));

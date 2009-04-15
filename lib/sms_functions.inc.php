@@ -716,11 +716,15 @@ function show_addrform() {
 			                           minChars: 3,
 			                           paramName: 'value',
 			                           method: 'get',
+									   parameters: 'exclude=' +  $A(document.forms[0].elements['del_receiver[]'].options).pluck('value').toJSON(),
 			                           afterUpdateElement: function (input, item) {
-			                             var username = encodeURI(item.down('span.username').firstChild.nodeValue);
-			                             document.location = STUDIP.ABSOLUTE_URI_STUDIP +
-			                               "sms_send.php?add_freesearch_x=1&freesearch[]=" + username;
-			                           }
+			                             var username = item.down('span.username').firstChild.nodeValue;
+			                             var the_form = $(document.forms[0]);
+										 the_form.appendChild(new Element('input', {type:'hidden', name:'freesearch[]', value: username}));
+										 the_form.appendChild(new Element('input', {type:'hidden', name:'add_freesearch_x', value: '1'}));
+										 the_form.search_exp.value = '';
+										 the_form.submit();
+									   }
 			                         });
 			});
 		</script>
