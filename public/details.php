@@ -430,7 +430,7 @@ print_infobox ($infobox,"contract.jpg");
 				<td class="<? $cssSw->switchClass(); echo $cssSw->getClass() ?>" width="1%">&nbsp;</td>
 				<td class="<? echo $cssSw->getClass() ?>" colspan=4 width="99%" valign="top">
 				<?
-				printf ("<font size=-1><b>" . _("Kommentar/Beschreibung:") . "</b></font><br><font size=-1>%s</font>",htmlReady($db2->f("Beschreibung"), TRUE, TRUE));
+				printf ("<font size=-1><b>" . _("Kommentar/Beschreibung:") . "</b></font><br><font size=-1>%s</font>",FixLinks(htmlReady($db2->f("Beschreibung"), TRUE, TRUE)));
 				?>
 				</td>
 			</tr>

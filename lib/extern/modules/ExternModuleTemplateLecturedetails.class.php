@@ -213,7 +213,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
 			$content['LECTUREDETAILS']['TITLE'] = ExternModule::ExtHtmlReady($seminar->getName());
 			$content['LECTUREDETAILS']['NUMBER'] = ExternModule::ExtHtmlReady($seminar->seminar_number);
 			$content['LECTUREDETAILS']['SUBTITLE'] = ExternModule::ExtHtmlReady($seminar->subtitle);
-			$content['LECTUREDETAILS']['DESCRIPTION'] = ExternModule::ExtHtmlReady($seminar->description);
+			$content['LECTUREDETAILS']['DESCRIPTION'] = ExternModule::ExtHtmlReady($seminar->description, TRUE);
 			$content['LECTUREDETAILS']['MISC'] = ExternModule::ExtHtmlReady($seminar->misc, TRUE);
 			$content['LECTUREDETAILS']['PARTICIPANTS'] = ExternModule::ExtHtmlReady($seminar->participants);
 			$content['LECTUREDETAILS']['REQUIREMENTS'] = ExternModule::ExtHtmlReady($seminar->requirements);
