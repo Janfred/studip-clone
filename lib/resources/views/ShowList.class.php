@@ -245,7 +245,7 @@ class ShowList extends ShowTreeRow{
 		}
 
 		//create the query for all additionale perms by the range to an object
-		$query = sprintf ("SELECT resource_id FROM  resources_user_resources WHERE user_id = '%s' ORDER BY name", $range_id);
+		$query = sprintf ("SELECT resources_user_resources.resource_id FROM  resources_user_resources LEFT JOIN resources_objects USING(resource_id) WHERE user_id = '%s' ORDER BY name", $range_id);
 		$db->query($query);
 
 		while ($db->next_record()) {
