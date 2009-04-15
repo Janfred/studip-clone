@@ -70,22 +70,6 @@ class reiter {
 		}
 	}
 	
-	/**
-	 * Converts relative links to absolute ones.
-	 *
-	 * @access private
-	 *
-	 * @param  string     a link that will be converted if it is relative
-	 *
-	 * @return string     an absolute link
-	 */
-	function absolutizeLink($link) {
-		if (!(preg_match('#^[a-z]+://#', $link) || $link[0] === '/')) {
-			$link = $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'].$link;
-		}
-		return $link;
-	}
-
 
 	/**
 	 * Activates that element of the structure that corresponds to the given view
@@ -140,13 +124,6 @@ class reiter {
 		if (preg_match('/^\((.*)\)$/', $view, $matches)) {
 			$noAktiveBottomkat = TRUE;
 			$view = $matches[1];
-		}
-
-		foreach ($structure as $key => $value) {
-			if (isset($structure[$key]['link'])) {
-				$structure[$key]['link'] =
-				  self::absolutizeLink($structure[$key]['link']);
-			}
 		}
 
 		$this->activateStructure($structure, $view);
