@@ -716,15 +716,17 @@ function show_addrform() {
 			                           minChars: 3,
 			                           paramName: 'value',
 			                           method: 'get',
-									   parameters: 'exclude=' +  $A(document.forms[0].elements['del_receiver[]'].options).pluck('value').toJSON(),
+			                           parameters: Object.toQueryString({
+			                                         "exclude[]": $$("select[name='del_receiver[]'] option").pluck("value")
+			                                       }),
 			                           afterUpdateElement: function (input, item) {
 			                             var username = item.down('span.username').firstChild.nodeValue;
-			                             var the_form = $(document.forms[0]);
-										 the_form.appendChild(new Element('input', {type:'hidden', name:'freesearch[]', value: username}));
-										 the_form.appendChild(new Element('input', {type:'hidden', name:'add_freesearch_x', value: '1'}));
-										 the_form.search_exp.value = '';
-										 the_form.submit();
-									   }
+			                             var form = $$("form[name='upload_form']")[0];
+			                             form.appendChild(new Element('input', {type:'hidden', name:'freesearch[]', value: username}));
+			                             form.appendChild(new Element('input', {type:'hidden', name:'add_freesearch_x', value: '1'}));
+			                             $("addressee").value = '';
+			                             form.submit();
+			                           }
 			                         });
 			});
 		</script>
