@@ -1407,6 +1407,16 @@ function studip_utf8decode($string){
 
 function mark_public_course($course = NULL) {
 
+	// need to handle institutes separately (always visible)
+	if ($GLOBALS['SessSemName']['class'] == 'inst') {
+		$GLOBALS["body_class"] = isset($GLOBALS["body_class"])
+		                         ? $GLOBALS["body_class"] . " public_course"
+		                         : "public_course";
+		$GLOBALS["SessSemName"]["header_line"] .=
+			" (" . _("öffentliche Einrichtung") . ")";
+		return;
+	}
+
 	if ($course === NULL) {
 		require_once "lib/classes/Seminar.class.php";
 		$course = Seminar::getInstance($GLOBALS['SessSemName'][1]);
