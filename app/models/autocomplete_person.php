@@ -40,7 +40,7 @@ function autocomplete_person_find_by_name($fragment, $exclude_from_search = null
   global $_fullname_sql;
   $db = DBManager::get();
   if(is_array($exclude_from_search)){
-    $exclude_sql = " AND username NOT IN('" . join("','", array_map('addslashes', $exclude_from_search)) . "') ";
+    $exclude_sql = " AND username NOT IN(" . join(",", array_map(array($db, 'quote'), $exclude_from_search)) . ") ";
   } else {
     $exclude_sql = '';
   }
