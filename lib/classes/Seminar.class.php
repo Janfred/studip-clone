@@ -1649,7 +1649,7 @@ class Seminar {
 	}
 
 	function isAdmissionQuotaChecked(){
-		return $this->admission_selection_take_place == 0  && ($this->admission_type == 1 || ($this->admission_enable_quota && $this->admission_type == 2));
+		return $this->admission_selection_take_place < 1  && ($this->admission_type == 1 || ($this->admission_enable_quota && $this->admission_type == 2));
 	}
 
 	function isAdmissionQuotaEnabled(){
