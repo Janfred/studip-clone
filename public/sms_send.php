@@ -65,12 +65,17 @@ check_messaging_default();
 
 # ACTION
 ###########################################################
-/*
-if($answer_to) {
-	$query = "UPDATE message_user SET	answered = '1' WHERE message_id = '".$answer_to."' AND user_id='".$user->id."' AND snd_rec = 'rec'";
-	$db->query ($query);
+// start new message
+if ($cmd == 'new') {
+	unset($sms_data["p_rec"]);
+	unset($sms_data["tmp_save_snd_folder"]);
+	unset($sms_data["tmpreadsnd"]);
+	unset($sms_data["tmpemailsnd"]);
+	unset($cmd);
+
+	if ($my_messaging_settings["save_snd"] == "1") $sms_data["tmpsavesnd"] = "1";
 }
-*/
+
 // write a chat-invitation, so predefine the messagesubject
 if ($cmd == "write_chatinv" && !isset($messagesubject)) $messagesubject = _("Chateinladung");
 

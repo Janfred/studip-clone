@@ -66,7 +66,7 @@ $structure["online"]=array ("topKat"=>"", "name"=>_("Online"), 'link' => URLHelp
 
 $structure["in"] = array ("topKat"=>"post", "name"=>_("empfangene"), 'link' => URLHelper::getLink('sms_box.php?sms_inout=in'), "active"=>FALSE);
 $structure["out"] = array ("topKat"=>"post", "name"=>_("gesendete"), 'link' => URLHelper::getLink('sms_box.php?sms_inout=out'), "active"=>FALSE);
-$structure["write"] = array ("topKat"=>"post", "name"=>_("Neue Nachricht schreiben"), 'link' => URLHelper::getLink('sms_send.php'), "active"=>FALSE);
+$structure["write"] = array ("topKat"=>"post", "name"=>_("Neue Nachricht schreiben"), 'link' => URLHelper::getLink('sms_send.php?cmd=new'), "active"=>FALSE);
 $structure["adjust"] = array ("topKat"=>"post", "name"=>_("Messaging anpassen"), 'link' => URLHelper::getLink('?change_view=TRUE'), "active"=>FALSE);
 $structure["online2"] = array ("topKat"=>"online", "name"=>_("Wer ist online?"), 'link' => URLHelper::getLink('online.php'), "active"=>FALSE);
 $structure["adjust_online"] = array ("topKat"=>"online", "name"=>_("Messaging anpassen"), 'link' => URLHelper::getLink('?change_view=TRUE'), "active"=>FALSE);
