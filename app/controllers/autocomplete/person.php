@@ -26,8 +26,9 @@ class Autocomplete_PersonController extends Trails_Controller {
 
   function name_action() {
     $search_term = strtr(self::get_param('value'), array('%' => '\%'));
-    $exclude_from_search = array_map('studip_utf8decode',
-                                     remove_magic_quotes($_GET['exclude']));
+    $exclude_from_search = is_array($_GET['exclude']) ?
+                           array_map('studip_utf8decode', remove_magic_quotes($_GET['exclude'])) :
+                           null;
     $this->persons = autocomplete_person_find_by_name($search_term, $exclude_from_search);
   }
 
