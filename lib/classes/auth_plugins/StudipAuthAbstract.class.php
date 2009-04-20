@@ -191,13 +191,6 @@ class StudipAuthAbstract {
 	function CheckAuthentication($username,$password,$jscript = false){
 
 		$db = new DB_Seminar();
-		$db->query(sprintf("SELECT * FROM auth_user_md5 WHERE username='%s'",mysql_escape_string($username)));
-		if ($db->next_record()) {
-				if ($db->f("locked")=="1") {
-						$error .= _("Dieser Benutzer ist gesperrt! Wenden Sie sich bitte an die Administration.")."<BR>";
-						return array('uid' => $uid,'error' => $error);
-				}
-		}
 
 		$plugins =& StudipAuthAbstract::GetInstance();
 		$error = false;
@@ -208,6 +201,24 @@ class StudipAuthAbstract {
 				continue;
 			}
 			if ($uid = $object->authenticateUser($username,$password,$jscript)){
+				$db->query(sprintf("SELECT * FROM auth_user_md5 WHERE username='%s'",mysql_escape_string($username)));
+				if($db->next_record()){
+					$locked = $db->f('locked');
+					$key = $db->f('validation_key');
+
+					$uc = new UserConfig();
+					$exp_d = $uc->getValue($db->f('user_id'),"EXPIRATION_DATE");
+
+					if($exp_d > 0 && $exp_d < time()){
+						$error .= _("Dieses Benutzerkonto ist abgelaufen.<br> Wenden Sie sich bitte an die Administration.")."<BR>";
+						return array('uid' => false,'error' => $error);
+					}else if($locked=="1"){
+						$error .= _("Dieser Benutzer ist gesperrt! Wenden Sie sich bitte an die Administration.")."<BR>";
+						return array('uid' => false,'error' => $error);
+					}else if($key != '') {
+						return array('uid' => $uid,'error' => $error,'need_email_activation' => $uid);
+					}
+				}
 				return array('uid' => $uid,'error' => $error, 'is_new_user' => $object->is_new_user);
 			} else {
 				$error .= (($object->error_head) ? ("<b>" . $object->error_head . ":</b> ") : "") . $object->error_msg . "<br>";
