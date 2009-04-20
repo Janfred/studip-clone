@@ -556,8 +556,7 @@ class Seminar_Auth extends Auth {
 				$this->error_msg= sprintf(_("Autologin ist mit dem Status: %s nicht möglich!"), $this->auth["perm"]);
 				return false;
 			}
-			$key = $this->db->f('validation_key');
-			if($key != '') {
+			if($check_auth['need_email_activation'] == $uid){
 				$this->need_email_activation = $uid;
 				$_SESSION['semi_logged_in'] = $uid;
 				return false;
@@ -647,8 +646,7 @@ class Seminar_Auth extends Auth {
 			$uid = $check_auth['uid'];
 			$this->db->query(sprintf("select * from %s where user_id = '%s'",$this->database_table,$uid));
 			$this->db->next_record();
-			$key = $this->db->f('validation_key');
-			if($key != '') {
+			if($check_auth['need_email_activation'] == $uid){
 				$this->need_email_activation = $uid;
 				$_SESSION['semi_logged_in'] = $uid;
 				return false;
