@@ -114,8 +114,8 @@ if (check_ticket($_REQUEST['studipticket'])){
 				$newuser['auth_user_md5.Email'] = stripslashes(trim($Email));
 			if (isset($perms))
 				$newuser['auth_user_md5.perms'] = implode($perms,",");
-			if (isset($validation_key))
-				$newuser['auth_user_md5.validation_key'] = stripslashes(trim($validation_key));
+			if ($delete_val_key == "1")
+				$newuser['auth_user_md5.validation_key'] = '';
 			$newuser['auth_user_md5.locked']     = (isset($locked) ? $locked : 0);
 			$newuser['auth_user_md5.lock_comment']    = (isset($lock_comment) ? stripslashes(trim($lock_comment)) : "");
 			$newuser['auth_user_md5.locked_by'] = ($locked==1 ? $auth->auth["uid"] : "");
@@ -560,16 +560,10 @@ if (isset($_GET['details']) || $showform ) {
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" class="steel1"><b>&nbsp;<?=_("Validation_key:")?></b></td>
+					<td class="steel1"><b>&nbsp;<?=_("Validation_key:")?></b></td>
+					<td class="steel1"><input type="checkbox" name="delete_val_key" value="1" />L&ouml;schen</td>
 					<td class="steel1">
-					<?
-					if (StudipAuthAbstract::CheckField("auth_user_md5.validation_key", $db->f('auth_plugin'))) {
-						echo htmlReady($db->f("validation_key"));
-					} else {
-					?><input type="text" name="validation_key" size=48 maxlength=63 value="<?=htmlReady($db->f("validation_key"))?>">
-					<?
-					}
-					?>
+					<?=htmlReady($db->f("validation_key"))?>
 					</td>
 				</tr>
 
