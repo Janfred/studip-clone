@@ -913,7 +913,7 @@ div.overdiv div.content {
 div.modalshadow {
 	background-image: url('../images/background-transparent.png');
 	position: absolute;
-	left: 25%; 
+	left: 25%;
 	top: 50%;
 	width: 50%;
 	-moz-border-radius: 10px;
@@ -926,4 +926,15 @@ div.modaldialog {
 	padding: 10px;
 	text-align: center;
 	-moz-border-radius: 10px;
+}
+
+/* --- Editor Toolbar ------------------------------------------------------- */
+.editor_toolbar {
+	width: 70%;
+	text-align: left;
+	padding-bottom: 0.5em;
+}
+
+.editor_toolbar button {
+	margin-right: 0.25em;
 }
