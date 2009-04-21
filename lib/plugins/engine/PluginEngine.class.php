@@ -84,8 +84,24 @@ class PluginEngine {
 	}
 
 	/**
-	 * Sends a message to all activated plugins and returns an array of the return
-	 * values.
+	 * Sends a message to all activated plugins of a type and returns an array of
+	 * the return values.
+	 *
+	 * @param  type       plugin type or NULL (all types)
+	 * @param  string     the method name that should be send to all plugins
+	 * @param  mixed      a variable number of arguments
+	 *
+	 * @return array      an array containing the return values
+	 */
+	function sendMessage($type, $method /* ... */) {
+		$args = func_get_args();
+		$args = array_splice($args, 1, 0, array(NULL));
+		return call_user_func_array(array($this, 'sendMessageWithContext'), $args);
+	}
+
+	/**
+	 * Sends a message to all activated plugins of a type enabled in a context and
+	 * returns an array of the return values.
 	 *
 	 * @param  type       plugin type or NULL (all types)
 	 * @param  context    context range id (optional)
@@ -94,7 +110,7 @@ class PluginEngine {
 	 *
 	 * @return array      an array containing the return values
 	 */
-	function sendMessage($type, $context, $method /* ... */) {
+	function sendMessageWithContext($type, $context, $method /* ... */) {
 		$args = func_get_args();
 		$args = array_slice($args, 3);
 		$results = array();
