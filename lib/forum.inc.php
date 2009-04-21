@@ -147,6 +147,13 @@ function editarea($forumposting) {
 	$description .= "<br><br><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"160\" height=\"1\"><input type=image name=create value=\"abschicken\" " . makeButton("abschicken", "src") . " align=\"absmiddle\" border=0>&nbsp;"
 		.$zusatz
 		."</div>";
+	$description .= <<<TOOLBAR
+<script>
+	document.observe("dom:loaded", function () {
+		new STUDIP.Forum.Toolbar($$("textarea[name='description']").first());
+	});
+</script>
+TOOLBAR;
 	return $description;
 }
 
