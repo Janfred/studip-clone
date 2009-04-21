@@ -484,9 +484,16 @@ class DataFieldLinkEntry extends DataFieldEntry
 		return sprintf('<input name="%s" value="%s" size="30">', $field_name, $this->getValue()==''?'http://':htmlready($this->getValue()));
 	}
 	
-	public function getDisplayValue()
+	public function getDisplayValue($entities = true)
 	{
-		return formatReady($this->getValue());
+		if($entities)
+		{
+			return formatReady($this->getValue());
+		}
+		else
+		{
+			return $this->getValue();
+		}
 	}
 
 	public function isValid()
