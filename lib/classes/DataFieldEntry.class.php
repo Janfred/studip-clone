@@ -486,30 +486,27 @@ class DataFieldLinkEntry extends DataFieldEntry
 	
 	public function getDisplayValue($entities = true)
 	{
-		if($entities)
-		{
+		if ($entities) {
 			return formatReady($this->getValue());
 		}
-		else
-		{
+		else {
 			return $this->getValue();
+		}
+	}
+	
+	public function setValueFromSubmit($submitted_value)
+	{
+		if ($submitted_value == 'http://') {
+			$this->setValue('');
+		}
+		else {
+			$this->setValue(remove_magic_quotes($submitted_value));
 		}
 	}
 
 	public function isValid()
 	{
-		if(substr($this->getValue(), 0, 7) == 'http://' || substr($this->getValue(), 0, 8) == 'https://' || substr($this->getValue(), 0, 6) == 'ftp://' || $this->getValue() == '')
-		{
-			if($this->getValue() == 'http://')
-			{
-				$this->setValue('');
-			}
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return (preg_match('%^(https?|ftp)://%', $this->getValue()) || $this->getValue() == '');
 	}
 }
 
