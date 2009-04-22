@@ -487,7 +487,7 @@ class DataFieldLinkEntry extends DataFieldEntry
 	public function getDisplayValue($entities = true)
 	{
 		if ($entities) {
-			return formatReady($this->getValue());
+			return FixLinks(htmlReady($this->getValue()));
 		}
 		else {
 			return $this->getValue();
