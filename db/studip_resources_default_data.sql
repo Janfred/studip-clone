@@ -1,3 +1,11 @@
+--
+-- Daten für Tabelle `config`
+--
+
+REPLACE INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('06cdb765fb8f0853e3ebe08f51c3596e', '', 'RESOURCES_ENABLE', '1', 1, 'boolean', 'global', '', 0, 0, 0, 'Enable the Stud.IP resource management module', '', '');
+REPLACE INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('9f6d7e248f58d1b211314dfb26c77d63', '', 'RESOURCES_ALLOW_DELETE_REQUESTS', '1', 1, 'boolean', 'global', '', 0, 1136826903, 1136826903, 'Erlaubt das Löschen von Raumanfragen für globale Ressourcenadmins', '', '');
+REPLACE INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('b7a2817d142443245df2f5ac587fe218', '', 'RESOURCES_ALLOW_ROOM_REQUESTS', '1', 1, 'boolean', 'global', '', 0, 0, 1100709567, 'Schaltet in der Ressourcenverwaltung das System zum Stellen und Bearbeiten von Raumanfragen ein oder aus', '', '');
+
 -- 
 -- Daten für Tabelle `resources_categories`
 -- 
