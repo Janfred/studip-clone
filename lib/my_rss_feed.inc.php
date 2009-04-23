@@ -59,7 +59,7 @@ function print_rss($username) {
 			$id = $db->f("feed_id");
 			echo "<tr><td class=\"".$cssSw->getClass()."\">";
 			if ($count)
-				echo "<br />";
+				echo "<br>";
 			echo "<input type=\"hidden\" name=\"rss_id[]\" value=\"".$db->f("feed_id")."\">\n";
 			echo "<blockquote>Name:<BR><input type='text' name='rss_name[]' style=\"width: 50%\" value='".htmlReady($db->f("name"))."' size=40>";
 			echo "&nbsp; &nbsp; &nbsp; <input type=checkbox name='rss_fetch_title[$count]' value='1'";
@@ -82,7 +82,7 @@ function print_rss($username) {
             echo ">" . _("unsichtbar") . "&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;";
 			echo "<br><br><input type='IMAGE' name='update' border=0 align=\"absmiddle\"" . makeButton("uebernehmen", "src") . " value='" . _("ver&auml;ndern") . "'>";
 			echo "&nbsp;<a href='$PHP_SELF?rss=delete_rss&rss_id=$id&view=$view&username=$username&show_rss_bsp=$show_rss_bsp'>";
-			echo makeButton("loeschen") . "</a><br />&nbsp; </td></tr>";
+			echo makeButton("loeschen") . "</a><br>&nbsp; </td></tr>";
 			$count++;
 	}
 	echo "</form></td></tr></table></td></tr>";

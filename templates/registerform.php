@@ -225,7 +225,7 @@ function checkdata(){
   </td>
  </tr>
 </table>
-<br /><br />
+<br><br>
 
 <input type="hidden" name="login_ticket" value="<?=Seminar_Session::get_ticket();?>">
 <input type="hidden" name="response"  value="">

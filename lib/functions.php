@@ -115,7 +115,7 @@ function get_object_name($range_id, $object_type){
 *	$SessSemName["art_num"]			Veranstaltung type in numeric form<br>
 *	$SessSemName["art_generic"]		Veranstaltung generic type in alhanumeric form (self description)<br>
 *	$SessSemName["class"]				Veranstaltung class (sem or inst, in this function always sem)<br>
-*	$SessSemName["header_line"]		the header-line to use on every page of the Veranstaltung<br />
+*	$SessSemName["header_line"]		the header-line to use on every page of the Veranstaltung<br>
 *
 * @param		string	the id of the Veranstaltung
 * @return		boolean	true if successful
@@ -175,7 +175,7 @@ function selectSem ($sem_id) {
 *	$SessSemName["art_num"]			Einrichtung type in numeric form<br>
 *	$SessSemName["art_generic"]		Einrichtung generic type in alhanumeric form (self description)<br>
 *	$SessSemName["class"]				Einrichtung class (sem or inst, in this function always inst)<br>
-*	$SessSemName["header_line"]		the header-line to use on every page of the Einrichtung<br />
+*	$SessSemName["header_line"]		the header-line to use on every page of the Einrichtung<br>
 *
 * @param		string	the id of the Veranstaltung
 * @return		boolean	true if successful
@@ -253,16 +253,16 @@ function checkObject() {
 		$last_edited = stripslashes(trim($_REQUEST['content'] . $_REQUEST['description'] . $_REQUEST['body']));
 		parse_window("error§"
 		. _("Sie haben kein Objekt gew&auml;hlt.")
-		. " <br /><font size=-1 color=black>"
+		. " <br><font size=-1 color=black>"
 		. _("Dieser Teil des Systems kann nur genutzt werden, wenn Sie vorher ein Objekt (Veranstaltung oder Einrichtung) gew&auml;hlt haben.")
-		. "<br /><br /> "
+		. "<br><br> "
 		. sprintf(_("Dieser Fehler tritt auch auf, wenn Ihre Session abgelaufen ist. Wenn sie sich länger als %s Minuten nicht im System bewegt haben, werden Sie automatisch abgemeldet. Bitte nutzen Sie in diesem Fall den untenstehenden Link, um zurück zur Anmeldung zu gelangen."), $AUTH_LIFETIME)
 		. ($last_edited ? '<br><br>'._("Folgender von ihnen eingegebener Text konnte nicht gespeichert werden:") . '<div class="steel1" style="margin-top:5px;padding:5px;border:1px solid">'.htmlReady($last_edited).'</div>' : "")
 		. " </font>",
 		"§",
 		_("Kein Objekt gew&auml;hlt"),
 		sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite.")
-				, "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
+				, "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br>&nbsp;");
 		die;
 	}
 }
@@ -282,7 +282,7 @@ function checkObjectModule($modul) {
 		if (!$Modules->checkLocal($modul, $SessSemName[1])) {
 			parse_window ("error§" . sprintf(_("Das Modul &raquo;%s&laquo; ist f&uuml;r dieses Objekt leider nicht verf&uuml;gbar."), $name), "§",
 					_("Modul nicht verf&uuml;gbar"),
-					sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br />&nbsp;");
+					sprintf(_("%sHier%s geht es wieder zur Anmeldung beziehungsweise Startseite."), "<a href=\"index.php\"><b>&nbsp;", "</b></a>") . "<br>&nbsp;");
 			die;
 		}
 	}
@@ -518,7 +518,7 @@ if (!($perm->have_perm("root"))) {
 				//$error_msg=$error_msg."Bitte melden Sie sich an.<br><br><a href=\"register1.php\"><b>Registrierung</b></a> wenn Sie noch keinen Account im System haben.<br><a href=\"index.php?again=yes\"><b>Login</b></a> f&uuml;r registrierte Benutzer.<br><br>";
 				break;
 			}
-		$error_msg=$error_msg."info§" . _("Dieser Fehler kann auch auftreten, wenn Sie zu lange inaktiv gewesen sind.") . " <br />" . sprintf(_("Wenn sie l&auml;nger als %s Minuten keine Aktion mehr ausgef&uuml;hrt haben, m&uuml;ssen sie sich neu anmelden."), $AUTH_LIFETIME) . "§";
+		$error_msg=$error_msg."info§" . _("Dieser Fehler kann auch auftreten, wenn Sie zu lange inaktiv gewesen sind.") . " <br>" . sprintf(_("Wenn sie l&auml;nger als %s Minuten keine Aktion mehr ausgef&uuml;hrt haben, m&uuml;ssen sie sich neu anmelden."), $AUTH_LIFETIME) . "§";
 		}
 	}
 return $error_msg;

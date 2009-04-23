@@ -32,7 +32,7 @@ class Siteinfo {
         	        return _("Benutzen Sie den Link »neue Seite anlegen« in der Infobox, um eine Seite in dieser Rubrik anzulegen.");
                 }
         	} else {
-    	        return _("Der für diese Stud.IP-Installation verantwortliche Administrator muss hier noch Inhalte einfügen.")."<br />".rootlist();
+    	        return _("Der für diese Stud.IP-Installation verantwortliche Administrator muss hier noch Inhalte einfügen.")."<br>".rootlist();
         	}
         } else {
             $sql = "SELECT content
@@ -130,13 +130,13 @@ class Siteinfo {
                 $detail = $input['detail_id'];
                 break;
             case "insert_detail":
-                $this->db->exec("INSERT 
-                           INTO siteinfo_details 
+                $this->db->exec("INSERT
+                           INTO siteinfo_details
                            (rubric_id,
                             name,
                             content)
-                           VALUES (".$this->db->quote($input['rubric_id'],PDO::PARAM_INT).", 
-                                   ".$this->db->quote($input['detail_name']).", 
+                           VALUES (".$this->db->quote($input['rubric_id'],PDO::PARAM_INT).",
+                                   ".$this->db->quote($input['detail_name']).",
                                    ".$this->db->quote($input['content']).");");
                 $rubric = $input['rubric_id'];
                 $detail = $this->db->lastInsertId();
@@ -149,7 +149,7 @@ class Siteinfo {
                 $detail = $this->first_detail_id($rubric);
                 break;
             case "insert_rubric":
-                $this->db->exec("INSERT 
+                $this->db->exec("INSERT
                            INTO siteinfo_rubrics
                            (name)
                            VALUES (".$this->db->quote($input['rubric_name']).");");
@@ -222,12 +222,12 @@ class SiteinfoMarkupEngine {
     function userinfo($input) {
         $template = $this->template_factory->open('userinfo');
         $sql = "SELECT ".$GLOBALS['_fullname_sql']['full'] ." AS fullname,
-                       Email, 
-                       username 
-                FROM auth_user_md5 
-                LEFT JOIN user_info USING (user_id) 
+                       Email,
+                       username
+                FROM auth_user_md5
+                LEFT JOIN user_info USING (user_id)
                 WHERE username=".$this->db->quote($input)."
-                AND ".get_vis_query(); 
+                AND ".get_vis_query();
         $result = $this->db->query($sql);
         if ($result->rowCount() == 1) {
             $user = $result->fetch(PDO::FETCH_ASSOC);
@@ -243,12 +243,12 @@ class SiteinfoMarkupEngine {
     function rootlist() {
         $template = $this->template_factory->open('rootlist');
         $sql = "SELECT ".$GLOBALS['_fullname_sql']['full'] ." AS fullname,
-                       Email, 
-                       username 
-                FROM auth_user_md5 
-                LEFT JOIN user_info USING (user_id) 
-                WHERE perms='root' 
-                AND ".get_vis_query()." 
+                       Email,
+                       username
+                FROM auth_user_md5
+                LEFT JOIN user_info USING (user_id)
+                WHERE perms='root'
+                AND ".get_vis_query()."
                 ORDER BY Nachname";
         $result = $this->db->query($sql);
         if ($result->rowCount() > 0) {
@@ -270,7 +270,7 @@ class SiteinfoMarkupEngine {
                 LEFT JOIN auth_user_md5 USING (user_id)
                 LEFT JOIN user_info USING (user_id)
                 WHERE inst_perms='admin'
-                AND ".get_vis_query()." 
+                AND ".get_vis_query()."
                 ORDER BY Institute.Name, auth_user_md5.Nachname, auth_user_md5.Vorname";
         $result = $this->db->query($sql);
         if ($result->rowCount() > 0) {
@@ -299,43 +299,43 @@ class SiteinfoMarkupEngine {
                 $template->heading = _("die meisten Teilnehmer");
                 $sql = "SELECT seminar_user.seminar_id,
                                seminare.name AS display,
-                               count(seminar_user.seminar_id) AS count 
-                        FROM seminar_user 
-                        INNER JOIN seminare USING(seminar_id) 
-                        WHERE seminare.visible = 1 
-                        GROUP BY seminar_user.seminar_id 
-                        ORDER BY count DESC 
+                               count(seminar_user.seminar_id) AS count
+                        FROM seminar_user
+                        INNER JOIN seminare USING(seminar_id)
+                        WHERE seminare.visible = 1
+                        GROUP BY seminar_user.seminar_id
+                        ORDER BY count DESC
                         LIMIT 10";
                 $template->type = "seminar";
                 break;
             case "recentlycreated":
                 $template->heading = _("zuletzt angelegt");
-                $sql = "SELECT seminare.seminar_id, 
-                               seminare.name AS display, 
-                               FROM_UNIXTIME(mkdate, '%d.%m.%Y %h:%i:%s') AS count 
-                        FROM seminare 
-                        WHERE visible = 1 
-                        ORDER BY mkdate DESC 
+                $sql = "SELECT seminare.seminar_id,
+                               seminare.name AS display,
+                               FROM_UNIXTIME(mkdate, '%d.%m.%Y %h:%i:%s') AS count
+                        FROM seminare
+                        WHERE visible = 1
+                        ORDER BY mkdate DESC
                         LIMIT 10";
                 $template->type = "seminar";
                 break;
             case "mostdocuments":
                 $template->heading = _("die meisten Materialien (Dokumente)");
-                $sql = "SELECT a.seminar_id, 
-                               b.name AS display, 
-                               count(a.seminar_id) AS count 
-                        FROM seminare b  
-                        INNER JOIN dokumente a USING(seminar_id) 
-                        WHERE b.visible=1 
-                        GROUP BY a.seminar_id  
-                        ORDER BY count DESC 
+                $sql = "SELECT a.seminar_id,
+                               b.name AS display,
+                               count(a.seminar_id) AS count
+                        FROM seminare b
+                        INNER JOIN dokumente a USING(seminar_id)
+                        WHERE b.visible=1
+                        GROUP BY a.seminar_id
+                        ORDER BY count DESC
                         LIMIT 10";
                 $template->type = "seminar";
                 break;
             case "mostpostings":
                 $template->heading = _("die aktivsten Veranstaltungen (Postings der letzten zwei Wochen)");
-                $sql = " SELECT a.seminar_id, 
-                                b.name AS display, 
+                $sql = " SELECT a.seminar_id,
+                                b.name AS display,
                                 count( a.seminar_id ) AS count
                          FROM px_topics a
                          INNER JOIN seminare b USING ( seminar_id )
@@ -348,15 +348,15 @@ class SiteinfoMarkupEngine {
                 break;
             case "mostvisitedhomepages":
                 $template->heading = _("die beliebtesten Homepages (Besucher)");
-                $sql = "SELECT auth_user_md5.user_id, 
-                               username, 
-                               views AS count, 
+                $sql = "SELECT auth_user_md5.user_id,
+                               username,
+                               views AS count,
                              ".$GLOBALS['_fullname_sql']['full'] . " AS display
-                        FROM object_views 
-                        LEFT JOIN auth_user_md5 ON(object_id=auth_user_md5.user_id) 
-                        LEFT JOIN user_info USING (user_id) 
+                        FROM object_views
+                        LEFT JOIN auth_user_md5 ON(object_id=auth_user_md5.user_id)
+                        LEFT JOIN user_info USING (user_id)
                         WHERE auth_user_md5.user_id IS NOT NULL
-                        ORDER BY count DESC 
+                        ORDER BY count DESC
                         LIMIT 10";
                 $template->type = "user";
                 break;

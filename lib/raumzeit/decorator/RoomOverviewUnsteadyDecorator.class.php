@@ -146,7 +146,7 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 				}
 
 				if ($this->shrinkDates && $this->hideRooms && !$this->xml_export) {
-					$ret .= join('<br />', shrink_dates($c_dates));
+					$ret .= join('<br>', shrink_dates($c_dates));
 				} else {
 
 					foreach ($sd as $termine) {

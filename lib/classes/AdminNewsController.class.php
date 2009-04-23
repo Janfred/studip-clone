@@ -126,7 +126,7 @@ class AdminNewsController {
 
 	function get_one_news($news_id) {
 		global $perm,$_fullname_sql;
-		
+
 		$this->news_query = null;
 		$news_obj =& new StudipNews($news_id);
 		if (!$news_obj->is_new) {
@@ -227,13 +227,13 @@ class AdminNewsController {
 		}
 		if ($this->news_query["user_id"]==$this->user_id)
 			$this->modus="";
-		echo "\n<tr> <td class=\"blank\" align=\"center\"><br />";
+		echo "\n<tr> <td class=\"blank\" align=\"center\"><br>";
 		echo "\n<form action=\"".$this->p_self("cmd=news_edit")."\" method=\"POST\">";
 		echo "\n<input type=\"HIDDEN\" name=\"news_id\" value=\"".$this->news_query["news_id"]."\">";
 		echo "\n<input type=\"HIDDEN\" name=\"user_id\" value=\"".$this->news_query["user_id"]."\">";
 		echo "\n<input type=\"HIDDEN\" name=\"author\" value=\"".$this->news_query["author"]."\">";
 		echo "\n</td></tr>";
-		echo "\n<tr> <td class=\"blank\" align=\"center\"><br />";
+		echo "\n<tr> <td class=\"blank\" align=\"center\"><br>";
 		echo "\n<table width=\"99%\" cellspacing=\"0\" cellpadding=\"6\" border=\"0\">";
 		echo "\n<tr><td class=\"steel1\" width=\"70%\"><b>" . _("Autor:") . "</b>&nbsp;". htmlReady($this->news_query["author"]) ."<br><br><b>" . _("&Uuml;berschrift")
 			. "</b><br><input type=\"TEXT\" style=\"width: 100%\" size=\"".floor($this->max_col*.5*.8)."\" maxlength=\"255\" name=\"topic\" value=\""
@@ -284,7 +284,7 @@ class AdminNewsController {
 		echo "></td></tr>";
 		echo "\n</table></td></tr>";
 		echo "\n<tr><td class=\"blank\"><hr width=\"99%\"></td></tr>";
-		echo "\n<tr><td class=\"blank\">&nbsp; <b>" . _("In diesen Bereichen wird die News angezeigt:") . "</b><br /><br /></td></tr>";
+		echo "\n<tr><td class=\"blank\">&nbsp; <b>" . _("In diesen Bereichen wird die News angezeigt:") . "</b><br><br></td></tr>";
 		echo "\n<tr><td class=\"blank\"><table class=\"blank\" width=\"99%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\">";
 		$cssSw=new cssClassSwitcher;
 		$cssSw->enableHover();
@@ -320,10 +320,10 @@ class AdminNewsController {
 		if ($perm->have_perm("admin")) {
 			echo "<tr><td class=\"blank\" colspan=2>";
 			echo "<table class=\"blank\" width=\"100%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\" align=\"center\">";
-			echo "\n<tr><td class=\"blank\"><b>" . _("Einen weiteren Bereich hinzuf&uuml;gen:") . "<br /></td></tr>";
-			echo "\n<tr><td class=\"steel1\"><font size=-1>" . _("Hier k&ouml;nnen Sie weitere Bereiche, auf die Sie Zugriff haben, der Auswahl hinzuf&uuml;gen") . "</font><br />";
+			echo "\n<tr><td class=\"blank\"><b>" . _("Einen weiteren Bereich hinzuf&uuml;gen:") . "<br></td></tr>";
+			echo "\n<tr><td class=\"steel1\"><font size=-1>" . _("Hier k&ouml;nnen Sie weitere Bereiche, auf die Sie Zugriff haben, der Auswahl hinzuf&uuml;gen") . "</font><br>";
 			echo "<br><input style=\"vertical-align:middle;\" type=\"TEXT\"  name=\"search\" size=\"20\">&nbsp; <input type=\"IMAGE\" name=\"news_range_search\""
-				. makeButton("suchestarten","src") . tooltip(_("Suche starten")) . " border=\"0\" style=\"vertical-align:middle;\"></div></td></tr></form></table><br />";
+				. makeButton("suchestarten","src") . tooltip(_("Suche starten")) . " border=\"0\" style=\"vertical-align:middle;\"></div></td></tr></form></table><br>";
 		}
 		echo "</form></table>";
 	}
@@ -472,7 +472,7 @@ class AdminNewsController {
 			}
 		}
 	}
-		
+
 	//Hilfsfunktionen
 	function list_range_details($type) {
 		global $perm;
@@ -612,7 +612,7 @@ class AdminNewsController {
 	function get_news_range_perm($range_id){
 		return ($GLOBALS['perm']->get_perm() == 'root' ? 3 : $this->news_perm[$range_id]["perm"]);
 	}
-	
+
 	function send_sms() {
 		$msg_object = new messaging();
 		while (list($user_id,$msg) = each($this->sms)) {

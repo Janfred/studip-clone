@@ -117,7 +117,7 @@ function change_general_view() {
 				?>
 				<tr  <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
-						<font size="-1"><?print _("Sichtbarkeit");?></font><br />
+						<font size="-1"><?print _("Sichtbarkeit");?></font><br>
 						<br><div align="left"><font size="-1">
 						<?print _("Sie können wählen, ob Sie für andere NutzerInnen sichtbar sein und alle Kommunikationsfunktionen von Stud.IP nutzen können wollen, oder ob Sie unsichtbar sein möchten und dann nur eingeschränkte Kommunikationsfunktionen nutzen können.");?>
 						</font></div>
@@ -143,7 +143,7 @@ function change_general_view() {
 
 				<tr  <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
-						<font size="-1"><?print _("Java-Script Hovereffekte");?></font><br />
+						<font size="-1"><?print _("Java-Script Hovereffekte");?></font><br>
 						<br><div align="left"><font size="-1">
 						<?print _("Mit dieser Funktion k&ouml;nnen Sie durch reines &Uuml;berfahren bestimmter Icons mit dem Mauszeiger (z.B. in den Foren oder im Adressbuch) die entsprechenden Eintr&auml;ge anzeigen lassen. Sie k&ouml;nnen sich so sehr schnell und effizient auch durch gr&ouml;&szlig;ere Informationsmengen arbeiten. Da jedoch die Ladezeiten der Seiten erheblich ansteigen, empfehlen wir diese Einstellung nur für NutzerInnen die mindestens &uuml;ber eine ISDN Verbindung verf&uuml;gen.");?>
 						</font></div>
@@ -166,7 +166,7 @@ function change_general_view() {
 				?>
 				<tr  <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
-						<font size="-1"><?print _("pers&ouml;nliche Startseite");?></font><br />
+						<font size="-1"><?print _("pers&ouml;nliche Startseite");?></font><br>
 						<br><div align="left"><font size="-1">
 						<?print _("Sie k&ouml;nnen hier einstellen, welcher Systembereich automatisch nach dem Login oder Autologin aufgerufen wird. Wenn Sie zum Beispiel regelm&auml;&szlig;ig die Seite &raquo;Meine Veranstaltungen&laquo;. nach dem Login aufrufen, so k&ouml;nnen Sie dies hier direkt einstellen.");?></font><br><br>
 						</font></div>
@@ -188,7 +188,7 @@ function change_general_view() {
 				?>
 				<tr  <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
-						<font size="-1"><?print _("Tastenkombinationen f&uuml;r Hauptfunktionen");?></font><br />
+						<font size="-1"><?print _("Tastenkombinationen f&uuml;r Hauptfunktionen");?></font><br>
 						<br><div align="left"><font size="-1">
 						<?print _("Mit dieser Einstellung k&ouml;nnen Sie f&uuml;r die meisten in der Kopfzeile erreichbaren Hauptfunktionen eine Bedienung &uuml;ber Tastenkombinationen aktivieren. <br>Die Tastenkombination wird im Tooltip des jeweiligen Icons angezeigt.");?>
 						</font></div>
@@ -206,7 +206,7 @@ function change_general_view() {
 				</tr>
 				<tr  <? $cssSw->switchClass() ?>>
 					<td  align="right" class="blank" style="border-bottom:1px dotted black;">
-						<font size="-1"><?print _("Semesteranzeige auf &raquo;Meine Veranstaltungen&laquo;");?></font><br />
+						<font size="-1"><?print _("Semesteranzeige auf &raquo;Meine Veranstaltungen&laquo;");?></font><br>
 						<br><div align="left"><font size="-1">
 						<?print _("Mit dieser Einstellung k&ouml;nnen Sie auf der Seite &raquo;Meine Veranstaltungen&laquo; die Einblendung des Start- und Endsemesters hinter jeder Veranstaltung aktivieren.");?>
 						</font></div>
@@ -230,8 +230,8 @@ function change_general_view() {
 				</tr>
 				</form>
 			</table>
-			<br />
-			<br />
+			<br>
+			<br>
 			</td>
 		</tr>
 	</table>

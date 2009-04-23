@@ -96,15 +96,15 @@ function parse_link($link, $level=0) {
 			$url_parts["pass"] .= "@".substr($url_parts["host"],0,strpos($url_parts["host"],"@"));
 			$url_parts["host"] = substr(strrchr($url_parts["host"],"@"),1);
 		}
-		
+
 		if (preg_match('/[^a-z0-9_.-]/i',$url_parts['host'])){ // exists umlauts ?
 			$IDN = new idna_convert();
 			$out = $IDN->encode(utf8_encode($url_parts['host'])); // false by error
 			$url_parts['host'] = ($out)? $out : $url_parts['host'];
 		}
-		
+
 		$ftp = ftp_connect($url_parts["host"]);
-		
+
 		if (!$url_parts["user"]) $url_parts["user"] = "anonymous";
 		if (!$url_parts["pass"]) {
 			$mailclass = new studip_smtp_class;
@@ -138,7 +138,7 @@ function parse_link($link, $level=0) {
 		}
 		$host = $url_parts["host"];
 		$port = $url_parts["port"];
-		
+
 		if (substr($link,0,8) == "https://") {
 			$ssl = TRUE;
 			if (empty($port)) $port = 443;
@@ -146,7 +146,7 @@ function parse_link($link, $level=0) {
 			$ssl = FALSE;
 		}
 		if (empty( $port ) ) $port = "80";
-		
+
 		if (preg_match('/[^a-z0-9_.-]/i',$host)){ // exists umlauts ?
 			$IDN = new idna_convert();
 			$out = $IDN->encode(utf8_encode($host)); // false by error
@@ -156,7 +156,7 @@ function parse_link($link, $level=0) {
 		}
 		$socket = @fsockopen( ($ssl? 'ssl://':'').$host, $port, $errno, $errstr, 10 );
 		if (!$socket) {
-			//echo "$errstr ($errno)<br />\n";
+			//echo "$errstr ($errno)<br>\n";
 		} else {
 			$urlString = "GET ".$documentpath." HTTP/1.0\r\nHost: $host\r\n";
 			if ($url_parts["user"] && $url_parts["pass"]) {
@@ -221,7 +221,7 @@ function createSelectedZip ($file_ids, $perm_check = TRUE, $size_check = false) 
 				@copy(get_upload_file_path($db->f('dokument_id')), $tmp_full_path . '/[' . $docs . ']_' . escapeshellcmd(prepareFilename($db->f("filename"), FALSE)));
 				TrackAccess($db->f('dokument_id'),'dokument');
 			}
-	
+
 			//zip stuff
 			create_zip_from_directory($tmp_full_path, $tmp_full_path);
 			rmdirr($tmp_full_path);
@@ -240,14 +240,14 @@ function createFolderZip ($folder_id, $perm_check = TRUE, $size_check = false) {
 
 	if(!($size_check && (doc_count($folder_id) > $max_files || doc_sum_filesize($folder_id) > $max_size))){
 		$zip_file_id = md5(uniqid("jabba",1));
-	
+
 		//create temporary Folder
 		$tmp_full_path = "$TMP_PATH/$zip_file_id";
 		mkdir($tmp_full_path,0700);
-	
+
 		//create folder comntent
 		createTempFolder($folder_id, $tmp_full_path, $perm_check, $size_check);
-	
+
 		//zip stuff
 		create_zip_from_directory($tmp_full_path, $tmp_full_path);
 		rmdirr($tmp_full_path);
@@ -622,12 +622,12 @@ function form($refresh = FALSE) {
 	$c=1;
 
 	if ($folder_system_data['zipupload'])
-		$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:")
-			. '<br>' . _("Die Dateien und Ordner, die im hochzuladenden Ziparchiv enthalten sind, werden in diesen Ordner entpackt.") .  "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+		$print="\n<br><br>" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:")
+			. '<br>' . _("Die Dateien und Ordner, die im hochzuladenden Ziparchiv enthalten sind, werden in diesen Ordner entpackt.") .  "<br><br><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 	else if (!$refresh)
-		$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+		$print="\n<br><br>" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:") . "<br><br><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 	else
-		$print="\n<br /><br />" . _("Sie haben diese Datei zum Aktualisieren ausgew&auml;hlt. Sie <b>&uuml;berschreiben</b> damit die vorhandene Datei durch eine neue Version!") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+		$print="\n<br><br>" . _("Sie haben diese Datei zum Aktualisieren ausgew&auml;hlt. Sie <b>&uuml;berschreiben</b> damit die vorhandene Datei durch eine neue Version!") . "<br><br><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 	$print.="\n";
 	$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>";
 
@@ -692,7 +692,7 @@ function form($refresh = FALSE) {
 	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"upload_form\" action=\"" . URLHelper::getLink('') . "\" method=\"post\">";
 	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen.") . " </font></td></tr>";
 	$print.= "\n<tr>";
-	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
+	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br>";
 	$print.= "&nbsp;<INPUT NAME=\"the_file\" TYPE=\"file\"  style=\"width: 70%\" SIZE=\"30\">&nbsp;</td></td>";
 	$print.= "\n</tr>";
 	if (!$refresh && !$folder_system_data['zipupload']) {
@@ -714,7 +714,7 @@ function form($refresh = FALSE) {
 	$print.="&nbsp;<a href=\"".URLHelper::getLink("?cancel_x=true")."\">" . makeButton("abbrechen", "img") . "</a></td></tr>";
 	$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"upload\">";
 	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";
-	$print.= "\n</form></table><br /></center>";
+	$print.= "\n</form></table><br></center>";
 
 	return $print;
 	}
@@ -1083,7 +1083,7 @@ function JS_for_upload() {
 	msg_window=window.open("","messagewindow","height=250,width=200,left=20,top=20,scrollbars=no,resizable=no,toolbar=no");
 	msg_window.document.write("<html><head><title>Datei Upload</title></head>");
 	msg_window.document.write("<body bgcolor='#ffffff'><center><p><img src='<?= $GLOBALS['ASSETS_URL'] ?>images/alienupload.gif' width='165' height='125'></p>");
-	msg_window.document.write("<p><font face='arial, helvetica, sans-serif'><b>&nbsp;"+file_only+"</b><br>&nbsp;<?=_("wird hochgeladen.")?><br>&nbsp;<?=_("Bitte haben sie etwas Geduld!")?><br /></font></p></body></html>");
+	msg_window.document.write("<p><font face='arial, helvetica, sans-serif'><b>&nbsp;"+file_only+"</b><br>&nbsp;<?=_("wird hochgeladen.")?><br>&nbsp;<?=_("Bitte haben sie etwas Geduld!")?><br></font></p></body></html>");
 
 	upload=true;
 
@@ -1225,13 +1225,13 @@ function link_form ($range_id, $updating=FALSE) {
 
 
 
-	$print.="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgewählt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+	$print.="\n<br><br>" . _("Sie haben diesen Ordner zum Upload ausgewählt:") . "<br><br><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 
 	$print.="</font></td></tr>";
 	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"link_form\" action=\"" . URLHelper::getLink('') . "\" method=\"post\">";
 	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Geben Sie hier den <b>vollständigen Pfad</b> zu der Datei an die sie verlinken wollen.") . " </font></td></tr>";
 	$print.= "\n<tr>";
-	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
+	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br>";
 	if ($hiddenurl)
 		$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\" value=\"***\">&nbsp;</td></td>";
 	else
@@ -1262,7 +1262,7 @@ function link_form ($range_id, $updating=FALSE) {
 	} else {
 		$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"link\">";
 	}
-	$print.= "\n</form></table><br /></center>";
+	$print.= "\n</form></table><br></center>";
 
 	return $print;
 
@@ -1520,7 +1520,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					$content .= _("Keine Beschreibung vorhanden");
 
 					if ($move == $db->f("folder_id")){
-						$content .="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
+						$content .="<br>" . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
 						if($rechte) $content .= _("Wenn Sie den Ordner in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus.");
 					}
 			if ($upload == $db->f("folder_id")) {
@@ -1553,8 +1553,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 									. rand()."#anker")."\">" . makeButton("ziphochladen", "img") . "</a>";
 								}
 							}
-						if($rechte || 
-							(!$documents_count && $level !=0 && 
+						if($rechte ||
+							(!$documents_count && $level !=0 &&
 								($folder_tree->isWritable($db->f("folder_id"), $user->id) &&
 								$folder_tree->isWritable($folder_tree->getValue($db->f("folder_id"), 'parent_id'), $user->id) &&
 								!$folder_tree->isExerciseFolder($db->f("folder_id"), $user->id))
@@ -1562,7 +1562,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_d_")."\">" . makeButton("loeschen", "img") . "</a>";
 						if($rechte || ($folder_tree->isWritable($db->f("folder_id"), $user->id) && !$folder_tree->isExerciseFolder($db->f("folder_id"), $user->id))) $edit.= " <a href=\"".URLHelper::getLink("?open=".$db->f("folder_id")."_c_#anker")."\">" . makeButton("bearbeiten", "img") . "</a>";
 						if(($rechte && $db->f('range_id') != $SessSemName[1]) ||
-							($level !=0 && 
+							($level !=0 &&
 								($folder_tree->isWritable($db->f("folder_id"), $user->id) &&
 								$folder_tree->isWritable($folder_tree->getValue($db->f("folder_id"), 'parent_id'), $user->id) &&
 								!$folder_tree->isExerciseFolder($db->f("folder_id"), $user->id))
@@ -1697,7 +1697,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							if ($db3->f("protected")==1)
 								$protect = "checked";
 							$content.= "\n&nbsp;<input type=\"CHECKBOX\" name=\"change_protected\" $protect>&nbsp;"._("geschützter Inhalt")."</br>";
-							$content.= "<br /><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br />";
+							$content.= "<br><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br>";
 							$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\" />";
 							$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\" />";
 							$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db3->f("dokument_id")."_sc_\" />";
@@ -1718,12 +1718,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							} else {
 								$content .= _("Keine Beschreibung vorhanden");
 							}
-							$content.=  "<br /><br />" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db3->f("filesize") / 1024));
+							$content.=  "<br><br>" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db3->f("filesize") / 1024));
 							$content.=  "&nbsp; " . sprintf(_("<b>Dateiname:</b> %s "),$db3->f("filename"));
 						}
 
 						if ($move == $db3->f("dokument_id"))
-							$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben / kopieren. Wenn Sie diese Datei in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus (sofern Sie Dozent oder Tutor in einer anderen Veranstaltung sind)."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
+							$content.="<br>" . sprintf(_("Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben / kopieren. Wenn Sie diese Datei in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus (sofern Sie Dozent oder Tutor in einer anderen Veranstaltung sind)."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
 
 						$content.= "\n";
 
@@ -2085,7 +2085,7 @@ function create_zip_from_file($file_name, $zip_file_name){
 		exec($GLOBALS['ZIP_PATH'] . ' -q ' . $GLOBALS['ZIP_OPTIONS'] . " -j {$zip_file_name} $file_name", $output, $ret);
 		return $ret;
 	}
-	
+
 	// return false, if nothing worked
 	return false;
 }

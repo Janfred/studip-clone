@@ -85,7 +85,7 @@ class EvalShow {
 
       return $tr;
   }
-  
+
   /**
    * creates the infobox
    */
@@ -138,7 +138,7 @@ class EvalShow {
 
 
   /**
-   * create html for the meta-information about an evaluation. 
+   * create html for the meta-information about an evaluation.
    * @param    Object $eval          The evaluation
    * @param    bool   $isAssociated  whether the current user has used the eval
    * @returns  String                a table row
@@ -170,11 +170,11 @@ class EvalShow {
       $html .= EvalShow::getAnonymousText( $eval, $voted );
       $html .= "<br>";
       $html .= EvalShow::getStopdateText( $eval, $voted );
-      
-      $html .= "<br />\n";
+
+      $html .= "<br>\n";
       $html .= "</div>\n";
       /* ---------------------------------------------------------------------- */
-    
+
       /* create html tr object ------------------------------------------------ */
       $tr = new HTM( "tr" );
       $td = new HTM( "td" );
@@ -212,7 +212,7 @@ class EvalShow {
 
       if ($voted && $number > 1)
 	  $html .= _(", Sie ebenfalls");
-      
+
       $html .= ".\n";
       return $html;
   }
@@ -266,7 +266,7 @@ class EvalShow {
 	      : ("<span style=\"color:red;\">" .
 		 _("Dies ist eine personalisierte Evaluation. Ihre Angaben werden verknüpft mit Ihrem Namen gespeichert.") .
 		 "</span>");
-      
+
       return $html;
   }
 
@@ -288,7 +288,7 @@ class EvalShow {
       $td->attr( "class", "steelkante" );
       $td->attr( "align", "center" );
       $td->cont( $br );
-      
+
       /* vote button */
       if( ! $voted ) {
          $button = new HTMpty( "input" );
@@ -299,7 +299,7 @@ class EvalShow {
          $button->attr( "border", "0" );
          $td->cont( $button );
       }
-      
+
       /* close button */
       if( $auth->auth["jscript"] ) {
          $button = new HTM( "a" );
@@ -342,7 +342,7 @@ class EvalShow {
       $img->stri( makeButton( "anzeigen", "src" ).tooltip(_("Evaluation anzeigen.")) );
       $img->addAttr( "border", "0" );
       return EvalCommon::createEvalShowLink ($eval->getObjectID(), $img);
-      
+
       // keine Ahnung warum das hier nicht funktioniert, bekomme eine JS-Fehlermeldung :(
 
       // <grusel> das da oben reicht ja auch :)
@@ -351,25 +351,25 @@ class EvalShow {
       $script = new HTML ("script");
       $script->addAttr ("type", "text/javascript");
       $script->addAttr ("language", "JavaScript");
-      
+
       $aScript = new HTML ("a");
       $aScript->addAttr ("href", "javascript:void();");
-      $aScript->addAttr ("onClick", 
+      $aScript->addAttr ("onClick",
         "window.open(\'show_evaluation.php?evalID=".$eval->getObjectID ()."\', ".
         "\'_blank\', ".
         "\'width=790,height=500,scrollbars=yes,resizable=yes\');");
       $aScript->addContent ("Teilnehmen"); // Eigentlich kommt hier ein button hin
-      $script->addContent ("document.write ('");      
+      $script->addContent ("document.write ('");
       $script->addContent ($aScript);
       $script->addContent ("');");
-            
+
       $noscript = new HTML ("noscript");
       $aNoScript = new HTML ("a");
       $aNoScript->addAttr ("href", "show_evaluation.php?evalID=".$eval->getObjectID ());
       $aNoScript->addAttr ("target", "_blank");
       $aNoScript->addContent ("Teilnehmen"); // Eigentlich kommt hier ein button hin
       $noscript->addContent ($aNoScript);
-      
+
       $div = new HTML ("div");
       $div->addContent ($script);
       $div->addContent ($noscript);
@@ -381,7 +381,7 @@ class EvalShow {
       return $tr;
       */
    }
-   
+
    function createEditButton ($eval) {
          $button = new HTML ( "a" );
          $button->addAttr ("href", EVAL_FILE_ADMIN."?page=edit&evalID=".$eval->getObjectID ());
@@ -391,7 +391,7 @@ class EvalShow {
          $button->addContent ( $img );
          return $button;
    }
-   
+
    function createOverviewButton ($rangeID, $evalID) {
          $button = new HTML ( "a" );
          $button->addAttr ("href", EVAL_FILE_ADMIN."?rangeID=".$rangeID."&openID=".$evalID."#open");
@@ -401,7 +401,7 @@ class EvalShow {
          $button->addContent ( $img );
          return $button;
    }
-   
+
    function createDeleteButton ($eval) {
          $button = new HTML ( "a" );
          $button->addAttr ("href", EVAL_FILE_ADMIN."?evalAction=delete_request&evalID=".$eval->getObjectID ());
@@ -411,7 +411,7 @@ class EvalShow {
          $button->addContent ( $img );
          return $button;
    }
-   
+
    function createStopButton ($eval) {
          $button = new HTML ( "a" );
          $button->addAttr ("href", EVAL_FILE_ADMIN."?evalAction=stop&evalID=".$eval->getObjectID ());
@@ -421,7 +421,7 @@ class EvalShow {
          $button->addContent ( $img );
          return $button;
    }
-   
+
    function createContinueButton ($eval) {
          $button = new HTML ( "a" );
          $button->addAttr ("href", EVAL_FILE_ADMIN."?evalAction=continue&evalID=".$eval->getObjectID ());
@@ -431,7 +431,7 @@ class EvalShow {
          $button->addContent ( $img );
          return $button;
    }
-   
+
    function createExportButton ($eval) {
          $button = new HTML ( "a" );
          $button->addAttr ("href", EVAL_FILE_ADMIN."?evalAction=export_request&evalID=".$eval->getObjectID ());
@@ -441,7 +441,7 @@ class EvalShow {
          $button->addContent ( $img );
          return $button;
    }
-   
+
   /* ----------------------------------------------------------------------- */
 }
 

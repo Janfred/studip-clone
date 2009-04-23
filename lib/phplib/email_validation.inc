@@ -53,7 +53,7 @@ class email_validation_class
 	{
 		$message.="\n";
 		if($this->html_debug)
-			$message=str_replace("\n","<br />\n",HtmlEntities($message));
+			$message=str_replace("\n","<br>\n",HtmlEntities($message));
 		echo $message;
 		flush();
 	}
@@ -83,27 +83,27 @@ class email_validation_class
 			$this->OutputDebug("C $line");
 		return(fputs($connection,"$line\r\n"));
 	}
-	
+
 	Function ValidateUsername($username)
 	{
 		return(strtolower($username) != 'studip' && ereg($this->username_regular_expression,$username)!=0);
 	}
-	
+
 	Function ValidatePassword($password)
 	{
 		return(eregi($this->password_regular_expression,$password)!=0);
 	}
-	
+
 	Function ValidateName($name)
 	{
 		return(ereg($this->name_regular_expression,$name)!=0);
 	}
-	
+
 	Function ValidateTelefon($telefon)
 	{
 		return(ereg($this->telefon_regular_expression,$telefon)!=0);
 	}
-	
+
 	Function ValidateEmailAddress($email, $restriction = '')
 	{
 		if ($restriction) {
@@ -120,11 +120,11 @@ class email_validation_class
 		}
 		return(eregi($this->email_regular_expression,$email)!=0);
 	}
-	
+
 	Function ValidateEmailHost($email){
 		return $this->ValidateEmailHostIntern($email, $hosts);
 	}
-	
+
 	Function ValidateEmailHostIntern($email,&$hosts)
 	{
 		if (!$GLOBALS['MAIL_VALIDATE_HOST']){

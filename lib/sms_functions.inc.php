@@ -913,10 +913,10 @@ function show_attachmentform() {
 		$print.="\n<table border=0 cellpadding=0 cellspacing=2>";
 		$print.="\n";
 		$print.="\n<tr><td class=\"steel1\" colspan=\"3\"><font size=-1><b>";
-		$print.="\n<br /><b>" . _("Angehängte Dateien:") . "</b></td></tr>";
+		$print.="\n<br><b>" . _("Angehängte Dateien:") . "</b></td></tr>";
 		foreach ($attachments as $key => $attachment) {
 			//Icon auswaehlen
-//			$print.= "\n<br /><a href=\"" . GetDownloadLink($attachment["id"], $attachment["name"], 7) . "\">"
+//			$print.= "\n<br><a href=\"" . GetDownloadLink($attachment["id"], $attachment["name"], 7) . "\">"
 			$print.= "\n<tr valign=\"bottom\"><td class=\"steel1\">". GetFileIcon(getFileExtension($attachment["name"]), true);
 			$print.= "</td><td class=\"steel1\"><font size=-1>" . $attachment["name"] . "&nbsp;</font></td><td class=\"steel1\">";
 			$print.= "<input type=\"image\" name=\"remove_attachment_$key\" src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" value=\""._("Dateianhang entfernen")."\" ".tooltip(_("entfernt den Dateianhang")).">";
@@ -925,8 +925,8 @@ function show_attachmentform() {
 		$print.= "</table>";
 	}
 	else
-		$print.="\n<br />" . _("An diese Nachricht ist keine Datei angehängt.");
-	$print.="\n<br /><br />";
+		$print.="\n<br>" . _("An diese Nachricht ist keine Datei angehängt.");
+	$print.="\n<br><br>";
 	$print.="\n<table width=\"90%\" border=0 cellpadding=0 cellspacing=0>";
 	$print.="\n";
 	$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>";
@@ -939,7 +939,7 @@ function show_attachmentform() {
 	$print.= "\n<input type=\"hidden\" name=\"attachments\" value=\"".urlencode(serialize($attachments))."\">";
 	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";
 	$print.= "</td></tr>";
-	$print.= "</table><br /></center>";
+	$print.= "</table><br></center>";
 
 	return $print;
 }

@@ -10,7 +10,7 @@
  <input name="key" />
  <input name="uid" type="hidden" value="<?= $uid ?>" />
  <?= makeButton("abschicken","input") ?></form><br><br>
-</td></tr></table></div><br />
+</td></tr></table></div><br>
 
 
 <div align="center">
@@ -27,6 +27,6 @@
 <tr><td><?= _('Wiederholung:') ?></td><td><input name="email2" /></td></tr></table>
 <?= makeButton("abschicken", "input") ?>
 </form>
-</td></tr></table></div><br />
+</td></tr></table></div><br>
 
 

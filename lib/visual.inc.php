@@ -189,7 +189,7 @@ function htmlReady ($what, $trim = TRUE, $br = FALSE) {
 	else $what = htmlentities($what,ENT_QUOTES);
 	// workaround zur Darstellung von Zeichen in der Form &#x268F oder &#283;
 	$what = preg_replace('/&amp;#(x[0-9a-f]+|[0-9]+);/i', '&#$1;', $what);
-	if ($br) $what = preg_replace("/(\n\r|\r\n|\n|\r)/", "<br />", $what); // newline fixen
+	if ($br) $what = preg_replace("/(\n\r|\r\n|\n|\r)/", "<br>", $what); // newline fixen
 	return $what;
 }
 
@@ -198,7 +198,7 @@ function JSReady ($what = "", $target = "overlib") {
 
 	case "contact" :
 		$what = htmlentities($what,ENT_COMPAT);
-		$what = str_replace("\n","<br />",$what);
+		$what = str_replace("\n","<br>",$what);
 		$what = str_replace("\r","",$what);
 		return $what;
 	break;
@@ -221,7 +221,7 @@ function JSReady ($what = "", $target = "overlib") {
 	case "overlib" :
 	default :
 		$what = addslashes(htmlentities(htmlentities($what,ENT_COMPAT),ENT_COMPAT));
-		$what = str_replace("\n","<br />",$what);
+		$what = str_replace("\n","<br>",$what);
 		$what = str_replace("\r","",$what);
 		return $what;
 		break;
@@ -272,7 +272,7 @@ function quotes_decode ($description) {
 						}
 					$description = $before_start_tag . "<blockquote class=\"quote\">";
 					$description .= $between_tags . "</blockquote>";
-					if (substr($after_end_tag,0,6)=="<br />") {
+					if (substr($after_end_tag,0,6)=="<br>") {
 						$after_end_tag = substr($after_end_tag,6);
 					}
 					$description .= $after_end_tag;
@@ -370,7 +370,7 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show
 	if (preg_match_all("'\[nop\](.+)\[/nop\]'isU", $what, $matches)) {
 		// replace protected text by very improbable character (ASCII 007 = BEL = ^G)
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", "\007", $what);
-		$what = str_replace("\n", '<br />', format_help($what, $trim, $extern, $wiki, $show_comments));
+		$what = str_replace("\n", '<br>', format_help($what, $trim, $extern, $wiki, $show_comments));
 		// explode nonprotected text on very improbable character
 		$what = explode("\007", $what);
 		$i = 0; $all = '';
@@ -383,7 +383,7 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show
 				// but:
 				// - fix newlines
 				// - replace [quote] by [quote\007 and [/quote] by [/nopquote\007]
-				$a = preg_replace("/\n?\r\n?/", '<br />', htmlReady($matches[1][$i], $trim, FALSE));
+				$a = preg_replace("/\n?\r\n?/", '<br>', htmlReady($matches[1][$i], $trim, FALSE));
 				$a = preg_replace("/\[quote/","[quote\007",$a);
 				$a = preg_replace("/\[\/quote\]/","[/quote\007]",$a);
 				$all .= $w . (($wiki == TRUE)? "<nowikilink>$a</nowikilink>" : $a);
@@ -392,7 +392,7 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show
 		}
 		return quotes_decode($all);
 	}
-	return quotes_decode(str_replace("\n", '<br />', format_help($what, $trim, $extern, $wiki, $show_comments)));
+	return quotes_decode(str_replace("\n", '<br>', format_help($what, $trim, $extern, $wiki, $show_comments)));
 }
 
 
@@ -826,7 +826,7 @@ function FixLinks ($data = "", $fix_nl = TRUE, $nl_to_br = TRUE, $img = FALSE, $
 	$fixed_text = preg_replace($pattern, $replace, $fixed_text);
 
 	if ($nl_to_br)
-		$fixed_text = str_replace("\n", "<br />", $fixed_text);
+		$fixed_text = str_replace("\n", "<br>", $fixed_text);
 
 	return $fixed_text;
 }

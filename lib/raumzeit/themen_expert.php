@@ -214,7 +214,7 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
   </TR>
 	<? while ($msg = $sem->getNextMessage()) { ?>
 	<TR>
-		<TD class="blank" colspan=2><br />
+		<TD class="blank" colspan=2><br>
 			<?parse_msg($msg);?>
 		</TD>
 	</TR>

@@ -699,7 +699,7 @@ echo "</td></tr></table></form>\n</td>\n";
 echo "<td class=\"blank\" align=\"center\" valign=\"top\" width=\"1%\">\n";
 print_infobox($info_box['all'], "dates.jpg");
 echo "</td></tr>\n";
-echo "</table></td></tr></table><br />\n";
+echo "</table></td></tr></table><br>\n";
 echo "</td></tr></table>\n";
 
 /**

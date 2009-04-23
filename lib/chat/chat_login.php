@@ -132,7 +132,7 @@ if (!$chat_entry_check){
 		<?
 		parse_msg ($msg, "§", "blank", 1);
 		?>
-		<tr><td class="blank"><font size=-1>&nbsp;<a href="javascript:window.close()"><?=_("Fenster schließen")?></a><br />&nbsp;</font>
+		<tr><td class="blank"><font size=-1>&nbsp;<a href="javascript:window.close()"><?=_("Fenster schließen")?></a><br>&nbsp;</font>
 		</td></tr>
 	</table>
 	</body>

@@ -123,7 +123,7 @@ while ($db->next_record()) {
 	echo "<br>".$c ."&nbsp;Veranstaltungen/Einrichtungen konvertiert";
 	echo "<hr>";
 }
-echo "<br />uff, geschafft!";
+echo "<br>uff, geschafft!";
 
 page_close();
 ?>

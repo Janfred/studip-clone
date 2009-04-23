@@ -60,11 +60,11 @@ function edit_email($uid, $email, $force=False) {
 			$email_restriction_parts = explode(',', $email_restriction);
 			for ($email_restriction_count = 0; $email_restriction_count < count($email_restriction_parts); $email_restriction_count++) {
 				if ($email_restriction_count == count($email_restriction_parts) - 1) {
-					$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . '<br />';
+					$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . '<br>';
 				} else if (($email_restriction_count + 1) % 3) {
 					$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ', ';
 				} else {
-					$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ',<br />';
+					$email_restriction_msg_part .= '@' . trim($email_restriction_parts[$email_restriction_count]) . ',<br>';
 				}
 			}
 			$msg.= 'error§'

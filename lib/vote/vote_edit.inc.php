@@ -73,11 +73,11 @@ if ( ! ( $perm->have_studip_perm( "tutor", $rangeID ) || $auth->auth["uname"] ==
     echo "<br>";
     parse_window( "error§" .
 		  _("Zugriff verweigert.").
-		  "<br /><font size=-1 color=black>".
+		  "<br><font size=-1 color=black>".
 		  $reason.
 		  "</font>",
 		  "§", _("Zugriff auf Editierseite verweigert"),
-		  "<br />&nbsp;"
+		  "<br>&nbsp;"
 		  );
 
     page_close ();

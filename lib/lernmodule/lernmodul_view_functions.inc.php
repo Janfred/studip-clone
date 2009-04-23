@@ -27,15 +27,15 @@ function show_these_modules($mod_array)
 	global $PHP_SELF, $print_open_search, $SessSemName, $search_key;
  	if ($mod_array == false)
  	{
-		echo "<br><b>" . _("Es wurden keine Lernmodule zu diesem Suchbegriff gefunden.") . "</b><br /><br /><br />";
+		echo "<br><b>" . _("Es wurden keine Lernmodule zu diesem Suchbegriff gefunden.") . "</b><br><br><br>";
  		return false;
  	}
  	else
  	{
 		if (sizeof($mod_array)<2)
-			echo "<br><b>" . _("Es wurde ein Lernmodul gefunden:") . "</b><br /><br /><br />";
+			echo "<br><b>" . _("Es wurde ein Lernmodul gefunden:") . "</b><br><br><br>";
 		else
-			echo "<br><b>" . sprintf(_("%s Lernmodule wurden gefunden:"), sizeof($mod_array)) . "</b><br /><br /><br />";
+			echo "<br><b>" . sprintf(_("%s Lernmodule wurden gefunden:"), sizeof($mod_array)) . "</b><br><br><br>";
 
 		for ($i=0; $i<sizeof($mod_array); $i++)
 		{
@@ -414,7 +414,7 @@ function show_seminar_modules_links($seminar_id)
 				$msg = _("Diese Einrichtung ist mit einem Lernmodul verbunden:");
 			else
 				$msg = _("Diese Veranstaltung ist mit einem Lernmodul verbunden:");
-			echo "<br><b>" . $msg . "</b><br /><br /><br />";
+			echo "<br><b>" . $msg . "</b><br><br><br>";
 		}
 		else
 		{
@@ -422,7 +422,7 @@ function show_seminar_modules_links($seminar_id)
 				$msg = _("Diese Einrichtung ist mit den folgenden Lernmodulen verbunden:");
 			else
 				$msg = _("Diese Veranstaltung ist mit den folgenden Lernmodulen verbunden:");
-			echo "<br><b>" . $msg . "</b><br /><br />";
+			echo "<br><b>" . $msg . "</b><br><br>";
 		}
 
 		for ($status=1; $status<=2; $status++)
@@ -436,7 +436,7 @@ function show_seminar_modules_links($seminar_id)
 				if ($out_str[$i]["status"] == $status)
 				{
 					if (!isset($printlink))
-						echo "<br><b>" . $msg . "</b><br /><br />";
+						echo "<br><b>" . $msg . "</b><br><br>";
 
 					if ($print_open[$out_str[$i]["key"]] == true)
 						$do_str = "do_close";

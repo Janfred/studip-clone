@@ -174,7 +174,7 @@ function change_schedule_view() {
 			  					}
 				    		echo "</select>";
 						?>
-						<font size="-1">&nbsp;<?=_("Uhr"). "<br /><br />&nbsp;"._("Endzeit:")?>&nbsp;</font>
+						<font size="-1">&nbsp;<?=_("Uhr"). "<br><br>&nbsp;"._("Endzeit:")?>&nbsp;</font>
 						<?
 				   		echo "<select name=\"ende_zeit\">";
 		   					for ($i=0; $i<=23; $i++)
@@ -278,8 +278,8 @@ function change_schedule_view() {
 				</tr>
 				</form>
 			</table>
-			<br />
-			<br />
+			<br>
+			<br>
 			</td>
 		</tr>
 	</table>

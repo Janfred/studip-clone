@@ -434,7 +434,7 @@ function change_messaging_view() {
 						}
 						?>
 						</select>
-						
+
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
@@ -448,8 +448,8 @@ function change_messaging_view() {
 				</tr>
 				</form>
 			</table>
-			<br />
-			<br />
+			<br>
+			<br>
 			</td>
 		</tr>
 	</table>

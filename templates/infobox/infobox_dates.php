@@ -1,7 +1,7 @@
 <table align="center" width="250" border="0" cellpadding="0" cellspacing="0">
 
   <!-- Bild -->
-  
+
   <tr>
     <td class="infobox" width="100%" align="right">
       <img src="<?=$GLOBALS['ASSETS_URL']?>images/<?=$picture?>">
@@ -14,13 +14,13 @@
 
       <!-- Statusmeldungen -->
       <? if ($messages) :
-            // render status messages partial  
-            echo $this->render_partial("infobox/infobox_statusmessages_partial.php"); 
-         endif; 
+            // render status messages partial
+            echo $this->render_partial("infobox/infobox_statusmessages_partial.php");
+         endif;
       ?>
-            
+
       <!-- Informationen -->
-    
+
       <tr>
         <td class="infobox" width="100%" colspan="2">
           <font size="-1"><b><?=_("Informationen")?>:</b></font>
@@ -36,17 +36,17 @@
             <font size="-1"><?=_("Hier finden Sie alle Termine der Veranstaltung.")?></font>
             <br>
           </td>
-      </tr>                             
-                
+      </tr>
+
       <!-- Semesterauswahl -->
-      
-      <?       
-        // render "semesterauswahl" selection list partial  
-        echo $this->render_partial("infobox/infobox_dropdownlist_partial.php"); 
+
+      <?
+        // render "semesterauswahl" selection list partial
+        echo $this->render_partial("infobox/infobox_dropdownlist_partial.php");
       ?>
 
       <!-- Aktionen -->
-    
+
 			<? if ($rechte) : ?>
       <tr>
         <td class="infobox" width="100%" colspan="2">
@@ -63,7 +63,7 @@
            <font size="-1">
 					   <a href="<?= URLHelper::getLink("raumzeit.php?cmd=createNewSingleDate#newSingleDate")?>"><?= _("Einen neuen Termin anlegen") ?></a>
 					 </font>
-           <br />
+           <br>
          </td>
       </tr>
 
@@ -75,7 +75,7 @@
            <font size="-1">
 					   <a href="<?= URLHelper::getLink("raumzeit.php")?>"><?= _("Zur Terminverwaltung") ?></a>
 					 </font>
-           <br />
+           <br>
          </td>
       </tr>
 
@@ -87,7 +87,7 @@
            <font size="-1">
 					   <a href="<?= URLHelper::getLink("themen.php")?>"><?= _("Zur Ablaufplanverwaltung") ?></a>
 					 </font>
-           <br />
+           <br>
          </td>
       </tr>
 			<? endif; ?>

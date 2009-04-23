@@ -10,7 +10,7 @@
 				<div width="100%" class="steelgraudunkel" style="padding : 2px; margin: 10px 0px 10px 0px">
 					<?= _("1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen.") ?>
 				</div>
-				&nbsp;<?= _("Dateipfad:") ?><br />
+				&nbsp;<?= _("Dateipfad:") ?><br>
 				&nbsp;<input name="the_file" type="file"  style="width: 70%"><br>
 
 				<div width="100%" class="steelgraudunkel" style="padding : 2px; margin: 10px 0px 10px 0px">

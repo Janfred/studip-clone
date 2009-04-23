@@ -59,13 +59,13 @@ if ($problems_found) {
 	</tr>
  	<tr>
 		<td class="blank" valign="top">
-			<br />
+			<br>
 			<blockquote>
-			<?=_("Das Anlegen einer Veranstaltung ist leider zu diesem Zeitpunkt noch nicht m&ouml;glich, da zun&auml;chst die folgenden Voraussetzungen geschaffen werden m&uuml;ssen.")?> <br /><br />
-			<?($problems_found > 1) ? print"<font size=\"-1\">"._("(Beachten Sie bitte die angegebene Reihenfolge!)")."</font><br />" : "" ?>
+			<?=_("Das Anlegen einer Veranstaltung ist leider zu diesem Zeitpunkt noch nicht m&ouml;glich, da zun&auml;chst die folgenden Voraussetzungen geschaffen werden m&uuml;ssen.")?> <br><br>
+			<?($problems_found > 1) ? print"<font size=\"-1\">"._("(Beachten Sie bitte die angegebene Reihenfolge!)")."</font><br>" : "" ?>
 			</blockquote>
 		</td>
-		<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br />
+		<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br>
 			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/warning.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" />
 		</td>
 	</tr>

@@ -201,7 +201,7 @@ $termine = getAllSortedSingleDates($sem);
 						<font size="-1">
 							<? if ($modules['forum']) : ?>
 							<input type="checkbox" name="createAllForumFolders"> <?=_("Für alle Termine einen Forumsordner anlegen")?>
-							<br />
+							<br>
 							<? endif;	if ($modules['documents']) : ?>
 							<input type="checkbox" name="createAllFileFolders"> <?=_("Für alle Termine einen Dateiordner anlegen")?>
 							<? endif; ?>

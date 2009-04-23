@@ -17,9 +17,9 @@
                 <? endif ?>
                 <h4><?= htmlReady($current_head) ?></h4>
             <? endif ?>
-            <a href="<?= URLHelper::getLink('about.php', 
+            <a href="<?= URLHelper::getLink('about.php',
                                              array('username' => $admin['username']))
-                      ?>"><?= htmlReady($admin['fullname'])?></a>, E-Mail:<?= FixLinks(htmlReady($admin['Email'])) ?><br />
+                      ?>"><?= htmlReady($admin['fullname'])?></a>, E-Mail:<?= FixLinks(htmlReady($admin['Email'])) ?><br>
             <? $i++ ?>
         <? endforeach ?>
             </td>

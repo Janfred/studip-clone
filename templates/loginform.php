@@ -27,14 +27,14 @@
 	<td>
 	<div style="margin-left:40px;margin-top:15px;">
 
-		<?=_("Bitte identifizieren Sie sich mit Benutzername und Passwort:")?><br />&nbsp;
+		<?=_("Bitte identifizieren Sie sich mit Benutzername und Passwort:")?><br>&nbsp;
 
 		<?if  ($loginerror):?>
 		<!-- failed login code -->
 		<table>
-				<? parse_msg_array(array(array("error" , "<font size=\"-1\">" . _("Bei der Anmeldung trat ein Fehler auf:") . "<br />
+				<? parse_msg_array(array(array("error" , "<font size=\"-1\">" . _("Bei der Anmeldung trat ein Fehler auf:") . "<br>
 													<b>".$error_msg."</b>"
-													.  sprintf(_("Bitte wenden Sie sich bei Problemen an: <br />%s"),
+													.  sprintf(_("Bitte wenden Sie sich bei Problemen an: <br>%s"),
 													"<a href=\"mailto:".$GLOBALS['UNI_CONTACT']."\">".$GLOBALS['UNI_CONTACT']."</a></font>"))), "", 1, FALSE);
 				?>
 		</table>

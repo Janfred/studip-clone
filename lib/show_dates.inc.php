@@ -281,15 +281,15 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 			if (($open == $db->f("termin_id")) || ($open == "all") || ($new)) {
 				$content='';
 				if ($db->f("Info"))
-					$content.= formatReady($db->f("Info"), TRUE, FALSE)."<br /><br />";
+					$content.= formatReady($db->f("Info"), TRUE, FALSE)."<br><br>";
 				else
-					$content.=_("Keine Beschreibung vorhanden") . "<br /><br />";
+					$content.=_("Keine Beschreibung vorhanden") . "<br><br>";
 
 				$content.="<b>" . _("Art des Termins:") . "</b> ".$TERMIN_TYP[$db->f("date_typ")]["name"].",&nbsp;";
-				$content.="<b>" . _("angelegt von:") . "</b> ".get_fullname($db->f("autor_id"),'full',true)."<br />";
+				$content.="<b>" . _("angelegt von:") . "</b> ".get_fullname($db->f("autor_id"),'full',true)."<br>";
 
 				if ($show_admin)
-					$content .= "<br /><div align=\"center\"><a href=\"".URLHelper::getLink("raumzeit.php?cmd=open&open_close_id=".$db->f("termin_id")."#".$db->f("termin_id"))."\">" . makeButton("bearbeiten", "img") . "</a></div>";
+					$content .= "<br><div align=\"center\"><a href=\"".URLHelper::getLink("raumzeit.php?cmd=open&open_close_id=".$db->f("termin_id")."#".$db->f("termin_id"))."\">" . makeButton("bearbeiten", "img") . "</a></div>";
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 				printcontent(0,0, $content, $edit);
@@ -310,9 +310,9 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 		print("\n<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" width=\"100%\" align=\"center\">");
 		printf("\n<tr><td class=\"topic\"><img src=\"".$GLOBALS['ASSETS_URL']."images/meinetermine.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;%s</b></td>",_("Termine"));
 		printf("\n<td align =\"right\" class=\"topic\">&nbsp;%s<img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" %s></a>&nbsp;</td></tr>", $admin_link, tooltip(_("Termine einstellen")));
-		print("\n<tr><td class=\"steel1\" colspan=\"2\"><blockquote><br /><font size=-1>");
+		print("\n<tr><td class=\"steel1\" colspan=\"2\"><blockquote><br><font size=-1>");
 		print(_("Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie auf die Doppelpfeile."));
-		print("<br />&nbsp; </blockquote>\n</td></tr></table>\n");
+		print("<br>&nbsp; </blockquote>\n</td></tr></table>\n");
 		if (!$full_width)
 			echo "</td></tr></table>\n";
 		return TRUE;
@@ -324,7 +324,7 @@ function show_dates ($date_start, $date_end, $open, $range_id = "", $show_not = 
 			echo "\n<tr><td>";
 		}
 		print("\n<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" width=\"100%\" align=\"center\">");
-		print("\n<tr><td class=\"blank\" colspan=\"2\"><blockquote><br /><font size=-1>");
+		print("\n<tr><td class=\"blank\" colspan=\"2\"><blockquote><br><font size=-1>");
 		parse_msg ("info§"._("Es sind keine aktuellen Termine vorhanden."));
 		print("\n</td></tr></table>\n");
 		if (!$full_width)
@@ -437,9 +437,9 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 
 				$content = '';
 				if ($termin->getDescription())
-					$content .= sprintf("%s<br /><br />", formatReady($termin->getDescription(), TRUE, TRUE));
+					$content .= sprintf("%s<br><br>", formatReady($termin->getDescription(), TRUE, TRUE));
 				else
-					$content .= _("Keine Beschreibung vorhanden") . "<br /><br />";
+					$content .= _("Keine Beschreibung vorhanden") . "<br><br>";
 
 				if (sizeof($PERS_TERMIN_KAT) > 1) {
 					$content .= sprintf("<b>%s</b> %s", _("Kategorie:"),
@@ -471,7 +471,7 @@ function show_personal_dates ($range_id, $date_start, $date_end, $show_docs=FALS
 		echo "\n<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 		echo "\n<tr><td class=\"topic\"><img src=\"".$GLOBALS['ASSETS_URL']."images/meinetermine.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;" . _("Termine") . "</b></td>";
 		echo "\n<td align =\"right\" class=\"topic\">&nbsp;$admin_link<img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" " . tooltip(_("Termine einstellen")) . "></a>&nbsp;</td></tr>";
-		echo "\n<tr><td class=\"steel1\" colspan=\"2\"><blockquote><br /><font size=-1>" . _("Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie auf die Doppelpfeile.") . "<br />&nbsp; </blockquote>";
+		echo "\n<tr><td class=\"steel1\" colspan=\"2\"><blockquote><br><font size=-1>" . _("Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie auf die Doppelpfeile.") . "<br>&nbsp; </blockquote>";
 		echo "\n</td></tr></table>";
 		return TRUE;
 	}
@@ -604,9 +604,9 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 
 				$content = "";
 				if($termin->getDescription())
-					$content .= sprintf("%s<br /><br />", formatReady($termin->getDescription(), TRUE, TRUE));
+					$content .= sprintf("%s<br><br>", formatReady($termin->getDescription(), TRUE, TRUE));
 				else
-					$content .= _("Keine Beschreibung vorhanden") . "<br /><br />";
+					$content .= _("Keine Beschreibung vorhanden") . "<br><br>";
 
 				$have_category = FALSE;
 				if (sizeof($PERS_TERMIN_KAT) > 1 && strtolower(get_class($termin)) != 'seminarevent') {
@@ -654,7 +654,7 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 					}
 				}
 				else
-					$content .= "<br />";
+					$content .= "<br>";
 
 				echo "\n<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\"><tr>";
 				printcontent(0, FALSE, $content, $edit);
@@ -672,9 +672,9 @@ function show_all_dates ($date_start, $date_end, $show_docs=FALSE, $show_admin=T
 		echo "\n<table border=\"0\" cellpadding=\"1\" cellspacing=\"0\" width=\"100%\" align=\"center\">";
 		echo "\n<tr><td class=\"topic\"><img src=\"".$GLOBALS['ASSETS_URL']."images/meinetermine.gif\" border=\"0\" align=\"texttop\"><b>&nbsp;&nbsp;" . _("Termine") . "</b></td>";
 		echo "\n<td align=\"right\" class=\"topic\">&nbsp;$admin_link<img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\" " . tooltip(_("Termine einstellen")) . "></a>&nbsp;</td></tr>";
-		echo "\n<tr><td class=\"steel1\" colspan=\"2\"><blockquote><br /><font size=-1>";
+		echo "\n<tr><td class=\"steel1\" colspan=\"2\"><blockquote><br><font size=-1>";
 		echo _("Es sind keine aktuellen Termine vorhanden. Um neue Termine zu erstellen, klicken Sie auf die Doppelpfeile.");
-		echo "<br />&nbsp; </blockquote>";
+		echo "<br>&nbsp; </blockquote>";
 		echo "\n</td></tr></table>";
 		echo "\n</tr></td>\n</table>";
 		return TRUE;

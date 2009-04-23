@@ -51,11 +51,11 @@
 				<TD class="steel1" valign="top" nowrap="nowrap">
 					<font size="-1">
 						<? if ($modules['forum'] || $modules['documents']) : ?>
-						<b><?=_("Verknüfpungen mit diesem Termin:")?></b><br />
+						<b><?=_("Verknüfpungen mit diesem Termin:")?></b><br>
 						<? 
 						if ($modules['forum']) :
 							if ($tpl['forumEntry']) :
-								echo _("Forenthema vorhanden").'<br />';
+								echo _("Forenthema vorhanden").'<br>';
 								echo '<INPUT type="hidden" name="forumFolder" value="on">';
 							else : 
 								echo '<input type="checkbox" name="forumFolder'.($openAll ? '§'.$tpl['sd_id']: '').'"> ';
@@ -73,7 +73,7 @@
 							endif;
 						endif;
 
-						echo '<br /><br />';
+						echo '<br><br>';
 					endif; ?>
 						<b><?=_("Art des Termins")?>:</b> <?=$tpl['art']?>
 					</font>

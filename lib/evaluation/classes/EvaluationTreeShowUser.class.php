@@ -184,7 +184,7 @@ class EvaluationTreeShowUser {
 	    /* add space after a top-level group */
 	    $parent = $group->getParentObject();
 	    if( $parent->x_instanceof() == "Evaluation" && $group->getPosition() != 0 )
-		echo "<td colspan=\"2\" width=\"100%\"><br /></td><tr>";
+		echo "<td colspan=\"2\" width=\"100%\"><br></td><tr>";
 
 	    echo "<td align=\"left\" width=\"100%\" valign=\"bottom\" class=\"steelkante\" style=\"padding:1px;\">\n";
 	    $parent_id = $group_id;
@@ -265,12 +265,12 @@ class EvaluationTreeShowUser {
 
 	/* get title */
 	$content .= $group->getChildType() == "EvaluationQuestion" && $group->getTitle()
-	    ? "<b>".formatReady( $group->getTitle() )."</b><br />\n"
+	    ? "<b>".formatReady( $group->getTitle() )."</b><br>\n"
 	    : "";
 
 	/* get text */
 	$content .= $group->getText()
-	    ? formatReady( $group->getText() )."<br />\n"
+	    ? formatReady( $group->getText() )."<br>\n"
 	    : "";
 
 	/* get the content of questions under this group, if any */
