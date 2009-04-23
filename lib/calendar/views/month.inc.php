@@ -2,47 +2,37 @@
 # Lifter002: TODO
 # Lifter005: TODO
 /**
-* month.inc.php
-*
-* Shows the month calender
-*
-* @author		Peter Thienel <pthienel@web.de>
-* @author 		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
-* @version		$Id$
-* @access		public
-* @package		calendar
-*/
-
-// +---------------------------------------------------------------------------+
-// This file is part of Stud.IP
-// month.inc.php
-//
-// Copyright (c) 2003 Peter Tienel <pthienel@web.de>
-// +---------------------------------------------------------------------------+
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or any later version.
-// +---------------------------------------------------------------------------+
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-// +---------------------------------------------------------------------------+
-
-/**
-* workaround for PHPDoc
-*
-* Use this if module contains no elements to document !
-* @const PHPDOC_DUMMY
-*/
-define("PHPDOC_DUMMY",true);
+ * month.inc.php
+ *
+ * Shows the month calendar
+ *
+ * PHP version 5
+ *
+ * LICENSE
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * @author     Peter Thienel <pthienel@web.de>
+ * @author     Michael Riehemann <michael.riehemann@uni-oldenburg.de>
+ * @copyright  2003-2009 Stud.IP
+ * @license    http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
+ * @category   Stud.IP
+ * @package    calendar
+ */
 
 // Begin of output
-//TODO: templates
 include('lib/include/html_head.inc.php');
 
 if ($forum["jshover"] == 1 AND $auth->auth["jscript"]) { // JS an und erwuenscht?
@@ -57,7 +47,7 @@ include('lib/include/header.php');
 include('lib/include/links_sms.inc.php');
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
-echo "<tr><td class=\"blank\" width=\"100%\"><br/>\n";
+echo "<tr><td class=\"blank\" width=\"100%\"><br>\n";
 echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
 echo "<tr><td>\n";
 echo "<table width=\"100%\" class=\"steelgroup0\" border=\"0\" cellspacing=\"1\" cellpadding=\"0\" align=\"center\">\n";
