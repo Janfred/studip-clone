@@ -11,8 +11,8 @@
 				<?=htmlReady(my_substr($val['fullname'], 0, 20))?> (<?=$val['username']?>) - <?=$val['perms']?>
 				</option>
 			<? endforeach; ?>
-			</select><br/>
-			<br/>
+			</select><br>
+			<br>
 		</td>
 	</tr>
 	<?if($show_search_and_members_form) : ?>
@@ -28,8 +28,8 @@
 				<?=htmlReady(my_substr($val['fullname'], 0, 20))?> (<?=$val['username']?>) - <?=$val['perms']?>
 				</option>
 			<? endforeach; ?>
-			</select><br/>
-			<br/>
+			</select><br>
+			<br>
 		</td>
 	</tr>
 
@@ -39,11 +39,11 @@
 	<tr>
 		<td valign="top">
 
-			<? 
+			<?
 			$search_exp = $GLOBALS['search_exp'];
 			if ($search_exp) :
 				$users = getSearchResults(trim($GLOBALS['search_exp']), $range_id, 'sem');
-				if ($users) : 
+				if ($users) :
 			?>
 			<select name="searchPersons[]" size="5" multiple style="width: 90%;">
 				<? if (is_array($users)) foreach ($users as $user) : ?>
@@ -53,7 +53,7 @@
 				<? endforeach; ?>
 			</select>
 			<input type="image" valign="bottom" name="search" src="<?= Assets::image_path('rewind.gif') ?>" border="0" value="<?=_("Personen suchen")?>" <?= tooltip(_("neue Suche")) ?>>&nbsp;
-			<br/>		
+			<br>
 				<? else : // no users there ?>
 			<?= _("kein Treffer") ?>
 			<input type="image" valign="bottom" name="search" src="<?= Assets::image_path('rewind.gif') ?>" border="0" value="<?=_("Personen suchen")?>" <?= tooltip(_("neue Suche")) ?>>&nbsp;
@@ -61,7 +61,7 @@
 			<? else : ?>
 				<input type="text" name="search_exp" value="" style="width: 90%">
 				<input type="image" name="search" src="<?= Assets::image_path('suchen.gif') ?>" border="0" value="Personen suchen" <?= tooltip(_("Person suchen")) ?>>&nbsp;
-				<br/><br/>
+				<br><br>
 			<? endif;	?>
 
 		</td>

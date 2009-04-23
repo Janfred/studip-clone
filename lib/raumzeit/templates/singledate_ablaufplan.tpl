@@ -42,10 +42,10 @@
 			<TR>
 				<TD width="70%" class="steel1">
 					<FONT size="-1">
-						<B><?=("Thema:")?></B><BR/>
-						<INPUT type="text" name="theme_title<?=$openAll ? '§'.$tpl['sd_id']: ''?>" maxlength="255" size="50" value="<?=$tpl['theme_title']?>" style="width: 98%"><BR/>
-						<B><?=_("Beschreibung:")?></B><BR/>
-						<TEXTAREA name="theme_description<?=$openAll ? '§'.$tpl['sd_id']: ''?>" rows="5" cols="50" style="width: 98%"><?=$tpl['theme_description']?></TEXTAREA><BR/>
+						<B><?=("Thema:")?></B><br>
+						<INPUT type="text" name="theme_title<?=$openAll ? '§'.$tpl['sd_id']: ''?>" maxlength="255" size="50" value="<?=$tpl['theme_title']?>" style="width: 98%"><br>
+						<B><?=_("Beschreibung:")?></B><br>
+						<TEXTAREA name="theme_description<?=$openAll ? '§'.$tpl['sd_id']: ''?>" rows="5" cols="50" style="width: 98%"><?=$tpl['theme_description']?></TEXTAREA><br>
 					</FONT>
 				</TD>
 				<TD class="steel1" valign="top" nowrap="nowrap">
@@ -59,7 +59,7 @@
 								echo '<INPUT type="hidden" name="forumFolder" value="on">';
 							else : 
 								echo '<input type="checkbox" name="forumFolder'.($openAll ? '§'.$tpl['sd_id']: '').'"> ';
-								echo _("Thema im Forum anlegen"). '<br/>';
+								echo _("Thema im Forum anlegen"). '<br>';
 							endif;
 						endif;
 

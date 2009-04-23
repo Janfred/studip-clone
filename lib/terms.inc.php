@@ -53,8 +53,8 @@ function check_terms($userid, $_language_path) {
 	</tr>
 	<tr>
 		<td class="blank">
-		<p><br/><?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der st&auml;ndigen Weiterentwicklung.")?></p>
-		<p><?=_("Um den vollen Funktionsumfang von Stud.IP nutzen zu k&ouml;nnen, m&uuml;ssen Sie sich am System anmelden.")?><br/>
+		<p><br><?=_("Stud.IP ist ein Open Source Projekt und steht unter der Gnu General Public License (GPL). Das System befindet sich in der st&auml;ndigen Weiterentwicklung.")?></p>
+		<p><?=_("Um den vollen Funktionsumfang von Stud.IP nutzen zu k&ouml;nnen, m&uuml;ssen Sie sich am System anmelden.")?><br>
 		<?=_("Das hat viele Vorz&uuml;ge:")?></p>
 		<ul>
 			<li><?=_("Zugriff auf Ihre Daten von jedem internetf&auml;higen Rechner weltweit,")?></li>
@@ -68,7 +68,7 @@ function check_terms($userid, $_language_path) {
 		<p align="center">
 		<a href="index.php?i_accept_the_terms=yes"><b><?=_("Ich erkenne die Nutzungsbedingungen an")?></b></a>
 		</p>
-		<br/>
+		<br>
 		</td>
 	</tr>
 </table>

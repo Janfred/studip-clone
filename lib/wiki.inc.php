@@ -605,7 +605,7 @@ function deleteWikiPage($keyword, $version, $range_id) {
 	begin_blank_table();
 	parse_msg("info§" . sprintf(_("Version %s der Seite %s gel&ouml;scht."), $version, '<b>'.$keyword.'</b>') . $addmsg);
 	end_blank_table();
-	if ($dellatest) { 
+	if ($dellatest) {
 		$lv=getLatestVersion($keyword, $SessSemName[1]);
 		if ($lv) {
 			$body="";
@@ -785,7 +785,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 	} else if ($localsearch && !$keyword) {
 		$invalid_searchstring=1;
 	} else {
-		// make search string 
+		// make search string
 		$searchfori=addslashes($searchfor);
 		if ($localsearch) {
 			$q="SELECT * FROM wiki WHERE range_id='$range_id' AND body LIKE '%$searchfori%' AND keyword='$keyword' ORDER BY version DESC";
@@ -803,7 +803,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 	begin_blank_table();
 	echo "<tr><td>";
 	begin_blank_table();
-	
+
 	// quit if no pages found / search string was invalid
 	if ($invalid_searchstring || $db->affected_rows() == 0) {
 		if ($invalid_searchstring) {
@@ -888,7 +888,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 		// display hit previews
 		$offset=0; // step through text
 		$ignore_next_hits=0; // don't show hits more than once
-		$first_line=1; // don't print <br/> before first hit	
+		$first_line=1; // don't print <br> before first hit
 		print($tdheadleft);
 		// find all occurences
 		while ($offset < strlen($db->f("body"))) {
@@ -896,10 +896,10 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 			if ($pos===FALSE) break;
 			$offset=$pos+1;
 			if (($ignore_next_hits--)>0) {
-				// if more than one occurence is found 
-				// in a fragment to be displayed, 
+				// if more than one occurence is found
+				// in a fragment to be displayed,
 				// the fragment is only shown once
-				continue; 
+				continue;
 			}
 			// show max 80 chars
 			$fragment = '';
@@ -916,7 +916,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 			$found_in_fragment = (count($split_fragment) - 1) / 2; // number of hits in fragment
 			$ignore_next_hits = ($found_in_fragment > 1) ? $found_in_fragment - 1 : 0;
 			print("...".$fragment."...");
-			print "<br/>";
+			print "<br>";
 		}
 		print($tdtail);
 		// version info
@@ -1174,7 +1174,7 @@ function showPageFrameEnd($infobox) {
 
 /**
 * Returns an infobox category string for a searchbox
-* 
+*
 * @param	string	preselection - put in searchbox
 *
 **/
@@ -1185,7 +1185,7 @@ function getSearchbox($preselection, $keyword) {
 	$search_text.="<input type='hidden' name='keyword' value='".htmlReady($keyword)."'>";
 	$search_text.="<input type='text' size='10' name='searchfor' value='".htmlReady($preselection)."'>";
 	$search_text.="&nbsp;<input type='image' ".makeButton("suchen","src")." align='top' border='0'>";
-	$search_text.="<br/>";
+	$search_text.="<br>";
 	$search_text.="<input type='checkbox' name='searchcurrentversions' checked>&nbsp;"._("Nur in aktuellen Versionen");
 	$search_text.="</form>";
 	return array("kategorie"=> _("Suche:"),
@@ -1360,7 +1360,7 @@ function get_toc_content() {
 		$toccont.= wikiLinks(wikiReady($toc["body"],TRUE,FALSE,$show_comments), "toc", "wiki");
 		$toccont.="</div>";
 		$toccont.="</div>\n";
-	} 
+	}
 	/*  additional edit link for QuickLinks. Disabled.
 	if ($GLOBALS['perm']->have_studip_perm('autor', $GLOBALS['SessSemName'][1])){
 		$toccont.="<div class='wikitoc_editlink'>";

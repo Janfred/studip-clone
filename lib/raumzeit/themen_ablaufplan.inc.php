@@ -27,13 +27,13 @@ function themen_doAddIssue() {
 	$termin = new SingleDate($_REQUEST['singledate_id']);
 	$termin->addIssueID($issue->getIssueID());
 	$termin->store();
-	$sem->createMessage(_("Folgendes Thema wurde hinzugefügt:").'<br/><li>'.htmlReady($issue->toString()));
+	$sem->createMessage(_("Folgendes Thema wurde hinzugefügt:").'<br><li>'.htmlReady($issue->toString()));
 }
 
 function themen_changeIssue() {
 	global $sem, $themen;
 
-	$msg .= sprintf(_("Das Thema \"%s\" wurde geändert."), htmlReady($themen[$_REQUEST['issue_id']]->toString())) . '<br/>';
+	$msg .= sprintf(_("Das Thema \"%s\" wurde geändert."), htmlReady($themen[$_REQUEST['issue_id']]->toString())) . '<br>';
 	$themen[$_REQUEST['issue_id']]->setDescription($_REQUEST['theme_description']);
 	$themen[$_REQUEST['issue_id']]->setTitle($_REQUEST['theme_title']);
 	$themen[$_REQUEST['issue_id']]->setForum(($_REQUEST['forumFolder'] == 'on') ? TRUE : FALSE);
@@ -41,7 +41,7 @@ function themen_changeIssue() {
 	$themen[$_REQUEST['issue_id']]->store();
 	if ($zw = $themen[$_REQUEST['issue_id']]->getMessages()) {
 		foreach ($zw as $val) {
-			$msg .= $val.'<br/>';
+			$msg .= $val.'<br>';
 		}
 	}
 	$sem->createMessage($msg);
@@ -63,7 +63,7 @@ function themen_closeAll() {
 function themen_saveAll() {
 	global $sem, $themen, $changeTitle, $changeForum, $changeDescription, $changeFile, $id;
 
-	$msg = _("Folgende Termine wurden bearbeitet:").'<br/>';
+	$msg = _("Folgende Termine wurden bearbeitet:").'<br>';
 	foreach ($changeTitle as $key => $val) {	// we use the changeTitle-array for running through all themes ($key = issue_id and $val = title)
 
 		unset($termin);
@@ -95,7 +95,7 @@ function themen_saveAll() {
 						($themen[$cur_issue_id]->hasForum() != $forumValue) ||
 						($themen[$cur_issue_id]->hasFile() != $fileValue)
 					 ) {
-					$msg .= '<li>'.$termin->toString().'<br/>';
+					$msg .= '<li>'.$termin->toString().'<br>';
 				}
 				$themen[$cur_issue_id]->setTitle($val);
 				$themen[$cur_issue_id]->setDescription($changeDescription[$key]);
@@ -106,12 +106,12 @@ function themen_saveAll() {
 		}
 	}
 
-	$msg .= '<br/>'._("Folgende weitere Aktionen wurden durchgeführt:").'<br/>';
+	$msg .= '<br>'._("Folgende weitere Aktionen wurden durchgeführt:").'<br>';
 
 	foreach ($themen as $val) {
 		if ($zw = $val->getMessages()) {
 			foreach ($zw as $iss_msg) {
-				$msg .= '<li>'.$iss_msg.'<br/>';
+				$msg .= '<li>'.$iss_msg.'<br>';
 			}
 		}
 	}

@@ -158,7 +158,7 @@ class EditSettings {
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="42%" valign="top">
 					<font size=-1><a href="<? echo $resObject->getOwnerLink($this->db->f("user_id"))."\">".$resObject->getOwnerName(TRUE, $this->db->f("user_id")) ?></a>
-					(<? echo get_username($this->db->f("user_id")); ?>)<br/>
+					(<? echo get_username($this->db->f("user_id")); ?>)<br>
 						<?
 						switch ($this->db->f("perms")) {
 							case "admin":
@@ -476,7 +476,7 @@ class EditSettings {
 							}
 							?>
 							<font size=-1>Vorschau:</font>
-							<br/>
+							<br>
 							<?
 							switch ($this->db2->f("type")) {
 								case "bool":

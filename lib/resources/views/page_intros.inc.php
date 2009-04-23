@@ -254,7 +254,7 @@ switch ($view) {
 		$clipboard = TRUE;
 	break;
 	case 'list_requests':
-		$page_intro = sprintf(_("Sie sehen hier eine Liste aller offenen Anfragen, die Sortierung folgt der Einstellung unter %sübersicht%s."), '<a href="resources.php?view=requests_start&cancel_edit_request_x=1">', '</a>'). '<br/>'._("Ein Klick auf das Symbol nebem dem Zähler erlaubt es Ihnen, direkt zu der Anfrage zu springen.");
+		$page_intro = sprintf(_("Sie sehen hier eine Liste aller offenen Anfragen, die Sortierung folgt der Einstellung unter %sübersicht%s."), '<a href="resources.php?view=requests_start&cancel_edit_request_x=1">', '</a>'). '<br>'._("Ein Klick auf das Symbol nebem dem Zähler erlaubt es Ihnen, direkt zu der Anfrage zu springen.");
 		$CURRENT_PAGE = _("Anfragenliste");
 	break;
 	//all the intros in an open object (Veranstaltung, Einrichtung)
@@ -333,7 +333,7 @@ switch ($view) {
 		$CURRENT_PAGE=_("übersicht der Ressourcen");
 	break;
 	}
-	
+
 	//general naming of resources management pages
 	if (!$essSemName) {
 		if ($CURRENT_PAGE)

@@ -44,7 +44,7 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 
 				$zeit = leadingZero($val['start_hour']).':'.leadingZero($val['start_minute']).'-'.leadingZero($val['end_hour']).':'.leadingZero($val['end_minute']);
 
-				if ($RESOURCES_ENABLE && $this->showRoomList && 
+				if ($RESOURCES_ENABLE && $this->showRoomList &&
 					$raum = $this->sem->getFormattedPredominantRooms($key, $this->link)) {
 					// all relevant information is already assigned to $raum
 
@@ -104,11 +104,11 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 					if (!$this->hideRooms) {
 						$ret .= '<td width="60%"><font size="-1">&nbsp;'.$raum.'&nbsp;&nbsp;<i>'. $val['desc'] .'</i></font></td>';
 					} else {
-						$ret .= '<td><font size="-1">&nbsp;&nbsp;<i>'. $val['desc'] .'</font></td>'; 
+						$ret .= '<td><font size="-1">&nbsp;&nbsp;<i>'. $val['desc'] .'</font></td>';
 					}
 					$ret .= '</tr>';
 				} else {
-					if ($commas > 0) $ret .= ',<br/>';
+					if ($commas > 0) $ret .= ',<br>';
 					$ret .= getWeekDay($val['day']).'.&nbsp;'.$repeat.'&nbsp;';
 					$ret .= $zeit;
 					if (!$this->hideRooms) {
@@ -131,7 +131,7 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 
 		if (!$this->onlyRegular) {
 			if ($data['regular']['turnus_data'] && sizeof($data['regular']['turnus_data']) > 0 && $data['irregular'] && sizeof($data['irregular']) > 0 && $this->hideRooms){
-				$ret .= ',<br/>';
+				$ret .= ',<br>';
 			}
 
 			// get irregular dates
@@ -235,7 +235,7 @@ class RoomOverviewUnsteadyDecorator extends Decorator {
 								$ret .= '<td width="60%"><font size="-1">&nbsp;&nbsp;'.(($typ) ? ", <I>$typ</I>":'').'</font></td></tr>';
 							}
 						} else {
-							if ($commas > 0) $ret .= ',<br/>';
+							if ($commas > 0) $ret .= ',<br>';
 							$ret .= getWeekDay(date('w', $termine[0]['start_time'])).'. '.date('d.m.Y', $termine[0]['end_time']).'&nbsp;';
 							$ret .= $zeit.'&nbsp;';
 							if (!$this->hideRooms) {

@@ -7,11 +7,11 @@ if (get_config("EXTERNAL_HELP")) {
 ?>
 <tr>
 	<td class="blank">
-		<br/>
+		<br>
 		<blockquote>
-			<?= _("Es sind noch keine Gruppen oder Funktionen angelegt worden.") ?><br/>
-			<?= sprintf(_("Um für diesen Bereich Gruppen anzulegen, klicken Sie auf %sneue Gruppe anlegen%s in der Infobox."), '<u>', '</u>') ?><br/>
-			<?=  _("Wenn Sie Gruppen angelegt haben, können Sie diesen Personen zuordnen. Jeder Gruppe können beliebig viele Personen zugeordnet werden. Jede Person kann beliebig vielen Gruppen zugeordnet werden.") ?><br/><br/>
+			<?= _("Es sind noch keine Gruppen oder Funktionen angelegt worden.") ?><br>
+			<?= sprintf(_("Um für diesen Bereich Gruppen anzulegen, klicken Sie auf %sneue Gruppe anlegen%s in der Infobox."), '<u>', '</u>') ?><br>
+			<?=  _("Wenn Sie Gruppen angelegt haben, können Sie diesen Personen zuordnen. Jeder Gruppe können beliebig viele Personen zugeordnet werden. Jede Person kann beliebig vielen Gruppen zugeordnet werden.") ?><br><br>
 			<?= sprintf(_("Lesen Sie weitere Bedienungshinweise in der %sHilfe%s nach!"), "<a href=\"".$help_url."\">", "</a>") ?>
 		</blockquote>
 </tr>

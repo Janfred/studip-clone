@@ -1,6 +1,6 @@
 <?
 	$cssSw = new cssClassSwitcher();
-	$num = 0;	
+	$num = 0;
 ?>
 <tr>
 	<td colspan="5" class="blank">
@@ -30,7 +30,7 @@
 
 					</select>
 				</td>
-			</tr>						
+			</tr>
 			<? if ($range_type != 'sem') : ?>
 			<? $cssSw->switchClass() ?>
 			<tr>
@@ -42,7 +42,7 @@
 				<td class="<?= $cssSw->getClass() ?>" width="70%" nowrap>
 					<font size="-1">
 						<select name="vather">
-							<option value="root"> -- <?= _("Hauptebene") ?> -- </option> 
+							<option value="root"> -- <?= _("Hauptebene") ?> -- </option>
 					 		<? Statusgruppe::displayOptionsForRoles($all_roles); ?>
 						</select>
 					</font>
@@ -59,10 +59,10 @@
 					</font>
 				</td>
 				<td class="<?= $cssSw->getClass() ?>" width="70%" nowrap>
-					<input type="text" name="new_size" value="<?= $role_data['size'] ?>"><br/>
+					<input type="text" name="new_size" value="<?= $role_data['size'] ?>"><br>
 				</td>
 			</tr>
-			
+
 			<? if ($range_type == 'sem') : ?>
 			<? $cssSw->switchClass() ?>
 			<tr>
@@ -90,7 +90,7 @@
 			</tr>
 
 			<? endif; ?>
-			
+
 			<? if ($range_type != 'sem' && is_array($role_data['datafields'])) foreach ($role_data['datafields'] as $field) : ?>
 			<? $cssSw->switchClass() ?>
 			<tr>
@@ -108,12 +108,12 @@
 			<? endforeach; ?>
 			<tr>
 				<td class="blank" align="right" colspan="2">
-					<br/>					
+					<br>
 					<input type="image" <?= makebutton('speichern', 'src') ?> align="absbottom">
 					&nbsp;
 					<a href="<?= URLHelper::getLink('?range_id='. $range_id) ?>">
 						<?= makebutton('abbrechen') ?>
-					</a>					
+					</a>
 				</td>
 			</tr>
 		</table>

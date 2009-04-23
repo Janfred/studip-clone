@@ -1,11 +1,11 @@
-<?	
+<?
 	$cssSw = new CSSClassSwitcher();
 	$pos = 0;
 	$style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."');"
 		." background-position: right;"
 		." background-repeat: repeat-y;"
-		."\" ";		
-		
+		."\" ";
+
 	if ($seminar_persons) :
 		$width = '33%';
 		$indirect = true;
@@ -28,27 +28,27 @@
 	<td class="printcontent" colspan="<?= 19 - $indent ?>" width="100%">
 		<center>
 			<? if ($editRole) : // edit the metadata of the role ?>
-				<br/>
+				<br>
 				<table cellspacing="0" cellpadding="0" border="0" width="90%">
 					<tr>
 						<td class="steelkante" colspan="6">
 							&nbsp;<b><?= $range_type == 'sem' ? _("Gruppe bearbeiten") : _("Rollendaten bearbeiten") ?></b>
 						</td>
-					</tr>					
+					</tr>
 					<?= $this->render_partial('statusgruppen/role_administration_edit.php'); ?>
 				</table>
 			<? else :	?>
 			<!-- Buttonbar -->
-			<br/>
+			<br>
 			<a href="<?= URLHelper::getLink('?view=editRole&role_id='. $role_id .'#'. $role_id) ?>">
 				<?= makebutton('bearbeiten') ?>
 			</a>
 			<a href="<?= URLHelper::getLink('?cmd=deleteRole&role_id='. $role_id .'#'. $role_id) ?>">
 				<?= makebutton('loeschen') ?>
 			</a>
-			<br/>
-			<br/>
-	
+			<br>
+			<br>
+
 			<form action="<?= URLHelper::getLink('') ?>" method="post" style="display: inline">
 				<input type="hidden" name="cmd" value="sort_person">
 				<input type="hidden" name="role_id" value="<?= $role_id ?>">
@@ -61,8 +61,8 @@
 						<td class="steelkante" width="5%" nowrap>
 							<?= ($role->getSize()) ? sizeof($persons) .' '._("von").' '. $role->getSize() : '' ?>
 							&nbsp;
-						</td> 
-						<td class="steelkante" width="1%" nowrap>						
+						</td>
+						<td class="steelkante" width="1%" nowrap>
 							<?= ($role->getSelfassign()) ? Assets::img('nutzer', array('title' => _("Personen können sich dieser Gruppe selbst zuordnen"))) : '' ?>
 							<a href="<?= URLHelper::getLink('?cmd=sortByName&role_id='. $role_id ) ?>"><?= Assets::img('sort') ?></a>
 						</td>
@@ -78,8 +78,8 @@
 						</td>
 
 						<td class="<?= $cssSw->getClass() ?>" width="1%" nowrap>
-							<input 
-								src="<?= Assets::image_path('antwortnew') ?>" 
+							<input
+								src="<?= Assets::image_path('antwortnew') ?>"
 								name="do_person_sort[<?= $person['username'] ?>]" type="image">
 						</td>
 
@@ -122,14 +122,14 @@
 					<? endforeach; ?>
 				</table>
 			</form>
-			<br/>
+			<br>
 			<table cellspacing="0" cellpadding="0" border="0" width="95%">
 				<tr>
 					<? if ($seminar_persons) : ?>
 					<td class="steelkante">&nbsp;<?= _("VeranstaltungsteilnehmerInnen") ?></td>
 					<td>&nbsp;&nbsp;</td>
 					<? endif; ?>
-					
+
 					<td class="steelkante">&nbsp;<?= _("Mitarbeiterliste") ?></td>
 					<td>&nbsp;&nbsp;</td>
 					<td class="steelkante" nowrap>&nbsp;<?= _("freie Personensuche") ?></td>
@@ -141,7 +141,7 @@
 					</td>
 					<td>&nbsp;&nbsp;</td>
 					<? endif; ?>
-					
+
 					<td width="<?= $width ?>" style="padding-left: 10px; padding-right: 10px" valign="top" align="center">
 						<?= $this->render_partial('statusgruppen/role_administration_members', array('indirect' => $indirect)) ?>
 					</td>
@@ -151,7 +151,7 @@
   	 			</td>
   	 		</tr>
    		</table>
-   		<br/>
+   		<br>
 			<? endif; // display person-administration ?>
 		</center>
 	</td>

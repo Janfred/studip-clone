@@ -18,13 +18,13 @@
 	<? endif; ?>
 
 	<label for="role_name">
-		<?= ($edit_role) ? _("neuer") :'' ?> <?= _("Gruppenname") ?>: 
+		<?= ($edit_role) ? _("neuer") :'' ?> <?= _("Gruppenname") ?>:
 	</label>
 	<input id="role_name" type="text" name="new_name" value="<?= ($role_data['name']) ? htmlReady($role_data['name']) : '' ?>">
-	<br/>
+	<br>
 
 	<label for="role_size">
-		<?= ($edit_role) ? _("neue") : '' ?> <?= _("Gruppengröße") ?>: 
+		<?= ($edit_role) ? _("neue") : '' ?> <?= _("Gruppengröße") ?>:
 	</label>
 	<input id="role_size" type="text" name="new_size" size="3" value="<?= ($role_data['size']) ? $role_data['size'] : '' ?>">
 
@@ -35,7 +35,7 @@
 
 	<? if ($role_data['folder']) : ?>
 		<?= _("Dateiordner vorhanden") ?>
-	<? else: ?>	
+	<? else: ?>
 	<label for="group_folder">
 		<?= _("Dateiordner") ?>
 	</label>

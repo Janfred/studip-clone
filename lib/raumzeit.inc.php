@@ -35,7 +35,7 @@ function raumzeit_delete_singledate() {
 		if($GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
 			$warning[] = _("Diesem Termin ist im Ablaufplan ein Thema zugeordnet. Titel und Beschreibung des Themas bleiben erhalten und können in der Expertenansicht des Ablaufplans einem anderen Termin wieder zugeordnet werden.");
 		} else {
-			$warning[] = _("Diesem Termin ist ein Thema zugeordnet."); 
+			$warning[] = _("Diesem Termin ist ein Thema zugeordnet.");
 		}
 	}
 
@@ -52,9 +52,9 @@ function raumzeit_delete_singledate() {
 				'sd_id' => $_REQUEST['sd_id'],
 				'approveDelete' => 'TRUE'
 			);
-			echo createQuestion( implode("\n", $warning) . "\n". _("Wollen Sie diesen Termin wirklich löschen?"), $params); 
-	} 
-	
+			echo createQuestion( implode("\n", $warning) . "\n". _("Wollen Sie diesen Termin wirklich löschen?"), $params);
+	}
+
 	// no approval needed or already approved
 	else {
 		// deletion approved, delete show approval-message
@@ -64,8 +64,8 @@ function raumzeit_delete_singledate() {
 			} else {
 				$sem->createMessage(sprintf(_("Der Termin %s wurde gelöscht!"), $termin->toString()));
 			}
-		} 
-		
+		}
+
 		// no approval needed, delete unquestioned
 		else {
 			$sem->createMessage(sprintf(_("Der Termin %s wurde gelöscht!"), $termin->toString()));
@@ -100,10 +100,10 @@ function raumzeit_checkboxAction() {
 		case 'deleteChoosen':
 			//TODO: what if deletion leads to an empty regular entry? -> the regular entry should be deleted too
 			if (!$_REQUEST['singledate']) break;
-			$msg = _("Folgende Termine wurden gelöscht:").'<br/>';
+			$msg = _("Folgende Termine wurden gelöscht:").'<br>';
 			foreach ($_REQUEST['singledate'] as $val) {
 				$termin = $sem->getSingleDate($val, $_REQUEST['cycle_id']);
-				$msg .= '<li>'.$termin->toString().'<br/>';
+				$msg .= '<li>'.$termin->toString().'<br>';
 				unset($termin);
 				$sem->deleteSingleDate($val, $_REQUEST['cycle_id']);
 			}
@@ -112,11 +112,11 @@ function raumzeit_checkboxAction() {
 
 		case 'unDeleteChoosen':
 			if (!$_REQUEST['singledate']) break;	// if there were no singleDates choosen, stop.
-			$msg = _("Folgende Termine wurden wieder hergestellt:").'<br/>';
+			$msg = _("Folgende Termine wurden wieder hergestellt:").'<br>';
 			foreach ($_REQUEST['singledate'] as $val) {
 				if ($sem->unDeleteSingleDate($val, $_REQUEST['cycle_id'])) {		// undelete retrieved singleDate
 					$termin = $sem->getSingleDate($val, $_REQUEST['cycle_id']);		// retrieve singleDate
-					$msg .= $termin->toString().'<br/>';													// add string representation to message
+					$msg .= $termin->toString().'<br>';													// add string representation to message
 					unset($termin);																								// we never now, if the variable persists...
 				}
 			}
@@ -159,11 +159,11 @@ function raumzeit_checkboxAction() {
 					echo createQuestion( $question, $link_params );
 
 				} else {									// deletion approved, so we do the job
-					$msg = _("Folgende Termine wurden gelöscht:").'<br/>';
+					$msg = _("Folgende Termine wurden gelöscht:").'<br>';
 					$singleDates =& $sem->getSingleDates();	// get all irrgeular singleDates of the seminar
 					foreach ($singleDates as $key => $val) {				// walk through each and delete it
 						// TODO: this functionality should be better implemented into the Seminar.class.php
-						$msg .= $val->toString().'<br/>';			// add string-representation of the current singleDate to the message
+						$msg .= $val->toString().'<br>';			// add string-representation of the current singleDate to the message
 						unset($sem->irregularSingleDates[$key]);	// we unset that singleDate, otherwise it would show up on the page although deleted already.
 						$val->delete();												// delete the singleDate
 					}
@@ -185,21 +185,21 @@ function raumzeit_bookRoom() {
   $termin_count = 0;
   $ex_termin_count = 0;
 	if ($_REQUEST['room'] == 'retreat') {
-		$msg = _("Für folgende Termine wurde die Raumbuchung aufgehoben:").'<br/>';
+		$msg = _("Für folgende Termine wurde die Raumbuchung aufgehoben:").'<br>';
 	} else {
-		$msg = sprintf(_("Für folgende Termine wurde der Raum \"%s\" gebucht:"), $raum)."<br/>";
+		$msg = sprintf(_("Für folgende Termine wurde der Raum \"%s\" gebucht:"), $raum)."<br>";
 	}
-  $error_msg = sprintf(_("Für folgende gelöschte Termine wurde Raum \"%s\" nicht gebucht:"), $raum)."<br/>";
+  $error_msg = sprintf(_("Für folgende gelöschte Termine wurde Raum \"%s\" nicht gebucht:"), $raum)."<br>";
 	foreach ($_REQUEST['singledate'] as $val) {
 		$termin = $sem->getSingleDate($val, $_REQUEST['cycle_id']);
 		if (!$termin->isExTermin()) {
 			if ($sem->bookRoomForSingleDate($val, $_REQUEST['room'], $_REQUEST['cycle_id'])) {
       	$termin_count++;
-				$msg .= $termin->toString()."<br/>";
+				$msg .= $termin->toString()."<br>";
 			}
 		} else
     {
-			$error_msg .= $termin->toString()."<br/>";
+			$error_msg .= $termin->toString()."<br>";
       $ex_termin_count++;
     }
 		unset($termin);
@@ -215,7 +215,7 @@ function raumzeit_bookRoom() {
 
 function raumzeit_selectSemester() {
 	global $sem, $semester;
-		
+
 		if (!$semester) $semester = new SemesterData();
 
     $start_semester = $_REQUEST['startSemester'];
@@ -376,7 +376,7 @@ function raumzeit_editSingleDate() {
 		// the choosen singleDate is irregular, so we can edit it directly
 		$termin =& $sem->getSingleDate($_REQUEST['singleDateID']);
 
-		if (  $termin->setTime($start, $ende) 
+		if (  $termin->setTime($start, $ende)
     ||    $termin->getFreeRoomText()!=$_REQUEST['freeRoomText_sd']
     ||    $termin->getDateType!=$_REQUEST['dateType'] ) {
 
@@ -423,7 +423,7 @@ function raumzeit_freeText() {
 
 function raumzeit_removeRequest() {
 	global $sem;
-	
+
 	$termin =& $sem->getSingleDate($_REQUEST['singleDateID'], $_REQUEST['cycle_id']);
 	// logging >>>>>>
 	log_event("SEM_DELETE_SINGLEDATE_REQUEST", $sem->getId(), $termin->toString());

@@ -97,7 +97,7 @@ if ($chat_entry_check){
 	$chatServer->addChat($chatid, chat_get_name($chatid));
 	if (!$chatServer->addUser($user->id,$chatid,$auth->auth["uname"],get_fullname(),(($chat_entry_level == "admin") ? true : false))){
 		$chat_entry_check = false;
-		$msg = "error§<b>" ._("Chatlogin nicht m&ouml;glich"). "</b><br/><font size=\"-1\" color=\"black\">"
+		$msg = "error§<b>" ._("Chatlogin nicht m&ouml;glich"). "</b><br><font size=\"-1\" color=\"black\">"
 			. _("Vermutlich sind sie noch aus einer fr&uuml;heren Chat-Session angemeldet. Es dauert ca. 3-5 Sekunden bis sie automatisch aus dem Chat entfernt werden. Versuchen Sie es etwas sp&auml;ter noch einmal.")
 			. "</font>§";
 	}

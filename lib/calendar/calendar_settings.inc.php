@@ -1,36 +1,38 @@
 <?
 # Lifter002: TODO
 /**
-* calendar_settings.inc.php
-*
-* @author		Peter Thienel <pthienel@web.de>
-* @author 		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
-* @version		$Id$
-* @access		public
-* @package		calendar
-*/
-
-// +---------------------------------------------------------------------------+
-// This file is part of Stud.IP
-// Persoenlicher Terminkalender in Stud.IP.
-// Copyright (C) 2001 Peter Thienel <pthien@gmx.de>
-// +---------------------------------------------------------------------------+
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or any later version.
-// +---------------------------------------------------------------------------+
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-// +---------------------------------------------------------------------------+
+ * calendar_settings.inc.php
+ *
+ * Persoenlicher Terminkalender in Stud.IP.
+ *
+ * PHP version 5
+ *
+ * LICENSE
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * @author     Peter Thienel <pthienel@web.de>
+ * @author     Michael Riehemann <michael.riehemann@uni-oldenburg.de>
+ * @copyright  2003-2009 Stud.IP
+ * @license    http://www.gnu.org/licenses/gpl-2.0.html GPL version 2
+ * @category   Stud.IP
+ * @package    calendar
+ */
 
 // Imports
-require_once('lib/visual.inc.php');
+require_once 'lib/visual.inc.php';
 
 
 if ($i_page == "calendar.php")
@@ -65,7 +67,7 @@ $css_switcher->switchClass();
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" border="0" align="center">
 	<tr>
-		<td class="blank" width="100%" colspan="2" align="center"><br/>
+		<td class="blank" width="100%" colspan="2" align="center"><br>
 			<blockquote>
 				<font size="-1"><b><? echo _("Hier k&ouml;nnen Sie die Ansicht Ihres pers&ouml;nlichen Terminkalenders anpassen."); ?></b></font>
 			</blockquote>
@@ -293,7 +295,7 @@ $css_switcher->switchClass();
 					</td>
 				</tr>
 			</table>
-			<br/>
+			<br>
 		</td>
 	</tr>
 </table>

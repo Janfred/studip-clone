@@ -103,7 +103,7 @@ class SingleDate {
 				}
 
 				$after = $this->toString();
-                // logging 
+                // logging
 				if ($before) {
 				    log_event("SINGLEDATE_CHANGE_TIME", $this->range_id, $before, $before.' -> '.$after);
 				}
@@ -240,7 +240,7 @@ class SingleDate {
 			}
 		}
 
-		// date_typ = 0 defaults to TERMIN_TYP[1] because there never exists one with zero 
+		// date_typ = 0 defaults to TERMIN_TYP[1] because there never exists one with zero
 		if (!$this->date_typ) $this->date_typ = 1;
 
 		if ($this->orig_ex != $this->ex_termin) {
@@ -350,7 +350,7 @@ class SingleDate {
 		if (is_array($overlaps) && (sizeof($overlaps) > 0)) {
 			$resObj =& ResourceObject::Factory($roomID);
 			$raum = $resObj->getFormattedLink(TRUE, TRUE, TRUE);
-			$msg = sprintf(_("Für den Termin %s konnte der Raum %s nicht gebucht werden, da es Überschneidungen mit folgenden Terminen gibt:"), $this->toString(), $raum).'<br/>';
+			$msg = sprintf(_("Für den Termin %s konnte der Raum %s nicht gebucht werden, da es Überschneidungen mit folgenden Terminen gibt:"), $this->toString(), $raum).'<br>';
 			foreach ($overlaps as $tmp_assign_id => $val) {
 				if ($val["lock"])
 					$msg .= sprintf(_("%s, %s Uhr bis %s, %s Uhr (Sperrzeit)")."\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("d.m.Y", $val["end"]), date("H:i", $val["end"]));
@@ -393,7 +393,7 @@ class SingleDate {
 			if (is_array($overlaps) && (sizeof($overlaps) > 0)) {
 				$resObj =& ResourceObject::Factory($roomID);
 				$raum = $resObj->getFormattedLink(TRUE, TRUE, TRUE);
-				$msg = sprintf(_("Für den Termin %s konnte der Raum %s nicht gebucht werden, da es Überschneidungen mit folgenden Terminen gibt:"), $this->toString(), $raum).'<br/>';
+				$msg = sprintf(_("Für den Termin %s konnte der Raum %s nicht gebucht werden, da es Überschneidungen mit folgenden Terminen gibt:"), $this->toString(), $raum).'<br>';
 				foreach ($overlaps as $tmp_assign_id => $val) {
 					if ($val["lock"])
 						$msg .= sprintf(_("%s, %s Uhr bis %s, %s Uhr (Sperrzeit)")."\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("d.m.Y", $val["end"]), date("H:i", $val["end"]));

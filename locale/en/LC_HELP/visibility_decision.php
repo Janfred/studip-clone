@@ -2,7 +2,7 @@
 <table width="100%" border="0" cellspacing="10" cellpadding="10">
 <tr>
 <td colspan=2><h1>Changes of visibility in Stud.IP</h1>
-<p>From now your data is only accessible for other users with your permission.<br/>
+<p>From now your data is only accessible for other users with your permission.<br>
 You <em>now</em> have the possibility to decide whether to be visible as usual and to use Stud.IP like before or to be invisible without being able to use all of the functions. </p>
 <p>If you look into your personal details you can change these adjustments at any time.</p>
   </td>
@@ -52,7 +52,7 @@ You <em>now</em> have the possibility to decide whether to be visible as usual a
 </td>
 </tr>
 <tr>
-<td width=50% align=center valign=top><a href="<?=$PHP_SELF?>?vis_state=yes&vis_cmd=apply"><img src="<?=$GLOBALS['ASSETS_URL']?>images/an.gif" border="0"><br/>become visible</a></td>
+<td width=50% align=center valign=top><a href="<?=$PHP_SELF?>?vis_state=yes&vis_cmd=apply"><img src="<?=$GLOBALS['ASSETS_URL']?>images/an.gif" border="0"><br>become visible</a></td>
 </tr>
 </table>
 </td>
@@ -64,7 +64,7 @@ You <em>now</em> have the possibility to decide whether to be visible as usual a
 <p>I note that my personal data - as described and well-founded in the explanation of data protection - is nevertheless accessible for administrators and partly for lecturers of my courses.
 </tr>
 <tr>
-<td width=50% align=center valign=top><a href="<?=$PHP_SELF?>?vis_state=no&vis_cmd=apply"><img src="<?=$GLOBALS['ASSETS_URL']?>images/aus.gif" border="0"><br/>become invisible</a></td>
+<td width=50% align=center valign=top><a href="<?=$PHP_SELF?>?vis_state=no&vis_cmd=apply"><img src="<?=$GLOBALS['ASSETS_URL']?>images/aus.gif" border="0"><br>become invisible</a></td>
 </tr>
 </table>
 </td></tr>

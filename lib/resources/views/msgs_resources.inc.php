@@ -2,9 +2,9 @@
 # Lifter002: TODO
 /**
 * msgs_resources.inc.php
-* 
+*
 * library for the messages (error, info and other)
-* 
+*
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version		$Id$
@@ -119,7 +119,7 @@ $this->msg[24] = array (
 $this->msg[25] = array (
 		"mode" => "error",
 		"titel" => _("Fehlende Berechtigung"),
-		"msg"=> _("Sie haben leider keine Berechtigung, diese Funktion zu benutzen!"));		
+		"msg"=> _("Sie haben leider keine Berechtigung, diese Funktion zu benutzen!"));
 $this->msg[26] = array (
 		"mode" => "error",
 		"msg"=> _("Fehler in den Sperrzeiten, bitte korrigieren Sie die Zeiten!"));
@@ -148,7 +148,7 @@ $this->msg[32] = array (
 		"msg"=> _("Die ausgew&auml;hlten Eintr&auml;ge wurden in die aktuelle Anfrage &uuml;bernommen."));
 $this->msg[33] = array (
 		"mode" => "msg",
-		"msg"=> _("Folgende R&auml;ume wurden gebucht und der Veranstaltung zugewiesen: <font size=\"-1\" color=\"black\">%s</font>"));		
+		"msg"=> _("Folgende R&auml;ume wurden gebucht und der Veranstaltung zugewiesen: <font size=\"-1\" color=\"black\">%s</font>"));
 $this->msg[34] = array (
 		"mode" => "error",
 		"msg"=> _("Folgende R&auml;ume konnten wegen &Uuml;berschneidungen nicht gebucht werden: <font size=\"-1\" color=\"black\">%s</font>"));
@@ -184,9 +184,9 @@ $this->msg[43] = array (
 		"msg"=> "<form action=\"%s\" method=\"post\"><table border=\"0\" cellspacing=\"5\" cellpadding=\"0\"><tr><td valign=\"top\">"
 			. _("Wollen Sie die Anfrage wirklich ablehnen?")
 			."<br /><input type=\"image\" ".makeButton('ja2', 'src')." align=\"middle\"></a>"
-			."&nbsp;<a href=\"%s?decline_request=0\">".makeButton("nein")."</a><br/>"
+			."&nbsp;<a href=\"%s?decline_request=0\">".makeButton("nein")."</a><br>"
 			.'<input type="hidden" name="decline_request" value="1"></td><td valign=\"top\">'
-			.'<font size="-1">'._("Grund der Ablehnung:").'</font><br/>'
+			.'<font size="-1">'._("Grund der Ablehnung:").'</font><br>'
 			.'<textarea cols="30" rows="3" name="decline_message"></textarea></td></tr></table>'
 			.'</form>');
 $this->msg[44] = array (

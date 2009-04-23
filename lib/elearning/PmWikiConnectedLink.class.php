@@ -45,7 +45,7 @@ class PmWikiConnectedLink extends ConnectedLink
 	* @access public
 	* @return string html-code
 	*/
-	
+
 	function getUserModuleLinks()
 	{
 		$range_id = $_SESSION['SessSemName'][1];
@@ -71,7 +71,7 @@ class PmWikiConnectedLink extends ConnectedLink
 		$token = new Token($GLOBALS['auth']->auth['uid']);
 
 		ob_start(); ?>
-		<form method='post' target='_blank' 
+		<form method='post' target='_blank'
 					action='<?=$connected_cms[$this->cms_type]->content_module[$current_module]->link?>' >
 
 			<input type='hidden' 	name='authid' 			value='<?= $GLOBALS['auth']->auth['uname'] ?>' />
@@ -84,11 +84,11 @@ class PmWikiConnectedLink extends ConnectedLink
 
 		</form>
 
-		<?php 
+		<?php
 
 		$output = ob_get_contents();
 		ob_end_clean();
-		return $output; 
+		return $output;
 	}
 
 	/**
@@ -105,7 +105,7 @@ class PmWikiConnectedLink extends ConnectedLink
 
 		ob_start(); ?>
 
-		<form method=\"post\" action="<?= $GLOBALS["PHP_SELF"] ?>"/>
+		<form method="post" action="<?= $GLOBALS["PHP_SELF"] ?>"/>
 			<input type="hidden" 	name="view" 							value="<?= $view ?>"/>
 			<input type="hidden" 	name="search_key" 				value="<?= $search_key ?>"/>
 			<input type="hidden" 	name="cms_select" 				value="<?= $cms_select ?>"/>
@@ -114,19 +114,19 @@ class PmWikiConnectedLink extends ConnectedLink
 			<input type="hidden" 	name="module_system_type" value="<?= $this->cms_type ?>"/>
 
 			<?php if ($connected_cms[$this->cms_type]->content_module[$current_module]->isConnected()) : ?>
-			
-				&nbsp;<input type="image" <?= makeButton("entfernen", "src") ?> border=0 
+
+				&nbsp;<input type="image" <?= makeButton("entfernen", "src") ?> border=0
 									value="<?= _("Entfernen") ?>" name="remove"/>
 
 			<?php else :?>
 
-				&nbsp;<input type="image" <?= makeButton("hinzufuegen", "src") ?> border=0 
-									value="<?= _("Hinzuf&uuml;gen") ?>" name="add"/><br/>
+				&nbsp;<input type="image" <?= makeButton("hinzufuegen", "src") ?> border=0
+									value="<?= _("Hinzuf&uuml;gen") ?>" name="add"/><br>
 
 			<?php endif ; ?>
 
 		</form>
-		<?php 
+		<?php
 
 		$output = ob_get_contents();
 

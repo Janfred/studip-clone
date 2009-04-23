@@ -294,7 +294,7 @@ class ShowToolsRequests {
 					echo $zt->cell("<a href=\"resources.php?view=edit_request&edit=".$val['request_id']."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\"".tooltip('Anfrage bearbeiten')."></a>");
 					echo $zt->cell((($resources_data['requests_open'][$val['request_id']]) ? '' : '<img src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif">')."</font>");
 					echo $zt->cell("<font size=\"-1\">".htmlReady($semObj->seminar_number)."</font>");
-					echo $zt->cell("<font size=\"-1\"><a href=\"details.php?sem_id=".$semObj->getId()."&send_from_search=true&send_from_search_page=".urlencode($CANONICAL_RELATIVE_PATH_STUDIP."resources.php?view=list_requests")."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br/></font>");
+					echo $zt->cell("<font size=\"-1\"><a href=\"details.php?sem_id=".$semObj->getId()."&send_from_search=true&send_from_search_page=".urlencode($CANONICAL_RELATIVE_PATH_STUDIP."resources.php?view=list_requests")."\">".my_substr(htmlReady($semObj->getName()),0,50)."</a><br></font>");
 					echo $zt->openCell();
 					echo "<font size=\"-1\">";
 					$k = false;
@@ -398,7 +398,7 @@ class ShowToolsRequests {
 					} else {
 
 						$this->selectDates($reqObj->getSeminarId(), $reqObj->getTerminId());
-						
+
 						if ($this->db->nf() ) {
 							$i=1;
 							while ($this->db->next_record()) {

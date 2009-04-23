@@ -164,13 +164,13 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		$links_admin_data["srch_on"]=TRUE;
 		$list=TRUE;
 	}
-	
+
 	if(isset($_REQUEST['links_admin_reset_search_x'])){
 		reset_all_data(true);
 		$view_mode = 'sem';
 		$list = true;
 	}
-	
+
 	if ($SessSemName[1])
 		$modules = $Modules->getLocalModules($SessSemName[1]);
 
@@ -270,7 +270,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	if ($perm->have_perm("admin")) {
 		$structure["einrichtungen"]=array ('topKat'=>"", 'name'=>_("Einrichtungen"), 'link' => URLHelper::getLink("admin_institut.php?list=TRUE&quit=1"), 'active'=>FALSE);
 	}
-	
+
 	if ($perm->have_perm("admin")) {
 		if (!$GLOBALS['RESTRICTED_USER_MANAGEMENT'] || $perm->have_perm("root")) {
 			$link = 'new_user_md5.php';
@@ -615,7 +615,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				<table cellpadding="0" cellspacing="0" border="0" width="99%" align="center">
 					<tr>
 						<td class="steel1">
-							<font size=-1><br /><b><?=_("Bitte wählen Sie die Einrichtung aus, die Sie bearbeiten wollen:")?></b><br/>&nbsp; </font>
+							<font size=-1><br /><b><?=_("Bitte wählen Sie die Einrichtung aus, die Sie bearbeiten wollen:")?></b><br>&nbsp; </font>
 						</td>
 					</tr>
 					<tr>
@@ -688,7 +688,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				<table cellpadding="0" cellspacing="0" border="0" width="99%" align="center">
 					<tr>
 						<td class="steel1" colspan=5>
-								<font size=-1><br /><b><?=_("Sie können die Auswahl der Veranstaltungen eingrenzen:")?></b><br/>&nbsp; </font>
+								<font size=-1><br /><b><?=_("Sie können die Auswahl der Veranstaltungen eingrenzen:")?></b><br>&nbsp; </font>
 						</td>
 					</tr>
 					<tr>
@@ -1096,7 +1096,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				echo "&nbsp;". _("(versteckt)");
 			}
 			echo "</font></td>";
-			
+
 			// if "show room-data" is enabled, show cell
 			if ($_REQUEST['show_rooms_check']) {
 				echo "<td valign=\"top\" class=\"".$cssSw->getClass()."\"><font size=-1>".$_room."</font></td>";

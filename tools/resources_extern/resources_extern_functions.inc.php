@@ -2,8 +2,8 @@
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // resources_extern_functions.inc.php
-// 
-// Copyright (c) 2005 André Noack <noack@data-quest.de> 
+//
+// Copyright (c) 2005 André Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -69,10 +69,10 @@ function show_sem_chooser($semester_id, $timespan){
 			. ">" . htmlReady($one_sem['name']) . "</option>";
 	}
 	 echo chr(10) . '</select>&nbsp;&nbsp;<input type="submit" name="jump" value="auswählen">';
-	 echo chr(10) . '<br/>';
+	 echo chr(10) . '<br>';
 	 echo chr(10) . '<input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" '
 	 			  . ($timespan == 'course_time' ? 'checked' : '').' name="timespan" value="course_time">'
-				  . _("Vorlesungszeit") 
+				  . _("Vorlesungszeit")
 				  .	'&nbsp;&nbsp;<input type="radio" onChange="document.schedule_form.submit()" style="vertical-align:bottom" '
 				  . ($timespan == 'sem_time' ? 'checked' : '') .' name="timespan" value="sem_time">'
 				  . _("vorlesungsfreie Zeit")

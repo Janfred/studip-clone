@@ -250,13 +250,13 @@ class Seminar {
 			$ex_termin = new SingleDate($termine['ex_termin']);
 			$missing_date  = '<div style="{border:1px solid black;background:#FFFFDD}">';
 			$missing_date .= sprintf(_("Der Termin am %s findet nicht statt."), $this->formatDate($return_mode, $ex_termin));
-			$missing_date .= '<br/>Kommentar: '.$ex_termin->getComment();
+			$missing_date .= '<br>Kommentar: '.$ex_termin->getComment();
 			$missing_date .= '</div>';
 
 			if ($termine['termin']) {
 				$termin = new SingleDate($termine['termin'][0]);
 				if ($ex_termin->getStartTime() < $termin->getStartTime()) {
-					return $next_date.'<br/>'.$missing_date;
+					return $next_date.'<br>'.$missing_date;
 				}
 			} else {
 				return $missing_date;
@@ -470,7 +470,7 @@ class Seminar {
 		$query = sprintf("SELECT * FROM seminare WHERE Seminar_id='%s' ",$this->id);
 		$this->db->query($query);
 		if ($this->db->num_rows() == 0) {
-			echo 'Fehler: Konnte das Seminar mit der ID '.$this->id.' nicht finden!<br/>';
+			echo 'Fehler: Konnte das Seminar mit der ID '.$this->id.' nicht finden!<br>';
 			die;
 		}
 
@@ -962,7 +962,7 @@ class Seminar {
 				);
 				$question = _("Wenn Sie die regelmäßige Zeit auf %s ändern, verlieren Sie die Raumbuchungen für alle in der Zukunft liegenden Termine!")
 					."\n". _("Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?");
-				$question_time = '**'. getWeekday($data['day'], FALSE) .', '. $data['start_stunde'] .':'. $data['start_minute'] 
+				$question_time = '**'. getWeekday($data['day'], FALSE) .', '. $data['start_stunde'] .':'. $data['start_minute']
 					.' - '. $data['end_stunde'] .':'. $data['end_minute'] .'**';
 
 				echo createQuestion(sprintf($question, $question_time), $link_params);
@@ -1424,7 +1424,7 @@ class Seminar {
 						$this->applyTimeFilter($semester['beginn'], $semester['ende']);
 						$raum = $this->getFormattedPredominantRooms($metadate_id);
 						if ($raum) {
-							$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$raum;
+							$info[$i]['name'] .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;'.$raum;
 							$room_stat = $this->getStatOfNotBookedRooms($cycle->getMetadateId());
 							$info[$i]['name'] .= sprintf(_(" (%s von %s belegt)"), $room_stat['all'] - $room_stat['open'] , $room_stat['all']);
 						}
@@ -1457,12 +1457,12 @@ class Seminar {
 								$first_event = $termin->getStartTime();
 							}
 							$groups[$i]["termin_ids"][$termin->getSingleDateId()] = TRUE;
-							if (!$first) $info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;';
+							if (!$first) $info[$i]['name'] .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;';
 							$info[$i]['name'] .= $termin->toString();
 							$resObj =& ResourceObject::Factory($termin->resource_id);
 
 							if ($link = $resObj->getFormattedLink($termin->getStartTime())) {
-								$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
+								$info[$i]['name'] .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
 								if (empty($info[$i]['raum'])) {
 									$info[$i]['raum'] = $termin->resource_id;
 								} else if ($info[$i]['raum'] != $termin->resource_id) {
@@ -1490,7 +1490,7 @@ class Seminar {
 							$resObj =& ResourceObject::Factory($termin->resource_id);
 
 							if ($link = $resObj->getFormattedLink($termin->getStartTime())) {
-								$info[$i]['name'] .= '<BR/>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
+								$info[$i]['name'] .= '<br>&nbsp;&nbsp;&nbsp;&nbsp;'.$link;
 								$info[$i]['raum'] = $termin->resource_id;
 							}
 

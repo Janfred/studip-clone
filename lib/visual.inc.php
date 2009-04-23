@@ -41,8 +41,8 @@ function get_ampel_write ($mein_status, $admission_status, $write_level, $print=
 
 	if ($mein_status == "dozent" || $mein_status == "tutor" || $mein_status == "autor") { // in den Fällen darf ich auf jeden Fall schreiben
 		$ampel_state = get_ampel_state($ampel_state,0,"");
-		//echo $ampel_state["access"]."<br/>";
-		//echo $ampel_state["text"]."<br/>";
+		//echo $ampel_state["access"]."<br>";
+		//echo $ampel_state["text"]."<br>";
 	} else {
 		if ($temporaly != 0) {
 			$ampel_state = get_ampel_state($ampel_state,1,_("(Vorl. Eintragung)"));
@@ -304,7 +304,7 @@ function quotes_encode ($description,$author) {
 		$postmp = strpos($description,"%%[editiert von");
 		$description = substr_replace($description," ",$postmp);
 		}
-	/* quote reduction deactivated (cf. http://develop.studip.de/trac/ticket/208 ) 
+	/* quote reduction deactivated (cf. http://develop.studip.de/trac/ticket/208 )
 	while (ereg("\[quote",$description) AND ereg("\[/quote\]",$description)){ // da wurde schon mal zitiert...
 		$pos1 =         strpos($description, "[quote");
 		$pos2 =         strpos($description, "[/quote]");
@@ -371,7 +371,7 @@ function formatReady ($what, $trim = TRUE, $extern = FALSE, $wiki = FALSE, $show
 		// replace protected text by very improbable character (ASCII 007 = BEL = ^G)
 		$what = preg_replace("'\[nop\].+\[/nop\]'isU", "\007", $what);
 		$what = str_replace("\n", '<br />', format_help($what, $trim, $extern, $wiki, $show_comments));
-		// explode nonprotected text on very improbable character 
+		// explode nonprotected text on very improbable character
 		$what = explode("\007", $what);
 		$i = 0; $all = '';
 		// treat all nop'd areas
@@ -1128,7 +1128,7 @@ function mila ($titel, $size = 60) {
 function printhead ($breite, $left, $link, $open, $new, $icon,
 		$titel, $zusatz, $timestmp = 0, $printout = TRUE, $index = "", $indikator = "age", $css_class = NULL) {
 		global $user;
-		
+
 		// Verzweigung was der Pfeil anzeigen soll
 	if ($indikator == "viewcount") {
 		if ($index == "0") {
@@ -1186,11 +1186,11 @@ function printhead ($breite, $left, $link, $open, $new, $icon,
 	$class = "printhead";
 	$class2 = "printhead2";
 	$class3 = "printhead3";
-    
-	if ($css_class) { 
+
+	if ($css_class) {
 		$class = $class2 = $class3 = $css_class;
 	}
-	
+
 	if ($open == "close") {
 		$print = "<td bgcolor=\"".$timecolor."\" class=\"".$class2."\" nowrap=\"nowrap\" width=\"1%\"";
 		$print .= "align=\"left\" valign=\"top\">";

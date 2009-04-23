@@ -147,7 +147,7 @@ class FoafDisplay {
 				$info=$this->user_info($uid,($uid==$this->user_id||$uid==$this->target_id));
 				$msg.="<td align=\"center\">";
 				$msg.=$info["pic"];
-				$msg.="<br/>";
+				$msg.="<br>";
 				$msg.=$info["link"];
 				$msg.="</td>";
 			}
@@ -186,7 +186,7 @@ class FoafDisplay {
 			echo $msg;
 			echo '</td>';
 		}
-		echo "</tr>\n</table>\n</td>\n</tr>\n</table>\n<br/>\n";
+		echo "</tr>\n</table>\n</td>\n</tr>\n</table>\n<br>\n";
 	}
 
 	/**

@@ -120,7 +120,7 @@ while ($db->next_record()) {
 			$db2->query("REPLACE INTO object_user_visits SET object_id = '$key', user_id ='".$db->f("sid")."', type='literature', visitdate='$val', last_visitdate = '".$lastvisit[$key]."'");
 			$c++;
 		}
-	echo "<br/>".$c ."&nbsp;Veranstaltungen/Einrichtungen konvertiert";
+	echo "<br>".$c ."&nbsp;Veranstaltungen/Einrichtungen konvertiert";
 	echo "<hr>";
 }
 echo "<br />uff, geschafft!";

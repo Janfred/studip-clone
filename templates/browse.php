@@ -84,7 +84,7 @@
 </table>
 </div>
 </form>
-<br/>
+<br>
 
 <!-- RESULTS -->
 <? if (isset($users)):?>

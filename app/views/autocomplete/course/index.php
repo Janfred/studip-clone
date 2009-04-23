@@ -9,10 +9,10 @@
     <? if (isset($semesters[$course['start_time']])) : ?>
       <span class="semester">(<?= htmlspecialchars(studip_utf8encode($semesters[$course['start_time']])) ?>)</span>
     <? endif ?>
-    <br/>
+    <br>
 
     <span class="lecturer"><?= htmlspecialchars(studip_utf8encode(text_excerpt($course['lecturer'], $search_term, 20, 60))) ?></span>
-    <br/>
+    <br>
 
     <span class="comment"><?= htmlspecialchars(studip_utf8encode(text_excerpt($course['Beschreibung'], $search_term, 20, 60))) ?></span>
 

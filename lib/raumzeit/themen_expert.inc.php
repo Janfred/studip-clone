@@ -13,9 +13,9 @@ function themen_changeChronoGroupedFilter() {
 
 function themen_chronoAutoAssign() {
 	global $sem;
-	
+
 	$termine = getAllSortedSingleDates($sem);
-	foreach ($termine as $singledate_id => $singledate) {	
+	foreach ($termine as $singledate_id => $singledate) {
 		if (!$singledate->isExTermin() && !$singledate->getIssueIDs()) {
 			if ($data = array_shift($_REQUEST['themen'])) {
 				$singledate->addIssueID($data);
@@ -29,7 +29,7 @@ function themen_chronoAutoAssign() {
 
 function themen_open() {
 	global $issue_open;
-	
+
 	$issue_open[$_REQUEST['open_close_id']] = true;
 }
 
@@ -50,10 +50,10 @@ function themen_doAddIssue() {
 	$issue->setFile(($_REQUEST['fileFolder'] == 'on') ? TRUE : FALSE);
 	$issue->store();
 	$sem->addIssue($issue);
-	$sem->createMessage(_("Folgendes Thema wurde hinzugefügt:").'<br/><li>'.htmlReady($issue->toString()));
+	$sem->createMessage(_("Folgendes Thema wurde hinzugefügt:").'<br><li>'.htmlReady($issue->toString()));
 }
 
-function themen_deleteIssueID() {  
+function themen_deleteIssueID() {
 	global $sem ;
 
 	$termin = $sem->getSingleDate($_REQUEST['sd_id'], $_REQUEST['cycle_id']);
@@ -63,15 +63,15 @@ function themen_deleteIssueID() {
 function themen_changeIssue() {
 	global $sem,$themen;
 
-	$msg .= sprintf(_("Das Thema \"%s\" wurde geändert."), htmlReady($themen[$_REQUEST['issue_id']]->toString())) . '<br/>';
-	$themen[$_REQUEST['issue_id']]->setDescription($_REQUEST['theme_description']);	
-	$themen[$_REQUEST['issue_id']]->setTitle($_REQUEST['theme_title']);	
+	$msg .= sprintf(_("Das Thema \"%s\" wurde geändert."), htmlReady($themen[$_REQUEST['issue_id']]->toString())) . '<br>';
+	$themen[$_REQUEST['issue_id']]->setDescription($_REQUEST['theme_description']);
+	$themen[$_REQUEST['issue_id']]->setTitle($_REQUEST['theme_title']);
 	$themen[$_REQUEST['issue_id']]->setForum(($_REQUEST['forumFolder'] == 'on') ? TRUE : FALSE);
 	$themen[$_REQUEST['issue_id']]->setFile(($_REQUEST['fileFolder'] == 'on') ? TRUE : FALSE);
 	$themen[$_REQUEST['issue_id']]->store();
 	if ($zw = $themen[$_REQUEST['issue_id']]->getMessages()) {
 		foreach ($zw as $val) {
-			$msg .= $val.'<br/>';
+			$msg .= $val.'<br>';
 		}
 	}
 	$sem->createMessage($msg);
@@ -80,7 +80,7 @@ function themen_changeIssue() {
 function themen_deleteIssue() {
 	global $sem, $themen;
 
-	$sem->createMessage(_("Folgendes Thema wurde gelöscht:").'<br/><li>'.htmlReady($themen[$_REQUEST['issue_id']]->toString()));
+	$sem->createMessage(_("Folgendes Thema wurde gelöscht:").'<br><li>'.htmlReady($themen[$_REQUEST['issue_id']]->toString()));
 	$sem->deleteIssue($_REQUEST['issue_id']);
 }
 
@@ -126,16 +126,16 @@ function themen_openAll() {
 function themen_saveAll() {
 	global $sem, $themen, $changeTitle, $changeFile, $changeForum, $changeDescription;
 
-	$msg = _("Folgende Themen wurden bearbeitet:").'<br/>';
+	$msg = _("Folgende Themen wurden bearbeitet:").'<br>';
 	foreach ($changeTitle as $key => $val) {	// we use the changeTitle-array for running through all themes ($key = issue_id and $val = title)
 		$forumValue = ($changeForum[$key] == 'on') ? TRUE : FALSE;
 		$fileValue = ($changeFile[$key] == 'on') ? TRUE : FALSE;
-		if (	($themen[$key]->getTitle() != $val) || 
+		if (	($themen[$key]->getTitle() != $val) ||
 				($themen[$key]->getDescription() != $changeDescription[$key]) ||
 				($themen[$key]->hasForum() != $forumValue) ||
 				($themen[$key]->hasFile() != $fileValue)
 			 ) {
-			$msg .= '<li>'.htmlReady($themen[$key]->toString()).'<br/>';
+			$msg .= '<li>'.htmlReady($themen[$key]->toString()).'<br>';
 		}
 		$themen[$key]->setTitle($val);
 		$themen[$key]->setDescription($changeDescription[$key]);
@@ -144,12 +144,12 @@ function themen_saveAll() {
 		$themen[$key]->store();
 	}
 
-	$msg .= '<br/>'._("Folgende weitere Aktionen wurde durchgeführt:").'<br/>';
+	$msg .= '<br>'._("Folgende weitere Aktionen wurde durchgeführt:").'<br>';
 
 	foreach ($themen as $val) {
 		if ($zw = $val->getMessages()) {
 			foreach ($zw as $iss_msg) {
-				$msg .= '<li>'.$iss_msg.'<br/>';
+				$msg .= '<li>'.$iss_msg.'<br>';
 			}
 		}
 	}
@@ -174,10 +174,10 @@ function themen_checkboxAction() {
 
 		case 'deleteChoosen':
 			if (!$_REQUEST['themen']) break;
-			$msg = _("Folgende Themen wurden gelöscht:").'<br/>';
+			$msg = _("Folgende Themen wurden gelöscht:").'<br>';
 			foreach ($_REQUEST['themen'] as $val) {
 				$thema =& $sem->getIssue($val);
-				$msg .= '<li>'.htmlReady($thema->toString()).'<br/>';
+				$msg .= '<li>'.htmlReady($thema->toString()).'<br>';
 				unset($thema);
 				$sem->deleteIssue($val);
 			}
@@ -187,7 +187,7 @@ function themen_checkboxAction() {
 		case 'deleteAll':
 			if ($_REQUEST['approveDeleteAll'] != TRUE) {	// security-question
 				$msg = _("Sind Sie sicher, dass Sie alle Themen löschen möchten?");
-				$msg .= "<br/><a href=\"{$GLOBALS['PHP_SELF']}?cmd=checkboxAction&checkboxAction=deleteAll&approveDeleteAll=TRUE\">";
+				$msg .= "<br><a href=\"{$GLOBALS['PHP_SELF']}?cmd=checkboxAction&checkboxAction=deleteAll&approveDeleteAll=TRUE\">";
 				$msg .= '<img '.makebutton('ja2', 'src').' border="0"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 				$msg .= "<a href=\"{$GLOBALS['PHP_SELF']}\">";
 				$msg .= '<img '.makebutton('nein', 'src').' border="0"></a>';

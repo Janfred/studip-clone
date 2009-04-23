@@ -41,7 +41,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 	$style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."');"
 		." background-position: right;"
 		." background-repeat: repeat-y;"
-		."\" ";		
+		."\" ";
 	$persons = getPersonsForRole($id);
 ?>
 <!-- Persons assigned to this role -->
@@ -101,18 +101,18 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 <? if (sizeof($roles) > $roles_pos) : ?>
 <tr>
 	<td colspan="6" class="blank" align="center">
-		<br/>
+		<br>
 		<a href="<?= URLHelper::getLink('?cmd=swapRoles&role_id='. $id) ?>">
 			<?= Assets::img('move_up') ?>
 			<?= Assets::img('move_down') ?>
-		</a><br/>
-		<br/>
+		</a><br>
+		<br>
 	</td>
 </tr>
 <? endif; ?>
 
 </table>
 
-<? 
+<?
 $roles_pos++;
 endforeach;

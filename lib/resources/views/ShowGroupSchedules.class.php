@@ -252,10 +252,10 @@ class ShowGroupSchedules extends ShowSemSchedules {
 					<?
 
 					if ($resources_data["show_repeat_mode"] == 'repeated' || $resources_data["show_repeat_mode"] == 'all'){
-						echo "&nbsp;<font size=-1>"._("Anzahl der regelm‰ﬂigen Belegungen in diesem Zeitraum:")." ".$num_rep_events."</font><br/>";
+						echo "&nbsp;<font size=-1>"._("Anzahl der regelm‰ﬂigen Belegungen in diesem Zeitraum:")." ".$num_rep_events."</font><br>";
 					}
 					if ($resources_data["show_repeat_mode"] == 'single' || $resources_data["show_repeat_mode"] == 'all'){
-						echo "&nbsp;<font size=-1>"._("Anzahl der Einzelbelegungen in diesem Zeitraum:")." ".$num_single_events."</font><br/>";
+						echo "&nbsp;<font size=-1>"._("Anzahl der Einzelbelegungen in diesem Zeitraum:")." ".$num_single_events."</font><br>";
 					}
 					?>
 					&nbsp;

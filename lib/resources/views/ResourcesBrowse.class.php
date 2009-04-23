@@ -169,7 +169,7 @@ class ResourcesBrowse {
 			<br />
 			</td>
 		</tr>
-		<tr>	
+		<tr>
 			<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
 			&nbsp;<br>
 				<table cellspacing="0" cellpadding="0" border="0" width="100%">
@@ -193,7 +193,7 @@ class ResourcesBrowse {
 							.<input type="TEXT" style="{font-size:8pt;}" name="search_month" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("m", $this->searchArray["search_assign_begin"]) : _("mm")?>" />
 							.<input type="TEXT" style="{font-size:8pt;}" name="search_year" size="4" maxlength="4" value="<?=($this->searchArray["search_assign_begin"]) ? date("Y", $this->searchArray["search_assign_begin"]) : _("jjjj")?>" />
 							&nbsp;&nbsp;&nbsp;&nbsp;	<input type="checkbox" style="{font-size:8pt;}" name="search_repeating" value="1" <?=($this->searchArray["search_repeating"]==1) ? "checked=checked" : ""?> /> für restliches Semester prüfen &nbsp; <br>
-							<br/>
+							<br>
 							</font>
 						</td>
 					</tr>
@@ -201,7 +201,7 @@ class ResourcesBrowse {
 				</td>
 				</tr>
 				<tr>
-				<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >	
+				<td <? $this->cssSw->switchClass(); echo $this->cssSw->getFullClass() ?> >
 					<table cellspacing="0" cellpadding="0" border="0" width="100%">
 						<tr>
 							<td width="120">
@@ -211,7 +211,7 @@ class ResourcesBrowse {
 							</td>
 							<td>
 				<font size="-1">
-					<br/>
+					<br>
 				<?=_("Beginn")?>:
 					&nbsp;<input type="TEXT" style="{font-size:8pt;}" name="search_begin_hour_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("H", $this->searchArray["search_assign_begin"]) : _("ss")?>" />
 					<input type="TEXT" style="{font-size:8pt;}" name="search_begin_minute_2" size="2" maxlength="2" value="<?=($this->searchArray["search_assign_begin"]) ? date("i", $this->searchArray["search_assign_begin"]) : _("mm")?>" />&nbsp;<?=_("Uhr")?>
@@ -263,11 +263,11 @@ class ResourcesBrowse {
 					</td>
 				</tr>
 			</table>
-				<br/>
+				<br>
 			</td>
 		</tr>
-		
-		
+
+
 		<?
 	}
 

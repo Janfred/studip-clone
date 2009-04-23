@@ -136,7 +136,7 @@ class EditResourceData {
 			$resAssign->setBegin($add_ts);
 			$resAssign->setEnd($add_ts + (2 * 60 * 60));
 		}
-		
+
 
 		$owner_type = $resAssign->getOwnerType();
 
@@ -361,7 +361,7 @@ class EditResourceData {
 						 else
 							print _("einen Nutzer (Person oder Einrichtung) eintragen:");
 						?><br /></font><font size=-1>
-						<? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE, FALSE, FALSE, FALSE, "up") ?> <br/>
+						<? showSearchForm("search_user", $search_string_search_user, FALSE, TRUE, FALSE, FALSE, FALSE, "up") ?> <br>
 						<?=_("freie Eingabe zur Belegung:")?><br /></font>
 						<input name="change_schedule_user_free_name" value="<?= htmlReady($resAssign->getUserFreeName()); ?>" size=40 maxlength="255" />
 						<br /><font size=-1><?=_("<b>Beachten Sie:</b> Wenn Sie einen NutzerIn oder eine Einrichtung eintragen, kann diese NutzerIn oder berechtigte Personen die Belegung selbstst&auml;ndig aufheben. Sie k&ouml;nnen die Belegung aber auch frei eingeben.")?></font>

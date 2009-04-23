@@ -58,11 +58,11 @@
 							}
 						?>
 					</SELECT>
-					<BR/>
+					<br>
 					<? endif; ?>
 					<?=_("freie Raumangabe:")?>
 					<INPUT type="text" name="freeRoomText_sd" size="50" maxlength="255" value="<?=$tpl['freeRoomText']?>">
-					<?=$GLOBALS['RESOURCES_ENABLE'] ? _("(f&uuml;hrt <em>nicht</em> zu einer Raumbuchung)"): ''?><BR/>
+					<?=$GLOBALS['RESOURCES_ENABLE'] ? _("(f&uuml;hrt <em>nicht</em> zu einer Raumbuchung)"): ''?><br>
 					<? if ($GLOBALS['RESOURCES_ENABLE'] && $GLOBALS['RESOURCES_ALLOW_ROOM_REQUESTS']) { ?>
 					<?=_("Raumanfrage")?>
 					<A href="admin_room_requests.php?seminar_id=<?=$tpl['seminar_id']?>&termin_id=<?=$tpl['sd_id']?>">
@@ -74,7 +74,7 @@
 						<IMG <?=($tpl['room_request']) ? makebutton('zurueckziehen', 'src') : ''?> border="0" align="absmiddle">
 					</A>
 					<? } ?>
-					<BR/>
+					<br>
 					<? } ?>
 					</FONT>
 				</TD>
@@ -147,8 +147,8 @@
 				</td>
 				<td valign="top" class="printcontent" colspan="10">
 					<font size="-1">
-						<?=_("Der hier eingegebene Kommentar wird im Ablaufplan der Veranstaltung angezeigt.")?><br/>
-						<br/>
+						<?=_("Der hier eingegebene Kommentar wird im Ablaufplan der Veranstaltung angezeigt.")?><br>
+						<br>
 						<?=_("Kommentar")?>: <input type="text" name="comment" size="50" value="<?=$tpl['comment']?>">
 					</font>
 				</td>

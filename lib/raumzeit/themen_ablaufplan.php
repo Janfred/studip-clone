@@ -117,7 +117,7 @@ $sem->processCommands();
 if ($sem->hasDatesOutOfDuration()) {
 	$tpl['forceShowAll'] = TRUE;
 	if ($raumzeitFilter != 'all') {
-		$sem->createInfo(_("Es gibt weitere Termine, die au&szlig;erhalb der regul&auml;ren Laufzeit der Veranstaltung liegen.<br/> Um diese anzuzeigen w&auml;hlen Sie bitte \"Alle Semester\"!"));
+		$sem->createInfo(_("Es gibt weitere Termine, die au&szlig;erhalb der regul&auml;ren Laufzeit der Veranstaltung liegen.<br> Um diese anzuzeigen w&auml;hlen Sie bitte \"Alle Semester\"!"));
 	}
 } else {
 	$tpl['forceShowAll'] = FALSE;
@@ -136,16 +136,16 @@ while ($msg = $sem->getNextMessage()) {
 }
 
 if ($sem->metadates->art == 0) {
-	$times_info .= '<B>'._("Typ").':</B> '._("regelm&auml;&szlig;ige Veranstaltung").'<BR/>';
+	$times_info .= '<B>'._("Typ").':</B> '._("regelm&auml;&szlig;ige Veranstaltung").'<br>';
 	$z = 0;
 	if (is_array($turnus = $sem->getFormattedTurnusDates())) {
 		foreach ($turnus as $val) {
-			if ($z != 0) { $times_info .= '<BR/>'; } $z = 1;
+			if ($z != 0) { $times_info .= '<br>'; } $z = 1;
 			$times_info .= $val;
 		}
 	}
 } else {
-	$times_info .= '<B>'._("Typ").':</B> '._("unregelm&auml;&szlig;ige Veranstaltung").'<BR/>';
+	$times_info .= '<B>'._("Typ").':</B> '._("unregelm&auml;&szlig;ige Veranstaltung").'<br>';
 }
 
 // infobox end
@@ -176,7 +176,7 @@ $termine = getAllSortedSingleDates($sem);
                 <? else : ?>
                 <TR>
                     <TD align="center">
-                        <br> 
+                        <br>
                         <?= _("Im ausgewählten Zeitraum sind keine Termine vorhanden."); ?>
                     </TD>
                 </TR>
@@ -242,12 +242,12 @@ $termine = getAllSortedSingleDates($sem);
     				// calendar jump
     				$tpl['calendar'] = "&nbsp;<a href=\"calendar.php?cmd=showweek&atime=" . $singledate->getStartTime();
     				$tpl['calendar'] .= "\"><img style=\"vertical-align:bottom\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" ";
-    				$tpl['calendar'] .= tooltip(sprintf(_("Zum %s in den persönlichen Terminkalender springen"), date("m.d", $singledate->getStartTime()))); 
+    				$tpl['calendar'] .= tooltip(sprintf(_("Zum %s in den persönlichen Terminkalender springen"), date("m.d", $singledate->getStartTime())));
     				$tpl['calendar'] .= ' border="0"></a>';
 
 						// activated modules
 						$tpl['modules'] = $modules;
- 
+
 						$issue_id = '';
 						if (is_array($tmp_ids = $singledate->getIssueIDs())) {
 							foreach ($tmp_ids as $val) {

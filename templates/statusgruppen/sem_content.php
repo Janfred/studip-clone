@@ -1,5 +1,5 @@
 <div align="right" style="margin-right: 10px" nowrap>
-	<br/>
+	<br>
 	<!-- edit options -->
 	<?= $this->render_partial('statusgruppen/sem_edit_role.php') ?>
 </div>
@@ -13,7 +13,7 @@
 		<td width="70%" valign="top" style="padding-left: 20px">
 			<!-- the roles -->
 			<?= $this->render_partial('statusgruppen/sem_roles') ?>
-		</td>	
+		</td>
 	</tr>
 </table>
 </form>

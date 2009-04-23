@@ -3,24 +3,24 @@ $cssSw = new CSSClassSwitcher();
 $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."');"
 	." background-position: right;"
 	." background-repeat: repeat-y;"
-	."\" ";			
+	."\" ";
 ?>
 <tr>
 	<td <?= ($followers) ? $style: ''?> width="1%">&nbsp;</td>
 	<td width="99%" class="printcontent">
 		<center>
-		<br/>
+		<br>
 		<? if ($GLOBALS['perm']->have_studip_perm('admin', $inst_id)) : ?>
 			<a href="inst_admin.php?admin_inst_id=<?= $inst_id ?>&list=true">
 				<?= makebutton('zureinrichtung'); ?>
 			</a>
-			<br/><br/>
+			<br><br>
 		<? else: ?>
 			<a href="institut_main.php?auswahl=<?= $inst_id ?>">
 				<?= makebutton('zureinrichtung'); ?>
 			</a>
-			<br/><br/>
-		<? endif; ?>		
+			<br><br>
+		<? endif; ?>
 		<form action="<?= URLHelper::getLink('#'. $inst_id) ?>" method="POST">
 			<input type="hidden" name="cmd" value="special_edit">
 			<input type="hidden" name="inst_id" value="<?= $inst_id ?>">
@@ -29,11 +29,11 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 			<input type="hidden" name="view" value=<?=$view?>>
 			<table cellspacing="0" cellpadding="0" border="0" class="blank" width="90%">
 			<tr>
-				<td width="100%" colspan="4" class="topic">&nbsp;<?= _("Einrichtungsdaten") ?></td> 
+				<td width="100%" colspan="4" class="topic">&nbsp;<?= _("Einrichtungsdaten") ?></td>
 			</tr>
 			<?
 			$status = $data['inst_perms'];
-			
+
 			$cssSw->switchClass();
 			echo '<tr><td class="'. $cssSw->getClass() .'">';
 			echo _("Status").':';
@@ -51,7 +51,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 			endif;
 
 			echo '</td></tr>';
-		
+
 			echo "<input type=\"HIDDEN\" name=\"name[$inst_id]\" value=\"";
 			echo htmlReady($data["Name"]) . "\">";
 			$cssSw->switchClass();
@@ -78,7 +78,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 			echo "align=\"left\">&nbsp; <input type=\"text\" style=\"width: 30%\" ";
 			echo "size=\"" . round($max_col * 0.25 * 0.6) . "\"   name=\"fax[$inst_id]\" ";
 			echo "value=\"" . htmlReady($data["Fax"]) . "\"></td></tr>";
-		
+
 			// Datenfelder für Rollen in Einrichtungen ausgeben
 			// Default-Daten der Einrichtung
 			$entries = DataFieldEntry::getDataFieldEntries(array($user_id, $inst_id),'userinstrole');	// Default-Daten der Einrichtung
@@ -88,11 +88,11 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 				echo '<tr><td class="' . $cssSw->getClass() . '" align="left">' . $entry->getName() . ':</td>';
 				echo '<td colspan="3" class="' . $cssSw->getClass() . '">&nbsp; ' . $entry->getHTML('datafields');
 				echo '</td></tr>';
-			} 
-			
+			}
+
 			$cssSw->switchClass();
 			?>
-			
+
 				<tr>
 					<? $info = _("Angaben, die im Adressbuch und auf den externen Seiten als Standard benutzt werden."); ?>
 					<td class="<?=$cssSw->getClass()?>" align="left" nowrap="nowrap" colspan="2">
@@ -111,15 +111,15 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 						<input type="checkbox" name="visible[<?=$inst_id?>]" value="1" <?=($data['visible'] == '1' ? '' : ' checked="checked"')?>>&nbsp;
 						<img src="<?=$GLOBALS['ASSETS_URL']?>images/info.gif" <?=tooltip($info, TRUE, TRUE)?>>
 					</td>
-				</tr>			
+				</tr>
 
 			</table>
 
-			<br/>
+			<br>
 			<input type="image" <?=makeButton('speichern', 'src')?> value="<?=_("Änderungen speichern")?>" align="absbottom">
-			<br/>
+			<br>
 		</form>
-		<br/>
+		<br>
 		</center>
 	</td>
 	<td class="printcontent"></td>

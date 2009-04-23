@@ -9,7 +9,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 	<td <?= ($followers) ? $style: ''?> width="1%">&nbsp;</td>
 	<td width="99%" class="printcontent">
 		<center>
-		<br/>
+		<br>
 		<? if ($GLOBALS['perm']->have_studip_perm('admin', $inst_id)) : ?>
 		<a href="<?= URLHelper::getLink('?view=Karriere&username='. $username .'&cmd=removeFromGroup&role_id='. $role_id .'&studipticket='. get_ticket()) ?>">
 			<?= makebutton('loeschen') ?>
@@ -17,18 +17,18 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 			&nbsp;&nbsp;&nbsp;
 			<a href="admin_roles.php?admin_inst_id=<?=$inst_id?>&open=<?=$role_id?>#<?= $role_id ?>">
 			 <?= makebutton('zurfunktion'); ?>
-			</a>			
-			<br/><br/>
+			</a>
+			<br><br>
 		<? endif; ?>
 			<input type="hidden" name="cmd" value="special_edit">
 			<input type="hidden" name="role_id" value="<?= $role_id ?>">
 			<input type="hidden" name="studipticket" value="<?=get_ticket()?>">
 			<input type="hidden" name="username" value="<?=$username?>">
-			<input type="hidden" name="view" value=<?=$view?>>		
+			<input type="hidden" name="view" value=<?=$view?>>
 	<?
-		
+
 		// Rollendaten anzeigen
-		//if ($sgroup = GetSingleStatusgruppe($role_id, $userID)) {			
+		//if ($sgroup = GetSingleStatusgruppe($role_id, $userID)) {
 			//$groupOptions = getOptionsOfStGroups($userID);
 			?>
 		<table cellspacing="0" cellpadding="0" border="0" class="blank" width="90%">
@@ -46,7 +46,7 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 			$cssSw->resetClass();
 			$default_entries = DataFieldEntry::getDataFieldEntries(array($user_id, $inst_id));
 			$entries = DataFieldEntry::getDataFieldEntries(array($user_id, $role_id));
-			
+
 			if (is_array($entries))
 			foreach ($entries as $id=>$entry) {
 				$cssSw->switchClass();
@@ -112,14 +112,14 @@ $style = "style=\"background-image: url('". Assets::image_path('forumstrich') ."
 					<td class="<?= $cssSw->getClass() ?>" align="center">
 						<a href="<?= URLHelper::getLink('?view=Karriere&open='. $inst_id .'&username='. $username .'#'. $inst_id) ?>">
 						<?=_("ändern")?>
-						</a>					
+						</a>
 					</td>
 				</tr>
 			</table>
-		<br/>
+		<br>
 		<input type="image" <?=makeButton('speichern', 'src')?> value="<?=_("Änderungen speichern")?>" align="absbottom">
-		<br/>
-		<br/>
+		<br>
+		<br>
 		</center>
 	</td>
 	<td class="printcontent"></td>

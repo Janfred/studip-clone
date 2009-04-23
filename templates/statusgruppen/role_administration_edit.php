@@ -21,7 +21,7 @@
 					</td>
 				</tr>
 				<? $cssSw->switchClass() ?>
-				
+
 				<tr>
 					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
 						<font size="-1">
@@ -32,14 +32,14 @@
 						<font size="-1">
 							<select name="vather">
 								<option value="nochange"> -- <?= _("Keine Änderung") ?> -- </option>
-								<option value="root"> -- <?= _("Hauptebene") ?> -- </option> 
+								<option value="root"> -- <?= _("Hauptebene") ?> -- </option>
 						 		<? Statusgruppe::displayOptionsForRoles($all_roles); ?>
 							</select>
 						</font>
 					</td>
 				</tr>
 				<? $cssSw->switchClass() ?>
-				
+
 				<tr>
 					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
 						<font size="-1">
@@ -48,10 +48,10 @@
 						</font>
 					</td>
 					<td class="<?= $cssSw->getClass() ?>" width="50%" nowrap>
-						<input type="text" name="new_size" value="<?=$group_data['size']?>"><br/>
+						<input type="text" name="new_size" value="<?=$group_data['size']?>"><br>
 					</td>
 				</tr>
-								
+
 				<? if (is_array($group_data['datafields'])) foreach ($group_data['datafields'] as $field) : ?>
 				<? $cssSw->switchClass() ?>
 				<tr>
@@ -69,8 +69,7 @@
 				<? endforeach; ?>
 				<tr>
 					<td class="steel1" align="right" colspan="2">
-						<br/>
-						&nbsp;
+						<br>
 						<a href="<?= URLHelper::getLink('?role_id='. $role->getId(). '#'. $role->getId()) ?>">
 							<?= makebutton('zurueck') ?>
 						</a>
