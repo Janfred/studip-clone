@@ -87,7 +87,7 @@ $UNI_URL = "http://www.studip.de";
 $UNI_LOGIN_ADD='';
 $UNI_LOGOUT_ADD=sprintf(_("Und hier geht's zur %sStud.IP Portalseite%s&nbsp;"), "<a href=\"http://www.studip.de\"><b>", "</b></a>");
 $UNI_CONTACT = "<please insert your general contact mail-adress here>";
-$UNI_INFO = "Stud.IP 1.5 - Studienbegleitender Internetsupport von Präsenzlehre";
+$UNI_INFO = "Stud.IP 1.10 - Studienbegleitender Internetsupport von Präsenzlehre";
 
 
 /*
@@ -121,7 +121,6 @@ $SEM_CLASS[1]=array("name"=>_("Lehre"), 					//the name of the class
 					"chat"=>TRUE,				//chat, only, if the module is global activated; see config_local.inc.php
 					"ilias_connect"=>TRUE,			//Ilias-connect, only, if the module is global activated; see config_local.inc.php
 					"wiki"=>TRUE,				//wikiwiki-web, this module is stud_ip core; always available
-					"support"=>FALSE,			//support, only, if the module is global activated; see config_local.inc.php (this modul is not part of the main distribution)
 					//descriptions
 					"description"=>_("Hier finden Sie alle in Stud.IP registrierten Lehrveranstaltungen"), 						//the description
 					"create_description"=>_("Verwenden Sie diese Kategorie, um normale Lehrveranstaltungen anzulegen"));		//the description in the creation process
@@ -324,7 +323,6 @@ $INST_MODULES["default"] = array(
 			"scm"=>FALSE,				//simple content module, this modul is stud_ip core; always available
 			"ilias_connect"=>FALSE,			//Ilias-connect, only, if the modul is global activated; see config_local.inc.php
 			"chat"=>TRUE,				//chat, only, if the module is global activated; see config_local.inc.php
-			"support"=>FALSE,			//support, only, if the module is global activated; see config_local.inc.php (this modul is not part of the main distribution)
 			"wiki"=>FALSE,				//wikiwiki-web, this module is stud_ip core; always available
 			);
 //you can add more specific presets for the different types
