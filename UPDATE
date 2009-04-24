@@ -1,29 +1,15 @@
 Seit der Version 1.6 gibt es einen Migrationsmechanismus für die Stud.IP Datenbank.
 Eingesetzt werden kann dieser ab einem Wechsel von Stud.IP 1.5.0-2 zu 1.6.0-1:
 - DATENSICHERUNG durchführen!
+- ACHTUNG! Der Migrationsmechanismus ist für Sprünge über mehrere major releases
+  nicht getestet! Zumindest für einen Sprung von 1.5.x auf 1.7.x oder neuer
+	sind Probleme bekannt.
 - die alten Scriptdateien durch die neuen ersetzen, dabei besonders auf die Dateien
   im Verzeichnis config sowie auf eventuelle eigene Anpassungen achten.
 - Datenbankaktualisierungen entweder über die Webschnittstelle:
   http://mein.server.de/studip/web_migrate.php
 - ODER über die Komandozeile:
-  studip-1.7.0/cli/migrate.php
+  studip-1.9.0/cli/migrate.php
   vornehmen.
 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-bis Stud.IP Version 1.5:
-
-Es gab bis jetzt noch keinen einfachen Updatemechanismus für Stud.IP.
-
-Ein erster Schritt in Richtung Updatemöglichkeiten ergibt sich für Benutzer und
-Benutzerinnnen ab StudIP-0.6. Zum Update auf Version ab 0.7 können die convert_*.php
-Skripte im Verzeichnis db/update genutzt werden.
-
-Seit dem Update von 0.8.15 auf 0.9 gibt zu jedem Versionssprung auch ein Migrationsskript,
-das von Hand Schritt für Schritt durchgegangen werden muss. Daneben gibt es ein detailliertes
-Updateprotokoll, dass wir bei dem jeweiligen Update der Göttinger Referenzinstallation erstellt
-haben. Damit sollte es kein groesseres Problem sein, eine bestehende Version zu aktualisieren.
-
-Bitte die README im entsprechenden Verzeichnis beachten,
-denn es handelt sich um keine Out-Of-Box Lösung!
-
-- The StudIP Core Group <info@studip.de> 2007
+- The StudIP Core Group <info@studip.de> 2009
