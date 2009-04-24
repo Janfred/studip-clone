@@ -258,7 +258,7 @@ function quotes_decode ($description) {
 						$nameend_pos = strpos($between_tags,"]");
 						$quote_name = substr($between_tags,1,$nameend_pos-1);
 						IF (substr($between_tags,$nameend_pos,5)=="]<br>") // ja, hier wurde anstaendig gequotet
-							$between_tags = substr($between_tags,$nameend_pos+6);
+							$between_tags = substr($between_tags,$nameend_pos+5);
 						ELSE // da wird gepfuscht, also mal besser Finger weg
 							$between_tags = substr($between_tags,$nameend_pos+1);
 						$between_tags = "<b>".sprintf(_("%s hat geschrieben:"),$quote_name)."</b><hr>".$between_tags;
@@ -272,8 +272,8 @@ function quotes_decode ($description) {
 						}
 					$description = $before_start_tag . "<blockquote class=\"quote\">";
 					$description .= $between_tags . "</blockquote>";
-					if (substr($after_end_tag,0,6)=="<br>") {
-						$after_end_tag = substr($after_end_tag,6);
+					if (substr($after_end_tag,0,4)=="<br>") {
+						$after_end_tag = substr($after_end_tag,4);
 					}
 					$description .= $after_end_tag;
 					if (sizeof($stack) > 0) {
