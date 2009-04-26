@@ -1,9 +1,9 @@
 <div id="study_area_selection">
 
-  <input type="hidden" name="study_area_selection[last_selected]" value="<?= htmlReady($selection->getSelected()->getID()) ?>"/>
-  <input type="hidden" name="study_area_selection[showall]" value="<?= (int) $selection->getShowAll() ?>"/>
+  <input type="hidden" name="study_area_selection[last_selected]" value="<?= htmlReady($selection->getSelected()->getID()) ?>">
+  <input type="hidden" name="study_area_selection[showall]" value="<?= (int) $selection->getShowAll() ?>">
 
-  <input type="submit" name="study_area_selection[placeholder]" style="display:none;"/>
+  <input type="submit" name="study_area_selection[placeholder]" style="display:none;">
 
 
   <div id="study_area_selection_chosen">
@@ -33,8 +33,8 @@
 
     <h3><?=_("Suche:")?></h3>
 
-    <input type="text" name="study_area_selection[search_key]" value="" />
-    <input type="image" name="study_area_selection[search_button]" src="<?= Assets::image_path('suche2.gif') ?>" />
+    <input type="text" name="study_area_selection[search_key]" value="">
+    <input type="image" name="study_area_selection[search_button]" src="<?= Assets::image_path('suche2.gif') ?>">
 
     <? if ($selection->searched()) : ?>
       <a href="<?= URLHelper::getLink(isset($url) ? $url : '',

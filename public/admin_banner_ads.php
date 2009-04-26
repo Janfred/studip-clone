@@ -26,34 +26,21 @@ $perm->check("root");
 $sess->register("save_banner_data");
 $sess->register("banner_data");
 
-if (!$BANNER_ADS_ENABLE) {
-	echo '<p>', _("Banner-Modul abgeschaltet."), "</p>\n";
-	include ('lib/include/html_end.inc.php');
-	page_close();
-	die;
-}
-
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
-
 require_once ('lib/msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
 require_once ('lib/visual.inc.php');
 require_once ('config.inc.php');
 require_once('lib/classes/Table.class.php');
 require_once('lib/classes/ZebraTable.class.php');
 
-// Start of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
-
 // Get a database connection
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;
 
-
-function imaging($img, $img_size, $img_name) {
+function imaging($img, $img_size, $img_name)
+{
 	global $banner_data;
 	$msg = '';
 	if (!$img_name) { //keine Datei ausgewählt!
@@ -88,7 +75,6 @@ function imaging($img, $img_size, $img_name) {
 }
 
 //Anzeige der Bannerdaten
-
 function view_probability($prio) {
 	static $computed=0, $sum=0;
 
@@ -107,7 +93,6 @@ function view_probability($prio) {
 	return "1/" . (1/(pow(2,$prio)/$sum));
 }
 
-
 function show_banner_list($table) {
 	global $db;
 	$q="SELECT * FROM banner_ads ORDER BY priority DESC";
@@ -121,7 +106,7 @@ function show_banner_list($table) {
 		print $table->row(array(_("Anzeigezeitraum"), ($db->f("startdate") ? date("d.m.Y, H:i",$db->f("startdate")) : _("sofort")) . " " . _("bis") . " " . ($db->f("enddate") ? date("d.m.Y, H:i",$db->f("enddate")) : _("unbegrenzt"))),"",0);
 		print $table->row(array(_("Views"), $db->f("views")),"",0);
 		print $table->row(array(_("Priorität (Wahrscheinlichkeit)"), $db->f("priority") . " (" . view_probability($db->f("priority")) . ")"),"",0);
-		print $table->row(array("", "<a href=\"$PHP_SELF?cmd=editdb&ad_id=".$db->f("ad_id")."\"><img " . makeButton("bearbeiten","src") . " border=0/></a> <a href=\"$PHP_SELF?cmd=delete&ad_id=".$db->f("ad_id")."\"><img " . makeButton("loeschen","src") . "\" border=0></a>"),"",0);
+		print $table->row(array("", "<a href=\"$PHP_SELF?cmd=editdb&ad_id=".$db->f("ad_id")."\"><img " . makeButton("bearbeiten","src") . "></a> <a href=\"$PHP_SELF?cmd=delete&ad_id=".$db->f("ad_id")."\"><img " . makeButton("loeschen","src") . "\" border=0></a>"),"",0);
 		print $table->row(array("&nbsp;","&nbsp"),array("class"=>"blank", "bgcolor"=>"white"),0);
 	}
 	if ($count==0) {
@@ -322,9 +307,18 @@ function edit_banner_data($banner_data) {
 	$table->close();
 }
 
-//
-// Start output
-//
+// Start of Output
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
+
+if (!$BANNER_ADS_ENABLE) {
+	echo '<p>', _("Banner-Modul abgeschaltet."), "</p>\n";
+	include ('lib/include/html_end.inc.php');
+	page_close();
+	die;
+}
+
 $container=new ContainerTable();
 echo $container->headerRow("<b>&nbsp;"._("Verwaltung der Werbebanner")."</b>");
 echo $container->openCell();
@@ -446,7 +440,7 @@ if ($i_view=="new") {
 echo $content->close();
 echo $container->blankRow();
 echo $container->close();
-include ('lib/include/html_end.inc.php');
-page_close();
-// <!-- $Id$ -->
+
+	include ('lib/include/html_end.inc.php');
+	page_close();
 ?>

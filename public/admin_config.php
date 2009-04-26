@@ -51,11 +51,6 @@ $sess->register("admin_config_data");
 
 $CURRENT_PAGE = _("Verwaltung von Konfigurationsvariablen");
 
-// Start of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
-
 if ($_REQUEST["select_username"] && !isset($_REQUEST['reset_search_x'])) {
 	$admin_config_data["range_id"] = get_userid ($_REQUEST["select_username"]);
 }
@@ -89,15 +84,19 @@ if ($_REQUEST["change_config"]) {
 	}
 }
 
+// Start of Output
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 ?>
-<table width="100%" border=0 cellpadding=0 cellspacing=0>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
  	<tr>
 		<td class="blank" valign="top">
 			<?
 			if (isset($msg)) {
 			?>
 				<table border="0">
-				<tr><td>&nbsp;</td></tr>
 				<?parse_msg($msg);?>
 				</table>
 			<? } ?>
@@ -108,12 +107,12 @@ if ($_REQUEST["change_config"]) {
 			<?=_("Beachten Sie: Bisher ist nur ein kleiner Teil der Werte hier verf&uuml;gbar. Zuk&uuml;nftige Stud.IP-Versionen werden einen umfangreichen Zugriff auf s&auml;mtliche Systemeinstellungen zulassen. ")?> <br><br>
 			</blockquote>
 		</td>
-		<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br>
-			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/modules.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" />
+		<td class="blank" align="right" valign="top"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5"><br>
+			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/modules.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10">
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" colspan=2>
+		<td class="blank" colspan="2">
 			<?
 			$out[] = '<form method="post" action="'.$PHP_SELF.'">';
 			$out[] = '<table width="95%" border=0 cellpadding=0 cellspacing=0 align="center">';
@@ -138,8 +137,8 @@ if ($_REQUEST["change_config"]) {
 						$out[].= sprintf ('<option value="%s">%s </option>', $db->f("username"), htmlReady(my_substr($db->f("fullname").' ('.$db->f("username").')', 0, 30)));
 					}
 					$out[].= '</select></font>';
-					$out[] = '&nbsp;<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" '.tooltip(_("Den/die BenutzerIn hinzufügen")).' border="0" name="send_user_id" />';
-					$out[] = '&nbsp;<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/rewind.gif" '.tooltip(_("neue Suche starten")).' border="0" name="reset_search" />';
+					$out[] = '&nbsp;<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" '.tooltip(_("Den/die BenutzerIn hinzufügen")).' border="0" name="send_user_id">';
+					$out[] = '&nbsp;<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/rewind.gif" '.tooltip(_("neue Suche starten")).' border="0" name="reset_search">';
 				}
 			}
 			if ((!$_REQUEST["search_exp"]) || (($_REQUEST["search_exp"]) && (!$db->num_rows()))) {
@@ -147,8 +146,8 @@ if ($_REQUEST["change_config"]) {
 				if (($_REQUEST["search_exp"]) && (!$db->num_rows()))
 					$out[] = _("KeineN NutzerIn gefunden.").'<a name="a"></a>';
 				$out[] = '</font><br>';
-				$out[] = '&nbsp;<input type="TEXT" size="30" maxlength="255" name="search_exp" />&nbsp;';
-				$out[] = '<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/suchen.gif"'.tooltip(_("Suche starten")).' border="0" name="search_user" /><br>';
+				$out[] = '&nbsp;<input type="TEXT" size="30" maxlength="255" name="search_exp">&nbsp;';
+				$out[] = '<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/suchen.gif"'.tooltip(_("Suche starten")).' border="0" name="search_user"><br>';
 				$out[] = '&nbsp;<font size=-1>'._("Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein.").'</font>';
 			}
 			$out[] = '</td></tr></table>';

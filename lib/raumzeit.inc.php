@@ -140,7 +140,7 @@ function raumzeit_checkboxAction() {
 					echo createQuestion( sprintf( $question, $question_time ), $link_params );
 
 				} else {											// deletion approved, so we do the job
-					$msg = sprintf(_("Der regelmäßige Termin \"%s\" wurde gelöscht."), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'<b/>');
+					$msg = sprintf(_("Der regelmäßige Termin \"%s\" wurde gelöscht."), '<b>'.$sem->metadate->cycles[$_REQUEST['cycle_id']]->toString().'</b>');
 					$sem->createMessage($msg);	// create a message
 					$sem->deleteCycle($_REQUEST['cycle_id']);
 				}

@@ -91,6 +91,7 @@ if ($rechte) {
 }
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("TeilnehmerInnen");
 if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
+
 	// Start  of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
@@ -793,23 +794,23 @@ $anzahl_teilnehmer_kontingent = $db->f('teilnehmer_kontingent');
 		if (!$perm->have_studip_perm('tutor',$SessSemName[1])) {
 			if ($iam_visible) {
 		?>
-		<br/>
-			<b><?=	_("Sie erscheinen für andere TeilnehmerInnen sichtbar auf der Teilnehmerliste."); ?></b><br/>
+		<br>
+			<b><?=	_("Sie erscheinen für andere TeilnehmerInnen sichtbar auf der Teilnehmerliste."); ?></b><br>
 			<a href="<?= URLHelper::getLink('?cmd=make_me_invisible&mode='.$visible_mode) ?>">
 			<img src="<?=$GLOBALS['ASSETS_URL']?>images/vote-icon-invisible.gif" border="0">
 			<?= _("Klicken Sie hier, um unsichtbar zu werden.") ?>
 			</a>
-		<br/>
+		<br>
 		<?
 			} else {
 		?>
-		<br/>
-			<b><?=	_("Sie erscheinen nicht auf der Teilnehmerliste."); ?></b><br/>
+		<br>
+			<b><?=	_("Sie erscheinen nicht auf der Teilnehmerliste."); ?></b><br>
 			<a href="<?= URLHelper::getLink('?cmd=make_me_visible&mode='.$visible_mode) ?>">
 			<img src="<?=$GLOBALS['ASSETS_URL']?>images/vote-icon-visible.gif" border="0">
 			<?= _("Klicken Sie hier, um sichtbar zu werden.") ?>
 			</a>
-		<br/>
+		<br>
 		<?
 			}
 		}
@@ -1376,7 +1377,7 @@ if ($db->f('visible') == 'yes' || $i_see_everybody || $db->f('user_id') == $user
 								<font size="-1">
 									<?= $val["name"] ?>: <?= $val["content"] ?>
 								</font>
-								<br/>
+								<br>
 								-->
 							<? endforeach ?>
 						</dl>
@@ -1391,7 +1392,7 @@ if ($db->f('visible') == 'yes' || $i_see_everybody || $db->f('user_id') == $user
 
 				<td colspan="<?= $colspan - 2 - ($show_user_picture ? 1 : 0) - ($showscore ? 1 : 0)?>">
 					<form action="<?= URLHelper::getLink('#'.$db->f("username")) ?>" method="POST">
-						<font size="-1"><?=_("Bemerkungen:")?></font><br/>
+						<font size="-1"><?=_("Bemerkungen:")?></font><br>
 						<textarea name="userinfo" rows="3" cols="50"><?= $db->f("comment") ?></textarea>
 						<br>
 						<font size="-1"><?= _("&Auml;nderungen") ?></font>
@@ -1533,7 +1534,7 @@ if (!LockRules::Check($id, 'participants') && $rechte
 			printf("<option value=\"%s\">%s - %s\n", $db->f("user_id"), htmlReady(my_substr($db->f("fullname")." (".$db->f("username"),0,35)).")", $db->f("inst_perms"));
 		?>
 		</select></td>
-		<td class="steel1" width="20%" align="center"><font size=-1><? if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) print _("als TutorIn"); else print _("als Mitglied") ?></font><br />
+		<td class="steel1" width="20%" align="center"><font size=-1><? if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) print _("als TutorIn"); else print _("als Mitglied") ?></font><br>
 		<input type="IMAGE" name="add_tutor" <?=makeButton("eintragen", "src")?> border="0" value=" <?=_("Als TutorIn berufen")?> "></td>
 	</tr></form></table>
 <?
@@ -1559,43 +1560,45 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 	</tr>
 	<tr><td class="blank" colspan="2">
 	<a name="freesearch"></a>
-	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
 	<form action="<?= URLHelper::getLink('?cmd=add_user') ?>" method="POST">
-	<INPUT type="hidden" name="studipticket" value="<?=$studipticket?>">
-	<tr>
-		<td class="steel1" width="40%" align="left">&nbsp; <font size="-1"><b><?=_("Gefundene Nutzer")?></b></font></td>
-		<td class="steel1" width="40%" align="left"><select name="username" size="1">
-		<?
-		printf("<option value=\"0\">- -  %s - -\n", _("bitte ausw&auml;hlen"));
-		while ($db->next_record())
-			printf("<option value=\"%s\">%s - %s\n", $db->f("username"), htmlReady(my_substr($db->f("fullname")." (".$db->f("username"),0,35)).")", $db->f("perms"));
-		?>
-		</select>
-		<?if($sem->isAdmissionEnabled()){
-			echo '<br><br><img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="absmiddle" hspace="3" border="0" '.tooltip(_("Mit dieser Einstellung beeinflussen Sie, ob Teilnehmer die Sie hinzufügen auf die Kontingentplätze angerechnet werden."),1,1).' >';
-			echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
-			echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
-			echo '<option value="">'._("Kein Kontingent").'</option>';
-			if(is_array($sem->admission_studiengang)){
-				foreach($sem->admission_studiengang as $studiengang => $data){
-					echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
+	<input type="hidden" name="studipticket" value="<?=$studipticket?>">
+	<table width="99%" border="0" cellpadding="2" cellspacing="0" border=0 align="center">
+		<tr>
+			<td class="steel1" width="40%" align="left">&nbsp; <font size="-1"><b><?=_("Gefundene Nutzer")?></b></font></td>
+			<td class="steel1" width="40%" align="left"><select name="username" size="1">
+			<?
+			printf("<option value=\"0\">- -  %s - -\n", _("bitte ausw&auml;hlen"));
+			while ($db->next_record())
+				printf("<option value=\"%s\">%s - %s\n", $db->f("username"), htmlReady(my_substr($db->f("fullname")." (".$db->f("username"),0,35)).")", $db->f("perms"));
+			?>
+			</select>
+			<?if($sem->isAdmissionEnabled()){
+				echo '<br><br><img src="'.$GLOBALS['ASSETS_URL'].'images/info.gif" align="absmiddle" hspace="3" border="0" '.tooltip(_("Mit dieser Einstellung beeinflussen Sie, ob Teilnehmer die Sie hinzufügen auf die Kontingentplätze angerechnet werden."),1,1).' >';
+				echo '<font size="-1"><label for="kontingent2">'._("Kontingent berücksichtigen:");
+				echo '&nbsp;<select name="consider_contingent" id="kontingent2">';
+				echo '<option value="">'._("Kein Kontingent").'</option>';
+				if(is_array($sem->admission_studiengang)){
+					foreach($sem->admission_studiengang as $studiengang => $data){
+						echo '<option value="'.$studiengang.'" '.($_REQUEST['consider_contingent'] == $studiengang ? 'selected' : '').'>'.htmlReady($data['name'] . ' ' . '('.$sem->getFreeAdmissionSeats($studiengang).')').'</option>';
+					}
 				}
+				echo '</select></label></font>';
 			}
-			echo '</select></label></font>';
-		}
-		?>
-		</td>
-		<td class="steel1" width="20%" align="center"><font size=-1>
-		<?
-		if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && $perm->have_studip_perm("dozent",$SessSemName[1])){
-			 echo (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] ? _("als TutorIn") . " / " . _("als AutorIn") : _("als Mitglied"));
-		} else {
-			echo _("als AutorIn");
-		}
-		?></font><br />
-		<input type="image" name="add_user" <?=makeButton("eintragen", "src")?> align="absmiddle" border=0 value="<?=_("Als AutorIn berufen")?> ">&nbsp;<a href="<?= URLHelper::getLink() ?>"><?=makeButton("neuesuche")?></a></td>
+			?>
+			</td>
+			<td class="steel1" width="20%" align="center"><font size=-1>
+			<?
+			if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && $perm->have_studip_perm("dozent",$SessSemName[1])){
+				 echo (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] ? _("als TutorIn") . " / " . _("als AutorIn") : _("als Mitglied"));
+			} else {
+				echo _("als AutorIn");
+			}
+			?></font><br>
+			<input type="image" name="add_user" <?=makeButton("eintragen", "src")?> align="absmiddle" border=0 value="<?=_("Als AutorIn berufen")?> ">&nbsp;<a href="<?= URLHelper::getLink() ?>"><?=makeButton("neuesuche")?></a></td>
 
-	</tr></form></table>
+		</tr>
+	</table>
+	</form>
 		<?
 	} else { //create a searchform
 		?>
@@ -1608,9 +1611,9 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 	<form action="<?= URLHelper::getLink('#freesearch') ?>" method="POST">
 	<tr>
 		<td class="steel1" width="40%" align="left">&nbsp; <font size=-1><b><?=_("Nutzer in die Veranstaltung eintragen")?></b></font>
-		<br /><font size=-1>&nbsp; <? printf(_("Bitte geben Sie den Vornamen, Nachnamen %s oder Usernamen zur Suche ein"), "<br />&nbsp;")?> </font></td>
+		<br><font size=-1>&nbsp; <? printf(_("Bitte geben Sie den Vornamen, Nachnamen %s oder Usernamen zur Suche ein"), "<br>&nbsp;")?> </font></td>
 		<td class="steel1" width="40%" align="left">
-		<input id="search_exp" type="TEXT" name="search_exp" size="40" maxlength="255" />
+		<input id="search_exp" type="TEXT" name="search_exp" size="40" maxlength="255">
 		<div id="search_exp_choices" class="autocomplete"></div>
 		<script type="text/javascript">
 			Event.observe(window, 'load', function() {
@@ -1643,10 +1646,10 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 		echo "<tr><td width=\"40%\" class=\"steel1\">\n<div style=\"font-size: small; margin-left:6px; width:250px;\">";
 		echo '<b>' . _("Teilnehmerliste übernehmen") . '</b><br>';
 		echo _("In das nebenstehende Textfeld können Sie eine Liste mit Namen von NutzerInnen eingeben, die in die Veranstaltung aufgenommen werden sollen.");
-		echo '<br />' . _("Geben Sie in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein.");
-		echo '<br/>'._('Alternativ kann auch der Benutzername eingegeben werden.');
-		echo '<br/>' . _("Eingabeformat: <b>Nachname[, Vorname] &crarr;</b>");
-		echo '<br/>' . _("oder: <b>Benutzername &crarr;</b>");
+		echo '<br>' . _("Geben Sie in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein.");
+		echo '<br>'._('Alternativ kann auch der Benutzername eingegeben werden.');
+		echo '<br>' . _("Eingabeformat: <b>Nachname[, Vorname] &crarr;</b>");
+		echo '<br>' . _("oder: <b>Benutzername &crarr;</b>");
 		echo "</div></td>\n";
 		echo "<td width=\"40%\" class=\"steel1\">";
 		echo "<textarea name=\"csv_import\" rows=\"6\" cols=\"50\">";
@@ -1746,20 +1749,14 @@ if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1]))) {
 		echo chr(10) . "<td class=\"blank\"><b><font size=\"-1\">" . export_link($SessSemName[1], "person", _("Warteliste") .' ' . $SessSemName[0], "csv", "csv-warteliste","awaiting",_("Warteliste exportieren csv Dokument") . '<img align="bottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0">', 'passthrough') . "</font></b></td>";
 		echo chr(10) . '</tr>';
 	}
-	}
-
-
+}
 ?>
-<tr>
-<td class="blank" colspan="2">&nbsp;
-</td>
-</tr>
-<?
+		</table>
+		</td>
+	</tr>
+</table>
 
-
-
-echo '</td></tr></table>';
-include ('lib/include/html_end.inc.php');
-// Save data back to database.
-page_close();
+<?php
+	include ('lib/include/html_end.inc.php');
+	page_close();
 ?>

@@ -563,7 +563,7 @@ function _real_format($text) {
 					"'\n?(</?h[1-4r]>)\n?'"                        // removes newline delimiters
 					);
 	$replace = array(
-					"'<hr noshade=\"noshade\" width=\"98%\" size=\"'.('\\1' ? '\\1' : '1').'\" align=\"center\" />'",
+					"'<hr noshade=\"noshade\" width=\"98%\" size=\"'.('\\1' ? '\\1' : '1').'\" align=\"center\" >'",
 //					"<pre>\\1</pre>",
 					"'\\1<i>'.substr(str_replace('%', ' ', '\\2'), 0, -1).'</i>'",
 					"'\\1<b>'.substr(str_replace('*', ' ', '\\2'), 0, -1).'</b>'",
@@ -856,9 +856,9 @@ function preg_call_link ($params, $mod, $img, $extern = FALSE, $wiki = FALSE) {
 	if ($extern) {
 		$link_pic = '';
 	} elseif ($intern) {
-		$link_pic = "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\" hspace=\"2\" />";
+		$link_pic = "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_intern.gif\" border=\"0\" alt=\"intern\">";
 	} else {
-		$link_pic = "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_extern.gif\" border=\"0\" />";
+		$link_pic = "<img src=\"".$GLOBALS['ASSETS_URL']."images/link_extern.gif\" border=\"0\" alt=\"extern\">";
 	}
 
 	if ($mod == 'LINK') {

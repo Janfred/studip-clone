@@ -1,7 +1,7 @@
 <div class="white" style="padding: 1ex;">
-    <? if (!$execute): ?>     
+    <? if (!$execute): ?>
         <div class="effect_highlight" style="text-align: center;padding: 10px;">
-        <? if ($detail) :?> 
+        <? if ($detail) :?>
             <p><?= _("Wollen Sie die Seite wirklich löschen?") ?></p>
         <? else : ?>
             <p><?= _("Wollen Sie die Rubrik mit allen Seiten wirklich löschen?") ?></p>
@@ -13,14 +13,14 @@
            $abort_url .= $detail ? "/".$currentdetail : '';
         ?>
         <a href="<?= $controller->url_for($delete_url) ?>">
-                 <?= makeButton("loeschen", "img") ?> 
+                 <?= makeButton("loeschen", "img") ?>
         </a>
         <a href="<?= $controller->url_for($abort_url) ?>">
                  <?= makeButton("abbrechen", "img") ?>
         </a>
     </div>
     <div>
-        <hr />
+        <hr>
     </div>
     <? endif ?>
     <?= $output ?>

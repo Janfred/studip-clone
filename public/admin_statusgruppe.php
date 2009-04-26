@@ -108,7 +108,7 @@ if (is_array($_REQUEST['role_id'])) {
  * H E L P E R   F U N C T I O N S *
  * * * * * * * * * * * * * * * * * */
 
-/* 
+/*
  * this function has to stay here for the moment, because in other files someone already uses this function name.
  */
 function MovePersonStatusgruppe ($range_id, $role_id, $type, $persons, $workgroup_mode=FALSE) {
@@ -137,7 +137,7 @@ function MovePersonStatusgruppe ($range_id, $role_id, $type, $persons, $workgrou
 						insert_seminar_user($range_id, $user_id, "autor", FALSE);
 					}
 				} else {
-					insert_seminar_user($range_id, $user_id, "autor", FALSE);					
+					insert_seminar_user($range_id, $user_id, "autor", FALSE);
 				}
 			}
 			checkExternDefaultForUser($user_id);
@@ -151,14 +151,14 @@ function MovePersonStatusgruppe ($range_id, $role_id, $type, $persons, $workgrou
 					if ($workgroup_mode == TRUE) {
 						$globalperms = get_global_perm($user_id);
 						if ($globalperms == "tutor" || $globalperms == "dozent") {
-							insert_seminar_user($range_id, $user_id, "tutor", FALSE);					
+							insert_seminar_user($range_id, $user_id, "tutor", FALSE);
 						} else {
-							insert_seminar_user($range_id, $user_id, "autor", FALSE);					
+							insert_seminar_user($range_id, $user_id, "autor", FALSE);
 						}
 					} else {
-						insert_seminar_user($range_id, $user_id, "autor", FALSE);					
+						insert_seminar_user($range_id, $user_id, "autor", FALSE);
 					}
-				
+
 				}
 			}
 		}
@@ -204,7 +204,7 @@ if ($_REQUEST['cmd'] == 'activateSelfAssignExclusive') {
 		SetSelfAssignExclusive($range_id, false);
 	} else {
 		$msgs[] = 'msg§' . _("Selbsteintrag in nur einer Gruppe erlauben wurde eingeschaltet!");
-	}	
+	}
 }
 
 // change the position of two adjacent statusgroups
@@ -255,12 +255,12 @@ if ($personsAdded) {
 // delete a person from a statusgroup
 if ($_REQUEST['cmd'] == 'removePerson') {
 	$msgs[] = 'msg§'. _("Die Person wurde aus der Gruppe entfernt!");
-	RemovePersonStatusgruppe ($_REQUEST['username'], $_REQUEST['role_id']);	
+	RemovePersonStatusgruppe ($_REQUEST['username'], $_REQUEST['role_id']);
 }
 
 // edit the data of a role
 if ($_REQUEST['cmd'] == 'doEditRole') {
-	$statusgruppe = new Statusgruppe($_REQUEST['role_id']);	
+	$statusgruppe = new Statusgruppe($_REQUEST['role_id']);
 	$name = htmlReady($statusgruppe->getName());
 	if ($statusgruppe->checkData()) {
 		$msgs[] = 'info§' . sprintf(_("Die Daten der Gruppe %s wurden geändert!"), '<b>'. $name .'</b>');
@@ -271,13 +271,13 @@ if ($_REQUEST['cmd'] == 'doEditRole') {
 
 // ask, if the user really intends to delete the role
 if ($_REQUEST['cmd'] == 'deleteRole') {
-	$statusgruppe = new Statusgruppe($_REQUEST['role_id']);	
+	$statusgruppe = new Statusgruppe($_REQUEST['role_id']);
 	if ($_REQUEST['really']) {
 		$msgs[] = 'msg§' . sprintf(_("Die Gruppe %s wurde gelöscht!"), htmlReady($statusgruppe->getName()));
 		$statusgruppe->delete();
 	} else {
 		$msgs[] = 'info§' . sprintf(_("Sind Sie sicher, dass Sie die Gruppe %s löschen möchten?"), '<b>'. htmlReady($statusgruppe->getName()) .'</b>')
-			. '<br/><a href="'. URLHelper::getLink('?cmd=deleteRole&really=true&role_id='. $_REQUEST['role_id']) .'">'. makebutton('ja') .'</a>'
+			. '<br><a href="'. URLHelper::getLink('?cmd=deleteRole&really=true&role_id='. $_REQUEST['role_id']) .'">'. makebutton('ja') .'</a>'
 			. '&nbsp;&nbsp;&nbsp;&nbsp;'
 			. '<a href="'. URLHelper::getLink('') .'">'. makebutton('nein') .'</a>';
 	}
@@ -287,14 +287,14 @@ if ($_REQUEST['cmd'] == 'deleteRole') {
 if ($_REQUEST['cmd'] == 'addRole' && !isset($_REQUEST['choosePreset'])) {
 	// to prevent url-hacking for changing the data of an existing role
 	$role_id = md5(uniqid(rand()));
-	if (!Statusgruppe::roleExists($role_id)) {		
+	if (!Statusgruppe::roleExists($role_id)) {
 		$new_role = new Statusgruppe();
-		
-		// this is necessary, because it could be the second try to add after the user has corrected errors 	
-		$new_role->setStatusgruppe_Id($role_id);		
-		$new_role->setRange_Id($range_id);		
 
-		if ($new_role->checkData()) {					
+		// this is necessary, because it could be the second try to add after the user has corrected errors
+		$new_role->setStatusgruppe_Id($role_id);
+		$new_role->setRange_Id($range_id);
+
+		if ($new_role->checkData()) {
 			// show a hint if a role with the same name already exists
 			if (Statusgruppe::countByName($new_role->getName(), $new_role->getRange_Id()) > 0) {
 				$msgs[] = 'info§' . sprintf(_("Die Gruppe %s wurde hinzugefügt, es gibt jedoch bereits ein Gruppe mit demselben Namen!"), '<b>'. htmlReady($new_role->getName()) .'</b>');
@@ -304,7 +304,7 @@ if ($_REQUEST['cmd'] == 'addRole' && !isset($_REQUEST['choosePreset'])) {
 
 			$new_role->store();
 		}
-		
+
 		$msgs = array_merge($msgs, $new_role->getMessages());
 	}
 }
@@ -347,15 +347,15 @@ if ($statusgruppen && sizeof($statusgruppen) > 0) {
 	$template->set_layout('statusgruppen/sem_layout.php');
 
 	$template->set_attribute('range_id', $range_id);
-	
+
 	// the persons of the institute who can be added directly
 	$template->set_attribute('seminar_persons', getPersons($range_id, 'sem'));
 	$template->set_attribute('inst_persons', getPersons($range_id, 'inst'));
-	
+
 	$template->set_attribute('messages', $msgs);
 
 	// all statusgroups in a tree-structured array
-	$template->set_attribute('roles', $statusgruppen);	
+	$template->set_attribute('roles', $statusgruppen);
 
 	// set the options for the box
 	list($self_assign_all, $self_assign_exclusive) = CheckSelfAssignAll($range_id);
@@ -366,7 +366,7 @@ if ($statusgruppen && sizeof($statusgruppen) > 0) {
 
 	if ($_REQUEST['cmd'] == 'editRole') {
 		$role = new Statusgruppe($_REQUEST['role_id']);
-		$template->set_attribute('role_data', $role->getData()); 
+		$template->set_attribute('role_data', $role->getData());
 		$template->set_attribute('edit_role', $role->getId());
 	} else if (isset($_REQUEST['choosePreset'])) {
 		$template->set_attribute('role_data', array('name' => $_REQUEST['presetName']));
@@ -374,8 +374,8 @@ if ($statusgruppen && sizeof($statusgruppen) > 0) {
 	$template->set_attribute('show_search_and_members_form', !LockRules::Check($range_id, 'participants'));
 	// show the tree-view of the statusgroups
 	echo $template->render();
-	
-	
+
+
 }
 
 // there are no roles yet, so we show some informational text
@@ -384,9 +384,9 @@ else {
 
 	// the layout defines where the infobox is located
 	$template->set_layout('statusgruppen/sem_layout.php');
-	
+
 	$template->set_attribute('range_id', $range_id);
-	
+
 	if (isset($_REQUEST['choosePreset'])) {
 		$template->set_attribute('role_data', array('name' => $_REQUEST['presetName']));
 	}

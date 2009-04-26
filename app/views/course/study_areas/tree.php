@@ -1,4 +1,4 @@
-<input type="hidden" name="study_area_selection[last_selected]" value="<?= htmlReady($selection->getSelected()->getID()) ?>"/>
+<input type="hidden" name="study_area_selection[last_selected]" value="<?= htmlReady($selection->getSelected()->getID()) ?>">
 
 <?
   TextHelper::reset_cycle();
@@ -13,7 +13,7 @@
 
       <? if ($area === $last) : ?>
         <input type="image" name="study_area_selection[showall_button]" title="Alle Unterebenen einblenden"
-               alt="Alle Unterebenen einblenden" src='<?= Assets::image_path('sem_tree.gif') ?>' />
+               alt="Alle Unterebenen einblenden" src="<?= Assets::image_path('sem_tree.gif') ?>">
       <? endif ?>
 <? endforeach ?>
 

@@ -698,7 +698,7 @@ function form($refresh = FALSE) {
 	if (!$refresh && !$folder_system_data['zipupload']) {
 		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. Geben Sie eine kurze Beschreibung und einen Namen f&uuml;r die Datei ein.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
-		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" /></td></tr>";
+		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" ></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
 		$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("geschützter Inhalt:") . "&nbsp;</font>";
@@ -1396,7 +1396,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 			$tmp_titel=htmlReady(mila($title_name));
 			if ($change == $db->f("folder_id") && ($level != 0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder') || $folder_tree->isGroupFolder($db->f('folder_id'))) ) { //Aenderungsmodus, Anker + Formular machen, Font tag direkt ausgeben (muss ausserhalb einer td stehen!
-				$titel= "<a $anker ></a><input style=\"font-size:8 pt; width: 100%;\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($title_name)."\" />";
+				$titel= "<a $anker ></a><input style=\"font-size:8 pt; width: 100%;\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($title_name)."\" >";
 				if ($rechte && $folder_tree->permissions_activated) $titel .= '&nbsp;<span style="color:red">['.$folder_tree->getPermissionString($db->f("folder_id")).']</span>';
 			}
 			else {
@@ -1510,8 +1510,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$content .= chr(10) . '<tr><td colspan="2">';
 						$content.="\n<input type=\"image\"" . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\""._("&Auml;nderungen speichern")."\">&nbsp;";
 						$content.="\n<input type=\"image\"" . makeButton("abbrechen", "src") . " align=\"absmiddle\" name=\"cancel\" value=\""._("Abbrechen")."\">";
-						$content.= "\n<input type=\"hidden\" name=\"open\" value=\"".$db->f("folder_id")."_sc_\" />";
-						$content.="\n<input type=\"hidden\" name=\"type\" value=1 />";
+						$content.= "\n<input type=\"hidden\" name=\"open\" value=\"".$db->f("folder_id")."_sc_\">";
+						$content.="\n<input type=\"hidden\" name=\"type\" value=\"1\">";
 						$content .= chr(10) . '</td></tr></table>';
 					}
 					elseif ($db->f("description"))
@@ -1632,7 +1632,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					//Titelbereich erstellen
 					$box = "";
 					if ($change == $db3->f("dokument_id")){
-						$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db3->f("name"))."\" />";
+						$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db3->f("name"))."\">";
 					} else {
 						$tmp_titel=htmlReady(mila($db3->f("t_name")));
 
@@ -1650,7 +1650,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$titel .= " / ".(($db3->f("downloads") == 1) ? $db3->f("downloads")." "._("Download") : $db3->f("downloads")." "._("Downloads")).")";
 
 						if (($all) && (!$upload) && ($db3->f("url")=="")) {
-							$box = sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\" />",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
+							$box = sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\">",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
 						}
 					}
 					//Zusatzangaben erstellen
@@ -1698,10 +1698,10 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 								$protect = "checked";
 							$content.= "\n&nbsp;<input type=\"CHECKBOX\" name=\"change_protected\" $protect>&nbsp;"._("geschützter Inhalt")."</br>";
 							$content.= "<br><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br>";
-							$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\" />";
-							$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\" />";
-							$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db3->f("dokument_id")."_sc_\" />";
-							$content.= "<input type=\"hidden\" name=\"type\" value=0 />";
+							$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\">";
+							$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\">";
+							$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db3->f("dokument_id")."_sc_\">";
+							$content.= "<input type=\"hidden\" name=\"type\" value=\"0\">";
 						}
 						else {
 							$content = '';

@@ -47,7 +47,7 @@
 */
 function get_accepted_languages() {
 	global $INSTALLED_LANGUAGES, $DEFAULT_LANGUAGE;
-	
+
 	$_language = $DEFAULT_LANGUAGE;
 	$accepted_languages = explode(",", getenv("HTTP_ACCEPT_LANGUAGE"));
 	if (is_array($accepted_languages) && count($accepted_languages)) {
@@ -108,14 +108,14 @@ function makeButton($name, $mode = "img", $tooltip = false, $inputname = false) 
 	switch ($mode) {
 
 		case 'img':
-			$tag = "\n" . sprintf('<img class="button" src="%s" %s />',
+			$tag = "\n" . sprintf('<img class="button" src="%s" %s >',
 			                      $url, $tooltext);
 			break;
 
 
 		case 'input':
 			$tag = "\n" . sprintf('<input class="button" type="image" src="%s" %s '.
-			                      'name="%s" />',
+			                      'name="%s" >',
 		                        $url, $tooltext, $inputname);
 			break;
 

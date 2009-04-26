@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter003: TODO
 /*
 new_user_md5.php - die globale Benutzerverwaltung von Stud.IP.
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>
@@ -87,7 +88,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 					}else
 						$uc->setValue($timestamp,$UserManagement->user_data['auth_user_md5.user_id'],"EXPIRATION_DATE");
 				}
-				
+
 				if ($_REQUEST['select_inst_id'] && $perm->have_studip_perm('admin', $_REQUEST['select_inst_id'])){
 					$db = new DB_Seminar();
 					$db->query(sprintf("SELECT Name, Institut_id FROM Institute WHERE Institut_id='%s'", $_REQUEST['select_inst_id']));
@@ -112,9 +113,9 @@ if (check_ticket($_REQUEST['studipticket'])){
 
 		// Change user parameters
 		case "u_edit_x":
-		
+
 			$UserManagement = new UserManagement($u_id);
-	
+
 			$newuser = array();
 			if (isset($username))
 				$newuser['auth_user_md5.username'] = stripslashes(trim($username));
@@ -150,7 +151,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 				$newuser['user_info.geschlecht'] = stripslashes(trim($geschlecht));
 
 			$UserManagement->changeUser($newuser);
-			
+
 			if($expiration_del == "1")
 				$uc->unsetValue($UserManagement->user_data['auth_user_md5.user_id'],"EXPIRATION_DATE");
 			else if(isset($expiration_date) && $expiration_date != ''){
@@ -162,7 +163,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 					break;
 				}
 			}
-			
+
 
 			if (is_array($_POST['datafields'])) {
 				$invalidEntries = array();
@@ -182,9 +183,9 @@ if (check_ticket($_REQUEST['studipticket'])){
 					}
 				}
 			}
-			
+
 			// Change Password...
-			
+
 			if(($perm->have_perm('root')  && $ALLOW_ADMIN_USERACCESS) && ( $_REQUEST['pass_1'] != ''  || $_REQUEST['pass_2'] != '' ))
 			{
 				if($_REQUEST['pass_1'] == $_REQUEST['pass_2']){
@@ -193,7 +194,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 						$showform = true;
 					}
 					$UserManagement->changePassword($pass_1);
-					
+
 				}
 				else{
 					$pass_msg .= "error§" . _("Bei der Wiederholung des Passwortes ist ein Fehler aufgetreten! Bitte geben sie das exakte Passwort ein!") . "§";
@@ -201,8 +202,8 @@ if (check_ticket($_REQUEST['studipticket'])){
 				}
 
 			}
-			
-			
+
+
 			break;
 
 
@@ -218,12 +219,12 @@ if (check_ticket($_REQUEST['studipticket'])){
 
 		// Delete the user
 		case "u_kill_x":
-			
+
 			$question = sprintf(_('Möchten Sie wirklich den User **%s** löschen ?'), $username);
 			echo createQuestion( $question, array("studipticket" => get_ticket(), 'u_kill_id' => $u_id), array('details' => $username));
-            	        
+
 			break;
-			
+
 		case 'pers_browse_search_x':
 			$_SESSION['pers_browse_old']['username'] = remove_magic_quotes($_POST['pers_browse_username']);
 			$_SESSION['pers_browse_old']['Vorname'] = remove_magic_quotes($_POST['pers_browse_Vorname']);
@@ -233,7 +234,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 			$_SESSION['pers_browse_old']['crit'] = remove_magic_quotes($_POST['pers_browse_crit']);
 			$_SESSION['pers_browse_old']['changed'] = strlen($_POST['pers_browse_changed']) ? abs($_POST['pers_browse_changed']) : null;
 			$_SESSION['pers_browse_old']['locked'] = (int)$_POST['pers_browse_locked'];
-		
+
 			$_SESSION['pers_browse_search_string'] = "";
 			foreach(array('username', 'Vorname', 'Email', 'Nachname') as $field){
 				if($_SESSION['pers_browse_old'][$field]){
@@ -263,9 +264,9 @@ if (check_ticket($_REQUEST['studipticket'])){
 				$_SESSION['pers_browse_old']['changed'] = null;
 				$_SESSION['pers_browse_search_string'] .= "changed IS NULL AND ";
 			}
-			
+
 			if ($_SESSION['pers_browse_search_string'] != "") {
-				$_SESSION['pers_browse_search_string'] = " WHERE " . $_SESSION['pers_browse_search_string'];	
+				$_SESSION['pers_browse_search_string'] = " WHERE " . $_SESSION['pers_browse_search_string'];
 				$_SESSION['pers_browse_search_string'] = substr($_SESSION['pers_browse_search_string'],0,-4);
 				if ($_SESSION['pers_browse_old']['crit'] == _("nie") || isset($_SESSION['pers_browse_old']['changed']))
 					$_SESSION['pers_browse_search_string'] .= $GLOBALS['user']->that->get_where_clause($GLOBALS['user']->name);
@@ -298,11 +299,9 @@ URLHelper::addLinkParam("studipticket", get_ticket());
 if (isset($_GET['details']) || $showform ) {
 	if ($details=="__" && in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])) { // neuen Benutzer anlegen
 		?>
-		<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
-		<tr><td class="blank" colspan=2>&nbsp;</td></tr>
+		<table border="0" cellspacing="0" cellpadding="0" width="100%">
 		<?parse_msg($UserManagement->msg);?>
-		<tr><td class="blank" colspan=2>
-
+		<tr><td class="blank" colspan="2">
 			<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=2>
 			<form name="edit" method="post" action="<?=URLHelper::getLink('')?>">
 				<tr>
@@ -385,8 +384,8 @@ if (isset($_GET['details']) || $showform ) {
 				</tr>
 				<tr>
 				<td colspan=3 align=center>&nbsp;
-				<input type="IMAGE" name="create" <?=makeButton("anlegen", "src")?> value=" <?=_("Benutzer anlegen")?> ">&nbsp;
-				<input type="IMAGE" name="nothing" <?=makeButton("abbrechen", "src")?> value=" <?=_("Abbrechen")?> ">
+				<input type="image" name="create" <?=makeButton("anlegen", "src")?> value="<?=_("Benutzer anlegen")?>" alt="anlegen">
+				<input type="image" name="nothing" <?=makeButton("abbrechen", "src")?> value="<?=_("Abbrechen")?>" alt="abbrechen">
 				&nbsp;</td></tr>
 			</form></table>
 
@@ -397,12 +396,10 @@ if (isset($_GET['details']) || $showform ) {
 
 	} else { // alten Benutzer bearbeiten
 	?>
-	
-	<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
 
-	
+	<table border="0" bgcolor="#000000" cellspacing="0" cellpadding="0" width="100%">
+
 	<?
-
 	if(empty($_REQUEST['details'])) {
 		parse_msg($pass_msg);
 		$details = $_REQUEST['username'];
@@ -586,14 +583,14 @@ if (isset($_GET['details']) || $showform ) {
 				</tr>
 				<tr>
 					<td class="steel1"><b>&nbsp;<?=_("Validation_key:")?></b></td>
-					<td class="steel1"><input type="checkbox" name="delete_val_key" value="1" />L&ouml;schen</td>
+					<td class="steel1"><input type="checkbox" name="delete_val_key" value="1">L&ouml;schen</td>
 					<td class="steel1">
 					<?=htmlReady($db->f("validation_key"))?>
 					</td>
 				</tr>
 				<tr>
 					<td class="steel1"><b>&nbsp;<?=_("Ablaufdatum:")?></b></td>
-					<td class="steel1"><input type="checkbox" name="expiration_del" value="1" />L&ouml;schen</td>
+					<td class="steel1"><input type="checkbox" name="expiration_del" value="1">L&ouml;schen</td>
 					<td class="steel1">
 					<?$expiration = ($uc->getValue($db->f('user_id'),"EXPIRATION_DATE") > 0)?date("d.m.Y",$uc->getValue($db->f('user_id'),"EXPIRATION_DATE")):'';?>
 					<input type="text" name="expiration_date" size=20 maxlength=63 value="<?=$expiration?>"> (TT.MM.JJJJ z.B. 31.01.2009)
@@ -684,14 +681,14 @@ if (isset($_GET['details']) || $showform ) {
 				echo "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
 				echo "&nbsp;" . _("Datei- und Aktivitätenübersicht") . "&nbsp;";
 				echo '<a href="' . URLHelper::getLink('user_activities.php?username=' . $db->f('username')) .'">
-					<img src="'.$GLOBALS['ASSETS_URL'].'images/icon-disc.gif" align="absmiddle" border="0">
+					<img src="'.$GLOBALS['ASSETS_URL'].'images/icon-disc.gif" border="0">
 					</a>';
 				echo "</td></tr>\n";
 				if($GLOBALS['LOG_ENABLE']){
 					echo "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
 					echo "&nbsp;" . _("Log") . "&nbsp;";
 					echo '<a href="' . URLHelper::getLink('dispatch.php/event_log/show', array('search' => $db->f('username'), 'type' => 'user', 'object_id' => $db->f('user_id'))) .'">
-					<img src="'.$GLOBALS['ASSETS_URL'].'images/suchen.gif" align="absmiddle" border="0">
+					<img src="'.$GLOBALS['ASSETS_URL'].'images/suchen.gif" border="0">
 					</a>';
 					echo "</td></tr>\n";
 				}
@@ -736,17 +733,13 @@ if (isset($_GET['details']) || $showform ) {
 
 	?>
 
-	<table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>
+	<table border="0" bgcolor="#000000" cellspacing="0" cellpadding="0" width="100%">
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
-
-	<?
-	parse_msg($UserManagement->msg . $msg);
-	?>
-
-	<tr><td class="blank" colspan=2>
+	<? parse_msg($UserManagement->msg . $msg); ?>
+	<tr><td class="blank" colspan="2">
 	<?
 	if (in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])){
-		printf("&nbsp;&nbsp;"._("Neuen Benutzer-Account %s")."<br /><br />", "<a href=\"" . URLHelper::getLink("?details=__") . "\"><img ".makeButton("anlegen", "src")." align=\"absmiddle\"></a>");
+		printf("&nbsp;&nbsp;"._("Neuen Benutzer-Account %s")."<br><br>", "<a href=\"" . URLHelper::getLink("?details=__") . "\"><img ".makeButton("anlegen", "src")."></a>");
 	} else {
 		echo "<p>&nbsp;" . _("Die Standard Authentifizierung ist ausgeschaltet. Das Anlegen von neuen Benutzern ist nicht möglich!") . "</p>";
 	}

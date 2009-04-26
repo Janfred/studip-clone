@@ -13,7 +13,7 @@ $expand_id = $area->hasChildren() ? $id : $area->getParentId();
         title="<?= _("Diesen Studienbereich zuordnen") ?>"
         alt="<?= _("Diesen Studienbereich zuordnen") ?>"
         <?= !$area->isAssignable() || $selection->includes($area)
-            ? 'style="visibility:hidden;"' : '' ?> />
+            ? 'style="visibility:hidden;"' : '' ?>>
 <? if (isset($show_link) && $show_link) : ?>
   <a onClick="STUDIP.study_area_selection.expandSelection('<?= htmlReady($expand_id) ?>','<?= htmlReady($course_id) ?>');return false;"
      href="<?= URLHelper::getLink(isset($url) ? $url : '',

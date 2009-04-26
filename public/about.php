@@ -609,7 +609,7 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 		// hier nun die HomepagePlugins anzeigen
 //		if ($activatedhomepageplugin->hasNavigation()){ // wieso ist hier eine Navigation erforderlich? hab das mal geaendert :-)
 		if ($activatedhomepageplugin->getStatusShowOverviewPage()){
-			echo '<table class="blank" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><img src="'. $activatedhomepageplugin->getPluginiconname() .'" border="0" align="texttop" /><b> ' . $activatedhomepageplugin->getDisplaytitle() .' </b></td><td align="right" width="1%" class="topic" nowrap="nowrap">&nbsp;';
+			echo '<table class="blank" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><img src="'. $activatedhomepageplugin->getPluginiconname() .'" border="0" align="texttop"><b> ' . $activatedhomepageplugin->getDisplaytitle() .' </b></td><td align="right" width="1%" class="topic" nowrap="nowrap">&nbsp;';
 
 			if ($requser->isSameUser($activatedhomepageplugin->getUser())) {
 				$admin_link = $activatedhomepageplugin->getAdminLink();

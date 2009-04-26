@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter003: TODO
 /*
 user_activities.php
 Copyright (C) 2006 André Noack <noack@data-quest.de>
@@ -29,7 +30,7 @@ function show_posts_guestbook($user_id,$range_id) {
 	global $PHP_SELF;
 	$db = new DB_Seminar("SELECT * FROM guestbook WHERE range_id = '$range_id' AND user_id = '$user_id' ORDER BY mkdate DESC");
 	$output = "<table class=\"blank\" width=\"98%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">";
-	while ($db->next_record()) {  
+	while ($db->next_record()) {
 		$output .= "<tr><td class=\"steel2\"><b><font size=\"-1\"><a href=\"$PHP_SELF?username=".get_username($db->f("user_id"))."\">";
 		$output .= sprintf(_("%s hat am %s geschrieben:"), htmlReady(get_fullname($db->f("user_id")),'full',true)."</a>", date("d.m.Y - H:i", $db->f("mkdate")));
 		$output .= "</font></b></td></tr>"
@@ -39,10 +40,10 @@ function show_posts_guestbook($user_id,$range_id) {
 		. "<tr><td class=\"steel1\">&nbsp;</td></tr>";
 	}
 	$output .= "</table>";
-	return $output;	
+	return $output;
 }
 
-	
+
 function show_documents($documents, $open = null){
 	$pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 	if (is_array($documents)){
@@ -58,10 +59,10 @@ function show_documents($documents, $open = null){
 			$ank = key($open);
 		}
 		ob_start();
-		while ($db->next_record()) { 			
+		while ($db->next_record()) {
 			$type = ($db->f('url') != '')? 6 : 0;
 			//Icon auswaehlen
-			$icon = '<a href="' . GetDownloadLink($db->f('dokument_id'), $db->f('filename'), $type) . '">' 
+			$icon = '<a href="' . GetDownloadLink($db->f('dokument_id'), $db->f('filename'), $type) . '">'
 								. GetFileIcon(getFileExtension($db->f('filename')), true) . '</a>';
 			//Workaround for older data from previous versions (chdate is 0)
 			$chdate = (($db->f("chdate")) ? $db->f("chdate") : $db->f("mkdate"));
@@ -75,7 +76,7 @@ function show_documents($documents, $open = null){
 			else $titel= $tmp_titel."&nbsp;&nbsp;(".round ($db->f("filesize") / 1024)." kB";
 			//add number of downloads
 			$titel .= " / ".(($db->f("downloads") == 1) ? $db->f("downloads")." "._("Download") : $db->f("downloads")." "._("Downloads")).")";
-			//$box = sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\" />",($check_all) ? "checked" : "" , $db->f("dokument_id"));
+			//$box = sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\">",($check_all) ? "checked" : "" , $db->f("dokument_id"));
 			//Zusatzangaben erstellen
 			$zusatz="<a href=\"about.php?username=".$db->f("username")."\"><font color=\"#333399\">".htmlReady($db->f("fullname"))."</font></a>&nbsp;".date("d.m.Y - H:i", $chdate);
 			if ($db->f("protected")==1)  $zusatz .= "&nbsp;<img src=\"$pic_path/ausruf_small3.gif\" ".tooltip(_("Diese Datei ist urheberrechtlich geschützt!")).">";
@@ -88,7 +89,7 @@ function show_documents($documents, $open = null){
 				$content='';
 				if ($db->f("description")) $content= htmlReady($db->f("description"), TRUE, TRUE);
 				else $content= _("Keine Beschreibung vorhanden");
-				$content.=  "<br /><br />" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db->f("filesize") / 1024));
+				$content.=  "<br><br>" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db->f("filesize") / 1024));
 				$content.=  "&nbsp; " . sprintf(_("<b>Dateiname:</b> %s "),$db->f("filename"));
 				$content.= "\n";
 				//Editbereich ertstellen
@@ -124,6 +125,7 @@ function get_user_documents($user_id, $seminar_id = null){
 	}
 	return $ret;
 }
+
 ob_start();
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("root");
@@ -151,7 +153,7 @@ if ($_REQUEST['download_as_zip']) {
 	if (is_array($download_ids) && count($download_ids)) {
 		$zip_file_id = createSelectedZip($download_ids, false);
 		$zip_name = prepareFilename($_user_activities['username'] . '-' . _("Dokumente") . '.zip');
-		header('Location: ' . getDownloadLink( $zip_file_id, $zip_name, 4)); 
+		header('Location: ' . getDownloadLink( $zip_file_id, $zip_name, 4));
 		page_close();
 		die;
 	}
@@ -220,7 +222,7 @@ include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');	 //hier wird der "Kopf" nachgeladen 
+include ('lib/include/header.php');	 //hier wird der "Kopf" nachgeladen
 //fake
 $i_page = 'new_user_md5.php';
 include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
@@ -243,32 +245,30 @@ $pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 	?>
 	<tr>
 	<td class="blank">
-	<table style="margin-left:20px;font-size:10pt;" cellpadding="2" cellspacing="2" bgcolor="#eeeeee"  width="75%">
-	<?php
-	foreach($queries as $one){
-		$db->query($one['query']);
-		$db->next_record();
-		?>
-		<tr><td <?=$cssSw->getFullClass()?>>
-		<b>
-		<?=$one['desc']?>
-		</b></td>
-		<td <?=$cssSw->getFullClass()?> >
-		<?=htmlReady($db->f(0))?>
-		</td>
-		<td <?=$cssSw->getFullClass()?> width="1%">
-		<?=($one['details'] ? '<a href="'.$PHP_SELF.'?'.$one['details'].'"><img src="'.$pic_path.'/edit_transparent.gif" border="0"></a>' : "&nbsp;")?>
-		</td>
-		</tr>
-		<?
-		$cssSw->switchClass();
-	}?>
-	</table>
+		<table style="margin-left:20px;font-size:10pt;" cellpadding="2" cellspacing="2" bgcolor="#eeeeee"  width="75%">
+		<?php
+		foreach($queries as $one){
+			$db->query($one['query']);
+			$db->next_record();
+			?>
+			<tr><td <?=$cssSw->getFullClass()?>>
+			<b>
+			<?=$one['desc']?>
+			</b></td>
+			<td <?=$cssSw->getFullClass()?> >
+			<?=htmlReady($db->f(0))?>
+			</td>
+			<td <?=$cssSw->getFullClass()?> width="1%">
+			<?=($one['details'] ? '<a href="'.$PHP_SELF.'?'.$one['details'].'"><img src="'.$pic_path.'/edit_transparent.gif" alt="edit"></a>' : "&nbsp;")?>
+			</td>
+			</tr>
+			<?
+			$cssSw->switchClass();
+		}?>
+		</table>
 	</td>
 	</tr>
 	<tr>
-		<td class="blank">&nbsp;</td>
-	</tr>
 	<td class="blank">
 	<?if ($_user_activities['details'] == 'files'){?>
 	<div style="margin-left:20px;" align="left">
@@ -278,18 +278,18 @@ $pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 	<?=makeButton('herunterladen','img',_("Alle Dateien dieses Nutzers als Zip herunterladen"))?>
 	</a>
 	</div>
-	<br>                                    
+	<br>
 	<div style="margin-left:20px;">
 	<b><?=_("Dateiübersicht Veranstaltungen")?></b>
 	<?php
 	$query = "SELECT s.Seminar_id,seminar_user.status, IF(s.visible=0,CONCAT(s.Name, ' "._("(versteckt)")."'), s.Name) AS Name, COUNT(dokument_id) as numdok
 			,sd1.name AS startsem,IF(s.duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem
-			FROM dokumente d 
+			FROM dokumente d
 			INNER JOIN seminare s USING(seminar_id)
 			LEFT JOIN semester_data sd1 ON ( start_time BETWEEN sd1.beginn AND sd1.ende)
 			LEFT JOIN semester_data sd2 ON ((start_time + duration_time) BETWEEN sd2.beginn AND sd2.ende)
-			LEFT JOIN seminar_user ON (d.seminar_id=seminar_user.seminar_id AND seminar_user.user_id='$user_id') 
-			WHERE d.user_id = '$user_id' 
+			LEFT JOIN seminar_user ON (d.seminar_id=seminar_user.seminar_id AND seminar_user.user_id='$user_id')
+			WHERE d.user_id = '$user_id'
 			GROUP BY s.Seminar_id ORDER BY numdok DESC";
 	$db->query($query);
 	while ($db->next_record()){
@@ -324,10 +324,10 @@ $pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 	<b><?=_("Dateiübersicht Einrichtungen")?></b>
 	<?php
 	$query = "SELECT i.Institut_id,user_inst.inst_perms as status, i.Name, COUNT(dokument_id) as numdok
-			FROM dokumente d 
+			FROM dokumente d
 			INNER JOIN Institute i ON(i.Institut_id = d.seminar_id)
-			LEFT JOIN user_inst  ON (d.seminar_id=user_inst.institut_id AND user_inst.user_id='$user_id') 
-			WHERE d.user_id = '$user_id' 
+			LEFT JOIN user_inst  ON (d.seminar_id=user_inst.institut_id AND user_inst.user_id='$user_id')
+			WHERE d.user_id = '$user_id'
 			GROUP BY i.Institut_id ORDER BY numdok DESC";
 	$db->query($query);
 	while ($db->next_record()){
@@ -378,12 +378,12 @@ $pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 			$desc = _("Übersicht Wartelisten von Veranstaltungen");
 			break;
 		}
-		
+
 		echo '<b>'.$desc.'</b><br>';
-	
+
 		$query = "SELECT s.Seminar_id,$status as status, IF(s.visible=0,CONCAT(s.Name, ' "._("(versteckt)")."'), s.Name) AS Name
 				,sd1.name AS startsem,IF(s.duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem
-				FROM $table 
+				FROM $table
 				LEFT JOIN seminare s USING(Seminar_id)
 				LEFT JOIN semester_data sd1 ON ( start_time BETWEEN sd1.beginn AND sd1.ende)
 				LEFT JOIN semester_data sd2 ON ((start_time + duration_time) BETWEEN sd2.beginn AND sd2.ende)
@@ -414,7 +414,7 @@ $pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 			$title = get_fullname($db->f('range_id'));
 			$is_open = $_user_activities['open'][$db->f('range_id')] ? 'open' : 'close';
 			$title = "<a ".($ank == $db->f('range_id') ? 'name="guest_anker"' : '')." href=\"$PHP_SELF?".($is_open == 'open' ? 'close' : 'open')."=".$db->f('range_id')."#guest_anker\" class=\"tree\">".htmlReady($title)."</a>";
-		
+
 			echo "\n<table width=\"80%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"><tr>";
 			printhead(0,0,false,$is_open,false, '&nbsp;', $title ,$addon, 0);
 			echo "\n</tr></table>";
@@ -424,7 +424,7 @@ $pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 						.'<a href="about.php?username='.get_username($db->f('range_id'))
 						. '&guestbook=open#guest"><img src="'.$pic_path.'/guestbook.gif" border="0" align="absmiddle" hspace="4" >'
 						. _("Gästebuch"). ': ' . htmlReady(get_fullname($db->f('range_id'))).'</a></b></div>';
-				
+
 				$content .= show_posts_guestbook($user_id,$db->f('range_id'));
 				printcontent(0,0,$content, $edit);
 				echo "\n</tr></table>";

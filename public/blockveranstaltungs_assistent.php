@@ -54,14 +54,14 @@ if (!$perm->have_studip_perm('tutor', $seminar_id)) {
 }
 
 //Content
-$destination=$ABSOLUTE_URI_STUDIP."raumzeit.php?newFilter=all&x=4&y=4&cmd=applyFilter#irregular_dates"; 
-echo "<SCRIPT> function reload_opener() {  
- 		        if (opener.location.href != '$destination')      
- 		                opener.location.href = '$destination'; 
- 		        else   
- 		                opener.location.reload(); 
- 		        return true; 
- 		        }  </SCRIPT>"; 
+$destination=$ABSOLUTE_URI_STUDIP."raumzeit.php?newFilter=all&x=4&y=4&cmd=applyFilter#irregular_dates";
+echo "<SCRIPT> function reload_opener() {
+ 		        if (opener.location.href != '$destination')
+ 		                opener.location.href = '$destination';
+ 		        else
+ 		                opener.location.reload();
+ 		        return true;
+ 		        }  </SCRIPT>";
 
 if (isset($_POST['command']) && ($_POST['command'] == 'create')) {
 	$return = create_block_schedule_dates($seminar_id,$_POST);
@@ -81,18 +81,18 @@ $cssSw = new cssClassSwitcher();
 	</tr>
 	<? if (!$return['ready'] && ($return['errors'])) :
 			foreach($return['errors'] as $error) {
-				$error_msg .= $error.'<br />';
-				//echo "&nbsp;<font align=\"center\" color=\"red\"><b>$error</b></font><br/>&nbsp;";
+				$error_msg .= $error.'<br>';
+				//echo "&nbsp;<font align=\"center\" color=\"red\"><b>$error</b></font><br>&nbsp;";
 			}
 			parse_msg('error§'.$error_msg.'§');
 		endif;
 
 		if ($return['ready']) :
 			$msg = "<b>"._("Für folgende Termine wurden die gewählten Aktionen durchgeführt").":</b>";
-			$msg .= "<br/>";
+			$msg .= "<br>";
 			foreach ($return['status'] as $status) {
 				$msg .= "<li>".$status."</li>";
-			}			
+			}
 			parse_msg('msg§'.$msg.'§');
 		endif; ?>
 	<tr>
@@ -165,17 +165,17 @@ $cssSw = new cssClassSwitcher();
 					<tr>
 						<td class="<?=$cssSw->getClass()?>" colspan="2">
 							<b><?=_("Die Veranstaltung findet an folgenden Tagen statt")?>:</b>
-							<br /><br />
-							<input type="checkbox" name="every_day" value="1" <?=($_POST["every_day"]=='1'?"checked=checked":"")?> />&nbsp;Jeden Tag<br/>
+							<br><br>
+							<input type="checkbox" name="every_day" value="1" <?=($_POST["every_day"]=='1'?"checked=checked":"")?> />&nbsp;Jeden Tag<br>
 								<br>
-							<input type="checkbox" name="days[]" value="Monday"<?=day_checked('Monday')?> />&nbsp;Montag<br/>
-							<input type="checkbox" name="days[]" value="Tuesday"<?=day_checked('Tuesday')?> />&nbsp;Dienstag<br/>
-							<input type="checkbox" name="days[]" value="Wednesday"<?=day_checked('Wednesday')?> />&nbsp;Mittwoch<br/>
-							<input type="checkbox" name="days[]" value="Thursday"<?=day_checked('Thursday')?> />&nbsp;Donnerstag<br/>
-							<input type="checkbox" name="days[]" value="Friday"<?=day_checked('Friday')?> />&nbsp;Freitag<br/>
-							<input type="checkbox" name="days[]" value="Saturday"<?=day_checked('Saturday')?> />&nbsp;Samstag<br/>
-							<input type="checkbox" name="days[]" value="Sunday"<?=day_checked('Sunday')?> />&nbsp;Sonntag<br/>
-							<br/>
+							<input type="checkbox" name="days[]" value="Monday"<?=day_checked('Monday')?> />&nbsp;Montag<br>
+							<input type="checkbox" name="days[]" value="Tuesday"<?=day_checked('Tuesday')?> />&nbsp;Dienstag<br>
+							<input type="checkbox" name="days[]" value="Wednesday"<?=day_checked('Wednesday')?> />&nbsp;Mittwoch<br>
+							<input type="checkbox" name="days[]" value="Thursday"<?=day_checked('Thursday')?> />&nbsp;Donnerstag<br>
+							<input type="checkbox" name="days[]" value="Friday"<?=day_checked('Friday')?> />&nbsp;Freitag<br>
+							<input type="checkbox" name="days[]" value="Saturday"<?=day_checked('Saturday')?> />&nbsp;Samstag<br>
+							<input type="checkbox" name="days[]" value="Sunday"<?=day_checked('Sunday')?> />&nbsp;Sonntag<br>
+							<br>
 						</td>
 					</tr>
 					<?$cssSw->switchClass()?>
@@ -190,11 +190,9 @@ $cssSw = new cssClassSwitcher();
 	</tr>
 </table>
 </form>
-<br/>
+<br>
+
 <?php
-
-//Footer
-include ('lib/include/html_end.inc.php');
-page_close();
-
+	include ('lib/include/html_end.inc.php');
+	page_close();
 ?>
