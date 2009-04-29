@@ -99,10 +99,10 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	} else {
 		$form .= $zt->row(array(_("Veranstaltungsnummer"),"<input type=\"radio\" name=\"lockdata[attributes][VeranstaltungsNummer]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][VeranstaltungsNummer]\" value=0 checked>"));
 	}
-	if ($lockdata["attributes"]["Institut_id"]) {
-		$form .= $zt->row(array(_("beteiligte Einrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=0>"));
+	if ($lockdata["attributes"]["seminar_inst"]) {
+		$form .= $zt->row(array(_("beteiligte Einrichtungen"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("beteiligte Einrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=0 checked>"));
+		$form .= $zt->row(array(_("beteiligte Einrichtungen"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["Name"]) {
 		$form .= $zt->row(array(_("Name"),"<input type=\"radio\" name=\"lockdata[attributes][Name]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Name]\" value=0>"));
@@ -169,10 +169,10 @@ function show_lock_rule_form($lockdata="",$edit=0) {
 	} else {
 		$form .= $zt->row(array(_("TutorInnen"),"<input type=\"radio\" name=\"lockdata[attributes][tutor]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][tutor]\" value=0 checked>"));
 	}
-	if ($lockdata["attributes"]["seminar_inst"]) {
-		$form .= $zt->row(array(_("Heimateinrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=0>"));
+	if ($lockdata["attributes"]["Institut_id"]) {
+		$form .= $zt->row(array(_("Heimateinrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=0>"));
 	} else {
-		$form .= $zt->row(array(_("Heimateinrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][seminar_inst]\" value=0 checked>"));
+		$form .= $zt->row(array(_("Heimateinrichtung"),"<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=1>","<input type=\"radio\" name=\"lockdata[attributes][Institut_id]\" value=0 checked>"));
 	}
 	if ($lockdata["attributes"]["sem_tree"]) {
 		$form .= $zt->row(array(_("Studienbereiche"),"<input type=\"radio\" name=\"lockdata[attributes][sem_tree]\" value=1 checked>","<input type=\"radio\" name=\"lockdata[attributes][sem_tree]\" value=0>"));
