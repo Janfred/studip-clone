@@ -817,9 +817,9 @@ class Seminar_Register_Auth extends Seminar_Auth {
 				$from = $smtp->env_from;
 				$to = $smtp->abuse;
 				$smtp->SendMessage(
-				$from, array($to),
-				array("From: $from", "To: $to", "Subject: Register"),
-				"Emailbox unbekannt\n\nUser: $username\nEmail: $Email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
+						$to, "",
+						$to, "",
+						"Register", "Emailbox unbekannt\n\nUser: $username\nEmail: $Email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
 				$this->error_msg=$this->error_msg. _("Die angegebene E-Mail-Adresse ist nicht erreichbar, bitte überprüfen Sie Ihre Angaben!") . "<br>";
 				return false;
 			} else {
@@ -881,9 +881,9 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		include_once("locale/$_language_path/LC_MAILS/register_mail.inc.php");
 
 		$smtp->SendMessage(
-		$smtp->env_from, array($to),
-		array("From: $smtp->from", "Reply-To: $smtp->abuse", "To: $to", "Subject: $subject"),
-		$mailbody);
+				$to, "",
+				$smtp->abuse, "",
+				$subject, $mailbody);
 
 		return $uid;
 	}
