@@ -268,8 +268,6 @@ if (check_ticket($_REQUEST['studipticket'])){
 			if ($_SESSION['pers_browse_search_string'] != "") {
 				$_SESSION['pers_browse_search_string'] = " WHERE " . $_SESSION['pers_browse_search_string'];
 				$_SESSION['pers_browse_search_string'] = substr($_SESSION['pers_browse_search_string'],0,-4);
-				if ($_SESSION['pers_browse_old']['crit'] == _("nie") || isset($_SESSION['pers_browse_old']['changed']))
-					$_SESSION['pers_browse_search_string'] .= $GLOBALS['user']->that->get_where_clause($GLOBALS['user']->name);
 			} else {
 				unset($_SESSION['pers_browse_search_string']);
 				$msg = "error§" . _("Bitte geben Sie einen Suchbegriff ein.") . "§";
