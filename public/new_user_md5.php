@@ -672,21 +672,21 @@ if (isset($_GET['details']) || $showform ) {
 
 			<? // links to everywhere
 			echo "<tr><td class=\"steelgraulight\" colspan=3 align=\"center\">";
-			echo "&nbsp;" . _("pers&ouml;nliche Homepage") . " <a href=\"".URLHelper::getLink('about.php?username=' . $db->f("username")) . "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" ".tooltip(_("Zur persönlichen Homepage des Benutzers"))." align=\"texttop\"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp";
-			echo "&nbsp;" . _("Nachricht an BenutzerIn") . " <a href=\"".URLHelper::getLink('sms_send.php?rec_uname=' . $db->f("username")) . "\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" ".tooltip(_("Nachricht an den Benutzer verschicken")) . " align=\"texttop\"></a>";
+			echo _("pers&ouml;nliche Homepage") . " <a href=\"".URLHelper::getLink('about.php?username=' . $db->f("username")) . "\"><img class=\"middle\" src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" ".tooltip(_("Zur persönlichen Homepage des Benutzers"))."></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp";
+			echo _("Nachricht an BenutzerIn") . " <a href=\"".URLHelper::getLink('sms_send.php?rec_uname=' . $db->f("username")) . "\"><img class=\"middle\" src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" ".tooltip(_("Nachricht an den Benutzer verschicken")) . "></a>";
 			echo "</td></tr>";
 			if ($perm->have_perm('root')){
 				echo "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
 				echo "&nbsp;" . _("Datei- und Aktivitätenübersicht") . "&nbsp;";
 				echo '<a href="' . URLHelper::getLink('user_activities.php?username=' . $db->f('username')) .'">
-					<img src="'.$GLOBALS['ASSETS_URL'].'images/icon-disc.gif" border="0">
+					<img class="middle" src="'.$GLOBALS['ASSETS_URL'].'images/icon-disc.gif">
 					</a>';
 				echo "</td></tr>\n";
 				if($GLOBALS['LOG_ENABLE']){
 					echo "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
 					echo "&nbsp;" . _("Log") . "&nbsp;";
 					echo '<a href="' . URLHelper::getLink('dispatch.php/event_log/show', array('search' => $db->f('username'), 'type' => 'user', 'object_id' => $db->f('user_id'))) .'">
-					<img src="'.$GLOBALS['ASSETS_URL'].'images/suchen.gif" border="0">
+					<img class="middle" src="'.$GLOBALS['ASSETS_URL'].'images/suchen.gif">
 					</a>';
 					echo "</td></tr>\n";
 				}
@@ -710,7 +710,7 @@ if (isset($_GET['details']) || $showform ) {
 				echo "<tr><td class=\"steel2\" colspan=3 align=\"center\">";
 				echo "&nbsp;" . htmlReady($db2->f("Name"));
 				echo ' <a href="' . URLHelper::getLink(sprintf('inst_admin.php?details=%s&admin_inst_id=%s', $db->f("username"), $db2->f("Institut_id"))) . '">';
-				echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/admin.gif\" align=\"texttop\" ".tooltip(_("Ändern der Einträge des Benutzers in der jeweiligen Einrichtung"))."\"></a>&nbsp;";
+				echo "<img class=\"middle\" src=\"".$GLOBALS['ASSETS_URL']."images/admin.gif\" ".tooltip(_("Ändern der Einträge des Benutzers in der jeweiligen Einrichtung"))."\"></a>";
 				echo "</td></tr>\n";
 			}
 			?>

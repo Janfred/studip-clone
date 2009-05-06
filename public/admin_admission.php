@@ -1391,7 +1391,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 		<!-- Hier gehts normal weiter -->
 		<tr>
 			<td class="steel2" align="center" colspan="3">
-				<?=makeButton("uebernehmen", "input")?>
+				<input type="image" name="uebernehmen" <?=makeButton("uebernehmen", "src")?> value="uebernehmen">
 			</td>
 		</tr>
 	</table>

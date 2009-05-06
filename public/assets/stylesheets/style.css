@@ -1,5 +1,4 @@
 /*******************************************************************************
-  $Id$
   Standard-Stylesheet für Stud.IP im Safire-Design
   Infos:
   - Vererbung beachten und doppelte Eigenschaften vermeiden
@@ -59,6 +58,16 @@ h2.topic, h3.topic {
 	line-height: 1em;
 }
 
+.topic {
+	border: 0px;
+	background-image: url('../images/fill1.gif');
+	background-color:#4A5681;
+	color:#FFFFFF;
+	font-size: 12pt;
+	padding: 2px;
+}
+
+
 /* --- Links ---------------------------------------------------------------- */
 /* //TODO: überflüssige klassen entfernen... */
 a, a:link, a:visited {
@@ -88,6 +97,17 @@ a img { /* Bilder in Links ohne Rand */
 	border:0px;
 }
 
+a:link.printhead {
+	color:#333399;
+}
+
+a:visited.printhead {
+	color:#333399;
+}
+a.printhead {
+	color:#333399;
+}
+
 
 /* --- Layouts -------------------------------------------------------------- */
 #layout_container {
@@ -110,9 +130,11 @@ a img { /* Bilder in Links ohne Rand */
 td.shadowver {
 	background-image: url('../images/shadowver.gif');
 }
+
 td.shadowhor {
 	background-image: url('../images/shadowhor.gif');
 }
+
 td.shadowcor {
 	background-image: url('../images/shadowcor.gif');
 }
@@ -124,6 +146,7 @@ td.reiterunten {
 table.header {
 	background-image: url('../images/fill1.gif');
 }
+
 table.links1 {
 	background-color: #FFFFFF;
 }
@@ -131,19 +154,11 @@ table.links1 {
 table.toolbar {
 	background-image: url('../images/steelblau.jpg');
 }
+
 td.toolbar {
 	background-image: url('../images/steelblau.jpg');
 }
 
-/* (mriehe) warum nur für td? -> entfernt */
-.topic {
-	border: 0px;
-	background-image: url('../images/fill1.gif');
-	background-color:#4A5681;
-	color:#FFFFFF;
-	font-size: 12pt;
-	padding: 2px;
-}
 td.topicwrite {
 	border:0px solid #000000;
 	background-image: url('../images/fill1write.gif');
@@ -155,9 +170,11 @@ td.topicwrite {
 td.header {
 	background-image: url('../images/fill1.gif');
 }
+
 td.angemeldet {
 	border-style: solid; border-color: #000000;	border-width: 1px;
 }
+
 td.rahmen_white {
 	border-style: solid;
 	border-color: #000000;
@@ -165,33 +182,38 @@ td.rahmen_white {
 	background-color: #FFFFFF;
 	background-image: url('../images/blank.gif');
 }
+
 td.rahmen_steel {
 	border-style: solid;
 	border-color: #000000;
 	border-width: 1px;
 	background-image: url('../images/steel1.jpg');
 }
+
 td.rahmen_steelgraulight {
 	border-style: solid;
 	border-color: #000000;
 	border-width: 1px;
 	background-image: url('../images/steelgraulight.jpg');
 }
+
 td.quote {
 	border-style: solid;
 	border-color: #000000;
 	border-width: 1px; font-size:8px;
 }
+
 td.nix {
 	background-color: transparent;
 }
+
 td.aufklapp {
 	background-color : #FFFAEE;
 }
+
 td.suche {
 	background-image: url('../images/suche2.jpg');
 }
-
 
 table.blank, td.blank, td.onlineinfo, td.blanksmall {
 	background-color: #FFFFFF;
@@ -358,37 +380,35 @@ tr.cycle_even:hover {
 	background-image: url('../images/plastic_red.jpg');
 }
 
-/* Styles fuer printhead und printcontent */
+
+/* --- Styles fuer printhead und printcontent ------------------------------- */
 td.printhead {
 	background-image: url('../images/steelblau.jpg');
 }
+
 td.printhead2 {
 	background-image: url('../images/steelblau2.gif');
 }
+
 td.printhead3 {
 	background-image: url('../images/steelblau3.gif');
 }
+
 td.colorline {
 	background-image: url('../images/colorline.gif');
 }
+
 td.colorline2 {
 	background-image: url('../images/colorline2.gif');
 }
-A:link.printhead {
-	color:#333399;
-}
-A:visited.printhead {
-	color:#333399;
-}
-a.printhead {
-	color:#333399;
-}
+
 td.printcontent {
 	background-image: url('../images/steel1.jpg');
 	text-align:left;
 }
 
-/* Styles fuer Terminkalender */
+
+/* --- Styles fuer Terminkalender ------------------------------------------- */
 a.day {
 	color: #3333DD;
 	font-weight: bold;
@@ -513,10 +533,12 @@ td.lightmonth {
 	background-image: url('../images/steel1.jpg');
 }
 
-/* Styles fuer TerminZeile */
+
+/* --- Styles fuer TerminZeile ---------------------------------------------- */
 table.tabdaterow {
 	background-color: white;
 }
+
 td.tddaterowp {
 	border-style: solid;
 	border-color: #FFFFFF;
@@ -524,6 +546,7 @@ td.tddaterowp {
 	background-image: url('../images/steelcal.jpg');
 	font-weight: bold; color: #009900;font-size:8pt;
 }
+
 td.tddaterowpx {
 	border-style: solid;
 	border-color: #D00000;
@@ -543,6 +566,7 @@ td.smiley_th {
 	text-align: center;
 	background-color:#B5B5B5;
 }
+
 td.smiley_redborder {
 	border:1px solid #D00000;
 }
@@ -550,6 +574,7 @@ td.smiley_redborder {
 table.logintable {
 	background-image: url('../images/login.jpg');
 }
+
 td.indexpage {
 	background: white url('../images/indexpage.jpg') no-repeat;
 	text-align:left;
@@ -598,6 +623,10 @@ div.selectbox {
 
 dd {
 	margin-left: 1.5em;
+}
+
+.middle {
+	vertical-align: middle;
 }
 
 /* index.php anpassungen an den boxen zur vereinheitlichung */

@@ -262,7 +262,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 		<table class="index_box" border="0" cellpadding="2" cellspacing="0" style="margin:auto">
 			<tr>
-				<td class="topic" colspan="2" align="left"><img src="<?=$GLOBALS['ASSETS_URL']?>images/home.gif" style="vertical-align:middle" alt="Home-Icon"> <b><?=$ueberschrift?></b></td>
+				<td class="topic" colspan="2" align="left"><img class="middle" src="<?=$GLOBALS['ASSETS_URL']?>images/home.gif" alt="Home-Icon"> <b><?=$ueberschrift?></b></td>
 			</tr>
 			<tr>
 				<td class="blank" valign="top" style="padding-left:25px; width:80%;">
@@ -278,7 +278,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 						echo	'<tr><td><div class="mainmenu">'. $menue[$menue_auswahl[$i][0]][0];
 					}
 					for ($k = 0; $k < count($menue_auswahl[$i][1]); $k++) { // submenue
-						echo	(($k == 0)? '<br />':'&nbsp;/&nbsp;');
+						echo	(($k == 0)? '<br>':'&nbsp;/&nbsp;');
 						echo	'<font size="-1"><a href="',$menue[$menue_auswahl[$i][1][$k]][1].'"'.
 							(($menue[$menue_auswahl[$i][1][$k]][2])? ' target="'.$menue[$menue_auswahl[$i][1][$k]][2].'"':'').
 							'>'. $menue[$menue_auswahl[$i][1][$k]][0].'</a></font>';
@@ -291,12 +291,12 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 				<td class="indexpage" align="right" valign="top"><img src="<?=$GLOBALS['ASSETS_URL']?>images/blank.gif" width="390" height="100" alt=""></td>
 			</tr>
 		</table>
-		<br/>
+		<br>
 <?
 
 	// display news
 	if (show_news('studip', $perm->have_perm('root'), 0, $index_data['nopen'], "70%", $LastLogin, $index_data))
-		echo "<br/>\n";
+		echo "<br>\n";
 
 	// display dates
 	if (!$perm->have_perm('admin')) { // only dozent, tutor, autor, user
@@ -330,7 +330,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 ?>
 		<table class="index_box" border="0" cellpadding="2" cellspacing="0">
 			<tr>
-				<td class="topic"><img src="<?=$activatedportalplugin->getPluginiconname()?>" align="absmiddle" /> <b><?=$activatedportalplugin->getDisplaytitle()?></b></td>
+				<td class="topic"><img class="middle" src="<?=$activatedportalplugin->getPluginiconname()?>"> <b><?=$activatedportalplugin->getDisplaytitle()?></b></td>
 				<td class="topic" align="right">
 					<? if ($activatedportalplugin->hasAdministration()) : ?>
 						<? if ($admin_link = $activatedportalplugin->getAdminLink()) : ?>
@@ -346,7 +346,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 				</td>
 			</tr>
 		</table>
-		<br/>
+		<br>
 
 <?
 		}
@@ -370,7 +370,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 				</td>
 			</tr>
 		</table>
-		<br/>
+		<br>
 
 <?
 		}
@@ -404,11 +404,11 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			if ($activatedplugin->hasUnauthorizedView())
 			{
 ?>
-		<br/>
+		<br>
 		<div align="center">
 		<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
 			<tr>
-				<td class="topic"><img src="<?=$activatedplugin->getPluginiconname()?>"" align="absmiddle" /><b>&nbsp;<?= $activatedplugin->getDisplaytitle() ?></b></td>
+				<td class="topic"><img class="middle" src="<?=$activatedplugin->getPluginiconname()?>"> <b><?= $activatedplugin->getDisplaytitle() ?></b></td>
 			</tr>
 			<tr>
 				<td class="index_box_cell">
