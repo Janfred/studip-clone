@@ -786,7 +786,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 		<table width="99%" border="0" cellpadding="2" cellspacing="0" align="center">
 		<tr <? $cssSw->switchClass() ?>>
 			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan="3">
-				<?=makeButton("uebernehmen", "input")?>
+				<input type="image" name="uebernehmen" <?=makeButton("uebernehmen", "src")?> value="uebernehmen">
 				<?if ($admin_admission_data["original"] != get_snapshot()) {
 
 					?> <br><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ausruf_small2.gif" align="absmiddle">&nbsp;<font size=-1><?=_("Diese Daten sind noch nicht gespeichert.")?></font><br> <?
