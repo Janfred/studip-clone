@@ -121,7 +121,7 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 			}
 			?>
 		</td>
-		<td width="270" NOWRAP class="blank" align="center" valign="top">
+		<td width="270" class="blank" align="center" valign="top">
 			<?
 			print_infobox ($infobox, "export.jpg");
 			?>

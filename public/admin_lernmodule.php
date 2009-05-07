@@ -141,7 +141,7 @@ if ($ILIAS_CONNECT_ENABLE)
 		?>
 		<br>
 		</td>
-		<td width="270" NOWRAP class="blank" align="center" valign="top">
+		<td width="270" class="blank" align="center" valign="top">
 		<?
 		$infobox = array	(
 		array ("kategorie"  => _("Information:"),

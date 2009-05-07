@@ -323,7 +323,7 @@ include_once ($RELATIVE_PATH_LEARNINGMODULES ."/lernmodul_user_functions.inc.php
 	?>
 	<br>
 	</td>
-	<td width="270" NOWRAP class="blank" align="center" valign="top">
+	<td width="270" class="blank" align="center" valign="top">
 	<?
 		print_infobox ($infobox,"lernmodule.jpg");
 	?>

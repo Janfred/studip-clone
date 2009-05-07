@@ -342,7 +342,7 @@ if ($ILIAS_CONNECT_ENABLE)
 		<br>
 		</td></tr></table>
 		</td>
-		<td width="270" NOWRAP class="blank" align="center" valign="top">
+		<td width="270" class="blank" align="center" valign="top">
 <?
 			if ($came_from == "admin")
 				$infobox[1]["eintrag"][] = array (	"icon" => "forumgrau.gif" ,

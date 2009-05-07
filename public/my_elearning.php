@@ -200,7 +200,7 @@ if ($ELEARNING_INTERFACE_ENABLE)
 		?>
 		<br>
 		</td>
-		<td width="270" NOWRAP class="blank" align="center" valign="top">
+		<td width="270" class="blank" align="center" valign="top">
 		<?
 			print_infobox ($infobox,"lernmodule.jpg");
 		?>
