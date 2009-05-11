@@ -46,7 +46,6 @@ $studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement')){
 //Bottomkats
 $structure["_meine_veranstaltungen"] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("Übersicht"), 'link' => URLHelper::getLink('meine_seminare.php'), 'active' => FALSE);
 if (!$GLOBALS['perm']->have_perm('admin')) {
-	$structure['meine_veranstaltungen_extended'] = array ('topKat' => 'meine_veranstaltungen', 'name' => _("erweiterte Übersicht"), 'link' => URLHelper::getLink('meine_seminare.php?view=ext'), 'active' => FALSE);
 	if ($GLOBALS['STM_ENABLE'] && $GLOBALS['perm']->have_perm('dozent')){
 		$structure["my_stm"]=array ('topKat'=>"meine_veranstaltungen", 'name'=>_("meine Studienmodule"), 'link' => URLHelper::getLink('my_stm.php'), 'active'=>FALSE);
 	}
