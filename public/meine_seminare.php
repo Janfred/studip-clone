@@ -453,13 +453,6 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 							<th width="2%" colspan=2 nowrap="nowrap" align="center"><a href="gruppe.php"><img src="<?=$GLOBALS['ASSETS_URL'] ?>images/gruppe.gif" <? echo tooltip(_("Gruppe ändern")) ?> border="0"></a></th>
 							<th width="85%" align="left"><? echo(_("Name")) ?></th>
 							<th width="10%"><b><? echo(_("Inhalt")) ?></b></th>
-							<?
-							if ($view=="ext") { ?>
-								<th width="10%"><b><? echo(_("besucht")) ?></b></th>
-
-								<th width="10%"><? echo(_("Status")) ?></th>
-								<th width="10%"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/nutzer.gif" <? echo tooltip(_("TeilnehmerInnen der Veranstaltung")) ?>></th>
-							<?	}?>
 							<th width="3%"></th>
 					</tr>
 		<?
@@ -576,25 +569,6 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				echo "</td>";
 
 
-				// Extendet views:
-
-				// last visited-field
-				if ($view=="ext") {
-					if ($lastVisit == 0) {
-						echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap><font size=-1>" . _("n.b.") . "</font></td>";
-					} else {
-						echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>", date("d.m.", $lastVisit),"</font></td>";
-					}
-					// Status-field
-					echo "<td class=\"".$cssSw->getClass()."\"  align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
-					// Teilnehmer
-					$db2=new DB_Seminar;
-					$db2->query ("SELECT count(*) as teilnehmer FROM seminar_user WHERE Seminar_id ='$semid'");
-					 while($db2->next_record())
-						 echo "<td class=\"".$cssSw->getClass()."\"  nowrap align=\"right\"><font size=-1>". $db2->f("teilnehmer")."&nbsp;</font></td>";
-				}
-
-
 				// delete Entry from List:
 
 				if (($values["status"]=="dozent") || ($values["status"]=="tutor"))
@@ -693,12 +667,6 @@ if ( !$perm->have_perm("root")) {
 									<th width="1%">&nbsp; </th>
 									<th width="86%" align="left"><?=_("Meine Einrichtungen")?></th>
 									<th width="10%"><b><?=_("Inhalt")?></b></th>
-									<?
-									if ($view=="ext") {
-									?>
-										<th width="10%"><b>&nbsp;<?=_("besucht")?>&nbsp;</b></th>
-										<th width="10%"><b>&nbsp;<?=_("Status")?>&nbsp;</b></th>
-									<? }?>
 									<th width="3%"><b>&nbsp;&nbsp;</b></th>
 								</tr>
 		<?
@@ -738,19 +706,6 @@ if ( !$perm->have_perm("root")) {
 					echo "&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-leer.gif\" width=\"18\" height=\"20\" border=\"0\">";
 				}
 				echo "</td>";
-
-				// Extendet views:
-
-				// last visited-field
-				if ($view=="ext") {
-					if ($lastVisit == 0) {
-						echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>n.b.</font></td>";
-					} else  {
-						echo "<td class=\"".$cssSw->getClass()."\"align=\"center\" nowrap><font size=-1>", date("d.m.", $lastVisit),"</font></td>";
-					}
-					// Status-field
-					echo "<td class=\"".$cssSw->getClass()."\" align=\"center\" nowrap><font size=-1>". $values["status"]."&nbsp;</font></td>";
-				}
 
 				// delete Entry from List:
 				if ($GLOBALS['ALLOW_SELFASSIGN_INSTITUTE'] && ($values['status'] == 'user')) {
