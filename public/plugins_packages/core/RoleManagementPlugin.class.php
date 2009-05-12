@@ -133,10 +133,10 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 			RolePersistence::deleteAssignedPluginRoles($pluginid,$delassignedrols);
 			StudIPTemplateEngine::showSuccessMessage(_("Die Rechteeinstellungen wurden erfolgreich gespeichert."));
 		}
-
+		
 		//view
 		$template = $this->template_factory->open('plugin_assignment');
-		$template->set_attribute('plugins', PluginManager::getInstance()->getPluginInfos());
+		$template->set_attribute('plugins', DBManager::get()->query('SELECT * FROM plugins ORDER BY pluginname')->fetchAll(PDO::FETCH_ASSOC));
 		$template->set_attribute('assigned', RolePersistence::getAssignedPluginRoles($pluginid));
 		$template->set_attribute('roles', RolePersistence::getAllRoles());
 		$template->set_attribute('pluginid', $pluginid);
