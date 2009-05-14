@@ -27,6 +27,9 @@ define("UNKNOWN_ROLE_ID",-1);
 class RolePersistence
 {
 
+	const ROLES_CACHE_KEY = 'plugins/rolepersistence/roles';
+	const ROLES_PLUGINS_CACHE_KEY = 'plugins/rolepersistence/roles_plugins/';
+
 	/**
 	 * Enter description here...
 	 *
@@ -34,21 +37,25 @@ class RolePersistence
 	 */
 	public function getAllRoles()
 	{
-		$roles = array();
-		foreach (DBManager::get()->query("SELECT * FROM roles ORDER BY rolename") as $row)
-		{
-			$role = new Role();
-			$role->setRoleid($row["roleid"]);
-			$role->setRolename($row["rolename"]);
-			if($row["system"] == 'y')
-			{
-				$role->setSystemtype(true);
+		$cache = StudipCacheFactory::getCache();
+
+		// read cache (unserializing a cache miss - FALSE - does not matter)
+		$roles = unserialize($cache->read(self::ROLES_CACHE_KEY));
+
+		// cache miss, retrieve from database
+		if (!$roles) {
+			$roles = array();
+			$stmt = DBManager::get()->query("SELECT * FROM roles ORDER BY rolename");
+			foreach ($stmt as $row) {
+				$role = new Role();
+				$role->setRoleid($row["roleid"]);
+				$role->setRolename($row["rolename"]);
+				$role->setSystemtype($row["system"] == 'y');
+				$roles[$row["roleid"]] = $role;
 			}
-			else
-			{
-				$role->setSystemtype(false);
-			}
-			$roles[$row["roleid"]] = $role;
+
+			// write to cache
+			$cache->write(self::ROLES_CACHE_KEY, serialize($roles));
 		}
 		return $roles;
 	}
@@ -61,6 +68,9 @@ class RolePersistence
 	 */
 	public function saveRole($role)
 	{
+		// sweep roles cache, see #getAllRoles
+		StudipCacheFactory::getCache()->expire(self::ROLES_CACHE_KEY);
+
 		$db = DBManager::get();
 
 		// role is not in database
@@ -86,7 +96,13 @@ class RolePersistence
 	 */
 	public function deleteRole($role)
 	{
+
 		$id = $role->getRoleid();
+
+		// sweep roles cache
+		StudipCacheFactory::getCache()->expire(self::ROLES_CACHE_KEY);
+		StudipCacheFactory::getCache()->expire(self::ROLES_PLUGINS_CACHE_KEY . $id);
+
 		$db = DBManager::get();
 		$stmt = $db->prepare("DELETE FROM roles WHERE roleid=? AND system='n'");
 		$stmt->execute(array($id));
@@ -224,8 +240,8 @@ class RolePersistence
 	public function assignPluginRoles($pluginid,$roleids)
 	{
 		$stmt = DBManager::get()->prepare("REPLACE INTO roles_plugins (roleid, pluginid) VALUES (?, ?)");
-		foreach ($roleids as $roleid)
-		{
+		foreach ($roleids as $roleid) {
+			StudipCacheFactory::getCache()->expire(self::ROLES_PLUGINS_CACHE_KEY . $roleid);
 			$stmt->execute(array($roleid, $pluginid));
 		}
 	}
@@ -240,6 +256,7 @@ class RolePersistence
 	{
 		$stmt = DBManager::get()->prepare("DELETE FROM roles_plugins WHERE roleid=? AND pluginid=?");
 		foreach ($roleids as $roleid) {
+			StudipCacheFactory::getCache()->expire(self::ROLES_PLUGINS_CACHE_KEY . $roleid);
 			$stmt->execute(array($roleid, $pluginid));
 		}
 	}
@@ -252,20 +269,30 @@ class RolePersistence
 	 */
 	public function getAssignedPluginRoles($pluginid=-1)
 	{
-		$stmt = DBManager::get()->prepare("SELECT * FROM roles_plugins WHERE pluginid=?");
-		$stmt->execute(array($pluginid));
+		$cache = StudipCacheFactory::getCache();
 
-		$assignedroles = array();
-		$roles = self::getAllRoles();
-		while ($row = $stmt->fetch())
-		{
-			$role = $roles[$row["roleid"]];
-			if (!empty($role))
-			{
-				$assignedroles[] = $role;
+		// read plugin roles from cache (unserialize does not matter on cache
+		$key = self::ROLES_PLUGINS_CACHE_KEY . (int) $pluginid;
+		$result = unserialize($cache->read($key));
+
+		// cache miss, retrieve roles from database
+		if (!$result) {
+
+			$result = array();
+			$roles = self::getAllRoles();
+
+			$stmt = DBManager::get()->prepare("SELECT * FROM roles_plugins WHERE pluginid=?");
+			$stmt->execute(array($pluginid));
+
+			while ($row = $stmt->fetch()) {
+				if (isset($roles[$row["roleid"]])) {
+					$result[] = $roles[$row["roleid"]];
+				}
 			}
+
+			$cache->write($key, serialize($result));
 		}
-		return $assignedroles;
+		return $result;
 	}
 
 	/**
