@@ -127,11 +127,13 @@ div#barTopMenu {
 	left: 0px;
 	text-align: right;
 }
+
 div#barTopMenu ul {
 	margin: 0px;
 	padding: 0px;
 	text-align: center;
 }
+
 div#barTopMenu li {
 	float: left;
 	list-style-type: none;
@@ -147,13 +149,16 @@ div#barTopMenu a {
 	list-style-type: none;
 	color: #7387ac;
 }
+
 div#barTopMenu a:hover {
 	list-style-type: none;
 	color: white;
 }
+
 div#barTopMenu img {
 	border: 0px;
 }
+
 /*****************************************************************************/
 /* DIFFERENT LOOK FOR PUBLIC COURSES                                         */
 /*****************************************************************************/

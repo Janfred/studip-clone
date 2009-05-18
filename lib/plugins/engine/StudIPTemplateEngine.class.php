@@ -1,19 +1,28 @@
 <?php
 # Lifter002: TODO
 
-require_once('lib/msg.inc.php');
-
 /**
- * @author Dennis Reil, <dennis.reil@offis.de>
- * @version $Revision$
- * $Id$
- * @package pluginengine
- * @subpackage engine
+ * StudIPTemplateEngine.class.php
+ *
+ * @author 		Dennis Reil <dennis.reil@offis.de>
+ * @author 		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
+ * @copyright
+ * @license
+ * @package 	studip
+ * @subpackage 	pluginengine
  */
 
-class StudIPTemplateEngine {
+//Imports
+require_once'lib/msg.inc.php';
 
-	function makeHeadline($title,$full_width=true,$img=""){
+/**
+ * @deprecated should be deprecated
+ *
+ */
+class StudIPTemplateEngine
+{
+	function makeHeadline($title,$full_width=true,$img="")
+	{
 		if (!$full_width) {
 			echo "\n<table cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"blank\" width=\"70%\">";
 		} else {
@@ -30,7 +39,8 @@ class StudIPTemplateEngine {
 		printf("</b></td></tr></table>");
 	}
 
-	function startContentTable($full_width=true){
+	function startContentTable($full_width=true)
+	{
 		if (!$full_width){
 			echo ("<table border=\"0\" width=\"70%\" cellspacing=\"0\" cellpadding=\"0\" bgcolor=\"#ffffff\">");
 		}
@@ -52,7 +62,8 @@ class StudIPTemplateEngine {
 		<?php
 	}
 
-	function createInfoBoxTableCell(){
+	function createInfoBoxTableCell()
+	{
 		?>
 					</td>
 				</tr>
@@ -62,7 +73,8 @@ class StudIPTemplateEngine {
 		<?php
 	}
 
-	function endInfoBoxTableCell(){
+	function endInfoBoxTableCell()
+	{
 		?>
 			</td>
 		</tr>
@@ -77,7 +89,8 @@ class StudIPTemplateEngine {
 		<?php
 	}
 
-	function endContentTable(){
+	function endContentTable()
+	{
 		?>
 					</td>
 				</tr>
@@ -93,29 +106,55 @@ class StudIPTemplateEngine {
 		<?php
 	}
 
-	function makeContentHeadline($title,$colspan=2){
+	function makeContentHeadline($title,$colspan=2)
+	{
 		printf('<table width="100%%" cellpadding="0" cellspacing="0"><tr><th align="left">&nbsp;%s</th></tr></table>', $title);
 	}
 
-	function showErrorMessage($text,$colspan=2){
-                echo '<table style="width: 100%;">';
+	/**
+	 * @deprecated since Stud.IP version 1.10
+	 *
+	 * @param unknown_type $text
+	 * @param unknown_type $colspan
+	 */
+	function showErrorMessage($text,$colspan=2)
+	{
+		echo Messagebox::get('WARNING')->show($text);
+        /*        echo '<table style="width: 100%;">';
                 parse_msg_array(array(array('error', $text)));
-                echo '</table>';
+                echo '</table>';*/
 	}
 
-	function showSuccessMessage($text,$colspan=2){
-                echo '<table style="width: 100%;">';
+	/**
+	 * @deprecated since Stud.IP version 1.10
+	 *
+	 * @param unknown_type $text
+	 * @param unknown_type $colspan
+	 */
+	function showSuccessMessage($text,$colspan=2)
+	{
+		echo Messagebox::get('SUCCESS')->show($text);
+		/*      echo '<table style="width: 100%;">';
                 parse_msg_array(array(array('msg', $text)));
-                echo '</table>';
+                echo '</table>'; */
 	}
 
-	function showInfoMessage($text,$colspan=2){
-                echo '<table style="width: 100%;">';
+	/**
+	 * @deprecated since Stud.IP version 1.10
+	 *
+	 * @param unknown_type $text
+	 * @param unknown_type $colspan
+	 */
+	function showInfoMessage($text,$colspan=2)
+	{
+		echo Messagebox::get('INFO')->show($text);
+		/*               echo '<table style="width: 100%;">';
                 parse_msg_array(array(array('info', $text)));
-                echo '</table>';
+                echo '</table>';*/
 	}
 
-	function showQuestionMessage($text,$colspan=2,$newrow=true){
+	function showQuestionMessage($text,$colspan=2,$newrow=true)
+	{
 		$colspan = $colspan -1;
 		?>
 

@@ -1,0 +1,48 @@
+/*******************************************************************************
+  Zusatz-CSS für die neuen Messageboxen
+*******************************************************************************/
+
+div.messagebox_outer { 	
+	padding: 5px;	
+}
+
+div.messagebox { 	
+	background-repeat: no-repeat;
+	background-position: 10px 10px;
+	padding: 15px 15px 15px 55px;
+	border: 1px solid;		
+}
+
+div.messagebox_buttons {
+	padding:4px;
+	float: right;
+}
+
+div.messagebox_text {
+	font-size: 12pt;
+	font-weight: bold;
+}
+
+div.messagebox_info {
+	color: #00529B;
+	background-color: #bde5f8;
+	background-image: url("../images/icons/icon_info.png");
+}
+
+div.messagebox_success {
+	color: #4F8A10;
+	background-color: #dff2bf;
+	background-image: url("../images/icons/icon_success.png");
+}
+
+div.messagebox_warning {	
+	color: #D63301;
+	background-color: #ffccba;
+	background-image: url("../images/icons/icon_warning.png");
+}
+
+div.messagebox_error {	
+	color: #D8000C;
+	background-color: #ffbaba;
+	background-image: url("../images/icons/icon_error.png");
+}
