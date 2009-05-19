@@ -21,8 +21,10 @@
 // +---------------------------------------------------------------------------+
 // $Id$
 
-function print_freie($username) {
+require_once 'visual.inc.php';
 
+function print_freie($username) {
+	
 	global $view,$PHP_SELF,$auth;
 	$db=new DB_Seminar;
 	$cssSw=new cssClassSwitcher;
@@ -36,11 +38,11 @@ function print_freie($username) {
 	echo "<br>\n";
 	echo _("Verwenden Sie die Option \"f&uuml;r andere unsichtbar\", um Memos anzulegen, die nur f&uuml;r Sie selbst auf der Homepage sichtbar werden - andere Nutzer k&ouml;nnen diese Daten nicht einsehen.");
 	echo "\n<br><br></blockquote></td></tr>\n".'<tr><td class="blank">';
-	echo '<form action="'.$PHP_SELF.'?freie=update_freie&username='.$username.'&view='.$view.'" method="POST" name="edit_freie">';
+	echo '<form action="'. URLHelper::getLink('?freie=update_freie&username='.$username.'&view='.$view) .'" method="POST" name="edit_freie">';
 	echo '<table width="100%" class="blank" border="0" cellpadding="0" cellspacing="0">';
 	if (!$db->num_rows())
 		echo '<tr><td class="'.$cssSw->getClass().'"><font size="-1"><b><blockquote>' . _("Es existieren zur Zeit keine eigenen Kategorien.") . "</blockquote></b></font></td></tr>\n";
-	echo '<tr><td class="'.$cssSw->getClass().'"> <blockquote>' . _("Kategorie") . '&nbsp; <a href="'.$PHP_SELF.'?freie=create_freie&view='.$view.'&username='.$username.'">' . makeButton("neuanlegen") . "</a></blockquote></td></tr>\n";
+	echo '<tr><td class="'.$cssSw->getClass().'"> <blockquote>' . _("Kategorie") . '&nbsp; <a href="'.URLHelper::getLink('?freie=create_freie&view='.$view.'&username='.$username).'">' . makeButton("neuanlegen") . "</a></blockquote></td></tr>\n";
 	$count = 0;
 	$hidden_count = 0;
 	while ($db->next_record() ){
@@ -61,12 +63,12 @@ function print_freie($username) {
 				echo " checked";
 			echo ">" . _("f&uuml;r andere unsichtbar") . "&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;";
 			if ($count){
-				echo "\n".'<a href="'.$PHP_SELF.'?freie=order_freie&direction=up&username='.$username.'&view='.$view.'&cat_id=' . $db->f('kategorie_id')
+				echo "\n".'<a href="'.URLHelper::getLink('?freie=order_freie&direction=up&username='.$username.'&view='.$view.'&cat_id=' . $db->f('kategorie_id'))
 				. '"><img src="'. $GLOBALS['ASSETS_URL'] . 'images/move_up.gif" hspace="4" width="13" height="11" border="0" '
 				. tooltip(_("Kategorie nach oben verschieben")) .'></a>';
 			}
 			if (($count+$hidden_count) != ($db->num_rows()-1) ){
-				echo "\n".'<a href="'.$PHP_SELF.'?freie=order_freie&direction=down&username='.$username.'&view='.$view.'&cat_id=' . $db->f("kategorie_id")
+				echo "\n".'<a href="'.URLHelper::getLink('?freie=order_freie&direction=down&username='.$username.'&view='.$view.'&cat_id=' . $db->f("kategorie_id"))
 				. '"><img src="'. $GLOBALS['ASSETS_URL'] . 'images/move_down.gif" hspace="4" width="13" height="11" border="0" '
 				. tooltip(_("Kategorie nach unten verschieben")) .'></a>';
 			}
@@ -75,7 +77,7 @@ function print_freie($username) {
 			$cols = ($auth->auth["jscript"])? ceil($auth->auth["xres"]/13):50;
 			echo '<tr><td class="'.$cssSw->getClass(). '"><blockquote><textarea  name="freie_content[]" style="width: 90%" cols="' . $cols . '" rows="7" wrap="virtual">' . htmlReady($db->f('content')) . '</textarea>';
 			echo '<br><br><input type="IMAGE" name="update" border="0" align="absmiddle" ' . makeButton("uebernehmen", "src") . ' value="' . _("ver&auml;ndern") . '">';
-			echo '&nbsp;<a href="'.$PHP_SELF.'?freie=delete_freie&freie_id='.$id.'&view='.$view.'&username='.$username.'">';
+			echo '&nbsp;<a href="'.URLHelper::getLink('?freie=verify_delete_freie&freie_id='.$id.'&view='.$view.'&username='.$username).'">';
 			echo makeButton("loeschen") . "</a><br>\n&nbsp; </blockquote></td></tr>\n";
 			$count++;
 			}
@@ -111,19 +113,38 @@ function create_freie() {
 }
 
 function delete_freie($kategorie_id) {
+	
 	global $username;
 
 	$db=new DB_Seminar;
+
+    $db->query("DELETE FROM kategorien WHERE kategorie_id='$kategorie_id'");
+	if ($db->affected_rows() == 1) {
+		parse_msg ("msg§" . _("Kategorie gel&ouml;scht!"));
+	}
+}
+
+function verify_delete_freie($kategorie_id) {
+    
+    global $username;
+   
+
+	$db=new DB_Seminar;
+
 	$db->query ("SELECT * FROM kategorien LEFT JOIN auth_user_md5 ON(range_id=user_id) WHERE username = '$username' and kategorie_id='$kategorie_id'");
 	if (!$db->next_record()) { //hier wollte jemand schummeln
 		parse_msg ("info§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion."));
 		die;
 	} else {
-		$db->query("DELETE FROM kategorien WHERE kategorie_id='$kategorie_id'");
-		if ($db->affected_rows() == 1) {
-			parse_msg ("msg§" . _("Kategorie gel&ouml;scht!"));
-		}
+	    $db->query("SELECT name FROM kategorien WHERE kategorie_id='$kategorie_id'"); 
+        while($db->next_record()) { 
+            $name = $db->f("name"); 
+        }
+        $msg = 'Möchten Sie wirklich die Kategorie: '.$name.' löschen?';
+        echo createQuestion($msg,array('freie' => 'delete_freie', "freie_id" => $kategorie_id,'username'=> $username, 'view' => 'Sonstiges'),array('username'=> $username, 'view' => 'Sonstiges'));
 	}
+	
+    
 }
 
 function update_freie() {

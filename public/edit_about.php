@@ -1218,6 +1218,7 @@ if ($view == 'Lebenslauf') {
 if ($view == "Sonstiges") {
 	if ($freie == "create_freie") create_freie();
 	if ($freie == "delete_freie") delete_freie($freie_id);
+	if ($freie == "verify_delete_freie") verify_delete_freie($freie_id);
 	if ($freie == "update_freie") update_freie();
 	if ($freie == "order_freie") order_freie($cat_id,$direction,$username);
 	print_freie($username);
