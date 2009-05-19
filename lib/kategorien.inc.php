@@ -140,7 +140,7 @@ function verify_delete_freie($kategorie_id) {
         while($db->next_record()) { 
             $name = $db->f("name"); 
         }
-        $msg = 'Möchten Sie wirklich die Kategorie: '.$name.' löschen?';
+        $msg = _('Möchten Sie wirklich die Kategorie **'.$name.'** löschen?');
         echo createQuestion($msg,array('freie' => 'delete_freie', "freie_id" => $kategorie_id,'username'=> $username, 'view' => 'Sonstiges'),array('username'=> $username, 'view' => 'Sonstiges'));
 	}
 	
