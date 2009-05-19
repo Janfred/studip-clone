@@ -302,9 +302,11 @@ if (($auth->lifetime != 0 && ((time() - $sem_create_data["timestamp"]) >$auth->l
 	$area_selection = new StudipStudyAreaSelection();
 	$sem_create_data["sem_bereich"] = array();
 
-	if ($_default_sem){
-		$one_sem = $semester->getSemesterData($_default_sem);
-		if ($one_sem["vorles_ende"] > time()) $sem_create_data['sem_start_time'] = $one_sem['beginn'];
+	if ($GLOBALS['WANTED_DEFAULT_VALUES']){
+		if ($_default_sem){
+			$one_sem = $semester->getSemesterData($_default_sem);
+			if ($one_sem["vorles_ende"] > time()) $sem_create_data['sem_start_time'] = $one_sem['beginn'];
+		}
 	}
 	$sem_create_data["timestamp"]=time();
 	}
