@@ -298,7 +298,7 @@ while ($tmp_first_date < $end_date) {
 				<?
 				$turnus = $sem->getFormattedTurnusDates();		// string representation of all CycleData-objects is retrieved as an associative array: key: CycleDataID, val: string
 					//TODO: string representation should not be collected by a big array, but with the toString method of the CycleData-object
-					foreach ($sem->metadate->cycles as $metadate_id => $val) {		// cycle trough all CycleData objects
+					foreach ($sem->metadate->getCycleData() as $metadate_id => $cycle_element) {		// cycle trough all CycleData objects
 						if (!$tpl['room'] = $sem->getFormattedPredominantRooms($metadate_id)) {		// getPredominantRoom returns the predominant booked room
 							$tpl['room'] = _("keiner");
 						}
@@ -314,12 +314,12 @@ while ($tmp_first_date < $end_date) {
 
 						$tpl['md_id'] = $metadate_id;
 						$tpl['date'] = $turnus[$metadate_id];
-						$tpl['mdDayNumber'] = $val->day;
-						$tpl['mdStartHour'] = $val->start_stunde;
-						$tpl['mdEndHour'] = $val->end_stunde;
-						$tpl['mdStartMinute'] = $val->start_minute;
-						$tpl['mdEndMinute'] = $val->end_minute;
-						$tpl['mdDescription'] = htmlReady($val->description);
+						$tpl['mdDayNumber'] = $cycle_element['day'];
+						$tpl['mdStartHour'] = $cycle_element['start_hour'];
+						$tpl['mdEndHour'] = $cycle_element['end_hour'];
+						$tpl['mdStartMinute'] = $cycle_element['start_minute'];
+						$tpl['mdEndMinute'] = $cycle_element['end_minute'];
+						$tpl['mdDescription'] = htmlReady($cycle_element['desc']);
 
 						include('lib/raumzeit/templates/metadate.tpl');
 
