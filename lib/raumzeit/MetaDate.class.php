@@ -334,7 +334,7 @@ class MetaDate {
 				'end_minute' => $val->end_minute, 
 				'desc' => $val->description, 
 				'room' => $val->room, 
-				'resource_id' => $val->resource_id
+				'resource_id' => $val->resource_id,
 				'assigned_rooms' => $val->getPredominantRoom(),
 				'freetext_rooms' => $val->getFreetextPredominantRoom()
 			);
