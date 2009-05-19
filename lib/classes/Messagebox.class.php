@@ -44,8 +44,6 @@ class Messagebox
 	private $class;
 	private $id;
 
-	private static $instance;
-
 	/**
 	 * this is the constructor of this class. it creates an unique id and sets
 	 * the type of the messagebox
@@ -67,8 +65,7 @@ class Messagebox
 	 */
 	public function get($type)
 	{
-		Messagebox::$instance = new Messagebox($type);
-		return Messagebox::$instance;
+		return new Messagebox($type);
 	}
 
 	/**
@@ -81,9 +78,6 @@ class Messagebox
 	 */
 	public function show($message, $details='')
 	{
-		//Zuviele Meldungen benutzen HTML
-		//$message = ($this->type == 'ERROR')? htmlready(_('Systemfehler: ').$message) : htmlready($message);
-		//Ersatz:
 		$message = ($this->type == 'ERROR')? _('Systemfehler! ').$message : $message;
 		$id = $this->id;
 		$class = $this->class;

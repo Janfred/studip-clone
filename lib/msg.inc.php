@@ -40,7 +40,7 @@ require_once 'lib/classes/Messagebox.class.php';
 //Displays Errormessages (kritischer Abbruch, Symbol "X")
 function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
 {
-	echo '<tr><td class="blank" colspan="'.$colspan.'">';
+	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
 	echo Messagebox::get('WARNING')->show($msg);
 	echo '</td></tr>';
 }
@@ -48,7 +48,7 @@ function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = fals
 //Displays Successmessages (Information ueber erfolgreiche Aktion, Symbol Haken)
 function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
 {
-	echo '<tr><td class="blank" colspan="'.$colspan.'">';
+	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
 	echo Messagebox::get('SUCCESS')->show($msg);
 	echo '</td></tr>';
 }
@@ -56,7 +56,7 @@ function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
 //Displays Informationmessages  (Hinweisnachrichten, Symbol Ausrufungszeichen)
 function my_info($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
 {
-	echo '<tr><td class="blank" colspan="'.$colspan.'">';
+	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
 	echo Messagebox::get('INFO')->show($msg);
 	echo '</td></tr>';
 }
