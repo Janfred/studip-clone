@@ -38,7 +38,6 @@ require_once ('lib/visual.inc.php');
 require_once ('lib/user_visible.inc.php');
 require_once ('lib/messaging.inc.php');
 require_once ('lib/contact.inc.php');
-require_once ('lib/seminar_open.php');
 require_once ('lib/classes/UserConfig.class.php');
 
 // access to user's config setting
@@ -438,11 +437,11 @@ function change_messaging_view() {
 					</td>
 				</tr>
 				<tr <? $cssSw->switchClass() ?>>
-					<td  <?=$cssSw->getFullClass()?> colspan=2 align="middle">
+					<td  <?=$cssSw->getFullClass()?> colspan="2" align="center">
 						<input type="hidden" name="view" value="Messaging">
-						<font size=-1>
-						<input type="image" <?=makeButton("uebernehmen", "src") ?> border=0 value="<?_("Änderungen übernehmen")?>" name="newmsgset"></font>&nbsp;
-						<input type="image" name="set_msg_default" <?=makeButton("zuruecksetzen", "src") ?> border=0 value="<?_("Einstellungen zurücksetzen")?>"></font>
+						<?=makeButton('uebernehmen', 'input', _("Änderungen übernehmen"), 'newmsgset')?>
+						&nbsp;
+						<?=makeButton('zuruecksetzen', 'input', _("Einstellungen zurücksetzen"), 'set_msg_default')?>
 						</form>
 					</td>
 				</tr>

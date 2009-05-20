@@ -28,7 +28,6 @@ $perm->check("user");
 require_once 'lib/functions.php';
 require_once 'lib/msg.inc.php';
 require_once 'lib/visual.inc.php';
-require_once 'lib/include/messagingSettings.inc.php';
 require_once 'lib/messaging.inc.php';
 require_once 'lib/contact.inc.php';
 require_once 'lib/user_visible.inc.php';
@@ -65,11 +64,12 @@ if ($sms_msg) {
 }
 
 if (($change_view) || ($delete_user) || ($view=="Messaging")) {
+	include 'lib/include/messagingSettings.inc.php';
 	change_messaging_view();
 	echo "</tr></td></table>";
 	page_close();
 	die;
-	}
+}
 
 if ($cmd=="add_user") {
 	$msging->add_buddy ($add_uname);
