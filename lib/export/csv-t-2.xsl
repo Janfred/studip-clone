@@ -39,6 +39,7 @@
 		<xsl:text>Vorname;</xsl:text>
 		<xsl:text>Nachname;</xsl:text>
 		<xsl:text>Titel2;</xsl:text>
+		<xsl:text>Nutzernamen;</xsl:text>
 		<xsl:text>Privatadr;</xsl:text>
 		<xsl:text>Privatnr;</xsl:text>
 		<xsl:text>E-Mail;</xsl:text>
@@ -98,6 +99,11 @@
 			
 			<xsl:if test="titel2">
 				<xsl:value-of select="titel2"/>
+			</xsl:if>
+			<xsl:text>";"</xsl:text>
+			
+			<xsl:if test="username">
+				<xsl:value-of select="username"/>
 			</xsl:if>
 			<xsl:text>";"</xsl:text>
 			

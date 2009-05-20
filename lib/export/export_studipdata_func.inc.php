@@ -200,11 +200,11 @@ function export_inst($inst_id, $ex_sem_id = "all")
 			$data_object .= xml_tag($val, $db->f($key));
 	}
 	reset($xml_names_inst);
-	$db->query("SELECT Name FROM Institute WHERE Institut_id = '" . $db->f('fakultaets_id') . "' AND fakultaets_id = '" . $db->f('fakultaets_id') . "'");
+	$db->query("SELECT Name, Institut_id FROM Institute WHERE Institut_id = '" . $db->f('fakultaets_id') . "' AND fakultaets_id = '" . $db->f('fakultaets_id') . "'");
 	$db->next_record();
 	{
 		if ($db->f("Name") != "")
-			$data_object .= xml_tag($xml_groupnames_inst["childobject"], $db->f("Name"));
+			$data_object .= xml_tag($xml_groupnames_inst["childobject"], $db->f("Name"), array('key' => $db->f('Institut_id')));
 	}
 	// freie Datenfelder ausgeben
 	$data_object .= export_datafields($inst_id, $xml_groupnames_inst["childgroup2"], $xml_groupnames_inst["childobject2"]);
@@ -288,8 +288,9 @@ function export_sem($inst_id, $ex_sem_id = "all")
 
 	if (!$GLOBALS['perm']->have_perm('root') && !$GLOBALS['perm']->have_studip_perm('admin', $inst_id)) $addquery .= " AND visible=1 ";
 
-	$db->query("SELECT * FROM seminar_inst
+	$db->query("SELECT seminare.*,seminar_inst.seminar_id, Institute.Name as heimateinrichtung FROM seminar_inst
 				LEFT JOIN seminare USING (Seminar_id)
+				LEFT JOIN Institute ON seminare.Institut_id=Institute.Institut_id
 				WHERE seminar_inst.Institut_id = '" . $inst_id . "' " . $addquery . "
 				ORDER BY " . $order);
 
@@ -361,6 +362,10 @@ function export_sem($inst_id, $ex_sem_id = "all")
 					$data_object .= xml_tag($val[1], $sem_obj->getFirstDate('export'));
 					$data_object .= xml_tag($val[2], $sem_obj->getFormattedTurnus());
 					$data_object .= xml_close_tag( $xml_groupnames_lecture["childgroup1"] );
+				}
+				elseif ($key == "Institut_id")
+				{
+					$data_object .= xml_tag($val, $db->f('heimateinrichtung') , array('key' => $db->f($key)));
 				}
 				elseif ($db->f($key) != "")
 					$data_object .= xml_tag($val, $db->f($key));

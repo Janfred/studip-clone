@@ -576,13 +576,20 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				$csv_nachname = trim($csv_name[0]);
 				$csv_vorname = trim($csv_name[1]);
 				if ($csv_nachname){
-					$db->query("SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms FROM auth_user_md5 a ".
-					"LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.seminar_id='$SessSemName[1]')  ".
-					"WHERE perms IN ('autor','tutor','dozent') AND ISNULL(b.seminar_id) AND ".
-					"(username='{$csv_nachname}' OR ".
-					"(Nachname LIKE '" . $csv_nachname . "'"
-					. ($csv_vorname ? " AND Vorname LIKE '" . $csv_vorname . "'" : '')
-					. ")) ORDER BY Nachname");
+					if($_REQUEST['csv_import_format'] == 'realname'){
+						$db->query("SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms, b.Seminar_id as is_present FROM auth_user_md5 a ".
+						"LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.Seminar_id='$SessSemName[1]')  ".
+						"WHERE perms IN ('autor','tutor','dozent') AND ".
+						"(username='{$csv_nachname}' OR ".
+						"(Nachname LIKE '" . $csv_nachname . "'"
+						. ($csv_vorname ? " AND Vorname LIKE '" . $csv_vorname . "'" : '')
+						. ")) ORDER BY Nachname");
+					} else {
+						$db->query("SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms, b.Seminar_id as is_present FROM auth_user_md5 a ".
+						"LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.Seminar_id='$SessSemName[1]')  ".
+						"WHERE perms IN ('autor','tutor','dozent') AND ".
+						"username LIKE '" . $csv_nachname . "' ORDER BY Nachname");
+					}
 					if ($db->num_rows() > 1) {
 						while ($db->next_record()) {
 							$csv_mult_founds[$csv_line][] = $db->Record;
@@ -590,18 +597,22 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 						$csv_count_multiple++;
 					} else if ($db->num_rows() > 0) {
 						$db->next_record();
-						if(insert_seminar_user($id, $db->f('user_id'), 'autor', isset($_REQUEST['consider_contingent']), $_REQUEST['consider_contingent'])){
-							$csv_count_insert++;
-							setTempLanguage($userchange);
-							if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-								$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn als TeilnehmerIn in die Veranstaltung **%s** eingetragen."), $SessSemName[0]);
-							} else {
-								$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn als TeilnehmerIn in die Veranstaltung **%s** eingetragen."), $SessSemName[0]);
+						if(!$db->f('is_present')){
+							if(insert_seminar_user($id, $db->f('user_id'), 'autor', isset($_REQUEST['consider_contingent']), $_REQUEST['consider_contingent'])){
+								$csv_count_insert++;
+								setTempLanguage($userchange);
+								if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+									$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn als TeilnehmerIn in die Veranstaltung **%s** eingetragen."), $SessSemName[0]);
+								} else {
+									$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn als TeilnehmerIn in die Veranstaltung **%s** eingetragen."), $SessSemName[0]);
+								}
+								restoreLanguage();
+								$messaging->insert_message(mysql_escape_string($message), $db->f('username'), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
+							} elseif (isset($_REQUEST['consider_contingent'])){
+								$csv_count_contingent_full++;
 							}
-							restoreLanguage();
-							$messaging->insert_message(mysql_escape_string($message), $db->f('username'), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
-						} elseif (isset($_REQUEST['consider_contingent'])){
-							$csv_count_contingent_full++;
+						} else {
+							$csv_count_present++;
 						}
 					} else {
 						// not found
@@ -640,6 +651,10 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 			if ($csv_count_insert) {
 				$msg .=  'msg§' . sprintf(_("%s NutzerInnen als AutorIn in die Veranstaltung eingetragen!"),
 						$csv_count_insert) . '§';
+			}
+			if ($csv_count_present) {
+				$msg .=  'info§' . sprintf(_("%s NutzerInnen waren bereits in der Veranstaltung eingetragen!"),
+						$csv_count_present) . '§';
 			}
 			if ($csv_count_multiple) {
 				$msg .= 'info§' . sprintf(_("%s NutzerInnen konnten <b>nicht eindeutig</b> zugeordnet werden! Nehmen Sie die Zuordnung am Ende dieser Seite manuell vor."),
@@ -1667,15 +1682,21 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 	echo "<table width=\"99%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" border=\"0\" ";
 	echo "align=\"center\">\n";
 	if (!sizeof($csv_mult_founds)) {
-		echo "<tr><td width=\"40%\" class=\"steel1\">\n<div style=\"font-size: small; margin-left:6px; width:250px;\">";
+		echo "<tr><td width=\"40%\" class=\"steel1\">\n<div style=\"font-size: small; margin-left:6px; width:300px;\">";
 		echo '<b>' . _("Teilnehmerliste übernehmen") . '</b><br>';
 		echo _("In das nebenstehende Textfeld können Sie eine Liste mit Namen von NutzerInnen eingeben, die in die Veranstaltung aufgenommen werden sollen.");
-		echo '<br>' . _("Geben Sie in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein.");
-		echo '<br>'._('Alternativ kann auch der Benutzername eingegeben werden.');
-		echo '<br>' . _("Eingabeformat: <b>Nachname[, Vorname] &crarr;</b>");
-		echo '<br>' . _("oder: <b>Benutzername &crarr;</b>");
+		echo '<br>' . _("Wählen Sie in der Auswahlbox das gewünschte Format, in dem Sie die Namen eingeben möchten:");
+		echo '<br>' . _("<b>Eingabeformat: Nachname, Vorname &crarr;</b>");
+		echo '<br>' . _("Geben Sie dazu in jede Zeile den Nachnamen und (optional) den Vornamen getrennt durch ein Komma oder ein Tabulatorzeichen ein.");
+		echo '<br>' . _("<b>Eingabeformat: Nutzername &crarr;</b>");
+		echo '<br>' . _("Geben Sie dazu in jede Zeile den Stud.IP Nutzernamen ein.");
 		echo "</div></td>\n";
 		echo "<td width=\"40%\" class=\"steel1\">";
+		echo '<div style="margin-top:10px;margin-bottom:10px;">' . _("Eingabeformat:");
+		echo '<select style="margin-left:10px;" name="csv_import_format">';
+		echo '<option value="realname">'._("Nachname, Vorname").' &crarr;</option>';
+		echo '<option value="username" '.($_REQUEST['csv_import_format'] == 'username' ? 'selected': '').'>'. _("Nutzername"). '&crarr;</option>';
+		echo '</select></div>';
 		echo "<textarea name=\"csv_import\" rows=\"6\" cols=\"50\">";
 		foreach($csv_not_found as $line) echo htmlReady($line) . chr(10);
 		echo "</textarea>";

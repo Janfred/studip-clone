@@ -57,8 +57,8 @@ global $UNI_NAME_CLEAN, $SEM_ID, $SOFTWARE_VERSION, $ex_type, $ex_sem, $range_na
 	elseif ($range_name != "") $xml_tag_string .= " range=\"" . htmlspecialchars ($range_name) . "\"";
 	if ($UNI_NAME_CLEAN != "") $xml_tag_string .= " uni=\"" . htmlspecialchars ($UNI_NAME_CLEAN) . "\"";
 	if ($ex_type !="veranstaltung")
-		$xml_tag_string .= " zeitraum=\"" . htmlspecialchars ($all_semester[$SEM_ID]["name"]) . "\"";
-	elseif ($all_semester[$ex_sem]["name"] != "") $xml_tag_string .= " zeitraum=\"" . htmlspecialchars ($all_semester[$ex_sem]["name"]) . "\"";
+		$xml_tag_string .= " zeitraum=\"" . htmlspecialchars ($all_semester[$SEM_ID]["name"]) . "\" semester_id=\"" . htmlspecialchars ($SEM_ID) . "\"";
+	elseif ($all_semester[$ex_sem]["name"] != "") $xml_tag_string .= " zeitraum=\"" . htmlspecialchars ($all_semester[$ex_sem]["name"]) . "\" semester_id=\"" . htmlspecialchars ($all_semester[$ex_sem]["semester_id"]) . "\"";
 	$xml_tag_string .= ">\n";
 	return $xml_tag_string;
 }

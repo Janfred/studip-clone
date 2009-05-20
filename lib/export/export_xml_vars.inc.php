@@ -73,7 +73,8 @@ $xml_names_lecture = array(
  	"VeranstaltungsNummer"	=>		"veranstaltungsnummer",
  	"ects"			=>		"ects",
 	"bereich"			=>		"bereich",
-	"metadata_dates"	=>		array("vorbesprechung", "erstertermin", "termin")
+	"metadata_dates"	=>		array("vorbesprechung", "erstertermin", "termin"),
+	"Institut_id"		=> "heimateinrichtung"
 );
 
 $xml_groupnames_person = array(
@@ -91,6 +92,7 @@ $xml_names_person = array(
 	"Vorname"		=>		"vorname",
 	"Nachname"		=>		"nachname",
 	"title_rear"		=>		"titel2",
+	"username"		=> 		"username",
 	"geschlecht"		=>		"geschlecht",
 	"sprechzeiten"		=>		"sprechzeiten",
 	"raum"			=>		"raum",
