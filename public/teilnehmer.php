@@ -514,19 +514,27 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 
 				$admission_user = insert_seminar_user($id, $userchange, $status, ($accepted || $_REQUEST['consider_contingent'] ? TRUE : FALSE), $_REQUEST['consider_contingent']);
 				//Only if user was on the waiting list
-				if ($admission_user == 2) {
+				if($admission_user){
 					setTempLanguage($userchange);
-					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
-						if (!$accepted) {
-							$message = sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+					if ($admission_user == 2) {
+						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+							if (!$accepted) {
+								$message = sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+							} else {
+								$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
+							}
 						} else {
-							$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
+							if (!$accepted) {
+								$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+							} else {
+								$message = sprintf(_("Sie wurden von einem/r DozentIn oder AdministratorIn vom Status **vorläufig akzeptiert** zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
+							}
 						}
 					} else {
-						if (!$accepted) {
-							$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+							$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn als TeilnehmerIn in die Veranstaltung **%s** eingetragen."), $SessSemName[0]);
 						} else {
-							$message = sprintf(_("Sie wurden von einem/r DozentIn oder AdministratorIn vom Status **vorläufig akzeptiert** zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
+							$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn als TeilnehmerIn in die Veranstaltung **%s** eingetragen."), $SessSemName[0]);
 						}
 					}
 					restoreLanguage();
@@ -584,6 +592,14 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 						$db->next_record();
 						if(insert_seminar_user($id, $db->f('user_id'), 'autor', isset($_REQUEST['consider_contingent']), $_REQUEST['consider_contingent'])){
 							$csv_count_insert++;
+							setTempLanguage($userchange);
+							if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+								$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn als TeilnehmerIn in die Veranstaltung **%s** eingetragen."), $SessSemName[0]);
+							} else {
+								$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn als TeilnehmerIn in die Veranstaltung **%s** eingetragen."), $SessSemName[0]);
+							}
+							restoreLanguage();
+							$messaging->insert_message(mysql_escape_string($message), $db->f('username'), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
 						} elseif (isset($_REQUEST['consider_contingent'])){
 							$csv_count_contingent_full++;
 						}
@@ -599,6 +615,14 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				if ($selected_user) {
 					if(insert_seminar_user($id, get_userid($selected_user), 'autor', isset($_REQUEST['consider_contingent']), $_REQUEST['consider_contingent'])){
 						$csv_count_insert++;
+						setTempLanguage($userchange);
+						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+							$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn als TeilnehmerIn in die Veranstaltung **%s** eingetragen."), $SessSemName[0]);
+						} else {
+							$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn als TeilnehmerIn in die Veranstaltung **%s** eingetragen."), $SessSemName[0]);
+						}
+						restoreLanguage();
+						$messaging->insert_message(mysql_escape_string($message), $selected_user, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
 					} elseif (isset($_REQUEST['consider_contingent'])){
 						$csv_count_contingent_full++;
 					}
