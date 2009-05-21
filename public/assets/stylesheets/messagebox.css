@@ -2,25 +2,21 @@
   Zusatz-CSS für die neuen Messageboxen
 *******************************************************************************/
 
-div.messagebox_outer { 	
-	padding: 5px;	
-}
-
-div.messagebox { 	
+div.messagebox {
+	margin: 5px;
 	background-repeat: no-repeat;
 	background-position: 10px 10px;
 	padding: 15px 15px 15px 55px;
-	border: 1px solid;		
+	border: 1px solid;
+	position: relative;
+	font-size: 12pt;
+	font-weight: bold;
 }
 
 div.messagebox_buttons {
-	padding:4px;
-	float: right;
-}
-
-div.messagebox_text {
-	font-size: 12pt;
-	font-weight: bold;
+	position: absolute;
+	right: 3px;
+	top: 3px;
 }
 
 div.messagebox_info {
@@ -35,13 +31,13 @@ div.messagebox_success {
 	background-image: url("../images/icons/icon_success.png");
 }
 
-div.messagebox_warning {	
+div.messagebox_warning {
 	color: #D63301;
 	background-color: #ffccba;
 	background-image: url("../images/icons/icon_warning.png");
 }
 
-div.messagebox_error {	
+div.messagebox_error {
 	color: #D8000C;
 	background-color: #ffbaba;
 	background-image: url("../images/icons/icon_error.png");
