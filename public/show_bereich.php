@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 /*
 show_bereich.php - Anzeige von Veranstaltungen eines Bereiches oder Institutes
@@ -29,15 +29,14 @@ require_once('lib/visual.inc.php');
 require_once 'lib/classes/SemBrowse.class.php';
 
 
-	$sess->register ("show_bereich_data");
 	$db=new DB_Seminar;
 	$intro_text = $head_text = '';
 	if ($id){
-		$show_bereich_data["id"]=$id;
-		$show_bereich_data['level'] = $level;
+		URLHelper::bindLinkParam('id',$id);
+		URLHelper::bindLinkParam('level',$level);
 	}
 
-	if (!$_REQUEST['group_by']){
+	if (!$_REQUEST['group_by']||!$group_by){
 		$_REQUEST['group_by'] = 0;
 	}
 	unset($_REQUEST['level']);
@@ -49,7 +48,7 @@ require_once 'lib/classes/SemBrowse.class.php';
 	$sem_browse_obj->target_url="details.php";	//teilt der nachfolgenden Include mit, wo sie die Leute hinschicken soll
 	$sem_browse_obj->target_id="sem_id"; 		//teilt der nachfolgenden Include mit, wie die id die &uuml;bergeben wird, bezeichnet werden soll
 	$sem_browse_obj->sem_browse_data['level'] = $show_bereich_data['level'];
-	switch ($show_bereich_data['level']) {
+	switch ($level) {
 		case "sbb":
 			$the_tree =& TreeAbstract::GetInstance("StudipSemTree", array('visible_only' => !$GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM'))));
 			$bereich_typ = _("Studienbereich");
@@ -64,17 +63,17 @@ require_once 'lib/classes/SemBrowse.class.php';
 			}
 			$sem_browse_obj->show_result = true;
 			$sem_browse_obj->sem_browse_data['sset'] = false;
-			$sem_browse_obj->sem_browse_data['start_item_id'] = $show_bereich_data["id"];
+			$sem_browse_obj->sem_browse_data['start_item_id'] = $id;
 			break;
 		case "s":
 			$bereich_typ=_("Einrichtung");
-			$db->query("SELECT Name FROM Institute WHERE Institut_id='".$show_bereich_data["id"]."'");
+			$db->query("SELECT Name FROM Institute WHERE Institut_id='".$id."'");
 			$db->next_record();
 			$head_text = _("Übersicht aller Veranstaltungen einer Einrichtung");
 			$intro_text = sprintf(_("Alle Veranstaltungen der Einrichtung <b>%s</b>"), htmlReady($db->f("Name")));
 			$db->query("SELECT seminar_inst.seminar_id FROM seminar_inst
 			LEFT JOIN seminare ON (seminar_inst.seminar_id=seminare.Seminar_id)
-			WHERE seminar_inst.Institut_id='".$show_bereich_data["id"]."'" . (!$GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM')) ? " AND seminare.visible='1'" : ""));
+			WHERE seminar_inst.Institut_id='".$id."'" . (!$GLOBALS['perm']->have_perm(get_config('SEM_VISIBILITY_PERM')) ? " AND seminare.visible='1'" : ""));
 
 			$sem_browse_obj->sem_browse_data['search_result'] = array();
 			while ($db->next_record()){
@@ -95,7 +94,7 @@ if (isset($_REQUEST['send_excel'])){
 ob_end_flush();
 // Start of Output
 $HELP_KEYWORD="Basis.Informationsseite";
-$CURRENT_PAGE = ($show_bereich_data['level'] == "s" ? $SessSemName["header_line"]." - " : "").$head_text;
+$CURRENT_PAGE = ($level == "s" ? $SessSemName["header_line"]." - " : "").$head_text;
 
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -116,7 +115,7 @@ $sem_browse_obj->print_result();
 $goup_by_links = "";
 for ($i = 0; $i < count($sem_browse_obj->group_by_fields); ++$i){
 	if($sem_browse_data['group_by'] != $i){
-		$group_by_links .= "<a href=\"$PHP_SELF?group_by=$i\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"10\" height=\"20\" border=\"0\">";
+		$group_by_links .= "<a href=\"".URLHelper::getLink("",array('group_by'=>$i))."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=\"10\" height=\"20\" border=\"0\">";
 	} else {
 		$group_by_links .= "<img src=\"".$GLOBALS['ASSETS_URL']."images/forumrot.gif\" border=\"0\" align=\"bottom\">";
 	}
@@ -130,7 +129,7 @@ $infobox[] = 	array(	"kategorie" => _("Anzeige gruppieren:"),
 						"eintrag" => array(array(	"icon" => "blank.gif",
 													"text" => $group_by_links))
 				);
-if (($EXPORT_ENABLE) AND ($show_bereich_data['level'] == "s") AND ($perm->have_perm("tutor")))
+if (($EXPORT_ENABLE) AND ($level == "s") AND ($perm->have_perm("tutor")))
 {
 	include_once($PATH_EXPORT . "/export_linking_func.inc.php");
 	$infobox[] = 	array(	"kategorie" => _("Daten ausgeben:"),
@@ -142,7 +141,7 @@ if (($EXPORT_ENABLE) AND ($show_bereich_data['level'] == "s") AND ($perm->have_p
 														)
 					);
 }
-if (($EXPORT_ENABLE) AND ($show_bereich_data['level'] == "sbb") AND ($perm->have_perm("tutor")))
+if (($EXPORT_ENABLE) AND ($level == "sbb") AND ($perm->have_perm("tutor")))
 {
 	include_once($PATH_EXPORT . "/export_linking_func.inc.php");
 	$infobox[] = 	array(	"kategorie" => _("Daten ausgeben:"),
