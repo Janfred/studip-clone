@@ -34,8 +34,8 @@ class Course_StudyAreasController extends Trails_Controller {
 
     # set up language prefs
     #$_language_path = init_i18n($_language);
-	include 'lib/seminar_open.php';
-	
+    include 'lib/seminar_open.php';
+
     # user must have tutor permission
     $perm->check('tutor');
 
@@ -49,7 +49,7 @@ class Course_StudyAreasController extends Trails_Controller {
       return FALSE;
     }
   }
-  
+
 
   # see Trails_Controller#after_filter  # see Trails_Controller#after_filter
   function after_filter($action, $args) {
@@ -297,11 +297,11 @@ class Course_StudyAreasController extends Trails_Controller {
       $GLOBALS['sem_create_data']['sem_bereich'] = $selection->getAreaIDs();
     }
   }
-  
+
   function set_course($course_id){
     $this->selection = self::get_selection($course_id);
     if ($course_id){
-  	  $this->course_id = $course_id;
+      $this->course_id = $course_id;
       $this->course = Seminar::getInstance($course_id);
       $this->semester_id = SemesterData::GetSemesterIdByDate($this->course->getSemesterStartTime());
     } else {
