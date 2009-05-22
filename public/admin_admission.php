@@ -1,5 +1,5 @@
 <?
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 # Lifter005: TODO - form validation and password encryption
 /**
@@ -135,11 +135,11 @@ $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
 $db6 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
-$sess->register("admin_admission_data");
+URLHelper::bindLinkParam('admin_admission_data',$admin_admission_data);
 $messaging = new messaging;
 
 /**
-* This function creates a snapshor for all the values the admin_admission script uses
+* This function creates a snapshot for all the values the admin_admission script uses
 *
 * The function serializes all the data which is used on this page. So you can
 * compare an old and a new state of the whole set. It is used to inform the user,
@@ -781,7 +781,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 	</tr>
 	<tr>
 	<td class="blank" colspan="2">
-	<form method="POST" name="Formular" action="<? echo $PHP_SELF ?>"
+	<form method="POST" name="Formular" action="<?=URLHelper::getLink()?>"
 	<? if (!$admin_admission_data["admission_type"] && !(LockRules::Check($seminar_id, 'Passwort'))) echo " onSubmit=\"return doCrypt();\" "; ?>>
 		<table width="99%" border="0" cellpadding="2" cellspacing="0" align="center">
 		<tr <? $cssSw->switchClass() ?>>
@@ -808,7 +808,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 						printf ("<font size=-1>"._("Sie haben ein Anmeldeverfahren aktiviert. Dieser Schritt kann %s nicht %s r&uuml;ckg&auml;ngig gemacht werden! Bei Problemen wenden sie sich bitte an eineN der hier aufgef&uuml;hrten AdministratorInnen.")."<br></font>", "</font><font size=-1 color=\"red\"><b>", "</b></font><font size=-1>");
 					printf ("<input type=\"HIDDEN\" name=\"commit_no_admission_data\" value=\"TRUE\">");
 					while ($db->next_record()) {
-						printf ("<li><font size=-1><a href=\"about.php?username=%s\">%s</a></font></li>", $db->f("username"), htmlReady($db->f("fullname")));
+						echo "<li><font size=-1><a href=\"". URLHelper::getLink('about.php?username='.$db->f("username")) ."\">". htmlReady($db->f("fullname")) ."</a></font></li>";
 					}
 				} else { ?>
           <? if (LockRules::Check($seminar_id, 'admission_type')) : ?>
@@ -822,13 +822,13 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 						<font size="-1">
 						<?=_("Diese Veranstaltung ist Mitglied einer Gruppe. Die Art des Anmeldeverfahrens können sie nur für die Gruppe insgesamt ändern.")?>
 						<br>
-						<a href="show_admission.php?group_sem_x=1&group_id=<?=$group_obj->getId()?>">
+						<a href="<?=URLHelper::getLink('show_admission.php?group_sem_x=1&group_id='.$group_obj->getId())?>">
 						<img src="<?=$GLOBALS['ASSETS_URL']?>images/link_intern.gif" border="0"> <?=_("Gruppenverwaltung")?></a>
 						<div style="margin-top:5px;">
 						<?=_("Veranstaltungsgruppe:")?>&nbsp;<?=htmlReady($group_obj->getValue('name'))?>
 						<ol>
 						<?foreach($group_obj->getMemberIds() as $m_id){?>
-							<li><a href="admin_admission.php?select_sem_id=<?=$m_id?>"><?=htmlReady($group_obj->members[$m_id]->getName())?></a></li>
+							<li><a href="<?=URLHelper::getLink('admin_admission.php?select_sem_id='.$m_id)?>"><?=htmlReady($group_obj->members[$m_id]->getName())?></a></li>
 						<?}?>
 						</ol>
 						</div>
@@ -938,7 +938,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 							echo _("Bei Problemen wenden sie sich bitte an eineN der hier aufgef&uuml;hrten AdministratorInnen.");
 						printf ("<input type=\"HIDDEN\" name=\"commit_no_admission_data\" value=\"TRUE\">");
 						while ($db->next_record()) {
-							printf ("<li><font size=-1><a href=\"about.php?username=%s\">%s</a></font></li>", $db->f("username"), htmlReady($db->f("fullname")));
+							echo "<li><font size=-1><a href=\"". URLHelper::getLink('about.php?username='.$db->f("username")) ."\">". htmlReady($db->f("fullname")) ."</a></font></li>";
 						}
 					} else { ?>
 						<b><?=_("Anmeldemodus:")?></b><br>
@@ -1177,10 +1177,10 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 									} else {
 										printf ("<input type=\"HIDDEN\" name=\"studg_ratio_old[]\" value=\"%s\">", $val["ratio"]);
 										printf ("<input type=\"TEXT\" name=\"studg_ratio[]\" size=5 maxlength=5 value=\"%s\"><font size=-1> %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
-										printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen")).">", $PHP_SELF, $key);
+										echo "&nbsp; <a href=\"". URLHelper::getLink('?delete_studg='.$key) ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen")).">";
 									}
 								} elseif (!LockRules::Check($seminar_id, 'admission_studiengang') && (!($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin")))) {
-									printf ("&nbsp; <a href=\"%s?delete_studg=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))."></a>", $PHP_SELF, $key);
+									echo "&nbsp; <a href=\"". URLHelper::getlink('?delete_studg='.$key) ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))."></a>";
 								}
 								?>
 								</td>
