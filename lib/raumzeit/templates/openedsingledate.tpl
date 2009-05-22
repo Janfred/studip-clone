@@ -5,8 +5,8 @@
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
 				<TD width="2%" align="left" valign="top" class="<?=$tpl['class']?>">
-					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
-						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0">
+					<A href="<?= URLHelper::getLink('?cmd=close&open_close_id='. $tpl['sd_id'] .'#'. $tpl['sd_id']) ?>">
+						<?= Assets::img('forumgraurunt.gif') ?>
 					</A>
 				</TD>
 				<TD width="43%" nowrap class="<?=$tpl['class']?>">
@@ -34,7 +34,8 @@
 					<? } ?>
 				</TD>
 				<TD width="5%" class="<?=$tpl['class']?>" align="right">
-					<A href="<?=$PHP_SELF?>?cmd=delete_singledate&sd_id=<?=$tpl['sd_id']?>&cycle_id=<?=($tpl['cycle_id']) ? $tpl['cycle_id'] : '' ?>">
+					<A href="<?= URLHelper::getLink('?cmd=delete_singledate&sd_id='. $tpl['sd_id'] 
+						.'&cycle_id='. ($tpl['cycle_id'] ? $tpl['cycle_id'] : '')) ?>">
 						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" align="absmiddle">
 					</A>
 				</TD>
@@ -65,12 +66,12 @@
 					<?=$GLOBALS['RESOURCES_ENABLE'] ? _("(f&uuml;hrt <em>nicht</em> zu einer Raumbuchung)"): ''?><br>
 					<? if ($GLOBALS['RESOURCES_ENABLE'] && $GLOBALS['RESOURCES_ALLOW_ROOM_REQUESTS']) { ?>
 					<?=_("Raumanfrage")?>
-					<A href="admin_room_requests.php?seminar_id=<?=$tpl['seminar_id']?>&termin_id=<?=$tpl['sd_id']?>">
+					<A href="<?= URLHelper::getLink('admin_room_requests.php?seminar_id='. $tpl['seminar_id'] .'&termin_id='. $tpl['sd_id']) ?>">
 						<IMG <?=($tpl['room_request']) ? makebutton('bearbeiten', 'src') : makebutton('erstellen', 'src')?> border="0" align="absmiddle">
 					</A>
 					<? if ($tpl['room_request']) { ?>
 					<?=_("oder")?>
-					<A href="<?=$PHP_SELF?>?cmd=removeRequest&cycle_id=<?=$tpl['cycle_id']?>&singleDateID=<?=$tpl['sd_id']?>">
+					<A href="<?= URLHelper::getLink('?cmd=removeRequest&cycle_id='. $tpl['cycle_id'] .'&singleDateID='. $tpl['sd_id']) ?>">
 						<IMG <?=($tpl['room_request']) ? makebutton('zurueckziehen', 'src') : ''?> border="0" align="absmiddle">
 					</A>
 					<? } ?>
@@ -100,7 +101,7 @@
 				<TD align="center" class="printcontent" colspan="4" style="text-align: center">
 					<INPUT type="hidden" name="cmd" value="doAddSingleDate">
 					<INPUT type="image" <?=makebutton('uebernehmen', 'src')?>>
-					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
+					<A href="<?= URLHelper::getLink('?cmd=close&open_close_id='. $tpl['sd_id'] .'#'. $tpl['sd_id']) ?>">
 						<IMG <?=makebutton('abbrechen', 'src')?> border="0">
 					</A>
 				</TD>
@@ -120,7 +121,7 @@
 		<table cellpadding="2" cellspacing="0" border="0" width="100%">
 			<tr>
 				<td width="2%" align="left" valign="center" class="<?=$tpl['class']?>" nowrap="nowrap">
-					<a href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
+					<a href="<?= URLHelper::getLink('?cmd=close&open_close_id='. $tpl['sd_id'] .'#'. $tpl['sd_id']) ?>">
 						<img src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
 					</a>
 				</td>
@@ -136,7 +137,8 @@
 				</td>
 				<td width="20%" nowrap class="<?=$tpl['class']?>" align="right">
 					<? if (!$_LOCKED) { ?>
-						<a href="<?=$PHP_SELF?>?cmd=undelete_singledate&sd_id=<?=$tpl['sd_id']?>&cycle_id=<?=($tpl['cycle_id']) ? $tpl['cycle_id'] : '' ?>">
+						<a href="<?= URLHelper::getLink('?cmd=undelete_singledate&sd_id='. $tpl['sd_id'] 
+							.'&cycle_id='. ($tpl['cycle_id'] ? $tpl['cycle_id'] : '')) ?>">
 							<img src="<?=$GLOBALS['ASSETS_URL']?>images/untrash.gif" border="0" align="absmiddle">
 						</a>
 					<? } ?>
@@ -156,7 +158,7 @@
 			<tr>
 				<td align="center" class="printcontent" colspan="4" style="text-align: center">
 					<input type="image" <?=makebutton('uebernehmen', 'src')?>>
-					<a href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
+					<a href="<?= URLHelper::getLink('?cmd=close&open_close_id='. $tpl['sd_id'] .'#'. $tpl['sd_id']) ?>">
 						<img <?=makebutton('abbrechen', 'src')?> border="0">
 					</a>
 				</td>

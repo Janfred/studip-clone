@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 # Lifter005: TODO
 /*
@@ -27,25 +28,22 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenAendernVonZeitenUndTerminen";
 
 // -- here you have to put initialisations for the current page
-$sess->register('sd_open');
-$sess->register('raumzeitFilter');
 
 if ($list) {
-	$sess->unregister('temporary_id');
-	unset($temporary_id);
+	URLHelper::removeLinkParam('seminar_id');
+	unset($seminar_id);
 }
 
 if (isset($_REQUEST['seminar_id'])) {
-	$sess->register('temporary_id');
-	$temporary_id = $_REQUEST['seminar_id'];
+	URLHelper::bindLinkParam('seminar_id', $seminar_id);
+	$seminar_id = $_REQUEST['seminar_id'];
 }
 
-if (isset($temporary_id)) {
-	$id = $temporary_id;
+if (isset($seminar_id)) {
+	$id = $seminar_id;
 } else {
 	$id = $SessSemName[1];
 }
-
 
 require_once ('lib/classes/Seminar.class.php');
 require_once ('lib/raumzeit/raumzeit_functions.inc.php');
@@ -69,6 +67,10 @@ ob_start();
 include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 $links = ob_get_clean();
 
+// bind linkParams for chosen semester and opened dates
+URLHelper::bindLinkParam('raumzeitFilter', $raumzeitFilter);
+URLHelper::bindLinkParam('sd_open', $sd_open);
+
 //Change header_line if open object
 $header_line = getHeaderLine($id);
 if ($header_line)
@@ -83,7 +85,7 @@ if (!$perm->have_studip_perm('tutor', $id)) {
 
 unQuoteAll();
 
-$sem = new Seminar($id);
+$sem = Seminar::GetInstance($id);
 $sem->checkFilter();
 
 $semester = new SemesterData();
@@ -179,7 +181,7 @@ while ($tmp_first_date < $end_date) {
 				<tr>
 					<TD colspan="9" class="blank">
 						<? if (!$_LOCKED) { ?>
-						<FORM action="<?=$PHP_SELF?>" method="post">
+						<form action="<?= URLHelper::getLink() ?>" method="post">
 						<? } ?>
 						<FONT size="-1">
 						&nbsp;<?=_("Startsemester")?>:&nbsp;
@@ -287,9 +289,9 @@ while ($tmp_first_date < $end_date) {
 						</SELECT>
 						</FONT>
 						&nbsp;&nbsp;
-						<INPUT type="image" <?=makebutton('uebernehmen', 'src')?> align="absmiddle">
-						<INPUT type="hidden" name="cmd" value="selectSemester">
-						</FORM>
+						<input type="image" <?=makebutton('uebernehmen', 'src')?> align="absmiddle">
+						<input type="hidden" name="cmd" value="selectSemester">
+						</form>
 						<? } else {
 							echo ($sem->getStartWeek() + 1) .'. '. _("Semesterwoche");
 						} ?>
@@ -326,7 +328,7 @@ while ($tmp_first_date < $end_date) {
 						if ($sd_open[$metadate_id]) {
 							$termine =& $sem->getSingleDatesForCycle($metadate_id);
 							?>
-							<FORM action="<?=$PHP_SELF?>" method="post" name="Formular">
+							<FORM action="<?= URLHelper::getLink() ?>" method="post" name="Formular">
 							<INPUT type="hidden" name="cycle_id" value="<?=$metadate_id?>">
 				<TR>
 					<TD align="center" colspan="9" class="steel1">
@@ -387,7 +389,7 @@ while ($tmp_first_date < $end_date) {
 				<?
 				endif;
 						}
-						echo "</FORM>";
+						echo "</form>";
 					}
 
 				if ($newCycle) {
@@ -416,7 +418,7 @@ while ($tmp_first_date < $end_date) {
 						<font size="-1">
 							&nbsp;&nbsp;
 							<?=_("Regelmäßigen Zeiteintrag")?>
-							<a href="<?=$PHP_SELF?>?cmd=addCycle#newCycle">
+							<a href="<?= URLHelper::getLink('?cmd=addCycle#newCycle') ?>">
 								<img <?=makebutton('hinzufuegen', 'src')?> border="0" align="absmiddle">
 							</a>
 						</font>
@@ -435,7 +437,7 @@ while ($tmp_first_date < $end_date) {
 				<? if ($termine =& $sem->getSingleDates(true, true)) { ?>
 				<TR>
 					<TD align="center" colspan="9" class="steel1">
-						<FORM action="<?=$PHP_SELF?>" method="post" name="Formular">
+						<form action="<?= URLHelper::getLink() ?>" method="post" name="Formular">
 						<TABLE cellpadding="1" cellspacing="0" border="0" width="100%">
 							<?
 							$count = 0;
@@ -476,7 +478,7 @@ while ($tmp_first_date < $end_date) {
 							$tpl['width'] = '100%';
 							include('lib/raumzeit/templates/actions.tpl');
 						?>
-						</FORM>
+						</form>
 					</TD>
 				</TR>
 				<? } ?>
@@ -498,7 +500,7 @@ while ($tmp_first_date < $end_date) {
 						<FONT size="-1">
 							&nbsp;<?=_("Blockveranstaltungstermine")?>
 						</FONT>
-						 <A href="javascript:window.block_fenster()"><?=makebutton("anlegen")?></A>
+						 <a href="javascript:window.block_fenster()"><?=makebutton("anlegen")?></a>
 					</TD>
 				</TR>
 				<? if (isset($cmd) && ($cmd == 'createNewSingleDate')) {
@@ -514,7 +516,7 @@ while ($tmp_first_date < $end_date) {
 					<TD colspan="9" class="blank">
 						<FONT size="-1">
 							&nbsp;einen neuen Termin
-							<A href="<?=$PHP_SELF?>?cmd=createNewSingleDate#newSingleDate">
+							<a href="<?= URLHelper::getLink('?cmd=createNewSingleDate#newSingleDate') ?>">
 								<IMG <?=makebutton('erstellen', 'src')?> align="absmiddle" border="0">
 							</A>
 						</FONT>
@@ -562,7 +564,7 @@ while ($tmp_first_date < $end_date) {
 						<? } ?>
 						<font size="-1">
 							&nbsp;Raumanfrage
-							<A href="admin_room_requests.php?seminar_id=<?=$id?>">
+							<a href="<?= URLHelper::getLink('admin_room_requests.php?seminar_id='. $id) ?>">
 								<? if ($req_info) {
 								?>
 									<img <?=makebutton('bearbeiten', 'src')?> align="absmiddle" border="0">
@@ -575,7 +577,7 @@ while ($tmp_first_date < $end_date) {
 							</A>
 							<? if ($req_info) { ?>
 							&nbsp;oder&nbsp;
-							<A href="<?=$PHP_SELF?>?cmd=removeSeminarRequest">
+							<a href="<?= URLHelper::getLink('?cmd=removeSeminarRequest') ?>">
 								<img <?=makebutton('zurueckziehen', 'src')?> align="absmiddle" border="0">
 							</A>
 						</FONT>

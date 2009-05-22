@@ -19,9 +19,9 @@
 <? } else { ?>
 		<TD class="steelkante" nowrap="nowrap" valign="middle">
 			&nbsp;
-			<A href="themen.php?cmd=changeViewMode&newFilter=<?=$key?>">
-				<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forum_indikator_grau.gif" align="middle" border="0">
-					<FONT color="#555555" size="-1"><?=$val?></FONT>
+			<A href="<?= URLHelper::getLink('themen.php?cmd=changeViewMode&newFilter=' . $key) ?>">
+				<?= Assets::img('forum_indikator_grau', array('align' => 'middle')) ?>
+				<font color="#555555" size="-1"><?=$val?></font>
 			</A>
 			&nbsp;
 		</TD>

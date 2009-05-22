@@ -1,4 +1,5 @@
 <?
+# Lifter001: DONE
 # Lifter002: TODO
 require_once('log_events.inc.php');
 require_once('visual.inc.php');
@@ -7,6 +8,7 @@ define('DO_NOT_APPEND_MESSAGES', false);
 /*
  * Command handlers
  */
+
 function raumzeit_open() {
 	global $sd_open;
 	$termin = new SingleDate($_REQUEST['open_close_id']);
@@ -60,7 +62,8 @@ function raumzeit_delete_singledate() {
 		// deletion approved, delete show approval-message
 		if ($_REQUEST['approveDelete']) {
 			if($GLOBALS["RESOURCES_ENABLE_EXPERT_SCHEDULE_VIEW"]){
-				$sem->createMessage(sprintf(_("Sie haben den Termin %s gelöscht, dem ein Thema zugeorndet war. Sie können das Thema in der %sExpertenansicht des Ablaufplans%s einem anderen Termin (z.B. einem Ausweichtermin) zuordnen."), $termin->toString(), '<a href="themen.php?cmd=changeViewMode&newFilter=expert">', '</a>'));
+				$sem->createMessage(sprintf(_("Sie haben den Termin %s gelöscht, dem ein Thema zugeorndet war. Sie können das Thema in der %sExpertenansicht des Ablaufplans%s einem anderen Termin (z.B. einem Ausweichtermin) zuordnen."), 
+					$termin->toString(), '<a href="'. URLHelper::getLink('themen.php?cmd=changeViewMode&newFilter=expert') .'">', '</a>'));
 			} else {
 				$sem->createMessage(sprintf(_("Der Termin %s wurde gelöscht!"), $termin->toString()));
 			}

@@ -6,15 +6,15 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
 				<TD width="2%" align="right" valign="center" class="<?=$tpl['class']?>">
-					<A href="<?=$PHP_SELF?>?cmd=open&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
+					<A href="<?= URLHelper::getLink('?cmd=open&open_close_id=' . $tpl['md_id'] .'#'. $tpl['md_id']) ?>">
 						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/simple_indicator_gray.gif" border="0">
 					</A>
 				</TD>
 				<TD width="23%" nowrap="nowrap" class="<?=$tpl['class']?>">
 					<? if (!$_LOCKED || !$sd_open[$tpl['md_id']]) { ?>
-					<A class="tree" href="<?=$PHP_SELF?>?cmd=open&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
+					<A class="tree" href="<?= URLHelper::getLink('?cmd=open&open_close_id='. $tpl['md_id'] .'#'. $tpl['md_id']) ?>">
 					<? } else { ?>
-					<A class="tree" href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
+					<A class="tree" href="<?= URLHelper::getLink('?cmd=close&open_close_id='. $tpl['md_id'] .'#'. $tpl['md_id']) ?>">
 					<? } ?>
 						<FONT size="-1">
 							<?=$tpl['date']?>
@@ -47,7 +47,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 				<? } ?>
 				<TD width="20%" nowrap="nowrap" class="<?=$tpl['class']?>" align="right">
 					<? if (!$_LOCKED) { ?>
-					<A href="<?=$PHP_SELF?>?cmd=deleteCycle&cycle_id=<?=$tpl['md_id']?>">
+					<A href="<?= URLHelper::getLink('?cmd=deleteCycle&cycle_id='. $tpl['md_id']) ?>">
 						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" align="absmiddle" <?=tooltip(_("Regelmäßige Zeit inklusive aller zugehörigen Termine löschen!"))?>>
 					</A>
 					<? } ?>
@@ -63,12 +63,12 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
 				<TD width="2%" align="left" valign="top" class="<?=$tpl['class']?>" nowrap="nowrap">
-					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['md_id']?>#<?=$tpl['md_id']?>">
+					<A href="<?= URLHelper::getLink('?cmd=close&open_close_id='. $tpl['md_id'] .'#'. $tpl['md_id']) ?>">
 						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" valign="absmiddle">
 					</A>
 				</TD>
 				<TD width="93%" nowrap="nowrap" class="<?=$tpl['class']?>">
-					<FORM action="<?=$PHP_SELF?>" method="post" name="EditCycle" style="display: inline">
+					<FORM action="<?= URLHelper::getLink() ?>" method="post" name="EditCycle" style="display: inline">
 						<FONT size="-1"><B>
 							<SELECT name="day">
 								<OPTION value="1"<?=($tpl['mdDayNumber']=='1') ? 'selected="selected"' : ''?>>Montag</OPTION>
@@ -91,7 +91,7 @@ if (!$sd_open[$tpl['md_id']] || $_LOCKED) { ?>
 						</B></FONT>
 					</FORM></TD>
 				<TD width="5%" nowrap="nowrap" class="<?=$tpl['class']?>" align="right">
-					<A href="<?=$PHP_SELF?>?cmd=deleteCycle&cycle_id=<?=$tpl['md_id']?>">
+					<A href="<?= URLHelper::getLink('?cmd=deleteCycle&cycle_id='. $tpl['md_id']) ?>">
 						<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" valign="absmiddle"  <?=tooltip(_("Regelmäßige Zeit inklusive aller zugehörigen Termine löschen!"))?>>
 					</A>
 				</TD>

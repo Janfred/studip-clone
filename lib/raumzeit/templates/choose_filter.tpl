@@ -30,9 +30,9 @@ if ( (!$tpl['forceShowAll']) && (sizeof($tpl['semester']) <= 2)) {
 	<? } else { ?>
 			<TD class="steelkante" nowrap="nowrap" valign="middle" width="117" height="20">
 				&nbsp;
-				<A href="<?=$PHP_SELF?>?cmd=applyFilter&newFilter=<?=$key?>">
-					<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forum_indikator_grau.gif" align="middle" border="0">
-						<FONT color="#555555" size="-1"><?=$val?></FONT>
+				<a href="<?= URLHelper::getLink('?cmd=applyFilter&newFilter=' . $key) ?>">
+					<?= Assets::img('forum_indikator_grau', array('align' => 'middle')) ?>
+					<font color="#555555" size="-1"><?=$val?></font>
 				</A>
 				&nbsp;
 			</TD>

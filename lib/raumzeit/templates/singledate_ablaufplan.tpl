@@ -1,7 +1,7 @@
 <TR>
 	<TD width="1%" align="right" valign="center" class="<?=$tpl['class']?>" nowrap="nowrap">
 		<A name="<?=$tpl['sd_id']?>" />
-		<A href="<?=$PHP_SELF?>?cmd=<?=($issue_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
+		<A href="<?= URLHelper::getLink('?cmd='. ($issue_open[$tpl['sd_id']] ? 'close' : 'open') .'&open_close_id='. $tpl['sd_id'] .'#'. $tpl['sd_id'])?>">
 			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau<?=($issue_open[$tpl['sd_id']]) ? 'runt' : ''?>.gif" border="0">
 		</A>
 	</TD>
@@ -10,7 +10,7 @@
 	</TD>
 
 	<TD nowrap="nowrap" class="<?=$tpl['class']?>" valign="bottom">
-		<A class="tree" href="<?=$PHP_SELF?>?cmd=<?=($issue_open[$tpl['sd_id']]) ? 'close' : 'open'?>&open_close_id=<?=$tpl['sd_id']?>#<?=$tpl['sd_id']?>">
+		<A class="tree" href="<?= URLHelper::getLink('?cmd='. ($issue_open[$tpl['sd_id']] ? 'close' : 'open') .'&open_close_id='. $tpl['sd_id'] .'#'. $tpl['sd_id'])?>">
 			<FONT size="-1">
 				<i><?=$tpl['art']?>:&nbsp;</i>
 				<?=$tpl['date']?>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -37,7 +37,7 @@
 <? if ($issue_open[$tpl['sd_id']] || $openAll) { ?>
 <TR>
 	<TD colspan="6" class="steel1" align="center">
-		<? if (!$openAll) { ?><FORM action="<?=$PHP_SELF?>" method="post"><? } ?>
+		<? if (!$openAll) { ?><FORM action="<?= URLHelper::getLink() ?>" method="post"><? } ?>
 		<TABLE border="0" cellspacing="0" cellpadding="1" width="99%">
 			<TR>
 				<TD width="70%" class="steel1">
@@ -87,7 +87,7 @@
 					<? } ?>
 					<INPUT type="hidden" name="singledate_id" value="<?=$tpl['sd_id']?>">
 					<INPUT type="image" <?=makebutton('uebernehmen', 'src')?> align="absmiddle" name="<?=$tpl['submit_name']?>">
-					<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['sd_id']?>">
+					<A href="<?= URLHelper::getLink('?cmd=close&open_close_id='. $tpl['sd_id'])?>">
 						<IMG <?=makebutton('abbrechen', 'src')?> border="0" align="absmiddle">
 					</A>
 					<? } ?>

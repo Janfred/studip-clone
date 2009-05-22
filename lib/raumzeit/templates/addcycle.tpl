@@ -9,7 +9,7 @@ if ($GLOBALS['RESOURCES_ENABLE'] && $GLOBALS['RESOURCES_ENABLE_BOOKINGSTATUS_COL
 <TR>
 	<TD class="steel1" colspan="9">
 		<A name="newCycle" />
-		<FORM action="<?=$PHP_SELF?>" method="post" name="Formular">
+		<FORM action="<?= URLHelper::getLink() ?>" method="post" name="Formular">
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
 				<TD width="2%" align="right" valign="top" class="<?=$class?>">
@@ -44,7 +44,7 @@ if ($GLOBALS['RESOURCES_ENABLE'] && $GLOBALS['RESOURCES_ENABLE_BOOKINGSTATUS_COL
 					<BR/>
 					<INPUT type="hidden" name="cmd" value="doAddCycle">
 					<INPUT type="image" <?=makebutton('uebernehmen', 'src')?>>
-					<A href="<?=$PHP_SELF?>">
+					<a href="<?= URLHelper::getLink() ?>">
 						<IMG <?=makebutton('abbrechen', 'src')?> border="0">
 					</A>
 				</TD>

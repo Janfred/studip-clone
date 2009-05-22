@@ -8,7 +8,7 @@
 <TR>
 	<TD class="steelgraulight" colspan="9">
 		<A name="newSingleDate" />
-		<FORM action="<?=$PHP_SELF?>" method="post">
+		<FORM action="<?= URLHelper::getLink() ?>" method="post">
 		<TABLE cellpadding="2" cellspacing="0" border="0" width="100%">
 			<TR>
 				<TD width="2%" align="right" valign="top" class="<?=$tpl['class']?>">
@@ -73,7 +73,7 @@
 				<TD colspan="9" class="steelgraulight" align="center">
 					<INPUT type="hidden" name="cmd" value="doAddSingleDate">
 					<INPUT type="image" <?=makebutton('uebernehmen', 'src')?>>
-					<A href="<?=$PHP_SELF?>">
+					<a href="<?= URLHelper::getLink() ?>">
 						<IMG <?=makebutton('abbrechen', 'src')?> border="0">
 					</A>
 				</TD>

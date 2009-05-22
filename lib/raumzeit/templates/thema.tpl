@@ -3,10 +3,10 @@
 		<A name="<?=$tpl['issue_id']?>" />
 		<INPUT type="checkbox" name="themen[]" value="<?=$tpl['issue_id']?>"<?=$tpl['selected']?>>
 		<? if ($issue_open[$tpl['issue_id']]) { ?>
-			<A href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['issue_id']?>#<?=$tpl['issue_id']?>">
+			<A href="<?= URLHelper::getLink('?cmd=close&open_close_id='. $tpl['issue_id'] .'#'. $tpl['issue_id']) ?>">
 			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgraurunt.gif" border="0" align="abstop">
 		<? } else { ?>
-			<A href="<?=$PHP_SELF?>?cmd=open&open_close_id=<?=$tpl['issue_id']?>#<?=$tpl['issue_id']?>">
+			<A href="<?= URLHelper::getLink('?cmd=open&open_close_id='. $tpl['issue_id'] .'#'. $tpl['issue_id']) ?>">
 			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/forumgrau.gif" border="0" align="abstop">
 		<? } ?>
 		</A>
@@ -14,9 +14,9 @@
 	<TD width="70%" nowrap class="steel">
 		<FONT size="-1">
 		<? if ($issue_open[$tpl['issue_id']]) { ?>
-			<A class="tree" href="<?=$PHP_SELF?>?cmd=close&open_close_id=<?=$tpl['issue_id']?>#<?=$tpl['issue_id']?>">
+			<A class="tree" href="<?= URLHelper::getLink('?cmd=close&open_close_id='. $tpl['issue_id'] .'#'. $tpl['issue_id']) ?>">
 		<? } else { ?>
-			<A class="tree" href="<?=$PHP_SELF?>?cmd=open&open_close_id=<?=$tpl['issue_id']?>#<?=$tpl['issue_id']?>">
+			<A class="tree" href="<?= URLHelper::getLink('?cmd=open&open_close_id='. $tpl['issue_id'] .'#'. $tpl['issue_id']) ?>">
 		<? } ?>
 				<?=mila($tpl['theme_title'])?>
 			</A>
@@ -24,16 +24,16 @@
 	</TD>
 	<TD width="20%" align="right" class="steel" nowrap>
 		<? if (!$tpl['first']) { ?>
-		<A href="<?=$PHP_SELF?>?newPriority=<?=($tpl['priority'] - 1)?>&issueID=<?=$tpl['issue_id']?>&cmd=changePriority">
+		<A href="<?= URLHelper::getLink('?newPriority='. ($tpl['priority'] - 1) .'&issueID='. $tpl['issue_id'] .'&cmd=changePriority') ?>">
 			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/move_up.gif" border="0" align="absmiddle">
 		</A>
 		<? } ?>
 		<? if (!$tpl['last']) { ?>
-		<A href="<?=$PHP_SELF?>?newPriority=<?=($tpl['priority'] + 1)?>&issueID=<?=$tpl['issue_id']?>&cmd=changePriority">
+		<A href="<?= URLHelper::getLink('?newPriority='. ($tpl['priority'] + 1) .'&issueID='. $tpl['issue_id'] .'&cmd=changePriority') ?>">
 			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/move_down.gif" border="0" align="absmiddle">
 		</A>
 		<? } ?>
-		<A href="<?=$PHP_SELF?>?cmd=deleteIssue&issue_id=<?=$tpl['issue_id']?>">
+		<A href="<?= URLHelper::getLink('?cmd=deleteIssue&issue_id='. $tpl['issue_id']) ?>">
 			<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" border="0" align="absmiddle">
 		</A>
 	</TD>
@@ -71,7 +71,7 @@
 			<INPUT type="hidden" name="issue_id" value="<?=$tpl['issue_id']?>">
 			<? } ?>
 			<INPUT type="image" <?=makebutton('uebernehmen', 'src')?> align="absmiddle" name="<?=$tpl['submit_name']?>">
-			<A href="<?=$PHP_SELF?>">
+			<A href="<?= URLHelper::getLink() ?>">
 				<IMG <?=makebutton('abbrechen', 'src')?> border="0" align="absmiddle">
 			</A>
 			<? } ?>
