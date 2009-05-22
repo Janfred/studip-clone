@@ -1,5 +1,5 @@
 <?
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 /**
 * admin_aux.php - Zusatzangaben-Administration von Stud.IP.
@@ -91,7 +91,7 @@ echo $zt->closeRow();
 
 // a Seminar is selected!
 if (isset($SessSemName[1]) && isset($selected)) {
-	$form	 = 	"<form name=\"\" action=\"".$PHP_SELF."\" method=\"post\">";
+	$form	 = 	"<form name=\"\" action=\"". URLHelper::getLink() ."\" method=\"post\">";
 	$form	.=	"<input type=\"hidden\" name=\"make_aux\" value=1>";
 	$form .=	"<select name=aux_sem[".$SessSemName[1]."]>";
 	$form .= "<option value=\"null\">-- ". _("keine Zusatzangaben"). " --</option>";
