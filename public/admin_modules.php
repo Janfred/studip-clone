@@ -1,5 +1,5 @@
 <?
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 /**
 * admin_modules.php
@@ -46,8 +46,9 @@ require_once('lib/messaging.inc.php');	//Nachrichtenfunktionen
 require_once('lib/classes/AdminModules.class.php');	//Nachrichtenfunktionen
 
 $cssSw=new cssClassSwitcher;
-$sess->register("admin_modules_data");
-$sess->register("plugin_toggle");
+URLHelper::bindLinkParam("admin_modules_data",$admin_modules_data);
+URLHelper::bindLinkParam("plugin_toggle",$plugin_toggle);
+
 
 //Output starts here
 
@@ -155,8 +156,8 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					($admin_modules_data["conflicts"][$key])) {
 
 					$msg.="info§".$amodules->registered_modules[$key]["msg_warning"];
-					$msg.="<br /><a href=\"".$PHP_SELF."?delete_$key=TRUE&retry=TRUE\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
-					$msg.="<a href=\"".$PHP_SELF."?cancel_$key=TRUE&retry=TRUE\">" . makeButton("nein", "img") . "</a>\n§";
+					$msg.="<br /><a href=\"". URLHelper::getLink("?delete_$key=TRUE&retry=TRUE") ."\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
+					$msg.="<a href=\"". URLHelper::getLink("?cancel_$key=TRUE&retry=TRUE") ."\">" . makeButton("nein", "img") . "</a>\n§";
 				} else
 					unset($admin_modules_data["conflicts"][$key]);
 			} else
@@ -251,7 +252,7 @@ if ($admin_modules_data["range_id"])
 	</tr>
 	<tr>
 	<td class="blank" colspan="2">
-	<form method="POST" name="modules" action="<? echo $PHP_SELF ?>">
+	<form method="POST" name="modules" action="<?=URLHelper::getLink()?>">
 		<table width="100%" border="0" cellpadding="2" cellspacing="0">
 		<tr><? $cssSw->switchClass() ?>
 			<td class="<?= $cssSw->getClass() ?>" align="center" colspan="3">
