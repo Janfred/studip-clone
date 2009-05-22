@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 
 /**
@@ -358,7 +359,7 @@ if( isset( $saveButton_x ) ) {
 	    $referer .= ( ! strpos( $referer, "?" ) ) ? "?" : "&";
 	    $referer .= "voteaction=".($pageMode == MODE_CREATE ? "created" : "saved");
 	    $referer .= "&voteID=".$vote->getVoteID();
-	    header( "Location: ".$referer );
+	    header( "Location: ". URLHelper::getUrl($referer) );
 	}
     }
     else {
@@ -375,7 +376,7 @@ elseif( isset( $cancelButton_x ) ) {
     ob_end_clean();
     $referer .= ( ! strpos( $referer, "?" ) ) ? "?" : "&";
     $referer .= "voteID=".$vote->getVoteID();
-    header( "Location: ".$referer );
+    header( "Location: " . URLHelper::getUrl($referer) );
 }
 
 

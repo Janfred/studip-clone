@@ -2,25 +2,15 @@
 # Lifter002: TODO
 
 /**
-
  * Overview of all existing votes ... vote_overview.inc.php
-
  *
-
  * @author      Christian Bauer <alfredhitchcock@gmx.net>
-
  * @version     $Id$
-
  * @copyright   2003 Stud.IP-Project
-
  * @access      public
-
  * @module      vote_overview
-
  * @package     vote
-
  * @modulegroup vote_modules
-
  */
 
 /* ************************************************************************** *
