@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TEST (mriehe)
 # Lifter005: TODO
 /**
