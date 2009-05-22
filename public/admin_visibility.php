@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 /**
 * admin_visibility.php - Sichtbarkeits-Administration von Stud.IP.
@@ -120,7 +120,7 @@ if ($SessSemName[1] && (!$change_visible)) {
 	$db->query($sql);
 	if ($db->next_record()) {
 		if(!LockRules::Check($SessSemName[1], 'seminar_visibility')) {
-			$form	=	"<form name=\"asd\" action=\"".$PHP_SELF."\" method=\"POST\">";
+			$form	=	"<form name=\"asd\" action=\"". URLHelper::getLink() ."\" method=\"POST\">";
 			$form	.=	"<input type=\"checkbox\" name=\"visibility_sem[".$SessSemName[1]."]\"";
 			if ($db->f("visible")) {
 				$form .= " checked ";
@@ -182,4 +182,3 @@ echo $containerTable->blankRow();
 echo $containerTable->close();
 include ('lib/include/html_end.inc.php');
 page_close();
-?>
