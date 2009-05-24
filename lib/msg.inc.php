@@ -41,7 +41,7 @@ require_once 'lib/classes/Messagebox.class.php';
 function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
-	echo Messagebox::get('WARNING')->show($msg);
+	echo Messagebox::error($msg);
 	echo '</td></tr>';
 }
 
@@ -49,7 +49,7 @@ function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = fals
 function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
-	echo Messagebox::get('SUCCESS')->show($msg);
+	echo Messagebox::success($msg);
 	echo '</td></tr>';
 }
 
@@ -57,7 +57,7 @@ function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
 function my_info($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
-	echo Messagebox::get('INFO')->show($msg);
+	echo Messagebox::info($msg);
 	echo '</td></tr>';
 }
 

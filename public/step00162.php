@@ -18,10 +18,11 @@ include 'lib/include/header.php';   //hier wird der "Kopf" nachgeladen
 		<div class="steel1"><br>Dies ist eine Beispielseite für die neuen Messageboxen...<br><br></div>
 		<br>
 
-		<?=Messagebox::get('INFO')->show('Info-Nachricht');?>
-		<?=Messagebox::get('SUCCESS')->show('Erfolgs-Nachricht');?>
-		<?=Messagebox::get('ERROR')->show('Error-Nachricht, sollte am besten nie erscheinen...');?>
-		<?=Messagebox::get('WARNING')->show('Warning-Nachricht', array('Detail Fehler 1', 'Fehler 2', 'Fehler 3'));?>
+		<?=Messagebox::info('Info-Nachricht');?>
+		<?=Messagebox::success('Erfolgs-Nachricht');?>
+		<?=Messagebox::error('Error-Nachricht, sollte am besten nie erscheinen...');?>
+		<?=Messagebox::warning('Warning-Nachricht auf', array('Detail Fehler 1', 'Fehler 2', 'Fehler 3'), true);?>
+		<?=Messagebox::warning('Warning-Nachricht zu', array('Detail Fehler 1', 'Fehler 2', 'Fehler 3'));?>
 
 		<div class="clear"></div>
 	</div>

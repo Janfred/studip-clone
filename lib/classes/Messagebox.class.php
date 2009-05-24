@@ -29,59 +29,64 @@
  * class Messagebox
  *
  *
- * example of use it:
- * echo Messagebox::get('WARNING')->show('Warning Nachricht', array('Detail Fehler 1', 'Fehler 2', 'Fehler3'));
- *
  */
 class Messagebox
 {
-	public static $INFO = 'messagebox_info';
-	public static $ERROR = 'messagebox_error';
-	public static $WARNING = 'messagebox_warning';
-	public static $SUCCESS = 'messagebox_success';
-
-	private $type;
-	private $class;
-	private $id;
-
 	/**
-	 * this is the constructor of this class. it creates an unique id and sets
-	 * the type of the messagebox
-	 *
-	 * @param string $type
-	 */
-	public function __construct($type='INFO')
-	{
-		$this->id = md5(uniqid('messagebox'));
-		$this->type = $type;
-		$this->class = Messagebox::$$type;
-	}
-
-	/**
-	 * creates an object of this class
-	 *
-	 * @param string $type
-	 * @return Messagebox object
-	 */
-	public function get($type)
-	{
-		return new Messagebox($type);
-	}
-
-	/**
-	 * creates the html of the messagebox with a message and optional details
-	 * from an array()
+	 * Enter description here...
 	 *
 	 * @param string $message
 	 * @param array() $details
-	 * @return html of the messagebox
+	 * @param boolean $open_details
+	 * @return string html-output of the messagebox
 	 */
-	public function show($message, $details='')
+	public static function error($message, $details = '', $open_details = false)
 	{
-		$message = ($this->type == 'ERROR')? _('Systemfehler! ').$message : $message;
-		$id = $this->id;
-		$class = $this->class;
-		return $GLOBALS['template_factory']->render('shared/message_box', compact('message', 'details', 'id', 'class'));
+		$message = _('Systemfehler! ').$message;
+		$class = 'messagebox_error';
+		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'open_details'));
+	}
+
+	/**
+	 * Enter description here...
+	 *
+	 * @param string $message
+	 * @param array() $details
+	 * @param boolean $open_details
+	 * @return string html-output of the messagebox
+	 */
+	public static function warning($message, $details = '', $open_details = false)
+	{
+		$class = 'messagebox_warning';
+		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'open_details'));
+	}
+
+	/**
+	 * Enter description here...
+	 *
+	 * @param string $message
+	 * @param array() $details
+	 * @param boolean $open_details
+	 * @return string html-output of the messagebox
+	 */
+	public static function success($message, $details = '', $open_details = false)
+	{
+		$class = 'messagebox_success';
+		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'open_details'));
+	}
+
+	/**
+	 * Enter description here...
+	 *
+	 * @param string $message
+	 * @param array() $details
+	 * @param boolean $open_details
+	 * @return string html-output of the messagebox
+	 */
+	public static function info($message, $details = '', $open_details = false)
+	{
+		$class = 'messagebox_info';
+		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'open_details'));
 	}
 }
 ?>

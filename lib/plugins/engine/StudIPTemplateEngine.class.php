@@ -119,10 +119,7 @@ class StudIPTemplateEngine
 	 */
 	function showErrorMessage($text,$colspan=2)
 	{
-		echo Messagebox::get('WARNING')->show($text);
-        /*        echo '<table style="width: 100%;">';
-                parse_msg_array(array(array('error', $text)));
-                echo '</table>';*/
+		echo Messagebox::warning($text);
 	}
 
 	/**
@@ -133,10 +130,7 @@ class StudIPTemplateEngine
 	 */
 	function showSuccessMessage($text,$colspan=2)
 	{
-		echo Messagebox::get('SUCCESS')->show($text);
-		/*      echo '<table style="width: 100%;">';
-                parse_msg_array(array(array('msg', $text)));
-                echo '</table>'; */
+		echo Messagebox::success($text);
 	}
 
 	/**
@@ -147,10 +141,7 @@ class StudIPTemplateEngine
 	 */
 	function showInfoMessage($text,$colspan=2)
 	{
-		echo Messagebox::get('INFO')->show($text);
-		/*               echo '<table style="width: 100%;">';
-                parse_msg_array(array(array('info', $text)));
-                echo '</table>';*/
+		echo Messagebox::info($text);
 	}
 
 	function showQuestionMessage($text,$colspan=2,$newrow=true)
