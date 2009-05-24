@@ -6,8 +6,6 @@
   - mehrere Klassen mit gleichen eigenschaften zusammenfassen
 *******************************************************************************/
 
-@import url(messagebox.css);
-
 /* --- Schrift (Vorgaben: Typ, Größe, Farbe --------------------------------- */
 body, input, textarea, td, th, blockquote, p, form, ul {
 	font-family: Arial, Helvetica, sans-serif;
