@@ -554,4 +554,145 @@ function admission_seminar_user_get_position($user_id, $seminar_id){
 	$position = $db->query($query)->fetchColumn();
 	return $position == 'na' ? true : $position;
 }
-?>
+
+
+/**
+ * this function returns a string representation of the differences between two admission_data-arrays
+ *
+ * @param mixed $aado the array holding the original data
+ * @param mixed $aado the array holding the changed data
+
+ * @return mixed an array holding each change in its string representation
+ */
+function get_readable_admission_difference ($aado, $aad) {
+	$message = array();
+
+	$changes = array_diff_assoc( $aad, $aado );
+
+	foreach ($changes as $field => $value) {
+		switch ($field) {
+			case 'admission_type':
+				$message[] = 'Anmeldeverfahren: '. get_admission_description($field, $aado[$field])
+					.' -> '. get_admission_description($field, $aad[$field]);
+				break;
+
+			case 'sem_admission_start_date':
+				if ( $aado[$field] <= 0 ) $before = 'keine'; else $before = date('d.m.Y H:i', $aado[$field]);
+				if ( $aad[$field]  <= 0 ) $after  = 'keine'; else $after  = date('d.m.Y H:i', $aad[$field]);
+				$message[] = 'Startzeit: '. $before .' -> '. $after;
+				break;
+
+			case 'sem_admission_end_date':
+				if ( $aado[$field] <= 0 ) $before = 'keine'; else $before = date('d.m.Y H:i', $aado[$field]);
+				if ( $aad[$field]  <= 0 ) $after  = 'keine'; else $after  = date('d.m.Y H:i', $aad[$field]);
+				$message[] = 'Endzeit: '. $before .' -> '. $after;
+				break;
+
+			case 'read_level':
+				$message[] = 'Lesezugriff: '. get_admission_description($field, $aado[$field]) 
+					.' -> '. get_admission_description($field, $aad[$field]);
+				break;
+
+			case 'write_level':
+				$message[] = 'Schreibzugriff: '. get_admission_description($field, $aado[$field]) 
+					.' -> '. get_admission_description($field, $aad[$field]);
+				break;
+
+			case 'passwort':
+				$message[] = 'Passwort: '. $aado[$field] .' -> '. $aad[$field];
+				break;
+
+			case 'admission_prelim':
+				$message[] = 'Anmeldemodus: '. get_admission_description($field, $aado[$field]) 
+					.' -> '. get_admission_description($field, $aad[$field]);
+				break;
+				
+			case 'admission_prelim_txt':
+				$message[] = 'Hinweistext Anmeldemodus: '. $aado[$field] ."<br/> -> ". $aad[$field];
+				break;
+	
+			case 'admission_disable_waitlist':
+				$message[] = 'Warteliste wurde '. (($aad[$field] == 0) ? 'aktiviert' : 'deaktiviert');
+				break;
+			
+			case 'admission_turnout':
+				$message[] = 'Teilnehmerzahl: '. $aado[$field] .' -> '. $aad[$field];
+				break;
+
+			case 'admission_binding':
+				$message[] = 'Verbindliche Anmeldung wurde '. (($aad[$field] == 1) ? 'aktiviert' : 'deaktiviert');
+				break;
+		}
+	}
+
+	return $message;
+}
+
+
+/**
+ * this function returns a readable representation of the following admission_data:
+ *  - admission_type
+ *  - read_level
+ *  - write_level
+ *
+ * @param string $type one of the possible fields to get the string representation for
+ * @param mixed $value the value for the value
+ *
+ * @return string string representation of $value
+ */
+function get_admission_description ($type, $value) {
+	switch ($type) {
+		case 'admission_type':
+			switch ( $value ) {
+				case 0:
+					$ergebnis = "Ohne";
+					break;
+				case 1:
+					$ergebnis = "Los";
+					break;
+				case 2:
+					$ergebnis = "Chronologisch";
+					break;
+				case 3:
+					$ergebnis = "Gesperrt";
+					break;
+			}
+		break; // admission_type
+
+		case 'read_level':
+		case 'write_level':
+			switch ( $value ) {
+				case 0:
+					$ergebnis = 'freier Zugriff';
+					break;
+
+				case 1:
+					$ergebnis = 'in Stud.IP angemeldet';
+					break;
+
+				case 2:
+					$ergebnis = 'nur mit Passwort';
+					break;
+
+				default:
+					$ergebnis = $value;
+					break;
+			}
+		break;
+
+		case 'admission_prelim':
+			switch ( $value ) {
+				case 0:
+					$ergebnis = 'Direkter Eintrag';
+					break;
+
+				case 1:
+					$ergebnis = 'Vorläufiger Eintrag';
+					break;
+			}
+		break;
+	}	
+
+	return $ergebnis;
+}
+

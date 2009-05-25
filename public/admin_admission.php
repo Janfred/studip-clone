@@ -135,7 +135,8 @@ $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
 $db6 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
-URLHelper::bindLinkParam('admin_admission_data',$admin_admission_data);
+URLHelper::bindLinkParam('admin_admission_data', $admin_admission_data);
+URLHelper::bindLinkParam('admin_admission_data_original', $admin_admission_data_original);
 $messaging = new messaging;
 
 /**
@@ -284,6 +285,10 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 		$admin_admission_data["sem_admission_end_date"]=-1;
 		$admin_admission_data["sem_admission_start_date"]=-1;
 	}
+
+	// save the values of the admin_admission_data
+	$admin_admission_data_original = $admin_admission_data;
+
 //nur wenn wir schon Daten haben kann was zurueckkommen
 } else {
 	//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
@@ -602,8 +607,12 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 			$admin_admission_data["write_level"]=3;
 		}
 
+
+		// find out what has been changed
+		$log_message = get_readable_admission_difference( $admin_admission_data_original, $admin_admission_data );
+
 		// LOGGING
-		log_event('SEM_CHANGED_ACCESS', $admin_admission_data['sem_id'], NULL, serialize($admin_admission_data));
+		log_event('SEM_CHANGED_ACCESS', $admin_admission_data['sem_id'], NULL, implode("<br/>", $log_message) ); 
 
 
 		$data_mapping['admission_turnout'] = 'admission_turnout';
@@ -721,12 +730,18 @@ if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm
 
 			//Save the current state as snapshot to compare with current data
 			$admin_admission_data["original"]=get_snapshot();
+
+			// save the values of the admin_admission_data
+			$admin_admission_data_original = $admin_admission_data;
 		}
 
 		//Save the current state as snapshot to compare with current data
 		$admin_admission_data["original"] = get_snapshot();
 		$admin_admission_data["admission_turnout_org"] = $admin_admission_data["admission_turnout"];
 		$admin_admission_data["admission_type_org"] = $admin_admission_data["admission_type"];
+
+		// save the values of the admin_admission_data
+		$admin_admission_data_original = $admin_admission_data;
 	}
 }
 }
