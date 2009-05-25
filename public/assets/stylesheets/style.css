@@ -908,10 +908,11 @@ div.clear {
 
 div.overdiv {
 	position:absolute;
-	margin:0px;
+	margin:20px;
 	padding:0px;
-	width:400px;
+	width:600px;
 	background-image: url('../images/steel1.jpg');
+	z-index: 2;
 }
 div.overdiv div.title {
 	margin:0px;
