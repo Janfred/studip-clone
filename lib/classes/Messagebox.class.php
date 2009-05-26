@@ -28,65 +28,77 @@
 /**
  * class Messagebox
  *
+ * usage:
+ *
+ * echo Messagebox::error('Nachricht', array('optional details'));
+ *
+ * use the optional parameter $close_details for displaying the messagebox with
+ * closed details
+ *
+ * echo Messagebox::success('Nachricht', array('optional details'), true);
  *
  */
 class Messagebox
 {
 	/**
-	 * Enter description here...
+	 * This function shows an error-messagebox. use it only for systemerrors or
+	 * securityproblems
 	 *
 	 * @param string $message
 	 * @param array() $details
-	 * @param boolean $open_details
+	 * @param boolean $close_details
 	 * @return string html-output of the messagebox
 	 */
-	public static function error($message, $details = '', $open_details = false)
+	public static function error($message, $details = '', $close_details = false)
 	{
 		$message = _('Systemfehler! ').$message;
 		$class = 'messagebox_error';
-		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'open_details'));
+		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'close_details'));
 	}
 
 	/**
-	 * Enter description here...
+	 * This function shows a warning-messagebox. use it for validation errors,
+	 * problems and other wrong user-input
 	 *
 	 * @param string $message
-	 * @param array() $details
-	 * @param boolean $open_details
+	 * @param array() $details (optional)
+	 * @param boolean $close_details (optional)
 	 * @return string html-output of the messagebox
 	 */
-	public static function warning($message, $details = '', $open_details = false)
+	public static function warning($message, $details = '', $close_details = false)
 	{
 		$class = 'messagebox_warning';
-		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'open_details'));
+		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'close_details'));
 	}
 
 	/**
-	 * Enter description here...
+	 * This function shows a success-messagebox. Use it for confirmation of user
+	 * interaction
 	 *
 	 * @param string $message
-	 * @param array() $details
-	 * @param boolean $open_details
+	 * @param array() $details (optional)
+	 * @param boolean $close_details (optional)
 	 * @return string html-output of the messagebox
 	 */
-	public static function success($message, $details = '', $open_details = false)
+	public static function success($message, $details = '', $close_details = false)
 	{
 		$class = 'messagebox_success';
-		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'open_details'));
+		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'close_details'));
 	}
 
 	/**
-	 * Enter description here...
+	 * This function shows a success-messagebox. Use it for all other status
+	 * informations.
 	 *
 	 * @param string $message
-	 * @param array() $details
-	 * @param boolean $open_details
+	 * @param array() $details (optional)
+	 * @param boolean $close_details (optional)
 	 * @return string html-output of the messagebox
 	 */
-	public static function info($message, $details = '', $open_details = false)
+	public static function info($message, $details = '', $close_details = false)
 	{
 		$class = 'messagebox_info';
-		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'open_details'));
+		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'close_details'));
 	}
 }
 ?>
