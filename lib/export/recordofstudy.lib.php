@@ -51,11 +51,11 @@ function printSelectSemester($infobox,$semestersAR){
 	global $record_of_study_templates;
 	$html = "<table border=\"0\" class=\"blank\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n"
 		  . " <tr valign=\"top\">\n"
-		  . "  <td width=\"99%\" NOWRAP class=\"blank\">&nbsp;\n"
-		  . "   <table align=\"center\" width=\"99%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n"
+		  . "  <td class=\"blank\">\n"
+		  . "   <table align=\"center\" class=\"blank\" border=\"0\" cellpadding=\"2\" cellspacing=3>\n"
 		  . "	 <tr>"
-		  . "	  <td align=\"left\" valign=\"top\"><font size=\"-1\">\n"
-		  . "<table>".parse_msg_to_string("info§".$GLOBALS['FDF_USAGE_HINT'])."</table>\n"
+		  . "	  <td><font size=\"-1\">\n"
+		  . Messagebox::info($GLOBALS['FDF_USAGE_HINT'])
 		  . _("Bitte wählen sie ein Semster aus:")."\n"
 		  . "	   <form action=\"".$_SERVER['PHP_SELF']."\" method=post>\n"
 		  . "       &nbsp;<select name=\"semesterid\" style=\"vertical-align:middle;\">\n";
@@ -80,13 +80,13 @@ function printSelectSemester($infobox,$semestersAR){
 	}
 	$html .="      </form>\n"
 		  . "	  </font></td>\n"
-		  . "	  <td align=\"right\" width=\"250\" valign=\"top\">\n";
-	echo $html;
-	print_infobox($infobox, "folders.jpg");
-	$html = "	  </td>\n"
 		  . "	 </tr>\n"
 		  . "	</table>\n"
-		  . "  <br></td>\n"
+		  . "  </td>\n"
+		  . "	  <td align=\"right\" width=\"270\" valign=\"top\">\n";
+	echo $html;
+	print_infobox($infobox, "folders.jpg");
+	$html = "	  <br></td>\n"
 		  . " </tr>\n"
 		  . "</table>\n";
 	echo $html;
@@ -108,31 +108,22 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 		. " <form action=\"{$_SERVER['PHP_SELF']}\" method=post>\n"
 		. " <input type=\"hidden\" name=\"semesterid\" value=\"".$semesterid."\">\n"
 		. " <tr valign=\"top\">\n"
-		. "  <td width=\"99%\" NOWRAP class=\"blank\">&nbsp;\n"
+		. "  <td width=\"99%\" class=\"blank\">&nbsp;\n"
 		. "   <table align=\"center\" width=\"99%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n"
 		. "	 <tr>"
 		. "	  <td valign=\"top\">"
 		. "	   <table align=\"center\" width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n";
 
 	// displays some infos for the user
-	if ($notice){
+	if ($notice)
+	{
 		$html .="		<tr>\n"
-			  . "		 <td colspan=\"4\">\n"
-			  . "		   <table border=0 cellspacing=0 cellpadding=2>\n"
-			  . "			<tr>\n"
-			  . "			 <td align=\"center\" width=50 valign=\"middle\">"
-			  . "			  <img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf.gif\" alt=\"ausruf\" style=\"vertical-align:middle;\">\n"
-			  . "			 </td>\n"
-			  . "			 <td align=\"left\" valign=\"middle\">\n";
+			  . "		 <td colspan=\"4\">\n";
 		if ($notice == "empty")
-			$html .="		  <font size=\"-1\"><b>"._("Keine Veranstaltungen zum Anzeigen vorhanden.")."</b><br>"._("Bitte fügen sie Veranstaltungen mit Hilfe des Buttons \"hinzufügen\" ein oder ändern Sie ihre Auswahl.")."\n";
+			$html .= Messagebox::info(_("Keine Veranstaltungen zum Anzeigen vorhanden."), array(_("Bitte fügen sie Veranstaltungen mit Hilfe des Buttons \"hinzufügen\" ein oder ändern Sie ihre Auswahl.")));
 		elseif ($notice == "above_limit")
-			$html .="		  <font size=\"-1\"><b>"._("Sie haben mehr als 10 Veranstaltungen in diesem Semester ausgewählt.")."</b><font size=\"-1\" color=\"yello\"><br>"._("Es werden automatisch mehrere Veranstaltungsübersichtseiten erstellt.")."</font>\n";
-		$html .="			  </font>\n"
-			  . "			 </td>\n"
-			  . "			</tr>\n"
-			  . "		   </table>\n"
-			  . "		 <br></td>\n"
+			$html .= Messagebox::info(_("Sie haben mehr als 10 Veranstaltungen in diesem Semester ausgewählt."), array(_("Es werden automatisch mehrere Veranstaltungsübersichtseiten erstellt.")));
+		$html .="		 <br></td>\n"
 			  . "		</tr>\n";
 	}
 
@@ -205,7 +196,7 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 		  . "	  </td>\n";
 
 	// the right site of the page
-	$html .="	  <td class=\"blank\" width=\"256\" valign=\"top\" align=\"center\"><font size=\"-1\">\n";
+	$html .="	  <td class=\"blank\" width=\"270\" valign=\"top\" align=\"center\">\n";
 	echo $html;
 	print_infobox($infobox, "folders.jpg");
 	$html = "	   <br>\n"
@@ -233,7 +224,7 @@ function printPdfAssortment($infobox,$seminars){
 	global $record_of_study_templates, $template;
 	$html = "<table border=\"0\" class=\"blank\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n"
 		  . " <tr valign=\"top\">\n"
-		  . "  <td width=\"99%\" NOWRAP class=\"blank\">&nbsp;\n"
+		  . "  <td class=\"blank\">&nbsp;\n"
 		  . "   <table align=\"center\" width=\"99%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n"
 		  . "	 <tr>\n"
 		  . "	  <td align=\"left\" valign=\"top\"><font size=\"-1\">\n"
@@ -268,7 +259,7 @@ function printPdfAssortment($infobox,$seminars){
 	}
 
 	$html .="	  </font></td>\n"
-		  . "	  <td align=\"right\" width=\"250\" valign=\"top\">\n";
+		  . "	  <td align=\"right\" width=\"270\" valign=\"top\">\n";
 	echo $html;
 	print_infobox($infobox, "folders.jpg");
 //	$html = "	  <form action=\"$PHP_SELF\" method=post>"
