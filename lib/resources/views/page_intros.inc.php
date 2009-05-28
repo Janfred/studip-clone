@@ -142,14 +142,10 @@ switch ($view) {
 			$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
 									"text"  =>"<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."\">"._("zurück zur Suche")."</a>");
 
-			if ($view_mode == "no_nav"){
-				$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
+		if ($view_mode == "no_nav")
+			$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
 									"text"  =>"<a href=\"$PHP_SELF?quick_view=search&quick_view_mode=".$view_mode."\">"._("zur Ressourcensuche")."</a>");
-				if (get_config('RESOURCES_ENABLE_SEM_SCHEDULE')){
-					$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
-								"text"  => sprintf (_("%sSemesterplan%s anzeigen"), "<a href=\"$PHP_SELF?quick_view=view_sem_schedule&quick_view_mode=".$view_mode."\">", "</a>"));
-				}
-			}
+		
 		if ($view_mode != "search" && $view_mode != "no_nav") {
 			if ($SessSemName["class"] == "sem")
 				$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
@@ -159,7 +155,10 @@ switch ($view) {
 										"text"  => "<a href=\"institut_main.php\">"._("zurück zur Einrichtung")."</a>");
 		}
 
-		//$infopic = "schedule.jpg";
+		if (get_config('RESOURCES_ENABLE_SEM_SCHEDULE'))
+			$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
+								"text"  => sprintf (_("%sSemesterplan%s anzeigen"), "<a href=\"$PHP_SELF?quick_view=view_sem_schedule&quick_view_mode=".$view_mode."\">", "</a>"));
+		
 	break;
 	case "view_sem_schedule":
 		$page_intro=_("Hier können Sie sich die Belegungszeiten der Ressource anzeigen  und auf unterschiedliche Art darstellen lassen.");
@@ -191,12 +190,12 @@ switch ($view) {
 			if ($SessSemName["class"] == "inst")
 				$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
 										"text"  => "<a href=\"institut_main.php\">"._("zurück zur Einrichtung")."</a>");
-			$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
+		}
+
+		$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
 								"text"  => "<a href=\"$PHP_SELF?view=view_sem_schedule&print_view=1\" target=\"_blank\">"
 											. _("Druckansicht")
 											. "</a>");
-		}
-
 		//$infopic = "schedule.jpg";
 	break;
 	case "view_group_schedule":
