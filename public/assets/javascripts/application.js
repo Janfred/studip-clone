@@ -410,7 +410,93 @@ STUDIP.Forum.Toolbar = Class.create(function() {
   };
 }());
 
+/* ------------------------------------------------------------------------
+ * automatic compression of tabs
+ * ------------------------------------------------------------------------ */
 
+STUDIP.Tabs = function () {
+
+  var list, items, list_item_height, viewport_width;
+
+  // check heights of list and items to check for wrapping
+  var needs_compression = function () {
+    if (!list_item_height) {
+      list_item_height = list.down('li').getHeight();
+    }
+    return list.clientHeight > list_item_height;
+  };
+
+  // returns the largest feasible item
+  var getLargest = function() {
+
+    var i = items.length,
+        largest = 5, item, letters;
+
+    while (i--) {
+      letters = items[i].innerHTML.length;
+      if (letters > largest) {
+        item = items[i];
+        largest = letters;
+      }
+    }
+    return item;
+  };
+
+  // truncates an item
+  var truncate = function (item) {
+    var text = item.innerHTML;
+    var len = text.length - 4 > 4 ? text.length - 4 : 4;
+    if (len < text.length) {
+      item.innerHTML = text.substr(0, len) + "\u2026";
+    }
+  };
+
+  return {
+
+    // initializes, observes resize events and compresses the tabs
+    initialize: function () {
+      list = $("tabs");
+      items = list.select("li a");
+      viewport_width = document.viewport.getWidth();
+
+      // strip contents and set titles
+      items.each(function (item) {
+        item.title = item.innerHTML = item.innerHTML.strip();
+      });
+
+      Event.observe(window, "resize", this.resize.bind(this));
+      this.compress();
+    },
+
+
+    // try to fit all the tabs into a single line
+    compress: function () {
+      var item;
+      if (!needs_compression()) {
+        return;
+      }
+      do {
+        item = getLargest();
+        if (!item) {
+          break;
+        }
+        truncate(item);
+      } while (needs_compression());
+    },
+
+    // event handler called when resizing the browser
+    resize: function () {
+      var new_width = document.viewport.getWidth();
+      if (new_width > viewport_width) {
+        items.each(function (item) {
+          item.innerHTML = item.title;
+        });
+      }
+      viewport_width = new_width;
+      this.compress();
+    }
+  };
+}();
 
 /* ------------------------------------------------------------------------
  * application wide setup
@@ -439,4 +525,7 @@ document.observe('dom:loaded', function() {
       }
     });
   }
+
+  // compress tabs
+  STUDIP.Tabs.initialize();
 });
