@@ -29,17 +29,13 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 
  ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
-	<tr>
-		<td class="blank" colspan="3">&nbsp;
-		</td>
-	</tr>
 	<tr valign="top">
      		<td width="1%" class="blank">
      		&nbsp;
      		</td>
-     		<td width="90%" class="blank">
+     		<td class="blank">
 
-			<table>
+			<table width="100%">
 <?
 
 				if (isset($export_error))
@@ -132,7 +128,6 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 		</td>
 	</tr>
 	</table>
-	<p>&nbsp;</p>
 <?php
 	include ('lib/include/html_end.inc.php');
 }

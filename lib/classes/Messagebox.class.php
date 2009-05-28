@@ -51,7 +51,6 @@ class Messagebox
 	 */
 	public static function error($message, $details = '', $close_details = false)
 	{
-		$message = _('Systemfehler! ').$message;
 		$class = 'messagebox_error';
 		return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'close_details'));
 	}

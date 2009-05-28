@@ -671,68 +671,32 @@ class about extends messaging {
 		return;
 	}
 
-
-
-
 	//Displays Errosmessages (kritischer Abbruch, Symbol "X")
 
-	function my_error($msg) {
-		?>
-			<tr>
-			<td class="blank" colspan=2>
-			<table border="0" align="left" cellspacing="0" cellpadding="2">
-			<tr>
-			<td class="blank" align="center" width="50"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x.gif"></td>
-			<td class="blank" align="left" width="*"><font color="#FF2020"><?php print $msg ?></font></td>
-			</tr>
-			</table>
-			</td>
-			</tr>
-			<tr>
-			<td class="blank" colspan="2">&nbsp;</td>
-			</tr>
-			<?
+	function my_error($msg)
+	{
+		echo '<tr><td>';
+		echo Messagebox::warning($msg);
+		echo '</td></tr>';
 	}
 
 
 	//Displays  Successmessages (Information &uuml;ber erfolgreiche Aktion, Symbol Haken)
 
-	function my_msg($msg) {
-		?>
-			<tr>
-			<td class="blank" colspan=2>
-			<table border="0" align="left" cellspacing="0" cellpadding="2">
-			<tr>
-			<td class="blank" align="center" width=50><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ok.gif"></td>
-			<td class="blank" align="left" width="*"><font color="#008000"><?php print $msg ?></font></td>
-			</tr>
-			</table>
-			</td>
-			</tr>
-			<tr>
-			<td class="blank" colspan="2">&nbsp;</td>
-			</tr>
-			<?
+	function my_msg($msg)
+	{
+		echo '<tr><td>';
+		echo Messagebox::success($msg);
+		echo '</td></tr>';
 	}
 
 	//Displays  Informationmessages  (Hinweisnachrichten, Symbol Ausrufungszeichen)
 
-	function my_info($msg) {
-		?>
-			<tr>
-			<td class="blank" colspan="2">
-			<table border="0" align="left" cellspacing="0" cellpadding="2">
-			<tr>
-			<td class="blank" align="center" width="50"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/ausruf.gif"></td>
-			<td class="blank" align="left" width="*"><font color="#008000"><?php print $msg ?></font></td>
-			</tr>
-			</table>
-			</td>
-			</tr>
-			<tr>
-			<td class="blank" colspan="2">&nbsp;</td>
-			</tr>
-			<?
+	function my_info($msg)
+	{
+		echo '<tr><td>';
+		echo Messagebox::info($msg);
+		echo '</td></tr>';
 	}
 
 	function parse_msg($long_msg,$separator="§") {
