@@ -181,7 +181,7 @@ if ($kill_datafield) { // contains a datafield_id
  	<tr>
 		<td class="blank" valign="top">
 			<? if (isset($msg)) { ?>
-				<table border="0">
+				<table width="100%">
 				<? parse_msg($msg, "§", "blank", 1, FALSE); ?>
 				</table>
 			<? } ?>
