@@ -16,6 +16,15 @@
   }
 // -->
 </script>
+<? if ($loginerror) : ?>
+<!-- failed login code -->
+<div style="width: 800px; margin: auto;">
+	<?= Messagebox::warning(_("Bei der Anmeldung trat ein Fehler auf:") . "<br>"
+		. $error_msg . " "
+		. sprintf(_("Bitte wenden Sie sich bei Problemen an: %s"),
+		"<a href=\"mailto:".$GLOBALS['UNI_CONTACT']."\">".$GLOBALS['UNI_CONTACT']."</a></font>")) ?>
+</div>
+<? endif; ?>
 <table class="logintable" width="800" align="center" border="0" cellpadding="0" cellspacing="0">
 <tr>
 	<td class="topic">
@@ -28,17 +37,6 @@
 	<div style="margin-left:40px;margin-top:15px;">
 
 		<?=_("Bitte identifizieren Sie sich mit Benutzername und Passwort:")?><br>&nbsp;
-
-		<?if  ($loginerror):?>
-		<!-- failed login code -->
-		<table>
-				<? parse_msg_array(array(array("error" , "<font size=\"-1\">" . _("Bei der Anmeldung trat ein Fehler auf:") . "<br>
-													<b>".$error_msg."</b>"
-													.  sprintf(_("Bitte wenden Sie sich bei Problemen an: <br>%s"),
-													"<a href=\"mailto:".$GLOBALS['UNI_CONTACT']."\">".$GLOBALS['UNI_CONTACT']."</a></font>"))), "", 1, FALSE);
-				?>
-		</table>
-		<? endif ?>
 
 		<form name="login" method="post" action="<?=$_SERVER['REQUEST_URI']?>" onSubmit="return doChallengeResponse();">
 		<!-- Set up the form with the challenge value and an empty reply value -->
