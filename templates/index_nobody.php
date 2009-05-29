@@ -1,10 +1,5 @@
 <!-- Startseite (nicht eingeloggt) -->
-<? if ($logout) : ?>
-<div style="width: 800px; margin: auto;">
-	<?= Messagebox::success(_("Sie sind nun aus dem System abgemeldet.")) ?>
-</div>
-<? endif; ?>
-<table class="index_box" border="0" cellpadding="0" cellspacing="0" style="width:800px !important; margin:auto;">
+<table class="index_box"  border="0" cellpadding="0" cellspacing="0" style="margin:auto">
 	<tr>
 		<td colspan="3" class="topic">
 			&nbsp;<b><?=$GLOBALS['UNI_NAME']?></b>
@@ -89,7 +84,7 @@
 			<br>
 		</td>
 	</tr>
-	<? if($GLOBALS['UNI_LOGIN_ADD']) : ?>
+	<?if($GLOBALS['UNI_LOGIN_ADD']){?>
 	<tr>
 		<td colspan="3" bgcolor="#FFFFFF">
 			<blockquote>
@@ -100,7 +95,7 @@
 			</blockquote>
 		</td>
 	</tr>
-	<? endif; ?>
+	<?}?>
 	<tr>
 		<td class="blank" valign="middle" align="left" style="padding-left:76px">
 			<a href="http://www.studip.de">

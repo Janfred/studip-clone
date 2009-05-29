@@ -50,7 +50,6 @@ include 'lib/seminar_open.php'; // initialise Stud.IP-Session
 require_once 'config.inc.php';
 require_once 'lib/functions.php';
 require_once 'lib/visual.inc.php';
-require_once 'lib/classes/Messagebox.class.php';
 include_once 'lib/classes/RSSFeed.class.php';
 // -- hier muessen Seiten-Initialisierungen passieren --
 
@@ -394,12 +393,6 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	$db->next_record();
 	$index_nobody_template->set_attribute('num_registered_users', $db->f(0));
 	$index_nobody_template->set_attribute('num_online_users', get_users_online_count(10));
-
-	if ($_REQUEST['logout'])
-	{
-		$index_nobody_template->set_attribute('logout', true);
-	}
-
 	echo $index_nobody_template->render();
 
 	if ($GLOBALS["PLUGINS_ENABLE"])
