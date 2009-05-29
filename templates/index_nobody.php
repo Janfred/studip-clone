@@ -1,7 +1,7 @@
 <!-- Startseite (nicht eingeloggt) -->
 <? if ($logout) : ?>
 <div style="width: 800px; margin: auto;">
-	<?= Messagebox::success(_("Sie sind nun aus dem System abgemeldet."), array($GLOBALS['UNI_LOGOUT_ADD])) ?>
+	<?= Messagebox::success(_("Sie sind nun aus dem System abgemeldet."), array($GLOBALS['UNI_LOGOUT_ADD'])) ?>
 </div>
 <? endif; ?>
 <table class="index_box" border="0" cellpadding="0" cellspacing="0" style="width:800px !important; margin:auto;">
