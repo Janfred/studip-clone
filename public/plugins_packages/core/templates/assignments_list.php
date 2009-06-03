@@ -30,7 +30,9 @@
 				<tr class="<?=($index%2==0)?'steel1':'steelgraulight'?>">
 					<td align="right"><?=$index+1?>.) </td>
 					<td><?=$user['vorname']?> <?=$user['nachname']?></td>
-					<td><a href="about.php?username=<?=$user['username']?>"><?=$user['username']?></a></td>
+					<td>
+					<a href="<?=URLHelper::getLink('about.php', array('username' => $user['username'])) ?>"><?=$user['username']?></a>
+					</td>
 				</tr>
 				<? endforeach; ?>
 			</table>
