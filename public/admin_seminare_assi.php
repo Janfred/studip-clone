@@ -1,5 +1,5 @@
 <?
-# Lifter001: TODO
+# Lifter001: TEST - URLHelper installed, but still no multi-tab-compatibilty
 # Lifter002: TODO
 # Lifter005: TODO - md5 hash
 /*
@@ -833,7 +833,7 @@ if (($form == 1) && ($jump_next_x))
 	if (!$sem_create_data["sem_inst_id"])
 		{
 		$level=1;
-		$errormsg=$errormsg.sprintf ("error§"._("Da Ihr Account keiner Einrichtung zugeordnet ist, k&ouml;nnen Sie leider noch keine Veranstaltung anlegen. Bitte wenden Sie sich an den/die zust&auml;ndigeN AdministratorIn der Einrichtung oder einen der %sAdministratoren%s des Systems!")."§", "<a href=\"dispatch.php/siteinfo/show\">", "</a>");
+		$errormsg=$errormsg.sprintf ("error§"._("Da Ihr Account keiner Einrichtung zugeordnet ist, k&ouml;nnen Sie leider noch keine Veranstaltung anlegen. Bitte wenden Sie sich an den/die zust&auml;ndigeN AdministratorIn der Einrichtung oder einen der %sAdministratoren%s des Systems!")."§", "<a href=\"".URLHelper::getLink("dispatch.php/siteinfo/show")."\">", "</a>");
 		}
 	if (($sem_create_data["sem_turnout"] < 1) && ($sem_create_data["sem_admission"]))
  		{
@@ -2037,8 +2037,8 @@ if ((!$sem_create_data["sem_class"]) && (!$level)){
 					<?
 					foreach (SeminarCategories::GetAll() as $category) {
 						if(!$category->course_creation_forbidden){
-							echo "<tr><td width=\"3%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$category->id\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumrot.gif\" border=0 /></a><td>";
-							echo "<td width=\"97%\" class=\"blank\"><a href=\"admin_seminare_assi.php?start_level=TRUE&class=$category->id\">".$category->name."</a><td></tr>";
+							echo "<tr><td width=\"3%\" class=\"blank\"><a href=\"".URLHelper::getLink($PHP_SELF."?start_level=TRUE&class=".$category->id)."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumrot.gif\" border=0 /></a><td>";
+							echo "<td width=\"97%\" class=\"blank\"><a href=\"".URLHelper::getLink($PHP_SELF."?start_level=TRUE&class=".$category->id)."\">".$category->name."</a><td></tr>";
 						echo "<tr><td width=\"3%\" class=\"blank\">&nbsp; <td>";
 							echo "<td width=\"97%\" class=\"blank\"><font size=-1>".$category->create_description."</font><td></tr>";
 						}
@@ -2083,7 +2083,7 @@ elseif ((!$level) || ($level == 1))
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
-			<form method="POST" action="<? echo $PHP_SELF ?>">
+			<form method="POST" action="<? echo URLHelper::getLink($PHP_SELF) ?>">
 			<input type="HIDDEN" name="form" value=1>
 				<table cellspacing=0 cellpadding=2 border=0 width="99%" align="center">
 					<tr <? $cssSw->switchClass() ?>>
@@ -2406,7 +2406,7 @@ if ($level == 2)
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
-			<form method="POST" action="<? echo $PHP_SELF ?>#anker">
+			<form method="POST" action="<? echo URLHelper::getLink($PHP_SELF) ?>#anker">
 			<input type="HIDDEN" name="form" value=2>
 			<input type="HIDDEN" name="level" value=2>
 				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
@@ -2439,7 +2439,7 @@ if ($level == 2)
 									 $href = "?delete_doz=".get_username($key)."#anker";
 
 									 echo "<td>";
-									 echo "<a href='{$PHP_SELF}{$href}'>";
+									 echo "<a href='".URLHelper::getLink($PHP_SELF.$href)."'>";
 									 echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
 									 echo "</a>";
 									 echo "</td>";
@@ -2450,7 +2450,7 @@ if ($level == 2)
                            {
 															$href = "?moveup_doz=".get_username($key)."&".time()."#anker";
 															$img_src = "images/move_up.gif";
-															echo "<a href='{$PHP_SELF}{$href}'>";
+															echo "<a href='".URLHelper::getLink($PHP_SELF.$href)."'>";
 															echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
 															echo "</a>";
                            }
@@ -2461,7 +2461,7 @@ if ($level == 2)
                            {
 															$href = "?movedown_doz=".get_username($key)."&".time()."#anker";
 															$img_src = "images/move_down.gif";
-															echo "<a href='{$PHP_SELF}{$href}'>";
+															echo "<a href='".URLHelper::getLink($PHP_SELF.$href)."'>";
 															echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
 															echo "</a>";
                            }
@@ -2476,7 +2476,7 @@ if ($level == 2)
                            $i++;
                         }
                            echo "</table>";
-                     //     printf ("&nbsp; <a href=\"%s?delete_doz=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\"></a> &nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", $PHP_SELF, get_username($key), get_fullname($key,"full_rev",true), get_username($key));
+                     //     printf ("&nbsp; <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\"></a> &nbsp; <font size=\"-1\"><b>%s (%s)&nbsp; &nbsp; <br />", URLHelper::getLink($PHP_SELF."?delete_doz=".get_username($key)), get_fullname($key,"full_rev",true), get_username($key));
 						 } else {
 								if ($SEM_CLASS[$sem_create_data["sem_class"]]["workgroup_mode"])
 									printf ("<font size=\"-1\">&nbsp;  "._("Keine LeiterIn gew&auml;hlt.")."</font><br >");
@@ -2552,7 +2552,7 @@ if ($level == 2)
 															$href = "?delete_tut=".get_username($key)."#anker";
 															$img_src = "images/trash.gif";
 
-															echo "<a href='{$PHP_SELF}{$href}'>";
+															echo "<a href='".URLHelper::getLink($PHP_SELF.$href)."'>";
 															echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
 															echo "</a>";
 															echo "</td>";
@@ -2564,7 +2564,7 @@ if ($level == 2)
 															$href = "?moveup_tut=".get_username($key)."&".time()."#anker";
 															$img_src ="images/move_up.gif";
 
-															echo "<a href='{$PHP_SELF}{$href}'>";
+															echo "<a href='".URLHelper::getLink($PHP_SELF.$href)."'>";
 															echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
 															echo "</a>";
                            }
@@ -2576,7 +2576,7 @@ if ($level == 2)
 															$href = "?movedown_tut=".get_username($key)."&".time()."#anker";
 															$img_src = "images/move_down.gif";
 
-															echo "<a href='{$PHP_SELF}{$href}'>";
+															echo "<a href='".URLHelper::getLink($PHP_SELF.$href)."'>";
 															echo "<img src='{$GLOBALS['ASSETS_URL']}{$img_src}' border='0'>";
 															echo "</a>";
                            }
@@ -2881,7 +2881,7 @@ if ($level == 3) {
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
-			<form method="POST" name="Formular" action="<? echo $PHP_SELF ?>">
+			<form method="POST" name="Formular" action="<? echo URLHelper::getLink($PHP_SELF) ?>">
 			<input type="HIDDEN" name="form" value=3>
 				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
 					<tr <? $cssSw->switchClass() ?>>
@@ -2982,7 +2982,7 @@ if ($level == 3) {
 
 										if ($sem_create_data["turnus_count"]>1) {
 											?>
-											&nbsp; <a href="<? echo $PHP_SELF?>?delete_turnus_field=<?echo $i+1?>"><img border=0 src="<?= $GLOBALS['ASSETS_URL'] ?>images/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
+											&nbsp; <a href="<? echo URLHelper::getLink($PHP_SELF."?delete_turnus_field=".($i+1)) ?>"><img border=0 src="<?= $GLOBALS['ASSETS_URL'] ?>images/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
 											<?
 										}
 										echo  Termin_Eingabe_javascript(4, $i, 0, $ss,$sm,$es,$em);
@@ -3062,7 +3062,7 @@ if ($level == 3) {
 										if ($sem_create_data["term_count"]>1)
 											{
 											?>
-											&nbsp; <a href="<? echo $PHP_SELF?>?delete_term_field=<?echo $i+1?>"><img border=0 src="<?= $GLOBALS['ASSETS_URL'] ?>images/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
+											&nbsp; <a href="<? echo URLHelper::getLink($PHP_SELF."?delete_term_field=".($i+1)) ?>"><img border=0 src="<?= $GLOBALS['ASSETS_URL'] ?>images/trash.gif" <? echo tooltip(_("Dieses Feld aus der Auswahl löschen"), TRUE) ?> ></a>
 											<?
 											}
 										echo  Termin_Eingabe_javascript (5, $i, 0, $ss, $sm, $es, $em);
@@ -3159,7 +3159,7 @@ if ($level == 4) {
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
-			<form method="POST" name="form_4" action="<? echo $PHP_SELF ?>#anker">
+			<form method="POST" name="form_4" action="<? echo URLHelper::getLink($PHP_SELF) ?>#anker">
 			<input type="HIDDEN" name="form" value=4>
 				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
 					<tr <? $cssSw->switchClass() ?>>
@@ -3203,7 +3203,7 @@ if ($level == 4) {
 						<td class="<? echo $cssSw->getClass() ?>" width="96%">
 							<br /><font size="-1"><b><?=("gew&uuml;nschter Raum:")?></b><br /><br />
 							<?
-							print "<b>".htmlReady($resObject->getName())."</b>,&nbsp;"._("verantwortlich:")."&nbsp;<a href=\"".$resObject->getOwnerLink()."\">".$resObject->getOwnerName()."</a>";
+							print "<b>".htmlReady($resObject->getName())."</b>,&nbsp;"._("verantwortlich:")."&nbsp;<a href=\"".URLHelper($resObject->getOwnerLink())."\">".$resObject->getOwnerName()."</a>";  //getOwnerLink() does not contain the output of an URLHelper
 							print "&nbsp;&nbsp;<input type=\"IMAGE\" src=\"".$GLOBALS['ASSETS_URL']."images/rewind.gif\" ".tooltip(_("den ausgewählten Raum löschen"))." border=\"0\" name=\"reset_resource_id\" />";
 							?>
 							</font>
@@ -3584,7 +3584,7 @@ if ($level == 5)
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
-			<form method="POST" name="form_5" action="<? echo $PHP_SELF ?>"
+			<form method="POST" name="form_5" action="<? echo URLHelper::getLink($PHP_SELF) ?>"
 	               <? if (($sem_create_data["sem_sec_lese"] ==2) ||  ($sem_create_data["sem_sec_schreib"] ==2)) echo " onSubmit=\"return doCrypt();\" "; ?>
                		>
 			<input type="HIDDEN" name="form" value=5>
@@ -3769,9 +3769,9 @@ if ($level == 5)
 										if($sem_create_data["admission_enable_quota"]){
 											printf ("<input type=\"HIDDEN\" name=\"sem_studg_ratio_old[]\" value=\"%s\" />", $val["ratio"]);
 											printf ("<input type=\"TEXT\" name=\"sem_studg_ratio[]\" size=5 maxlength=5 value=\"%s\" /><font size=-1> %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
-											printf ("&nbsp; <a href=\"%s?sem_delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", $PHP_SELF, $key);
+											printf ("&nbsp; <a href=\"%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", URLHelper::getLink($PHP_SELF."?sem_delete_studg=".$key));
 										} else {
-											printf ("&nbsp; <a href=\"%s?sem_delete_studg=%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", $PHP_SELF, $key);
+											printf ("&nbsp; <a href=\"%s\"><img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))." />", URLHelper::getLink($PHP_SELF."?sem_delete_studg=".$key));
 										}
 										?>
 										</td>
@@ -3995,7 +3995,7 @@ if ($level == 6)
 				<blockquote>
 				<b><?=_("Schritt 6: Bereit zum Anlegen der Veranstaltung"); ?></b><br><br>
 				<?=_("Sie haben nun alle n&ouml;tigen Daten zum Anlegen der Veranstaltung eingegeben. Wenn Sie auf &raquo;anlegen&laquo; klicken, wird die Veranstaltung in Stud.IP &uuml;bernommen. Wenn Sie sich nicht sicher sind, ob alle Daten korrekt sind, &uuml;berpr&uuml;fen Sie noch einmal Ihre Eingaben auf den vorhergehenden Seiten."); ?><br><br>
-				<form method="POST" action="<? echo $PHP_SELF ?>">
+				<form method="POST" action="<? echo URLHelper::getLink($PHP_SELF) ?>">
 					<input type="HIDDEN" name="form" value=6>
 					<input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?> >>" name="jump_back">&nbsp;<input type="IMAGE" <?=makeButton("anlegen", "src"); ?> border=0 value="<?=_("weiter >>");?>" name="jump_next">
 				</form>
@@ -4029,7 +4029,7 @@ if ($level == 7)
 					<blockquote>
 					<b><?=_("Die Veranstaltung konnte nicht angelegt werden."); ?></b><br><br>
 					<?=_("Bitte korrigieren Sie die Daten."); ?>
-					<form method="POST" action="<? echo $PHP_SELF ?>">
+					<form method="POST" action="<? echo URLHelper::getLink($PHP_SELF) ?>">
 						<input type="HIDDEN" name="form" value=7>
 						<input type="IMAGE" <?=makeButton("zurueck", "src"); ?> border=0 value="<?=_("<< zur&uuml;ck");?>" name="jump_back">
 					</form>
@@ -4058,7 +4058,7 @@ if ($level == 7)
 					}
 					?>
 					<br /><br />
-					<form method="POST" action="<? echo $PHP_SELF ?>">
+					<form method="POST" action="<? echo URLHelper::getLink($PHP_SELF) ?>">
 						<input type="HIDDEN" name="form" value=7>
 						<input type="IMAGE" <?=makeButton("abbrechen", "src"); ?> border=0 value="<?=_("abbrechen");?>" name="cancel">
 						<?
@@ -4116,7 +4116,7 @@ if ($level == 7)
 			<tr>
 				<td class="blank" colspan=2>
 				<br>
-				<form method="POST" action="<? echo $PHP_SELF ?>">
+				<form method="POST" action="<? echo URLHelper::getLink($PHP_SELF) ?>">
 					<table width ="60%" cellspacing=1 cellpadding=1>
 						<tr>
 							<td width="10%" class="blank">&nbsp; </td>
@@ -4234,7 +4234,7 @@ if ($level == 8)
 		</tr>
 		<tr>
 			<td class="blank" colspan=2>
-			<form method="POST" name="form_8" action="<? echo $PHP_SELF ?>">
+			<form method="POST" name="form_8" action="<? echo URLHelper::getLink($PHP_SELF) ?>">
 			<input type="HIDDEN" name="form" value=8>
 				<table width ="99%" cellspacing=0 cellpadding=2 border=0 align="center">
 					<tr<? $cssSw->switchClass() ?>>
