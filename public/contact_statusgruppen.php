@@ -1,5 +1,5 @@
 <?
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 /*
 admin_statusgruppe.php - Statusgruppen-Verwaltung von Stud.IP.
@@ -95,8 +95,8 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 		echo "\n\t<tr>";
 		echo "\n\t\t<td width=\"5%\">";
 		printf ("            	  <input type=\"IMAGE\" name=\"%s\" src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=\"0\" %s>&nbsp; </td>", $statusgruppe_id, tooltip(_("Markierte Personen dieser Gruppe zuordnen")));
-		printf ("	          <td width=\"85%%\" class=\"%s\">&nbsp; %s </td><td class=\"%s\" width=\"5%%\"><a href=\"$PHP_SELF?cmd=edit_statusgruppe&edit_id=%s&range_id=%s&view=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" border=\"0\" %s></a></td>",$edit_id == $statusgruppe_id?"topicwrite":"topic", htmlReady($db->f("name")), $edit_id == $statusgruppe_id?"topicwrite":"topic", $statusgruppe_id, $range_id, $view, tooltip(_("Gruppenname oder -größe anpassen")));
-		printf ( "	          <td width=\"5%%\"><a href=\"$PHP_SELF?cmd=verify_remove_statusgruppe&statusgruppe_id=%s&range_id=%s&view=%s&name=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash_att.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>",$statusgruppe_id, $range_id, $view, $db->f('name'), tooltip(_("Gruppe mit Personenzuordnung entfernen")));
+		printf ("	          <td width=\"85%%\" class=\"%s\">&nbsp; %s </td><td class=\"%s\" width=\"5%%\"><a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/einst.gif\" border=\"0\" %s></a></td>", ($edit_id == $statusgruppe_id?"topicwrite":"topic"), htmlReady($db->f("name")), ($edit_id == $statusgruppe_id?"topicwrite":"topic"), URLHelper::getLink($PHP_SELF."?edit_id=".$statusgruppe_id."&range_id=".$range_id."&view=".$view), tooltip(_("Gruppenname oder -größe anpassen")) );
+		printf ("	          <td width=\"5%%\"><a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash_att.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", URLHelper::getLink($PHP_SELF."?cmd=verify_remove_statusgruppe&statusgruppe_id=".$statusgruppe_id."&range_id=".$range_id."&view=".$view."&name=".$db->f("name")), tooltip(_("Gruppe mit Personenzuordnung entfernen")));
 		echo 	"\n\t</tr>";
 
 		$db2->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] . " AS fullname , username FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$statusgruppe_id'");
@@ -115,7 +115,7 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 				}
 				printf ("\n\t<tr>\n\t\t<td><font color=\"%s\">$k</font></td>", $farbe);
 				printf ("<td class=\"%s\" colspan=\"2\"><font size=\"2\">%s</font></td>",$class, htmlReady($db2->f("fullname")));
-				printf ("<td><a href=\"$PHP_SELF?cmd=remove_person&statusgruppe_id=%s&username=%s&range_id=%s&view=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", $statusgruppe_id, $db2->f("username"), $range_id, $view, tooltip(_("Person aus der Gruppe entfernen")));
+				printf ("<td><a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" width=\"11\" height=\"17\" border=\"0\" %s></a></td>", URLHelper::getLink($PHP_SELF.'?cmd=remove_person&statusgruppe_id='.$statusgruppe_id.'&username='.$db2->f("username").'&range_id='.$range_id.'&view='.$view), tooltip(_("Person aus der Gruppe entfernen")));
 				echo "\n\t</tr>";
 				$k++;
 			}
@@ -129,7 +129,7 @@ function PrintAktualStatusgruppen ($range_id, $view, $edit_id="")
 		$i++;
 		echo "</table>";
 		if ($i < $AnzahlStatusgruppen) {
-			printf ("<p align=\"center\"><a href=\"$PHP_SELF?cmd=swap&statusgruppe_id=%s&range_id=%s&view=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_up.gif\"  vspace=\"1\" width=\"13\" height=\"11\" border=\"0\"  %s><img src=\"".$GLOBALS['ASSETS_URL']."images/move_down.gif\" vspace=\"1\" width=\"13\" height=\"11\" border=\"0\" %s></a><br>&nbsp;",$statusgruppe_id, $range_id, $view, tooltip(_("Gruppenreihenfolge tauschen")), tooltip(_("Gruppenreihenfolge tauschen")));
+			printf ("<p align=\"center\"><a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/move_up.gif\"  vspace=\"1\" width=\"13\" height=\"11\" border=\"0\"  %s><img src=\"".$GLOBALS['ASSETS_URL']."images/move_down.gif\" vspace=\"1\" width=\"13\" height=\"11\" border=\"0\" %s></a><br>&nbsp;", URLHelper::getLink($PHP_SELF.'?cmd=swap&statusgruppe_id='.$statusgruppe_id.'&range_id='.$range_id.'&view='.$view), tooltip(_("Gruppenreihenfolge tauschen")), tooltip(_("Gruppenreihenfolge tauschen")));
 		}
 	}
 }
@@ -265,7 +265,7 @@ if (is_array($msgs)) {
 <?
 	if ($cmd!="edit_statusgruppe") { // normale Anzeige
 ?>
-		<form action="<? echo $PHP_SELF ?>?cmd=add_new_statusgruppe" method="post">
+		<form action="<? echo URLHelper::getLink('?cmd=add_new_statusgruppe') ?>" method="post">
 		<?
 	  	  echo"<input type=\"HIDDEN\" name=\"range_id\" value=\"$range_id\">";
   	      	  echo"<input type=\"HIDDEN\" name=\"view\" value=\"$view\">";
@@ -280,7 +280,7 @@ if (is_array($msgs)) {
 <?
 	} else { // editieren einer bestehenden Statusgruppe
 ?>
-		<form action="<? echo $PHP_SELF ?>?cmd=edit_existing_statusgruppe" method="POST">
+		<form action="<? echo URLHelper::getLink('?cmd=edit_existing_statusgruppe') ?>" method="POST">
 		<?
 		$db = new DB_Seminar("SELECT name, size FROM statusgruppen WHERE statusgruppe_id = '$edit_id'");
 		if ($db->next_record()) {
@@ -311,7 +311,7 @@ $db = new DB_Seminar();
 $db->query ("SELECT name, statusgruppe_id, size FROM statusgruppen WHERE range_id = '$range_id' ORDER BY position ASC");
 if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 	?>
-<form action="<? echo $PHP_SELF ?>?cmd=move_person" method="post">
+<form action="<? echo URLHelper::getLink('?cmd=move_person') ?>" method="post">
 <table width="100%" border="0" cellspacing="0">
 	<tr>
 		<td class="steel1" valign="top" width="50%">
@@ -385,4 +385,4 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 
 	include ('lib/include/html_end.inc.php');
 	page_close();
-?>
+?> 
