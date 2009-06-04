@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 
 /*
@@ -80,7 +80,10 @@ if ($SessSemName[1]) {
 		<blockquote>
 		<? 
 		printf(_("Die Veranstaltung wurde zum Kopieren ausgewählt."). " ");
-		printf(_("Um die vorgewählte Veranstaltung zu kopieren klicken sie %shier%s."),'<a href="admin_seminare_assi.php?cmd=do_copy&cp_id='.$SessSemName[1].'&start_level=TRUE&class=1">','</a>'); ?>
+		printf(_("Um die vorgewählte Veranstaltung zu kopieren klicken sie %shier%s."),
+			'<a href="'.URLHelper::getLink('admin_seminare_assi.php?cmd=do_copy&cp_id='.$SessSemName[1].'&start_level=TRUE&class=1').'">',
+			'</a>'); 
+		?>
 		</blockquote>
 		<br />
 		</td></tr>
