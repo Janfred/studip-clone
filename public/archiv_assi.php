@@ -1,5 +1,5 @@
 <?
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 /**
 * archiv_Assi.php - Archivierungs-Assistent von Stud.IP.
@@ -432,7 +432,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 				while ($db2->next_record()) {
 					if ($db2->num_rows() > 1)
 						print "<li>";
-					printf("<font size=-1><a href = about.php?username=%s>%s</a></font>", $db2->f("username"), htmlReady($db2->f("fullname")));
+					printf("<font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink("about.php?username=".$db2->f("username")), htmlReady($db2->f("fullname")));
 					if ($db2->num_rows() > 1)
 						print "</li>";
 				}
@@ -452,7 +452,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 				while ($db2->next_record()) {
 					if ($db2->num_rows() > 1)
 						print "<li>";
-					printf("<font size=-1><a href = about.php?username=%s>%s</a></font>", $db2->f("username"), htmlReady($db2->f("fullname")));
+					printf("<font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink("about.php?username=".$db2->f("username")), htmlReady($db2->f("fullname")));
 					if ($db2->num_rows() > 1)
 						print "</li>";
 				}
@@ -500,7 +500,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 				$db2->query("SELECT Name, url, Institut_id FROM Institute WHERE Institut_id = '" . $db->f("Institut_id") . "' ");
 				$db2->next_record();
 				if ($db2->num_rows()) {
-					printf("<font size=-1><b>" . _("Heimat-Einrichtung:") . "</b></font><br><font size=-1><a href=\"institut_main.php?auswahl=%s\">%s</a></font>", $db2->f("Institut_id"), htmlReady($db2->f("Name")));
+					printf("<font size=-1><b>" . _("Heimat-Einrichtung:") . "</b></font><br><font size=-1><a href=\"%s\">%s</a></font>", URLHelper::getLink("institut_main.php?auswahl=".$db2->f("Institut_id")), htmlReady($db2->f("Name")));
 				}
 
 				?>
@@ -517,7 +517,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 				while ($db2->next_record()) {
 					if ($db2->num_rows() >= 2)
 						print "<li>";
-					printf("<font size=-1><a href=\"institut_main.php?auswahl=%s\">%s</a></font><br>", $db2->f("Institut_id"), htmlReady($db2->f("Name")));
+					printf("<font size=-1><a href=\"%s\">%s</a></font><br>", URLHelper::getLink("institut_main.php?auswahl=".$db2->f("Institut_id")), htmlReady($db2->f("Name")));
 					if ($db2->num_rows() > 2)
 						print "</li>";
 				}
@@ -539,13 +539,13 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 						$inc_possible = TRUE;
 				}
 				if ($inc_possible) {
-					print("&nbsp;<a href=\"$PHP_SELF?dec=TRUE\">" . makeButton("vorherige", "img") . "</a>");
+					printf("&nbsp;<a href=\"%s\">%s</a>", URLHelper::getLink($PHP_SELF."?dec=TRUE"), makeButton("vorherige", "img"));
 				}
 				if (!$links_admin_data["sem_id"]) {
 					echo '&nbsp;<a href="' .
-					 (($SessSemName[1]) ? 'admin_seminare1.php?list=TRUE' : $_SERVER['PHP_SELF'].'?list=TRUE&new_session=TRUE'). '">' . makeButton('abbrechen', 'img') . '</a>';
+					 URLHelper::getLink((($SessSemName[1]) ? 'admin_seminare1.php?list=TRUE' : $_SERVER['PHP_SELF'].'?list=TRUE&new_session=TRUE')). '">' . makeButton('abbrechen', 'img') . '</a>';
 				}
-				print("&nbsp;<a href=\"$PHP_SELF?archive_kill=TRUE\">" . makeButton("archivieren", "img") . "</a>");
+				printf("&nbsp;<a href=\"%s\">%s</a>", URLHelper::getLink($PHP_SELF."?archive_kill=TRUE"), makeButton("archivieren", "img"));
 				// can we inc?
 				if ($archiv_assi_data["pos"] < sizeof($archiv_assi_data["sems"])-1) {
 					$i = 1;
@@ -555,7 +555,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 						$dec_possible = TRUE;
 				}
 				if ($dec_possible) {
-					print("&nbsp;<a href=\"$PHP_SELF?inc=TRUE\">" . makeButton("naechster", "img") . "</a>");
+					printf("&nbsp;<a href=\"%s\">%s</a>", URLHelper::getLink($PHP_SELF."?inc=TRUE"), makeButton("naechster", "img"));
 				}
 				if (sizeof($archiv_assi_data["sems"]) > 1)
 					printf ("<br><font size=\"-1\">" . _("noch <b>%s</b> von <b>%s</b> Veranstaltungen zum Archivieren ausgew&auml;hlt.") . "</font>", sizeof($archiv_assi_data["sem_check"]), sizeof($archiv_assi_data["sems"]));
