@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 /*
 themen_ablaufplan.php: GUI for default-view of the theme managment
@@ -161,7 +161,7 @@ $grenze = 0;
 $termine = getAllSortedSingleDates($sem);
 
 ?>
-<FORM action="<?=$PHP_SELF?>" method="post">
+<FORM action="<?= URLHelper::getLink($PHP_SELF) ?>" method="post">
 <TABLE width="100%" border="0" cellpadding="0" cellspacing="0">
   <TR>
 		<TD align="center" class="blank" width="80%" valign="top">
@@ -169,7 +169,7 @@ $termine = getAllSortedSingleDates($sem);
 				<? if (is_array($termine) && sizeof($termine) > 0) : ?>
 				<TR>
 					<TD class="steelgraulight" colspan="6" height="24" align="center">
-						<A href="<?=$PHP_SELF?>?cmd=<?=($openAll) ? 'close' : 'open'?>All">
+						<A href="<?= URLHelper::getLink($PHP_SELF."?cmd=".(($openAll) ? 'close' : 'open')."All") ?>">
 							<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/<?=($openAll) ? 'close' : 'open'?>_all.gif" border="0" <?=tooltip(sprintf("Alle Termine %sklappen", ($openAll) ? 'zu' : 'auf'))?>>
 						</A>
 					</TD>
@@ -190,7 +190,7 @@ $termine = getAllSortedSingleDates($sem);
 					<td class="steelgraulight" colspan="6" align="center" height="30" valign="middle">
 						<input type="hidden" name="allOpen" value="TRUE">
 						<input type="image" <?=makebutton('allesuebernehmen', 'src')?> name="editAll" align="absmiddle">&nbsp;&nbsp;&nbsp;
-						<a href="<?=$PHP_SELF?>?cmd=closeAll">
+						<a href="<?= URLHelper::getLink($PHP_SELF."?cmd=closeAll") ?>">
 							<img <?=makebutton('abbrechen', 'src')?> border="0" align="absmiddle">
 						</a>
 					</td>
@@ -241,7 +241,7 @@ $termine = getAllSortedSingleDates($sem);
 						$tpl['art'] = $TERMIN_TYP[$tpl['type']]['name'];
 
     				// calendar jump
-    				$tpl['calendar'] = "&nbsp;<a href=\"calendar.php?cmd=showweek&atime=" . $singledate->getStartTime();
+    				$tpl['calendar'] = "&nbsp;<a href=\"".URLHelper::getLink("calendar.php?cmd=showweek&atime=". $singledate->getStartTime());
     				$tpl['calendar'] .= "\"><img style=\"vertical-align:bottom\" src=\"".$GLOBALS['ASSETS_URL']."images/popupkalender.gif\" ";
     				$tpl['calendar'] .= tooltip(sprintf(_("Zum %s in den persönlichen Terminkalender springen"), date("m.d", $singledate->getStartTime())));
     				$tpl['calendar'] .= ' border="0"></a>';
@@ -283,7 +283,7 @@ $termine = getAllSortedSingleDates($sem);
 					<TD class="steelgraulight" colspan="6" align="center" height="30" valign="middle">
 						<INPUT type="hidden" name="allOpen" value="TRUE">
 						<INPUT type="image" <?=makebutton('allesuebernehmen', 'src')?> name="editAll" align="absmiddle">&nbsp;&nbsp;&nbsp;
-						<A href="<?=$PHP_SELF?>?cmd=closeAll">
+						<A href="<?= URLHelper::getLink($PHP_SELF."?cmd=closeAll") ?>">
 							<IMG <?=makebutton('abbrechen', 'src')?> border="0" align="absmiddle">
 						</A>
 					</TD>
