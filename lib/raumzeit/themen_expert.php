@@ -1,5 +1,5 @@
 <?php
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 /*
 themen_expert.php: GUI for the expert mode of the theme management
