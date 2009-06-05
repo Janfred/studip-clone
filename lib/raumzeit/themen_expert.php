@@ -175,7 +175,7 @@ $sem->processCommands();
 unset($themen);
 $themen =& $sem->getIssues(true);	// read again, so we have the actual sort order and so on
 ?>
-<FORM action="<?=$PHP_SELF?>" method="post">
+<FORM action="<?= URLHelper::getLink($PHP_SELF) ?>" method="post">
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="0">
 	<TR>
 		<TD class="blank" colspan="2">
@@ -259,7 +259,7 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
 				</TR>
 				<TR>
 					<TD class="steelgraulight" colspan="3" align="center">
-						<A href="<?=$PHP_SELF?>?cmd=openAll">
+						<A href="<?= URLHelper::getLink($PHP_SELF."?cmd=openAll") ?>">
 							<IMG src="<?= $GLOBALS['ASSETS_URL'] ?>images/forumgraurunt.gif" title="<?=_("Alle Themen aufklappen")?>" border="0">
 						</A>
 					</TD>
@@ -330,7 +330,7 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
 					<TD class="blank" colspan="3" align="center">
 						<INPUT type="hidden" name="allOpen" value="1">
 						<INPUT type="image" <?=makebutton('allesuebernehmen', 'src')?> name="saveAll">&nbsp;
-						<A href="<?=$PHP_SELF?>">
+						<A href="<?= URLHelper::getLink($PHP_SELF) ?>">
 							<IMG <?=makebutton('abbrechen', 'src')?> border="0">
 						</A>
 					</TD>
@@ -369,7 +369,7 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
 							</TD>
 							<TD background="<?= $GLOBALS['ASSETS_URL'] ?>images/steel2.jpg">
 								<FONT size="-1">
-									<A href="<?=$PHP_SELF?>?cmd=changeChronoGroupedFilter&newFilter=chrono">
+									<A href="<?= URLHelper::getLink($PHP_SELF."?cmd=changeChronoGroupedFilter&newFilter=chrono") ?>">
 										&nbsp;&nbsp;<?=_("chronologisch")?>&nbsp;&nbsp;
 									</A>
 								</FONT>
@@ -377,7 +377,7 @@ $themen =& $sem->getIssues(true);	// read again, so we have the actual sort orde
 						<? } else { ?>
 							<TD background="<?= $GLOBALS['ASSETS_URL'] ?>images/steel2.jpg">
 								<FONT size="-1">
-									<A href="<?=$PHP_SELF?>?cmd=changeChronoGroupedFilter&newFilter=grouped">
+									<A href="<?= URLHelper::getLink($PHP_SELF."?cmd=changeChronoGroupedFilter&newFilter=grouped") ?>">
 										&nbsp;&nbsp;<?=_("gruppiert")?>&nbsp;&nbsp;
 									</A>
 								</FONT>
