@@ -1,5 +1,5 @@
 <?
-# Lifter001: TODO
+# Lifter001: TEST
 # Lifter002: TODO
 /**
 * admin_datafields.php
@@ -73,20 +73,22 @@ function printDataFieldType ($targetID, $currStruct)
 			printf('<input type="hidden" name="datafield_id" value="%s">', $currStruct->getID());
 			print ' <input type="image" name="save" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" align="middle" title="&Auml;nderungen speichern">';
 			print ' <input type="image" name="preview" src="'.$GLOBALS['ASSETS_URL'].'images/preview.gif" border="0" align="middle" title="Vorschau">';
-			printf(' <a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" align="middle" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+			printf(' <a href="%s"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" align="middle" title="Bearbeitung abbrechen"></a>', 
+					URLHelper::getLink($PHP_SELF."?cancel=TRUE"));
 		}
 		elseif ($_POST['preview_x'] && $_POST['datafield_id'] == $currStruct->getID()) { // preview button clicked?
 			print '<br>';
 			$currStruct->setTypeParam($_POST['typeparam']);
 			$sbox = DataFieldEntry::createDataFieldEntry($currStruct);
 			print '<a name="a">' . $sbox->getHTML('') . '</a>';
-			printf(' <a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" align="middle" title="Fertig"></a>', $PHP_SELF);
-			printf(' <a href="%s?edit_typeparam=%s#a"><img src="'.$GLOBALS['ASSETS_URL'].'images/edit_transparent.gif" border="0" align="middle" title="Eintr&auml;ge bearbeiten"></a>',
-					 $PHP_SELF, $_POST['datafield_id']);
+			printf(' <a href="%s"><img src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" align="middle" title="Fertig"></a>', 
+					 URLHelper::getLink($PHP_SELF."?cancel=TRUE"));
+			printf(' <a href="%s"><img src="'.$GLOBALS['ASSETS_URL'].'images/edit_transparent.gif" border="0" align="middle" title="Eintr&auml;ge bearbeiten"></a>',
+					 URLHelper::getLink($PHP_SELF."?edit_typeparam=".$_POST['datafield_id']."#a"));
 		}
 		else
 			if (in_array($currStruct->getType(), array('selectbox', 'radio', 'combo'))) {
-				printf(" <a href=\"$PHP_SELF?edit_typeparam=%s#a\">", $currStruct->getID());
+				printf(" <a href=\"%s\">", URLHelper::getLink($PHP_SELF."?edit_typeparam=".$currStruct->getID()."#a"));
 				print  '<img src="'.$GLOBALS['ASSETS_URL'].'images/edit_transparent.gif" border="0" align="middle" title="Eintr&auml;ge bearbeiten"></a>';
 			}
 	}
@@ -176,7 +178,7 @@ if ($kill_datafield) { // contains a datafield_id
 }
 
 ?>
-<form method="POST" name="modules" action="<?=  $_SERVER['PHP_SELF'] ?>?send=TRUE#a">
+<form method="POST" name="modules" action="<?=  URLHelper::getLink($_SERVER['PHP_SELF']."?send=TRUE#a") ?>">
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
  	<tr>
 		<td class="blank" valign="top">
@@ -322,11 +324,14 @@ if ($kill_datafield) { // contains a datafield_id
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print  ' <input type="IMAGE" name="send_datafield" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" title="Änderungen übernehmen">';
-						printf ('<a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+						printf ('<a href="%s"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', 
+								URLHelper::getLink($PHP_SELF."?cancel=TRUE"));
 					}
 					else
-						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
-					printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+						printf (" <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s></a>", 
+								URLHelper::getLink($PHP_SELF."?change_datafield=".$val->getID()."#a"), tooltip(_("Datenfeld ändern")));
+					printf (" <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s></a>", 
+							URLHelper::getLink($PHP_SELF."?kill_datafield=".$val->getID()), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -394,7 +399,7 @@ if ($kill_datafield) { // contains a datafield_id
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
 					<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?>>
-					<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?>>
+					<a href="<?= URLHelper::getLink($PHP_SELF."?cancel=TRUE") ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?>>
 				</td>
 			</tr>
 			<?
@@ -403,7 +408,7 @@ if ($kill_datafield) { // contains a datafield_id
 		</table>
 		<?
 		if ($admin_datafields_data["create_datafield"] != "sem") {
-			?><a href="<?=$PHP_SELF?>?create_new=sem#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Veranstaltungen anlegen"))?>></a><?
+			?><a href="<?= URLHelper::getLink($PHP_SELF."?create_new=sem#a") ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Veranstaltungen anlegen"))?>></a><?
 		}
 		?>
 		<br><br>
@@ -555,11 +560,14 @@ if ($kill_datafield) { // contains a datafield_id
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print  ' <input type="IMAGE" name="send_datafield" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" title="Änderungen übernehmen">';
-						printf ('<a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+						printf ('<a href="%s"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', 
+								URLHelper::getLink($PHP_SELF."?cancel=TRUE"));
 					}
 					else
-						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
-					printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+						printf (" <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s></a>", 
+								URLHelper::getLink($PHP_SELF."?change_datafield=".$val->getID()."#a"), tooltip(_("Datenfeld ändern")));
+					printf (" <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s></a>", 
+							URLHelper::getLink($PHP_SELF."?kill_datafield=".$val->getID()), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -627,7 +635,7 @@ if ($kill_datafield) { // contains a datafield_id
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
 					<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?>>
-					<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?>>
+					<a href="<?= URLHelper::getLink($PHP_SELF."?cancel=TRUE") ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?>>
 				</td>
 			</tr>
 			<?
@@ -636,7 +644,7 @@ if ($kill_datafield) { // contains a datafield_id
 		</table>
 		<?
 		if ($admin_datafields_data["create_datafield"] != "inst") {
-			?><a href="<?=$PHP_SELF?>?create_new=inst#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Einrichtungen anlegen"))?>></a><?
+			?><a href="<?= URLHelper::getLink($PHP_SELF."?create_new=inst#a") ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Einrichtungen anlegen"))?>></a><?
 		}
 		?>
 		<br><br>
@@ -790,11 +798,14 @@ if ($kill_datafield) { // contains a datafield_id
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print  ' <input type="IMAGE" name="send_datafield" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" title="Änderungen übernehmen">';
-						printf ('<a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+						printf ('<a href="%s"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', 
+								URLHelper::getLink($PHP_SELF."?cancel=TRUE"));
 					}
 					else
-						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
-					printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+						printf (" <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s></a>", 
+								URLHelper::getLink($PHP_SELF."?change_datafield=".$val->getID()."#a"), tooltip(_("Datenfeld ändern")));
+					printf (" <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s></a>", 
+							URLHelper::getLink($PHP_SELF."?kill_datafield=".$val->getID()), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -863,7 +874,7 @@ if ($kill_datafield) { // contains a datafield_id
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
 					<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> >
-					<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> ></a>
+					<a href="<?= URLHelper::getLink($PHP_SELF."?cancel=TRUE") ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> ></a>
 				</td>
 			</tr>
 			<?
@@ -872,7 +883,7 @@ if ($kill_datafield) { // contains a datafield_id
 		</table>
 		<?
 		if ($admin_datafields_data["create_datafield"] != "user") {
-			?><a href="<?=$PHP_SELF?>?create_new=user#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer anlegen"))?>></a><?
+			?><a href="<?= URLHelper::getLink($PHP_SELF."?create_new=user#a") ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer anlegen"))?>></a><?
 		}
 		?>
 		<br><br>
@@ -1024,11 +1035,14 @@ if ($kill_datafield) { // contains a datafield_id
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print  ' <input type="IMAGE" name="send_datafield" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" title="Änderungen übernehmen">';
-						printf ('<a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+						printf ('<a href="%s"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', 
+								URLHelper::getLink($PHP_SELF."?cancel=TRUE"));
 					}
 					else
-						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
-					printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+						printf (" <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s></a>", 
+								URLHelper::getLink($PHP_SELF."?change_datafield=".$val->getID()."#a"), tooltip(_("Datenfeld ändern")));
+					printf (" <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s></a>", 
+							URLHelper::getLink($PHP_SELF."?kill_datafield=".$val->getID()), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -1097,7 +1111,7 @@ if ($kill_datafield) { // contains a datafield_id
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
 					<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> >
-					<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> ></a>
+					<a href="<?= URLHelper::getLink($PHP_SELF."?cancel=TRUE") ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> ></a>
 				</td>
 			</tr>
 			<?
@@ -1106,7 +1120,7 @@ if ($kill_datafield) { // contains a datafield_id
 		</table>
 		<?
 		if ($admin_datafields_data["create_datafield"] != "userinstrole") {
-			?><a href="<?=$PHP_SELF?>?create_new=userinstrole#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer anlegen"))?>></a><?
+			?><a href="<?= URLHelper::getLink($PHP_SELF."?create_new=userinstrole#a") ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer anlegen"))?>></a><?
 		}
 		?>
 		<br><br>
@@ -1265,11 +1279,14 @@ if ($kill_datafield) { // contains a datafield_id
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print  ' <input type="IMAGE" name="send_datafield" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" title="Änderungen übernehmen">';
-						printf ('<a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+						printf ('<a href="%s"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', 
+								URLHelper::getLink($PHP_SELF."?cancel=TRUE"));
 					}
 					else
-						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
-					printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+						printf (" <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s></a>", 
+								URLHelper::getLink($PHP_SELF."?change_datafield=".$val->getID()."#a"), tooltip(_("Datenfeld ändern")));
+					printf (" <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s></a>", 
+							URLHelper::getLink($PHP_SELF."?kill_datafield=".$val->getID()), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -1338,7 +1355,7 @@ if ($kill_datafield) { // contains a datafield_id
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
 					<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> >
-					<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> ></a>
+					<a href="<?= URLHelper::getLink($PHP_SELF."?cancel=TRUE") ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> ></a>
 				</td>
 			</tr>
 			<?
@@ -1347,7 +1364,7 @@ if ($kill_datafield) { // contains a datafield_id
 		</table>
 		<?
 		if ($admin_datafields_data["create_datafield"] != "usersemdata") {
-			?><a href="<?=$PHP_SELF?>?create_new=usersemdata#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer-Zusatzangaben anlegen"))?>></a><?
+			?><a href="<?= URLHelper::getLink($PHP_SELF."?create_new=usersemdata#a") ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer-Zusatzangaben anlegen"))?>></a><?
 		}
 		?>
 		<br><br>
@@ -1504,11 +1521,14 @@ if ($kill_datafield) { // contains a datafield_id
 					<?
 					if ($admin_datafields_data["change_datafield"] == $val->getID()) {
 						print  ' <input type="IMAGE" name="send_datafield" src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif" border="0" title="Änderungen übernehmen">';
-						printf ('<a href="%s?cancel=TRUE"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', $PHP_SELF);
+						printf ('<a href="%s"><img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif" border="0" title="Bearbeitung abbrechen"></a>', 
+								URLHelper::getLink($PHP_SELF."?cancel=TRUE"));
 					}
 					else
-						printf (" <a href=\"%s?change_datafield=%s#a\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld ändern")));
-					printf (" <a href=\"%s?kill_datafield=%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s></a>", $PHP_SELF, $val->getID(), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
+						printf (" <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/edit_transparent.gif\" border=\"0\" %s></a>", 
+								URLHelper::getLink($PHP_SELF."?change_datafield=".$val->getID()."#a"), tooltip(_("Datenfeld ändern")));
+					printf (" <a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" %s></a>", 
+							URLHelper::getLink($PHP_SELF."?kill_datafield=".$val->getID()), tooltip(_("Datenfeld löschen (wird von keiner Veranstaltung verwendet)")));
 					?>
 				</td>
 			</tr>
@@ -1577,7 +1597,7 @@ if ($kill_datafield) { // contains a datafield_id
 				</td>
 				<td class="<?=$cssSw->getClass()?>" align="center" nowrap>
 					<input type="IMAGE" name="send" src="<?= $GLOBALS['ASSETS_URL'] ?>images/haken_transparent.gif" border="0" <?=tooltip(_("Datenfeld speichern"))?> >
-					<a href="<?=$PHP_SELF?>?cancel=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> ></a>
+					<a href="<?= URLHelper::getLink($PHP_SELF."?cancel=TRUE") ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/x_transparent.gif" border="0" <?=tooltip(_("Anlegen abbrechen"))?> ></a>
 				</td>
 			</tr>
 			<?
@@ -1586,7 +1606,7 @@ if ($kill_datafield) { // contains a datafield_id
 		</table>
 		<?
 		if ($admin_datafields_data["create_datafield"] != "roleinstdata") {
-			?><a href="<?=$PHP_SELF?>?create_new=roleinstdata#a"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer-Zusatzangaben anlegen"))?>></a><?
+			?><a href="<?= URLHelper::getLink($PHP_SELF."?create_new=roleinstdata#a") ?>"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/add_right.gif" border="0" <?=tooltip(_("Neues Datenfeld für Nutzer-Zusatzangaben anlegen"))?>></a><?
 		}
 		?>
 		<br><br>
