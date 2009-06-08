@@ -1,6 +1,7 @@
 <?php
 # Lifter001: TEST
 # Lifter002: TEST (mriehe)
+# Lifter003: TEST
 # Lifter005: TODO
 /**
  * score.php - Stud.IP Highscore List
@@ -42,18 +43,17 @@ if($_REQUEST['cmd']=="kill")
 }
 
 // Liste aller die mutig (oder eitel?) genug sind
-$db = new DB_Seminar();
-$db->query("SELECT a.user_id,username,score,geschlecht, " .$_fullname_sql['full'] ." AS fullname FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 AND locked=0 AND ".get_vis_query('b')." ORDER BY score DESC");
-while ($db->next_record())
-{
+$query = "SELECT a.user_id,username,score,geschlecht, " .$_fullname_sql['full'] ." AS fullname FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 AND locked=0 AND ".get_vis_query('b')." ORDER BY score DESC";
+$result = DBManager::get()->query($query);
+while ($row = $result->fetch()) {
 	$person = array(
-		"userid" => $db->f("user_id"),
-		"username" => $db->f("username"),
-		"avatar" => Avatar::getAvatar($db->f("user_id"))->getImageTag(Avatar::SMALL),
-		"name" => htmlReady($db->f("fullname")),
-		"content" => $score->GetScoreContent($db->f("user_id")),
-		"score" => $db->f("score"),
-		"title" => $score->GetTitel($db->f("score"), $db->f("geschlecht"))
+		"userid" => $row["user_id"],
+		"username" => $row["username"],
+		"avatar" => Avatar::getAvatar($row["user_id"])->getImageTag(Avatar::SMALL),
+		"name" => htmlReady($row["fullname"]),
+		"content" => $score->GetScoreContent($row["user_id"]),
+		"score" => $row["score"],
+		"title" => $score->GetTitel($row["score"], $row["geschlecht"])
 
 	);
 	$persons[] = $person;
