@@ -174,14 +174,15 @@ class ModulesNotification extends Modules {
 			}
 			$modules = $this->generateModulesArrayFromModulesInteger( $modulesInt );
 			$my_sem[$seminar_id] = array(
-				//	'visitdate' => $this->db->f('visitdate'),
 					'name' => $this->db->f('Name'),
 					'chdate' => $this->db->f('chdate'),
 					'start_time' => $this->db->f('start_time'),
 					'modules' => $modules,
 					'modulesInt' => $modulesInt,
 					'visitdate' => $this->db->f('visitdate'),
-					$this->db->f('modules'));
+					'obj_type' => 'sem'
+					);
+
 			unset( $seminar_id );
 			unset( $modules );
 			unset( $modulesInt );
@@ -198,7 +199,7 @@ class ModulesNotification extends Modules {
 		
 		$text = '';
 		foreach ($my_sem as $seminar_id => $s_data) {
-			$m_notification = ($s_data['$modulesInt'] + $m_extended)
+			$m_notification = ($s_data['modulesInt'] + $m_extended)
 					& $m_all_notifications[$seminar_id];
 			$m_text = '';
 			foreach ($m_enabled_modules as $m_name => $m_data) {

@@ -41,6 +41,9 @@ get_config('MAIL_NOTIFICATION_ENABLE') || trigger_error('Mail notifications are 
 
 set_time_limit(60*60*2);
 
+//notifications for plugins not implemented 
+$PLUGINS_ENABLE = false;
+
 $db = new DB_Seminar();
 $notification = new ModulesNotification();
 $smtp =& $notification->smtp;
