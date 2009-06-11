@@ -1,5 +1,5 @@
 <?
-# Lifter001: TEST
+# Lifter001: TODO
 # Lifter002: TODO
 /**
 * admin_modules.php
@@ -46,8 +46,8 @@ require_once('lib/messaging.inc.php');	//Nachrichtenfunktionen
 require_once('lib/classes/AdminModules.class.php');	//Nachrichtenfunktionen
 
 $cssSw=new cssClassSwitcher;
-URLHelper::bindLinkParam("admin_modules_data",$admin_modules_data);
-URLHelper::bindLinkParam("plugin_toggle",$plugin_toggle);
+$sess->register("admin_modules_data");
+$sess->register("plugin_toggle");
 
 
 //Output starts here
@@ -136,7 +136,7 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					if( $check != $setting ){
 						array_push( $plugin_toggle , $plugin->getPluginId() );
 					}
-				
+
 				}
 			}
 		}
@@ -195,10 +195,10 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 					$changes = true;
 					// logging
 					if ($activated) {
-						log_event('PLUGIN_ENABLE',$admin_modules_data["range_id"],$plugin->getPluginId() ,$user->id); 
+						log_event('PLUGIN_ENABLE',$admin_modules_data["range_id"],$plugin->getPluginId() ,$user->id);
 					}
 					else {
-						log_event('PLUGIN_DISABLE',$admin_modules_data["range_id"],$plugin->getPluginId() ,$user->id); 
+						log_event('PLUGIN_DISABLE',$admin_modules_data["range_id"],$plugin->getPluginId() ,$user->id);
 					}
 				}
 			}
