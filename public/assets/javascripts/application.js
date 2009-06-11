@@ -456,16 +456,18 @@ STUDIP.Tabs = function () {
     // initializes, observes resize events and compresses the tabs
     initialize: function () {
       list = $("tabs");
-      items = list.select("li a");
-      viewport_width = document.viewport.getWidth();
+      if (list !== null) {
+        items = list.select("li a");
+        viewport_width = document.viewport.getWidth();
 
-      // strip contents and set titles
-      items.each(function (item) {
-        item.title = item.innerHTML = item.innerHTML.strip();
-      });
+        // strip contents and set titles
+        items.each(function (item) {
+          item.title = item.innerHTML = item.innerHTML.strip();
+        });
 
-      Event.observe(window, "resize", this.resize.bind(this));
-      this.compress();
+        Event.observe(window, "resize", this.resize.bind(this));
+        this.compress();
+      }
     },
 
 
