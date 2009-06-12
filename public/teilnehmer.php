@@ -580,10 +580,9 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 						$db->query("SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms, b.Seminar_id as is_present FROM auth_user_md5 a ".
 						"LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.Seminar_id='$SessSemName[1]')  ".
 						"WHERE perms IN ('autor','tutor','dozent') AND ".
-						"(username='{$csv_nachname}' OR ".
 						"(Nachname LIKE '" . $csv_nachname . "'"
 						. ($csv_vorname ? " AND Vorname LIKE '" . $csv_vorname . "'" : '')
-						. ")) ORDER BY Nachname");
+						. ") ORDER BY Nachname");
 					} else {
 						$db->query("SELECT a.user_id, username, " . $_fullname_sql['full_rev'] ." AS fullname, perms, b.Seminar_id as is_present FROM auth_user_md5 a ".
 						"LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user b ON (b.user_id=a.user_id AND b.Seminar_id='$SessSemName[1]')  ".
