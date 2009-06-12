@@ -127,6 +127,7 @@ function export_range($range_id)
 
 
 //    Ist die Range-ID ein Range-Tree-Item?
+	if($range_id != 'root'){
 	$tree_object = new RangeTreeObject($range_id);
 	$range_name = $tree_object->item_data["name"];
 //    Tree-Item ist ein Institut:
@@ -150,9 +151,10 @@ function export_range($range_id)
 			export_inst($inst_ids);
 		}
 	}
+	}
 
 	$db->query("SELECT sem_tree_id FROM sem_tree WHERE sem_tree_id = '$range_id' ");
-	if ($db->next_record()){
+	if ($db->next_record() || $range_id=='root'){
 		if (!$output_startet)  output_data(xml_header(), $o_mode);
 		$output_startet = true;
 		$the_tree =& TreeAbstract::GetInstance('StudipSemTree');
@@ -251,6 +253,8 @@ function export_sem($inst_id, $ex_sem_id = "all")
 {
 	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $SEM_CLASS, $filter, $ex_sem, $ex_class_array,$ex_person_details,$persons;
 
+	$ex_only_homeinst = (int)$_REQUEST['ex_only_homeinst'];
+	
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;
 	$db3=new DB_Seminar;
@@ -288,11 +292,18 @@ function export_sem($inst_id, $ex_sem_id = "all")
 
 	if (!$GLOBALS['perm']->have_perm('root') && !$GLOBALS['perm']->have_studip_perm('admin', $inst_id)) $addquery .= " AND visible=1 ";
 
+	if($ex_only_homeinst){
+		$db->query("SELECT seminare.*,Seminar_id as seminar_id, Institute.Name as heimateinrichtung FROM seminare
+				LEFT JOIN Institute ON seminare.Institut_id=Institute.Institut_id
+				WHERE seminare.Institut_id = '" . $inst_id . "' " . $addquery . "
+				ORDER BY " . $order);
+	} else {
 	$db->query("SELECT seminare.*,seminar_inst.seminar_id, Institute.Name as heimateinrichtung FROM seminar_inst
 				LEFT JOIN seminare USING (Seminar_id)
 				LEFT JOIN Institute ON seminare.Institut_id=Institute.Institut_id
 				WHERE seminar_inst.Institut_id = '" . $inst_id . "' " . $addquery . "
 				ORDER BY " . $order);
+	}
 
 	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
 
