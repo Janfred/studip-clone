@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter007: TODO
 
 /**
  * Ausgangspunkt für Administrationsplugins, also Plugins, die speziell im

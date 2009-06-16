@@ -1,6 +1,7 @@
 <?php
 # Lifter002: TODO
 # Lifter003: TODO
+# Lifter007: TODO
 /*
 user_activities.php
 Copyright (C) 2006 André Noack <noack@data-quest.de>

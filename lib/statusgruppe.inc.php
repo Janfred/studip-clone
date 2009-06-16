@@ -1,6 +1,7 @@
 <?
 # Lifter001: TEST
 # Lifter002: TODO
+# Lifter007: TODO
 /**
 * helper functions for handling statusgruppen
 *

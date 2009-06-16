@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter007: TODO
 /*
 email_validation.php - Hochstufung eines user auf Status autor, wenn erfolgreich per Mail zurueckgemeldet
 Copyright (C) 2001 Stefan Suchi <suchi@gmx.de>

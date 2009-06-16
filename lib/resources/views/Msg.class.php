@@ -1,5 +1,6 @@
 <?
 # Lifter002: TODO
+# Lifter007: TODO
 /**
 * Msg.class.php
 * 

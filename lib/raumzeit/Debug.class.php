@@ -1,5 +1,6 @@
 <?
 # Lifter002: TODO
+# Lifter007: TODO
 class Debug {
 
 	function debug($text, $dl = 0) {

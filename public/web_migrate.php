@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter007: TODO
 /*
  * web_migrate.php - web-based migrator for Stud.IP
  * Copyright (C) 2007  Elmar Ludwig

@@ -1,5 +1,6 @@
 #!/usr/bin/php -q
 <?php
+# Lifter007: TODO
 
 // run untill really everything is done...
 set_time_limit(0);

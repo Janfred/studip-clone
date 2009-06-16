@@ -2,6 +2,7 @@
 # Lifter001: DONE - nothing to do
 # Lifter002: TODO
 # Lifter005: TODO - passwortabsicherung
+# Lifter007: TODO
 /**
 * sem_verify.php
 *

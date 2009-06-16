@@ -1,6 +1,7 @@
 <?
 # Lifter001: TEST
 # Lifter002: TODO
+# Lifter007: TODO
 /*
 statusgruppen.php - Statusgruppen-Anzeige von Stud.IP.
 Copyright (C) 2002 Ralf Stockmann <rstockm@gwdg.de>

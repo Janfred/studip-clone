@@ -1,6 +1,7 @@
 <?
 # Lifter002: TODO
 # Lifter005: TODO
+# Lifter007: TODO
 /**
 * ExternModuleNewsticker.class.php
 * 

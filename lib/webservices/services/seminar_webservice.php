@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter007: TODO
 
 /*
  * seminar_webservice.php - Provides webservices for infos about

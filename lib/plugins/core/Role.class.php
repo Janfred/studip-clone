@@ -1,4 +1,5 @@
 <?php
+# Lifter007: TODO
 /**
  * Role.class.php
  *

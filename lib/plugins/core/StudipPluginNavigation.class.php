@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter007: TODO
 
 /*
  * StudipPluginNavigation.class.php - menus for plugins

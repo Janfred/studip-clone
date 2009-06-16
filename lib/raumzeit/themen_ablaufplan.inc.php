@@ -1,5 +1,6 @@
 <?
 # Lifter002: TODO
+# Lifter007: TODO
 function themen_open() {
 	global $issue_open;
 

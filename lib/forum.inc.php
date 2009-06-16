@@ -1,6 +1,7 @@
 <?
 # Lifter001: DONE
 # Lifter002: TODO
+# Lifter007: TODO
 // vim: noexpandtab
 /**
 * helper functions for handling the board

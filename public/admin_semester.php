@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter007: TODO
 /*
 admin_semester.php - Semester-Verwaltung von Stud.IP.
 Copyright (C) 2003 Mark Sievers <mark_sievers2000@yahoo.de>

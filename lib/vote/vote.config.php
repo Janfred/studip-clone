@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TEST
+# Lifter007: TODO
 
 /**
  * This file contains all public defines used for the votes / tests

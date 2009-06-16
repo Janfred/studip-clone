@@ -1,6 +1,7 @@
 <?
 # Lifter001: TODO - in progress (session variables)
 # Lifter002: TODO
+# Lifter007: TODO
 /*
 links_admin.inc.php - Navigation fuer die Verwaltungsseiten von Stud.IP.
 Copyright (C) 2001 Stefan Suchi <suchi@gmx.de>, Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de

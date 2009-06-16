@@ -1,5 +1,6 @@
 <?
 # Lifter002: TODO
+# Lifter007: TODO
 /*
 score.class.php - Score class
 Copyright (C) 2003 Ralf Stockmann <rstockm@gwdg.de>

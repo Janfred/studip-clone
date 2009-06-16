@@ -1,5 +1,6 @@
 #!/usr/bin/php -q
 <?php
+# Lifter007: TODO
 /**
 * kill_studip_user.php
 * 

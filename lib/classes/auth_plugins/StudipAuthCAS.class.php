@@ -1,4 +1,5 @@
 <?php
+# Lifter007: TODO
 /**
 * Stud.IP authentication against CAS Server
 *

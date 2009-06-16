@@ -1,5 +1,6 @@
 <?
 # Lifter002: TODO
+# Lifter007: TODO
 require_once('lib/visual.inc.php');
 require_once('lib/dates.inc.php');
 require_once 'lib/functions.php';

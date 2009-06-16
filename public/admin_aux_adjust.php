@@ -1,5 +1,6 @@
 <?
 # Lifter002: TODO
+# Lifter007: TODO
 /**
 * admin_aux_lock.php - Sichtbarkeits-Administration von Stud.IP.
 * Copyright (C) 2006 Till Glöggler <tgloeggl@inspace.de>

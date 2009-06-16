@@ -1,5 +1,6 @@
 <?
 # Lifter002: TODO
+# Lifter007: TODO
 
 // Jetzt ist ein Element nur noch eine kleine Werteklasse :( 
 // naja etwas überzogen für ein paar Werte und eine Check-Methode, aber was solls _Maik

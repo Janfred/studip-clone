@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter007: TODO
 
 /*
  * PmWikiConnectedCMS.class.php - Provides search capabilities

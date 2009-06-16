@@ -1,5 +1,6 @@
 <?
 # Lifter002: TODO
+# Lifter007: TODO
 
 //global $RELATIVE_PATH_CALENDAR;
 require_once("lib/classes/SemesterData.class.php");

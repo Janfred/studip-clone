@@ -1,5 +1,6 @@
 <?
 # Lifter002: TODO
+# Lifter007: TODO
 require_once('lib/raumzeit/decorator/Decorator.class.php');
 
 class RoomDecorator extends Decorator {

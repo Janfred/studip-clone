@@ -1,4 +1,5 @@
 <?
+# Lifter007: TODO
 // vim: noexpandtab
 /**
  * RolePersistence.class.php

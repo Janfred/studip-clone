@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter007: TODO
 /**
  * Diese Datei soll die originale visual.inc.php Datei erweitern bzw. ev
  * in Zukunft ersetzen...

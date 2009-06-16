@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 # Lifter002: TODO
+# Lifter007: TODO
 
 /*
  * client.php - PHP client implementation.

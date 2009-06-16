@@ -1,4 +1,5 @@
 <?
+# Lifter007: TODO
 /**
 * chat_dummy
 * 

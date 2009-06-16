@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter007: TODO
 // vim: noexpandtab
 /**
  * Abstract class for a plugin in Stud.IP.

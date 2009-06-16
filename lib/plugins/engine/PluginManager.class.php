@@ -1,4 +1,5 @@
 <?php
+# Lifter007: TODO
 /*
  * PluginManager.class.php - plugin manager for Stud.IP
  *

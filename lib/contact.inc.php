@@ -1,5 +1,6 @@
 <?php
 # Lifter002: TODO
+# Lifter007: TODO
 // vim: noexpandtab
 /**
 * helper functions for handling contacts

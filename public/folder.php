@@ -1,6 +1,7 @@
 <?php
 # Lifter001: DONE
 # Lifter002: TODO
+# Lifter007: TODO
 /*
 folder.php - Anzeige und Verwaltung des Ordnersystems
 Copyright (C) 2001 Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>

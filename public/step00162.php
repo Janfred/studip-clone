@@ -1,4 +1,5 @@
 <?
+# Lifter007: TODO
 require_once 'lib/classes/Messagebox.class.php';
 
 page_open(array('sess' => 'Seminar_Session',

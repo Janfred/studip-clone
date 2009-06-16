@@ -2,6 +2,7 @@
 # Lifter001: TEST
 # Lifter002: TODO
 # Lifter005: TODO - form validation and password encryption
+# Lifter007: TODO
 /**
 * admin_admission.php
 *

@@ -1,6 +1,7 @@
 <?php
 # Lifter002: TODO
 # Lifter003: TODO
+# Lifter007: TODO
 /*
 new_user_md5.php - die globale Benutzerverwaltung von Stud.IP.
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>

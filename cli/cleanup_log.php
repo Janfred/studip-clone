@@ -1,5 +1,6 @@
 #!/usr/bin/php -q
 <?php
+# Lifter007: TODO
 /**
 * cleanup_log.php
 * 

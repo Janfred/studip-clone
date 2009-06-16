@@ -1,5 +1,6 @@
 <?
 # Lifter002: TODO
+# Lifter007: TODO
 /*
 guestbook.class.php - Guestbook for personal homepages
 Copyright (C) 2003 Ralf Stockmann <rstockm@gwdg.de>

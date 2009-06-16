@@ -1,5 +1,6 @@
 <?
 # Lifter002: TODO
+# Lifter007: TODO
 
 function day_save (&$events_save, &$events_delete) {
 	$db = new DB_Seminar();
