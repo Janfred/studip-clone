@@ -1203,9 +1203,8 @@ if (($search_room_x) ||($search_properties_x) || ($reset_room_search_x) || ($res
 if (($form == 4) && ($jump_next_x)) {
 	//checks for room-request
 	if (is_object($sem_create_data["resRequest"])) {
-		if ((!$sem_create_data["resRequest"]->getSettedPropertiesCount())
-		&& (!$sem_create_data["resRequest"]->getResourceId())
-		&& (!$perm->have_perm("admin"))
+		if (($sem_create_data["resRequest"]->getSettedPropertiesCount() === 0)
+		&& ($sem_create_data["resRequest"]->getResourceId() === NULL)
 		&& (!(get_config('RESOURCES_ALLOW_SEMASSI_SKIP_REQUEST') && $sem_create_data['skip_room_request']))) {
 			$errormsg.="error§"._("Die Anfrage konnte nicht gespeichert werden, da Sie mindestens einen Raumwunsch oder eine gew&uuml;nschte Eigenschaft (z.B. Anzahl der Sitzpl&auml;tze) angeben m&uuml;ssen!");
 			if(get_config('RESOURCES_ALLOW_SEMASSI_SKIP_REQUEST')){
