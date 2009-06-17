@@ -147,8 +147,6 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	} elseif ($i_page== "adminarea_start.php")
 		$list=TRUE;
 
-	print_r($_REQUEST);
-
 	// start tic #650, sortierung in der userconfig merken
 	if ($_REQUEST['adminarea_sortby']) {
 		$links_admin_data["sortby"]=$_REQUEST['adminarea_sortby'];
