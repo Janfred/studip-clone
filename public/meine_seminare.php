@@ -186,6 +186,7 @@ $cssSw = new cssClassSwitcher();									// Klasse für Zebra-Design
 $cssSw->enableHover();
 $db = new DB_Seminar();
 $Modules = new Modules();
+$userConfig = new UserConfig();
 
 // we are defintely not in an lexture or institute
 closeObject();
@@ -345,10 +346,19 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 	if (isset($_REQUEST['close_my_sem'])) unset($_my_sem_open[$_REQUEST['close_my_sem']]);
 
-	if (!isset($sortby))
-		$sortby="gruppe, Name";
-	if ($sortby == "count")
+	// tic #650
+	if (!isset($sortby)||$sortby==null) {
+		$sortby=$userConfig->getValue($user->id, 'MEINE_SEMINARE_SORT');
+
+		if ($sortby=="" || $sortby==false) {
+			$sortby="Name";
+		}
+	} else {
+		$userConfig->setValue($adminarea_sortby,$user->id, 'MEINE_SEMINARE_SORT');
+	}
+	if ($sortby == "count") {
 		$sortby = "count DESC";
+	}
 
 	$groups = array();
 
@@ -374,7 +384,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				FROM seminar_user LEFT JOIN seminare  USING (Seminar_id)
 				LEFT JOIN object_user_visits ouv ON (ouv.object_id=seminar_user.Seminar_id AND ouv.user_id='$user->id' AND ouv.type='sem')
 				$add_query
-				WHERE seminar_user.user_id = '$user->id'");
+				WHERE seminar_user.user_id = '$user->id' ORDER BY seminare.VeranstaltungsNummer ASC");
 	$num_my_sem = $db->num_rows();
 
 	if (!$num_my_sem)
@@ -407,7 +417,6 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			}
 		}
 
-	$sortby = "Name";
 	if ($sortby == "count")
 		$sortby = "count DESC";
 	$db->query ("SELECT b.Name, b.Institut_id,b.type, user_inst.inst_perms,if(b.Institut_id=b.fakultaets_id,1,0) AS is_fak,
@@ -883,9 +892,20 @@ elseif ($auth->auth["perm"]=="admin") {
 			$_my_admin_inst_id = ($_my_inst[$_REQUEST['institut_id']]) ? $_REQUEST['institut_id'] : $_my_inst_arr[0];
 		}
 
-		if (!isset($sortby)) $sortby="start_time DESC, Name ASC";
-		if ($sortby == "teilnehmer")
-		$sortby = "teilnehmer DESC";
+		//tic #650 sortierung in der userconfig merken
+		if (!isset($sortby)||$sortby==null) {
+			$sortby=$userConfig->getValue($user->id,'MEINE_SEMINARE_SORT');
+
+			if ($sortby=="" || $sortby==false) {
+				$sortby="VeranstaltungsNummer ASC, Name ASC";
+			}
+		} else {
+			$userConfig->setValue($sortby,$user->id,'MEINE_SEMINARE_SORT');
+		}
+		if ($sortby == "teilnehmer") {
+			$sortby = "teilnehmer DESC";
+		}
+
 		$db->query("SELECT Institute.Name AS Institut, seminare.Seminar_id,seminare.Name,seminare.status,seminare.chdate,
 					seminare.start_time,seminare.admission_binding,seminare.visible, seminare.modules,
 					COUNT(seminar_user.user_id) AS teilnehmer,IFNULL(visitdate,0) as visitdate,

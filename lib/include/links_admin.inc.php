@@ -85,15 +85,18 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	$sess->register("links_admin_data");
 	$sess->register("sem_create_data");
 	$sess->register("admin_dates_data");
+	$userConfig=new UserConfig(); // tic #650
+
 	/**
 	* We use this helper-function, to reset all the data in the adminarea
 	*
 	* There are much pages with an own temporary set of data. Please use
 	* only this function to add defaults or clear data.
 	*/
-	function reset_all_data($reset_search_fields = false) {
-		global $links_admin_data, $sem_create_data, $admin_dates_data, $admin_admission_data, $archiv_assi_data,
-			$term_metadata, $news_range_id, $news_range_name;
+	function reset_all_data($reset_search_fields = false)
+	{
+		global $links_admin_data, $sem_create_data, $admin_dates_data, $admin_admission_data,
+		$archiv_assi_data, $term_metadata, $news_range_id, $news_range_name;
 
 		if($reset_search_fields) $links_admin_data='';
 		$sem_create_data='';
@@ -144,12 +147,33 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	} elseif ($i_page== "adminarea_start.php")
 		$list=TRUE;
 
+	print_r($_REQUEST);
 
+	// start tic #650, sortierung in der userconfig merken
 	if ($_REQUEST['adminarea_sortby']) {
 		$links_admin_data["sortby"]=$_REQUEST['adminarea_sortby'];
 		$list=TRUE;
-	} else
-		$links_admin_data["sortby"]="Name";
+	}
+	if (!isset($links_admin_data["sortby"]) || $links_admin_data["sortby"]==null) {
+		$links_admin_data["sortby"]=$userConfig->getValue($user->id,'LINKS_ADMIN');
+
+	    if ($links_admin_data["sortby"]=="" || $links_admin_data["sortby"]==false) {
+			$links_admin_data["sortby"]="VeranstaltungsNummer";
+	    }
+	    $list=TRUE;
+	} else {
+	    $userConfig->setValue($links_admin_data["sortby"],$user->id,'LINKS_ADMIN');
+	}
+
+	if (!$_REQUEST['srch_send']) {
+		$_REQUEST['show_rooms_check']=$userConfig->getValue($user->id,'LINKS_ADMIN_SHOW_ROOMS');
+	} else {
+		if (!isset($_REQUEST['show_rooms_check'])) {
+			$_REQUEST['show_rooms_check']="off";
+		}
+		$userConfig->setValue($_REQUEST['show_rooms_check'],$user->id,'LINKS_ADMIN_SHOW_ROOMS');
+    }
+    // end tic #650
 
 	if ($_REQUEST['view'])
 		$links_admin_data["view"]=$_REQUEST['view'];
