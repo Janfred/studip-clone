@@ -250,7 +250,7 @@ if (check_ticket($studipticket)) {
 				$new_password = $_REQUEST['new_passwd_1'];
 			}
 		} else if($_REQUEST['new_passwd_2'] != '' && $_REQUEST['new_passwd_2'] != '*****') {
-			$my_about->msg.= 'info§'. _('Sie müssen den Harken bei "ändern" setzen, wenn Sie Ihr Passwort ändern wollen.') .'§';
+			$my_about->msg.= 'info§'. _('Sie müssen den Haken bei "ändern" setzen, wenn Sie Ihr Passwort ändern wollen.') .'§';
 		}
 
 		if($_REQUEST['password'] != $my_about->auth_user["username"])
