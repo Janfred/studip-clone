@@ -2,39 +2,25 @@
 # Lifter002: TODO
 # Lifter007: TODO
 /**
-* UserManagement.class.php
-*
-* Management for the Stud.IP global users
-*
-*
-* @author		Stefan Suchi <suchi@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id$
-* @access		public
-* @modulegroup		core
-* @module		UserManagement.class.php
-* @package		studip_core
-*/
+ * UserManagement.class.php
+ *
+ * Management for the Stud.IP global users
+ *
+ * LICENSE
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * @author      Stefan Suchi <suchi@data-quest>
+ * @author      Suchi & Berg GmbH <info@data-quest.de>
+ * @copyright   2009 Stud.IP
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GPL Licence 2
+ * @category    Stud.IP
+ */
 
-// +---------------------------------------------------------------------------+
-// This file is part of Stud.IP
-// UserManagement.class.php
-// Management for the Stud.IP global users
-// Copyright (C) 2003 Stefan Suchi <suchi@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
-// +---------------------------------------------------------------------------+
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or any later version.
-// +---------------------------------------------------------------------------+
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-// +---------------------------------------------------------------------------+
-
+// Imports
 require_once 'lib/functions.php';
 require_once 'lib/language.inc.php';
 require_once 'config.inc.php'; 		// We need the uni name for emails
@@ -48,6 +34,9 @@ require_once 'lib/classes/DataFieldEntry.class.php';	// remove extra data of use
 require_once 'lib/classes/auth_plugins/StudipAuthAbstract.class.php';
 require_once 'lib/classes/StudipNews.class.php';
 require_once 'lib/object.inc.php';
+require_once 'lib/log_events.inc.php';	// Event logging
+require_once 'lib/classes/Avatar.class.php'; // remove Avatarture
+
 if ($GLOBALS['RESOURCES_ENABLE']) {
 	include_once ($GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/DeleteResourcesUser.class.php");
 }
@@ -62,11 +51,13 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']){
 	require_once ($GLOBALS['RELATIVE_PATH_ELEARNING_INTERFACE'] . "/ELearningUtils.class.php");
 }
-require_once "lib/log_events.inc.php";	// Event logging
 
-require_once 'lib/classes/Avatar.class.php'; // remove Avatarture
-
-class UserManagement {
+/**
+ * Enter description here...
+ *
+ */
+class UserManagement
+{
 	var $user_data = array();		// associative array, contains userdata from tables auth_user_md5 and user_info
 	var $msg = ""; 		// contains all messages
 	var $db;     			// database connection1
@@ -243,7 +234,7 @@ class UserManagement {
 			return FALSE;
 		}
 		if (!$this->validator->ValidateEmailBox($Email)) {		// aber user unbekannt, ablehnen
-			$this->msg .= "error§" . sprintf(_("E-Mail an <b>%s</b> ist nicht zustellbar!"), $Email) . "§";
+			$this->msg .= "error§" . sprintf(_("E-Mail an <em>%s</em> ist nicht zustellbar!"), $Email) . "§";
 			return FALSE;
 		}
 		return TRUE;
@@ -277,18 +268,18 @@ class UserManagement {
 									if ($this->db2->f("status") == "user") { // we could uplift him
 										$this->db2->query("UPDATE seminar_user SET status = 'autor' WHERE Seminar_id = '$sem' AND user_id='".$this->user_data['auth_user_md5.user_id']."'");
 										if ($this->user_data['auth_user_md5.user_id'] == $auth->auth["uid"]) {
-											$this->msg .= sprintf("msg§" . _("Ihnen wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt.") . "§", $this->db->f("Name"));
+											$this->msg .= sprintf("msg§" . _("Ihnen wurden Schreibrechte in der Veranstaltung <em>%s</em> erteilt.") . "§", $this->db->f("Name"));
 										} else {
-											$this->msg .= sprintf("msg§" . _("Der Person wurden Schreibrechte in der Veranstaltung <b>%s</b> erteilt.") . "§", $this->db->f("Name"));
+											$this->msg .= sprintf("msg§" . _("Der Person wurden Schreibrechte in der Veranstaltung <em>%s</em> erteilt.") . "§", $this->db->f("Name"));
 										}
 									}
 								} else {  // user has not subscribed until now, lets do it...
 									$group = select_group ($this->db->f("start_time"));
 									$this->db2->query("INSERT into seminar_user (Seminar_id, user_id, status, gruppe) values ('$sem', '".$this->user_data['auth_user_md5.user_id']."', 'autor', '$group')");
 									if ($this->user_data['auth_user_md5.user_id'] == $auth->auth["uid"]) {
-										$this->msg .= sprintf("msg§" . _("Sie wurden automatisch in die Veranstaltung <b>%s</b> eingetragen.") . "§", $this->db->f("Name"));
+										$this->msg .= sprintf("msg§" . _("Sie wurden automatisch in die Veranstaltung <em>%s</em> eingetragen.") . "§", $this->db->f("Name"));
 									} else {
-										$this->msg .= sprintf("msg§" . _("Die Person wurde automatisch in die Veranstaltung <b>%s</b> eingetragen.") . "§", $this->db->f("Name"));
+										$this->msg .= sprintf("msg§" . _("Die Person wurde automatisch in die Veranstaltung <em>%s</em> eingetragen.") . "§", $this->db->f("Name"));
 									}
 								}
 							}
@@ -316,17 +307,17 @@ class UserManagement {
 			return FALSE;
 		}
 		if (!$perm->is_fak_admin() && $newuser['auth_user_md5.perms'] == "admin") {
-			$this->msg .= "error§" . _("Sie haben keine Berechtigung <b>Admin-Accounts</b> anzulegen.") . "§";
+			$this->msg .= "error§" . _("Sie haben keine Berechtigung <em>>Admin-Accounts</em> anzulegen.") . "§";
 			return FALSE;
 		}
 		if (!$perm->have_perm("root") && $newuser['auth_user_md5.perms'] == "root") {
-			$this->msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> anzulegen.") . "§";
+			$this->msg .= "error§" . _("Sie haben keine Berechtigung <em>Root-Accounts</em> anzulegen.") . "§";
 			return FALSE;
 		}
 
 		// Do we have all necessary data?
 		if (empty($newuser['auth_user_md5.username']) || empty($newuser['auth_user_md5.perms']) || empty ($newuser['auth_user_md5.Email'])) {
-			$this->msg .= "error§" . _("Bitte geben Sie <b>Username</b>, <b>Status</b> und <b>E-Mail</b> an!") . "§";
+			$this->msg .= "error§" . _("Bitte geben Sie <em>Username</em>, <em>Status</em> und <em>E-Mail</em> an!") . "§";
 			return FALSE;
 		}
 
@@ -353,7 +344,7 @@ class UserManagement {
 		// NOTE: This should be a transaction, but it is not...
 		$this->db->query("select * from auth_user_md5 where username='{$newuser['auth_user_md5.username']}'");
 		if ($this->db->nf()>0) {
-			$this->msg .= "error§" . sprintf(_("BenutzerIn <b>%s</b> ist schon vorhanden!"), $newuser['auth_user_md5.username']) . "§";
+			$this->msg .= "error§" . sprintf(_("BenutzerIn <em>%s</em> ist schon vorhanden!"), $newuser['auth_user_md5.username']) . "§";
 			return FALSE;
 		}
 
@@ -396,20 +387,20 @@ class UserManagement {
 			return FALSE;
 		}
 		if (!$perm->is_fak_admin() && $newuser['auth_user_md5.perms'] == "admin") {
-			$this->msg .= "error§" . _("Sie haben keine Berechtigung, <b>Admin-Accounts</b> anzulegen.") . "§";
+			$this->msg .= "error§" . _("Sie haben keine Berechtigung, <em>Admin-Accounts</em> anzulegen.") . "§";
 			return FALSE;
 		}
 		if (!$perm->have_perm("root") && $newuser['auth_user_md5.perms'] == "root") {
-			$this->msg .= "error§" . _("Sie haben keine Berechtigung, <b>Root-Accounts</b> anzulegen.") . "§";
+			$this->msg .= "error§" . _("Sie haben keine Berechtigung, <em>Root-Accounts</em> anzulegen.") . "§";
 			return FALSE;
 		}
 		if (!$perm->have_perm("root")) {
 			if (!$perm->is_fak_admin() && $this->user_data['auth_user_md5.perms'] == "admin") {
-				$this->msg .= "error§" . _("Sie haben keine Berechtigung <b>Admin-Accounts</b> zu ver&auml;ndern.") . "§";
+				$this->msg .= "error§" . _("Sie haben keine Berechtigung <em>Admin-Accounts</em> zu ver&auml;ndern.") . "§";
 				return FALSE;
 			}
 			if ($this->user_data['auth_user_md5.perms'] == "root") {
-				$this->msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu ver&auml;ndern.") . "§";
+				$this->msg .= "error§" . _("Sie haben keine Berechtigung <em>Root-Accounts</em> zu ver&auml;ndern.") . "§";
 				return FALSE;
 			}
 			if ($perm->is_fak_admin() && $this->user_data['auth_user_md5.perms'] == "admin") {
@@ -429,20 +420,20 @@ class UserManagement {
 		$this->db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '" . $this->user_data['auth_user_md5.user_id'] . "' AND status = 'dozent' GROUP BY user_id");
 		$this->db->next_record();
 		if ($this->db->f("count") &&  isset($newuser['auth_user_md5.perms']) && $newuser['auth_user_md5.perms'] != "dozent") {
-			$this->msg .= sprintf("error§" . _("Der Benutzer <b>%s</b> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht in einen anderen Status versetzt werden!") . "§", $this->user_data['auth_user_md5.username'], $this->db->f("count"));
+			$this->msg .= sprintf("error§" . _("Der Benutzer <em>%s</em> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht in einen anderen Status versetzt werden!") . "§", $this->user_data['auth_user_md5.username'], $this->db->f("count"));
 			return FALSE;
 		}
 
 		// active admin?
 		if ($this->user_data['auth_user_md5.perms'] == 'admin' && $newuser['auth_user_md5.perms'] != 'admin') {
 			// count number of institutes where the user is admin
-			$stmt = DBManager::get()->query("SELECT COUNT(*) AS count FROM user_inst 
+			$stmt = DBManager::get()->query("SELECT COUNT(*) AS count FROM user_inst
 				WHERE user_id = '". $this->user_data['auth_user_md5.user_id'] ."' AND inst_perms = 'admin'
 				GROUP BY Institut_id");
 
 			// if there are institutes with admin-perms, add error-message and deny change
 			if ($count = $stmt->fetchColumn()) {
-				$this->msg .= sprintf('error§'. _("Der Benutzer <b>%s</b> ist Admin in %s Einrichtungen und kann daher nicht in einen anderen Status versetzt werden!") .'§', $this->user_data['auth_user_md5.username'], $count);
+				$this->msg .= sprintf('error§'. _("Der Benutzer <em>%s</em> ist Admin in %s Einrichtungen und kann daher nicht in einen anderen Status versetzt werden!") .'§', $this->user_data['auth_user_md5.username'], $count);
 				return false;
 			}
 		}
@@ -456,7 +447,7 @@ class UserManagement {
 				}
 				$check_uname = StudipAuthAbstract::CheckUsername($newuser['auth_user_md5.username']);
 				if ($check_uname['found']) {
-					$this->msg .= "error§" . _("Der Username wird bereits von einem anderen User verwendet. Bitte wählen sie einen anderen Usernamen!") . "§";
+					$this->msg .= "error§" . _("Der Username wird bereits von einem anderen Benutzer verwendet. Bitte wählen sie einen anderen Usernamen!") . "§";
 					return false;
 				} else {
 					//$this->msg .= "info§" . $check_uname['error'] ."§";
@@ -478,7 +469,7 @@ class UserManagement {
 			if (!StudipAuthAbstract::CheckField($key, $this->user_data['auth_user_md5.auth_plugin'])) {
 				$this->user_data[$key] = $value;
 			} else {
-				$this->msg .= "error§" .  sprintf(_("Das Feld <b>%s</b> können Sie nicht ändern!"), $key) . "§";
+				$this->msg .= "error§" .  sprintf(_("Das Feld <em>%s</em> können Sie nicht ändern!"), $key) . "§";
 				return FALSE;
 			}
 		}
@@ -495,7 +486,7 @@ class UserManagement {
 		}
 
 		$this->autoInsertSem($old_perms);
-		$this->msg .= "msg§" . sprintf(_("User \"%s\" ver&auml;ndert."), $this->user_data['auth_user_md5.username']) . "§";
+		$this->msg .= "msg§" . sprintf(_("Benutzer \"%s\" ver&auml;ndert."), $this->user_data['auth_user_md5.username']) . "§";
 
 		// include language-specific subject and mailbody
 		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']);
@@ -583,7 +574,7 @@ class UserManagement {
 
 		if (!$perm->have_perm("root")) {
 			if ($this->user_data['auth_user_md5.perms'] == "root") {
-				$this->msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu ver&auml;ndern.") . "§";
+				$this->msg .= "error§" . _("Sie haben keine Berechtigung <em>Root-Accounts</em> zu ver&auml;ndern.") . "§";
 				return FALSE;
 			}
 			if ($perm->is_fak_admin() && $this->user_data['auth_user_md5.perms'] == "admin"){
@@ -612,7 +603,7 @@ class UserManagement {
 			return FALSE;
 		}
 
-		$this->msg .= "msg§" . sprintf(_("Passwort von User \"%s\" neu gesetzt."), $this->user_data['auth_user_md5.username']) . "§";
+		$this->msg .= "msg§" . sprintf(_("Passwort von Benutzer \"%s\" neu gesetzt."), $this->user_data['auth_user_md5.username']) . "§";
 
 		// include language-specific subject and mailbody
 		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']);
@@ -648,7 +639,7 @@ class UserManagement {
 
 		if (!$perm->have_perm("root")) {
 			if ($this->user_data['auth_user_md5.perms'] == "root") {
-				$this->msg .= "error§" . _("Sie haben keine Berechtigung <b>Root-Accounts</b> zu l&ouml;schen.") . "§";
+				$this->msg .= "error§" . _("Sie haben keine Berechtigung <em>Root-Accounts</em> zu l&ouml;schen.") . "§";
 				return FALSE;
 			}
 			if ($perm->is_fak_admin() && $this->user_data['auth_user_md5.perms'] == "admin"){
@@ -668,7 +659,7 @@ class UserManagement {
 		$this->db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '" . $this->user_data['auth_user_md5.user_id'] . "' AND status = 'dozent' GROUP BY user_id");
 		$this->db->next_record();
 		if ($this->db->f("count")) {
-			$this->msg .= sprintf("error§" . _("Der Benutzer/die Benutzerin <b>%s</b> ist DozentIn in %s aktiven Veranstaltungen und kann daher nicht gel&ouml;scht werden.") . "§", $this->user_data['auth_user_md5.username'], $this->db->f("count"));
+			$this->msg .= sprintf("error§" . _("Der Benutzer/die Benutzerin <em>%s</em> ist DozentIn in %s aktiven Veranstaltungen und kann daher nicht gel&ouml;scht werden.") . "§", $this->user_data['auth_user_md5.username'], $this->db->f("count"));
 			return FALSE;
 		}
 
@@ -857,10 +848,10 @@ class UserManagement {
 		$query = "DELETE FROM auth_user_md5 WHERE user_id='" . $this->user_data['auth_user_md5.user_id'] . "'";
 		$this->db->query($query);
 		if (!$this->db->affected_rows()) {
-			$this->msg .= "error§<b>" . _("Fehlgeschlagen:") . "</b> " . $query . "§";
+			$this->msg .= "error§<em>" . _("Fehler:") . "</em> " . $query . "§";
 		return FALSE;
 		} else {
-			$this->msg .= "msg§" . sprintf(_("User \"%s\" gel&ouml;scht."), $this->user_data['auth_user_md5.username']) . "§";
+			$this->msg .= "msg§" . sprintf(_("Benutzer \"%s\" gel&ouml;scht."), $this->user_data['auth_user_md5.username']) . "§";
 		}
 		log_event("USER_DEL",$this->user_data['auth_user_md5.user_id'],NULL,sprintf("%s %s (%s)", $this->user_data['auth_user_md5.Vorname'], $this->user_data['auth_user_md5.Nachname'], $this->user_data['auth_user_md5.username'])); //log with Vorname Nachname (username) as info string
 
@@ -912,7 +903,7 @@ class UserManagement {
 		$this->user_data['auth_user_md5.password'] = md5($password);
 		$this->storeToDatabase();
 
-		$this->msg .= "msg§" . sprintf(_("Passwort von User \"%s\" neu gesetzt."), $this->user_data['auth_user_md5.username']) . "§";
+		$this->msg .= "msg§" . sprintf(_("Passwort von Benutzer \"%s\" neu gesetzt."), $this->user_data['auth_user_md5.username']) . "§";
 
 		// include language-specific subject and mailbody
 		$user_language = getUserLanguagePath($this->user_data['auth_user_md5.user_id']);

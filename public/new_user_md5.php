@@ -24,13 +24,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA	02111-1307, USA.
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check($GLOBALS['RESTRICTED_USER_MANAGEMENT'] ? 'root' : 'admin');
 
-include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
-require_once('lib/msg.inc.php'); 		// Funktionen fuer Nachrichtenmeldungen
-require_once('config.inc.php'); 		// Wir brauchen den Namen der Uni
-require_once('lib/visual.inc.php');
-require_once('lib/user_visible.inc.php');
-require_once('lib/classes/UserManagement.class.php');
-require_once('lib/visual.inc.php');
+include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+
+require_once 'lib/classes/Messagebox.class.php';
+require_once 'config.inc.php'; // Wir brauchen den Namen der Uni
+require_once 'lib/visual.inc.php';
+require_once 'lib/user_visible.inc.php';
+require_once 'lib/classes/UserManagement.class.php';
+
 
 $cssSw = new cssClassSwitcher;
 
@@ -294,13 +295,69 @@ if (isset($_GET['pers_browse_clear'])) {
 
 URLHelper::addLinkParam("studipticket", get_ticket());
 
+// --- ab hier neue messageboxen zusammengefasst -------------------------------
+// messages erstmal nach dem alten muster zusammen in einen string speichern
+//TODO: $UserManagement und Meldungen anpassen und optimieren
+$messages = $UserManagement->msg;
+if(empty($_REQUEST['details'])) {
+	$messages .= $pass_msg;
+}
+$messages .= $msg;
+
+// dann messages wieder separat nach typen in arrays speichern
+$msg = explode('§', $messages);
+for ($i=0; $i < count($msg); $i=$i+2) {
+	switch ($msg[$i]) {
+		case "error" :
+		    $details_error[] = $msg[$i+1];
+		    break;
+		case "info" :
+		    $details_info[] =$msg[$i+1];
+		    break;
+		case "msg" :
+		    $details_success[] =$msg[$i+1];
+		    break;
+	}
+}
+
+// und schliesslich anzeigen (TODO: optimieren beim durchführen von lifter2)
+?>
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+	<tr>
+		<td class="blank">
+		<? // fehlermeldungen
+		if (count($details_error) > 1) {
+		    $details_error = array_reverse($details_error);
+		    echo Messagebox::warning(array_pop($details_error), $details_error);
+		} elseif (count($details_error) == 1) {
+		    echo Messagebox::warning(array_pop($details_error));
+		}
+		// infos
+		if (count($details_info) > 1) {
+		    $details_info = array_reverse($details_info);
+		    echo Messagebox::info(array_pop($details_info), $details_info);
+		} elseif (count($details_info) == 1) {
+		    echo Messagebox::info(array_pop($details_info));
+		}
+		// erfolg
+		if (count($details_success) > 1) {
+		    $details_success = array_reverse($details_success);
+		    echo Messagebox::success(array_pop($details_success), $details_success);
+		} elseif (count($details_success) == 1) {
+		    echo Messagebox::success(array_pop($details_success));
+		} ?>
+		</td>
+	</tr>
+</table>
+
+<?
 // einzelnen Benutzer anzeigen
 if (isset($_GET['details']) || $showform ) {
 	if ($details=="__" && in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])) { // neuen Benutzer anlegen
 		?>
 		<table border="0" cellspacing="0" cellpadding="0" width="100%">
-		<?parse_msg($UserManagement->msg);?>
-		<tr><td class="blank" colspan="2">
+		<tr>
+			<td class="blank" colspan="2">
 			<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=2>
 			<form name="edit" method="post" action="<?=URLHelper::getLink('')?>">
 				<tr>
@@ -397,10 +454,8 @@ if (isset($_GET['details']) || $showform ) {
 	?>
 
 	<table border="0" bgcolor="#000000" cellspacing="0" cellpadding="0" width="100%">
-
 	<?
 	if(empty($_REQUEST['details'])) {
-		parse_msg($pass_msg);
 		$details = $_REQUEST['username'];
 	}
 
@@ -415,7 +470,6 @@ if (isset($_GET['details']) || $showform ) {
 			$auth_plugin = $db->f('auth_plugin') ? $db->f('auth_plugin') : 'Standard';
 			?>
 			<tr><td class="blank" colspan=2>&nbsp;</td></tr>
-			<?parse_msg($UserManagement->msg);?>
 			<tr><td class="blank" colspan=2>
 			<table border=0 bgcolor="#eeeeee" align="center" cellspacing=0 cellpadding=2>
 			<form name="edit" method="post" action="<?=URLHelper::getLink('')?>">
@@ -731,10 +785,8 @@ if (isset($_GET['details']) || $showform ) {
 	// Gesamtliste anzeigen
 
 	?>
-
 	<table border="0" bgcolor="#000000" cellspacing="0" cellpadding="0" width="100%">
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
-	<? parse_msg($UserManagement->msg . $msg); ?>
 	<tr><td class="blank" colspan="2">
 	<?
 	if (in_array("Standard",$GLOBALS['STUDIP_AUTH_PLUGIN'])){
