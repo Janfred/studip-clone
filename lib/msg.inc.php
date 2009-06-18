@@ -87,15 +87,6 @@ function parse_msg_array($msg, $class = "blank", $colspan = 2, $add_row = true, 
 	}
 }
 
-function parse_msg_array_to_string($msg, $class = "blank", $colspan = 2, $add_row = true, $small = true)
-{
-	ob_start();
-	parse_msg_array($msg, $class, $colspan);
-	$out = ob_get_contents();
-	ob_end_clean();
-	return $out;
-}
-
 //Kombinierte Nachrichten zerlegen und in eigenem Fenster anzeigen
 function parse_window($long_msg, $separator="§", $titel, $add_msg="")
 {
