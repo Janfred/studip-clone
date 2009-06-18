@@ -1,7 +1,5 @@
 <?php
-# Lifter002: TODO
-# Lifter007: TODO
-# Lifter003: TODO
+# Lifter007: TEST
 /**
  * msg.inc.php
  *
@@ -13,23 +11,18 @@
  *
  * LICENSE
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
  * @author 		Cornelis Kater <ckater@gwdg.de>
  * @author 		Stefan Suchi <suchi@gmx.de>
  * @author 		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
  * @copyright	2000-2009 Stud.IP
- * @license		http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GPL Licence 2
- * @package 	studip
- * @subpackage 	layout
+ * @license		http://www.gnu.org/licenses/gpl-2.0.html GPL Licence 2
+ * @category  	Stud.IP
+ * @package 	layout
  *
  * @deprecated 	since Stud.IP version 1.10. please use the new Messagebox instead.
  *
@@ -40,7 +33,7 @@ require_once 'lib/classes/Messagebox.class.php';
 
 
 //Displays Errormessages (kritischer Abbruch, Symbol "X")
-function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
+function my_error($msg, $class="blank", $colspan=2, $add_row, $small)
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
 	echo Messagebox::warning($msg);
@@ -48,7 +41,7 @@ function my_error($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = fals
 }
 
 //Displays Successmessages (Information ueber erfolgreiche Aktion, Symbol Haken)
-function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
+function my_msg($msg, $class="blank", $colspan=2, $add_row, $small)
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
 	echo Messagebox::success($msg);
@@ -56,7 +49,7 @@ function my_msg($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
 }
 
 //Displays Informationmessages  (Hinweisnachrichten, Symbol Ausrufungszeichen)
-function my_info($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false)
+function my_info($msg, $class="blank", $colspan=2, $add_row, $small)
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
 	echo Messagebox::info($msg);
@@ -64,7 +57,7 @@ function my_info($msg, $class="blank", $colspan=2, $add_row=TRUE, $small = false
 }
 
 //Kombinierte Nachrichten zerlegen
-function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_row=TRUE, $small = true)
+function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_row, $small)
 {
 	$msg = explode ($separator,$long_msg);
 	for ($i=0; $i < count($msg); $i=$i+2) {
@@ -77,7 +70,7 @@ function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_ro
 	return;
 }
 
-function parse_msg_array($msg, $class = "blank", $colspan = 2, $add_row = true, $small = true)
+function parse_msg_array($msg, $class = "blank", $colspan = 2, $add_row, $small)
 {
 	if (is_array($msg)) {
 		foreach($msg as $one_msg) {
