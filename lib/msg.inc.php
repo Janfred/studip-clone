@@ -69,9 +69,9 @@ function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_ro
 	$msg = explode ($separator,$long_msg);
 	for ($i=0; $i < count($msg); $i=$i+2) {
 		switch ($msg[$i]) {
-			case "error" : my_error($msg[$i+1], $class, $colspan, $add_row, $small); break;
-			case "info" : my_info($msg[$i+1], $class, $colspan, $add_row, $small); break;
-			case "msg" : my_msg($msg[$i+1], $class, $colspan, $add_row, $small); break;
+			case "error" : my_error($msg[$i+1], $class, $colspan); break;
+			case "info" : my_info($msg[$i+1], $class, $colspan); break;
+			case "msg" : my_msg($msg[$i+1], $class, $colspan); break;
 		}
 	}
 	return;
@@ -79,46 +79,39 @@ function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_ro
 
 function parse_msg_array($msg, $class = "blank", $colspan = 2, $add_row = true, $small = true)
 {
-	if(is_array($msg)){
-		foreach($msg as $one_msg){
+	if (is_array($msg)) {
+		foreach($msg as $one_msg) {
 			list($type, $content) = $one_msg;
-			call_user_func('my_' . $type, $content, $class, $colspan, $add_row, $small);
+			call_user_func('my_' . $type, $content, $class, $colspan);
 		}
 	}
-}
-
-function parse_msg_to_string($long_msg, $separator="§", $class="blank", $colspan=2, $add_row=TRUE, $small = true)
-{
-	ob_start();
-	parse_msg($long_msg, $separator, $class, $colspan, $add_row, $small);
-	$out = ob_get_contents();
-	ob_end_clean();
-	return $out;
 }
 
 function parse_msg_array_to_string($msg, $class = "blank", $colspan = 2, $add_row = true, $small = true)
 {
 	ob_start();
-	parse_msg_array($msg, $class, $colspan, $add_row, $small);
+	parse_msg_array($msg, $class, $colspan);
 	$out = ob_get_contents();
 	ob_end_clean();
 	return $out;
 }
 
 //Kombinierte Nachrichten zerlegen und in eigenem Fenster anzeigen
-function parse_window ($long_msg,$separator="§", $titel, $add_msg="")
+function parse_window($long_msg, $separator="§", $titel, $add_msg="")
 {
 	if ($titel == "")
 		$titel= _("Fehler");
 	if ($add_msg == "")
-		$add_msg= sprintf(_("%sHier%s geht es zur&uuml;ck zur Startseite."), "<a href=\"index.php\"><b>", "</b></a>") . "<br>";
+		$add_msg= sprintf(_("%sHier%s geht es zurück zur Startseite."), "<a href=\"index.php\"><em>", "</em></a>") . "<br>";
 	?>
-	<table border="0" bgcolor="#000000" align="center" cellspacing="0" cellpadding="0" width=70%>
-	<tr valign=top align="middle">
-		<td class="topic" align="left"><b><? echo $titel?></b></td>
-	</tr>
-	<tr><td class="blank">&nbsp;</td></tr>
-	<?
+	<table border="0" bgcolor="#000000" align="center" cellspacing="0" cellpadding="2" width="70%">
+    	<tr>
+    		<td class="topic"><b><? echo $titel?></b></td>
+    	</tr>
+	   <tr>
+	       <td class="blank">&nbsp;</td>
+	   </tr>
+	<?php
 	  $msg = explode ($separator,$long_msg);
 		for ($i=0; $i < count($msg); $i=$i+2) {
 			switch ($msg[$i]) {
@@ -129,10 +122,8 @@ function parse_window ($long_msg,$separator="§", $titel, $add_msg="")
 		}
 	?>
 		<tr>
-			<td class="blank"><font size=-1><? echo $add_msg ?></font></td>
+			<td class="blank"><?= $add_msg ?></td>
 		</tr>
 	</table>
 	<?
-	return;
 }
-?>
