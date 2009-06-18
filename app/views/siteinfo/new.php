@@ -1,8 +1,6 @@
 <div class="white" style="padding: 1ex;">
   <? if (isset($error_msg)): ?>
-    <table style="width: 100%;">
-      <? my_error($error_msg, '', 1, false, true) ?>
-    </table>
+    <?= Messagebox::error($error_msg) ?>
   <? endif ?>
     <form action="<?= $controller->url_for('siteinfo/save') ?>" method="POST">
   <? if($edit_rubric): ?>

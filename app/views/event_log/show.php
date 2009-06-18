@@ -66,9 +66,7 @@
     </p>
 
     <? if (isset($error_msg)): ?>
-      <table style="width: 100%;">
-        <? my_error($error_msg, '', 1, false, true) ?>
-      </table>
+      <?= Messagebox::error($error_msg) ?>
     <? endif ?>
 
     <? if (isset($log_events)): ?>
