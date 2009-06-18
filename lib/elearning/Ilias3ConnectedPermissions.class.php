@@ -1,6 +1,7 @@
 <?php
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 require_once "ConnectedPermissions.class.php";
 
 DEFINE (CRS_NOTIFICATION, "1");

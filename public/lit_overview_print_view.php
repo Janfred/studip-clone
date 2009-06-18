@@ -1,6 +1,7 @@
 <?php
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 lit_overview_print_view.php 
 Copyright (C) 2004 André Noack <noack@data-quest.de>

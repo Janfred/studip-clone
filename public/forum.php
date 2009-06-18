@@ -3,6 +3,7 @@
 # Lifter002: TODO
 # Lifter005: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 forum.php - Anzeige und Verwaltung des Forensystems
 Copyright (C) 2003 Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>

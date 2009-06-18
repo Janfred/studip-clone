@@ -2,6 +2,7 @@
 # Lifter001: DONE
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /**
  * All needed HTML-code to visualize a vote or a test
  *

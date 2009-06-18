@@ -1,5 +1,6 @@
 <?php
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 logout.php - Ausloggen aus Stud.IP und aufräumen
 Copyright (C) 2000 Stefan Suchi <suchi@gmx.de>, André Noack <andre.noack@gmx.net>,

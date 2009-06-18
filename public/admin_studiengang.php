@@ -1,6 +1,7 @@
 <?php
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 admin_studiengang.php - Studiengang-Verwaltung von Stud.IP.
 Copyright (C) 2002 Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <ckater@gwdg.de>, Stefan Suchi <suchi@gmx.de>

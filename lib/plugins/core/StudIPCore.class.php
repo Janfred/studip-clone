@@ -1,6 +1,7 @@
 <?php
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 // vim: noexpandtab
 /**
  *  Base functionality for accessing data in the Stud.IP database,

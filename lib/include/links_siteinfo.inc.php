@@ -1,5 +1,6 @@
 <?
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 links_siteinfo.inc.php - Navigation fuer das Impressum.
 Copyright (C) 2008	Ansgar Bockstiegel <ansgar.bockstiegel@uos.de>

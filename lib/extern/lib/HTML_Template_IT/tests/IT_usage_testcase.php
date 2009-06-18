@@ -1,6 +1,7 @@
 <?php
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 
 class IT_Usage_TestCase extends PHPUnit_TestCase
 {

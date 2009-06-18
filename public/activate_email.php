@@ -1,5 +1,6 @@
 <?php
 # Lifter007: TODO
+# Lifter003: TODO
 $_GET['cancel_login'] = 1;
 page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', 'perm' => 'Seminar_Perm', 'user' => 'Seminar_User'));
 

@@ -2,6 +2,7 @@
 # Lifter001: TEST
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 forum_export.php - Druck-Anzeige des Forensystems
 Copyright (C) 2002 Ralf Stockmann <rstockm@gwdg.de>

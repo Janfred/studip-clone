@@ -2,6 +2,7 @@
 # Lifter001: TEST
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 show_bereich.php - Anzeige von Veranstaltungen eines Bereiches oder Institutes
 Copyright (C) 2000 Cornelis Kater <ckater@gwdg.de>

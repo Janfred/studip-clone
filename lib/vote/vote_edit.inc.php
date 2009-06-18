@@ -2,6 +2,7 @@
 # Lifter001: TEST
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 
 /**
  * The page to create/edit votes ... vote_edit.inc.php

@@ -1,6 +1,7 @@
 <?
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 reiter.php - 0.8.20020327
 Klasse zum Erstellen des Reitersystems

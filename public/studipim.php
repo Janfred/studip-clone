@@ -2,6 +2,7 @@
 # Lifter002: TODO
 # Lifter005: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 studipim.php - Instant Messenger for Studip
 Copyright (C) 2001 André Noack <andre.noack@gmx.net>

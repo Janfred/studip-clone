@@ -2,6 +2,7 @@
 # Lifter001: TEST
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 themen_ablaufplan.php: GUI for default-view of the theme managment
 Copyright (C) 2005-2007 Till Glöggler <tgloeggl@uos.de>

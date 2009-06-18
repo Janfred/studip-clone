@@ -1,6 +1,7 @@
 <?
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /**
 * Administration of learning-modules in the connected ILIAS-Installation.
 *

@@ -1,6 +1,7 @@
 <?
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /**
 * ZusatzLockRules.class.php - Sichtbarkeits-Administration fuer Zusatzangaben bei Teilnehmerlisten
 *

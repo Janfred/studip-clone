@@ -1,6 +1,7 @@
 #!/usr/bin/php -q
 <?php
 # Lifter007: TODO
+# Lifter003: TODO
 /**
 * send_mail_notifications.php
 * 

@@ -1,6 +1,7 @@
 <?
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /**
 * ExternElementMainTemplateLectures.class.php
 * 

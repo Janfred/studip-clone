@@ -3,6 +3,7 @@
 # Lifter002: TODO
 # Lifter005: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 GUI for Seminar.class.php und all aggregated classes
 Copyright (C) 2005-2007 Till Glöggler <tgloeggl@uos.de>

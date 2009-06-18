@@ -1,6 +1,7 @@
 <?php
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 
 /*
  * xmlrpc.php - XML-RPC Backend for Stud.IP web services

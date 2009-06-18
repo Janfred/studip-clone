@@ -2,6 +2,7 @@
 # Lifter002: TODO
 # Lifter005: TODO - overlib
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 contact.php - 0.8
 Bindet Adressbuch ein.

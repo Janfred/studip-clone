@@ -1,6 +1,7 @@
 <?php
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 
 DEFINE ("USER_TYPE_ORIGINAL" , "1");
 DEFINE ("USER_TYPE_CREATED", "0");

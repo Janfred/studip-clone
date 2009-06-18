@@ -1,6 +1,7 @@
 <?
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 // $Id$
 
 require_once('lib/visual.inc.php');

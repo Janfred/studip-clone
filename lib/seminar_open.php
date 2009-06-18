@@ -1,6 +1,7 @@
 <?php
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 /*
 seminar_open.php - Initialises a Stud.IP sesssion
 Copyright (C) 2000 Stefan Suchi <suchi@data-quest.de>

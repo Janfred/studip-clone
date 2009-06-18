@@ -2,6 +2,7 @@
 # Lifter001: DONE
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 require_once('log_events.inc.php');
 require_once('visual.inc.php');
 

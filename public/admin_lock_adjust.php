@@ -1,6 +1,7 @@
 <?
 # Lifter002: TODO
 # Lifter007: TODO
+# Lifter003: TODO
 
 /**
 * admin_lock.php - Sichtbarkeits-Administration von Stud.IP.
