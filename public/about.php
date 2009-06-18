@@ -185,11 +185,7 @@ function open_im() {
 <?php
 
 if (!$user_id){
-	if ($db->f("user_id")) {
-		throw new Exception(_("Diese Homepage ist nicht verfügbar."));
-	} else {
-		throw new Exception(_("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!"));
-	}
+	throw new Exception(_("Diese Homepage ist nicht verfügbar."));
 }
 
 // count views of Page
