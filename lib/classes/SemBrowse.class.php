@@ -357,7 +357,7 @@ class SemBrowse {
 		global $PHP_SELF, $_language_path;
 		echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=0 width = \"99%\">\n";
 		if ($this->sem_browse_data['level'] == "f"){
-			
+
 			echo "\n<tr><td align=\"center\" class=\"steelgraulight\" height=\"40\" valign=\"middle\"><div style=\"margin-top:10px;margin-bottom:10px;\"><font size=\"-1\">";
 			if (($this->show_result && count($this->sem_browse_data['search_result'])) || $this->sem_browse_data['cmd'] == "xts") {
 				printf(_("Suche im %sEinrichtungsverzeichnis%s"),"<a href=\"$PHP_SELF?level=ev&cmd=qs&sset=0\">","</a>");
@@ -497,14 +497,11 @@ function print_result(){
 				}
 			}
 			echo "</table>";
-		} elseif($this->search_obj->search_button_clicked && !$this->search_obj->new_search_button_clicked){
-			echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
-			echo "\n<tr><td class=\"steelgraulight\"><font size=\"-1\"><b>&nbsp;" . _("Ihre Suche ergab keine Treffer") ;
-			if ($this->search_obj->found_rows === false){
-				echo "<br>" . _("(Der Suchbegriff fehlt oder ist zu kurz)");
+		} elseif ($this->search_obj->search_button_clicked && !$this->search_obj->new_search_button_clicked) {
+		    if ($this->search_obj->found_rows === false) {
+				$details = array(_("Der Suchbegriff fehlt oder ist zu kurz"));
 			}
-			echo "</b></font></td></tr>";
-			echo "\n</table>";
+			echo Messagebox::warning(_("Ihre Suche ergab keine Treffer"), $details);
 			$this->sem_browse_data["sset"] = 0;
 		}
 	ob_end_flush();
