@@ -27,8 +27,7 @@ $perm->check("user");
 // nobody hat hier nix zu suchen...
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
-require_once('lib/msg.inc.php');
-require_once('config.inc.php'); 
+require_once('config.inc.php');
 require_once 'lib/functions.php';
 require_once('lib/classes/UserManagement.class.php');
 
@@ -37,51 +36,42 @@ require_once('lib/classes/UserManagement.class.php');
 $magic     = "dsdfjhgretha";  // Challenge seed.
 // MUSS IDENTISCH ZU DEM IN SEMINAR_REGISTER_AUTH IN LOCAL.INC SEIN!
 
+$hash = md5("$user->id:$magic");
+// hier wird noch mal berechnet, welches secret in der Bestaetigungsmail uebergeben wurde
+
 $HELP_KEYWORD="Basis.AnmeldungMail";
+$CURRENT_PAGE= _("Aktivierung");
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 
-
 ?>
-<br>
-
-<table width="100%" border=0 cellpadding=0 cellspacing=0>
-<tr>
-	<td class="topic" colspan=2><b>&nbsp;<?=_("Best&auml;tigung der E-Mail-Adresse")?></b></td>
-</tr>
-<tr><td class="blank" colspan=2 width="100%">&nbsp;</td></tr>
-
-<?
-	if ($perm->have_perm("autor")) {
-		my_error(sprintf(_("Sie haben schon den Status <b>%s</b> im System. Eine Aktivierung des Accounts ist nicht mehr n&ouml;tig, um Schreibrechte zu bekommen"), $auth->auth["perm"]) . "\n");
-		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><a href=\"index.php\">&nbsp;" . _("zur&uuml;ck zur Startseite") . "</a><br><br>\n";
-		print "</td></tr></table>";
-		page_close();
-		die;
+<div class="topic"><b><?=_("Bestätigung der E-Mail-Adresse")?></b></div>
+<table width="100%" border="0" cellpadding="2" cellspacing="0">
+    <tr>
+        <td class="blank"><br>
+<?php
+	//user bereits vorhanden
+    if ($perm->have_perm("autor")) {
+	    echo Messagebox::error(sprintf(_("Sie haben schon den Status <b>%s</b> im System.
+	    Eine Aktivierung des Accounts ist nicht mehr n&ouml;tig, um Schreibrechte zu bekommen"), $auth->auth["perm"]),
+	    array("<a href=\"index.php\">&nbsp;" . _("zur&uuml;ck zur Startseite") . "</a>"));
 	}
 
-//	So, wer bis hier hin gekommen ist gehoert zur Zielgruppe...
-
-	if (!isset($secret) || $secret == "") {   // Volltrottel (oder abuse)
-		my_error(_("Sie m&uuml;ssen den vollst&auml;ndigen Link aus der Best&auml;tigungsmail<br>in die Zeile <b>Location</b> oder <b>URL</b> Ihres Browsers kopieren.") . "\n");
-		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><b>&nbsp;" . _("Versuchen Sie es noch einmal!") . "</b><br><br>\n";
-		print "</td></tr></table>";
-		page_close();
-		die;
+    //	So, wer bis hier hin gekommen ist gehoert zur Zielgruppe...
+    // Volltrottel (oder abuse)
+	elseif (!isset($secret) || $secret == "") {
+		echo Messagebox::error(_("Sie müssen den vollst&ändigen Link aus der Bestätigungsmail in die Adresszeile Ihres Browsers kopieren."));
 	}
 
-	$hash = md5("$user->id:$magic");
-	// hier wird noch mal berechnet, welches secret in der Bestaetigungsmail uebergeben wurde
+	// abuse (oder Volltrottel)
+	elseif ($secret != $hash) {
+	    echo Messagebox::error(_("Der übergebene <em>Secret-Code</em> ist nicht korrekt."),
+	    array(_("Sie müssen unter dem Benutzernamen eingeloggt sein, für den Sie die Bestätigungsmail erhalten haben."),
+	    _("Und Sie müssen den vollständigen Link aus der Bestätigungsmail in die Adresszeile Ihres Browsers kopieren.")));
 
-	if ($secret != $hash) {   // abuse (oder Volltrottel)
-		my_error(_("Der &uuml;bergebene <b>Secret-Code</b> ist nicht korrekt.") . "\n");
-		my_info(_("Sie m&uuml;ssen unter dem Benutzernamen eingeloggt sein,<br>f&uuml;r den Sie die Best&auml;tigungsmail erhalten haben.") . "\n");
-		my_info(_("Und Sie m&uuml;ssen den vollst&auml;ndigen Link aus der Best&auml;tigungsmail<br>in die Zeile <b>Location</b> oder <b>URL</b> Ihres Browsers kopieren.") . "\n");
-		print "<tr><td class=\"blank\" colspan=2 width=\"100%\"><b>&nbsp;" . _("Versuchen Sie es noch einmal!") . "</b><br><br>\n";
-		print "</td></tr></table>";
-    // Mail an abuse
+        // Mail an abuse
 		$smtp=new studip_smtp_class;
 		$REMOTE_ADDR=getenv("REMOTE_ADDR");
 		$Zeit=date("H:i:s, d.m.Y",time());
@@ -92,34 +82,35 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 				$to, "",
 				$smtp->abuse, "",
 				"Validation", "Secret falsch\n\nUser: $username\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
-		page_close();
-		die;
 	}
 
-	if ($secret == $hash) {   // alles paletti, Status ändern
-		$db = new DB_Seminar;
-	   $query = "update auth_user_md5 set perms='autor' where user_id='$user->id'";
-	   $db->query($query);
-	   if ($db->affected_rows() == 0) {
-	     my_error("<b>Changes failed:</b> $query");
-	     break;
-	   }
+	// alles paletti, Status ändern
+    elseif ($secret == $hash) {
+        $db = new DB_Seminar;
+        $query = "update auth_user_md5 set perms='autor' where user_id='$user->id'";
+        $db->query($query);
+        if ($db->affected_rows() == 0) {
+            echo Messagebox::error(_("Fehler! Bitte wenden Sie sich an den Systemadministrator."), array($query));
+        } else {
+            echo Messagebox::success(_("Ihr Status wurde erfolgreich auf <em>autor</em> gesetzt.<br>
+            Damit dürfen Sie in den meisten Veranstaltungen schreiben,<br>für die Sie sich anmelden."),
+            array(_("Einige Veranstaltungen erfordern allerdings bei der Anmeldung die Eingabe eines Passwortes.
+            Dieses Passwort erfahren Sie von der Dozentin oder dem Dozenten der Veranstaltung.")));
 
-		my_msg(_("Ihr Status wurde erfolgreich auf <b>autor</b> gesetzt.<br>Damit d&uuml;rfen Sie in den meisten Veranstaltungen schreiben,<br>f&uuml;r die Sie sich anmelden.") . "\n");
-		my_info(_("Einige Veranstaltungen erfordern allerdings bei der Anmeldung<br>die Eingabe eines Passwortes.<br>Dieses Passwort erfahren Sie von der Dozentin oder dem Dozenten der Veranstaltung.") . "\n");
+            // Auto-Eintrag in Boards
+            $UserManagement = new UserManagement($user->id);
+            $UserManagement->autoInsertSem('user');
 
-		// Auto-Eintrag in Boards
-		$UserManagement = new UserManagement($user->id);
-		$UserManagement->autoInsertSem('user');
-
-		$auth->logout();	// einen Logout durchführen, um erneuten Login zu erzwingen
-		my_info(sprintf(_("Die Status&auml;nderung wird erst nach einem erneuten %sLogin%s wirksam!<br>Deshalb wurden Sie jetzt automatisch ausgeloggt."), "<a href=\"index.php?again=yes\"><b>", "</b></a>") . "\n");
-		print "";
-	} else {
-		; // hier sollten wir nie hinkommen
-	}
-include ('lib/include/html_end.inc.php');
-  page_close();
-
-// <!-- $Id$ -->
+            $auth->logout();	// einen Logout durchführen, um erneuten Login zu erzwingen
+            echo Messagebox::info(sprintf(_("Die Statusänderung wird erst nach einem erneuten %sLogin%s wirksam!<br>
+            Deshalb wurden Sie jetzt automatisch ausgeloggt."), "<a href=\"index.php?again=yes\"><em>", "</em></a>"));
+        }
+    }
 ?>
+        </td>
+    </tr>
+</table>
+
+<?php
+    include ('lib/include/html_end.inc.php');
+    page_close();
