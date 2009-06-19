@@ -2688,6 +2688,10 @@ if ($level == 2)
 							<td colspan="4" class="<? echo $cssSw->getClass() ?>">
 
 								<?= _("Studienbereiche:") ?>
+								<img src="<?= Assets::image_path('info') ?>"
+									<?= tooltip( _("Sie müssen mindestens einen Studienbereich auswählen! Der Studienbereich legt z.B. fest, wo die Veranstaltung im Vorlesungsverzeichnis auftaucht."), TRUE, TRUE ) ?>
+								>	
+								<font color="red" size=+2>*</font>
 
 								<?
 								$trails_views = $GLOBALS['STUDIP_BASE_PATH'] . '/app/views';
