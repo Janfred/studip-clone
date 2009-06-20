@@ -246,6 +246,21 @@ class HeaderController {
 		}
 	}
 
+	/**
+	 * Checks if the Quicksearch box should be shown in the submenu
+	 *
+	 * @return boolean
+	 */
+	public function getHeaderItemQuickSearch()
+	{
+		global $user;
+		if (is_object($user) && $user->id != 'nobody') {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	function getHeaderItemHelp(){
 		global $perm;
 		if (get_config("EXTERNAL_HELP")) {

@@ -1014,3 +1014,21 @@ div.messagebox_error {
 	background-color: #ffbaba;
 	background-image: url("../images/icons/icon_error.png");
 }
+
+/* --- Quicksearch ---------------------------------------------------------- */
+input.quicksearchbox {
+	background-color:#ABB7CE; 
+	border:1px solid #485979; 
+	color:#FFFFFF; 
+	font-size:10px; 
+	width:100px;
+}
+
+input.quicksearchbutton {
+	font-weight:bold; 
+	background-color:#485979; 
+	border:1px solid #485979; 
+	color:#FFFFFF; 
+	font-size:10px; 
+	padding:0px;
+}

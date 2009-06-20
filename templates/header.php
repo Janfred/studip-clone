@@ -11,7 +11,7 @@
 		<ul>
 		<?
 		$accesskey = 0;
-		foreach (array($home,$courses,$messages,$chat,$online,$homepage,$planner,$admin) as $item) 
+		foreach (array($home,$courses,$messages,$chat,$online,$homepage,$planner,$admin) as $item)
 		{
 			 if(!is_null($item)){
 				 if($item['accesskey']){
@@ -31,7 +31,7 @@
 		}
 		if(is_array($plugins))
 		{
-			foreach ($plugins as $plugin_item) 
+			foreach ($plugins as $plugin_item)
 			{
 				?>
 				<li>
@@ -40,7 +40,7 @@
 				<img <?=tooltip($plugin_item['info'])?> src="<?=$plugin_item['image']?>" border="0">
 				<br>
 				<?=htmlReady($plugin_item['text'])?>
-				</a></div>				
+				</a></div>
 				</li>
 				<?
 			}
@@ -79,8 +79,18 @@
 <!-- Dynamische Links ohne Icons -->
 <div id="barBottomright">
 	<ul>
-		<?
-		foreach (array($search, $imprint, $help, $caslogin, $shiblogin, $loginlogout) as $item) {
+		<? if ($quicksearch) : ?>
+		<li>
+		<form action="<?= URLHelper::getLink('sem_portal.php', array('send' => 'yes', 'group_by' => '0')) ?>" method="post" style="display: inline;">
+		  <input type="hidden" name="search_sem_qs_choose" value="all">
+		  <input type="hidden" name="search_sem_sem" value="all">
+		  <input type="hidden" name="search_sem_1508068a50572e5faff81c27f7b3a72f" value="1">
+		  <input class="quicksearchbox" type="text" name="search_sem_quick_search" value="" title="<?= _('Suche nach Veranstaltungen, Dozenten oder Nummern starten') ?>">
+		  <input class="quicksearchbutton" type="submit" name="search_sem" value="OK" title="<?= _('Suche nach Veranstaltungen, Dozenten oder Nummern starten') ?>">
+		</form>
+		</li>
+		<? endif ?>
+		<? foreach (array($search, $imprint, $help, $caslogin, $shiblogin, $loginlogout) as $item) :
 			 if(isset($item)){
  				 if($item['accesskey']){
 					 $accesskey = ++$accesskey % 10;
@@ -95,8 +105,7 @@
 				 </li>
 				 <?
 			 }
-		}
-		?>
+		endforeach ?>
 	</ul>
 </div>
 <br>
