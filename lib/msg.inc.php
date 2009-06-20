@@ -49,7 +49,7 @@ function my_msg($msg, $class="blank", $colspan=2, $add_row='', $small='')
 }
 
 //Displays Informationmessages  (Hinweisnachrichten, Symbol Ausrufungszeichen)
-function my_info($msg, $class="blank", $colspan=2='', $add_row, $small='')
+function my_info($msg, $class="blank", $colspan='', $add_row, $small='')
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
 	echo Messagebox::info($msg);
