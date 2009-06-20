@@ -33,7 +33,7 @@ require_once 'lib/classes/Messagebox.class.php';
 
 
 //Displays Errormessages (kritischer Abbruch, Symbol "X")
-function my_error($msg, $class="blank", $colspan=2, $add_row, $small)
+function my_error($msg, $class="blank", $colspan=2, $add_row='', $small='')
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
 	echo Messagebox::warning($msg);
@@ -41,7 +41,7 @@ function my_error($msg, $class="blank", $colspan=2, $add_row, $small)
 }
 
 //Displays Successmessages (Information ueber erfolgreiche Aktion, Symbol Haken)
-function my_msg($msg, $class="blank", $colspan=2, $add_row, $small)
+function my_msg($msg, $class="blank", $colspan=2, $add_row='', $small='')
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
 	echo Messagebox::success($msg);
@@ -49,7 +49,7 @@ function my_msg($msg, $class="blank", $colspan=2, $add_row, $small)
 }
 
 //Displays Informationmessages  (Hinweisnachrichten, Symbol Ausrufungszeichen)
-function my_info($msg, $class="blank", $colspan=2, $add_row, $small)
+function my_info($msg, $class="blank", $colspan=2='', $add_row, $small='')
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
 	echo Messagebox::info($msg);
@@ -57,7 +57,7 @@ function my_info($msg, $class="blank", $colspan=2, $add_row, $small)
 }
 
 //Kombinierte Nachrichten zerlegen
-function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_row, $small)
+function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_row='', $small='')
 {
 	$msg = explode ($separator,$long_msg);
 	for ($i=0; $i < count($msg); $i=$i+2) {
@@ -70,7 +70,7 @@ function parse_msg($long_msg,$separator="§", $class="blank", $colspan=2, $add_ro
 	return;
 }
 
-function parse_msg_array($msg, $class = "blank", $colspan = 2, $add_row, $small)
+function parse_msg_array($msg, $class = "blank", $colspan = 2, $add_row='', $small='')
 {
 	if (is_array($msg)) {
 		foreach($msg as $one_msg) {
