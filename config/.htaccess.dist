@@ -10,7 +10,7 @@ Allow from all
 php_value auto_prepend_file "/usr/local/studip/lib/phplib/prepend4.php"
 php_value upload_max_filesize 7M
 php_value post_max_size 8M
-php_value memory_limit 20M
+php_value memory_limit 40M
 php_value max_execution_time 300
 php_flag short_open_tag On
 php_flag register_globals On
