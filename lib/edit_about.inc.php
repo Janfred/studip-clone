@@ -678,7 +678,7 @@ class about extends messaging {
 	function my_error($msg)
 	{
 		echo '<tr><td>';
-		echo Messagebox::warning($msg);
+		echo Messagebox::error($msg);
 		echo '</td></tr>';
 	}
 

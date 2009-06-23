@@ -36,7 +36,7 @@ require_once 'lib/classes/Messagebox.class.php';
 function my_error($msg, $class="blank", $colspan=2, $add_row='', $small='')
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
-	echo Messagebox::warning($msg);
+	echo Messagebox::error($msg);
 	echo '</td></tr>';
 }
 

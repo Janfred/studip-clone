@@ -19,7 +19,7 @@
 <? if ($loginerror) : ?>
 <!-- failed login code -->
 <div style="width: 800px; margin: auto;">
-	<?= Messagebox::warning(_("Bei der Anmeldung trat ein Fehler auf:") . "<br>"
+	<?= Messagebox::error(_("Bei der Anmeldung trat ein Fehler auf:") . "<br>"
 		. $error_msg . " "
 		. sprintf(_("Bitte wenden Sie sich bei Problemen an: %s"),
 		"<a href=\"mailto:".$GLOBALS['UNI_CONTACT']."\">".$GLOBALS['UNI_CONTACT']."</a></font>")) ?>

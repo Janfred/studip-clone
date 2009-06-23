@@ -121,7 +121,7 @@ class StudIPTemplateEngine
 	 */
 	function showErrorMessage($text,$colspan=2)
 	{
-		echo Messagebox::warning($text);
+		echo Messagebox::error($text);
 	}
 
 	/**

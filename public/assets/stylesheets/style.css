@@ -989,7 +989,7 @@ div.messagebox_buttons {
 
 div.messagebox_details {
 	font-weight: normal;
-}	
+}
 
 div.messagebox_info {
 	color: #00529B;
@@ -1003,32 +1003,32 @@ div.messagebox_success {
 	background-image: url("../images/icons/icon_success.png");
 }
 
-div.messagebox_warning {
+div.messagebox_error {
 	color: #D63301;
 	background-color: #ffccba;
-	background-image: url("../images/icons/icon_warning.png");
+	background-image: url("../images/icons/icon_error.png");
 }
 
-div.messagebox_error {
+div.messagebox_exception {
 	color: #D8000C;
 	background-color: #ffbaba;
-	background-image: url("../images/icons/icon_error.png");
+	background-image: url("../images/icons/icon_exception.png");
 }
 
 /* --- Quicksearch ---------------------------------------------------------- */
 input.quicksearchbox {
-	background-color:#ABB7CE; 
-	border:1px solid #485979; 
-	color:#FFFFFF; 
-	font-size:10px; 
+	background-color:#ABB7CE;
+	border:1px solid #485979;
+	color:#FFFFFF;
+	font-size:10px;
 	width:100px;
 }
 
 input.quicksearchbutton {
-	font-weight:bold; 
-	background-color:#485979; 
-	border:1px solid #485979; 
-	color:#FFFFFF; 
-	font-size:10px; 
+	font-weight:bold;
+	background-color:#485979;
+	border:1px solid #485979;
+	color:#FFFFFF;
+	font-size:10px;
 	padding:0px;
 }

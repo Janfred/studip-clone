@@ -328,9 +328,9 @@ for ($i=0; $i < count($msg); $i=$i+2) {
 		<? // fehlermeldungen
 		if (count($details_error) > 1) {
 		    $details_error = array_reverse($details_error);
-		    echo Messagebox::warning(array_pop($details_error), $details_error);
+		    echo Messagebox::error(array_pop($details_error), $details_error);
 		} elseif (count($details_error) == 1) {
-		    echo Messagebox::warning(array_pop($details_error));
+		    echo Messagebox::error(array_pop($details_error));
 		}
 		// infos
 		if (count($details_info) > 1) {

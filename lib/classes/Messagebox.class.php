@@ -38,38 +38,38 @@
 class Messagebox
 {
     /**
-     * This function shows an error-messagebox. use it only for systemerrors or
-     * securityproblems
+     * This function shows an exception-messagebox. Use it only for systemerrors
+     * or security related problems.
      *
      * @param string $message
      * @param array() $details
      * @param boolean $close_details
      * @return string html-output of the messagebox
      */
-    public static function error($message, $details = array(),
-                                 $close_details = false)
+    public static function exception($message, $details = array(),
+                                     $close_details = false)
     {
-        return self::render('error', $message, $details, $close_details);
+        return self::render('exception', $message, $details, $close_details);
     }
 
     /**
-     * This function shows a warning-messagebox. use it for validation errors,
-     * problems and other wrong user-input
+     * This function shows an error-messagebox. Use it for validation errors,
+     * problems and other wrong user input.
      *
      * @param string $message
      * @param array() $details (optional)
      * @param boolean $close_details (optional)
      * @return string html-output of the messagebox
      */
-    public static function warning($message, $details = array(),
+    public static function error($message, $details = array(),
                                    $close_details = false)
     {
-        return self::render('warning', $message, $details, $close_details);
+        return self::render('error', $message, $details, $close_details);
     }
 
     /**
-     * This function shows a success-messagebox. Use it for confirmation of user
-     * interaction
+     * This function shows a success messagebox. Use it for confirmation of user
+     * interaction.
      *
      * @param string $message
      * @param array() $details (optional)
@@ -83,7 +83,7 @@ class Messagebox
     }
 
     /**
-     * This function shows a success-messagebox. Use it for all other status
+     * This function shows an info messagebox. Use it to report neutral
      * informations.
      *
      * @param string $message

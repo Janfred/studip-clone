@@ -14,7 +14,7 @@ $home = array(
 <?= $this->render_partial('header', compact('current_page', 'home')) ?>
 
 <div style="background-color: white; width: 70%; padding: 1em; margin: auto;">
-	<?=Messagebox::error(_("Fehler! Bitte wenden Sie sich an Ihren Systemadministrator."), array(htmlentities($exception->getMessage())))?>
+	<?=Messagebox::exception(_("Fehler! Bitte wenden Sie sich an Ihren Systemadministrator."), array(htmlentities($exception->getMessage())))?>
     <p>
       <?= _("Zurück zur") ?> <a href="<?= URLHelper::getLink('index.php') ?>"><?= _("Startseite") ?></a>
     </p>

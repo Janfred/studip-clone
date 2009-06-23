@@ -501,7 +501,7 @@ function print_result(){
 		    if ($this->search_obj->found_rows === false) {
 				$details = array(_("Der Suchbegriff fehlt oder ist zu kurz"));
 			}
-			echo Messagebox::warning(_("Ihre Suche ergab keine Treffer"), $details);
+			echo Messagebox::error(_("Ihre Suche ergab keine Treffer"), $details);
 			$this->sem_browse_data["sset"] = 0;
 		}
 	ob_end_flush();
