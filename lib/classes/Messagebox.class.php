@@ -46,10 +46,10 @@ class Messagebox
      * @param boolean $close_details
      * @return string html-output of the messagebox
      */
-    public static function error($message, $details = '', $close_details = false)
+    public static function error($message, $details = array(),
+                                 $close_details = false)
     {
-        $class = 'messagebox_error';
-        return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'close_details'));
+        return self::render('error', $message, $details, $close_details);
     }
 
     /**
@@ -61,10 +61,10 @@ class Messagebox
      * @param boolean $close_details (optional)
      * @return string html-output of the messagebox
      */
-    public static function warning($message, $details = '', $close_details = false)
+    public static function warning($message, $details = array(),
+                                   $close_details = false)
     {
-        $class = 'messagebox_warning';
-        return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'close_details'));
+        return self::render('warning', $message, $details, $close_details);
     }
 
     /**
@@ -76,10 +76,10 @@ class Messagebox
      * @param boolean $close_details (optional)
      * @return string html-output of the messagebox
      */
-    public static function success($message, $details = '', $close_details = false)
+    public static function success($message, $details = array(),
+                                   $close_details = false)
     {
-        $class = 'messagebox_success';
-        return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'close_details'));
+        return self::render('success', $message, $details, $close_details);
     }
 
     /**
@@ -91,10 +91,26 @@ class Messagebox
      * @param boolean $close_details (optional)
      * @return string html-output of the messagebox
      */
-    public static function info($message, $details = '', $close_details = false)
+    public static function info($message, $details = array(),
+                                $close_details = false)
     {
-        $class = 'messagebox_info';
-        return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'close_details'));
+        return self::render('info', $message, $details, $close_details);
+    }
+
+
+    /**
+     * This method actually renders a message to keep t
+     *
+     * @param  type       <description>
+     *
+     * @param string $class the type of this message
+     * @param string $message
+     * @param array() $details
+     * @param boolean $close_details
+     * @return string html-output of the messagebox
+     */
+    private static function render($class, $message, $details, $close_details) {
+        return $GLOBALS['template_factory']->render('shared/message_box',
+            compact('class', 'message', 'details', 'close_details'));
     }
 }
-?>
