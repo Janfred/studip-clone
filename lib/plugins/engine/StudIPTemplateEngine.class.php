@@ -121,7 +121,7 @@ class StudIPTemplateEngine
 	 */
 	function showErrorMessage($text,$colspan=2)
 	{
-		echo Messagebox::error($text);
+		echo MessageBox::error($text);
 	}
 
 	/**
@@ -132,7 +132,7 @@ class StudIPTemplateEngine
 	 */
 	function showSuccessMessage($text,$colspan=2)
 	{
-		echo Messagebox::success($text);
+		echo MessageBox::success($text);
 	}
 
 	/**
@@ -143,7 +143,7 @@ class StudIPTemplateEngine
 	 */
 	function showInfoMessage($text,$colspan=2)
 	{
-		echo Messagebox::info($text);
+		echo MessageBox::info($text);
 	}
 
 	function showQuestionMessage($text,$colspan=2,$newrow=true)

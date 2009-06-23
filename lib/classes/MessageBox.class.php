@@ -2,7 +2,7 @@
 # Lifter007: TEST
 # Lifter003: TODO
 /**
- * Messagebox.class.php
+ * MessageBox.class.php
  *
  * html-boxes for different kinds of messages
  *
@@ -23,19 +23,19 @@
  */
 
 /**
- * class Messagebox
+ * class MessageBox
  *
  * usage:
  *
- * echo Messagebox::error('Nachricht', array('optional details'));
+ * echo MessageBox::error('Nachricht', array('optional details'));
  *
  * use the optional parameter $close_details for displaying the messagebox with
  * closed details
  *
- * echo Messagebox::success('Nachricht', array('optional details'), true);
+ * echo MessageBox::success('Nachricht', array('optional details'), true);
  *
  */
-class Messagebox
+class MessageBox
 {
     /**
      * This function shows an exception-messagebox. Use it only for systemerrors

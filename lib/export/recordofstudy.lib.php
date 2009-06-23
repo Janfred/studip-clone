@@ -57,7 +57,7 @@ function printSelectSemester($infobox,$semestersAR){
 		  . "   <table align=\"center\" class=\"blank\" border=\"0\" cellpadding=\"2\" cellspacing=3>\n"
 		  . "	 <tr>"
 		  . "	  <td><font size=\"-1\">\n"
-		  . Messagebox::info($GLOBALS['FDF_USAGE_HINT'])
+		  . MessageBox::info($GLOBALS['FDF_USAGE_HINT'])
 		  . _("Bitte wählen sie ein Semster aus:")."\n"
 		  . "	   <form action=\"".$_SERVER['PHP_SELF']."\" method=post>\n"
 		  . "       &nbsp;<select name=\"semesterid\" style=\"vertical-align:middle;\">\n";
@@ -122,9 +122,9 @@ function printRecordOfStudies($infobox, $basicdata, $seminare, $notice = NULL){
 		$html .="		<tr>\n"
 			  . "		 <td colspan=\"4\">\n";
 		if ($notice == "empty")
-			$html .= Messagebox::info(_("Keine Veranstaltungen zum Anzeigen vorhanden."), array(_("Bitte fügen sie Veranstaltungen mit Hilfe des Buttons \"hinzufügen\" ein oder ändern Sie ihre Auswahl.")));
+			$html .= MessageBox::info(_("Keine Veranstaltungen zum Anzeigen vorhanden."), array(_("Bitte fügen sie Veranstaltungen mit Hilfe des Buttons \"hinzufügen\" ein oder ändern Sie ihre Auswahl.")));
 		elseif ($notice == "above_limit")
-			$html .= Messagebox::info(_("Sie haben mehr als 10 Veranstaltungen in diesem Semester ausgewählt."), array(_("Es werden automatisch mehrere Veranstaltungsübersichtseiten erstellt.")));
+			$html .= MessageBox::info(_("Sie haben mehr als 10 Veranstaltungen in diesem Semester ausgewählt."), array(_("Es werden automatisch mehrere Veranstaltungsübersichtseiten erstellt.")));
 		$html .="		 <br></td>\n"
 			  . "		</tr>\n";
 	}

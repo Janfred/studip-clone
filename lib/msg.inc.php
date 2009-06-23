@@ -24,19 +24,19 @@
  * @category  	Stud.IP
  * @package 	layout
  *
- * @deprecated 	since Stud.IP version 1.10. please use the new Messagebox instead.
+ * @deprecated 	since Stud.IP version 1.10. please use the new MessageBox instead.
  *
  */
 
 //Imports
-require_once 'lib/classes/Messagebox.class.php';
+require_once 'lib/classes/MessageBox.class.php';
 
 
 //Displays Errormessages (kritischer Abbruch, Symbol "X")
 function my_error($msg, $class="blank", $colspan=2, $add_row='', $small='')
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
-	echo Messagebox::error($msg);
+	echo MessageBox::error($msg);
 	echo '</td></tr>';
 }
 
@@ -44,7 +44,7 @@ function my_error($msg, $class="blank", $colspan=2, $add_row='', $small='')
 function my_msg($msg, $class="blank", $colspan=2, $add_row='', $small='')
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
-	echo Messagebox::success($msg);
+	echo MessageBox::success($msg);
 	echo '</td></tr>';
 }
 
@@ -52,7 +52,7 @@ function my_msg($msg, $class="blank", $colspan=2, $add_row='', $small='')
 function my_info($msg, $class="blank", $colspan='', $add_row, $small='')
 {
 	echo '<tr><td class="'.$class.'" colspan="'.$colspan.'">';
-	echo Messagebox::info($msg);
+	echo MessageBox::info($msg);
 	echo '</td></tr>';
 }
 

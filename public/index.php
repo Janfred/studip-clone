@@ -52,7 +52,7 @@ include 'lib/seminar_open.php'; // initialise Stud.IP-Session
 require_once 'config.inc.php';
 require_once 'lib/functions.php';
 require_once 'lib/visual.inc.php';
-require_once 'lib/classes/Messagebox.class.php';
+require_once 'lib/classes/MessageBox.class.php';
 include_once 'lib/classes/RSSFeed.class.php';
 // -- hier muessen Seiten-Initialisierungen passieren --
 
@@ -236,7 +236,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 						} else {
 							$help_url="help/index.php?help_page=ii_bestaetigungsmail.htm";
 						}
-						echo Messagebox::info(sprintf(_("Sie haben noch nicht auf Ihre %s Bestätigungsmail %s geantwortet.<br>Bitte holen Sie dies nach, um Stud.IP Funktionen wie das Belegen von Veranstaltungen nutzen zu können.<br>Bei Problemen wenden Sie Sich an: %s"),'<a href="'.$help_url.'" target="_blank">','</a>', '<a href="mailto:'.$GLOBALS['UNI_CONTACT'].'">'.$GLOBALS['UNI_CONTACT'].'</a>')); ?>
+						echo MessageBox::info(sprintf(_("Sie haben noch nicht auf Ihre %s Bestätigungsmail %s geantwortet.<br>Bitte holen Sie dies nach, um Stud.IP Funktionen wie das Belegen von Veranstaltungen nutzen zu können.<br>Bei Problemen wenden Sie Sich an: %s"),'<a href="'.$help_url.'" target="_blank">','</a>', '<a href="mailto:'.$GLOBALS['UNI_CONTACT'].'">'.$GLOBALS['UNI_CONTACT'].'</a>')); ?>
 					</td></tr>
 				</table>
 			</td>

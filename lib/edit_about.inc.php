@@ -678,7 +678,7 @@ class about extends messaging {
 	function my_error($msg)
 	{
 		echo '<tr><td>';
-		echo Messagebox::error($msg);
+		echo MessageBox::error($msg);
 		echo '</td></tr>';
 	}
 
@@ -688,7 +688,7 @@ class about extends messaging {
 	function my_msg($msg)
 	{
 		echo '<tr><td>';
-		echo Messagebox::success($msg);
+		echo MessageBox::success($msg);
 		echo '</td></tr>';
 	}
 
@@ -697,7 +697,7 @@ class about extends messaging {
 	function my_info($msg)
 	{
 		echo '<tr><td>';
-		echo Messagebox::info($msg);
+		echo MessageBox::info($msg);
 		echo '</td></tr>';
 	}
 

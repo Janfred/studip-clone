@@ -26,7 +26,7 @@ $perm->check($GLOBALS['RESTRICTED_USER_MANAGEMENT'] ? 'root' : 'admin');
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
-require_once 'lib/classes/Messagebox.class.php';
+require_once 'lib/classes/MessageBox.class.php';
 require_once 'config.inc.php'; // Wir brauchen den Namen der Uni
 require_once 'lib/visual.inc.php';
 require_once 'lib/user_visible.inc.php';
@@ -328,23 +328,23 @@ for ($i=0; $i < count($msg); $i=$i+2) {
 		<? // fehlermeldungen
 		if (count($details_error) > 1) {
 		    $details_error = array_reverse($details_error);
-		    echo Messagebox::error(array_pop($details_error), $details_error);
+		    echo MessageBox::error(array_pop($details_error), $details_error);
 		} elseif (count($details_error) == 1) {
-		    echo Messagebox::error(array_pop($details_error));
+		    echo MessageBox::error(array_pop($details_error));
 		}
 		// infos
 		if (count($details_info) > 1) {
 		    $details_info = array_reverse($details_info);
-		    echo Messagebox::info(array_pop($details_info), $details_info);
+		    echo MessageBox::info(array_pop($details_info), $details_info);
 		} elseif (count($details_info) == 1) {
-		    echo Messagebox::info(array_pop($details_info));
+		    echo MessageBox::info(array_pop($details_info));
 		}
 		// erfolg
 		if (count($details_success) > 1) {
 		    $details_success = array_reverse($details_success);
-		    echo Messagebox::success(array_pop($details_success), $details_success);
+		    echo MessageBox::success(array_pop($details_success), $details_success);
 		} elseif (count($details_success) == 1) {
-		    echo Messagebox::success(array_pop($details_success));
+		    echo MessageBox::success(array_pop($details_success));
 		} ?>
 		</td>
 	</tr>

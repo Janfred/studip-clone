@@ -1,7 +1,7 @@
 <div class="white" style="padding: 1ex;">
 
   <? if (isset($error_msg)): ?>
-    <?= Messagebox::error($error_msg) ?>
+    <?= MessageBox::error($error_msg) ?>
   <? endif ?>
 
   <h3><?= _('Liste der Nutzerdomänen') ?></h3>

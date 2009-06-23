@@ -1,6 +1,6 @@
 <div class="white" style="padding: 1ex;">
   <? if (isset($error_msg)): ?>
-    <?= Messagebox::error($error_msg) ?>
+    <?= MessageBox::error($error_msg) ?>
   <? endif ?>
     <form action="<?= $controller->url_for('siteinfo/save') ?>" method="POST">
   <? if($edit_rubric): ?>

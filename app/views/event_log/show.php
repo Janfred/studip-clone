@@ -66,7 +66,7 @@
     </p>
 
     <? if (isset($error_msg)): ?>
-      <?= Messagebox::error($error_msg) ?>
+      <?= MessageBox::error($error_msg) ?>
     <? endif ?>
 
     <? if (isset($log_events)): ?>

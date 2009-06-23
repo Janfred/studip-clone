@@ -54,7 +54,7 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 <?php
 	//user bereits vorhanden
     if ($perm->have_perm("autor")) {
-	    echo Messagebox::error(sprintf(_("Sie haben schon den Status <b>%s</b> im System.
+	    echo MessageBox::error(sprintf(_("Sie haben schon den Status <b>%s</b> im System.
 	    Eine Aktivierung des Accounts ist nicht mehr n&ouml;tig, um Schreibrechte zu bekommen"), $auth->auth["perm"]),
 	    array("<a href=\"index.php\">&nbsp;" . _("zur&uuml;ck zur Startseite") . "</a>"));
 	}
@@ -62,12 +62,12 @@ include ('lib/include/header.php');   // Output of Stud.IP head
     //	So, wer bis hier hin gekommen ist gehoert zur Zielgruppe...
     // Volltrottel (oder abuse)
 	elseif (!isset($secret) || $secret == "") {
-		echo Messagebox::error(_("Sie müssen den vollst&ändigen Link aus der Bestätigungsmail in die Adresszeile Ihres Browsers kopieren."));
+		echo MessageBox::error(_("Sie müssen den vollst&ändigen Link aus der Bestätigungsmail in die Adresszeile Ihres Browsers kopieren."));
 	}
 
 	// abuse (oder Volltrottel)
 	elseif ($secret != $hash) {
-	    echo Messagebox::error(_("Der übergebene <em>Secret-Code</em> ist nicht korrekt."),
+	    echo MessageBox::error(_("Der übergebene <em>Secret-Code</em> ist nicht korrekt."),
 	    array(_("Sie müssen unter dem Benutzernamen eingeloggt sein, für den Sie die Bestätigungsmail erhalten haben."),
 	    _("Und Sie müssen den vollständigen Link aus der Bestätigungsmail in die Adresszeile Ihres Browsers kopieren.")));
 
@@ -90,9 +90,9 @@ include ('lib/include/header.php');   // Output of Stud.IP head
         $query = "update auth_user_md5 set perms='autor' where user_id='$user->id'";
         $db->query($query);
         if ($db->affected_rows() == 0) {
-            echo Messagebox::error(_("Fehler! Bitte wenden Sie sich an den Systemadministrator."), array($query));
+            echo MessageBox::error(_("Fehler! Bitte wenden Sie sich an den Systemadministrator."), array($query));
         } else {
-            echo Messagebox::success(_("Ihr Status wurde erfolgreich auf <em>autor</em> gesetzt.<br>
+            echo MessageBox::success(_("Ihr Status wurde erfolgreich auf <em>autor</em> gesetzt.<br>
             Damit dürfen Sie in den meisten Veranstaltungen schreiben,<br>für die Sie sich anmelden."),
             array(_("Einige Veranstaltungen erfordern allerdings bei der Anmeldung die Eingabe eines Passwortes.
             Dieses Passwort erfahren Sie von der Dozentin oder dem Dozenten der Veranstaltung.")));
@@ -102,7 +102,7 @@ include ('lib/include/header.php');   // Output of Stud.IP head
             $UserManagement->autoInsertSem('user');
 
             $auth->logout();	// einen Logout durchführen, um erneuten Login zu erzwingen
-            echo Messagebox::info(sprintf(_("Die Statusänderung wird erst nach einem erneuten %sLogin%s wirksam!<br>
+            echo MessageBox::info(sprintf(_("Die Statusänderung wird erst nach einem erneuten %sLogin%s wirksam!<br>
             Deshalb wurden Sie jetzt automatisch ausgeloggt."), "<a href=\"index.php?again=yes\"><em>", "</em></a>"));
         }
     }

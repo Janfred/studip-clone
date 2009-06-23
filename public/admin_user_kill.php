@@ -48,7 +48,7 @@ if (isset($_REQUEST['transfer_search']) && strlen($pers_browse_search_string)){
 		$_kill_user[$db->f('username')]['selected'] = true;
 	}
 	$_kill_user = array_filter($_kill_user, 'is_array');
-	$msg[] = Messagebox::info(sprintf(_("%s Benutzer gefunden"), count($_kill_user)));
+	$msg[] = MessageBox::info(sprintf(_("%s Benutzer gefunden"), count($_kill_user)));
 }
 
 elseif (isset($_REQUEST['userlist_submit_x']) && trim($_REQUEST['kill_user_list'])){
@@ -60,7 +60,7 @@ elseif (isset($_REQUEST['userlist_submit_x']) && trim($_REQUEST['kill_user_list'
 		$_kill_user[$db->f('username')]['selected'] = true;
 	}
 	$_kill_user = array_filter($_kill_user, 'is_array');
-	$msg[] = Messagebox::info(sprintf(_("%s Benutzer gefunden"), count($_kill_user)));
+	$msg[] = MessageBox::info(sprintf(_("%s Benutzer gefunden"), count($_kill_user)));
 }
 
 elseif (isset($_REQUEST['kill_accounts_x']) && check_ticket($_POST['ticket'])){
@@ -74,11 +74,11 @@ elseif (isset($_REQUEST['kill_accounts_x']) && check_ticket($_POST['ticket'])){
 			if (!$_REQUEST['send_email']) $umanager->user_data['auth_user_md5.Email'] = '';
 			if ($umanager->deleteUser()) {
 			    $details = explode('§', str_replace(array('msg§', 'info§', 'error§'), '', substr($umanager->msg, 0, -1)));
-				$msg[] = Messagebox::success(sprintf(_("Der Benutzer <em>%s</em> wurde gelöscht."), $uname), $details);
+				$msg[] = MessageBox::success(sprintf(_("Der Benutzer <em>%s</em> wurde gelöscht."), $uname), $details);
 				unset($_kill_user[$uname]);
 			} else {
 			    $details = explode('§', str_replace(array('msg§', 'info§', 'error§'), '', substr($umanager->msg, 0, -1)));
-				$msg[] = Messagebox::error(sprintf(_("Fehler! Der Benutzer <em>%s</em> konnte nicht gelöscht werden."), $uname), $details);
+				$msg[] = MessageBox::error(sprintf(_("Fehler! Der Benutzer <em>%s</em> konnte nicht gelöscht werden."), $uname), $details);
 			}
 		} else {
 			$_kill_user[$uname]['selected'] = false;
