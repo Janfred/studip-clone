@@ -1016,6 +1016,10 @@ div.messagebox_exception {
 }
 
 /* --- Quicksearch ---------------------------------------------------------- */
+form#quicksearch {
+	display: inline;
+}
+
 input.quicksearchbox {
 	background-color:#ABB7CE;
 	border:1px solid #485979;
@@ -1031,4 +1035,8 @@ input.quicksearchbutton {
 	color:#FFFFFF;
 	font-size:10px;
 	padding:0px;
+}
+
+form#quicksearch input.hint {
+	color: #E0E0FF;
 }
