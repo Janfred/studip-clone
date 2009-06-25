@@ -1535,6 +1535,33 @@ if ($decline_request) {
 		}
 	}
 }
+if ($delete_request_x || $_REQUEST['approveDelete']) {
+        if(!$_REQUEST['approveDelete']){
+        	$approval=array('approveDelete' => TRUE);
+        	echo createQuestion(_("Wollen Sie diese Raumanfrage wirklich löschen?"), $approval);
+        }
+        
+	if($_REQUEST['approveDelete']){
+	        require_once ($RELATIVE_PATH_RESOURCES."/lib/RoomRequest.class.php");
+       	 	$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);//$_REQUEST['request_id']);
+        	unset($resources_data["requests_open"][$reqObj->getId()]);
+        	$reqObj->delete();
+        	$resources_data['requests_working_pos'] = 0;
+        	$resources_data['requests_working_on'] = array_values($resources_data['requests_working_on']);
+        	unset($_REQUEST['approveDelete']);
+                if (sizeof($resources_data["requests_open"]) == 0) {
+                	$resources_data["view"] = "requests_start";
+                	$view = "requests_start";
+        	} else  {
+                	if ($resources_data["requests_working_pos"] == sizeof($resources_data["requests_working_on"])-1) {
+                        	$auto_dec = TRUE;
+                	} else {
+                        	$auto_inc = TRUE;
+                	}
+        	}
+
+        }
+}
 
 // inc if we have requests left in the upper
 if (($inc_request_x) || ($auto_inc))
