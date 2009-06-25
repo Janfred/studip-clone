@@ -1026,6 +1026,7 @@ input.quicksearchbox {
 	color:#FFFFFF;
 	font-size:10px;
 	width:100px;
+	vertical-align: middle;
 }
 
 input.quicksearchbutton {
