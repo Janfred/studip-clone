@@ -447,13 +447,16 @@ class Session {
   * Write callback.
   *
   */
-  function freeze($id, $sess_data) {
-
-	if ($this->module == 'user') {
-
+  function freeze($id = NULL, $sess_data = NULL)
+  {
+    if ($this->module == 'user') {
+      if (!isset($sess_data)) {
+        $sess_data = session_encode();
+      }
       $r = $this->that->ac_store($this->id, $this->name, $sess_data);
-       if(!$r)
+      if (!$r) {
         $this->that->ac_halt("Session: freeze() failed.");
+      }
     }
 
     return $r;
