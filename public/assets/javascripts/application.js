@@ -558,8 +558,6 @@ document.observe('dom:loaded', function() {
     });
   }
 
-  $("quicksearch").down(".quicksearchbox").defaultValueActsAsHint();
-
   // compress tabs
   STUDIP.Tabs.initialize();
 });
