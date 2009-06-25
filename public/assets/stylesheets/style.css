@@ -1029,12 +1029,9 @@ input.quicksearchbox {
 }
 
 input.quicksearchbutton {
-	font-weight:bold;
-	background-color:#485979;
-	border:1px solid #485979;
-	color:#FFFFFF;
-	font-size:10px;
+	border: 0px;
 	padding:0px;
+	vertical-align: middle;
 }
 
 form#quicksearch input.hint {

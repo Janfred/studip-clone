@@ -86,7 +86,7 @@
 		  <input type="hidden" name="search_sem_sem" value="all">
 		  <input type="hidden" name="search_sem_1508068a50572e5faff81c27f7b3a72f" value="1">
 		  <input class="quicksearchbox" type="text" name="search_sem_quick_search" value="<?= _('Veranstaltungen') ?>" title="<?= _('Suche nach Veranstaltungen, Dozenten oder Nummern starten') ?>">
-		  <input class="quicksearchbutton" type="submit" name="search_sem" value="OK" title="<?= _('Suche nach Veranstaltungen, Dozenten oder Nummern starten') ?>">
+		  <input class="quicksearchbutton" type="image" src="<?= Assets::url('images/quicksearch_button.gif ') ?>" name="search_sem" value="OK" title="<?= _('Suche nach Veranstaltungen, Dozenten oder Nummern starten') ?>">
 		</form>
 		<script>
 		  $("quicksearch").down(".quicksearchbox").defaultValueActsAsHint();
