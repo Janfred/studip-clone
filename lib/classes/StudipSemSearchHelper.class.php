@@ -31,6 +31,7 @@ class StudipSemSearchHelper {
 	
 	public static function GetQuickSearchFields(){
 		return array(	'all' =>_("alles"),
+						'title_lecturer_number' => _("Titel") . ',' . _("DozentIn") . ',' . _("Nummer"), 
 						'title' => _("Titel"),
 						'lecturer' => _("DozentIn"),
 						'number' => _("Nummer"),
@@ -57,6 +58,11 @@ class StudipSemSearchHelper {
 		if(isset($params['quick_search']) && isset($params['qs_choose'])){
 			if($params['qs_choose'] == 'all'){
 				foreach (self::GetQuickSearchFields() as $key => $value){
+					$params[$key] = trim($params['quick_search']);
+				}
+				$params['combination'] = 'OR';
+			} elseif($params['qs_choose'] == 'title_lecturer_number') {
+				foreach (explode('_', 'title_lecturer_number') as $key){
 					$params[$key] = trim($params['quick_search']);
 				}
 				$params['combination'] = 'OR';

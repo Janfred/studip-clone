@@ -255,9 +255,12 @@ class HeaderController {
 	{
 		global $user;
 		if (is_object($user) && $user->id != 'nobody') {
-			return true;
+			$ret['default_semester_nr'] = SemesterData::GetSemesterIndexById($_SESSION['_default_sem']);
+			$old_style_semester = SemesterData::GetSemesterArray();
+			$ret['default_semester_name'] = $old_style_semester[$ret['default_semester_nr']]['name'];
+			return $ret;
 		} else {
-			return false;
+			return null;
 		}
 	}
 
