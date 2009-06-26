@@ -43,7 +43,7 @@
 			<a href="<?= URLHelper::getLink('?view=editRole&role_id='. $role_id .'#'. $role_id) ?>">
 				<?= makebutton('bearbeiten') ?>
 			</a>
-			<a href="<?= URLHelper::getLink('?cmd=deleteRole&role_id='. $role_id .'#'. $role_id) ?>">
+			<a href="<?= URLHelper::getLink('?cmd=deleteRole&role_id='. $role_id) ?>">
 				<?= makebutton('loeschen') ?>
 			</a>
 			<br>
