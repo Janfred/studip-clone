@@ -85,11 +85,34 @@
 		  <input type="hidden" name="search_sem_qs_choose" value="title_lecturer_number">
 		  <input type="hidden" name="search_sem_sem" value="<?=$quicksearch['default_semester_nr']?>">
 		  <input type="hidden" name="search_sem_1508068a50572e5faff81c27f7b3a72f" value="1">
-		  <input class="quicksearchbox" type="text" name="search_sem_quick_search" value="<?= _('Veranstaltungen') ?>" title="<?= sprintf(_('Suche nach Veranstaltungen, Dozenten oder Nummern starten (%s)'), htmlready($quicksearch['default_semester_name']))?>">
+		  <input class="quicksearchbox" id="quicksearch_autocomplete" type="text" name="search_sem_quick_search" value="<?= _('Veranstaltungen') ?>" title="<?= sprintf(_('Suche nach Veranstaltungen, Dozenten oder Nummern starten (%s)'), htmlready($quicksearch['default_semester_name']))?>">
 		  <input class="quicksearchbutton" type="image" src="<?= Assets::url('images/quicksearch_button.gif ') ?>" name="search_sem_do_search" value="OK" title="<?= sprintf(_('Suche nach Veranstaltungen, Dozenten oder Nummern starten (%s)'), htmlready($quicksearch['default_semester_name'])) ?>">
+		  <div id="quicksearch_autocomplete_choices" class="autocomplete"></div>
 		</form>
 		<script>
 		  $("quicksearch").down(".quicksearchbox").defaultValueActsAsHint();
+		  document.observe('dom:loaded', function() {
+				new Ajax.Autocompleter('quicksearch_autocomplete',
+				                       'quicksearch_autocomplete_choices',
+				                       'dispatch.php/autocomplete/course/quicksearch',
+				                       {
+				  minChars: 3,
+				  paramName: 'value',
+				  method: 'get',
+				  callback: function(element, entry) {
+				    return entry + '&' + Object.toQueryString({
+				      'semester': '<?=$quicksearch['default_semester_nr']?>',
+				      'what':  'title_lecturer_number',
+				      'category': 'all'
+				    });
+				  },
+				  afterUpdateElement: function (input, item) {
+				    var seminar_id = encodeURI(item.down('span.seminar_id').firstChild.nodeValue);
+				    document.location = "<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>details.php?sem_id=" +
+				      seminar_id + "&send_from_search=1&send_from_search_page=<?= urlencode($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) ?>sem_portal.php?keep_result_set=1";
+				  }
+				});
+			});
 		</script>
 		</li>
 		<? endif ?>
