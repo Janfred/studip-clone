@@ -52,10 +52,6 @@ class Autocomplete_CourseController extends Trails_Controller {
     if(!$this->options['semester']) $this->semesters = autocomplete_course_get_semesters();
   }
 
-  function quicksearch_action() {
-    $this->index_action();
-  }
-
   private static function get_param($key) {
     return studip_utf8decode(remove_magic_quotes(@$_GET[$key]));
   }

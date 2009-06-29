@@ -94,7 +94,7 @@
 		  document.observe('dom:loaded', function() {
 				new Ajax.Autocompleter('quicksearch_autocomplete',
 				                       'quicksearch_autocomplete_choices',
-				                       'dispatch.php/autocomplete/course/quicksearch',
+				                       'dispatch.php/autocomplete/course',
 				                       {
 				  minChars: 3,
 				  paramName: 'value',

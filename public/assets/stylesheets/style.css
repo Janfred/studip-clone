@@ -1035,11 +1035,17 @@ input.quicksearchbutton {
 	vertical-align: middle;
 }
 
-form#quicksearch div.autocomplete ul li {
+form#quicksearch .autocomplete li {
 	display: block;
-	font-size:10px;
+	font-size: 10px;
 }
+
+#quicksearch_autocomplete_choices .informal {
+	display: none;
+}
+
 
 form#quicksearch input.hint {
 	color: #E0E0FF;
 }
+
