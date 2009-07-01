@@ -86,7 +86,7 @@
 		  <input type="hidden" name="search_sem_sem" value="<?=$quicksearch['default_semester_nr']?>">
 		  <input type="hidden" name="search_sem_1508068a50572e5faff81c27f7b3a72f" value="1">
 		  <input class="quicksearchbox" id="quicksearch_autocomplete" type="text" name="search_sem_quick_search" value="<?= _('Veranstaltungen') ?>" title="<?= sprintf(_('Suche nach Veranstaltungen, Dozenten oder Nummern starten (%s)'), htmlready($quicksearch['default_semester_name']))?>">
-		  <input class="quicksearchbutton" type="image" src="<?= Assets::url('images/quicksearch_button.gif ') ?>" name="search_sem_do_search" value="OK" title="<?= sprintf(_('Suche nach Veranstaltungen, Dozenten oder Nummern starten (%s)'), htmlready($quicksearch['default_semester_name'])) ?>">
+		  <input class="quicksearchbutton" type="image" src="<?= Assets::url('images/quicksearch_button.png ') ?>" name="search_sem_do_search" value="OK" title="<?= sprintf(_('Suche nach Veranstaltungen, Dozenten oder Nummern starten (%s)'), htmlready($quicksearch['default_semester_name'])) ?>">
 		  <div id="quicksearch_autocomplete_choices" class="autocomplete"></div>
 		</form>
 		<script>
