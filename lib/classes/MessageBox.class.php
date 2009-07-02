@@ -1,6 +1,5 @@
 <?php
 # Lifter007: TEST
-# Lifter003: TODO
 /**
  * MessageBox.class.php
  *
@@ -46,8 +45,7 @@ class MessageBox
      * @param boolean $close_details
      * @return string html-output of the messagebox
      */
-    public static function exception($message, $details = array(),
-                                     $close_details = false)
+    public static function exception($message, $details = array(), $close_details = false)
     {
         return self::render('exception', $message, $details, $close_details);
     }
@@ -61,8 +59,7 @@ class MessageBox
      * @param boolean $close_details (optional)
      * @return string html-output of the messagebox
      */
-    public static function error($message, $details = array(),
-                                   $close_details = false)
+    public static function error($message, $details = array(), $close_details = false)
     {
         return self::render('error', $message, $details, $close_details);
     }
@@ -76,8 +73,7 @@ class MessageBox
      * @param boolean $close_details (optional)
      * @return string html-output of the messagebox
      */
-    public static function success($message, $details = array(),
-                                   $close_details = false)
+    public static function success($message, $details = array(), $close_details = false)
     {
         return self::render('success', $message, $details, $close_details);
     }
@@ -91,8 +87,7 @@ class MessageBox
      * @param boolean $close_details (optional)
      * @return string html-output of the messagebox
      */
-    public static function info($message, $details = array(),
-                                $close_details = false)
+    public static function info($message, $details = array(), $close_details = false)
     {
         return self::render('info', $message, $details, $close_details);
     }
@@ -109,8 +104,8 @@ class MessageBox
      * @param boolean $close_details
      * @return string html-output of the messagebox
      */
-    private static function render($class, $message, $details, $close_details) {
-        return $GLOBALS['template_factory']->render('shared/message_box',
-            compact('class', 'message', 'details', 'close_details'));
+    private static function render($class, $message, $details, $close_details)
+    {
+        return $GLOBALS['template_factory']->render('shared/message_box', compact('class', 'message', 'details', 'close_details'));
     }
 }
