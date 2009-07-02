@@ -570,7 +570,7 @@ class MetaDate {
 						$irregularSingleDates[$key]->update = TRUE;
 						$irregularSingleDates[$key]->store();
 						if ($irregularSingleDates[$key]->room) {
-							$irregularSingleDates[$key]->setFreeRomText('');
+							$irregularSingleDates[$key]->setFreeRoomText('');
 						}
 						$dateExists = TRUE;
 					}
