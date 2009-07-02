@@ -5,8 +5,6 @@
 # Lifter007: TODO
 # Lifter003: TODO
 
-// $Id$
-
 /**
 * Retrieve a WikiPage version from current seminar's WikiWikiWeb.
 *
@@ -57,13 +55,14 @@ function completeWikiComments($body) {
 	return preg_replace("/\[comment\]/","\[comment=".addslashes(get_fullname($auth->auth['uid'],'full',false))."\]",$body);
 }
 
-/*
+/**
  * Fill in signature markup in signatures
  *
- * @param      string  body    WikiPage text
- *
- **/
-function completeWikiSignatures($body) {
+ * @param string $body WikiPage text
+ * @return string text with signature
+ */
+function completeWikiSignatures($body)
+{
 	global $auth;
 	return preg_replace("/ ~~~~/"," [sig ".$auth->auth['uname']." ".time()."]", $body);
 }
@@ -97,6 +96,7 @@ function submitWikiPage($keyword, $version, $body, $user_id, $range_id) {
 	// complete signature from ~~~~
 	$body=completeWikiSignatures($body);
 
+	//TODO: Die $message Texte klingen fürchterlich. Halbsätze, Denglisch usw...
 	if ($latestVersion && ($latestVersion['body'] == $body)) {
 		$message="info§" . _("Keine Änderung vorgenommen.");
 	} else if ($latestVersion && ($version!="") && ($lastchange < 30*60) && ($user_id == $latestVersion[user_id])) {
@@ -104,7 +104,7 @@ function submitWikiPage($keyword, $version, $body, $user_id, $range_id) {
 		// no new verison is created
 		$result=$db->query("UPDATE wiki SET body='$body', chdate='$date' WHERE keyword='$keyword' AND range_id='$range_id' AND version='$version'");
 		begin_blank_table();
-		$message="info§" . _("Update ok, keine neue Version, da erneute Änderung innerhalb 30 Minuten.");
+		$message="msg§" . _("Update ok, keine neue Version, da erneute Änderung innerhalb 30 Minuten.");
 	} else {
 		if ($version=="") {
 			$version=0;
@@ -113,7 +113,7 @@ function submitWikiPage($keyword, $version, $body, $user_id, $range_id) {
 		}
 		$date=time();
 		$result=$db->query("INSERT INTO wiki (range_id, user_id, keyword, body, chdate, version) VALUES ('$range_id', '$user_id', '$keyword','$body','$date','$version')");
-		$message="info§" . _("Update ok, neue Version angelegt.");
+		$message="msg§" . _("Update ok, neue Version angelegt.");
 	}
 
 	refreshBacklinks($keyword, $body);
@@ -483,7 +483,7 @@ function showDeleteDialog($keyword, $version) {
 	global $perm, $SessSemName;
 	if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
 		begin_blank_table();
-		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
+		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu löschen."));
 		end_blank_table();
 		echo '</td></tr></table>';
 		include ('lib/include/html_end.inc.php');
@@ -502,19 +502,20 @@ function showDeleteDialog($keyword, $version) {
 
 	if (!$islatest) {
 		begin_blank_table();
-		parse_msg("error§" . _("Die Version, die Sie l&ouml;schen wollen, ist nicht die aktuellste. &Uuml;berpr&uuml;fen Sie, ob inzwischen eine aktuellere Version erstellt wurde."));
+		parse_msg("error§" . _("Die Version, die Sie löschen wollen, ist nicht die Aktuellste. Überprüfen Sie, ob inzwischen eine aktuellere Version erstellt wurde."));
 		end_blank_table();
 		echo '</td></tr></table>';
 		include ('lib/include/html_end.inc.php');
 		die;
 	}
 	begin_blank_table();
-	$msg="info§" . sprintf(_("Wollen Sie die untenstehende Version %s der Seite %s wirklich l&ouml;schen?"), "<b>".$version."</b>", "<b>".$keyword."</b>") . "<br>\n";
+	$msg="info§" . sprintf(_("Wollen Sie die untenstehende Version %s der Seite %s wirklich löschen?"), "<b>".$version."</b>", "<b>".$keyword."</b>") . "<br>\n";
 	if (!$willvanish) {
-		$msg .= _("Diese Version ist derzeit aktuell. Nach dem L&ouml;schen wird die n&auml;chst&auml;ltere Version aktuell.") . "<br>";
+		$msg .= _("Diese Version ist derzeit aktuell. Nach dem Löschen wird die nächstältere Version aktuell.") . "<br>";
 	} else {
-		$msg .= _("Diese Version ist die derzeit einzige. Nach dem L&ouml;schen ist die Seite komplet gelöscht.") . "<br>";
+		$msg .= _("Diese Version ist die derzeit einzige. Nach dem Löschen ist die Seite komplet gelöscht.") . "<br>";
 	}
+	//TODO: modaler dialog benutzen
 	$msg.="<a href=\"".URLHelper::getLink("?cmd=really_delete&keyword=".urlencode($keyword)."&version=$version&dellatest=$islatest")."\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 	$lnk = "?keyword=".urlencode($keyword); // what to do when delete is aborted
 	if (!$islatest) $lnk .= "&version=$version";
@@ -535,26 +536,27 @@ function showDeleteAllDialog($keyword) {
 	global $perm, $SessSemName;
 	if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
 		begin_blank_table();
-		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
+		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu löschen."));
 		end_blank_table();
 		echo '</td></tr></table>';
 		include ('lib/include/html_end.inc.php');
 		die;
 	}
 	begin_blank_table();
-	$msg="info§" . sprintf(_("Wollen Sie die Seite %s wirklich vollständig - mit allen Versionen - l&ouml;schen?"), "<b>".$keyword."</b>") . "<br>\n";
+	$msg="info§" . sprintf(_("Wollen Sie die Seite %s wirklich vollständig - mit allen Versionen - löschen?"), "<b>".$keyword."</b>") . "<br>\n";
 	if ($keyword=="WikiWikiWeb") {
 		$msg .= "<p>" . _("Sie sind im Begriff die Startseite zu löschen, die dann durch einen leeren Text ersetzt wird. Damit wären auch alle anderen Seiten nicht mehr direkt erreichbar.") . "</p>";
 	} else {
 		$numbacklinks=count(getBacklinks($keyword));
 		if ($numbacklinks == 0) {
-			$msg .= "<p>"._("Auf diese Seite verweist keine andere Seite.")."</p>";
+			$msg .= _("Auf diese Seite verweist keine andere Seite.").'<br>';
 		} else if ($numbacklinks == 1) {
-			$msg .= "<p>"._("Auf diese Seite verweist 1 andere Seite.")."</p>";
+			$msg .= _("Auf diese Seite verweist 1 andere Seite.").'<br>';
 		} else {
-			$msg .= "<p>" . sprintf(_("Auf diese Seite verweisen %s andere Seiten."), count(getBacklinks($keyword))) . "</p>";
+			$msg .= sprintf(_("Auf diese Seite verweisen %s andere Seiten."), count(getBacklinks($keyword)));
 		}
 	}
+	//TODO: modaler dialog benutzen
 	$msg.="<a href=\"".URLHelper::getLink("?cmd=really_delete_all&keyword=".urlencode($keyword))."\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
 	$lnk = "?keyword=".urlencode($keyword); // what to do when delete is aborted
 	if (!$islatest) $lnk .= "&version=$version";
@@ -579,7 +581,7 @@ function deleteWikiPage($keyword, $version, $range_id) {
 	global $perm, $SessSemName, $dellatest;
 	if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
 		begin_blank_table();
-		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
+		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu löschen."));
 		end_blank_table();
 		echo '</td></tr></table>';
 		include ('lib/include/html_end.inc.php');
@@ -588,7 +590,7 @@ function deleteWikiPage($keyword, $version, $range_id) {
 	$lv=getLatestVersion($keyword, $SessSemName[1]);
 	if ($lv["version"] != $version) {
 		begin_blank_table();
-		parse_msg("error§" . _("Die Version, die Sie l&ouml;schen wollen, ist nicht die aktuellste. &Uuml;berpr&uuml;fen Sie, ob inzwischen eine aktuellere Version erstellt wurde."));
+		parse_msg("error§" . _("Die Version, die Sie löschen wollen, ist nicht die aktuellste. Überprüfen Sie, ob inzwischen eine aktuellere Version erstellt wurde."));
 		end_blank_table();
 		echo '</td></tr></table>';
 		include ('lib/include/html_end.inc.php');
@@ -598,14 +600,14 @@ function deleteWikiPage($keyword, $version, $range_id) {
 	$db=new DB_Seminar;
 	$db->query($q);
 	if (!keywordExists($keyword)) { // all versions have gone
-		$addmsg = '<br>' . sprintf(_("Damit ist die Seite %s mit allen Versionen gel&ouml;scht."),'<b>'.$keyword.'</b>');
+		$addmsg = '<br>' . sprintf(_("Damit ist die Seite %s mit allen Versionen gelöscht."),'<b>'.$keyword.'</b>');
 		$newkeyword = "WikiWikiWeb";
 	} else {
 		$newkeyword = $keyword;
 		$addmsg = "";
 	}
 	begin_blank_table();
-	parse_msg("info§" . sprintf(_("Version %s der Seite %s gel&ouml;scht."), $version, '<b>'.$keyword.'</b>') . $addmsg);
+	parse_msg("info§" . sprintf(_("Version %s der Seite %s gelöscht."), $version, '<b>'.$keyword.'</b>') . $addmsg);
 	end_blank_table();
 	if ($dellatest) {
 		$lv=getLatestVersion($keyword, $SessSemName[1]);
@@ -630,7 +632,7 @@ function deleteAllWikiPage($keyword, $range_id) {
 	global $perm, $SessSemName;
 	if (!$perm->have_studip_perm("tutor", $SessSemName[1])) {
 		begin_blank_table();
-		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu l&ouml;schen."));
+		parse_msg("error§" . _("Sie haben keine Berechtigung, Seiten zu löschen."));
 		end_blank_table();
 		echo '</td></tr></table>';
 		include ('lib/include/html_end.inc.php');
@@ -640,7 +642,7 @@ function deleteAllWikiPage($keyword, $range_id) {
 	$db=new DB_Seminar;
 	$db->query($q);
 	begin_blank_table();
-	parse_msg("info§" . sprintf(_("Die Seite %s wurde mit allen Versionen gel&ouml;scht."), '<b>'.$keyword.'</b>'));
+	parse_msg("info§" . sprintf(_("Die Seite %s wurde mit allen Versionen gelöscht."), '<b>'.$keyword.'</b>'));
 	end_blank_table();
 	refreshBacklinks($keyword, "");
 	return "WikiWikiWeb";
@@ -670,7 +672,7 @@ function listPages($mode, $sortby=NULL) {
 		$sort = "ORDER by lastchange"; // default sort order for "new pages"
 		$nopages = _("Seit Ihrem letzten Login gab es keine Änderungen.");
 	} else {
-		parse_msg("info§" . _("ERROR: Falscher Anzeigemodus:") . $mode);
+		parse_msg("error§" . _("Fehler! Falscher Anzeigemodus:") . $mode);
 		return 0;
 	}
 
@@ -798,7 +800,7 @@ function searchWiki($searchfor, $searchcurrentversions, $keyword, $localsearch) 
 			// search only latest versions of all pages
 			$q="SELECT * FROM wiki AS w1 WHERE range_id='$range_id' AND version=(SELECT MAX(version) FROM wiki AS w2 WHERE w2.range_id='$range_id' AND w2.keyword=w1.keyword) AND w1.body LIKE '%$searchfori%' ORDER BY w1.keyword ASC";
 		}
-		$result=$db->query($q);
+		$result=$db->query($q); //result wird nie benutzt... wofür?
 	}
 
 	showPageFrameStart();
@@ -1006,7 +1008,7 @@ function wikiEdit($keyword, $wikiData, $user_id, $backpage=NULL) {
 		parse_msg("info§" . "<p>&nbsp;</p>". sprintf(_("Die Seite wird eventuell von %s bearbeitet."), $locks) . "<br>" . _("Wenn Sie die Seite trotzdem &auml;ndern, kann ein Versionskonflikt entstehen.") . "<br>" . _("Es werden dann beide Versionen eingetragen und m&uuml;ssen von Hand zusammengef&uuml;hrt werden.") . "<br>" . _("Klicken Sie auf Abbrechen, um zurückzukehren."), "§", "printcontent");
 	}
 	if ($keyword=='toc') {
-		parse_msg("info§" . "<p>&nbsp;</p>". _("Sie bearbeiten die QuickLinks.") . "<br>" . _("Verwenden Sie Aufzählungszeichen (-, --, ---), um Verweise auf Seiten hinzuzufügen.") , "§", "printcontent");
+		parse_msg("info§" . _("Sie bearbeiten die QuickLinks.") . "<br>" . _("Verwenden Sie Aufzählungszeichen (-, --, ---), um Verweise auf Seiten hinzuzufügen.") , "§", "printcontent");
 		if (!$body) { $body=_("- WikiWikiWeb\n- BeispielSeite\n-- UnterSeite1\n-- UnterSeite2"); }
 	}
 
