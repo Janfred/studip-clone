@@ -249,10 +249,10 @@ if ($_REQUEST['cmd'] == 'deleteRole') {
 		$msgs[] = 'msg§' . sprintf(_("Die Gruppe %s wurde gelöscht!"), htmlReady($statusgruppe->getName()));
 		$statusgruppe->delete();
 	} else {
-		$msgs[] = 'info§' . sprintf(_("Sind Sie sicher, dass Sie die Gruppe %s löschen möchten?"), '<b>'. htmlReady($statusgruppe->getName()) .'</b>')
-			. '<br/><a href="'. URLHelper::getLink('?cmd=deleteRole&really=true&role_id='. $_REQUEST['role_id']) .'">'. makebutton('ja') .'</a>'
-			. '&nbsp;&nbsp;&nbsp;&nbsp;'
-			. '<a href="'. URLHelper::getLink('#'. $_REQUEST['role_id']) .'">'. makebutton('nein') .'</a>';
+		echo createQuestion(sprintf(_("Sind Sie sicher, dass Sie die Gruppe **%s** löschen möchten?"), $statusgruppe->getName() ),
+			array('cmd' => 'deleteRole', 'really' => 'true', 'role_id' => $_REQUEST['role_id']),
+			array('role_id' => $_REQUEST['role_id'])
+		);
 	}
 }
 

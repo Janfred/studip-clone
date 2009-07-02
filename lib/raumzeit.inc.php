@@ -347,7 +347,8 @@ function raumzeit_editSingleDate() {
 	// generate time-stamps to we can compare directly
 	$start = mktime((int)$_REQUEST['start_stunde'], (int)$_REQUEST['start_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
 	$ende = mktime((int)$_REQUEST['end_stunde'], (int)$_REQUEST['end_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
-	if ($_REQUEST['cycle_id'] != '') {
+
+	if ($_REQUEST['cycle_id'] != '') {   // regelmäßiger Termin
 		// the choosen singleDate is connected to a cycleDate
 		$termin =& $sem->getSingleDate($_REQUEST['singleDateID'], $_REQUEST['cycle_id']);
 		if (($termin->getStartTime() != $start) || ($termin->getEndTime() != $ende)) {	// if we have changed the time of the date, it is not a regular time-slot any more, so we have to move it to the irregularSingleDates of the seminar
@@ -377,7 +378,10 @@ function raumzeit_editSingleDate() {
 			$sem->appendMessages($termin->getMessages());
 		}
 		$sem->readSingleDatesForCycle($_REQUEST['cycle_id'], true);
-	} else {
+	} 
+	
+	// unregelmäßiger Termin
+	else {
 		// the choosen singleDate is irregular, so we can edit it directly
 		$termin =& $sem->getSingleDate($_REQUEST['singleDateID']);
 
