@@ -1031,7 +1031,7 @@ input.quicksearchbox {
 
 input.quicksearchbutton {
 	border: 0px;
-	padding:0px;
+	padding: 0px;
 	vertical-align: middle;
 }
 
@@ -1044,8 +1044,6 @@ form#quicksearch .autocomplete li {
 	display: none;
 }
 
-
 form#quicksearch input.hint {
-	color: #E0E0FF;
+	color: #FFFFFF;
 }
-

@@ -249,7 +249,7 @@ class HeaderController {
 	/**
 	 * Checks if the Quicksearch box should be shown in the submenu
 	 *
-	 * @return boolean
+	 * @return array() with information about the default semster
 	 */
 	public function getHeaderItemQuickSearch()
 	{

@@ -26,7 +26,8 @@
   var methods = {
     defaultValueActsAsHint: function (element) {
       element = $(element);
-      element._default = element.value;
+      element._default = 'Veranstaltungen';
+      element.addClassName('hint').value = element._default;
 
       return element.observe('focus', function () {
         if (element._default != element.value) {
