@@ -145,13 +145,6 @@ $sem->registerCommand('removeRequest', 'raumzeit_removeRequest');
 $sem->registerCommand('removeSeminarRequest', 'raumzeit_removeSeminarRequest');
 $sem->processCommands();
 
-// create infobox with semester-chooser and status-messages
-$messages = array();
-
-while ($msg = $sem->getNextMessage()) {
-	$messages[] = $msg;
-}
-
 // get possible start-weeks
 $start_weeks = array();
 
@@ -175,14 +168,30 @@ while ($tmp_first_date < $end_date) {
 	<tr>
 		<td class="blank" width="100%" valign="top">
 			<table width="99%" border="0" cellpadding="2" cellspacing="0">
+
+			<?php 
+				// show messages
+				if ($messages = $sem->getStackedMessages()) :
+			?>
+			<tr>
+				<td colspan="9">
+			<?php
+				foreach ($messages as $message) :
+					echo MessageBox::$message['type']( $message['message'] );
+				endforeach;
+			?>
+				</td>
+			</tr>
+			<? endif; ?>
+
 			<tr>
 				<td colspan="9" class="blue_gradient">
 					&nbsp;<B><?=_("Regelmäßige Zeiten")?></B>
 				</td>
-			</td>
-				<tr>
-					<TD colspan="9" class="blank">
-						<? if (!$_LOCKED) { ?>
+			</tr>
+			<tr>
+				<td colspan="9" class="blank">
+					<? if (!$_LOCKED) { ?>
 						<form action="<?= URLHelper::getLink() ?>" method="post">
 						<? } ?>
 						<FONT size="-1">
@@ -606,9 +615,7 @@ while ($tmp_first_date < $end_date) {
 					$infobox_template->set_attribute('picture', 'schedules.jpg');
 					$infobox_template->set_attribute("selectionlist_title", "Semesterauswahl"); 
 					$infobox_template->set_attribute('selectionlist', $semester_selectionlist);    
-					if (sizeof($messages) > 0) {
-							$infobox_template->set_attribute('messages', $messages);
-					}
+
 					// render template
 					echo $infobox_template->render();
 

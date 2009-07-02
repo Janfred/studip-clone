@@ -902,6 +902,28 @@ class Seminar {
 		}
 	}
 
+	/**
+	 * return all stacked messages as a multidimensional array
+	 *
+	 * The array has the following structure:
+	 *   array( 'type' => ..., 'message' ... )
+	 * where type is one of error, info and success
+	 *
+	 * @return mixed the array of stacked messages
+	 */
+	function getStackedMessages() {
+		if ( is_array( $this->message_stack ) ) {
+			return $this->message_stack;
+		}
+
+		return false;
+	}
+
+	/**
+	 * return the next stacked messag-string
+	 *
+	 * @return string a message-string
+	 */
 	function getNextMessage() {
 		if ($this->messages[0]) {
 			$ret = $this->messages[0];
@@ -912,18 +934,51 @@ class Seminar {
 		return FALSE;
 	}
 
+	/**
+	 * stack an error-message
+	 *
+	 * @param string $text the message to stack
+	 */
 	function createError($text) {
 		$this->messages[] = 'error§'.$text.'§';
+		$this->message_stack[] = array(
+			'type' => 'error',
+			'message' => $text
+		);
 	}
 
+	/**
+	 * stack an info-message
+	 *
+	 * @param string $text the message to stack
+	 */
 	function createInfo($text) {
 		$this->messages[] = 'info§'.$text.'§';
+		$this->message_stack[] = array(
+			'type' => 'info',
+			'message' => $text
+		);
 	}
 
+	/**
+	 * stack a success-message
+	 *
+	 * @param string $text the message to stack
+	 */
 	function createMessage($text) {
 		$this->messages[] = 'msg§'.$text.'§';
+		$this->message_stack[] = array(
+			'type' => 'success',
+			'message' => $text
+		);
 	}
 
+	/**
+	 * add an array of messages to the message-stack
+	 *
+	 * @param mixed $messages array of pre-marked message-strings
+	 * @param bool returns true on success
+	 */
 	function appendMessages($messages) {
 		if (!is_array($messages)) return FALSE;
 		$this->messages = array_merge($this->messages, $messages);
