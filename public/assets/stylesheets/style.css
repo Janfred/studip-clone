@@ -1043,7 +1043,3 @@ form#quicksearch .autocomplete li {
 #quicksearch_autocomplete_choices .informal {
 	display: none;
 }
-
-form#quicksearch input.hint {
-	color: #FFFFFF;
-}
