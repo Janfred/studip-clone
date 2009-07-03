@@ -376,14 +376,21 @@ class ExternEditGeneric extends ExternEdit {
 		$out .= "$title</font></td>\n";
 		$out .= "<td$width_2 nowrap=\"nowrap\">";
 		if ($multiple)
-			$out .= "<select name=\"$form_name\" size=\"$size\" multiple>";
+			$out .= "<select name=\"{$form_name}[]\" size=\"$size\" multiple>";
 		else
 			$out .= "<select name=\"$form_name\" size=\"$size\">";
 
 		for ($i = 0; $i < sizeof($option_values); $i++) {
 			$out .= "<option value=\"{$option_values[$i]}\"";
-			if ($value == $option_values[$i] && $option_values[$i])
-				$out .= " selected";
+			if ($multiple) {
+				if ($option_values[$i] && in_array($option_values[$i], (array) $value)) {
+					$out .= " selected";
+				}
+			} else {
+				if ($value == $option_values[$i] && $option_values[$i]) {
+					$out .= " selected";
+				}
+			}
 			$out .= " />{$option_names[$i]}</option>\n";
 		}
 

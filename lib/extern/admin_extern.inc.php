@@ -47,10 +47,19 @@ require_once($RELATIVE_PATH_EXTERN . '/lib/ExternModule.class.php');
 
 // -- here you have to put initialisations for the current page
 
+if ($_REQUEST['view'] == 'extern_global') {
+	$range_id = 'studip';
+	URLHelper::addLinkParam('view', 'extern_global');
+} else {
+	$range_id = $SessSemName[1] ? $SessSemName[1] : '';
+	URLHelper::addLinkParam('view', 'extern_inst');
+}
+URLHelper::addLinkParam('cid', $range_id);
+
 // when downloading a config, do it here and stop afterwards
-if ($com == "download_config") {
-	if ($SessSemName[1]) {
-		download_config($SessSemName[1], $_REQUEST['config_id'], $_REQUEST['module']);
+if ($_REQUEST['com'] == 'download_config') {
+	if ($range_id) {
+		download_config($range_id, $_REQUEST['config_id'], $_REQUEST['module']);
 		page_close();
 		exit;
 	}
@@ -66,10 +75,6 @@ ob_start();
 include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 $links = ob_get_clean();
 
-//get ID from a open Institut
-if ($SessSemName[1])
-	$range_id = $SessSemName[1];
-
 //Change header_line if open object
 $header_line = getHeaderLine($range_id);
 if ($header_line) {
@@ -83,7 +88,7 @@ if ($header_line) {
 }
 
 // upload of configuration
-if ($com == "do_upload_config") {
+if ($_REQUEST['com'] == "do_upload_config") {
 	$file_content = file_get_contents($the_file);
 	$file_content_wo_tabs = preg_replace("/\t/", "  ", $file_content);
 
@@ -105,7 +110,7 @@ require_once('lib/language.inc.php');
 
 echo "<table border=\"0\" class=\"blank\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n";
 echo "<tr><td class=\"blank\" colspan=\"2\">&nbsp;</td></tr>\n";
-if ($com != "info") {
+if ($_REQUEST['com'] != "info") {
 	echo "<tr><td class=\"blank\" align=\"center\" valign=\"top\" width=\"90%\">\n";
 } else {
 	echo "<tr><td class=\"blank\" align=\"center\" valign=\"top\" width=\"90%\" colspan=\"2\">\n";
@@ -120,11 +125,10 @@ if ($_REQUEST['com'] == 'copyconfig') {
 		my_msg(sprintf(_("Die Konfiguration wurde als \"%s\" nach Modul \"%s\" kopiert."), htmlReady($config_copy->getConfigName()), htmlReady($GLOBALS['EXTERN_MODULE_TYPES'][$config_copy->getTypeName()]['name'])), 'blank', 1, false);
 	} else {
 		$_REQUEST['com'] = '';
-		$com = '';
 	}
 }
 
-if ($com == "delete") {
+if ($_REQUEST['com'] == 'delete') {
 	$config = ExternConfig::GetInstance($range_id, '', $config_id);
 	if ($config->deleteConfiguration()) {
 		my_msg(sprintf(_("Konfiguration <strong>\"%s\"</strong> für Modul <strong>\"%s\"</strong> gelöscht!"), htmlReady($config->getConfigName()), htmlReady($GLOBALS['EXTERN_MODULE_TYPES'][$config->getTypeName()]['name'])), 'blank', 1, false);
@@ -135,14 +139,13 @@ if ($com == "delete") {
 
 echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 
-if ($com == "delete_sec") {
+if ($_REQUEST['com'] == 'delete_sec') {
 	$config = ExternConfig::GetConfigurationMetaData($range_id, $config_id);
 
-	$message = sprintf(_("Wollen Sie die Konfiguration <b>&quot;%s&quot;</b> des Moduls <b>%s</b> wirklich l&ouml;schen?"),
-							$config["name"], $GLOBALS["EXTERN_MODULE_TYPES"][$config["type"]]["name"]);
-	$message .= "<br><br><a href=\"$PHP_SELF?com=delete&config_id=$config_id\">";
+	$message = sprintf(_("Wollen Sie die Konfiguration <b>&quot;%s&quot;</b> des Moduls <b>%s</b> wirklich l&ouml;schen?"), $config["name"], $GLOBALS["EXTERN_MODULE_TYPES"][$config["type"]]["name"]);
+	$message .= '<br><br><a href="' . URLHelper::getLink('?com=delete&config_id='.$config_id) . '">';
 	$message .= makeButton("ja2") . "</a>&nbsp; &nbsp;";
-	$message .= "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst\">";
+	$message .= '<a href="' . URLHelper::getLink('?list=TRUE&view=extern_inst') . '">';
 	$message .= makeButton("nein") . "</a>";
 	my_info($message, "blank", 1);
 	print_footer();
@@ -152,7 +155,7 @@ if ($com == "delete_sec") {
 
 $css_switcher =& new cssClassSwitcher();
 
-if ($com == "info") {
+if ($_REQUEST['com'] == 'info') {
 	include($RELATIVE_PATH_EXTERN . "/views/extern_info_module.inc.php");
 	print_footer();
 	page_close();
@@ -170,13 +173,13 @@ if ($edit) {
 				$pos = $pos_tmp[0];
 			}
 			$execute_command = $element_command;
-			$com = "store";
+			$_REQUEST['com'] = 'store';
 		}
 	}
 }
 
-if ($com == "new" || $com == "edit" || $com == "open" ||
-		$com == "close" || $com == "store") {
+if ($_REQUEST['com'] == 'new' || $_REQUEST['com'] == 'edit' || $_REQUEST['com'] == 'open' ||
+		$_REQUEST['com'] == 'close' || $_REQUEST['com'] == 'store') {
 
 	require_once($RELATIVE_PATH_EXTERN . "/views/extern_edit_module.inc.php");
 	print_footer();
@@ -186,7 +189,7 @@ if ($com == "new" || $com == "edit" || $com == "open" ||
 
 // Some browsers don't reload the site by clicking the same link twice again.
 // So it's better to use different commands to do the same job.
-if ($com == "set_default" || $com == "unset_default") {
+if ($_REQUEST['com'] == 'set_default' || $_REQUEST['com'] == 'unset_default') {
 	if (!ExternConfig::SetStandardConfiguration($range_id, $config_id)) {
 		page_close();
 		exit;
@@ -195,7 +198,7 @@ if ($com == "set_default" || $com == "unset_default") {
 
 if ($EXTERN_SRI_ENABLE_BY_ROOT && $_REQUEST['com'] == 'enable_sri'
 		&& $perm->have_perm('root')) {
-	enable_sri($SessSemName[1], $_REQUEST['sri_enable']);
+	enable_sri($range_id, $_REQUEST['sri_enable']);
 }
 
 echo "<table class=\"blank\" border=\"0\" width=\"95%\" ";
@@ -208,11 +211,11 @@ echo "</td></tr>";
 
 if ($EXTERN_SRI_ENABLE_BY_ROOT && $perm->have_perm('root')) {
 	echo "<tr><td class=\"blank\">\n";
-	echo "<form method=\"post\" action=\"$PHP_SELF?com=enable_sri\">\n";
+	echo '<form method="post" action="' . URLHelper::getLink('?com=enable_sri') . '">';
 	echo '<blockquote><font size="2">';
 	echo _("SRI-Schnittstelle freigeben");
 	echo ' <input type="checkbox" name="sri_enable" value="1"';
-	if (sri_is_enabled($SessSemName[1])) {
+	if (sri_is_enabled($range_id)) {
 		echo ' checked="checked"';
 	}
 	echo '/> &nbsp;<input type="image" border="0" align="absmiddle" ';
@@ -230,52 +233,60 @@ $choose_module_form = '';
 // remove global configuration
 array_shift($module_types_ordered);
 foreach ($module_types_ordered as $i) {
-	if (sizeof($configurations[$EXTERN_MODULE_TYPES[$i]['module']]) < $EXTERN_MAX_CONFIGURATIONS) {
+	if ((sizeof($configurations[$GLOBALS['EXTERN_MODULE_TYPES'][$i]['module']]) < $EXTERN_MAX_CONFIGURATIONS)
+		&& ExternModule::HaveAccessModuleType($_REQUEST['view'], $i)) {
 		$choose_module_form .= "<option value=\"{$EXTERN_MODULE_TYPES[$i]['module']}\">"
 				. $EXTERN_MODULE_TYPES[$i]['name'] . "</option>\n";
 	}
-	if ($configurations[$EXTERN_MODULE_TYPES[$i]["module"]]) {
+	if (isset($configurations[$EXTERN_MODULE_TYPES[$i]["module"]])) {
 		$have_config = TRUE;
 	}
 }
 // add global configuration on first position
 array_unshift($module_types_ordered, 0);
 // check for global configurations
-if ($configurations[$EXTERN_MODULE_TYPES[0]["module"]]) {
+if (isset($configurations[$EXTERN_MODULE_TYPES[0]["module"]])) {
 	$have_config = TRUE;
 }
 
-if ($com != 'copychoose') {
+if ($_REQUEST['com'] != 'copychoose') {
 	echo "<blockquote><font size=\"2\">";
 	echo _("Neue globale Konfiguration anlegen.");
-	echo "&nbsp; <a href=\"$PHP_SELF?com=new&mod=Global\">" . makeButton("neuanlegen") . "</a>\n";
+	echo '&nbsp; <a href="' . URLHelper::getLink('?com=new&mod=Global') . '">' . makeButton("neuanlegen") . "</a>\n";
 	echo "</blockquote>";
 }
 
-if ($choose_module_form != "") {
+if ($choose_module_form != '') {
 	if ($_REQUEST['com'] != 'copychoose') {
-		echo "<form method=\"post\" action=\"$PHP_SELF?com=new\">\n";
+		echo '<form method="post" action="' . URLHelper::getLink('?com=new') . '">';
 		echo "<blockquote><font size=\"2\">";
 		$choose_module_form = "<select name=\"mod\">\n$choose_module_form</select>\n";
 		printf(_("Neue Konfiguration f&uuml;r Modul %s anlegen."), $choose_module_form);
 		echo "&nbsp; <input type=\"image\" " . makeButton("neuanlegen", "src") . " border=\"0\" align=\"absmiddle\">";
 		echo "</font></blockquote>\n";
 		echo "</form>\n";
-	
-		echo "<form method=\"post\" action=\"$PHP_SELF?com=copychoose\">\n";
-		echo "<blockquote><font size=\"2\">";
-		$choose_institute_copy = "<select name=\"copychooseinst\">\n" . ExternConfig::GetInstitutesWithConfigurations() . "</select>\n";
-		printf(_("Konfiguration aus Einrichtung %s kopieren."), $choose_institute_copy);
-		echo "&nbsp; <input type=\"image\" " . makeButton("weiter", "src") . " border=\"0\" align=\"absmiddle\">";
-		echo "</font></blockquote>\n";
-		echo "</form>\n";
+		
+		$conf_institutes = ExternConfig::GetInstitutesWithConfigurations(($GLOBALS['perm']->have_perm('root') && $_REQUEST['view'] == 'extern_global') ? 'global' : array('inst', 'fak'));
+		if (sizeof($conf_institutes)) {
+			echo '<form method="post" action="' . URLHelper::getLink('?com=copychoose') . '">';
+			echo "<blockquote><font size=\"2\">";
+			$choose_institute_copy = "<select name=\"copychooseinst\">\n";
+			foreach ($conf_institutes as $conf_institute) {
+				$choose_institute_copy .= sprintf("<option value=\"%s\" style=\"%s\">%s</option>\n", $conf_institute['institut_id'], ($conf_institute['fakultaets_id'] == $conf_institute['institut_id'] ? '"font-weight:bold;' : ''), htmlReady(strlen($conf_institute['name']) > 60 ? substr_replace($conf_institute['name'], '[...]', 30, -30) : $conf_institute['name']));
+			}
+			$choose_institute_copy .= "</select>\n";
+			printf(_("Konfiguration aus Einrichtung %s kopieren."), $choose_institute_copy);
+			echo "&nbsp; <input type=\"image\" " . makeButton("weiter", "src") . " border=\"0\" align=\"absmiddle\">";
+			echo "</font></blockquote>\n";
+			echo "</form>\n";
+		}
 	} else {
 		if ($_REQUEST['com'] == 'copychoose') {
 			$choose_module_select = "<select name=\"copyconfigid\">\n";
 			$configurations_copy = ExternConfig::GetAllConfigurations($_REQUEST['copychooseinst']);
 			foreach ($module_types_ordered as $module_type) {
 				$print_module_name = TRUE;
-				foreach ((array) $configurations_copy[$GLOBALS['EXTERN_MODULE_TYPES'][$module_type]['module']] as $config_id_copy => $config_data_copy) {
+				foreach ($configurations_copy[$GLOBALS['EXTERN_MODULE_TYPES'][$module_type]['module']] as $config_id_copy => $config_data_copy) {
 					if ($print_module_name) {
 						$choose_module_select .= '<option value="" style="font-weight: bold;">' . htmlReady($GLOBALS['EXTERN_MODULE_TYPES'][$module_type]['name']) . '</option>';
 					}
@@ -284,11 +295,11 @@ if ($choose_module_form != "") {
 				}
 			}
 			
-			echo "<form method=\"post\" action=\"$PHP_SELF?com=copyconfig\">\n";
+			echo '<form method="post" action="' . URLHelper::getLink('?com=copyconfig') . '">';
 			echo "<blockquote><font size=\"2\">";
 			printf(_("Konfiguration %s aus Einrichtung kopieren."), $choose_module_select . '</select>');
 			echo "&nbsp; <input type=\"image\" " . makeButton('kopieren', 'src') . " border=\"0\" align=\"absmiddle\">&nbsp; &nbsp";
-			echo '<a href="admin_extern.php?list=TRUE&view=extern_inst">' . makeButton('zurueck', 'img') . '</a>';
+			echo '<a href="' . URLHelper::getLink('?list=TRUE&view=extern_inst') . '">' . makeButton('zurueck', 'img') . '</a>';
 			echo "</font></blockquote>\n";
 			echo "<input type=\"hidden\" name=\"copyinstid\" value=\"" . htmlReady($_REQUEST['copychooseinst']) . "\" />\n";
 			echo "</form>\n";
@@ -326,13 +337,13 @@ if (!$have_config) {
 	foreach ($module_types_ordered as $order) {
 		$module_type = $GLOBALS['EXTERN_MODULE_TYPES'][$order];
 	//foreach ($EXTERN_MODULE_TYPES as $module_type) {
-		if ($configurations[$module_type["module"]]) {
+		if (isset($configurations[$module_type["module"]])) {
 			$css_switcher_2->switchClass();
 			echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
 			echo "<tr>\n<td class=\"" . $css_switcher_2->getHeaderClass() . "\">";
 			echo "<font size=\"2\"><b>&nbsp; ";
 
-			if ($configurations[$module_type["module"]][$config_id]) {
+			if (isset($configurations[$module_type["module"]][$config_id])) {
 				echo "<a name=\"anker\"></a>\n";
 			}
 			echo $module_type["name"];
@@ -364,41 +375,37 @@ if (!$have_config) {
 
 				echo "<td" . $css_switcher_2->getFullClass() . " width=\"5%\">";
 				$tooltip = _("weitere Informationen anzeigen");
-				echo "<a href=\"$PHP_SELF?com=info&config_id=" . $configuration["id"];
-				echo '"><img src="';
+				echo '<a href="' . URLHelper::getLink('?com=info&config_id=' . $configuration['id']) . '"><img src="';
 				echo $GLOBALS['ASSETS_URL']."images/i.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
 				echo "<td" . $css_switcher_2->getFullClass() . " width=\"5%\">";
 
 				// Switching for the is_default option. Read the comment above.
 				if ($configuration["is_default"]) {
-					echo "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst&com=unset_default&config_id=";
-					echo $configuration["id"] . "#anker\">";
+					echo '<a href="' . URLHelper::getLink('?list=true&view=extern_inst&com=unset_default&config_id=' . $configuration['id']) . '#anker">';
 					$tooltip = _("Standard entziehen");
 					echo '<img src="';
 					echo $GLOBALS['ASSETS_URL']."images/on_small.gif\" border=\"0\"" . tooltip($tooltip) . ">\n";
 				}
 				else {
-					echo "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst&com=set_default&config_id=";
-					echo $configuration["id"] . "#anker\">";
+					echo '<a href="' . URLHelper::getLink('?list=true&view=extern_inst&com=set_default&config_id=' . $configuration['id']) . '#anker">';
 					$tooltip = _("Standard zuweisen");
 					echo '<img src="'.$GLOBALS['ASSETS_URL']."images/off_small_blank.gif\" border=\"0\"" . tooltip($tooltip) . ">";
 				}
 
 				echo "</a>\n</td>\n";
 				echo "<td" . $css_switcher_2->getFullClass() . " align=\"center\" width=\"5%\">\n";
-				echo "<a href=\"$PHP_SELF?com=delete_sec&config_id=" . $configuration["id"] . '#anker">';
+				echo '<a href="' . URLHelper::getLink('?com=delete_sec&config_id=' . $configuration['id']) . '#anker">';
 				echo '<img src="' . $GLOBALS['ASSETS_URL'];
 				$tooltip = _("Konfiguration löschen");
 				echo "images/trash.gif\" border=\"0\"" . tooltip($tooltip) . "></a>\n</td>\n";
 				echo "<td" . $css_switcher_2->getFullClass() . " align=\"right\" width=\"20%\" ";
 				echo ">\n";
-				echo "<a href=\"$PHP_SELF?com=edit&mod=" . $module_type["module"];
-				echo "&config_id=" . $configuration["id"] . "\"><img ";
+				echo '<a href="' . URLHelper::getLink('?com=edit&mod=' . $module_type['module'] . '&config_id=' . $configuration['id']) . '"><img ';
 				echo makeButton("bearbeiten", "src") . " border=\"0\"";
 				$tooltip = _("Konfiguration bearbeiten");
 				echo tooltip($tooltip) . "></a>&nbsp;\n</td></tr>\n";
 
-				if ($com == 'upload_config' && $_REQUEST['config_id'] == $configuration['id']) {
+				if ($_REQUEST['com'] == 'upload_config' && $_REQUEST['config_id'] == $configuration['id']) {
 					$template = $GLOBALS['template_factory']->open('extern/upload_form');
 					$template->set_attribute('class', $css_switcher_2->getFullClass());
 					$template->set_attribute('module', $module_type['module']);
@@ -430,7 +437,7 @@ echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 $info_max_configs = sprintf(_("Sie können pro Modul maximal %s Konfigurationen anlegen."),
 		$EXTERN_MAX_CONFIGURATIONS);
 
-if ($configurations) {
+if (sizeof($configurations)) {
 	$info_set_default = _("Klicken Sie auf diesen Button, um eine Konfiguration zur Standard-Konfiguration zu erklären.");
 	$info_no_default = _("Wenn Sie keine Konfiguration als Standard ausgew&auml;hlt haben, wird die Stud.IP-Konfiguration verwendet.");
 	$info_is_default = _("Dieses Symbol kennzeichnet die Standard-Konfiguration, die zur Formatierung herangezogen wird, wenn sie beim Aufruf dieses Moduls keine Konfiguration angeben.");

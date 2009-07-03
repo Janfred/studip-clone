@@ -54,15 +54,6 @@ class ExternModuleNewsticker extends ExternModule {
 	
 	function setup () {}
 	
-	function checkRangeId ($range_id) {
-		$range = get_object_type($range_id);
-		
-		if ($range == "inst" || $range == "fak")
-			return TRUE;
-			
-		return FALSE;
-	}
-	
 	function printout ($args) {
 		echo $this->toString();
 	}

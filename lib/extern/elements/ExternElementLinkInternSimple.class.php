@@ -73,8 +73,9 @@ class ExternElementLinkInternSimple extends ExternElement {
 		global $EXTERN_MODULE_TYPES;
 		$out = "";
 		$table = "";
-		if ($edit_form == "")
+		if ($edit_form == "") {
 			$edit_form =& new ExternEditModule($this->config, $post_vars, $faulty_values, $anker);
+		}
 		
 		$edit_form->setElementName($this->getName());
 		$element_headline = $edit_form->editElementHeadline($this->real_name,
@@ -91,7 +92,8 @@ class ExternElementLinkInternSimple extends ExternElement {
 		
 		$title = _("Konfiguration:");
 		$info = _("Der Link ruft das Modul mit der gewählten Konfiguration auf. Wählen Sie \"Standard\", um die von Ihnen gesetzte Standardkonfiguration zu benutzen. Ist für das aufgerufene Modul noch keine Konfiguration erstellt worden, wird die Stud.IP-Default-Konfiguration verwendet.");
-		if ($configs = ExternConfig::GetAllConfigurations($this->config->range_id, $this->link_module_type)) {
+		$configs = ExternConfig::GetAllConfigurations($this->config->range_id, $this->link_module_type)
+		if (sizeof($configs)) {
 			$module_name = $EXTERN_MODULE_TYPES[$this->link_module_type]["module"];
 			$values = array_keys($configs[$module_name]);
 			unset($names);

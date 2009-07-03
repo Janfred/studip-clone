@@ -58,9 +58,11 @@ class ExternConfigDb extends ExternConfig {
 	*
 	*/
 	function store () {
+		parent::store();
 		$serialized_config = addslashes(serialize($this->config));
 		if (sizeof($serialized_config)) {
-			$query = "UPDATE extern_config SET config = '$serialized_config' "
+			$time = time();
+			$query = "UPDATE extern_config SET config = '$serialized_config', chdate = $time "
 				. "WHERE config_id = '{$this->id}' AND range_id = '{$this->range_id}'";
 			$this->db->query($query);
 			return($this->updateConfiguration());
@@ -84,13 +86,8 @@ class ExternConfigDb extends ExternConfig {
 	}
 	
 	function insertConfiguration () {
-		$db =& new DB_Seminar();
-		$query = "SELECT COUNT(config_id) AS count FROM extern_config WHERE ";
-		$query .= "range_id='{$this->range_id}' AND config_type={$this->module_type}";
-		$db->query($query);
-
-		if ($db->next_record() && $db->f('count') > $GLOBALS['EXTERN_MAX_CONFIGURATIONS']) {
-			return FALSE;
+		if (!parent::insertConfiguration()) {
+			return false;
 		}
 	
 		$serialized_config = serialize($config_obj->config);
@@ -98,9 +95,9 @@ class ExternConfigDb extends ExternConfig {
 		$query = "INSERT INTO extern_config VALUES (";
 		$query .= "'{$this->id}', '{$this->range_id}', {$this->module_type}, ";
 		$query .= "'{$this->config_name}', 0, '$serialized_config', $time, $time)";
-		$db->query($query);
+		$this->db->query($query);
 	
-		if ($db->affected_rows() != 1) {
+		if ($this->db->affected_rows() != 1) {
 			return FALSE;
 		}
 	

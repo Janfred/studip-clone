@@ -231,15 +231,6 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		return $markers[$element_name];
 	}
 
-	function checkRangeId ($range_id) {
-		$range = get_object_type($range_id);
-
-		if ($range == "inst" || $range == "fak")
-			return TRUE;
-
-		return FALSE;
-	}
-
 	function getContent ($args = NULL, $raw = FALSE) {
 		$instituts_id = $this->config->range_id;
 		$username = $args['username'];

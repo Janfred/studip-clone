@@ -111,7 +111,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
 	function toStringEdit ($open_elements = '', $post_vars = '',
 			$faulty_values = '', $anker = '') {
 
-		$this->updateGenericDatafields('TemplateGeneric', 'sem');
+		$this->updateGenericDatafields('TemplateLectureData', 'sem');
 		$this->elements['TemplateLectureData']->markers = $this->getMarkerDescription('TemplateLectureData');
 		$this->elements['TemplateStudipData']->markers = $this->getMarkerDescription('TemplateStudipData');
 
@@ -201,15 +201,6 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
 		$markers['TemplateStudipData'][] = array('<!-- END STUDIP-DATA -->', '');
 
 		return $markers[$element_name];
-	}
-
-	function checkRangeId ($range_id) {
-		$range = get_object_type($range_id);
-
-		if ($range == "inst" || $range == "fak")
-			return TRUE;
-
-		return FALSE;
 	}
 
 	function getContent ($args = NULL, $raw = FALSE) {
@@ -311,8 +302,6 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
 
 			// generic data fields
 			if ($generic_datafields = $this->config->getValue('Main', 'genericdatafields')) {
-				#$datafields_obj =& new DataFields($this->seminar_id);
-				#$datafields = $datafields_obj->getLocalFields($this->seminar_id);
 				$localEntries = DataFieldEntry::getDataFieldEntries($this->seminar_id, 'sem');
 				$k = 0;
 				foreach ($generic_datafields as $datafield) {

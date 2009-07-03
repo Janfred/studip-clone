@@ -59,7 +59,7 @@ class ExternElementSelectSubjectAreas extends ExternElement {
 		$this->name = "SelectSubjectAreas";
 		$this->real_name = _("Auswahl der anzuzeigenden Studienbereiche");
 		$this->description = _("Sie k&ouml;nnen hier die Studienbereiche ausw&auml;hlen, die auf der externen Seite ausgegeben werden sollen.");
-		$this->attributes = array('subjectareasselected', 'selectallsubjectareas');
+		$this->attributes = array('subjectareasselected', 'selectallsubjectareas', 'reverseselection');
 		
 		$this->selector =& new StudipSemTreeSearch('dummy', 'SelectSubjectAreas', FALSE);
 		if ($this->config->range_id) {
@@ -78,6 +78,7 @@ class ExternElementSelectSubjectAreas extends ExternElement {
 		$config['subjectareasselected'] = '';
 		$config['subjectareasselected'] .= '|' . implode('|', $this->all_ranges);
 		$config['selectallsubjectareas'] = '1';
+		$config['reverseselection'] = '';
 		
 		return $config;
 	}
@@ -101,6 +102,12 @@ class ExternElementSelectSubjectAreas extends ExternElement {
 		$names = '';
 		$table = $edit_form->editCheckboxGeneric('selectallsubjectareas', $title, $info, $values, $names);
 		$table .= $edit_form->editSelectSubjectAreas($this->selector);
+		
+		$title = _("Auswahl umkehren:");
+		$info = _("Wählen Sie diese Option, wenn Veranstaltungen aus den ausgewählten Bereichen nicht angezeigt werden sollen.");
+		$values = '1';
+		$names = '';
+		$table .= $edit_form->editCheckboxGeneric('reverseselection', $title, $info, $values, $names);
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
@@ -144,6 +151,17 @@ class ExternElementSelectSubjectAreas extends ExternElement {
 				$_POST[$this->name . '_' . $attribute] = '';
 				return FALSE;
 			}
+		}
+		
+		if ($attribute == 'reverseselection') {
+			// This is necessary for checkbox-values. If there is no checkbox
+			// checked, the variable is not declared and it is necessary to set the
+			// variable to "".
+			if (!isset($_POST[$this->name . '_' . $attribute])) {
+				$_POST[$this->name . '_' . $attribute] = '';
+				return FALSE;
+			}
+			return !($value == '1' || $value == '');
 		}
 
 		return FALSE;

@@ -126,15 +126,6 @@ class ExternModuleTemplateNews extends ExternModule {
 		return $markers[$element_name];
 	}
 	
-	function checkRangeId ($range_id) {
-		$range = get_object_type($range_id);
-		
-		if ($range == "inst" || $range == "fak")
-			return TRUE;
-			
-		return FALSE;
-	}
-	
 	function getContent ($args = NULL, $raw = FALSE) {
 		$content = array();
 		$db =& new DB_Seminar();

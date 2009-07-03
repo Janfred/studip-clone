@@ -103,15 +103,6 @@ class ExternModulePersondetails extends ExternModule {
 		$this->elements["TableHeader"]->real_name = _("Umschließende Tabelle");
 	}
 	
-	function checkRangeId ($range_id) {
-		$range = get_object_type($range_id);
-		
-		if ($range == "inst" || $range == "fak")
-			return TRUE;
-			
-		return FALSE;
-	}
-	
 	function printout ($args) {
 		if ($this->config->getValue("Main", "wholesite"))
 			echo html_header($this->config);

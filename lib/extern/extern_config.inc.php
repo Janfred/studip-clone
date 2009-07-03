@@ -55,25 +55,25 @@ global
 
 
 $EXTERN_MODULE_TYPES[0] = array("module" => "Global", "name" => _("globale Konfiguration"), "level" => 1,
-													"description" => _("Das Modul &quot;globale Konfiguration&quot; enthält Einstellungen, die für alle Module gelten, solange sie nicht in den jeweiligen Modulen &uuml;berschrieben werden."), 'order' => 1);
+													"description" => _("Das Modul &quot;globale Konfiguration&quot; enthält Einstellungen, die für alle Module gelten, solange sie nicht in den jeweiligen Modulen &uuml;berschrieben werden."), 'order' => 1, 'view' => array('inst','fak','studip'));
 
 $EXTERN_MODULE_TYPES[1] = array("module" => "Persons", "name" => _("Mitarbeiter"), "level" => 1,
-													"description" => _("Das Modul &quot;Mitarbeiter&quot; gibt ein Mitarbeiterverzeichnis einer Einrichtung aus."), 'order' => 20);
+													"description" => _("Das Modul &quot;Mitarbeiter&quot; gibt ein Mitarbeiterverzeichnis einer Einrichtung aus."), 'order' => 20, 'view' => array('inst','fak'));
 
 $EXTERN_MODULE_TYPES[2] = array("module" => "Persondetails", "name" => _("Mitarbeiterdetails"), "level" => 2,
-													"description" => _("Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters einer Einrichtung aus."), 'order' => 30);
+													"description" => _("Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters einer Einrichtung aus."), 'order' => 30, 'view' => array('inst','fak'));
 
 $EXTERN_MODULE_TYPES[3] = array("module" => "Lectures", "name" => _("Veranstaltungen"), "level" => 1,
-													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."), 'order' => 40);
+													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."), 'order' => 40, 'view' => array('inst','fak'));
 
 $EXTERN_MODULE_TYPES[4] = array("module" => "Lecturedetails", "name" => _("Veranstaltungsdetails"), "level" => 2,
-													"description" => _("Das Modul &quot;Veranstaltungsdetails&quot; gibt alle allgemeinen Daten einer Veranstaltung aus."), 'order' => 50);
+													"description" => _("Das Modul &quot;Veranstaltungsdetails&quot; gibt alle allgemeinen Daten einer Veranstaltung aus."), 'order' => 50, 'view' => array('inst','fak'));
 
 $EXTERN_MODULE_TYPES[5] = array("module" => "News", "name" => _("News"), "level" => 1,
-													"description" => _("Das Modul &quot;News&quot; gibt alle News einer Einrichtung aus."), 'order' => 60);
+													"description" => _("Das Modul &quot;News&quot; gibt alle News einer Einrichtung aus."), 'order' => 60, 'view' => array('inst','fak'));
 
 $EXTERN_MODULE_TYPES[6] = array("module" => "Download", "name" => _("Download"), "level" => 1,
-													"description" => _("Das Modul &quot;Download&quot; stellt alle Dateien aus dem Dateibereich einer Einrichtung zum Download zur Verf&uuml;gung."), 'order' => 70);
+													"description" => _("Das Modul &quot;Download&quot; stellt alle Dateien aus dem Dateibereich einer Einrichtung zum Download zur Verf&uuml;gung."), 'order' => 70, 'view' => array('inst','fak'));
 /*
 $EXTERN_MODULE_TYPES[8] = array("module" => "Semlecturetree", "name" => _("Bereichsbaum Veranstaltungen"), "level" => 1,
 													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
@@ -82,30 +82,34 @@ $EXTERN_MODULE_TYPES[9] = array("module" => "Rangelecturetree", "name" => _("Ein
 													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."));
 */
 $EXTERN_MODULE_TYPES[7] = array("module" => "Newsticker", "name" => _("Newsticker"), "level" => 1,
-													"description" => _("Das Modul &quot;Newsticker&quot; gibt alle News einer Einrichtung in einem Ticker aus."), 'order' => 75);
+													"description" => _("Das Modul &quot;Newsticker&quot; gibt alle News einer Einrichtung in einem Ticker aus."), 'order' => 75, 'view' => array('inst','fak'));
 
 $EXTERN_MODULE_TYPES[8] = array("module" => "Lecturestable", "name" => _("Veranstaltungen (Tabelle)"), "level" => 1,
-													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung a Tabelle aus."), 'order' => 45);
+													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung a Tabelle aus."), 'order' => 45, 'view' => array('inst','fak'));
 
 $EXTERN_MODULE_TYPES[9] = array("module" => "TemplatePersons", "name" => _("Mitarbeiter (templatebasiert)"), "level" => 1,
-													"description" => _("Das Modul &quot;Mitarbeiter&quot; gibt ein Mitarbeiterverzeichnis einer Einrichtung aus."), 'order' => 22);
+													"description" => _("Das Modul &quot;Mitarbeiter&quot; gibt ein Mitarbeiterverzeichnis einer Einrichtung aus."), 'order' => 22, 'view' => array('inst','fak', 'studip'));
 													
 $EXTERN_MODULE_TYPES[10] = array("module" => "TemplateDownload", "name" => _("Download (templatebasiert)"), "level" => 1,
-													"description" => _("Das Modul &quot;Download&quot; stellt alle Dateien aus dem Dateibereich einer Einrichtung zum Download zur Verf&uuml;gung."), 'order' => 72);
+													"description" => _("Das Modul &quot;Download&quot; stellt alle Dateien aus dem Dateibereich einer Einrichtung zum Download zur Verf&uuml;gung."), 'order' => 72, 'view' => array('inst','fak'));
 
 $EXTERN_MODULE_TYPES[11] = array("module" => "TemplateNews", "name" => _("News (templatebasiert)"), "level" => 1,
-													"description" => _("Das Modul &quot;News&quot; gibt alle News einer Einrichtung aus."), 'order' => 62);
+													"description" => _("Das Modul &quot;News&quot; gibt alle News einer Einrichtung aus."), 'order' => 62, 'view' => array('inst','fak'));
 
 $EXTERN_MODULE_TYPES[12] = array("module" => "TemplateLectures", "name" => _("Veranstaltungen (templatebasiert)"), "level" => 1,
-													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."), 'order' => 42);
+													"description" => _("Das Modul &quot;Veranstaltungen&quot; gibt alle Veranstaltungen einer Einrichtung aus."), 'order' => 42, 'view' => array('inst','fak'));
 													
 $EXTERN_MODULE_TYPES[13] = array("module" => "TemplateLecturedetails", "name" => _("Veranstaltungsdetails (templatebasiert)"), "level" => 2,
-													"description" => _("Das Modul &quot;Veranstaltungsdetails&quot; gibt alle allgemeinen Daten einer Veranstaltung aus."), 'order' => 52);
+													"description" => _("Das Modul &quot;Veranstaltungsdetails&quot; gibt alle allgemeinen Daten einer Veranstaltung aus."), 'order' => 52, 'view' => array('inst','fak','studip'));
 													
 $EXTERN_MODULE_TYPES[14] = array("module" => "TemplatePersondetails", "name" => _("Mitarbeiterdetails (templatebasiert)"), "level" => 2,
-													"description" => _("Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters einer Einrichtung aus."), 'order' => 32);
+													"description" => _("Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters einer Einrichtung aus."), 'order' => 32, 'view' => array('inst','fak','studip'));
 
+$EXTERN_MODULE_TYPES[15] = array("module" => "TemplateSemBrowse", "name" => _("Veranstaltungsbrowser (templatebasiert)"), "level" => 1,
+													"description" => _("Das Modul &quot;Veranstaltungsbrowser&quot; ermöglicht das Suchen nach Veranstaltungen im Einrichtungs- und Vorlesungsverzeichnis."), 'order' => 45, 'view' => array('studip'));
 													
+$EXTERN_MODULE_TYPES[16] = array('module' => 'TemplatePersBrowse', 'name' => _("Personenbrowser (templatebasiert)"), 'level' => 1, 'description' => _("Das Modul &quot;Personenbrowser&quot; ermöglicht die Anzeige eines systemweiten Personalverzeichnisses."), 'order' => 55, 'view' => array('studip'));
+
 // Allowed number of configurations
 $EXTERN_MAX_CONFIGURATIONS = 6;
 

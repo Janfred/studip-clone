@@ -156,15 +156,6 @@ class ExternModuleTemplateLectures extends ExternModule {
 		return $markers[$element_name];
 	}
 	
-	function checkRangeId ($range_id) {
-		$range = get_object_type($range_id);
-		
-		if ($range == "inst" || $range == "fak")
-			return TRUE;
-			
-		return FALSE;
-	}
-	
 	function getContent ($args = NULL, $raw = FALSE) {
 		
 		$start_item_id = get_start_item_id($this->config->range_id);
@@ -279,10 +270,15 @@ class ExternSemBrowseTemplate extends SemBrowse {
 		if (is_array($this->sem_browse_data['search_result']) && count($this->sem_browse_data['search_result'])) {
 			
 			// show only selected subject areas
-			$selected_ranges = $this->module->config->getValue('SelectSubjectAreas', 'subjectareasselected');
+			$selected_ranges = (array) $this->module->config->getValue('SelectSubjectAreas', 'subjectareasselected');
+			$selected_ranges[] = $this->sem_browse_data['start_item_id'];
 			if (!$this->module->config->getValue('SelectSubjectAreas', 'selectallsubjectareas')
 					&& count($selected_ranges)) {
-				$sem_range_query =  "AND seminar_sem_tree.sem_tree_id IN ('".implode("','", $selected_ranges)."')";
+				if ($this->module->config->getValue('SelectSubjectAreas', 'reverseselection')) {
+					$sem_range_query =  "AND seminar_sem_tree.sem_tree_id NOT IN ('".implode("','", $selected_ranges)."')";
+				} else {
+					$sem_range_query =  "AND seminar_sem_tree.sem_tree_id IN ('".implode("','", $selected_ranges)."')";
+				}
 			} else {
 				$sem_range_query = '';
 			}
@@ -383,9 +379,9 @@ class ExternSemBrowseTemplate extends SemBrowse {
 			foreach ($group_by_data as $group_field => $sem_ids){
 				foreach ($sem_ids['Seminar_id'] as $seminar_id => $foo){
 					$name = strtolower(key($sem_data[$seminar_id]["Name"]));
-					$name = str_replace("Ä","ae",$name);
-					$name = str_replace("Ö","oe",$name);
-					$name = str_replace("Ü","ue",$name);
+					$name = str_replace("ä","ae",$name);
+					$name = str_replace("ö","oe",$name);
+					$name = str_replace("ü","ue",$name);
 					$group_by_data[$group_field]['Seminar_id'][$seminar_id] = $name;
 				}
 				uasort($group_by_data[$group_field]['Seminar_id'], 'strnatcmp');

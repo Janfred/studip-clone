@@ -65,12 +65,13 @@ class ExternModule {
 	*
 	*/
 	function &GetInstance ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
-		$module_name = ucfirst($module_name);
 		
 		if ($module_name != '') {
+			$module_name = ucfirst($module_name);
+			require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . "/modules/ExternModule$module_name.class.php");
+		
 			$class_name = "ExternModule" . $module_name;
 			$module =& new $class_name($range_id, $module_name, $config_id, $set_config, $global_id);
-			
 			return $module;
 		}
 		
@@ -82,17 +83,17 @@ class ExternModule {
 	*/
 	function ExternModule ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
 		
-		// the module is called via extern.php (not via the admin area) and there is
-		// no config_id so it's necessary to check the range_id
-		if (!$config_id && !$this->checkRangeId($range_id)) {
-			$this->printError();
-		}
-		
 		foreach ($GLOBALS["EXTERN_MODULE_TYPES"] as $type => $module) {
 			if ($module["module"] == $module_name) {
 				$this->type = $type;
 				break;
 			}
+		}
+		
+		// the module is called via extern.php (not via the admin area) and there is
+		// no config_id so it's necessary to check the range_id
+		if (!$config_id && !$this->checkRangeId($range_id)) {
+			$this->printError();
 		}
 		if (is_null($this->type)) {
 			$this->printError();
@@ -319,7 +320,13 @@ class ExternModule {
 	/**
 	*
 	*/
-	function checkRangeId () {}
+	function checkRangeId ($range_id) {
+		if ($range_id == 'studip') {
+			return in_array('studip', $GLOBALS['EXTERN_MODULE_TYPES'][$this->type]['view']);
+		}
+		
+		return in_array(get_object_type($range_id), $GLOBALS['EXTERN_MODULE_TYPES'][$this->type]['view']);
+	}
 	
 	/**
 	*
@@ -442,6 +449,130 @@ class ExternModule {
 		return $order;
 	}
 		
+	function getLinkToModule ($linked_element_name = null, $params = null, $with_module_params = false, $self = false) {
+		if ($with_module_params) {
+			$module_params = $this->getModuleParams();
+			$params = array_merge($module_params, $params);
+		}
+		$query_parts = array();
+		if (is_array($params)) {
+			$param_key = 'ext_' . strtolower($this->name);
+			foreach ($params as $name => $value) {
+				$query_parts[] = "{$param_key}[{$name}]=" . $value;
+			}
+		}
+		
+		if (is_null($linked_element_name)) {
+			$sriurl = trim($this->config->getValue('Main', 'sriurl'));
+			$includeurl = trim($this->config->getValue('Main', 'includeurl'));
+		} else {
+			$sriurl = trim($this->config->getValue($linked_element_name, 'srilink'));
+			$includeurl = trim($this->config->getValue($linked_element_name, 'includlink'));
+		}
+			
+		if ($sriurl) {
+			$url = $sriurl;
+		} else if ($includeurl) {
+			$url = $includeurl;
+		} else {
+			$url = $GLOBALS['EXTERN_SERVER_NAME'] . 'extern.php';
+		}
+		
+		if (parse_url($url, PHP_URL_QUERY)) {
+			$url .= '&';
+		} else {
+			$url .= '?';
+		}
+		
+		if ($self) {
+			$module = $this->name;
+		} else {
+			// get module name by config id
+			$config_meta_data = ExternConfig::GetConfigurationMetaData($this->config->range_id, $this->config->getValue($linked_element_name, 'config'));
+			if (is_array($config_meta_data)) {
+				$module = $config_meta_data['module_name'];
+			} else {
+				return '';
+			}
+		}
+		
+		$url .= "module={$module}&config_id=" . (is_null($linked_element_name) ? $this->config->getId() : $this->config->getValue($linked_element_name, 'config')) . "&range_id={$this->config->range_id}";
+		if (sizeof($query_parts)) {
+			$url .= '&' . implode('&', $query_parts);
+		}
+		return $url;
+	}
 	
+	function getLinkToSelf ($params = null, $with_module_params = false, $linked_element_name = null) {
+		return $this->getLinkToModule($linked_element_name, $params, $with_module_params, true);
+	}
+	
+	function getModuleParams ($params = null) {
+		$param_key = 'ext_' . strtolower($this->name);
+		if (is_array($_REQUEST[$param_key])) {
+			$ret = array();
+			if (is_null($params)) {
+				if (is_array($_GET[$param_key])) {
+					foreach ($_GET[$param_key] as $key => $value) {
+						$ret[$key] = urldecode($value);
+					}
+				}
+				if (is_array($_POST[$param_key])) {
+					foreach ($_POST[$param_key] as $key => $value) {
+						$ret[$key] = $value;
+					}
+				}
+				return $ret;
+			}
+			foreach ($params as $param) {
+				if (isset($_GET[$param_key][$param])) {
+					$ret[$param] = urldecode($_GET[$param_key][$param]);
+				}
+				if (isset($_POST[$param_key][$param])) {
+					$ret[$param] = $_POST[$param_key][$param];
+				}
+			}
+			return $ret;
+		}
+		return array();
+	}
+	
+	/**
+	 * Checks access for a module in a given view.of the admin area.
+	 *
+	 * @param string $view view in the admin area ('extern_inst' or 'extern_global')
+	 * @param int $module_id (optional) ID of the module (see extern_config.inc.php)
+	 * @param string $module_name (optional) name of the module (see extern_config.inc.php)
+	 * @return bool access granted
+	 */
+	public static function HaveAccessModuleType ($view, $module_id = NULL, $module_name = NULL) {
+		if (!is_null($module_id)) {
+			if (!is_array($GLOBALS['EXTERN_MODULE_TYPES'][$module_id])) {
+				return false;
+			}
+			switch ($view) {
+				case 'extern_inst' :
+					return (in_array('inst', $GLOBALS['EXTERN_MODULE_TYPES'][$module_id]['view']) || in_array('fak', $GLOBALS['EXTERN_MODULE_TYPES'][$module_id]['view']));
+				case 'extern_global' :
+					return in_array('studip', $GLOBALS['EXTERN_MODULE_TYPES'][$module_id]['view']);
+				default :
+					return false;
+			}
+		} else if (!is_null($module_name)) {
+			foreach ($GLOBALS['EXTERN_MODULE_TYPES'] as $id => $module) {
+				if ($module_id == $id || $module_name == $module['module']) {
+					switch ($view) {
+						case 'extern_inst' :
+							return (in_array('inst', $module['view']) || in_array('fak', $module['view']));
+						case 'extern_global' :
+							return in_array('studip', $module['view']);
+						default :
+							return false;
+					}
+				}
+			}
+		}
+		return false;
+	}
 }
 ?>

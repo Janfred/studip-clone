@@ -136,7 +136,11 @@ class ExternSemBrowseTable extends SemBrowse {
 			$selected_ranges = $this->module->config->getValue('SelectSubjectAreas', 'subjectareasselected');
 			if (!$this->module->config->getValue('SelectSubjectAreas', 'selectallsubjectareas')
 					&& count($selected_ranges)) {
-				$sem_range_query =  "AND seminar_sem_tree.sem_tree_id IN ('".implode("','", $selected_ranges)."')";
+				if ($this->module->config->getValue('SelectSubjectAreas', 'reverseselection')) {
+					$sem_range_query =  "AND seminar_sem_tree.sem_tree_id NOT IN ('".implode("','", $selected_ranges)."')";
+				} else {
+					$sem_range_query =  "AND seminar_sem_tree.sem_tree_id IN ('".implode("','", $selected_ranges)."')";
+				}
 			} else {
 				$sem_range_query = '';
 			}

@@ -275,7 +275,7 @@ class ExternConfig {
 	*
 	*/
 	function store () {
-		
+		$this->permCheck();
 	}
 	
 	/**
@@ -312,7 +312,7 @@ class ExternConfig {
 		$config_name = $config_name_prefix . $config_name_suffix;
 		$all_config_names = "";
 		
-		if (is_array($configurations[$this->module_name])) {
+		if (sizeof($configurations[$this->module_name])) {
 			foreach ($configurations[$this->module_name] as $configuration)
 				$all_config_names .= $configuration['name'];
 		}
@@ -357,7 +357,7 @@ class ExternConfig {
 		}
 	}
 	
-	function updateConfiguration () {
+	protected function updateConfiguration () {
 		$db =& new DB_Seminar();
 	
 		$changed = time();
@@ -373,6 +373,8 @@ class ExternConfig {
 	}
 	
 	function insertConfiguration () {
+		$this->permCheck();
+		
 		$db =& new DB_Seminar();
 		$query = "SELECT COUNT(config_id) AS count FROM extern_config WHERE ";
 		$query .= "range_id='{$this->range_id}' AND config_type={$this->module_type}";
@@ -381,17 +383,8 @@ class ExternConfig {
 		if ($db->next_record() && $db->f('count') > $GLOBALS['EXTERN_MAX_CONFIGURATIONS']) {
 			return FALSE;
 		}
-	
-		$time = time();
-		$query = "INSERT INTO extern_config SET config_id='{$this->id}', range_id='{$this->range_id}', config_type={$this->module_type}, ";
-		$query .= "name='{$this->config_name}', is_standard=0, mkdate=$time, chdate=$time";
-		$db->query($query);
-	
-		if ($db->affected_rows() != 1) {
-			return FALSE;
-		}
-	
-		return TRUE;
+		
+		return true;
 	}
 	
 	function deleteConfiguration () {
@@ -429,6 +422,7 @@ class ExternConfig {
 	* "is_default" TRUE if it is the default configuration)
 	*/
 	function GetAllConfigurations ($range_id, $type = NULL) {
+		$all_configs = array();
 		$db =& new DB_Seminar();
 		$query = "SELECT * FROM extern_config WHERE range_id='$range_id' ";
 	
@@ -438,10 +432,6 @@ class ExternConfig {
 		
 		$query .= 'ORDER BY name ASC';
 		$db->query($query);
-	
-		if ($db->num_rows() == 0) {
-			return FALSE;
-		}
 	
 		while ($db->next_record()) {
 			// return registered modules only!
@@ -675,26 +665,34 @@ class ExternConfig {
 		return FALSE;
 	}
 	
-	function GetInstitutesWithConfigurations ($as_options = TRUE) {
-		$options = '';
+	function GetInstitutesWithConfigurations ($check_view = null) {
 		$inst_array = array();
-		$db =& new DB_Seminar();
-		$db->query("SELECT DISTINCT i.Institut_id, i.Name, fakultaets_id, (i.Institut_id = i.fakultaets_id) AS is_fak FROM Institute i LEFT JOIN extern_config ec ON i.Institut_id = ec.range_id WHERE i.Institut_id = ec.range_id ORDER BY Name");
-		
-		while ($db->next_record()) {
-			if ($as_options) {
-				$options .= sprintf("<option value=\"%s\" style=\"%s\">%s </option>\n", $db->f("Institut_id"),($db->f("is_fak") ? "font-weight:bold;" : ""), htmlReady(strlen($db->f('Name')) > 60 ? substr_replace($db->f("Name"), '[...]', 30, -30) : $db->f('Name')));
-			} else {
-				$inst_array[$db->f('fakultaets_id')] = array($db->f('Institut_id'), $db->f('Name'));
+		$c_types = array();
+		foreach ($GLOBALS['EXTERN_MODULE_TYPES'] as $id => $conf_type) {
+			if (is_null($check_view) || in_array($check_view, $conf_type['view'])) {
+				$c_types[] = $id;
 			}
 		}
 		
-		if ($as_options) {
-			return $options;
+		$db =& new DB_Seminar();
+		$query = sprintf("SELECT i.Institut_id, i.Name, fakultaets_id FROM Institute i LEFT JOIN extern_config ec ON i.Institut_id = ec.range_id WHERE i.Institut_id = ec.range_id AND ec.config_type IN ('%s') ORDER BY Name", implode("','", $c_types));
+		$db->query($query);
+		while ($db->next_record()) {
+			$inst_array[$db->f('Institut_id')] = array('institut_id' => $db->f('Institut_id'), 'fakultaets_id' => $db->f('fakultaets_id'), 'name' => $db->f('Name'));
 		}
 		return $inst_array;
 	}
 	
+	private function permCheck () {
+		// check for sufficient rights
+		if ($this->range_id == 'studip' && $GLOBALS['perm']->have_perm('root')) {
+			return true;
+		}
+		if ($GLOBALS['perm']->have_studip_perm('admin', $this->range_id)) {
+			return true;
+		}
+		
+		throw new Exception(_("Sie verfügen nicht über ausreichend Rechte für diese Aktion."));
+	}
+	
 }
-
-?>

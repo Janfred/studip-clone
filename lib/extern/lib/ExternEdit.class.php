@@ -182,7 +182,7 @@ class ExternEdit {
 		$out .= $this->css->getFullClass() . ">&nbsp;";
 		$out .= "<input type=\"image\" name=\"submit\" ";
 		$out .= makeButton("uebernehmen", "src") . ">&nbsp; &nbsp; &nbsp;";
-		$out .= "<a href=\"{$GLOBALS['PHP_SELF']}?list=TRUE&view=extern_inst\">";
+		$out .= '<a href="' . URLHelper::getLink('?list=TRUE') . '">';
 		$out .= "<img " . makeButton("abbrechen", "src");
 		$out .= " border=\"0\" valign=\"absmiddle\"></a>\n";
 		$out .= "<input type=\"hidden\" name=\"config_id\" value=\"$config_id\">";
@@ -221,13 +221,11 @@ class ExternEdit {
 		$icon .= "txt-icon.gif\" border=\"0\">";
 
 		if ($open) {
-			$link = $GLOBALS["PHP_SELF"] . "?com=close&mod=$module_name&edit=";
-			$link .= $this->element_name . "&config_id=$config_id#anker";
+			$link = URLHelper::getLink('?com=close&mod=' . $module_name . '&edit=' . $this->element_name . '&config_id=' . $config_id . '#anker');
 			$open = "open";
 		}
 		else {
-			$link = $GLOBALS["PHP_SELF"] . "?com=open&mod=$module_name&edit=";
-			$link .= $this->element_name . "&config_id=$config_id#anker";
+			$link = URLHelper::getLink('?com=open&mod=' . $module_name . '&edit=' . $this->element_name . '&config_id=' . $config_id . '#anker');
 			$open = "close";
 		}
 
@@ -271,7 +269,7 @@ class ExternEdit {
 
 		$out = "\n<!-- BEGIN Content -->\n";
 		$out .= "<tr><td class=\"$class\" width=\"100%\" align=\"left\">\n";
-		$out .= "<form name=\"edit_form\" action=\"{$GLOBALS['PHP_SELF']}?com=store#anker\" method=\"post\">\n";
+		$out .= '<form name="edit_form" action="' . URLHelper::getLink('?com=store#anker') .  '" method="post">';
 		$out .= "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" align=\"center\">\n";
 		$out .= "<tr>" . printcontent("100%", FALSE, $content, "", FALSE) . "</tr>";
 		$out .= "$submit</table>\n</form>\n</td></tr>\n";

@@ -45,24 +45,24 @@ require_once('lib/msg.inc.php');
 echo "<table class=\"blank\" border=\"0\" width=\"100%\" ";
 echo "align=\"left\" cellspacing=\"0\" cellpadding=\"0\">\n";
 // it's forbidden to use the command "new" with a given config_id
-if ($com == "new")
-	$config_id = "";
+if ($_REQUEST['com'] == 'new') {
+	$config_id = '';
+}
 
 $module = FALSE;
-if ($com == "new") {
-	foreach ($EXTERN_MODULE_TYPES as $key => $type) {
-		if ($type["module"] == $mod) {
+if ($_REQUEST['com'] == 'new') {
+	foreach ($GLOBALS['EXTERN_MODULE_TYPES'] as $key => $type) {
+		if ($type['module'] == $_REQUEST['mod']) {
 			$configurations = ExternConfig::GetAllConfigurations($range_id, $key);
-			if (sizeof($configurations[$type["module"]]) < $EXTERN_MAX_CONFIGURATIONS) {
-				require_once($RELATIVE_PATH_EXTERN."/modules/ExternModule$mod.class.php");
-				$module =& ExternModule::GetInstance($range_id, $mod, '', 'NEW');
+			if (!isset($configurations[$type['module']]) || sizeof($configurations[$type['module']]) < $GLOBALS['EXTERN_MAX_CONFIGURATIONS']) {
+				$module =& ExternModule::GetInstance($range_id, $type['module'], '', 'NEW');
 			}
 			else {
 				$message = sprintf(_("Es wurden bereits %s Konfigurationen angelegt. Sie k&ouml;nnen f&uuml;r dieses Module keine weiteren Konfigurationen anlegen.")
-						, $EXTERN_MAX_CONFIGURATIONS);
+						, $GLOBALS['EXTERN_MAX_CONFIGURATIONS']);
 				my_error($message, "blank", 1);
 				echo "<tr><td class=\"blank\" align=\"center\">\n";
-				echo "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst\">";
+				echo '<a href="' . URLHelper::getLink('?list=TRUE') . '">';
 				echo makeButton("zurueck");
 				echo "</a>\n</td></tr>\n</table>\n";
 				print_footer();
@@ -73,10 +73,8 @@ if ($com == "new") {
 	}
 }
 else {
-	foreach ($EXTERN_MODULE_TYPES as $type) {
+	foreach ($GLOBALS['EXTERN_MODULE_TYPES'] as $type) {
 		if ($type["module"] == $mod) {
-			// Vorläufiger Bugfix
-			require_once($RELATIVE_PATH_EXTERN . "/modules/ExternModule$mod.class.php");
 			$module =& ExternModule::GetInstance($range_id, $mod, $config_id);
 		}
 	}
@@ -96,15 +94,16 @@ $elements = $module->getAllElements();
 $edit_open = "";
 
 foreach ($elements as $element) {
-	if ($edit == $element->getName())
-		$edit_open = array("$edit" => ($com != "close"));
+	if ($edit == $element->getName()) {
+		$edit_open = array("$edit" => ($_REQUEST['com'] != 'close'));
+	}
 }
-if ($com == "new" || $com == "edit" || $com == "open" || $com == "close") {
+if ($_REQUEST['com'] == 'new' || $_REQUEST['com'] == 'edit' || $_REQUEST['com'] == 'open' || $_REQUEST['com'] == 'close') {
 	echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";
 	$module->printoutEdit($edit_open, $_POST, "", $edit);
 }
 
-if ($com == "store") {
+if ($_REQUEST['com'] == 'store') {
 
 	$faulty_values = $module->checkFormValues($edit);
 	$fault = FALSE;
@@ -152,7 +151,7 @@ echo "</td></tr>\n";
 if (!$edit_open[$edit]) {
 	echo "<tr><td class=\"blank\">&nbsp;</td></tr>\n";
 	echo "<tr><td class=\"blank\" align=\"center\">";
-	echo "<a href=\"{$GLOBALS['PHP_SELF']}?list=TRUE&view=extern_inst\">";
+	echo '<a href="' . URLHelper::getLink('?list=TRUE') . '">';
 	echo "<img " . makeButton("zurueck", "src");
 	echo " border=\"0\" align=\"absmiddle\"></a>\n</td></tr>\n";
 }
@@ -166,7 +165,7 @@ $info_edit_element = _("Um die Werte eines einzelnen Elements zu &auml;ndern, kl
 if ($module->getType() != 0) {
 	$info_preview = _("Um eine Vorschau der Seite zu erhalten, klicken Sie bitte hier:");
 	$info_preview .= "<br>&nbsp;<div align=\"center\">";
-	$info_preview .= "<a target=\"_blank\" href=\"{$GLOBALS["CANONICAL_RELATIVE_PATH_STUDIP"]}extern.php";
+	$info_preview .= '<a target="_blank" href="' . $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'] . 'extern.php';
 	$info_preview .= "?module=" . $module->getName() . "&range_id=" . $module->config->range_id;
 	$info_preview .= "&preview=1&config_id=" . $module->config->getId();
 	if ($global_config = ExternConfig::GetGlobalConfiguration($module->config->range_id))

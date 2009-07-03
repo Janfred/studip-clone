@@ -60,6 +60,7 @@ class ExternConfigIni extends ExternConfig {
 	*
 	*/
 	function store () {
+		parent::store();
 		if (!$this->file_name) {
 			if ($this->id) {
 				$this->file_name = $this->id . '.cfg';
@@ -121,7 +122,24 @@ class ExternConfigIni extends ExternConfig {
 			// error handling
 		}
 	}
-
+	
+	function insertConfiguration () {
+		if (!parent::insertConfiguration()) {
+			return false;
+		}
+	
+		$time = time();
+		$query = "INSERT INTO extern_config SET config_id='{$this->id}', range_id='{$this->range_id}', config_type={$this->module_type}, ";
+		$query .= "name='{$this->config_name}', is_standard=0, mkdate=$time, chdate=$time";
+		$db->query($query);
+	
+		if ($db->affected_rows() != 1) {
+			return FALSE;
+		}
+	
+		return TRUE;
+	}
+	
 	function deleteConfiguration () {
 		if (parent::deleteConfiguration()) {
 			if (!@unlink($GLOBALS['EXTERN_CONFIG_FILE_PATH'] . $this->file_name)) {

@@ -55,15 +55,6 @@ class ExternModuleRangeLectureTree extends ExternModule {
 		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
 	}
 	
-	function checkRangeId ($range_id) {
-		$range = get_object_type($range_id);
-		
-		if ($range == "inst" || $range == "fak")
-			return TRUE;
-			
-		return FALSE;
-	}
-	
 	function printout ($args) {
 		
 		if ($this->config->getValue("Main", "wholesite"))

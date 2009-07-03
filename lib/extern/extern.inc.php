@@ -54,7 +54,6 @@ if ($range_id && $module) {
 	// $module = ucfirst(strtolower($module));
 	
 	// Is it a valid module name?
-	reset($EXTERN_MODULE_TYPES);
 	foreach ($EXTERN_MODULE_TYPES as $module_type => $module_data) {
 		if ($module_data["module"] == $module) {
 			$type = $module_type;
@@ -104,9 +103,6 @@ if (!$global_id && ($global_configuration = ExternConfig::GetGlobalConfiguration
 // all parameters ok, instantiate module and print data
 foreach ($EXTERN_MODULE_TYPES as $type) {
 	if ($type["module"] == $module) {
-		// Vorläufiger Bugfix
-		$class_name = "ExternModule" . $module;
-		require_once($RELATIVE_PATH_EXTERN . "/modules/$class_name.class.php");
 		$module_obj =& ExternModule::GetInstance($range_id, $module, $config_id, $default, $global_id);
 	}
 }
@@ -117,8 +113,13 @@ if ($incdata) {
 }
 
 $args = $module_obj->getArgs();
+/*
 for ($i = 0; $i < sizeof($args); $i++) {
 	$arguments[$args[$i]] = $$args[$i];
+}
+*/
+foreach ($args as $arg) {
+	$arguments[$arg] = $_REQUEST[$arg];
 }
 
 if ($preview) {

@@ -243,7 +243,13 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 
 		$links_admin_data["topkat"]="sem";
 	}
-
+	
+	//here are all the pages/views listed, which require the search form for Veranstaltungen
+	if ($i_page == "admin_extern.php" AND $links_admin_data["view"] == 'extern_global') {
+	
+		$links_admin_data["topkat"] = 'global';
+	}
+	
 	//remember the open topkat
 	if ($view_mode=="sem")
 		$links_admin_data["topkat"]="sem";
@@ -447,6 +453,10 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			$structure["show_log"]=array ('topKat'=>"log", 'name'=>_("Log"), 'link' => URLHelper::getLink('dispatch.php/event_log/show'), 'active'=>FALSE);
 			$structure["admin_log"]=array ('topKat'=>"log", 'name'=>_("Einstellungen"), 'link' => URLHelper::getLink('dispatch.php/event_log/admin'), 'active'=>FALSE);
 		}
+		
+		if ($EXTERN_ENABLE) {
+			$structure["extern_global"] = array("topKat" => "global", "name" => _("externe Seiten"), 'link' => URLHelper::getLink("admin_extern.php?list=TRUE&view=extern_global"), "active" => FALSE);
+		}
 	}
 	// create sublinks for administration plugins
 	if ($GLOBALS["PLUGINS_ENABLE"] && $perm->have_perm("admin")){
@@ -599,7 +609,12 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 				$reiter_view="datafields";
 			break;
 			case "admin_extern.php":
-				$reiter_view = "extern_inst";
+				if ($links_admin_data["topkat"] == "inst") {
+					$reiter_view = "extern_inst";
+				} else {
+					$reiter_view = "extern_global";
+				//	reset_all_data();
+				}
 			break;
 			case "admin_banner_ads.php":
 				$reiter_view = "bannerads";

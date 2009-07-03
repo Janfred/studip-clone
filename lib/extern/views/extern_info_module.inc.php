@@ -108,7 +108,7 @@ $css_switcher->resetClass();
 $css_switcher->switchClass();
 
 echo "<tr><td" . $css_switcher->getFullClass() . " align=\"center\">&nbsp;<br>\n";
-echo "<a href=\"$PHP_SELF?list=TRUE&view=extern_inst\">" . makeButton("zurueck");
+echo '<a href="' . URLHelper::getLink('?list=TRUE') . '">' . makeButton("zurueck");
 echo "</a><br>&nbsp;</td></tr>\n";
 
 ?>
