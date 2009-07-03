@@ -136,10 +136,6 @@ class ExternElementMainTemplatePersBrowse extends ExternElementMain {
 				_("Dr. Peter Meyer"), _("Meyer, Peter, Dr."));
 		$table = $edit_form->editOptionGeneric("nameformat", $title, $info, $values, $names);
 		
-		$title = _("Standard-Adresse:");
-		$info = _("Wenn Sie diese Option wählen, wird die Standard-Adresse ausgegeben, die jede(r) Mitarbeiter(in) bei seinen universitären Daten auswählen kann. Wählen Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben werden soll.");
-		$table .= $edit_form->editCheckboxGeneric('defaultadr', $title, $info, '1', '0');
-		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
 		
