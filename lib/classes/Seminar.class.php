@@ -913,7 +913,35 @@ class Seminar {
 	 */
 	function getStackedMessages() {
 		if ( is_array( $this->message_stack ) ) {
-			return $this->message_stack;
+			$ret = array();
+
+			// cycle through message types and set title and details appropriate
+			foreach ($this->message_stack as $type => $messages ) {
+				switch ( $type ) {
+					case 'error':
+						$ret['error'] = array(
+							'title'   => implode('<br>', $this->message_stack['error']),
+							'details' => array()
+						);
+					break;
+
+					case 'info':
+						$ret['info'] = array(
+							'title'   => implode('<br>', $this->message_stack['info']),
+							'details' => array()
+						);
+					break;
+					
+					case 'success':
+						$ret['success'] = array(
+							'title'   => _("Ihre Änderungen wurden gespeichert!"),
+							'details' => $this->message_stack['success']
+						);
+					break;
+				}
+			}
+
+			return $ret;
 		}
 
 		return false;
@@ -941,10 +969,7 @@ class Seminar {
 	 */
 	function createError($text) {
 		$this->messages[] = 'error§'.$text.'§';
-		$this->message_stack[] = array(
-			'type' => 'error',
-			'message' => $text
-		);
+		$this->message_stack['error'][] = $text;
 	}
 
 	/**
@@ -954,10 +979,7 @@ class Seminar {
 	 */
 	function createInfo($text) {
 		$this->messages[] = 'info§'.$text.'§';
-		$this->message_stack[] = array(
-			'type' => 'info',
-			'message' => $text
-		);
+		$this->message_stack['info'][] = $text;
 	}
 
 	/**
@@ -967,10 +989,7 @@ class Seminar {
 	 */
 	function createMessage($text) {
 		$this->messages[] = 'msg§'.$text.'§';
-		$this->message_stack[] = array(
-			'type' => 'success',
-			'message' => $text
-		);
+		$this->message_stack['success'][] = $text;
 	}
 
 	/**

@@ -85,6 +85,7 @@ foreach ($_REQUEST as $key => $val) {
 	}
 }
 
+// if all entries are opened, we parse the submitted results into appropriate arrays
 foreach ($_REQUEST as $key => $val) {
 	if ($_REQUEST['allOpen']) {
 		if (strstr($key, 'theme_title')) {
@@ -132,11 +133,6 @@ if ($sem->hasDatesOutOfDuration()) {
  * * * * * * * * * * * * * * */
 
 $infobox = array();
-$messages = array();
-
-while ($msg = $sem->getNextMessage()) {
-	$messages[] = $msg;
-}
 
 if ($sem->metadates->art == 0) {
 	$times_info .= '<B>'._("Typ").':</B> '._("regelm&auml;&szlig;ige Veranstaltung").'<br>';
@@ -167,6 +163,14 @@ $termine = getAllSortedSingleDates($sem);
 <TABLE width="100%" border="0" cellpadding="0" cellspacing="0">
   <TR>
 		<TD align="center" class="blank" width="80%" valign="top">
+		<?php 
+			// show messages
+			if ($messages = $sem->getStackedMessages()) :
+				foreach ($messages as $type => $message_data) :
+					echo MessageBox::$type( $message_data['title'], $message_data['details'], true );
+				endforeach;
+			endif;
+		?>
 			<TABLE width="99%" cellspacing="0" cellpadding="0" border="0">
 				<? if (is_array($termine) && sizeof($termine) > 0) : ?>
 				<TR>
@@ -308,9 +312,6 @@ $termine = getAllSortedSingleDates($sem);
 			$infobox_template->set_attribute("selectionlist_title", "Semesterauswahl");
 			$infobox_template->set_attribute('selectionlist', $semester_selectionlist);
 			$infobox_template->set_attribute('times_info', $times_info);
-			if (sizeof($messages) > 0) {
-				$infobox_template->set_attribute('messages', $messages);
-			}
 
 			// render template
 			echo $infobox_template->render();

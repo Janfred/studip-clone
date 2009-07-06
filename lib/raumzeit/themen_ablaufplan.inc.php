@@ -29,7 +29,7 @@ function themen_doAddIssue() {
 	$termin = new SingleDate($_REQUEST['singledate_id']);
 	$termin->addIssueID($issue->getIssueID());
 	$termin->store();
-	$sem->createMessage(_("Folgendes Thema wurde hinzugefügt:").'<br><li>'.htmlReady($issue->toString()));
+	$sem->createMessage(_("Folgendes Thema wurde hinzugefügt:") .'<br>'. htmlReady($issue->toString()));
 }
 
 function themen_changeIssue() {
@@ -97,7 +97,7 @@ function themen_saveAll() {
 						($themen[$cur_issue_id]->hasForum() != $forumValue) ||
 						($themen[$cur_issue_id]->hasFile() != $fileValue)
 					 ) {
-					$msg .= '<li>'.$termin->toString().'<br>';
+					$msg .= $termin->toString() .'<br>';
 				}
 				$themen[$cur_issue_id]->setTitle($val);
 				$themen[$cur_issue_id]->setDescription($changeDescription[$key]);
@@ -108,14 +108,19 @@ function themen_saveAll() {
 		}
 	}
 
-	$msg .= '<br>'._("Folgende weitere Aktionen wurden durchgeführt:").'<br>';
+	// add changed dates to message
+	$sem->createMessage($msg);
+
+	$msg = _("Folgende weitere Aktionen wurden durchgeführt:").'<br>';
 
 	foreach ($themen as $val) {
 		if ($zw = $val->getMessages()) {
 			foreach ($zw as $iss_msg) {
-				$msg .= '<li>'.$iss_msg.'<br>';
+				$msg .= $iss_msg. '<br>';
 			}
 		}
 	}
+
+	// add additional changes to message
 	$sem->createMessage($msg);
 }

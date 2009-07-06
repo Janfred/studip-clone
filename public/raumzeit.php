@@ -176,8 +176,8 @@ while ($tmp_first_date < $end_date) {
 			<tr>
 				<td colspan="9">
 			<?php
-				foreach ($messages as $message) :
-					echo MessageBox::$message['type']( $message['message'] );
+				foreach ($messages as $type => $message_data) :
+					echo MessageBox::$type( $message_data['title'], $message_data['details'], true );
 				endforeach;
 			?>
 				</td>
