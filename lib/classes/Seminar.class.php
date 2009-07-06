@@ -920,8 +920,8 @@ class Seminar {
 				switch ( $type ) {
 					case 'error':
 						$ret['error'] = array(
-							'title'   => implode('<br>', $this->message_stack['error']),
-							'details' => array()
+							'title'   => _("Es sind Fehler/Probleme aufgetreten!"),
+							'details' => $this->message_stack['error']
 						);
 					break;
 

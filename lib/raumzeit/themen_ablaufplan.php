@@ -167,7 +167,7 @@ $termine = getAllSortedSingleDates($sem);
 			// show messages
 			if ($messages = $sem->getStackedMessages()) :
 				foreach ($messages as $type => $message_data) :
-					echo MessageBox::$type( $message_data['title'], $message_data['details'], true );
+					echo MessageBox::$type( $message_data['title'], $message_data['details'] );
 				endforeach;
 			endif;
 		?>
