@@ -168,7 +168,7 @@ function table_head ($structure, $css_switcher) {
 			$begin = FALSE;
 		}
 		else
-			printf ("<th width=\"%s\" align=\"left\" valign=\"bottom\" ".($key == 'nachricht' ? 'colspan="3"':'').">", $field["width"]);
+			printf ("<th width=\"%s\" align=\"left\" valign=\"bottom\" ".($key == 'nachricht' ? 'colspan="2"':'').">", $field["width"]);
 
 		if ($field["link"]) {
 			printf("<a href=\"%s\">", URLHelper::getLink($field["link"]));
@@ -253,11 +253,11 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 		}
 
 		if (sizeof($GLOBALS['dview']) == 0) {
-			if ($structure['raum']) echo '<td>'. $db->f('raum') .'</td>';
-			if ($structure['sprechzeiten']) echo '<td>'. $db->f('sprechzeiten') .'</td>';
-			if ($structure['telefon']) echo '<td>'. $db->f('telefon') .'</td>';
-			if ($structure['email']) echo '<td>'. $db->f('Email') .'</td>';
-			if ($structure['homepage']) echo '<td>'. $db->f('Homepage') .'</td>';
+			if ($structure['raum']) echo '<td '.$css_switcher->getFullClass().'>'. $db->f('raum') .'</td>';
+			if ($structure['sprechzeiten']) echo '<td '.$css_switcher->getFullClass().'>'. $db->f('sprechzeiten') .'</td>';
+			if ($structure['telefon']) echo '<td '.$css_switcher->getFullClass().'>'. $db->f('telefon') .'</td>';
+			if ($structure['email']) echo '<td '.$css_switcher->getFullClass().'>'. $db->f('Email') .'</td>';
+			if ($structure['homepage']) echo '<td '.$css_switcher->getFullClass().'>'. $db->f('Homepage') .'</td>';
 		}
 
 		if ($structure["nachricht"]) {
@@ -317,7 +317,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 							}
 						}
 					} else {
-						for ($i = 0; $i < $cells; $i++) {
+						for ($i = 0; $i < sizeof($GLOBALS['struct']); $i++) {
 							echo '<td '.$css_switcher->getFullClass().'></td>';
 						}
 					}
@@ -332,12 +332,11 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 						echo '&nbsp;<a href="'.URLHelper::getLink('?cmd=removeFromGroup&username='.$db->f('username').'&role_id='.$id).'">';
 						echo '<img src="'.$GLOBALS['ASSETS_URL'].'/images/trash.gif" border="0"></a>&nbsp;';
 						echo '</td>';
-						echo '</tr>', "\n";
 					}
 					elseif ($structure["nachricht"]) {
 						echo '<td '.$css_switcher->getFullClass().' colspan=\"2\">&nbsp;</td>';
-						echo '</tr>', "\n";
 					}
+					echo '</tr>', "\n";
 				}
 			}
 		}
