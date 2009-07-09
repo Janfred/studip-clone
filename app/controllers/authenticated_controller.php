@@ -34,6 +34,8 @@ class AuthenticatedController extends Trails_Controller {
                     'perm' => 'Seminar_Perm',
                     'user' => 'Seminar_User'));
 
+    $this->flash = Trails_Flash::instance();
+
     # set up language prefs
     $_language_path = init_i18n($_language);
 
