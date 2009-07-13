@@ -70,7 +70,6 @@ DBManager::getInstance()
 require_once('lib/language.inc.php');
 require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
 require_once('lib/language.inc.php');
-require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
 require_once('lib/classes/Config.class.php');
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/classes/StudipNews.class.php');
@@ -105,19 +104,6 @@ class DB_Seminar extends DB_Sql {
 		parent::DB_Sql($query);
 	}
 }
-
-// Vollzugriff auf eine ILIAS-Installation
-class DB_Ilias extends DB_Sql {
-	function DB_Ilias($query = false){
-		$this->Host = $GLOBALS['DB_ILIAS_HOST'];
-		$this->Database = $GLOBALS['DB_ILIAS_DATABASE'];
-		$this->User = $GLOBALS['DB_ILIAS_USER'];
-		$this->Password = $GLOBALS['DB_ILIAS_PASSWORD'];
-		parent::DB_Sql($query);
-	}
-}
-
-
 
 /*class for config; load config in globals (should be deprecated in future)
 ----------------------------------------------------------------*/
