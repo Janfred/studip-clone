@@ -122,7 +122,6 @@ $RELATIVE_PATH_CALENDAR = "lib/calendar";							//Stud.IP module: calendar
 $RELATIVE_PATH_CHAT = "lib/chat"; 								//Stud.IP module: chat
 $RELATIVE_PATH_ADMIN_MODULES = "lib/admin";				 			//Stud.IP module: admin tools
 $RELATIVE_PATH_EXTERN = "lib/extern"; 							//Stud.IP module: SRI-System for including Stud.IP data in other websites
-$RELATIVE_PATH_LEARNINGMODULES = "lib/lernmodule";						//Stud.IP module: Ilias 2 lerningmodules-connection (deprecated)
 $RELATIVE_PATH_ELEARNING_INTERFACE = "lib/elearning";					//Stud.IP module: Ilias 3 lerningmodules-connection / general E-Learning-interface
 $RELATIVE_PATH_SOAP = "lib/soap";
 $RELATIVE_PATH_SUPPORT = "lib/support";
@@ -148,15 +147,10 @@ $XSLT_ENABLE = TRUE;
 $FOP_ENABLE = TRUE;
 $FOP_SH_CALL = "export JAVA_HOME=/usr/lib/jvm/jre && /usr/local/bin/fop";    					//path to fop
 
-$ILIAS_CONNECT_ENABLE = FALSE;								//Stud.IP module: ilias 2 connect
-$ABSOLUTE_PATH_ILIAS = "http://<your.server.name/ilias/>";
-
 $EXTERN_ENABLE = TRUE;									//Stud.IP module: "external pages" and SRI-System
 $EXTERN_SRI_ENABLE = TRUE;								//allow the usage of SRI-interface (Stud.IP Remote Include)
 $EXTERN_SRI_ENABLE_BY_ROOT = FALSE;							//only root allows the usage of SRI-interface for specific institutes
 $EXTERN_ALLOW_ACCESS_WITHOUT_CONFIG = FALSE;						//free access to external pages (without the need of a configuration), independent of SRI settings above
-
-$SUPPORT_ENABLE = FALSE;
 
 $VOTE_ENABLE = TRUE;									//Stud.IP module: Votingsystem
 

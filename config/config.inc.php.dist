@@ -41,8 +41,6 @@ global
   $export_o_modes,
   $FLASHPLAYER_DEFAULT_CONFIG_MIN,
   $FLASHPLAYER_DEFAULT_CONFIG_MAX,
-  $ilias_status,
-  $ilias_systemgroup,
   $INST_ADMIN_DATAFIELDS_VIEW,
   $INST_MODULES,
   $INST_STATUS_GROUPS,
@@ -119,7 +117,6 @@ $SEM_CLASS[1]=array("name"=>_("Lehre"), 					//the name of the class
 					"scm"=>FALSE,				//simple content module, this modul is stud_ip core; always available
 					"literature"=>TRUE,			//literature, this module is stud_ip core; always available
 					"chat"=>TRUE,				//chat, only, if the module is global activated; see config_local.inc.php
-					"ilias_connect"=>TRUE,			//Ilias-connect, only, if the module is global activated; see config_local.inc.php
 					"wiki"=>TRUE,				//wikiwiki-web, this module is stud_ip core; always available
 					//descriptions
 					"description"=>_("Hier finden Sie alle in Stud.IP registrierten Lehrveranstaltungen"), 						//the description
@@ -321,7 +318,6 @@ $INST_MODULES["default"] = array(
 			"personal"=>TRUE,			//personal, this module is stud_ip core; always available
 			"literature"=>TRUE,			//literature, this module is stud_ip core; always available
 			"scm"=>FALSE,				//simple content module, this modul is stud_ip core; always available
-			"ilias_connect"=>FALSE,			//Ilias-connect, only, if the modul is global activated; see config_local.inc.php
 			"chat"=>TRUE,				//chat, only, if the module is global activated; see config_local.inc.php
 			"wiki"=>FALSE,				//wikiwiki-web, this module is stud_ip core; always available
 			);
@@ -502,37 +498,6 @@ $export_icon["csv"] = "xls-icon.gif";
 $record_of_study_templates[1] = array("title" => "Allgemeine Druckvorlage", "template" =>"general_template.pdf");
 $record_of_study_templates[2] = array("title" => "Studienbuch", "template" => "recordofstudy_template.pdf");
 // EXPORT -->>
-
-
-
-// <<-- E-LEARNING-MODULES
-// These mappings will be used if you connect an ILIAS installation to Stud.IP. 
-// string to be included in front of every Ilias-username:
-// DO NOT CHANGE AFTER SYSTEM IS RUNNING!!!
-$username_prefix = "studip_";
-
-// Assignment of Stud.IP-status to ILIAS-status
-// DEFAULT: 1 = guest, 2 = superuser, 3 = student, 4 = staff member
-$ilias_status = array(
-"user" => "1",
-"autor" => "3",
-"tutor" => "3",
-"dozent" => "4",
-"admin" => "2",
-"root" => "2",
-);
-
-// Assignment of Stud.IP-status-group to ILIAS-system group
-// DEFAULT: 1 = Administrator, 2 = Author, 3 = Learner, 4 = Guest
-$ilias_systemgroup = array(
-"user" => "4",
-"autor" => "2",
-"tutor" => "2",
-"dozent" => "2",
-"admin" => "1",
-"root" => "1",
-);
-// E-LEARNING-MODULES -->>
 
 // cofiguration for flash player
 $FLASHPLAYER_DEFAULT_CONFIG_MIN = "&amp;showstop=1&amp;showvolume=1&amp;bgcolor=A6B6C6&amp;bgcolor1=A6B6C6&amp;bgcolor2=7387AC&amp;playercolor=7387AC&amp;buttoncolor=254580&amp;buttonovercolor=E9EFFD&amp;slidercolor1=CAD7E1&amp;slidercolor2=A6B6C6&amp;sliderovercolor=E9EFFD&amp;loadingcolor=E9B21A&amp;buffer=5&amp;buffercolor=white&amp;buffershowbg=0&amp;playeralpha=90&amp;playertimeout=500&amp;shortcut=1&amp;phpstream=0&amp;onclick=playpause&amp;showloading=always";

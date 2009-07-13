@@ -65,13 +65,6 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 	<br>
 	<?
 	}
-	if ($ILIAS_CONNECT_ENABLE) {
-	?>
-	<br><a href="browse_lernmodule.php"><b><?=_("Suchen nach Lernmodulen")?></b></a><br>
-	<font size=-1><?=_("Hier finden Sie Lernmodule aus dem angebundenen ILIAS-System.")?></font>
-	<br>
-	<?
-	}
 	if ($ELEARNING_INTERFACE_ENABLE) {
 	?>
 	<br><a href="browse_elearning.php"><b><?=_("Suchen nach Lernmodulen")?></b></a><br>

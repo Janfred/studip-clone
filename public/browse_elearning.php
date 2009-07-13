@@ -43,7 +43,6 @@ $sess->register("print_open_search");
 
 if ($ELEARNING_INTERFACE_ENABLE)
 {
-	$GLOBALS['ALWAYS_SELECT_DB'] = true;
 
 	include_once ($RELATIVE_PATH_ELEARNING_INTERFACE ."/" . "ELearningUtils.class.php");
 

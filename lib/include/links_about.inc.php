@@ -29,7 +29,6 @@ global
 	$auth,
 	$CALENDAR_ENABLE,
 	$ELEARNING_INTERFACE_ENABLE,
-	$ILIAS_CONNECT_ENABLE,
 	$i_page,
 	$MAIL_NOTIFICATION_ENABLE,
 	$perm;
@@ -116,9 +115,6 @@ $structure["messaging"] = array('topKat' => 'mystudip', 'name' => _("Messaging")
 $structure["rss"]=array ('topKat'=>"mystudip", 'name'=>_("RSS-Feeds"), 'link' => URLHelper::getLink('edit_about.php?view=rss'), 'active'=>FALSE);
 if ($MAIL_NOTIFICATION_ENABLE && !$perm->have_perm('admin')) {
 	$structure['notification'] = array('topKat' => 'mystudip', 'name' => _("Benachrichtigung"), 'link' => URLHelper::getLink('edit_about.php?view=notification'), 'active' => FALSE);
-}
-if ($perm->have_perm("autor") AND $ILIAS_CONNECT_ENABLE) {
-	$structure["ilias"] = array('topKat' => 'mystudip', 'name' => _("Mein ILIAS-Account"), 'link' => URLHelper::getLink('migration2studip.php'), 'active' => FALSE);
 }
 if ($perm->have_perm("autor") AND $ELEARNING_INTERFACE_ENABLE) {
 	$structure["elearning"]=array ('topKat'=>"tools", 'name'=>_("Meine Lernmodule"), 'link' => URLHelper::getLink('my_elearning.php'), 'active'=>FALSE);

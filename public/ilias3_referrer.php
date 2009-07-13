@@ -38,8 +38,6 @@ if ($ELEARNING_INTERFACE_ENABLE)
 	require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ELearningUtils.class.php");
 	ELearningUtils::bench("start");
 
-	$GLOBALS['ALWAYS_SELECT_DB'] = true;
-
 
 
 	if (isset($ELEARNING_INTERFACE_MODULES[$cms_select]["name"]))

@@ -45,8 +45,6 @@ global
   $export_o_modes,
   $FLASHPLAYER_DEFAULT_CONFIG_MIN,
   $FLASHPLAYER_DEFAULT_CONFIG_MAX,
-  $ilias_status,
-  $ilias_systemgroup,
   $INST_ADMIN_DATAFIELDS_VIEW,
   $INST_MODULES,
   $INST_STATUS_GROUPS,
@@ -142,7 +140,6 @@ $SEM_CLASS[1]=array("name"=>_("Lehre"), 					 	//the name of the class
 					"schedule"=>TRUE,
 					"participants"=>TRUE,
 					"literature"=>TRUE,
-					"ilias_connect"=>TRUE,			//Ilias-connect, only, if the modul is global activated; see local.inc
 					"chat"=>TRUE,				//chat, only, if the modul is global activated; see local.inc
 					"support"=>FALSE,			//support, only, if the modul is global activated; see local.inc (this modul is not part of the main distribution)
 					"scm"=>TRUE,
@@ -461,7 +458,6 @@ $INST_MODULES["default"] = array(
 			"schedule"=>TRUE,
 			"participants"=>TRUE,
 			"literature"=>TRUE,
-			"ilias_connect"=>TRUE,			//Ilias-connect, only, if the modul is global activated; see local.inc
 			"chat"=>TRUE,				//chat, only, if the modul is global activated; see local.inc
 			"support"=>FALSE,			//support, only, if the modul is global activated; see local.inc (this modul is not part of the main distribution)
 			);
@@ -614,35 +610,6 @@ $record_of_study_templates[1] = array("title" => "Allgemeine Druckvorlage", "tem
 $record_of_study_templates[2] = array("title" => "Studienbuch", "template" => "recordofstudy_template.pdf");
 
 // EXPORT -->>
-
-
-
-// <<-- LERNMODULE
-// Zeichenkette, die vor Ilias-Usernamen gesetzt wird:
-// IM LAUFENDEN BETRIEB NICHT MEHR ÄNDERN!!!
-$username_prefix = "studip_";
-
-// Zuordnung von Stud.IP-Status zu ILIAS-Status
-// DEFAULT: 1 = Gast, 2 = Superuser, 3 = StudentIn, 4 = MitarbeiterIn
-$ilias_status = array(
-"user" => "1",
-"autor" => "3",
-"tutor" => "3",
-"dozent" => "4",
-"admin" => "2",
-"root" => "2",
-);
-
-// Zuordnung von Stud.IP-Status zu ILIAS-System-Gruppe
-// DEFAULT: 1 = AdministratorIn, 2 = AutorIn, 3 = LernerIn, 4 = Gast
-$ilias_systemgroup = array(
-"user" => "4",
-"autor" => "2",
-"tutor" => "2",
-"dozent" => "2",
-"admin" => "1",
-"root" => "1",
-);
 
 // cofiguration for flash player
 $FLASHPLAYER_DEFAULT_CONFIG_MIN = "&amp;showstop=1&amp;showvolume=1&amp;bgcolor=A6B6C6&amp;bgcolor1=A6B6C6&amp;bgcolor2=7387AC&amp;playercolor=7387AC&amp;buttoncolor=254580&amp;buttonovercolor=E9EFFD&amp;slidercolor1=CAD7E1&amp;slidercolor2=A6B6C6&amp;sliderovercolor=E9EFFD&amp;loadingcolor=E9B21A&amp;buffer=5&amp;buffercolor=white&amp;buffershowbg=0&amp;playeralpha=90&amp;playertimeout=500&amp;shortcut=1&amp;phpstream=0&amp;onclick=playpause&amp;showloading=always";

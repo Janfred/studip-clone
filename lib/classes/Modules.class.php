@@ -47,10 +47,10 @@ class Modules {
 				"participants" => array("id" => 3, "const" => "", "sem" => TRUE, "inst" => FALSE),
 				"personal" => array("id" => 4, "const" => "", "sem" => FALSE, "inst" => TRUE),
 				"literature" => array("id" => 5, "const" => "", "sem" => TRUE, "inst" => TRUE),
-				"ilias_connect" => array("id" => 6, "const" => "ILIAS_CONNECT_ENABLE", "sem" => TRUE, "inst" => TRUE),
+				"ilias_connect" => array("id" => 6) /*deprecated*/,
 				"chat" => array("id" => 7, "const" => "CHAT_ENABLE", "sem" => TRUE, "inst" => TRUE),
 				"wiki" => array("id" => 8, "const" => "WIKI_ENABLE", "sem" => TRUE, "inst" => TRUE),
-				"support" => array("id" => 9, "const" => "SUPPORT_ENABLE", "sem" => TRUE, "inst" => FALSE),
+				"support" => array("id" => 9) /*deprecated*/,
 				"scm" => array("id" => 12, "const" => "SCM_ENABLE", "sem" => TRUE, "inst" => TRUE),
 				"elearning_interface" => array("id" => 13, "const" => "ELEARNING_INTERFACE_ENABLE", "sem" => TRUE, "inst" => TRUE),
 				"documents_folder_permissions" => array("id" => 14, "const" => "", "sem" => TRUE, "inst" => TRUE)

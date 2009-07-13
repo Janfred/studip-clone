@@ -41,10 +41,6 @@ require_once 'lib/classes/Avatar.class.php'; // remove Avatarture
 if ($GLOBALS['RESOURCES_ENABLE']) {
 	include_once ($GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/DeleteResourcesUser.class.php");
 }
-if ($GLOBALS['ILIAS_CONNECT_ENABLE']) {
-	include_once ($GLOBALS['RELATIVE_PATH_LEARNINGMODULES']."/lernmodul_db_functions.inc.php");
-	include_once ($GLOBALS['RELATIVE_PATH_LEARNINGMODULES']."/lernmodul_user_functions.inc.php");
-}
 if ($GLOBALS['CALENDAR_ENABLE']) {
 	include_once ($GLOBALS['RELATIVE_PATH_CALENDAR']
 	. "/lib/driver/{$GLOBALS['CALENDAR_DRIVER']}/CalendarDriver.class.php");
@@ -480,12 +476,6 @@ class UserManagement
 			return FALSE;
 		}
 
-		if ($GLOBALS['ILIAS_CONNECT_ENABLE']) {
-			$this_ilias_id = get_connected_user_id($this->user_data['auth_user_md5.user_id']);
-			if ($this_ilias_id)
-				edit_ilias_user($this_ilias_id, $this->user_data['auth_user_md5.username'], $this->user_data['user_info.geschlecht'], $this->user_data['auth_user_md5.Vorname'], $this->user_data['auth_user_md5.Nachname'], $this->user_data['user_info.title_front'], "Stud.IP", $this->user_data['auth_user_md5.Email'], $this->user_data['auth_user_md5.perms'], $this->user_data['user_info.preferred_language']);
-		}
-
 		$this->autoInsertSem($old_perms);
 		$this->msg .= "msg§" . sprintf(_("Benutzer \"%s\" ver&auml;ndert."), $this->user_data['auth_user_md5.username']) . "§";
 
@@ -819,13 +809,6 @@ class UserManagement
 		if ($avatar->is_customized()) {
 			$avatar->reset();
 			$this->msg .= "info§" . _("Bild gel&ouml;scht.") . "§";
-		}
-
-		// delete ILIAS-Account (if it was automatically generated)
-		if ($GLOBALS['ILIAS_CONNECT_ENABLE']) {
-			$this_ilias_id = get_connected_user_id($this->user_data['auth_user_md5.user_id']);
-			if (($this_ilias_id) AND (is_created_user($this->user_data['auth_user_md5.user_id'])))
-				delete_ilias_user($this_ilias_id);
 		}
 
 		//delete connected users

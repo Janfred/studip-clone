@@ -44,7 +44,6 @@ include ('lib/include/links_admin.inc.php');
 
 if ($ELEARNING_INTERFACE_ENABLE)
 {
-	$GLOBALS['ALWAYS_SELECT_DB'] = true;
 
 	if ($cms_select != "")
 	{

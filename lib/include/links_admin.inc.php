@@ -27,7 +27,6 @@ global  $BANNER_ADS_ENABLE,
         $ELEARNING_INTERFACE_ENABLE,
         $EXPORT_ENABLE,
         $EXTERN_ENABLE,
-        $ILIAS_CONNECT_ENABLE,
         $LOG_ENABLE,
         $RESOURCES_ALLOW_ROOM_REQUESTS,
         $RESOURCES_ENABLE,
@@ -398,8 +397,6 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	//
 	if ($EXPORT_ENABLE)
 		$structure["export"]=array ('topKat'=>"modules", 'name'=>_("Export"), 'link' => URLHelper::getLink("export.php"), 'active'=>FALSE);
-	if ($ILIAS_CONNECT_ENABLE)
-		$structure["lernmodule"]=array ('topKat'=>"modules", 'name'=>_("Lernmodule"), 'link' => URLHelper::getLink("admin_lernmodule.php"), 'active'=>FALSE);
 	if ($RESOURCES_ENABLE)
 		$structure["resources"]=array ('topKat'=>"modules", 'name'=>_("Ressourcenverwaltung"), 'link' => URLHelper::getLink("resources.php"), 'active'=>FALSE);
 	if ($perm->have_perm("admin")){
@@ -595,9 +592,6 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			break;
 			case "admin_elearning_interface.php":
 				$reiter_view="elearning_interface";
-			break;
-			case "admin_lernmodule.php":
-				$reiter_view="lernmodule";
 			break;
 			case "admin_range_tree.php":
 				$reiter_view="range_tree";

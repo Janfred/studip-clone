@@ -38,10 +38,6 @@
 require_once 'lib/classes/Modules.class.php';
 require_once 'lib/meine_seminare_func.inc.php';
 
-if ($GLOBALS['ILIAS_CONNECT_ENABLE']) {
-	include_once ($RELATIVE_PATH_LEARNINGMODULES.'/lernmodul_db_functions.inc.php'); 
-}
-
 class ModulesNotification extends Modules {
 
 	var $registered_notification_modules = array();
@@ -263,19 +259,6 @@ class ModulesNotification extends Modules {
 					$text = _("1 neue Literaturliste angelegt");
 				}
 				$redirect = '&again=yes&redirect_to=literatur.php';
-				break;
-			case 'ilias_connect' :
-				/* sinnlos...
-				if ($GLOBALS['ILIAS_CONNECT_ENABLE']) {
-					$mod_count = get_seminar_modules($range_id);
-					if ($mod_count > 1) {
-						$text = sprintf(_("%s Lernmodule sind mit der Veranstaltung verbunden:"), $mod_count);
-					} else if ($mod_count > 0) {
-						$text = _("1 Lernmodul ist mit der Veranstaltung verbunden:");
-					}
-				}
-				$redirect = "&again=yes&redirect_to=seminar_lernmodule.php&seminar_id=$range_id";
-				*/
 				break;
 			case 'elearning_interface' :
 				if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']) {

@@ -179,9 +179,6 @@ if ($GLOBALS['CHAT_ENABLE']){
 	$chatServer->caching = true;
 	$sms = new messaging();
 }
-if ($GLOBALS['ILIAS_CONNECT_ENABLE']){
-	include_once ($RELATIVE_PATH_LEARNINGMODULES."/lernmodul_db_functions.inc.php");
-}
 
 $cssSw = new cssClassSwitcher();									// Klasse für Zebra-Design
 $cssSw->enableHover();
@@ -563,20 +560,6 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				} else
 					echo "&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-leer.gif' width=\"15\" height=\"17\" border=0>";
 
-				if (($GLOBALS['ILIAS_CONNECT_ENABLE']) && ($values["modules"]["ilias_connect"])) {
-					$mod_count = get_seminar_modules($semid);
-					if ($mod_count) {
-						echo "<a href=\"seminar_main.php?auswahl=$semid&redirect_to=seminar_lernmodule.php&view=show&seminar_id=$semid\">&nbsp;";
-						echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-lern.gif\" ";
-						if (sizeof($mod_count) == 1)
-							echo tooltip(sprintf(_("Die Veranstaltung ist mit %s ILIAS-Lernmodul verbunden."), sizeof($mod_count)))."border=\"0\">";
-						else
-							echo tooltip(sprintf(_("Die Veranstaltung ist mit %s ILIAS-Lernmodulen verbunden."), sizeof($mod_count)))."border=\"0\">";
-						echo "</a>&nbsp;";
-					}
-					else
-						echo "&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-leer.gif\" width=\"18\" height=\"20\" border=\"0\">";
-				}
 				echo "</td>";
 
 
@@ -702,20 +685,6 @@ if ( !$perm->have_perm("root")) {
 				} else
 				echo "&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-leer.gif' width=\"15\" height=\"17\" border=0>";
 
-				if (($GLOBALS['ILIAS_CONNECT_ENABLE']) && ($values["modules"]["ilias_connect"])) {
-					$mod_count = get_seminar_modules($instid);
-					if ($mod_count) {
-						echo "<a href=\"institut_main.php?view=show&auswahl=$instid&redirect_to=seminar_lernmodule.php\">&nbsp;";
-						echo "<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-lern.gif\" ";
-						if (sizeof($mod_count) == 1)
-						echo tooltip(sprintf(_("Die Einrichtung ist mit %s ILIAS-Lernmodul verbunden."), sizeof($mod_count)))."border=\"0\">";
-						else
-						echo tooltip(sprintf(_("Die Einrichtung ist mit %s ILIAS-Lernmodulen verbunden."), sizeof($mod_count)))."border=\"0\">";
-						echo "</a>&nbsp;";
-					}
-					else
-					echo "&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/icon-leer.gif\" width=\"18\" height=\"20\" border=\"0\">";
-				}
 				echo "</td>";
 
 				// delete Entry from List:
