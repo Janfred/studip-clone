@@ -1,19 +1,19 @@
 <?
 # Lifter002: TODO
-# Lifter007: TODO
-# Lifter003: TODO
+# Lifter007: TEST
+# Lifter003: DONE
 /**
 * Msg.class.php
 * 
 * creates messages
 * 
 *
-* @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id$
-* @access		public
-* @modulegroup		resources
-* @module		Msg.class.php
-* @package		resources
+* @author       Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @versio       $Id$
+* @access       public
+* @modulegroup  resources
+* @module       Msg.class.php
+* @package      resources
 */
 
 // +---------------------------------------------------------------------------+
@@ -41,48 +41,109 @@ Msg, class for all the msg stuff
 /*****************************************************************************/
 
 class Msg {
-	var $msg;
-	var $codes=array();
-	var $params;
-	
-	//Konstruktor
-	function Msg() {
-		global $RELATIVE_PATH_RESOURCES;
+    var $msg;
+    var $codes=array();
+    var $params;
+    
+    /** 
+     * Constructor for resource-messages. Loads lib/resources/views/msg_resources.inc.php
+     */
+    function Msg() {
+        global $RELATIVE_PATH_RESOURCES;
 
-	 	include ($RELATIVE_PATH_RESOURCES."/views/msgs_resources.inc.php");
-	}
-				
-	function addMsg($msg_code, $params='') {
-		$this->codes[]=$msg_code;
-		if (is_array($params)) {
-			$this->params[] = $params;
-		} else
-			$this->params[] = array();
-			
-	}
-	
-	function checkMsgs() {
-		if ($this->codes)
-			return TRUE;
-		else 
-			return FALSE;
-	}
-	
-	function displayAllMsg($view_mode = "line") {
-		if (is_array($this->codes)) {
-			foreach ($this->codes as $key=>$val)
-				$collected_msg.=($this->msg[$val]["mode"]."§".vsprintf($this->msg[$val]["msg"],$this->params[$key])."§");
-			if ($view_mode == "window")
-				parse_window($collected_msg, "§", $this->msg[$this->codes[0]]["titel"], "<a href=\"resources.php?view=resources\">"._("zur&uuml;ck")."</a>");
-			else
-				parse_msg($collected_msg, "§", "blank", 1, FALSE);
-		}
-	}
-	
-	function displayMsg($msg_code, $view_mode = "line", $params=array()) {
-		if ($view_mode == "window")
-			parse_window($this->msg[$msg_code]["mode"]."§".vsprintf($this->msg[$msg_code]["msg"], $params), "§", $this->msg[$msg_code]["titel"], "<a href=\"resources.php?view=resources\">"._("zur&uuml;ck")."</a>");
-		else
-			parse_msg($this->msg[$msg_code]["mode"]."§".vsprintf($this->msg[$msg_code]["msg"], $params), "§", "blank", 1, FALSE);
-	}
+         include ($RELATIVE_PATH_RESOURCES."/views/msgs_resources.inc.php");
+    }
+                
+    /**
+     * Adds the message defined by the submitted code to a queue
+     *
+     * @param int $msg_code a number referencing to a message in lib/resources/views/msg_resources.inc.php
+     * @param mixed $params an array of msg-paramaters
+     *
+     */
+    function addMsg($msg_code, $params='') {
+        $this->codes[]=$msg_code;
+        if (is_array($params)) {
+            $this->params[] = $params;
+        } else
+            $this->params[] = array();
+            
+    }
+    
+    /**
+     * Checks if there are any messages in the queue
+     *
+     * @returns bool true if messages have been queued, false otherwise
+     */
+    function checkMsgs() {
+        if ($this->codes)
+            return TRUE;
+        else 
+            return FALSE;
+    }
+    
+    /**
+     * Displays all queued messages
+     * 
+     * @param string $view_mode can be "line" for embedded messages, "window" for separate messages
+     */
+    function displayAllMsg($view_mode = "line") {
+        if ( is_array( $this->codes ) ) {
+            $messages = array();
+
+            // sort message by type (error, info, success) to show them bundled
+            foreach( $this->codes as $key => $message_id ) {
+                $messages[ $this->msg[$message_id]['mode'] ][] = vsprintf( $this->msg[$message_id]['msg'], $this->params[$key] );
+            }
+                
+            // messages alone in the wild
+            if ($view_mode == 'window') {
+                // template with studip-layout surrounding the message
+                $template = $GLOBALS['template_factory']->open('resources/msg_window');
+                $template->set_layout('layouts/base_without_infobox');
+
+                // pass messages to template and render it
+                $template->set_attribute('messages', $messages);
+                $template->set_attribute('title', $this->msg[$this->codes[0]]["titel"]);
+                echo $template->render();
+
+            // "normal" messages
+            } else if ($view_mode == 'line') {
+                foreach ($messages as $type => $msg_array) {
+                    echo MessageBox::$type( implode('<br>', $msg_array ));
+                }
+            }
+        }
+    }
+    
+    /**
+     * Display a single message
+     *
+     * @param int $msg_code a number referencing to a message in lib/resources/views/msg_resources.inc.php
+     * @param string $view_mode can be "line" for embedded messages, "window" for separate messages
+     * @param mixed $params an array of paramaters to be placed into the message
+     *
+     */
+    function displayMsg($msg_code, $view_mode = "line", $params=array()) {
+        // messages alone in the wild
+        if ($view_mode == "window") {
+            $message[$this->msg[$msg_code]['mode']][] = vsprintf($this->msg[$msg_code]['msg'], $params);
+
+            // template with studip-layout surrounding the message
+            $template = $GLOBALS['template_factory']->open('resources/msg_window');
+            $template->set_layout('layouts/base_without_infobox');
+
+            // pass messages to template and render it
+            $template->set_attribute('messages', $message );
+            $template->set_attribute('title', $this->msg[$msg_code]["titel"]);
+            echo $template->render();
+
+        } 
+        
+        // "normal" messages
+        else {
+            $type = $this->msg[$msg_code]["mode"];
+            echo MessageBox::$type( vsprintf($this->msg[$msg_code]["msg"], $params) );
+        }
+    }
 }

@@ -53,7 +53,7 @@ require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
 require_once ($RELATIVE_PATH_RESOURCES."/views/Msg.class.php");
 
 $sess->register("resources_data");
-$resources_data = unserialize($resources_data);
+$resources_data = @unserialize($resources_data);
 $globalPerm = getGlobalPerms($user->id);
 $msg = new Msg;
 $db=new DB_Seminar;

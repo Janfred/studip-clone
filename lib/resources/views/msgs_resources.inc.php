@@ -46,31 +46,31 @@ $this->msg[2] = array (
 		"titel" => _("NutzerIn hat keine Berechtigung")	,
 		"msg"=> _("Sie versuchen, eineN NutzerIn einzutragen, der/die nicht selbst in der Lage ist, die Belegung zu bearbeiten oder zu l&ouml;schen. Sie k&ouml;nnen dieseN NutzerIn leider nicht eintragen"));
 $this->msg[3] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"titel" => _("Belegung eingetragen"),
 		"msg"=> _("Die Belegung wurde eingetragen"));
 $this->msg[4] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"titel" => _("Belegung ver&auml;ndert"),
 		"msg"=> _("Die Belegung wurde ver&auml;ndert"));
 $this->msg[5] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"titel" => _("Belegung gel&ouml;scht"),
 		"msg"=> _("Die Belegung wurde gel&ouml;scht"));
 $this->msg[6] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"titel" => _("Eigenschaften ver&auml;ndert"),
 		"msg"=> _("Die Eigenschaften der Ressource wurden ver&auml;ndert"));
 $this->msg[7] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"titel" => _("Ressource gel&ouml;scht"),
 		"msg"=> _("Die Ressource wurde gel&ouml;scht"));
 $this->msg[8] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"titel" => _("Berechtigungen ver&auml;ndert"),
 		"msg"=> _("Die Berechtigungseinstellungen der Ressource wurden ver&auml;ndert"));
 $this->msg[9] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"titel" => _("Ressource verschoben"),
 		"msg"=> _("Die Ressource wurde verschoben"));
 $this->msg[10] = array (
@@ -126,10 +126,10 @@ $this->msg[26] = array (
 		"mode" => "error",
 		"msg"=> _("Fehler in den Sperrzeiten, bitte korrigieren Sie die Zeiten!"));
 $this->msg[27] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"msg"=> _("Die Sperrzeiten wurden ge&auml;ndert."));
 $this->msg[28] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"msg"=> _("Die Sperrzeit wurde gel&ouml;scht. Falls die Blockierung aktiviert war, und der gel&ouml;schte Zeitraum bereits l&auml;uft, k&ouml;nnen berechtigte Nutzer wieder Belegungen erstellen."));
 $this->msg[29] = array (
 		"mode" => "info",
@@ -146,10 +146,10 @@ $this->msg[31] = array (
 		"msg"=> "<font size=\"-1\">"._("<b>Ressourcenblockierung vom %s bis zum %s.</b>")."</font><br />".
 			_("Sie versuchen, ein Objekt zu bearbeiten, das zur Zeit f&uuml;r eine Bearbeitung gesperrt ist. Nur der globale Ressourcenadministrator hat Zugriff auf dieses Objekt! <br />(Wenn Sie normalerweise Zugriff auf dieses Objekt haben, wird Ihnen der Zugriff nach Aufhebung der Blockierung wieder gew&auml;hrt.)"));
 $this->msg[32] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"msg"=> _("Die ausgew&auml;hlten Eintr&auml;ge wurden in die aktuelle Anfrage &uuml;bernommen."));
 $this->msg[33] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"msg"=> _("Folgende R&auml;ume wurden gebucht und der Veranstaltung zugewiesen: <font size=\"-1\" color=\"black\">%s</font>"));
 $this->msg[34] = array (
 		"mode" => "error",
@@ -163,10 +163,10 @@ $this->msg[36] = array (
 			."<br /><a href=\"%s?snd_closed_request_sms=1&reset_set=1\">".makeButton("ja2")."</a>"
 			."&nbsp;<a href=\"%s?reset_set=1\">".makeButton("nein")."</a>");
 $this->msg[37] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"msg"=> _("Die regelm&auml;&szlig;ige Belegung wurde in Einzeltermine umgewandelt und ein Ablaufplan angelegt."));
 $this->msg[38] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"msg"=> _("Belegung wurde in die Ressource &raquo;%s&laquo; verschoben."));
 $this->msg[39] = array (
 		"mode" => "error",
@@ -196,7 +196,5 @@ $this->msg[44] = array (
 		"msg"=> _("Die Belegungen konnte nicht gespeichert werden, da sie mit folgenden Sperrzeiten kollidiert:")
 			."<br><font size=\"-1\" color=\"black\">%s</font>");
 $this->msg[45] = array (
-		"mode" => "msg",
+		"mode" => 'success',
 		"msg"=> _("Es wurden %s Raumanfragen gel&ouml;scht."));
-
-?>
