@@ -47,11 +47,16 @@ $GLOBALS['template_factory'] =
 
 // set default exception handler
 function studip_default_exception_handler($exception) {
-	error_log($exception->__toString());
+	if($exception instanceof Studip_AccessDeniedException) {
+		$template = 'access_denied_exception';
+	} else {
+		error_log($exception->__toString());
+		$template = 'unhandled_exception';
+	}
 	while (ob_get_level()) {
 		ob_end_clean();
 	}
-	echo $GLOBALS['template_factory']->render('unhandled_exception',
+	echo $GLOBALS['template_factory']->render($template,
 	                                          compact('exception'));
 	exit;
 }
