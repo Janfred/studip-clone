@@ -266,7 +266,7 @@ class AssignObject {
 	
 	function getRepeatMode() {
 		if ((!$this->repeat_month_of_year) && (!$this->repeat_week_of_month) && (!$this->repeat_day_of_month) && (!$this->repeat_day_of_week) && (!$this->repeat_quantity)) {
-			if ((date("j", $this->repeat_end) != date("j", $this->begin)) && ($this->repeat_end))
+			if ( $this->repeat_end && date("j", $this->repeat_end) != date("j", $this->begin) )
 				return "sd";
 			else
 				return "na";
