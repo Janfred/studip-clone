@@ -71,8 +71,11 @@ if ($auth->auth["uid"]!="nobody")
 	if ($docaslogout){
 		$casauth->logout();
 	}
+} else {
+	$sess->delete();
+	page_close();
 }
 
-header("Location:index.php?logout=true&_language=$_language");
+header("Location:" . URLHelper::getURL("index.php?logout=true&_language=$_language"));
 
 ?>
