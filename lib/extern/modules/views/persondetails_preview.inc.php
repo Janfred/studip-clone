@@ -431,7 +431,7 @@ function head (&$module, $data, $a) {
 
 		if ($module->config->getValue("Main", "showimage")) {
 			echo "<td" . $module->config->getAttributes("PersondetailsHeader", "picturetd") . ">";
-			echo "<img src=\"".Avatar::getNobodyAvatarUrl(Avatar::NORMAL)."\" alt=\"Foto " . $data["fullname"] . "\"";
+			echo "<img src=\"".Avatar::getNobody()->getUrl(Avatar::NORMAL)."\" alt=\"Foto " . $data["fullname"] . "\"";
 			echo $module->config->getAttributes("PersondetailsHeader", "img") . ">";
 		}
 

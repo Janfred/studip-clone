@@ -100,6 +100,6 @@ $GLOBALS['_views']["SEM_INST_GET_SEM"] = array("query" => "SELECT c.Seminar_id, 
 
 $GLOBALS['_views']["SEM_USER_GET_SEM"] = array("query" =>"SELECT b.Seminar_id,b.Name, " . $GLOBALS['_views']['sem_number_sql'] . " AS sem_number , " . $GLOBALS['_views']['sem_number_end_sql'] . " AS sem_number_end FROM seminar_user a LEFT JOIN seminare b USING(Seminar_id)
 											WHERE b.visible=1 AND a.user_id=? AND a.status=?  §");
-unset($allowed_sem_status);
-unset($sem_start_times);
+unset($GLOBALS['allowed_sem_status']);
+unset($GLOBALS['sem_start_times']);
 ?>

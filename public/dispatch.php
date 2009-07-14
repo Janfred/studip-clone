@@ -19,13 +19,13 @@ require_once 'lib/functions.php';
 # define root
 $trails_root = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'app';
 
-$trails_uri = rtrim($CANONICAL_RELATIVE_PATH_STUDIP, '/') . '/dispatch.php';
+$trails_uri = rtrim($ABSOLUTE_URI_STUDIP, '/') . '/dispatch.php';
 
 # load trails
 require_once 'vendor/trails/trails.php';
 
 # set base url for URLHelper class
-URLHelper::setBaseUrl($CANONICAL_RELATIVE_PATH_STUDIP);
+URLHelper::setBaseUrl($ABSOLUTE_URI_STUDIP);
 
 # disable register_globals if set
 unregister_globals();

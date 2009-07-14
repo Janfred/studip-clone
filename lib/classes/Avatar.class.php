@@ -13,7 +13,6 @@
  */
 
 
-require_once 'lib/functions.php';
 require_once 'lib/visual.inc.php';
 
 
@@ -72,39 +71,48 @@ class Avatar {
     return new Avatar($user_id);
   }
 
+  /**
+   * Returns an avatar object for "nobody".
+   *
+   * @return mixed   the user's avatar.
+   */
+  static function getNobody() {
+    return new Avatar('nobody');
+  }
 
-  static function getCustomAvatarUrl($user_id, $size, $ext = 'png') {
-    return sprintf('%s/user/%s_%s.%s',
-                   $GLOBALS['DYNAMIC_CONTENT_URL'],
-                   $user_id,
+
+  function getAvatarDirectoryUrl() {
+    return $GLOBALS['DYNAMIC_CONTENT_URL'] . "/user";
+  }
+
+
+  function getAvatarDirectoryPath() {
+    return $GLOBALS['DYNAMIC_CONTENT_PATH'] . "/user";
+  }
+
+
+  function getCustomAvatarUrl($size, $ext = 'png') {
+    return sprintf('%s/%s_%s.%s',
+                   $this->getAvatarDirectoryUrl(),
+                   $this->user_id,
                    $size,
                    $ext);
   }
 
 
-  static function getCustomAvatarPath($user_id, $size, $ext = 'png') {
-    return sprintf('%s/user/%s_%s.%s',
-                   $GLOBALS['DYNAMIC_CONTENT_PATH'],
-                   $user_id,
+  function getCustomAvatarPath($size, $ext = 'png') {
+    return sprintf('%s/%s_%s.%s',
+                   $this->getAvatarDirectoryPath(),
+                   $this->user_id,
                    $size,
                    $ext);
-  }
-
-
-  static function getNobodyAvatarUrl($size, $ext = 'png') {
-    return self::getCustomAvatarUrl('nobody', $size, $ext);
-  }
-
-
-  static function getNobodyAvatarPath($size, $ext = 'png') {
-    return self::getCustomAvatarPath('nobody', $size, $ext);
   }
 
 
   /**
    * Constructs a new Avatar object belonging to a user with the given id.
    *
-   * @param  string  the user's' id
+   * @param  string  the user's id
    *
    * @return void
    */
@@ -123,8 +131,8 @@ class Avatar {
    */
   function getFilename($size, $ext = 'png') {
     return $this->is_customized()
-      ? self::getCustomAvatarPath($this->user_id, $size, $ext)
-      : self::getNobodyAvatarPath($size, $ext);
+      ? $this->getCustomAvatarPath($size, $ext)
+      : $this->getNobody()->getCustomAvatarPath($size, $ext);
   }
 
 
@@ -139,8 +147,8 @@ class Avatar {
   # TODO (mlunzena) in Url umbenennen
   function getURL($size, $ext = 'png') {
     return $this->is_customized()
-      ? self::getCustomAvatarUrl($this->user_id, $size, $ext)
-      : self::getNobodyAvatarUrl($size, $ext);
+      ? $this->getCustomAvatarUrl($size, $ext)
+      : $this->getNobody()->getCustomAvatarUrl($size, $ext);
   }
 
 
@@ -151,19 +159,20 @@ class Avatar {
    *                  otherwise.
    */
   function is_customized() {
-    return file_exists(self::getCustomAvatarPath($this->user_id,
-                                                 Avatar::MEDIUM));
+    return $this->user_id !== 'nobody' &&
+           file_exists($this->getCustomAvatarPath(Avatar::MEDIUM));
   }
 
 
   /**
-   * Constructs a desired HTML image tag for a Avatar.
+   * Constructs a desired HTML image tag for an Avatar.
    *
    * @param string  one of the constants Avatar::(NORMAL|MEDIUM|SMALL)
    *
    * @return string returns the HTML image tag
    */
   function getImageTag($size = Avatar::MEDIUM) {
+    require_once 'lib/functions.php';
     $username = htmlReady(get_username($this->user_id));
     $fullname = htmlReady(get_fullname($this->user_id));
     return sprintf('<img src="%s" align="middle" class="avatar-%s user-%s" '.
@@ -211,8 +220,9 @@ class Avatar {
       }
 
       // na dann kopieren wir mal...
-      $filename = sprintf('%s/user/%s.%s',
-                          $GLOBALS['DYNAMIC_CONTENT_PATH'], $this->user_id, $ext);
+      $filename = sprintf('%s/%s.%s',
+                          $this->getAvatarDirectoryPath(),
+                          $this->user_id, $ext);
 
       if (!@move_uploaded_file($_FILES[$userfile]['tmp_name'], $filename)) {
         throw new Exception(_("Es ist ein Fehler beim Kopieren der Datei aufgetreten. Das Bild wurde nicht hochgeladen!"));
@@ -227,7 +237,7 @@ class Avatar {
 
     // eigentlich braucht man hier "finally"
     } catch (Exception $e) {
-      unlink($filename);
+      @unlink($filename);
       throw $e;
     }
   }
@@ -263,10 +273,26 @@ class Avatar {
    */
   function reset() {
     if ($this->is_customized()) {
-      @unlink(self::getCustomAvatarPath($this->user_id, Avatar::NORMAL));
-      @unlink(self::getCustomAvatarPath($this->user_id, Avatar::SMALL));
-      @unlink(self::getCustomAvatarPath($this->user_id, Avatar::MEDIUM));
+      @unlink($this->getCustomAvatarPath(Avatar::NORMAL));
+      @unlink($this->getCustomAvatarPath(Avatar::SMALL));
+      @unlink($this->getCustomAvatarPath(Avatar::MEDIUM));
     }
+  }
+
+
+  /**
+   * Return the dimension of a size
+   *
+   * @param  string     the dimension of a size
+   *
+   * @return array      a tupel of integers [width, height]
+   */
+  function getDimension($size) {
+    $dimensions = array(
+      Avatar::NORMAL => array(200, 250),
+      Avatar::MEDIUM => array( 80, 100),
+      Avatar::SMALL  => array( 20,  25));
+    return $dimensions[$size];
   }
 
 
@@ -280,11 +306,7 @@ class Avatar {
    */
   private function resize($size, $filename) {
 
-    $sizes = array();
-    $sizes[Avatar::NORMAL] = array(200, 250);
-    $sizes[Avatar::MEDIUM] = array( 80, 100);
-    $sizes[Avatar::SMALL]  = array( 20,  25);
-    list($thumb_width, $thumb_height) = $sizes[$size];
+    list($thumb_width, $thumb_height) = $this->getDimension($size);
 
     list($width, $height, $type) = getimagesize($filename);
 
@@ -330,7 +352,7 @@ class Avatar {
     imagecopy($dst, $image, $xpos, $ypos, 0, 0,
               $resized_width, $resized_height);
 
-    imagepng($dst, self::getCustomAvatarPath($this->user_id, $size));
+    imagepng($dst, $this->getCustomAvatarPath($size));
   }
 
 

@@ -27,12 +27,16 @@ error_reporting(E_ALL & ~E_NOTICE);
 # set include path
 $inc_path = ini_get('include_path');
 $inc_path .= PATH_SEPARATOR . dirname(__FILE__) . '/..';
+$inc_path .= PATH_SEPARATOR . dirname(__FILE__) . '/../config';
 ini_set('include_path', $inc_path);
 
 # load required files
 require_once 'vendor/simpletest/unit_tester.php';
 require_once 'vendor/simpletest/reporter.php';
 require_once 'vendor/simpletest/collector.php';
+
+# load varstream for easier filesystem testing
+require_once 'varstream.php';
 
 
 # collect all tests

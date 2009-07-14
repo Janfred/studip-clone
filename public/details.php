@@ -37,6 +37,7 @@ require_once 'lib/classes/StudipStmInstance.class.php';
 require_once 'lib/classes/StudipAdmissionGroup.class.php';
 require_once 'lib/classes/StudipStudyArea.class.php';
 require_once 'lib/classes/UserDomain.php';
+require_once "lib/classes/CourseAvatar.class.php";
 
 include 'lib/seminar_open.php'; // initialise Stud.IP-Session
 
@@ -289,9 +290,12 @@ if ($db2->f("admission_binding")) {
 }
 
 // print the info_box
-
-print_infobox ($infobox,"contract.jpg");
-
+echo $template_factory->render(
+    'infobox/infobox_custom_image',
+    array(
+        'content' => $infobox,
+        'picture' => CourseAvatar::getAvatar($sem_id)->getUrl(Avatar::NORMAL)
+));
 // ende Infobox
 
 ?>

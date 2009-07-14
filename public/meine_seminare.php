@@ -23,6 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 $Id$
 */
 
+require_once 'lib/classes/CourseAvatar.class.php';
+
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
@@ -530,7 +532,9 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				echo "<tr ".$cssSw->getHover()."><td class=gruppe";
 				echo $values["gruppe"];
 				echo "><a href='gruppe.php'><img src='".$GLOBALS['ASSETS_URL']."images/blank.gif' ".tooltip(_("Gruppe ändern"))." border=0 width=7 height=12></a></td>";
-				echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
+				echo "<td class=\"".$cssSw->getClass()."\">";
+				echo CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL);
+				echo "</td>";
 				// Name-field
 				echo "<td align=\"left\" class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";
 				if ($lastVisit <= $values["chdate"])
@@ -988,7 +992,10 @@ elseif ($auth->auth["perm"]=="admin") {
 
 			$lastVisit = $values['visitdate'];
 
-			echo "<tr ".$cssSw->getHover()."><td class=\"$class\">&nbsp;&nbsp;</td>";
+			echo "<tr ".$cssSw->getHover().">";
+			echo "<td class=\"$class\">";
+			echo CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL);
+			echo "</td>";
 			echo "<td class=\"$class\"><a href=\"seminar_main.php?auswahl=$semid\">";
 			if ($lastVisit <= $values["chdate"])
 				print ("<font color=\"red\">");

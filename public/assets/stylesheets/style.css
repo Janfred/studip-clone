@@ -1044,3 +1044,14 @@ form#quicksearch .autocomplete li {
 #quicksearch_autocomplete_choices .informal {
 	display: none;
 }
+
+/* --- Infobox für Veranstaltungen mit Avatar ------------------------------- */
+
+.infobox-course-avatar {
+  width: 250px;
+  height: 250px;
+  background: #DEE2E8 url(../images/infoboxcorner.jpg) no-repeat left top;
+  text-align: center;
+  padding: 25px 0;
+}
+

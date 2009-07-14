@@ -41,7 +41,7 @@ require_once('lib/statusgruppe.inc.php');	//Funktionen der Statusgruppen
 require_once('lib/classes/StudipSemTreeSearch.class.php');
 require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/classes/SeminarCategories.class.php');
-
+require_once 'lib/classes/CourseAvatar.class.php';
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGrunddaten";
 
 //Start of Output
@@ -821,7 +821,7 @@ if ($s_send) {
 						log_event('CHANGE_INSTITUTE_DATA', $s_id, $val, "Beteiligte Einrichtung {$old_inst_name['name']} wurde hinzugefügt" ,$user->id);
 					}
 
-					unset($old_institutes[$val]);				
+					unset($old_institutes[$val]);
 					$query = "INSERT INTO seminar_inst values('$s_id','$val')";
 					$db3->query($query);			     // Institut eintragen
 				}
@@ -837,8 +837,8 @@ if ($s_send) {
 				$old_inst_name = get_object_name($heimateinrichtung, 'inst');
 				$new_inst_name = get_object_name($Institut, 'inst');
 				$changed_institute = " Heimatinstitut von {$old_inst_name['name']} in {$new_inst_name['name']} geändert";
- 
-				log_event('CHANGE_INSTITUTE_DATA', $s_id, " ", $changed_institute, $user->id); 
+
+				log_event('CHANGE_INSTITUTE_DATA', $s_id, " ", $changed_institute, $user->id);
 			}
 
 
@@ -890,7 +890,7 @@ if (($s_id) && (auth_check())) {
 	<?
 	parse_msg($msg);
 	?>
-	</td></tr><tr><td class="blank" colspan=2>
+	</td></tr><tr><td class="blank">
 	<?
 
 	// ab hier Anzeigeroutinen ///////////////////////////////////////////////
@@ -1479,13 +1479,39 @@ if (($s_id) && (auth_check())) {
 				<input type="hidden" name="s_send" value="TRUE">
 				</td>
 			</tr>
+
+	<? } ?>
+
 		</table>
 	</form>
-	</td></tr>
+	</td>
+
+	<td class="blank" style="width: 250px;vertical-align: top;">
+			<?
+			$aktionen = array();
+			$aktionen[] = array(
+			  "icon" => "edit_transparent.gif",
+			  "text" => '<a href="' .
+			            URLHelper::getLink('dispatch.php/course/avatar/update') .
+			            '">' . _("Bild ändern") . '</a>');
+			$aktionen[] = array(
+			  "icon" => "trash.gif",
+			  "text" => '<a href="' .
+			            URLHelper::getLink('dispatch.php/course/avatar/delete') .
+			            '">' . _("Bild löschen") . '</a>');
+
+			$infobox = array(
+			    array("kategorie" => _("Aktionen:"),
+			          "eintrag"   => $aktionen
+			));
+			?>
+			<?= $template_factory->render('infobox/infobox_custom_image',
+	        array('content' => $infobox,
+	              'picture' => CourseAvatar::getAvatar($s_id)->getUrl(Avatar::NORMAL)
+		    )) ?>
+	</td>
+	</tr>
 	<tr><td class="blank" colspan=2>&nbsp;</td></tr>
-	<?
-}
-?>
 </table>
 <?php
 include ('lib/include/html_end.inc.php');
