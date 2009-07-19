@@ -117,6 +117,7 @@ if ($my_messaging_settings['start_messenger_at_startup'] && $auth->auth['jscript
 	<script type="text/javascript" language="javascript">
 	// <![CDATA[
 		STUDIP.ABSOLUTE_URI_STUDIP = "<?= $GLOBALS['ABSOLUTE_URI_STUDIP'] ?>";
+		STUDIP.ASSETS_URL = "<?= $GLOBALS['ASSETS_URL'] ?>";
 	// ]]>
 	</script>
 	</head>

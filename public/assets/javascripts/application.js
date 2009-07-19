@@ -208,13 +208,14 @@ STUDIP.OverDiv.prototype = {
         content_url:'',
         content_element_type:'',
         position: 'bottom right',
-        width: 400,
+        width: 0,
         is_moveable: true,
         inititator: null,
         event_type: 'mouseover'
   },
   is_drawn: false,
   is_hidden: true,
+  is_scaled : false,
   id: '',
   container: null,
   title: null,
@@ -237,13 +238,13 @@ STUDIP.OverDiv.prototype = {
       var closer = new Element('a', {className: 'title', href:'#'});
       var content = new Element('div', {className: 'content'});
       if(this.options.is_moveable){
-        closer.appendChild(new Element('img', {src: 'assets/images/hide.gif'}));
+        closer.appendChild(new Element('img', {src: STUDIP.ASSETS_URL + 'images/hide.gif'}));
         Event.observe(closer, 'click', this.hide.bindAsEventListener(this));
         Event.observe(inner, 'dblclick', this.scale.bindAsEventListener(this));
         new Draggable(outer, {scroll:window, handle:inner});
       }
-      title.innerHTML = this.options.title;
-      content.innerHTML = this.options.content;
+      title.update(this.options.title);
+      content.update(this.options.content);
       this.title = title;
       this.content = content;
       inner.appendChild(title);
@@ -252,7 +253,6 @@ STUDIP.OverDiv.prototype = {
       outer.appendChild(content);
       this.container = outer;
       this.container.absolutize();
-      this.container.setStyle({width: this.options.width + 'px'});
       this.container.hide();
       $('overdiv_container').appendChild(this.container);
       this.is_drawn = true;
@@ -267,13 +267,11 @@ STUDIP.OverDiv.prototype = {
   },
 
   update: function(transport){
-    this.title.innerHTML = transport.responseJSON.title;
-    this.content.innerHTML = transport.responseJSON.content;
+    this.title.update(transport.responseJSON.title);
+    this.content.update(transport.responseJSON.content);
   },
 
-  getPosition: function(){
-    var x = this.initiator.cumulativeOffset().left;
-    var y = this.initiator.cumulativeOffset().top;
+  getOffset: function(){
     var ho = this.initiator.getWidth() / 2;
     var vo = this.initiator.getHeight() / 2;
     var positions = $w(this.options.position);
@@ -300,12 +298,18 @@ STUDIP.OverDiv.prototype = {
       default:
       }
     }
-    return {left: Math.floor(x + ho), top: Math.floor(y + vo) };
+   return {left: Math.floor(ho), top: Math.floor(vo) };
+  },
+
+  getWidth: function() {
+    return this.options.width > 0 ? this.options.width : Math.floor(document.viewport.getWidth()/3);
   },
 
   show: function(event){
     this.draw();
-    this.container.setStyle(this.getPosition());
+    var offset = this.getOffset();
+    this.container.clonePosition(this.initiator, {setWidth: false, setHeight: false, offsetLeft: offset.left, offsetTop: offset.top});
+    this.container.setStyle({width: this.getWidth() + 'px'});
     this.container.show();
     this.is_hidden = false;
     if(this.options.event_type == 'mouseover'){
@@ -315,7 +319,7 @@ STUDIP.OverDiv.prototype = {
   },
 
   hide: function(event){
-    if(!(this.options.is_moveable && this.isChildOfContainer($(event.relatedTarget)))){
+    if(!(this.options.is_moveable && event.relatedTarget && $(event.relatedTarget).descendantOf(this.container))){
       this.container.hide();
       this.is_hidden = true;
     }
@@ -326,18 +330,10 @@ STUDIP.OverDiv.prototype = {
   },
 
   scale: function(event){
-    new Effect.Scale(this.container, this.container.getWidth() <= this.options.width ? Math.floor(this.options.width/2) : Math.floor(this.options.width/8), {scaleContent:false,scaleY:false});
-  },
-
-  isChildOfContainer: function(obj){
-    var i = 3;
-    do {
-      if(obj == this.container)
-        return true;
-      if(obj) obj = obj.parentNode;
-    } while(obj && i--);
-    return false;
+    new Effect.Scale(this.container, this.is_scaled ? 50 : 200, {scaleContent:false,scaleY:false});
+    this.is_scaled = !this.is_scaled;
   }
+ 
 };
 
 /* ------------------------------------------------------------------------

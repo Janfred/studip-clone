@@ -908,9 +908,9 @@ div.clear {
 
 div.overdiv {
 	position:absolute;
-	margin:20px;
-	padding:0px;
-	width:600px;
+	margin: 0px;
+	padding: 0px;
+	width: 600px;
 	background-image: url('../images/steel1.jpg');
 	z-index: 2;
 }
@@ -927,6 +927,8 @@ div.overdiv h4.title {
 	padding:2px;
 	color:#FFFFFF;
 	float:left;
+	width:90%;
+	overflow: hidden;
 }
 div.overdiv a.title {
 	margin:0px;
@@ -937,6 +939,8 @@ div.overdiv div.content {
 	margin:0px;
 	padding:2px;
 	background-image: url('../images/steel1.jpg');
+	overflow: hidden;
+	clear: both;
 }
 
 /* --- Modaler Dialog ------------------------------------------------------- */
