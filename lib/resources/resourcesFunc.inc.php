@@ -845,6 +845,7 @@ function showSearchForm($name, $search_string='', $user_only=FALSE, $administrab
 		if ($allow_all)
 			print "<option style=\"vertical-align: middle;\" value=\"all\">"._("jedeR")."</option>";
 
+		if ( is_array($my_objects) ) 
 		foreach ($my_objects as $key=>$val) {
 			if ($val["art"] != $old_art) {
 				?>

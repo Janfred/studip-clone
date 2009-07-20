@@ -111,7 +111,6 @@ switch ($view) {
 	//Reiter "Objekt"
 	case "objects":
 	case "edit_object_assign":
-		$page_intro=_("Sie sehen hier die Einzelheiten der Belegung. Falls Sie über entsprechende Rechte verfügen, können Sie sie bearbeiten oder eine neue Belegung erstellen.");
 		$CURRENT_PAGE=_("Belegungen anzeigen/bearbeiten").$currentObjectTitelAdd;
 		if (($view_mode == "no_nav") || ($view_mode == "search")) {
 			$infobox = array(
@@ -122,11 +121,9 @@ switch ($view) {
 		}
 	break;
 	case "edit_object_properties":
-		$page_intro=_("Hier können Sie Ressourcen-Eigenschaften bearbeiten.");
 		$CURRENT_PAGE=_("Eigenschaften bearbeiten").$currentObjectTitelAdd;
 	break;
 	case "edit_object_perms":
-		$page_intro=_("Hier können Sie Berechtigungen für den Zugriff auf die Ressource vergeben.")." <br /><font size=\"-1\">"._("<b>Achtung:</b> Alle hier erteilten Berechtigungen gelten ebenfalls für die Ressourcen, die der gewählten Ressource untergeordnet sind!")."</font>";
 		$CURRENT_PAGE=_("Rechte bearbeiten").$currentObjectTitelAdd;
 	break;
 	case "view_schedule":

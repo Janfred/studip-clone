@@ -170,7 +170,7 @@ $this->msg[38] = array (
 		"msg"=> _("Belegung wurde in die Ressource &raquo;%s&laquo; verschoben."));
 $this->msg[39] = array (
 		"mode" => "error",
-		"msg"=> _("Die Belegung konnte nicht verschoben werden, da Sie sich in der gew&uuml;nschten Ressource einer anderen Belegung &uuml;berschneidet!"));
+		"msg"=> _("Die Belegung konnte nicht verschoben werden, da Sie sich in der gew&uuml;nschten Ressource mit einer anderen Belegung &uuml;berschneidet!"));
 $this->msg[40] = array (
 		"mode" => "info",
 		"msg"=> _("Sie haben bereits Anfragen, die Sie ausgew&auml;hlt haben, bearbeitet. Klicken Sie auf &raquo;absenden&laquo;, um Nachrichten zu aufgel&ouml;sten Anfragen versenden.")
@@ -198,3 +198,7 @@ $this->msg[44] = array (
 $this->msg[45] = array (
 		"mode" => 'success',
 		"msg"=> _("Es wurden %s Raumanfragen gel&ouml;scht."));
+$this->msg[46] = array (
+    'mode' => 'error',
+    'msg'  => _("Sie müssen eineN NutzerIn eintragen oder eine freie Eingabe zur Belegung eintragen, um diese Belegung speichern zu können!")
+);
