@@ -333,6 +333,12 @@ if ($change_object_schedules) {
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/VeranstaltungResourcesAssign.class.php");
 	require_once ('lib/classes/SemesterData.class.php');
 
+	// check, if the submit-button has been pressed. Otherwise do not store the assign.
+	$storeAssign = false;
+	if ($_REQUEST['submit_x']) {
+		$storeAssign = true;
+	}
+
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
 	//load the object perms
@@ -580,7 +586,7 @@ if ($change_object_schedules) {
 				$changeAssign->setRepeatEnd($changeAssign->getRepeatEndByQuantity());
 
 			//check repeat_end
-			if (($changeAssign->getRepeatMode() != "na") && ($change_schedule_repeat_end_month) && ($change_schedule_repeat_end_day) && ($change_schedule_repeat_end_year)){
+			if (($changeAssign->getRepeatMode() != "na") && ($change_schedule_repeat_end_month) && ($change_schedule_repeat_end_day) && ($change_schedule_repeat_end_year)) {
 				if (!check_date($change_schedule_repeat_end_month, $change_schedule_repeat_end_day, $change_schedule_repeat_end_year)) {
 					$illegal_dates=TRUE;
 					$msg -> addMsg(18);
@@ -624,42 +630,61 @@ if ($change_object_schedules) {
 				} else {
 					$changeAssign->restore();
 				}
-			} elseif (($change_object_schedules == "NEW") || ($new_assign_object)) {
+			} 
+			
+			// create a new assign
+			elseif ( ($change_object_schedules == "NEW" || $new_assign_object)){
+
 				if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name)) {
 					$overlaps = $changeAssign->checkOverlap(FALSE);
 					$locks = $changeAssign->checkLock();
+				} 
+				// show hint, that either a user or a free text must be provided
+				else if ($storeAssign) {
+					$msg->addMsg(46);
 				}
+
 				if ((!$overlaps) && (!$locks)) {
-					if ($changeAssign->create()) {
+					if ($storeAssign && $changeAssign->create()) {
 						$resources_data["actual_assign"]=$changeAssign->getId();
 						$msg->addMsg(3);
 						$new_assign_object='';
 					} else {
-						if ((!$do_search_user_x) && (!$reset_search_user_x))
-							if ((!$change_schedule_assign_user_id) && ($change_schedule_user_free_name))
+						$new_assign_object=serialize($changeAssign);  // store the submitted form-data
+
+						if ( $storeAssign && !$do_search_user_x && !$reset_search_user_x 
+							&& !$change_schedule_assign_user_id && $change_schedule_user_free_name) {
 								$msg->addMsg(10);
-						$new_assign_object=serialize($changeAssign);
+						}
 					}
 				} else {
-					if ($overlaps)
-						$msg->addMsg(11);
-					if ($locks) {
-						foreach ($locks as $val)
-							$locks_txt.=date("d.m.Y, H:i",$val["lock_begin"])." - ".date("d.m.Y, H:i",$val["lock_end"])."<br>";
-						$msg->addMsg(44, array($locks_txt));
+					if ($storeAssign) {
+						if ($overlaps)
+							$msg->addMsg(11);
+						if ($locks) {
+							foreach ($locks as $val)
+								$locks_txt.=date("d.m.Y, H:i",$val["lock_begin"])." - ".date("d.m.Y, H:i",$val["lock_end"])."<br>";
+							$msg->addMsg(44, array($locks_txt));
+						}
+					} else {  // store the submitted form-data
+						$new_assign_object=serialize($changeAssign);
 					}
 				}
-			} else {
+			} 
+			
+			// change an existing assign
+			else {
 				if (($change_schedule_assign_user_id) || ($change_schedule_user_free_name)) {
 					$overlaps = $changeAssign->checkOverlap(FALSE);
 					$locks = $changeAssign->checkLock();
 				}
+
 				if ((!$overlaps) && (!$locks)) {
 					$changeAssign->chng_flag=TRUE;
 					if ($changeAssign->store()) {
 						$msg->addMsg(4);
 						$new_assign_object='';
-						}
+					}
 					$resources_data["actual_assign"]=$changeAssign->getId();
 				} else {
 					if ($overlaps)
