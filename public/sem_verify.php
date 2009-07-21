@@ -69,9 +69,9 @@ function temporaly_accepted($sem_name, $user_id, $sem_id, $ask = "TRUE", $studie
 			echo formatReady($db->f("admission_prelim_txt"));
 			echo "</td></tr></table><br/>\n";
 		} else {
-			print " "._("Bitte erkundigen Sie sich bei dem Dozenten oder der Dozentin der Veranstaltung nach weiteren Teilnahmevoraussetzungen.");
+			printf(" "._("Bitte erkundigen Sie sich bei dem Leiter (%s) der Veranstaltung nach weiteren Teilnahmevoraussetzungen.", get_title_for_status('dozent', 1)));
 		}
-		printf (_("Wenn Sie auf \"eintragen\" klicken, werden Sie vorl&auml;ufig f&uuml;r diese Veranstaltung eingetragen. Erf&uuml;llen Sie die Anforderungen, um von der DozentIn fest in die Veranstaltung %s eingetragen zu werden."), '<b>'.$sem_name.'</b>');
+		printf (_("Wenn Sie auf \"eintragen\" klicken, werden Sie vorl&auml;ufig f&uuml;r diese Veranstaltung eingetragen. Erf&uuml;llen Sie die Anforderungen, um von dem/der %s fest in die Veranstaltung %s eingetragen zu werden."), get_title_for_status('dozent', 1), '<b>'.$sem_name.'</b>');
 		echo "<br/><br/>\n";
 
 		printf("<form action=\"%s\" method=\"post\">\n",$url);

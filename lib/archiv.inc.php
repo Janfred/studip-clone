@@ -80,21 +80,15 @@ function dump_sem($sem_id, $print_view = false) {
 	//wer macht den Dozenten?
 	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY position, Nachname");
 
-	if ($db->affected_rows() > 1)
-		$dump.= "<tr><td width=\"15%\"><b>" . _("DozentInnen:") . " </b></td><td>";
-	else
-		$dump.= "<tr><td width=\"15%\"><b>" . _("DozentIn:") . " </b></td><td>";
+		$dump.= "<tr><td width=\"15%\"><b>" . get_title_for_status("dozent", $db->affected_rows()) . " </b></td><td>";
 	while ($db->next_record())
 		$dump.= htmlReady($db->f("fullname")) ."<br>  ";
 	$dump.="</td></tr>\n";
 
 	//und wer ist Tutor?
 	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY position, Nachname");
-
-	if ($db->affected_rows() > 1)
-		$dump.="<tr><td width=\"15%\"><b>" . _("TutorInnen:") . " </b></td><td>";
-	elseif ($db->affected_rows() == 1)
-		$dump.="<tr><td width=\"15%\"><b>" . _("TutorIn:") . " </b></td><td>";
+	if ($db->affected_rows())
+		$dump.="<tr><td width=\"15%\"><b>" .  get_title_for_status("tutor", $db->affected_rows()) . " </b></td><td>";
 	while ($db->next_record())
 		$dump.= htmlReady($db->f("fullname")) ."<br>";
 	if ($db->affected_rows())
@@ -369,10 +363,10 @@ function dump_sem($sem_id, $print_view = false) {
 	// Teilnehmer
 	if ($Modules["participants"]) {
 		if (!is_array($AUTO_INSERT_SEM) || (is_array($AUTO_INSERT_SEM) && !in_array($sem_id, $AUTO_INSERT_SEM))) {
-			$gruppe = array ("dozent" => _("DozentInnen"),
-				"tutor" => _("TutorInnen"),
-				"autor" => _("AutorInnen"),
-				"user" => _("LeserInnen"));
+			$gruppe = array ("dozent" =>  get_title_for_status("dozent", $db->affected_rows()),
+				"tutor" =>  get_title_for_status("tutor", $db->affected_rows()),
+				"autor" =>  get_title_for_status("autor", $db->affected_rows()),
+				"user" =>  get_title_for_status("user", $db->affected_rows()));
 			$dump.="<br>";
 			while (list ($key, $val) = each ($gruppe)) {
 
