@@ -161,11 +161,24 @@ $SEM_CLASS[3]=array("name"=>_("Community"),
 
 // more classes can be added below (please adhere exactly to the structure given above)
 
+
+// Festlegen der standard Titel für Userklassen
+$DEFAULT_TITLE_FOR_STATUS = array(
+		'dozent'   => array(_('ProjektleiterIn'), _('ProjektleiterInnen')),
+		'tutor'    => array(_('ProjektmitarbeiterIn'), _('ProjektmitarbeiterInnen')),
+		'autor'    => array(_('AutorIn'), _('AutorInnen')),
+		'user'     => array(_('LeserIn'), _('LeserInnen')),
+		'accepted' => array(_('Vorläufig akzeptierte TeilnehmerIn'),
+		                    _('Vorläufig akzeptierte TeilnehmerInnen')));
+
 /*
 name the allowed course-types and assign them to one of the above classes
+alternative titles for DozentIn, TutorIn, ... can be specified within each type:
+ "title_dozent" => array(_("singular form"), _("plural form"))
+("title_tutor", "title_autor", "title_user", "title_accepted" also exist)
 */
 $SEM_TYPE_MISC_NAME=_("sonstige"); //this name is replaced by the common name (=course)
-$SEM_TYPE[1]=array("name"=>_("Vorlesung"), "class"=>1);
+$SEM_TYPE[1]=array("name"=>_("Vorlesung"), "class"=>1, "title_dozent" => array(_("Maus"), _("Mäuse")), "title_tutor" => array(_("Hund"), _("Hunde")), "title_autor" => array(_("Vogel"), _("Vögel")), "title_user" => array(_("Wurm"), _("Würmer"))););
 $SEM_TYPE[2]=array("name"=>_("Seminar"),  "class"=>1);
 $SEM_TYPE[3]=array("name"=>_("Übung"),  "class"=>1);
 $SEM_TYPE[4]=array("name"=>_("Praktikum"), "class"=>1);
