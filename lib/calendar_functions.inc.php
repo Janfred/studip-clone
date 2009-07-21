@@ -207,7 +207,7 @@ function check_date ($month, $day, $year, $hour = 0, $min = 0) {
 	if ($hour > 23 || $hour < 0 || $min > 59 || $min < 0)
 		return FALSE;
 
-	return mktime($hour, $min, 0, $month, $day, $year);
+	return @mktime($hour, $min, 0, $month, $day, $year);
 }
 
 // ermittelt die Anzahl von Tagen zwischen zwei timestamps (plus Schalttage)

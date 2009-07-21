@@ -297,20 +297,32 @@ function raumzeit_doDeleteCycle() {
 }
 
 function raumzeit_doAddSingleDate() {
-	global $sem;
-	$termin = new SingleDate();
-	$start = mktime((int)$_REQUEST['start_stunde'], (int)$_REQUEST['start_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
-	$ende = mktime((int)$_REQUEST['end_stunde'], (int)$_REQUEST['end_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
-	$termin->setTime($start, $ende);
-	$termin->setDateType($_REQUEST['dateType']);
+	global $sem, $cmd;
 
-	if ($start < $sem->filterStart || $ende > $sem->filterEnd) {
-		$sem->setFilter('all');
+	// check validity of the date 
+	if (!check_date($_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year'], $_REQUEST['start_stunde'], $_REQUEST['start_minute']) 
+		|| !check_date($_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year'], $_REQUEST['end_stunde'], $_REQUEST['end_minute']) ) 
+	{ 
+		$sem->createError(_("Bitte geben Sie ein gültiges Datum und eine gültige Uhrzeit an!")); 
+		$cmd = 'createNewSingleDate'; 
+	} 
+	
+	// create date
+	else { 
+		$termin = new SingleDate();
+		$start = mktime((int)$_REQUEST['start_stunde'], (int)$_REQUEST['start_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
+		$ende = mktime((int)$_REQUEST['end_stunde'], (int)$_REQUEST['end_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
+		$termin->setTime($start, $ende);
+		$termin->setDateType($_REQUEST['dateType']);
+
+		if ($start < $sem->filterStart || $ende > $sem->filterEnd) {
+			$sem->setFilter('all');
+		}
+		$sem->addSingleDate($termin);
+		$sem->bookRoomForSingleDate($termin->getSingleDateID(), $_REQUEST['room']);
+		$sem->createMessage(sprintf(_("Der Termin %s wurde hinzugefügt!"), '<b>'.$termin->toString().'</b>'));
+		$sem->store();
 	}
-	$sem->addSingleDate($termin);
-	$sem->bookRoomForSingleDate($termin->getSingleDateID(), $_REQUEST['room']);
-	$sem->createMessage(sprintf(_("Der Termin %s wurde hinzugefügt!"), '<b>'.$termin->toString().'</b>'));
-	$sem->store();
 }
 
 function raumzeit_editDeletedSingleDate() {

@@ -16,13 +16,15 @@
 				</TD>
 				<TD width="98%" nowrap class="<?=$tpl['class']?>" colspan="8">
 					<FONT size="-1">
-						<INPUT type="text" id="day" name="day" maxlength="2" size="2" value="<?=_("dd")?>">.
-						<INPUT type="text" id="month" name="month" maxlength="2" size="2" value="<?=_("mm")?>">.
-						<INPUT type="text" id="year" name="year" maxlength="4" size="4" value="<?=("jjjj")?>">&nbsp;,&nbsp;
-						<INPUT type="text" id="start_stunde" name="start_stunde" maxlength="2" size="2" value="<?=_("hh")?>">:
-						<INPUT type="text" id="start_minute" name="start_minute" maxlength="2" size="2" value="<?=_("mm")?>">&nbsp;<?=_("bis")?>&nbsp;
-						<INPUT type="text" id="end_stunde" name="end_stunde" maxlength="2" size="2" value="<?=_("hh")?>">:
-						<INPUT type="text" id="end_minute" name="end_minute" maxlength="2" size="2" value="<?=_("mm")?>">&nbsp;<?=_("Uhr")?>
+						<INPUT type="text" id="day" name="day" maxlength="2" size="2" value="<?= $_REQUEST['day'] ? $_REQUEST['day'] : _("dd")?>">.
+						<INPUT type="text" id="month" name="month" maxlength="2" size="2" value="<?= $_REQUEST['month'] ? $_REQUEST['month'] : _("mm")?>">.
+						<INPUT type="text" id="year" name="year" maxlength="4" size="4" value="<?= $_REQUEST['year'] ? $_REQUEST['year'] : ("jjjj")?>">&nbsp;,&nbsp;
+						<INPUT type="text" id="start_stunde" name="start_stunde" maxlength="2" size="2" value="<?= $_REQUEST['start_stunde'] ? $_REQUEST['start_stunde'] : _("hh")?>">:
+						<INPUT type="text" id="start_minute" name="start_minute" maxlength="2" size="2" value="<?= $_REQUEST['start_minute'] ? $_REQUEST['start_minute'] : _("mm")?>">
+						<?=_("bis")?>
+						<INPUT type="text" id="end_stunde" name="end_stunde" maxlength="2" size="2" value="<?= $_REQUEST['end_stunde'] ? $_REQUEST['end_stunde'] : _("hh")?>">:
+						<INPUT type="text" id="end_minute" name="end_minute" maxlength="2" size="2" value="<?= $_REQUEST['end_minute'] ? $_REQUEST['end_minute'] : _("mm")?>">
+						<?=_("Uhr")?>
 					</FONT>
 					<?=Termin_Eingabe_javascript(1);?>
 				</TD>
