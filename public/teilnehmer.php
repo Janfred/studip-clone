@@ -313,7 +313,11 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 
 				if($db->affected_rows()) $msgs[] = $fullname;
 			}
-			$msg = "msg§" . sprintf (_("%s %s wurde entlassen und auf den Status '%s' zur&uuml;ckgestuft."), get_title_for_status('tutor', count($msgs)), htmlReady(join(', ',$msgs)), get_title_for_status('autor', 1)) . "§";
+			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+				$msg = "msg§" . sprintf (_("Das Mitglied %s wurde entlassen und auf den Status 'Autor' zur&uuml;ckgestuft."), htmlReady(join(', ',$msgs))) . "§";
+			} else {
+				$msg = "msg§" . sprintf (_("Der/die TutorIn %s wurde entlassen und auf den Status 'Autor' zur&uuml;ckgestuft."), htmlReady(join(', ',$msgs))) . "§";
+			}
 		}
 		else $msg ="error§" . _("Sie haben leider nicht die notwendige Berechtigung für diese Aktion.") . "§";
 	}
@@ -394,7 +398,11 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
 				if($db->affected_rows()){
 					setTempLanguage($userchange);
-					$message = sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/einer VeranstaltungsleiterIn (%s) oder AdministratorIn aufgehoben."), $SessSemName[0], get_title_for_status('dozent', 1));
+					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+						$message = sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r LeiterIn oder AdministratorIn aufgehoben."), $SessSemName[0]);
+					} else {
+						$message= sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/r DozentIn oder AdministratorIn aufgehoben."), $SessSemName[0]);
+					}
 					restoreLanguage();
 					$messaging->insert_message(mysql_escape_string($message), $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Abonnement aufgehoben"), TRUE);
 					// raus aus allen Statusgruppen
@@ -434,10 +442,18 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				$db->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$userchange'");
 				if($db->affected_rows()){
 					setTempLanguage($userchange);
-					if (!$accepted) {
-						$message = sprintf(_("Sie wurden von einem/einer VeranstaltungsleiterIn (%s) oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), get_title_for_status('dozent', 1), $SessSemName[0]);
+					if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+						if (!$accepted) {
+							$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
+						} else {
+							$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
+						}
 					} else {
-						$message = sprintf(_("Sie wurden von einem/einer VeranstaltungsleiterIn (%s) oder AdministratorIn aus der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), get_title_for_status('dozent', 1), $SessSemName[0]);
+						if (!$accepted) {
+							$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn von der Warteliste der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
+						} else {
+							$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Veranstaltung **%s** gestrichen und sind damit __nicht__ zugelassen worden."), $SessSemName[0]);
+						}
 					}
 					restoreLanguage();
 
@@ -502,10 +518,26 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				//Only if user was on the waiting list
 				if($admission_user){
 					setTempLanguage($userchange);
-					if (!$accepted) {
-						$message = sprintf(_("Sie wurden vom einem/einer %s oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), get_title_for_status('dozent', 1), $SessSemName[0]);
+					if ($admission_user == 2) {
+						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+							if (!$accepted) {
+								$message = sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+							} else {
+								$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
+							}
+						} else {
+							if (!$accepted) {
+								$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn aus der Warteliste in die Veranstaltung **%s** aufgenommen und sind damit zugelassen."), $SessSemName[0]);
+							} else {
+								$message = sprintf(_("Sie wurden von einem/r DozentIn oder AdministratorIn vom Status **vorläufig akzeptiert** zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), $SessSemName[0]);
+							}
+						}
 					} else {
-						$message = sprintf(_("Sie wurden von einem/einer %s oder AdministratorIn vom Status **vorläufig akzeptiert** zum/r TeilnehmerIn der Veranstaltung **%s** hochgestuft und sind damit zugelassen."), get_title_for_status('dozent', 1), $SessSemName[0]);
+						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+							$message = sprintf(_("Sie wurden von einem/r LeiterIn oder AdministratorIn als TeilnehmerIn in die Veranstaltung **%s** eingetragen."), $SessSemName[0]);
+						} else {
+							$message = sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn als TeilnehmerIn in die Veranstaltung **%s** eingetragen."), $SessSemName[0]);
+						}
 					}
 					restoreLanguage();
 					$messaging->insert_message(mysql_escape_string($message), $username, "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
@@ -664,7 +696,11 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 							// LOGGING
 							log_event('SEM_USER_ADD', $id, $userchange, 'tutor', 'Wurde zum Tutor ernannt (add_tutor_x)');
 							$db2->query("UPDATE seminar_user SET status='tutor', position='$next_pos' WHERE Seminar_id = '$id' AND user_id = '$u_id'");
-							$msg = "msg§" . sprintf(_("%s wurde auf den Status '%s' bef&ouml;rdert."), get_fullname($u_id,'full',1), get_title_for_status('tutor', 1)) . "§";
+							if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+								$msg = "msg§" . sprintf (_("%s wurde zum Mitglied bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
+							} else {
+								$msg = "msg§" . sprintf (_("%s wurde auf den Status 'Tutor' bef&ouml;rdert."), get_fullname($u_id,'full',1)) . "§";
+							}
 							//kill from waiting user
 							$db2->query("DELETE FROM admission_seminar_user WHERE seminar_id = '$id' AND user_id = '$u_id'");
 							//reordner waiting list
@@ -676,10 +712,18 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 					} else {  // ok, einfach aufnehmen.
 						insert_seminar_user($id, $u_id, "tutor", FALSE);
 
-						$msg = "msg§" . sprintf(_("%s wurde als %s in die Veranstaltung aufgenommen."), get_fullname($u_id,'full',1), get_title_for_status('tutor', 1));
+						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+							$msg = "msg§" . sprintf (_("%s wurde als Mitglied in die Veranstaltung aufgenommen."), get_fullname($u_id,'full',1));
+						} else {
+							$msg = "msg§" . sprintf (_("%s wurde als Tutor in die Veranstaltung aufgenommen."), get_fullname($u_id,'full',1));
+						}
 
 						setTempLanguage($userchange);
-						$message = sprintf(_("Sie wurden von einem/einer VeranstaltungsleiteriIn (%s) oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), get_title_for_status('dozent', 1), $SessSemName[0]);
+						if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+							$message= sprintf(_("Sie wurden vom einem/r LeiterIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
+						} else {
+							$message= sprintf(_("Sie wurden vom einem/r DozentIn oder AdministratorIn in die Veranstaltung **%s** aufgenommen."), $SessSemName[0]);
+						}
 						restoreLanguage();
 						$messaging->insert_message(mysql_escape_string($message), get_username($u_id), "____%system%____", FALSE, FALSE, "1", FALSE, _("Systemnachricht:")." "._("Eintragung in Veranstaltung"), TRUE);
 					}
@@ -704,19 +748,34 @@ if($SEMINAR_LOCK_ENABLE && $perm->have_studip_perm('tutor', $SessSemName[1])){
 	}
 }
 
-$gruppe = array(
-	'dozent' => get_title_for_status('dozent', 2),
-	'tutor'  => get_title_for_status('tutor', 2),
-	'autor'  => get_title_for_status('autor', 2),
-	'user'   => get_title_for_status('user', 2)
-);
-
 if ($perm->have_perm("tutor")) {
-	$gruppe['accepted'] = get_title_for_status('accepted', 2);
+	if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
+		$gruppe = array ("dozent" => _("DozentInnen"),
+					  "tutor" => _("TutorInnen"),
+					  "autor" => _("AutorInnen"),
+					  "user" => _("LeserInnen"),
+					  "accepted" => _("Vorl&auml;ufig akzeptierte TeilnehmerInnen"));
+	else
+		$gruppe = array ("dozent" => _("LeiterInnen"),
+					  "tutor" => _("Mitglieder"),
+					  "autor" => _("AutorInnen"),
+					  "user" => _("LeserInnen"),
+					  "accepted" => _("Vorl&auml;ufig akzeptierte TeilnehmerInnen"));
+} else {
+	if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"])
+		$gruppe = array ("dozent" => _("DozentInnen"),
+					  "tutor" => _("TutorInnen"),
+					  "autor" => _("AutorInnen"),
+					  "user" => _("LeserInnen"));
+	else
+		$gruppe = array ("dozent" => _("LeiterInnen"),
+					  "tutor" => _("Mitglieder"),
+					  "autor" => _("AutorInnen"),
+					  "user" => _("LeserInnen"));
 }
 
-$multiaction['tutor'] = array('insert' => null, 'delete' => array('tutor_to_autor', sprintf(_("Ausgewählte %s entlassen"), get_title_for_status('tutor', 2))));
-$multiaction['autor'] = array('insert' => array('autor_to_tutor', sprintf(_("Ausgewählte Benutzer als %s eintragen"), get_title_for_status('tutor', 2))), 'delete' => array('autor_to_user', _("Ausgewählten Benutzern das Schreibrecht entziehen")));
+$multiaction['tutor'] = array('insert' => null, 'delete' => array('tutor_to_autor', (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] ? _("Ausgewählte Tutoren entlassen") : _("Ausgewählte Mitglieder entlassen"))));
+$multiaction['autor'] = array('insert' => array('autor_to_tutor',(!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] ? _("Ausgewählte Benutzer als Tutor eintragen") : _("Ausgewählte Benutzer als Mitglied eintragen"))), 'delete' => array('autor_to_user', _("Ausgewählten Benutzern das Schreibrecht entziehen")));
 $multiaction['user'] = array('insert' => array('user_to_autor',_("Ausgewählten Benutzern das Schreibrecht erteilen")), 'delete' => array('user_to_null', _("Ausgewählte Benutzer aus der Veranstaltung entfernen")));
 $multiaction['accepted'] = array('insert' => array('admission_insert',_("Ausgewählte Benutzer akzeptieren")), 'delete' => array('admission_delete', _("Ausgewählte Benutzer aus der Veranstaltung entfernen")));
 
@@ -1070,13 +1129,21 @@ while (list ($key, $val) = each ($gruppe)) {
 
 		if ($key == "tutor") {
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\"><font size=\"-1\"><b>&nbsp;</b></font></td>", $width);
-			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"tutor_to_autor\" onClick=\"return invert_selection('tutor_to_autor','%s');\" %s><b>%s</b></a></font></td>", $width, $key, $tooltip, sprintf(_("%s entlassen"), get_title_for_status('tutor', 1)));
+			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+				printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"tutor_to_autor\" onClick=\"return invert_selection('tutor_to_autor','%s');\" %s><b>%s</b></a></font></td>", $width, $key, $tooltip, _("Mitglied entlassen"));
+			} else {
+				printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"tutor_to_autor\" onClick=\"return invert_selection('tutor_to_autor','%s');\" %s><b>%s</b></a></font></td>", $width, $key, $tooltip, _("TutorIn entlassen"));
+			}
 			if ($sem->isAdmissionEnabled())
 				echo"<td class=\"steel\" width=\"10%\" align=\"center\"><b>&nbsp;</b></td>";
 		}
 
 		if ($key == "autor") {
-			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"autor_to_tutor\" onClick=\"return invert_selection('autor_to_tutor','%s');\" %s><b>%s</b></a></font></td>",  $width, $key, $tooltip, sprintf(_("als %s eintragen"), get_title_for_status('tutor', 1)));
+			if ($SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) {
+				printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"autor_to_tutor\" onClick=\"return invert_selection('autor_to_tutor','%s');\" %s><b>%s</b></a></font></td>",  $width, $key, $tooltip, _("als Mitglied eintragen"));
+			} else {
+				printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"autor_to_tutor\" onClick=\"return invert_selection('autor_to_tutor','%s');\" %s><b>%s</b></a></font></td>",  $width, $key, $tooltip, _("als TutorIn eintragen"));
+			}
 			printf ("<td class=\"steel\" width=\"%s%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><a name=\"autor_to_user\" onClick=\"return invert_selection('autor_to_user','%s');\" %s><b>%s</b></a></font></td>",  $width, $key, $tooltip, _("Schreibrecht entziehen"));
 			if ($sem->isAdmissionEnabled())
 				printf("<td class=\"steel\" width=\"10%%\" align=\"center\" valign=\"bottom\"><font size=\"-1\"><b>%s</b></font></td>", _("Kontingent"));
@@ -1507,8 +1574,8 @@ if (!LockRules::Check($id, 'participants') && $rechte
 			printf("<option value=\"%s\">%s - %s\n", $db->f("user_id"), htmlReady(my_substr($db->f("fullname")." (".$db->f("username"),0,35)).")", $db->f("inst_perms"));
 		?>
 		</select></td>
-		<td class="steel1" width="20%" align="center"><font size=-1><?= sprintf(_("als %s"), get_title_for_status('tutor', 1)) ?></font><br />
-		<input type="IMAGE" name="add_tutor" <?=makeButton("eintragen", "src")?> border="0" value="<?= sprintf(_("als %s berufen"), get_title_for_status('tutor', 1)) ?>"></td>
+		<td class="steel1" width="20%" align="center"><font size=-1><? if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"]) print _("als TutorIn"); else print _("als Mitglied") ?></font><br>
+		<input type="IMAGE" name="add_tutor" <?=makeButton("eintragen", "src")?> border="0" value=" <?=_("Als TutorIn berufen")?> "></td>
 	</tr></form></table>
 <?
 
@@ -1557,19 +1624,17 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 				}
 				echo '</select></label></font>';
 			}
-			echo '</select></label></font>';
-		}
-		?>
-		</td>
-		<td class="steel1" width="20%" align="center"><font size=-1>
-		<?
-		if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && $perm->have_studip_perm("dozent",$SessSemName[1])){
-			printf(_("als %s / %s"), get_title_for_status('tutor', 1), get_title_for_status('autor', 1));
-		} else {
-			printf(_("als %s"), get_title_for_status('autor', 1));
-		}
-		?></font><br />
-		<input type="image" name="add_user" <?=makeButton("eintragen", "src")?> align="absmiddle" border=0 value="<?= sprintf(_("als %s berufen"), get_title_for_status('autor', 1)) ?>">&nbsp;<a href="<?= URLHelper::getLink() ?>"><?=makeButton("neuesuche")?></a></td>
+			?>
+			</td>
+			<td class="steel1" width="20%" align="center"><font size=-1>
+			<?
+			if (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["only_inst_user"] && $perm->have_studip_perm("dozent",$SessSemName[1])){
+				 echo (!$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["workgroup_mode"] ? _("als TutorIn") . " / " . _("als AutorIn") : _("als Mitglied"));
+			} else {
+				echo _("als AutorIn");
+			}
+			?></font><br>
+			<input type="image" name="add_user" <?=makeButton("eintragen", "src")?> align="absmiddle" border=0 value="<?=_("Als AutorIn berufen")?> ">&nbsp;<a href="<?= URLHelper::getLink() ?>"><?=makeButton("neuesuche")?></a></td>
 
 		</tr>
 	</table>
@@ -1715,7 +1780,7 @@ if (!LockRules::Check($id, 'participants') && $rechte) {
 	}
 
 	echo "</table>\n</form>";
- // end insert autor
+} // end insert autor
 
 if (($EXPORT_ENABLE) AND ($perm->have_studip_perm("tutor", $SessSemName[1]))) {
 	include_once($PATH_EXPORT . "/export_linking_func.inc.php");
