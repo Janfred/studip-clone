@@ -5,14 +5,14 @@
 <tr>
 	<th width="3%" align="left"><?=_("Platz")?></th>
 	<th width="1%"></th>
-	<th align="left"><?=_("Name")?></th>
-	<th align="left"></th>
-	<th align="left"><?=_("Score")?></th>
-	<th align="left"><?=_("Titel")?></th>
+	<th align="left" width="51%"><?=_("Name")?></th>
+	<th align="left" width="15%"></th>
+	<th align="left" width="15%"><?=_("Score")?></th>
+	<th align="left" width="15%"><?=_("Titel")?></th>
 </tr>
 <? foreach ($persons as $index=>$person): ?>
 <tr class="<?=TextHelper::cycle('cycle_odd', 'cycle_even')?>">
-	<td align="right"><?=$index+1?>. </td>
+	<td align="right"><?=$index+(($page-1)*ELEMENTS_PER_PAGE)+1?>. </td>
 	<td> <?=$person['avatar']?></td>
 	<td><a href="<?=URLHelper::getLink("about.php?username=". $person['username'])?>"><?=$person['name']?></a></td>
 	<td><?=$person['content']?></td>
@@ -21,6 +21,9 @@
 </tr>
 <? endforeach;?>
 </table>
+<div style="text-align:right; padding-top: 2px; padding-bottom: 2px" class="steelgraudunkel"><?= $this->render_partial("shared/pagechooser", array("perPage" => 20, "num_postings" => $numberOfPersons,
+	"page"=>$page, "pagelink" => "score.php?page=%s"));
+?></div>
 </div>
 <? endif; ?>
 

@@ -32,6 +32,8 @@ require_once 'lib/classes/Avatar.class.php';
 $HELP_KEYWORD="Basis.VerschiedenesScore"; // external help keyword
 $CURRENT_PAGE=_("Stud.IP-Score");
 
+define("ELEMENTS_PER_PAGE", 20);
+
 /* --- Actions -------------------------------------------------------------- */
 $score = new Score($user->id);
 if($_REQUEST['cmd']=="write")
@@ -43,8 +45,20 @@ if($_REQUEST['cmd']=="kill")
 	$score->KillScore();
 }
 
+$stmt=DBManager::get()->query("SELECT COUNT(*) FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 AND locked=0 AND ".get_vis_query('b') );
+
+$anzahl=$stmt->fetchColumn();
+
+if($_REQUEST['page']){
+	$page=$_REQUEST['page'];
+} else {
+	$page=1;
+}
+
+if($page < 1 || $page > ceil($anzahl/ELEMENTS_PER_PAGE)) $page = 1;
+
 // Liste aller die mutig (oder eitel?) genug sind
-$query = "SELECT a.user_id,username,score,geschlecht, " .$_fullname_sql['full'] ." AS fullname FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 AND locked=0 AND ".get_vis_query('b')." ORDER BY score DESC";
+$query = "SELECT a.user_id,username,score,geschlecht, " .$_fullname_sql['full'] ." AS fullname FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 AND locked=0 AND ".get_vis_query('b')." ORDER BY score DESC LIMIT ".(($page-1)*ELEMENTS_PER_PAGE).",".ELEMENTS_PER_PAGE; 
 $result = DBManager::get()->query($query);
 while ($row = $result->fetch()) {
 	$person = array(
@@ -59,13 +73,13 @@ while ($row = $result->fetch()) {
 	);
 	$persons[] = $person;
 }
-
-
 /* --- View ----------------------------------------------------------------- */
 $template = $GLOBALS['template_factory']->open('score');
 $template->set_attribute('persons', $persons);
 $template->set_attribute('user', $user);
 $template->set_attribute('score', $score);
+$template->set_attribute('numberOfPersons', $anzahl);
+$template->set_attribute('page', $page);
 $template->set_layout("layouts/base");
 echo $template->render();
 page_close();
