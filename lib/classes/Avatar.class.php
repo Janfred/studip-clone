@@ -211,7 +211,7 @@ class Avatar {
 
       // get extension
       $pathinfo = pathinfo($_FILES[$userfile]['name']);
-      $ext = $pathinfo['extension'];
+      $ext = strtolower($pathinfo['extension']);
 
       // passende Endung ?
       if (!in_array($ext, words('jpg jpeg gif png'))) {
@@ -229,11 +229,11 @@ class Avatar {
       }
 
       // set permissions for uploaded file
-      chmod($filename, 0666 & ~umask());
+      @chmod($filename, 0666 & ~umask());
 
       $this->createFrom($filename);
 
-      unlink($filename);
+      @unlink($filename);
 
     // eigentlich braucht man hier "finally"
     } catch (Exception $e) {

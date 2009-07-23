@@ -1492,12 +1492,12 @@ if (($s_id) && (auth_check())) {
 			$aktionen[] = array(
 			  "icon" => "edit_transparent.gif",
 			  "text" => '<a href="' .
-			            URLHelper::getLink('dispatch.php/course/avatar/update') .
+			            URLHelper::getLink('dispatch.php/course/avatar/update/' . $s_id) .
 			            '">' . _("Bild ändern") . '</a>');
 			$aktionen[] = array(
 			  "icon" => "trash.gif",
 			  "text" => '<a href="' .
-			            URLHelper::getLink('dispatch.php/course/avatar/delete') .
+			            URLHelper::getLink('dispatch.php/course/avatar/delete/'. $s_id) .
 			            '">' . _("Bild löschen") . '</a>');
 
 			$infobox = array(

@@ -2,6 +2,7 @@
 
 /*
  * Copyright (C) 2009 - Marcus Lunzenauer <mlunzena@uos.de>
+ * André Noack <noack@data-quest.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -11,7 +12,7 @@
 
 
 require_once 'app/controllers/authenticated_controller.php';
-require_once 'lib/classes/CourseAvatar.class.php';
+require_once 'lib/classes/InstituteAvatar.class.php';
 
 
 /**
@@ -19,7 +20,7 @@ require_once 'lib/classes/CourseAvatar.class.php';
  *
  * @author    mlunzena
  */
-class Course_AvatarController extends AuthenticatedController
+class Institute_AvatarController extends AuthenticatedController
 {
 
     # see Trails_Controller#before_filter
@@ -33,17 +34,17 @@ class Course_AvatarController extends AuthenticatedController
         $GLOBALS['auth']->login_if(
             $GLOBALS['auth']->auth['uid'] == 'nobody');
 
-        $this->course_id = current($args);
-        if ($this->course_id === '' || get_object_type($this->course_id) !== 'sem'
-            || !$GLOBALS['perm']->have_studip_perm("tutor", $this->course_id)) {
+        $this->institute_id = current($args);
+        if ($this->institute_id === '' || !in_array(get_object_type($this->institute_id), words('inst fak'))
+            || !$GLOBALS['perm']->have_studip_perm("admin", $this->institute_id)) {
             $this->set_status(403);
             return FALSE;
         }
-        $GLOBALS['CURRENT_PAGE'] = getHeaderLine($this->course_id) . ' - ' .
+        $GLOBALS['CURRENT_PAGE'] = getHeaderLine($this->institute_id) . ' - ' .
                            _('Bild ändern');
         $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
         $layout->set_attribute('tabs', 'links_admin');
-        $layout->set_attribute('reiter_view', 'grunddaten_sem');
+        $layout->set_attribute('reiter_view', 'grunddaten_inst');
         $this->set_layout($layout);
     }
 
@@ -66,7 +67,7 @@ class Course_AvatarController extends AuthenticatedController
     function put_action()
     {
         try {
-            CourseAvatar::getAvatar($this->course_id)->createFromUpload('avatar');
+            InstituteAvatar::getAvatar($this->institute_id)->createFromUpload('avatar');
         } catch (Exception $e) {
             $this->error = $e->getMessage();
             $this->render_action("update");
@@ -80,7 +81,7 @@ class Course_AvatarController extends AuthenticatedController
      */
     function delete_action()
     {
-        CourseAvatar::getAvatar($this->course_id)->reset();
-        $this->redirect(URLHelper::getUrl('admin_seminare1.php?s_id=' . $this->course_id));
+        InstituteAvatar::getAvatar($this->institute_id)->reset();
+        $this->redirect(URLHelper::getUrl('admin_institut.php?i_id=' . $this->institute_id));
     }
 }

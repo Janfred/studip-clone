@@ -35,6 +35,7 @@ require_once 'config.inc.php';
 require_once 'lib/visual.inc.php';
 require_once 'lib/functions.php';
 require_once 'lib/classes/DataFieldEntry.class.php';
+require_once 'lib/classes/InstituteAvatar.class.php';
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
@@ -164,10 +165,8 @@ process_news_commands($institut_main_data);
 			<br />
 			</blockquote>
 		</td>
-		<td class="blank" align="right" valign="top">
-			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" /><br />
-			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/einrichtungen.jpg" border="0"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="10" /><br />
-			<img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" height="10" width="5" />
+		<td class="blank" align="right" style="padding:10px;">
+			<?= InstituteAvatar::getAvatar($SessSemName[1])->getImageTag(Avatar::NORMAL) ?>
 		</td>
 		</tr>
 	</table>

@@ -24,6 +24,7 @@ $Id$
 */
 
 require_once 'lib/classes/CourseAvatar.class.php';
+require_once 'lib/classes/InstituteAvatar.class.php';
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
@@ -674,8 +675,10 @@ if ( !$perm->have_perm("root")) {
 				$cssSw->switchClass();
 				$lastVisit = $values['visitdate'];
 				echo "<tr ".$cssSw->getHover().">";
-				echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
-				// Name-field
+				echo "<td class=\"".$cssSw->getClass()."\">";
+				echo InstituteAvatar::getAvatar($instid)->getImageTag(Avatar::SMALL);
+                echo "</td>";
+                // Name-field
 				echo "<td align=\"left\" class=\"".$cssSw->getClass()."\"><a href=\"institut_main.php?auswahl=$instid\">";
 				echo "<font size=-1>".htmlReady($INST_TYPE[$values["type"]]["name"] . ": " . $values["name"])."</font>";
 				print ("</a></td>");

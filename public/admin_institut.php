@@ -47,6 +47,7 @@ require_once('lib/classes/StudipLitList.class.php');
 require_once('lib/classes/StudipLitSearch.class.php');
 require_once('lib/classes/StudipNews.class.php');
 require_once('lib/log_events.inc.php');
+require_once 'lib/classes/InstituteAvatar.class.php';
 
 if ($RESOURCES_ENABLE) {
 	include_once($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");
@@ -366,8 +367,8 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 	}
 	$i_id= $db->f("Institut_id");
 	?>
-<tr><td class="blank" colspan=2>
-<table border=0 align="center" width="60%" cellspacing=0 cellpadding=2>
+<tr><td class="blank">
+<table border=0 align="center" width="80%" cellspacing=0 cellpadding=2>
 	<form method="POST" name="edit" action="<? echo $PHP_SELF?>">
 	<tr <? $cssSw->switchClass() ?>><td width="40%" class="<? echo $cssSw->getClass() ?>" ><?=_("Name:")?> </td><td width="60%" class="<? echo $cssSw->getClass() ?>" ><input style="width:98%" type="text" name="Name" size=50 maxlength=254 value="<?php echo htmlReady($db->f("Name")) ?>"></td></tr>
 	<tr <? $cssSw->switchClass() ?>><td class="<? echo $cssSw->getClass() ?>" ><?=_("Fakult&auml;t:")?></td>
@@ -481,7 +482,33 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 	<input type="hidden" name="i_view" value="<? printf ("%s", ($i_view=="new") ? "create" : $i_view);  ?>">
 	</td></tr></table>
 	</form>
-	<br>
+    <br>
+	</td>
+    <td class="blank" style="width: 250px;vertical-align: top;">
+			<?
+			$aktionen = array();
+			$aktionen[] = array(
+			  "icon" => "edit_transparent.gif",
+			  "text" => '<a href="' .
+			            URLHelper::getLink('dispatch.php/institute/avatar/update/' . $i_id) .
+			            '">' . _("Bild ändern") . '</a>');
+			$aktionen[] = array(
+			  "icon" => "trash.gif",
+			  "text" => '<a href="' .
+			            URLHelper::getLink('dispatch.php/institute/avatar/delete/'. $i_id) .
+			            '">' . _("Bild löschen") . '</a>');
+
+			$infobox = array(
+			    array("kategorie" => _("Aktionen:"),
+			          "eintrag"   => $aktionen
+			));
+			?>
+			<?= $template_factory->render('infobox/infobox_custom_image',
+	        array('content' => $infobox,
+	              'picture' => InstituteAvatar::getAvatar($i_id)->getUrl(Avatar::NORMAL)
+		    )) ?>
+	</td>
+    </tr>
 	<?
 }
 

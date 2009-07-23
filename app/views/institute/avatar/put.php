@@ -1,4 +1,4 @@
-<h1><?= _("Veranstaltungsbild hochladen") ?></h1>
+<h1><?= _("Einrichtungsbild hochladen") ?></h1>
 
 <?= MessageBox::success(_("Die Bilddatei wurde erfolgreich hochgeladen.")) ?>
 
@@ -7,8 +7,8 @@
 </p>
 
 <p>
-    <a href="<?= URLHelper::getLink('admin_seminare1.php?s_id=' . $course_id) ?>">
+    <a href="<?= URLHelper::getLink('admin_institut.php?i_id=' . $institute_id) ?>">
       <?= Assets::img('forumgruen.gif', array('style' => 'vertical-align: baseline;')) ?>
-      <?= _("zurück zur Veranstaltungsadministration") ?>
+      <?= _("zurück zur Einrichtungsadministration") ?>
     </a>
 </p>
