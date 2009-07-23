@@ -154,6 +154,7 @@ class studip_smtp_class extends smtp_message_class {
 		$error_delivery_name=$from_name;
 		$error_delivery_address=$from_address;
 
+		$this->ResetMessage();
 		$this->SetEncodedEmailHeader("To",$to_address,$to_name);
 		$this->SetEncodedEmailHeader("From",$from_address,$from_name);
 		$this->SetEncodedEmailHeader("Reply-To",$reply_address,$reply_name);
