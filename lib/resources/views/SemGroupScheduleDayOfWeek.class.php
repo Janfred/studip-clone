@@ -50,13 +50,16 @@ class SemGroupScheduleDayOfWeek extends ScheduleView {
 		parent::ScheduleView($start_hour, $end_hour, $show_columns, $start_date);
 
 		$this->dow = $dow;
-		//the base_date have to be 0:00
-		$first_monday = date("j",$this->start_date)  - (date("w", $this->start_date) - 1);
-		if (date("w", $this->start_date) > 1){
-			$first_monday += 7;
+		if($this->dow !== false){
+			//the base_date have to be 0:00
+			$first_monday = date("j",$this->start_date)  - (date("w", $this->start_date) - 1);
+			if (date("w", $this->start_date) > 1){
+				$first_monday += 7;
+			}
+			$this->base_date = mktime(0, 0, 0, date("n", $this->start_date), $first_monday + $this->dow - 1,  date("Y", $this->start_date));
+		} else {
+			$this->base_date = $this->start_date;
 		}
-		$this->base_date = mktime(0, 0, 0, date("n", $this->start_date), $first_monday + $this->dow - 1,  date("Y", $this->start_date));
-
 		//the categories configuration (color's and bg-image)
 		$this->categories = array(
 			"0"=>array("bg-picture"=>$GLOBALS['ASSETS_URL']."images/calendar/category5.jpg", "border-color"=>"#505064"),
