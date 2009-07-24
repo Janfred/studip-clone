@@ -673,4 +673,23 @@ class AssignObject {
 			return TRUE;
 		return FALSE;
 	}
+	
+	function getCopyForResource($resource_id){
+		$new_assign = new AssignObject(array(null, $resource_id));
+		foreach(array(	'assign_user_id',
+						'user_free_name',
+						'begin',
+						'end',
+						'repeat_end',
+						'repeat_quantity',
+						'repeat_interval',
+						'repeat_month_of_year',
+						'repeat_day_of_month',
+						'repeat_day_of_month',
+						'repeat_week_of_month',
+						'repeat_day_of_week') as $prop){
+			$new_assign->$prop = $this->$prop;
+		}
+		return $new_assign;
+	}
 }

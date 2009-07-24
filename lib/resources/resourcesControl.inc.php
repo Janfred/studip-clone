@@ -583,22 +583,63 @@ Roomplanning
 if ($view == "requests_start") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowToolsRequests.class.php");
 
-	$toolReq=new ShowToolsRequests;
+	$toolReq=new ShowToolsRequests($resources_data["sem_schedule_semester_id"],$resources_data["resolve_requests_no_time"]);
 	$toolReq->showToolStart();
 }
 
 if ($view == "edit_request") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowToolsRequests.class.php");
 
-	$toolReq=new ShowToolsRequests;
+	$toolReq=new ShowToolsRequests($resources_data["sem_schedule_semester_id"]);
 	$toolReq->showRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
 }
 
 if ($view == "list_requests") {
         require_once ($RELATIVE_PATH_RESOURCES."/views/ShowToolsRequests.class.php");
 
-        $toolReq=new ShowToolsRequests;
+        $toolReq=new ShowToolsRequests($resources_data["sem_schedule_semester_id"],$resources_data["resolve_requests_no_time"]);
         $toolReq->showRequestList();
+}
+if ($view == "view_requests_schedule") {
+	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowSchedulesRequests.class.php");
+	if ($resources_data["resolve_requests_one_res"]) {
+		$ViewSchedules=new ShowSchedulesRequests($resources_data["resolve_requests_one_res"]);
+		$ViewSchedules->setStartTime($resources_data["schedule_start_time"]);
+		$ViewSchedules->setEndTime($resources_data["schedule_end_time"]);
+		$ViewSchedules->setWeekOffset($resources_data["schedule_week_offset"]);
+		$ViewSchedules->setUsedView($view);
+
+		$ViewSchedules->navigator();
+		$suppress_infobox = TRUE;
+		?>						</td>
+							</tr>
+						</table>
+					</td>
+				<?
+				if ($infobox) {
+					?>
+					<td class="blank" width="270" align="right" valign="top">
+						<? print_infobox ($infobox, $infopic);?>
+					</td>
+					<?
+				}
+			?>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td class="blank" valign ="top">
+			<table width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td valign ="top">
+			<?
+		if ($resources_data["schedule_start_time"])
+			$ViewSchedules->showScheduleGraphical($schedule_start_time, $schedule_end_time);
+	} else {
+		echo "</td></tr>";
+		$msg->displayMsg(15);
+	}
 }
 
 
@@ -644,6 +685,7 @@ if (!$suppress_infobox) {
 		</td>
 	</tr>
 </table>
+<pre>
 <?
 $resources_data = serialize($resources_data);
 if (!isset($_REQUEST['print_view'])){

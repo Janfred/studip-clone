@@ -357,30 +357,33 @@ if ($change_object_schedules) {
 
 	if (($ObjectPerms->havePerm("tutor")) && ($change_meta_to_single_assigns_x)) {
 		$assObj =& AssignObject::Factory($change_object_schedules);	
-		$events = $assObj->getEvents();
-		if (is_array($events)){
-			$create_assign = new AssignObject(false);
-			$create_assign->setResourceId($assObj->getResourceId());
-			$create_assign->setAssignUserId($assObj->getAssignUserId());
-			$create_assign->setUserFreeName($assObj->getUserFreeName());
-			$assObj->delete();
-			foreach($events as $one_event){
-				$create_assign->setBegin($one_event->begin);
-				$create_assign->setEnd($one_event->end);
-				$create_assign->id = $one_event->id;
-				$create_assign->store(true);
+		if ($assObj->getOwnerType() != 'sem'){
+			$events = $assObj->getEvents();
+			if (is_array($events)){
+				$create_assign = new AssignObject(false);
+				$create_assign->setResourceId($assObj->getResourceId());
+				$create_assign->setAssignUserId($assObj->getAssignUserId());
+				$create_assign->setUserFreeName($assObj->getUserFreeName());
+				$assObj->delete();
+				foreach($events as $one_event){
+					$create_assign->setBegin($one_event->begin);
+					$create_assign->setEnd($one_event->end);
+					$create_assign->id = $one_event->id;
+					$create_assign->store(true);
+				}
+				$return_schedule = TRUE;
+				$change_object_schedules = $events[0]->id;
+				header (sprintf("Location:resources.php?quick_view=%s&quick_view_mode=%s&show_msg=37", ($view_mode == "oobj") ? "openobject_sem_schedule" : "view_sem_schedule", $view_mode));
 			}
-			$return_schedule = TRUE;
-			$change_object_schedules = $events[0]->id;
-			header (sprintf("Location:resources.php?quick_view=%s&quick_view_mode=%s&show_msg=37", ($view_mode == "oobj") ? "openobject_sem_schedule" : "view_sem_schedule", $view_mode));
 		}
 	}
 
-	if (($ObjectPerms->havePerm("admin")) && ($send_change_resource_x)) {
-		$ChangeObjectPerms =& ResourceObjectPerms::Factory($select_change_resource);
+	if ($ObjectPerms->havePerm("admin") && isset($_POST['send_change_resource_x']) && isset($_POST['select_change_resource'])) {
+		if(!is_array($_POST['select_change_resource'])){
+		$ChangeObjectPerms = ResourceObjectPerms::Factory($_POST['select_change_resource']);
 		if ($ChangeObjectPerms->havePerm("tutor")) {
-			$changeAssign =& AssignObject::Factory($change_object_schedules);
-			$changeAssign->setResourceId($select_change_resource);
+				$changeAssign = AssignObject::Factory($_REQUEST['change_object_schedules']);
+				$changeAssign->setResourceId($_POST['select_change_resource']);
 			$overlaps = $changeAssign->checkOverlap();
 			if ($overlaps) {
 				$msg->addMsg(11);
@@ -391,6 +394,26 @@ if ($change_object_schedules) {
 			}
 		} else
 			$msg->addMsg(2);
+		} else {
+			$original_assign = AssignObject::Factory($_REQUEST['change_object_schedules']);
+			foreach($_POST['select_change_resource'] as $copy_to_resource_id){
+				$ChangeObjectPerms = ResourceObjectPerms::Factory($copy_to_resource_id);
+				if ($ChangeObjectPerms->havePerm("tutor")) {
+					$new_assign = $original_assign->getCopyForResource($copy_to_resource_id);
+					$overlaps = $new_assign->checkOverlap();
+					if ($overlaps) {
+						$bad_msg = _("Nicht buchbare Belegungszeiten:");
+						foreach($overlaps as $overlap){
+							$bad_msg .= "<br>".date("d.m.Y, H:i",$overlap["begin"])." - ".date("d.m.Y, H:i",$overlap["end"]);
+						}
+						$msg->addMsg(48, array(htmlReady(ResourceObject::Factory($copy_to_resource_id)->getName()), $bad_msg));
+					} else {
+						$new_assign->store(true);
+						$msg->addMsg(47, array(htmlReady(ResourceObject::Factory($copy_to_resource_id)->getName())));
+					}
+				}
+			}
+	}
 	}
 
 	if ($ObjectPerms->havePerm("autor")) {
@@ -1162,7 +1185,44 @@ if ($view == "search") {
 /*****************************************************************************
 the room-planning module
 /*****************************************************************************/
+if(isset($_REQUEST['tools_requests_sem_choose_button_x']) || isset($_REQUEST['tools_requests_sem_choose'])){
+	$resources_data["sem_schedule_semester_id"] = $_REQUEST['tools_requests_sem_choose'];
+	$resources_data["resolve_requests_no_time"] = (bool)$_REQUEST['resolve_requests_no_time'];
+	unset($resources_data["requests_working_on"]);
+	unset($resources_data["requests_open"]);
+	$resources_data["view"] = "requests_start";
+	$view = "requests_start";
+}
 
+if ($view == "view_requests_schedule") {
+	if ($_REQUEST['next_week'])
+		$resources_data["schedule_week_offset"]++;
+	elseif ($_REQUEST['previous_week'])
+		$resources_data["schedule_week_offset"]--;
+	elseif($_REQUEST["show_repeat_mode_requests"])
+		$resources_data["show_repeat_mode_requests"] = $_REQUEST["show_repeat_mode_requests"];
+	elseif ($_REQUEST['start_time']) {
+		$resources_data["schedule_start_time"] = $_REQUEST['start_time'];
+		$resources_data["schedule_end_time"] = $resources_data["schedule_start_time"] + (7 * 24 * 60 * 60) + 59;
+		$resources_data["schedule_mode"] = "graphical";
+		$resources_data["schedule_week_offset"] = 0;
+	}
+	elseif ($_REQUEST['navigate']) {
+		$resources_data["schedule_week_offset"] = 0;
+		$resources_data["schedule_start_time"] = mktime (0,0,0,(int)$_REQUEST['schedule_begin_month'], (int)$_REQUEST['schedule_begin_day'], (int)$_REQUEST['schedule_begin_year']);
+	} else {
+		if($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]['first_event']){
+			$resources_data["schedule_start_time"] = $resources_data["requests_working_on"][$resources_data["requests_working_pos"]]['first_event'];
+		} else {
+			$semester_data = SemesterData::GetInstance()->getSemesterData($resources_data["sem_schedule_semester_id"]);
+			$resources_data["schedule_start_time"] = $semester_data['vorles_beginn'];
+		}
+		$resources_data["schedule_mode"] = "graphical";
+		$resources_data["show_repeat_mode_requests"] = 'all';
+		$resources_data["schedule_week_offset"] = 0;
+		$resources_data['sem_schedule_timespan'] = 'course_time';
+	}
+}
 switch ($skip_closed_requests) {
 	case "FALSE" : $resources_data["skip_closed_requests"] = FALSE; break;
 	case "TRUE" : $resources_data["skip_closed_requests"] = TRUE; break;
@@ -1194,11 +1254,15 @@ if (($start_multiple_mode_x) || ($single_request)) {
 	unset($resources_data["requests_working_on"]);
 	unset($resources_data["requests_open"]);
 
-	$requests = getMyRoomRequests();
+	$requests = getMyRoomRequests($GLOBALS['user']->id, $resources_data["sem_schedule_semester_id"], !$resources_data["resolve_requests_no_time"]);
 
 	$resources_data["requests_working_pos"] = 0;
 	$resources_data["skip_closed_requests"] = TRUE;
-
+	if($_REQUEST['resolve_requests_mode'] == "one_res"){
+		$resources_data['resolve_requests_one_res'] = $_REQUEST['resolve_requests_one_res'];
+	} else {
+		$resources_data['resolve_requests_one_res'] = null;
+	}
 	//filter the requests
 	foreach($requests as $key => $val) {
 		if (!$val["closed"] && !($resolve_requests_no_time && !$val['have_times'])) {
@@ -1207,6 +1271,9 @@ if (($start_multiple_mode_x) || ($single_request)) {
 					$selected_requests[$key] = TRUE;
 			} elseif ($resolve_requests_mode == "res") {
 				if ($val["my_res"])
+					$selected_requests[$key] = TRUE;
+			} elseif ($_REQUEST['resolve_requests_mode'] == "one_res") {
+				if ($val["resource_id"] == $_REQUEST['resolve_requests_one_res'])
 					$selected_requests[$key] = TRUE;
 			} else {
 				$selected_requests[$key] = TRUE;
@@ -1218,12 +1285,15 @@ if (($start_multiple_mode_x) || ($single_request)) {
 		if ($selected_requests[$single_request]) {
 			$resources_data["requests_working_on"][] = array("request_id" => $single_request, "closed" => FALSE);
 			$resources_data["requests_open"][$single_request] = TRUE;
+			if($requests[$single_request]['resource_id']){
+				$resources_data['resolve_requests_one_res'] = $requests[$single_request]['resource_id'];
+			}
 		}
 	} elseif (is_array($selected_requests)) {
 		//order requests
 		$in =  "('".join("','",array_keys($selected_requests))."')";
 		if ($resolve_requests_order == "complex")
-			$order = "seats DESC, complexity DESC";
+		    $order = "seats DESC, complexity DESC";
 		if ($resolve_requests_order == "newest")
 			$order = "a.mkdate DESC";
 		if ($resolve_requests_order == "oldest")

@@ -106,6 +106,7 @@ if ($top_kat_tools) {
 	$structure["requests_start"]=array ("topKat"=>"room_planning", "name"=>_("Übersicht"), "link"=>"resources.php?view=requests_start&cancel_edit_request_x=1", "active"=>FALSE);
 	$structure["edit_request"]=array ("topKat"=>"room_planning", "name"=>_("Anfragen bearbeiten"), "link"=>"resources.php?view=edit_request", "active"=>FALSE, "disabled"=>(($resources_data["requests_working_on"]) ? FALSE : TRUE));
 	$structure["list_requests"]=array ("topKat"=>"room_planning", "name"=>_("Anfragenliste"), "link"=>"resources.php?view=list_requests", "active"=>FALSE, "disabled"=>(($resources_data["requests_working_on"]) ? FALSE : TRUE));
+	$structure["view_requests_schedule"]=array ("topKat"=>"room_planning", "name"=>_("Anfragenplan"), "link"=>"resources.php?view=view_requests_schedule", "active"=>FALSE, "disabled"=> empty($resources_data["resolve_requests_one_res"]));
 }
 
 //Reiter "Anpassen"

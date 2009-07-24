@@ -188,17 +188,12 @@ class EditResourceData {
 
 		if ($lockedAssign) {
 			if ($owner_type == "sem") {
-				$query = sprintf("SELECT Name, Seminar_id FROM seminare WHERE Seminar_id='%s' ",$resAssign->getAssignUserId());
-				$db->query($query);
-				$db->next_record();
+				$seminarName = Seminar::GetInstance($resAssign->getAssignUserId())->getName();
+				$seminarID = $resAssign->getAssignUserId();
 			} elseif ($owner_type == "date") {
-				$query = sprintf("SELECT Name, Seminar_id FROM termine LEFT JOIN seminare ON (termine.range_id = seminare.Seminar_id) WHERE termin_id='%s' ",$resAssign->getAssignUserId());
-				$db->query($query);
-				$db->next_record();
+				$seminarID = Seminar::GetSemIdByDateId($resAssign->getAssignUserId());
+				$seminarName = Seminar::GetInstance($seminarID)->getName();
 			}
-
-			$seminarName = $db->f('Name');
-			$seminarID = $db->f('Seminar_id');
 		}
 
 		/* * * * * * * * * * * * * * * *
@@ -207,10 +202,10 @@ class EditResourceData {
 		$template = $GLOBALS['template_factory']->open('resources/show_schedule_forms.php');
 		$template->set_attribute('used_view', $this->used_view);
 		$template->set_attribute('db', $this->db);
-
+		$change_schedule_move_or_copy = $_POST['change_schedule_move_or_copy'];
 		echo $template->render(compact( 'resAssign', 'resources_data', 'view_mode', 'cssSw', 'lockedAssign', 'killButton', 
 			'owner_type', 'perm', 'search_string_search_user', 'ResourceObjectPerms', 'search_exp_room', 'search_room_x',
-			'search_properties_x', 'resReq', 'seminarName', 'seminarID'));
+			'search_properties_x', 'resReq', 'seminarName', 'seminarID','change_schedule_move_or_copy'));
 	}
 
 

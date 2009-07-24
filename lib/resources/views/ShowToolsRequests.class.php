@@ -58,64 +58,71 @@ class ShowToolsRequests {
 	var $db2;
 	var $cssSw;			//the cssClassSwitcher
 	var $requests;			//the requests i'am responsibel for
+	var $semester_id;
+	var $show_requests_no_time = false;
 
-	function ShowToolsRequests() {
+	function ShowToolsRequests($semester_id, $resolve_requests_no_time = null) {
 		$this->db = new DB_Seminar;
 		$this->db2 = new DB_Seminar;
+		if (!$semester_id){
+			$this->semester_id = SemesterData::GetSemesterIdByDate(time());
+		} else {
+			$this->semester_id = $semester_id;
+		}
+		if(!is_null($resolve_requests_no_time)){
+			$this->show_requests_no_time = !$resolve_requests_no_time;
+		}
 	}
 
 	function getMyOpenSemRequests() {
-		if (!$this->requests)
-			$this->requests = getMyRoomRequests();
-
-		if (is_array($this->requests)) {
-			foreach ($this->requests as $val) {
-				if ((!$val["closed"]) && ($val["my_sem"]))
-					$count++;
-			}
-		}
-		return $count;
+		$this->restoreOpenRequests();
+		return (int)$this->requests_stats_open['my_sem'];
 	}
 
 	function getMyOpenNoTimeRequests() {
-		if (!$this->requests)
-			$this->requests = getMyRoomRequests();
-
-		if (is_array($this->requests)) {
-			foreach ($this->requests as $val) {
-				if ((!$val["closed"]) && (!$val["have_times"]))
-					++$count;
-			}
-		}
-		return $count;
+		$this->restoreOpenRequests();
+		return (int)$this->requests_stats_open['no_time'];
 	}
 
 	function getMyOpenResRequests() {
-		if (!$this->requests)
-			$this->requests = getMyRoomRequests();
-
-		if (is_array($this->requests)) {
-			foreach ($this->requests as $val) {
-				if ((!$val["closed"]) && ($val["my_res"]))
-					$count++;
-			}
-		}
-		return $count;
+		$this->restoreOpenRequests();
+		return (int)$this->requests_stats_open['my_res'];
 	}
 
 	function getMyOpenRequests() {
-		if (!$this->requests)
-			$this->requests = getMyRoomRequests();
-
-		if (is_array($this->requests)) {
+		$this->restoreOpenRequests();
+		return (int)$this->requests_stats_open['sum'];
+	}
+	
+	function restoreOpenRequests(){
+		if (is_null($this->requests)){
+			$this->requests = (array)getMyRoomRequests($GLOBALS['user']->id, $this->semester_id, true);
 			foreach ($this->requests as $val) {
-				if (!$val["closed"])
-					$count++;
+				$this->requests_stats_open['sum'] += !$val["closed"] && ($val["have_times"] || $this->show_requests_no_time);
+				$this->requests_stats_open['my_res'] += !$val["closed"] && $val["my_res"] && ($val["have_times"] || $this->show_requests_no_time);
+				$this->requests_stats_open['my_sem'] += !$val["closed"] && $val["my_sem"] && ($val["have_times"] || $this->show_requests_no_time);
+				$this->requests_stats_open['no_time'] += !$val["closed"] && !$val["have_times"];
 			}
 		}
-		return $count;
 	}
-
+	
+	function getMyRequestedRooms(){
+		$db = DBManager::get();
+		$ret = array();
+		$res_requests = array_filter($this->requests, create_function('$val', 'return (!$val["closed"] && $val["my_res"] && ($val["have_times"] || ' . (int)$this->show_requests_no_time . '));'));
+		if(count($res_requests)){
+			$ret = $db->query("SELECT ro.resource_id, ro.name, COUNT(ro.resource_id) as anzahl
+							FROM resources_requests rr
+							INNER JOIN resources_objects ro
+							USING ( resource_id )
+							WHERE rr.request_id
+							IN (
+							" . join(',', array_map(array($db, 'quote'), array_keys($res_requests))) . " 
+							) GROUP BY ro.resource_id ORDER BY ro.name")->fetchAll(PDO::FETCH_ASSOC);
+		}
+		return $ret;
+	}
+	
 	function selectSemInstituteNames($inst_id) {
 		$query = sprintf("SELECT a.Name AS inst_name, b.Name AS fak_name FROM Institute a LEFT JOIN Institute b ON (a.fakultaets_id = b.Institut_id) WHERE a.Institut_id = '%s' ", $inst_id);
 		$this->db->query($query);
@@ -145,23 +152,44 @@ class ShowToolsRequests {
 
 		?>
 		<table border=0 celpadding=2 cellspacing=0 width="99%" align="center">
-		<form method="POST" action="<?echo $PHP_SELF ?>?tools_requests_start=1">
+		<form method="POST" name="tools_requests_form" action="<?echo $PHP_SELF ?>?tools_requests_start=1">
 			<input type="HIDDEN" name="view" value="edit_request" />
 			<tr>
 				<td class="<? echo $cssSw->getClass() ?>" width="4%">&nbsp;
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>"><font size=-1><b><?=_("aktueller Status")?></b><br />
+				<td class="<? echo $cssSw->getClass() ?>">
+				<table border="0" cellpadding="2" cellspacing="2">
+				<tr>
+				<td>
+				<?=SemesterData::GetSemesterSelector(array('name' => 'tools_requests_sem_choose', 'onChange' => 'document.tools_requests_form.submit()'), $this->semester_id, 'semester_id',false)?>
+				<?=makeButton("auswaehlen",'input',_("Semester auswählen"),'tools_requests_sem_choose_button')?>
+				</td>
+				<td class="<? echo $cssSw->getClass() ?>" style="padding-left:10px">
+				<b><?=_("Status:")?></b>
+				<br>
 					<?
 					if ($open_requests){
 						printf (_("Es liegen insgesamt <b>%s</b> nicht aufgel&ouml;ste Anfragen vor - <br />davon <b>%s</b> von Veranstaltungen und <b>%s</b> auf Ressourcen, auf die Sie Zugriff haben."), $open_requests, (int)$this->getMyOpenSemRequests(), (int)$this->getMyOpenResRequests());
-						if ($no_time = $this->getMyOpenNoTimeRequests()){
-							printf("<br>" . _("<b>%s</b> Anfragen haben keine Zeiten eingetragen!"), $no_time);
-						}
 					} else {
 						printf (_("Es liegen im Augenblick keine unaufgel&ouml;sten Anfragen vor."));
 					}
+					if (($no_time = $this->getMyOpenNoTimeRequests())){
+						if(!$this->show_requests_no_time){
+							printf("<br>" . _("(<b>%s</b> weitere Anfragen haben keine Zeiten eingetragen, oder beziehen sich auf vergangene Termine.)"), $no_time);
+						} else {
+							printf("<br>" . _("(<b>%s</b> der Anfragen haben keine Zeiten eingetragen, oder beziehen sich auf vergangene Termine.)"), $no_time);
+						}
+					}
 					?>
-					</font>
+				</td>
+				</tr>
+				<tr>
+				<td colspan="2">
+					<input onChange="document.tools_requests_form.submit()" name="resolve_requests_no_time" id="resolve_requests_no_time_check" type="checkbox" <?=(!$this->show_requests_no_time ? 'checked' : '')?> value="1">
+					&nbsp;<label for="resolve_requests_no_time_check"><?=_("Anfragen ohne eingetragene Zeiten oder auf vergangene Termine ausblenden")?></label>
+				</td>
+				</tr>	
+				</table>
 				</td>
 			</tr>
 			<? $cssSw->switchClass();
@@ -184,6 +212,13 @@ class ShowToolsRequests {
 								print "<br /><br /><input type=\"RADIO\" name=\"resolve_requests_mode\" value=\"all\" checked />&nbsp;"._("alle Anfragen");
 								print "<br /><input type=\"RADIO\" name=\"resolve_requests_mode\" value=\"sem\" />&nbsp;"._("nur Anfragen von meinen Veranstaltungen");
 								print "<br /><input type=\"RADIO\" name=\"resolve_requests_mode\" value=\"res\" />&nbsp;"._("nur Anfragen auf meine R&auml;ume");
+								print "<br /><input type=\"RADIO\" id=\"resolve_requests_one_res_check\" name=\"resolve_requests_mode\" value=\"one_res\" />&nbsp;"._("nur Anfragen auf einen Raum:");
+								print "<br><span style=\"padding-left:20px;\"><select onchange=\"$('resolve_requests_one_res_check').checked=true;\"name=\"resolve_requests_one_res\">";
+								foreach(array_merge(array(array('resource_id' => '', 'name' => _(" -keine Auswahl - "))), $this->getMyRequestedRooms()) as $one){
+									echo '<option value="'.$one['resource_id'].'">'.htmlready($one['name'] . ($one['anzahl'] ? ' (' . $one['anzahl']. ')' : '')).'</option>';
+								}
+								print "</select></span>";
+								
 								?>
 								</font>
 							</td>
@@ -202,14 +237,7 @@ class ShowToolsRequests {
 								</font>
 							</td>
 						</tr>
-						<tr>
-						<td colspan="3">
-						<font size="-1"><br>
-						<input name="resolve_requests_no_time" type="checkbox" checked value="1">
-						&nbsp;<?=_("Anfragen ohne eingetragene Zeiten ausblenden")?>
-						</font>
-						</td>
-						</tr>
+						
 					</table>
 				</td>
 			</tr>
@@ -286,7 +314,7 @@ class ShowToolsRequests {
 			$i++;
 			if ($resources_data['requests_open'][$val['request_id']] || !$resources_data['skip_closed_requests']) {
 				$reqObj = new RoomRequest($val['request_id']);
-				$semObj =& Seminar::GetInstance($reqObj->getSeminarId());
+				$semObj = new Seminar($reqObj->getSeminarId());
 
 				if ($semObj->getName() != "") {
 					echo $zt->openRow();

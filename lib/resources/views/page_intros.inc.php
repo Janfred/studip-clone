@@ -111,6 +111,7 @@ switch ($view) {
 	//Reiter "Objekt"
 	case "objects":
 	case "edit_object_assign":
+		$page_intro=_("Sie sehen hier die Einzelheiten der Belegung. Falls Sie über entsprechende Rechte verfügen, können Sie sie bearbeiten oder eine neue Belegung erstellen.");
 		$CURRENT_PAGE=_("Belegungen anzeigen/bearbeiten").$currentObjectTitelAdd;
 		if (($view_mode == "no_nav") || ($view_mode == "search")) {
 			$infobox = array(
@@ -345,6 +346,17 @@ switch ($view) {
 								"text"  => "<a href=\"$PHP_SELF?view=openobject_group_schedule&print_view=1\" target=\"_blank\">"
 											. _("Druckansicht")
 											. "</a>");
+	break;
+	case "view_requests_schedule":
+		$page_intro=_("Hier können Sie sich eine Übersicht über alle Anfragen und vorhandenenen Belegungen eines angeforderten Raums anzeigen lassen.");
+		$CURRENT_PAGE=_("Anfragenübersicht eines Raums:") . ' ' . ResourceObject::Factory($resources_data["resolve_requests_one_res"])->getName();
+
+		$infobox[0]["kategorie"] = _("Aktionen:");
+		$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
+									"text"  =>  sprintf("<a href=\"javascript:void(null)\" onclick=\"window.open('resources.php?actual_object={$resources_data['resolve_requests_one_res']}&amp;quick_view=view_sem_schedule&amp;quick_view_mode=no_nav','','scrollbars=yes,left=10,top=10,width=1000,height=680,resizable=yes');\">%s</a>", _("Semesterplan")));
+		
+
+		
 	break;
 	//default
 	default:

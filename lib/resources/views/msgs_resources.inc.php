@@ -164,7 +164,7 @@ $this->msg[36] = array (
 			."&nbsp;<a href=\"%s?reset_set=1\">".makeButton("nein")."</a>");
 $this->msg[37] = array (
 		"mode" => 'success',
-		"msg"=> _("Die regelm&auml;&szlig;ige Belegung wurde in Einzeltermine umgewandelt und ein Ablaufplan angelegt."));
+		"msg"=> _("Die regelm&auml;&szlig;ige Belegung wurde in Einzeltermine umgewandelt."));
 $this->msg[38] = array (
 		"mode" => 'success',
 		"msg"=> _("Belegung wurde in die Ressource &raquo;%s&laquo; verschoben."));
@@ -202,3 +202,11 @@ $this->msg[46] = array (
     'mode' => 'error',
     'msg'  => _("Sie müssen eineN NutzerIn eintragen oder eine freie Eingabe zur Belegung eintragen, um diese Belegung speichern zu können!")
 );
+$this->msg[47] = array (
+		"mode" => "success",
+		"msg"=> _("Belegung wurde in die Ressource &raquo;%s&laquo; kopiert."));
+$this->msg[48] = array (
+		"mode" => "error",
+		"msg"=> _("Die Belegung konnte nicht in die Ressource &raquo;%s&laquo; kopiert werden, da sie sich mit einer anderen Belegung &uuml;berschneidet:") . "<br><font size=\"-1\" color=\"black\">%s</font>");
+
+?>

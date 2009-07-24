@@ -1,4 +1,4 @@
-<form name="Formular" method="post" action="<?= URLHelper::getLink('?change_object_schedules='. (!$resAssign->isNew() ?  $resAssign->getId() : 'NEW')); ?>">
+<form name="Formular" method="post" action="<?= URLHelper::getLink('?change_object_schedules='. (!$resAssign->isNew() ?  $resAssign->getId() : 'NEW')); ?>#anker">
 <table border="0" cellpadding="2" cellspacing="0" width="99%" align="center">
 	<input type="hidden" name="quick_view" value="<?=$used_view ?>" />
 	<input type="hidden" name="quick_view_mode" value="<?=$view_mode ?>" />
@@ -286,6 +286,7 @@
 	<? if (($ResourceObjectPerms->havePerm("tutor")) && (!$resAssign->isNew())) : ?>
 	<tr>
 		<td class="blank" colspan="3" width="100%">&nbsp;
+		<?if(isset($search_room_x)) echo '<a name="anker"> </a>';?> 
 		</td>
 	</tr>
 
@@ -299,37 +300,84 @@
 	<?= $cssSw->switchClass(); ?>
 	<tr>
 		<td class="<?= $cssSw->getClass() ?>" valign="top">
+			<?
+		if ($owner_type == "sem" || $owner_type == "date") {
+			?>
 			<b><?=_("Belegung in anderen Raum verschieben:")?></b><br>
 			<?=_("Sie k&ouml;nnen diese Belegung in einen anderen Raum verschieben. <br>Alle anderen Angaben bleiben unver&auml;ndert.");?>
 			<br>&nbsp;
 			<?
-			if ((($search_exp_room) && ($search_room_x)) || ($search_properties_x)) :
-				if (getGlobalPerms($user->id) != "admin")
-					$resList = new ResourcesUserRoomsList ($user->id, FALSE, FALSE);
+		} else {
+			?>
+			<table cellspacing="5" cellpadding="2" border="0">
+			<tr>
+				<td>
+				<input <?=($change_schedule_move_or_copy != 'copy' ? 'checked' : '')?> type="radio" name="change_schedule_move_or_copy" id="change_schedule_move_or_copy1" value="move">
+				</td>
+				<td>
+				<label for="change_schedule_move_or_copy1" style="font-weight:bold;">
+				<?=_("Belegung in anderen Raum verschieben")?>
+				</label>
+				</td>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<input <?=($change_schedule_move_or_copy == 'copy' ? 'checked' : '')?> type="radio" name="change_schedule_move_or_copy" id="change_schedule_move_or_copy2" value="copy">
+				</td>
+				<td>
+				<label for="change_schedule_move_or_copy2" style="font-weight:bold;">
+				<?=_("Belegung in andere Räume kopieren")?>
+				</label>
+				</td>
+				</td>
+			</tr>
+			</table>
+			<?
+		}
+		$result = null;
+		if (strlen($search_exp_room) > 1 && isset($search_room_x)) {
+			if (getGlobalPerms($user->id) != "admin")
+				$resList = new ResourcesUserRoomsList ($user->id, FALSE, FALSE);
 
-				$result = $resReq->searchRooms($search_exp_room, ($search_properties_x) ? TRUE : FALSE, 0, 10, FALSE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
-				if ($result) :
-					printf ("<br><b>%s</b> ".((!$search_properties_x) ? _("Ressourcen gefunden:") : _("passende R&auml;ume gefunden"))."<br>", sizeof($result));
-					print "<select name=\"select_change_resource\">";
-					foreach ($result as $key => $val) :
-						printf ("<option value=\"%s\">%s </option>", $key, htmlReady(my_substr($val, 0, 30)));
-					endforeach;
-					print "</select>";
-					print "&nbsp;&nbsp;<input type=\"IMAGE\" src=\"".$GLOBALS['ASSETS_URL']."images/rewind.gif\" ".tooltip(_("neue Suche starten"))." border=\"0\" name=\"reset_room_search\" />";
-					print "<br><input type=\"IMAGE\" ".makeButton("verschieben", "src")." ".tooltip(_("Die Belegung ist den ausgew&auml;hlten Raum verschieben"))." border=\"0\" name=\"send_change_resource\" />";
-					if ($search_properties_x)
-						print "<br><br>"._("(Diese Resourcen/R&auml;ume erf&uuml;llen die Wunschkriterien einer Raumanfrage.)");
-
-				endif;
-			endif;
-			if (((!$search_exp_room) && (!$search_properties_x)) || (($search_exp_room) && (!$result)) || (($search_properties_x) && (!$result))) :
+			$result = $resReq->searchRooms($_POST['search_exp_room'], FALSE, 0, 10, FALSE, (is_object($resList)) ? array_keys($resList->getRooms()) : FALSE);
+		}
+		if ($result) {
+			printf ("<span class=\"effect_highlight\"><b>%s</b> ". _("Ressourcen gefunden:")."</span><br>", sizeof($result));
+			if($change_schedule_move_or_copy != 'copy'){
+				print "<select name=\"select_change_resource\">";
+				foreach ($result as $key => $val) {
+					printf ("<option value=\"%s\">%s  </option>", $key, htmlReady(my_substr($val, 0, 40)));
+				}
+				print "</select>";
+				print "&nbsp;<input type=\"IMAGE\" src=\"".$GLOBALS['ASSETS_URL']."images/rewind.gif\" ".tooltip(_("neue Suche starten"))." name=\"reset_room_search\" />";
+				print "&nbsp;&nbsp;".makeButton('verschieben', 'input', _("Die Belegung in den ausgewählten Raum verschieben"),'send_change_resource');
+			} else {
 				?>
-				<? print ((($search_exp_room) || ($search_properties_x)) && (!$result)) ? _("<b>Keine</b> Ressource gefunden.") : "";?>
-				<br>
-				<?=_("Geben Sie zur Suche den Namen der Ressource ganz oder teilweise ein:"); ?>
-				<input type="TEXT" size="30" maxlength="255" name="search_exp_room" />&nbsp;
-				<input type="IMAGE" src="<?= $GLOBALS['ASSETS_URL'] ?>images/suchen.gif" <? echo tooltip(_("Suche starten")) ?> border="0" name="search_room" /><br>
-			<? endif; ?>
+				<select name="select_change_resource[]" multiple size="10">
+				<?foreach($result as $key => $name){?>
+					<option value="<?=$key?>"><?=htmlReady(my_substr($name, 0, 40))?>  </option>
+				<?}?>
+				</select>
+				</font>
+				&nbsp;<input type="image" src="<?=$GLOBALS['ASSETS_URL']?>images/rewind.gif" <?=tooltip(_("neue Suche starten"))?> name="reset_room_search" />
+				&nbsp;&nbsp;
+				<?=makeButton('kopieren', 'input', _("Die Belegung in die ausgewählten Räume kopieren"),'send_change_resource')?>
+				<?
+			}
+			echo "<br><br>";
+		} else {
+			?>
+			<? if($result !== null) echo '<span class="effect_highlight">'._("<b>Keine</b> Ressource gefunden.").'</span>';?>
+			<br>
+			<?=_("Geben Sie zur Suche den Namen der Ressource ganz oder teilweise ein:"); ?>
+			<br>
+			<input type="TEXT" size="30" maxlength="255" name="search_exp_room" />&nbsp;
+			<?=makeButton('suchen', 'input', _("Suche starten"), 'search_room') ?>
+			<br>
+			<?
+		}
+		?>
 		</td>
 		<td class="<? echo $cssSw->getClass() ?>" valign="top">
 		<?

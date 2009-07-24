@@ -244,7 +244,19 @@ class RoomRequest {
 	function setDefaultSeats($value) {
 		$this->default_seats=($value);
 	}
-
+	
+	function searchRoomsToRequest($search_exp, $properties = false){
+		$permitted_rooms = null;
+		if(getGlobalPerms($user->id) != 'admin' && !Config::GetInstance()->getValue('RESOURCES_ALLOW_ROOM_REQUESTS_ALL_ROOMS')){
+			$my_rooms = new ResourcesUserRoomsList($user->id, false, false, true);
+			$global_resources = DBManager::get()
+								->query("SELECT resource_id FROM resources_objects WHERE owner_id='global'")
+								->fetchAll(PDO::FETCH_COLUMN);
+			$permitted_rooms = array_unique(array_merge(array_keys($my_rooms->getRooms()), $global_resources));
+		}
+		return $this->searchRooms($search_exp, $properties, 0, 0, true, $permitted_rooms);
+	}
+	
 	function searchRooms($search_exp, $properties = FALSE, $limit_lower = 0, $limit_upper = 0, $only_rooms = TRUE, $permitted_resources = FALSE) {
 		$search_exp = mysql_escape_string($search_exp);
 		//create permitted resource clause
