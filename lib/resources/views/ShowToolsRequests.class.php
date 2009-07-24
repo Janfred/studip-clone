@@ -528,7 +528,7 @@ class ShowToolsRequests {
 						</tr>
 						<?
 						if (get_config('RESOURCES_ENABLE_GROUPING')){
-							$room_group =& RoomGroups::GetInstance();
+							$room_group = RoomGroups::GetInstance();
 							$group_id = $resources_data['actual_room_group'];
 							?>
 						<tr>
@@ -541,7 +541,7 @@ class ShowToolsRequests {
 						<select name="request_tool_choose_group">
 						<option <?=(is_null($group_id) ? 'selected' : '')?> value="-"><?=_("Keine Raumgruppe anzeigen")?></option>
 						<?
-						foreach(array_keys($room_group->room_groups) as $gid){
+						foreach($room_group->getAvailableGroups() as $gid){
 						echo '<option value="'.$gid.'" '
 							. (!is_null($group_id) && $group_id == $gid ? 'selected' : '') . '>'
 							.htmlReady(my_substr($room_group->getGroupName($gid),0,45))
@@ -557,13 +557,13 @@ class ShowToolsRequests {
 						</td>
 						</tr>
 						<?
-						if (is_array($room_group->room_groups[$group_id]['rooms'])){
-							foreach ($room_group->room_groups[$group_id]['rooms'] as $key) {
+						if ($room_group->getGroupCount($group_id)){
+							foreach ($room_group->getGroupContent($group_id) as $key) {
 						?>
 						<tr>
 							<td width="70%"><font size="-1">
 								<?
-								$resObj =& ResourceObject::Factory($key);
+								$resObj = ResourceObject::Factory($key);
 								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							?>

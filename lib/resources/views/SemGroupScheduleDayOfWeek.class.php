@@ -73,11 +73,13 @@ class SemGroupScheduleDayOfWeek extends ScheduleView {
 	}
 
 	function getColumnName($id, $print_view = false){
-		$res_obj =& ResourceObject::Factory($this->show_columns[$id]);
+		$res_obj = ResourceObject::Factory($this->show_columns[$id]);
 		if (!$print_view){
-			$ret = '<a class="tree" href="' . $GLOBALS['PHP_SELF'] . '?show_object=' . $this->show_columns[$id] . '&view=view_sem_schedule">'
+			$ret = '<a class="tree" href="' . $GLOBALS['PHP_SELF'] . '?show_object=' . $this->show_columns[$id] . '&view=' 
+					. ($_REQUEST['view'] == 'openobject_group_schedule' ? 'openobject_schedule' : 'view_schedule') 
+					. '">'
 					. htmlReady($res_obj->getName()) . '</a>'
-					. '<br><span style="font-size:10pt;">(' . $res_obj->getSeats() . ')</span>';
+					. ($res_obj->getSeats() ? '<br>(' . $res_obj->getSeats() . ')' : '');
 		} else {
 			$ret = '<span style="font-size:12pt;">' . htmlReady($res_obj->getName()) . '</span>';
 		}

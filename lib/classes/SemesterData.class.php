@@ -178,7 +178,22 @@ class SemesterData {
 			return 0;
 		}
 		$this->db->next_record();
-		return $this->wrapSemesterData();
+		$semester = $this->wrapSemesterData();
+		$first_sem_week = (int)strftime('%U', $semester['vorles_beginn']);
+		$current_sem_week = (int)strftime('%U', $timestamp);
+		$last_sem_week = (int)strftime('%U', $semester['vorles_ende']);
+		if(strftime('%Y', $timestamp) > strftime('%Y', $semester['vorles_beginn'])){
+			$current_sem_week += 52;
+		}
+		if($last_sem_week < $first_sem_week){
+			$last_sem_week += 52;
+		}
+		if($current_sem_week >= $first_sem_week && $current_sem_week <= $last_sem_week){
+			$semester['sem_week_number'] = $current_sem_week - $first_sem_week + 1; 
+		} else {
+			$semester['sem_week_number'] = false;
+		}
+		return $semester;
 	}
 
 	function getCurrentSemesterData() {

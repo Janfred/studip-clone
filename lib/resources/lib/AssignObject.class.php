@@ -284,9 +284,11 @@ class AssignObject {
 		create_assigns($this, $this, -1, -1);
 		
 		$max_date = 0;
-		foreach ($this->events as $val) {
-			if ($val->getEnd() > $max_date)
-				$max_date = $val->getEnd();
+		if(is_array($this->events)){
+			foreach ($this->events as $val) {
+				if ($val->getEnd() > $max_date)
+					$max_date = $val->getEnd();
+			}
 		}
 		return $max_date;
 	}

@@ -135,12 +135,13 @@ if ($cancel_edit_assign) {
 }
 
 //send the user to index, if he want to use studip-object based modul but has no object set!
-if (($view=="openobject_main") || ($view=="openobject_details") || ($view=="openobject_assign") || ($view=="openobject_schedule"))
+if (($view=="openobject_main") || ($view=="openobject_details") || ($view=="openobject_assign") || ($view=="openobject_schedule")){
 	if (!$SessSemName[1]) {
-		checkObject();
-		die;
+		$resources_data = null;
+		$resources_data["view"] = $view = "search";
+		$resources_data["view_mode"] = $view_mode = FALSE;
 	}
-
+}
 //we take a search as long with us, as no other overview modul is used
 if (($view=="openobject_main") || ($view=="_lists") || ($view=="lists") || ($view=="resources") || ($view=="_resources"))
 	$resources_data["search_array"]='';
@@ -1684,10 +1685,10 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 
 		//add resource_ids from room groups
 		if (get_config('RESOURCES_ENABLE_GROUPING')){
-			$room_group =& RoomGroups::GetInstance();
+			$room_group = RoomGroups::GetInstance();
 			$group_id = $resources_data['actual_room_group'];
-			if (is_array($room_group->room_groups[$group_id]['rooms'])){
-				foreach ($room_group->room_groups[$group_id]['rooms'] as $val) {
+			if ($room_group->getGroupCount($group_id)){
+				foreach ($room_group->getGroupContent($group_id) as $val) {
 					$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["considered_resources"][$val] = array("type"=>"grouped");
 				}
 			}
@@ -1922,7 +1923,7 @@ if ($reset_set) {
 /*****************************************************************************
 evaluate the commands from schedule navigator (sem mode)
 /*****************************************************************************/
-if ($view == "view_sem_schedule" || $view == "view_group_schedule") {
+if ($view == "view_sem_schedule" || $view == "view_group_schedule" || $view == "view_group_schedule_daily" || $view == 'openobject_group_schedule') {
 
 	if ($_REQUEST['next_sem']){
 		$sem_array = SemesterData::GetSemesterArray();
@@ -1942,13 +1943,26 @@ if ($view == "view_sem_schedule" || $view == "view_group_schedule") {
 			}
 		}
 	}
+	if($view == "view_group_schedule_daily" || $view == 'openobject_group_schedule'){
+		if(isset($_REQUEST['jump_x'])){
+			$resources_data["schedule_start_time"] = mktime (0, 0, 0, (int)$_REQUEST['schedule_begin_month'], (int)$_REQUEST['schedule_begin_day'], (int)$_REQUEST['schedule_begin_year']);
+		}
+		if(!$resources_data["schedule_start_time"]) $resources_data["schedule_start_time"] = strtotime('today');
+		if ($_REQUEST['previous_day']){
+			$resources_data["schedule_start_time"] = strtotime('yesterday', $resources_data["schedule_start_time"]);
+		}
+		if ($_REQUEST['next_day']){
+			$resources_data["schedule_start_time"] = strtotime('tomorrow', $resources_data["schedule_start_time"]);
+		}
+	}
+	if($view == "view_group_schedule"){
 	if ($_REQUEST['previous_day']){
 		$resources_data['group_schedule_dow'] = (--$resources_data['group_schedule_dow'] == 0 ? 7 : $resources_data['group_schedule_dow']);
 	}
 	if ($_REQUEST['next_day']){
 		$resources_data['group_schedule_dow'] = (++$resources_data['group_schedule_dow'] == 8 ? 1 : $resources_data['group_schedule_dow']);
 	}
-
+	}
 	if ($_REQUEST['navigate']) {
 		if (isset($_REQUEST['sem_time_choose'])){
 			$resources_data['sem_schedule_timespan'] = $_REQUEST['sem_time_choose'];

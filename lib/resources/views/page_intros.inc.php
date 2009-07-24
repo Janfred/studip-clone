@@ -198,13 +198,24 @@ switch ($view) {
 		//$infopic = "schedule.jpg";
 	break;
 	case "view_group_schedule":
-		$room_groups =& RoomGroups::GetInstance();
+		$room_groups = RoomGroups::GetInstance();
 		$page_intro=_("Hier können Sie sich die Belegungszeiten einer Raumgruppe anzeigen lassen.");
 		$CURRENT_PAGE=_("Belegungszeiten einer Raumgruppe pro Semester ausgeben:") . ' ' . $room_groups->getGroupName($resources_data['actual_room_group']);
 
 		$infobox[0]["kategorie"] = _("Aktionen:");
 		$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
 								"text"  => "<a href=\"$PHP_SELF?view=view_group_schedule&print_view=1\" target=\"_blank\">"
+											. _("Druckansicht")
+											. "</a>");
+	break;
+	case "view_group_schedule_daily":
+		$room_groups = RoomGroups::GetInstance();
+		$page_intro=_("Hier können Sie sich die Belegungszeiten einer Raumgruppe anzeigen lassen.");
+		$CURRENT_PAGE=_("Belegungszeiten einer Raumgruppe pro Tag ausgeben:") . ' ' . $room_groups->getGroupName($resources_data['actual_room_group']);
+
+		$infobox[0]["kategorie"] = _("Aktionen:");
+		$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
+								"text"  => "<a href=\"$PHP_SELF?view=view_group_schedule_daily&print_view=1\" target=\"_blank\">"
 											. _("Druckansicht")
 											. "</a>");
 	break;
@@ -324,6 +335,16 @@ switch ($view) {
 		if ($resources_data["actual_object"])
 			$page_intro=sprintf(_("Vergeben von Rechten auf die Ressource %s"), "<b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().").");
 		$CURRENT_PAGE=sprintf(_("Vergeben von Berechtigungen - Objekt%s"), $currentObjectTitelAdd);
+	break;
+	case "openobject_group_schedule":
+		$page_intro=_("Hier können Sie sich die Belegungszeiten aller Ressourcen dieser Veranstaltung anzeigen lassen.");
+		$CURRENT_PAGE=$SessSemName["header_line"]." - "._("Belegungszeiten aller Ressourcen pro Tag ausgeben");
+
+		$infobox[0]["kategorie"] = _("Aktionen:");
+		$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
+								"text"  => "<a href=\"$PHP_SELF?view=openobject_group_schedule&print_view=1\" target=\"_blank\">"
+											. _("Druckansicht")
+											. "</a>");
 	break;
 	//default
 	default:

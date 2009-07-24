@@ -71,7 +71,8 @@ if (get_config('RESOURCES_ALLOW_CREATE_TOP_LEVEL') || getGlobalPerms($user->id) 
 	$structure["create_hierarchie"]=array ("topKat"=>"resources", "name"=>_("Neue Hierarchieebene erzeugen"), "link"=>"resources.php?view=create_hierarchie#a", "active"=>FALSE);
 }
 if (get_config('RESOURCES_ENABLE_GROUPING')){
-	$structure["view_group_schedule"]=array ("topKat"=>"resources", "name"=>_("Gruppen-Belegungspläne"), "link"=>"resources.php?view=view_group_schedule", "active"=>FALSE);
+	$structure["view_group_schedule_daily"]=array ("topKat"=>"resources", "name"=>_("Gruppen-Belegungspläne"), "link"=>"resources.php?view=view_group_schedule_daily", "active"=>FALSE);
+	$structure["view_group_schedule"]=array ("topKat"=>"resources", "name"=>_("Gruppen-Belegungspläne (Semester)"), "link"=>"resources.php?view=view_group_schedule", "active"=>FALSE);
 }
 
 //Reiter "Listen"

@@ -283,11 +283,13 @@ if ($modules["wiki"]) {
 //bottomkats for resources-management, if modul is activated
 if ($RESOURCES_ENABLE) {
 	$structure["resources_overview"]=array ('topKat' => "resources", 'name' => _("Übersicht"), 'link' => URLHelper::getLink('resources.php?view=openobject_main'), 'active' => FALSE);
+	$structure["resources_openobject_group_schedule"]=array ('topKat' => "resources", 'name' => _("Übersicht Belegung"), 'link' => URLHelper::getLink("resources.php?view=openobject_group_schedule"), 'active' => FALSE);
 	$structure["resources_details"]=array ('topKat' => "resources", 'name' => _("Details"), 'link' => URLHelper::getLink('resources.php?view=openobject_details'), 'active' => FALSE);
 	$structure["resources_schedule"]=array ('topKat' => "resources", 'name' => _("Belegung"), 'link' => URLHelper::getLink('resources.php?view=openobject_schedule'), 'active' => FALSE);
 	$structure["resources_assign"]=array ('topKat' => "resources", 'name' => _("Belegungen bearbeiten"), 'link' => URLHelper::getLink('resources.php?view=openobject_assign'), 'active' => FALSE);
-	if ($rechte)
-		$structure["resources_admin"]=array ('topKat' => "resources", 'name' => _("Ressourcen verwalten"), 'link' => URLHelper::getLink('resources.php'), 'active' => FALSE);
+	//Hmm, funzt nicht. Aber wo sollte man auch rauskommen?
+	//if ($rechte)
+	//	$structure["resources_admin"]=array ('topKat' => "resources", 'name' => _("Ressourcen verwalten"), 'link' => //URLHelper::getLink('resources.php'), 'active' => FALSE);
 }
 
 //bottomkats for Ilias-connect, if modul is activated
@@ -448,6 +450,10 @@ if (!$reiter_view){
 				case "openobject_assign":
 					$reiter_view="resources_assign";
 				break;
+				case "openobject_group_schedule":
+					$reiter_view="resources_openobject_group_schedule";
+				break;
+
 				default :
 					$reiter_view="resources";
 				break;

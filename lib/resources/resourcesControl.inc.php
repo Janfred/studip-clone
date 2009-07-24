@@ -99,7 +99,7 @@ if ($quick_view_mode != "no_nav" && !isset($_REQUEST['print_view']))
 	include ('lib/include/header.php');
 
 //load correct nav
-if ($view_mode == "oobj")
+if ($view_mode == "oobj" && !isset($_REQUEST['print_view']))
 	include ('lib/include/links_openobject.inc.php');
 elseif (($view_mode == "no_nav") || ($view_mode == "search") || isset($_REQUEST['print_view']))
 	;
@@ -454,11 +454,19 @@ if ($view == "view_sem_schedule") {
 	}
 }
 
-if ($view == "view_group_schedule") {
-	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowGroupSchedules.class.php");
+if ($view == "view_group_schedule" || $view == "view_group_schedule_daily") {
 	$room_group = RoomGroups::GetInstance();
-	if (isset($room_group->room_groups[$resources_data["actual_room_group"]]['rooms'])) {
-		$ViewSchedules =& new ShowGroupSchedules($resources_data['actual_room_group'], $resources_data['sem_schedule_semester_id'],$resources_data['sem_schedule_timespan'], $resources_data['group_schedule_dow']);
+	if(!$room_group->isGroup($resources_data["actual_room_group"])){
+		$resources_data["actual_room_group"] = 0;
+	}
+	if ($room_group->getGroupCount($resources_data["actual_room_group"])) {
+		if ($view == "view_group_schedule") {
+			require_once $RELATIVE_PATH_RESOURCES."/views/ShowGroupSchedules.class.php";
+			$ViewSchedules = new ShowGroupSchedules($resources_data['actual_room_group'], $resources_data['sem_schedule_semester_id'],$resources_data['sem_schedule_timespan'], $resources_data['group_schedule_dow']);
+		} elseif ($view == "view_group_schedule_daily"){
+			require_once $RELATIVE_PATH_RESOURCES."/views/ShowGroupSchedulesDaily.class.php";
+			$ViewSchedules = new ShowGroupSchedulesDaily($resources_data['actual_room_group'], $resources_data["schedule_start_time"],$room_group);
+		}
 		$ViewSchedules->setUsedView($view);
 		$ViewSchedules->navigator($_REQUEST['print_view']);
 		$suppress_infobox = TRUE;
@@ -493,6 +501,53 @@ if ($view == "view_group_schedule") {
 		$suppress_infobox = TRUE;
 	}
 }
+
+if ($view == "openobject_group_schedule") {
+	require_once $RELATIVE_PATH_RESOURCES."/lib/ResourcesOpenObjectGroups.class.php";
+
+	$resources_groups = ResourcesOpenObjectGroups::GetInstance($SessSemName[1]);
+	if(!$resources_groups->isGroup($resources_data["actual_room_group"])){
+		$resources_data["actual_room_group"] = 0;
+	}
+
+	if ($resources_groups->getGroupCount($resources_data["actual_room_group"])) {
+		require_once $RELATIVE_PATH_RESOURCES."/views/ShowGroupSchedulesDaily.class.php";
+		$ViewSchedules = new ShowGroupSchedulesDaily($resources_data['actual_room_group'], $resources_data["schedule_start_time"],$resources_groups);
+		$ViewSchedules->setUsedView($view);
+		$ViewSchedules->navigator($_REQUEST['print_view']);
+		$suppress_infobox = TRUE;
+		?>						</td>
+							</tr>
+						</table>
+					</td>
+				<?
+				if ($infobox && !isset($_REQUEST['print_view'])) {
+					?>
+					<td class="blank" width="270" align="right" valign="top">
+						<? print_infobox ($infobox, $infopic);?>
+					</td>
+					<?
+				}
+			?>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td class="blank" valign ="top">
+			<table width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td valign ="top">
+			<?
+		if (isset($resources_data['actual_room_group']))
+			$ViewSchedules->showScheduleGraphical($_REQUEST['print_view']);
+	} else {
+		echo "</td></tr>";
+		$msg->displayMsg(25);
+		$suppress_infobox = TRUE;
+	}
+}
+
 
 /*****************************************************************************
 persoenliche Einstellungen verwalten, views: edit_personal_settings

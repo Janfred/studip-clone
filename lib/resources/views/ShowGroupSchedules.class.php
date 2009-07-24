@@ -97,7 +97,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
 					<select name="group_schedule_choose_group" onChange="document.schedule_form.submit()">
 					<?
 					$room_group = RoomGroups::GetInstance();
-					foreach(array_keys($room_group->room_groups) as $gid){
+					foreach($room_group->getAvailableGroups() as $gid){
 						echo '<option value="'.$gid.'" '
 							. ($this->group_id == $gid ? 'selected' : '') . '>'
 							.htmlReady(my_substr($room_group->getGroupName($gid),0,85))
@@ -156,9 +156,9 @@ class ShowGroupSchedules extends ShowSemSchedules {
 		}
 
 		$room_group = RoomGroups::GetInstance();
-		if (is_array($room_group->room_groups[$this->group_id]['rooms'])){
+		if ($room_group->getGroupCount($this->group_id)){
 
-			$schedule=new SemGroupScheduleDayOfWeek($start_hour, $end_hour,$room_group->room_groups[$this->group_id]['rooms'], $start_time, $this->dow);
+			$schedule=new SemGroupScheduleDayOfWeek($start_hour, $end_hour,$room_group->getGroupContent($this->group_id), $start_time, $this->dow);
 
 			$schedule->add_link = "resources.php?cancel_edit_assign=1&quick_view=$view&quick_view_mode=".$view_mode."&add_ts=";
 
@@ -166,7 +166,7 @@ class ShowGroupSchedules extends ShowSemSchedules {
 			$num_single_events = 0;
 			$num = 1;
 
-			foreach ($room_group->room_groups[$this->group_id]['rooms'] as $room_to_show_id => $room_id){
+			foreach ($room_group->getGroupContent($this->group_id) as $room_to_show_id => $room_id){
 
 				if ($resources_data["show_repeat_mode"] == 'repeated' || $resources_data["show_repeat_mode"] == 'all'){
 					$events = createNormalizedAssigns($room_id, $start_time, $end_time,get_config('RESOURCES_SCHEDULE_EXPLAIN_USER_NAME'), $this->dow);
@@ -191,9 +191,9 @@ class ShowGroupSchedules extends ShowSemSchedules {
 					$a_end_time = ($print_view ? $a_start_time + 86400 * 14 : $end_time);
 					$assign_events = new AssignEventList ($a_start_time, $a_end_time, $room_id, '', '', TRUE, 'semschedulesingle', $this->dow);
 					while ($event = $assign_events->nextEvent()) {
-						if(strftime('%u', $event->getBegin()) != $this->dow) continue;
 						if(in_array($event->repeat_mode, array('d','m','y'))){
-							$assign =& AssignObject::Factory($event->getAssignId());
+							if(strftime('%u', $event->getBegin()) != $this->dow) continue;
+							$assign = AssignObject::Factory($event->getAssignId());
 							switch($event->repeat_mode){
 								case 'd':
 								$add_info = '('.sprintf(_("täglich, %s bis %s"), strftime('%x',$assign->getBegin()), strftime('%x',$assign->getRepeatEnd())).')';

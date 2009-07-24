@@ -38,29 +38,26 @@
 
 require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/ResourceObject.class.php";
 require_once $GLOBALS['RELATIVE_PATH_RESOURCES'] . "/lib/ResourcesUserRoomsList.class.php";
-require_once "lib/classes/DbSnapshot.class.php";
 
 
 class RoomGroups {
 	
-	var $room_groups = array();
+	private static $room_group_object;
+	private $groups = array();
 	
-	function &GetInstance($refresh_cache = false){
-		
-		static $room_group_object;
-		
+	public static function GetInstance($refresh_cache = false){
 		if ($refresh_cache){
-			$room_group_object = null;
+			self::$room_group_object = null;
 		}
-		if (is_object($room_group_object)){
-			return $room_group_object;
+		if (is_object(self::$room_group_object)){
+			return self::$room_group_object;
 		} else {
-			$room_group_object = new RoomGroups();
-			return $room_group_object;
+			self::$room_group_object = new RoomGroups();
+			return self::$room_group_object;
 		}
 	}
 	
-	function RoomGroups(){
+	function __construct(){
 		$this->createConfigGroups();
 		if (get_config('RESOURCES_ENABLE_VIRTUAL_ROOM_GROUPS')){
 			$this->createVirtualGroups();
@@ -76,7 +73,7 @@ class RoomGroups {
 				foreach ($room_groups as $key => $value){
 					$rooms = array_intersect($value['rooms'], $my_rooms);
 					if (count($rooms)){
-						$this->room_groups[] = array('name' => $value['name'], 'rooms' => $rooms);
+						$this->groups[] = array('name' => $value['name'], 'resources' => $rooms);
 					}
 				}
 			}
@@ -84,21 +81,22 @@ class RoomGroups {
 	}
 	
 	function createVirtualGroups(){
+		$db = DBManager::get();
 		$room_list = new ResourcesUserRoomsList($GLOBALS['user']->id, false, false, true);
-		$res_obj =& ResourceObject::Factory();
-		$offset = count($this->room_groups);
+		$res_obj = ResourceObject::Factory();
+		$offset = count($this->groups);
 		if ($room_list->numberOfRooms()){
-			$snap =& new DbSnapshot(new DB_Seminar("SELECT resource_id, parent_id 
-													FROM resources_objects 
-													WHERE resource_id IN('"
-													. join("','", array_keys($room_list->getRooms()))."') ORDER BY name"));
-			foreach($snap->getGroupedResult('parent_id') as $parent_id => $rooms){
-				if (is_array($rooms['resource_id'])){
+			$rs = $db->query("SELECT parent_id,resource_id 
+				FROM resources_objects 
+				WHERE resource_id IN('"
+				. join("','", array_keys($room_list->getRooms()))."') ORDER BY name");
+			foreach($rs->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP) as $parent_id => $resource_ids){
+				if (is_array($resource_ids) && count($resource_ids)){
 					$res_obj->restore($parent_id);
-					$this->room_groups[$offset]['name'] = $res_obj->getPathToString(true);
-					foreach (array_keys($rooms['resource_id']) as $room_id){
-						$res_obj->restore($room_id);
-						$this->room_groups[$offset]['rooms'][] = $room_id;  
+					$this->groups[$offset]['name'] = $res_obj->getPathToString(true);
+					foreach ($resource_ids as $resource_id){
+						$res_obj->restore($resource_id);
+						$this->groups[$offset]['resources'][] = $resource_id;  
 					}
 					++$offset;
 				}
@@ -107,19 +105,23 @@ class RoomGroups {
 	}
 	
 	function getGroupName($id){
-		return (isset($this->room_groups[$id]) ? $this->room_groups[$id]['name'] : false);
+		return (isset($this->groups[$id]) ? $this->groups[$id]['name'] : false);
+	}
+	
+	function getGroupContent($id){
+		return (isset($this->groups[$id]) ? $this->groups[$id]['resources'] : array());
 	}
 	
 	function getGroupCount($id){
-		return (is_array($this->room_groups[$id]['rooms']) ? count($this->room_groups[$id]['rooms']) : 0);
+		return count($this->getGroupContent($id));
+	}
+	
+	function getAvailableGroups(){
+		return array_keys($this->groups);
+	}
+	
+	function isGroup($id){
+		return array_key_exists($id, $this->groups);
 	}
 }
-
-//test
-/*
-page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "user" => "Seminar_user" , "perm" => "Seminar_Perm"));
-echo "<pre>";
-$test = new RoomGroups();
-print_r($test->room_groups);
-*/
 ?>

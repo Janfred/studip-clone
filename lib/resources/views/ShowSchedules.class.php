@@ -296,9 +296,12 @@ class ShowSchedules {
 				<td class="<? echo $cssSw->getClass() ?>"  width="10%" align="left">&nbsp;
 					<a href="<? echo $PHP_SELF ?>?quick_view=<?=$this->used_view?>&quick_view_mode=<?=$view_mode?>&previous_week=TRUE"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/calendar_previous.gif" <? echo tooltip (_("Vorherige Woche anzeigen")) ?>border="0" /></a>
 				</td>
-				<td class="<? echo $cssSw->getClass() ?>" width="76%" align="center">
-					<? echo "<b>Anzeige der Woche vom ", date ("d.m.Y", $start_time), " bis ", date ("d.m.Y", $end_time)."</b> (".strftime("%V", $start_time).". "._("Woche").")";?>
-					<br />
+				<td class="<? echo $cssSw->getClass() ?>" width="76%" align="center" style="font-weight:bold">
+					<? printf(_("Anzeige der Woche vom %s bis %s (KW %s)"), strftime("%x", $start_time), strftime("%x", $end_time),strftime("%V", $start_time));?>
+					<br>
+					<?php
+					$this->showSemWeekNumber($start_time);
+					?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" width="10%" align="center">&nbsp;
 					<a href="<? echo $PHP_SELF ?>?quick_view=<?=$this->used_view?>&quick_view_mode=<?=$view_mode?>&next_week=TRUE"><img  valign="middle"  src="<?= $GLOBALS['ASSETS_URL'] ?>images/calendar_next.gif" <? echo tooltip (_("Nächste Woche anzeigen")) ?>border="0" /></a>
@@ -351,6 +354,16 @@ class ShowSchedules {
 		</table>
 		</form>
 	<?
+	}
+	
+	function showSemWeekNumber($start_time){
+		$semester = SemesterData::getInstance()->getSemesterDataByDate($start_time);
+		echo htmlready($semester['name']) . ' - ';
+		if(is_int($semester['sem_week_number'])){
+			printf(_("%s. Vorlesungswoche"), $semester['sem_week_number']); 
+		} else {
+			echo _("vorlesungsfreie Zeit");
+		}
 	}
 }
 ?>

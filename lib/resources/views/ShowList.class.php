@@ -235,27 +235,13 @@ class ShowList extends ShowTreeRow{
 	}
 
 	function showRangeList($range_id) {
-		$db=new DB_Seminar;
-
-		//create the query for all objects owned by the range
-		$query = sprintf ("SELECT resource_id FROM resources_objects WHERE owner_id = '%s' ORDER BY name", $range_id);
-		$db->query($query);
-
-		while ($db->next_record()) {
-			$this->showListObject($db->f("resource_id"));
-			$result_count++;
+		$count = 0;
+		require_once $GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/ResourcesOpenObjectGroups.class.php";
+		foreach(ResourcesOpenObjectGroups::GetInstance($range_id)->getAllResources() as $resource_id){
+			$this->showListObject($resource_id);
+			++$count;
 		}
-
-		//create the query for all additionale perms by the range to an object
-		$query = sprintf ("SELECT resources_user_resources.resource_id FROM  resources_user_resources LEFT JOIN resources_objects USING(resource_id) WHERE user_id = '%s' ORDER BY name", $range_id);
-		$db->query($query);
-
-		while ($db->next_record()) {
-			$this->showListObject($db->f("resource_id"));
-			$result_count++;
-		}
-
-	return $result_count;
+		return $count;
 	}
 
 	function showSearchList($search_array, $check_assigns = FALSE) {
@@ -266,7 +252,7 @@ class ShowList extends ShowTreeRow{
 			$search_only = $this->getResourcesSearchRange($search_array['resources_search_range']);
 		}
 
-		if (($search_array["search_exp"]) && (!$search_array["search_properties"]))
+		if (!$search_array["properties"])
 			$query = sprintf ("SELECT resource_id FROM resources_objects ro LEFT JOIN resources_categories USING (category_id)
 								WHERE ro.name LIKE '%%%s%%' %s %s %s ORDER BY ro.name",
 								$search_array["search_exp"],
@@ -302,19 +288,15 @@ class ShowList extends ShowTreeRow{
 				$i++;
 			}
 
-			if ($search_array["search_exp"])
-				$query.= sprintf(" %s (b.name LIKE '%%%s%%' OR b.description LIKE '%%%s%%') ", $search_array["properties"] ? "AND" : "", $search_array["search_exp"], $search_array["search_exp"]);
-
-			if ($search_array["properties"])
-				$query.= sprintf (" GROUP BY a.resource_id  HAVING resource_id_count = '%s' ", $i);
+			$query .= sprintf(" AND b.name LIKE '%%%s%%' ", $search_array["search_exp"]);
+			$query .= $this->supress_hierachy_levels ? " AND b.category_id != ''" : "";
+			$query .= $this->show_only_rooms ? " AND is_room = 1" : "";
+			$query .= $search_array['resources_search_range'] ? " AND b.resource_id IN('".join("','", $search_only)."')" : "";
+			$query .= sprintf (" GROUP BY a.resource_id  HAVING resource_id_count = '%s' ", $i);
 
 			$query .=" ORDER BY b.name";
 		}
 
-		if ($query == null)
-		{
-			$query = "SELECT resource_id FROM resources_objects WHERE 1 ORDER BY name";
-		}
 
 		$db->query($query);
 
