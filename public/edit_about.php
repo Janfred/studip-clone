@@ -1041,7 +1041,7 @@ if ($view == 'Karriere') {
 			$stmt = DBManager::get()->prepare("SELECT Institut_id, Name FROM Institute WHERE fakultaets_id = ? AND Institut_id != ? ORDER BY Name");
 			if ($stmt->execute(array($data['Institut_id'], $data['Institut_id']))) {
 				while($sub_data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-					$sub_admin_insts[$data['Institut_id']] = $sub_data;
+					$sub_admin_insts[$data['Institut_id']][$sub_data['Institut_id']] = $sub_data;
 				}
 			}
 		}
