@@ -33,7 +33,7 @@ class URLHelper
     /**
      * base URL for all links generated from relative URLs
      */
-    private static $base_url;
+    public static $base_url;
 
     /**
      * Set a base URL to be used when resolving relative URLs passed

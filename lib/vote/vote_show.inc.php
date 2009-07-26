@@ -115,7 +115,7 @@ function show_votes ($rangeID, $userID, $perm, $isHomepage = NO) {
    /* Show the vote box ---------------------------------------------------- */
    $width = ($isHomepage)? "100%" : "70%";
 
-   if ($perm->have_studip_perm ("tutor", $rangeID) OR
+   if (($perm->have_studip_perm ("tutor", $rangeID) && $perm->have_perm('tutor')) OR
        get_username($userID) == $rangeID)
       echo createBoxHeader (_("Umfragen"), $width, "",
 			    VOTE_ICON_BIG,

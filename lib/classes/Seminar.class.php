@@ -49,6 +49,14 @@ require_once ('lib/log_events.inc.php');
 require_once ($GLOBALS['RELATIVE_PATH_RESOURCES'].'/lib/ResourceObject.class.php');
 require_once ('lib/visual.inc.php');
 
+
+require_once('lib/classes/StudipLitList.class.php');
+require_once('lib/classes/StudipNews.class.php');
+require_once ($GLOBALS['RELATIVE_PATH_ELEARNING_INTERFACE'] . "/ObjectConnections.class.php");
+require_once ($GLOBALS['RELATIVE_PATH_ELEARNING_INTERFACE'] . "/ELearningUtils.class.php");
+require_once ('lib/classes/LockRules.class.php');
+
+
 class Seminar {
 
 	var $id = null;						// ID of the seminar
@@ -102,6 +110,7 @@ class Seminar {
 		if (!$this->id) {
 			$this->id = $this->createId();
 			$this->is_new = TRUE;
+			$this->metadate = new MetaDate();
 		}
 
 	}
@@ -139,6 +148,27 @@ class Seminar {
 						WHERE status='$status' AND su.seminar_id='".$this->getId()."' ORDER BY su.position, Nachname");
 		while($this->db->next_record()){
 			$this->members[$status][$this->db->f('user_id')] = $this->db->Record;
+		}
+		return $this->db->num_rows();
+	}
+
+	function getAdmissionMembers($status = 'awaiting'){
+		if (!isset($this->admission_members[$status])){
+			$this->restoreAdmissionMembers($status);
+		}
+		return $this->admission_members[$status];
+	}
+
+	function restoreAdmissionMembers($status = 'awaiting'){
+		$this->admission_members[$status] = array();
+		$this->db->query("SELECT su.user_id,username,Vorname,Nachname,
+						".$GLOBALS['_fullname_sql']['full']." as fullname,
+						studiengang_id
+						FROM admission_seminar_user su INNER JOIN auth_user_md5 USING(user_id)
+						LEFT JOIN user_info USING(user_id)
+						WHERE status='$status' AND su.seminar_id='".$this->getId()."' ORDER BY su.position, Nachname");
+		while($this->db->next_record()){
+			$this->admission_members[$status][$this->db->f('user_id')] = $this->db->Record;
 		}
 		return $this->db->num_rows();
 	}
@@ -522,6 +552,7 @@ class Seminar {
 			$this->modules = $this->db->f("modules");
 			$this->is_new = false;
 			$this->members = array();
+			$this->admission_members = array();
 			$this->admission_studiengang = null;
 			return TRUE;
 
@@ -1839,5 +1870,151 @@ class Seminar {
 	 */
 	function isPublic() {
 		return $this->read_level == 0 && $this->visible == 1;
+	}
+	
+	
+	/**
+	 *  Deletes the current seminar
+	 * 
+	 * @return void       returns success-message if seminar could be deleted
+	 *                    otherwise an  error-message
+	 */
+	
+	function delete() {
+	   $s_id = $this->id;
+
+	    // Delete that Seminar.
+
+		// Alle Benutzer aus dem Seminar rauswerfen.
+		$query = "DELETE from seminar_user where Seminar_id='$s_id'";
+		$db = new DB_Seminar();
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$this->createMessage(sprintf(_("%s VeranstaltungsteilnehmerInnen, DozentenInnen oder TutorenInnen archiviert."), $db_ar));
+		}
+
+		// Alle Benutzer aus Wartelisten rauswerfen
+		$query = "DELETE from admission_seminar_user where seminar_id='$s_id'";
+		$db->query($query);
+
+		// Alle Eintraege aus Zuordnungen zu Studiengaenge rauswerfen
+		$query = "DELETE from admission_seminar_studiengang where seminar_id='$s_id'";
+		$db->query($query);
+
+		// Alle beteiligten Institute rauswerfen
+		$query = "DELETE FROM seminar_inst where Seminar_id='$s_id'";
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$this->createMessage(sprintf(_("%s Zuordnungen zu Einrichtungen archiviert."), $db_ar));
+		}
+
+		// user aus den Statusgruppen rauswerfen
+		$count = DeleteAllStatusgruppen($s_id);
+		if ($count > 0) {
+			 $this->createMessage(_("Eintr&auml;ge aus Funktionen / Gruppen gel&ouml;scht."));
+		}
+
+		// Alle Eintraege aus dem Vorlesungsverzeichnis rauswerfen
+		$db_ar = StudipSemTree::DeleteSemEntries(null, $s_id);
+		if ($db_ar > 0) {
+			$this->createMessage(sprintf(_("%s Zuordnungen zu Bereichen archiviert."), $db_ar));
+		}
+
+		// Alle Termine mit allem was dranhaengt zu diesem Seminar loeschen.
+		if (($db_ar = delete_range_of_dates($s_id, TRUE)) > 0) {
+			$this->createMessage(sprintf(_("%s Veranstaltungstermine archiviert."), $db_ar));
+		}
+
+		// Alle weiteren Postings zu diesem Seminar loeschen.
+		$query = "DELETE from px_topics where Seminar_id='$s_id'";
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$this->createMessage(sprintf(_("%s Postings archiviert."), $db_ar));
+		}
+
+		// Alle Dokumente zu diesem Seminar loeschen.
+		if (($db_ar = delete_all_documents($s_id)) > 0) {
+			$this->createMessage(sprintf(_("%s Dokumente und Ordner archiviert."), $db_ar));
+		}
+
+		// Freie Seite zu diesem Seminar löschen
+		$query = "DELETE FROM scm where range_id='$s_id'";
+		$db->query($query);
+		if (($db_ar = $db->affected_rows()) > 0) {
+			$this->createMessage(_("Freie Seite der Veranstaltung archiviert."));
+		}
+
+		// delete literatur
+		$del_lit = StudipLitList::DeleteListsByRange($s_id);
+		if ($del_lit) {
+			$this->createMessage(sprintf(_("%s Literaturlisten archiviert."),$del_lit['list']));
+		}
+
+		// Alle News-Verweise auf dieses Seminar löschen
+		if ( ($db_ar = StudipNews::DeleteNewsRanges($s_id)) ) {
+			$this->createMessage(sprintf(_("%s News gel&ouml;scht."), $db_ar));
+		}
+		//delete entry in news_rss_range
+		StudipNews::UnsetRssId($s_id);
+
+		//kill the datafields
+		DataFieldEntry::removeAll($s_id);
+
+		//kill all wiki-pages
+		$query = sprintf ("DELETE FROM wiki WHERE range_id='%s'", $s_id);
+		$db->query($query);
+		if (($db_wiki = $db->affected_rows()) > 0) {
+			$this->createMessage(sprintf(_("%s Wiki-Seiten archiviert."), $db_wiki));
+		}
+
+		$query = sprintf ("DELETE FROM wiki_links WHERE range_id='%s'", $s_id);
+		$db->query($query);
+
+		$query = sprintf ("DELETE FROM wiki_locks WHERE range_id='%s'", $s_id);
+		$db->query($query);
+
+		// kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
+		if ($RESOURCES_ENABLE) {
+			$killAssign = new DeleteResourcesUser($s_id);
+			$killAssign->delete();
+		}
+
+    	// kill virtual seminar-entries in calendar
+		$query = "DELETE FROM seminar_user_schedule WHERE range_id = '$s_id'";
+		$db->query($query);
+
+		if($ELEARNING_INTERFACE_ENABLE){
+			$cms_types = ObjectConnections::GetConnectedSystems($s_id);
+			if(count($cms_types)){
+				foreach($cms_types as $system){
+					ELearningUtils::loadClass($system);
+					$del_cms += $connected_cms[$system]->deleteConnectedModules($s_id);
+				}
+				$this->createMessage(sprintf(_("%s Verknüpfungen zu externen Systemen gel&ouml;scht."), $del_cms ));
+			}
+		}
+	
+		//kill the object_user_vists for this seminar
+		object_kill_visits(null, $s_id);
+
+                // Logging...
+                $query="SELECT seminare.name as name, seminare.VeranstaltungsNummer as number, semester_data.name as semester FROM seminare LEFT JOIN semester_data ON (seminare.start_time = semester_data.beginn) WHERE seminare.Seminar_id='$s_id'";
+                $db->query($query);
+                if ($db->next_record()) {
+                        $semlogname=$db->f('number')." ".$db->f('name')." (".$db->f('semester').")";
+                } else {
+                        $semlogname="unknown sem_id: $s_id";
+                }
+                log_event("SEM_ARCHIVE",$s_id,NULL,$semlogname);
+                // ...logged
+
+		// und das Seminar loeschen.
+		$query = "DELETE FROM seminare where Seminar_id= '$s_id'";
+		$db->query($query);
+		if ($db->affected_rows() == 0) {
+			throw new Exception(_("Fehler beim Löschen der Veranstaltung"));
+		}
+		return true;
+        
 	}
 }

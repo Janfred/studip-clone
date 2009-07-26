@@ -29,6 +29,9 @@ require_once 'lib/classes/InstituteAvatar.class.php';
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
 
+global $SEM_CLASS,
+       $SEM_TYPE;
+
 ob_start(); //Outputbuffering für maximal Performance
 
 function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
@@ -570,9 +573,15 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 				// delete Entry from List:
 
-				if (($values["status"]=="dozent") || ($values["status"]=="tutor"))
-					echo "<td class=\"".$cssSw->getClass()."\"  align=center><a href=\"admin_seminare1.php?select_sem_id=$semid\"><img width=\"15\" height=\"17\" src=\"".$GLOBALS['ASSETS_URL']."images/minikey.gif\" ".tooltip(_("Veranstaltung administrieren"))." border=\"0\" /></a>&nbsp;</td>";
-				elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
+				if (($values["status"]=="dozent") || ($values["status"]=="tutor")) {
+				    if ($SEM_CLASS[$SEM_TYPE[$values['sem_status']]["class"]]["studygroup_mode"]) {
+				    	echo "<td class=\"".$cssSw->getClass()."\"  align=center><a href=\"".
+							UrlHelper::getUrl('dispatch.php/course/studygroup/edit/'. $semid .'?cid='. $semid)
+							. "\"><img width=\"15\" height=\"17\" src=\"".$GLOBALS['ASSETS_URL']."images/minikey.gif\" ".tooltip(_("Veranstaltung administrieren"))." border=\"0\" /></a>&nbsp;</td>";
+				    } else {
+				        echo "<td class=\"".$cssSw->getClass()."\"  align=center><a href=\"admin_seminare1.php?select_sem_id=$semid\"><img width=\"15\" height=\"17\" src=\"".$GLOBALS['ASSETS_URL']."images/minikey.gif\" ".tooltip(_("Veranstaltung administrieren"))." border=\"0\" /></a>&nbsp;</td>";
+				    }
+				} elseif ($values["binding"]) //anderer Link und andere Tonne wenn Veranstaltungszuordnung bindend ist.
 					printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=no_kill\"><img src=\"".$GLOBALS['ASSETS_URL']."images/logout_seminare_no.gif\" ".tooltip(_("Das Abonnement ist bindend. Bitte wenden Sie sich an die Dozentin oder den Dozenten."))." border=\"0\"></a>&nbsp; </td>", $semid);
 				else
 					printf("<td class=\"".$cssSw->getClass()."\"  align=center nowrap><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill\"><img src=\"".$GLOBALS['ASSETS_URL']."images/logout_seminare.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp;</td>", $semid);

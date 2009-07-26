@@ -25,7 +25,7 @@ class SemBrowse {
 	var $target_id;
 
 	function SemBrowse($sem_browse_data_init = array()){
-		global $sem_browse_data,$sess;
+		global $sem_browse_data,$sess,$SEM_CLASS,$SEM_TYPE;
 
 		$this->group_by_fields = array(	array('name' => _("Semester"), 'group_field' => 'sem_number'),
 										array('name' => _("Bereich"), 'group_field' => 'bereich'),
@@ -434,11 +434,15 @@ function print_result(){
 					break;
 
 				}
-				echo "</b></font></td></tr>";
+				echo "</b></font></td></tr><tr>";
 				ob_end_flush();
 				ob_start();
+				
 				if (is_array($sem_ids['Seminar_id'])){
-					while(list($seminar_id,) = each($sem_ids['Seminar_id'])){
+				   while(list($seminar_id,) = each($sem_ids['Seminar_id'])){
+					    if ($SEM_CLASS[$SEM_TYPE[key($sem_data[$seminar_id]['status'])]["class"]]["studygroup_mode"]) {
+   					         // do something smart here in order to display the icon for studygroup
+   					    }
 						$sem_name = key($sem_data[$seminar_id]["Name"]);
 						$seminar_number = key($sem_data[$seminar_id]['VeranstaltungsNummer']);
 						$sem_number_start = key($sem_data[$seminar_id]["sem_number"]);

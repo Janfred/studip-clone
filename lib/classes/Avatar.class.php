@@ -171,10 +171,16 @@ class Avatar {
    *
    * @return string returns the HTML image tag
    */
-  function getImageTag($size = Avatar::MEDIUM) {
+  function getImageTag($size = Avatar::MEDIUM, $opt = array()) {
+    
+    $opt = Avatar::parse_attributes($opt);  
+          
     require_once 'lib/functions.php';
     $username = htmlReady(get_username($this->user_id));
     $fullname = htmlReady(get_fullname($this->user_id));
+    
+    if(isset($opt['title'])) $fullname = $opt['title'];
+    
     return sprintf('<img src="%s" align="middle" class="avatar-%s user-%s" '.
                    'alt="%s" title="%s" />',
                    $this->getURL($size), $size, $username,
@@ -383,5 +389,28 @@ class Avatar {
     # execute PHP internal error handler
     return false;
   }
+  
+  private static function parse_attributes($stringOrArray) {
+
+      if (is_array($stringOrArray))
+        return $stringOrArray;
+
+      preg_match_all('/
+        \s*(\w+)              # key                               \\1
+        \s*=\s*               # =
+        (\'|")?               # values may be included in \' or " \\2
+        (.*?)                 # value                             \\3
+        (?(2) \\2)            # matching \' or " if needed        \\4
+        \s*(?:
+          (?=\w+\s*=) | \s*$  # followed by another key= or the end of the string
+        )
+      /x', $stringOrArray, $matches, PREG_SET_ORDER);
+
+      $attributes = array();
+      foreach ($matches as $val)
+        $attributes[$val[1]] = $val[3];
+
+      return $attributes;
+    }
 }
 

@@ -46,6 +46,7 @@ if ($GLOBALS['VOTE_ENABLE']) {
 	include_once ("lib/vote/vote_show.inc.php");
 }
 
+$studygroup_mode=$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["studygroup_mode"];
 
 if (isset($auswahl) && $auswahl!="") {
 		//just opened a seminar: we have to initialize the seminar for working with it
@@ -134,6 +135,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
 	}
 
+	if (!$studygroup_mode) {
 ?>
 	<font size="-1">
 	<?
@@ -230,7 +232,30 @@ $quarter_year = 60 * 60 * 24 * 90;
 				}
 			}
 		}
-		?>
+	} else {
+		echo '<br><br>';
+        echo '<font size="-1">';
+		$stmt = DBManager::get()->query("SELECT Beschreibung FROM seminare WHERE Seminar_id = '$SessionSeminar'");
+		echo '<b>'._('Beschreibung:').' </b>'.$stmt->fetchColumn(0) .'<br><br>';
+
+
+		$stmt = DBManager::get()->query("SELECT ". $_fullname_sql['full'] . " AS fullname, username FROM seminar_user
+			LEFT JOIN auth_user_md5 ON (auth_user_md5.user_id = seminar_user.user_id)
+			LEFT JOIN user_info ON (user_info.user_id = seminar_user.user_id)
+			WHERE Seminar_id = '$SessionSeminar' 
+			AND (status = 'dozent' OR status = 'tutor' )
+			ORDER BY status ASC");
+
+		echo '<b>'._('Moderiert von:') .'</b> ';
+		while($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		    
+			$mods[$data['user_id']] = '<a href="'.URLHelper::getLink("about.php?username=".$data['username']).'">'.$data['fullname'].'</a>';
+		}
+		echo implode(', ', $mods);
+        echo '</font>';
+
+	}
+?>
 		</blockquote><br>
 		</td>
 		<td class="blank" align="right" valign="top">
@@ -244,7 +269,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 
 // Anzeige von News
 
-($rechte) ? $show_admin=TRUE : $show_admin=FALSE;
+($rechte && $perm->have_perm('tutor')) ? $show_admin=TRUE : $show_admin=FALSE;
 if (show_news($auswahl,$show_admin, 0, $smain_data["nopen"], "100%", object_get_visit($SessSemName[1], "sem"), $smain_data))
 		echo"<br>";
 
@@ -253,8 +278,10 @@ $start_zeit=time();
 $end_zeit=$start_zeit+1210000;
 $name = rawurlencode($SessSemName[0]);
 ($rechte) ? $show_admin=URLHelper::getLink("admin_dates.php?range_id=$SessSemName[1]&ebene=sem&new_sem=TRUE") : $show_admin=FALSE;
-if (show_dates($start_zeit, $end_zeit, $smain_data["dopen"], $auswahl, 0, TRUE, $show_admin))
+if (!$studygroup_mode) {
+	if (show_dates($start_zeit, $end_zeit, $smain_data["dopen"], $auswahl, 0, TRUE, $show_admin))
 		echo"<br>";
+}
 
 // show chat info
 if (($GLOBALS['CHAT_ENABLE']) && ($modules["chat"]))

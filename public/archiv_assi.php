@@ -37,6 +37,7 @@ require_once('lib/classes/StudipNews.class.php');
 require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ObjectConnections.class.php");
 require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ELearningUtils.class.php");
 require_once ('lib/classes/LockRules.class.php');
+require_once 'lib/classes/Seminar.class.php';
 
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
@@ -150,140 +151,18 @@ if ($archive_kill) {
 	if ($run) {
 		// Bevor es wirklich weg ist. kommt das Seminar doch noch schnell ins Archiv
 		in_archiv($s_id);
-
+        $sem = new Seminar($s_id);
 		// Delete that Seminar.
-
-		// Alle Benutzer aus dem Seminar rauswerfen.
-		$query = "DELETE from seminar_user where Seminar_id='$s_id'";
-		$db->query($query);
-		if (($db_ar = $db->affected_rows()) > 0) {
-			$liste .= "<li>" . sprintf(_("%s VeranstaltungsteilnehmerInnen, DozentenInnen oder TutorenInnen archiviert."), $db_ar) . "</li>";
-		}
-
-		// Alle Benutzer aus Wartelisten rauswerfen
-		$query = "DELETE from admission_seminar_user where seminar_id='$s_id'";
-		$db->query($query);
-
-		// Alle Eintraege aus Zuordnungen zu Studiengaenge rauswerfen
-		$query = "DELETE from admission_seminar_studiengang where seminar_id='$s_id'";
-		$db->query($query);
-
-		// Alle beteiligten Institute rauswerfen
-		$query = "DELETE FROM seminar_inst where Seminar_id='$s_id'";
-		$db->query($query);
-		if (($db_ar = $db->affected_rows()) > 0) {
-			$liste .= "<li>" . sprintf(_("%s Zuordnungen zu Einrichtungen archiviert."), $db_ar) . "</li>";
-		}
-
-		// user aus den Statusgruppen rauswerfen
-		$count = DeleteAllStatusgruppen($s_id);
-		if ($count > 0) {
-			$liste .= "<li>" . _("Eintr&auml;ge aus Funktionen / Gruppen gel&ouml;scht.") . "</li>";
-		}
-
-		// Alle Eintraege aus dem Vorlesungsverzeichnis rauswerfen
-		$db_ar = StudipSemTree::DeleteSemEntries(null, $s_id);
-		if ($db_ar > 0) {
-			$liste .= "<li>" . sprintf(_("%s Zuordnungen zu Bereichen archiviert."), $db_ar) . "</li>";
-		}
-
-		// Alle Termine mit allem was dranhaengt zu diesem Seminar loeschen.
-		if (($db_ar = delete_range_of_dates($s_id, TRUE)) > 0) {
-			$liste .= "<li>" . sprintf(_("%s Veranstaltungstermine archiviert."), $db_ar) . "</li>";
-		}
-
-		// Alle weiteren Postings zu diesem Seminar loeschen.
-		$query = "DELETE from px_topics where Seminar_id='$s_id'";
-		$db->query($query);
-		if (($db_ar = $db->affected_rows()) > 0) {
-			$liste .= "<li>" . sprintf(_("%s Postings archiviert."), $db_ar) . "</li>";
-		}
-
-		// Alle Dokumente zu diesem Seminar loeschen.
-		if (($db_ar = delete_all_documents($s_id)) > 0) {
-			$liste .= "<li>" . sprintf(_("%s Dokumente und Ordner archiviert."), $db_ar) . "</li>";
-		}
-
-		// Freie Seite zu diesem Seminar löschen
-		$query = "DELETE FROM scm where range_id='$s_id'";
-		$db->query($query);
-		if (($db_ar = $db->affected_rows()) > 0) {
-			$liste .= "<li>" . _("Freie Seite der Veranstaltung archiviert.") . "</li>";
-		}
-
-		// delete literatur
-		$del_lit = StudipLitList::DeleteListsByRange($s_id);
-		if ($del_lit) {
-			$liste .= "<li>" . sprintf(_("%s Literaturlisten archiviert."),$del_lit['list'])  . "</li>";
-		}
-
-		// Alle News-Verweise auf dieses Seminar löschen
-		if ( ($db_ar = StudipNews::DeleteNewsRanges($s_id)) ) {
-			$liste .= "<li>" . sprintf(_("%s News gel&ouml;scht."), $db_ar) . "</li>";
-		}
-		//delete entry in news_rss_range
-		StudipNews::UnsetRssId($s_id);
-
-		//kill the datafields
-		DataFieldEntry::removeAll($s_id);
-
-		//kill all wiki-pages
-		$query = sprintf ("DELETE FROM wiki WHERE range_id='%s'", $s_id);
-		$db->query($query);
-		if (($db_wiki = $db->affected_rows()) > 0) {
-			$liste .= "<li>" . sprintf(_("%s Wiki-Seiten archiviert."), $db_wiki) . "</li>";
-		}
-
-		$query = sprintf ("DELETE FROM wiki_links WHERE range_id='%s'", $s_id);
-		$db->query($query);
-
-		$query = sprintf ("DELETE FROM wiki_locks WHERE range_id='%s'", $s_id);
-		$db->query($query);
-
-		// kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
-		if ($RESOURCES_ENABLE) {
-			$killAssign = new DeleteResourcesUser($s_id);
-			$killAssign->delete();
-		}
-
-		// kill virtual seminar-entries in calendar
-		$query = "DELETE FROM seminar_user_schedule WHERE range_id = '$s_id'";
-		$db->query($query);
-
-		if($ELEARNING_INTERFACE_ENABLE){
-			$cms_types = ObjectConnections::GetConnectedSystems($s_id);
-			if(count($cms_types)){
-				foreach($cms_types as $system){
-					ELearningUtils::loadClass($system);
-					$del_cms += $connected_cms[$system]->deleteConnectedModules($s_id);
-				}
-				$liste .= "<li>" . sprintf(_("%s Verknüpfungen zu externen Systemen gel&ouml;scht."), $del_cms ) . "</li>";
+        
+        $sem->delete();
+      	
+      	if ($messages = $sem->getStackedMessages()) {
+			foreach ($messages as $type => $message_data) {
+				echo MessageBox::$type( $message_data['title'], $message_data['details'] );
 			}
 		}
-		if ($liste)
-			$msg .= "info§<font size=-1>$liste</font>§";
-
-		//kill the object_user_vists for this seminar
-		object_kill_visits(null, $s_id);
-
-                // Logging...
-                $query="SELECT seminare.name as name, seminare.VeranstaltungsNummer as number, semester_data.name as semester FROM seminare LEFT JOIN semester_data ON (seminare.start_time = semester_data.beginn) WHERE seminare.Seminar_id='$s_id'";
-                $db->query($query);
-                if ($db->next_record()) {
-                        $semlogname=$db->f('number')." ".$db->f('name')." (".$db->f('semester').")";
-                } else {
-                        $semlogname="unknown sem_id: $s_id";
-                }
-                log_event("SEM_ARCHIVE",$s_id,NULL,$semlogname);
-                // ...logged
-
-		// und das Seminar loeschen.
-		$query = "DELETE FROM seminare where Seminar_id= '$s_id'";
-		$db->query($query);
-		if ($db->affected_rows() == 0) {
-			$msg .= "error§<b>" . _("Fehler beim L&ouml;schen der Veranstaltung") . "§";
-			die;
-		}
+		unset($sem);
+			
 		// Successful archived, if we are here
 		$msg .= "msg§" . sprintf(_("Die Veranstaltung %s wurde erfolgreich archiviert und aus der Liste der aktiven Veranstaltungen gel&ouml;scht. Sie steht nun im Archiv zur Verf&uuml;gung."), "<b>" . htmlReady(stripslashes($tmp_name)) . "</b>") . "§";
 

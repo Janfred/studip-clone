@@ -58,8 +58,8 @@ global
 	$_show_scm,
 	$type,
 	$user,
-	$view;
-
+	$view,
+    $studygroup_mode;
 
 //only if there's an open object
 
@@ -79,6 +79,7 @@ $Modules=new Modules;
 
 //load list of used modules
 $modules = $Modules->getLocalModules($SessSemName[1]);
+$studygroup_mode=$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["studygroup_mode"];
 
 if ($modules["scm"]){
 	$scms = array_values(StudipScmEntry::GetSCMEntriesForRange($SessSemName[1]));
@@ -114,9 +115,16 @@ if ($SessSemName["class"]=="inst") {
 	}
 } else {
 	$structure["seminar_main"]=array ('topKat' => '', 'name' => _("Übersicht"), 'link' => URLHelper::getLink("seminar_main.php"), 'active' => FALSE);
+	if ($studygroup_mode && $rechte && $perm->have_studip_perm('dozent',$SessSemName[1])) {
+		$structure["studygroup_admin"]=array ('topKat' => '', 'name' => _("Admin"), 'link' => URLHelper::getLink("dispatch.php/course/studygroup/edit/".$SessSemName[1]), 'active' => FALSE);
+		$structure["_studygroup_admin"]=array ('topKat' => 'studygroup_admin', 'name' => _("Admin"), 'link' => URLHelper::getLink("dispatch.php/course/studygroup/edit/".$SessSemName[1]), 'active' => FALSE);
+	}
 	if ($modules["forum"])
 		$structure["forum"]=array ('topKat' => '', 'name' => _("Forum"), 'link' => URLHelper::getLink("forum.php?view=reset"), 'active' => FALSE);
-	if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) && $modules["participants"] && $user->id != "nobody") {
+	// studygroup (TT)
+	if ($modules["participants"] && $studygroup_mode) {
+		$structure["studygroup_teilnehmer"]=array ('topKat' => '', 'name' => _("TeilnehmerInnen"), 'link' => URLHelper::getLink("dispatch.php/course/studygroup/members/".$SessSemName[1]), 'active' => FALSE);
+	} else if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM) || $rechte) && $modules["participants"] && $user->id != "nobody") {
 		$structure["teilnehmer"]=array ('topKat' => '', 'name' => _("TeilnehmerInnen"), 'link' => URLHelper::getLink("teilnehmer.php"), 'active' => FALSE);
 	}
 	if ($modules["documents"])
@@ -178,9 +186,11 @@ if ($SessSemName["class"]=="inst") {
 } else {
 //
 	$structure["_seminar_main"]=array ('topKat' => "seminar_main", 'name' => _("Kurzinfo"), 'link' => URLHelper::getLink("seminar_main.php"), 'active' => FALSE);
-	$structure["details"]=array ('topKat' => "seminar_main", 'name' => _("Details"), 'link' => URLHelper::getLink("details.php"), 'active' => FALSE);
-	$structure["druckansicht_s"]=array ('topKat' => "seminar_main", 'name' => _("Druckansicht"), 'link' => URLHelper::getLink("print_seminar.php"), 'target' => "_blank", 'active' => FALSE);
-	if ($rechte)
+	if (!$studygroup_mode) {
+		$structure["details"]=array ('topKat' => "seminar_main", 'name' => _("Details"), 'link' => URLHelper::getLink("details.php"), 'active' => FALSE);
+		$structure["druckansicht_s"]=array ('topKat' => "seminar_main", 'name' => _("Druckansicht"), 'link' => URLHelper::getLink("print_seminar.php"), 'target' => "_blank", 'active' => FALSE);
+	}
+	if ($rechte && !$studygroup_mode)
 		$structure["administration_v"]=array ('topKat' => "seminar_main", 'name' => _("Administration dieser Veranstaltung"), 'link' => URLHelper::getLink("admin_seminare1.php?new_sem=TRUE"), 'active' => FALSE);
 
 	$db->query("SELECT admission_binding FROM seminare WHERE seminar_id = '$SessSemName[1]'");
@@ -190,7 +200,10 @@ if ($SessSemName["class"]=="inst") {
 }
 //
 
-if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)  || $rechte) && ($modules["participants"])){
+// studygroup
+if ($modules['participants'] && $studygroup_mode) {
+	$structure["_studygroup_teilnehmer"]=array ('topKat' => 'studygroup_teilnehmer', 'name' => _("TeilnehmerInnen"), 'link' => URLHelper::getLink("dispatch.php/course/studygroup/members/".$SessSemName[1]), 'active' => FALSE);
+} else if ((!is_array($AUTO_INSERT_SEM) || !in_array($SessSemName[1], $AUTO_INSERT_SEM)  || $rechte) && ($modules["participants"])){
 	$structure["_teilnehmer"]=array ('topKat' => "teilnehmer", 'name' => _("TeilnehmerInnen"), 'link' => URLHelper::getLink("teilnehmer.php"), 'active' => FALSE);
 }
 if ($modules["forum"]) {

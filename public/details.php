@@ -46,6 +46,7 @@ if ($SessSemName[1] && !isset($sem_id)) $header_object_id = $SessSemName[1];
 else $header_object_id = $sem_id;
 $CURRENT_PAGE = getHeaderLine($header_object_id). " - " . _("Details");
 
+ob_start();
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');	 // Output of Stud.IP head
@@ -73,6 +74,18 @@ if (($SessSemName[1] != "") && (!isset($sem_id) || $SessSemName[1] == $sem_id)) 
 
 $sem = new Seminar($sem_id);
 #$DataFields = new DataFields($sem_id);
+
+// redirect, if sem is a studygroup
+if ( $SEM_CLASS[$SEM_TYPE[$sem->status]["class"]]["studygroup_mode"] ) {
+	ob_end_clean();
+	if ($perm->have_studip_perm('autor', $sem_id)) {    // participants may see seminar_main
+		$link = UrlHelper::getUrl('seminar_main.php?auswahl='. $sem_id);
+	} else {   // all other get a special details-page
+		$link = UrlHelper::getUrl('dispatch.php/course/studygroup/details/'. $sem_id);
+	}
+	header('Location: '. $link);
+	die;
+}
 
 //load all the data
 $db2->query("SELECT * FROM seminare WHERE Seminar_id = '$sem_id'");

@@ -261,6 +261,11 @@ $SEM_TREE_TYPES[4] = array("name" => _(""), "editable" => true);
 $SEM_TREE_TYPES[5] = array("name" => _(""), "editable" => true);
 */
 
+
+// studygroups
+require_once("config/config_studygroups.inc.php");
+
+
 //Festlegen der erlaubten oder verbotenen Dateitypen
 $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen SEM_TYPE, name "1" waere entsprechend die Definition der Dateiendungen fuer SEM_TYPE[1]; default wird verwendet, wenn es keine spezielle Definition fuer einen SEM_TYPE gibt
 						array(	"type"=>"allow", 									//Type bezeichnet den grundsetzlichen Typ der Deklaration: deny verbietet alles ausser den angegebenen file_types, allow erlaubt alle ausser den angegebenen file_types

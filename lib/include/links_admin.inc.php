@@ -34,7 +34,8 @@ global  $BANNER_ADS_ENABLE,
         $SEM_CLASS,
         $SEM_TYPE,
         $SMILEYADMIN_ENABLE,
-        $VOTE_ENABLE;
+        $VOTE_ENABLE,
+		$SEMESTER_ADMINISTRATION_ENABLE;
 
 global  $auth, $perm, $sess, $user;
 
@@ -146,6 +147,22 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		closeObject();
 	} elseif ($i_page== "adminarea_start.php")
 		$list=TRUE;
+
+	$studygroup_mode=$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["studygroup_mode"];
+	if ($studygroup_mode) {
+		$links_admin_data["topkat"]="sem";
+
+		$reiter=new reiter;
+
+		//Ruecksprung-Reiter vorbereiten
+		$back_jump= _("zurück zur Arbeitsgruppe");
+
+		$structure["veranstaltungen"]=array ('topKat'=>"", 'name'=> $SessSemName[0], 'link' => URLHelper::getLink("adminarea_start.php?list=TRUE"), 'active'=>FALSE);
+		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link' => URLHelper::getLink("seminar_main.php?auswahl=".$SessSemName[1]), 'active'=>FALSE);
+
+		$structure["news_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("News"), 'link' => URLHelper::getLink("admin_news.php?list=TRUE&view=news_sem"), 'active'=>FALSE, 'isolator'=>TRUE);
+	} else { 
+
 
 	// start tic #650, sortierung in der userconfig merken
 	if ($_REQUEST['adminarea_sortby']) {
@@ -454,6 +471,9 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		if ($EXTERN_ENABLE) {
 			$structure["extern_global"] = array("topKat" => "global", "name" => _("externe Seiten"), 'link' => URLHelper::getLink("admin_extern.php?list=TRUE&view=extern_global"), "active" => FALSE);
 		}
+
+		$structure['admin_studygroup'] = array( 'topKat' => 'global', 'name' => _("Studentische Arbeitsgruppen"), 
+			'link' => URLHelper::getLink('dispatch.php/course/studygroup/globalmodules'), 'active' => false );
 	}
 	// create sublinks for administration plugins
 	if ($GLOBALS["PLUGINS_ENABLE"] && $perm->have_perm("admin")){
@@ -1301,6 +1321,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		die;
 	}
 }
+} // end of "hide, when in studygroup mode"
+
 if ($SessSemName["class"] == "sem" && $SessSemName[1] && !$perm->have_studip_perm('tutor', $SessSemName[1])){
 	if(!is_object($header_controller)) include ('lib/include/header.php');   // Output of Stud.IP head
 	parse_window('error§' . _("Sie haben keine ausreichende Zugriffsberechtigung!"), '§', _("Zugriff verweigert"));
@@ -1309,3 +1331,6 @@ if ($SessSemName["class"] == "sem" && $SessSemName[1] && !$perm->have_studip_per
 	die();
 }
 $reiter->create($structure, $reiter_view);
+
+// prevent administration of all other admin_areas!
+if ($studygroup_mode && $i_page != 'admin_news.php') die;
