@@ -85,6 +85,15 @@ $UNI_CONTACT = "studip-users@lists.sourceforge.net";
 $UNI_INFO = "Kontakt:\nStud.IP Crew c/o data-quest Suchi & Berg GmbH\nFriedländer Weg 20a\n37085 Göttingen\nTel. 0551-3819850\nFax 0551-3819853\nstudip@data-quest.de";
 
 
+// define default names for status groups
+$DEFAULT_TITLE_FOR_STATUS = array(
+	'dozent'   => array(_('DozentIn'), _('DozentInnen')),
+	'tutor'    => array(_('TutorIn'), _('TutorInnen')),
+	'autor'    => array(_('AutorIn'), _('AutorInnen')),
+	'user'     => array(_('LeserIn'), _('LeserInnen')),
+	'accepted' => array(_('Vorläufig akzeptierte TeilnehmerIn'),
+	                    _('Vorläufig akzeptierte TeilnehmerInnen')));
+
 //Festlegen der zulaessigen Typen fuer Veranstaltungen
 $SEM_TYPE_MISC_NAME="sonstige"; //dieser Name wird durch die allgemeine Bezechnung (=Veranstaltung ersetzt)
 $SEM_TYPE[1]=array("name"=>_("Vorlesung"), "class"=>1);

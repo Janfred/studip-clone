@@ -161,8 +161,19 @@ $SEM_CLASS[3]=array("name"=>_("Community"),
 
 // more classes can be added below (please adhere exactly to the structure given above)
 
+
+// define default names for status groups
+$DEFAULT_TITLE_FOR_STATUS = array(
+	'dozent'   => array(_('DozentIn'), _('DozentInnen')),
+	'tutor'    => array(_('TutorIn'), _('TutorInnen')),
+	'autor'    => array(_('AutorIn'), _('AutorInnen')),
+	'user'     => array(_('LeserIn'), _('LeserInnen')),
+	'accepted' => array(_('Vorläufig akzeptierte TeilnehmerIn'),
+	                    _('Vorläufig akzeptierte TeilnehmerInnen')));
+
 /*
 name the allowed course-types and assign them to one of the above classes
+alternative titles for members can be specified within each type (see example below)
 */
 $SEM_TYPE_MISC_NAME=_("sonstige"); //this name is replaced by the common name (=course)
 $SEM_TYPE[1]=array("name"=>_("Vorlesung"), "class"=>1);
@@ -172,8 +183,8 @@ $SEM_TYPE[4]=array("name"=>_("Praktikum"), "class"=>1);
 $SEM_TYPE[5]=array("name"=>_("Colloquium"),  "class"=>1);
 $SEM_TYPE[6]=array("name"=>_("Forschungsgruppe"), "class"=>1);
 $SEM_TYPE[7]=array("name"=>_("sonstige"), "class"=>1);
-$SEM_TYPE[8]=array("name"=>_("Gremium"), "class"=>2);
-$SEM_TYPE[9]=array("name"=>_("Projektgruppe"), "class"=>2);
+$SEM_TYPE[8]=array("name"=>_("Gremium"), "class"=>2, "title_dozent" => array(_("LeiterIn"), _("LeiterInnen")), "title_tutor" => array(_("Mitglied"), _("Mitglieder")));
+$SEM_TYPE[9]=array("name"=>_("Projektgruppe"), "class"=>2, "title_dozent" => array(_("LeiterIn"), _("LeiterInnen")), "title_tutor" => array(_("Mitglied"), _("Mitglieder")));
 $SEM_TYPE[10]=array("name"=>_("sonstige"), "class"=>2);
 $SEM_TYPE[11]=array("name"=>_("Kulturforum"), "class"=>3);
 $SEM_TYPE[12]=array("name"=>_("Veranstaltungsboard"), "class"=>3);

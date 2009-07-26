@@ -306,10 +306,7 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 				<?
 				// wer macht den Dozenten?
 				$db2->query ("SELECT " . $_fullname_sql['full'] . " AS fullname, seminar_user.user_id, username, status, position FROM seminar_user  LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '" . $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"] . "' AND status = 'dozent' ORDER BY position, Nachname");
-				if ($db2->num_rows() > 1)
-					printf ("<font size=-1><b>" . _("DozentInnen:") . "</b></font><br>");
-				else
-					printf ("<font size=-1><b>" . _("DozentIn:") . "</b></font><br>");
+				printf("<font size=-1><b>" . get_title_for_status('dozent', $db2->num_rows(), $db->f('status')) . "</b></font><br>");
 				while ($db2->next_record()) {
 					if ($db2->num_rows() > 1)
 						print "<li>";
@@ -324,12 +321,10 @@ if (($archiv_assi_data["sems"]) && (sizeof($archiv_assi_data["sem_check"]) > 0))
 				<?
 				// und wer ist Tutor?
 				$db2->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status, position FROM seminar_user  LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '" . $archiv_assi_data["sems"][$archiv_assi_data["pos"]]["id"] . "' AND status = 'tutor' ORDER BY position, Nachname");
-				if ($db2->num_rows() > 1)
-					printf ("<font size=-1><b>" . _("TutorInnen:") . "</b></font><br>");
-				elseif ($db2->num_rows() == 0)
-					printf ("<font size=-1><b>" . _("TutorIn:") . "</b></font><br><font size=-1>" . _("keine") . "</font>");
-				else
-					printf ("<font size=-1><b>" . _("TutorIn:") . "</b></font><br>");
+				printf("<font size=-1><b>" . get_title_for_status('tutor', $db2->num_rows(), $db->f('status')) . "</b></font><br>");
+				if ($db2->num_rows() == 0) {
+					print("<font size=-1>" . _("keine") . "</font>");
+				}
 				while ($db2->next_record()) {
 					if ($db2->num_rows() > 1)
 						print "<li>";

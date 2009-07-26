@@ -1890,7 +1890,7 @@ class Seminar {
 		$db = new DB_Seminar();
 		$db->query($query);
 		if (($db_ar = $db->affected_rows()) > 0) {
-			$this->createMessage(sprintf(_("%s VeranstaltungsteilnehmerInnen, DozentenInnen oder TutorenInnen archiviert."), $db_ar));
+			$this->createMessage(sprintf(_("%s VeranstaltungsteilnehmerInnen, DozentInnen oder TutorInnen archiviert."), $db_ar));
 		}
 
 		// Alle Benutzer aus Wartelisten rauswerfen

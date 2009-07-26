@@ -1437,3 +1437,33 @@ function mark_public_course($course = NULL) {
 			" (" . _("öffentliche Veranstaltung") . ")";
 	}
 }
+
+/*
+ * Get the title used for the given status ('dozent', 'tutor' etc.) for the
+ * specified SEM_TYPE. Alternative titles can be defined in the config.inc.php.
+ *
+ * @param string        status ('dozent', 'tutor', 'autor', 'user' or 'accepted')
+ * @param int           count, this determines singular or plural form of title
+ * @param int           sem_type of course (defaults to type of current course)
+ *
+ * @return string       translated title for status
+ */
+function get_title_for_status($type, $count, $sem_type = NULL) {
+	global $SEM_TYPE, $SessSemName, $DEFAULT_TITLE_FOR_STATUS;
+
+	if (is_null($sem_type)) {
+		$sem_type = $SessSemName['art_num'];
+	}
+
+	$atype = 'title_'.$type;
+
+	if (isset($SEM_TYPE[$sem_type][$atype])) {
+		$title = $SEM_TYPE[$sem_type][$atype];
+	} else if (isset($DEFAULT_TITLE_FOR_STATUS[$type])) {
+		$title = $DEFAULT_TITLE_FOR_STATUS[$type];
+	} else {
+		throw new Exception('unkown status in get_title_for_status()');
+	}
+
+	return ngettext($title[0], $title[1], $count);
+}
