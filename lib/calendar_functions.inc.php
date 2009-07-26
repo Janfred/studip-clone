@@ -197,6 +197,7 @@ function holiday ($tmstamp, $mod = "") {
 // gibt bei Erfolg den timestamp zurück mit DST
 function check_date ($month, $day, $year, $hour = 0, $min = 0) {
 	if (!preg_match("/^\d{1,2}$/", $day) || !preg_match("/^\d{1,2}$/", $month)
+			|| !preg_match("/^\d{1,2}$/", $hour) || !preg_match("/^\d{1,2}$/", $min)
 			|| !preg_match("/^\d{4}$/", $year)) {
 		return FALSE;
 	}
@@ -207,7 +208,7 @@ function check_date ($month, $day, $year, $hour = 0, $min = 0) {
 	if ($hour > 23 || $hour < 0 || $min > 59 || $min < 0)
 		return FALSE;
 
-	return @mktime($hour, $min, 0, $month, $day, $year);
+	return mktime($hour, $min, 0, $month, $day, $year);
 }
 
 // ermittelt die Anzahl von Tagen zwischen zwei timestamps (plus Schalttage)
@@ -251,4 +252,31 @@ function get_day_name($day) {
 
 
 	return $days[$day - 1];
+}
+
+/**
+ * checks values that shall become a single date with start- and endtime
+ *
+ * @param string $day
+ * @param string $month
+ * @param string $year
+ * @param string $start_hour
+ * @param string $start_minute
+ * @param string $end_hour
+ * @param string $end_minute
+ *
+ * @return bool true if date is valid, false otherwise
+ */
+function check_singledate( $day, $month, $year, $start_hour, $start_minute, $end_hour, $end_minute ) {
+
+	// check start-date
+	$start = check_date($month, $day, $year, $start_hour, $start_minute);
+	if (!$start) return false;
+
+	// check end-date
+	$end = check_date($month, $day, $year, $end_hour, $end_minute);
+	if (!$end) return false;
+
+	// check, that end-date is not before start_date
+	return ($end > $start);
 }

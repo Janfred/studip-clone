@@ -300,9 +300,8 @@ function raumzeit_doAddSingleDate() {
 	global $sem, $cmd;
 
 	// check validity of the date 
-	if (!check_date($_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year'], $_REQUEST['start_stunde'], $_REQUEST['start_minute']) 
-		|| !check_date($_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year'], $_REQUEST['end_stunde'], $_REQUEST['end_minute']) ) 
-	{ 
+	if (!check_singledate($_REQUEST['day'], $_REQUEST['month'], $_REQUEST['year'], $_REQUEST['start_stunde'],
+		$_REQUEST['start_minute'], $_REQUEST['end_stunde'], $_REQUEST['end_minute'])) { 
 		$sem->createError(_("Bitte geben Sie ein g¸ltiges Datum und eine g¸ltige Uhrzeit an!")); 
 		$cmd = 'createNewSingleDate'; 
 	} 
@@ -310,8 +309,8 @@ function raumzeit_doAddSingleDate() {
 	// create date
 	else { 
 		$termin = new SingleDate();
-		$start = mktime((int)$_REQUEST['start_stunde'], (int)$_REQUEST['start_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
-		$ende = mktime((int)$_REQUEST['end_stunde'], (int)$_REQUEST['end_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
+		$start = mktime($_REQUEST['start_stunde'], $_REQUEST['start_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
+		$ende = mktime($_REQUEST['end_stunde'], $_REQUEST['end_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
 		$termin->setTime($start, $ende);
 		$termin->setDateType($_REQUEST['dateType']);
 
@@ -357,8 +356,8 @@ function raumzeit_editSingleDate() {
 	global $sem, $sd_open;
 	unset($sd_open[$_REQUEST['singleDateID']]);	// we close the choosen singleDate, that it does not happen that we have multiple singleDates open -> could lead to confusion, which singleDate is meant to be edited
 	// generate time-stamps to we can compare directly
-	$start = mktime((int)$_REQUEST['start_stunde'], (int)$_REQUEST['start_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
-	$ende = mktime((int)$_REQUEST['end_stunde'], (int)$_REQUEST['end_minute'], 0, (int)$_REQUEST['month'], (int)$_REQUEST['day'], (int)$_REQUEST['year']);
+	$start = mktime($_REQUEST['start_stunde'], $_REQUEST['start_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
+	$ende = mktime($_REQUEST['end_stunde'], $_REQUEST['end_minute'], 0, $_REQUEST['month'], $_REQUEST['day'], $_REQUEST['year']);
 
 	if ($_REQUEST['cycle_id'] != '') {   // regelm‰ﬂiger Termin
 		// the choosen singleDate is connected to a cycleDate
