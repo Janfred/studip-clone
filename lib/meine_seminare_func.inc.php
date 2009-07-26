@@ -361,7 +361,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 	if ($GLOBALS["PLUGINS_ENABLE"]){
 		// inserts every activated plugin as new entry
 		foreach ($my_obj as $poiid => $my_obj_item) {		
-			$activated_plugins = PluginEngine::getPlugins('Standard', $poiid);	
+			$activated_plugins = PluginEngine::getPlugins('StandardPlugin', $poiid);	
 
 			foreach ($activated_plugins as $plugin){				
 				$plugin->setId($poiid);

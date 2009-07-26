@@ -11,9 +11,7 @@
  * @subpackage core
  */
 
-class AbstractStudIPCorePlugin extends AbstractStudIPLegacyPlugin
-  implements StudIPCorePlugin {
-
+class AbstractStudIPCorePlugin extends AbstractStudIPLegacyPlugin {
 
   /**
    * This abstract method sets everything up to perform the given action and

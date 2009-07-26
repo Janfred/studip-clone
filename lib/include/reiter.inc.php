@@ -40,7 +40,7 @@ class reiter {
 		if($navigation instanceof StudipPluginNavigation){
 			$navigation->setPlugin($plugin);
 			$plugin_id = $plugin->getPluginid();
-			if ($plugin instanceof StudipStandardPlugin || $plugin instanceof StudipHomepagePlugin){
+			if ($plugin instanceof StandardPlugin || $plugin instanceof HomepagePlugin){
 				$top_displayname = $plugin->getDisplayTitle();
 			} else {
 				$top_displayname = $navigation->getDisplayname();

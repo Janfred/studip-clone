@@ -13,7 +13,7 @@
  */
 
 class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
-  implements StudIPHomepagePlugin {
+  implements HomepagePlugin {
 
 	var $requesteduser; // StudIPUser for which user the homepage should be shown
 	var $status_showOverview; // Uebersichtsseite unterdruecken

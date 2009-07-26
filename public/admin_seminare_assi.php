@@ -264,7 +264,7 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 
 		// Pluginkonfiguration übernehmen
 		if ($GLOBALS['PLUGINS_ENABLE']) {
-			$enabled_plugins = PluginEngine::getPlugins('Standard', $cp_id);
+			$enabled_plugins = PluginEngine::getPlugins('StandardPlugin', $cp_id);
 
 			foreach ($enabled_plugins as $plugin) {
 				$plugin->setId($cp_id);
@@ -1868,7 +1868,7 @@ if (($form == 6) && ($jump_next_x))
 
 			// save activation of plugins
 			if (count($sem_create_data["enabled_plugins"]) > 0) {
-				$enabled_plugins = PluginEngine::getPlugins('Standard');
+				$enabled_plugins = PluginEngine::getPlugins('StandardPlugin');
 
 				foreach ($enabled_plugins as $plugin) {	
 					$plugin->setId($sem->getId());

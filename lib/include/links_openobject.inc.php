@@ -152,7 +152,7 @@ if ($ELEARNING_INTERFACE_ENABLE && $modules["elearning_interface"] && $user->id 
 // create the structure array for activated plugins
 if ($GLOBALS['PLUGINS_ENABLE']){
 	// list all activated plugins
-	$plugins = PluginEngine::getPlugins('Standard', $SessSemName[1]);
+	$plugins = PluginEngine::getPlugins('StandardPlugin', $SessSemName[1]);
 
 	foreach ($plugins as $plugin){
 		if ($plugin_struct = $reiter->getStructureForPlugin($plugin)){

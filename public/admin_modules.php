@@ -76,7 +76,7 @@ echo $links;
 $amodules=new AdminModules;
 
 if ($GLOBALS['PLUGINS_ENABLE']){
-	$admin_modules_plugins = PluginEngine::getPlugins('Standard'); // get all installed and enabled plugins
+	$admin_modules_plugins = PluginEngine::getPlugins('StandardPlugin'); // get all installed and enabled plugins
 	if ($SessSemName[1] == '') {
 		foreach ($admin_modules_plugins as $plugin) {
 			$plugin->setId($range_id ? $range_id : $admin_modules_data['range_id']);

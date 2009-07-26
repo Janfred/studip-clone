@@ -11,7 +11,7 @@
  * the License, or (at your option) any later version.
  */
 
-interface StudIPSystemPlugin {
+interface SystemPlugin {
 
   /**
    * A system plugin can do system tasks like logging in the background.

@@ -133,10 +133,10 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 			RolePersistence::deleteAssignedPluginRoles($pluginid,$delassignedrols);
 			StudIPTemplateEngine::showSuccessMessage(_("Die Rechteeinstellungen wurden erfolgreich gespeichert."));
 		}
-		
+
 		//view
 		$template = $this->template_factory->open('plugin_assignment');
-		$template->set_attribute('plugins', DBManager::get()->query('SELECT * FROM plugins ORDER BY pluginname')->fetchAll(PDO::FETCH_ASSOC));
+		$template->set_attribute('plugins', PluginManager::getInstance()->getPluginInfos());
 		$template->set_attribute('assigned', RolePersistence::getAssignedPluginRoles($pluginid));
 		$template->set_attribute('roles', RolePersistence::getAllRoles());
 		$template->set_attribute('pluginid', $pluginid);
@@ -302,6 +302,25 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 	}
 
 	/**
+	 * Check role access permission for the given plugin.
+	 *
+	 * @param $plugin   plugin meta data
+	 * @param $role_id  role id of role
+	 */
+	protected function checkRoleAccess($plugin, $role_id)
+	{
+		$plugin_roles = RolePersistence::getAssignedPluginRoles($plugin['id']);
+
+		foreach ($plugin_roles as $plugin_role) {
+			if ($plugin_role->getRoleid() === $role_id) {
+				return true;
+			}
+		}
+
+		return $false;
+	}
+
+	/**
 	 * Zeigt alle Benutzer mit bestimmten Rollen an
 	 *
 	 */
@@ -321,10 +340,17 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 				}
 			}
 			//users
-		    $users = DBManager::get()->query("SELECT a.user_id AS userid, a.username, a.Vorname, a.Nachname FROM roles_user  AS u LEFT JOIN auth_user_md5 AS a ON u.userid=a.user_id WHERE u.roleid = '".$roleid."' ORDER BY a.Nachname;")->fetchAll(PDO::FETCH_ASSOC);
+			$users = DBManager::get()->query("SELECT a.user_id AS userid, a.username, a.Vorname, a.Nachname FROM roles_user  AS u LEFT JOIN auth_user_md5 AS a ON u.userid=a.user_id WHERE u.roleid = '".$roleid."' ORDER BY a.Nachname;")->fetchAll(PDO::FETCH_ASSOC);
 
 			//plugins
-			$plugins = DBManager::get()->query("SELECT a.pluginname, a.plugintype FROM roles_plugins AS u LEFT JOIN plugins AS a ON u.pluginid=a.pluginid WHERE u.roleid = '".$roleid."' ORDER BY a.pluginname;")->fetchAll(PDO::FETCH_ASSOC);
+			$plugins = PluginManager::getInstance()->getPluginInfos();
+
+			foreach ($plugins as $id => $plugin)
+			{
+				if (!$this->checkRoleAccess($plugin, $roleid)) {
+					unset($plugins[$id]);
+				}
+			}
 		}
 
 		//view

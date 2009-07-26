@@ -598,7 +598,7 @@ foreach ($long_datafields as $entry) {
 if ($GLOBALS["PLUGINS_ENABLE"]){
 	// PluginEngine aktiviert.
 	// Prüfen, ob HomepagePlugins vorhanden sind.
-	$activatedhomepageplugins = PluginEngine::getPlugins('Homepage');
+	$activatedhomepageplugins = PluginEngine::getPlugins('HomepagePlugin');
 	$requser = new StudIPUser();
 	$requser->setUserid($user_id);
 

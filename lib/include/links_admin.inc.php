@@ -457,7 +457,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 	}
 	// create sublinks for administration plugins
 	if ($GLOBALS["PLUGINS_ENABLE"] && $perm->have_perm("admin")){
-		$plugins = PluginEngine::getPlugins('Administration');
+		$plugins = PluginEngine::getPlugins('AdministrationPlugin');
 
 		foreach ($plugins as $adminplugin) {
 			if($plugin_struct = $reiter->getStructureForPlugin($adminplugin, 'plugins')){

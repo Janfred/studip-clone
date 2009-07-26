@@ -1,7 +1,5 @@
 <?php
-# Lifter002: TODO
 # Lifter007: TODO
-# Lifter003: TODO
 // vim: noexpandtab
 /**
  * Factory Class for the plugin engine
@@ -106,7 +104,7 @@ class PluginEngine {
 	 * returns an array of the return values.
 	 *
 	 * @param  type       plugin type or NULL (all types)
-	 * @param  context    context range id (optional)
+	 * @param  context    context range id (may be NULL)
 	 * @param  string     the method name that should be send to all plugins
 	 * @param  mixed      a variable number of arguments
 	 *

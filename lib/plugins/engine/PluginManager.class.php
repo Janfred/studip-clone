@@ -1,6 +1,5 @@
 <?php
 # Lifter007: TODO
-# Lifter003: TODO
 /*
  * PluginManager.class.php - plugin manager for Stud.IP
  *
@@ -53,6 +52,14 @@ class PluginManager
     }
 
     /**
+     * Comparison function used to order plugins by position.
+     */
+    private static function positionCompare ($plugin1, $plugin2)
+    {
+        return $plugin1['position'] - $plugin2['position'];
+    }
+
+    /**
      * Read meta data for all plugins registered in the data base.
      */
     private function readPluginInfos ()
@@ -60,7 +67,7 @@ class PluginManager
         $db = DBManager::get();
         $this->plugins = array();
 
-        $result = $db->query('SELECT * FROM plugins ORDER BY plugintype, navigationpos, pluginname');
+        $result = $db->query('SELECT * FROM plugins ORDER BY pluginname');
 
         foreach ($result as $plugin) {
             $id = (int) $plugin['pluginid'];
@@ -70,7 +77,7 @@ class PluginManager
                 'name'        => $plugin['pluginname'],
                 'class'       => $plugin['pluginclassname'],
                 'path'        => $plugin['pluginpath'],
-                'type'        => $plugin['plugintype'],
+                'type'        => explode(',', $plugin['plugintype']),
                 'description' => $plugin['plugindesc'],
                 'enabled'     => $plugin['enabled'] === 'yes',
                 'position'    => $plugin['navigationpos'],
@@ -137,7 +144,7 @@ class PluginManager
                                     poiid = 'sem$context'");
         $state = $result->fetchColumn();
 
-        return $default && $state !== 'off' || !$default && $state === 'on';
+        return $default && $state !== 'off' || $state === 'on';
     }
 
     /**
@@ -204,29 +211,25 @@ class PluginManager
     {
         $basepath = $GLOBALS['pluginenv']->getPackagebasepath();
         $pluginfile = $basepath.'/'.$path.'/'.$class.'.class.php';
-        $type = NULL;
+        $types = array();
 
         if (file_exists($pluginfile)) {
             require_once $pluginfile;
 
             $plugin_class = new ReflectionClass($class);
+            $plugin_base = new ReflectionClass('AbstractStudIPPlugin');
+            $interfaces = $plugin_class->getInterfaces();
 
-            if ($plugin_class->implementsInterface('StudIPAdministrationPlugin')) {
-                $type = 'Administration';
-            } else if ($plugin_class->implementsInterface('StudIPCorePlugin')) {
-                $type = 'Core';
-            } else if ($plugin_class->implementsInterface('StudIPHomepagePlugin')) {
-                $type = 'Homepage';
-            } else if ($plugin_class->implementsInterface('StudIPPortalPlugin')) {
-                $type = 'Portal';
-            } else if ($plugin_class->implementsInterface('StudIPStandardPlugin')) {
-                $type = 'Standard';
-            } else if ($plugin_class->implementsInterface('StudIPSystemPlugin')) {
-                $type = 'System';
+            if ($plugin_class->isSubclassOf($plugin_base)) {
+                foreach ($interfaces as $interface) {
+                    $types[] = $interface->getName();
+                }
             }
         }
 
-        return $type;
+        sort($types);
+
+        return $types;
     }
 
     /**
@@ -242,28 +245,32 @@ class PluginManager
     {
         $db = DBManager::get();
         $info = $this->getPluginInfo($class);
+        $type = $this->getPluginType($class, $path);
+        $position = 1;
+
+        // plugin must implement at least one interface
+        if (count($type) == 0) {
+            return NULL;
+        }
 
         if ($info) {
             $id = $info['id'];
-            $sql = 'UPDATE plugins SET pluginname = ?, pluginpath = ? WHERE pluginid = ?';
+            $sql = 'UPDATE plugins SET pluginname = ?, pluginpath = ?,
+                                       plugintype = ? WHERE pluginid = ?';
             $stmt = $db->prepare($sql);
-            $stmt->execute(array($name, $path, $id));
+            $stmt->execute(array($name, $path, join(',', $type), $id));
 
             $this->plugins[$id]['name'] = $name;
             $this->plugins[$id]['path'] = $path;
+            $this->plugins[$id]['type'] = $type;
 
             return $id;
         }
 
-        $type = $this->getPluginType($class, $path);
-        $position = 1;
-
-        if ($type == NULL) {
-            return NULL;
-        }
-
         foreach ($this->plugins as $plugin) {
-            if ($plugin['type'] == $type && $plugin['position'] >= $position) {
+            $common_types = array_intersect($type, $plugin['type']);
+
+            if (count($common_types) > 0 && $plugin['position'] >= $position) {
                 $position = $plugin['position'] + 1;
             }
         }
@@ -273,7 +280,7 @@ class PluginManager
                     plugintype, navigationpos, dependentonid
                 ) VALUES (?,?,?,?,?,?)';
         $stmt = $db->prepare($sql);
-        $stmt->execute(array($name, $class, $path, $type, $position, $depends));
+        $stmt->execute(array($name, $class, $path, join(',', $type), $position, $depends));
         $id = $db->lastInsertId();
 
         $this->plugins[$id] = array(
@@ -357,7 +364,7 @@ class PluginManager
         $result = array();
 
         foreach ($this->plugins as $id => $plugin) {
-            if ($type === NULL || $type === $plugin['type']) {
+            if ($type === NULL || in_array($type, $plugin['type'])) {
                 $result[$id] = $plugin;
             }
         }
@@ -470,6 +477,8 @@ class PluginManager
         $user = $GLOBALS['user']->id;
         $plugin_info = $this->getPluginInfos($type);
         $plugins = array();
+
+        usort($plugin_info, array('self', 'positionCompare'));
 
         foreach ($plugin_info as $info) {
             $activated = $context == NULL ||

@@ -129,7 +129,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
         if ($GLOBALS["PLUGINS_ENABLE"]) {
             $plugin_entries = array();
             // plugins activated
-            $activatedplugins = PluginEngine::getPlugins('System');
+            $activatedplugins = PluginEngine::getPlugins('SystemPlugin');
 
             foreach ($activatedplugins as $activatedplugin) {
                 if ($activatedplugin->hasNavigation() &&
@@ -143,7 +143,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
             if ($perm->have_perm('admin')) {
                 // plugins activated
-                $activatedplugins = PluginEngine::getPlugins('Administration');
+                $activatedplugins = PluginEngine::getPlugins('AdministrationPlugin');
 
                 foreach ($activatedplugins as $activatedplugin) {
                     if ($activatedplugin->hasTopNavigation()) {
@@ -322,7 +322,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	if ($GLOBALS["PLUGINS_ENABLE"]){
 		// PluginEngine aktiviert.
 		// Prüfen, ob PortalPlugins vorhanden sind.
-		$activatedportalplugins = PluginEngine::getPlugins('Portal');
+		$activatedportalplugins = PluginEngine::getPlugins('PortalPlugin');
 
 		foreach ($activatedportalplugins as $activatedportalplugin){
 			if (!$activatedportalplugin->hasAuthorizedView()){
@@ -406,7 +406,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 	if ($GLOBALS["PLUGINS_ENABLE"])
 	{
-		$activatedportalplugins = PluginEngine::getPlugins('Portal');
+		$activatedportalplugins = PluginEngine::getPlugins('PortalPlugin');
 
 		foreach ($activatedportalplugins as $activatedplugin)
 		{

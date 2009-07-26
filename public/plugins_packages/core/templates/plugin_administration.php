@@ -47,24 +47,18 @@
         <? foreach ($plugins as $plugin): ?>
             <? $pluginid = $plugin['id'] ?>
             <? if ($plugin['class'] != 'PluginAdministrationPlugin'): ?>
-                <? if (($type = $plugin['type']) != $lasttype): ?>
-                    <? $lasttype = $type ?>
-                    <tr style="height: 10px;">
-                        <td colspan="6"></td>
-                    </tr>
-                <? endif ?>
                 <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>" style="height: 25px;">
                     <td style="padding-left: 1ex;">
                         <a href="<?= PluginEngine::getLink($admin_plugin, array(), 'manifest/'.$plugin['class']) ?>">
                             <?= htmlspecialchars($plugin['name']) ?>
                         </a>
-                        <? if ($plugin['type'] == 'Standard'): ?>
+                        <? if (in_array('StandardPlugin', $plugin['type'])): ?>
                             <a href="<?= PluginEngine::getLink($admin_plugin, array(), 'defaultActivation/'.$plugin['class']) ?>">
                                 <?= _('(Default-Aktivierung)') ?>
                             </a>
                         <? endif ?>
                     <td>
-                        <?= $type ?>
+                        <?= join(', ', $plugin['type']) ?>
                     </td>
                     <td>
                         <select name="available_<?= $pluginid ?>">

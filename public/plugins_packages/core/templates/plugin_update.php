@@ -11,19 +11,13 @@
         <? foreach ($plugins as $plugin): ?>
             <? $pluginid = $plugin['id'] ?>
             <? if ($plugin['class'] != 'PluginAdministrationPlugin'): ?>
-                <? if (($type = $plugin['type']) != $lasttype): ?>
-                    <? $lasttype = $type ?>
-                    <tr style="height: 10px;">
-                        <td colspan="5"></td>
-                    </tr>
-                <? endif ?>
                 <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>" style="height: 25px;">
                     <td style="padding-left: 1ex;">
                         <a href="<?= PluginEngine::getLink($admin_plugin, array(), 'manifest/'.$plugin['class']) ?>">
                             <?= htmlspecialchars($plugin['name']) ?>
                         </a>
                     <td>
-                        <?= $type ?>
+                        <?= join(', ', $plugin['type']) ?>
                     </td>
                     <td>
                         <?= htmlspecialchars($update_info[$pluginid]['version']) ?>

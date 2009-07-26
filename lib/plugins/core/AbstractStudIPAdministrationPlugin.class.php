@@ -12,7 +12,7 @@
  */
 
 class AbstractStudIPAdministrationPlugin extends AbstractStudIPLegacyPlugin
-	implements StudIPAdministrationPlugin {
+	implements AdministrationPlugin {
 
 	var $topnavigation;
 

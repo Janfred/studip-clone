@@ -69,7 +69,7 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 	// Prüfen, ob HomepagePlugins vorhanden sind.
 	$requser = new StudIPUser();
 	$requser->setUserid(get_userid($username));
-	$activatedhomepageplugins = PluginEngine::getPlugins('Homepage');
+	$activatedhomepageplugins = PluginEngine::getPlugins('HomepagePlugin');
 	foreach ($activatedhomepageplugins as $activatedhomepageplugin){
 		$activatedhomepageplugin->setRequestedUser($requser);
 		// hier nun die HomepagePlugins anzeigen

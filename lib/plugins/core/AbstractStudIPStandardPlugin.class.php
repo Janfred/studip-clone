@@ -12,7 +12,7 @@
  */
 
 class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
-  implements StudIPStandardPlugin {
+  implements StandardPlugin {
 
 	// relativer Name des Icons für Änderungen an diesem Plugin
 	var $changeindicatoriconname;

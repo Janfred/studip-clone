@@ -11,7 +11,7 @@
  * the License, or (at your option) any later version.
  */
 
-interface StudIPHomepagePlugin {
+interface HomepagePlugin {
 
   /**
    * Used to show an overview on the homepage of a user.

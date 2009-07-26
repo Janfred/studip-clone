@@ -335,7 +335,7 @@ function GetMyScore() {
 	$visits = object_return_views($user_id);
 
 	if ($GLOBALS['PLUGINS_ENABLE'])	{
-		$scoreplugins = PluginEngine::getPlugins('System') + PluginEngine::getPlugins('Standard');
+		$scoreplugins = PluginEngine::getPlugins('SystemPlugin') + PluginEngine::getPlugins('StandardPlugin');
 		$pluginscore = 0;
 		$pluginscount = 0;
 		if (is_array($scoreplugins) && (count($scoreplugins) > 0 )){

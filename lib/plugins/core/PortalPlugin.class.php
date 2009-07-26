@@ -11,7 +11,7 @@
  * the License, or (at your option) any later version.
  */
 
-interface StudIPPortalPlugin {
+interface PortalPlugin {
 
   /**
    * Used to show an overview on the start page or portal page

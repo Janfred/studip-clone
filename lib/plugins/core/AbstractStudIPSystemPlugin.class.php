@@ -32,7 +32,7 @@ define('SYSTEM_PLUGIN_TOOLBAR',   1);
 define('SYSTEM_PLUGIN_STARTPAGE', 2);
 
 class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin
-  implements StudIPSystemPlugin {
+  implements SystemPlugin {
 
         var $display_type;
 

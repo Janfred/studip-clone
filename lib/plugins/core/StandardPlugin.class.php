@@ -11,7 +11,7 @@
  * the License, or (at your option) any later version.
  */
 
-interface StudIPStandardPlugin {
+interface StandardPlugin {
 
   /**
    * <MethodDescription>

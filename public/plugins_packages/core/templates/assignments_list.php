@@ -48,11 +48,11 @@
 					<th align="left">Name</th>
 					<th align="left">Typ</th>
 				</tr>
-				<? foreach ($plugins as $index=>$plugin): ?>
-				<tr class="<?=($index%2==0)?'steel1':'steelgraulight'?>">
-					<td align="right"><?=$index+1?>.) </td>
-					<td><?=$plugin['pluginname']?></td>
-					<td><?=$plugin['plugintype']?></td>
+				<? foreach ($plugins as $plugin): ?>
+				<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
+					<td align="right"><?= ++$index ?>.) </td>
+					<td><?= htmlspecialchars($plugin['name']) ?></td>
+					<td><?= join(', ', $plugin['type']) ?></td>
 				</tr>
 				<? endforeach; ?>
 			</table>

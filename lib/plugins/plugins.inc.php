@@ -24,12 +24,11 @@ if ($GLOBALS['PLUGINS_ENABLE']){
 	require_once("core/Environment.class.php");
 	require_once("core/AbstractStudIPPlugin.class.php");
 	require_once("core/AbstractStudIPLegacyPlugin.class.php");
-	require_once("core/StudIPCorePlugin.class.php");
-	require_once("core/StudIPAdministrationPlugin.class.php");
-	require_once("core/StudIPStandardPlugin.class.php");
-	require_once("core/StudIPSystemPlugin.class.php");
-	require_once("core/StudIPHomepagePlugin.class.php");
-	require_once("core/StudIPPortalPlugin.class.php");
+	require_once("core/AdministrationPlugin.class.php");
+	require_once("core/StandardPlugin.class.php");
+	require_once("core/SystemPlugin.class.php");
+	require_once("core/HomepagePlugin.class.php");
+	require_once("core/PortalPlugin.class.php");
 	require_once("core/StudienmodulManagementPlugin.class.php");
 	require_once("core/AbstractStudIPCorePlugin.class.php");
 	require_once("core/AbstractStudIPAdministrationPlugin.class.php");

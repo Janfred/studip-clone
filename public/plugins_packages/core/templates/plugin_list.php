@@ -8,17 +8,11 @@
 
     <? foreach ($plugins as $plugin): ?>
         <? if ($plugin['class'] != 'PluginAdministrationPlugin'): ?>
-            <? if (($type = $plugin['type']) != $lasttype): ?>
-                <? $lasttype = $type ?>
-                <tr style="height: 10px;">
-                    <td colspan="4"></td>
-                </tr>
-            <? endif ?>
             <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>" style="height: 25px;">
                 <td style="padding-left: 1ex;">
                     <?= htmlspecialchars($plugin['name']) ?>
                 <td>
-                    <?= $type ?>
+                    <?= join(', ', $plugin['type']) ?>
                 </td>
                 <td>
                     <? if ($plugin['enabled']): ?>

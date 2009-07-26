@@ -11,7 +11,7 @@
  * the License, or (at your option) any later version.
  */
 
-interface StudIPAdministrationPlugin {
+interface AdministrationPlugin {
 
   /**
    * Verfügt dieses Plugin über einen Eintrag auf der Startseite des
