@@ -60,7 +60,8 @@ if($perm->have_studip_perm('tutor',$sem_id)) {
 }
 
 $infobox=array();
-$infobox['picture']='infoboxbild_studygroup.jpg';
+$infobox['picture'] = StudygroupAvatar::getAvatar($sem_id)->getUrl(Avatar::NORMAL);
+
 $infobox['content']=array(
 	array(
 		'kategorie'=>_("Information"), 
