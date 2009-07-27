@@ -444,7 +444,7 @@ class SemBrowse {
 					    $studygroup_mode = $SEM_CLASS[$SEM_TYPE[key($sem_data[$seminar_id]['status'])]["class"]]["studygroup_mode"];
 
 						// create instance of seminar-object
-						$seminar_obj = Seminar::getInstance($seminar_id);
+						$seminar_obj = new Seminar($seminar_id);
 
 						$sem_name = key($sem_data[$seminar_id]["Name"]);
 						$seminar_number = key($sem_data[$seminar_id]['VeranstaltungsNummer']);
@@ -475,7 +475,7 @@ class SemBrowse {
 
 						//create Turnus field
 						if ($studygroup_mode) {
-							echo $seminar_obj->description;
+							echo "<div style=\"font-size:smaller\">" . htmlReady($seminar_obj->description) . "</div>";
 						} else {
 							$temp_turnus_string = $seminar_obj->getFormattedTurnus(true);
 							//Shorten, if string too long (add link for details.php)
@@ -483,11 +483,11 @@ class SemBrowse {
 								$temp_turnus_string = htmlReady(substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") + 71));
 								$temp_turnus_string .= " ... <a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">("._("mehr").")</a>";
 							}
-							echo "<font style=\"margin-left:5px;\" size=\"-2\">" . htmlReady($seminar_number) . "</font><br>";
-							echo "<font style=\"margin-left:5px;\" size=\"-2\">" . $temp_turnus_string . "</font>";
+							echo "<div style=\"margin-left:5px;font-size:smaller\">" . htmlReady($seminar_number) . "</div>";
+							echo "<div style=\"margin-left:5px;font-size:smaller\">" . $temp_turnus_string . "</div>";
 						}
 						echo '</td>';
-						echo "<td class=\"steel1\" align=\"right\"><font size=-1>(";
+						echo "<td class=\"steel1\" align=\"right\">(";
 						$doz_name = array();
 						$c = 0;
 						reset($sem_data[$seminar_id]['fullname']);
@@ -516,7 +516,7 @@ class SemBrowse {
 								}
 								++$i;
 							}
-							echo ") </font></td></tr>";
+							echo ")</td></tr>";
 						}
 					}
 				}
