@@ -16,3 +16,7 @@ if ($messages = $flash['messages']) {
 		echo MessageBox::$type( $message_data['title'], $message_data['details'] );
 	}
 }
+
+if ($flash['question']) {
+	echo $flash['question'];
+}

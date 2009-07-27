@@ -383,7 +383,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 
 	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe,
-				seminare.chdate, seminare.visible, admission_binding,modules,IFNULL(visitdate,0) as visitdate,
+				seminare.chdate, seminare.visible, admission_binding,modules,IFNULL(visitdate,0) as visitdate, admission_prelim, 
 				{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end $add_fields
 				FROM seminar_user LEFT JOIN seminare  USING (Seminar_id)
 				LEFT JOIN object_user_visits ouv ON (ouv.object_id=seminar_user.Seminar_id AND ouv.user_id='$user->id' AND ouv.type='sem')
@@ -396,9 +396,22 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 
 	while ($db->next_record()) {
-			$my_obj[$db->f("Seminar_id")]=array("name" => $db->f("Name"),"status" => $db->f("status"),"visible" => $db->f("visible"), "gruppe" => $db->f("gruppe"),
-				"chdate" => $db->f("chdate"), "binding" => $db->f("admission_binding"), "modules" =>$Modules->getLocalModules($db->f("Seminar_id"),"sem",$db->f("modules"),$db->f("sem_status")),
-				"obj_type" => "sem", "sem_status" => $db->f("sem_status"), "visitdate" => $db->f("visitdate"), "sem_number" => $db->f("sem_number"),"sem_number_end" => $db->f("sem_number_end") );
+			$my_obj[$db->f("Seminar_id")] = array(
+				"name"       => $db->f("Name"), 
+				"status"     => $db->f("status"),
+				"visible"    => $db->f("visible"), 
+				"gruppe"     => $db->f("gruppe"),
+				"chdate"     => $db->f("chdate"),
+				"binding"    => $db->f("admission_binding"),
+				"modules"    => $Modules->getLocalModules($db->f("Seminar_id"), $db->f("modules"), $db->f("sem_status")),
+				"obj_type"   => "sem", 
+				"sem_status" => $db->f("sem_status"), 
+				'prelim'     => $db->f('admission_prelim'),
+				"visitdate"  => $db->f("visitdate"), 
+				"sem_number" => $db->f("sem_number"),
+				"sem_number_end"   => $db->f("sem_number_end"),
+				"sem"
+			);
 			if (($GLOBALS['CHAT_ENABLE']) && ($my_obj[$db->f("Seminar_id")]["modules"]["chat"])) {
 				$chatter = $chatServer->isActiveChat($db->f("Seminar_id"));
 				$chat_info[$db->f("Seminar_id")] = array("chatter" => $chatter, "chatuniqid" => $chatServer->chatDetail[$db->f("Seminar_id")]["id"],
@@ -537,7 +550,17 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				echo $values["gruppe"];
 				echo "><a href='gruppe.php'><img src='".$GLOBALS['ASSETS_URL']."images/blank.gif' ".tooltip(_("Gruppe ändern"))." border=0 width=7 height=12></a></td>";
 				echo "<td class=\"".$cssSw->getClass()."\">";
-				echo CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL);
+
+				// for studygroups display a special avatar
+				if ($SEM_CLASS[$SEM_TYPE[$my_obj[$semid]['sem_status']]["class"]]["studygroup_mode"]) {
+					if ($my_obj[$semid]['prelim'] == 1) {
+						echo Assets::img('studygroup_locked.png', array('title' => _("Studentische Arbeitsgruppe (Teilnahme erst nach Freischaltung)")));
+					} else {
+						echo Assets::img('studygroup.png', array('title' => _("Studentische Arbeitsgruppe")));
+					}
+				} else {
+					echo CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL);
+				}
 				echo "</td>";
 				// Name-field
 				echo "<td align=\"left\" class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";

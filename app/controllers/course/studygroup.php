@@ -51,9 +51,16 @@ class Course_StudygroupController extends AuthenticatedController {
 
 	function new_action()
 	{
+		closeObject();
 		$GLOBALS['CURRENT_PAGE'] =  _('Arbeitsgruppe anlegen');
 
 		$this->terms = Config::GetInstance()->getValue('STUDYGROUP_TERMS');
+		$this->available_modules = StudygroupModel::getAvailableModules();
+		if ($GLOBALS['PLUGINS_ENABLE']) {
+			$this->available_plugins = StudygroupModel::getAvailablePlugins();
+			$this->enabled_plugins   = StudygroupModel::getEnabledPlugins();
+		}
+		$this->modules           = new Modules();
 	}
 
 	function create_action()
@@ -110,7 +117,6 @@ class Course_StudygroupController extends AuthenticatedController {
 			$sem->semester_duration_time=-1;
 			$sem->institut_id=''; // TODO: default inst id!
 
-			$sem->store();
 			$semid=$sem->id;
 			$userid=$GLOBALS['auth']->auth['uid'];
 
@@ -125,24 +131,30 @@ class Course_StudygroupController extends AuthenticatedController {
             
 			$mods=new Modules();
 			$bitmask=0;
-			if ($_REQUEST['groupmodule_forum']) {
-				$mods->setBit($bitmask, $mods->registered_modules["forum"]["id"]);
-			}
-			if ($_REQUEST['groupmodule_files']) {
-				$mods->setBit($bitmask, $mods->registered_modules["documents"]["id"]);
-			}
-			#if ($_REQUEST['groupmodule_members']) {
-			$mods->setBit($bitmask, $mods->registered_modules["participants"]["id"]);
-			#}
-			if ($_REQUEST['groupmodule_wiki']) {
-				$mods->setBit($bitmask, $mods->registered_modules["wiki"]["id"]);
-			}
-			if ($_REQUEST['groupmodule_literature']) {
-				$mods->setBit($bitmask, $mods->registered_modules["literature"]["id"]);
-			}
-			$sem->modules=$bitmask;
-			$mods->writeBin($semid, $bitmask, 'sem');
 
+			// de-/activate modules
+			$available_modules = StudygroupModel::getAvailableModules();
+
+			foreach ($_REQUEST['groupmodule'] as $key => $enable) {
+				if ($available_modules[$key] && $enable) {
+					$mods->setBit($bitmask, $mods->registered_modules[$key]["id"]);
+				}
+			}
+
+			$sem->modules=$bitmask;
+			$mods->writeBin($id, $bitmask, 'sem');
+			$sem->store();
+
+			// de-/activate plugins
+			$available_plugins = StudygroupModel::getAvailablePlugins();
+			foreach ($available_plugins as $key => $name) {
+				$plugin = PluginManager::getInstance()->getPlugin($key);
+				if ($_REQUEST['groupplugin'][$key] && $enable) {
+					$plugin->setActivated(true);
+				} else {
+					$plugin->setActivated(false);
+				}
+			}
 
 			// work done. locate to new group.
 			$this->redirect(URLHelper::getURL('seminar_main.php?auswahl=' . $semid));
@@ -218,8 +230,6 @@ class Course_StudygroupController extends AuthenticatedController {
 				$sem->store();
 
 				$mods=new Modules();
-
-
 				$bitmask=0;
 
 				// de-/activate modules
@@ -297,24 +307,33 @@ class Course_StudygroupController extends AuthenticatedController {
 		}
 	}
 
-	function delete_action($id)
+	function delete_action($id, $approveDelete = false)
 	{
 		global $perm;
-		if($perm->have_studip_perm('dozent',$id)) {
+		if ($perm->have_studip_perm( 'dozent',$id )) {
 
-			$messages = array();
-
-			$sem=new Seminar($id);
-			
-            $sem->delete();
+			if ($approveDelete) {
+				$messages = array();
+				$sem=new Seminar($id);
+	            $sem->delete();
           	
           	
-          	if ($messages = $sem->getStackedMessages()) {
-    			$this->flash['messages'] = $messages;
-    		}
-    		unset($sem);
+    	      	if ($messages = $sem->getStackedMessages()) {
+	    			$this->flash['messages'] = $messages;
+	    		}
+	    		unset($sem);
 			
-			$this->redirect('course/studygroup/new/');
+				$this->redirect('course/studygroup/new');
+			} else {
+				$template = $GLOBALS['template_factory']->open('shared/question');
+
+				$template->set_attribute('approvalLink', $this->url_for('/course/studygroup/delete/'. $id. '/true'));
+				$template->set_attribute('disapprovalLink', $this->url_for('/course/studygroup/edit/'. $id));
+				$template->set_attribute('question', _("Sind Sie sicher, dass Sie diese Arbeitsgruppe löschen möchten?"));
+
+				$this->flash['question'] = $template->render();
+				$this->redirect('course/studygroup/edit/'. $id);
+			}
 		} else {
 			$this->redirect(URLHelper::getURL('seminar_main.php?auswahl=' . $id));
 		}

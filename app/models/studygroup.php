@@ -16,7 +16,7 @@ class StudygroupModel {
 
 		// get standard-plugins (suitable for seminars)
 		if ($GLOBALS['PLUGINS_ENABLE']){
-			$plugins = PluginEngine::getPlugins('Standard');     // get all globally enabled plugins
+			$plugins = PluginEngine::getPlugins('StandardPlugin');     // get all globally enabled plugins
 			foreach ($plugins as $plugin ) {
 				$modules[$plugin->getPluginClassName()] = $plugin->getPluginName();
 			}
@@ -91,7 +91,7 @@ class StudygroupModel {
 		$enabled = array();
 
 		if ($GLOBALS['PLUGINS_ENABLE']){
-			$plugins = PluginEngine::getPlugins('Standard');     // get all globally enabled plugins
+			$plugins = PluginEngine::getPlugins('StandardPlugin');     // get all globally enabled plugins
 			foreach ($plugins as $plugin ) { 
 				$enabled[$plugin->getPluginClassName()] = $plugin->isActivated();
 			}

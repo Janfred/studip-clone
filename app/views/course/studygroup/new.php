@@ -1,4 +1,4 @@
-<?
+<?php
 $infobox=array();
 $infobox['picture']='infoboxbild_studygroup.jpg';
 $infobox['content']=array(
@@ -23,22 +23,31 @@ $infobox['content']=array(
 <table class="blank" width="75%" cellspacing="5" cellpadding="0" border="0" style="margin-left:75px; margin-right:300px;">
 
 <tr>
-  <td style='text-align:right; font-size:150%;'>Name:</td>
+  <td style='text-align:right; font-size:150%;'><?= _("Name:") ?></td>
   <td style='font-size:150%;'><input type='text' name='groupname' size='25' value='<?=$this->flash['request']['groupname']?>' style='font-size:100%'></td>
 </tr>
 
 <tr>
-  <td style='text-align:right; vertical-align:top;'>Beschreibung:</td>
-  <td><textarea name='groupdescription' rows=5 cols=50><?=$this->flash['request']['groupdescription']?><?=_("Hier aussagekräftige Beschreibung eingeben.")?></textarea></td>
+  <td style='text-align:right; vertical-align:top;'><?= _("Beschreibung:") ?></td>
+  <td><textarea name='groupdescription' rows=5 cols=50><?= ($this->flash['request']['groupdescription'] ? $this->flash['request']['groupdescription'] : _("Hier aussagekräftige Beschreibung eingeben.")) ?></textarea></td>
 </tr>
 
 <tr>
-  <td style='text-align:right; vertical-align:top;'>Module:</td>
+  <td style='text-align:right; vertical-align:top;'><?= _("Module:") ?></td>
   <td>
-    <input name='groupmodule_forum' type=checkbox <?= ($this->flash['request']['groupmodule_forum']) ? 'checked' : '' ?>> Forum<br/>
-    <input name='groupmodule_files' type=checkbox <?= ($this->flash['request']['groupmodule_files']) ? 'checked' : ''?>> Dateibereich<br/>
-    <input name='groupmodule_wiki' type=checkbox <?= ($this->flash['request']['groupmodule_wiki']) ? 'checked' : ''?>> Wiki<br/>
-    <input name='groupmodule_literature' type=checkbox <?= ($this->flash['request']['groupmodule_literature']) ? 'checked' : ''?>> Literatur
+	<? foreach($available_modules as $key => $name) : ?>
+	<label>
+		<input name="groupmodule[<?= $key ?>]" type="checkbox" <?= ($this->flash['request']['groupmodule'][$key]) ? 'checked="checked"' : '' ?>> <?= $name ?>
+	</label><br>
+	<? endforeach; ?>
+
+	<? if ($GLOBALS['PLUGINS_ENABLE']) : ?>
+		<? foreach($available_plugins as $key => $name) : ?>
+		<label>
+			<input name="groupplugin[<?= $key ?>]" type="checkbox" <?= ($this->flash['request']['groupplugin'][$key]) ? 'checked="checked"' : '' ?>> <?= $name ?>
+		</label><br>
+		<? endforeach; ?>
+	<? endif; ?>
   </td>
 </tr>
 
@@ -47,11 +56,11 @@ $infobox['content']=array(
 </tr>
 
 <tr>
-  <td style='text-align:right;'>Zugang:</td>
+  <td style='text-align:right;'><?= _("Zugang:") ?></td>
   <td>
       <select size=0 name="groupaccess">
-         <option value="all">Offen für alle
-         <option value="invite">Auf Anfrage
+         <option value="all"><?= _("Offen für alle") ?></option>
+         <option value="invite"><?= _("Auf Anfrage") ?></option>
       </select>
   </td>
 </tr>
@@ -62,13 +71,15 @@ $infobox['content']=array(
 </tr>
 
 <tr>
-  <td style='text-align:right; vertical-align:top;'>Nutzungsbedingungen:</td>
+  <td style='text-align:right; vertical-align:top;'><?= _("Nutzungsbedingungen:") ?></td>
   <td>
   	<p>
 		<em><?= formatReady( $terms ) ?></em>
 	</p>
 	<p>
-		<input type=checkbox name="grouptermsofuse_ok"> Einverstanden
+		<label>
+			<input type=checkbox name="grouptermsofuse_ok"> <?= _("Einverstanden") ?>
+		</label>
 	</p>
   </td>
 </tr>

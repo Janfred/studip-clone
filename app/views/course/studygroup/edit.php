@@ -11,8 +11,7 @@ $infobox['content']=array(
         'eintrag'=>array(
             array("text"=>'<a href="'.$controller->url_for('course/studygroup/new').'">'._('Neue Arbeitsgruppe anlegen').'</a>', 
                   "icon"=>"icon-cont.gif"),
-	        array("text"=>'<a href="'.$controller->url_for('course/studygroup/delete/'.$sem_id).'">'._('Diese Arbeitsgruppe 
-	                        löschen').'</a>',
+	        array("text"=>'<a href="'.$controller->url_for('course/studygroup/delete/'.$sem_id).'">'._('Diese Arbeitsgruppe löschen').'</a>',
 	              "icon"=>"trash.gif"))),
      );
 
@@ -39,12 +38,16 @@ $infobox['content']=array(
   <td style='text-align:right; vertical-align:top;'>Module:</td>
   <td>
   	<? foreach($available_modules as $key => $name) : ?>
-    <input name="groupmodule[<?= $key ?>]" type="checkbox" <?= ($modules->getStatus($key, $sem_id, 'sem')) ? 'checked="checked"' : '' ?>> <?= $name ?> <br>
+	<label>
+	    <input name="groupmodule[<?= $key ?>]" type="checkbox" <?= ($modules->getStatus($key, $sem_id, 'sem')) ? 'checked="checked"' : '' ?>> <?= $name ?>
+	</label><br>
 	<? endforeach; ?>
 
 	<? if ($GLOBALS['PLUGINS_ENABLE']) : ?>
 	  	<? foreach($available_plugins as $key => $name) : ?>
-	    <input name="groupplugin[<?= $key ?>]" type="checkbox" <?= ($enabled_plugins[$key]) ? 'checked="checked"' : '' ?>> <?= $name ?> <br>
+		<label>
+		    <input name="groupplugin[<?= $key ?>]" type="checkbox" <?= ($enabled_plugins[$key]) ? 'checked="checked"' : '' ?>> <?= $name ?>
+		</label><br>
 		<? endforeach; ?>
 	<? endif; ?>
   </td>

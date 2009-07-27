@@ -387,7 +387,7 @@ class SemBrowse {
 		ob_end_flush();
 	}
 
-function print_result(){
+	function print_result(){
 		ob_start();
 		global $_fullname_sql,$_views,$PHP_SELF,$SEM_TYPE,$SEM_CLASS;
 
@@ -401,14 +401,14 @@ function print_result(){
 			$the_tree = $this->sem_tree->tree;
 			list($group_by_data, $sem_data) = $this->get_result();
 			echo "\n<table border=\"0\" align=\"center\" cellspacing=0 cellpadding=2 width = \"99%\">\n";
-			echo "\n<tr><td class=\"steelgraulight\" colspan=\"2\"><div style=\"margin-top:10px;margin-bottom:10px;\"><font size=\"-1\"><b>&nbsp;"
+			echo "\n<tr><td class=\"steelgraulight\" colspan=\"4\"><div style=\"margin-top:10px;margin-bottom:10px;\"><font size=\"-1\"><b>&nbsp;"
 				. sprintf(_(" %s Veranstaltungen gefunden %s, Gruppierung: %s"),count($sem_data),
 				(($this->sem_browse_data['sset']) ? _("(Suchergebnis)") : ""),
 				$this->group_by_fields[$this->sem_browse_data['group_by']]['name'])
 				. "</b></font></div></td></tr>";
 
 			foreach ($group_by_data as $group_field => $sem_ids){
-				echo "\n<tr><td class=\"steelkante\" colspan=\"2\"><font size=-1><b>";
+				echo "\n<tr><td class=\"steelkante\" colspan=\"4\"><font size=-1><b>";
 				switch ($this->sem_browse_data["group_by"]){
 					case 0:
 					echo $this->search_obj->sem_dates[$group_field]['name'];
@@ -440,9 +440,12 @@ function print_result(){
 				
 				if (is_array($sem_ids['Seminar_id'])){
 				   while(list($seminar_id,) = each($sem_ids['Seminar_id'])){
-					    if ($SEM_CLASS[$SEM_TYPE[key($sem_data[$seminar_id]['status'])]["class"]]["studygroup_mode"]) {
-   					         // do something smart here in order to display the icon for studygroup
-   					    }
+				   		// is this sem a studygroup?
+					    $studygroup_mode = $SEM_CLASS[$SEM_TYPE[key($sem_data[$seminar_id]['status'])]["class"]]["studygroup_mode"];
+
+						// create instance of seminar-object
+						$seminar_obj = Seminar::getInstance($seminar_id);
+
 						$sem_name = key($sem_data[$seminar_id]["Name"]);
 						$seminar_number = key($sem_data[$seminar_id]['VeranstaltungsNummer']);
 						$sem_number_start = key($sem_data[$seminar_id]["sem_number"]);
@@ -453,19 +456,37 @@ function print_result(){
 						} elseif ($this->sem_browse_data["group_by"]) {
 							$sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . ")";
 						}
-						echo"<td class=\"steel1\" width=\"66%\"><font size=-1><a href=\"{$this->target_url}?{$this->target_id}={$seminar_id}&send_from_search=1&send_from_search_page="
-						. $PHP_SELF. "?keep_result_set=1\">", htmlReady($sem_name), "</a><br>";
-						//create Turnus field
-						$seminar_obj = new Seminar($seminar_id);
-						$temp_turnus_string = $seminar_obj->getFormattedTurnus(true);
-						//Shorten, if string too long (add link for details.php)
-						if (strlen($temp_turnus_string) > 70) {
-							$temp_turnus_string = htmlReady(substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") + 71));
-							$temp_turnus_string .= " ... <a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">("._("mehr").")</a>";
+					    if ($studygroup_mode) {
+   					    	// do something smart here in order to display the icon for studygroup
+							echo '<td width="1%" class="steel1">';
+							if ($seminar_obj->admission_prelim == 1) {
+								echo Assets::img('studygroup_locked.png', array('title' => _("Studentische Arbeitsgruppe (Teilnahme erst nach Freischaltung)")));
+							} else {
+								echo Assets::img('studygroup.png', array('title' => _("Studentische Arbeitsgruppe")));
+							}
+							echo '</td>';
+   					    } else {
+							echo '<td width="1%" class="steel1"></td>';
 						}
-						echo "</font>";
-						echo "<font style=\"margin-left:5px;\" size=\"-2\">" . htmlReady($seminar_number) . "</font><br>";
-						echo "<font style=\"margin-left:5px;\" size=\"-2\">" . $temp_turnus_string . "</font></td>";
+
+						echo '<td class="steel1" width="66%" colspan="2">';
+						echo "<a href=\"{$this->target_url}?{$this->target_id}={$seminar_id}&send_from_search=1&send_from_search_page=";
+						echo $PHP_SELF. "?keep_result_set=1\">", htmlReady($sem_name), "</a><br>";
+
+						//create Turnus field
+						if ($studygroup_mode) {
+							echo $seminar_obj->description;
+						} else {
+							$temp_turnus_string = $seminar_obj->getFormattedTurnus(true);
+							//Shorten, if string too long (add link for details.php)
+							if (strlen($temp_turnus_string) > 70) {
+								$temp_turnus_string = htmlReady(substr($temp_turnus_string, 0, strpos(substr($temp_turnus_string, 70, strlen($temp_turnus_string)), ",") + 71));
+								$temp_turnus_string .= " ... <a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">("._("mehr").")</a>";
+							}
+							echo "<font style=\"margin-left:5px;\" size=\"-2\">" . htmlReady($seminar_number) . "</font><br>";
+							echo "<font style=\"margin-left:5px;\" size=\"-2\">" . $temp_turnus_string . "</font>";
+						}
+						echo '</td>';
 						echo "<td class=\"steel1\" align=\"right\"><font size=-1>(";
 						$doz_name = array();
 						$c = 0;
