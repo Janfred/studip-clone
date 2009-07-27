@@ -10,6 +10,8 @@ require_once ('lib/dates.inc.php');
 require_once ('lib/classes/StudipSemSearch.class.php');
 require_once ('lib/classes/StudipSemTreeViewSimple.class.php');
 require_once ('lib/classes/StudipSemRangeTreeViewSimple.class.php');
+require_once ('lib/classes/CourseAvatar.class.php');
+require_once ('lib/classes/StudygroupAvatar.class.php');
 
 class SemBrowse {
 
@@ -459,14 +461,12 @@ class SemBrowse {
 					    if ($studygroup_mode) {
    					    	// do something smart here in order to display the icon for studygroup
 							echo '<td width="1%" class="steel1">';
-							if ($seminar_obj->admission_prelim == 1) {
-								echo Assets::img('studygroup_locked.png', array('title' => _("Studentische Arbeitsgruppe (Teilnahme erst nach Freischaltung)")));
-							} else {
-								echo Assets::img('studygroup.png', array('title' => _("Studentische Arbeitsgruppe")));
-							}
+							echo StudygroupAvatar::getAvatar($seminar_id)->getImageTag(Avatar::SMALL);
 							echo '</td>';
    					    } else {
-							echo '<td width="1%" class="steel1"></td>';
+							echo '<td width="1%" class="steel1">';
+							echo CourseAvatar::getAvatar($seminar_id)->getImageTag(Avatar::SMALL);
+							echo '</td>';
 						}
 
 						echo '<td class="steel1" width="66%" colspan="2">';

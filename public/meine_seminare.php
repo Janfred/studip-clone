@@ -24,6 +24,7 @@ $Id$
 */
 
 require_once 'lib/classes/CourseAvatar.class.php';
+require_once 'lib/classes/StudygroupAvatar.class.php';
 require_once 'lib/classes/InstituteAvatar.class.php';
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
@@ -552,11 +553,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 				// for studygroups display a special avatar
 				if ($SEM_CLASS[$SEM_TYPE[$my_obj[$semid]['sem_status']]["class"]]["studygroup_mode"]) {
-					if ($my_obj[$semid]['prelim'] == 1) {
-						echo Assets::img('studygroup_locked.png', array('title' => _("Studentische Arbeitsgruppe (Teilnahme erst nach Freischaltung)")));
-					} else {
-						echo Assets::img('studygroup.png', array('title' => _("Studentische Arbeitsgruppe")));
-					}
+					echo StudygroupAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL);
 				} else {
 					echo CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL);
 				}

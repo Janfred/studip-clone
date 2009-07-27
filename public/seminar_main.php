@@ -35,6 +35,7 @@ require_once('config.inc.php');
 require_once('lib/visual.inc.php');
 require_once 'lib/functions.php';
 require_once 'lib/classes/CourseAvatar.class.php';
+require_once 'lib/classes/StudygroupAvatar.class.php';
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
@@ -256,7 +257,11 @@ $quarter_year = 60 * 60 * 24 * 90;
 		</blockquote><br>
 		</td>
 		<td class="blank" align="right" valign="top">
+			<? if ($studygroup_mode) : ?>
+			<?= StudygroupAvatar::getAvatar($SessSemName[1])->getImageTag(Avatar::NORMAL) ?>
+			<? else: ?>
 			<?= CourseAvatar::getAvatar($SessSemName[1])->getImageTag(Avatar::NORMAL) ?>
+			<? endif; ?>
 		</td>
 	</tr>
 	</table>

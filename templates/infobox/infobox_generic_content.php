@@ -12,7 +12,7 @@
 
       <tr>
         <td class="infobox" width="100%" align="right">
-          <img src="<?= $GLOBALS['ASSETS_URL']."images/".$picture ?>">
+		  <?= Assets::img($picture) ?>
         </td>
       </tr>
 

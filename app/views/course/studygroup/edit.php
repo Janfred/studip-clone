@@ -1,19 +1,42 @@
 <?
-$infobox=array();
-$infobox['picture']='infoboxbild_studygroup.jpg';
-$infobox['content']=array(
-        array(
-        'kategorie'=>_("Information"),
-        'eintrag'=>array(
-            array("text"=>"Studiengruppen sind eine einfache Möglichkeit, mit Kommilitonen, Kollegen und anderen zusammenzuarbeiten. Jeder kann Studiengruppen gründen.","icon"=>"ausruf_small2.gif"))),
-        array(
-        'kategorie'=>_("Aktionen"),
-        'eintrag'=>array(
-            array("text"=>'<a href="'.$controller->url_for('course/studygroup/new').'">'._('Neue Arbeitsgruppe anlegen').'</a>', 
-                  "icon"=>"icon-cont.gif"),
-	        array("text"=>'<a href="'.$controller->url_for('course/studygroup/delete/'.$sem_id).'">'._('Diese Arbeitsgruppe löschen').'</a>',
-	              "icon"=>"trash.gif"))),
-     );
+$infobox = array();
+$infobox['picture'] = StudygroupAvatar::getAvatar($sem_id)->getUrl(Avatar::NORMAL);
+
+$aktionen[] = array(
+	"text" => '<a href="'.$controller->url_for('course/studygroup/new').'">'._('Neue Arbeitsgruppe anlegen').'</a>',
+	"icon" => "icon-cont.gif"
+);
+$aktionen[] = array(
+	"text" => '<a href="'.$controller->url_for('course/studygroup/delete/'.$sem_id).'">'._('Diese Arbeitsgruppe löschen').'</a>',
+	"icon" => "trash.gif"
+);
+
+if ($GLOBALS['perm']->have_studip_perm('tutor', $sem_id)) {
+	$aktionen[] = array(
+		"icon" => "edit_transparent.gif",
+		"text" => '<a href="'.  URLHelper::getLink('dispatch.php/course/avatar/update/' . $sem_id) .'">'. _("Bild ändern") .'</a>'
+	);
+	$aktionen[] = array(
+		"icon" => "trash.gif",
+		"text" => '<a href="'. URLHelper::getLink('dispatch.php/course/avatar/delete/'. $sem_id) .'">'. _("Bild löschen") .'</a>'
+	);
+}
+
+$infobox['content'] = array(
+	array(
+		'kategorie' => _("Information"),
+		'eintrag'   => array(
+			array(
+				"text" => _("Studiengruppen sind eine einfache Möglichkeit, mit Kommilitonen, Kollegen und anderen zusammenzuarbeiten. Jeder kann Studiengruppen gründen."),
+				"icon" => "ausruf_small2.gif"
+			)
+		)
+	),
+	array(
+		'kategorie' => _("Aktionen"),
+		'eintrag'   => $aktionen
+	)
+);
 
 ?>
 
