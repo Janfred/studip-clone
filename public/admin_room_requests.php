@@ -418,7 +418,7 @@ if ($perm->have_perm("admin"))
 							<?
 							print "<b>"._("Raum suchen:")."</b><br />";
 							if ((($search_exp_room) && ($search_room_x)) || ($search_properties_x)) {
-								$result = $admin_rooms_data["resRequest"]->searchRooms($search_exp_room, ($search_properties_x) ? TRUE : FALSE);
+								$result = $admin_rooms_data["resRequest"]->searchRoomsToRequest(remove_magic_quotes($search_exp_room), ($search_properties_x) ? TRUE : FALSE);
 								if ($result) {
 									printf ("<br /><font size=-1><b>%s</b> ".((!$search_properties_x) ? _("R&auml;ume gefunden:") : _("passende R&auml;ume gefunden."))."<br /><br />", sizeof($result));
 									print "<select name=\"select_room\">";

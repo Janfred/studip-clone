@@ -247,8 +247,8 @@ class RoomRequest {
 	
 	function searchRoomsToRequest($search_exp, $properties = false){
 		$permitted_rooms = null;
-		if(getGlobalPerms($user->id) != 'admin' && !Config::GetInstance()->getValue('RESOURCES_ALLOW_ROOM_REQUESTS_ALL_ROOMS')){
-			$my_rooms = new ResourcesUserRoomsList($user->id, false, false, true);
+		if(getGlobalPerms($GLOBALS['user']->id) != 'admin' && !Config::GetInstance()->getValue('RESOURCES_ALLOW_ROOM_REQUESTS_ALL_ROOMS')){
+			$my_rooms = new ResourcesUserRoomsList($GLOBALS['user']->id, false, false, true);
 			$global_resources = DBManager::get()
 								->query("SELECT resource_id FROM resources_objects WHERE owner_id='global'")
 								->fetchAll(PDO::FETCH_COLUMN);

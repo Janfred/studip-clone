@@ -3313,7 +3313,7 @@ if ($level == 4) {
 										<?
 										print "<b>"._("Raum suchen:")."</b><br />";
 										if ((($search_exp_room) && ($search_room_x)) || ($search_properties_x)) {
-											$result = $sem_create_data["resRequest"]->searchRooms(remove_magic_quotes($search_exp_room), ($search_properties_x) ? TRUE : FALSE);
+											$result = $sem_create_data["resRequest"]->searchRoomsToRequest(remove_magic_quotes($search_exp_room), ($search_properties_x) ? TRUE : FALSE);
 											if ($result) {
 												printf ("<br /><font size=-1><b>%s</b> ".((!$search_properties_x) ? _("R&auml;ume gefunden:") : _("passende R&auml;ume gefunden"))."<br /><br />", sizeof($result));
 												print "<select name=\"select_room\">";
