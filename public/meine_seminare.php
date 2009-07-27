@@ -403,14 +403,13 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				"gruppe"     => $db->f("gruppe"),
 				"chdate"     => $db->f("chdate"),
 				"binding"    => $db->f("admission_binding"),
-				"modules"    => $Modules->getLocalModules($db->f("Seminar_id"), $db->f("modules"), $db->f("sem_status")),
+				"modules"    => $Modules->getLocalModules($db->f("Seminar_id"), "sem", $db->f("modules"), $db->f("sem_status")),
 				"obj_type"   => "sem", 
 				"sem_status" => $db->f("sem_status"), 
 				'prelim'     => $db->f('admission_prelim'),
 				"visitdate"  => $db->f("visitdate"), 
 				"sem_number" => $db->f("sem_number"),
-				"sem_number_end"   => $db->f("sem_number_end"),
-				"sem"
+				"sem_number_end"   => $db->f("sem_number_end")
 			);
 			if (($GLOBALS['CHAT_ENABLE']) && ($my_obj[$db->f("Seminar_id")]["modules"]["chat"])) {
 				$chatter = $chatServer->isActiveChat($db->f("Seminar_id"));
