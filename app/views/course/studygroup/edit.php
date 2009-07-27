@@ -27,12 +27,12 @@ $infobox['content']=array(
 
 <tr>
   <td style='text-align:right; font-size:150%;'>Name:</td>
-  <td style='font-size:150%;'><input type='text' name='groupname' size='25' value='<?=$sem->getName()?>' style='font-size:100%'></td>
+  <td style='font-size:150%;'><input type='text' name='groupname' size='25' value='<?= htmlReady($sem->getName()) ?>' style='font-size:100%'></td>
 </tr>
 
 <tr>
   <td style='text-align:right; vertical-align:top;'>Beschreibung:</td>
-  <td><textarea name='groupdescription' rows=5 cols=50><?=$sem->description?></textarea></td>
+  <td><textarea name='groupdescription' rows=5 cols=50><?= htmlReady($sem->description) ?></textarea></td>
 </tr>
 <tr>
   <td style='text-align:right; vertical-align:top;'>Module:</td>

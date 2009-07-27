@@ -68,42 +68,43 @@ class Course_StudygroupController extends AuthenticatedController {
 		$errors = array();
 
 		//checks
-		if (!$_REQUEST['groupname']) {
+		if (!Request::get('groupname')) {
 			$errors[] = _("Bitte Gruppennamen angeben");
 		} else {
-			$db=new DB_Seminar();
-			$db->query("SELECT * FROM seminare WHERE name='".$_REQUEST['groupname']."'");
-			if ($db->nf()) {
+			$pdo = DBManager::get();
+			$stmt = $pdo->query($query = "SELECT * FROM seminare WHERE name = ". $pdo->quote(Request::get('groupname')));
+			if ($stmt->fetch()) {
 				$errors[] = _("Eine Veranstaltung/Arbeitsgruppe mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen");
 			}
 		}
-		if (!$_REQUEST['grouptermsofuse_ok']) {
+
+		if (!Request::get('grouptermsofuse_ok')) {
 			$errors[] = _("Sie müssen die Nutzungsbedingungen durch Setzen des Häkchens bei 'Einverstanden' akzeptieren.");
 		}
 		if (count($errors)) {
 			$this->flash['errors'] =  $errors;
 			$this->flash['create'] = true;
-			$this->flash['request'] = $_REQUEST;
+			$this->flash['request'] = Request::getInstance();
 			$this->redirect('course/studygroup/new/');
 		} else {
 			// Everything seems fine, let's create a studygroup
 
-			$sem=new Seminar();
-			$sem->name=$_REQUEST['groupname'];
-			$sem->description=$_REQUEST['groupdescription'];
-			$sem->status=99;
-			$sem->read_level=1;
-			$sem->write_level=1;
+			$sem = new Seminar();
+			$sem->name        = Request::get('groupname');         // seminar-class quotes itself
+			$sem->description = Request::get('groupdescription');  // seminar-class quotes itself
+			$sem->status      = 99;
+			$sem->read_level  = 1;
+			$sem->write_level = 1;
 
 			$sem->institute_id = Config::GetInstance()->getValue('STUDYGROUP_DEFAULT_INST');
 
 
 			$sem->admission_type=0; 
-			if ($_REQUEST['groupaccess']=='all') {
-				$sem->admission_prelim=0;
+			if (Request::get('groupaccess') == 'all') {
+				$sem->admission_prelim = 0;
 			} else {
-				$sem->admission_prelim=1;
-				$sem->admission_prelim_txt=_("Die ModeratorInnen der Arbeitsgruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
+				$sem->admission_prelim = 1;
+				$sem->admission_prelim_txt = _("Die ModeratorInnen der Arbeitsgruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
 			}
 			$sem->admission_endtime=-1;
 			$sem->admission_binding=0;
@@ -193,12 +194,12 @@ class Course_StudygroupController extends AuthenticatedController {
 
 			//checks
 			// What kind of checks might be of concern here? 
-			if (!$_REQUEST['groupname']) {
+			if (!Request::get('groupname')) {
 				$errors[] = _("Bitte Gruppennamen angeben");
 			} else {
-				$db=new DB_Seminar();
-				$db->query("SELECT * FROM seminare WHERE name='".$_REQUEST['groupname']."' AND Seminar_id != '".$id."' ");
-				if ($db->nf()) {
+				$pdo = DBManager::get();
+				$stmt = $pdo->query($query = "SELECT * FROM seminare WHERE name = ". $pdo->quote(Request::get('groupname')) ." AND Seminar_id != ". $pdo->quote( $id ));
+				if ($stmt->fetch()) {
 					$errors[] = _("Eine Veranstaltung/Arbeitsgruppe mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen");
 				}
 			}
@@ -206,25 +207,25 @@ class Course_StudygroupController extends AuthenticatedController {
 			if (count($errors)) {
 				$this->flash['errors'] =  $errors;
 				$this->flash['edit'] = true;
-				$this->flash['request'] = $_REQUEST;
+				// $this->flash['request'] = $_REQUEST;
 				$this->redirect('course/studygroup/edit/' . $id);
 			} else {
 				// Everything seems fine, let's create a studygroup
 
-				$sem=new Seminar($id);
-				$sem->name=$_REQUEST['groupname'];
-				$sem->description=$_REQUEST['groupdescription'];
-				$sem->status=99;
-				$sem->read_level=1;
-				$sem->write_level=1;
+				$sem = new Seminar($id);
+				$sem->name        = Request::get('groupname');         // seminar-class quotes itself
+				$sem->description = Request::get('groupdescription');  // seminar-class quotes itself
+				$sem->status      = 99;
+				$sem->read_level  = 1;
+				$sem->write_level = 1;
 
-				$sem->admission_type=0; 
+				$sem->admission_type = 0; 
 
-				if ($_REQUEST['groupaccess']=='all') {
-					$sem->admission_prelim=0;
+				if (Request::get('groupaccess') == 'all') {
+					$sem->admission_prelim = 0;
 				} else {
-					$sem->admission_prelim=1;
-					$sem->admission_prelim_txt=_("Die ModeratorInnen der Arbeitsgruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
+					$sem->admission_prelim = 1;
+					$sem->admission_prelim_txt = _("Die ModeratorInnen der Arbeitsgruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
 				}
 
 				$sem->store();
@@ -382,8 +383,8 @@ class Course_StudygroupController extends AuthenticatedController {
 				$config_string[] = $key .':'. $value;
 			}
 			Config::GetInstance()->setValue(implode('|', $config_string), 'STUDYGROUP_SETTINGS');
-			Config::GetInstance()->setValue( Request::get('institute'), 'STUDYGROUP_DEFAULT_INST');
-			Config::GetInstance()->setValue( Request::get('terms'), 'STUDYGROUP_TERMS');
+			Config::GetInstance()->setValue( Request::quoted('institute'), 'STUDYGROUP_DEFAULT_INST');
+			Config::GetInstance()->setValue( Request::quoted('terms'), 'STUDYGROUP_TERMS');
 			$this->flash['success'] = _("Die Einstellungen wurden gespeichert!");
 		} else {
 			$this->flash['error'] = _("Fehler beim Speichern der Einstellung!");
