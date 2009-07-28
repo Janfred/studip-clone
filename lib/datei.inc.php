@@ -219,9 +219,11 @@ function createSelectedZip ($file_ids, $perm_check = TRUE, $size_check = false) 
 			$query = sprintf ("SELECT dokument_id, filename FROM dokumente WHERE dokument_id IN %s %s ORDER BY chdate, name, filename", $in, ($perm_check) ? "AND seminar_id = '".$SessSemName[1]."' $folders_cond" : "");
 			$db->query($query);
 			while ($db->next_record()) {
-				$docs++;
-				@copy(get_upload_file_path($db->f('dokument_id')), $tmp_full_path . '/[' . $docs . ']_' . escapeshellcmd(prepareFilename($db->f("filename"), FALSE)));
-				TrackAccess($db->f('dokument_id'),'dokument');
+				if(check_protected_download($db->f('dokument_id'))){
+					$docs++;
+					@copy(get_upload_file_path($db->f('dokument_id')), $tmp_full_path . '/[' . $docs . ']_' . escapeshellcmd(prepareFilename($db->f("filename"), FALSE)));
+					TrackAccess($db->f('dokument_id'),'dokument');
+				}
 			}
 
 			//zip stuff
@@ -273,9 +275,11 @@ function createTempFolder($folder_id, $tmp_full_path, $perm_check = TRUE) {
 		if ($db->f("url") != "") {  // just a linked file
 			$linkinfo .= "\r\n".$db->f("filename");
 		} else {
-			$docs++;
-			@copy(get_upload_file_path($db->f('dokument_id')), $tmp_full_path.'/['.$docs.']_'.escapeshellcmd(prepareFilename($db->f('filename'), FALSE)));
-			TrackAccess($db->f('dokument_id'),'dokument');
+			if(check_protected_download($db->f('dokument_id'))){
+				$docs++;
+				@copy(get_upload_file_path($db->f('dokument_id')), $tmp_full_path.'/['.$docs.']_'.escapeshellcmd(prepareFilename($db->f('filename'), FALSE)));
+				TrackAccess($db->f('dokument_id'),'dokument');
+			}
 		}
 	}
 	if ($linkinfo) {
@@ -698,18 +702,22 @@ function form($refresh = FALSE) {
 	$print.= "&nbsp;<INPUT NAME=\"the_file\" TYPE=\"file\"  style=\"width: 70%\" SIZE=\"30\">&nbsp;</td></td>";
 	$print.= "\n</tr>";
 	if (!$refresh && !$folder_system_data['zipupload']) {
-		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. Geben Sie eine kurze Beschreibung und einen Namen f&uuml;r die Datei ein.") . "</font></td></tr>";
+		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. Schutz gem&auml;&szlig; Urhebberecht.") . "</font></td></tr>";
+		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>";
+		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protected\" value=\"0\"".(!$protect ? "checked" :"") .">"._("Ja, dieses Dokument ist frei von Rechten Dritter") ;
+		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protected\" value=\"1\"".($protect ? "checked" :"") .">"._("Nein, dieses Dokument ist <u>nicht</u> frei von Rechten Dritter");
+		$print.= "<br/>&nbsp;&nbsp;&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a></font></td></tr>";
+
+		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("3. Geben Sie eine kurze Beschreibung und einen Namen f&uuml;r die Datei ein.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
 		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" ></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
 		$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
-		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("geschützter Inhalt:") . "&nbsp;</font>";
-		$print.= "\n<input style=\"vertical-align:middle\" type=\"checkbox\" value=\"1\" name=\"protected\"></td></tr>";
-		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen") . "</font></td></tr>";
+		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("4. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen") . "</font></td></tr>";
 	} else if ($folder_system_data['zipupload']){
-		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("2. Klicken Sie auf <b>'absenden'</b>, um das Ziparchiv hochzuladen und in diesem Ordner zu entpacken.") . "</font></td></tr>";
+		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("3. Klicken Sie auf <b>'absenden'</b>, um das Ziparchiv hochzuladen und in diesem Ordner zu entpacken.") . "</font></td></tr>";
 	} else {
-		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die alte Version zu &uuml;berschreiben.") . "</font></td></tr>";
+		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die alte Version zu &uuml;berschreiben.") . "</font></td></tr>";
 	}
 	$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"center\" valign=\"center\">";
 	$print.= "\n<input type=\"image\" " . makeButton("absenden", "src") . " value=\"Senden\" align=\"absmiddle\" onClick=\"return upload_start();\" name=\"create\" border=\"0\">";
@@ -719,7 +727,7 @@ function form($refresh = FALSE) {
 	$print.= "\n</form></table><br></center>";
 
 	return $print;
-	}
+}
 
 //kill the forbidden characters, shorten filename to 31 Characters
 function prepareFilename($filename, $shorten = FALSE) {
@@ -1241,9 +1249,11 @@ function link_form ($range_id, $updating=FALSE) {
 	$print.= "\n</tr>";
 	if (!$refresh) {
 
-		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. Sie können hier angeben, ob es sich um eine urheberrechtlich geschützte Datei handelt.") . "</font></td></tr>";
-		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Geschützt:") . "&nbsp;</font>";
-		$print.= "\n&nbsp;<input type=\"CHECKBOX\" name=\"protect\" $protect></td></tr>";
+		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("2. Schutz gem&auml;&szlig; Urhebberecht.") . "</font></td></tr>";
+		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dieses Dokument ist frei von Rechten Dritter:") . "&nbsp;";
+		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protect\" value=\"0\"".(!$protect ? "checked" :"") .">"._("Ja");
+		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protect\" value=\"1\"".($protect ? "checked" :"") .">"._("Nein");
+		$print.= "<br/>&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a></font></td></tr>";
 
 		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("3. Geben Sie eine kurze Beschreibung und einen Namen für die Datei ein.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
@@ -1620,8 +1630,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					} elseif ($open['anker'] == $db3->f("dokument_id"))
 						$doc_anker = ' name="anker" ';
 					//Icon auswaehlen
-					$icon = '<a href="' . GetDownloadLink($db3->f('dokument_id'), $db3->f('filename'), $type) . '">'
-							. GetFileIcon(getFileExtension($db3->f('filename')), true) . '</a>';
+					if(check_protected_download($db3->f("dokument_id"))){
+						$icon = '<a href="' . GetDownloadLink($db3->f('dokument_id'), $db3->f('filename'), $type) . '">'
+						. GetFileIcon(getFileExtension($db3->f('filename')), true) . '</a>';
+					} else {
+						$icon = Assets::Img('ausruf_small3.gif');
+					}
 					//Link erstellen
 					if (isset($open[$db3->f("dokument_id")]))
 						$link=URLHelper::getLink("?close=".$db3->f("dokument_id")."#anker");
@@ -1696,14 +1710,14 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 
 						if ($change == $db3->f("dokument_id")) { 	//Aenderungsmodus, Formular aufbauen
-							if ($db3->f("protected")==1)
-								$protect = "checked";
-							$content.= "\n&nbsp;<input type=\"CHECKBOX\" name=\"change_protected\" $protect>&nbsp;"._("geschützter Inhalt")."</br>";
-							$content.= "<br><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br>";
-							$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\">";
-							$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\">";
-							$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db3->f("dokument_id")."_sc_\">";
-							$content.= "<input type=\"hidden\" name=\"type\" value=\"0\">";
+							$content.= "<input type=\"RADIO\" name=\"change_protected\" value=\"0\"".((!$db3->f("protected")) ? "checked" :"") .">"._("Ja, dieses Dokument ist frei von Rechten Dritter") ;
+							$content.= "\n&nbsp;<input type=\"RADIO\" name=\"change_protected\" value=\"1\"".(($db3->f("protected")) ? "checked" :"") .">"._("Nein, dieses Dokument ist <u>nicht</u> frei von Rechten Dritter");
+							$content.= "<br/>&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a>";
+							$content.= "<br /><br /><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br />";
+							$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\" />";
+							$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\" />";
+							$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db3->f("dokument_id")."_sc_\" />";
+							$content.= "<input type=\"hidden\" name=\"type\" value=0 />";
 						}
 						else {
 							$content = '';
@@ -1737,10 +1751,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$edit='';
 						if (($change != $db3->f("dokument_id")) && ($upload != $db3->f("dokument_id")) && $filelink != $db3->f("dokument_id")) {
 							$type = ($db3->f('url') != '')? 6 : 0;
-							$edit= '&nbsp;<a href="' . GetDownloadLink( $db3->f('dokument_id'), $db3->f('filename'), $type, 'force') .'">' . makeButton('herunterladen', 'img') . '</a>';
-							$fext = getFileExtension(strtolower($db3->f('filename')));
-							if (($type != '6') && ($fext != 'zip') && ($fext != 'tgz') && ($fext != 'gz') && ($fext != 'bz2')) {
-								$edit.= '&nbsp;<a href="'. GetDownloadLink( $db3->f('dokument_id'), $db3->f('filename'), $type, 'zip') . '">' . makeButton('alsziparchiv', 'img') . '</a>';
+							if(check_protected_download($db3->f("dokument_id"))){
+								$edit= '&nbsp;<a href="' . GetDownloadLink( $db3->f('dokument_id'), $db3->f('filename'), $type, 'force') .'">' . makeButton('herunterladen', 'img') . '</a>';
+								$fext = getFileExtension(strtolower($db3->f('filename')));
+								if (($type != '6') && ($fext != 'zip') && ($fext != 'tgz') && ($fext != 'gz') && ($fext != 'bz2')) {
+									$edit.= '&nbsp;<a href="'. GetDownloadLink( $db3->f('dokument_id'), $db3->f('filename'), $type, 'zip') . '">' . makeButton('alsziparchiv', 'img') . '</a>';
+								}
 							}
 							if (($rechte) || ($db3->f("user_id") == $user->id && $folder_tree->isWritable($db3->f("range_id"), $user->id))) {
 								if ($type!=6)
@@ -1767,8 +1783,14 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 						if ($db3->f("protected")) {
 							$content .= "<br><br><hr><table><tr><td><img src=\"".$GLOBALS['ASSETS_URL']."images/ausruf.gif\" valign=\"middle\"></td><td><font size=\"2\"><b>"
-							._("Diese Datei ist urheberrechtlich geschützt.<br>Sie darf nur im Rahmen dieser Veranstaltung verwendet werden, jede weitere Verbreitung ist strafbar!")
-							."</td></tr></table>";
+							._("Diese Datei ist urheberrechtlich geschützt.");
+							$content .= "<br>";
+							if(check_protected_download($db3->f("dokument_id"))){
+								$content .=_("Sie darf nur im Rahmen dieser Veranstaltung verwendet werden, jede weitere Verbreitung ist unzul&auml;ssig!");
+							} else {
+								$content .= _("Sie k&ouml;nnen diese Datei nicht herunterladen, so lange diese Veranstaltung einen offenen Teilnehmerkreis aufweist.");
+							}
+							$content .= "</td></tr></table>";
 						}
 						if ($filelink == $db3->f("dokument_id")) {
 							$content .= link_item($db3->f("dokument_id"),FALSE,FALSE,$db3->f("dokument_id"));
@@ -2348,4 +2370,31 @@ function get_upload_file_path ($document_id)
 
     return $directory.'/'.$document_id;
 }
+
+/**
+ * 
+ * checks if the 'protected' flag of a file is set and if
+ * the course access is closed
+ *
+ * @param string MD5 id of the file
+ * @return bool
+ */
+function check_protected_download($document_id)
+{
+	$doc = new StudipDocument($document_id);
+	$ok = true;
+	if($doc->getValue('protected')){
+		$ok = false;
+		$range_id = $doc->getValue('seminar_id');
+		if(get_object_type($range_id) == 'sem'){
+			$seminar = Seminar::GetInstance($range_id);
+			if( $seminar->read_level > 1 ||
+				$seminar->admission_type == 3
+				|| ($seminar->admission_endtime_sem > 0 && $seminar->admission_endtime_sem < time())){
+				$ok = true; 
+			}
+		}
+	}
+	return $ok; 
+} 
 ?>

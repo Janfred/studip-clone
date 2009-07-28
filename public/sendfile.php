@@ -71,6 +71,10 @@ if ($type == 0 || $type == 6) {
 		$no_access = true;
 		$skip_check = TRUE;
 	}
+	if(!check_protected_download($file_id)){
+		$no_access = true;
+		$skip_check = true;
+	}
 }
 elseif ($type == 7) {
 	$object_type = get_object_type($object_id);
