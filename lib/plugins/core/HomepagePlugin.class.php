@@ -1,9 +1,10 @@
 <?php
 # Lifter007: TODO
-# Lifter003: TODO
 
 /*
  * Copyright (C) 2008 - Marcus Lunzenauer <mlunzena@uos.de>
+ *
+ * NOTE: This interface will change significantly in Stud.IP 1.11.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -29,15 +30,6 @@ interface HomepagePlugin {
   function getStatusShowOverviewPage();
 
   /**
-   * <MethodDescription>
-   *
-   * @param  type       <description>
-   *
-   * @return type       <description>
-   */
-  function setStatusShowOverviewPage($status);
-
-  /**
    * Set the user for which the homepage is rendered
    *
    * @param  type       <description>
@@ -45,11 +37,4 @@ interface HomepagePlugin {
    * @return void
    */
   function setRequestedUser($newuser);
-
-  /**
-   * <MethodDescription>
-   *
-   * @return type       <description>
-   */
-  function getRequestedUser();
 }

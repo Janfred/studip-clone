@@ -15,8 +15,6 @@ if ($GLOBALS['PLUGINS_ENABLE']){
 	require_once("core/StudIPInstitute.class.php");
 	require_once("core/AbstractStudIPPluginVisualization.class.php");
 	require_once("core/AdminInfo.class.php");
-	require_once("core/ChangeMessage.class.php");
-	require_once("core/HelpInfo.class.php");
 	require_once("core/StudipPluginNavigation.class.php");
 	require_once("core/PluginNavigation.class.php");
 	require_once("core/Permission.class.php");

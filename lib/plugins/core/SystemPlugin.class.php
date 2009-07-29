@@ -1,9 +1,10 @@
 <?php
 # Lifter007: TODO
-# Lifter003: TODO
 
 /*
  * Copyright (C) 2008 - Marcus Lunzenauer <mlunzena@uos.de>
+ *
+ * NOTE: This interface will change significantly in Stud.IP 1.11.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -36,16 +37,6 @@ interface SystemPlugin {
    * @return integer    <description>
    */
   function getScore();
-
-  /**
-   * define where the plugin will be visible (toolbar and/or start page)
-   *
-   * @param  type       <description>
-   *
-   * @return void
-   */
-  function setDisplayType($display_type);
-
 
   /**
    * returns where the plugin will be visible (toolbar and/or start page)

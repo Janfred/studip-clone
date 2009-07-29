@@ -80,17 +80,6 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 	}
 
 	/**
-	 * Liefert die Änderungsmeldungen für die übergebenen ids zurück
-	 * @param lastlogin - letzter Loginzeitpunkt des Benutzers
-	 * @param ids - ein Array von Veranstaltungs- bzw. Institutionsids, zu denen
-	 * die Änderungsnachricht bestimmt werden soll.
-	 * @return Änderungsmeldungen
-	 */
-	function getChangeMessages($lastlogin, $ids) {
-		return array();
-	}
-
-	/**
 	 * Getter- und Setter für die Attribute
    */
 	function getChangeindicatoriconname() {

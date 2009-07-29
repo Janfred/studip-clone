@@ -32,7 +32,6 @@ abstract class AbstractStudIPPlugin {
 	var $pluginadmininfo;
 	var $pluginiconname;
 	var $user;
-	var $helpinfo;
 
 	var $navigation;
 	var $activated;
@@ -62,7 +61,6 @@ abstract class AbstractStudIPPlugin {
 		$this->pluginid = "-1";
 		$this->pluginadmininfo = null;
 		$this->pluginiconname = NULL;
-		$this->helpinfo = null;
 		$this->navigation = null;
 		$this->activated = false;
 		$this->setUser(new StudIPUser());
@@ -204,14 +202,6 @@ abstract class AbstractStudIPPlugin {
 
 	function getPluginid() {
 		return $this->pluginid;
-	}
-
-	function getHelpinfo() {
-		return $this->helpinfo;
-	}
-
-	function setHelpInfo(HelpInfo $newhelpinfo) {
-		$this->helpinfo = $newhelpinfo;
 	}
 
 	function getNavigation() {
