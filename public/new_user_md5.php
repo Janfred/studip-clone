@@ -31,6 +31,7 @@ require_once 'config.inc.php'; // Wir brauchen den Namen der Uni
 require_once 'lib/visual.inc.php';
 require_once 'lib/user_visible.inc.php';
 require_once 'lib/classes/UserManagement.class.php';
+require_once('lib/messaging.inc.php');
 
 
 $cssSw = new cssClassSwitcher;
@@ -99,6 +100,26 @@ if (check_ticket($_REQUEST['studipticket'])){
 						$db->query(sprintf("INSERT INTO user_inst (user_id,Institut_id,inst_perms) VALUES ('%s','%s','%s')",
 						$UserManagement->user_data['auth_user_md5.user_id'], $_REQUEST['select_inst_id'], $UserManagement->user_data['auth_user_md5.perms']));
 						if ($db->affected_rows()){
+							if($_POST['enable_mail_admin'] == "admin" && $_POST['enable_mail_dozent'] == "dozent"){
+								$in = "'admin','dozent'";
+								$wem = "Admins und Dozenten";
+							}else if($_POST['enable_mail_admin'] == "admin"){
+								$in = "'admin'";
+								$wem = "Admins";
+							}else if($_POST['enable_mail_dozent'] == "dozent"){
+								$in = "'dozent'";
+								$wem = "Dozenten";
+							}
+							if($in != "" && $perms[0] == "admin"){
+								$msging = new messaging();
+								$subject = "Neuer Administrator in Ihrer Einrichtung angelegt";
+								$db->query(sprintf("SELECT a.user_id,b.Vorname,b.Nachname,c.geschlecht FROM user_inst a INNER JOIN auth_user_md5 b ON a.user_id = b.user_id INNER JOIN user_info c ON a.user_id = c.user_id  WHERE a.Institut_id = '%s' AND a.inst_perms IN (%s) AND a.user_id != '%s' ",$_REQUEST['select_inst_id'],$in,$UserManagement->user_data['auth_user_md5.user_id']));
+								while($db->next_record()){
+									$message1 = sprintf("%s %s %s,\n\nIn der Einrichtung '%s' wurde %s %s %s als Administrator eingetragen und steht Ihnen als neuer Ansprechpartner bei Fragen oder Problemen im StudIP zur Verfügung. ",($db->f('geschlecht') == 0)?"Lieber Herr":"Liebe Frau",$db->f('Vorname'),$db->f('Nachname'),htmlReady($inst_name),($UserManagement->user_data['user_info.geschlecht']==0)?"Herr":"Frau",$UserManagement->user_data['auth_user_md5.Vorname'],$UserManagement->user_data['auth_user_md5.Nachname']);
+									$msging->sendingEmail($db->f('user_id'),$auth->auth['uid'],$message1,$subject);
+								}
+								$UserManagement->msg .= "msg§" . sprintf(_("Es wurden ingesamt %s Mails an die %s der Einrichtung \"%s\" geschickt."),$db->num_rows(),$wem,htmlReady($inst_name)) . "§";
+							}
 							$UserManagement->msg .= "msg§" . sprintf(_("Benutzer in Einrichtung \"%s\" mit dem Status \"%s\" eingetragen."), htmlReady($inst_name), $UserManagement->user_data['auth_user_md5.perms']) . "§";
 						} else {
 							$UserManagement->msg .= "error§" . sprintf(_("Benutzer konnte nicht in  Einrichtung \"%s\" eingetragen werden."), htmlReady($inst_name)) . "§";
@@ -431,13 +452,14 @@ if (isset($_GET['details']) || $showform ) {
 					}
 				}
 			}
+			echo "</select>";
 			if($GLOBALS['MAIL_VALIDATE_BOX'] || $_POST['disable_mail_host_check']){
-				echo chr(10).'<tr><td colspan="3" align="right"><input type="checkbox" id="disable_mail_host_check" name="disable_mail_host_check" value="1" '.($_POST['disable_mail_host_check'] ? 'checked' : '').'><label for="disable_mail_host_check" >'._("Mailboxüberprüfung deaktivieren").'</label></td></tr>';
+				echo chr(10).'<tr><td colspan="2">&nbsp;</td><td><input type="checkbox" id="disable_mail_host_check" name="disable_mail_host_check" value="1" '.($_POST['disable_mail_host_check'] ? 'checked' : '').'><label for="disable_mail_host_check" >'._("Mailboxüberprüfung deaktivieren").'</label></td></tr>';
 			}
 			?>
-			</select>
-					&nbsp;</td>
-				</tr>
+			<tr><td colspan="2">&nbsp;</td><td><b>Folgende nur bei Anlage eines Admins:</b></td></tr>
+			<tr><td colspan="2">&nbsp;</td><td><input type="checkbox" id="enable_mail_admin" name="enable_mail_admin" value="admin"><label for="enable_mail_admin" >Admins der Einrichtung benachrichtigen</label></td></tr>
+			<tr><td colspan="2">&nbsp;</td><td><input type="checkbox" id="enable_mail_dozent" name="enable_mail_dozent" value="dozent"><label for="enable_mail_dozent" >Dozenten der Einrichtung benachrichtigen</label></td></tr>
 				<tr>
 				<td colspan=3 align=center>&nbsp;
 				<input type="image" name="create" <?=makeButton("anlegen", "src")?> value="<?=_("Benutzer anlegen")?>" alt="anlegen">
