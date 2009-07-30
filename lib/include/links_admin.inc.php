@@ -157,7 +157,11 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		//Ruecksprung-Reiter vorbereiten
 		$back_jump= _("zurück zur Arbeitsgruppe");
 
-		$structure["veranstaltungen"]=array ('topKat'=>"", 'name'=> $SessSemName[0], 'link' => URLHelper::getLink("adminarea_start.php?list=TRUE"), 'active'=>FALSE);
+		if ($GLOBALS['perm']->have_perm('admin')) {
+			$structure["veranstaltungen"]=array ('topKat'=>"", 'name'=> _("Veranstaltungen"), 'link' => URLHelper::getLink("adminarea_start.php?list=TRUE"), 'active'=>FALSE);
+		} else {
+			$structure["veranstaltungen"]=array ('topKat'=>"", 'name'=> $SessSemName[0], 'link' => URLHelper::getLink("adminarea_start.php?list=TRUE"), 'active'=>FALSE);
+		}
 		$structure["back_jump"]=array ('topKat'=>"", 'name'=>$back_jump, 'link' => URLHelper::getLink("seminar_main.php?auswahl=".$SessSemName[1]), 'active'=>FALSE);
 
 		$structure["news_sem"]=array ('topKat'=>"veranstaltungen", 'name'=>_("News"), 'link' => URLHelper::getLink("admin_news.php?list=TRUE&view=news_sem"), 'active'=>FALSE, 'isolator'=>TRUE);
@@ -1118,6 +1122,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		while ($db->next_record()) {
 			$seminar_id = $db->f("Seminar_id");
 			$sem=new SemesterData;
+			$studygroup_mode = $GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][$db->f('status')]["class"]]["studygroup_mode"]; 
 
 			if (!$semdata=$sem->getSemesterData($links_admin_data['srch_sem'])) {
 				$semdata = $sem->getSemesterDataByDate($db->f('start_time'));
@@ -1148,6 +1153,7 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			if ($db->f("visible")==0) {
 				echo "&nbsp;". _("(versteckt)");
 			}
+
 			echo "</font></td>";
 
 			// if "show room-data" is enabled, show cell
@@ -1156,15 +1162,19 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			}
 
 			echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>";
-			$db4->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, position FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) where Seminar_id = '$seminar_id' and status = 'dozent' ORDER BY position ");
+			$db4->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, position FROM seminar_user 
+				LEFT JOIN auth_user_md5 USING (user_id) 
+				LEFT JOIN user_info USING (user_id) 
+				WHERE Seminar_id = '$seminar_id' and status = 'dozent' ORDER BY position ");
 			$k=0;
 			if (!$db4->num_rows())
 				echo "&nbsp; ";
 			while ($db4->next_record()) {
-				if ($k)
-					echo ", ";
-				echo "<a href=\"".UrlHelper::GetLink("about.php?username=".$db4->f("username"))."\">".htmlReady($db4->f("fullname"))."</a>";
-				$k++;
+				if ($db4->f('username')) {
+					if ($k) echo ', ';
+					echo "<a href=\"".UrlHelper::GetLink("about.php?username=".$db4->f("username"))."\">".htmlReady($db4->f("fullname"))."</a>";
+					$k++;
+				}
 			}
 			echo "</font></td>";
 			echo "<td class=\"".$cssSw->getClass()."\" align=\"center\"><font size=-1>".$SEM_TYPE[$db->f("status")]["name"]."<br>" . _("Kategorie:") . " <b>".$SEM_CLASS[$SEM_TYPE[$db->f("status")]["class"]]["name"]."</b><font></td>";
@@ -1173,7 +1183,11 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 			//Kommandos fuer die jeweilgen Seiten
 			switch ($i_page) {
 				case "adminarea_start.php":
-					printf("<font size=-1>" . _("Veranstaltung") . "<br><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_sem_id=' . $seminar_id), makeButton("auswaehlen"));
+					if ($studygroup_mode) {
+						echo _("Arbeitsgruppe") . sprintf("<br><a href=\"%s\">%s</a></font>", URLHelper::getLink('admin_news.php?cid=' . $seminar_id), makeButton("auswaehlen"));
+					} else {
+						printf("<font size=-1>" . _("Veranstaltung") . "<br><a href=\"%s\">%s</a></font>", URLHelper::getLink('?select_sem_id=' . $seminar_id), makeButton("auswaehlen"));
+					}
 					break;
 				case "themen.php":
 					printf("<font size=-1>" . _("Ablaufplan") . "<br><a href=\"%s\">%s</a></font>", URLHelper::getLink('?seminar_id=' . $seminar_id), makeButton("bearbeiten"));

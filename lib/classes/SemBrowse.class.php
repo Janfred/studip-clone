@@ -450,23 +450,27 @@ class SemBrowse {
 
 						$sem_name = key($sem_data[$seminar_id]["Name"]);
 						$seminar_number = key($sem_data[$seminar_id]['VeranstaltungsNummer']);
-						$sem_number_start = key($sem_data[$seminar_id]["sem_number"]);
-						$sem_number_end = key($sem_data[$seminar_id]["sem_number_end"]);
-						if ($sem_number_start != $sem_number_end){
-							$sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . " - ";
-							$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->search_obj->sem_dates[$sem_number_end]['name']) . ")";
-						} elseif ($this->sem_browse_data["group_by"]) {
-							$sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . ")";
-						}
-					    if ($studygroup_mode) {
-   					    	// do something smart here in order to display the icon for studygroup
+
+						if ($studygroup_mode) {
+							$sem_name .= ' ('. _("Studentische Arbeitsgruppe");
+							if ($seminar_obj->admission_prelim) $sem_name .= ', '. _("Zutritt auf Anfrage");
+							$sem_name .= ')';
 							echo '<td width="1%" class="steel1">';
 							echo StudygroupAvatar::getAvatar($seminar_id)->getImageTag(Avatar::SMALL);
 							echo '</td>';
-   					    } else {
+						} else {
+							$sem_number_start = key($sem_data[$seminar_id]["sem_number"]);
+							$sem_number_end = key($sem_data[$seminar_id]["sem_number_end"]);
+							if ($sem_number_start != $sem_number_end){
+								$sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . " - ";
+								$sem_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $this->search_obj->sem_dates[$sem_number_end]['name']) . ")";
+							} elseif ($this->sem_browse_data["group_by"]) {
+								$sem_name .= " (" . $this->search_obj->sem_dates[$sem_number_start]['name'] . ")";
+							}
 							echo '<td width="1%" class="steel1">';
 							echo CourseAvatar::getAvatar($seminar_id)->getImageTag(Avatar::SMALL);
 							echo '</td>';
+
 						}
 
 						echo '<td class="steel1" width="66%" colspan="2">';
@@ -506,13 +510,15 @@ class SemBrowse {
 							array_multisort($doz_position, $doz_name, $doz_uname);
 							$i = 0;
 							foreach ($doz_name as $index => $value){
-								if ($i == 4){
-									echo "... <a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">("._("mehr").")</a>";
-									break;
-								}
-								echo "<a href=\"about.php?username=" . $doz_uname[$index] ."\">" . htmlReady($value) . "</a>";
-								if($i != count($doz_name)-1){
-									echo ", ";
+								if ($value) {	// hide dozenten with empty username
+									if ($i == 4){
+										echo "... <a href=\"".$this->target_url."?".$this->target_id."=".$seminar_id."&send_from_search=1&send_from_search_page={$PHP_SELF}?keep_result_set=1\">("._("mehr").")</a>";
+										break;
+									}
+									echo "<a href=\"about.php?username=" . $doz_uname[$index] ."\">" . htmlReady($value) . "</a>";
+									if($i != count($doz_name)-1){
+										echo ", ";
+									}
 								}
 								++$i;
 							}

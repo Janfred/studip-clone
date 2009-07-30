@@ -399,6 +399,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	while ($db->next_record()) {
 			$my_obj[$db->f("Seminar_id")] = array(
 				"name"       => $db->f("Name"), 
+				'semname'    => $db->f('Name'),
 				"status"     => $db->f("status"),
 				"visible"    => $db->f("visible"), 
 				"gruppe"     => $db->f("gruppe"),
@@ -543,29 +544,39 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			foreach ($group_members as $member){
 				$semid = $member['seminar_id'];
 				$values = $my_obj[$semid];
+				$studygroup_mode = $SEM_CLASS[$SEM_TYPE[$my_obj[$semid]['sem_status']]["class"]]["studygroup_mode"];
+
 				  if ($values['obj_type'] == "sem"){
 				$cssSw->switchClass();
 				$lastVisit = $values['visitdate'];
 				echo "<tr ".$cssSw->getHover()."><td class=gruppe";
 				echo $values["gruppe"];
 				echo "><a href='gruppe.php'><img src='".$GLOBALS['ASSETS_URL']."images/blank.gif' ".tooltip(_("Gruppe ändern"))." border=0 width=7 height=12></a></td>";
-				echo "<td class=\"".$cssSw->getClass()."\">";
 
+				echo "<td class=\"".$cssSw->getClass()."\">";
 				// for studygroups display a special avatar
-				if ($SEM_CLASS[$SEM_TYPE[$my_obj[$semid]['sem_status']]["class"]]["studygroup_mode"]) {
+				if ($studygroup_mode) {
 					echo StudygroupAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL);
 				} else {
 					echo CourseAvatar::getAvatar($semid)->getImageTag(Avatar::SMALL);
 				}
 				echo "</td>";
+
 				// Name-field
 				echo "<td align=\"left\" class=\"".$cssSw->getClass()."\" ><a href=\"seminar_main.php?auswahl=$semid\">";
 				if ($lastVisit <= $values["chdate"])
-					print ("<font color=\"red\">");    // red color for new metadates
-				echo "<font size=-1>".htmlReady($values["name"]);
-				echo "</font>";
+					echo '<span style="color:red">';    // red color for new metadates
+				if ($studygroup_mode) {
+					echo htmlReady($values['semname']);
+					echo ' ('. _("Studentische Arbeitsgruppe");
+					if ($values['prelim']) echo ', '. _("geschlossen");
+					echo ')';
+				} else {
+					echo htmlReady($values['name']);
+				}
 				if ($lastVisit <= $values["chdate"])
-					print ("</font>");
+					echo '</span>';
+
 				print ("</a>");
 				if ($values["visible"]==0) {
 					$infotext=_("Versteckte Veranstaltungen können über die Suchfunktionen nicht gefunden werden.");
