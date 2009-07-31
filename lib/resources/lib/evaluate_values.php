@@ -1298,10 +1298,23 @@ if (($start_multiple_mode_x) || ($single_request)) {
 			$order = "a.mkdate DESC";
 		if ($resolve_requests_order == "oldest")
 			$order = "a.mkdate ASC";
-		if ($resolve_requests_order == "urgent")
-			$order = "a.mkdate DESC";
 
-		$query = sprintf ("SELECT a.seminar_id, a.termin_id, a.request_id, a.resource_id, COUNT(b.property_id) AS complexity, MAX(d.state) AS seats
+		// for sort-order urgent a simpler query suffices
+		if ($resolve_requests_order == "urgent") {
+			$stmt = DBManager::get()->query($query = "SELECT rq.request_id, rq.seminar_id, rq.termin_id FROM resources_requests as rq
+			 	LEFT JOIN termine as t ON (t.range_id = rq.seminar_id OR (t.termin_id = rq.termin_id 
+					AND rq.termin_id IS NOT NULL AND rq.termin_id != ''))
+			 	WHERE rq.request_id IN $in AND t.date > ". time() ."
+				ORDER BY t.date ASC");
+			while ($data = $stmt->fetch()) {
+				$db_requests[] = array(
+					'request_id' => $data['request_id'],
+					'termin_id'  => $data['termin_id'],
+					'seminar_id' => $data['seminar_id']
+				);
+			}
+		} else {
+			$query = sprintf ("SELECT a.seminar_id, a.termin_id, a.request_id, a.resource_id, COUNT(b.property_id) AS complexity, MAX(d.state) AS seats
 				FROM resources_requests a
 				LEFT JOIN resources_requests_properties b USING (request_id)
 				LEFT JOIN resources_properties c ON (b.property_id = c.property_id AND c.system = 2)
@@ -1309,66 +1322,16 @@ if (($start_multiple_mode_x) || ($single_request)) {
 				WHERE a.request_id IN %s
 				GROUP BY a.request_id
 				ORDER BY %s", $in, $order);
+			$db->query($query);
 
-		$db->query($query);
-
-		while ($db->next_record()) {
-			$db_requests[] = array('request_id' => $db->f('request_id'), 'termin_id' => $db->f('termin_id'), 'seminar_id' => $db->f('seminar_id'));
-		}
-
-		if ($resolve_requests_order == "urgent") {	// if the sorting order ist 'urgent first'
-			$db_requests_neu = array();
-			$semester_data = new SemesterData();
-			$cursem = $semester_data->getCurrentSemesterData();
-			$now = $cursem['beginn'];
-			$days = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
-			foreach ($db_requests as $val) {
-				if ($val['termin_id'] == "") {					// if it is a seminar
-					$db->query("SELECT start_time, Seminar_id, metadata_dates FROM seminare WHERE Seminar_id = '".$val['seminar_id']."'");
-					$db->next_record();
-					$sid = $db->f('Seminar_id');
-					$metadates = unserialize($db->f('metadata_dates'));
-
-					$db->query("SELECT date FROM termine WHERE range_id = '$sid' AND date_typ IN ". getPresenceTypeClause() ." ORDER BY date ASC");
-					if ($db->num_rows() > 0) {
-						$db->next_record();
-						$db_requests_neu[$val['request_id']] = $db->f('date');
-					} else {
-						if (isset($metadates['turnus_data'])) {
-							foreach ($metadates['turnus_data'] as $md_val) {
-								$next = strtotime("this ".$days[$md_val['day']]);
-								$semdates[] = mktime($md_val['start_stunde'], $md_val['start_minute'], 0, date('n', $next), date('j', $next), date('Y', $next));
-							}
-							sort($semdates);
-							if ($db->f('start_time') > $semdates[0]) {
-								$semdates[0] = $db->f('start_time');
-							}
-							$db_requests_neu[$val['request_id']] = $semdates[0];
-						}
-					}
-				} else {																// otherwise we take the start_date for the single date
-					$db->query("SELECT date FROM termine WHERE termin_id = '".$val['termin_id']."'");
-					$db->next_record();
-					$db_requests_neu[$val['request_id']] = $db->f('date');
-				}
+			while ($db->next_record()) {
+				$db_requests[] = array('request_id' => $db->f('request_id'), 'termin_id' => $db->f('termin_id'), 'seminar_id' => $db->f('seminar_id'));
 			}
 
-			asort($db_requests_neu);
-			$db_requests = array();
-			//$i = 0;
-			//echo "<pre>";
-			foreach ($db_requests_neu as $key => $val) {
-				if (($val != '') && ($val >= $now)) {
-					$i++;
-					//echo "$i\t[$key] => $val\n";
-					$db_requests[] = array('request_id' => $key);
-				}
-			}
-			//echo "</pre>";
 		}
 
 		// insert sorted requests into resources_data-Array
-		foreach ($db_requests as $val) {
+		if (is_array($db_requests)) foreach ($db_requests as $val) {
 			$resources_data["requests_working_on"][] = array("request_id" => $val['request_id'], "closed" => FALSE);
 			$resources_data["requests_open"][$val['request_id']] = TRUE;
 		}
