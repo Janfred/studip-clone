@@ -112,11 +112,11 @@ if (check_ticket($_REQUEST['studipticket'])){
 							}
 							if($in != "" && $perms[0] == "admin"){
 								$msging = new messaging();
-								$subject = "Neuer Administrator in Ihrer Einrichtung angelegt";
 								$db->query(sprintf("SELECT a.user_id,b.Vorname,b.Nachname,c.geschlecht FROM user_inst a INNER JOIN auth_user_md5 b ON a.user_id = b.user_id INNER JOIN user_info c ON a.user_id = c.user_id  WHERE a.Institut_id = '%s' AND a.inst_perms IN (%s) AND a.user_id != '%s' ",$_REQUEST['select_inst_id'],$in,$UserManagement->user_data['auth_user_md5.user_id']));
 								while($db->next_record()){
-									$message1 = sprintf("%s %s %s,\n\nIn der Einrichtung '%s' wurde %s %s %s als Administrator eingetragen und steht Ihnen als neuer Ansprechpartner bei Fragen oder Problemen im StudIP zur Verfügung. ",($db->f('geschlecht') == 0)?"Lieber Herr":"Liebe Frau",$db->f('Vorname'),$db->f('Nachname'),htmlReady($inst_name),($UserManagement->user_data['user_info.geschlecht']==0)?"Herr":"Frau",$UserManagement->user_data['auth_user_md5.Vorname'],$UserManagement->user_data['auth_user_md5.Nachname']);
-									$msging->sendingEmail($db->f('user_id'),$auth->auth['uid'],$message1,$subject);
+									$user_language = getUserLanguagePath($db->f('user_id'));
+									include("locale/$user_language/LC_MAILS/new_admin_mail.inc.php");
+									$msging->sendingEmail($db->f('user_id'),$auth->auth['uid'],$mailbody,$subject);
 								}
 								$UserManagement->msg .= "msg§" . sprintf(_("Es wurden ingesamt %s Mails an die %s der Einrichtung \"%s\" geschickt."),$db->num_rows(),$wem,htmlReady($inst_name)) . "§";
 							}
