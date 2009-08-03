@@ -1055,7 +1055,15 @@ class Seminar {
 		$do_changes = false;
 
 		if (($new_start < $old_start) || ($new_end > $old_end) || ($data['day'] != $this->metadate->cycles[$data['cycle_id']]->day) ) {
-			if (!$data['really_change']) {
+			$has_bookings = false;
+
+			foreach($cycle->getSingleDates() as $singleDate) {
+				if ($singleDate->getStarttime() > (time() - 3600) && $singleDate->hasRoom()) {
+					$has_bookings = true;
+					break;
+				}
+			}
+			if (!$data['really_change'] && $has_bookings) {
 				$link_params = array(
 					'editCycle_x' => '1',
 					'editCycle_y' => '1',
