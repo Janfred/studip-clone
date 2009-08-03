@@ -234,7 +234,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 		echo '<br><br>';
         echo '<font size="-1">';
 		$stmt = DBManager::get()->query("SELECT Beschreibung FROM seminare WHERE Seminar_id = '$SessionSeminar'");
-		echo '<b>'._('Beschreibung:').' </b>'.$stmt->fetchColumn(0) .'<br><br>';
+		echo '<b>'._('Beschreibung:').' </b>'. htmlReady($stmt->fetchColumn(0)) .'<br><br>';
 
 
 		$stmt = DBManager::get()->query("SELECT ". $_fullname_sql['full'] . " AS fullname, username FROM seminar_user
