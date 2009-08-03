@@ -83,8 +83,8 @@ elseif ($perm->have_perm("dozent"))
 	$rangemode = "dozent";
 elseif ($perm->have_perm("tutor"))
 	$rangemode = "dozent";
-elseif ($perm->have_perm("autor"))
-	$rangemode = "autor";
+elseif ($perm->have_perm("autor"))    // allow creation of evaluations for autors as well, studygroup
+	$rangemode = "dozent";
 else
 	printSafeguard("ausruf",_("Fehler: Sie haben keine Berechtigung f&uuml;r diese Seite."));
 

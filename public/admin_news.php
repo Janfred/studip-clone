@@ -143,7 +143,7 @@ if ($cmd=="edit") {
 			echo "</td></tr>";
 		}
 	}
-	if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor")
+	if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor" OR $auth->auth["perm"]=="autor")	// allow autors, needed for studygroups
 		$news->search_range();
 
 	$news->edit_news($edit_news);
@@ -162,7 +162,7 @@ if ($news->msg) {
 $news->msg="";
 
 if ($cmd=="new_entry") {
-	if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor") $news->search_range();
+	if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor" OR $auth->auth["perm"]=="autor") $news->search_range(); // allow autors, needed for studygroups
 	$news->edit_news();
 
 }
@@ -170,7 +170,7 @@ if ($cmd=="new_entry") {
 if (!$cmd OR $cmd=="show") {
 	if ($news->sms)
 		$news->send_sms();
-	if ($perm->have_perm("tutor")) {
+	if ($perm->have_perm("autor")) {    // allow autors, needed for studygroups
 		if ($perm->have_perm("admin")) {
 			echo"\n<tr><td class=\"blank\"><blockquote><br /><b>" . _("Bereichsauswahl") . "</b><br />&nbsp; </blockquote></td></tr>\n";
 			echo "<tr><td class=\"blank\"><blockquote>";
@@ -195,7 +195,7 @@ if (!$cmd OR $cmd=="show") {
 						"inst"=> array('name' => _("Einrichtung"), 'view_mode' => 'inst', 'id_param' => 'admin_inst_id'),
 						"fak"=>  array('name' => _("Fakult&auml;t"), 'view_mode' => 'inst', 'id_param' => 'admin_inst_id'));
 		$my_cols=3;
-		if ($perm->have_perm("tutor")){
+		if ($perm->have_perm("autor")) {   // allow autors, needed for studygroups
 			echo "\n<tr><td class=\"blank\"><blockquote>";
 			echo "<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Sie k&ouml;nnen&nbsp; <b>Pers&ouml;nliche News</b> bearbeiten") . "</font>&nbsp;";
 			echo "<a href=\"". URLHelper::getLink($news->p_self("range_id=self")) ."\">&nbsp; <img style=\"vertical-align:middle;\" " . makeButton("bearbeiten","src") . tooltip(_("Persönliche News bearbeiten")) ." border=\"0\"></a>";
@@ -208,7 +208,7 @@ if (!$cmd OR $cmd=="show") {
 		if ($news->search_result)
 			echo "<br><br><font size=\"-1\" style=\"vertical-align:middle;\">" . _("<i>oder</i> <b>hier</b> einen der gefundenen Bereiche ausw&auml;hlen:") . "&nbsp;</font>";
 
-		if ($perm->have_perm("tutor"))
+		if ($perm->have_perm("autor"))   // allow autors, needed for studygroups
 			echo "</blockquote></td></tr>";
 
 		if ($news->search_result) {

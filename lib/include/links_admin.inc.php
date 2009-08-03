@@ -57,7 +57,7 @@ global  $admin_admission_data,
         $view_mode;
 
 
-if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
+if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors also need a navigation for studygroups
 
 	require_once 'config.inc.php';
 	require_once 'lib/admin_semester.inc.php';
@@ -1334,8 +1334,8 @@ if ($perm->have_perm("tutor")) {	// Navigationsleiste ab status "Tutor"
 		page_close();
 		die;
 	}
-}
 } // end of "hide, when in studygroup mode"
+}
 
 if ($SessSemName["class"] == "sem" && $SessSemName[1] && !$perm->have_studip_perm('tutor', $SessSemName[1])){
 	if(!is_object($header_controller)) include ('lib/include/header.php');   // Output of Stud.IP head

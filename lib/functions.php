@@ -1185,7 +1185,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 			}
 		}
 
-	} elseif ($perm->have_perm("tutor")) {
+	} elseif ($perm->have_perm("tutor") || $perm->have_perm("autor")) {    // autors my also have evaluations and news in studygroups with proper rights
 		$query="SELECT s.Seminar_id,IF(s.visible=0,CONCAT(s.Name, ' "._("(versteckt)")."'), s.Name) AS Name"
 				. ($show_sem ? $show_sem_sql1 : "")
 				. "	FROM seminar_user AS a LEFT JOIN seminare AS s USING (Seminar_id)"

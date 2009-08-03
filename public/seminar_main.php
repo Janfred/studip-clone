@@ -234,7 +234,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 		echo '<br><br>';
         echo '<font size="-1">';
 		$stmt = DBManager::get()->query("SELECT Beschreibung FROM seminare WHERE Seminar_id = '$SessionSeminar'");
-		echo '<b>'._('Beschreibung:').' </b>'. htmlReady($stmt->fetchColumn(0)) .'<br><br>';
+		echo '<b>'._('Beschreibung:').' </b><br>'. FixLinks(htmlReady($stmt->fetchColumn(0))) .'<br><br>';
 
 
 		$stmt = DBManager::get()->query("SELECT ". $_fullname_sql['full'] . " AS fullname, username FROM seminar_user
@@ -270,10 +270,8 @@ $quarter_year = 60 * 60 * 24 * 90;
 <?php
 
 // Anzeige von News
-
-($rechte && $perm->have_perm('tutor')) ? $show_admin=TRUE : $show_admin=FALSE;
-if (show_news($auswahl,$show_admin, 0, $smain_data["nopen"], "100%", object_get_visit($SessSemName[1], "sem"), $smain_data))
-		echo"<br>";
+if (show_news($auswahl, $rechte, 0, $smain_data["nopen"], "100%", object_get_visit($SessSemName[1], "sem"), $smain_data))
+	echo"<br>";
 
 // Anzeige von Terminen
 $start_zeit=time();
