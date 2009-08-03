@@ -1301,7 +1301,7 @@ if (($start_multiple_mode_x) || ($single_request)) {
 
 		// for sort-order urgent a simpler query suffices
 		if ($resolve_requests_order == "urgent") {
-			$stmt = DBManager::get()->query($query = "SELECT rq.request_id, rq.seminar_id, rq.termin_id FROM resources_requests as rq
+			$stmt = DBManager::get()->query($query = "SELECT DISTINCT rq.request_id, rq.seminar_id, rq.termin_id FROM resources_requests as rq
 			 	LEFT JOIN termine as t ON (t.range_id = rq.seminar_id OR (t.termin_id = rq.termin_id 
 					AND rq.termin_id IS NOT NULL AND rq.termin_id != ''))
 			 	WHERE rq.request_id IN $in AND t.date > ". time() ."
