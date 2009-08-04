@@ -25,27 +25,27 @@ require_once 'lib/classes/CourseAvatar.class.php';
  */
 class StudygroupAvatar extends CourseAvatar
 {
-	/** 
-	 * Returns an avatar object of the appropriate class.
-	 *
-	 * @param  string  the studygroup's id
-	 *
-	 * @return mixed   the studygroup's avatar.
-	 */
-	static function getAvatar($course_id)
-	{   
-		return new StudygroupAvatar($course_id);
-	}  
+    /**
+     * Returns an avatar object of the appropriate class.
+     *
+     * @param  string  the studygroup's id
+     *
+     * @return mixed   the studygroup's avatar.
+     */
+    static function getAvatar($course_id)
+    {
+        return new StudygroupAvatar($course_id);
+    }
 
 
-	/**
-	 * Returns an avatar object for "nobody".
-	 *
-	 * @return mixed   the studygroup's avatar.
-	 */
-	static function getNobody()
-	{
-		return new StudygroupAvatar('studygroup');
-	}
+    /**
+     * Returns an avatar object for "nobody".
+     *
+     * @return mixed   the studygroup's avatar.
+     */
+    static function getNobody()
+    {
+        return new StudygroupAvatar('studygroup');
+    }
 
 }

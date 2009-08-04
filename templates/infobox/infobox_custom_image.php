@@ -1,7 +1,7 @@
 <table align="center" width="250" border="0" cellpadding="0" cellspacing="0">
 
     <tr>
-      <td class="infobox-course-avatar" width="100%" align="right">
+      <td class="infobox-custom-image" width="100%" align="right">
         <img src="<?= $picture ?>" />
       </td>
     </tr>

@@ -26,7 +26,7 @@ class Course_AvatarController extends AuthenticatedController
 
     # see Trails_Controller#before_filter
     function before_filter(&$action, &$args) {
-		global $SEM_TYPE, $SEM_CLASS;
+        global $SEM_TYPE, $SEM_CLASS;
 
         parent::before_filter($action, $args);
 
@@ -42,20 +42,21 @@ class Course_AvatarController extends AuthenticatedController
             $this->set_status(403);
             return FALSE;
         }
+
+        $GLOBALS['body_id'] = 'custom_avatar';
         $GLOBALS['CURRENT_PAGE'] = getHeaderLine($this->course_id) . ' - ' .
                            _('Bild ändern');
+
+        $sem = Seminar::getInstance($this->course_id);
+        $this->studygroup_mode = $SEM_CLASS[$SEM_TYPE[$sem->status]["class"]]["studygroup_mode"];
+
+        # choose base layout w/o infobox and set tabs
         $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
 
-		$sem = Seminar::getInstance($this->course_id);
-		$this->studygroup_mode = $SEM_CLASS[$SEM_TYPE[$sem->status]["class"]]["studygroup_mode"];
-
-		if ($this->studygroup_mode) {
-        	$layout->set_attribute('tabs', 'links_openobject');
-	        $layout->set_attribute('reiter_view', 'studygroup_admin');
-		} else {
-        	$layout->set_attribute('tabs', 'links_admin');
-	        $layout->set_attribute('reiter_view', 'grunddaten_sem');
-		}
+        $layout->tabs        = $this->studygroup_mode ? 'links_openobject'
+                                                      : 'links_admin';
+        $layout->reiter_view = $this->studygroup_mode ? 'studygroup_admin'
+                                                      : 'grunddaten_sem';
         $this->set_layout($layout);
     }
 
@@ -93,10 +94,10 @@ class Course_AvatarController extends AuthenticatedController
     function delete_action()
     {
         CourseAvatar::getAvatar($this->course_id)->reset();
-		if ($this->studygroup_mode) {
-        	$this->redirect(URLHelper::getUrl('dispatch.php/course/studygroup/edit/' . $this->course_id));
-		} else {
-        	$this->redirect(URLHelper::getUrl('admin_seminare1.php?s_id=' . $this->course_id));
-		}
+        if ($this->studygroup_mode) {
+            $this->redirect(URLHelper::getUrl('dispatch.php/course/studygroup/edit/' . $this->course_id));
+        } else {
+            $this->redirect(URLHelper::getUrl('admin_seminare1.php?s_id=' . $this->course_id));
+        }
     }
 }

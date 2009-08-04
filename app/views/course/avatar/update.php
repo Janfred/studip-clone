@@ -1,10 +1,3 @@
-<style>
-label {
-    display: block;
-    font-weight: bold;
-}
-</style>
-
 <? if (isset($error)) : ?>
     <?= MessageBox::error($error) ?>
 <? endif ?>
@@ -12,11 +5,11 @@ label {
 <h1><?= _("Veranstaltungsbild hochladen") ?></h1>
 
 <div style="float: left; padding: 0 1em 1em 0;">
-	<? if ($this->studygroup_mode) : ?>
+    <? if ($this->studygroup_mode) : ?>
     <?= StudygroupAvatar::getAvatar($course_id)->getImageTag(Avatar::NORMAL) ?>
-	<? else: ?>
+    <? else: ?>
     <?= CourseAvatar::getAvatar($course_id)->getImageTag(Avatar::NORMAL) ?>
-	<? endif; ?>
+    <? endif ?>
 </div>
 
 <form enctype="multipart/form-data"
@@ -36,12 +29,12 @@ label {
     <p>
         <?= makeButton('absenden', 'input') ?>
         <span class="quiet">
-            <?= _("oder") ?> 
-			<? if ($this->studygroup_mode) : ?>
-            <a href="<?= URLHelper::getLink('dispatch.php/course/studygroup/edit/' . $course_id) ?>">
-			<? else : ?>
-            <a href="<?= URLHelper::getLink('admin_seminare1.php?s_id=' . $course_id) ?>">
-			<? endif; ?>
+            <?= _("oder") ?>
+            <? if ($this->studygroup_mode) : ?>
+                <a href="<?= URLHelper::getLink('dispatch.php/course/studygroup/edit/' . $course_id) ?>">
+            <? else : ?>
+                <a href="<?= URLHelper::getLink('admin_seminare1.php?s_id=' . $course_id) ?>">
+            <? endif ?>
             <?= makeButton('abbrechen') ?>
             </a>
         </span>

@@ -81,21 +81,5 @@ class CourseAvatar extends Avatar
         return sprintf('<img src="%s" align="middle" class="avatar-%s course-%s"/>',
                        $this->getURL($size), $size, $this->user_id);
     }
-
-    /**
-     * Return the dimension of a size
-     *
-     * @param  string     the dimension of a size
-     *
-     * @return array      a tupel of integers [width, height]
-     */
-    function getDimension($size)
-    {
-        $dimensions = array(
-          Avatar::NORMAL => array(200, 250),
-          Avatar::MEDIUM => array( 80, 100),
-          Avatar::SMALL  => array( 20,  25));
-        return $dimensions[$size];
-    }
 }
 

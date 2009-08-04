@@ -1,10 +1,3 @@
-<style>
-label {
-    display: block;
-    font-weight: bold;
-}
-</style>
-
 <? if (isset($error)) : ?>
     <?= MessageBox::error($error) ?>
 <? endif ?>
@@ -32,7 +25,7 @@ label {
     <p>
         <?= makeButton('absenden', 'input') ?>
         <span class="quiet">
-            <?= _("oder") ?> 
+            <?= _("oder") ?>
             <a href="<?= URLHelper::getLink('admin_institut.php?i_id=' . $institute_id) ?>">
             <?= makeButton('abbrechen') ?>
             </a>

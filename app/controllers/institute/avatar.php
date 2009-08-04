@@ -40,11 +40,15 @@ class Institute_AvatarController extends AuthenticatedController
             $this->set_status(403);
             return FALSE;
         }
+
+        $GLOBALS['body_id'] = 'custom_avatar';
         $GLOBALS['CURRENT_PAGE'] = getHeaderLine($this->institute_id) . ' - ' .
                            _('Bild ändern');
+
+        # choose base layout w/o infobox and set tabs
         $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
-        $layout->set_attribute('tabs', 'links_admin');
-        $layout->set_attribute('reiter_view', 'grunddaten_inst');
+        $layout->tabs = 'links_admin';
+        $layout->reiter_view = 'grunddaten_inst';
         $this->set_layout($layout);
     }
 

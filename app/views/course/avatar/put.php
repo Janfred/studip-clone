@@ -17,5 +17,5 @@
       <?= Assets::img('forumgruen.gif', array('style' => 'vertical-align: baseline;')) ?>
       <?= _("zurück zur Veranstaltungsadministration") ?>
     </a>
-	<? endif; ?>
+	<? endif ?>
 </p>
