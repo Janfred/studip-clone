@@ -107,7 +107,7 @@ include 'lib/include/links_openobject.inc.php';
 include 'lib/showNews.inc.php';
 include 'lib/show_dates.inc.php';
 
-$sem = new Seminar($SessSemName[1]);
+$sem = Seminar::GetInstance($SessSemName[1]);
 
 URLHelper::bindLinkParam("sem_data", $smain_data);
 
@@ -128,19 +128,16 @@ $quarter_year = 60 * 60 * 24 * 90;
 <table width="100%" border=0 cellpadding=0 cellspacing=0>
 	<tr>
 		<td class="blank" valign="top">
-		<blockquote>
+		<div style="padding:0 1.5em 1.5em 1.5em">
 	<?
-	echo "<br><font size=\"+1\"><b>".htmlReady($SessSemName["header_line"]). "</b>";
+	echo "<h3>".htmlReady($SessSemName["header_line"]). "</h3>";
 	if ($SessSemName[3]) {
-		echo "<br><font size=\"-1\"><b>" . _("Untertitel:") . " </b>";
-		echo htmlReady($SessSemName[3])."</font>"; echo "<br>";
+		echo "<b>" . _("Untertitel:") . " </b>";
+		echo htmlReady($SessSemName[3]);
+		echo "<br>";
 	}
 
 	if (!$studygroup_mode) {
-?>
-	<font size="-1">
-	<?
-		echo '<br>';
 		echo '<b>'. _("Zeit") .':</b><br>';
 
 		$data = getRegularOverview($SessSemName[1], true);		// second parameter set option to "shrink" dates
@@ -169,26 +166,17 @@ $quarter_year = 60 * 60 * 24 * 90;
 			echo '<b>'._("Erster Termin").':</b><br>';
 			echo _("Die Zeiten der Veranstaltung stehen nicht fest."). '<br>';
 		}
-		?>
-	</font>
 
-<?
-
-	$db=new DB_Seminar;
-	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, " . $_fullname_sql['no_title_short'] . " AS shortname,username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id)  LEFT JOIN user_info USING(user_id) WHERE seminar_user.Seminar_id = '$SessionSeminar' AND status = 'dozent' ORDER BY position, Nachname");
-	printf("<font size=\"-1\"><b>%s: </b>", get_title_for_status('dozent', $db->num_rows()));
-	
-	$i=0;
-	while ($db->next_record()) {
-		if ($i)
-			print(", ");
-                print("<a href=\"".URLHelper::getLink("about.php?username=".$db->f("username"))."\">");
-		if ($db->affected_rows() > 10)
-			print(htmlReady($db->f("shortname")) ."</a>");
-		else
-			print(htmlReady($db->f("fullname")) ."</a>");
-		$i++;
+	$dozenten = $sem->getMembers('dozent');
+	$num_dozenten = count($dozenten);
+	$show_dozenten = array();
+	foreach($dozenten as $dozent) {
+		$show_dozenten[] = '<a href="'.URLHelper::getLink("about.php?username=".$dozent['username']).'">'
+							. htmlready($num_dozenten > 10 ? get_fullname($dozent['user_id'], 'no_title_short') : $dozent['fullname'])
+							. '</a>';
 	}
+	printf("<br><b>%s: </b>%s", get_title_for_status('dozent', $num_dozenten), implode(' ,', $show_dozenten));
+
 	?>
 		<br>
 		<br>
@@ -211,18 +199,16 @@ $quarter_year = 60 * 60 * 24 * 90;
 				}
 
 				if ($show) { ?>
-					<table cellspacing="1" cellpadding="0" border="0" style="{border:1px solid black;background:#FFFFDD}">
+					<table cellspacing="1" cellpadding="0" border="0" style="border:1px solid black;background:#FFFFDD">
 						<tr>
 							<td align="center" valign="center">
 								&nbsp;<img src="<?=$GLOBALS['ASSETS_URL']?>/images/ausruf.gif">&nbsp;
 							</td>
 							<td>
-								<font size="-1">
 								<?= _("Sie haben noch nicht die für diese Veranstaltung benötigten Zusatzinformationen eingetragen.")?><br>
 								<?= _("Um das nochzuholen gehen Sie unter \"TeilnehmerInnen\" auf \"Zusatzangaben\"")?><br>
 								<?= _("oder klicken sie auf")?>
 								&nbsp;&nbsp;<a href="<?=URLHelper::getLink("teilnehmer_aux.php")?>"><img src="<?=$GLOBALS['ASSETS_URL']?>/images/link_intern.gif" border="0" valign="absmiddle">&nbsp;<?= _("Direkt zu den Zusatzangaben") ?></a>
-								</font>
 							</td>
 						</tr>
 					</table>
@@ -231,30 +217,17 @@ $quarter_year = 60 * 60 * 24 * 90;
 			}
 		}
 	} else {
-		echo '<br><br>';
-        echo '<font size="-1">';
-		$stmt = DBManager::get()->query("SELECT Beschreibung FROM seminare WHERE Seminar_id = '$SessionSeminar'");
-		echo '<b>'._('Beschreibung:').' </b><br>'. FixLinks(htmlReady($stmt->fetchColumn(0))) .'<br><br>';
-
-
-		$stmt = DBManager::get()->query("SELECT ". $_fullname_sql['full'] . " AS fullname, username FROM seminar_user
-			LEFT JOIN auth_user_md5 ON (auth_user_md5.user_id = seminar_user.user_id)
-			LEFT JOIN user_info ON (user_info.user_id = seminar_user.user_id)
-			WHERE Seminar_id = '$SessionSeminar' 
-			AND (status = 'dozent' OR status = 'tutor' )
-			ORDER BY status ASC");
-
+		echo '<b>'._('Beschreibung:').' </b><br>'. FixLinks(htmlReady($sem->description)) .'<br><br>';
 		echo '<b>'._('Moderiert von:') .'</b> ';
-		while($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-		    
-			$mods[$data['user_id']] = '<a href="'.URLHelper::getLink("about.php?username=".$data['username']).'">'.$data['fullname'].'</a>';
+		$all_mods = array_diff_assoc($sem->getMembers('dozent') + $sem->getMembers('tutor'), array(array(md5('studygroupt_dozent') => true)));
+		$mods = array();
+		foreach($all_mods as $mod) {
+			$mods[] = '<a href="'.URLHelper::getLink("about.php?username=".$mod['username']).'">'.htmlready($mod['fullname']).'</a>';
 		}
 		echo implode(', ', $mods);
-        echo '</font>';
-
 	}
 ?>
-		</blockquote><br>
+		</div>
 		</td>
 		<td class="blank" align="right" valign="top">
 			<? if ($studygroup_mode) : ?>

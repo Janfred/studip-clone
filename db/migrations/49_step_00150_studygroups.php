@@ -11,7 +11,7 @@ class Step00150Studygroups extends Migration
 	function up ()
 	{
 	    // (1) Add a new dozent who is used as default dozent for all studygroups
-		DBManager::get()->query("INSERT IGNORE INTO auth_user_md5 (user_id, username, password, perms) VALUES (MD5('studygroupt_dozent'),'studygroup_dozent','0c6fe1b07e3aca7ee6387f87dc8370eb','dozent')"); 
+		DBManager::get()->query("INSERT IGNORE INTO auth_user_md5 (user_id, username, password, perms, Vorname, Nachname, Email) VALUES (MD5('studygroupt_dozent'),'studygroup_dozent','0c6fe1b07e3aca7ee6387f87dc8370eb','dozent','','','')"); 
 		DBManager::get()->query("INSERT IGNORE INTO user_info SET user_id =MD5('studygroupt_dozent')");	
 	
 		// (2) Allocate some space in the config-table
