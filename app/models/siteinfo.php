@@ -439,10 +439,6 @@ class SiteinfoMarkupEngine {
                                          "title" => _("Wiki-Seiten"),
                                          "detail" => "",
                                          "constraint" => $GLOBALS['WIKI_ENABLE']);
-        $indicator['lernmodul'] = array("query" => "SELECT COUNT(DISTINCT co_id) AS count FROM seminar_lernmodul",
-                                        "title" => _("ILIAS-Lernmodule"),
-                                        "detail" => "",
-                                        "constraint" => $GLOBALS['ILIAS_CONNECT_ENABLE']);
         $indicator['resource'] = array("query" => "SELECT COUNT(*) FROM resources_objects",
                                        "title" => _("Ressourcen-Objekte"),
                                        "detail" => _("von Stud.IP verwaltete Ressourcen wie Räume oder Geräte"),
