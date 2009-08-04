@@ -333,7 +333,7 @@ STUDIP.OverDiv.prototype = {
     new Effect.Scale(this.container, this.is_scaled ? 50 : 200, {scaleContent:false,scaleY:false});
     this.is_scaled = !this.is_scaled;
   }
- 
+
 };
 
 /* ------------------------------------------------------------------------
@@ -525,6 +525,25 @@ STUDIP.Tabs = function () {
     }
   };
 }();
+
+
+/* ------------------------------------------------------------------------
+ * Studentische Arbeitsgruppen
+ * ------------------------------------------------------------------------ */
+
+STUDIP.Arbeitsgruppen = {
+
+    toggleOption: function(user_id) {
+        if ($('user_opt_' + user_id).visible()) {
+            $('user_opt_' + user_id).fade({ duration: 0.2 });
+            $('user_' + user_id).morph('width:0px;', { queue: 'end', duration: 0.2 });
+
+        } else {
+            $('user_' + user_id).morph('width:110px;', { duration: 0.2 });
+            $('user_opt_' + user_id).appear({ queue: 'end', duration: 0.2 });
+        }
+    }
+};
 
 /* ------------------------------------------------------------------------
  * application wide setup
