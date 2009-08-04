@@ -2381,17 +2381,19 @@ function get_upload_file_path ($document_id)
  */
 function check_protected_download($document_id)
 {
-	$doc = new StudipDocument($document_id);
 	$ok = true;
-	if($doc->getValue('protected')){
-		$ok = false;
-		$range_id = $doc->getValue('seminar_id');
-		if(get_object_type($range_id) == 'sem'){
-			$seminar = Seminar::GetInstance($range_id);
-			if( $seminar->read_level > 1 ||
-				$seminar->admission_type == 3
-				|| ($seminar->admission_endtime_sem > 0 && $seminar->admission_endtime_sem < time())){
-				$ok = true; 
+	if(Config::GetInstance()->getValue('ENABLE_PROTECTED_DOWNLOAD_RESTRICTION')){
+		$doc = new StudipDocument($document_id);
+		if($doc->getValue('protected')){
+			$ok = false;
+			$range_id = $doc->getValue('seminar_id');
+			if(get_object_type($range_id) == 'sem'){
+				$seminar = Seminar::GetInstance($range_id);
+				if( $seminar->read_level > 1 ||
+					$seminar->admission_type == 3
+					|| ($seminar->admission_endtime_sem > 0 && $seminar->admission_endtime_sem < time())){
+					$ok = true; 
+				}
 			}
 		}
 	}
