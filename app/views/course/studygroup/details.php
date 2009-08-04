@@ -1,5 +1,12 @@
 <?php
-$participate_link = '<a href="'. UrlHelper::getLink('sem_verify.php?id='. $studygroup->getId()) .'">%s</a>';
+
+if ($membership_requested) {
+	$participate = _("Mitgliedschaft bereits beantragt!");
+} else {
+	$participate_link = '<a href="'. UrlHelper::getLink('sem_verify.php?id='. $studygroup->getId()) .'">%s</a>';
+	$participate = sprintf( $participate_link, $studygroup->admission_prelim ? _("Mitgliedschaft beantragen") : _("Arbeitsgruppe beitreten"));
+}
+
 $mods_db = $studygroup->getMembers();
 foreach ($mods_db as $data) :
 	$mods[] = '<a href="'. UrlHelper::getLink('about.php?username='. $data['username']) .'">'. $data['fullname'] .'</a>';
@@ -23,7 +30,7 @@ $infobox['content'] = array(
 		'kategorie' => _("Aktionen"),
 		'eintrag'   => array(
 			array(
-				'text' => sprintf( $participate_link, $studygroup->admission_prelim ? _("Mitliedschaft beantragen") : _("Arbeitsgruppe beitreten")),
+				'text' => $participate, 
 				'icon' => 'link_intern.gif'
 			),
 		)
@@ -46,4 +53,5 @@ if ($send_from_search_page) {
 <h1><?= $studygroup->getName() ?></h1>
 <b><?= _("Moderiert von:") ?></b> <?= implode(',', $mods) ?><br>
 <br>
-<em><?= $studygroup->description ?></em>
+<b><?= _("Beschreibung:") ?></b><br>
+<?= FixLinks(htmlReady($studygroup->description)) ?>

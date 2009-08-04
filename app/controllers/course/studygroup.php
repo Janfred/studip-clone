@@ -38,6 +38,13 @@ class Course_StudygroupController extends AuthenticatedController {
 
 		$GLOBALS['CURRENT_PAGE'] = getHeaderLine($id).' - '._('Arbeitsgruppendetails');
 
+		$stmt = DBManager::get()->prepare("SELECT * FROM admission_seminar_user 
+			WHERE user_id = ? AND seminar_id = ?");
+		$stmt->execute(array($GLOBALS['user']->id, $id));
+		$data = $stmt->fetch();
+
+		if ($data['status'] == 'accepted') $this->membership_requested = true;
+
 		if ($perm->have_studip_perm('autor',$id)) {
 			$this->participant = true;
 		} else {

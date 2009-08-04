@@ -1,12 +1,17 @@
 <?
-if ($GLOBALS['perm']->have_studip_perm('tutor', $sem_id)) {
-    $text = _('Hier können Sie je nach die Teilnehmer der Studiengruppen einsehen und verwalten. Teilnehmer können je nach Status zu einem Moderator hoch oder runtergestuft werden und aus der Studiengruppe entlassen werden.');
+if ($rechte) {
+    $text = _('Hier können Sie die Teilnehmer der Studiengruppen verwalten. Teilnehmer können je nach Status zu einem Moderator hoch oder runtergestuft werden und aus der Studiengruppe entlassen werden.');
     $aktionen = array(
         'kategorie' => _("Aktionen"),
-        'eintrag'   => array(array("text" => _("Klicken Sie auf das Photo eines Gruppenmitglied um entsprechende Aktionen auszuführen"),
-                                   "icon" => "icon-cont.gif")));
+        'eintrag'   => array(
+			array(
+				'text' => _("Klicken Sie auf ein Gruppenmitglied, um ModeratorInnen zu berufen, abzuberufen oder ein Mitglieder der Arbeitsgruppe zu entfernen."),
+                'icon' => "icon-cont.gif"
+			)
+		)
+	);
 } else {
-    $text = _('Studiengruppen sind eine einfache Möglichkeit, mit Kommilitonen, Kollegen und anderen zusammenzuarbeiten. Jeder kann Studiengruppen');
+    $text = _('Studiengruppen sind eine einfache Möglichkeit, mit Kommilitonen, Kollegen und anderen zusammenzuarbeiten. Jeder kann Studiengruppen anlegen.');
     $aktionen = array();
 }
 
@@ -27,6 +32,12 @@ $infobox['content'] = array(
 
 <h1><?= _("Mitglieder") ?></h1>
 
+<? if ($rechte) : ?>
+<p>
+	<?= _("Klicken Sie auf ein Gruppenmitglied, um ModeratorInnen zu berufen, abzuberufen oder ein Mitglied der Arbeitsgruppe zu entfernen. ") ?>
+</p>
+<? endif; ?>
+
 <? foreach ($members as $m) : ?>
 
 <div style="float:left;position:relative" align="left" valign="top"
@@ -35,7 +46,7 @@ $infobox['content'] = array(
     onClick    ="STUDIP.Arbeitsgruppen.toggleOption('<?= $m['user_id'] ?>')"
     title="klicken für weitere Optionen">
 
-    <? if (in_array($m, $moderators)) : ?>
+    <? if (in_array($m, $moderators) || !$rechte || $m['user_id'] == $GLOBALS['user']->id ) : ?>
         <div style="float:left;position:relative;">
             <?= Avatar::getAvatar($m['user_id'])->getImageTag(Avatar::MEDIUM) ?>
         </div>
@@ -48,7 +59,7 @@ $infobox['content'] = array(
         </div>
     <? endif ?>
 
-    <? if ($rechte && !in_array($m, $moderators) ) : ?>
+    <? if ($rechte && !in_array($m, $moderators) && $m['user_id'] != $GLOBALS['user']->id) : ?>
     <noscript>
         <div id="user_<?= $m['user_id']?>" style="float:left; margin-right: 10px; width: 110px;" align="left" valign="top">
             <div id="user_opt_<?= $m['user_id'] ?>">
