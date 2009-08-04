@@ -82,7 +82,7 @@ for ($i = 1; $i <= $pages; $i++) {
 }
 
 // next page
-if ($cur_page < $i) {
+if ($cur_page < ($i-1)) {
 	$ret .= '&nbsp;|&nbsp;<a href="'. URLHelper::getLink(sprintf($pagelink, $cur_page+1) ) .'">'. _("weiter") .'</a>';
 }
 
