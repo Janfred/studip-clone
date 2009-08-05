@@ -7,7 +7,9 @@ if ($membership_requested) {
 	$participate = sprintf( $participate_link, $studygroup->admission_prelim ? _("Mitgliedschaft beantragen") : _("Arbeitsgruppe beitreten"));
 }
 
-$all_mods = array_diff_assoc($studygroup->getMembers('dozent') + $studygroup->getMembers('tutor'), array(array(md5('studygroupt_dozent') => true)));
+$all_mods = $studygroup->getMembers('dozent') + $studygroup->getMembers('tutor');
+unset($all_mods[md5('studygroup_dozent')]);
+
 $mods = array();
 foreach($all_mods as $mod) {
 	$mods[] = '<a href="'.URLHelper::getLink("about.php?username=".$mod['username']).'">'.htmlready($mod['fullname']).'</a>';
