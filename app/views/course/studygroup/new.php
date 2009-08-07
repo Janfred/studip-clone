@@ -1,17 +1,14 @@
 <?php
-$infobox=array();
-$infobox['picture']='infoboxbild_studygroup.jpg';
-$infobox['content']=array(
-        array(
+$infobox = array();
+$infobox['picture'] = 'infoboxbild_studygroup.jpg';
+$infobox['content'] = array(
+    array(
         'kategorie'=>_("Information"),
         'eintrag'=>array(
-            array("text"=>"Studiengruppen sind eine einfache Möglichkeit, mit Kommilitonen, Kollegen und anderen zusammenzuarbeiten. Jeder kann Studiengruppen gründen.","icon"=>"ausruf_small2.gif"))),
-        array(
-        'kategorie'=>_("Aktionen"),
-        'eintrag'=>array(
-            array("text"=>"Neue Studiengruppe gründen", "icon"=>"icon-cont.gif"),
-	    array("text"=>"Studiengruppe löschen", "icon"=>"icon-wiki.gif"))),
-     );
+            array("text"=>"Studiengruppen sind eine einfache Möglichkeit, mit Kommilitonen, Kollegen und anderen zusammenzuarbeiten. Jeder kann Studiengruppen gründen.","icon"=>"ausruf_small2.gif")
+        )
+    )
+);
 
 ?>
 
@@ -34,19 +31,19 @@ $infobox['content']=array(
 <tr>
   <td style='text-align:right; vertical-align:top;'><?= _("Module:") ?></td>
   <td>
-	<? foreach($available_modules as $key => $name) : ?>
-	<label>
-		<input name="groupmodule[<?= $key ?>]" type="checkbox" <?= ($this->flash['request']['groupmodule'][$key]) ? 'checked="checked"' : '' ?>> <?= $name ?>
-	</label><br>
-	<? endforeach; ?>
+    <? foreach($available_modules as $key => $name) : ?>
+    <label>
+        <input name="groupmodule[<?= $key ?>]" type="checkbox" <?= ($this->flash['request']['groupmodule'][$key]) ? 'checked="checked"' : '' ?>> <?= $name ?>
+    </label><br>
+    <? endforeach; ?>
 
-	<? if ($GLOBALS['PLUGINS_ENABLE']) : ?>
-		<? foreach($available_plugins as $key => $name) : ?>
-		<label>
-			<input name="groupplugin[<?= $key ?>]" type="checkbox" <?= ($this->flash['request']['groupplugin'][$key]) ? 'checked="checked"' : '' ?>> <?= $name ?>
-		</label><br>
-		<? endforeach; ?>
-	<? endif; ?>
+    <? if ($GLOBALS['PLUGINS_ENABLE']) : ?>
+        <? foreach($available_plugins as $key => $name) : ?>
+        <label>
+            <input name="groupplugin[<?= $key ?>]" type="checkbox" <?= ($this->flash['request']['groupplugin'][$key]) ? 'checked="checked"' : '' ?>> <?= $name ?>
+        </label><br>
+        <? endforeach; ?>
+    <? endif; ?>
   </td>
 </tr>
 
@@ -72,14 +69,14 @@ $infobox['content']=array(
 <tr>
   <td style='text-align:right; vertical-align:top;'><?= _("Nutzungsbedingungen:") ?></td>
   <td>
-  	<p>
-		<em><?= formatReady( $terms ) ?></em>
-	</p>
-	<p>
-		<label>
-			<input type=checkbox name="grouptermsofuse_ok"> <?= _("Einverstanden") ?>
-		</label>
-	</p>
+      <p>
+        <em><?= formatReady( $terms ) ?></em>
+    </p>
+    <p>
+        <label>
+            <input type=checkbox name="grouptermsofuse_ok"> <?= _("Einverstanden") ?>
+        </label>
+    </p>
   </td>
 </tr>
 

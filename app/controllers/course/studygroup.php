@@ -24,10 +24,21 @@ class Course_StudygroupController extends AuthenticatedController {
 
 	function before_filter(&$action, &$args) 
 	{
+		global $SEM_CLASS, $SEM_TYPE;
+
 		parent::before_filter($action, $args);
 		include 'lib/seminar_open.php';
 
 		$this->tabs = 'links_openobject';
+
+		// args at position zeor is always the studygroup-id
+		if ($args[0]) {
+			if ($sem = new Seminar($args[0])) {
+				if (!$SEM_CLASS[$SEM_TYPE[$sem->status]["class"]]["studygroup_mode"]) {
+					throw new Exception(_("Dieses Seminar ist keine Studentische Arbeitsgruppe!"));
+				}
+			}
+		}
 	}
 
 	/**
@@ -316,12 +327,12 @@ class Course_StudygroupController extends AuthenticatedController {
 		}
 	}
 
-	function delete_action($id, $approveDelete = false)
+	function delete_action($id, $approveDelete = false, $studipticket = false)
 	{
 		global $perm;
 		if ($perm->have_studip_perm( 'dozent',$id )) {
 
-			if ($approveDelete) {
+			if ($approveDelete && check_ticket($studipticket)) {
 				$messages = array();
 				$sem=new Seminar($id);
 	            $sem->delete();
@@ -333,15 +344,17 @@ class Course_StudygroupController extends AuthenticatedController {
 	    		unset($sem);
 			
 				$this->redirect('course/studygroup/new');
-			} else {
+			} else if (!$approveDelete) {
 				$template = $GLOBALS['template_factory']->open('shared/question');
 
-				$template->set_attribute('approvalLink', $this->url_for('/course/studygroup/delete/'. $id. '/true'));
+				$template->set_attribute('approvalLink', $this->url_for('/course/studygroup/delete/'. $id. '/true/'. get_ticket()));
 				$template->set_attribute('disapprovalLink', $this->url_for('/course/studygroup/edit/'. $id));
 				$template->set_attribute('question', _("Sind Sie sicher, dass Sie diese Arbeitsgruppe löschen möchten?"));
 
 				$this->flash['question'] = $template->render();
 				$this->redirect('course/studygroup/edit/'. $id);
+			} else {
+				$this->redirect(URLHelper::getURL('seminar_main.php?auswahl=' . $id));
 			}
 		} else {
 			$this->redirect(URLHelper::getURL('seminar_main.php?auswahl=' . $id));
