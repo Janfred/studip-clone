@@ -121,53 +121,32 @@ class StudygroupModel {
 
 		return $institutes;
 	}
-}
 
-function accept_user($username,$sem_id) {
-	$q="SELECT asu.user_id FROM admission_seminar_user asu LEFT JOIN auth_user_md5 au ON (au.user_id=asu.user_id) WHERE au.username='$username' AND asu.seminar_id='".$sem_id."'";
-//	print $q;
-	$db=new DB_Seminar();
-	$db->query($q);
-	if ($db->nf()==1) {
-		$db->next_record();
-		$accept_user_id=$db->f('user_id');
-		print $accept_user_id;
-		$q="INSERT INTO seminar_user SET user_id='".$accept_user_id."', seminar_id='".$sem_id."', status='autor', position=0, gruppe=0, admission_studiengang_id=0, notification=0, mkdate=NOW(), comment='', visible='yes'";
-		$db->query($q);
-		$q="DELETE FROM admission_seminar_user WHERE user_id='".$accept_user_id."' AND seminar_id='".$sem_id."'";
-		$db->query($q);
+	function accept_user($username, $sem_id) {
+		$stmt = DBManager::get()->query("SELECT asu.user_id FROM admission_seminar_user asu 
+			LEFT JOIN auth_user_md5 au ON (au.user_id=asu.user_id) 
+			WHERE au.username='$username' AND asu.seminar_id='". $sem_id ."'");
+		if ($data = $stmt->fetch()) {
+			$accept_user_id = $data['user_id'];
+
+			DBManager::get()->query("INSERT INTO seminar_user SET user_id='".$accept_user_id."', seminar_id='".$sem_id."',
+				status='autor', position=0, gruppe=0, admission_studiengang_id=0, notification=0, mkdate=NOW(), comment='', visible='yes'");
+
+			DBManager::get()->query("DELETE FROM admission_seminar_user WHERE user_id='".$accept_user_id."' AND seminar_id='".$sem_id."'");
+		}
+	}
+
+	function deny_user($username, $sem_id) {
+		DBManager::get()->query("DELETE FROM admission_seminar_user WHERE user_id='". get_userid($username) ."' AND seminar_id='".$sem_id."'");
+	}
+
+	function promote_user($username, $sem_id, $perm) 
+	{
+		DBManager::get()->query( "UPDATE seminar_user SET status = '$perm' WHERE Seminar_id = '$sem_id' AND user_id = '". get_userid($username) ."'");
+	}
+
+	function remove_user($username, $sem_id, $perm) 
+	{
+		DBManager::get()->query("DELETE FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '". get_userid($username) ."'");
 	}
 }
-
-function deny_user($username,$sem_id) {
-    $db=new DB_Seminar();
-    $q =  "SELECT user_id FROM auth_user_md5 WHERE username='$username'";
-    $db->query($q);
-    if ($db->nf()==1) {
-        $db->next_record();
-        $user_id = $db->f('user_id');
-    }
-    $q="DELETE FROM admission_seminar_user WHERE user_id='".$user_id."' AND seminar_id='".$sem_id."'";
-	$db->query($q);
-}
-
-function promote_user($user_id, $sem_id, $perm) 
-{
-    
-    $db=new DB_Seminar();
-    $q = "UPDATE seminar_user SET status = '$perm' WHERE Seminar_id = '$sem_id' AND user_id = '$user_id'";
-    var_dump($q);
-    $db->query($q);
-}
-
-function remove_user($user_id, $sem_id, $perm) 
-{
-    
-    $db=new DB_Seminar();
-    $q = "DELETE FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '$user_id'";
-    $db->query($q);
-}
-
-
-
-?>

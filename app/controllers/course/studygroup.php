@@ -307,19 +307,21 @@ class Course_StudygroupController extends AuthenticatedController {
 			if (!$status) {
 				$this->flash['success'] = _("Es wurde keine korrekte Option gewählt.");
 			} elseif ($status == 'accept') {
-				accept_user($user,$id);
+				StudygroupModel::accept_user($user,$id);
 				$this->flash['success'] = sprintf(_("Der Nutzer %s wurde akzeptiert."), get_fullname_from_uname($user));
 			} elseif ($status == 'deny') {
-				deny_user($user,$id);
+				StudygroupModel::deny_user($user,$id);
 				$this->flash['success'] = sprintf(_("Der Nutzer %s wurde nicht akzeptiert."), get_fullname_from_uname($user));
-			} elseif ($status == 'promote' && $perm !='') {
+			}
 
-				promote_user($user,$id,$stat);
-				$this->flash['success'] = sprintf(_("Der Status des Nutzer %s wurde geändert."), get_fullname_from_uname($user));
-			} elseif ($status == 'remove') {
-
-				remove_user($user,$id);
-				$this->flash['success'] = sprintf(_("Der Nutzer %s wurde aus der Studiengruppe entfernt."), get_fullname_from_uname($user));
+			if ($perm->have_studip_perm('dozent', $id)) {
+				if ($status == 'promote' && $perm !='') {
+					StudygroupModel::promote_user($user,$id,$stat);
+					$this->flash['success'] = sprintf(_("Der Status des Nutzer %s wurde geändert."), get_fullname_from_uname($user));
+				} elseif ($status == 'remove') {
+					StudygroupModel::remove_user($user,$id);
+					$this->flash['success'] = sprintf(_("Der Nutzer %s wurde aus der Studiengruppe entfernt."), get_fullname_from_uname($user));
+				}
 			}
 
 			$this->redirect('course/studygroup/members/'.$id);
