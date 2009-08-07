@@ -61,9 +61,11 @@ $infobox['content'] = array(
   <td style='text-align:right; vertical-align:top;'>Module:</td>
   <td>
   	<? foreach($available_modules as $key => $name) : ?>
-	<label>
-	    <input name="groupmodule[<?= $key ?>]" type="checkbox" <?= ($modules->getStatus($key, $sem_id, 'sem')) ? 'checked="checked"' : '' ?>> <?= $name ?>
-	</label><br>
+	    <? if ($key != 'participants') :?>
+	    <label>	    
+	        <input name="groupmodule[<?= $key ?>]" type="checkbox" <?= ($modules->getStatus($key, $sem_id, 'sem')) ? 'checked="checked"' : '' ?>> <?= $name ?>
+	    </label><br>
+	    <? endif;?>
 	<? endforeach; ?>
 
 	<? if ($GLOBALS['PLUGINS_ENABLE']) : ?>

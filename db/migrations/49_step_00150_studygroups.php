@@ -25,7 +25,7 @@ Ich erkläre mich damit einverstanden, dass AdministratorInnen die Inhalte der Gr
 		Config::GetInstance()->setValue( $terms, 'STUDYGROUP_TERMS');
 
 		// (4) Add default for allowed modules
-		Config::GetInstance()->setValue( 'forum:1', 'STUDYGROUP_SETTINGS');
+		Config::GetInstance()->setValue( 'forum:1|documents:0|schedule:0|participants:1', 'STUDYGROUP_SETTINGS');
 	}
 
 	function down ()
