@@ -685,12 +685,9 @@ if (!$suppress_infobox) {
 		</td>
 	</tr>
 </table>
-<pre>
 <?
 $resources_data = serialize($resources_data);
 if (!isset($_REQUEST['print_view'])){
 	include ('lib/include/html_end.inc.php');
 }
 page_close();
-?>
-

@@ -37,6 +37,7 @@
 // +---------------------------------------------------------------------------+
 
 require_once('lib/log_events.inc.php');
+require_once($GLOBALS['RELATIVE_PATH_RESOURCES'] .'/lib/ResourcesUserRoomsList.class.php');
 
 /**
 * RoomRequest, class for room-requests and room-property-requests
