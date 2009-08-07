@@ -27,6 +27,7 @@ class Course_StudygroupController extends AuthenticatedController {
 		global $SEM_CLASS, $SEM_TYPE;
 
 		parent::before_filter($action, $args);
+
 		include 'lib/seminar_open.php';
 
 		$this->tabs = 'links_openobject';
@@ -307,18 +308,18 @@ class Course_StudygroupController extends AuthenticatedController {
 				$this->flash['success'] = _("Es wurde keine korrekte Option gewählt.");
 			} elseif ($status == 'accept') {
 				accept_user($user,$id);
-				$this->flash['success'] = sprintf(_("Der Nutzer %s wurde akzeptiert."), get_fullname($user));
+				$this->flash['success'] = sprintf(_("Der Nutzer %s wurde akzeptiert."), get_fullname_from_uname($user));
 			} elseif ($status == 'deny') {
 				deny_user($user,$id);
-				$this->flash['success'] = sprintf(_("Der Nutzer %s wurde nicht akzeptiert."), get_fullname($user));
+				$this->flash['success'] = sprintf(_("Der Nutzer %s wurde nicht akzeptiert."), get_fullname_from_uname($user));
 			} elseif ($status == 'promote' && $perm !='') {
 
 				promote_user($user,$id,$stat);
-				$this->flash['success'] = sprintf(_("Der Status des Nutzer %s wurde geändert."), get_fullname($user));
+				$this->flash['success'] = sprintf(_("Der Status des Nutzer %s wurde geändert."), get_fullname_from_uname($user));
 			} elseif ($status == 'remove') {
 
 				remove_user($user,$id);
-				$this->flash['success'] = sprintf(_("Der Nutzer %s wurde aus der Studiengruppe entfernt."), get_fullname($user));
+				$this->flash['success'] = sprintf(_("Der Nutzer %s wurde aus der Studiengruppe entfernt."), get_fullname_from_uname($user));
 			}
 
 			$this->redirect('course/studygroup/members/'.$id);

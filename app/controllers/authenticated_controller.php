@@ -26,13 +26,16 @@ class AuthenticatedController extends Trails_Controller {
    * @return bool
    */
   function before_filter(&$action, &$args) {
-    global $_language_path, $_language;
+    global $_language_path, $_language, $auth;
 
     # open session
     page_open(array('sess' => 'Seminar_Session',
                     'auth' => 'Seminar_Auth',
                     'perm' => 'Seminar_Perm',
                     'user' => 'Seminar_User'));
+
+	// show login-screen, if authentication is "nobody"
+	$auth->login_if($auth->auth["uid"] == "nobody"); 
 
     $this->flash = Trails_Flash::instance();
 
