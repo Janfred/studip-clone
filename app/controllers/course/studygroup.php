@@ -163,7 +163,6 @@ class Course_StudygroupController extends AuthenticatedController {
 			}
 
 			$sem->modules=$bitmask;
-			$mods->writeBin($id, $bitmask, 'sem');
 			$sem->store();
 
 			// de-/activate plugins
@@ -284,7 +283,7 @@ class Course_StudygroupController extends AuthenticatedController {
 
 	function members_action($id)
 	{
-		$GLOBALS['CURRENT_PAGE'] = getHeaderLine($id).' - '.'TeilnehmerInnen';
+		$GLOBALS['CURRENT_PAGE'] = getHeaderLine($id) . ' - ' . _("TeilnehmerInnen");
 		$this->reiter_view = '_studygroup_teilnehmer';
 
 		$sem=new Seminar($id);
@@ -292,11 +291,12 @@ class Course_StudygroupController extends AuthenticatedController {
 		$this->groupname = $sem->name;
 		$this->sem_id = $id;
 		$this->groupdescription = $sem->description;
-		$this->moderators =$sem->getMembers('dozent');
+		$this->moderators = $sem->getMembers('dozent');
+		unset($this->moderators[md5('studygroup_dozent')]);
 		$this->tutors =  $sem->getMembers('tutor');
-		$this->members = array_merge($sem->getMembers('dozent'), $sem->getMembers('tutor'), $sem->getMembers('autor'));
+		$this->members = array_merge($this->moderators, $this->tutors, $sem->getMembers('autor'));
 		$this->accepted = $sem->getAdmissionMembers('accepted');
-		$this->rechte =  $GLOBALS['rechte']; 
+		$this->rechte = $GLOBALS['perm']->have_studip_perm("tutor", $id);
 	}
 
 	function edit_members_action($id,$user,$status,$stat='')
