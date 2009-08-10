@@ -262,7 +262,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 
 		if ($structure["nachricht"]) {
 			printf("<td%salign=\"left\" width=\"1%%\"".(($admin_view) ? "" : " colspan=\"2\""). " nowrap>\n",$css_switcher->getFullClass());
-			printf("<a href=\"%s\">", URLHelper::getLink("sms_send.php?sms_source_page=inst_admin.php&rec_uname=".$db->f("username")));
+			printf("<a href=\"%s\">", URLHelper::getLink("sms_send.php?sms_source_page=" . ($admin_view == true ? "inst_admin.php" : "institut_members.php") . "&rec_uname=".$db->f("username")));
 			printf("<img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" alt=\"%s\" ", _("Nachricht an User verschicken"));
 			printf("title=\"%s\" border=\"0\" valign=\"baseline\"></a>", _("Nachricht an User verschicken"));
 			echo '</td>';
@@ -938,7 +938,7 @@ if ($show == "funktion") {
 						echo "<font size=\"-1\"><b>&nbsp;";
 						echo htmlReady($zw_title);
 						echo "<b></font>"."</td><td class=\"steelkante\" colspan=\"2\" height=\"20\">";
-						echo "<a href=\"".URLHelper::getLink("sms_send.php?sms_source_page=" . ($admin_view == true ? "inst_admin.php" : "inst_members.php") . "&group_id=".$role_id."&subject=".rawurlencode($SessSemName[0]))."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(sprintf(_("Nachricht an alle Mitglieder der Gruppe %s verschicken"), $zw_title)) . " border=\"0\"></a>&nbsp;";
+						echo "<a href=\"".URLHelper::getLink("sms_send.php?sms_source_page=" . ($admin_view == true ? "inst_admin.php" : "institut_members.php") . "&group_id=".$role_id."&subject=".rawurlencode($SessSemName[0]))."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(sprintf(_("Nachricht an alle Mitglieder der Gruppe %s verschicken"), $zw_title)) . " border=\"0\"></a>&nbsp;";
 						echo "</td></tr>\n";
 					}
 					else {
