@@ -683,8 +683,11 @@ if ($change_object_schedules) {
 					}
 				} else {
 					if ($storeAssign) {
-						if ($overlaps)
+						if ($overlaps) {  // add error message an store the submitted form-data
 							$msg->addMsg(11);
+							$new_assign_object=serialize($changeAssign);
+						}
+
 						if ($locks) {
 							foreach ($locks as $val)
 								$locks_txt.=date("d.m.Y, H:i",$val["lock_begin"])." - ".date("d.m.Y, H:i",$val["lock_end"])."<br>";
