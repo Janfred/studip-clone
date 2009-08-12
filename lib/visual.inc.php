@@ -230,19 +230,22 @@ function JSReady ($what = "", $target = "overlib") {
 	}
 }
 
-//////////////////////
-// de- und encodieren der Quotings
-
-function quotes_decode ($description) {
-// Funktion um Quotings zu decoden
-// $description: der Text der gequotet werden soll, wird zurueckgegeben
-
+/**
+ * Hilfsfunktion, die sich den zu quotenden Text holt, encodiert und zurueckgibt.
+ *
+ * @param string $description Hilfsfunktion, die sich den zu quotenden Text holt, encodiert und zurueckgibt.
+ * @return string
+ */
+function quotes_decode($description)
+{
 	$description = " ".$description;
 	$stack = Array();
 	$curr_pos = 1;
-	while ($curr_pos && ($curr_pos < strlen($description))) {
+	while ($curr_pos && ($curr_pos < strlen($description)))
+	{
 		$curr_pos = strpos($description, "[", $curr_pos);
-		if ($curr_pos) {
+		if ($curr_pos)
+		{
 			$possible_start = substr($description, $curr_pos, 6);
 			$possible_end = substr($description, $curr_pos, 8);
 			if (strcasecmp("[quote", $possible_start) == 0) {
@@ -268,7 +271,7 @@ function quotes_decode ($description) {
 					ELSE { // kein Name, also nur Zitat
 						$nameend_pos = strpos($between_tags,"]");
 						IF (substr($between_tags,$nameend_pos,5)=="]<br>") // ja, hier wurde anstaendig gequotet
-							$between_tags = "<b>"._("Zitat:")."</b><hr>".substr($between_tags,$nameend_pos+6);
+							$between_tags = "<b>"._("Zitat:")."</b><hr>".substr($between_tags,$nameend_pos+5);
 						ELSE // da wird gepfuscht, also mal besser Finger weg
 							$between_tags = "<b>"._("Zitat:")."</b><hr>".substr($between_tags,$nameend_pos+1);
 						}
@@ -288,24 +291,26 @@ function quotes_decode ($description) {
 				else ++$curr_pos;
 				}
 			else ++$curr_pos;
-			}
 		}
+	}
 	$description=preg_replace("/\[quote\007/","[quote",$description);
 	$description=preg_replace("/\[\/quote\007\]/","[/quote]",$description);
 	return $description;
 }
 
-///////////
-
-function quotes_encode ($description,$author) {
-// Funktion um Quotings zu encoden
-// $description: der Text der gequotet werden soll, wird zurueckgegeben
-// $author: Name des urspruenglichen Autors
-
+/**
+ * Funktion um Quotings zu encoden
+ *
+ * @param string $description der Text der gequotet werden soll, wird zurueckgegeben
+ * @param string $author Name des urspruenglichen Autors
+ * @return string
+ */
+function quotes_encode($description,$author)
+{
 	if (ereg("%%\[editiert von",$description)) { // wurde schon mal editiert
 		$postmp = strpos($description,"%%[editiert von");
 		$description = substr_replace($description," ",$postmp);
-		}
+	}
 	/* quote reduction deactivated (cf. http://develop.studip.de/trac/ticket/208 )
 	while (ereg("\[quote",$description) AND ereg("\[/quote\]",$description)){ // da wurde schon mal zitiert...
 		$pos1 =         strpos($description, "[quote");
