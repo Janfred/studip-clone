@@ -384,7 +384,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 
 	$db->query ("SELECT seminare.Name, seminare.Seminar_id, seminare.status as sem_status, seminar_user.status, seminar_user.gruppe,
-				seminare.chdate, seminare.visible, admission_binding,modules,IFNULL(visitdate,0) as visitdate, admission_prelim, 
+				seminare.chdate, seminare.visible, admission_binding,modules,IFNULL(visitdate,0) as visitdate, admission_prelim,
 				{$_views['sem_number_sql']} as sem_number, {$_views['sem_number_end_sql']} as sem_number_end $add_fields
 				FROM seminar_user LEFT JOIN seminare  USING (Seminar_id)
 				LEFT JOIN object_user_visits ouv ON (ouv.object_id=seminar_user.Seminar_id AND ouv.user_id='$user->id' AND ouv.type='sem')
@@ -398,18 +398,18 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 	while ($db->next_record()) {
 			$my_obj[$db->f("Seminar_id")] = array(
-				"name"       => $db->f("Name"), 
+				"name"       => $db->f("Name"),
 				'semname'    => $db->f('Name'),
 				"status"     => $db->f("status"),
-				"visible"    => $db->f("visible"), 
+				"visible"    => $db->f("visible"),
 				"gruppe"     => $db->f("gruppe"),
 				"chdate"     => $db->f("chdate"),
 				"binding"    => $db->f("admission_binding"),
 				"modules"    => $Modules->getLocalModules($db->f("Seminar_id"), "sem", $db->f("modules"), $db->f("sem_status")),
-				"obj_type"   => "sem", 
-				"sem_status" => $db->f("sem_status"), 
+				"obj_type"   => "sem",
+				"sem_status" => $db->f("sem_status"),
 				'prelim'     => $db->f('admission_prelim'),
-				"visitdate"  => $db->f("visitdate"), 
+				"visitdate"  => $db->f("visitdate"),
 				"sem_number" => $db->f("sem_number"),
 				"sem_number_end"   => $db->f("sem_number_end")
 			);
@@ -473,9 +473,9 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 		<tr valign="top">
 			<td valign="top" class="blank" align="center">
 			<br>
-				<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" valign="top" class="blank">
+				<table border="0" cellpadding="1" cellspacing="0" width="98%" valign="top">
 					<? if ($meldung) {
-						parse_msg($meldung, "§", "blank",3);
+						parse_msg($meldung, "§", "blank",5);
 						}?>
 					<tr align="center" valign="top">
 							<th width="2%" colspan=2 nowrap="nowrap" align="center"><a href="gruppe.php"><img src="<?=$GLOBALS['ASSETS_URL'] ?>images/gruppe.gif" <? echo tooltip(_("Gruppe ändern")) ?> border="0"></a></th>
