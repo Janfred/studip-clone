@@ -647,7 +647,8 @@ class UserManagement
 		}
 
 		// active dozent?
-		$this->db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '" . $this->user_data['auth_user_md5.user_id'] . "' AND status = 'dozent' GROUP BY user_id");
+		$this->db->query("SELECT count(*) AS count FROM seminar_user as su LEFT JOIN auth_user_md5 as aum USING (user_id) WHERE user_id = '" .
+		                  $this->user_data['auth_user_md5.user_id'] . "' AND su.status = 'dozent' AND aum.perms = 'dozent' GROUP BY user_id");
 		$this->db->next_record();
 		if ($this->db->f("count")) {
 			$this->msg .= sprintf("error§" . _("Der Benutzer/die Benutzerin <em>%s</em> ist DozentIn in %s aktiven Veranstaltungen und kann daher nicht gel&ouml;scht werden.") . "§", $this->user_data['auth_user_md5.username'], $this->db->f("count"));
