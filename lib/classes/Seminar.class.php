@@ -844,6 +844,10 @@ class Seminar {
 		return $this->irregularSingleDates;
 	}
 
+	function &getCycles() {
+		return $this->metadate->cycles;
+	}
+
 	function &getSingleDatesForCycle($metadate_id) {
 		if (!$this->metadate->cycles[$metadate_id]->termine) {
 			$this->metadate->readSingleDates($metadate_id, $this->filterStart, $this->filterEnd);

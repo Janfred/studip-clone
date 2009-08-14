@@ -206,11 +206,24 @@ class VeranstaltungResourcesAssign {
 	}
 
 	function &getDateAssignObjects($presence_dates_only = FALSE) {
-		$query2 = sprintf("SELECT termin_id FROM termine WHERE range_id = '%s' %s ORDER BY date, content", $this->seminar_id, ($presence_dates_only) ? "AND date_typ IN ".getPresenceTypeClause() : "");
-		$this->db2->query($query2);
+		$sem = Seminar::getInstance($this->seminar_id);
 
-		while ($this->db2->next_record()) {
-			$assignObjects[$this->db2->f("termin_id")] =& $this->getDateAssignObject($this->db2->f("termin_id"));
+		// get regular metadates
+		foreach ($sem->getCycles() as $cycle_id => $cycle) {
+			// get the assigned singledates 
+			$dates = $sem->getSingleDatesForCycle($cycle_id);
+			foreach ($dates as $date) {
+				if ($date->isPresence() || !$presence_dates_only) {
+					$assignObjects[$date->getSingleDateId()] =& $this->getDateAssignObject($date->getSingleDateId());
+				}
+			}
+		}
+
+		// get irregular singledates
+		foreach ($sem->getSingledates() as $date) {
+			if ($date->isPresence() || !$presence_dates_only) {
+				$assignObjects[$date->getSingleDateId()] =& $this->getDateAssignObject($date->getSingleDateId());
+			}
 		}
 
 		return $assignObjects;
