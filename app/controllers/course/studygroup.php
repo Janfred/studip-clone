@@ -116,7 +116,7 @@ class Course_StudygroupController extends AuthenticatedController {
 			$sem->read_level  = 1;
 			$sem->write_level = 1;
 
-			$sem->institute_id = Config::GetInstance()->getValue('STUDYGROUP_DEFAULT_INST');
+			$sem->institut_id = Config::GetInstance()->getValue('STUDYGROUP_DEFAULT_INST');
 
 
 			$sem->admission_type=0; 
@@ -136,7 +136,6 @@ class Course_StudygroupController extends AuthenticatedController {
 			$this_semester=$semdata->getSemesterDataByDate(time());
 			$sem->semester_start_time=$this_semester['beginn'];
 			$sem->semester_duration_time=-1;
-			$sem->institut_id=''; // TODO: default inst id!
 
 			$semid=$sem->id;
 			$userid=$GLOBALS['auth']->auth['uid'];
