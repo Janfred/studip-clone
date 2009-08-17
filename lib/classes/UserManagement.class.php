@@ -60,9 +60,8 @@ class UserManagement
 	var $db;     			// database connection1
 	var $db2;     		// database connection2
 	var $validator;		// object used for checking input
-	var $smtp;				// object used for sending mails
 	var $hash_secret = "jdfiuwenxclka";  // set this to something, just something different...
-
+	
 	/**
 	* Constructor
 	*
@@ -76,7 +75,8 @@ class UserManagement
 		$this->db2 = new DB_Seminar;
 		$this->validator = new email_validation_class;
 		$this->validator->timeout = 10;					// How long do we wait for response of mailservers?
-		$this->smtp = new studip_smtp_class;
+		$mail = new StudipMail();
+		$this->abuse_email = $mail->getReplyToEmail();
 		if ($user_id) {
 			$this->getFromDatabase($user_id);
 		}
@@ -359,11 +359,8 @@ class UserManagement
 		include("locale/$user_language/LC_MAILS/create_mail.inc.php");
 
 		// send mail
-		$this->smtp->SendMessage(
-				$this->user_data['auth_user_md5.Email'], "",
-				$this->smtp->abuse, "",
-				$subject, $mailbody);
-
+		StudipMail::sendMessage($this->user_data['auth_user_md5.Email'],$subject, $mailbody);
+		
 		return TRUE;
 	}
 
@@ -485,11 +482,8 @@ class UserManagement
 		include("locale/$user_language/LC_MAILS/change_mail.inc.php");
 
 		// send mail
-		$this->smtp->SendMessage(
-				$this->user_data['auth_user_md5.Email'], "",
-				$this->smtp->abuse, "",
-				$subject, $mailbody);
-
+		StudipMail::sendMessage($this->user_data['auth_user_md5.Email'],$subject, $mailbody);
+		
 		// Upgrade to admin or root?
 		if ($newuser['auth_user_md5.perms'] == "admin" || $newuser['auth_user_md5.perms'] == "root") {
 
@@ -602,11 +596,7 @@ class UserManagement
 		include("locale/$user_language/LC_MAILS/password_mail.inc.php");
 
 		// send mail
-		$this->smtp->SendMessage(
-				$this->user_data['auth_user_md5.Email'], "",
-				$this->smtp->abuse, "",
-				$subject, $mailbody);
-
+		StudipMail::sendMessage($this->user_data['auth_user_md5.Email'],$subject, $mailbody);
 		log_event("USER_NEWPWD",$this->user_data['auth_user_md5.user_id']);
 		return TRUE;
 
@@ -847,10 +837,7 @@ class UserManagement
 			include("locale/$user_language/LC_MAILS/delete_mail.inc.php");
 
 			// send mail
-			$this->smtp->SendMessage(
-					$this->user_data['auth_user_md5.Email'], "",
-					$this->smtp->abuse, "",
-					$subject, $mailbody);
+			StudipMail::sendMessage($this->user_data['auth_user_md5.Email'],$subject, $mailbody);
 
 		}
 
@@ -896,10 +883,8 @@ class UserManagement
 		include("locale/$user_language/LC_MAILS/password_mail.inc.php");
 
 		// send mail
-		$this->smtp->SendMessage(
-				$this->user_data['auth_user_md5.Email'], "",
-				$this->smtp->abuse, "",
-				$subject, $mailbody);
+		StudipMail::sendMessage($this->user_data['auth_user_md5.Email'],$subject, $mailbody);
+		
 
 		return TRUE;
 

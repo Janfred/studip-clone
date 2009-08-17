@@ -22,6 +22,6 @@
 		."Falls Sie sich nicht als Benutzer \"$username\" angemeldet haben\n"
 		."oder überhaupt nicht wissen, wovon hier die Rede ist,\n"
 		."dann hat jemand Ihre E-Mail-Adresse missbraucht!\n\n"
-		."Bitte wenden Sie sich in diesem Fall an $smtp->abuse,\n"
+		."Bitte wenden Sie sich in diesem Fall an $abuse,\n"
 		."damit der Eintrag aus der Datenbank gelöscht wird.\n";
 ?>

@@ -59,7 +59,6 @@ function CheckSelected($a, $b) {
 		return FALSE;
 	}
 }
-
 //
 function array_add_value($add, $array) {
 	foreach ($add as $a) {
@@ -207,8 +206,6 @@ class messaging {
 		$to = $db4->f("Email");
 		$rec_fullname = get_fullname($db4->f("user_id"));
 
-		$smtp = new studip_smtp_class;
-
 		setTempLanguage($db4->f("user_id"));
 
 		$title = "[Stud.IP - " . $GLOBALS['UNI_NAME_CLEAN'] . "] ".stripslashes(kill_format(str_replace(array("\r","\n"), '', $subject)));
@@ -223,7 +220,6 @@ class messaging {
 			$reply_to = $GLOBALS["UNI_CONTACT"];
 		}
 
-//		$title = $smtp->QuotedPrintableEncode($title, 1);
 		// Generate "Header" of the message
 		$mailmessage = _("Von: ")."$snd_fullname\n";
 		$mailmessage .= _("An: ")."$rec_fullname\n";
@@ -233,7 +229,7 @@ class messaging {
 
 		// generate signature of the message
 		$mailmessage .= sprintf(_("Diese E-Mail ist eine Kopie einer systeminternen Nachricht, die in Stud.IP an %s versendet wurde."), $rec_fullname)."\n";
-		$mailmessage .= sprintf(_("Antworten Sie nicht auf diese E-Mail, sondern benutzen Sie Stud.IP unter %s"), $smtp->url);
+		$mailmessage .= sprintf(_("Antworten Sie nicht auf diese E-Mail, sondern benutzen Sie Stud.IP unter %s"), $GLOBALS['ABSOLUTE_URI_STUDIP']);
 		//rescue escaped newlines if mysql_escape_string() was used
 		$mailmessage = str_replace('\n', "\n", $mailmessage);
 		$mailmessage = stripslashes($mailmessage);
@@ -241,7 +237,16 @@ class messaging {
 		restoreLanguage();
 
 		// Now, let us send the message
-		$smtp->SendMessage($to, $rec_fullname, $reply_to, $snd_fullname, $title, $mailmessage, $attachments);
+		$mail = new StudipMail();
+		$mail->setSubject($title)
+			->addRecipient($to, $rec_fullname)
+			->setSenderEmail($reply_to)
+			->setSenderName($snd_fullname)
+			->setBodyText($mailmessage);
+		foreach($attachments as $a){
+			$mail->addStudipAttachment($a['id']);
+		}
+		$mail->send();
 
 	}
 

@@ -283,13 +283,14 @@ $STUDIP_DOMAINS[4] = "134.76.82.67/studip";
 /*mail settings
 ----------------------------------------------------------------
 leave blank if localhost is also the mailserver*/
-
+$MAIL_TRANSPORT = "smtp";
 $MAIL_LOCALHOST = "develop.studip.de";					//name of the mail sending machine (the web server) defaults to SERVER_NAME
 $MAIL_HOST_NAME = "127.0.0.1";									//which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
 $MAIL_CHARSET = "";									//character set of mail body, defaults to ISO-8859-1
 $MAIL_ENV_FROM = "develop-noreply@studip.de";		//sender mail adress, defaults to wwwrun @ $MAIL_LOCAHOST
 $MAIL_FROM = "";									//name of sender, defaults to "Stud.IP"
 $MAIL_ABUSE = "abuse@studip.de";									//mail adress to reply to in case of abuse, defaults to abuse @  $MAIL_LOCAHOST
+$MAIL_BULK_DELIVERY = true;
 
 $MAIL_VALIDATE_HOST = TRUE;								//check for valid mail host when user enters email adress
 $MAIL_VALIDATE_BOX = FALSE;								//check for valid mail account when user enters email adress; set to false if the webserver got no valid MX record

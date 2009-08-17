@@ -109,10 +109,7 @@ function parse_link($link, $level=0) {
 
 		if (!$url_parts["user"]) $url_parts["user"] = "anonymous";
 		if (!$url_parts["pass"]) {
-			$mailclass = new studip_smtp_class;
-			$mailtmp = $mailclass->localhost;
-			if ($mailtmp == "127.0.0.1") $mailtmp = "localhost.de";
-			$url_parts["pass"] = "wwwrun%40".$mailtmp;
+			$url_parts["pass"] = "info%40studip.de";
 		}
 		if (!@ftp_login($ftp,$url_parts["user"],$url_parts["pass"])) {
 			ftp_quit($ftp);

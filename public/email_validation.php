@@ -72,16 +72,10 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 	    _("Und Sie müssen den vollständigen Link aus der Bestätigungsmail in die Adresszeile Ihres Browsers kopieren.")));
 
         // Mail an abuse
-		$smtp=new studip_smtp_class;
 		$REMOTE_ADDR=getenv("REMOTE_ADDR");
 		$Zeit=date("H:i:s, d.m.Y",time());
-		$from="wwwrun@".$smtp->localhost;
-		$to="abuse@".$smtp->localhost;
 		$username = $auth->auth["uname"];
-		$smtp->SendMessage(
-				$to, "",
-				$smtp->abuse, "",
-				"Validation", "Secret falsch\n\nUser: $username\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
+		StudipMail::sendAbuseMessage("Validation", "Secret falsch\n\nUser: $username\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
 	}
 
 	// alles paletti, Status ändern

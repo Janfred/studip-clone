@@ -92,10 +92,7 @@ class UserManagementRequestNewPassword extends UserManagement {
 		include("locale/$user_language/LC_MAILS/password_mail.inc.php");
 
 		// send mail
-		$this->smtp->SendMessage(
-				$this->user_data['auth_user_md5.Email'], "",
-				$this->user_data['auth_user_md5.Email'], "",
-				$subject, $mailbody);
+		StudipMail::sendMessage($this->user_data['auth_user_md5.Email'], $subject, $mailbody);
 
 		log_event("USER_NEWPWD",$this->user_data['auth_user_md5.user_id']);
 		return TRUE;
@@ -142,15 +139,11 @@ if( $_POST['email'] != "" ) {
 				$nachname = $row['Nachname'];
 				$id = md5($username . $GLOBALS['REQUEST_NEW_PASSWORD_SECRET']);
 
-				$smtp =& new studip_smtp_class();
 				// include language-specific subject and mailbody
 				$user_language = getUserLanguagePath($row['user_id']);
 				include("locale/$user_language/LC_MAILS/request_new_password_mail.inc.php");
 
-				$smtp->SendMessage(
-						$row['Email'], "",
-						$row['Email'], "",
-						$subject, $mailbody);
+				StudipMail::sendMessage($row['Email'], $subject, $mailbody);
 			}
 	    } else {
 			// Mehrere Benutzer für E-Mail

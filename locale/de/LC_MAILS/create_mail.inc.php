@@ -15,7 +15,7 @@
 		."Diese Mail wurde Ihnen zugesandt, um Ihnen den Benutzernamen\n"
 		."und das Passwort mitzuteilen, mit dem Sie sich am System anmelden können.\n\n"
 		."Sie finden die Startseite des Systems unter folgender URL:\n\n"
-		. $this->smtp->url . "\n\n"
+		. $GLOBALS['ABSOLUTE_URI_STUDIP'] . "\n\n"
 		."Wahrscheinlich unterstützt Ihr Mail-Programm ein einfaches Anklicken des Links.\n"
 		."Ansonsten müssen Sie Ihren Browser öffnen und den Link komplett in die Zeile\n"
 		."\"Location\" oder \"URL\" kopieren.\n\n"

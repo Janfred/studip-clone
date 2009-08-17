@@ -15,7 +15,7 @@
 		."This mail was sent to inform you about your username and password\n"
 		."so that you can log on into the system.\n\n"
 		."You will find the system start page under the following URL:\n\n"
-		. $this->smtp->url . "\n\n"
+		. $GLOBALS['ABSOLUTE_URI_STUDIP'] . "\n\n"
 		."Your mail program will probably support a simple click on the link.\n"
 		."If not, you must open your browser and copy the link completely into the line\n"
 		."\"Location\" oder \"URL\".\n\n"

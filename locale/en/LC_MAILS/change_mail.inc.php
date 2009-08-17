@@ -14,9 +14,9 @@
 		."Your password has not been changed.\n\n"
 		."This mail has been sent to you, to inform you of the changes.\n\n"
 		."If you have objections against these changes, please contact\n"
-		. $this->smtp->abuse . "\n"
+		. $this->abuse_email . "\n"
 		."You can simply reply to this mail.\n\n"
 		."Here takes you directly into the system:\n"
-		. $this->smtp->url . "\n\n";
+		. $GLOBALS['ABSOLUTE_URI_STUDIP'] . "\n\n";
 
 ?>

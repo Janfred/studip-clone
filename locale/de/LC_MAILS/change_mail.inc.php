@@ -16,9 +16,9 @@
 		."Ihr Passwort hat sich nicht verändert.\n\n"
 		."Diese Mail wurde Ihnen zugesandt, um Sie über die Änderungen zu informieren.\n\n"
 		."Wenn Sie Einwände gegen die Änderungen haben, wenden Sie sich bitte an\n"
-		. $this->smtp->abuse . "\n"
+		. $this->abuse_email . "\n"
 		."Sie können einfach auf diese Mail antworten.\n\n"
 		."Hier kommen Sie direkt ins System:\n"
-		. $this->smtp->url . "\n\n";
+		. $GLOBALS['ABSOLUTE_URI_STUDIP'] . "\n\n";
 
 ?>

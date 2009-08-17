@@ -50,7 +50,6 @@ function edit_email($uid, $email, $force=False) {
 
 	$validator = new email_validation_class; ## Klasse zum Ueberpruefen der Eingaben
 	$validator->timeout = 10;
-	$smtp = new studip_smtp_class;       ## Einstellungen fuer das Verschicken der Mails
 	$REMOTE_ADDR = $_SERVER["REMOTE_ADDR"];
 	$Zeit = date("H:i:s, d.m.Y",time());
 
@@ -83,12 +82,7 @@ function edit_email($uid, $email, $force=False) {
 		return array(False, $msg);
 	} else {       // Server ereichbar
 		if (!$validator->ValidateEmailBox($email)) {    // aber user unbekannt. Mail an abuse!
-			$from = $smtp->env_from;
-			$to = $smtp->abuse;
-			$smtp->SendMessage(
-				$to, "",
-				$smtp->abuse, "",
-				"edit_about", "Emailbox unbekannt\n\nUser: ". $username ."\nEmail: $email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
+			StudipMail::sendAbuseMessage("edit_about", "Emailbox unbekannt\n\nUser: ". $username ."\nEmail: $email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
 			$msg.=  "error§" . _("Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie Ihre Angaben!") . "§";
 			return array(False, $msg);
 		}
@@ -107,7 +101,6 @@ function edit_email($uid, $email, $force=False) {
 		return array(True, $msg);
 	} else {
 		// auth_plugin does not map validation_key (what if...?)
-		$url = $smtp->url;
 
 		// generate 10 char activation key
 		$key = '';
@@ -132,13 +125,9 @@ function edit_email($uid, $email, $force=False) {
 		}
 		include_once("locale/$lang/LC_MAILS/change_self_mail.inc.php");
 
-		$mail = $smtp->SendMessage(
-			$email, "",
-			$smtp->abuse, "",
-			$subject, $mailbody);
+		$mail = StudipMail::sendMessage($email, $subject, $mailbody);
 
 		if(!$mail) {
-			$msg.= "error§". $smtp->error ."§";
 			return array(True, $msg);
 		}
 

@@ -17,6 +17,6 @@
 		."damit nicht Dritte in Ihrem Namen Nachrichten\n"
 		."in das System einstellen können!\n\n"
 		."Hier kommen Sie direkt ins System:\n"
-		. $this->smtp->url . "\n\n"
+		. $GLOBALS['ABSOLUTE_URI_STUDIP'] . "\n\n"
 
 ?>

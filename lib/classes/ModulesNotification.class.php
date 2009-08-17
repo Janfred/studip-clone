@@ -42,7 +42,6 @@ class ModulesNotification extends Modules {
 
 	var $registered_notification_modules = array();
 	var $subject;
-	var $smtp;
 	
 	function ModulesNotification () {
 		parent::Modules();
@@ -71,7 +70,6 @@ class ModulesNotification extends Modules {
 				"elearning_interface" => array('mes' => TRUE, 'name' => _("Lernmodule")));
 		$this->registered_modules = array_merge_recursive($this->registered_modules,
 				$extend_modules);
-		$this->smtp =& new studip_smtp_class();
 	}
 	
 	function getGlobalEnabledNotificationModules ($range) {
@@ -216,7 +214,7 @@ class ModulesNotification extends Modules {
 			$text = _("Diese Email wurde automatisch vom Stud.IP-System verschickt. Sie können auf diese Nachricht nicht antworten.")
 						. "\n" . _("Sie erhalten hiermit in regelmäßigen Abständen Informationen über Neuigkeiten und Änderungen in Ihren abonnierten Veranstaltungen.")
 						. "\n\n" . _("Über welche Inhalte Sie informiert werden wollen, können Sie hier einstellen:")
-						. "\n{$this->smtp->url}sem_notification.php"
+						. "\n{$GLOBALS['ABSOLUTE_URI_STUDIP']}sem_notification.php"
 						. "\n" . $text
 						. "\n\n--\n"
 						. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
@@ -312,7 +310,7 @@ class ModulesNotification extends Modules {
 				$redirect = '';
 		}
 		if ($range == 'sem' && $text != '') {
-			$text .= "\n{$this->smtp->url}seminar_main.php?";
+			$text .= "\n{$GLOBALS['ABSOLUTE_URI_STUDIP']}seminar_main.php?";
 			$text .= "auswahl=$range_id$redirect\n";
 		} 
 		return $text;

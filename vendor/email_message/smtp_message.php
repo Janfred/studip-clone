@@ -2,7 +2,7 @@
 /*
  * smtp_message.php
  *
- * @(#) $Header: /home/mlemos/cvsroot/mimemessage/smtp_message.php,v 1.33 2008/04/07 06:38:19 mlemos Exp $
+ * @(#) $Header: /home/mlemos/cvsroot/mimemessage/smtp_message.php,v 1.34 2009/04/12 08:20:39 mlemos Exp $
  *
  *
  */
@@ -14,7 +14,7 @@
 	<package>net.manuellemos.mimemessage</package>
 
 	<name>smtp_message_class</name>
-	<version>@(#) $Id: smtp_message.php,v 1.33 2008/04/07 06:38:19 mlemos Exp $</version>
+	<version>@(#) $Id: smtp_message.php,v 1.34 2009/04/12 08:20:39 mlemos Exp $</version>
 	<copyright>Copyright © (C) Manuel Lemos 1999-2004</copyright>
 	<title>MIME E-mail message composing and sending via SMTP</title>
 	<author>Manuel Lemos</author>
@@ -58,6 +58,14 @@
 			<integervalue>465</integervalue>.<paragraphbreak />
 			SSL support requires at least PHP 4.3.0 with OpenSSL extension
 			enabled.<paragraphbreak />
+			<b>- Secure SMTP connections starting TLS after connections is established</b><paragraphbreak />
+			Some SMTP servers, like for instance Hotmail, require starting the
+			TLS protocol after the connection is already established to exchange
+			data securely. In that case it is necessary to set the
+			<variablelink>smtp_start_tls</variablelink> variable to
+			<booleanvalue>1</booleanvalue>.<paragraphbreak />
+			Starting TLS protocol on an already established connection requires
+			at least PHP 5.1.0 with OpenSSL extension enabled.<paragraphbreak />
 			<b>- Authentication</b><paragraphbreak />
 			Most servers only allow relaying messages sent by authorized
 			users. If the SMTP server that you want to use requires
@@ -203,6 +211,24 @@ class smtp_message_class extends email_message_class
 {/metadocument}
 */
 	var $smtp_ssl=0;
+
+/*
+{metadocument}
+	<variable>
+		<name>smtp_start_tls</name>
+		<type>BOOLEAN</type>
+		<value>0</value>
+		<documentation>
+			<purpose>Specify whether it should use secure connections starting
+				TLS protocol after connecting to the SMTP server.</purpose>
+			<usage>Certain e-mail services like Hotmail require starting TLS
+				protocol after the connection to the SMTP server is already
+				established.</usage>
+		</documentation>
+	</variable>
+{/metadocument}
+*/
+	var $smtp_start_tls=0;
 
 /*
 {metadocument}
@@ -457,7 +483,7 @@ class smtp_message_class extends email_message_class
 {metadocument}
 	<variable>
 		<name>mailer_delivery</name>
-		<value>smtp $Revision: 1.33 $</value>
+		<value>smtp $Revision: 1.34 $</value>
 		<documentation>
 			<purpose>Specify the text that is used to identify the mail
 				delivery class or sub-class. This text is appended to the
@@ -468,7 +494,7 @@ class smtp_message_class extends email_message_class
 	</variable>
 {/metadocument}
 */
-	var $mailer_delivery='smtp $Revision: 1.33 $';
+	var $mailer_delivery='smtp $Revision: 1.34 $';
 
 /*
 {metadocument}
@@ -529,6 +555,7 @@ class smtp_message_class extends email_message_class
 		$this->smtp->host_name=$this->smtp_host;
 		$this->smtp->host_port=$this->smtp_port;
 		$this->smtp->ssl=$this->smtp_ssl;
+		$this->smtp->start_tls=$this->smtp_start_tls;
 		$this->smtp->timeout=$this->timeout;
 		$this->smtp->debug=$this->smtp_debug;
 		$this->smtp->html_debug=$this->smtp_html_debug;
@@ -547,7 +574,7 @@ class smtp_message_class extends email_message_class
 			$this->delivery = 0;
 			return("");
 		}
-		return($this->ResetConnection($error));
+		return($this->ResetConnection($this->smtp->error));
 	}
 
 	Function SendMessageHeaders($headers)
@@ -629,8 +656,7 @@ class smtp_message_class extends email_message_class
 
 	Function SendMessageBody($data)
 	{
-		$this->smtp->PrepareData($data,$output);
-		return($this->smtp->SendData($output) ? "" : $this->ResetConnection($this->smtp->error));
+		return($this->smtp->SendData($this->smtp->PrepareData($data)) ? "" : $this->ResetConnection($this->smtp->error));
 	}
 
 	Function EndSendingMessage()

@@ -80,6 +80,7 @@ require_once('lib/classes/UserConfig.class.php');
 require_once('lib/classes/StudipNews.class.php');
 require_once('lib/classes/caching.php');
 require_once 'lib/classes/SessionDecoder.class.php';
+require_once 'lib/classes/StudipMail.class.php';
 
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";
@@ -121,65 +122,37 @@ umask(022);
 
 /*mail settings
 ----------------------------------------------------------------*/
+if($GLOBALS['MAIL_TRANSPORT']){
+	$mail_transporter_name = strtolower($GLOBALS['MAIL_TRANSPORT']) .'_message';
+} else {
+	$mail_transporter_name = 'smtp_message';
+}
+include 'vendor/email_message/email_message.php';
+include 'vendor/email_message/' . $mail_transporter_name . '.php';
+$mail_transporter_class = $mail_transporter_name . '_class';
+$mail_transporter = new $mail_transporter_class;
+if($mail_transporter_name == 'smtp_message'){
+	include 'vendor/email_message/smtp.php';
+	$mail_transporter->localhost = ($GLOBALS['MAIL_LOCALHOST'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_LOCALHOST'];
+	$mail_transporter->smtp_host_name = ($GLOBALS['MAIL_HOST_NAME'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_HOST_NAME'];
+}
+$mail_transporter->default_charset = 'WINDOWS-1252';
+$mail_transporter->SetBulkMail((int)$GLOBALS['MAIL_BULK_DELIVERY']);
+StudipMail::setDefaultTransporter($mail_transporter);
+unset($mail_transporter);
 
-// Step 155: Mail Attachments
-require_once('lib/phplib/email_message.inc');
-require_once('lib/phplib/smtp.inc');
-require_once('lib/phplib/smtp_message.inc');
-
-class studip_smtp_class extends smtp_message_class {
-
-	var $from = "";
-	var $env_from = "";
-	var $abuse = "";
-	var $url = "";
-	var $additional_headers = array();
-
+/**
+ * @deprecated
+ */
+class studip_smtp_class {
 	function studip_smtp_class() {
 		$this->localhost = ($GLOBALS['MAIL_LOCALHOST'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_LOCALHOST']; // name of the mail sending machine (the web server)
-		$this->smtp_host = ($GLOBALS['MAIL_HOST_NAME'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_HOST_NAME']; // which mailserver should we use? (must allow mail-relaying from this->localhost)
 		$this->host_name = ($GLOBALS['MAIL_HOST_NAME'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_HOST_NAME']; // which mailserver should we use? (must allow mail-relaying from this->localhost)
-		$this->charset = ($GLOBALS['MAIL_CHARSET'] == "") ? "ISO-8859-1" : $GLOBALS['MAIL_CHARSET']; //charset used in mail body
+		$this->charset = ($GLOBALS['MAIL_CHARSET'] == "") ? "WINDOWS-1252" : $GLOBALS['MAIL_CHARSET']; //charset used in mail body
 		$this->env_from = ($GLOBALS['MAIL_ENV_FROM'] == "") ? "wwwrun@".$this->localhost : $GLOBALS['MAIL_ENV_FROM']; // Envelope-From:
 		$this->from = ($GLOBALS['MAIL_FROM'] == "") ? "\"Stud.IP\" <" . $this->env_from . ">" : $this->QuotedPrintableEncode('"' . $GLOBALS['MAIL_FROM'] . '"',1) . ' <' . $this->env_from . '>'; // From: Mailheader
 		$this->abuse = ($GLOBALS['MAIL_ABUSE'] == "") ? "abuse@" . $this->localhost : $GLOBALS['MAIL_ABUSE']; // Reply-To: Mailheader
 		$this->url = $GLOBALS['ABSOLUTE_URI_STUDIP'];
-	}
-
-	function SendMessage($to_address, $to_name, $from_address, $from_name, $subject, $message, $attachments = false){
-		$reply_name=$from_name;
-		$reply_address=$from_address;
-		$from_address = $this->env_from;
-		$from_name = ($GLOBALS['MAIL_FROM'] == "") ? "Stud.IP" : $GLOBALS['MAIL_FROM'];
-		$error_delivery_name=$from_name;
-		$error_delivery_address=$from_address;
-
-		$this->ResetMessage();
-		$this->SetEncodedEmailHeader("To",$to_address,$to_name);
-		$this->SetEncodedEmailHeader("From",$from_address,$from_name);
-		$this->SetEncodedEmailHeader("Reply-To",$reply_address,$reply_name);
-		$this->SetHeader("Sender",$from_address);
-		$this->SetEncodedHeader("Subject",$subject);
-		$this->AddQuotedPrintableTextPart($message);
-
-		if (is_array($attachments) AND ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true)) {
-			require_once('lib/datei.inc.php');
-			foreach ($attachments as $key => $attachment) {
-				$email_attachment=array(
-					"FileName"=> get_upload_file_path($attachment["id"]),
-					"Name"=> $attachment["name"],
-					"Content-Type"=>"automatic/name",
-					"Disposition"=>"attachment");
-				$this->AddFilePart($email_attachment);
-			}
-		}
-
-		$error=$this->Send();
-
-		if (strlen($error) > 0)
-			return false;
-
-		return true;
 	}
 }
 
@@ -799,7 +772,6 @@ class Seminar_Register_Auth extends Seminar_Auth {
 			return false;
 		}			   // E-Mail syntaktisch nicht korrekt oder fehlend
 
-		$smtp=new studip_smtp_class;		     // Einstellungen fuer das Verschicken der Mails
 		$REMOTE_ADDR=$_SERVER["REMOTE_ADDR"];
 		$Zeit=date("H:i:s, d.m.Y",time());
 
@@ -808,12 +780,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 			return false;
 		} else {					  // Server ereichbar
 			if (!$validator->ValidateEmailBox($Email)) {    // aber user unbekannt. Mail an abuse!
-				$from = $smtp->env_from;
-				$to = $smtp->abuse;
-				$smtp->SendMessage(
-						$to, "",
-						$to, "",
-						"Register", "Emailbox unbekannt\n\nUser: $username\nEmail: $Email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
+				StudipMail::sendAbuseMessage("Register", "Emailbox unbekannt\n\nUser: $username\nEmail: $Email\n\nIP: $REMOTE_ADDR\nZeit: $Zeit\n");
 				$this->error_msg=$this->error_msg. _("Die angegebene E-Mail-Adresse ist nicht erreichbar, bitte überprüfen Sie Ihre Angaben!") . "<br>";
 				return false;
 			} else {
@@ -867,18 +834,17 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		$this->db->query("INSERT INTO user_info SET user_id='$uid', mkdate='".time()."', geschlecht='$geschlecht', title_front='$title_front', title_rear='$title_rear'");
 
 		// Abschicken der Bestaetigungsmail
-		$to=$Email;
+		$to = $Email;
 		$secret= md5("$uid:$this->magic");
-		$url = $smtp->url . "email_validation.php?secret=" . $secret;
-
+		$url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "email_validation.php?secret=" . $secret;
+		$mail = new StudipMail();
+		$abuse = $mail->getReplyToEmail();
 		// include language-specific subject and mailbody
 		include_once("locale/$_language_path/LC_MAILS/register_mail.inc.php");
-
-		$smtp->SendMessage(
-				$to, "",
-				$smtp->abuse, "",
-				$subject, $mailbody);
-
+		$mail->setSubject($subject)
+			->addRecipient($to)
+			->setBodyText($mailbody)
+			->send();
 		return $uid;
 	}
 }

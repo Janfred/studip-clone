@@ -16,6 +16,6 @@
 		."else (not even an administrator). This is to stop third parties\n"
 		."from posting messages in the system under your name!\n\n"
 		."Here takes you directly into the system:\n"
-		. $this->smtp->url . "\n\n"
+		. $GLOBALS['ABSOLUTE_URI_STUDIP'] . "\n\n"
 
 ?>
