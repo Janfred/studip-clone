@@ -76,9 +76,6 @@ if ($type == 0 || $type == 6) {
 		$skip_check = true;
 	}
 }
-elseif ($type == 7) {
-	$object_type = get_object_type($object_id);
-}
 
 // Rechtecheck
 //////////////
@@ -112,7 +109,7 @@ if (($type != 2) && ($type != 3) && ($type != 4) && (!$skip_check)) { //if type 
 			}
 		// File is attached to a Stud.IP-Message. Check if message belongs to current user.
 		} elseif ($type == 7) {
-			$db->query ("SELECT dokument_id FROM message_user LEFT JOIN message USING (message_id) LEFT JOIN dokumente ON (message_id=range_id) WHERE dokument_id = '".$file_id."' ");
+			$db->query("SELECT dokument_id FROM dokumente INNER JOIN message_user ON message_id=range_id AND message_user.user_id='{$user->id}' WHERE dokument_id = '".$file_id."' ");
 			if (!$db->next_record()){
 				$no_access = TRUE;
 			}
