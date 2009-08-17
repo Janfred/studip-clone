@@ -240,8 +240,8 @@ class messaging {
 		$mail = new StudipMail();
 		$mail->setSubject($title)
 			->addRecipient($to, $rec_fullname)
-			->setSenderEmail($reply_to)
-			->setSenderName($snd_fullname)
+			->setReplyToEmail($reply_to)
+			->setReplyToName($snd_fullname)
 			->setBodyText($mailmessage);
 		foreach($attachments as $a){
 			$mail->addStudipAttachment($a['id']);
