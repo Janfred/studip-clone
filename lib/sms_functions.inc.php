@@ -225,9 +225,11 @@ function print_snd_message($psm) {
 		if (is_array($psm["attachments"]) AND (sizeof($psm["attachments"]) > 0)) {
 			$content.= "<br>--<br>";
 			foreach ($psm["attachments"] as $key => $attachment) {
-				$content.= "\n<a href=\"" . GetDownloadLink($attachment["id"], $attachment["name"], 7) . "\">";
+				$content.= "\n<a href=\"" . GetDownloadLink($attachment["dokument_id"], $attachment["name"], 7) . "\">";
 				$content.= "&nbsp;". GetFileIcon(getFileExtension($attachment["name"]), true);
-				$content.= "&nbsp;" . $attachment["name"] . "</a><br>";
+				$content.= "&nbsp;" . htmlready($attachment["name"]);
+				$content.= "&nbsp;(" . ($attachment["filesize"] / 1024 / 1024 >= 1 ? round($attachment["filesize"] / 1024 / 1024) ." Mb" : round($attachment["filesize"] / 1024)." Kb");
+				$content.= ")</a><br>";
 			}
 		}
 		if ($x >= 2) { // if more than one receiver add appendix
@@ -369,9 +371,11 @@ function print_rec_message($prm) {
 		if (is_array($prm["attachments"]) AND (sizeof($prm["attachments"]) > 0)) {
 			$content.= "<br>--<br>";
 			foreach ($prm["attachments"] as $key => $attachment) {
-				$content.= "\n<a href=\"" . GetDownloadLink($attachment["id"], $attachment["name"], 7) . "\">";
+				$content.= "\n<a href=\"" . GetDownloadLink($attachment["dokument_id"], $attachment["name"], 7) . "\">";
 				$content.= "&nbsp;". GetFileIcon(getFileExtension($attachment["name"]), true);
-				$content.= "&nbsp;" . $attachment["name"] . "</a><br>";
+				$content.= "&nbsp;" . htmlready($attachment["name"]);
+				$content.= "&nbsp;(" . ($attachment["filesize"] / 1024 / 1024 >= 1 ? round($attachment["filesize"] / 1024 / 1024) ." Mb" : round($attachment["filesize"] / 1024)." Kb");
+				$content.= ")</a><br>";
 			}
 		}
 		if ($my_messaging_settings["confirm_reading"] != 1 && $prm['message_reading_confirmation'] == 1) { // yeah i'm interested in readingconfirmations and the message has a readingrequested
@@ -488,10 +492,7 @@ function print_messages() {
 			// StEP 155: Mail Attachments
 			$prm['attachments'] = array();
 			if ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true) {
-				$db2->query("SELECT dokument_id, filename, filesize FROM dokumente WHERE range_id = '".$prm['message_id']."'");
-				while ($db2->next_record()) {
-					$prm['attachments'][] = array("name" => $db2->f("filename"), "id" => $db2->f("dokument_id"), "size" => $db2->f("filesize"));
-				}
+				$prm['attachments'] = get_message_attachments($prm['message_id']);
 			}
 			ob_start();
 			print_rec_message($prm);
@@ -527,10 +528,7 @@ function print_messages() {
 			// StEP 155: Mail Attachments
 			$psm['attachments'] = array();
 			if ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true) {
-				$db2->query("SELECT dokument_id, filename, filesize FROM dokumente WHERE range_id = '".$psm['message_id']."'");
-				while ($db2->next_record()) {
-					$psm['attachments'][] = array("name" => $db2->f("filename"), "id" => $db2->f("dokument_id"), "size" => $db2->f("filesize"));
-				}
+				$psm['attachments'] = get_message_attachments($psm['message_id']);
 			}
 			ob_start();
 			print_snd_message($psm);
@@ -896,54 +894,53 @@ function show_chatselector() {
 
 }
 
-//StEP 155: Mail Attachments
 //Ausgabe des Formulars für Nachrichtenanhänge
 function show_attachmentform() {
-	global $UPLOAD_TYPES,$range_id,$SessSemName,$user,$folder_system_data, $attachments;
 
 	//erlaubte Dateigroesse aus Regelliste der Config.inc.php auslesen
-	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
-		$max_filesize=$UPLOAD_TYPES[$SessSemName["art_num"]]["file_sizes"][$sem_status];
-		}
-	else {
-		$max_filesize=$UPLOAD_TYPES["default"]["file_sizes"][$sem_status];
-		}
-
-	$c=1;
-
-	if (sizeof($attachments) > 0) {
-		$print.="\n<table border=0 cellpadding=0 cellspacing=2>";
+	$max_filesize = $GLOBALS['UPLOAD_TYPES']['attachments']["file_sizes"][$GLOBALS['perm']->get_perm()];
+	if( !($attachment_message_id = Request::option('attachment_message_id')) ){
+		$attachment_message_id = md5(uniqid('message', true));
+	}
+	$attachments = get_message_attachments($attachment_message_id, true);
+	if (count($attachments)) {
+		$print.="\n<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\">";
 		$print.="\n";
-		$print.="\n<tr><td class=\"steel1\" colspan=\"3\"><font size=-1><b>";
-		$print.="\n<br><b>" . _("Angehängte Dateien:") . "</b></td></tr>";
-		foreach ($attachments as $key => $attachment) {
-			//Icon auswaehlen
-//			$print.= "\n<br><a href=\"" . GetDownloadLink($attachment["id"], $attachment["name"], 7) . "\">"
-			$print.= "\n<tr valign=\"bottom\"><td class=\"steel1\">". GetFileIcon(getFileExtension($attachment["name"]), true);
-			$print.= "</td><td class=\"steel1\"><font size=-1>" . $attachment["name"] . "&nbsp;</font></td><td class=\"steel1\">";
-			$print.= "<input type=\"image\" name=\"remove_attachment_$key\" src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" border=\"0\" value=\""._("Dateianhang entfernen")."\" ".tooltip(_("entfernt den Dateianhang")).">";
+		$print.="\n<tr><td colspan=\"3\">";
+		$print.="\n<b>" . _("Angehängte Dateien:") . "</b></td></tr>";
+		foreach ($attachments as $attachment) {
+			$print.= "\n<tr><td>". GetFileIcon(getFileExtension($attachment["filename"]), true);
+			$print.= "</td><td>" . htmlReady($attachment["filename"]) ."&nbsp;(";
+			$print.= ($attachment["filesize"] / 1024 / 1024 >= 1 ? round($attachment["filesize"] / 1024 / 1024) ." Mb" : round($attachment["filesize"] / 1024)." Kb");
+			$print.= ")</td><td style=\"padding-left:5px\">";
+			$print.= "<input type=\"image\" name=\"remove_attachment_{$attachment['dokument_id']}\" src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("entfernt den Dateianhang")).">";
 			$print.= "</td></tr>";
 		}
 		$print.= "</table>";
-	}
-	else
+	} else {
 		$print.="\n<br>" . _("An diese Nachricht ist keine Datei angehängt.");
-	$print.="\n<br><br>";
-	$print.="\n<table width=\"90%\" border=0 cellpadding=0 cellspacing=0>";
-	$print.="\n";
-	$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>";
-	$print.= "<tr><td class=\"steel1\" colspan=2><font size=-1>" . _("Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen.") . " </font></td></tr>";
-	$print.= "\n<tr valign=\"middle\">";
-	$print.= "\n<td class=\"steel1\" colspan=1 align=\"left\"><font size=-1>";
-	$print.= "<INPUT NAME=\"the_file\" TYPE=\"file\" SIZE=\"30\"></td><td class=\"steel1\" colspan=1 align=\"left\">";
-	$print.= "\n<input type=\"image\" " . makeButton("hinzufuegen", "src") . " name=\"upload\" value=\"Hinzufügen\" align=\"absmiddle\" onClick=\"return upload_start();\" name=\"create\" border=\"0\">";
-	$print.= "\n<input type=\"hidden\" name=\"test\" value=\""."HALLO!"."\">";
-	$print.= "\n<input type=\"hidden\" name=\"attachments\" value=\"".urlencode(serialize($attachments))."\">";
-	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";
-	$print.= "</td></tr>";
-	$print.= "</table><br></center>";
-
+	}
+	$print.="\n<div style=\"margin-top:5px;\">";
+	$print.="\n" . _("Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen.");
+	$print.= "\n</div>";
+	$print.="\n<div>";
+	$print.="\n<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"$max_filesize\" />";
+	$print.= "<INPUT NAME=\"the_file\" TYPE=\"file\" SIZE=\"40\">";
+	$print.= '&nbsp;<input type="image" class="button" ' .makeButton('hinzufuegen', 'src'). ' onClick="return upload_start();" name="upload">';
+	$print.= "\n<input type=\"hidden\" name=\"attachment_message_id\" value=\"".htmlready($attachment_message_id)."\">";
+	$print.= "</div>";
+	
 	return $print;
+}
+
+function get_message_attachments($message_id, $provisional = false){
+	$db = DBManager::get();
+	if(!$provisional){
+		$st = $db->prepare("SELECT dokumente.* FROM message INNER JOIN dokumente ON message_id=range_id WHERE message_id=? ORDER BY dokumente.chdate");
+	} else {
+		$st = $db->prepare("SELECT * FROM dokumente WHERE range_id='provisional' AND description=? ORDER BY chdate");
+	}
+	return $st->execute(array($message_id)) ? $st->fetchAll(PDO::FETCH_ASSOC) : array();
 }
 
 ?>

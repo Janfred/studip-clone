@@ -42,8 +42,9 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once 'lib/functions.php';
 require_once ('lib/msg.inc.php');
 require_once ('lib/visual.inc.php');
-if ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true)
+if ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"]){
 	require_once ('lib/datei.inc.php');
+}
 require_once ('lib/include/messagingSettings.inc.php');
 require_once ('lib/messaging.inc.php');
 require_once ('lib/statusgruppe.inc.php');
@@ -81,20 +82,33 @@ if ($cmd == 'new') {
 // write a chat-invitation, so predefine the messagesubject
 if ($cmd == "write_chatinv" && !isset($messagesubject)) $messagesubject = _("Chateinladung");
 
-// StEP 155: Mail Attachments
 //wurde eine Datei hochgeladen?
-if (isset($attachments))
-	$attachments = unserialize(urldecode($attachments));
-else
-	$attachments = array();
-foreach ($attachments as $key => $attachment)
-	if (isset($_POST["remove_attachment_" . $key . "_x"]))
-		unset($attachments[$key]);
-if (isset($upload_x) AND ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true)) {
-	if (upload ($the_file)) {
-		insert_entry_db("provisional", 0, false);
-		$attachments[] = array("name" => $the_file_name, "id" => $dokument_id, "size" => $the_file_size);
+if($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"]){
+	if(Request::submitted('upload')){
+		if ($_FILES['the_file']['size'] > 0 && validate_upload($_FILES['the_file']['tmp_name'])) {
+			$document = new StudipDocument();
+			$document->setValue('range_id' , 'provisional');
+			$document->setValue('seminar_id' , $user->id);
+			$document->setValue('name' , Request::removeMagicQuotes(basename($_FILES['the_file']['name'])));
+			$document->setValue('filename' , $document->getValue('name'));
+			$document->setValue('filesize' , (int)$_FILES['the_file']['size']);
+			$document->setValue('autor_host' , $_SERVER['REMOTE_ADDR']);
+			$document->setValue('user_id' , $user->id);
+			$document->setValue('description', Request::option('attachment_message_id'));
+			if($document->store()
+			&& @move_uploaded_file($_FILES['the_file']['tmp_name'],get_upload_file_path($document->getId()))){
+				$msg = "msg§" . _("Die Datei wurde erfolgreich auf den Server &uuml;bertragen!");
+			} else {
+				$msg .= "error§" . _("Datei&uuml;bertragung gescheitert!");
+			}
+		}
 	}
+	foreach(get_message_attachments(Request::option('attachment_message_id'), true) as $document){
+			if(Request::submitted('remove_attachment_' . $document['dokument_id'])){
+				delete_document($document['dokument_id']);
+			}
+	}
+	
 }
 
 // where do we save the message?
@@ -139,6 +153,7 @@ if ($cmd_insert_x) {
 		if ($chat_id) {
 			$count = $msging->insert_chatinv($message, $sms_data["p_rec"], $chat_id);
 		} else {
+			$msging->provisonal_attachment_id = Request::option('attachment_message_id');
 			$count = $msging->insert_message($message, $sms_data["p_rec"], FALSE, $time, $tmp_message_id, FALSE, $signature, $messagesubject);
 		}
 	}

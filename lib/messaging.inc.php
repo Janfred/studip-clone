@@ -195,13 +195,11 @@ class messaging {
 
 	}
 
-	function sendingEmail($rec_uname, $snd_user_id, $message, $subject) {
+	function sendingEmail($rec_user_id, $snd_user_id, $message, $subject, $message_id) {
 
-		global $user, $attachments;
+		global $user;
 
-		if (!is_array($attachments))
-			$attachments = false;
-		$db4 = new DB_Seminar("SELECT user_id, Email FROM auth_user_md5 WHERE username = '$rec_uname' OR user_id = '$rec_uname';");
+		$db4 = new DB_Seminar("SELECT user_id, Email FROM auth_user_md5 WHERE user_id = '$rec_user_id';");
 		$db4->next_record();
 		$to = $db4->f("Email");
 		$rec_fullname = get_fullname($db4->f("user_id"));
@@ -243,8 +241,10 @@ class messaging {
 			->setReplyToEmail($reply_to)
 			->setReplyToName($snd_fullname)
 			->setBodyText($mailmessage);
-		foreach($attachments as $a){
-			$mail->addStudipAttachment($a['id']);
+		if($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"]){
+			foreach(get_message_attachments($message_id) as $attachment){
+				$mail->addStudipAttachment($attachment['dokument_id']);
+			}
 		}
 		$mail->send();
 
@@ -276,7 +276,7 @@ class messaging {
 
 	function insert_message($message, $rec_uname, $user_id='', $time='', $tmp_message_id='', $set_deleted='', $signature='', $subject='', $force_email='', $priority='normal') {
 
-		global $_fullname_sql, $user, $my_messaging_settings, $attachments;
+		global $_fullname_sql, $user, $my_messaging_settings;
 
 		$db = new DB_Seminar;
 		$db2 = new DB_Seminar;
@@ -343,12 +343,13 @@ class messaging {
 
 			}
 
-			// StEP 155: Mail Attachments
+			
 			// Setzen der Message-ID als Range_ID für angehängte Dateien
-			if (is_array($attachments) AND ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true))
-				foreach ($attachments as $key => $attachment) {
-					$db3->query("UPDATE dokumente SET range_id = '$tmp_message_id' WHERE dokument_id = '".$attachment["id"]."'");
+			if (isset($this->provisonal_attachment_id) && $GLOBALS["ENABLE_EMAIL_ATTACHMENTS"]){
+				foreach(get_message_attachments($this->provisonal_attachment_id, true) as $attachment){
+					$db3->query("UPDATE dokumente SET range_id = '$tmp_message_id', description='' WHERE dokument_id = '".$attachment["dokument_id"]."'");
 				}
+			}
 
 			// insert message
 			$db3->query("INSERT INTO message SET message_id = '".$tmp_message_id."', mkdate = '".$time."', message = '".$message."', autor_id = '".$snd_user_id."', subject = '".$subject."', reading_confirmation = '".$reading_confirmation."', priority ='".$priority."'");
@@ -395,7 +396,7 @@ class messaging {
 					// mail to original receiver
 					$mailstatus_original = $this->user_wants_email($rec_id[$x]);
 					if($mailstatus_original == 2 || ($mailstatus_original == 3 && $email_request == 1) || $force_email == TRUE) {
-						$this->sendingEmail($rec_id[$x], $snd_user_id, $message, $subject);
+						$this->sendingEmail($rec_id[$x], $snd_user_id, $message, $subject, $tmp_message_id);
 					}
 				}
 				//Benachrichtigung in alle Chaträume schicken
