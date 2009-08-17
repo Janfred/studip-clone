@@ -687,7 +687,7 @@ if ($extend == 'yes') {
     else $dview = array();
 }
 
-if (sizeof($dview) == 0) {
+if (!is_array($dview) || sizeof($dview) == 0) {
 	$struct = array (
 		"raum" => array("name" => _("Raum"), "width" => "10%"),
 		"sprechzeiten" => array("name" => _("Sprechzeiten"), "width" => "10%"),
