@@ -114,58 +114,57 @@ process_news_commands($institut_main_data);
 
 ?>
 
-<table width="100%" border=0 cellpadding=0 cellspacing=0>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td class="blank" valign="top">
-		<blockquote>
-	<br />
+		<div style="padding:0 1.5em 1.5em 1.5em">
+		<ul style="list-style-type:none;padding:0px;">
 	<?
-
 	$db->query ("SELECT a.*, b.Name AS fakultaet_name  FROM Institute a LEFT JOIN Institute b ON (b.Institut_id = a.fakultaets_id) WHERE a.Institut_id='$auswahl'");
 	$db->next_record();
 
 	if ($db->f("Strasse")) {
-		echo "<font size=\"-1\"><b>" . _("Straﬂe:") . " </b>"; echo htmlReady($db->f("Strasse")); echo"<br></font>";
+		echo "<li><b>" . _("Straﬂe:") . " </b>"; echo htmlReady($db->f("Strasse")); echo"</li>";
 	}
 
 	if ($db->f("Plz")) {
-		echo "<font size=\"-1\"><b>" . _("Ort:") . " </b>"; echo htmlReady($db->f("Plz")); echo"<br></font>";
+		echo "<li><b>" . _("Ort:") . " </b>"; echo htmlReady($db->f("Plz")); echo"</li>";
 	}
 
 	if ($db->f("telefon")) {
-		echo "<font size=\"-1\"><b>" . _("Tel.:") . " </b>"; echo htmlReady($db->f("telefon")); echo"<br></font>";
+		echo "<li><b>" . _("Tel.:") . " </b>"; echo htmlReady($db->f("telefon")); echo"</li>";
 	}
 
 	if ($db->f("fax")) {
-		echo "<font size=\"-1\"><b>" . _("Fax:") . " </b>"; echo htmlReady($db->f("fax")); echo"<br></font>";
+		echo "<li><b>" . _("Fax:") . " </b>"; echo htmlReady($db->f("fax")); echo"</li>";
 	}
 
 	if ($db->f("url")) {
-		echo "<font size=\"-1\"><b>" . _("Homepage:") . " </b>"; echo formatReady($db->f("url")); echo"<br></font>";
+		echo "<li><b>" . _("Homepage:") . " </b>"; echo formatReady($db->f("url")); echo"</li>";
 	}
 
 	if ($db->f("email")) {
-		echo "<font size=\"-1\"><b>" . _("E-Mail:") . " </b>"; echo formatReady($db->f("email")); echo"<br></font>";
+		echo "<li><b>" . _("E-Mail:") . " </b>"; echo formatReady($db->f("email")); echo"</li>";
 	}
 
 	if ($db->f("fakultaet_name")) {
-		echo "<font size=\"-1\"><b>" . _("Fakult&auml;t:") . " </b>"; echo htmlReady($db->f("fakultaet_name")); echo"<br></font>";
+		echo "<li><b>" . _("Fakult&auml;t:") . " </b>"; echo htmlReady($db->f("fakultaet_name")); echo"</li>";
 	}
 
 	$localEntries = DataFieldEntry::getDataFieldEntries($SessSemName[1]);
 	foreach ($localEntries as $entry) {
 		if ($entry->structure->accessAllowed($perm) && $entry->getValue()) {
-			echo "<font size=\"-1\"><b>" .htmlReady($entry->getName()) . ": </b>";
+			echo "<li><b>" .htmlReady($entry->getName()) . ": </b>";
 			echo $entry->getDisplayValue();
-			echo "<br>";
+			echo "</li>";
 		}
 	}
 
 ?>
-			<br />
-			</blockquote>
-		</td>
-		<td class="blank" align="right" style="padding:10px;">
+	</ul>
+	</div>
+	</td>
+		<td class="blank" align="right" valign="top" style="padding:10px;">
 			<?= InstituteAvatar::getAvatar($SessSemName[1])->getImageTag(Avatar::NORMAL) ?>
 		</td>
 		</tr>
