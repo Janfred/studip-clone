@@ -1795,7 +1795,7 @@ class Seminar {
 			$ret['all']['num_total'] = $admission_turnout - $count;
 			if($ret['all']['num_total'] < 0) $ret['all']['num_total'] = 0;
 		}
-		foreach($ret as $studiengang_id => $data){
+		if (is_array($ret)) foreach($ret as $studiengang_id => $data){
 			$ret[$studiengang_id]['num_occupied'] = 0;
 			$this->db->query("SELECT COUNT(user_id) FROM seminar_user WHERE seminar_id = '".$this->getId()."' AND admission_studiengang_id='$studiengang_id'");
 			$this->db->next_record();
@@ -1818,7 +1818,7 @@ class Seminar {
 			$free = $this->admission_studiengang[$studiengang_id]['num_total'] - $this->admission_studiengang[$studiengang_id]['num_occupied'];
 		} else {
 			$occupied = 0;
-			foreach($this->admission_studiengang as $st){
+			if (is_array($this->admission_studiengang)) foreach($this->admission_studiengang as $st){
 				$occupied += $st['num_occupied'];
 			}
 			$free = $this->admission_turnout - $occupied;
