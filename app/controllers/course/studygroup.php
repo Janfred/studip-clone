@@ -65,8 +65,11 @@ class Course_StudygroupController extends AuthenticatedController {
 		}
 
 		$this->studygroup = new Seminar( $id );
-		if (!preg_match('/^('.preg_quote($CANONICAL_RELATIVE_PATH_STUDIP,'/').')?([a-zA-Z0-9_-]+\.php)([a-zA-Z0-9_?&=-]*)$/', $send_from_search_page)) $send_from_search_page = '';
-		$this->send_from_search_page = $send_from_search_page;
+		if (!preg_match('/^('.preg_quote($GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP'],'/').')?([a-zA-Z0-9_-]+\.php)([a-zA-Z0-9_?&=-]*)$/', $_REQUEST['send_from_search_page'])) {
+			$this->send_from_search_page = '';
+		} else {
+			$this->send_from_search_page = $_REQUEST['send_from_search_page'];
+		}
 	}
 
 	function new_action()

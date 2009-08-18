@@ -81,7 +81,7 @@ if ( $SEM_CLASS[$SEM_TYPE[$sem->status]["class"]]["studygroup_mode"] ) {
 	if ($perm->have_studip_perm('autor', $sem_id)) {    // participants may see seminar_main
 		$link = UrlHelper::getUrl('seminar_main.php?auswahl='. $sem_id);
 	} else {   // all other get a special details-page
-		$link = UrlHelper::getUrl('dispatch.php/course/studygroup/details/'. $sem_id);
+		$link = UrlHelper::getUrl('dispatch.php/course/studygroup/details/'. $sem_id, array('send_from_search_page' => $send_from_search_page));
 	}
 	header('Location: '. $link);
 	die;
