@@ -175,7 +175,7 @@ $quarter_year = 60 * 60 * 24 * 90;
 							. htmlready($num_dozenten > 10 ? get_fullname($dozent['user_id'], 'no_title_short') : $dozent['fullname'])
 							. '</a>';
 	}
-	printf("<br><b>%s: </b>%s", get_title_for_status('dozent', $num_dozenten), implode(' ,', $show_dozenten));
+	printf("<br><b>%s: </b>%s", get_title_for_status('dozent', $num_dozenten), implode(', ', $show_dozenten));
 
 	?>
 		<br>
