@@ -85,7 +85,7 @@ $structure["_bild"] = array('topKat' => "bild", 'name' => _("Hochladen des persö
 $structure["_daten"] = array('topKat' => "daten", 'name' => _("Allgemein"), 'link' => URLHelper::getLink('edit_about.php?view=Daten'), 'active' => FALSE);
 
 $structure["lebenslauf"] = array('topKat' => 'daten', 'name' => _("Privat"), 'link' => URLHelper::getLink('edit_about.php?view=Lebenslauf'), 'active' => FALSE);
-if ($my_about->auth_user["perms"] != "dozent" && $my_about->auth_user["perms"] != "admin" && $my_about->auth_user["perms"] != "root") {
+if ( $my_about->auth_user["perms"] != "admin" && $my_about->auth_user["perms"] != "root") {
 	$structure["studium"] = array('topKat' => 'daten', 'name' => _("Studiendaten"), 'link' => URLHelper::getLink('edit_about.php?view=Studium'), 'active' => FALSE);
 }
 

@@ -403,12 +403,14 @@ $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
 				<?
 				// Anzeige der Institute an denen (hoffentlich) studiert wird:
 
+				if($db->f('perms') != 'dozent'){
 				$db3->query("SELECT Institute.* FROM user_inst LEFT JOIN Institute  USING (Institut_id) WHERE user_id = '$user_id' AND inst_perms = 'user'");
 				IF ($db3->num_rows()) {
 					echo "<br><b>&nbsp;" . _("Wo ich studiere:") . "&nbsp;&nbsp;</b><br>";
 					while ($db3->next_record()) {
 						echo "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"institut_main.php?auswahl=".$db3->f("Institut_id")."\">".htmlReady($db3->f("Name"))."</a><br>";
 					}
+				}
 				}
 
 				// Anzeige der Institute an denen gearbeitet wird

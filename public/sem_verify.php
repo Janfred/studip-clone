@@ -583,7 +583,7 @@ $db6=new DB_Seminar;
 		} else {//User ist noch nicht eingetragen in seminar_user
 			if ($perm->have_perm("autor")) { //User ist global 'Autor'also normaler User
 				if (($SemSecLevelWrite==3) && ($SemSecLevelRead==3)) {//Teilnehmerbeschraenkte Veranstaltung, naehere Uberpruefungen erforderlich
-					if ($auth->auth["perm"]=="dozent") { //Dozenten duerfen sich nicht fuer Anmeldebeschraenkte Veranstaltungen anmelden
+					/*if ($auth->auth["perm"]=="dozent") { //Dozenten duerfen sich nicht fuer Anmeldebeschraenkte Veranstaltungen anmelden
 						parse_msg ('info§'. sprintf(_("Sie d&uuml;rfen sich mit dem Status Dozent nicht f&uuml;r die teilnahmebeschr&auml;nkte Veranstaltung %s anmelden.<br />Wenn Sie dennoch eingetragen werden m&ouml;chten, wenden Sie sich bitte direkt an die Dozentin oder den Dozenten der Veranstaltung."), '<b>'.$SeminarName.'</b>'));
 						echo "<tr><td class=\"blank\" colspan=2><a href=\"index.php\">&nbsp;&nbsp; "._("Zur&uuml;ck zur Startseite")."</a>";
 						if ($send_from_search)
@@ -592,7 +592,7 @@ $db6=new DB_Seminar;
 						include ('lib/include/html_end.inc.php');
 						page_close();
 						die;
-						}
+						}*/
 					$db->query("SELECT studiengang_id FROM user_studiengang WHERE user_id = '$user->id' "); //Hat der Studie ueberhaupt Studiengaenge angegeben?
 					if (!$db->num_rows()) { //Es sind gar keine vorhanden! Hinweis wie man das eintragen kann
 						parse_msg ('info§' . sprintf(_("Die Veranstaltung %s ist teilnahmebeschr&auml;nkt. Um sich f&uuml;r teilnahmebeschr&auml;nkte Veranstaltungen eintragen zu k&ouml;nnen, m&uuml;ssen Sie einmalig Ihre Studieng&auml;nge angeben! <br> Bitte tragen Sie ihre Studieng&auml;nge auf ihrer %spers&ouml;nlichen Homepage%s ein!"), '<b>'.$SeminarName .'</b>', '<a href="edit_about.php?view=Studium#studiengaenge">','</a>'));

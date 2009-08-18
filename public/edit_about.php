@@ -828,7 +828,7 @@ if ($view == 'Studium') {
 	}
 
 	//Studiengänge die ich belegt habe
-	if (($my_about->auth_user['perms'] == 'autor' || $my_about->auth_user['perms'] == 'tutor')) { // nur für Autoren und Tutoren
+	if (($my_about->auth_user['perms'] == 'autor' || $my_about->auth_user['perms'] == 'tutor' || $my_about->auth_user['perms'] == 'dozent')) { // nur für Autoren und Tutoren und Dozenten
 		$allow_change_sg = (!StudipAuthAbstract::CheckField("studiengang_id", $my_about->auth_user['auth_plugin']) && ($GLOBALS['ALLOW_SELFASSIGN_STUDYCOURSE'] || $perm->have_perm('admin')))? TRUE : FALSE;
 
 		$cssSw->resetClass();
@@ -887,7 +887,7 @@ if ($view == 'Studium') {
 
 
 	//Institute, an denen studiert wird
-	if (($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor")) {
+	if (($my_about->auth_user["perms"]=="autor" || $my_about->auth_user["perms"]=="tutor" || $my_about->auth_user["perms"]=="dozent")) {
 		$allow_change_in = ($GLOBALS['ALLOW_SELFASSIGN_INSTITUTE'] || $perm->have_perm('admin'))? TRUE:FALSE;
 		$cssSw->resetClass();
 		$cssSw->switchClass();
