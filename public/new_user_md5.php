@@ -86,7 +86,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 				if(isset($expiration_date) && $expiration_date != ''){
 					$a = explode(".",stripslashes(trim($expiration_date)));
 					if(!($timestamp = @mktime(0,0,0,$a[1],$a[0],$a[2]))){
-						$UserManagement->msg .= "error§Das Ablaufdatum wurde in einem falschen Format angegeben§";
+						$UserManagement->msg .= "error§" . _("Das Ablaufdatum wurde in einem falschen Format angegeben.") . "§";
 						break;
 					}else
 						$uc->setValue($timestamp,$UserManagement->user_data['auth_user_md5.user_id'],"EXPIRATION_DATE");
@@ -111,12 +111,11 @@ if (check_ticket($_REQUEST['studipticket'])){
 								$wem = "Dozenten";
 							}
 							if($in != "" && $perms[0] == "admin"){
-								$msging = new messaging();
-								$db->query(sprintf("SELECT a.user_id,b.Vorname,b.Nachname,c.geschlecht FROM user_inst a INNER JOIN auth_user_md5 b ON a.user_id = b.user_id INNER JOIN user_info c ON a.user_id = c.user_id  WHERE a.Institut_id = '%s' AND a.inst_perms IN (%s) AND a.user_id != '%s' ",$_REQUEST['select_inst_id'],$in,$UserManagement->user_data['auth_user_md5.user_id']));
+								$db->query(sprintf("SELECT a.user_id,b.Vorname,b.Nachname,b.Email,c.geschlecht FROM user_inst a INNER JOIN auth_user_md5 b ON a.user_id = b.user_id INNER JOIN user_info c ON a.user_id = c.user_id  WHERE a.Institut_id = '%s' AND a.inst_perms IN (%s) AND a.user_id != '%s' ",$_REQUEST['select_inst_id'],$in,$UserManagement->user_data['auth_user_md5.user_id']));
 								while($db->next_record()){
 									$user_language = getUserLanguagePath($db->f('user_id'));
 									include("locale/$user_language/LC_MAILS/new_admin_mail.inc.php");
-									$msging->sendingEmail($db->f('user_id'),$auth->auth['uid'],$mailbody,$subject);
+									StudipMail::sendMessage($db->f('Email'), $subject, $mailbody);
 								}
 								$UserManagement->msg .= "msg§" . sprintf(_("Es wurden ingesamt %s Mails an die %s der Einrichtung \"%s\" geschickt."),$db->num_rows(),$wem,htmlReady($inst_name)) . "§";
 							}
@@ -182,7 +181,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 				if($timestamp = @mktime(0,0,0,$a[1],$a[0],$a[2])){
 					$uc->setValue($timestamp,$UserManagement->user_data['auth_user_md5.user_id'],"EXPIRATION_DATE");
 				}else{
-					$UserManagement->msg .= "error§Das Ablaufdatum wurde in einem falschen Format angegeben§";
+					$UserManagement->msg .= "error§" . _("Das Ablaufdatum wurde in einem falschen Format angegeben.") . "§";
 					break;
 				}
 			}
