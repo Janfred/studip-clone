@@ -1427,7 +1427,15 @@ if ($save_state_x) {
 							$skipped_termin_ids[$key2]=TRUE;
 					}
 				}
-				$close_request = TRUE;
+
+				// only close request, if number of booked entries matches number of bookable entries
+				$booked_entries = sizeof($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["selected_resources"]);
+				$bookable_entries = sizeof($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]['groups']);
+
+				if ($booked_entries == $bookable_entries ) {
+					$close_request = TRUE;
+				}
+
 				$semObj->store();
 			//normal metadate mode
 			} elseif (($semObj->getMetaDateType() == 1) || (isSchedule($semObj->getId(), FALSE))) {
@@ -1711,7 +1719,7 @@ if (($inc_request_x) || ($dec_request_x) || ($new_session_started) || ($marked_c
 		$all_semester = $semester->getAllSemesterData();
 
 		$reqObj = new RoomRequest($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["request_id"]);
-		$semObj =& Seminar::GetInstance($reqObj->getSeminarId());
+		$semObj =& Seminar::GetInstance($reqObj->getSeminarId(), true);
 		$multiOverlaps = new CheckMultipleOverlaps;
 		$semResAssign = new VeranstaltungResourcesAssign($semObj->getId());
 
