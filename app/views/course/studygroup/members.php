@@ -1,6 +1,6 @@
 <?
 if ($rechte) {
-    $text = _('Hier können Sie die Teilnehmer der Studiengruppen verwalten. Teilnehmer können je nach Status zu einem Moderator hoch oder runtergestuft werden und aus der Studiengruppe entlassen werden.');
+    $text = _('Hier können Sie die TeilnehmerInnen der Studiengruppen verwalten. TeilnehmerInnen können je nach Status zu einem Moderator hoch oder runtergestuft werden und aus der Studiengruppe entlassen werden.');
     $aktionen = array(
         'kategorie' => _("Aktionen"),
         'eintrag'   => array(
@@ -66,15 +66,15 @@ $infobox['content'] = array(
             <div class="blue_gradient" style="text-align: center"><?= _('Optionen') ?></div>
             <br>
             <? if (in_array($m, $tutors)) : ?>
-                &nbsp;<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$m['username'].'/promote/autor') ?>" alt="Nutzer runterstufen">
+                &nbsp;<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$m['username'].'/promote/autor') ?>" alt="NutzerIn runterstufen">
                     <?= makebutton('runterstufen') ?>
                 </a>
             <? else : ?>
-                &nbsp;<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$m['username'].'/promote/tutor') ?>" alt="Nutzer befördern">
+                &nbsp;<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$m['username'].'/promote/tutor') ?>" alt="NutzerIn befördern">
                     <?= makebutton('hochstufen') ?>
                 </a><br>
                 <br>
-                &nbsp;<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$m['username'].'/remove') ?>" alt="Nutzer runterstufen">
+                &nbsp;<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$m['username'].'/remove') ?>" alt="NutzerIn runterstufen">
                     <?= makebutton('rauswerfen') ?>
                 </a>
             <? endif ?>
@@ -86,15 +86,15 @@ $infobox['content'] = array(
             <div class="blue_gradient" style="text-align: center"><?= _('Optionen') ?></div>
             <br>
             <? if (in_array($m, $tutors)) : ?>
-                &nbsp;<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$m['username'].'/promote/autor') ?>" alt="Nutzer runterstufen">
+                &nbsp;<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$m['username'].'/promote/autor') ?>" alt="NutzerIn runterstufen">
                     <?= makebutton('runterstufen') ?>
                 </a>
             <? else : ?>
-                &nbsp;<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$m['username'].'/promote/tutor') ?>" alt="Nutzer befördern">
+                &nbsp;<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$m['username'].'/promote/tutor') ?>" alt="NutzerIn befördern">
                     <?= makebutton('hochstufen') ?>
                 </a><br>
                 <br>
-                &nbsp;<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$m['username'].'/remove') ?>" alt="Nutzer runterstufen">
+                &nbsp;<a href="<?= $controller->url_for('course/studygroup/edit_members/'.$sem_id.'/'.$m['username'].'/remove') ?>" alt="NutzerIn runterstufen">
                     <?= makebutton('rauswerfen') ?>
                 </a>
             <? endif ?>
@@ -106,9 +106,9 @@ $infobox['content'] = array(
     <a href="<?= URLHelper::getLink('about.php?username='.$m['username']) ?>">
         <?= htmlReady($m['fullname']) ?><br>
         <?  if (in_array($m, $moderators)) : ?>
-            <em><?= _("Gruppengründer") ?></em>
+            <em><?= _("GruppengründerIn") ?></em>
         <? elseif (in_array($m, $tutors)) : ?>
-            <em><?= _("Moderator") ?></em>
+            <em><?= _("ModeratorIn") ?></em>
         <? endif ?>
         </a>
     </div>
