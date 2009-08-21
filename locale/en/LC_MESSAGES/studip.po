@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: studip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-10 14:09+0200\n"
+"POT-Creation-Date: 2009-08-21 17:31+0200\n"
 "PO-Revision-Date: 2009-02-25 18:23+GMT\n"
 "Last-Translator: Stefan Suchi <suchi@data-quest.de>\n"
 "Language-Team: english <de@li.org>\n"
@@ -43,7 +43,7 @@ msgstr "Please enter first and/or surname."
 #: ../public/wap/login_form.php:53 ../public/wap/index.php:68
 #: ../public/edit_about.php:87 ../lib/include/links_about.inc.php:123
 #: ../lib/classes/HeaderController.class.php:297
-#: ../lib/phplib_local.inc.php:602 ../templates/loginform.php:62
+#: ../lib/phplib_local.inc.php:575 ../templates/loginform.php:62
 #: ../templates/index_nobody.php:19 ../templates/index_nobody.php:31
 msgid "Login"
 msgstr "Login"
@@ -89,7 +89,7 @@ msgstr "Appointments"
 #: ../lib/include/links_admin.inc.php:403
 #: ../lib/include/links_admin.inc.php:1220
 #: ../lib/include/links_about.inc.php:102
-#: ../lib/classes/ModulesNotification.class.php:51
+#: ../lib/classes/ModulesNotification.class.php:50
 #: ../lib/extern/modules/ExternModulePersondetails.class.php:85
 #: ../lib/extern/elements/main/ExternElementMainNews.class.php:80
 #: ../lib/extern/extern_config.inc.php:72 ../lib/showNews.inc.php:123
@@ -99,7 +99,7 @@ msgid "News"
 msgstr "News"
 
 #: ../public/wap/login_index.php:89 ../public/wap/events.php:54
-#: ../public/about.php:668 ../public/admin_studiengang.php:266
+#: ../public/about.php:669 ../public/admin_studiengang.php:266
 #: ../lib/include/links_openobject.inc.php:178
 #: ../lib/include/links_admin.inc.php:161
 #: ../lib/include/links_admin.inc.php:316
@@ -182,15 +182,15 @@ msgid "Suche"
 msgstr "Search"
 
 #: ../public/wap/directory.php:58 ../public/edit_about.php:732
-#: ../public/new_user_md5.php:401 ../public/new_user_md5.php:539
-#: ../public/new_user_md5.php:830 ../templates/registerform.php:188
+#: ../public/new_user_md5.php:400 ../public/new_user_md5.php:538
+#: ../public/new_user_md5.php:829 ../templates/registerform.php:188
 #: ../templates/browse.php:71
 msgid "Nachname:"
 msgstr "Surname:"
 
 #: ../public/wap/directory.php:62 ../public/edit_about.php:726
-#: ../public/new_user_md5.php:397 ../public/new_user_md5.php:527
-#: ../public/new_user_md5.php:826 ../templates/registerform.php:183
+#: ../public/new_user_md5.php:396 ../public/new_user_md5.php:526
+#: ../public/new_user_md5.php:825 ../templates/registerform.php:183
 #: ../templates/browse.php:62
 msgid "Vorname:"
 msgstr "First name:"
@@ -280,7 +280,7 @@ msgid "Bitte den Zeitraum einschränken."
 msgstr "Please restrict time period."
 
 #: ../public/wap/show_institute.php:135 ../public/wap/show_institute.php:147
-#: ../public/institut_main.php:140 ../public/about.php:438
+#: ../public/institut_main.php:139 ../public/about.php:439
 #: ../lib/extern/elements/ExternElementContact.class.php:69
 #: ../lib/extern/elements/ExternElementRangeTreeLevelContent.class.php:68
 #: ../templates/statusgruppen/institute_modify_edit_about.php:77
@@ -288,7 +288,7 @@ msgid "Fax:"
 msgstr "Fax:"
 
 #: ../public/wap/show_institute.php:165 ../public/mein_stundenplan.php:1015
-#: ../public/about.php:432
+#: ../public/about.php:433
 #: ../lib/extern/elements/ExternElementContact.class.php:69
 #: ../lib/calendar/views/edit.inc.php:231 ../lib/show_dates.inc.php:383
 #: ../lib/show_dates.inc.php:627
@@ -599,18 +599,18 @@ msgstr "Edit campus media"
 
 #: ../public/plugins_packages/data-quest/IWFCampusmedienPlugin/classes/IWFCampusmedienViewDozent.class.php:352
 #: ../public/folder.php:159 ../lib/raumzeit/Issue.class.php:152
-#: ../lib/datei.inc.php:1387
+#: ../lib/datei.inc.php:1384
 msgid "Ohne Titel"
 msgstr "Without title "
 
 #: ../public/plugins_packages/data-quest/IWFCampusmedienPlugin/classes/IWFCampusmedienViewDozent.class.php:364
-#: ../lib/datei.inc.php:1399
+#: ../lib/datei.inc.php:1396
 #, c-format
 msgid "Sitzung am: %s"
 msgstr "Meeting on: %s"
 
 #: ../public/plugins_packages/data-quest/IWFCampusmedienPlugin/classes/IWFCampusmedienViewDozent.class.php:366
-#: ../lib/datei.inc.php:1402
+#: ../lib/datei.inc.php:1399
 msgid ", ohne Titel"
 msgstr ", no title "
 
@@ -978,8 +978,8 @@ msgstr "Access number"
 
 #: ../public/plugins_packages/data-quest/IWFCampusmedienPlugin/templates/IWFCampusmedien_dozent_template.php:337
 #: ../public/plugins_packages/data-quest/IWFCampusmedienPlugin/templates/IWFCampusmedien_autor_template.php:109
-#: ../public/edit_about.php:765 ../public/new_user_md5.php:405
-#: ../public/new_user_md5.php:566 ../public/admin_sem_tree.php:161
+#: ../public/edit_about.php:765 ../public/new_user_md5.php:404
+#: ../public/new_user_md5.php:565 ../public/admin_sem_tree.php:161
 #: ../public/admin_literatur_overview.php:402 ../public/lit_search.php:240
 #: ../public/admin_seminare_assi.php:4244
 #: ../public/lit_overview_print_view.php:100
@@ -1124,7 +1124,7 @@ msgstr "Visibility of the list:"
 #: ../public/plugins_packages/data-quest/IWFCampusmedienPlugin/templates/IWFCampusmedien_dozent_template.php:427
 #: ../public/eval_config.php:161
 #: ../lib/classes/StudipLitListViewAdmin.class.php:511
-#: ../lib/classes/AdminNewsController.class.php:312 ../lib/datei.inc.php:1254
+#: ../lib/classes/AdminNewsController.class.php:312 ../lib/datei.inc.php:1251
 msgid "Ja"
 msgstr "Yes"
 
@@ -1134,7 +1134,7 @@ msgstr "Yes"
 #: ../lib/classes/StudipLitListViewAdmin.class.php:513
 #: ../lib/classes/AdminNewsController.class.php:197
 #: ../lib/classes/AdminNewsController.class.php:314
-#: ../lib/classes/StudipLitSearch.class.php:60 ../lib/datei.inc.php:1255
+#: ../lib/classes/StudipLitSearch.class.php:60 ../lib/datei.inc.php:1252
 msgid "Nein"
 msgstr "No"
 
@@ -1174,7 +1174,7 @@ msgid "Anmerkung speichern"
 msgstr "Save remarks"
 
 #: ../public/plugins_packages/data-quest/IWFCampusmedienPlugin/templates/IWFCampusmedien_dozent_template.php:480
-#: ../lib/datei.inc.php:1524 ../lib/datei.inc.php:1718
+#: ../lib/datei.inc.php:1521 ../lib/datei.inc.php:1715
 #: ../templates/loginform.php:65 ../templates/request_password.php:41
 msgid "Abbrechen"
 msgstr "Cancel "
@@ -1229,15 +1229,15 @@ msgstr "No media has been added to the list."
 #: ../public/sem_verify.php:482 ../public/sem_verify.php:501
 #: ../public/sem_verify.php:532 ../public/sem_verify.php:541
 #: ../public/sem_verify.php:557 ../public/sem_verify.php:566
-#: ../public/sem_verify.php:577 ../public/sem_verify.php:590
-#: ../public/sem_verify.php:601 ../public/sem_verify.php:612
-#: ../public/sem_verify.php:628 ../public/sem_verify.php:678
-#: ../public/sem_verify.php:692 ../public/sem_verify.php:715
-#: ../public/sem_verify.php:732 ../public/sem_verify.php:746
-#: ../public/sem_verify.php:764 ../public/sem_verify.php:781
-#: ../public/sem_verify.php:806 ../public/sem_verify.php:852
-#: ../public/sem_verify.php:868 ../public/sem_verify.php:895
-#: ../public/sem_verify.php:909 ../public/details.php:147
+#: ../public/sem_verify.php:577 ../public/sem_verify.php:601
+#: ../public/sem_verify.php:612 ../public/sem_verify.php:628
+#: ../public/sem_verify.php:678 ../public/sem_verify.php:692
+#: ../public/sem_verify.php:715 ../public/sem_verify.php:732
+#: ../public/sem_verify.php:746 ../public/sem_verify.php:764
+#: ../public/sem_verify.php:781 ../public/sem_verify.php:806
+#: ../public/sem_verify.php:852 ../public/sem_verify.php:868
+#: ../public/sem_verify.php:895 ../public/sem_verify.php:909
+#: ../public/details.php:147
 msgid "Zur&uuml;ck zur letzten Auswahl"
 msgstr "Back to the last selection"
 
@@ -1486,7 +1486,7 @@ msgstr "Responsible:"
 #: ../public/inst_admin.php:775 ../public/inst_admin.php:807
 #: ../public/inst_admin.php:860 ../public/admin_elearning_interface.php:141
 #: ../public/admin_elearning_interface.php:151 ../public/my_archiv.php:93
-#: ../public/new_user_md5.php:895 ../public/meine_seminare.php:1002
+#: ../public/new_user_md5.php:894 ../public/meine_seminare.php:1002
 #: ../public/show_admission.php:162 ../public/show_admission.php:266
 #: ../lib/include/links_admin.inc.php:1003
 #: ../lib/include/admin_lock_adjust.inc.php:120
@@ -1563,8 +1563,8 @@ msgstr "is still hidden"
 msgid "Nr."
 msgstr "No."
 
-#: ../public/admin_visibility.php:117 ../public/new_user_md5.php:393
-#: ../public/new_user_md5.php:894 ../public/admin_datafields.php:216
+#: ../public/admin_visibility.php:117 ../public/new_user_md5.php:392
+#: ../public/new_user_md5.php:893 ../public/admin_datafields.php:216
 #: ../public/admin_datafields.php:447 ../public/admin_datafields.php:683
 #: ../public/admin_datafields.php:922 ../public/admin_datafields.php:1166
 #: ../public/admin_datafields.php:1408 ../lib/include/links_admin.inc.php:385
@@ -2036,7 +2036,7 @@ msgstr ""
 "to work with this entry, you can provide yourselves apersonal copy."
 
 #: ../public/admin_lit_element.php:291 ../public/lit_search.php:305
-#: ../public/about.php:564
+#: ../public/about.php:565
 msgid "Literaturlisten bearbeiten"
 msgstr "Edit literature lists"
 
@@ -2050,16 +2050,16 @@ msgstr "Search literature "
 msgid "Merkliste:"
 msgstr "Clipboard:"
 
-#: ../public/sms_box.php:74 ../public/sms_send.php:381
+#: ../public/sms_box.php:74 ../public/sms_send.php:396
 msgid "Systeminterne Nachrichten"
 msgstr "Internal system messages"
 
-#: ../public/sms_box.php:126 ../lib/sms_functions.inc.php:391
+#: ../public/sms_box.php:126 ../lib/sms_functions.inc.php:395
 #, c-format
 msgid "Lesebestätigung von %s"
 msgstr "achnowledgement of reading of %s"
 
-#: ../public/sms_box.php:127 ../lib/sms_functions.inc.php:392
+#: ../public/sms_box.php:127 ../lib/sms_functions.inc.php:396
 #, c-format
 msgid "Ihre Nachricht an %s mit dem Betreff: %s vom %s wurde gelesen."
 msgstr "Your message to %s with the subject: %s has been read by %s."
@@ -2131,7 +2131,7 @@ msgstr "in your inbox"
 msgid "gesendete systeminterne Nachrichten anzeigen"
 msgstr "Show sent internal system messages"
 
-#: ../public/sms_box.php:258 ../lib/sms_functions.inc.php:825
+#: ../public/sms_box.php:258 ../lib/sms_functions.inc.php:823
 msgid "Postausgang"
 msgstr "Post outbox"
 
@@ -2314,7 +2314,7 @@ msgstr "Customise the forum settings."
 #: ../lib/include/links_openobject.inc.php:97
 #: ../lib/include/links_openobject.inc.php:123
 #: ../lib/include/links_about.inc.php:108
-#: ../lib/classes/ModulesNotification.class.php:60
+#: ../lib/classes/ModulesNotification.class.php:59
 msgid "Forum"
 msgstr "Forum"
 
@@ -2394,30 +2394,30 @@ msgstr "%s posting(s) deleted."
 msgid "%s Posting(s) verschoben."
 msgstr "%s posting(s) moved."
 
-#: ../public/sendfile.php:128
+#: ../public/sendfile.php:125
 #, c-format
 msgid "%sZur&uuml;ck%s zum Archiv"
 msgstr "%sBack%s to archive"
 
-#: ../public/sendfile.php:130 ../public/sendfile.php:334
+#: ../public/sendfile.php:127 ../public/sendfile.php:331
 #, c-format
 msgid "%sZur&uuml;ck%s zum Downloadbereich"
 msgstr "%sBack%s to download area"
 
-#: ../public/sendfile.php:136
+#: ../public/sendfile.php:133
 msgid "Sie haben keine Zugriffsberechtigung f&uuml;r diesen Download!"
 msgstr "You don't have any access authorisation for this download!"
 
-#: ../public/sendfile.php:136 ../public/sendfile.php:189
-#: ../public/sendfile.php:335
+#: ../public/sendfile.php:133 ../public/sendfile.php:186
+#: ../public/sendfile.php:332
 msgid "Download nicht m&ouml;glich"
 msgstr "Download not possible"
 
-#: ../public/sendfile.php:189
+#: ../public/sendfile.php:186
 msgid "Fehler beim Erstellen des Zip-Archivs!"
 msgstr "Error while creating zip archive!"
 
-#: ../public/sendfile.php:335
+#: ../public/sendfile.php:332
 msgid ""
 "Diese Datei wird von einem externen Server geladen und ist dort momentan "
 "nicht erreichbar!"
@@ -2456,35 +2456,35 @@ msgstr "%s wrote on %s :"
 
 #: ../public/user_activities.php:79
 #: ../lib/extern/elements/main/ExternElementMainDownload.class.php:79
-#: ../lib/extern/extern_config.inc.php:75 ../lib/datei.inc.php:1666
+#: ../lib/extern/extern_config.inc.php:75 ../lib/datei.inc.php:1663
 msgid "Download"
 msgstr "Download"
 
-#: ../public/user_activities.php:79 ../lib/datei.inc.php:1666
+#: ../public/user_activities.php:79 ../lib/datei.inc.php:1663
 msgid "Downloads"
 msgstr "Downloads"
 
-#: ../public/user_activities.php:83 ../lib/datei.inc.php:1689
+#: ../public/user_activities.php:83 ../lib/datei.inc.php:1686
 msgid "Diese Datei ist urheberrechtlich geschützt!"
 msgstr "This file is copyright protected!"
 
-#: ../public/user_activities.php:84 ../lib/datei.inc.php:1691
+#: ../public/user_activities.php:84 ../lib/datei.inc.php:1688
 msgid "Diese Datei wird von einem externen Server geladen!"
 msgstr "This file is loaded from an external server!"
 
 #: ../public/user_activities.php:92 ../public/admin_config.php:212
-#: ../lib/datei.inc.php:1532 ../lib/datei.inc.php:1735
+#: ../lib/datei.inc.php:1529 ../lib/datei.inc.php:1732
 #: ../lib/show_dates.inc.php:288 ../lib/show_dates.inc.php:444
 #: ../lib/show_dates.inc.php:611
 msgid "Keine Beschreibung vorhanden"
 msgstr "No description available"
 
-#: ../public/user_activities.php:93 ../lib/datei.inc.php:1737
+#: ../public/user_activities.php:93 ../lib/datei.inc.php:1734
 #, c-format
 msgid "<b>Dateigr&ouml;&szlig;e:</b> %s kB"
 msgstr "<b>File size:</b> %s kB"
 
-#: ../public/user_activities.php:94 ../lib/datei.inc.php:1738
+#: ../public/user_activities.php:94 ../lib/datei.inc.php:1735
 #, c-format
 msgid "<b>Dateiname:</b> %s "
 msgstr "<b>File name:</b> %s"
@@ -2829,7 +2829,7 @@ msgstr "Address book"
 msgid "Stundenplan"
 msgstr "Time table"
 
-#: ../public/index.php:99 ../public/new_user_md5.php:752
+#: ../public/index.php:99 ../public/new_user_md5.php:751
 msgid "pers&ouml;nliche Homepage"
 msgstr "Personal homepage"
 
@@ -2929,7 +2929,7 @@ msgstr ""
 "in order to use Stud.IP functions such as subscribing to courses.<br>In case "
 "of problems please contact: %s"
 
-#: ../public/index.php:343 ../public/about.php:617
+#: ../public/index.php:343 ../public/about.php:618
 msgid "Administration"
 msgstr "Administration"
 
@@ -3024,7 +3024,7 @@ msgid "Geben Sie einen Suchbegriff ein, um weitere Bereiche zu finden!"
 msgstr "Enter a search keyword to find other areas!"
 
 #: ../public/admin_news.php:182 ../public/admin_config.php:152
-#: ../public/new_user_md5.php:857 ../public/archiv.php:558
+#: ../public/new_user_md5.php:856 ../public/archiv.php:558
 #: ../public/institut_browse.php:110 ../public/admin_seminare_assi.php:2557
 #: ../public/admin_seminare_assi.php:2662
 #: ../public/admin_seminare_assi.php:3337 ../public/admin_seminare1.php:1244
@@ -3155,8 +3155,8 @@ msgstr "Heading:"
 msgid "Ihr Name:"
 msgstr "Your name:"
 
-#: ../public/write_topic.php:121 ../public/new_user_md5.php:647
-#: ../public/new_user_md5.php:931 ../public/admin_literatur_overview.php:430
+#: ../public/write_topic.php:121 ../public/new_user_md5.php:646
+#: ../public/new_user_md5.php:930 ../public/admin_literatur_overview.php:430
 #: ../public/admin_seminare1.php:1468 ../public/admin_seminare1.php:1471
 #: ../public/teilnehmer.php:1203 ../public/lit_overview_print_view.php:120
 #: ../lib/forum.inc.php:133 ../lib/user_visible.inc.php:155
@@ -3390,7 +3390,7 @@ msgstr "You haven't selected any course to archive."
 #: ../public/dates.php:70 ../lib/include/links_openobject.inc.php:133
 #: ../lib/include/links_admin.inc.php:364
 #: ../lib/include/links_admin.inc.php:1193
-#: ../lib/classes/ModulesNotification.class.php:62 ../lib/archiv.inc.php:240
+#: ../lib/classes/ModulesNotification.class.php:61 ../lib/archiv.inc.php:240
 #, c-format
 msgid "Ablaufplan"
 msgstr "Schedule"
@@ -3589,7 +3589,7 @@ msgstr "No user found."
 msgid "Geben Sie zur Suche den Vor-, Nach- oder Usernamen ein."
 msgstr "To search, enter the first name, surname or username."
 
-#: ../public/admin_config.php:198 ../public/new_user_md5.php:694
+#: ../public/admin_config.php:198 ../public/new_user_md5.php:693
 #: ../public/admin_sem_tree.php:170 ../lib/classes/StmBrowse.class.php:165
 #: ../lib/classes/SemBrowse.class.php:319
 msgid "Kommentar:"
@@ -3647,7 +3647,7 @@ msgstr "Duration"
 #: ../public/raumzeit.php:236 ../public/raumzeit.php:264
 #: ../public/admin_sem_tree.php:218 ../public/admin_banner_ads.php:108
 #: ../public/admin_seminare_assi.php:2293
-#: ../public/admin_seminare_assi.php:2295 ../public/about.php:661
+#: ../public/admin_seminare_assi.php:2295 ../public/about.php:662
 #: ../lib/classes/StudipSemTreeView.class.php:190
 #: ../lib/classes/SemBrowse.class.php:466
 #: ../lib/classes/SemBrowse.class.php:654
@@ -3816,7 +3816,7 @@ msgstr "Incorrect entry in field <em>%s</em>: %s (entry wasn't saved)"
 msgid "Ihre Sichtbarkeit wurde geändert."
 msgstr "Your visibility has been changed."
 
-#: ../public/edit_about.php:332 ../lib/classes/UserManagement.class.php:811
+#: ../public/edit_about.php:332 ../lib/classes/UserManagement.class.php:802
 msgid "Bild gel&ouml;scht."
 msgstr "Picture deleted."
 
@@ -4022,16 +4022,16 @@ msgstr "Repeat password:"
 
 #: ../public/edit_about.php:726 ../public/edit_about.php:760
 #: ../public/admin_institut.php:373 ../public/admin_aux_adjust.php:113
-#: ../lib/resources/views/ShowObject.class.php:82 ../lib/datei.inc.php:712
-#: ../lib/datei.inc.php:1259
+#: ../lib/resources/views/ShowObject.class.php:82 ../lib/datei.inc.php:709
+#: ../lib/datei.inc.php:1256
 #: ../templates/resources/show_properties_forms.php:9
 msgid "Name:"
 msgstr "Name:"
 
 #: ../public/edit_about.php:742 ../public/edit_about.php:744
-#: ../public/edit_about.php:762 ../public/new_user_md5.php:432
-#: ../public/new_user_md5.php:629 ../public/new_user_md5.php:828
-#: ../public/institut_main.php:148 ../templates/request_password.php:32
+#: ../public/edit_about.php:762 ../public/new_user_md5.php:431
+#: ../public/new_user_md5.php:628 ../public/new_user_md5.php:827
+#: ../public/institut_main.php:147 ../templates/request_password.php:32
 #: ../templates/registerform.php:198
 msgid "E-Mail:"
 msgstr "E-mail:"
@@ -4044,25 +4044,25 @@ msgstr "Repeat e-mail:"
 msgid "Adminzugriff hier nicht möglich!"
 msgstr "Administrative access not possible here!"
 
-#: ../public/edit_about.php:782 ../public/new_user_md5.php:416
-#: ../public/new_user_md5.php:590 ../templates/registerform.php:168
+#: ../public/edit_about.php:782 ../public/new_user_md5.php:415
+#: ../public/new_user_md5.php:589 ../templates/registerform.php:168
 msgid "Titel nachgest.:"
 msgstr "Second title:"
 
-#: ../public/edit_about.php:799 ../public/new_user_md5.php:427
-#: ../public/new_user_md5.php:614 ../templates/registerform.php:193
+#: ../public/edit_about.php:799 ../public/new_user_md5.php:426
+#: ../public/new_user_md5.php:613 ../templates/registerform.php:193
 msgid "Geschlecht:"
 msgstr "Gender:"
 
 #: ../public/edit_about.php:801 ../public/edit_about.php:803
-#: ../public/new_user_md5.php:428 ../public/new_user_md5.php:618
-#: ../public/new_user_md5.php:621 ../templates/registerform.php:194
+#: ../public/new_user_md5.php:427 ../public/new_user_md5.php:617
+#: ../public/new_user_md5.php:620 ../templates/registerform.php:194
 msgid "m&auml;nnlich"
 msgstr "male"
 
 #: ../public/edit_about.php:801 ../public/edit_about.php:807
-#: ../public/new_user_md5.php:429 ../public/new_user_md5.php:618
-#: ../public/new_user_md5.php:622
+#: ../public/new_user_md5.php:428 ../public/new_user_md5.php:617
+#: ../public/new_user_md5.php:621
 #: ../lib/export/export_studipdata_func.inc.php:809
 #: ../templates/registerform.php:194
 msgid "weiblich"
@@ -4204,7 +4204,7 @@ msgstr ""
 "The information on your user domains are administered by the system and "
 "therefore cannot be changed by yourself."
 
-#: ../public/edit_about.php:1106 ../public/about.php:359
+#: ../public/edit_about.php:1106 ../public/about.php:358
 msgid "Telefon (privat):"
 msgstr "Home telephone number: "
 
@@ -4216,11 +4216,11 @@ msgstr "Fixed line network"
 msgid "Mobiltelefon"
 msgstr "Mobile phone"
 
-#: ../public/edit_about.php:1127 ../public/about.php:385
+#: ../public/edit_about.php:1127 ../public/about.php:384
 msgid "Adresse (privat):"
 msgstr "Home address:"
 
-#: ../public/edit_about.php:1136 ../public/about.php:372
+#: ../public/edit_about.php:1136 ../public/about.php:371
 msgid "Skype:"
 msgstr "Skype:"
 
@@ -4237,7 +4237,7 @@ msgid "Motto:"
 msgstr "Motto:"
 
 #: ../public/edit_about.php:1152 ../public/admin_institut.php:417
-#: ../public/institut_main.php:144 ../public/about.php:391
+#: ../public/institut_main.php:143 ../public/about.php:390
 #: ../lib/extern/elements/ExternElementContact.class.php:70
 #: ../lib/extern/elements/ExternElementRangeTreeLevelContent.class.php:68
 msgid "Homepage:"
@@ -4538,7 +4538,7 @@ msgstr "Office hours"
 msgid "Telefon"
 msgstr "Telephone"
 
-#: ../public/inst_admin.php:695 ../public/new_user_md5.php:898
+#: ../public/inst_admin.php:695 ../public/new_user_md5.php:897
 #: ../lib/contact.inc.php:282
 msgid "E-Mail"
 msgstr "E-mail"
@@ -4897,7 +4897,7 @@ msgid "%s Postings aus dem Forum der Einrichtung gel&ouml;scht."
 msgstr "%s postings from the institute's forum have been deleted."
 
 #: ../public/admin_institut.php:280
-#: ../lib/classes/UserManagement.class.php:669
+#: ../lib/classes/UserManagement.class.php:660
 #, c-format
 msgid "%s Dokumente gel&ouml;scht."
 msgstr "%s documents have been deleted."
@@ -4921,7 +4921,7 @@ msgid "Bitte wählen Sie über den Reiter %s eine andere Einrichtung aus."
 msgstr "With the key symbol %s please select another institute."
 
 #: ../public/admin_institut.php:374 ../public/archiv.php:499
-#: ../public/institut_main.php:152
+#: ../public/institut_main.php:151
 msgid "Fakult&auml;t:"
 msgstr "Faculty:"
 
@@ -4945,7 +4945,7 @@ msgstr "Description:"
 msgid "Strasse:"
 msgstr "Street:"
 
-#: ../public/admin_institut.php:413 ../public/institut_main.php:132
+#: ../public/admin_institut.php:413 ../public/institut_main.php:131
 #: ../lib/classes/Seminar.class.php:217 ../lib/classes/Seminar.class.php:252
 #: ../lib/extern/elements/main/ExternElementMainLecturedetails.class.php:70
 #: ../lib/extern/elements/ExternElementRangeTreeLevelContent.class.php:67
@@ -5133,7 +5133,7 @@ msgstr "My categories"
 msgid "Kontakt löschen"
 msgstr "Delete contact"
 
-#: ../public/contact.php:277 ../public/about.php:315
+#: ../public/contact.php:277 ../public/about.php:314
 msgid "als vCard exportieren"
 msgstr "Export as vCard"
 
@@ -5379,16 +5379,16 @@ msgstr ""
 "And you must copy the complete link from the confirmation mail <br>into the "
 "line <b>Location</b> or <b>URL</b> of your browser."
 
-#: ../public/email_validation.php:93
+#: ../public/email_validation.php:87
 #, fuzzy
 msgid "Fehler! Bitte wenden Sie sich an den Systemadministrator."
 msgstr "This user is blocked! Please contact an administrator."
 
-#: ../public/email_validation.php:95
+#: ../public/email_validation.php:89
 msgid "Ihr Status wurde erfolgreich auf <em>autor</em> gesetzt.<br>"
 msgstr ""
 
-#: ../public/email_validation.php:97
+#: ../public/email_validation.php:91
 #, fuzzy
 msgid ""
 "Einige Veranstaltungen erfordern allerdings bei der Anmeldung die Eingabe "
@@ -5397,22 +5397,22 @@ msgstr ""
 "A few courses require a password to be entered<br>for registration.<br> This "
 "password can be received from the course lecturer."
 
-#: ../public/email_validation.php:98
+#: ../public/email_validation.php:92
 msgid ")));"
 msgstr ""
 
-#: ../public/email_validation.php:105
+#: ../public/email_validation.php:99
 #, fuzzy, c-format
 msgid "Die Statusänderung wird erst nach einem erneuten %sLogin%s wirksam!<br>"
 msgstr ""
 "The change of status will first take effect after arenewed %slogin%s! "
 "<br>Therefore you have been automatically logged out."
 
-#: ../public/email_validation.php:106
+#: ../public/email_validation.php:100
 msgid "), "
 msgstr ""
 
-#: ../public/email_validation.php:106
+#: ../public/email_validation.php:100
 msgid "index.php?again=yes\"><em>"
 msgstr ""
 
@@ -5587,13 +5587,12 @@ msgstr "You are an <b>Administrator</b> and can not register for courses."
 #: ../public/sem_verify.php:183 ../public/sem_verify.php:203
 #: ../public/sem_verify.php:217 ../public/sem_verify.php:231
 #: ../public/sem_verify.php:530 ../public/sem_verify.php:539
-#: ../public/sem_verify.php:588 ../public/sem_verify.php:599
-#: ../public/sem_verify.php:610 ../public/sem_verify.php:626
-#: ../public/sem_verify.php:676 ../public/sem_verify.php:690
-#: ../public/sem_verify.php:730 ../public/sem_verify.php:744
-#: ../public/sem_verify.php:779 ../public/sem_verify.php:804
-#: ../public/sem_verify.php:850 ../public/sem_verify.php:866
-#: ../public/sem_verify.php:907
+#: ../public/sem_verify.php:599 ../public/sem_verify.php:610
+#: ../public/sem_verify.php:626 ../public/sem_verify.php:676
+#: ../public/sem_verify.php:690 ../public/sem_verify.php:730
+#: ../public/sem_verify.php:744 ../public/sem_verify.php:779
+#: ../public/sem_verify.php:804 ../public/sem_verify.php:850
+#: ../public/sem_verify.php:866 ../public/sem_verify.php:907
 msgid "Zur&uuml;ck zur Startseite"
 msgstr "back to start page "
 
@@ -5880,18 +5879,6 @@ msgid ""
 "freigeschaltet."
 msgstr ""
 "You are already registered with the authorisation %s for the course %s."
-
-#: ../public/sem_verify.php:587
-#, c-format
-msgid ""
-"Sie d&uuml;rfen sich mit dem Status Dozent nicht f&uuml;r die "
-"teilnahmebeschr&auml;nkte Veranstaltung %s anmelden.<br />Wenn Sie dennoch "
-"eingetragen werden m&ouml;chten, wenden Sie sich bitte direkt an die "
-"Dozentin oder den Dozenten der Veranstaltung."
-msgstr ""
-"As lecturer you may not register for this participant restricted course %s. "
-"<br />If you wish to take part in this course, please contact directly the "
-"lecturer responsible for the course."
 
 #: ../public/sem_verify.php:598
 #, c-format
@@ -6263,8 +6250,8 @@ msgstr "Export module is not connected"
 #: ../public/elearning_interface.php:37
 #: ../lib/include/links_openobject.inc.php:154
 #: ../lib/include/links_openobject.inc.php:156
-#: ../lib/classes/ModulesNotification.class.php:66
-#: ../lib/classes/ModulesNotification.class.php:71
+#: ../lib/classes/ModulesNotification.class.php:65
+#: ../lib/classes/ModulesNotification.class.php:70
 msgid "Lernmodule"
 msgstr "Learning modules"
 
@@ -6441,31 +6428,36 @@ msgstr "You can view your course overview via the link(s)."
 msgid "Benutzerverwaltung"
 msgstr "User administration"
 
-#: ../public/new_user_md5.php:121
+#: ../public/new_user_md5.php:89 ../public/new_user_md5.php:184
+#, fuzzy
+msgid "Das Ablaufdatum wurde in einem falschen Format angegeben."
+msgstr "Start date: Month is missing."
+
+#: ../public/new_user_md5.php:120
 #, fuzzy, c-format
 msgid "Es wurden ingesamt %s Mails an die %s der Einrichtung \"%s\" geschickt."
 msgstr "It has already been allocated to %s other institutes."
 
-#: ../public/new_user_md5.php:123
+#: ../public/new_user_md5.php:122
 #, c-format
 msgid "Benutzer in Einrichtung \"%s\" mit dem Status \"%s\" eingetragen."
 msgstr "User of institute %s entered with status \"%s\"."
 
-#: ../public/new_user_md5.php:125
+#: ../public/new_user_md5.php:124
 #, c-format
 msgid "Benutzer konnte nicht in  Einrichtung \"%s\" eingetragen werden."
 msgstr "%s could not be entered into the institute!"
 
-#: ../public/new_user_md5.php:205
+#: ../public/new_user_md5.php:204
 #, c-format
 msgid "Fehlerhafte Eingabe im Datenfeld %s (wurde nicht gespeichert)!"
 msgstr "Incorrect entry in field '%s (entry not saved)!"
 
-#: ../public/new_user_md5.php:216 ../lib/edit_about.inc.php:571
+#: ../public/new_user_md5.php:215 ../lib/edit_about.inc.php:560
 msgid "Das Passwort ist zu kurz - es sollte mindestens 4 Zeichen lang sein."
 msgstr "The password is too short - it ought to have at least 4 characters."
 
-#: ../public/new_user_md5.php:223
+#: ../public/new_user_md5.php:222
 msgid ""
 "Bei der Wiederholung des Passwortes ist ein Fehler aufgetreten! Bitte geben "
 "sie das exakte Passwort ein!"
@@ -6473,7 +6465,7 @@ msgstr ""
 "An error occurred while repeating the password! Enter the correct password, "
 "please!"
 
-#: ../public/new_user_md5.php:269 ../public/new_user_md5.php:835
+#: ../public/new_user_md5.php:268 ../public/new_user_md5.php:834
 #: ../public/admin_datafields.php:262 ../public/admin_datafields.php:268
 #: ../public/admin_datafields.php:294 ../public/admin_datafields.php:304
 #: ../public/admin_datafields.php:360 ../public/admin_datafields.php:384
@@ -6510,7 +6502,7 @@ msgstr ""
 msgid "alle"
 msgstr "All"
 
-#: ../public/new_user_md5.php:286 ../public/new_user_md5.php:847
+#: ../public/new_user_md5.php:285 ../public/new_user_md5.php:846
 #: ../lib/include/messagingSettings.inc.php:240
 #: ../lib/calendar/views/edit.inc.php:530
 #: ../lib/calendar/calendar_settings.inc.php:281
@@ -6518,123 +6510,123 @@ msgstr "All"
 msgid "nie"
 msgstr "never"
 
-#: ../public/new_user_md5.php:296
+#: ../public/new_user_md5.php:295
 msgid "Bitte geben Sie einen Suchbegriff ein."
 msgstr "Please enter a search word."
 
-#: ../public/new_user_md5.php:385 ../public/new_user_md5.php:499
-#: ../public/new_user_md5.php:824 ../templates/loginform.php:50
+#: ../public/new_user_md5.php:384 ../public/new_user_md5.php:498
+#: ../public/new_user_md5.php:823 ../templates/loginform.php:50
 #: ../templates/registerform.php:136
 msgid "Benutzername:"
 msgstr "Username:"
 
-#: ../public/new_user_md5.php:389 ../public/new_user_md5.php:511
+#: ../public/new_user_md5.php:388 ../public/new_user_md5.php:510
 msgid "globaler Status:"
 msgstr "Global status:"
 
-#: ../public/new_user_md5.php:436 ../lib/include/links_admin.inc.php:766
+#: ../public/new_user_md5.php:435 ../lib/include/links_admin.inc.php:766
 msgid "Einrichtung:"
 msgstr "Institution:"
 
-#: ../public/new_user_md5.php:445
+#: ../public/new_user_md5.php:444
 msgid "-- bitte Einrichtung ausw&auml;hlen (optional) --"
 msgstr "-- Please select an institute (optionally) --"
 
-#: ../public/new_user_md5.php:457 ../public/new_user_md5.php:723
+#: ../public/new_user_md5.php:456 ../public/new_user_md5.php:722
 msgid "Mailboxüberprüfung deaktivieren"
 msgstr "Disable mailbox check"
 
-#: ../public/new_user_md5.php:488
+#: ../public/new_user_md5.php:487
 msgid "Tagen"
 msgstr "Days"
 
-#: ../public/new_user_md5.php:490 ../public/new_user_md5.php:915
+#: ../public/new_user_md5.php:489 ../public/new_user_md5.php:914
 msgid "nie benutzt"
 msgstr "never used"
 
-#: ../public/new_user_md5.php:523
+#: ../public/new_user_md5.php:522
 #: ../lib/classes/StudipLitListViewAdmin.class.php:360
 #: ../lib/show_dates.inc.php:454 ../lib/show_dates.inc.php:637
 msgid "Sichtbarkeit:"
 msgstr "Visibility:"
 
-#: ../public/new_user_md5.php:552
+#: ../public/new_user_md5.php:551
 msgid "Neues Passwort:"
 msgstr "New password:"
 
-#: ../public/new_user_md5.php:558
+#: ../public/new_user_md5.php:557
 msgid "Passwortwiederholung:"
 msgstr "Repeat password:"
 
-#: ../public/new_user_md5.php:642
+#: ../public/new_user_md5.php:641
 msgid "inaktiv seit:"
 msgstr "Inactive since:"
 
-#: ../public/new_user_md5.php:646
+#: ../public/new_user_md5.php:645
 msgid "registriert seit:"
 msgstr "Registered since:"
 
-#: ../public/new_user_md5.php:650
+#: ../public/new_user_md5.php:649
 msgid "Authentifizierung:"
 msgstr "Authentication:"
 
-#: ../public/new_user_md5.php:660
+#: ../public/new_user_md5.php:659
 #, fuzzy
 msgid "Validation_key:"
 msgstr "Evaluations:"
 
-#: ../public/new_user_md5.php:667
+#: ../public/new_user_md5.php:666
 #, fuzzy
 msgid "Ablaufdatum:"
 msgstr "Termination date"
 
-#: ../public/new_user_md5.php:689
+#: ../public/new_user_md5.php:688
 msgid "Benutzer sperren:"
 msgstr "Block user:"
 
-#: ../public/new_user_md5.php:691
+#: ../public/new_user_md5.php:690
 msgid "sperren"
 msgstr "block"
 
-#: ../public/new_user_md5.php:699
+#: ../public/new_user_md5.php:698
 msgid "Gesperrt von:"
 msgstr "Blocked by:"
 
-#: ../public/new_user_md5.php:752
+#: ../public/new_user_md5.php:751
 msgid "Zur persönlichen Homepage des Benutzers"
 msgstr "To the user's personal homepage"
 
-#: ../public/new_user_md5.php:753
+#: ../public/new_user_md5.php:752
 msgid "Nachricht an BenutzerIn"
 msgstr "Message to user"
 
-#: ../public/new_user_md5.php:753
+#: ../public/new_user_md5.php:752
 msgid "Nachricht an den Benutzer verschicken"
 msgstr "Send message to user"
 
-#: ../public/new_user_md5.php:757
+#: ../public/new_user_md5.php:756
 msgid "Datei- und Aktivitätenübersicht"
 msgstr "File and activity overview"
 
-#: ../public/new_user_md5.php:764 ../lib/include/links_admin.inc.php:345
+#: ../public/new_user_md5.php:763 ../lib/include/links_admin.inc.php:345
 #: ../lib/include/links_admin.inc.php:471
 msgid "Log"
 msgstr "Log"
 
-#: ../public/new_user_md5.php:783
+#: ../public/new_user_md5.php:782
 msgid "Link zur MitarbeiterInnen-Verwaltung"
 msgstr "Link to staff administration"
 
-#: ../public/new_user_md5.php:790
+#: ../public/new_user_md5.php:789
 msgid "Ändern der Einträge des Benutzers in der jeweiligen Einrichtung"
 msgstr "Edit the user's entries in the respective institute"
 
-#: ../public/new_user_md5.php:815
+#: ../public/new_user_md5.php:814
 #, c-format
 msgid "Neuen Benutzer-Account %s"
 msgstr "New user account %s"
 
-#: ../public/new_user_md5.php:817
+#: ../public/new_user_md5.php:816
 msgid ""
 "Die Standard Authentifizierung ist ausgeschaltet. Das Anlegen von neuen "
 "Benutzern ist nicht möglich!"
@@ -6642,17 +6634,17 @@ msgstr ""
 "The standard authentication is turned off. It is not possible to create new "
 "users!"
 
-#: ../public/new_user_md5.php:823
+#: ../public/new_user_md5.php:822
 msgid "Suchformular"
 msgstr "Search form"
 
-#: ../public/new_user_md5.php:832 ../public/archiv.php:529
-#: ../lib/resources/lib/evaluate_values.php:1496
+#: ../public/new_user_md5.php:831 ../public/archiv.php:529
+#: ../lib/resources/lib/evaluate_values.php:1507
 #: ../lib/resources/views/ShowToolsRequests.class.php:168
 msgid "Status:"
 msgstr "Status:"
 
-#: ../public/new_user_md5.php:842 ../public/show_admission.php:79
+#: ../public/new_user_md5.php:841 ../public/show_admission.php:79
 #: ../lib/include/admin_lock_adjust.inc.php:96
 #: ../lib/include/admin_lock_adjust.inc.php:161
 #: ../lib/include/admin_lock_adjust.inc.php:206
@@ -6662,60 +6654,60 @@ msgstr "Status:"
 msgid "gesperrt"
 msgstr "locked"
 
-#: ../public/new_user_md5.php:844
+#: ../public/new_user_md5.php:843
 msgid "inaktiv:"
 msgstr "Inactive:"
 
-#: ../public/new_user_md5.php:859
+#: ../public/new_user_md5.php:858
 msgid "Formular zurücksetzen"
 msgstr "reset form"
 
-#: ../public/new_user_md5.php:877
+#: ../public/new_user_md5.php:876
 msgid ""
 "Es wurden keine Personen gefunden, auf die die obigen Kriterien zutreffen."
 msgstr "No-one was found, who met the criteria given above."
 
-#: ../public/new_user_md5.php:884
+#: ../public/new_user_md5.php:883
 msgid "Suchergebnis in Löschformular übernehmen"
 msgstr "Copy search results to delete form"
 
-#: ../public/new_user_md5.php:889
+#: ../public/new_user_md5.php:888
 msgid "Suchergebnis: Es wurde <b>1</b> Person gefunden."
 msgstr "Search result: <b>1</b> person was found."
 
-#: ../public/new_user_md5.php:891
+#: ../public/new_user_md5.php:890
 #, c-format
 msgid "Suchergebnis: Es wurden <b>%s</b> Personen gefunden."
 msgstr "Search result: <b>%s</b> people were found."
 
-#: ../public/new_user_md5.php:894
+#: ../public/new_user_md5.php:893
 #: ../lib/evaluation/classes/EvaluationExportManagerCSV.class.php:137
 msgid "Benutzername"
 msgstr "Username"
 
-#: ../public/new_user_md5.php:896
+#: ../public/new_user_md5.php:895
 #: ../lib/evaluation/classes/EvaluationExportManagerCSV.class.php:139
 msgid "Vorname"
 msgstr "First name"
 
-#: ../public/new_user_md5.php:897
+#: ../public/new_user_md5.php:896
 #: ../lib/evaluation/classes/EvaluationExportManagerCSV.class.php:138
 msgid "Nachname"
 msgstr "Surname"
 
-#: ../public/new_user_md5.php:899
+#: ../public/new_user_md5.php:898
 msgid "inaktiv"
 msgstr "inactive"
 
-#: ../public/new_user_md5.php:900
+#: ../public/new_user_md5.php:899
 msgid "registriert seit"
 msgstr "registered since"
 
-#: ../public/new_user_md5.php:901
+#: ../public/new_user_md5.php:900
 msgid "Authentifizierung"
 msgstr "Authentication"
 
-#: ../public/new_user_md5.php:921
+#: ../public/new_user_md5.php:920
 msgid "gesperrt!"
 msgstr "blocked!"
 
@@ -6730,7 +6722,7 @@ msgstr "Administration of access authorisations"
 #: ../public/admin_seminare_assi.php:1283
 #: ../public/admin_seminare_assi.php:3776
 #: ../lib/export/export_studipdata_func.inc.php:453
-#: ../lib/classes/Seminar.class.php:1782
+#: ../lib/classes/Seminar.class.php:1786
 msgid "Alle Studiengänge"
 msgstr "All programs of study"
 
@@ -7631,7 +7623,7 @@ msgstr "End:"
 #: ../lib/calendar/calendar_visual.inc.php:784
 #: ../lib/resources/views/ShowObject.class.php:99
 #: ../lib/admin_semester.inc.php:182 ../lib/admin_semester.inc.php:681
-#: ../lib/datei.inc.php:714 ../lib/datei.inc.php:1262
+#: ../lib/datei.inc.php:711 ../lib/datei.inc.php:1259
 #: ../lib/archiv.inc.php:121
 #: ../templates/resources/show_properties_forms.php:62
 msgid "Beschreibung:"
@@ -7813,7 +7805,7 @@ msgstr "Data fields for roles in institutes"
 #: ../lib/include/links_admin.inc.php:402
 #: ../lib/include/links_admin.inc.php:1205
 #: ../lib/include/links_about.inc.php:103
-#: ../lib/classes/ModulesNotification.class.php:65
+#: ../lib/classes/ModulesNotification.class.php:64
 #: ../config/config.inc.php:455
 #, c-format
 msgid "Literatur"
@@ -7940,7 +7932,7 @@ msgstr "Delete from clipboard"
 msgid "Gewählte Aktion starten"
 msgstr "Start selected action"
 
-#: ../public/folder.php:51 ../lib/classes/ModulesNotification.class.php:61
+#: ../public/folder.php:51 ../lib/classes/ModulesNotification.class.php:60
 #: ../templates/statusgruppen/sem_edit_role.php:40
 msgid "Dateiordner"
 msgstr "Document folder"
@@ -10625,16 +10617,16 @@ msgstr ""
 msgid "Einrichtungshierarchie bearbeiten"
 msgstr "Edit institute hierarchy"
 
-#: ../public/institut_main.php:128
+#: ../public/institut_main.php:127
 msgid "Straße:"
 msgstr "Street: "
 
-#: ../public/institut_main.php:136
+#: ../public/institut_main.php:135
 msgid "Tel.:"
 msgstr "Tel.:"
 
 #: ../public/studipim2.php:72 ../public/studipim.php:182
-#: ../lib/messaging.inc.php:293 ../templates/studipim_onlinelist.php:17
+#: ../lib/messaging.inc.php:298 ../templates/studipim_onlinelist.php:17
 msgid "Ohne Betreff"
 msgstr "Without subject"
 
@@ -10852,7 +10844,7 @@ msgstr "Change group order"
 #: ../public/contact_statusgruppen.php:149
 #: ../public/contact_statusgruppen.php:163
 #: ../lib/include/messagingSettings.inc.php:288
-#: ../lib/sms_functions.inc.php:678 ../lib/sms_functions.inc.php:701
+#: ../lib/sms_functions.inc.php:676 ../lib/sms_functions.inc.php:699
 msgid "keine Treffer"
 msgstr "no matches"
 
@@ -11346,7 +11338,7 @@ msgstr "Choose institute"
 #: ../lib/include/links_openobject.inc.php:128
 #: ../lib/include/links_openobject.inc.php:205
 #: ../lib/include/links_openobject.inc.php:207
-#: ../lib/classes/ModulesNotification.class.php:63
+#: ../lib/classes/ModulesNotification.class.php:62
 #: ../lib/extern/modules/ExternModuleLecturedetails.class.php:87
 #: ../lib/extern/modules/ExternModuleTemplateLecturedetails.class.php:83
 msgid "TeilnehmerInnen"
@@ -12826,7 +12818,7 @@ msgid "Alle Informationsfelder aufklappen"
 msgstr "Open all information areas"
 
 #: ../public/teilnehmer.php:1054 ../public/teilnehmer.php:1435
-#: ../public/sms_send.php:413
+#: ../public/sms_send.php:428
 #: ../lib/extern/modules/ExternModuleNews.class.php:62
 #: ../lib/extern/elements/main/ExternElementMainNews.class.php:70
 msgid "Nachricht"
@@ -13315,11 +13307,11 @@ msgid ""
 msgstr ""
 "You have left %s obligatory questions unanswered. These have been marked."
 
-#: ../public/about.php:157
+#: ../public/about.php:156
 msgid "Meine persönliche Homepage"
 msgstr "My personal homepage"
 
-#: ../public/about.php:160 ../public/about.php:163
+#: ../public/about.php:159 ../public/about.php:162
 #: ../lib/include/links_about.inc.php:83
 #: ../lib/evaluation/classes/db/EvaluationObjectDB.class.php:116
 #: ../lib/evaluation/classes/db/EvaluationObjectDB.class.php:202
@@ -13328,71 +13320,71 @@ msgstr "My personal homepage"
 msgid "Persönliche Homepage"
 msgstr "Personal homepage"
 
-#: ../public/about.php:188
+#: ../public/about.php:187
 msgid "Diese Homepage ist nicht verfügbar."
 msgstr "This home page is not available."
 
-#: ../public/about.php:282
+#: ../public/about.php:281
 msgid "Besucher dieser Homepage:"
 msgstr "Visitors to this homepage:"
 
-#: ../public/about.php:290
+#: ../public/about.php:289
 msgid "Zur Highscoreliste"
 msgstr "To high score list"
 
-#: ../public/about.php:291
+#: ../public/about.php:290
 msgid "Ihr Stud.IP-Score:"
 msgstr "Your Stud.IP score:"
 
-#: ../public/about.php:292
+#: ../public/about.php:291
 msgid "Ihr Rang:"
 msgstr "Your rank:"
 
-#: ../public/about.php:298
+#: ../public/about.php:297
 msgid "Stud.IP-Score:"
 msgstr "Stud.IP-Score:"
 
-#: ../public/about.php:299
+#: ../public/about.php:298
 msgid "Rang:"
 msgstr "Rank:"
 
-#: ../public/about.php:304
+#: ../public/about.php:303
 msgid "Stud.IP Messenger starten"
 msgstr "Start Stud.IP Messenger"
 
-#: ../public/about.php:308
+#: ../public/about.php:307
 msgid "zu Buddies hinzuf&uuml;gen"
 msgstr "Add to Buddies "
 
-#: ../public/about.php:310
+#: ../public/about.php:309
 msgid "Nachricht an Nutzer"
 msgstr "Message to user"
 
-#: ../public/about.php:310
+#: ../public/about.php:309
 msgid "Nachricht an Nutzer verschicken"
 msgstr "Send message to user"
 
-#: ../public/about.php:315
+#: ../public/about.php:314
 msgid "vCard herunterladen"
 msgstr "Download vCard"
 
-#: ../public/about.php:343
+#: ../public/about.php:342
 msgid "(Dieser Nutzer ist unsichtbar.)"
 msgstr "(This user is invisible.)"
 
-#: ../public/about.php:347
+#: ../public/about.php:346
 msgid "(Sie sind unsichtbar. Deshalb können nur Sie diese Seite sehen.)"
 msgstr "(You are invisible. Thus only you can see this page.)"
 
-#: ../public/about.php:354
+#: ../public/about.php:353
 msgid "E-mail:"
 msgstr "E-mail:"
 
-#: ../public/about.php:365
+#: ../public/about.php:364
 msgid "Mobiltelefon:"
 msgstr "Mobil phone:"
 
-#: ../public/about.php:399
+#: ../public/about.php:398
 msgid "BENUTZER IST GESPERRT!"
 msgstr "USER IS BLOCKED!"
 
@@ -13400,125 +13392,133 @@ msgstr "USER IS BLOCKED!"
 msgid "Wo ich studiere:"
 msgstr "Where I study:"
 
-#: ../public/about.php:421
+#: ../public/about.php:422
 msgid "Wo ich arbeite:"
 msgstr "Where I work:"
 
-#: ../public/about.php:434
+#: ../public/about.php:435
 #: ../templates/statusgruppen/institute_modify_edit_about.php:65
 msgid "Sprechzeit:"
 msgstr "Office hours:"
 
-#: ../public/about.php:436
+#: ../public/about.php:437
 #: ../lib/extern/elements/ExternElementContact.class.php:69
 #: ../lib/extern/elements/ExternElementRangeTreeLevelContent.class.php:67
 #: ../templates/statusgruppen/institute_modify_edit_about.php:71
 msgid "Telefon:"
 msgstr "Telephone:"
 
-#: ../public/about.php:489 ../public/about.php:589
+#: ../public/about.php:490 ../public/about.php:590
 msgid "sichtbar für alle"
 msgstr "for all visible"
 
-#: ../public/about.php:490 ../public/about.php:590
+#: ../public/about.php:491 ../public/about.php:591
 #, c-format
 msgid "sichtbar für Sie und alle %s"
 msgstr "visible for you an all %s"
 
-#: ../public/about.php:561 ../lib/archiv.inc.php:308
+#: ../public/about.php:562 ../lib/archiv.inc.php:308
 msgid "Literaturlisten"
 msgstr "Literature lists"
 
-#: ../public/about.php:572
+#: ../public/about.php:573
 #: ../lib/extern/modules/ExternModulePersondetails.class.php:82
 #: ../lib/extern/modules/ExternModuleTemplatePersondetails.class.php:161
 #: ../lib/extern/elements/main/ExternElementMainPersondetails.class.php:76
 msgid "Lebenslauf"
 msgstr "Curriculum vitae"
 
-#: ../public/about.php:573
+#: ../public/about.php:574
 msgid "Hobbys"
 msgstr "Hobbies"
 
-#: ../public/about.php:574
+#: ../public/about.php:575
 #: ../lib/extern/modules/ExternModulePersondetails.class.php:87
 #: ../lib/extern/elements/main/ExternElementMainPersondetails.class.php:77
 msgid "Publikationen"
 msgstr "Publications"
 
-#: ../public/about.php:575
+#: ../public/about.php:576
 msgid "Arbeitsschwerpunkte"
 msgstr "Research interests"
 
-#: ../public/about.php:637 ../lib/kategorien.inc.php:66
+#: ../public/about.php:638 ../lib/kategorien.inc.php:66
 msgid "f&uuml;r andere unsichtbar"
 msgstr "hidden for others"
 
-#: ../public/sms_send.php:82 ../public/sms_send.php:413
+#: ../public/sms_send.php:83 ../public/sms_send.php:428
 msgid "Chateinladung"
 msgstr "Chat invitation "
 
-#: ../public/sms_send.php:149
+#: ../public/sms_send.php:100 ../lib/datei.inc.php:937
+msgid "Die Datei wurde erfolgreich auf den Server &uuml;bertragen!"
+msgstr "The file has been successfully sent to the server!"
+
+#: ../public/sms_send.php:102 ../lib/datei.inc.php:929
+msgid "Datei&uuml;bertragung gescheitert!"
+msgstr "File transmission aborted!"
+
+#: ../public/sms_send.php:164
 #, c-format
 msgid "Ihre Nachricht an %s wurde verschickt!"
 msgstr "Your message has been sent to %s!"
 
-#: ../public/sms_send.php:150
+#: ../public/sms_send.php:165
 #, c-format
 msgid "Ihre Nachricht wurde an %s Empf&auml;nger verschickt!"
 msgstr "Your message has been sent to %s addressees!"
 
-#: ../public/sms_send.php:161
+#: ../public/sms_send.php:176
 msgid ""
 "Ihre Nachricht konnte nicht gesendet werden. Die Nachricht enth&auml;lt "
 "keinen Text."
 msgstr "Your message could not be sent. The message does not contain any text."
 
-#: ../public/sms_send.php:163
+#: ../public/sms_send.php:178
 msgid "Ihre Nachricht konnte nicht gesendet werden."
 msgstr "Your message could not be sent."
 
-#: ../public/sms_send.php:260
+#: ../public/sms_send.php:275
 msgid "Die gewählte Adressbuchgruppe enthält keine Mitglieder."
 msgstr "The selected address book group does not contain any members."
 
-#: ../public/sms_send.php:408
+#: ../public/sms_send.php:423
 msgid "aktuelle Empf&auml;ngerInnen"
 msgstr "Current addressees"
 
-#: ../public/sms_send.php:409
+#: ../public/sms_send.php:424
 msgid "m&ouml;gliche Empf&auml;ngerInnen"
 msgstr "Possible addressees"
 
-#: ../public/sms_send.php:410
+#: ../public/sms_send.php:425
 #, fuzzy
 msgid "Dateianhang"
 msgstr "File name"
 
-#: ../public/sms_send.php:411 ../public/sms_send.php:624
+#: ../public/sms_send.php:426 ../public/sms_send.php:639
 #: ../lib/classes/lit_search_plugins/StudipLitSearchPluginDDB_Experimental.class.php:74
 msgid "Signatur"
 msgstr "Signature"
 
-#: ../public/sms_send.php:412
+#: ../public/sms_send.php:427
 #: ../lib/evaluation/evaluation_admin_overview.lib.php:419
 #: ../lib/evaluation/evaluation_admin_template.lib.php:1017
 msgid "Vorschau"
 msgstr "Preview"
 
-#: ../public/sms_send.php:414
+#: ../public/sms_send.php:429
 msgid "Nachricht speichern"
 msgstr "Save message"
 
-#: ../public/sms_send.php:415
+#: ../public/sms_send.php:430
 msgid "als Email senden"
 msgstr "send as e-mail"
 
-#: ../public/sms_send.php:416 ../public/sms_send.php:608
+#: ../public/sms_send.php:431 ../public/sms_send.php:623
 msgid "Lesebestätigung"
 msgstr "acknowledgement of reading"
 
-#: ../public/sms_send.php:583
+#: ../public/sms_send.php:598
 msgid ""
 "Die Nachricht wird auch als E-Mail weitergeleitet, sofern die EmpfängerIn "
 "sich nicht ausdrücklich gegen die E-Mail-Weiterleitung entschieden hat."
@@ -13526,31 +13526,31 @@ msgstr ""
 "The message will be sent as e-mail, too, unless the recipient has not "
 "specifically deactivated e-mail-forwarding."
 
-#: ../public/sms_send.php:585
+#: ../public/sms_send.php:600
 msgid "Ihre Nachricht wird nicht gleichzeitig als E-Mail weitergeleitet."
 msgstr "Your message will not be forwarded as e-mail."
 
-#: ../public/sms_send.php:587
+#: ../public/sms_send.php:602
 msgid "Emailweiterleitung:"
 msgstr "e-mail-forwarding:"
 
-#: ../public/sms_send.php:599
+#: ../public/sms_send.php:614
 msgid "Emailweiterleitung"
 msgstr "e-mail-forwarding"
 
-#: ../public/sms_send.php:616
+#: ../public/sms_send.php:631
 msgid "Speichern"
 msgstr "Save"
 
-#: ../public/sms_send.php:626
+#: ../public/sms_send.php:641
 msgid "Übersicht:"
 msgstr "Survey:"
 
-#: ../public/sms_send.php:641
+#: ../public/sms_send.php:656
 msgid "Smilies & Textformatierung:"
 msgstr "Smilies & Textformatting:"
 
-#: ../public/sms_send.php:642
+#: ../public/sms_send.php:657
 #, c-format
 msgid ""
 "%s Liste mit allen Smilies %s Hilfe zu Smilies %s Hilfe zur Textformatierung "
@@ -14050,8 +14050,8 @@ msgstr "Password request not possible!"
 
 #: ../public/request_new_password.php:84
 #: ../lib/classes/UserManagement.class.php:349
-#: ../lib/classes/UserManagement.class.php:475
-#: ../lib/classes/UserManagement.class.php:593
+#: ../lib/classes/UserManagement.class.php:472
+#: ../lib/classes/UserManagement.class.php:587
 msgid "Die &Auml;nderung konnte nicht in die Datenbank geschrieben werden."
 msgstr "The changes could not be written in the database."
 
@@ -14060,7 +14060,7 @@ msgstr "The changes could not be written in the database."
 msgid "Passwort von User \"%s\" neu gesetzt."
 msgstr "New password for user \"%s\" has been generated. "
 
-#: ../public/request_new_password.php:108
+#: ../public/request_new_password.php:105
 #, c-format
 msgid ""
 "Leider ist ein Fehler aufgetreten. Bitte fordern Sie gegebenenfalls %sper E-"
@@ -14069,16 +14069,16 @@ msgstr ""
 "Unfortunately, an error occurred. If necessary, please, request a new "
 "password %svia e-mail%s."
 
-#: ../public/request_new_password.php:121
+#: ../public/request_new_password.php:118
 msgid "Die E-Mail-Adresse ist ungültig!"
 msgstr "The e-mail-address is not valid!"
 
-#: ../public/request_new_password.php:130
+#: ../public/request_new_password.php:127
 #, fuzzy
 msgid "Es konnte kein Benutzer mit dieser E-Mail-Adresse<br>gefunden werden!"
 msgstr "No user with the e-mail-address</br> was found!"
 
-#: ../public/request_new_password.php:135
+#: ../public/request_new_password.php:132
 #, c-format
 msgid ""
 "Ihr Passwort kann nur durch einen Adminstrator ge&auml;ndert werden. Bitte "
@@ -14087,7 +14087,7 @@ msgstr ""
 "Your password can be changed by an administrator, only. If necessary, "
 "please, request a new password %sby e-mail%s."
 
-#: ../public/request_new_password.php:139
+#: ../public/request_new_password.php:136
 #, c-format
 msgid ""
 "In Kürze wird Ihnen eine E-Mail an die Adresse %s mit einem Bestätigungslink "
@@ -14100,15 +14100,15 @@ msgstr ""
 "do not receive that e-mail, please, check whether it has been moved to your "
 "spam folder."
 
-#: ../public/request_new_password.php:157
+#: ../public/request_new_password.php:150
 msgid "Diese E-Mail-Adresse wird von mehreren Benutzern genutzt!"
 msgstr "This e-mail-address is used by more than one user!"
 
-#: ../public/request_new_password.php:164
+#: ../public/request_new_password.php:157
 msgid "Sie haben keine E-Mail-Adresse eingegeben!"
 msgstr "You have not entered any e-mail-address!"
 
-#: ../public/request_new_password.php:185
+#: ../public/request_new_password.php:178
 #, c-format
 msgid ""
 "Ihnen wird in Kürze eine E-Mail an die Adresse %s mit Ihrem neuen Passwort "
@@ -14117,7 +14117,7 @@ msgstr ""
 "In the next moment an e-mail will be sent to the address %s. Please, note "
 "the information provided in that e-mail."
 
-#: ../public/request_new_password.php:187
+#: ../public/request_new_password.php:180
 msgid ""
 "Das Passwort konnte nicht gesetzt werden. Bitte wiederholen Sie den Vorgang "
 "oder fordern Sie ein neues Passwort per E-Mail an."
@@ -14125,7 +14125,7 @@ msgstr ""
 "Your password could not be set. Please, repeat the procedure of request a "
 "new password by e-mail."
 
-#: ../public/request_new_password.php:191
+#: ../public/request_new_password.php:184
 msgid ""
 "Fehler beim Aufruf dieser Seite. Stellen Sie sicher, dass sie den gesamten "
 "Link in die Adressleiste eingetragen haben. Bitte wiederholen Sie den "
@@ -14135,7 +14135,7 @@ msgstr ""
 "complte link in the address line. Repeat the procedure or request a new "
 "password by e-mail."
 
-#: ../public/request_new_password.php:195
+#: ../public/request_new_password.php:188
 msgid ""
 "Fehler beim Aufruf dieser Seite. Bitte wiederholen Sie den Vorgang oder "
 "fordern Sie ein neues Passwort per E-Mail an."
@@ -14143,12 +14143,12 @@ msgstr ""
 "Error while loading this page. Repeat the procedure or request a nerw "
 "password by e-mail."
 
-#: ../public/request_new_password.php:207
+#: ../public/request_new_password.php:200
 #, c-format
 msgid "Zurück zur %sStartseite%s."
 msgstr "Back to %sstart page%s."
 
-#: ../public/request_new_password.php:212
+#: ../public/request_new_password.php:205
 msgid "Passwort anfordern"
 msgstr "Request password"
 
@@ -16298,15 +16298,15 @@ msgid "Neuen Empfänger suchen."
 msgstr "Search new addressee."
 
 #: ../lib/include/messagingSettings.inc.php:287
-#: ../lib/sms_functions.inc.php:677 ../lib/sms_functions.inc.php:696
-#: ../lib/sms_functions.inc.php:700
+#: ../lib/sms_functions.inc.php:675 ../lib/sms_functions.inc.php:694
+#: ../lib/sms_functions.inc.php:698
 msgid "Suche zur&uuml;cksetzen"
 msgstr "Reset search"
 
 #: ../lib/include/messagingSettings.inc.php:287
 #: ../lib/include/messagingSettings.inc.php:298
-#: ../lib/sms_functions.inc.php:677 ../lib/sms_functions.inc.php:696
-#: ../lib/sms_functions.inc.php:700
+#: ../lib/sms_functions.inc.php:675 ../lib/sms_functions.inc.php:694
+#: ../lib/sms_functions.inc.php:698
 msgid "setzt die Suche zurück"
 msgstr "Reset the search"
 
@@ -16460,7 +16460,7 @@ msgid "Übersicht"
 msgstr "Survey"
 
 #: ../lib/include/links_openobject.inc.php:99
-#: ../lib/classes/ModulesNotification.class.php:64
+#: ../lib/classes/ModulesNotification.class.php:63
 msgid "Personal"
 msgstr "Staff"
 
@@ -16939,7 +16939,7 @@ msgid "Nachrichten"
 msgstr "Messages"
 
 #: ../lib/include/links_sms.inc.php:63
-#: ../lib/classes/ModulesNotification.class.php:67
+#: ../lib/classes/ModulesNotification.class.php:66
 #: ../lib/classes/HeaderController.class.php:124
 msgid "Chat"
 msgstr "Chat"
@@ -18682,36 +18682,36 @@ msgstr "Last update from %s (%s) on %s"
 msgid "Der Titel darf nicht leer sein."
 msgstr "The title must not be emply."
 
-#: ../lib/classes/ModulesNotification.class.php:54
+#: ../lib/classes/ModulesNotification.class.php:53
 msgid "Umfragen und Votings"
 msgstr "Evaluations and votings"
 
-#: ../lib/classes/ModulesNotification.class.php:57
+#: ../lib/classes/ModulesNotification.class.php:56
 msgid "Grunddaten der Veranstaltung"
 msgstr "Basic data of the course"
 
-#: ../lib/classes/ModulesNotification.class.php:58
+#: ../lib/classes/ModulesNotification.class.php:57
 msgid "Stud.IP Benachrichtigung"
 msgstr "Stud.IP notification"
 
-#: ../lib/classes/ModulesNotification.class.php:68
+#: ../lib/classes/ModulesNotification.class.php:67
 msgid "Wiki-Web"
 msgstr "Wiki-Web"
 
-#: ../lib/classes/ModulesNotification.class.php:69
+#: ../lib/classes/ModulesNotification.class.php:68
 msgid "SupportDB"
 msgstr "SupportDB"
 
-#: ../lib/classes/ModulesNotification.class.php:70
+#: ../lib/classes/ModulesNotification.class.php:69
 msgid "Freie Informationsseite"
 msgstr "Free information page"
 
-#: ../lib/classes/ModulesNotification.class.php:210
+#: ../lib/classes/ModulesNotification.class.php:208
 #, c-format
 msgid "In der Veranstaltung \"%s\" gibt es folgende Neuigkeiten:"
 msgstr "Within the course \"%s\" there are the followinf news:"
 
-#: ../lib/classes/ModulesNotification.class.php:216
+#: ../lib/classes/ModulesNotification.class.php:214
 msgid ""
 "Diese Email wurde automatisch vom Stud.IP-System verschickt. Sie können auf "
 "diese Nachricht nicht antworten."
@@ -18719,7 +18719,7 @@ msgstr ""
 "This e-mail has automatically been generated by the Stud.IP system. You can "
 "not reply to this message."
 
-#: ../lib/classes/ModulesNotification.class.php:217
+#: ../lib/classes/ModulesNotification.class.php:215
 msgid ""
 "Sie erhalten hiermit in regelmäßigen Abständen Informationen über "
 "Neuigkeiten und Änderungen in Ihren abonnierten Veranstaltungen."
@@ -18727,13 +18727,13 @@ msgstr ""
 "From now on you will regularly receive information on news and changes in "
 "the courses you have registered for. "
 
-#: ../lib/classes/ModulesNotification.class.php:218
+#: ../lib/classes/ModulesNotification.class.php:216
 msgid ""
 "Über welche Inhalte Sie informiert werden wollen, können Sie hier einstellen:"
 msgstr "Here you can choose the topics you want to get informed on."
 
-#: ../lib/classes/ModulesNotification.class.php:222
-#: ../lib/messaging.inc.php:336
+#: ../lib/classes/ModulesNotification.class.php:220
+#: ../lib/messaging.inc.php:341
 msgid ""
 "Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können "
 "darauf nicht antworten."
@@ -18741,80 +18741,80 @@ msgstr ""
 "This message has been automatically generated by the Stud.IP system. You can "
 "not reply to it."
 
-#: ../lib/classes/ModulesNotification.class.php:233
+#: ../lib/classes/ModulesNotification.class.php:231
 #, c-format
 msgid "%s neue Beiträge im Forum:"
 msgstr "%s new postings in the forum:"
 
-#: ../lib/classes/ModulesNotification.class.php:241
+#: ../lib/classes/ModulesNotification.class.php:239
 #, c-format
 msgid "%s neue Dokumente hochgeladen:"
 msgstr "%s new uploaded document(s):"
 
-#: ../lib/classes/ModulesNotification.class.php:243
+#: ../lib/classes/ModulesNotification.class.php:241
 msgid "1 neues Dokument hochgeladen:"
 msgstr "1 new uploaded document:"
 
-#: ../lib/classes/ModulesNotification.class.php:249
+#: ../lib/classes/ModulesNotification.class.php:247
 #, c-format
 msgid "%s neue Termine angelegt:"
 msgstr "%s newly created appointment"
 
-#: ../lib/classes/ModulesNotification.class.php:251
+#: ../lib/classes/ModulesNotification.class.php:249
 msgid "1 neuer Termin angelegt:"
 msgstr "1 newly created appointment"
 
-#: ../lib/classes/ModulesNotification.class.php:257
+#: ../lib/classes/ModulesNotification.class.php:255
 #, c-format
 msgid "%s neue Literaturlisten angelegt"
 msgstr "%s newly created literature lists"
 
-#: ../lib/classes/ModulesNotification.class.php:259
+#: ../lib/classes/ModulesNotification.class.php:257
 msgid "1 neue Literaturliste angelegt"
 msgstr "1 newly created literature list"
 
-#: ../lib/classes/ModulesNotification.class.php:266
+#: ../lib/classes/ModulesNotification.class.php:264
 #, c-format
 msgid "%s neue Content-Module angelegt"
 msgstr "%s newly created content module"
 
-#: ../lib/classes/ModulesNotification.class.php:268
+#: ../lib/classes/ModulesNotification.class.php:266
 msgid "1 neues Content-Modul angelegt"
 msgstr "1 newly created content modul"
 
-#: ../lib/classes/ModulesNotification.class.php:275
+#: ../lib/classes/ModulesNotification.class.php:273
 #, c-format
 msgid "%s Wikiseiten wurden angelegt oder bearbeitet:"
 msgstr "%s Wiki pages have been created or changed:"
 
-#: ../lib/classes/ModulesNotification.class.php:277
+#: ../lib/classes/ModulesNotification.class.php:275
 msgid "1 Wikiseite wurde angelegt oder bearbeitet:"
 msgstr "1 Wiki page has been created or changed:"
 
-#: ../lib/classes/ModulesNotification.class.php:283
+#: ../lib/classes/ModulesNotification.class.php:281
 #, c-format
 msgid "Die Seite \"%s\" wurde neu angelegt oder bearbeitet:"
 msgstr "This page \"%s\" has been newly created of changed:"
 
-#: ../lib/classes/ModulesNotification.class.php:290
+#: ../lib/classes/ModulesNotification.class.php:288
 #, c-format
 msgid "%s neue Umfragen oder Evaluationen wurden angelegt:"
 msgstr "%s votings or evaluations have newly been created. "
 
-#: ../lib/classes/ModulesNotification.class.php:292
+#: ../lib/classes/ModulesNotification.class.php:290
 msgid "1 neue Umfrage oder Evaluation wurde angelegt:"
 msgstr "1 voting or evaluation has newly been created. "
 
-#: ../lib/classes/ModulesNotification.class.php:299
+#: ../lib/classes/ModulesNotification.class.php:297
 #, c-format
 msgid "%s neu News wurden angelegt:"
 msgstr "%s news have newly been created."
 
-#: ../lib/classes/ModulesNotification.class.php:301
+#: ../lib/classes/ModulesNotification.class.php:299
 msgid "1 neue News wurde angelegt:"
 msgstr "1 news has newly been created."
 
-#: ../lib/classes/ModulesNotification.class.php:307
+#: ../lib/classes/ModulesNotification.class.php:305
 msgid "Die Grunddaten wurden geändert:"
 msgstr "The basic data have been changed."
 
@@ -19539,17 +19539,17 @@ msgstr ""
 msgid "Die Dauer wurde geändert."
 msgstr "The duration have been changed."
 
-#: ../lib/classes/Seminar.class.php:954
+#: ../lib/classes/Seminar.class.php:958
 #, fuzzy
 msgid "Es sind Fehler/Probleme aufgetreten!"
 msgstr "Errors have occurred."
 
-#: ../lib/classes/Seminar.class.php:968
+#: ../lib/classes/Seminar.class.php:972
 #, fuzzy
 msgid "Ihre Änderungen wurden gespeichert!"
 msgstr "Changes have been saved."
 
-#: ../lib/classes/Seminar.class.php:1078
+#: ../lib/classes/Seminar.class.php:1082
 #, fuzzy, c-format
 msgid ""
 "Wenn Sie die regelmäßige Zeit auf %s ändern, verlieren Sie die Raumbuchungen "
@@ -19558,16 +19558,16 @@ msgstr ""
 "The time of the regular appointment has been changed to \"%s\" for all "
 "appointments in the futre."
 
-#: ../lib/classes/Seminar.class.php:1079
+#: ../lib/classes/Seminar.class.php:1083
 #, fuzzy
 msgid "Sind Sie sicher, dass Sie die regelmäßige Zeit ändern möchten?"
 msgstr "Are you sure that you want to delete the regular entry \"%s\"?"
 
-#: ../lib/classes/Seminar.class.php:1096
+#: ../lib/classes/Seminar.class.php:1100
 msgid "Die Beschreibung des regelmäßigen Eintrags wurde geändert."
 msgstr "The description of the regular entry has been changed."
 
-#: ../lib/classes/Seminar.class.php:1111
+#: ../lib/classes/Seminar.class.php:1115
 #, c-format
 msgid ""
 "Die regelmäßige Veranstaltungszeit wurde auf \"%s\" für alle in der Zukunft "
@@ -19576,7 +19576,7 @@ msgstr ""
 "The time of the regular appointment has been changed to \"%s\" for all "
 "appointments in the futre."
 
-#: ../lib/classes/Seminar.class.php:1116
+#: ../lib/classes/Seminar.class.php:1120
 #, c-format
 msgid ""
 "Die regelmäßige Veranstaltungszeit wurde auf \"%s\" geändert, jedoch gab es "
@@ -19585,107 +19585,107 @@ msgstr ""
 "The time of the regular appoinment has been changed to \"%s\", however, no "
 "appointments have been affected."
 
-#: ../lib/classes/Seminar.class.php:1143
+#: ../lib/classes/Seminar.class.php:1147
 msgid "Der Turnus wurde geändert."
 msgstr "Cycle has been changed."
 
-#: ../lib/classes/Seminar.class.php:1223
+#: ../lib/classes/Seminar.class.php:1227
 msgid "Folgende Termine haben keine Raumbuchung:"
 msgstr "No room has been allocated to the following appointments:"
 
-#: ../lib/classes/Seminar.class.php:1415
+#: ../lib/classes/Seminar.class.php:1419
 #, c-format
 msgid "und %s weitere"
 msgstr "and %s others"
 
-#: ../lib/classes/Seminar.class.php:1469
+#: ../lib/classes/Seminar.class.php:1473
 msgid "Die Raumanfrage wurde zur&uuml;ckgezogen!"
 msgstr "The room request has been withdrawn!"
 
-#: ../lib/classes/Seminar.class.php:1489
+#: ../lib/classes/Seminar.class.php:1493
 msgid "Die Startwoche wurde ge&auml;ndert."
 msgstr "The start week have been modified."
 
-#: ../lib/classes/Seminar.class.php:1544
+#: ../lib/classes/Seminar.class.php:1548
 #, c-format
 msgid " (%s von %s belegt)"
 msgstr " (%s out of %s taken)"
 
-#: ../lib/classes/Seminar.class.php:1651
+#: ../lib/classes/Seminar.class.php:1655
 #: ../lib/raumzeit/SingleDate.class.php:492
 msgid "Die Anfrage wurde noch nicht bearbeitet."
 msgstr "This request hasn't been processed yet."
 
-#: ../lib/classes/Seminar.class.php:1653
+#: ../lib/classes/Seminar.class.php:1657
 #: ../lib/raumzeit/SingleDate.class.php:494
 msgid "Die Anfrage wurde bearbeitet und abgelehnt."
 msgstr "The request has been processed and rejected."
 
-#: ../lib/classes/Seminar.class.php:1655
+#: ../lib/classes/Seminar.class.php:1659
 #: ../lib/raumzeit/SingleDate.class.php:496
 msgid "Die Anfrage wurde bearbeitet."
 msgstr "The request has been processed."
 
-#: ../lib/classes/Seminar.class.php:1901
+#: ../lib/classes/Seminar.class.php:1905
 #, fuzzy, c-format
 msgid ""
 "%s VeranstaltungsteilnehmerInnen, DozentInnen oder TutorInnen archiviert."
 msgstr "%s course participants, lecturers or tutors have been archived."
 
-#: ../lib/classes/Seminar.class.php:1916
+#: ../lib/classes/Seminar.class.php:1920
 #, c-format
 msgid "%s Zuordnungen zu Einrichtungen archiviert."
 msgstr "%s allocation to institutes have been archived."
 
-#: ../lib/classes/Seminar.class.php:1922
+#: ../lib/classes/Seminar.class.php:1926
 msgid "Eintr&auml;ge aus Funktionen / Gruppen gel&ouml;scht."
 msgstr "Entries from functions / groups have been deleted."
 
-#: ../lib/classes/Seminar.class.php:1928
+#: ../lib/classes/Seminar.class.php:1932
 #, c-format
 msgid "%s Zuordnungen zu Bereichen archiviert."
 msgstr "%s allocations to areas have been archived."
 
-#: ../lib/classes/Seminar.class.php:1933
+#: ../lib/classes/Seminar.class.php:1937
 #, c-format
 msgid "%s Veranstaltungstermine archiviert."
 msgstr "%s course appointments have been archived."
 
-#: ../lib/classes/Seminar.class.php:1940
+#: ../lib/classes/Seminar.class.php:1944
 #, c-format
 msgid "%s Postings archiviert."
 msgstr "%s postings have been archived."
 
-#: ../lib/classes/Seminar.class.php:1945
+#: ../lib/classes/Seminar.class.php:1949
 #, c-format
 msgid "%s Dokumente und Ordner archiviert."
 msgstr "%s Documents and folder have been archived."
 
-#: ../lib/classes/Seminar.class.php:1952
+#: ../lib/classes/Seminar.class.php:1956
 msgid "Freie Seite der Veranstaltung archiviert."
 msgstr "Course free page has been archived."
 
-#: ../lib/classes/Seminar.class.php:1958
+#: ../lib/classes/Seminar.class.php:1962
 #, c-format
 msgid "%s Literaturlisten archiviert."
 msgstr "%s literature lists have been archived."
 
-#: ../lib/classes/Seminar.class.php:1963
+#: ../lib/classes/Seminar.class.php:1967
 #, c-format
 msgid "%s News gel&ouml;scht."
 msgstr "%s news have been deleted."
 
-#: ../lib/classes/Seminar.class.php:1975
+#: ../lib/classes/Seminar.class.php:1979
 #, c-format
 msgid "%s Wiki-Seiten archiviert."
 msgstr "%s Wiki pages archived."
 
-#: ../lib/classes/Seminar.class.php:2001
+#: ../lib/classes/Seminar.class.php:2005
 #, c-format
 msgid "%s Verknüpfungen zu externen Systemen gel&ouml;scht."
 msgstr "%s links to external systems have been deleted."
 
-#: ../lib/classes/Seminar.class.php:2023
+#: ../lib/classes/Seminar.class.php:2027
 #, fuzzy
 msgid "Fehler beim Löschen der Veranstaltung"
 msgstr "Error while deleting the course"
@@ -20119,7 +20119,7 @@ msgid ""
 msgstr "Please enter <b>Username</b>, <b>Status</b> and <b>E-Mail-address</b>!"
 
 #: ../lib/classes/UserManagement.class.php:323
-#: ../lib/classes/UserManagement.class.php:442
+#: ../lib/classes/UserManagement.class.php:439
 msgid "Der gewählte Username ist zu kurz oder enthält unzulässige Zeichen!"
 msgstr "The chosen username is too short or includes illegal characters!"
 
@@ -20133,38 +20133,38 @@ msgstr "User <b>%s</b> already exists!"
 msgid "BenutzerIn \"%s\" angelegt."
 msgstr "User \"%s\" created."
 
-#: ../lib/classes/UserManagement.class.php:383
-#: ../lib/classes/UserManagement.class.php:562
+#: ../lib/classes/UserManagement.class.php:380
+#: ../lib/classes/UserManagement.class.php:556
 msgid "Sie haben keine Berechtigung Accounts zu ver&auml;ndern."
 msgstr "You don't have any authorisation to change accounts."
 
-#: ../lib/classes/UserManagement.class.php:387
+#: ../lib/classes/UserManagement.class.php:384
 #, fuzzy
 msgid "Sie haben keine Berechtigung, <em>Admin-Accounts</em> anzulegen."
 msgstr "You don't have any authorisation to create <b>Admin Accounts</b>"
 
-#: ../lib/classes/UserManagement.class.php:391
+#: ../lib/classes/UserManagement.class.php:388
 #, fuzzy
 msgid "Sie haben keine Berechtigung, <em>Root-Accounts</em> anzulegen."
 msgstr "You don't have any authorisation to create <b>Root Accounts</b>"
 
-#: ../lib/classes/UserManagement.class.php:396
+#: ../lib/classes/UserManagement.class.php:393
 #, fuzzy
 msgid "Sie haben keine Berechtigung <em>Admin-Accounts</em> zu ver&auml;ndern."
 msgstr "You don't have any authorisation to change <b>Admin Accounts</b>."
 
-#: ../lib/classes/UserManagement.class.php:400
-#: ../lib/classes/UserManagement.class.php:568
+#: ../lib/classes/UserManagement.class.php:397
+#: ../lib/classes/UserManagement.class.php:562
 #, fuzzy
 msgid "Sie haben keine Berechtigung <em>Root-Accounts</em> zu ver&auml;ndern."
 msgstr "You don't have any authorisation to change <b>Root Accounts</b>"
 
-#: ../lib/classes/UserManagement.class.php:410
-#: ../lib/classes/UserManagement.class.php:578
+#: ../lib/classes/UserManagement.class.php:407
+#: ../lib/classes/UserManagement.class.php:572
 msgid "Sie haben keine Berechtigung diesen Admin-Account zu ver&auml;ndern."
 msgstr "You don't have any authorisation to change this admin account."
 
-#: ../lib/classes/UserManagement.class.php:420
+#: ../lib/classes/UserManagement.class.php:417
 #, fuzzy, c-format
 msgid ""
 "Der Benutzer <em>%s</em> ist Dozent in %s aktiven Veranstaltungen und kann "
@@ -20173,7 +20173,7 @@ msgstr ""
 "The user <b>%s</b> is lecturer in %s active courses and therefore can not be "
 "given a different status!"
 
-#: ../lib/classes/UserManagement.class.php:433
+#: ../lib/classes/UserManagement.class.php:430
 #, fuzzy, c-format
 msgid ""
 "Der Benutzer <em>%s</em> ist Admin in %s Einrichtungen und kann daher nicht "
@@ -20182,7 +20182,7 @@ msgstr ""
 "The user <b>%s</b> is administrator in %s institutes and therefore can not "
 "be given a different status!"
 
-#: ../lib/classes/UserManagement.class.php:447
+#: ../lib/classes/UserManagement.class.php:444
 #, fuzzy
 msgid ""
 "Der Username wird bereits von einem anderen Benutzer verwendet. Bitte wählen "
@@ -20190,67 +20190,67 @@ msgid ""
 msgstr ""
 "The username is already used by another user. Please choose another username!"
 
-#: ../lib/classes/UserManagement.class.php:469
+#: ../lib/classes/UserManagement.class.php:466
 #, fuzzy, c-format
 msgid "Das Feld <em>%s</em> können Sie nicht ändern!"
 msgstr "You can not change the field <b>%s</b>!"
 
-#: ../lib/classes/UserManagement.class.php:480
+#: ../lib/classes/UserManagement.class.php:477
 #, fuzzy, c-format
 msgid "Benutzer \"%s\" ver&auml;ndert."
 msgstr "User \"%s\" changed."
 
-#: ../lib/classes/UserManagement.class.php:504
-#: ../lib/classes/UserManagement.class.php:710
+#: ../lib/classes/UserManagement.class.php:498
+#: ../lib/classes/UserManagement.class.php:701
 #, c-format
 msgid "%s Eintr&auml;ge aus Veranstaltungen gel&ouml;scht."
 msgstr "%s entries from courses have been deleted."
 
-#: ../lib/classes/UserManagement.class.php:515
-#: ../lib/classes/UserManagement.class.php:719
+#: ../lib/classes/UserManagement.class.php:509
+#: ../lib/classes/UserManagement.class.php:710
 #, c-format
 msgid "%s Eintr&auml;ge aus Wartelisten gel&ouml;scht."
 msgstr "%s entries from the waiting list have been deleted."
 
-#: ../lib/classes/UserManagement.class.php:524
-#: ../lib/classes/UserManagement.class.php:758
+#: ../lib/classes/UserManagement.class.php:518
+#: ../lib/classes/UserManagement.class.php:749
 #, c-format
 msgid "%s Zuordnungen zu Studieng&auml;ngen gel&ouml;scht."
 msgstr "%s allocations to programs of study have been deleted."
 
-#: ../lib/classes/UserManagement.class.php:528
-#: ../lib/classes/UserManagement.class.php:764
+#: ../lib/classes/UserManagement.class.php:522
+#: ../lib/classes/UserManagement.class.php:755
 #, c-format
 msgid "%s Eintr&auml;ge aus den Terminen gel&ouml;scht."
 msgstr "%s appointment entries have been deleted."
 
-#: ../lib/classes/UserManagement.class.php:536
-#: ../lib/classes/UserManagement.class.php:543
-#: ../lib/classes/UserManagement.class.php:728
+#: ../lib/classes/UserManagement.class.php:530
+#: ../lib/classes/UserManagement.class.php:537
+#: ../lib/classes/UserManagement.class.php:719
 #, c-format
 msgid "%s Eintr&auml;ge aus MitarbeiterInnenlisten gel&ouml;scht."
 msgstr "%s entries from the staff list have been deleted."
 
-#: ../lib/classes/UserManagement.class.php:597
-#: ../lib/classes/UserManagement.class.php:890
+#: ../lib/classes/UserManagement.class.php:591
+#: ../lib/classes/UserManagement.class.php:878
 #, fuzzy, c-format
 msgid "Passwort von Benutzer \"%s\" neu gesetzt."
 msgstr "New password for user \"%s\" has been generated. "
 
-#: ../lib/classes/UserManagement.class.php:627
+#: ../lib/classes/UserManagement.class.php:617
 msgid "Sie haben keine Berechtigung Accounts zu l&ouml;schen."
 msgstr "You don't have any authorisation to delete user accounts."
 
-#: ../lib/classes/UserManagement.class.php:633
+#: ../lib/classes/UserManagement.class.php:623
 #, fuzzy
 msgid "Sie haben keine Berechtigung <em>Root-Accounts</em> zu l&ouml;schen."
 msgstr "You don't have any authorisation to delete <b>Root Accounts</b>"
 
-#: ../lib/classes/UserManagement.class.php:643
+#: ../lib/classes/UserManagement.class.php:633
 msgid "Sie haben keine Berechtigung diesen Admin-Account zu l&ouml;schen."
 msgstr "You don't have any authorisation to delete this admin account."
 
-#: ../lib/classes/UserManagement.class.php:653
+#: ../lib/classes/UserManagement.class.php:644
 #, fuzzy, c-format
 msgid ""
 "Der Benutzer/die Benutzerin <em>%s</em> ist DozentIn in %s aktiven "
@@ -20259,12 +20259,12 @@ msgstr ""
 "The user <b>%s</b> is lecturer in %s active courses and therefore can not be "
 "deleted."
 
-#: ../lib/classes/UserManagement.class.php:687
+#: ../lib/classes/UserManagement.class.php:678
 #, c-format
 msgid "%s leere Ordner gel&ouml;scht."
 msgstr "%s Empty folder deleted."
 
-#: ../lib/classes/UserManagement.class.php:695
+#: ../lib/classes/UserManagement.class.php:686
 #, c-format
 msgid ""
 "%s Ordner konnten nicht gel&ouml;scht werden, da sie noch Dokumente anderer "
@@ -20272,12 +20272,12 @@ msgid ""
 msgstr ""
 "%s folder couldn't be deleted because it contains documents from other users"
 
-#: ../lib/classes/UserManagement.class.php:733
+#: ../lib/classes/UserManagement.class.php:724
 #, c-format
 msgid "%s Eintr&auml;ge aus Funktionen / Gruppen gel&ouml;scht."
 msgstr "%s entries from functions / groups have been deleted."
 
-#: ../lib/classes/UserManagement.class.php:740
+#: ../lib/classes/UserManagement.class.php:731
 #, c-format
 msgid ""
 "%s Eintr&auml;ge aus den Zugriffsberechtigungen f&uuml;r das Archiv gel&ouml;"
@@ -20285,36 +20285,36 @@ msgid ""
 msgstr ""
 "%s entries from the access authorisation for the archive have been deleted ."
 
-#: ../lib/classes/UserManagement.class.php:745
+#: ../lib/classes/UserManagement.class.php:736
 #, c-format
 msgid "%s Eintr&auml;ge aus den News gel&ouml;scht."
 msgstr "%s news entries have been deleted!"
 
-#: ../lib/classes/UserManagement.class.php:748
+#: ../lib/classes/UserManagement.class.php:739
 #, c-format
 msgid "%s Verweise auf News gel&ouml;scht."
 msgstr "%s links to news have been deleted!"
 
-#: ../lib/classes/UserManagement.class.php:774
+#: ../lib/classes/UserManagement.class.php:765
 #, c-format
 msgid "%s Eintr&auml;ge aus Adressb&uuml;chern gel&ouml;scht."
 msgstr "%s entries in the address book have been deleted."
 
-#: ../lib/classes/UserManagement.class.php:785
+#: ../lib/classes/UserManagement.class.php:776
 #, c-format
 msgid "%s Eintr&auml;ge aus dem Gästebuch gel&ouml;scht."
 msgstr "%s guest book entries have been deleted."
 
-#: ../lib/classes/UserManagement.class.php:823
+#: ../lib/classes/UserManagement.class.php:814
 #, c-format
 msgid "Der verknüpfte Nutzer %s wurde im System %s gelöscht."
 msgstr "The linked user %s has been deleted in system %s."
 
-#: ../lib/classes/UserManagement.class.php:835
+#: ../lib/classes/UserManagement.class.php:826
 msgid "Fehler:"
 msgstr "Error:"
 
-#: ../lib/classes/UserManagement.class.php:838
+#: ../lib/classes/UserManagement.class.php:829
 #, fuzzy, c-format
 msgid "Benutzer \"%s\" gel&ouml;scht."
 msgstr "User \"%s\" deleted."
@@ -21265,6 +21265,12 @@ msgstr "You cannot allocate this group to a subgroup allocated to it!"
 #: ../lib/classes/Statusgruppe.class.php:310
 msgid "Korrigieren Sie die fehlerhaften Eingaben!"
 msgstr "Please correct the wrong entry!"
+
+#: ../lib/classes/StudipMail.class.php:372
+msgid ""
+"Diese Nachricht ist im HTML-Format verfasst. Sie benötigen eine E-Mail-"
+"Anwendung, die das HTML-Format anzeigen kann."
+msgstr ""
 
 #: ../lib/soap/StudipSoapClient_PHP5.class.php:36
 #: ../lib/soap/StudipSoapClient.class.php:31
@@ -28719,34 +28725,34 @@ msgstr "reload"
 msgid "Nicht buchbare Belegungszeiten:"
 msgstr "requested allocation period:"
 
-#: ../lib/resources/lib/evaluate_values.php:1450
-#: ../lib/resources/lib/evaluate_values.php:1454
-#: ../lib/resources/lib/evaluate_values.php:1464
-#: ../lib/resources/lib/evaluate_values.php:1466
-#: ../lib/resources/lib/evaluate_values.php:1482
-#: ../lib/resources/lib/evaluate_values.php:1485
+#: ../lib/resources/lib/evaluate_values.php:1461
+#: ../lib/resources/lib/evaluate_values.php:1465
+#: ../lib/resources/lib/evaluate_values.php:1475
+#: ../lib/resources/lib/evaluate_values.php:1477
+#: ../lib/resources/lib/evaluate_values.php:1493
+#: ../lib/resources/lib/evaluate_values.php:1496
 #, c-format
 msgid "%s, Belegungszeit: %s"
 msgstr "%s, allocation period: %s"
 
-#: ../lib/resources/lib/evaluate_values.php:1495
+#: ../lib/resources/lib/evaluate_values.php:1506
 msgid "Belegungszeit:"
 msgstr "allocation period:"
 
-#: ../lib/resources/lib/evaluate_values.php:1496
+#: ../lib/resources/lib/evaluate_values.php:1507
 msgid "noch nicht bearbeitet"
 msgstr "note done yet"
 
-#: ../lib/resources/lib/evaluate_values.php:1496
+#: ../lib/resources/lib/evaluate_values.php:1507
 msgid "bereits bearbeitet"
 msgstr "already done"
 
-#: ../lib/resources/lib/evaluate_values.php:1600
+#: ../lib/resources/lib/evaluate_values.php:1611
 #, fuzzy
 msgid "Wollen Sie diese Raumanfrage wirklich löschen?"
 msgstr "Do you really want to delete this topic?"
 
-#: ../lib/resources/lib/evaluate_values.php:1895
+#: ../lib/resources/lib/evaluate_values.php:1906
 #, c-format
 msgid ""
 "ABGELEHNTE RAUMANFRAGE: Ihre Raumanfrage zur Veranstaltung %s (%s) wurde "
@@ -28755,12 +28761,12 @@ msgstr ""
 "REJECTED ROOM REQUEST: Your room request for the course %s (%s) has been "
 "rejected."
 
-#: ../lib/resources/lib/evaluate_values.php:1896
-#: ../lib/resources/lib/evaluate_values.php:1899
+#: ../lib/resources/lib/evaluate_values.php:1907
+#: ../lib/resources/lib/evaluate_values.php:1910
 msgid "Nachricht des Raumadministrators:"
 msgstr "Message of the room administrator:"
 
-#: ../lib/resources/lib/evaluate_values.php:1898
+#: ../lib/resources/lib/evaluate_values.php:1909
 #, c-format
 msgid ""
 "ABGELEHNTE RAUMANFRAGE: Ihre Raumanfrage zur Veranstaltung %s wurde "
@@ -28768,31 +28774,31 @@ msgid ""
 msgstr ""
 "REJECTED ROOM REQUEST: Your room request for the course %s has been rejected."
 
-#: ../lib/resources/lib/evaluate_values.php:1904
+#: ../lib/resources/lib/evaluate_values.php:1915
 msgid "Betroffener Termin:"
 msgstr "Appointment concerned:"
 
-#: ../lib/resources/lib/evaluate_values.php:1919
+#: ../lib/resources/lib/evaluate_values.php:1930
 msgid "Raumanfrage abgelehnt:"
 msgstr "Room request rejected:"
 
-#: ../lib/resources/lib/evaluate_values.php:1929
+#: ../lib/resources/lib/evaluate_values.php:1940
 #, c-format
 msgid "Ihre Raumanfrage zur Veranstaltung %s (%s) wurde bearbeitet."
 msgstr "Your room request for the course %s (%s) has been processed."
 
-#: ../lib/resources/lib/evaluate_values.php:1929
-#: ../lib/resources/lib/evaluate_values.php:1931
+#: ../lib/resources/lib/evaluate_values.php:1940
+#: ../lib/resources/lib/evaluate_values.php:1942
 msgid "Für folgende Belegungszeiten wurde der jeweils angegebene Raum gebucht:"
 msgstr ""
 "The marked rooms have been booked for the following allocation periods:"
 
-#: ../lib/resources/lib/evaluate_values.php:1931
+#: ../lib/resources/lib/evaluate_values.php:1942
 #, c-format
 msgid "Ihre Raumanfrage zur Veranstaltung %s wurde bearbeitet."
 msgstr "Your room request for the course %s has been processed."
 
-#: ../lib/resources/lib/evaluate_values.php:1939
+#: ../lib/resources/lib/evaluate_values.php:1950
 msgid "Raumanfrage bearbeitet"
 msgstr "Resolved room request"
 
@@ -30029,8 +30035,8 @@ msgid "Objekt in diese Ebene verschieben"
 msgstr "Move object to this level"
 
 #: ../lib/resources/views/ShowThread.class.php:124
-#: ../lib/resources/views/ShowList.class.php:169 ../lib/datei.inc.php:1523
-#: ../lib/datei.inc.php:1717
+#: ../lib/resources/views/ShowList.class.php:169 ../lib/datei.inc.php:1520
+#: ../lib/datei.inc.php:1714
 msgid "&Auml;nderungen speichern"
 msgstr "Save changes"
 
@@ -31959,20 +31965,20 @@ msgstr ""
 msgid "DB: Keine gültige Antwort gewählt"
 msgstr "DB: No valid answer selected."
 
-#: ../lib/sms_functions.inc.php:195 ../lib/sms_functions.inc.php:336
+#: ../lib/sms_functions.inc.php:195 ../lib/sms_functions.inc.php:338
 msgid "Löschschutz deaktivieren."
 msgstr "Deactivate deletion protection."
 
-#: ../lib/sms_functions.inc.php:196 ../lib/sms_functions.inc.php:337
+#: ../lib/sms_functions.inc.php:196 ../lib/sms_functions.inc.php:339
 msgid "Diese Nachricht kann momentan nicht gelöscht werden."
 msgstr "This message can not be deleted at the moment."
 
-#: ../lib/sms_functions.inc.php:200 ../lib/sms_functions.inc.php:341
+#: ../lib/sms_functions.inc.php:200 ../lib/sms_functions.inc.php:343
 msgid "Löschschutz für diese Nachricht aktivieren."
 msgstr "The deletion protection has been activated for the selected message."
 
-#: ../lib/sms_functions.inc.php:201 ../lib/sms_functions.inc.php:262
-#: ../lib/sms_functions.inc.php:342
+#: ../lib/sms_functions.inc.php:201 ../lib/sms_functions.inc.php:264
+#: ../lib/sms_functions.inc.php:344
 msgid "Diese Nachricht löschen."
 msgstr "Delete this message."
 
@@ -31982,8 +31988,8 @@ msgid "an %s, %s"
 msgstr "to %s, %s "
 
 #: ../lib/sms_functions.inc.php:209 ../lib/sms_functions.inc.php:216
-#: ../lib/sms_functions.inc.php:264 ../lib/sms_functions.inc.php:346
-#: ../lib/sms_functions.inc.php:416
+#: ../lib/sms_functions.inc.php:266 ../lib/sms_functions.inc.php:348
+#: ../lib/sms_functions.inc.php:420
 msgid "Diese Nachricht in einen frei wählbaren Ordner verschieben."
 msgstr "Move this message to a folder of your choice."
 
@@ -31992,66 +31998,66 @@ msgstr "Move this message to a folder of your choice."
 msgid "an %s Empf&auml;nger, %s"
 msgstr "to %s addressee, %s. "
 
-#: ../lib/sms_functions.inc.php:234
+#: ../lib/sms_functions.inc.php:236
 msgid "gesendet an:"
 msgstr "Sent to:"
 
-#: ../lib/sms_functions.inc.php:252
+#: ../lib/sms_functions.inc.php:254
 msgid "und an Sie selbst"
 msgstr "and to yourself"
 
-#: ../lib/sms_functions.inc.php:270 ../lib/sms_functions.inc.php:360
+#: ../lib/sms_functions.inc.php:272 ../lib/sms_functions.inc.php:362
 #, fuzzy
 msgid "Diese Nachricht enthält einen Dateianhang."
 msgstr "A signature has been attachted to this message"
 
-#: ../lib/sms_functions.inc.php:350
+#: ../lib/sms_functions.inc.php:352
 msgid "automatische Systemnachricht, "
 msgstr "Automatically system message,"
 
-#: ../lib/sms_functions.inc.php:352
+#: ../lib/sms_functions.inc.php:354
 #, c-format
 msgid "von %s, "
 msgstr "from %s, "
 
-#: ../lib/sms_functions.inc.php:379
+#: ../lib/sms_functions.inc.php:383
 msgid "Der Absender / Die Absenderin hat eine Lesebestätigung angefordert."
 msgstr "The sender has requested an acknowledgement of reading."
 
-#: ../lib/sms_functions.inc.php:380
+#: ../lib/sms_functions.inc.php:384
 msgid "Klicken Sie hier um das Lesen der Nachricht zu bestätigen"
 msgstr "Click here for acknowledgment of reading this message."
 
-#: ../lib/sms_functions.inc.php:550
+#: ../lib/sms_functions.inc.php:548
 msgid "keine Nachrichten"
 msgstr "No messages "
 
-#: ../lib/sms_functions.inc.php:552
+#: ../lib/sms_functions.inc.php:550
 #, c-format
 msgid "%s von %s Nachrichten"
 msgstr "%s from %s messages"
 
-#: ../lib/sms_functions.inc.php:598
+#: ../lib/sms_functions.inc.php:596
 msgid "Bitte w&auml;hlen Sie mindestens einen Empf&auml;nger aus."
 msgstr "Please select at least one addressee."
 
-#: ../lib/sms_functions.inc.php:607
+#: ../lib/sms_functions.inc.php:605
 msgid "löscht alle ausgewählten EmpfängerInnen"
 msgstr "Delete all selected addressees "
 
-#: ../lib/sms_functions.inc.php:608
+#: ../lib/sms_functions.inc.php:606
 msgid "ausgewählte löschen"
 msgstr "delete selected"
 
-#: ../lib/sms_functions.inc.php:609 ../lib/sms_functions.inc.php:610
+#: ../lib/sms_functions.inc.php:607 ../lib/sms_functions.inc.php:608
 msgid "Empfängerliste leeren"
 msgstr "Clear list of recipients"
 
-#: ../lib/sms_functions.inc.php:631
+#: ../lib/sms_functions.inc.php:629
 msgid "Adressbuch-Liste:"
 msgstr "Address book list:"
 
-#: ../lib/sms_functions.inc.php:635
+#: ../lib/sms_functions.inc.php:633
 #, c-format
 msgid ""
 "Sie haben noch keine Personen in ihrem Adressbuch. %s Klicken sie %s hier %s "
@@ -32060,162 +32066,157 @@ msgstr ""
 "You do not have anyone in your address book. %s Click %shere%s to arrive "
 "there."
 
-#: ../lib/sms_functions.inc.php:640
+#: ../lib/sms_functions.inc.php:638
 msgid "Bereits alle Personen des Adressbuchs hinzugef&uuml;gt!"
 msgstr "All people in your address book have already been added!"
 
-#: ../lib/sms_functions.inc.php:660
+#: ../lib/sms_functions.inc.php:658
 msgid "fügt alle ausgewähtlen Personen der EmpfängerInnenliste hinzu"
 msgstr "Add all selected people to the addressee list."
 
-#: ../lib/sms_functions.inc.php:661
+#: ../lib/sms_functions.inc.php:659
 msgid "ausgew&auml;hlte hinzufügen"
 msgstr "Add selected"
 
-#: ../lib/sms_functions.inc.php:662
+#: ../lib/sms_functions.inc.php:660
 msgid "fügt alle Personen der EmpfängerInnenliste hinzu"
 msgstr "Add all people to the addressee list."
 
-#: ../lib/sms_functions.inc.php:663
+#: ../lib/sms_functions.inc.php:661
 msgid "alle hinzuf&uuml;gen"
 msgstr "Add all"
 
-#: ../lib/sms_functions.inc.php:670
+#: ../lib/sms_functions.inc.php:668
 msgid "Freie Suche:"
 msgstr "Free search:"
 
-#: ../lib/sms_functions.inc.php:681
+#: ../lib/sms_functions.inc.php:679
 msgid "zu Empfängerliste hinzufügen"
 msgstr "Add to addressee list."
 
-#: ../lib/sms_functions.inc.php:681
+#: ../lib/sms_functions.inc.php:679
 msgid "zu Empf&auml;ngerliste hinzuf&uuml;gen"
 msgstr "Add to addressee list"
 
-#: ../lib/sms_functions.inc.php:745 ../lib/sms_functions.inc.php:768
+#: ../lib/sms_functions.inc.php:743 ../lib/sms_functions.inc.php:766
 msgid "Betreff:"
 msgstr "Subject:"
 
-#: ../lib/sms_functions.inc.php:748 ../lib/sms_functions.inc.php:769
+#: ../lib/sms_functions.inc.php:746 ../lib/sms_functions.inc.php:767
 msgid "Nachricht:"
 msgstr "Message:"
 
-#: ../lib/sms_functions.inc.php:767
+#: ../lib/sms_functions.inc.php:765
 msgid "aktualisiert die Vorschau der aktuellen Nachricht."
 msgstr "renew the preview of the current message."
 
-#: ../lib/sms_functions.inc.php:767
+#: ../lib/sms_functions.inc.php:765
 msgid "Vorschau erneuern."
 msgstr "Renew preview."
 
-#: ../lib/sms_functions.inc.php:790
+#: ../lib/sms_functions.inc.php:788
 msgid "Dieser Nachricht wird eine Signatur angehängt"
 msgstr "A signature has been attachted to this message"
 
-#: ../lib/sms_functions.inc.php:791
+#: ../lib/sms_functions.inc.php:789
 msgid "entfernt die Signatur von der aktuellen Nachricht."
 msgstr "Remove the signature from the current message."
 
-#: ../lib/sms_functions.inc.php:791
+#: ../lib/sms_functions.inc.php:789
 msgid "Signatur entfernen."
 msgstr "Remove signature."
 
-#: ../lib/sms_functions.inc.php:802
+#: ../lib/sms_functions.inc.php:800
 msgid "Dieser Nachricht wird keine Signatur angehängt"
 msgstr "No signature has been attached to this message."
 
-#: ../lib/sms_functions.inc.php:803
+#: ../lib/sms_functions.inc.php:801
 msgid "fügt der aktuellen Nachricht eine Signatur an."
 msgstr "Add a signature to the current message."
 
-#: ../lib/sms_functions.inc.php:803
+#: ../lib/sms_functions.inc.php:801
 msgid "Signatur anhängen."
 msgstr "Attach signature."
 
-#: ../lib/sms_functions.inc.php:818
+#: ../lib/sms_functions.inc.php:816
 msgid "Klicken Sie hier um die Nachricht nicht zu speichern."
 msgstr "Click here for not saving the message."
 
-#: ../lib/sms_functions.inc.php:818
+#: ../lib/sms_functions.inc.php:816
 msgid "Klicken Sie das Icon um die Nachricht nicht zu speichern."
 msgstr "Click on the icon for not saving the message."
 
-#: ../lib/sms_functions.inc.php:823
+#: ../lib/sms_functions.inc.php:821
 msgid "in: "
 msgstr "in: "
 
-#: ../lib/sms_functions.inc.php:836
+#: ../lib/sms_functions.inc.php:834
 msgid "Klicken Sie hier um die Nachricht zu speichern."
 msgstr "Click here for saving the message."
 
-#: ../lib/sms_functions.inc.php:836
+#: ../lib/sms_functions.inc.php:834
 msgid "Klicken Sie das Icon um die Nachricht zu speichern."
 msgstr "Click on the icon for saving the message."
 
-#: ../lib/sms_functions.inc.php:850
+#: ../lib/sms_functions.inc.php:848
 msgid "Klicken Sie hier um die Nachricht nicht (auch) als Email zu versenden."
 msgstr "Click here for not (additionally) sending the message as e-mail."
 
-#: ../lib/sms_functions.inc.php:850
+#: ../lib/sms_functions.inc.php:848
 msgid ""
 "Klicken Sie das Icon um die Nachricht nicht (auch) als Email zu versenden."
 msgstr ""
 "Click on the icon for not (additionally) sending the message as e-mail."
 
-#: ../lib/sms_functions.inc.php:852
+#: ../lib/sms_functions.inc.php:850
 msgid "Klicken Sie hier um die Nachricht (auch) als Email zu versenden."
 msgstr "Click here for (additionally) sending the message as e-mail."
 
-#: ../lib/sms_functions.inc.php:852
+#: ../lib/sms_functions.inc.php:850
 msgid "Klicken Sie das Icon um die Nachricht (auch) als Email zu versenden."
 msgstr "Click on the icon for (additionally) sending the message as e-mail."
 
-#: ../lib/sms_functions.inc.php:865
+#: ../lib/sms_functions.inc.php:863
 msgid ""
 "Klicken Sie hier um für diese Nachricht keine Lesebestätigung anzufordern."
 msgstr ""
 "Click here for not requesting acknowledgement of reading for this message."
 
-#: ../lib/sms_functions.inc.php:865
+#: ../lib/sms_functions.inc.php:863
 msgid "Klicken Sie das Icon um keine Lesebestätigung anzufordern."
 msgstr ""
 "Click on the icon for not requesting acknowledgement of reading for this "
 "message."
 
-#: ../lib/sms_functions.inc.php:867
+#: ../lib/sms_functions.inc.php:865
 msgid ""
 "Klicken Sie hier um für diese Nachricht eine Lesebestätigung anzufordern."
 msgstr "Click here for requesting acknowledgement of reading for this message."
 
-#: ../lib/sms_functions.inc.php:867
+#: ../lib/sms_functions.inc.php:865
 msgid "Klicken Sie das Icon um eine Lesebestätigung anzufordern."
 msgstr ""
 "Click on the icon for requesting acknowledgement of reading for this message."
 
-#: ../lib/sms_functions.inc.php:882
+#: ../lib/sms_functions.inc.php:880
 msgid "Chatraum ausw&auml;hlen:"
 msgstr "Select chat room:"
 
-#: ../lib/sms_functions.inc.php:918
+#: ../lib/sms_functions.inc.php:910
 #, fuzzy
 msgid "Angehängte Dateien:"
 msgstr "No files:"
 
-#: ../lib/sms_functions.inc.php:924
-#, fuzzy
-msgid "Dateianhang entfernen"
-msgstr "Remove this course"
-
-#: ../lib/sms_functions.inc.php:924
+#: ../lib/sms_functions.inc.php:916
 msgid "entfernt den Dateianhang"
 msgstr ""
 
-#: ../lib/sms_functions.inc.php:930
+#: ../lib/sms_functions.inc.php:921
 #, fuzzy
 msgid "An diese Nachricht ist keine Datei angehängt."
 msgstr "No signature has been attached to this message."
 
-#: ../lib/sms_functions.inc.php:935
+#: ../lib/sms_functions.inc.php:924
 #, fuzzy
 msgid ""
 "Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen."
@@ -32543,50 +32544,50 @@ msgstr "Move there"
 msgid "in das Forum einer Einrichtung:"
 msgstr "in the forum of an institute:"
 
-#: ../lib/phplib_local.inc.php:487
+#: ../lib/phplib_local.inc.php:460
 msgid ""
 "Das System befindet sich im Wartungsmodus. Zur Zeit ist kein Zugriff möglich."
 msgstr ""
 "The system is in the maintance modus. At present no access is possible."
 
-#: ../lib/phplib_local.inc.php:487
+#: ../lib/phplib_local.inc.php:460
 msgid "Wartungsmodus"
 msgstr "Maintance modus"
 
-#: ../lib/phplib_local.inc.php:534
+#: ../lib/phplib_local.inc.php:507
 msgid "Fehler beim Auto-Login!"
 msgstr "Error by Auto-login!"
 
-#: ../lib/phplib_local.inc.php:550
+#: ../lib/phplib_local.inc.php:523
 #, c-format
 msgid "Autologin ist mit dem Status: %s nicht möglich!"
 msgstr "Autologin is not possible with the status: %s!"
 
-#: ../lib/phplib_local.inc.php:725
+#: ../lib/phplib_local.inc.php:698
 msgid "Registrierung"
 msgstr "Registration"
 
-#: ../lib/phplib_local.inc.php:773
+#: ../lib/phplib_local.inc.php:746
 msgid "Der gewählte Username ist zu kurz!"
 msgstr "The chosen username is too short!"
 
-#: ../lib/phplib_local.inc.php:781
+#: ../lib/phplib_local.inc.php:754
 msgid "Das Passwort ist zu kurz!"
 msgstr "The password is too short! "
 
-#: ../lib/phplib_local.inc.php:788 ../lib/edit_about.inc.php:586
+#: ../lib/phplib_local.inc.php:761 ../lib/edit_about.inc.php:575
 msgid "Der Vorname fehlt oder ist unsinnig!"
 msgstr "The first name is missing or is absurd!"
 
-#: ../lib/phplib_local.inc.php:793 ../lib/edit_about.inc.php:597
+#: ../lib/phplib_local.inc.php:766 ../lib/edit_about.inc.php:586
 msgid "Der Nachname fehlt oder ist unsinnig!"
 msgstr "The surname is missing or is absurd!"
 
-#: ../lib/phplib_local.inc.php:798 ../lib/edit_about.inc.php:76
+#: ../lib/phplib_local.inc.php:771 ../lib/edit_about.inc.php:75
 msgid "Die E-Mail-Adresse fehlt oder ist falsch geschrieben!"
 msgstr "The e-mail-address is missing or is incorrectly written! "
 
-#: ../lib/phplib_local.inc.php:807
+#: ../lib/phplib_local.inc.php:779
 msgid ""
 "Der Mailserver ist nicht erreichbar, bitte überprüfen Sie, ob Sie E-Mails "
 "mit der angegebenen Adresse verschicken und empfangen können!"
@@ -32594,7 +32595,7 @@ msgstr ""
 "The mail server is not contactable. Please check whether e-mails can be sent "
 "and received from the given address!"
 
-#: ../lib/phplib_local.inc.php:817
+#: ../lib/phplib_local.inc.php:784
 msgid ""
 "Die angegebene E-Mail-Adresse ist nicht erreichbar, bitte überprüfen Sie "
 "Ihre Angaben!"
@@ -32602,11 +32603,11 @@ msgstr ""
 "The given e-mail-address is not contactable, please check the given "
 "information!"
 
-#: ../lib/phplib_local.inc.php:828
+#: ../lib/phplib_local.inc.php:795
 msgid "Der gewählte Username ist bereits vorhanden!"
 msgstr "The chosen username has already been taken!"
 
-#: ../lib/phplib_local.inc.php:839
+#: ../lib/phplib_local.inc.php:806
 msgid ""
 "Die angegebene E-Mail-Adresse wird bereits von einem anderen User verwendet. "
 "Sie müssen eine andere E-Mail-Adresse angeben!"
@@ -33658,7 +33659,7 @@ msgstr ""
 "With this setting you can activate viewing of begin and end semester behind "
 "each course on the page &raquo;Meine Veranstaltungen&laquo;."
 
-#: ../lib/datei.inc.php:286
+#: ../lib/datei.inc.php:283
 msgid ""
 "Hinweis: die folgenden Dateien sind nicht im Archiv enthalten, da sie "
 "lediglich verlinkt wurden:"
@@ -33666,11 +33667,11 @@ msgstr ""
 "Note: the following files are not contained in the archive, since they were "
 "only linked:"
 
-#: ../lib/datei.inc.php:631 ../lib/datei.inc.php:634
+#: ../lib/datei.inc.php:628 ../lib/datei.inc.php:631
 msgid "Sie haben diesen Ordner zum Upload ausgew&auml;hlt:"
 msgstr "You have chosen to upload a document into this folder:"
 
-#: ../lib/datei.inc.php:632
+#: ../lib/datei.inc.php:629
 msgid ""
 "Die Dateien und Ordner, die im hochzuladenden Ziparchiv enthalten sind, "
 "werden in diesen Ordner entpackt."
@@ -33678,7 +33679,7 @@ msgstr ""
 "All the files and folders contained in the zip archive to be uploaded will "
 "be unpacked to this folder."
 
-#: ../lib/datei.inc.php:636
+#: ../lib/datei.inc.php:633
 msgid ""
 "Sie haben diese Datei zum Aktualisieren ausgew&auml;hlt. Sie <b>&uuml;"
 "berschreiben</b> damit die vorhandene Datei durch eine neue Version!"
@@ -33686,65 +33687,65 @@ msgstr ""
 "You have chosen to update these files. You will therefore <b>overwrite</b> "
 "the current file with a new version!"
 
-#: ../lib/datei.inc.php:645 ../lib/datei.inc.php:667
+#: ../lib/datei.inc.php:642 ../lib/datei.inc.php:664
 msgid "Unzul&auml;ssige Dateitypen:"
 msgstr "Invalid file types:"
 
-#: ../lib/datei.inc.php:655 ../lib/datei.inc.php:677 ../lib/datei.inc.php:687
+#: ../lib/datei.inc.php:652 ../lib/datei.inc.php:674 ../lib/datei.inc.php:684
 msgid "Zul&auml;ssige Dateitypen:"
 msgstr "Valid file types:"
 
-#: ../lib/datei.inc.php:691 ../templates/extern/upload_form.php:7
+#: ../lib/datei.inc.php:688 ../templates/extern/upload_form.php:7
 msgid "Maximale Gr&ouml;&szlig;e:"
 msgstr "Maximum size:"
 
-#: ../lib/datei.inc.php:691
+#: ../lib/datei.inc.php:688
 msgid "Megabyte"
 msgstr "Megabyte"
 
-#: ../lib/datei.inc.php:693
+#: ../lib/datei.inc.php:690
 msgid "Maximaler Inhalt des Ziparchivs:"
 msgstr "Maximal content of the zip archive:"
 
-#: ../lib/datei.inc.php:695
+#: ../lib/datei.inc.php:692
 #, c-format
 msgid "<b>%d</b> Dateien und <b>%d</b> Ordner"
 msgstr "<b>%d</b> files and <b>%d</b> folders"
 
-#: ../lib/datei.inc.php:699 ../templates/extern/upload_form.php:11
+#: ../lib/datei.inc.php:696 ../templates/extern/upload_form.php:11
 msgid ""
 "1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen."
 msgstr "1. Click on <b>'Browse...'</b> to select a file."
 
-#: ../lib/datei.inc.php:701 ../lib/datei.inc.php:1244
+#: ../lib/datei.inc.php:698 ../lib/datei.inc.php:1241
 #: ../templates/extern/upload_form.php:13
 msgid "Dateipfad:"
 msgstr "File path:"
 
-#: ../lib/datei.inc.php:705 ../lib/datei.inc.php:1252
+#: ../lib/datei.inc.php:702 ../lib/datei.inc.php:1249
 msgid "2. Schutz gem&auml;&szlig; Urhebberecht."
 msgstr ""
 
-#: ../lib/datei.inc.php:707 ../lib/datei.inc.php:1713
+#: ../lib/datei.inc.php:704 ../lib/datei.inc.php:1710
 msgid "Ja, dieses Dokument ist frei von Rechten Dritter"
 msgstr ""
 
-#: ../lib/datei.inc.php:708 ../lib/datei.inc.php:1714
+#: ../lib/datei.inc.php:705 ../lib/datei.inc.php:1711
 msgid "Nein, dieses Dokument ist <u>nicht</u> frei von Rechten Dritter"
 msgstr ""
 
-#: ../lib/datei.inc.php:711
+#: ../lib/datei.inc.php:708
 #, fuzzy
 msgid ""
 "3. Geben Sie eine kurze Beschreibung und einen Namen f&uuml;r die Datei ein."
 msgstr "2. Enter a short description and a name for the file."
 
-#: ../lib/datei.inc.php:716
+#: ../lib/datei.inc.php:713
 #, fuzzy
 msgid "4. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen"
 msgstr "3. Click on <b>'send'</b> to upload the file."
 
-#: ../lib/datei.inc.php:718
+#: ../lib/datei.inc.php:715
 #, fuzzy
 msgid ""
 "3. Klicken Sie auf <b>'absenden'</b>, um das Ziparchiv hochzuladen und in "
@@ -33753,7 +33754,7 @@ msgstr ""
 "2. Click on <b>'send'</b> to upload the zip archive and to unpack it into "
 "this folder."
 
-#: ../lib/datei.inc.php:720
+#: ../lib/datei.inc.php:717
 #, fuzzy
 msgid ""
 "3. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die "
@@ -33762,17 +33763,17 @@ msgstr ""
 "2. Click on <b>'send'</b> to upload the file and to overwrite the old "
 "version with it."
 
-#: ../lib/datei.inc.php:766
+#: ../lib/datei.inc.php:763
 #, fuzzy
 msgid "Dateianhänge für Nachrichten sind in dieser Installation nicht erlaubt!"
 msgstr ""
 "It is not permitted to set up courses of this category in this installation!"
 
-#: ../lib/datei.inc.php:785 ../lib/datei.inc.php:2159
+#: ../lib/datei.inc.php:782 ../lib/datei.inc.php:2156
 msgid "Sie haben keine Datei zum Hochladen ausgew&auml;hlt!"
 msgstr "You haven't selected any file to upload! "
 
-#: ../lib/datei.inc.php:808 ../lib/datei.inc.php:861
+#: ../lib/datei.inc.php:805 ../lib/datei.inc.php:858
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen den Dateityp %"
@@ -33781,7 +33782,7 @@ msgstr ""
 "The file could not be accepted: you are not allowed to upload thefile types %"
 "s!"
 
-#: ../lib/datei.inc.php:810 ../lib/datei.inc.php:863
+#: ../lib/datei.inc.php:807 ../lib/datei.inc.php:860
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen die "
@@ -33790,13 +33791,13 @@ msgstr ""
 "The file could not be accepted: you are not allowed to upload the file types "
 "%s!"
 
-#: ../lib/datei.inc.php:817 ../lib/datei.inc.php:842 ../lib/datei.inc.php:870
-#: ../lib/datei.inc.php:896
+#: ../lib/datei.inc.php:814 ../lib/datei.inc.php:839 ../lib/datei.inc.php:867
+#: ../lib/datei.inc.php:893
 #, c-format
 msgid "%sHier%s bekommen Sie Hilfe zum Upload von Word-Dokumenten."
 msgstr "%sHere%s you can get help for uploading word documents."
 
-#: ../lib/datei.inc.php:833 ../lib/datei.inc.php:887
+#: ../lib/datei.inc.php:830 ../lib/datei.inc.php:884
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur den "
@@ -33805,7 +33806,7 @@ msgstr ""
 "The file could not be accepted: you are only allowed to upload the file type "
 "%s!"
 
-#: ../lib/datei.inc.php:835 ../lib/datei.inc.php:889
+#: ../lib/datei.inc.php:832 ../lib/datei.inc.php:886
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Sie d&uuml;rfen nur die "
@@ -33814,7 +33815,7 @@ msgstr ""
 "The file could not be accepted: you are only allowed to upload the file "
 "types %s!"
 
-#: ../lib/datei.inc.php:904
+#: ../lib/datei.inc.php:901
 #, c-format
 msgid ""
 "Die Datei konnte nicht &uuml;bertragen werden: Die maximale Gr&ouml;sse "
@@ -33823,15 +33824,7 @@ msgstr ""
 "The file could not be accepted: the maximum size for uploading (%s "
 "Megabytes) was exceeded! "
 
-#: ../lib/datei.inc.php:932
-msgid "Datei&uuml;bertragung gescheitert!"
-msgstr "File transmission aborted!"
-
-#: ../lib/datei.inc.php:940
-msgid "Die Datei wurde erfolgreich auf den Server &uuml;bertragen!"
-msgstr "The file has been successfully sent to the server!"
-
-#: ../lib/datei.inc.php:1231
+#: ../lib/datei.inc.php:1228
 msgid ""
 "&nbsp;FEHLER: unter der angegebenen Adresse wurde keine Datei gefunden."
 "<br>&nbsp;Bitte kontrollieren Sie die Pfadangabe!"
@@ -33839,30 +33832,30 @@ msgstr ""
 "&nbsp;Error: No file was found at the indicated address.<br>&nbsp; Please "
 "check the path!"
 
-#: ../lib/datei.inc.php:1238
+#: ../lib/datei.inc.php:1235
 msgid "Sie haben diesen Ordner zum Upload ausgewählt:"
 msgstr "You have chosen to upload a document into this folder:"
 
-#: ../lib/datei.inc.php:1242
+#: ../lib/datei.inc.php:1239
 #, fuzzy
 msgid ""
 "1. Geben Sie hier den <b>vollständigen Pfad</b> zu der Datei an die Sie "
 "verlinken wollen."
 msgstr "1. Here enter the complete path to the file you want to link. "
 
-#: ../lib/datei.inc.php:1253
+#: ../lib/datei.inc.php:1250
 msgid "Dieses Dokument ist frei von Rechten Dritter:"
 msgstr ""
 
-#: ../lib/datei.inc.php:1258
+#: ../lib/datei.inc.php:1255
 msgid "3. Geben Sie eine kurze Beschreibung und einen Namen für die Datei ein."
 msgstr "3. Enter a short description and a name for the file."
 
-#: ../lib/datei.inc.php:1264
+#: ../lib/datei.inc.php:1261
 msgid "4. Klicken Sie auf <b>'absenden'</b>, um die Datei zu verlinken"
 msgstr "4. Click on <b>'send'</b> to upload the file."
 
-#: ../lib/datei.inc.php:1266
+#: ../lib/datei.inc.php:1263
 msgid ""
 "2. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen und damit die "
 "alte Version zu &uuml;berschreiben."
@@ -33870,32 +33863,32 @@ msgstr ""
 "2. Click on <b>'send'</b> to upload the file and to overwrite the old "
 "version with it."
 
-#: ../lib/datei.inc.php:1371
+#: ../lib/datei.inc.php:1368
 msgid "Dieser Ordner ist gesperrt."
 msgstr "This folder is locked."
 
-#: ../lib/datei.inc.php:1373
+#: ../lib/datei.inc.php:1370
 msgid ""
 "Dieser Ordner ist nicht zugänglich, da ein übergeordneter Ordner gesperrt "
 "ist."
 msgstr "This folder is not available because a superordinate folder is locked."
 
-#: ../lib/datei.inc.php:1375 ../lib/datei.inc.php:1473
+#: ../lib/datei.inc.php:1372 ../lib/datei.inc.php:1470
 msgid ""
 "Dieser Ordner ist ein Hausaufgabenordner. Es können nur Dateien eingestellt "
 "werden."
 msgstr "This folder is for homework. Files can be placed in, only."
 
-#: ../lib/datei.inc.php:1422
+#: ../lib/datei.inc.php:1419
 #, c-format
 msgid "(%s Dokumente)"
 msgstr "(%s documents)"
 
-#: ../lib/datei.inc.php:1424
+#: ../lib/datei.inc.php:1421
 msgid "(1 Dokument)"
 msgstr "(1 Document)"
 
-#: ../lib/datei.inc.php:1467
+#: ../lib/datei.inc.php:1464
 #, c-format
 msgid ""
 "Dieser Ordner ist nicht zugänglich, da der übergeordnete Ordner \"%s\" nicht "
@@ -33904,19 +33897,19 @@ msgstr ""
 "This folder is not available because the superordinate folder \"%s\" is not "
 "readable or not visible!"
 
-#: ../lib/datei.inc.php:1474
+#: ../lib/datei.inc.php:1471
 msgid "Sie selbst haben folgende Dateien in diesen Ordner eingestellt:"
 msgstr "You have placed in this folder the following files:"
 
-#: ../lib/datei.inc.php:1484
+#: ../lib/datei.inc.php:1481
 msgid "Dieser Ordner ist ein themenbezogener Dateiordner."
 msgstr "This is a topic related folder."
 
-#: ../lib/datei.inc.php:1486
+#: ../lib/datei.inc.php:1483
 msgid "Folgende Termine sind diesem Thema zugeordnet:"
 msgstr "The following appointments are related to this topic:"
 
-#: ../lib/datei.inc.php:1493
+#: ../lib/datei.inc.php:1490
 #, c-format
 msgid ""
 "Dieser Ordner gehört der Gruppe <b>%s</b>. Nur Mitglieder dieser Gruppe "
@@ -33925,23 +33918,23 @@ msgstr ""
 "The folder belongs to the group <b>%s</b>. Only members of this group can "
 "view this folder."
 
-#: ../lib/datei.inc.php:1506
+#: ../lib/datei.inc.php:1503
 msgid "Lesen (Dateien k&ouml;nnen heruntergeladen werden)"
 msgstr "Read (files can be downloaded)"
 
-#: ../lib/datei.inc.php:1508
+#: ../lib/datei.inc.php:1505
 msgid "Schreiben (Dateien k&ouml;nnen heraufgeladen werden)"
 msgstr "Write (files can be uploaded)"
 
-#: ../lib/datei.inc.php:1510
+#: ../lib/datei.inc.php:1507
 msgid "Sichtbarkeit (Ordner wird angezeigt)"
 msgstr "Visibility (folder will be shown)"
 
-#: ../lib/datei.inc.php:1514
+#: ../lib/datei.inc.php:1511
 msgid "Ordner erstellen (Alle Nutzer können Ordner erstellen)"
 msgstr "Create folder (all users may create folders)"
 
-#: ../lib/datei.inc.php:1535
+#: ../lib/datei.inc.php:1532
 #, c-format
 msgid ""
 "Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen "
@@ -33951,13 +33944,13 @@ msgstr ""
 "This object has been marked to be moved / copied. In order to move it to the "
 "folder of your choice, please select the insertion symbol %s."
 
-#: ../lib/datei.inc.php:1535
+#: ../lib/datei.inc.php:1532
 msgid ""
 "Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner "
 "einzufügen."
 msgstr "Click this symbol in order to paste this folder into another folder."
 
-#: ../lib/datei.inc.php:1536
+#: ../lib/datei.inc.php:1533
 msgid ""
 "Wenn Sie den Ordner in eine andere Veranstaltung verschieben / kopieren "
 "möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus."
@@ -33965,7 +33958,7 @@ msgstr ""
 "If you would like to move / copy this folder to a different cousre, then "
 "select the course of your choice at the top of this page."
 
-#: ../lib/datei.inc.php:1742
+#: ../lib/datei.inc.php:1739
 #, c-format
 msgid ""
 "Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie "
@@ -33981,17 +33974,17 @@ msgstr ""
 "the course of your choice at the top of this page (provided you are lecturer "
 "or tutor of a different course). "
 
-#: ../lib/datei.inc.php:1742
+#: ../lib/datei.inc.php:1739
 msgid ""
 "Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen"
 msgstr "Click this symbol to paste this file into another folder"
 
-#: ../lib/datei.inc.php:1786
+#: ../lib/datei.inc.php:1783
 #, fuzzy
 msgid "Diese Datei ist urheberrechtlich geschützt."
 msgstr "This file is copyright protected!"
 
-#: ../lib/datei.inc.php:1789
+#: ../lib/datei.inc.php:1786
 #, fuzzy
 msgid ""
 "Sie darf nur im Rahmen dieser Veranstaltung verwendet werden, jede weitere "
@@ -34000,7 +33993,7 @@ msgstr ""
 "This file is copyright protected. It may be used only in the context of this "
 "course, further distribution is liable to persecution!"
 
-#: ../lib/datei.inc.php:1791
+#: ../lib/datei.inc.php:1788
 #, fuzzy
 msgid ""
 "Sie k&ouml;nnen diese Datei nicht herunterladen, so lange diese "
@@ -34009,17 +34002,17 @@ msgstr ""
 "Here you can view the details and the allocation plan of the resources "
 "allocated to this course."
 
-#: ../lib/datei.inc.php:2013
+#: ../lib/datei.inc.php:2010
 #, c-format
 msgid "Der Dateiordner <b>%s</b> und %s Dokument(e) wurden gel&ouml;scht"
 msgstr "The document folder <b>%s</b> and %s files have been deleted"
 
-#: ../lib/datei.inc.php:2015
+#: ../lib/datei.inc.php:2012
 #, c-format
 msgid "Der Dateiordner <b>%s</b> wurde gel&ouml;scht"
 msgstr "The document folder <b>%s</b> has been deleted"
 
-#: ../lib/datei.inc.php:2020
+#: ../lib/datei.inc.php:2017
 #, c-format
 msgid ""
 "Probleme beim L&ouml;schen des Ordners <b>%s</b>. %s Dokument(e) wurden "
@@ -34028,12 +34021,12 @@ msgstr ""
 "A problem occurred while deleting the folder <b>%s</b>.. %s files have been "
 "deleted"
 
-#: ../lib/datei.inc.php:2022
+#: ../lib/datei.inc.php:2019
 #, c-format
 msgid "Probleme beim L&ouml;schen des Ordners <b>%s</b>"
 msgstr "Problem while deleting the folder <b>%s</b>"
 
-#: ../lib/datei.inc.php:2164
+#: ../lib/datei.inc.php:2161
 msgid ""
 "Die Datei kann nicht entpackt werden: Sie d&uuml;rfen nur den Dateityp .ZIP "
 "hochladen!"
@@ -34041,16 +34034,16 @@ msgstr ""
 "The file could not be unpacked: you are allowed to upload files of the type ."
 "ZIP, only!"
 
-#: ../lib/datei.inc.php:2170 ../lib/datei.inc.php:2177
+#: ../lib/datei.inc.php:2167 ../lib/datei.inc.php:2174
 msgid "Die ZIP-Datei kann nicht ge&ouml;ffnet werden!"
 msgstr "The ZIP file could not been opened!"
 
-#: ../lib/datei.inc.php:2184
+#: ../lib/datei.inc.php:2181
 #, c-format
 msgid "Es wurden %d Dateien und %d Ordner erfolgreich entpackt."
 msgstr " %d files und %d folders have successfully been unpacked."
 
-#: ../lib/datei.inc.php:2192
+#: ../lib/datei.inc.php:2189
 msgid "Die Datei konnte nicht entpackt werden."
 msgstr "It was not possible to unpack the file."
 
@@ -34383,33 +34376,33 @@ msgstr "(Register / waiting list)"
 msgid "(Anmeldeverfahren)"
 msgstr "(Registration procedure)"
 
-#: ../lib/visual.inc.php:266
+#: ../lib/visual.inc.php:269
 #, c-format
 msgid "%s hat geschrieben:"
 msgstr "%s wrote:"
 
-#: ../lib/visual.inc.php:271 ../lib/visual.inc.php:273
+#: ../lib/visual.inc.php:274 ../lib/visual.inc.php:276
 msgid "Zitat:"
 msgstr "Citation:"
 
-#: ../lib/visual.inc.php:436 ../lib/visual.inc.php:442
+#: ../lib/visual.inc.php:441 ../lib/visual.inc.php:447
 #, c-format
 msgid "Kommentar von"
 msgstr "Comment by"
 
-#: ../lib/visual.inc.php:494
+#: ../lib/visual.inc.php:499
 msgid "Nicht interpretierbare oder möglicherweise gefährliche Latex Formel"
 msgstr "unparseable or potentially dangerous latex formula"
 
-#: ../lib/visual.inc.php:1216
+#: ../lib/visual.inc.php:1221
 msgid "Objekt aufklappen"
 msgstr "Open object"
 
-#: ../lib/visual.inc.php:1219
+#: ../lib/visual.inc.php:1224
 msgid "Objekt zuklappen"
 msgstr "Close object"
 
-#: ../lib/visual.inc.php:1258
+#: ../lib/visual.inc.php:1263
 msgid "Bewertungsbereich öffnen"
 msgstr "Open rating area"
 
@@ -34450,23 +34443,23 @@ msgstr "on"
 msgid "Das Forum ist leer"
 msgstr "This forum is empty"
 
-#: ../lib/messaging.inc.php:228
+#: ../lib/messaging.inc.php:222
 msgid "Von: "
 msgstr "from:"
 
-#: ../lib/messaging.inc.php:229
+#: ../lib/messaging.inc.php:223
 msgid "An: "
 msgstr "To:"
 
-#: ../lib/messaging.inc.php:230
+#: ../lib/messaging.inc.php:224
 msgid "Betreff: "
 msgstr "Subject: "
 
-#: ../lib/messaging.inc.php:231
+#: ../lib/messaging.inc.php:225
 msgid "Datum: "
 msgstr "Date:"
 
-#: ../lib/messaging.inc.php:235
+#: ../lib/messaging.inc.php:229
 #, c-format
 msgid ""
 "Diese E-Mail ist eine Kopie einer systeminternen Nachricht, die in Stud.IP "
@@ -34475,28 +34468,28 @@ msgstr ""
 "This e-mail is a copy of an internal system message, which was sent within "
 "Stud.IP %s."
 
-#: ../lib/messaging.inc.php:236
+#: ../lib/messaging.inc.php:230
 #, c-format
 msgid ""
 "Antworten Sie nicht auf diese E-Mail, sondern benutzen Sie Stud.IP unter %s"
 msgstr "Do not reply to this e-Mail, use Stud.IP at %s instead"
 
-#: ../lib/messaging.inc.php:401
+#: ../lib/messaging.inc.php:407
 #, c-format
 msgid "Sie haben eine Nachricht von <b>%s</b> erhalten!"
 msgstr "You have received a message from<b>%s</b>!"
 
-#: ../lib/messaging.inc.php:455
+#: ../lib/messaging.inc.php:461
 #, c-format
 msgid "Chateinladung von %s"
 msgstr "Chat invitation by %s"
 
-#: ../lib/messaging.inc.php:456
+#: ../lib/messaging.inc.php:462
 #, c-format
 msgid "Sie wurden von %s in den Chatraum %s eingeladen!"
 msgstr "%s has invited you into the chat room %s! "
 
-#: ../lib/messaging.inc.php:484
+#: ../lib/messaging.inc.php:490
 #, c-format
 msgid "Sie wurden von <b>%s</b> in den Chatraum <b>%s</b> eingeladen!"
 msgstr "<b>%s</b> has invited you into the chat room <b>%s</b>! "
@@ -34749,7 +34742,7 @@ msgstr "Enter a type of appointment!"
 msgid "Sie haben keine Daten angegeben!"
 msgstr "You have not entered any dates!"
 
-#: ../lib/edit_about.inc.php:73
+#: ../lib/edit_about.inc.php:72
 #, c-format
 msgid ""
 "Die E-Mail-Adresse fehlt, ist falsch geschrieben oder gehört nicht zu "
@@ -34758,7 +34751,7 @@ msgstr ""
 "The e-mail-address is missing or is incorrectly written or doesn't belong to "
 "any of the following domains:%s "
 
-#: ../lib/edit_about.inc.php:82
+#: ../lib/edit_about.inc.php:81
 msgid ""
 "Der Mailserver ist nicht erreichbar. Bitte &uuml;berpr&uuml;fen Sie, ob Sie "
 "E-Mails mit der angegebenen Adresse verschicken k&ouml;nnen!"
@@ -34766,14 +34759,14 @@ msgstr ""
 "The mail server is not contactable. Please check whether e-mails can be sent "
 "from the given address!"
 
-#: ../lib/edit_about.inc.php:92
+#: ../lib/edit_about.inc.php:86
 msgid ""
 "Die angegebene E-Mail-Adresse ist nicht erreichbar. Bitte &uuml;berpr&uuml;"
 "fen Sie Ihre Angaben!"
 msgstr ""
 "The given e-mail-address is not contactable. Please check your information!"
 
-#: ../lib/edit_about.inc.php:99
+#: ../lib/edit_about.inc.php:93
 #, c-format
 msgid ""
 "Die angegebene E-Mail-Adresse wird bereits von einem anderen User (%s %s) "
@@ -34782,108 +34775,108 @@ msgstr ""
 "The given e-mail-address is already being used by another user (%s %s). "
 "Please enter a differnet e-mail-address."
 
-#: ../lib/edit_about.inc.php:106
+#: ../lib/edit_about.inc.php:100
 msgid "Ihre E-Mail-Adresse wurde ge&auml;ndert!"
 msgstr "Your e-mail-address has been changed!"
 
-#: ../lib/edit_about.inc.php:309
+#: ../lib/edit_about.inc.php:298
 #, c-format
 msgid "Fehler beim L&ouml;schen in user_studiengang bei ID=%s"
 msgstr "Error while deleting in user_studiengang by ID=%s"
 
-#: ../lib/edit_about.inc.php:316
+#: ../lib/edit_about.inc.php:305
 #, c-format
 msgid "Fehler beim Einf&uuml;gen in user_studiengang bei ID=%s"
 msgstr "Error while inserting in user_studiengang at ID=%s"
 
-#: ../lib/edit_about.inc.php:320
+#: ../lib/edit_about.inc.php:309
 msgid "Die Zuordnung zu Studiengängen wurde ge&auml;ndert."
 msgstr "Program of study allocation has been changed."
 
-#: ../lib/edit_about.inc.php:322
+#: ../lib/edit_about.inc.php:311
 msgid "Die Zuordnung zu Studiengängen wurde geändert!\n"
 msgstr "The allocation to courses of study has been changed!\n"
 
-#: ../lib/edit_about.inc.php:345
+#: ../lib/edit_about.inc.php:334
 msgid "Die Zuordnung zu Nutzerdomänen wurde ge&auml;ndert."
 msgstr "Allocation to user domains has been changed."
 
-#: ../lib/edit_about.inc.php:347
+#: ../lib/edit_about.inc.php:336
 msgid "Die Zuordnung zu Nutzerdomänen wurde geändert!\n"
 msgstr "Allocation to user domains has been changed!\n"
 
-#: ../lib/edit_about.inc.php:359
+#: ../lib/edit_about.inc.php:348
 #, c-format
 msgid "Fehler beim L&ouml;schen in user_inst bei ID=%s"
 msgstr "Error while deleting in user_inst at ID=%s"
 
-#: ../lib/edit_about.inc.php:366
+#: ../lib/edit_about.inc.php:355
 #, c-format
 msgid "Fehler beim Einf&uuml;gen in user_inst bei ID=%s"
 msgstr "Error while inserting in user_inst at ID=%s"
 
-#: ../lib/edit_about.inc.php:370
+#: ../lib/edit_about.inc.php:359
 msgid "Die Zuordnung zu Einrichtungen wurde ge&auml;ndert."
 msgstr "Allocation to institutes has been changed."
 
-#: ../lib/edit_about.inc.php:372
+#: ../lib/edit_about.inc.php:361
 msgid "Die Zuordnung zu Einrichtungen wurde geändert!\n"
 msgstr "Allocation to institutes has been changed!\n"
 
-#: ../lib/edit_about.inc.php:419
+#: ../lib/edit_about.inc.php:408
 #, c-format
 msgid "Ihre Daten an der Einrichtung %s wurden ge&auml;ndert"
 msgstr "Your data in the institute %s have been changed"
 
-#: ../lib/edit_about.inc.php:421
+#: ../lib/edit_about.inc.php:410
 #, c-format
 msgid "Ihre Daten an der Einrichtung %s wurden geändert.\n"
 msgstr "Your data at the institute %s have been changed.\n"
 
-#: ../lib/edit_about.inc.php:431
+#: ../lib/edit_about.inc.php:420
 msgid "Der Status wurde geändert!"
 msgstr "Status has been changed!"
 
-#: ../lib/edit_about.inc.php:515
+#: ../lib/edit_about.inc.php:504
 msgid "Daten im Lebenslauf u.a. wurden ge&auml;ndert"
 msgstr "Curriculum vitae data have been changed"
 
-#: ../lib/edit_about.inc.php:517
+#: ../lib/edit_about.inc.php:506
 msgid "Daten im Lebenslauf u.a. wurden geändert.\n"
 msgstr "Entries in the curriculum vitae have been changed.\n"
 
-#: ../lib/edit_about.inc.php:547
+#: ../lib/edit_about.inc.php:536
 msgid "Ihre pers&ouml;nlichen Daten wurden ge&auml;ndert."
 msgstr "Your personal data have been changed."
 
-#: ../lib/edit_about.inc.php:549
+#: ../lib/edit_about.inc.php:538
 msgid "Ihre persönlichen Daten wurden geändert.\n"
 msgstr "Your personal data have been changed.\n"
 
-#: ../lib/edit_about.inc.php:580
+#: ../lib/edit_about.inc.php:569
 msgid "Ihr Passwort wurde ge&auml;ndert!"
 msgstr "Your password has been changed!"
 
-#: ../lib/edit_about.inc.php:590
+#: ../lib/edit_about.inc.php:579
 msgid "Ihr Vorname wurde ge&auml;ndert!"
 msgstr "Your first name has been changed!"
 
-#: ../lib/edit_about.inc.php:601
+#: ../lib/edit_about.inc.php:590
 msgid "Ihr Nachname wurde ge&auml;ndert!"
 msgstr "Your surname has been changed!"
 
-#: ../lib/edit_about.inc.php:609
+#: ../lib/edit_about.inc.php:598
 msgid "Der gewählte Username ist nicht lang genug!"
 msgstr "The chosen username is not long enough!"
 
-#: ../lib/edit_about.inc.php:614
+#: ../lib/edit_about.inc.php:603
 msgid ""
 "Der Username wird bereits von einem anderen User verwendet. Bitte wählen sie "
 "einen anderen Usernamen!"
 msgstr ""
 "The username is already used by another user. Please choose another username!"
 
-#: ../lib/edit_about.inc.php:620
+#: ../lib/edit_about.inc.php:609
 msgid "Ihr Username wurde ge&auml;ndert!"
 msgstr "Your username has been changed!"
 
@@ -35240,7 +35233,7 @@ msgstr ""
 "Use the export function of Stud.IP for exporting literature lists in Stud.IP "
 "format."
 
-#: ../cli/send_mail_notifications.php:58
+#: ../cli/send_mail_notifications.php:57
 msgid "Tägliche Benachrichtigung"
 msgstr "Daily notification"
 
@@ -36274,6 +36267,20 @@ msgstr "Edited by:"
 #, fuzzy
 msgid "Offene Mitgliedsanträge"
 msgstr "Enter as member"
+
+#~ msgid ""
+#~ "Sie d&uuml;rfen sich mit dem Status Dozent nicht f&uuml;r die "
+#~ "teilnahmebeschr&auml;nkte Veranstaltung %s anmelden.<br />Wenn Sie "
+#~ "dennoch eingetragen werden m&ouml;chten, wenden Sie sich bitte direkt an "
+#~ "die Dozentin oder den Dozenten der Veranstaltung."
+#~ msgstr ""
+#~ "As lecturer you may not register for this participant restricted course %"
+#~ "s. <br />If you wish to take part in this course, please contact directly "
+#~ "the lecturer responsible for the course."
+
+#, fuzzy
+#~ msgid "Dateianhang entfernen"
+#~ msgstr "Remove this course"
 
 #~ msgid "LeiterIn"
 #~ msgstr "Co-ordinator"
