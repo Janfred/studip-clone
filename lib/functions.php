@@ -56,17 +56,16 @@ require_once ('lib/exceptions/access_denied.php');
 * @return		string	the header-line
 *
 */
-
 function getHeaderLine($id, $object_name = null) {
 	if(!$object_name){
 		$object_name = get_object_name($id, get_object_type($id));
 	}
 	$header_line = $object_name['type'];
-	if ($object_name['name'])
-		$header_line.=": ";
-	$header_line.= substr($object_name['name'], 0, 60);
-	if (strlen($object_name['name']) > 60)
-			$header_line.= "... ";
+	if ($object_name['name']) $header_line.=": ";
+	if (studip_strlen($object_name['name']) > 60){
+			$header_line .= studip_substr($object_name['name'], 0, 60);
+			$header_line .= "... ";
+	}
 	return $header_line;
 }
 
@@ -478,9 +477,10 @@ function select_group($sem_start_time, $user_id='') {
 */
 function my_substr($what, $start, $end) {
 	$length=$end-$start;
-	if (strlen($what) > $length) {
-		$what=substr($what, $start, (($length / 3) * 2))."[...]".substr($what, strlen($what) -($length / 3), strlen($what));
-		}
+	$what_length = studip_strlen($what);
+	if ($what_length > $length) {
+		$what=studip_substr($what, $start, round(($length / 3) * 2))."[...]".studip_substr($what, $what_length - round($length / 3), $what_length);
+	}
 	return $what;
 }
 
@@ -1466,4 +1466,39 @@ function get_title_for_status($type, $count, $sem_type = NULL) {
 	}
 
 	return ngettext($title[0], $title[1], $count);
+}
+
+/**
+ * Stud.IP encoding aware version of good ol' substr(), treats numeric HTML-ENTITIES as one character
+ * use only if really necessary
+ *
+ * @param  string		
+ * @param  integer		
+ * @param  integer		
+ * @return string		the part of the string
+ */
+function studip_substr($string, $offset, $length = false){
+	if(!preg_match("'&#[0-9]+;'", $string)){
+		return substr($string, $offset, $length);
+	}
+	$utf8string = studip_utf8encode($string);
+	if ($length === false) {
+        return studip_utf8decode(mb_substr($utf8string, $offset, mb_strlen($utf8string, 'UTF-8'), 'UTF-8'));
+    } else {
+        return studip_utf8decode(mb_substr($utf8string, $offset, $length, 'UTF-8'));
+    }
+}
+
+/**
+ * Stud.IP encoding aware version of good ol' strlen(), treats numeric HTML-ENTITIES as one character
+ * use only if really necessary
+ *
+ * @param  string		
+ * @return integer		the number of characters in string
+ */
+function studip_strlen($string){
+	if(!preg_match("'&#[0-9]+;'", $string)){
+		return strlen($string);
+	}
+    return mb_strlen(studip_utf8encode($string), 'UTF-8');
 }
