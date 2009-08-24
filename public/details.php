@@ -304,7 +304,7 @@ if ($db2->f("admission_binding")) {
 
 // print the info_box
 echo $template_factory->render(
-    'infobox/infobox_custom_image',
+    'infobox/infobox_avatar',
     array(
         'content' => $infobox,
         'picture' => CourseAvatar::getAvatar($sem_id)->getUrl(Avatar::NORMAL)

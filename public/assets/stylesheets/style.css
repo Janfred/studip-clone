@@ -1051,12 +1051,13 @@ form#quicksearch .autocomplete li {
 
 /* --- Avatars of courses and institutes ------------------------------------ */
 
-.infobox-custom-image {
+.infobox-avatar {
     width: 250px;
-    height: 250px;
-    background: #DEE2E8 url(../images/infoboxcorner.jpg) no-repeat left top;
+    height: 125px;
+    background-color: #DEE2E8;
     text-align: center;
-    padding: 25px 0;
+    -moz-border-radius-topleft: 15px;
+    -webkit-border-top-left-radius: 15px;
 }
 
 #custom_avatar label {

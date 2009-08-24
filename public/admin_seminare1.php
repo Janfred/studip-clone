@@ -1509,7 +1509,7 @@ if (($s_id) && (auth_check())) {
 			          "eintrag"   => $aktionen
 			));
 			?>
-			<?= $template_factory->render('infobox/infobox_custom_image',
+			<?= $template_factory->render('infobox/infobox_avatar',
 	        array('content' => $infobox,
 	              'picture' => CourseAvatar::getAvatar($s_id)->getUrl(Avatar::NORMAL)
 		    )) ?>

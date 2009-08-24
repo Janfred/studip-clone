@@ -103,15 +103,15 @@ while ( is_array($_POST)
 		}
 
 	  	$query = "insert into Institute (Institut_id,Name,fakultaets_id,Strasse,Plz,url,telefon,email,fax,type,lit_plugin_name,mkdate,chdate) values('$i_id','$Name','$Fakultaet','$strasse','$plz', '$home', '$telefon', '$email', '$fax', '$type','$lit_plugin_name', '".time()."', '".time()."')";
-		  
+
 		$db->query($query);
-	  	
+
 	  	if ($db->affected_rows() == 0) {
 	  		$msg="error§<b>" . _("Datenbankoperation gescheitert:") . " " . $query . "</b>";
 			break;
 		}
 
-		
+
 		log_event("INST_CREATE",$i_id,NULL,NULL,$query); // logging
 
 		// Set the default list of modules
@@ -301,7 +301,7 @@ while ( is_array($_POST)
 		break;
 
 	default:
-	
+
 	}
 }
 
@@ -450,7 +450,7 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 				<td class="<? echo $cssSw->getClass() ?>" >
 					<?
 					if ($perm->have_perm($entry->structure->getEditPerms())) {
-						print $entry->getHTML("datafields");  
+						print $entry->getHTML("datafields");
 					}
 					else
 						print $entry->getDisplayValue();
@@ -503,7 +503,7 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 			          "eintrag"   => $aktionen
 			));
 			?>
-			<?= $template_factory->render('infobox/infobox_custom_image',
+			<?= $template_factory->render('infobox/infobox_avatar',
 	        array('content' => $infobox,
 	              'picture' => InstituteAvatar::getAvatar($i_id)->getUrl(Avatar::NORMAL)
 		    )) ?>
