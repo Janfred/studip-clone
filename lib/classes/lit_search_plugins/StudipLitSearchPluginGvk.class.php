@@ -40,7 +40,9 @@ class StudipLitSearchPluginGvk extends StudipLitSearchPluginZ3950Abstract{
 	
 	function StudipLitSearchPluginGvk(){
 		parent::StudipLitSearchPluginZ3950Abstract();
-		$this->description = "Gemeinsamer Verbundkatalog - GVK";
+		$this->description = "Gemeinsamer Verbundkatalog - GVK
+Der GVK erfasst die Bibliotheksbestände der Bundesländer: Bremen, Hamburg, Niedersachsen, Sachsen-Anhalt, Schleswig-Holstein, Thüringen, Mecklenburg-Vorpommern und der Stiftung Preußischer Kulturbesitz (Berlin).
+Zusätzlich sind die Zeitschriftennachweise aller subito-Lieferbibliotheken aus Deutschland und Österreich sowie weiterer deutscher Universitätsbibliotheken enthalten.";
 		$this->z_host = "z3950.gbv.de:20010/gsogvk";
 		$this->z_options = array('user' => '999', 'password' => 'abc');
 		$this->z_syntax = "USMARC";

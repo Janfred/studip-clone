@@ -41,7 +41,8 @@ class StudipLitSearchPluginTIBUBOpac extends StudipLitSearchPluginGvk{
 	function StudipLitSearchPluginTIBUBOpac(){
 		parent::StudipLitSearchPluginGvk();
 		$this->description = "Technische Informationsbibliothek / Universitätsbibliothek Hannover";
-		$this->z_host = "z3950.gbv.de:20010/tib_opc";
+		$this->z_host = "z3950.gbv.de:20012/tib_opc";
+		$this->z_record_encoding = 'utf-8';
 		$this->z_profile = array('1016' => _("alle Wörter [ALL]"),
 					 '1004' => _("Person, Autor [PER]"),					 					 
 					 '4' => _("Titelstichwörter [TIT]"),

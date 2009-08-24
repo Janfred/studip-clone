@@ -1,7 +1,5 @@
 <?php
 # Lifter002: TODO
-# Lifter007: TODO
-# Lifter003: TODO
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // StudipLitSearchPluginRkgoe.class.php
@@ -40,8 +38,20 @@ class StudipLitSearchPluginRkgoe extends StudipLitSearchPluginGvk{
 	
 	function StudipLitSearchPluginRkgoe(){
 		parent::StudipLitSearchPluginGvk();
-		$this->description = "Göttinger Gesamtkatalog (Regionalkatalog Göttingen)";
-		$this->z_host = "z3950.gbv.de:20010/rkgoe";
+		$this->description = "Göttinger Gesamtkatalog (GGK)
+Online-Katalog der folgenden Göttinger Bibliotheken:
+- SUB Göttingen mit Bereichsbibliotheken
+- Teilbibliotheken (Institutsbibliotheken) der Georg-August-Universität Göttingen
+- Otto-Hahn-Bibliothek - Max-Planck-Institut für biophysikalische Chemie
+- Max-Planck-Institut für experimentelle Medizin
+- Max-Planck-Institut zur Erforschung multireligiöser und multiethnischer Gesellschaften
+- Max-Planck-Institut für Strömungsforschung
+- Bibliotheken der FH Hildesheim-Holzminden in Göttingen
+- Bibliothek der FH im Deutschen Roten Kreuz in Göttingen
+- Stadtbibliothek Göttingen
+";
+		$this->z_host = "z3950.gbv.de:20012/rkgoe";
+		$this->z_record_encoding = 'utf-8';
 		$this->z_profile = array('1016' => _("Basisindex [ALL]"), '2' => _("Körperschaftsname [KOS]"),
 								'3' => _("Kongress [KNS]"),'4' => _("Titelstichwörter [TIT]"),
 								'5' => _("Serienstichwörter [SER]"), '7' => _("ISBN [ISB]"),

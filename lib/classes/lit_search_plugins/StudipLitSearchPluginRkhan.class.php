@@ -35,18 +35,15 @@ require_once ("lib/classes/lit_search_plugins/StudipLitSearchPluginZ3950Abstract
 * @version	$Id$
 * @package	
 **/
-class StudipLitSearchPluginRkhan extends StudipLitSearchPluginZ3950Abstract {
+class StudipLitSearchPluginRkhan extends StudipLitSearchPluginGvk {
 	
 	
 	function StudipLitSearchPluginRkhan(){
-		parent::StudipLitSearchPluginZ3950Abstract();
+		parent::StudipLitSearchPluginGvk();
 		$this->description = "Gesamtkatalog Hannover";
-		$this->z_host = "z3950.gbv.de:20010/rkhan";
+		$this->z_host = "z3950.gbv.de:20012/rkhan";
+		$this->z_record_encoding = 'utf-8';
 		$this->z_options = array('user' => '999', 'password' => 'abc');
-		$this->z_syntax = "USMARC";
-		$this->convert_umlaute = true;
-		$this->z_accession_bib = "12";
-		$this->z_accession_re = '/[0-9]{8}[0-9X]{1}/';
 		$this->z_profile = array('1016' => _("Alle Wörter [ALL]"),
 					 '4' => _("Titel (Stichwort) [TIT]"),
 					 '21' => _("Schlagwörter [SLW]"),					 					 
