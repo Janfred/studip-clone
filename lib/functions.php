@@ -65,6 +65,8 @@ function getHeaderLine($id, $object_name = null) {
 	if (studip_strlen($object_name['name']) > 60){
 			$header_line .= studip_substr($object_name['name'], 0, 60);
 			$header_line .= "... ";
+	} else {
+		$header_line .= $object_name['name'];
 	}
 	return $header_line;
 }
