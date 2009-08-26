@@ -240,12 +240,24 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$row = false;
 
 		// Mitarbeiter/in am Institut
-		$stm_inst = DBManager::get()->prepare("SELECT i.Institut_id FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) WHERE i.Institut_id = ? AND aum.username = ? AND ui.inst_perms IN ('autor','tutor','dozent')");
+		$stm_inst = DBManager::get()->prepare(
+			"SELECT i.Institut_id "
+			. "FROM Institute i "
+			. "LEFT JOIN user_inst ui USING(Institut_id) "
+			. "LEFT JOIN auth_user_md5 aum USING(user_id) "
+			. "WHERE i.Institut_id = ? "
+			. "AND aum.username = ? AND ui.inst_perms IN ('autor','tutor','dozent')");
 		$stm_inst->execute(array($instituts_id, $username));
 		
 		// Mitarbeiter/in am Heimatinstitut des Seminars
 		if (!$row = $stm_inst->fetch(PDO::FETCH_ASSOC) && $sem_id) {
-			$stm_inst = DBManager::get()->prepare("SELECT s.Institut_id FROM seminare s LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) WHERE s.Seminar_id = ? AND aum.username = ? AND ui.inst_perms = 'dozent'");
+			$stm_inst = DBManager::get()->prepare(
+				"SELECT s.Institut_id "
+				. "FROM seminare s "
+				. "LEFT JOIN user_inst ui USING(Institut_id) "
+				. "LEFT JOIN auth_user_md5 aum USING(user_id) "
+				. "WHERE s.Seminar_id = ? "
+				. "AND aum.username = ? AND ui.inst_perms = 'dozent'");
 			$stm_inst->execute(array($sem_id, $username));
 			if ($row = $stm_inst->fetch(PDO::FETCH_ASSOC)) {
 				$instituts_id = $row['Institut_id'];
@@ -254,8 +266,15 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 
 		// an beteiligtem Institut Dozent(in)
 		if (!$row && $sem_id) {
-			$stm_inst = DBManager::get()->prepare("SELECT si.institut_id FROM seminare s LEFT JOIN seminar_inst si ON(s.Seminar_id = si.seminar_id) LEFT JOIN user_inst ui ON(si.institut_id = ui.Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) WHERE s.Seminar_id = '$sem_id' AND si.institut_id != '$instituts_id' AND ui.inst_perms = 'dozent' AND aum.username = '$username'");
-			$stm_inst->execute(array($sem_id, $intituts_id));
+			$stm_inst = DBManager::get()->prepare(
+				"SELECT si.institut_id "
+				. "FROM seminare s "
+				. "LEFT JOIN seminar_inst si ON(s.Seminar_id = si.seminar_id) "
+				. "LEFT JOIN user_inst ui ON(si.institut_id = ui.Institut_id) "
+				. "LEFT JOIN auth_user_md5 aum USING(user_id) "
+				. "WHERE s.Seminar_id = ? "
+				. "AND si.institut_id != ? AND ui.inst_perms = 'dozent' AND aum.username = ?");
+			$stm_inst->execute(array($sem_id, $intituts_id, $username));
 			if ($row = $stm_inst->fetch(PDO::FETCH_ASSOC)) {
 				$instituts_id = $row['institut_id'];
 			}
@@ -263,21 +282,58 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 
 		// ist zwar global Dozent, aber an keinem Institut eingetragen
 		if (!$row && $sem_id) {
-			$stm = DBManager::get()->prepare("SELECT aum.*, ? AS fullname,  FROM auth_user_md5 aum LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user su WHERE username = ? AND perms = 'dozent' AND su.seminar_id = ? AND su.status = 'dozent'");
-			$stm->execute(array($GLOBALS['_fullname_sql'][$nameformat], $username, $sem_id));
+			$stm = DBManager::get()->prepare(sprintf(
+				"SELECT aum.*, %s AS fullname "
+				. "FROM auth_user_md5 aum "
+				. "LEFT JOIN user_info USING(user_id) "
+				. "LEFT JOIN seminar_user su "
+				. "WHERE username = ? "
+				. "AND perms = 'dozent' AND su.seminar_id = ? AND su.status = 'dozent'"
+				, $GLOBALS['_fullname_sql'][$nameformat]));
+			$stm->execute(array($username, $sem_id));
 			$row = $stm->fetch(PDO::FETCH_ASSOC);
 		} elseif ($this->config->getValue('Main', 'defaultaddr')) {
-			$stm = DBManager::get()->prepare("SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, ? AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home, uin.title_front, uin.title_rear FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info uin USING (user_id) WHERE ui.inst_perms IN ('autor','tutor','dozent') AND aum.username = ? AND ui.externdefault = 1");
-			$stm->execute(array($GLOBALS['_fullname_sql'][$nameformat], $username));
+			$stm = DBManager::get()->prepare(sprintf(
+				"SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, "
+				. "%s AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, "
+				. "uin.Home, uin.title_front, uin.title_rear "
+				. "FROM Institute i "
+				. "LEFT JOIN user_inst ui USING(Institut_id) "
+				. "LEFT JOIN auth_user_md5 aum USING(user_id) "
+				. "LEFT JOIN user_info uin USING (user_id) "
+				. "WHERE ui.inst_perms IN ('autor','tutor','dozent') "
+				. "AND aum.username = ? AND ui.externdefault = 1"
+				, $GLOBALS['_fullname_sql'][$nameformat]));
+			$stm->execute(array($username));
 			$row = $stm->fetch(PDO::FETCH_ASSOC);
 			if (!$row) {
-				$stm = DBManager::get()->prepare("SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, ? AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home, uin.title_front, uin.title_rear FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info uin USING (user_id) WHERE ui.inst_perms IN ('autor','tutor','dozent') AND aum.username = ? AND i.Institut_id = ?");
-				$stm->execute(array($GLOBALS['_fullname_sql'][$nameformat], $username, $instituts_id));
+				$stm = DBManager::get()->prepare(sprintf(
+					"SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, "
+					. "%s AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, "
+					. "uin.Home, uin.title_front, uin.title_rear "
+					. "FROM Institute i "
+					. "LEFT JOIN user_inst ui USING(Institut_id) "
+					. "LEFT JOIN auth_user_md5 aum USING(user_id) "
+					. "LEFT JOIN user_info uin USING (user_id) "
+					. "WHERE ui.inst_perms IN ('autor','tutor','dozent') "
+					. "AND aum.username = ? AND i.Institut_id = ?"
+					, $GLOBALS['_fullname_sql'][$nameformat]));
+				$stm->execute(array($username, $instituts_id));
 				$row = $stm->fetch(PDO::FETCH_ASSOC);
 			}
 		} else {
-			$stm = DBManager::get()->prepare("SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, ? AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home, uin.title_front, uin.title_rear FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info uin USING (user_id) WHERE ui.inst_perms IN ('autor','tutor','dozent') AND aum.username = ? AND i.Institut_id = ?");
-			$stm->execute(array($GLOBALS['_fullname_sql'][$nameformat], $username, $instituts_id));
+			$stm = DBManager::get()->prepare(sprintf(
+				"SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, "
+				. "%s AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, "
+				. "uin.Home, uin.title_front, uin.title_rear "
+				. "FROM Institute i "
+				. "LEFT JOIN user_inst ui USING(Institut_id) "
+				. "LEFT JOIN auth_user_md5 aum USING(user_id) "
+				. "LEFT JOIN user_info uin USING (user_id) "
+				. "WHERE ui.inst_perms IN ('autor','tutor','dozent') "
+				. "AND aum.username = ? AND i.Institut_id = ?"
+				, $GLOBALS['_fullname_sql'][$nameformat]));
+			$stm->execute(array($username, $instituts_id));
 			$row = $stm->fetch(PDO::FETCH_ASSOC);
 		}
 		
@@ -322,8 +378,6 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 
 		// generic data fields
 		if ($generic_datafields = $this->config->getValue('Main', 'genericdatafields')) {
-			#$datafields_obj =& new DataFields($user_id);
-			#$datafields = $datafields_obj->getLocalFields($user_id);
 			$localEntries = DataFieldEntry::getDataFieldEntries($user_id, 'user');
 			$k = 0;
 			foreach ($generic_datafields as $datafield) {
@@ -353,7 +407,11 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 	}
 
 	private function getContentOwnCategories () {
-		$stm = DBManager::get()->prepare("SELECT * FROM kategorien WHERE range_id = ? ORDER BY priority");
+		$stm = DBManager::get()->prepare(
+			"SELECT name, content "
+			. "FROM kategorien "
+			. "WHERE range_id = ? AND hidden = 0 "
+			. "ORDER BY priority");
 		$stm->execute(array($this->user_id));
 		$i = 0;
 		while ($row = $stm->fetch(PDO::FETCH_ASSOC)) {
@@ -472,7 +530,16 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 				$types[] = $key;
 			}
 		}
-		$stm = DBManager::get()->prepare(sprintf("SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) WHERE user_id = ? AND su.status LIKE 'dozent' AND ((start_time >= ? AND start_time <= ?) OR (start_time <= ? AND duration_time = -1)) AND s.status IN ('%s') AND s.visible = 1 ORDER BY s.mkdate DESC", implode("','", $types)));
+		$stm = DBManager::get()->prepare(sprintf(
+			"SELECT s.Name, s.Seminar_id, s.Untertitel "
+			. "FROM seminar_user su "
+			. "LEFT JOIN seminare s USING(seminar_id) "
+			. "WHERE user_id = ? AND su.status LIKE 'dozent' "
+			. "AND ((start_time >= ? AND start_time <= ?) "
+			. "OR (start_time <= ? AND duration_time = -1)) "
+			. "AND s.status IN ('%s') AND s.visible = 1 "
+			. "ORDER BY s.mkdate DESC"
+			, implode("','", $types)));
 		
 		$i = 0;
 		for (;$current_sem <= $last_sem; $last_sem--) {
