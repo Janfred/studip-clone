@@ -381,13 +381,13 @@ if (!$have_config) {
 
 				// Switching for the is_default option. Read the comment above.
 				if ($configuration["is_default"]) {
-					echo '<a href="' . URLHelper::getLink('?list=true&view=extern_inst&com=unset_default&config_id=' . $configuration['id']) . '#anker">';
+					echo '<a href="' . URLHelper::getLink('?com=unset_default&config_id=' . $configuration['id']) . '#anker">';
 					$tooltip = _("Standard entziehen");
 					echo '<img src="';
 					echo $GLOBALS['ASSETS_URL']."images/on_small.gif\" border=\"0\"" . tooltip($tooltip) . ">\n";
 				}
 				else {
-					echo '<a href="' . URLHelper::getLink('?list=true&view=extern_inst&com=set_default&config_id=' . $configuration['id']) . '#anker">';
+					echo '<a href="' . URLHelper::getLink('?com=set_default&config_id=' . $configuration['id']) . '#anker">';
 					$tooltip = _("Standard zuweisen");
 					echo '<img src="'.$GLOBALS['ASSETS_URL']."images/off_small_blank.gif\" border=\"0\"" . tooltip($tooltip) . ">";
 				}

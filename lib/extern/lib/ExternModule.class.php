@@ -488,9 +488,16 @@ class ExternModule {
 			$module = $this->name;
 		} else {
 			// get module name by config id
-			$config_meta_data = ExternConfig::GetConfigurationMetaData($this->config->range_id, $this->config->getValue($linked_element_name, 'config'));
+			$linked_element_id = $this->config->getValue($linked_element_name, 'config');
+			// linked with module declared as standard?
+			if ($linked_element_id) {
+				$config_meta_data = ExternConfig::GetConfigurationMetaData($this->config->range_id, $linked_element_id);
+			} else {
+				$config_meta_data = array('module_name' => $this->config->module_name);
+			}
 			if (is_array($config_meta_data)) {
 				$module = $config_meta_data['module_name'];
+			//	var_dump($this->config);
 			} else {
 				return '';
 			}

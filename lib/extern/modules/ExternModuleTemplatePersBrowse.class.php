@@ -51,14 +51,14 @@ global $_fullname_sql;
 
 class ExternModuleTemplatePersBrowse extends ExternModule {
 
-	var $markers = array();
-	var $approved_params = array();
-	var $range_tree;
+	public $markers = array();
+	private $approved_params = array();
+	private $range_tree;
 	
 	/**
 	*
 	*/
-	function ExternModuleTemplatePersBrowse ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+	public function __construct ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
 		$this->data_fields = array(
 				'Nachname', 'Telefon', 'raum', 'Email', 'sprechzeiten'
 		);
@@ -88,7 +88,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 		parent::ExternModule($range_id, $module_name, $config_id, $set_config, $global_id);
 	}
 	
-	function setup () {
+	public function setup () {
 		$this->elements['LinkInternListCharacters']->real_name = _("Verlinkung der alpabetischen Liste zur Personenliste");
 		$this->elements['LinkInternListCharacters']->link_module_type = array(16);
 		$this->elements['LinkInternListInstitutes']->real_name = _("Verlinkung der Einrichtungsliste zur Personenliste");
@@ -102,7 +102,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 		
 	}
 	
-	function toStringEdit ($open_elements = '', $post_vars = '', $faulty_values = '', $anker = '') {
+	public function toStringEdit ($open_elements = '', $post_vars = '', $faulty_values = '', $anker = '') {
 		
 		$this->updateGenericDatafields('TemplateListPersons', 'user');
 		$this->elements['TemplateMain']->markers = $this->getMarkerDescription('TemplateMain');
@@ -113,7 +113,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 		return parent::toStringEdit($open_elements, $post_vars, $faulty_values, $anker);
 	}
 	
-	function getMarkerDescription ($element_name) {
+	public function getMarkerDescription ($element_name) {
 	
 		$markers['TemplateMain'] = array(
 			array('<!-- BEGIN PERS_BROWSER -->', ''),
@@ -147,6 +147,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 			array('<!-- BEGIN LIST_PERSONS -->', ''),
 			array('<!-- BEGIN NO-PERSONS -->', ''),
 			array('<!-- END NO-PERSONS -->', ''),
+			array('<!-- BEGIN PERSONS -->', ''),
 			array('<!-- BEGIN PERSON -->', ''),
 			array('###FULLNAME###', ''),
 			array('###LASTNAME###', ''),
@@ -162,13 +163,14 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 			array('###PERSON-NO###', ''),
 			$this->insertDatafieldMarkers('user', $markers, 'TemplateList'),
 			array('<!-- END PERSON -->', ''),
+			array('<!-- END PERSONS -->', ''),
 			array('<!-- END LIST_PERSONS -->', '')
 		);
 	
 		return $markers[$element_name];
 	}
 	
-	function getContent ($args = null, $raw = false) {
+	private function getContent ($args = null, $raw = false) {
 		if ($raw) {
 			$this->setRawOutput();
 		}
@@ -186,7 +188,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 		return $content;
 	}
 	
-	function getContentListPersons () {
+	private function getContentListPersons () {
 		if (!$nameformat = $this->config->getValue('Main', 'nameformat')) {
 			$nameformat = 'full_rev';
 		}
@@ -294,7 +296,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 		
 		$query = sprintf("SELECT ui.Institut_id, ui.raum, ui.sprechzeiten, ui.Telefon, "
 			. "inst_perms,	Email, aum.user_id, username, "
-			. "%s AS fullname, aum.Nachname "
+			. "%s AS fullname, aum.Nachname, aum.Vorname "
 			. "FROM user_inst ui LEFT JOIN auth_user_md5 aum USING(user_id)"
 			. "LEFT JOIN user_info uin USING(user_id) "
 			. "WHERE CONCAT(ui.user_id, ui.Institut_id) IN ('%s') "
@@ -339,7 +341,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 	}
 	
 	
-	function getContentListCharacters () {
+	private function getContentListCharacters () {
 		$content = array();
 		// FILTER:
 		// - müssen Dozent in aktiver Veranstaltung sein
@@ -389,7 +391,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 		return $content;
 	}
 	
-	function getContentListInstitutes () {
+	private function getContentListInstitutes () {
 		$content = array();
 		// getting the institutes from the first level
 		$first_levels = $this->range_tree->getKids('root');
@@ -448,7 +450,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 		return $content;
 	}
 	
-	function printout ($args) {
+	public function printout ($args) {
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
 		init_i18n($language);
@@ -457,7 +459,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 		
 	}
 	
-	function printoutPreview () {
+	public function printoutPreview () {
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
 		init_i18n($language);

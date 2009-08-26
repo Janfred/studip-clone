@@ -57,13 +57,13 @@ global $_fullname_sql;
 
 class ExternModuleTemplatePersondetails extends ExternModule {
 
-	var $markers = array();
-	var $user_id;
+	public $markers = array();
+	private $user_id;
 
 	/**
 	*
 	*/
-	function ExternModuleTemplatePersondetails ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
+	public function __construct ($range_id, $module_name, $config_id = NULL, $set_config = NULL, $global_id = NULL) {
 		$this->data_fields = array();
 		if ($GLOBALS['CALENDAR_ENABLE']) {
 			$this->registered_elements = array(
@@ -96,12 +96,9 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 
 	}
 
-	function setup () {
-
+	public function setup () {
+	
 		// setup module properties
-	//	$this->elements["LinkIntern"]->link_module_type = 2;
-	//	$this->elements["LinkIntern"]->real_name = _("Link zum Modul MitarbeiterInnendetails");
-
 		$this->elements['LinkInternLecturedetails']->real_name = _("Link zum Modul Veranstaltungsdetails");
 		$this->elements['LinkInternLecturedetails']->link_module_type = array(4, 13);
 		$this->elements['PersondetailsLectures']->real_name = _("Einstellungen für Lehrveranstaltungen");
@@ -117,7 +114,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 
 	}
 
-	function toStringEdit ($open_elements = '', $post_vars = '',
+	public function toStringEdit ($open_elements = '', $post_vars = '',
 			$faulty_values = '', $anker = '') {
 
 		$this->updateGenericDatafields('TemplateMain', 'user');
@@ -134,7 +131,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 
 	}
 
-	function getMarkerDescription ($element_name) {
+	public function getMarkerDescription ($element_name) {
 		$markers['TemplateMain'][] = array('__GLOBAL__', _("Globale Variablen (gültig im gesamten Template)."));
 		$markers['TemplateMain'][] = array('###STUDIP-EDIT-HREF###', '');
 
@@ -204,7 +201,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 			$markers['TemplateAppointments'][] = array('<!-- END NO-APPOINTMENTS -->', '');
 			$markers['TemplateAppointments'][] = array('<!-- BEGIN ALL-APPOINTMENTS -->', '');
 			$markers['TemplateAppointments'][] = array('<!-- BEGIN SINGLE-APPOINTMENT -->', '');
-			$markers['TemplateAppointments'][] = array('###DATE###', _("Start und Endzeit oder ganztägig"));
+			$markers['TemplateAppointments'][] = array('###DATE###', _("Start und Endzeit oder ganztügig"));
 			$markers['TemplateAppointments'][] = array('###BEGIN###', '');
 			$markers['TemplateAppointments'][] = array('###END###', '');
 			$markers['TemplateAppointments'][] = array('###TITLE###', '');
@@ -231,89 +228,97 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		return $markers[$element_name];
 	}
 
-	function getContent ($args = NULL, $raw = FALSE) {
+	private function getContent ($args = NULL, $raw = FALSE) {
 		$instituts_id = $this->config->range_id;
 		$username = $args['username'];
 		$sem_id = $args['seminar_id'];
 
-		$db_inst =& new DB_Seminar();
-		$db =& new DB_Seminar();
-
 		if (!$nameformat = $this->config->getValue('Main', 'nameformat')) {
 			$nameformat = 'full';
 		}
-
-		$query_user_data = "SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, {$GLOBALS['_fullname_sql'][$nameformat]} AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home, uin.title_front, uin.title_rear FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info uin USING (user_id) WHERE ui.inst_perms IN ('autor','tutor','dozent') AND ";
+		
+		$row = false;
 
 		// Mitarbeiter/in am Institut
-		$db_inst->query("SELECT i.Institut_id FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) WHERE i.Institut_id = '$instituts_id' AND aum.username = '$username' AND ui.inst_perms IN ('autor','tutor','dozent')");
-
+		$stm_inst = DBManager::get()->prepare("SELECT i.Institut_id FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) WHERE i.Institut_id = ? AND aum.username = ? AND ui.inst_perms IN ('autor','tutor','dozent')");
+		$stm_inst->execute(array($instituts_id, $username));
+		
 		// Mitarbeiter/in am Heimatinstitut des Seminars
-		if (!$db_inst->num_rows() && $sem_id) {
-			$db_inst->query("SELECT s.Institut_id FROM seminare s LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) WHERE s.Seminar_id = '$sem_id' AND aum.username = '$username' AND ui.inst_perms = 'dozent'");
-			if($db_inst->num_rows() && $db_inst->next_record()) {
-				$instituts_id = $db_inst->f('Institut_id');
+		if (!$row = $stm_inst->fetch(PDO::FETCH_ASSOC) && $sem_id) {
+			$stm_inst = DBManager::get()->prepare("SELECT s.Institut_id FROM seminare s LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) WHERE s.Seminar_id = ? AND aum.username = ? AND ui.inst_perms = 'dozent'");
+			$stm_inst->execute(array($sem_id, $username));
+			if ($row = $stm_inst->fetch(PDO::FETCH_ASSOC)) {
+				$instituts_id = $row['Institut_id'];
 			}
 		}
 
 		// an beteiligtem Institut Dozent(in)
-		if (!$db_inst->num_rows() && $sem_id) {
-			$db_inst->query("SELECT si.institut_id FROM seminare s LEFT JOIN seminar_inst si ON(s.Seminar_id = si.seminar_id) LEFT JOIN user_inst ui ON(si.institut_id = ui.Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) WHERE s.Seminar_id = '$sem_id' AND si.institut_id != '$instituts_id' AND ui.inst_perms = 'dozent' AND aum.username = '$username'");
-			if($db_inst->num_rows() && $db_inst->next_record()) {
-				$instituts_id = $db_inst->f('institut_id');
+		if (!$row && $sem_id) {
+			$stm_inst = DBManager::get()->prepare("SELECT si.institut_id FROM seminare s LEFT JOIN seminar_inst si ON(s.Seminar_id = si.seminar_id) LEFT JOIN user_inst ui ON(si.institut_id = ui.Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) WHERE s.Seminar_id = '$sem_id' AND si.institut_id != '$instituts_id' AND ui.inst_perms = 'dozent' AND aum.username = '$username'");
+			$stm_inst->execute(array($sem_id, $intituts_id));
+			if ($row = $stm_inst->fetch(PDO::FETCH_ASSOC)) {
+				$instituts_id = $row['institut_id'];
 			}
 		}
 
 		// ist zwar global Dozent, aber an keinem Institut eingetragen
-		if (!$db_inst->num_rows() && $sem_id) {
-			$query = "SELECT aum.*, {$GLOBALS['_fullname_sql'][$nameformat]} AS fullname,  FROM auth_user_md5 aum LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user su WHERE username = '$username' AND perms = 'dozent' AND su.seminar_id = '$sem_id' AND su.status = 'dozent'";
-			$db->query($query);
+		if (!$row && $sem_id) {
+			$stm = DBManager::get()->prepare("SELECT aum.*, ? AS fullname,  FROM auth_user_md5 aum LEFT JOIN user_info USING(user_id) LEFT JOIN seminar_user su WHERE username = ? AND perms = 'dozent' AND su.seminar_id = ? AND su.status = 'dozent'");
+			$stm->execute(array($GLOBALS['_fullname_sql'][$nameformat], $username, $sem_id));
+			$row = $stm->fetch(PDO::FETCH_ASSOC);
 		} elseif ($this->config->getValue('Main', 'defaultaddr')) {
-			$db->query("$query_user_data aum.username = '$username' AND ui.externdefault = 1");
-			if (!$db->num_rows()) {
-				$db->query("$query_user_data aum.username = '$username' AND i.Institut_id = '$instituts_id'");
+			$stm = DBManager::get()->prepare("SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, ? AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home, uin.title_front, uin.title_rear FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info uin USING (user_id) WHERE ui.inst_perms IN ('autor','tutor','dozent') AND aum.username = ? AND ui.externdefault = 1");
+			$stm->execute(array($GLOBALS['_fullname_sql'][$nameformat], $username));
+			$row = $stm->fetch(PDO::FETCH_ASSOC);
+			if (!$row) {
+				$stm = DBManager::get()->prepare("SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, ? AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home, uin.title_front, uin.title_rear FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info uin USING (user_id) WHERE ui.inst_perms IN ('autor','tutor','dozent') AND aum.username = ? AND i.Institut_id = ?");
+				$stm->execute(array($GLOBALS['_fullname_sql'][$nameformat], $username, $instituts_id));
+				$row = $stm->fetch(PDO::FETCH_ASSOC);
 			}
 		} else {
-			$db->query("$query_user_data aum.username = '$username' AND i.Institut_id = '$instituts_id'");
+			$stm = DBManager::get()->prepare("SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, ? AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, uin.Home, uin.title_front, uin.title_rear FROM Institute i LEFT JOIN user_inst ui USING(Institut_id) LEFT JOIN auth_user_md5 aum USING(user_id) LEFT JOIN user_info uin USING (user_id) WHERE ui.inst_perms IN ('autor','tutor','dozent') AND aum.username = ? AND i.Institut_id = ?");
+			$stm->execute(array($GLOBALS['_fullname_sql'][$nameformat], $username, $instituts_id));
+			$row = $stm->fetch(PDO::FETCH_ASSOC);
+		}
+		
+		// the user with the given username does not fulfill the conditions above
+		if (!$row) {
+			return array();
 		}
 
-		if (!$db->next_record()) {
-			die;
-		}
-
-		$this->user_id = $db->f('user_id');
+		$this->user_id = $row['user_id'];
 
 		$content['__GLOBAL__']['STUDIP-EDIT-HREF'] = "{$GLOBALS['ABSOLUTE_URI_STUDIP']}edit_about.php?login=yes&view=Daten&usr_name=$username";
 
-		$content['PERSONDETAILS']['FULLNAME'] = ExternModule::ExtHtmlReady($db->f('fullname'));
-		$content['PERSONDETAILS']['LASTNAME'] = ExternModule::ExtHtmlReady($db->f('Nachname'));
-		$content['PERSONDETAILS']['FIRSTNAME'] = ExternModule::ExtHtmlReady($db->f('Vorname'));
-		$content['PERSONDETAILS']['TITLEFRONT'] = ExternModule::ExtHtmlReady($db->f('title_front'));
-		$content['PERSONDETAILS']['TITLEREAR'] = ExternModule::ExtHtmlReady($db->f('title_rear'));
+		$content['PERSONDETAILS']['FULLNAME'] = ExternModule::ExtHtmlReady($row['fullname']);
+		$content['PERSONDETAILS']['LASTNAME'] = ExternModule::ExtHtmlReady($row['Nachname']);
+		$content['PERSONDETAILS']['FIRSTNAME'] = ExternModule::ExtHtmlReady($row['Vorname']);
+		$content['PERSONDETAILS']['TITLEFRONT'] = ExternModule::ExtHtmlReady($row['title_front']);
+		$content['PERSONDETAILS']['TITLEREAR'] = ExternModule::ExtHtmlReady($row['title_rear']);
 		if ($statusgroups = GetRoleNames(GetAllStatusgruppen($instituts_id, $this->user_id))) {
 			$content['PERSONDETAILS']['STATUSGROUPS'] = ExternModule::ExtHtmlReady(join(', ', array_values($statusgroups)));
 		}
-		$content['PERSONDETAILS']['USERNAME'] = $db->f('username');
+		$content['PERSONDETAILS']['USERNAME'] = $row['username'];
 		$avatar = Avatar::getAvatar($this->user_id);
 		if ($avatar->is_customized()) {
 			$content['PERSONDETAILS']['IMAGE-HREF'] = $avatar->getURL(Avatar::NORMAL);
 		}
 
-		$gruppen = GetRoleNames(GetAllStatusgruppen($this->config->range_id, $db->f('user_id')));
+		$gruppen = GetRoleNames(GetAllStatusgruppen($this->config->range_id, $row['user_id']));
 		for ($i = 0; $i < sizeof($gruppen); $i++) {
 			$content['PERSONDETAILS']['GROUPS'][$i]['GROUP'] = ExternModule::ExtHtmlReady($gruppen[$i]);
 		}
 
-		$content['PERSONDETAILS']['INST-NAME'] = ExternModule::ExtHtmlReady($db->f('Name'));
-		$content['PERSONDETAILS']['INST-HREF'] = ExternModule::ExtHtmlReady(trim($db->f('url')));
-		$content['PERSONDETAILS']['STREET'] = ExternModule::ExtHtmlReady($db->f('Strasse'));
-		$content['PERSONDETAILS']['ZIPCODE'] = ExternModule::ExtHtmlReady($db->f('Plz'));
-		$content['PERSONDETAILS']['EMAIL'] = ExternModule::ExtHtmlReady($db->f('Email'));
-		$content['PERSONDETAILS']['ROOM'] = ExternModule::ExtHtmlReady($db->f('raum'));
-		$content['PERSONDETAILS']['PHONE'] = ExternModule::ExtHtmlReady($db->f('Telefon'));
-		$content['PERSONDETAILS']['FAX'] = ExternModule::ExtHtmlReady($db->f('Fax'));
-		$content['PERSONDETAILS']['HOMEPAGE-HREF'] = ExternModule::ExtHtmlReady(trim($db->f('Home')));
-		$content['PERSONDETAILS']['OFFICE-HOURS'] = ExternModule::ExtHtmlReady($db->f('sprechzeiten'));
+		$content['PERSONDETAILS']['INST-NAME'] = ExternModule::ExtHtmlReady($row['Name']);
+		$content['PERSONDETAILS']['INST-HREF'] = ExternModule::ExtHtmlReady(trim($row['url']));
+		$content['PERSONDETAILS']['STREET'] = ExternModule::ExtHtmlReady($row['Strasse']);
+		$content['PERSONDETAILS']['ZIPCODE'] = ExternModule::ExtHtmlReady($row['Plz']);
+		$content['PERSONDETAILS']['EMAIL'] = ExternModule::ExtHtmlReady($row['Email']);
+		$content['PERSONDETAILS']['ROOM'] = ExternModule::ExtHtmlReady($row['raum']);
+		$content['PERSONDETAILS']['PHONE'] = ExternModule::ExtHtmlReady($row['Telefon']);
+		$content['PERSONDETAILS']['FAX'] = ExternModule::ExtHtmlReady($row['Fax']);
+		$content['PERSONDETAILS']['HOMEPAGE-HREF'] = ExternModule::ExtHtmlReady(trim($row['Home']));
+		$content['PERSONDETAILS']['OFFICE-HOURS'] = ExternModule::ExtHtmlReady($row['sprechzeiten']);
 
 		// generic data fields
 		if ($generic_datafields = $this->config->getValue('Main', 'genericdatafields')) {
@@ -332,9 +337,9 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 			}
 		}
 
-		$content['PERSONDETAILS']['CV'] = ExternModule::ExtFormatReady($db->f('lebenslauf'), TRUE, TRUE);
-		$content['PERSONDETAILS']['RESEARCH-INTERESTS'] = ExternModule::ExtFormatReady($db->f('schwerp'), TRUE, TRUE);
-		$content['PERSONDETAILS']['PUBLICATIONS'] = ExternModule::ExtFormatReady($db->f('publi'), TRUE, TRUE);
+		$content['PERSONDETAILS']['CV'] = ExternModule::ExtFormatReady($row['lebenslauf'], TRUE, TRUE);
+		$content['PERSONDETAILS']['RESEARCH-INTERESTS'] = ExternModule::ExtFormatReady($row['schwerp'], TRUE, TRUE);
+		$content['PERSONDETAILS']['PUBLICATIONS'] = ExternModule::ExtFormatReady($row['publi'], TRUE, TRUE);
 
 		$content['PERSONDETAILS']['LECTURES'] = $this->elements['TemplateLectures']->toString(array('content' => $this->getContentLectures(), 'subpart' => 'LECTURES'));
 		$content['PERSONDETAILS']['NEWS'] = $this->elements['TemplateNews']->toString(array('content' => $this->getContentNews(), 'subpart' => 'NEWS'));
@@ -347,21 +352,20 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		return $content;
 	}
 
-	function getContentOwnCategories () {
-		$db =& new DB_Seminar();
-		$db->query("SELECT * FROM kategorien WHERE range_id = '{$this->user_id}' ORDER BY priority");
+	private function getContentOwnCategories () {
+		$stm = DBManager::get()->prepare("SELECT * FROM kategorien WHERE range_id = ? ORDER BY priority");
+		$stm->execute(array($this->user_id));
 		$i = 0;
-		while ($db->next_record()) {
-			$content['OWNCATEGORIES']['OWNCATEGORY'][$i]['OWNCATEGORY_TITLE'] = ExternModule::ExtHtmlReady($db->f('name'));
-			$content['OWNCATEGORIES']['OWNCATEGORY'][$i]['OWNCATEGORY_CONTENT'] = ExternModule::ExtFormatReady($db->f('content'));
+		while ($row = $stm->fetch(PDO::FETCH_ASSOC)) {
+			$content['OWNCATEGORIES']['OWNCATEGORY'][$i]['OWNCATEGORY_TITLE'] = ExternModule::ExtHtmlReady($row['name']);
+			$content['OWNCATEGORIES']['OWNCATEGORY'][$i]['OWNCATEGORY_CONTENT'] = ExternModule::ExtFormatReady($row['content']);
 			$content['OWNCATEGORIES']['OWNCATEGORY'][$i]['OWNCATEGORY_NO'] = $i + 1;
 			$i++;
 		}
 		return $content;
 	}
 
-	function getContentNews () {
-
+	private function getContentNews () {
 		$news =& StudipNews::GetNewsByRange($this->user_id, TRUE);
 		if (!count($news)) {
 			$content['NEWS']['NO-NEWS']['NEWS_NO-NEWS-TEXT'] = $this->config->getValue('Main', 'nodatatext');
@@ -384,7 +388,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		return $content;
 	}
 
-	function getContentAppointments () {
+	private function getContentAppointments () {
 		if ($GLOBALS['CALENDAR_ENABLE']) {
 			$event_list = new DbCalendarEventList($this->user_id);
 			$content['APPOINTMENTS']['LIST-START'] = ExternModule::ExtHtmlReady(strftime($this->config->getValue('Main', 'dateformat') . ' %X', $event_list->getStart()));
@@ -393,7 +397,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 				$i = 0;
 				while ($event = $event_list->nextEvent()) {
 					if ($event->isDayEvent()) {
-						$content['APPOINTMENTS']['ALL-APPOINTMENTS']['SINGLE-APPOINTMENT'][$i]['DATE'] = ExternModule::ExtHtmlReady(strftime($this->config->getValue('Main', 'dateformat'), $event->getStart()) . ' (' . _("ganztägig") . ')');
+						$content['APPOINTMENTS']['ALL-APPOINTMENTS']['SINGLE-APPOINTMENT'][$i]['DATE'] = ExternModule::ExtHtmlReady(strftime($this->config->getValue('Main', 'dateformat'), $event->getStart()) . ' (' . _("ganztügig") . ')');
 					} else {
 						$content['APPOINTMENTS']['ALL-APPOINTMENTS']['SINGLE-APPOINTMENT'][$i]['DATE'] = ExternModule::ExtHtmlReady(strftime($this->config->getValue('Main', 'dateformat') . " %X", $event->getStart()));
 						if (date("dmY", $event->getStart()) == date("dmY", $event->getEnd())) {
@@ -420,25 +424,12 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		return NULL;
 	}
 
-	function getContentLectures () {
+	private function getContentLectures () {
 		global $attr_text_td, $end, $start;
-		$db1 = new DB_Seminar();
 		$semester = new SemesterData();
 		$all_semester = $semester->getAllSemesterData();
 		// old hard coded $SEMESTER-array starts with index 1
 		array_unshift($all_semester, 0);
-		
-		$types = array();
-		$semclass = $this->config->getValue('PersondetailsLectures', 'semclass');
-		if (is_null($semclass)) {
-			$semclass = array(1);
-		}
-		foreach ($GLOBALS["SEM_TYPE"] as $key => $type) {
-			if (in_array($type["class"], $semclass)) {
-				$types[] = $key;
-			}
-		}
-		$types = implode("','", $types);
 
 		$switch_time = mktime(0, 0, 0, date("m"), date("d") + 7 * $this->config->getValue("PersondetailsLectures", "semswitch"), date("Y"));
 		// get current semester
@@ -470,13 +461,25 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		if (!isset($all_semester[$last_sem])) {
 			$last_sem = sizeof($all_semester) - 1;
 		}
+		
+		$types = array();
+		$semclass = $this->config->getValue('PersondetailsLectures', 'semclass');
+		if (is_null($semclass)) {
+			$semclass = array(1);
+		}
+		foreach ($GLOBALS["SEM_TYPE"] as $key => $type) {
+			if (in_array($type["class"], $semclass)) {
+				$types[] = $key;
+			}
+		}
+		$stm = DBManager::get()->prepare(sprintf("SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) WHERE user_id = ? AND su.status LIKE 'dozent' AND ((start_time >= ? AND start_time <= ?) OR (start_time <= ? AND duration_time = -1)) AND s.status IN ('%s') AND s.visible = 1 ORDER BY s.mkdate DESC", implode("','", $types)));
+		
 		$i = 0;
 		for (;$current_sem <= $last_sem; $last_sem--) {
-			$query = "SELECT * FROM seminar_user su LEFT JOIN seminare s USING(seminar_id) WHERE user_id='{$this->user_id}' AND su.status LIKE 'dozent' AND ((start_time >= {$all_semester[$last_sem]['beginn']} AND start_time <= {$all_semester[$last_sem]['beginn']}) OR (start_time <= {$all_semester[$last_sem]['ende']} AND duration_time = -1)) AND s.status IN ('$types') AND s.visible = 1 ORDER BY s.mkdate DESC";
+			$stm->execute(array($this->user_id, $all_semester[$last_sem]['beginn'], $all_semester[$last_sem]['beginn'],$all_semester[$last_sem]['ende']));
+			$result = $stm->fetchAll();
 
-			$db1->query($query);
-
-			if ($db1->num_rows()) {
+			if ($result && sizeof($result)) {
 				if (!($this->config->getValue('PersondetailsLectures', 'semstart') == 'current' && $this->config->getValue('PersondetailsLectures', 'semrange') == 1)) {
 					$month = date('n', $all_semester[$last_sem]['beginn']);
 					if ($month > 9) {
@@ -486,11 +489,11 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 					}
 				}
 				$k = 0;
-				while ($db1->next_record()) {
-					$content['LECTURES']['SEMESTER'][$i]['LECTURE'][$k]['TITLE'] = ExternModule::ExtHtmlReady($db1->f('Name'));
-					$content['LECTURES']['SEMESTER'][$i]['LECTURE'][$k]['LECTUREDETAILS-HREF'] = $this->elements['LinkInternLecturedetails']->createUrl(array('link_args' => 'seminar_id=' . $db1->f('Seminar_id')));
-					if ($db1->f("Untertitel") != '') {
-						$content['LECTURES']['SEMESTER'][$i]['LECTURE'][$k]['SUBTITLE'] = ExternModule::ExtHtmlReady($db1->f('Untertitel'));
+				foreach ($result as $row) {
+					$content['LECTURES']['SEMESTER'][$i]['LECTURE'][$k]['TITLE'] = ExternModule::ExtHtmlReady($row['Name']);
+					$content['LECTURES']['SEMESTER'][$i]['LECTURE'][$k]['LECTUREDETAILS-HREF'] = $this->elements['LinkInternLecturedetails']->createUrl(array('link_args' => 'seminar_id=' . $row['Seminar_id']));
+					if ($row['Untertitel'] != '') {
+						$content['LECTURES']['SEMESTER'][$i]['LECTURE'][$k]['SUBTITLE'] = ExternModule::ExtHtmlReady($row['Untertitel']);
 					}
 					$k++;
 				}
@@ -500,7 +503,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		return $content;
 	}
 
-	function printout ($args) {
+	public function printout ($args) {
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
 		init_i18n($language);
@@ -509,7 +512,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 
 	}
 
-	function printoutPreview () {
+	public function printoutPreview () {
 		if (!$language = $this->config->getValue("Main", "language"))
 			$language = "de_DE";
 		init_i18n($language);
@@ -519,5 +522,4 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 	}
 
 }
-
 ?>

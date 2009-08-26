@@ -149,8 +149,8 @@ class ExternConfig {
 		$this->config_name = $this->createConfigName($this->range_id);
 		
 		// take the new configuration, write the name in the configuration
-		// insert it into the database and write it to the specified path with
-		// id.cfg as file name
+		// insert it into the database and store it (method of storaging deepends on
+		// object type)
 		$this->config = $new_config;
 		$this->setValue('Main', 'name', $this->config_name);
 		if ($this->insertConfiguration()) {
