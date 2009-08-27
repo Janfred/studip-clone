@@ -3,22 +3,22 @@
 # Lifter007: TODO
 # Lifter003: TODO
 /**
-* ExternElementMainTemplatePersons.class.php
+* ExternElementMainTemplatePersBrowse.class.php
 * 
 *  
 * 
 *
 * @author		Peter Thienel <thienel@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version	$Id: ExternElementMainTemplatePersons.class.php 6854 2006-10-18 16:04:09Z pthiene $
+* @version	$Id: ExternElementMainTemplatePersBrowse.class.php 6854 2006-10-18 16:04:09Z pthiene $
 * @access		public
 * @modulegroup	extern
-* @module		ExternElementMainTemplatePersons
+* @module		ExternElementMainTemplatePersBrowse
 * @package	studip_extern
 */
 
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
-// ExternElementMainTemplatePersons.class.php
+// ExternElementMainTemplatePersBrowse.class.php
 // 
 // Copyright (C) 2003 Peter Thienel <pthienel@web.de>,
 // Suchi & Berg GmbH <info@data-quest.de>
@@ -46,7 +46,7 @@ class ExternElementMainTemplatePersBrowse extends ExternElementMain {
 	* Constructor
 	*
 	*/
-	function ExternElementMainTemplatePersBrowse ($module_name, &$data_fields, &$field_names, &$config) {
+	public function __construct ($module_name, &$data_fields, &$field_names, &$config) {
 		$this->attributes = array(
 				'name', 'sort', 'groupsalias', 'groupsvisible', 'grouping',
 				'nameformat', 'defaultadr', 'genericdatafields', 'onlylecturers', 'onlygrouped',
@@ -61,7 +61,7 @@ class ExternElementMainTemplatePersBrowse extends ExternElementMain {
 	/**
 	* 
 	*/
-	function getDefaultConfig () {
+	public function getDefaultConfig () {
 		$config = array(
 			'name' => '',
 			'sort' => '|1|0|0|0|0',
@@ -81,7 +81,7 @@ class ExternElementMainTemplatePersBrowse extends ExternElementMain {
 	/**
 	* 
 	*/
-	function toStringEdit ($post_vars = "", $faulty_values = "",
+	public function toStringEdit ($post_vars = "", $faulty_values = "",
 			$edit_form = "", $anker = "") {
 		
 		$out = '';
@@ -100,7 +100,7 @@ class ExternElementMainTemplatePersBrowse extends ExternElementMain {
 		
 		$content_table .= $this->getSRIFormContent($edit_form);
 		
-		$headline = $edit_form->editHeadline(_("Allgemeine Angaben zum Tabellenaufbau"));
+		$headline = $edit_form->editHeadline(_("Sortierung der Personenliste"));
 		$edit_function = $this->edit_function;
 		$table = $edit_form->$edit_function($this->field_names);
 				
@@ -147,7 +147,7 @@ class ExternElementMainTemplatePersBrowse extends ExternElementMain {
 		return $element_headline . $out;
 	}
 	
-	function checkValue ($attribute, $value) {
+	public function checkValue ($attribute, $value) {
 		if (in_array($attribute, array('grouping', 'defaultadr', 'onlylecturers'))) {
 			// This is especially for checkbox-values. If there is no checkbox
 			// checked, the variable is not declared and it is necessary to set the
