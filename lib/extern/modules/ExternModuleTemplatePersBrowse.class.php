@@ -63,6 +63,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 				'Nachname', 'Telefon', 'raum', 'Email', 'sprechzeiten'
 		);
 		$this->registered_elements = array(
+				'SelectInstitutes',
 				'LinkInternListCharacters' => 'LinkInternTemplate',
 				'LinkInternListInstitutes' => 'LinkInternTemplate',
 				'LinkInternPersondetails' => 'LinkInternTemplate',
@@ -109,7 +110,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 		$this->elements['TemplateListInstitutes']->markers = $this->getMarkerDescription('TemplateListInstitutes');
 		$this->elements['TemplateListPersons']->markers = $this->getMarkerDescription('TemplateListPersons');
 		$this->elements['TemplateListCharacters']->markers = $this->getMarkerDescription('TemplateListCharacters');
-		$this->getContentListInstitutes();
+		
 		return parent::toStringEdit($open_elements, $post_vars, $faulty_values, $anker);
 	}
 	
@@ -156,6 +157,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 			array('###TITLEREAR###', ''),
 			array('###PERSONDETAIL-HREF###', ''),
 			array('###USERNAME###', ''),
+			array('###INSTNAME###', ''),
 			array('###PHONE###', ''),
 			array('###ROOM###', ''),
 			array('###EMAIL###', ''),
@@ -193,6 +195,12 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 			$nameformat = 'full_rev';
 		}
 		
+		$selected_item_ids = $this->config->getValue('SelectInstitutes', 'institutesselected');
+		// at least one institute has to be selected in the configuration
+		if (!is_array($selected_item_ids)) {
+			return array();
+		}
+		
 		$sort = $this->config->getValue('Main', 'sort');
 		$query_order = '';
 		foreach ($sort as $key => $position) {
@@ -222,6 +230,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 				. "AND su.status = 'dozent' "
 				. "AND s.visible=1 "
 				. "AND ((%s) = %s OR ((%s) <= %s  AND ((%s) >= %s OR (%s) = -1))) "
+				. "AND ui.Institut_id IN ('%s') "
 				. "ORDER BY ui.priority, ui.externdefault",
 				substr($module_params['initiale'], 0, 1),
 				$GLOBALS['_views']['sem_number_sql'],
@@ -230,7 +239,8 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 				$current_semester,
 				$GLOBALS['_views']['sem_number_end_sql'],
 				$current_semester,
-				$GLOBALS['_views']['sem_number_end_sql']);
+				$GLOBALS['_views']['sem_number_end_sql'],
+				implode("','", $selected_item_ids));
 			} else {
 					// get only users with the given status
 				$query = sprintf("SELECT ui.Institut_id, ui.user_id, ui.externdefault "
@@ -239,25 +249,28 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 					. "WHERE LOWER(LEFT(TRIM(aum.Nachname), 1)) = LOWER('%s') "
 					. "AND ui.inst_perms IN('%s') "
 					. "AND ui.visible=1 "
+					. "AND ui.Institut_id IN ('%s') "
 					. "ORDER BY ui.priority, ui.externdefault",
 					substr($module_params['initiale'], 0, 1),
-					implode("','", $this->config->getValue('Main', 'instperms')));
+					implode("','", $this->config->getValue('Main', 'instperms')),
+					implode("','", $selected_item_ids));
 			}
-		} else if ($module_params['item_id']) {
+		// the given item_id is not in the list of item_ids selected in the configuration
+		} else if ($module_params['item_id'] && in_array($module_params['item_id'], $selected_item_ids)) {
 			if ($this->config->getValue('Main', 'onlylecturers')) {
 				$current_semester = get_sem_num(time());
 				// get only users with status dozent in an visible seminar in the current semester
 				$query = sprintf("SELECT ui.Institut_id, ui.user_id, ui.externdefault "
-					. "FROM range_tree rt "
+					. "FROM user_inst ui "
 					. "LEFT JOIN user_inst ui ON rt.studip_object_id = ui.Institut_id "
 					. "LEFT JOIN seminar_user su USING(user_id) "
 					. "LEFT JOIN seminare s USING (seminar_id) "
-					. "WHERE rt.item_id IN('%s') "
+					. "WHERE ui.Institut_id = '%s' "
 					. "AND su.status = 'dozent' "
 					. "AND ui.visible=1 "
 					. "AND ((%s) = %s OR ((%s) <= %s  AND ((%s) >= %s OR (%s) = -1))) "
 					. "ORDER BY ui.priority, ui.externdefault",
-					implode("','", $this->range_tree->getKidsKids($module_params['item_id'])),
+					$module_params['item_id'],
 					$GLOBALS['_views']['sem_number_sql'],
 					$current_semester,
 					$GLOBALS['_views']['sem_number_sql'],
@@ -268,13 +281,13 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 			} else {
 				// get only users with the given status
 				$query = sprintf("SELECT ui.Institut_id, ui.user_id, ui.externdefault "
-					. "FROM range_tree rt "
-					. "LEFT JOIN user_inst ui ON rt.studip_object_id = ui.Institut_id "
+					. "FROM user_inst ui "
+					. "WHERE ui.Institut_id = '%s' "
 					. "WHERE rt.item_id IN('%s') "
 					. "AND ui.inst_perms IN('%s') "
 					. "AND ui.visible=1 "
 					. "ORDER BY ui.priority, ui.externdefault",
-					implode("','", $this->range_tree->getKidsKids($module_params['item_id'])),
+					$module_params['item_id'],
 					implode("','", $this->config->getValue('Main', 'instperms')));
 			}
 		} else {
@@ -294,10 +307,13 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 			return array();
 		}
 		
-		$query = sprintf("SELECT ui.Institut_id, ui.raum, ui.sprechzeiten, ui.Telefon, "
-			. "inst_perms,	Email, aum.user_id, username, "
+		$query = sprintf(
+			"SELECT ui.Institut_id, ui.raum, ui.sprechzeiten, ui.Telefon, "
+			. "inst_perms,	i.Name, aum.Email, aum.user_id, username, "
 			. "%s AS fullname, aum.Nachname, aum.Vorname "
-			. "FROM user_inst ui LEFT JOIN auth_user_md5 aum USING(user_id)"
+			. "FROM user_inst ui "
+			. "LEFT JOIN Institute i USING(Institut_id) "
+			. "LEFT JOIN auth_user_md5 aum USING(user_id)"
 			. "LEFT JOIN user_info uin USING(user_id) "
 			. "WHERE CONCAT(ui.user_id, ui.Institut_id) IN ('%s') "
 			. "ORDER BY aum.Nachname ",
@@ -314,6 +330,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 			$content['PERSONS']['PERSON'][$j]['TITLEREAR'] = ExternModule::ExtHtmlReady($db->f('title_rear'));
 			$content['PERSONS']['PERSON'][$j]['PERSONDETAIL-HREF'] = $this->elements['LinkInternPersondetails']->createUrl(array('link_args' => 'username=' . $db->f('username')));
 			$content['PERSONS']['PERSON'][$j]['USERNAME'] = $db->f('username');
+			$content['PERSONS']['PERSON'][$j]['INSTNAME'] = ExternModule::ExtHtmlReady($db->f('Name'));
 			$content['PERSONS']['PERSON'][$j]['PHONE'] = ExternModule::ExtHtmlReady($db->f('Telefon'));
 			$content['PERSONS']['PERSON'][$j]['ROOM'] = ExternModule::ExtHtmlReady($db->f('raum'));
 			$content['PERSONS']['PERSON'][$j]['EMAIL'] = ExternModule::ExtHtmlReady($db->f('Email'));
@@ -342,11 +359,19 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 	
 	
 	private function getContentListCharacters () {
+		$selected_item_ids = $this->config->getValue('SelectInstitutes', 'institutesselected');
+		// at least one institute has to be selected in the configuration
+		if (!is_array($selected_item_ids)) {
+			return array();
+		}
 		$content = array();
 		// FILTER:
 		// - müssen Dozent in aktiver Veranstaltung sein
 		// - müssen Gruppe in ihrer Einrichtung zugeordnet sein
-		
+		// at least one institute has to be selected in the configuration
+		if (!is_array($selected_item_ids)) {
+			return array();
+		}
 		$db = new DB_Seminar();
 		
 	//	$query = sprintf("SELECT COUNT(ui.user_id) as count_initiale, UPPER(LEFT(TRIM(aum.Nachname),1)) AS initiale FROM user_inst ui LEFT JOIN auth_user_md5 aum USING (user_id) WHERE ui.inst_perms IN ('%s') AND TRIM(aum.Nachname) != '' GROUP BY initiale", implode("','", $this->config->getValue('Main', 'instperms')));
@@ -354,14 +379,16 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 		
 		if ($this->config->getValue('Main', 'onlylecturers')) {
 			$current_semester = get_sem_num(time());
-			$query = sprintf("SELECT COUNT(DISTINCT(aum.user_id)) as count_user, "
+				$query = sprintf("SELECT COUNT(DISTINCT aum.user_id) as count_user, "
 				. "UPPER(LEFT(TRIM(aum.Nachname),1)) AS initiale "
-				. "FROM seminar_user su "
-				. "LEFT JOIN seminare s USING (seminar_id) "
+				. "FROM user_inst ui "
+				. "LEFT JOIN seminar_user su ON ui.user_id = su.user_id "
+				. "LEFT JOIN seminare s ON su.Seminar_id = s.Seminar_id "
 				. "LEFT JOIN auth_user_md5 aum ON su.user_id = aum.user_id "
 				. "WHERE su.status = 'dozent' AND s.visible = 1 "
 				. "AND ((%s) = %s OR ((%s) <= %s  AND ((%s) >= %s OR (%s) = -1))) "
 				. "AND TRIM(aum.Nachname) != '' "
+				. "AND ui.Institut_id IN ('%s') "
 				. "GROUP BY initiale",
 				$GLOBALS['_views']['sem_number_sql'],
 				$current_semester,
@@ -369,16 +396,19 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 				$current_semester,
 				$GLOBALS['_views']['sem_number_end_sql'],
 				$current_semester,
-				$GLOBALS['_views']['sem_number_end_sql']);
+				$GLOBALS['_views']['sem_number_end_sql'],
+				implode("','", $selected_item_ids));
 		} else {
-			$query = sprintf("SELECT COUNT(DISTINCT(ui.user_id)) as count_user, "
+			$query = sprintf("SELECT COUNT(DISTINCT ui.user_id) as count_user, "
 				. "UPPER(LEFT(TRIM(aum.Nachname),1)) AS initiale "
 				. "FROM user_inst ui "
 				. "LEFT JOIN auth_user_md5 aum USING (user_id) "
 				. "WHERE ui.inst_perms IN ('%s') "
+				. "AND ui.Institut_id IN ('%s') "
 				. "AND TRIM(aum.Nachname) != '' "
 				. "GROUP BY initiale",
-				implode("','", $this->config->getValue('Main', 'instperms')));
+				implode("','", $this->config->getValue('Main', 'instperms')),
+				implode("';'", $selected_item_ids));
 		}
 		
 		$db->query($query);
@@ -392,20 +422,33 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 	}
 	
 	private function getContentListInstitutes () {
+		$selected_item_ids = $this->config->getValue('SelectInstitutes', 'institutesselected');
+		// at least one institute has to be selected in the configuration
+		if (!is_array($selected_item_ids)) {
+			return array();
+		}
 		$content = array();
-		// getting the institutes from the first level
+		
 		$first_levels = $this->range_tree->getKids('root');
 	//	var_dump($first_levels);
 		$current_semester = get_sem_num(time());
 		$db = new DB_Seminar();
 		$db_count = new DB_Seminar();
-		$query = "SELECT rt.item_id, IF(rt.studip_object_id = '', rt.name, i.Name) AS instname FROM range_tree rt LEFT JOIN Institute i ON (rt.studip_object_id = i.Institut_id) WHERE rt.parent_id = 'root' ORDER BY priority ASC";
+		
+	//	$query = "SELECT rt.item_id, IF(rt.studip_object_id = '', rt.name, i.Name) AS instname FROM range_tree rt LEFT JOIN Institute i ON (rt.studip_object_id = i.Institut_id) WHERE rt.parent_id = 'root' ORDER BY priority ASC";
+		$query = sprintf(
+			"SELECT Institut_id, Name "
+			. "FROM Institute "
+			. "WHERE Institut_id IN ('%s') "
+			. "AND fakultaets_id != Institut_id "
+			. "ORDER BY Name ASC",
+			implode("','", $selected_item_ids));
 		$db->query($query);
 		
 		while ($db->next_record()) {
 			if ($this->config->getValue('Main', 'onlylecturers')) {
 				// get only users with status dozent in an visible seminar in the current semester
-				$query = sprintf("SELECT COUNT(DISTINCT(su.user_id)) AS count_user "
+				/*$query = sprintf("SELECT COUNT(DISTINCT(su.user_id)) AS count_user "
 					. "FROM range_tree rt "
 					. "LEFT JOIN user_inst ui ON rt.studip_object_id = ui.Institut_id "
 					. "LEFT JOIN seminar_user su USING(user_id) "
@@ -422,16 +465,40 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 					$current_semester,
 					$GLOBALS['_views']['sem_number_end_sql'],
 					$current_semester,
+					$GLOBALS['_views']['sem_number_end_sql']);*/
+				$query = sprintf("SELECT COUNT(DISTINCT(su.user_id)) AS count_user "
+					. "FROM user_inst ui "
+					. "LEFT JOIN seminar_user su USING(user_id) "
+					. "LEFT JOIN seminare s USING (seminar_id) "
+					. "LEFT JOIN auth_user_md5 aum ON su.user_id = aum.user_id "
+					. "WHERE ui.Institut_id = '%s' "
+					. "AND su.status = 'dozent' "
+					. "AND ui.visible=1 "
+					. "AND ((%s) = %s OR ((%s) <= %s  AND ((%s) >= %s OR (%s) = -1)))",
+					$db->f('Institut_id'),
+					$GLOBALS['_views']['sem_number_sql'],
+					$current_semester,
+					$GLOBALS['_views']['sem_number_sql'],
+					$current_semester,
+					$GLOBALS['_views']['sem_number_end_sql'],
+					$current_semester,
 					$GLOBALS['_views']['sem_number_end_sql']);
 			} else {
 				// get only users with the given status
-				$query = sprintf("SELECT COUNT(DISTINCT(ui.user_id)) AS count_user "
+				/*$query = sprintf("SELECT COUNT(DISTINCT(ui.user_id)) AS count_user "
 					. "FROM range_tree rt "
 					. "LEFT JOIN user_inst ui ON rt.studip_object_id = ui.Institut_id "
 					. "WHERE rt.item_id IN('%s') "
 					. "AND ui.inst_perms IN('%s') "
 					. "AND ui.visible=1 ",
 					implode("','", $this->range_tree->getKidsKids($db->f('item_id'))),
+					implode("','", $this->config->getValue('Main', 'instperms')));*/
+				$query = sprintf("SELECT COUNT(DISTINCT(ui.user_id)) AS count_user "
+					. "FROM user_inst ui "
+					. "WHERE ui.Institut_id = '%s' "
+					. "AND ui.inst_perms IN('%s') "
+					. "AND ui.visible=1 ",
+					$db->f('Institut_id'),
 					implode("','", $this->config->getValue('Main', 'instperms')));
 			}
 			
@@ -440,9 +507,9 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 			while ($db_count->next_record()) {
 				if ($db_count->f('count_user') > 0) {
 					$content['LIST_INSTITUTES']['INSTITUTE'][] = array(
-						'INSTITUTE_NAME' => ExternModule::ExtHtmlReady($db->f('instname')),
+						'INSTITUTE_NAME' => ExternModule::ExtHtmlReady($db->f('Name')),
 						'INSTITUTE_COUNT_USER' => $db_count->f('count_user'),
-						'URL_LIST_PERSONS' => $this->getLinkToModule('LinkInternListInstitutes', array('item_id' => $db->f('item_id'))));
+						'URL_LIST_PERSONS' => $this->getLinkToModule('LinkInternListInstitutes', array('item_id' => $db->f('Institut_id'))));
 				}
 			}
 		}
