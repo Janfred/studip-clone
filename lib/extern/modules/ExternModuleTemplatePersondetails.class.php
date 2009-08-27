@@ -148,6 +148,8 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$markers['TemplateMain'][] = array('###STREET###', '');
 		$markers['TemplateMain'][] = array('###ZIPCODE###', '');
 		$markers['TemplateMain'][] = array('###EMAIL###', '');
+		$markers['TemplateMain'][] = array('###EMAIL-LOCAL###', _("Der local-part der E-Mail-Adresse (vor dem @-Zeichen)"));
+		$markers['TemplateMain'][] = array('###EMAIL-DOMAIN###', _("Der domain-part der E-Mail-Adresse (nach dem @-Zeichen)"));
 		$markers['TemplateMain'][] = array('###ROOM###', '');
 		$markers['TemplateMain'][] = array('###PHONE###', '');
 		$markers['TemplateMain'][] = array('###FAX###', '');
@@ -369,6 +371,8 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$content['PERSONDETAILS']['STREET'] = ExternModule::ExtHtmlReady($row['Strasse']);
 		$content['PERSONDETAILS']['ZIPCODE'] = ExternModule::ExtHtmlReady($row['Plz']);
 		$content['PERSONDETAILS']['EMAIL'] = ExternModule::ExtHtmlReady($row['Email']);
+		$content['PERSONDETAILS']['EMAIL-LOCAL'] = array_shift(explode('@', $content['PERSONDETAILS']['EMAIL']));
+		$content['PERSONDETAILS']['EMAIL-DOMAIN'] = array_pop(explode('@', $content['PERSONDETAILS']['EMAIL']));
 		$content['PERSONDETAILS']['ROOM'] = ExternModule::ExtHtmlReady($row['raum']);
 		$content['PERSONDETAILS']['PHONE'] = ExternModule::ExtHtmlReady($row['Telefon']);
 		$content['PERSONDETAILS']['FAX'] = ExternModule::ExtHtmlReady($row['Fax']);

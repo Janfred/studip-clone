@@ -161,6 +161,8 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 			array('###PHONE###', ''),
 			array('###ROOM###', ''),
 			array('###EMAIL###', ''),
+			array('###EMAIL-LOCAL###', _("Der local-part der E-Mail-Adresse (vor dem @-Zeichen)")),
+			array('###EMAIL-DOMAIN###', _("Der domain-part der E-Mail-Adresse (nach dem @-Zeichen)")),
 			array('###OFFICEHOURS###', ''),
 			array('###PERSON-NO###', ''),
 			$this->insertDatafieldMarkers('user', $markers, 'TemplateList'),
@@ -283,7 +285,6 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 				$query = sprintf("SELECT ui.Institut_id, ui.user_id, ui.externdefault "
 					. "FROM user_inst ui "
 					. "WHERE ui.Institut_id = '%s' "
-					. "WHERE rt.item_id IN('%s') "
 					. "AND ui.inst_perms IN('%s') "
 					. "AND ui.visible=1 "
 					. "ORDER BY ui.priority, ui.externdefault",
@@ -334,6 +335,8 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 			$content['PERSONS']['PERSON'][$j]['PHONE'] = ExternModule::ExtHtmlReady($db->f('Telefon'));
 			$content['PERSONS']['PERSON'][$j]['ROOM'] = ExternModule::ExtHtmlReady($db->f('raum'));
 			$content['PERSONS']['PERSON'][$j]['EMAIL'] = ExternModule::ExtHtmlReady($db->f('Email'));
+			$content['PERSONS']['PERSON'][$j]['EMAIL-LOCAL'] = array_shift(explode('@', $content['PERSONS']['PERSON'][$j]['EMAIL']));
+			$content['PERSONS']['PERSON'][$j]['EMAIL-DOMAIN'] = array_pop(explode('@', $content['PERSONS']['PERSON'][$j]['EMAIL']));
 			$content['PERSONS']['PERSON'][$j]['OFFICEHOURS'] = ExternModule::ExtHtmlReady($db->f('sprechzeiten'));
 			$content['PERSONS']['PERSON'][$j]['PERSON-NO'] = $j + 1;
 			
@@ -408,7 +411,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 				. "AND TRIM(aum.Nachname) != '' "
 				. "GROUP BY initiale",
 				implode("','", $this->config->getValue('Main', 'instperms')),
-				implode("';'", $selected_item_ids));
+				implode("','", $selected_item_ids));
 		}
 		
 		$db->query($query);

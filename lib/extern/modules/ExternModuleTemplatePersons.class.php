@@ -123,6 +123,8 @@ class ExternModuleTemplatePersons extends ExternModule {
 		$markers['TemplateGeneric'][] = array('###PHONE###', '');
 		$markers['TemplateGeneric'][] = array('###ROOM###', '');
 		$markers['TemplateGeneric'][] = array('###EMAIL###', '');
+		$markers['TemplateGeneric'][] = array('###EMAIL-LOCAL###', _("Der local-part der E-Mail-Adresse (vor dem @-Zeichen)"));
+		$markers['TemplateGeneric'][] = array('###EMAIL-DOMAIN###', _("Der domain-part der E-Mail-Adresse (nach dem @-Zeichen)"));
 		$markers['TemplateGeneric'][] = array('###OFFICEHOURS###', '');
 		$markers['TemplateGeneric'][] = array('###PERSON-NO###', '');
 		$this->insertDatafieldMarkers('user', $markers, 'TemplateGeneric');
@@ -282,6 +284,8 @@ class ExternModuleTemplatePersons extends ExternModule {
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['PHONE'] = ExternModule::ExtHtmlReady($db_out->f('Telefon'));
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['ROOM'] = ExternModule::ExtHtmlReady($db_out->f('raum'));
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['EMAIL'] = $db_out->f('Email');
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['EMAIL-LOCAL'] = array_shift(explode('@', $db_out->f('Email')));
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['EMAIL-DOMAIN'] = array_pop(explode('@', $db_out->f('Email')));
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['OFFICEHOURS'] = ExternModule::ExtHtmlReady($db_out->f('sprechzeiten'));
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['PERSON-NO'] = $j + 1;
 					
