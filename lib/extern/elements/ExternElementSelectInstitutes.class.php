@@ -62,7 +62,7 @@ class ExternElementSelectInstitutes extends ExternElement {
 	* 
 	*/
 	public function getDefaultConfig () {
-		$config['institutesselected'] = '|';
+		$config = array('institutesselected' => '|');
 		
 		return $config;
 	}

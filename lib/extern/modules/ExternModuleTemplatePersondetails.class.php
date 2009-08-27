@@ -88,6 +88,9 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 				'TemplateOwnCategories' => 'TemplateGeneric'
 			);
 		}
+		if (in_array(get_object_type($range_id), array('fak', 'global'))) {
+			array_unshift($this->registered_elements, 'SelectInstitutes');
+		}
 		$this->field_names = array();
 		$this->args = array('username', 'seminar_id');
 
@@ -110,7 +113,9 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 		$this->elements['TemplateLitList']->real_name = _("Template für Literaturlisten");
 		$this->elements['TemplateOwnCategories']->real_name = _("Template für eigene Kategorien");
-
+		if (in_array(get_object_type($this->config->range_id), array('fak', 'global'))) {
+			$this->elements['SelectInstitutes']->real_name = _("Einschränkung auf Institute/Einrichtungen");
+		}
 	}
 
 	public function toStringEdit ($open_elements = '', $post_vars = '',
@@ -239,7 +244,60 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 		
 		$row = false;
-
+		
+		if (in_array(get_object_type($this->config->range_id), array('fak', 'global'))) {
+			$selected_item_ids = $this->config->getValue('SelectInstitutes', 'institutesselected');
+			// at least one institute has to be selected in the configuration
+			if (!is_array($selected_item_ids)) {
+				return array();
+			}
+			// is user lecturer ?
+			if ($this->config->getValue('Main', 'onlylecturer')) {
+				$current_semester = get_sem_num(time());
+				$stm = DBManager::get()->prepare(sprintf(
+					"SELECT aum.user_id "
+					. "FROM auth_user_md5 aum "
+					. "LEFT JOIN seminar_user su USING(user_id) "
+					. "LEFT JOIN seminare s USING (seminar_id) "
+					. "LEFT JOIN user_inst ui ON aum.user_id = ui.user_id "
+					. "WHERE aum.username = ? "
+					. "AND su.status = 'dozent' "
+					. "AND s.visible = 1 "
+					. "AND ((%s) = %s OR ((%s) <= %s  AND ((%s) >= %s OR (%s) = -1))) "
+					. "AND ui.Institut_id IN ('%s') "
+					. "AND ui.inst_perms = 'dozent' "
+					. "AND ui.externdefault = 1 ",
+					$GLOBALS['_views']['sem_number_sql'],
+					$current_semester,
+					$GLOBALS['_views']['sem_number_sql'],
+					$current_semester,
+					$GLOBALS['_views']['sem_number_end_sql'],
+					$current_semester,
+					$GLOBALS['_views']['sem_number_end_sql'],
+					implode("','", $selected_item_ids)));
+				$stm->execute(array($username));
+				// user is not a lecturer
+				if (!$row = $stm->fetch()) {
+					return array();
+				}
+			} else {
+				// have user the status dozent at an institute in the list of accepted institutes
+				$stm = DBManager::get()->prepare(sprintf(
+					"SELECT aum.user_id "
+					. "FROM auth_user_md5 aum "
+					. "LEFT JOIN user_inst ui USING(user_id) "
+					. "WHERE aum.username = ? "
+					. "AND ui.Institut_id IN ('%s') "
+					. "AND ui.externdefault = 1 ",
+					implode("','", $selected_item_ids)));
+				$stm->execute(array($username));
+				// user is not dozent at an institute that is in the list of accepted institutes
+				if (!$row = $stm->fetch()) {
+					return array();
+				}
+			}
+		}
+		
 		// Mitarbeiter/in am Institut
 		$stm_inst = DBManager::get()->prepare(
 			"SELECT i.Institut_id "

@@ -68,15 +68,11 @@ class ExternElementMainTemplatePersBrowse extends ExternElementMain {
 			'nameformat' => '',
 			'defaultadr' => '',
 			'instperms' => '|dozent',
-			'onlylecturers' => '',
-			'onlygrouped' => ''
+			'onlylecturers' => '1'
 		);
 		
 		return $config;
 	}
-	
-	
-		
 	
 	/**
 	* 
@@ -121,11 +117,13 @@ class ExternElementMainTemplatePersBrowse extends ExternElementMain {
 			$values = '1';
 			$table .= $edit_form->editCheckboxGeneric('onlylecturers', $title, $info, $values, '');
 			
+			$table .= $edit_form->editTextblock('<span style="font-weight: bold">'
+				. _("Das Modul zeigt nur Personen an, die eine Standardadresse angegeben haben.")
+				. '</span>');
+				
 			$content_table .= $edit_form->editContentTable($headline, $table);
 			$content_table .= $edit_form->editBlankContent();
 		}
-		
-		
 		
 		$headline = $edit_form->editHeadline(_("Weitere Angaben"));
 		

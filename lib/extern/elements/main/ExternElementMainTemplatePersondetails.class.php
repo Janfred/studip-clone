@@ -65,7 +65,8 @@ class ExternElementMainTemplatePersondetails extends ExternElementMain {
 			"nameformat" => '',
 			"dateformat" => '%d. %b. %Y',
 			"language" => '',
-			'defaultaddr' => ''
+			'defaultaddr' => '',
+			'onlylecturers' => '1'
 		);
 		
 		get_default_generic_datafields($config, "user");
@@ -119,9 +120,20 @@ class ExternElementMainTemplatePersondetails extends ExternElementMain {
 		$names = array(_("keine Auswahl"), _("Deutsch"), _("Englisch"));
 		$table .= $edit_form->editOptionGeneric("language", $title, $info, $values, $names);
 		
-		$title = _("Standard-Adresse:");
-		$info = _("Wenn Sie diese Option wählen, wird die Standard-Adresse ausgegeben, die jede(r) Mitarbeiter(in) bei seinen universitären Daten auswählen kann. Wählen Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben werden soll.");
-		$table .= $edit_form->editCheckboxGeneric('defaultaddr', $title, $info, '1', '0');
+		if (in_array(get_object_type($this->config->range_id), array('fak', 'global'))) {
+			$title = _("Nur Lehrende:");
+			$info = _("Es werden nur Personen angezeigt, die in einer sichtbaren Veranstaltung des aktuellen Semesters Dozent sind.");
+			$values = '1';
+			$table .= $edit_form->editCheckboxGeneric('onlylecturers', $title, $info, $values, '');
+			
+			$table .= $edit_form->editTextblock('<span style="font-weight: bold">'
+				. _("Das Modul zeigt nur Personen an, die eine Standardadresse angegeben haben.")
+				. '</span>');
+		} else {
+			$title = _("Standard-Adresse:");
+			$info = _("Wenn Sie diese Option wählen, wird die Standard-Adresse ausgegeben, die jede(r) Mitarbeiter(in) bei seinen universitären Daten auswählen kann. Wählen Sie diese Option nicht, wenn immer die Adresse der Einrichtung ausgegeben werden soll.");
+			$table .= $edit_form->editCheckboxGeneric('defaultaddr', $title, $info, '1', '0');
+		}
 		
 		$content_table .= $edit_form->editContentTable($headline, $table);
 		$content_table .= $edit_form->editBlankContent();
@@ -135,12 +147,11 @@ class ExternElementMainTemplatePersondetails extends ExternElementMain {
 	}
 	
 	function checkValue ($attribute, $value) {
-		if ($attribute == 'defaultaddr') {
+		if ($attribute == 'defaultaddr' || $attribute == 'onlylecturers') {
 			if (!isset($_POST["Main_$attribute"])) {
 				$_POST["Main_$attribute"] = 0;
 				return FALSE;
 			}
-				
 			return !($value == "1" || $value == "");
 		}
 		
