@@ -244,8 +244,9 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 		
 		$row = false;
-		
+		$global_view = false;
 		if (in_array(get_object_type($this->config->range_id), array('fak', 'global'))) {
+			$global_view = true;
 			$selected_item_ids = $this->config->getValue('SelectInstitutes', 'institutesselected');
 			// at least one institute has to be selected in the configuration
 			if (!is_array($selected_item_ids)) {
@@ -297,6 +298,8 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 				}
 			}
 		}
+		
+		$row = false;
 		
 		// Mitarbeiter/in am Institut
 		$stm_inst = DBManager::get()->prepare(
@@ -351,7 +354,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 				, $GLOBALS['_fullname_sql'][$nameformat]));
 			$stm->execute(array($username, $sem_id));
 			$row = $stm->fetch(PDO::FETCH_ASSOC);
-		} elseif ($this->config->getValue('Main', 'defaultaddr')) {
+		} elseif ($global_view || $this->config->getValue('Main', 'defaultaddr')) {
 			$stm = DBManager::get()->prepare(sprintf(
 				"SELECT i.Institut_id, i.Name, i.Strasse, i.Plz, i.url, ui.*, aum.*, "
 				. "%s AS fullname, uin.user_id, uin.lebenslauf, uin.publi, uin.schwerp, "
