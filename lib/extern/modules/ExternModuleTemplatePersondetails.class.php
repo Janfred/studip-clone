@@ -1,7 +1,6 @@
 <?
 # Lifter002: TODO
 # Lifter007: TODO
-# Lifter003: TODO
 /**
 * ExternModuleTemplatePersondetails.class.php
 *
@@ -488,7 +487,14 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$all_semester = $semester->getAllSemesterData();
 		// old hard coded $SEMESTER-array starts with index 1
 		array_unshift($all_semester, 0);
-
+		
+		$types = array();
+		$semclass = $this->config->getValue('PersondetailsLectures', 'semclass');
+		if (is_null($semclass)) {
+			$semclass = array(1);
+		}
+			if (in_array($type["class"], $semclass)) {
+			}
 		$switch_time = mktime(0, 0, 0, date("m"), date("d") + 7 * $this->config->getValue("PersondetailsLectures", "semswitch"), date("Y"));
 		// get current semester
 		$current_sem = get_sem_num($switch_time) + 1;
