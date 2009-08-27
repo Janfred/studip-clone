@@ -431,8 +431,8 @@ class ExternEditModule extends ExternEditHtml {
 	}
 	
 	function editSelectSubjectAreas ($selector) {
-		$info = _("Wählen Sie die Studienbereiche aus, deren Veranstaltungen angezeigt werden sollen.");
-		$info2 = _("Sie können beliebig viele Studienbereiche auswählen.");
+		$info = _("Wählen Sie die Studienmodule aus, deren Veranstaltungen angezeigt werden sollen.");
+		$info2 = _("Sie können beliebig viele Studienmodule auswählen.");
 		$this->css->resetClass();
 		$this->css->switchClass();
 		$form_name = $this->element_name . "_" . 'subjectareasselected';
@@ -463,7 +463,7 @@ class ExternEditModule extends ExternEditHtml {
 		$out .= '<tr><td align="left" style="font-size: smaller;" width="100%" nowrap="nowrap" colspan="2">' . _("Suche") . ': ';
 		$out .= $selector->getSearchField(array('size' => 30 ,'style' => 'vertical-align:middle;'));
 		$out .= $selector->getSearchButton(array('style' => 'vertical-align:middle;'));
-		$out .= '<br><span style="font-size: 0.9em;"> (' . _("Geben Sie '%%%' ein, um alle Studienbereiche zu finden.") . ')</span>';
+		$out .= '<br><span style="font-size: 0.9em;"> (' . _("Geben Sie '%%%' ein, um alle Studienmodule zu finden.") . ')</span>';
 		if ($selector->num_search_result !== false){
 			$out .= "<br><span style=\"font-size:smaller;\"><a name=\"anker\">&nbsp;&nbsp;</a>"
 					. sprintf(_("Ihre Suche ergab %s Treffer."),$selector->num_search_result)
@@ -556,6 +556,41 @@ class ExternEditModule extends ExternEditHtml {
 		}
 		$out .= "</table></td></tr>\n";
 		
+		return $out;
+	}
+	
+	function editSelectInstitutes () {
+		// get all faculties
+		$stm_fak = DBManager::get()->prepare(
+			"SELECT Institut_id, Name "
+			. "FROM Institute "
+			. "WHERE fakultaets_id = Institut_id "
+			. "ORDER BY Name");
+		$stm_fak->execute();
+		$stm_inst = DBManager::get()->prepare(
+			"SELECT Institut_id, Name "
+			. "FROM Institute "
+			. "WHERE fakultaets_id = ? AND fakultaets_id != Institut_id "
+			. "ORDER BY Name");
+		$selected = $this->config->getValue($this->element_name, 'institutesselected');
+		if (!is_array($selected)) {
+			$selected = array();
+		}
+		
+		$out = '<div class="selectbox" style="width: 98%;" size="15">';
+		while ($row_fak = $stm_fak->fetch(PDO::FETCH_ASSOC)) {
+			$stm_inst->execute(array($row_fak['Institut_id']));
+			$out .= sprintf('<div style="margin-top: 5px; font-weight: bold; color: red;">%s</div>', htmlReady(my_substr($row_fak['Name'], 0, 70)));
+			$out .= '<div style="font-weight: bold; color: red;">';
+			$out .= str_repeat("¯", 70);
+			$out .= '</div>';
+			while ($row_inst = $stm_inst->fetch(PDO::FETCH_ASSOC)) {
+				$is_selected = in_array($row_inst['Institut_id'], $selected);
+				$out .= sprintf('<div><label for="SelectInstitutes_institutesselected_%s"><input style="vertical-align: middle;" id="SelectInstitutes_institutesselected_%s" type="checkbox" name="SelectInstitutes_institutesselected[]" value="%s"%s>', $row_inst['Institut_id'], $row_inst['Institut_id'], $row_inst['Institut_id'], ($is_selected ? ' checked="checked"' : ''));
+				$out .= sprintf('&nbsp;<span%s>%s</span></div>', ($is_selected ? '' : ' style="color: blue;"'), htmlReady(my_substr($row_inst['Name'], 0, 70)));
+			}
+		}
+		$out .= '</div>';
 		return $out;
 	}
 	
