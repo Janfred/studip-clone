@@ -54,6 +54,7 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 	public $markers = array();
 	private $approved_params = array();
 	private $range_tree;
+	private $global_markers = array();
 	
 	/**
 	*
@@ -117,6 +118,9 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 	public function getMarkerDescription ($element_name) {
 	
 		$markers['TemplateMain'] = array(
+			array('__GLOBAL__', _("Globale Variablen (gültig im gesamten Template).")),
+			array('###CHARACTER###', ''),
+			array('###INSTNAME###', ''),
 			array('<!-- BEGIN PERS_BROWSER -->', ''),
 			array('###LISTCHARACTERS###', _("Auflistung der Anfangsbuchstaben")),
 			array('###LISTINSTITUTES###', _("Auflistung der Einrichtungen")),
@@ -188,7 +192,8 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 		if (trim($this->config->getValue('TemplateListPersons', 'template'))) {
 			$content['PERS_BROWSER']['LISTPERSONS'] = $this->elements['TemplateListPersons']->toString(array('content' => $this->getContentListPersons(), 'subpart' => 'LIST_PERSONS'));
 		}
-		
+		// set super global markers
+		$content['__GLOBAL__'] = $this->global_markers;
 		return $content;
 	}
 	
@@ -353,6 +358,11 @@ class ExternModuleTemplatePersBrowse extends ExternModule {
 				}
 			}
 			$j++;
+		}
+		if (!$module_params['initiale']) {
+			$this->global_markers['INSTNAME'] = $content['PERSONS']['PERSON'][0]['INSTNAME'];
+		} else {
+			$this->global_markers['CHARACTER'] = substr($module_params['initiale'], 0, 1);
 		}
 		
 		return $content;

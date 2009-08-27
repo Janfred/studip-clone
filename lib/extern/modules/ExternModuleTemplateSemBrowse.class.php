@@ -173,7 +173,6 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
 			array('<!-- END SEARCH_FORM -->', ''));
 
 		$markers['TemplateTree'] = array(
-			array('__GLOBAL__', _("Globale Variablen (gültig im gesamten Template).")),
 			array('<!-- BEGIN NO_COURSES_LEVEL -->', _("Ausgabe, wenn keine Veranstaltungen auf aktueller Ebene vorhanden sind")),
 			array('<!-- END NO_COURSES_LEVEL -->', ''),
 			array('<!-- BEGIN NO_SUBLEVELS -->', _("Ausgabe, wenn keine Unterebenen vorhanden sind")),
