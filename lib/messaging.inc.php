@@ -314,114 +314,106 @@ class messaging {
 		// wenn keine user_id uebergeben
 		if (!$user_id) $user_id = $user->id;
 
+		# send message now
+		if ($user_id != "____%system%____")  { // real-user message
 
-		if (!empty($message)) { // wenn $message nicht empty
-
-			if ($user_id != "____%system%____")  { // real-user message
-
-				$snd_user_id = $user_id;
-				if ($sms_data["tmpsavesnd"] != "1") { // don't save save sms in outbox
-					$set_deleted = "1";
-				}
-
-				// personal-signatur
-				if ($sms_data["sig"] == "1") {
-					if(!$signature) {
-						$signature = $my_messaging_settings["sms_sig"];
-					}
-					$message .= $this->sig_string.$signature;
-				}
-
-			} else { // system-message
-
+			$snd_user_id = $user_id;
+			if ($sms_data["tmpsavesnd"] != "1") { // don't save save sms in outbox
 				$set_deleted = "1";
-				// system-signatur
-				$snd_user_id = "____%system%____";
-				setTempLanguage();
-				$message .= $this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
-				restoreLanguage();
-
 			}
 
-			
-			// Setzen der Message-ID als Range_ID für angehängte Dateien
-			if (isset($this->provisonal_attachment_id) && $GLOBALS["ENABLE_EMAIL_ATTACHMENTS"]){
-				foreach(get_message_attachments($this->provisonal_attachment_id, true) as $attachment){
-					$db3->query("UPDATE dokumente SET range_id = '$tmp_message_id', description='' WHERE dokument_id = '".$attachment["dokument_id"]."'");
+			// personal-signatur
+			if ($sms_data["sig"] == "1") {
+				if(!$signature) {
+					$signature = $my_messaging_settings["sms_sig"];
 				}
+				$message .= $this->sig_string.$signature;
 			}
 
-			// insert message
-			$db3->query("INSERT INTO message SET message_id = '".$tmp_message_id."', mkdate = '".$time."', message = '".$message."', autor_id = '".$snd_user_id."', subject = '".$subject."', reading_confirmation = '".$reading_confirmation."', priority ='".$priority."'");
+		} else { // system-message
 
-			// insert snd
-			if (!$set_deleted) { // safe message
-				if($sms_data["tmp_save_snd_folder"]) { // safe in specific folder (sender)
-					$db3->query("INSERT INTO message_user SET message_id='".$tmp_message_id."',mkdate = '".$time."', user_id='".$snd_user_id."', snd_rec='snd', folder='".$sms_data["tmp_save_snd_folder"]."'");
-				} else { // don't safe message in specific folder
-					$db3->query("INSERT INTO message_user SET message_id='".$tmp_message_id."',mkdate = '".$time."', user_id='".$snd_user_id."', snd_rec='snd'");
-				}
-			} else { // save as deleted
-				$db3->query("INSERT INTO message_user SET message_id='".$tmp_message_id."',mkdate = '".$time."', user_id='".$snd_user_id."', snd_rec='snd', deleted='1'");
-			}
-
-			// heben wir kein array bekommen, machen wir einfach eins ...
-			if(!is_array($rec_uname)) {
-				$rec_uname = array($rec_uname);
-			}
-
-			// wir bastelen ein neues array, das die user_id statt des user_name enthaelt
-			for($x=0; $x<sizeof($rec_uname); $x++) {
-				$rec_id[$x] = get_userid($rec_uname[$x]);
-			}
-			// wir gehen das eben erstellt array durch und schauen, ob irgendwer was weiterleiten moechte. diese user_id schreiben wir in ein tempraeres array
-			for($x=0; $x<sizeof($rec_id); $x++) {
-				$tmp_forward_id = $this->get_forward_id($rec_id[$x]);
-				if($tmp_forward_id) {
-					$tmp_forward_copy = $this->get_forward_copy($rec_id[$x]);
-					$rec_id_tmp[] = $tmp_forward_id;
-				}
-
-			}
-
-			// wir mergen die eben erstellten arrays und entfernen doppelte eintraege
-			$rec_id = array_merge((array)$rec_id, (array)$rec_id_tmp);
-			$rec_id = array_unique($rec_id);
-
-
-			// hier gehen wir alle empfaenger durch, schreiben das in die db und schicken eine mail
-			for($x=0; $x<sizeof($rec_id); $x++) {
-				$db3->query("INSERT message_user SET message_id='".$tmp_message_id."',mkdate = '".$time."', user_id='".$rec_id[$x]."', snd_rec='rec'");
-				if ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"]) {
-					// mail to original receiver
-					$mailstatus_original = $this->user_wants_email($rec_id[$x]);
-					if($mailstatus_original == 2 || ($mailstatus_original == 3 && $email_request == 1) || $force_email == TRUE) {
-						$this->sendingEmail($rec_id[$x], $snd_user_id, $message, $subject, $tmp_message_id);
-					}
-				}
-				//Benachrichtigung in alle Chaträume schicken
-				$snd_name = ($user_id != "____%system%____") ? get_fullname($user_id) . " (" . get_username($user_id). ")" : "Stud.IP-System";
-				if ($GLOBALS['CHAT_ENABLE']) {
-					$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
-					setTempLanguage($rec_id[$x]);
-					$chatMsg = sprintf(_("Sie haben eine Nachricht von <b>%s</b> erhalten!"), htmlReady($snd_name));
-					restoreLanguage();
-					$chatMsg .= "<br></i>".formatReady(stripslashes($message))."<i>";
-					foreach($chatServer->chatDetail as $chatid => $wert) {
-						if ($wert['users'][$rec_id[$x]]) {
-							$chatServer->addMsg("system:".$rec_id[$x], $chatid, $chatMsg);
-						}
-					}
-				}
-			}
-
-			return sizeof($rec_id);
-
-		} else { // wenn $message empty
-
-			return 0;
+			$set_deleted = "1";
+			// system-signatur
+			$snd_user_id = "____%system%____";
+			setTempLanguage();
+			$message .= $this->sig_string. _("Diese Nachricht wurde automatisch vom Stud.IP-System generiert. Sie können darauf nicht antworten.");
+			restoreLanguage();
 
 		}
+
+		
+		// Setzen der Message-ID als Range_ID für angehängte Dateien
+		if (isset($this->provisonal_attachment_id) && $GLOBALS["ENABLE_EMAIL_ATTACHMENTS"]){
+			foreach(get_message_attachments($this->provisonal_attachment_id, true) as $attachment){
+				$db3->query("UPDATE dokumente SET range_id = '$tmp_message_id', description='' WHERE dokument_id = '".$attachment["dokument_id"]."'");
+			}
+		}
+
+		// insert message
+		$db3->query("INSERT INTO message SET message_id = '".$tmp_message_id."', mkdate = '".$time."', message = '".$message."', autor_id = '".$snd_user_id."', subject = '".$subject."', reading_confirmation = '".$reading_confirmation."', priority ='".$priority."'");
+
+		// insert snd
+		if (!$set_deleted) { // safe message
+			if($sms_data["tmp_save_snd_folder"]) { // safe in specific folder (sender)
+				$db3->query("INSERT INTO message_user SET message_id='".$tmp_message_id."',mkdate = '".$time."', user_id='".$snd_user_id."', snd_rec='snd', folder='".$sms_data["tmp_save_snd_folder"]."'");
+			} else { // don't safe message in specific folder
+				$db3->query("INSERT INTO message_user SET message_id='".$tmp_message_id."',mkdate = '".$time."', user_id='".$snd_user_id."', snd_rec='snd'");
+			}
+		} else { // save as deleted
+			$db3->query("INSERT INTO message_user SET message_id='".$tmp_message_id."',mkdate = '".$time."', user_id='".$snd_user_id."', snd_rec='snd', deleted='1'");
+		}
+
+		// heben wir kein array bekommen, machen wir einfach eins ...
+		if(!is_array($rec_uname)) {
+			$rec_uname = array($rec_uname);
+		}
+
+		// wir bastelen ein neues array, das die user_id statt des user_name enthaelt
+		for($x=0; $x<sizeof($rec_uname); $x++) {
+			$rec_id[$x] = get_userid($rec_uname[$x]);
+		}
+		// wir gehen das eben erstellt array durch und schauen, ob irgendwer was weiterleiten moechte. diese user_id schreiben wir in ein tempraeres array
+		for($x=0; $x<sizeof($rec_id); $x++) {
+			$tmp_forward_id = $this->get_forward_id($rec_id[$x]);
+			if($tmp_forward_id) {
+				$tmp_forward_copy = $this->get_forward_copy($rec_id[$x]);
+				$rec_id_tmp[] = $tmp_forward_id;
+			}
+
+		}
+
+		// wir mergen die eben erstellten arrays und entfernen doppelte eintraege
+		$rec_id = array_merge((array)$rec_id, (array)$rec_id_tmp);
+		$rec_id = array_unique($rec_id);
+
+
+		// hier gehen wir alle empfaenger durch, schreiben das in die db und schicken eine mail
+		for($x=0; $x<sizeof($rec_id); $x++) {
+			$db3->query("INSERT message_user SET message_id='".$tmp_message_id."',mkdate = '".$time."', user_id='".$rec_id[$x]."', snd_rec='rec'");
+			if ($GLOBALS["MESSAGING_FORWARD_AS_EMAIL"]) {
+				// mail to original receiver
+				$mailstatus_original = $this->user_wants_email($rec_id[$x]);
+				if($mailstatus_original == 2 || ($mailstatus_original == 3 && $email_request == 1) || $force_email == TRUE) {
+					$this->sendingEmail($rec_id[$x], $snd_user_id, $message, $subject, $tmp_message_id);
+				}
+			}
+			//Benachrichtigung in alle Chaträume schicken
+			$snd_name = ($user_id != "____%system%____") ? get_fullname($user_id) . " (" . get_username($user_id). ")" : "Stud.IP-System";
+			if ($GLOBALS['CHAT_ENABLE']) {
+				$chatServer =& ChatServer::GetInstance($GLOBALS['CHAT_SERVER_NAME']);
+				setTempLanguage($rec_id[$x]);
+				$chatMsg = sprintf(_("Sie haben eine Nachricht von <b>%s</b> erhalten!"), htmlReady($snd_name));
+				restoreLanguage();
+				$chatMsg .= "<br></i>".formatReady(stripslashes($message))."<i>";
+				foreach($chatServer->chatDetail as $chatid => $wert) {
+					if ($wert['users'][$rec_id[$x]]) {
+						$chatServer->addMsg("system:".$rec_id[$x], $chatid, $chatMsg);
+					}
+				}
+			}
+		}
+
+		return sizeof($rec_id);
 	}
 
 	function buddy_chatinv ($message, $chat_id) {
