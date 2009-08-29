@@ -72,6 +72,7 @@ if (!$GLOBALS['perm']->have_perm('root')){
 
 $structure['all'] = array ('topKat' => 'veranstaltungen_suche', 'name' => _("Alle"), 'link' => URLHelper::getLink('sem_portal.php?view=all&reset_all=TRUE'), 'active' => FALSE);
 foreach ($GLOBALS['SEM_CLASS'] as $key => $val)  {
+	if($val['studygroup_mode'] == true) continue; //skip studygroups
 	$structure['class_'.$key] = array ('topKat' => 'veranstaltungen_suche', 'name' => $val['name'], 'link' => URLHelper::getLink('sem_portal.php?view='.$key.'&reset_all=TRUE&cmd=qs'), 'active' => FALSE);
 }
 if ($GLOBALS['STM_ENABLE']){
