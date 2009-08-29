@@ -55,15 +55,30 @@ $msg = ""; // Message to display
 
 $_show_scm = preg_replace('/[^a-z0-9_-]/', '',  $_REQUEST['show_scm']);
 
-if ($i_view == 'kill' && $perm->have_studip_perm('tutor', $SessSemName[1])){
+if ($perm->have_studip_perm('tutor', $SessSemName[1])){
 	$scm = new StudipScmEntry($_show_scm);
-	if (!$scm->is_new && $scm->getValue('range_id') == $SessSemName[1]){
-		$scm->delete();
-		$msg = "msg§" . _("Der Eintrag wurde gelöscht.");
+	if($i_view == 'kill'){ 
+		if (!$scm->is_new && $scm->getValue('range_id') == $SessSemName[1]){
+			$scm->delete();
+			$msg = "msg§" . _("Der Eintrag wurde gelöscht.");
+		}
+		unset($scm);
+		$_show_scm = null;
 	}
-	unset($scm);
-	$_show_scm = null;
+	if($i_view == 'first_position'){ 
+		if (!$scm->is_new && $scm->getValue('range_id') == $SessSemName[1]){
+			$minmkdate = DBManager::get()
+				->query("SELECT MIN(mkdate)-1 FROM scm WHERE range_id='" .  $scm->getValue('range_id') . "'")
+				->fetchColumn();
+			if(DBManager::get()->exec("UPDATE scm SET mkdate='$minmkdate' WHERE scm_id='" . $scm->getId() . "'")){
+				$msg = "msg§" . _("Der Eintrag wurde an die erste Position verschoben.");
+			}
+		}
+		unset($scm);
+		$_show_scm = null;
+	}
 }
+
 switch ($i_view) {
 	case "edit":
 		include ('lib/include/links_openobject.inc.php');
@@ -152,7 +167,10 @@ function scm_show_content($range_id, $msg, $scm_id) {
 		$printcontent_table=new Table(array("width"=>"100%"));
 		echo $printcontent_table->open();
 		if ($rechte) {
-			$edit = "<a href=\"".URLHelper::getLink("?i_view=edit&show_scm=$scm_id")."\">".makeButton("bearbeiten")."</a>";
+			if(StudipScmEntry::GetNumSCMEntriesForRange($range_id) > 1){
+				$edit .= "<a href=\"".URLHelper::getLink("?i_view=first_position&show_scm=$scm_id")."\">".makeButton("nachvorne", 'img', _("Diese Seite an die erste Position setzen"))."</a>&nbsp;";
+			}
+			$edit .= "<a href=\"".URLHelper::getLink("?i_view=edit&show_scm=$scm_id")."\">".makeButton("bearbeiten")."</a>";
 			if(StudipScmEntry::GetNumSCMEntriesForRange($range_id) > 1){
 				$edit .= "&nbsp;<a href=\"".URLHelper::getLink("?i_view=kill&show_scm=$scm_id")."\">".makeButton("loeschen")."</a>";
 			}
