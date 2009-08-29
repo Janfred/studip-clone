@@ -227,7 +227,7 @@ class messaging {
 
 		// generate signature of the message
 		$mailmessage .= sprintf(_("Diese E-Mail ist eine Kopie einer systeminternen Nachricht, die in Stud.IP an %s versendet wurde."), $rec_fullname)."\n";
-		$mailmessage .= sprintf(_("Antworten Sie nicht auf diese E-Mail, sondern benutzen Sie Stud.IP unter %s"), $GLOBALS['ABSOLUTE_URI_STUDIP']);
+		$mailmessage .= sprintf(_("Sie erreichen Stud.IP unter %s"), $GLOBALS['ABSOLUTE_URI_STUDIP']);
 		//rescue escaped newlines if mysql_escape_string() was used
 		$mailmessage = str_replace('\n', "\n", $mailmessage);
 		$mailmessage = stripslashes($mailmessage);
