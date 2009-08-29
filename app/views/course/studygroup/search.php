@@ -18,36 +18,57 @@ $infobox['content'] = array(
 
 
 <script type="text/javascript" src="<?=ASSETS::javascript_path('tablekit.js')?>"></script>
+<script type="text/javascript">
+TableKit.options.rowEvenClass = 'cycle_even';
+TableKit.options.rowOddClass = 'cycle_odd';
+</script>
+<style>
+.sortasc {
+	background-image: url(<?=Assets::image_path('dreieck_up.png')?>);
+	background-repeat:no-repeat;
+	background-position:center right;
+	padding: 2px 15px 2px 15px;
+	text-align:center;
+}
+.sortdesc {
+	background-image: url(<?=Assets::image_path('dreieck_down.png')?>);
+	background-repeat:no-repeat;
+	background-position:center right;
+	padding: 2px 15px 2px 15px;
+	text-align:center;
+}
+th {
+	background: #B5B5B5;
+	padding: 2px 15px 2px 15px;
+	text-align:center;
 
+}
+</style>
 <table class="sortable" border="0" cellpadding="2" cellspacing="0" width="100%" align="center">
     <tr>
-        <th width="60%" align="center"><?= _("Name") ?></th>
-        <th width="10%" align="center" class="sortfirstasc"><?= _("gegründet") ?></th>
-        <th width="3%" align="center"><?= _("Mitglieder") ?></th>
-        <th width="2%" align="center"></th>
-        <th width="15%" align="center"><?= _("GründerIn") ?></th>
-        <th width="10%" align="center"><?= _("Zugang") ?></th>
+        <th width="60%"><?= _("Name") ?></th>
+        <th width="10%" class="sortfirstasc"><?= _("gegründet") ?></th>
+        <th width="5%"><?= _("Mitglieder") ?></th>
+        <th width="15%"><?= _("GründerIn") ?></th>
+        <th width="10%"><?= _("Zugang") ?></th>
     </tr>
 
     <? foreach ($groups as $group) : ?>
         <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>">
-            <td>   
-                    <a href="<?=URLHelper::getlink("dispatch.php/course/studygroup/details/".$group['Seminar_id'])?>">
-                        <?=StudygroupAvatar::getAvatar($group['Seminar_id'])->getImageTag(Avatar::SMALL)?> <?=htmlready($group['Name'])?></a>
-                
-                       </td>
+            <td style="text-align:left;white-space:nowrap;">
+            <img src="<?=StudygroupAvatar::getAvatar($group['Seminar_id'])->getUrl(Avatar::SMALL);?>" style="vertical-align:middle;">
+                   <a href="<?=URLHelper::getlink("dispatch.php/course/studygroup/details/".$group['Seminar_id'])?>">
+                   <?=htmlready($group['Name'])?></a>
+             </td>
              <td align="center">
                 <?=strftime('%x', $group['mkdate']);?>
             </td>
             <td align="center">
                 <?=StudygroupModel::countMembers($group['Seminar_id']);?>
             </td>
-            <td align="center">
-                <? $founder = StudygroupModel::getFounder($group['Seminar_id']);
-                   echo Avatar::getAvatar($founder['user_id'])->getImageTag(Avatar::SMALL);
-                ?>
-            </td>
-            <td align="center">    
+            <td style="text-align:left;white-space:nowrap;">
+                <? $founder = StudygroupModel::getFounder($group['Seminar_id']);?>
+                <img src="<?=Avatar::getAvatar($founder['user_id'])->getUrl(Avatar::SMALL);?>" style="vertical-align:middle;">
                 <a href="<?=URLHelper::getlink('about.php?username='.$founder['uname'])?>"><?=htmlready($founder['fullname'])?></a>
             </td>
             <td align="center">
