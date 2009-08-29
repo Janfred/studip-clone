@@ -455,5 +455,6 @@ class Course_StudygroupController extends AuthenticatedController {
 		$this->tabs = 'links_seminare';
 		$this->reiter_view = 'studygroups_search';
 		$GLOBALS['CURRENT_PAGE'] =  _('Studentische Arbeitsgruppen suchen');
+		$this->groups = StudygroupModel::getAllGroups();
 	}
 }

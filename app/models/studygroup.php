@@ -149,4 +149,41 @@ class StudygroupModel {
 	{
 		DBManager::get()->query("DELETE FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '". get_userid($username) ."'");
 	}
+	
+	function getAllGroups()
+	{
+	     global $SEM_TYPE, $SEM_CLASS;
+            	foreach ($SEM_TYPE as $num => $type) {
+            	 if ($SEM_CLASS[$type['class']]['studygroup_mode']) {
+            	     $status[] = $num;
+            	 }
+            	}
+              $sql = "SELECT * FROM seminare WHERE status IN('". implode("','", $status)."')";
+
+            $stmt = DBManager::get()->query($sql);
+            $groups = $stmt->fetchAll();
+
+            return $groups;
+	}
+	
+	function countMembers ( $semid )
+    {
+      $sql = "SELECT COUNT(user_id) FROM `seminar_user` WHERE Seminar_id = '{$semid}'";  
+      
+      $stmt = DBManager::get()->query($sql);
+      $count= $stmt->fetch();
+      
+      // always return one member less than the total count since there is dummy_dozent in each group
+      return $count[0]-1;
+    }
+    
+    function getFounder ( $semid )
+    {
+        $sql = "SELECT user_id FROM `seminar_user` WHERE Seminar_id = '{$semid}' AND status = 'dozent' AND user_id != MD5('studygroup_dozent')";
+        $stmt = DBManager::get()->query($sql);
+        $user= $stmt->fetch();
+        $founder = array('fullname' => get_fullname($user['user_id']), 'uname' => get_username($user['user_id']));
+       
+        return $founder; 
+    }
 }
