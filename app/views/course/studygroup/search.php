@@ -47,7 +47,7 @@ th {
 <table class="sortable" border="0" cellpadding="2" cellspacing="0" width="100%" align="center">
     <tr>
         <th width="60%"><?= _("Name") ?></th>
-        <th width="10%" class="sortfirstasc"><?= _("gegründet") ?></th>
+        <th width="10%" class="sortfirstdesc"><?= _("gegründet") ?></th>
         <th width="5%"><?= _("Mitglieder") ?></th>
         <th width="15%"><?= _("GründerIn") ?></th>
         <th width="10%"><?= _("Zugang") ?></th>
