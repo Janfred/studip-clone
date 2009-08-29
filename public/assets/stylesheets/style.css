@@ -975,7 +975,9 @@ div.modaldialog {
 
 /* --- MessageBoxes --------------------------------------------------------- */
 div.messagebox {
-    margin: 5px;
+    margin: 0px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     background-repeat: no-repeat;
     background-position: 10px 10px;
     padding: 15px 15px 15px 55px;
@@ -997,25 +999,25 @@ div.messagebox_details {
 }
 
 div.messagebox_info {
-    color: #00529B;
-    background-color: #bde5f8;
+    color: #000000;
+    background-color: #d8e3fc;
     background-image: url("../images/icons/icon_info.png");
 }
 
 div.messagebox_success {
-    color: #4F8A10;
-    background-color: #dff2bf;
+    color: #000000;
+    background-color: #dcf1da;
     background-image: url("../images/icons/icon_success.png");
 }
 
 div.messagebox_error {
-    color: #D63301;
-    background-color: #ffccba;
+    color: #000000;
+    background-color: #ffdddc;
     background-image: url("../images/icons/icon_error.png");
 }
 
 div.messagebox_exception {
-    color: #D8000C;
+    color: #000000;
     background-color: #ffbaba;
     background-image: url("../images/icons/icon_exception.png");
 }
