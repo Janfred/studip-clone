@@ -66,7 +66,8 @@ $cssSw = new cssClassSwitcher();
 	<div style="float: left; width: 50%;" class="<?= $cssSw->getClass() ?>">
 	<select name='modules[<?= $key ?>]'>
 		<? if (!Config::getInstance()->getValue('STUDYGROUPS_ENABLE')):?>
-		<option value='invalid'><?= _("-- bitte auswählen --")?></option>
+		<option value='invalid' selected><?= _("-- bitte auswählen --")?></option>
+		<? $enabled=FALSE; ?>
 		<? endif ?>
 		<option value='on' <?= $enabled[$key] ? 'selected' : '' ?>><?= _("aktivierbar")?></option>
 		<option value='off' <?= $enabled[$key] ? '' : 'selected' ?>><?= _("nicht aktivierbar")?></option>
@@ -89,6 +90,7 @@ $cssSw = new cssClassSwitcher();
 		<select name="institute">
 		<? if (!Config::getInstance()->getValue('STUDYGROUPS_ENABLE')):?>
 			<option value='invalid' selected><?= _("-- bitte auswählen --")?></option>
+			<? $default_inst=FALSE; ?>
 		<? endif ?>
 		<? foreach ($institutes as $fak_id => $faculty) : ?>
 			<option value="<?= $fak_id ?>" style="font-weight: bold" 

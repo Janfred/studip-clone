@@ -19,6 +19,14 @@ class Step00150Studygroups extends Migration
 			`value` TEXT CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL");
 
 		// (3) Add some default-terms
+		DBManager::get()->query("INSERT IGNORE INTO `config` (
+			`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`,
+			`range`, `section`, `position`, `mkdate`, `chdate`, `description`,
+			`comment`, `message_template` )
+			VALUES ( MD5( 'STUDYGROUPS_ENABLE' ) , '', 'STUDYGROUPS_ENABLE',
+			'0', '1', 'boolean', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) ,
+			'Studentische Arbeitsgruppen', '', '')");
+		
 		$terms = "Mir ist bekannt, dass ich die Gruppe nicht zu rechtswidrigen Zwecken nutzen darf. Dazu zählen u.a. Urheberrechtsverletzungen, Beleidigungen und andere Persönlichkeitsdelikte.
 
 Ich erkläre mich damit einverstanden, dass AdministratorInnen die Inhalte der Gruppe zu Kontrollzwecken einsehen dürfen.";
@@ -26,6 +34,7 @@ Ich erkläre mich damit einverstanden, dass AdministratorInnen die Inhalte der Gr
 
 		// (4) Add default for allowed modules
 		Config::GetInstance()->setValue( 'forum:1|documents:0|schedule:0|participants:1', 'STUDYGROUP_SETTINGS');
+		
 	}
 
 	function down ()
