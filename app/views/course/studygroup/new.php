@@ -5,15 +5,17 @@ $infobox['content'] = array(
     array(
         'kategorie'=>_("Information"),
         'eintrag'=>array(
-            array("text"=>"Studiengruppen sind eine einfache Möglichkeit, mit Kommilitonen, Kollegen und anderen zusammenzuarbeiten. Jeder kann Studiengruppen gründen.","icon"=>"ausruf_small2.gif")
-        )
+            array("text"=>_("Studentische Arbeitsgruppen sind eine einfache Möglichkeit, mit KommilitonInnen, KollegInnen und anderen zusammenzuarbeiten. JedeR kann Studiengruppen gründen."),"icon"=>"ausruf_small2.gif"),
+            array("text"=>_("Wählen Sie 'Offen für alle', wenn beliebige Nutzer der Gruppe ohne Nachfrage beitreten können sollen. 'Auf Anfrage' erfordert Ihr Eingreifen: Sie müssen jede einzelne Aufnahmeanfrage annehmen oder ablehnen."),"icon"=>"ausruf_small2.gif"),
+            array("text"=>_("Alle Einstellungen können auch später noch unter dem Reiter 'Admin' geändert werden."),"icon"=>"ausruf_small2.gif")
+            )    
     )
 );
 
 ?>
 
 <?= $this->render_partial("course/studygroup/_feedback") ?>
-<h1><?= _("Arbeitsgruppe anlegen") ?></h1>
+<h1><?= _("Studentische Arbeitsgruppe anlegen") ?></h1>
 
 <form action="<?= $controller->url_for('course/studygroup/create') ?>" method=post>
 
@@ -67,7 +69,7 @@ $infobox['content'] = array(
 </tr>
 
 <tr>
-  <td style='text-align:right; vertical-align:top;'><?= _("Nutzungsbedingungen:") ?></td>
+  <td style='text-align:right; vertical-align:top;'><p><?= _("Nutzungsbedingungen:") ?></p></td>
   <td>
       <p>
         <em><?= formatReady( $terms ) ?></em>
@@ -83,7 +85,7 @@ $infobox['content'] = array(
 
 <tr>
   <td></td>
-  <td><input type='submit' value="Änderungen übernehmen"></td>
+  <td><?= makebutton("speichern","input") ?></td>
 </tr>
 
 </table>

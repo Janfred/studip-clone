@@ -2050,6 +2050,16 @@ if ((!$sem_create_data["sem_class"]) && (!$level)){
 				</blockquote>
 			</td>
 		</tr>
+		<tr>
+			<td class="blank">
+			<blockquote>
+			<br />
+			<?=_("Sie können auch Studentische Arbeitsgruppen anlegen, die funktional deutlich eingeschränkt sind und vor allem Formen selbstorganisierten Lernens unterstützen sollen:")?>
+			&nbsp;<a href="<?=URLHelper::getLink('dispatch.php/course/studygroup/new')?>"><?=_("Studentische Arbeitsgruppen anlegen")?></a>.
+			</blockquote>
+			</td>
+			<td class="blank">&nbsp;</td>
+		</tr>
 	</table>
 	<?
 }

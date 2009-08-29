@@ -40,6 +40,8 @@ class Course_StudygroupController extends AuthenticatedController {
 				}
 			}
 		}
+		$GLOBALS['CURRENT_PAGE'] =  _('Studentische Arbeitsgruppe bearbeiten');
+        $GLOBALS['HELP_KEYWORD'] = 'Basis.StudentischeArbeitsgruppen';
 	}
 
 	/**
@@ -76,7 +78,8 @@ class Course_StudygroupController extends AuthenticatedController {
 	{
 		closeObject();
 		$GLOBALS['CURRENT_PAGE'] =  _('Arbeitsgruppe anlegen');
-
+        $GLOBALS['HELP_KEYWORD'] = 'Basis.Nutzerdomaenen';
+		
 		$this->terms = Config::GetInstance()->getValue('STUDYGROUP_TERMS');
 		$this->available_modules = StudygroupModel::getAvailableModules();
 		if ($GLOBALS['PLUGINS_ENABLE']) {
@@ -374,7 +377,8 @@ class Course_StudygroupController extends AuthenticatedController {
 	function globalmodules_action() {
 		global $perm;
 		$perm->check("root");
-
+        $GLOBALS['HELP_KEYWORD'] = 'Admin.StudentischeArbeitsgruppen';
+		
 		// get available modules
 		$modules = StudygroupModel::getInstalledModules() + StudygroupModel::getInstalledPlugins();
 		$enabled = StudygroupModel::getAvailability( $modules );
@@ -406,6 +410,7 @@ class Course_StudygroupController extends AuthenticatedController {
 	function savemodules_action() {
 		global $perm;
 		$perm->check("root");
+        $GLOBALS['HELP_KEYWORD'] = 'Admin.StudentischeArbeitsgruppen';
 		
 		$err=0;
 		if (Request::quoted('institute')=='invalid') $err=1;
@@ -445,6 +450,7 @@ class Course_StudygroupController extends AuthenticatedController {
 	function deactivate_action() {
 		global $perm;
 		$perm->check("root");
+        $GLOBALS['HELP_KEYWORD'] = 'Admin.StudentischeArbeitsgruppen';
 		$cfg=new Config();
 		$cfg->setValue(FALSE,"STUDYGROUPS_ENABLE","Studentische Arbeitsgruppen");
 		$this->flash['success'] = _("Die Studentischen Arbeitsgruppen wurden deaktiviert.");
