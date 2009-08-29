@@ -1,5 +1,6 @@
 <?php
 require_once 'lib/classes/StudygroupAvatar.class.php';
+require_once 'lib/classes/Avatar.class.php';
 
 $infobox = array();
 $infobox['picture'] = 'infoboxbild_studygroup.jpg';
@@ -22,8 +23,9 @@ $infobox['content'] = array(
     <tr>
         <th width="60%" align="center"><?= _("Name") ?></th>
         <th width="10%" align="center" class="sortfirstasc"><?= _("gegründet") ?></th>
-        <th width="10%" align="center"><?= _("Mitglieder") ?></th>
-        <th width="10%" align="center"><?= _("GründerIn") ?></th>
+        <th width="3%" align="center"><?= _("Mitglieder") ?></th>
+        <th width="2%" align="center"></th>
+        <th width="15%" align="center"><?= _("GründerIn") ?></th>
         <th width="10%" align="center"><?= _("Zugang") ?></th>
     </tr>
 
@@ -41,7 +43,11 @@ $infobox['content'] = array(
                 <?=StudygroupModel::countMembers($group['Seminar_id']);?>
             </td>
             <td align="center">
-                <? $founder = StudygroupModel::getFounder($group['Seminar_id']);?>
+                <? $founder = StudygroupModel::getFounder($group['Seminar_id']);
+                   echo Avatar::getAvatar($founder['user_id'])->getImageTag(Avatar::SMALL);
+                ?>
+            </td>
+            <td align="center">    
                 <a href="<?=URLHelper::getlink('about.php?username='.$founder['uname'])?>"><?=htmlready($founder['fullname'])?></a>
             </td>
             <td align="center">
