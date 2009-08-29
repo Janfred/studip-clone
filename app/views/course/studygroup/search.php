@@ -1,9 +1,6 @@
 <?php
 require_once 'lib/classes/StudygroupAvatar.class.php';
 
-
-$cssSw = new cssClassSwitcher();
-$cssSw->enableHover();
 $infobox = array();
 $infobox['picture'] = 'infoboxbild_studygroup.jpg';
 $infobox['content'] = array(
@@ -21,35 +18,33 @@ $infobox['content'] = array(
 
 <script type="text/javascript" src="<?=ASSETS::javascript_path('tablekit.js')?>"></script>
 
-<table class="sortable" border="0" cellpadding="2" cellspacing="0" width="98%" align="center" class="blank">
+<table class="sortable" border="0" cellpadding="2" cellspacing="0" width="100%" align="center">
     <tr>
-        <th width="70%" align="center"><b><?= _("Name") ?></b></th>
-        <th width="10%" align="center"><b><?= _("Mitglieder") ?></b></th>
-        <th width="10%" align="center"><b><?= _("GründerIn") ?></b></th>
-        <th width="10%" align="center"><b><?= _("Weiteres") ?></b></th>
+        <th width="60%" align="center"><?= _("Name") ?></th>
+        <th width="10%" align="center" class="sortfirstasc"><?= _("gegründet") ?></th>
+        <th width="10%" align="center"><?= _("Mitglieder") ?></th>
+        <th width="10%" align="center"><?= _("GründerIn") ?></th>
+        <th width="10%" align="center"><?= _("Zugang") ?></th>
     </tr>
 
-    <?$cssSw->resetClass();?>
-
     <? foreach ($groups as $group) : ?>
-   
-    
-        <?$cssSw->switchClass();?>
-        <tr <?=$cssSw->getHover()?> >
-            <td class="<?=$cssSw->getClass()?>">   
-               
+        <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>">
+            <td>   
                     <a href="<?=URLHelper::getlink("dispatch.php/course/studygroup/details/".$group['Seminar_id'])?>">
-                        <?=StudygroupAvatar::getAvatar($SessSemName[1])->getImageTag(Avatar::SMALL)?> <?=$group['Name']?></a>
+                        <?=StudygroupAvatar::getAvatar($group['Seminar_id'])->getImageTag(Avatar::SMALL)?> <?=htmlready($group['Name'])?></a>
                 
                        </td>
-            <td class="<?=$cssSw->getClass()?>" align="center">
+             <td align="center">
+                <?=strftime('%x', $group['mkdate']);?>
+            </td>
+            <td align="center">
                 <?=StudygroupModel::countMembers($group['Seminar_id']);?>
             </td>
-            <td class="<?=$cssSw->getClass()?>" align="center">
+            <td align="center">
                 <? $founder = StudygroupModel::getFounder($group['Seminar_id']);?>
-                <a href="<?=URLHelper::getlink('about.php?username='.$founder['uname'])?>"><?=$founder['fullname']?></a>
+                <a href="<?=URLHelper::getlink('about.php?username='.$founder['uname'])?>"><?=htmlready($founder['fullname'])?></a>
             </td>
-            <td class="<?=$cssSw->getClass()?>" align="center">
+            <td align="center">
                 <? if ($group['admission_prelim'] == 1) :?>
                     <?=Assets::img("closelock",array('title' => _('Mitgliedschaft muss beantragt werden')))?>
                 <? endif;?>
