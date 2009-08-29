@@ -656,17 +656,21 @@ class StudipSemTreeViewAdmin extends TreeView {
 			$content .= "<input type=\"TEXT\" name=\"edit_name\" size=\"50\" style=\"width:100%\" value=\"" . htmlReady($this->tree->tree_data[$this->edit_item_id]['name']) . "\">";
 		}
 		$content .= "</td></tr>";
-		$content .= "<tr><td class=\"steel1\"  width=\"1%\">" . _("Typ des Elements:") . "</td><td class=\"steel1\">"
-		. "<select name=\"edit_type\">";
-		foreach($GLOBALS['SEM_TREE_TYPES'] as $sem_tree_type_key => $sem_tree_type){
-			if($sem_tree_type['editable']){
-				$selected = $sem_tree_type_key == $this->tree->getValue($this->edit_item_id, 'type') ? 'selected' : '';
-				$content .= '<option value="'.htmlReady($sem_tree_type_key).'"'.$selected.'>';
-				$content .= htmlReady($sem_tree_type['name'] ? $sem_tree_type['name'] : $sem_tree_type_key);
-				$content .= '</option>';
+		if (count($GLOBALS['SEM_TREE_TYPES']) > 1) {
+			$content .= "<tr><td class=\"steel1\"  width=\"1%\">" . _("Typ des Elements:") . "</td><td class=\"steel1\">"
+			. "<select name=\"edit_type\">";
+			foreach($GLOBALS['SEM_TREE_TYPES'] as $sem_tree_type_key => $sem_tree_type){
+				if($sem_tree_type['editable']){
+					$selected = $sem_tree_type_key == $this->tree->getValue($this->edit_item_id, 'type') ? 'selected' : '';
+					$content .= '<option value="'.htmlReady($sem_tree_type_key).'"'.$selected.'>';
+					$content .= htmlReady($sem_tree_type['name'] ? $sem_tree_type['name'] : $sem_tree_type_key);
+					$content .= '</option>';
+				}
 			}
+			$content .= "</select></td></tr>";
+		} else { # Auswahl ausblenden, wenn nur ein Typ vorhanden
+			$content .= "<input type='hidden' name='edit_type' value='0'>";
 		}
-		$content .= "</select></td></tr>";
 		$content .= "<tr><td class=\"steel1\"  width=\"1%\">" . _("Infotext:") . "</td><td class=\"steel1\">"
 		. "<textarea style=\"width:100%\" rows=\"5\" name=\"edit_info\" wrap=\"virtual\">" .htmlReady($this->tree->tree_data[$this->edit_item_id]['info']) . "</textarea>"
 		. "</td></tr><tr><td class=\"steel1\" align=\"right\" valign=\"top\" colspan=\"2\"><input type=\"image\" "
