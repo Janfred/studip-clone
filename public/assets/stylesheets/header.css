@@ -63,6 +63,10 @@ div#barBottomright a:hover {
     background-image: url('../images/fill1.gif');
 }
 
+div#barBottomshadow {
+    background-image: url('../images/header_schatten.png');
+}
+
 
 div#barTopFont {
 	position: absolute;
