@@ -137,7 +137,5 @@
 	</ul>
 </div>
 <div id="barBottomshadow">
-	&nbsp;
 </div>
-<br>
 <!-- Ende Header -->

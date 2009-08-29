@@ -64,6 +64,7 @@ div#barBottomright a:hover {
 }
 
 div#barBottomshadow {
+	padding-top: 20px;
     background-image: url('../images/header_schatten.png');
 }
 
