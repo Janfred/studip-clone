@@ -42,18 +42,28 @@ $cssSw = new cssClassSwitcher();
 	<div style="float: left; width: 50%; clear: left;" class="steelgraudunkel">
 		<b><?= _("Aktivierbare Module / Plugins") ?></b>
 	</div>
-	<div style="float: left; width: 25%;" class="steelgraudunkel">
+	<div style="float: left; width: 50%;" class="steelgraudunkel">
 		&nbsp;
+	</div>
+	<?= $cssSw->switchClass(); ?>
+	<div style="float: left; width: 50%; clear: left;" class="<?= $cssSw->getClass() ?>">
+	    <?=_("TeilnehmerInnen")?>
+	</div>
+	<div style="float: left; width: 50%;" class="<?= $cssSw->getClass() ?>">
+		<?=_("immer aktiv")?>
 	</div>
 
 	<!-- Modules / Plugins -->
 <? if (is_array($modules)) foreach( $modules as $key => $name ) : 
+	if (in_array($key, array('participants', 'schedule'))) continue; 
 	$cssSw->switchClass(); ?>
+
+
 	<div style="float: left; width: 50%; clear: left;" class="<?= $cssSw->getClass() ?>">
 	    <?= $name ?>
 	</div>
 
-	<div style="float: left; width: 25%;" class="<?= $cssSw->getClass() ?>">
+	<div style="float: left; width: 50%;" class="<?= $cssSw->getClass() ?>">
 	<select name='modules[<?= $key ?>]'>
 		<? if (!Config::getInstance()->getValue('STUDYGROUPS_ENABLE')):?>
 		<option value='invalid'><?= _("-- bitte auswählen --")?></option>
@@ -70,13 +80,13 @@ $cssSw = new cssClassSwitcher();
 	<!-- Title -->
 	<div style="clear: left">
 	<div>&nbsp;</div>
-	<div style="float: left; width: 75%; clear: left;" class="steelgraudunkel">
+	<div style="float: left; width: 100%; clear: left;" class="steelgraudunkel">
 		<b><?= _("Einrichtungszuordnung") ?></b>
 	</div>
 	<div style="float: left; width: 50%; clear: left;" class="<?= $cssSw->getClass() ?>">
 		<?= _("Alle Studentischen Arbeitsgruppen werden folgender Einrichtung zugeordnet:") ?><br>
 	</div>
-	<div style="float: left; width: 25%;" class="<?= $cssSw->getClass() ?>">
+	<div style="float: left; width: 50%;" class="<?= $cssSw->getClass() ?>">
 		<select name="institute">
 		<? if (!Config::getInstance()->getValue('STUDYGROUPS_ENABLE')):?>
 			<option value='invalid' selected><?= _("-- bitte auswählen --")?></option>
@@ -100,15 +110,15 @@ $cssSw = new cssClassSwitcher();
 	<div style="clear: left">
 	<div>&nbsp;</div>
 	<!-- Title -->
-	<div style="float: left; width: 75%; clear: left;" class="steelgraudunkel">
+	<div style="float: left; width: 100%; clear: left;" class="steelgraudunkel">
 		<b><?= _("Nutzungsbedingugen") ?></b>
 	</div>
-	<div style="float: left; width: 75%; clear: left;" class="<?= $cssSw->getClass() ?>">
+	<div style="float: left; width: 100%; clear: left;" class="<?= $cssSw->getClass() ?>">
 		<?= _("Geben Sie hier Nutzungsbedingungen für die Studentischen Arbeitsgruppe ein. ".
 				"Diese müssen akzeptiert werden, bevor eine Arbeitsgruppe angelegt werden kann.") ?><br>
 	</div>
 	<? $cssSw->switchClass(); ?>
-	<div style="float: left; width: 75%; clear: left; text-align: center;" class="<?= $cssSw->getClass() ?>">
+	<div style="float: left; width: 100%; clear: left; text-align: center;" class="<?= $cssSw->getClass() ?>">
 		<br />
 		<textarea name="terms" style="width: 90%" rows="10" style='align:middle;'><?= $terms ?></textarea>
 		<br />
