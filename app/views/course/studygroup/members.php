@@ -115,9 +115,8 @@ $infobox['content'] = array(
 </div>
 
 <? endforeach ?>
-
 <? if ($rechte && count($accepted) > 0) : ?>
-    <h2 style="clear:left;"><?= _("Offene Mitgliedsanträge") ?></h2>
+    <h2 style="clear:left; padding-top: 50px;"><?= _("Offene Mitgliedsanträge") ?></h2>
     <table cellspacing="0" cellpadding="2" border="0" style="max-width: 100%; min-width: 70%">
         <tr>
             <th colspan="2" width="70%">
