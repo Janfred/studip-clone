@@ -68,7 +68,6 @@ $cssSw = new cssClassSwitcher();
 		<? if (!Config::getInstance()->getValue('STUDYGROUPS_ENABLE')):?>
 		<option value='invalid'><?= _("-- bitte auswählen --")?></option>
 		<? endif ?>
-		<option >blö</option>
 		<option value='on' <?= $enabled[$key] ? 'selected' : '' ?>><?= _("aktivierbar")?></option>
 		<option value='off' <?= $enabled[$key] ? '' : 'selected' ?>><?= _("nicht aktivierbar")?></option>
 	</select>

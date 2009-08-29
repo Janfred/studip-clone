@@ -425,8 +425,12 @@ class Course_StudygroupController extends AuthenticatedController {
 			if ( is_array($_REQUEST['modules']) ) {
 				// $config_string enthält modul/pluginname=0/1|...
 				foreach ($_REQUEST['modules'] as $key => $value) {
+					if (in_array($key, array('participants','schedule'))) continue;
 					$config_string[] = $key .':'. ($value=='on'?'1':'0');
 				}
+				$config_string[] = 'participants:1';
+				$config_string[] = 'schedule:0';
+
 				Config::GetInstance()->setValue(implode('|', $config_string), 'STUDYGROUP_SETTINGS');
 				Config::GetInstance()->setValue( Request::quoted('institute'), 'STUDYGROUP_DEFAULT_INST');
 				Config::GetInstance()->setValue( Request::quoted('terms'), 'STUDYGROUP_TERMS');
