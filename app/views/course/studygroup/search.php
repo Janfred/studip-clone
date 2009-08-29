@@ -22,13 +22,26 @@ $infobox['content'] = array(
 TableKit.options.rowEvenClass = 'cycle_even';
 TableKit.options.rowOddClass = 'cycle_odd';
 TableKit.Sortable.addSortType(
-	new TableKit.Sortable.Type('date-de',{
+	new TableKit.Sortable.Type('date-de_DE',{
 		pattern : /^\d{2}\.\d{2}\.\d{4}/,
 		normal : function(v) {
 			v = v.strip();
 			if(!this.pattern.test(v)) {return 0;}
 			var r = v.match(/^(\d{2})\.(\d{2})\.(\d{4})/);
 			var yr_num = r[3];
+			var mo_num = parseInt(r[2],10)-1;
+			var day_num = r[1];
+			return new Date(yr_num, mo_num, day_num).valueOf();
+		}})
+	);
+TableKit.Sortable.addSortType(
+	new TableKit.Sortable.Type('date-en_GB',{
+		pattern : /^\d{2}\/\d{2}\/\d{2}/,
+		normal : function(v) {
+			v = v.strip();
+			if(!this.pattern.test(v)) {return 0;}
+			var r = v.match(/^(\d{2})\/(\d{2})\/(\d{2})/);
+			var yr_num = '20' + r[3];
 			var mo_num = parseInt(r[2],10)-1;
 			var day_num = r[1];
 			return new Date(yr_num, mo_num, day_num).valueOf();
@@ -60,7 +73,7 @@ th {
 <table class="sortable" border="0" cellpadding="2" cellspacing="0" width="100%" align="center">
     <tr>
         <th width="60%"><?= _("Name") ?></th>
-        <th width="10%" class="date-de sortfirstdesc"><?= _("gegründet") ?></th>
+        <th width="10%" class="date-<?=$GLOBALS['_language']?> sortfirstdesc"><?= _("gegründet") ?></th>
         <th width="5%"><?= _("Mitglieder") ?></th>
         <th width="15%"><?= _("GründerIn") ?></th>
         <th width="10%"><?= _("Zugang") ?></th>
