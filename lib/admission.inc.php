@@ -258,7 +258,7 @@ function group_update_admission($seminar_id, $send_message = TRUE) {
  *
  **/
 function update_admission ($seminar_id, $send_message = TRUE) {
-	if(Seminar::GetInstance($seminar_id)->isAdmissionEnabled()){
+	if(Seminar::GetInstance($seminar_id, TRUE)->isAdmissionEnabled()){
 		$group = StudipAdmissionGroup::GetAdmissionGroupBySeminarId($seminar_id);
 		if(is_object($group) && $group->getValue('status') == 0){
 			group_update_admission($seminar_id, $send_message);
