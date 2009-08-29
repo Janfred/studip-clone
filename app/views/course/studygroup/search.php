@@ -21,6 +21,19 @@ $infobox['content'] = array(
 <script type="text/javascript">
 TableKit.options.rowEvenClass = 'cycle_even';
 TableKit.options.rowOddClass = 'cycle_odd';
+TableKit.Sortable.addSortType(
+	new TableKit.Sortable.Type('date-de',{
+		pattern : /^\d{2}\.\d{2}\.\d{4}/,
+		normal : function(v) {
+			v = v.strip();
+			if(!this.pattern.test(v)) {return 0;}
+			var r = v.match(/^(\d{2})\.(\d{2})\.(\d{4})/);
+			var yr_num = r[3];
+			var mo_num = parseInt(r[2],10)-1;
+			var day_num = r[1];
+			return new Date(yr_num, mo_num, day_num).valueOf();
+		}})
+	);
 </script>
 <style>
 .sortasc {
@@ -47,7 +60,7 @@ th {
 <table class="sortable" border="0" cellpadding="2" cellspacing="0" width="100%" align="center">
     <tr>
         <th width="60%"><?= _("Name") ?></th>
-        <th width="10%" class="sortfirstdesc"><?= _("gegründet") ?></th>
+        <th width="10%" class="date-de sortfirstdesc"><?= _("gegründet") ?></th>
         <th width="5%"><?= _("Mitglieder") ?></th>
         <th width="15%"><?= _("GründerIn") ?></th>
         <th width="10%"><?= _("Zugang") ?></th>
@@ -60,8 +73,7 @@ th {
                    <a href="<?=URLHelper::getlink("dispatch.php/course/studygroup/details/".$group['Seminar_id'])?>">
                    <?=htmlready($group['Name'])?></a>
              </td>
-             <td align="center">
-                <?=strftime('%x', $group['mkdate']);?>
+             <td align="center"><?=strftime('%x', $group['mkdate']);?>
             </td>
             <td align="center">
                 <?=StudygroupModel::countMembers($group['Seminar_id']);?>
