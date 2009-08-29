@@ -262,18 +262,6 @@ $SEM_CLASS[6]=array("name"=>_("importierte Kurse"),
 //weitere Klassen koennen hier angefuegt werden. Bitte Struktur wie oben exakt uebernehmen.
 
 $SEM_TREE_TYPES[0] = array("name" => "", "editable" => true);
-$SEM_TREE_TYPES[1] = array("name" => _("Studienmodul") , "editable" => true, "is_module" => true);
-/*
-$SEM_TREE_TYPES[2] = array("name" => _(""), "editable" => true);
-$SEM_TREE_TYPES[3] = array("name" => _(""), "editable" => true);
-$SEM_TREE_TYPES[4] = array("name" => _(""), "editable" => true);
-$SEM_TREE_TYPES[5] = array("name" => _(""), "editable" => true);
-*/
-
-
-// studygroups
-require_once("config/config_studygroups.inc.php");
-
 
 //Festlegen der erlaubten oder verbotenen Dateitypen
 $UPLOAD_TYPES=array( 	"default" =>												//Name bezeichnet den zugehoerigen SEM_TYPE, name "1" waere entsprechend die Definition der Dateiendungen fuer SEM_TYPE[1]; default wird verwendet, wenn es keine spezielle Definition fuer einen SEM_TYPE gibt

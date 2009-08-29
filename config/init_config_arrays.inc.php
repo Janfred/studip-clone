@@ -37,4 +37,12 @@ $ilias_systemgroup =
 $_fullname_sql =
 $SEM_TREE_TYPES =
 array();
-?>
+
+// Notwendige Config-Einträge für Studentische Arbeitsgruppen
+// (Veranstaltungen, die von Autoren angelegt werden können)
+$SEM_TYPE[99]=array("name"=>_("Studentische Arbeitsgruppe"), "class"=>99);
+$SEM_CLASS[99]=array("name"=>_("Studentische Arbeitsgruppen"),
+					"studygroup_mode"=>TRUE,
+					"topic_create_autor"=>TRUE,
+					"course_creation_forbidden" => TRUE);
+
