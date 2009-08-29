@@ -1693,7 +1693,8 @@ if (($form == 6) && ($jump_next_x))
 
 					$query = "insert into seminar_user SET Seminar_id = '".
 					$sem_create_data["sem_id"]."', user_id = '".
-					$key."', status = 'dozent', gruppe = '$group', mkdate = '".time()."', position = '$next_pos'";
+					$key."', status = 'dozent', gruppe = '$group', visible = 'yes',".
+					" mkdate = '".time()."', position = '$next_pos'";
 					$db3->query($query);// Dozenten eintragen:w
 
 					if ($db3->affected_rows() >=1)

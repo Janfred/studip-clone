@@ -760,12 +760,17 @@ if ($s_send) {
 			$db2->query($query);
 			if ($db2->next_record()){ //User schon da
 				if($db2->f('status') != 'dozent'){
-					$query = "UPDATE seminar_user SET status = 'dozent', position='$next_pos' WHERE Seminar_id = '$s_id' AND user_id = '$add_doz_id'";
+					$query = "UPDATE seminar_user SET status = 'dozent', ".
+					         "position='$next_pos', visible='yes' WHERE ".
+							 "Seminar_id = '$s_id' AND user_id = '$add_doz_id'";
 				} else {
 					$query = '';
 				}
 			} else {						//User noch nicht da
-				$query = "INSERT INTO seminar_user SET Seminar_id = '$s_id', user_id = '$add_doz_id', status = 'dozent', gruppe = '$group', admission_studiengang_id = '', mkdate = '".time()."', position = '$next_pos'";
+				$query = "INSERT INTO seminar_user SET ".
+				"Seminar_id = '$s_id', user_id = '$add_doz_id', status = 'dozent', ".
+				"gruppe = '$group', visible = 'yes', admission_studiengang_id = '', ".
+				"mkdate = '".time()."', position = '$next_pos'";
 			}
 			if($query){
 				$db3->query($query);					//Dozent eintragen
