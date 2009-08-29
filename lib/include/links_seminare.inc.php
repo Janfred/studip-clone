@@ -37,6 +37,9 @@ if (!$GLOBALS['perm']->have_perm('admin')){
 } else {
 	$structure['veranstaltungen_suche'] = array ('topKat' => '', 'name' => _("Veranstaltungen suchen"), 'link' => URLHelper::getLink('sem_portal.php'), 'active' => FALSE);
 }
+if($GLOBALS['STUDYGROUPS_ENABLE']){
+	$structure['studygroups'] = array ('topKat' => '', 'name' => _("Studentische Arbeitsgruppen"), 'link' => URLHelper::getLink('dispatch.php/course/studygroup/search'), 'active' => FALSE);
+}
 if ($GLOBALS['PLUGINS_ENABLE'] &&
 $studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement')){
 	if($plugin_struct = $reiter->getStructureForPlugin($studienmodulmanagement, '', 'getModuleCatalogNavigation')){
@@ -74,7 +77,9 @@ foreach ($GLOBALS['SEM_CLASS'] as $key => $val)  {
 if ($GLOBALS['STM_ENABLE']){
 	$structure["mod"]=array ("topKat"=>"veranstaltungen_suche", "name"=>_("Studienmodule"), 'link' => URLHelper::getLink('sem_portal.php?view=mod&reset_all=TRUE'), "active"=>FALSE);
 }
-
+if($GLOBALS['STUDYGROUPS_ENABLE']){
+	$structure['studygroups_search'] = array ('topKat' => 'studygroups', 'name' => _("Studentische Arbeitsgruppen"), 'link' => URLHelper::getLink('dispatch.php/course/studygroup/search'), 'active' => FALSE);
+}
 
 //View festlegen
 if(!$reiter_view){

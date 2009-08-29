@@ -418,4 +418,10 @@ class Course_StudygroupController extends AuthenticatedController {
 
 		$this->redirect('course/studygroup/globalmodules');
 	}
+	
+	function search_action() {
+		$this->tabs = 'links_seminare';
+		$this->reiter_view = 'studygroups_search';
+		$GLOBALS['CURRENT_PAGE'] =  _('Studentische Arbeitsgruppen suchen');
+	}
 }
