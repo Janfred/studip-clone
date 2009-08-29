@@ -32,7 +32,7 @@ class StudygroupModel {
 		$admin_modules = new AdminModules();
 
 		foreach ($admin_modules->registered_modules as $key => $data) {
-			$modules[$key] = $data['name'];
+			if ($admin_modules->isEnableable($key, '', 'sem')) $modules[$key] = $data['name'];
 		}
 
 		return $modules;

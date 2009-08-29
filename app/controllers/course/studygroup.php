@@ -404,18 +404,46 @@ class Course_StudygroupController extends AuthenticatedController {
 	 * und danach wird weitergeleitet zur globalmodules_action
 	 */
 	function savemodules_action() {
-		if ( is_array($_REQUEST['modules']) ) {
-			foreach ($_REQUEST['modules'] as $key => $value) {
-				$config_string[] = $key .':'. $value;
-			}
-			Config::GetInstance()->setValue(implode('|', $config_string), 'STUDYGROUP_SETTINGS');
-			Config::GetInstance()->setValue( Request::quoted('institute'), 'STUDYGROUP_DEFAULT_INST');
-			Config::GetInstance()->setValue( Request::quoted('terms'), 'STUDYGROUP_TERMS');
-			$this->flash['success'] = _("Die Einstellungen wurden gespeichert!");
-		} else {
+		global $perm;
+		$perm->check("root");
+		
+		$err=0;
+		if (Request::quoted('institute')=='invalid') $err=1;
+		if (Request::quoted('terms')=='invalid') $err=1;
+		foreach ($_REQUEST['modules'] as $key => $value) 
+			if ($value=='invalid') $err=1;
+		
+		if ($err) {
 			$this->flash['error'] = _("Fehler beim Speichern der Einstellung!");
-		}
+		} else {				
+			$cfg=new Config("STUDYGROUPS_ENABLE");
+			if ($cfg->getValue()==FALSE) {
+				$cfg->setValue(TRUE,"STUDYGROUPS_ENABLE","Studentische Arbeitsgruppen");
+				$this->flash['success'] = _("Die Studentischen Arbeitsgruppen wurden aktiviert.");
+			}
 
+			if ( is_array($_REQUEST['modules']) ) {
+				// $config_string enthält modul/pluginname=0/1|...
+				foreach ($_REQUEST['modules'] as $key => $value) {
+					$config_string[] = $key .':'. ($value=='on'?'1':'0');
+				}
+				Config::GetInstance()->setValue(implode('|', $config_string), 'STUDYGROUP_SETTINGS');
+				Config::GetInstance()->setValue( Request::quoted('institute'), 'STUDYGROUP_DEFAULT_INST');
+				Config::GetInstance()->setValue( Request::quoted('terms'), 'STUDYGROUP_TERMS');
+				$this->flash['success'] = _("Die Einstellungen wurden gespeichert!");
+			} else {
+				$this->flash['error'] = _("Fehler beim Speichern der Einstellung!");
+			}
+		}
+		$this->redirect('course/studygroup/globalmodules');
+	}
+	
+	function deactivate_action() {
+		global $perm;
+		$perm->check("root");
+		$cfg=new Config();
+		$cfg->setValue(FALSE,"STUDYGROUPS_ENABLE","Studentische Arbeitsgruppen");
+		$this->flash['success'] = _("Die Studentischen Arbeitsgruppen wurden deaktiviert.");
 		$this->redirect('course/studygroup/globalmodules');
 	}
 	

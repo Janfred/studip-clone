@@ -31,11 +31,10 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-$STUDYGROUPS_ENABLE=TRUE;
+#$STUDYGROUPS_ENABLE=TRUE;
 
 // Veranstaltungen, die von Autoren angelegt werden können
 $SEM_TYPE[99]=array("name"=>_("Studentische Arbeitsgruppe"), "class"=>99);
-
 
 $SEM_CLASS[99]=array("name"=>_("Studentische Arbeitsgruppen"),
 					"studygroup_mode"=>TRUE,
