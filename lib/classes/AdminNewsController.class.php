@@ -492,7 +492,7 @@ class AdminNewsController {
 				break;
 		}
 
-		if ($perm->have_perm('tutor')) {
+		if ($perm->have_perm('autor')) {
 			foreach ($this->search_result as $range => $details) {
 				if ($details['type'] == $type) {
 					$ranges[$range] = array(
@@ -542,7 +542,7 @@ class AdminNewsController {
 		if ($auth->auth["perm"]=="root"){
 			$this->news_perm["studip"]=array("name"=>"Stud.IP News","perm"=>3);
 		} else {
-			if (in_array($auth->auth["perm"], array("dozent","tutor"))){
+			if (in_array($auth->auth["perm"], array("dozent", "tutor", "autor"))){
 				$query="SELECT seminare.Seminar_id AS id,seminar_user.status,Name FROM seminar_user LEFT JOIN seminare USING (Seminar_id) WHERE seminar_user.user_id='".$this->user_id."' AND seminar_user.status IN ('dozent','tutor')";
 				$this->db->query($query);
 				while($this->db->next_record()) {
