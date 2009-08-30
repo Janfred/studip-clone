@@ -24,24 +24,28 @@ class Course_StudygroupController extends AuthenticatedController {
 
 	function before_filter(&$action, &$args) 
 	{
-		global $SEM_CLASS, $SEM_TYPE;
+	    if ($STUDYGROUPS_ENABLE) {
+    		global $SEM_CLASS, $SEM_TYPE;
 
-		parent::before_filter($action, $args);
+    		parent::before_filter($action, $args);
 
-		include 'lib/seminar_open.php';
+    		include 'lib/seminar_open.php';
 
-		$this->tabs = 'links_openobject';
+    		$this->tabs = 'links_openobject';
 
-		// args at position zeor is always the studygroup-id
-		if ($args[0]) {
-			if ($sem = new Seminar($args[0])) {
-				if (!$SEM_CLASS[$SEM_TYPE[$sem->status]["class"]]["studygroup_mode"]) {
-					throw new Exception(_("Dieses Seminar ist keine Studentische Arbeitsgruppe!"));
-				}
-			}
-		}
-		$GLOBALS['CURRENT_PAGE'] =  _('Studentische Arbeitsgruppe bearbeiten');
-        $GLOBALS['HELP_KEYWORD'] = 'Basis.StudentischeArbeitsgruppen';
+    		// args at position zeor is always the studygroup-id
+    		if ($args[0]) {
+    			if ($sem = new Seminar($args[0])) {
+    				if (!$SEM_CLASS[$SEM_TYPE[$sem->status]["class"]]["studygroup_mode"]) {
+    					throw new Exception(_("Dieses Seminar ist keine Studentische Arbeitsgruppe!"));
+    				}
+    			}
+    		}
+    		$GLOBALS['CURRENT_PAGE'] =  _('Studentische Arbeitsgruppe bearbeiten');
+            $GLOBALS['HELP_KEYWORD'] = 'Basis.StudentischeArbeitsgruppen';
+        } else {
+            throw new Exception(_("Die von Ihnen gewählte Option ist im System nicht aktiviert."));
+        }
 	}
 
 	/**

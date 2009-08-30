@@ -114,7 +114,9 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$help_url="help/index.php?help_page=schnelleinstieg.htm";
 	}
 	$menue[13] = array( _("Schnelleinstieg"), $help_url, '_blank');
-	$menue[14] = array( _("Arbeitsgruppe anlegen"), 'dispatch.php/course/studygroup/new/', false);
+	if ($STUDYGROUPS_ENABLE) {
+	    $menue[14] = array( _("Arbeitsgruppe anlegen"), 'dispatch.php/course/studygroup/new/', false);
+   	}
 	// dozent
 	$menue[20] = array( _("Verwaltung von Veranstaltungen"), 'adminarea_start.php?list=TRUE', false);
 	$menue[21] = array( _("neue Veranstaltung anlegen"), 'admin_seminare_assi.php?new_session=TRUE', false);
@@ -201,7 +203,9 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		$ueberschrift = _("Startseite f&uuml;r DozentInnen bei Stud.IP");
 		$menue_auswahl[] = array( 1, array());
 		$menue_auswahl[] = array(20, ($sem_create_perm == 'dozent' ? array(21) : array()));
-		$menue_auswahl[] = array(14, array());
+        if ($STUDYGROUPS_ENABLE) {
+		    $menue_auswahl[] = array(14, array());
+        }
 		$menue_auswahl[] = array( 3, array(4, 5, 6));
 		$menue_auswahl[] = array( 7, array(8));
 		$menue_auswahl[] = array( 9, array(10, 11));
@@ -209,7 +213,11 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		if($GLOBALS['STM_ENABLE']) $menue_auswahl[] = array(34, array());
 	} elseif ($perm->have_perm('autor')) { // autor, tutor
 		$ueberschrift = _("Ihre pers&ouml;nliche Startseite bei Stud.IP");
-		$menue_auswahl[] = array( 1, array(2, 14));
+		if ($STUDYGROUPS_ENABLE) {
+		    $menue_auswahl[] = array( 1, array(2,14));
+	    } else {
+	        $menue_auswahl[] = array( 1, array(2));
+	    }
 		$menue_auswahl[] = array( 3, array(4, 5, 6));
 		$menue_auswahl[] = array( 7, array(8));
 		$menue_auswahl[] = array( 9, array(10, 11));
