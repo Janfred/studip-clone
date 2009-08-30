@@ -5,9 +5,9 @@ class AddSwitchToPreselectSemester extends Migration {
 	}
 
 	function up() {
-		 DBManager::get()->query("INSERT INTO config (config_id, parent_id, field, " .
-		 		"value, is_default, type, range, section, position, mkdate, chdate," .
-		 		"description, comment, message_template) VALUES " .
+		 DBManager::get()->exec("INSERT INTO config (`config_id`, `parent_id`, `field`, " .
+		 		"`value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`," .
+		 		"`description`, `comment`, `message_template`) VALUES " .
 		 		"('06d703c3de37cdae942c66e18f7dcd02', '', 'ASSI_SEMESTER_PRESELECT', " .
 		 		"'TRUE', 0, 'boolean', 'global', '', 0, ".time().",". time().
 				", 'Wenn ausgeschaltet wird im admin_seminare_assi beim" .
@@ -16,7 +16,7 @@ class AddSwitchToPreselectSemester extends Migration {
 	}
 
 	function down() {
-		 DBManager::get()->query("DELETE FROM `config` WHERE `config_id`='06d703c3de37cdae942c66e18f7dcd02' LIMIT 1 ");
+		 DBManager::get()->exec("DELETE FROM `config` WHERE `config_id`='06d703c3de37cdae942c66e18f7dcd02' LIMIT 1 ");
 	}
 }
 
