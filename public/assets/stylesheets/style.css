@@ -1017,7 +1017,7 @@ div.messagebox_error {
 }
 
 div.messagebox_exception {
-    color: #000000;
+    color: #ff0400;
     background-color: #ffbaba;
     background-image: url("../images/icons/icon_exception.png");
 }
