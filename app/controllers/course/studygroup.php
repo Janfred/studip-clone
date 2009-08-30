@@ -24,6 +24,8 @@ class Course_StudygroupController extends AuthenticatedController {
 
 	function before_filter(&$action, &$args) 
 	{
+	    global $STUDYGROUPS_ENABLE;
+	    
 	    if ($STUDYGROUPS_ENABLE) {
     		global $SEM_CLASS, $SEM_TYPE;
 
