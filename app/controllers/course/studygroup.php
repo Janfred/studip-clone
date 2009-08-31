@@ -175,7 +175,8 @@ class Course_StudygroupController extends AuthenticatedController {
 			$available_plugins = StudygroupModel::getAvailablePlugins();
 			foreach ($available_plugins as $key => $name) {
 				$plugin = PluginManager::getInstance()->getPlugin($key);
-				if ($_REQUEST['groupplugin'][$key] && $enable) {
+				$plugin->setId($semid);
+				if ($_REQUEST['groupplugin'][$key] && $name) {
 					$plugin->setActivated(true);
 				} else {
 					$plugin->setActivated(false);
@@ -274,7 +275,8 @@ class Course_StudygroupController extends AuthenticatedController {
 				$available_plugins = StudygroupModel::getAvailablePlugins();
 				foreach ($available_plugins as $key => $name) {
 					$plugin = PluginManager::getInstance()->getPlugin($key);
-					if ($_REQUEST['groupplugin'][$key] && $enable) {
+					$plugin->setId($id);
+					if ($_REQUEST['groupplugin'][$key] && $name) {
 						$plugin->setActivated(true);
 					} else {
 						$plugin->setActivated(false);
