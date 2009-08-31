@@ -24,23 +24,19 @@ class Course_StudygroupController extends AuthenticatedController {
 
 	function before_filter(&$action, &$args) 
 	{
-	    global $STUDYGROUPS_ENABLE;
-	    
-	    if ($STUDYGROUPS_ENABLE) {
-    		global $SEM_CLASS, $SEM_TYPE;
+	    parent::before_filter($action, $args);
 
-    		parent::before_filter($action, $args);
+	    if (Config::GetInstance()->getValue('STUDYGROUPS_ENABLE')
+	        || in_array($action, words('globalmodules savemodules deactivate'))) {
 
     		include 'lib/seminar_open.php';
 
     		$this->tabs = 'links_openobject';
 
-    		// args at position zeor is always the studygroup-id
+    		// args at position zero is always the studygroup-id
     		if ($args[0]) {
-    			if ($sem = new Seminar($args[0])) {
-    				if (!$SEM_CLASS[$SEM_TYPE[$sem->status]["class"]]["studygroup_mode"]) {
-    					throw new Exception(_("Dieses Seminar ist keine Studentische Arbeitsgruppe!"));
-    				}
+    			if (SeminarCategories::GetBySeminarId($args[0])->studygroup_mode == false) {
+   					throw new Exception(_("Dieses Seminar ist keine Studentische Arbeitsgruppe!"));
     			}
     		}
     		$GLOBALS['CURRENT_PAGE'] =  _('Studentische Arbeitsgruppe bearbeiten');
@@ -84,7 +80,6 @@ class Course_StudygroupController extends AuthenticatedController {
 	{
 		closeObject();
 		$GLOBALS['CURRENT_PAGE'] =  _('Arbeitsgruppe anlegen');
-        $GLOBALS['HELP_KEYWORD'] = 'Basis.Nutzerdomaenen';
 		
 		$this->terms = Config::GetInstance()->getValue('STUDYGROUP_TERMS');
 		$this->available_modules = StudygroupModel::getAvailableModules();
