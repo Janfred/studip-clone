@@ -36,8 +36,8 @@ require_once ('lib/language.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/user_visible.inc.php');
 require_once ('lib/contact.inc.php');
-// StEP 155: Mail Attachments
 require_once ('lib/datei.inc.php');
+require_once ('lib/sms_functions.inc.php');
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $GLOBALS['RELATIVE_PATH_CHAT']."/ChatServer.class.php"; //wird für Nachrichten im chat benötigt
 }
