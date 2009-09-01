@@ -113,7 +113,7 @@ STUDIP.study_area_selection = {
           STUDIP.study_area_selection.swishAndFlick($$(".study_area_selection_add_" + id)[0],
                                                     "study_area_selection_selected");
           $("study_area_selection_none").fade();
-          $("study_area_selection_selected").insert(transport.responseText);
+          $("study_area_selection_selected").replace(transport.responseText);
           STUDIP.study_area_selection.refreshSelection();
         }});
   },

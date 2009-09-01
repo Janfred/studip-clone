@@ -191,7 +191,7 @@ class Course_StudyAreasController extends Trails_Controller {
 
     $this->store_selection($course_id, $this->selection);
 
-    $this->render_template('course/study_areas/selected_entry');
+    $this->render_template('course/study_areas/selected_entries');
   }
 
 
