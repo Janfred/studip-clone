@@ -72,11 +72,21 @@ class StudipStudyAreaSelection {
 	 */
 	private function populateAreasForCourse($id) {
 		$areas = StudipStudyArea::getStudyAreasForCourse($id);
-		$lambda = create_function('$a, $b', 'return strcmp($a->getPath(" · "), '.
-		                                                  '$b->getPath(" · "));');
-		uasort($areas, $lambda);
-
 		$this->setAreas($areas);
+		$this->sortAreas();
+	}
+
+
+	/**
+	 * Sorts the internal representation of the areas by their paths according to
+	 * the current locale.
+	 *
+	 * @return void
+	 */
+	private function sortAreas() {
+		$lambda = create_function('$a, $b', 'return strcoll($a->getPath(" · "), '.
+		                                                   '$b->getPath(" · "));');
+		uasort($this->areas, $lambda);
 	}
 
 
@@ -278,6 +288,7 @@ class StudipStudyAreaSelection {
 		if (!isset($this->areas[$id])) {
 			$this->areas[$id] = $area;
 		}
+		$this->sortAreas();
 		return $this;
 	}
 
