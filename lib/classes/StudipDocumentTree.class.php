@@ -244,13 +244,16 @@ class StudipDocumentTree extends TreeAbstract {
 	}
 	
 	function isDownloadFolder($folder_id, $user_id = null){
+		if($user_id && is_object($GLOBALS['perm']) && $GLOBALS['perm']->have_studip_perm($this->must_have_perm, $this->range_id, $user_id)){
+			return true;
+		}
 		if (!$this->isExecutable($folder_id, $user_id) || !$this->isReadable($folder_id, $user_id)){
 			return false;
 		} elseif ( ($s_folder = $this->getNextSuperFolder($folder_id))
 		&& (!$this->isExecutable($s_folder, $user_id) || !$this->isReadable($s_folder, $user_id) )) {
 			return false;
 		} else {
-			return true;
+			return $this->checkGroupFolder($this->getRootFolder($folder_id), $user_id);
 		}
 	}
 	
