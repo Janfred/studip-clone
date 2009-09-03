@@ -8,7 +8,7 @@ $infobox['content'] = array(
     array(
         'kategorie'=>_("Information"),
         'eintrag'=>array(
-            array("text"=>"Studiengruppen sind eine einfache Möglichkeit, mit Kommilitonen, Kollegen und anderen zusammenzuarbeiten. Jeder kann Studiengruppen gründen. Auf dieser Seite finden Sie eine Liste aller Studiengruppen. Klicken Sie auf auf die Überschriften um die jeweiligen Spalten zu sortieren.","icon"=>"ausruf_small2.gif")
+            array("text"=>_("Studiengruppen sind eine einfache Möglichkeit, mit Kommilitonen, Kollegen und anderen zusammenzuarbeiten. Jeder kann Studiengruppen gründen. Auf dieser Seite finden Sie eine Liste aller Studiengruppen. Klicken Sie auf auf die Überschriften um die jeweiligen Spalten zu sortieren."),"icon"=>"ausruf_small2.gif")
         )
     )
 );
@@ -53,25 +53,20 @@ TableKit.Sortable.addSortType(
 	background-image: url(<?=Assets::image_path('dreieck_up.png')?>);
 	background-repeat:no-repeat;
 	background-position:center right;
-	padding: 2px 15px 2px 15px;
-	text-align:center;
 }
 .sortdesc {
 	background-image: url(<?=Assets::image_path('dreieck_down.png')?>);
 	background-repeat:no-repeat;
 	background-position:center right;
-	padding: 2px 15px 2px 15px;
-	text-align:center;
 }
 th {
-	background: #B5B5B5;
+	background: none;
 	padding: 2px 15px 2px 15px;
 	text-align:center;
-
 }
 </style>
-<table class="sortable" border="0" cellpadding="2" cellspacing="0" width="100%" align="center">
-    <tr>
+<table class="sortable" border="0" cellpadding="2" cellspacing="0" width="100%">
+<tr style="background: url(<?=Assets::image_path('steelgraudunkel.gif')?>);cursor: pointer;" title="<?=_("Klicken, um die Sortierung zu ändern")?>">
         <th width="60%"><?= _("Name") ?></th>
         <th width="10%" class="date-<?=$GLOBALS['_language']?> sortfirstdesc"><?= _("gegründet") ?></th>
         <th width="5%"><?= _("Mitglieder") ?></th>
