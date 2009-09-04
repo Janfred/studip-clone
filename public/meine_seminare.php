@@ -641,7 +641,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	}
 
 // Anzeige der Wartelisten
-  $db->query("SELECT admission_seminar_user.*, seminare.Name, seminare.admission_endtime, seminare.admission_turnout, quota FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) LEFT JOIN admission_seminar_studiengang ON (admission_seminar_user.studiengang_id = admission_seminar_studiengang.studiengang_id AND seminare.seminar_id = admission_seminar_studiengang.seminar_id) WHERE user_id = '$user->id' ORDER BY admission_type, name");
+  $db->query("SELECT admission_seminar_user.*, seminare.status as sem_status, seminare.Name, seminare.admission_endtime, seminare.admission_turnout, quota FROM admission_seminar_user LEFT JOIN seminare USING(seminar_id) LEFT JOIN admission_seminar_studiengang ON (admission_seminar_user.studiengang_id = admission_seminar_studiengang.studiengang_id AND seminare.seminar_id = admission_seminar_studiengang.seminar_id) WHERE user_id = '$user->id' ORDER BY admission_type, name");
   if ($db->num_rows())
   {
 
@@ -668,13 +668,18 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 				else
 					$chance_color = dechex(255-($db->f("position")*6)); // da gibts vielleicht noch Hoffnung, also grün
 			}
-
-			//$cssSw->disableHover();
+			
+			$seminar_name = $db->f("Name");
+			if(SeminarCategories::GetByTypeId($db->f('sem_status'))->studygroup_mode){
+				$seminar_name .= ' ('. _("Studentische Arbeitsgruppe");
+				$seminar_name .= ', '. _("geschlossen");
+				$seminar_name .= ')';
+			}
 			$cssSw->switchClass();
 			printf ("<tr".$cssSw->getHover()."><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='".$GLOBALS['ASSETS_URL']."images/blank.gif' " . tooltip(_("Position oder Wahrscheinlichkeit")) . " border=0 width=7 height=12></td>",$chance_color);
 			printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
 			printf ("<td width=\"55%%\" class=\"%s\">",$cssSw->getClass());
-			print "<a href=details.php?sem_id=".$db->f("seminar_id")."&send_from_search_page=meine_seminare.php&send_from_search=TRUE><font size=-1>".htmlReady($db->f("Name"))."</font></a></td>";
+			print "<a href=details.php?sem_id=".$db->f("seminar_id")."&send_from_search_page=meine_seminare.php&send_from_search=TRUE><font size=-1>".htmlReady($seminar_name)."</font></a></td>";
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.", $db->f("admission_endtime")) : "-");
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s %s</font></td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? _("Los") : (($db->f("status") == "accepted") ? _("Vorl.") :_("Wartel.")));
