@@ -61,7 +61,7 @@
 				<td align="center" colspan="2">
 					<?=makeButton("login", "input", _("Login"), "login")?>
 					&nbsp;
-					<a href="index.php?cancel_login=1">
+					<a href="<?=UrlHelper::getLink('index.php?cancel_login=1')?>">
 					<?=makeButton("abbrechen", "img", _("Abbrechen"))?>
 					</a>
 					<br>
@@ -76,14 +76,14 @@
 	<?endif;?>
 	<font size="-1">
 	<?if ($GLOBALS['ENABLE_REQUEST_NEW_PASSWORD_BY_USER'] && in_array('Standard', $GLOBALS['STUDIP_AUTH_PLUGIN'])):?>
-	<a href="request_new_password.php?cancel_login=1">
+	<a href="<?=UrlHelper::getLink('request_new_password.php?cancel_login=1')?>">
 	<?else:?>
 		<font size="-1"><a href="mailto:<?=$GLOBALS['UNI_CONTACT']?>?<?="subject=".rawurlencode("Stud.IP Passwort vergessen - ".$GLOBALS['UNI_NAME_CLEAN'])."&amp;body=".rawurlencode("Ich habe mein Passwort vergessen. Bitte senden sie mir ein Neues.\nMein Nutzername: ".htmlReady($uname)."\n")?>">
 	<?endif;?>
 	<?=_("Passwort vergessen")?></a>
 	<?if($self_registration_activated){?>
 		&nbsp;/&nbsp;
-		<a href="register1.php?cancel_login=1"><?=_("Registrieren")?></a>
+		<a href="<?=UrlHelper::getLink('register1.php?cancel_login=1')?>"><?=_("Registrieren")?></a>
 	<?}?>
 	</font>
 	</div>
