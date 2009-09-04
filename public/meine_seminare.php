@@ -214,92 +214,93 @@ if ($GLOBALS['CHAT_ENABLE']){
 if (!$perm->have_perm("root"))
 	include ('lib/include/links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
 
-//Ausgabe bei bindenden Veranstaltungen, loeschen nicht moeglich!
-if ($cmd == "no_kill") {
-	$db->query("SELECT Name, admission_type FROM seminare WHERE Seminar_id = '$auswahl'");
-	$db->next_record();
-	$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an die Dozentin oder den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br>";
-}
+$cmd = Request::option('cmd');
+if(in_array($cmd, words('no_kill suppose_to_kill suppose_to_kill_admission kill kill_admission'))){
+	$current_seminar = Seminar::getInstance(Request::option('auswahl'));
+	$ticket_check = Seminar_Session::check_ticket(Request::option('studipticket'));
+	UrlHelper::addLinkParam('studipticket', Seminar_Session::get_ticket());
 
-//Sicherheitsabfrage fuer abonnierte Veranstaltungen
-if ($cmd == "suppose_to_kill") {
-	$db->query("SELECT * FROM seminare WHERE Seminar_id = '$auswahl'");
-	$db->next_record();
-	if(LockRules::Check($auswahl, 'participants')){
-		$lockRule = new LockRules();
-		$lockdata = $lockRule->getSemLockRule($auswahl);
-		$meldung = "error§" . sprintf(_("Sie können das Abonnement der Veranstaltung <b>%s</b> nicht aufheben."), htmlReady($db->f("Name")));
-		if($lockdata['description']) $meldung .= '§info§' . fixLinks($lockdata['description']);
-	} elseif ($db->f("admission_type") || ($db->f("admission_prelim") == 1)) {
-		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die Berechtigung f&uuml;r die Veranstaltung und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($db->f("Name"))) . "<br>";
-		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
-		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
-	} else if ($db->f("admission_endtime_sem")!="-1" && $db->f("admission_endtime_sem") < time()) {
-		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der Veranstaltung <b>%s</b> wirklich aufheben? Der Anmeldzeitraum ist abgelaufen und Sie k&ouml;nnen sich nicht wieder anmelden!"), htmlReady($db->f("Name"))) . "<br>";
-		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
-		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
-	} else {
-		$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der Veranstaltung <b>%s</b> wirklich aufheben?"), htmlReady($db->f("Name"))) . "<br>";
-		$meldung.= "<a href=\"$PHP_SELF?cmd=kill&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
-		$meldung.= "<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
+	//Ausgabe bei bindenden Veranstaltungen, loeschen nicht moeglich!
+	if ($cmd == "no_kill") {
+		$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an die Dozentin oder den Dozenten der Veranstaltung wenden."), htmlReady($current_seminar->getName())) . "<br>";
 	}
-}
 
-//Sicherheitsabfrage fuer Wartelisteneintraege
-if ($cmd=="suppose_to_kill_admission") {
-	$db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
-	$db->next_record();
-	$meldung = "info§" . sprintf(_("Wollen Sie den Eintrag auf der Warteliste der Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die bereits erreichte Position und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($db->f("Name"))) . "<br>";
-	$meldung.="<a href=\"$PHP_SELF?cmd=kill_admission&auswahl=$auswahl\">" . makeButton("ja2") . "</a>&nbsp; \n";
-	$meldung.="<a href=\"$PHP_SELF\">" . makeButton("nein") . "</a>\n";
-}
+	//Sicherheitsabfrage fuer abonnierte Veranstaltungen
+	if ($cmd == "suppose_to_kill") {
+		if(LockRules::Check($current_seminar->getId(), 'participants')){
+			$lockRule = new LockRules();
+			$lockdata = $lockRule->getSemLockRule($current_seminar->getId());
+			$meldung = "error§" . sprintf(_("Sie können das Abonnement der Veranstaltung <b>%s</b> nicht aufheben."), htmlReady($current_seminar->getName()));
+			if($lockdata['description']) $meldung .= '§info§' . fixLinks($lockdata['description']);
+		} elseif ($current_seminar->admission_type || $current_seminar->admission_prelim == 1) {
+			$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der teilnahmebeschr&auml;nkten Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die Berechtigung f&uuml;r die Veranstaltung und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($current_seminar->getName())) . "<br>";
+			$meldung.= "<a href=\"" . UrlHelper::getLink('?cmd=kill&auswahl='.$current_seminar->getId()) . "\">" . makeButton("ja2") . "</a>&nbsp; \n";
+			$meldung.= "<a href=\"" . UrlHelper::getLink() . "\">" . makeButton("nein") . "</a>\n";
+		} else if ($current_seminar->admission_endtime_sem != -1 && $current_seminar->admission_endtime_sem < time()) {
+			$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der Veranstaltung <b>%s</b> wirklich aufheben? Der Anmeldzeitraum ist abgelaufen und Sie k&ouml;nnen sich nicht wieder anmelden!"), htmlReady($current_seminar->getName())) . "<br>";
+			$meldung.= "<a href=\"" . UrlHelper::getLink('?cmd=kill&auswahl='.$current_seminar->getId()) . "\">" . makeButton("ja2") . "</a>&nbsp; \n";
+			$meldung.= "<a href=\"" . UrlHelper::getLink() . "\">" . makeButton("nein") . "</a>\n";
+		} else {
+			$meldung = "info§" . sprintf(_("Wollen Sie das Abonnement der Veranstaltung <b>%s</b> wirklich aufheben?"), htmlReady($current_seminar->getName())) . "<br>";
+			$meldung.= "<a href=\"" . UrlHelper::getLink('?cmd=kill&auswahl='.$current_seminar->getId()) . "\">" . makeButton("ja2") . "</a>&nbsp; \n";
+			$meldung.= "<a href=\"" . UrlHelper::getLink() . "\">" . makeButton("nein") . "</a>\n";
+		}
+	}
 
-//bei Bedarf aus seminar_user austragen
-if ($cmd=="kill" && !LockRules::Check($auswahl, 'participants')) {
-	$db->query("SELECT Name, admission_binding, a.status FROM seminar_user a LEFT JOIN seminare USING(Seminar_id) WHERE a.Seminar_id = '$auswahl' AND a.user_id='$user->id' AND a.status IN('user','autor')");
-	$db->next_record();
-	if ($db->f("admission_binding")) {
-		$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an die Dozentin oder den Dozenten der Veranstaltung wenden."), htmlReady($db->f("Name"))) . "<br>";
-	} elseif ($db->f("status")) {
+	//Sicherheitsabfrage fuer Wartelisteneintraege
+	if ($cmd=="suppose_to_kill_admission") {
+		if(admission_seminar_user_get_position($user->id, $current_seminar->getId()) == 'na'){
+			$meldung = "info§" . sprintf(_("Wollen Sie den Eintrag auf der Anmeldeliste der Veranstaltung <b>%s</b> wirklich aufheben?"), htmlReady($current_seminar->getName())) . "<br>";
+		} else {
+			$meldung = "info§" . sprintf(_("Wollen Sie den Eintrag auf der Warteliste der Veranstaltung <b>%s</b> wirklich aufheben? Sie verlieren damit die bereits erreichte Position und m&uuml;ssen sich ggf. neu anmelden!"), htmlReady($current_seminar->getName())) . "<br>";
+		}
+		$meldung.="<a href=\"" . UrlHelper::getLink('?cmd=kill_admission&auswahl='.$current_seminar->getId()) . "\">" . makeButton("ja2") . "</a>&nbsp; \n";
+		$meldung.="<a href=\"" . UrlHelper::getLink() . "\">" . makeButton("nein") . "</a>\n";
+	}
+
+	//bei Bedarf aus seminar_user austragen
+	if ($cmd=="kill"
+		&& !LockRules::Check($current_seminar->getId(), 'participants')
+		&& $ticket_check) {
+	
+		if ($current_seminar->admission_binding) {
+			$meldung = "info§" . sprintf(_("Die Veranstaltung <b>%s</b> ist als <b>bindend</b> angelegt. Wenn Sie sich austragen wollen, m&uuml;ssen Sie sich an die Dozentin oder den Dozenten der Veranstaltung wenden."), htmlReady($current_seminar->getName())) . "<br>";
+		} elseif (!$perm->have_studip_perm('tutor', $current_seminar->getId())) {
+			
+			// LOGGING
+			log_event('SEM_USER_DEL', $current_seminar->getId(), $user->id, 'Hat sich selbst ausgetragen');
+			
+			$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='".$current_seminar->getId()."'");
+			if ($db->affected_rows() == 0)
+				$meldung="error§" . _("Datenbankfehler!");
+			else {
+				// Löschen aus Statusgruppen
+				RemovePersonStatusgruppeComplete (get_username(), $current_seminar->getId());
+				
+				//Pruefen, ob es Nachruecker gibt
+				update_admission($current_seminar->getId());
+				
+				$meldung = "msg§" . sprintf(_("Das Abonnement der Veranstaltung <b>%s</b> wurde aufgehoben. Sie sind nun nicht mehr als TeilnehmerIn dieser Veranstaltung im System registriert."), htmlReady($current_seminar->getName()));
+			}
+		}
+	}
+
+	//bei Bedarf aus admission_seminar_user austragen
+	if ($cmd=="kill_admission" && $ticket_check) {
 
 		// LOGGING
-		log_event('SEM_USER_DEL', $auswahl, $user->id, 'Hat sich selbst ausgetragen');
-
-		$db->query("DELETE FROM seminar_user WHERE user_id='$user->id' AND Seminar_id='$auswahl'");
-		if ($db->affected_rows() == 0)
-			$meldung="error§" . _("Datenbankfehler!");
+		log_event('SEM_USER_DEL', $current_seminar->getId(), $user->id, 'Hat sich selbst aus der Wartliste ausgetragen');
+		
+		$db->query("DELETE FROM admission_seminar_user WHERE user_id='$user->id' AND seminar_id='".$current_seminar->getId()."'");
+		if ($db->affected_rows() == 0)  $meldung="error§" . _("Datenbankfehler!");
 		else {
-		  	// Löschen aus Statusgruppen
-		  	RemovePersonStatusgruppeComplete ($user->username, $auswahl);
-
-		  	//Pruefen, ob es Nachruecker gibt
-		  	update_admission($auswahl);
-
-	  		$db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
-		  	$db->next_record();
-		  	$meldung = "msg§" . sprintf(_("Das Abonnement der Veranstaltung <b>%s</b> wurde aufgehoben. Sie sind nun nicht mehr als TeilnehmerIn dieser Veranstaltung im System registriert."), htmlReady($db->f("Name")));
+			//Warteliste neu sortieren
+			renumber_admission($current_seminar->getId());
+			
+			$meldung="msg§" . sprintf(_("Der Eintrag in der Anmelde- bzw. Warteliste der Veranstaltung <b>%s</b> wurde aufgehoben. Wenn Sie an der Veranstaltung teilnehmen wollen, m&uuml;ssen Sie sich erneut bewerben."), htmlReady($current_seminar->getName()));
 		}
 	}
 }
-
-//bei Bedarf aus admission_seminar_user austragen
-if ($cmd=="kill_admission") {
-
-	// LOGGING
-	log_event('SEM_USER_DEL', $auswahl, $user->id, 'Hat sich selbst aus der Wartliste ausgetragen');
-
-	$db->query("DELETE FROM admission_seminar_user WHERE user_id='$user->id' AND seminar_id='$auswahl'");
-	if ($db->affected_rows() == 0)  $meldung="error§" . _("Datenbankfehler!");
-	else {
-	  //Warteliste neu sortieren
-	  renumber_admission($auswahl);
-
-	  $db->query("SELECT Name FROM seminare WHERE Seminar_id = '$auswahl'");
-	  $db->next_record();
-	  $meldung="msg§" . sprintf(_("Der Eintrag in der Anmelde- bzw. Warteliste der Veranstaltung <b>%s</b> wurde aufgehoben. Wenn Sie an der Veranstaltung teilnehmen wollen, m&uuml;ssen Sie sich erneut bewerben."), htmlReady($db->f("Name")));
-	}
-}
-
 //bei Bedarf aus seminar_user austragen
 if ($cmd=="inst_kill" && $GLOBALS['ALLOW_SELFASSIGN_INSTITUTE']) {
 	$db->query("DELETE FROM user_inst WHERE user_id='$user->id' AND Institut_id='$auswahl'");
@@ -683,7 +684,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.", $db->f("admission_endtime")) : "-");
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s %s</font></td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(),  ($db->f("status") == "claiming") ? _("Los") : (($db->f("status") == "accepted") ? _("Vorl.") :_("Wartel.")));
-			printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=%skill_admission\"><img src=\"".$GLOBALS['ASSETS_URL']."images/logout_seminare.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp;</td></tr>", $cssSw->getClass(), $db->f("seminar_id"), ($db->f("status") == "awaiting") ? "suppose_to_" : "");
+			printf("<td width=\"3%%\" class=\"%s\" align=\"center\"><a href=\"$PHP_SELF?auswahl=%s&cmd=suppose_to_kill_admission\"><img src=\"".$GLOBALS['ASSETS_URL']."images/logout_seminare.gif\" ".tooltip(_("aus der Veranstaltung abmelden"))." border=\"0\"></a>&nbsp;</td></tr>", $cssSw->getClass(), $db->f("seminar_id"));
 		}
 		print "</table>";
 		?>
