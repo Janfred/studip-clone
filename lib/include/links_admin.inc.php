@@ -155,7 +155,7 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 		$reiter=new reiter;
 
 		//Ruecksprung-Reiter vorbereiten
-		$back_jump= _("zurück zur Arbeitsgruppe");
+		$back_jump= _("zurück zur Studiengruppe");
 
 		if ($GLOBALS['perm']->have_perm('admin')) {
 			$structure["veranstaltungen"]=array ('topKat'=>"", 'name'=> _("Veranstaltungen"), 'link' => URLHelper::getLink("adminarea_start.php?list=TRUE"), 'active'=>FALSE);
@@ -476,7 +476,7 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 			$structure["extern_global"] = array("topKat" => "global", "name" => _("externe Seiten"), 'link' => URLHelper::getLink("admin_extern.php?list=TRUE&view=extern_global"), "active" => FALSE);
 		}
 
-		$structure['admin_studygroup'] = array( 'topKat' => 'global', 'name' => _("Studentische Arbeitsgruppen"), 
+		$structure['admin_studygroup'] = array( 'topKat' => 'global', 'name' => _("Studiengruppen"), 
 			'link' => URLHelper::getLink('dispatch.php/course/studygroup/globalmodules'), 'active' => false );
 	}
 	// create sublinks for administration plugins
@@ -1181,7 +1181,7 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 			echo "<td class=\"".$cssSw->getClass()."\" nowrap align=\"center\">";
 
 			if ($studygroup_mode) {
-						echo _("Arbeitsgruppe") . sprintf("<br><a href=\"%s\">%s</a></font>", URLHelper::getLink('dispatch.php/course/studygroup/edit/' . $seminar_id . "?cid=" . $seminar_id), makeButton("bearbeiten"));
+						echo _("Studiengruppe") . sprintf("<br><a href=\"%s\">%s</a></font>", URLHelper::getLink('dispatch.php/course/studygroup/edit/' . $seminar_id . "?cid=" . $seminar_id), makeButton("bearbeiten"));
 			} else {
 				//Kommandos fuer die jeweilgen Seiten
 				switch ($i_page) {

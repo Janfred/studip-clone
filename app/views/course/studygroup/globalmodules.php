@@ -9,7 +9,7 @@ $infobox['content'] = array(
 		'kategorie' => _("Information"), 
 		'eintrag'   => array(
 			array(
-				'text' => 'Hier können Sie angeben, welche Module/Plugins in Studentische Arbeitsgruppen verwendet werden dürfen.',
+				'text' => 'Hier können Sie angeben, welche Module/Plugins in Studiengruppen verwendet werden dürfen.',
 				'icon' => 'ausruf_small.gif'
 			)
 		)
@@ -24,12 +24,12 @@ $cssSw = new cssClassSwitcher();
 
 ?>
 <?= $this->render_partial("course/studygroup/_feedback") ?>
-<h3><?= _("Studentische Arbeitsgruppen")?></h3>
+<h3><?= _("Studiengruppen")?></h3>
 <? if (!Config::getInstance()->getValue('STUDYGROUPS_ENABLE')):?>
-	<p><?= _("Die Studentischen Arbeitsgruppen sind derzeit <b>nicht</b> aktiviert.") ?></p>
+	<p><?= _("Die Studiengruppen sind derzeit <b>nicht</b> aktiviert.") ?></p>
 	<p><?= _("Zum Aktivieren füllen Sie das Formular aus und klicken Sie auf 'Speichern'") ?></p>
 <? else: ?>
-	<p><?= _("Die Studentischen Arbeitsgruppen sind aktiviert.") ?></p>
+	<p><?= _("Die Studiengruppen sind aktiviert.") ?></p>
 	<div>
 	<form action="<?= $controller->url_for('course/studygroup/deactivate') ?>" method="post">
 	<?= makebutton('deaktivieren', 'input') ?>
@@ -84,7 +84,7 @@ $cssSw = new cssClassSwitcher();
 		<b><?= _("Einrichtungszuordnung") ?></b>
 	</div>
 	<div style="float: left; width: 50%; clear: left;" class="<?= $cssSw->getClass() ?>">
-		<?= _("Alle Studentischen Arbeitsgruppen werden folgender Einrichtung zugeordnet:") ?><br>
+		<?= _("Alle Studiengruppen werden folgender Einrichtung zugeordnet:") ?><br>
 	</div>
 	<div style="float: left; width: 50%;" class="<?= $cssSw->getClass() ?>">
 		<select name="institute">
@@ -115,8 +115,8 @@ $cssSw = new cssClassSwitcher();
 		<b><?= _("Nutzungsbedingugen") ?></b>
 	</div>
 	<div style="float: left; width: 100%; clear: left;" class="<?= $cssSw->getClass() ?>">
-		<?= _("Geben Sie hier Nutzungsbedingungen für die Studentischen Arbeitsgruppe ein. ".
-				"Diese müssen akzeptiert werden, bevor eine Arbeitsgruppe angelegt werden kann.") ?><br>
+		<?= _("Geben Sie hier Nutzungsbedingungen für die Studiengruppen ein. ".
+				"Diese müssen akzeptiert werden, bevor eine Studiengruppe angelegt werden kann.") ?><br>
 	</div>
 	<? $cssSw->switchClass(); ?>
 	<div style="float: left; width: 100%; clear: left; text-align: center;" class="<?= $cssSw->getClass() ?>">

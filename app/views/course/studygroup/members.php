@@ -5,7 +5,7 @@ if ($rechte) {
         'kategorie' => _("Aktionen"),
         'eintrag'   => array(
 			array(
-				'text' => _("Klicken Sie auf ein Gruppenmitglied, um ModeratorInnen zu berufen, abzuberufen oder ein Mitglieder der Arbeitsgruppe zu entfernen."),
+				'text' => _("Klicken Sie auf ein Gruppenmitglied, um ModeratorInnen zu berufen, abzuberufen oder ein Mitglieder der Studiengruppe zu entfernen."),
                 'icon' => "icon-cont.gif"
 			)
 		)
@@ -34,7 +34,7 @@ $infobox['content'] = array(
 
 <? if ($rechte) : ?>
 <p>
-	<?= _("Klicken Sie auf ein Gruppenmitglied, um ModeratorInnen zu berufen, abzuberufen oder ein Mitglied der Arbeitsgruppe zu entfernen. ") ?>
+	<?= _("Klicken Sie auf ein Gruppenmitglied, um ModeratorInnen zu berufen, abzuberufen oder ein Mitglied der Studiengruppe zu entfernen. ") ?>
 </p>
 <? endif; ?>
 

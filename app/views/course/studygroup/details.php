@@ -7,7 +7,7 @@ if ($GLOBALS['perm']->have_studip_perm('admin',$studygroup->getId())) {
 	$participate = _("Mitgliedschaft bereits beantragt!");
 } else {
 	$participate_link = '<a href="'. UrlHelper::getLink('sem_verify.php?id='. $studygroup->getId()) .'">%s</a>';
-	$participate = sprintf( $participate_link, $studygroup->admission_prelim ? _("Mitgliedschaft beantragen") : _("Arbeitsgruppe beitreten"));
+	$participate = sprintf( $participate_link, $studygroup->admission_prelim ? _("Mitgliedschaft beantragen") : _("Studiengruppe beitreten"));
 }
 
 $all_mods = $studygroup->getMembers('dozent') + $studygroup->getMembers('tutor');
@@ -27,7 +27,7 @@ $infobox['content'] = array(
 		'kategorie' => _("Information"), 
 		'eintrag'   => array(
 			array(
-				'text' => _("Hier sehen Sie weitere Informationen zur Arbeitsgruppe. Außerdem können sie ihr beitreten/eine Mitgliedschaft beantragen."),
+				'text' => _("Hier sehen Sie weitere Informationen zur Studiengruppe. Außerdem können sie ihr beitreten/eine Mitgliedschaft beantragen."),
 				'icon' => 'ausruf_small.gif'
 			)
 		)

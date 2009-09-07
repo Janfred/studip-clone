@@ -115,7 +115,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	}
 	$menue[13] = array( _("Schnelleinstieg"), $help_url, '_blank');
 	if ($STUDYGROUPS_ENABLE) {
-	    $menue[14] = array( _("Arbeitsgruppe anlegen"), 'dispatch.php/course/studygroup/new/', false);
+	    $menue[14] = array( _("Studiengruppe anlegen"), 'dispatch.php/course/studygroup/new/', false);
    	}
 	// dozent
 	$menue[20] = array( _("Verwaltung von Veranstaltungen"), 'adminarea_start.php?list=TRUE', false);

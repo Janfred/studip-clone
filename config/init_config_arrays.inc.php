@@ -38,10 +38,10 @@ $_fullname_sql =
 $SEM_TREE_TYPES =
 array();
 
-// Notwendige Config-Einträge für Studentische Arbeitsgruppen
+// Notwendige Config-Einträge für Studiengruppen
 // (Veranstaltungen, die von Autoren angelegt werden können)
-$SEM_TYPE[99]=array("name"=>_("Studentische Arbeitsgruppe"), "class"=>99);
-$SEM_CLASS[99]=array("name"=>_("Studentische Arbeitsgruppen"),
+$SEM_TYPE[99]=array("name"=>_("Studiengruppe"), "class"=>99);
+$SEM_CLASS[99]=array("name"=>_("Studiengruppen"),
 					"studygroup_mode"=>TRUE,
 					"topic_create_autor"=>TRUE,
 					"course_creation_forbidden" => TRUE);

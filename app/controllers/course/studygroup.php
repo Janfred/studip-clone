@@ -36,11 +36,11 @@ class Course_StudygroupController extends AuthenticatedController {
     		// args at position zero is always the studygroup-id
     		if ($args[0]) {
     			if (SeminarCategories::GetBySeminarId($args[0])->studygroup_mode == false) {
-   					throw new Exception(_("Dieses Seminar ist keine Studentische Arbeitsgruppe!"));
+   					throw new Exception(_("Dieses Seminar ist keine Studiengruppe!"));
     			}
     		}
-    		$GLOBALS['CURRENT_PAGE'] =  _('Studentische Arbeitsgruppe bearbeiten');
-            $GLOBALS['HELP_KEYWORD'] = 'Basis.StudentischeArbeitsgruppen';
+    		$GLOBALS['CURRENT_PAGE'] =  _('Studiengruppe bearbeiten');
+            $GLOBALS['HELP_KEYWORD'] = 'Basis.Studiengruppen';
         } else {
             throw new Exception(_("Die von Ihnen gewählte Option ist im System nicht aktiviert."));
         }
@@ -52,7 +52,7 @@ class Course_StudygroupController extends AuthenticatedController {
 	function details_action( $id ) {
 		global $perm;
 
-		$GLOBALS['CURRENT_PAGE'] = getHeaderLine($id).' - '._('Arbeitsgruppendetails');
+		$GLOBALS['CURRENT_PAGE'] = getHeaderLine($id).' - '._('Studiengruppendetails');
 
 		$stmt = DBManager::get()->prepare("SELECT * FROM admission_seminar_user 
 			WHERE user_id = ? AND seminar_id = ?");
@@ -79,7 +79,7 @@ class Course_StudygroupController extends AuthenticatedController {
 	function new_action()
 	{
 		closeObject();
-		$GLOBALS['CURRENT_PAGE'] =  _('Arbeitsgruppe anlegen');
+		$GLOBALS['CURRENT_PAGE'] =  _('Studiengruppe anlegen');
 		
 		$this->terms = Config::GetInstance()->getValue('STUDYGROUP_TERMS');
 		$this->available_modules = StudygroupModel::getAvailableModules();
@@ -101,7 +101,7 @@ class Course_StudygroupController extends AuthenticatedController {
 			$pdo = DBManager::get();
 			$stmt = $pdo->query($query = "SELECT * FROM seminare WHERE name = ". $pdo->quote(Request::get('groupname')));
 			if ($stmt->fetch()) {
-				$errors[] = _("Eine Veranstaltung/Arbeitsgruppe mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen");
+				$errors[] = _("Eine Veranstaltung/Studiengruppe mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen");
 			}
 		}
 
@@ -131,7 +131,7 @@ class Course_StudygroupController extends AuthenticatedController {
 				$sem->admission_prelim = 0;
 			} else {
 				$sem->admission_prelim = 1;
-				$sem->admission_prelim_txt = _("Die ModeratorInnen der Arbeitsgruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
+				$sem->admission_prelim_txt = _("Die ModeratorInnen der Studiengruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
 			}
 			$sem->admission_endtime=-1;
 			$sem->admission_binding=0;
@@ -195,7 +195,7 @@ class Course_StudygroupController extends AuthenticatedController {
 		if ($perm->have_studip_perm('dozent',$id)) {
 
 			$this->reiter_view = '_studygroup_admin';
-			$GLOBALS['CURRENT_PAGE'] = getHeaderLine($id).' - '._('Arbeitsgruppe bearbeiten');
+			$GLOBALS['CURRENT_PAGE'] = getHeaderLine($id).' - '._('Studiengruppe bearbeiten');
 			$sem                      = new Seminar($id);
 			$this->sem_id            = $id;
 			$this->sem               = $sem;
@@ -226,7 +226,7 @@ class Course_StudygroupController extends AuthenticatedController {
 				$pdo = DBManager::get();
 				$stmt = $pdo->query($query = "SELECT * FROM seminare WHERE name = ". $pdo->quote(Request::get('groupname')) ." AND Seminar_id != ". $pdo->quote( $id ));
 				if ($stmt->fetch()) {
-					$errors[] = _("Eine Veranstaltung/Arbeitsgruppe mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen");
+					$errors[] = _("Eine Veranstaltung/Studiengruppe mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen");
 				}
 			}
 
@@ -251,7 +251,7 @@ class Course_StudygroupController extends AuthenticatedController {
 					$sem->admission_prelim = 0;
 				} else {
 					$sem->admission_prelim = 1;
-					$sem->admission_prelim_txt = _("Die ModeratorInnen der Arbeitsgruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
+					$sem->admission_prelim_txt = _("Die ModeratorInnen der Studiengruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
 				}
 
 				$sem->store();
@@ -360,7 +360,7 @@ class Course_StudygroupController extends AuthenticatedController {
 
 				$template->set_attribute('approvalLink', $this->url_for('/course/studygroup/delete/'. $id. '/true/'. get_ticket()));
 				$template->set_attribute('disapprovalLink', $this->url_for('/course/studygroup/edit/'. $id));
-				$template->set_attribute('question', _("Sind Sie sicher, dass Sie diese Arbeitsgruppe löschen möchten?"));
+				$template->set_attribute('question', _("Sind Sie sicher, dass Sie diese Studiengruppe löschen möchten?"));
 
 				$this->flash['question'] = $template->render();
 				$this->redirect('course/studygroup/edit/'. $id);
@@ -375,12 +375,12 @@ class Course_StudygroupController extends AuthenticatedController {
 
 
 	/**
-	 * Globale Einstellungen -> Studentische Arbeitsgruppen. Hier wird die Ansicht gebaut.
+	 * Globale Einstellungen -> Studiengruppen. Hier wird die Ansicht gebaut.
 	 */
 	function globalmodules_action() {
 		global $perm;
 		$perm->check("root");
-        $GLOBALS['HELP_KEYWORD'] = 'Admin.StudentischeArbeitsgruppen';
+        $GLOBALS['HELP_KEYWORD'] = 'Admin.Studiengruppen';
 		
 		// get available modules
 		$modules = StudygroupModel::getInstalledModules() + StudygroupModel::getInstalledPlugins();
@@ -395,7 +395,7 @@ class Course_StudygroupController extends AuthenticatedController {
 
 
 		// set variables for view
-		$this->current_page = _("Verwaltung erlaubter Module und Plugins für Studentische Arbeitsgruppen");
+		$this->current_page = _("Verwaltung erlaubter Module und Plugins für Studiengruppen");
 		$this->tabs         = 'links_admin';
 		$this->modules      = $modules;
 		$this->enabled      = $enabled;
@@ -407,13 +407,13 @@ class Course_StudygroupController extends AuthenticatedController {
 	}
 	
 	/**
-	 * Globale Einstellungen -> Studentische Arbeitsgruppen. Hier werden die Einstellungen gespeichert
+	 * Globale Einstellungen -> Studiengruppen. Hier werden die Einstellungen gespeichert
 	 * und danach wird weitergeleitet zur globalmodules_action
 	 */
 	function savemodules_action() {
 		global $perm;
 		$perm->check("root");
-        $GLOBALS['HELP_KEYWORD'] = 'Admin.StudentischeArbeitsgruppen';
+        $GLOBALS['HELP_KEYWORD'] = 'Admin.Studiengruppen';
 		
 		$err=0;
 		if (Request::quoted('institute')=='invalid') $err=1;
@@ -426,8 +426,8 @@ class Course_StudygroupController extends AuthenticatedController {
 		} else {				
 			$cfg=new Config("STUDYGROUPS_ENABLE");
 			if ($cfg->getValue()==FALSE) {
-				$cfg->setValue(TRUE,"STUDYGROUPS_ENABLE","Studentische Arbeitsgruppen");
-				$this->flash['success'] = _("Die Studentischen Arbeitsgruppen wurden aktiviert.");
+				$cfg->setValue(TRUE,"STUDYGROUPS_ENABLE","Studiengruppen");
+				$this->flash['success'] = _("Die Studiengruppen wurden aktiviert.");
 			}
 
 			if ( is_array($_REQUEST['modules']) ) {
@@ -453,17 +453,17 @@ class Course_StudygroupController extends AuthenticatedController {
 	function deactivate_action() {
 		global $perm;
 		$perm->check("root");
-        $GLOBALS['HELP_KEYWORD'] = 'Admin.StudentischeArbeitsgruppen';
+        $GLOBALS['HELP_KEYWORD'] = 'Admin.Studiengruppen';
 		$cfg=new Config();
-		$cfg->setValue(FALSE,"STUDYGROUPS_ENABLE","Studentische Arbeitsgruppen");
-		$this->flash['success'] = _("Die Studentischen Arbeitsgruppen wurden deaktiviert.");
+		$cfg->setValue(FALSE,"STUDYGROUPS_ENABLE","Studiengruppen");
+		$this->flash['success'] = _("Die Studiengruppen wurden deaktiviert.");
 		$this->redirect('course/studygroup/globalmodules');
 	}
 	
 	function search_action() {
 		$this->tabs = 'links_seminare';
 		$this->reiter_view = 'studygroups_search';
-		$GLOBALS['CURRENT_PAGE'] =  _('Studentische Arbeitsgruppen suchen');
+		$GLOBALS['CURRENT_PAGE'] =  _('Studiengruppen suchen');
 		$this->groups = StudygroupModel::getAllGroups();
 	}
 }

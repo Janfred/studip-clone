@@ -569,7 +569,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 					echo '<span style="color:red">';    // red color for new metadates
 				if ($studygroup_mode) {
 					echo htmlReady($values['semname']);
-					echo ' ('. _("Studentische Arbeitsgruppe");
+					echo ' ('. _("Studiengruppe");
 					if ($values['prelim']) echo ', '. _("geschlossen");
 					echo ')';
 				} else {
@@ -672,7 +672,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			
 			$seminar_name = $db->f("Name");
 			if(SeminarCategories::GetByTypeId($db->f('sem_status'))->studygroup_mode){
-				$seminar_name .= ' ('. _("Studentische Arbeitsgruppe");
+				$seminar_name .= ' ('. _("Studiengruppe");
 				$seminar_name .= ', '. _("geschlossen");
 				$seminar_name .= ')';
 			}

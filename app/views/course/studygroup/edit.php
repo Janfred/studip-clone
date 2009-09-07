@@ -3,11 +3,11 @@ $infobox = array();
 $infobox['picture'] = StudygroupAvatar::getAvatar($sem_id)->getUrl(Avatar::NORMAL);
 
 $aktionen[] = array(
-	"text" => '<a href="'.$controller->url_for('course/studygroup/new').'">'._('Neue Arbeitsgruppe anlegen').'</a>',
+	"text" => '<a href="'.$controller->url_for('course/studygroup/new').'">'._('Neue Studiengruppe anlegen').'</a>',
 	"icon" => "icon-cont.gif"
 );
 $aktionen[] = array(
-	"text" => '<a href="'.$controller->url_for('course/studygroup/delete/'.$sem_id).'">'._('Diese Arbeitsgruppe löschen').'</a>',
+	"text" => '<a href="'.$controller->url_for('course/studygroup/delete/'.$sem_id).'">'._('Diese Studiengruppe löschen').'</a>',
 	"icon" => "trash.gif"
 );
 
@@ -41,7 +41,7 @@ $infobox['content'] = array(
 ?>
 
 <?= $this->render_partial("course/studygroup/_feedback") ?>
-<h1><?= _("Arbeitsgruppe bearbeiten") ?></h1>
+<h1><?= _("Studiengruppe bearbeiten") ?></h1>
 
 <form action="<?= $controller->url_for('course/studygroup/update/'.$sem_id) ?>" method=post>
 

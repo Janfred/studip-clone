@@ -10,7 +10,7 @@
 	<? if ($this->studygroup_mode) : ?>
     <a href="<?= URLHelper::getLink('dispatch.php/course/studygroup/edit/' . $course_id) ?>">
       <?= Assets::img('forumgruen.gif', array('style' => 'vertical-align: baseline;')) ?>
-      <?= _("zurück zur Arbeitsgruppenadministration") ?>
+      <?= _("zurück zur Studiengruppenadministration") ?>
     </a>
 	<? else: ?>
     <a href="<?= URLHelper::getLink('admin_seminare1.php?s_id=' . $course_id) ?>">

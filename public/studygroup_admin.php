@@ -50,10 +50,10 @@ $messages=array();
 
 if ($_REQUEST['cmd']=='edit') {
 	$editmode=1;
-	$CURRENT_PAGE = _("Arbeitsgruppe bearbeiten");
+	$CURRENT_PAGE = _("Studiengruppe bearbeiten");
 } else {
 	$createmode=1;
-	$CURRENT_PAGE = _("Arbeitsgruppe anlegen");
+	$CURRENT_PAGE = _("Studiengruppe anlegen");
 }
 
 if ($createmode && $_REQUEST['group_new']) {
@@ -64,7 +64,7 @@ if ($createmode && $_REQUEST['group_new']) {
 		$db=new DB_Seminar();
 		$db->query("SELECT * FROM seminare WHERE name='".$_REQUEST['groupname']."'");
 		if ($db->nf()) {
-			$messages[]=array("error",_("Eine Veranstaltung/Arbeitsgruppe mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen"));
+			$messages[]=array("error",_("Eine Veranstaltung/Studiengruppe mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen"));
 		}
 	}
 	if (!$_REQUEST['grouptermsofuse_ok']) {
@@ -89,7 +89,7 @@ if ($createmode && $_REQUEST['group_new']) {
 			$sem->admission_prelim=0;
 		} else {
 			$sem->admission_prelim=1;
-			$sem->admission_prelim_txt=_("Die ModeratorInnen der Arbeitsgruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
+			$sem->admission_prelim_txt=_("Die ModeratorInnen der Studiengruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
 		}
 		$sem->admission_endtime=-1;
 		$sem->admission_binding=0;

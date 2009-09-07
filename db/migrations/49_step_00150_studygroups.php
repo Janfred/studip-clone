@@ -25,7 +25,7 @@ class Step00150Studygroups extends Migration
 			`comment`, `message_template` )
 			VALUES ( MD5( 'STUDYGROUPS_ENABLE' ) , '', 'STUDYGROUPS_ENABLE',
 			'0', '1', 'boolean', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) ,
-			'Studentische Arbeitsgruppen', '', '')");
+			'Studiengruppen', '', '')");
 		
 		$terms = "Mir ist bekannt, dass ich die Gruppe nicht zu rechtswidrigen Zwecken nutzen darf. Dazu zählen u.a. Urheberrechtsverletzungen, Beleidigungen und andere Persönlichkeitsdelikte.
 

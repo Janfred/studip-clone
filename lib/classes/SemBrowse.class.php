@@ -452,7 +452,7 @@ class SemBrowse {
 						$seminar_number = key($sem_data[$seminar_id]['VeranstaltungsNummer']);
 
 						if ($studygroup_mode) {
-							$sem_name .= ' ('. _("Studentische Arbeitsgruppe");
+							$sem_name .= ' ('. _("Studiengruppe");
 							if ($seminar_obj->admission_prelim) $sem_name .= ', '. _("Zutritt auf Anfrage");
 							$sem_name .= ')';
 							echo '<td width="1%" class="steel1">';
@@ -666,7 +666,7 @@ class SemBrowse {
 						// is this sem a studygroup?
 					    $studygroup_mode = SeminarCategories::GetByTypeId($seminar_obj->getStatus())->studygroup_mode;
 						if ($studygroup_mode) {
-							$sem_name = $seminar_obj->getName() . ' ('. _("Studentische Arbeitsgruppe");
+							$sem_name = $seminar_obj->getName() . ' ('. _("Studiengruppe");
 							if ($seminar_obj->admission_prelim) $sem_name .= ', '. _("Zutritt auf Anfrage");
 							$sem_name .= ')';
 						}
