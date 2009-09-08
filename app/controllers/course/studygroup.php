@@ -163,11 +163,14 @@ class Course_StudygroupController extends AuthenticatedController {
 			$available_modules = StudygroupModel::getAvailableModules();
 
 			foreach ($_REQUEST['groupmodule'] as $key => $enable) {
+				if ($key=='schedule') continue; // no schedule for studygroups 
 				if ($available_modules[$key] && $enable) {
 					$mods->setBit($bitmask, $mods->registered_modules[$key]["id"]);
 				}
 			}
-
+			// always activate participants list
+			$mods->setBit($bitmask, $mods->registered_modules["participants"]["id"]);
+			
 			$sem->modules=$bitmask;
 			$sem->store();
 

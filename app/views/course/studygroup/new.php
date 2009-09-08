@@ -34,9 +34,11 @@ $infobox['content'] = array(
   <td style='text-align:right; vertical-align:top;'><?= _("Module:") ?></td>
   <td>
     <? foreach($available_modules as $key => $name) : ?>
-    <label>
-        <input name="groupmodule[<?= $key ?>]" type="checkbox" <?= ($this->flash['request']['groupmodule'][$key]) ? 'checked="checked"' : '' ?>> <?= $name ?>
-    </label><br>
+	    <? if ($key != 'participants') :?>
+	    <label>
+	        <input name="groupmodule[<?= $key ?>]" type="checkbox" <?= ($this->flash['request']['groupmodule'][$key]) ? 'checked="checked"' : '' ?>> <?= $name ?>
+	    </label><br>
+	    <? endif; ?>
     <? endforeach; ?>
 
     <? if ($GLOBALS['PLUGINS_ENABLE']) : ?>
