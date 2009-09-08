@@ -130,7 +130,7 @@ class StudygroupModel {
 			$accept_user_id = $data['user_id'];
 
 			DBManager::get()->query("INSERT INTO seminar_user SET user_id='".$accept_user_id."', seminar_id='".$sem_id."',
-				status='autor', position=0, gruppe=0, admission_studiengang_id=0, notification=0, mkdate=NOW(), comment='', visible='yes'");
+				status='autor', position=0, gruppe=8, admission_studiengang_id=0, notification=0, mkdate=NOW(), comment='', visible='yes'");
 
 			DBManager::get()->query("DELETE FROM admission_seminar_user WHERE user_id='".$accept_user_id."' AND seminar_id='".$sem_id."'");
 		}

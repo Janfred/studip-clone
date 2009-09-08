@@ -148,13 +148,14 @@ class Course_StudygroupController extends AuthenticatedController {
 			$userid=$GLOBALS['auth']->auth['uid'];
 
 			// insert dozent
-			$q="INSERT INTO seminar_user SET seminar_id='$semid', user_id='$userid', status='dozent'";
-			$db=new DB_Seminar();
-			$db->query($q);
-            
+			DBManager::get()->query("INSERT INTO seminar_user SET ".
+			                        "seminar_id='$semid', ".
+									"user_id='$userid', ".
+									"status='dozent', ".
+									"gruppe=8");
+			
             // now add the studygroup_dozent dozent who's supposed to be invisible 
-            $q="INSERT INTO seminar_user SET seminar_id='$semid', user_id=MD5('studygroup_dozent'), status='dozent', visible='no'";
-            $db->query($q);
+            DBManager::get()->query("INSERT INTO seminar_user SET seminar_id='$semid', user_id=MD5('studygroup_dozent'), status='dozent', visible='no'");
             
 			$mods=new Modules();
 			$bitmask=0;

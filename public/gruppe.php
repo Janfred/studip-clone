@@ -85,7 +85,7 @@ IF ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 	<th width="90%"><?=_("Veranstaltung")?></th>
 
 <?
-FOR ($i=0; $i<8; $i++)
+FOR ($i=0; $i<9; $i++)
 	ECHO "<th class=\"gruppe".$i."\" >&nbsp;<img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" height=\"15px\" width=\"20px\"></th>";
 	ECHO "</tr>";
 	$group_field = $_my_sem_group_field;
@@ -160,7 +160,7 @@ FOR ($i=0; $i<8; $i++)
 				printf("<tr><td class=\"$class\"><font size=\"-1\">&nbsp;<a href=\"seminar_main.php?auswahl=%s\">%s</a>%s</font></td>",
 				$member['seminar_id'] ,htmlReady(my_substr($values["name"],0,70)),
 				(!$values["visible"] ? "&nbsp;" . _("(versteckt)")  : ""));
-				FOR ($i=0; $i<8; $i++)
+				FOR ($i=0; $i<9; $i++)
 				{
 					ECHO "<td class=\"gruppe".$i."\"><INPUT type=radio name=gruppe[".$member['seminar_id']."] value=".$i;
 					IF ($values["gruppe"]==$i) ECHO " checked";
