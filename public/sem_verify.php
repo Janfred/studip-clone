@@ -237,7 +237,8 @@ $db6=new DB_Seminar;
 	   	die;
 	}
 
-	$group = select_group ($current_seminar->semester_start_time, $user->id);
+	// get colour group (used for grouping in meine_seminar.php, can be changed by user)
+	$group = $current_seminar->getDefaultGroup();
 
 	//check stuff for admission
 	check_admission();

@@ -1884,6 +1884,27 @@ class Seminar {
 		return $this->read_level == 0 && $this->visible == 1;
 	}
 	
+	/**
+	 * @return boolean	returns TRUE if this course is a studygroup,
+	 * 					FALSE otherwise
+	 */
+	function isStudygroup() {
+		global $SEM_CLASS, $SEM_TYPE;
+		return $SEM_CLASS[$SEM_TYPE[$this->status]["class"]]["studygroup_mode"];
+	}
+	
+	/**
+	 * @return int		returns default colour group for new members (shown in meine_seminare.php)
+	 * 
+	 **/
+	function getDefaultGroup() {
+		if ($this->isStudygroup()) {
+			return 8;
+		} else {
+			return select_group ($this->semester_start_time);
+		}
+	}
+	
 	
 	/**
 	 *  Deletes the current seminar
