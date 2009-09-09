@@ -469,6 +469,49 @@ if (!isset($details) || isset($set)) {
 					my_error("<b>" . _("ROOTs k&ouml;nnen nicht berufen werden!") . "</b>");
 				elseif ($db3->f("perms") == "admin") {
 					if ($perm->have_perm("root") || (!$SessSemName["is_fak"] && $perm->have_studip_perm("admin",$SessSemName["fak"]))) {
+					    
+					    // Emails schreiben...
+						if($_POST['enable_mail_admin'] == "admin" && $_POST['enable_mail_dozent'] == "dozent"){
+							$in = "'admin','dozent'";
+							$wem = "Admins und Dozenten";
+						}else if($_POST['enable_mail_admin'] == "admin"){
+							$in = "'admin'";
+							$wem = "Admins";
+						}else if($_POST['enable_mail_dozent'] == "dozent"){
+							$in = "'dozent'";
+							$wem = "Dozenten";
+						}
+						if($in != ""){
+							$i=0;
+							$notin = array();
+							
+							$db->query(sprintf("SELECT Name FROM Institute WHERE Institut_id = '%s' ",$ins_id));
+							if($db->next_record())
+								$instname = $db->f("Name");
+							$vorname = $Fullname;
+							//$nachname = siehe $vorname
+							
+							$db->query(sprintf("SELECT a.user_id,b.Vorname,b.Nachname,b.Email FROM user_inst a INNER JOIN auth_user_md5 b ON a.user_id = b.user_id WHERE a.Institut_id = '%s' AND a.inst_perms IN (%s)",$ins_id,$in));
+							while($db->next_record()){
+								$user_language = getUserLanguagePath($db->f('user_id'));
+								include("locale/$user_language/LC_MAILS/new_admin_mail.inc.php");
+								StudipMail::sendMessage($db->f('Email'), $subject, $mailbody);
+								$notin[$i] = $db->f('user_id'); $i++;
+							}
+							if($in != "'dozent'"){
+								//Noch ein paar Mails für die Fakultätsadmins
+								$db->query(sprintf("SELECT a.user_id,b.Vorname,b.Nachname,b.Email FROM user_inst a INNER JOIN auth_user_md5 b ON a.user_id = b.user_id WHERE a.user_id NOT IN ('%s','%s') AND a.Institut_id IN (SELECT fakultaets_id FROM Institute WHERE Institut_id = '%s' AND fakultaets_id !=  Institut_id) AND a.inst_perms = 'admin'",implode("','",$notin),$u_id,$ins_id));
+								while($db->next_record()){
+									$user_language = getUserLanguagePath($db->f('user_id'));
+									include("locale/$user_language/LC_MAILS/new_admin_mail.inc.php");
+									StudipMail::sendMessage($db->f('Email'), $subject, $mailbody);
+									$i++;
+								}
+							}
+							my_msg("<b>" . sprintf(_("Es wurden ingesamt %s Mails an die %s der Einrichtung geschickt."),$i,$wem) . "</b>");
+						}
+					    
+					    
 					    // als admin aufnehmen
 					    $db2->query("INSERT into user_inst (user_id, Institut_id, inst_perms) values ('$u_id', '$ins_id', 'admin')");
 					    my_msg("<b>" . sprintf(_("%s wurde als \"admin\" in die Einrichtung aufgenommen."), $Fullname) . "</b>");
@@ -584,6 +627,9 @@ if ($inst_id != "" && $inst_id !="0") {
 								?>
 								</select>&nbsp;
 							<input type="hidden" name="ins_id" value="<?= $inst_id ?>"><br />
+							<b><?=_("Folgende nur bei Zuordnung eines Admins:")?></b><br>
+							<input type="checkbox" id="enable_mail_admin" name="enable_mail_admin" value="admin"><label for="enable_mail_admin" ><?=_("Admins der Einrichtung benachrichtigen")?></label><br>
+							<input type="checkbox" id="enable_mail_dozent" name="enable_mail_dozent" value="dozent"><label for="enable_mail_dozent" ><?=_("Dozenten der Einrichtung benachrichtigen")?></label><br>
 							<input type="IMAGE" name="berufen" <?=makeButton("hinzufuegen", "src")?> border=0 value="<?=_("berufen")?>">
 						<? } ?>
 							<input type="IMAGE" name="reset" <?=makeButton("neuesuche", "src")?> border=0 value="<?=_("Neue Suche")?>">

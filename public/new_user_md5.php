@@ -111,13 +111,30 @@ if (check_ticket($_REQUEST['studipticket'])){
 								$wem = "Dozenten";
 							}
 							if($in != "" && $perms[0] == "admin"){
-								$db->query(sprintf("SELECT a.user_id,b.Vorname,b.Nachname,b.Email,c.geschlecht FROM user_inst a INNER JOIN auth_user_md5 b ON a.user_id = b.user_id INNER JOIN user_info c ON a.user_id = c.user_id  WHERE a.Institut_id = '%s' AND a.inst_perms IN (%s) AND a.user_id != '%s' ",$_REQUEST['select_inst_id'],$in,$UserManagement->user_data['auth_user_md5.user_id']));
+								$i=0;
+								$notin = array();
+								$instname = htmlReady($inst_name);
+								$vorname = $UserManagement->user_data['auth_user_md5.Vorname'];
+								$nachname = $UserManagement->user_data['auth_user_md5.Nachname'];
+								
+								$db->query(sprintf("SELECT a.user_id,b.Vorname,b.Nachname,b.Email FROM user_inst a INNER JOIN auth_user_md5 b ON a.user_id = b.user_id WHERE a.Institut_id = '%s' AND a.inst_perms IN (%s) AND a.user_id != '%s' ",$_REQUEST['select_inst_id'],$in,$UserManagement->user_data['auth_user_md5.user_id']));
 								while($db->next_record()){
 									$user_language = getUserLanguagePath($db->f('user_id'));
 									include("locale/$user_language/LC_MAILS/new_admin_mail.inc.php");
 									StudipMail::sendMessage($db->f('Email'), $subject, $mailbody);
+									$notin[$i] = $db->f('user_id'); $i++;
 								}
-								$UserManagement->msg .= "msg§" . sprintf(_("Es wurden ingesamt %s Mails an die %s der Einrichtung \"%s\" geschickt."),$db->num_rows(),$wem,htmlReady($inst_name)) . "§";
+								if($in != "'dozent'"){
+									//Noch ein paar Mails für die Fakultätsadmins
+									$db->query(sprintf("SELECT a.user_id,b.Vorname,b.Nachname,b.Email FROM user_inst a INNER JOIN auth_user_md5 b ON a.user_id = b.user_id WHERE a.user_id NOT IN ('%s','%s') AND  a.Institut_id IN (SELECT fakultaets_id FROM Institute WHERE Institut_id = '%s' AND fakultaets_id !=  Institut_id) AND a.inst_perms = 'admin' AND a.user_id != '%s' ",implode("','",$notin),$UserManagement->user_data['auth_user_md5.user_id'],$_REQUEST['select_inst_id'],$UserManagement->user_data['auth_user_md5.user_id']));
+									while($db->next_record()){
+										$user_language = getUserLanguagePath($db->f('user_id'));
+										include("locale/$user_language/LC_MAILS/new_admin_mail.inc.php");
+										StudipMail::sendMessage($db->f('Email'), $subject, $mailbody);
+										$i++;
+									}
+								}
+								$UserManagement->msg .= "msg§" . sprintf(_("Es wurden ingesamt %s Mails an die %s der Einrichtung \"%s\" geschickt."),$i,$wem,htmlReady($inst_name)) . "§";
 							}
 							$UserManagement->msg .= "msg§" . sprintf(_("Benutzer in Einrichtung \"%s\" mit dem Status \"%s\" eingetragen."), htmlReady($inst_name), $UserManagement->user_data['auth_user_md5.perms']) . "§";
 						} else {
@@ -456,9 +473,9 @@ if (isset($_GET['details']) || $showform ) {
 				echo chr(10).'<tr><td colspan="2">&nbsp;</td><td><input type="checkbox" id="disable_mail_host_check" name="disable_mail_host_check" value="1" '.($_POST['disable_mail_host_check'] ? 'checked' : '').'><label for="disable_mail_host_check" >'._("Mailboxüberprüfung deaktivieren").'</label></td></tr>';
 			}
 			?>
-			<tr><td colspan="2">&nbsp;</td><td><b>Folgende nur bei Anlage eines Admins:</b></td></tr>
-			<tr><td colspan="2">&nbsp;</td><td><input type="checkbox" id="enable_mail_admin" name="enable_mail_admin" value="admin"><label for="enable_mail_admin" >Admins der Einrichtung benachrichtigen</label></td></tr>
-			<tr><td colspan="2">&nbsp;</td><td><input type="checkbox" id="enable_mail_dozent" name="enable_mail_dozent" value="dozent"><label for="enable_mail_dozent" >Dozenten der Einrichtung benachrichtigen</label></td></tr>
+			<tr><td colspan="2">&nbsp;</td><td><b><?=_("Folgende nur bei Anlage eines Admins:")?></b></td></tr>
+			<tr><td colspan="2">&nbsp;</td><td><input type="checkbox" id="enable_mail_admin" name="enable_mail_admin" value="admin"><label for="enable_mail_admin" ><?=_("Admins der Einrichtung benachrichtigen")?></label></td></tr>
+			<tr><td colspan="2">&nbsp;</td><td><input type="checkbox" id="enable_mail_dozent" name="enable_mail_dozent" value="dozent"><label for="enable_mail_dozent" ><?=_("Dozenten der Einrichtung benachrichtigen")?></label></td></tr>
 				<tr>
 				<td colspan=3 align=center>&nbsp;
 				<input type="image" name="create" <?=makeButton("anlegen", "src")?> value="<?=_("Benutzer anlegen")?>" alt="anlegen">
