@@ -50,7 +50,7 @@ require_once 'lib/classes/StudipLitList.class.php';
 init_i18n($_SESSION['_language']);
 
 $db = DBManager::get();
-$file_id = escapeshellcmd(basename(Request::option('file_id')));
+$file_id = escapeshellcmd(basename(Request::get('file_id')));
 $type = Request::int('type');
 if($type < 0 || $type > 7) $type = 0;
 
