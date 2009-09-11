@@ -980,9 +980,7 @@ div.modaldialog {
 
 /* --- MessageBoxes --------------------------------------------------------- */
 div.messagebox {
-    margin: 0px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin: 5px;
     background-repeat: no-repeat;
     background-position: 10px 10px;
     padding: 15px 15px 15px 55px;
@@ -1025,6 +1023,10 @@ div.messagebox_exception {
     color: #ff0400;
     background-color: #ffbaba;
     background-image: url("../images/icons/icon_exception.png");
+}
+
+#index .messagebox {
+  margin: 5px 0;
 }
 
 /* --- Quicksearch ---------------------------------------------------------- */

@@ -83,7 +83,7 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && ($auth->is_authenticated() && $user-
 $HELP_KEYWORD="Basis.Startseite"; // set keyword for new help
 $CURRENT_PAGE = _("Startseite");
 // Start of Output
-
+$GLOBALS['body_id'] = 'index';
 include 'lib/include/html_head.inc.php'; // Output of html head
 include 'lib/include/header.php';
 
