@@ -187,4 +187,17 @@ class StudygroupModel {
        
         return $founder; 
     }
+    
+    
+    function isMember ( $userid, $semid)
+    {
+        $sql = "SELECT * FROM `seminar_user` WHERE Seminar_id = '{$semid}' AND user_id = '{$userid}'";  
+
+        $stmt = DBManager::get()->query($sql);
+        $res= $stmt->fetch();
+        
+        return (is_array($res));
+       
+    }
+    
 }

@@ -71,7 +71,8 @@ th {
         <th width="10%" class="date-<?=$GLOBALS['_language']?> sortfirstdesc"><?= _("gegründet") ?></th>
         <th width="5%"><?= _("Mitglieder") ?></th>
         <th width="15%"><?= _("GründerIn") ?></th>
-        <th width="10%"><?= _("Zugang") ?></th>
+        <th width="5%"><?= _("Mitglied") ?></th>
+        <th width="5%"><?= _("Zugang") ?></th>
     </tr>
 
     <? foreach ($groups as $group) : ?>
@@ -90,6 +91,11 @@ th {
                 <? $founder = StudygroupModel::getFounder($group['Seminar_id']);?>
                 <img src="<?=Avatar::getAvatar($founder['user_id'])->getUrl(Avatar::SMALL);?>" style="vertical-align:middle;">
                 <a href="<?=URLHelper::getlink('about.php?username='.$founder['uname'])?>"><?=htmlready($founder['fullname'])?></a>
+            </td>
+            <td align="center">
+                <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )) :?>
+                    <?=Assets::img("members.png",array('title' => _('Sie sind Mitglied in dieser Gruppe')))?>
+                <? endif;?>
             </td>
             <td align="center">
                 <? if ($group['admission_prelim'] == 1) :?>

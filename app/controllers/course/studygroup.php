@@ -469,5 +469,6 @@ class Course_StudygroupController extends AuthenticatedController {
 		$this->reiter_view = 'studygroups_search';
 		$GLOBALS['CURRENT_PAGE'] =  _('Studiengruppen suchen');
 		$this->groups = StudygroupModel::getAllGroups();
+		$this->userid = $GLOBALS['auth']->auth['uid'];
 	}
 }
