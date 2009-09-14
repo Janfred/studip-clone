@@ -21,40 +21,18 @@ interface StandardPlugin {
    *
    * @return void
    */
-  function setId($newid);
-
-  /**
-   * Hat sich seit dem letzten Login etwas geändert?
-   *
-   * @param  type       letzter Loginzeitpunkt des Benutzers
-   *
-   * @return boolean    <description>
-   */
-  function hasChanged($lastlogin);
-
-  /**
-   * Nachricht für tooltip in der Übersicht
-   *
-   * @param  type       letzter Loginzeitpunkt des Benutzers; optional,
-   *                    default: false
-   *
-   * @return string     <description>
-   */
-  function getOverviewMessage($has_changed = FALSE);
+  function setId($id);
 
   /**
    * Wird dieses Plugin in der Übersicht angezeigt?
+   * Hat sich seit dem letzten Login etwas geändert?
    *
-   * @return boolean    <description>
-   */
-  function isShownInOverview();
-
-  /**
-   * <MethodDescription>
+   * @param  string     gewählter Kurs bzw. Einrichtung
+   * @param  int        letzter Loginzeitpunkt des Benutzers
    *
-   * @return string     <description>
+   * @return Navigation <description>
    */
-  function getChangeindicatoriconname();
+  function getIconNavigation($semid, $lastlogin);
 
   /**
    * returns the score which the current user get's for activities in this

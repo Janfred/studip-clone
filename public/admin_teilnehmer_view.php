@@ -35,11 +35,12 @@ require_once ("config/config.inc.php");		//We need the config for some parameter
 require_once ("lib/classes/Table.class.php");
 require_once ("lib/classes/ZebraTable.class.php");
 
+$CURRENT_PAGE = _("Teilnehmeransicht konfigurieren"); 
+Navigation::activateItem('/admin/config/member_view');
+
 // Start  of Output
 include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php");   //hier wird der "Kopf" nachgeladen
-
-include ("lib/include/links_admin.inc.php");
 
 $cssSw=new cssClassSwitcher;
 

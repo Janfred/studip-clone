@@ -41,7 +41,6 @@ if ($i_page == "calendar.php")
 {
 	include('lib/include/html_head.inc.php');
 	include('lib/include/header.php');
-	include('lib/include/links_sms.inc.php');
 }
 
 

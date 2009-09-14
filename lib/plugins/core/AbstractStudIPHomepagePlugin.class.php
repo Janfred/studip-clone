@@ -20,13 +20,31 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
 
 	function AbstractStudIPHomepagePlugin(){
 		parent::AbstractStudIPLegacyPlugin();
-		$this->requesteduser = null;
 		$this->status_showOverview = 1;
 	}
 
 	/**
-	 * Used to show an overview on the homepage of a user.
+	 * Sets the navigation of this plugin.
 	 *
+	 * @deprecated
+	 */
+	function setNavigation(StudipPluginNavigation $navigation) {
+		// prepend copy of navigation to its sub navigation
+		$first_item_name = key($navigation->getSubNavigation());
+		$navigation_copy = clone $navigation;
+		$navigation_copy->clearSubmenu();
+		$navigation->insertSubNavigation('self', $first_item_name, $navigation_copy);
+		$navigation->setTitle($this->getDisplayTitle());
+
+		parent::setNavigation($navigation);
+
+		if (Navigation::hasItem('/homepage')) {
+			Navigation::addItem('/homepage/' . $this->getPluginclassname(), $navigation);
+		}
+	}
+
+	/**
+	 * Used to show an overview on the homepage of a user.
 	 */
 	function showOverview(){
 		// has to be implemented
@@ -39,6 +57,7 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
 	function getStatusShowOverviewPage(){
 		return $this->status_showOverview;
 	}
+
 	function setStatusShowOverviewPage($status){
 		$oldstatus = $this->status_showOverview;
 		$this->status_showOverview = $status;
@@ -49,11 +68,11 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
 	/**
 	 * Set the user for which the homepage is rendered
 	 *
-	 * @param unknown_type $newuser
+	 * @param unknown_type $user
 	 */
-	function setRequestedUser($newuser){
-		if (is_a($newuser,"StudIPUser") || is_subclass_of($newuser,"StudIPUser")){
-			$this->requesteduser = $newuser;
+	function setRequestedUser($user){
+		if ($user instanceof StudIPUser) {
+			$this->requesteduser = $user;
 		}
 	}
 
@@ -63,7 +82,7 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
 
 
   /**
-   * This abstract method sets everything up to perform the given action and
+   * This method sets everything up to perform the given action and
    * displays the results or anything you want to.
    *
    * @param  string the name of the action to accomplish
@@ -71,57 +90,18 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
    * @return void
    */
   function display_action($action) {
-    $username = isset($_GET['username']) ?
-                      $_GET['username'] : $GLOBALS["auth"]->auth["uname"];
-
+    $username = Request::quoted('username', $GLOBALS['auth']->auth['uname']);
     $user_id = get_userid($username);
+
     if ($user_id == '') {
-      throw new Exception(_("Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!").
-                          _("Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers geändert hat oder der Nutzer gelöscht wurde."));
+      throw new Exception(_('Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!').
+                          _('Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers geändert hat oder der Nutzer gelöscht wurde.'));
     }
 
-    $requser = new StudIPUser();
-    $requser->setUserid($user_id);
+    $requser = new StudIPUser($user_id);
     $this->setRequestedUser($requser);
 
-
-    $GLOBALS['CURRENT_PAGE'] = $this->getDisplayTitle();
-
-    include 'lib/include/html_head.inc.php';
-    include 'lib/include/header.php';
-
-    $pluginparams = $_GET["plugin_subnavi_params"];
-
-    $db = new DB_Seminar();
-    $admin_darf = false;
-
-    // Bin ich ein Inst_admin, und ist der user in meinem Inst Tutor oder Dozent?
-    $db->query("SELECT b.inst_perms FROM user_inst AS a LEFT JOIN user_inst AS b USING (Institut_id) WHERE (b.user_id = '$user_id') AND (b.inst_perms = 'autor' OR b.inst_perms = 'tutor' OR b.inst_perms = 'dozent') AND (a.user_id = '{$GLOBALS['user']->id}') AND (a.inst_perms = 'admin')");
-
-    if ($GLOBALS['perm']->have_perm("root"))
-      $admin_darf = true;
-    else if ($GLOBALS["auth"]->auth["uname"] == $username)
-      $admin_darf = true;
-    else if ($db->num_rows())
-      $admin_darf = true;
-    else if ($GLOBALS['perm']->is_fak_admin()) {
-      $db->query("SELECT c.user_id FROM user_inst a LEFT JOIN Institute b ON(a.Institut_id=b.fakultaets_id)  LEFT JOIN user_inst c ON(b.Institut_id=c.Institut_id) WHERE a.user_id='{$GLOBALS['user']->id}' AND a.inst_perms='admin' AND c.user_id='$user_id'");
-      if ($db->next_record())
-        $admin_darf = true;
-    }
-
-    // show the admin tabs if user may edit
-    if ($admin_darf == true) {
-      include 'lib/include/links_about.inc.php';
-    }
-
-    StudIPTemplateEngine::startContentTable();
-    $this->$action($pluginparams);
-    StudIPTemplateEngine::endContentTable();
-
-    // close the page
-    include 'lib/include/html_end.inc.php';
-    page_close();
+    parent::display_action($action);
   }
 }
 ?>

@@ -96,6 +96,13 @@ $GLOBALS['_fullname_sql']['no_title_motto'] = "CONCAT(Vorname ,' ', Nachname,IF(
 //software version - please leave it as it is!
 $SOFTWARE_VERSION = '1.10 alpha svn';
 
+require_once 'lib/navigation/Navigation.php';
+require_once 'lib/navigation/AutoNavigation.php';
+require_once 'lib/navigation/StudipNavigation.php';
+
+// set up global navigation
+Navigation::setRootNavigation(new StudipNavigation(''));
+
 /*classes for database access
 ----------------------------------------------------------------
 please note: Stud.IP uses the class DB_Seminar*/
@@ -545,7 +552,6 @@ class Seminar_Auth extends Auth {
 		require_once('lib/visual.inc.php');
 		require_once('lib/msg.inc.php');
 		require_once('config.inc.php');
-		require_once('lib/classes/HeaderController.class.php');
 
 		global $_language, $_language_path, $fail_count;
 		if (!isset($_language)) {
@@ -570,11 +576,9 @@ class Seminar_Auth extends Auth {
 			$login_template->set_attribute('uname', (isset($this->auth["uname"]) ? $this->auth["uname"] : $_REQUEST['shortcut']));
 			$login_template->set_attribute('self_registration_activated', $GLOBALS['ENABLE_SELF_REGISTRATION']);
 		}
-		$header_controller = new HeaderController();
-		$header_controller->help_keyword = 'Basis.AnmeldungLogin';
-		$header_controller->current_page = _("Login");
-		$header_template =& $GLOBALS['template_factory']->open('header');
-		$header_controller->fillTemplate($header_template);
+		$GLOBALS['HELP_KEYWORD'] = 'Basis.AnmeldungLogin';
+		$header_template = $GLOBALS['template_factory']->open('header');
+		$header_template->current_page = _('Login');
 
 		include 'lib/include/html_head.inc.php';
 		echo $header_template->render();
@@ -672,7 +676,7 @@ class Seminar_Register_Auth extends Seminar_Auth {
 		require_once('lib/language.inc.php');
 		require_once('lib/visual.inc.php');
 		require_once('config.inc.php');
-		require_once('lib/classes/HeaderController.class.php');
+
 		global $_language, $_language_path;
 		// first of all init I18N because seminar_open is not called here...
 		if (!isset($_language)) {
@@ -693,11 +697,9 @@ class Seminar_Register_Auth extends Seminar_Auth {
 			$register_template->set_attribute('title_rear', $_POST['title_rear']);
 			$register_template->set_attribute('geschlecht', $_POST['geschlecht']);
 		}
-		$header_controller = new HeaderController();
-		$header_controller->help_keyword = 'Basis.AnmeldungRegistrierung';
-		$header_controller->current_page = _("Registrierung");
-		$header_template =& $GLOBALS['template_factory']->open('header');
-		$header_controller->fillTemplate($header_template);
+		$GLOBALS['HELP_KEYWORD'] = 'Basis.AnmeldungRegistrierung';
+		$header_template = $GLOBALS['template_factory']->open('header');
+		$header_template->current_page = _('Registrierung');
 
 		include 'lib/include/html_head.inc.php';
 		echo $header_template->render();

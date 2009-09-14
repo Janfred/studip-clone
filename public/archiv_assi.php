@@ -48,6 +48,7 @@ $check_perm = (get_config('ALLOW_DOZENT_ARCHIV') ? 'dozent' : 'admin');
 $perm->check($check_perm);
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+require_once 'lib/admin_search.inc.php';
 
 // -- here you have to put initialisations for the current page
 
@@ -62,10 +63,13 @@ $db4 = new DB_Seminar;
 
 $sess->register("archiv_assi_data");
 $cssSw = new cssClassSwitcher;
+
+Navigation::activateItem('/admin/course/archive');
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php'); // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php'); //Linkleiste fuer admins
+include 'lib/include/admin_search_form.inc.php';
 
 // single delete (a Veranstaltung is open)
 if ($SessSemName[1]) {

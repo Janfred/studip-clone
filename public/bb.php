@@ -26,13 +26,9 @@ $perm->check("root");
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
-// -- here you have to put initialisations for the current page
-// chdir ('/usr/local/httpd/htdocs/studip/');
-
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;

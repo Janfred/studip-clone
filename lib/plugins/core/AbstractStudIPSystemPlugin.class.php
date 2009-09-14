@@ -34,11 +34,26 @@ define('SYSTEM_PLUGIN_STARTPAGE', 2);
 class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin
   implements SystemPlugin {
 
-        var $display_type;
+        protected $display_type;
 
 	function AbstractStudIPSystemPlugin(){
 		parent::AbstractStudIPLegacyPlugin();
 		$this->display_type = SYSTEM_PLUGIN_TOOLBAR;
+	}
+
+
+	function setNavigation(StudipPluginNavigation $navigation) {
+		parent::setNavigation($navigation);
+
+		$navigation->setImage($this->getPluginiconname(),
+				array('title' => $navigation->getTitle()));
+
+		if ($this->getDisplayType(SYSTEM_PLUGIN_TOOLBAR)) {
+			Navigation::addItem('/' . $this->getPluginclassname(), $navigation);
+		}
+		if ($this->getDisplayType(SYSTEM_PLUGIN_STARTPAGE)) {
+			Navigation::addItem('/start/' . $this->getPluginclassname(), $navigation);
+		}
 	}
 
 
@@ -75,7 +90,25 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin
      * define where the plugin will be visible (toolbar and/or start page)
      */
     function setDisplayType ($display_type) {
+        $changes = $this->display_type ^ $display_type;
         $this->display_type = $display_type;
+
+        if ($this->hasNavigation()) {
+            if ($changes & SYSTEM_PLUGIN_TOOLBAR) {
+                if ($this->getDisplayType(SYSTEM_PLUGIN_TOOLBAR)) {
+                    Navigation::addItem('/' . $this->getPluginclassname(), $this->getNavigation());
+                } else {
+                    Navigation::removeItem('/' . $this->getPluginclassname());
+                }
+            }
+            if ($changes & SYSTEM_PLUGIN_STARTPAGE) {
+                if ($this->getDisplayType(SYSTEM_PLUGIN_STARTPAGE)) {
+                    Navigation::addItem('/start/' . $this->getPluginclassname(), $this->getNavigation());
+                } else {
+                    Navigation::removeItem('/start/' . $this->getPluginclassname());
+                }
+            }
+        }
     }
 
 
@@ -85,32 +118,4 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin
     function getDisplayType ($filter = -1) {
         return $this->display_type & $filter;
     }
-
-
-  /**
-   * This abstract method sets everything up to perform the given action and
-   * displays the results or anything you want to.
-   *
-   * @param  string the name of the action to accomplish
-   *
-   * @return void
-   */
-  function display_action($action) {
-
-    $GLOBALS['CURRENT_PAGE'] = $this->getDisplayTitle();
-
-    include 'lib/include/html_head.inc.php';
-    include 'lib/include/header.php';
-
-    $pluginparams = $_GET["plugin_subnavi_params"];
-
-    // let the plugin show its view
-    StudIPTemplateEngine::startContentTable();
-    $this->$action($pluginparams);
-    StudIPTemplateEngine::endContentTable();
-
-    // close the page
-    include 'lib/include/html_end.inc.php';
-    page_close();
-  }
 }

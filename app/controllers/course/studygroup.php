@@ -31,19 +31,17 @@ class Course_StudygroupController extends AuthenticatedController {
 
     		include 'lib/seminar_open.php';
 
-    		$this->tabs = 'links_openobject';
-
-    		// args at position zero is always the studygroup-id
-    		if ($args[0]) {
+		// args at position zero is always the studygroup-id
+		if ($args[0]) {
     			if (SeminarCategories::GetBySeminarId($args[0])->studygroup_mode == false) {
-   					throw new Exception(_("Dieses Seminar ist keine Studiengruppe!"));
-    			}
-    		}
+				throw new Exception(_("Dieses Seminar ist keine Studiengruppe!"));
+			}
+		}
     		$GLOBALS['CURRENT_PAGE'] =  _('Studiengruppe bearbeiten');
-            $GLOBALS['HELP_KEYWORD'] = 'Basis.Studiengruppen';
-        } else {
-            throw new Exception(_("Die von Ihnen gewählte Option ist im System nicht aktiviert."));
-        }
+		$GLOBALS['HELP_KEYWORD'] = 'Basis.Studiengruppen';
+	    } else {
+		throw new Exception(_("Die von Ihnen gewählte Option ist im System nicht aktiviert."));
+	    }
 	}
 
 	/**
@@ -65,7 +63,6 @@ class Course_StudygroupController extends AuthenticatedController {
 			$this->participant = true;
 		} else {
 			$this->participant = false;
-			unset($this->tabs);
 		}
 
 		$this->studygroup = new Seminar( $id );
@@ -85,7 +82,7 @@ class Course_StudygroupController extends AuthenticatedController {
 		$this->available_modules = StudygroupModel::getAvailableModules();
 		if ($GLOBALS['PLUGINS_ENABLE']) {
 			$this->available_plugins = StudygroupModel::getAvailablePlugins();
-			$this->enabled_plugins   = StudygroupModel::getEnabledPlugins();
+			// $this->enabled_plugins   = StudygroupModel::getEnabledPlugins();
 		}
 		$this->modules           = new Modules();
 	}
@@ -154,9 +151,9 @@ class Course_StudygroupController extends AuthenticatedController {
 									"status='dozent', ".
 									"gruppe=8");
 			
-            // now add the studygroup_dozent dozent who's supposed to be invisible 
-            DBManager::get()->query("INSERT INTO seminar_user SET seminar_id='$semid', user_id=MD5('studygroup_dozent'), status='dozent', visible='no'");
-            
+			// now add the studygroup_dozent dozent who's supposed to be invisible 
+			DBManager::get()->query("INSERT INTO seminar_user SET seminar_id='$semid', user_id=MD5('studygroup_dozent'), status='dozent', visible='no'");
+
 			$mods=new Modules();
 			$bitmask=0;
 
@@ -198,15 +195,16 @@ class Course_StudygroupController extends AuthenticatedController {
 		global $perm;
 		if ($perm->have_studip_perm('dozent',$id)) {
 
-			$this->reiter_view = '_studygroup_admin';
 			$GLOBALS['CURRENT_PAGE'] = getHeaderLine($id).' - '._('Studiengruppe bearbeiten');
+			Navigation::activateItem('/course/studygroup/admin');
+
 			$sem                      = new Seminar($id);
 			$this->sem_id            = $id;
 			$this->sem               = $sem;
 			$this->available_modules = StudygroupModel::getAvailableModules();
 			if ($GLOBALS['PLUGINS_ENABLE']) {
 				$this->available_plugins = StudygroupModel::getAvailablePlugins();
-				$this->enabled_plugins   = StudygroupModel::getEnabledPlugins();
+				$this->enabled_plugins   = StudygroupModel::getEnabledPlugins($id);
 			}
 			$this->modules           = new Modules();
 		} else {
@@ -296,7 +294,7 @@ class Course_StudygroupController extends AuthenticatedController {
 	function members_action($id)
 	{
 		$GLOBALS['CURRENT_PAGE'] = getHeaderLine($id) . ' - ' . _("TeilnehmerInnen");
-		$this->reiter_view = '_studygroup_teilnehmer';
+		Navigation::activateItem('/course/members/view');
 
 		$sem=new Seminar($id);
 
@@ -384,7 +382,7 @@ class Course_StudygroupController extends AuthenticatedController {
 	function globalmodules_action() {
 		global $perm;
 		$perm->check("root");
-        $GLOBALS['HELP_KEYWORD'] = 'Admin.Studiengruppen';
+		$GLOBALS['HELP_KEYWORD'] = 'Admin.Studiengruppen';
 		
 		// get available modules
 		$modules = StudygroupModel::getInstalledModules() + StudygroupModel::getInstalledPlugins();
@@ -397,17 +395,16 @@ class Course_StudygroupController extends AuthenticatedController {
 		// Nutzungsbedingungen
 		$terms = Config::GetInstance()->getValue('STUDYGROUP_TERMS');
 
+		$GLOBALS['CURRENT_PAGE'] = _('Verwaltung studentischer Arbeitsgruppen');
+		Navigation::activateItem('/admin/config/studygroup');
 
 		// set variables for view
 		$this->current_page = _("Verwaltung erlaubter Module und Plugins für Studiengruppen");
-		$this->tabs         = 'links_admin';
 		$this->modules      = $modules;
 		$this->enabled      = $enabled;
 		$this->institutes   = $institutes;
 		$this->default_inst = $default_inst;
 		$this->terms        = $terms;
-		$this->reiter_view  = 'admin_studygroup';
-
 	}
 	
 	/**
@@ -417,7 +414,7 @@ class Course_StudygroupController extends AuthenticatedController {
 	function savemodules_action() {
 		global $perm;
 		$perm->check("root");
-        $GLOBALS['HELP_KEYWORD'] = 'Admin.Studiengruppen';
+		$GLOBALS['HELP_KEYWORD'] = 'Admin.Studiengruppen';
 		
 		$err=0;
 		if (Request::quoted('institute')=='invalid') $err=1;
@@ -457,7 +454,7 @@ class Course_StudygroupController extends AuthenticatedController {
 	function deactivate_action() {
 		global $perm;
 		$perm->check("root");
-        $GLOBALS['HELP_KEYWORD'] = 'Admin.Studiengruppen';
+		$GLOBALS['HELP_KEYWORD'] = 'Admin.Studiengruppen';
 		$cfg=new Config();
 		$cfg->setValue(FALSE,"STUDYGROUPS_ENABLE","Studiengruppen");
 		$this->flash['success'] = _("Die Studiengruppen wurden deaktiviert.");
@@ -465,9 +462,8 @@ class Course_StudygroupController extends AuthenticatedController {
 	}
 	
 	function search_action() {
-		$this->tabs = 'links_seminare';
-		$this->reiter_view = 'studygroups_search';
 		$GLOBALS['CURRENT_PAGE'] =  _('Studiengruppen suchen');
+		Navigation::activateItem('/browse/studygroups/all');
 		$this->groups = StudygroupModel::getAllGroups();
 		$this->userid = $GLOBALS['auth']->auth['uid'];
 	}

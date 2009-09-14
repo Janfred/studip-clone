@@ -143,7 +143,7 @@ if (($view=="openobject_main") || ($view=="openobject_details") || ($view=="open
 	}
 }
 //we take a search as long with us, as no other overview modul is used
-if (($view=="openobject_main") || ($view=="_lists") || ($view=="lists") || ($view=="resources") || ($view=="_resources"))
+if (($view=="openobject_main") || ($view=="lists") || ($view=="resources"))
 	$resources_data["search_array"]='';
 
 
@@ -180,7 +180,7 @@ if ($cancel_move) {
 //Listenstartpunkt festlegen
 if ($open_list) {
 	$resources_data["list_open"]=$open_list;
-	$resources_data["view"]="_lists";
+	$resources_data["view"]="lists";
 	$view = $resources_data["view"];
 	}
 
@@ -2095,8 +2095,6 @@ if ($edit_object) {
 		$view = $resources_data["view"];
 	}
 }
-
-if ($resources_data['view'] == 'resources') $resources_data['view'] = $view = '_resources';
 
 ?>
 

@@ -79,11 +79,11 @@ export_tmp_gc();
 if (!isset($ausgabeformat)) $ausgabeformat = 1;
 
 $HELP_KEYWORD="Basis.Evaluationen";
+Navigation::activateItem('/homepage/tools/evaluation');
 
 if ($ausgabeformat==1) {
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');    //hier wird der "Kopf" nachgeladen
-	include ('lib/include/links_about.inc.php');
 }
 require_once('lib/visual.inc.php'); // fuer CSS etc.
 

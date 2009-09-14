@@ -14,37 +14,49 @@
 class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
   implements StandardPlugin {
 
-	// relativer Name des Icons für Änderungen an diesem Plugin
-	var $changeindicatoriconname;
-
 	// Id, der dieses Plugin zugeordnet ist (bspw. Veranstaltung oder Institution)
 	var $id;
 
 	// wird dieses Plugin in der Übersicht (z.B. meine_seminare) angezeigt
 	var $overview;
 
+	// relativer Name des Icons für Änderungen an diesem Plugin
+	var $changeindicatoriconname;
+
+	// Anzeigetexte beim Ein- und Ausschaltes des Plugins
+	var $pluginadmininfo;
+
 	function AbstractStudIPStandardPlugin() {
 		parent::AbstractStudIPLegacyPlugin();
-		$this->pluginiconname = "";
 		$this->changeindicatoriconname = "";
 		$this->overview = false;
 		// create the standard AdminInfo
-		$admininfo = new AdminInfo();
-		$this->setPluginAdminInfo($admininfo);
-	}
-
-	/**
-	 * set the current user
-	 *
-	 * @param StudIPUser $user
-	 */
-	function setUser(StudIPUser $user) {
-		parent::setUser($user);
+		$this->admininfo = new AdminInfo();
 		$this->user->permission->setPoiid($this->getId());
 	}
 
-	function setId($newid) {
-		$this->id = $newid;
+	/**
+	 * Sets the navigation of this plugin.
+	 *
+	 * @deprecated
+	 */
+	function setNavigation(StudipPluginNavigation $navigation) {
+		// prepend copy of navigation to its sub navigation
+		$first_item_name = key($navigation->getSubNavigation());
+		$navigation_copy = clone $navigation;
+		$navigation_copy->clearSubmenu();
+		$navigation->insertSubNavigation('self', $first_item_name, $navigation_copy);
+		$navigation->setTitle($this->getDisplayTitle());
+
+		parent::setNavigation($navigation);
+
+		if (Navigation::hasItem('/course')) {
+			Navigation::addItem('/course/' . $this->getPluginclassname(), $navigation);
+		}
+	}
+
+	function setId($id) {
+		$this->id = $id;
 	}
 
 	function getId() {
@@ -57,8 +69,37 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 	}
 
 	/**
+	 * Wird dieses Plugin in der Übersicht angezeigt?
+	 * Hat sich seit dem letzten Login etwas geändert?
+	 *
+	 * @param  string     gewählter Kurs bzw. Einrichtung
+	 * @param  int        letzter Loginzeitpunkt des Benutzers
+	 *
+	 * @return Navigation <description>
+	*/
+	function getIconNavigation($semid, $lastlogin) {
+		$this->setId($semid);
+
+		if ($this->isShownInOverview()) {
+			$navigation = new Navigation('', PluginEngine::getURL($this));
+
+		  	if ($this->hasChanged($lastlogin)) {
+				$navigation->setImage($this->getChangeindicatoriconname(),
+						array('title' => $this->getOverviewMessage(true)));
+		  	} else {
+				$navigation->setImage($this->getPluginiconname(),
+						array('title' => $this->getOverviewMessage(false)));
+		  	}
+		}
+
+		return $navigation;
+	}
+
+	/**
 	 * Hat sich seit dem letzten Login etwas geändert?
 	 * @param lastlogin - letzter Loginzeitpunkt des Benutzers
+	 *
+	 * @deprecated
 	 */
 	function hasChanged($lastlogin) {
 		return false;
@@ -67,6 +108,8 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 	/**
 	 * Nachricht für tooltip in der Übersicht
 	 * @param lastlogin - letzter Loginzeitpunkt des Benutzers
+	 *
+	 * @deprecated
 	 */
 	function getOverviewMessage($has_changed = false) {
 		return $this->getPluginname() . ($has_changed ? ' ' . _("geändert") : '');
@@ -74,6 +117,8 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 
 	/**
 	 * Wird dieses Plugin in der Übersicht angezeigt?
+	 *
+	 * @deprecated
 	 */
 	function isShownInOverview() {
 		return $this->overview;
@@ -81,13 +126,15 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 
 	/**
 	 * Getter- und Setter für die Attribute
-   */
+	 *
+	 * @deprecated
+         */
 	function getChangeindicatoriconname() {
 		return $this->getPluginURL() . '/' . $this->changeindicatoriconname;
 	}
 
-	function setChangeindicatoriconname($newicon) {
-		$this->changeindicatoriconname = $newicon;
+	function setChangeindicatoriconname($icon) {
+		$this->changeindicatoriconname = $icon;
 	}
 
 	function setShownInOverview($value = true) {
@@ -95,44 +142,26 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 	}
 
 	/**
-	 * returns the score which the current user get's for activities in this plugin
+	 * Liefert die Administrationsinformationen zu diesem Plugin zurück
+	 */
+	function getPluginAdminInfo() {
+		return $this->pluginadmininfo;
+	}
+
+	/**
+	 * setzt neue Administrationsinformationen zu diesem Plugin
 	 *
+	 * @param AdminInfo
+	 */
+	function setPluginAdminInfo(AdminInfo $admininfo) {
+		$this->pluginadmininfo = $admininfo;
+	}
+
+	/**
+	 * returns the score which the current user get's for activities in this plugin
 	 */
 	function getScore()  {
 		return 0;
-	}
-
-
-	/**
-	 * This abstract method sets everything up to perform the given action and
-	 * displays the results or anything you want to.
-	 *
-	 * @param  string the name of the action to accomplish
-	 *
-	 * @return void
-	 */
-	function display_action($action) {
-
-		mark_public_course();
-
-		$GLOBALS['CURRENT_PAGE'] =
-			$_SESSION['SessSemName']['header_line'] . ' - ' . $this->getDisplayTitle();
-
-		include 'lib/include/html_head.inc.php';
-		include 'lib/include/header.php';
-
-		$pluginparams = $_GET["plugin_subnavi_params"];
-
-		include 'lib/include/links_openobject.inc.php';
-
-		// let the plugin show its view
-		StudIPTemplateEngine::startContentTable(true);
-		$this->$action($pluginparams);
-		StudIPTemplateEngine::endContentTable();
-
-		// close the page
-		include 'lib/include/html_end.inc.php';
-		page_close();
 	}
 
 	/**
@@ -148,12 +177,27 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 	 * Sets the state of the plugin.
 	 *
 	 * @param boolean $value
-	 * @param boolean $requestedbyuser - true if the user requested to change the
-	 *                status
 	 */
-	function setActivated($value = false, $requestedbyuser = false) {
+	function setActivated($value) {
 		$plugin_manager = PluginManager::getInstance();
 
 		$plugin_manager->setPluginActivated($this->getPluginid(), $this->getId(), $value);
+	}
+
+	/**
+	 * This method sets everything up to perform the given action and
+	 * displays the results or anything you want to.
+	 *
+	 * @param  string the name of the action to accomplish
+	 *
+	 * @return void
+	 */
+	function display_action($action) {
+		mark_public_course();
+
+		$GLOBALS['CURRENT_PAGE'] =
+			$_SESSION['SessSemName']['header_line'] . ' - ' . $this->getDisplayTitle();
+
+		parent::display_action($action);
 	}
 }

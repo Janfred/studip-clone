@@ -26,6 +26,7 @@ $perm->check($SEMESTER_ADMINISTRATION_ENABLE ? 'root' : false);
 
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+include ('lib/admin_semester.inc.php');
 require_once('lib/classes/SemesterData.class.php');
 require_once('lib/classes/HolidayData.class.php');
 // -- here you have to put initialisations for the current page
@@ -37,11 +38,11 @@ require_once('lib/classes/HolidayData.class.php');
  if (isset($cancel_x)) unset ($i_view);
 
 $CURRENT_PAGE = _("Verwaltung von Semester- und Ferienzeiten");
+Navigation::activateItem('/admin/config/semester');
 
 // Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   // Output of Stud.IP head
-	include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 	require_once ('lib/msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
 	require_once ('lib/visual.inc.php');

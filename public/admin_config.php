@@ -47,11 +47,13 @@ require_once('lib/visual.inc.php');	//visuals
 require_once('lib/classes/Config.class.php');	//Acces to config-values
 require_once('lib/classes/UserConfig.class.php');	//Acces to userconfig-values
 
+$db = new DB_Seminar();
 $cssSw=new cssClassSwitcher;
 $sess->register("admin_config_data");
 //$admin_config_data["range_id"] = '';
 
 $CURRENT_PAGE = _("Verwaltung von Konfigurationsvariablen");
+Navigation::activateItem('/admin/config/settings');
 
 if ($_REQUEST["select_username"] && !isset($_REQUEST['reset_search_x'])) {
 	$admin_config_data["range_id"] = get_userid ($_REQUEST["select_username"]);
@@ -89,7 +91,6 @@ if ($_REQUEST["change_config"]) {
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 ?>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">

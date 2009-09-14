@@ -84,152 +84,23 @@ $HELP_KEYWORD="Basis.Startseite"; // set keyword for new help
 $CURRENT_PAGE = _("Startseite");
 // Start of Output
 $GLOBALS['body_id'] = 'index';
+$navigation = Navigation::getItem('/start');
+
 include 'lib/include/html_head.inc.php'; // Output of html head
 include 'lib/include/header.php';
 
 // only for authenticated users
 if ($auth->is_authenticated() && $user->id != 'nobody') {
-	//                     Menuename, Link, Target
-	$menue[ 1] = array( _("Meine Veranstaltungen"), 'meine_seminare.php', false);
-	$menue[ 2] = array( _("Veranstaltung hinzuf&uuml;gen"), 'sem_portal.php', false);
-	$menue[ 3] = array( _("Mein Planer"), 'calendar.php', false);
-	$menue[ 4] = array( _("Terminkalender"), 'calendar.php', false);
-	$menue[ 5] = array( _("Adressbuch"), 'contact.php', false);
-	$menue[ 6] = array( _("Stundenplan"), 'mein_stundenplan.php', false);
-	$menue[ 7] = array( _("pers&ouml;nliche Homepage"), 'about.php', false);
-	$menue[ 8] = array( _("individuelle Einstellungen"), 'edit_about.php?view=allgemein', false);
-	$menue[ 9] = array( _("Suchen"), 'auswahl_suche.php', false);
-	$menue[10] = array( _("Personensuche"), 'browse.php', false);
-	$menue[11] = array( _("Veranstaltungssuche"), 'sem_portal.php', false);
-
-	if (get_config("EXTERNAL_HELP")) {
-		$help_url=format_help_url("Basis.Allgemeines");
-	} else {
-		$help_url="help/index.php";
-	}
-	$menue[12] = array( _("Hilfe"), $help_url, '_blank');
-	if (get_config("EXTERNAL_HELP")) {
-		$help_url=format_help_url("Basis.SchnellEinstiegKomplett");
-	} else {
-		$help_url="help/index.php?help_page=schnelleinstieg.htm";
-	}
-	$menue[13] = array( _("Schnelleinstieg"), $help_url, '_blank');
-	if ($STUDYGROUPS_ENABLE) {
-	    $menue[14] = array( _("Studiengruppe anlegen"), 'dispatch.php/course/studygroup/new/', false);
-   	}
-	// dozent
-	$menue[20] = array( _("Verwaltung von Veranstaltungen"), 'adminarea_start.php?list=TRUE', false);
-	$menue[21] = array( _("neue Veranstaltung anlegen"), 'admin_seminare_assi.php?new_session=TRUE', false);
-	// admin
-	$menue[30] = array( _("Veranstaltungen an meinen Einrichtungen"), 'meine_seminare.php', false);
-	$menue[31] = array( _("Verwaltung von Veranstaltungen"), 'adminarea_start.php?list=TRUE', false);
-	$menue[32] = array( _("Verwaltung von Einrichtungen"), 'admin_institut.php?list=TRUE', false);
-	$menue[33] = array( _("globale Benutzerverwaltung"), 'new_user_md5.php', false);
-	if($GLOBALS['STM_ENABLE']) $menue[34] = array( _("Studienmodule"), 'auswahl_module.php', false);// root
-	$menue[40] = array( _("Veranstaltungs&uuml;bersicht"), 'sem_portal.php', false);
-	$menue[41] = array( _("Verwaltung globaler Einstellungen"), 'new_user_md5.php', false);
-
-        if ($GLOBALS["PLUGINS_ENABLE"]) {
-            $plugin_entries = array();
-            // plugins activated
-            $activatedplugins = PluginEngine::getPlugins('SystemPlugin');
-
-            foreach ($activatedplugins as $activatedplugin) {
-                if ($activatedplugin->hasNavigation() &&
-                    $activatedplugin->getDisplayType(SYSTEM_PLUGIN_STARTPAGE)) {
-                    $plugin_entries[] = array(
-                        'plugin' => $activatedplugin,
-                        'navigation' => $activatedplugin->getNavigation()
-                    );
-                }
-            }
-
-            if ($perm->have_perm('admin')) {
-                // plugins activated
-                $activatedplugins = PluginEngine::getPlugins('AdministrationPlugin');
-
-                foreach ($activatedplugins as $activatedplugin) {
-                    if ($activatedplugin->hasTopNavigation()) {
-                        $plugin_entries[] = array(
-                            'plugin' => $activatedplugin,
-                            'navigation' => $activatedplugin->getTopNavigation()
-                        );
-                    }
-                }
-            }
-
-            foreach ($plugin_entries as $plugin_entry) {
-                $activatedplugin = $plugin_entry['plugin'];
-                $pluginnav = $plugin_entry['navigation'];
-                $pluginid = $activatedplugin->getPluginid();
-                $menue["pluginnav_" . $pluginid] = array(
-                    $pluginnav->getDisplayname(),
-                    $pluginnav->getLink(),
-                    false);
-
-                $submenu = array();
-                foreach ($pluginnav->getSubMenu() as $subkey => $subitem) {
-                    $menue["pluginnav_" . $pluginid . '_' . $subkey] = array(
-                        $subitem->getDisplayname(),
-                        $subitem->getLink(),
-                        false);
-                    $submenu[] = "pluginnav_" . $pluginid . '_' . $subkey;
-                }
-                $pluginmenue[] = array("pluginnav_" . $pluginid, $submenu);
-            }
-        }
-
-	$sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
-
 	if ($perm->have_perm('root')) { // root
 		$ueberschrift = _("Startseite f&uuml;r Root bei Stud.IP");
-		//                 array(mainmenue number, array(submenue numbers));
-		$menue_auswahl[] = array(40, array());
-		$menue_auswahl[] = array(31, array());
-		$menue_auswahl[] = array(32, array());
-		$menue_auswahl[] = array(41, array());
-		if($GLOBALS['STM_ENABLE']) $menue_auswahl[] = array(34, array());
-
 	} elseif ($perm->have_perm('admin')) { // admin
 		$ueberschrift = _("Startseite f&uuml;r AdministratorInnen bei Stud.IP");
-		$menue_auswahl[] = array(30, array());
-		$menue_auswahl[] = array(31, array());
-		$menue_auswahl[] = array(32, array());
-		if($GLOBALS['STM_ENABLE']) $menue_auswahl[] = array(34, array());
-		$menue_auswahl[] = array( 9, array(10, 11));
-		if (!$GLOBALS['RESTRICTED_USER_MANAGEMENT'])
-			$menue_auswahl[] = array(33, array());
 	} elseif ($perm->have_perm('dozent')) { // dozent
 		$ueberschrift = _("Startseite f&uuml;r DozentInnen bei Stud.IP");
-		$menue_auswahl[] = array( 1, array());
-		$menue_auswahl[] = array(20, ($sem_create_perm == 'dozent' ? array(21) : array()));
-        if ($STUDYGROUPS_ENABLE) {
-		    $menue_auswahl[] = array(14, array());
-        }
-		$menue_auswahl[] = array( 3, array(4, 5, 6));
-		$menue_auswahl[] = array( 7, array(8));
-		$menue_auswahl[] = array( 9, array(10, 11));
-		$menue_auswahl[] = array(12, array(13));
-		if($GLOBALS['STM_ENABLE']) $menue_auswahl[] = array(34, array());
 	} elseif ($perm->have_perm('autor')) { // autor, tutor
 		$ueberschrift = _("Ihre pers&ouml;nliche Startseite bei Stud.IP");
-		if ($STUDYGROUPS_ENABLE) {
-		    $menue_auswahl[] = array( 1, array(2,14));
-	    } else {
-	        $menue_auswahl[] = array( 1, array(2));
-	    }
-		$menue_auswahl[] = array( 3, array(4, 5, 6));
-		$menue_auswahl[] = array( 7, array(8));
-		$menue_auswahl[] = array( 9, array(10, 11));
-		$menue_auswahl[] = array(12, array(13));
-
 	} else { // user
 		$ueberschrift = _("Ihre pers&ouml;nliche Startseite bei Stud.IP");
-		$menue_auswahl[] = array( 1, array(2));
-		$menue_auswahl[] = array( 3, array(4, 5, 6));
-		$menue_auswahl[] = array( 7, array());
-		$menue_auswahl[] = array( 9, array(10, 11));
-		$menue_auswahl[] = array(12, array(13));
 		// Warning for Users
 	?>
 		<div align="center">
@@ -257,13 +128,6 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	<?
 	}
 
-        // insert plugin menus
-        if (!empty($pluginmenue)) {
-                foreach ($pluginmenue as $item) {
-                        $menue_auswahl[] = $item;
-                }
-        }
-
 	// Display banner ad
 	if ($GLOBALS['BANNER_ADS_ENABLE']) {
 		require_once 'lib/banner_show.inc.php';
@@ -280,25 +144,32 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			<tr>
 				<td class="blank" valign="top" style="padding-left:25px; width:80%;">
 				<table align="left" cellpadding="4">
-<?
-				for ($i=0; $i < count($menue_auswahl); $i++) { // mainmenue
-					if ($menue[$menue_auswahl[$i][0]][1]) {
-						echo	'<tr><td><div class="mainmenu" align="left"><a href="'.$menue[$menue_auswahl[$i][0]][1]. '"'.
-						(($menue[$menue_auswahl[$i][0]][2])? ' target="'.$menue[$menue_auswahl[$i][0]][2].'"':'').
-						'>'. $menue[$menue_auswahl[$i][0]][0]. '</a>';
-
-					} else {
-						echo	'<tr><td><div class="mainmenu">'. $menue[$menue_auswahl[$i][0]][0];
-					}
-					for ($k = 0; $k < count($menue_auswahl[$i][1]); $k++) { // submenue
-						echo	(($k == 0)? '<br>':'&nbsp;/&nbsp;');
-						echo	'<font size="-1"><a href="',$menue[$menue_auswahl[$i][1][$k]][1].'"'.
-							(($menue[$menue_auswahl[$i][1][$k]][2])? ' target="'.$menue[$menue_auswahl[$i][1][$k]][2].'"':'').
-							'>'. $menue[$menue_auswahl[$i][1][$k]][0].'</a></font>';
-					}
-					echo	'</div></td></tr>', "\n";
-				}
-?>
+				<? foreach ($navigation as $nav) : ?>
+					<? if ($nav->isVisible()) : ?>
+						<tr><td><div class="mainmenu" align="left">
+						<? if (is_internal_url($url = $nav->getURL())) : ?>
+							<a href="<?= URLHelper::getLink($url) ?>">
+						<? else : ?>
+							<a href="<?= htmlspecialchars($url) ?>" target="_blank">
+						<? endif ?>
+						<?= htmlReady($nav->getTitle()) ?></a>
+					<? endif ?>
+					<? $pos = 0 ?>
+					<? foreach ($nav as $subnav) : ?>
+						<? if ($subnav->isVisible()) : ?>
+							<font size="-1">
+							<?= $pos++ ? ' / ' : '<br>' ?>
+							<? if (is_internal_url($url = $subnav->getURL())) : ?>
+								<a href="<?= URLHelper::getLink($url) ?>">
+							<? else : ?>
+								<a href="<?= htmlspecialchars($url) ?>" target="_blank">
+							<? endif ?>
+							<?= htmlReady($subnav->getTitle()) ?></a>
+							</font>
+						<? endif ?>
+					<? endforeach ?>
+					</div></td></tr>
+				<? endforeach ?>
 				</table>
 				</td>
 				<td class="indexpage" align="right" valign="top"><img src="<?=$GLOBALS['ASSETS_URL']?>images/blank.gif" width="390" height="100" alt=""></td>
@@ -392,12 +263,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	</div>
 <?
 } else { //displaymodul for nobody
-	$index_nobody_template =& $GLOBALS['template_factory']->open('index_nobody');
-	$index_nobody_template->set_attribute('sso_cas', array_search("CAS", $GLOBALS["STUDIP_AUTH_PLUGIN"]));
-	$index_nobody_template->set_attribute('sso_shib', array_search("Shib", $GLOBALS["STUDIP_AUTH_PLUGIN"]));
-	$index_nobody_template->set_attribute('self_registration_activated', get_config('ENABLE_SELF_REGISTRATION'));
-	$index_nobody_template->set_attribute('free_access_activated', get_config('ENABLE_FREE_ACCESS'));
-	$index_nobody_template->set_attribute('help_url', format_help_url("Basis.Allgemeines"));
+	$index_nobody_template = $GLOBALS['template_factory']->open('index_nobody');
 	$db=new DB_Seminar();
 	$db->query("SELECT count(*) from seminare");
 	$db->next_record();

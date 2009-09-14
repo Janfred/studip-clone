@@ -38,13 +38,13 @@ require_once('lib/messaging.inc.php');
 $cssSw = new cssClassSwitcher;
 
 $CURRENT_PAGE = _("Benutzerverwaltung");
+Navigation::activateItem('/admin/config/new_user');
 
 //-- hier muessen Seiten-Initialisierungen passieren --
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');	 //hier wird der "Kopf" nachgeladen
-include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
 
 
 // Get a database connection

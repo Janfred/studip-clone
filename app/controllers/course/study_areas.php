@@ -71,9 +71,12 @@ class Course_StudyAreasController extends Trails_Controller {
     # prepare layout
     $layout =
       $GLOBALS['template_factory']->open('layouts/base_without_infobox');
-    $layout->set_attribute('tabs', 'links_admin');
-    $layout->set_attribute('reiter_view', 'study_areas_sem');
+    $layout->tabs = 'admin_search_form';
     $this->set_layout($layout);
+
+    require_once 'lib/admin_search.inc.php';
+
+    Navigation::activateItem('/admin/course/study_areas');
 
     # w/o a course ID respond with a "Bad Request"
     if ($course_id === '') {

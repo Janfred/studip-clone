@@ -52,14 +52,24 @@ $CURRENT_PAGE.= _("Verwaltung von Evaluationen");
 
 require_once ('lib/evaluation/evaluation.config.php');
 
+if ($list || $view) {
+	if ($links_admin_data['topkat'] == 'sem') {
+		Navigation::activateItem('/admin/course/evaluation');
+	} else {
+		Navigation::activateItem('/admin/institute/evaluation');
+	}
+} else {
+	Navigation::activateItem('/homepage/tools/evaluation');
+}
+
 include_once('lib/seminar_open.php');
+require_once 'lib/admin_search.inc.php';
 include_once('lib/include/html_head.inc.php');
 include_once('lib/include/header.php');
 
-if ($list || $view)
-	include ('lib/include/links_admin.inc.php');
-else
-	include ('lib/include/links_about.inc.php');
+if ($list || $view) {
+	include 'lib/include/admin_search_form.inc.php';
+}
 
 if (($SessSemName[1]) && (($view == "vote_sem") || ($view == "vote_inst"))) 
 	$the_range = $SessSemName[1];

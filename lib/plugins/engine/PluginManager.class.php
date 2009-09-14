@@ -140,8 +140,7 @@ class PluginManager
         $default = $result->rowCount() > 0;
 
         $result = $db->query("SELECT state FROM plugins_activated
-                              WHERE pluginid = '$id' AND
-                                    poiid = 'sem$context'");
+                              WHERE pluginid = '$id' AND poiid = 'sem$context'");
         $state = $result->fetchColumn();
 
         return $default && $state !== 'off' || $state === 'on';
@@ -418,14 +417,6 @@ class PluginManager
         }
 
         $plugin = PluginEngine::instantiatePlugin($plugin_info['class'], $plugin_info['path']);
-
-        if ($plugin != NULL) {
-            $plugin->setPluginid($plugin_info['id']);
-            $plugin->setPluginname($plugin_info['name']);
-            $plugin->setNavigationPosition($plugin_info['position']);
-            $plugin->setEnabled($plugin_info['enabled']);
-            $plugin->setDependentOnOtherPlugin($plugin_info['depends'] != NULL);
-        }
 
         return $this->plugin_cache[$cache_key] = $plugin;
     }

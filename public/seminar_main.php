@@ -97,15 +97,20 @@ mark_public_course($sem);
 
 $HELP_KEYWORD="Basis.InVeranstaltungKurzinfo";
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Kurzinfo");
+Navigation::activateItem('/course/main/info');
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 
 checkObject();
 
-include 'lib/include/links_openobject.inc.php';
 include 'lib/showNews.inc.php';
 include 'lib/show_dates.inc.php';
+
+// list of used modules
+$Modules = new Modules;
+$modules = $Modules->getLocalModules($SessSemName[1]);
 
 $sem = Seminar::GetInstance($SessSemName[1]);
 

@@ -38,7 +38,6 @@ if ($list) {
 
 if (isset($_REQUEST['seminar_id'])) {
 	URLHelper::bindLinkParam('seminar_id', $seminar_id);
-	$seminar_id = $_REQUEST['seminar_id'];
 }
 
 if (isset($seminar_id)) {
@@ -50,6 +49,7 @@ if (isset($seminar_id)) {
 require_once ('lib/classes/Seminar.class.php');
 require_once ('lib/raumzeit/raumzeit_functions.inc.php');
 require_once ('lib/dates.inc.php');
+require_once 'lib/admin_search.inc.php';
 
 if ($RESOURCES_ENABLE) {
 	include_once ($RELATIVE_PATH_RESOURCES."/lib/ResourceObject.class.php");
@@ -59,15 +59,8 @@ if ($RESOURCES_ENABLE) {
 	$resList = new ResourcesUserRoomsList($user->id, TRUE, FALSE, TRUE);
 }
 
-//Output starts here
-
-include ('lib/include/html_head.inc.php'); // Output of html head
 $CURRENT_PAGE = _("Verwaltung von Zeiten und Raumangaben");
-
-//prebuild navi and the object switcher (important to do already here and to use ob!)
-ob_start();
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
-$links = ob_get_clean();
+Navigation::activateItem('/admin/course/dates');
 
 // bind linkParams for chosen semester and opened dates
 URLHelper::bindLinkParam('raumzeitFilter', $raumzeitFilter);
@@ -78,8 +71,11 @@ $header_line = getHeaderLine($id);
 if ($header_line)
 	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
 
+//Output starts here
+
+include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
-echo $links;
+include 'lib/include/admin_search_form.inc.php';
 
 if (!$perm->have_studip_perm('tutor', $id)) {
 	die;

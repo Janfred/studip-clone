@@ -98,11 +98,11 @@ function printDataFieldType ($targetID, $currStruct)
 }
 
 $CURRENT_PAGE = _("Verwaltung generischer Datenfelder");
+Navigation::activateItem('/admin/config/data_fields');
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
 
 
 if ($change_datafield)

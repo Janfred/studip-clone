@@ -94,17 +94,18 @@ mark_public_course();
 $HELP_KEYWORD="Basis.Dateien";
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Dateien");
 
+if ($folder_system_data['cmd'] == 'all') {
+	Navigation::activateItem('/course/files/all');
+} else {
+	Navigation::activateItem('/course/files/tree');
+}
 
 include ('lib/include/html_head.inc.php'); // Output of html head
-
-
 include ('lib/include/header.php');   // Output of Stud.IP head
 
 checkObject();
 checkObjectModule('documents');
 object_set_visit_module('documents');
-
-include ('lib/include/links_openobject.inc.php');
 
 //obskuren id+_?_ string zerpflücken
 if (strpos($open, "_") !== false){

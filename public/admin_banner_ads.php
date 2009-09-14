@@ -309,10 +309,12 @@ function edit_banner_data($banner_data) {
 	$table->close();
 }
 
+$CURRENT_PAGE = _("Verwaltung der Werbebanner");
+Navigation::activateItem('/admin/config/banner_ads');
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 if (!$BANNER_ADS_ENABLE) {
 	echo '<p>', _("Banner-Modul abgeschaltet."), "</p>\n";

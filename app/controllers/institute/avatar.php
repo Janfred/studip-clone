@@ -45,10 +45,13 @@ class Institute_AvatarController extends AuthenticatedController
         $GLOBALS['CURRENT_PAGE'] = getHeaderLine($this->institute_id) . ' - ' .
                            _('Bild ändern');
 
+        require_once 'lib/admin_search.inc.php';
+
+        Navigation::activateItem('/admin/institute/details');
+
         # choose base layout w/o infobox and set tabs
         $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
-        $layout->tabs = 'links_admin';
-        $layout->reiter_view = 'grunddaten_inst';
+        $layout->tabs = 'admin_search_form';
         $this->set_layout($layout);
     }
 

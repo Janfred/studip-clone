@@ -57,15 +57,15 @@ $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen g
 $HELP_KEYWORD="Basis.MeinArchiv";
 $CURRENT_PAGE=_("Meine archivierten Veranstaltungen");
 
+if (!$perm->have_perm('root')) {
+	Navigation::activateItem('/browse/my_courses/archive');
+}
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
-
-if (!$perm->have_perm('root'))
-	include ('lib/include/links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
 
 if (!isset($sortby))
 	$sortby="name";

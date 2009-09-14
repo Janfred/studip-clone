@@ -40,14 +40,11 @@ require_once("lib/classes/ZebraTable.class.php");
 
 
 $CURRENT_PAGE = _("Sperrebenen von Veranstaltungen anpassen");
+Navigation::activateItem('/admin/config/lock_rules');
 
 // Start of Output
 include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php"); // Output of Stud.IP head
-
-// most of the logic happens in links_admin
-//
-include ("lib/include/links_admin.inc.php"); //Linkleiste fuer admins
 
 $containerTable = new ContainerTable();
 echo $containerTable->openRow();

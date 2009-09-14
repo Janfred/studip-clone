@@ -127,11 +127,11 @@ class PluginEngine {
 	* @param $cmd - command to execute by clicking the link
 	* @return a link to the current plugin with the additional $params
 	*/
-	public static function getURL($plugin, $params=array(), $cmd="") {
+	public static function getURL($plugin, $params = array(), $cmd = 'show') {
 		if (is_null($plugin)) {
-			throw new InvalidArgumentException(_("Es wurde kein Plugin gewählt."));
+			throw new InvalidArgumentException(_('Es wurde kein Plugin gewählt.'));
 		}
-		$link = sprintf("plugins.php/%s/%s", urlencode($plugin->getPluginclassname()), $cmd);
+		$link = sprintf('plugins.php/%s/%s', urlencode($plugin->getPluginclassname()), $cmd);
 
 		return URLHelper::getURL($link, $params);
 	}
@@ -143,7 +143,7 @@ class PluginEngine {
 	* @param $cmd - command to execute by clicking the link
 	* @return a link to the current plugin with the additional $params
 	*/
-	public static function getLink($plugin, $params=array(), $cmd="") {
+	public static function getLink($plugin, $params = array(), $cmd = 'show') {
 		return htmlspecialchars(PluginEngine::getURL($plugin, $params, $cmd));
 	}
 
@@ -182,9 +182,6 @@ class PluginEngine {
 
 		$plugin_class = new ReflectionClass($pluginclassname);
 		$plugin = $plugin_class->newInstance();
-		$plugin->setEnvironment($pluginenv);
-		$plugin->setPluginpath($pluginenv->getRelativepackagepath().'/'.$pluginpath);
-		$plugin->setBasepluginpath($pluginpath);
 
 		return $plugin;
 	}

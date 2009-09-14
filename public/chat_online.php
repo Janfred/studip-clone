@@ -84,11 +84,11 @@ function print_chat_info($chatids){
 
 $HELP_KEYWORD = "Basis.InteraktionChat";
 $CURRENT_PAGE = _("Chat-Online");
+Navigation::activateItem('/messaging/chat');
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_sms.inc.php');
-
 
 if (!$sess->is_registered("chat_online_id")){
 	$sess->register("chat_online_id");

@@ -48,14 +48,14 @@ require_once ('lib/visual.inc.php');
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();
 $CURRENT_PAGE = _("Mein Adressbuch");
+Navigation::activateItem('/messaging/address_book/' . Request::get('view'));
+
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 $cssSw->switchClass();
-
-// include 'lib/include/links_openobject.inc.php';
 
 if (!$contact["filter"])
 	$contact["filter"]="all";
@@ -76,8 +76,6 @@ if ($contact["view"]=="alpha" && strlen($filter) > 3)
 	$filter="";
 if ($contact["view"]=="gruppen" && strlen($filter) < 4)
 	$filter="";
-
-include ('lib/include/links_sms.inc.php');
 
 // Aktionen //////////////////////////////////////
 

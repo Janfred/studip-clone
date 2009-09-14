@@ -65,13 +65,14 @@ switch ($view) {
 	break;
 
 	case "resources":
-	case "_resources":
 		$page_intro=_("Auf dieser Seite können Sie durch alle Ressourcen bzw. Ebenen, auf die Sie Zugriff haben, navigieren und Ressourcen verwalten.");
 		$CURRENT_PAGE=_("Übersicht der Ressourcen");
+		Navigation::activateItem('/resources/view/hierarchy');
 	break;
 	case "search":
 		$page_intro=_("Sie können hier nach Ressourcen suchen. Sie haben die Möglichkeit, über ein Stichwort oder bestimmte Eigenschaften Ressourcen zu suchen oder sich durch die Ebenen zu navigieren.");
 		$CURRENT_PAGE=_("Suche nach Ressourcen");
+		Navigation::activateItem('/resources/view/browse');
 		$infobox = array(
 					array  ("kategorie" => _("Aktionen:"),
 							"eintrag" => array (
@@ -88,12 +89,12 @@ switch ($view) {
 	break;
 	//Reiter "Listen"
 	case "lists":
-	case "_lists":
 	case "export_lists":
 	case "search_list":
 		if ($resources_data["list_open"])
 			$page_intro= sprintf(_("Sie sehen alle Einträge in der Ebene <b>%s</b>"), getResourceObjectName($resources_data["list_open"]));
 		$CURRENT_PAGE=_("Bearbeiten und ausgeben von Listen");
+		Navigation::activateItem('/resources/lists/show');
 		if ($resources_data["list_open"])
 			$title.=" - "._("Ebene").": ".getResourceObjectName($resources_data["list_open"]);
 		$infobox = array(
@@ -113,6 +114,8 @@ switch ($view) {
 	case "edit_object_assign":
 		$page_intro=_("Sie sehen hier die Einzelheiten der Belegung. Falls Sie über entsprechende Rechte verfügen, können Sie sie bearbeiten oder eine neue Belegung erstellen.");
 		$CURRENT_PAGE=_("Belegungen anzeigen/bearbeiten").$currentObjectTitelAdd;
+		Navigation::activateItem('/resources/objects/edit_assign');
+
 		if (($view_mode == "no_nav") || ($view_mode == "search")) {
 			$infobox = array(
 						array  ("kategorie" => _("Aktionen:"),
@@ -123,13 +126,16 @@ switch ($view) {
 	break;
 	case "edit_object_properties":
 		$CURRENT_PAGE=_("Eigenschaften bearbeiten").$currentObjectTitelAdd;
+		Navigation::activateItem('/resources/objects/edit_properties');
 	break;
 	case "edit_object_perms":
 		$CURRENT_PAGE=_("Rechte bearbeiten").$currentObjectTitelAdd;
+		Navigation::activateItem('/resources/objects/edit_perms');
 	break;
 	case "view_schedule":
 		$page_intro=_("Hier können Sie sich die Belegungszeiten der Ressource anzeigen  und auf unterschiedliche Art darstellen lassen.");
 		$CURRENT_PAGE=_("Belegungszeiten ausgeben").$currentObjectTitelAdd;
+		Navigation::activateItem('/resources/objects/view_schedule');
 
 		$infobox[0]["kategorie"] = _("Aktionen:");
 		$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
@@ -163,6 +169,7 @@ switch ($view) {
 	case "view_sem_schedule":
 		$page_intro=_("Hier können Sie sich die Belegungszeiten der Ressource anzeigen  und auf unterschiedliche Art darstellen lassen.");
 		$CURRENT_PAGE=_("Belegungszeiten pro Semester ausgeben").$currentObjectTitelAdd;
+		Navigation::activateItem('/resources/objects/view_sem_schedule');
 
 		$infobox[0]["kategorie"] = _("Aktionen:");
 
@@ -202,6 +209,7 @@ switch ($view) {
 		$room_groups = RoomGroups::GetInstance();
 		$page_intro=_("Hier können Sie sich die Belegungszeiten einer Raumgruppe anzeigen lassen.");
 		$CURRENT_PAGE=_("Belegungszeiten einer Raumgruppe pro Semester ausgeben:") . ' ' . $room_groups->getGroupName($resources_data['actual_room_group']);
+		Navigation::activateItem('/resources/view/group_schedule');
 
 		$infobox[0]["kategorie"] = _("Aktionen:");
 		$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
@@ -213,6 +221,7 @@ switch ($view) {
 		$room_groups = RoomGroups::GetInstance();
 		$page_intro=_("Hier können Sie sich die Belegungszeiten einer Raumgruppe anzeigen lassen.");
 		$CURRENT_PAGE=_("Belegungszeiten einer Raumgruppe pro Tag ausgeben:") . ' ' . $room_groups->getGroupName($resources_data['actual_room_group']);
+		Navigation::activateItem('/resources/view/group_schedule_daily');
 
 		$infobox[0]["kategorie"] = _("Aktionen:");
 		$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
@@ -225,28 +234,34 @@ switch ($view) {
 	case "edit_types":
 		$page_intro=_("Verwalten Sie auf dieser Seite die Ressourcen-Typen, wie etwa Räume, Geräte oder Gebäude. Sie können jedem Typ beliebig viele Eigenschaften zuordnen.");
 		$CURRENT_PAGE=_("Typen bearbeiten");
+		Navigation::activateItem('/resources/settings/edit_types');
 	break;
 	case "edit_properties":
 		$page_intro=_("Verwalten Sie auf dieser Seite die einzelnen Eigenschaften. Diese Eigenschaften können Sie beliebigen Ressourcen-Typen zuweisen.");
 		$CURRENT_PAGE=_("Eigenschaften bearbeiten");
+		Navigation::activateItem('/resources/settings/edit_properties');
 	break;
 	case "edit_perms":
 		$page_intro=_("Verwalten Sie hier AdministratorInnen des Systems, die Rechte über alle Ressourcen erhalten.");
 		$CURRENT_PAGE=_("globale Rechte der Ressourcenadministratoren bearbeiten");
+		Navigation::activateItem('/resources/settings/edit_perms');
 	break;
 	case "edit_settings":
 		$page_intro=_("Verwalten Sie hier grundlegende Einstellungen der Ressourcenverwaltung.");
 		$CURRENT_PAGE=_("Einstellungen der Ressourcenverwaltung");
+		Navigation::activateItem('/resources/settings/edit_settings');
 	break;
 
 	//Reiter Raumplanung
 	case "requests_start":
 		$page_intro=_("Auf dieser Seite wird Ihnen der Status der Anfragen aus Ihren Bereichen angezeigt. Sie können das Bearbeiten der Anfragen von hier aus starten.");
 		$CURRENT_PAGE=_("übersicht des Raumplanungs-Status");
+		Navigation::activateItem('/resources/room_requests/start');
 	break;
 	case "edit_request":
 		$page_intro=_("Sie können hier die einzelnen Anfragen einsehen und passenden Räume auswählen sowie zuweisen.");
 		$CURRENT_PAGE=_("Bearbeiten der Anfragen");
+		Navigation::activateItem('/resources/room_requests/edit');
 		$infobox = array(
 					array  ("kategorie"  => _("Information:"),
 							"eintrag" => array (
@@ -266,11 +281,13 @@ switch ($view) {
 	case 'list_requests':
 		$page_intro = sprintf(_("Sie sehen hier eine Liste aller offenen Anfragen, die Sortierung folgt der Einstellung unter %sübersicht%s."), '<a href="resources.php?view=requests_start&cancel_edit_request_x=1">', '</a>'). '<br>'._("Ein Klick auf das Symbol nebem dem Zähler erlaubt es Ihnen, direkt zu der Anfrage zu springen.");
 		$CURRENT_PAGE = _("Anfragenliste");
+		Navigation::activateItem('/resources/room_requests/list');
 	break;
 	//all the intros in an open object (Veranstaltung, Einrichtung)
 	case "openobject_main":
 		$page_intro=sprintf(_("Auf dieser Seite sehen sie alle der %s zugeordneten Ressourcen."), $SessSemName["art_generic"]);
 		$CURRENT_PAGE=$SessSemName["header_line"]." - "._("Ressourcenübersicht");
+		Navigation::activateItem('/course/resources/overview');
 		$infobox = array(
 					array  ("kategorie"  => _("Information:"),
 							"eintrag" => array (
@@ -286,10 +303,13 @@ switch ($view) {
 	case "view_details":
 		if ($resources_data["actual_object"])
 			$page_intro= sprintf(_("Hier sehen Sie detaillierte Informationen der Ressource %s"), "<b>".$currentObject->getName()."</b> (".(($currentObject->getCategoryName()) ? $currentObject->getCategoryName() : _("Hierachieebene")).").");
-		if ($view_mode == "oobj")
+		if ($view_mode == "oobj") {
 			$CURRENT_PAGE=$SessSemName["header_line"]." - "._("Ressourcendetails").$currentObjectTitelAdd;
-		else
+			Navigation::activateItem('/course/resources/view_details');
+		} else {
 			$CURRENT_PAGE=_("Anzeige der Ressourceneigenschaften").$currentObjectTitelAdd;
+			Navigation::activateItem('/resources/objects/view_details');
+		}
 
 		if (($view_mode == "no_nav") || ($view_mode == "search")) {
 			$infobox[0]["kategorie"] = _("Aktionen:");
@@ -326,20 +346,18 @@ switch ($view) {
 		if ($resources_data["actual_object"])
 			$page_intro=sprintf(_("Hier können Sie sich die Belegungszeiten der Ressource %s ausgeben lassen"), "<b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().")");
 		$CURRENT_PAGE=$SessSemName["header_line"]." - "._("Ressourcenbelegung");
+		Navigation::activateItem('/course/resources/view_schedule');
 	break;
 	case "openobject_assign":
 		if ($resources_data["actual_object"])
 			$page_intro=sprintf(_("Anzeigen der der Belegung der Ressource %s. Sie können die Belegung auch bearbeiten, falls Sie entsprechende Rechte besitzen, oder eine neue Belegung erstellen."), "<b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().").");
 		$CURRENT_PAGE=$SessSemName["header_line"]." - ".("Belegung anzeigen/bearbeiten");
-	break;
-	case "edit_object_perms":
-		if ($resources_data["actual_object"])
-			$page_intro=sprintf(_("Vergeben von Rechten auf die Ressource %s"), "<b>".$currentObject->getName()."</b> (".$currentObject->getCategoryName().").");
-		$CURRENT_PAGE=sprintf(_("Vergeben von Berechtigungen - Objekt%s"), $currentObjectTitelAdd);
+		Navigation::activateItem('/course/resources/edit_assign');
 	break;
 	case "openobject_group_schedule":
 		$page_intro=_("Hier können Sie sich die Belegungszeiten aller Ressourcen dieser Veranstaltung anzeigen lassen.");
 		$CURRENT_PAGE=$SessSemName["header_line"]." - "._("Belegungszeiten aller Ressourcen pro Tag ausgeben");
+		Navigation::activateItem('/course/resources/group_schedule');
 
 		$infobox[0]["kategorie"] = _("Aktionen:");
 		$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
@@ -350,6 +368,7 @@ switch ($view) {
 	case "view_requests_schedule":
 		$page_intro=_("Hier können Sie sich eine Übersicht über alle Anfragen und vorhandenenen Belegungen eines angeforderten Raums anzeigen lassen.");
 		$CURRENT_PAGE=_("Anfragenübersicht eines Raums:") . ' ' . ResourceObject::Factory($resources_data["resolve_requests_one_res"])->getName();
+		Navigation::activateItem('/resources/room_requests/schedule');
 
 		$infobox[0]["kategorie"] = _("Aktionen:");
 		$infobox[0]["eintrag"][] = array ("icon" => "link_intern.gif",
@@ -366,7 +385,7 @@ switch ($view) {
 	}
 
 	//general naming of resources management pages
-	if (!$essSemName) {
+	if (!$SessSemName) {
 		if ($CURRENT_PAGE)
 			$CURRENT_PAGE = ": ".$CURRENT_PAGE;
 			$CURRENT_PAGE = _("Ressourcenverwaltung").$CURRENT_PAGE;

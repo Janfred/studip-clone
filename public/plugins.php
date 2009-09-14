@@ -64,3 +64,6 @@ try {
   throw $ade;
 
 }
+
+# close the page
+page_close();

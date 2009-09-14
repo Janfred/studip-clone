@@ -220,13 +220,12 @@ $queries[$c]['details'] = "details=files";
 ++$c;
 include ('lib/seminar_open.php'); 		// initialise Stud.IP-Session
 
+$CURRENT_PAGE = _('Informationen zu einem Nutzer');
+Navigation::activateItem('/admin/config/new_user');
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');	 //hier wird der "Kopf" nachgeladen
-//fake
-$i_page = 'new_user_md5.php';
-include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
 $pic_path = $GLOBALS['ASSETS_URL'] . 'images';
 ?>
 <table border="0" bgcolor="#000000" align="center" cellspacing="0" cellpadding="0" width="100%">

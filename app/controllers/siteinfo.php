@@ -26,10 +26,6 @@ class SiteinfoController extends Trails_Controller
         global $perm, $template_factory, $CURRENT_PAGE;
         global $_language_path, $_language;
         
-        $this->si = new Siteinfo();
-
-        $this->populate_ids($args);
-
         # open session
         page_open(array('sess' => 'Seminar_Session',
                         'auth' => 'Seminar_Default_Auth',
@@ -42,6 +38,11 @@ class SiteinfoController extends Trails_Controller
 
         $_language_path = init_i18n($_language);
 
+        $this->si = new Siteinfo();
+
+        $this->populate_ids($args);
+        $this->add_navigation($action);
+
         if ($perm->have_perm('root')) {
             $this->layout = $template_factory->open('layouts/base');
             $this->layout->set_attribute('infobox', $this->infobox_content());
@@ -49,32 +50,53 @@ class SiteinfoController extends Trails_Controller
             $action = "show";
             $this->layout = $template_factory->open('layouts/base_without_infobox');
         }
-        $this->layout->set_attribute('tabs', 'links_siteinfo');
-        $this->layout->set_attribute('reiter_view', 'siteinfo');
         $this->set_layout($this->layout);
         $CURRENT_PAGE = _('Impressum');
     }
 
     function populate_ids($args)
     {
-        global $view,$dynstradd;
-
         if (isset($args[0]) && is_numeric($args[0])) {
             $this->currentrubric = $args[0];
             if (isset($args[1]) && is_numeric($args[1])) {
                 $this->currentdetail = $args[1];
-                $view = $this->currentrubric.'_'.$this->currentdetail;
             } else {
                 $this->currentdetail = $this->si->first_detail_id($args[0]);
-                $view = $this->currentrubric;
             }
         } else {
             $this->currentrubric = $this->si->first_rubric_id();
             $this->currentdetail = $this->si->first_detail_id();
         }
-        $view = 'r'.$this->currentrubric;
-        if ($this->currentdetail > 0){
-            $view .= '_d'.$this->currentdetail;
+    }
+    
+    function add_navigation($action)
+    {
+        Navigation::addItem('/siteinfo', new Navigation(_('Impressum')));
+
+        foreach ($this->si->get_all_rubrics() as $rubric) {
+            $rubric[1] = language_filter($rubric[1]);
+            if ($rubric[1] == '') {
+                $rubric[1] = _('unbenannt');
+            }
+            Navigation::addItem('/siteinfo/'.$rubric[0],
+                new Navigation($rubric[1], $this->url_for('siteinfo/show/'.$rubric[0])));
+        }
+
+        foreach ($this->si->get_all_details() as $detail) {
+            $detail[2] = language_filter($detail[2]);
+            if ($detail[2] == '') {
+                $detail[2] = _('unbenannt');
+            }
+            Navigation::addItem('/siteinfo/'.$detail[1].'/'.$detail[0],
+                new Navigation($detail[2], $this->url_for('siteinfo/show/'.$detail[1].'/'.$detail[0])));
+        }
+
+        if ($action != 'new') {
+            if ($this->currentdetail > 0) {
+                Navigation::activateItem('/siteinfo/'.$this->currentrubric.'/'.$this->currentdetail);
+            } else {
+                Navigation::activateItem('/siteinfo/'.$this->currentrubric);
+            }
         }
     }
     
@@ -125,21 +147,14 @@ class SiteinfoController extends Trails_Controller
 
     function new_action ($givenrubric=NULL)
     {
-        global $view, $dynstradd;
         if($givenrubric===NULL){
-            $dynstradd['rubric_new'] = array('topKat' => '', 
-                                             'name'   => _('neue Rubrik'), 
-                                             'link'   => '#',
-                                             'active' => FALSE);
-            $view = "rubric_new";
+            Navigation::addItem('/siteinfo/rubric_new',
+                new AutoNavigation(_('neue Rubrik'), $this->url_for('siteinfo/new')));
             $this->edit_rubric = TRUE;
         } else {        
-            $dynstradd['detail_new'] = array('topKat' => 'r'.$this->currentrubric, 
-                                             'name'   => _('neue Seite'), 
-                                             'link'   => '#',
-                                             'active' => FALSE);
+            Navigation::addItem('/siteinfo/'.$this->currentrubric.'/detail_new',
+                new AutoNavigation(_('neue Seite'), $this->url_for('siteinfo/new/'.$this->currentrubric)));
             $this->rubrics = $this->si->get_all_rubrics();
-            $view = "detail_new";
         }
     }
 

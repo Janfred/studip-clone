@@ -16,10 +16,10 @@ require_once ('config.inc.php');
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 $CURRENT_PAGE = _("Übersicht verwendeter Literatur");
+Navigation::activateItem('/admin/tools/literature');
 
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 function my_session_open($id = false){
 	if (!$id){

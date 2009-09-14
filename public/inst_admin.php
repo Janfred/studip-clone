@@ -35,9 +35,6 @@ require_once("lib/visual.inc.php"); //htmlReady
 require_once ("lib/statusgruppe.inc.php");	//Funktionen der Statusgruppen
 require_once ("lib/classes/DataFieldEntry.class.php");
 
-// Start of Output
-include ("lib/include/html_head.inc.php"); // Output of html head
-
 // if we are not in admin_view, we get the proper set variable from institut_members.php
 if (!isset($admin_view)) {
 	$admin_view = true;
@@ -54,23 +51,15 @@ echo $css_switcher->GetHoverJSFunction();
 // or for just displaying the workers and their roles
 if ($admin_view) {
 	$CURRENT_PAGE = _("Verwaltung der MitarbeiterInnen");
-
+	Navigation::activateItem('/admin/institute/faculty');
 	$perm->check("admin");
-	//prebuild navi and the object switcher (important to do already here and to use ob!)
-	ob_start();
-	include ("lib/include/links_admin.inc.php");  //Linkleiste fuer admins
-	$links = ob_get_clean();
-
 } else {
 	$CURRENT_PAGE = _("Liste der MitarbeiterInnen");
+	Navigation::activateItem('/course/faculty/view');
 	$perm->check("autor");
-
-	//prebuild navi and the object switcher (important to do already here and to use ob!)
-	ob_start();
-	require("lib/include/links_openobject.inc.php");  //Linkleiste fuer Normalos
-	$links = ob_get_clean();
-
 }
+
+require_once 'lib/admin_search.inc.php';
 
 //get ID from a open Institut. We have to wait until a links_*.inc.php has opened an institute (necessary if we jump directly to this page)
 if ($SessSemName[1])
@@ -90,9 +79,13 @@ $header_line = getHeaderLine($inst_id);
 if ($header_line)
   $CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
 
+// Start of Output
+include ("lib/include/html_head.inc.php"); // Output of html head
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
-echo $links;
 
+if ($admin_view) {
+	include 'lib/include/admin_search_form.inc.php';
+}
 
 $db = new DB_Seminar();
 $db2 = new DB_Seminar();

@@ -69,6 +69,14 @@ mark_public_course($sem);
 
 $CURRENT_PAGE = $SessSemName["header_line"].' - '._("Ablaufplan");
 
+if ($type == '1') {
+	Navigation::activateItem('/course/schedule/type1');
+} else if ($type == 'other') {
+	Navigation::activateItem('/course/schedule/other');
+} else {
+	Navigation::activateItem('/course/schedule/all');
+}
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -76,8 +84,6 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 checkObject();
 checkObjectModule("schedule");
 object_set_visit_module("schedule");
-
-include ("lib/include/links_openobject.inc.php");
 
 $semester = new SemesterData();
 $data = $semester->getCurrentSemesterData();

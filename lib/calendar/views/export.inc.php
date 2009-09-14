@@ -96,7 +96,6 @@ if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == '
 	echo "\n<body onUnLoad=\"upload_end()\">";
 
 	include('lib/include/header.php');
-	include('lib/include/links_sms.inc.php');
 }
 
 if (($expmod != 'exp' && $expmod != 'imp' && $expmod != 'sync') || ($expmod == 'exp' && !empty($err))) {

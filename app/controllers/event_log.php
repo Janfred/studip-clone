@@ -39,15 +39,14 @@ class EventLogController extends Trails_Controller
 
         // set page title and navigation
         $layout = $template_factory->open('layouts/base_without_infobox');
-        $layout->tabs = 'links_admin';
         $this->set_layout($layout);
 
         if ($action === 'show') {
             $GLOBALS['CURRENT_PAGE'] = _('Anzeige der Log-Events');
-            $this->layout->reiter_view = 'show_log';
+            Navigation::activateItem('/admin/log/show');
         } else {
             $GLOBALS['CURRENT_PAGE'] = _('Konfiguration der Logging-Funktionen');
-            $this->layout->reiter_view = 'admin_log';
+            Navigation::activateItem('/admin/log/admin');
         }
 
         $this->event_log = new EventLog();

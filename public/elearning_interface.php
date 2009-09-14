@@ -35,6 +35,7 @@ mark_public_course();
 
 $HELP_KEYWORD="Basis.Ilias";
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Lernmodule");
+Navigation::activateItem('/course/elearning/' . Request::get('view'));
 
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -134,7 +135,6 @@ if ($ELEARNING_INTERFACE_ENABLE AND (($view == "edit") OR ($view == "show")))
 		$connected_modules = $object_connections->getConnections();
 		ELearningUtils::bench("connections");
 	}
-	include ('lib/include/links_openobject.inc.php');
 
 	?><table cellspacing="0" cellpadding="0" border="0" width="100%">
 	<tr>

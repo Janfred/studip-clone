@@ -37,13 +37,4 @@ interface SystemPlugin {
    * @return integer    <description>
    */
   function getScore();
-
-  /**
-   * returns where the plugin will be visible (toolbar and/or start page)
-   *
-   * @param  type       optional, default: -1
-   *
-   * @return type       <description>
-   */
-  function getDisplayType($filter = -1);
 }

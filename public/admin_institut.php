@@ -125,7 +125,7 @@ while ( is_array($_POST)
 
 		$i_view = $i_id;
 
-		//This will select the new institute later for navigation (=>links_admin.inc.php)
+		//This will select the new institute later for navigation (=>admin_search_form.inc.php)
 		$admin_inst_id = $i_id;
 		openInst($i_id);
 	  break;
@@ -309,12 +309,10 @@ while ( is_array($_POST)
 if ($i_view == "new")
 	closeObject();
 
-include ('lib/include/html_head.inc.php'); // Output of html head
+require_once 'lib/admin_search.inc.php';
+
 $CURRENT_PAGE = _("Verwaltung der Grunddaten");
-ob_start();
-//Output starts here
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
-$links = ob_get_clean();
+Navigation::activateItem('/admin/institute/details');
 
 //get ID from a open Institut
 if ($SessSemName[1])
@@ -324,8 +322,9 @@ $header_line = getHeaderLine($i_view);
 if ($header_line)
 	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
 
+include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
-echo $links;
+include 'lib/include/admin_search_form.inc.php';
 
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing=0 cellpadding=0 width=100%>

@@ -52,9 +52,22 @@ require_once('lib/classes/StudipAdmissionGroup.class.php'); //htmlReady
 require_once('lib/classes/UserDomain.php'); // Nutzerdomänen
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+require_once 'lib/admin_search.inc.php';
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenZugangsberechtigungen";
 $CURRENT_PAGE = _("Verwaltung von Zugangsberechtigungen");
+Navigation::activateItem('/admin/course/admission');
+
+//get ID from a open Seminar
+if ($SessSemName[1])
+	$header_object_id = $SessSemName[1];
+else
+	$header_object_id = $seminar_id;
+
+//Change header_line if open object
+$header_line = getHeaderLine($header_object_id);
+if ($header_line)
+	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
 
 //Output starts here
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -112,24 +125,8 @@ include ('lib/include/html_head.inc.php'); // Output of html head
 	</script>
 <?
 
-
-//prebuild navi and the object switcher (important to do already here and to use ob!)
-ob_start();
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
-$links = ob_get_clean();
-//get ID from a open Seminar
-if ($SessSemName[1])
-	$header_object_id = $SessSemName[1];
-else
-	$header_object_id = $seminar_id;
-
-//Change header_line if open object
-$header_line = getHeaderLine($header_object_id);
-if ($header_line)
-	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
-
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
-echo $links;
+include 'lib/include/admin_search_form.inc.php';
 
 $db = new DB_Seminar;
 $db2 = new DB_Seminar;

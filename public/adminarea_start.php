@@ -26,16 +26,18 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check("tutor");
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+require_once 'lib/admin_search.inc.php';
 
 // -- here you have to put initialisations for the current page
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwalten";
 $CURRENT_PAGE = _('Verwaltung von Veranstaltungen');
+Navigation::activateItem('/admin/course');
 
 // Start of Output
 include 'lib/include/html_head.inc.php'; // Output of html head
 include 'lib/include/header.php';   // Output of Stud.IP head
-include 'lib/include/links_admin.inc.php'; //Output the nav
+include 'lib/include/admin_search_form.inc.php';
 
 require_once 'lib/visual.inc.php';
 

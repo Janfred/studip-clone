@@ -47,7 +47,6 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$this->template_factory = new Flexi_TemplateFactory(dirname(__FILE__).'/templates');
 
 		$this->layout = $GLOBALS['template_factory']->open('layouts/base');
-		$this->layout->set_attribute('tabs', 'links_admin');
 		$GLOBALS['CURRENT_PAGE'] = $this->getDisplayTitle();
 
 		$this->$action();

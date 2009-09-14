@@ -31,16 +31,17 @@ class StudIPUser
 	public $assignedroles;
 
 	/**
-	 * Automatically reads in the uid of the current user
-	 *
+	 * Initialize a user object for the current user or the given user id.
 	 */
-	public function __construct()
+	public function __construct($id = NULL)
 	{
-		$this->setUserid ( $GLOBALS ["auth"]->auth ['uid'] );
+		$this->setUserid($id ? $id : $GLOBALS['auth']->auth['uid']);
 	}
 
 	/**
 	 * TODO: (mlunzena) what a bad design, the whole idea of filling a user by setting an ID smells
+	 *
+	 * @deprecated
 	 *
 	 * @param int $id
 	 */

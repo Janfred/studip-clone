@@ -15,101 +15,111 @@
  */
 
 
-class StudipPluginNavigation {
+class StudipPluginNavigation extends AutoNavigation {
 
-  protected $plugin;
-  protected $displayname;
-  protected $link;
   protected $icon;
-  protected $submenu;
 
-
-  function StudipPluginNavigation($displayname = '', $link = '', $icon = '') {
-    $this->displayname = $displayname;
-    $this->link = $link;
-    $this->icon = $icon;
-    $this->submenu = array();
+  /**
+   * @deprecated
+   */
+  public function __construct($title = '', $url = NULL)
+  {
+      parent::__construct($title, $url);
   }
 
-
-  function getPlugin() {
-    return $this->plugin;
-  }
-
-
-  function setPlugin($plugin) {
-    $this->plugin = $plugin;
-    foreach ($this->submenu as $item)
-      $item->setPlugin($plugin);
+  /**
+   * Returns the displayname, usually used for creating a link
+   *
+   * @deprecated
+   */
+  function getDisplayname(){
+    return $this->getTitle();
   }
 
 
   /**
-   * Returns the displayname, usually used for creating a link
+   * @deprecated
    */
-  function getDisplayname(){
-    return $this->displayname;
+  function setDisplayname($title){
+    $this->setTitle($title);
   }
 
 
-  function setDisplayname($newdisplayname){
-    $this->displayname = $newdisplayname;
-    return $this;
-  }
-
-
+  /**
+   * @deprecated
+   */
   function getLink(){
-    return $this->link;
+    return $this->getURL();
   }
 
 
-  function setLink($link){
-    $this->link = $link;
-    return $this;
+  /**
+   * @deprecated
+   */
+  function setLink($url){
+    $this->setURL($url);
   }
 
 
+  /**
+   * @deprecated
+   */
   function getIcon(){
     return $this->icon;
   }
 
 
-  function setIcon($newicon){
-    $this->icon = trim($newicon);
-    return $this;
+  /**
+   * @deprecated
+   */
+  function setIcon($icon){
+    $this->icon = $icon;
   }
 
 
+  /**
+   * @deprecated
+   */
   function hasIcon(){
-    return strlen($this->icon) > 0;
+    return isset($this->icon);
   }
 
 
+  /**
+   * @deprecated
+   */
   function getSubmenu(){
-    return $this->submenu;
+    return $this->getSubNavigation();
   }
 
 
+  /**
+   * @deprecated
+   */
   function addSubmenu(StudipPluginNavigation $subnavigation){
-    $subnavigation->setPlugin($this->getPlugin());
-    $this->submenu[] = $subnavigation;
-    return $this;
+    $this->addSubNavigation(uniqid(), $subnavigation);
   }
 
+
+  /**
+   * @deprecated
+   */
   function removeSubmenu(StudipPluginNavigation $subnavigation){
-    $this->submenu = array_diff($this->submenu, $subnavigation);
-    return $this;
+    foreach ($this->getSubNavigation() as $name => $nav) {
+      if ($nav === $subnavigation) {
+        $this->removeSubNavigation($name);
+      }
+    }
   }
 
   /**
-    * Löscht das komplette Untermenü
-    */
+   * clears the submenu
+   *
+   * @deprecated
+   */
   function clearSubmenu(){
-    $this->submenu = array();
-    return $this;
-  }
-
-  function isActive() {
-    return $_SERVER['REQUEST_URI'] === $this->getLink();
+    foreach ($this->getSubNavigation() as $name => $nav) {
+      $this->removeSubNavigation($name);
+    }
   }
 }

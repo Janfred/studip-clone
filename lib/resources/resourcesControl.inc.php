@@ -43,13 +43,13 @@
 Requires & Registers
 /*****************************************************************************/
 
-require_once ('lib/include/reiter.inc.php');
 require_once ('lib/msg.inc.php');
 require_once ('lib/visual.inc.php');
 require_once ('config.inc.php');
 require_once ("config_tools_semester.inc.php");
 require_once 'lib/functions.php';
 require_once ($RELATIVE_PATH_RESOURCES."/resourcesFunc.inc.php");
+require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
 require_once ($RELATIVE_PATH_RESOURCES."/views/Msg.class.php");
 
 $sess->register("resources_data");
@@ -84,6 +84,104 @@ if ($view == "edit_request") {
 //handle values
 include ("$RELATIVE_PATH_RESOURCES/lib/evaluate_values.php");
 
+/*****************************************************************************
+Navigation aufbauen
+/*****************************************************************************/
+
+$resources_nav = new Navigation(_('Ressourcenverwaltung'));
+
+// Reiter "Uebersicht"
+$navigation = new Navigation(_('Übersicht'));
+$navigation->addSubNavigation('browse', new Navigation(_('Suchen'), 'resources.php?reset=TRUE', array('view' => 'search')));
+$navigation->addSubNavigation('hierarchy', new Navigation(_('Struktur'), 'resources.php#a', array('view' => 'resources')));
+
+if (get_config('RESOURCES_ALLOW_CREATE_TOP_LEVEL') || getGlobalPerms($user->id) == 'admin') {
+	$navigation->addSubNavigation('create_entry', new Navigation(_('Neue Hierarchieebene erzeugen'), 'resources.php#a', array('view' => 'create_hierarchie')));
+}
+
+if (get_config('RESOURCES_ENABLE_GROUPING')) {
+	$navigation->addSubNavigation('group_schedule_daily', new Navigation(_('Gruppen-Belegungspläne'), 'resources.php', array('view' => 'view_group_schedule_daily')));
+	$navigation->addSubNavigation('group_schedule', new Navigation(_('Gruppen-Belegungspläne (Semester)'), 'resources.php', array('view' => 'view_group_schedule')));
+}
+
+$resources_nav->addSubNavigation('view', $navigation);
+
+// Reiter "Listen"
+if ($resources_data['list_open']) {
+	$navigation = new Navigation(_('Liste'));
+	$navigation->addSubNavigation('show', new Navigation(_('Listenausgabe'), 'resources.php#a', array('view' => 'lists')));
+	// $navigation->addSubNavigation('search', new Navigation(_('Suchen'), 'resources.php', array('view' => 'search_lists')));
+	// $navigation->addSubNavigation('export', new Navigation(_('Listen exportieren'), 'resources.php', array('view' => 'export_lists')));
+	$resources_nav->addSubNavigation('lists', $navigation);
+}
+
+// Reiter "Objekt"
+if ($resources_data['actual_object']) {
+	$navigation = new Navigation(_('Ressource'));
+	$navigation->addSubNavigation('view_details', new Navigation(_('Eigenschaften'), 'resources.php', array('view' => 'view_details')));
+
+	if ($ActualObjectPerms->havePerm('admin')) {
+		$navigation->addSubNavigation('edit_properties', new Navigation(_('Eigenschaften bearbeiten'), 'resources.php', array('view' => 'edit_object_properties')));
+		$navigation->addSubNavigation('edit_perms', new Navigation(_('Rechte bearbeiten'), 'resources.php', array('view' => 'edit_object_perms')));
+	}
+
+	if (getResourceObjectCategory($resources_data['actual_object'])) {
+		$navigation->addSubNavigation('view_schedule', new Navigation(_('Belegungsplan'), 'resources.php', array('view' => 'view_schedule')));
+
+		if (get_config('RESOURCES_ENABLE_SEM_SCHEDULE')) {
+			$navigation->addSubNavigation('view_sem_schedule', new Navigation(_('Semester-Belegungsplan'), 'resources.php', array('view' => 'view_sem_schedule')));
+		}
+
+		if ($ActualObjectPerms->havePerm('autor')) {
+			$navigation->addSubNavigation('edit_assign', new Navigation(_('Belegung bearbeiten'), 'resources.php', array('view' => 'edit_object_assign')));
+		} else {
+			$navigation->addSubNavigation('edit_assign', new Navigation(_('Belegung anzeigen'), 'resources.php', array('view' => 'edit_object_assign')));
+		}
+	}
+
+	$resources_nav->addSubNavigation('objects', $navigation);
+}
+
+// Reiter "Raumplanung"
+if ($perm->have_perm('admin')) {
+	$resList = new ResourcesUserRoomsList($user_id, TRUE, FALSE);
+	if ($resList->roomsExist() && get_config('RESOURCES_ALLOW_ROOM_REQUESTS')) {
+		$navigation = new Navigation(_('Raumplanung'));
+		$navigation->addSubNavigation('start', new Navigation(_('Übersicht'), 'resources.php?cancel_edit_request_x=1', array('view' => 'requests_start')));
+
+		$edit_nav = new Navigation(_('Anfragen bearbeiten'), 'resources.php', array('view' => 'edit_request'));
+		$list_nav = new Navigation(_('Anfragenliste'), 'resources.php', array('view' => 'list_requests'));
+		$view_nav = new Navigation(_('Anfragenplan'), 'resources.php', array('view' => 'view_requests_schedule'));
+		$navigation->addSubNavigation('edit', $edit_nav);
+		$navigation->addSubNavigation('list', $list_nav);
+		$navigation->addSubNavigation('schedule', $view_nav);
+
+		if (!$resources_data['requests_working_on']) {
+			$edit_nav->setEnabled(false);
+			$list_nav->setEnabled(false);
+			$view_nav->setEnabled(false);
+		}
+
+		$resources_nav->addSubNavigation('room_requests', $navigation);
+	}
+}
+
+// Reiter "Anpassen": Grundlegende Einstellungen fuer alle Ressourcen Admins
+if ((getGlobalPerms($user->id) == 'admin') || ($perm->have_perm('root'))) {
+	$navigation = new Navigation(_('Anpassen'));
+	$navigation->addSubNavigation('edit_types', new Navigation(_('Typen verwalten'), 'resources.php', array('view' => 'edit_types')));
+	$navigation->addSubNavigation('edit_properties', new Navigation(_('Eigenschaften verwalten'), 'resources.php', array('view' => 'edit_properties')));
+	$navigation->addSubNavigation('edit_settings', new Navigation(_('globale Einstellungen verwalten'), 'resources.php', array('view' => 'edit_settings')));
+
+	if ($perm->have_perm('root')) {
+		$navigation->addSubNavigation('edit_perms', new Navigation(_('globale Rechte verwalten'), 'resources.php', array('view' => 'edit_perms')));
+	}
+
+	$resources_nav->addSubNavigation('settings', $navigation);
+}
+
+Navigation::addItem('/resources', $resources_nav);
+
 //load content, text, pictures and stuff
 include ("$RELATIVE_PATH_RESOURCES/views/page_intros.inc.php");
 
@@ -95,17 +193,9 @@ if (isset($_REQUEST['print_view'])){
 }
 
 include ('lib/include/html_head.inc.php');
-if ($quick_view_mode != "no_nav" && !isset($_REQUEST['print_view']))
+if ($quick_view_mode != "no_nav" && !isset($_REQUEST['print_view'])) {
 	include ('lib/include/header.php');
-
-//load correct nav
-if ($view_mode == "oobj" && !isset($_REQUEST['print_view']))
-	include ('lib/include/links_openobject.inc.php');
-elseif (($view_mode == "no_nav") || ($view_mode == "search") || isset($_REQUEST['print_view']))
-	;
-else
-	include ("$RELATIVE_PATH_RESOURCES/views/links_resources.inc.php");
-
+}
 
 ?>
 <script type="text/javascript">
@@ -164,9 +254,9 @@ function check_opener(obj){
 	<?
 
 /*****************************************************************************
-Treeview, die Strukturdarstellung, views: resources, _resources, make_hierarchie
+Treeview, die Strukturdarstellung, views: resources, make_hierarchie
 /*****************************************************************************/
-if ($view == "resources" || $view == "_resources"){
+if ($view == "resources"){
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoots.class.php");
 	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowThread.class.php");
 
@@ -198,9 +288,9 @@ if ($view == "resources" || $view == "_resources"){
 }
 
 /*****************************************************************************
-Listview, die Listendarstellung, views: lists, _lists, openobject_main
+Listview, die Listendarstellung, views: lists, openobject_main
 /*****************************************************************************/
-if ($view == "lists" || $view == "_lists" || $view == "openobject_main") {
+if ($view == "lists" || $view == "openobject_main") {
 	require_once ($RELATIVE_PATH_RESOURCES."/views/ShowList.class.php");
 
 	$list=new ShowList();

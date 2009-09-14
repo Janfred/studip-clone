@@ -40,13 +40,12 @@ class DomainAdminController extends Trails_Controller
 
         # set page title and navigation
         $layout = $template_factory->open('layouts/base');
-        $layout->set_attribute('tabs', 'links_admin');
-        $layout->set_attribute('reiter_view', 'userdomains');
-        $layout->set_attribute('infobox', $this->infobox_content());
+        $layout->infobox = $this->infobox_content();
         $this->set_layout($layout);
 
         $CURRENT_PAGE = _('Nutzerdomänen');
         $HELP_KEYWORD = 'Admins.Nutzerdomaenen';
+        Navigation::activateItem('/admin/config/user_domains');
 
         # fetch user domain
         $this->domains = UserDomain::getUserDomains();

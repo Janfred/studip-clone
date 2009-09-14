@@ -55,15 +55,16 @@ closeObject();
 $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
 $CURRENT_PAGE = _("Meine Studienmodule");
+if (!$perm->have_perm('root')) {
+	Navigation::activateItem('/browse/my_courses/modules');
+}
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 
 echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 
-if (!$perm->have_perm('root'))
-	include ('lib/include/links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
-	 
 $num_my_mod = 0;
 $my_stm = array();
 $all_sems = array();

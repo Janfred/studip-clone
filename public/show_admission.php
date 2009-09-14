@@ -34,6 +34,7 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 $CURRENT_PAGE = _("Übersicht laufender Anmeldeverfahren / Grupppierung von Veranstaltungen");
+Navigation::activateItem('/admin/tools/show_admission');
 
 require_once('config.inc.php'); //Grunddaten laden
 require_once('lib/visual.inc.php'); //htmlReady
@@ -257,6 +258,7 @@ $db2=new DB_Seminar;
 $db3=new DB_Seminar;
 $sem_condition = '';
 $admission_condition = array();
+$cssSw = new cssClassSwitcher();
 
 $cols = array();
 if ($ALLOW_GROUPING_SEMINARS) {
@@ -480,7 +482,6 @@ if ($_REQUEST['cmd'] == 'send_excel_sheet'){
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 ob_end_flush();
 ?>
 <table border=0 bgcolor="#000000" align="center" cellspacing="0" cellpadding="0" width="100%">

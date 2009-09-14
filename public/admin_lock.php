@@ -42,15 +42,15 @@ require_once("lib/visual.inc.php");
 require_once("lib/classes/Table.class.php");
 require_once("lib/classes/ZebraTable.class.php");
 require_once("lib/classes/LockRules.class.php");
- 
+require_once 'lib/admin_search.inc.php';
+
 $CURRENT_PAGE = _("Sperren von Veranstaltungen");
+Navigation::activateItem('/admin/course/lock_rules');
+
 // Start of Output
 include ("lib/include/html_head.inc.php"); // Output of html head
 include ("lib/include/header.php"); // Output of Stud.IP head
-
-// most of the logic happens in links_admin
-//
-include ("lib/include/links_admin.inc.php"); //Linkleiste fuer admins
+include 'lib/include/admin_search_form.inc.php';
 
 if (isset($SessSemName[1]) && (!$make_lock)) {
 	$stmt = DBManager::get()->prepare(

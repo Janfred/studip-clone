@@ -45,7 +45,6 @@ define("PHPDOC_DUMMY",true);
 //TODO: templates
 include('lib/include/html_head.inc.php');
 include('lib/include/header.php');
-include('lib/include/links_sms.inc.php');
 
 // alle vom user abonnierten Seminare
 $db =& new DB_Seminar;

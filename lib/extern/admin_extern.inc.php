@@ -44,6 +44,7 @@ require_once($RELATIVE_PATH_EXTERN . '/extern_config.inc.php');
 require_once($RELATIVE_PATH_EXTERN . '/lib/extern_functions.inc.php');
 require_once($RELATIVE_PATH_EXTERN . '/lib/ExternConfig.class.php');
 require_once($RELATIVE_PATH_EXTERN . '/lib/ExternModule.class.php');
+require_once 'lib/admin_search.inc.php';
 
 // -- here you have to put initialisations for the current page
 
@@ -65,15 +66,13 @@ if ($_REQUEST['com'] == 'download_config') {
 	}
 }
  
-//Output starts here
-
-include ('lib/include/html_head.inc.php'); // Output of html head
 $CURRENT_PAGE = _("Verwaltung externer Seiten");
 
-//prebuild navi and the object switcher (important to do already here and to use ob!)
-ob_start();
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
-$links = ob_get_clean();
+if ($links_admin_data["topkat"] == "inst") {
+	Navigation::activateItem('/admin/institute/external');
+} else {
+	Navigation::activateItem('/admin/config/external');
+}
 
 //Change header_line if open object
 $header_line = getHeaderLine($range_id);
@@ -101,8 +100,11 @@ if ($_REQUEST['com'] == "do_upload_config") {
 	}
 }
 
+//Output starts here
+
+include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
-echo $links;
+include 'lib/include/admin_search_form.inc.php';
 
 require_once('lib/msg.inc.php'); //Funktionen f&uuml;r Nachrichtenmeldungen
 require_once('lib/classes/cssClassSwitcher.inc.php');

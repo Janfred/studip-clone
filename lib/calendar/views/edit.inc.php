@@ -45,7 +45,6 @@ define("PHPDOC_DUMMY",true);
 //TODO: templates
 include('lib/include/html_head.inc.php');
 include('lib/include/header.php');
-include('lib/include/links_sms.inc.php');
 
 echo "<table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\" valign=\"top\">\n";

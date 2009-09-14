@@ -66,6 +66,11 @@ mark_public_course();
 $HELP_KEYWORD="Basis.Wiki"; // Hilfeseite im Hilfewiki
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Wiki");
 
+if (in_array(Request::get('view'), words('listnew listall export'))) {
+	Navigation::activateItem('/course/wiki/' . Request::get('view'));
+} else {
+	Navigation::activateItem('/course/wiki/show');
+}
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -83,8 +88,6 @@ if ($wiki_comments=="all") {         // show all comments
 }
 
 URLHelper::addLinkParam('wiki_comments', $show_wiki_comments);
-
-include ('lib/include/links_openobject.inc.php');
 
 
 // echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>\n";

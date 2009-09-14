@@ -38,10 +38,10 @@ require_once ('lib/user_visible.inc.php');
 #include ("calendar/calendar_links.inc.php");
 
 $CURRENT_PAGE = _("Kontaktgruppen");
+Navigation::activateItem('/messaging/address_book/admin_groups');
 
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include('lib/include/links_sms.inc.php');
 
 $cssSw = new cssClassSwitcher;									// Klasse für Zebra-Design
 $cssSw->enableHover();

@@ -47,7 +47,6 @@ require_once ('lib/visual.inc.php');
 require_once ('lib/include/messagingSettings.inc.php');
 require_once ('lib/messaging.inc.php');
 require_once ('lib/statusgruppe.inc.php');
-require_once ('lib/include/reiter.inc.php');
 require_once ('lib/sms_functions.inc.php');
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
@@ -68,10 +67,14 @@ $db7 = new DB_Seminar;
 
 if ($change_view) {
 	$HELP_KEYWORD="Basis.MyStudIPMessaging";
+	Navigation::activateItem('/messaging/message/settings');
 } else {
 	$HELP_KEYWORD="Basis.InteraktionNachrichten";
+	Navigation::activateItem('/messaging/message/' . Request::get('sms_inout'));
 }
+
 $CURRENT_PAGE = _("Systeminterne Nachrichten");
+
 // Output of html head and Stud.IP head
 include ('lib/include/html_head.inc.php');
 include ('lib/include/header.php');
@@ -89,9 +92,6 @@ if ($sms_inout && !$neux) {
 	$sms_data["view"] = "in";
 }
 
-// include
-include ('lib/include/links_sms.inc.php');
-
 // check the messaging settings, avoids severals errors
 check_messaging_default();
 
@@ -105,6 +105,8 @@ if ($auth->auth["jscript"]) {
 if (($change_view) || ($delete_user) || ($view=="Messaging")) {
 	change_messaging_view();
 	echo "</td></tr></table>";
+	// Save data back to database.
+	include ('lib/include/html_end.inc.php');
 	page_close();
 	die;
 }

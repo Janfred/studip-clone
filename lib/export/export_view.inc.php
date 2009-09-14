@@ -21,11 +21,11 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 {
 // Start of Output
 	$CURRENT_PAGE = $export_pagename;
+	Navigation::activateItem('/admin/tools/export');
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   // Output of Stud.IP head
 	if ($page == 1)
 		echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
-	include ('lib/include/links_admin.inc.php');
 	if ($page == 1)
 		$cssSw->enableHover();
 

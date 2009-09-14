@@ -231,6 +231,7 @@ elseif($mode == 'create_pdf'){
 /* ************************************************************************* */
 $CURRENT_PAGE = _("Veranstaltungsübersicht erstellen");
 $HELP_KEYWORD="Basis.Allgemeines";
+Navigation::activateItem('/browse/my_courses/record_of_study');
 
 ob_start();
 if ($mode == "new"){
@@ -261,7 +262,6 @@ if (!isset($_GET["create_pdf"])){
 	$out = ob_get_clean();
 	require_once('lib/include/html_head.inc.php');
 	require_once('lib/include/header.php');
-	require_once('lib/include/links_seminare.inc.php');
 }
 echo $out;
 page_close ();

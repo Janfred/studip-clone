@@ -53,10 +53,14 @@ class Course_AvatarController extends AuthenticatedController
         # choose base layout w/o infobox and set tabs
         $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
 
-        $layout->tabs        = $this->studygroup_mode ? 'links_openobject'
-                                                      : 'links_admin';
-        $layout->reiter_view = $this->studygroup_mode ? 'studygroup_admin'
-                                                      : 'grunddaten_sem';
+        if ($this->studygroup_mode) {
+            Navigation::activateItem('/course/studygroup/admin');
+        } else {
+            Navigation::activateItem('/admin/course/details');
+
+            require_once 'lib/admin_search.inc.php';
+            $layout->tabs = 'admin_search_form';
+        }
         $this->set_layout($layout);
     }
 

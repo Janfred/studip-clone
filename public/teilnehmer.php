@@ -92,6 +92,8 @@ if ($rechte) {
 	$HELP_KEYWORD="Basis.InVeranstaltungTeilnehmer";
 }
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("TeilnehmerInnen");
+Navigation::activateItem('/course/members/view');
+
 if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 
 	// Start  of Output
@@ -145,8 +147,6 @@ if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 		die;
 	}
 }
-
-include ('lib/include/links_openobject.inc.php');
 
 $messaging=new messaging;
 $cssSw=new cssClassSwitcher;

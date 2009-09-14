@@ -163,26 +163,6 @@ if($db->f('user_id') == $user->id && !$db->f('locked')){
 	unset($user_id);
 }
 
-# get the layout template
-$layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
-
-# and start the output buffering
-ob_start();
-
-
-
-?>
-<script language="Javascript">
-function open_im() {
-  fenster = window.open("studipim.php",
-                        "im_<?=$GLOBALS['user']->id;?>",
-                        "scrollbars=yes,width=400,height=300",
-                        "resizable=no");
-}
-</script>
-
-<?php
-
 if (!$user_id){
 	throw new Exception(_("Diese Homepage ist nicht verfügbar."));
 }
@@ -249,7 +229,28 @@ foreach (DataFieldEntry::getDataFieldEntries($user_id) as $entry) {
 $show_tabs = ($user_id == $user->id && $perm->have_perm("autor"))
              || $perm->have_perm("root")
              || $admin_darf;
+
+if ($show_tabs) {
+	Navigation::activateItem('/homepage/view/all');
+}
+
+# get the layout template
+$layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
+
+# and start the output buffering
+ob_start();
+
+
 ?>
+<script language="Javascript">
+function open_im() {
+  fenster = window.open("studipim.php",
+                        "im_<?=$GLOBALS['user']->id;?>",
+                        "scrollbars=yes,width=400,height=300",
+                        "resizable=no");
+}
+</script>
+
 
 
 <table align="center" width="100%" border="0" cellpadding="1" cellspacing="0" valign="top">
@@ -600,13 +601,11 @@ if ($GLOBALS["PLUGINS_ENABLE"]){
 	// PluginEngine aktiviert.
 	// Prüfen, ob HomepagePlugins vorhanden sind.
 	$activatedhomepageplugins = PluginEngine::getPlugins('HomepagePlugin');
-	$requser = new StudIPUser();
-	$requser->setUserid($user_id);
+	$requser = new StudIPUser($user_id);
 
 	foreach ($activatedhomepageplugins as $activatedhomepageplugin){
 		$activatedhomepageplugin->setRequestedUser($requser);
 		// hier nun die HomepagePlugins anzeigen
-//		if ($activatedhomepageplugin->hasNavigation()){ // wieso ist hier eine Navigation erforderlich? hab das mal geaendert :-)
 		if ($activatedhomepageplugin->getStatusShowOverviewPage()){
 			echo '<table class="blank" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><img src="'. $activatedhomepageplugin->getPluginiconname() .'" border="0" align="texttop"><b> ' . $activatedhomepageplugin->getDisplaytitle() .' </b></td><td align="right" width="1%" class="topic" nowrap="nowrap">&nbsp;';
 
@@ -671,10 +670,6 @@ if ($perm->get_perm($user_id) == 'dozent'){
 }
 
 $layout->set_attribute('content_for_layout', ob_get_clean());
-
-if ($show_tabs) {
-	$layout->set_attribute('tabs', 'links_about');
-}
 
 echo $layout->render();
 

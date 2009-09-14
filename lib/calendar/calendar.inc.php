@@ -216,125 +216,78 @@ if ($source_page && ($cmd == 'edit' || $cmd == 'add' || $cmd == 'delete'))
 	$calendar_sess_control_data['source'] = preg_replace('![^0-9a-z+_?&#/=.-]!i', '', rawurldecode($source_page));
 }
 
-// add an event to database *********************************************************
-
-if ($cmd == 'add')
-{
-//	$atermin =& new DbCalendarEvent($termin_id);
-	// Ueberpruefung der Formulareingaben
-	$err = check_form_values($calendar_sess_forms_data);
-//	set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
-	// wenn alle Daten OK, dann Termin anlegen, oder bei vorhandener
-	// termin_id updaten
-	if (empty($err) && $count_events < $CALENDAR_MAX_EVENTS)
-	{
-		$atermin =& new DbCalendarEvent($termin_id);
-		set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
-		$atermin->save();
-		$atime = $atermin->getStart();
-
-		if ($calendar_sess_control_data['source'])
-		{
-			$destination = $calendar_sess_control_data['source'] . "#a";
-			$calendar_sess_control_data['source'] = '';
-			unset($calendar_sess_forms_data);
-			$sess->unregister('calendar_sess_forms_data');
-			page_close();
-			header("Location: $destination");
-			exit;
-		}
-
-		if (!empty($calendar_sess_control_data['view_prv']))
-			$cmd = $calendar_sess_control_data['view_prv'];
-		else
-			$cmd = 'showday';
-
-		unset($calendar_sess_forms_data);
-		$sess->unregister('calendar_sess_forms_data');
-	}
-	// wrong data? -> switch back to edit mode
-	else
-	{
-		$cmd = 'edit';
-		$mod = $mod_prv ? $mod_prv : 'SINGLE';
-		if ($back_recur_x) {
-			$set_recur_x = 1;
-			unset($back_recur_x);
-		}
-	}
-}
-
 // Seitensteuerung
+$HELP_KEYWORD="Basis.Terminkalender";
 
 switch ($cmd)
 {
 	case 'showday':
 		$calendar_sess_control_data['view_prv'] = $cmd;
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Tagesansicht");
-		break;
-	case 'add':
-		switch($calendar_sess_control_data['view_prv'])
-		{
-			case 'showday':
-				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Tagesansicht");
-				break;
-			case 'showweek':
-				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Wochenansicht");
-				break;
-			case 'showmonth':
-				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Monatsansicht");
-				break;
-			case 'showyear':
-				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Jahresansicht");
-		}
-		break;
-	case 'del':
-		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Tagesansicht");
-		$atermin =& new DbCalendarEvent($termin_id);
-		$atermin->delete();
-
-		if($calendar_sess_control_data['source'])
-		{
-			$destination = $calendar_sess_control_data['source'];
-			$calendar_sess_control_data['source'] = '';
-			header("Location: $destination");
-			page_close();
-			die;
-		}
-
-		if(!empty($calendar_sess_control_data['view_prv']))
-			$cmd = $calendar_sess_control_data['view_prv'];
-		else
-			$cmd = 'showday';
-
-		unset($calendar_sess_forms_data);
-		$sess->unregister('calendar_sess_forms_data');
+		Navigation::activateItem('/messaging/calendar/day');
 		break;
 
 	case 'showweek':
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Wochenansicht");
+		Navigation::activateItem('/messaging/calendar/week');
 		$calendar_sess_control_data['view_prv'] = $cmd;
 		break;
 
 	case 'showmonth':
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Monatsansicht");
+		Navigation::activateItem('/messaging/calendar/month');
 		$calendar_sess_control_data['view_prv'] = $cmd;
 		break;
 
 	case 'showyear':
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Jahresansicht");
+		Navigation::activateItem('/messaging/calendar/year');
 		$calendar_sess_control_data['view_prv'] = $cmd;
+		break;
+
+	case 'changeview':
+		$HELP_KEYWORD = "Basis.TerminkalenderEinstellungen";
+		$CURRENT_PAGE = _("Einstellungen des Terminkalenders bearbeiten");
+		Navigation::activateItem('/messaging/calendar/settings');
 		break;
 
 	case 'export':
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Termindaten importieren, exportieren und synchronisieren");
+		Navigation::activateItem('/messaging/calendar/export');
 		break;
 
 	case 'bind':
+		$HELP_KEYWORD = "Basis.TerminkalenderEinbinden";
 		$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Veranstaltungstermine einbinden");
+		Navigation::activateItem('/messaging/calendar/course');
+		break;
+
+	case 'add':
+	case 'del':
+		switch($calendar_sess_control_data['view_prv'])
+		{
+			case 'showday':
+				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Tagesansicht");
+				Navigation::activateItem('/messaging/calendar/day');
+				break;
+			case 'showweek':
+				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Wochenansicht");
+				Navigation::activateItem('/messaging/calendar/week');
+				break;
+			case 'showmonth':
+				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Monatsansicht");
+				Navigation::activateItem('/messaging/calendar/month');
+				break;
+			case 'showyear':
+				$CURRENT_PAGE = _("Mein persönlicher Terminkalender - Jahresansicht");
+				Navigation::activateItem('/messaging/calendar/year');
+		}
 		break;
 
 	case 'edit':
+		$HELP_KEYWORD = "Basis.TerminkalenderBearbeiten";
+		Navigation::activateItem('/messaging/calendar/edit');
+
 		if ($termin_id)
 		{
 			if ($evtype == 'sem')
@@ -421,6 +374,79 @@ switch ($cmd)
 		}
 		extract($calendar_sess_forms_data, EXTR_OVERWRITE);
 		break;
+}
+
+// add an event to database *********************************************************
+
+if ($cmd == 'add')
+{
+//	$atermin =& new DbCalendarEvent($termin_id);
+	// Ueberpruefung der Formulareingaben
+	$err = check_form_values($calendar_sess_forms_data);
+//	set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
+	// wenn alle Daten OK, dann Termin anlegen, oder bei vorhandener
+	// termin_id updaten
+	if (empty($err) && $count_events < $CALENDAR_MAX_EVENTS)
+	{
+		$atermin =& new DbCalendarEvent($termin_id);
+		set_event_properties($calendar_sess_forms_data, $atermin, $calendar_sess_forms_data['mod_prv']);
+		$atermin->save();
+		$atime = $atermin->getStart();
+
+		if ($calendar_sess_control_data['source'])
+		{
+			$destination = $calendar_sess_control_data['source'] . "#a";
+			$calendar_sess_control_data['source'] = '';
+			unset($calendar_sess_forms_data);
+			$sess->unregister('calendar_sess_forms_data');
+			page_close();
+			header("Location: $destination");
+			exit;
+		}
+
+		if (!empty($calendar_sess_control_data['view_prv']))
+			$cmd = $calendar_sess_control_data['view_prv'];
+		else
+			$cmd = 'showday';
+
+		unset($calendar_sess_forms_data);
+		$sess->unregister('calendar_sess_forms_data');
+	}
+	// wrong data? -> switch back to edit mode
+	else
+	{
+		$cmd = 'edit';
+		$mod = $mod_prv ? $mod_prv : 'SINGLE';
+		if ($back_recur_x) {
+			$set_recur_x = 1;
+			unset($back_recur_x);
+		}
+	}
+}
+
+// remove an event from database **********************************************
+
+if ($cmd == 'del')
+{
+	$atermin =& new DbCalendarEvent($termin_id);
+	$atermin->delete();
+
+	if($calendar_sess_control_data['source'])
+	{
+		$destination = $calendar_sess_control_data['source'];
+		$calendar_sess_control_data['source'] = '';
+		header("Location: $destination");
+		page_close();
+		die;
+	}
+
+	if(!empty($calendar_sess_control_data['view_prv']))
+		$cmd = $calendar_sess_control_data['view_prv'];
+	else
+		$cmd = 'showday';
+
+	unset($calendar_sess_forms_data);
+	$sess->unregister('calendar_sess_forms_data');
 }
 
 // Tagesuebersicht anzeigen ***************************************************

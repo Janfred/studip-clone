@@ -38,7 +38,8 @@ class reiter {
 	function getStructureForPlugin($plugin, $topKat = '', $navigation_getter = 'getNavigation'){
 		$navigation = $plugin->$navigation_getter();
 		if($navigation instanceof StudipPluginNavigation){
-			$navigation->setPlugin($plugin);
+			// $navigation->setPlugin($plugin);
+			$active_plugin = PluginEngine::getCurrentPluginId();
 			$plugin_id = $plugin->getPluginid();
 			if ($plugin instanceof StandardPlugin || $plugin instanceof HomepagePlugin){
 				$top_displayname = $plugin->getDisplayTitle();
@@ -49,21 +50,20 @@ class reiter {
 														'name' => $top_displayname,
 														'link' => $navigation->getLink(),
 			 											'active' => false);
-			if($navigation->isActive() || ($navigation_getter == 'getNavigation' && PluginEngine::getCurrentPluginId() == $plugin_id)){
+			if($navigation->isActive() || ($navigation_getter == 'getNavigation' && isset($active_plugin) && $active_plugin == $plugin_id)){
 				$view = $topKat . "plugin_" . $plugin_id;
 			}
-			$submenu = (array)$navigation->getSubMenu();
 			if($topKat == ''){
-				array_unshift($submenu, $navigation);
-			}
-			foreach ($submenu as $key => $submenuitem){
-				$structure[$topKat . "plugin_" . $plugin_id . "_" . $key] = array (
-																	'topKat' => $topKat . "plugin_" . $plugin_id,
-																	'name' => $submenuitem->getDisplayname(),
-																	'link' => $submenuitem->getLink(),
-																	'active' => false);
-				if($submenuitem->isActive()){
-					$view = $topKat . "plugin_" . $plugin_id . "_" . $key;
+				$submenu = (array)$navigation->getSubMenu();
+				foreach ($submenu as $key => $submenuitem){
+					$structure[$topKat . "plugin_" . $plugin_id . "_" . $key] = array (
+																		'topKat' => $topKat . "plugin_" . $plugin_id,
+																		'name' => $submenuitem->getDisplayname(),
+																		'link' => $submenuitem->getLink(),
+																		'active' => false);
+					if($submenuitem->isActive()){
+						$view = $topKat . "plugin_" . $plugin_id . "_" . $key;
+					}
 				}
 			}
 			return array('structure' => $structure, 'reiter_view' => $view);
@@ -84,7 +84,7 @@ class reiter {
 	 *
 	 * @return void
 	 */
-	function activateStructure(&$structure, $view) {
+	function activateStructure(&$structure, $view, $activeBottomkat) {
 
 		# view is empty, use the first item
 		if (!$view) {
@@ -100,7 +100,7 @@ class reiter {
 		}
 
 		# or the topKat itself
-		else {
+		else if ($activeBottomkat) {
 			foreach ($structure as $key => $value) {
 				if ($structure[$key]["topKat"] == $view) {
 					$structure[$key]["active"] = TRUE;
@@ -121,16 +121,40 @@ class reiter {
 	 */
 	function create($structure, $view) {
 
-		$noAktiveBottomkat = FALSE;
+		$activeBottomkat = true;
 
 		if (preg_match('/^\((.*)\)$/', $view, $matches)) {
-			$noAktiveBottomkat = TRUE;
+			$activeBottomkat = false;
 			$view = $matches[1];
 		}
 
-		$this->activateStructure($structure, $view);
+		$this->activateStructure($structure, $view, $activeBottomkat);
 
-		echo $GLOBALS['template_factory']->render('tabs',
-			compact('structure', 'noAktiveBottomkat'));
+		Navigation::addItem('/reiter', new Navigation(''));
+
+		foreach ($structure as $key => $item) {
+			$navigation = new Navigation($item['name'],
+				html_entity_decode($item['link']));
+
+			if ($item['disabled']) {
+				$navigation->setEnabled(false);
+			} else if ($item['active']) {
+				$navigation->setActive(true);
+			}
+
+			if ($item['topKat'] && isset($structure[$item['topKat']])) {
+				$path = '/reiter/' . $item['topKat'] . '/' . $key;
+				Navigation::addItem($path, $navigation);
+			} else if ($item['topKat'] == '') {
+				$path = '/reiter/' . $key;
+				Navigation::addItem($path, $navigation);
+			}
+		}
+
+		$navigation = Navigation::getItem('/')->activeSubNavigation();
+
+		if (isset($navigation)) {
+		    echo $GLOBALS['template_factory']->render('tabs', compact('navigation'));
+		}
 	}
 }

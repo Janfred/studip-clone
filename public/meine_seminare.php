@@ -36,130 +36,31 @@ global $SEM_CLASS,
 ob_start(); //Outputbuffering für maximal Performance
 
 function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
-  $link = $type."_main.php";
+  $link = $type.'_main.php?auswahl='.$semid;
 
-  // Postings
-  if ($my_obj_values["neuepostings"])
-		echo "<a href=\"$link?auswahl=$semid&redirect_to=forum.php&view=neue&sort=age\">&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-posting2.gif' border=0 ".tooltip(sprintf(_("%s Postings, %s neue"), $my_obj_values["postings"], $my_obj_values["neuepostings"]))."></a>";
-  elseif ($my_obj_values["postings"])
-		echo "<a href=\"$link?auswahl=$semid&redirect_to=forum.php&view=reset&sort=age\">&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-posting.gif' border=0 ".tooltip(sprintf(_("%s Postings"), $my_obj_values["postings"]))."></a>";
-  else
-		echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-leer.gif\" border=\"0\">";
+  foreach (words('forum files news scm literature schedule wiki elearning vote') as $key) {
+	$navigation[$key] = $my_obj_values[$key];
+  }
 
-  //Dokumente
-  if ($my_obj_values["neuedokumente"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=folder.php&cmd=all\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-disc2.gif' border=0 ".tooltip(sprintf(_("%s Dokumente, %s neue"), $my_obj_values["dokumente"], $my_obj_values["neuedokumente"]))."></a>";
-  elseif ($my_obj_values["dokumente"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=folder.php&cmd=tree\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-disc.gif' border=0 ".tooltip(sprintf(_("%s Dokumente"), $my_obj_values["dokumente"]))."></a>";
-  else
-		echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-leer.gif\" border=\"0\">";
+  if ($GLOBALS['PLUGINS_ENABLE']) {
+	foreach (PluginEngine::getPlugins('StandardPlugin', $semid) as $plugin) {
+		$navigation[] = $plugin->getIconNavigation($semid, $my_obj_values['visitdate']);
+	}
+  }
 
-  //News
-  if ($my_obj_values["neuenews"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-news2.gif' border=0 ".tooltip(sprintf(_("%s News, %s neue"), $my_obj_values["news"], $my_obj_values["neuenews"]))."></a>";
-  elseif ($my_obj_values["news"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-news.gif' border=0 ".tooltip(sprintf(_("%s News"), $my_obj_values["news"]))."></a>";
-  else
-		echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-leer.gif\" border=\"0\">";
-
-  //SCM
-  if ($my_obj_values["scmcontent"]) {
-		echo "<a href=\"$link?auswahl=$semid&redirect_to=scm.php\">";
-		if($my_obj_values["scmcontent"] == 1){
-			if ($my_obj_values["neuscmcontent"]){
-				$ttip = $my_obj_values["scmtabname"]._(" (geändert)");
-			} else {
-				$ttip = $my_obj_values["scmtabname"];
-			}
-		} else {
-			if ($my_obj_values["neuscmcontent"]){
-				$ttip = sprintf(_("%s Einträge, %s neue"), $my_obj_values["scmcontent"] ,$my_obj_values["neuscmcontent"]);
-			} else {
-				$ttip = sprintf(_("%s Einträge"), $my_obj_values["scmcontent"]);
-			}
+  foreach ($navigation as $key => $nav) {
+	if (isset($nav) && $nav->isVisible(true)) {
+		printf('&nbsp; <a href="%s&redirect_to=%s"><img ', $link, htmlspecialchars($nav->getURL()));
+		foreach ($nav->getImage() as $key => $value) {
+			printf('%s="%s" ', $key, htmlReady($value));
 		}
-		if ($my_obj_values["neuscmcontent"])
-			echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-cont2.gif\" border=0 ".tooltip($ttip)."></a>";
-		else
-			echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-cont.gif\" border=0 ".tooltip($ttip)."></a>";
-  }
-  else
-		echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-leer.gif\" border=\"0\">";
-
-	// Literaturlisten
-  if ($my_obj_values["neuelitlist"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=literatur.php\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-lit2.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten, %s neue"), $my_obj_values["litlist"], $my_obj_values["neuelitlist"]))."></a>";
-  elseif ($my_obj_values["litlist"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=literatur.php\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-lit.gif' border=0 ".tooltip(sprintf(_("%s Literaturlisten"), $my_obj_values["litlist"]))."></a>";
-  else
-		echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-leer.gif\" border=\"0\">";
-
-  // Termine
-  if ($my_obj_values["neuetermine"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=dates.php#a\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-uhr2.gif' border=0 ".tooltip(sprintf(_("%s Termine, %s neue"), $my_obj_values["termine"], $my_obj_values["neuetermine"]))."></a>";
-  elseif ($my_obj_values["termine"])
-		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=dates.php\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-uhr.gif' border=0 ".tooltip(sprintf(_("%s Termine"), $my_obj_values["termine"]))."></a>";
-  else
-		echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-leer.gif\" border=\"0\">";
-
-
-  // Wikiseiten
-  if ($GLOBALS['WIKI_ENABLE']) {
-	  if ($my_obj_values["neuewikiseiten"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=wiki.php&view=listnew\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-wiki2.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten, %s Änderungen"), $my_obj_values["wikiseiten"], $my_obj_values["neuewikiseiten"]))."></a>";
-	  elseif ($my_obj_values["wikiseiten"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=wiki.php\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-wiki.gif' border=0 ".tooltip(sprintf(_("%s WikiSeiten"), $my_obj_values["wikiseiten"]))."></a>";
-	  else
-			echo "&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-leer.gif\" width=\"20\" height=\"17\" border=\"0\">";
+		echo '></a>';
+	} else if (is_string($key)) {
+		$width = $key == 'wiki' ? 20 : ($key == 'elearning' ? 18 : 13);
+		echo '&nbsp; '.Assets::img('icon-leer.gif', array('width' => $width, 'height' => 17));
+	}
   }
 
-   //elearning
-  if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']) {
-  	if ($my_obj_values["neuecontentmodule"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=elearning_interface.php&view=show\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-lern2.gif' border=0 ".tooltip(sprintf(_("%s Content-Modul(e), %s neue"), $my_obj_values["contentmodule"], $my_obj_values["neuecontentmodule"]))."></a>";
-	  elseif ($my_obj_values["contentmodule"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to=elearning_interface.php&view=show\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-lern.gif' border=0 ".tooltip(sprintf(_("%s Content-Modul(e)"), $my_obj_values["contentmodule"]))."></a>";
-	  else
-			echo "&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-leer.gif' width=\"18\" height=\"17\" border=0>";
-  }
-
- //votes
-  if ($GLOBALS['VOTE_ENABLE']) {
-  	if ($my_obj_values["neuevotes"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-vote2.gif' border=0 ".tooltip(sprintf(_("%s Umfrage(n), %s neue"), $my_obj_values["votes"], $my_obj_values["neuevotes"]))."></a>";
-	  elseif ($my_obj_values["votes"])
-			echo "&nbsp; <a href=\"$link?auswahl=$semid#vote\"><img src='".$GLOBALS['ASSETS_URL']."images/icon-vote.gif' border=0 ".tooltip(sprintf(_("%s Umfrage(n)"), $my_obj_values["votes"]))."></a>";
-	  else
-			echo '&nbsp; <img src="'.$GLOBALS['ASSETS_URL'].'images/icon-leer.gif" width="13" height="17" border=0>';
-  }
-
-  // plugins
-  if ($GLOBALS["PLUGINS_ENABLE"]){
-
-  	  if (is_array($my_obj_values["activatedplugins"])){
-		  foreach ($my_obj_values["activatedplugins"] as $plugin){
-
-			$plugin->setId($semid);
-		  	if ($plugin->hasChanged($my_obj_values["visitdate"])){
-		  		// something new
-		  		echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to="
-				. PluginEngine::getLink($plugin) . "\"><img src='" . $plugin->getChangeindicatoriconname() . "' border=0 "
-				. tooltip($plugin->getOverviewMessage(true)) ."></a>";
-		  	}
-		  	else {
-		  		// nothing changed, show empty icon
-				echo "&nbsp; <a href=\"$link?auswahl=$semid&redirect_to="
-				. PluginEngine::getLink($plugin) . "\"><img src='" . $plugin->getPluginiconname()
-				. "' border=0 "
-				. tooltip($plugin->getOverviewMessage(false))."></a>";
-		  	}
-		  }
-  	  }
-  	  else {
-
-  	  	 echo '&nbsp; <img src="'. $GLOBALS['ASSETS_URL'] . 'images/icon-leer.gif" width="13" height="17" border=0>';
-  	  }
-  }
   echo "&nbsp;";
 
 } // Ende function print_seminar_content
@@ -197,10 +98,11 @@ $userConfig = new UserConfig();
 closeObject();
 $links_admin_data='';	 //Auch im Adminbereich gesetzte Veranstaltungen muessen geloescht werden.
 
-URLHelper::removeLinkParam('cid');
-
 $HELP_KEYWORD="Basis.MeineVeranstaltungen";
 $CURRENT_PAGE=_("Meine Veranstaltungen und Einrichtungen");
+if (!$perm->have_perm("root")) {
+	Navigation::activateItem('/browse/my_courses/list');
+}
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -210,9 +112,6 @@ echo "\n" . $cssSw->GetHoverJSFunction() . "\n";
 if ($GLOBALS['CHAT_ENABLE']){
 	chat_get_javascript();
 }
-
-if (!$perm->have_perm("root"))
-	include ('lib/include/links_seminare.inc.php');	   //hier wird die Navigation nachgeladen
 
 $cmd = Request::option('cmd');
 if(in_array($cmd, words('no_kill suppose_to_kill suppose_to_kill_admission kill kill_admission'))){

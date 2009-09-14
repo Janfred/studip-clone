@@ -42,16 +42,11 @@ require_once('lib/classes/StudipSemTreeSearch.class.php');
 require_once('lib/classes/DataFieldEntry.class.php');
 require_once('lib/classes/SeminarCategories.class.php');
 require_once 'lib/classes/CourseAvatar.class.php';
+require_once 'lib/admin_search.inc.php';
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGrunddaten";
 
-//Start of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
 $CURRENT_PAGE.=_("Verwaltung der Grunddaten");
-
-//prebuild navi and the object switcher (important to do already here and to use ob!)
-ob_start();
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
-$links = ob_get_clean();
+Navigation::activateItem('/admin/course/details');
 
 //get ID from a open Seminar
 if ($SessSemName[1])
@@ -62,8 +57,10 @@ $header_line = getHeaderLine($s_id);
 if ($header_line)
 	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
 
+//Start of Output
+include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-echo $links;
+include 'lib/include/admin_search_form.inc.php';
 
 ?>
 

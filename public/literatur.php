@@ -34,6 +34,7 @@ mark_public_course();
 
 $HELP_KEYWORD="Basis.Literatur";
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Literatur");
+Navigation::activateItem('/course/literature/view');
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -43,7 +44,6 @@ checkObject(); // do we have an open object?
 checkObjectModule("literature");
 object_set_visit_module("literature");
 
-include ('lib/include/links_openobject.inc.php');
 ?>
 <body>
 <table width="100%" border="0" cellpadding="2" cellspacing="0">

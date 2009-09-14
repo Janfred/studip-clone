@@ -24,23 +24,6 @@
 interface StudienmodulManagementPlugin {
 	
 	/**
-	 * Gibt die Navigationsstruktur für den Modulkatalog/Modulsuche zurück.
-	 * Wird neben "Meine Veranstaltungen" und "Veranstaltungen suchen" eingeblendet
-	 * Kann beliebiges Submenü enthalten
-	 *
-	 * @return StudipPluginNavigation
-	 */
-	function getModuleCatalogNavigation();
-	
-	/**
-	 * Gibt das Navigationsobjekt für den Menüpunkt "Meine Module" zurück.
-	 * Wird unter der Topnavigation "Meine Veranstaltungen" eingeblendet
-	 *
-	 * @return StudipPluginNavigation
-	 */
-	function getMyModulesNavigation();
-	
-	/**
 	 * Gibt die Bezeichnung für ein Modul zurück
 	 *
 	 * @param string $module_id eine ID aus der Tabelle sem_tree

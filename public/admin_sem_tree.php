@@ -34,6 +34,7 @@ if (!$perm->is_fak_admin()){
 }
 
 $CURRENT_PAGE = $UNI_NAME_CLEAN . " - " . _("Veranstaltungshierachie bearbeiten");
+Navigation::activateItem('/admin/config/sem_tree');
 
 require_once ('lib/visual.inc.php');
 require_once ('lib/classes/StudipSemTreeViewAdmin.class.php');
@@ -44,7 +45,6 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
 
 $view = new DbView();
 $the_tree = new StudipSemTreeViewAdmin($_REQUEST['start_item_id']);

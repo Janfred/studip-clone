@@ -45,20 +45,29 @@ require_once 'lib/functions.php';
 $HELP_KEYWORD="Basis.Votings";
 $CURRENT_PAGE= _("Verwaltung von Umfragen und Tests"); 
 
-include_once('lib/seminar_open.php');
-include_once('lib/include/html_head.inc.php');
-include_once('lib/include/header.php');
-
-
 if (!empty($the_range) && $the_range != $auth->auth['uname'] && $the_range != 'studip'){
 	$view_mode = get_object_type($the_range);
 	if ($view_mode == "fak"){
 		$view_mode = "inst";
 	}
-	include ('lib/include/links_admin.inc.php');
+	if ($links_admin_data['topkat'] == 'sem') {
+		Navigation::activateItem('/admin/course/vote');
+	} else {
+		Navigation::activateItem('/admin/institute/vote');
+	}
 } else {
-	include ('lib/include/links_about.inc.php');
+	Navigation::activateItem('/homepage/tools/vote');
 }
+
+include_once('lib/seminar_open.php');
+require_once 'lib/admin_search.inc.php';
+include_once('lib/include/html_head.inc.php');
+include_once('lib/include/header.php');
+
+if (!empty($the_range) && $the_range != $auth->auth['uname'] && $the_range != 'studip'){
+	include 'lib/include/admin_search_form.inc.php';
+}
+
 if ($page == "edit")
 	include ('lib/vote/vote_edit.inc.php');
 else

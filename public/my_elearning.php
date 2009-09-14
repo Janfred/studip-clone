@@ -32,6 +32,7 @@ require_once ('config.inc.php');
 require_once ('lib/visual.inc.php');
 
 $CURRENT_PAGE = _("Meine Lernmodule und Benutzer-Accounts");
+Navigation::activateItem('/homepage/tools/elearning');
 
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -41,9 +42,6 @@ if ($ELEARNING_INTERFACE_ENABLE)
 {
 	require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ELearningUtils.class.php");
 	ELearningUtils::bench("start");
-
-
-	include ('lib/include/links_about.inc.php');
 
 	if ($elearning_open_close["type"] != "user")
 	{

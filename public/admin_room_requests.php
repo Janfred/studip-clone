@@ -57,6 +57,7 @@ require_once('config.inc.php');	//Settings....
 require_once 'lib/functions.php';	//basale Funktionen
 require_once('lib/visual.inc.php');	//Darstellungsfunktionen
 require_once('lib/classes/Seminar.class.php');	//Seminar-class
+require_once 'lib/admin_search.inc.php';
 
 // -- here you have to put initialisations for the current page
 
@@ -92,12 +93,12 @@ if ($SessSemName[1]) {
 }
 
 $CURRENT_PAGE = getHeaderLine($seminar_id)." -  "._("Raumanfrage");
+Navigation::activateItem('/admin/course/dates');
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');	//hier wird das Reiter- und Suchsystem des Adminbereichs eingebunden
-
+include 'lib/include/admin_search_form.inc.php';
 
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
 if ((($seminar_id) || ($termin_id)) && (!$uebernehmen_x) && (!$search_room_x) && (!$reset_room_search_x) && (!$send_room_x)

@@ -224,19 +224,31 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 	// Postings
 	$db2->query(get_obj_clause('px_topics a','Seminar_id','topic_id',"(chdate > IFNULL(b.visitdate,0) AND chdate >= mkdate AND a.user_id !='$user_id')", 'forum'));
 	while($db2->next_record()) {
-		if ($my_obj[$db2->f("object_id")]["modules"]["forum"]) {
-			$my_obj[$db2->f("object_id")]["neuepostings"]=$db2->f("neue");
-			$my_obj[$db2->f("object_id")]["postings"]=$db2->f("count");
-			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+		$object_id = $db2->f('object_id');
+		if ($my_obj[$object_id]["modules"]["forum"]) {
+			if ($my_obj[$object_id]['last_modified'] < $db2->f('last_modified')){
+				$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 			}
+	
+			$nav = new Navigation('');
+
+			if ($db2->f('neue')) {
+				$nav->setURL('forum.php&view=neue&sort=age');
+				$nav->setImage('icon-posting2.gif', array('title' =>
+					sprintf(_('%s Postings, %s neue'), $db2->f('count'), $db2->f('neue'))));
+			} else if ($db2->f('count')) {
+				$nav->setURL('forum.php&view=reset&sort=age');
+				$nav->setImage('icon-posting.gif', array('title' => sprintf(_('%s Postings'), $db2->f('count'))));
+			}
+
+			$my_obj[$object_id]['forum'] = $nav;
 		}
 	}
-	
+
 	//dokumente
 	$unreadable_folders = array();
 	if (!$GLOBALS['perm']->have_perm('admin')){
-		foreach( array_keys($my_obj) as $obj_id){
+		foreach (array_keys($my_obj) as $obj_id){
 			if($my_obj[$obj_id]['modules']['documents_folder_permissions'] 
 			|| ($my_obj[$obj_id]['obj_type'] == 'sem' && StudipDocumentTree::ExistsGroupFolders($obj_id))){
 				$must_have_perm = $my_obj[$obj_id]['obj_type'] == 'sem' ? 'tutor' : 'autor';
@@ -249,129 +261,218 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 	}
 	$db2->query(get_obj_clause('dokumente a','Seminar_id','dokument_id',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'documents', false, (count($unreadable_folders) ? "AND a.range_id NOT IN('".join("','", $unreadable_folders)."')" : "")));
 	while($db2->next_record()) {
-		if ($my_obj[$db2->f("object_id")]["modules"]["documents"]) {
-			$my_obj[$db2->f("object_id")]["neuedokumente"]=$db2->f("neue");
-			$my_obj[$db2->f("object_id")]["dokumente"]=$db2->f("count");
-			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+		$object_id = $db2->f('object_id');
+		if ($my_obj[$object_id]["modules"]["documents"]) {
+			if ($my_obj[$object_id]['last_modified'] < $db2->f('last_modified')){
+				$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 			}
+	
+			$nav = new Navigation('');
+
+			if ($db2->f('neue')) {
+				$nav->setURL('folder.php&cmd=all');
+				$nav->setImage('icon-disc2.gif', array('title' =>
+					sprintf(_('%s Dokumente, %s neue'), $db2->f('count'), $db2->f('neue'))));
+			} else if ($db2->f('count')) {
+				$nav->setURL('folder.php&cmd=tree');
+				$nav->setImage('icon-disc.gif', array('title' => sprintf(_('%s Dokumente'), $db2->f('count'))));
+			}
+
+			$my_obj[$object_id]['files'] = $nav;
 		}
 	}
-	
+
 	//News
 	$db2->query(get_obj_clause('news_range a {ON_CLAUSE} LEFT JOIN news nw ON(a.news_id=nw.news_id AND UNIX_TIMESTAMP() BETWEEN date AND (date+expire))','range_id','nw.news_id',"(chdate > IFNULL(b.visitdate,0) AND nw.user_id !='$user_id')",'news',false,false,'a.news_id'));
 	while($db2->next_record()) {
-		$my_obj[$db2->f("object_id")]["neuenews"]=$db2->f("neue");
-		$my_obj[$db2->f("object_id")]["news"]=$db2->f("count");
-		if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-			$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+		$object_id = $db2->f('object_id');
+		if ($my_obj[$object_id]['last_modified'] < $db2->f('last_modified')){
+			$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 		}
-	}
 	
+		$nav = new Navigation('', '');
+
+		if ($db2->f('neue')) {
+			$nav->setImage('icon-news2.gif', array('title' =>
+				sprintf(_('%s News, %s neue'), $db2->f('count'), $db2->f('neue'))));
+		} else if ($db2->f('count')) {
+			$nav->setImage('icon-news.gif', array('title' => sprintf(_('%s News'), $db2->f('count'))));
+		}
+
+		$my_obj[$object_id]['news'] = $nav;
+	}
+
 	// scm?
 	$db2->query(get_obj_clause('scm a','range_id',"IF(content !='',1,0)","(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", "scm", 'tab_name'));
 	while($db2->next_record()) {
-		if ($my_obj[$db2->f("object_id")]["modules"]["scm"]) {	
-			$my_obj[$db2->f("object_id")]["neuscmcontent"]=$db2->f("neue");
-			$my_obj[$db2->f("object_id")]["scmcontent"]=$db2->f("count");
-			$my_obj[$db2->f("object_id")]["scmtabname"]=$db2->f("tab_name");
-			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+		$object_id = $db2->f('object_id');
+		if ($my_obj[$object_id]["modules"]["scm"]) {	
+			if ($my_obj[$object_id]['last_modified'] < $db2->f('last_modified')){
+				$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 			}
+	
+			$nav = new Navigation('', 'scm.php');
+
+			if ($db2->f('count')) {
+				if ($db2->f('neue')) {
+					$image = 'icon-cont2.gif';
+
+					if ($db2->f('count') == 1) {
+						$title = $db2->f('tab_name')._(' (geändert)');
+					} else {
+						$title = sprintf(_('%s Einträge, %s neue'), $db2->f('count') ,$db2->f('neue'));
+					}
+				} else {
+					$image = 'icon-cont.gif';
+
+					if ($db2->f('count') == 1) {
+						$title = $db2->f('tab_name');
+					} else {
+						$title = sprintf(_('%s Einträge'), $db2->f('count'));
+					}
+				}
+
+				$nav->setImage($image, array('title' => $title));
+			}
+
+			$my_obj[$object_id]['scm'] = $nav;
 		}
 	}
-	
+
 	//Literaturlisten
 	$db2->query(get_obj_clause('lit_list a','range_id','list_id',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'literature', false, " AND a.visibility=1"));
 	while($db2->next_record()) {
-		if ($my_obj[$db2->f("object_id")]["modules"]["literature"]) {	
-			$my_obj[$db2->f("object_id")]["neuelitlist"]=$db2->f("neue");
-			$my_obj[$db2->f("object_id")]["litlist"]=$db2->f("count");
-			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+		$object_id = $db2->f('object_id');
+		if ($my_obj[$object_id]["modules"]["literature"]) {	
+			if ($my_obj[$object_id]['last_modified'] < $db2->f('last_modified')){
+				$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 			}
+	
+			$nav = new Navigation('', 'literatur.php');
+
+			if ($db2->f('neue')) {
+				$nav->setImage('icon-lit2.gif', array('title' =>
+					sprintf(_('%s Literaturlisten, %s neue'), $db2->f('count'), $db2->f('neue'))));
+			} else if ($db2->f('count')) {
+				$nav->setImage('icon-lit.gif', array('title' => sprintf(_('%s Literaturlisten'), $db2->f('count'))));
+			}
+
+			$my_obj[$object_id]['literature'] = $nav;
 		}
 	}
-	
+
 	//Termine?
 	$db2->query(get_obj_clause('termine a','range_id','termin_id',"(chdate > IFNULL(b.visitdate,0) AND autor_id !='$user_id')", 'schedule'));
 	while($db2->next_record()) {
-		if ($my_obj[$db2->f("object_id")]["modules"]["schedule"]) {	
-			$my_obj[$db2->f("object_id")]["neuetermine"]=$db2->f("neue");
-			$my_obj[$db2->f("object_id")]["termine"]=$db2->f("count");
-			if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-				$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+		$object_id = $db2->f('object_id');
+		if ($my_obj[$object_id]["modules"]["schedule"]) {	
+			if ($my_obj[$object_id]['last_modified'] < $db2->f('last_modified')){
+				$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 			}
+	
+			$nav = new Navigation('', 'dates.php');
+
+			if ($db2->f('neue')) {
+				$nav->setImage('icon-uhr2.gif', array('title' =>
+					sprintf(_('%s Termine, %s neue'), $db2->f('count'), $db2->f('neue'))));
+			} else if ($db2->f('count')) {
+				$nav->setImage('icon-uhr.gif', array('title' => sprintf(_('%s Termine'), $db2->f('count'))));
+			}
+
+			$my_obj[$object_id]['schedule'] = $nav;
 		}
 	}
-	
+
 	//Wiki-Eintraege?
-	if ($GLOBALS['WIKI_ENABLE']) {
+	if (get_config('WIKI_ENABLE')) {
 		$db2->query(get_obj_clause('wiki a','range_id','keyword',"(chdate > IFNULL(b.visitdate,0) AND a.user_id !='$user_id')", 'wiki', "COUNT(DISTINCT keyword) as count_d"));
 		while($db2->next_record()) {
-			if ($my_obj[$db2->f("object_id")]["modules"]["wiki"]) {	
-				$my_obj[$db2->f("object_id")]["neuewikiseiten"]=$db2->f("neue");
-				$my_obj[$db2->f("object_id")]["wikiseiten"]=$db2->f("count_d");
-				if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-					$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+			$object_id = $db2->f('object_id');
+			if ($my_obj[$object_id]["modules"]["wiki"]) {	
+				if ($my_obj[$object_id]['last_modified'] < $db2->f('last_modified')){
+					$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 				}
+	
+				$nav = new Navigation('');
+
+				if ($db2->f('neue')) {
+					$nav->setURL('wiki.php&view=listnew');
+					$nav->setImage('icon-wiki2.gif', array('title' =>
+						sprintf(_('%s WikiSeiten, %s Änderungen'), $db2->f('count'), $db2->f('neue'))));
+				} else if ($db2->f('count')) {
+					$nav->setURL('wiki.php');
+					$nav->setImage('icon-wiki.gif', array('title' => sprintf(_('%s WikiSeiten'), $db2->f('count'))));
+				}
+
+				$my_obj[$object_id]['wiki'] = $nav;
 			}
 		}
 	}
-	
+
 	//Lernmodule?
-	if ($GLOBALS['ELEARNING_INTERFACE_ENABLE']) {
+	if (get_config('ELEARNING_INTERFACE_ENABLE')) {
 		$db2->query(get_obj_clause('object_contentmodules a','object_id','module_id',"(chdate > IFNULL(b.visitdate,0) AND a.module_type != 'crs')",
 									'elearning_interface', false , " AND a.module_type != 'crs'"));
 //		$db2->query(get_obj_clause('object_contentmodules a','object_id','module_id',"(chdate > IFNULL(b.visitdate,0))", 'elearning_interface'));
 		while($db2->next_record()) {
-			if ($my_obj[$db2->f("object_id")]["modules"]["elearning_interface"]) {	
-				$my_obj[$db2->f("object_id")]["neuecontentmodule"]=$db2->f("neue");
-				$my_obj[$db2->f("object_id")]["contentmodule"]=$db2->f("count");
-				if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-					$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
+			$object_id = $db2->f('object_id');
+			if ($my_obj[$object_id]["modules"]["elearning_interface"]) {	
+				if ($my_obj[$object_id]['last_modified'] < $db2->f('last_modified')){
+					$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 				}
+	
+				$nav = new Navigation('', 'elearning_interface.php&view=show');
+
+				if ($db2->f('neue')) {
+					$nav->setImage('icon-lern2.gif', array('title' =>
+						sprintf(_('%s Content-Modul(e), %s neue'), $db2->f('count'), $db2->f('neue'))));
+				} else if ($db2->f('count')) {
+					$nav->setImage('icon-lern.gif', array('title' => sprintf(_('%s Content-Modul(e)'), $db2->f('count'))));
+				}
+
+				$my_obj[$object_id]['elearning'] = $nav;
 			}
 		}
 	}
-	
+
 	//Umfragen
-	if ($GLOBALS['VOTE_ENABLE']) {
+	if (get_config('VOTE_ENABLE')) {
 		$db2->query(get_obj_clause('vote a','range_id','vote_id',"(chdate > IFNULL(b.visitdate,0) AND a.author_id !='$user_id' AND a.state != 'stopvis')",
 									'vote', false , " AND a.state IN('active','stopvis')",'vote_id'));
 		while($db2->next_record()) {
-				$my_obj[$db2->f("object_id")]["neuevotes"] = $db2->f("neue");
-				$my_obj[$db2->f("object_id")]["votes"] = $db2->f("count");
-				if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-					$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
-				}
+			$object_id = $db2->f('object_id');
+			$my_obj[$object_id]["neuevotes"] = $db2->f("neue");
+			$my_obj[$object_id]["votes"] = $db2->f("count");
+			if ($my_obj[$object_id]['last_modified'] < $db2->f('last_modified')){
+				$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
+			}
 		}
 		
 		$db2->query(get_obj_clause('eval_range a {ON_CLAUSE} INNER JOIN eval d ON ( a.eval_id = d.eval_id AND d.startdate < UNIX_TIMESTAMP( ) AND (d.stopdate > UNIX_TIMESTAMP( ) OR d.startdate + d.timespan > UNIX_TIMESTAMP( ) OR (d.stopdate IS NULL AND d.timespan IS NULL)))',
 									'range_id','a.eval_id',"(chdate > IFNULL(b.visitdate,0) AND d.author_id !='$user_id' )",'eval',false,false,'a.eval_id'));
 		while($db2->next_record()) {
-				$my_obj[$db2->f("object_id")]["neuevotes"] += $db2->f("neue");
-				$my_obj[$db2->f("object_id")]["votes"] += $db2->f("count");
-				if ($my_obj[$db2->f("object_id")]['last_modified'] < $db2->f('last_modified')){
-					$my_obj[$db2->f("object_id")]['last_modified'] = $db2->f('last_modified');
-				}
-		}
-	}
-	// Check plugins, which are enabled in current seminar
-	if ($GLOBALS["PLUGINS_ENABLE"]){
-		// inserts every activated plugin as new entry
-		foreach ($my_obj as $poiid => $my_obj_item) {		
-			$activated_plugins = PluginEngine::getPlugins('StandardPlugin', $poiid);	
-
-			foreach ($activated_plugins as $plugin){				
-				$plugin->setId($poiid);
-				if ($plugin->isShownInOverview()) {
-					$my_obj[$poiid]['activatedplugins'][] = $plugin;
-				}
+			$object_id = $db2->f('object_id');
+			$my_obj[$object_id]["neuevotes"] += $db2->f("neue");
+			$my_obj[$object_id]["votes"] += $db2->f("count");
+			if ($my_obj[$object_id]['last_modified'] < $db2->f('last_modified')){
+				$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 			}
 		}
-	}	
 	
+		foreach (array_keys($my_obj) as $object_id) {
+			$nav = new Navigation('', '#vote');
+
+			if ($my_obj[$object_id]['neuevotes']) {
+				$nav->setImage('icon-vote2.gif', array('title' =>
+					sprintf(_('%s Umfrage(n), %s neue'), $my_obj[$object_id]['votes'], $my_obj[$object_id]['neuevotes'])));
+			} else if ($my_obj[$object_id]['votes']) {
+				$nav->setImage('icon-vote.gif', array('title' => sprintf(_('%s Umfrage(n)'), $my_obj[$object_id]['votes'])));
+			}
+
+			$my_obj[$object_id]['vote'] = $nav;
+		}
+	}
+
 	$db2->query("DROP TABLE IF EXISTS myobj_" . $user_id);
 	return;
 }

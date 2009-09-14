@@ -9,43 +9,29 @@
 	</div>
 	<div id="barTopMenu">
 		<ul>
-		<?
-		$accesskey = 0;
-		foreach (array($home,$courses,$messages,$chat,$online,$homepage,$planner,$admin) as $item)
-		{
-			 if(!is_null($item)){
-				 if($item['accesskey']){
-					 $accesskey = ++$accesskey % 10;
-				 }
-				 ?>
-				<li>
-				<div style="font-size:12px; z-index:2; line-height:90%; padding-bottom:3px">
-				<a href="<?=$item['link']?>" <?=($item['accesskey'] ? 'accesskey="' . $accesskey . '"' : '')?>>
-				<img <?=tooltip($item['info'] . ($item['accesskey'] ? "  [ALT] + $accesskey" : "") )?> src="<?=$GLOBALS['ASSETS_URL'] . 'images/header_' . $item['image'] . '.gif'?>" border="0">
-				<br>
-				<?=htmlReady($item['text'])?>
-				</a></div>
-				</li>
+		<? $accesskey = 0 ?>
+		<? foreach (Navigation::getItem('/') as $nav) : ?>
+			<? if ($nav->isVisible(true)) : ?>
 				<?
-			}
-		}
-		if(is_array($plugins))
-		{
-			foreach ($plugins as $plugin_item)
-			{
+				$accesskey_attr = '';
+				$image = $nav->getImage();
+
+				if ($accesskey_enabled) {
+					$accesskey = ++$accesskey % 10;
+					$accesskey_attr = 'accesskey="' . $accesskey . '"';
+					$image['title'] .= "  [ALT] + $accesskey";
+				}
 				?>
 				<li>
 				<div style="font-size:12px; z-index:2; line-height:90%; padding-bottom:3px">
-				<a href="<?=$plugin_item['link']?>">
-				<img <?=tooltip($plugin_item['info'])?> src="<?=$plugin_item['image']?>" border="0">
+				<a href="<?= URLHelper::getLink($nav->getURL()) ?>" <?= $accesskey_attr ?>>
+				<img <? foreach ($image as $key => $value) printf('%s="%s" ', $key, htmlReady($value)) ?>>
 				<br>
-				<?=htmlReady($plugin_item['text'])?>
+				<?= htmlReady($nav->getTitle()) ?>
 				</a></div>
 				</li>
-				<?
-			}
-		}
-		?>
+			<? endif ?>
+		<? endforeach ?>
 		</ul>
 	</div>
 </div>
@@ -79,14 +65,14 @@
 <!-- Dynamische Links ohne Icons -->
 <div id="barBottomright">
 	<ul>
-		<? if ($quicksearch) : ?>
+		<? if (isset($search_semester_nr)) : ?>
 		<li>
 		<form id="quicksearch" action="<?= URLHelper::getLink('sem_portal.php', array('send' => 'yes', 'group_by' => '0')) ?>" method="post">
 		  <input type="hidden" name="search_sem_qs_choose" value="title_lecturer_number">
-		  <input type="hidden" name="search_sem_sem" value="<?= $quicksearch['default_semester_nr'] ?>">
+		  <input type="hidden" name="search_sem_sem" value="<?= $search_semester_nr ?>">
 		  <input type="hidden" name="search_sem_1508068a50572e5faff81c27f7b3a72f" value="1">
-		  <input class="quicksearchbox" type="text" name="search_sem_quick_search" value="" title="<?= sprintf(_('Nach Veranstaltungen suchen (%s)'), htmlready($quicksearch['default_semester_name']))?>">
-		  <input class="quicksearchbutton" type="image" src="<?= Assets::url('images/quicksearch_button.png ') ?>" name="search_sem_do_search" value="OK" title="<?= sprintf(_('Nach Veranstaltungen suchen (%s)'), htmlready($quicksearch['default_semester_name'])) ?>">
+		  <input class="quicksearchbox" type="text" name="search_sem_quick_search" value="" title="<?= sprintf(_('Nach Veranstaltungen suchen (%s)'), htmlready($search_semester_name))?>">
+		  <input class="quicksearchbutton" type="image" src="<?= Assets::url('images/quicksearch_button.png ') ?>" name="search_sem_do_search" value="OK" title="<?= sprintf(_('Nach Veranstaltungen suchen (%s)'), htmlready($search_semester_name)) ?>">
 		  <div id="quicksearch_autocomplete_choices" class="autocomplete"></div>
 		</form>
 		<script>
@@ -103,7 +89,7 @@
 				  method: 'get',
 				  callback: function(element, entry) {
 				    return entry + '&' + Object.toQueryString({
-				      'semester': '<?= $quicksearch['default_semester_nr'] ?>',
+				      'semester': '<?= $search_semester_nr ?>',
 				      'what':  'title_lecturer_number',
 				      'category': 'all'
 				    });
@@ -118,24 +104,26 @@
 		</script>
 		</li>
 		<? endif ?>
-		<? foreach (array($search, $imprint, $help, $caslogin, $shiblogin, $loginlogout) as $item) :
-			 if(isset($item)){
- 				 if($item['accesskey']){
-					 $accesskey = ++$accesskey % 10;
-				 }
-				 ?>
-				 <li>
-				 <a <?=tooltip($item['info'] . ($item['accesskey'] ? "  [ALT] + $accesskey" : ""), false)?>
-				 	href="<?=$item['link']?>" <?=($item['target'] ? "target=\"{$item['target']}\"" : "")?>
-					 <?=($item['accesskey'] ? 'accesskey="' . $accesskey . '"' : '')?>>
-				 <?=htmlReady($item['text'])?>
-				 </a>
-				 </li>
-				 <?
-			 }
-		endforeach ?>
+		<? foreach (Navigation::getItem('/links') as $nav) : ?>
+			<? if ($nav->isVisible()) : ?>
+				<li>
+				<a
+				<? if (is_internal_url($url = $nav->getURL())) : ?>
+					href="<?= URLHelper::getLink($url) ?>"
+				<? else : ?>
+					href="<?= htmlspecialchars($url) ?>" target="_blank"
+				<? endif ?>
+				>
+				<?= htmlReady($nav->getTitle()) ?>
+				</a>
+				</li>
+			<? endif ?>
+		<? endforeach ?>
 	</ul>
 </div>
 <div id="barBottomshadow">
 </div>
+<? if (isset($navigation)) : ?>
+	<?= $this->render_partial('tabs') ?>
+<? endif ?>
 <!-- Ende Header -->

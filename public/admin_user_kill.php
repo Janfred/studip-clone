@@ -87,13 +87,11 @@ elseif (isset($_REQUEST['kill_accounts_x']) && check_ticket($_POST['ticket'])){
 }
 
 $CURRENT_PAGE = _("Löschen von Benutzer-Accounts");
+Navigation::activateItem('/admin/config/new_user');
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');	 //hier wird der "Kopf" nachgeladen
-//fake
-$i_page = 'new_user_md5.php';
-include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
 
 echo "\n" . cssClassSwitcher::GetHoverJSFunction() . "\n";
 

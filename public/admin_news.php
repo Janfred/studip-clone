@@ -33,6 +33,7 @@ require_once 'lib/classes/AdminNewsController.class.php';
 
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
+require_once 'lib/admin_search.inc.php';
 
 echo "\n" . cssClassSwitcher::GetHoverJSFunction() . "\n";
 
@@ -53,15 +54,15 @@ if ($range_id){
 $HELP_KEYWORD = "Basis.News";
 $CURRENT_PAGE = _("Verwaltung von News"); 
 
-// Start of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-ob_start();
 if ($list || $view || ($news_range_id != $user->id && $news_range_id != 'studip') && $view_mode != 'user' ){
-		include ('lib/include/links_admin.inc.php');	//Linkleiste fuer admins
+	if ($links_admin_data['topkat'] == 'sem') {
+		Navigation::activateItem('/admin/course/news');
+	} else {
+		Navigation::activateItem('/admin/institute/news');
+	}
 } else {
-		include ('lib/include/links_about.inc.php'); //Linkliste persönlicher Bereich
+	Navigation::activateItem('/homepage/tools/news');
 }
-$links = ob_get_clean();
 
 if ($SessSemName[1] && ($list || $view || ($news_range_id != $user->id && $news_range_id != 'studip') && $view_mode != 'user' )) {
 	$news_range_id = $SessSemName[1];
@@ -71,8 +72,11 @@ if ($SessSemName[1] && ($list || $view || ($news_range_id != $user->id && $news_
 $news = new AdminNewsController();
 
 $CURRENT_PAGE = ($SessSemName[1] && ($list || $view || ($news_range_id != $user->id && $news_range_id != 'studip') && $view_mode != 'user' ) ?  $SessSemName["header_line"] : $news->range_name ) . " - " . _("Verwaltung von News"); 
+
+// Start of Output
+include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-echo $links;
+include 'lib/include/admin_search_form.inc.php';
 
 ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">

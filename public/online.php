@@ -50,10 +50,15 @@ $cssSw=new cssClassSwitcher;
 $HELP_KEYWORD="Basis.InteraktionWhosOnline";
 $CURRENT_PAGE = _("Wer ist online?");
 
+if (Request::get('change_view')) {
+	Navigation::activateItem('/messaging/online/settings');
+} else {
+	Navigation::activateItem('/messaging/online/who');
+}
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_sms.inc.php');
 
 ob_start();
 

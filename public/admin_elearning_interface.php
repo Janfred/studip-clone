@@ -36,11 +36,10 @@ require_once ('lib/elearning/ConnectedCMS.class.php');
 
 $HELP_KEYWORD="Basis.Ilias";
 $CURRENT_PAGE=_("Verwaltung der Lernmodul-Schnittstelle");
+Navigation::activateItem('/admin/tools/elearning');
 
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-
-include ('lib/include/links_admin.inc.php');
 
 if ($ELEARNING_INTERFACE_ENABLE)
 {

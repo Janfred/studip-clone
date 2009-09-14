@@ -49,12 +49,11 @@ require_once('lib/visual.inc.php');
 require_once('lib/classes/StudipRangeTreeViewAdmin.class.php');
 
 $CURRENT_PAGE = $UNI_NAME_CLEAN . " - " . _("Einrichtungshierarchie bearbeiten");
-
+Navigation::activateItem('/admin/config/range_tree');
 
 include('lib/seminar_open.php'); //hier werden die sessions initialisiert
 include('lib/include/html_head.inc.php');
 include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen 
-include('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 ?>
 <table class="blank" cellspacing="0" cellpadding="2" border="0" width="100%">

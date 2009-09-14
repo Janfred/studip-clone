@@ -54,7 +54,6 @@ if (!($GLOBALS['ENABLE_REQUEST_NEW_PASSWORD_BY_USER'] && in_array('Standard', $G
 require_once('lib/language.inc.php');
 require_once('lib/visual.inc.php');
 require_once('config.inc.php');
-require_once('lib/classes/HeaderController.class.php');
 
 if (!isset($_language)) {
 	$_language = get_accepted_languages();
@@ -200,11 +199,9 @@ $request_template->set_attribute('messages', $msg);
 $request_template->set_attribute('link_startpage', sprintf(_("Zurück zur %sStartseite%s."), '<a href="./index.php?cancel_login=1">', '</a>'));
 $request_template->set_attribute('email', $email);
 
-$header_controller = new HeaderController();
-$header_controller->help_keyword = 'Basis.AnmeldungPasswortAnfrage';
-$header_controller->current_page = _("Passwort anfordern");
-$header_template =& $GLOBALS['template_factory']->open('header');
-$header_controller->fillTemplate($header_template);
+$GLOBALS['HELP_KEYWORD'] = 'Basis.AnmeldungPasswortAnfrage';
+$header_template = $GLOBALS['template_factory']->open('header');
+$header_template->current_page = _('Passwort anfordern');
 
 include('lib/include/html_head.inc.php');
 echo $header_template->render();

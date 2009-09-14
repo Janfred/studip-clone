@@ -36,6 +36,7 @@ mark_public_course();
 
 $HELP_KEYWORD="Basis.InVeranstaltungGruppen";
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("Funktionen / Gruppen");
+Navigation::activateItem('/course/members/view_groups');
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -43,8 +44,6 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 
 checkObject();
 checkObjectModule("participants");
-
-include ('lib/include/links_openobject.inc.php');
 
 $cssSw=new cssClassSwitcher;
 

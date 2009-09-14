@@ -11,82 +11,22 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="blank" height="270" valign="top" colspan="3" style="background:url(<?=$GLOBALS['ASSETS_URL']?>images/startseite.jpg) no-repeat left top; background-color:#FFFFFF;">
-			<table style="margin-left:70px; margin-top:40px;" cellspacing="2" cellpadding="0" border="0">
-				<tr>
-					<td width="270">
-					<a class="index" href="index.php?again=yes">
-					<font size="4"><b><?=_("Login")?></b></font>
-					<font color="#555555" size="1"><br><?=_("f&uuml;r registrierte NutzerInnen")?></font>
-					</a>
-					&nbsp;
-					</td>
-				</tr>
-			</table>
-			<?if($sso_cas){?>
-			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
-				<tr>
-					<td width="270">
-					<a class="index" href="index.php?again=yes&sso=cas">
-					<font size="4"><b><?=_("Login")?></b></font>
-					<font color="#555555" size="1"><br><?=_("f&uuml;r Single Sign On mit CAS")?></font>
-					</a>
-					&nbsp;
-					</td>
-				</tr>
-			</table>
-			<?}?>
-			<?if($sso_shib){?>
-			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
-				<tr>
-					<td width="270">
-					<a class="index" href="index.php?again=yes&sso=shib">
-					<font size="4"><b><?=_("Shibboleth Login")?></b></font>
-					<font color="#555555" size="1"><br><?=_("f&uuml;r Single Sign On mit Shibboleth")?></font>
-					</a>
-					&nbsp;
-					</td>
-				</tr>
-			</table>
-			<?}?>
-			<?if($self_registration_activated){?>
-			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
-				<tr>
-					<td width="270">
-					<a class="index" href="register1.php">
-					<font size="4"><b><?=_("Registrieren")?></b></font>
-					<font color="#555555" size="1"><br><?=_("um NutzerIn zu werden")?></font>
-					</a>
-					&nbsp;
-					</td>
-				</tr>
-			</table>
-			<?}?>
-			<?if($free_access_activated){?>
-			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
-				<tr>
-					<td width="270">
-					<a class="index" href="freie.php">
-					<font size="4"><b><?=_("Freier Zugang")?></b></font>
-					<font color="#555555" size="1"><br><?=_("ohne Registrierung")?></font>
-					</a>
-					&nbsp;
-					</td>
-				</tr>
-			</table>
-			<?}?>
-			<table style="margin-left:70px; margin-top:10px;" cellspacing="2" cellpadding="0" border="0">
-				<tr>
-					<td width="270">
-					<a class="index" href="<?=$help_url?>" target="_blank">
-					<font size="4"><b><?=_("Hilfe")?></b></font>
-					<font color="#555555" size="1"><br><?=_("zu Bedienung und Funktionsumfang")?></font>
-					</a>
-					&nbsp;
-					</td>
-				</tr>
-			</table>
-			<br>
+		<td class="blank" height="270" valign="top" colspan="3" style="background:url(<?=$GLOBALS['ASSETS_URL']?>images/startseite.jpg) no-repeat left top; background-color:#FFFFFF; padding-top:30px;">
+			<? foreach (Navigation::getItem('/login') as $key => $nav) : ?>
+				<? if ($nav->isVisible()) : ?>
+					<? list($name, $title) = explode(' - ', $nav->getTitle()) ?>
+					<div style="margin-left:70px; margin-top:10px; padding: 2px;">
+						<? if (is_internal_url($url = $nav->getURL())) : ?>
+							<a class="index" href="<?= URLHelper::getLink($url) ?>">
+						<? else : ?>
+							<a class="index" href="<?= htmlspecialchars($url) ?>" target="_blank">
+						<? endif ?>
+						<font size="4"><b><?= htmlReady($name) ?></b></font>
+						<font color="#555555" size="1"><br><?= htmlReady($title) ?></font>
+						</a>
+					</div>
+				<? endif ?>
+			<? endforeach ?>
 		</td>
 	</tr>
 	<? if($GLOBALS['UNI_LOGIN_ADD']) : ?>

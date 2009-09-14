@@ -35,11 +35,11 @@ $hash_secret = "dudeldoe";
 if (isset($cancel_x)) unset ($i_view);
 
 $CURRENT_PAGE = _("Verwaltung der Studiengänge");
+Navigation::activateItem('/admin/config/study_programs');
 
 // Start of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   // Output of Stud.IP head
-	include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 	require_once ('lib/msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
 	require_once ('lib/visual.inc.php');

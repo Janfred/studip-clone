@@ -181,8 +181,10 @@ class URLHelper
             $link_params = array_merge($link_params, $params);
         }
 
-        if (count($link_params) || $url === '') {
-            $url .= '?'.http_build_query($link_params);
+        $query_string = http_build_query($link_params);
+
+        if (strlen($query_string) || $url === '') {
+            $url .= '?'.$query_string;
         }
 
         if (isset($fragment)) {

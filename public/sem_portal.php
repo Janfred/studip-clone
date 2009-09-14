@@ -52,10 +52,6 @@ require_once 'lib/visual.inc.php';	//wir brauchen die Seminar-Typen
 require_once 'lib/classes/SemBrowse.class.php';
 require_once 'lib/classes/StmBrowse.class.php';
 
-// Start of Output
-include ('lib/include/html_head.inc.php'); // Output of html head
-include ('lib/include/header.php');   // Output of Stud.IP head
-
 $db=new DB_Seminar;
 
 echo "\n".cssClassSwitcher::GetHoverJSFunction()."\n";
@@ -75,12 +71,17 @@ if (!$sem_portal["bereich"])
 	$sem_portal["bereich"] = "all";
 
 $_REQUEST['view'] = $sem_portal['bereich'];
+Navigation::activateItem('/browse/courses/'.$sem_portal['bereich']);
 
 if ($choose_toplist)
 	$sem_portal["toplist"] = $choose_toplist;
 
 if (!$sem_portal["toplist"])
 	$sem_portal["toplist"] = 4;
+
+// Start of Output
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
 
 //function to display toplists
 function getToplist($rubrik, $query, $type="count") {
@@ -146,8 +147,6 @@ if ($sem_portal["bereich"] == "mod") {
 	if ($db->next_record())
 		$anzahl_seminare_class = $db->f("count");
 }
-
-include ('lib/include/links_seminare.inc.php');   	//hier wird die Navigation nachgeladen
 
 $init_data = array(	"level" => "f",
 					"cmd"=>"qs",

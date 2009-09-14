@@ -36,11 +36,7 @@ require_once('lib/classes/DataFieldEntry.class.php');
 
 include ('lib/include/html_head.inc.php'); // Output of html head
 $CURRENT_PAGE = _("Verwaltung der Regeln für Zusatzangaben");
-
-//prebuild navi and the object switcher (important to do already here and to use ob!)
-ob_start();
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
-$links = ob_get_clean();
+Navigation::activateItem('/admin/config/aux_data');
 
 //get ID from a open Seminar
 if ($SessSemName[1])
@@ -52,7 +48,6 @@ if ($header_object_id)
 	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
 
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
-echo $links;
 
 $sem_id = $SessionSemName[1];
 

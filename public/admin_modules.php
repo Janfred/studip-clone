@@ -46,21 +46,20 @@ require_once 'lib/functions.php';	//basale Funktionen
 require_once('lib/visual.inc.php');	//Darstellungsfunktionen
 require_once('lib/messaging.inc.php');	//Nachrichtenfunktionen
 require_once('lib/classes/AdminModules.class.php');	//Nachrichtenfunktionen
+require_once 'lib/admin_search.inc.php';
 
 $cssSw=new cssClassSwitcher;
 $sess->register("admin_modules_data");
 $sess->register("plugin_toggle");
 
 
-//Output starts here
-
-include ('lib/include/html_head.inc.php'); // Output of html head
 $CURRENT_PAGE = _("Verwaltung verwendeter Module und Plugins");
+if ($links_admin_data['topkat'] == 'sem') {
+	Navigation::activateItem('/admin/course/modules');
+} else {
+	Navigation::activateItem('/admin/institute/modules');
+}
 
-//prebuild navi and the object switcher (important to do already here and to use ob!)
-ob_start();
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
-$links = ob_get_clean();
 //get ID
 if ($SessSemName[1])
 	$range_id=$SessSemName[1];
@@ -70,8 +69,11 @@ $header_line = getHeaderLine($range_id);
 if ($header_line)
 	$CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
 
+//Output starts here
+
+include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
-echo $links;
+include 'lib/include/admin_search_form.inc.php';
 
 $amodules=new AdminModules;
 

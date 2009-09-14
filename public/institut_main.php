@@ -97,6 +97,7 @@ if (get_config('NEWS_RSS_EXPORT_ENABLE') && $SessSemName[1]){
 
 $HELP_KEYWORD="Basis.Einrichtungen";
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " ._("Kurzinfo");
+Navigation::activateItem('/course/main/info');
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
@@ -104,8 +105,11 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 
 checkObject();
 
-include 'lib/include/links_openobject.inc.php';
 include 'lib/showNews.inc.php';
+
+// list of used modules
+$Modules = new Modules;
+$modules = $Modules->getLocalModules($SessSemName[1]);
 
 URLHelper::bindLinkParam("inst_data", $institut_main_data);
 
@@ -120,6 +124,7 @@ process_news_commands($institut_main_data);
 		<div style="padding:0 1.5em 1.5em 1.5em">
 		<ul style="list-style-type:none;padding:0px;">
 	<?
+	$db = new DB_Seminar();
 	$db->query ("SELECT a.*, b.Name AS fakultaet_name  FROM Institute a LEFT JOIN Institute b ON (b.Institut_id = a.fakultaets_id) WHERE a.Institut_id='$auswahl'");
 	$db->next_record();
 

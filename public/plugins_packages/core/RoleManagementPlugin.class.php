@@ -94,8 +94,7 @@ class RoleManagementPlugin extends AbstractStudIPAdministrationPlugin
 		$users = array();
 		foreach ($result as $row)
 		{
-			$user = new StudIPUser();
-			$user->setUserid($row["user_id"]);
+			$user = new StudIPUser($row["user_id"]);
 			$users[$row["user_id"]] = $user;
 		}
 		return $users;

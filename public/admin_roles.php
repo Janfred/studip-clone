@@ -35,6 +35,7 @@ require_once ('lib/admission.inc.php');
 require_once ('lib/statusgruppe.inc.php');
 require_once ('lib/datei.inc.php');
 require_once ('lib/classes/Statusgruppe.class.php');
+require_once 'lib/admin_search.inc.php';
 
 /* 
  * no admin help yet (cf. http://develop.studip.de/trac/ticket/475 )
@@ -42,15 +43,8 @@ require_once ('lib/classes/Statusgruppe.class.php');
  */
 $HELP_KEYWORD="Basis.Allgemeines"; 
 
-//Output starts here
-
-include ('lib/include/html_head.inc.php'); // Output of html head
 $CURRENT_PAGE = _("Verwaltung von Gruppen und Funktionen");
-
-//prebuild navi and the object switcher (important to do already here and to use ob!)
-ob_start();
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
-$links = ob_get_clean();
+Navigation::activateItem('/admin/institute/groups');
 
 //get ID, if a object is open
 if ($SessSemName[1])
@@ -65,8 +59,11 @@ $header_line = getHeaderLine($range_id);
 if ($header_line)
   $CURRENT_PAGE = $header_line." - ".$CURRENT_PAGE;
 
+//Output starts here
+
+include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
-echo $links;
+include 'lib/include/admin_search_form.inc.php';
 
 // Rechtecheck
 $_range_type = get_object_type($range_id);

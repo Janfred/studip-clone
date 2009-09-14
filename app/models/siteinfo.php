@@ -61,6 +61,14 @@ class Siteinfo {
         return $output;
     }
 
+    function get_all_details() {
+        $sql = "SELECT detail_id, rubric_id, name
+                FROM siteinfo_details
+                ORDER BY position, detail_id ASC";
+        $result = $this->db->query($sql);
+        return $result->fetchAll();
+    }
+
     function first_detail_id($rubric = NULL) {
         $rubric_id = $rubric ? $rubric : $this->first_rubric_id();
         $sql = "SELECT detail_id
@@ -77,6 +85,14 @@ class Siteinfo {
         } else {
             return 0;
         }
+    }
+
+    function get_all_rubrics() {
+        $sql = "SELECT rubric_id, name
+                FROM siteinfo_rubrics
+                ORDER BY position, rubric_id ASC";
+        $result = $this->db->query($sql);
+        return $result->fetchAll();
     }
 
     function first_rubric_id() {
@@ -110,14 +126,6 @@ class Siteinfo {
         $result = $this->db->query($sql);
         $rows = $result->fetch();
         return $rows[0];
-    }
-
-    function get_all_rubrics() {
-        $sql = "SELECT rubric_id, name
-                FROM siteinfo_rubrics";
-        $result = $this->db->query($sql);
-        $rows = $result->fetchAll();
-        return $rows;
     }
 
     function save($type, $input) {

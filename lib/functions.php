@@ -297,7 +297,7 @@ function checkObjectModule($modul) {
 function closeObject() {
 	global $SessionSeminar, $SessSemName, $SemSecLevelRead, $SemSecLevelWrite, $SemUserStatus, $rechte, $sess;
 
-	$SessionSeminar = '';
+	$SessionSeminar = null;
 	$SessSemName = array();
 	$SemSecLevelRead = null;
 	$SemSecLevelWrite = null;
@@ -1228,7 +1228,7 @@ function format_help_url($keyword) {
 	// encode locationid for help wiki if set
 	$locationid=get_config("EXTERNAL_HELP_LOCATIONID");
 	if ($locationid) {
-		$helppage.="&amp;setstudiplocationid=".$locationid;
+		$helppage.="&setstudiplocationid=".$locationid;
 	}
 	// insert into URL-Template from config
 	$help_query=sprintf(get_config("EXTERNAL_HELP_URL"),$helppage);
@@ -1503,4 +1503,17 @@ function studip_strlen($string){
 		return strlen($string);
 	}
     return mb_strlen(studip_utf8encode($string), 'UTF-8');
+}
+
+function is_internal_url($url)
+{
+    if (preg_match('%^[a-z]+:%', $url)) {
+        return strpos($url, $GLOBALS['ABSOLUTE_URI_STUDIP']) === 0;
+    }
+
+    if ($url[0] === '/') {
+        return strpos($url, $GLOBALS['CANONICAL_RELATIVE_PATH_STUDIP']) === 0;
+    }
+
+    return true;
 }

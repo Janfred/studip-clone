@@ -89,13 +89,14 @@ if (!$inst_id) {
 }
 
 if ($view != 'print') {
-	include 'lib/include/header.php';   //hier wird der "Kopf" nachgeladen
 	if ($inst_id) //Links if we show in the instiute-object-view
-		include 'lib/include/links_openobject.inc.php';
-	elseif (!$perm->have_perm("admin")) //if not in the adminview, it's the user view!
-		include ('lib/include/links_sms.inc.php');
+		Navigation::activateItem('/course/main/schedule');
+	else if (!$perm->have_perm("admin")) //if not in the adminview, it's the user view!
+		Navigation::activateItem('/messaging/schedule');
 	else
-		include ('lib/include/links_sms.inc.php');
+		Navigation::activateItem('/browse/my_courses/schedule');
+
+	include 'lib/include/header.php';   //hier wird der "Kopf" nachgeladen
 }
 
 $db = new DB_Seminar;

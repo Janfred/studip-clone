@@ -37,11 +37,11 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once('lib/classes/smiley.class.php');
 
 $CURRENT_PAGE = _("Verwaltung der Smileys");
+Navigation::activateItem('/admin/config/smileys');
 
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');  //Linkleiste fuer admins
 
 
 $sm = new smiley(true);

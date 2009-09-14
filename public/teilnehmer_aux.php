@@ -34,6 +34,7 @@ require_once('lib/dates.inc.php');
 mark_public_course();
 
 $GLOBALS['CURRENT_PAGE'] = $SessSemName["header_line"]. " - " . _("Zusatzangaben");
+Navigation::activateItem('/course/members/aux_data');
 
 if (!$_REQUEST['display_type']) {
 	// Start  of Output
@@ -42,8 +43,6 @@ if (!$_REQUEST['display_type']) {
 
 	checkObject();
 	checkObjectModule("participants");
-
-	include ("lib/include/links_openobject.inc.php");
 }
 
 $sem_id = $SessSemName[1];

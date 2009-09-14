@@ -1989,10 +1989,11 @@ switch ($level) {
 # change <body>'s id attribute
 $GLOBALS['body_id'] = 'admin_seminare_assi';
 
+Navigation::activateItem('/admin/course/create');
+
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_admin.inc.php');  		//Linkleiste fuer admins
 
 
 if (!$sem_create_data["sem_class"])

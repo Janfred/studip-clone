@@ -35,7 +35,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-require_once ('lib/classes/HeaderController.class.php');
 require_once ('lib/visual.inc.php');
 
 /* --- 
@@ -52,22 +51,28 @@ if ($GLOBALS['USER_VISIBILITY_CHECK'])
    first_decision($GLOBALS['user']->id);
 }
 
-if (!isset($header_controller))
+if ($_NOHEADER == true) //Einige Seiten benötigen keinen Header, sprich Navigation (Evaluation usw.)
 {
-	$header_controller = new HeaderController();
-	$header_controller->help_keyword = $GLOBALS['HELP_KEYWORD'];
-	$header_controller->current_page = $GLOBALS['CURRENT_PAGE'];
-	if($_NOHEADER == true) //Einige Seiten benötigen keinen Header, sprich Navigation (Evaluation usw.)
-	{
-		$header_template =& $GLOBALS['template_factory']->open('noheader');
-	}
-	else
-	{
-		$header_template =& $GLOBALS['template_factory']->open('header');
-	}
-	$header_controller->fillTemplate($header_template);
-	echo $header_template->render();
+	$header_template = $GLOBALS['template_factory']->open('noheader');
 }
+else
+{
+	$header_template = $GLOBALS['template_factory']->open('header');
+	$header_template->current_page = $GLOBALS['CURRENT_PAGE'];
+	$header_template->navigation = Navigation::getItem('/')->activeSubNavigation();
+
+	if (is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody') {
+		if ($GLOBALS['user']->cfg->getValue(null, 'ACCESSKEY_ENABLE')){
+			$header_template->accesskey_enabled = true;
+		}
+		// fetch semester for quick search box in the link bar
+		$semester_data = SemesterData::GetSemesterArray();
+		$default_semester = SemesterData::GetSemesterIndexById($_SESSION['_default_sem']);
+		$header_template->search_semester_nr = $default_semester;
+		$header_template->search_semester_name = $semester_data[$default_semester]['name'];
+	}
+}
+echo $header_template->render();
 
 if ($GLOBALS['SHOW_TERMS_ON_FIRST_LOGIN'] && $GLOBALS['auth']->is_authenticated() && $GLOBALS['user']->id != 'nobody')
 {

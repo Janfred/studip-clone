@@ -13,20 +13,4 @@
  */
 
 interface AdministrationPlugin {
-
-  /**
-   * Verfügt dieses Plugin über einen Eintrag auf der Startseite des
-   * Administrators?
-   *
-   * @return boolean    true, falls Hauptmenü vorhanden, sonst false
-   */
-  function hasTopNavigation();
-
-  /**
-   * Liefert den Menüeintrag zurück.
-   *
-   * @return StudipPluginNavigation  das Menü, oder null, wenn kein Menü
-   *                                 vorhanden ist
-   */
-  function getTopNavigation();
 }

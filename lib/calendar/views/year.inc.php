@@ -37,7 +37,6 @@
 // Begin of output
 include('lib/include/html_head.inc.php');
 include('lib/include/header.php');
-include('lib/include/links_sms.inc.php');
 
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"0\">\n";
 echo "<tr><td class=\"blank\" width=\"100%\"><br>\n";

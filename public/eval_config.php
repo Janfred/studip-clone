@@ -49,6 +49,7 @@ require_once(EVAL_FILE_EVAL);
 require_once(EVAL_FILE_OBJECTDB);
 
 // Start of Output
+Navigation::activateItem('/homepage/tools/evaluation');
 
 $eval = new Evaluation($eval_id);
 $no_permissons = EvaluationObjectDB::getEvalUserRangesWithNoPermission ($eval);
@@ -58,7 +59,6 @@ $staff_member = $perm->have_studip_perm("tutor",$SessSemName[1]);;
 
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');    //hier wird der "Kopf" nachgeladen
-include ('lib/include/links_about.inc.php');
 
 
 $graphtypes_mchoice = array("bars"=>"Balken",

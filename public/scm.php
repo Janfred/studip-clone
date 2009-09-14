@@ -38,34 +38,30 @@ require_once('lib/classes/Table.class.php');
 
 mark_public_course();
 
-include ('lib/include/html_head.inc.php'); // Output of html head
-
 checkObject(); // do we have an open object?
 checkObjectModule("scm");
 object_set_visit_module("scm");
 
 $scms = array_values(StudipScmEntry::GetSCMEntriesForRange($SessSemName[1]));
 
-
-$CURRENT_PAGE = $SessSemName["header_line"]. " - " .($scms[0]['tab_name'] ? $scms[0]['tab_name'] : _("Informationen"));
-
-include ('lib/include/header.php');   // Output of Stud.IP head
-
 $msg = ""; // Message to display
 
-$_show_scm = preg_replace('/[^a-z0-9_-]/', '',  $_REQUEST['show_scm']);
+$_show_scm = Request::option('show_scm', $scms[0]['scm_id']);
 
-if ($perm->have_studip_perm('tutor', $SessSemName[1])){
-	$scm = new StudipScmEntry($_show_scm);
-	if($i_view == 'kill'){ 
+if ($perm->have_studip_perm('tutor', $SessSemName[1])) {
+	if ($i_view == 'change') {
+		$_show_scm = scm_change_content($_show_scm, $SessSemName[1], $scm_name, $scm_preset, $content);
+		$msg = "msg§"._("Die Änderungen wurden übernommen.");
+	} else if ($i_view == 'kill') {
+		$scm = new StudipScmEntry($_show_scm);
 		if (!$scm->is_new && $scm->getValue('range_id') == $SessSemName[1]){
 			$scm->delete();
 			$msg = "msg§" . _("Der Eintrag wurde gelöscht.");
 		}
-		unset($scm);
-		$_show_scm = null;
-	}
-	if($i_view == 'first_position'){ 
+		$scms = array_values(StudipScmEntry::GetSCMEntriesForRange($SessSemName[1]));
+		$_show_scm = $scms[0]['scm_id'];
+	} else if ($i_view == 'first_position') {
+		$scm = new StudipScmEntry($_show_scm);
 		if (!$scm->is_new && $scm->getValue('range_id') == $SessSemName[1]){
 			$minmkdate = DBManager::get()
 				->query("SELECT MIN(mkdate)-1 FROM scm WHERE range_id='" .  $scm->getValue('range_id') . "'")
@@ -74,25 +70,24 @@ if ($perm->have_studip_perm('tutor', $SessSemName[1])){
 				$msg = "msg§" . _("Der Eintrag wurde an die erste Position verschoben.");
 			}
 		}
-		unset($scm);
-		$_show_scm = null;
+		$scms = array_values(StudipScmEntry::GetSCMEntriesForRange($SessSemName[1]));
+		$_show_scm = $scms[0]['scm_id'];
 	}
 }
 
-switch ($i_view) {
-	case "edit":
-		include ('lib/include/links_openobject.inc.php');
-		scm_edit_content($SessSemName[1], $_show_scm);
-		break;
-	case "change":
-		$_show_scm = scm_change_content($_show_scm, $SessSemName[1], $scm_name, $scm_preset, $content);
-		$msg = "msg§"._("Die Änderungen wurden übernommen.");
-	default:
-		include ('lib/include/links_openobject.inc.php');
-		scm_show_content($SessSemName[1], $msg, $_show_scm);
-		break;
-}
+$scm = new StudipScmEntry($_show_scm);
 
+$CURRENT_PAGE = $SessSemName["header_line"]. " - " . $scm->getValue('tab_name');
+Navigation::activateItem('/course/scm/' . $_show_scm);
+
+include ('lib/include/html_head.inc.php'); // Output of html head
+include ('lib/include/header.php');   // Output of Stud.IP head
+
+if ($i_view == 'edit') {
+	scm_edit_content($SessSemName[1], $_show_scm);
+} else {
+	scm_show_content($SessSemName[1], $msg, $_show_scm);
+}
 
 function scm_max_cols()
 {
@@ -190,7 +185,7 @@ function scm_show_content($range_id, $msg, $scm_id) {
 }
 
 function scm_edit_content($range_id, $scm_id) {
-	global $perm, $SCM_PRESET;
+	global $SCM_PRESET;
 
 	if ($scm_id == 'new_entry') $scm_id = null;
 
@@ -264,11 +259,8 @@ function scm_edit_content($range_id, $scm_id) {
 }
 
 function scm_change_content($scm_id, $range_id, $name, $preset, $content) {
-	global $user, $perm, $SCM_PRESET;
-	if (!$perm->have_studip_perm("tutor",$range_id)) {
-		echo "</tr></td></table>";
-		return;
-	}
+	global $user, $SCM_PRESET;
+
 	if ($scm_id == 'new_entry') $scm_id = null;
 
 	$scm = new StudipScmEntry($scm_id);

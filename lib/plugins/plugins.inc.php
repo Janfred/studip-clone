@@ -13,7 +13,6 @@
 if ($GLOBALS['PLUGINS_ENABLE']){
 	// the plugin interface classes
 	require_once("core/StudIPInstitute.class.php");
-	require_once("core/AbstractStudIPPluginVisualization.class.php");
 	require_once("core/AdminInfo.class.php");
 	require_once("core/StudipPluginNavigation.class.php");
 	require_once("core/PluginNavigation.class.php");

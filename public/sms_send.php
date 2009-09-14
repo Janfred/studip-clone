@@ -48,7 +48,6 @@ if ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"]){
 require_once ('lib/include/messagingSettings.inc.php');
 require_once ('lib/messaging.inc.php');
 require_once ('lib/statusgruppe.inc.php');
-require_once ('lib/include/reiter.inc.php');
 require_once ('lib/sms_functions.inc.php');
 require_once ('lib/user_visible.inc.php');
 if ($GLOBALS['CHAT_ENABLE']){
@@ -387,13 +386,10 @@ if ($del_receiver_button_x && !empty($del_receiver)) {
 # OUTPUT
 ###########################################################
 
-if ($change_view) {
-	$HELP_KEYWORD="Basis.MyStudIPMessaging";
-} else {
-	$HELP_KEYWORD="Basis.InteraktionNachrichten";
-}
-
+$HELP_KEYWORD="Basis.InteraktionNachrichten";
 $CURRENT_PAGE = _("Systeminterne Nachrichten");
+Navigation::activateItem('/messaging/message/write');
+
 // includes
 include ('lib/include/html_head.inc.php'); // Output of html head
 
@@ -405,19 +401,8 @@ if ($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true) {
 }
 
 include ('lib/include/header.php');   // Output of Stud.IP head
-include ('lib/include/links_sms.inc.php'); // include reitersystem
+
 check_messaging_default();
-
-if (($change_view) || ($delete_user) || ($view=="Messaging")) {
-
-	change_messaging_view();
-	echo "</td></tr></table>\n<br/>";
-	// Save data back to database.
-	include ('lib/include/html_end.inc.php');
-	page_close();
-	die;
-
-}
 
 
 $txt['001'] = _("aktuelle Empf&auml;ngerInnen");

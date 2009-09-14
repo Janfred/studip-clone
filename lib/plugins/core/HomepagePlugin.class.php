@@ -36,5 +36,5 @@ interface HomepagePlugin {
    *
    * @return void
    */
-  function setRequestedUser($newuser);
+  function setRequestedUser($user);
 }
