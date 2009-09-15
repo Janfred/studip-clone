@@ -321,7 +321,17 @@ class ResourceObject {
 		}
 	}
 	
-	function getLink($quick_view = FALSE, $view ="view_schedule", $view_mode = "no_nav", $timestamp = FALSE) {
+	/**
+	 * This function creates a link to show an room in a new window/tab/popup. This function should not be used from outside of this class anymore
+	 *
+	 * @param bool   $quick_view
+	 * @param string $view
+	 * @param string $view_mode
+	 * @param int    $timestamp jump to this date in the room-assignment-plan
+	 *
+	 * @return string href-part of a link
+	 */
+	private function getLink($quick_view = FALSE, $view ="view_schedule", $view_mode = "no_nav", $timestamp = FALSE) {
 		if (func_num_args() == 1) {
 			$timestamp = func_get_arg(0);
 		}

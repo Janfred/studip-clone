@@ -1472,9 +1472,9 @@ if ($save_state_x) {
 				foreach ($result as $key=>$val) {
 					$resObj =& ResourceObject::Factory($val["resource_id"]);
 					if (!$val["overlap_assigns"]) {
-						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_blank\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), $resObj->getFormattedLink( $assignObjects[$result_termin_id[$i]]->getBegin() ), $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
 					} else {
-						$req_added_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_blank\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+						$req_added_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), $resObj->getFormattedLink( $assignObjects[$result_termin_id[$i]]->getBegin() ), $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
 						$copyReqObj = clone $reqObj;
 						$copyReqObj->copy();
 						$copyReqObj->setTerminId($val["termin_id"]);
@@ -1490,10 +1490,10 @@ if ($save_state_x) {
 					$resObj =& ResourceObject::Factory($val["resource_id"]);
 					if (!$val["overlap_assigns"]) {
 						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = $resObj->getId();
-						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_blank\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+						$good_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), $resObj->getFormattedLink( $assignObjects[$result_termin_id[$i]]->getBegin() ), $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
 					} else {
 						$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["assign_objects"][$assign_ids[$i]]["resource_id"] = FALSE;
-						$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), "<a href=\"".$resObj->getLink()."\" target=\"_blank\">".$resObj->getName()."</a>", $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
+						$bad_msg.="<br>".sprintf(_("%s, Belegungszeit: %s"), $resObj->getFormattedLink( $assignObjects[$result_termin_id[$i]]->getBegin() ), $assignObjects[$result_termin_id[$i]]->getFormattedShortInfo());
 					}
 					$i++;
 				}
