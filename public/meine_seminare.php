@@ -593,9 +593,6 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//This view is only for users up to admin
-if ( !$perm->have_perm("root")) {
-
 	if (!$num_my_inst)
 		if (!$GLOBALS['ALLOW_SELFASSIGN_INSTITUTE'] || $perm->have_perm("dozent"))
 			$meldung = "info§" . sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"dispatch.php/siteinfo/show\">", "</a>") . "§";
@@ -659,7 +656,6 @@ if ( !$perm->have_perm("root")) {
 		</table>
 		<?
 	}
-}
 
 ////////////////////
 
@@ -760,11 +756,7 @@ if ( !$perm->have_perm("root")) {
 
      	</td>
     </tr>
-	<tr>
-		<td class="blank" colspan=2>
-			&nbsp;
-		</td>
-	</tr>
+    </table>
 <?
 }
 
@@ -989,12 +981,7 @@ elseif ($auth->auth["perm"]=="admin") {
 	}
 
 ?>
-				</table>
-			</td>
-		</tr>
 	</table>
-
-
 <?
 }
 //Anzeigemodul fuer alle Seminare für root
