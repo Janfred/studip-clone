@@ -105,7 +105,7 @@
 		</a>
 	</td>
 
-	<td width="80%" colspan="4" class="steelred" valign="bottom">
+	<td width="80%" colspan="5" class="steelred" valign="bottom">
 		<font size="-1" style="text-color: red">
 			<b><?=_("Dieser Termin findet nicht statt!")?></b>
 		<font>

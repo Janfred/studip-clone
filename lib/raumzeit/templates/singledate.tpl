@@ -45,7 +45,7 @@
 <TR>
 	<TD width="2%" align="right" valign="center" class="<?=$tpl['class']?>" nowrap="nowrap">
 		<? if (!$_LOCKED) { ?>
-			<? if ($GLOBALS['perm']->have_perm('admin')) : ?>
+			<? if ($GLOBALS['perm']->have_perm('dozent')) : ?>
 				<A href="<?= URLHelper::getLink('?cmd='. ($sd_open[$tpl['sd_id']] ? 'close' : 'open') .'&open_close_id='. $tpl['sd_id'] .'#'. $tpl['sd_id'])?>">
 					<IMG src="<?=$GLOBALS['ASSETS_URL']?>images/<?=($sd_open[$tpl['sd_id']]) ? 'forumgraurunt' : 'simple_indicator_gray'?>.gif" border="0">
 				</A>
