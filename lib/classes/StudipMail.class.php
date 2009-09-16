@@ -80,6 +80,15 @@ class StudipMail
 	public static function setDefaultTransporter(email_message_class $transporter) {
 		self::$transporter = $transporter;
 	}
+	
+	/**
+	 * gets the default transporter used in StudipMail::send()
+	 *  
+	 * @return email_message_class 
+	 */
+	public static function getDefaultTransporter() {
+		return self::$transporter;
+	}
 
 	/**
 	 * convenience method for sending a qick, text based email message
