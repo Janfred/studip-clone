@@ -12,6 +12,9 @@
 
 class BrowseNavigation extends Navigation
 {
+    /**
+     * Initialize a new Navigation instance.
+     */
     public function __construct()
     {
         global $user, $perm;
@@ -34,12 +37,17 @@ class BrowseNavigation extends Navigation
         $this->setImage('header_meinesem', array('title' => $courseinfo));
     }
 
+    /**
+     * Initialize the subnavigation of this item. This method
+     * is called once before the first item is added or removed.
+     */
     public function initSubNavigation()
     {
         global $perm;
 
         parent::initSubNavigation();
 
+        // my courses
         if (!$perm->have_perm('root')) {
             $navigation = new Navigation(_('Meine Veranstaltungen'));
             $navigation->addSubNavigation('list', new Navigation(_('Übersicht'), 'meine_seminare.php'));
@@ -61,6 +69,7 @@ class BrowseNavigation extends Navigation
             $this->addSubNavigation('my_courses', $navigation);
         }
 
+        // browse courses
         $navigation = new Navigation(_('Veranstaltungen suchen / hinzufügen'), 'sem_portal.php');
 
         if ($perm->have_perm('admin')) {
@@ -81,12 +90,14 @@ class BrowseNavigation extends Navigation
 
         $this->addSubNavigation('courses', $navigation);
 
+        // browse study groups
         if (get_config('STUDYGROUPS_ENABLE')) {
             $navigation = new Navigation(_('Studiengruppen suchen/hinzufügen'));
             $navigation->addSubNavigation('all', new Navigation(_('Studiengruppen'), 'dispatch.php/course/studygroup/search'));
             $this->addSubNavigation('studygroups', $navigation);
         }
 
+        // module plugin
         if ($GLOBALS['PLUGINS_ENABLE']) {
             PluginEngine::getPlugin('StudienmodulManagement');
         }

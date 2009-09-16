@@ -1505,6 +1505,12 @@ function studip_strlen($string){
     return mb_strlen(studip_utf8encode($string), 'UTF-8');
 }
 
+/**
+ * Test whether the given URL refers to some page or resource of
+ * this Stud.IP installation.
+ *
+ * @param string        url to check
+ */
 function is_internal_url($url)
 {
     if (preg_match('%^[a-z]+:%', $url)) {

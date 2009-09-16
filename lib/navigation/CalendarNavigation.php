@@ -12,6 +12,9 @@
 
 class CalendarNavigation extends Navigation
 {
+    /**
+     * Initialize a new Navigation instance.
+     */
     public function __construct()
     {
         parent::__construct(_('Planer'));

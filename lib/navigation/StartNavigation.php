@@ -12,6 +12,9 @@
 
 class StartNavigation extends Navigation
 {
+    /**
+     * Initialize a new Navigation instance.
+     */
     public function __construct()
     {
         global $user;
@@ -53,11 +56,18 @@ class StartNavigation extends Navigation
         $this->setImage($homeimage, array('title' => $homeinfo));
     }
 
+    /**
+     * Determine whether this navigation item is active.
+     */
     public function isActive()
     {
         return $this->active;
     }
 
+    /**
+     * Initialize the subnavigation of this item. This method
+     * is called once before the first item is added or removed.
+     */
     public function initSubNavigation()
     {
         global $perm;

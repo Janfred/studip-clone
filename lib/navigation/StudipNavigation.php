@@ -23,6 +23,10 @@ require_once 'StartNavigation.php';
 
 class StudipNavigation extends Navigation
 {
+    /**
+     * Initialize the subnavigation of this item. This method
+     * is called once before the first item is added or removed.
+     */
     public function initSubNavigation()
     {
         global $user, $perm, $user;
@@ -101,6 +105,6 @@ class StudipNavigation extends Navigation
         $this->addSubNavigation('links', $links);
 
         // login page
-        $this->addSubNavigation('login', new LoginNavigation());
+        $this->addSubNavigation('login', new LoginNavigation(_('Login')));
     }
 }

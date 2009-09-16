@@ -26,11 +26,18 @@ if (get_config('RESOURCES_ENABLE')) {
 
 class CourseNavigation extends Navigation
 {
+    /**
+     * Initialize a new Navigation instance.
+     */
     public function __construct()
     {
         parent::__construct(_('Veranstaltung'));
     }
 
+    /**
+     * Initialize the subnavigation of this item. This method
+     * is called once before the first item is added or removed.
+     */
     public function initSubNavigation()
     {
         global $AUTO_INSERT_SEM, $SEM_CLASS, $SEM_TYPE;
@@ -54,6 +61,7 @@ class CourseNavigation extends Navigation
             $scms = array_values(StudipScmEntry::GetSCMEntriesForRange($SessSemName[1]));
         }
 
+        // general information
         $navigation = new Navigation(_('Übersicht'));
 
         if ($sem_class == 'sem') {
@@ -87,12 +95,14 @@ class CourseNavigation extends Navigation
 
         $this->addSubNavigation('main', $navigation);
 
+        // admin (study group only)
         if ($studygroup_mode && $perm->have_studip_perm('dozent', $SessSemName[1])) {
             $navigation = new Navigation(_('Admin'));
             $navigation->addSubNavigation('admin', new Navigation(_('Admin'), 'dispatch.php/course/studygroup/edit/'.$SessSemName[1]));
             $this->addSubNavigation('studygroup', $navigation);
         }
 
+        // forum
         if ($modules['forum']) {
             $navigation = new Navigation(_('Forum'), 'forum.php?view=reset');
             $navigation->addSubNavigation('view', new Navigation(_('Themenansicht'), 'forum.php?view='.$forum['themeview']));
@@ -113,6 +123,7 @@ class CourseNavigation extends Navigation
             $this->addSubNavigation('forum', $navigation);
         }
 
+        // participants
         if ($user->id != 'nobody') {
             if ($modules['participants']) {
                 $navigation = new Navigation(_('TeilnehmerInnen'));
@@ -147,6 +158,7 @@ class CourseNavigation extends Navigation
             }
         }
 
+        // files
         if ($modules['documents']) {
             $navigation = new Navigation(_('Dateien'));
             $navigation->addSubNavigation('tree', new Navigation(_('Ordneransicht'), 'folder.php?cmd=tree'));
@@ -154,6 +166,7 @@ class CourseNavigation extends Navigation
             $this->addSubNavigation('files', $navigation);
         }
 
+        // schedule
         if ($modules['schedule'] && $user->id != 'nobody') {
             $navigation = new Navigation(_('Ablaufplan'));
             $navigation->addSubNavigation('all', new Navigation(_('alle Termine'), 'dates.php?cmd=setType&type=all'));
@@ -167,6 +180,7 @@ class CourseNavigation extends Navigation
             $this->addSubNavigation('schedule', $navigation);
         }
 
+        // information page
         if ($modules['scm']) {
             $navigation = new Navigation($scms[0]['tab_name']);
 
@@ -181,6 +195,7 @@ class CourseNavigation extends Navigation
             $this->addSubNavigation('scm', $navigation);
         }
 
+        // literature
         if ($modules['literature']) {
             $navigation = new Navigation(_('Literatur'));
             $navigation->addSubNavigation('view', new Navigation(_('Literatur'), 'literatur.php?view=literatur_'.$sem_class));
@@ -198,6 +213,7 @@ class CourseNavigation extends Navigation
             $this->addSubNavigation('literature', $navigation);
         }
 
+        // wiki
         if ($modules['wiki']) {
             $navigation = new Navigation(_('Wiki'));
             $navigation->addSubNavigation('show', new Navigation(_('WikiWikiWeb'), 'wiki.php?view=show'));
@@ -207,6 +223,7 @@ class CourseNavigation extends Navigation
             $this->addSubNavigation('wiki', $navigation);
         }
 
+        // resources
         if (get_config('RESOURCES_ENABLE')) {
             if (checkAvailableResources($SessSemName[1])) {
                 $navigation = new Navigation(_('Ressourcen'), 'resources.php?view=openobject_main&view_mode=oobj');
@@ -219,7 +236,7 @@ class CourseNavigation extends Navigation
             }
         }
 
-        //contentmodules, if elearning-interface is activated
+        // content modules
         if (get_config('ELEARNING_INTERFACE_ENABLE') && $modules['elearning_interface'] && $user->id != 'nobody') {
             $navigation = new Navigation(_('Lernmodule'));
 
@@ -240,7 +257,7 @@ class CourseNavigation extends Navigation
             $this->addSubNavigation('elearning', $navigation);
         }
 
-        // create the structure array for activated plugins
+        // activated plugins
         if ($GLOBALS['PLUGINS_ENABLE']) {
             PluginEngine::getPlugins('StandardPlugin', $SessSemName[1]);
         }

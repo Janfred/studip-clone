@@ -92,6 +92,7 @@ URLHelper::addLinkParam('wiki_comments', $show_wiki_comments);
 
 // echo "<table width=\"100%\" border=0 cellpadding=0 cellspacing=0>\n";
 
+$db = new DB_Seminar();
 $user_id=$auth->auth['uid'];
 
 wikiSeminarHeader();

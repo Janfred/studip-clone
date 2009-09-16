@@ -14,6 +14,9 @@ require_once 'lib/sms_functions.inc.php';
 
 class MessagingNavigation extends Navigation
 {
+    /**
+     * Initialize a new Navigation instance.
+     */
     public function __construct()
     {
         global $user;
@@ -44,12 +47,17 @@ class MessagingNavigation extends Navigation
         $this->setImage($icon, array('title' => $tip));
     }
 
+    /**
+     * Initialize the subnavigation of this item. This method
+     * is called once before the first item is added or removed.
+     */
     public function initSubNavigation()
     {
         global $perm;
 
         parent::initSubNavigation();
 
+        // calendar / schedule
         if (!$perm->have_perm('admin')) {
             if (get_config('CALENDAR_ENABLE')) {
                 $navigation = new Navigation(_('Terminkalender'), 'calendar.php');
@@ -68,6 +76,7 @@ class MessagingNavigation extends Navigation
             $this->addSubNavigation('schedule', $navigation);
         }
 
+        // address book
         $navigation = new Navigation(_('Adressbuch'));
         $navigation->addSubNavigation('alpha', new Navigation(_('Alphabetisch'), 'contact.php', array('view' => 'alpha')));
         $navigation->addSubNavigation('gruppen', new Navigation(_('Gruppenansicht'), 'contact.php', array('view' => 'gruppen')));
@@ -75,6 +84,7 @@ class MessagingNavigation extends Navigation
         $navigation->addSubNavigation('export', new Navigation(_('VCF-Export'), 'contact_export.php'));
         $this->addSubNavigation('address_book', $navigation);
 
+        // message box
         $navigation = new Navigation(_('Nachrichten'));
         $navigation->addSubNavigation('in', new Navigation(_('empfangene'), 'sms_box.php', array('sms_inout' => 'in')));
         $navigation->addSubNavigation('out', new Navigation(_('gesendete'), 'sms_box.php', array('sms_inout' => 'out')));
@@ -82,11 +92,13 @@ class MessagingNavigation extends Navigation
         $navigation->addSubNavigation('settings', new Navigation(_('Messaging anpassen'), 'sms_box.php', array('change_view' => 'TRUE')));
         $this->addSubNavigation('message', $navigation);
 
+        // chat
         if (get_config('CHAT_ENABLE')) {
             $navigation = new Navigation(_('Chat'), 'chat_online.php');
             $this->addSubNavigation('chat', $navigation);
         }
 
+        // online list
         $navigation = new Navigation(_('Online'));
         $navigation->addSubNavigation('who', new Navigation(_('Wer ist online?'), 'online.php'));
         $navigation->addSubNavigation('settings', new Navigation(_('Messaging anpassen'), 'online.php', array('change_view' => 'TRUE')));

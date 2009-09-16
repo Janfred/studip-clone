@@ -12,6 +12,9 @@
 
 class AdminNavigation extends Navigation
 {
+    /**
+     * Initialize a new Navigation instance.
+     */
     public function __construct()
     {
         parent::__construct(_('Admin'));
@@ -19,6 +22,10 @@ class AdminNavigation extends Navigation
         $this->setImage('header_admin', array('title' => _('Zu Ihrer Administrationsseite')));
     }
 
+    /**
+     * Initialize the subnavigation of this item. This method
+     * is called once before the first item is added or removed.
+     */
     public function initSubNavigation()
     {
         global $SessSemName, $archive_kill, $links_admin_data, $perm;
@@ -43,9 +50,11 @@ class AdminNavigation extends Navigation
 
         $sem_create_perm = in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent';
 
+        // course administration
         $navigation = new Navigation(_('Veranstaltungen'), 'adminarea_start.php?list=TRUE');
         $navigation->addSubNavigation('details', new Navigation(_('Grunddaten'), 'admin_seminare1.php?list=TRUE'));
-        $navigation->addSubNavigation('study_areas', new Navigation(_('Studienbereiche'), 'dispatch.php/course/study_areas/show/' . $GLOBALS['SessionSeminar'], array('list' => 'TRUE')));
+        $navigation->addSubNavigation('study_areas', new Navigation(_('Studienbereiche'),
+                                      'dispatch.php/course/study_areas/show/' . $_SESSION['SessionSeminar'], array('list' => 'TRUE')));
         $navigation->addSubNavigation('dates', new Navigation(_('Zeiten / Räume'), 'raumzeit.php?list=TRUE'));
         $navigation->addSubNavigation('schedule', new Navigation(_('Ablaufplan'), 'themen.php?list=TRUE'));
         $navigation->addSubNavigation('news', new Navigation(_('News'), 'admin_news.php?list=TRUE&view=news_sem'));
@@ -80,6 +89,7 @@ class AdminNavigation extends Navigation
         $navigation->addSubNavigation('aux_data', new Navigation(_('Zusatzangaben'), 'admin_aux.php?list=TRUE&new_session=TRUE'));
         $this->addSubNavigation('course', $navigation);
 
+        // institute administration
         $navigation = new Navigation(_('Einrichtungen'));
 
         if ($perm->have_perm('admin')) {
@@ -110,6 +120,7 @@ class AdminNavigation extends Navigation
 
         $this->addSubNavigation('institute', $navigation);
 
+        // global config / user administration
         if ($perm->have_perm('admin')) {
             $navigation = new Navigation(_('globale Einstellungen'));
 
@@ -163,7 +174,7 @@ class AdminNavigation extends Navigation
             $this->addSubNavigation('config', $navigation);
         }
 
-        // 'Log' tab for log view and administration (root only)
+        // log view
         if ($perm->have_perm('root') && get_config('LOG_ENABLE')) {
             $navigation = new Navigation(_('Log'));
             $navigation->addSubNavigation('show', new Navigation(_('Log'), 'dispatch.php/event_log/show'));
@@ -171,6 +182,7 @@ class AdminNavigation extends Navigation
             $this->addSubNavigation('log', $navigation);
         }
 
+        // admin tools
         $navigation = new Navigation(_('Tools'));
 
         if (get_config('EXPORT_ENABLE')) {
@@ -204,6 +216,7 @@ class AdminNavigation extends Navigation
 
         $this->addSubNavigation('tools', $navigation);
 
+        // link to course
         if ($SessSemName['class'] == 'inst') {
             $navigation = new Navigation($back_jump, 'institut_main.php?auswahl='.$SessSemName[1]);
             $this->addSubNavigation('back_jump', $navigation);
@@ -212,6 +225,7 @@ class AdminNavigation extends Navigation
             $this->addSubNavigation('back_jump', $navigation);
         }
 
+        // admin plugins
         if ($perm->have_perm('admin') && $GLOBALS['PLUGINS_ENABLE']) {
             $navigation = new Navigation(_('Administrations-Plugins'));
             $this->addSubNavigation('plugins', $navigation);

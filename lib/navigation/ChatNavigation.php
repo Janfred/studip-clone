@@ -14,6 +14,9 @@ require_once $GLOBALS['RELATIVE_PATH_CHAT'] . '/chat_func_inc.php';
 
 class ChatNavigation extends Navigation
 {
+    /**
+     * Initialize a new Navigation instance.
+     */
     public function __construct()
     {
         global $user;

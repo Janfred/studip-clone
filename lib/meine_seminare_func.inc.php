@@ -230,7 +230,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 				$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 			}
 	
-			$nav = new Navigation('');
+			$nav = new Navigation('forum');
 
 			if ($db2->f('neue')) {
 				$nav->setURL('forum.php&view=neue&sort=age');
@@ -267,7 +267,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 				$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 			}
 	
-			$nav = new Navigation('');
+			$nav = new Navigation('files');
 
 			if ($db2->f('neue')) {
 				$nav->setURL('folder.php&cmd=all');
@@ -290,7 +290,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 			$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 		}
 	
-		$nav = new Navigation('', '');
+		$nav = new Navigation('news', '');
 
 		if ($db2->f('neue')) {
 			$nav->setImage('icon-news2.gif', array('title' =>
@@ -311,7 +311,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 				$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 			}
 	
-			$nav = new Navigation('', 'scm.php');
+			$nav = new Navigation('scm', 'scm.php');
 
 			if ($db2->f('count')) {
 				if ($db2->f('neue')) {
@@ -348,7 +348,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 				$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 			}
 	
-			$nav = new Navigation('', 'literatur.php');
+			$nav = new Navigation('literature', 'literatur.php');
 
 			if ($db2->f('neue')) {
 				$nav->setImage('icon-lit2.gif', array('title' =>
@@ -370,7 +370,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 				$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 			}
 	
-			$nav = new Navigation('', 'dates.php');
+			$nav = new Navigation('schedule', 'dates.php');
 
 			if ($db2->f('neue')) {
 				$nav->setImage('icon-uhr2.gif', array('title' =>
@@ -393,7 +393,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 					$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 				}
 	
-				$nav = new Navigation('');
+				$nav = new Navigation('wiki');
 
 				if ($db2->f('neue')) {
 					$nav->setURL('wiki.php&view=listnew');
@@ -421,7 +421,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 					$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 				}
 	
-				$nav = new Navigation('', 'elearning_interface.php&view=show');
+				$nav = new Navigation('elearning', 'elearning_interface.php&view=show');
 
 				if ($db2->f('neue')) {
 					$nav->setImage('icon-lern2.gif', array('title' =>
@@ -460,7 +460,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 		}
 	
 		foreach (array_keys($my_obj) as $object_id) {
-			$nav = new Navigation('', '#vote');
+			$nav = new Navigation('vote', '#vote');
 
 			if ($my_obj[$object_id]['neuevotes']) {
 				$nav->setImage('icon-vote2.gif', array('title' =>

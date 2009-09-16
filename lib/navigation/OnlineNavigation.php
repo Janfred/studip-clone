@@ -12,6 +12,9 @@
 
 class OnlineNavigation extends Navigation
 {
+    /**
+     * Initialize a new Navigation instance.
+     */
     public function __construct()
     {
         global $my_messaging_settings;

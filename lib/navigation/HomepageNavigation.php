@@ -12,6 +12,9 @@
 
 class HomepageNavigation extends Navigation
 {
+    /**
+     * Initialize a new Navigation instance.
+     */
     public function __construct()
     {
         global $user, $auth, $homepage_cache_own, $LastLogin;
@@ -45,6 +48,10 @@ class HomepageNavigation extends Navigation
         $this->setImage($picture, array('title' => $hp_txt));
     }
 
+    /**
+     * Initialize the subnavigation of this item. This method
+     * is called once before the first item is added or removed.
+     */
     public function initSubNavigation()
     {
         global $auth, $perm;
@@ -65,14 +72,17 @@ class HomepageNavigation extends Navigation
 
         URLHelper::addLinkParam('username', $username);
 
+        // homepage
         $navigation = new Navigation(_('Alle'));
         $navigation->addSubNavigation('all', new Navigation(_('Persönliche Homepage'), 'about.php'));
         $this->addSubNavigation('view', $navigation);
 
+        // avatar
         $navigation = new Navigation(_('Bild'));
         $navigation->addSubNavigation('upload', new Navigation(_('Hochladen des persönlichen Bildes'), 'edit_about.php', array('view' => 'Bild')));
         $this->addSubNavigation('avatar', $navigation);
 
+        // profile data
         $navigation = new Navigation(_('Nutzerdaten'));
         $navigation->addSubNavigation('profile', new Navigation(_('Allgemein'), 'edit_about.php', array('view' => 'Daten')));
         $navigation->addSubNavigation('private', new Navigation(_('Privat'), 'edit_about.php', array('view' => 'Lebenslauf')));
@@ -93,10 +103,12 @@ class HomepageNavigation extends Navigation
 
         $this->addSubNavigation('edit', $navigation);
 
+        // user defined sections
         $navigation = new Navigation(_('eigene Kategorien'));
         $navigation->addSubNavigation('edit', new Navigation(_('Eigene Kategorien bearbeiten'), 'edit_about.php', array('view' => 'Sonstiges')));
         $this->addSubNavigation('sections', $navigation);
 
+        // tools
         $navigation = new Navigation(_('Tools'));
         $navigation->addSubNavigation('news', new Navigation(_('News'), 'admin_news.php', array('range_id' => 'self')));
         $navigation->addSubNavigation('literature', new Navigation(_('Literatur'), 'admin_lit_list.php', array('_range_id' => 'self')));
@@ -109,6 +121,7 @@ class HomepageNavigation extends Navigation
 
         $this->addSubNavigation('tools', $navigation);
 
+        // settings
         if ($username == $auth->auth['uname']) {
             $navigation = new Navigation(_('My Stud.IP'));
             $navigation->addSubNavigation('general', new Navigation(_('Allgemeines'), 'edit_about.php', array('view' => 'allgemein')));
@@ -136,6 +149,7 @@ class HomepageNavigation extends Navigation
             $this->addSubNavigation('settings', $navigation);
         }
 
+        // activated plugins
         if ($GLOBALS['PLUGINS_ENABLE']) {
             PluginEngine::getPlugins('HomepagePlugin');
         }

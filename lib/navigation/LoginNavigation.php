@@ -12,11 +12,10 @@
 
 class LoginNavigation extends Navigation
 {
-    public function __construct()
-    {
-        parent::__construct(_('Login'));
-    }
-
+    /**
+     * Initialize the subnavigation of this item. This method
+     * is called once before the first item is added or removed.
+     */
     public function initSubNavigation()
     {
         parent::initSubNavigation();
