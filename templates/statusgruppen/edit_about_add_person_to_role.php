@@ -13,7 +13,7 @@
 				<? if (is_array($admin_insts)) foreach ($admin_insts as $data) : ?>
 				<option value="<?=$data['Institut_id']?>" style="<?=($data["is_fak"] ? "font-weight:bold;" : "")?>" <?=($subview_id==$data['Institut_id'])? 'selected="selected"':''?>><?=htmlReady(substr($data["Name"], 0, 70))?></option>
 				<?
-					if ($data["is_fak"]) foreach ($sub_admin_insts[$data['Institut_id']] as $sub_data) : ?>
+					if ($data["is_fak"] && is_array($sub_admin_insts[$data['Institut_id']])) foreach ($sub_admin_insts[$data['Institut_id']] as $sub_data) : ?>
 						<option <?= ($subview_id == $sub_data['Institut_id']) ? 'selected="selected"' : '' ?> value="<?= $sub_data['Institut_id'] ?>">&nbsp;&nbsp;&nbsp;&nbsp;<?= htmlReady(substr($sub_data['Name'], 0, 70)) ?></option>
 					<? endforeach;
 				endforeach;
