@@ -351,7 +351,7 @@ class SingleDate {
 		$overlaps = $createAssign->checkOverlap(TRUE);
 		if (is_array($overlaps) && (sizeof($overlaps) > 0)) {
 			$resObj =& ResourceObject::Factory($roomID);
-			$raum = $resObj->getFormattedLink(TRUE, TRUE, TRUE);
+			$raum = $resObj->getFormattedLink( $this->date );
 			$msg = sprintf(_("Für den Termin %s konnte der Raum %s nicht gebucht werden, da es Überschneidungen mit folgenden Terminen gibt:"), $this->toString(), $raum).'<br>';
 			foreach ($overlaps as $tmp_assign_id => $val) {
 				if ($val["lock"])
@@ -359,15 +359,15 @@ class SingleDate {
 				else
 					$msg .= sprintf(_("%s von %s bis %s Uhr")."\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("H:i", $val["end"]));
 			}
-			$this->messages[] = 'error§'.$msg.'§';
+			$this->messages['error'][] = $msg;
 			return FALSE;
 		}
 
 		if ($createAssign->create()) {
 			$resObj =& ResourceObject::Factory($roomID);
-  	  $raum = $resObj->getFormattedLink(TRUE, TRUE, TRUE);
+			$raum = $resObj->getFormattedLink( $this->date );
 			$msg = sprintf(_("Für den Termin %s wurde der Raum %s gebucht."), $this->toString(), $raum);
-			$this->messages[] = 'msg§'.$msg.'§';
+			$this->messages['success'][] = $msg;
 			$this->resource_id = $roomID;
 			return TRUE;
 		}
@@ -394,7 +394,7 @@ class SingleDate {
 			$overlaps = $changeAssign->checkOverlap(TRUE);
 			if (is_array($overlaps) && (sizeof($overlaps) > 0)) {
 				$resObj =& ResourceObject::Factory($roomID);
-				$raum = $resObj->getFormattedLink(TRUE, TRUE, TRUE);
+				$raum = $resObj->getFormattedLink( $this->date );
 				$msg = sprintf(_("Für den Termin %s konnte der Raum %s nicht gebucht werden, da es Überschneidungen mit folgenden Terminen gibt:"), $this->toString(), $raum).'<br>';
 				foreach ($overlaps as $tmp_assign_id => $val) {
 					if ($val["lock"])
@@ -402,7 +402,7 @@ class SingleDate {
 					else
 						$msg .= sprintf(_("%s von %s bis %s Uhr")."\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("H:i", $val["end"]));
 				}
-				$this->messages[] = 'error§'.$msg.'§';
+				$this->messages['error'][] = $msg;
 				return FALSE;
 			}
 
@@ -411,9 +411,9 @@ class SingleDate {
 			/*if (!$changeAssign->getId())
 				$changeAssign->createId();*/
 			$resObj =& ResourceObject::Factory($roomID);
-      $raum = $resObj->getFormattedLink(TRUE, TRUE, TRUE);
+      $raum = $resObj->getFormattedLink( $this->date );
 			$msg = sprintf(_("Für den Termin %s wurde der Raum %s gebucht."), $this->toString(), $raum);
-			$this->messages[] = 'msg§'.$msg.'§';
+			$this->messages['success'][] = $msg;
 			return TRUE;
 		}
 		return FALSE;
@@ -560,7 +560,7 @@ class SingleDate {
 		if ($start < 100000) return FALSE;
 		if ($end < 100000)  return FALSE;
 		if ($start > $end) {
-			$this->messages[] = 'error§'._("Die Endzeitpunkt darf nicht vor dem Anfangszeitpunkt liegen!").'§';
+			$this->messages['error'][] = _("Die Endzeitpunkt darf nicht vor dem Anfangszeitpunkt liegen!");
 			return FALSE;
 		}
 		return TRUE;

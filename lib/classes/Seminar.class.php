@@ -70,6 +70,7 @@ class Seminar {
 	var $filterStart = 0;
 	var $filterEnd = 0;
 	var $hasDatesOutOfDuration = -1;
+	var $message_stack = array();
 
 	var $user_number = 0;
 
@@ -1033,10 +1034,15 @@ class Seminar {
 	 * @param mixed $messages array of pre-marked message-strings
 	 * @param bool returns true on success
 	 */
-	function appendMessages($messages) {
-		if (!is_array($messages)) return FALSE;
-		$this->messages = array_merge($this->messages, $messages);
-		return TRUE;
+	function appendMessages( $messages ) {
+		if (!is_array($messages)) return false;
+
+		foreach ( $messages as $type => $msgs ) {
+			foreach ($msgs as $msg) {
+				$this->message_stack[$type][] = $msg;
+			}
+		}
+		return true;
 	}
 
 	function addCycle($data = array()) {
@@ -1167,7 +1173,6 @@ class Seminar {
 					$this->metadate->cycles[$cycle_id]->termine[$singleDateID]->killAssign();	// delete bookment for this singledate
 				} else {
 					return FALSE;		// otherwise return FALSE, meaning : 'No Success'; optional could be placed an error message here
-					//$this->createError(sprintf(_("Es existiert kein Termin mit der SingleDateID %s in der CycleDataID %s"), $singleDateID, $cycle_id));
 				}
 				return TRUE;
 			}
@@ -1177,8 +1182,6 @@ class Seminar {
 					$this->appendMessages($this->metadate->cycles[$cycle_id]->termine[$singleDateID]->getMessages());
 					return FALSE;
 				}
-				/*if ($append_messages)
-					$this->appendMessages($this->metadate->cycles[$cycle_id]->termine[$singleDateID]->getMessages());*/
 			}
 		} else {	// an irregular SingleDate
 			$this->readSingleDates();
@@ -1194,8 +1197,6 @@ class Seminar {
 					$this->appendMessages($this->irregularSingleDates[$singleDateID]->getMessages());
 					return FALSE;
 				}
-				/*if ($append_messages)
-					$this->appendMessages($this->irregularSingleDates[$singleDateID]->getMessages());*/
 			}
 		}
 		return TRUE;

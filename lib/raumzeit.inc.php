@@ -187,35 +187,36 @@ function raumzeit_bookRoom() {
 	if (!$_REQUEST['singledate']) return;
 	$resObj =& ResourceObject::Factory($_REQUEST['room']);
 	$raum = $resObj->getFormattedLink(TRUE, TRUE, TRUE);
-  $termin_count = 0;
-  $ex_termin_count = 0;
+	$termin_count = 0;
+	$ex_termin_count = 0;
+
 	if ($_REQUEST['room'] == 'retreat') {
 		$msg = _("Für folgende Termine wurde die Raumbuchung aufgehoben:").'<br>';
 	} else {
 		$msg = sprintf(_("Für folgende Termine wurde der Raum \"%s\" gebucht:"), $raum)."<br>";
 	}
-  $error_msg = sprintf(_("Für folgende gelöschte Termine wurde Raum \"%s\" nicht gebucht:"), $raum)."<br>";
+
+	$error_msg = sprintf(_("Für folgende gelöschte Termine wurde Raum \"%s\" nicht gebucht:"), $raum)."<br>";
 	foreach ($_REQUEST['singledate'] as $val) {
 		$termin = $sem->getSingleDate($val, $_REQUEST['cycle_id']);
 		if (!$termin->isExTermin()) {
 			if ($sem->bookRoomForSingleDate($val, $_REQUEST['room'], $_REQUEST['cycle_id'])) {
-      	$termin_count++;
+				$termin_count++;
 				$msg .= $termin->toString()."<br>";
 			}
-		} else
-    {
+		} else {
 			$error_msg .= $termin->toString()."<br>";
-      $ex_termin_count++;
-    }
+			$ex_termin_count++;
+		}
 		unset($termin);
 	}
-  if ($termin_count > 0) {
-    $sem->createMessage($msg);
-  }
+	if ($termin_count > 0) {
+		$sem->createMessage($msg);
+	}
 
-  if (($ex_termin_count > 0 ) && ($_REQUEST['room'] != 'retreat')) {
-    $sem->createError($error_msg);
-  }
+	if (($ex_termin_count > 0 ) && ($_REQUEST['room'] != 'retreat')) {
+		$sem->createError($error_msg);
+	}
 }
 
 function raumzeit_selectSemester() {
