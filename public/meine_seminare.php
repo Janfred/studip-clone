@@ -756,6 +756,11 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 
      	</td>
     </tr>
+	<tr>
+		<td class="blank" colspan=2>
+			&nbsp;
+		</td>
+	</tr>
     </table>
 <?
 }
