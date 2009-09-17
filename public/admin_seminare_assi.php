@@ -832,6 +832,11 @@ if (($form == 1) && ($jump_next_x))
 		$level=1; //wir bleiben auf der ersten Seite
 		$errormsg=$errormsg."error§"._("Bitte geben Sie einen g&uuml;ltigen Namen f&uuml;r die Veranstaltung ein!")."§";
 		}
+	 if ($sem_create_data["sem_start_time"] <0) 
+		{ 
+		$level=1; //wir bleiben auf der ersten Seite 
+		$errormsg=$errormsg."error§"._("Bitte geben Sie ein gültiges Semester für die Veranstaltung ein!")."§"; 
+		}	
 	if (!$sem_create_data["sem_inst_id"])
 		{
 		$level=1;
@@ -2260,7 +2265,7 @@ elseif ((!$level) || ($level == 1))
 							$all_semester = $semester->getAllSemesterData();
 
 							echo "<select name=\"sem_start_time\">";
-
+							echo "<option value=\"-1\" >"._('Bitte auswählen')."</option>";
 							foreach ($all_semester as $key => $semester) {
 								if ((!$semester["past"]) && ($semester["ende"] > time())) {
 									if ($sem_create_data["sem_start_time"] ==$semester["beginn"]) {
