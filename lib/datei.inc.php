@@ -703,7 +703,7 @@ function form($refresh = FALSE) {
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>";
 		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protected\" value=\"0\"".(!$protect ? "checked" :"") .">"._("Ja, dieses Dokument ist frei von Rechten Dritter") ;
 		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protected\" value=\"1\"".($protect ? "checked" :"") .">"._("Nein, dieses Dokument ist <u>nicht</u> frei von Rechten Dritter");
-		$print.= "<br/>&nbsp;&nbsp;&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a></font></td></tr>";
+		$print.= "</td></tr>";
 
 		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("3. Geben Sie eine kurze Beschreibung und einen Namen f&uuml;r die Datei ein.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
@@ -1250,7 +1250,7 @@ function link_form ($range_id, $updating=FALSE) {
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dieses Dokument ist frei von Rechten Dritter:") . "&nbsp;";
 		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protect\" value=\"0\"".(!$protect ? "checked" :"") .">"._("Ja");
 		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protect\" value=\"1\"".($protect ? "checked" :"") .">"._("Nein");
-		$print.= "<br/>&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a></font></td></tr>";
+		$print.= "</td></tr>";
 
 		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("3. Geben Sie eine kurze Beschreibung und einen Namen für die Datei ein.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
@@ -1709,7 +1709,6 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						if ($change == $db3->f("dokument_id")) { 	//Aenderungsmodus, Formular aufbauen
 							$content.= "<input type=\"RADIO\" name=\"change_protected\" value=\"0\"".((!$db3->f("protected")) ? "checked" :"") .">"._("Ja, dieses Dokument ist frei von Rechten Dritter") ;
 							$content.= "\n&nbsp;<input type=\"RADIO\" name=\"change_protected\" value=\"1\"".(($db3->f("protected")) ? "checked" :"") .">"._("Nein, dieses Dokument ist <u>nicht</u> frei von Rechten Dritter");
-							$content.= "<br/>&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a>";
 							$content.= "<br /><br /><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br />";
 							$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\" />";
 							$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\" />";
