@@ -2265,7 +2265,10 @@ elseif ((!$level) || ($level == 1))
 							$all_semester = $semester->getAllSemesterData();
 
 							echo "<select name=\"sem_start_time\">";
-							echo "<option value=\"-1\" >"._('Bitte auswählen')."</option>";
+							if(!$GLOBALS['ASSI_SEMESTER_PRESELECT'])
+							{
+								echo "<option value=\"-1\" >"._('Bitte auswählen')."</option>";
+							}
 							foreach ($all_semester as $key => $semester) {
 								if ((!$semester["past"]) && ($semester["ende"] > time())) {
 									if ($sem_create_data["sem_start_time"] ==$semester["beginn"]) {
