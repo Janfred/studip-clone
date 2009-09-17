@@ -397,6 +397,11 @@ function raumzeit_editSingleDate() {
 		// the choosen singleDate is irregular, so we can edit it directly
 		$termin =& $sem->getSingleDate($_REQUEST['singleDateID']);
 
+		$bookRoom = false;
+		if ($start >= $termin->date && $ende <= $termin->end_time) {
+			$bookRoom = true;	
+		}
+
 		if (  $termin->setTime($start, $ende)
     ||    $termin->getFreeRoomText()!=$_REQUEST['freeRoomText_sd']
     ||    $termin->getDateType!=$_REQUEST['dateType'] ) {
@@ -404,7 +409,12 @@ function raumzeit_editSingleDate() {
 			$termin->setDateType($_REQUEST['dateType']);
 			$termin->setFreeRoomText($_REQUEST['freeRoomText_sd']);
 			$termin->store();
-			$sem->bookRoomForSingleDate($_REQUEST['singleDateID'], $_REQUEST['room_sd']);
+			if ($bookRoom) {
+				$sem->bookRoomForSingleDate($_REQUEST['singleDateID'], $_REQUEST['room_sd']);
+			} else {
+				$termin->killAssign();
+				$sem->createInfo(sprintf(_("Die Raumbuchung für den Termin %s wurde aufgehoben, da die neuen Zeiten außerhalb der Alten liegen!"), '<b>'. $termin->toString() .'</b>'));
+			}
 			$sem->createMessage(sprintf(_("Der Termin %s wurde geändert!"), '<b>'.$termin->toString().'</b>'));
 		}
 		$sem->appendMessages($termin->getMessages());
