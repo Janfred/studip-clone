@@ -84,30 +84,38 @@ if ($cmd == "write_chatinv" && !isset($messagesubject)) $messagesubject = _("Cha
 //wurde eine Datei hochgeladen?
 if($GLOBALS["ENABLE_EMAIL_ATTACHMENTS"]){
 	if(Request::submitted('upload')){
-		if ($_FILES['the_file']['size'] > 0 && validate_upload($_FILES['the_file']['tmp_name'])) {
-			$document = new StudipDocument();
-			$document->setValue('range_id' , 'provisional');
-			$document->setValue('seminar_id' , $user->id);
-			$document->setValue('name' , Request::removeMagicQuotes(basename($_FILES['the_file']['name'])));
-			$document->setValue('filename' , $document->getValue('name'));
-			$document->setValue('filesize' , (int)$_FILES['the_file']['size']);
-			$document->setValue('autor_host' , $_SERVER['REMOTE_ADDR']);
-			$document->setValue('user_id' , $user->id);
-			$document->setValue('description', Request::option('attachment_message_id'));
-			if($document->store()
-			&& @move_uploaded_file($_FILES['the_file']['tmp_name'],get_upload_file_path($document->getId()))){
-				$msg = "msg§" . _("Die Datei wurde erfolgreich auf den Server &uuml;bertragen!");
-			} else {
-				$msg .= "error§" . _("Datei&uuml;bertragung gescheitert!");
-			}
-		}
-	}
-	foreach(get_message_attachments(Request::option('attachment_message_id'), true) as $document){
+		$current_size_of_attachments = 0;
+		$max_size_of_attachments = $GLOBALS['UPLOAD_TYPES']['attachments']['file_sizes'][$perm->get_perm()];
+		foreach(get_message_attachments(Request::option('attachment_message_id'), true) as $document){
 			if(Request::submitted('remove_attachment_' . $document['dokument_id'])){
 				delete_document($document['dokument_id']);
 			}
+			$current_size_of_attachments += $document['filesize'];
+		}
+		if ($_FILES['the_file']['error'] === UPLOAD_ERR_OK && validate_upload($_FILES['the_file']['tmp_name'])) {
+			if($current_size_of_attachments + $_FILES['the_file']['size'] > $max_size_of_attachments){
+				$msg = "error§" . sprintf(_("Die Gesamtgröße der angehängten Dateien überschreitet die zulässige Größe von %sMB."), round($max_size_of_attachments/1048576,1));
+			} else {
+				$document = new StudipDocument();
+				$document->setValue('range_id' , 'provisional');
+				$document->setValue('seminar_id' , $user->id);
+				$document->setValue('name' , Request::removeMagicQuotes(basename($_FILES['the_file']['name'])));
+				$document->setValue('filename' , $document->getValue('name'));
+				$document->setValue('filesize' , (int)$_FILES['the_file']['size']);
+				$document->setValue('autor_host' , $_SERVER['REMOTE_ADDR']);
+				$document->setValue('user_id' , $user->id);
+				$document->setValue('description', Request::option('attachment_message_id'));
+				if($document->store()
+				&& @move_uploaded_file($_FILES['the_file']['tmp_name'],get_upload_file_path($document->getId()))){
+					$msg = "msg§" . _("Die Datei wurde erfolgreich auf den Server &uuml;bertragen!");
+				} else {
+					$msg = "error§" . _("Datei&uuml;bertragung gescheitert!");
+				}
+			}
+		} elseif($_FILES['the_file']['error'] === UPLOAD_ERR_FORM_SIZE) {
+			$msg = "error§" . sprintf(_("Die Größe der Datei überschreitet die zulässige Größe von %sMB."), round($max_size_of_attachments/1048576,1));
+		}
 	}
-	
 }
 
 // where do we save the message?
