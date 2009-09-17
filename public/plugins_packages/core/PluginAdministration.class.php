@@ -375,10 +375,27 @@ class PluginAdministration {
 	}
 
 	/**
+	 * Get a list of the types of all the installed plugins.
+	 */
+	function getPluginTypes ()
+	{
+		$plugin_manager = PluginManager::getInstance();
+		$plugin_infos   = $plugin_manager->getPluginInfos();
+		$plugin_types   = array();
+
+		foreach ($plugin_infos as $plugin) {
+			$plugin_types = array_merge($plugin_types, $plugin['type']);
+		}
+
+		sort($plugin_types);
+		return array_unique($plugin_types);
+	}
+
+	/**
 	 * Fetch update information for a list of plugins. This method
 	 * returns for each plugin: plugin name, current version and
 	 * meta data of the plugin update, if available.
-	 */ 
+	 */
 	function getUpdateInfo ($plugins)
 	{
 		$default_repository = new PluginRepository();

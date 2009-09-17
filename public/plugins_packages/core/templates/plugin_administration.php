@@ -34,6 +34,7 @@
 <? endif ?>
 
 <form action="<?= PluginEngine::getLink($admin_plugin) ?>" method="post">
+    <input type="hidden" name="plugin_filter" value="<?= $plugin_filter ?>">
     <table style="width: 100%;" cellspacing="0">
         <tr>
             <th style="text-align: left; width: 35%;"><?= _('Name')?></th>
@@ -46,7 +47,7 @@
 
         <? foreach ($plugins as $plugin): ?>
             <? $pluginid = $plugin['id'] ?>
-            <? if ($plugin['class'] != 'PluginAdministrationPlugin'): ?>
+            <? if ($plugin['class'] != 'PluginAdministrationPlugin' && ($plugin_filter == '' || in_array($plugin_filter, $plugin['type']))): ?>
                 <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>" style="height: 25px;">
                     <td style="padding-left: 1ex;">
                         <a href="<?= PluginEngine::getLink($admin_plugin, array(), 'manifest/'.$plugin['class']) ?>">
@@ -112,11 +113,19 @@
 <?
 $infobox_content = array(
     array(
+        'kategorie' => _('Anzeigefilter:'),
+        'eintrag'   => array(
+            array(
+                'icon' => 'suchen.gif',
+                'text' => $this->render_partial('plugin_filter')
+            )
+        )
+    ), array(
         'kategorie' => _('Hinweise:'),
         'eintrag'   => array(
             array(
                 'icon' => 'ausruf_small.gif',
-                'text' => _('Verfügbarkeit bedeutet bei Standard-Plugins, dass sie vom Dozenten in Veranstaltungen und Einrichtungen aktiviert werden können. Bei System- und Administrationsplugins wird zwischen Aktivierung und Verfügbarkeit nicht unterschieden.')
+                'text' => _('Verfügbarkeit bedeutet bei Standard-Plugins, dass sie vom Dozenten in Veranstaltungen und Einrichtungen aktiviert werden können.')
             ), array(
                 'icon' => 'ausruf_small.gif',
                 'text' => _('Per Default-Aktivierung lassen sich Standard-Plugins automatisch in allen Veranstaltungen einer Einrichtung aktivieren.')

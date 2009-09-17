@@ -161,6 +161,8 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$template->set_attributes(array(
 			'admin_plugin'  => $this,
 			'plugins'       => $plugin_manager->getPluginInfos(),
+			'plugin_types'  => $this->pluginmgmt->getPluginTypes(),
+			'plugin_filter' => Request::option('plugin_filter', ''),
 			'roleplugin'    => PluginEngine::getPlugin('RoleManagementPlugin'),
 			'installable'   => PluginEngine::getInstallablePlugins()
 		));
