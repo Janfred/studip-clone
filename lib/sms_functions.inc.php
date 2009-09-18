@@ -920,6 +920,17 @@ function show_attachmentform() {
 	} else {
 		$print.="\n<br>" . _("An diese Nachricht ist keine Datei angehängt.");
 	}
+	$print.="\n<div style=\"margin-top:5px;font-weight:bold;\">";
+	if ($GLOBALS['UPLOAD_TYPES']['attachments']['type'] == "allow") {
+		$print.= _("Unzul&auml;ssige Dateitypen:");
+	} else {
+		$print.= _("Zul&auml;ssige Dateitypen:");
+	}
+	$print .= '&nbsp;'. join(', ', array_map('strtoupper', (array)$GLOBALS['UPLOAD_TYPES']['attachments']['file_types']));
+ 	$print .= '<br>';
+ 	$print .= _("Maximale Größe der angehängten Dateien:");
+ 	$print .= sprintf("&nbsp;%sMB", round($max_filesize/1048576,1));
+	$print.= "\n</div>";
 	$print.="\n<div style=\"margin-top:5px;\">";
 	$print.="\n" . _("Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen.");
 	$print.= "\n</div>";
