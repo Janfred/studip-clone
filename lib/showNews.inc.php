@@ -29,7 +29,6 @@ require_once ('lib/classes/StudipComments.class.php');
 require_once ('lib/classes/Seminar.class.php');
 
 function process_news_commands(&$cmd_data) {
-	global $nopen, $nclose, $comopen, $comnew, $comsubmit, $comdel, $comdelnews;
 	//Auf und Zuklappen News
 
 	$cmd_data["comopen"]='';
@@ -38,13 +37,13 @@ function process_news_commands(&$cmd_data) {
 	$cmd_data["comdel"]='';
 	$cmd_data["comdelnews"]='';
 
-	if ($comsubmit) $cmd_data["comsubmit"]=$comopen=$comsubmit;
-	if ($comdelnews) $cmd_data["comdelnews"]=$comopen=$comdelnews;
-	if ($comopen) $cmd_data["comopen"]=$nopen=$comopen;
-	if ($nopen) $cmd_data["nopen"]=$nopen;
-	if ($nclose)  $cmd_data["nopen"]='';
-	if ($comnew) $cmd_data["comnew"]=$comnew;
-	if ($comdel) $cmd_data["comdel"]=$comdel;
+	if ($_REQUEST['comsubmit']) $cmd_data["comsubmit"]=$_REQUEST['comopen']=$_REQUEST['comsubmit'];
+	if ($_REQUEST['comdelnews']) $cmd_data["comdelnews"]=$_REQUEST['comopen']=$_REQUEST['comdelnews'];
+	if ($_REQUEST['comopen']) $cmd_data["comopen"]=$_REQUEST['nopen']=$_REQUEST['comopen'];
+	if ($_REQUEST['nopen']) $cmd_data["nopen"]=$_REQUEST['nopen'];
+	if ($_REQUEST['nclose'])  $cmd_data["nopen"]='';
+	if ($_REQUEST['comnew']) $cmd_data["comnew"]=$_REQUEST['comnew'];
+	if ($_REQUEST['comdel']) $cmd_data["comdel"]=$_REQUEST['comdel'];
 
 }
 
@@ -376,7 +375,7 @@ function show_news_item($news_item, $cmd_data, $show_admin) {
   			$formular.="</div></form><p> </p>";
   			$content.=$formular;
   		} else {
-  			$cmdline = "<p align=center><font size=-1><a href=\"".URLHelper::getLink("?comopen=".$id.$unamelink."#anker")."\">"
+  			$cmdline = "<p align=center><font size=-1><a href=\"".URLHelper::getLink("?foo=".rand()."&comopen=".$id.$unamelink."#anker")."\">"
   						.sprintf(_("Kommentare lesen (%s) / Kommentar schreiben"), $numcomments)."</a></font></p>";
   			$content .= $cmdline;
   		}

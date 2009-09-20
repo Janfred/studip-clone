@@ -80,6 +80,8 @@ function isDataFieldArrayEmpty ($array) {
 
 unregister_globals();
 
+UrlHelper::bindLinkParam('about_data', $about_data);
+
 $username = $auth->auth["uname"];
 
 if (isset($_REQUEST['username']) && $_REQUEST['username'] !== '') {
@@ -117,7 +119,6 @@ $db2 = new DB_Seminar;
 $db3 = new DB_Seminar;
 $semester = new SemesterData;
 
-$sess->register("about_data");
 $msging = new messaging;
 
 //Buddie hinzufuegen
@@ -127,22 +128,19 @@ if ($_GET['cmd'] == "add_user") {
 
 
 //Auf und Zuklappen Termine
-# TODO (mlunzena) Woher stammen $dopen und $dclose?
-if ($dopen)
-	$about_data["dopen"]=$dopen;
+if ($_GET['dopen'])
+	$about_data["dopen"]=$_GET['dopen'];
 
-if ($dclose)
+if ($_GET['dclose'])
 	$about_data["dopen"]='';
 
 //Auf und Zuklappen News
 process_news_commands($about_data);
 
-# TODO (mlunzena) Woher stammt $sms_msg?
 $msg = "";
-if ($sms_msg) {
-	$msg = $sms_msg;
-	$sms_msg = '';
-	$sess->unregister('sms_msg');
+if ($_SESSION['sms_msg']) {
+	$msg = $_SESSION['sms_msg'];
+	unset($_SESSION['sms_msg']);
 }
 
 // 3 zeilen wegen username statt id zum aufruf...
