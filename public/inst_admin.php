@@ -165,11 +165,11 @@ function table_head ($structure, $css_switcher) {
 
 		if ($field["link"]) {
 			printf("<a href=\"%s\">", URLHelper::getLink($field["link"]));
-			printf("<font size=\"-1\"><b>%s&nbsp;</b></font>\n", $field["name"]);
+			printf("<font size=\"-1\"><b>%s&nbsp;</b></font>\n", htmlReady($field["name"]));
 			echo "</a>\n";
 		}
 		else
-			printf("<font size=\"-1\" color=\"black\"><b>%s&nbsp;</b></font>\n", $field["name"]);
+			printf("<font size=\"-1\" color=\"black\"><b>%s&nbsp;</b></font>\n", htmlReady($field["name"]));
 		echo "</td>\n";
 	}
 	echo "</tr>\n";
@@ -203,7 +203,7 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 				printf("<a href=\"%s\">%s</a>\n",
 				URLHelper::getLink("edit_about.php?view=Karriere&open=".$range_id."&username=".$db->f("username")."#".$range_id), htmlReady($db->f("fullname")));
 			} else {
-				echo '<a href="'.URLHelper::getLink('about.php?username='.$db->f('username')).'">'. $db->f('fullname') .'</a>';
+				echo '<a href="'.URLHelper::getLink('about.php?username='.$db->f('username')).'">'. htmlReady($db->f('fullname')) .'</a>';
 			}
 			echo '</font></td>';
 		}
@@ -230,13 +230,13 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 				$value = '';
 				if ($role_entries[$entry->getId()]) {
 					if ($role_entries[$entry->getId()]->getValue() == 'default_value') {
-						$value = $default_entries[$entry->getId()]->getValue();
+						$value = $default_entries[$entry->getId()]->getDisplayValue();
 					} else {
-						$value = $role_entries[$entry->getId()]->getValue();
+						$value = $role_entries[$entry->getId()]->getDisplayValue();
 					}
 				} else {
 					if ($default_entries[$entry->getId()]) {
-						$value = $default_entries[$entry->getId()]->getValue();
+						$value = $default_entries[$entry->getId()]->getDisplayValue();
 					}
 				}
 
@@ -246,11 +246,11 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 		}
 
 		if (sizeof($GLOBALS['dview']) == 0) {
-			if ($structure['raum']) echo '<td '.$css_switcher->getFullClass().'>'. $db->f('raum') .'</td>';
-			if ($structure['sprechzeiten']) echo '<td '.$css_switcher->getFullClass().'>'. $db->f('sprechzeiten') .'</td>';
-			if ($structure['telefon']) echo '<td '.$css_switcher->getFullClass().'>'. $db->f('telefon') .'</td>';
-			if ($structure['email']) echo '<td '.$css_switcher->getFullClass().'>'. $db->f('Email') .'</td>';
-			if ($structure['homepage']) echo '<td '.$css_switcher->getFullClass().'>'. $db->f('Homepage') .'</td>';
+			if ($structure['raum']) echo '<td '.$css_switcher->getFullClass().'>'. htmlReady($db->f('raum')) .'</td>';
+			if ($structure['sprechzeiten']) echo '<td '.$css_switcher->getFullClass().'>'. htmlReady($db->f('sprechzeiten')) .'</td>';
+			if ($structure['telefon']) echo '<td '.$css_switcher->getFullClass().'>'. htmlReady($db->f('telefon')) .'</td>';
+			if ($structure['email']) echo '<td '.$css_switcher->getFullClass().'>'. htmlReady($db->f('Email')) .'</td>';
+			if ($structure['homepage']) echo '<td '.$css_switcher->getFullClass().'>'. htmlReady($db->f('Homepage')) .'</td>';
 		}
 
 		if ($structure["nachricht"]) {
@@ -290,9 +290,9 @@ function table_body ($db, $range_id, $structure, $css_switcher) {
 					echo '<td '.$css_switcher->getFullClass().'><font size="-1">';
 
 					if ($admin_view) {
-						echo '<a href="'.URLHelper::getLink('admin_statusgruppe.php?role_id='.$id.'&cmd=displayRole').'">'.$group_list[$id].'</a>';
+						echo '<a href="'.URLHelper::getLink('admin_statusgruppe.php?role_id='.$id.'&cmd=displayRole').'">'.htmlReady($group_list[$id]).'</a>';
 					} else {
-						echo $group_list[$id];
+						echo htmlReady($group_list[$id]);
 					}
 
 					echo '</font></td>';
@@ -861,7 +861,7 @@ else {
 // StEP 154: Nachricht an alle Mitglieder der Gruppe; auch auf der inst_members.php
 if ($admin_view OR $perm->have_studip_perm('autor', $SessSemName[1])) {
 	$nachricht['nachricht'] = array(
-		"name" => _("Aktionen") . "&nbsp;",
+		"name" => _("Aktionen"),
 		"width" => "5%"
 	);
 }
