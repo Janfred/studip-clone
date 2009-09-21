@@ -241,7 +241,7 @@ class SiteinfoMarkupEngine {
         $result = $this->db->query($sql);
         if ($result->rowCount() == 1) {
             $user = $result->fetch(PDO::FETCH_ASSOC);
-            $template->user = $user['username'];
+            $template->username = $user['username'];
             $template->fullname = $user['fullname'];
             $template->email = $user['Email'];
         } else {
