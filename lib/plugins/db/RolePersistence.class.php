@@ -103,7 +103,6 @@ class RolePersistence
 
 		// sweep roles cache
 		StudipCacheFactory::getCache()->expire(self::ROLES_CACHE_KEY);
-		StudipCacheFactory::getCache()->expire(self::ROLES_PLUGINS_CACHE_KEY . $id);
 
 		$db = DBManager::get();
 		$stmt = $db->prepare("DELETE FROM roles WHERE roleid=? AND system='n'");
@@ -241,9 +240,10 @@ class RolePersistence
 	 */
 	public function assignPluginRoles($pluginid,$roleids)
 	{
+		StudipCacheFactory::getCache()->expire(self::ROLES_PLUGINS_CACHE_KEY . $pluginid);
+
 		$stmt = DBManager::get()->prepare("REPLACE INTO roles_plugins (roleid, pluginid) VALUES (?, ?)");
 		foreach ($roleids as $roleid) {
-			StudipCacheFactory::getCache()->expire(self::ROLES_PLUGINS_CACHE_KEY . $roleid);
 			$stmt->execute(array($roleid, $pluginid));
 		}
 	}
@@ -256,9 +256,10 @@ class RolePersistence
 	 */
 	public function deleteAssignedPluginRoles($pluginid,$roleids)
 	{
+		StudipCacheFactory::getCache()->expire(self::ROLES_PLUGINS_CACHE_KEY . $pluginid);
+
 		$stmt = DBManager::get()->prepare("DELETE FROM roles_plugins WHERE roleid=? AND pluginid=?");
 		foreach ($roleids as $roleid) {
-			StudipCacheFactory::getCache()->expire(self::ROLES_PLUGINS_CACHE_KEY . $roleid);
 			$stmt->execute(array($roleid, $pluginid));
 		}
 	}
@@ -292,6 +293,7 @@ class RolePersistence
 				}
 			}
 
+			// write to cache
 			$cache->write($key, serialize($result));
 		}
 		return $result;
