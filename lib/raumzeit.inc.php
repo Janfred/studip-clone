@@ -400,11 +400,25 @@ function raumzeit_editSingleDate() {
 		$bookRoom = false;
 		if ($start >= $termin->date && $ende <= $termin->end_time) {
 			$bookRoom = true;	
+		} else {
+			if (!$_REQUEST['approveChange']) {
+				$zw_termin = new SingleDate();
+				$zw_termin->date = $start;
+				$zw_termin->end_time = $ende;
+
+				echo createQuestion( sprintf(_("Wenn Sie den Termin am %s auf %s ändern,".
+						" verlieren Sie die Raumbuchung. Sind Sie sicher, dass Sie diesen Termin ändern möchten?"),
+						'**'. $termin->toString() .'**',  '**'. $zw_termin->toString() .'**'),
+					array_merge($_REQUEST, array('approveChange' => true)));
+
+				unset($zw_termin);
+				return;
+			}
 		}
 
-		if (  $termin->setTime($start, $ende)
-    ||    $termin->getFreeRoomText()!=$_REQUEST['freeRoomText_sd']
-    ||    $termin->getDateType!=$_REQUEST['dateType'] ) {
+		if ( $termin->setTime($start, $ende)
+      || $termin->getFreeRoomText()!=$_REQUEST['freeRoomText_sd']
+      || $termin->getDateType!=$_REQUEST['dateType'] ) {
 
 			$termin->setDateType($_REQUEST['dateType']);
 			$termin->setFreeRoomText($_REQUEST['freeRoomText_sd']);

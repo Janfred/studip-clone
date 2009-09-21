@@ -1441,17 +1441,19 @@ function TransformInternalLinks($str){
 /**
 * creates a modal dialog ensuring that the user is really aware about the action to perform
 *
-*@param   string $question          question of the modal dialog
-*@param   string $approveParams     an array of params for a link to be used on approval
-*@param   string $disapproveParams  an array of params for a link to be used on disapproval
-*@return  string $dialog            text which contains the dialog
+* @param   string $question          question of the modal dialog
+* @param   string $approveParams     an array of params for a link to be used on approval
+* @param   string $disapproveParams  an array of params for a link to be used on disapproval
+* @param   string $baseUrl           if set, this url is used, PHP_SELF otherwise
+*
+* @return  string $dialog            text which contains the dialog
 */
 
-function createQuestion($question, $approveParams, $disapproveParams = array()) {
+function createQuestion($question, $approveParams, $disapproveParams = array(), $baseUrl = '?') {
 	$template = $GLOBALS['template_factory']->open('shared/question');
 
-	$template->set_attribute('approvalLink', URLHelper::getLink('', $approveParams ));
-	$template->set_attribute('disapprovalLink', URLHelper::getLink('', $disapproveParams ));
+	$template->set_attribute('approvalLink', URLHelper::getLink($baseUrl, $approveParams ));
+	$template->set_attribute('disapprovalLink', URLHelper::getLink($baseUrl, $disapproveParams ));
 	$template->set_attribute('question', $question);
 
 	return $template->render();
