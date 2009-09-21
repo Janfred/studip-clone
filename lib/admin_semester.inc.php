@@ -107,10 +107,10 @@ function semester_check_form_field($semesterdata) {
     }
     //now compare dates
     if ((mktime(0,0,0,$semesterdata["expireMonth"],$semesterdata["expireDay"],$semesterdata["expireYear"])-mktime(0,0,0,$semesterdata["startMonth"],$semesterdata["startDay"],$semesterdata["startYear"]))<0) {
-        return _("Das Datum des Semesterendes muss groesser sein als das Datum des Semesteranfangs");
+        return _("Das Datum des Semesterendes muss größer sein als das Datum des Semesteranfangs");
     }
     if ((mktime(0,0,0,$semesterdata["lectureExpireMonth"],$semesterdata["lectureExpireDay"],$semesterdata["lectureExpireYear"])-mktime(0,0,0,$semesterdata["lectureStartMonth"],$semesterdata["lectureStartDay"],$semesterdata["lectureStartYear"]))<0) {
-        return _("Das Datum des Vorlesungsendes muss groesser sein als das Datum des Vorlesunganfangs");
+        return _("Das Datum des Vorlesungsendes muss größer sein als das Datum des Vorlesunganfangs");
     }
     if (((mktime(0,0,0,$semesterdata["lectureStartMonth"],$semesterdata["lectureStartDay"],$semesterdata["lectureStartYear"])-mktime(0,0,0,$semesterdata["startMonth"],$semesterdata["startDay"],$semesterdata["startYear"]))<0) || ((mktime(0,0,0,$semesterdata["expireMonth"],$semesterdata["expireDay"],$semesterdata["expireYear"])-mktime(0,0,0,$semesterdata["lectureExpireMonth"],$semesterdata["lectureExpireDay"],$semesterdata["lectureExpireYear"]))<0)) {
         return _("Der Vorlesungszeitraum muss innerhalb des Semesters liegen");
@@ -821,7 +821,7 @@ function holiday_check_form_field($holidaydata) { // check insert_form
     }
     //now compare dates
     if ((mktime(0,0,0,$holidaydata["expireMonth"],$holidaydata["expireDay"],$holidaydata["expireYear"])-mktime(0,0,0,$holidaydata["startMonth"],$holidaydata["startDay"],$holidaydata["startYear"]))<0) {
-        return _("Das Datum des Ferienendes muss groesser sein als das Datum des Ferienanfangs");
+        return _("Das Datum des Ferienendes muss größer sein als das Datum des Ferienanfangs");
     }
     return 1;
 }
