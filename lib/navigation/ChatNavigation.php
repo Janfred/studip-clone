@@ -21,7 +21,7 @@ class ChatNavigation extends Navigation
     {
         global $user;
 
-        parent::__construct(_('Chat'));
+        parent::__construct(_('Chat'), 'chat_online.php');
 
         $db = DBManager::get();
         $chatServer = ChatServer::GetInstance(get_config('CHAT_SERVER_NAME'));
@@ -68,7 +68,6 @@ class ChatNavigation extends Navigation
             $chat_tip[] = sprintf(_('%d aktive Chaträume'), $active_chats);
         }
 
-        $this->setURL('chat_online.php');
         $this->setImage($chatimage, array('title' => join(', ', $chat_tip)));
     }
 }

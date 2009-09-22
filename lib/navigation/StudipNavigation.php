@@ -68,21 +68,22 @@ class StudipNavigation extends Navigation
 
         if ($GLOBALS['PLUGINS_ENABLE']) {
             foreach (PluginEngine::getPlugins('SystemPlugin') as $plugin) {
-                if ($plugin->hasBackgroundTasks()) {
-                    $plugin->doBackgroundTasks();
+                if ($plugin instanceof AbstractStudIPSystemPlugin) {
+                    if ($plugin->hasBackgroundTasks()) {
+                        $plugin->doBackgroundTasks();
+                    }
                 }
             }
         }
 
         // quick links
         $links = new Navigation('Links');
-        $cancel = Request::get('again') ? array('cancel_login' => 1) : NULL;
 
         if (is_object($user) && $user->id != 'nobody') {
             $links->addSubNavigation('search', new Navigation(_('Suche'), 'auswahl_suche.php'));
         }
 
-        $links->addSubNavigation('imprint', new Navigation(_('Impressum'), 'dispatch.php/siteinfo/show', $cancel));
+        $links->addSubNavigation('imprint', new Navigation(_('Impressum'), 'dispatch.php/siteinfo/show'));
 
         if (get_config('EXTERNAL_HELP')) {
             $links->addSubNavigation('help', new Navigation(_('Hilfe'), format_help_url($GLOBALS['HELP_KEYWORD'])));
@@ -92,11 +93,11 @@ class StudipNavigation extends Navigation
             $links->addSubNavigation('logout', new Navigation(_('Logout'), 'logout.php'));
         } else {
             if (in_array('CAS', $GLOBALS['STUDIP_AUTH_PLUGIN'])) {
-                $links->addSubNavigation('login_cas', new Navigation(_('Login CAS'), 'index.php?again=yes&sso=cas', $cancel));
+                $links->addSubNavigation('login_cas', new Navigation(_('Login CAS'), 'index.php?again=yes&sso=cas'));
             }
 
             if (in_array('Shib', $GLOBALS['STUDIP_AUTH_PLUGIN'])) {
-                $links->addSubNavigation('login_shib', new Navigation(_('Login Shibboleth'), 'index.php?again=yes&sso=shib', $cancel));
+                $links->addSubNavigation('login_shib', new Navigation(_('Login Shibboleth'), 'index.php?again=yes&sso=shib'));
             }
 
             $links->addSubNavigation('login', new Navigation(_('Login'), 'index.php?again=yes'));

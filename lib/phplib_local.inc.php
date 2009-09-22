@@ -579,6 +579,7 @@ class Seminar_Auth extends Auth {
 		$GLOBALS['HELP_KEYWORD'] = 'Basis.AnmeldungLogin';
 		$header_template = $GLOBALS['template_factory']->open('header');
 		$header_template->current_page = _('Login');
+		$header_template->link_params = array('cancel_login' => 1);
 
 		include 'lib/include/html_head.inc.php';
 		echo $header_template->render();

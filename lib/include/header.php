@@ -60,6 +60,7 @@ else
 	$header_template = $GLOBALS['template_factory']->open('header');
 	$header_template->current_page = $GLOBALS['CURRENT_PAGE'];
 	$header_template->navigation = Navigation::getItem('/')->activeSubNavigation();
+	$header_template->link_params = array_fill_keys(array_keys(URLHelper::getLinkParams()), NULL);
 
 	if (is_object($GLOBALS['user']) && $GLOBALS['user']->id != 'nobody') {
 		if ($GLOBALS['user']->cfg->getValue(null, 'ACCESSKEY_ENABLE')){

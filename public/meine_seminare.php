@@ -36,7 +36,6 @@ global $SEM_CLASS,
 ob_start(); //Outputbuffering für maximal Performance
 
 function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
-  $link = $type.'_main.php?auswahl='.$semid;
 
   foreach (words('forum files news scm literature schedule wiki elearning vote') as $key) {
 	$navigation[$key] = $my_obj_values[$key];
@@ -50,7 +49,9 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
 
   foreach ($navigation as $key => $nav) {
 	if (isset($nav) && $nav->isVisible(true)) {
-		printf('&nbsp; <a href="%s&redirect_to=%s"><img ', $link, htmlspecialchars($nav->getURL()));
+		// need to use strtr() here to deal with seminar_main craziness
+		$url = $type.'_main.php?auswahl='.$semid.'&redirect_to='.strtr($nav->getURL(), '?', '&');
+		printf('&nbsp; <a href="%s"><img ', htmlspecialchars($url));
 		foreach ($nav->getImage() as $key => $value) {
 			printf('%s="%s" ', $key, htmlReady($value));
 		}

@@ -19,7 +19,7 @@ class StartNavigation extends Navigation
     {
         global $user;
 
-        parent::__construct(_('Start'));
+        parent::__construct(_('Start'), 'index.php');
 
         $db = DBManager::get();
 
@@ -50,9 +50,6 @@ class StartNavigation extends Navigation
         $homeinfo .= $vote ? ' - ' . sprintf(_('%s neue Umfrage(n)'), $vote) : '';
         $homeimage = $vote + $news ? 'header_home_red' : 'header_home';
 
-        $cancel = Request::get('again') ? array('cancel_login' => 1) : NULL;
-
-        $this->setURL('index.php', $cancel);
         $this->setImage($homeimage, array('title' => $homeinfo));
     }
 

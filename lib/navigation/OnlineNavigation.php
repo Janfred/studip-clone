@@ -19,7 +19,7 @@ class OnlineNavigation extends Navigation
     {
         global $my_messaging_settings;
 
-        parent::__construct(_('Online'));
+        parent::__construct(_('Online'), 'online.php');
 
         $onlineimage = 'header_nutzer';
         $onlinetip = _('Nur Sie sind online');
@@ -36,7 +36,6 @@ class OnlineNavigation extends Navigation
             }
         }
 
-        $this->setURL('online.php');
         $this->setImage($onlineimage, array('title' => $onlinetip));
     }
 }

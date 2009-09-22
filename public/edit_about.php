@@ -111,6 +111,7 @@ if (!$my_about->check) {
 	exit;
 }
 
+$my_about->get_user_details();
 
 
 /* * * * * * * * * * * * * * * *
@@ -593,7 +594,6 @@ if (!$cmd)
  {
  // darfst du ändern?? evtl erst ab autor ?
 	$perm->check("user");
-	$my_about->get_user_details();
 	$username = $my_about->auth_user["username"];
 	//maximale spaltenzahl berechnen
 	 if ($auth->auth["jscript"]) $max_col = round($auth->auth["xres"] / 10 );

@@ -21,7 +21,7 @@ class MessagingNavigation extends Navigation
     {
         global $user;
 
-        parent::__construct(_('Post'));
+        parent::__construct(_('Post'), 'sms_box.php?sms_inout=in');
 
         $neum = count_messages_from_user('in', ' AND message_user.readed = 0 ');
         $altm = count_messages_from_user('in', ' AND message_user.readed = 1 ');
@@ -43,7 +43,6 @@ class MessagingNavigation extends Navigation
             $tip = _('Sie haben keine alten empfangenen Nachrichten');
         }
 
-        $this->setURL('sms_box.php?sms_inout=in');
         $this->setImage($icon, array('title' => $tip));
     }
 

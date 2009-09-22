@@ -233,11 +233,11 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 			$nav = new Navigation('forum');
 
 			if ($db2->f('neue')) {
-				$nav->setURL('forum.php&view=neue&sort=age');
+				$nav->setURL('forum.php?view=neue&sort=age');
 				$nav->setImage('icon-posting2.gif', array('title' =>
 					sprintf(_('%s Postings, %s neue'), $db2->f('count'), $db2->f('neue'))));
 			} else if ($db2->f('count')) {
-				$nav->setURL('forum.php&view=reset&sort=age');
+				$nav->setURL('forum.php?view=reset&sort=age');
 				$nav->setImage('icon-posting.gif', array('title' => sprintf(_('%s Postings'), $db2->f('count'))));
 			}
 
@@ -270,11 +270,11 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 			$nav = new Navigation('files');
 
 			if ($db2->f('neue')) {
-				$nav->setURL('folder.php&cmd=all');
+				$nav->setURL('folder.php?cmd=all');
 				$nav->setImage('icon-disc2.gif', array('title' =>
 					sprintf(_('%s Dokumente, %s neue'), $db2->f('count'), $db2->f('neue'))));
 			} else if ($db2->f('count')) {
-				$nav->setURL('folder.php&cmd=tree');
+				$nav->setURL('folder.php?cmd=tree');
 				$nav->setImage('icon-disc.gif', array('title' => sprintf(_('%s Dokumente'), $db2->f('count'))));
 			}
 
@@ -396,7 +396,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 				$nav = new Navigation('wiki');
 
 				if ($db2->f('neue')) {
-					$nav->setURL('wiki.php&view=listnew');
+					$nav->setURL('wiki.php?view=listnew');
 					$nav->setImage('icon-wiki2.gif', array('title' =>
 						sprintf(_('%s WikiSeiten, %s Änderungen'), $db2->f('count'), $db2->f('neue'))));
 				} else if ($db2->f('count')) {
@@ -421,7 +421,7 @@ function get_my_obj_values (&$my_obj, $user_id, $modules = NULL) {
 					$my_obj[$object_id]['last_modified'] = $db2->f('last_modified');
 				}
 	
-				$nav = new Navigation('elearning', 'elearning_interface.php&view=show');
+				$nav = new Navigation('elearning', 'elearning_interface.php?view=show');
 
 				if ($db2->f('neue')) {
 					$nav->setImage('icon-lern2.gif', array('title' =>

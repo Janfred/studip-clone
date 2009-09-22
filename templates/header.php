@@ -24,7 +24,7 @@
 				?>
 				<li>
 				<div style="font-size:12px; z-index:2; line-height:90%; padding-bottom:3px">
-				<a href="<?= URLHelper::getLink($nav->getURL()) ?>" <?= $accesskey_attr ?>>
+				<a href="<?= URLHelper::getLink($nav->getURL(), $link_params) ?>" <?= $accesskey_attr ?>>
 				<img <? foreach ($image as $key => $value) printf('%s="%s" ', $key, htmlReady($value)) ?>>
 				<br>
 				<?= htmlReady($nav->getTitle()) ?>
@@ -67,7 +67,7 @@
 	<ul>
 		<? if (isset($search_semester_nr)) : ?>
 		<li>
-		<form id="quicksearch" action="<?= URLHelper::getLink('sem_portal.php', array('send' => 'yes', 'group_by' => '0')) ?>" method="post">
+		<form id="quicksearch" action="<?= URLHelper::getLink('sem_portal.php', array('send' => 'yes', 'group_by' => '0') + $link_params) ?>" method="post">
 		  <input type="hidden" name="search_sem_qs_choose" value="title_lecturer_number">
 		  <input type="hidden" name="search_sem_sem" value="<?= $search_semester_nr ?>">
 		  <input type="hidden" name="search_sem_1508068a50572e5faff81c27f7b3a72f" value="1">
@@ -109,7 +109,7 @@
 				<li>
 				<a
 				<? if (is_internal_url($url = $nav->getURL())) : ?>
-					href="<?= URLHelper::getLink($url) ?>"
+					href="<?= URLHelper::getLink($url, $link_params) ?>"
 				<? else : ?>
 					href="<?= htmlspecialchars($url) ?>" target="_blank"
 				<? endif ?>

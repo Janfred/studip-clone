@@ -28,12 +28,8 @@ class BrowseNavigation extends Navigation
             $courselink = 'freie.php';
         }
 
-        parent::__construct($coursetext);
+        parent::__construct($coursetext, $courselink);
 
-        $cancel = Request::get('again') ? array('cancel_login' => 1) : NULL;
-
-        $this->setTitle($coursetext);
-        $this->setURL($courselink, $cancel);
         $this->setImage('header_meinesem', array('title' => $courseinfo));
     }
 
