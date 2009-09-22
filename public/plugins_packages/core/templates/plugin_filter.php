@@ -1,4 +1,4 @@
-<form action="<? PluginEngine::getLink($admin_plugin) ?>" method="post">
+<form action="<?= PluginEngine::getLink($admin_plugin) ?>" method="post">
     <select name="plugin_filter" onchange="this.form.submit();">
         <option value="">
             <?= _('alle anzeigen') ?>
@@ -11,6 +11,6 @@
     </select>
 
     <noscript>
-        <input type="image" name="show" src="<?= Assets::image_path('GruenerHakenButton.png') ?>">
+        <input type="image" class="middle" name="show" src="<?= Assets::image_path('GruenerHakenButton.png') ?>">
     </noscript>
 </form>
