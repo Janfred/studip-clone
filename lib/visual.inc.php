@@ -295,7 +295,7 @@ function quotes_decode($description)
 	}
 	$description=preg_replace("/\[quote\007/","[quote",$description);
 	$description=preg_replace("/\[\/quote\007\]/","[/quote]",$description);
-	return $description;
+	return substr($description, 1);
 }
 
 /**
