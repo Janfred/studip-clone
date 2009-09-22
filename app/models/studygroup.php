@@ -181,11 +181,11 @@ class StudygroupModel {
     
     function getFounder ( $semid )
     {
-        $sql = "SELECT user_id FROM `seminar_user` WHERE Seminar_id = '{$semid}' AND status = 'dozent' AND user_id != MD5('studygroup_dozent')";
+        $sql  = "SELECT user_id FROM `seminar_user` WHERE Seminar_id = '{$semid}' AND status = 'dozent' AND user_id != MD5('studygroup_dozent')";
         $stmt = DBManager::get()->query($sql);
-        $user= $stmt->fetch();
-        $founder = array('user_id' => $user['user_id'], 'fullname' => get_fullname($user['user_id']), 'uname' => 
-                         get_username($user['user_id']));
+		while ($user = $stmt->fetch()) {
+	        $founder[] = array('user_id' => $user['user_id'], 'fullname' => get_fullname($user['user_id']), 'uname' => get_username($user['user_id']));
+		}
        
         return $founder; 
     }
@@ -202,4 +202,27 @@ class StudygroupModel {
        
     }
     
+	function addFounder ( $username, $sem_id ) {
+		var_dump($username);
+		$stmt = DBManager::get()->prepare("INSERT IGNORE INTO seminar_user
+			(Seminar_id, user_id, status) VALUES (?, ?, 'dozent')");
+		$stmt->execute( array($sem_id, get_userid($username)) );
+	}
+
+	function removeFounder ( $username, $sem_id ) {
+		$stmt = DBManager::get()->prepare("DELETE FROM seminar_user
+			WHERE Seminar_id = ? AND user_id = ?");
+		$stmt->execute( array($sem_id, get_userid($username)) );
+	}
+
+	function getFounders ( $sem_id ) {
+		$stmt = DBManager::get()->prepare($query = "SELECT username, perms, ". $GLOBALS['_fullname_sql']['full_rev'] ." as fullname FROM seminar_user
+			LEFT JOIN auth_user_md5 USING (user_id)
+			LEFT JOIN user_info USING (user_id)
+			WHERE Seminar_id = ? AND status = 'dozent'
+				AND username != 'studygroup_dozent'");
+		$stmt->execute( array($sem_id) );
+
+		return $stmt->fetchAll();
+	}
 }

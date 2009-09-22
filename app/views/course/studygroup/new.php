@@ -19,7 +19,7 @@ $infobox['content'] = array(
 
 <form action="<?= $controller->url_for('course/studygroup/create') ?>" method=post>
 
-<table class="blank" width="75%" cellspacing="5" cellpadding="0" border="0" style="margin-left:75px; margin-right:300px;">
+<table class="blank" width="85%" cellspacing="5" cellpadding="0" border="0" style="margin-left:75px; margin-right:150px;">
 <tr>
   <td style='text-align:right; font-size:150%;'><?= _("Name:") ?></td>
   <td style='font-size:150%;'><input type='text' name='groupname' size='25' value="<?= htmlReady($this->flash['request']['groupname'])?>" style='font-size:100%'></td>
@@ -30,6 +30,9 @@ $infobox['content'] = array(
   <td><textarea name='groupdescription' rows=5 cols=50><?= ($this->flash['request']['groupdescription'] ? htmlReady($this->flash['request']['groupdescription']) : _("Hier aussagekräftige Beschreibung eingeben.")) ?></textarea></td>
 </tr>
 
+<? if ($GLOBALS['perm']->have_perm('admin')) : ?>
+	<?= $this->render_partial("course/studygroup/_choose_founders", array('founders' => $flash['founders'], 'results_choose_founders' => $flash['results_choose_founders'])) ?>
+<? endif; ?>
 <tr>
   <td style='text-align:right; vertical-align:top;'><?= _("Module:") ?></td>
   <td>
@@ -73,8 +76,13 @@ $infobox['content'] = array(
 <tr>
   <td style='text-align:right; vertical-align:top;'><p><?= _("Nutzungsbedingungen:") ?></p></td>
   <td>
-      <p>
-        <em><?= formatReady( $terms ) ?></em>
+  	<? if ($GLOBALS['perm']->have_perm('admin')) : ?>
+    <p>
+	  <b><?= _("Ich habe die eingetragenen GründerInnen darüber informiert, dass in Ihrem Namen eine Studiengruppe angelegt wird und versichere, dass Sie mit folgenden Nutzungsbedingungen einverstandenen sind:") ?></b>
+	</p>
+	<? endif; ?>
+    <p>
+      <em><?= formatReady( $terms ) ?></em>
     </p>
     <p>
         <label>
@@ -92,6 +100,3 @@ $infobox['content'] = array(
 
 </table>
 </form>
-
-
-

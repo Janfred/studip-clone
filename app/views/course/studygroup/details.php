@@ -1,8 +1,8 @@
 <?php
 
-if ($GLOBALS['perm']->have_studip_perm('admin',$studygroup->getId())) {
+if ($GLOBALS['perm']->have_studip_perm('autor',$studygroup->getId())) {
 	$participate_link = '<a href="'. UrlHelper::getLink('seminar_main.php?auswahl='. $studygroup->getId()) .'">%s</a>';
-	$participate = sprintf($participate_link, _("Direkt zur Veranstaltung"));
+	$participate = sprintf($participate_link, _("Direkt zur Studiengruppe"));
 } else if ($membership_requested) {
 	$participate = _("Mitgliedschaft bereits beantragt!");
 } else {

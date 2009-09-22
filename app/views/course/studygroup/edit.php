@@ -57,6 +57,11 @@ $infobox['content'] = array(
   <td style='text-align:right; vertical-align:top;'>Beschreibung:</td>
   <td><textarea name='groupdescription' rows=5 cols=50><?= htmlReady($sem->description) ?></textarea></td>
 </tr>
+
+<? if ($GLOBALS['perm']->have_studip_perm('admin', $sem_id)) : ?>
+	<?= $this->render_partial("course/studygroup/_choose_founders", array('results_choose_founders' => $flash['results_choose_founders'])) ?>
+<? endif; ?>
+
 <tr>
   <td style='text-align:right; vertical-align:top;'>Module:</td>
   <td>

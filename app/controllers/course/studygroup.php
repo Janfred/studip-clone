@@ -82,111 +82,211 @@ class Course_StudygroupController extends AuthenticatedController {
 		$this->available_modules = StudygroupModel::getAvailableModules();
 		if ($GLOBALS['PLUGINS_ENABLE']) {
 			$this->available_plugins = StudygroupModel::getAvailablePlugins();
-			// $this->enabled_plugins   = StudygroupModel::getEnabledPlugins();
 		}
-		$this->modules           = new Modules();
+		$this->modules = new Modules();
 	}
 
 	function create_action()
 	{
+		global $perm;
+
+		$admin = $perm->have_perm('admin');
+
 		$errors = array();
 
-		//checks
-		if (!Request::get('groupname')) {
-			$errors[] = _("Bitte Gruppennamen angeben");
-		} else {
-			$pdo = DBManager::get();
-			$stmt = $pdo->query($query = "SELECT * FROM seminare WHERE name = ". $pdo->quote(Request::get('groupname')));
-			if ($stmt->fetch()) {
-				$errors[] = _("Eine Veranstaltung/Studiengruppe mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen");
-			}
+		if ($_REQUEST['founders']) {
+			$founders = $_REQUEST['founders'];
+			$this->flash['founders'] = $_REQUEST['founders'];
 		}
 
-		if (!Request::get('grouptermsofuse_ok')) {
-			$errors[] = _("Sie müssen die Nutzungsbedingungen durch Setzen des Häkchens bei 'Einverstanden' akzeptieren.");
-		}
-		if (count($errors)) {
-			$this->flash['errors'] =  $errors;
+		// search for founder
+		if ($admin && (Request::get('search_founder') || Request::get('search_founder_x'))) {
+			$search_for_founder = Request::get('search_for_founder');
+
+			// do not allow to search with the empty string
+			if ($search_for_founder) {
+
+				// search for the user
+				$pdo = DBManager::get();
+				$search_for_founder = $pdo->quote('%'. $search_for_founder .'%');
+				$stmt = $pdo->query("SELECT user_id, {$GLOBALS['_fullname_sql']['full_rev']} as fullname, username, perms FROM auth_user_md5 
+					LEFT JOIN user_info USING (user_id)
+					WHERE username LIKE $search_for_founder OR Vorname LIKE $search_for_founder
+						OR Nachname LIKE $search_for_founder
+					LIMIT 500");
+				while ($data = $stmt->fetch()) {
+					$results_founders[$data['user_id']] = array( 
+						'fullname' => $data['fullname'],
+						'username' => $data['username'],
+						'perms'    => $data['perms']
+					);
+				}
+
+			}
+			$this->flash['create'] = true;
+			$this->flash['results_choose_founders'] = $results_founders;
+			$this->flash['request'] = Request::getInstance();
+			$this->redirect('course/studygroup/new/');
+		} 
+		
+		// add a new founder
+		else if ($admin && (Request::get('add_founder') || Request::get('add_founder_x'))) {
+
+			$founders[Request::get('choose_founder')] = array(
+				'username' => Request::get('choose_founder'),
+				'fullname' => get_fullname_from_uname(Request::get('choose_founder'), 'full_rev')
+			);
+
+			$this->flash['founders'] = $founders;
 			$this->flash['create'] = true;
 			$this->flash['request'] = Request::getInstance();
 			$this->redirect('course/studygroup/new/');
-		} else {
-			// Everything seems fine, let's create a studygroup
+		}
 
-			$sem = new Seminar();
-			$sem->name        = Request::get('groupname');         // seminar-class quotes itself
-			$sem->description = Request::get('groupdescription');  // seminar-class quotes itself
-			$sem->status      = 99;
-			$sem->read_level  = 1;
-			$sem->write_level = 1;
+		// remove a founder
+		else if ($admin && (Request::get('remove_founder') || Request::get('remove_founder_x'))) {
 
-			$sem->institut_id = Config::GetInstance()->getValue('STUDYGROUP_DEFAULT_INST');
-
-
-			$sem->admission_type=0; 
-			if (Request::get('groupaccess') == 'all') {
-				$sem->admission_prelim = 0;
+			if (Request::get('remove_founder')) {
+				$name = Request::get('remove_founder');
 			} else {
-				$sem->admission_prelim = 1;
-				$sem->admission_prelim_txt = _("Die ModeratorInnen der Studiengruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
+				$name = Request::get('remove_founder_x');
 			}
-			$sem->admission_endtime=-1;
-			$sem->admission_binding=0;
-			$sem->admission_starttime=-1;
-			$sem->admission_endtime_sem=-1;
-			$sem->visible=1;
 
-			$semdata=new SemesterData();
-			$this_semester=$semdata->getSemesterDataByDate(time());
-			$sem->semester_start_time=$this_semester['beginn'];
-			$sem->semester_duration_time=-1;
+			unset($founders[$name]);
 
-			$semid=$sem->id;
-			$userid=$GLOBALS['auth']->auth['uid'];
+			$this->flash['founders'] = $founders;
+			$this->flash['create'] = true;
+			$this->flash['request'] = Request::getInstance();
+			$this->redirect('course/studygroup/new/');
+		}
+		
+		// reset search
+		else if ($admin && (Request::get('new_search') || Request::get('new_search_x'))) {
 
-			// insert dozent
-			DBManager::get()->query("INSERT INTO seminar_user SET ".
-			                        "seminar_id='$semid', ".
-									"user_id='$userid', ".
-									"status='dozent', ".
-									"gruppe=8");
-			
-			// now add the studygroup_dozent dozent who's supposed to be invisible 
-			DBManager::get()->query("INSERT INTO seminar_user SET seminar_id='$semid', user_id=MD5('studygroup_dozent'), status='dozent', visible='no'");
-
-			$mods=new Modules();
-			$bitmask=0;
-
-			// de-/activate modules
-			$available_modules = StudygroupModel::getAvailableModules();
-
-			foreach ($_REQUEST['groupmodule'] as $key => $enable) {
-				if ($key=='schedule') continue; // no schedule for studygroups 
-				if ($available_modules[$key] && $enable) {
-					$mods->setBit($bitmask, $mods->registered_modules[$key]["id"]);
+			$this->flash['create'] = true;
+			$this->flash['request'] = Request::getInstance();
+			$this->redirect('course/studygroup/new/');
+		} 
+		
+		//checks
+		else {
+			if (!Request::get('groupname')) {
+				$errors[] = _("Bitte Gruppennamen angeben");
+			} else {
+				$pdo = DBManager::get();
+				$stmt = $pdo->query($query = "SELECT * FROM seminare WHERE name = ". $pdo->quote(Request::get('groupname')));
+				if ($stmt->fetch()) {
+					$errors[] = _("Eine Veranstaltung/Studiengruppe mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen");
 				}
 			}
-			// always activate participants list
-			$mods->setBit($bitmask, $mods->registered_modules["participants"]["id"]);
-			
-			$sem->modules=$bitmask;
-			$sem->store();
 
-			// de-/activate plugins
-			$available_plugins = StudygroupModel::getAvailablePlugins();
-			foreach ($available_plugins as $key => $name) {
-				$plugin = PluginManager::getInstance()->getPlugin($key);
-				$plugin->setId($semid);
-				if ($_REQUEST['groupplugin'][$key] && $name) {
-					$plugin->setActivated(true);
+			if (!Request::get('grouptermsofuse_ok')) {
+				$errors[] = _("Sie müssen die Nutzungsbedingungen durch Setzen des Häkchens bei 'Einverstanden' akzeptieren.");
+			}
+
+			if ($admin && (!is_array($founders) || !sizeof($founders))) {
+				$errors[] = _("Sie müssen mindestens einen Gruppengründer eintragen!");
+			}
+
+			if (count($errors)) {
+				$this->flash['errors'] =  $errors;
+				$this->flash['create'] = true;
+				$this->flash['request'] = Request::getInstance();
+				$this->redirect('course/studygroup/new/');
+			} else {
+				// Everything seems fine, let's create a studygroup
+
+				$sem = new Seminar();
+				$sem->name        = Request::get('groupname');         // seminar-class quotes itself
+				$sem->description = Request::get('groupdescription');  // seminar-class quotes itself
+				$sem->status      = 99;
+				$sem->read_level  = 1;
+				$sem->write_level = 1;
+
+				$sem->institut_id = Config::GetInstance()->getValue('STUDYGROUP_DEFAULT_INST');
+
+				$mods=new Modules();
+				$bitmask=0;
+
+
+				$sem->admission_type=0; 
+				if (Request::get('groupaccess') == 'all') {
+					$sem->admission_prelim = 0;
 				} else {
-					$plugin->setActivated(false);
+					$sem->admission_prelim = 1;
+					$sem->admission_prelim_txt = _("Die ModeratorInnen der Studiengruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
 				}
+				$sem->admission_endtime=-1;
+				$sem->admission_binding=0;
+				$sem->admission_starttime=-1;
+				$sem->admission_endtime_sem=-1;
+				$sem->visible=1;
+
+				$semdata=new SemesterData();
+				$this_semester=$semdata->getSemesterDataByDate(time());
+				$sem->semester_start_time=$this_semester['beginn'];
+				$sem->semester_duration_time=-1;
+
+				if ($admin) {
+					// insert founder(s)
+					foreach ($founders as $username => $fullname) {
+						$cur_user_id = get_userid( $username );
+						var_Dump($cur_user_id, $sem->id);
+						$stmt = DBManager::get()->prepare("INSERT INTO seminar_user 
+							(seminar_id, user_id, status, gruppe)
+							VALUES (?, ?, 'dozent', 8)");
+						$stmt->execute(array( $sem->id, $cur_user_id ));
+					}
+
+					$this->founders = null;
+					$this->flash['founders'] = null;
+				} else {
+					$user_id = $GLOBALS['auth']->auth['uid'];
+					// insert dozent
+					DBManager::get()->query("INSERT INTO seminar_user SET ".
+						"seminar_id = '$sem->id', ".
+						"user_id    = '$user_id', ".
+						"status     = 'dozent', ".
+						"gruppe     = 8");
+				}
+			
+				// now add the studygroup_dozent dozent who's supposed to be invisible 
+				DBManager::get()->query("INSERT INTO seminar_user SET seminar_id='$sem->id', user_id=MD5('studygroup_dozent'), status='dozent', visible='no'");
+
+				$mods=new Modules();
+				$bitmask=0;
+
+				// de-/activate modules
+				$available_modules = StudygroupModel::getAvailableModules();
+
+				foreach ($_REQUEST['groupmodule'] as $key => $enable) {
+					if ($key=='schedule') continue; // no schedule for studygroups 
+					if ($available_modules[$key] && $enable) {
+						$mods->setBit($bitmask, $mods->registered_modules[$key]["id"]);
+					}
+				}
+				// always activate participants list
+				$mods->setBit($bitmask, $mods->registered_modules["participants"]["id"]);
+
+				$sem->modules=$bitmask;
+				$sem->store();
+
+				// de-/activate plugins
+				$available_plugins = StudygroupModel::getAvailablePlugins();
+				foreach ($available_plugins as $key => $name) {
+					$plugin = PluginManager::getInstance()->getPlugin($key);
+					$plugin->setId($sem->id);
+					if ($_REQUEST['groupplugin'][$key] && $name) {
+						$plugin->setActivated(true);
+					} else {
+						$plugin->setActivated(false);
+					}
+				}
+
+				// work done. locate to new group.
+				$this->redirect(URLHelper::getURL('seminar_main.php?auswahl=' . $sem->id));
+
 			}
-
-			// work done. locate to new group.
-			$this->redirect(URLHelper::getURL('seminar_main.php?auswahl=' . $semid));
-
 		}
 	}
 
@@ -206,7 +306,9 @@ class Course_StudygroupController extends AuthenticatedController {
 				$this->available_plugins = StudygroupModel::getAvailablePlugins();
 				$this->enabled_plugins   = StudygroupModel::getEnabledPlugins($id);
 			}
-			$this->modules           = new Modules();
+			$this->modules  = new Modules();
+			$this->founders = StudygroupModel::getFounders( $id );
+
 		} else {
 			$this->redirect(URLHelper::getURL('seminar_main.php?auswahl=' . $id));
 		}
@@ -219,72 +321,138 @@ class Course_StudygroupController extends AuthenticatedController {
 		if ($perm->have_studip_perm('dozent',$id)) { 
 
 			$errors = array();
+			$admin = $perm->have_studip_perm('admin', $id); 
+			$founders = StudygroupModel::getFounders( $id );
 
-			//checks
-			// What kind of checks might be of concern here? 
-			if (!Request::get('groupname')) {
-				$errors[] = _("Bitte Gruppennamen angeben");
-			} else {
-				$pdo = DBManager::get();
-				$stmt = $pdo->query($query = "SELECT * FROM seminare WHERE name = ". $pdo->quote(Request::get('groupname')) ." AND Seminar_id != ". $pdo->quote( $id ));
-				if ($stmt->fetch()) {
-					$errors[] = _("Eine Veranstaltung/Studiengruppe mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen");
+			if ( $admin && Request::get('search_founder') || Request::get('search_founder_x')) {
+				$search_for_founder = Request::get('search_for_founder');
+
+				// do not allow to search with the empty string
+				if ($search_for_founder) {
+
+					// search for the user
+					$pdo = DBManager::get();
+					$search_for_founder = $pdo->quote('%'. $search_for_founder .'%');
+					$stmt = $pdo->query("SELECT user_id, {$GLOBALS['_fullname_sql']['full_rev']} as fullname, username, perms FROM auth_user_md5 
+						LEFT JOIN user_info USING (user_id)
+						WHERE username LIKE $search_for_founder OR Vorname LIKE $search_for_founder
+						OR Nachname LIKE $search_for_founder
+						LIMIT 500");
+					while ($data = $stmt->fetch()) {
+						$results_founders[$data['user_id']] = array( 
+							'fullname' => $data['fullname'],
+							'username' => $data['username'],
+							'perms'    => $data['perms']
+						);
+					}
+
+				}
+				$this->flash['create'] = true;
+				$this->flash['results_choose_founders'] = $results_founders;
+				$this->flash['request'] = Request::getInstance();
+			} 
+
+			// add a founder
+			else if ( $admin && (Request::get('add_founder') || Request::get('add_founder_x'))) {
+				if (Request::get('choose_founder')) {
+					$name = Request::get('choose_founder');
+				} else {
+					$name = Request::get('choose_founder_x');
+				}
+
+				StudygroupModel::addFounder( $name, $id );
+
+				$this->flash['success'] = sprintf(_("Der Nutzer %s wurde als Gruppengründer hinzugefügt!"), htmlReady( $name ));
+			}
+
+			// remove a founder
+			else if ( $admin && (Request::get('remove_founder') || Request::get('remove_founder_x'))) {
+				if (sizeof($founders) == 1) {
+					$this->flash['messages'] = array( 
+						'error' => array (
+							'title' => _("Jede Studiengruppe muss mindestens einen Gruppengründer haben!")
+						)
+					);
+				} else {
+					if (Request::get('remove_founder')) {
+						$name = Request::get('remove_founder');
+					} else {
+						$name = Request::get('remove_founder_x');
+					}
+
+					StudygroupModel::removeFounder( $name, $id );
+
+					$this->flash['success'] = sprintf(_("Der Nutzer %s wurde als Gruppengründer entfernt!"), htmlReady( $name ));
 				}
 			}
 
-			if (count($errors)) {
-				$this->flash['errors'] =  $errors;
-				$this->flash['edit'] = true;
-				// $this->flash['request'] = $_REQUEST;
-				$this->redirect('course/studygroup/edit/' . $id);
-			} else {
-				// Everything seems fine, let's create a studygroup
-
-				$sem = new Seminar($id);
-				$sem->name        = Request::get('groupname');         // seminar-class quotes itself
-				$sem->description = Request::get('groupdescription');  // seminar-class quotes itself
-				$sem->status      = 99;
-				$sem->read_level  = 1;
-				$sem->write_level = 1;
-
-				$sem->admission_type = 0; 
-
-				if (Request::get('groupaccess') == 'all') {
-					$sem->admission_prelim = 0;
+			//checks
+			else {
+				// What kind of checks might be of concern here? 
+				if (!Request::get('groupname')) {
+					$errors[] = _("Bitte Gruppennamen angeben");
 				} else {
-					$sem->admission_prelim = 1;
-					$sem->admission_prelim_txt = _("Die ModeratorInnen der Studiengruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
-				}
-
-				$sem->store();
-
-				$mods=new Modules();
-				$bitmask=0;
-
-				// de-/activate modules
-				$available_modules = StudygroupModel::getAvailableModules();
-
-				foreach ($_REQUEST['groupmodule'] as $key => $enable) {
-					if ($available_modules[$key] && $enable) {
-						$mods->setBit($bitmask, $mods->registered_modules[$key]["id"]);
+					$pdo = DBManager::get();
+					$stmt = $pdo->query($query = "SELECT * FROM seminare WHERE name = ". $pdo->quote(Request::get('groupname')) ." AND Seminar_id != ". $pdo->quote( $id ));
+					if ($stmt->fetch()) {
+						$errors[] = _("Eine Veranstaltung/Studiengruppe mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen");
 					}
 				}
 
-				$sem->modules=$bitmask;
-				$mods->writeBin($id, $bitmask, 'sem');
+				if (count($errors)) {
+					$this->flash['errors'] =  $errors;
+					$this->flash['edit'] = true;
+					// $this->flash['request'] = $_REQUEST;
+				} else {
+					// Everything seems fine, let's create a studygroup
 
-				// de-/activate plugins
-				$available_plugins = StudygroupModel::getAvailablePlugins();
-				foreach ($available_plugins as $key => $name) {
-					$plugin = PluginManager::getInstance()->getPlugin($key);
-					$plugin->setId($id);
-					if ($_REQUEST['groupplugin'][$key] && $name) {
-						$plugin->setActivated(true);
+					$sem = new Seminar($id);
+					$sem->name        = Request::get('groupname');         // seminar-class quotes itself
+					$sem->description = Request::get('groupdescription');  // seminar-class quotes itself
+					$sem->status      = 99;
+					$sem->read_level  = 1;
+					$sem->write_level = 1;
+
+					$sem->admission_type = 0; 
+
+					if (Request::get('groupaccess') == 'all') {
+						$sem->admission_prelim = 0;
 					} else {
-						$plugin->setActivated(false);
+						$sem->admission_prelim = 1;
+						$sem->admission_prelim_txt = _("Die ModeratorInnen der Studiengruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
 					}
-				}
 
+					$sem->store();
+
+					// get the current bitmask
+					$mods = new Modules();
+					$bitmask = $mods->getBin( $sem->id, 'sem');
+
+					// de-/activate modules
+					$available_modules = StudygroupModel::getAvailableModules();
+
+					foreach ($_REQUEST['groupmodule'] as $key => $enable) {
+						if ($available_modules[$key] && $enable) {
+							$mods->setBit($bitmask, $mods->registered_modules[$key]["id"]);
+						}
+					}
+
+					$sem->modules=$bitmask;
+					$mods->writeBin($id, $bitmask, 'sem');
+
+					// de-/activate plugins
+					$available_plugins = StudygroupModel::getAvailablePlugins();
+					foreach ($available_plugins as $key => $name) {
+						$plugin = PluginManager::getInstance()->getPlugin($key);
+						$plugin->setId($id);
+						if ($_REQUEST['groupplugin'][$key] && $name) {
+							$plugin->setActivated(true);
+						} else {
+							$plugin->setActivated(false);
+						}
+					}
+
+				}
 			}
 		}
 

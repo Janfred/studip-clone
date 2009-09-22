@@ -2056,6 +2056,7 @@ if ((!$sem_create_data["sem_class"]) && (!$level)){
 				</blockquote>
 			</td>
 		</tr>
+		<? if ($GLOBALS['STUDYGROUPS_ENABLE']) : ?>
 		<tr>
 			<td class="blank">
 			<blockquote>
@@ -2066,6 +2067,7 @@ if ((!$sem_create_data["sem_class"]) && (!$level)){
 			</td>
 			<td class="blank">&nbsp;</td>
 		</tr>
+		<? endif; ?>
 	</table>
 	<?
 }

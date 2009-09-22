@@ -143,7 +143,7 @@ class Seminar {
 		$this->members[$status] = array();
 		$this->db->query("SELECT su.user_id,username,Vorname,Nachname,
 						".$GLOBALS['_fullname_sql']['full']." as fullname,
-						admission_studiengang_id
+						admission_studiengang_id, su.status
 						FROM seminar_user su INNER JOIN auth_user_md5 USING(user_id)
 						LEFT JOIN user_info USING(user_id)
 						WHERE status='$status' AND su.seminar_id='".$this->getId()."' ORDER BY su.position, Nachname");
