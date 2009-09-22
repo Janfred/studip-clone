@@ -1,5 +1,4 @@
 <?php
-# Lifter007: TODO
 /*
  * PluginManager.class.php - plugin manager for Stud.IP
  *
@@ -208,7 +207,7 @@ class PluginManager
      */
     private function getPluginType ($class, $path)
     {
-        $basepath = $GLOBALS['pluginenv']->getPackagebasepath();
+        $basepath = get_config('PLUGINS_PATH');
         $pluginfile = $basepath.'/'.$path.'/'.$class.'.class.php';
         $types = array();
 
@@ -406,6 +405,7 @@ class PluginManager
     protected function getCachedPlugin ($plugin_info, $context = NULL)
     {
         $class = $plugin_info['class'];
+        $path  = $plugin_info['path'];
         $cache_key = isset($context) ? $class.'_'.$context : $class;
 
         if (isset($this->plugin_cache[$class])) {
@@ -416,7 +416,17 @@ class PluginManager
             return $this->plugin_cache[$cache_key];
         }
 
-        $plugin = PluginEngine::instantiatePlugin($plugin_info['class'], $plugin_info['path']);
+        $basepath = get_config('PLUGINS_PATH');
+        $pluginfile = $basepath.'/'.$path.'/'.$class.'.class.php';
+
+        if (!file_exists($pluginfile)) {
+            return NULL;
+        }
+
+        require_once $pluginfile;
+
+        $plugin_class = new ReflectionClass($class);
+        $plugin = $plugin_class->newInstance();
 
         return $this->plugin_cache[$cache_key] = $plugin;
     }

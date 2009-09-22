@@ -1,10 +1,9 @@
 <?php
-# Lifter007: TODO
-
 /*
- * Copyright (C) 2008 - Marcus Lunzenauer <mlunzena@uos.de>
+ * HomepagePlugin.class.php - home page plugin interface
  *
- * NOTE: This interface will change significantly in Stud.IP 1.11.
+ * Copyright (c) 2008 - Marcus Lunzenauer <mlunzena@uos.de>
+ * Copyright (c) 2009 - Elmar Ludwig
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -12,29 +11,22 @@
  * the License, or (at your option) any later version.
  */
 
-interface HomepagePlugin {
-
-  /**
-   * Used to show an overview on the homepage of a user.
-   *
-   * @return type       <description>
-   */
-  function showOverview();
-
-  /**
-   * <MethodDescription>
-   *
-   * @return boolean    true:  overviewpage is enabled,
-   *                    false: overviewpage is disabled
-   */
-  function getStatusShowOverviewPage();
-
-  /**
-   * Set the user for which the homepage is rendered
-   *
-   * @param  type       <description>
-   *
-   * @return void
-   */
-  function setRequestedUser($user);
+interface HomepagePlugin
+{
+    /**
+     * Return a template (an instance of the Flexi_Template class)
+     * to be rendered on the given user's home page. Return NULL to
+     * render nothing for this plugin.
+     *
+     * The template will automatically get a standard layout, which
+     * can be configured via attributes set on the template:
+     *
+     * $title       title to display, defaults to plugin name
+     * $icon_url    icon for this plugin (if any)
+     * $admin_url   admin link for this plugin (if any)
+     * $admin_title title for admin link (default: Administration)
+     *
+     * @return object   template object to render or NULL
+     */
+    function getHomepageTemplate($user_id);
 }

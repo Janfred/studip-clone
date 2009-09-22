@@ -23,17 +23,6 @@ define("PLUGIN_MISSING_MANIFEST_ERROR",8);
 define("PLUGIN_ALREADY_REGISTERED_ERROR",9);
 
 class PluginAdministration {
-	var $environment;
-
-	/**
-	 * Creates a new object for plugin administration
-	 *
-	 * @param Environment $environment the plugin environment
-	 */
-	function PluginAdministration($environment){
-		$this->environment = $environment;
-	}
-
 	/**
 	 * Returns the error message for the given error/status code.
 	 */
@@ -80,7 +69,7 @@ class PluginAdministration {
 	function deinstallPlugin($plugin){
 		$plugin_manager = PluginManager::getInstance();
 		$plugin_manager->unregisterPlugin($plugin['id']);
-		$pluginpath = $this->environment->getPackagebasepath().'/'.$plugin['path'];
+		$pluginpath = get_config('PLUGINS_PATH').'/'.$plugin['path'];
 		$manifest = PluginEngine::getPluginManifest($pluginpath);
 
 		// delete database if needed
@@ -101,7 +90,7 @@ class PluginAdministration {
 		global $SOFTWARE_VERSION;
 
 		$currdate = mktime();
-		$pluginstmpdir = $GLOBALS["TMP_PATH"] . "/plugins_tmp/";
+		$pluginstmpdir = get_config('TMP_PATH') . "/plugins_tmp/";
 		$tmppackagedir = $pluginstmpdir . $currdate . "/";
 
 		// check if directory exists
@@ -149,7 +138,7 @@ class PluginAdministration {
 		$pluginclassname = $plugininfos['pluginclassname'];
 
 		// Neuen Pfad bestimmen
-		$vendordir = $this->environment->getPackagebasepath() . "/" . $plugininfos["origin"];
+		$vendordir = get_config('PLUGINS_PATH') . "/" . $plugininfos["origin"];
 		$newpluginpath = $vendordir . "/" . $pluginclassname; // . "_" . $plugininfos["version"];
 		$pluginrelativepath = $plugininfos["origin"] . "/" . $pluginclassname; //  . "_" . $plugininfos["version"];
 		$plugin_manager = PluginManager::getInstance();
@@ -232,7 +221,7 @@ class PluginAdministration {
 	 */
 	function installPluginFromURL ($plugin_url)
 	{
-		$temp_name = tempnam($GLOBALS['TMP_PATH'], 'plugin');
+		$temp_name = tempnam(get_config('TMP_PATH'), 'plugin');
 
 		if (!@copy($plugin_url, $temp_name)) {
 			return PLUGIN_UPLOAD_ERROR;
@@ -366,11 +355,11 @@ class PluginAdministration {
 	function zipPluginPackage($pluginid){
 		$plugin_manager = PluginManager::getInstance();
 		$plugin = $plugin_manager->getPluginInfoById($pluginid);
-		$pluginpath = $this->environment->getPackagebasepath().'/'.$plugin['path'];
+		$pluginpath = get_config('PLUGINS_PATH').'/'.$plugin['path'];
 		$manifest = PluginEngine::getPluginManifest($pluginpath);
 		$file_id = $plugin['class'].'-'.$manifest['version'].'.zip';
 
-		create_zip_from_directory($pluginpath, $GLOBALS["TMP_PATH"].'/'.$file_id);
+		create_zip_from_directory($pluginpath, get_config('TMP_PATH').'/'.$file_id);
 		return GetDownloadLink($file_id, $file_id, 4, 'force');
 	}
 
@@ -406,7 +395,7 @@ class PluginAdministration {
 
 		foreach ($plugins as $plugin) {
 			$repository = $default_repository;
-			$pluginpath = $this->environment->getPackagebasepath().'/'.$plugin['path'];
+			$pluginpath = get_config('PLUGINS_PATH').'/'.$plugin['path'];
 			$manifest = PluginEngine::getPluginManifest($pluginpath);
 
 			if (isset($manifest['updateURL'])) {

@@ -273,13 +273,16 @@ class Course_StudygroupController extends AuthenticatedController {
 
 				// de-/activate plugins
 				$available_plugins = StudygroupModel::getAvailablePlugins();
+				$plugin_manager = PluginManager::getInstance();
+
 				foreach ($available_plugins as $key => $name) {
-					$plugin = PluginManager::getInstance()->getPlugin($key);
-					$plugin->setId($sem->id);
+					$plugin = $plugin_manager->getPlugin($key);
+					$plugin_id = $plugin->getPluginId();
+
 					if ($_REQUEST['groupplugin'][$key] && $name) {
-						$plugin->setActivated(true);
+						$plugin_manager->setPluginActivated($plugin_id, $sem->id, true);
 					} else {
-						$plugin->setActivated(false);
+						$plugin_manager->setPluginActivated($plugin_id, $sem->id, false);
 					}
 				}
 
@@ -442,13 +445,16 @@ class Course_StudygroupController extends AuthenticatedController {
 
 					// de-/activate plugins
 					$available_plugins = StudygroupModel::getAvailablePlugins();
+					$plugin_manager = PluginManager::getInstance();
+
 					foreach ($available_plugins as $key => $name) {
-						$plugin = PluginManager::getInstance()->getPlugin($key);
-						$plugin->setId($id);
+						$plugin = $plugin_manager->getPlugin($key);
+						$plugin_id = $plugin->getPluginId();
+
 						if ($_REQUEST['groupplugin'][$key] && $name) {
-							$plugin->setActivated(true);
+							$plugin_manager->setPluginActivated($plugin_id, $id, true);
 						} else {
-							$plugin->setActivated(false);
+							$plugin_manager->setPluginActivated($plugin_id, $id, false);
 						}
 					}
 

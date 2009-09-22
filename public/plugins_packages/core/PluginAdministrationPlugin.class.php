@@ -15,8 +15,6 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 	var $template_factory;
 	// layout template
 	var $layout;
-	// environment
-	var $environment;
 
 	/**
 	 *
@@ -28,16 +26,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$this->setNavigation($tab);
 		$this->setTopNavigation($tab);
 		$this->setPluginiconname("img/einst.gif");
-	}
-
-	/**
-	 * Initializes basic functions like the PluginVisualization and the PluginAdministration
-	 *
-	 */
-	function initialize(){
-		if ($this->pluginmgmt == null){
-			$this->pluginmgmt = new PluginAdministration($this->environment);
-		}
+		$this->pluginmgmt = new PluginAdministration();
 	}
 
 	/**
@@ -195,7 +184,7 @@ class PluginAdministrationPlugin extends AbstractStudIPAdministrationPlugin{
 		$plugin = PluginManager::getInstance()->getPluginInfo($plugin_class);
 
 		# retrieve manifest
-		$pluginpath = $this->environment->getPackagebasepath().'/'.$plugin['path'];
+		$pluginpath = get_config('PLUGINS_PATH').'/'.$plugin['path'];
 		$plugininfos = PluginEngine::getPluginManifest($pluginpath);
 
 		$template->set_attributes(array(

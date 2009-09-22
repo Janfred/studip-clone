@@ -338,15 +338,16 @@ function GetMyScore() {
 		$scoreplugins = PluginEngine::getPlugins('SystemPlugin') + PluginEngine::getPlugins('StandardPlugin');
 		$pluginscore = 0;
 		$pluginscount = 0;
-		if (is_array($scoreplugins) && (count($scoreplugins) > 0 )){
 
-			foreach ($scoreplugins as $scoreplugin) {
+		foreach ($scoreplugins as $scoreplugin) {
+			if ($scoreplugin instanceof AbstractStudIPSystemPlugin ||
+			    $scoreplugin instanceof AbstractStudIPStandardPlugin) {
 				$pluginscore += $scoreplugin->getScore();
 				$pluginscount++;
 			}
-			if ($pluginscount > 0 ){
-				$pluginscore = round($pluginscore / $pluginscount);
-			}
+		}
+		if ($pluginscount > 0) {
+			$pluginscore = round($pluginscore / $pluginscount);
 		}
 	}
 

@@ -1,18 +1,15 @@
 <?php
 # Lifter007: TODO
 // vim: expandtab
-/**
- * Abstract class for a plugin in Stud.IP.
- * Don't use this as a base class for creating your own plugin. Look at
- * AbstractStudIPStandardPlugin, AbstractStudIPSystemPlugin or
- * AbstractStudIPAdministrationPlugin for creating a plugin.
+/*
+ * AbstractStudIPPlugin.class.php - generic plugin base class
  *
- * @author Dennis Reil, <Dennis.Reil@offis.de>
- * @version $Revision$
- * @see AbstractStudIPStandardPlugin, AbstractStudIPSystemPlugin, AbstractStudIPAdministrationPlugin
- * $Id$
- * @package pluginengine
- * @subpackage core
+ * Copyright (c) 2009 - Elmar Ludwig
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
  */
 
 abstract class AbstractStudIPPlugin {
@@ -25,7 +22,7 @@ abstract class AbstractStudIPPlugin {
     /**
      * constructor
      */
-    function __construct() {
+    public function __construct() {
         $plugin_manager = PluginManager::getInstance();
         $this->plugin_info = $plugin_manager->getPluginInfo(get_class($this));
     }
@@ -33,40 +30,61 @@ abstract class AbstractStudIPPlugin {
     /**
      * Return the ID of this plugin.
      */
-    function getPluginId() {
+    public function getPluginId() {
         return $this->plugin_info['id'];
     }
 
     /**
      * Return the name of this plugin.
      */
-    function getPluginName() {
+    public function getPluginName() {
         return $this->plugin_info['name'];
     }
 
     /**
      * Return the filesystem path to this plugin.
      */
-    function getPluginPath() {
-        $packagepath = $GLOBALS['pluginenv']->getRelativepackagepath();
-
-        return $packagepath . '/' . $this->plugin_info['path'];
+    public function getPluginPath() {
+        return 'plugins_packages/' . $this->plugin_info['path'];
     }
 
     /**
      * Return the URL of this plugin. Can be used to refer to resources
      * (images, style sheets, etc.) inside the installed plugin package.
      */
-    function getPluginURL() {
-        return $GLOBALS['ABSOLUTE_URI_STUDIP'] . $this->getPluginpath();
+    public function getPluginURL() {
+        return $GLOBALS['ABSOLUTE_URI_STUDIP'] . $this->getPluginPath();
+    }
+
+    /**
+     * Get the activation status of this plugin in the given context.
+     * This also checks the plugin default activations.
+     *
+     * @param $context   context range id
+     */
+    public function isActivated($context) {
+        $plugin_id = $this->getPluginId();
+        $plugin_manager = PluginManager::getInstance();
+
+        return $plugin_manager->isPluginActivated($plugin_id, $context);
+    }
+
+    /**
+     * Return a warning message to be printed before deactivation of
+     * this plugin in the given context.
+     *
+     * @param $context   context range id
+     */
+    public function deactivationWarning($context) {
+        return NULL;
     }
 
     /**
      * This method dispatches all actions.
      *
-     * @param  string  the part of the dispatch path, that were not consumed yet
+     * @param string   part of the dispatch path that was not consumed
      *
      * @return void
      */
-    abstract function perform($unconsumed_path);
+    public abstract function perform($unconsumed_path);
 }

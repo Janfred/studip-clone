@@ -1,7 +1,5 @@
 <?php
-# Lifter002: TODO
 # Lifter007: TODO
-# Lifter003: TODO
 
 // vim: noexpandtab
 /*
@@ -23,16 +21,10 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 	// relativer Name des Icons für Änderungen an diesem Plugin
 	var $changeindicatoriconname;
 
-	// Anzeigetexte beim Ein- und Ausschaltes des Plugins
-	var $pluginadmininfo;
-
 	function AbstractStudIPStandardPlugin() {
-		parent::AbstractStudIPLegacyPlugin();
-		$this->changeindicatoriconname = "";
-		$this->overview = false;
-		// create the standard AdminInfo
-		$this->admininfo = new AdminInfo();
-		$this->user->permission->setPoiid($this->getId());
+		parent::__construct();
+		$this->id = $_SESSION['SessSemName'][1];
+		$this->user->permission->setPoiid($this->id);
 	}
 
 	/**
@@ -41,49 +33,65 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 	 * @deprecated
 	 */
 	function setNavigation(StudipPluginNavigation $navigation) {
+		parent::setNavigation($navigation);
+
 		// prepend copy of navigation to its sub navigation
-		$first_item_name = key($navigation->getSubNavigation());
+		$item_names = array_keys($navigation->getSubNavigation());
 		$navigation_copy = clone $navigation;
 		$navigation_copy->clearSubmenu();
-		$navigation->insertSubNavigation('self', $first_item_name, $navigation_copy);
+		$navigation->insertSubNavigation('self', $item_names[0], $navigation_copy);
 		$navigation->setTitle($this->getDisplayTitle());
-
-		parent::setNavigation($navigation);
 
 		if (Navigation::hasItem('/course')) {
 			Navigation::addItem('/course/' . $this->getPluginclassname(), $navigation);
 		}
 	}
 
+	/**
+	 * Set the current course id - deprecated, do not use.
+	 *
+	 * @deprecated
+	 */
 	function setId($id) {
 		$this->id = $id;
 	}
 
+	/**
+	 * Return current course id - deprecated, do not use.
+	 *
+	 * @deprecated
+	 */
 	function getId() {
-		if ($this->id === NULL) {
-			$this->id = $_SESSION['SessSemName'][1];
-		} else {
-			$this->id = str_replace($_SESSION["SessSemName"]["class"], '', $this->id);
-	 	}
 		return $this->id;
 	}
 
 	/**
-	 * Wird dieses Plugin in der Übersicht angezeigt?
-	 * Hat sich seit dem letzten Login etwas geändert?
+	 * Return a navigation object representing this plugin in the
+	 * course overview table or return NULL if you want to display
+	 * no icon for this plugin (or course). The navigation object's
+	 * title will not be shown, only the image (and its associated
+	 * attributes like 'title') and the URL are actually used.
 	 *
-	 * @param  string     gewählter Kurs bzw. Einrichtung
-	 * @param  int        letzter Loginzeitpunkt des Benutzers
+	 * By convention, new or changed plugin content is indicated
+	 * by a different icon and a corresponding tooltip.
 	 *
-	 * @return Navigation <description>
-	*/
-	function getIconNavigation($semid, $lastlogin) {
-		$this->setId($semid);
+	 * TODO: remove $last_visit parameter (needs new API?)
+	 *
+	 * @param  string   course or institute range id
+	 * @param  int      time of user's last visit
+	 *
+	 * @return object   navigation item to render or NULL
+	 */
+	function getIconNavigation($course_id, $last_visit) {
+		$this->setId($course_id);
 
-		if ($this->isShownInOverview()) {
-			$navigation = new Navigation('', PluginEngine::getURL($this));
+		// $sem_type = get_object_type($course_id);
+		// $last_visit = object_get_visit($this->id, $sem_type, 'current');
 
-		  	if ($this->hasChanged($lastlogin)) {
+		if ($this->isShownInOverview() && $this->hasNavigation()) {
+			$navigation = $this->getNavigation();
+
+		  	if ($this->hasChanged($last_visit)) {
 				$navigation->setImage($this->getChangeindicatoriconname(),
 						array('title' => $this->getOverviewMessage(true)));
 		  	} else {
@@ -93,6 +101,29 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 		}
 
 		return $navigation;
+	}
+
+	/**
+	 * Gehen beim Deaktivieren des Plugins Daten verloren?
+	 *
+	 * @deprecated
+	 */
+	function getPluginExistingItems($course_id) {
+		return 0;
+	}
+
+	/**
+	 * Return a warning message to be printed before deactivation of
+	 * this plugin in the given context.
+	 *
+	 * @param $context   context range id
+	 */
+	function deactivationWarning($context) {
+		if ($this->getPluginExistingItems($context)) {
+			return _('Achtung: Beim Deaktivieren dieses Plugins gehen möglicherweise Einstellungen verloren.');
+		}
+
+		return NULL;
 	}
 
 	/**
@@ -107,12 +138,12 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 
 	/**
 	 * Nachricht für tooltip in der Übersicht
-	 * @param lastlogin - letzter Loginzeitpunkt des Benutzers
+	 * @param has_changed - hat sich etwas geändert?
 	 *
 	 * @deprecated
 	 */
 	function getOverviewMessage($has_changed = false) {
-		return $this->getPluginname() . ($has_changed ? ' ' . _("geändert") : '');
+		return $this->getPluginName() . ($has_changed ? ' ' . _("geändert") : '');
 	}
 
 	/**
@@ -142,46 +173,35 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 	}
 
 	/**
-	 * Liefert die Administrationsinformationen zu diesem Plugin zurück
-	 */
-	function getPluginAdminInfo() {
-		return $this->pluginadmininfo;
-	}
-
-	/**
-	 * setzt neue Administrationsinformationen zu diesem Plugin
-	 *
-	 * @param AdminInfo
-	 */
-	function setPluginAdminInfo(AdminInfo $admininfo) {
-		$this->pluginadmininfo = $admininfo;
-	}
-
-	/**
 	 * returns the score which the current user get's for activities in this plugin
+	 *
+	 * @deprecated
 	 */
 	function getScore()  {
 		return 0;
 	}
 
 	/**
-	 * Returns the state of the plugin.
+	 * Get the activation status of this plugin in the given context.
+	 * This also checks the plugin default activations.
+	 *
+	 * @param $context   context range id
 	 */
-	function isActivated() {
-		$plugin_manager = PluginManager::getInstance();
-
-		return $plugin_manager->isPluginActivated($this->getPluginid(), $this->getId());
+	function isActivated($context = NULL) {
+		return parent::isActivated($context ? $context : $this->id);
 	}
 
 	/**
-	 * Sets the state of the plugin.
+	 * Sets the activation status of this plugin.
 	 *
-	 * @param boolean $value
+	 * @deprecated
+	 *
+	 * @param boolean    plugin status (true or false)
 	 */
 	function setActivated($value) {
 		$plugin_manager = PluginManager::getInstance();
 
-		$plugin_manager->setPluginActivated($this->getPluginid(), $this->getId(), $value);
+		$plugin_manager->setPluginActivated($this->getPluginId(), $this->id, $value);
 	}
 
 	/**

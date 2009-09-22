@@ -1,21 +1,5 @@
 <?php
-# Lifter002: TODO
 # Lifter007: TODO
-# Lifter003: TODO
-
-  /*
-   * AbstractStudIPSystemPlugin.class.php - abstract superclass for legacy
-   *                                        system plugins
-   *
-   * Copyright (C) 2007 - Marcus Lunzenauer <mlunzena@uos.de>
-   *
-   * This program is free software; you can redistribute it and/or
-   * modify it under the terms of the GNU General Public License as
-   * published by the Free Software Foundation; either version 2 of
-   * the License, or (at your option) any later version.
-   */
-
-
 
 /**
  * Starting point for system plugins. System plugins can be integrated into the main menu for system wide
@@ -37,11 +21,16 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin
         protected $display_type;
 
 	function AbstractStudIPSystemPlugin(){
-		parent::AbstractStudIPLegacyPlugin();
+		parent::__construct();
 		$this->display_type = SYSTEM_PLUGIN_TOOLBAR;
 	}
 
 
+	/**
+	 * Sets the navigation of this plugin.
+	 *
+	 * @deprecated
+	 */
 	function setNavigation(StudipPluginNavigation $navigation) {
 		parent::setNavigation($navigation);
 
@@ -61,6 +50,8 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin
 	 * A system plugin can do system tasks like logging in the background.
 	 * This function
 	 *
+	 * @deprecated
+	 *
 	 * @return true - plugin should be called for background task
 	 * 		   false - plugin has no background task
 	 */
@@ -72,14 +63,16 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin
 	/**
 	 * abstract function for doing all background tasks
 	 *
+	 * @deprecated
 	 */
 	function doBackgroundTasks(){
 	}
 
 
-	 /**
+     /**
      * returns the score which the current user get's for activities in this plugin
      *
+     * @deprecated
      */
     function getScore(){
     	return 0;
@@ -88,6 +81,8 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin
 
     /**
      * define where the plugin will be visible (toolbar and/or start page)
+     *
+     * @deprecated
      */
     function setDisplayType ($display_type) {
         $changes = $this->display_type ^ $display_type;
@@ -114,6 +109,8 @@ class AbstractStudIPSystemPlugin extends AbstractStudIPLegacyPlugin
 
     /**
      * returns where the plugin will be visible (toolbar and/or start page)
+     *
+     * @deprecated
      */
     function getDisplayType ($filter = -1) {
         return $this->display_type & $filter;

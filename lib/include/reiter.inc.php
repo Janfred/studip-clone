@@ -27,53 +27,6 @@ require_once ('lib/visual.inc.php');
 class reiter {
 
 	/**
-	 * creates "reiter" array structure for a plugin, sets the view if
-	 * one of plugin links is active
-	 * 
-	 * @param object Studip Plugin 
-	 * @param string place the structure below this top navigation
-	 * @param string the name of the plugin method to retrieve the navigation
-	 * @return array ('structure' => reiter array, 'reiter_view' => active view) see links_xxx
-	 */
-	function getStructureForPlugin($plugin, $topKat = '', $navigation_getter = 'getNavigation'){
-		$navigation = $plugin->$navigation_getter();
-		if($navigation instanceof StudipPluginNavigation){
-			// $navigation->setPlugin($plugin);
-			$active_plugin = PluginEngine::getCurrentPluginId();
-			$plugin_id = $plugin->getPluginid();
-			if ($plugin instanceof StandardPlugin || $plugin instanceof HomepagePlugin){
-				$top_displayname = $plugin->getDisplayTitle();
-			} else {
-				$top_displayname = $navigation->getDisplayname();
-			}
-			$structure[$topKat . "plugin_" . $plugin_id] = array('topKat' => $topKat,
-														'name' => $top_displayname,
-														'link' => $navigation->getLink(),
-			 											'active' => false);
-			if($navigation->isActive() || ($navigation_getter == 'getNavigation' && isset($active_plugin) && $active_plugin == $plugin_id)){
-				$view = $topKat . "plugin_" . $plugin_id;
-			}
-			if($topKat == ''){
-				$submenu = (array)$navigation->getSubMenu();
-				foreach ($submenu as $key => $submenuitem){
-					$structure[$topKat . "plugin_" . $plugin_id . "_" . $key] = array (
-																		'topKat' => $topKat . "plugin_" . $plugin_id,
-																		'name' => $submenuitem->getDisplayname(),
-																		'link' => $submenuitem->getLink(),
-																		'active' => false);
-					if($submenuitem->isActive()){
-						$view = $topKat . "plugin_" . $plugin_id . "_" . $key;
-					}
-				}
-			}
-			return array('structure' => $structure, 'reiter_view' => $view);
-		} else {
-			return array();
-		}
-	}
-	
-
-	/**
 	 * Activates that element of the structure that corresponds to the given view
 	 * argument.
 	 *

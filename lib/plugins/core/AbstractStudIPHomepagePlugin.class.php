@@ -1,7 +1,5 @@
 <?php
-# Lifter002: TODO
 # Lifter007: TODO
-# Lifter003: TODO
 
 /**
  * Abstract plugin for plugins shown on the homepage of a user
@@ -19,7 +17,8 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
 	var $status_showOverview; // Uebersichtsseite unterdruecken
 
 	function AbstractStudIPHomepagePlugin(){
-		parent::AbstractStudIPLegacyPlugin();
+		parent::__construct();
+		$this->requesteduser = $this->getRequestedUser();
 		$this->status_showOverview = 1;
 	}
 
@@ -29,14 +28,14 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
 	 * @deprecated
 	 */
 	function setNavigation(StudipPluginNavigation $navigation) {
+		parent::setNavigation($navigation);
+
 		// prepend copy of navigation to its sub navigation
-		$first_item_name = key($navigation->getSubNavigation());
+		$item_names = array_keys($navigation->getSubNavigation());
 		$navigation_copy = clone $navigation;
 		$navigation_copy->clearSubmenu();
-		$navigation->insertSubNavigation('self', $first_item_name, $navigation_copy);
+		$navigation->insertSubNavigation('self', $item_names[0], $navigation_copy);
 		$navigation->setTitle($this->getDisplayTitle());
-
-		parent::setNavigation($navigation);
 
 		if (Navigation::hasItem('/homepage')) {
 			Navigation::addItem('/homepage/' . $this->getPluginclassname(), $navigation);
@@ -45,6 +44,8 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
 
 	/**
 	 * Used to show an overview on the homepage of a user.
+	 *
+	 * @deprecated
 	 */
 	function showOverview(){
 		// has to be implemented
@@ -53,55 +54,80 @@ class AbstractStudIPHomepagePlugin extends AbstractStudIPLegacyPlugin
 	/**
 	 * true:  overviewpage is enabled
 	 * false: overviewpage is disabled
+	 *
+	 * @deprecated
 	 */
 	function getStatusShowOverviewPage(){
 		return $this->status_showOverview;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	function setStatusShowOverviewPage($status){
-		$oldstatus = $this->status_showOverview;
 		$this->status_showOverview = $status;
-		return $oldstatus;
 	}
 
 
 	/**
-	 * Set the user for which the homepage is rendered
+	 * Does nothing - deprecated, do not use.
 	 *
-	 * @param unknown_type $user
+	 * @deprecated
 	 */
 	function setRequestedUser($user){
-		if ($user instanceof StudIPUser) {
-			$this->requesteduser = $user;
-		}
 	}
 
+	/**
+	 * Return current user - deprecated, do not use.
+	 *
+	 * @deprecated
+	 */
 	function getRequestedUser(){
-		return $this->requesteduser;
+		$username = Request::quoted('username', $GLOBALS['auth']->auth['uname']);
+		$user_id = get_userid($username);
+
+		if ($user_id == '') {
+			throw new Exception(_('Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!'));
+		}
+
+		return new StudIPUser($user_id);
 	}
 
+    /**
+     * Return a template (an instance of the Flexi_Template class)
+     * to be rendered on the given user's home page. Return NULL to
+     * render nothing for this plugin.
+     *
+     * The template will automatically get a standard layout, which
+     * can be configured via attributes set on the template:
+     *
+     * $title       title to display, defaults to plugin name
+     * $icon_url    icon for this plugin (if any)
+     * $admin_url   admin link for this plugin (if any)
+     *
+     * @return object   template object to render or NULL
+     */
+    function getHomepageTemplate($user_id)
+    {
+        global $user, $template_factory;
 
-  /**
-   * This method sets everything up to perform the given action and
-   * displays the results or anything you want to.
-   *
-   * @param  string the name of the action to accomplish
-   *
-   * @return void
-   */
-  function display_action($action) {
-    $username = Request::quoted('username', $GLOBALS['auth']->auth['uname']);
-    $user_id = get_userid($username);
+        if (!$this->getStatusShowOverviewPage()) {
+            return NULL;
+        }
 
-    if ($user_id == '') {
-      throw new Exception(_('Es wurde kein Nutzer unter dem angegebenen Nutzernamen gefunden!').
-                          _('Wenn Sie auf einen Link geklickt haben, kann es sein, dass sich der Username des gesuchten Nutzers geändert hat oder der Nutzer gelöscht wurde.'));
+        $template = $template_factory->open('shared/string');
+        $template->title = $this->getDisplaytitle();
+        $template->icon_url = $this->getPluginiconname();
+
+        if ($user_id == $user->id) {
+            $template->admin_url = $this->getAdminLink();
+        }
+
+        ob_start();
+        $this->showOverview();
+        $template->content = ob_get_clean();
+
+        return $template;
     }
-
-    $requser = new StudIPUser($user_id);
-    $this->setRequestedUser($requser);
-
-    parent::display_action($action);
-  }
 }
 ?>

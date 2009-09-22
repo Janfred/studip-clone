@@ -18,9 +18,9 @@ class Permission {
 	var $perm;
 
 
-	function Permission($userid="") {
+	function Permission($userid) {
 		$this->userid = $userid;
-		$this->perm = new Seminar_Perm();
+		$this->perm = $GLOBALS['perm'];
 	}
 
 	function setPoiid($id) {

@@ -79,12 +79,8 @@ $amodules=new AdminModules;
 
 if ($GLOBALS['PLUGINS_ENABLE']){
 	$admin_modules_plugins = PluginEngine::getPlugins('StandardPlugin'); // get all installed and enabled plugins
-	if ($SessSemName[1] == '') {
-		foreach ($admin_modules_plugins as $plugin) {
-			$plugin->setId($range_id ? $range_id : $admin_modules_data['range_id']);
-		}
-	}
 }
+
 if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
 	if ($default_x) {
@@ -133,10 +129,10 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 				}
 			}
 			// Setzen der Plugins
-			if ($GLOBALS['PLUGINS_ENABLE'] && is_array($admin_modules_plugins)){
+			if ($GLOBALS['PLUGINS_ENABLE']){
 				foreach ($admin_modules_plugins as $plugin){
 					$check = ( $_POST[ "plugin_" . $plugin->getPluginId() ] == "TRUE" );
-					$setting = $plugin->isActivated();
+					$setting = $plugin->isActivated($admin_modules_data['range_id']);
 					if( $check != $setting ){
 						array_push( $plugin_toggle , $plugin->getPluginId() );
 					}
@@ -192,17 +188,22 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 		}
 		// Plugins speichern
 		if( count( $plugin_toggle ) > 0 ){
+			$context = $admin_modules_data['range_id'];
+			$plugin_manager = PluginManager::getInstance();
+
 			foreach ($admin_modules_plugins as $plugin){
-				if( in_array( $plugin->getPluginId() , $plugin_toggle ) ){
-					$activated = !$plugin->isActivated();
-					$plugin->setActivated($activated);
+				$plugin_id = $plugin->getPluginId();
+
+				if( in_array( $plugin_id , $plugin_toggle ) ){
+					$activated = !$plugin_manager->isPluginActivated($plugin_id, $context);
+					$plugin_manager->setPluginActivated($plugin_id, $context, $activated);
 					$changes = true;
 					// logging
 					if ($activated) {
-						log_event('PLUGIN_ENABLE',$admin_modules_data["range_id"],$plugin->getPluginId() ,$user->id);
+						log_event('PLUGIN_ENABLE',$context,$plugin_id, $user->id);
 					}
 					else {
-						log_event('PLUGIN_DISABLE',$admin_modules_data["range_id"],$plugin->getPluginId() ,$user->id);
+						log_event('PLUGIN_DISABLE',$context,$plugin_id, $user->id);
 					}
 				}
 			}
@@ -311,40 +312,29 @@ if ($admin_modules_data["range_id"])
 	{
 		foreach ($admin_modules_plugins as $plugin)
 		{
+			$plugin_activated = $plugin->isActivated($admin_modules_data['range_id']);
 			?>
 			<tr><? $cssSw->switchClass() ?>
 				<td class="<?= $cssSw->getClass() ?>"  width="15%" align="left">
 					<font size=-1><b><?=$plugin->getPluginname()?></b><br /></font>
 				</td>
 				<td class="<?= $cssSw->getClass() ?>" width="15%">
-					<input type="RADIO" name="plugin_<?=$plugin->getPluginid()?>" value="TRUE" <?= $plugin->isActivated() ? "checked" : "" ?>>
 					<!-- mark old state -->
+					<input type="RADIO" name="plugin_<?=$plugin->getPluginId()?>" value="TRUE" <?= $plugin_activated ? "checked" : "" ?>>
 					<font size=-1><?=_("an")?></font>
-					<input type="RADIO" name="plugin_<?=$plugin->getPluginid()?>" value="FALSE" <?= $plugin->isActivated() ? "" : "checked" ?>>
+					<input type="RADIO" name="plugin_<?=$plugin->getPluginId()?>" value="FALSE" <?= $plugin_activated ? "" : "checked" ?>>
 					<font size=-1><?=_("aus")?><br /></font>
 				</td>
 				<td class="<?= $cssSw->getClass() ?>" width="70%">
-					<font size=-1><?
-					$admininfo = $plugin->getPluginAdminInfo();
-					if (!is_null($admininfo)){
-						if ($plugin->isActivated()) {
-							if (!method_exists($plugin, 'getPluginExistingItems') ||
-							    $plugin->getPluginExistingItems($admin_modules_data['range_id'])) {
-								print ('<font color="red">'.$admininfo->getMsg_pre_warning().'</font>');
-							}
-							else {
-								print ($admininfo->getMsg_deactivate());
-							}
-						}
-						else {
-							print ($admininfo->getMsg_activate());
-						}
-					}
-					else {
-						// kein AdminInfo vorhanden, also nichts ausgeben
-						print ("Dieses Plugin hat keinen Hilfetext bereitgestellt.");
-					}
-					?></font>
+					<font size="-1">
+					<? if (!$plugin_activated): ?>
+						<?= _('Dieses Plugin kann jederzeit aktiviert werden.') ?>
+					<? elseif ($warning = $plugin->deactivationWarning($admin_modules_data['range_id'])): ?>
+						<font color="red"><?= $warning ?></font>
+					<? else: ?>
+						<?= _('Dieses Plugin kann jederzeit deaktiviert werden.') ?>
+					<? endif ?>
+					</font>
 				</td>
 			</tr>
 			<?php

@@ -37,7 +37,6 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
     public $pluginid;
     public $pluginpath;
     public $basepluginpath;
-    public $environment;
     public $navposition;
     public $dependentonplugin;
     public $navigation;
@@ -48,14 +47,13 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
     /**
      * constructor
      */
-    function AbstractStudIPLegacyPlugin() {
+    function __construct() {
         parent::__construct();
 
-        $this->pluginname        = $this->getPluginname();
-        $this->pluginid          = $this->getPluginid();
-        $this->pluginpath        = $this->getPluginpath();
+        $this->pluginname        = $this->getPluginName();
+        $this->pluginid          = $this->getPluginId();
+        $this->pluginpath        = $this->getPluginPath();
         $this->basepluginpath    = $this->getBasepluginpath();
-        $this->environment       = $this->getEnvironment();
         $this->navposition       = $this->getNavigationPosition();
         $this->dependentonplugin = $this->isDependentOnOtherPlugin();
         $this->user              = new StudIPUser();
@@ -84,11 +82,13 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
      * method, if you want another URI, or return NULL to signal, that there is
      * no such page.
      *
+     * @deprecated
+     *
      * @return string if this plugin has an administration page return its URI,
      *                return NULL otherwise
      */
     function getAdminLink() {
-        return PluginEngine::getLink($this, array(), 'showAdministrationPage');
+        return PluginEngine::getURL($this, array(), 'showAdministrationPage');
     }
 
     /**
@@ -103,19 +103,12 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
     /**
      * Which text should be shown in certain titles?
      *
+     * @deprecated
+     *
      * @return string title
      */
     function getDisplaytitle() {
         return $this->hasNavigation() ?  $this->navigation->getTitle() : $this->getPluginName();
-    }
-
-    /**
-     * Returns plugin environment - deprecated, do not use.
-     *
-     * @deprecated
-     */
-    function getEnvironment() {
-        return $GLOBALS['pluginenv'];
     }
 
     /**
@@ -138,6 +131,8 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
 
     /**
      * Returns the class name of this plugin (in lower case).
+     *
+     * @deprecated
      */
     function getPluginclassname() {
         return strtolower($this->plugin_info['class']);
@@ -145,6 +140,8 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
 
     /**
      * Liefert den Pfad zum Icon dieses Plugins zurück.
+     *
+     * @deprecated
      *
      * @return den Pfad zum Icon
      */
@@ -173,16 +170,7 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
      * @deprecated
      */
     function hasNavigation() {
-        return $this->navigation != null;
-    }
-
-    /**
-     * Always returns false - deprecated, do not use.
-     *
-     * @deprecated
-     */
-    function isActivated() {
-        return false;
+        return $this->navigation != NULL;
     }
 
     /**
@@ -219,14 +207,6 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
     }
 
     /**
-     * Does nothing - deprecated, do not use.
-     *
-     * @deprecated
-     */
-    function setEnvironment($env) {
-    }
-
-    /**
      * Sets the navigation of this plugin.
      *
      * @deprecated
@@ -240,8 +220,11 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
 
         $active_plugin = PluginEngine::getCurrentPluginId();
 
-        if (isset($active_plugin) && $active_plugin == $this->getPluginid()) {
-            $navigation->setActive(true);
+        // make sure navigation for current plugin is active
+        if (isset($active_plugin) && $active_plugin == $this->getPluginId()) {
+            if ($navigation->activeSubNavigation() == NULL) {
+                $navigation->setActive(true);
+            }
         }
     }
 
@@ -255,6 +238,8 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
 
     /**
      * Setzt den Pfad zum Icon dieses Plugins.
+     *
+     * @deprecated
      */
     function setPluginiconname($icon) {
         $this->pluginiconname = $icon;
@@ -265,7 +250,7 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
      *
      * @deprecated
      */
-    function setPluginid($id) {
+    function setPluginId($id) {
     }
 
     /**
@@ -273,7 +258,7 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
      *
      * @deprecated
      */
-    function setPluginname($name) {
+    function setPluginName($name) {
     }
 
     /**
@@ -281,7 +266,7 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
      *
      * @deprecated
      */
-    function setPluginpath($path) {
+    function setPluginPath($path) {
     }
 
     /**
@@ -296,7 +281,7 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
   /**
    * This is the standard action of this plugin.
    */
-  function actionShow($param = null) {
+  function actionShow($param = NULL) {
     return $this->show($param);
   }
 
@@ -304,13 +289,14 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
   /**
    * Does nothing - deprecated, do not use.
    *
-   * @param $subnavigationparam - set if a subnavigation item was clicked.
-   *                              The value is plugin dependent and specified
-   *                              by the plugins subnavigation link params.
+   * @param $param - set if a subnavigation item was clicked.
+   *                 The value is plugin dependent and specified
+   *                 by the plugins subnavigation link params.
    *
    * @deprecated
    */
-  function show($subnavigationparam = null) {}
+  function show($param = NULL) {
+  }
 
 
   /**

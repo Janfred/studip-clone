@@ -232,9 +232,6 @@ if ($show_tabs) {
 	Navigation::activateItem('/homepage/view/all');
 }
 
-# get the layout template
-$layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
-
 # and start the output buffering
 ob_start();
 
@@ -556,19 +553,19 @@ if ($GLOBALS['CHAT_ENABLE']){
 		echo "<br>";
 }
 
-//test Ausgabe von Literaturlisten
-if ( ($lit_list = StudipLitList::GetFormattedListsByRange($user_id)) ) {
-	echo "<table class=\"blank\" width=\"100%%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td class=\"topic\"><b>&nbsp;" . _("Literaturlisten") . " </b></td>";
-	$cs = 1;
-	if ($user_id == $auth->auth['uid']){
-		echo '<td align="right" class="topic">&nbsp;<a href="admin_lit_list.php?_range_id=self"><img src="'.$GLOBALS['ASSETS_URL'].'images/pfeillink.gif" border="0" ' . tooltip(_("Literaturlisten bearbeiten")) . '>&nbsp;</td>';
-		$cs = 2;
-	}
-	printf ("</tr><tr><td colspan=\"$cs\" class=\"steel1\">&nbsp;</td></tr><tr><td colspan=\"$cs\" class=\"steel1\"><blockquote>%s</blockquote></td></tr><tr><td colspan=\"$cs\" class=\"steel1\">&nbsp;</td></tr></table><br>\n",$lit_list);
-	unset($cs);
+$layout = $GLOBALS['template_factory']->open('shared/homepage_box');
+
+// Ausgabe von Literaturlisten
+$lit_list = StudipLitList::GetFormattedListsByRange($user_id);
+if ($user_id == $user->id){
+	$layout->admin_url = 'admin_lit_list.php?_range_id=self';
+	$layout->admin_title = _('Literaturlisten bearbeiten');
 }
+
+echo $layout->render(array('title' => _('Literaturlisten'), 'content_for_layout' => $lit_list));
+$layout->clear_attributes();
+
 // Hier werden Lebenslauf, Hobbys, Publikationen und Arbeitsschwerpunkte ausgegeben:
-$ausgabe_format = '<table class="blank" width="100%%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><b>&nbsp;%s </b>%s</td></tr><tr><td class="steel1">&nbsp;</td></tr><tr><td class="steel1"><blockquote>%s</blockquote></td></tr><tr><td class="steel1">&nbsp;</td></tr></table><br>'."\n";
 $ausgabe_felder = array('lebenslauf' => _("Lebenslauf"),
 			'hobby' => _("Hobbys"),
 			'publi' => _("Publikationen"),
@@ -576,10 +573,10 @@ $ausgabe_felder = array('lebenslauf' => _("Lebenslauf"),
 			);
 
 foreach ($ausgabe_felder as $key => $value) {
-	if ($db->f($key) != '') {
-		printf($ausgabe_format, $value, '', formatReady($db->f($key)));
-	}
+	echo $layout->render(array('title' => $value, 'content_for_layout' => formatReady($db->f($key))));
 }
+
+$layout->clear_attributes();
 
 // add the free administrable datafields (these field are system categories -
 // the user is not allowed to change the categories)
@@ -589,51 +586,37 @@ foreach ($long_datafields as $entry) {
 	           ? _("sichtbar für alle")
 	           : sprintf(_("sichtbar für Sie und alle %s"),
 	                     prettyViewPermString($vperms));
-	printf($ausgabe_format,
-	       htmlReady($entry->getName()),
-	       "($visible)",
-	       $entry->getDisplayValue());
+	echo $layout->render(array('title' => $entry->getName() . "($visible)", 'content_for_layout' => $entry->getDisplayValue()));
 }
+
+$layout->clear_attributes();
 
 if ($GLOBALS["PLUGINS_ENABLE"]){
 	// PluginEngine aktiviert.
 	// Prüfen, ob HomepagePlugins vorhanden sind.
-	$activatedhomepageplugins = PluginEngine::getPlugins('HomepagePlugin');
-	$requser = new StudIPUser($user_id);
+	$homepageplugins = PluginEngine::getPlugins('HomepagePlugin');
 
-	foreach ($activatedhomepageplugins as $activatedhomepageplugin){
-		$activatedhomepageplugin->setRequestedUser($requser);
+	foreach ($homepageplugins as $homepageplugin){
 		// hier nun die HomepagePlugins anzeigen
-		if ($activatedhomepageplugin->getStatusShowOverviewPage()){
-			echo '<table class="blank" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td class="topic"><img src="'. $activatedhomepageplugin->getPluginiconname() .'" border="0" align="texttop"><b> ' . $activatedhomepageplugin->getDisplaytitle() .' </b></td><td align="right" width="1%" class="topic" nowrap="nowrap">&nbsp;';
+		$template = $homepageplugin->getHomepageTemplate($user_id);
 
-			if ($requser->isSameUser($activatedhomepageplugin->getUser())) {
-				$admin_link = $activatedhomepageplugin->getAdminLink();
-				if (NULL !== $admin_link) {
-				?>
-					<a href="<?= $admin_link ?>" title="<?= _("Administration") ?>">
-						<?= Assets::img('pfeillink.gif', array('alt' => _("Administration"))) ?>
-					</a>
-				<?
-				}
-			}
-			echo '&nbsp;</td></tr>'."\n";
-			echo '<tr><td class="steel1" colspan="2">&nbsp;</td></tr><tr><td class="steel1" colspan="2"><blockquote>';
-			$activatedhomepageplugin->showOverview();
-			echo '</blockquote></td></tr><tr><td class="steel1" colspan="2">&nbsp;</td></tr></table><br>'."\n";
+		if ($template) {
+			echo $template->render(NULL, $layout);
 		}
 	}
+
+	$layout->clear_attributes();
 }
+
 //add the own categories - this ones are self created by the user
 $db2->query("SELECT * FROM kategorien WHERE range_id = '$user_id' ORDER BY priority");
 while ($db2->next_record())  {
 	$head=$db2->f("name");
 	$body=$db2->f("content");
-	if ($db2->f("hidden") != '1') { // oeffentliche Rubrik
-		printf ($ausgabe_format, htmlReady($head), '', formatReady($body));
-	} elseif ($db->f("user_id") == $user->id) {  // nur ich darf sehen
-		printf ($ausgabe_format, htmlReady($head), ' ('._("f&uuml;r andere unsichtbar").')',formatReady($body));
+	if ($db2->f("hidden") == '1') { // oeffentliche Rubrik
+		$head .= ' ('._('für andere unsichtbar').')';
 	}
+	echo $layout->render(array('title' => $head, 'content_for_layout' => formatReady($body)));
 }
 // Anzeige der Seminare
 if ($perm->get_perm($user_id) == 'dozent'){
@@ -662,12 +645,14 @@ if ($perm->get_perm($user_id) == 'dozent'){
 			}
 		}
 	}
-	if ($output){
-		printf($ausgabe_format, _("Veranstaltungen"), '', $output);
-	}
+
+	echo $layout->render(array('title' => _('Veranstaltungen'), 'content_for_layout' => $output));
 }
 
-$layout->set_attribute('content_for_layout', ob_get_clean());
+# get the layout template
+$layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
+
+$layout->content_for_layout = ob_get_clean();
 
 echo $layout->render();
 

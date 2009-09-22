@@ -92,15 +92,15 @@ include 'lib/include/header.php';
 // only for authenticated users
 if ($auth->is_authenticated() && $user->id != 'nobody') {
 	if ($perm->have_perm('root')) { // root
-		$ueberschrift = _("Startseite f&uuml;r Root bei Stud.IP");
+		$ueberschrift = _("Startseite für Root bei Stud.IP");
 	} elseif ($perm->have_perm('admin')) { // admin
-		$ueberschrift = _("Startseite f&uuml;r AdministratorInnen bei Stud.IP");
+		$ueberschrift = _("Startseite für AdministratorInnen bei Stud.IP");
 	} elseif ($perm->have_perm('dozent')) { // dozent
-		$ueberschrift = _("Startseite f&uuml;r DozentInnen bei Stud.IP");
+		$ueberschrift = _("Startseite für DozentInnen bei Stud.IP");
 	} elseif ($perm->have_perm('autor')) { // autor, tutor
-		$ueberschrift = _("Ihre pers&ouml;nliche Startseite bei Stud.IP");
+		$ueberschrift = _("Ihre persönliche Startseite bei Stud.IP");
 	} else { // user
-		$ueberschrift = _("Ihre pers&ouml;nliche Startseite bei Stud.IP");
+		$ueberschrift = _("Ihre persönliche Startseite bei Stud.IP");
 		// Warning for Users
 	?>
 		<div align="center">
@@ -114,8 +114,6 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 					<?
 						if (get_config("EXTERNAL_HELP")) {
 							$help_url=format_help_url("Basis.AnmeldungMail");
-						} else {
-							$help_url="help/index.php?help_page=ii_bestaetigungsmail.htm";
 						}
 						echo MessageBox::info(sprintf(_("Sie haben noch nicht auf Ihre %s Bestätigungsmail %s geantwortet.<br>Bitte holen Sie dies nach, um Stud.IP Funktionen wie das Belegen von Veranstaltungen nutzen zu können.<br>Bei Problemen wenden Sie Sich an: %s"),'<a href="'.$help_url.'" target="_blank">','</a>', '<a href="mailto:'.$GLOBALS['UNI_CONTACT'].'">'.$GLOBALS['UNI_CONTACT'].'</a>')); ?>
 					</td></tr>
@@ -124,6 +122,7 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 			<td class="blank" align="right" valign="top" background="<?= $GLOBALS['ASSETS_URL'] ?>images/sms3.jpg"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/blank.gif" width="235" height="1"></td>
 		</tr>
 		</table>
+		</div>
 		<br><br>
 	<?
 	}
@@ -136,46 +135,45 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 // display menue
 ?>
-
-		<table class="index_box" border="0" cellpadding="2" cellspacing="0" style="margin:auto">
+		<table class="index_box" cellpadding="2" cellspacing="0">
 			<tr>
-				<td class="topic" colspan="2" align="left"><img class="middle" src="<?=$GLOBALS['ASSETS_URL']?>images/home.gif" alt="Home-Icon"> <b><?=$ueberschrift?></b></td>
+				<td class="topic" style="font-weight: bold;" colspan="2">
+					<?= Assets::img('home.gif', array('class' => 'middle')) ?>
+					<?= htmlReady($ueberschrift) ?>
+				</td>
 			</tr>
 			<tr>
 				<td class="blank" valign="top" style="padding-left:25px; width:80%;">
-				<table align="left" cellpadding="4">
 				<? foreach ($navigation as $nav) : ?>
 					<? if ($nav->isVisible()) : ?>
-						<tr><td><div class="mainmenu" align="left">
+						<div class="mainmenu">
 						<? if (is_internal_url($url = $nav->getURL())) : ?>
 							<a href="<?= URLHelper::getLink($url) ?>">
 						<? else : ?>
 							<a href="<?= htmlspecialchars($url) ?>" target="_blank">
 						<? endif ?>
 						<?= htmlReady($nav->getTitle()) ?></a>
-					<? endif ?>
-					<? $pos = 0 ?>
-					<? foreach ($nav as $subnav) : ?>
-						<? if ($subnav->isVisible()) : ?>
-							<font size="-1">
-							<?= $pos++ ? ' / ' : '<br>' ?>
-							<? if (is_internal_url($url = $subnav->getURL())) : ?>
-								<a href="<?= URLHelper::getLink($url) ?>">
-							<? else : ?>
-								<a href="<?= htmlspecialchars($url) ?>" target="_blank">
+						<? $pos = 0 ?>
+						<? foreach ($nav as $subnav) : ?>
+							<? if ($subnav->isVisible()) : ?>
+								<font size="-1">
+								<?= $pos++ ? ' / ' : '<br>' ?>
+								<? if (is_internal_url($url = $subnav->getURL())) : ?>
+									<a href="<?= URLHelper::getLink($url) ?>">
+								<? else : ?>
+									<a href="<?= htmlspecialchars($url) ?>" target="_blank">
+								<? endif ?>
+								<?= htmlReady($subnav->getTitle()) ?></a>
+								</font>
 							<? endif ?>
-							<?= htmlReady($subnav->getTitle()) ?></a>
-							</font>
-						<? endif ?>
-					<? endforeach ?>
-					</div></td></tr>
+						<? endforeach ?>
+						</div>
+					<? endif ?>
 				<? endforeach ?>
-				</table>
 				</td>
 				<td class="indexpage" align="right" valign="top"><img src="<?=$GLOBALS['ASSETS_URL']?>images/blank.gif" width="390" height="100" alt=""></td>
 			</tr>
 		</table>
-		<br>
 <?
 
 	// display news
@@ -199,72 +197,8 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 		include 'lib/vote/vote_show.inc.php';
 		show_votes ('studip', $auth->auth['uid'], $perm);
 	}
-
-	if ($GLOBALS["PLUGINS_ENABLE"]){
-		// PluginEngine aktiviert.
-		// Prüfen, ob PortalPlugins vorhanden sind.
-		$activatedportalplugins = PluginEngine::getPlugins('PortalPlugin');
-
-		foreach ($activatedportalplugins as $activatedportalplugin){
-			if (!$activatedportalplugin->hasAuthorizedView()){
-				// skip this plugin
-				continue;
-			}
-			// hier nun die PortalPlugins anzeigen
-?>
-		<table class="index_box" border="0" cellpadding="2" cellspacing="0">
-			<tr>
-				<td class="topic"><img class="middle" src="<?=$activatedportalplugin->getPluginiconname()?>"> <b><?=$activatedportalplugin->getDisplaytitle()?></b></td>
-				<td class="topic" align="right">
-					<? if ($activatedportalplugin->hasAdministration()) : ?>
-						<? if ($admin_link = $activatedportalplugin->getAdminLink()) : ?>
-							<a href="<?= $admin_link ?>" title="<?= _("Administration") ?>">
-								<?= Assets::img('pfeillink.gif', array('alt' => _("Administration"))) ?>
-						<? endif ?>
-					<? endif ?>
-				</td>
-			</tr>
-			<tr>
-				<td class="index_box_cell" colspan="2">
-				<?=$activatedportalplugin->showOverview()?>
-				</td>
-			</tr>
-		</table>
-		<br>
-
-<?
-		}
-	}
-	page_close(); // end session
-
-	$db->query(sprintf("SELECT * FROM rss_feeds WHERE user_id='%s' AND hidden=0 ORDER BY priority",$auth->auth["uid"]));
-	while ($db->next_record()) {
-		if ($db->f("name")!="" && $db->f("url")!="") {
-			$feed = new RSSFeed($db->f("url"));
-			if($db->f('fetch_title') && $feed->ausgabe->channel['title']) $feedtitle = $feed->ausgabe->channel['title'];
-			else $feedtitle = $db->f("name");
-?>
-		<table class="index_box" border="0" cellpadding="2" cellspacing="0" style="margin:auto">
-			<tr>
-				<td class="topic"><b><?=htmlReady($feedtitle)?></b></td>
-			</tr>
-			<tr>
-				<td class="index_box_cell">
-					<? $feed->rssfeed_start(); ?>
-				</td>
-			</tr>
-		</table>
-		<br>
-
-<?
-		}
-	}
-?>
-	</div>
-<?
 } else { //displaymodul for nobody
 	$index_nobody_template = $GLOBALS['template_factory']->open('index_nobody');
-	$db=new DB_Seminar();
 	$db->query("SELECT count(*) from seminare");
 	$db->next_record();
 	$index_nobody_template->set_attribute('num_active_courses', $db->f(0));
@@ -279,35 +213,43 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 	}
 
 	echo $index_nobody_template->render();
+}
 
-	if ($GLOBALS["PLUGINS_ENABLE"])
-	{
-		$activatedportalplugins = PluginEngine::getPlugins('PortalPlugin');
+$layout = $GLOBALS['template_factory']->open('shared/index_box');
 
-		foreach ($activatedportalplugins as $activatedplugin)
-		{
-			if ($activatedplugin->hasUnauthorizedView())
-			{
-?>
-		<br>
-		<div align="center">
-		<table class="index_box" border="0" cellpadding="2" cellspacing="0" >
-			<tr>
-				<td class="topic"><img class="middle" src="<?=$activatedplugin->getPluginiconname()?>"> <b><?= $activatedplugin->getDisplaytitle() ?></b></td>
-			</tr>
-			<tr>
-				<td class="index_box_cell">
-					<?= $activatedplugin->showOverview(false) ?>
-				</td>
-			</tr>
-		</table>
-		</div>
+if ($GLOBALS['PLUGINS_ENABLE']){
+	// Prüfen, ob PortalPlugins vorhanden sind.
+	$portalplugins = PluginEngine::getPlugins('PortalPlugin');
 
-<?php
+	foreach ($portalplugins as $portalplugin) {
+		$template = $portalplugin->getPortalTemplate();
+
+		if ($template) {
+			echo $template->render(NULL, $layout);
+		}
+	}
+
+	$layout->clear_attributes();
+}
+
+page_close();
+
+if (is_object($user) && $user->id != 'nobody') {
+	$db->query(sprintf("SELECT * FROM rss_feeds WHERE user_id='%s' AND hidden=0 ORDER BY priority",$auth->auth["uid"]));
+	while ($db->next_record()) {
+		if ($db->f("name")!="" && $db->f("url")!="") {
+			$feed = new RSSFeed($db->f("url"));
+			if ($db->f('fetch_title') && $feed->ausgabe->channel['title']) {
+				$feedtitle = $feed->ausgabe->channel['title'];
+			} else {
+				$feedtitle = $db->f("name");
 			}
+
+			ob_start();
+			$feed->rssfeed_start();
+			echo $layout->render(array('title' => $feedtitle, 'content_for_layout' => ob_get_clean()));
 		}
 	}
 }
 
 include 'lib/include/html_end.inc.php';
-page_close();

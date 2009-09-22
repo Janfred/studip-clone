@@ -24,24 +24,24 @@ class PluginEngine {
 
 
 	/**
-	 * TODO
+	 * @deprecated
 	 *
 	 * @return int  returns the current plugin's ID
 	 */
 	public static function getCurrentPluginId() {
-		return PluginEngine::$currentPluginId;
+		return self::$currentPluginId;
 	}
 
 
 	/**
-	 * TODO
+	 * @deprecated
 	 *
 	 * @param  int  the current plugin's ID
 	 *
 	 * @return int  returns the current plugin's ID
 	 */
 	public static function setCurrentPluginId($id) {
-		return (PluginEngine::$currentPluginId = $id);
+		return self::$currentPluginId = $id;
 	}
 
 	/**
@@ -131,7 +131,7 @@ class PluginEngine {
 		if (is_null($plugin)) {
 			throw new InvalidArgumentException(_('Es wurde kein Plugin gewählt.'));
 		}
-		$link = sprintf('plugins.php/%s/%s', urlencode($plugin->getPluginclassname()), $cmd);
+		$link = sprintf('plugins.php/%s/%s', strtolower(get_class($plugin)), $cmd);
 
 		return URLHelper::getURL($link, $params);
 	}
@@ -144,11 +144,13 @@ class PluginEngine {
 	* @return a link to the current plugin with the additional $params
 	*/
 	public static function getLink($plugin, $params = array(), $cmd = 'show') {
-		return htmlspecialchars(PluginEngine::getURL($plugin, $params, $cmd));
+		return htmlspecialchars(self::getURL($plugin, $params, $cmd));
 	}
 
 	/**
 	 * Generates a Link to the plugin administration which can be shown in user interfaces
+	 *
+	 * @deprecated
 	 *
 	 * @param   array   an optional array with name value pairs
 	 * @param   string  an optional command defaulting to 'show'
@@ -162,34 +164,10 @@ class PluginEngine {
 	}
 
 	/**
-	 * Creates an instance of the desired plugin class
-	 * @param pluginclassname - the desired class name
-	 * @param pluginpath - the path to the plugin
-	 * @param args - arguments passed to the plugin
-	 * @return an instance of the desired plugin or null otherwise
-	 */
-	public static function instantiatePlugin($pluginclassname, $pluginpath) {
-		global $pluginenv;
-
-		$basepath = $pluginenv->getPackagebasepath();
-		$pluginfile = $basepath.'/'.$pluginpath.'/'.$pluginclassname.'.class.php';
-
-		if (!file_exists($pluginfile)) {
-			return NULL;
-		}
-
-		require_once $pluginfile;
-
-		$plugin_class = new ReflectionClass($pluginclassname);
-		$plugin = $plugin_class->newInstance();
-
-		return $plugin;
-	}
-
-	/**
 	 * Reads the manifest of the plugin in the given path
 	 * @return array containing the manifest information
-	 * @todo Klasse für die Rückgabe realisieren
+	 *
+	 * @deprecated
 	 */
 	public static function getPluginManifest($pluginpath) {
 		$manifest = file($pluginpath . '/plugin.manifest');
@@ -220,6 +198,7 @@ class PluginEngine {
 	 * Searches for plugins in the plugins installation directory, if enabled in local.inc
 	 * @return list of installable names of plugin packages
 	 *
+	 * @deprecated
 	 */
 	public static function getInstallablePlugins() {
 		$newpluginsdir = $GLOBALS["NEW_PLUGINS_PATH"];
@@ -247,6 +226,8 @@ class PluginEngine {
 	/**
 	 * Saves a value to the global session
 	 *
+	 * @deprecated
+	 *
 	 * @param AbstractStudIPPlugin $plugin - the plugin for which the value should be saved
 	 * @param string $key - a key for the value. has to be unique for the calling plugin
 	 * @param string $value - the value, which should be saved into the session
@@ -259,6 +240,7 @@ class PluginEngine {
 	/**
 	 * Retrieves the value to key from the global plugin session
 	 *
+	 * @deprecated
 	 */
 	public static function getValueFromSession($plugin,$key) {
 		return unserialize($_SESSION["PLUGIN_SESSION_SPACE"][strtolower(get_class($plugin))][$key]);

@@ -589,6 +589,7 @@ td.indexpage {
     margin-top: 7px;
     text-align:left;
     font-size: 16px;
+    padding: 5px;
 }
 
 .button {
@@ -638,6 +639,7 @@ dd {
 table.index_box {
     width:70%;
     margin:auto;
+    margin-bottom:1em;
 }
 
 td.index_box_cell {
