@@ -228,7 +228,7 @@ class PluginEngine {
 	 *
 	 * @deprecated
 	 *
-	 * @param AbstractStudIPPlugin $plugin - the plugin for which the value should be saved
+	 * @param StudIPPlugin $plugin - the plugin for which the value should be saved
 	 * @param string $key - a key for the value. has to be unique for the calling plugin
 	 * @param string $value - the value, which should be saved into the session
 	 */

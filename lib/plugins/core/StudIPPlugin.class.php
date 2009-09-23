@@ -2,7 +2,7 @@
 # Lifter007: TODO
 // vim: expandtab
 /*
- * AbstractStudIPPlugin.class.php - generic plugin base class
+ * StudIPPlugin.class.php - generic plugin base class
  *
  * Copyright (c) 2009 - Elmar Ludwig
  *
@@ -12,7 +12,7 @@
  * the License, or (at your option) any later version.
  */
 
-abstract class AbstractStudIPPlugin {
+abstract class StudIPPlugin {
 
     /**
      * plugin meta data

@@ -13,7 +13,7 @@ require_once 'core/StudIPUser.class.php';
 require_once 'core/StudIPCore.class.php';
 
 // plugin base class
-require_once 'core/AbstractStudIPPlugin.class.php';
+require_once 'core/StudIPPlugin.class.php';
 
 // plugin interfaces
 require_once 'core/AdministrationPlugin.class.php';

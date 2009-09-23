@@ -215,7 +215,7 @@ class PluginManager
             require_once $pluginfile;
 
             $plugin_class = new ReflectionClass($class);
-            $plugin_base = new ReflectionClass('AbstractStudIPPlugin');
+            $plugin_base = new ReflectionClass('StudIPPlugin');
             $interfaces = $plugin_class->getInterfaces();
 
             if ($plugin_class->isSubclassOf($plugin_base)) {

@@ -25,7 +25,7 @@
  * @subpackage  core
  */
 
-abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
+abstract class AbstractStudIPLegacyPlugin extends StudIPPlugin {
 
 
     /**

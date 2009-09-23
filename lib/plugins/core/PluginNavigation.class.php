@@ -50,7 +50,7 @@ class PluginNavigation extends StudipPluginNavigation {
   }
 
 
-  function setPlugin(AbstractStudIPPlugin $plugin) {
+  function setPlugin(StudIPPlugin $plugin) {
     $this->plugin = $plugin;
 
     foreach ($this->getSubNavigation() as $nav) {
@@ -89,6 +89,12 @@ class PluginNavigation extends StudipPluginNavigation {
      */
     function setLinkParam($link){
 	$this->addLinkParam('plugin_subnavi_params', $link);
+    }
+
+    /**
+     * @deprecated
+     */
+    function setActive($value=true){
     }
 }
 ?>
