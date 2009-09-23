@@ -33,8 +33,8 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
      *
      * @deprecated
      */
-    public $pluginname;
     public $pluginid;
+    public $pluginname;
     public $pluginpath;
     public $basepluginpath;
     public $navposition;
@@ -50,13 +50,20 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
     function __construct() {
         parent::__construct();
 
-        $this->pluginname        = $this->getPluginName();
-        $this->pluginid          = $this->getPluginId();
-        $this->pluginpath        = $this->getPluginPath();
+        $this->pluginid          = parent::getPluginId();
+        $this->pluginname        = parent::getPluginName();
+        $this->pluginpath        = parent::getPluginPath();
         $this->basepluginpath    = $this->getBasepluginpath();
         $this->navposition       = $this->getNavigationPosition();
         $this->dependentonplugin = $this->isDependentOnOtherPlugin();
         $this->user              = new StudIPUser();
+
+        $this->setPluginId($this->pluginid);
+        $this->setPluginName($this->pluginname);
+        $this->setPluginPath($this->pluginpath);
+        $this->setBasepluginpath($this->basepluginpath);
+        $this->setNavigationPosition($this->navposition);
+        $this->setDependentOnOtherPlugin($this->dependentonplugin);
     }
 
     /**
@@ -153,6 +160,13 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
         } else {
             return Assets::image_path('icon-leer.gif');
         }
+    }
+
+    /**
+     * Return the name of this plugin.
+     */
+    public function getPluginName() {
+        return $this->pluginname;
     }
 
     /**
@@ -259,6 +273,7 @@ abstract class AbstractStudIPLegacyPlugin extends AbstractStudIPPlugin {
      * @deprecated
      */
     function setPluginName($name) {
+        $this->pluginname = $name;
     }
 
     /**

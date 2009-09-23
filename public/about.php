@@ -613,11 +613,15 @@ $db2->query("SELECT * FROM kategorien WHERE range_id = '$user_id' ORDER BY prior
 while ($db2->next_record())  {
 	$head=$db2->f("name");
 	$body=$db2->f("content");
-	if ($db2->f("hidden") == '1') { // oeffentliche Rubrik
+	if ($db2->f("hidden") == '1') {
 		$head .= ' ('._('für andere unsichtbar').')';
 	}
-	echo $layout->render(array('title' => $head, 'content_for_layout' => formatReady($body)));
+	// oeffentliche Rubrik oder eigene Homepage
+	if ($db2->f("hidden") != '1' || $user_id == $user->id) {
+		echo $layout->render(array('title' => $head, 'content_for_layout' => formatReady($body)));
+	}
 }
+
 // Anzeige der Seminare
 if ($perm->get_perm($user_id) == 'dozent'){
 	$all_semester = SemesterData::GetSemesterArray();

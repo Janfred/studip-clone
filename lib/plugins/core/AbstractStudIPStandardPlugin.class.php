@@ -185,6 +185,8 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 	 * Get the activation status of this plugin in the given context.
 	 * This also checks the plugin default activations.
 	 *
+	 * @deprecated
+	 *
 	 * @param $context   context range id
 	 */
 	function isActivated($context = NULL) {
