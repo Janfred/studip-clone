@@ -134,10 +134,20 @@ $db3 = new DB_Seminar;
 $db4 = new DB_Seminar;
 $db6 = new DB_Seminar;
 $cssSw = new cssClassSwitcher;
-URLHelper::bindLinkParam('admin_admission_data', $admin_admission_data);
-URLHelper::bindLinkParam('admin_admission_data_original', $admin_admission_data_original);
+$admin_admission_data = unserialize(base64_decode($_REQUEST['admin_admission_data']));
+$admin_admission_data_original = unserialize(base64_decode($_REQUEST['admin_admission_data_original']));
+
 $messaging = new messaging;
 
+if ($_REQUEST['delete_studg']) {
+	$delete_studg = array_pop(array_keys($_REQUEST['delete_studg']));
+	$_REQUEST['delete_studg'] = $delete_studg;
+}
+
+if ($_REQUEST['delete_domain']) {
+	$delete_domain = array_pop(array_keys($_REQUEST['delete_domain']));
+	$_REQUEST['delete_domain'] = $delete_domain;
+}
 /**
 * This function creates a snapshot for all the values the admin_admission script uses
 *
@@ -241,7 +251,8 @@ if (isset($seminar_id) && $SEMINAR_LOCK_ENABLE) {
 // end new stuff
 
 //wenn wir frisch reinkommen, werden benoetigte Daten eingelesen
-if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg) && (!$adm_gesperrt_x) && !$toggle_admission_quota_x) {
+if (($seminar_id) && (!$uebernehmen_x) &&(!$adm_null_x) &&(!$adm_los_x) &&(!$adm_chrono_x) && (!$add_studg_x) && (!$delete_studg) && (!$adm_gesperrt_x) 
+	&& !$toggle_admission_quota_x && !$delete_domain && !$add_domain && !$add_domain_x) {
 	$db->query("SELECT * FROM seminare WHERE Seminar_id = '$seminar_id' ");
 	$db->next_record();
 	$admin_admission_data='';
@@ -797,6 +808,8 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 	<td class="blank" colspan="2">
 	<form method="POST" name="Formular" action="<?=URLHelper::getLink()?>"
 	<? if (!$admin_admission_data["admission_type"] && !(LockRules::Check($seminar_id, 'Passwort'))) echo " onSubmit=\"return doCrypt();\" "; ?>>
+		<input type="hidden" name="admin_admission_data" value="<?= base64_encode(serialize($admin_admission_data)) ?>">
+		<input type="hidden" name="admin_admission_data_original" value="<?= base64_encode(serialize($admin_admission_data_original)) ?>">
 		<table width="99%" border="0" cellpadding="2" cellspacing="0" align="center">
 		<tr <? $cssSw->switchClass() ?>>
 			<td class="<? echo $cssSw->getClass() ?>" align="center" colspan="3">
@@ -1191,10 +1204,10 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 									} else {
 										printf ("<input type=\"HIDDEN\" name=\"studg_ratio_old[]\" value=\"%s\">", $val["ratio"]);
 										printf ("<input type=\"TEXT\" name=\"studg_ratio[]\" size=5 maxlength=5 value=\"%s\"><font size=-1> %% (%s Teilnehmer)</font>", $val["ratio"], $num_stg[$key]);
-										echo "&nbsp; <a href=\"". URLHelper::getLink('?delete_studg='.$key) ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen")).">";
+										echo '<input type="image" name="delete_studg['. $key .']" src="'. Assets::image_path('trash.gif') .'" '. tooltip(_("Den Studiengang aus der Liste löschen")) .'>';
 									}
 								} elseif (!LockRules::Check($seminar_id, 'admission_studiengang') && (!($admin_admission_data["admission_type_org"] && !$perm->have_perm("admin")))) {
-									echo "&nbsp; <a href=\"". URLHelper::getlink('?delete_studg='.$key) ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" ".tooltip(_("Den Studiengang aus der Liste löschen"))."></a>";
+										echo '<input type="image" name="delete_studg['. $key .']" src="'. Assets::image_path('trash.gif') .'" '. tooltip(_("Den Studiengang aus der Liste löschen")) .'>';
 								}
 								?>
 								</td>
@@ -1364,7 +1377,7 @@ if (is_array($admin_admission_data["studg"]) && $admin_admission_data["admission
 									</td>
 									<td class="<?= $cssSw->getClass() ?>" nowrap colspan=2 >
 									<?if (!LockRules::check($seminar_id, 'user_domain')){?>
-									<a href="<?= URLHelper::getLink('?delete_domain='.$domain->getID()) ?>"><img src="<?=$GLOBALS['ASSETS_URL']?>images/trash.gif" <?=tooltip(_('Nutzerdomäne aus der Liste löschen')) ?>></a>
+										<input type="image" name="delete_domain[<?= $domain->getID() ?>]" src="<?= Assets::image_path('trash.gif') ?>" <?= tooltip(_("Nutzerdomäne aus der Liste löschen")) ?>>
 									<?}?>
 									</td>
 								</tr>
