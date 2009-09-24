@@ -148,6 +148,7 @@ $semester_index = get_sem_num($sem->getStartSemester());
 $tmp_first_date = getCorrectedSemesterVorlesBegin($semester_index);
 $all_semester = $semester->getAllSemesterData();
 $end_date = $all_semester[$semester_index]['vorles_ende'];
+$date = getdate($tmp_first_date);
 
 $i = 0;
 while ($tmp_first_date < $end_date) {
@@ -155,7 +156,7 @@ while ($tmp_first_date < $end_date) {
 	$start_weeks[$i]['selected'] = ($sem->getStartWeek() == $i);
 
 	$i++;
-	$tmp_first_date = $tmp_first_date + (7 * 24 * 60 * 60);
+	$tmp_first_date = mktime($date['hours'], $date['minutes'], $date['seconds'], $date['mon'], $date['mday'] + 7 * $i, $date['year']);
 }
 
 // template-like output
