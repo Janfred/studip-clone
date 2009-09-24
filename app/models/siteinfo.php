@@ -193,6 +193,7 @@ class SiteinfoMarkupEngine {
         $this->siteinfoMarkup("/\(:uniname:\)/e",'$this->uniName()');
         $this->siteinfoMarkup("/\(:unicontact:\)/e",'$this->uniContact()');
         $this->siteinfoMarkup("/\(:userinfo ([a-z_@\-]*):\)/e",'$this->userinfo(\'$1\')');
+        $this->siteinfoMarkup("/\(:userlink ([a-z_@\-]*):\)/e",'$this->userlink(\'$1\')');
         $this->siteinfoMarkup("/\(:rootlist:\)/e",'$this->rootlist()');
         $this->siteinfoMarkup("/\(:adminlist:\)/e",'$this->adminlist()');
         $this->siteinfoMarkup("/\(:coregroup:\)/e",'$this->coregroup()');
@@ -249,6 +250,26 @@ class SiteinfoMarkupEngine {
         }
         return $template->render();
     }
+
+    function userlink($input) {
+        $template = $this->template_factory->open('userlink');
+        $sql = "SELECT ".$GLOBALS['_fullname_sql']['full'] ." AS fullname,
+                       username
+                FROM auth_user_md5
+                LEFT JOIN user_info USING (user_id)
+                WHERE username=".$this->db->quote($input)."
+                AND ".get_vis_query();
+        $result = $this->db->query($sql);
+        if ($result->rowCount() == 1) {
+            $user = $result->fetch(PDO::FETCH_ASSOC);
+            $template->username = $user['username'];
+            $template->fullname = $user['fullname'];
+        } else {
+            $template->error = TRUE;
+        }
+        return $template->render();
+    }
+
 
     function rootlist() {
         $template = $this->template_factory->open('rootlist');

@@ -16,6 +16,8 @@
         <dd><?= _('Der administrative Kontakt gemäß der Konfiguration.')?></dd>
         <dt>(:userinfo <em>user</em>:)</dt>
         <dd><?= sprintf(_('Ausgabe von Vor- und Nachnamen verlinkt mit der persönlichen Homepage und der E-Mail-Adresse des mit %s angegebenen Nutzers.'),'<em>user</em>')?></dd>
+        <dt>(:userlink <em>user</em>:)</dt>
+        <dd><?= sprintf(_('Ausgabe von Vor- und Nachnamen verlinkt mit der persönlichen Homepage des mit %s angegebenen Nutzers.'),'<em>user</em>')?></dd>
         <dt>(:rootlist:)</dt>
         <dd><?= _('Ausgabe von Vor- und Nachnamen verlinkt mit der persönlichen Homepage und der E-Mail-Adresse aller Nutzer mit Root-Status.')?></dd>
         <dt>(:adminlist:)</dt>
