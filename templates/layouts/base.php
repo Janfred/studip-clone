@@ -62,6 +62,7 @@
 
  <body<?= (isset($GLOBALS['body_id']) ? ' id="'.htmlReady($GLOBALS['body_id']).'"' : '') .
           (isset($GLOBALS['body_class']) ? ' class="'.htmlReady($GLOBALS['body_class']).'"' : '' ) ?>>
+    <?= isset($GLOBALS['_include_additional_html']) ? $GLOBALS['_include_additional_html'] : '' ?>
     <div id="overdiv_container"></div>
 
     <div id="ajax_notification" style="display: none;">
@@ -91,4 +92,3 @@
     </div>
   </body>
 </html>
-

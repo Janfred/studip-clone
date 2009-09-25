@@ -28,7 +28,7 @@
 
 //
 $_never_globalize_request_params = array('msg','_msg','errormsg','meldung','sms_msg','_html_head_title','_include_stylesheet',
-									'_include_extra_stylesheet','_include_additional_header'
+									'_include_extra_stylesheet','_include_additional_header','_include_additional_html'
 									);
 foreach($_never_globalize_request_params as $one_param){
 	if (isset($_REQUEST[$one_param])){
