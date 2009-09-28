@@ -79,7 +79,11 @@ th {
         <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>">
             <td style="text-align:left;white-space:nowrap;">
             <img src="<?=StudygroupAvatar::getAvatar($group['Seminar_id'])->getUrl(Avatar::SMALL);?>" style="vertical-align:middle;">
+                <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )): ?>
+                    <a href="<?=URLHelper::getlink("seminar_main.php?auswahl=".$group['Seminar_id'])?>">
+                <? else: ?>
                    <a href="<?=URLHelper::getlink("dispatch.php/course/studygroup/details/".$group['Seminar_id'])?>">
+                <? endif; ?>
                    <?=htmlready($group['Name'])?></a>
              </td>
              <td align="center"><?=strftime('%x', $group['mkdate']);?>
