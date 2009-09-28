@@ -83,11 +83,13 @@ $infobox['content'] = array(
     <a href="<?= URLHelper::getLink('about.php?username='.$m['username']) ?>">
         <?= htmlReady($m['fullname']) ?><br>
         <?  if (in_array($m, $moderators)) : ?>
-            <em><?= _("GruppengründerIn") ?></em>
+          <em><?= _("GruppengründerIn") ?></em>
         <? elseif (in_array($m, $tutors)) : ?>
-            <em><?= _("ModeratorIn") ?></em>
+          <em><?= _("ModeratorIn") ?></em>
         <? endif ?>
-        </a>
+				<br>
+				<br>
+      </a>
     </div>
 </div>
 
