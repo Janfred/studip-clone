@@ -92,9 +92,12 @@ th {
                 <?=StudygroupModel::countMembers($group['Seminar_id']);?>
             </td>
             <td style="text-align:left;white-space:nowrap;">
-                <? $founder = StudygroupModel::getFounder($group['Seminar_id']);?>
+                <? $founders = StudygroupModel::getFounder($group['Seminar_id']);
+									foreach ($founders as $founder) : ?>
                 <img src="<?=Avatar::getAvatar($founder['user_id'])->getUrl(Avatar::SMALL);?>" style="vertical-align:middle;">
                 <a href="<?=URLHelper::getlink('about.php?username='.$founder['uname'])?>"><?=htmlready($founder['fullname'])?></a>
+								<br>
+								<? endforeach; ?>
             </td>
             <td align="center">
                 <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )) :?>

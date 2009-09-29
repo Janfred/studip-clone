@@ -183,9 +183,9 @@ class StudygroupModel {
     {
         $sql  = "SELECT user_id FROM `seminar_user` WHERE Seminar_id = '{$semid}' AND status = 'dozent' AND user_id != MD5('studygroup_dozent')";
         $stmt = DBManager::get()->query($sql);
-		while ($user = $stmt->fetch()) {
+				while ($user = $stmt->fetch()) {
 	        $founder[] = array('user_id' => $user['user_id'], 'fullname' => get_fullname($user['user_id']), 'uname' => get_username($user['user_id']));
-		}
+				}
        
         return $founder; 
     }
