@@ -396,7 +396,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			if ($group_field != 'not_grouped'){
 				$last_modified = check_group_new($group_members, $my_obj);
 			  	echo '<tr><td class="blank" colspan="' . ($view == 'ext' ? 7 : 5) . '"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" width="1px" height="5px"></td></tr>';
-				echo '<tr><td class="blue_gradient" valign="top" height="20" colspan="2"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" style="vertical-align: middle;" width="1px" height="20px">';
+				echo '<tr><td class="blue_gradient" valign="top" nowrap height="20" colspan="2"><img src="'.$GLOBALS['ASSETS_URL'].'images/blank.gif" style="vertical-align: middle;" width="1px" height="20px">';
 				if (isset($_my_sem_open[$group_id])){
 					echo '<a class="tree" style="font-weight:bold"  name="' . $group_id . '" href="' . $PHP_SELF . '?view=' . $view . '&close_my_sem=' . $group_id . '#' .$group_id . '" ' . tooltip(_("Gruppierung schließen"), true) . '>';
 					if ($last_modified){
