@@ -54,6 +54,31 @@ require_once('lib/classes/SemesterData.class.php');
 require_once('lib/user_visible.inc.php');
 require_once('lib/classes/StudipLitList.class.php');
 require_once('lib/classes/Avatar.class.php');
+require_once('lib/classes/StudipKing.class.php');
+
+function print_kings($username) {
+
+	$uid = get_userid($username);
+	$is_king = StudipKing::is_king($uid, TRUE);
+
+	$result = '';
+	foreach ($is_king as $type => $text) {
+		$alt =
+		$result .= Assets::img("king_$type", array(
+			'style' => 'padding: 0.5em;',
+			'alt'   => $text,
+			'title' => $text
+		));
+	}
+
+	if ($result !== '') {
+	?>
+		<p>
+			<?= $result ?>
+		</p>
+	<?
+	}
+}
 
 function prettyViewPermString ($viewPerms) {
 	switch ($viewPerms) {
@@ -474,7 +499,13 @@ function open_im() {
 					echo ' * Diese Felder sind nur für Sie und AdministratorInnen sichtbar.<br>';
 					echo '</font>';
 				}
+if ($score->IsMyScore() || $score->ReturnPublik()) {
+	echo "<p>";
+	print_kings($username);
+}
+
 				?>
+
 
 				<br>
 

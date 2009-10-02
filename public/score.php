@@ -27,6 +27,7 @@ require_once 'lib/classes/score.class.php';
 require_once 'lib/object.inc.php';
 require_once 'lib/user_visible.inc.php';
 require_once 'lib/classes/Avatar.class.php';
+require_once 'lib/classes/StudipKing.class.php';
 
 //Basics
 $HELP_KEYWORD="Basis.VerschiedenesScore"; // external help keyword
@@ -58,9 +59,10 @@ if($_REQUEST['page']){
 if($page < 1 || $page > ceil($anzahl/ELEMENTS_PER_PAGE)) $page = 1;
 
 // Liste aller die mutig (oder eitel?) genug sind
-$query = "SELECT a.user_id,username,score,geschlecht, " .$_fullname_sql['full'] ." AS fullname FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 AND locked=0 AND ".get_vis_query('b')." ORDER BY score DESC LIMIT ".(($page-1)*ELEMENTS_PER_PAGE).",".ELEMENTS_PER_PAGE; 
+$query = "SELECT a.user_id,username,score,geschlecht, " .$_fullname_sql['full'] ." AS fullname FROM user_info a LEFT JOIN auth_user_md5 b USING (user_id) WHERE score > 0 AND locked=0 AND ".get_vis_query('b')." ORDER BY score DESC LIMIT ".(($page-1)*ELEMENTS_PER_PAGE).",".ELEMENTS_PER_PAGE;
 $result = DBManager::get()->query($query);
 while ($row = $result->fetch()) {
+	$is_king = StudipKing::is_king($row["user_id"], TRUE);
 	$person = array(
 		"userid" => $row["user_id"],
 		"username" => $row["username"],
@@ -68,8 +70,8 @@ while ($row = $result->fetch()) {
 		"name" => htmlReady($row["fullname"]),
 		"content" => $score->GetScoreContent($row["user_id"]),
 		"score" => $row["score"],
-		"title" => $score->GetTitel($row["score"], $row["geschlecht"])
-
+		"title" => $score->GetTitel($row["score"], $row["geschlecht"]),
+		"is_king" => $is_king
 	);
 	$persons[] = $person;
 }

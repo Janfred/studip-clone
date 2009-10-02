@@ -14,7 +14,12 @@
 <tr class="<?=TextHelper::cycle('cycle_odd', 'cycle_even')?>">
 	<td align="right"><?=$index+(($page-1)*ELEMENTS_PER_PAGE)+1?>. </td>
 	<td> <?=$person['avatar']?></td>
-	<td><a href="<?=URLHelper::getLink("about.php?username=". $person['username'])?>"><?=$person['name']?></a></td>
+	<td>
+		<a href="<?=URLHelper::getLink("about.php?username=". $person['username'])?>"><?=$person['name']?></a>
+		<? foreach ($person['is_king'] as $type => $text) : ?>
+			<?= Assets::img("crown.png", array('alt' => $text, 'title' => $text)) ?>
+		<? endforeach ?>
+	</td>
 	<td><?=$person['content']?></td>
 	<td><?=$person['score']?></td>
 	<td><?=$person['title']?> <? if($person['userid']==$user->id): ?><a href="<?=URLHelper::getLink('score.php?cmd=kill')?>"><?=_("[löschen]")?></a><? endif; ?></td>
