@@ -127,6 +127,7 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 		</td>
 		</table>
 		<?
+		include ('lib/include/html_end.inc.php');
 		page_close();
 		die;
 	}
@@ -704,9 +705,9 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 						}
 						break;
 					case "dispatch.php":
-						if($controller instanceof Course_StudyAreasController){
+						if ($this instanceof Course_StudyAreasController){
 							printf(_("Studienbereiche") . '<br><a href="%s">%s</a>',
-								$controller->url_for('course/study_areas/show/' . $seminar_id),
+								$this->url_for('course/study_areas/show/' . $seminar_id),
 								makeButton("bearbeiten"));
 						}
 						break;
@@ -738,6 +739,7 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 	</tr>
 	</table>
 	<?
+		include ('lib/include/html_end.inc.php');
 		page_close();
 		die;
 	}

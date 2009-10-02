@@ -57,9 +57,6 @@ class Course_AvatarController extends AuthenticatedController
             Navigation::activateItem('/course/studygroup/admin');
         } else {
             Navigation::activateItem('/admin/course/details');
-
-            require_once 'lib/admin_search.inc.php';
-            $layout->tabs = 'admin_search_form';
         }
         $this->set_layout($layout);
     }

@@ -71,10 +71,6 @@
 
     <? include 'lib/include/header.php'; ?>
 
-    <? if (isset($tabs)) : ?>
-      <? include 'lib/include/' . $tabs . '.inc.php'; ?>
-    <? endif ?>
-
     <div id="layout_container" style="padding: 1em;">
         <?= $content_for_layout ?>
         <div class="clear"></div>
