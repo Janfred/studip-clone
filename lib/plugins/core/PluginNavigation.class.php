@@ -90,11 +90,5 @@ class PluginNavigation extends StudipPluginNavigation {
     function setLinkParam($link){
 	$this->addLinkParam('plugin_subnavi_params', $link);
     }
-
-    /**
-     * @deprecated
-     */
-    function setActive($value=true){
-    }
 }
 ?>
