@@ -69,7 +69,7 @@ th {
 <tr style="background: url(<?=Assets::image_path('steelgraudunkel.gif')?>);cursor: pointer;" title="<?=_("Klicken, um die Sortierung zu ändern")?>">
         <th width="60%"><?= _("Name") ?></th>
         <th width="10%" class="date-<?=$GLOBALS['_language']?> sortfirstdesc"><?= _("gegründet") ?></th>
-        <th width="5%"><?= _("Mitglieder") ?></th>
+        <th width="5%" class="number"><?= _("Mitglieder") ?></th>
         <th width="15%"><?= _("GründerIn") ?></th>
         <th width="5%"><?= _("Mitglied") ?></th>
         <th width="5%"><?= _("Zugang") ?></th>
