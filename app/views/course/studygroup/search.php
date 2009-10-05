@@ -67,7 +67,8 @@ th {
 </style>
 <table class="sortable" border="0" cellpadding="2" cellspacing="0" width="100%">
 <tr style="background: url(<?=Assets::image_path('steelgraudunkel.gif')?>);cursor: pointer;" title="<?=_("Klicken, um die Sortierung zu ändern")?>">
-        <th width="60%"><?= _("Name") ?></th>
+        <th class="nosort" width="1%"></th>
+        <th width="59%"><?= _("Name") ?></th>
         <th width="10%" class="date-<?=$GLOBALS['_language']?> sortfirstdesc"><?= _("gegründet") ?></th>
         <th width="5%" class="number"><?= _("Mitglieder") ?></th>
         <th width="15%"><?= _("GründerIn") ?></th>
@@ -77,8 +78,10 @@ th {
 
     <? foreach ($groups as $group) : ?>
         <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>">
-            <td style="text-align:left;white-space:nowrap;">
-            <img src="<?=StudygroupAvatar::getAvatar($group['Seminar_id'])->getUrl(Avatar::SMALL);?>" style="vertical-align:middle;">
+            <td>
+               <img src="<?=StudygroupAvatar::getAvatar($group['Seminar_id'])->getUrl(Avatar::SMALL);?>" style="vertical-align:middle;">
+            </td>    
+            <td style="text-align:left;">
                 <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )): ?>
                     <a href="<?=URLHelper::getlink("seminar_main.php?auswahl=".$group['Seminar_id'])?>">
                 <? else: ?>
