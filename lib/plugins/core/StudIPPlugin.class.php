@@ -20,7 +20,8 @@ abstract class StudIPPlugin {
     protected $plugin_info;
 
     /**
-     * constructor
+     * plugin constructor
+     * TODO bindtextdomain()
      */
     public function __construct() {
         $plugin_manager = PluginManager::getInstance();
@@ -86,5 +87,14 @@ abstract class StudIPPlugin {
      *
      * @return void
      */
-    public abstract function perform($unconsumed_path);
+    public function perform($unconsumed_path) {
+        $args = explode('/', $unconsumed_path);
+        $action = $args[0] !== '' ? array_shift($args).'_action' : 'show_action';
+
+        if (!method_exists($this, $action)) {
+            throw new Exception(_('unbekannte Plugin-Aktion: ') . $action);
+        }
+
+        call_user_func_array(array($this, $action), $args);
+    }
 }

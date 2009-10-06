@@ -130,14 +130,17 @@ class PluginEngine {
 	public static function getURL($plugin, $params = array(), $cmd = 'show') {
 		if (is_null($plugin)) {
 			throw new InvalidArgumentException(_('Es wurde kein Plugin gewählt.'));
+		} else if (is_object($plugin)) {
+			$plugin = strtolower(get_class($plugin)) . '/' . $cmd;
+		} else if (strpos($plugin, '/') === false) {
+			$plugin = $plugin . '/' . $cmd;
 		}
-		$link = sprintf('plugins.php/%s/%s', strtolower(get_class($plugin)), $cmd);
 
-		return URLHelper::getURL($link, $params);
+		return URLHelper::getURL('plugins.php/' . $plugin, $params);
 	}
 
 	/**
-	* Generates a Link (entity encoded URL) which can be shown in user interfaces
+	* Generates a link (entity encoded URL) which can be shown in user interfaces
 	* @param $plugin - the plugin to which should be linked
 	* @param $params - an array with name value pairs
 	* @param $cmd - command to execute by clicking the link
@@ -148,7 +151,7 @@ class PluginEngine {
 	}
 
 	/**
-	 * Generates a Link to the plugin administration which can be shown in user interfaces
+	 * Generates a link to the plugin administration which can be shown in user interfaces
 	 *
 	 * @deprecated
 	 *
@@ -158,9 +161,7 @@ class PluginEngine {
 	 * @return  string  a link to the administration plugin with the additional $params
 	 */
 	public static function getLinkToAdministrationPlugin($params = array(), $cmd = 'show') {
-		$link = "plugins.php/pluginadministrationplugin/" . $cmd;
-
-		return URLHelper::getLink($link, $params);
+		return self::getLink('pluginadministrationplugin', $params, $cmd);
 	}
 
 	/**

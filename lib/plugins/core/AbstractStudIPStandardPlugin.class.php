@@ -75,8 +75,6 @@ class AbstractStudIPStandardPlugin extends AbstractStudIPLegacyPlugin
 	 * By convention, new or changed plugin content is indicated
 	 * by a different icon and a corresponding tooltip.
 	 *
-	 * TODO: remove $last_visit parameter (needs new API?)
-	 *
 	 * @param  string   course or institute range id
 	 * @param  int      time of user's last visit
 	 *
