@@ -106,7 +106,7 @@ $EXTERN_MODULE_TYPES[14] = array("module" => "TemplatePersondetails", "name" => 
 													"description" => _("Das Modul &quot;Mitarbeiterdetails&quot; gibt die Daten eines Mitarbeiters einer Einrichtung aus."), 'order' => 32, 'view' => array('inst','fak','studip'));
 
 $EXTERN_MODULE_TYPES[15] = array("module" => "TemplateSemBrowse", "name" => _("Veranstaltungsbrowser (templatebasiert)"), "level" => 1,
-													"description" => _("Das Modul &quot;Veranstaltungsbrowser&quot; ermöglicht das Suchen nach Veranstaltungen im Einrichtungs- und Vorlesungsverzeichnis."), 'order' => 45, 'view' => array('studip'));
+													"description" => _("Das Modul &quot;Veranstaltungsbrowser&quot; ermöglicht das Suchen nach Veranstaltungen im Einrichtungs- und Vorlesungsverzeichnis."), 'order' => 47, 'view' => array('studip'));
 													
 $EXTERN_MODULE_TYPES[16] = array('module' => 'TemplatePersBrowse', 'name' => _("Personenbrowser (templatebasiert)"), 'level' => 1, 'description' => _("Das Modul &quot;Personenbrowser&quot; ermöglicht die Anzeige eines systemweiten Personalverzeichnisses."), 'order' => 55, 'view' => array('studip'));
 
