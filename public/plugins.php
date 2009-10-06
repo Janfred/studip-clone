@@ -14,6 +14,7 @@
 
 require_once 'lib/functions.php';
 require_once 'lib/exceptions/access_denied.php';
+require_once 'vendor/trails/trails.php';
 
 # set base url for URLHelper class
 URLHelper::setBaseUrl($CANONICAL_RELATIVE_PATH_STUDIP);
