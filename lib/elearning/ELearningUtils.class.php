@@ -305,19 +305,19 @@ class ELearningUtils
 //		print_r($_POST);
 
 		//Password was sent, but is to short
-		if (isset($ext_password_2) AND ! ($go_back != "") AND ($next != "") AND (strlen($ext_password_2) < 6))
+		if (isset($ext_password_2) AND ! ($_REQUEST['go_back_x'] != "") AND ($_REQUEST['next_x'] != "") AND (strlen($ext_password_2) < 6))
 		{
 			$messages["error"] .= _("Das Passwort muss mindestens 6 Zeichen lang sein!");
 			$new_account_step--;
 		}
-		elseif (isset($ext_password_2) AND ! ($go_back != "") AND ($next != "") AND ($ext_password != $ext_password_2))
+		elseif (isset($ext_password_2) AND ! ($_REQUEST['go_back_x'] != "") AND ($_REQUEST['next_x'] != "") AND ($ext_password != $ext_password_2))
 		{
 			$messages["error"] .= _("Das Passwort entspricht nicht der Passwort-Wiederholung!");
 			$new_account_step--;
 		}
 
 		// Username was sent
-		if (($ext_username != "") AND ! ($go_back != "") AND ($assign != ""))
+		if (($ext_username != "") AND ! ($_REQUEST['go_back_x'] != "") AND ($_REQUEST['assign_x'] != ""))
 		{
 			$caching_status = $connected_cms[$new_account_cms]->soap_client->getCachingStatus();
 			$connected_cms[$new_account_cms]->soap_client->setCachingStatus(false);
@@ -348,9 +348,9 @@ class ELearningUtils
 			$connected_cms[$new_account_cms]->soap_client->setCachingStatus($caching_status);
 		}
 
-		if ($start != "")
+		if ($_REQUEST['start_x'] != "")
 			$new_account_step = 1;
-		if ($go_back != "")
+		if ($_REQUEST['go_back_x'] != "")
 		{
 			$new_account_step--;
 			if ($new_account_step < 1)
@@ -359,10 +359,10 @@ class ELearningUtils
 				return false;
 			}
 		}
-		elseif (($next != "") OR ($assign != ""))
+		elseif (($_REQUEST['next_x'] != "") OR ($_REQUEST['assign_x'] != ""))
 			$new_account_step++;
 
-		if (($new_account_step == 2) AND ($assign != ""))
+		if (($new_account_step == 2) AND ($_REQUEST['assign_x'] != ""))
 		{
 			// Assign existing Account
 			$output .= "<a name='anker'></a>";
@@ -409,7 +409,7 @@ class ELearningUtils
 
 //			getLoginForm();
 		}
-		elseif (($new_account_step == 2) AND ($next != ""))
+		elseif (($new_account_step == 2) AND ($_REQUEST['next_x'] != ""))
 		{
 			// Create new Account: ask for new password
 			$output .= "<a name='anker'></a>";
@@ -455,7 +455,7 @@ class ELearningUtils
 			$output .=  "</form>\n";
 
 		}
-		elseif (($new_account_step == 3) AND ($next != ""))
+		elseif (($new_account_step == 3) AND ($_REQUEST['next_x'] != ""))
 		{
 			$output .= "<a name='anker'></a>";
 			// Create new Account
@@ -484,7 +484,7 @@ class ELearningUtils
 			$output .= "<table border=\"0\" cellspacing=0 cellpadding=6 width = \"99%\">";
 			$output .= "<tr><td>\n";
 			$output .= "<font size=\"-1\">";
-			if ($start != "")
+			if ($_REQUEST['start_x'] != "")
 				$messages["info"] = sprintf(_("Sie versuchen zum erstem Mal ein Lernmodul des angebundenen Systems %s zu starten. Bevor Sie das Modul nutzen k&ouml;nnen, muss Ihrem Stud.IP-Benutzeraccount ein Account im angebundenen System zugeordnet werden."), $connected_cms[$new_account_cms]->getName()) . "<br><br>\n\n";
 			if ($connected_cms[$new_account_cms]->user->isConnected())
 			{
@@ -513,7 +513,7 @@ class ELearningUtils
 			$output .=  "</table>\n";
 			$output .=  "</form>\n";
 		}
-//		echo "nas:$new_account_step.cm:$current_module.n:$next.gb:$go_back.a:$assign.<br>";
+//		echo "nas:$new_account_step.cm:$current_module.n:$_REQUEST['next_x'].gb:$_REQUEST['go_back_x'].a:$_REQUEST['assign_x'].<br>";
 		return $output;
 	}
 
@@ -640,22 +640,5 @@ class ELearningUtils
 		echo "Gesamtzeit: " . ($timearray[$i-1]["zeit"]-$timearray[0]["zeit"]);
 	}
 }
-
-
-// Workaround for IE form-bug
-if ($next_x != "")
-	$next = $next_x;
-if ($assign_x != "")
-	$assign = $assign_x;
-if ($go_back_x != "")
-	$go_back = $go_back_x;
-if ($start_x != "")
-	$start = $start_x;
-if ($remove_x != "")
-	$remove = $remove_x;
-if ($delete_x != "")
-	$delete = $delete_x;
-if ($add_x != "")
-	$add = $add_x;
 
 ?>
