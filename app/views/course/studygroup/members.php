@@ -37,63 +37,63 @@ $infobox['content'] = array(
 	<?= _("Klicken Sie auf ein Gruppenmitglied, um ModeratorInnen zu berufen, abzuberufen oder ein Mitglied der Studiengruppe zu entfernen. ") ?>
 </p>
 <? endif; ?>
-
+<ul style="overflow:hidden;display:block;list-style-type:none;list-style-image:none;
+list-style-position:outside;list-style-type:none;">
 <? foreach ($members as $m) : ?>
 
 <? $this->m = $m ?>
-<div style="float:left;position:relative" align="left" valign="top"
-    onMouseOver="$(this).down('.invitation').show();"
-    onMouseOut ="$(this).down('.invitation').hide();"
-    onClick    ="STUDIP.Arbeitsgruppen.toggleOption('<?= $m['user_id'] ?>')"
-    title="klicken für weitere Optionen">
+    <li style="position:relative;width:200px;display:inline-block;overflow:hidden;vertical-align:top;" align="left">
 
-    <? if (($GLOBALS['perm']->have_studip_perm('dozent', $sem_id) && $m['status'] != 'dozent') || $GLOBALS['perm']->have_studip_perm('admin', $sem_id)) : ?>
-        <div style="float:left;position:relative;cursor:hand;">
-            <?= Avatar::getAvatar($m['user_id'])->getImageTag(Avatar::MEDIUM, array("title" => _("klicken für weitere Optionen"))) ?>
-            <div class='invitation' style="display:none;position:absolute;bottom:10px;right:10px;width:10px;height:10px">
-                <?= Assets::img('einst2') ?>
+        <? if (($GLOBALS['perm']->have_studip_perm('dozent', $sem_id) && $m['status'] != 'dozent') || $GLOBALS['perm']->have_studip_perm('admin', $sem_id)) : ?>
+            <div style="float:left;position:relative;cursor:hand;"onMouseOver="$(this).down('.invitation').show();"
+               onMouseOut ="$(this).down('.invitation').hide();"
+               onClick    ="STUDIP.Arbeitsgruppen.toggleOption('<?= $m['user_id'] ?>')"
+               title="klicken für weitere Optionen">
+                <?= Avatar::getAvatar($m['user_id'])->getImageTag(Avatar::MEDIUM, array("title" => _("klicken für weitere Optionen"))) ?>
+                <div class='invitation' style="display:none;position:absolute;bottom:10px;right:10px;width:10px;height:10px">
+                    <?= Assets::img('einst2') ?>
+                </div>
+            </div>
+        <? else : ?>
+            <div style="float:left;position:relative;">
+                <?= Avatar::getAvatar($m['user_id'])->getImageTag(Avatar::MEDIUM) ?>
+            </div>
+        <? endif ?>
+
+        <? if (($GLOBALS['perm']->have_studip_perm('dozent', $sem_id) && $m['status'] != 'dozent') || $GLOBALS['perm']->have_studip_perm('admin', $sem_id)) : ?>
+        <noscript>
+            <div id="user_<?= $m['user_id']?>" style="float:left; margin-right: 10px; width: 110px;" align="left" valign="top">
+                <div id="user_opt_<?= $m['user_id'] ?>">
+                <div class="blue_gradient" style="text-align: center"><?= _('Optionen') ?></div>
+                <br>
+    			<?= $this->render_partial('course/studygroup/_members_options.php') ?>
+            </div>
+        </noscript>
+
+        <div id="user_<?= $m['user_id'] ?>" style="float:left; margin-right: 10px; width: 0px;" align="left" valign="top">
+            <div id="user_opt_<?= $m['user_id'] ?>" style="display: none">
+                <div class="blue_gradient" style="text-align: center"><?= _('Optionen') ?></div>
+                <br>
+    			<?= $this->render_partial('course/studygroup/_members_options.php') ?>
             </div>
         </div>
-    <? else : ?>
-        <div style="float:left;position:relative;">
-            <?= Avatar::getAvatar($m['user_id'])->getImageTag(Avatar::MEDIUM) ?>
-        </div>
-    <? endif ?>
-
-    <? if (($GLOBALS['perm']->have_studip_perm('dozent', $sem_id) && $m['status'] != 'dozent') || $GLOBALS['perm']->have_studip_perm('admin', $sem_id)) : ?>
-    <noscript>
-        <div id="user_<?= $m['user_id']?>" style="float:left; margin-right: 10px; width: 110px;" align="left" valign="top">
-            <div id="user_opt_<?= $m['user_id'] ?>">
-            <div class="blue_gradient" style="text-align: center"><?= _('Optionen') ?></div>
-            <br>
-			<?= $this->render_partial('course/studygroup/_members_options.php') ?>
-        </div>
-    </noscript>
-
-    <div id="user_<?= $m['user_id'] ?>" style="float:left; margin-right: 10px; width: 0px;" align="left" valign="top">
-        <div id="user_opt_<?= $m['user_id'] ?>" style="display: none">
-            <div class="blue_gradient" style="text-align: center"><?= _('Optionen') ?></div>
-            <br>
-			<?= $this->render_partial('course/studygroup/_members_options.php') ?>
-        </div>
-    </div>
-    <? endif ?>
-
-    <div style="clear: both; margin-right: 25px;">
-    <a href="<?= URLHelper::getLink('about.php?username='.$m['username']) ?>">
-        <?= htmlReady($m['fullname']) ?><br>
-        <?  if (in_array($m, $moderators)) : ?>
-          <em><?= _("GruppengründerIn") ?></em>
-        <? elseif (in_array($m, $tutors)) : ?>
-          <em><?= _("ModeratorIn") ?></em>
         <? endif ?>
-				<br>
-				<br>
-      </a>
-    </div>
-</div>
 
+        <div style="clear: both; margin-right: 25px;">
+        <a href="<?= URLHelper::getLink('about.php?username='.$m['username']) ?>">
+            <?= htmlReady($m['fullname']) ?><br>
+            <?  if (in_array($m, $moderators)) : ?>
+              <em><?= _("GruppengründerIn") ?></em>
+            <? elseif (in_array($m, $tutors)) : ?>
+              <em><?= _("ModeratorIn") ?></em>
+            <? endif ?>
+    				<br>
+    				<br>
+          </a>
+        </div>
+    </li>
 <? endforeach ?>
+</ul>
 <? if ($rechte && count($accepted) > 0) : ?>
     <h2 style="clear:left; padding-top: 50px;"><?= _("Offene Mitgliedsanträge") ?></h2>
     <table cellspacing="0" cellpadding="2" border="0" style="max-width: 100%; min-width: 70%">
