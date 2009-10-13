@@ -613,8 +613,7 @@ function DebugForum ($debugvar) {
 *
 **/
 function ForumEmpty () {
-	global $rechte, $SessSemName, $SEM_CLASS, $SEM_TYPE;
-	$studygroupmode=$studygroup_mode=$SEM_CLASS[$SEM_TYPE[$SessSemName["art_num"]]["class"]]["studygroup_mode"];
+	global $rechte, $SessSemName;
 	if ($rechte)
 		$text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie können oben unter <b>neues Thema</b> einen Themenordner anlegen.");
 	else {
@@ -622,9 +621,6 @@ function ForumEmpty () {
 			 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie eine/n TutorIn oder eine/n DozentIn dieser Veranstaltung, um Themenordner anlegen zu lassen.");
 		else
 			 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den/die AdministratorIn der Einrichtung, um Themenordner anlegen zu lassen.");
-	}
-	if($studygroupmode){
-		$text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie eine/n ModeratorIn oder eine/n GruppengründerIn dieser Veranstaltung, um Themenordner anlegen zu lassen.");	
 	}
 	$empty = parse_msg('info§'.$text);
 	return $empty;
