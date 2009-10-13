@@ -618,7 +618,7 @@ function ForumEmpty () {
 		$text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Sie können oben unter <b>neues Thema</b> einen Themenordner anlegen.");
 	else {
 		if ($SessSemName["class"]!="inst")
-			 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie eine/n TutorIn oder eine/n DozentIn dieser Veranstaltung, um Themenordner anlegen zu lassen.");
+			 $text = sprintf(_("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie eine/n %s oder eine/n %s dieser Veranstaltung, um Themenordner anlegen zu lassen."),get_title_for_status('tutor',1),get_title_for_status('dozent',1));
 		else
 			 $text = _("In diesem Forum wurde noch kein Themenordner angelegt.<br>Kontaktieren Sie den/die AdministratorIn der Einrichtung, um Themenordner anlegen zu lassen.");
 	}
