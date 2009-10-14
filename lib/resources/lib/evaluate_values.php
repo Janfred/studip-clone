@@ -1304,17 +1304,20 @@ if (($start_multiple_mode_x) || ($single_request)) {
 
 		// for sort-order urgent a simpler query suffices
 		if ($resolve_requests_order == "urgent") {
-			$stmt = DBManager::get()->query($query = "SELECT DISTINCT rq.request_id, rq.seminar_id, rq.termin_id FROM resources_requests as rq
-			 	LEFT JOIN termine as t ON (t.range_id = rq.seminar_id OR (t.termin_id = rq.termin_id 
-					AND rq.termin_id IS NOT NULL AND rq.termin_id != ''))
-			 	WHERE rq.request_id IN $in AND t.date > ". time() ."
+			$stmt = DBManager::get()->query("SELECT rq.request_id, rq.seminar_id, rq.termin_id FROM resources_requests as rq, termine as t
+			 	WHERE rq.request_id IN $in AND t.date > ". time() ." AND (
+					(t.range_id = rq.seminar_id AND (rq.termin_id IS NULL OR rq.termin_id = ''))
+					OR ( rq.termin_id IS NOT NULL AND rq.termin_id != '' AND rq.termin_id = t.termin_id)
+				)
 				ORDER BY t.date ASC");
 			while ($data = $stmt->fetch()) {
-				$db_requests[] = array(
-					'request_id' => $data['request_id'],
-					'termin_id'  => $data['termin_id'],
-					'seminar_id' => $data['seminar_id']
-				);
+				if (!$db_requests[$data['request_id']]) {
+					$db_requests[$data['request_id']] = array(
+						'request_id' => $data['request_id'],
+						'termin_id'  => $data['termin_id'],
+						'seminar_id' => $data['seminar_id']
+					);
+				}
 			}
 		} else {
 			$query = sprintf ("SELECT a.seminar_id, a.termin_id, a.request_id, a.resource_id, COUNT(b.property_id) AS complexity, MAX(d.state) AS seats
