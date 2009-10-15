@@ -84,14 +84,13 @@ class Trails_Dispatcher {
    */
   function dispatch($uri) {
 
-    $old_handler = set_error_handler(array('Trails_Exception',
-                                           'errorHandlerCallback'),
-                                     E_ALL);
+    $old_handler =
+      set_error_handler(array($this, 'error_handler'), E_ALL);
 
     ob_start();
     $level = ob_get_level();
 
-    $this->map_uri_to_response($this->clean_uri((string) $uri))->output();
+    $this->map_uri_to_response($this->clean_request_uri((string) $uri))->output();
 
     while (ob_get_level() >= $level) {
       ob_end_flush();
@@ -178,7 +177,7 @@ class Trails_Dispatcher {
    *
    * @return string  the cleaned string
    */
-  function clean_uri($uri) {
+  function clean_request_uri($uri) {
     if (FALSE !== ($pos = strpos($uri, '?'))) {
       $uri = substr($uri, 0, $pos);
     }
@@ -242,6 +241,31 @@ class Trails_Dispatcher {
       throw new Trails_UnknownController("Controller missing: '$class'");
     }
     return new $class($this);
+  }
+
+
+  /**
+   * <MethodDescription>
+   * # TODO (mlunzena) add description
+   *
+   * @param  type       <description>
+   *
+   * @return type       <description>
+   */
+  function error_handler($errno, $string, $file, $line, $context) {
+
+    if (!($errno & error_reporting())) {
+      return;
+    }
+
+    if ($errno == E_NOTICE || $errno == E_WARNING || $errno == E_STRICT) {
+      return FALSE;
+    }
+
+    $e = new Trails_Exception(500, $string);
+    $e->line = $line;
+    $e->file = $file;
+    throw $e;
   }
 }
 

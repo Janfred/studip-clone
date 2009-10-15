@@ -58,6 +58,16 @@ class Trails_Controller {
 
 
   /**
+   * Return this controller's response
+   *
+   * @return mixed  the controller's response
+   */
+  function get_response() {
+    return $this->response;
+  }
+
+
+  /**
    * This method extracts an action string and further arguments from it's
    * parameter. The action string is mapped to a method being called afterwards
    * using the said arguments. That method is called and a response object is
@@ -189,15 +199,11 @@ class Trails_Controller {
     $this->performed = TRUE;
 
     # get uri; keep absolute URIs
-    $url = preg_match('#^[a-z]+://#', $to)
+    $url = preg_match('#^(/|\w+://)#', $to)
            ? $to
            : $this->url_for($to);
 
-    # redirect
-    $this->response
-      ->add_header('Location', $url)
-      ->set_body(sprintf('<html><head><meta http-equiv="refresh" content="0;'.
-                         'url=%s"/></head></html>', htmlentities($url)));
+    $this->response->add_header('Location', $url)->set_status(302);
   }
 
 
@@ -240,7 +246,7 @@ class Trails_Controller {
   function render_action($action) {
     $class = get_class($this);
     $controller_name =
-      Trails_Inflector::underscore(substr($class, 0, strlen($class) - 10));
+      Trails_Inflector::underscore(substr($class, 0, -10));
 
     $this->render_template($controller_name.'/'.$action, $this->layout);
   }
@@ -257,13 +263,10 @@ class Trails_Controller {
   function render_template($template_name, $layout = NULL) {
 
     # open template
-    $factory =
-      new Flexi_TemplateFactory($this->dispatcher->trails_root . '/views/');
+    $factory = new Flexi_TemplateFactory($this->dispatcher->trails_root .
+                                         '/views/');
 
     $template = $factory->open($template_name);
-    if (is_null($template)) {
-      throw new Trails_MissingFile("No such template: '$template_name'");
-    }
 
     # template requires setup ?
     switch (get_class($template)) {
@@ -324,21 +327,43 @@ class Trails_Controller {
    * Example:
    * Your Trails application is located at 'http://example.com/dispatch.php'.
    * So your dispatcher's trails_uri is set to 'http://example.com/dispatch.php'
-   * If you want the URL to your 'wiki' controller with action 'index' you
-   * should send:
+   * If you want the URL to your 'wiki' controller with action 'show' and
+   * parameter 'page' you should send:
    *
-   *   $url = $controller->url_for('wiki/index');
+   *   $url = $controller->url_for('wiki/show', 'page');
    *
-   * $url should then contain 'http://example.com/dispatch.php/wiki/index'.
+   * $url should then contain 'http://example.com/dispatch.php/wiki/show/page'.
    *
-   * NOTE: This method will likely get changed in the next release.
+   * The first parameter is a string containing the controller and optionally an
+   * action:
    *
-   * @param  string  a string containing a route
+   *   - "{controller}/{action}"
+   *   - "path/to/controller/action"
+   *   - "controller"
+   *
+   * This "controller/action" string is not url encoded. You may provide
+   * additional parameter which will be urlencoded and concatenated with
+   * slashes:
+   *
+   *     $controller->url_for('wiki/show', 'page');
+   *     -> 'wiki/show/page'
+   *
+   *     $controller->url_for('wiki/show', 'page', 'one and a half');
+   *     -> 'wiki/show/page/one+and+a+half'
+   *
+   * @param  string   a string containing a controller and optionally an action
+   * @param  strings  optional arguments
    *
    * @return string  a URL to this route
    */
-  function url_for($to) {
-    return $this->dispatcher->trails_uri . '/' . $to;
+  function url_for($to/*, ...*/) {
+
+    # urlencode all but the first argument
+    $args = func_get_args();
+    $args = array_map('urlencode', $args);
+    $args[0] = $to;
+
+    return $this->dispatcher->trails_uri . '/' . join('/', $args);
   }
 
 
@@ -375,15 +400,7 @@ class Trails_Controller {
    * @return object     a response object
    */
   function rescue($exception) {
-
-    # erase former response
-    if ($this->performed) {
-      $this->erase_response();
-    }
-
-    $this->response = $this->dispatcher->trails_error($exception);
-
-    return $this->response;
+    return ($this->response = $this->dispatcher->trails_error($exception));
   }
 }
 
