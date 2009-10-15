@@ -55,7 +55,7 @@
 				<table cellspacing="0" cellpadding="0" border="0" width="95%">
 					<!-- Person assigned to this role - Heading -->
 					<tr>
-						<td class="steelkante" colspan="6">
+						<td class="steelkante" colspan="6" align="left">
 							&nbsp;<b><?= $range_type == 'sem' ? _("Personen in dieser Gruppe") : _("Personen in dieser Rolle") ?></b>
 						</td>
 						<td class="steelkante" width="5%" nowrap>
@@ -103,7 +103,7 @@
 							&nbsp;&nbsp;<?= $pos ?>&nbsp;
 						</td>
 
-						<td class="<?= $cssSw->getClass() ?>">
+						<td class="<?= $cssSw->getClass() ?>" align="left">
 							<? if ($range_type == 'sem') : ?>
 							<a href="about.php?username=<?= $person['username'] ?>">
 							<? else: ?>
