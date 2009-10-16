@@ -11,7 +11,9 @@
  * the License, or (at your option) any later version.
  */
 
-class AuthenticatedController extends Trails_Controller {
+require_once 'studip_controller.php';
+
+abstract class AuthenticatedController extends StudipController {
 
   /**
    * Callback function being called before an action is executed. If this
@@ -34,8 +36,8 @@ class AuthenticatedController extends Trails_Controller {
                     'perm' => 'Seminar_Perm',
                     'user' => 'Seminar_User'));
 
-	// show login-screen, if authentication is "nobody"
-	$auth->login_if($auth->auth["uid"] == "nobody"); 
+    // show login-screen, if authentication is "nobody"
+    $auth->login_if($auth->auth["uid"] == "nobody"); 
 
     $this->flash = Trails_Flash::instance();
 
@@ -71,29 +73,5 @@ class AuthenticatedController extends Trails_Controller {
    */
   function after_filter($action, $args) {
     page_close();
-  }
-
-  /**
-   * Exception handler called when the performance of an action raises an
-   * exception.
-   *
-   * @param  object     the thrown exception
-   *
-   * @return object     a response object
-   */
-  function rescue($exception) {
-
-    # erase former response
-    if ($this->performed) {
-      $this->erase_response();
-    }
-
-    $body = $GLOBALS['template_factory']->render('unhandled_exception',
-                                                     compact("exception"));
-
-    $this->response = new Trails_Response($body, array(), 500,
-                                          $exception->getMessage());
-
-    return $this->response;
   }
 }
