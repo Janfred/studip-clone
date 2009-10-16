@@ -134,7 +134,7 @@ function create_block_schedule_dates($seminar_id, $form_data)
 			if ($start_time==$end_time)	{
 				$errors[] = "Start- und Endzeitpunkt sind gleich!";
 			} else if ($start_time>$end_time)	{
-				$errors[] = "Startzeitpunkt liegt vor Endzeitpunkt!";
+				$errors[] = "Startzeitpunkt liegt nach Endzeitpunkt!";
 			}
 		}
 
@@ -147,7 +147,7 @@ function create_block_schedule_dates($seminar_id, $form_data)
 
 		if ($start_time > $absolute_end_time)
 		{
-			$errors[] = "Startdatum liegt vor Enddatum!";
+			$errors[] = "Startdatum liegt nach Enddatum!";
 		}
 
 
