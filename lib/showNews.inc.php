@@ -147,7 +147,7 @@ function show_news($range_id, $show_admin = FALSE, $limit = "", $open, $width = 
 			echo " <a href=\"".URLHelper::getLink("admin_news.php?$admin_link&modus=admin&cmd=show")."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/pfeillink.gif\" border=\"0\"" . tooltip(_("News bearbeiten")) . "></a> ";
 			echo "\n</td>";
 		}
-		echo "\n</tr>\n<tr><td colspan=$colspan>";
+		echo "\n</tr>\n<tr><td class=\"blank\" colspan=\"$colspan\">";
 
 		// Ausgabe der Daten
 		foreach ($news as $id => $news_item) {
