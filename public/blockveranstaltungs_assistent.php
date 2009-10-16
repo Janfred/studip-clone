@@ -84,8 +84,6 @@ $cssSw = new cssClassSwitcher();
 	<? if (!$return['ready'] && ($return['errors'])) :
 			foreach($return['errors'] as $error) {
 				$error_msg .= $error.'<br>';
-				if($error==_("Startdatum liegt nach Enddatum!"))
-					break;
 				//echo "&nbsp;<font align=\"center\" color=\"red\"><b>$error</b></font><br>&nbsp;";
 			}
 			parse_msg('error§'.$error_msg.'§');
