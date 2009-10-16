@@ -579,7 +579,7 @@ if ($auth->is_authenticated() && $user->id != "nobody" && !$perm->have_perm("adm
 			$cssSw->switchClass();
 			printf ("<tr".$cssSw->getHover()."><td width=\"1%%\" bgcolor=\"#44%s44\"><img src='".$GLOBALS['ASSETS_URL']."images/blank.gif' " . tooltip(_("Position oder Wahrscheinlichkeit")) . " border=0 width=7 height=12></td>",$chance_color);
 			printf ("<td width=\"1%%\" class=\"%s\">&nbsp;</td>",$cssSw->getClass());
-			printf ("<td width=\"55%%\" class=\"%s\">",$cssSw->getClass());
+			printf ("<td width=\"55%%\" class=\"%s\"  align=\"left\">",$cssSw->getClass());
 			print "<a href=details.php?sem_id=".$db->f("seminar_id")."&send_from_search_page=meine_seminare.php&send_from_search=TRUE><font size=-1>".htmlReady($seminar_name)."</font></a></td>";
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s</font></td>", $cssSw->getClass(), ($db->f("status") == "claiming") ? date("d.m.", $db->f("admission_endtime")) : "-");
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=-1>%s %s</font></td>",$cssSw->getClass(), ($db->f("status") == "claiming") ? $admission_chance : $db->f("position"), ($db->f("status") == "claiming") ? "%" : "");
