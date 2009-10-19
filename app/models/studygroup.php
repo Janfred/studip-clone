@@ -175,9 +175,8 @@ class StudygroupModel {
         }
         $sql = "SELECT * FROM seminare WHERE status IN('". implode("','", $status)."')";
         
-				$sort_order = (substr($sort, strlen($sort) - 3, 3) == 'asc') ? 'asc' : 'desc';
-				// var_dump($sort_order);
-
+		$sort_order = (substr($sort, strlen($sort) - 3, 3) == 'asc') ? 'asc' : 'desc';
+				
         // add here the sortings
         if($sort == 'name_asc') {
             $sql .= " ORDER BY Name ASC";
@@ -192,14 +191,14 @@ class StudygroupModel {
             $sql .= " ORDER BY mkdate DESC";
         }
         else if($sort == 'member_asc' || $sort == 'member_desc') {
-                $sql = "SELECT *, (SELECT COUNT(*) FROM seminar_user as su 
+                $sql = "SELECT s.*, (SELECT COUNT(*) FROM seminar_user as su 
                                 WHERE s.Seminar_id = su.Seminar_id) as countsems
                         FROM seminare as s
                         WHERE s.STATUS IN ('". implode("','", $status)."')
                         ORDER BY countsems $sort_order";
         }
         else if($sort == 'founder_asc' || $sort == 'founder_desc') {
-                $sql = 'SELECT * FROM seminare as s 
+                $sql = 'SELECT s.* FROM seminare as s 
                         LEFT JOIN seminar_user as su USING (Seminar_id) 
                         LEFT JOIN auth_user_md5 as aum USING (user_id) 
                         WHERE s.status IN ("'. implode("','", $status).'") 
@@ -208,7 +207,7 @@ class StudygroupModel {
                         ORDER BY aum.Nachname '. $sort_order;
         }
         else if($sort == 'ismember_asc' || $sort == 'ismember_desc') {
-                $sql = 'SELECT * , IF( "'.$GLOBALS['auth']->auth['uid'].'" = su.user_id, 1, 0 ) AS ismember
+                $sql = 'SELECT s.* , IF( "'.$GLOBALS['auth']->auth['uid'].'" = su.user_id, 1, 0 ) AS ismember
                         FROM seminare AS s
                         LEFT JOIN seminar_user AS su USING ( Seminar_id )
                         LEFT JOIN auth_user_md5 AS aum USING ( user_id )
@@ -225,9 +224,10 @@ class StudygroupModel {
         }
 
         $sql .= ', name ASC LIMIT '. $lower_bound .','. $elements_per_page;
+    
         $stmt = DBManager::get()->query($sql);
         $groups = $stmt->fetchAll();
-
+        
         return $groups;
 	}
 	
