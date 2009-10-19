@@ -634,11 +634,5 @@ class Course_StudygroupController extends AuthenticatedController {
 		$this->flash['success'] = _("Die Studiengruppen wurden deaktiviert.");
 		$this->redirect('course/studygroup/globalmodules');
 	}
-	
-	function search_action() {
-		$GLOBALS['CURRENT_PAGE'] =  _('Studiengruppen suchen');
-		Navigation::activateItem('/browse/studygroups/all');
-		$this->groups = StudygroupModel::getAllGroups();
-		$this->userid = $GLOBALS['auth']->auth['uid'];
-	}
+
 }

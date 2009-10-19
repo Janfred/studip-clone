@@ -14,68 +14,68 @@ $infobox['content'] = array(
 );
 
 
+list($sort_type, $sort_order) = explode('_', $sort);
+
 ?>
 
-
-<script type="text/javascript" src="<?=ASSETS::javascript_path('tablekit.js')?>"></script>
-<script type="text/javascript">
-TableKit.options.rowEvenClass = 'cycle_even';
-TableKit.options.rowOddClass = 'cycle_odd';
-TableKit.Sortable.addSortType(
-	new TableKit.Sortable.Type('date-de_DE',{
-		pattern : /^\d{2}\.\d{2}\.\d{4}/,
-		normal : function(v) {
-			v = v.strip();
-			if(!this.pattern.test(v)) {return 0;}
-			var r = v.match(/^(\d{2})\.(\d{2})\.(\d{4})/);
-			var yr_num = r[3];
-			var mo_num = parseInt(r[2],10)-1;
-			var day_num = r[1];
-			return new Date(yr_num, mo_num, day_num).valueOf();
-		}})
-	);
-TableKit.Sortable.addSortType(
-	new TableKit.Sortable.Type('date-en_GB',{
-		pattern : /^\d{2}\/\d{2}\/\d{2}/,
-		normal : function(v) {
-			v = v.strip();
-			if(!this.pattern.test(v)) {return 0;}
-			var r = v.match(/^(\d{2})\/(\d{2})\/(\d{2})/);
-			var yr_num = '20' + r[3];
-			var mo_num = parseInt(r[2],10)-1;
-			var day_num = r[1];
-			return new Date(yr_num, mo_num, day_num).valueOf();
-		}})
-	);
-</script>
 <style>
 .sortasc {
-	background-image: url(<?=Assets::image_path('dreieck_up.png')?>);
-	background-repeat:no-repeat;
-	background-position:center right;
+  background-image: url(<?=Assets::image_path('dreieck_up.png')?>);
+  background-repeat:no-repeat;
+  background-position:center right;
 }
 .sortdesc {
-	background-image: url(<?=Assets::image_path('dreieck_down.png')?>);
-	background-repeat:no-repeat;
-	background-position:center right;
+  background-image: url(<?=Assets::image_path('dreieck_down.png')?>);
+  background-repeat:no-repeat;
+  background-position:center right;
 }
 th {
-	background: none;
-	padding: 2px 15px 2px 15px;
-	text-align:center;
+  background: none;
+  padding: 2px 15px 2px 15px;
+  text-align:center;
 }
 </style>
-<table class="sortable" border="0" cellpadding="2" cellspacing="0" width="100%">
+<? $sort_url =$controller->url_for('studygroup/search/'.$page.'/') ?>
+<table class border="0" cellpadding="2" cellspacing="0" width="100%">
 <tr style="background: url(<?=Assets::image_path('steelgraudunkel.gif')?>);cursor: pointer;" title="<?=_("Klicken, um die Sortierung zu ändern")?>">
         <th class="nosort" width="1%"></th>
-        <th width="59%"><?= _("Name") ?></th>
-        <th width="10%" class="date-<?=$GLOBALS['_language']?> sortfirstdesc"><?= _("gegründet") ?></th>
-        <th width="5%" class="number"><?= _("Mitglieder") ?></th>
-        <th width="15%"><?= _("GründerIn") ?></th>
-        <th width="5%"><?= _("Mitglied") ?></th>
-        <th width="5%"><?= _("Zugang") ?></th>
+        <th width="59%" <?= ($sort_type == 'name') ? 'class="sort'. $sort_order .'"' : '' ?>> 
+          <a href =<? if($sort == "name_asc") :?>"<?=$sort_url?>name_desc">
+						<? else: ?>"<?=$sort_url?>name_asc">
+            <? endif;?><?= _("Name") ?>
+					</a>
+				</th>
+        <th width="10%" <?= ($sort_type == 'founded') ? 'class="sort'. $sort_order .'"' : '' ?>>
+					<a href =<? if($sort == "founded_asc") :?>"<?=$sort_url?>founded_desc">
+          	<? else: ?>"<?=$sort_url?>founded_asc">
+						<? endif;?><?= _("gegründet") ?>
+					</a>
+				</th>
+				<th width="5%" <?= ($sort_type == 'member') ? 'class="sort'. $sort_order .'"' : '' ?>> 
+					<a href =<? if($sort == "member_asc") :?>"<?=$sort_url?>member_desc">
+          	<? else: ?>"<?=$sort_url?>member_asc">
+						<? endif;?><?= _("Mitglieder") ?>
+					</a>
+				</th>
+				<th width="15%" <?= ($sort_type == 'founder') ? 'class="sort'. $sort_order .'"' : '' ?>>
+					<a href =<? if($sort == "founder_asc") :?>"<?=$sort_url?>founder_desc">
+          	<? else: ?>"<?=$sort_url?>founder_asc">
+						<? endif;?><?= _("GründerIn") ?>
+					</a>
+				</th>
+				<th width="5%" <?= ($sort_type == 'ismember') ? 'class="sort'. $sort_order .'"' : '' ?>> 
+					<a href =<? if($sort == "ismember_asc") :?>"<?=$sort_url?>ismember_desc">
+          	<? else: ?>"<?=$sort_url?>ismember_asc">
+						<? endif;?><?= _("Mitglied") ?>
+					</a>
+				</th>
+				<th width="5%" <?= ($sort_type == 'access') ? 'class="sort'. $sort_order .'"' : '' ?>> 
+					<a href =<? if($sort == "access_asc") :?><?=$sort_url?>access_desc>
+          	<? else: ?><?=$sort_url?>access_asc>
+						<? endif; ?><?= _("Zugang") ?>
+					</a>
+				</th>
     </tr>
-
     <? foreach ($groups as $group) : ?>
         <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>">
             <td>
@@ -96,11 +96,11 @@ th {
             </td>
             <td style="text-align:left;white-space:nowrap;">
                 <? $founders = StudygroupModel::getFounder($group['Seminar_id']);
-									foreach ($founders as $founder) : ?>
+                foreach ($founders as $founder) : ?>
                 <img src="<?=Avatar::getAvatar($founder['user_id'])->getUrl(Avatar::SMALL);?>" style="vertical-align:middle;">
                 <a href="<?=URLHelper::getlink('about.php?username='.$founder['uname'])?>"><?=htmlready($founder['fullname'])?></a>
-								<br>
-								<? endforeach; ?>
+                <br>
+                <? endforeach; ?>
             </td>
             <td align="center">
                 <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )) :?>
@@ -117,3 +117,12 @@ th {
 <? endforeach ; ?>
 
 </table>
+<?
+$link = "dispatch.php/studygroup/search/%s/".$sort;
+?>
+<div style="text-align:right; padding-top: 2px; padding-bottom: 2px" class="steelgraudunkel"><?=
+ $pages = $GLOBALS['template_factory']->open('shared/pagechooser');
+ $pages->set_attributes(array("perPage" => 20, "num_postings" => $anzahl, "page"=>$page, "pagelink" => $link));
+ 
+ echo $this->render_partial($pages);
+?></div>

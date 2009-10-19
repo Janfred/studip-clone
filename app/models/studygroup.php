@@ -152,20 +152,83 @@ class StudygroupModel {
 		DBManager::get()->query("DELETE FROM seminar_user WHERE Seminar_id = '$sem_id' AND user_id = '". get_userid($username) ."'");
 	}
 	
-	function getAllGroups()
+        function countGroups() {
+                global $SEM_TYPE, $SEM_CLASS;
+
+                foreach ($SEM_TYPE as $num => $type) {
+                        if ($SEM_CLASS[$type['class']]['studygroup_mode']) {
+                                $status[] = $num;
+                        }
+                }
+
+                return DBManager::get()->query("SELECT COUNT(*) as c FROM seminare WHERE status IN ('". implode("','", $status)."')")->fetchColumn();
+        }
+
+	function getAllGroups($sort = '', $lower_bound = 1, $elements_per_page = 20)
 	{
-	     global $SEM_TYPE, $SEM_CLASS;
-            	foreach ($SEM_TYPE as $num => $type) {
-            	 if ($SEM_CLASS[$type['class']]['studygroup_mode']) {
-            	     $status[] = $num;
-            	 }
-            	}
-              $sql = "SELECT * FROM seminare WHERE status IN('". implode("','", $status)."')";
+	    global $SEM_TYPE, $SEM_CLASS;
+         
+        foreach ($SEM_TYPE as $num => $type) {
+            if ($SEM_CLASS[$type['class']]['studygroup_mode']) {
+                $status[] = $num;
+            }
+        }
+        $sql = "SELECT * FROM seminare WHERE status IN('". implode("','", $status)."')";
+        
+				$sort_order = (substr($sort, strlen($sort) - 3, 3) == 'asc') ? 'asc' : 'desc';
+				// var_dump($sort_order);
 
-            $stmt = DBManager::get()->query($sql);
-            $groups = $stmt->fetchAll();
+        // add here the sortings
+        if($sort == 'name_asc') {
+            $sql .= " ORDER BY Name ASC";
+        }
+        else if($sort == 'name_desc') {
+            $sql .= " ORDER BY Name DESC";
+        }
+        else if($sort == 'founded_asc') {
+            $sql .= " ORDER BY mkdate ASC";
+        }
+        else if($sort == 'founded_desc') {
+            $sql .= " ORDER BY mkdate DESC";
+        }
+        else if($sort == 'member_asc' || $sort == 'member_desc') {
+                $sql = "SELECT *, (SELECT COUNT(*) FROM seminar_user as su 
+                                WHERE s.Seminar_id = su.Seminar_id) as countsems
+                        FROM seminare as s
+                        WHERE s.STATUS IN ('". implode("','", $status)."')
+                        ORDER BY countsems $sort_order";
+        }
+        else if($sort == 'founder_asc' || $sort == 'founder_desc') {
+                $sql = 'SELECT * FROM seminare as s 
+                        LEFT JOIN seminar_user as su USING (Seminar_id) 
+                        LEFT JOIN auth_user_md5 as aum USING (user_id) 
+                        WHERE s.status IN ("'. implode("','", $status).'") 
+                        AND su.status = "dozent" 
+                        AND aum.username != "studygroup_dozent" 
+                        ORDER BY aum.Nachname '. $sort_order;
+        }
+        else if($sort == 'ismember_asc' || $sort == 'ismember_desc') {
+                $sql = 'SELECT * , IF( "'.$GLOBALS['auth']->auth['uid'].'" = su.user_id, 1, 0 ) AS ismember
+                        FROM seminare AS s
+                        LEFT JOIN seminar_user AS su USING ( Seminar_id )
+                        LEFT JOIN auth_user_md5 AS aum USING ( user_id )
+                        WHERE s.status IN ("'. implode("','", $status).'")  
+                        GROUP BY s.Seminar_id
+                        ORDER BY ismember '. $sort_order;
 
-            return $groups;
+        }
+        else if($sort == 'access_asc') {
+                $sql .= " ORDER BY admission_prelim ASC";
+        }
+        else if($sort == 'access_desc') {
+                 $sql .= " ORDER BY admission_prelim DESC";
+        }
+
+        $sql .= ', name ASC LIMIT '. $lower_bound .','. $elements_per_page;
+        $stmt = DBManager::get()->query($sql);
+        $groups = $stmt->fetchAll();
+
+        return $groups;
 	}
 	
 	function countMembers ( $semid )
@@ -203,7 +266,6 @@ class StudygroupModel {
     }
     
 	function addFounder ( $username, $sem_id ) {
-		var_dump($username);
 		$stmt = DBManager::get()->prepare("INSERT IGNORE INTO seminar_user
 			(Seminar_id, user_id, status) VALUES (?, ?, 'dozent')");
 		$stmt->execute( array($sem_id, get_userid($username)) );
