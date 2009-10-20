@@ -44,7 +44,7 @@ include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 
 
-$sm = new smiley(true);
+$sm = new Smiley(true);
 
 $cmd = (isset($_REQUEST['cmd']))? $_REQUEST['cmd']:'';
 

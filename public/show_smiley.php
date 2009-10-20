@@ -32,7 +32,7 @@ function my_comp($a, $b){
 	return strcasecmp($a[1], $b[1]);
 }
 
-$sm = new smiley(false);
+$sm = new Smiley(false);
 
 if ($sm->error) { // old code is used
 

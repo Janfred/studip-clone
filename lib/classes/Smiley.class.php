@@ -31,7 +31,7 @@ require_once('lib/classes/Table.class.php');
 require_once('lib/classes/ZebraTable.class.php');
 
 
-class smiley {
+class Smiley {
 
 	var $SMILEY_COUNTER;
 	var $error;
@@ -596,7 +596,7 @@ class smiley {
 	}
 
 	function read_favorite(){
-		if ($this->error) return false;		
+		if ($this->error) return false;
 		$this->db->query("SHOW COLUMNS FROM user_info LIKE 'smiley_favorite%'");
 		if (!$this->db->next_record()) return false;
 		$this->my_smiley = array();
