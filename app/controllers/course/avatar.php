@@ -11,6 +11,9 @@
 
 
 require_once 'app/controllers/authenticated_controller.php';
+require_once 'lib/classes/CourseAvatar.class.php';
+require_once 'lib/classes/StudygroupAvatar.class.php';
+require_once 'lib/classes/Seminar.class.php';
 
 
 /**

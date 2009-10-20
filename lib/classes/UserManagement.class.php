@@ -31,9 +31,12 @@ require_once 'lib/statusgruppe.inc.php';	// remove user from statusgroups
 require_once 'lib/dates.inc.php';	// remove appointments of user
 require_once 'lib/messaging.inc.php';	// remove messages send or recieved by user
 require_once 'lib/contact.inc.php';	// remove user from adressbooks
+require_once 'lib/classes/DataFieldEntry.class.php';	// remove extra data of user
 require_once 'lib/classes/auth_plugins/StudipAuthAbstract.class.php';
+require_once 'lib/classes/StudipNews.class.php';
 require_once 'lib/object.inc.php';
 require_once 'lib/log_events.inc.php';	// Event logging
+require_once 'lib/classes/Avatar.class.php'; // remove Avatarture
 
 if ($GLOBALS['RESOURCES_ENABLE']) {
 	include_once ($GLOBALS['RELATIVE_PATH_RESOURCES']."/lib/DeleteResourcesUser.class.php");

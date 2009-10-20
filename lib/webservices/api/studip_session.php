@@ -15,6 +15,7 @@
  */
 
 require_once('lib/webservices/api/studip_seminar.php');
+require_once('lib/classes/Token.class.php');
 require_once('lib/functions.php');
 
 class StudipSessionHelper 

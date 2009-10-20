@@ -11,6 +11,7 @@
  */
 
 
+require_once 'lib/classes/CourseAvatar.class.php';
 
 
 /**

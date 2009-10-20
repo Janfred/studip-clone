@@ -31,6 +31,8 @@ $sess->register('raumzeitFilter');
 
 $issue_open = array();
 
+require_once ('lib/classes/Seminar.class.php');
+require_once ('lib/classes/Modules.class.php');
 require_once ('lib/raumzeit/raumzeit_functions.inc.php');
 require_once ('lib/raumzeit/themen_ablaufplan.inc.php');
 require_once 'lib/admin_search.inc.php';

@@ -60,6 +60,7 @@ if (!isset($_language)) {
 }
 $_language_path = init_i18n($_language);
 require_once('lib/msg.inc.php');
+include('lib/classes/UserManagement.class.php');
 
 
 class UserManagementRequestNewPassword extends UserManagement {

@@ -25,6 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 require_once('vendor/idna_convert/idna_convert.class.php');
+require_once('lib/classes/StudipDocument.class.php');
+require_once('lib/classes/StudipDocumentTree.class.php');
 require_once('lib/raumzeit/IssueDB.class.php');
 
 

@@ -10,9 +10,14 @@
  */
 
 require_once 'app/controllers/authenticated_controller.php';
+require_once 'lib/classes/Seminar.class.php';
+require_once 'lib/classes/Modules.class.php';
+require_once 'lib/classes/StudygroupAvatar.class.php';
 require_once 'app/models/studygroup.php';
 
 // classes required for global-module-settings 
+require_once('lib/classes/AdminModules.class.php');
+require_once('lib/classes/Config.class.php');
 
 class Course_StudygroupController extends AuthenticatedController {
 

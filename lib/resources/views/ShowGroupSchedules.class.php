@@ -37,6 +37,7 @@
 require_once ($GLOBALS['RELATIVE_PATH_RESOURCES']."/views/ShowSemSchedules.class.php");
 require_once ($GLOBALS['RELATIVE_PATH_RESOURCES']."/views/SemGroupScheduleDayOfWeek.class.php");
 
+require_once ("lib/classes/SemesterData.class.php");
 
 
 

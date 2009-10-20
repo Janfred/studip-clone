@@ -36,7 +36,14 @@ require_once ('lib/forum.inc.php');		//damit wir Themen anlegen koennen
 require_once ('lib/visual.inc.php');		//Aufbereitungsfunktionen
 require_once ('lib/dates.inc.php');		//Terminfunktionen
 require_once ('lib/log_events.inc.php');
+require_once ('lib/classes/StudipSemTreeSearch.class.php');
+require_once ('lib/classes/Modules.class.php');
+require_once ('lib/classes/DataFieldEntry.class.php');
 require_once ('lib/classes/UserDomain.php'); // Nutzerdomänen
+require_once ('lib/classes/SeminarCategories.class.php');
+require_once ('lib/classes/LockRules.class.php');
+require_once 'lib/classes/Seminar.class.php';
+require_once 'lib/classes/StudipStudyAreaSelection.class.php';
 
 $sem_create_perm = (in_array(get_config('SEM_CREATE_PERM'), array('root','admin','dozent')) ? get_config('SEM_CREATE_PERM') : 'dozent');
 

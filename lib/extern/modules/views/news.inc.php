@@ -5,6 +5,7 @@
 // $Id$
 
 require_once('lib/visual.inc.php');
+require_once('lib/classes/StudipNews.class.php');
 
 $db =& new DB_Seminar();
 $error_message = "";

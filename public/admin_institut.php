@@ -41,7 +41,13 @@ require_once('lib/forum.inc.php');
 require_once('lib/datei.inc.php');
 require_once('lib/statusgruppe.inc.php');
 require_once 'lib/functions.php';
+require_once('lib/classes/Modules.class.php');
+require_once('lib/classes/DataFieldEntry.class.php');
+require_once('lib/classes/StudipLitList.class.php');
+require_once('lib/classes/StudipLitSearch.class.php');
+require_once('lib/classes/StudipNews.class.php');
 require_once('lib/log_events.inc.php');
+require_once 'lib/classes/InstituteAvatar.class.php';
 
 if ($RESOURCES_ENABLE) {
 	include_once($RELATIVE_PATH_RESOURCES."/lib/DeleteResourcesUser.class.php");

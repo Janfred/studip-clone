@@ -44,6 +44,7 @@ page_open(array("sess" => "Seminar_Session",
 
 require_once 'config.inc.php';
 require_once 'lib/datei.inc.php';
+require_once 'lib/classes/StudipLitList.class.php';
 
 //basename() needs setlocale()
 init_i18n($_SESSION['_language']);

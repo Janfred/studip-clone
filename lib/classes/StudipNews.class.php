@@ -33,6 +33,9 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
+require_once 'lib/classes/SimpleORMap.class.php';
+require_once 'lib/classes/StudipComments.class.php';
+require_once 'lib/classes/Config.class.php';
 require_once 'lib/object.inc.php';
 
 define('STUDIPNEWS_DB_TABLE', 'news');

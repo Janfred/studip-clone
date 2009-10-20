@@ -25,6 +25,7 @@ $Id: admin_extern.inc.php 6924 2006-11-09 14:32:56Z mlunzena $
 
 
 require_once('lib/functions.php');
+require_once('lib/classes/UserManagement.class.php');
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", 'user' => "Seminar_User"));
 $perm->check("root");

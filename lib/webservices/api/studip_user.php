@@ -17,6 +17,7 @@
 
 # using UserManagement class for now
 # TODO shall be removed afterwards
+#require_once 'lib/classes/UserManagement.class.php';
 
 
 /**

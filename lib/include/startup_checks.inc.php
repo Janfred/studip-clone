@@ -39,6 +39,7 @@
 $perm->check("dozent");
 
 require_once('lib/msg.inc.php');	//Ausgaben
+require_once('lib/classes/StartupChecks.class.php');
 
 $checks=new StartupChecks;
 $list = $checks->getCheckList();

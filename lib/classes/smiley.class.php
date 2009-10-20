@@ -27,9 +27,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once('config.inc.php');
 require_once('lib/msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
 require_once('lib/visual.inc.php');
+require_once('lib/classes/Table.class.php');
+require_once('lib/classes/ZebraTable.class.php');
 
 
-class Smiley {
+class smiley {
 
 	var $SMILEY_COUNTER;
 	var $error;
@@ -594,7 +596,7 @@ class Smiley {
 	}
 
 	function read_favorite(){
-		if ($this->error) return false;
+		if ($this->error) return false;		
 		$this->db->query("SHOW COLUMNS FROM user_info LIKE 'smiley_favorite%'");
 		if (!$this->db->next_record()) return false;
 		$this->my_smiley = array();

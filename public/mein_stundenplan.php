@@ -63,6 +63,7 @@ require_once 'config.inc.php'; //Daten laden
 require_once 'config_tools_semester.inc.php';
 require_once 'lib/include/ms_stundenplan.inc.php';
 require_once 'lib/visual.inc.php';
+require_once 'lib/classes/SemesterData.class.php';
 require_once 'lib/raumzeit/CycleDataDB.class.php';
 
 if ($RESOURCES_ENABLE)

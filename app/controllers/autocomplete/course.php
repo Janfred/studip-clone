@@ -12,6 +12,7 @@
  */
 
 require_once 'lib/functions.php';
+require_once 'lib/classes/SemesterData.class.php';
 require_once 'app/models/autocomplete_course.php';
 
 class Autocomplete_CourseController extends Trails_Controller {

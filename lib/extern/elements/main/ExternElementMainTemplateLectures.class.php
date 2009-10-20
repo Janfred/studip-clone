@@ -39,6 +39,7 @@
 
 
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/ExternElementMain.class.php');
+require_once('lib/classes/SemesterData.class.php');
 
 
 class ExternElementMainTemplateLectures extends ExternElementMain {

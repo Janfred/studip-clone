@@ -13,7 +13,11 @@
 
 
 require_once 'lib/functions.php';
+require_once 'lib/classes/StudipStudyArea.class.php';
+require_once 'lib/classes/StudipStudyAreaSelection.class.php';
+require_once 'lib/classes/Seminar.class.php';
 require_once 'lib/webservices/api/studip_lecture_tree.php';
+require_once 'lib/classes/LockRules.class.php';
 
 
 class Course_StudyAreasController extends Trails_Controller {

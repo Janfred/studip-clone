@@ -40,6 +40,7 @@
 
 global $RELATIVE_PATH_EXTERN;
 require_once($RELATIVE_PATH_EXTERN."/lib/ExternElementMain.class.php");
+require_once("lib/classes/SemesterData.class.php");
 
 
 class ExternElementMainLecturestable extends ExternElementMain {

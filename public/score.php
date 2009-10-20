@@ -23,8 +23,11 @@ $perm->check('user');
 require_once 'lib/seminar_open.php'; // initialise Stud.IP-Session
 require_once 'lib/functions.php';
 require_once 'lib/visual.inc.php';
+require_once 'lib/classes/score.class.php';
 require_once 'lib/object.inc.php';
 require_once 'lib/user_visible.inc.php';
+require_once 'lib/classes/Avatar.class.php';
+require_once 'lib/classes/StudipKing.class.php';
 
 //Basics
 $HELP_KEYWORD="Basis.VerschiedenesScore"; // external help keyword

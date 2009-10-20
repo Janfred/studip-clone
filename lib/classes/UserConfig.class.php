@@ -3,6 +3,7 @@
 # Lifter007: TODO
 # Lifter003: TODO
 
+require_once("lib/classes/Config.class.php");	//Acces to config-values
 
 
 /**

@@ -34,6 +34,7 @@ require_once('lib/msg.inc.php');
 require_once('lib/visual.inc.php');
 require_once('config.inc.php');
 require_once 'lib/functions.php';
+require_once('lib/classes/StudipDocumentTree.class.php');
 require_once 'lib/raumzeit/Issue.class.php';
 
 $db=new DB_Seminar;

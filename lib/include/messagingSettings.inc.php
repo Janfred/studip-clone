@@ -40,6 +40,7 @@ require_once ('lib/visual.inc.php');
 require_once ('lib/user_visible.inc.php');
 require_once ('lib/messaging.inc.php');
 require_once ('lib/contact.inc.php');
+require_once ('lib/classes/UserConfig.class.php');
 
 // access to user's config setting
 $user_cfg=new UserConfig();

@@ -27,6 +27,8 @@ $perm->check($SEMESTER_ADMINISTRATION_ENABLE ? 'root' : false);
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 include ('lib/admin_semester.inc.php');
+require_once('lib/classes/SemesterData.class.php');
+require_once('lib/classes/HolidayData.class.php');
 // -- here you have to put initialisations for the current page
 
 // Set this to something, just something different...

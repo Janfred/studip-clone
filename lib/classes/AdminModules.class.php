@@ -43,6 +43,9 @@ require_once ('lib/forum.inc.php');
 require_once ('config.inc.php');
 require_once ('lib/datei.inc.php');
 require_once ('lib/dates.inc.php');
+require_once ('lib/classes/ModulesNotification.class.php');
+require_once ('lib/classes/StudipLitList.class.php');
+require_once ('lib/classes/StudipDocumentTree.class.php');
 require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ObjectConnections.class.php");
 require_once ($RELATIVE_PATH_ELEARNING_INTERFACE . "/ELearningUtils.class.php");
 

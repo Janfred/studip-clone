@@ -33,6 +33,7 @@ require_once("lib/msg.inc.php"); //Ausgaberoutinen an den User
 require_once("config/config.inc.php"); //Grunddaten laden
 require_once("lib/visual.inc.php"); //htmlReady
 require_once ("lib/statusgruppe.inc.php");	//Funktionen der Statusgruppen
+require_once ("lib/classes/DataFieldEntry.class.php");
 
 // if we are not in admin_view, we get the proper set variable from institut_members.php
 if (!isset($admin_view)) {

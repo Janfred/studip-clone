@@ -40,6 +40,9 @@
 define('STUDIPSTMINSTANCE_DB_TABLE', 'stm_instances');
 define('LANGUAGE_ID',"09c438e63455e3e1b3deabe65fdbc087");
 
+require_once "lib/classes/SimpleORMap.class.php";
+require_once "lib/classes/StudipStmInstanceElement.class.php";
+require_once "lib/classes/Seminar.class.php";
 
 
 class StudipStmInstance extends SimpleORMap {

@@ -46,6 +46,9 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 	require_once 'lib/msg.inc.php';
 	require_once 'lib/visual.inc.php';
 	require_once 'lib/functions.php';
+	require_once 'lib/classes/SemesterData.class.php';
+	require_once "lib/classes/LockRules.class.php";
+	require_once "lib/classes/AuxLockRules.class.php";
 
 	$db=new DB_Seminar;
 	$db2=new DB_Seminar;

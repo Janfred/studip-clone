@@ -4,6 +4,8 @@
 # Lifter003: TODO
 
 
+require_once("lib/classes/AbstractStm.class.php");
+require_once("lib/classes/AbstractStmElement.class.php");
 require_once("lib/wiki.inc.php");
 
 class StmAbstractAssiVisualization {

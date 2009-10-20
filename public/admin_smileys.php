@@ -34,6 +34,7 @@ if (!$SMILEYADMIN_ENABLE) {
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
+require_once('lib/classes/smiley.class.php');
 
 $CURRENT_PAGE = _("Verwaltung der Smileys");
 Navigation::activateItem('/admin/config/smileys');
@@ -43,7 +44,7 @@ include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 
 
-$sm = new Smiley(true);
+$sm = new smiley(true);
 
 $cmd = (isset($_REQUEST['cmd']))? $_REQUEST['cmd']:'';
 

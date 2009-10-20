@@ -34,6 +34,8 @@ require_once 'lib/functions.php';
 require_once ('lib/admission.inc.php');
 require_once ('lib/statusgruppe.inc.php');
 require_once ('lib/datei.inc.php');
+require_once ('lib/classes/Statusgruppe.class.php');
+require_once ('lib/classes/LockRules.class.php');
 require_once 'lib/admin_search.inc.php';
 
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGruppen";

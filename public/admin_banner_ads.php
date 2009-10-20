@@ -34,6 +34,8 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once ('lib/msg.inc.php'); //Funktionen fuer Nachrichtenmeldungen
 require_once ('lib/visual.inc.php');
 require_once ('config.inc.php');
+require_once('lib/classes/Table.class.php');
+require_once('lib/classes/ZebraTable.class.php');
 
 // Get a database connection
 $db = new DB_Seminar;

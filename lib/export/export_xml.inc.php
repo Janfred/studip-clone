@@ -42,6 +42,7 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 
 $export_pagename = _("Datenexport");
 require_once ('config_tools_semester.inc.php');   // Aktuelles Semester
+require_once ('lib/classes/RangeTreeObject.class.php');   // Uni-Baum-Funktionen
 require_once ($PATH_EXPORT.'/export_xml_vars.inc.php');   // XML-Variablen
 require_once ($PATH_EXPORT.'/export_xml_func.inc.php');   // XML-Funktionen
 require_once ($PATH_EXPORT.'/export_studipdata_func.inc.php');   // Studip-Export-Funktionen

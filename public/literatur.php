@@ -27,6 +27,7 @@ $auth->login_if($again && ($auth->auth["uid"] == "nobody"));
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
+require_once('lib/classes/StudipLitList.class.php');
 // -- here you have to put initialisations for the current page
 
 mark_public_course();

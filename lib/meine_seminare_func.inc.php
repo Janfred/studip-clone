@@ -2,6 +2,7 @@
 # Lifter002: TODO
 # Lifter007: TODO
 # Lifter003: TODO
+require_once("lib/classes/StudipDocumentTree.class.php");
 
 function get_group_names($group_field, $groups){
 	global $SEM_TYPE, $SEM_CLASS;

@@ -1,3 +1,4 @@
+<? require_once 'lib/classes/Avatar.class.php' ?>
 <ul>
   <? foreach ($persons as $person) : ?>
     <li><span class="informal">

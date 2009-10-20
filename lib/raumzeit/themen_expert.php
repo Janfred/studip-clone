@@ -28,6 +28,7 @@ $sess->register('issue_open');
 $sess->register('raumzeitFilter');
 $sess->register('chronoGroupedFilter');
 
+require_once ('lib/classes/Seminar.class.php');
 require_once ('lib/raumzeit/raumzeit_functions.inc.php');
 require_once ('lib/raumzeit/themen_expert.inc.php');
 require_once 'lib/admin_search.inc.php';

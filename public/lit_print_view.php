@@ -25,6 +25,7 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
+require_once('lib/classes/StudipLitList.class.php');
 
 $_include_stylesheet = "style_print.css"; // use special stylesheet for printing
 // Start of Output

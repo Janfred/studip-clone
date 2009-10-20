@@ -25,6 +25,9 @@
 // +---------------------------------------------------------------------------+
 // $Id$
 require_once ('lib/visual.inc.php');
+require_once ('lib/classes/StudipLitSearch.class.php');
+require_once ('lib/classes/StudipLitClipBoard.class.php');
+require_once ('lib/classes/StudipLitCatElement.class.php');
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("autor");

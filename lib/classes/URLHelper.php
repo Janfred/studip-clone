@@ -12,6 +12,7 @@
  * the License, or (at your option) any later version.
  */
 
+require_once 'lib/classes/Request.class.php';
 
 /**
  * The URLHelper class provides several utility functions (as class

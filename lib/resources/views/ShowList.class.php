@@ -317,6 +317,7 @@ class ShowList extends ShowTreeRow{
 			if ($search_array["search_repeating"])
 			{
 				// is this slot empty for the rest of the term?
+				require_once ("lib/classes/SemesterData.class.php");
 				$semester_data = new SemesterData();
 				$semester = $semester_data->getSemesterDataByDate($search_array["search_assign_begin"]);
 				// create the dummy assign object

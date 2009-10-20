@@ -8,6 +8,7 @@
 require_once('config.inc.php');
 require_once('lib/classes/cssClassSwitcher.inc.php');
 include_once('vendor/idna_convert/idna_convert.class.php');
+include_once('lib/classes/UserConfig.class.php');
 
 /*****************************************************************************
 get_ampel_state is a helper function for get_ampel_write and get_ampel_read.
@@ -464,6 +465,7 @@ function latex($text, $extern = FALSE) {
 	       $LATEX_FORMATS;
 
 	if ($LATEXRENDER_ENABLE && isset($LATEX_FORMATS)) {
+		include_once("lib/classes/latexrender.class.php");
 		$latex = new LatexRender($GLOBALS['DYNAMIC_CONTENT_PATH'].'/tex', $GLOBALS['DYNAMIC_CONTENT_URL'].'/tex');
 		$latex->_latex_path = $LATEX_PATH;
 		$latex->_dvips_path = $DVIPS_PATH;
