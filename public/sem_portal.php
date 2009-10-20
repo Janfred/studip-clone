@@ -49,8 +49,6 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once 'lib/functions.php';	//hier wird der "Kopf" nachgeladen
 require_once 'config.inc.php';		//wir brauchen die Seminar-Typen
 require_once 'lib/visual.inc.php';	//wir brauchen die Seminar-Typen
-require_once 'lib/classes/SemBrowse.class.php';
-require_once 'lib/classes/StmBrowse.class.php';
 
 $db=new DB_Seminar;
 

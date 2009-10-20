@@ -45,7 +45,6 @@ require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . "/lib/ExternElement.class.php");
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . "/lib/ExternElementMain.class.php");
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'] . "/views/ExternEditModule.class.php");
 require_once('lib/functions.php');
-require_once('lib/classes/DataFieldEntry.class.php');
 
 
 class ExternModule {

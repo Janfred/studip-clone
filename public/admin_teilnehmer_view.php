@@ -32,8 +32,6 @@ require_once ("lib/admission.inc.php");	//Funktionen der Teilnehmerbegrenzung
 require_once ("lib/statusgruppe.inc.php");	//Funktionen der Statusgruppen
 require_once ("lib/messaging.inc.php");	//Funktionen des Nachrichtensystems
 require_once ("config/config.inc.php");		//We need the config for some parameters of the class of the Veranstaltung
-require_once ("lib/classes/Table.class.php");
-require_once ("lib/classes/ZebraTable.class.php");
 
 $CURRENT_PAGE = _("Teilnehmeransicht konfigurieren"); 
 Navigation::activateItem('/admin/config/member_view');

@@ -29,7 +29,6 @@ $perm->check("autor");
 require_once 'lib/messaging.inc.php';
 require_once 'lib/visual.inc.php';
 require_once 'lib/functions.php';
-require_once 'lib/classes/AdminNewsController.class.php';
 
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session

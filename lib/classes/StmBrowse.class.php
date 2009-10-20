@@ -6,8 +6,6 @@
 require_once ("lib/visual.inc.php");
 require_once ("lib/functions.php");
 require_once ("lib/dates.inc.php");
-require_once ("lib/classes/StudipStmSearch.class.php");
-require_once ("lib/classes/StudipStmInstanceTreeViewSimple.class.php");
 
 
 class StmBrowse {

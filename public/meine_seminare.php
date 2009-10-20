@@ -23,9 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 $Id$
 */
 
-require_once 'lib/classes/CourseAvatar.class.php';
-require_once 'lib/classes/StudygroupAvatar.class.php';
-require_once 'lib/classes/InstituteAvatar.class.php';
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 $perm->check("user");
@@ -75,12 +72,9 @@ require_once ('lib/visual.inc.php');			// htmlReady fuer die Veranstaltungsnamen
 require_once ('lib/dates.inc.php');			// Semester-Namen fuer Admins
 require_once ('lib/admission.inc.php');		// Funktionen der Teilnehmerbegrenzung
 require_once ('lib/messaging.inc.php');
-require_once ('lib/classes/Modules.class.php');	// modul-config class
-require_once ('lib/classes/ModulesNotification.class.php');
 require_once ('lib/statusgruppe.inc.php');		// Funktionen für Statusgruppen
 require_once ('lib/object.inc.php');
 require_once ('lib/meine_seminare_func.inc.php');
-require_once ('lib/classes/LockRules.class.php');
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";

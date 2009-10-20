@@ -11,9 +11,6 @@
  */
 
 
-require_once("lib/classes/DataFieldStructure.class.php");
-require_once("lib/classes/LockRules.class.php");
-require_once("lib/classes/ZebraTable.class.php");
 
 function show_lock_rules() {
 	$lock_rules = new LockRules;

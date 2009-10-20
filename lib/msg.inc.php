@@ -29,7 +29,6 @@
  */
 
 //Imports
-require_once 'lib/classes/MessageBox.class.php';
 
 
 //Displays Errormessages (kritischer Abbruch, Symbol "X")

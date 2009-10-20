@@ -26,7 +26,6 @@ page_open(array('sess' => 'Seminar_Session', 'auth' => 'Seminar_Default_Auth', '
 
 include_once('lib/seminar_open.php');
 require_once('config.inc.php');
-require_once('lib/classes/smiley.class.php');
 
 function my_comp($a, $b){
 	return strcasecmp($a[1], $b[1]);

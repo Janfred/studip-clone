@@ -29,7 +29,6 @@ $perm->check("user");
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 require_once('config.inc.php');
 require_once 'lib/functions.php';
-require_once('lib/classes/UserManagement.class.php');
 
 // -- here you have to put initialisations for the current page
 

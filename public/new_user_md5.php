@@ -27,11 +27,9 @@ $perm->check($GLOBALS['RESTRICTED_USER_MANAGEMENT'] ? 'root' : 'admin');
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
-require_once 'lib/classes/MessageBox.class.php';
 require_once 'config.inc.php'; // Wir brauchen den Namen der Uni
 require_once 'lib/visual.inc.php';
 require_once 'lib/user_visible.inc.php';
-require_once 'lib/classes/UserManagement.class.php';
 require_once('lib/messaging.inc.php');
 
 

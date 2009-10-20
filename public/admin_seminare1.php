@@ -38,10 +38,6 @@ require_once 'lib/functions.php';
 require_once('lib/visual.inc.php');
 require_once('lib/admission.inc.php');
 require_once('lib/statusgruppe.inc.php');	//Funktionen der Statusgruppen
-require_once('lib/classes/StudipSemTreeSearch.class.php');
-require_once('lib/classes/DataFieldEntry.class.php');
-require_once('lib/classes/SeminarCategories.class.php');
-require_once 'lib/classes/CourseAvatar.class.php';
 require_once 'lib/admin_search.inc.php';
 $HELP_KEYWORD="Basis.VeranstaltungenVerwaltenGrunddaten";
 

@@ -43,18 +43,9 @@ require_once('lib/msg.inc.php');
 require_once('lib/statusgruppe.inc.php');
 require_once('lib/showNews.inc.php');
 require_once('lib/show_dates.inc.php');
-require_once('lib/classes/DbView.class.php');
 require_once('lib/dbviews/sem_tree.view.php');
-require_once('lib/classes/DbSnapshot.class.php');
-require_once('lib/classes/DataFieldEntry.class.php');
-require_once('lib/classes/guestbook.class.php');
 require_once('lib/object.inc.php');
-require_once('lib/classes/score.class.php');
-require_once('lib/classes/SemesterData.class.php');
 require_once('lib/user_visible.inc.php');
-require_once('lib/classes/StudipLitList.class.php');
-require_once('lib/classes/Avatar.class.php');
-require_once('lib/classes/StudipKing.class.php');
 
 function print_kings($username) {
 
@@ -556,7 +547,6 @@ if ($GLOBALS['CALENDAR_ENABLE']) {
 if ($GLOBALS['FOAF_ENABLE']
 	&& ($auth->auth['uid']!=$user_id)
 	&& $user->cfg->getValue($user_id, 'FOAF_SHOW_IDENTITY')) {
-        include("lib/classes/FoafDisplay.class.php");
         $foaf=new FoafDisplay($auth->auth['uid'], $user_id, $username);
         $foaf->show($_REQUEST['foaf_open']);
 }

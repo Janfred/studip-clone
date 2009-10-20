@@ -44,7 +44,6 @@ include ('lib/seminar_open.php'); // initialise Stud.IP-Session
 
 // -- here you have to put initialisations for the current page
 require_once ('lib/visual.inc.php');		// htmlReady fuer die Veranstaltungsnamen
-require_once ('lib/classes/StudipStmInstance.class.php');
 
 
 $cssSw = new cssClassSwitcher;							// Klasse für Zebra-Design

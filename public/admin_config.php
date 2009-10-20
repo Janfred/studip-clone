@@ -44,8 +44,6 @@ require_once('lib/msg.inc.php');	//messages
 require_once('config.inc.php');	//Settings....
 require_once 'lib/functions.php';	//whatever ;)
 require_once('lib/visual.inc.php');	//visuals
-require_once('lib/classes/Config.class.php');	//Acces to config-values
-require_once('lib/classes/UserConfig.class.php');	//Acces to userconfig-values
 
 $db = new DB_Seminar();
 $cssSw=new cssClassSwitcher;

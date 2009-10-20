@@ -26,7 +26,6 @@
 
 
 // Including all needed files
-require_once ('lib/classes/StudipObject.class.php');
 
 # wozu diese Datei?
 

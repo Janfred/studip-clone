@@ -38,7 +38,6 @@
 // +---------------------------------------------------------------------------+
 
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/ExternElement.class.php');
-require_once('lib/classes/StudipLitList.class.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/elements/ExternElementTemplateGeneric.class.php');
      
 class ExternElementLitList extends ExternElement {

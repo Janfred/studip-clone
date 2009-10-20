@@ -15,8 +15,6 @@
 */
 require_once 'lib/functions.php';
 require_once 'config/config.inc.php';
-require_once 'lib/classes/DataFieldStructure.class.php';
-require_once 'lib/classes/SeminarCategories.class.php';
 
 /**
  * Enter description here...

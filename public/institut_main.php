@@ -34,8 +34,6 @@ require_once 'lib/datei.inc.php';
 require_once 'config.inc.php';
 require_once 'lib/visual.inc.php';
 require_once 'lib/functions.php';
-require_once 'lib/classes/DataFieldEntry.class.php';
-require_once 'lib/classes/InstituteAvatar.class.php';
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";

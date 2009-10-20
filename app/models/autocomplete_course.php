@@ -11,7 +11,6 @@
  * the License, or (at your option) any later version.
  */
 
-require_once 'lib/classes/StudipSemSearchHelper.class.php';
 
 function autocomplete_course_get_semesters() {
   $semdata = new SemesterData();

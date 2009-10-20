@@ -23,9 +23,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-require_once('lib/classes/StudipSemTree.class.php');
-require_once('lib/classes/RangeTreeObject.class.php');
-require_once('lib/classes/SemesterData.class.php');
 
 class StudipSemSearchHelper {
 	

@@ -35,8 +35,6 @@ require_once("lib/datei.inc.php"); // Funktionen zum Loeschen von Dokumenten
 require_once("lib/functions.php");
 require_once("lib/include/admin_lock_adjust.inc.php");
 require_once("lib/visual.inc.php");
-require_once("lib/classes/Table.class.php");
-require_once("lib/classes/ZebraTable.class.php");
 
 
 $CURRENT_PAGE = _("Sperrebenen von Veranstaltungen anpassen");

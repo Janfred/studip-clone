@@ -37,7 +37,6 @@ foreach($_never_globalize_request_params as $one_param){
 }
 
 // set assets url
-require_once('lib/classes/Assets.class.php');
 Assets::set_assets_url($GLOBALS['ASSETS_URL']);
 
 // globale template factory anlegen
@@ -64,7 +63,6 @@ require_once 'lib/classes/URLHelper.php';
 set_exception_handler('studip_default_exception_handler');
 
 // set default pdo connection
-require_once('lib/classes/DBManager.class.php');
 DBManager::getInstance()
   ->setConnection('studip',
                   'mysql:host='.$GLOBALS['DB_STUDIP_HOST'].
@@ -75,12 +73,7 @@ DBManager::getInstance()
 require_once('lib/language.inc.php');
 require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
 require_once('lib/language.inc.php');
-require_once('lib/classes/Config.class.php');
-require_once('lib/classes/UserConfig.class.php');
-require_once('lib/classes/StudipNews.class.php');
 require_once('lib/classes/caching.php');
-require_once 'lib/classes/SessionDecoder.class.php';
-require_once 'lib/classes/StudipMail.class.php';
 
 if (strpos( PHP_OS,"WIN") !== false && $CHAT_ENABLE == true && $CHAT_SERVER_NAME == "ChatShmServer")	//Attention: file based chat for windows installations (slow)
 	$CHAT_SERVER_NAME = "ChatFileServer";

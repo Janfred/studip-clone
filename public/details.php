@@ -31,13 +31,7 @@ require_once 'config.inc.php';
 require_once 'lib/visual.inc.php'; // wir brauchen htmlReady
 require_once 'lib/admission.inc.php';
 require_once 'lib/functions.php';
-require_once 'lib/classes/StudipSemTree.class.php';
-require_once 'lib/classes/DataFieldEntry.class.php';
-require_once 'lib/classes/StudipStmInstance.class.php';
-require_once 'lib/classes/StudipAdmissionGroup.class.php';
-require_once 'lib/classes/StudipStudyArea.class.php';
 require_once 'lib/classes/UserDomain.php';
-require_once "lib/classes/CourseAvatar.class.php";
 
 include 'lib/seminar_open.php'; // initialise Stud.IP-Session
 

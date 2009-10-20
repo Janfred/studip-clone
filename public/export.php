@@ -53,7 +53,6 @@ if (($o_mode != "direct") AND ($o_mode != "passthrough"))
 require_once ('lib/visual.inc.php');
 require_once 'lib/functions.php';
 require_once ('lib/msg.inc.php');
-require_once ('lib/classes/DataFieldEntry.class.php');
 
 require_once ('config.inc.php');
 

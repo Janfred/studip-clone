@@ -1,6 +1,4 @@
 <?php
-require_once 'lib/classes/StudygroupAvatar.class.php';
-require_once 'lib/classes/Avatar.class.php';
 
 $infobox = array();
 $infobox['picture'] = 'infoboxbild_studygroup.jpg';

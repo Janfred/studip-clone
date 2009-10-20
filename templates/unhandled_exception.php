@@ -1,5 +1,4 @@
 <?php
-require_once 'lib/classes/MessageBox.class.php';
 require_once 'lib/visual.inc.php';
 
 include 'lib/include/html_head.inc.php';

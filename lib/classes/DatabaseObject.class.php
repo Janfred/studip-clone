@@ -26,7 +26,6 @@
 
 
 # Include all required files ================================================ #
-require_once ("lib/classes/AuthorObject.class.php");
 # ====================================================== end: including files #
 
 

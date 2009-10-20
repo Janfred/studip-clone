@@ -46,7 +46,6 @@ if (isset($seminar_id)) {
 	$id = $SessSemName[1];
 }
 
-require_once ('lib/classes/Seminar.class.php');
 require_once ('lib/raumzeit/raumzeit_functions.inc.php');
 require_once ('lib/dates.inc.php');
 require_once 'lib/admin_search.inc.php';
@@ -89,7 +88,6 @@ $sem->checkFilter();
 $semester = new SemesterData();
 $_LOCKED = FALSE;
 if ($SEMINAR_LOCK_ENABLE) {
-	require_once ('lib/classes/LockRules.class.php');
 	$lockRule = new LockRules();
 	$data = $lockRule->getSemLockRule($id);
 	if (LockRules::Check($id, 'room_time')) {

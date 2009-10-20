@@ -25,7 +25,6 @@
 // +---------------------------------------------------------------------------+
 // $Id$
 require_once("config.inc.php");
-require_once("lib/classes/SemesterData.class.php");
 
 foreach (SemesterData::GetSemesterArray() as $key => $value){
 	if (isset($value['beginn']) && $value['beginn'])

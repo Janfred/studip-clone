@@ -30,11 +30,9 @@ $HELP_KEYWORD="Basis.Informationsseite";
 
 
 include ('lib/seminar_open.php'); // initialise Stud.IP-Session
-require_once ('lib/classes/StudipScmEntry.class.php');
 require_once 'lib/functions.php';
 require_once('lib/msg.inc.php');
 require_once('lib/visual.inc.php');
-require_once('lib/classes/Table.class.php');
 
 mark_public_course();
 

@@ -45,7 +45,6 @@ require_once('config.inc.php');	//Settings....
 require_once 'lib/functions.php';	//basale Funktionen
 require_once('lib/visual.inc.php');	//Darstellungsfunktionen
 require_once('lib/messaging.inc.php');	//Nachrichtenfunktionen
-require_once('lib/classes/AdminModules.class.php');	//Nachrichtenfunktionen
 require_once 'lib/admin_search.inc.php';
 
 $cssSw=new cssClassSwitcher;

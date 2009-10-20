@@ -12,7 +12,6 @@ try {
     ini_set( "memory_limit", "256M");
 	
     // include business logic classes
-    require_once('lib/classes/Seminar.class.php');
     require_once('lib/resources/lib/VeranstaltungResourcesAssign.class.php');
     
     $db = new DB_Seminar();

@@ -46,7 +46,6 @@ page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" =>
 $perm->check($RANGE_TREE_ADMIN_PERM ? $RANGE_TREE_ADMIN_PERM  : 'admin');
 		
 require_once('lib/visual.inc.php');
-require_once('lib/classes/StudipRangeTreeViewAdmin.class.php');
 
 $CURRENT_PAGE = $UNI_NAME_CLEAN . " - " . _("Einrichtungshierarchie bearbeiten");
 Navigation::activateItem('/admin/config/range_tree');

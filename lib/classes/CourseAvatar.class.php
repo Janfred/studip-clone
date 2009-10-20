@@ -10,7 +10,6 @@
  */
 
 
-require_once 'lib/classes/Avatar.class.php';
 
 
 /**

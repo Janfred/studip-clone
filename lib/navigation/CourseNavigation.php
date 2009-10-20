@@ -11,10 +11,6 @@
  */
 
 require_once 'lib/functions.php';
-require_once 'lib/classes/Modules.class.php';
-require_once 'lib/classes/StudipScmEntry.class.php';
-require_once 'lib/classes/LockRules.class.php';
-require_once 'lib/classes/AuxLockRules.class.php';
 
 if (get_config('ELEARNING_INTERFACE_ENABLE')) {
     require_once $GLOBALS['RELATIVE_PATH_ELEARNING_INTERFACE'].'/ObjectConnections.class.php';

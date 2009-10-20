@@ -34,8 +34,6 @@ require_once('lib/dates.inc.php'); //Funktionen zur Anzeige der Terminstruktur
 require_once('config.inc.php');
 require_once('lib/visual.inc.php');
 require_once 'lib/functions.php';
-require_once 'lib/classes/CourseAvatar.class.php';
-require_once 'lib/classes/StudygroupAvatar.class.php';
 
 if ($GLOBALS['CHAT_ENABLE']){
 	include_once $RELATIVE_PATH_CHAT."/chat_func_inc.php";
@@ -188,7 +186,6 @@ $quarter_year = 60 * 60 * 24 * 90;
 	<?
 		// Ticket #68
 		if (!$perm->have_perm('dozent')) {
-			require_once('lib/classes/AuxLockRules.class.php');
 			$rule = AuxLockRules::getLockRuleBySemId($SessSemName[1]);
 			if (isset($rule)) {
 				$show = false;

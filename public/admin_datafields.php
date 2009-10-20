@@ -46,8 +46,6 @@ require_once('lib/msg.inc.php');	//Ausgaben
 require_once('config.inc.php');	//Settings....
 require_once 'lib/functions.php';	//basale Funktionen
 require_once('lib/visual.inc.php');	//Darstellungsfunktionen
-require_once('lib/classes/DataFieldStructure.class.php');
-require_once('lib/classes/DataFieldEntry.class.php');
 
 
 $db=new DB_Seminar;

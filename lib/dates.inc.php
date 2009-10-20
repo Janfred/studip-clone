@@ -25,8 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once 'lib/datei.inc.php';  // benötigt zum Löschen von Dokumenten
 require_once 'config.inc.php';  //Daten
 require_once 'lib/functions.php';  //Daten
-require_once 'lib/classes/SemesterData.class.php';  //Daten
-require_once 'lib/classes/Seminar.class.php';  //Daten
 require_once 'lib/calendar_functions.inc.php';
 require_once "lib/raumzeit/CycleDataDB.class.php";			// Turnus-Daten
 require_once "lib/raumzeit/SingleDate.class.php";  			// Einzeltermin
@@ -101,7 +99,6 @@ function getRoomOverviewUnsteady ($range_id, $semester_id, $link=TRUE, $start_ti
 		 *   S E M I N A R   D A T E S   *
 		 * * * * * * * * * * * * * * * * */
 		case 'sem':
-			require_once('lib/classes/Seminar.class.php');
 			require_once('lib/raumzeit/decorator/RoomOverviewUnsteadyDecorator.class.php');
 
 			$filter = getFilterForSemester($semester_id);

@@ -51,7 +51,6 @@ URLHelper::bindLinkParam('rzsem_data',$rzSeminar);
 #$sess->register('raumzeitFilter');
 #$sess->register('rzSeminar');
 
-require_once ('lib/classes/Seminar.class.php');
 require_once ('lib/datei.inc.php');
 require_once ('lib/forum.inc.php');
 require_once ('lib/raumzeit/raumzeit_functions.inc.php');

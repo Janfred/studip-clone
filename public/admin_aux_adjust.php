@@ -27,10 +27,6 @@ $auth->login_if($auth->auth["uid"] == "nobody");
 $perm->check($AUX_RULE_ADMIN_PERM ? $AUX_RULE_ADMIN_PERM : 'admin');
 include ("lib/seminar_open.php"); // initialise Stud.IP-Session
 
-require_once('lib/classes/Table.class.php');
-require_once('lib/classes/ZebraTable.class.php');
-require_once('lib/classes/AuxLockRules.class.php');
-require_once('lib/classes/DataFieldEntry.class.php');
 
 //Output starts here
 
