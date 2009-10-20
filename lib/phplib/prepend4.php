@@ -8,7 +8,7 @@
  *
  * $Id$
  *
- */ 
+ */
 (!isset($_REQUEST['GLOBALS'])) OR die('Setting the $GLOBALS array is not tolerated!');
 $PHP_SELF = $_SERVER['PHP_SELF'] = $_SERVER['SCRIPT_NAME'];
 $STUDIP_BASE_PATH = realpath( dirname(__FILE__) . '/../..');
@@ -17,6 +17,10 @@ $include_path = $STUDIP_BASE_PATH;
 $include_path .= PATH_SEPARATOR . $STUDIP_BASE_PATH . DIRECTORY_SEPARATOR . 'config';
 $include_path .= PATH_SEPARATOR . get_include_path();
 set_include_path($include_path);
+
+# register autoload
+require 'lib/classes/StudipAutoloader.php';
+StudipAutoloader::register();
 
 define('PHPLIB_SESSIONDATA_TABLE', 'session_data');
 define('PHPLIB_USERDATA_TABLE', 'user_data');
