@@ -104,6 +104,7 @@
 		</script>
 		</li>
 		<? endif ?>
+		<? if (Navigation::hasItem('/links')) : ?>
 		<? foreach (Navigation::getItem('/links') as $nav) : ?>
 			<? if ($nav->isVisible()) : ?>
 				<li>
@@ -119,6 +120,7 @@
 				</li>
 			<? endif ?>
 		<? endforeach ?>
+		<? endif ?>
 	</ul>
 </div>
 <div id="barBottomshadow">

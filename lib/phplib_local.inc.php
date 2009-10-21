@@ -60,8 +60,14 @@ function studip_default_exception_handler($exception) {
 	                                          compact('exception'));
 	exit;
 }
-require_once 'lib/classes/URLHelper.php';
 set_exception_handler('studip_default_exception_handler');
+
+require_once 'lib/classes/URLHelper.php';
+require_once 'lib/navigation/Navigation.php';
+require_once 'lib/navigation/AutoNavigation.php';
+
+// set dummy navigation until db is ready
+Navigation::setRootNavigation(new Navigation(''));
 
 // set default pdo connection
 require_once('lib/classes/DBManager.class.php');
@@ -96,11 +102,8 @@ $GLOBALS['_fullname_sql']['no_title_motto'] = "CONCAT(Vorname ,' ', Nachname,IF(
 //software version - please leave it as it is!
 $SOFTWARE_VERSION = '1.10 alpha svn';
 
-require_once 'lib/navigation/Navigation.php';
-require_once 'lib/navigation/AutoNavigation.php';
-require_once 'lib/navigation/StudipNavigation.php';
-
 // set up global navigation
+require_once 'lib/navigation/StudipNavigation.php';
 Navigation::setRootNavigation(new StudipNavigation(''));
 
 /*classes for database access
