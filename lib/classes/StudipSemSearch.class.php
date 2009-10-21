@@ -92,7 +92,7 @@ class StudipSemSearch {
 								'scope_choose' => array('type' => 'select', 'default_value' => 'root', 'max_length' => 45,'options_callback' => array(&$this, 'getSelectOptions')),
 								'range_choose' => array('type' => 'select', 'default_value' => 'root', 'max_length' => 45,'options_callback' => array(&$this, 'getSelectOptions')),
 								'qs_choose' => array('type' => 'select',
-													'default_value' => 'all',
+													'default_value' => 'title_lecturer_number',
 													'options_callback' => array(&$this, 'getSelectOptions')
 													)
 								);
