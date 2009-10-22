@@ -13,7 +13,7 @@ $infobox['content'] = array(
     )
 );
 
-
+URLHelper::removeLinkParam('cid'); 
 list($sort_type, $sort_order) = explode('_', $sort);
 
 ?>
@@ -35,7 +35,7 @@ th {
   text-align:center;
 }
 </style>
-<? $sort_url =$controller->url_for('studygroup/search/'.$page.'/') ?>
+<? $sort_url =$controller->url_for('studygroup/search/1/') ?>
 <table class border="0" cellpadding="2" cellspacing="0" width="100%">
 <tr style="background: url(<?=Assets::image_path('steelgraudunkel.gif')?>);cursor: pointer;" title="<?=_("Klicken, um die Sortierung zu ändern")?>">
         <th class="nosort" width="1%"></th>
@@ -120,9 +120,11 @@ th {
 <?
 $link = "dispatch.php/studygroup/search/%s/".$sort;
 ?>
+<? if($anzahl>20) :?>
 <div style="text-align:right; padding-top: 2px; padding-bottom: 2px" class="steelgraudunkel"><?=
  $pages = $GLOBALS['template_factory']->open('shared/pagechooser');
  $pages->set_attributes(array("perPage" => 20, "num_postings" => $anzahl, "page"=>$page, "pagelink" => $link));
  
  echo $this->render_partial($pages);
 ?></div>
+<? endif;?>
