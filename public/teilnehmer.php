@@ -120,6 +120,10 @@ if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 	}
 
 } else {
+    $stmt =DBManager::get()->query("SELECT VeranstaltungsNummer as sn, Name FROM seminare WHERE Seminar_id = '".$SessSemName[1]."'");
+	$result = $stmt->fetch();
+	$subject = "[".$result['sn'].": ".$result['Name'] ."]";
+	
 	if ($cmd == "send_sms_to_all" && $who != "accepted") {
 		$sess->register("sms_data");
 		$db->query("SELECT b.username FROM seminar_user a, auth_user_md5 b WHERE a.Seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND a.status = '$who' ORDER BY Nachname, Vorname");
@@ -130,7 +134,7 @@ if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 		}
 		$sms_data['p_rec'] = $data;
 		page_close(NULL);
-		header('Location: '.URLHelper::getURL('sms_send.php'));
+		header('Location: '.URLHelper::getURL('sms_send.php',array('messagesubject' => $subject)));
 		die;
 	} else if ($cmd == "send_sms_to_waiting" || $who == "accepted") {
 		$sess->register("sms_data");
@@ -143,7 +147,7 @@ if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 		}
 		$sms_data['p_rec'] = $data;
 		page_close(NULL);
-		header('Location: '.URLHelper::getURL('sms_send.php'));
+		header('Location: '.URLHelper::getURL('sms_send.php',array('messagesubject' => $subject)));
 		die;
 	}
 }
