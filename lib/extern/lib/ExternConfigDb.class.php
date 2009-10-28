@@ -59,12 +59,14 @@ class ExternConfigDb extends ExternConfig {
 	*/
 	function store () {
 		parent::store();
-		$serialized_config = addslashes(serialize($this->config));
-		if (sizeof($serialized_config)) {
-			$time = time();
-			$query = "UPDATE extern_config SET config = '$serialized_config', chdate = $time "
-				. "WHERE config_id = '{$this->id}' AND range_id = '{$this->range_id}'";
-			$this->db->query($query);
+		$serialized_config = serialize($this->config);
+
+		if (strlen($serialized_config)) {
+			$stmt = DBManager::get()->prepare("UPDATE extern_config 
+				SET config = ?, chdate = UNIX_TIMESTAMP()
+				WHERE config_id = ? AND range_id = ?");
+			$stmt->execute($data = array($serialized_config, $this->id, $this->range_id));
+
 			return($this->updateConfiguration());
 		} else {
 			ExternModule::printError();

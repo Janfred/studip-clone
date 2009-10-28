@@ -137,14 +137,15 @@ class ExternConfig {
 	
 	function setDefaultConfiguration ($config) {
 		foreach ($config as $element_name => $element) {
-			foreach ($element as $attribute => $value) {
-				if ($value{0} == '|') {
+			if (is_array($element)) foreach ($element as $attribute => $value) {
+				if ((string)$value{0} == '|') {
 					$new_config[$element_name][$attribute] = explode('|', substr($value, 1));
 				} else {
 					$new_config[$element_name][$attribute] = $value;
 				}
 			}
 		}
+
 		$this->id = $this->makeId();
 		$this->config_name = $this->createConfigName($this->range_id);
 		
@@ -156,6 +157,7 @@ class ExternConfig {
 		if ($this->insertConfiguration()) {
 			$this->store();
 		} else {
+			echo MessageBox::error(_("Sie haben die maximale Anzahl an Konfigurationen für dieses Modul erreicht! Kopieren fehlgeschlagen!"));
 			ExternModule::printError();
 		}
 	}

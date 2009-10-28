@@ -290,12 +290,15 @@ if ($choose_module_form != '') {
 			$configurations_copy = ExternConfig::GetAllConfigurations($_REQUEST['copychooseinst']);
 			foreach ($module_types_ordered as $module_type) {
 				$print_module_name = TRUE;
-				foreach ($configurations_copy[$GLOBALS['EXTERN_MODULE_TYPES'][$module_type]['module']] as $config_id_copy => $config_data_copy) {
-					if ($print_module_name) {
-						$choose_module_select .= '<option value="" style="font-weight: bold;">' . htmlReady($GLOBALS['EXTERN_MODULE_TYPES'][$module_type]['name']) . '</option>';
+
+				if (is_array($configurations_copy[$GLOBALS['EXTERN_MODULE_TYPES'][$module_type]['module']])) {
+					foreach ($configurations_copy[$GLOBALS['EXTERN_MODULE_TYPES'][$module_type]['module']] as $config_id_copy => $config_data_copy) {
+						if ($print_module_name) {
+							$choose_module_select .= '<option value="" style="font-weight: bold;">' . htmlReady($GLOBALS['EXTERN_MODULE_TYPES'][$module_type]['name']) . '</option>';
+						}
+						$choose_module_select .= '<option value="' . $config_id_copy . '">&nbsp;&nbsp;' . htmlReady($config_data_copy['name']) . '</option>';
+						$print_module_name = FALSE;
 					}
-					$choose_module_select .= '<option value="' . $config_id_copy . '">&nbsp;&nbsp;' . htmlReady($config_data_copy['name']) . '</option>';
-					$print_module_name = FALSE;
 				}
 			}
 			
