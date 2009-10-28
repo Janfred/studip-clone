@@ -113,7 +113,7 @@ function PrintAktualStatusgruppen ($roles, $level = 0, $pred = '') {
 		);
 
 		$limit = GetStatusgruppeLimit($role_id);
-		if ($limit!=FALSE && $data['role']->getSelfassign()  == '1') {
+		if ($limit!=FALSE && ($data['role']->getSelfassign()  == '1' || $data['role']->getSelfassign()  == '2')) {
 			$voll = CountMembersPerStatusgruppe ($role_id);
 			if ($voll >= $limit)
 				$limitcolor = "#CC0000";
