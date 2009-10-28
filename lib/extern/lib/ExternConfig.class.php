@@ -358,18 +358,9 @@ class ExternConfig {
 	}
 	
 	protected function updateConfiguration () {
-		$db =& new DB_Seminar();
-	
-		$changed = time();
-		$query = "UPDATE extern_config SET chdate=$changed ";
-		$query .= "WHERE config_id='{$this->id}' AND range_id='{$this->range_id}'";
-		$db->query($query);
-	
-		if ($db->affected_rows() != 1) {
-			return FALSE;
-		}
-		
-		return TRUE;
+		$stmt = DBManager::get()->prepare("UPDATE extern_config SET chdate = ?
+			WHERE config_id = ? AND range_id = ?");
+		return $stmt->execute(array(time(), $this->id, $this->range_id));
 	}
 	
 	function insertConfiguration () {

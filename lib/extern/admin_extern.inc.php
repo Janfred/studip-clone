@@ -93,10 +93,12 @@ if ($_REQUEST['com'] == "do_upload_config") {
 
 	$jsonconfig = json_decode($file_content_wo_tabs, true);
 	
-	if (check_config($jsonconfig, $_REQUEST['check_module']) && store_config($range_id, $_REQUEST['config_id'], $jsonconfig)) {
-	 	$msg = "info§". _("Die Datei wurde erfolgreich &uuml;bertragen!"). "§";
-	} else {
+	if (!check_config($jsonconfig, $_REQUEST['check_module'])) {
 		$msg ="error§". _("Die Konfigurationsdatei hat den falschen Modultyp!"). "§";
+	} else if (!store_config($range_id, $_REQUEST['config_id'], $jsonconfig)) {
+		$msg ="error§". _("Die Konfigurationsdatei konnte nicht hochgeladen werden!"). "§";
+	} else {
+	 	$msg = "info§". _("Die Datei wurde erfolgreich &uuml;bertragen!"). "§";
 	}
 }
 
