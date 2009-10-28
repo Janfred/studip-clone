@@ -234,8 +234,11 @@ class Statusgruppe {
 		$this->size = (int)$_REQUEST['new_size'];
 
 		// check if we have to remove the self_assign_exclusive-flag
-		if ($_REQUEST['new_selfassign']) {
-			if ($this->selfassign != 2) {
+		
+		$this->selfassign = SetSelfAssign($this->statusgruppe_id, ($_REQUEST['new_selfassign'] ? 1 : 0));
+		
+		/*if ($_REQUEST['new_selfassign']) {
+			if ($this->selfassign == 0) {
 				$this->selfassign = 1;
 			}
 		} else {
@@ -245,7 +248,7 @@ class Statusgruppe {
 				}
 			}
 			$this->selfassign = 0;
-		}
+		}*/
 
 		if ($_REQUEST['groupfolder']) { 
 			// check if there already exists a folder

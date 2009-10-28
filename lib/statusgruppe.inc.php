@@ -117,15 +117,47 @@ function CheckAssignRights($statusgruppe_id, $user_id, $seminar_id) {
 	return $assign;
 }
 
+/**
+ * sets selfassign of a group to 0 or 1/2 dependend on the status of the other groups
+ * @param statusgruppe_id:	id of statusgruppe in database
+ * @param flag:	0 for users are not allowed to assign themselves to this group
+ * 							or 1 / 2 to set selfassign to the value of the other statusgroups
+ * 							of the same seminar for which selfassign is allowed. If no such 
+ * 							group exists, selfassign is set to the value of flag, 1 means
+ * 							selfassigning is allowed and 2 it's only allowed for a maximum 
+ * 							of one group.
+ */
 function SetSelfAssign ($statusgruppe_id, $flag="0") {
-	$db=new DB_Seminar;
-	$db->query("UPDATE statusgruppen SET selfassign = '$flag' WHERE statusgruppe_id = '$statusgruppe_id'");
+	$db = DBManager::get();
+	if ($flag != 0) {
+		if ($result = $db->query("SELECT 1 " .
+				"FROM statusgruppen " .
+				"WHERE range_id = (SELECT range_id " .
+													"FROM statusgruppen " .
+													"WHERE statusgruppe_id = ".$db->quote($statusgruppe_id).") " .
+						"AND selfassign = 2")->fetch()) {
+			$flag = 2;
+		} elseif ($result = $db->query("SELECT 1 " .
+				"FROM statusgruppen " .
+				"WHERE range_id = (SELECT range_id " .
+													"FROM statusgruppen " .
+													"WHERE statusgruppe_id = ".$db->quote($statusgruppe_id).") " .
+						"AND selfassign = 1")->fetch()) {
+			$flag = 1;
+		}
+	}
+	$prep = $db->prepare("UPDATE statusgruppen " .
+			"SET selfassign = ".$db->quote($flag)." " .
+			"WHERE statusgruppe_id = ".$db->quote($statusgruppe_id));
+	$prep->execute();
+	return $flag;
 }
 
 function SetSelfAssignAll ($seminar_id, $flag = false) {
-	$db=new DB_Seminar;
-	$db->query("UPDATE statusgruppen SET selfassign = '".(int)$flag."' WHERE range_id = '$seminar_id'");
-	return $db->affected_rows();
+	$db = DBManager::get();
+	$prep = $db->prepare("UPDATE statusgruppen SET selfassign = '".(int)$flag."' WHERE range_id = ".$db->quote($seminar_id));
+	$prep->execute();
+	return $prep->rowCount();
 }
 
 function SetSelfAssignExclusive ($seminar_id, $flag = false) {
