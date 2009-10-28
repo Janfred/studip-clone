@@ -373,7 +373,7 @@ class UserManagement
 	* @return	bool Change successful?
 	*/
 	function changeUser($newuser) {
-		global $perm, $auth;
+		global $perm, $auth, $SEM_TYPE, $SEM_CLASS;
 
 		// Do we have permission to do so?
 		if (!$perm->have_perm("admin")) {
@@ -410,9 +410,20 @@ class UserManagement
 			}
 		}
 
-		// active dozent?
-		$this->db->query("SELECT count(*) AS count FROM seminar_user WHERE user_id = '" . $this->user_data['auth_user_md5.user_id'] . "' AND status = 'dozent' GROUP BY user_id");
+		// active dozent? (ignore the studygroup guys)
+		foreach ($SEM_TYPE as $num => $type) {
+            if ($SEM_CLASS[$type['class']]['studygroup_mode']) {
+                $status[] = $num;
+            }
+        }
+        
+        $this->db->query("SELECT count(*) AS count FROM seminar_user as su LEFT JOIN seminare as s USING (Seminar_id) 
+		                  WHERE su.user_id = '" . $this->user_data['auth_user_md5.user_id'] . "'
+		                  AND s.status NOT IN ('". implode("','", $status)."')
+		                  AND su.status = 'dozent' GROUP BY user_id");
+		
 		$this->db->next_record();
+		
 		if ($this->db->f("count") &&  isset($newuser['auth_user_md5.perms']) && $newuser['auth_user_md5.perms'] != "dozent") {
 			$this->msg .= sprintf("error§" . _("Der Benutzer <em>%s</em> ist Dozent in %s aktiven Veranstaltungen und kann daher nicht in einen anderen Status versetzt werden!") . "§", $this->user_data['auth_user_md5.username'], $this->db->f("count"));
 			return FALSE;
