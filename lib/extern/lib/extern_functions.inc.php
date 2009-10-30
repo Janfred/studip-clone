@@ -60,43 +60,13 @@ require_once("lib/extern/lib/ExternConfigDb.class.php");
 * @return	array	(structure statusgruppe_id => name)
 */
 function get_all_statusgruppen ($range_id) {
-	$ret = "";
-	$db =& new DB_Seminar();
-	$db->query("SELECT statusgruppe_id, name FROM statusgruppen
-							WHERE range_id='$range_id' ORDER BY position ASC");
-	while ($db->next_record()) {
-		$ret[$db->f("statusgruppe_id")] = $db->f("name");
+	$ret = array();
+	$roles = Statusgruppe::getFlattenedRoles(getAllStatusgruppen($range_id));
+	
+	foreach ($roles as $id => $role) {
+		$ret[$id] = $role['name_long'];
 	}
-	return (is_array($ret)) ? $ret : FALSE;
-}
-
-/**
-* Returns an array containing the ids as key and the name as value
-* for every given name of statusgruppe.
-*
-* If there is no known statusgruppe for the given range and name, 
-* it returns FALSE.
-*
-* @access	public
-* @param	string	$range_id
-* @param	string	$names comma separated list of names for 
-* statusgruppe valid in the given range (syntax: 'name1','name2',...)
-* @param	boolean	$hidden TRUE if you don't want to get the specified groups,
-* but all others in the given range. Default FALSE.
-* @return	array		(structure statusgruppe_id => name)
-*/
-function get_statusgruppen_by_name ($range_id, $names, $hidden = FALSE) {
-	$ret = "";
-	if ($hidden)
-		$not = " NOT";
-	$db =& new DB_Seminar();
-	$db->query("SELECT statusgruppe_id, name FROM statusgruppen
-							WHERE range_id='$range_id' AND name$not IN ($names)
-							ORDER BY position ASC");
-	while ($db->next_record()) {
-		$ret[$db->f("statusgruppe_id")] = $db->f("name");
-	}
-	return (is_array($ret)) ? $ret : FALSE;
+	return sizeof($ret) ? $ret : false;
 }
 
 /**
@@ -110,24 +80,17 @@ function get_statusgruppen_by_name ($range_id, $names, $hidden = FALSE) {
 * @param	string	$range_id
 * @param	string	$ids comma separated list of statusgruppe_id for 
 * statusgruppe valid for the given range (syntax: 'id1','id2',...)
-* @param	boolean	$hidden TRUE if you don't want to get the specified groups,
-* but all others in the given range. Default FALSE.
+*
 * @return	array		(structure statusgruppe_id => name)
 */
-function get_statusgruppen_by_id ($range_id, $ids, $hidden = FALSE) {
-	$ret = "";
-	if (is_array($ids))
-		$ids = "'" . implode("','", $ids) . "'";
-	if ($hidden)
-		$not = " NOT";
-	$db =& new DB_Seminar();
-	$db->query("SELECT statusgruppe_id, name FROM statusgruppen
-							WHERE range_id='$range_id' AND statusgruppe_id$not IN ($ids)
-							ORDER BY position ASC");
-	while ($db->next_record()) {
-		$ret[$db->f("statusgruppe_id")] = $db->f("name");
+function get_statusgruppen_by_id ($range_id, $ids) {
+	$ret = array();
+	$groups = get_all_statusgruppen($range_id);
+
+	foreach ($ids as $id) {
+		if ($groups[$id]) $ret[$id] = $groups[$id];
 	}
-	return (is_array($ret)) ? $ret : FALSE;
+	return sizeof($ret) ? $ret : false;
 }
 
 function print_footer () {

@@ -250,7 +250,7 @@ class ExternEditModule extends ExternEditHtml {
 	}
 
 	function editGroups () {
-		$groups_db = get_statusgruppen_by_name($this->config->range_id, "''", TRUE);
+		$groups_db = get_all_statusgruppen($this->config->range_id);
 
 		if (!$groups_db)
 			return FALSE;
@@ -290,8 +290,8 @@ class ExternEditModule extends ExternEditHtml {
 		foreach ($groups_db as $id => $name) {
 
 			// name of group
-			if (strlen($name) > 30)
-				$name = substr($name, 0, 14) . "[...]" . substr($name, -10);
+			if (strlen($name) > 70)
+				$name = substr($name, 0, 34) . "[...]" . substr($name, -30);
 			$out .= "<tr" . $this->css->getFullClass() . ">\n";
 			$out .= "<td nowrap=\"nowrap\"><font size=\"2\">&nbsp;" . htmlReady($name) . "</font></td>";
 
