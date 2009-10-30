@@ -18,7 +18,7 @@
 		</A>
 	</TD>
 
-	<td width="80%" nowrap="nowrap" class="<?=$tpl['class']?>" valign="bottom">
+	<td width="80%" nowrap="nowrap" class="<?=$tpl['class']?>" valign="bottom" align="left">
 		<font size="-1" color="#000000">
 			<?=mila($tpl['theme_title'])?>
 		</font>
