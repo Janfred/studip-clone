@@ -909,7 +909,7 @@ function getPersonsForRole($role_id) {
 	$persons = array();
 	
 	$db = new DB_Seminar();
-	$db->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full'] . " AS fullname , username, position FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$role_id' ORDER BY position ASC");
+	$db->query ("SELECT statusgruppe_user.user_id, " . $_fullname_sql['full_rev'] . " AS fullname , username, position FROM statusgruppe_user LEFT JOIN auth_user_md5 USING(user_id) LEFT JOIN user_info USING (user_id) WHERE statusgruppe_id = '$role_id' ORDER BY position ASC");
 	while ($db->next_record()) {
 		$persons[$db->f('user_id')] = array (
 			'position' => $db->f('position'),

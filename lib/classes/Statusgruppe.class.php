@@ -331,6 +331,8 @@ class Statusgruppe {
 	}
 	 
 	static function getFlattenedRoles($roles, $level = 0, $parent_name = false) { 	
+		if (!is_array($roles)) return array();
+
 		$ret = array();
 		
 		//var_dump($roles);
