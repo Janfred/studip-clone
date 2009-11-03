@@ -1257,7 +1257,7 @@ if (($start_multiple_mode_x) || ($single_request)) {
 	unset($resources_data["requests_working_on"]);
 	unset($resources_data["requests_open"]);
 
-	$requests = getMyRoomRequests($GLOBALS['user']->id, $resources_data["sem_schedule_semester_id"], !$resources_data["resolve_requests_no_time"]);
+	$requests = (array)getMyRoomRequests($GLOBALS['user']->id, $resources_data["sem_schedule_semester_id"], !$resources_data["resolve_requests_no_time"], $single_request);
 
 	$resources_data["requests_working_pos"] = 0;
 	$resources_data["skip_closed_requests"] = TRUE;

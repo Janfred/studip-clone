@@ -374,7 +374,7 @@ function getSeminarRoomRequest($seminar_id) {
 }
 
 
-function getMyRoomRequests($user_id = '', $semester_id = null, $only_not_closed = true) {
+function getMyRoomRequests($user_id = '', $semester_id = null, $only_not_closed = true, $single_request = null) {
 	global $user, $perm, $RELATIVE_PATH_RESOURCES;
 
 	require_once ($RELATIVE_PATH_RESOURCES."/lib/ResourcesUserRoomsList.class.php");
@@ -389,10 +389,12 @@ function getMyRoomRequests($user_id = '', $semester_id = null, $only_not_closed 
 	} else {
 		$criteria = ' 1 ';
 	}
-	if ($semester_id){
+	if($single_request){
+		$criteria .= " AND rr.request_id='$single_request' ";
+	} elseif ($semester_id){
 		$semester = SemesterData::GetInstance()->getSemesterData($semester_id);
-		$criteria .= ' AND (tt.date BETWEEN ' . (int)$semester['beginn'] . ' AND ' . (int)$semester['ende'] 
-					. '  OR t.date BETWEEN ' . (int)$semester['beginn'] . ' AND ' . (int)$semester['ende'] . ') ';
+		$criteria .= ' AND ((rr.termin_id <> \'\' AND tt.date BETWEEN ' . (int)$semester['beginn'] . ' AND ' . (int)$semester['ende'] 
+					. ')  OR (rr.termin_id = \'\' AND t.date BETWEEN ' . (int)$semester['beginn'] . ' AND ' . (int)$semester['ende'] . ')) ';
 	} 
 	if ((getGlobalPerms($user_id) == "admin") || ($perm->have_perm("root"))) {
 		$query = sprintf("SELECT request_id, closed, tt.termin_id as tt_termin_id, rr.termin_id as rr_termin_id,
