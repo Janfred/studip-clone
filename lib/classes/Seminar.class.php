@@ -2008,7 +2008,7 @@ class Seminar {
 		$db->query($query);
 
 		// kill all the ressources that are assigned to the Veranstaltung (and all the linked or subordinated stuff!)
-		if ($RESOURCES_ENABLE) {
+		if ($GLOBALS['RESOURCES_ENABLE']) {
 			$killAssign = new DeleteResourcesUser($s_id);
 			$killAssign->delete();
 		}
@@ -2017,7 +2017,7 @@ class Seminar {
 		$query = "DELETE FROM seminar_user_schedule WHERE range_id = '$s_id'";
 		$db->query($query);
 
-		if($ELEARNING_INTERFACE_ENABLE){
+		if($GLOBALS['ELEARNING_INTERFACE_ENABLE']){
 			$cms_types = ObjectConnections::GetConnectedSystems($s_id);
 			if(count($cms_types)){
 				foreach($cms_types as $system){
