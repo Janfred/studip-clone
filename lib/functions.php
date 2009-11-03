@@ -1098,7 +1098,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 	$db = new DB_Seminar();
 
 	$search_result = null;
-	$show_sem_sql1 = ",sd1.name AS startsem,IF(s.duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem ";
+	$show_sem_sql1 = ",s.start_time,sd1.name AS startsem,IF(s.duration_time=-1, '"._("unbegrenzt")."', sd2.name) AS endsem ";
 	$show_sem_sql2 = "LEFT JOIN semester_data sd1 ON ( start_time BETWEEN sd1.beginn AND sd1.ende)
 					LEFT JOIN semester_data sd2 ON ((start_time + duration_time) BETWEEN sd2.beginn AND sd2.ende)";
 
@@ -1125,6 +1125,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				. ($db->f('startsem') != $db->f('endsem') ? " - ".$db->f('endsem') : "")
 				. ")" : "");
 			$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
+														"starttime"=>$db->f('start_time'),
 														"startsem"=>$db->f('startsem'),
 														"name"=>$name);
 		}
@@ -1146,6 +1147,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				. ($db->f('startsem') != $db->f('endsem') ? " - ".$db->f('endsem') : "")
 				. ")" : "");
 			$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
+														"starttime"=>$db->f('start_time'),
 														"startsem"=>$db->f('startsem'),
 														"name"=>$name);
 		}
@@ -1169,6 +1171,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 					. ($db->f('startsem') != $db->f('endsem') ? " - ".$db->f('endsem') : "")
 					. ")" : "");
 				$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
+														"starttime"=>$db->f('start_time'),
 														"startsem"=>$db->f('startsem'),
 														"name"=>$name);
 			}
@@ -1200,6 +1203,7 @@ function search_range($search_str = false, $search_user = false, $show_sem = tru
 				. ($db->f('startsem') != $db->f('endsem') ? " - ".$db->f('endsem') : "")
 				. ")" : "");
 			$search_result[$db->f("Seminar_id")]=array("type"=>"sem",
+														"starttime"=>$db->f('start_time'),
 														"startsem"=>$db->f('startsem'),
 														"name"=>$name);
 		}

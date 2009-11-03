@@ -78,6 +78,10 @@ include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
 include 'lib/include/admin_search_form.inc.php';
 
+function callback_cmp_newsarray($a, $b) {
+	return strnatcasecmp($a['name'], $b['name']); // Case insensitive string comparisons using a "natural order" algorithm
+}
+
 ?>
 <table cellspacing="0" cellpadding="0" border="0" width="100%">
 <?
@@ -139,16 +143,16 @@ $news->msg="";
 
 if ($cmd=="edit") {
 	if ($perm->have_perm("admin") && $search) {
-		if ($search)
-			$news->search_range($search);
-			if (is_array($news->search_result) && !count($news->search_result)) {
+		$news->search_range($search);
+
+		if (!count($news->search_result)) {
 			echo "<tr><td class=\"blank\"><br />";
 			parse_msg("info§" . _("Die Suche ergab keine Treffer!") . "§","§","blank","1",FALSE);
 			echo "</td></tr>";
 		}
-	}
-	if ($auth->auth["perm"]=="dozent" OR $auth->auth["perm"]=="tutor" OR $auth->auth["perm"]=="autor")	// allow autors, needed for studygroups
+	} else {
 		$news->search_range();
+	}
 
 	$news->edit_news($edit_news);
 }
