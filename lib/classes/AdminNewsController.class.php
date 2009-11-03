@@ -137,7 +137,7 @@ class AdminNewsController {
 					" LEFT JOIN semester_data sd ON ( c.start_time = sd.beginn ) ".
 					" LEFT JOIN semester_data sd2 ON ( c.start_time + c.duration_time BETWEEN sd2.beginn AND sd2.ende ) ".
 					" LEFT JOIN Institute AS d ON (d.Institut_id=a.range_id) ".
-					" WHERE news_id='$news_id' ORDER BY c.start_time DESC , seminar_name, institut_name, author";
+					" WHERE news_id='$news_id'";
 			$this->db->query($query);
 			while ($this->db->next_record()) {
 				if ($this->db->f("user_id")) {
@@ -221,6 +221,11 @@ class AdminNewsController {
 				$this->search_result[$this->news_range] = array('type' => $this->range_type, 'name' => $this->range_name);
 			}
 		}
+
+		// merge current range_detail into search result
+		$this->search_result += $this->range_detail;
+		uasort($this->search_result, array('AdminNewsController', 'compare_range'));
+
 		if (isset($_REQUEST['news_range_search_x'])) {
 			$this->news_query['topic'] = stripslashes($_REQUEST['topic']);
 			$this->news_query['body'] = stripslashes($_REQUEST['body']);
@@ -490,8 +495,6 @@ class AdminNewsController {
 	function list_range_details($type) {
 		global $perm;
 		$ranges = array();
-		$search_result = $this->search_result + $this->range_detail;
-		uasort($search_result, array('AdminNewsController', 'compare_range'));
 
 		switch ($type) {
 			case "sem" :
@@ -510,7 +513,7 @@ class AdminNewsController {
 		}
 
 		if ($perm->have_perm('autor')) {
-			foreach ($search_result as $range => $details) {
+			foreach ($this->search_result as $range => $details) {
 				if ($details['type'] == $type) {
 					$ranges[$range] = array(
 						'name' => $details['name'],
@@ -543,7 +546,7 @@ class AdminNewsController {
 			$cssSw->switchClass();
 			echo "\n<tr ".$cssSw->getHover().'><td	'.$cssSw->getFullClass(). '  width="90%">' .htmlReady($details['name']).'</td>';
 			echo "\n<td  ".$cssSw->getFullClass(). ' width="10%" align="center">';
-			if ($this->news_perm[$range]["perm"] || $GLOBALS['perm']->have_perm("root")) { 
+			if ($this->news_perm[$range]["perm"] || $GLOBALS['perm']->have_perm("root")) {
 				echo '<input type="CHECKBOX" name="add_range[]" value="' . $range. '"';
 				if ($range == $this->news_range && $this->news_query['news_id'] == 'new_entry' || isset($this->range_detail[$range]))
 					echo ' checked ';
