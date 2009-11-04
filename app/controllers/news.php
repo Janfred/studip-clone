@@ -106,7 +106,6 @@ function ajaxified_news_has_permission($news) {
     if ('studip' === $object_type) {
       $permitted = TRUE;
       $show_admin = $GLOBALS['perm']->have_perm('root');
-      break;
     }
 
     else if (in_array($object_type, words('sem inst fak'))) {
@@ -114,7 +113,6 @@ function ajaxified_news_has_permission($news) {
       if ($GLOBALS['SessSemName'][1] === (string)$range) {
         $permitted = TRUE;
         $show_admin = $GLOBALS['perm']->have_studip_perm('tutor', $range);
-        break;
       }
     }
 
@@ -124,8 +122,11 @@ function ajaxified_news_has_permission($news) {
         $permitted = TRUE;
         $show_admin = $GLOBALS['perm']->have_perm('autor')
                       && $GLOBALS['auth']->auth['uid'] === $range;
-        break;
       }
+    }
+
+    if ($show_admin) {
+      break;
     }
   }
 
