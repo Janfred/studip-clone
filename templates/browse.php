@@ -94,15 +94,15 @@
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 	<tr>
 		<th align="left">
-			<a href="<?= URLHelper::getLink('') ?>"><?=_("Name")?></a>
+			<a href="<?= URLHelper::getLink('', compact('vorname', 'nachname', 'sem_id', 'inst_id')) ?>"><?=_("Name")?></a>
 		</th>
 		<th align="left">
 			<? if ($inst_id): ?>
 			<?= _("Funktion an der Einrichtung") ?>
 			<? elseif ($sem_id): ?>
-			<a href="<?= URLHelper::getLink('', array('sortby' => 'status')) ?>"><?= _("Status in der Veranstaltung") ?></a>
+			<a href="<?= URLHelper::getLink('', compact('vorname', 'nachname', 'sem_id') + array('sortby' => 'status')) ?>"><?= _("Status in der Veranstaltung") ?></a>
 			<? else: ?>
-			<a href="<?= URLHelper::getLink('', array('sortby' => 'perms')) ?>"><?= _("globaler Status") ?></a>
+			<a href="<?= URLHelper::getLink('', compact('vorname', 'nachname') + array('sortby' => 'perms')) ?>"><?= _("globaler Status") ?></a>
 			<? endif; ?>
 		</th>
 		<th align="right">

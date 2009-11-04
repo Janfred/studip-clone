@@ -1,9 +1,6 @@
 <?php
 # Lifter001: TEST
-# Lifter002: TEST (mriehe)
-# Lifter002: TEST
 # Lifter007: TODO
-# Lifter003: TODO
 /**
  * browse.php
  *
@@ -45,14 +42,17 @@ $template = $GLOBALS['template_factory']->open('browse');
 $template->set_layout('layouts/base');
 
 /* --- Actions -------------------------------------------------------------- */
-//Eine Suche wurde abgeschickt
-if (isset($_REQUEST['send_x']))
-{
-	$vorname = remove_magic_quotes($_REQUEST['vorname']);
-	$nachname = remove_magic_quotes($_REQUEST['nachname']);
-	$inst_id = preg_replace('/\W/', '', $_REQUEST['inst_id']);
-	$sem_id = preg_replace('/\W/', '', $_REQUEST['sem_id']);
 
+if (!Request::submitted('reset')) {
+    $vorname = Request::get('vorname');
+    $nachname = Request::get('nachname');
+    $inst_id = Request::option('inst_id');
+    $sem_id = Request::option('sem_id');
+}
+
+//Eine Suche wurde abgeschickt
+if (isset($vorname) || isset($nachname))
+{
 	$template->set_attribute('vorname', $vorname);
 	$template->set_attribute('nachname', $nachname);
 	$template->set_attribute('inst_id', $inst_id);
@@ -60,8 +60,9 @@ if (isset($_REQUEST['send_x']))
 }
 
 //Ergebnisse sollen sortiert werden
-$sortby_fields = array('Nachname', 'perms', 'status');
-$sortby = in_array($_REQUEST['sortby'], $sortby_fields) ? $_REQUEST['sortby'] : 'Nachname';
+$sortby_fields = array('perms', 'status');
+$sortby = Request::option('sortby');
+$sortby = in_array($sortby, $sortby_fields) ? $sortby : 'Nachname, Vorname';
 
 /* --- Search --------------------------------------------------------------- */
 $db = DBManager::get();
@@ -125,6 +126,7 @@ if ($inst_id) {
 		$fields[] = 'user_inst.inst_perms';
 		$tables[] = 'JOIN user_inst USING (user_id)';
 		$filter[] = "user_inst.Institut_id = '".$inst_id."'";
+		$filter[] = "user_inst.inst_perms != 'user'";
 	}
 }
 
@@ -167,12 +169,8 @@ if (count($filter))
 			);
 
 			if (isset($row['inst_perms'])) {
-				if ($row['inst_perms'] == 'user') {
-					$userinfo['status'] = _('Studierender');
-				} else {
-					$gruppen = GetRoleNames(GetAllStatusgruppen($inst_id, $row['user_id']));
-					$userinfo['status'] = is_array($gruppen) ? join(', ', array_values($gruppen)) : _('keiner Funktion zugeordnet');
-				}
+				$gruppen = GetRoleNames(GetAllStatusgruppen($inst_id, $row['user_id']));
+				$userinfo['status'] = is_array($gruppen) ? join(', ', array_values($gruppen)) : _('keiner Funktion zugeordnet');
 			}
 
 			if ($GLOBALS['CHAT_ENABLE']) {
