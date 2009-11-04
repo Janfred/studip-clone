@@ -163,6 +163,7 @@ if (count($filter))
 	{
 		if ($row['visible']) {
 			$userinfo = array(
+				'user_id' => $row['user_id'],
 				'username' => $row['username'],
 				'fullname' => $row['fullname'],
 				'status' => isset($row['status']) ? $row['status'] : $row['perms']

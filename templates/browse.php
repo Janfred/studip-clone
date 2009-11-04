@@ -24,7 +24,7 @@
 
 <!-- form zur wahl der institute -->
 <div style="width: 100%;">
-<table width="100%" border="0" cellpadding="2" cellspacing="0">
+<table width="100%" cellpadding="2" cellspacing="0">
 	<? if (count($institutes)): ?>
 	<tr class="<?= TextHelper::cycle('steel1', 'steelgraulight') ?>">
 		<td style="white-space: nowrap;">
@@ -91,7 +91,7 @@
 <div class="topic"><b><?=_("Ergebnisse:")?></b></div>
 
 <div style="width: 100%;">
-<table width="100%" border="0" cellpadding="2" cellspacing="0">
+<table width="100%" cellpadding="2" cellspacing="0">
 	<tr>
 		<th align="left">
 			<a href="<?= URLHelper::getLink('', compact('vorname', 'nachname', 'sem_id', 'inst_id')) ?>"><?=_("Name")?></a>
@@ -112,7 +112,10 @@
 	<? foreach ($users as $user): ?>
 	<tr class="<?=TextHelper::cycle('cycle_odd', 'cycle_even')?>">
 		<td>
-			<a href="<?= URLHelper::getLink('about.php', array('username' => $user['username'])) ?>"><?= htmlReady($user['fullname']) ?></a>
+			<a href="<?= URLHelper::getLink('about.php', array('username' => $user['username'])) ?>">
+				<img src="<?= Avatar::getAvatar($user['user_id'])->getURL(Avatar::SMALL) ?>" style="vertical-align: middle;">
+				<?= htmlReady($user['fullname']) ?>
+			</a>
 		</td>
 		<td>
 			<?= htmlReady($user['status']) ?>
@@ -120,7 +123,7 @@
 		<td align="right">
 			<?= $user['chat'] ?>
 			<a href="<?= URLHelper::getLink('sms_send.php', array('sms_source_page' => 'browse.php', 'rec_uname' => $user['username'])) ?>">
-				<img src="<?=Assets::url()?>images/nachricht1.gif" title="<?=_("Nachricht an User verschicken")?>" border="0">
+				<img src="<?=Assets::url()?>images/nachricht1.gif" title="<?=_("Nachricht an User verschicken")?>">
 			</a>
 		</td>
 	</tr>
