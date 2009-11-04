@@ -260,6 +260,7 @@ if (check_ticket($_REQUEST['studipticket'])){
 		// Delete the user
 		case "u_kill_x":
 
+			$username = get_username($u_id);
 			$question = sprintf(_('Möchten Sie wirklich den User **%s** löschen ?'), $username);
 			echo createQuestion( $question, array("studipticket" => get_ticket(), 'u_kill_id' => $u_id), array('details' => $username));
 
