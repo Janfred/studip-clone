@@ -62,7 +62,7 @@ if (isset($vorname) || isset($nachname))
 //Ergebnisse sollen sortiert werden
 $sortby_fields = array('perms', 'status');
 $sortby = Request::option('sortby');
-$sortby = in_array($sortby, $sortby_fields) ? $sortby : 'Nachname, Vorname';
+$sortby = in_array($sortby, $sortby_fields) ? "$sortby, Nachname, Vorname" : 'Nachname, Vorname';
 
 /* --- Search --------------------------------------------------------------- */
 $db = DBManager::get();
