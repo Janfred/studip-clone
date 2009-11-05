@@ -70,16 +70,19 @@ class CourseAvatar extends Avatar
     }
 
     /**
-     * Constructs a desired HTML image tag for a Avatar.
+     * Constructs a desired HTML image tag for an Avatar. Additional
+     * html attributes may also be specified using the $opt parameter.
      *
      * @param string  one of the constants Avatar::(NORMAL|MEDIUM|SMALL)
+     * @param array   array of attributes to add to the HTML image tag
      *
      * @return string returns the HTML image tag
      */
-    function getImageTag($size = Avatar::MEDIUM)
+    function getImageTag($size = Avatar::MEDIUM, $opt = array())
     {
-        return sprintf('<img src="%s" align="middle" class="avatar-%s course-%s"/>',
-                       $this->getURL($size), $size, $this->user_id);
+        $class = sprintf('course-avatar-%s course-%s', $size, $this->user_id);
+
+        return parent::getImageTag($size, $opt + compact('class'));
     }
 
     /**

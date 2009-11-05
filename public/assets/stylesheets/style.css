@@ -1060,7 +1060,39 @@ form#quicksearch .autocomplete li {
     display: none;
 }
 
-/* --- Avatars of courses and institutes ------------------------------------ */
+/* --- Avatars of users, courses and institutes ------------------------------------ */
+
+.avatar-small {
+    vertical-align: middle;
+    width: 20px;
+    height: 25px;
+}
+
+.avatar-medium {
+    width: 80px;
+    height: 100px;
+}
+
+.avatar-normal {
+    width: 200px;
+    height: 250px;
+}
+
+.course-avatar-small {
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+}
+
+.course-avatar-medium {
+    width: 80px;
+    height: 80px;
+}
+
+.course-avatar-normal {
+    width: 250px;
+    height: 125px;
+}
 
 .infobox-avatar {
     width: 250px;

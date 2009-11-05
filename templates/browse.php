@@ -113,7 +113,7 @@
 	<tr class="<?=TextHelper::cycle('cycle_odd', 'cycle_even')?>">
 		<td>
 			<a href="<?= URLHelper::getLink('about.php', array('username' => $user['username'])) ?>">
-				<img src="<?= Avatar::getAvatar($user['user_id'])->getURL(Avatar::SMALL) ?>" style="vertical-align: middle;">
+				<?= Avatar::getAvatar($user['user_id'])->getImageTag(Avatar::SMALL) ?>
 				<?= htmlReady($user['fullname']) ?>
 			</a>
 		</td>

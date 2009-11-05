@@ -165,26 +165,41 @@ class Avatar {
 
 
   /**
-   * Constructs a desired HTML image tag for an Avatar.
+   * Constructs a desired HTML image tag for an Avatar. Additional
+   * html attributes may also be specified using the $opt parameter.
    *
    * @param string  one of the constants Avatar::(NORMAL|MEDIUM|SMALL)
+   * @param array   array of attributes to add to the HTML image tag
    *
    * @return string returns the HTML image tag
    */
   function getImageTag($size = Avatar::MEDIUM, $opt = array()) {
-    
-    $opt = Avatar::parse_attributes($opt);  
-          
-    require_once 'lib/functions.php';
-    $username = htmlReady(get_username($this->user_id));
-    $fullname = htmlReady(get_fullname($this->user_id));
-    
-    if(isset($opt['title'])) $fullname = $opt['title'];
-    
-    return sprintf('<img src="%s" align="middle" class="avatar-%s user-%s" '.
-                   'alt="%s" title="%s" />',
-                   $this->getURL($size), $size, $username,
-                   $fullname, $fullname);
+
+    $opt = Avatar::parse_attributes($opt);
+    $opt['src'] = $this->getURL($size);
+
+    if (!isset($opt['class'])) {
+      require_once 'lib/functions.php';
+      $username = htmlReady(get_username($this->user_id));
+      $opt['class'] = sprintf('avatar-%s user-%s', $size, $username);
+    }
+
+    if (!isset($opt['title'])) {
+      require_once 'lib/functions.php';
+      $opt['title'] = htmlReady(get_fullname($this->user_id));
+    }
+
+    if (!isset($opt['alt'])) {
+      $opt['alt'] = $opt['title'];
+    }
+
+    $result = '';
+
+    foreach ($opt as $key => $value) {
+      $result .= sprintf('%s="%s" ', $key, $value);
+    }
+
+    return '<img ' . $result . '/>';
   }
 
 
@@ -389,7 +404,7 @@ class Avatar {
     # execute PHP internal error handler
     return false;
   }
-  
+
   private static function parse_attributes($stringOrArray) {
 
       if (is_array($stringOrArray))
