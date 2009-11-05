@@ -61,14 +61,24 @@ class Avatar {
 
 
   /**
+   * Holds the user's username
+   *
+   * @access protected
+   * @var string
+   */
+  protected $username;
+
+
+  /**
    * Returns an avatar object of the appropriate class.
    *
    * @param  string  the user's id
+   * @param  string  the user's username (optional)
    *
    * @return mixed   the user's avatar.
    */
-  static function getAvatar($user_id) {
-    return new Avatar($user_id);
+  static function getAvatar($user_id, $username = NULL) {
+    return new Avatar($user_id, $username);
   }
 
   /**
@@ -77,7 +87,7 @@ class Avatar {
    * @return mixed   the user's avatar.
    */
   static function getNobody() {
-    return new Avatar('nobody');
+    return new Avatar('nobody', 'nobody');
   }
 
 
@@ -113,11 +123,13 @@ class Avatar {
    * Constructs a new Avatar object belonging to a user with the given id.
    *
    * @param  string  the user's id
+   * @param  string  the user's username (optional)
    *
    * @return void
    */
-  protected function __construct($user_id) {
+  protected function __construct($user_id, $username = NULL) {
     $this->user_id = $user_id;
+    $this->username = $username;
   }
 
 
@@ -165,6 +177,23 @@ class Avatar {
 
 
   /**
+   * Returns the CSS class to use for this avatar image.
+   *
+   * @param string  one of the constants Avatar::(NORMAL|MEDIUM|SMALL)
+   *
+   * @return string CSS class to use for the avatar
+   */
+  protected function getCssClass($size) {
+    if (!isset($this->username)) {
+      require_once 'lib/functions.php';
+      $this->username = htmlReady(get_username($this->user_id));
+    }
+
+    return sprintf('avatar-%s user-%s', $size, $this->username);
+  }
+
+
+  /**
    * Constructs a desired HTML image tag for an Avatar. Additional
    * html attributes may also be specified using the $opt parameter.
    *
@@ -175,13 +204,12 @@ class Avatar {
    */
   function getImageTag($size = Avatar::MEDIUM, $opt = array()) {
 
-    $opt = Avatar::parse_attributes($opt);
     $opt['src'] = $this->getURL($size);
 
-    if (!isset($opt['class'])) {
-      require_once 'lib/functions.php';
-      $username = htmlReady(get_username($this->user_id));
-      $opt['class'] = sprintf('avatar-%s user-%s', $size, $username);
+    if (isset($opt['class'])) {
+      $opt['class'] = $this->getCssClass($size) . ' ' . $opt['class'];
+    } else {
+      $opt['class'] = $this->getCssClass($size);
     }
 
     if (!isset($opt['title'])) {
@@ -404,28 +432,5 @@ class Avatar {
     # execute PHP internal error handler
     return false;
   }
-
-  private static function parse_attributes($stringOrArray) {
-
-      if (is_array($stringOrArray))
-        return $stringOrArray;
-
-      preg_match_all('/
-        \s*(\w+)              # key                               \\1
-        \s*=\s*               # =
-        (\'|")?               # values may be included in \' or " \\2
-        (.*?)                 # value                             \\3
-        (?(2) \\2)            # matching \' or " if needed        \\4
-        \s*(?:
-          (?=\w+\s*=) | \s*$  # followed by another key= or the end of the string
-        )
-      /x', $stringOrArray, $matches, PREG_SET_ORDER);
-
-      $attributes = array();
-      foreach ($matches as $val)
-        $attributes[$val[1]] = $val[3];
-
-      return $attributes;
-    }
 }
 
