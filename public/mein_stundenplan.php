@@ -410,7 +410,8 @@ if ((is_array($my_personal_sems)) && (!$inst_id)){
 			if ($tmp_day==0)
 				$tmp_day = 7;
 
-			$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"])+$idx_corr_h.(int)((date("i", $mps["start_time"])+$idx_corr_m) / 15).$tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>$mps["room"], "row_span"=>$tmp_row_span, "dozenten"=>htmlReady($mps["doz"]), "personal_sem"=>TRUE);
+			// start_time_idx is encoded here as:  <hour of day> * 100 + <quarter of hour> * 10 + <day of week>
+			$my_sems[$mps["seminar_id"]]=array("start_time_idx"=>date("G", $mps["start_time"]+$idx_corr_h) * 100 + (date("i", $mps["start_time"]+$idx_corr_m) / 15) * 10 + $tmp_day, "start_time"=>$mps["start_time"], "end_time"=>$mps["ende_time"], "name"=>$mps["beschreibung"], "seminar_id"=>$mps["seminar_id"],  "ort"=>$mps["room"], "row_span"=>$tmp_row_span, "dozenten"=>htmlReady($mps["doz"]), "personal_sem"=>TRUE);
 		}
 	}
 }
@@ -428,6 +429,8 @@ if (is_array($my_sems)) {
 					$start_cell=FALSE;
 
 				$cell_sem[$idx_tmp][$ms["seminar_id"]] = $start_cell; 
+
+				// extract quarter of hour from $idx_tmp and skip to next quarter
 				if (($idx_tmp % 100) - date("w",$ms["start_time"]) == 30) {
 					$idx_tmp=$idx_tmp+70;
 				} else {
