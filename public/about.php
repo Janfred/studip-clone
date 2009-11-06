@@ -185,14 +185,9 @@ if($db->f('user_id') == $user->id && !$db->f('locked')){
 	$CURRENT_PAGE = _("Persönliche Homepage");
 	unset($user_id);
 }
-
-if (!$user_id){
-	echo MessageBox::error(_("Diese Homepage ist nicht verfügbar."),array(_("Der Benutzer hat sich unsichtbar geschaltet."), _("Der Benutzer ist im System nicht vorhanden.")));
-	$layout->set_attribute('content_for_layout', ob_get_clean());
-	echo $layout->render();
-	page_close();
-	die;
-}
+# and start the output buffering
+ob_start();
+if ($user_id){
 
 // count views of Page
 if ($auth->auth["uid"]!=$user_id) {
@@ -261,8 +256,6 @@ if ($show_tabs) {
 	Navigation::activateItem('/homepage/view/all');
 }
 
-# and start the output buffering
-ob_start();
 
 
 ?>
@@ -687,7 +680,9 @@ if ($perm->get_perm($user_id) == 'dozent'){
 
 	echo $layout->render(array('title' => _('Veranstaltungen'), 'content_for_layout' => $output));
 }
-
+} else { 
+	echo MessageBox::error(_("Diese Homepage ist nicht verfügbar."),array(_("Der Benutzer hat sich unsichtbar geschaltet oder der Benutzer ist im System nicht vorhanden."))); 
+}
 # get the layout template
 $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
 
