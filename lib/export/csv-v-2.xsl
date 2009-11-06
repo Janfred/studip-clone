@@ -43,7 +43,7 @@
 	<xsl:text>";"</xsl:text>
 	
 	<xsl:if test="teilnehmerzahl">
-	    <xsl:value-of select="teilnehmeranzahl"/>
+	    <xsl:value-of select="normalize-space(teilnehmerzahl)"/>
 	</xsl:if>
 	<xsl:text>";"</xsl:text>
 
