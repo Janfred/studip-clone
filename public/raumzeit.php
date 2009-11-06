@@ -444,7 +444,7 @@ while ($tmp_first_date < $end_date) {
 				</TR>
 				<? if ($termine =& $sem->getSingleDates(true, true)) { ?>
 				<TR>
-					<TD align="center" colspan="9" class="steel1">
+					<TD align="left" colspan="9" class="steel1">
 						<form action="<?= URLHelper::getLink() ?>" method="post" name="Formular">
 						<TABLE cellpadding="1" cellspacing="0" border="0" width="100%">
 							<?

@@ -30,7 +30,7 @@
 	</TR>
 	<TR>
 		<TD align="left" class="steelgraulight">&nbsp;</TD>
-		<TD colspan="8" class="steelgraulight">
+		<TD colspan="8" class="steelgraulight" align="left">
 			<FONT size="-1">
 			<?
 				if ($GLOBALS['RESOURCES_ENABLE'] && $resList->numberOfRooms()) :
