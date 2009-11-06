@@ -253,7 +253,7 @@ function export_inst($inst_id, $ex_sem_id = "all")
 */
 function export_sem($inst_id, $ex_sem_id = "all")
 {
-	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $SEM_CLASS, $filter, $ex_sem, $ex_class_array,$ex_person_details,$persons;
+	global $db, $db2, $range_id, $xml_file, $o_mode, $xml_names_lecture, $xml_groupnames_lecture, $object_counter, $SEM_TYPE, $SEM_CLASS, $filter, $ex_sem, $ex_sem_class,$ex_person_details,$persons;
 
 	$ex_only_homeinst = (int)$_REQUEST['ex_only_homeinst'];
 	
@@ -294,24 +294,37 @@ function export_sem($inst_id, $ex_sem_id = "all")
 
 	if (!$GLOBALS['perm']->have_perm('root') && !$GLOBALS['perm']->have_studip_perm('admin', $inst_id)) $addquery .= " AND visible=1 ";
 
+	if(count($ex_sem_class)){
+		$allowed_sem_types = array();
+		foreach(array_keys($ex_sem_class) as $semclassid){
+			$allowed_sem_types += array_keys(SeminarCategories::get($semclassid)->getTypes());
+		}
+		$addquery .= sprintf(" AND seminare.status IN(%s) ", join(",", $allowed_sem_types));
+	} else {
+		$addquery .= " AND seminare.status <> 99 ";
+	}
+	
 	if($ex_only_homeinst){
 		$db->query("SELECT seminare.*,Seminar_id as seminar_id, Institute.Name as heimateinrichtung FROM seminare
 				LEFT JOIN Institute ON seminare.Institut_id=Institute.Institut_id
 				WHERE seminare.Institut_id = '" . $inst_id . "' " . $addquery . "
 				ORDER BY " . $order);
 	} else {
-	$db->query("SELECT seminare.*,seminar_inst.seminar_id, Institute.Name as heimateinrichtung FROM seminar_inst
+		$db->query("SELECT seminare.*,seminar_inst.seminar_id, Institute.Name as heimateinrichtung FROM seminar_inst
 				LEFT JOIN seminare USING (Seminar_id)
 				LEFT JOIN Institute ON seminare.Institut_id=Institute.Institut_id
 				WHERE seminar_inst.Institut_id = '" . $inst_id . "' " . $addquery . "
 				ORDER BY " . $order);
+		echo "SELECT seminare.*,seminar_inst.seminar_id, Institute.Name as heimateinrichtung FROM seminar_inst
+				LEFT JOIN seminare USING (Seminar_id)
+				LEFT JOIN Institute ON seminare.Institut_id=Institute.Institut_id
+				WHERE seminar_inst.Institut_id = '" . $inst_id . "' " . $addquery . "
+				ORDER BY " . $order;
 	}
 
 	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
 
 	while ($db->next_record())
-		if (($ex_class_array == "") OR ($ex_class_array[$SEM_TYPE[$db->f("status")]["class"]] == true))
-		// Nur gew&auml;hlte Veranstaltungsklassen exportieren
 		{
 			$group_string = "";
 			if (($do_group) AND ($group != $db->f($group_tab_zelle)))

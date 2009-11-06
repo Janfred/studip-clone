@@ -140,16 +140,16 @@ $export_pagename = _("Datenexport - Startseite");
 
 	$export_pagecontent .="<b><font size=\"-1\">". _("Welche Arten von Veranstaltungen sollen exportiert werden? ") .  "</font></b><br />";
 
-	if ($ex_sem_class == "")
-		$ex_sem_class = "1000";
-	$count = 0;
-	foreach ($SEM_CLASS as $key=>$val)
+	if(!count($ex_sem_class)){
+		$ex_sem_class[1] = 1;
+	}
+	foreach (SeminarCategories::getAll() as $sem_class)
 	{
-		$export_pagecontent .= "<input type=\"checkbox\" name=\"ex_class_$count\" value=\"TRUE\"";
-		if ($ex_sem_class[$count] == "1")
-			$export_pagecontent .= " checked";
-		$export_pagecontent .= ">&nbsp;" . $val["name"] . "&nbsp;&nbsp;";
-		$count ++;
+		if(!$sem_class->studygroup_mode){
+			$export_pagecontent .= "<input type=\"checkbox\" name=\"ex_sem_class[$sem_class->id]\" value=\"1\"";
+			if (isset($ex_sem_class[$sem_class->id])) $export_pagecontent .= " checked";
+			$export_pagecontent .= ">&nbsp;" . htmlready($sem_class->name) . "&nbsp;&nbsp;";
+		}
 	}
 
 	$export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"choose\">";

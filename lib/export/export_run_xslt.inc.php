@@ -142,7 +142,9 @@ else
 		$export_weiter_button .= "<input type=\"hidden\" name=\"o_mode\" value=\"" . $o_mode . "\">";
 		$export_weiter_button .= "<input type=\"hidden\" name=\"ex_type\" value=\"" . $ex_type . "\">";
 		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem\" value=\"" . $ex_sem . "\">";
-		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class\" value=\"" . $ex_sem_class . "\">";
+		foreach(array_keys($ex_sem_class) as $semclassid){
+			$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class[$semclassid]\" value=\"1\">";
+		}
 		$export_weiter_button .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
 		$export_weiter_button .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
 		$export_weiter_button .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";

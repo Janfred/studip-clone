@@ -120,17 +120,6 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 	unset($xml_printdesc);
 	unset($xml_printcontent);
 
-	$count = 0;
-	if (!isset($ex_sem_class))
-		foreach ($SEM_CLASS as $key=>$val)
-		{
-			if (isset($GLOBALS["ex_class_" . $count]))
-				$ex_sem_class .= "1";
-			else
-				$ex_sem_class .= "0";
-			$count ++;
-		}
-
 	$export_info = _("Bitte wählen Sie, in welchem Format die Daten ausgegeben werden sollen!") . "<br>";
 
 	$export_pagecontent .= "<form method=\"POST\" action=\"" . $PHP_SELF . "\">";
@@ -145,14 +134,15 @@ elseif (!isset($page) or ($page == 0)) // Seite 1 : Auswahl des Dateiformats
 		$export_pagecontent .= ">" . $val;
 	}
 	$export_pagecontent .= "</select><br>	<br><br>";
-
 	$export_pagecontent .= "<b><font size=\"-1\">"._("Name der Datei (z.B. &raquo;Test&laquo;):")."</font></b><br />";
 	$export_pagecontent .= "<input type=\"text\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"page\" value=\"1\"><br><br><br>";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"" . $o_mode . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem\" value=\"" . $ex_sem . "\">";
-	$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class\" value=\"" . $ex_sem_class . "\">";
+	foreach(array_keys($ex_sem_class) as $semclassid){
+		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class[$semclassid]\" value=\"1\">";
+	}
 	$export_pagecontent .= "<input type=\"hidden\" name=\"ex_type\" value=\"" . $ex_type . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"choose\" value=\"" . $choose . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
@@ -220,8 +210,9 @@ elseif ($page == 1) // Seite 2 : Auswahl des XSLT-Scripts
 	$export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"" . $o_mode . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"ex_type\" value=\"" . $ex_type . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem\" value=\"" . $ex_sem . "\">";
-	$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class\" value=\"" . $ex_sem_class . "\">";
-	$export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
+	foreach(array_keys($ex_sem_class) as $semclassid){
+		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class[$semclassid]\" value=\"1\">";
+	}	$export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
 
@@ -273,7 +264,9 @@ elseif ($page == 2)  // Seite 3 : Download der Dateien
 	$export_pagecontent .= "<input type=\"hidden\" name=\"o_mode\" value=\"" . $o_mode . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"ex_type\" value=\"" . $ex_type . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem\" value=\"" . $ex_sem . "\">";
-	$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class\" value=\"" . $ex_sem_class . "\">";
+	foreach(array_keys($ex_sem_class) as $semclassid){
+		$export_pagecontent .= "<input type=\"hidden\" name=\"ex_sem_class[$semclassid]\" value=\"1\">";
+	}
 	$export_pagecontent .= "<input type=\"hidden\" name=\"range_id\" value=\"" . $range_id . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xml_file_id\" value=\"" . $xml_file_id . "\">";
 	$export_pagecontent .= "<input type=\"hidden\" name=\"xslt_filename\" value=\"" . htmlReady($xslt_filename) . "\">";
