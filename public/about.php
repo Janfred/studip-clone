@@ -681,8 +681,9 @@ if ($perm->get_perm($user_id) == 'dozent'){
 	echo $layout->render(array('title' => _('Veranstaltungen'), 'content_for_layout' => $output));
 }
 } else { 
-	echo MessageBox::error(_("Diese Homepage ist nicht verfügbar."),array(_("Der Benutzer hat sich unsichtbar geschaltet oder der Benutzer ist im System nicht vorhanden."))); 
+	echo MessageBox::error(_("Diese Homepage ist nicht verfügbar."),array(_("Der Benutzer hat sich unsichtbar geschaltet oder ist im System nicht vorhanden."))); 
 }
+
 # get the layout template
 $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
 
