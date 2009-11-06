@@ -187,7 +187,11 @@ if($db->f('user_id') == $user->id && !$db->f('locked')){
 }
 
 if (!$user_id){
-	throw new Exception(_("Diese Homepage ist nicht verfügbar."));
+	echo MessageBox::error(_("Diese Homepage ist nicht verfügbar."),array(_("Der Benutzer hat sich unsichtbar geschaltet."), _("Der Benutzer ist im System nicht vorhanden.")));
+	$layout->set_attribute('content_for_layout', ob_get_clean());
+	echo $layout->render();
+	page_close();
+	die;
 }
 
 // count views of Page
