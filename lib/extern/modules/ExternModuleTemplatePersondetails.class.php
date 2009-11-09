@@ -460,8 +460,8 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		if ($GLOBALS["PLUGINS_ENABLE"]) {
 			$plugins = PluginEngine::getPlugins('HomepagePlugin');
 
-			foreach ($plugins as $plugin){
-				$template = $plugin->getHomepageTemplate($user_id);
+			foreach ($plugins as $plugin) {
+				$template = $plugin->getHomepageTemplate($this->user_id);
 
 				if ($template) {
 					$keyname = 'PLUGIN_' . strtoupper($plugin->getPluginName());
