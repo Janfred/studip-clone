@@ -146,14 +146,14 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
 
 		$markers['TemplateLectureData'][] = array('<!-- BEGIN TUTORS -->', '');
 		$markers['TemplateLectureData'][] = array('<!-- BEGIN TUTOR -->', '');
-		$markers['TemplateLectureData'][] = array('###FULLNAME###', '');
-		$markers['TemplateLectureData'][] = array('###LASTNAME###', '');
-		$markers['TemplateLectureData'][] = array('###FIRSTNAME###', '');
-		$markers['TemplateLectureData'][] = array('###TITLEFRONT###', '');
-		$markers['TemplateLectureData'][] = array('###TITLEREAR###', '');
-		$markers['TemplateLectureData'][] = array('###PERSONDETAILS-HREF###', '');
+		$markers['TemplateLectureData'][] = array('###TUTOR_FULLNAME###', '');
+		$markers['TemplateLectureData'][] = array('###TUTOR_LASTNAME###', '');
+		$markers['TemplateLectureData'][] = array('###TUTOR_FIRSTNAME###', '');
+		$markers['TemplateLectureData'][] = array('###TUTOR_TITLEFRONT###', '');
+		$markers['TemplateLectureData'][] = array('###TUTOR_TITLEREAR###', '');
+		$markers['TemplateLectureData'][] = array('###TUTOR_PERSONDETAILS-HREF###', '');
 		$markers['TemplateLectureData'][] = array('###TUTOR-NO###', '');
-		$markers['TemplateLectureData'][] = array('###UNAME###', '');
+		$markers['TemplateLectureData'][] = array('###TUTOR_UNAME###', '');
 		$markers['TemplateLectureData'][] = array('<!-- END TUTOR -->', '');
 		$markers['TemplateLectureData'][] = array('<!-- END TUTORS -->', '');
 
@@ -255,13 +255,13 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
 			foreach ($tutors as $tutor) {
 				$db_tutor->query("SELECT {$GLOBALS['_fullname_sql'][$name_sql]} AS name, username, Vorname, Nachname, title_rear, title_front FROM auth_user_md5 aum LEFT JOIN user_info ui USING(user_id) WHERE aum.user_id = '$tutor'");
 				if ($db_tutor->next_record()) {
-					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['PERSONDETAILS-HREF'] = $this->elements['LinkInternPersondetails']->createUrl(array('link_args' => 'username=' . $db_tutor->f('username')));
-					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['FULLNAME'] = ExternModule::ExtHtmlReady($db_tutor->f('name'));
-					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['FIRSTNAME'] = ExternModule::ExtHtmlReady($db_tutor->f('Vorname'));
-					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['LASTNAME'] = ExternModule::ExtHtmlReady($db_tutor->f('Nachname'));
-					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TITLEFRONT'] = ExternModule::ExtHtmlReady($db_tutor->f('title_front'));
-					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TITLEREAR'] = ExternModule::ExtHtmlReady($db_tutor->f('title_rear'));
-					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['UNAME'] = $db_tutor->f('username');
+					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TUTOR_PERSONDETAILS-HREF'] = $this->elements['LinkInternPersondetails']->createUrl(array('link_args' => 'username=' . $db_tutor->f('username')));
+					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TUTOR_FULLNAME'] = ExternModule::ExtHtmlReady($db_tutor->f('name'));
+					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TUTOR_FIRSTNAME'] = ExternModule::ExtHtmlReady($db_tutor->f('Vorname'));
+					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TUTOR_LASTNAME'] = ExternModule::ExtHtmlReady($db_tutor->f('Nachname'));
+					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TUTOR_TITLEFRONT'] = ExternModule::ExtHtmlReady($db_tutor->f('title_front'));
+					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TUTOR_TITLEREAR'] = ExternModule::ExtHtmlReady($db_tutor->f('title_rear'));
+					$content['LECTUREDETAILS']['TUTORS']['TUTOR'][$l]['TUTOR_UNAME'] = $db_tutor->f('username');
 					$l++;
 				}
 			}
