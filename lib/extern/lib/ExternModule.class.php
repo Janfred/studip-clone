@@ -413,6 +413,17 @@ class ExternModule {
 			$i++;
 		}
 	}
+
+	function insertPluginMarkers ($plugin_type, &$markers, $element_name) {
+		if ($GLOBALS["PLUGINS_ENABLE"]) {
+			$plugin_manager = PluginManager::getInstance();
+
+			foreach ($plugin_manager->getPluginInfos($plugin_type) as $plugin) {
+				$keyname = 'PLUGIN_' . strtoupper($plugin['name']);
+				$markers[$element_name][] = array("###$keyname###", $plugin['description']);
+			}
+		}
+	}
 	
 	function setRawOutput ($raw = TRUE) {
 		$this->is_raw_output = $raw;

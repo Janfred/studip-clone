@@ -43,6 +43,11 @@ require_once($RELATIVE_PATH_EXTERN . "/lib/extern_functions.inc.php");
 
 $default = "";
 
+// set up dummy user environment (but no session)
+$user = new Seminar_User('nobody');
+$auth = new Seminar_Default_Auth();
+$perm = new Seminar_Perm();
+
 // there is a page_url, switch to the sri-interface
 if ($page_url) {
 	require($RELATIVE_PATH_EXTERN . "/sri.inc.php");

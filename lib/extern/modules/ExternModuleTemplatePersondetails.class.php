@@ -165,6 +165,7 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		$markers['TemplateMain'][] = array('###PUBLICATIONS###', '');
 		$markers['TemplateMain'][] = array('###OFFICE-HOURS###', '');
 		$this->insertDatafieldMarkers('user', $markers, 'TemplateMain');
+		$this->insertPluginMarkers('HomepagePlugin', $markers, 'TemplateMain');
 		$markers['TemplateMain'][] = array('###LECTURES###', _("Inhalt aus dem Template für Veranstaltungen"));
 		$markers['TemplateMain'][] = array('###NEWS###', _("Inhalt aus dem Template für News"));
 		$markers['TemplateMain'][] = array('###LITERATURE###', _("Inhalt aus dem Template für Literaturlisten"));
@@ -452,6 +453,20 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 					}
 				}
 				$k++;
+			}
+		}
+
+		// homepage plugins
+		if ($GLOBALS["PLUGINS_ENABLE"]) {
+			$plugins = PluginEngine::getPlugins('HomepagePlugin');
+
+			foreach ($plugins as $plugin){
+				$template = $plugin->getHomepageTemplate($user_id);
+
+				if ($template) {
+					$keyname = 'PLUGIN_' . strtoupper($plugin->getPluginName());
+					$content['PERSONDETAILS'][$keyname] = $template->render();
+				}
 			}
 		}
 
