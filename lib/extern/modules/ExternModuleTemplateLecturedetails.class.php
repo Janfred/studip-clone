@@ -303,7 +303,7 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
 			// generic data fields
 			if ($generic_datafields = $this->config->getValue('Main', 'genericdatafields')) {
 				$localEntries = DataFieldEntry::getDataFieldEntries($this->seminar_id, 'sem');
-				$k = 0;
+				$k = 1;
 				foreach ($generic_datafields as $datafield) {
 					if (isset($localEntries[$datafield]) && is_object($localEntries[$datafield])) {
 						$localEntry = trim($localEntries[$datafield]->getDisplayValue());

@@ -443,8 +443,8 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 
 		// generic data fields
 		if ($generic_datafields = $this->config->getValue('Main', 'genericdatafields')) {
-			$localEntries = DataFieldEntry::getDataFieldEntries($user_id, 'user');
-			$k = 0;
+			$localEntries = DataFieldEntry::getDataFieldEntries($this->user_id, 'user');
+			$k = 1;
 			foreach ($generic_datafields as $datafield) {
 				if (isset($localEntries[$datafield]) && is_object($localEntries[$datafield])) {
 					$localEntry = trim($localEntries[$datafield]->getDisplayValue());
