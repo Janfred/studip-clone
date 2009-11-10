@@ -501,9 +501,9 @@ class ExternSemBrowseTemplate extends SemBrowse {
 							$l = 1;
 							foreach ($generic_datafields as $datafield) {
 								if (isset($localEntries[$datafield]) && is_object($localEntries[$datafield])) {
-									$localEntry = trim($localEntries[$datafield]->getDisplayValue());
+									$localEntry = $localEntries[$datafield]->getDisplayValue();
 									if ($localEntry) {
-										$content['LECTURES']['GROUP'][$i]['LECTURE'][$j]['DATAFIELD_' . $l] = ExternModule::ExtFormatReady($localEntry, TRUE, TRUE);
+										$content['LECTURES']['GROUP'][$i]['LECTURE'][$j]['DATAFIELD_' . $l] = $localEntry;
 									}
 								}
 								$l++;

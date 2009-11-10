@@ -817,19 +817,9 @@ class ExternModuleTemplateSemBrowse extends ExternModule {
 								$m = 1;
 								foreach ($generic_datafields as $datafield) {
 									if (isset($localEntries[$datafield]) && is_object($localEntries[$datafield])) {
-										switch ($localEntries[$datafield]->getType()) {
-											case 'link':
-												$localEntry = trim($localEntries[$datafield]->getValue());
-												if ($localEntry) {
-													$content['RESULT']['GROUP'][$j]['COURSE'][$k]['DATAFIELD_' . $m] = $localEntry;
-												}
-												break;
-
-											default:
-												$localEntry = trim($localEntries[$datafield]->getDisplayValue());
-												if ($localEntry) {
-													$content['RESULT']['GROUP'][$j]['COURSE'][$k]['DATAFIELD_' . $m] = ExternModule::ExtFormatReady($localEntry, TRUE, TRUE);
-												}
+										$localEntry = $localEntries[$datafield]->getDisplayValue();
+										if ($localEntry) {
+											$content['RESULT']['GROUP'][$j]['COURSE'][$k]['DATAFIELD_' . $m] = $localEntry;
 										}
 									}
 									$m++;

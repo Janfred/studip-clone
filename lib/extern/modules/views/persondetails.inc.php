@@ -127,7 +127,7 @@ foreach ($order as $position) {
 					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
-					echo formatReady($db->f($data_field), TRUE, TRUE, TRUE);
+					echo formatReady($db->f($data_field), TRUE, TRUE);
 					echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 				}
 				break;
@@ -147,7 +147,7 @@ foreach ($order as $position) {
 			// generic data fields
 			default :
 				// include generic datafields
-				if (isset($fieldEntries[$data_field]) && is_object($fieldEntries[$data_field]) && trim($fieldEntries[$data_field]->getValue())) {
+				if (isset($fieldEntries[$data_field]) && is_object($fieldEntries[$data_field]) && $fieldEntries[$data_field]->getDisplayValue()) {
 					echo "<tr><td width=\"100%\">\n";
 					echo "<table" . $this->config->getAttributes("TableParagraph", "table") . ">\n";
 					echo "<tr" . $this->config->getAttributes("TableParagraphHeadline", "tr");
@@ -157,7 +157,7 @@ foreach ($order as $position) {
 					echo "<tr" . $this->config->getAttributes("TableParagraphText", "tr") . ">";
 					echo "<td" . $this->config->getAttributes("TableParagraphText", "td") . ">";
 					echo "$text_div<font" . $this->config->getAttributes("TableParagraphText", "font") . ">\n";
-					echo trim($fieldEntries[$data_field]->getDisplayValue());
+					echo $fieldEntries[$data_field]->getDisplayValue();
 					echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 				}
 		}
@@ -207,7 +207,7 @@ function news (&$module, $db, $alias_content, $text_div, $text_div_end) {
 			list ($content, $admin_msg) = explode("<admin_msg>", $db_news->f("body"));
 			echo "<td" . $module->config->getAttributes("TableParagraphText", "td") . ">";
 			echo "$text_div<font" . $module->config->getAttributes("TableParagraphText", "font") . ">";
-			echo formatReady($content, TRUE, TRUE, TRUE);
+			echo formatReady($content, TRUE, TRUE);
 			echo "</font>$text_div_end</td></tr>\n";
 		}
 		echo "</table>\n</td></tr>\n";
@@ -277,7 +277,7 @@ function kategorien (&$module, $db, $alias_content, $text_div, $text_div_end) {
 		echo "<tr" . $module->config->getAttributes("TableParagraphText", "tr") . ">";
 		echo "<td" . $module->config->getAttributes("TableParagraphText", "td") . ">";
 		echo "$text_div<font" . $module->config->getAttributes("TableParagraphText", "font") . ">";
-		echo formatReady($db_kategorien->f("content"), TRUE, TRUE, TRUE);
+		echo formatReady($db_kategorien->f("content"), TRUE, TRUE);
 		echo "</font>$text_div_end</td></tr>\n</table>\n</td></tr>\n";
 	}
 }

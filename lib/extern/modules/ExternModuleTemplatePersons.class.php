@@ -296,9 +296,9 @@ class ExternModuleTemplatePersons extends ExternModule {
 						$k = 1;
 						foreach ($generic_datafields as $datafield) {
 							if (isset($localEntries[$datafield]) && is_object($localEntries[$datafield])) {
-								$localEntry = trim($localEntries[$datafield]->getDisplayValue());
+								$localEntry = $localEntries[$datafield]->getDisplayValue();
 								if ($localEntry) {
-									$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['DATAFIELD_' . $k] = ExternModule::ExtFormatReady($localEntry, TRUE, TRUE);
+									$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['DATAFIELD_' . $k] = $localEntry;
 								}
 							}
 							$k++;

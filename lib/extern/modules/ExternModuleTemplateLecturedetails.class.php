@@ -306,9 +306,9 @@ class ExternModuleTemplateLecturedetails extends ExternModule {
 				$k = 1;
 				foreach ($generic_datafields as $datafield) {
 					if (isset($localEntries[$datafield]) && is_object($localEntries[$datafield])) {
-						$localEntry = trim($localEntries[$datafield]->getDisplayValue());
+						$localEntry = $localEntries[$datafield]->getDisplayValue();
 						if ($localEntry) {
-							$content['LECTUREDETAILS']["DATAFIELD_$k"] = ExternModule::ExtFormatReady($localEntry, TRUE, TRUE);
+							$content['LECTUREDETAILS']["DATAFIELD_$k"] = $localEntry;
 						}
 					}
 					$k++;
