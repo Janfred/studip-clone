@@ -897,7 +897,9 @@ function validate_upload($the_file) {
 			}
 
 		//pruefen ob die Groesse stimmt.
-		if ($the_file_size > $max_filesize) {
+		if ($the_file_size == 0) {
+			$emsg.= "error§" . _("Sie haben eine leere Datei zum Hochladen ausgew&auml;hlt!") . "§";
+		} else if ($the_file_size > $max_filesize) {
 			$emsg.= "error§" . sprintf(_("Die Datei konnte nicht &uuml;bertragen werden: Die maximale Gr&ouml;sse f&uuml;r einen Upload (%s Megabyte) wurde &uuml;berschritten!"), $max_filesize / 1048576);
 		}
 	}
