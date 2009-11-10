@@ -178,8 +178,9 @@ function semadmission_create_result_xls($data){
 			$teilnehmer_aux = $semdata['count_teilnehmer_aux'];
 			$quota = $semdata['admission_turnout'];
 			$count2 = $semdata['count_anmeldung'];
-			$count3 = $semdata['count_wartende'];;
-			$datum = $semdata['admission_endtime'];
+			$count3 = $semdata['count_wartende'];
+			// show end date only if it is actually relevant
+			$datum = $semdata['admission_type'] == 1 || $semdata['admission_type'] == 2 && $semdata['admission_enable_quota'] ? $semdata['admission_endtime'] : -1;
 			$startdatum = $semdata['admission_starttime'];
 			$enddatum = $semdata['admission_endtime_sem'];
 			$status = $semdata['admission_status_text'];
@@ -690,7 +691,7 @@ if(is_object($group_obj)){
 				<input type="checkbox" name="check_prelim" <?=$_SESSION['show_admission']['check_prelim'] ? 'checked' : ''?> value="1" style="vertical-align:middle;">&nbsp;<?=_("vorläufige Teilnahme")?>
 				</span>
 				</div>
-				<div style="font-size:10pt;margin-top:10px;;margin-left:10px;">
+				<div style="font-size:10pt;margin-top:10px;margin-left:10px;">
 				<b><?=_("Präfix des Veranstaltungsnamens:")?></b>
 				<span style="margin-left:10px;font-size:10pt;">
 				<input type="test" name="sem_name_prefix" value="<?=htmlReady($_SESSION['show_admission']['sem_name_prefix'])?>" style="vertical-align:middle;" size="20">
@@ -745,7 +746,7 @@ if(is_object($group_obj)){
 			$count2 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Anmeldungen") . ' '. $semdata['Name']).'&format=csv&choose=csv-warteliste&filter=accepted&o_mode=passthrough">';
 			$count2 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Anmeldeliste downloaden")).' ></a>';
 		}
-		$count3 = $semdata['count_wartende'];;
+		$count3 = $semdata['count_wartende'];
 		if($count3){
 			$count3 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Warteliste") . ' '. $semdata['Name']).'&format=csv&choose=csv-warteliste&filter=awaiting&o_mode=passthrough">';
 			$count3 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Warteliste downloaden")).' ></a>';
