@@ -258,8 +258,6 @@ class CourseNavigation extends Navigation
         }
 
         // activated plugins
-        if ($GLOBALS['PLUGINS_ENABLE']) {
-            PluginEngine::getPlugins('StandardPlugin', $SessSemName[1]);
-        }
+        PluginEngine::getPlugins('StandardPlugin', $SessSemName[1]);
     }
 }

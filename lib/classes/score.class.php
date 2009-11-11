@@ -334,21 +334,19 @@ function GetMyScore() {
 
 	$visits = object_return_views($user_id);
 
-	if ($GLOBALS['PLUGINS_ENABLE'])	{
-		$scoreplugins = PluginEngine::getPlugins('SystemPlugin') + PluginEngine::getPlugins('StandardPlugin');
-		$pluginscore = 0;
-		$pluginscount = 0;
+	$scoreplugins = PluginEngine::getPlugins('SystemPlugin') + PluginEngine::getPlugins('StandardPlugin');
+	$pluginscore = 0;
+	$pluginscount = 0;
 
-		foreach ($scoreplugins as $scoreplugin) {
-			if ($scoreplugin instanceof AbstractStudIPSystemPlugin ||
-			    $scoreplugin instanceof AbstractStudIPStandardPlugin) {
-				$pluginscore += $scoreplugin->getScore();
-				$pluginscount++;
-			}
+	foreach ($scoreplugins as $scoreplugin) {
+		if ($scoreplugin instanceof AbstractStudIPSystemPlugin ||
+		    $scoreplugin instanceof AbstractStudIPStandardPlugin) {
+			$pluginscore += $scoreplugin->getScore();
+			$pluginscount++;
 		}
-		if ($pluginscount > 0) {
-			$pluginscore = round($pluginscore / $pluginscount);
-		}
+	}
+	if ($pluginscount > 0) {
+		$pluginscore = round($pluginscore / $pluginscount);
 	}
 
 
@@ -356,9 +354,7 @@ function GetMyScore() {
 
 	$score = (5*$postings) + (5*$news) + (20*$dokumente) + (2*$institut) + (10*$archiv*$age) + (10*$contact) + (20*$katcount) + (5*$seminare) + (1*$gaeste) + (5*$vote) + (5*$wiki) + (3*$visits);
 
-	if ($GLOBALS['PLUGINS_ENABLE']){
-		$score += $pluginscore;
-	}
+	$score += $pluginscore;
 
 	$score = round($score/$age);
 

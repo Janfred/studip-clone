@@ -80,9 +80,7 @@ class Course_StudygroupController extends AuthenticatedController {
 		
 		$this->terms = Config::GetInstance()->getValue('STUDYGROUP_TERMS');
 		$this->available_modules = StudygroupModel::getAvailableModules();
-		if ($GLOBALS['PLUGINS_ENABLE']) {
-			$this->available_plugins = StudygroupModel::getAvailablePlugins();
-		}
+		$this->available_plugins = StudygroupModel::getAvailablePlugins();
 		$this->modules = new Modules();
 	}
 
@@ -305,10 +303,8 @@ class Course_StudygroupController extends AuthenticatedController {
 			$this->sem_id            = $id;
 			$this->sem               = $sem;
 			$this->available_modules = StudygroupModel::getAvailableModules();
-			if ($GLOBALS['PLUGINS_ENABLE']) {
-				$this->available_plugins = StudygroupModel::getAvailablePlugins();
-				$this->enabled_plugins   = StudygroupModel::getEnabledPlugins($id);
-			}
+			$this->available_plugins = StudygroupModel::getAvailablePlugins();
+			$this->enabled_plugins   = StudygroupModel::getEnabledPlugins($id);
 			$this->modules  = new Modules();
 			$this->founders = StudygroupModel::getFounders( $id );
 

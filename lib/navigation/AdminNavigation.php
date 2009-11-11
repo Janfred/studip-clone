@@ -226,7 +226,7 @@ class AdminNavigation extends Navigation
         }
 
         // admin plugins
-        if ($perm->have_perm('admin') && $GLOBALS['PLUGINS_ENABLE']) {
+        if ($perm->have_perm('admin')) {
             $navigation = new Navigation(_('Administrations-Plugins'));
             $this->addSubNavigation('plugins', $navigation);
 

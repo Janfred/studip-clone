@@ -73,13 +73,11 @@ $infobox['content'] = array(
 	    <? endif;?>
 	<? endforeach; ?>
 
-	<? if ($GLOBALS['PLUGINS_ENABLE']) : ?>
-	  	<? foreach($available_plugins as $key => $name) : ?>
+  	<? foreach($available_plugins as $key => $name) : ?>
 		<label>
 		    <input name="groupplugin[<?= $key ?>]" type="checkbox" <?= ($enabled_plugins[$key]) ? 'checked="checked"' : '' ?>> <?= $name ?>
 		</label><br>
-		<? endforeach; ?>
-	<? endif; ?>
+	<? endforeach; ?>
   </td>
 </tr>
 

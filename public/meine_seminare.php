@@ -41,10 +41,8 @@ function print_seminar_content ($semid, $my_obj_values, $type = 'seminar') {
 	$navigation[$key] = $my_obj_values[$key];
   }
 
-  if ($GLOBALS['PLUGINS_ENABLE']) {
-	foreach (PluginEngine::getPlugins('StandardPlugin', $semid) as $plugin) {
-		$navigation[] = $plugin->getIconNavigation($semid, $my_obj_values['visitdate']);
-	}
+  foreach (PluginEngine::getPlugins('StandardPlugin', $semid) as $plugin) {
+	$navigation[] = $plugin->getIconNavigation($semid, $my_obj_values['visitdate']);
   }
 
   foreach ($navigation as $key => $nav) {

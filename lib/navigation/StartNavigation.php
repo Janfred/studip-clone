@@ -144,12 +144,10 @@ class StartNavigation extends Navigation
         }
 
         // load additional plugins
-        if ($GLOBALS['PLUGINS_ENABLE']) {
-            PluginEngine::getPlugins('SystemPlugin');
+        PluginEngine::getPlugins('SystemPlugin');
 
-            if ($perm->have_perm('admin')) {
-                PluginEngine::getPlugins('AdministrationPlugin');
-            }
+        if ($perm->have_perm('admin')) {
+            PluginEngine::getPlugins('AdministrationPlugin');
         }
 
         // global search

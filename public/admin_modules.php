@@ -77,9 +77,7 @@ include 'lib/include/admin_search_form.inc.php';
 
 $amodules=new AdminModules;
 
-if ($GLOBALS['PLUGINS_ENABLE']){
-	$admin_modules_plugins = PluginEngine::getPlugins('StandardPlugin'); // get all installed and enabled plugins
-}
+$admin_modules_plugins = PluginEngine::getPlugins('StandardPlugin'); // get all installed and enabled plugins
 
 if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 	//Sicherheitscheck ob ueberhaupt was zum Bearbeiten gewaehlt ist.
@@ -129,15 +127,13 @@ if ($perm->have_studip_perm("tutor", $admin_modules_data["range_id"])) {
 				}
 			}
 			// Setzen der Plugins
-			if ($GLOBALS['PLUGINS_ENABLE']){
-				foreach ($admin_modules_plugins as $plugin){
-					$check = ( $_POST[ "plugin_" . $plugin->getPluginId() ] == "TRUE" );
-					$setting = $plugin->isActivated($admin_modules_data['range_id']);
-					if( $check != $setting ){
-						array_push( $plugin_toggle , $plugin->getPluginId() );
-					}
-
+			foreach ($admin_modules_plugins as $plugin){
+				$check = ( $_POST[ "plugin_" . $plugin->getPluginId() ] == "TRUE" );
+				$setting = $plugin->isActivated($admin_modules_data['range_id']);
+				if( $check != $setting ){
+					array_push( $plugin_toggle , $plugin->getPluginId() );
 				}
+
 			}
 		}
 
@@ -308,8 +304,6 @@ if ($admin_modules_data["range_id"])
 			<? }
 
 		}
-	if ($GLOBALS['PLUGINS_ENABLE'])
-	{
 		foreach ($admin_modules_plugins as $plugin)
 		{
 			$plugin_activated = $plugin->isActivated($admin_modules_data['range_id']);
@@ -339,7 +333,7 @@ if ($admin_modules_data["range_id"])
 			</tr>
 			<?php
 		}
-	}?>
+	?>
 	</table>
 	</td>
 </tr>

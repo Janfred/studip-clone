@@ -263,12 +263,10 @@ if (isset($cmd) && ($cmd == 'do_copy') && $perm->have_studip_perm('tutor',$cp_id
 		$sem_create_data['sem_modules'] = $db->f('modules');
 
 		// Pluginkonfiguration übernehmen
-		if ($GLOBALS['PLUGINS_ENABLE']) {
-			$enabled_plugins = PluginEngine::getPlugins('StandardPlugin', $cp_id);
+		$enabled_plugins = PluginEngine::getPlugins('StandardPlugin', $cp_id);
 
-			foreach ($enabled_plugins as $plugin) {
-				$sem_create_data["enabled_plugins"][] = $plugin->getPluginId();
-			}
+		foreach ($enabled_plugins as $plugin) {
+			$sem_create_data["enabled_plugins"][] = $plugin->getPluginId();
 		}
 
 		// Dozenten und Tutoren eintragen

@@ -66,9 +66,7 @@ class StudipSemTreeViewSimple {
 		if (!$this->tree->tree_data[$this->start_item_id]){
 			$this->start_item_id = "root";
 		}
-		if ($GLOBALS['PLUGINS_ENABLE']){
-			$this->studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement');
-		}
+		$this->studienmodulmanagement = PluginEngine::getPlugin('StudienmodulManagement');
 	}
 
 	function showSemTree(){

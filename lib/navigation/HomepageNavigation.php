@@ -150,8 +150,6 @@ class HomepageNavigation extends Navigation
         }
 
         // activated plugins
-        if ($GLOBALS['PLUGINS_ENABLE']) {
-            PluginEngine::getPlugins('HomepagePlugin');
-        }
+        PluginEngine::getPlugins('HomepagePlugin');
     }
 }

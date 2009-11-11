@@ -457,16 +457,14 @@ class ExternModuleTemplatePersondetails extends ExternModule {
 		}
 
 		// homepage plugins
-		if ($GLOBALS["PLUGINS_ENABLE"]) {
-			$plugins = PluginEngine::getPlugins('HomepagePlugin');
+		$plugins = PluginEngine::getPlugins('HomepagePlugin');
 
-			foreach ($plugins as $plugin) {
-				$template = $plugin->getHomepageTemplate($this->user_id);
+		foreach ($plugins as $plugin) {
+			$template = $plugin->getHomepageTemplate($this->user_id);
 
-				if ($template) {
-					$keyname = 'PLUGIN_' . strtoupper($plugin->getPluginName());
-					$content['PERSONDETAILS'][$keyname] = $template->render();
-				}
+			if ($template) {
+				$keyname = 'PLUGIN_' . strtoupper($plugin->getPluginName());
+				$content['PERSONDETAILS'][$keyname] = $template->render();
 			}
 		}
 

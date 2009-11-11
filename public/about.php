@@ -619,22 +619,19 @@ foreach ($long_datafields as $entry) {
 
 $layout->clear_attributes();
 
-if ($GLOBALS["PLUGINS_ENABLE"]){
-	// PluginEngine aktiviert.
-	// Prüfen, ob HomepagePlugins vorhanden sind.
-	$homepageplugins = PluginEngine::getPlugins('HomepagePlugin');
+// Prüfen, ob HomepagePlugins vorhanden sind.
+$homepageplugins = PluginEngine::getPlugins('HomepagePlugin');
 
-	foreach ($homepageplugins as $homepageplugin){
-		// hier nun die HomepagePlugins anzeigen
-		$template = $homepageplugin->getHomepageTemplate($user_id);
+foreach ($homepageplugins as $homepageplugin){
+	// hier nun die HomepagePlugins anzeigen
+	$template = $homepageplugin->getHomepageTemplate($user_id);
 
-		if ($template) {
-			echo $template->render(NULL, $layout);
-		}
+	if ($template) {
+		echo $template->render(NULL, $layout);
 	}
-
-	$layout->clear_attributes();
 }
+
+$layout->clear_attributes();
 
 //add the own categories - this ones are self created by the user
 $db2->query("SELECT * FROM kategorien WHERE range_id = '$user_id' ORDER BY priority");

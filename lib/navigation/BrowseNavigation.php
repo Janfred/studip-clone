@@ -92,10 +92,5 @@ class BrowseNavigation extends Navigation
             $navigation->addSubNavigation('all', new Navigation(_('Studiengruppen'), 'dispatch.php/studygroup/search/1/founded_asc'));
             $this->addSubNavigation('studygroups', $navigation);
         }
-
-        // module plugin
-        if ($GLOBALS['PLUGINS_ENABLE']) {
-            PluginEngine::getPlugin('StudienmodulManagement');
-        }
     }
 }

@@ -217,20 +217,18 @@ if ($auth->is_authenticated() && $user->id != 'nobody') {
 
 $layout = $GLOBALS['template_factory']->open('shared/index_box');
 
-if ($GLOBALS['PLUGINS_ENABLE']){
-	// Prüfen, ob PortalPlugins vorhanden sind.
-	$portalplugins = PluginEngine::getPlugins('PortalPlugin');
+// Prüfen, ob PortalPlugins vorhanden sind.
+$portalplugins = PluginEngine::getPlugins('PortalPlugin');
 
-	foreach ($portalplugins as $portalplugin) {
-		$template = $portalplugin->getPortalTemplate();
+foreach ($portalplugins as $portalplugin) {
+	$template = $portalplugin->getPortalTemplate();
 
-		if ($template) {
-			echo $template->render(NULL, $layout);
-		}
+	if ($template) {
+		echo $template->render(NULL, $layout);
 	}
-
-	$layout->clear_attributes();
 }
+
+$layout->clear_attributes();
 
 page_close();
 

@@ -66,12 +66,10 @@ class StudipNavigation extends Navigation
             $this->addSubNavigation('admin', new AdminNavigation());
         }
 
-        if ($GLOBALS['PLUGINS_ENABLE']) {
-            foreach (PluginEngine::getPlugins('SystemPlugin') as $plugin) {
-                if ($plugin instanceof AbstractStudIPSystemPlugin) {
-                    if ($plugin->hasBackgroundTasks()) {
-                        $plugin->doBackgroundTasks();
-                    }
+        foreach (PluginEngine::getPlugins('SystemPlugin') as $plugin) {
+            if ($plugin instanceof AbstractStudIPSystemPlugin) {
+                if ($plugin->hasBackgroundTasks()) {
+                    $plugin->doBackgroundTasks();
                 }
             }
         }

@@ -236,12 +236,9 @@ array(
 		"root" => "admin")
 );
 
-$PLUGINS_ENABLE = TRUE;
 $PLUGINS_UPLOAD_ENABLE = TRUE; 					//Upload of Plugins is enabled
 			     								//if disabled for security reasons, uploads have to go into $NEW_PLUGINS_PATH
 $NEW_PLUGINS_PATH = ""; 							//The place from which new plugins should be loaded
-$PLUGINS_CACHING = TRUE;  						//enable caching
-$PLUGINS_CACHE_TIME = 300; 						//Time in seconds, the cache is valid
 
 $PLUGIN_REPOSITORIES = array(
 	'http://plugins.studip.de/svn/plugins/plugins.xml'
