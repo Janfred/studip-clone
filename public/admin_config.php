@@ -9,7 +9,6 @@
 *
 *
 * @author		Cornelis Kater <info@ckater.de>
-* @version		$Id$
 * @access		public
 * @module		admin_config.php
 * @modulegroup		admin

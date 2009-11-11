@@ -9,7 +9,6 @@
 * rooms and resources structure, writes to STDOUT
 *
 * @author		André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id$
 * @access		public
 */
 // +---------------------------------------------------------------------------+

@@ -9,7 +9,6 @@
 * helper functions for handling statusgruppen
 *
 * @author				Ralf Stockmann <rstockm@gwdg.de>
-* @version			$Id$
 * @access				public
 * @package			studip_core
 * @modulegroup	library

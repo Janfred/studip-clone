@@ -9,7 +9,6 @@
 *
 *
 * @author		Ralf Stockmann <rstockm@gwdg.de>, Cornelis Kater <kater@data-quest.de>, data-quest GmbH <info@data-quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		functions
 * @module		object.inc.php

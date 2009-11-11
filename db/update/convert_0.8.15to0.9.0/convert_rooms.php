@@ -77,4 +77,3 @@ while ($db->next_record()) {
 ?>
 </body>
 </html>
-<!-- $Id$ -->

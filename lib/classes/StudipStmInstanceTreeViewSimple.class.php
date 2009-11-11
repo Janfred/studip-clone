@@ -34,7 +34,6 @@ require_once("config.inc.php");
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id: StudipSemRangeTreeViewSimple.class.php,v 2.6 2004/12/29 10:06:37 anoack Exp $
 * @package	
 */
 class StudipStmInstanceTreeViewSimple {

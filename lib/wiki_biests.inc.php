@@ -3,7 +3,6 @@
 # Lifter002: TODO
 # Lifter007: TODO
 # Lifter003: TODO
-// $Id$
 
 // wikiMarkups are used by the wikiDirective function
 // after all other conversions,

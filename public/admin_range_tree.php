@@ -8,7 +8,6 @@
 * 
 *
 * @author		André Noack <andre.noack@data.quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup	admin_modules
 * @module		admin_range_tree
@@ -71,5 +70,4 @@ echo '</td></tr></table><br /></td></tr></table>';
 include ('lib/include/html_end.inc.php');
 page_close();
 
-// <!--$Id$-->
 ?>

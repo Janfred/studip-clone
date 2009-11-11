@@ -6,7 +6,6 @@
  * the form to create/edit templates for answers
  *
  * @author  JPWowra
- * @version $Id$
  *
  * @copyright   2004 Stud.IP-Project
  * @access      public

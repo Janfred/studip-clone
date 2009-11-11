@@ -6,7 +6,6 @@
  * Copyright (c) 1998,1999 SH Online Dienst GmbH
  *                    Boris Erdmann, Kristian Koehntopp
  *
- * $Id$
  *
  */ 
 (!isset($_REQUEST['GLOBALS'])) OR die('Setting the $GLOBALS array is not tolerated!');

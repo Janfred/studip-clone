@@ -71,7 +71,6 @@ class DebugPDOStatement extends PDOStatement {
 *
 * @author    mlunzena
 * @copyright (c) Authors
-* @version   $Id: DBManager.class.php 8449 2007-10-30 13:10:45Z mlunzena $
 */
 
 class DBManager {
@@ -202,7 +201,6 @@ class DBManager {
 *
 * @author    mlunzena
 * @copyright (c) Authors
-* @version   $Id: DBManager.class.php 8449 2007-10-30 13:10:45Z mlunzena $
 */
 
 class DBManagerException extends Exception {

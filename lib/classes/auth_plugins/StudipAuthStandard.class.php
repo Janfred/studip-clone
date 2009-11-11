@@ -33,7 +33,6 @@ require_once ("lib/dbviews/core.view.php");
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package	
 */
 class StudipAuthStandard extends StudipAuthAbstract {

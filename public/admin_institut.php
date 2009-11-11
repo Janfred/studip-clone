@@ -514,5 +514,4 @@ if ($perm->have_studip_perm("admin",$i_view) || $i_view == "new") {
 echo '</table>';
 include ('lib/include/html_end.inc.php');
 page_close();
-//<!-- $Id$ -->
 ?>

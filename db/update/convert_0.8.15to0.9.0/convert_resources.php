@@ -81,4 +81,3 @@ function insert_level ($parent, $level) {
 ?>
 </body>
 </html>
-<!-- $Id$ -->

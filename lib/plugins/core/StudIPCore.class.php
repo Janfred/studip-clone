@@ -9,7 +9,6 @@
  *  @author  Dennis Reil, <Dennis.Reil@offis.de>
  *  @package pluginengine
  *  @subpackage core
- *  @version $Revision$
  */
 class StudIPCore {
 

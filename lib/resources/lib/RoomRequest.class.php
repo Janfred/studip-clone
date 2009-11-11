@@ -9,7 +9,6 @@
 * 
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		resources
 * @module		AssignObject.class.php
@@ -44,7 +43,6 @@ require_once($GLOBALS['RELATIVE_PATH_RESOURCES'] .'/lib/ResourcesUserRoomsList.c
 *
 * @access	public	
 * @author	Cornelis Kater <kater@data-quest.de>
-* @version	$Id$
 * @package	resources
 **/
 class RoomRequest {

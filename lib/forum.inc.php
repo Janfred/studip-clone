@@ -10,7 +10,6 @@
 * helper functions for handling boards
 *
 * @author			Ralf Stockmann <rstockm@uni-goettingen.de>
-* @version			$Id$
 * @access			public
 * @package			studip_core
 * @modulegroup			library

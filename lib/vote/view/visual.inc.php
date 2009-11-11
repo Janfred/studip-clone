@@ -7,7 +7,6 @@
  * in Zukunft ersetzen...
  *
  * @author      Alexander Willner <mail@alexanderwillner.de>
- * @version     $Id$
  * @copyright   2003 Stud.IP-Project
  * @access      public
  * @module      visual

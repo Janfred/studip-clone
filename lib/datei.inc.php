@@ -4,7 +4,6 @@
 # Lifter007: TODO
 # Lifter003: TODO
 /*
-$Id$
 
 datei.inc.php - basale Routinen zur Dateiverwaltung, dienen zum Aufbau des Ordnersystems
 Copyright (C) 2001 Stefan Suchi <suchi@gmx.de>, Cornelis Kater <ckater@gwdg.de>

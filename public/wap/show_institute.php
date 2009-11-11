@@ -21,7 +21,6 @@
 * @module		show_institute.php
 * @package		WAP
 */
-// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // show_institute.php

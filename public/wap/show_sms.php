@@ -17,7 +17,6 @@
 * @module		show_sms.php
 * @package		WAP
 */
-// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // show_sms.php

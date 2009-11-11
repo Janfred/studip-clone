@@ -29,7 +29,6 @@
 * Object XML Parser
 *
 * @author Stefan Meyer <smeyer@databay.de>
-* @version $Id$
 *
 * @extends ilSaxParser
 * @package common

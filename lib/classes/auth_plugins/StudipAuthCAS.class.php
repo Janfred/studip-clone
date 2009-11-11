@@ -6,7 +6,6 @@
 *
 * @access	public
 * @author	Dennis Reil <dennis.reil@offis.de>
-* @version	$Id$
 * @package	
 */
 

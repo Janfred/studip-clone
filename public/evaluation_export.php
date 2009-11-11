@@ -9,7 +9,6 @@
 *
 *
 * @author
-* @version		$Id$
 * @access		public
 * @modulegroup	export_modules
 * @module		export

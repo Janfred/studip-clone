@@ -10,7 +10,6 @@
 * submodules for export in formats xml, rtf, html, pdf...
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		export_modules
 * @module		export

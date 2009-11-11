@@ -8,7 +8,6 @@
 * This file checks the tmp-directory for old files an deletes them.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup	export_modules
 * @module		oscar

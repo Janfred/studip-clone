@@ -64,7 +64,6 @@ define ("EVAL_LOAD_ONLY_EVALGROUP", 3);
  * This abstract class provides functions for evaluation objects
  *
  * @author  Alexander Willner <mail@AlexanderWillner.de>
- * @version $Id$ *
  * @copyright   2004 Stud.IP-Project
  * @access      public
  * @package     evaluation

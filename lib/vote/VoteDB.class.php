@@ -41,7 +41,6 @@ require_once 'lib/functions.php'; // <- für getHeaderLine
  * This class is used to ...
  *
  * @author      John Patrick Wowra jpwowra@math.uni-goettingen.de
- * @version     $Id$
  * @access      public
  * @package     vote
  * @modulegroup vote_modules

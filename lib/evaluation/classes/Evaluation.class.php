@@ -42,7 +42,6 @@ define ("INSTANCEOF_EVAL", "Evaluation");
  * The mainclass for an evaluation for the Stud.IP-project.
  *
  * @author  Alexander Willner <mail@AlexanderWillner.de>
- * @version $Id$
  *
  * @copyright   2004 Stud.IP-Project
  * @access      public

@@ -4,8 +4,6 @@
 /**
  * Starting point for creating "normal" course or institute plugins.
  * @author Dennis Reil <dennis.reil@offis.de>
- * @version $Revision$
- * $Id$
  * @package pluginengine
  * @subpackage core
  */

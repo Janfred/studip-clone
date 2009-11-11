@@ -9,7 +9,6 @@
 * helper functions for handling contacts
 *
 * @author				Ralf Stockmann <rstockm@gwdg.de>
-* @version			$Id$
 * @access				public
 * @package			studip_core
 * @modulegroup	library

@@ -3,7 +3,6 @@
 # Lifter007: TODO
 # Lifter003: TODO
 /*
-$Id$
 
 archiv.inc.php - Funktionen zur Archivierung in Stud.IP
 Copyright (C) 2000 Cornelis Kater <ckater@gwdg.de>, Ralf Stockmann <rstockm@gwdg.de>, Stefan Suchi <suchi@gmx.de>

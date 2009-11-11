@@ -33,7 +33,6 @@ require_once(EVAL_FILE_EVAL);
  * Class to print out the an evaluation's admin-tree
  *
  * @author	Christian Bauer <alfredhitchcock@gmx.net>
- * @version	$Id$
  * @copyright   2004 Stud.IP-Project
  * @access	public
  * @package     evaluation

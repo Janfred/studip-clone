@@ -9,7 +9,6 @@
 * Depending on $o_mode it passes the xml-stream into a file or to the screen.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		export_modules
 * @module		export_xml

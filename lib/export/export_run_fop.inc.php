@@ -8,7 +8,6 @@
 * This file calls the Formatting-Objects-Processor to generate PDF-Files.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		export_modules
 * @module		export_run_fop

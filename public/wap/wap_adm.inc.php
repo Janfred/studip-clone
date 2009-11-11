@@ -9,7 +9,6 @@
 * @module		wap_adm.inc.php
 * @package		WAP
 */
-// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // wap_adm.inc.php

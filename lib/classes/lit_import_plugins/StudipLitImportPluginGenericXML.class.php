@@ -33,7 +33,6 @@ if (version_compare(PHP_VERSION,'5','>=')) require_once('vendor/php4-to-php5/dom
 *
 * @access	public	
 * @author 	Jan Kulmann <jankul@zmml.uni-bremen.de>	
-* @version	$Id$
 * @package	
 **/
 class StudipLitImportPluginGenericXML extends StudipLitImportPluginAbstract {

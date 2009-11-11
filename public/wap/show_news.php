@@ -24,7 +24,6 @@
 * @module		show_news.php
 * @package		WAP
 */
-// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // show_news.php

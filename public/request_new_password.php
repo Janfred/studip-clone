@@ -9,7 +9,6 @@
 *
 *
 * @author		Mike Barthel <m.barthel.goe@gmx.de>, Peter Thienel <thienel@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id: request_new_password.php 7206 2007-01-24 22:07:49Z schmelzer $
 * @access		public
 * @module		request_new_password.php
 * @modulegroup	public

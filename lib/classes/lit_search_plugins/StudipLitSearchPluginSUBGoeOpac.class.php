@@ -32,7 +32,6 @@ require_once ("lib/classes/lit_search_plugins/StudipLitSearchPluginGvk.class.php
 *
 * @access	public	
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package	
 **/
 class StudipLitSearchPluginSUBGoeOpac extends StudipLitSearchPluginGvk{

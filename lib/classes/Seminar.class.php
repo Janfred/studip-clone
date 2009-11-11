@@ -9,7 +9,6 @@
 *
 *
 * @author		Till Glöggler <tgloeggl@uni-osnabrueck.de>; Stefan Suchi <suchi@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		core
 * @module		Seminar.class.php

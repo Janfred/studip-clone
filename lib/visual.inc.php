@@ -3,7 +3,6 @@
 # Lifter007: TODO
 # Lifter003: TODO
 
-// $Id$
 
 require_once('config.inc.php');
 require_once('lib/classes/cssClassSwitcher.inc.php');

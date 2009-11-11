@@ -33,7 +33,6 @@ require_once ("lib/classes/lit_search_plugins/StudipLitSearchPluginAbstract.clas
 *
 * @access	public	
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package	
 **/
 class StudipLitSearchPluginZ3950Abstract extends StudipLitSearchPluginAbstract{

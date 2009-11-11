@@ -25,7 +25,6 @@ define('DYNAMIC_ASSETS_URL', 'http://www%d.example.com/public/');
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id$
  */
 
 class AssetsTestCase extends UnitTestCase {

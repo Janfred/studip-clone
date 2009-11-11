@@ -31,7 +31,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // - additional link in writer_form for more settings
 // - messages-cache so no message will ever be lost by clicking on a wrong button
 
-// $Id: studipim.php 12072 2009-03-27 21:19:53Z tthelen $
 
 // Known bugs:
 // * Umlaute (only if a message with Umlauts is about to be cited)

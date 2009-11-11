@@ -10,7 +10,6 @@
 *
 * @author   André Noack <noack@data-quest.de>
 *           Suchi & Berg GmbH <info@data-quest.de>
-* @version  $Id: Associate.class.php,v 1.26 2005/10/04 15:42:13 thienel Exp $
 * @access   public
 * @package  
 */

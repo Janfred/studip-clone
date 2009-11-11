@@ -9,7 +9,6 @@
 * This script checks user permissions and builds a frameset for the chat
 *
 * @author		André Noack <andre.noack@gmx.net>
-* @version		$Id$
 * @access		public
 * @modulegroup		chat_modules
 * @module		chat_login

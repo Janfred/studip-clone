@@ -32,7 +32,6 @@ require_once ("lib/classes/lit_import_plugins/StudipLitImportPluginAbstract.clas
 *
 * @access	public	
 * @author 	Jan Kulmann <jankul@zmml.uni-bremen.de>	
-* @version	$Id$
 * @package	
 **/
 class StudipLitImportPluginStudipLitList extends StudipLitImportPluginAbstract {

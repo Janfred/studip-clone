@@ -254,4 +254,3 @@ if ($view=="listall") {
 // Save data back to database.
 page_close()
 ?>
-<!-- $Id$ -->

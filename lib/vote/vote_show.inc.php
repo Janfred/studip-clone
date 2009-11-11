@@ -9,7 +9,6 @@
  *
  * @author      Alexander Willner <mail@AlexanderWillner.de>,
  *              Michael Cohrs <michael A7 cohrs D07 de>
- * @version     $Id$
  * @copyright   2003 Stud.IP-Project (GNU General Public License)
  * @access      public
  * @module      vote_show

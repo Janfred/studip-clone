@@ -9,7 +9,6 @@
 *
 *
 * @author		Till Glöggler <tgloeggl@uos.de>, André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup	views
 * @module		chat_online

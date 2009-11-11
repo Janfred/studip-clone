@@ -8,7 +8,6 @@
 * This file calls the XSLT-Process to convert XML-Files into other file-formats.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		export_modules
 * @module		export_run_xslt

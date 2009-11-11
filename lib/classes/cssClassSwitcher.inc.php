@@ -27,7 +27,6 @@ define('PHPDOC_DUMMY',false);
 *
 * class for handling zebra-tables
 * @author		Andre Noack <noack@data-quest.de>
-* @version		$Id$
 * @access		public
 * @package		studip_core
 */

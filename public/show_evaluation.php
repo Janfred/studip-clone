@@ -7,7 +7,6 @@
  *
  * @author      mcohrs <michael A7 cohrs D07 de>
  * @author      Michael Riehemann <michael.riehemann@uni-oldenburg.de>
- * @version     $Id$
  * @copyright   2004 Stud.IP-Project
  * @access      public
  * @package     evaluation

@@ -6,7 +6,6 @@
  * The treeclass for an evaluation.
  *
  * @author  mcohrs
- * @version $Id$
  *
  * @copyright   2004 Stud.IP-Project
  * @access      public

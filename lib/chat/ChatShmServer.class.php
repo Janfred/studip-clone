@@ -30,7 +30,6 @@ require_once $GLOBALS['RELATIVE_PATH_CHAT']."/ShmHandler.class.php";
 *
 * @access	public
 * @author	André Noack <andre.noack@gmx.net>
-* @version	$Id$
 * @package	Chat
 */
 class ChatShmServer extends ChatServer{

@@ -18,7 +18,6 @@
 * @module		dates_search.php
 * @package		WAP
 */
-// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // show_user.php

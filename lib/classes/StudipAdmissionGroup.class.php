@@ -9,7 +9,6 @@
 *
 *
 * @author	André Noack <noack@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
-* @version	$Id: StudipNews.class.php 7191 2007-01-21 21:33:01Z schmelzer $
 * @access	public
 */
 

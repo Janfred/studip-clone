@@ -6,7 +6,6 @@
 *
 *
 * @author		André Noack <noack@data-quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup	chat_modules
 * @module		chat_func_inc

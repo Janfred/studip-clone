@@ -12,7 +12,6 @@ require_once ("lib/classes/RangeTreeObject.class.php");
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package	
 */
 class ExternRangeLectureTree {

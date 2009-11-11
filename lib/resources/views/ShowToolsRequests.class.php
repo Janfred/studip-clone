@@ -10,7 +10,6 @@
 *
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		resources
 * @module		ToolsRequestResolve.class.php
@@ -50,7 +49,6 @@ $cssSw = new cssClassSwitcher;
 *
 * @access	public
 * @author	Cornelis Kater <kater@data-quest.de>
-* @version	$Id$
 * @package	resources
 **/
 class ShowToolsRequests {

@@ -32,7 +32,6 @@ require_once('lib/visual.inc.php');
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package
 */
 class TreeView {

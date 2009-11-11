@@ -6,7 +6,6 @@
 /**
  * An example for the usage of ITX::addBlockfile
  *
- * @version CVS: $Id: sample_itx_addblockfile.php,v 1.1 2006/07/11 21:56:05 dsp Exp $
  */
 
 require_once 'HTML/Template/ITX.php';

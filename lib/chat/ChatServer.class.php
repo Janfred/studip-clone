@@ -32,7 +32,6 @@ require_once 'lib/visual.inc.php';
 *
 * @access	public
 * @author	André Noack <andre.noack@gmx.net>
-* @version	$Id$
 * @package	Chat
 */
 class ChatServer {

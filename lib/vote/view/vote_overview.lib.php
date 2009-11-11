@@ -7,7 +7,6 @@
  * Overview of all existing votes ... vote_overview.lib.php
  *
  * @author      Christian Bauer <alfredhitchcock@gmx.net>
- * @version     $Id$
  * @copyright   2003 Stud.IP-Project
  * @access      public
  * @module      vote_overview_lib

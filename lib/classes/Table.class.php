@@ -34,7 +34,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 *
 * @access public
 * @author Tobias Thelen <tthelen@uni-osnabrueck.de>
-* @version $Id$
 *
 **/
 class Table {
@@ -464,7 +463,6 @@ class Table {
 *
 * @access public
 * @author Tobias Thelen <tthelen@uni-osnabrueck.de>
-* @version $Id$
 *
 **/
 class ContainerTable extends Table {
@@ -520,7 +518,6 @@ class ContainerTable extends Table {
 *
 * @access public
 * @author Tobias Thelen <tthelen@uni-osnabrueck.de>
-* @version $Id$
 *
 **/
 class ContentTable extends Table {

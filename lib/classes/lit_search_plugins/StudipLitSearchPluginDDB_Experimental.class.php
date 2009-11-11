@@ -40,7 +40,6 @@ require_once ("lib/classes/lit_search_plugins/StudipLitSearchPluginZ3950Abstract
 *
 * @access	public
 * @author	Jens Schmelzer
-* @version	$Id$
 * @package
 **/
 class StudipLitSearchPluginDDB_Experimental extends StudipLitSearchPluginZ3950Abstract{

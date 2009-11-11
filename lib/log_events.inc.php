@@ -8,7 +8,6 @@
 * Functions to create log events
 *
 * @author               Tobias Thelen <tthelen@uni-osnabrueck.de>
-* @version              $Id$
 * @access               public
 * @module               log_events.inc.php
 * @modulegroup		library

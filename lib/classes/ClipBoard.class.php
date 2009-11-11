@@ -34,7 +34,6 @@ require_once("lib/classes/StudipForm.class.php");
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>, Cornelis Kater <kater@data-quest.de>,
-* @version	$Id$
 * @package	core
 **/
 class ClipBoard {

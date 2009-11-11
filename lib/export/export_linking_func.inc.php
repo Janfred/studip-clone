@@ -8,7 +8,6 @@
 * In this file there are three functions which help to include the export-module into Stud.IP-pages. 
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		export_modules
 * @module		export_linking_functions

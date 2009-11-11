@@ -59,7 +59,6 @@ define ("EVAL_STATE_STOPPED", "stopped");
  * Databaseclass for all evaluations
  *
  * @author  Alexander Willner <mail@AlexanderWillner.de>
- * @version $Id$
  *
  * @copyright   2004 Stud.IP-Project
  * @access      public

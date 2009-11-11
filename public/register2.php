@@ -79,5 +79,4 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 include ('lib/include/html_end.inc.php');
 page_close();
 
-// <!-- $Id$ -->
 ?>

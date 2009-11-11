@@ -15,7 +15,6 @@
 * @author 		Stefan Suchi <suchi@data-quest.de>
 * @author 		Suchi & Berg GmbH <info@data-quest.de>
 * @author 		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
-* @version		$Id$
 * @access		public
 * @module		sem_verify.php
 * @modulegroup	misc

@@ -22,7 +22,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-// $Id: edit_about.php 9361 2008-03-19 11:00:35Z tgloeggl $
 
 require_once('lib/messaging.inc.php');
 require_once('lib/log_events.inc.php');

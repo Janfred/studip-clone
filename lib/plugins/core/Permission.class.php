@@ -6,8 +6,6 @@
 /**
  * The permission of an object, usually a user.
  * @author Dennis Reil, <dennis.reil@offis.de>
- * @version $Revision$
- * $Id$
  * @package pluginengine
  * @subpackage core
  */

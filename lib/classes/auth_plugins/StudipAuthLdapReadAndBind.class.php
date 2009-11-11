@@ -34,7 +34,6 @@ require_once ("lib/classes/auth_plugins/StudipAuthLdap.class.php");
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id: StudipAuthLdapReader.class.php,v 1.3 2006/07/21 12:15:12 tthelen Exp $
 * @package	
 */
 class StudipAuthLdapReadAndBind extends StudipAuthLdap {

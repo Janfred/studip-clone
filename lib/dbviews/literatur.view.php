@@ -23,7 +23,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-// $Id$
 $GLOBALS['_views']['element_name_short_sql'] = " CONCAT(IF ( RIGHT( SUBSTRING_INDEX( TRIM(dc_creator),  ' ', 1  ) , 1  )
 									=  ',', LEFT( SUBSTRING_INDEX( TRIM(dc_creator),  ' ', 1  ) , 
 									LENGTH( SUBSTRING_INDEX( TRIM(dc_creator),  ' ', 1  )  )  - 1  ) , 

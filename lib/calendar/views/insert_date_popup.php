@@ -9,7 +9,6 @@
 * popup calendar for studip
 *
 * @author			Peter Tienel <pthienel@web.de>, Till Glöggler <tgloeggl@uos.de>
-* @version			$Id$
 * @access			public
 * @module			insert_date_popup.ph
 */

@@ -38,7 +38,6 @@ require_once 'lib/statusgruppe.inc.php';
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package	
 */
 class StudipDocumentTree extends TreeAbstract {

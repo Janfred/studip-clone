@@ -12,7 +12,6 @@ require_once ("lib/vote/VoteDB.class.php");
  * This class is used to implement a vote in Stud.IP
  *
  * @author      Alexander Willner <mail@alexanderwillner.de>
- * @version     $Id$
  * @copyright   2003 Stud.IP-Project
  * @access      public
  * @package     vote

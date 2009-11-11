@@ -18,7 +18,6 @@
 * @module		show_private.php
 * @package		WAP
 */
-// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // show_private.php

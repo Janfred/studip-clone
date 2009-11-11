@@ -8,7 +8,6 @@
 * basic calendar functions
 *
 * @author		Peter Thienel <pthienel@web.de>
-* @version		$Id$
 *	@access		public
 * @package		studip_core
 * @modulegroup		library

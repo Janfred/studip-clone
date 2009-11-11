@@ -9,7 +9,6 @@
 *
 *
 * @author		Stefan Suchi <suchi@data-quest.de>, Ralf Stockmann <rstockm@gwdg.de>
-* @version		$Id$
 * @access		public
 * @module		freie.php
 * @modulegroup	views

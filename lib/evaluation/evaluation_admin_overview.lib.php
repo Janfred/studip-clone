@@ -21,7 +21,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +--------------------------------------------------------------------------+
 
-// $Id$
 
 # Include all required files ================================================ #
 require_once('lib/evaluation/evaluation.config.php');
@@ -44,7 +43,6 @@ define ("EVAL_TITLE", _("Evaluations-Verwaltung"));
  * Library for the overview of all existing evaluations
  *
  * @author  Alexander Willner <mail@AlexanderWillner.de>
- * @version $Id$
  *
  * @copyright   2004 Stud.IP-Project
  * @access      public

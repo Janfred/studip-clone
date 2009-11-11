@@ -8,7 +8,6 @@
 * for a faked 'root' user, sets custom error handler wich writes to STDERR
 *
 * @author		André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id: kill_studip_user.php 6996 2006-11-21 13:24:52Z mlunzena $
 * @access		public
 */
 // +---------------------------------------------------------------------------+

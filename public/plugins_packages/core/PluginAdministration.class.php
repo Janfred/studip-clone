@@ -3,8 +3,6 @@
 /**
  * Basic methods for managing plugins
  * @author Dennis Reil <Dennis.Reil@offis.de>
- * @version $Revision$
- * $Id$
  */
 require_once 'lib/datei.inc.php';
 require_once 'lib/migrations/db_migration.php';

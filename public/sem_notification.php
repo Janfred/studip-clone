@@ -10,7 +10,6 @@
 *
 *
 * @author		Peter Thienel <thienel@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version	$Id$
 * @access		public
 * @modulegroup	studip
 * @module		studip
@@ -419,5 +418,4 @@ if ($_REQUEST['view'] != 'notification') {
   page_close();
 }
 
-// <!-- $Id$ -->
 ?>

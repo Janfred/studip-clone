@@ -18,7 +18,6 @@
 // |         Pierre-Alain Joye <pajoye@php.net>                           |
 // +----------------------------------------------------------------------+
 //
-// $Id: ITX.php,v 1.16 2006/08/17 15:47:22 dsp Exp $
 //
 
 require_once $GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/HTML_Template_IT/IT.php';
@@ -38,7 +37,6 @@ require_once $GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/HTML_Template_IT/IT_Error.ph
 *
 * @author   Ulf Wendel <uw@netuse.de>
 * @access   public
-* @version  $Id: ITX.php,v 1.16 2006/08/17 15:47:22 dsp Exp $
 * @package  HTML_Template_IT
 */
 class HTML_Template_ITX extends HTML_Template_IT

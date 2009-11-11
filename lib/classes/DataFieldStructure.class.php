@@ -24,7 +24,6 @@
  *
  * @author    mgieseki, mlunzena
  * @copyright (c) Authors
- * @version   $Id$
  */
 class DataFieldStructure {
 

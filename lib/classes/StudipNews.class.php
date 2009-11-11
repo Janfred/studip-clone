@@ -9,7 +9,6 @@
 *
 *
 * @author	André Noack <noack@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
-* @version	$Id$
 * @access	public
 */
 

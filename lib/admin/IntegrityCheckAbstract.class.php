@@ -34,7 +34,6 @@ require_once $RELATIVE_PATH_ADMIN_MODULES."/integrity.view.php";
 *
 * @access	private	
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package	Admin
 */
 class IntegrityCheckAbstract{

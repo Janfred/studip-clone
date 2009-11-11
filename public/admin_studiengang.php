@@ -287,5 +287,4 @@ echo '</table>';
 include ('lib/include/html_end.inc.php');
 page_close();
 
-//<!-- $Id$ -->
 ?>

@@ -33,7 +33,6 @@ require_once("lib/classes/DbView.class.php");
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package	
 */
 class TreeAbstract {

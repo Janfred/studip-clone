@@ -15,7 +15,6 @@
 * @module		events.php
 * @package		WAP
 */
-// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // events.php

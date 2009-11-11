@@ -35,7 +35,6 @@ require_once('lib/classes/Avatar.class.php');
 *
 * @author		Tobias Thelen <tthelen@uni-osnabrueck.de>
 * @author		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
-* @version		$Id$
 */
 class FoafDisplay {
 	var $db; // Database connection

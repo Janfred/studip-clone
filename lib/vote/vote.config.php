@@ -7,7 +7,6 @@
  * This file contains all public defines used for the votes / tests
  *
  * @author      Alexander Willner <mail@AlexanderWillner.de>
- * @version     $Id$
  * @copyright   2003 Stud.IP-Project
  * @access      public
  * @module      vote_config

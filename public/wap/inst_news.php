@@ -19,7 +19,6 @@
 * @module		inst_news.php
 * @package		WAP
 */
-// $Id$
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // inst_news.php

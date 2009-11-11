@@ -9,7 +9,6 @@
 * This script prints a HTML input form and handles color changing and quitting the chat with some JavaScript
 *
 * @author		André Noack <andre.noack@gmx.net>
-* @version		$Id$
 * @access		public
 * @modulegroup		chat_modules
 * @module		chat_input

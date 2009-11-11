@@ -70,7 +70,6 @@ define ("EVALEXPORT_EXTENSION", "csv");
  * The mainclass for the evaluation export manager
  *
  * @author  Alexander Willner <mail@AlexanderWillner.de>
- * @version $Id$
  *
  * @copyright   2004 Stud.IP-Project
  * @access      public

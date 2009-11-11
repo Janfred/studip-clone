@@ -34,7 +34,6 @@ require_once("DbSnapshot.class.php");
 *
 * @access	public	
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package	DBTools
 */
 class DbCrossTableView extends DbView{

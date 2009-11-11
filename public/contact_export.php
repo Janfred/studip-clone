@@ -10,7 +10,6 @@
 
  * @author      Christian Bauer <alfredhitchcock@gmx.net>
 
- * @version     $Id$
 
  * @copyright   2003 Stud.IP-Project
 

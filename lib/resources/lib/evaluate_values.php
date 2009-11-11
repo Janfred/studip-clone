@@ -9,7 +9,6 @@
 *
 *
 * @author		Cornelis Kater <ckater@gwdg.de>
-* @version		$Id$
 * @access		public
 * @package		resources
 * @modulegroup	resources

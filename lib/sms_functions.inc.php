@@ -13,7 +13,6 @@
 * @module				sms_functions.inc.php
 * @package			Stud.IP Core
 */
-// $Id$
 /*
 sms_functions.inc.php -
 Copyright (C) 2002 Cornelis Kater <ckater@gwdg.de>, Nils K. Windisch <info@nkwindisch.de>

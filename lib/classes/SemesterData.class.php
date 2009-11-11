@@ -8,7 +8,6 @@
 * 
 *
 * @author		Mark Sievers <msievers@uos.de> 
-* @version		$Id$
 * @access		public
 * @modulegroup	core
 * @module			

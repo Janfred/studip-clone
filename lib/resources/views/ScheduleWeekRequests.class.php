@@ -8,7 +8,6 @@
 * 
 *
 * @author		Cornelis Kater <ckater@gwdg.de>
-* @version		$Id: ScheduleWeek.class.php 9787 2008-05-29 08:20:17Z mlunzena $
 * @access		public
 * @package		resources
 * @modulegroup	resources_modules

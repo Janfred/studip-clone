@@ -35,7 +35,6 @@
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id$
  */
 
 class DBManager {
@@ -165,7 +164,6 @@ class DBManager {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id$
  */
 
 class DBManagerException extends Exception {

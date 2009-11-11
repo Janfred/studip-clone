@@ -8,7 +8,6 @@
 * 
 *
 * @author		Peter Thienel <pthienel@data.quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup	extern_modules
 * @module		extern

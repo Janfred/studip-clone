@@ -35,7 +35,6 @@ require_once("lib/classes/SemesterData.class.php");
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package	
 */
 class StudipRangeTree extends TreeAbstract {

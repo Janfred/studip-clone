@@ -181,5 +181,4 @@ FOR ($i=0; $i<9; $i++)
 include ('lib/include/html_end.inc.php');
   // Save data back to database.
   page_close();
-// <!-- $Id$ --> 
 ?>

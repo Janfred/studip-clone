@@ -10,7 +10,6 @@
 *
 *
 * @author		Peter Thienel <pthienel@web.de>
-* @version	$Id$
 * @access		public
 * @modulegroup	calendar
 * @module		calendar

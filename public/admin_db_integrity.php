@@ -8,7 +8,6 @@
 * 
 *
 * @author		André Noack <andre.noack@gmx.net>
-* @version		$Id$
 * @access		public
 * @modulegroup	admin_modules
 * @module		admin_db_integrity
@@ -196,5 +195,4 @@ if(!$_REQUEST['plugin']) {
 echo '</td></tr></table>';
 include ('lib/include/html_end.inc.php');
 page_close();
-// <!--$Id$-->
 ?>

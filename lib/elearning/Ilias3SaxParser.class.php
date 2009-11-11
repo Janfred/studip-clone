@@ -31,7 +31,6 @@
 * 
 *
 * @author Stefan Meyer <smeyer@databay>
-* @version $Id$
 *
 * @package ilias-core
 */

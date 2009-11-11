@@ -11,7 +11,6 @@
 * it writes only the xml-stream or the output-file to the screen.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		export_modules
 * @module		export_view

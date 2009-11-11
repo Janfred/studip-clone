@@ -9,7 +9,6 @@
 * 
 *
 * @author		Peter Thienel <thienel@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version	$Id$
 * @access		public
 * @modulegroup	extern
 * @module		ExternElementLinkIntern

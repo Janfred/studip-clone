@@ -146,5 +146,4 @@ include ('lib/include/html_end.inc.php');
 // Save data back to database.
 my_session_close(md5('admin_literatur_overview.php'));
 page_close();
-// <!-- $Id$ -->
 ?>

@@ -9,7 +9,6 @@
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>,
 *               André Noack <andre.noack@gmx.net>
-* @version		$Id$
 * @access		public
 * @package		studip_core
 * @modulegroup	library

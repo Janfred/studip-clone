@@ -9,7 +9,6 @@
 * 
 *
 * @author		Peter Thienel <thienel@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version	$Id: ExternElementTemplateGeneric.class.php 6706 2006-07-21 12:15:16Z tthelen $
 * @access		public
 * @modulegroup	extern
 * @module		ExternElementTemplateGeneric

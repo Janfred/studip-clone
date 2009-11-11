@@ -20,7 +20,6 @@
  * the plugin's behaviour.
  *
  * @author      Marcus Lunzenauer <mlunzena@uos.de>
- * @version     $Id$
  * @package     pluginengine
  * @subpackage  core
  */

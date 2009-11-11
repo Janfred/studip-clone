@@ -23,7 +23,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
-// $Id$
 require_once ('lib/visual.inc.php');
 require_once ('lib/classes/StudipLitSearch.class.php');
 require_once ('lib/classes/StudipLitClipBoard.class.php');

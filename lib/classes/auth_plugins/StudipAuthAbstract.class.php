@@ -41,7 +41,6 @@ require_once ("lib/classes/UserDomain.php");
 * @abstract
 * @access	public
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package	
 */
 class StudipAuthAbstract {

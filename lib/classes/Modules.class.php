@@ -9,7 +9,6 @@
 * 
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		core
 * @module		Modules.class.php

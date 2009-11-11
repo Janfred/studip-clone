@@ -62,5 +62,4 @@ fclose($fp);
 </body>
 <?
 
-// <!-- $Id: buttonrender.php 7206 2007-01-24 22:07:49Z stockmann $ -->
 ?>

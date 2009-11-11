@@ -45,7 +45,6 @@ define ("INSTANCEOF_STUDIPOBJECT", "StudipObject");
  * Class to provide basic properties of an StudipObject in Stud.IP
  *
  * @author      Alexander Willner <mail@alexanderwillner.de>
- * @version     $Id$
  * @copyright   2003 Stud.IP-Project
  * @access      public
  * @package     studip_core

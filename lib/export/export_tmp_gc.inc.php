@@ -8,7 +8,6 @@
 * This file checks the tmp-directory for old files an deletes them.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
-* @version		$Id: oscar.php 6706 2006-07-21 12:15:16Z tthelen $
 * @access		public
 * @package		Export
 */

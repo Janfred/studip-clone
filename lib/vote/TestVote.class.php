@@ -35,7 +35,6 @@
  *
  * @author      Alexander Willner <mail@alexanderwillner.de>,
  *              Michael Cohrs <michael A7 cohrs D07 de>
- * @version     $Id$
  * @access      public
  * @package     vote
  * @modulegroup vote_modules

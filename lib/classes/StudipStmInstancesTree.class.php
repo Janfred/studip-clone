@@ -33,7 +33,6 @@ require_once("lib/classes/SemesterData.class.php");
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id: StudipSemTree.class.php,v 2.7 2006/01/29 12:32:49 anoack Exp $
 * @package	
 */
 class StudipStmInstancesTree extends TreeAbstract {

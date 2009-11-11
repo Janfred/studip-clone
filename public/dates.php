@@ -9,7 +9,6 @@
 * Schedule for Students
 *
 * @author		Till Glöggler <tgloeggl@uni-osnabrueck.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		views
 * @module		dates.php

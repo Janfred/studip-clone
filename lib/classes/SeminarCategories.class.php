@@ -8,7 +8,6 @@
  * aka $SEM_CLASS, $SEM_TYPE, $UPLOAD_TYPES
  *
  * @author		André Noack <noack@data-quest>, Suchi & Berg GmbH <info@data-quest.de>
- * @version		$Id: SeminarCategories.class.php 9787 2008-05-29 08:20:17Z mlunzena $
  * @access		public
  * @package		core
  */

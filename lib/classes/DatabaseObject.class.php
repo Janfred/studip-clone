@@ -45,7 +45,6 @@ define ("INSTANCEOF_DATABASEOBJECT", "DatabaseObject");
  * Class to provide basic properties of an DatabaseObject in Stud.IP
  *
  * @author      Alexander Willner <mail@alexanderwillner.de>
- * @version     $Id$
  * @copyright   2003 Stud.IP-Project
  * @access      public
  * @package     studip_core

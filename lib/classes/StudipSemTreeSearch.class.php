@@ -35,7 +35,6 @@ require_once 'lib/functions.php';
 *
 * @access	public
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package	DBTools
 **/
 class StudipSemTreeSearch {

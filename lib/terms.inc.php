@@ -9,7 +9,6 @@
 *
 *
 * @author		Zentrum VirtuOS, Osnabrueck
-* @version		$Id$
 * @access		public
 * @modulegroup		admission
 * @module		admission.inc.php

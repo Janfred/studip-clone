@@ -18,7 +18,6 @@
 // |         Pierre-Alain Joye <pajoye@php.net>                           |
 // +----------------------------------------------------------------------+
 //
-// $Id: IT.php,v 1.20 2006/08/17 15:47:22 dsp Exp $
 //
 
 //require_once 'PEAR.php';
@@ -120,7 +119,6 @@ define('IT_UNKNOWN_OPTION',            -6);
  * </code>
  *
  * @author   Ulf Wendel <uw@netuse.de>
- * @version  $Id: IT.php,v 1.20 2006/08/17 15:47:22 dsp Exp $
  * @access   public
  * @package  HTML_Template_IT
  */

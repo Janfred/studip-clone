@@ -30,7 +30,6 @@ require_once $GLOBALS['RELATIVE_PATH_CHAT']."/FileHandler.class.php";
 *
 * @access	public
 * @author	André Noack <andre.noack@gmx.net>
-* @version	$Id$
 * @package	Chat
 */
 class ChatFileServer extends ChatServer {

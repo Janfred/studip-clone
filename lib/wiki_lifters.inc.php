@@ -8,7 +8,6 @@
 // wikiMarkup patterns are replaced
 // args to wikiMarkup are passed to preg_replace
 //
-// $Id$
 
 require_once 'lib/forum.inc.php';
 

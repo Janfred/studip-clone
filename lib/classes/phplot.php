@@ -1,5 +1,4 @@
 <?php
-/* $Id$ */
 /*
  * PHPLOT Version 5.0.7
  *

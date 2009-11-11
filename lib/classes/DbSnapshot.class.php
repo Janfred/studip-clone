@@ -31,7 +31,6 @@
 *
 * @access	public	
 * @author	André Noack <andre.noack@gmx.net>
-* @version	$Id$
 * @package	DBTools
 **/
 class DbSnapshot {

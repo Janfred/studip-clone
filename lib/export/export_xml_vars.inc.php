@@ -9,7 +9,6 @@
 * Changes in this file may cause export-problems if the XSLT-Scripts are not changed either!
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		export_modules
 * @module		export_xml_vars

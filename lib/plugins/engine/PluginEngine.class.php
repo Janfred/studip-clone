@@ -4,8 +4,6 @@
 /**
  * Factory Class for the plugin engine
  * @author Dennis Reil, <dennis.reil@offis.de>
- * @version $Revision$
- * $Id$
  * @package pluginengine
  * @subpackage engine
  */

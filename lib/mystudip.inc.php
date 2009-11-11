@@ -9,7 +9,6 @@
 *
 *
 * @author		Stefan Suchi <suchi@data-quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup	library
 * @module		mystudip.inc

@@ -1,8 +1,6 @@
 <?php
 /**
  * @author Dennis Reil, <dennis.reil@offis.de>
- * @version $Revision$
- * $Id$
  * @package pluginengine
  */
 

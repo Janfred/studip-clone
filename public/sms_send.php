@@ -7,7 +7,6 @@
 * frontend for message-transmission
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Nils K. Windisch <studip@nkwindisch.de>
-* @version		$Id$
 * @access		public
 * @modulegroup	Messaging
 * @module		sms_send.php

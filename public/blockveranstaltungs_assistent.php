@@ -7,7 +7,6 @@
 *
 * @author		André Noack
 * @author		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
-* @version		$Id: header.php 7904 2007-07-29 15:05:13Z anoack $
 * @access		public
 * @module		blockveranstaltungs_assistent.php
 * @package		studip_core

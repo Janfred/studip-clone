@@ -32,7 +32,6 @@ require_once("lib/classes/StudipForm.class.php");
 *
 * @access	public	
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id$
 * @package	
 **/
 class StudipLitSearch {

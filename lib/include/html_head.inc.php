@@ -17,7 +17,6 @@
 * <li> if set use as title </li></ul>
 *
 * @author		Stefan Suchi <suchi@data-quest.de>
-* @version		$Id$
 * @access		public
 * @package		studip_core
 * @modulegroup	library

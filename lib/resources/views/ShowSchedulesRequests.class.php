@@ -7,7 +7,6 @@
 *
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id: ShowSchedules.class.php 9787 2008-05-29 08:20:17Z mlunzena $
 * @access		public
 * @modulegroup		resources
 * @module		ShowSchedules.class.php

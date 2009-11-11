@@ -11,7 +11,6 @@
 *
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version		$Id$
 * @access		public
 * @module		admin_admission.php
 * @modulegroup	admin

@@ -8,7 +8,6 @@
 *
 *
 * @author		Peter Thienel <thienel@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version	$Id: ExternModuleTemplatePersondetails.class.php 6854 2006-10-18 16:04:09Z pthiene $
 * @access		public
 * @modulegroup	extern
 * @module		ExternModuleTemplatePersondetails

@@ -33,7 +33,6 @@ require_once ("lib/classes/StudipLitCatElement.class.php");
 *
 * @access	public
 * @author 	Jan Kulmann <jankul@zmml.uni-bremen.de>
-* @version	$Id$
 * @package
 **/
 class StudipLitImportPluginAbstract {

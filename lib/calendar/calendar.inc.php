@@ -9,7 +9,6 @@
 *
 * @author		Peter Thienel <pthienel@web.de>
 * @author 		Michael Riehemann <michael.riehemann@uni-oldenburg.de>
-* @version		$Id$
 * @access		public
 * @package		calendar
 */

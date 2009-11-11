@@ -6,7 +6,6 @@
  * Library for template gui
  *
  * @author      JPWowra
- * @version     $Id$
  *
  * @copyright   2004 Stud.IP-Project
  * @access      public

@@ -33,7 +33,6 @@ require_once $RELATIVE_PATH_ADMIN_MODULES."/IntegrityCheckAbstract.class.php";
 *
 * @access	public	
 * @author	André Noack <andre.noack@gmx.net>
-* @version	$Id$
 * @package	Admin
 * @see		IntegrityCheckAbstract
 */

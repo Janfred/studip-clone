@@ -75,4 +75,3 @@ $db=new DB_Seminar;
 // Save data back to database.
 page_close();
  ?>
-<!-- $Id$ -->

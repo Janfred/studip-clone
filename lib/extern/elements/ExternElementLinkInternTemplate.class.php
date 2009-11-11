@@ -9,7 +9,6 @@
 * 
 *
 * @author		Peter Thienel <thienel@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version	$Id: ExternElementLinkInternTemplate.class.php 6859 2006-10-19 13:42:40Z pthiene $
 * @access		public
 * @modulegroup	extern
 * @module		ExternElementLinkInternTemplate

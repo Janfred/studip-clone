@@ -10,7 +10,6 @@
 * 
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, data-quest GmbH <info@data-quest.de>
-* @version		$Id$
 * @access		public
 * @package		resources
 * @modulegroup		resources_modules

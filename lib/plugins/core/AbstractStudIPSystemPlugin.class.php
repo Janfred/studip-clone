@@ -6,8 +6,6 @@
  * functions or can do background tasks like logging without having a menu entry.
  *
  * @author Dennis Reil, <dennis.reil@offis.de>
- * @version $Revision$
- * $Id$
  * @package pluginengine
  * @subpackage core
  */

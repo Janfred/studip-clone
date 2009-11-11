@@ -10,7 +10,6 @@
 * 
 *
 * @author		André Noack <andre.noack@gmx.net>
-* @version		$Id$
 * @access		public
 * @modulegroup	chat_modules
 * @module		chat_client

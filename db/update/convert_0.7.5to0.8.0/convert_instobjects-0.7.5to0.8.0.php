@@ -81,4 +81,3 @@ echo $i, "Datei- und Diskussionsordner angelegt.";
 ?>
 </body>
 </html>
-<!-- $Id$ -->

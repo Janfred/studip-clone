@@ -9,7 +9,6 @@
 * 
 *
 * @author   André Noack <noack@data-quest.de>
-* @version  $Id: Task.class.php,v 1.39 2005/09/15 13:34:03 thienel Exp $
 * @access   public
 
 * @package  

@@ -6,7 +6,6 @@
  * Library for evaluation participation page
  *
  * @author      mcohrs <michael A7 cohrs D07 de>
- * @version     $Id$
  * @copyright   2004 Stud.IP-Project
  * @access      public
  * @package     evaluation

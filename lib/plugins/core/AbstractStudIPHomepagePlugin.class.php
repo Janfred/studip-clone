@@ -4,8 +4,6 @@
 /**
  * Abstract plugin for plugins shown on the homepage of a user
  * @author Dennis Reil <dennis.reil@offis.de>
- * @version $Revision$
- * $Id$
  * @package pluginengine
  * @subpackage core
  */

@@ -41,7 +41,6 @@ define ("INSTANCEOF_EVALDBOBJECT", "EvalDBObject");
  * Databaseclass for all evaluationobjects
  *
  * @author  Alexander Willner <mail@AlexanderWillner.de>
- * @version $Id$
  *
  * @copyright   2004 Stud.IP-Project
  * @access      public

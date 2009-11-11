@@ -8,7 +8,6 @@
 * This file contains functions to get data from the Stud.IP-db and write it into a file.
 *
 * @author		Arne Schroeder <schroeder@data.quest.de>
-* @version		$Id$
 * @access		public
 * @modulegroup		export_modules
 * @module		export_studipdata_functions

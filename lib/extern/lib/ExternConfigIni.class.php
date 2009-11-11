@@ -9,7 +9,6 @@
 * 
 *
 * @author		Peter Thienel <pthienel@web.de>, Suchi & Berg GmbH <info@data-quest.de>
-* @version	$Id: ExternConfigIni.class.php 7859 2007-07-24 11:27:30Z pthiene $
 * @access		public
 * @modulegroup	extern
 * @module		ExternConfig

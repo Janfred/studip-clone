@@ -31,7 +31,6 @@ if (version_compare(PHP_VERSION, '5.2', '<')) {
 *
 *
 * @author     Mark Sievers <msievers@uos.de>
-* @version    $Id: LockRules.class.php,v 1.7 2003/11/13 07:56:11 msievers Exp $
 * @access     public
 * @modulegroup
 * @module

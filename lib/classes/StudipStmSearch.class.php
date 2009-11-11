@@ -35,7 +35,6 @@ require_once("lib/functions.php");
 *
 * @access	public	
 * @author	André Noack <noack@data-quest.de>
-* @version	$Id: StudipSemSearch.class.php,v 2.12 2006/01/29 12:32:49 anoack Exp $
 * @package	DBTools
 **/
 class StudipStmSearch {
