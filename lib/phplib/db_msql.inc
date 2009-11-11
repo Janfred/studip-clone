@@ -7,7 +7,6 @@
  *
  * Derived from db_mysql.inc by Sascha Schumann <sascha@schumann.cx>
  *
- * $Id$
  *
  */ 
 

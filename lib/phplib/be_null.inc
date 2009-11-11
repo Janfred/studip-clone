@@ -4,7 +4,6 @@
 ## Copyright (c) 1999-2000 Internet Images srl
 ##                    Massimiliano Masserelli <negro@interim.it>
 ##
-## $Id$
 ##
 ## PHPLIB Blob Engine using nothing
 ## 

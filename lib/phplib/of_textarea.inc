@@ -3,7 +3,6 @@
  *
  * Copyright (c) 1998 by Jay Bloodworth
  *
- * $Id$
  */
 
 class of_textarea extends of_element {

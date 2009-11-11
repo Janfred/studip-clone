@@ -3,7 +3,6 @@
 ##
 ## Copyright (c) 1999-2000 Daniel Lashua <daniel.lashua@gte.com>
 ##
-## $Id$
 ##
 ## PHPLIB Data Storage Container using DBM Files
 ##

@@ -3,7 +3,6 @@
 ##
 ## Copyright (c) 1998-2000 Sascha Schumann <sascha@schumann.cx>
 ##
-## $Id$
 ##
 ## PHPLIB Data Storage Container using nothing
 ## 

@@ -5,7 +5,6 @@
  * Copyright (c) 1998-2000 Cameron Taggart (cameront@wolfenet.com)
  *        Modified by Guarneri carmelo (carmelo@melting-soft.com)
  *					 
- * $Id$
  */ 
 
 class DB_Sql {

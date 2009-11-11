@@ -8,7 +8,6 @@
 ## C a little bit better it will be placed directly in PHP3.
 ## But I can't... :-}
 ##
-## $Id$
 
 
 ##

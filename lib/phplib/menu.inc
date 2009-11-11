@@ -5,7 +5,6 @@
  * Copyright (c) 1999 NetUSE GmbH
  *                    Kristian Koehntopp
  *
- * $Id$
  *
  */ 
 class Menu {

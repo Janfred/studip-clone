@@ -6,7 +6,6 @@
  *        Modified by Guarneri carmelo (carmelo@melting-soft.com)
  *	  Modified by Cameron Just     (C.Just@its.uq.edu.au)	 
  *
- * $Id$
  */ 
 # echo "<BR>This is using the MSSQL class<BR>";
 

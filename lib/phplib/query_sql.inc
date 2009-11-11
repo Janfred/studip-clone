@@ -8,7 +8,6 @@
  *     The idea is of this class is based in November 1997,
  *     it was a collection of functions for PHP/FI and mSQL.
  *
- * $Id$
  *
  */
 

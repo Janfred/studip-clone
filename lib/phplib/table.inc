@@ -6,7 +6,6 @@
  *                    Boris Erdmann, Kristian Koehntopp,
  *                    Jeffrey Galbraith
  *
- * $Id$
  * 
  * History: 990617: Modularized entire table class. Modularity breaks larger
  *                  objects into smaller, autonomous objects in order to 

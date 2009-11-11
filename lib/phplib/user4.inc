@@ -4,7 +4,6 @@
 *
 * @copyright  1998,1999 NetUSE GmbH Boris Erdmann, Kristian Koehntopp
 *             2001, Maxim Derkachev <kot@books.ru>
-* @version    $Id$
 * @package    PHPLib
 * @access     public
 */ 

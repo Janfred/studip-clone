@@ -3,7 +3,6 @@
 ## Copyright (c) 1999-2000 Internet Images srl
 ##                    Massimiliano Masserelli
 ##
-## $Id$
 ##
 ## PHPLIB Data Storage Container using a SQL database and multiple
 ## rows for each element

@@ -6,7 +6,6 @@
 ##
 ## Copyright (c) 1998-2000 Sascha Schumann <sascha@schumann.cx>
 ##
-## $Id$
 ##
 ## PHPLIB Data Storage Container using a SQL database
 ## patched ac_store (for use with MySQL only!)

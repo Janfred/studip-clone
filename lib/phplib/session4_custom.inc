@@ -7,7 +7,6 @@
 *             2000 Teodor Cimpoesu <teo@digiro.net>
 * @author     André Noack <noack@data-quest.de> Maxim Derkachev <kot@books.ru>,
 *				Teodor Cimpoesu <teo@digiro.net>,Ulf Wendel <uw@netuse.de>
-* @version    $Id$
 * @package    PHPLib
 * @access     public
 */
@@ -78,7 +77,6 @@ class Session {
   * has no effect on previous versions
   *
   * @var    string
-  * @deprec $Id$
   */
   var $mode = "cookie";               ## We propagate session IDs with cookies
 
@@ -87,7 +85,6 @@ class Session {
   * propagation policy, which is a safer  propagation method that get mode
   *
   * @var    string
-  * @deprec $Id$
   */
   var $fallback_mode;                 ## if fallback_mode is also 'ccokie'
                                       ## we enforce session.use_only_cookie
@@ -325,7 +322,6 @@ class Session {
   *		 doesn't seem to do (looking @ the session.c:940)
   * uw: yes we should keep it to remain the same interface, but deprec.
   *
-  * @deprec $Id$
   * @access public
   * @global $_COOKIE
   */

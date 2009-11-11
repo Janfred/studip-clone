@@ -5,7 +5,6 @@
 ##
 ## Depends on ooh_forms
 ##
-## $Id$
 ##
 
 class tpl_form {

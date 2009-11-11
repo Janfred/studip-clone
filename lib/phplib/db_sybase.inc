@@ -9,7 +9,6 @@
  *
  * metadata() contributed by Adelino Monteiro <adelino@infologia.pt>
  *
- * $Id$
  *
  */ 
 

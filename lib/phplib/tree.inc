@@ -4,7 +4,6 @@
  *
  * © 1998 Alex Aulbach
  *
- * $Id$
  *
  * This class needs a generated assoc array in this form:
  *

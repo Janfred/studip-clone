@@ -8,7 +8,6 @@
  * based on db_oracle.inc by Luis Francisco Gonzalez Hernandez 
  * contains metadata() from db_oracle.inc 1.10
  *
- * $Id$
  *
  */ 
 

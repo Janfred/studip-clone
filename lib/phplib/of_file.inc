@@ -3,7 +3,6 @@
  *
  * Copyright (c) 1998 by Jay Bloodworth
  *
- * $Id$
  */
 
 class of_file extends of_element {

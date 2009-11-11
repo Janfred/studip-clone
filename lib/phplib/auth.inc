@@ -7,7 +7,6 @@
  * Copyright (c) 1999-2000 Internet Images srl
  *                    Massimiliano Masserelli
  *
- * $Id$
  *
  */ 
 

@@ -5,7 +5,6 @@
  * (C) Copyright 1998 NetUSE AG
  *                    Boris Erdmann, Kristian Koehntopp, Eric Ries
  *
- * $Id$
  *
  * WARNING! This is a temporary file only and it is here to
  *          be merged with sqlquery.inc and for cleanup.

@@ -4,7 +4,6 @@
  *
  * Jan 1999 Alexander Aulbach for Main Media
  *
- * $Id$
  *
  * This Lib is used for the default representation of a page.
  * It has to be extended for own layout-design

@@ -4,7 +4,6 @@
  *
  * (c) 1999-2000 Carmelo Guarneri
  *
- * $Id$
  *
  */ 
 

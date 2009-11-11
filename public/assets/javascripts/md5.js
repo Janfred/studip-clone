@@ -14,7 +14,6 @@
  * Of course, this soft is provided "as is" without express or implied
  * warranty of any kind.
  *
- * $Id$
  *
  */
 

@@ -4,7 +4,6 @@
  *
  * Copyright (c) 1998-2000 Luis Francisco Gonzalez Hernandez
  *
- * $Id$
  *
  */ 
 

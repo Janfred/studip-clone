@@ -3,7 +3,6 @@
  *
  * Copyright (c) 1998 by Jay Bloodworth
  *
- * $Id$
  */
 
 class of_checkbox extends of_element {
