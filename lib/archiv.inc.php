@@ -50,6 +50,7 @@ function dump_sem($sem_id, $print_view = false) {
 
 	$db2->query ("SELECT * FROM seminare WHERE Seminar_id='$sem_id'");
 	$db2->next_record();
+	$sem_type = $db2->f('status');
 
 	$dump.="\n<table width=100% border=1 cellpadding=2 cellspacing=0>";
 	$dump .= " <tr><td colspan=2 align=left class=\"topic\">";
@@ -79,7 +80,7 @@ function dump_sem($sem_id, $print_view = false) {
 	//wer macht den Dozenten?
 	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'dozent' ORDER BY position, Nachname");
 
-	$dump.= "<tr><td width=\"15%\"><b>" . get_title_for_status("dozent", $db->affected_rows()) . " </b></td><td>";
+	$dump.= "<tr><td width=\"15%\"><b>" . get_title_for_status("dozent", $db->affected_rows(), $sem_type) . " </b></td><td>";
 	while ($db->next_record())
 		$dump.= htmlReady($db->f("fullname")) ."<br>  ";
 	$dump.="</td></tr>\n";
@@ -87,7 +88,7 @@ function dump_sem($sem_id, $print_view = false) {
 	//und wer ist Tutor?
 	$db->query ("SELECT seminar_user.user_id, " . $_fullname_sql['full'] . " AS fullname, username, status FROM seminar_user LEFT JOIN auth_user_md5 USING (user_id) LEFT JOIN user_info USING (user_id) WHERE seminar_user.Seminar_id = '$sem_id' AND status = 'tutor' ORDER BY position, Nachname");
 	if ($db->affected_rows())
-		$dump.="<tr><td width=\"15%\"><b>" .  get_title_for_status("tutor", $db->affected_rows()) . " </b></td><td>";
+		$dump.="<tr><td width=\"15%\"><b>" . get_title_for_status("tutor", $db->affected_rows(), $sem_type) . " </b></td><td>";
 	while ($db->next_record())
 		$dump.= htmlReady($db->f("fullname")) ."<br>";
 	if ($db->affected_rows())
@@ -362,12 +363,9 @@ function dump_sem($sem_id, $print_view = false) {
 	// Teilnehmer
 	if ($Modules["participants"]) {
 		if (!is_array($AUTO_INSERT_SEM) || (is_array($AUTO_INSERT_SEM) && !in_array($sem_id, $AUTO_INSERT_SEM))) {
-			$gruppe = array ("dozent" => get_title_for_status("dozent", $db->affected_rows()),
-				"tutor" => get_title_for_status("tutor", $db->affected_rows()),
-				"autor" => get_title_for_status("autor", $db->affected_rows()),
-				"user" => get_title_for_status("user", $db->affected_rows()));
+			$gruppe = array("dozent", "tutor", "autor", "user");
 			$dump.="<br>";
-			while (list ($key, $val) = each ($gruppe)) {
+			foreach ($gruppe as $key) {
 
 			// die eigentliche Teil-Tabelle
 
@@ -379,10 +377,10 @@ function dump_sem($sem_id, $print_view = false) {
 							LEFT JOIN user_info ON (auth_user_md5.user_id=user_info.user_id)
 							WHERE seminar_user.Seminar_id = '$sem_id' AND status = '$key'  GROUP by seminar_user.user_id ORDER BY $sortby");
 
-				if (!$db->affected_rows() == 0) {//haben wir in der Personengattung ueberhaupt einen Eintrag?
+				if ($db->affected_rows() != 0) {//haben wir in der Personengattung ueberhaupt einen Eintrag?
 		  			$dump.="<table width=100% border=1 cellpadding=2 cellspacing=0>";
 					$dump .= " <tr><td align=left colspan=4 class=\"topic\">";
-					$dump .= "<H2 class=\"topic\">&nbsp;".$val."</H2>";
+					$dump .= "<H2 class=\"topic\">&nbsp;".get_title_for_status($key, $db->affected_rows(), $sem_type)."</H2>";
 					$dump.= "</td></tr>\n";
 					$dump.="<th width=\"30%%\">" . _("Name") . "</th>";
 					$dump.="<th width=\"10%%\">" . _("Postings") . "</th>";
