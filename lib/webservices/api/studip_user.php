@@ -28,7 +28,6 @@
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id$
  */
 
 require_once('lib/functions.php');

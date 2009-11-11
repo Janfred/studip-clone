@@ -24,7 +24,6 @@ require_once 'lib/classes/StudipStudyArea.class.php';
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id$
  */
 
 class StudipStudyAreaSelection {

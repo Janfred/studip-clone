@@ -8,7 +8,6 @@
 *
 *
 * @author               Tobias Thelen <tobias.thelen@uni-osnabrueck.de>
-* @version              $Id$
 * @access               public
 * @package              studip_core
 * @modulegroup          library

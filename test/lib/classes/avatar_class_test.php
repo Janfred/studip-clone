@@ -20,7 +20,6 @@ require_once 'lib/classes/CourseAvatar.class.php';
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id$
  */
 
 class AvatarTestCase extends UnitTestCase {

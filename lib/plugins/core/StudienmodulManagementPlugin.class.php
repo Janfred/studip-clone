@@ -18,7 +18,6 @@
 *
 * @author    anoack
 * @copyright (c) Authors
-* @version   $Id$
 */
 
 interface StudienmodulManagementPlugin {

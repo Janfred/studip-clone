@@ -18,7 +18,6 @@
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id$
  */
 
 class StudipStudyArea {

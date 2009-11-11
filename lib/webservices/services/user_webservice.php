@@ -26,7 +26,6 @@ require_once 'lib/webservices/api/studip_user.php';
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id$
  */
 
 class MockPermission extends Seminar_Perm {
@@ -43,7 +42,6 @@ class MockPermission extends Seminar_Perm {
  *
  * @author    mlunzena
  * @copyright (c) Authors
- * @version   $Id$
  */
 
 class UserService extends Studip_Ws_Service {

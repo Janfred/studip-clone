@@ -9,7 +9,6 @@
 * 
 *
 * @author		Tobias Thelen <tobias.thelen@uni-osnabrueck.de>
-* @version		$Id$
 * @access		public
 */
 // +---------------------------------------------------------------------------+
