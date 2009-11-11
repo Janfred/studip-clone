@@ -1,5 +1,5 @@
 <?php
-    // $Id$
+    // $Id: test.php 8575 2007-11-13 14:41:00Z mlunzena $
 
     require_once(dirname(__FILE__) . '/../array_reporter.php');
     require_once(dirname(__FILE__) . '/../../unit_tester.php');

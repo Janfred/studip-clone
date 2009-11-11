@@ -4,7 +4,7 @@
  *	@package	SimpleTest
  *	@subpackage	DomTestCase
  *  @author     Perrick Penet <perrick@noparking.net>
- *	@version	$Id$
+ *	@version	$Id: dom_tester.php 8575 2007-11-13 14:41:00Z mlunzena $
  */
 
 /**#@+

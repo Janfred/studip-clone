@@ -6,7 +6,7 @@
      * @author Travis Swicegood <development@domain51.com>
      * @package SimpleTest
      * @subpackage UnitTester
-     * @version $Id$
+     * @version $Id: collector.php 8575 2007-11-13 14:41:00Z mlunzena $
      */
     
     /**

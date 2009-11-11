@@ -1,5 +1,5 @@
 <?php
-    // $Id$
+    // $Id: sample_test.php 8575 2007-11-13 14:41:00Z mlunzena $
     
     class SampleTestForArrayReporter extends UnitTestCase {
         

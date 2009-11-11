@@ -1,6 +1,6 @@
 <?php
 
-// $Id$
+// $Id: dom_tester_doc_test.php 8575 2007-11-13 14:41:00Z mlunzena $
 
 require_once(dirname(__FILE__) . '/../../autorun.php');
 require_once(dirname(__FILE__) . '/../dom_tester.php');
