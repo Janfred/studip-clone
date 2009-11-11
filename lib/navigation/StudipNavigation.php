@@ -66,14 +66,6 @@ class StudipNavigation extends Navigation
             $this->addSubNavigation('admin', new AdminNavigation());
         }
 
-        foreach (PluginEngine::getPlugins('SystemPlugin') as $plugin) {
-            if ($plugin instanceof AbstractStudIPSystemPlugin) {
-                if ($plugin->hasBackgroundTasks()) {
-                    $plugin->doBackgroundTasks();
-                }
-            }
-        }
-
         // quick links
         $links = new Navigation('Links');
 
@@ -105,5 +97,19 @@ class StudipNavigation extends Navigation
 
         // login page
         $this->addSubNavigation('login', new LoginNavigation(_('Login')));
+
+        // admin plugins
+        if ($perm->have_perm('admin')) {
+            PluginEngine::getPlugins('AdministrationPlugin');
+        }
+
+        // system plugins
+        foreach (PluginEngine::getPlugins('SystemPlugin') as $plugin) {
+            if ($plugin instanceof AbstractStudIPSystemPlugin) {
+                if ($plugin->hasBackgroundTasks()) {
+                    $plugin->doBackgroundTasks();
+                }
+            }
+        }
     }
 }

@@ -70,7 +70,7 @@ class AbstractStudIPAdministrationPlugin extends AbstractStudIPLegacyPlugin
             $this->topnavigation->setPlugin($this);
         }
 
-        Navigation::addItem('/start/' . $this->getPluginclassname(), $navigation);
+        Navigation::insertItem('/start/' . $this->getPluginclassname(), 'search', $navigation);
     }
 }
 ?>

@@ -143,13 +143,6 @@ class StartNavigation extends Navigation
             $this->addSubNavigation('admin_modules', $navigation);
         }
 
-        // load additional plugins
-        PluginEngine::getPlugins('SystemPlugin');
-
-        if ($perm->have_perm('admin')) {
-            PluginEngine::getPlugins('AdministrationPlugin');
-        }
-
         // global search
         $navigation = new Navigation(_('Suchen'), 'auswahl_suche.php');
         $navigation->addSubNavigation('user', new Navigation(_('Personensuche'), 'browse.php'));

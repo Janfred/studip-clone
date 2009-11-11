@@ -229,8 +229,6 @@ class AdminNavigation extends Navigation
         if ($perm->have_perm('admin')) {
             $navigation = new Navigation(_('Administrations-Plugins'));
             $this->addSubNavigation('plugins', $navigation);
-
-            PluginEngine::getPlugins('AdministrationPlugin');
         }
     }
 }
