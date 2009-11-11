@@ -77,43 +77,44 @@ th {
 				</th>
     </tr>
     <? foreach ($groups as $group) : ?>
-        <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>">
-            <td>
-               <img src="<?=StudygroupAvatar::getAvatar($group['Seminar_id'])->getUrl(Avatar::SMALL);?>" style="vertical-align:middle;">
-            </td>    
-            <td style="text-align:left;">
-                <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )): ?>
-                    <a href="<?=URLHelper::getlink("seminar_main.php?auswahl=".$group['Seminar_id'])?>">
-                <? else: ?>
-                   <a href="<?=URLHelper::getlink("dispatch.php/course/studygroup/details/".$group['Seminar_id'])?>">
-                <? endif; ?>
-                   <?=htmlready($group['Name'])?></a>
-             </td>
-             <td align="center"><?=strftime('%x', $group['mkdate']);?>
-            </td>
-            <td align="center">
-                <?=StudygroupModel::countMembers($group['Seminar_id']);?>
-            </td>
-            <td style="text-align:left;white-space:nowrap;">
-                <? $founders = StudygroupModel::getFounder($group['Seminar_id']);
-                foreach ($founders as $founder) : ?>
-                <img src="<?=Avatar::getAvatar($founder['user_id'])->getUrl(Avatar::SMALL);?>" style="vertical-align:middle;">
-                <a href="<?=URLHelper::getlink('about.php?username='.$founder['uname'])?>"><?=htmlready($founder['fullname'])?></a>
-                <br>
-                <? endforeach; ?>
-            </td>
-            <td align="center">
-                <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )) :?>
-                    <?=Assets::img("members.png",array('title' => _('Sie sind Mitglied in dieser Gruppe')))?>
-                <? endif;?>
-            </td>
-            <td align="center">
-                <? if ($group['admission_prelim'] == 1) :?>
-                    <?=Assets::img("closelock",array('title' => _('Mitgliedschaft muss beantragt werden')))?>
-                <? endif;?>
-            </td>
-        </tr>
-
+    	<? if (StudygroupModel::countMembers($group['Seminar_id'])> 0 ) :?>
+	        <tr class="<?= TextHelper::cycle('cycle_odd', 'cycle_even') ?>">
+	            <td>
+	               <img src="<?=StudygroupAvatar::getAvatar($group['Seminar_id'])->getUrl(Avatar::SMALL);?>" style="vertical-align:middle;">
+	            </td>    
+	            <td style="text-align:left;">
+	                <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )): ?>
+	                    <a href="<?=URLHelper::getlink("seminar_main.php?auswahl=".$group['Seminar_id'])?>">
+	                <? else: ?>
+	                   <a href="<?=URLHelper::getlink("dispatch.php/course/studygroup/details/".$group['Seminar_id'])?>">
+	                <? endif; ?>
+	                   <?=htmlready($group['Name'])?></a>
+	             </td>
+	             <td align="center"><?=strftime('%x', $group['mkdate']);?>
+	            </td>
+	            <td align="center">
+	                <?=StudygroupModel::countMembers($group['Seminar_id']);?>
+	            </td>
+	            <td style="text-align:left;white-space:nowrap;">
+	                <? $founders = StudygroupModel::getFounder($group['Seminar_id']);
+	                foreach ($founders as $founder) : ?>
+	                <img src="<?=Avatar::getAvatar($founder['user_id'])->getUrl(Avatar::SMALL);?>" style="vertical-align:middle;">
+	                <a href="<?=URLHelper::getlink('about.php?username='.$founder['uname'])?>"><?=htmlready($founder['fullname'])?></a>
+	                <br>
+	                <? endforeach; ?>
+	            </td>
+	            <td align="center">
+	                <? if (StudygroupModel::isMember($this->userid,$group['Seminar_id'] )) :?>
+	                    <?=Assets::img("members.png",array('title' => _('Sie sind Mitglied in dieser Gruppe')))?>
+	                <? endif;?>
+	            </td>
+	            <td align="center">
+	                <? if ($group['admission_prelim'] == 1) :?>
+	                    <?=Assets::img("closelock",array('title' => _('Mitgliedschaft muss beantragt werden')))?>
+	                <? endif;?>
+	            </td>
+	        </tr>
+	<? endif;?>
 <? endforeach ; ?>
 
 </table>

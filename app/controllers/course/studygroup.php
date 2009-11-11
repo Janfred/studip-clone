@@ -530,8 +530,8 @@ class Course_StudygroupController extends AuthenticatedController {
 			} else if (!$approveDelete) {
 				$template = $GLOBALS['template_factory']->open('shared/question');
 
-				$template->set_attribute('approvalLink', $this->url_for('/course/studygroup/delete/'. $id. '/true/'. get_ticket()));
-				$template->set_attribute('disapprovalLink', $this->url_for('/course/studygroup/edit/'. $id));
+				$template->set_attribute('approvalLink', $this->url_for('course/studygroup/delete/'. $id. '/true/'. get_ticket()));
+				$template->set_attribute('disapprovalLink', $this->url_for('course/studygroup/edit/'. $id));
 				$template->set_attribute('question', _("Sind Sie sicher, dass Sie diese Studiengruppe löschen möchten?"));
 
 				$this->flash['question'] = $template->render();
