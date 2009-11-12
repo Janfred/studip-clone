@@ -35,7 +35,7 @@ Ich erkläre mich damit einverstanden, dass AdministratorInnen die Inhalte der Gr
 			`range`, `section`, `position`, `mkdate`, `chdate`, `description`,
 			`comment`, `message_template` )
 			VALUES ( MD5( 'STUDYGROUP_TERMS' ) , '', 'STUDYGROUP_TERMS',
-			'$terms', '', 'string', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) ,
+			'$terms', '1', 'string', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) ,
 			'Studiengruppen', '', '')");
 
 		// (4) Add default for allowed modules
@@ -44,8 +44,17 @@ Ich erkläre mich damit einverstanden, dass AdministratorInnen die Inhalte der Gr
 			`range`, `section`, `position`, `mkdate`, `chdate`, `description`,
 			`comment`, `message_template` )
 			VALUES ( MD5( 'STUDYGROUP_SETTINGS' ) , '', 'STUDYGROUP_SETTINGS',
-			'forum:1|documents:0|schedule:0|participants:1', '', 'string', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) ,
+			'forum:1|documents:0|schedule:0|participants:1', '1', 'string', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) ,
 			'Studiengruppen', '', '')");
+
+		DBManager::get()->query("INSERT IGNORE INTO `config` (
+			`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`,
+			`range`, `section`, `position`, `mkdate`, `chdate`, `description`,
+			`comment`, `message_template` )
+			VALUES ( MD5( 'STUDYGROUP_DEFAULT_INST' ) , '', 'STUDYGROUP_DEFAULT_INST',
+			'', '1', 'string', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) ,
+			'Studiengruppen', '', '')");
+
 	}
 
 	function down ()
