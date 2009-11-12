@@ -99,7 +99,7 @@ class StudipNavigation extends Navigation
         $this->addSubNavigation('login', new LoginNavigation(_('Login')));
 
         // admin plugins
-        if ($perm->have_perm('admin')) {
+        if (is_object($user) && $perm->have_perm('admin')) {
             PluginEngine::getPlugins('AdministrationPlugin');
         }
 
