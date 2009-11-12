@@ -517,7 +517,7 @@ class Course_StudygroupController extends AuthenticatedController {
 
 			if ($approveDelete && check_ticket($studipticket)) {
 				$messages = array();
-				$sem=new Seminar($id);
+				$sem = new Seminar($id);
 	            $sem->delete();
           	
           	
