@@ -15,8 +15,7 @@ class Step00150Studygroups extends Migration
 		DBManager::get()->query("INSERT IGNORE INTO user_info SET user_id =MD5('studygroup_dozent')");	
 	
 		// (2) Allocate some space in the config-table
-		DBManager::get()->query("ALTER TABLE `config` CHANGE `value` 
-			`value` TEXT CHARACTER SET latin1 COLLATE latin1_german1_ci NOT NULL");
+		DBManager::get()->query("ALTER TABLE `config` CHANGE `value` `value` TEXT NOT NULL");
 
 		// (3) Add some default-terms
 		DBManager::get()->query("INSERT IGNORE INTO `config` (
@@ -30,11 +29,23 @@ class Step00150Studygroups extends Migration
 		$terms = "Mir ist bekannt, dass ich die Gruppe nicht zu rechtswidrigen Zwecken nutzen darf. Dazu zählen u.a. Urheberrechtsverletzungen, Beleidigungen und andere Persönlichkeitsdelikte.
 
 Ich erkläre mich damit einverstanden, dass AdministratorInnen die Inhalte der Gruppe zu Kontrollzwecken einsehen dürfen.";
-		Config::GetInstance()->setValue( $terms, 'STUDYGROUP_TERMS');
+
+		DBManager::get()->query("INSERT IGNORE INTO `config` (
+			`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`,
+			`range`, `section`, `position`, `mkdate`, `chdate`, `description`,
+			`comment`, `message_template` )
+			VALUES ( MD5( 'STUDYGROUP_TERMS' ) , '', 'STUDYGROUP_TERMS',
+			'$terms', '', 'string', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) ,
+			'Studiengruppen', '', '')");
 
 		// (4) Add default for allowed modules
-		Config::GetInstance()->setValue( 'forum:1|documents:0|schedule:0|participants:1', 'STUDYGROUP_SETTINGS');
-		
+		DBManager::get()->query("INSERT IGNORE INTO `config` (
+			`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`,
+			`range`, `section`, `position`, `mkdate`, `chdate`, `description`,
+			`comment`, `message_template` )
+			VALUES ( MD5( 'STUDYGROUP_SETTINGS' ) , '', 'STUDYGROUP_SETTINGS',
+			'forum:1|documents:0|schedule:0|participants:1', '', 'string', 'global', '', '0', UNIX_TIMESTAMP( ) , UNIX_TIMESTAMP( ) ,
+			'Studiengruppen', '', '')");
 	}
 
 	function down ()
