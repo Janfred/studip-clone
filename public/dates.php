@@ -46,9 +46,6 @@ $issue_open = array();
 URLHelper::bindLinkParam('dates_data',$showDatesFilter);
 URLHelper::bindLinkParam('raumzeit_data',$raumzeitFilter);
 URLHelper::bindLinkParam('rzsem_data',$rzSeminar);
-#$sess->register('showDatesFilter');
-#$sess->register('raumzeitFilter');
-#$sess->register('rzSeminar');
 
 require_once ('lib/classes/Seminar.class.php');
 require_once ('lib/datei.inc.php');
@@ -76,6 +73,7 @@ if ($type == '1') {
 	Navigation::activateItem('/course/schedule/all');
 }
 
+ob_start();
 // Start of Output
 include ('lib/include/html_head.inc.php'); // Output of html head
 include ('lib/include/header.php');   // Output of Stud.IP head
@@ -118,6 +116,60 @@ $sem->registerCommand('setType', 'dates_settype');
 $sem->processCommands();
 
 $termine = getAllSortedSingleDates($sem);
+
+// Export the dates
+if (Request::get('export') && $rechte) {
+	ob_end_clean();
+
+	header("Content-Type: application/vnd.ms-word");
+	header("Content-Disposition: attachment; filename=ablaufplan.doc")
+?>
+<html>
+	<head>
+		<title>Ablaufplan</title>
+	</head>
+	<body>
+
+	<?
+	$semester = new SemesterData();
+	$all_semester = $semester->getAllSemesterData();
+
+	if (is_array($termine) && sizeof($termine) > 0) {
+		echo '<table cellspacing="0" cellpadding="0" border="0" width="100%">';
+
+		foreach ($termine as $singledate_id => $singledate) {
+
+			if ( ($grenze == 0) || ($grenze < $singledate->getStartTime()) ) {
+				foreach ($all_semester as $zwsem) {
+					if ( ($zwsem['beginn'] < $singledate->getStartTime()) && ($zwsem['ende'] > $singledate->getStartTime()) ) {
+						$grenze = $zwsem['ende'];
+						?>
+						<tr>
+							<td colspan="2">
+								<h1><?= $zwsem['name'] ?></h1>
+							</td>
+						</tr>
+						<?
+					}
+				}
+			}
+
+			$tmp_ids = $singledate->getIssueIDs();
+			$title = '';
+			if (is_array($tmp_ids)) {
+				$title = $themen[array_pop($tmp_ids)]->getTitle();
+			}
+			?>
+			<tr>
+				<td width="50%"><?= htmlReady($singledate->toString()) ?></td>
+				<td width="50%"><?= htmlReady($title); ?></td>
+			</tr>
+			<?
+		}
+
+		echo '</table>';
+	}		
+} else {
 
 if ($cmd == 'openAll') $openAll = true;
 ?>
@@ -276,6 +328,6 @@ if ($cmd == 'openAll') $openAll = true;
 	</tr>
 </table>
 <?php
-	include ('lib/include/html_end.inc.php');
-	page_close();
-?>
+}
+include ('lib/include/html_end.inc.php');
+page_close();
