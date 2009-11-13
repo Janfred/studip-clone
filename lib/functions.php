@@ -1526,3 +1526,28 @@ function is_internal_url($url)
 
     return true;
 }
+
+/**
+ * generates form fields for the submitted multidimensional array
+ *
+ * @param string  $variable the name of the array, which is filled with the data
+ * @param mixed   $data     the data-array
+ * @param mixed   $parent   leave this entry as is
+ *
+ * @return string the inputs of type hidden as html
+ * 
+ */
+function addHiddenFields($variable, $data, $parent = array())
+{
+	if (is_array($data)) {
+		foreach($data as $key => $value) {
+			if (is_array($value)) {
+				$ret .= addHiddenFields($variable, $value, array_merge($parent, array($key)));
+			} else {
+				$ret.= '<input type="hidden" name="'. $variable .'['. implode('][', array_merge($parent, array($key))) .']" value="'. $value .'">' ."\n";
+			}
+		}
+	}
+
+	return $ret;
+}
