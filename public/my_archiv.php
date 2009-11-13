@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 # Lifter007: TODO
 # Lifter003: TODO
@@ -87,9 +88,9 @@ if ($num_my_sem) {
 			<table border="0" cellpadding="1" cellspacing="0" width="98%" align="center" valign="top" class="blank">
 				<tr align="center" valign="top">
 					<th width="1%"></th>
-					<th width="82%" align="left"><a href="<? echo $PHP_SELF ?>?sortby=name&view=<? echo $view ?>"><? echo(_("Name")) ?></a></th>
+					<th width="82%" align="left"><a href="<?= URLHelper::getLink("?sortby=name&view=". $view) ?>"><? echo(_("Name")) ?></a></th>
 					<th width="7%"><b><? echo(_("Inhalt")) ?></b></th>
-					<th width="10%"><a href="<? echo $PHP_SELF ?>?sortby=status&view=<? echo $view ?>">&nbsp;<? echo(_("Status")) ?>&nbsp;</a></th>
+					<th width="10%"><a href="<?= URLHelper::getLink("?sortby=status&view=". $view) ?>">&nbsp;<? echo(_("Status")) ?>&nbsp;</a></th>
 				</tr>
 	<?
 	while ($db->next_record()) {
@@ -102,20 +103,20 @@ if ($num_my_sem) {
 		echo "<tr ".$cssSw->getHover()." >";
 		echo "<td class=\"".$cssSw->getClass()."\">&nbsp; </td>";
 		// name-field
-		echo "<td class=\"".$cssSw->getClass()."\" ><a href=\"archiv.php?dump_id=".$db->f('seminar_id')."\" target=\"_blank\">";
+		echo "<td class=\"".$cssSw->getClass()."\" ><a href=\"". URLHelper::getLink("archiv.php?dump_id=".$db->f('seminar_id')."") ."\" target=\"_blank\">";
 		echo "<font size=-1>".htmlReady($db->f("name"))."</font>";
 		print ("</a></td>");
 		// content-field
 		echo "<td class=\"".$cssSw->getClass()."\" align=\"left\" nowrap>";
 		// postings-field
 		if ($db->f("forumdump"))
-			echo "<a href=\"archiv.php?forum_dump_id=".$db->f('seminar_id')."\" target=\"blank\">&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-posting.gif\"border=0 ".tooltip(_("Beiträge des Forums der Veranstaltung"))."></a>";
+			echo "<a href=\"". URLHelper::getLink("archiv.php?forum_dump_id=".$db->f('seminar_id'))."" ."\" target=\"blank\">&nbsp; <img src=\"".$GLOBALS['ASSETS_URL']."images/icon-posting.gif\"border=0 ".tooltip(_("Beiträge des Forums der Veranstaltung"))."></a>";
 		else
 			echo "&nbsp; <img src='".$GLOBALS['ASSETS_URL']."images/icon-leer.gif' border=0>";
 		 //documents-field
  		$file_name = _("Dateisammlung") . '-' . substr($db->f('name'),0,200) . '.zip';
 		if ($db->f('archiv_file_id')) {
-			echo '<a href="'. GetDownloadLink($db->f('archiv_file_id'), $file_name, 1) . '">&nbsp; <img src="'.$GLOBALS['ASSETS_URL'].'images/icon-disc.gif" border=0 '.tooltip(_("Dateisammlung der Veranstaltung herunterladen")).'></a>';
+			echo '<a href="'. URLHelper::getLink(GetDownloadLink($db->f('archiv_file_id'), $file_name, 1)) . '">&nbsp; <img src="'.$GLOBALS['ASSETS_URL'].'images/icon-disc.gif" border=0 '.tooltip(_("Dateisammlung der Veranstaltung herunterladen")).'></a>';
 		} else {
 			echo '&nbsp; <img src="'.$GLOBALS['ASSETS_URL'].'images/icon-leer.gif" border=0>';
 		}
@@ -166,7 +167,7 @@ $infobox = array	(
 	array  ("kategorie" => _("Aktionen:"),
 		"eintrag" => array	(
 			array	 (	'icon' => "suche2.gif",
-								"text"  => sprintf(_("Um Informationen &uuml;ber andere archivierte Veranstaltungen anzuzeigen nutzen Sie die <br />%sSuche im Archiv%s"), '<a href="archiv.php">', '</a>')
+								"text"  => sprintf(_("Um Informationen &uuml;ber andere archivierte Veranstaltungen anzuzeigen nutzen Sie die <br />%sSuche im Archiv%s"), '<a href="'. URLHelper::getLink("archiv.php") .'">', '</a>')
 			)
 		)
 	)

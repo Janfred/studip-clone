@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 # Lifter007: TODO
 # Lifter003: TODO
@@ -93,7 +94,7 @@ $active = array();
 while ($db->next_record()) {
 	$active[$db->f("seminar_id")][$db->f("datafield_id")] = TRUE;
 }
-echo "<FORM action=\"$PHP_SELF\" method=\"post\">";
+echo "<FORM action=\"". URLHelper::getLink() ."\" method=\"post\">";
 foreach ($SEM_CLASS as $key => $val) {
 	echo $tbl2->headerRow(array("&nbsp;<B>". $val["name"]."</B>", "<B>Status</B>", "<B>Anzeige</B>"));
 	echo $tbl2->closeRow();
@@ -127,4 +128,3 @@ page_close();
 ?>
 </body>
 </html>
-
