@@ -132,9 +132,11 @@ $size_of_book = GetSizeofBook()
 		<td class="blank" align="left">
 <?
 if ($open != "all" && $size_of_book>0) {
-	echo "&nbsp; <a href=\"$PHP_SELF?view=$view&open=all&filter=$filter\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle aufklappen (").((($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book)).")</font></a></td>";
+	$link=URLHelper::getLink('',array('view'=>$view, 'open'=>'all', 'filter'=>$filter));
+	echo "&nbsp; <a href=\"$link\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle aufklappen (").((($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book)).")</font></a></td>";
 } elseif ($size_of_book>0) {
-	echo "&nbsp; <a href=\"$PHP_SELF?filter=$filter\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurauf.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle zuklappen (").((($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book)).")</font></a></td>";
+	$link=URLHelper::getLink('',array('filter'=>$filter));
+	echo "&nbsp; <a href=\"$link\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurauf.gif\" border=\"0\">&nbsp; <font size=\"2\">"._("Alle zuklappen (").((($size_of_book = GetSizeofBook()) == 1) ? _("1 Eintrag") : sprintf(_("%d Eintr&auml;ge"),$size_of_book)).")</font></a></td>";
 }
 
 echo "<td class=\"blank\" align=\"right\">";
@@ -144,7 +146,7 @@ if ($search_exp) {
 	$search_exp = str_replace("_","\_",$search_exp);
 	if (strlen(trim($search_exp))<3) {
 		echo "&nbsp; <font size=\"-1\">"._("Ihr Suchbegriff muss mindestens 3 Zeichen umfassen! ");
-		printf ("<a href=\"$PHP_SELF\"><img src= \"".$GLOBALS['ASSETS_URL']."images/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>", tooltip(_("neue Suche")));
+		printf ("<a href=\"".URLHelper::getLink()."\"><img src= \"".$GLOBALS['ASSETS_URL']."images/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>", tooltip(_("neue Suche")));
 	} else {
 		$search_exp = trim($search_exp);
 		if (SearchResults($search_exp)) {
@@ -153,7 +155,7 @@ if ($search_exp) {
 		} else {
 			echo "&nbsp; <font size=\"2\">"._("keine Treffer zum Suchbegriff:")."</font><b>&nbsp; $search_exp&nbsp; </b>";
 		}
-		printf ("<a href=\"$PHP_SELF\"><img src= \"".$GLOBALS['ASSETS_URL']."images/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>", tooltip(_("neue Suche")));
+		printf ("<a href=\"".URLHelper::getLink()."\"><img src= \"".$GLOBALS['ASSETS_URL']."images/rewind.gif\" border=\"0\" value=\"" . _("neue Suche") . "\" %s>", tooltip(_("neue Suche")));
 	}
 } else {
 	echo "<font size=\"2\" color=\"#555555\">". _("Person zum Eintrag in das Adressbuch suchen:")."</font>&nbsp; <input type=\"text\" name=\"search_exp\" value=\"\">";
@@ -182,8 +184,8 @@ if (($contact["view"])=="alpha") {
 	}
 	echo "<td width=\"8%\" align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\" "
 		. tooltip(($size_of_book == 1) ? _("1 Eintrag") : sprintf(_("%d Einträge"),$size_of_book),false)
-		."><a href=\"$PHP_SELF?filter=all\">a-z</a>"
-		."&nbsp; <a href=\"contact_export.php?groupid=all\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("Alle Einträge als vCard exportieren"))."></a></td>";
+		."><a href=\"".URLHelper::getLink('',array('filter'=>'all'))."\">a-z</a>"
+		."&nbsp; <a href=\"".URLHelper::getLink('contact_export.php',array('groupid'=>'all'))."\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("Alle Einträge als vCard exportieren"))."></a></td>";
 	if (!$filter) {
 		$cssSw->switchClass();
 	}
@@ -201,7 +203,7 @@ if (($contact["view"])=="alpha") {
 		}
 		echo "<td width=\"3%\"  align=\"center\" valign=\"center\" ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\""
 		. tooltip(($size_of_book_by_letter[chr($i)] == 1) ? _("1 Eintrag") : (($size_of_book_by_letter[chr($i)] > 1 ) ? sprintf(_("%d Einträge"),$size_of_book_by_letter[chr($i)]) : _("keine Einträge")),false)
-		."><a href=\"$PHP_SELF?view=$view&filter=".chr($i)."\" "
+		."><a href=\"".URLHelper::getLink('',array('view'=>$view, 'filter'=>chr($i)))."\" "
 		. ">".$character."</a>"
 		."</td>";
 		if ($filter==chr($i)) {
@@ -217,8 +219,8 @@ if (($contact["view"])=="gruppen") {
 		$cssSw->switchClass();
 	}
 	echo "<td nowrap ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-		."<a href=\"$PHP_SELF?filter=all\"><font size=\"2\">" . _("Alle Gruppen") . "</font></a>"
-		."&nbsp; <a href=\"contact_export.php?groupid=all\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("Alle Einträge als vCard exportieren"))."></a>&nbsp; </td>";
+	."<a href=\"".URLHelper::getLink('',array('filter'=>'all'))."\"><font size=\"2\">" . _("Alle Gruppen") . "</font></a>"
+	."&nbsp; <a href=\"".URLHelper::getLink('',array('groupid'=>'all'))."\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("Alle Einträge als vCard exportieren"))."></a>&nbsp; </td>";
 	if (!$filter) {
 		$cssSw->switchClass();
 	}
@@ -229,14 +231,17 @@ if (($contact["view"])=="gruppen") {
 		if ($filter==$db->f("statusgruppe_id")) {
 			$cssSw->switchClass();
 			$color = "color=\"#FF0000\"";
-			$maillink = "&nbsp; <a href=\"sms_send.php?sms_source_page=contact.php&group_id=$filter\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/nachrichtsmall.gif\" valign=\"bottom\" border=\"0\"".tooltip(_("Nachricht an alle Personen dieser Gruppe schicken"))."></a>";
-			$maillink .= "&nbsp; <a href=\"contact_export.php?groupid=".$db->f("statusgruppe_id")."\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("Diese Gruppe als vCard exportieren"))."></a>";
+			$smslink=URLHelper::getLink('sms_send.php',array('sms_source_page'=>'contact.php', 'group_id'=>$filter));
+			$exportlink=URLHelper::getLink('contact_export.php',array('groupid'=>$db->f("statusgruppe_id")));
+			$maillink = "&nbsp; <a href=\"$smslink\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/nachrichtsmall.gif\" valign=\"bottom\" border=\"0\"".tooltip(_("Nachricht an alle Personen dieser Gruppe schicken"))."></a>";
+			$maillink .= "&nbsp; <a href=\"$exportlink\"><img style=\"vertical-align:middle;\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("Diese Gruppe als vCard exportieren"))."></a>";
 		} else {
 			$color = "";
 			$maillink ="";
 		}
+		$link=URLHelper::getLink('',array('view'=>$view, 'filter'=>$db->f("statusgruppe_id")));
 		echo "<td ".$cssSw->getHover()." class=\"".$cssSw->getClass()."\">&nbsp; "
-		."<a href=\"$PHP_SELF?view=$view&filter=".$db->f("statusgruppe_id")."\"><font size=\"2\" $color>".htmlready($db->f("name"))."</font></a>$maillink"
+		."<a href=\"$link\"><font size=\"2\" $color>".htmlready($db->f("name"))."</font></a>$maillink"
 		."&nbsp; </td>";
 		if ($filter==$db->f("statusgruppe_id")) {
 			$cssSw->switchClass();
