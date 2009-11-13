@@ -1,4 +1,5 @@
 <?
+# Lifter001: TEST
 # Lifter002: TODO
 # Lifter007: TODO
 # Lifter003: TODO
@@ -91,8 +92,8 @@ if ($delete_id) {
    	$db->query("SELECT name FROM archiv WHERE seminar_id= '$delete_id'");
 	$db->next_record();
 	$msg="info§" . sprintf(_("Wollen Sie die Veranstaltung <b>%s</b> wirklich l&ouml;schen? S&auml;mtliche Daten und die mit der Veranstaltung archivierte Dateisammlung werden unwiderruflich gel&ouml;scht!"), htmlReady($db->f("name"))) . " <br>";
-	$msg.="<a href=\"".$PHP_SELF."?delete_really=TRUE&delete_id=$delete_id\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
-	$msg.="<a href=\"".$PHP_SELF."?back=TRUE\">" . makeButton("nein", "img") . "</a>\n";
+	$msg.="<a href=\"". URLHelper::getLink("?delete_really=TRUE&delete_id=$delete_id") ."\">" . makeButton("ja2", "img") . "</a>&nbsp; \n";
+	$msg.="<a href=\"". URLHelper::getLink("?back=TRUE") ."\">" . makeButton("nein", "img") . "</a>\n";
 
 }
 
@@ -156,7 +157,7 @@ if (!empty($dump_id)) {
 		$db->query ($query);
 		if ($db->next_record()) {
 			if (!isset($druck)) {
-				echo "<div align=center> <a href='$PHP_SELF?dump_id=".$dump_id."&druck=1' target=_self><b>" . _("Druckversion") . "</b></a><br><br></div>";
+				echo '<div align=center> <a href="'. URLHelper::getLink("?dump_id=".$dump_id."&druck=1") .'" target="_self"><b>' . _("Druckversion") . "</b></a><br><br></div>";
 			}
 			echo $db->f('dump');
 		}
@@ -173,7 +174,7 @@ elseif (!empty($forum_dump_id)) {
 		$db->query ($query);
 		if ($db->next_record()) {
 			if (!isset($druck)) {
-				echo "<div align=center> <a href='$PHP_SELF?forum_dump_id=".$forum_dump_id."&druck=1' target=_self><b>" . _("Druckversion") . "</b></a><br><br></div>";
+				echo '<div align=center> <a href="'. URLHelper::getLink("?forum_dump_id=".$forum_dump_id."&druck=1") .'" target=_self><b>' . _("Druckversion") . "</b></a><br><br></div>";
 			}
 			echo $db->f('forumdump');
 		}
@@ -190,7 +191,7 @@ elseif (!empty($wiki_dump_id)) {
 		$db->query ($query);
 		if ($db->next_record()) {
 			if (!isset($druck)) {
-				echo "<div align=center> <a href='$PHP_SELF?wiki_dump_id=".$wiki_dump_id."&druck=1' target=_self><b>" . _("Druckversion") . "</b></a><br><br></div>";
+				echo '<div align=center> <a href="'. URLHelper::getLink("?wiki_dump_id=".$wiki_dump_id."&druck=1") .'" target=_self><b>' . _("Druckversion") . "</b></a><br><br></div>";
 			}
 			echo "<table class=blank width=95% align=center><tr><td>";
 			echo stripslashes($db->f('wikidump'));
@@ -224,7 +225,7 @@ include('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
 			<blockquote>
 			<br>
 				<p>
-				<form  name="search" method="post" action="<?echo $PHP_SELF?>" >
+				<form  name="search" method="post" action="<?= URLHelper::getLink() ?>" >
 					<table border=0 cellspacing=0 cellpadding=2>
 						<tr <? $cssSw->switchClass() ?>>
 							<td class="<? echo $cssSw->getClass() ?>" colspan=2>
@@ -437,10 +438,10 @@ if ($archiv_data["perform_search"]) {
 
 	 	echo "<br><br><TABLE class=\"blank\"  WIDTH=99% align=center cellspacing=0 border=0>\n";
    	echo "<tr height=28><td  width=\"1%\" class=\"steel\"><img src=\"".$GLOBALS['ASSETS_URL']."images/blank.gif\" width=1 height=20>&nbsp; </td>\n";
-		echo "<td  width=\"29%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=Name\">" . _("Name") . "</a></b></td>\n";
-		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=dozenten\">" . _("DozentIn") . "</a></b></td>\n";
-		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=institute\">" . _("Einrichtungen") . "</a></b></td>\n";
-		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"$PHP_SELF?sortby=semester\">" . _("Semester") . "</a></b></td>\n";
+		echo "<td  width=\"29%\" class=\"steel\" align=center valign=bottom><b><a href=\"". URLHelper::getLink("?sortby=Name") ."\">" . _("Name") . "</a></b></td>\n";
+		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"". URLHelper::getLink("?sortby=dozenten") ."\">" . _("DozentIn") . "</a></b></td>\n";
+		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"". URLHelper::getLink("?sortby=institute") ."\">" . _("Einrichtungen") . "</a></b></td>\n";
+		echo "<td  width=\"20%\" class=\"steel\" align=center valign=bottom><b><a href=\"". URLHelper::getLink("?sortby=semester") ."\">" . _("Semester") . "</a></b></td>\n";
 		echo "<td  width=\"10%\" class=\"steel\" colspan=3 align=center valign=bottom><b>" . _("Aktion") . "</b></td></tr>\n";
 
 		$c=0;
@@ -464,11 +465,11 @@ if ($archiv_data["perform_search"]) {
 
       		// schon aufgeklappt?
 			if ($archiv_data["open"]==$db->f('seminar_id')) {
-				echo "<a name=\"anker\"></a><a href=\"$PHP_SELF?close=yes\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif\" " . tooltip(_("Zuklappen")) . " border=\"0\" valign=\"top\"></a></td>";
-				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><b><a href=\"$PHP_SELF?close=yes\">".htmlReady($db->f("name"))."</a></b></font></td>";
+				echo "<a name=\"anker\"></a><a href=\"". URLHelper::getLink("close=yes") ."\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgraurunt.gif\" " . tooltip(_("Zuklappen")) . " border=\"0\" valign=\"top\"></a></td>";
+				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><b><a href=\"". URLHelper::getLink("close=yes") ."\">".htmlReady($db->f("name"))."</a></b></font></td>";
 			} else {
-	      echo "<a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgrau.gif\" " . tooltip(_("Aufklappen")) . " border=\"0\" valign=\"top\"></a></td>";
-				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><a href=\"$PHP_SELF?open=" . $db->f('seminar_id') . "#anker\">".htmlReady($db->f("name"))."</a></font></td>";
+	      echo "<a href=\"". URLHelper::getLink("?open=" . $db->f('seminar_id')) . "#anker\"><img src=\"".$GLOBALS['ASSETS_URL']."images/forumgrau.gif\" " . tooltip(_("Aufklappen")) . " border=\"0\" valign=\"top\"></a></td>";
+				echo "<td class=\"$class\" width=\"29%\"><font size=\"-1\"><a href=\"". URLHelper::getLink("?open=" . $db->f('seminar_id')) . "#anker\">".htmlReady($db->f("name"))."</a></font></td>";
 			}
 	    echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".htmlReady($db->f("dozenten"))."</font></td>";
 	 		echo "<td align=center class=\"$class\">&nbsp;<font size=-1>".htmlReady($db->f("institute"))."</font></td>";
@@ -477,14 +478,14 @@ if ($archiv_data["perform_search"]) {
 			if (archiv_check_perm($db->f("seminar_id")))
 				$view = 1;
 			if ($view == 1) {
-				echo "<td class=\"$class\" width=\"3%\">&nbsp;<a href=\"$PHP_SELF?dump_id=".$db->f('seminar_id')."\" target=_blank><img src=\"".$GLOBALS['ASSETS_URL']."images/i.gif\" " . tooltip(_("Komplettansicht")) . " border=\"0\"></a></td>";
+				echo "<td class=\"$class\" width=\"3%\">&nbsp;<a href=\"". URLHelper::getLink("?dump_id=".$db->f('seminar_id')) ."\" target=_blank><img src=\"".$GLOBALS['ASSETS_URL']."images/i.gif\" " . tooltip(_("Komplettansicht")) . " border=\"0\"></a></td>";
 				echo "<td class=\"$class\" width=\"3%\">&nbsp;";
 				if (!$db->f('archiv_file_id')=='') {
-					echo '<a href="' . GetDownloadLink($db->f('archiv_file_id'), $file_name, 1) .'"><img src="'.$GLOBALS['ASSETS_URL'].'images/files.gif" ' . tooltip(_("Dateisammlung")) . ' border="0"></a>';
+					echo '<a href="' . URLHelper::getLink(GetDownloadLink($db->f('archiv_file_id'), $file_name, 1)) .'"><img src="'.$GLOBALS['ASSETS_URL'].'images/files.gif" ' . tooltip(_("Dateisammlung")) . ' border="0"></a>';
 				}
 				echo "</td><td class=\"$class\" width=\"3%\">&nbsp;";
 				if (archiv_check_perm($db->f("seminar_id")) == "admin")
-					echo "<a href=\"$PHP_SELF?delete_id=".$db->f('seminar_id')."\">&nbsp;<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Diese Veranstaltung aus dem Archiv entfernen")) . "></a>";
+					echo "<a href=\"". URLHelper::getLink("?delete_id=".$db->f('seminar_id')) ."\">&nbsp;<img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Diese Veranstaltung aus dem Archiv entfernen")) . "></a>";
 				echo "</td>";
 			} else
 				echo "<td class=\"$class\" width=\"9%\" colspan=\"3\">&nbsp;</td>";
@@ -503,21 +504,21 @@ if ($archiv_data["perform_search"]) {
 			// doppelt haelt besser: noch mal die Extras
 
 				if ($view == 1) {
-					echo "<br><br><li><a href=\"$PHP_SELF?dump_id=".$db->f('seminar_id')."\" target=_blank><font size=\"-1\">" . _("&Uuml;bersicht der Veranstaltungsinhalte") . "</font></a></li>";
+					echo "<br><br><li><a href=\"". URLHelper::getLink("?dump_id=".$db->f('seminar_id')) ."\" target=_blank><font size=\"-1\">" . _("&Uuml;bersicht der Veranstaltungsinhalte") . "</font></a></li>";
 					if (!$db->f('forumdump')=='')
-						echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?forum_dump_id=".$db->f('seminar_id')."\" target=_blank>" . _("Beitr&auml;ge des Forums") . "</a></font></li>";
+						echo "<li><font size=\"-1\"><a href=\"". URLHelper::getLink("?forum_dump_id=".$db->f('seminar_id')) ."\" target=_blank>" . _("Beitr&auml;ge des Forums") . "</a></font></li>";
 					if (!$db->f('wikidump')=='')
-						echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?wiki_dump_id=".$db->f('seminar_id')."\" target=_blank>" . _("Wikiseiten") . "</a></font></li>";
+						echo "<li><font size=\"-1\"><a href=\"". URLHelper::getLink("?wiki_dump_id=".$db->f('seminar_id')) ."\" target=_blank>" . _("Wikiseiten") . "</a></font></li>";
 					if (!$db->f('archiv_file_id')=='') {
-						echo '<li><font size="-1"><a href="' . GetDownloadLink($db->f('archiv_file_id'), $file_name, 1) .'">' . _("Download der Dateisammlung") . '</a></font></li>';
+						echo '<li><font size="-1"><a href="' . URLHelper::getLink(GetDownloadLink($db->f('archiv_file_id'), $file_name, 1)) .'">' . _("Download der Dateisammlung") . '</a></font></li>';
 					}
 					if (archiv_check_perm($db->f("seminar_id")) == "admin")
-						echo "<li><a href=\"$PHP_SELF?delete_id=".$db->f('seminar_id')."\"><font size=\"-1\">" . _("Diese Veranstaltung unwiderruflich aus dem Archiv entfernen") . "</font></a></li>";
+						echo "<li><a href=\"". URLHelper::getLink("?delete_id=".$db->f('seminar_id')) ."\"><font size=\"-1\">" . _("Diese Veranstaltung unwiderruflich aus dem Archiv entfernen") . "</font></a></li>";
 					if (archiv_check_perm($db->f("seminar_id")) == "admin") {
 						if (!$archiv_data["edit_grants"])
-							echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?show_grants=yes#anker\">" . _("Zugriffsberechtigungen einblenden") . "</a></font></li>";
+							echo "<li><font size=\"-1\"><a href=\"". URLHelper::getLink("?show_grants=yes") ."#anker\">" . _("Zugriffsberechtigungen einblenden") . "</a></font></li>";
 						else
-							echo "<li><font size=\"-1\"><a href=\"$PHP_SELF?hide_grants=yes#anker\">" . _("Zugriffsberechtigungen ausblenden") . "</a></font></li>";
+							echo "<li><font size=\"-1\"><a href=\"". URLHelper::getLink("?hide_grants=yes") ."#anker\">" . _("Zugriffsberechtigungen ausblenden") . "</a></font></li>";
 					}
 				} else
 					echo "<br><br><li><font size=\"-1\">" . _("Die Veranstaltungsinhalte, Beitr&auml;ge im Forum und das Dateiarchiv sind nicht zug&auml;ngig, da Sie an dieser Veranstaltung nicht teilgenommen haben.") . "</font></li>";
@@ -528,13 +529,13 @@ if ($archiv_data["perform_search"]) {
 					while ($db2->next_record()) {
 						echo "<font size=\"-1\">".htmlReady($db2->f("fullname")). " (" . _("Status:") . " ". $db2->f("status"). ")</font>";
 						if ($db2->f("status") != "dozent")
-							echo "<a href=\"$PHP_SELF?delete_user=".$db2->f("user_id")."&d_sem_id=".$db->f("seminar_id"),"#anker\"><font size=\"-1\">&nbsp;" . _("Zugriffsberechtigung entfernen") . "</font> <img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Dieser Person die Zugriffsberechtigung entziehen")) . "></a>";
+							echo "<a href=\"". URLHelper::getLink("?delete_user=".$db2->f("user_id")."&d_sem_id=".$db->f("seminar_id")) ,"#anker\"><font size=\"-1\">&nbsp;" . _("Zugriffsberechtigung entfernen") . "</font> <img border=0 src=\"".$GLOBALS['ASSETS_URL']."images/trash.gif\" " . tooltip(_("Dieser Person die Zugriffsberechtigung entziehen")) . "></a>";
 						echo "<br>";
 					}
 					if (($add_user) && (!$new_search)) {
 						$db2->query("SELECT " . $_fullname_sql['full'] . " AS fullname, username, auth_user_md5.user_id FROM auth_user_md5 LEFT JOIN user_info USING (user_id) WHERE Vorname LIKE '%$search_exp%' OR Nachname LIKE '%$search_exp%' OR username LIKE '%".trim($search_exp)."%' ORDER BY Nachname");
 						if ($db2->affected_rows()) {
-							echo "<form action=\"$PHP_SELF#anker\">";
+							echo "<form action=\"". URLHelper::getLink() ."#anker\">";
 							echo "<hr><b><font size=\"-1\">" . _("Person Berechtigung erteilen:") . " </font></b><br><br>";
 							echo "<b><font size=\"-1\">" . sprintf(_("Es wurden %s Personen gefunden"), $db2->affected_rows()) . " </font></b><br>";
 							echo "<font size=\"-1\">" . _("Bitte w&auml;hlen Sie die Person aus der Liste aus:") . "</font>&nbsp;<br><font size=\"-1\"><select name=\"add_user\">";
@@ -549,7 +550,7 @@ if ($archiv_data["perform_search"]) {
 						}
 					}
 					if ((($add_user) && (!$db2->affected_rows())) || (!$add_user) || ($new_search)) {
-						echo "<form action=\"$PHP_SELF#anker\">";
+						echo "<form action=\"". URLHelper::getLink() ."#anker\">";
 						echo "<hr><b><font size=\"-1\">" . _("Person Berechtigung erteilen:") . " </font></b><br>";
 						if (($add_user) && (!$db2->affected_rows())  && (!$new_search))
 							echo "<br><b><font size=\"-1\">" . _("Es wurde keine Person zu dem eingegebenem Suchbegriff gefunden!") . "</font></b><br>";
