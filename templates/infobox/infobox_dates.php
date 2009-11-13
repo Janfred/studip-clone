@@ -90,6 +90,18 @@
            <br>
          </td>
       </tr>
+
+       <tr>
+         <td class="infobox" align="center" valign="top" width="1%">
+           <img src="<?=$GLOBALS['ASSETS_URL']?>images/link_intern.gif">
+         </td>
+         <td class="infobox" width="99%" align="left">
+           <font size="-1">
+					   <a href="<?= URLHelper::getLink("dates.php?export=true")?>"><?= _("Exportieren") ?></a>
+					 </font>
+           <br>
+         </td>
+      </tr>
 			<? endif; ?>
 
     </table>
