@@ -183,10 +183,9 @@ class StudygroupModel {
         }
         else if($sort == 'founder_asc' || $sort == 'founder_desc') {
                 $sql = "SELECT s.* FROM seminare as s 
-                        LEFT JOIN seminar_user as su USING (Seminar_id) 
-                        LEFT JOIN auth_user_md5 as aum ON (su.user_id = aum.user_id  AND aum.username != 'studygroup_dozent') 
+                        LEFT JOIN seminar_user as su ON s.Seminar_id = su.Seminar_id AND su.status = 'dozent' AND su.user_id <> MD5('studygroup_dozent') 
+                        LEFT JOIN auth_user_md5 as aum ON su.user_id = aum.user_id 
                         WHERE s.status IN ('". implode("','", $status)."') 
-                        AND su.status = 'dozent' 
                         ORDER BY aum.Nachname ". $sort_order;
         }
         else if($sort == 'ismember_asc' || $sort == 'ismember_desc') {
