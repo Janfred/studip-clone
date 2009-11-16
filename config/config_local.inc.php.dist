@@ -2,7 +2,7 @@
 /*basic settings for Stud.IP
 ----------------------------------------------------------------
 you find here the basic system settings. You shouldn't have to touch much of them...
-please note the CONFIG.INC.PHP in the system folder for the indivual settings of your installation!*/
+please note the CONFIG.INC.PHP for the indivual settings of your installation!*/
 
 $UNI_NAME_CLEAN = 'Stud.IP 1.10';							//the clean-name of your master-faculty (e.g. University of Göttingen), without html-entities (used for mail-system)
 $STUDIP_INSTALLATION_ID='demo-installation';      //unique identifier for installation
@@ -12,8 +12,7 @@ $AUTH_LIFETIME = 60;									//the length of a session in minutes, zero means un
 /*settings for database access
 ----------------------------------------------------------------
 please fill in your database connection settings.
-please note: Stud.IP uses the class DB_Seminar,
-DB_Ilias is used to connect to an Ilias Database*/
+*/
 
 // default Stud.IP database (DB_Seminar)
 $DB_STUDIP_HOST = "localhost";
@@ -112,8 +111,7 @@ $IMAGE_PROXY_MAX_FILES_IN_CACHE = 3000;
 $IMAGE_PROXY_GC_PROBABILITY = 1;
 $IMAGE_PROXY_MAX_IMAGE_SIZE = 3000; // x or y
 
-//ImageMagick, used by latexrender modul and for resizing of pictures uploaded by users
-//if the convert utility is not found, an attempt to use gd (must be > 2.01) is made
+//ImageMagick, used by latexrender modul
 $CONVERT_PATH = "/usr/bin/convert";
 $IDENTIFY_PATH = "/usr/bin/identify";
 
@@ -273,14 +271,28 @@ and add all used domain names. Below, some examples are given.
 
 /*mail settings
 ----------------------------------------------------------------
-leave blank if localhost is also the mailserver*/
+possible settings for $MAIL_TRANSPORT:
+smtp      use smtp to deliver to $MAIL_HOST_NAME
+php       use php's mail() function
+sendmail  use local sendmail script
+qmail     use local Qmail MTA
+debug     mails are only written to a file in $TMP_PATH
+*/
+$MAIL_TRANSPORT = "smtp";
 
-$MAIL_LOCALHOST = "";									//name of the mail sending machine (the web server) defaults to SERVER_NAME
-$MAIL_HOST_NAME = "";									//which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
-$MAIL_CHARSET = "";									//character set of mail body, defaults to ISO-8859-1
-$MAIL_ENV_FROM = "";									//sender mail adress, defaults to wwwrun @ $MAIL_LOCAHOST
+/*smtp settings
+----------------------------------------------------------------
+leave blank or try 127.0.0.1 if localhost is also the mailserver
+ignore if you don't use smtp as transport*/
+$MAIL_HOST_NAME = "";								//which mailserver should we use? (must allow mail-relaying from $MAIL_LOCALHOST, defaults to SERVER_NAME)
+
+$MAIL_LOCALHOST = "";								//name of the mail sending machine (the web server) defaults to SERVER_NAME
+$MAIL_CHARSET = "";									//character set of mail body, defaults to WINDOWS-1252
+$MAIL_ENV_FROM = "";								//sender mail adress, defaults to wwwrun @ $MAIL_LOCALHOST
 $MAIL_FROM = "";									//name of sender, defaults to "Stud.IP"
-$MAIL_ABUSE = "";									//mail adress to reply to in case of abuse, defaults to abuse @  $MAIL_LOCAHOST
+$MAIL_ABUSE = "";									//mail adress to reply to in case of abuse, defaults to abuse @  $MAIL_LOCALHOST
+
+$MAIL_BULK_DELIVERY = FALSE;						//try to improve the message queueing rate (experimental, does not work for php transport)
 
 $MAIL_VALIDATE_HOST = TRUE;								//check for valid mail host when user enters email adress
 $MAIL_VALIDATE_BOX = TRUE;								//check for valid mail account when user enters email adress; set to false if the webserver got no valid MX record

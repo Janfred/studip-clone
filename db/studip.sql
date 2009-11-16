@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.1.3
+-- version 3.1.5
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 22. April 2009 um 21:21
--- Server Version: 5.0.67
--- PHP-Version: 5.2.6-2ubuntu4.1
+-- Erstellungszeit: 11. November 2009 um 14:47
+-- Server Version: 5.0.84
+-- PHP-Version: 5.2.11-0.dotdeb.0
 
 --
 -- Datenbank: `studip`
@@ -273,7 +273,7 @@ CREATE TABLE `config` (
   `config_id` varchar(32) NOT NULL default '',
   `parent_id` varchar(32) NOT NULL default '',
   `field` varchar(255) NOT NULL default '',
-  `value` varchar(255) NOT NULL default '',
+  `value` text NOT NULL,
   `is_default` tinyint(4) NOT NULL default '0',
   `type` enum('boolean','integer','string') NOT NULL default 'boolean',
   `range` enum('global','user') NOT NULL default 'global',
@@ -341,7 +341,7 @@ CREATE TABLE `datafields` (
   `priority` tinyint(3) unsigned NOT NULL default '0',
   `mkdate` int(20) unsigned default NULL,
   `chdate` int(20) unsigned default NULL,
-  `type` enum('bool','textline','textarea','selectbox','date','time','email','url','phone','radio','combo') NOT NULL default 'textline',
+  `type` enum('bool','textline','textarea','selectbox','date','time','email','phone','radio','combo','link') NOT NULL default 'textline',
   `typeparam` text NOT NULL,
   PRIMARY KEY  (`datafield_id`),
   KEY `object_type` (`object_type`)
@@ -1140,7 +1140,7 @@ CREATE TABLE `plugins` (
   `pluginpath` varchar(255) NOT NULL default '',
   `pluginname` varchar(45) NOT NULL default '',
   `plugindesc` varchar(45) NOT NULL default '',
-  `plugintype` enum('Standard','Administration','System','Homepage','Portal','Core') NOT NULL default 'Standard',
+  `plugintype` text NOT NULL,
   `enabled` enum('yes','no') NOT NULL default 'no',
   `navigationpos` int(10) unsigned NOT NULL default '0',
   `dependentonid` int(10) unsigned default NULL,
@@ -1654,21 +1654,6 @@ CREATE TABLE `seminar_inst` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `seminar_lernmodul`
---
-
-DROP TABLE IF EXISTS `seminar_lernmodul`;
-CREATE TABLE `seminar_lernmodul` (
-  `seminar_id` varchar(32) NOT NULL default '',
-  `co_inst` int(11) unsigned NOT NULL default '0',
-  `co_id` int(11) unsigned NOT NULL default '0',
-  `status` tinyint(4) NOT NULL default '0',
-  PRIMARY KEY  (`seminar_id`,`co_id`)
-) TYPE=MyISAM;
-
--- --------------------------------------------------------
-
---
 -- Tabellenstruktur für Tabelle `seminar_sem_tree`
 --
 
@@ -2030,21 +2015,6 @@ CREATE TABLE `studiengaenge` (
   `mkdate` int(20) NOT NULL default '0',
   `chdate` int(20) NOT NULL default '0',
   PRIMARY KEY  (`studiengang_id`)
-) TYPE=MyISAM;
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `studip_ilias`
---
-
-DROP TABLE IF EXISTS `studip_ilias`;
-CREATE TABLE `studip_ilias` (
-  `studip_user_id` varchar(32) NOT NULL default '',
-  `ilias_user_id` int(11) unsigned NOT NULL default '0',
-  `is_created` tinyint(4) NOT NULL default '0',
-  PRIMARY KEY  (`studip_user_id`,`ilias_user_id`),
-  KEY `is_created` (`is_created`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
@@ -2418,4 +2388,3 @@ CREATE TABLE `wiki_locks` (
   KEY `user_id` (`user_id`),
   KEY `chdate` (`chdate`)
 ) TYPE=MyISAM;
-

@@ -1,10 +1,15 @@
+--
+-- Daten für Tabelle `auth_user_md5`
+--
+
+INSERT INTO `auth_user_md5` (`user_id`, `username`, `password`, `perms`, `Vorname`, `Nachname`, `Email`, `validation_key`, `auth_plugin`, `locked`, `lock_comment`, `locked_by`, `visible`) VALUES('0c6fe1b07e3aca7ee6387f87dc8370eb', 'studygroup_dozent', '0c6fe1b07e3aca7ee6387f87dc8370eb', 'dozent', '', '', '', '', NULL, 1, NULL, NULL, 'unknown');
 
 --
 -- Daten für Tabelle `config`
 --
 
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('7291d64d9cc4ea43ee9e8260f05a4111', '', 'MAIL_NOTIFICATION_ENABLE', '0', 1, 'boolean', 'global', '', 0, 1122996278, 1122996278, 'Informationen über neue Inhalte per email verschicken', '', '');
-INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('9f6d7e248f58d1b211314dfb26c77d63', '', 'RESOURCES_ALLOW_DELETE_REQUESTS', '0', 1, 'boolean', 'global', '', 0, 1136826903, 1136826903, 'Erlaubt das Löschen von Raumanfragen für globale Ressourcenadmins', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('9f6d7e248f58d1b211314dfb26c77d63', '', 'RESOURCES_ALLOW_DELETE_REQUESTS', '1', 1, 'boolean', 'global', '', 0, 1136826903, 1136826903, 'Erlaubt das Löschen von Raumanfragen für globale Ressourcenadmins', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('25bdaf939c88ee79bf3da54165d61a48', '', 'MAINTENANCE_MODE_ENABLE', '0', 1, 'boolean', 'global', '', 0, 1130840930, 1130840930, 'Schaltet das System in den Wartungsmodus, so dass nur noch Administratoren Zugriff haben', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('88c038ca4fb36764ff6486d72379e1ae', '', 'ZIP_UPLOAD_MAX_FILES', '100', 1, 'integer', 'global', '', 0, 1130840930, 1130840930, 'Die maximale Anzahl an Dateien, die bei einem Zipupload automatisch entpackt werden', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('c1f9ef95f501893c73e2654296c425f2', '', 'ZIP_UPLOAD_ENABLE', '1', 1, 'boolean', 'global', '', 0, 1130840930, 1130840930, 'Ermöglicht es, ein Zip Archiv hochzuladen, welches automatisch entpackt wird', '', '');
@@ -13,7 +18,7 @@ INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, 
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('9d4956b4eac20f03b60b17d7ac30b40a', '', 'SEMESTER_TIME_SWITCH', '0', 1, 'integer', 'global', '', 0, 1140013696, 1140013696, 'Anzahl der Wochen vor Semesterende zu dem das vorgewählte Semester umspringt', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('06cdb765fb8f0853e3ebe08f51c3596e', '', 'RESOURCES_ENABLE', '0', 1, 'boolean', 'global', '', 0, 0, 0, 'Enable the Stud.IP resource management module', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('3d415eca6003321f09e59407e4a7994d', '', 'RESOURCES_LOCKING_ACTIVE', '', 1, 'boolean', 'global', 'resources', 0, 0, 1100709567, 'Schaltet in der Ressourcenverwaltung das Blockieren der Bearbeitung für einen Zeitraum aus (nur Admins dürfen in dieser Zeit auf die Belegung zugreifen)', '', '');
-INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('b7a2817d142443245df2f5ac587fe218', '', 'RESOURCES_ALLOW_ROOM_REQUESTS', '', 1, 'boolean', 'global', '', 0, 0, 1100709567, 'Schaltet in der Ressourcenverwaltung das System zum Stellen und Bearbeiten von Raumanfragen ein oder aus', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('b7a2817d142443245df2f5ac587fe218', '', 'RESOURCES_ALLOW_ROOM_REQUESTS', '1', 1, 'boolean', 'global', '', 0, 0, 1100709567, 'Schaltet in der Ressourcenverwaltung das System zum Stellen und Bearbeiten von Raumanfragen ein oder aus', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('d821ffbff29ce636c6763ffe3fd8b427', '', 'RESOURCES_ALLOW_CREATE_ROOMS', '2', 1, 'integer', 'global', '', 0, 0, 1100709567, 'Welche Rechstufe darf  Räume anlegen? 1 = Nutzer ab Status tutor, 2 = Nutzer ab Status admin, 3 = nur Ressourcenadministratoren', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('5a6e2342b90530ed50ad8497054420c0', '', 'RESOURCES_ALLOW_ROOM_PROPERTY_REQUESTS', '1', 1, 'boolean', 'global', '', 0, 0, 1074780851, 'Schaltet in der Ressourcenverwaltung die Möglichkeit, im Rahmen einer Anfrage Raumeigenschaften zu wünschen, ein oder aus', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('e4123cf9158cd0b936144f0f4cf8dfa3', '', 'RESOURCES_INHERITANCE_PERMS_ROOMS', '1', 1, 'integer', 'global', '', 0, 0, 1100709567, 'Art der Rechtevererbung in der Ressourcenverwaltung für Räume: 1 = lokale Rechte der Einrichtung und Veranstaltung werden übertragen, 2 = nur Autorenrechte werden vergeben, 3 = es werden keine Rechte vergeben', '', '');
@@ -71,64 +76,65 @@ INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, 
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('62ccc1c5408de882f38de933cecaf88f', '', 'ALLOW_SELFASSIGN_INSTITUTE', '1', 1, 'boolean', 'global', '', 0, 1240427632, 1240427632, 'Wenn eingeschaltet, dürfen Studenten sich selbst Einrichtungen an denen sie studieren zuordnen.', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('7fc613594ac8a9f44b6280c6dd3d653e', '', 'ALLOW_ADMIN_USERACCESS', '1', 1, 'boolean', 'global', '', 0, 1240427632, 1240427632, 'Wenn eingeschaltet, dürfen Administratoren sensible Nutzerdaten wie z.B. Passwörter ändern.', '', '');
 INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('cd1ba192616b66967b51f8e8f8155fb5', '', 'SEM_TREE_SHOW_EMPTY_AREAS_PERM', 'user', 1, 'string', 'global', '', 0, 1240427632, 1240427632, 'Bestimmt den globalen Nutzerstatus, ab dem in der Veranstaltungssuche auch Bereiche angezeigt werden, denen keine Veranstaltungen zugewiesen sind.', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('06d703c3de37cdae942c66e18f7dcd02', '', 'ASSI_SEMESTER_PRESELECT', '1', 1, 'boolean', 'global', '', 0, 1257956185, 1257956185, 'Wenn ausgeschaltet wird im admin_seminare_assi beimErstellen einer Veranstaltung als Semester bitte auswählen angezeigt und nicht das voreingestellte Semester.', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('274e61e0b19ab9edadb4be9764aa17a2', '', 'RESOURCES_HIDE_PAST_SINGLE_DATES', '1', 1, 'boolean', 'global', '', 0, 1257956185, 1257956185, 'Schaltet in der Ressourcenverwaltung ein,ob bereits vergangene Terminen bei der Buchung und Planung brücksichtigt werden sollen', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('64031f867c3688ecf1c697bd79eff230', '', 'RESOURCES_ALLOW_ROOM_REQUESTS_ALL_ROOMS', '1', 1, 'boolean', 'global', '', 0, 1257956185, 1257956185, 'Schaltet in der Ressourcenverwaltung ein,ob alle Räume gewünscht werden können, oder nur eigene und ''Global'' gesetzte', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('f2ce635d994363fad26e010f5dbae2c4', '', 'STUDYGROUPS_ENABLE', '0', 1, 'boolean', 'global', '', 0, 1257956185, 1257956185, 'Studiengruppen', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('ebe2dd4ffa77bb1966c5940272d7c8dd', '', 'STUDYGROUP_TERMS', 'Mir ist bekannt, dass ich die Gruppe nicht zu rechtswidrigen Zwecken nutzen darf. Dazu zählen u.a. Urheberrechtsverletzungen, Beleidigungen und andere Persönlichkeitsdelikte.\n\nIch erkläre mich damit einverstanden, dass AdministratorInnen die Inhalte der Gruppe zu Kontrollzwecken einsehen dürfen.', 1, 'string', 'global', '', 0, 1257956185, 1257956185, 'Studiengruppen', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('c73737d9119e86faa22810a1c154271e', '', 'STUDYGROUP_SETTINGS', 'forum:1|documents:0|schedule:0|participants:1', 1, 'string', 'global', '', 0, 1257956185, 1257956185, 'Studiengruppen', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('da0a01b50f472296f940de98c56b5a9f', '', 'STUDYGROUP_DEFAULT_INST', '', 1, 'string', 'global', '', 0, 1258042892, 1258042892, 'Studiengruppen', '', '');
+INSERT INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`) VALUES('e776a479dc024fb9b6478be3f60455da', '', 'ENABLE_PROTECTED_DOWNLOAD_RESTRICTION', '0', 1, 'boolean', 'global', '', 0, 1257956185, 1257956185, 'Schaltet die Überprüfung (fester Teilnehmerkreis) bei Download von als geschützt markierten Dateien ein', '', '');
 
--- 
+--
 -- Daten für Tabelle `evalanswer`
--- 
+--
 
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('d67301d4f59aa35d1e3f12a9791b6885', 'ef227e91618878835d52cfad3e6d816b', 0, 'Sehr gut', 1, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('7052b76e616656e4b70f1c504c04ec81', 'ef227e91618878835d52cfad3e6d816b', 1, '', 2, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('64152ace8f2a74d0efb67c54eff64a2b', 'ef227e91618878835d52cfad3e6d816b', 2, '', 3, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('3a3ab5307f39ea039d41fb6f2683475e', 'ef227e91618878835d52cfad3e6d816b', 3, '', 4, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('6115b19f694ccd3d010a0047ff8f970a', 'ef227e91618878835d52cfad3e6d816b', 4, 'Sehr Schlecht', 5, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('be4c3e5fe0b2b735bb3b2712afa8c490', 'ef227e91618878835d52cfad3e6d816b', 5, 'Keine Meinung', 6, 0, 0, 1);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('84be4c31449a9c1807bf2dea0dc869f1', '724244416b5d04a4d8f4eab8a86fdbf8', 0, 'Sehr gut', 1, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('c446970d2addd68e43c2a6cae6117bf7', '724244416b5d04a4d8f4eab8a86fdbf8', 1, 'Gut', 2, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('3d4dcedb714dfdcfbe65cd794b4d404b', '724244416b5d04a4d8f4eab8a86fdbf8', 2, 'Befriedigend', 3, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('fa2bf667ba73ae74794df35171c2ad2e', '724244416b5d04a4d8f4eab8a86fdbf8', 3, 'Ausreichend', 4, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('0be387b9379a05c5578afce64b0c688f', '724244416b5d04a4d8f4eab8a86fdbf8', 4, 'Mangelhaft', 5, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('aec07dd525f2610bdd10bf778aa1893b', '724244416b5d04a4d8f4eab8a86fdbf8', 5, 'Nicht erteilt', 6, 0, 0, 1);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('7080335582e2787a54f315ec8cef631e', '95bbae27965d3404f7fa3af058850bd3', 0, 'trifft völlig zu', 1, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('d68a74dc2c1f0ce226366da918dd161d', '95bbae27965d3404f7fa3af058850bd3', 1, 'trifft ziemlich zu', 2, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('641686e7c61899b303cda106f20064e7', '95bbae27965d3404f7fa3af058850bd3', 2, 'teilsteils', 3, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('7c36d074f2cc38765c982c9dfb769afc', '95bbae27965d3404f7fa3af058850bd3', 3, 'trifft wenig zu', 4, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('5c4827f903168ed4483db5386a9ad5b8', '95bbae27965d3404f7fa3af058850bd3', 4, 'trifft gar nicht zu', 5, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('c10a3f4e97f8badc5230a9900afde0c7', '95bbae27965d3404f7fa3af058850bd3', 5, 'kann ich nicht beurteilen', 6, 0, 0, 1);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('ced33706ca95aff2163c7d0381ef5717', '6fddac14c1f2ac490b93681b3da5fc66', 0, 'Montag', 1, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('087c734855c8a5b34d99c16ad09cd312', '6fddac14c1f2ac490b93681b3da5fc66', 1, 'Dienstag', 2, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('63f5011614f45329cc396b90d94a7096', '6fddac14c1f2ac490b93681b3da5fc66', 2, 'Mittwoch', 3, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('ccd1eaddccca993f6789659b36f40506', '6fddac14c1f2ac490b93681b3da5fc66', 3, 'Donnerstag', 4, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('48842cedeac739468741940982b5fe6d', '6fddac14c1f2ac490b93681b3da5fc66', 4, 'Freitag', 5, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('21b3f7cf2de5cbb098d800f344d399ee', '12e508079c4770fb13c9fce028f40cac', 0, 'Montag', 1, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('f0016e918b5bc5c4cf3cc62bf06fa2e9', '12e508079c4770fb13c9fce028f40cac', 1, 'Dienstag', 2, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('c88242b50ff0bb43df32c1e15bdaca22', '12e508079c4770fb13c9fce028f40cac', 2, 'Mittwoch', 3, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('b39860f6601899dcf87ba71944c57bc7', '12e508079c4770fb13c9fce028f40cac', 3, 'Donnerstag', 4, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('568d6fd620642cb7395c27d145a76734', '12e508079c4770fb13c9fce028f40cac', 4, 'Freitag', 5, 0, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('39b98a5560d5dabaf67227e2895db8da', 'a68bd711902f23bd5c55a29f1ecaa095', 0, '', 1, 5, 0, 0);
-INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES ('61ae27ab33c402316a3f1eb74e1c46ab', '442e1e464e12498bd238a7767215a5a2', 0, '', 1, 1, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('d67301d4f59aa35d1e3f12a9791b6885', 'ef227e91618878835d52cfad3e6d816b', 0, 'Sehr gut', 1, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('7052b76e616656e4b70f1c504c04ec81', 'ef227e91618878835d52cfad3e6d816b', 1, '', 2, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('64152ace8f2a74d0efb67c54eff64a2b', 'ef227e91618878835d52cfad3e6d816b', 2, '', 3, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('3a3ab5307f39ea039d41fb6f2683475e', 'ef227e91618878835d52cfad3e6d816b', 3, '', 4, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('6115b19f694ccd3d010a0047ff8f970a', 'ef227e91618878835d52cfad3e6d816b', 4, 'Sehr Schlecht', 5, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('be4c3e5fe0b2b735bb3b2712afa8c490', 'ef227e91618878835d52cfad3e6d816b', 5, 'Keine Meinung', 6, 0, 0, 1);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('84be4c31449a9c1807bf2dea0dc869f1', '724244416b5d04a4d8f4eab8a86fdbf8', 0, 'Sehr gut', 1, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('c446970d2addd68e43c2a6cae6117bf7', '724244416b5d04a4d8f4eab8a86fdbf8', 1, 'Gut', 2, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('3d4dcedb714dfdcfbe65cd794b4d404b', '724244416b5d04a4d8f4eab8a86fdbf8', 2, 'Befriedigend', 3, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('fa2bf667ba73ae74794df35171c2ad2e', '724244416b5d04a4d8f4eab8a86fdbf8', 3, 'Ausreichend', 4, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('0be387b9379a05c5578afce64b0c688f', '724244416b5d04a4d8f4eab8a86fdbf8', 4, 'Mangelhaft', 5, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('aec07dd525f2610bdd10bf778aa1893b', '724244416b5d04a4d8f4eab8a86fdbf8', 5, 'Nicht erteilt', 6, 0, 0, 1);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('7080335582e2787a54f315ec8cef631e', '95bbae27965d3404f7fa3af058850bd3', 0, 'trifft völlig zu', 1, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('d68a74dc2c1f0ce226366da918dd161d', '95bbae27965d3404f7fa3af058850bd3', 1, 'trifft ziemlich zu', 2, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('641686e7c61899b303cda106f20064e7', '95bbae27965d3404f7fa3af058850bd3', 2, 'teilsteils', 3, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('7c36d074f2cc38765c982c9dfb769afc', '95bbae27965d3404f7fa3af058850bd3', 3, 'trifft wenig zu', 4, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('5c4827f903168ed4483db5386a9ad5b8', '95bbae27965d3404f7fa3af058850bd3', 4, 'trifft gar nicht zu', 5, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('c10a3f4e97f8badc5230a9900afde0c7', '95bbae27965d3404f7fa3af058850bd3', 5, 'kann ich nicht beurteilen', 6, 0, 0, 1);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('ced33706ca95aff2163c7d0381ef5717', '6fddac14c1f2ac490b93681b3da5fc66', 0, 'Montag', 1, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('087c734855c8a5b34d99c16ad09cd312', '6fddac14c1f2ac490b93681b3da5fc66', 1, 'Dienstag', 2, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('63f5011614f45329cc396b90d94a7096', '6fddac14c1f2ac490b93681b3da5fc66', 2, 'Mittwoch', 3, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('ccd1eaddccca993f6789659b36f40506', '6fddac14c1f2ac490b93681b3da5fc66', 3, 'Donnerstag', 4, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('48842cedeac739468741940982b5fe6d', '6fddac14c1f2ac490b93681b3da5fc66', 4, 'Freitag', 5, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('21b3f7cf2de5cbb098d800f344d399ee', '12e508079c4770fb13c9fce028f40cac', 0, 'Montag', 1, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('f0016e918b5bc5c4cf3cc62bf06fa2e9', '12e508079c4770fb13c9fce028f40cac', 1, 'Dienstag', 2, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('c88242b50ff0bb43df32c1e15bdaca22', '12e508079c4770fb13c9fce028f40cac', 2, 'Mittwoch', 3, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('b39860f6601899dcf87ba71944c57bc7', '12e508079c4770fb13c9fce028f40cac', 3, 'Donnerstag', 4, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('568d6fd620642cb7395c27d145a76734', '12e508079c4770fb13c9fce028f40cac', 4, 'Freitag', 5, 0, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('39b98a5560d5dabaf67227e2895db8da', 'a68bd711902f23bd5c55a29f1ecaa095', 0, '', 1, 5, 0, 0);
+INSERT INTO `evalanswer` (`evalanswer_id`, `parent_id`, `position`, `text`, `value`, `rows`, `counter`, `residual`) VALUES('61ae27ab33c402316a3f1eb74e1c46ab', '442e1e464e12498bd238a7767215a5a2', 0, '', 1, 1, 0, 0);
 
--- 
+--
 -- Daten für Tabelle `evalquestion`
--- 
+--
 
-INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES ('ef227e91618878835d52cfad3e6d816b', '0', 'polskala', 0, 'Wertung 1-5', 0);
-INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES ('724244416b5d04a4d8f4eab8a86fdbf8', '0', 'likertskala', 0, 'Schulnoten', 0);
-INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES ('95bbae27965d3404f7fa3af058850bd3', '0', 'likertskala', 0, 'Wertung (trifft zu, ...)', 0);
-INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES ('6fddac14c1f2ac490b93681b3da5fc66', '0', 'multiplechoice', 0, 'Werktage', 0);
-INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES ('12e508079c4770fb13c9fce028f40cac', '0', 'multiplechoice', 0, 'Werktage-mehrfach', 1);
-INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES ('a68bd711902f23bd5c55a29f1ecaa095', '0', 'multiplechoice', 0, 'Freitext-Mehrzeilig', 0);
-INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES ('442e1e464e12498bd238a7767215a5a2', '0', 'multiplechoice', 0, 'Freitext-Einzeilig', 0);
+INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES('ef227e91618878835d52cfad3e6d816b', '0', 'polskala', 0, 'Wertung 1-5', 0);
+INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES('724244416b5d04a4d8f4eab8a86fdbf8', '0', 'likertskala', 0, 'Schulnoten', 0);
+INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES('95bbae27965d3404f7fa3af058850bd3', '0', 'likertskala', 0, 'Wertung (trifft zu, ...)', 0);
+INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES('6fddac14c1f2ac490b93681b3da5fc66', '0', 'multiplechoice', 0, 'Werktage', 0);
+INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES('12e508079c4770fb13c9fce028f40cac', '0', 'multiplechoice', 0, 'Werktage-mehrfach', 1);
+INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES('a68bd711902f23bd5c55a29f1ecaa095', '0', 'multiplechoice', 0, 'Freitext-Mehrzeilig', 0);
+INSERT INTO `evalquestion` (`evalquestion_id`, `parent_id`, `type`, `position`, `text`, `multiplechoice`) VALUES('442e1e464e12498bd238a7767215a5a2', '0', 'multiplechoice', 0, 'Freitext-Einzeilig', 0);
 
--- 
--- Daten für Tabelle `semester_data`
--- 
-
-INSERT INTO `semester_data` (`semester_id`, `name`, `description`, `semester_token`, `beginn`, `ende`, `vorles_beginn`, `vorles_ende`) VALUES('f2b4fdf5ac59a9cb57dd73c4d3bbb651', 'SS 2009', '', '', 1238536800, 1254347999, 1239660000, 1247867999);
-INSERT INTO `semester_data` (`semester_id`, `name`, `description`, `semester_token`, `beginn`, `ende`, `vorles_beginn`, `vorles_ende`) VALUES('eb828ebb81bb946fac4108521a3b4697', 'WS 2009/10', '', '', 1254348000, 1270072799, 1255384800, 1264892399);
-
--- 
+--
 -- Daten für Tabelle `log_actions`
--- 
+--
 
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('0ee290df95f0547caafa163c4d533991', 'SEM_VISIBLE', 'Veranstaltung sichtbar schalten', '%user schaltet %sem(%affected) sichtbar.', 1, 0);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('a94706b41493e32f8336194262418c01', 'SEM_INVISIBLE', 'Veranstaltung unsichtbar schalten', '%user versteckt %sem(%affected).', 1, 0);
@@ -142,7 +148,7 @@ INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, 
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('cf8986a67e67ca273e15fd9230f6e872', 'USER_CHANGE_TITLE', 'Akademische Titel ändern', '%user ändert/setzt akademischen Titel für %user(%affected) - %info.', 1, 0);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('ca216ccdf753f59ba7fd621f7b22f7bd', 'USER_CHANGE_NAME', 'Personennamen ändern', '%user ändert/setzt Name für %user(%affected) - %info.', 1, 0);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('8aad296e52423452fc75cabaf2bee384', 'USER_CHANGE_USERNAME', 'Benutzernamen ändern', '%user ändert/setzt Benutzernamen für %user(%affected): %info.', 1, 0);
-INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('59f3f38c905fded82bbfdf4f04c16729', 'INST_CREATE', 'Einrichtung anlegen', '%user legt Einrichtung %inst(%affected) an.', 1, 0);
+INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('0d87c25b624b16fb9b8cdaf9f4e96e53', 'INST_CREATE', 'Einrichtung anlegen', '%user legt Einrichtung %inst(%affected) an.', 1, 0);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('1a1e8c9c3125ea8d2c58c875a41226d6', 'INST_DEL', 'Einrichtung löschen', '%user löscht Einrichtung %info (%affected).', 1, 0);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('d18d750fb2c166e1c425976e8bca96e7', 'USER_CHANGE_EMAIL', 'E-Mail-Adresse ändern', '%user ändert/setzt E-Mail-Adresse für %user(%affected): %info.', 1, 0);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('a92afa63584cc2a62d2dd2996727b2c5', 'USER_CREATE', 'Nutzer anlegen', '%user legt Nutzer %user(%affected) an.', 1, 0);
@@ -164,7 +170,7 @@ INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, 
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('fd74339a9ea038d084569e33e2655b6a', 'CHANGE_INSTITUTE_DATA', 'Institutdaten geändert', '%user hat in Veranstaltung %sem(%affected) die Daten %info geändert.', 0, 0);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('89114dcd6f02dd7f94488a616c21a7c3', 'PLUGIN_ENABLE', 'Plugin einschalten', '%user hat in Veranstaltung %sem(%affected) das Plugin %plugin(%coaffected) aktiviert.', 1, 0);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('a66c9e04e9c41bf5cc4d23fa509a8667', 'PLUGIN_DISABLE', 'Plugin ausschalten', '%user hat in Veranstaltung %sem(%affected) das Plugin %plugin(%coaffected) deaktiviert.', 1, 0);
-INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('005df8d5eb23c66214b28b3c9792680b', 'SEM_CHANGED_ACCESS', 'Zugangsberechtigungen geändert', '%user ändert die Zugangsberechtigungen für %sem(%affected) auf %access(%info).', 0, 0);
+INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('005df8d5eb23c66214b28b3c9792680b', 'SEM_CHANGED_ACCESS', 'Zugangsberechtigungen geändert', '%user ändert die Zugangsberechtigungen der Veranstaltung %sem(%affected).', 0, 0);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('535010528d6c012ec0e3535e2d754f66', 'SEM_USER_ADD', 'In Veranstaltung eingetragen', '%user hat %user(%coaffected) für %sem(%affected) mit dem status %info eingetragen. (%dbg_info)', 0, 0);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('6e2b789a57b9125af59c0273f5b47cb1', 'SEM_USER_DEL', 'Aus Veranstaltung ausgetragen', '%user hat %user(%coaffected) aus %sem(%affected) ausgetragen. (%info)', 0, 0);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('d07c8b37c6d3e206cd012d07ba8028b1', 'SEM_CHANGED_RIGHTS', 'Veranstaltungsrechte geändert', '%user hat %user(%coaffected) in %sem(%affected) als %info eingetragen. (%dbg_info)', 0, 0);
@@ -180,87 +186,86 @@ INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, 
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('9179d3cf4e0353f9874bcde072d12b30', 'RES_REQUEST_DENY', 'Abgelehnte Raumanfrage', '%user lehnt Raumanfrage für %sem(%coaffected), Raum %sem(%affected) ab.', 0, 0);
 INSERT INTO `log_actions` (`action_id`, `name`, `description`, `info_template`, `active`, `expires`) VALUES('ff806b4b26f8bc8c3e65e29d14176cd9', 'RES_REQUEST_RESOLVE', 'Aufgelöste Raumanfrage', '%user löst Raumanfrage für %sem(%affected), Raum %res(%coaffected) auf.', 0, 0);
 
--- 
+--
 -- Daten für Tabelle `plugins`
--- 
+--
 
-INSERT INTO `plugins` (`pluginid`, `pluginclassname`, `pluginpath`, `pluginname`, `plugindesc`, `plugintype`, `enabled`, `navigationpos`) VALUES (1, 'PluginAdministrationPlugin', 'core', 'Plugin-Administration', 'Administrationsoberfläche für Plugins', 'Administration', 'yes', 0);
-INSERT INTO `plugins` (`pluginid`, `pluginclassname`, `pluginpath`, `pluginname`, `plugindesc`, `plugintype`, `enabled`, `navigationpos`, `dependentonid`) VALUES (2, 'de_studip_core_UserManagementPlugin', 'core', 'UserManagement', '', 'Core', 'yes', 1, 1);
-INSERT INTO `plugins` (`pluginid`, `pluginclassname`, `pluginpath`, `pluginname`, `plugindesc`, `plugintype`, `enabled`, `navigationpos`, `dependentonid`) VALUES (3, 'de_studip_core_RoleManagementPlugin', 'core', 'RollenManagement', 'Administration der Rollen', 'Administration', 'yes', 2, 1);
+INSERT INTO `plugins` (`pluginid`, `pluginclassname`, `pluginpath`, `pluginname`, `plugindesc`, `plugintype`, `enabled`, `navigationpos`, `dependentonid`) VALUES(1, 'PluginAdministrationPlugin', 'core', 'Plugin-Administration', 'Administrationsoberfläche für Plugins', 'AdministrationPlugin', 'yes', 0, NULL);
+INSERT INTO `plugins` (`pluginid`, `pluginclassname`, `pluginpath`, `pluginname`, `plugindesc`, `plugintype`, `enabled`, `navigationpos`, `dependentonid`) VALUES(3, 'RoleManagementPlugin', 'core', 'RollenManagement', 'Administration der Rollen', 'AdministrationPlugin', 'yes', 1, 1);
 
--- 
+--
 -- Daten für Tabelle `plugins_activated`
--- 
+--
 
-INSERT INTO `plugins_activated` (`pluginid`, `poiid`, `state`) VALUES (1, 'admin', 'on');
-INSERT INTO `plugins_activated` (`pluginid`, `poiid`, `state`) VALUES (3, 'admin', 'on');
+INSERT INTO `plugins_activated` (`pluginid`, `poiid`, `state`) VALUES(1, 'admin', 'on');
+INSERT INTO `plugins_activated` (`pluginid`, `poiid`, `state`) VALUES(3, 'admin', 'on');
 
--- 
+--
 -- Daten für Tabelle `roles`
--- 
+--
 
-INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (1, 'Root-Administrator(in)', 'y');
-INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (2, 'Administrator(in)', 'y');
-INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (3, 'Mitarbeiter(in)', 'y');
-INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (4, 'Lehrende(r)', 'y');
-INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (5, 'Studierende(r)', 'y');
-INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (6, 'Tutor(in)', 'y');
-INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES (7, 'Nobody', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES(1, 'Root-Administrator(in)', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES(2, 'Administrator(in)', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES(3, 'Mitarbeiter(in)', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES(4, 'Lehrende(r)', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES(5, 'Studierende(r)', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES(6, 'Tutor(in)', 'y');
+INSERT INTO `roles` (`roleid`, `rolename`, `system`) VALUES(7, 'Nobody', 'y');
 
--- 
--- Daten für Tabelle `roles_studipperms`
--- 
-
-INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (1, 'root');
-INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (2, 'admin');
-INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (3, 'admin');
-INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (3, 'root');
-INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (4, 'dozent');
-INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (5, 'autor');
-INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (5, 'tutor');
-INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES (6, 'tutor');
-
--- 
+--
 -- Daten für Tabelle `roles_plugins`
--- 
+--
 
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (1, 1);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (1, 2);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (1, 3);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (2, 1);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (2, 2);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (2, 3);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (3, 1);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (3, 2);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (3, 3);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (4, 1);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (4, 2);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (4, 3);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (5, 1);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (5, 2);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (5, 3);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (6, 1);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (6, 2);
-INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES (6, 3);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES(1, 1);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES(1, 3);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES(2, 1);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES(2, 3);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES(3, 1);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES(3, 3);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES(4, 1);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES(4, 3);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES(5, 1);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES(5, 3);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES(6, 1);
+INSERT INTO `roles_plugins` (`roleid`, `pluginid`) VALUES(6, 3);
 
--- 
+--
+-- Daten für Tabelle `roles_studipperms`
+--
+
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES(1, 'root');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES(2, 'admin');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES(3, 'admin');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES(3, 'root');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES(4, 'dozent');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES(5, 'autor');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES(5, 'tutor');
+INSERT INTO `roles_studipperms` (`roleid`, `permname`) VALUES(6, 'tutor');
+
+--
 -- Daten für Tabelle `roles_user`
--- 
+--
 
-INSERT INTO `roles_user` (`roleid`, `userid`) VALUES (7, 'nobody');
+INSERT INTO `roles_user` (`roleid`, `userid`) VALUES(7, 'nobody');
 
--- 
+--
 -- Daten für Tabelle `schema_version`
--- 
-
-INSERT INTO `schema_version` (`domain`, `version`) VALUES ('studip', 40);
-
---
--- Daten für Tabelle `siteinfo_rubrics`
 --
 
-INSERT INTO `siteinfo_rubrics` (`rubric_id`, `position`, `name`) VALUES(1, NULL, '[lang=de]Kontakt[/lang][lang=en]Contact[/lang]');
-INSERT INTO `siteinfo_rubrics` (`rubric_id`, `position`, `name`) VALUES(2, NULL, '[lang=de]Über Stud.IP[/lang][lang=en]About Stud.IP[/lang]');
+INSERT INTO `schema_version` (`domain`, `version`) VALUES('studip', 51);
+
+--
+-- Daten für Tabelle `semester_data`
+--
+
+INSERT INTO `semester_data` (`semester_id`, `name`, `description`, `semester_token`, `beginn`, `ende`, `vorles_beginn`, `vorles_ende`) VALUES('f2b4fdf5ac59a9cb57dd73c4d3bbb651', 'SS 2010', '', '', 1270072800, 1285883999, 1270504800, 1278712799);
+INSERT INTO `semester_data` (`semester_id`, `name`, `description`, `semester_token`, `beginn`, `ende`, `vorles_beginn`, `vorles_ende`) VALUES('eb828ebb81bb946fac4108521a3b4697', 'WS 2009/10', '', '', 1254348000, 1270072799, 1255903200, 1265410799);
+
+--
+-- Daten für Tabelle `semester_holiday`
+--
+
+INSERT INTO `semester_holiday` (`holiday_id`, `semester_id`, `name`, `description`, `beginn`, `ende`) VALUES('75a24d5f6f0c4f633d5293221629b9a6', '1', 'Weihnachtsferien 2009/2010', '', 1261522800, 1262818799);
 
 --
 -- Daten für Tabelle `siteinfo_details`
@@ -273,4 +278,9 @@ INSERT INTO `siteinfo_details` (`detail_id`, `rubric_id`, `position`, `name`, `c
 INSERT INTO `siteinfo_details` (`detail_id`, `rubric_id`, `position`, `name`, `content`) VALUES(5, 2, NULL, 'History', '(:history:)');
 INSERT INTO `siteinfo_details` (`detail_id`, `rubric_id`, `position`, `name`, `content`) VALUES(6, 2, NULL, 'Stud.IP-Blog', '[lang=de]Das Blog der Stud.IP-Entwickler finden Sie auf:[/lang]\n[lang=en]The Stud.IP-Developer-Blog can be found under:[/lang]\nhttp://blog.studip.de');
 
+--
+-- Daten für Tabelle `siteinfo_rubrics`
+--
 
+INSERT INTO `siteinfo_rubrics` (`rubric_id`, `position`, `name`) VALUES(1, NULL, '[lang=de]Kontakt[/lang][lang=en]Contact[/lang]');
+INSERT INTO `siteinfo_rubrics` (`rubric_id`, `position`, `name`) VALUES(2, NULL, '[lang=de]Über Stud.IP[/lang][lang=en]About Stud.IP[/lang]');
