@@ -1528,6 +1528,25 @@ function is_internal_url($url)
 }
 
 /**
+ * Return the list of SEM_TYPES that represent study groups in this
+ * Stud.IP installation.
+ *
+ * @return array     list of SEM_TYPES used for study groups
+ */
+function studygroup_sem_types()
+{
+    $result = array();
+
+    foreach ($GLOBALS['SEM_TYPE'] as $id => $sem_type) {
+        if ($GLOBALS['SEM_CLASS'][$sem_type['class']]['studygroup_mode']) {
+            $result[] = $id;
+        }
+    }
+
+    return $result;
+}
+
+/**
  * generates form fields for the submitted multidimensional array
  *
  * @param string  $variable the name of the array, which is filled with the data

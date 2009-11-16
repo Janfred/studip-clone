@@ -191,6 +191,17 @@ $SEM_TYPE[12]=array("name"=>_("Veranstaltungsboard"), "class"=>3);
 $SEM_TYPE[13]=array("name"=>_("sonstige"), "class"=>3);
 //more types can be added below
 
+// required config settings for study groups (courses that can be created by students)
+$SEM_TYPE[99]=array("name"=>_("Studiengruppe"), "class"=>99,
+					"title_dozent" => array(_("GruppengründerIn"), _("GruppengründerInnen")),
+					"title_tutor" => array(_("ModeratorIn"), _("ModeratorInnen")),
+					"title_autor" => array(_("Mitglied"), _("Mitglieder")));
+
+$SEM_CLASS[99]=array("name"=>_("Studiengruppen"),
+					"studygroup_mode"=>TRUE,
+					"topic_create_autor"=>TRUE,
+					"course_creation_forbidden" => TRUE);
+
 /*
 possible types of sem_tree ("Veranstaltungshierarchie") types
 the "editable" flag could be used to prevent modifications, e.g. imported data

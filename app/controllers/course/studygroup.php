@@ -194,10 +194,12 @@ class Course_StudygroupController extends AuthenticatedController {
 			} else {
 				// Everything seems fine, let's create a studygroup
 
+				$sem_types = studygroup_sem_types();
+
 				$sem = new Seminar();
 				$sem->name        = Request::get('groupname');         // seminar-class quotes itself
 				$sem->description = Request::get('groupdescription');  // seminar-class quotes itself
-				$sem->status      = 99;
+				$sem->status      = $sem_types[0];
 				$sem->read_level  = 1;
 				$sem->write_level = 1;
 
@@ -408,7 +410,6 @@ class Course_StudygroupController extends AuthenticatedController {
 					$sem = new Seminar($id);
 					$sem->name        = Request::get('groupname');         // seminar-class quotes itself
 					$sem->description = Request::get('groupdescription');  // seminar-class quotes itself
-					$sem->status      = 99;
 					$sem->read_level  = 1;
 					$sem->write_level = 1;
 
@@ -570,6 +571,7 @@ class Course_StudygroupController extends AuthenticatedController {
 
 		// set variables for view
 		$this->current_page = _("Verwaltung erlaubter Module und Plugins für Studiengruppen");
+		$this->configured   = count(studygroup_sem_types()) > 0;
 		$this->modules      = $modules;
 		$this->enabled      = $enabled;
 		$this->institutes   = $institutes;
@@ -596,7 +598,7 @@ class Course_StudygroupController extends AuthenticatedController {
 			$this->flash['error'] = _("Fehler beim Speichern der Einstellung!");
 		} else {				
 			$cfg=new Config("STUDYGROUPS_ENABLE");
-			if ($cfg->getValue()==FALSE) {
+			if ($cfg->getValue()==FALSE && count(studygroup_sem_types()) > 0) {
 				$cfg->setValue(TRUE,"STUDYGROUPS_ENABLE","Studiengruppen");
 				$this->flash['success'] = _("Die Studiengruppen wurden aktiviert.");
 			}

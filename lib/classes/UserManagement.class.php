@@ -411,11 +411,7 @@ class UserManagement
 		}
 
 		// active dozent? (ignore the studygroup guys)
-		foreach ($SEM_TYPE as $num => $type) {
-            if ($SEM_CLASS[$type['class']]['studygroup_mode']) {
-                $status[] = $num;
-            }
-        }
+		$status = studygroup_sem_types();
         
         $this->db->query("SELECT count(*) AS count FROM seminar_user as su LEFT JOIN seminare as s USING (Seminar_id) 
 		                  WHERE su.user_id = '" . $this->user_data['auth_user_md5.user_id'] . "'

@@ -300,7 +300,7 @@ function export_sem($inst_id, $ex_sem_id = "all")
 		}
 		$addquery .= sprintf(" AND seminare.status IN(%s) ", join(",", $allowed_sem_types));
 	} else {
-		$addquery .= " AND seminare.status <> 99 ";
+		$addquery .= " AND seminare.status NOT IN (" . join(",", studygroup_sem_types()) . ")";
 	}
 	
 	if($ex_only_homeinst){

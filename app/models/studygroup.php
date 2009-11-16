@@ -149,26 +149,14 @@ class StudygroupModel {
 	}
 	
         function countGroups() {
-                global $SEM_TYPE, $SEM_CLASS;
-
-                foreach ($SEM_TYPE as $num => $type) {
-                        if ($SEM_CLASS[$type['class']]['studygroup_mode']) {
-                                $status[] = $num;
-                        }
-                }
+		$status = studygroup_sem_types();
 
                 return DBManager::get()->query("SELECT COUNT(*) as c FROM seminare WHERE status IN ('". implode("','", $status)."')")->fetchColumn();
         }
 
 	function getAllGroups($sort = '', $lower_bound = 1, $elements_per_page = 20)
 	{
-	    global $SEM_TYPE, $SEM_CLASS;
-         
-        foreach ($SEM_TYPE as $num => $type) {
-            if ($SEM_CLASS[$type['class']]['studygroup_mode']) {
-                $status[] = $num;
-            }
-        }
+		$status = studygroup_sem_types();
         $sql = "SELECT * FROM seminare WHERE status IN('". implode("','", $status)."')";
         
 		$sort_order = (substr($sort, strlen($sort) - 3, 3) == 'asc') ? 'asc' : 'desc';

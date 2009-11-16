@@ -37,14 +37,3 @@ $ilias_systemgroup =
 $_fullname_sql =
 $SEM_TREE_TYPES =
 array();
-
-// Notwendige Config-Einträge für Studiengruppen
-// (Veranstaltungen, die von Autoren angelegt werden können)
-$SEM_TYPE[99]=array("name"=>_("Studiengruppe"), "class"=>99, "short" => "Sg", "title_dozent" => array(_("GruppengründerIn"), _("GruppengründerInnen")), 
-																			  "title_tutor"  => array(_("ModeratorIn"), _("ModeratorInnen")), 
-																			  "title_autor" => array(_("Mitglied"), _("Mitglieder")));
-$SEM_CLASS[99]=array("name"=>_("Studiengruppen"),
-					"studygroup_mode"=>TRUE,
-					"topic_create_autor"=>TRUE,
-					"course_creation_forbidden" => TRUE);
-

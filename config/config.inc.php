@@ -129,6 +129,16 @@ $SEM_TYPE[30]=array("name"=>_("Kolloquium"), "class"=>6);
 $SEM_TYPE[31]=array("name"=>_("Forschungsgruppe"), "class"=>6);
 //weitere Typen koennen hier angefuegt werden
 
+// required config settings for study groups (courses that can be created by students)
+$SEM_TYPE[99]=array("name"=>_("Studiengruppe"), "class"=>99,
+					"title_dozent" => array(_("GruppengründerIn"), _("GruppengründerInnen")),
+					"title_tutor" => array(_("ModeratorIn"), _("ModeratorInnen")),
+					"title_autor" => array(_("Mitglied"), _("Mitglieder")));
+
+$SEM_CLASS[99]=array("name"=>_("Studiengruppen"),
+					"studygroup_mode"=>TRUE,
+					"topic_create_autor"=>TRUE,
+					"course_creation_forbidden" => TRUE);
 
 //Festlegen der zulaessigen Klassen fuer Veranstaltungen. Jeder sem_type referenziert auf eine dieser Klassen
 $SEM_CLASS[1]=array("name"=>_("Lehre"), 					 	//the name of the class
