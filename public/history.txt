@@ -1,3 +1,21 @@
+__16.11.2009 v 1.10__
+- Interfaces für Plugins (Komponenten)
+- Vorlesungsverzeichnis und systemweite Personalübersicht für externe Seiten
+- Entfernung Schnittstelle Ilias 2
+- Erweiterung der Raumplanung
+- Schnellsuche (für Veranstaltungen)
+- Erweiterung der Anzeige von Ressourcengruppen
+- "Avatare" für Veranstaltungen und Einrichtungen
+- eMail-Benachrichtigung an Dozenten bei neuem Admin
+- Statusmeldungen erneuern und erweitern
+- Erweiterung der Datenfelder um einen neuen Typ Link
+- Erweiterung und Überarbeitung des Rollenmanagments in der Plugin-Schnittstelle
+- Attachments an internen Nachrichten
+- Interne Nachrichten an Mitarbeitergruppen einer Einrichtung
+- Urheberrecht und Stud.IP
+- Studentische Arbeitsgruppen ("Studiengruppen")
+- Abweichende Bezeichnung für "DozentIn" und "TutorIn"
+
 __01.04.2009 v 1.9__
 - Editierbares Impressum
 - Abbildung von Modulstrukturen über Veranstaltungshierarchie und Plugins
