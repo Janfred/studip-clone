@@ -1,4 +1,4 @@
-16.11.2009 v 1.10
+18.11.2009 v 1.10
 http://develop.studip.de/trac/query?milestone=Stud.IP+1.10
 - Seltsame Meldung nach automatischem Logout [#662]
 - Raumanfragen werden bei teilweiser Auflösung geschlossen [#225]
@@ -84,6 +84,7 @@ http://develop.studip.de/trac/query?milestone=Stud.IP+1.10
 - XSRF Lücke beim Abmelden von Veranstaltungen [#745]
 - Mitgliedschaft wird nicht angezeigt [#746]
 - Überflüssige Dateien [#747]
+- Rechtschreibfehler [#749]
 - Defektes Tabellen-Layout auf "Meine Veranstaltungen" [#750]
 - Keine Fehlermeldung nach erfolglosem Buchungsversuch [#752]
 - Checkbox "Raumdaten einblenden" bei Veranstaltungssuche (für Admins) hat keine Wirkung [#753]
@@ -96,6 +97,7 @@ http://develop.studip.de/trac/query?milestone=Stud.IP+1.10
 - Newskasten - Background fehlt [#762]
 - Im IE wird unter Gruppen/Funktionen zentriert [#763]
 - Größenbeschränkung bei Attachments fehlt (StEP00155) [#766]
+- Darstellung von Tutoren-Daten auf Externen Seiten Fehlerhaft [#767]
 - Datei an Stud.IP-Nachricht anhängen - Infos fehlen [#769]
 - Link zur pers. Homepage ist nicht vollständig bei Verwendung von userinfo-Markup im Impressum [#770]
 - Nicht internationalisierte Strings... [#771]
@@ -135,6 +137,19 @@ http://develop.studip.de/trac/query?milestone=Stud.IP+1.10
 - Migration für StEP00157 führt zu Inkonsistenzen in roles_plugins [#846]
 - Studiengruppen werde nicht richtig gelöscht [#848]
 - Sortierungseinstellungen (bei Veranstaltungen) speichern [#650]
+
+18.11.2009 v 1.9.1
+http://develop.studip.de/trac/query?milestone=Stud.IP+1.9.1
+- Navigation verschwindet in der Ressourcenverwaltung [#751]
+- Newsverwaltung: Admin und Root sehen keine ausgewählten Bereiche [#589]
+- Benachrichtigungen über neue Inhalte in Veranstaltungen per Mail funktioniert nicht korrekt [#333]
+- Raumzeit: Widersprüchliche Ausgaben [#492]
+- Es können Raumanfragen ohne Eigenschaften erstellt werden [#499]
+- Automatisches Nachrücken aus Wartelisten nach Heraufsetzen der Teilnehmerzahl funktioniert nicht immer [#585]
+- Objekt Typ 0 [#607]
+- Anlegen von ungültigen Einzelterminen möglich [#695]
+- Blockveranstaltungen anlegen, Art der Veranstaltung ändert sich bei freie Raumangabe [#854]
+- Fehlerhafte Verlinkung bei Veranstaltung -> Gruppen/Funktionen verwalten [#855]
 
 22.04.2009 v 1.9
 http://develop.studip.de/trac/query?milestone=Stud.IP+1.9
