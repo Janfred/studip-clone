@@ -57,7 +57,7 @@ function printSelectSemester($infobox,$semestersAR){
 		  . "	 <tr>"
 		  . "	  <td><font size=\"-1\">\n"
 		  . MessageBox::info($GLOBALS['FDF_USAGE_HINT'])
-		  . _("Bitte wählen sie ein Semster aus:")."\n"
+		  . _("Bitte wählen sie ein Semester aus:")."\n"
 		  . "	   <form action=\"".$_SERVER['PHP_SELF']."\" method=post>\n"
 		  . "       &nbsp;<select name=\"semesterid\" style=\"vertical-align:middle;\">\n";
 	// the semester

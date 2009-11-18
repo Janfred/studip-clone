@@ -77,7 +77,7 @@ function check_schedule_settings() {
 	$semester = new SemesterData;
 	$all_semester = $semester->getAllSemesterData();
 
-	//Check, ob Semster, das ich gespeichert habe, inzwischen abgelaufen ist. Dann das naechste (Semesterferien) oder aktuelle Semester setzen.
+	//Check, ob Semester, das ich gespeichert habe, inzwischen abgelaufen ist. Dann das naechste (Semesterferien) oder aktuelle Semester setzen.
 	$k=0;
 	foreach ($all_semester as $a) {
 		if ($a["name"] == $my_schedule_settings["glb_sem"])
