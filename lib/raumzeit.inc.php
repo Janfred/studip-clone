@@ -454,7 +454,6 @@ function raumzeit_freeText() {
 					|| $termin->getFreeRoomText()!=$_REQUEST['freeRoomText']
 					|| $termin->getDateType!=$_REQUEST['dateType'] ) {
 
-				$termin->setDateType($_REQUEST['dateType']);
 				$termin->setFreeRoomText($_REQUEST['freeRoomText']);
 				$termin->store();
 				$sem->createMessage(sprintf(_("Der Termin %s wurde geändert!"), '<b>'.$termin->toString().'</b>'));
