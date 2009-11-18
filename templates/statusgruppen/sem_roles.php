@@ -55,11 +55,7 @@ if (is_array($roles)) foreach ($roles as $id => $role) :
 	</td>
 
 	<td class="<?= $cssSw->getClass() ?>">
-		<? if ($range_type == 'sem') : ?>
 		<a href="<?= URLHelper::getLink('about.php?username='. $person['username'] ) ?>">
-		<? else: ?>
-		<a href="<?= URLHelper::getLink('edit_about.php?view=Karriere&open='. $id .'&username='. $person['username'] .'#'. $id) ?>">
-		<? endif; ?>
 			<?= htmlReady($person['fullname']) ?>
 		</a>
 	</td>
