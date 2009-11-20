@@ -91,15 +91,11 @@ if ($_include_stylesheet != '')  // if empty, use no stylesheet
 
 if (isset ($_include_extra_stylesheet))
 	echo "\t\t".'<link rel="stylesheet" href="'.$GLOBALS['ASSETS_URL'].'stylesheets/'.$_include_extra_stylesheet.'" type="text/css">'."\n";
-if (isset ($_include_additional_header)){
-	echo "\t\t" . $_include_additional_header . "\n";
-}
 echo "\t\t".'<link rel="stylesheet" href="'.$GLOBALS['ASSETS_URL'].'stylesheets/header.css" type="text/css">'."\n";
 
 unset ($_include_extra_stylesheet);
 unset ($_include_stylesheet);
 unset ($_html_head_title);
-unset ($_include_additional_header);
 
 //start messenger, if set
 if ($my_messaging_settings['start_messenger_at_startup'] && $auth->auth['jscript'] && !$_SESSION['messenger_started'] && !$seminar_open_redirected) {
@@ -119,6 +115,10 @@ if ($my_messaging_settings['start_messenger_at_startup'] && $auth->auth['jscript
 		STUDIP.ASSETS_URL = "<?= $GLOBALS['ASSETS_URL'] ?>";
 	// ]]>
 	</script>
+	<? if (isset ($_include_additional_header)) : ?>
+		<?= $_include_additional_header ?>
+	<? endif ?>
+	<? unset($_include_additional_header) ?>
 	</head>
 	<body<?= (isset($GLOBALS['body_id']) ? ' id="'.htmlReady($GLOBALS['body_id']).'"' : '') .
 	         (isset($GLOBALS['body_class']) ? ' class="'.htmlReady($GLOBALS['body_class']).'"' : '' ) ?>>
