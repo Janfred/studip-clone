@@ -1,4 +1,4 @@
-18.11.2009 v 1.10
+20.11.2009 v 1.10
 http://develop.studip.de/trac/query?milestone=Stud.IP+1.10
 - Seltsame Meldung nach automatischem Logout [#662]
 - Raumanfragen werden bei teilweiser Auflösung geschlossen [#225]
@@ -136,6 +136,7 @@ http://develop.studip.de/trac/query?milestone=Stud.IP+1.10
 - Fehler bei Ausgabe von generischen Datenfeldern auf templatebasierten externen Seiten [#843]
 - Migration für StEP00157 führt zu Inkonsistenzen in roles_plugins [#846]
 - Studiengruppen werde nicht richtig gelöscht [#848]
+- _include_additional_header kommt zu früh [#856]
 - Sortierungseinstellungen (bei Veranstaltungen) speichern [#650]
 
 18.11.2009 v 1.9.1
