@@ -314,11 +314,6 @@ function export_sem($inst_id, $ex_sem_id = "all")
 				LEFT JOIN Institute ON seminare.Institut_id=Institute.Institut_id
 				WHERE seminar_inst.Institut_id = '" . $inst_id . "' " . $addquery . "
 				ORDER BY " . $order);
-		echo "SELECT seminare.*,seminar_inst.seminar_id, Institute.Name as heimateinrichtung FROM seminar_inst
-				LEFT JOIN seminare USING (Seminar_id)
-				LEFT JOIN Institute ON seminare.Institut_id=Institute.Institut_id
-				WHERE seminar_inst.Institut_id = '" . $inst_id . "' " . $addquery . "
-				ORDER BY " . $order;
 	}
 
 	$data_object .= xml_open_tag( $xml_groupnames_lecture["group"] );
