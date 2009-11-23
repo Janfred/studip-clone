@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 # Lifter007: TODO
 # Lifter003: TODO
@@ -40,7 +41,6 @@ require_once 'lib/functions.php';
 class AdminNewsController {
 	var $db;			  //Datenbankverbindung
 	var $modus;
-	var $self;	   //enthält $PHP_SELF
 	var $msg;		   //Nachricht für msg.inc.php
 	var $sms=array();		   //private Nachricht wegen Admin zugriff
 	var $news_query=array();
@@ -56,8 +56,7 @@ class AdminNewsController {
 	var $xres;
 
 	function AdminNewsController() {
-		global $PHP_SELF,$perm,$auth,$news_range_id,$news_range_name;
-		$this->self = $PHP_SELF;
+		global $perm,$auth,$news_range_id,$news_range_name;
 		if ($auth->auth["jscript"]) {
 			$this->max_col = floor($auth->auth["xres"] / 10 );
 			$this->xres=$auth->auth["xres"];
@@ -172,7 +171,7 @@ class AdminNewsController {
 			return FALSE;
 		}
 		echo "\n<tr><td width=\"100%\" class=\"blank\"><blockquote>";
-		echo "\n<form action=\"".$this->p_self("cmd=kill")."\" method=\"POST\">";
+		echo "\n<form action=\"".URLHelper::getLink("?cmd=kill")."\" method=\"POST\">";
 		echo "<table class=\"blank\" align=\"left\" width=\"".round(0.88*$this->xres)."\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\">";
 		echo "\n<tr><td class=\"blank\" colspan=\"4\" align=\"left\" style=\"vertical-align:middle;\"><font size=-1 >" . _("Vorhandene News im gew&auml;hlten Bereich:") . "<br>";
 		echo "</td><td class=\"blank\" colspan=\"4\" align=\"right\" style=\"vertical-align:middle;\"><font size=-1 >" . _("Markierte News l&ouml;schen");
@@ -188,7 +187,7 @@ class AdminNewsController {
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><font size=\"-1\">".htmlReady($details["author"])."</font></td>";
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"10%\" align=\"center\">".strftime("%d.%m.%y", $details["date"])."</td>";
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"10%\" align=\"center\">".strftime("%d.%m.%y", ($details["date"]+$details["expire"]))."</td>";
-			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><a href=\"".$this->p_self("cmd=edit&edit_news=$news_id")."\"><img "
+			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"15%\" align=\"center\"><a href=\"".URLHelper::getLink("?cmd=edit&edit_news=$news_id")."\"><img "
 				. makeButton("bearbeiten","src") . tooltip(_("Diese News bearbeiten")) . " border=\"0\"></a></td>";
 			echo "\n<td class=\"".$cssSw->getClass()."\" width=\"10%\" align=\"center\">";
 			if ($this->news_perm[$id]["perm"]==3 OR $auth->auth["perm"]=="root" OR $details["user_id"]==$this->user_id)
@@ -235,7 +234,7 @@ class AdminNewsController {
 		if ($this->news_query["user_id"]==$this->user_id)
 			$this->modus="";
 		echo "\n<tr> <td class=\"blank\" align=\"center\"><br>";
-		echo "\n<form action=\"".$this->p_self("cmd=news_edit")."\" method=\"POST\">";
+		echo "\n<form action=\"".URLHelper::getLink("?cmd=news_edit")."\" method=\"POST\">";
 		echo "\n<input type=\"HIDDEN\" name=\"news_id\" value=\"".$this->news_query["news_id"]."\">";
 		echo "\n<input type=\"HIDDEN\" name=\"user_id\" value=\"".$this->news_query["user_id"]."\">";
 		echo "\n<input type=\"HIDDEN\" name=\"author\" value=\"".$this->news_query["author"]."\">";
@@ -557,9 +556,6 @@ class AdminNewsController {
 		}
 	}
 
-	function p_self($par="") {
-		return "$this->self?$par";
-	}
 
 	function get_news_perm() {
 		global $auth,$perm;
