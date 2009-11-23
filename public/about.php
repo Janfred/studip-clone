@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 # Lifter005: TODO - studipim
 # Lifter007: TODO
@@ -301,16 +302,17 @@ function open_im() {
 			<?
 			// Die Anzeige der Stud.Ip-Score
 			$score = new Score(get_userid($username));
+			
 
 			if ($score->IsMyScore()) {
-				echo "&nbsp;<a href=\"score.php\" " . tooltip(_("Zur Highscoreliste")) . "><font size=\"-1\">"
+				echo "&nbsp;<a href=\"". URLhelper::getLink("score.php") ."\" " . tooltip(_("Zur Highscoreliste")) . "><font size=\"-1\">"
 				     . _("Ihr Stud.IP-Score:") . " ".$score->ReturnMyScore()."<br>&nbsp;"
 				     . _("Ihr Rang:") . " ".$score->ReturnMyTitle()."</a></font><br>";
 			}
 			elseif ($score->ReturnPublik()) {
 				$scoretmp = $score->GetScore(get_userid($username));
 				$title = $score->gettitel($scoretmp, $score->GetGender(get_userid($username)));
-				echo "&nbsp;<a href=\"score.php\"><font size=\"-1\">"
+				echo "&nbsp;<a href=\"". URLhelper::getLink("score.php") ."\"><font size=\"-1\">"
 				     . _("Stud.IP-Score:") . " ".$scoretmp."<br>&nbsp;"
 				     . _("Rang:") . " ".$title."</a></font><br>";
 			}
@@ -321,14 +323,15 @@ function open_im() {
 				}
 			} else {
 				if (CheckBuddy($username)==FALSE) {
-					echo "<br><font size=\"-1\">&nbsp;<a href=\"$PHP_SELF?cmd=add_user&add_uname=$username&username=$username\">" . _("zu Buddies hinzuf&uuml;gen") . "</a></font>";
+					echo "<br><font size=\"-1\">&nbsp;<a href=\"". URLHelper::getLink("?cmd=add_user&add_uname=".$username) ."\">" . _("zu Buddies hinzuf&uuml;gen") . "</a></font>";
 				}
-				echo "<br><font size=\"-1\"> <a href=\"sms_send.php?sms_source_page=about.php&rec_uname=", $db->f("username"),"\">&nbsp;" . _("Nachricht an Nutzer") . "&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Nachricht an Nutzer verschicken")) . " border=0 align=texttop></a></font>";
+				echo "<br><font size=\"-1\"> <a href=\"". URLHelper::getLink("sms_send.php?sms_source_page=about.php&rec_uname=".$db->f("username")) ."\">&nbsp;" . _("Nachricht an Nutzer") . "&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" " . tooltip(_("Nachricht an Nutzer verschicken")) . " border=0 align=texttop></a></font>";
 
 			}
 
 			// Export dieses Users als Vcard
-			echo "<br><font size=\"-1\"><a href=\"contact_export.php?username=$username\">&nbsp;"._("vCard herunterladen")."&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("als vCard exportieren"))."></a></font>";
+			echo "<br><font size=\"-1\"><a href=\"". URLHelper::getLink("contact_export.php") ."\">&nbsp;"._("vCard herunterladen")."&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("als vCard exportieren"))."></a></font>";
+			
 			?>
 
 			<br>
@@ -425,7 +428,7 @@ function open_im() {
 				IF ($db3->num_rows()) {
 					echo "<br><b>&nbsp;" . _("Wo ich studiere:") . "&nbsp;&nbsp;</b><br>";
 					while ($db3->next_record()) {
-						echo "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"institut_main.php?auswahl=".$db3->f("Institut_id")."\">".htmlReady($db3->f("Name"))."</a><br>";
+						echo "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"". URLHelper::getLink("institut_main.php?auswahl=".$db3->f("Institut_id")) ."\">".htmlReady($db3->f("Name"))."</a><br>";
 					}
 				}
 				}
@@ -443,7 +446,7 @@ function open_im() {
 
 				while ($db3->next_record()) {
 					$institut=$db3->f("Institut_id");
-					echo "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"institut_main.php?auswahl=".$institut."\">".htmlReady($db3->f("Name"))."</a>";
+					echo "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"". URLHelper::getLink("institut_main.php?auswahl=".$institut) ."\">".htmlReady($db3->f("Name"))."</a>";
 
 					echo "<font size=-1>";
 					IF ($db3->f("raum")!="")
@@ -669,7 +672,7 @@ if ($perm->get_perm($user_id) == 'dozent'){
 					$ver_name .= " (" . $all_semester[$sem_number_start]['name'] . " - ";
 					$ver_name .= (($sem_number_end == -1) ? _("unbegrenzt") : $all_semester[$sem_number_end]['name']) . ")";
 				}
-				$output .= '<b><a href="details.php?sem_id=' . $snap->getField('Seminar_id') . '">' . htmlReady($ver_name) . '</a></b><br>';
+				$output .= '<b><a href="'. URLHelper::getLink("details.php?sem_id=".$snap->getField('Seminar_id')). '">' . htmlReady($ver_name) . '</a></b><br>';
 			}
 		}
 	}
