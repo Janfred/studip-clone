@@ -77,9 +77,21 @@ DBManager::getInstance()
                   $GLOBALS['DB_STUDIP_USER'],
                   $GLOBALS['DB_STUDIP_PASSWORD']);
 
+/**
+ * @deprecated
+ */
+class DB_Seminar extends DB_Sql {
+	function DB_Seminar($query = false){
+		$this->Host = $GLOBALS['DB_STUDIP_HOST'];
+		$this->Database = $GLOBALS['DB_STUDIP_DATABASE'];
+		$this->User = $GLOBALS['DB_STUDIP_USER'];
+		$this->Password = $GLOBALS['DB_STUDIP_PASSWORD'];
+		parent::DB_Sql($query);
+	}
+}
+
 require_once('lib/language.inc.php');
 require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
-require_once('lib/language.inc.php');
 require_once('lib/classes/Config.class.php');
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/classes/StudipNews.class.php');
@@ -105,26 +117,9 @@ $SOFTWARE_VERSION = '1.11 alpha svn';
 require_once 'lib/navigation/StudipNavigation.php';
 Navigation::setRootNavigation(new StudipNavigation(''));
 
-/*classes for database access
-----------------------------------------------------------------
-please note: Stud.IP uses the class DB_Seminar*/
-
-// default Stud.IP database class
-class DB_Seminar extends DB_Sql {
-	function DB_Seminar($query = false){
-		$this->Host = $GLOBALS['DB_STUDIP_HOST'];
-		$this->Database = $GLOBALS['DB_STUDIP_DATABASE'];
-		$this->User = $GLOBALS['DB_STUDIP_USER'];
-		$this->Password = $GLOBALS['DB_STUDIP_PASSWORD'];
-		parent::DB_Sql($query);
-	}
-}
-
 /*class for config; load config in globals (should be deprecated in future)
 ----------------------------------------------------------------*/
-$cfg = &Config::GetInstance();
-$cfg->extractAllGlobal(FALSE);
-unset($cfg);
+Config::GetInstance()->extractAllGlobal(FALSE);
 
 /* set default umask to a sane value */
 umask(022);
