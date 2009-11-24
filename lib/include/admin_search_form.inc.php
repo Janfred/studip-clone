@@ -530,7 +530,7 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 		while ($db->next_record()) {
 			$seminar_id = $db->f("Seminar_id");
 			$sem=new SemesterData;
-			$studygroup_mode = $GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][$db->f('status')]["class"]]["studygroup_mode"]; 
+			$studygroup_mode = $GLOBALS['SEM_CLASS'][$GLOBALS['SEM_TYPE'][$db->f('status')]["class"]]["studygroup_mode"];
 
 			if (!$semdata=$sem->getSemesterData($links_admin_data['srch_sem'])) {
 				$semdata = $sem->getSemesterDataByDate($db->f('start_time'));
@@ -570,9 +570,9 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 			}
 
 			echo "<td align=\"center\" class=\"".$cssSw->getClass()."\"><font size=-1>";
-			$db4->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, position FROM seminar_user 
-				LEFT JOIN auth_user_md5 USING (user_id) 
-				LEFT JOIN user_info USING (user_id) 
+			$db4->query("SELECT ". $_fullname_sql['full'] ." AS fullname, username, position FROM seminar_user
+				LEFT JOIN auth_user_md5 USING (user_id)
+				LEFT JOIN user_info USING (user_id)
 				WHERE Seminar_id = '$seminar_id' and status = 'dozent' ORDER BY position ");
 			$k=0;
 			if (!$db4->num_rows())
@@ -715,26 +715,21 @@ if ($perm->have_perm("autor")) {	// Navigationsleiste ab status "Autor", autors 
 			}
 			echo "</tr>";
 		}
-
-		//Traurige Meldung wenn nichts gefunden wurde oder sonst irgendwie nichts da ist
-		if ($query && !$db->num_rows()) {
-			if ($conditions)
-				$srch_result="info§<font size=-1><b>" . _("Leider wurden keine Veranstaltungen entsprechend Ihren Suchkriterien gefunden!") . "</b></font>§";
-			else
-				$srch_result="info§<font size=-1><b>" . _("Leider wurden keine Veranstaltungen gefunden!") . "</b></font>§";
-			parse_msg ($srch_result, "§", "steel1", 2, FALSE);
-		}
-		?>
-			<tr>
-				<td class="blank" colspan=1>
-					&nbsp;
-				</td>
-			</tr>
+        ?>
 		</table>
 		</form>
 		<?
+        //Traurige Meldung wenn nichts gefunden wurde oder sonst irgendwie nichts da ist
+        if ($query && !$db->num_rows()) {
+            if ($conditions) {
+                echo Messagebox::error(_("Leider wurden keine Veranstaltungen entsprechend Ihren Suchkriterien gefunden!"));
+            } else {
+                echo Messagebox::error(_("Leider wurden keine Veranstaltungen gefunden!"));
+            }
+        }
 	}
 	?>
+	<br>
 	</td>
 	</tr>
 	</table>
