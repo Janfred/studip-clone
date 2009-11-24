@@ -24,7 +24,7 @@
 				<?= htmlReady($fullname) ?>
 			</font>
 			<? foreach (StudipKing::is_king($tmp_user_id, TRUE) as $type => $text) : ?>
-				<?= Assets::img("crown.png", array('alt' => $text, 'title' => $text)) ?>
+				<?= Assets::img("crown.gif", array('alt' => $text, 'title' => $text)) ?>
 			<? endforeach ?>
 		</a>
 	</td>

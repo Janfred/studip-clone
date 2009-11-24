@@ -17,7 +17,7 @@
 	<td>
 		<a href="<?=URLHelper::getLink("about.php?username=". $person['username'])?>"><?=$person['name']?></a>
 		<? foreach ($person['is_king'] as $type => $text) : ?>
-			<?= Assets::img("crown.png", array('alt' => $text, 'title' => $text)) ?>
+			<?= Assets::img("crown.gif", array('alt' => $text, 'title' => $text)) ?>
 		<? endforeach ?>
 	</td>
 	<td><?=$person['content']?></td>
