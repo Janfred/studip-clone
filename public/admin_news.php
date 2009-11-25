@@ -182,7 +182,7 @@ if (!$cmd OR $cmd=="show") {
 			echo"\n<tr><td class=\"blank\"><blockquote><br /><b>" . _("Bereichsauswahl") . "</b><br />&nbsp; </blockquote></td></tr>\n";
 			echo "<tr><td class=\"blank\"><blockquote>";
 			echo "<table width=\"50%\" cellspacing=0 cellpadding=2 border=0>";
-			echo "<form action=\"". URLHelper::getLink($news->p_self("cmd=search")) ."\" method=\"POST\">";
+			echo "<form action=\"". URLHelper::getLink("?cmd=search") ."\" method=\"POST\">";
 			echo "<tr><td class=\"steel1\">";
 			echo "&nbsp; <font size=-1>" . _("Geben Sie einen Suchbegriff ein, um weitere Bereiche zu finden!") . "</font><br /><br />";
 			echo "&nbsp; <INPUT TYPE=\"TEXT\" style=\"vertical-align:middle;\" name=\"search\" size=\"20\">&nbsp;&nbsp;";
@@ -205,12 +205,12 @@ if (!$cmd OR $cmd=="show") {
 		if ($perm->have_perm("autor")) {   // allow autors, needed for studygroups
 			echo "\n<tr><td class=\"blank\"><blockquote>";
 			echo "<font size=\"-1\" style=\"vertical-align:middle;\">" . _("Sie k&ouml;nnen&nbsp; <b>Pers&ouml;nliche News</b> bearbeiten") . "</font>&nbsp;";
-			echo "<a href=\"". URLHelper::getLink($news->p_self("range_id=self")) ."\">&nbsp; <img style=\"vertical-align:middle;\" " . makeButton("bearbeiten","src") . tooltip(_("Persönliche News bearbeiten")) ." border=\"0\"></a>";
+			echo "<a href=\"". URLHelper::getLink("?range_id=self") ."\">&nbsp; <img style=\"vertical-align:middle;\" " . makeButton("bearbeiten","src") . tooltip(_("Persönliche News bearbeiten")) ." border=\"0\"></a>";
 		}
 		if ($perm->have_perm("root")) {
 			$my_cols=4;
 			echo "<font size=\"-1\" style=\"vertical-align:middle;\">&nbsp; " . _("<i>oder</i> <b>Systemweite News</b> bearbeiten") . "</font>&nbsp;";
-			echo "<a href=\"". URLHelper::getLink($news->p_self("range_id=studip")) ."\">&nbsp;<img style=\"vertical-align:middle;\" " . makeButton("bearbeiten","src") . tooltip(_("Systemweite News bearbeiten")) ." border=\"0\"></a>";
+			echo "<a href=\"". URLHelper::getLink("?range_id=studip") ."\">&nbsp;<img style=\"vertical-align:middle;\" " . makeButton("bearbeiten","src") . tooltip(_("Systemweite News bearbeiten")) ." border=\"0\"></a>";
 		}
 		if ($news->search_result)
 			echo "<br><br><font size=\"-1\" style=\"vertical-align:middle;\">" . _("<i>oder</i> <b>hier</b> einen der gefundenen Bereiche ausw&auml;hlen:") . "&nbsp;</font>";
@@ -232,7 +232,7 @@ if (!$cmd OR $cmd=="show") {
 				reset($news->search_result);
 				while (list ($range,$details) = each ($news->search_result)) {
 					if ($details['type'] == $typen_key) {
-						echo "\n<li " . $css->getHover() . '><a href="'. URLHelper::getLink($news->p_self("{$typen_value['id_param']}=$range&range_id=$range&view_mode={$typen_value['view_mode']}")) .'">' .htmlReady($details['name']);
+						echo "\n<li " . $css->getHover() . '><a href="'. URLHelper::getLink("?{$typen_value['id_param']}=$range&range_id=$range&view_mode={$typen_value['view_mode']}") .'">' .htmlReady($details['name']);
 						echo ($details['anzahl']) ? ' ('.$details['anzahl'].')' : ' (0)';
 						echo '</a></li>';
 					}
@@ -243,7 +243,7 @@ if (!$cmd OR $cmd=="show") {
 		}
 	}
 	echo "\n<tr><td class=\"blank\"><br /><blockquote>";
-	echo "<form action=\"". URLHelper::getLink($news->p_self("cmd=new_entry&range_id=$news_range_id&view_mode=$view_mode"))."\" method=\"POST\">";
+	echo "<form action=\"". URLHelper::getLink("?cmd=new_entry&range_id=$news_range_id&view_mode=$view_mode")."\" method=\"POST\">";
 	echo "<hr width=\"100%\"><br /><b>" . _("gew&auml;hlter Bereich:") . " </b>".htmlReady($news_range_name). "<br /><br />";
 	if (get_config('NEWS_RSS_EXPORT_ENABLE') && $news->get_news_range_perm($news_range_id) > 1){
 		echo '<img src="'.$GLOBALS['ASSETS_URL'].'images/rss.gif" border="0" align="absmiddle">&nbsp;';
