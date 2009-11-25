@@ -222,6 +222,8 @@ class StudipSemTree extends TreeAbstract {
 		$view = new DbView();
 		$view->params = array($item_id,$parent_id,$item_name,$priority,$item_info,$studip_object_id, $type);
 		$rs = $view->get_query("view:SEM_TREE_INS_ITEM");
+		// Logging
+		log_event("STUDYAREA_ADD",$item_id);
 		return $rs->affected_rows();
 	}
 	
@@ -240,6 +242,10 @@ class StudipSemTree extends TreeAbstract {
 		$deleted['items'] = $rs->affected_rows();
 		$rs = $view->get_query("view:SEMINAR_SEM_TREE_DEL_RANGE");
 		$deleted['entries'] = $rs->affected_rows();
+		// Logging
+		foreach ($items_to_delete as $item_id) {
+			log_event("STUDYAREA_DELETE",$item_id);
+		 }
 		return $deleted;
 	}
 	
