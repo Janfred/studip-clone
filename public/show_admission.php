@@ -1,4 +1,5 @@
 <?php
+# Lifter001: TEST
 # Lifter002: TODO
 # Lifter005: TODO
 # Lifter007: TODO
@@ -308,7 +309,7 @@ $seminare_condition = "AND (" . join(" AND ", $admission_condition) . ") " .  $s
 $_my_inst = semadmission_get_institute($seminare_condition);
 
 if (!is_array($_my_inst)){
-	$_msg[] = array("info", sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"dispatch.php/siteinfo/show\">", "</a>"));
+	$_msg[] = array("info", sprintf(_("Sie wurden noch keinen Einrichtungen zugeordnet. Bitte wenden Sie sich an einen der zust&auml;ndigen %sAdministratoren%s."), "<a href=\"".URLHelper::getLink("dispatch.php/siteinfo/show")."\">", "</a>"));
 } else {
 	$_my_inst_arr = array_keys($_my_inst);
 	if(!$_SESSION['show_admission']['institut_id']){
@@ -698,7 +699,7 @@ if(is_object($group_obj)){
 				</span>
 				</div>
 				<div style="font-size: 10pt; margin-bottom: 5px;margin-right:5px;" align="right">
-				<a href="<?=$PHP_SELF?>?cmd=send_excel_sheet">
+				<a href="<?=URLHelper::getLink('?cmd=send_excel_sheet')?>">
 				<img src="<?=$GLOBALS['ASSETS_URL']?>images/xls-icon.gif" align="absbottom" border="0"></a>
 				<img src="<?=$GLOBALS['ASSETS_URL']?>images/symbol04.gif" align="absbottom" border="0" hspace="5"><?=_("Download als Excel Datei")?></div>
 			</td>
@@ -716,9 +717,7 @@ if(is_object($group_obj)){
 				foreach($cols as $col){
 					echo "\n<th width=\"{$col[0]}%\" style=\"white-space:nowrap;\">";
 					if($col[1]){
-						echo '<a class="tree" href="' . $PHP_SELF;
-						echo '?sortby='. $col[2];
-						echo '">'.$col[1];
+						echo '<a class="tree" href="' . URLHelper::getLink('?sortby='. $col[2]). '">'.$col[1];
 						if($col[2] == $_SESSION['show_admission']['sortby']['field']){
 							echo Assets::img($_SESSION['show_admission']['sortby']['direction'] ? 'dreieck_up.png' : 'dreieck_down.png', array('style' => 'vertical-align:middle;'));
 						}
@@ -735,7 +734,7 @@ if(is_object($group_obj)){
 	foreach($data as $seminar_id => $semdata) {
 		$teilnehmer = $semdata['count_teilnehmer'];
 		if($teilnehmer){
-			$teilnehmer .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("TeilnehmerInnen") . ' '. $semdata['Name']) .'&format=csv&choose=csv-teiln&o_mode=passthrough">';
+			$teilnehmer .= '&nbsp;<a href="'.URLHelper::getLink('export.php', array('range_id' => $seminar_id, 'ex_type' => 'person', 'xslt_filename=' => rawurlencode(_("TeilnehmerInnen") . ' '. $semdata['Name']),'format' => 'csv', 'choose' => 'csv-teiln', 'o_mode'=> 'passthrough')).'">';
 			$teilnehmer .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Teilnehmerliste downloaden")).' ></a>';
 		}
 		$cssSw->switchClass();
@@ -743,12 +742,12 @@ if(is_object($group_obj)){
 		$quota = $semdata['admission_turnout'];
 		$count2 = $semdata['count_anmeldung'];
 		if($count2){
-			$count2 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Anmeldungen") . ' '. $semdata['Name']).'&format=csv&choose=csv-warteliste&filter=accepted&o_mode=passthrough">';
+			$count2 .= '&nbsp;<a href="'.URLHelper::getLink('export.php', array('range_id' => $seminar_id, 'ex_type' => 'person', 'xslt_filename' => rawurlencode(_("Anmeldungen") . ' '. $semdata['Name']), 'format' => 'csv', 'choose' => 'csv-warteliste', 'filter' => 'accepted', 'o_mode' => 'passthrough')).'">';
 			$count2 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Anmeldeliste downloaden")).' ></a>';
 		}
 		$count3 = $semdata['count_wartende'];
 		if($count3){
-			$count3 .= '&nbsp;<a href="export.php?range_id='.$seminar_id.'&ex_type=person&xslt_filename='.rawurlencode(_("Warteliste") . ' '. $semdata['Name']).'&format=csv&choose=csv-warteliste&filter=awaiting&o_mode=passthrough">';
+			$count3 .= '&nbsp;<a href="'.URLHelper::getLink('export.php', array('range_id' => $seminar_id, 'ex_type' => 'person', 'xslt_filename' => rawurlencode(_("Warteliste") . ' '. $semdata['Name']), 'format' => 'csv', 'choose' =>'csv-warteliste', 'filter' => 'awaiting', 'o_mode' => 'passthrough')).'">';
 			$count3 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Warteliste downloaden")).' ></a>';
 		}
 		// show end date only if it is actually relevant
@@ -773,17 +772,17 @@ if(is_object($group_obj)){
 					if(!$groupname) $groupname = _("Gruppe") . ++$groupcount;
 				}
 				echo '<td class="'.$cssSw->getClass().'" align="center"><font size="-1">';
-				printf("<a title=\"%s\" href=\"show_admission.php?group_id=%s&group_sem_x=1\">%s</a>",
-					_("Gruppe bearbeiten"), $semdata['admission_group'], htmlReady($groupname));
+				printf("<a title=\"%s\" href=\"".URLHelper::getLink('show_admission.php',array('group_id' => $semdata['admission_group'], 'group_sem_x'=>1))."\">%s</a>",
+					_("Gruppe bearbeiten"), htmlReady($groupname));
 				echo '</font></td>';
 			}
 		}
 		printf ("<td class=\"%s\">
-		<a title=\"%s\" href=\"seminar_main.php?auswahl=%s&redirect_to=teilnehmer.php\">
+		<a title=\"%s\" href=\"".URLHelper::getLink('seminar_main.php?auswahl=%s&redirect_to=teilnehmer.php')."\">
 				<font size=\"-1\">%s%s</font>
 				</a></td>
 				<td class=\"%s\" align=\"center\">
-				<a title=\"%s\" href=\"admin_admission.php?select_sem_id=%s\"><font size=\"-1\">%s</font></a></td>
+				<a title=\"%s\" href=\"".URLHelper::getLink('admin_admission.php?select_sem_id=%s')."\"><font size=\"-1\">%s</font></a></td>
 				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
 				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
 				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
