@@ -98,7 +98,7 @@ function semadmission_create_result_xls($data){
 	require_once "vendor/write_excel/Worksheet.php";
 	require_once "vendor/write_excel/Workbook.php";
 	
-	global $_default_sem, $_my_inst;
+	global $_my_inst;
 	$tempfile = null;
 	if (count($data)) {
 		$tmpfile = $GLOBALS['TMP_PATH'] . '/' . md5(uniqid('write_excel',1));
@@ -142,11 +142,11 @@ function semadmission_create_result_xls($data){
 		$worksheet1->set_row(0, 20);
 		$worksheet1->write_string(0, 0, _("Stud.IP Veranstaltungen") . ' - ' . $GLOBALS['UNI_NAME_CLEAN'] ,$head_format);
 		$worksheet1->set_row(1, 20);
-		if(!$_default_sem){
+		if(!$_SESSION['_default_sem']){
 			$semester = _("alle");
 		} else {
 			$sem_array =& SemesterData::GetSemesterArray();
-			$semester = $sem_array[SemesterData::GetSemesterIndexById($_default_sem)]['name'];
+			$semester = $sem_array[SemesterData::GetSemesterIndexById($_SESSION['_default_sem'])]['name'];
 		}
 		$worksheet1->write_string(1, 0, sprintf(_("Einrichtung: %s, Semester: %s"),
 		$_my_inst[$_SESSION['show_admission']['institut_id']]['name'],
@@ -218,7 +218,7 @@ function semadmission_create_result_xls($data){
 }
 
 function semadmission_get_institute($seminare_condition){
-	global $perm, $user,$_default_sem;
+	global $perm, $user;
 	$db = new DB_Seminar();
 	$db2 = new DB_Seminar();
 	if($perm->have_perm('root')){
@@ -284,16 +284,16 @@ if(!isset($_SESSION['show_admission']['check_admission'])){
 
 if(isset($_REQUEST['choose_institut_x'])){
 	if(isset($_REQUEST['select_sem'])){
-		$_default_sem = $_REQUEST['select_sem'];
+		$_SESSION['_default_sem'] = $_REQUEST['select_sem'];
 	}
 	$_SESSION['show_admission']['check_admission'] = isset($_REQUEST['check_admission']);
 	$_SESSION['show_admission']['check_prelim'] = isset($_REQUEST['check_prelim']);
 	$_SESSION['show_admission']['sem_name_prefix'] = trim(stripslashes($_REQUEST['sem_name_prefix']));
 }
 
-if ($_default_sem){
-	$semester =& SemesterData::GetInstance();
-	$one_semester = $semester->getSemesterData($_default_sem);
+if ($_SESSION['_default_sem']){
+	$semester = SemesterData::GetInstance();
+	$one_semester = $semester->getSemesterData($_SESSION['_default_sem']);
 	if($one_semester["beginn"]){
 		$sem_condition = "AND seminare.start_time <=".$one_semester["beginn"]." AND (".$one_semester["beginn"]." <= (seminare.start_time + seminare.duration_time) OR seminare.duration_time = -1) ";
 	}
@@ -322,7 +322,7 @@ if (!is_array($_my_inst)){
 if(isset($_REQUEST['admissiongroupdelete_x']) && isset($_REQUEST['group_id'])){
 	$msg[] = array('info', _("Wollen Sie die Gruppierung f&uuml;r die ausgew&auml;hlte Gruppe aufl&ouml;sen?") 
 							. '<br>' . _("Beachten Sie, dass f&uuml;r bereits eingetragene / auf der Warteliste stehende TeilnehmerInnen keine &Auml;nderungen vorgenommen werden.")
-							. '<form action="'.$PHP_SELF.'" method="post">'
+							. '<form action="'.URLHelper::getLink().'" method="post">'
 							. '<input type="hidden" name="group_sem_x" value="1"><div style="padding:3px;">'
 							. '<input type="hidden" name="group_id" value="'.$_REQUEST['group_id'].'">'
 							. makeButton('ja', 'input', _("Gruppe auflösen"), 'admissiongroupreallydelete')
@@ -495,10 +495,10 @@ if(is_object($group_obj)){
 	?>
 	<tr>
 		<td class="blank" width="100%">
-		<form action="<?=$PHP_SELF?>" name="Formular" method="post">
+		<form action="<?=URLHelper::getLink()?>" name="Formular" method="post">
 		<div class="steel1" style="margin:10px;padding:5px;border: 1px solid;">
 		<div style="font-weight:bold;"><?=_("Gruppierte Veranstaltungen bearbeiten")?></div>
-		<div style="font-size:10pt;">
+		<div>
 		<?=_("Gruppierte Veranstaltungen müssen ein identisches Anmeldeverfahren benutzen.")?>
 		<?=_("Alle Einstellungen die sie an dieser Stelle vornehmen können, werden in allen Veranstaltungen dieser Gruppe gesetzt, wenn sie die entsprechende Option auswählen.")?>
 		<?=_("Veranstaltungen dieser Gruppe, die noch kein Anmeldeverfahren eingestellt haben, werden automatisch mit einem Kontingent für alle Studiengänge versehen.")?>
@@ -654,9 +654,9 @@ if(is_object($group_obj)){
 	if (is_array($_my_inst)) {
 	?>
 		<tr>
-			<form action="<?=$PHP_SELF?>" method="post">
+			<form action="<?=URLHelper::getLink()?>" method="post">
 			<td class="blank" width="100%" >
-				<div style="font-weight:bold;font-size:10pt;margin:10px;">
+				<div style="font-weight:bold;margin:10px;">
 				<?=_("Bitte w&auml;hlen Sie eine Einrichtung aus:")?>
 				</div>
 				<div style="margin-left:10px;">
@@ -682,23 +682,23 @@ if(is_object($group_obj)){
 				if($institut_id == 'all') $institut_id = 'root';
 				?>
 					</select>&nbsp;
-					<?=SemesterData::GetSemesterSelector(array('name'=>'select_sem', 'style'=>'vertical-align:middle;'), $_default_sem)?>
+					<?=SemesterData::GetSemesterSelector(array('name'=>'select_sem', 'style'=>'vertical-align:middle;'), $_SESSION['_default_sem'])?>
 					<?=makeButton("auswaehlen","input",_("Einrichtung auswählen"), "choose_institut")?>
 				</div>
-				<div style="font-size:10pt;margin:10px;">
+				<div style="margin:10px;">
 				<b><?=_("Angezeigte Veranstaltungen einschränken:")?></b>
-				<span style="margin-left:10px;font-size:10pt;">
+				<span style="margin-left:10px;">
 				<input type="checkbox" name="check_admission" <?=$_SESSION['show_admission']['check_admission'] ? 'checked' : ''?> value="1" style="vertical-align:middle;">&nbsp;<?=_("Anmeldeverfahren")?>
 				<input type="checkbox" name="check_prelim" <?=$_SESSION['show_admission']['check_prelim'] ? 'checked' : ''?> value="1" style="vertical-align:middle;">&nbsp;<?=_("vorläufige Teilnahme")?>
 				</span>
 				</div>
-				<div style="font-size:10pt;margin-top:10px;margin-left:10px;">
+				<div style="margin-top:10px;margin-left:10px;">
 				<b><?=_("Präfix des Veranstaltungsnamens:")?></b>
-				<span style="margin-left:10px;font-size:10pt;">
+				<span style="margin-left:10px;">
 				<input type="test" name="sem_name_prefix" value="<?=htmlReady($_SESSION['show_admission']['sem_name_prefix'])?>" style="vertical-align:middle;" size="20">
 				</span>
 				</div>
-				<div style="font-size: 10pt; margin-bottom: 5px;margin-right:5px;" align="right">
+				<div style="margin-bottom: 5px;margin-right:5px;" align="right">
 				<a href="<?=URLHelper::getLink('?cmd=send_excel_sheet')?>">
 				<img src="<?=$GLOBALS['ASSETS_URL']?>images/xls-icon.gif" align="absbottom" border="0"></a>
 				<img src="<?=$GLOBALS['ASSETS_URL']?>images/symbol04.gif" align="absbottom" border="0" hspace="5"><?=_("Download als Excel Datei")?></div>
@@ -726,7 +726,7 @@ if(is_object($group_obj)){
 					echo "\n</th>";
 				}
 				echo "\n</tr>";
-		printf("\n<form action=\"%s\" method=\"post\">\n",$PHP_SELF);
+		printf("\n<form action=\"%s\" method=\"post\">\n",URLHelper::getLink());
 	} elseif ($institut_id) {
 		echo "\n<table width=\"99%\" align=\"center\" border=\"0\" cellspacing=\"2\" cellpadding=\"2\">";
 		parse_msg ("info§"._("Im gew&auml;hlten Bereich existieren keine teilnahmebeschr&auml;nkten Veranstaltungen")."§", "§", "steel1",2, FALSE);
@@ -734,7 +734,7 @@ if(is_object($group_obj)){
 	foreach($data as $seminar_id => $semdata) {
 		$teilnehmer = $semdata['count_teilnehmer'];
 		if($teilnehmer){
-			$teilnehmer .= '&nbsp;<a href="'.URLHelper::getLink('export.php', array('range_id' => $seminar_id, 'ex_type' => 'person', 'xslt_filename=' => rawurlencode(_("TeilnehmerInnen") . ' '. $semdata['Name']),'format' => 'csv', 'choose' => 'csv-teiln', 'o_mode'=> 'passthrough')).'">';
+			$teilnehmer .= '&nbsp;<a href="'.URLHelper::getLink('export.php', array('range_id' => $seminar_id, 'ex_type' => 'person', 'xslt_filename' => _("TeilnehmerInnen") . ' '. $semdata['Name'],'format' => 'csv', 'choose' => 'csv-teiln', 'o_mode'=> 'passthrough')).'">';
 			$teilnehmer .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Teilnehmerliste downloaden")).' ></a>';
 		}
 		$cssSw->switchClass();
@@ -742,12 +742,12 @@ if(is_object($group_obj)){
 		$quota = $semdata['admission_turnout'];
 		$count2 = $semdata['count_anmeldung'];
 		if($count2){
-			$count2 .= '&nbsp;<a href="'.URLHelper::getLink('export.php', array('range_id' => $seminar_id, 'ex_type' => 'person', 'xslt_filename' => rawurlencode(_("Anmeldungen") . ' '. $semdata['Name']), 'format' => 'csv', 'choose' => 'csv-warteliste', 'filter' => 'accepted', 'o_mode' => 'passthrough')).'">';
+			$count2 .= '&nbsp;<a href="'.URLHelper::getLink('export.php', array('range_id' => $seminar_id, 'ex_type' => 'person', 'xslt_filename' => _("Anmeldungen") . ' '. $semdata['Name'], 'format' => 'csv', 'choose' => 'csv-warteliste', 'filter' => 'accepted', 'o_mode' => 'passthrough')).'">';
 			$count2 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Anmeldeliste downloaden")).' ></a>';
 		}
 		$count3 = $semdata['count_wartende'];
 		if($count3){
-			$count3 .= '&nbsp;<a href="'.URLHelper::getLink('export.php', array('range_id' => $seminar_id, 'ex_type' => 'person', 'xslt_filename' => rawurlencode(_("Warteliste") . ' '. $semdata['Name']), 'format' => 'csv', 'choose' =>'csv-warteliste', 'filter' => 'awaiting', 'o_mode' => 'passthrough')).'">';
+			$count3 .= '&nbsp;<a href="'.URLHelper::getLink('export.php', array('range_id' => $seminar_id, 'ex_type' => 'person', 'xslt_filename' => _("Warteliste") . ' '. $semdata['Name'], 'format' => 'csv', 'choose' =>'csv-warteliste', 'filter' => 'awaiting', 'o_mode' => 'passthrough')).'">';
 			$count3 .= '<img align="absbottom" src="'.$GLOBALS['ASSETS_URL'].'images/xls-icon.gif" border="0" '.tooltip(_("Warteliste downloaden")).' ></a>';
 		}
 		// show end date only if it is actually relevant
@@ -771,26 +771,26 @@ if(is_object($group_obj)){
 					$groupname = $group_obj->getValue('name');
 					if(!$groupname) $groupname = _("Gruppe") . ++$groupcount;
 				}
-				echo '<td class="'.$cssSw->getClass().'" align="center"><font size="-1">';
+				echo '<td class="'.$cssSw->getClass().'" align="center">';
 				printf("<a title=\"%s\" href=\"".URLHelper::getLink('show_admission.php',array('group_id' => $semdata['admission_group'], 'group_sem_x'=>1))."\">%s</a>",
 					_("Gruppe bearbeiten"), htmlReady($groupname));
-				echo '</font></td>';
+				echo '</td>';
 			}
 		}
 		printf ("<td class=\"%s\">
-		<a title=\"%s\" href=\"".URLHelper::getLink('seminar_main.php?auswahl=%s&redirect_to=teilnehmer.php')."\">
-				<font size=\"-1\">%s%s</font>
+		<a title=\"%s\" href=\"".URLHelper::getLink('teilnehmer.php?cid=%s')."\">
+				%s%s
 				</a></td>
 				<td class=\"%s\" align=\"center\">
-				<a title=\"%s\" href=\"".URLHelper::getLink('admin_admission.php?select_sem_id=%s')."\"><font size=\"-1\">%s</font></a></td>
-				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
-				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
-				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
-				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
-				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
-				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
-				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>
-				<td class=\"%s\" align=\"center\"><font size=\"-1\">%s</font></td>",
+				<a title=\"%s\" href=\"".URLHelper::getLink('admin_admission.php?select_sem_id=%s')."\">%s</a></td>
+				<td class=\"%s\" align=\"center\">%s</td>
+				<td class=\"%s\" align=\"center\">%s</td>
+				<td class=\"%s\" align=\"center\">%s</td>
+				<td class=\"%s\" align=\"center\">%s</td>
+				<td class=\"%s\" align=\"center\">%s</td>
+				<td class=\"%s\" align=\"center\">%s</td>
+				<td class=\"%s\" align=\"center\">%s</td>
+				<td class=\"%s\" align=\"center\">%s</td>",
 				$cssSw->getClass(),
 				_("Teilnehmerliste aufrufen"),
 				$seminar_id,
