@@ -505,11 +505,19 @@ if(is_object($group_obj)){
 		<br><br>
 		<b><?=_("Veranstaltungen in dieser Gruppe:")?></b>
 		<ol>
-		<?foreach($group_obj->members as $member){?>
+		<?
+		$count_members = array();
+		foreach($group_obj->members as $member){
+			$count_members += $member->getMembers('autor') + $member->getAdmissionMembers('awaiting') +  $member->getAdmissionMembers('accepted') + $member->getAdmissionMembers('claiming');?>
 			<li><?=htmlReady($member->getName())?></li>
 			<input type="hidden" name="gruppe[]" value="<?=$member->getId();?>">
 		<?}?>
 		</ol>
+		<? if(count($count_members)  > 0 ) :?>
+		<br>
+		<b><?=_("Anzahl aller Anmeldungen:")?></b> <?=count($count_members)?>
+		<br>
+		<? endif;?>
 		<ul style="list-style: none; margin:0px;padding:0px;">
 		<li style="margin-top:5px;">
 		<span style="display:block;float:left;width:200px;"><?=_("Name der Gruppe (optional):")?></span>
