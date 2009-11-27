@@ -733,15 +733,15 @@ class DataFieldDateEntry extends DataFieldEntry
 	{
 		$field_name = $name . '[' . $this->structure->getID() . '][]';
 		$parts = split('-', $this->value);
-		$ret = sprintf('<input name="%s" maxlength="2" size="1" value="%s" title="Tag">', $field_name, $parts[2]);
+		$ret = sprintf('<input name="%s" maxlength="2" size="1" value="%s" title="'._("Tag").'">', $field_name, $parts[2]);
 		$ret .= ". ";
 		//TODO: was ist, wenn studip auf englisch eingestellt ist?!? lieber srfttime oder so benutzen...
 		$months = array('' , 'Januar' , 'Februar' , 'März' , 'April' , 'Mai' , 'Juni' , 'Juli' , 'August' , 'September' , 'Oktober' , 'Novemember' , 'Dezember');
-		$ret .= "<select name=\"$field_name\" title=\"Monat\">";
+		$ret .= "<select name=\"$field_name\" title=\""._("Monat")."\">";
 		foreach($months as $i => $m)
 			$ret .= sprintf('<option %s value="%s">%s</option>', ($parts[1] == $i ? 'selected' : ''), $i, $m);
 		$ret .= "</select> ";
-		$ret .= sprintf('<input name="%s" maxlength="4" size="3" value="%s" title="Jahr">', $field_name, $parts[0]);
+		$ret .= sprintf('<input name="%s" maxlength="4" size="3" value="%s" title="'._("Jahr").'">', $field_name, $parts[0]);
 		return $ret;
 	}
 
@@ -775,8 +775,8 @@ class DataFieldTimeEntry extends DataFieldEntry
 	{
 		$name = $name . '[' . $this->structure->getID() . '][]';
 		$parts = split(':', $this->value);
-		$ret = sprintf('<input name="%s" maxlength="2" size="1" value="%s" title="Stunden">:', $name, $parts[0]);
-		$ret .= sprintf('<input name="%s" maxlength="2" size="1" value="%s" title="Minuten">', $name, $parts[1]);
+		$ret = sprintf('<input name="%s" maxlength="2" size="1" value="%s" title="'._("Stunden").'">:', $name, $parts[0]);
+		$ret .= sprintf('<input name="%s" maxlength="2" size="1" value="%s" title="'._("Minuten").'">', $name, $parts[1]);
 		return $ret;
 	}
 
