@@ -506,19 +506,19 @@ if(is_object($group_obj)){
 		<b><?=_("Veranstaltungen in dieser Gruppe:")?></b>
 		<ol>
 		<?
-		$count_members = array();
+		$distinct_members = array();
 		foreach($group_obj->members as $member){
-			$count_members += $member->getMembers('autor') + $member->getAdmissionMembers('awaiting') +  $member->getAdmissionMembers('accepted') + $member->getAdmissionMembers('claiming');?>
+			$distinct_members += $member->getMembers('autor') + $member->getAdmissionMembers('awaiting') +  $member->getAdmissionMembers('accepted') + $member->getAdmissionMembers('claiming');?>
 			<li><?=htmlReady($member->getName())?></li>
 			<input type="hidden" name="gruppe[]" value="<?=$member->getId();?>">
 		<?}?>
 		</ol>
-		<? if(count($count_members)  > 0 ) :?>
-		<br>
-		<b><?=_("Anzahl aller Anmeldungen:")?></b> <?=count($count_members)?>
-		<br>
-		<? endif;?>
 		<ul style="list-style: none; margin:0px;padding:0px;">
+		<? if(count($distinct_members)  > 0 ) :?>
+		<li style="margin-top:5px;">
+		<span style="display:block;float:left;width:200px;"><?=_("Anzahl aller Anmeldungen:")?></span><?=count($distinct_members)?>
+		</li>
+		<? endif;?>
 		<li style="margin-top:5px;">
 		<span style="display:block;float:left;width:200px;"><?=_("Name der Gruppe (optional):")?></span>
 		<input type="text" name="admission_group_name" value="<?=htmlReady($group_obj->getValue('name'))?>" size="80" >
