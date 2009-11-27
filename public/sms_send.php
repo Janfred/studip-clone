@@ -7,6 +7,7 @@
 * frontend for message-transmission
 *
 * @author		Cornelis Kater <ckater@gwdg.de>, Nils K. Windisch <studip@nkwindisch.de>
+* @version		$Id: sms_send.php 14023 2009-11-27 11:36:40Z sewert $
 * @access		public
 * @modulegroup	Messaging
 * @module		sms_send.php
@@ -253,7 +254,7 @@ if ($rec_uname) {
 	$sms_data["sig"] = $my_messaging_settings["addsignature"];
 }
 
-if($rec_uname) {
+if($rec_uname && !is_array($rec_uname)) {
 	if(get_userid($rec_uname) != "") $sms_data["p_rec"] = array($rec_uname);
 	unset($rec_uname);
 }
@@ -285,6 +286,17 @@ if ($group_id) {
 	// append signature
 	$sms_data["sig"] = $my_messaging_settings["addsignature"];
 
+}
+// if send message at single/multiple user coming from teilnehmer.php
+if (isset($_REQUEST["subject"]) && isset($_REQUEST["rec_uname"])  && !isset($_REQUEST["filter"]) && !isset($_REQUEST["cmd"]))
+{
+	$messagesubject = Request::quoted("subject");
+	$sms_data["tmpsavesnd"] = Request::quoted("tmpsavesnd");	
+		if (is_array($_REQUEST['rec_uname']))
+			$sms_data["p_rec"] = Request::quotedArray("rec_uname");
+		else
+			$sms_data["p_rec"] = array(Request::quoted("rec_uname"));
+	$sms_data["sig"] = $my_messaging_settings["addsignature"];
 }
 
 // if send message at course

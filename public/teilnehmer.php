@@ -93,6 +93,22 @@ if ($rechte) {
 $CURRENT_PAGE = $SessSemName["header_line"]. " - " . _("TeilnehmerInnen");
 Navigation::activateItem('/course/members/view');
 
+//Subject for sms
+$stmt =DBManager::get()->query("SELECT VeranstaltungsNummer as sn FROM seminare WHERE Seminar_id = '".$SessSemName[1]."'"); 
+$result = $stmt->fetch(); 
+$subject = ( $result["sn"] == "" ) ? "[".$SessSemName['0']."]" : "[".$result['sn'].": ".$SessSemName['0']."]"; 
+
+// Send message to multiple user
+if (isset($_REQUEST['do_send_msg_x']) && isset($_REQUEST['send_msg']) && Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'participants')){
+		$post = NULL;
+		$sms_data = array();	
+		$send_msg = array_keys($_REQUEST['send_msg']);
+		page_close(NULL);
+
+		header('Location: '.URLHelper::getURL('sms_send.php', array('sms_source_page' => 'teilnehmer.php', 'subject' => $subject, 'tmpsavesnd' => 1, 'rec_uname' => $send_msg)));
+		die;
+}
+
 if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 
 	// Start  of Output
@@ -119,37 +135,27 @@ if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 	}
 
 } else {
-    $stmt =DBManager::get()->query("SELECT VeranstaltungsNummer as sn, Name FROM seminare WHERE Seminar_id = '".$SessSemName[1]."'");
-	$result = $stmt->fetch();
-	$subject = "[".$result['sn'].": ".$result['Name'] ."]";
-	
 	if ($cmd == "send_sms_to_all" && $who != "accepted") {
-		$sess->register("sms_data");
 		$db->query("SELECT b.username FROM seminar_user a, auth_user_md5 b WHERE a.Seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND a.status = '$who' ORDER BY Nachname, Vorname");
-		$sms_data = array();
-		$sms_data['tmpsavesnd'] = 1;
 		while ($db->next_record()) {
 			$data[] = $db->f("username");
 		}
-		$sms_data['p_rec'] = $data;
 		page_close(NULL);
-		header('Location: '.URLHelper::getURL('sms_send.php',array('messagesubject' => $subject)));
+		header('Location: '.URLHelper::getURL('sms_send.php', array('sms_source_page' => 'teilnehmer.php', 'subject' => $subject, 'tmpsavesnd' => 1, 'rec_uname' => $data )));
 		die;
 	} else if ($cmd == "send_sms_to_waiting" || $who == "accepted") {
-		$sess->register("sms_data");
 		if (!$who) $who = "awaiting";
 		$db->query("SELECT b.username FROM admission_seminar_user a, auth_user_md5 b WHERE a.seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND status = '$who' ORDER BY Nachname, Vorname");
-		$sms_data = array();
-		$sms_data['tmpsavesnd'] = 1;
 		while ($db->next_record()) {
 			$data[] = $db->f("username");
 		}
-		$sms_data['p_rec'] = $data;
 		page_close(NULL);
-		header('Location: '.URLHelper::getURL('sms_send.php',array('messagesubject' => $subject)));
+		
+		header('Location: '.URLHelper::getURL('sms_send.php', array('sms_source_page' => 'teilnehmer.php', 'subject' => $subject,  'tmpsavesnd' => 1, 'rec_uname' => $data)));
 		die;
 	}
 }
+
 
 $messaging=new messaging;
 $cssSw=new cssClassSwitcher;
@@ -395,6 +401,7 @@ if (Seminar_Session::check_ticket($studipticket) && !LockRules::Check($id, 'part
 				// LOGGING
 				log_event('SEM_USER_DEL', $id, $userchange, 'Wurde aus der Veranstaltung rausgeworfen');
 				$db->query("DELETE FROM seminar_user WHERE Seminar_id = '$id' AND user_id = '$userchange' AND status='user'");
+
 				if($db->affected_rows()){
 					setTempLanguage($userchange);
 					$message = sprintf(_("Ihr Abonnement der Veranstaltung **%s** wurde von einem/einer VeranstaltungsleiterIn (%s) oder AdministratorIn aufgehoben."), $SessSemName[0], get_title_for_status('dozent', 1));
@@ -718,10 +725,10 @@ if ($perm->have_perm("tutor")) {
 	$gruppe['accepted'] = get_title_for_status('accepted', 2);
 }
 
-$multiaction['tutor'] = array('insert' => null, 'delete' => array('tutor_to_autor', sprintf(_("Ausgewählte %s entlassen"), get_title_for_status('tutor', 2))));
-$multiaction['autor'] = array('insert' => array('autor_to_tutor', sprintf(_("Ausgewählte Benutzer als %s eintragen"), get_title_for_status('tutor', 2))), 'delete' => array('autor_to_user', _("Ausgewählten Benutzern das Schreibrecht entziehen")));
-$multiaction['user'] = array('insert' => array('user_to_autor',_("Ausgewählten Benutzern das Schreibrecht erteilen")), 'delete' => array('user_to_null', _("Ausgewählte Benutzer aus der Veranstaltung entfernen")));
-$multiaction['accepted'] = array('insert' => array('admission_insert',_("Ausgewählte Benutzer akzeptieren")), 'delete' => array('admission_delete', _("Ausgewählte Benutzer aus der Veranstaltung entfernen")));
+$multiaction['tutor'] = array('insert' => null, 'delete' => array('tutor_to_autor', sprintf(_("Ausgewählte %s entlassen"), get_title_for_status('tutor', 2))), 'send' => array('send_msg', 'Nachricht an ausgewählte Benutzer schicken'));
+$multiaction['autor'] = array('insert' => array('autor_to_tutor', sprintf(_("Ausgewählte Benutzer als %s eintragen"), get_title_for_status('tutor', 2))), 'delete' => array('autor_to_user', _("Ausgewählten Benutzern das Schreibrecht entziehen")), 'send' => array('send_msg', 'Nachricht an ausgewählte Benutzer schicken'));
+$multiaction['user'] = array('insert' => array('user_to_autor',_("Ausgewählten Benutzern das Schreibrecht erteilen")), 'delete' => array('user_to_null', _("Ausgewählte Benutzer aus der Veranstaltung entfernen")),'send' => array('send_msg', 'Nachricht an ausgewählte Benutzer schicken'));
+$multiaction['accepted'] = array('insert' => array('admission_insert',_("Ausgewählte Benutzer akzeptieren")), 'delete' => array('admission_delete', _("Ausgewählte Benutzer aus der Veranstaltung entfernen")), 'send' => array('send_msg', 'Nachricht an ausgewählte Benutzer schicken'));
 
 $db->query("SELECT COUNT(user_id) as teilnehmer, COUNT(IF(admission_studiengang_id <> '',1,NULL)) as teilnehmer_kontingent FROM seminar_user WHERE seminar_id='".$SessSemName[1]."' AND status IN('autor','user')");
 $db->next_record();
@@ -890,7 +897,7 @@ $anzahl_teilnehmer_kontingent = $db->f('teilnehmer_kontingent');
 	</tr>
 	<tr>
 		<td class="blank" width="100%" colspan="2">
-		<a href="<?= URLHelper::getLink('sms_send.php?sms_source_page=teilnehmer.php&course_id='.$SessSemName[1].'&emailrequest=1&subject='.rawurlencode($SessSemName[0]).'&filter=all') ?>">
+		<a href="<?= URLHelper::getLink('sms_send.php', array('sms_source_page' => 'teilnehmer.php', 'course_id' => $SessSemName[1], 'emailrequest' => 1, 'subject' => $subject, 'filter' => 'all')) ?>">
 		<img src="<?=$GLOBALS['ASSETS_URL']?>images/mailnachricht.gif" border="0" vspace="3" hspace="3" align="absmiddle">
 		<span style="font-size:80%">
 		<?=_("Systemnachricht mit Emailweiterleitung an alle Teilnehmer verschicken")?>
@@ -1212,18 +1219,22 @@ if ($db->f('visible') == 'yes' || $i_see_everybody || $db->f('user_id') == $user
 	echo "<td class=\"$class\" align=\"center\"><font size=\"-1\">".$Dokumente."</font></td>";
 
 	echo "<td class=\"$class\" align=\"center\">";
+	
+	$username=$db->f("username");
 	if ($db->f('visible') == 'yes' || $i_see_everybody) {
 		if ($GLOBALS['CHAT_ENABLE']){
 			echo chat_get_online_icon($db->f("user_id"),$db->f("username"),$SessSemName[1]) . "&nbsp;";
 		}
 
-		printf ("<a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" %s border=\"0\"></a>", URLHelper::getLink('sms_send.php?sms_source_page=teilnehmer.php&rec_uname='.$db->f("username")), tooltip(_("Nachricht an User verschicken")));
+		printf ("<a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" %s border=\"0\"></a>", URLHelper::getLink("sms_send.php", array("sms_source_page" => "teilnehmer.php", "subject" => $subject, "rec_uname" => $db->f("username"))), tooltip(_("Nachricht an User verschicken")));
+	
+	if (isset($multiaction[$key]['send'][0]) && $rechte)
+	printf("<input type=\"checkbox\" name=\"send_msg[%s]\" value=\"1\" /></td>", $username);
 	}
 
 	echo "</td>";
 
 	// Befoerderungen und Degradierungen
-	$username=$db->f("username");
 	if ($rechte && !LockRules::Check($id, 'participants')) {
 
 		// Tutor entlassen
@@ -1390,7 +1401,14 @@ else {
 }
 }
 if($key != 'dozent' && $rechte && !$info_is_open && !LockRules::Check($id, 'participants')) {
-	echo '<tr><td class="blank" colspan="'.($showscore ? 8 : 7).'">&nbsp;</td>';
+	echo '<tr><td class="blank" colspan="'.($showscore ? 7 : 6).'">&nbsp;</td>';
+
+	if (isset($multiaction[$key]['send'][0]))
+		echo '<td class="blank" align="center">' . makeButton('versenden','input', $multiaction[$key]['send'][1],'do_' . $multiaction[$key]['send'][0]) . '</td>';
+	else
+		echo '<td class="blank">&nbsp;</td>';
+
+
 	if (isset($multiaction[$key]['insert'][0]) && !($key == 'autor' && !$tutor_count)) echo '<td class="blank" align="center">' . makeButton('eintragen','input', $multiaction[$key]['insert'][1],'do_' . $multiaction[$key]['insert'][0]) . '</td>';
 	else echo '<td class="blank">&nbsp;</td>';
 	echo '<td class="blank" align="center">' . makeButton('entfernen','input', $multiaction[$key]['delete'][1],'do_' . $multiaction[$key]['delete'][0]) . '</td>';
@@ -1418,7 +1436,7 @@ if ($rechte) {
 		?>
 		<tr>
 		<td class="blank" width="100%" colspan="2">
-		<a href="<?= URLHelper::getLink('sms_send.php?sms_source_page=teilnehmer.php&course_id='.$SessSemName[1].'&emailrequest=1&subject='.rawurlencode($SessSemName[0]).'&filter=waiting') ?>">
+		<a href="<?= URLHelper::getLink('sms_send.php', array( 'sms_source_page' => 'teilnehmer.php', 'course_id' => $SessSemName[1],  'emailrequest' => 1, 'subject' => $subject, 'filter' => 'waiting')) ?>">
 		<img src="<?=$GLOBALS['ASSETS_URL']?>images/mailnachricht.gif" border="0" vspace="3" hspace="3" align="absmiddle">
 		<span style="font-size:80%">
 		<?=_("Systemnachricht mit Emailweiterleitung an alle Wartenden verschicken")?>
@@ -1454,7 +1472,7 @@ if ($rechte) {
 				printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><font size=\"-1\">%s</font></td>", $cssSw->getClass(), $db->f("position"));
 			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\">&nbsp; </td>", $cssSw->getClass());
 
-			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" %s border=\"0\"></a></td>", $cssSw->getClass(), URLHelper::getLink('sms_send.php?sms_source_page=teilnehmer.php&rec_uname='.$db->f("username")), tooltip(_("Nachricht an User verschicken")));
+			printf ("<td width=\"10%%\" align=\"center\" class=\"%s\"><a href=\"%s\"><img src=\"".$GLOBALS['ASSETS_URL']."images/nachricht1.gif\" %s border=\"0\"></a></td>", $cssSw->getClass(), URLHelper::getLink('sms_send.php', array('sms_source_page' => 'teilnehmer.php', 'rec_uname' => $db->f("username"))), tooltip(_("Nachricht an User verschicken")));
 			if(!LockRules::Check($id, 'participants')){
 				printf ("<td width=\"15%%\" align=\"center\" class=\"%s\"><input type=\"image\" name=\"admission_rein\" value=\"%s\" border=\"0\" src=\"".$GLOBALS['ASSETS_URL']."images/up.gif\" width=\"21\" height=\"16\">
 						<input type=\"checkbox\" name=\"admission_insert[%s]\" value=\"1\"></td>", $cssSw->getClass(), $db->f("username"), $db->f("username"));
