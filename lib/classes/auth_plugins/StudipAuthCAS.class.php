@@ -30,8 +30,7 @@ class StudipAuthCAS extends StudipAuthSSO {
 	* 
 	*/
 	function StudipAuthCAS() {
-		//calling the baseclass constructor
-		parent::StudipAuthSSO();
+		parent::__construct();
 		$this->cas = new CASClient(CAS_VERSION_2_0,false,$this->host,$this->port,$this->uri,false);
 
 		if (isset($this->cacert)) {
