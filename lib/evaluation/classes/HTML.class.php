@@ -60,7 +60,8 @@ class HTML extends HTMLempty {
    *
    */
   function addHTMLContent ($_content) {
-    if ($classname = strtolower(get_class ($_content))) {
+    if (is_object($_content)) {
+      $classname = strtolower(get_class($_content));
       $valid_classes = array ('htmlempty', 'html', 'htm', 'htmpty');
       if (in_array ($classname, $valid_classes)) {
 	$this->_content[] = $_content;
@@ -79,7 +80,7 @@ echo "Fehler in HTML.class.php: Es fehlt ein addHTMLContent-Element für ein Elem
    *
    */
   function addContent ($_content) {
-    if ($classname = strtolower(get_class ($_content)))
+    if (is_object($_content))
       $this->addHTMLContent ($_content);
     elseif (is_scalar ($_content))
       $this->addHTMLContent (htmlentities (((string)$_content)));
