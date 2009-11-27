@@ -84,15 +84,15 @@ class StudipSemSearch {
 								'lecturer' => array('type' => 'text'),
 								'scope' => array('type' => 'text'),
 								'quick_search' => array('type' => 'text'),
-								'type' => array('type' => 'select', 'default_value' => 'all', 'max_length' => 35,'options_callback' => array(&$this, 'getSelectOptions')),
-								'sem' => array('type' => 'select', 'default_value' => 'all','options_callback' => array(&$this, 'getSelectOptions')),
-								'category' => array('type' => 'select', 'default_value' => 'all', 'max_length' => 50,'options_callback' => array(&$this, 'getSelectOptions')),
-								'combination' => array('type' => 'select', 'default_value' => 'AND','options_callback' => array(&$this, 'getSelectOptions')),
-								'scope_choose' => array('type' => 'select', 'default_value' => 'root', 'max_length' => 45,'options_callback' => array(&$this, 'getSelectOptions')),
-								'range_choose' => array('type' => 'select', 'default_value' => 'root', 'max_length' => 45,'options_callback' => array(&$this, 'getSelectOptions')),
+								'type' => array('type' => 'select', 'default_value' => 'all', 'max_length' => 35,'options_callback' => array($this, 'getSelectOptions')),
+								'sem' => array('type' => 'select', 'default_value' => 'all','options_callback' => array($this, 'getSelectOptions')),
+								'category' => array('type' => 'select', 'default_value' => 'all', 'max_length' => 50,'options_callback' => array($this, 'getSelectOptions')),
+								'combination' => array('type' => 'select', 'default_value' => 'AND','options_callback' => array($this, 'getSelectOptions')),
+								'scope_choose' => array('type' => 'select', 'default_value' => 'root', 'max_length' => 45,'options_callback' => array($this, 'getSelectOptions')),
+								'range_choose' => array('type' => 'select', 'default_value' => 'root', 'max_length' => 45,'options_callback' => array($this, 'getSelectOptions')),
 								'qs_choose' => array('type' => 'select',
 													'default_value' => 'title_lecturer_number',
-													'options_callback' => array(&$this, 'getSelectOptions')
+													'options_callback' => array($this, 'getSelectOptions')
 													)
 								);
 		$search_buttons = array('do_search' => array('type' => 'suchestarten', 'info' => _("Suche starten")),
@@ -124,7 +124,7 @@ class StudipSemSearch {
 		return $this->form->getFormField($name,$attributes,$default);
 	}
 	
-	function getSelectOptions(&$caller, $name){
+	function getSelectOptions($caller, $name){
 		$options = array();
 		if ($name == "combination"){
 			$options = array(array('name' =>_("UND"),'value' => 'AND'),array('name' => _("ODER"), 'value' => 'OR'));
