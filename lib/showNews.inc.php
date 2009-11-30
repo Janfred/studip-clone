@@ -54,7 +54,7 @@ function commentbox($num, $authorname, $authoruname, $date, $dellink, $content) 
 	$out[].="<td align=left style=\"border-bottom: 1px black dotted\">";
 	$out[].="<font size=-1>#$num - ";
 	$out[].="<a href=\"".URLHelper::getLink("about.php?username=$authoruname")."\">".htmlReady($authorname)."</a> ";
-	$out[].=sprintf(_("hat am %s geschrieben:"),$date);
+	$out[].=sprintf(_("hat am %s geschrieben:"),strftime('%x - %H:%M',$date));
 	$out[].="</font>";
 	$out[].="</td>";
 	$out[].="<td align=right style=\"border-bottom: 1px black dotted\">";
@@ -106,7 +106,7 @@ function show_news($range_id, $show_admin = FALSE, $limit = "", $open, $width = 
 		StudipNews::TouchNews($_REQUEST['touch_news']);
 	}
 
-	$news =& StudipNews::GetNewsByRange($range_id, true);
+	$news = StudipNews::GetNewsByRange($range_id, true);
 
 	if ($SessSemName[1] == $range_id){
 		$admin_link = ($SessSemName["class"]=="sem") ? "new_sem=TRUE&view=news_sem" :  "new_inst=TRUE&view=news_inst";
@@ -174,7 +174,7 @@ function show_rss_news($range_id, $type){
 		break;
 		case 'sem':
 			$studip_url = $GLOBALS['ABSOLUTE_URI_STUDIP'] . "seminar_main.php?auswahl=" . $range_id;
-			$sem_obj =& Seminar::GetInstance($range_id);
+			$sem_obj = Seminar::GetInstance($range_id);
 			if ($sem_obj->read_level > 0) $studip_url .= "&again=yes";
 			$title = $sem_obj->getName() . ' (Stud.IP - ' . $GLOBALS['UNI_NAME_CLEAN'] . ')';
 			$RssChannelDesc = _("Neuigkeiten der Veranstaltung") . ' ' . $title;

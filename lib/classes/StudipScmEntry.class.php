@@ -1,7 +1,6 @@
 <?php
-# Lifter002: TODO
 # Lifter007: TODO
-# Lifter003: TODO
+# Lifter003: TEST
 /**
 * StudipScmEntry.class.php
 *
@@ -38,42 +37,41 @@ define('STUDIPSCMENTRY_DB_TABLE', 'scm');
 
 class StudipScmEntry extends SimpleORMap {
 
-	function GetSCMEntriesForRange($range_id, $as_objects = false){
+	public static function GetSCMEntriesForRange($range_id, $as_objects = false){
 		$ret = array();
 		$query = "SELECT " . STUDIPSCMENTRY_DB_TABLE . ".* FROM "
 					. STUDIPSCMENTRY_DB_TABLE . " WHERE range_id='$range_id' ORDER BY mkdate";
-		$db = new DB_Seminar($query);
-		while ($db->next_record()){
+		$rs = DBManager::get()->query($query);
+		while ($row = $rs->fetch(PDO::FETCH_ASSOC)){
 			if (!$as_objects){
-				$ret[$db->f('scm_id')] = $db->Record;
+				$ret[$row['scm_id']] = $row;
 			} else {
-				$ret[$db->f('scm_id')] =& new StudipScmEntry();
-				$ret[$db->f('scm_id')]->setData($db->Record, true);
-				$ret[$db->f('scm_id')]->is_new = false;
+				$ret[$row['scm_id']] = new StudipScmEntry();
+				$ret[$row['scm_id']]->setData($row, true);
+				$ret[$row['scm_id']]->is_new = false;
 			}
 		}
 		return $ret;
 	}
 	
-	function GetNumSCMEntriesForRange($range_id){
+	public static function GetNumSCMEntriesForRange($range_id){
 		$query = "SELECT COUNT(*) FROM "
 					. STUDIPSCMENTRY_DB_TABLE . " WHERE range_id='$range_id'";
-		$db = new DB_Seminar($query);
-		$db->next_record();
-		return $db->f(0);
+		return DBManager::get()
+				->query($query)
+				->fetchColumn();
 	}
 	
-	function DeleteSCMEntriesForRange($range_ids){
+	public static function DeleteSCMEntriesForRange($range_ids){
 		if (!is_array($range_ids)){
 			$range_ids = array($range_ids);
 		}
 		$query = "DELETE FROM " . STUDIPSCMENTRY_DB_TABLE . " WHERE range_id IN ('" . join("','", $range_ids). "')";
-		$db = new DB_Seminar($query);
-		return $db->affected_rows();
+		return DBManager::get()->exec($query);
 	}
 	
-	function StudipScmEntry($id = null){
-		parent::SimpleORMap($id);
+	function __construct($id = null){
+		parent::__construct($id);
 	}
 
 }

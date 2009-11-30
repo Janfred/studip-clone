@@ -1,7 +1,6 @@
 <?php
-# Lifter002: TODO
 # Lifter007: TODO
-# Lifter003: TODO
+# Lifter003: TEST
 /**
 * SimpleORMap.class.php
 * 
@@ -36,39 +35,34 @@
 
 class SimpleORMap {
 	
-	// name of the database table 
-	var $db_table = '';
-	
-	var $content = array();
-	
-	var $is_new = true;
+	public $content = array();
+	public $is_new = true;
 	
 	// private
+	protected $db_table = '';
+	protected $db_fields = null;
+	protected $pk = null;
 	
-	var $db = NULL;
-	var $db_fields = null;
-	var $pk = null;
+	protected static $schemes;
 	
-	function TableScheme ($db_table) {
-		static $schemes;
-		if (!isset($schemes[$db_table]) && !($schemes[$db_table] = $GLOBALS['DB_TABLE_SCHEMES'][$db_table]) ){
-			$db =& new DB_Seminar("SHOW COLUMNS FROM $db_table");
-			while($db->next_record()){
-				$db_fields[$db->f('Field')] = array('name' => $db->f('Field'),
-				'type' => $db->f('Type'),
-				'key'  => $db->f('Key'));
-				if ($db->f('Key') == 'PRI'){
-					$pk[] = $db->f('Field');
-				}
+	public static function TableScheme ($db_table) {
+		if (!isset(SimpleORMap::$schemes[$db_table]) && !(SimpleORMap::$schemes[$db_table] = $GLOBALS['DB_TABLE_SCHEMES'][$db_table]) ){
+			$db = DBManager::get()->query("SHOW COLUMNS FROM $db_table");
+			while($rs = $db->fetch(PDO::FETCH_ASSOC)){
+				$db_fields[$rs['Field']] = array('name' => $rs['Field'],
+				'type' => $rs['Type'],
+				'key'  => $rs['Key']);
+				if ($rs['Key'] == 'PRI'){
+					$pk[] = $rs['Field'];
 			}
-			$schemes[$db_table]['db_fields'] = $db_fields;
-			$schemes[$db_table]['pk'] = $pk;
+			}
+			SimpleORMap::$schemes[$db_table]['db_fields'] = $db_fields;
+			SimpleORMap::$schemes[$db_table]['pk'] = $pk;
 		}
-		return $schemes[$db_table];
+		return isset(SimpleORMap::$schemes[$db_table]);
 	}
 	
-	function SimpleORMap ($id = null) {
-		$this->db =& new DB_Seminar();
+	function __construct ($id = null) {
 		if (!$this->db_table){
 			if (defined(strtoupper(get_class($this)) . '_DB_TABLE')){
 				$this->db_table = constant(strtoupper(get_class($this)) . '_DB_TABLE');
@@ -86,9 +80,10 @@ class SimpleORMap {
 	}
 	
 	function getTableScheme (){
-		$scheme = SimpleORMap::TableScheme($this->db_table);
-		$this->db_fields = $scheme['db_fields'];
-		$this->pk = $scheme['pk'];
+		if(SimpleORMap::TableScheme($this->db_table)){
+			$this->db_fields =& SimpleORMap::$schemes[$this->db_table]['db_fields'];
+			$this->pk =& SimpleORMap::$schemes[$this->db_table]['pk'];
+		}
 	}
 	
 	function setId ($id){
@@ -122,9 +117,9 @@ class SimpleORMap {
 		if (count($this->pk) == 1){
 			do {
 				$id = md5(uniqid($this->db_table,1));
-				$this->db->query("SELECT {$this->pk[0]} FROM {$this->db_table} "
+				$db = DBManager::get()->query("SELECT {$this->pk[0]} FROM {$this->db_table} "
 					. "WHERE {$this->pk[0]} = '$id'");
-			} while($this->db->next_record());
+			} while($db->fetch());
 		}
 		return $id;
 	}
@@ -193,9 +188,9 @@ class SimpleORMap {
 		if ($where_query){
 			$query = "SELECT * FROM {$this->db_table} WHERE "
 					. join(" AND ", $where_query);
-			$this->db->query($query);
-			if ($this->db->next_record()) {
-				if ($this->setData($this->db->Record, true)){
+			$rs = DBManager::get()->query($query)->fetchAll(PDO::FETCH_ASSOC);
+			if (isset($rs[0])) {
+				if ($this->setData($rs[0], true)){
 					$this->is_new = false;
 					return true;
 				} else {
@@ -229,8 +224,7 @@ class SimpleORMap {
 				$query = "UPDATE {$this->db_table} SET "
 					. implode(',', $query_part);
 				$query .= " WHERE ". join(" AND ", $where_query);
-				$this->db->query($query);
-				if ($this->db->affected_rows()){
+				if ($ret = DBManager::get()->exec($query)){
 					$this->triggerChdate();
 				}
 			} else {
@@ -242,9 +236,8 @@ class SimpleORMap {
 			if ($this->db_fields['chdate']){
 				$query .= " , chdate=UNIX_TIMESTAMP()";
 			}
-			$this->db->query($query);
+			$ret = DBManager::get()->exec($query);
 			}
-			$ret = $this->db->affected_rows();
 			$this->restore();
 			return $ret;
 		} else {
@@ -256,7 +249,7 @@ class SimpleORMap {
 		if ($this->db_fields['chdate']){
 			$this->content['chdate'] = time();
 			if ($where_query = $this->getWhereQuery()){
-				$this->db->query("UPDATE {$this->db_table} SET chdate={$this->content['chdate']}
+				DBManager::get()->exec("UPDATE {$this->db_table} SET chdate={$this->content['chdate']}
 							WHERE ". join(" AND ", $where_query));
 				return true;
 			}
@@ -272,7 +265,7 @@ class SimpleORMap {
 			if ($where_query){
 				$query = "DELETE FROM {$this->db_table} WHERE "
 						. join(" AND ", $where_query);
-				$this->db->query($query);
+				DBManager::get()->exec($query);
 			}
 		}
 		$this->is_new = true;

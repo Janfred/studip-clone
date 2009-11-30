@@ -1,7 +1,6 @@
 <?php
-# Lifter002: TODO
 # Lifter007: TODO
-# Lifter003: TODO
+# Lifter003: TEST
 /**
 * StudipAdmissionGroup.class.php
 *
@@ -39,11 +38,11 @@ define('STUDIPADMISSIONGROUP_DB_TABLE', 'admission_group');
 
 class StudipAdmissionGroup extends SimpleORMap {
 	
-	var $members = array();
-	var $deleted_members = array();
+	public $members = array();
+	public $deleted_members = array();
 	
-	function &GetAdmissionGroupBySeminarId($seminar_id){
-		$sem =& Seminar::GetInstance($seminar_id);
+	function GetAdmissionGroupBySeminarId($seminar_id){
+		$sem = Seminar::GetInstance($seminar_id);
 		if($sem->admission_group){
 			return new StudipAdmissionGroup($sem->admission_group);
 		} else {
@@ -51,9 +50,9 @@ class StudipAdmissionGroup extends SimpleORMap {
 		}
 	}
 	
-	function StudipAdmissionGroup($id = null){
+	function __construct($id = null){
 		$this->db_table = STUDIPADMISSIONGROUP_DB_TABLE;
-		parent::SimpleORMap($id);
+		parent::__construct($id);
 	}
 
 	function restore(){
@@ -66,9 +65,9 @@ class StudipAdmissionGroup extends SimpleORMap {
 		$this->members = array();
 		if (!$this->is_new){
 			$where_query = $this->getWhereQuery();
-			$this->db->queryf("SELECT Seminar_id FROM seminare WHERE admission_group='%s' ORDER BY Name", $this->getId());
-			while($this->db->next_record()){
-				$this->members[$this->db->f('Seminar_id')] =& Seminar::GetInstance($this->db->f('Seminar_id'));
+			$rs = DBManager::get()->query(sprintf("SELECT Seminar_id FROM seminare WHERE admission_group='%s' ORDER BY Name", $this->getId()));
+			while($seminar_id = $rs->fetchColumn()){
+				$this->members[$seminar_id] = Seminar::GetInstance($seminar_id);
 			}
 		}
 		return count($this->members);
@@ -110,7 +109,7 @@ class StudipAdmissionGroup extends SimpleORMap {
 	function addMember($seminar_id){
 		if($this->is_new && !$this->getId()) $this->setId($this->getNewId());
 		if (!$this->isMember($seminar_id)){
-			$this->members[$seminar_id] =& Seminar::GetInstance($seminar_id);
+			$this->members[$seminar_id] = Seminar::GetInstance($seminar_id);
 			if(!$this->members[$seminar_id]->is_new){
 				$this->members[$seminar_id]->admission_group = $this->getId();
 			} else {
@@ -123,7 +122,7 @@ class StudipAdmissionGroup extends SimpleORMap {
 	function deleteMember($seminar_id){
 		if ($this->isMember($seminar_id)){
 			$this->members[$seminar_id]->admission_group = '';
-			$this->deleted_members[$seminar_id] =& $this->members[$seminar_id];
+			$this->deleted_members[$seminar_id] = $this->members[$seminar_id];
 			unset($this->members[$seminar_id]);
 			return true;
 		} else {
@@ -183,11 +182,13 @@ class StudipAdmissionGroup extends SimpleORMap {
 	}
 	
 	function setMinimumContingent(){
+		$ret = array();
+		$db = DBManager::get();
 		foreach($this->getMemberIds() as $seminar_id){
-			$this->db->query("SELECT studiengang_id FROM admission_seminar_studiengang WHERE seminar_id = '$seminar_id' LIMIT 1");
-			if(!$this->db->next_record()){
-				$this->db->query("INSERT INTO admission_seminar_studiengang (studiengang_id,quota,seminar_id) VALUES('all', '100', '$seminar_id')");
-				if($this->db->affected_rows()) $ret[] = $seminar_id;
+			$db->query("SELECT studiengang_id FROM admission_seminar_studiengang WHERE seminar_id = '$seminar_id' LIMIT 1");
+			if(!$db->fetchColumn()){
+				$affected_rows = $db->exec("INSERT INTO admission_seminar_studiengang (studiengang_id,quota,seminar_id) VALUES('all', '100', '$seminar_id')");
+				if($affected_rows) $ret[] = $seminar_id;
 			}
 		}
 		return $ret;
@@ -195,9 +196,10 @@ class StudipAdmissionGroup extends SimpleORMap {
 	
 	function checkUserSubscribedtoGroup($user_id, $waitlist = false){
 		$table = $waitlist ? 'admission_seminar_user' : 'seminar_user' ;
-		$this->db->query("SELECT seminar_id FROM $table WHERE seminar_id IN ('".join("','", $this->getMemberIds())."') AND user_id='$user_id'");
-		$this->db->next_record();
-		return $this->db->f('seminar_id');
+		$seminar_id = DBManager::get()
+					->query("SELECT seminar_id FROM $table WHERE seminar_id IN ('".join("','", $this->getMemberIds())."') AND user_id='$user_id'")
+					->fetchColumn();
+		return $seminar_id;
 	}
 	
 	function checkUserSubscribedtoGroupWaitingList($user_id){

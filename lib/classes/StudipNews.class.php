@@ -1,7 +1,6 @@
 <?php
-# Lifter002: TODO
 # Lifter007: TODO
-# Lifter003: TODO
+# Lifter003: TEST
 /**
 * StudipNews.class.php
 *
@@ -41,37 +40,34 @@ define('STUDIPNEWS_DB_TABLE', 'news');
 
 class StudipNews extends SimpleORMap {
 
-	var $ranges = array();
+	public $ranges = array();
 
-	function &GetNewsByRange($range_id, $only_visible = false, $as_objects = false){
+	public static function GetNewsByRange($range_id, $only_visible = false, $as_objects = false){
 		$ret = array();
-		$db = new DB_Seminar();
 		if ($only_visible){
 			$clause = " AND date < UNIX_TIMESTAMP() AND (date+expire) > UNIX_TIMESTAMP() ";
 		}
-		$query = "SELECT " . STUDIPNEWS_DB_TABLE . ".* FROM " . STUDIPNEWS_DB_TABLE . "_range
+		$query = "SELECT news_id as idx," . STUDIPNEWS_DB_TABLE . ".* FROM " . STUDIPNEWS_DB_TABLE . "_range
 					INNER JOIN " . STUDIPNEWS_DB_TABLE . " USING(news_id) WHERE range_id='$range_id' "
 					. $clause . " ORDER BY date DESC, chdate DESC, topic ASC";
-		$db->query($query);
-		while ($db->next_record()){
-			$ret[$db->f('news_id')] = $db->Record;
-		}
+		$rs = DBManager::get()->query($query);
+		$news = $rs->fetchAll(PDO::FETCH_ASSOC|PDO::FETCH_GROUP);
+		$ret = array_map('array_shift', $news);
+		
 		return ($as_objects ? StudipNews::GetNewsObjects($ret) : $ret);
 	}
 
-	function &GetNewsByAuthor($user_id, $as_objects = false){
+	public static function GetNewsByAuthor($user_id, $as_objects = false){
 		$ret = array();
-		$db = new DB_Seminar();
-		$query = "SELECT " . STUDIPNEWS_DB_TABLE . ".* FROM "
+		$query = "SELECT news_id as idx," . STUDIPNEWS_DB_TABLE . ".* FROM "
 					. STUDIPNEWS_DB_TABLE . " WHERE user_id='$user_id' ORDER BY date DESC, chdate DESC";
-		$db->query($query);
-		while ($db->next_record()){
-			$ret[$db->f('news_id')] = $db->Record;
-		}
+		$rs = DBManager::get()->query($query);
+		$news = $rs->fetchAll(PDO::FETCH_ASSOC|PDO::FETCH_GROUP);
+		$ret = array_map('array_shift', $news);
 		return ($as_objects ? StudipNews::GetNewsObjects($ret) : $ret);
 	}
 
-	function &GetNewsByRSSId($rss_id, $as_objects = false){
+	public static function GetNewsByRSSId($rss_id, $as_objects = false){
 		if ($user_id = StudipNews::GetUserIDFromRssID($rss_id)){
 			return StudipNews::GetNewsByRange($user_id, true, $as_objects);
 		} else {
@@ -79,11 +75,11 @@ class StudipNews extends SimpleORMap {
 		}
 	}
 
-	function &GetNewsObjects($news_result){
+	public static function GetNewsObjects($news_result){
 		$objects = array();
 		if (is_array($news_result)){
 			foreach($news_result as $id => $result){
-				$objects[$id] =& new StudipNews();
+				$objects[$id] = new StudipNews();
 				$objects[$id]->setData($result, true);
 				$objects[$id]->is_new = false;
 			}
@@ -91,88 +87,83 @@ class StudipNews extends SimpleORMap {
 		return $objects;
 	}
 
-	function GetUserIdFromRssID($rss_id){
+	public static function GetUserIdFromRssID($rss_id){
 		$ret = StudipNews::GetRangeIdFromRssID($rss_id);
 		return $ret['range_id'];
 	}
 
-	function GetRssIdFromUserId($user_id){
+	public static function GetRssIdFromUserId($user_id){
 		return StudipNews::GetRssIdFromRangeId($user_id);
 	}
 	
-	function GetRangeFromRssID($rss_id){
+	public static function GetRangeFromRssID($rss_id){
 		if ($rss_id){
-			$db = new DB_Seminar("SELECT range_id,range_type FROM news_rss_range WHERE rss_id='$rss_id'");
-			if ($db->next_record())	return array('range_id' => $db->f(0), 'range_type' => $db->f(1));
+			$ret = DBManager::get()
+				->query("SELECT range_id,range_type FROM news_rss_range WHERE rss_id='$rss_id'")
+				->fetch(PDO::FETCH_ASSOC);
+			if (count($ret)) return $ret;
 		}
 		return false;
 	}
 	
-	function GetRangeIdFromRssID($rss_id){
-		$ret = StudipNews::GetRangeIdFromRssID($rss_id);
+	public static function GetRangeIdFromRssID($rss_id){
+		$ret = StudipNews::GetRangeFromRssID($rss_id);
 		return $ret['range_id'];
 	}
 	
-	function GetRssIdFromRangeId($range_id){
-		$db = new DB_Seminar("SELECT rss_id FROM news_rss_range WHERE range_id='$range_id'");
-		$db->next_record();
-		return $db->f(0);
+	public static function GetRssIdFromRangeId($range_id){
+		$query = "SELECT rss_id FROM news_rss_range WHERE range_id='$range_id'";
+		return DBManager::get()
+				->query($query)
+				->fetchColumn();
 	}
 	
-	function SetRssId($range_id, $type = false){
+	public static function SetRssId($range_id, $type = false){
 		if (!$type){
 			$type = get_object_type($range_id);
 			if ($type == 'fak') $type = 'inst';
 		}
 		$rss_id = md5('StudipRss'.$range_id);
-		$db = new DB_Seminar("REPLACE INTO news_rss_range (range_id,rss_id,range_type) VALUES ('$range_id','$rss_id','$type')");
-		$db->next_record();
-		return $db->affected_rows();
+		$affected_rows = DBManager::get()->exec("REPLACE INTO news_rss_range (range_id,rss_id,range_type) VALUES ('$range_id','$rss_id','$type')");
+		return $affected_rows;
 	}
 	
-	function UnsetRssId($range_id){
-		$db = new DB_Seminar("DELETE FROM news_rss_range WHERE range_id='$range_id'");
-		$db->next_record();
-		return $db->affected_rows();
+	public static function  UnsetRssId($range_id){
+		$affected_rows = DBManager::get()->exec("DELETE FROM news_rss_range WHERE range_id='$range_id'");
+		return $affected_rows;
 	}
 	
-	function GetAdminMsg($user_id, $date){
+	public static function GetAdminMsg($user_id, $date){
 		return sprintf(_("Zuletzt aktualisiert von %s (%s) am %s"),get_fullname($user_id) ,get_username($user_id) ,date("d.m.y",$date));
 	}
 
-	function DoGarbageCollect(){
-		$db =& new DB_Seminar();
-		$cfg =& Config::GetInstance();
-		if (!$cfg->getValue('NEWS_DISABLE_GARBAGE_COLLECT')){
-			$db->query("SELECT news.news_id FROM news where (date+expire)<UNIX_TIMESTAMP() ");
-			while($db->next_record()) {
-				$result[$db->Record[0]] = true;
-			}
-			$db->query("SELECT news_range.news_id FROM news_range LEFT JOIN news USING (news_id) WHERE ISNULL(news.news_id)");
-			while($db->next_record()) {
-				$result[$db->Record[0]] = true;
-			}
-			$db->query("SELECT news.news_id FROM news LEFT JOIN news_range USING (news_id) WHERE range_id IS NULL");
-			while($db->next_record()) {
-				$result[$db->Record[0]] = true;
-			}
+	public static function DoGarbageCollect(){
+		$db = DBManager::get();
+		if (!Config::GetInstance()->getValue('NEWS_DISABLE_GARBAGE_COLLECT')){
+			$result = $db->query(
+								"SELECT news.news_id FROM news where (date+expire)<UNIX_TIMESTAMP() 
+								UNION DISTINCT
+								SELECT news_range.news_id FROM news_range LEFT JOIN news USING (news_id) WHERE ISNULL(news.news_id)
+								UNION DISTINCT
+								SELECT news.news_id FROM news LEFT JOIN news_range USING (news_id) WHERE range_id IS NULL"
+								)->fetchAll(PDO::FETCH_COLUMN, 0);
+			
 			if (is_array($result)) {
-				$kill_news = "('".join("','",array_keys($result))."')";
-				$db->query("DELETE FROM news WHERE news_id IN $kill_news");
-				$killed = $db->affected_rows();
-				$db->query("DELETE FROM news_range WHERE news_id IN $kill_news");
-				object_kill_visits(null, array_keys($result));
-				object_kill_views(array_keys($result));
-				StudipComments::DeleteCommentsByObject(array_keys($result));
+				$kill_news = "('".join("','",$result)."')";
+				$killed = $db->exec("DELETE FROM news WHERE news_id IN $kill_news");
+				$db->exec("DELETE FROM news_range WHERE news_id IN $kill_news");
+				object_kill_visits(null, $result);
+				object_kill_views($result);
+				StudipComments::DeleteCommentsByObject($result);
 			}
 			return $killed;
 		}
 	}
 
-	function TouchNews($news_id, $touch_stamp = null){
+	public static function TouchNews($news_id, $touch_stamp = null){
 		$ret = false;
 		if(!$touch_stamp) $touch_stamp = time();
-		$news =& new StudipNews($news_id);
+		$news = new StudipNews($news_id);
 		if(!$news->is_new){
 			$news->setValue('date', mktime(0,0,0,strftime("%m",$touch_stamp),strftime("%d",$touch_stamp),strftime("%y",$touch_stamp)));
 			$ret = $news->store();
@@ -181,23 +172,22 @@ class StudipNews extends SimpleORMap {
 		return $ret;
 	}
 	
-	function DeleteNewsRanges($range_id){
-		$db =& new DB_Seminar("DELETE FROM news_range WHERE range_id='$range_id'");
-		$ret = $db->affected_rows();
+	public static function DeleteNewsRanges($range_id){
+		$ret = DBManager::get()->exec("DELETE FROM news_range WHERE range_id='$range_id'");
 		StudipNews::DoGarbageCollect();
 		return $ret;
 	}
 	
-	function DeleteNewsByAuthor($user_id){
+	public static function DeleteNewsByAuthor($user_id){
 		foreach (StudipNews::GetNewsByAuthor($user_id, true) as $news){
 			$deleted += $news->delete();
 		}
 		return $deleted;
 	}
 	
-	function StudipNews($id = null){
+	function __construct($id = null){
 		$this->db_table = STUDIPNEWS_DB_TABLE;
-		parent::SimpleORMap($id);
+		parent::__construct($id);
 	}
 
 	function restore(){
@@ -209,10 +199,10 @@ class StudipNews extends SimpleORMap {
 	function restoreRanges(){
 		$this->ranges = array();
 		if (!$this->is_new){
-			$this->db->query("SELECT range_id FROM {$this->db_table}_range WHERE news_id='".$this->getId()."'");
-			while($this->db->next_record()){
-				$this->ranges[$this->db->f(0)] = true;
-			}
+			$ranges = DBManager::get()
+					->query("SELECT range_id FROM {$this->db_table}_range WHERE news_id='".$this->getId()."'")
+					->fetchAll(PDO::FETCH_COLUMN, 0);
+			$this->ranges = array_flip($ranges);
 		}
 		return count($this->ranges);
 	}
@@ -224,13 +214,14 @@ class StudipNews extends SimpleORMap {
 	}
 
 	function storeRanges(){
+		$db = DBManager::get();
 		if (!$this->is_new){
 			$where_query = $this->getWhereQuery();
 			if ($where_query){
-				$this->db->query("DELETE FROM {$this->db_table}_range WHERE  news_id='".$this->getId()."'");
+				$db->exec("DELETE FROM {$this->db_table}_range WHERE  news_id='".$this->getId()."'");
 				if (count($this->ranges)){
 					foreach($this->getRanges() as $range_id){
-						$this->db->query("INSERT INTO {$this->db_table}_range SET range_id='$range_id',news_id='".$this->getId()."'");
+						$db->exec("INSERT INTO {$this->db_table}_range SET range_id='$range_id',news_id='".$this->getId()."'");
 					}
 				}
 				return count($this->ranges);

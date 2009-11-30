@@ -1,7 +1,6 @@
 <?php
-# Lifter002: TODO
 # Lifter007: TODO
-# Lifter003: TODO
+# Lifter003: TEST
 /**
 * StudipDocument.class.php
 *
@@ -38,8 +37,8 @@ define('STUDIPDOCUMENT_DB_TABLE', 'dokumente');
 
 class StudipDocument extends SimpleORMap {
 
-	function StudipDocument($id = null){
-		parent::SimpleORMap($id);
+	function __construct($id = null){
+		parent::__construct($id);
 	}
 }
 ?>
