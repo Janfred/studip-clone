@@ -16,9 +16,9 @@ require_once('lib/visual.inc.php');
 require_once('lib/user_visible.inc.php');
 
 class Siteinfo {
-    private $sme;
-    private $rubrics_empty;
-    private $db;
+    private $sme; //SiteinfoMarkupEngine
+    private $rubrics_empty; //boolean; true if there is no rubric
+    private $db; //DBManager
 
     function __construct() {
         $this->sme = new SiteinfoMarkupEngine();
@@ -26,15 +26,18 @@ class Siteinfo {
     }
     function get_detail_content($id) {
         global $perm;
+        //first we define some fallbacks
         if ($id == 0) {
+            //users with root priveleges get a hint whether what to do...
             if ($perm->have_perm('root')) {
                 if ($this->rubrics_empty) {
                     return _("Benutzen Sie den Link »neue Rubrik anlegen« in der Infobox, um eine Rubrik anzulegen.");
                 } else {
         	        return _("Benutzen Sie den Link »neue Seite anlegen« in der Infobox, um eine Seite in dieser Rubrik anzulegen.");
                 }
+            //...while unauthorized users just get informed that there's something missing und who might be the person to fix this
         	} else {
-    	        return _("Der für diese Stud.IP-Installation verantwortliche Administrator muss hier noch Inhalte einfügen.")."<br>".rootlist();
+    	        return _("Der für diese Stud.IP-Installation verantwortliche Administrator muss hier noch Inhalte einfügen.\n(:rootlist:)");
         	}
         } else {
             $sql = "SELECT content
@@ -56,6 +59,7 @@ class Siteinfo {
     }
 
     function get_detail_content_processed($id) {
+        //applying Schnellformatierungen and Siteinfo-specific markup to the content
         $content = $this->get_detail_content($id);
         $output = $this->sme->siteinfoDirectives(formatReady(language_filter($content)));
         return $output;
@@ -129,13 +133,14 @@ class Siteinfo {
     }
 
     function save($type, $input) {
+        //distinguish the subject and the action (modification/insertion)
         switch ($type) {
             case "update_detail":
                 $this->db->exec("UPDATE siteinfo_details
-                           SET rubric_id = ".$this->db->quote($input['rubric_id'],PDO::PARAM_INT).",
-                               name = ".$this->db->quote($input['detail_name']).",
-                               content = ".$this->db->quote($input['content'])."
-                           WHERE detail_id=".$this->db->quote($input['detail_id'],PDO::PARAM_INT));
+                                 SET rubric_id = ".$this->db->quote($input['rubric_id'],PDO::PARAM_INT).",
+                                     name = ".$this->db->quote($input['detail_name']).",
+                                     content = ".$this->db->quote($input['content'])."
+                                 WHERE detail_id=".$this->db->quote($input['detail_id'],PDO::PARAM_INT));
                 $rubric = $input['rubric_id'];
                 $detail = $input['detail_id'];
                 break;
@@ -183,8 +188,9 @@ class SiteinfoMarkupEngine {
     private $db;
     private $template_factory;
     private $siteinfo_directives;
+    //a copy of wiki-engine to support specialized markup in order
     //to preserve (parts?) of the old impressum.php-functionality
-    //here a modified copy of wiki-engine supports specialized markup
+    //and add new markup as needed
 
     function __construct() {
         $this->db = DBManager::get();
@@ -204,17 +210,19 @@ class SiteinfoMarkupEngine {
     }
 
     function siteinfoMarkup($pattern, $replace) {
-           $this->siteinfo_directives[] = array($pattern, $replace);
-    }
-    function siteinfoDirectives($str) {
-           if (is_array($this->siteinfo_directives)) {
-                   foreach ($this->siteinfo_directives as $direct) {
-                        $str = preg_replace($direct[0],$direct[1],$str);
-                   }
-           }
-           return $str;
+        //function to register markup for later processing
+        $this->siteinfo_directives[] = array($pattern, $replace);
     }
 
+    function siteinfoDirectives($str) {
+        //function to process registered markup
+        if (is_array($this->siteinfo_directives)) {
+            foreach ($this->siteinfo_directives as $direct) {
+                $str = preg_replace($direct[0],$direct[1],$str);
+            }
+        }
+        return $str;
+    }
 
     function version() {
         return $GLOBALS['SOFTWARE_VERSION'];
@@ -499,6 +507,8 @@ class SiteinfoMarkupEngine {
         return '<div style="'.$style.'">'.$styled.'</div>';
     }
 }
+
+//functions for language filtering; used both in page-content and detail- and rubric-names
 
 function language_filter($input) {
     return preg_replace("'\[lang=(\w*)\]\s*(.*?)\s*\[/lang\]'es",
