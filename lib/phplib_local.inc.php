@@ -483,7 +483,7 @@ class Seminar_Auth extends Auth {
 				$uid = $authplugin->getStudipUserid($authplugin->getUser());
 				$this->db->query(sprintf("select username,perms,auth_plugin from %s where user_id = '%s'",$this->database_table,$uid));
 				$this->db->next_record();
-				$this->auth["jscript"] = true; 
+				$this->auth["jscript"] = true;
 				$this->auth["perm"]  = $this->db->f("perms");
 				$this->auth["uname"] = $this->db->f("username");
 				$this->auth["auth_plugin"]  = $this->db->f("auth_plugin");
@@ -585,6 +585,7 @@ class Seminar_Auth extends Auth {
 		echo $header_template->render();
 		echo $login_template->render();
 		include 'lib/include/html_end.inc.php';
+		page_close();
 	}
 
 	function auth_validatelogin() {
