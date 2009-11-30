@@ -266,7 +266,7 @@ $termine = getAllSortedSingleDates($sem);
 							$tpl['issue_id'] = $issue_id;
 							if ($themen[$issue_id]) {
 								$thema =& $themen[$issue_id];
-								$tpl['theme_title'] = htmlReady($thema->getTitle());
+								$tpl['theme_title'] = $thema->getTitle();
 								$tpl['theme_description'] = $thema->getDescription();
 								$tpl['forumEntry'] = ($thema->hasForum()) ? SELECTED : NOT_SELECTED;
 								$tpl['fileEntry'] = ($thema->hasFile()) ? SELECTED : NOT_SELECTED;

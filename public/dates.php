@@ -263,7 +263,7 @@ if ($cmd == 'openAll') $openAll = true;
     									}
     								} else {
     									if (is_object($themen[$val])) {
-    										$tpl['additional_themes'][] = array('title' => htmlReady($themen[$val]->getTitle()), 'desc' => formatReady($themen[$val]->getDescription()));
+    										$tpl['additional_themes'][] = array('title' => $themen[$val]->getTitle(), 'desc' => formatReady($themen[$val]->getDescription()));
     									}
     								}
     							}
@@ -271,7 +271,7 @@ if ($cmd == 'openAll') $openAll = true;
     						if (is_object($themen[$issue_id])) {
     							$tpl['issue_id'] = $issue_id;
     							$thema =& $themen[$issue_id];
-    							$tpl['theme_title'] = htmlReady($thema->getTitle());
+    							$tpl['theme_title'] = $thema->getTitle();
     							$tpl['theme_description'] = formatReady($thema->getDescription());
     							$tpl['folder_id'] = $thema->getFolderID();
     							$tpl['forumEntry'] = $thema->hasForum();

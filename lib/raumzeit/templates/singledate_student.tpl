@@ -22,7 +22,7 @@
 
 	<td width="80%" nowrap class="<?=$tpl['class']?>" valign="bottom" align="left">
 		<font size="-1" color="#000000">
-			<?=mila($tpl['theme_title']);?>
+			<?=htmlReady(mila($tpl['theme_title']));?>
 		</font>
 	</td>
 
