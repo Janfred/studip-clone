@@ -40,6 +40,7 @@
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/ExternModule.class.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/views/extern_html_templates.inc.php');
 require_once('lib/classes/DataFieldEntry.class.php');
+require_once('lib/classes/Avatar.class.php');
 require_once('lib/visual.inc.php');
 require_once('lib/user_visible.inc.php');
 require_once($GLOBALS['RELATIVE_PATH_EXTERN'].'/lib/extern_functions.inc.php');
@@ -119,6 +120,9 @@ class ExternModuleTemplatePersons extends ExternModule {
 		$markers['TemplateGeneric'][] = array('###TITLEREAR###', '');
 		$markers['TemplateGeneric'][] = array('###PERSONDETAIL-HREF###', '');
 		$markers['TemplateGeneric'][] = array('###USERNAME###', '');
+		$markers['TemplateGeneric'][] = array('###IMAGE-URL-NORMAL###', _('Nutzerbild (groß)'));
+		$markers['TemplateGeneric'][] = array('###IMAGE-URL-MEDIUM###', _('Nutzerbild (mittel)'));
+		$markers['TemplateGeneric'][] = array('###IMAGE-URL-SMALL###', _('Nutzerbild (klein)'));
 		$markers['TemplateGeneric'][] = array('###PHONE###', '');
 		$markers['TemplateGeneric'][] = array('###ROOM###', '');
 		$markers['TemplateGeneric'][] = array('###EMAIL###', '');
@@ -280,6 +284,12 @@ class ExternModuleTemplatePersons extends ExternModule {
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['TITLEREAR'] = ExternModule::ExtHtmlReady($db_out->f('title_rear'));
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['PERSONDETAIL-HREF'] = $this->elements['LinkInternTemplate']->createUrl(array('link_args' => 'username=' . $db_out->f('username')));
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['USERNAME'] = $db_out->f('username');
+
+					$avatar = Avatar::getAvatar($db_out->f('user_id'));
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['IMAGE-URL-SMALL'] = $avatar->getURL(Avatar::SMALL);
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['IMAGE-URL-MEDIUM'] = $avatar->getURL(Avatar::MEDIUM);
+					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['IMAGE-URL-NORMAL'] = $avatar->getURL(Avatar::NORMAL);
+
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['PHONE'] = ExternModule::ExtHtmlReady($db_out->f('Telefon'));
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['ROOM'] = ExternModule::ExtHtmlReady($db_out->f('raum'));
 					$content['PERSONS']['GROUP'][$i]['PERSON'][$j]['EMAIL'] = $db_out->f('Email');
