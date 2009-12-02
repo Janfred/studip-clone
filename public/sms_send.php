@@ -248,18 +248,6 @@ if ($msgid) {
 	$sms_data["p_rec"] = "";
 }
 
-
-if ($rec_uname) {
-	$sms_data["p_rec"] = array($rec_uname);
-	$sms_data["sig"] = $my_messaging_settings["addsignature"];
-}
-
-if($rec_uname && !is_array($rec_uname)) {
-	if(get_userid($rec_uname) != "") $sms_data["p_rec"] = array($rec_uname);
-	unset($rec_uname);
-}
-
-
 // if send message at group (adressbook or groups in courses)
 if ($group_id) {
 
@@ -288,47 +276,55 @@ if ($group_id) {
 
 }
 // if send message at single/multiple user coming from teilnehmer.php
-if (isset($_REQUEST["subject"]) && isset($_REQUEST["rec_uname"])  && !isset($_REQUEST["filter"]) && !isset($_REQUEST["cmd"]))
+if (isset($_REQUEST['rec_uname'])  || isset($_REQUEST['filter']))
 {
-	$messagesubject = Request::quoted("subject");
-	$sms_data["tmpsavesnd"] = Request::quoted("tmpsavesnd");	
-		if (is_array($_REQUEST['rec_uname']))
-			$sms_data["p_rec"] = Request::quotedArray("rec_uname");
-		else
-			$sms_data["p_rec"] = array(Request::quoted("rec_uname"));
-	$sms_data["sig"] = $my_messaging_settings["addsignature"];
-}
+	//$sms_data für neue Nachricht vorbereiten
+	unset($sms_data['p_rec']);
+	unset($sms_data['tmp_save_snd_folder']);
+	unset($sms_data['tmpreadsnd']);
+	unset($sms_data['tmpemailsnd']);
+	$messagesubject = Request::quoted('subject');
+	$course_id = Request::option('course_id');
 
-// if send message at course
-if(isset($_REQUEST['course_id']) && isset($_REQUEST['filter'])){
-	$filter = in_array($_REQUEST['filter'], words('all prelim waiting')) ? $_REQUEST['filter'] : null;
-	$course_id = preg_match('/^[a-z0-9]{1,32}$/', $_REQUEST['course_id']) ? $_REQUEST['course_id'] : null;
-
-	if ($filter && $course_id && $perm->have_studip_perm('tutor', $course_id)) {
-
-	// be sure to send it as email
-	if($emailrequest == 1) $sms_data['tmpemailsnd'] = 1;
-
-	// predefine subject
-	if($subject) $messagesubject = $subject;
-	$db = new DB_Seminar;
-	if ($filter=="all") {
-		$db->query ("SELECT username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '".$course_id."' ORDER BY Nachname, Vorname");
-	} else if ($filter=="prelim") {
-		$db->query ("SELECT username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '".$course_id."' AND status='accepted' ORDER BY Nachname, Vorname");
-	} else if ($filter=="waiting") {
-		$db->query ("SELECT username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '".$course_id."' AND (status='awaiting' OR status='claiming') ORDER BY Nachname, Vorname");
+	if ((in_array($_REQUEST['filter'], words('all prelim waiting')) && $course_id) || ($_REQUEST['filter'] == 'send_sms_to_all' && isset($_REQUEST['who'])) && $perm->have_studip_perm('tutor', $course_id)) 
+	{
+		//Datenbank abfragen für die verschiedenen Filter
+		switch($filter)
+		{
+			case 'send_sms_to_all': 
+				$who = Request::quoted('who');
+				$db->query("SELECT b.username FROM seminar_user a, auth_user_md5 b WHERE a.Seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND a.status = '$who' ORDER BY Nachname, Vorname");
+				break;
+			case 'all':
+				$db->query("SELECT username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '".$course_id."' ORDER BY Nachname, Vorname");
+				break;
+			case 'prelim':
+				$db->query("SELECT username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '".$course_id."' AND status='accepted' ORDER BY Nachname, Vorname");
+				break;
+			case 'waiting':
+				$db->query("SELECT username FROM admission_seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE seminar_id = '".$course_id."' AND (status='awaiting' OR status='claiming') ORDER BY Nachname, Vorname");
+				break;
+		}
+		
+		//Ergebnis der Query als Empfänger setzen
+		while ($db->next_record()) 
+		{
+			$sms_data["p_rec"][] = $db->f("username");
+		}
+		
+		if($_REQUEST['emailrequest'] == 1) $sms_data['tmpemailsnd'] = 1;
 	}
-	while ($db->next_record()) {
-		$add_course_members[] = $db->f("username");
-	}
-
-	$sms_data["p_rec"] = "";
-	$sms_data["p_rec"] = array_add_value($add_course_members, $sms_data["p_rec"]);
-
+	//Nachricht wurde nur an bestimmte User versendet
+	if (is_array($_REQUEST['rec_uname']))
+		foreach (Request::quotedArray('rec_uname') as $var)
+		{
+			if(get_userid($var) != "")
+				$sms_data['p_rec'][] = $var;
+		}
+	elseif (isset($_REQUEST['rec_uname'])&& get_userid(Request::quoted('rec_uname')) != "")
+		$sms_data['p_rec'] = array(Request::quoted('rec_uname'));
 	// append signature
 	$sms_data["sig"] = $my_messaging_settings["addsignature"];
-	}
 }
 
 // if send message at inst, only for admins

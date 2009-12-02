@@ -109,8 +109,6 @@ if (isset($_REQUEST['do_send_msg_x']) && isset($_REQUEST['send_msg']) && Seminar
 		die;
 }
 
-if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
-
 	// Start  of Output
 	include ('lib/include/html_head.inc.php'); // Output of html head
 	include ('lib/include/header.php');   //hier wird der "Kopf" nachgeladen
@@ -134,27 +132,6 @@ if ($cmd != "send_sms_to_all" && $cmd != "send_sms_to_waiting") {
 		die();
 	}
 
-} else {
-	if ($cmd == "send_sms_to_all" && $who != "accepted") {
-		$db->query("SELECT b.username FROM seminar_user a, auth_user_md5 b WHERE a.Seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND a.status = '$who' ORDER BY Nachname, Vorname");
-		while ($db->next_record()) {
-			$data[] = $db->f("username");
-		}
-		page_close(NULL);
-		header('Location: '.URLHelper::getURL('sms_send.php', array('sms_source_page' => 'teilnehmer.php', 'subject' => $subject, 'tmpsavesnd' => 1, 'rec_uname' => $data )));
-		die;
-	} else if ($cmd == "send_sms_to_waiting" || $who == "accepted") {
-		if (!$who) $who = "awaiting";
-		$db->query("SELECT b.username FROM admission_seminar_user a, auth_user_md5 b WHERE a.seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND status = '$who' ORDER BY Nachname, Vorname");
-		while ($db->next_record()) {
-			$data[] = $db->f("username");
-		}
-		page_close(NULL);
-		
-		header('Location: '.URLHelper::getURL('sms_send.php', array('sms_source_page' => 'teilnehmer.php', 'subject' => $subject,  'tmpsavesnd' => 1, 'rec_uname' => $data)));
-		die;
-	}
-}
 
 
 $messaging=new messaging;
@@ -1044,7 +1021,7 @@ while (list ($key, $val) = each ($gruppe)) {
 			echo '</a>';
 		}
 
-		echo '<a href="'.URLHelper::getLink('teilnehmer.php?cmd=send_sms_to_all&who='.$key).'">';
+		echo '<a href="'.URLHelper::getLink('sms_send.php', array('filter' => 'send_sms_to_all', 'who' => $key, 'sms_source_page' => 'teilnehmer.php', 'subject' => $subject)).'">';
 		echo Assets::img('nachricht1.gif', array('title' => sprintf(_('Nachricht an alle %s schicken'), $val), 'align' => 'absmiddle'));
 		echo '</a>';
 		echo '</td>';
