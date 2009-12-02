@@ -302,7 +302,7 @@ function open_im() {
 			<?
 			// Die Anzeige der Stud.Ip-Score
 			$score = new Score(get_userid($username));
-			
+
 
 			if ($score->IsMyScore()) {
 				echo "&nbsp;<a href=\"". URLhelper::getLink("score.php") ."\" " . tooltip(_("Zur Highscoreliste")) . "><font size=\"-1\">"
@@ -331,7 +331,7 @@ function open_im() {
 
 			// Export dieses Users als Vcard
 			echo "<br><font size=\"-1\"><a href=\"". URLHelper::getLink("contact_export.php") ."\">&nbsp;"._("vCard herunterladen")."&nbsp;<img style=\"vertical-align:middle\" src=\"".$GLOBALS['ASSETS_URL']."images/vcardexport.gif\" border=\"0\" ".tooltip(_("als vCard exportieren"))."></a></font>";
-			
+
 			?>
 
 			<br>
@@ -679,8 +679,8 @@ if ($perm->get_perm($user_id) == 'dozent'){
 
 	echo $layout->render(array('title' => _('Veranstaltungen'), 'content_for_layout' => $output));
 }
-} else { 
-	echo MessageBox::error(_("Diese Homepage ist nicht verfügbar."),array(_("Der Benutzer hat sich unsichtbar geschaltet oder ist im System nicht vorhanden."))); 
+} else {
+	echo MessageBox::error(_("Diese Homepage ist nicht verfügbar."),array(_("Der Benutzer hat sich unsichtbar geschaltet oder ist im System nicht vorhanden.")));
 }
 
 # get the layout template
