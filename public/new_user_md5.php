@@ -143,6 +143,23 @@ if (check_ticket($_REQUEST['studipticket'])){
 						}
 					}
 				}
+				if( isset( $_REQUEST[ 'select_dom_id' ] ) ){
+					$validDomain = false;
+					$domain = new UserDomain( $_REQUEST[ 'select_dom_id' ] );
+					if( $perm->have_perm('root') ){
+						$validDomain = true;
+					}
+					else{
+						$validDomain = in_array($domain , UserDomain::getUserDomainsForUser( $auth->auth["uid"] ) ) ;
+					}
+					if( $validDomain ){
+						$domain->addUser( $UserManagement->user_data['auth_user_md5.user_id'] );
+						$UserManagement->msg .= "msg§" . sprintf(_("Benutzer wurde in Nutzerdomäne \"%s\" eingetragen." ) , htmlReady( $domain->getName() ) );
+					}
+					else{
+						$UserManagement->msg .= "error§" . sprintf(_("Benutzer konnte nicht in die Nutzerdomäne eingetragen werden." ) );
+					}
+				}
 				$_GET['details'] = $details = $UserManagement->user_data['auth_user_md5.username'];
 			} else {
 				$_GET['details'] = $details = '__';
@@ -473,6 +490,38 @@ if (isset($_GET['details']) || $showform ) {
 			echo "</select>";
 			if($GLOBALS['MAIL_VALIDATE_BOX'] || $_POST['disable_mail_host_check']){
 				echo chr(10).'<tr><td colspan="2">&nbsp;</td><td><input type="checkbox" id="disable_mail_host_check" name="disable_mail_host_check" value="1" '.($_POST['disable_mail_host_check'] ? 'checked' : '').'><label for="disable_mail_host_check" >'._("Mailboxüberprüfung deaktivieren").'</label></td></tr>';
+			}
+			if( $perm->have_perm('root') ){
+				$domains = UserDomain::getUserDomains();
+			}
+			else{
+				$domains = UserDomain::getUserDomainsForUser( $auth->auth["uid"] );
+			}
+			if( count( $domains ) ){
+			?>
+			<tr>
+				<td colspan="2">
+					<b>
+						&nbsp;<?=_("Nutzerdomäne:")?>
+					</b>
+				</td>
+				<td>
+					&nbsp;<select name="select_dom_id">
+					<?php
+						if( $perm->have_perm('root') ){
+							?>
+							<option value=""><?= _("-- bitte Nutzerdomäne auswählen (optional) --") ?></option>
+							<?php } 
+							foreach( $domains as $domain ){
+								?>
+								<option value="<?= $domain->getID() ?>"><?= $domain->getName() ?></option>
+							<?php
+						}
+						echo "</select>";
+					?>
+				</td>
+			</tr>
+			<?
 			}
 			?>
 			<tr><td colspan="2">&nbsp;</td><td><b><?=_("Folgende nur bei Anlage eines Admins:")?></b></td></tr>
