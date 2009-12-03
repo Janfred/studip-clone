@@ -53,7 +53,7 @@ class Autocomplete_CourseController extends Trails_Controller {
   }
 
   private static function get_param($key) {
-    return studip_utf8decode(remove_magic_quotes(@$_GET[$key]));
+    return studip_utf8decode(Request::get($key));
   }
 
   function before_filter($action, &$args) {
@@ -66,6 +66,8 @@ class Autocomplete_CourseController extends Trails_Controller {
     # user must be logged in
     $GLOBALS['auth']->login_if($_REQUEST['again']
                                && ($GLOBALS['auth']->auth['uid'] == 'nobody'));
+
+    $this->response->add_header('Content-Type', 'text/html; charset=windows-1252');
   }
 
   function after_filter($action, &$args) {

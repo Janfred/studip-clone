@@ -1,5 +1,5 @@
 <ul>
   <? foreach ($persons as $person) : ?>
-    <li><?= htmlspecialchars(studip_utf8encode(($person))) ?></li>
+    <li><?= htmlReady($person) ?></li>
   <? endforeach ?>
 </ul>
