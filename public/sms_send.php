@@ -293,7 +293,7 @@ if (isset($_REQUEST['rec_uname'])  || isset($_REQUEST['filter']))
 		{
 			case 'send_sms_to_all': 
 				$who = Request::quoted('who');
-				$db->query("SELECT b.username FROM seminar_user a, auth_user_md5 b WHERE a.Seminar_id = '".$SessSemName[1]."' AND a.user_id = b.user_id AND a.status = '$who' ORDER BY Nachname, Vorname");
+				$db->query("SELECT b.username FROM seminar_user a, auth_user_md5 b WHERE a.Seminar_id = '".$course_id."' AND a.user_id = b.user_id AND a.status = '$who' ORDER BY Nachname, Vorname");
 				break;
 			case 'all':
 				$db->query("SELECT username FROM seminar_user LEFT JOIN auth_user_md5 USING(user_id) WHERE Seminar_id = '".$course_id."' ORDER BY Nachname, Vorname");

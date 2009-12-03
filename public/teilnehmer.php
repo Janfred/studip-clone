@@ -1021,7 +1021,7 @@ while (list ($key, $val) = each ($gruppe)) {
 			echo '</a>';
 		}
 
-		echo '<a href="'.URLHelper::getLink('sms_send.php', array('filter' => 'send_sms_to_all', 'who' => $key, 'sms_source_page' => 'teilnehmer.php', 'subject' => $subject)).'">';
+		echo '<a href="'.URLHelper::getLink('sms_send.php', array('filter' => 'send_sms_to_all', 'who' => $key, 'sms_source_page' => 'teilnehmer.php', 'course_id' => $SessSemName[1], 'subject' => $subject)).'">';
 		echo Assets::img('nachricht1.gif', array('title' => sprintf(_('Nachricht an alle %s schicken'), $val), 'align' => 'absmiddle'));
 		echo '</a>';
 		echo '</td>';
