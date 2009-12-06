@@ -82,7 +82,7 @@
 				box.defaultValueActsAsHint();
 				new Ajax.Autocompleter(box,
 				                       'quicksearch_autocomplete_choices',
-				                       'dispatch.php/autocomplete/course',
+				                       STUDIP.ABSOLUTE_URI_STUDIP + 'dispatch.php/autocomplete/course',
 				                       {
 				  minChars: 3,
 				  paramName: 'value',
