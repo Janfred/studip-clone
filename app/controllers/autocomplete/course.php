@@ -28,7 +28,7 @@ class Autocomplete_CourseController extends Trails_Controller {
     }
 
     $what = self::get_param('what');
-    if (in_array($what, array('title', 'lecturer', 'number', 'comment'))) {
+    if (in_array($what, array_keys(StudipSemSearchHelper::GetQuickSearchFields()))) {
       $this->options['what'] = $what;
     }
 
