@@ -109,17 +109,20 @@ class CourseNavigation extends Navigation
 
             if ($user->id != 'nobody') {
                 $navigation->addSubNavigation('unread', new Navigation(_('neue Beiträge'), 'forum.php?view=neue&sort=age'));
-                $navigation->addSubNavigation('recent', new Navigation(_('letzte Beiträge'), 'forum.php?view=flat&sort=age'));
-                $navigation->addSubNavigation('search', new Navigation(_('Suchen'), 'forum.php?view=search&reset=1'));
             }
 
+            $navigation->addSubNavigation('recent', new Navigation(_('letzte Beiträge'), 'forum.php?view=flat&sort=age'));
+            $navigation->addSubNavigation('search', new Navigation(_('Suchen'), 'forum.php?view=search&reset=1'));
             $navigation->addSubNavigation('export', new Navigation(_('Druckansicht'), 'forum_export.php'));
 
             if ($perm->have_studip_perm('tutor', $SessSemName[1]) || $SEM_CLASS[$SEM_TYPE[$SessSemName['art_num']]['class']]['topic_create_autor']) {
                 $navigation->addSubNavigation('create_topic', new Navigation(_('neues Thema anlegen'), 'forum.php?view='.$forum['themeview'].'&neuesthema=TRUE#anker'));
             }
 
-            $navigation->addSubNavigation('settings', new Navigation(_('Forum anpassen'), 'forum.php?forumsend=anpassen'));
+            if ($user->id != 'nobody') {
+                $navigation->addSubNavigation('settings', new Navigation(_('Forum anpassen'), 'forum.php?forumsend=anpassen'));
+            }
+
             $this->addSubNavigation('forum', $navigation);
         }
 
