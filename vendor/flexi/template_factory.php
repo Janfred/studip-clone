@@ -36,10 +36,9 @@ class Flexi_TemplateFactory {
   /**
    * include path for templates
    *
-   * @access private
    * @var string
    */
-  var $path;
+  protected $path;
 
 
   /**
@@ -49,7 +48,7 @@ class Flexi_TemplateFactory {
    *
    * @return void
    */
-  function Flexi_TemplateFactory($path) {
+  function __construct($path) {
     $this->set_path($path);
   }
 
@@ -85,66 +84,169 @@ class Flexi_TemplateFactory {
 
 
   /**
-   * Open a template of the given name using the factory method pattern. This
-   * method returns it's parameter, if it is not a string. This functionality is
-   * useful for helper methods like #render_partial
+   * Open a template of the given name using the factory method pattern.
+   * If a string was given, the path of the factory is searched for a matching
+   * template.
+   * If this string starts with a slash or with /\w+:\/\//, the string is
+   * interpreted as an absolute path. Otherwise the path of the factory will be
+   * prepended.
+   * After that the factory searches for a file extension in this string. If
+   * there is none, the directory where the template is supposed to live is
+   * searched for a file starting with the template string and a supported
+   * file extension.
+   * At last the factory instantiates a template object of the matching template
+   * class.
+   *
+   * Examples:
+   *
+   *   $factory->open('/path/to/template')
+   *     does not prepend the factory's path but searches for "template.*" in
+   *     "/path/to"
+   *
+   *   $factory->open('template')
+   *     prepends the factory's path and searches there for "template.*"
+   *
+   *  $factory->open('template.php')
+   *     prepends the factory's path but does not search and instantiates a
+   *     PHPTemplate instead
+   *
+   * This method returns it's parameter, if it is not a string. This
+   * functionality is useful for helper methods like #render_partial
+   *
+   * @throws Flexi_TemplateNotFoundException
+   * @throws Flexi_TemplateClassNotFoundException
    *
    * @param string A name of a template.
    *
    * @return mixed the factored object
    */
-  function &open($template0) {
+  function open($template) {
 
-    if (!is_string($template0)) {
-      return $template0;
+    # if it is not a string, this method behaves like identity
+    if (!is_string($template)) {
+      return $template;
     }
 
-    # if it starts with a slash, it's an absolute path
-    $template = $template0[0] != '/'
-                ? $this->get_path() . $template0
-                : $template0;
+    # get file
+    $file = $this->get_template_file($template);
+    if ($file === NULL) {
+      throw new Flexi_TemplateNotFoundException(
+          sprintf('Could not find template: "%s".', $template));
+    }
 
-    $matches = array();
-    $matched = ereg('\.([^/.]+)$', $template, $matches);
+    # retrieve class
+    $class = $this->get_template_class($file);
+    if ($class === NULL) {
+        throw new Flexi_TemplateClassNotFoundException(
+          sprintf('Could not find class of "%s"', $template));
+    }
+
+    return new $class($file, $this);
+  }
+
+
+  /**
+   * This method returns the absolute filename of the template
+   *
+   * @param  string     a template string
+   *
+   * @return mixed      an absolute filename or NULL if the template could not
+   *                    be found
+   */
+  function get_template_file($template) {
+
+    $template = $this->get_absolute_path($template);
 
     # no extension defined, find it
-    if ($matched === FALSE) {
+    if ($this->get_extension($template) === NULL) {
+      return $this->find_template($template);
+    }
 
-      # find templates matching pattern
-      $files = glob($template . '.*');
+    return file_exists($template) ? $template : NULL;
+  }
 
-      # no such template
-      if (0 == sizeof($files)) {
-        trigger_error(sprintf('Could not find template: "%s" (searching "%s").',
-                              $template0, $this->get_path()),
-                      E_USER_WARNING);
-        $null = NULL;
-        return $null;
+
+  /**
+   * Matches an extension to a template class.
+   *
+   * @param  string     the template
+   *
+   * @return string     a string containing the class name of a matched
+   *                    extension or NULL if the extension did not match
+   */
+  function get_template_class($template) {
+
+    $classes = array(
+      'php' => 'Flexi_PhpTemplate',
+      'pjs' => 'Flexi_JsTemplate'
+    );
+
+    $extension = $this->get_extension($template);
+    return isset($classes[$extension]) ? $classes[$extension] : NULL;
+  }
+
+
+  /**
+   * Returns the absolute path to the template. If the given argument starts
+   * with a slash or with a protocoll, this method just returns its arguments.
+   *
+   * @param  string     an incomplete template name
+   *
+   * @return string     an absolute path to the incomplete template name
+   */
+  function get_absolute_path($template) {
+    return preg_match('#^(/|\w+://)#', $template)
+           ? $template
+           : $this->get_path() . $template;
+  }
+
+
+  /**
+   * Find template given w/o extension.
+   *
+   * @param  string     the template's filename w/o extension
+   *
+   * @return mixed      NULL if there no such file could be found, a string
+   *                    containing the complete file name otherwise
+   */
+  function find_template($template) {
+
+    $file = basename($template);
+    $dir = substr($template, 0, strlen($template) - strlen($file) - 1);
+    $file .= '.';
+    $len = strlen($file);
+
+    if (!is_dir($dir)) {
+      return NULL;
+    }
+
+    $handle = opendir($dir);
+    if (!$handle) {
+      return NULL;
+    }
+
+    while(($name = readdir($handle)) !== FALSE) {
+      if (!strncmp($name, $file, $len)) {
+        return $dir . '/' . $name;
       }
-
-      $template = current($files);
-      ereg('\.([^/.]+)$', $template, $matches);
     }
+    closedir($handle);
+    return NULL;
+  }
 
-    switch ($matches[1]) {
 
-      case 'php':
-        $class = 'Flexi_PhpTemplate'; break;
-
-      case 'pjs':
-        $class = 'Flexi_JsTemplate'; break;
-
-      default:
-        trigger_error(sprintf('Could not find class of "%s": "%s".',
-                              $template, $matches[1]),
-                      E_USER_ERROR);
-        $null = NULL;
-        return $null;
-    }
-
-    $template = new $class($template, $this);
-
-    return $template;
+  /**
+   * Returns the file extension if there is one.
+   *
+   * @param  string     an possibly incomplete template file name
+   *
+   * @return mixed      a string containing the file extension if there is one,
+   *                    NULL otherwise
+   */
+  function get_extension($file) {
+    $matches = array();
+    $matched = ereg('\.([^/.]+)$', $file, $matches);
+    return $matched ? $matches[1] : NULL;
   }
 
 
@@ -160,7 +262,6 @@ class Flexi_TemplateFactory {
    * @return string A string representing the rendered presentation.
    */
   function render($name, $attributes = null, $layout = null) {
-    $template = $this->open($name);
-    return $template->render($attributes, $layout);
+    return $this->open($name)->render($attributes, $layout);
   }
 }

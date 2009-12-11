@@ -701,7 +701,7 @@ class Flexi_JavascriptGenerator {
   /**
    * Executes the given javascript after a delay of 'seconds'.
    *
-   * @todo
+   * # TODO (mlunzena) this function has side effects and has to be explained or deleted
    *
    * @param type <description>
    *
@@ -749,11 +749,7 @@ class Flexi_JavascriptGenerator {
    * @ignore
    */
   function javascript_object_for($object) {
-    static $json;
-    if (is_null($json)) {
-      $json = new Services_JSON();
-    }
-    return $json->encode($object);
+    return json_encode($object);
   }
 
   /**

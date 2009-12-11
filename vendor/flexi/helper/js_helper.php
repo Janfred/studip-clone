@@ -85,8 +85,16 @@ class JsHelper {
    * @return type <description>
    */
   function escape_javascript($javascript = '') {
-    $javascript = preg_replace('/\r\n|\n|\r/', "\\n", $javascript);
-    $javascript = preg_replace('/(["\'])/', '\\\\\1', $javascript);
+    $pattern = array();    $replace = array();
+    $pattern[] = '/\\\\/'; $replace[] = '\\\\\\';
+    $pattern[] = '/<\//';  $replace[] = '<\\/';
+    $pattern[] = "/\r\n/"; $replace[] = '\n';
+    $pattern[] = "/\n/";   $replace[] = '\n';
+    $pattern[] = "/\r/";   $replace[] = '\n';
+    $pattern[] = '/"/';    $replace[] = '\\"';
+    $pattern[] = "/'/";    $replace[] = "\\'";
+
+    $javascript = preg_replace($pattern, $replace, $javascript);
     return $javascript;
   }
 
@@ -123,15 +131,5 @@ class JsHelper {
     sort($opts);
 
     return '{'.join(', ', $opts).'}';
-  }
-
-  /**
-   * @ignore
-   */
-  function array_or_string_for_javascript($option) {
-    if (is_array($option))
-      return "['".join("','", $option)."']";
-    else if ($option)
-      return "'$option'";
   }
 }
