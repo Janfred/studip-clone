@@ -141,7 +141,7 @@ $mail_transporter = new $mail_transporter_class;
 if($mail_transporter_name == 'smtp_message'){
 	include 'vendor/email_message/smtp.php';
 	$mail_transporter->localhost = ($GLOBALS['MAIL_LOCALHOST'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_LOCALHOST'];
-	$mail_transporter->smtp_host_name = ($GLOBALS['MAIL_HOST_NAME'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_HOST_NAME'];
+	$mail_transporter->smtp_host = ($GLOBALS['MAIL_HOST_NAME'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_HOST_NAME'];
 }
 $mail_transporter->default_charset = 'WINDOWS-1252';
 $mail_transporter->SetBulkMail((int)$GLOBALS['MAIL_BULK_DELIVERY']);
