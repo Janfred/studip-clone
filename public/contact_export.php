@@ -160,13 +160,14 @@ function printSiteTitle(){
  * @param   array $semestersAR	the array with the semesters to select
  *
  */
-function printSelectGroup($infobox, $groups){
+function printSelectGroup($infobox, $groups)
+{
 	$html = "<table border=\"0\" class=\"blank\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n"
 		. " <tr valign=\"top\">\n"
-		. "  <td width=\"99%\" NOWRAP class=\"blank\">&nbsp;\n"
-		. "   <table align=\"center\" width=\"99%\" class=\"blank\" border=\"0\" cellpadding=\"0\" cellspacing=0>\n"
+		. "  <td class=\"blank\" valign=\"top\">\n"
+		. "  <table width=\"100%\" class=\"blank\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\">\n"
 		. "	 <tr>"
-		. "	  <td align=\"left\" valign=\"top\"><font size=\"-1\">\n"
+		. "	  <td valign=\"top\"><font size=\"-1\">\n"
 		. _("Bitte wählen sie ein Gruppe aus, deren Daten sie in eine vCard-Datei exportieren möchten:")."\n"
 		. "	   <form action=\"$PHP_SELF\" method=post>\n"
 		. "       &nbsp;<select name=\"groupid\" style=\"vertical-align:middle;\">\n";
@@ -178,7 +179,7 @@ function printSelectGroup($infobox, $groups){
 		. createButton("export",_("Diese Gruppe nun exportieren"),"export_vcard")
 		. "      </form>\n"
 		. "	  </font></td>\n"
-		. "	  <td align=\"right\" width=\"250\" valign=\"top\">\n";
+		. "	  <td align=\"right\" width=\"270\" valign=\"top\">\n";
 	echo $html;
 	print_infobox($infobox,"export.jpg");
 	$html = "	  </td>\n"
