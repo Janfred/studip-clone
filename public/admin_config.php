@@ -177,10 +177,10 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 					$out[] = '<tr><td><b><font size="-1">&nbsp;'.$key.'</font></b></td>';
 					$out[] = '<td width="3%" class="steelgraulight" nowrap valign="top">';
 					if ($_REQUEST["edit_config"] == $key) {
-						$out[].= '<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/GruenerHakenButton.png" border=0>';
+						$out[].= '<input type="IMAGE" src="'.$GLOBALS['ASSETS_URL'].'images/GruenerHakenButton.png">';
 					} else {
 						$out[].= '<a href="'.$PHP_SELF.'?edit_config='.$key.'#anker">';
-						$out[].= '&nbsp;<img src="'.$GLOBALS['ASSETS_URL'].'images/edit_transparent.gif" border=0>';
+						$out[].= '&nbsp;<img src="'.$GLOBALS['ASSETS_URL'].'images/edit_transparent.gif">';
 					}
 					$out[] = '<td width="20%" class="steelgraulight" align="center"><font size="-1">';
 					if ($_REQUEST["edit_config"] == $key || isset($_REQUEST['change_config'][$key])) $out[] = '<a name="anker"> </a>';
@@ -191,12 +191,12 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 							$out[].= '<option value="FALSE" '.((!$val["value"]) ? "selected" : "").'>FALSE</option>';
 							$out[].= '</select>';
 						} elseif ($val["type"] == "integer") {
-							$out[].= '<input type="TEXT" style="font-size: 8pt" maxlength=20 size=20 name="change_config['.$key.']" value="'.$val["value"].'">';
+							$out[].= '<input type="TEXT" style="font-size: 8pt" maxlength=20 size=20 name="change_config['.$key.']" value="'.htmlReady($val["value"]).'">';
 						} else {
-							$out[].= '<textarea style="font-size: 8pt;width:100%;" wrap="virtual" rows="4" name="change_config['.$key.']">'.$val["value"].'</textarea>';
+							$out[].= '<textarea style="font-size: 8pt;width:100%;" wrap="virtual" rows="4" name="change_config['.$key.']">'.htmlReady($val["value"]).'</textarea>';
 						}
 						$out[].= '<br><font size="-1">'. _("Kommentar:") .'</font><br>';
-						$out[].= '<textarea style="font-size: 8pt;width:100%;" wrap="virtual" rows="4" name="change_comment['.$key.']">'.$val["comment"].'</textarea>';
+						$out[].= '<textarea style="font-size: 8pt;width:100%;" wrap="virtual" rows="4" name="change_comment['.$key.']">'.htmlReady($val["comment"]).'</textarea>';
 					} elseif ($val["type"] == "boolean") {
 						if ($val["value"]) {
 							$out[].= '<img src="'.$GLOBALS['ASSETS_URL'].'images/haken_transparent.gif">';
@@ -204,12 +204,12 @@ include ('lib/include/header.php');   // Output of Stud.IP head
 							$out[].= '<img src="'.$GLOBALS['ASSETS_URL'].'images/x_transparent.gif">';
 						}
 					} else {
-						$out[].= '<i>'.$val["value"].'</i>';
+						$out[].= '<i>'.htmlReady($val["value"]).'</i>';
 					}
 
 					$out[].= '</font></td>';
 					$out[] = '<td width="10%"><font size="-1">&nbsp;'.$val["type"].'</font></td>';
-					$out[] = '<td width="30%" class="steelgraulight"><font size="-1">&nbsp;'.($val["description"] ? $val["description"] : _("Keine Beschreibung vorhanden")).'</font></td>';
+					$out[] = '<td width="30%" class="steelgraulight"><font size="-1">&nbsp;'.($val["description"] ? htmlReady($val["description"]) : _("Keine Beschreibung vorhanden")).'</font></td>';
 					$out[] = '</tr>';
 					$out[] = '</table></td></tr>';
 				}
