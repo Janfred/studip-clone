@@ -188,19 +188,11 @@ class AdminModules extends ModulesNotification {
 	}
 
 	function getModuleIlias_ConnectExistingItems($range_id) {
-		$query = sprintf ("SELECT COUNT(seminar_id) as items FROM seminar_lernmodul WHERE seminar_id = '%s' ", $range_id);
-
-		$this->db->query($query);
-		$this->db->next_record();
-		
-		return $this->db->f("items");
+		return 0;
 	}
 
 	function moduleIlias_ConnectDeactivate($range_id) {
-		$db = new DB_Seminar;
-
-		$query = sprintf ("DELETE FROM seminar_lernmodul WHERE seminar_id='%s'", $range_id);
-		$db->query($query);
+		return false;
 	}
 	
 	function getModuleWikiExistingItems($range_id) {
