@@ -230,12 +230,12 @@ function PrintAktualContacts ($range_id)
 	// Entfernen von Statusgruppen
 
 	if ($cmd=="verify_remove_statusgruppe") {
-		$msg = sprintf(_('Möchten Sie wirklich die Kategorie **%s** löschen?'), $name); 
-		echo createQuestion($msg, array('cmd' => 'remove_statusgruppe', "statusgruppe_id" => $statusgruppe_id, 'range_id' => $range_id)); 
+		$msg = sprintf(_('Möchten Sie wirklich die Kategorie **%s** löschen?'), $name);
+		echo createQuestion($msg, array('cmd' => 'remove_statusgruppe', "statusgruppe_id" => $statusgruppe_id, 'range_id' => $range_id));
 	}
 
     if ($cmd=="remove_statusgruppe") {
-		
+
 		DeleteStatusgruppe ($statusgruppe_id);
 	}
 	// Aendern der Position
@@ -364,22 +364,25 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 } else { // es sind noch keine Gruppen angelegt, daher Infotext
 ?>
 <table class="blank" width="100%" border="0" cellspacing="0">
+    <tr><td>
     <?
 
-	if (get_config("EXTERNAL_HELP")) {
+	if (get_config("EXTERNAL_HELP"))
+	{
 		$help_url=format_help_url("Basis.VeranstaltungenVerwaltenGruppen");
 	} else {
 		$help_url="help/index.php?help_page=admin_statusgruppe.php";
 	}
-  	parse_msg("info§"
-		. _("Es sind noch keine Gruppen oder Funktionen angelegt worden.") . "<br>"
-		. _("Um f&uuml;r diesen Bereich Gruppen oder Funktionen anzulegen, nutzen Sie bitte die obere Zeile!")
-  	. "<br><br>"
-		. _("Wenn Sie Gruppen angelegt haben, k&ouml;nnen Sie diesen Personen zuordnen. Jeder Gruppe k&ouml;nnen beliebig viele Personen zugeordnet werden. Jede Person kann beliebig vielen Gruppen zugeordnet werden.")
-  	. "<br><br>"
-		. sprintf(_("Lesen Sie weitere Bedienungshinweise in der %sHilfe%s nach!"),"<a href=\"".$help_url."\">", "</a>")
-  	. "§");
-    ?>
+ 	$zusatz = array(
+ 	    _("Um f&uuml;r diesen Bereich Gruppen oder Funktionen anzulegen, nutzen Sie bitte die obere Zeile!"),
+        _("Wenn Sie Gruppen angelegt haben, k&ouml;nnen Sie diesen Personen zuordnen. Jeder Gruppe k&ouml;nnen beliebig viele Personen zugeordnet werden. Jede Person kann beliebig vielen Gruppen zugeordnet werden."),
+        sprintf(_("Lesen Sie weitere Bedienungshinweise in der %sHilfe%s nach!"),"<a href=\"".$help_url."\">", "</a>")
+    );
+
+	echo Messagebox::info(_("Es sind noch keine Gruppen oder Funktionen angelegt worden."), $zusatz);
+
+	?>
+	</td></tr>
 </table>
 <?php
 }
@@ -387,4 +390,4 @@ if ($db->num_rows()>0) {   // haben wir schon Gruppen? dann Anzeige
 
 	include ('lib/include/html_end.inc.php');
 	page_close();
-?> 
+?>
