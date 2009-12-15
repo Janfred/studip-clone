@@ -61,10 +61,8 @@ class ModulesNotification extends Modules {
 				"participants" => array('mes' => FALSE, 'name' => _("TeilnehmerInnen")),
 				"personal" => array('mes' => FALSE, 'name' => _("Personal")),
 				"literature" => array('mes' => TRUE, 'name' => _("Literatur")),
-				"ilias_connect" => array('mes' => TRUE, 'name' => _("Lernmodule")),
 				"chat" => array('mes' => FALSE, 'name' => _("Chat")),
 				"wiki" => array('mes' => TRUE, 'name' => _("Wiki-Web")),
-				"support" => array('mes' => FALSE, 'name' => _("SupportDB")),
 				"scm" => array('mes' => TRUE, 'name' => _("Freie Informationsseite")),
 				"elearning_interface" => array('mes' => TRUE, 'name' => _("Lernmodule")));
 		$this->registered_modules = array_merge_recursive($this->registered_modules,

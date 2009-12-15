@@ -92,7 +92,6 @@ function print_module_icons ($m_enabled) {
 				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-lit.gif';
 				break;
 			case 'elearning_interface' :
-			case 'ilias_connect' :
 				$m_icon = $GLOBALS['ASSETS_URL'].'images/icon-lern.gif';
 				break;
 			case 'wiki' :

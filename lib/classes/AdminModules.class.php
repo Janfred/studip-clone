@@ -82,16 +82,8 @@ class AdminModules extends ModulesNotification {
 		$this->registered_modules["literature"]["msg_activate"] = _("Die Literaturverwaltung kann jederzeit aktiviert werden.");
 		$this->registered_modules["literature"]["msg_deactivate"] = _("Die Literaturverwaltung kann jederzeit deaktiviert werden.");
 
-		$this->registered_modules["ilias_connect"]["msg_warning"] = _("Wollen Sie wirklich die Anbindung an ILIAS-Lernmodule deaktivieren und damit alle bestehenden Verkn&uuml;pfungen mit Lernmodulen l&ouml;schen?");
-		$this->registered_modules["ilias_connect"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren der Anbindung an ILIAS-Lernmodule werden <b>%s</b> Verkn&uuml;pfungen mit Lernmodulen aufgel&ouml;st!");
-		$this->registered_modules["ilias_connect"]["msg_activate"] = _("Die Anbindung zu Ilias Lernmodulen  kann jederzeit aktiviert werden.");
-		$this->registered_modules["ilias_connect"]["msg_deactivate"] = _("Die Anbindung zu Ilias Lernmodulen kann jederzeit deaktiviert werden.");
-
 		$this->registered_modules["chat"]["msg_activate"] = _("Der Chat kann jederzeit aktiviert werden.");
 		$this->registered_modules["chat"]["msg_deactivate"] = _("Der Chat kann jederzeit deaktiviert werden.");
-
-		$this->registered_modules["support"]["msg_activate"] = _("Die SupportDB kann jederzeit aktiviert werden.");
-		$this->registered_modules["support"]["msg_deactivate"] = _("Die SupportDB kann jederzeit deaktiviert werden.");
 
 		$this->registered_modules["wiki"]["msg_warning"] = _("Wollen Sie wirklich das Wiki deaktivieren und damit alle Seitenversionen l&ouml;schen?");
 		$this->registered_modules["wiki"]["msg_pre_warning"] = _("Achtung: Beim Deaktivieren des Wiki-Webs werden <b>%s</b> Seitenversionen ebenfalls gel&ouml;scht!");
@@ -187,14 +179,6 @@ class AdminModules extends ModulesNotification {
 		return StudipLitList:: DeleteListsByRange($range_id);
 	}
 
-	function getModuleIlias_ConnectExistingItems($range_id) {
-		return 0;
-	}
-
-	function moduleIlias_ConnectDeactivate($range_id) {
-		return false;
-	}
-	
 	function getModuleWikiExistingItems($range_id) {
 		$query = sprintf ("SELECT COUNT(keyword) as items FROM wiki WHERE range_id = '%s' ", $range_id);
 
@@ -247,10 +231,6 @@ class AdminModules extends ModulesNotification {
 			ELearningUtils::loadClass($system);
 			$connected_cms[$system]->deleteConnectedModules($range_id);
 		}
-	}
-	
-	function moduleImpuls_ECDeactivate($range_id) {
-		return 0;
 	}
 	
 	function moduledocuments_folder_permissionsDeactivate($range_id){
