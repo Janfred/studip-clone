@@ -16,7 +16,7 @@ class ContentElementController extends Trails_Controller {
     require_once 'lib/seminar_open.php';
 	list($type, $id) = $args;
 	$content_class = 'StudipContentElement' . $type;
-	if(class_exists($content_class)){
+	if($type && class_exists($content_class)){
 		$this->element = new $content_class($id);
 		if(!$this->element->isAccessible($GLOBALS['user']->id)){
 			$this->set_status(401);
