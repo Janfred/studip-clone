@@ -91,7 +91,7 @@ class ShowToolsRequests {
 		$this->restoreOpenRequests();
 		return (int)$this->requests_stats_open['sum'];
 	}
-	
+
 	function restoreOpenRequests(){
 		if (is_null($this->requests)){
 			$this->requests = (array)getMyRoomRequests($GLOBALS['user']->id, $this->semester_id, true);
@@ -103,7 +103,7 @@ class ShowToolsRequests {
 			}
 		}
 	}
-	
+
 	function getMyRequestedRooms(){
 		$db = DBManager::get();
 		$ret = array();
@@ -115,12 +115,12 @@ class ShowToolsRequests {
 							USING ( resource_id )
 							WHERE rr.request_id
 							IN (
-							" . join(',', array_map(array($db, 'quote'), array_keys($res_requests))) . " 
+							" . join(',', array_map(array($db, 'quote'), array_keys($res_requests))) . "
 							) GROUP BY ro.resource_id ORDER BY ro.name")->fetchAll(PDO::FETCH_ASSOC);
 		}
 		return $ret;
 	}
-	
+
 	function selectSemInstituteNames($inst_id) {
 		$query = sprintf("SELECT a.Name AS inst_name, b.Name AS fak_name FROM Institute a LEFT JOIN Institute b ON (a.fakultaets_id = b.Institut_id) WHERE a.Institut_id = '%s' ", $inst_id);
 		$this->db->query($query);
@@ -160,7 +160,7 @@ class ShowToolsRequests {
 				<tr>
 				<td>
 				<?=SemesterData::GetSemesterSelector(array('name' => 'tools_requests_sem_choose', 'onChange' => 'document.tools_requests_form.submit()'), $this->semester_id, 'semester_id',false)?>
-				<?=makeButton("auswaehlen",'input',_("Semester auswählen"),'tools_requests_sem_choose_button')?>
+				<?=makeButton("auswaehlen",'input',_("Semester auswï¿½hlen"),'tools_requests_sem_choose_button')?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" style="padding-left:10px">
 				<b><?=_("Status:")?></b>
@@ -186,7 +186,7 @@ class ShowToolsRequests {
 					<input onChange="document.tools_requests_form.submit()" name="resolve_requests_no_time" id="resolve_requests_no_time_check" type="checkbox" <?=(!$this->show_requests_no_time ? 'checked' : '')?> value="1">
 					&nbsp;<label for="resolve_requests_no_time_check"><?=_("Anfragen ohne eingetragene Zeiten oder auf vergangene Termine ausblenden")?></label>
 				</td>
-				</tr>	
+				</tr>
 				</table>
 				</td>
 			</tr>
@@ -216,7 +216,7 @@ class ShowToolsRequests {
 									echo '<option value="'.$one['resource_id'].'">'.htmlready($one['name'] . ($one['anzahl'] ? ' (' . $one['anzahl']. ')' : '')).'</option>';
 								}
 								print "</select></span>";
-								
+
 								?>
 								</font>
 							</td>
@@ -235,7 +235,7 @@ class ShowToolsRequests {
 								</font>
 							</td>
 						</tr>
-						
+
 					</table>
 				</td>
 			</tr>
@@ -288,7 +288,7 @@ class ShowToolsRequests {
 				<a href="#" onClick="auswahl_umkehr();return false;">'
 				. makeButton('auswahlumkehr', 'img', _("Auswahl umkehren"))
 				. '</a>&nbsp;&nbsp;'
-				. makeButton('loeschen', 'input', _("Ausgewählte Anfragen löschen"), 'do_delete_requests')
+				. makeButton('loeschen', 'input', _("Ausgewï¿½hlte Anfragen lï¿½schen"), 'do_delete_requests')
 				. '&nbsp;</div><br>';
 		}
 		$i = 0;
@@ -381,22 +381,24 @@ class ShowToolsRequests {
 					</a>
 					<font size="-1">
 						<br />
-						<?
-						$this->selectSemInstituteNames($semObj->getInstitutId());
+                        <?
+                        $this->selectSemInstituteNames($semObj->getInstitutId());
 
-						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Art der Anfrage:")." ".(($reqObj->getTerminId()) ? _("Einzeltermin einer Veranstaltung") : _("alle Termine einer Veranstaltung"))."<br />";
-						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Erstellt von:")." <a href=\"about.php?username=".get_username($reqObj->getUserId())."\">".htmlReady(get_fullname($reqObj->getUserId(), 'full', true))."</a><br />";
-						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Lehrende: ");
-						foreach ($semObj->getMembers('dozent') as $doz) {
-						if ($k) echo ", ";
-						echo "<a href=\"about.php?username={$doz['username']}\">".HtmlReady($doz['fullname'])."</a>";
-						$k = true;
-						}
-					    	print "<br/>";
-						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Einrichtung:")." ".htmlReady($this->db->f("inst_name"))."<br />";
-						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Fakult&auml;t:")." ".htmlReady($this->db->f("fak_name"))."<br />";
-						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("aktuelle Teilnehmerzahl:")." ".$semObj->getNumberOfParticipants('total').'<br />';
-						?>
+                        print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Art der Anfrage:")." ".(($reqObj->getTerminId()) ? _("Einzeltermin einer Veranstaltung") : _("alle Termine einer Veranstaltung"))."<br />";
+                        print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Erstellt von:")." <a href=\"about.php?username=".get_username($reqObj->getUserId())."\">".htmlReady(get_fullname($reqObj->getUserId(), 'full', true))."</a><br />";
+                        print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Lehrende: ");
+                        foreach ($semObj->getMembers('dozent') as $doz) {
+                            if ($dozent){
+                                echo ", ";
+                            }
+                            echo '<a href ="'. URLHelper::getLink('about.php?username='.$doz['username']). '">'.HtmlReady($doz['fullname'])."</a>";
+                            $dozent = true;
+                        }
+                        print "<br/>";
+                        print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Einrichtung:")." ".htmlReady($this->db->f("inst_name"))."<br />";
+                        print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Fakult&auml;t:")." ".htmlReady($this->db->f("fak_name"))."<br />";
+                        print "&nbsp;&nbsp;&nbsp;&nbsp;"._("aktuelle Teilnehmerzahl:")." ".$semObj->getNumberOfParticipants('total').'<br />';
+                        ?>
 					</font>
 				</td>
 			</tr>
@@ -490,7 +492,7 @@ class ShowToolsRequests {
 							<?
 							if ($request_resource_id = $reqObj->getResourceId()) {
 								$resObj =& ResourceObject::Factory($request_resource_id);
-								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewï¿½hlte Raum bietet folgende der wï¿½nschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							} else
 								print _("Es wurde kein Raum angefordert.");
@@ -565,7 +567,7 @@ class ShowToolsRequests {
 							?>
 						<tr>
 							<td style="border-top:1px solid;" width="100%" colspan="<?=$cols+2?>">
-								<font size="-1"><b><?=_("Raumgruppe berücksichtigen:")?></b></font>
+								<font size="-1"><b><?=_("Raumgruppe berï¿½cksichtigen:")?></b></font>
 							</td>
 						</tr>
 						<tr>
@@ -596,7 +598,7 @@ class ShowToolsRequests {
 							<td width="70%"><font size="-1">
 								<?
 								$resObj = ResourceObject::Factory($key);
-								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewï¿½hlte Raum bietet folgende der wï¿½nschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							?>
 							</td>
@@ -687,7 +689,7 @@ class ShowToolsRequests {
 							<td width="70%"><font size="-1">
 								<?
 								$resObj =& ResourceObject::Factory($key);
-								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewï¿½hlte Raum bietet folgende der wï¿½nschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							?>
 							</td>
@@ -764,7 +766,7 @@ class ShowToolsRequests {
 									<input type="TEXT" name="search_rooms_limit_high" maxlength="2" size="1" style="font-size:8pt" value="<?=$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"]?>">
 									<a href="<?=$PHP_SELF?>?inc_limit_high=1"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/+.gif" border="0" <?=tooltip(_("+10"))?>/></a>
 
-									<input type="IMAGE" name="matching_rooms_limit_submit" src="<?= $GLOBALS['ASSETS_URL'] ?>images/move_right.gif" border="0" <?=tooltip(_("ausgewählten Bereich anzeigen"))?>/>
+									<input type="IMAGE" name="matching_rooms_limit_submit" src="<?= $GLOBALS['ASSETS_URL'] ?>images/move_right.gif" border="0" <?=tooltip(_("ausgewï¿½hlten Bereich anzeigen"))?>/>
 								</font>
 							</td>
 						</tr>
@@ -787,7 +789,7 @@ class ShowToolsRequests {
 							<td width="70%"><font size="-1">
 								<?
 								$resObj =& ResourceObject::Factory($key);
-								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewï¿½hlte Raum bietet folgende der wï¿½nschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							?>
 							</td>
@@ -985,15 +987,15 @@ class ShowToolsRequests {
 			if ($overlap_events_count >= round($events_count * ($GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE'] / 100))) {
 				if ($overlap_events_count == 1)
 					if ($lock_desc)
-						$desc.=sprintf(_("Es besteht eine Belegungssperre zur gewünschten Belegungszeit.")."\n".$lock_desc);
+						$desc.=sprintf(_("Es besteht eine Belegungssperre zur gewï¿½nschten Belegungszeit.")."\n".$lock_desc);
 					else
-						$desc.=sprintf(_("Es existieren Überschneidungen zur gewünschten Belegungszeit.")."\n");
+						$desc.=sprintf(_("Es existieren ï¿½berschneidungen zur gewï¿½nschten Belegungszeit.")."\n");
 				else
-					$desc.=sprintf(_("Es existieren Überschneidungen oder Belegungssperren zu mehr als %s%% aller gewünschten Belegungszeiten.")."\n".$lock_desc, $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
+					$desc.=sprintf(_("Es existieren ï¿½berschneidungen oder Belegungssperren zu mehr als %s%% aller gewï¿½nschten Belegungszeiten.")."\n".$lock_desc, $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
 				$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" ".tooltip($desc, TRUE, TRUE)." />";
 				$status = 2;
 			} else {
-				$desc.=sprintf(_("Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
+				$desc.=sprintf(_("Einige der gewï¿½nschten Belegungszeiten ï¿½berschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
 				foreach ($group_dates as $key=>$val) {
 					if ($overlaps[$key])
 						foreach ($overlaps[$key] as $key2=>$val2)
@@ -1006,7 +1008,7 @@ class ShowToolsRequests {
 				$status = 1;
 			}
 		} else {
-			$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" ".tooltip(_("Es existieren keine Überschneidungen"), TRUE, TRUE)."/>";
+			$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" ".tooltip(_("Es existieren keine ï¿½berschneidungen"), TRUE, TRUE)."/>";
 			$status = 0;
 		}
 		return array("html"=>$html, "status"=>$status);
@@ -1025,15 +1027,15 @@ class ShowToolsRequests {
 			if ($overlap_events_count >= round($events_count * ($GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE'] / 100))) {
 				if ($overlap_events_count == 1)
 					if ($overlaps[0]["lock"])
-						$desc.=sprintf(_("Es besteht eine Belegungssperre zur gewünschten Belegungszeit.")."\n".$lock_desc);
+						$desc.=sprintf(_("Es besteht eine Belegungssperre zur gewï¿½nschten Belegungszeit.")."\n".$lock_desc);
 					else
-						$desc.=sprintf(_("Es existieren Überschneidungen zur gewünschten Belegungszeit.")."\n");
+						$desc.=sprintf(_("Es existieren ï¿½berschneidungen zur gewï¿½nschten Belegungszeit.")."\n");
 				else
-					$desc.=sprintf(_("Es existieren Überschneidungen oder Belegungssperren zu mehr als %s%% aller gewünschten Belegungszeiten.")."\n".$lock_desc, $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
+					$desc.=sprintf(_("Es existieren ï¿½berschneidungen oder Belegungssperren zu mehr als %s%% aller gewï¿½nschten Belegungszeiten.")."\n".$lock_desc, $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
 				$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" ".tooltip($desc, TRUE, TRUE)." />";
 				$status = 2;
 			} else {
-				$desc.=sprintf(_("Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
+				$desc.=sprintf(_("Einige der gewï¿½nschten Belegungszeiten ï¿½berschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
 				foreach ($overlaps as $val) {
 					if ($val["lock"])
 						$desc.=sprintf(_("%s, %s Uhr bis %s, %s Uhr (Sperrzeit)")."\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("d.m.Y", $val["end"]), date("H:i", $val["end"]));
@@ -1044,7 +1046,7 @@ class ShowToolsRequests {
 				$status = 1;
 			}
 		} else {
-			$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" ".tooltip(_("Es existieren keine Überschneidungen"), TRUE, TRUE)."/>";
+			$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" ".tooltip(_("Es existieren keine ï¿½berschneidungen"), TRUE, TRUE)."/>";
 			$status = 0;
 		}
 		return array("html"=>$html, "status"=>$status);
