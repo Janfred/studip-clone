@@ -1031,7 +1031,7 @@ class ShowToolsRequests {
 					else
 						$desc.=sprintf(_("Es existieren Überschneidungen zur gewünschten Belegungszeit.")."\n");
 				else
-					$desc.=sprintf(_("Es existieren ï¿½berschneidungen oder Belegungssperren zu mehr als %s%% aller gewünschten Belegungszeiten.")."\n".$lock_desc, $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
+					$desc.=sprintf(_("Es existieren Überschneidungen oder Belegungssperren zu mehr als %s%% aller gewünschten Belegungszeiten.")."\n".$lock_desc, $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
 				$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" ".tooltip($desc, TRUE, TRUE)." />";
 				$status = 2;
 			} else {
