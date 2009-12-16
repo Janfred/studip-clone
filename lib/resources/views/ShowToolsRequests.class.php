@@ -160,7 +160,7 @@ class ShowToolsRequests {
 				<tr>
 				<td>
 				<?=SemesterData::GetSemesterSelector(array('name' => 'tools_requests_sem_choose', 'onChange' => 'document.tools_requests_form.submit()'), $this->semester_id, 'semester_id',false)?>
-				<?=makeButton("auswaehlen",'input',_("Semester auswï¿½hlen"),'tools_requests_sem_choose_button')?>
+				<?=makeButton("auswaehlen",'input',_("Semester auswählen"),'tools_requests_sem_choose_button')?>
 				</td>
 				<td class="<? echo $cssSw->getClass() ?>" style="padding-left:10px">
 				<b><?=_("Status:")?></b>
@@ -288,7 +288,7 @@ class ShowToolsRequests {
 				<a href="#" onClick="auswahl_umkehr();return false;">'
 				. makeButton('auswahlumkehr', 'img', _("Auswahl umkehren"))
 				. '</a>&nbsp;&nbsp;'
-				. makeButton('loeschen', 'input', _("Ausgewï¿½hlte Anfragen lï¿½schen"), 'do_delete_requests')
+				. makeButton('loeschen', 'input', _("Ausgewählte Anfragen löschen"), 'do_delete_requests')
 				. '&nbsp;</div><br>';
 		}
 		$i = 0;
@@ -492,7 +492,7 @@ class ShowToolsRequests {
 							<?
 							if ($request_resource_id = $reqObj->getResourceId()) {
 								$resObj =& ResourceObject::Factory($request_resource_id);
-								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewï¿½hlte Raum bietet folgende der wï¿½nschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							} else
 								print _("Es wurde kein Raum angefordert.");
@@ -567,7 +567,7 @@ class ShowToolsRequests {
 							?>
 						<tr>
 							<td style="border-top:1px solid;" width="100%" colspan="<?=$cols+2?>">
-								<font size="-1"><b><?=_("Raumgruppe berï¿½cksichtigen:")?></b></font>
+								<font size="-1"><b><?=_("Raumgruppe berücksichtigen:")?></b></font>
 							</td>
 						</tr>
 						<tr>
@@ -598,7 +598,7 @@ class ShowToolsRequests {
 							<td width="70%"><font size="-1">
 								<?
 								$resObj = ResourceObject::Factory($key);
-								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewï¿½hlte Raum bietet folgende der wï¿½nschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							?>
 							</td>
@@ -789,7 +789,7 @@ class ShowToolsRequests {
 							<td width="70%"><font size="-1">
 								<?
 								$resObj =& ResourceObject::Factory($key);
-								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewï¿½hlte Raum bietet folgende der wï¿½nschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							?>
 							</td>
@@ -987,15 +987,15 @@ class ShowToolsRequests {
 			if ($overlap_events_count >= round($events_count * ($GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE'] / 100))) {
 				if ($overlap_events_count == 1)
 					if ($lock_desc)
-						$desc.=sprintf(_("Es besteht eine Belegungssperre zur gewï¿½nschten Belegungszeit.")."\n".$lock_desc);
+						$desc.=sprintf(_("Es besteht eine Belegungssperre zur gewünschten Belegungszeit.")."\n".$lock_desc);
 					else
-						$desc.=sprintf(_("Es existieren ï¿½berschneidungen zur gewï¿½nschten Belegungszeit.")."\n");
+						$desc.=sprintf(_("Es existieren Überschneidungen zur gewünschten Belegungszeit.")."\n");
 				else
-					$desc.=sprintf(_("Es existieren ï¿½berschneidungen oder Belegungssperren zu mehr als %s%% aller gewï¿½nschten Belegungszeiten.")."\n".$lock_desc, $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
+					$desc.=sprintf(_("Es existieren Überschneidungen oder Belegungssperren zu mehr als %s%% aller gewünschten Belegungszeiten.")."\n".$lock_desc, $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
 				$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" ".tooltip($desc, TRUE, TRUE)." />";
 				$status = 2;
 			} else {
-				$desc.=sprintf(_("Einige der gewï¿½nschten Belegungszeiten ï¿½berschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
+				$desc.=sprintf(_("Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
 				foreach ($group_dates as $key=>$val) {
 					if ($overlaps[$key])
 						foreach ($overlaps[$key] as $key2=>$val2)
@@ -1008,7 +1008,7 @@ class ShowToolsRequests {
 				$status = 1;
 			}
 		} else {
-			$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" ".tooltip(_("Es existieren keine ï¿½berschneidungen"), TRUE, TRUE)."/>";
+			$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" ".tooltip(_("Es existieren keine überschneidungen"), TRUE, TRUE)."/>";
 			$status = 0;
 		}
 		return array("html"=>$html, "status"=>$status);
@@ -1027,15 +1027,15 @@ class ShowToolsRequests {
 			if ($overlap_events_count >= round($events_count * ($GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE'] / 100))) {
 				if ($overlap_events_count == 1)
 					if ($overlaps[0]["lock"])
-						$desc.=sprintf(_("Es besteht eine Belegungssperre zur gewï¿½nschten Belegungszeit.")."\n".$lock_desc);
+						$desc.=sprintf(_("Es besteht eine Belegungssperre zur gewünschten Belegungszeit.")."\n".$lock_desc);
 					else
-						$desc.=sprintf(_("Es existieren ï¿½berschneidungen zur gewï¿½nschten Belegungszeit.")."\n");
+						$desc.=sprintf(_("Es existieren Überschneidungen zur gewünschten Belegungszeit.")."\n");
 				else
-					$desc.=sprintf(_("Es existieren ï¿½berschneidungen oder Belegungssperren zu mehr als %s%% aller gewï¿½nschten Belegungszeiten.")."\n".$lock_desc, $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
+					$desc.=sprintf(_("Es existieren ï¿½berschneidungen oder Belegungssperren zu mehr als %s%% aller gewünschten Belegungszeiten.")."\n".$lock_desc, $GLOBALS['RESOURCES_ALLOW_SINGLE_ASSIGN_PERCENTAGE']);
 				$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_rot.gif\" ".tooltip($desc, TRUE, TRUE)." />";
 				$status = 2;
 			} else {
-				$desc.=sprintf(_("Einige der gewï¿½nschten Belegungszeiten ï¿½berschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
+				$desc.=sprintf(_("Einige der gewünschten Belegungszeiten überschneiden sich mit eingetragenen Belegungen bzw. Sperrzeiten:\n"));
 				foreach ($overlaps as $val) {
 					if ($val["lock"])
 						$desc.=sprintf(_("%s, %s Uhr bis %s, %s Uhr (Sperrzeit)")."\n", date("d.m.Y", $val["begin"]), date("H:i", $val["begin"]), date("d.m.Y", $val["end"]), date("H:i", $val["end"]));
@@ -1046,7 +1046,7 @@ class ShowToolsRequests {
 				$status = 1;
 			}
 		} else {
-			$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" ".tooltip(_("Es existieren keine ï¿½berschneidungen"), TRUE, TRUE)."/>";
+			$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" ".tooltip(_("Es existieren keine Überschneidungen"), TRUE, TRUE)."/>";
 			$status = 0;
 		}
 		return array("html"=>$html, "status"=>$status);
