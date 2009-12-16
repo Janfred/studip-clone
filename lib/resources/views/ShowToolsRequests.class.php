@@ -386,7 +386,13 @@ class ShowToolsRequests {
 
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Art der Anfrage:")." ".(($reqObj->getTerminId()) ? _("Einzeltermin einer Veranstaltung") : _("alle Termine einer Veranstaltung"))."<br />";
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Erstellt von:")." <a href=\"about.php?username=".get_username($reqObj->getUserId())."\">".htmlReady(get_fullname($reqObj->getUserId(), 'full', true))."</a><br />";
-
+						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("Lehrende: ");
+						foreach ($semObj->getMembers('dozent') as $doz) {
+						if ($k) echo ", ";
+						echo "<a href=\"about.php?username={$doz['username']}\">".HtmlReady($doz['fullname'])."</a>";
+						$k = true;
+						}
+					    	print "<br/>";
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Einrichtung:")." ".htmlReady($this->db->f("inst_name"))."<br />";
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("verantwortliche Fakult&auml;t:")." ".htmlReady($this->db->f("fak_name"))."<br />";
 						print "&nbsp;&nbsp;&nbsp;&nbsp;"._("aktuelle Teilnehmerzahl:")." ".$semObj->getNumberOfParticipants('total').'<br />';
