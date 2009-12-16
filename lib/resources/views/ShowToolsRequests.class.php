@@ -689,7 +689,7 @@ class ShowToolsRequests {
 							<td width="70%"><font size="-1">
 								<?
 								$resObj =& ResourceObject::Factory($key);
-								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewï¿½hlte Raum bietet folgende der wï¿½nschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
+								print "<img src=\"".$GLOBALS['ASSETS_URL']."images/info.gif\" ".tooltip(_("Der ausgewählte Raum bietet folgende der wünschbaren Eigenschaften:")." \n".$resObj->getPlainProperties(TRUE), TRUE, TRUE)." />";
 								print "&nbsp;".$resObj->getFormattedLink($resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["first_event"]);
 							?>
 							</td>
@@ -766,7 +766,7 @@ class ShowToolsRequests {
 									<input type="TEXT" name="search_rooms_limit_high" maxlength="2" size="1" style="font-size:8pt" value="<?=$resources_data["requests_working_on"][$resources_data["requests_working_pos"]]["search_limit_high"]?>">
 									<a href="<?=$PHP_SELF?>?inc_limit_high=1"><img src="<?= $GLOBALS['ASSETS_URL'] ?>images/+.gif" border="0" <?=tooltip(_("+10"))?>/></a>
 
-									<input type="IMAGE" name="matching_rooms_limit_submit" src="<?= $GLOBALS['ASSETS_URL'] ?>images/move_right.gif" border="0" <?=tooltip(_("ausgewï¿½hlten Bereich anzeigen"))?>/>
+									<input type="IMAGE" name="matching_rooms_limit_submit" src="<?= $GLOBALS['ASSETS_URL'] ?>images/move_right.gif" border="0" <?=tooltip(_("ausgewählten Bereich anzeigen"))?>/>
 								</font>
 							</td>
 						</tr>
@@ -1008,7 +1008,7 @@ class ShowToolsRequests {
 				$status = 1;
 			}
 		} else {
-			$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" ".tooltip(_("Es existieren keine überschneidungen"), TRUE, TRUE)."/>";
+			$html = "<img src=\"".$GLOBALS['ASSETS_URL']."images/ampel_gruen.gif\" ".tooltip(_("Es existieren keine Überschneidungen"), TRUE, TRUE)."/>";
 			$status = 0;
 		}
 		return array("html"=>$html, "status"=>$status);
