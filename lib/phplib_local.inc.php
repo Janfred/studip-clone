@@ -148,22 +148,6 @@ $mail_transporter->SetBulkMail((int)$GLOBALS['MAIL_BULK_DELIVERY']);
 StudipMail::setDefaultTransporter($mail_transporter);
 unset($mail_transporter);
 
-/**
- * @deprecated
- */
-class studip_smtp_class {
-	function studip_smtp_class() {
-		$this->localhost = ($GLOBALS['MAIL_LOCALHOST'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_LOCALHOST']; // name of the mail sending machine (the web server)
-		$this->host_name = ($GLOBALS['MAIL_HOST_NAME'] == "") ? $_SERVER["SERVER_NAME"] : $GLOBALS['MAIL_HOST_NAME']; // which mailserver should we use? (must allow mail-relaying from this->localhost)
-		$this->charset = ($GLOBALS['MAIL_CHARSET'] == "") ? "WINDOWS-1252" : $GLOBALS['MAIL_CHARSET']; //charset used in mail body
-		$this->env_from = ($GLOBALS['MAIL_ENV_FROM'] == "") ? "wwwrun@".$this->localhost : $GLOBALS['MAIL_ENV_FROM']; // Envelope-From:
-		$this->from = ($GLOBALS['MAIL_FROM'] == "") ? "\"Stud.IP\" <" . $this->env_from . ">" : $this->QuotedPrintableEncode('"' . $GLOBALS['MAIL_FROM'] . '"',1) . ' <' . $this->env_from . '>'; // From: Mailheader
-		$this->abuse = ($GLOBALS['MAIL_ABUSE'] == "") ? "abuse@" . $this->localhost : $GLOBALS['MAIL_ABUSE']; // Reply-To: Mailheader
-		$this->url = $GLOBALS['ABSOLUTE_URI_STUDIP'];
-	}
-}
-
-
 class Seminar_CT_Sql extends CT_Sql {
 	var $database_table = PHPLIB_SESSIONDATA_TABLE; // and find our session data in this table.
 }
