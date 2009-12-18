@@ -369,7 +369,10 @@ class StudipMail
 		}
 		$transporter->SetHeader("Return-Path", $this->return_path);
 		foreach($this->getRecipients() as $recipient) {
-			$transporter->SetEncodedEmailHeader($recipient['type'], $recipient['mail'], $recipient['name']);
+			$recipients_by_type[$recipient['type']][ $recipient['mail']] = $recipient['name'];
+		}
+		foreach($recipients_by_type as $type => $recipients){
+			$transporter->SetMultipleEncodedEmailHeader($type, $recipients);
 		}
 		$transporter->SetEncodedHeader("Subject", $this->getSubject());
 		if($this->getBodyHtml()){
