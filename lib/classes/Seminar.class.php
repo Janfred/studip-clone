@@ -503,8 +503,7 @@ class Seminar {
 		$query = sprintf("SELECT * FROM seminare WHERE Seminar_id='%s' ",$this->id);
 		$this->db->query($query);
 		if ($this->db->num_rows() == 0) {
-			echo 'Fehler: Konnte das Seminar mit der ID '.$this->id.' nicht finden!<br>';
-			die;
+			throw new Exception( sprintf(_('Fehler: Konnte das Seminar mit der ID %s nicht finden!'),$this->id));
 		}
 
 		if ($this->db->next_record()) {
