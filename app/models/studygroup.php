@@ -18,9 +18,10 @@ class StudygroupModel {
 		$plugin_manager = PluginManager::getInstance();
 		$plugins = $plugin_manager->getPluginInfos('StandardPlugin');     // get all globally enabled plugins
 		foreach ($plugins as $plugin) {
-			$modules[$plugin['class']] = $plugin['name'];
+			if($plugin['enabled']){
+				$modules[$plugin['class']] = $plugin['name'];
+			}
 		}
-
 		return $modules;
 	}
 

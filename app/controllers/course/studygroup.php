@@ -422,23 +422,26 @@ class Course_StudygroupController extends AuthenticatedController {
 						$sem->admission_prelim_txt = _("Die ModeratorInnen der Studiengruppe können Ihren Aufnahmewunsch bestätigen oder ablehnen. Erst nach Bestätigung erhalten Sie vollen Zugriff auf die Gruppe.");
 					}
 
-					$sem->store();
+					
 
 					// get the current bitmask
 					$mods = new Modules();
-					$bitmask = $mods->getBin( $sem->id, 'sem');
+					$bitmask = $sem->modules;
 
 					// de-/activate modules
 					$available_modules = StudygroupModel::getAvailableModules();
-
-					foreach ($_REQUEST['groupmodule'] as $key => $enable) {
-						if ($available_modules[$key] && $enable) {
+					
+					foreach (array_keys($available_modules) as $key){
+						if($key == 'participants') continue;
+						if ($_REQUEST['groupmodule'][$key]) {
 							$mods->setBit($bitmask, $mods->registered_modules[$key]["id"]);
+						} else {
+							$mods->clearBit($bitmask, $mods->registered_modules[$key]["id"]);
 						}
 					}
 
 					$sem->modules=$bitmask;
-					$mods->writeBin($id, $bitmask, 'sem');
+					$sem->store();
 
 					// de-/activate plugins
 					$available_plugins = StudygroupModel::getAvailablePlugins();
