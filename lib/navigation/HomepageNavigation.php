@@ -49,6 +49,20 @@ class HomepageNavigation extends Navigation
     }
 
     /**
+     * Determine whether this navigation item is active.
+     */
+    public function isActive()
+    {
+        $active = parent::isActive();
+
+        if ($active) {
+            URLHelper::addLinkParam('username', $GLOBALS['username']);
+        }
+
+        return $active;
+    }
+
+    /**
      * Initialize the subnavigation of this item. This method
      * is called once before the first item is added or removed.
      */
@@ -69,8 +83,6 @@ class HomepageNavigation extends Navigation
 
         // this really should not be here
         $username = preg_replace('/[^\w@.-]/', '', $username);
-
-        URLHelper::addLinkParam('username', $username);
 
         // homepage
         $navigation = new Navigation(_('Alle'));
