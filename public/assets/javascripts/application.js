@@ -1,3 +1,5 @@
+/*global window, $, $$, $A, $H, $w, Ajax, Class, Draggable, Effect, Element, Event */
+/*jslint browser: true, white: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, newcap: true, immed: true, indent: 2, onevar: false */
 /* ------------------------------------------------------------------------
  * application.js
  * This file is part of Stud.IP - http://www.studip.de
@@ -26,10 +28,10 @@
   var methods = {
     defaultValueActsAsHint: function (element) {
       element = $(element);
-      element._default = element.value;
+      element.store("default", element.value);
 
       return element.observe('focus', function () {
-        if (element._default != element.value) {
+        if (element.retrieve("default") !== element.value) {
           return;
         }
         element.removeClassName('hint').value = '';
@@ -37,7 +39,7 @@
         if (element.value.strip() !== '') {
           return;
         }
-        element.addClassName('hint').value = element._default;
+        element.addClassName('hint').value = element.retrieve("default");
       }).addClassName('hint');
     }
   };
@@ -45,15 +47,13 @@
   $w('input textarea').each(function (tag) {
     Element.addMethods(tag, methods);
   });
-})();
+}());
 
 
 /* ------------------------------------------------------------------------
  * the global STUDIP namespace
  * ------------------------------------------------------------------------ */
-if (typeof STUDIP == "undefined" || !STUDIP) {
-    var STUDIP = {};
-}
+var STUDIP = STUDIP || {};
 
 
 /* ------------------------------------------------------------------------
@@ -62,12 +62,12 @@ if (typeof STUDIP == "undefined" || !STUDIP) {
 
 STUDIP.study_area_selection = {
 
-  url: function(action, args) {
+  url: function (action, args) {
     return STUDIP.ABSOLUTE_URI_STUDIP + "dispatch.php/course/study_areas/" +
            $A(arguments).join("/");
   },
 
-  swishAndFlick: function(element, target) {
+  swishAndFlick: function (element, target) {
 
     // clone element
     var clone = element.cloneNode(true);
@@ -78,7 +78,7 @@ STUDIP.study_area_selection = {
     var o = target.cumulativeOffset();
     o[1] += target.getHeight();
 
-    new Effect.Parallel(
+    var effect = new Effect.Parallel(
       [
         new Effect.Move(clone, { sync: true, x: o[0], y: o[1], mode: "absolute"}),
         new Effect.Opacity(clone, { sync: true, from: 1, to: 0})
@@ -87,85 +87,89 @@ STUDIP.study_area_selection = {
         duration:    0.4,
         delay:       0,
         transition:  Effect.Transitions.sinoidal,
-        afterFinish: function() { clone.remove(); }
-      });
-  },
-
-  add: function(id, course_id) {
-
-      course_id = course_id || "";
-
-      // may not be visible at the current
-      $$(".study_area_selection_add_" + id).each(function(add) {
-          // prevent selecting twice
-          add.disable();
-          new Effect.Opacity(add, {from: 1, to: 0, duration: 0.25,
-            afterFinish: function() {
-              add.setStyle({visibility: "hidden"}).enable();
-            }
-          });
-        });
-
-      new Ajax.Request(STUDIP.study_area_selection.url("add", course_id), {
-        method: "post",
-        parameters: { "id": id },
-        onSuccess: function(transport) {
-          STUDIP.study_area_selection.swishAndFlick($$(".study_area_selection_add_" + id)[0],
-                                                    "study_area_selection_selected");
-          $("study_area_selection_none").fade();
-          $("study_area_selection_selected").replace(transport.responseText);
-          STUDIP.study_area_selection.refreshSelection();
-        }});
-  },
-
-  remove: function(id, course_id) {
-
-      course_id = course_id || "";
-
-      var selection = $("study_area_selection_" + id);
-
-      if (selection.siblings().size() == 0) {
-        $("study_area_selection_at_least_one").appear();
-        $("study_area_selection_at_least_one").fade({ delay: 5, queue: 'end' });
-        selection.shake();
-        return;
-      }
-
-      new Ajax.Request(STUDIP.study_area_selection.url("remove", course_id), {
-        method: "post",
-        parameters: { "id": id },
-        onSuccess: function(transport) {
-          selection.remove();
-          if (!$$("#study_area_selection_selected li").length) {
-            $("study_area_selection_none").appear();
-          }
-
-          $$(".study_area_selection_add_" + id).each(function(add) {
-            add.setStyle({opacity: 0, visibility: "visible"});
-            new Effect.Opacity(add, {from: 0, to: 1});
-          });
-
-          STUDIP.study_area_selection.refreshSelection();
-        },
-        onFailure: function() {
-          selection.appear();
+        afterFinish: function () {
+          clone.remove();
         }
       });
   },
 
-  expandSelection: function(id, course_id) {
+  add: function (id, course_id) {
 
     course_id = course_id || "";
 
-    new Ajax.Request(STUDIP.study_area_selection.url("expand", course_id, id), {
-      method: 'post',
-      onSuccess: function(transport) {
-        $("study_area_selection_selectables").down("ul").replace(transport.responseText);
-      }});
+    // may not be visible at the current
+    $$(".study_area_selection_add_" + id).each(function (add) {
+        // prevent selecting twice
+        add.disable();
+        var effect = new Effect.Opacity(add, {from: 1, to: 0, duration: 0.25,
+          afterFinish: function () {
+            add.setStyle({visibility: "hidden"}).enable();
+          }
+        });
+      });
+
+    var request = new Ajax.Request(STUDIP.study_area_selection.url("add", course_id), {
+      method: "post",
+      parameters: { "id": id },
+      onSuccess: function (transport) {
+        STUDIP.study_area_selection.swishAndFlick($$(".study_area_selection_add_" + id)[0],
+                                                  "study_area_selection_selected");
+        $("study_area_selection_none").fade();
+        $("study_area_selection_selected").replace(transport.responseText);
+        STUDIP.study_area_selection.refreshSelection();
+      }
+    });
   },
 
-  refreshSelection: function() {
-    $$("#study_area_selection_selected li").each(function(element, index) {
+  remove: function (id, course_id) {
+
+    course_id = course_id || "";
+
+    var selection = $("study_area_selection_" + id);
+
+    if (selection.siblings().size() === 0) {
+      $("study_area_selection_at_least_one").appear();
+      $("study_area_selection_at_least_one").fade({ delay: 5, queue: 'end' });
+      selection.shake();
+      return;
+    }
+
+    var request = new Ajax.Request(STUDIP.study_area_selection.url("remove", course_id), {
+      method: "post",
+      parameters: { "id": id },
+      onSuccess: function (transport) {
+        selection.remove();
+        if (!$$("#study_area_selection_selected li").length) {
+          $("study_area_selection_none").appear();
+        }
+
+        $$(".study_area_selection_add_" + id).each(function (add) {
+          add.setStyle({opacity: 0, visibility: "visible"});
+          var effect = new Effect.Opacity(add, {from: 0, to: 1});
+        });
+
+        STUDIP.study_area_selection.refreshSelection();
+      },
+      onFailure: function () {
+        selection.appear();
+      }
+    });
+  },
+
+  expandSelection: function (id, course_id) {
+
+    course_id = course_id || "";
+
+    var request = new Ajax.Request(STUDIP.study_area_selection.url("expand", course_id, id), {
+      method: 'post',
+      onSuccess: function (transport) {
+        $("study_area_selection_selectables").down("ul").replace(transport.responseText);
+      }
+    });
+  },
+
+  refreshSelection: function () {
+    $$("#study_area_selection_selected li").each(function (element, index) {
       if (index % 2) {
         element.removeClassName("odd").addClassName("even");
       } else {
@@ -175,12 +179,11 @@ STUDIP.study_area_selection = {
   }
 };
 
-STUDIP.OverDiv = Object.extend(Class.create(),
-  {
+STUDIP.OverDiv = Object.extend(Class.create(), {
     overdivs: {},
-    BindInline: function(options, event) {
+    BindInline: function (options, event) {
       event = Event.extend(event);
-      if(!this.overdivs[options.id]){
+      if (!this.overdivs[options.id]) {
         options.event_type = event.type;
         this.overdivs[options.id] = new STUDIP.OverDiv(options);
       }
@@ -188,9 +191,9 @@ STUDIP.OverDiv = Object.extend(Class.create(),
       return false;
     },
 
-    BindToEvent: function(options, event_type) {
+    BindToEvent: function (options, event_type) {
       event_type = event_type || 'mouseover';
-      if(!this.overdivs[options.id]){
+      if (!this.overdivs[options.id]) {
         options.event_type = event.type;
         this.overdivs[options.id] = new STUDIP.OverDiv(options);
         Event.observe($(options.initiator), event_type, this.overdivs[options.id].show.bindAsEventListener(this.overdivs[options.id]));
@@ -202,16 +205,16 @@ STUDIP.OverDiv = Object.extend(Class.create(),
 
 STUDIP.OverDiv.prototype = {
   options: {
-        id:'',
-        title:'',
-        content:'',
-        content_url:'',
-        content_element_type:'',
-        position: 'bottom right',
-        width: 0,
-        is_moveable: true,
-        inititator: null,
-        event_type: 'mouseover'
+    id: '',
+    title: '',
+    content: '',
+    content_url: '',
+    content_element_type: '',
+    position: 'bottom right',
+    width: 0,
+    is_moveable: true,
+    inititator: null,
+    event_type: 'mouseover'
   },
   is_drawn: false,
   is_hidden: true,
@@ -221,27 +224,27 @@ STUDIP.OverDiv.prototype = {
   title: null,
   content: null,
 
-  initialize: function(options) {
+  initialize: function (options) {
     Object.extend(this.options, options || {});
     this.id = this.options.id;
     this.initiator = $(this.options.initiator);
-    if(options.content_element_type){
+    if (options.content_element_type) {
       this.options.content_url = STUDIP.ABSOLUTE_URI_STUDIP + 'dispatch.php/content_element/get_formatted/' + options.content_element_type + '/' + this.id;
     }
   },
 
-  draw: function() {
-    if(!this.is_drawn){
+  draw: function () {
+    if (!this.is_drawn) {
       var outer = new Element('div', {className: 'overdiv', id: 'overdiv_' + this.id});
       var inner = new Element('div', {className: 'title'});
       var title = new Element('h4', {className: 'title'});
-      var closer = new Element('a', {className: 'title', href:'#'});
+      var closer = new Element('a', {className: 'title', href: '#'});
       var content = new Element('div', {className: 'content'});
-      if(this.options.is_moveable){
+      if (this.options.is_moveable) {
         closer.appendChild(new Element('img', {src: STUDIP.ASSETS_URL + 'images/hide.gif'}));
         Event.observe(closer, 'click', this.hide.bindAsEventListener(this));
         Event.observe(inner, 'dblclick', this.scale.bindAsEventListener(this));
-        new Draggable(outer, {scroll:window, handle:inner});
+        var draggable = new Draggable(outer, {scroll: window, handle: inner});
       }
       title.update(this.options.title);
       content.update(this.options.content);
@@ -256,27 +259,30 @@ STUDIP.OverDiv.prototype = {
       this.container.hide();
       $('overdiv_container').appendChild(this.container);
       this.is_drawn = true;
-      if(this.options.content_url){
+      if (this.options.content_url) {
         var self = this;
-        new Ajax.Request(this.options.content_url, {
+        var request = new Ajax.Request(this.options.content_url, {
             method: 'get',
-            onSuccess: function(transport){self.update(transport)}
-        });
+            onSuccess: function (transport) {
+              self.update(transport);
+            }
+          }
+        );
       }
     }
   },
 
-  update: function(transport){
+  update: function (transport) {
     this.title.update(transport.responseJSON.title);
     this.content.update(transport.responseJSON.content);
   },
 
-  getOffset: function(){
+  getOffset: function () {
     var ho = this.initiator.getWidth() / 2;
     var vo = this.initiator.getHeight() / 2;
     var positions = $w(this.options.position);
-    for(i = 0; i < positions.length; ++i) {
-      switch(positions[i].toLowerCase()) {
+    for (var i = 0; i < positions.length; i += 1) {
+      switch (positions[i].toLowerCase()) {
       case 'left':
         ho = this.container.getWidth() * -1;
         break;
@@ -298,51 +304,55 @@ STUDIP.OverDiv.prototype = {
       default:
       }
     }
-   return {left: Math.floor(ho), top: Math.floor(vo) };
+    return {left: Math.floor(ho), top: Math.floor(vo) };
   },
 
-  getWidth: function() {
-    return this.options.width > 0 ? this.options.width : Math.floor(document.viewport.getWidth()/3);
+  getWidth: function () {
+    return this.options.width > 0 ? this.options.width : Math.floor(document.viewport.getWidth() / 3);
   },
 
-  show: function(event){
+  show: function (event) {
     this.draw();
     var offset = this.getOffset();
     this.container.clonePosition(this.initiator, {setWidth: false, setHeight: false, offsetLeft: offset.left, offsetTop: offset.top});
     this.container.setStyle({width: this.getWidth() + 'px'});
     this.container.show();
     this.is_hidden = false;
-    if(this.options.event_type == 'mouseover'){
+    if (this.options.event_type === 'mouseover') {
       Event.observe(this.initiator, 'mouseout', this.hide.bindAsEventListener(this));
     }
     event.stop();
   },
 
-  hide: function(event){
-    if(!(this.options.is_moveable && event.relatedTarget && $(event.relatedTarget).descendantOf(this.container))){
+  hide: function (event) {
+    if (!(this.options.is_moveable && event.relatedTarget && $(event.relatedTarget).descendantOf(this.container))) {
       this.container.hide();
       this.is_hidden = true;
     }
-    if(this.options.event_type == 'mouseover'){
+    if (this.options.event_type === 'mouseover') {
       Event.stopObserving(this.initiator, 'mouseout', this.hide.bindAsEventListener(this));
     }
     event.stop();
   },
 
-  scale: function(event){
-    new Effect.Scale(this.container, this.is_scaled ? 50 : 200, {scaleContent:false,scaleY:false});
+  scale: function (event) {
+    var effect = new Effect.Scale(this.container, this.is_scaled ? 50 : 200, {
+      scaleContent: false,
+      scaleY: false
+    });
     this.is_scaled = !this.is_scaled;
   }
 
 };
 
 /* ------------------------------------------------------------------------
- * forum toolbar
+ * Markup toolbar
  * ------------------------------------------------------------------------ */
-STUDIP.Forum = {};
-STUDIP.Forum.Toolbar = Class.create(function() {
+(function () {
 
-  var markup = [
+  STUDIP.Markup = {};
+
+  STUDIP.Markup.buttonSet = [
     { "name": "bold",          "label": "<strong>B</strong>", open: "**",     close: "**"},
     { "name": "italic",        "label": "<em>i</em>",         open: "%%",     close: "%%"},
     { "name": "underline",     "label": "<u>u</u>",           open: "__",     close: "__"},
@@ -352,50 +362,6 @@ STUDIP.Forum.Toolbar = Class.create(function() {
     { "name": "smaller",       "label": "A-",                 open: "--",     close: "--"}
   ];
 
-  var initialize = function (editor) {
-    this.editor = $(editor);
-    this.element = this.createToolbarElement();
-    this.addButtonSet(markup);
-  };
-
-  var createToolbarElement = function () {
-    var toolbar = new Element('div', { 'class': 'editor_toolbar' });
-    this.editor.insert({before: toolbar});
-    return toolbar;
-  };
-
-  var addButtonSet = function (set) {
-    var toolbar = this;
-    $A(set).each(function (button) {
-      toolbar.addButton(button);
-    });
-  };
-
-  var addButton = function (options) {
-    options = $H(options);
-
-    var button = this.createButtonElement(this.element, options);
-    button.observe('click', this.buttonHandler(options).bind(this));
-  };
-
-  var createButtonElement= function (toolbar, options) {
-    var button = Element('button');
-    button.update(options.get('label'));
-    button.addClassName(options.get('name'));
-
-    toolbar.appendChild(button);
-
-    return button;
-  };
-
-  var buttonHandler = function (options) {
-    return function (event) {
-      event.stop();
-      replaceSelection(this.editor, options.get("open") +
-                                    getSelection(this.editor) +
-                                    options.get("close"));
-    };
-  };
 
   var getSelection = function (element)  {
     if (!!document.selection) {
@@ -426,21 +392,53 @@ STUDIP.Forum.Toolbar = Class.create(function() {
     element.scrollTop = scroll_top;
   };
 
-  return {
-    initialize: initialize,
-    createToolbarElement: createToolbarElement,
-    addButtonSet: addButtonSet,
-    addButton: addButton,
-    createButtonElement: createButtonElement,
-    buttonHandler: buttonHandler
+  var createToolbarElement = function (editor) {
+    var toolbar = new Element('div', { 'class': 'editor_toolbar' });
+    $(editor).insert({before: toolbar});
+    return toolbar;
   };
+
+  var createButtonElement = function (editor, options) {
+    var button = new Element('button');
+    button.update(options.get('label'));
+    button.addClassName(options.get('name'));
+    $(editor.toolbar).appendChild(button);
+    button.observe("click", function (event) {
+      event.stop();
+      replaceSelection(editor, options.get("open") +
+                               getSelection(editor) +
+                               options.get("close"));
+    });
+  };
+
+
+  STUDIP.Markup.addToolbar = function (editor, buttonSet) {
+    var toolbar = createToolbarElement(editor);
+    Object.extend(editor, {
+      toolbar: toolbar,
+
+      addButtonSet: function (set) {
+        $A(set).each(function (button) {
+          editor.addButton(button);
+        });
+      },
+
+      addButton: function (options) {
+        options = $H(options);
+        createButtonElement(editor, options);
+      }
+    });
+    buttonSet = buttonSet || STUDIP.Markup.buttonSet;
+    editor.addButtonSet(buttonSet);
+  };
+
 }());
 
 /* ------------------------------------------------------------------------
  * automatic compression of tabs
  * ------------------------------------------------------------------------ */
 
-STUDIP.Tabs = function () {
+STUDIP.Tabs = (function () {
 
   var list, items, list_item_height, viewport_width;
 
@@ -453,12 +451,13 @@ STUDIP.Tabs = function () {
   };
 
   // returns the largest feasible item
-  var getLargest = function() {
+  var getLargest = function () {
 
     var i = items.length,
         largest = 5, item, letters;
 
-    while (i--) {
+    while (i) {
+      i -= 1;
       letters = items[i].innerHTML.length;
       if (letters > largest) {
         item = items[i];
@@ -524,7 +523,7 @@ STUDIP.Tabs = function () {
       this.compress();
     }
   };
-}();
+}());
 
 
 /* ------------------------------------------------------------------------
@@ -533,22 +532,21 @@ STUDIP.Tabs = function () {
 
 STUDIP.Arbeitsgruppen = {
 
-    toggleOption: function(user_id) {
-        if ($('user_opt_' + user_id).visible()) {
-            $('user_opt_' + user_id).fade({ duration: 0.2 });
-            $('user_' + user_id).morph('width:0px;', { queue: 'end', duration: 0.2 });
-
-        } else {
-            $('user_' + user_id).morph('width:110px;', { duration: 0.2 });
-            $('user_opt_' + user_id).appear({ queue: 'end', duration: 0.2 });
-        }
+  toggleOption: function (user_id) {
+    if ($('user_opt_' + user_id).visible()) {
+      $('user_opt_' + user_id).fade({ duration: 0.2 });
+      $('user_' + user_id).morph('width:0px;', { queue: 'end', duration: 0.2 });
+    } else {
+      $('user_' + user_id).morph('width:110px;', { duration: 0.2 });
+      $('user_opt_' + user_id).appear({ queue: 'end', duration: 0.2 });
     }
+  }
 };
 
 /* ------------------------------------------------------------------------
  * application wide setup
  * ------------------------------------------------------------------------ */
-document.observe('dom:loaded', function() {
+document.observe('dom:loaded', function () {
 
   // message highlighting
   $$(".effect_highlight").invoke('highlight');
@@ -557,14 +555,14 @@ document.observe('dom:loaded', function() {
   var indicator = $('ajax_notification');
   if (indicator) {
     Ajax.Responders.register({
-      onCreate:   function(request) {
+      onCreate:   function (request) {
         if (Ajax.activeRequestCount) {
-          request.usability_timer = setTimeout(function() {
+          request.usability_timer = setTimeout(function () {
             indicator.show();
           }, 100);
         }
       },
-      onComplete: function(request) {
+      onComplete: function (request) {
         clearTimeout(request.usability_timer);
         if (!Ajax.activeRequestCount) {
           indicator.hide();

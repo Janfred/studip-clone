@@ -77,7 +77,7 @@ function forum_append_edit ($description) {
 function forum_parse_edit ($description) {
 	if (preg_match('/^.*(<admin_msg.*?)$/s',$description, $match)) { // wurde schon mal editiert
 		$tmp = explode('"',$match[1]);
-		// use special markup [admin_msg]. (cf. http://develop.studip.de/trac/ticket/335 ) 
+		// use special markup [admin_msg]. (cf. http://develop.studip.de/trac/ticket/335 )
 		$append = "\n\n[admin_msg]["._("Zuletzt editiert von"). ' '.$tmp[1]." - ".date ("d.m.y - H:i", $tmp[3])."][/admin_msg]";
 		$description = forum_kill_edit($description) . $append;
 	}
@@ -151,7 +151,7 @@ function editarea($forumposting) {
 	$description .= <<<TOOLBAR
 <script>
 	document.observe("dom:loaded", function () {
-		new STUDIP.Forum.Toolbar($$("textarea[name='description']").first());
+		STUDIP.Markup.addToolbar($$("textarea[name='description']").first());
 	});
 </script>
 TOOLBAR;
