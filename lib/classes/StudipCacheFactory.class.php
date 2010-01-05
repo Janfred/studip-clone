@@ -170,7 +170,7 @@ class StudipCacheFactory {
                                 ? $reflection_class->newInstanceArgs($arguments)
                                 : $reflection_class->newInstance();
             } catch (Exception $e) {
-                error_log("Could not instantiate cache class.\n" .
+                error_log("Could not instantiate cache class. " .
                           var_export($e, true));
                 self::$cache = new StudipNullCache();
             }
