@@ -98,7 +98,7 @@ require_once('lib/classes/auth_plugins/StudipAuthAbstract.class.php');
 require_once('lib/classes/Config.class.php');
 require_once('lib/classes/UserConfig.class.php');
 require_once('lib/classes/StudipNews.class.php');
-require_once('lib/classes/caching.php');
+require_once('lib/classes/StudipCacheFactory.class.php');
 require_once 'lib/classes/SessionDecoder.class.php';
 require_once 'lib/classes/StudipMail.class.php';
 
