@@ -30,7 +30,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // +---------------------------------------------------------------------------+
 
-if (!isset($EVAL_AUSWERTUNG_GRAPH_FORMAT)) $EVAL_AUSWERTUNG_GRAPH_FORMAT = 'jpg';
+if (!isset($EVAL_AUSWERTUNG_GRAPH_FORMAT)) $EVAL_AUSWERTUNG_GRAPH_FORMAT = 'png'; //png sieht besser aus, mriehe
 
 page_open(array("sess" => "Seminar_Session", "auth" => "Seminar_Auth", "perm" => "Seminar_Perm", "user" => "Seminar_User"));
 
@@ -88,7 +88,7 @@ require_once('lib/visual.inc.php'); // fuer CSS etc.
 
 
 // Grafikbibliotheken
-require_once("lib/classes/phplot.php");
+require_once("vendor/phplot/phplot.php");
 
 
 
