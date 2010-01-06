@@ -189,6 +189,9 @@ function printSelectGroup($infobox, $groups)
 		. " </tr>\n"
 		. "</table>\n";
 	echo $html;
+
+    include('lib/include/html_end.inc.php');
+    page_close();
 }
 
 /**
