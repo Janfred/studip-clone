@@ -6,8 +6,8 @@ class FileAndFolderPriority extends Migration {
 
     function up() {
         $db = DBManager::get();
-        $db->exec("UPDATE dokumente ADD priority INT(11) NOT NULL DEFAULT 0");
-        $db->exec("UPDATE folder ADD priority INT(11) NOT NULL DEFAULT 0");
+        $db->exec("ALTER TABLE `dokumente` ADD `priority` SMALLINT UNSIGNED NOT NULL DEFAULT 0");
+        $db->exec("ALTER TABLE `folder` ADD `priority` SMALLINT UNSIGNED NOT NULL DEFAULT 0");
     }
 
     function down() {
