@@ -65,7 +65,7 @@ class StudipStmSearch {
 		$this->db = new DB_Seminar();
 		$this->form_name = $form_name;
 		$this->search_fields = array(	'quick_search' => array('type' => 'text'),
-										'scope_choose' => array('type' => 'select','default_value' => 'root','options_callback' => array(&$this,'getScopeChooseOptions') , 'size' => 45),
+										'scope_choose' => array('type' => 'select','default_value' => 'root','options_callback' => array($this,'getScopeChooseOptions') , 'size' => 45),
 										'qs_choose' => array('type' => 'select', 'default_value' => 'all', 'options' => array(
 																											array('name' =>_("alles"),'value' => 'all'),
 																											array('name' =>_("Titel"),'value' => 'title'),
@@ -94,7 +94,7 @@ class StudipStmSearch {
 		return $this->form->getFormField($name,$attributes,$default);
 	}
 	
-	function getScopeChooseOptions(&$caller, $name){
+	function getScopeChooseOptions($caller, $name){
 		$options = array();
 		if(!is_object($this->stm_tree)){
 			$this->stm_tree =& TreeAbstract::GetInstance("StudipStmInstancesTree");

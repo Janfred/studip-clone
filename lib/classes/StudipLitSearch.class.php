@@ -55,7 +55,7 @@ class StudipLitSearch {
 		
 		$this->form_template = array('search_term'	=> 	array('type' => 'text', 'caption' => _("Suchbegriff"), 'info' => _("Bitte geben Sie hier einen beliebigen Suchbegriff ein.")),
 									'search_field'	=> 	array('type' => 'select', 'caption' => _("Suchfeld"), 'info' => _("Mögliche Suchfelder"),
-															'options_callback' => array(&$this,"getSearchFields")),
+															'options_callback' => array($this,"getSearchFields")),
 									'search_truncate'=>	array('type' => 'select', 'caption' => _("Trunkieren"), 'info' => _("Wenn Sie eine der Trunkierungsoptionen wählen, werden alle Treffer angezeigt, die mit dem Suchbegriff beginnen (Rechts trunkieren) bzw. enden (Links trunkieren)."), 
 															'options' => array(array('name' => _("Nein"), "value" => 'none'),
 																				array('name' => _("Rechts trunkieren"), "value" => 'right'),
@@ -128,7 +128,7 @@ class StudipLitSearch {
 		$this->outer_form->form_fields['search_plugin']['info'] = $this->search_plugin->description;
 	}
 	
-	function getSearchFields(&$caller, $name){
+	function getSearchFields($caller, $name){
 		return $this->search_plugin->getSearchFields();
 	}
 	

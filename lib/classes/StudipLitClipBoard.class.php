@@ -142,7 +142,7 @@ class StudipLitClipBoard {
 		
 	function setFormObject(){
 		$form_name = $this->form_name;
-		$form_fields['clip_content'] = array('type' => 'select', 'multiple' => true, 'options_callback' => array(&$this, "getClipOptions"));
+		$form_fields['clip_content'] = array('type' => 'select', 'multiple' => true, 'options_callback' => array($this, "getClipOptions"));
 		$form_fields['clip_cmd'] = array('type' => 'select', 'options' => array(array('name' => _("Aus Merkliste löschen"), 'value' => 'del')));
 		$form_buttons['clip_ok'] = array('type' => 'ok', 'info' => _("Gewählte Aktion starten"));
 		if (!is_object($this->form_obj)){
@@ -153,7 +153,7 @@ class StudipLitClipBoard {
 		return true;
 	}
 	
-	function getClipOptions(&$caller, $name){
+	function getClipOptions($caller, $name){
 		$options = array();
 		$cols = 40;
 		if ($elements = $this->getElements()){
