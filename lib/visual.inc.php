@@ -526,17 +526,6 @@ function decodeHTML ($string) {
 * @return	string
 */
 function format ($text) {
-  $cache = StudipCacheFactory::getCache();
-  if (!($formatted_text = $cache->read($key = 'formatted_text/' . md5($text)))) {
-    $cache->write($key, $formatted_text = _real_format($text));
-  }
-  return $formatted_text;
-}
-
-/**
- * This function does all the grunt work for #format
- */
-function _real_format($text) {
 	$text = preg_replace("'\n?\r\n?'", "\n", $text);
 	$pattern = array(
 					"'^--+(\d?)$'me",               // Trennlinie
