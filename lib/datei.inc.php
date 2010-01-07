@@ -3,6 +3,7 @@
 # Lifter002: TODO
 # Lifter007: TODO
 # Lifter003: TODO
+# Lifter005: TODO
 /*
 
 datei.inc.php - basale Routinen zur Dateiverwaltung, dienen zum Aufbau des Ordnersystems
@@ -649,19 +650,24 @@ function form($refresh = FALSE) {
 	$sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]);
 
 	//erlaubte Dateigroesse aus Regelliste der Config.inc.php auslesen
+	if ($UPLOAD_TYPES[$SessSemName["art_num"]]) { 
+		$max_filesize=$UPLOAD_TYPES[$SessSemName["art_num"]]["file_sizes"][$sem_status]; 
+	}	else { 
+		$max_filesize=$UPLOAD_TYPES["default"]["file_sizes"][$sem_status]; 
+	} 
 	// FL:START
-	$max_filesize = get_max_filesize($folder_system_data['upload']);
+	//$max_filesize = get_max_filesize($folder_system_data['upload']);
 	// FL:END
 
 	$c=1;
 
 	if ($folder_system_data['zipupload'])
-		$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:")
-			. '<br>' . _("Die Dateien und Ordner, die im hochzuladenden Ziparchiv enthalten sind, werden in diesen Ordner entpackt.") .  "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+		$print="\n<br><br>" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:")
+			. '<br>' . _("Die Dateien und Ordner, die im hochzuladenden Ziparchiv enthalten sind, werden in diesen Ordner entpackt.") .  "<br><br><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 	else if (!$refresh)
-		$print="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+		$print="\n<br><br>" . _("Sie haben diesen Ordner zum Upload ausgew&auml;hlt:") . "<br><br><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 	else
-		$print="\n<br /><br />" . _("Sie haben diese Datei zum Aktualisieren ausgew&auml;hlt. Sie <b>&uuml;berschreiben</b> damit die vorhandene Datei durch eine neue Version!") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+		$print="\n<br><br>" . _("Sie haben diese Datei zum Aktualisieren ausgew&auml;hlt. Sie <b>&uuml;berschreiben</b> damit die vorhandene Datei durch eine neue Version!") . "<br><br><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 	$print.="\n";
 	$print.="\n<tr><td class=\"steel1\" width=\"20%\"><font size=-1><b>";
 
@@ -726,7 +732,7 @@ function form($refresh = FALSE) {
 	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"upload_form\" action=\"" . URLHelper::getLink('') . "\" method=\"post\">";
 	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Klicken Sie auf <b>'Durchsuchen...'</b>, um eine Datei auszuw&auml;hlen.") . " </font></td></tr>";
 	$print.= "\n<tr>";
-	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
+	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br>";
 	$print.= "&nbsp;<INPUT NAME=\"the_file\" TYPE=\"file\"  style=\"width: 70%\" SIZE=\"30\">&nbsp;</td></td>";
 	$print.= "\n</tr>";
 	if (!$refresh && !$folder_system_data['zipupload']) {
@@ -734,11 +740,12 @@ function form($refresh = FALSE) {
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>";
 		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protected\" value=\"0\"".(!$protect ? "checked" :"") .">"._("Ja, dieses Dokument ist frei von Rechten Dritter") ;
 		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protected\" value=\"1\"".($protect ? "checked" :"") .">"._("Nein, dieses Dokument ist <u>nicht</u> frei von Rechten Dritter");
-		$print.= "<br/>&nbsp;&nbsp;&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a></font></td></tr>";
+		//$print.= "<br>&nbsp;&nbsp;&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a></font>";
+		$print.= "</td></tr>";
 
 		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("3. Geben Sie eine kurze Beschreibung und einen Namen f&uuml;r die Datei ein.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
-		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\" /></td></tr>";
+		$print.= "\n&nbsp;<input type=\"TEXT\" name=\"name\" style=\"width: 70%\" size=\"40\" maxlength\"255\"></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Beschreibung:") . "&nbsp;</font><br>";
 		$print.= "\n&nbsp;<TEXTAREA NAME=\"description\"  style=\"width: 70%\" COLS=40 ROWS=3 WRAP=PHYSICAL></TEXTAREA>&nbsp;</td></tr>";
 		$print.= "\n<tr><td class=\"steelgraudunkel\"colspan=2 ><font size=-1>" . _("4. Klicken Sie auf <b>'absenden'</b>, um die Datei hochzuladen") . "</font></td></tr>";
@@ -752,7 +759,7 @@ function form($refresh = FALSE) {
 	$print.="&nbsp;<a href=\"".URLHelper::getLink("?cancel_x=true")."\">" . makeButton("abbrechen", "img") . "</a></td></tr>";
 	$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"upload\">";
 	$print.= "\n<input type=\"hidden\" name=\"upload_seminar_id\" value=\"".$SessSemName[1]."\">";
-	$print.= "\n</form></table><br /></center>";
+	$print.= "\n</form></table><br></center>";
 
 	return $print;
 }
@@ -787,13 +794,26 @@ function getFileExtension($str) {
 
 //Check auf korrekten Upload
 function validate_upload($the_file) {
-	global $UPLOAD_TYPES,$the_file_size, $msg, $the_file_name, $SessSemName, $user, $auth;
+	global $UPLOAD_TYPES,$the_file_size, $msg, $the_file_name, $SessSemName, $user, $auth, $i_page;
 
-	$sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]);
+	if ($i_page == "sms_send.php") { 
+		if (!$GLOBALS["ENABLE_EMAIL_ATTACHMENTS"] == true) 
+				$emsg.= "error§" . _("Dateianhänge für Nachrichten sind in dieser Installation nicht erlaubt!") . "§"; 
+		$active_upload_type = "attachments"; 
+		$sem_status = $GLOBALS['perm']->get_perm(); 
+	} else { 
+		$sem_status = $GLOBALS['perm']->get_studip_perm($SessSemName[1]); 
+		$active_upload_type = $SessSemName["art_num"]; 
+	} 
 
 	//erlaubte Dateigroesse aus Regelliste der Config.inc.php auslesen
+	if ($UPLOAD_TYPES[$active_upload_type]) { 
+		$max_filesize=$UPLOAD_TYPES[$active_upload_type]["file_sizes"][$sem_status]; 
+	} else { 
+		$max_filesize=$UPLOAD_TYPES["default"]["file_sizes"][$sem_status]; 
+	} 
 	// FL:START
-	$max_filesize = get_max_filesize($folder_system_data['upload']);
+	//$max_filesize = get_max_filesize($folder_system_data['upload']);
 	// FL:END
 
 	$error = FALSE;
@@ -807,11 +827,11 @@ function validate_upload($the_file) {
 			$doc=TRUE;
 
 		//Erweiterung mit Regelliste in config.inc.php vergleichen
-		if ($UPLOAD_TYPES[$SessSemName["art_num"]]) {
-			if ($UPLOAD_TYPES[$SessSemName["art_num"]]["type"] == "allow") {
+		if ($UPLOAD_TYPES[$SessSemName[$active_upload_type]]) {
+			if ($UPLOAD_TYPES[$SessSemName[$active_upload_type]]["type"] == "allow") {
 				$t=TRUE;
 				$i=1;
-				foreach ($UPLOAD_TYPES[$SessSemName["art_num"]]["file_types"] as $ft) {
+				foreach ($UPLOAD_TYPES[$SessSemName[$active_upload_type]]["file_types"] as $ft) {
 					if ($pext == $ft)
 						$t=FALSE;
 					if ($i !=1)
@@ -1107,7 +1127,7 @@ function JS_for_upload() {
 	msg_window=window.open("","messagewindow","height=250,width=200,left=20,top=20,scrollbars=no,resizable=no,toolbar=no");
 	msg_window.document.write("<html><head><title>Datei Upload</title></head>");
 	msg_window.document.write("<body bgcolor='#ffffff'><center><p><img src='<?= $GLOBALS['ASSETS_URL'] ?>images/alienupload.gif' width='165' height='125'></p>");
-	msg_window.document.write("<p><font face='arial, helvetica, sans-serif'><b>&nbsp;"+file_only+"</b><br>&nbsp;<?=_("wird hochgeladen.")?><br>&nbsp;<?=_("Bitte haben sie etwas Geduld!")?><br /></font></p></body></html>");
+	msg_window.document.write("<p><font face='arial, helvetica, sans-serif'><b>&nbsp;"+file_only+"</b><br>&nbsp;<?=_("wird hochgeladen.")?><br>&nbsp;<?=_("Bitte haben Sie etwas Geduld!")?><br></font></p></body></html>");
 
 	upload=true;
 
@@ -1249,13 +1269,13 @@ function link_form ($range_id, $updating=FALSE) {
 
 
 
-	$print.="\n<br /><br />" . _("Sie haben diesen Ordner zum Upload ausgewählt:") . "<br /><br /><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
+	$print.="\n<br><br>" . _("Sie haben diesen Ordner zum Upload ausgewählt:") . "<br><br><center><table width=\"90%\" style=\"{border-style: solid; border-color: #000000;  border-width: 1px;}\" border=0 cellpadding=2 cellspacing=3>";
 
 	$print.="</font></td></tr>";
 	$print.= "\n<form enctype=\"multipart/form-data\" NAME=\"link_form\" action=\"" . URLHelper::getLink('') . "\" method=\"post\">";
 	$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("1. Geben Sie hier den <b>vollständigen Pfad</b> zu der Datei an die sie verlinken wollen.") . " </font></td></tr>";
 	$print.= "\n<tr>";
-	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br />";
+	$print.= "\n<td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dateipfad:") . "&nbsp;</font><br>";
 	if ($hiddenurl)
 		$print.= "&nbsp;<INPUT NAME=\"the_link\" TYPE=\"text\"  style=\"width: 70%\" SIZE=\"30\" value=\"***\">&nbsp;</td></td>";
 	else
@@ -1267,7 +1287,7 @@ function link_form ($range_id, $updating=FALSE) {
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Dieses Dokument ist frei von Rechten Dritter:") . "&nbsp;";
 		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protect\" value=\"0\"".(!$protect ? "checked" :"") .">"._("Ja");
 		$print.= "\n&nbsp;<input type=\"RADIO\" name=\"protect\" value=\"1\"".($protect ? "checked" :"") .">"._("Nein");
-		$print.= "<br/>&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a></font></td></tr>";
+		$print.= "<br>&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a></font></td></tr>";
 
 		$print.= "<tr><td class=\"steelgraudunkel\" colspan=2><font size=-1>" . _("3. Geben Sie eine kurze Beschreibung und einen Namen für die Datei ein.") . "</font></td></tr>";
 		$print.= "\n<tr><td class=\"steel1\" colspan=2 align=\"left\" valign=\"center\"><font size=-1>&nbsp;" . _("Name:") . "&nbsp;</font><br>";
@@ -1288,7 +1308,7 @@ function link_form ($range_id, $updating=FALSE) {
 	} else {
 		$print.= "\n<input type=\"hidden\" name=\"cmd\" value=\"link\">";
 	}
-	$print.= "\n</form></table><br /></center>";
+	$print.= "\n</form></table><br></center>";
 
 	return $print;
 
@@ -2054,7 +2074,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 
 			$tmp_titel=htmlReady(mila($title_name));
 			if ($change == $db->f("folder_id") && ($level != 0 || $db->f('range_id') == md5($SessSemName[1] . 'top_folder') || $folder_tree->isGroupFolder($db->f('folder_id'))) ) { //Aenderungsmodus, Anker + Formular machen, Font tag direkt ausgeben (muss ausserhalb einer td stehen!
-				$titel= "<a $anker ></a><input style=\"font-size:8 pt; width: 100%;\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($title_name)."\" />";
+				$titel= "<a $anker ></a><input style=\"font-size:8 pt; width: 100%;\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($title_name)."\">";
 				if ($rechte && $folder_tree->permissions_activated) $titel .= '&nbsp;<span style="color:red">['.$folder_tree->getPermissionString($db->f("folder_id")).']</span>';
 			}
 			else {
@@ -2168,8 +2188,8 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$content .= chr(10) . '<tr><td colspan="2">';
 						$content.="\n<input type=\"image\"" . makeButton("uebernehmen", "src") . " align=\"absmiddle\" value=\""._("&Auml;nderungen speichern")."\">&nbsp;";
 						$content.="\n<input type=\"image\"" . makeButton("abbrechen", "src") . " align=\"absmiddle\" name=\"cancel\" value=\""._("Abbrechen")."\">";
-						$content.= "\n<input type=\"hidden\" name=\"open\" value=\"".$db->f("folder_id")."_sc_\" />";
-						$content.="\n<input type=\"hidden\" name=\"type\" value=1 />";
+						$content.= "\n<input type=\"hidden\" name=\"open\" value=\"".$db->f("folder_id")."_sc_\">";
+						$content.="\n<input type=\"hidden\" name=\"type\" value=1>";
 						$content .= chr(10) . '</td></tr></table>';
 					}
 					elseif ($db->f("description"))
@@ -2178,7 +2198,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					$content .= _("Keine Beschreibung vorhanden");
 
 					if ($move == $db->f("folder_id")){
-						$content .="<br />" . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
+						$content .="<br>" . sprintf(_("Dieser Ordner wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um ihn in den gew&uuml;nschten Ordner zu verschieben."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie auf dieses Symbol, um diesen Ordner in einen anderen Ordner einzufügen.")) . ">");
 						if($rechte) $content .= _("Wenn Sie den Ordner in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus.");
 					}
 			if ($upload == $db->f("folder_id")) {
@@ -2294,7 +2314,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 					//Titelbereich erstellen
 					$box = "";
 					if ($change == $db3->f("dokument_id")){
-						$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db3->f("name"))."\" />";
+						$titel= "<input style=\"{font-size:8 pt; width: 100%;}\" type=\"text\" size=20 maxlength=255 name=\"change_name\" value=\"".htmlReady($db3->f("name"))."\">";
 					} else {
 						$tmp_titel=htmlReady(mila($db3->f("t_name")));
 
@@ -2312,7 +2332,7 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						$titel .= " / ".(($db3->f("downloads") == 1) ? $db3->f("downloads")." "._("Download") : $db3->f("downloads")." "._("Downloads")).")";
 
 						if (($all) && (!$upload) && ($db3->f("url")=="")) {
-							$box = sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\" />",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
+							$box = sprintf ("<input type=\"CHECKBOX\" %s name=\"download_ids[]\" value=\"%s\">",($check_all) ? "checked" : "" , $db3->f("dokument_id"));
 						}
 					}
 					//Zusatzangaben erstellen
@@ -2358,12 +2378,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 						if ($change == $db3->f("dokument_id")) { 	//Aenderungsmodus, Formular aufbauen
 							$content.= "<input type=\"RADIO\" name=\"change_protected\" value=\"0\"".((!$db3->f("protected")) ? "checked" :"") .">"._("Ja, dieses Dokument ist frei von Rechten Dritter") ;
 							$content.= "\n&nbsp;<input type=\"RADIO\" name=\"change_protected\" value=\"1\"".(($db3->f("protected")) ? "checked" :"") .">"._("Nein, dieses Dokument ist <u>nicht</u> frei von Rechten Dritter");
-							$content.= "<br/>&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a>";
-							$content.= "<br /><br /><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br />";
-							$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\" />";
-							$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\" />";
-							$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db3->f("dokument_id")."_sc_\" />";
-							$content.= "<input type=\"hidden\" name=\"type\" value=0 />";
+							$content.= "<br>&nbsp;<a href=\"http://www.uni-hannover.de/imperia/md/content/elearning/druck/flyer_rechtsfragen_2009_web.pdf\">Wann ist ein Dokument frei von Rechten Dritter? Informationen in der Brosch&uuml;re \"Rechtssicherheit im eLearning\"</a>";
+							$content.= "<br><br><textarea name=\"change_description\" rows=3 cols=40>".$db3->f("description")."</textarea><br>";
+							$content.= "<input type=\"image\" " . makeButton("uebernehmen", "src") . " border=0 value=\""._("&Auml;nderungen speichern")."\">";
+							$content.= "&nbsp;<input type=\"image\" " . makeButton("abbrechen", "src") . " border=0 name=\"cancel\" value=\""._("Abbrechen")."\">";
+							$content.= "<input type=\"hidden\" name=\"open\" value=\"".$db3->f("dokument_id")."_sc_\">";
+							$content.= "<input type=\"hidden\" name=\"type\" value=0>";
 						}
 						else {
 							$content = '';
@@ -2380,12 +2400,12 @@ function display_folder_system ($folder_id, $level, $open, $lines, $change, $mov
 							} else {
 								$content .= _("Keine Beschreibung vorhanden");
 							}
-							$content.=  "<br /><br />" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db3->f("filesize") / 1024));
+							$content.=  "<br><br>" . sprintf(_("<b>Dateigr&ouml;&szlig;e:</b> %s kB"), round ($db3->f("filesize") / 1024));
 							$content.=  "&nbsp; " . sprintf(_("<b>Dateiname:</b> %s "),$db3->f("filename"));
 						}
 
 						if ($move == $db3->f("dokument_id"))
-							$content.="<br />" . sprintf(_("Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben / kopieren. Wenn Sie diese Datei in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus (sofern Sie Dozent oder Tutor in einer anderen Veranstaltung sind)."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
+							$content.="<br>" . sprintf(_("Diese Datei wurde zum Verschieben / Kopieren markiert. Bitte w&auml;hlen Sie das Einf&uuml;gen-Symbol %s, um diese Datei in den gew&uuml;nschten Ordner zu verschieben / kopieren. Wenn Sie diese Datei in eine andere Veranstaltung verschieben / kopieren möchten, wählen Sie die gewünschte Veranstaltung oben auf der Seite aus (sofern Sie Dozent oder Tutor in einer anderen Veranstaltung sind)."), "<img src=\"".$GLOBALS['ASSETS_URL']."images/move.gif\" border=0 " . tooltip(_("Klicken Sie dieses Symbol, um diese Datei in einen anderen Ordner einzufügen")) . ">");
 
 						$content.= "\n";
 
